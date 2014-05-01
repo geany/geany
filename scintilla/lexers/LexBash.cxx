@@ -108,6 +108,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 	CharacterSet setWordStart(CharacterSet::setAlpha, "_");
 	// note that [+-] are often parts of identifiers in shell scripts
 	CharacterSet setWord(CharacterSet::setAlphaNum, "._+-");
+	CharacterSet setMetaCharacter(CharacterSet::setNone, "|&;()<> \t\r\n");
+	setMetaCharacter.Add(0);
 	CharacterSet setBashOperator(CharacterSet::setNone, "^&%()-+=|{}[]:;>,*/<?!.~@");
 	CharacterSet setSingleCharOp(CharacterSet::setNone, "rwxoRWXOezsfdlpSbctugkTBMACahGLNn");
 	CharacterSet setParam(CharacterSet::setAlphaNum, "$_");
@@ -627,7 +629,12 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 			} else if (setWordStart.Contains(sc.ch)) {
 				sc.SetState(SCE_SH_WORD);
 			} else if (sc.ch == '#') {
-				sc.SetState(SCE_SH_COMMENTLINE);
+				if (stylePrev != SCE_SH_WORD && stylePrev != SCE_SH_IDENTIFIER &&
+					(sc.currentPos == 0 || setMetaCharacter.Contains(sc.chPrev))) {
+					sc.SetState(SCE_SH_COMMENTLINE);
+				} else {
+					sc.SetState(SCE_SH_WORD);
+				}
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_SH_STRING);
 				QuoteStack.Start(sc.ch, BASH_DELIM_STRING);

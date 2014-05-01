@@ -1,4 +1,13 @@
-Geany 1.24 (unreleased)
+Geany 1.25 (unreleased)
+
+
+Geany 1.24.1 (April 16, 2014)
+
+    General
+    * Fix distribution of custom GTK style files (#1037).
+
+
+Geany 1.24 (April 13, 2014)
 
     General
     * Add experimental support for GTK3.
@@ -10,24 +19,37 @@ Geany 1.24 (unreleased)
     * Fix stopping of some spawned commands.
     * Fix cursor position and selection after comment toggling (#3576431).
     * Fix truncated output of ``--list-documents`` command-line option.
-    * Fix launching a new instance when ``--list-documents`` is passed and
-      no other instance is running.
+    * Fix launching a new instance when ``--list-documents`` is passed
+      and no other instance is running.
+    * Fix crash if a Custom Command returns after its related document
+      has been closed.
+    * Fix typo in "deque" C++ include name (#1027).
+    * Fix replacing a selection starting with "0x" by a color if the
+      selection is not 8 bytes long.
+    * Fix a possible crash on quit.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
     * Add Find entries in the Symbol List popup menu (#3608278).
     * Flatten-out the View menu.
     * Add a button to directly configure a plugin's keybindings in the
-      plugin manager (Pavel Roschin)
+      plugin manager (Pavel Roschin).
+    * Add an Apply button to the color chooser dialog (FR#686,
+      Steven Valsesia).
+    * Use a non-cropped 16x16 application icon (#1010).
+    * Fix "leaks" of geany_run_script (#975).
 
     Editor
-    * Update Scintilla to version 3.3.6.
-    * Fix Reflow to follow Line breaking behavior (Eugene Arshinov).
+    * Update Scintilla to version 3.3.6 (#962, #995).
+    * Fix Reflow to follow Line breaking behavior (#382, #412, #464,
+      Eugene Arshinov).
     * Fix unfolding the very last line in a level (#1007).
     * Fix commenting the very last line in some situations.
 
     Search
     * Fix bulk Search & Replace not to match replacements.
+    * Fix finding start of word when performing whole word matching.
+    * Search when activating the Replace dialog find entry.
 
     Filetypes
     * Add CUDA filetype (PR#147, Benjamin Chrétien).
@@ -35,25 +57,33 @@ Geany 1.24 (unreleased)
     * Add Batch filetype (canou).
     * Add Graphviz filetype (PR#125, Miro Hrončok).
     * Add PowerShell filetype (Igor Shaula).
-    * Add Clojure fieltype (PR#92, Hoàng Minh Thắng).
+    * Add Clojure filetype (PR#92, Hoàng Minh Thắng).
     * Many improvements to the PHP tag parser.
     * Update PHP global tags file (PR#137, John Long).
+    * Improve shebang detection for mksh and tcsh shells
+      (PR#126 , Ypnose).
     * Fix Asciidoc parser recognition of open block as underline.
     * Fix symbol list entry for Asciidoc headers containing a dot.
+    * Fix Asciidoc title parsing.
     * SQL parsing improvements.
     * Extend list of recognized keywords for SQL.
     * Fix SQL single-line comment marker (#997).
-    * Fix parsing of some JavaScript constructors.
+    * Fix parsing of some JavaScript constructors (#966).
     * Fix parsing a JavaScript regular expression in a return statement.
+    * Fix parsing JavaScript files with a shebang.
     * Parse Java annotations with parameters (#924, Braden Walters).
     * Display Java enums in the symbol list.
+    * Add "strictfp" Java keyword and fix annotation parsing (#936, #924).
     * Fix parsing of C++ static_assert.
     * Fix parsing of typed enums in C# and C++.
-    * Fix parsing of Frotran "forall" blocks and procedure pointers
+    * Mitigate parsing errors on C++ generics containing an expression.
+    * Add C++ member pointer operator to scope autocomplete operators
+      (#907).
+    * Fix parsing of Fortran "forall" blocks and procedure pointers
       (Alexander Eberspächer).
     * Fix parsing of complex Cython types.
     * Fix re-parsing Objective-C code.
-    * Fix parsing of Verliog initializers.
+    * Fix parsing of Verilog initializers.
     * Fix displaying of quoted Bash HereDoc delimiters (#952).
     * Add some HTML5 keywords (Duncan de Wet).
     * Add Erlang snippets and a template (PR#157, Fabio Ticconi).
@@ -62,16 +92,42 @@ Geany 1.24 (unreleased)
     * Fix argument list on some Python constructors.
     * Fix R indenting to use braces.
     * Display R sources and libraries in the symbol list.
+    * Many improvements to the Fortran tag parser (#1023, #1030, with
+      help from Adam Hirst).
+    * Put Makefile comments at start of line.
+    * Add some missing Pascal keywords (#1033, PR#144).
+    * Add default build command for Bibtex in the Latex filetype
+      (PR#227, Francisco Iacobelli).
+    * Ignore Python imports when going to a tag's definition.
+    * Add some more Ruby extensions (Igor Shaula).
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
-    * Update translations: de, eu, he, it, lt, sl, sv
+    * Update translations: ca, cs, de, es, eu, fr, gl, he, hu, it, kk,
+                           lt, nl, pt, ru, sk, sl, sv, tr, zh_CN, zh_TW
+
+    Plugins
+    * Save Actions: add autosave when the editor lose focus (FR#683,
+      Steven Valsesia).
+    * Export: fix exporting a document not ending with a newline.
+    * Export: fix including random, unused styles in the output.
+    * Export: fix HTML title if the file name contains control characters.
+    * Export: fix LaTeX export with many consecutive '-', '<' or '>'.
 
     API
     * Add plugin_builder_connect_signals().
 
     Windows
     * Fix infinite pagination when printing (#961).
+    * Fix spawning commands with spaces (#943).
+    * Allow to use the GTK color chooser dialog (PR#218, Steven Valsesia).
+    * Add default extension to native save dialogs (#1021).
+    * Add colorschemes from the Geany-Themes project to the
+      Windows  installer.
+    * Add option to install Geany header files and pkgconfig file to the
+      Windows installer.
+    * Fix broken opening files from command line on Windows
+      (again, #3613096).
 
 
 Geany 1.23.1 (May 19, 2013)

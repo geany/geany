@@ -77,7 +77,7 @@ extern GeanyFilePrefs file_prefs;
  **/
 struct GeanyDocument
 {
-	/** General flag to represent this document is active and all properties are set correctly. */
+	/** Flag used to check if this document is valid when iterating @ref documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -118,9 +118,11 @@ struct GeanyDocument
 extern GPtrArray *documents_array;
 
 
-/** Wraps documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL;
- * @see document_index(). */
+/** Wraps @ref documents_array so it can be used with C array syntax.
+ * @warning Always check the returned document is valid (@c doc->is_valid).
+ *
+ * Example: @code GeanyDocument *doc = documents[i]; @endcode
+ * @see documents_array(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
 /** @deprecated Use @ref foreach_document() instead.
@@ -131,18 +133,26 @@ extern GPtrArray *documents_array;
 #define documents_foreach(i) foreach_document(i)
 #endif
 
-/** Iterates all valid documents.
+/** Iterates all valid document indexes.
  * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
+ * @param i @c guint index for @ref documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * foreach_document(i)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
-/** @c NULL-safe way to check @c doc_ptr->is_valid.
- * This is useful when @a doc_ptr was stored some time earlier and documents may have been
- * closed since then.
+/** Null-safe way to check @ref GeanyDocument::is_valid.
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \

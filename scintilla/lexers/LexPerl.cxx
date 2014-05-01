@@ -1185,7 +1185,7 @@ void SCI_METHOD LexerPerl::Lex(unsigned int startPos, int length, int initStyle,
 				}
 				switch (HereDoc.Quote) {
 				case '\'':
-					st_new = SCE_PL_HERE_Q ;
+					st_new = SCE_PL_HERE_Q;
 					break;
 				case '"' :
 					st_new = SCE_PL_HERE_QQ;

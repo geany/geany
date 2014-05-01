@@ -33,11 +33,20 @@ will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
+Pull requests
+-------------
+Making pull requests on Github is the preferred way of contributing for geany.
+
+.. note:: For helping you to get started: https://help.github.com/articles/fork-a-repo
+
+See `Rules to contribute`_ for more information.
+
 Patches
 -------
-We are happy to receive patches, but it's best to check with us by email
-or mailing list whether a new feature is appropriate, and whether someone
-is already working on similar code.
+We are happy to receive patches, but the prefered way is to make a pull
+request on our Github repository. If you don't want to make a pull request,
+you can send your patches on the devel mailing list, but the rules are the same:
+see `Rules to contribute`_ for more information.
 
 In general it's best to provide git-formatted patches made from the
 current Git (see `Committing`_)::
@@ -58,6 +67,26 @@ patch's description.
 .. note::
     Please make sure patches follow the style of existing code - In
     particular, use tabs for indentation. See `Coding`_.
+
+Rules to contribute
+-------------------
+
+Keep in mind this is best to check with us by email on mailing list
+whether a new feature is appropriate and whether someone is already
+working on similar code.
+
+Please, make sure contributions you make follow these rules:
+
+* changes should be made in a dedicated branch for pull requests.
+* only one feature should be in each pull request (or patch).
+* pull requests (or patches) should not contain changes unrelated to the feature,
+  and commits should be sensible units of change.
+* the submitter should squash together corrections that are part of
+  the development process, especially correcting your own mistakes.
+* Please make sure your modifications follow the style of existing code:
+  see `Coding`_ for more information.
+
+See `Committing`_ for more information.
 
 Windows tools
 -------------
@@ -422,6 +451,8 @@ Programming languages should have:
 For languages with a Scintilla lexer, there should be a [styling] section,
 to correspond to the styles used in highlighting_styles_FOO[] in
 highlightingmappings.h - see below.
+
+Don't forget to add the newly created filetype file to data/Makefile.am.
 
 Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^

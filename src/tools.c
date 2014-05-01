@@ -946,7 +946,6 @@ void tools_word_count(void)
 /*
  * color dialog callbacks
  */
-#ifndef G_OS_WIN32
 static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	switch (response)
@@ -976,17 +975,21 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 			gtk_widget_hide(ui_widgets.open_colorsel);
 	}
 }
-#endif
 
 
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
-#ifdef G_OS_WIN32
-	win32_show_color_dialog(color);
-#else
 	GdkColor gc;
 	GtkWidget *colorsel;
+
+#ifdef G_OS_WIN32
+	if (interface_prefs.use_native_windows_dialogs)
+	{
+		win32_show_color_dialog(color);
+		return;
+	}
+#endif
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
@@ -1015,5 +1018,4 @@ void tools_color_chooser(const gchar *color)
 
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));
-#endif
 }

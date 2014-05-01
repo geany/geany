@@ -13,6 +13,9 @@ ideol=type
 # default extension used when saving files
 extension=mak
 
+# MIME type
+mime_type=text/x-makefile
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
@@ -28,7 +31,7 @@ comment_single=#
 # setting to false would generate this
 #	command_example();
 # This setting works only for single line comments
-comment_use_indent=true
+comment_use_indent=false
 
 # context action command (please see Geany's main documentation for details)
 context_action_cmd=

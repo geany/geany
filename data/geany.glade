@@ -433,12 +433,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="encoding_list">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="eol_list">
     <columns>
       <!-- column-name text -->
@@ -1282,12 +1276,12 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="check_native_windows_dialogs">
-                                    <property name="label" translatable="yes">Use Windows File Open/Save dialogs</property>
+                                    <property name="label" translatable="yes">Use Windows native dialogs</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Defines whether to use the native Windows File Open/Save dialogs or whether to use the GTK default dialogs</property>
+                                    <property name="tooltip_text" translatable="yes">Defines whether to use the Windows native dialogs or whether to use the GTK default dialogs</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -4245,7 +4239,7 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Start a new file for each command-line filename that doesn't exist</property>
+                                    <property name="tooltip_text" translatable="yes">Create a new file for each command-line filename that doesn't exist</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
@@ -4368,12 +4362,8 @@
                                       <object class="GtkComboBox" id="combo_new_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">encoding_list</property>
                                         <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext6"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
+                                          <object class="GtkCellRendererText" id="combo_new_encoding_renderer"/>
                                         </child>
                                       </object>
                                     </child>
@@ -4434,12 +4424,8 @@
                                       <object class="GtkComboBox" id="combo_open_encoding">
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
-                                        <property name="model">encoding_list</property>
                                         <child>
-                                          <object class="GtkCellRendererText" id="cellrenderertext7"/>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
+                                          <object class="GtkCellRendererText" id="combo_open_encoding_renderer"/>
                                         </child>
                                       </object>
                                     </child>
@@ -8297,7 +8283,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkImageMenuItem" id="cut_current_lines1">
-                                    <property name="label" translatable="yes">_Cut Current Line(s)</property>
+                                    <property name="label" translatable="yes">Cu_t Current Line(s)</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
@@ -8334,7 +8320,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Duplicate Line or Selection</property>
+                                    <property name="label" translatable="yes">D_uplicate Line or Selection</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_duplicate_line_or_selection1_activate" swapped="no"/>
                                   </object>
@@ -8350,7 +8336,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Select Current Line(s)</property>
+                                    <property name="label" translatable="yes">S_elect Current Line(s)</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_select_current_lines1_activate" swapped="no"/>
                                   </object>
@@ -8360,7 +8346,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Select Current Paragraph</property>
+                                    <property name="label" translatable="yes">Se_lect Current Paragraph</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_select_current_paragraph1_activate" swapped="no"/>
                                   </object>
@@ -8386,7 +8372,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Move Line(s) Down</property>
+                                    <property name="label" translatable="yes">M_ove Line(s) Down</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_move_lines_down1_activate" swapped="no"/>
                                   </object>

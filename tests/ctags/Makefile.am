@@ -256,5 +256,3 @@ TAGS_LOG_COMPILER = $(srcdir)/runner.sh
 
 TESTS = $(test_results)
 EXTRA_DIST = $(test_sources) $(test_results)
-
-runner.sh: ../../src/geany$(EXEEXT)

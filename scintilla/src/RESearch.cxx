@@ -333,16 +333,18 @@ static int GetHexaChar(unsigned char hd1, unsigned char hd2) {
 		hexValue += 16 * (hd1 - 'A' + 10);
 	} else if (hd1 >= 'a' && hd1 <= 'f') {
 		hexValue += 16 * (hd1 - 'a' + 10);
-	} else
+	} else {
 		return -1;
+	}
 	if (hd2 >= '0' && hd2 <= '9') {
 		hexValue += hd2 - '0';
 	} else if (hd2 >= 'A' && hd2 <= 'F') {
 		hexValue += hd2 - 'A' + 10;
 	} else if (hd2 >= 'a' && hd2 <= 'f') {
 		hexValue += hd2 - 'a' + 10;
-	} else
+	} else {
 		return -1;
+	}
 	return hexValue;
 }
 
@@ -472,18 +474,18 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 			break;
 
 		case '^':               /* match beginning */
-			if (p == pattern)
+			if (p == pattern) {
 				*mp++ = BOL;
-			else {
+			} else {
 				*mp++ = CHR;
 				*mp++ = *p;
 			}
 			break;
 
 		case '$':               /* match endofline */
-			if (!*(p+1))
+			if (!*(p+1)) {
 				*mp++ = EOL;
-			else {
+			} else {
 				*mp++ = CHR;
 				*mp++ = *p;
 			}
@@ -498,8 +500,9 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 				mask = '\377';
 				i++;
 				p++;
-			} else
+			} else {
 				mask = 0;
+			}
 
 			if (*p == '-') {	/* real dash */
 				i++;
@@ -523,9 +526,9 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 							i++;
 							c2 = static_cast<unsigned char>(*++p);
 							if (c2 == '\\') {
-								if (!*(p+1))	// End of RE
+								if (!*(p+1)) {	// End of RE
 									return badpat("Missing ]");
-								else {
+								} else {
 									i++;
 									p++;
 									int incr;
@@ -654,8 +657,9 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 				if (tagc > n) {
 					*mp++ = static_cast<char>(REF);
 					*mp++ = static_cast<char>(n);
-				} else
+				} else {
 					return badpat("Undetermined reference");
+				}
 				break;
 			default:
 				if (!posix && *p == '(') {
@@ -663,16 +667,18 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 						tagstk[++tagi] = tagc;
 						*mp++ = BOT;
 						*mp++ = static_cast<char>(tagc++);
-					} else
+					} else {
 						return badpat("Too many \\(\\) pairs");
+					}
 				} else if (!posix && *p == ')') {
 					if (*sp == BOT)
 						return badpat("Null pattern inside \\(\\)");
 					if (tagi > 0) {
 						*mp++ = static_cast<char>(EOT);
 						*mp++ = static_cast<char>(tagstk[tagi--]);
-					} else
+					} else {
 						return badpat("Unmatched \\)");
+					}
 				} else {
 					int incr;
 					int c = GetBackslashExpression(p, incr);
@@ -697,16 +703,18 @@ const char *RESearch::Compile(const char *pattern, int length, bool caseSensitiv
 					tagstk[++tagi] = tagc;
 					*mp++ = BOT;
 					*mp++ = static_cast<char>(tagc++);
-				} else
+				} else {
 					return badpat("Too many () pairs");
+				}
 			} else if (posix && *p == ')') {
 				if (*sp == BOT)
 					return badpat("Null pattern inside ()");
 				if (tagi > 0) {
 					*mp++ = static_cast<char>(EOT);
 					*mp++ = static_cast<char>(tagstk[tagi--]);
-				} else
+				} else {
 					return badpat("Unmatched )");
+				}
 			} else {
 				unsigned char c = *p;
 				if (!c)	// End of RE

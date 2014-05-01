@@ -4,23 +4,24 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2013.
+# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-23 14:24+0100\n"
-"PO-Revision-Date: 2013-03-04 23:28+0800\n"
+"POT-Creation-Date: 2014-03-30 20:46+0200\n"
+"PO-Revision-Date: 2014-03-31 17:37-0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:350
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:365
 msgid "Geany"
 msgstr "Geany"
 
@@ -84,7 +85,7 @@ msgstr "不可见"
 msgid "_Insert \"include <...>\""
 msgstr "插入“include <...>”(_I)"
 
-#: ../data/geany.glade.h:14 ../src/keybindings.c:414
+#: ../data/geany.glade.h:14 ../src/keybindings.c:415
 msgid "_Insert Alternative White Space"
 msgstr "插入额外的空白(_I)"
 
@@ -96,11 +97,11 @@ msgstr "搜索(_S)"
 msgid "Open Selected F_ile"
 msgstr "打开选择的文件(_I)"
 
-#: ../data/geany.glade.h:17
+#: ../data/geany.glade.h:17 ../src/symbols.c:2415
 msgid "Find _Usage"
 msgstr "查找用法(_U)"
 
-#: ../data/geany.glade.h:18
+#: ../data/geany.glade.h:18 ../src/symbols.c:2420
 msgid "Find _Document Usage"
 msgstr "查找文档用法(_D)"
 
@@ -112,7 +113,17 @@ msgstr "跳转到标记定义(_T)"
 msgid "Conte_xt Action"
 msgstr "上下文动作(_X)"
 
-#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1789
+#. Column legend:
+#. *   [0] = Filetype constant (GEANY_FILETYPES_*)
+#. *   [1] = CTags parser (TM_PARSER_*)
+#. *   [2] = Non-translated filetype name (*not* label for display)
+#. *   [3] = Translatable human filetype title prefix or NULL to use [2]
+#. *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
+#. *   [5] = Mime type or NULL for none/unknown
+#. *   [6] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+#. * --------------------------------------------------------------------------------------------------------------------------
+#. *       [0]         [1]           [2]                 [3]                        [4]          [5]                           [6]
+#: ../data/geany.glade.h:21 ../src/filetypes.c:137 ../src/filetypes.c:1505
 msgid "None"
 msgstr "没有"
 
@@ -128,7 +139,7 @@ msgstr "当前字符"
 msgid "Match braces"
 msgstr "匹配花括号"
 
-#: ../data/geany.glade.h:25 ../src/keybindings.c:424
+#: ../data/geany.glade.h:25 ../src/keybindings.c:425
 msgid "Preferences"
 msgstr "首选项"
 
@@ -260,14 +271,14 @@ msgstr ""
 "找和定位框和虚拟终端。"
 
 #: ../data/geany.glade.h:53
-msgid "Use Windows File Open/Save dialogs"
-msgstr "使用 Winodows 文件打开/保存对话框"
+msgid "Use Windows native dialogs"
+msgstr "使用 Winodows 原生对话框"
 
 #: ../data/geany.glade.h:54
 msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
-msgstr "选择使用原生的 Windows 文件打开/保存对话框或者 GTK 默认的对话框"
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
+msgstr "选择使用 Windows 原生对话框或者 GTK 默认对话框"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -344,7 +355,7 @@ msgstr "杂项"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:70 ../src/prefs.c:1585
+#: ../data/geany.glade.h:70 ../src/prefs.c:1610
 msgid "General"
 msgstr "常规"
 
@@ -428,7 +439,7 @@ msgstr "显示状态栏"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "是否在主窗口底部显示状态栏"
 
-#: ../data/geany.glade.h:91 ../src/prefs.c:1587
+#: ../data/geany.glade.h:91 ../src/prefs.c:1612
 msgid "Interface"
 msgstr "界面"
 
@@ -508,7 +519,7 @@ msgstr "将工具栏添加到菜单(_A)"
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr "把工具栏放在主菜单中以节省垂直空间"
 
-#: ../data/geany.glade.h:110 ../src/toolbar.c:933
+#: ../data/geany.glade.h:110 ../src/toolbar.c:939
 msgid "Customize Toolbar"
 msgstr "自定义工具栏"
 
@@ -556,7 +567,7 @@ msgstr "<b>图标尺寸</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>工具栏</b>"
 
-#: ../data/geany.glade.h:122 ../src/prefs.c:1589
+#: ../data/geany.glade.h:122 ../src/prefs.c:1614
 msgid "Toolbar"
 msgstr "工具栏"
 
@@ -951,7 +962,7 @@ msgstr "颜色："
 msgid "Sets the color of the long line marker"
 msgstr "设置长行标志颜色"
 
-#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:974
+#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:996
 msgid "Color Chooser"
 msgstr "颜色选择器"
 
@@ -1027,7 +1038,7 @@ msgstr "<b>虚拟空格</b>"
 msgid "Display"
 msgstr "显示"
 
-#: ../data/geany.glade.h:225 ../src/keybindings.c:227 ../src/prefs.c:1591
+#: ../data/geany.glade.h:225 ../src/keybindings.c:228 ../src/prefs.c:1616
 msgid "Editor"
 msgstr "编辑器"
 
@@ -1106,7 +1117,7 @@ msgstr "去除行尾空白"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "去除行尾空格和制表符"
 
-#: ../data/geany.glade.h:243 ../src/keybindings.c:569
+#: ../data/geany.glade.h:243 ../src/keybindings.c:570
 msgid "Replace tabs by space"
 msgstr "用空格替换制表符"
 
@@ -1136,8 +1147,8 @@ msgid ""
 "disables checking."
 msgstr "设置磁盘检查的间隔时间。零表示不检查。"
 
-#: ../data/geany.glade.h:250 ../src/prefs.c:1593 ../src/symbols.c:680
-#: ../plugins/filebrowser.c:1118
+#: ../data/geany.glade.h:250 ../src/prefs.c:1618 ../src/symbols.c:695
+#: ../plugins/filebrowser.c:1119
 msgid "Files"
 msgstr "文件"
 
@@ -1186,7 +1197,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>命令</b>"
 
-#: ../data/geany.glade.h:262 ../src/keybindings.c:239 ../src/prefs.c:1595
+#: ../data/geany.glade.h:262 ../src/keybindings.c:240 ../src/prefs.c:1620
 msgid "Tools"
 msgstr "工具"
 
@@ -1267,7 +1278,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>模板数据</b>"
 
-#: ../data/geany.glade.h:280 ../src/prefs.c:1597
+#: ../data/geany.glade.h:280 ../src/prefs.c:1622
 msgid "Templates"
 msgstr "模板"
 
@@ -1279,7 +1290,7 @@ msgstr "更改(_H)"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>快捷键</b>"
 
-#: ../data/geany.glade.h:283 ../src/prefs.c:1599
+#: ../data/geany.glade.h:283 ../src/plugins.c:1446 ../src/prefs.c:1624
 msgid "Keybindings"
 msgstr "快捷键"
 
@@ -1352,7 +1363,7 @@ msgstr "使用原生的 GTK 打印"
 msgid "<b>Printing</b>"
 msgstr "<b>打印</b>"
 
-#: ../data/geany.glade.h:300 ../src/prefs.c:1601
+#: ../data/geany.glade.h:300 ../src/prefs.c:1626
 msgid "Printing"
 msgstr "打印"
 
@@ -1473,9 +1484,9 @@ msgstr "在虚拟终端中执行程序"
 
 #: ../data/geany.glade.h:327
 msgid ""
-"Don't use the simple run script which is usually used to display the exit "
-"status of the executed program"
-msgstr "不使用用于显示程序的退出状态的简单运行脚本。"
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr "在虚拟终端而不是一个终端中执行程序。注意：虚拟终端中的程序不能停止。"
 
 #: ../data/geany.glade.h:328
 msgid "Don't use run script"
@@ -1483,15 +1494,15 @@ msgstr "不要使用运行脚本"
 
 #: ../data/geany.glade.h:329
 msgid ""
-"Run programs in VTE instead of opening a terminal emulation window. Please "
-"note, programs executed in VTE cannot be stopped"
-msgstr "在虚拟终端而不是一个终端中执行程序。注意：虚拟终端中的程序不能停止。"
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr "不使用用于显示程序的退出状态的简单运行脚本。"
 
 #: ../data/geany.glade.h:330
 msgid "<b>Terminal</b>"
 msgstr "<b>终端</b>"
 
-#: ../data/geany.glade.h:331 ../src/prefs.c:1605 ../src/vte.c:291
+#: ../data/geany.glade.h:331 ../src/prefs.c:1630 ../src/vte.c:298
 msgid "Terminal"
 msgstr "虚拟终端"
 
@@ -1503,7 +1514,7 @@ msgstr "<i>警告：在修改这些设置前请阅读文档。</i>"
 msgid "<b>Various preferences</b>"
 msgstr "<b>高级设置</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1603
+#: ../data/geany.glade.h:334 ../src/prefs.c:1628
 msgid "Various"
 msgstr "高级设置"
 
@@ -1511,11 +1522,11 @@ msgstr "高级设置"
 msgid "Project Properties"
 msgstr "项目属性"
 
-#: ../data/geany.glade.h:336 ../src/plugins.c:1458 ../src/project.c:150
+#: ../data/geany.glade.h:336 ../src/plugins.c:1472 ../src/project.c:153
 msgid "Filename:"
 msgstr "文件名："
 
-#: ../data/geany.glade.h:337 ../src/project.c:141
+#: ../data/geany.glade.h:337 ../src/project.c:143
 #: ../plugins/classbuilder.c:469 ../plugins/classbuilder.c:479
 msgid "Name:"
 msgstr "名称："
@@ -1524,7 +1535,7 @@ msgstr "名称："
 msgid "Description:"
 msgstr "描述："
 
-#: ../data/geany.glade.h:339 ../src/project.c:166
+#: ../data/geany.glade.h:339 ../src/project.c:170
 msgid "Base path:"
 msgstr "根路径："
 
@@ -1538,7 +1549,7 @@ msgid ""
 "g. *.c *.h)"
 msgstr "空格分隔的文件通配符，用于在文件中查找 (例如 *.c *.h)"
 
-#: ../data/geany.glade.h:342 ../src/project.c:172
+#: ../data/geany.glade.h:342 ../src/project.c:177
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -1547,7 +1558,7 @@ msgstr ""
 "组成项目的所有文件的根路径，可以是一个新路径或一个已存在的路径。你可以使用与"
 "项目名关联的路径。"
 
-#: ../data/geany.glade.h:343 ../src/keybindings.c:237
+#: ../data/geany.glade.h:343 ../src/keybindings.c:238
 msgid "Project"
 msgstr "项目"
 
@@ -1564,486 +1575,558 @@ msgid "Use global settings"
 msgstr "使用全局设置"
 
 #: ../data/geany.glade.h:347
+msgid "Size:"
+msgstr "尺寸："
+
+#: ../data/geany.glade.h:348
+msgid "Location:"
+msgstr "位置："
+
+#: ../data/geany.glade.h:349
+msgid "Read-only:"
+msgstr "只读："
+
+#: ../data/geany.glade.h:350
+msgid "Encoding:"
+msgstr "编码："
+
+#: ../data/geany.glade.h:351
+msgid "Modified:"
+msgstr "修改于："
+
+#: ../data/geany.glade.h:352
+msgid "Changed:"
+msgstr "变更于 (ctime)："
+
+#: ../data/geany.glade.h:353
+msgid "Accessed:"
+msgstr "访问于："
+
+#: ../data/geany.glade.h:354
+msgid "(only inside Geany)"
+msgstr "（仅在 Geany 中）"
+
+#: ../data/geany.glade.h:355
+msgid "Permissions:"
+msgstr "权限："
+
+#: ../data/geany.glade.h:356
+msgid "Read:"
+msgstr "读："
+
+#: ../data/geany.glade.h:357
+msgid "Write:"
+msgstr "写："
+
+#: ../data/geany.glade.h:358
+msgid "Execute:"
+msgstr "执行："
+
+#: ../data/geany.glade.h:359
+msgid "Owner:"
+msgstr "所有者："
+
+#: ../data/geany.glade.h:360
+msgid "Group:"
+msgstr "组："
+
+#: ../data/geany.glade.h:361
+msgid "Other:"
+msgstr "其他："
+
+#: ../data/geany.glade.h:362
 msgid "Top"
 msgstr "顶端"
 
-#: ../data/geany.glade.h:348
+#: ../data/geany.glade.h:363
 msgid "_Toolbar Preferences"
 msgstr "工具栏首选项(_T)"
 
-#: ../data/geany.glade.h:349
+#: ../data/geany.glade.h:364
 msgid "_Hide Toolbar"
 msgstr "隐藏工具栏(_H)"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:366
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../data/geany.glade.h:352
+#: ../data/geany.glade.h:367
 msgid "New (with _Template)"
 msgstr "从模板新建(_T)"
 
-#: ../data/geany.glade.h:353
+#: ../data/geany.glade.h:368
+msgid "_Open..."
+msgstr "打开...(_O)"
+
+#: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "最近打开的文件(_F)"
 
-#: ../data/geany.glade.h:354
+#: ../data/geany.glade.h:370
+msgid "Save _As..."
+msgstr "另存为...(_A)"
+
+#: ../data/geany.glade.h:371
 msgid "Save A_ll"
 msgstr "全部保存(_L)"
 
-#: ../data/geany.glade.h:355 ../src/callbacks.c:433 ../src/document.c:2915
-#: ../src/sidebar.c:697
+#: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
+#: ../src/sidebar.c:707
 msgid "_Reload"
 msgstr "重新载入(_R)"
 
-#: ../data/geany.glade.h:356
+#: ../data/geany.glade.h:373
 msgid "R_eload As"
 msgstr "重新载入为(_E)"
 
-#: ../data/geany.glade.h:357
+#: ../data/geany.glade.h:374
 msgid "Page Set_up"
 msgstr "页面设置(_U)"
 
-#: ../data/geany.glade.h:358 ../src/notebook.c:489
+#: ../data/geany.glade.h:375
+msgid "_Print..."
+msgstr "打印...(_P)"
+
+#: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
 msgstr "关闭其它文件(_H)"
 
-#: ../data/geany.glade.h:359 ../src/notebook.c:495
+#: ../data/geany.glade.h:377 ../src/notebook.c:496
 msgid "C_lose All"
 msgstr "全部关闭(_L)"
 
-#: ../data/geany.glade.h:360
+#: ../data/geany.glade.h:378
 msgid "_Commands"
 msgstr "命令(_C)"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:349
+#: ../data/geany.glade.h:379 ../src/keybindings.c:350
 msgid "_Cut Current Line(s)"
 msgstr "剪切当前行(_C)"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:346
+#: ../data/geany.glade.h:380 ../src/keybindings.c:347
 msgid "_Copy Current Line(s)"
 msgstr "复制当前行(_C)"
 
-#: ../data/geany.glade.h:363 ../src/keybindings.c:300
+#: ../data/geany.glade.h:381 ../src/keybindings.c:301
 msgid "_Delete Current Line(s)"
 msgstr "删除当前行(_D)"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:297
+#: ../data/geany.glade.h:382 ../src/keybindings.c:298
 msgid "_Duplicate Line or Selection"
 msgstr "重复行或选中的文本(_D)"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:359
+#: ../data/geany.glade.h:383 ../src/keybindings.c:360
 msgid "_Select Current Line(s)"
 msgstr "选择当前行(_S)"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:362
+#: ../data/geany.glade.h:384 ../src/keybindings.c:363
 msgid "_Select Current Paragraph"
 msgstr "选择当前段落(_S)"
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:385
 msgid "_Move Line(s) Up"
 msgstr "上移行(_M)"
 
-#: ../data/geany.glade.h:368
+#: ../data/geany.glade.h:386
 msgid "_Move Line(s) Down"
 msgstr "下移行(_M)"
 
-#: ../data/geany.glade.h:369 ../src/keybindings.c:401
+#: ../data/geany.glade.h:387 ../src/keybindings.c:402
 msgid "_Send Selection to Terminal"
 msgstr "发送选中的文字到终端(_S)"
 
-#: ../data/geany.glade.h:370 ../src/keybindings.c:403
+#: ../data/geany.glade.h:388 ../src/keybindings.c:404
 msgid "_Reflow Lines/Block"
 msgstr "重排行/区块(_R)"
 
-#: ../data/geany.glade.h:371 ../src/keybindings.c:373
+#: ../data/geany.glade.h:389 ../src/keybindings.c:374
 msgid "T_oggle Case of Selection"
 msgstr "切换大小写(_O)"
 
-#: ../data/geany.glade.h:372
+#: ../data/geany.glade.h:390
 msgid "_Comment Line(s)"
 msgstr "转换为注释(_C)"
 
-#: ../data/geany.glade.h:373
+#: ../data/geany.glade.h:391
 msgid "U_ncomment Line(s)"
 msgstr "取消注释(_N)"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:392
 msgid "_Toggle Line Commentation"
 msgstr "切换注释状态(_T)"
 
-#: ../data/geany.glade.h:375
+#: ../data/geany.glade.h:393
 msgid "_Increase Indent"
 msgstr "增加缩进(_I)"
 
-#: ../data/geany.glade.h:376
+#: ../data/geany.glade.h:394
 msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:392
+#: ../data/geany.glade.h:395 ../src/keybindings.c:393
 msgid "_Smart Line Indent"
 msgstr "智能缩进(_S)"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:396
 msgid "_Send Selection to"
 msgstr "发送选中的文字到(_S)"
 
-#: ../data/geany.glade.h:379
+#: ../data/geany.glade.h:397
 msgid "I_nsert Comments"
 msgstr "插入注释(_N)"
 
-#: ../data/geany.glade.h:380
+#: ../data/geany.glade.h:398
 msgid "Preference_s"
 msgstr "首选项(_S)"
 
-#: ../data/geany.glade.h:381 ../src/keybindings.c:427
+#: ../data/geany.glade.h:399 ../src/keybindings.c:428
 msgid "P_lugin Preferences"
 msgstr "插件首选项(_L)"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:400
+msgid "_Find..."
+msgstr "查找...(_F)"
+
+#: ../data/geany.glade.h:401
 msgid "Find _Next"
 msgstr "查找下一个(_N)"
 
-#: ../data/geany.glade.h:383
+#: ../data/geany.glade.h:402
 msgid "Find _Previous"
 msgstr "查找上一个(_P)"
 
-#: ../data/geany.glade.h:384
-msgid "Find in F_iles"
-msgstr "在多个文件中查找(_I)"
+#: ../data/geany.glade.h:403 ../src/symbols.c:2425
+msgid "Find in F_iles..."
+msgstr "在多个文件中查找...(_I)"
 
-#: ../data/geany.glade.h:385 ../src/search.c:603
-msgid "_Replace"
-msgstr "替换(_R)"
+#: ../data/geany.glade.h:404
+msgid "_Replace..."
+msgstr "替换...(_R)"
 
-#: ../data/geany.glade.h:386
+#: ../data/geany.glade.h:405
 msgid "Next _Message"
 msgstr "下一个信息(_M)"
 
-#: ../data/geany.glade.h:387
+#: ../data/geany.glade.h:406
 msgid "Pr_evious Message"
 msgstr "前一个信息(_E)"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:476
+#: ../data/geany.glade.h:407 ../src/keybindings.c:477
 msgid "_Go to Next Marker"
 msgstr "到下一个标记(_G)"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:479
+#: ../data/geany.glade.h:408 ../src/keybindings.c:480
 msgid "_Go to Previous Marker"
 msgstr "到上一个标记(_G)"
 
-#: ../data/geany.glade.h:390
-msgid "_Go to Line"
-msgstr "跳转到指定行(_G)"
+#: ../data/geany.glade.h:409
+msgid "_Go to Line..."
+msgstr "跳转到指定行...(_G)"
 
-#: ../data/geany.glade.h:391 ../src/keybindings.c:439
+#: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
 msgstr "查找下一个选择(_S)"
 
-#: ../data/geany.glade.h:392 ../src/keybindings.c:441
+#: ../data/geany.glade.h:411 ../src/keybindings.c:442
 msgid "Find Pre_vious Selection"
 msgstr "查找上一个选择(_S)"
 
-#: ../data/geany.glade.h:393 ../src/keybindings.c:458
+#: ../data/geany.glade.h:412 ../src/keybindings.c:459
 msgid "_Mark All"
 msgstr "标记全部(_M)"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:413
 msgid "Go to T_ag Declaration"
 msgstr "跳转到标记说明(_A)"
 
-#: ../data/geany.glade.h:395 ../src/dialogs.c:358
+#: ../data/geany.glade.h:414 ../src/dialogs.c:358
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../data/geany.glade.h:396
-msgid "Change _Font"
-msgstr "更改字体(_F)"
+#: ../data/geany.glade.h:415
+msgid "Change _Font..."
+msgstr "更改字体...(_F)"
 
-#: ../data/geany.glade.h:397
-msgid "To_ggle All Additional Widgets"
-msgstr "开关所有附加部件(_G)"
+#: ../data/geany.glade.h:416
+msgid "Change _Color Scheme..."
+msgstr "更改配色方案...(_C)"
 
-#: ../data/geany.glade.h:398
-msgid "Full_screen"
-msgstr "全屏(_S)"
-
-#: ../data/geany.glade.h:399
-msgid "Show Message _Window"
-msgstr "显示信息窗口(_W)"
-
-#: ../data/geany.glade.h:400
-msgid "Show _Toolbar"
-msgstr "显示工具栏(_T)"
-
-#: ../data/geany.glade.h:401
-msgid "Show Side_bar"
-msgstr "显示侧边栏(_B)"
-
-#: ../data/geany.glade.h:402
-msgid "_Color Schemes"
-msgstr "配色方案(_C)"
-
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
 msgstr "显示页边标注区域(_M)"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:418
 msgid "Show _Line Numbers"
 msgstr "显示行号(_L)"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:419
 msgid "Show _White Space"
 msgstr "显示空白(_W)"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:420
 msgid "Show Line _Endings"
 msgstr "显示行尾(_E)"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:421
 msgid "Show _Indentation Guides"
 msgstr "显示缩进标记(_I)"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:422
+msgid "Full_screen"
+msgstr "全屏(_S)"
+
+#: ../data/geany.glade.h:423
+msgid "To_ggle All Additional Widgets"
+msgstr "开关所有附加部件(_G)"
+
+#: ../data/geany.glade.h:424
+msgid "Show Message _Window"
+msgstr "显示信息窗口(_W)"
+
+#: ../data/geany.glade.h:425
+msgid "Show _Toolbar"
+msgstr "显示工具栏(_T)"
+
+#: ../data/geany.glade.h:426
+msgid "Show Side_bar"
+msgstr "显示侧边栏(_B)"
+
+#: ../data/geany.glade.h:427
 msgid "_Document"
 msgstr "文档(_D)"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:428
 msgid "_Line Wrapping"
 msgstr "自动换行(_L)"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:429
 msgid "Line _Breaking"
 msgstr "自动断行(_B)"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:430
 msgid "_Auto-indentation"
 msgstr "自动缩进(_A)"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:431
 msgid "In_dent Type"
 msgstr "缩进类型(_D)"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:432
 msgid "_Detect from Content"
 msgstr "根据文件探测(_D)"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:433
 msgid "T_abs and Spaces"
 msgstr "制表符和空格(_A)"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:434
 msgid "Indent Widt_h"
 msgstr "缩进宽度(_H)"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:435
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:436
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:437
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:438
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:439
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:440
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:441
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:442
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:424
+#: ../data/geany.glade.h:443
 msgid "Read _Only"
 msgstr "只读(_O)"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:444
 msgid "_Write Unicode BOM"
 msgstr "写 Unicode BOM (_W)"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:445
 msgid "Set File_type"
 msgstr "设置文件类型(_T)"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:446
 msgid "Set _Encoding"
 msgstr "设置文件编码(_E)"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:447
 msgid "Set Line E_ndings"
 msgstr "设置换行符(_N)"
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:448
 msgid "Convert and Set to _CR/LF (Win)"
 msgstr "转换并设置为 _CR/LF (Win)"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:449
 msgid "Convert and Set to _LF (Unix)"
 msgstr "转换并设置为 _LF (Unix)"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:450
 msgid "Convert and Set to CR (_Mac)"
 msgstr "转换并设置为 CR (_Mac)"
 
-#: ../data/geany.glade.h:432 ../src/keybindings.c:567
+#: ../data/geany.glade.h:451 ../src/keybindings.c:568
 msgid "_Clone"
 msgstr "克隆(_C)"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:452
 msgid "_Strip Trailing Spaces"
 msgstr "去除行尾空白(_S)"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:453
 msgid "_Replace Tabs by Spaces"
 msgstr "替换制表符为空格(_R)"
 
-#: ../data/geany.glade.h:435
-msgid "Replace Spaces b_y Tabs"
-msgstr "替换空格为制表符为(_Y)"
+#: ../data/geany.glade.h:454
+msgid "Replace Spaces b_y Tabs..."
+msgstr "替换空格为制表符...(_Y)"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:455
 msgid "_Fold All"
 msgstr "全部折叠(_F)"
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:456
 msgid "_Unfold All"
 msgstr "全部展开(_U)"
 
-#: ../data/geany.glade.h:438
+#: ../data/geany.glade.h:457
 msgid "Remove _Markers"
 msgstr "去除记号(_M)"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:458
 msgid "Remove Error _Indicators"
 msgstr "去除所有出错指示(_I)"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:459
 msgid "_Project"
 msgstr "项目(_P)"
 
-#: ../data/geany.glade.h:441
-msgid "_New"
-msgstr "新建(_N)"
+#: ../data/geany.glade.h:460
+msgid "_New..."
+msgstr "新建...(_N)"
 
-#: ../data/geany.glade.h:442
-msgid "_Open"
-msgstr "打开(_O)"
-
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:461
 msgid "_Recent Projects"
 msgstr "最近项目(_R)"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:462
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:463
 msgid "Apply the default indentation settings to all documents"
 msgstr "对所有文档使用默认的缩进设置"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:464
 msgid "_Apply Default Indentation"
 msgstr "使用默认缩进(_A)"
 
 #. build the code
-#: ../data/geany.glade.h:447 ../src/build.c:2554 ../src/build.c:2831
+#: ../data/geany.glade.h:465 ../src/build.c:2566 ../src/build.c:2843
 msgid "_Build"
 msgstr "生成(_B)"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:466
 msgid "_Tools"
 msgstr "工具(_T)"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:467
 msgid "_Reload Configuration"
 msgstr "重新载入设置(_R)"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:468
 msgid "C_onfiguration Files"
 msgstr "配置文件(_O)"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:469
 msgid "_Color Chooser"
 msgstr "颜色选择器(_C)"
 
-#: ../data/geany.glade.h:452
+#: ../data/geany.glade.h:470
 msgid "_Word Count"
 msgstr "字数统计(_W)"
 
-#: ../data/geany.glade.h:453
-msgid "Load Ta_gs"
-msgstr "载入标记文件(_G)"
+#: ../data/geany.glade.h:471
+msgid "Load Ta_gs..."
+msgstr "载入标记文件...(_G)"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:472
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:473
 msgid "_Keyboard Shortcuts"
 msgstr "快捷键(_K)"
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:474
 msgid "Debug _Messages"
 msgstr "调试信息(_M)"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:475
 msgid "_Website"
 msgstr "网站(_W)"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:476
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: ../data/geany.glade.h:459
-msgid "Report a _Bug"
-msgstr "报告错误(_B)"
+#: ../data/geany.glade.h:477
+msgid "Report a _Bug..."
+msgstr "报告错误...(_B)"
 
-#: ../data/geany.glade.h:460
-msgid "_Donate"
-msgstr "捐赠(_D)"
+#: ../data/geany.glade.h:478
+msgid "_Donate..."
+msgstr "捐赠...(_D)"
 
-#: ../data/geany.glade.h:461 ../src/sidebar.c:124
+#: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
 msgstr "标记"
 
-#: ../data/geany.glade.h:462
+#: ../data/geany.glade.h:480
 msgid "Documents"
 msgstr "文档"
 
-#: ../data/geany.glade.h:463
+#: ../data/geany.glade.h:481
 msgid "Status"
 msgstr "状态"
 
-#: ../data/geany.glade.h:464
+#: ../data/geany.glade.h:482
 msgid "Compiler"
 msgstr "编译器"
 
-#: ../data/geany.glade.h:465
+#: ../data/geany.glade.h:483
 msgid "Messages"
 msgstr "信息"
 
-#: ../data/geany.glade.h:466
+#: ../data/geany.glade.h:484
 msgid "Scribble"
 msgstr "便签"
 
-#: ../src/about.c:42
+#: ../src/about.c:43
 msgid ""
-"Copyright (c)  2005-2012\n"
+"Copyright (c)  2005-2014\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2051,7 +2134,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2012\n"
+"Copyright (c)  2005-2014\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2059,67 +2142,67 @@ msgstr ""
 "Frank Lanitz\n"
 "All rights reserved."
 
-#: ../src/about.c:161
+#: ../src/about.c:163
 msgid "About Geany"
 msgstr "关于 Geany"
 
-#: ../src/about.c:206
+#: ../src/about.c:208
 msgid "A fast and lightweight IDE"
 msgstr "轻快的 IDE"
 
-#: ../src/about.c:227
+#: ../src/about.c:230
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s 或之后生成)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:258
+#: ../src/about.c:262
 msgid "Info"
 msgstr "信息"
 
-#: ../src/about.c:274
+#: ../src/about.c:278
 msgid "Developers"
 msgstr "开发人员"
 
-#: ../src/about.c:281
+#: ../src/about.c:285
 msgid "maintainer"
 msgstr "主管"
 
-#: ../src/about.c:289 ../src/about.c:297 ../src/about.c:305
+#: ../src/about.c:293 ../src/about.c:301 ../src/about.c:309
 msgid "developer"
 msgstr "开发"
 
-#: ../src/about.c:313
+#: ../src/about.c:317
 msgid "translation maintainer"
 msgstr "翻译"
 
-#: ../src/about.c:322
+#: ../src/about.c:326
 msgid "Translators"
 msgstr "翻译者"
 
-#: ../src/about.c:342
+#: ../src/about.c:346
 msgid "Previous Translators"
 msgstr "原翻译者"
 
-#: ../src/about.c:363
+#: ../src/about.c:367
 msgid "Contributors"
 msgstr "贡献者"
 
-#: ../src/about.c:373
+#: ../src/about.c:377
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "一部分贡献者 (详细清单参见文件 %s)"
 
-#: ../src/about.c:399
+#: ../src/about.c:403
 msgid "Credits"
 msgstr "荣誉"
 
-#: ../src/about.c:416
+#: ../src/about.c:420
 msgid "License"
 msgstr "许可条款"
 
-#: ../src/about.c:425
+#: ../src/about.c:429
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2127,21 +2210,21 @@ msgstr ""
 "许可条款未找到，请到 http://www.gnu.org/licenses/gpl-2.0.txt 在线查看。"
 
 #. fall back to %d
-#: ../src/build.c:748
+#: ../src/build.c:753
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "无法替代 %%p，没有活动的项目"
 
-#: ../src/build.c:786
+#: ../src/build.c:792
 msgid "Process failed, no working directory"
 msgstr "进程失败，没有工作目录"
 
-#: ../src/build.c:811
+#: ../src/build.c:815
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (在目录 %s 中)"
 
-#: ../src/build.c:831 ../src/build.c:1042 ../src/search.c:1624
+#: ../src/build.c:835 ../src/build.c:1048 ../src/search.c:1720
 #, c-format
 msgid "Process failed (%s)"
 msgstr "进程失败 (%s)"
@@ -2151,177 +2234,177 @@ msgstr "进程失败 (%s)"
 msgid "Failed to change the working directory to \"%s\""
 msgstr "改变工作路径到“%s”失败"
 
-#: ../src/build.c:929
+#: ../src/build.c:930
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr "执行 %s 失败 (启动脚本无法创建：%s)"
 
-#: ../src/build.c:984
+#: ../src/build.c:985
 msgid ""
 "Could not execute the file in the VTE because it probably contains a command."
 msgstr "因为文件中可能含有命令所以无法在虚拟终端中执行这个文件"
 
-#: ../src/build.c:1010
+#: ../src/build.c:1012
 #, c-format
 msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr "无法解析终端命令“%s”(请检查在首选项中的终端设置)"
 
-#: ../src/build.c:1027
+#: ../src/build.c:1031
 #, c-format
 msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
 msgstr "无法找到终端“%s” (请检查首选项中的终端设置)"
 
-#: ../src/build.c:1181
+#: ../src/build.c:1189
 msgid "Compilation failed."
 msgstr "编译失败。"
 
-#: ../src/build.c:1195
+#: ../src/build.c:1203
 msgid "Compilation finished successfully."
 msgstr "编译成功结束。"
 
-#: ../src/build.c:1381
+#: ../src/build.c:1389
 msgid "Custom Text"
 msgstr "自定义文本"
 
-#: ../src/build.c:1382
+#: ../src/build.c:1390
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "在这里输入自定义文本，所有输入的文本将追加到命令上。"
 
-#: ../src/build.c:1460
+#: ../src/build.c:1468
 msgid "_Next Error"
 msgstr "下一个错误(_N)"
 
-#: ../src/build.c:1462
+#: ../src/build.c:1470
 msgid "_Previous Error"
 msgstr "前一个错误(_P)"
 
 #. arguments
-#: ../src/build.c:1472 ../src/build.c:2871
+#: ../src/build.c:1480 ../src/build.c:2883
 msgid "_Set Build Commands"
 msgstr "设置生成命令(_S)"
 
-#: ../src/build.c:1756 ../src/toolbar.c:372
+#: ../src/build.c:1766 ../src/toolbar.c:372
 msgid "Build the current file"
 msgstr "生成当前文件"
 
-#: ../src/build.c:1767
+#: ../src/build.c:1777
 msgid "Build the current file with Make and the default target"
 msgstr "使用 Make 和缺省目标来生成当前文件"
 
-#: ../src/build.c:1769
+#: ../src/build.c:1779
 msgid "Build the current file with Make and the specified target"
 msgstr "使用 Make 和特定目标来生成当前文件"
 
-#: ../src/build.c:1771
+#: ../src/build.c:1781
 msgid "Compile the current file with Make"
 msgstr "使用 Make 来编译文件"
 
-#: ../src/build.c:1798
+#: ../src/build.c:1805
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "进程无法停止 (%s)。"
 
-#: ../src/build.c:1815 ../src/build.c:1827
+#: ../src/build.c:1822 ../src/build.c:1834
 msgid "No more build errors."
 msgstr "没有生成错误。"
 
-#: ../src/build.c:1926 ../src/build.c:1928
+#: ../src/build.c:1933 ../src/build.c:1935
 msgid "Set menu item label"
 msgstr "设置菜单项的标签"
 
-#: ../src/build.c:1953 ../src/symbols.c:735 ../src/tools.c:554
+#: ../src/build.c:1960 ../src/symbols.c:750 ../src/tools.c:568
 msgid "Label"
 msgstr "标签"
 
 #. command column, holding status and command display
-#: ../src/build.c:1954 ../src/symbols.c:730 ../src/tools.c:539
+#: ../src/build.c:1961 ../src/symbols.c:745 ../src/tools.c:553
 msgid "Command"
 msgstr "命令"
 
-#: ../src/build.c:1955
+#: ../src/build.c:1962
 msgid "Working directory"
 msgstr "工作目录"
 
-#: ../src/build.c:1956
+#: ../src/build.c:1963
 msgid "Reset"
 msgstr "重置"
 
-#: ../src/build.c:2001
+#: ../src/build.c:2010
 msgid "Click to set menu item label"
 msgstr "点击设置菜单项标签"
 
-#: ../src/build.c:2085 ../src/build.c:2087
+#: ../src/build.c:2094 ../src/build.c:2096
 #, c-format
 msgid "%s commands"
 msgstr "%s命令"
 
-#: ../src/build.c:2087
+#: ../src/build.c:2096
 msgid "No filetype"
 msgstr "无文件类型"
 
-#: ../src/build.c:2096 ../src/build.c:2131
+#: ../src/build.c:2105 ../src/build.c:2140
 msgid "Error regular expression:"
 msgstr "错误正则表达式："
 
-#: ../src/build.c:2124
+#: ../src/build.c:2133
 msgid "Independent commands"
 msgstr "文件类型无关命令"
 
-#: ../src/build.c:2156
+#: ../src/build.c:2165
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "附注：第 2 项会打开一个对话框，并将输入的文本追加到命令中。"
 
-#: ../src/build.c:2165
+#: ../src/build.c:2174
 msgid "Execute commands"
 msgstr "执行命令"
 
-#: ../src/build.c:2177
+#: ../src/build.c:2186
 #, c-format
 msgid ""
 "%d, %e, %f, %p are substituted in command and directory fields, see manual "
 "for details."
 msgstr "命令和目录字段中的 %d、%e、%f、%p 将被替代，详见手册。"
 
-#: ../src/build.c:2335
+#: ../src/build.c:2344
 msgid "Set Build Commands"
 msgstr "设置生成命令"
 
-#: ../src/build.c:2547
+#: ../src/build.c:2559
 msgid "_Compile"
 msgstr "编译(_C)"
 
-#: ../src/build.c:2561 ../src/build.c:2591 ../src/build.c:2799
+#: ../src/build.c:2573 ../src/build.c:2603 ../src/build.c:2811
 msgid "_Execute"
 msgstr "执行(_E)"
 
 #. build the code with make custom
-#: ../src/build.c:2606 ../src/build.c:2797 ../src/build.c:2851
-msgid "Make Custom _Target"
-msgstr "生成自定义目标(_T)"
+#: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
+msgid "Make Custom _Target..."
+msgstr "生成自定义目标...(_T)"
 
 #. build the code with make object
-#: ../src/build.c:2608 ../src/build.c:2798 ../src/build.c:2859
+#: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
 msgid "Make _Object"
 msgstr "生成目标文件(_O)"
 
-#: ../src/build.c:2610 ../src/build.c:2796
+#: ../src/build.c:2622 ../src/build.c:2808
 msgid "_Make"
 msgstr "生成(_M)"
 
 #. build the code with make all
-#: ../src/build.c:2843
+#: ../src/build.c:2855
 msgid "_Make All"
 msgstr "生成全部(_M)"
 
-#: ../src/callbacks.c:148
+#: ../src/callbacks.c:149
 msgid "Do you really want to quit?"
 msgstr "您真的要退出吗？"
 
-#: ../src/callbacks.c:206
+#: ../src/callbacks.c:207
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
@@ -2336,52 +2419,52 @@ msgstr "未保存的修改将会丢失。"
 msgid "Are you sure you want to reload '%s'?"
 msgstr "您确定要重新载入“%s”吗？"
 
-#: ../src/callbacks.c:1065 ../src/keybindings.c:467
+#: ../src/callbacks.c:1060 ../src/keybindings.c:468
 msgid "Go to Line"
 msgstr "跳转到行"
 
-#: ../src/callbacks.c:1066
+#: ../src/callbacks.c:1061
 msgid "Enter the line you want to go to:"
 msgstr "输入您要跳转到的行号："
 
-#: ../src/callbacks.c:1167 ../src/callbacks.c:1192
+#: ../src/callbacks.c:1162 ../src/callbacks.c:1187
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "在使用这个功能前请设置当前文件的文件类型。"
 
-#: ../src/callbacks.c:1297 ../src/ui_utils.c:642
+#: ../src/callbacks.c:1292 ../src/ui_utils.c:664
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/callbacks.c:1299 ../src/ui_utils.c:643
+#: ../src/callbacks.c:1294 ../src/ui_utils.c:665
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/callbacks.c:1301 ../src/ui_utils.c:644
+#: ../src/callbacks.c:1296 ../src/ui_utils.c:666
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/callbacks.c:1303 ../src/ui_utils.c:653
+#: ../src/callbacks.c:1298 ../src/ui_utils.c:675
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1305 ../src/ui_utils.c:654
+#: ../src/callbacks.c:1300 ../src/ui_utils.c:676
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/callbacks.c:1307 ../src/ui_utils.c:655
+#: ../src/callbacks.c:1302 ../src/ui_utils.c:677
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/callbacks.c:1309 ../src/ui_utils.c:664
+#: ../src/callbacks.c:1304 ../src/ui_utils.c:686
 msgid "_Use Custom Date Format"
 msgstr "使用自定义日期格式(_U)"
 
-#: ../src/callbacks.c:1313
+#: ../src/callbacks.c:1308
 msgid "Custom Date Format"
 msgstr "自定义日期格式"
 
-#: ../src/callbacks.c:1314
+#: ../src/callbacks.c:1309
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -2389,63 +2472,63 @@ msgstr ""
 "请在这里输入自定义日期和时间格式。你可以使用 ANSI C strftime 函数中的任何一个"
 "转义符。"
 
-#: ../src/callbacks.c:1337
+#: ../src/callbacks.c:1332
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "日期格式字符串无法转换 (可能太长了)。"
 
-#: ../src/callbacks.c:1530 ../src/callbacks.c:1538
+#: ../src/callbacks.c:1525 ../src/callbacks.c:1533
 msgid "No more message items."
 msgstr "没有消息"
 
-#: ../src/callbacks.c:1676
+#: ../src/callbacks.c:1671
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "无法打开文件 %s (文件不存在)"
 
-#: ../src/dialogs.c:219
+#: ../src/dialogs.c:220
 msgid "Detect from file"
 msgstr "根据文件探测"
 
-#: ../src/dialogs.c:222
+#: ../src/dialogs.c:223
 msgid "West European"
 msgstr "西欧"
 
-#: ../src/dialogs.c:224
+#: ../src/dialogs.c:225
 msgid "East European"
 msgstr "东欧"
 
-#: ../src/dialogs.c:226
+#: ../src/dialogs.c:227
 msgid "East Asian"
 msgstr "东亚"
 
-#: ../src/dialogs.c:228
+#: ../src/dialogs.c:229
 msgid "SE & SW Asian"
 msgstr "东南亚和西南亚"
 
-#: ../src/dialogs.c:230
+#: ../src/dialogs.c:231
 msgid "Middle Eastern"
 msgstr "中东"
 
-#: ../src/dialogs.c:232 ../src/encodings.c:112 ../src/encodings.c:113
+#: ../src/dialogs.c:233 ../src/encodings.c:112 ../src/encodings.c:113
 #: ../src/encodings.c:114 ../src/encodings.c:115 ../src/encodings.c:116
 #: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
 msgid "Unicode"
 msgstr "Unicode"
 
-#: ../src/dialogs.c:281
+#: ../src/dialogs.c:282
 msgid "_More Options"
 msgstr "更多选项(_M)"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:288
+#: ../src/dialogs.c:289
 msgid "Show _hidden files"
 msgstr "显示隐藏文件(_H)"
 
-#: ../src/dialogs.c:299
+#: ../src/dialogs.c:300
 msgid "Set encoding:"
 msgstr "设置编码："
 
-#: ../src/dialogs.c:308
+#: ../src/dialogs.c:309
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -2457,7 +2540,7 @@ msgstr ""
 "如果同时打开多个文件，则所有文件都被以该编码打开。"
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:315
+#: ../src/dialogs.c:316
 msgid "Set filetype:"
 msgstr "设置文件类型："
 
@@ -2471,7 +2554,7 @@ msgstr ""
 "明确定义文件类型。当 Geany 无法准确探测到文件类型时应明确定义。\n"
 "如果同时打开多个文件，则所在文件都被以该类型打开。"
 
-#: ../src/dialogs.c:354 ../src/dialogs.c:459
+#: ../src/dialogs.c:354 ../src/dialogs.c:460
 msgid "Open File"
 msgstr "打开文件"
 
@@ -2485,180 +2568,113 @@ msgstr "以只读模式打开文件。如果你打开多个文件，所有文件
 msgid "Detect by file extension"
 msgstr "根据文件扩展名探测"
 
-#: ../src/dialogs.c:524
+#: ../src/dialogs.c:525
 msgid "Overwrite?"
 msgstr "覆盖？"
 
-#: ../src/dialogs.c:525
+#: ../src/dialogs.c:526
 msgid "Filename already exists!"
 msgstr "文件名已经存在！"
 
-#: ../src/dialogs.c:554 ../src/dialogs.c:667
+#: ../src/dialogs.c:555 ../src/dialogs.c:668
 msgid "Save File"
 msgstr "保存文件"
 
-#: ../src/dialogs.c:563
+#: ../src/dialogs.c:564
 msgid "R_ename"
 msgstr "重命名(_E)"
 
-#: ../src/dialogs.c:564
+#: ../src/dialogs.c:565
 msgid "Save the file and rename it"
 msgstr "保存并重命名文件"
 
-#: ../src/dialogs.c:685 ../src/win32.c:678
+#: ../src/dialogs.c:686 ../src/win32.c:687
 msgid "Error"
 msgstr "错误"
 
-#: ../src/dialogs.c:688 ../src/dialogs.c:766 ../src/dialogs.c:1551
-#: ../src/win32.c:684
+#: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
+#: ../src/win32.c:693
 msgid "Question"
 msgstr "问题"
 
-#: ../src/dialogs.c:691 ../src/win32.c:690
+#: ../src/dialogs.c:692 ../src/win32.c:699
 msgid "Warning"
 msgstr "警告"
 
-#: ../src/dialogs.c:694 ../src/win32.c:696
+#: ../src/dialogs.c:695 ../src/win32.c:705
 msgid "Information"
 msgstr "信息"
 
-#: ../src/dialogs.c:770
+#: ../src/dialogs.c:771
 msgid "_Don't save"
 msgstr "不保存(_D)"
 
-#: ../src/dialogs.c:799
+#: ../src/dialogs.c:800
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "文件“%s”没有保存。"
 
-#: ../src/dialogs.c:800
+#: ../src/dialogs.c:801
 msgid "Do you want to save it before closing?"
 msgstr "您要在关闭文件前保存吗？"
 
-#: ../src/dialogs.c:862
+#: ../src/dialogs.c:877
 msgid "Choose font"
 msgstr "选择字体"
 
-#: ../src/dialogs.c:1163
+#: ../src/dialogs.c:1180
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr "发生了一个错误或无法取得文件信息 (比如一个空文件)。"
 
-#: ../src/dialogs.c:1182 ../src/dialogs.c:1183 ../src/dialogs.c:1184
-#: ../src/dialogs.c:1190 ../src/dialogs.c:1191 ../src/dialogs.c:1192
-#: ../src/symbols.c:2176 ../src/symbols.c:2190 ../src/ui_utils.c:267
+#: ../src/dialogs.c:1199 ../src/dialogs.c:1200 ../src/dialogs.c:1201
+#: ../src/dialogs.c:1207 ../src/dialogs.c:1208 ../src/dialogs.c:1209
+#: ../src/symbols.c:2229 ../src/symbols.c:2245 ../src/ui_utils.c:281
 msgid "unknown"
 msgstr "未知"
 
-#: ../src/dialogs.c:1197 ../src/symbols.c:905
-msgid "Properties"
-msgstr "属性"
+#: ../src/dialogs.c:1214
+#, c-format
+msgid "%s Properties"
+msgstr "%s 属性"
 
-#: ../src/dialogs.c:1228
-msgid "<b>Type:</b>"
-msgstr "<b>类型：</b>"
-
-#: ../src/dialogs.c:1242
-msgid "<b>Size:</b>"
-msgstr "<b>大小：</b>"
-
-#: ../src/dialogs.c:1258
-msgid "<b>Location:</b>"
-msgstr "<b>位置：</b>"
-
-#: ../src/dialogs.c:1272
-msgid "<b>Read-only:</b>"
-msgstr "<b>只读：</b>"
-
-#: ../src/dialogs.c:1279
-msgid "(only inside Geany)"
-msgstr " (仅在Geany中)"
-
-#: ../src/dialogs.c:1288
-msgid "<b>Encoding:</b>"
-msgstr "<b>编码：</b>"
-
-#: ../src/dialogs.c:1298 ../src/ui_utils.c:271
+#: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
 msgstr " (含有 BOM)"
 
-#: ../src/dialogs.c:1298
+#: ../src/dialogs.c:1247
 msgid "(without BOM)"
 msgstr " (无 BOM)"
-
-#: ../src/dialogs.c:1309
-msgid "<b>Modified:</b>"
-msgstr "<b>修改于：</b>"
-
-#: ../src/dialogs.c:1323
-msgid "<b>Changed:</b>"
-msgstr "<b>变更于：</b>"
-
-#: ../src/dialogs.c:1337
-msgid "<b>Accessed:</b>"
-msgstr "<b>访问于：</b>"
-
-#: ../src/dialogs.c:1359
-msgid "<b>Permissions:</b>"
-msgstr "<b>权限：</b>"
-
-#. Header
-#: ../src/dialogs.c:1367
-msgid "Read:"
-msgstr "读："
-
-#: ../src/dialogs.c:1374
-msgid "Write:"
-msgstr "写："
-
-#: ../src/dialogs.c:1381
-msgid "Execute:"
-msgstr "执行："
-
-#. Owner
-#: ../src/dialogs.c:1389
-msgid "Owner:"
-msgstr "所有者："
-
-#. Group
-#: ../src/dialogs.c:1425
-msgid "Group:"
-msgstr "组："
-
-#. Other
-#: ../src/dialogs.c:1461
-msgid "Other:"
-msgstr "其他："
 
 #: ../src/document.c:600
 #, c-format
 msgid "File %s closed."
 msgstr "文件 %s 已关闭。"
 
-#: ../src/document.c:744
+#: ../src/document.c:747
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "新文件“%s”已打开。"
 
-#: ../src/document.c:795 ../src/document.c:1319
+#: ../src/document.c:798 ../src/document.c:1334
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "无法打开文件 %s (%s)"
 
-#: ../src/document.c:815
+#: ../src/document.c:818
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "文件“%s”是非法的 %s。"
 
-#: ../src/document.c:821
+#: ../src/document.c:824
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr "文件“%s”可能不是文本文件或文件编码不支持。"
 
-#: ../src/document.c:831
+#: ../src/document.c:834
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2670,31 +2686,31 @@ msgstr ""
 "据丢失。\n"
 "文件被设置为只读状态。"
 
-#: ../src/document.c:1033
+#: ../src/document.c:1046
 msgid "Spaces"
 msgstr "空格"
 
-#: ../src/document.c:1036
+#: ../src/document.c:1049
 msgid "Tabs"
 msgstr "制表符"
 
-#: ../src/document.c:1039
+#: ../src/document.c:1052
 msgid "Tabs and Spaces"
 msgstr "制表符和空格"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1044
+#: ../src/document.c:1057
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "为 %2$s 设置 %1$s 缩进模式。"
 
-#: ../src/document.c:1055
+#: ../src/document.c:1068
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "为 %2$s 设置缩进宽度 %1$d。"
 
-#: ../src/document.c:1207
+#: ../src/document.c:1222
 #, c-format
 msgid "File %s reloaded."
 msgstr "文件 %s 已重新载入。"
@@ -2702,27 +2718,27 @@ msgstr "文件 %s 已重新载入。"
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1215
+#: ../src/document.c:1230
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "文件 %s 已打开 (%d%s)。"
 
-#: ../src/document.c:1217
+#: ../src/document.c:1232
 msgid ", read-only"
 msgstr "，只读"
 
-#: ../src/document.c:1413
+#: ../src/document.c:1429
 msgid "Error renaming file."
 msgstr "重命名文件出错。"
 
-#: ../src/document.c:1500
+#: ../src/document.c:1516
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr "文件“%s”从UTF-8转换过来时出错。文件未保存。"
 
-#: ../src/document.c:1522
+#: ../src/document.c:1537
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2731,32 +2747,32 @@ msgstr ""
 "错误信息：%s\n"
 "错误产生于“%s” (行：%d，列：%d)。"
 
-#: ../src/document.c:1527
+#: ../src/document.c:1541
 #, c-format
 msgid "Error message: %s."
 msgstr "错误信息：%s 。"
 
-#: ../src/document.c:1587
+#: ../src/document.c:1601
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "无法打开文件“%s”进行编辑：fopen() 失败：%s"
 
-#: ../src/document.c:1605
+#: ../src/document.c:1619
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "无法写文件“%s”：fwrite() 失败：%s"
 
-#: ../src/document.c:1619
+#: ../src/document.c:1633
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "无法关闭文件“%s”：fclose() 失败：%s"
 
-#: ../src/document.c:1768
+#: ../src/document.c:1782
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "保存文件出错 (%s)。"
 
-#: ../src/document.c:1773
+#: ../src/document.c:1787
 #, c-format
 msgid ""
 "%s\n"
@@ -2767,41 +2783,41 @@ msgstr ""
 "\n"
 "磁盘上的文件可能会被截断！"
 
-#: ../src/document.c:1775
+#: ../src/document.c:1789
 msgid "Error saving file."
 msgstr "保存文件出错。"
 
-#: ../src/document.c:1799
+#: ../src/document.c:1813
 #, c-format
 msgid "File %s saved."
 msgstr "文件 %s 已保存。"
 
-#: ../src/document.c:1876 ../src/document.c:1940 ../src/document.c:1948
+#: ../src/document.c:1890 ../src/document.c:1955 ../src/document.c:1963
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "“%s”未找到。"
 
-#: ../src/document.c:1948
+#: ../src/document.c:1963
 msgid "Wrap search and find again?"
 msgstr "要循环查找吗？"
 
-#: ../src/document.c:2034 ../src/search.c:1270 ../src/search.c:1314
-#: ../src/search.c:2085 ../src/search.c:2086
+#: ../src/document.c:2052 ../src/search.c:1359 ../src/search.c:1410
+#: ../src/search.c:2205 ../src/search.c:2206
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "未找到匹配项“%s”。"
 
-#: ../src/document.c:2040
+#: ../src/document.c:2058
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s：替换了 %d 处，从“%s”变为“%s”。"
 
-#: ../src/document.c:2916
+#: ../src/document.c:2955
 msgid "Do you want to reload it?"
 msgstr "您要重新载入吗？"
 
-#: ../src/document.c:2917
+#: ../src/document.c:2956
 #, c-format
 msgid ""
 "The file '%s' on the disk is more recent than\n"
@@ -2810,28 +2826,28 @@ msgstr ""
 "磁盘中的文件“%s”\n"
 "比当前编辑的新。"
 
-#: ../src/document.c:2935
+#: ../src/document.c:2974
 msgid "Close _without saving"
 msgstr "关闭且不保存(_W)"
 
-#: ../src/document.c:2938
+#: ../src/document.c:2977
 msgid "Try to resave the file?"
 msgstr "尝试重新保存文件？"
 
-#: ../src/document.c:2939
+#: ../src/document.c:2978
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "没有在磁盘上找到文件“%s”！"
 
-#: ../src/editor.c:4348
+#: ../src/editor.c:4356
 msgid "Enter Tab Width"
 msgstr "输入制表符宽度"
 
-#: ../src/editor.c:4349
+#: ../src/editor.c:4357
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "输入要用一个制表符代替多少个空格。"
 
-#: ../src/editor.c:4511
+#: ../src/editor.c:4519
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "警告：非标准的硬 tab 宽度：%d != 8！"
@@ -2964,68 +2980,73 @@ msgstr "中东语系(_M)"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:83 ../src/filetypes.c:173 ../src/filetypes.c:187
-#: ../src/filetypes.c:195 ../src/filetypes.c:209
+#: ../src/filetypes.c:91
 #, c-format
 msgid "%s source file"
 msgstr "%s 源文件"
 
-#: ../src/filetypes.c:84
+#: ../src/filetypes.c:92
 #, c-format
 msgid "%s file"
 msgstr "%s 文件"
 
-#: ../src/filetypes.c:311
-msgid "Shell script"
-msgstr "Shell 脚本"
+#: ../src/filetypes.c:93
+#, c-format
+msgid "%s script"
+msgstr "%s 脚本文件"
 
-#: ../src/filetypes.c:319
+#: ../src/filetypes.c:94
+#, c-format
+msgid "%s document"
+msgstr "%s 文档"
+
+#: ../src/filetypes.c:164
+msgid "Shell"
+msgstr "Shell"
+
+#: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../src/filetypes.c:326
-msgid "XML document"
-msgstr "XML 文档"
-
-#: ../src/filetypes.c:350
-msgid "Cascading StyleSheet"
+#: ../src/filetypes.c:169
+msgid "Cascading Stylesheet"
 msgstr "层叠样式表"
 
-#: ../src/filetypes.c:419
-msgid "Config file"
+#: ../src/filetypes.c:178
+msgid "Config"
 msgstr "配置文件"
 
-#: ../src/filetypes.c:425
-msgid "Gettext translation file"
+#: ../src/filetypes.c:179
+msgid "Gettext translation"
 msgstr "Gettext 翻译文件"
 
-#: ../src/filetypes.c:734
+#: ../src/filetypes.c:414
 msgid "_Programming Languages"
 msgstr "编程语言(_P)"
 
-#: ../src/filetypes.c:735
+#: ../src/filetypes.c:415
 msgid "_Scripting Languages"
 msgstr "脚本语言(_S)"
 
-#: ../src/filetypes.c:736
+#: ../src/filetypes.c:416
 msgid "_Markup Languages"
 msgstr "标记语言(_M)"
 
-#: ../src/filetypes.c:737
+#: ../src/filetypes.c:417
 msgid "M_iscellaneous"
 msgstr "其他"
 
-#: ../src/filetypes.c:1475 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:105
 msgid "All Source"
 msgstr "所有源文件"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1500 ../src/project.c:295 ../src/win32.c:95
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
 #: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
 msgid "All files"
 msgstr "所有文件"
 
-#: ../src/filetypes.c:1548
+#: ../src/filetypes.c:1241
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "文件类型 %s 的错误正则表达式：%s"
@@ -3034,555 +3055,555 @@ msgstr "文件类型 %s 的错误正则表达式：%s"
 msgid "untitled"
 msgstr "未命名"
 
-#: ../src/highlighting.c:1257 ../src/main.c:841 ../src/socket.c:166
-#: ../src/templates.c:224
+#: ../src/highlighting.c:1232 ../src/main.c:864 ../src/socket.c:166
+#: ../src/templates.c:226
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "无法找到“%s”文件。"
 
-#: ../src/highlighting.c:1329
+#: ../src/highlighting.c:1304
 msgid "Default"
 msgstr "默认"
 
-#: ../src/highlighting.c:1368
+#: ../src/highlighting.c:1343
 msgid "The current filetype overrides the default style."
 msgstr "当前文件类型覆盖了默认的样式。"
 
-#: ../src/highlighting.c:1369
+#: ../src/highlighting.c:1344
 msgid "This may cause color schemes to display incorrectly."
 msgstr "这可能导致配色方案显示不正常。"
 
-#: ../src/highlighting.c:1390
+#: ../src/highlighting.c:1365
 msgid "Color Schemes"
 msgstr "配色方案"
 
 #. visual group order
-#: ../src/keybindings.c:226 ../src/symbols.c:707
+#: ../src/keybindings.c:227 ../src/symbols.c:722
 msgid "File"
 msgstr "文件"
 
-#: ../src/keybindings.c:228
+#: ../src/keybindings.c:229
 msgid "Clipboard"
 msgstr "剪贴板"
 
-#: ../src/keybindings.c:229
+#: ../src/keybindings.c:230
 msgid "Select"
 msgstr "选择"
 
-#: ../src/keybindings.c:230
+#: ../src/keybindings.c:231
 msgid "Format"
 msgstr "格式"
 
-#: ../src/keybindings.c:231
+#: ../src/keybindings.c:232
 msgid "Insert"
 msgstr "插入"
 
-#: ../src/keybindings.c:232
+#: ../src/keybindings.c:233
 msgid "Settings"
 msgstr "设置"
 
-#: ../src/keybindings.c:233
+#: ../src/keybindings.c:234
 msgid "Search"
 msgstr "搜索"
 
-#: ../src/keybindings.c:234
+#: ../src/keybindings.c:235
 msgid "Go to"
 msgstr "跳转到行"
 
-#: ../src/keybindings.c:235
+#: ../src/keybindings.c:236
 msgid "View"
 msgstr "查看"
 
-#: ../src/keybindings.c:236 ../src/symbols.c:822
+#: ../src/keybindings.c:237 ../src/symbols.c:855
 msgid "Document"
 msgstr "文档"
 
-#: ../src/keybindings.c:238 ../src/keybindings.c:592 ../src/project.c:447
-#: ../src/ui_utils.c:1882
+#: ../src/keybindings.c:239 ../src/keybindings.c:593 ../src/project.c:452
+#: ../src/ui_utils.c:1989
 msgid "Build"
 msgstr "生成"
 
-#: ../src/keybindings.c:240 ../src/keybindings.c:617
+#: ../src/keybindings.c:241 ../src/keybindings.c:618
 msgid "Help"
 msgstr "帮助"
 
-#: ../src/keybindings.c:241
+#: ../src/keybindings.c:242
 msgid "Focus"
 msgstr "焦点"
 
-#: ../src/keybindings.c:242
+#: ../src/keybindings.c:243
 msgid "Notebook tab"
 msgstr "标签页"
 
-#: ../src/keybindings.c:251 ../src/keybindings.c:281
+#: ../src/keybindings.c:252 ../src/keybindings.c:282
 msgid "New"
 msgstr "新建"
 
-#: ../src/keybindings.c:253 ../src/keybindings.c:283
+#: ../src/keybindings.c:254 ../src/keybindings.c:284
 msgid "Open"
 msgstr "打开"
 
-#: ../src/keybindings.c:256
+#: ../src/keybindings.c:257
 msgid "Open selected file"
 msgstr "打开选择的文件"
 
-#: ../src/keybindings.c:258
+#: ../src/keybindings.c:259
 msgid "Save"
 msgstr "保存"
 
-#: ../src/keybindings.c:260 ../src/toolbar.c:55
+#: ../src/keybindings.c:261 ../src/toolbar.c:55
 msgid "Save as"
 msgstr "另存为"
 
-#: ../src/keybindings.c:262
+#: ../src/keybindings.c:263
 msgid "Save all"
 msgstr "全部保存"
 
-#: ../src/keybindings.c:265
+#: ../src/keybindings.c:266
 msgid "Print"
 msgstr "打印"
 
-#: ../src/keybindings.c:267 ../src/keybindings.c:288
+#: ../src/keybindings.c:268 ../src/keybindings.c:289
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/keybindings.c:269
+#: ../src/keybindings.c:270
 msgid "Close all"
 msgstr "全部关闭"
 
-#: ../src/keybindings.c:272
+#: ../src/keybindings.c:273
 msgid "Reload file"
 msgstr "重新载入文件"
 
-#: ../src/keybindings.c:274
+#: ../src/keybindings.c:275
 msgid "Re-open last closed tab"
 msgstr "重新载入刚刚关闭的标签"
 
-#: ../src/keybindings.c:276
+#: ../src/keybindings.c:277
 msgid "Quit"
 msgstr "退出"
 
-#: ../src/keybindings.c:293
+#: ../src/keybindings.c:294
 msgid "Undo"
 msgstr "撤消"
 
-#: ../src/keybindings.c:295
+#: ../src/keybindings.c:296
 msgid "Redo"
 msgstr "重做"
 
-#: ../src/keybindings.c:304
+#: ../src/keybindings.c:305
 msgid "Delete to line end"
 msgstr "删除到行尾"
 
-#: ../src/keybindings.c:307
+#: ../src/keybindings.c:308
 msgid "_Transpose Current Line"
 msgstr "调换当前行(_T)"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:310
 msgid "Scroll to current line"
 msgstr "滚动到当前行"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:312
 msgid "Scroll up the view by one line"
 msgstr "逐行移动"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:314
 msgid "Scroll down the view by one line"
 msgstr "逐行地向下滚动视图"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:316
 msgid "Complete snippet"
 msgstr "完成片断"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:318
 msgid "Move cursor in snippet"
 msgstr "在片断中移动光标"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:320
 msgid "Suppress snippet completion"
 msgstr "禁止完成片断"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:322
 msgid "Context Action"
 msgstr "上下文动作"
 
-#: ../src/keybindings.c:323
+#: ../src/keybindings.c:324
 msgid "Complete word"
 msgstr "自动完成"
 
-#: ../src/keybindings.c:325
+#: ../src/keybindings.c:326
 msgid "Show calltip"
 msgstr "显示函数原型"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:328
 msgid "Show macro list"
 msgstr "显示宏列表"
 
-#: ../src/keybindings.c:329
+#: ../src/keybindings.c:330
 msgid "Word part completion"
 msgstr "单词片段完成"
 
-#: ../src/keybindings.c:332
+#: ../src/keybindings.c:333
 msgid "Move line(s) up"
 msgstr "上移行"
 
-#: ../src/keybindings.c:335
+#: ../src/keybindings.c:336
 msgid "Move line(s) down"
 msgstr "下移行"
 
-#: ../src/keybindings.c:340
+#: ../src/keybindings.c:341
 msgid "Cut"
 msgstr "剪切"
 
-#: ../src/keybindings.c:342
+#: ../src/keybindings.c:343
 msgid "Copy"
 msgstr "复制"
 
-#: ../src/keybindings.c:344
+#: ../src/keybindings.c:345
 msgid "Paste"
 msgstr "粘贴"
 
-#: ../src/keybindings.c:355
+#: ../src/keybindings.c:356
 msgid "Select All"
 msgstr "全选"
 
-#: ../src/keybindings.c:357
+#: ../src/keybindings.c:358
 msgid "Select current word"
 msgstr "选择当前词"
 
-#: ../src/keybindings.c:365
+#: ../src/keybindings.c:366
 msgid "Select to previous word part"
 msgstr "选择上一个单词片段"
 
-#: ../src/keybindings.c:367
+#: ../src/keybindings.c:368
 msgid "Select to next word part"
 msgstr "选择下一个单词片段"
 
-#: ../src/keybindings.c:375
+#: ../src/keybindings.c:376
 msgid "Toggle line commentation"
 msgstr "开关行注释"
 
-#: ../src/keybindings.c:378
+#: ../src/keybindings.c:379
 msgid "Comment line(s)"
 msgstr "注释行"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 msgid "Uncomment line(s)"
 msgstr "取消注释行"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:383
 msgid "Increase indent"
 msgstr "增加缩进"
 
-#: ../src/keybindings.c:385
+#: ../src/keybindings.c:386
 msgid "Decrease indent"
 msgstr "减少缩进"
 
-#: ../src/keybindings.c:388
+#: ../src/keybindings.c:389
 msgid "Increase indent by one space"
 msgstr "增加一个空格缩进"
 
-#: ../src/keybindings.c:390
+#: ../src/keybindings.c:391
 msgid "Decrease indent by one space"
 msgstr "减少一个空格缩进"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:395
 msgid "Send to Custom Command 1"
 msgstr "发送自定义命令 1"
 
-#: ../src/keybindings.c:396
+#: ../src/keybindings.c:397
 msgid "Send to Custom Command 2"
 msgstr "发送自定义命令 2"
 
-#: ../src/keybindings.c:398
+#: ../src/keybindings.c:399
 msgid "Send to Custom Command 3"
 msgstr "发送自定义命令 3"
 
-#: ../src/keybindings.c:406
+#: ../src/keybindings.c:407
 msgid "Join lines"
 msgstr "加入行"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Insert date"
 msgstr "插入日期"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 msgid "Insert New Line Before Current"
 msgstr "在前面插入一个新行"
 
-#: ../src/keybindings.c:419
+#: ../src/keybindings.c:420
 msgid "Insert New Line After Current"
 msgstr "在后面插入一个新行"
 
-#: ../src/keybindings.c:432 ../src/search.c:439
+#: ../src/keybindings.c:433 ../src/search.c:455
 msgid "Find"
 msgstr "查找"
 
-#: ../src/keybindings.c:434
+#: ../src/keybindings.c:435
 msgid "Find Next"
 msgstr "查找下一个"
 
-#: ../src/keybindings.c:436
+#: ../src/keybindings.c:437
 msgid "Find Previous"
 msgstr "查找上一个"
 
-#: ../src/keybindings.c:443 ../src/search.c:593
+#: ../src/keybindings.c:444 ../src/search.c:608
 msgid "Replace"
 msgstr "替换"
 
-#: ../src/keybindings.c:445 ../src/search.c:843
+#: ../src/keybindings.c:446 ../src/search.c:860
 msgid "Find in Files"
 msgstr "在多个文件中查找"
 
-#: ../src/keybindings.c:448
+#: ../src/keybindings.c:449
 msgid "Next Message"
 msgstr "下一个信息"
 
-#: ../src/keybindings.c:450
+#: ../src/keybindings.c:451
 msgid "Previous Message"
 msgstr "上一个信息"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:454
 msgid "Find Usage"
 msgstr "查找用法"
 
-#: ../src/keybindings.c:456
+#: ../src/keybindings.c:457
 msgid "Find Document Usage"
 msgstr "查找文档用法"
 
-#: ../src/keybindings.c:463 ../src/toolbar.c:66
+#: ../src/keybindings.c:464 ../src/toolbar.c:66
 msgid "Navigate back a location"
 msgstr "返回上一个位置"
 
-#: ../src/keybindings.c:465 ../src/toolbar.c:67
+#: ../src/keybindings.c:466 ../src/toolbar.c:67
 msgid "Navigate forward a location"
 msgstr "前进一个位置"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:471
 msgid "Go to matching brace"
 msgstr "跳转到对应花括号"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:474
 msgid "Toggle marker"
 msgstr "开关标记"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 msgid "Go to Tag Definition"
 msgstr "跳转到标记定义"
 
-#: ../src/keybindings.c:485
+#: ../src/keybindings.c:486
 msgid "Go to Tag Declaration"
 msgstr "跳转到标记说明"
 
-#: ../src/keybindings.c:487
+#: ../src/keybindings.c:488
 msgid "Go to Start of Line"
 msgstr "跳转到行首"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:490
 msgid "Go to End of Line"
 msgstr "跳转到行尾"
 
-#: ../src/keybindings.c:491
+#: ../src/keybindings.c:492
 msgid "Go to Start of Display Line"
 msgstr "跳转到显示的行首"
 
-#: ../src/keybindings.c:493
+#: ../src/keybindings.c:494
 msgid "Go to End of Display Line"
 msgstr "跳转到显示的行尾"
 
-#: ../src/keybindings.c:495
+#: ../src/keybindings.c:496
 msgid "Go to Previous Word Part"
 msgstr "跳转到前一个词"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:498
 msgid "Go to Next Word Part"
 msgstr "跳转到下一个词"
 
-#: ../src/keybindings.c:502
+#: ../src/keybindings.c:503
 msgid "Toggle All Additional Widgets"
 msgstr "开关所有附加部件"
 
-#: ../src/keybindings.c:505
+#: ../src/keybindings.c:506
 msgid "Fullscreen"
 msgstr "全屏"
 
-#: ../src/keybindings.c:507
+#: ../src/keybindings.c:508
 msgid "Toggle Messages Window"
 msgstr "开关信息窗口"
 
-#: ../src/keybindings.c:510
+#: ../src/keybindings.c:511
 msgid "Toggle Sidebar"
 msgstr "开关边栏"
 
-#: ../src/keybindings.c:512
+#: ../src/keybindings.c:513
 msgid "Zoom In"
 msgstr "放大"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:515
 msgid "Zoom Out"
 msgstr "缩小"
 
-#: ../src/keybindings.c:516
+#: ../src/keybindings.c:517
 msgid "Zoom Reset"
 msgstr "重置缩放"
 
-#: ../src/keybindings.c:521
+#: ../src/keybindings.c:522
 msgid "Switch to Editor"
 msgstr "切换到编辑器"
 
-#: ../src/keybindings.c:523
+#: ../src/keybindings.c:524
 msgid "Switch to Search Bar"
 msgstr "切换到查找栏"
 
-#: ../src/keybindings.c:525
+#: ../src/keybindings.c:526
 msgid "Switch to Message Window"
 msgstr "切换到信息窗口"
 
-#: ../src/keybindings.c:527
+#: ../src/keybindings.c:528
 msgid "Switch to Compiler"
 msgstr "切换到编译器"
 
-#: ../src/keybindings.c:529
+#: ../src/keybindings.c:530
 msgid "Switch to Messages"
 msgstr "切换到信息"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:532
 msgid "Switch to Scribble"
 msgstr "切换到便签"
 
-#: ../src/keybindings.c:533
+#: ../src/keybindings.c:534
 msgid "Switch to VTE"
 msgstr "切换到虚拟终端"
 
-#: ../src/keybindings.c:535
+#: ../src/keybindings.c:536
 msgid "Switch to Sidebar"
 msgstr "切换到边栏"
 
-#: ../src/keybindings.c:537
+#: ../src/keybindings.c:538
 msgid "Switch to Sidebar Symbol List"
 msgstr "切换到边栏符号列表"
 
-#: ../src/keybindings.c:539
+#: ../src/keybindings.c:540
 msgid "Switch to Sidebar Document List"
 msgstr "切换到边栏文档列表"
 
-#: ../src/keybindings.c:544
+#: ../src/keybindings.c:545
 msgid "Switch to left document"
 msgstr "切换到左侧文档"
 
-#: ../src/keybindings.c:546
+#: ../src/keybindings.c:547
 msgid "Switch to right document"
 msgstr "切换到右侧文档"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:549
 msgid "Switch to last used document"
 msgstr "切换到上次使用的文楼"
 
-#: ../src/keybindings.c:551
+#: ../src/keybindings.c:552
 msgid "Move document left"
 msgstr "向左移动文档"
 
-#: ../src/keybindings.c:554
+#: ../src/keybindings.c:555
 msgid "Move document right"
 msgstr "向右移动文档"
 
-#: ../src/keybindings.c:556
+#: ../src/keybindings.c:557
 msgid "Move document first"
 msgstr "将文档移动到最前"
 
-#: ../src/keybindings.c:558
+#: ../src/keybindings.c:559
 msgid "Move document last"
 msgstr "将文档移动到最后"
 
-#: ../src/keybindings.c:563
+#: ../src/keybindings.c:564
 msgid "Toggle Line wrapping"
 msgstr "切换自动换行"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:566
 msgid "Toggle Line breaking"
 msgstr "切换自动断行"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:572
 msgid "Replace spaces by tabs"
 msgstr "替换空格为制表符"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:574
 msgid "Toggle current fold"
 msgstr "开关当前折叠点"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:576
 msgid "Fold all"
 msgstr "折叠全部"
 
-#: ../src/keybindings.c:577
+#: ../src/keybindings.c:578
 msgid "Unfold all"
 msgstr "展开全部"
 
-#: ../src/keybindings.c:579
+#: ../src/keybindings.c:580
 msgid "Reload symbol list"
 msgstr "重新载入符号列表"
 
-#: ../src/keybindings.c:581
+#: ../src/keybindings.c:582
 msgid "Remove Markers"
 msgstr "移除标记"
 
-#: ../src/keybindings.c:583
+#: ../src/keybindings.c:584
 msgid "Remove Error Indicators"
 msgstr "移除出错指示"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:586
 msgid "Remove Markers and Error Indicators"
 msgstr "移除标记和出错指示"
 
-#: ../src/keybindings.c:590 ../src/toolbar.c:68
+#: ../src/keybindings.c:591 ../src/toolbar.c:68
 msgid "Compile"
 msgstr "编译"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:595
 msgid "Make all"
 msgstr "生成全部"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:598
 msgid "Make custom target"
 msgstr "生成自定义目标"
 
-#: ../src/keybindings.c:599
+#: ../src/keybindings.c:600
 msgid "Make object"
 msgstr "生成目标文件"
 
-#: ../src/keybindings.c:601
+#: ../src/keybindings.c:602
 msgid "Next error"
 msgstr "下一个错误"
 
-#: ../src/keybindings.c:603
+#: ../src/keybindings.c:604
 msgid "Previous error"
 msgstr "上一个错误"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:606
 msgid "Run"
 msgstr "运行"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:608
 msgid "Build options"
 msgstr "生成参数"
 
-#: ../src/keybindings.c:612
+#: ../src/keybindings.c:613
 msgid "Show Color Chooser"
 msgstr "显示颜色选择器"
 
-#: ../src/keybindings.c:865
+#: ../src/keybindings.c:866
 msgid "Keyboard Shortcuts"
 msgstr "快捷键"
 
-#: ../src/keybindings.c:877
+#: ../src/keybindings.c:878
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "下列快捷键可定义："
 
-#: ../src/keyfile.c:979
+#: ../src/keyfile.c:990
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "随便写写，当便签或草稿好了。从前有座山，山里有个庙……"
 
-#: ../src/keyfile.c:1185
+#: ../src/keyfile.c:1196
 msgid "Failed to load one or more session files."
 msgstr "打开一个或多个上次会话的文件失败。"
 
@@ -3673,25 +3694,25 @@ msgstr "细节"
 msgid "Show version and exit"
 msgstr "显示版本并退出"
 
-#: ../src/main.c:528
+#: ../src/main.c:545
 msgid "[FILES...]"
 msgstr "[文件...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/main.c:559
+#: ../src/main.c:578
 #, c-format
 msgid "built on %s with "
 msgstr "生成于 %s，库版本 "
 
-#: ../src/main.c:647
+#: ../src/main.c:666
 msgid "Move it now?"
 msgstr "现在移动？"
 
-#: ../src/main.c:649
+#: ../src/main.c:668
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany 需要在开始前移动您原来的设置路径。"
 
-#: ../src/main.c:658
+#: ../src/main.c:677
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3700,14 +3721,14 @@ msgstr "你的设置路径已成功从“%s”变为“%s”。"
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/main.c:668
+#: ../src/main.c:687
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr "您的配置文件路径无法从“%s”移动到“%s” (%s)。请手动移动文件夹到新路径。"
 
-#: ../src/main.c:749
+#: ../src/main.c:772
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3718,17 +3739,17 @@ msgstr ""
 "如果没有配置文件目录 Geany 可能会出现问题。\n"
 "不管它，启动 Geany？"
 
-#: ../src/main.c:1080
+#: ../src/main.c:1156
 #, c-format
 msgid "This is Geany %s."
 msgstr "这是 Geany %s。"
 
-#: ../src/main.c:1082
+#: ../src/main.c:1158
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "无法创建配置文件目录 (%s)。"
 
-#: ../src/main.c:1299
+#: ../src/main.c:1363
 msgid "Configuration files reloaded."
 msgstr "配置文件已重新载入。"
 
@@ -3753,60 +3774,60 @@ msgstr "隐藏信息窗口(_H)"
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "无法找到文件“%s” - 尝试当前文档路径。"
 
-#: ../src/notebook.c:195
+#: ../src/notebook.c:196
 msgid "Switch to Document"
 msgstr "切换到文档"
 
-#: ../src/plugins.c:496
+#: ../src/plugins.c:497
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr "插件“%s”与这个版本的 Geany 不匹配，请重新编译该插件。"
 
-#: ../src/plugins.c:1040
+#: ../src/plugins.c:1041
 msgid "_Plugin Manager"
 msgstr "插件管理器(_P)"
 
 #. Translators: <plugin name> <plugin version>
-#: ../src/plugins.c:1211
+#: ../src/plugins.c:1216
 #, c-format
 msgid "%s %s"
 msgstr "%s %s"
 
-#: ../src/plugins.c:1287
+#: ../src/plugins.c:1292
 msgid "Active"
 msgstr "激活"
 
-#: ../src/plugins.c:1293
+#: ../src/plugins.c:1298
 msgid "Plugin"
 msgstr "插件"
 
-#: ../src/plugins.c:1299
+#: ../src/plugins.c:1304
 msgid "Description"
 msgstr "描述"
 
-#: ../src/plugins.c:1317
+#: ../src/plugins.c:1322
 msgid "No plugins available."
 msgstr "没有可用插件。"
 
-#: ../src/plugins.c:1415
+#: ../src/plugins.c:1424
 msgid "Plugins"
 msgstr "插件"
 
-#: ../src/plugins.c:1435
+#: ../src/plugins.c:1444
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "选择哪些插件应该在启动时装载："
 
-#: ../src/plugins.c:1447
+#: ../src/plugins.c:1461
 msgid "<b>Plugin details:</b>"
 msgstr "<b>插件细节：</b>"
 
-#: ../src/plugins.c:1456
+#: ../src/plugins.c:1470
 msgid "Plugin:"
 msgstr "插件："
 
-#: ../src/plugins.c:1457
+#: ../src/plugins.c:1471
 msgid "Author(s):"
 msgstr "作者："
 
@@ -3823,11 +3844,11 @@ msgstr "获取按键"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "请按下用于“%s”的按键组合。"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2298 ../src/sidebar.c:731
+#: ../src/prefs.c:226 ../src/symbols.c:2383 ../src/sidebar.c:741
 msgid "_Expand All"
 msgstr "全部展开(_E)"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2303 ../src/sidebar.c:737
+#: ../src/prefs.c:231 ../src/symbols.c:2388 ../src/sidebar.c:747
 msgid "_Collapse All"
 msgstr "全部折叠(_C)"
 
@@ -3839,38 +3860,38 @@ msgstr "操作"
 msgid "Shortcut"
 msgstr "快捷键"
 
-#: ../src/prefs.c:1466
+#: ../src/prefs.c:1491
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: ../src/prefs.c:1468
+#: ../src/prefs.c:1493
 msgid "_Override"
 msgstr "覆写(_O)"
 
-#: ../src/prefs.c:1469
+#: ../src/prefs.c:1494
 msgid "Override that keybinding?"
 msgstr "覆写快捷键？"
 
-#: ../src/prefs.c:1470
+#: ../src/prefs.c:1495
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "按键组合“%s”已用于“%s”。"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1667
+#: ../src/prefs.c:1699
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr "在下面输入工具路径。不需要的请留空。"
 
 #. page Templates
-#: ../src/prefs.c:1672
+#: ../src/prefs.c:1704
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr "定义用于模板的信息。查看帮助文档了解更多细节。"
 
 #. page Keybindings
-#: ../src/prefs.c:1677
+#: ../src/prefs.c:1709
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3880,7 +3901,7 @@ msgstr ""
 "击一个操作直接编辑快捷键的字符串。"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1682
+#: ../src/prefs.c:1714
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -3899,35 +3920,35 @@ msgstr "文档设置"
 msgid "Print only the basename(without the path) of the printed file"
 msgstr "打印文件的基本文件名，不包括路径。"
 
-#: ../src/printing.c:404
+#: ../src/printing.c:414
 msgid "Paginating"
 msgstr "页码"
 
-#: ../src/printing.c:428
+#: ../src/printing.c:438
 #, c-format
 msgid "Page %d of %d"
 msgstr "第 %d 页，共 %d 页"
 
-#: ../src/printing.c:484
+#: ../src/printing.c:494
 #, c-format
 msgid "Did not send document %s to the printing subsystem."
 msgstr "没有将文档 %s 发送到打印子系统。"
 
-#: ../src/printing.c:486
+#: ../src/printing.c:496
 #, c-format
 msgid "Document %s was sent to the printing subsystem."
 msgstr "文档 %s 已发送到打印子系统。"
 
-#: ../src/printing.c:539
+#: ../src/printing.c:549
 #, c-format
 msgid "Printing of %s failed (%s)."
 msgstr "打印 %s 失败 (%s)。"
 
-#: ../src/printing.c:577
+#: ../src/printing.c:587
 msgid "Please set a print command in the preferences dialog first."
 msgstr "请先在首选项对话框中设置打印命令。"
 
-#: ../src/printing.c:585
+#: ../src/printing.c:595
 #, c-format
 msgid ""
 "The file \"%s\" will be printed with the following command:\n"
@@ -3938,12 +3959,12 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../src/printing.c:601
+#: ../src/printing.c:611
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
 msgstr "打印“%s”失败 (返回代码：%s)。"
 
-#: ../src/printing.c:607
+#: ../src/printing.c:617
 #, c-format
 msgid "File %s printed."
 msgstr "文件 %s 打印完毕。"
@@ -3958,209 +3979,213 @@ msgstr "项目"
 msgid "New Project"
 msgstr "新项目"
 
-#: ../src/project.c:127
+#: ../src/project.c:129
 msgid "C_reate"
 msgstr "创建(_R)"
 
-#: ../src/project.c:175 ../src/project.c:420
+#: ../src/project.c:180 ../src/project.c:425
 msgid "Choose Project Base Path"
 msgstr "选择项目根目录"
 
-#: ../src/project.c:197 ../src/project.c:563
+#: ../src/project.c:202 ../src/project.c:568
 msgid "Project file could not be written"
 msgstr "无法写入项目文件"
 
-#: ../src/project.c:200
+#: ../src/project.c:205
 #, c-format
 msgid "Project \"%s\" created."
 msgstr "已创建项目“%s”。"
 
-#: ../src/project.c:241 ../src/project.c:273 ../src/project.c:953
+#: ../src/project.c:246 ../src/project.c:278 ../src/project.c:958
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "无法载入项目文件“%s”。"
 
-#: ../src/project.c:267 ../src/project.c:279
+#: ../src/project.c:272 ../src/project.c:284
 msgid "Open Project"
 msgstr "打开项目"
 
-#: ../src/project.c:299
+#: ../src/project.c:304
 msgid "Project files"
 msgstr "项目文件"
 
-#: ../src/project.c:361
+#: ../src/project.c:366
 #, c-format
 msgid "Project \"%s\" closed."
 msgstr "已关闭项目\"%s\"。"
 
-#: ../src/project.c:566
+#: ../src/project.c:571
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "已保存项目“%s”。"
 
-#: ../src/project.c:599
+#: ../src/project.c:604
 msgid "Do you want to close it before proceeding?"
 msgstr "您要在执行前关闭文件吗？"
 
-#: ../src/project.c:600
+#: ../src/project.c:605
 #, c-format
 msgid "The '%s' project is open."
 msgstr "已打开项目“%s”。"
 
-#: ../src/project.c:649
+#: ../src/project.c:654
 msgid "The specified project name is too short."
 msgstr "定义的项目名称太短。"
 
-#: ../src/project.c:655
+#: ../src/project.c:660
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "定义的项目名称太短 (最大%d个字符)。"
 
-#: ../src/project.c:667
+#: ../src/project.c:672
 msgid "You have specified an invalid project filename."
 msgstr "项目文件名非法。"
 
-#: ../src/project.c:690
+#: ../src/project.c:695
 msgid "Create the project's base path directory?"
 msgstr "创建项目根目录？"
 
-#: ../src/project.c:691
+#: ../src/project.c:696
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "路径“%s”不存在。"
 
-#: ../src/project.c:700
+#: ../src/project.c:705
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "项目根目录无法创建 (%s)。"
 
-#: ../src/project.c:713
+#: ../src/project.c:718
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "项目文件无法写入 (%s)。"
 
 #. initialise the dialog
-#: ../src/project.c:857 ../src/project.c:868
+#: ../src/project.c:862 ../src/project.c:873
 msgid "Choose Project Filename"
 msgstr "选择项目文件名"
 
-#: ../src/project.c:943
+#: ../src/project.c:948
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "已打开项目“%s”。"
 
-#: ../src/search.c:290 ../src/search.c:942
+#: ../src/search.c:302 ../src/search.c:959
 msgid "_Use regular expressions"
 msgstr "使用正则表达式(_U)"
 
-#: ../src/search.c:293
+#: ../src/search.c:305
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr "使用POSIX-like正则表达式，详见帮助文档。"
 
-#: ../src/search.c:300
+#: ../src/search.c:312
 msgid "Search _backwards"
 msgstr "向后搜索(_B)"
 
-#: ../src/search.c:313
+#: ../src/search.c:325
 msgid "Use _escape sequences"
 msgstr "使用转义序列(_E)"
 
-#: ../src/search.c:317
+#: ../src/search.c:329
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
 "corresponding control characters"
 msgstr "替换 \\\\、\\t、\\n、\\r 和 \\uXXXX (Unicode字符串) 为对应的控制字符。"
 
-#: ../src/search.c:326 ../src/search.c:951
+#: ../src/search.c:338 ../src/search.c:968
 msgid "C_ase sensitive"
 msgstr "大小写敏感(_A)"
 
-#: ../src/search.c:330 ../src/search.c:956
+#: ../src/search.c:342 ../src/search.c:973
 msgid "Match only a _whole word"
 msgstr "整词配对(_W)"
 
-#: ../src/search.c:334
+#: ../src/search.c:346
 msgid "Match from s_tart of word"
 msgstr "匹配词首(_T)"
 
-#: ../src/search.c:446
+#: ../src/search.c:462
 msgid "_Previous"
 msgstr "上一个(_P)"
 
-#: ../src/search.c:451
+#: ../src/search.c:467
 msgid "_Next"
 msgstr "下一个(_N)"
 
-#: ../src/search.c:455 ../src/search.c:614 ../src/search.c:853
+#: ../src/search.c:471 ../src/search.c:629 ../src/search.c:870
 msgid "_Search for:"
 msgstr "搜索(_S)："
 
 #. Now add the multiple match options
-#: ../src/search.c:484
+#: ../src/search.c:499
 msgid "_Find All"
 msgstr "查找全部(_F)"
 
-#: ../src/search.c:491
+#: ../src/search.c:506
 msgid "_Mark"
 msgstr "标记(_M)"
 
-#: ../src/search.c:493
+#: ../src/search.c:508
 msgid "Mark all matches in the current document"
 msgstr "在当前文档中标记所有匹配项。"
 
-#: ../src/search.c:498 ../src/search.c:671
+#: ../src/search.c:513 ../src/search.c:688
 msgid "In Sessi_on"
 msgstr "在所有打开的文档中(_O)"
 
-#: ../src/search.c:503 ../src/search.c:676
+#: ../src/search.c:518 ../src/search.c:693
 msgid "_In Document"
 msgstr "在当前文档中(_I)"
 
 #. close window checkbox
-#: ../src/search.c:509 ../src/search.c:689
+#: ../src/search.c:524 ../src/search.c:706
 msgid "Close _dialog"
 msgstr "关闭对话框(_D)"
 
-#: ../src/search.c:513 ../src/search.c:693
+#: ../src/search.c:528 ../src/search.c:710
 msgid "Disable this option to keep the dialog open"
 msgstr "禁止该选项使对话框保持打开"
 
-#: ../src/search.c:608
+#: ../src/search.c:618
+msgid "_Replace"
+msgstr "替换(_R)"
+
+#: ../src/search.c:623
 msgid "Replace & Fi_nd"
 msgstr "替换和查找(_N)"
 
-#: ../src/search.c:617
+#: ../src/search.c:632
 msgid "Replace wit_h:"
 msgstr "替换为(_H)："
 
 #. Now add the multiple replace options
-#: ../src/search.c:664
+#: ../src/search.c:681
 msgid "Re_place All"
 msgstr "全部替换(_P)"
 
-#: ../src/search.c:681
+#: ../src/search.c:698
 msgid "In Se_lection"
 msgstr "在选中的文字中(_L)"
 
-#: ../src/search.c:683
+#: ../src/search.c:700
 msgid "Replace all matches found in the currently selected text"
 msgstr "在当前选中的文字中替换"
 
-#: ../src/search.c:800
+#: ../src/search.c:817
 msgid "all"
 msgstr "全部"
 
-#: ../src/search.c:802
+#: ../src/search.c:819
 msgid "project"
 msgstr "项目"
 
-#: ../src/search.c:804
+#: ../src/search.c:821
 msgid "custom"
 msgstr "自定义"
 
-#: ../src/search.c:808
+#: ../src/search.c:825
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4170,110 +4195,110 @@ msgstr ""
 "项目：使用项目设置中定义的文件通配符\n"
 "自定义：自定义文件通配符"
 
-#: ../src/search.c:872
+#: ../src/search.c:889
 msgid "Fi_les:"
 msgstr "文件(_L)："
 
-#: ../src/search.c:884
+#: ../src/search.c:901
 msgid "File patterns, e.g. *.c *.h"
 msgstr "文件通配符，比如 *.c *.h"
 
-#: ../src/search.c:896
+#: ../src/search.c:913
 msgid "_Directory:"
 msgstr "目录(_D)："
 
-#: ../src/search.c:914
+#: ../src/search.c:931
 msgid "E_ncoding:"
 msgstr "编码(_N)："
 
-#: ../src/search.c:945
+#: ../src/search.c:962
 msgid "See grep's manual page for more information"
 msgstr "详情请参阅 Grep 手册"
 
-#: ../src/search.c:947
+#: ../src/search.c:964
 msgid "_Recurse in subfolders"
 msgstr "搜索子目录(_R)"
 
-#: ../src/search.c:960
+#: ../src/search.c:977
 msgid "_Invert search results"
 msgstr "反转查找结果(_I)"
 
-#: ../src/search.c:964
+#: ../src/search.c:981
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "反转查找结果以选择不匹配的行"
 
-#: ../src/search.c:981
+#: ../src/search.c:998
 msgid "E_xtra options:"
 msgstr "额外的参数(_X)："
 
-#: ../src/search.c:988
+#: ../src/search.c:1005
 msgid "Other options to pass to Grep"
 msgstr "传给 Grep 的其它参数"
 
-#: ../src/search.c:1273 ../src/search.c:2091 ../src/search.c:2094
+#: ../src/search.c:1362 ../src/search.c:2211 ../src/search.c:2214
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "找到 %d 个“%s”的匹配项。"
 
-#: ../src/search.c:1320
+#: ../src/search.c:1416
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "在 %2$u 个文档中替换了 %1$u 个匹配项。"
 
-#: ../src/search.c:1511
+#: ../src/search.c:1607
 msgid "Invalid directory for find in files."
 msgstr "非法目录。"
 
-#: ../src/search.c:1532
+#: ../src/search.c:1628
 msgid "No text to find."
 msgstr "未找到。"
 
-#: ../src/search.c:1559
+#: ../src/search.c:1655
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
 
-#: ../src/search.c:1566
+#: ../src/search.c:1662
 #, c-format
 msgid "Cannot parse extra options: %s"
 msgstr "无法解析额外选项：%s"
 
-#: ../src/search.c:1632
+#: ../src/search.c:1728
 msgid "Searching..."
 msgstr "搜索..."
 
-#: ../src/search.c:1643
+#: ../src/search.c:1739
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (在目录 %s 中)"
 
-#: ../src/search.c:1684
+#: ../src/search.c:1780
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "无法打开目录 (%s)"
 
-#: ../src/search.c:1784
+#: ../src/search.c:1880
 msgid "Search failed."
 msgstr "搜索失败。"
 
-#: ../src/search.c:1808
+#: ../src/search.c:1904
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "搜索完成，找到 %d 个匹配项。"
 
-#: ../src/search.c:1816
+#: ../src/search.c:1912
 msgid "No matches found."
 msgstr "未找到匹配项。"
 
-#: ../src/search.c:1844
+#: ../src/search.c:1940
 #, c-format
 msgid "Bad regex: %s"
 msgstr "错误的正则表达式：%s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:228
+#: ../src/socket.c:232
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -4282,302 +4307,332 @@ msgstr ""
 "Geany 尝试访问以另一用户身份运行的另一实例的 Unix Domain socket。\n"
 "这是一个致命错误，Geany 即将退出。"
 
-#: ../src/stash.c:1098
+#: ../src/stash.c:1118
 msgid "Name"
 msgstr "名称"
 
-#: ../src/stash.c:1105
+#: ../src/stash.c:1125
 msgid "Value"
 msgstr "值"
 
-#: ../src/symbols.c:686 ../src/symbols.c:736 ../src/symbols.c:812
+#: ../src/symbols.c:701 ../src/symbols.c:751 ../src/symbols.c:845
 msgid "Chapter"
 msgstr "章"
 
-#: ../src/symbols.c:687 ../src/symbols.c:732 ../src/symbols.c:813
+#: ../src/symbols.c:702 ../src/symbols.c:747 ../src/symbols.c:846
 msgid "Section"
 msgstr "节"
 
-#: ../src/symbols.c:688
+#: ../src/symbols.c:703
 msgid "Sect1"
 msgstr "第1节"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:704
 msgid "Sect2"
 msgstr "第2节"
 
-#: ../src/symbols.c:690
+#: ../src/symbols.c:705
 msgid "Sect3"
 msgstr "第3节"
 
-#: ../src/symbols.c:691
+#: ../src/symbols.c:706
 msgid "Appendix"
 msgstr "索引"
 
-#: ../src/symbols.c:692 ../src/symbols.c:737 ../src/symbols.c:762
-#: ../src/symbols.c:773 ../src/symbols.c:871 ../src/symbols.c:882
-#: ../src/symbols.c:894 ../src/symbols.c:908 ../src/symbols.c:920
-#: ../src/symbols.c:932 ../src/symbols.c:947 ../src/symbols.c:976
-#: ../src/symbols.c:1006
+#: ../src/symbols.c:707 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:793 ../src/symbols.c:804 ../src/symbols.c:904
+#: ../src/symbols.c:915 ../src/symbols.c:928 ../src/symbols.c:942
+#: ../src/symbols.c:954 ../src/symbols.c:966 ../src/symbols.c:983
+#: ../src/symbols.c:1012 ../src/symbols.c:1044
 msgid "Other"
 msgstr "其他"
 
-#: ../src/symbols.c:698 ../src/symbols.c:940 ../src/symbols.c:985
+#: ../src/symbols.c:713 ../src/symbols.c:974 ../src/symbols.c:1022
 msgid "Module"
 msgstr "模块"
 
-#: ../src/symbols.c:699 ../src/symbols.c:867 ../src/symbols.c:918
-#: ../src/symbols.c:930 ../src/symbols.c:945 ../src/symbols.c:957
+#: ../src/symbols.c:714 ../src/symbols.c:900 ../src/symbols.c:952
+#: ../src/symbols.c:964 ../src/symbols.c:979 ../src/symbols.c:993
 msgid "Types"
 msgstr "类型"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:715
 msgid "Type constructors"
 msgstr "类型结构"
 
-#: ../src/symbols.c:701 ../src/symbols.c:723 ../src/symbols.c:744
-#: ../src/symbols.c:761 ../src/symbols.c:770 ../src/symbols.c:782
-#: ../src/symbols.c:791 ../src/symbols.c:855 ../src/symbols.c:904
-#: ../src/symbols.c:927 ../src/symbols.c:942 ../src/symbols.c:970
-#: ../src/symbols.c:993
+#: ../src/symbols.c:716 ../src/symbols.c:738 ../src/symbols.c:759
+#: ../src/symbols.c:776 ../src/symbols.c:788 ../src/symbols.c:801
+#: ../src/symbols.c:814 ../src/symbols.c:824 ../src/symbols.c:888
+#: ../src/symbols.c:938 ../src/symbols.c:961 ../src/symbols.c:1006
+#: ../src/symbols.c:1030
 msgid "Functions"
 msgstr "函数"
 
-#: ../src/symbols.c:706
+#: ../src/symbols.c:721
 msgid "Program"
 msgstr "程序"
 
-#: ../src/symbols.c:708 ../src/symbols.c:716 ../src/symbols.c:722
+#: ../src/symbols.c:723 ../src/symbols.c:731 ../src/symbols.c:737
 msgid "Sections"
 msgstr "节"
 
-#: ../src/symbols.c:709
+#: ../src/symbols.c:724
 msgid "Paragraph"
 msgstr "段"
 
-#: ../src/symbols.c:710
+#: ../src/symbols.c:725
 msgid "Group"
 msgstr "组"
 
-#: ../src/symbols.c:711
+#: ../src/symbols.c:726
 msgid "Data"
 msgstr "数据"
 
-#: ../src/symbols.c:717
+#: ../src/symbols.c:732
 msgid "Keys"
 msgstr "键值"
 
-#: ../src/symbols.c:724 ../src/symbols.c:784 ../src/symbols.c:856
-#: ../src/symbols.c:881 ../src/symbols.c:906 ../src/symbols.c:919
-#: ../src/symbols.c:928 ../src/symbols.c:944 ../src/symbols.c:1005
+#: ../src/symbols.c:739 ../src/symbols.c:790 ../src/symbols.c:816
+#: ../src/symbols.c:889 ../src/symbols.c:914 ../src/symbols.c:940
+#: ../src/symbols.c:953 ../src/symbols.c:962 ../src/symbols.c:978
+#: ../src/symbols.c:1013 ../src/symbols.c:1042
 msgid "Variables"
 msgstr "变量"
 
-#: ../src/symbols.c:731
+#: ../src/symbols.c:746
 msgid "Environment"
 msgstr "环境"
 
-#: ../src/symbols.c:733 ../src/symbols.c:814
+#: ../src/symbols.c:748 ../src/symbols.c:847
 msgid "Subsection"
 msgstr "小节"
 
-#: ../src/symbols.c:734 ../src/symbols.c:815
+#: ../src/symbols.c:749 ../src/symbols.c:848
 msgid "Subsubsection"
 msgstr "小小节"
 
-#: ../src/symbols.c:745
+#: ../src/symbols.c:760 ../src/symbols.c:785
 msgid "Structures"
 msgstr "结构"
 
-#: ../src/symbols.c:752
+#: ../src/symbols.c:767
 msgid "Parts"
 msgstr "部分"
 
-#: ../src/symbols.c:753
+#: ../src/symbols.c:768
 msgid "Assembly"
 msgstr "汇编"
 
-#: ../src/symbols.c:754
+#: ../src/symbols.c:769
 msgid "Steps"
 msgstr "步骤"
 
-#: ../src/symbols.c:769 ../src/symbols.c:864 ../src/symbols.c:889
-#: ../src/symbols.c:901
-msgid "Package"
-msgstr "包"
-
-#: ../src/symbols.c:771 ../src/symbols.c:931 ../src/symbols.c:954
-msgid "Labels"
-msgstr "标签"
-
-#: ../src/symbols.c:772 ../src/symbols.c:783 ../src/symbols.c:907
-#: ../src/symbols.c:929
-msgid "Constants"
-msgstr "固定值"
-
-#: ../src/symbols.c:780 ../src/symbols.c:890 ../src/symbols.c:902
-#: ../src/symbols.c:915 ../src/symbols.c:941 ../src/symbols.c:992
-msgid "Interfaces"
-msgstr "接口"
-
-#: ../src/symbols.c:781 ../src/symbols.c:802 ../src/symbols.c:834
-#: ../src/symbols.c:844 ../src/symbols.c:853 ../src/symbols.c:891
-#: ../src/symbols.c:903 ../src/symbols.c:916 ../src/symbols.c:991
-msgid "Classes"
-msgstr "类"
-
-#: ../src/symbols.c:792
-msgid "Anchors"
-msgstr "锚点"
-
-#: ../src/symbols.c:793
-msgid "H1 Headings"
-msgstr "标题一"
-
-#: ../src/symbols.c:794
-msgid "H2 Headings"
-msgstr "标题二"
-
-#: ../src/symbols.c:795
-msgid "H3 Headings"
-msgstr "标题三"
-
-#: ../src/symbols.c:803
-msgid "ID Selectors"
-msgstr "ID 选择"
-
-#: ../src/symbols.c:804
-msgid "Type Selectors"
-msgstr "类型选择器"
-
-#: ../src/symbols.c:823
-msgid "Section Level 1"
-msgstr "章节一"
-
-#: ../src/symbols.c:824
-msgid "Section Level 2"
-msgstr "章节二"
-
-#: ../src/symbols.c:825
-msgid "Section Level 3"
-msgstr "章节三"
-
-#: ../src/symbols.c:826
-msgid "Section Level 4"
-msgstr "章节四"
-
-#: ../src/symbols.c:833 ../src/symbols.c:879
+#: ../src/symbols.c:784 ../src/symbols.c:866 ../src/symbols.c:912
 msgid "Modules"
 msgstr "模块"
 
-#: ../src/symbols.c:835
-msgid "Singletons"
-msgstr "单态"
+#: ../src/symbols.c:786 ../src/symbols.c:817
+msgid "Traits"
+msgstr "接口"
 
-#: ../src/symbols.c:836 ../src/symbols.c:845 ../src/symbols.c:854
-#: ../src/symbols.c:892 ../src/symbols.c:917
-msgid "Methods"
-msgstr "方法"
+#: ../src/symbols.c:787
+msgid "Implementations"
+msgstr "实现"
 
-#: ../src/symbols.c:843 ../src/symbols.c:988
-msgid "Namespaces"
-msgstr "命名空间"
-
-#: ../src/symbols.c:846 ../src/symbols.c:971
-msgid "Procedures"
-msgstr "过程"
-
-#: ../src/symbols.c:857
-msgid "Imports"
-msgstr "导出"
-
-#: ../src/symbols.c:865
-msgid "Entities"
-msgstr "实体"
-
-#: ../src/symbols.c:866
-msgid "Architectures"
-msgstr "结构"
-
-#: ../src/symbols.c:868
-msgid "Functions / Procedures"
-msgstr "函数 / 过程"
-
-#: ../src/symbols.c:869
-msgid "Variables / Signals"
-msgstr "变量 / 信号"
-
-#: ../src/symbols.c:870
-msgid "Processes / Blocks / Components"
-msgstr "进程 / 块 / 元件"
-
-#: ../src/symbols.c:878
-msgid "Events"
-msgstr "事件"
-
-#: ../src/symbols.c:880
-msgid "Functions / Tasks"
-msgstr "函数 / 任务"
-
-#: ../src/symbols.c:893 ../src/symbols.c:994
-msgid "Members"
-msgstr "成员"
-
-#: ../src/symbols.c:943
-msgid "Subroutines"
-msgstr "子程序"
-
-#: ../src/symbols.c:946
-msgid "Blocks"
-msgstr "块"
-
-#: ../src/symbols.c:955 ../src/symbols.c:964 ../src/symbols.c:1002
-msgid "Macros"
-msgstr "宏"
-
-#: ../src/symbols.c:956
-msgid "Defines"
-msgstr "预定义"
-
-#: ../src/symbols.c:963
-msgid "Targets"
-msgstr "目标"
-
-#: ../src/symbols.c:972
-msgid "Indexes"
-msgstr "索引"
-
-#: ../src/symbols.c:973
-msgid "Tables"
-msgstr "表"
-
-#: ../src/symbols.c:974
-msgid "Triggers"
-msgstr "触发器"
-
-#: ../src/symbols.c:975
-msgid "Views"
-msgstr "视图"
-
-#: ../src/symbols.c:995
-msgid "Structs"
-msgstr "结构"
-
-#: ../src/symbols.c:996
+#: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
 msgstr "定义/枚举"
 
-#: ../src/symbols.c:1744
+#: ../src/symbols.c:791 ../src/symbols.c:991 ../src/symbols.c:1000
+#: ../src/symbols.c:1039
+msgid "Macros"
+msgstr "宏"
+
+#: ../src/symbols.c:792 ../src/symbols.c:869 ../src/symbols.c:878
+#: ../src/symbols.c:887 ../src/symbols.c:925 ../src/symbols.c:951
+msgid "Methods"
+msgstr "方法"
+
+#: ../src/symbols.c:800 ../src/symbols.c:897 ../src/symbols.c:922
+#: ../src/symbols.c:935
+msgid "Package"
+msgstr "包"
+
+#: ../src/symbols.c:802 ../src/symbols.c:965 ../src/symbols.c:990
+msgid "Labels"
+msgstr "标签"
+
+#: ../src/symbols.c:803 ../src/symbols.c:815 ../src/symbols.c:941
+#: ../src/symbols.c:963
+msgid "Constants"
+msgstr "固定值"
+
+#: ../src/symbols.c:811 ../src/symbols.c:876 ../src/symbols.c:1025
+msgid "Namespaces"
+msgstr "命名空间"
+
+#: ../src/symbols.c:812 ../src/symbols.c:923 ../src/symbols.c:936
+#: ../src/symbols.c:949 ../src/symbols.c:976 ../src/symbols.c:1029
+msgid "Interfaces"
+msgstr "接口"
+
+#: ../src/symbols.c:813 ../src/symbols.c:835 ../src/symbols.c:867
+#: ../src/symbols.c:877 ../src/symbols.c:886 ../src/symbols.c:924
+#: ../src/symbols.c:937 ../src/symbols.c:950 ../src/symbols.c:1028
+msgid "Classes"
+msgstr "类"
+
+#: ../src/symbols.c:825
+msgid "Anchors"
+msgstr "锚点"
+
+#: ../src/symbols.c:826
+msgid "H1 Headings"
+msgstr "标题一"
+
+#: ../src/symbols.c:827
+msgid "H2 Headings"
+msgstr "标题二"
+
+#: ../src/symbols.c:828
+msgid "H3 Headings"
+msgstr "标题三"
+
+#: ../src/symbols.c:836
+msgid "ID Selectors"
+msgstr "ID 选择"
+
+#: ../src/symbols.c:837
+msgid "Type Selectors"
+msgstr "类型选择器"
+
+#: ../src/symbols.c:856
+msgid "Section Level 1"
+msgstr "章节一"
+
+#: ../src/symbols.c:857
+msgid "Section Level 2"
+msgstr "章节二"
+
+#: ../src/symbols.c:858
+msgid "Section Level 3"
+msgstr "章节三"
+
+#: ../src/symbols.c:859
+msgid "Section Level 4"
+msgstr "章节四"
+
+#: ../src/symbols.c:868
+msgid "Singletons"
+msgstr "单态"
+
+#: ../src/symbols.c:879 ../src/symbols.c:1007
+msgid "Procedures"
+msgstr "过程"
+
+#: ../src/symbols.c:890
+msgid "Imports"
+msgstr "导出"
+
+#: ../src/symbols.c:898
+msgid "Entities"
+msgstr "实体"
+
+#: ../src/symbols.c:899
+msgid "Architectures"
+msgstr "结构"
+
+#: ../src/symbols.c:901
+msgid "Functions / Procedures"
+msgstr "函数 / 过程"
+
+#: ../src/symbols.c:902
+msgid "Variables / Signals"
+msgstr "变量 / 信号"
+
+#: ../src/symbols.c:903
+msgid "Processes / Blocks / Components"
+msgstr "进程 / 块 / 元件"
+
+#: ../src/symbols.c:911
+msgid "Events"
+msgstr "事件"
+
+#: ../src/symbols.c:913
+msgid "Functions / Tasks"
+msgstr "函数 / 任务"
+
+#: ../src/symbols.c:926 ../src/symbols.c:1031
+msgid "Members"
+msgstr "成员"
+
+#: ../src/symbols.c:927 ../src/symbols.c:982
+msgid "Enums"
+msgstr "枚举"
+
+#: ../src/symbols.c:939
+msgid "Properties"
+msgstr "属性"
+
+#: ../src/symbols.c:975
+msgid "Programs"
+msgstr "程序"
+
+#: ../src/symbols.c:977
+msgid "Functions / Subroutines"
+msgstr "函数 / 过程"
+
+#: ../src/symbols.c:980
+msgid "Components"
+msgstr "组件"
+
+#: ../src/symbols.c:981
+msgid "Blocks"
+msgstr "块"
+
+#: ../src/symbols.c:992
+msgid "Defines"
+msgstr "预定义"
+
+#: ../src/symbols.c:999
+msgid "Targets"
+msgstr "目标"
+
+#: ../src/symbols.c:1008
+msgid "Indexes"
+msgstr "索引"
+
+#: ../src/symbols.c:1009
+msgid "Tables"
+msgstr "表"
+
+#: ../src/symbols.c:1010
+msgid "Triggers"
+msgstr "触发器"
+
+#: ../src/symbols.c:1011
+msgid "Views"
+msgstr "视图"
+
+#: ../src/symbols.c:1032
+msgid "Structs"
+msgstr "结构"
+
+#: ../src/symbols.c:1043
+msgid "Extern Variables"
+msgstr "外部变量"
+
+#: ../src/symbols.c:1803
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "“%s”是未知的文件类型。\n"
 
-#: ../src/symbols.c:1767
+#: ../src/symbols.c:1829
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr "创建标记文件失败，可能因为未找到标记。\n"
 
-#: ../src/symbols.c:1774
+#: ../src/symbols.c:1836
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4586,7 +4641,7 @@ msgstr ""
 "用法：%s -g <标记文件> <文件列表>\n"
 "\n"
 
-#: ../src/symbols.c:1775
+#: ../src/symbols.c:1837
 #, c-format
 msgid ""
 "Example:\n"
@@ -4597,40 +4652,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1789
+#: ../src/symbols.c:1851
 msgid "Load Tags"
 msgstr "载入标记"
 
-#: ../src/symbols.c:1796
+#: ../src/symbols.c:1858
 msgid "Geany tag files (*.*.tags)"
 msgstr "Geany 标记文件 (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1816
+#: ../src/symbols.c:1878
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "载入 %s 标记文件“%s”。"
 
-#: ../src/symbols.c:1819
+#: ../src/symbols.c:1881
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "无法载入标记文件“%s”。"
 
-#: ../src/symbols.c:1959
+#: ../src/symbols.c:2019
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "未找到“%s”的声明。"
 
-#: ../src/symbols.c:1961
+#: ../src/symbols.c:2021
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "未找到“%s”的定义。"
 
-#: ../src/symbols.c:2313
+#: ../src/symbols.c:2398
 msgid "Sort by _Name"
 msgstr "按名称排序(_N)"
 
-#: ../src/symbols.c:2320
+#: ../src/symbols.c:2405
 msgid "Sort by _Appearance"
 msgstr "按外观排序(_A)"
 
@@ -4765,101 +4820,101 @@ msgstr "搜索框"
 msgid "Goto Field"
 msgstr "定位框"
 
-#: ../src/toolbar.c:579
+#: ../src/toolbar.c:582
 msgid "Separator"
 msgstr "分隔线"
 
-#: ../src/toolbar.c:580
+#: ../src/toolbar.c:583
 msgid "--- Separator ---"
 msgstr "--- 分隔线 ---"
 
-#: ../src/toolbar.c:949
+#: ../src/toolbar.c:955
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr "选择在工具栏上显示的项，可以拖拽项进行排列。"
 
-#: ../src/toolbar.c:965
+#: ../src/toolbar.c:971
 msgid "Available Items"
 msgstr "可用的项"
 
-#: ../src/toolbar.c:986
+#: ../src/toolbar.c:992
 msgid "Displayed Items"
 msgstr "显示的项"
 
-#: ../src/tools.c:109 ../src/tools.c:114
+#: ../src/tools.c:115 ../src/tools.c:120
 #, c-format
 msgid "Invalid command: %s"
 msgstr "非法命令：%s"
 
-#: ../src/tools.c:109
+#: ../src/tools.c:115
 msgid "Command not found"
 msgstr "命令未找到"
 
-#: ../src/tools.c:260
+#: ../src/tools.c:271
 #, c-format
 msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr "运行的自定义命令返回一个错误。您的选择内容没有变化。错误信息：%s"
 
-#: ../src/tools.c:326
+#: ../src/tools.c:338
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "运行的自定义命令返回一个错误退出代码。"
 
-#: ../src/tools.c:354 ../src/tools.c:402
+#: ../src/tools.c:366 ../src/tools.c:416
 #, c-format
 msgid "Custom command failed: %s"
 msgstr "自定义命令失败：%s"
 
-#: ../src/tools.c:358
+#: ../src/tools.c:370
 #, c-format
 msgid "Passing data and executing custom command: %s"
 msgstr "传送数据并执行自定义命令：%s"
 
-#: ../src/tools.c:514 ../src/tools.c:774
+#: ../src/tools.c:528 ../src/tools.c:791
 msgid "Set Custom Commands"
 msgstr "设置自定义命令"
 
-#: ../src/tools.c:522
+#: ../src/tools.c:536
 msgid ""
 "You can send the current selection to any of these commands and the output "
 "of the command replaces the current selection."
 msgstr "你可以发送当前选择给这些命令中的任一个，命令的输出将替换当前选择。"
 
-#: ../src/tools.c:536
+#: ../src/tools.c:550
 msgid "ID"
 msgstr "ID"
 
-#: ../src/tools.c:745
+#: ../src/tools.c:762
 msgid "No custom commands defined."
 msgstr "没有定义自定义命令。"
 
-#: ../src/tools.c:843
+#: ../src/tools.c:860
 msgid "Word Count"
 msgstr "字数统计"
 
-#: ../src/tools.c:852
+#: ../src/tools.c:869
 msgid "selection"
 msgstr "选中的文本"
 
-#: ../src/tools.c:857
+#: ../src/tools.c:874
 msgid "whole document"
 msgstr "整个文档"
 
-#: ../src/tools.c:866
+#: ../src/tools.c:883
 msgid "Range:"
 msgstr "范围："
 
-#: ../src/tools.c:878
+#: ../src/tools.c:895
 msgid "Lines:"
 msgstr "行数："
 
-#: ../src/tools.c:892
+#: ../src/tools.c:909
 msgid "Words:"
 msgstr "字数："
 
-#: ../src/tools.c:906
+#: ../src/tools.c:923
 msgid "Characters:"
 msgstr "字符："
 
@@ -4867,28 +4922,27 @@ msgstr "字符："
 msgid "No tags found"
 msgstr "未找到标记"
 
-#: ../src/sidebar.c:589
+#: ../src/sidebar.c:591
 msgid "Show S_ymbol List"
 msgstr "显示符号列表(_Y)"
 
-#: ../src/sidebar.c:597
+#: ../src/sidebar.c:603
 msgid "Show _Document List"
 msgstr "显示打开的文件的列表(_D)"
 
-#: ../src/sidebar.c:605 ../plugins/filebrowser.c:658
+#: ../src/sidebar.c:615 ../plugins/filebrowser.c:659
 msgid "H_ide Sidebar"
 msgstr "隐藏边栏(_I)"
 
-#: ../src/sidebar.c:710 ../plugins/filebrowser.c:629
-msgid "_Find in Files"
-msgstr "在多个文件中查找(_F)"
+#: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
+msgid "_Find in Files..."
+msgstr "在多个文件中查找...(_F)"
 
-#: ../src/sidebar.c:720
+#: ../src/sidebar.c:730
 msgid "Show _Paths"
 msgstr "显示路径(_P)"
 
-#. Status bar statistics: col = column, sel = selection.
-#: ../src/ui_utils.c:188
+#: ../src/ui_utils.c:62
 msgid ""
 "line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
 "encoding: %e      filetype: %f      scope: %S"
@@ -4897,146 +4951,136 @@ msgstr ""
 "%e      文件类型: %f      范围: %S"
 
 #. L = lines
-#: ../src/ui_utils.c:222
+#: ../src/ui_utils.c:236
 #, c-format
 msgid "%dL"
 msgstr "%dL"
 
 #. RO = read-only
-#: ../src/ui_utils.c:228 ../src/ui_utils.c:235
+#: ../src/ui_utils.c:242 ../src/ui_utils.c:249
 msgid "RO "
 msgstr "只读"
 
 #. OVR = overwrite/overtype, INS = insert
-#: ../src/ui_utils.c:230
+#: ../src/ui_utils.c:244
 msgid "OVR"
 msgstr "覆盖"
 
-#: ../src/ui_utils.c:230
+#: ../src/ui_utils.c:244
 msgid "INS"
 msgstr "插入"
 
-#: ../src/ui_utils.c:244
+#: ../src/ui_utils.c:258
 msgid "TAB"
 msgstr "制表符"
 
 #. SP = space
-#: ../src/ui_utils.c:247
+#: ../src/ui_utils.c:261
 msgid "SP"
 msgstr "空格"
 
 #. T/S = tabs and spaces
-#: ../src/ui_utils.c:250
+#: ../src/ui_utils.c:264
 msgid "T/S"
 msgstr "制表符或空格"
 
-#: ../src/ui_utils.c:258
+#: ../src/ui_utils.c:272
 msgid "MOD"
 msgstr "已修改"
 
-#: ../src/ui_utils.c:331
-#, c-format
-msgid "pos: %d"
-msgstr "位置: %d"
-
-#: ../src/ui_utils.c:333
-#, c-format
-msgid "style: %d"
-msgstr "样式: %d"
-
-#: ../src/ui_utils.c:385
+#: ../src/ui_utils.c:399
 msgid " (new instance)"
 msgstr " (新实例)"
 
-#: ../src/ui_utils.c:415
+#: ../src/ui_utils.c:429
 #, c-format
 msgid "Font updated (%s)."
 msgstr "字体已更新 (%s)。"
 
-#: ../src/ui_utils.c:611
+#: ../src/ui_utils.c:633
 msgid "C Standard Library"
 msgstr "C标准库"
 
-#: ../src/ui_utils.c:612
+#: ../src/ui_utils.c:634
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:613
+#: ../src/ui_utils.c:635
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C标准库)"
 
-#: ../src/ui_utils.c:614
+#: ../src/ui_utils.c:636
 msgid "C++ Standard Library"
 msgstr "C++ 标准库"
 
-#: ../src/ui_utils.c:615
+#: ../src/ui_utils.c:637
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:677
+#: ../src/ui_utils.c:699
 msgid "_Set Custom Date Format"
 msgstr "设置自定义日期格式(_S)"
 
-#: ../src/ui_utils.c:1725
+#: ../src/ui_utils.c:1810
 msgid "Select Folder"
 msgstr "选择目录"
 
-#: ../src/ui_utils.c:1725
+#: ../src/ui_utils.c:1810
 msgid "Select File"
 msgstr "选择文件"
 
-#: ../src/ui_utils.c:1880
+#: ../src/ui_utils.c:1987
 msgid "Save All"
 msgstr "全部保存"
 
-#: ../src/ui_utils.c:1881
+#: ../src/ui_utils.c:1988
 msgid "Close All"
 msgstr "全部关闭"
 
-#: ../src/ui_utils.c:2114
+#: ../src/ui_utils.c:2222
 msgid "Geany cannot start!"
 msgstr "Geany 无法启动！"
 
-#: ../src/utils.c:87
+#: ../src/utils.c:88
 msgid "Select Browser"
 msgstr "选择浏览器"
 
-#: ../src/utils.c:88
+#: ../src/utils.c:89
 msgid ""
 "Failed to spawn the configured browser command. Please correct it or enter "
 "another one."
 msgstr "无法启动设定的浏览器。请修改设置或输入另一个。"
 
-#: ../src/utils.c:374
+#: ../src/utils.c:375
 msgid "Win (CRLF)"
 msgstr "Win (CRLF)"
 
-#: ../src/utils.c:375
+#: ../src/utils.c:376
 msgid "Mac (CR)"
 msgstr "Mac (CR)"
 
-#: ../src/utils.c:376
+#: ../src/utils.c:377
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/vte.c:432
+#: ../src/vte.c:437
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "无效的 VTE 库 \"%s\"：缺少符号 \"%s\""
 
-#: ../src/vte.c:581
+#: ../src/vte.c:586
 msgid "_Set Path From Document"
 msgstr "根据文档设置路径(_S)"
 
-#: ../src/vte.c:586
+#: ../src/vte.c:591
 msgid "_Restart Terminal"
 msgstr "重启虚拟终端(_R)"
 
-#: ../src/vte.c:609
+#: ../src/vte.c:614
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
-#: ../src/vte.c:703
+#: ../src/vte.c:708
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
@@ -5050,7 +5094,7 @@ msgstr "Geany 项目文件"
 msgid "Executables"
 msgstr "可执行"
 
-#: ../src/win32.c:1210
+#: ../src/win32.c:1217
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "进程超时（%.02f 秒后）！"
@@ -5152,16 +5196,16 @@ msgid "Create Cla_ss"
 msgstr "创建类(_S)"
 
 #: ../plugins/classbuilder.c:1097
-msgid "_C++ Class"
-msgstr "_C++ 类"
+msgid "_C++ Class..."
+msgstr "_C++ 类..."
 
 #: ../plugins/classbuilder.c:1100
-msgid "_GTK+ Class"
-msgstr "_GTK+ 类"
+msgid "_GTK+ Class..."
+msgstr "_GTK+ 类..."
 
 #: ../plugins/classbuilder.c:1103
-msgid "_PHP Class"
-msgstr "_PHP 类"
+msgid "_PHP Class..."
+msgstr "_PHP 类..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5172,8 +5216,8 @@ msgid "Inserts HTML character entities like '&amp;'."
 msgstr "插入 HTML 实体字符如“&amp;”。"
 
 #: ../plugins/htmlchars.c:41 ../plugins/export.c:39
-#: ../plugins/filebrowser.c:45 ../plugins/saveactions.c:41
-#: ../plugins/splitwindow.c:34
+#: ../plugins/filebrowser.c:46 ../plugins/saveactions.c:43
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "Geany 开发团队"
 
@@ -5209,8 +5253,8 @@ msgstr "标点符号"
 msgid "Miscellaneous characters"
 msgstr "其他字符"
 
-#: ../plugins/htmlchars.c:369 ../plugins/filebrowser.c:1152
-#: ../plugins/saveactions.c:474
+#: ../plugins/htmlchars.c:369 ../plugins/filebrowser.c:1153
+#: ../plugins/saveactions.c:525
 msgid "Plugin configuration directory could not be created."
 msgstr "无法创建插件定义目录。"
 
@@ -5239,8 +5283,8 @@ msgid "HTML (name)"
 msgstr "HTML (名称)"
 
 #: ../plugins/htmlchars.c:739
-msgid "_Insert Special HTML Characters"
-msgstr "插入特殊 HTML 字符(_I)"
+msgid "_Insert Special HTML Characters..."
+msgstr "插入特殊 HTML 字符...(_I)"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5317,78 +5361,78 @@ msgstr "导出(_E)"
 
 #. HTML
 #: ../plugins/export.c:787
-msgid "As _HTML"
-msgstr "为 _HTML"
+msgid "As _HTML..."
+msgstr "为 _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-msgid "As _LaTeX"
-msgstr "为 _LaTeX"
+msgid "As _LaTeX..."
+msgstr "为 _LaTeX..."
 
-#: ../plugins/filebrowser.c:44
+#: ../plugins/filebrowser.c:45
 msgid "File Browser"
 msgstr "文件浏览器"
 
-#: ../plugins/filebrowser.c:44
+#: ../plugins/filebrowser.c:45
 msgid "Adds a file browser tab to the sidebar."
 msgstr "在边栏上增加文件浏览器标签。"
 
-#: ../plugins/filebrowser.c:368
+#: ../plugins/filebrowser.c:369
 msgid "Too many items selected!"
 msgstr "选择了太多项！"
 
-#: ../plugins/filebrowser.c:444
+#: ../plugins/filebrowser.c:445
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "无法执行设置的外部命令“%s” (%s)。"
 
-#: ../plugins/filebrowser.c:614
-msgid "Open _externally"
-msgstr "外部打开(_E)"
+#: ../plugins/filebrowser.c:615
+msgid "Open _Externally"
+msgstr "在外部打开(_E)"
 
-#: ../plugins/filebrowser.c:639
+#: ../plugins/filebrowser.c:640
 msgid "Show _Hidden Files"
 msgstr "显示隐藏文件(_H)"
 
-#: ../plugins/filebrowser.c:869
+#: ../plugins/filebrowser.c:870
 msgid "Up"
 msgstr "向上"
 
-#: ../plugins/filebrowser.c:874
+#: ../plugins/filebrowser.c:875
 msgid "Refresh"
 msgstr "刷新"
 
-#: ../plugins/filebrowser.c:879
+#: ../plugins/filebrowser.c:880
 msgid "Home"
 msgstr "家目录"
 
-#: ../plugins/filebrowser.c:884
+#: ../plugins/filebrowser.c:885
 msgid "Set path from document"
 msgstr "根据文档设置路径"
 
-#: ../plugins/filebrowser.c:898
+#: ../plugins/filebrowser.c:899
 msgid "Filter:"
 msgstr "过滤器："
 
-#: ../plugins/filebrowser.c:907
+#: ../plugins/filebrowser.c:908
 msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
 msgstr "用常用的通配符过滤您的文件。用空格分开多个通配符。"
 
-#: ../plugins/filebrowser.c:1122
+#: ../plugins/filebrowser.c:1123
 msgid "Focus File List"
 msgstr "聚焦文件列表"
 
-#: ../plugins/filebrowser.c:1124
+#: ../plugins/filebrowser.c:1125
 msgid "Focus Path Entry"
 msgstr "聚焦路径输入框"
 
-#: ../plugins/filebrowser.c:1217
+#: ../plugins/filebrowser.c:1218
 msgid "External open command:"
 msgstr "外部打开命令："
 
-#: ../plugins/filebrowser.c:1225
+#: ../plugins/filebrowser.c:1226
 #, c-format
 msgid ""
 "The command to execute when using \"Open with\". You can use %f and %d "
@@ -5401,155 +5445,192 @@ msgstr ""
 "%f 代表包括全路径的文件名\n"
 "%d 代表选定文件的路径，不包括文件名"
 
-#: ../plugins/filebrowser.c:1233
+#: ../plugins/filebrowser.c:1234
 msgid "Show hidden files"
 msgstr "显示隐藏文件"
 
-#: ../plugins/filebrowser.c:1241
+#: ../plugins/filebrowser.c:1242
 msgid "Hide file extensions:"
 msgstr "隐藏文件扩展名："
 
-#: ../plugins/filebrowser.c:1260
+#: ../plugins/filebrowser.c:1261
 msgid "Follow the path of the current file"
 msgstr "切换到当前文件路径"
 
-#: ../plugins/filebrowser.c:1266
+#: ../plugins/filebrowser.c:1267
 msgid "Use the project's base directory"
 msgstr "使用项目根目录"
 
-#: ../plugins/filebrowser.c:1270
+#: ../plugins/filebrowser.c:1271
 msgid ""
 "Change the directory to the base directory of the currently opened project"
 msgstr "将目录切换至当前打开的项目的根目录"
 
-#: ../plugins/saveactions.c:40
+#: ../plugins/saveactions.c:42
 msgid "Save Actions"
 msgstr "保存动作"
 
-#: ../plugins/saveactions.c:40
+#: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
 msgstr "这个插件提供与保存文件相关的不同动作。"
 
-#: ../plugins/saveactions.c:170
+#: ../plugins/saveactions.c:174
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
 msgstr "备份复制：无法创建目录 (%s)。"
 
 #. it's unlikely that this happens
-#: ../plugins/saveactions.c:202
+#: ../plugins/saveactions.c:207
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
 msgstr "备份复制：无法读取文件 (%s)。"
 
-#: ../plugins/saveactions.c:220
+#: ../plugins/saveactions.c:225
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
 msgstr "备份复制：无法保存文件 (%s)。"
 
-#: ../plugins/saveactions.c:312
+#: ../plugins/saveactions.c:358
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] "自动保存：保存了 %d 个文件。"
 
 #. initialize the dialog
-#: ../plugins/saveactions.c:381
+#: ../plugins/saveactions.c:429
 msgid "Select Directory"
 msgstr "选择目录"
 
-#: ../plugins/saveactions.c:466
+#: ../plugins/saveactions.c:517
 msgid "Backup directory does not exist or is not writable."
 msgstr "备份目录不存在或不可写。"
 
-#: ../plugins/saveactions.c:547
+#: ../plugins/saveactions.c:598
 msgid "Auto Save"
 msgstr "自动保存"
 
-#: ../plugins/saveactions.c:549 ../plugins/saveactions.c:611
-#: ../plugins/saveactions.c:652
+#: ../plugins/saveactions.c:600
+msgid "Enable save when losing _focus"
+msgstr "在失去焦点时自动保存(_F)"
+
+#: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
+#: ../plugins/saveactions.c:709
 msgid "_Enable"
 msgstr "启用(_E)"
 
-#: ../plugins/saveactions.c:557
+#: ../plugins/saveactions.c:614
 msgid "Auto save _interval:"
 msgstr "自动保存间隔(_I)："
 
-#: ../plugins/saveactions.c:565
+#: ../plugins/saveactions.c:622
 msgid "seconds"
 msgstr "秒"
 
-#: ../plugins/saveactions.c:574
+#: ../plugins/saveactions.c:631
 msgid "_Print status message if files have been automatically saved"
 msgstr "文件自动保存后输出状态信息(_P)"
 
-#: ../plugins/saveactions.c:582
+#: ../plugins/saveactions.c:639
 msgid "Save only current open _file"
 msgstr "仅保存当前打开的文件(_F)"
 
-#: ../plugins/saveactions.c:589
+#: ../plugins/saveactions.c:646
 msgid "Sa_ve all open files"
 msgstr "保存全部打开的文件(_V)"
 
-#: ../plugins/saveactions.c:609
+#: ../plugins/saveactions.c:666
 msgid "Instant Save"
 msgstr "立即保存"
 
-#: ../plugins/saveactions.c:619
+#: ../plugins/saveactions.c:676
 msgid "_Filetype to use for newly opened files:"
 msgstr "新打开文件使用的文件类型(_F)："
 
-#: ../plugins/saveactions.c:650
+#: ../plugins/saveactions.c:707
 msgid "Backup Copy"
 msgstr "备份复制"
 
-#: ../plugins/saveactions.c:660
+#: ../plugins/saveactions.c:717
 msgid "_Directory to save backup files in:"
 msgstr "备份复制的目录(_D)："
 
-#: ../plugins/saveactions.c:683
+#: ../plugins/saveactions.c:740
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr "备份文件的日期时间格式 (详见“man strftime”) (_T)："
 
-#: ../plugins/saveactions.c:696
+#: ../plugins/saveactions.c:753
 msgid "Directory _levels to include in the backup destination:"
 msgstr "备份目录的目录层次(_L)："
 
-#: ../plugins/splitwindow.c:33
+#: ../plugins/splitwindow.c:34
 msgid "Split Window"
 msgstr "分割窗口"
 
-#: ../plugins/splitwindow.c:33
+#: ../plugins/splitwindow.c:34
 msgid "Splits the editor view into two windows."
 msgstr "把编辑视图分割为两个窗口。"
 
-#: ../plugins/splitwindow.c:272
+#: ../plugins/splitwindow.c:273
 msgid "Show the current document"
 msgstr "显示当前文件"
 
-#: ../plugins/splitwindow.c:289 ../plugins/splitwindow.c:417
-#: ../plugins/splitwindow.c:432
+#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:418
+#: ../plugins/splitwindow.c:433
 msgid "_Unsplit"
 msgstr "合并(_U)"
 
-#: ../plugins/splitwindow.c:399
+#: ../plugins/splitwindow.c:400
 msgid "_Split Window"
 msgstr "分割窗口(_S)"
 
-#: ../plugins/splitwindow.c:407
+#: ../plugins/splitwindow.c:408
 msgid "_Side by Side"
 msgstr "左右(_S)"
 
-#: ../plugins/splitwindow.c:412
+#: ../plugins/splitwindow.c:413
 msgid "_Top and Bottom"
 msgstr "上下(_T)"
 
-#: ../plugins/splitwindow.c:428
-msgid "Split Horizontally"
-msgstr "水平分割"
+#: ../plugins/splitwindow.c:429
+msgid "Side by Side"
+msgstr "左右"
 
-#: ../plugins/splitwindow.c:430
-msgid "Split Vertically"
-msgstr "垂直分割"
+#: ../plugins/splitwindow.c:431
+msgid "Top and Bottom"
+msgstr "上下"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>类型：</b>"
+
+#~ msgid "<b>Size:</b>"
+#~ msgstr "<b>大小：</b>"
+
+#~ msgid "<b>Read-only:</b>"
+#~ msgstr "<b>只读：</b>"
+
+#~ msgid "<b>Encoding:</b>"
+#~ msgstr "<b>编码：</b>"
+
+#~ msgid "<b>Changed:</b>"
+#~ msgstr "<b>变更于：</b>"
+
+#~ msgid "Shell script"
+#~ msgstr "Shell 脚本"
+
+#~ msgid "Subroutines"
+#~ msgstr "子程序"
+
+#~ msgid "pos: %d"
+#~ msgstr "位置: %d"
+
+#~ msgid "style: %d"
+#~ msgstr "样式: %d"
+
+#~ msgid "Split Horizontally"
+#~ msgstr "水平分割"
+
+#~ msgid "Split Vertically"
+#~ msgstr "垂直分割"
 
 #~ msgid ""
 #~ "A terminal emulator like xterm, gnome-terminal or konsole (should accept "
@@ -5596,9 +5677,6 @@ msgstr "垂直分割"
 
 #~ msgid "SQL Dump file"
 #~ msgstr "SQL 转储文件"
-
-#~ msgid "%s script file"
-#~ msgstr "%s 脚本文件"
 
 #~ msgid "M_iscellaneous Languages"
 #~ msgstr "其他语言(_I)"

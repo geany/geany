@@ -1,8 +1,8 @@
 # German translations for geany package.
-# Copyright (C) 2006-2013 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2014 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2009
-# Frank Lanitz <frank@frank.uvena.de> 2006 - 2013
+# Frank Lanitz <frank@frank.uvena.de> 2006 - 2014
 # Dominic Hopf <dh@dmaphy.de> 2008 - 2009
 #
 # Basic guidelines for this translation: http://i18n.xfce.org/wiki/team_de
@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-26 22:31+0100\n"
+"POT-Creation-Date: 2014-03-30 20:46+0200\n"
 "PO-Revision-Date: 2014-01-26 22:31+0100\n"
 "Last-Translator: Frank Lanitz <frlan@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -100,11 +100,11 @@ msgstr "_Suchen"
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
-#: ../data/geany.glade.h:17 ../src/symbols.c:2405
+#: ../data/geany.glade.h:17 ../src/symbols.c:2415
 msgid "Find _Usage"
 msgstr "_Auftreten finden"
 
-#: ../data/geany.glade.h:18 ../src/symbols.c:2410
+#: ../data/geany.glade.h:18 ../src/symbols.c:2420
 msgid "Find _Document Usage"
 msgstr "_Auftreten im Dokument finden"
 
@@ -116,7 +116,17 @@ msgstr "Gehe zur _Tagdefinition"
 msgid "Conte_xt Action"
 msgstr "_Kontextaktion"
 
-#: ../data/geany.glade.h:21 ../src/filetypes.c:102 ../src/filetypes.c:1823
+#. Column legend:
+#. *   [0] = Filetype constant (GEANY_FILETYPES_*)
+#. *   [1] = CTags parser (TM_PARSER_*)
+#. *   [2] = Non-translated filetype name (*not* label for display)
+#. *   [3] = Translatable human filetype title prefix or NULL to use [2]
+#. *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
+#. *   [5] = Mime type or NULL for none/unknown
+#. *   [6] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+#. * --------------------------------------------------------------------------------------------------------------------------
+#. *       [0]         [1]           [2]                 [3]                        [4]          [5]                           [6]
+#: ../data/geany.glade.h:21 ../src/filetypes.c:137 ../src/filetypes.c:1505
 msgid "None"
 msgstr "Keiner"
 
@@ -281,16 +291,15 @@ msgstr ""
 "Werkzeugliste sowie für das integrierte Terminal."
 
 #: ../data/geany.glade.h:53
-msgid "Use Windows File Open/Save dialogs"
-msgstr "Benutze den Windows Datei öffnen/speichern Dialog"
+msgid "Use Windows native dialogs"
+msgstr "Windows-typische Dialoge nutzen"
 
 #: ../data/geany.glade.h:54
 msgid ""
-"Defines whether to use the native Windows File Open/Save dialogs or whether "
-"to use the GTK default dialogs"
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
 msgstr ""
-"Bestimmt, ob der native Windows Datei öffnen/speichern anstelle des GTK-"
-"Dialogs genutzt werden soll."
+"Bestimmt, ob Dialoge im Stil von Windows oder von Gtk geöffnet werden sollen"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1036,7 +1045,7 @@ msgstr "Farbe:"
 msgid "Sets the color of the long line marker"
 msgstr "Stellt die Farbe der »Umbruchhilfe für lange Zeilen« ein"
 
-#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:991
+#: ../data/geany.glade.h:209 ../src/toolbar.c:70 ../src/tools.c:996
 msgid "Color Chooser"
 msgstr "Farbwähler"
 
@@ -1199,7 +1208,7 @@ msgid ""
 "mixed line endings in the same file"
 msgstr ""
 "Stellt sicher, dass die Zeilenumbrüche vor dem Speichern immer umgewandelt "
-"werden um gemischte Zeilenende zu vermeiden."
+"werden um gemischte Zeilenenden zu vermeiden."
 
 #: ../data/geany.glade.h:241
 msgid "Strip trailing spaces and tabs"
@@ -1241,7 +1250,7 @@ msgstr ""
 "Wie oft soll auf Veränderungen geprüft werden? Angabe in Sekunden. 0 "
 "deaktiviert die Funktion."
 
-#: ../data/geany.glade.h:250 ../src/prefs.c:1618 ../src/symbols.c:693
+#: ../data/geany.glade.h:250 ../src/prefs.c:1618 ../src/symbols.c:695
 #: ../plugins/filebrowser.c:1119
 msgid "Files"
 msgstr "Dateien"
@@ -1458,7 +1467,7 @@ msgid ""
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
-"Geben Sie ein Datumsformat an, dass für jeden Seitenkopf benutzt wird. Dabei "
+"Geben Sie ein Datumsformat an, das für jeden Seitenkopf benutzt wird. Dabei "
 "können alle Platzhalter verwendet werden, die auch in der ANSI C Funktion "
 "»strftime« zum Einsatz kommen können."
 
@@ -1565,7 +1574,7 @@ msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Erlaubt das integrierte Terminal über Tastenkürzel anzusprechen (mit "
-"Ausnahme der Fokus Kommandos)"
+"Ausnahme des Fokus Kommandos)"
 
 #: ../data/geany.glade.h:322
 msgid "Disable menu shortcut key (F10 by default)"
@@ -1920,7 +1929,7 @@ msgstr "_Nächstes"
 msgid "Find _Previous"
 msgstr "_Vorheriges"
 
-#: ../data/geany.glade.h:403 ../src/symbols.c:2415
+#: ../data/geany.glade.h:403 ../src/symbols.c:2425
 msgid "Find in F_iles..."
 msgstr "In _Dateien suchen..."
 
@@ -2162,7 +2171,7 @@ msgstr "S_chließen"
 
 #: ../data/geany.glade.h:463
 msgid "Apply the default indentation settings to all documents"
-msgstr "Wende die Standardeinreckü"
+msgstr "Wende die Standardeinrückung auf alle Dokumente an"
 
 #: ../data/geany.glade.h:464
 msgid "_Apply Default Indentation"
@@ -2251,7 +2260,7 @@ msgstr "Notizen"
 
 #: ../src/about.c:43
 msgid ""
-"Copyright (c)  2005-2012\n"
+"Copyright (c)  2005-2014\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2259,7 +2268,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2012\n"
+"Copyright (c)  2005-2014\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2381,7 +2390,7 @@ msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Konnte de Aufruf für das Terminalprogramm »%s« nicht verstehen. (Bitte die "
+"Konnte den Aufruf für das Terminalprogramm »%s« nicht verstehen. (Bitte die "
 "Terminal-Einstellungen überprüfen.)"
 
 #: ../src/build.c:1031
@@ -2453,12 +2462,12 @@ msgstr "Keine weiteren Fehlermeldungen."
 msgid "Set menu item label"
 msgstr "Bezeichnung für den Menüeintrag definieren"
 
-#: ../src/build.c:1960 ../src/symbols.c:748 ../src/tools.c:568
+#: ../src/build.c:1960 ../src/symbols.c:750 ../src/tools.c:568
 msgid "Label"
 msgstr "Label"
 
 #. command column, holding status and command display
-#: ../src/build.c:1961 ../src/symbols.c:743 ../src/tools.c:553
+#: ../src/build.c:1961 ../src/symbols.c:745 ../src/tools.c:553
 msgid "Command"
 msgstr "Kommando"
 
@@ -2737,20 +2746,20 @@ msgstr "_Umbenennen"
 msgid "Save the file and rename it"
 msgstr "Speichert und benennt die Datei um"
 
-#: ../src/dialogs.c:686 ../src/win32.c:678
+#: ../src/dialogs.c:686 ../src/win32.c:687
 msgid "Error"
 msgstr "Fehler"
 
 #: ../src/dialogs.c:689 ../src/dialogs.c:767 ../src/dialogs.c:1333
-#: ../src/win32.c:684
+#: ../src/win32.c:693
 msgid "Question"
 msgstr "Frage"
 
-#: ../src/dialogs.c:692 ../src/win32.c:690
+#: ../src/dialogs.c:692 ../src/win32.c:699
 msgid "Warning"
 msgstr "Warnung"
 
-#: ../src/dialogs.c:695 ../src/win32.c:696
+#: ../src/dialogs.c:695 ../src/win32.c:705
 msgid "Information"
 msgstr "Information"
 
@@ -2781,7 +2790,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1199 ../src/dialogs.c:1200 ../src/dialogs.c:1201
 #: ../src/dialogs.c:1207 ../src/dialogs.c:1208 ../src/dialogs.c:1209
-#: ../src/symbols.c:2219 ../src/symbols.c:2235 ../src/ui_utils.c:281
+#: ../src/symbols.c:2229 ../src/symbols.c:2245 ../src/ui_utils.c:281
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -3142,68 +3151,73 @@ msgstr "_Nahöstlich"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/filetypes.c:83 ../src/filetypes.c:173 ../src/filetypes.c:187
-#: ../src/filetypes.c:195 ../src/filetypes.c:209
+#: ../src/filetypes.c:91
 #, c-format
 msgid "%s source file"
 msgstr "%s Quelldatei"
 
-#: ../src/filetypes.c:84
+#: ../src/filetypes.c:92
 #, c-format
 msgid "%s file"
 msgstr "%s Quelldatei"
 
-#: ../src/filetypes.c:311
-msgid "Shell script"
-msgstr "Shellskript"
+#: ../src/filetypes.c:93
+#, c-format
+msgid "%s script"
+msgstr "%s Skript Datei"
 
-#: ../src/filetypes.c:319
+#: ../src/filetypes.c:94
+#, c-format
+msgid "%s document"
+msgstr "%s-Dokument"
+
+#: ../src/filetypes.c:164
+msgid "Shell"
+msgstr "Shell"
+
+#: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../src/filetypes.c:326
-msgid "XML document"
-msgstr "XML-Dokument"
-
-#: ../src/filetypes.c:350
-msgid "Cascading StyleSheet"
+#: ../src/filetypes.c:169
+msgid "Cascading Stylesheet"
 msgstr "Cascading StyleSheet"
 
-#: ../src/filetypes.c:419
-msgid "Config file"
+#: ../src/filetypes.c:178
+msgid "Config"
 msgstr "Konfigurationsdatei"
 
-#: ../src/filetypes.c:425
-msgid "Gettext translation file"
+#: ../src/filetypes.c:179
+msgid "Gettext translation"
 msgstr "Gettext-Übersetzungsdatei"
 
-#: ../src/filetypes.c:755
+#: ../src/filetypes.c:414
 msgid "_Programming Languages"
 msgstr "_Kompilersprachen"
 
-#: ../src/filetypes.c:756
+#: ../src/filetypes.c:415
 msgid "_Scripting Languages"
 msgstr "_Interpretersprachen"
 
-#: ../src/filetypes.c:757
+#: ../src/filetypes.c:416
 msgid "_Markup Languages"
 msgstr "_Markup-Sprachen"
 
-#: ../src/filetypes.c:758
+#: ../src/filetypes.c:417
 msgid "M_iscellaneous"
 msgstr "_Sonstiges"
 
-#: ../src/filetypes.c:1509 ../src/win32.c:105
+#: ../src/filetypes.c:1168 ../src/win32.c:105
 msgid "All Source"
 msgstr "Alle Quellen"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1534 ../src/project.c:300 ../src/win32.c:95
+#: ../src/filetypes.c:1193 ../src/project.c:300 ../src/win32.c:95
 #: ../src/win32.c:140 ../src/win32.c:161 ../src/win32.c:166
 msgid "All files"
 msgstr "Alle Dateien"
 
-#: ../src/filetypes.c:1582
+#: ../src/filetypes.c:1241
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Schlechter RegEx für Dateityp %s: %s"
@@ -3239,7 +3253,7 @@ msgid "Color Schemes"
 msgstr "Farbschemata"
 
 #. visual group order
-#: ../src/keybindings.c:227 ../src/symbols.c:720
+#: ../src/keybindings.c:227 ../src/symbols.c:722
 msgid "File"
 msgstr "Datei"
 
@@ -3275,12 +3289,12 @@ msgstr "Gehe zu"
 msgid "View"
 msgstr "Ansicht"
 
-#: ../src/keybindings.c:237 ../src/symbols.c:853
+#: ../src/keybindings.c:237 ../src/symbols.c:855
 msgid "Document"
 msgstr "Dokument"
 
 #: ../src/keybindings.c:239 ../src/keybindings.c:593 ../src/project.c:452
-#: ../src/ui_utils.c:1931
+#: ../src/ui_utils.c:1989
 msgid "Build"
 msgstr "Erstellen"
 
@@ -3760,15 +3774,15 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:988
+#: ../src/keyfile.c:990
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1194
+#: ../src/keyfile.c:1196
 msgid "Failed to load one or more session files."
 msgstr ""
-"Eine oder mehre Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
+"Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
 "werden."
 
 #: ../src/log.c:181
@@ -3844,8 +3858,7 @@ msgstr "Geanys Installationsverzeichnis ausgeben"
 #: ../src/main.c:138
 msgid "Open all FILES in read-only mode (see documention)"
 msgstr ""
-"Alle Dateien nur zum Lesen öffnen (unbeteiligt die Dokumentation dazu "
-"konsultieren)"
+"Alle Dateien nur zum Lesen öffnen (die Dokumentation dazu konsultieren)"
 
 #: ../src/main.c:139
 msgid "Don't load the previous session's files"
@@ -4027,11 +4040,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2373 ../src/sidebar.c:741
+#: ../src/prefs.c:226 ../src/symbols.c:2383 ../src/sidebar.c:741
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2378 ../src/sidebar.c:747
+#: ../src/prefs.c:231 ../src/symbols.c:2388 ../src/sidebar.c:747
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4117,7 +4130,7 @@ msgstr ""
 
 #: ../src/printing.c:414
 msgid "Paginating"
-msgstr "Seitenummerierung"
+msgstr "Seitennummerierung"
 
 #: ../src/printing.c:438
 #, c-format
@@ -4392,7 +4405,7 @@ msgid ""
 "Custom: specify file patterns manually"
 msgstr ""
 "Alle: Durchsuche alle Dateien im Verzeichnis\n"
-"Projekt: Benutzer Dateimuster, die in den Projekteinstellungen hinterlegt "
+"Projekt: Benutze Dateimuster, die in den Projekteinstellungen hinterlegt "
 "sind\n"
 "Benutzerdefiniert: Manuelles angeben der Dateimuster"
 
@@ -4491,8 +4504,8 @@ msgstr "Suche fehlgeschlagen."
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "Such mit %d Treffer abgeschlossen."
-msgstr[1] "Such mit %d Treffern abgeschlossen."
+msgstr[0] "Suche mit %d Treffer abgeschlossen."
+msgstr[1] "Suche mit %d Treffern abgeschlossen."
 
 #: ../src/search.c:1912
 msgid "No matches found."
@@ -4523,314 +4536,326 @@ msgstr "Name"
 msgid "Value"
 msgstr "Wert"
 
-#: ../src/symbols.c:699 ../src/symbols.c:749 ../src/symbols.c:843
+#: ../src/symbols.c:701 ../src/symbols.c:751 ../src/symbols.c:845
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: ../src/symbols.c:700 ../src/symbols.c:745 ../src/symbols.c:844
+#: ../src/symbols.c:702 ../src/symbols.c:747 ../src/symbols.c:846
 msgid "Section"
 msgstr "Abschnitt"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:703
 msgid "Sect1"
 msgstr "Sect1"
 
-#: ../src/symbols.c:702
+#: ../src/symbols.c:704
 msgid "Sect2"
 msgstr "Sect2"
 
-#: ../src/symbols.c:703
+#: ../src/symbols.c:705
 msgid "Sect3"
 msgstr "Sect3"
 
-#: ../src/symbols.c:704
+#: ../src/symbols.c:706
 msgid "Appendix"
 msgstr "Anhang"
 
-#: ../src/symbols.c:705 ../src/symbols.c:750 ../src/symbols.c:775
-#: ../src/symbols.c:791 ../src/symbols.c:802 ../src/symbols.c:902
-#: ../src/symbols.c:913 ../src/symbols.c:926 ../src/symbols.c:940
-#: ../src/symbols.c:952 ../src/symbols.c:964 ../src/symbols.c:979
-#: ../src/symbols.c:1008 ../src/symbols.c:1039
+#: ../src/symbols.c:707 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:793 ../src/symbols.c:804 ../src/symbols.c:904
+#: ../src/symbols.c:915 ../src/symbols.c:928 ../src/symbols.c:942
+#: ../src/symbols.c:954 ../src/symbols.c:966 ../src/symbols.c:983
+#: ../src/symbols.c:1012 ../src/symbols.c:1044
 msgid "Other"
 msgstr "Sonstiges"
 
-#: ../src/symbols.c:711 ../src/symbols.c:972 ../src/symbols.c:1018
+#: ../src/symbols.c:713 ../src/symbols.c:974 ../src/symbols.c:1022
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:712 ../src/symbols.c:898 ../src/symbols.c:950
-#: ../src/symbols.c:962 ../src/symbols.c:977 ../src/symbols.c:989
+#: ../src/symbols.c:714 ../src/symbols.c:900 ../src/symbols.c:952
+#: ../src/symbols.c:964 ../src/symbols.c:979 ../src/symbols.c:993
 msgid "Types"
 msgstr "Typen"
 
-#: ../src/symbols.c:713
+#: ../src/symbols.c:715
 msgid "Type constructors"
 msgstr "Typkonstruktoren"
 
-#: ../src/symbols.c:714 ../src/symbols.c:736 ../src/symbols.c:757
-#: ../src/symbols.c:774 ../src/symbols.c:786 ../src/symbols.c:799
-#: ../src/symbols.c:812 ../src/symbols.c:822 ../src/symbols.c:886
-#: ../src/symbols.c:936 ../src/symbols.c:959 ../src/symbols.c:974
-#: ../src/symbols.c:1002 ../src/symbols.c:1026
+#: ../src/symbols.c:716 ../src/symbols.c:738 ../src/symbols.c:759
+#: ../src/symbols.c:776 ../src/symbols.c:788 ../src/symbols.c:801
+#: ../src/symbols.c:814 ../src/symbols.c:824 ../src/symbols.c:888
+#: ../src/symbols.c:938 ../src/symbols.c:961 ../src/symbols.c:1006
+#: ../src/symbols.c:1030
 msgid "Functions"
 msgstr "Funktionen"
 
-#: ../src/symbols.c:719
+#: ../src/symbols.c:721
 msgid "Program"
 msgstr "Programm"
 
-#: ../src/symbols.c:721 ../src/symbols.c:729 ../src/symbols.c:735
+#: ../src/symbols.c:723 ../src/symbols.c:731 ../src/symbols.c:737
 msgid "Sections"
 msgstr "Abschnitte"
 
-#: ../src/symbols.c:722
+#: ../src/symbols.c:724
 msgid "Paragraph"
 msgstr "Absatz"
 
-#: ../src/symbols.c:723
+#: ../src/symbols.c:725
 msgid "Group"
 msgstr "Gruppe"
 
-#: ../src/symbols.c:724
+#: ../src/symbols.c:726
 msgid "Data"
 msgstr "Daten"
 
-#: ../src/symbols.c:730
+#: ../src/symbols.c:732
 msgid "Keys"
 msgstr "Indizes"
 
-#: ../src/symbols.c:737 ../src/symbols.c:788 ../src/symbols.c:814
-#: ../src/symbols.c:887 ../src/symbols.c:912 ../src/symbols.c:938
-#: ../src/symbols.c:951 ../src/symbols.c:960 ../src/symbols.c:976
-#: ../src/symbols.c:1009 ../src/symbols.c:1038
+#: ../src/symbols.c:739 ../src/symbols.c:790 ../src/symbols.c:816
+#: ../src/symbols.c:889 ../src/symbols.c:914 ../src/symbols.c:940
+#: ../src/symbols.c:953 ../src/symbols.c:962 ../src/symbols.c:978
+#: ../src/symbols.c:1013 ../src/symbols.c:1042
 msgid "Variables"
 msgstr "Variablen"
 
-#: ../src/symbols.c:744
+#: ../src/symbols.c:746
 msgid "Environment"
 msgstr "Umgebung"
 
-#: ../src/symbols.c:746 ../src/symbols.c:845
+#: ../src/symbols.c:748 ../src/symbols.c:847
 msgid "Subsection"
 msgstr "Unterabschnitt"
 
-#: ../src/symbols.c:747 ../src/symbols.c:846
+#: ../src/symbols.c:749 ../src/symbols.c:848
 msgid "Subsubsection"
 msgstr "Unterunterabschnitt"
 
-#: ../src/symbols.c:758 ../src/symbols.c:783
+#: ../src/symbols.c:760 ../src/symbols.c:785
 msgid "Structures"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:765
+#: ../src/symbols.c:767
 msgid "Parts"
 msgstr "Parts"
 
-#: ../src/symbols.c:766
+#: ../src/symbols.c:768
 msgid "Assembly"
 msgstr "Assembly"
 
-#: ../src/symbols.c:767
+#: ../src/symbols.c:769
 msgid "Steps"
 msgstr "Steps"
 
-#: ../src/symbols.c:782 ../src/symbols.c:864 ../src/symbols.c:910
+#: ../src/symbols.c:784 ../src/symbols.c:866 ../src/symbols.c:912
 msgid "Modules"
 msgstr "Module"
 
-#: ../src/symbols.c:784 ../src/symbols.c:815
+#: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
 msgstr "Characteristika"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:787
 msgid "Implementations"
 msgstr "Implementierungen"
 
-#: ../src/symbols.c:787 ../src/symbols.c:1029
+#: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
 msgstr "Typendefinition und Enumerates"
 
-#: ../src/symbols.c:789 ../src/symbols.c:987 ../src/symbols.c:996
-#: ../src/symbols.c:1035
+#: ../src/symbols.c:791 ../src/symbols.c:991 ../src/symbols.c:1000
+#: ../src/symbols.c:1039
 msgid "Macros"
 msgstr "Makros"
 
-#: ../src/symbols.c:790 ../src/symbols.c:867 ../src/symbols.c:876
-#: ../src/symbols.c:885 ../src/symbols.c:923 ../src/symbols.c:949
+#: ../src/symbols.c:792 ../src/symbols.c:869 ../src/symbols.c:878
+#: ../src/symbols.c:887 ../src/symbols.c:925 ../src/symbols.c:951
 msgid "Methods"
 msgstr "Methoden"
 
-#: ../src/symbols.c:798 ../src/symbols.c:895 ../src/symbols.c:920
-#: ../src/symbols.c:933
+#: ../src/symbols.c:800 ../src/symbols.c:897 ../src/symbols.c:922
+#: ../src/symbols.c:935
 msgid "Package"
 msgstr "Package"
 
-#: ../src/symbols.c:800 ../src/symbols.c:963 ../src/symbols.c:986
+#: ../src/symbols.c:802 ../src/symbols.c:965 ../src/symbols.c:990
 msgid "Labels"
 msgstr "Label"
 
-#: ../src/symbols.c:801 ../src/symbols.c:813 ../src/symbols.c:939
-#: ../src/symbols.c:961
+#: ../src/symbols.c:803 ../src/symbols.c:815 ../src/symbols.c:941
+#: ../src/symbols.c:963
 msgid "Constants"
 msgstr "Konstanten"
 
-#: ../src/symbols.c:809 ../src/symbols.c:874 ../src/symbols.c:1021
+#: ../src/symbols.c:811 ../src/symbols.c:876 ../src/symbols.c:1025
 msgid "Namespaces"
 msgstr "Namensräume"
 
-#: ../src/symbols.c:810 ../src/symbols.c:921 ../src/symbols.c:934
-#: ../src/symbols.c:947 ../src/symbols.c:973 ../src/symbols.c:1025
+#: ../src/symbols.c:812 ../src/symbols.c:923 ../src/symbols.c:936
+#: ../src/symbols.c:949 ../src/symbols.c:976 ../src/symbols.c:1029
 msgid "Interfaces"
 msgstr "Interfaces"
 
-#: ../src/symbols.c:811 ../src/symbols.c:833 ../src/symbols.c:865
-#: ../src/symbols.c:875 ../src/symbols.c:884 ../src/symbols.c:922
-#: ../src/symbols.c:935 ../src/symbols.c:948 ../src/symbols.c:1024
+#: ../src/symbols.c:813 ../src/symbols.c:835 ../src/symbols.c:867
+#: ../src/symbols.c:877 ../src/symbols.c:886 ../src/symbols.c:924
+#: ../src/symbols.c:937 ../src/symbols.c:950 ../src/symbols.c:1028
 msgid "Classes"
 msgstr "Klassen"
 
-#: ../src/symbols.c:823
+#: ../src/symbols.c:825
 msgid "Anchors"
 msgstr "Anker"
 
-#: ../src/symbols.c:824
+#: ../src/symbols.c:826
 msgid "H1 Headings"
 msgstr "Überschrift (H1)"
 
-#: ../src/symbols.c:825
+#: ../src/symbols.c:827
 msgid "H2 Headings"
 msgstr "Überschrift (H2)"
 
-#: ../src/symbols.c:826
+#: ../src/symbols.c:828
 msgid "H3 Headings"
 msgstr "Überschrift (H3)"
 
-#: ../src/symbols.c:834
+#: ../src/symbols.c:836
 msgid "ID Selectors"
 msgstr "ID"
 
-#: ../src/symbols.c:835
+#: ../src/symbols.c:837
 msgid "Type Selectors"
 msgstr "Typ"
 
-#: ../src/symbols.c:854
+#: ../src/symbols.c:856
 msgid "Section Level 1"
 msgstr "Überschrift Ebene 1"
 
-#: ../src/symbols.c:855
+#: ../src/symbols.c:857
 msgid "Section Level 2"
 msgstr "Überschrift Ebene 2"
 
-#: ../src/symbols.c:856
+#: ../src/symbols.c:858
 msgid "Section Level 3"
 msgstr "Überschrift Ebene 3"
 
-#: ../src/symbols.c:857
+#: ../src/symbols.c:859
 msgid "Section Level 4"
 msgstr "Überschrift Ebene 4"
 
-#: ../src/symbols.c:866
+#: ../src/symbols.c:868
 msgid "Singletons"
 msgstr "Singletons"
 
-#: ../src/symbols.c:877 ../src/symbols.c:1003
+#: ../src/symbols.c:879 ../src/symbols.c:1007
 msgid "Procedures"
 msgstr "Prozeduren"
 
-#: ../src/symbols.c:888
+#: ../src/symbols.c:890
 msgid "Imports"
 msgstr "Importe"
 
-#: ../src/symbols.c:896
+#: ../src/symbols.c:898
 msgid "Entities"
 msgstr "Entitäten"
 
-#: ../src/symbols.c:897
+#: ../src/symbols.c:899
 msgid "Architectures"
 msgstr "Architekturen"
 
-#: ../src/symbols.c:899
+#: ../src/symbols.c:901
 msgid "Functions / Procedures"
 msgstr "Funktionen/Prozeduren"
 
-#: ../src/symbols.c:900
+#: ../src/symbols.c:902
 msgid "Variables / Signals"
 msgstr "Variablen/Signale"
 
-#: ../src/symbols.c:901
+#: ../src/symbols.c:903
 msgid "Processes / Blocks / Components"
 msgstr "Prozesse/Blöcke/Komponenten"
 
-#: ../src/symbols.c:909
+#: ../src/symbols.c:911
 msgid "Events"
 msgstr "Ereignisse"
 
-#: ../src/symbols.c:911
+#: ../src/symbols.c:913
 msgid "Functions / Tasks"
 msgstr "Funktionen"
 
-#: ../src/symbols.c:924 ../src/symbols.c:1027
+#: ../src/symbols.c:926 ../src/symbols.c:1031
 msgid "Members"
 msgstr "Instanzvariablen"
 
-#: ../src/symbols.c:925
+#: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
 msgstr "Enums"
 
-#: ../src/symbols.c:937
+#: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Eigenschaften"
 
 #: ../src/symbols.c:975
-msgid "Subroutines"
-msgstr "Subroutinen"
+msgid "Programs"
+msgstr "Programme"
 
-#: ../src/symbols.c:978
+#: ../src/symbols.c:977
+msgid "Functions / Subroutines"
+msgstr "Funktionen/Prozeduren"
+
+#: ../src/symbols.c:980
+msgid "Components"
+msgstr "Komponenten"
+
+#: ../src/symbols.c:981
 msgid "Blocks"
 msgstr "Blöcke"
 
-#: ../src/symbols.c:988
+#: ../src/symbols.c:992
 msgid "Defines"
 msgstr "Definitionen"
 
-#: ../src/symbols.c:995
+#: ../src/symbols.c:999
 msgid "Targets"
 msgstr "Targets"
 
-#: ../src/symbols.c:1004
+#: ../src/symbols.c:1008
 msgid "Indexes"
 msgstr "Indizies"
 
-#: ../src/symbols.c:1005
+#: ../src/symbols.c:1009
 msgid "Tables"
 msgstr "Tabellen"
 
-#: ../src/symbols.c:1006
+#: ../src/symbols.c:1010
 msgid "Triggers"
 msgstr "Trigger"
 
-#: ../src/symbols.c:1007
+#: ../src/symbols.c:1011
 msgid "Views"
 msgstr "Ansichten"
 
-#: ../src/symbols.c:1028
+#: ../src/symbols.c:1032
 msgid "Structs"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:1793
+#: ../src/symbols.c:1043
+msgid "Extern Variables"
+msgstr "Externe Variablen"
+
+#: ../src/symbols.c:1803
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Unbekannte Dateierweiterung für »%s«.\n"
 
-#: ../src/symbols.c:1819
+#: ../src/symbols.c:1829
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
 "Die Tag-Datei konnte nicht erstellt werden, möglicherweise konnten keine "
 "Tags gefunden werden.\n"
 
-#: ../src/symbols.c:1826
+#: ../src/symbols.c:1836
 #, c-format
 msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
@@ -4839,7 +4864,7 @@ msgstr ""
 "Verwendung: %s -g <Tag-Datei> <Datei-Liste>\n"
 "\n"
 
-#: ../src/symbols.c:1827
+#: ../src/symbols.c:1837
 #, c-format
 msgid ""
 "Example:\n"
@@ -4850,40 +4875,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1841
+#: ../src/symbols.c:1851
 msgid "Load Tags"
 msgstr "Tags laden"
 
-#: ../src/symbols.c:1848
+#: ../src/symbols.c:1858
 msgid "Geany tag files (*.*.tags)"
 msgstr "Geany Tag-Datei (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1868
+#: ../src/symbols.c:1878
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag-Datei »%s« geladen."
 
-#: ../src/symbols.c:1871
+#: ../src/symbols.c:1881
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: ../src/symbols.c:2009
+#: ../src/symbols.c:2019
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2011
+#: ../src/symbols.c:2021
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2388
+#: ../src/symbols.c:2398
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2395
+#: ../src/symbols.c:2405
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
@@ -5226,23 +5251,23 @@ msgstr "C++ STL"
 msgid "_Set Custom Date Format"
 msgstr "_Benutzerdefiniertes Datumsformat einstellen"
 
-#: ../src/ui_utils.c:1752
+#: ../src/ui_utils.c:1810
 msgid "Select Folder"
 msgstr "Ordner wählen"
 
-#: ../src/ui_utils.c:1752
+#: ../src/ui_utils.c:1810
 msgid "Select File"
 msgstr "Datei wählen"
 
-#: ../src/ui_utils.c:1929
+#: ../src/ui_utils.c:1987
 msgid "Save All"
 msgstr "Alle speichern"
 
-#: ../src/ui_utils.c:1930
+#: ../src/ui_utils.c:1988
 msgid "Close All"
 msgstr "Alle schließen"
 
-#: ../src/ui_utils.c:2164
+#: ../src/ui_utils.c:2222
 msgid "Geany cannot start!"
 msgstr "Geany kann nicht starten!"
 
@@ -5303,7 +5328,7 @@ msgstr "Geany Projektdateien"
 msgid "Executables"
 msgstr "Ausführbare Dateien"
 
-#: ../src/win32.c:1201
+#: ../src/win32.c:1217
 #, c-format
 msgid "Process timed out after %.02f s!"
 msgstr "Der Prozess hat das Zeitlimit nach %.02f s erreicht!"
@@ -5386,7 +5411,7 @@ msgstr "Konstruktor erstellen"
 
 #: ../plugins/classbuilder.c:559
 msgid "Create destructor"
-msgstr "Dekonstruktor erstellen"
+msgstr "Destruktor erstellen"
 
 #: ../plugins/classbuilder.c:566
 msgid "Is abstract"
@@ -5425,7 +5450,7 @@ msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Fügt HTML-Sonderzeichen wie »&amp;« ein."
 
 #: ../plugins/htmlchars.c:41 ../plugins/export.c:39
-#: ../plugins/filebrowser.c:46 ../plugins/saveactions.c:42
+#: ../plugins/filebrowser.c:46 ../plugins/saveactions.c:43
 #: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "Das Geany-Entwicklerteam"
@@ -5463,7 +5488,7 @@ msgid "Miscellaneous characters"
 msgstr "Sonstige Zeichen"
 
 #: ../plugins/htmlchars.c:369 ../plugins/filebrowser.c:1153
-#: ../plugins/saveactions.c:476
+#: ../plugins/saveactions.c:525
 msgid "Plugin configuration directory could not be created."
 msgstr "Plugin-Konfigurationsverzeichnis konnte nicht erstellt werden."
 
@@ -5682,31 +5707,31 @@ msgstr ""
 "Das aktuelle Verzeichnis beim Öffnen eines Projekts dem Basisverzeichnis des "
 "Projekts anpassen"
 
-#: ../plugins/saveactions.c:41
+#: ../plugins/saveactions.c:42
 msgid "Save Actions"
 msgstr "Speicheraktionen"
 
-#: ../plugins/saveactions.c:41
+#: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
 msgstr "Bietet verschiedene Funktionen rund um das Speichern von Dateien."
 
-#: ../plugins/saveactions.c:171
+#: ../plugins/saveactions.c:174
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
 msgstr "Backup Copy: Verzeichnis konnte nicht erstellt werden (%s)."
 
 #. it's unlikely that this happens
-#: ../plugins/saveactions.c:204
+#: ../plugins/saveactions.c:207
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
 msgstr "Backup Copy: Datei konnte nicht gelesen werden (%s)."
 
-#: ../plugins/saveactions.c:222
+#: ../plugins/saveactions.c:225
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Backup Copy: Datei konnte nicht gespeichert werden (%s)."
 
-#: ../plugins/saveactions.c:314
+#: ../plugins/saveactions.c:358
 #, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
@@ -5714,64 +5739,68 @@ msgstr[0] "Automatisches Speichern: %d Datei wurde gespeichert."
 msgstr[1] "Automatisches Speichern: %d Dateien wurden gespeichert."
 
 #. initialize the dialog
-#: ../plugins/saveactions.c:383
+#: ../plugins/saveactions.c:429
 msgid "Select Directory"
 msgstr "Verzeichnis wählen"
 
-#: ../plugins/saveactions.c:468
+#: ../plugins/saveactions.c:517
 msgid "Backup directory does not exist or is not writable."
 msgstr "Sicherungsverzeichnis existiert nicht oder ist nicht beschreibbar."
 
-#: ../plugins/saveactions.c:549
+#: ../plugins/saveactions.c:598
 msgid "Auto Save"
 msgstr "Automatisches Speichern"
 
-#: ../plugins/saveactions.c:551 ../plugins/saveactions.c:613
-#: ../plugins/saveactions.c:654
+#: ../plugins/saveactions.c:600
+msgid "Enable save when losing _focus"
+msgstr "Speichern bei _Fokusverlust"
+
+#: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
+#: ../plugins/saveactions.c:709
 msgid "_Enable"
 msgstr "A_ktivieren"
 
-#: ../plugins/saveactions.c:559
+#: ../plugins/saveactions.c:614
 msgid "Auto save _interval:"
 msgstr "_Interval für Autospeicherung:"
 
-#: ../plugins/saveactions.c:567
+#: ../plugins/saveactions.c:622
 msgid "seconds"
 msgstr "Sekunden"
 
-#: ../plugins/saveactions.c:576
+#: ../plugins/saveactions.c:631
 msgid "_Print status message if files have been automatically saved"
 msgstr "_Statusmeldung ausgeben, wenn Dateien automatisch gespeichert wurden"
 
-#: ../plugins/saveactions.c:584
+#: ../plugins/saveactions.c:639
 msgid "Save only current open _file"
 msgstr "_Nur aktuell aktive Datei speichern"
 
-#: ../plugins/saveactions.c:591
+#: ../plugins/saveactions.c:646
 msgid "Sa_ve all open files"
 msgstr "A_lle geöffneten Dateien speichern"
 
-#: ../plugins/saveactions.c:611
+#: ../plugins/saveactions.c:666
 msgid "Instant Save"
 msgstr "Instant Save"
 
-#: ../plugins/saveactions.c:621
+#: ../plugins/saveactions.c:676
 msgid "_Filetype to use for newly opened files:"
 msgstr "_Dateityp der zu öffnenden Datei:"
 
-#: ../plugins/saveactions.c:652
+#: ../plugins/saveactions.c:707
 msgid "Backup Copy"
 msgstr "Backup Copy"
 
-#: ../plugins/saveactions.c:662
+#: ../plugins/saveactions.c:717
 msgid "_Directory to save backup files in:"
 msgstr "_Verzeichnis zum Speichern der Sicherheitskopien"
 
-#: ../plugins/saveactions.c:685
+#: ../plugins/saveactions.c:740
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr "_Datums- und Zeitformat für Sicherungsdateien:"
 
-#: ../plugins/saveactions.c:698
+#: ../plugins/saveactions.c:753
 msgid "Directory _levels to include in the backup destination:"
 msgstr "Verzeichnis_ebenen die im Zielpfad übernommen werden sollen:"
 
@@ -5811,6 +5840,12 @@ msgstr "Seite an Seite"
 #: ../plugins/splitwindow.c:431
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
+
+#~ msgid "Shell script"
+#~ msgstr "Shellskript"
+
+#~ msgid "Subroutines"
+#~ msgstr "Subroutinen"
 
 #~ msgid "file name"
 #~ msgstr "Dateiname:"
@@ -5903,9 +5938,6 @@ msgstr "Oben und Unten"
 
 #~ msgid "SQL Dump file"
 #~ msgstr "SQL-Dump Datei"
-
-#~ msgid "%s script file"
-#~ msgstr "%s Skript Datei"
 
 #~ msgid "M_iscellaneous Languages"
 #~ msgstr "_Sonstige Sprachen"

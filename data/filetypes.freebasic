@@ -2,7 +2,11 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-comment=comment
+comment=comment_line
+commentblock=comment
+docline=comment_line_doc
+docblock=comment_doc
+dockeyword=comment_doc_keyword
 number=number_1
 word=keyword_1
 string=string_1

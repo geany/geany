@@ -79,7 +79,7 @@ const char *LexerModule::GetWordListDescription(int index) const {
 		return "";
 	} else {
 		return wordListDescriptions[index];
- 	}
+	}
 }
 
 int LexerModule::GetStyleBitsNeeded() const {

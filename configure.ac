@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.24],
+AC_INIT([Geany], [1.25],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -113,6 +113,10 @@ GEANY_I18N
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
 
+# Documentation tools
+GEANY_CHECK_DOCUTILS
+GEANY_CHECK_DOXYGEN
+
 # Output
 AC_CONFIG_FILES([
 		Makefile
@@ -137,6 +141,7 @@ AC_CONFIG_FILES([
 		src/Makefile
 		plugins/Makefile
 		po/Makefile.in
+		data/Makefile
 		doc/Makefile
 		doc/geany.1
 		geany.spec

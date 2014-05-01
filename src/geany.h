@@ -47,7 +47,7 @@ G_BEGIN_DECLS
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Sakai"
+#define GEANY_CODENAME					"Veed"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_WIKI						"http://wiki.geany.org/"
 #define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"

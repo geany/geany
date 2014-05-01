@@ -25,6 +25,9 @@ primary=above abovedisplayshortskip abovedisplayskip abovewithdelims accent adjd
 # default extension used when saving files
 extension=tex
 
+# MIME type
+mime_type=text/x-tex
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
@@ -67,6 +70,9 @@ FT_00_BD=false
 FT_01_LB=LaTeX -> _PDF
 FT_01_CM=pdflatex --file-line-error-style "%f"
 FT_01_BD=false
+FT_02_LB=Bibtex
+FT_02_CM=bibtex "%e"
+FT_02_WD=
 EX_00_LB=V_iew PDF File
 EX_00_CM=evince "%e.pdf"
 EX_00_BD=false

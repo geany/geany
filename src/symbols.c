@@ -570,45 +570,6 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 }
 
 
-/* finds the next iter at any level
- * @param iter in/out, the current iter, will be changed to the next one
- * @param down whether to try the child iter
- * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
-static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
-{
-	GtkTreeIter guess;
-	GtkTreeIter copy = *iter;
-
-	/* go down if the item has children */
-	if (down && gtk_tree_model_iter_children(model, &guess, iter))
-		*iter = guess;
-	/* or to the next item at the same level */
-	else if (gtk_tree_model_iter_next(model, &copy))
-		*iter = copy;
-	/* or to the next item at a parent level */
-	else if (gtk_tree_model_iter_parent(model, &guess, iter))
-	{
-		copy = guess;
-		while(TRUE)
-		{
-			if (gtk_tree_model_iter_next(model, &copy))
-			{
-				*iter = copy;
-				return TRUE;
-			}
-			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
-				guess = copy;
-			else
-				return FALSE;
-		}
-	}
-	else
-		return FALSE;
-
-	return TRUE;
-}
-
-
 static gboolean find_toplevel_iter(GtkTreeStore *store, GtkTreeIter *iter, const gchar *title)
 {
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
@@ -1314,7 +1275,7 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 	if (! cont && has_parent)
 	{
 		*iter = parent;
-		cont = next_iter(GTK_TREE_MODEL(store), iter, FALSE);
+		cont = ui_tree_model_iter_any_next(GTK_TREE_MODEL(store), iter, FALSE);
 	}
 
 	return cont;
@@ -1494,7 +1455,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 		if (! tag) /* most probably a toplevel, skip it */
-			cont = next_iter(model, &iter, TRUE);
+			cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 		else
 		{
 			GList *found_item;
@@ -1527,7 +1488,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				tags_table_remove(tags_table, found);
 				*tags = g_list_delete_link(*tags, found_item);
 
-				cont = next_iter(model, &iter, TRUE);
+				cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 			}
 
 			tm_tag_unref(tag);

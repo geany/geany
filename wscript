@@ -51,7 +51,7 @@ from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
-VERSION = '1.24'
+VERSION = '1.25'
 LINGUAS_FILE = 'po/LINGUAS'
 MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
@@ -201,6 +201,8 @@ def configure(conf):
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
 
+    conf.check_cc(function_name='pow', header_name='math.h', lib='m', uselib_store='M')
+
     # check sunOS socket support
     if Options.platform == 'sunos':
         conf.check_cc(function_name='socket', lib='socket',
@@ -238,14 +240,17 @@ def configure(conf):
             _add_to_env_and_define(conf, 'PREFIX', new_prefix, quote=True)
             _add_to_env_and_define(conf, 'BINDIR', os.path.join(new_prefix, 'bin'), quote=True)
         _add_to_env_and_define(conf, 'DOCDIR', os.path.join(conf.env['PREFIX'], 'doc'), quote=True)
-        _add_to_env_and_define(conf, 'LIBDIR', conf.env['PREFIX'], quote=True)
+        _add_to_env_and_define(conf, 'LIBDIR', '%s/lib' % conf.env['PREFIX'], quote=True)
         conf.define('LOCALEDIR', os.path.join('share' 'locale'), quote=True)
         # overwrite LOCALEDIR to install message catalogues properly
         conf.env['LOCALEDIR'] = os.path.join(conf.env['PREFIX'], 'share/locale')
         # DATADIR is defined in objidl.h, so we remove it from config.h but keep it in env
         conf.undefine('DATADIR')
         conf.env['DATADIR'] = os.path.join(conf.env['PREFIX'], 'data')
-        conf.env.append_value('LINKFLAGS_cprogram', ['-mwindows'])
+        conf.env.append_value('LINKFLAGS_cprogram', [
+            '-mwindows',
+            '-static-libgcc',
+            '-static-libstdc++'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
@@ -313,6 +318,9 @@ def options(opt):
     opt.load('compiler_cxx')
     opt.load('intltool')
 
+    # Option
+    opt.add_option('--no-scm', action='store_true', default=False,
+        help='Disable SCM detection [default: No]', dest='no_scm')
     # Features
     opt.add_option('--disable-plugins', action='store_true', default=False,
         help='compile without plugin support [default: No]', dest='no_plugins')
@@ -345,7 +353,7 @@ def build(bld):
     if bld.cmd in ('install', 'uninstall'):
         bld.add_post_fun(_post_install)
 
-    def build_plugin(plugin_name, install=True):
+    def build_plugin(plugin_name, install=True, uselib_add=[]):
         if install:
             instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany'
         else:
@@ -357,7 +365,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB', 'GMODULE'],
+            uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
             install_path            = instpath)
 
     # CTags
@@ -402,7 +410,7 @@ def build(bld):
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'M'],
         install_path    = None)  # do not install this library
 
     # Geany
@@ -419,7 +427,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET', 'M'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h
@@ -434,7 +442,7 @@ def build(bld):
     if bld.env['HAVE_PLUGINS'] == 1:
         build_plugin('classbuilder')
         build_plugin('demoplugin', False)
-        build_plugin('export')
+        build_plugin('export', uselib_add=['M'])
         build_plugin('filebrowser')
         build_plugin('htmlchars')
         build_plugin('saveactions')
@@ -501,23 +509,22 @@ def build(bld):
     ###
     # Install files
     ###
-    if not is_win32:
-        # Headers
-        bld.install_files('${PREFIX}/include/geany', '''
-            src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-            src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
-            src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-            src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
-            plugins/geanyplugin.h plugins/geanyfunctions.h''')
-        bld.install_files('${PREFIX}/include/geany/scintilla', '''
-            scintilla/include/SciLexer.h scintilla/include/Scintilla.h
-            scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
-        bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-            tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
-            tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
-            tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
-            tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
-            tagmanager/src/tm_workspace.h ''')
+    # Headers
+    bld.install_files('${PREFIX}/include/geany', '''
+        src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
+        src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
+        src/prefs.h src/project.h src/search.h src/stash.h src/support.h
+        src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
+        plugins/geanyplugin.h plugins/geanyfunctions.h''')
+    bld.install_files('${PREFIX}/include/geany/scintilla', '''
+        scintilla/include/SciLexer.h scintilla/include/Scintilla.h
+        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
+    bld.install_files('${PREFIX}/include/geany/tagmanager', '''
+        tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
+        tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
+        tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
+        tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+        tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
@@ -715,6 +722,9 @@ def _define_from_opt(conf, define_name, opt_value, default_value, quote=1):
 
 
 def _get_git_rev(conf):
+    if conf.options.no_scm:
+        return
+
     if not os.path.isdir('.git'):
         return
 

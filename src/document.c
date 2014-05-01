@@ -78,17 +78,20 @@
 
 GeanyFilePrefs file_prefs;
 
-/** Dynamic array of GeanyDocument pointers holding information about the notebook tabs.
+/** Dynamic array of GeanyDocument pointers.
  * Once a pointer is added to this, it is never freed. This means you can keep a pointer
- * to a document over time, but it might no longer represent a notebook tab. To check this,
- * check @c doc_ptr->is_valid. Of course, the pointer may represent a different
- * file by then.
+ * to a document over time, but it may represent a different
+ * document later on, or may have been closed and become invalid.
  *
- * You also need to check @c GeanyDocument::is_valid when iterating over this array,
- * although usually you would just use the foreach_document() macro.
+ * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
+ * This is done automatically if you use the foreach_document() macro.
  *
+ * @note
  * Never assume that the order of document pointers is the same as the order of notebook tabs.
- * Notebook tabs can be reordered. Use @c document_get_from_page(). */
+ * One reason is that notebook tabs can be reordered.
+ * Use @c document_get_from_page() to lookup a document from a notebook tab number.
+ *
+ * @see documents. */
 GPtrArray *documents_array = NULL;
 
 
@@ -592,7 +595,14 @@ static gboolean remove_page(guint page_num)
 
 	doc->is_valid = FALSE;
 
-	if (! main_status.quitting)
+	if (main_status.quitting)
+	{
+		/* we need to destroy the ScintillaWidget so our handlers on it are
+		 * disconnected before we free any data they may use (like the editor).
+		 * when not quitting, this is handled by removing the notebook page. */
+		gtk_widget_destroy(GTK_WIDGET(doc->editor->sci));
+	}
+	else
 	{
 		notebook_remove_page(page_num);
 		sidebar_remove_document(doc);
@@ -2438,7 +2448,7 @@ void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 
 		/* assume that if previous filetype was none and the settings are the default ones, this
 		 * is the first time the filetype is carefully set, so we should apply indent settings */
-		if (old_ft && old_ft->id == GEANY_FILETYPES_NONE &&
+		if ((! old_ft || old_ft->id == GEANY_FILETYPES_NONE) &&
 			doc->editor->indent_type == iprefs->type &&
 			doc->editor->indent_width == iprefs->width)
 		{
@@ -2822,7 +2832,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 }
 
 
-/** Accessor function for @ref GeanyData::documents_array items.
+/** Accessor function for @ref documents_array items.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  * @param idx @c documents_array index.
  * @return The document, or @c NULL if @a idx is out of range.

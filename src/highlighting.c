@@ -1658,7 +1658,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_HA_LITERATE_CODEDELIM);
 
 		case SCLEX_FREEBASIC:
-			return (style == SCE_B_COMMENT);
+			return (style == SCE_B_COMMENT ||
+				style == SCE_B_COMMENTBLOCK ||
+				style == SCE_B_DOCLINE ||
+				style == SCE_B_DOCBLOCK ||
+				style == SCE_B_DOCKEYWORD);
 
 		case SCLEX_YAML:
 			return (style == SCE_YAML_COMMENT);

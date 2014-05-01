@@ -1346,6 +1346,29 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 }
 
 
+static GtkWidget *dialog_get_widget_for_response(GtkDialog *dialog, gint response_id)
+{
+#if GTK_CHECK_VERSION(2, 20, 0)
+	return gtk_dialog_get_widget_for_response(dialog, response_id);
+#else /* GTK < 2.20 */
+	/* base logic stolen from GTK */
+	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
+	GtkWidget *widget = NULL;
+	GList *children, *node;
+
+	children = gtk_container_get_children(GTK_CONTAINER(action_area));
+	for (node = children; node && ! widget; node = node->next)
+	{
+		if (gtk_dialog_get_response_for_widget(dialog, node->data) == response_id)
+			widget = node->data;
+	}
+	g_list_free(children);
+
+	return widget;
+#endif
+}
+
+
 /* Reorders a dialog's buttons
  * @param dialog A dialog
  * @param response First response ID to reorder
@@ -1369,7 +1392,7 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
 	va_start(ap, response);
 	for (position = 0; response != -1; position++)
 	{
-		GtkWidget *child = gtk_dialog_get_widget_for_response(dialog, response);
+		GtkWidget *child = dialog_get_widget_for_response(dialog, response);
 		if (child)
 			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
 		else
@@ -2657,7 +2680,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		image = gtk_image_new_from_gicon(doc->file_type->icon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 
 		gtk_widget_show(menu_item);
@@ -2735,60 +2758,27 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 
 
 /* gets the icon that applies to a particular MIME type */
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
+GIcon *ui_get_mime_icon(const gchar *mime_type)
 {
-	GdkPixbuf *icon = NULL;
+	GIcon *icon = NULL;
 	gchar *ctype;
-	GIcon *gicon;
-	GtkIconInfo *info;
-	GtkIconTheme *theme;
-	gint real_size;
 
-	if (!gtk_icon_size_lookup(size, &real_size, NULL))
-	{
-		g_return_val_if_reached(NULL);
-	}
 	ctype = g_content_type_from_mime_type(mime_type);
-	if (ctype != NULL)
+	if (ctype)
 	{
-		gicon = g_content_type_get_icon(ctype);
-		theme = gtk_icon_theme_get_default();
-		info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
-		g_object_unref(gicon);
+		icon = g_content_type_get_icon(ctype);
 		g_free(ctype);
-
-		if (info != NULL)
-		{
-			icon = gtk_icon_info_load_icon(info, NULL);
-			gtk_icon_info_free(info);
-		}
 	}
 
-	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
-	if (icon == NULL)
+	/* fallback if icon lookup failed, like it might happen on Windows (?) */
+	if (! icon)
 	{
 		const gchar *stock_id = GTK_STOCK_FILE;
-		GtkIconSet *icon_set;
 
 		if (strstr(mime_type, "directory"))
 			stock_id = GTK_STOCK_DIRECTORY;
 
-		icon_set = gtk_icon_factory_lookup_default(stock_id);
-		if (icon_set)
-		{
-#if GTK_CHECK_VERSION(3, 0, 0)
-			GtkStyleContext *ctx = gtk_style_context_new();
-			GtkWidgetPath *path = gtk_widget_path_new();
-			gtk_style_context_set_path(ctx, path);
-			gtk_widget_path_unref(path);
-			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
-			g_object_unref(ctx);
-#else
-			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
-				gtk_widget_get_default_direction(),
-				GTK_STATE_NORMAL, size, NULL, NULL);
-#endif
-		}
+		icon = g_themed_icon_new(stock_id);
 	}
 	return icon;
 }
@@ -2816,4 +2806,95 @@ const gchar *ui_lookup_stock_label(const gchar *stock_id)
 
 	g_warning("No stock id '%s'!", stock_id);
 	return NULL;
+}
+
+
+/* finds the next iter at any level
+ * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
+ * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
+{
+	GtkTreeIter guess;
+	GtkTreeIter copy = *iter;
+
+	/* go down if the item has children */
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
+		*iter = guess;
+	/* or to the next item at the same level */
+	else if (gtk_tree_model_iter_next(model, &copy))
+		*iter = copy;
+	/* or to the next item at a parent level */
+	else if (gtk_tree_model_iter_parent(model, &guess, iter))
+	{
+		copy = guess;
+		while (TRUE)
+		{
+			if (gtk_tree_model_iter_next(model, &copy))
+			{
+				*iter = copy;
+				return TRUE;
+			}
+			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
+				guess = copy;
+			else
+				return FALSE;
+		}
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeIter iter;
+	GtkWidget *combo = gtk_combo_box_new();
+	GtkTreeStore *store = encodings_encoding_store_new(has_detect);
+
+	if (default_enc < 0 || default_enc >= GEANY_ENCODINGS_MAX)
+		default_enc = has_detect ? GEANY_ENCODINGS_MAX : GEANY_ENCODING_NONE;
+
+	gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(store));
+	if (encodings_encoding_store_get_iter(store, &iter, default_enc))
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo), renderer,
+			encodings_encoding_store_cell_data_func, NULL, NULL);
+
+	return combo;
+}
+
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo)
+{
+	GtkTreeIter iter;
+	gint enc = GEANY_ENCODING_NONE;
+
+	/* there should always be an active iter anyway, but we check just in case */
+	if (gtk_combo_box_get_active_iter(combo, &iter))
+	{
+		GtkTreeModel *model = gtk_combo_box_get_model(combo);
+		enc = encodings_encoding_store_get_encoding(GTK_TREE_STORE(model), &iter);
+	}
+
+	return enc;
+}
+
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+
+	if (encodings_encoding_store_get_iter(GTK_TREE_STORE(model), &iter, enc))
+	{
+		gtk_combo_box_set_active_iter(combo, &iter);
+		return TRUE;
+	}
+	return FALSE;
 }

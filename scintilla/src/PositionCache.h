@@ -53,19 +53,22 @@ public:
 	int lines;
 	XYPOSITION wrapIndent; // In pixels
 
-	LineLayout(int maxLineLength_);
+	explicit LineLayout(int maxLineLength_);
 	virtual ~LineLayout();
 	void Resize(int maxLineLength_);
 	void Free();
 	void Invalidate(validLevel validity_);
 	int LineStart(int line) const;
 	int LineLastVisible(int line) const;
+	Range SubLineRange(int line) const;
 	bool InLine(int offset, int line) const;
 	void SetLineStart(int line, int start);
 	void SetBracesHighlight(Range rangeLine, Position braces[],
 		char bracesMatchStyle, int xHighlight, bool ignoreStyle);
 	void RestoreBracesHighlight(Range rangeLine, Position braces[], bool ignoreStyle);
 	int FindBefore(XYPOSITION x, int lower, int upper) const;
+	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const;
+	Point PointFromPosition(int posInLine, int lineHeight) const;
 	int EndLineStyle() const;
 };
 
@@ -116,7 +119,7 @@ public:
 class Representation {
 public:
 	std::string stringRep;
-	Representation(const char *value="") : stringRep(value) {
+	explicit Representation(const char *value="") : stringRep(value) {
 	}
 };
 

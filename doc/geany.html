@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.8.1: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
 <title>Geany</title>
 <meta name="authors" content="Enrico Tröger  Nick Treleaven  Frank Lanitz  Colomban Wendling  Matthew Brush" />
-<meta name="date" content="2013-03-10" />
+<meta name="date" content="2014-04-16" />
 <style type="text/css">
 
 /*
@@ -141,12 +141,13 @@ Stylesheet for Geany's documentation based on a version of John Gabriele.
 <br />Colomban Wendling
 <br />Matthew Brush</td></tr>
 <tr><th class="docinfo-name">Date:</th>
-<td>2013-03-10</td></tr>
+<td>2014-04-16</td></tr>
 <tr><th class="docinfo-name">Version:</th>
-<td>1.24</td></tr>
+<td>1.24.1</td></tr>
 </tbody>
 </table>
-<p>Copyright © 2005-2012</p>
+<!-- -*- reStructuredText -*- -->
+<p>Copyright © 2005-2014</p>
 <p>This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version. A copy of this
@@ -459,8 +460,10 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#filetype-extensions" id="id207">Filetype extensions</a></li>
+<li><a class="reference internal" href="#filetype-extensions" id="id207">Filetype extensions</a><ul>
 <li><a class="reference internal" href="#filetype-group-membership" id="id208">Filetype group membership</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#preferences-file-format" id="id209">Preferences file format</a><ul>
 <li><a class="reference internal" href="#build-menu-section" id="id210">[build-menu] section</a></li>
 </ul>
@@ -502,35 +505,37 @@ of this program, and also in the chapter <a class="reference internal" href="#gn
 </ul>
 </li>
 <li><a class="reference internal" href="#save-actions" id="id229">Save Actions</a><ul>
-<li><a class="reference internal" href="#instant-save" id="id230">Instant Save</a></li>
-<li><a class="reference internal" href="#backup-copy" id="id231">Backup Copy</a></li>
+<li><a class="reference internal" href="#auto-save" id="id230">Auto Save</a></li>
+<li><a class="reference internal" href="#save-on-focus-out" id="id231">Save on focus out</a></li>
+<li><a class="reference internal" href="#instant-save" id="id232">Instant Save</a></li>
+<li><a class="reference internal" href="#backup-copy" id="id233">Backup Copy</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#contributing-to-this-document" id="id232">Contributing to this document</a></li>
-<li><a class="reference internal" href="#scintilla-keyboard-commands" id="id233">Scintilla keyboard commands</a><ul>
-<li><a class="reference internal" href="#keyboard-commands" id="id234">Keyboard commands</a></li>
+<li><a class="reference internal" href="#contributing-to-this-document" id="id234">Contributing to this document</a></li>
+<li><a class="reference internal" href="#scintilla-keyboard-commands" id="id235">Scintilla keyboard commands</a><ul>
+<li><a class="reference internal" href="#keyboard-commands" id="id236">Keyboard commands</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#tips-and-tricks" id="id235">Tips and tricks</a><ul>
-<li><a class="reference internal" href="#document-notebook" id="id236">Document notebook</a></li>
-<li><a class="reference internal" href="#editor" id="id237">Editor</a></li>
-<li><a class="reference internal" href="#interface" id="id238">Interface</a></li>
-<li><a class="reference internal" href="#gtk-related" id="id239">GTK-related</a></li>
+<li><a class="reference internal" href="#tips-and-tricks" id="id237">Tips and tricks</a><ul>
+<li><a class="reference internal" href="#document-notebook" id="id238">Document notebook</a></li>
+<li><a class="reference internal" href="#editor" id="id239">Editor</a></li>
+<li><a class="reference internal" href="#interface" id="id240">Interface</a></li>
+<li><a class="reference internal" href="#gtk-related" id="id241">GTK-related</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#compile-time-options" id="id240">Compile-time options</a><ul>
-<li><a class="reference internal" href="#src-geany-h" id="id241">src/geany.h</a></li>
-<li><a class="reference internal" href="#project-h" id="id242">project.h</a></li>
-<li><a class="reference internal" href="#filetypes-c" id="id243">filetypes.c</a></li>
-<li><a class="reference internal" href="#editor-h" id="id244">editor.h</a></li>
-<li><a class="reference internal" href="#keyfile-c" id="id245">keyfile.c</a></li>
-<li><a class="reference internal" href="#build-c" id="id246">build.c</a></li>
+<li><a class="reference internal" href="#compile-time-options" id="id242">Compile-time options</a><ul>
+<li><a class="reference internal" href="#src-geany-h" id="id243">src/geany.h</a></li>
+<li><a class="reference internal" href="#project-h" id="id244">project.h</a></li>
+<li><a class="reference internal" href="#filetypes-c" id="id245">filetypes.c</a></li>
+<li><a class="reference internal" href="#editor-h" id="id246">editor.h</a></li>
+<li><a class="reference internal" href="#keyfile-c" id="id247">keyfile.c</a></li>
+<li><a class="reference internal" href="#build-c" id="id248">build.c</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#gnu-general-public-license" id="id247">GNU General Public License</a></li>
-<li><a class="reference internal" href="#license-for-scintilla-and-scite" id="id248">License for Scintilla and SciTE</a></li>
+<li><a class="reference internal" href="#gnu-general-public-license" id="id249">GNU General Public License</a></li>
+<li><a class="reference internal" href="#license-for-scintilla-and-scite" id="id250">License for Scintilla and SciTE</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -687,10 +692,10 @@ list, type:</p>
 <pre class="literal-block">
 $ ./configure --help
 </pre>
-<dl class="docutils">
-<dt>or::</dt>
-<dd>$ ./waf --help</dd>
-</dl>
+<p>or:</p>
+<pre class="literal-block">
+$ ./waf --help
+</pre>
 <p>(depending on which build system you use).</p>
 <p>You may also want to read the INSTALL file for advanced installation
 options.</p>
@@ -738,6 +743,8 @@ permissions. See <a class="reference internal" href="#configuration-files">Confi
 <li><p class="first">From the Desktop Environment menu:</p>
 <p>Choose in your application menu of your used Desktop Environment:
 Development --&gt; Geany.</p>
+<p>At Windows-systems you will find Geany after installation inside
+the application menu within its special folder.</p>
 </li>
 <li><p class="first">From the command line:</p>
 <p>To start Geany from a command line, type the following and press
@@ -1257,9 +1264,18 @@ before the selected text was copied to the new position.</p>
 <div class="section" id="indentation">
 <h3><a class="toc-backref" href="#id45">Indentation</a></h3>
 <p>Geany allows each document to indent either with a tab character,
-multiple spaces or a combination of both. The default indent
-settings are set in <a class="reference internal" href="#editor-indentation-preferences">Editor Indentation preferences</a> (see the link
-for more information).</p>
+multiple spaces or a combination of both.</p>
+<p>The <em>Tabs</em> setting indents with one tab character per indent level, and
+displays tabs as the indent width.</p>
+<p>The <em>Spaces</em> setting indents with the number of spaces set in the indent
+width for each level.</p>
+<p>The <em>Tabs and Spaces</em> setting indents with spaces as above, then converts
+as many spaces as it can to tab characters at the rate of one tab for
+each multiple of the <cite>Various preference</cite> setting
+<em>indent_hard_tab_width</em> (default 8) and displays tabs as the
+<em>indent_hard_tab_width</em> value.</p>
+<p>The default indent settings are set in <a class="reference internal" href="#editor-indentation-preferences">Editor Indentation
+preferences</a> (see the link for more information).</p>
 <p>The default settings can be overridden per-document using the
 Document menu. They can also be overridden by projects - see
 <a class="reference internal" href="#project-management">Project management</a>.</p>
@@ -1297,7 +1313,10 @@ user doesn't always have to indent each line manually.</p>
 <dt>None</dt>
 <dd>Disables auto-indentation completely.</dd>
 <dt>Basic</dt>
-<dd>Adds the same amount of whitespace on a new line as on the last line.</dd>
+<dd>Adds the same amount of whitespace on a new line as on the previous line.
+For the <em>Tabs</em> and the <em>Spaces</em> indent types the indentation will use the
+same combination of characters as the previous line.  The
+<em>Tabs and Spaces</em> indentation type converts as explained above.</dd>
 <dt>Current chars</dt>
 <dd>Does the same as <em>Basic</em> but also indents a new line after an opening
 brace '{', and de-indents when typing a closing brace '}'. For Python,
@@ -1305,7 +1324,10 @@ a new line will be indented after typing ':' at the end of the
 previous line.</dd>
 <dt>Match braces</dt>
 <dd>Similar to <em>Current chars</em> but the closing brace will be aligned to
-match the indentation of the line with the opening brace.</dd>
+match the indentation of the line with the opening brace.  This
+requires the filetype to be one where Geany knows that the Scintilla
+lexer understands matching braces (C, C++, D, HTML, Pascal, Bash,
+Perl, TCL).</dd>
 </dl>
 <p>There is also XML-tag auto-indentation. This is enabled when the
 mode is more than just Basic, and is also controlled by a filetype
@@ -1372,6 +1394,12 @@ commands are not saved.</p>
 </ul>
 <p>The above example would normally be done with the <a class="reference internal" href="#replace-all">Replace all</a>
 function, but it can be handy to have common commands already set up.</p>
+<p>Note that the command is not run in a shell, so if you want to use
+shell features like pipes and command chains, you need to explicitly
+launch the shell and pass it your command:</p>
+<ul class="simple">
+<li><tt class="docutils literal">sh <span class="pre">-c</span> 'sort | uniq'</tt></li>
+</ul>
 </div>
 <div class="section" id="context-actions">
 <h3><a class="toc-backref" href="#id52">Context actions</a></h3>
@@ -4752,7 +4780,9 @@ path where Geany is installed (see <a class="reference internal" href="#installa
 <p>The system path is the <tt class="docutils literal">data</tt> subfolder of the installation path
 on Windows.</p>
 <p>The user configuration directory might vary, but on Windows XP it's:
-<tt class="docutils literal"><span class="pre">C:\Documents</span> and Settings\UserName\Application Data\geany</tt></p>
+<tt class="docutils literal"><span class="pre">C:\Documents</span> and Settings\UserName\Application Data\geany</tt>
+On Windows 7 and above you most likely will find it at:
+<tt class="docutils literal"><span class="pre">C:\users\UserName\Roaming\geany</span></tt></p>
 </div>
 </div>
 <div class="section" id="tools-menu-items">
@@ -4875,21 +4905,23 @@ the '<tt class="docutils literal">*</tt>' wildcard - e.g. <tt class="docutils li
 <p>Custom filetypes are not as powerful as built-in filetypes, but
 support for the following has been implemented:</p>
 <ul>
-<li><p class="first">Recognizing and setting the filetype (after the user has manually edited
-<tt class="docutils literal">filetype_extensions.conf</tt>).</p>
+<li><p class="first">Recognizing and setting the filetype (after the user has manually updated
+the <a class="reference internal" href="#filetype-extensions">filetype extensions</a> file).</p>
+</li>
+<li><p class="first"><a class="reference internal" href="#filetype-group-membership">Filetype group membership</a>.</p>
 </li>
 <li><dl class="first docutils">
 <dt>Reading filetype settings in the <tt class="docutils literal">[settings]</tt> section, including:</dt>
 <dd><ul class="first last simple">
 <li>Using an existing syntax highlighting lexer (<a class="reference internal" href="#lexer-filetype">lexer_filetype</a> key).</li>
-<li>Using an existing tag parser (<tt class="docutils literal">tag_parser</tt> key).</li>
+<li>Using an existing tag parser (<a class="reference internal" href="#tag-parser">tag_parser</a> key).</li>
 </ul>
 </dd>
 </dl>
 </li>
 <li><p class="first">Build commands (<tt class="docutils literal"><span class="pre">[build-menu]</span></tt> section).</p>
 </li>
-<li><p class="first">Loading global tags files (sharing the <tt class="docutils literal">tag_parser</tt> namespace).</p>
+<li><p class="first">Loading global tags files (sharing the <tt class="docutils literal">tag_parser</tt> filetype's namespace).</p>
 </li>
 </ul>
 <p>See <a class="reference internal" href="#filetype-configuration">Filetype configuration</a> for details on each setting.</p>
@@ -5071,6 +5103,8 @@ position or by the current selection.</p>
 context_action_cmd=firefox &quot;<a class="reference external" href="http://www.php.net/%s">http://www.php.net/%s</a>&quot;</p>
 <p class="last"><em>Example:</em> <tt class="docutils literal">context_action_cmd=devhelp <span class="pre">-s</span> &quot;%s&quot;</tt></p>
 </dd>
+</dl>
+<dl class="docutils" id="tag-parser">
 <dt>tag_parser</dt>
 <dd>The TagManager language name, e.g. &quot;C&quot;. Usually the same as the
 filetype name.</dd>
@@ -5463,8 +5497,11 @@ when moving, selecting and deleting across word boundaries
 </div>
 <div class="section" id="filetype-extensions">
 <h2><a class="toc-backref" href="#id207">Filetype extensions</a></h2>
-<p>To change the default filetype extension used when saving a new file,
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">To change the default filetype extension used when saving a new file,
 see <a class="reference internal" href="#filetype-definition-files">Filetype definition files</a>.</p>
+</div>
 <p>You can override the list of file extensions that Geany uses to detect
 filetypes using the user <tt class="docutils literal">filetype_extensions.conf</tt> file. Use the
 <em>Tools-&gt;Configuration Files-&gt;filetype_extensions.conf</em> menu item. See
@@ -5480,9 +5517,8 @@ should look like:</p>
 [Extensions]
 Make=Makefile*;*.mk;Buildfile;
 </pre>
-</div>
 <div class="section" id="filetype-group-membership">
-<h2><a class="toc-backref" href="#id208">Filetype group membership</a></h2>
+<h3><a class="toc-backref" href="#id208">Filetype group membership</a></h3>
 <p>Group membership is also stored in <tt class="docutils literal">filetype_extensions.conf</tt>. This
 file is used to store information Geany needs at startup, whereas the
 separate filetype definition files hold information only needed when
@@ -5500,6 +5536,7 @@ None=None;
 <div class="note">
 <p class="first admonition-title">Note</p>
 <p class="last">Group membership is only read at startup.</p>
+</div>
 </div>
 </div>
 <div class="section" id="preferences-file-format">
@@ -5773,7 +5810,7 @@ bsd, gpl, snippets.</td>
 </tr>
 <tr><td>geanyversion</td>
 <td>The actual Geany version, e.g.
-&quot;Geany 1.24&quot;.</td>
+&quot;Geany 1.24.1&quot;.</td>
 <td>file templates, file header,
 function description, ChangeLog entry,
 bsd, gpl, snippets.</td>
@@ -6074,8 +6111,20 @@ configure a keybinding for the plugin.</p>
 </div>
 <div class="section" id="save-actions">
 <h2><a class="toc-backref" href="#id229">Save Actions</a></h2>
+<div class="section" id="auto-save">
+<h3><a class="toc-backref" href="#id230">Auto Save</a></h3>
+<p>This plugin provides an option to automatically save documents.
+You can choose to save the current document, or all of your documents, at
+a given delay.</p>
+</div>
+<div class="section" id="save-on-focus-out">
+<h3><a class="toc-backref" href="#id231">Save on focus out</a></h3>
+<p>You can save the current document when the editor's focus goes out.
+Every pop-up, menu dialogs, or anything else that can make the editor lose the focus,
+will make the current document to be saved.</p>
+</div>
 <div class="section" id="instant-save">
-<h3><a class="toc-backref" href="#id230">Instant Save</a></h3>
+<h3><a class="toc-backref" href="#id232">Instant Save</a></h3>
 <p>This plugin sets on every new file (<em>File-&gt;New</em> or <em>File-&gt;New (with template)</em>)
 a randomly chosen filename and set its filetype appropriate to the used template
 or when no template was used, to a configurable default filetype.
@@ -6085,7 +6134,7 @@ useful when you often create new files just for testing some code or something
 similar.</p>
 </div>
 <div class="section" id="backup-copy">
-<h3><a class="toc-backref" href="#id231">Backup Copy</a></h3>
+<h3><a class="toc-backref" href="#id233">Backup Copy</a></h3>
 <p>This plugin creates a backup copy of the current file in Geany when it is
 saved. You can specify the directory where the backup copy is saved and
 you can configure the automatically added extension in the configure dialog
@@ -6096,7 +6145,7 @@ copied into the configured backup directory when the file is saved in Geany.</p>
 </div>
 </div>
 <div class="section" id="contributing-to-this-document">
-<h1><a class="toc-backref" href="#id232">Contributing to this document</a></h1>
+<h1><a class="toc-backref" href="#id234">Contributing to this document</a></h1>
 <p>This document (<tt class="docutils literal">geany.txt</tt>) is written in <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a>
 (or &quot;reST&quot;). The source file for it is located in Geany's <tt class="docutils literal">doc</tt>
 subdirectory.  If you intend on making changes, you should grab the
@@ -6105,7 +6154,7 @@ editing the file, to build the HTML document to see how your changes
 look, run &quot;<tt class="docutils literal">make doc</tt>&quot; in the subdirectory <tt class="docutils literal">doc</tt> of Geany's source
 directory. This regenerates the <tt class="docutils literal">geany.html</tt> file. To generate a PDF
 file, use the command &quot;<tt class="docutils literal">make pdf</tt>&quot; which should generate a file called
-geany-1.24.pdf.</p>
+geany-1.24.1.pdf.</p>
 <p>After you are happy with your changes, create a patch e.g. by using:</p>
 <pre class="literal-block">
 % git diff geany.txt &gt; foo.patch
@@ -6128,7 +6177,7 @@ to build the docs. The package is named <tt class="docutils literal"><span class
 and Fedora systems.</p>
 </div>
 <div class="section" id="scintilla-keyboard-commands">
-<h1><a class="toc-backref" href="#id233">Scintilla keyboard commands</a></h1>
+<h1><a class="toc-backref" href="#id235">Scintilla keyboard commands</a></h1>
 <p>Copyright © 1998, 2006 Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>This appendix is distributed under the terms of the License for
 Scintilla and SciTE. A copy of this license can be found in the file
@@ -6137,7 +6186,7 @@ program and in the appendix of this document. See <a class="reference internal" 
 Scintilla and SciTE</a>.</p>
 <p>20 June 2006</p>
 <div class="section" id="keyboard-commands">
-<h2><a class="toc-backref" href="#id234">Keyboard commands</a></h2>
+<h2><a class="toc-backref" href="#id236">Keyboard commands</a></h2>
 <p>Keyboard commands for Scintilla mostly follow common Windows and GTK+
 conventions. All move keys (arrows, page up/down, home and end)
 allows to extend or reduce the stream selection when holding the
@@ -6220,9 +6269,9 @@ menus. Some less common commands with no menu equivalent are:</p>
 </div>
 </div>
 <div class="section" id="tips-and-tricks">
-<h1><a class="toc-backref" href="#id235">Tips and tricks</a></h1>
+<h1><a class="toc-backref" href="#id237">Tips and tricks</a></h1>
 <div class="section" id="document-notebook">
-<h2><a class="toc-backref" href="#id236">Document notebook</a></h2>
+<h2><a class="toc-backref" href="#id238">Document notebook</a></h2>
 <ul class="simple">
 <li>Double-click on empty space in the notebook tab bar to open a
 new document.</li>
@@ -6235,7 +6284,7 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section" id="editor">
-<h2><a class="toc-backref" href="#id237">Editor</a></h2>
+<h2><a class="toc-backref" href="#id239">Editor</a></h2>
 <ul class="simple">
 <li>Alt-scroll wheel moves up/down a page.</li>
 <li>Ctrl-scroll wheel zooms in/out.</li>
@@ -6245,13 +6294,13 @@ shortcut). The interface pref must be enabled for this to work.</li>
 </ul>
 </div>
 <div class="section" id="interface">
-<h2><a class="toc-backref" href="#id238">Interface</a></h2>
+<h2><a class="toc-backref" href="#id240">Interface</a></h2>
 <ul class="simple">
 <li>Double-click on a symbol-list group to expand or compact it.</li>
 </ul>
 </div>
 <div class="section" id="gtk-related">
-<h2><a class="toc-backref" href="#id239">GTK-related</a></h2>
+<h2><a class="toc-backref" href="#id241">GTK-related</a></h2>
 <ul class="simple">
 <li>Scrolling the mouse wheel over a notebook tab bar will switch
 notebook pages.</li>
@@ -6266,7 +6315,7 @@ position without having to drag it.</li>
 </div>
 </div>
 <div class="section" id="compile-time-options">
-<h1><a class="toc-backref" href="#id240">Compile-time options</a></h1>
+<h1><a class="toc-backref" href="#id242">Compile-time options</a></h1>
 <p>There are some options which can only be changed at compile time,
 and some options which are used as the default for configurable
 options. To change these options, edit the appropriate source file
@@ -6278,7 +6327,7 @@ not be changed.</p>
 <p class="last">Most users should not need to change these options.</p>
 </div>
 <div class="section" id="src-geany-h">
-<h2><a class="toc-backref" href="#id241">src/geany.h</a></h2>
+<h2><a class="toc-backref" href="#id243">src/geany.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6335,7 +6384,7 @@ when building on a non-Win32 system.</em></td>
 </table>
 </div>
 <div class="section" id="project-h">
-<h2><a class="toc-backref" href="#id242">project.h</a></h2>
+<h2><a class="toc-backref" href="#id244">project.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6360,7 +6409,7 @@ open dialog.</td>
 </table>
 </div>
 <div class="section" id="filetypes-c">
-<h2><a class="toc-backref" href="#id243">filetypes.c</a></h2>
+<h2><a class="toc-backref" href="#id245">filetypes.c</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6383,7 +6432,7 @@ filetype with the extract filetype regex.</td>
 </table>
 </div>
 <div class="section" id="editor-h">
-<h2><a class="toc-backref" href="#id244">editor.h</a></h2>
+<h2><a class="toc-backref" href="#id246">editor.h</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6409,7 +6458,7 @@ underscore.</td>
 </table>
 </div>
 <div class="section" id="keyfile-c">
-<h2><a class="toc-backref" href="#id245">keyfile.c</a></h2>
+<h2><a class="toc-backref" href="#id247">keyfile.c</a></h2>
 <p>These are default settings that can be overridden in the <a class="reference internal" href="#preferences">Preferences</a> dialog.</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -6503,7 +6552,7 @@ xterm -e &quot;/bin/sh %c&quot;
 </pre>
 </div>
 <div class="section" id="build-c">
-<h2><a class="toc-backref" href="#id246">build.c</a></h2>
+<h2><a class="toc-backref" href="#id248">build.c</a></h2>
 <table border="1" class="docutils">
 <colgroup>
 <col width="33%" />
@@ -6548,7 +6597,7 @@ overriding the compile setting.</td>
 </div>
 </div>
 <div class="section" id="gnu-general-public-license">
-<h1><a class="toc-backref" href="#id247">GNU General Public License</a></h1>
+<h1><a class="toc-backref" href="#id249">GNU General Public License</a></h1>
 <pre class="literal-block">
             GNU GENERAL PUBLIC LICENSE
                Version 2, June 1991
@@ -6893,7 +6942,7 @@ Public License instead of this License.
 </pre>
 </div>
 <div class="section" id="license-for-scintilla-and-scite">
-<h1><a class="toc-backref" href="#id248">License for Scintilla and SciTE</a></h1>
+<h1><a class="toc-backref" href="#id250">License for Scintilla and SciTE</a></h1>
 <p>Copyright 1998-2003 by Neil Hodgson &lt;neilh(at)scintilla(dot)org&gt;</p>
 <p>All Rights Reserved</p>
 <p>Permission to use, copy, modify, and distribute this software and
@@ -6913,7 +6962,7 @@ USE OR PERFORMANCE OF THIS SOFTWARE.</p>
 <div class="footer">
 <hr class="footer" />
 <a class="reference external" href="geany.txt">View document source</a>.
-Generated on: 2013-04-15 01:56 UTC.
+Generated on: 2014-04-16 15:16 UTC.
 Generated by <a class="reference external" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference external" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
