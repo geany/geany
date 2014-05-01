@@ -1374,6 +1374,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 
 	g_signal_connect(tree, "query-tooltip", G_CALLBACK(pm_treeview_query_tooltip), NULL);
 	gtk_widget_set_has_tooltip(tree, TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
 	checkbox_renderer = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
