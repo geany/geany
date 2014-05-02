@@ -172,3 +172,29 @@ entity=default
 line_added=0x34b034;0xffffff;false;false
 line_removed=0xff2727;0xffffff;false;false
 line_changed=0x7f007f;0xffffff;false;false
+
+# Markup-type languages
+# foreground;background;bold;italic
+#default=false;false;false;false
+strong=0x445675;false;true;false
+emphasis=0x653A39;false;false;true
+underlined=0x386742;false;false;false
+header1=0xE20700;false;true;false
+header2=0xE20700;false;true;false
+header3=0xA81D05;false;true;false
+header4=0x871704;false;true;false
+header5=0x871704;false;true;false
+header6=0x871704;false;true;false
+ulist_item=0xE300EE;false;false;false
+olist_item=0xE300EE;false;false;false
+blockquote=0x015F52;false;false;false
+strikeout=0x644A9B;false;false;false
+hrule=0xff901e;false;false;false
+link=0x0930DE;false;false;true
+code=0x009f00;false;false;false
+codebk=0x005f00;false;false;false
+comment=0x777777;false;false;false
+option=0xC0036E;false;false;true
+preproc=0x848B00;false;false;true
+postproc=0xC05600;false;false;true
+
