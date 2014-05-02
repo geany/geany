@@ -2,22 +2,23 @@
 [styling]
 # Edit these in the colorscheme .conf file instead
 default=default
-strong=string_3
-emphasis=string_4
-header1=keyword_1
-header2=keyword_1
-header3=keyword_1
-header4=keyword_1
-header5=keyword_1
-header6=keyword_1
-ulist_item=tag_unknown
-olist_item=tag_unknown
-blockquote=tag_unknown
-strikeout=tag_unknown
-hrule=tag_unknown
-link=keyword_1
-code=attribute_unknown
-codebk=attribute_unknown
+strong=strong
+emphasis=emphasis
+strikeout=strikeout
+header1=header1
+header2=header2
+header3=header3
+header4=header4
+header5=header5
+header6=header6
+ulist_item=ulist_item
+olist_item=olist_item
+blockquote=blockquote
+hrule=hrule
+link=link
+code=code
+codebk=codebk
+option=option
 
 [settings]
 # default extension used when saving files
