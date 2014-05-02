@@ -1,6 +1,23 @@
 # For complete documentation of this file, please see Geany's main documentation
 [styling]
-# no syntax highlighting yet
+default=default
+strong=strong
+emphasis=emphasis
+header1=header1
+header2=header2
+header3=header3
+header4=header4
+header5=header5
+header6=header6
+ulist_item=ulist_item
+olist_item=olist_item
+blockquote=blockquote
+hrule=hrule
+link=link
+code=code
+codebk=codebk
+comment=comment_markup
+option=option
 
 [settings]
 # default extension used when saving files
