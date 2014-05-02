@@ -1194,14 +1194,20 @@ void configuration_open_files(void)
 
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
-	else if (session_notebook_page >= 0)
+	else
 	{
-		/* explicitly allow notebook switch page callback to be called for window title,
-		 * encoding settings and so other things */
+		/* explicitly trigger a notebook page switch after unsetting main_status.opening_session_files
+		 * for callbacks to run (and update window title, encoding settings, and so on) */
+		gint n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+		gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
+
+		/* if target page is current page, switch to another page first to really trigger an event */
+		if (target_page == cur_page)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), (cur_page + 1) % n_pages);
+
 		main_status.opening_session_files = FALSE;
-		/** TODO if session_notebook_page is equal to the current notebook tab(the last opened)
-		 ** the notebook switch page callback isn't triggered and e.g. menu items are not updated */
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), session_notebook_page);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
 	}
 	main_status.opening_session_files = FALSE;
 }
