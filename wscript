@@ -504,7 +504,9 @@ def build(bld):
             source          = 'doc/Doxyfile.in',
             target          = 'doc/Doxyfile',
             install_path    = None,
-            dct             = {'VERSION': VERSION})
+            dct             = {'VERSION': VERSION,
+                               'top_builddir': os.path.join(bld.path.abspath(), out),
+                               'top_srcdir': os.path.join(bld.path.abspath(), top)})
 
     ###
     # Install files
