@@ -69,7 +69,7 @@ MessageWindow msgwindow;
 enum
 {
 	MSG_COL_LINE = 0,
-	MSG_COL_DOC,
+	MSG_COL_DOC_ID,
 	MSG_COL_COLOR,
 	MSG_COL_STRING,
 	MSG_COL_COUNT
@@ -186,8 +186,8 @@ static void prepare_msg_tree_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	/* line, doc, fg, str */
-	msgwindow.store_msg = gtk_list_store_new(MSG_COL_COUNT, G_TYPE_INT, G_TYPE_POINTER,
+	/* line, doc id, fg, str */
+	msgwindow.store_msg = gtk_list_store_new(MSG_COL_COUNT, G_TYPE_INT, G_TYPE_UINT,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 	g_object_unref(msgwindow.store_msg);
@@ -392,7 +392,8 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter,
-		MSG_COL_LINE, line, MSG_COL_DOC, doc, MSG_COL_COLOR, color, MSG_COL_STRING, utf8_msg, -1);
+		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
+		color, MSG_COL_STRING, utf8_msg, -1);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -1079,18 +1080,28 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		gint line;
+		guint id;
 		gchar *string;
 		GeanyDocument *doc;
 		GeanyDocument *old_doc = document_get_current();
 
 		gtk_tree_model_get(model, &iter,
-			MSG_COL_LINE, &line, MSG_COL_DOC, &doc, MSG_COL_STRING, &string, -1);
-		/* doc may have been closed, so check doc is valid: */
-		if (line >= 0 && DOC_VALID(doc))
+			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_STRING, &string, -1);
+		if (line >= 0 && id > 0)
 		{
-			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && focus_editor)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+			/* check doc is still open */
+			doc = document_find_by_id(id);
+			if (!doc)
+			{
+				ui_set_statusbar(FALSE, _("The document has been closed."));
+				utils_beep();
+			}
+			else
+			{
+				ret = navqueue_goto_line(old_doc, doc, line);
+				if (ret && focus_editor)
+					gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+			}
 		}
 		else if (line < 0 && string != NULL)
 		{

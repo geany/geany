@@ -58,7 +58,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 218
+#define GEANY_API_VERSION 219
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -324,6 +324,7 @@ typedef struct DocumentFuncs
 	gint		(*document_compare_by_display_name) (gconstpointer a, gconstpointer b);
 	gint		(*document_compare_by_tab_order) (gconstpointer a, gconstpointer b);
 	gint		(*document_compare_by_tab_order_reverse) (gconstpointer a, gconstpointer b);
+	GeanyDocument*	(*document_find_by_id)(guint id);
 }
 DocumentFuncs;
 

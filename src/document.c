@@ -84,9 +84,11 @@ GeanyFilePrefs file_prefs;
 
 
 /** Dynamic array of GeanyDocument pointers.
- * Once a pointer is added to this, it is never freed. This means you can keep a pointer
- * to a document over time, but it may represent a different
- * document later on, or may have been closed and become invalid.
+ * Once a pointer is added to this, it is never freed. This means the same document pointer
+ * can represent a different document later on, or it may have been closed and become invalid.
+ * For this reason, you should use document_find_by_id() instead of storing
+ * document pointers over time if there is a chance the user can close the
+ * document.
  *
  * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
  * This is done automatically if you use the foreach_document() macro.
@@ -108,6 +110,9 @@ typedef struct
 	gpointer *data; 	/* the old value (before the change), in case of a redo action
 						 * it contains the new value */
 } undo_action;
+
+
+static guint doc_id_counter = 0;
 
 
 static void document_undo_clear(GeanyDocument *doc);
@@ -219,6 +224,38 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 	for (i = 0; i < documents_array->len; i++)
 	{
 		if (documents[i]->is_valid && documents[i]->editor->sci == sci)
+			return documents[i];
+	}
+	return NULL;
+}
+
+
+/** Lookup an old document by its ID.
+ * Useful when the corresponding document may have been closed since the
+ * ID was retrieved.
+ * @return @c NULL if the document is no longer open.
+ *
+ * Example:
+ * @code
+ * static guint id;
+ * GeanyDocument *doc = ...;
+ * id = doc->id;	// store ID
+ * ...
+ * // time passes - the document may have been closed by now
+ * GeanyDocument *doc = document_find_by_id(id);
+ * gboolean still_open = (doc != NULL);
+ * @endcode
+ * @since 1.25. */
+GeanyDocument *document_find_by_id(guint id)
+{
+	guint i;
+
+	if (!id)
+		return NULL;
+
+	foreach_document(i)
+	{
+		if (documents[i]->id == id)
 			return documents[i];
 	}
 	return NULL;
@@ -586,6 +623,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	/* initialize default document settings */
 	doc->priv = g_new0(GeanyDocumentPrivate, 1);
+	doc->id = ++doc_id_counter;
 	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
 	doc->editor = editor_create(doc);
@@ -648,6 +686,7 @@ static gboolean remove_page(guint page_num)
 		ui_add_recent_document(doc);
 
 	doc->is_valid = FALSE;
+	doc->id = 0;
 
 	if (main_status.quitting)
 	{
