@@ -1006,6 +1006,10 @@ static void recent_create_menu(GeanyRecentFiles *grf)
 	}
 }
 
+static gint sort_fileName(gconstpointer a, gconstpointer b, gpointer data) 
+{
+    return strcmp((const char *)a, (const char *)b );
+}
 
 static GeanyRecentFiles *recent_get_recent_files(void)
 {
@@ -1014,6 +1018,7 @@ static GeanyRecentFiles *recent_get_recent_files(void)
 	if (G_UNLIKELY(grf.recent_queue == NULL))
 	{
 		grf.recent_queue = ui_prefs.recent_queue;
+		g_queue_sort(grf.recent_queue, (GCompareDataFunc)sort_fileName, NULL);
 		grf.menubar = ui_widgets.recent_files_menu_menubar;
 		grf.toolbar = geany_menu_button_action_get_menu(GEANY_MENU_BUTTON_ACTION(
 						toolbar_get_action_by_name("Open")));
