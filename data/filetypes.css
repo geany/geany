@@ -20,10 +20,10 @@ variable=identifier_1
 important=error
 directive=preprocessor
 identifier3=keyword_1
-pseudoelement=element
+pseudoelement=string_2
 extended_identifier=keyword_1
-extended_pseudoclass=pseudoclass
-extended_pseudoelement=pseudoelement
+extended_pseudoclass=string_1
+extended_pseudoelement=string_2
 media=parameter
 
 [keywords]
