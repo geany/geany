@@ -59,6 +59,7 @@ filetypes = \
 	filetypes.ruby \
 	filetypes.rust \
 	filetypes.Scala.conf \
+	filetypes.SCSS.conf \
 	filetypes.sh \
 	filetypes.sql \
 	filetypes.tcl \
