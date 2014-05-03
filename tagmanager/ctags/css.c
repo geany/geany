@@ -146,6 +146,11 @@ static CssParserState parseCssLine( const unsigned char *line, CssParserState st
 				}
 				else if( *line == '*' && *(line-1) == '/' ) /* multi-line comment */
 					state = P_STATE_IN_COMMENT;
+				else if( *line == '/' && *(line-1) == '/' ) /* single-line comment (SCSS, Less, etc.) */
+				{
+					while( *line != '\0' )
+						++line;
+				}
 				else if ( stack->length > 0 )
 					state = parseCssDeclaration( &line, K_SELECTOR, vStringValue(stack) );
 
