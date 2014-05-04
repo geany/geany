@@ -2365,6 +2365,9 @@ Strip trailing spaces
     .. note::
         This does not apply to Diff documents, e.g. patch files.
 
+Preserve Empty Lines
+    Don't change the whitespace in empty lines.
+
 Replace tabs by space
     Replace all tabs in the document with the equivalent number of spaces.
 

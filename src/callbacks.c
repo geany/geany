@@ -1848,6 +1848,7 @@ G_MODULE_EXPORT void on_tabs_and_spaces1_activate(GtkCheckMenuItem *menuitem, gp
 G_MODULE_EXPORT void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc;
+	const GeanyFilePrefs *fp = project_get_file_prefs();
 
 	if (ignore_callback)
 		return;
@@ -1855,7 +1856,7 @@ G_MODULE_EXPORT void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, g
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	editor_strip_trailing_spaces(doc->editor);
+	editor_strip_trailing_spaces(doc->editor, fp->strip_preserve_empty);
 }
 
 

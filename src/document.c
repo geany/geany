@@ -1734,7 +1734,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		editor_replace_tabs(doc->editor);
 	/* strip trailing spaces */
 	if (fp->strip_trailing_spaces)
-		editor_strip_trailing_spaces(doc->editor);
+		editor_strip_trailing_spaces(doc->editor, fp->strip_preserve_empty);
 	/* ensure the file has a newline at the end */
 	if (fp->final_new_line)
 		editor_ensure_final_newline(doc->editor);
