@@ -1,0 +1,82 @@
+# Make file for Scintilla on Linux or compatible OS
+# Copyright 1998-2010 by Neil Hodgson <neilh@scintilla.org>
+# The License.txt file describes the conditions under which this software may be distributed.
+# This makefile assumes GCC 4.3 is used and changes will be needed to use other compilers.
+# GNU make does not like \r\n line endings so should be saved to CVS in binary form.
+# Builds for GTK+ 2 and no longer supports GTK+ 1.
+# Also works with ming32-make on Windows.
+
+.SUFFIXES: .cxx .c .o .h .a
+CXX = g++
+CC = gcc
+AR = ar
+RANLIB = ranlib
+PREFIX = C:/libs
+RM = del
+-include ../../localwin32.mk
+
+ifdef MSYS
+RM = rm -f
+endif
+
+GTK_INCLUDES= \
+	-I$(PREFIX)/include/gtk-2.0 \
+	-I$(PREFIX)/lib/gtk-2.0/include \
+	-I$(PREFIX)/include/atk-1.0 \
+	-I$(PREFIX)/include/cairo \
+	-I$(PREFIX)/include/gdk-pixbuf-2.0 \
+	-I$(PREFIX)/include/pango-1.0 \
+	-I$(PREFIX)/include/glib-2.0 \
+	-I$(PREFIX)/lib/glib-2.0/include \
+	-I$(PREFIX)/include \
+	-I$(PREFIX)/include/gettext
+	
+COMPLIB=../scintilla.a
+
+vpath %.h ../gtk ../src ../include ../lexlib
+vpath %.cxx ../gtk ../src ../lexlib ../lexers
+vpath %.c ../gtk
+
+INCLUDEDIRS=-I ../include -I ../src -I ../lexlib $(GTK_INCLUDES)
+CXXBASEFLAGS=-Wall -pedantic -DGTK -DSCI_LEXER $(INCLUDEDIRS)
+
+ifdef THREADS
+THREADFLAGS=
+else
+THREADFLAGS=-DG_THREADS_IMPL_NONE
+endif
+
+ifdef DEBUG
+CXXFLAGS=-DDEBUG -g -O0 $(CXXBASEFLAGS) $(THREADFLAGS)
+else
+CXXFLAGS=-DNDEBUG -Os $(CXXBASEFLAGS) $(THREADFLAGS)
+endif
+
+MARSHALLER=scintilla-marshal.o
+
+.cxx.o:
+	$(CXX) $(CXXFLAGS) -c $<
+.c.o:
+	$(CC) $(CXXFLAGS) -c $<
+
+LEXOBJS:=$(addsuffix .o,$(basename $(notdir $(wildcard ../lexers/Lex*.cxx))))
+
+all: $(COMPLIB)
+
+clean:
+	$(RM) *.o $(COMPLIB) *.plist
+
+deps:
+	$(CC) -MM $(CONFIGFLAGS) $(CXXTFLAGS) *.cxx ../src/*.cxx ../lexlib/*.cxx ../lexers/*.cxx >deps.mak
+
+$(COMPLIB): Accessor.o CharacterSet.o LexerBase.o LexerModule.o LexerSimple.o StyleContext.o WordList.o \
+	CharClassify.o Decoration.o Document.o PerLine.o Catalogue.o CallTip.o CaseConvert.o CaseFolder.o \
+	ScintillaBase.o ContractionState.o Editor.o ExternalLexer.o PropSetSimple.o PlatGTK.o \
+	KeyMap.o LineMarker.o PositionCache.o ScintillaGTK.o CellBuffer.o CharacterCategory.o ViewStyle.o \
+	RESearch.o RunStyles.o Selection.o Style.o Indicator.o AutoComplete.o UniConversion.o XPM.o \
+	$(MARSHALLER) $(LEXOBJS)
+	$(AR) rc $@ $^
+	$(RANLIB) $@
+
+# Automatically generate header dependencies with "make deps"
+include deps.mak
