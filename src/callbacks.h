@@ -526,6 +526,10 @@ on_strip_trailing_spaces1_activate	 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
+on_doc_rename_activate				(GtkMenuItem	 *menuitem,
+										gpointer		 user_data);
+
+G_MODULE_EXPORT void
 on_page_setup1_activate				(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 

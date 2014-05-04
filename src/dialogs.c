@@ -32,6 +32,7 @@
 # include <sys/time.h>
 #endif
 #include <time.h>
+#include <errno.h>
 
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
@@ -541,7 +542,19 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 }
 
 
-static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
+/* HACK to override the GtkFileChooserDialog's default response button
+ * when the dialog is shown. GtkFileChooserDialog is hardcoded to only
+ * allow a few "positive" stock responses as GtkDialog's default
+ * response. */
+static gboolean dialogs_save_mapped(GtkWidget *widget, GdkEvent *event,
+	gpointer user_data)
+{
+	gtk_dialog_set_default_response(GTK_DIALOG(widget), GEANY_RESPONSE_RENAME);
+	return FALSE;
+}
+
+
+static GtkWidget *create_save_file_dialog(GeanyDocument *doc, gboolean def_rename)
 {
 	GtkWidget *dialog, *rename_btn;
 	const gchar *initdir;
@@ -563,7 +576,9 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog),
+		def_rename ? GEANY_RESPONSE_RENAME : GTK_RESPONSE_ACCEPT);
 
 	gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog), TRUE);
 	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
@@ -576,18 +591,24 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), linitdir);
 		g_free(linitdir);
 	}
+
+	/* HACK to set the default response for the GtkFileChooserDialog to
+	 * the GEANY_RESPONSE_RENAME button later once the dialog is shown. */
+	if (def_rename && doc->real_path)
+		g_signal_connect_after(dialog, "map-event", G_CALLBACK(dialogs_save_mapped), NULL);
+
 	return dialog;
 }
 
 
-static gboolean show_save_as_gtk(GeanyDocument *doc)
+static gboolean show_save_as_gtk(GeanyDocument *doc, gboolean def_rename)
 {
 	GtkWidget *dialog;
 	gint resp;
 
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
-	dialog = create_save_file_dialog(doc);
+	dialog = create_save_file_dialog(doc, def_rename);
 
 	if (doc->file_name != NULL)
 	{
@@ -650,8 +671,17 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  **/
 gboolean dialogs_show_save_as(void)
 {
-	GeanyDocument *doc = document_get_current();
+	/* To avoid breaking the API and ABI, just forward the call */
+	return dialogs_show_save_document_as(NULL, FALSE);
+}
+
+
+gboolean dialogs_show_save_document_as(GeanyDocument *doc, gboolean def_rename)
+{
 	gboolean result = FALSE;
+
+	if (doc == NULL)
+		doc = document_get_current();
 
 	g_return_val_if_fail(doc, FALSE);
 
@@ -662,10 +692,12 @@ gboolean dialogs_show_save_as(void)
 						_("Save File"), doc);
 		if (utf8_name != NULL)
 			result = handle_save_as(utf8_name, FALSE);
+		g_free(utf8_name);
 	}
 	else
 #endif
-	result = show_save_as_gtk(doc);
+	result = show_save_as_gtk(doc, def_rename);
+
 	return result;
 }
 
