@@ -1762,8 +1762,7 @@ msgstr "すべて閉じる(_L)"
 msgid "Co_mmands"
 msgstr "コマンド(_C)"
 
-#: ../data/geany.glade.h:379
-#, fuzzy
+#: ../data/geany.glade.h:379  ../src/keybindings.c:350
 msgid "Cu_t Current Line(s)"
 msgstr "現在の行を切り取り(_C)"
 
@@ -1775,18 +1774,15 @@ msgstr "現在の行をコピー(_C)"
 msgid "_Delete Current Line(s)"
 msgstr "現在の行を削除(_D)"
 
-#: ../data/geany.glade.h:382
-#, fuzzy
+#: ../data/geany.glade.h:382  ../src/keybindings.c:298
 msgid "D_uplicate Line or Selection"
 msgstr "行/選択範囲を複製(_D)"
 
-#: ../data/geany.glade.h:383
-#, fuzzy
+#: ../data/geany.glade.h:383  ../src/keybindings.c:360
 msgid "S_elect Current Line(s)"
 msgstr "現在の行を選択(_S)"
 
-#: ../data/geany.glade.h:384
-#, fuzzy
+#: ../data/geany.glade.h:384  ../src/keybindings.c:363
 msgid "Se_lect Current Paragraph"
 msgstr "現在の段落を選択(_S)"
 
@@ -3297,10 +3293,6 @@ msgstr "元に戻す"
 msgid "Redo"
 msgstr "やり直し"
 
-#: ../src/keybindings.c:298
-msgid "D_uplicate Line or Selection"
-msgstr "行/選択範囲を複製(_D)"
-
 #: ../src/keybindings.c:305
 msgid "Delete to line end"
 msgstr "行末まで削除"
@@ -3373,10 +3365,6 @@ msgstr "コピー"
 msgid "Paste"
 msgstr "貼り付け"
 
-#: ../src/keybindings.c:350
-msgid "Cu_t Current Line(s)"
-msgstr "現在の行を切り取り(_C)"
-
 #: ../src/keybindings.c:356
 msgid "Select All"
 msgstr "すべて選択"
@@ -3384,14 +3372,6 @@ msgstr "すべて選択"
 #: ../src/keybindings.c:358
 msgid "Select current word"
 msgstr "現在の単語を選択"
-
-#: ../src/keybindings.c:360
-msgid "S_elect Current Line(s)"
-msgstr "現在の行を選択(_S)"
-
-#: ../src/keybindings.c:363
-msgid "Se_lect Current Paragraph"
-msgstr "現在の段落を選択(_S)"
 
 #: ../src/keybindings.c:366
 msgid "Select to previous word part"
