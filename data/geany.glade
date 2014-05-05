@@ -234,7 +234,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Insert _Multiline Comment</property>
+                <property name="label" translatable="yes">Insert Mu_ltiline Comment</property>
                 <property name="use_underline">True</property>
                 <signal name="activate" handler="on_comments_multiline_activate" swapped="no"/>
               </object>
@@ -350,7 +350,7 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Insert Alternative White Space</property>
+                <property name="label" translatable="yes">Insert Alternative _White Space</property>
                 <property name="use_underline">True</property>
                 <signal name="activate" handler="on_insert_alternative_white_space1_activate" swapped="no"/>
               </object>
@@ -8012,7 +8012,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="menu_save_all1">
-                            <property name="label" translatable="yes">Save A_ll</property>
+                            <property name="label" translatable="yes">Sa_ve All</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8276,7 +8276,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Commands</property>
+                            <property name="label" translatable="yes">Co_mmands</property>
                             <property name="use_underline">True</property>
                             <child type="submenu">
                               <object class="GtkMenu" id="commands2_menu">
@@ -8498,7 +8498,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">_Smart Line Indent</property>
+                                    <property name="label" translatable="yes">S_mart Line Indent</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_smart_line_indent1_activate" swapped="no"/>
                                   </object>
@@ -8578,7 +8578,7 @@
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Insert _Multiline Comment</property>
+                                    <property name="label" translatable="yes">Insert Mu_ltiline Comment</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_menu_comments_multiline_activate" swapped="no"/>
                                   </object>
@@ -8676,7 +8676,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Insert Alternative White Space</property>
+                            <property name="label" translatable="yes">Insert Alternative _White Space</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_insert_alternative_white_space1_activate" swapped="no"/>
                           </object>
@@ -8796,7 +8796,7 @@
                         </child>
                         <child>
                           <object class="GtkImageMenuItem" id="next_message1">
-                            <property name="label" translatable="yes">Next _Message</property>
+                            <property name="label" translatable="yes">Next Me_ssage</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -8829,7 +8829,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Go to Next Marker</property>
+                            <property name="label" translatable="yes">Go to Ne_xt Marker</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_go_to_next_marker1_activate" swapped="no"/>
                           </object>
@@ -8839,7 +8839,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Go to Previous Marker</property>
+                            <property name="label" translatable="yes">Go to Pre_vious Marker</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_go_to_previous_marker1_activate" swapped="no"/>
                           </object>
@@ -9036,7 +9036,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show _White Space</property>
+                            <property name="label" translatable="yes">Show White S_pace</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_menu_show_white_space1_toggled" swapped="no"/>
                           </object>
@@ -9056,7 +9056,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Show _Indentation Guides</property>
+                            <property name="label" translatable="yes">Show Indentation _Guides</property>
                             <property name="use_underline">True</property>
                             <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" swapped="no"/>
                           </object>
@@ -9082,7 +9082,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">To_ggle All Additional Widgets</property>
+                            <property name="label" translatable="yes">Toggle All _Additional Widgets</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_menu_toggle_all_additional_widgets1_activate" swapped="no"/>
                           </object>
@@ -9540,7 +9540,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Replace Tabs with _Spaces</property>
+                            <property name="label" translatable="yes">Replace Tabs with S_paces</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_replace_tabs_activate" swapped="no"/>
                           </object>
@@ -9550,7 +9550,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Replace Spaces with _Tabs...</property>
+                            <property name="label" translatable="yes">_Replace Spaces with Tabs...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_replace_spaces_activate" swapped="no"/>
                           </object>
@@ -9816,7 +9816,7 @@
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">_Keyboard Shortcuts</property>
+                            <property name="label" translatable="yes">Keyboard _Shortcuts</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_help_shortcuts1_activate" swapped="no"/>
                           </object>

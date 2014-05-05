@@ -390,7 +390,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FORMAT_DECREASEINDENTBYSPACE, NULL,
 		0, 0, "edit_decreaseindentbyspace", _("Decrease indent by one space"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_AUTOINDENT, NULL,
-		0, 0, "edit_autoindent", _("_Smart Line Indent"), "smart_line_indent1");
+		0, 0, "edit_autoindent", _("S_mart Line Indent"), "smart_line_indent1");
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD1, NULL,
 		GDK_1, GDK_CONTROL_MASK, "edit_sendtocmd1", _("Send to Custom Command 1"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD2, NULL,
@@ -412,7 +412,7 @@ static void init_default_kb(void)
 		GDK_d, GDK_SHIFT_MASK | GDK_MOD1_MASK, "menu_insert_date", _("Insert date"),
 		"insert_date_custom1");
 	add_kb(group, GEANY_KEYS_INSERT_ALTWHITESPACE, NULL,
-		0, 0, "edit_insertwhitespace", _("_Insert Alternative White Space"),
+		0, 0, "edit_insertwhitespace", _("Insert Alternative _White Space"),
 		"insert_alternative_white_space1");
 	add_kb(group, GEANY_KEYS_INSERT_LINEBEFORE, NULL,
 		0, 0, "edit_insertlinebefore", _("Insert New Line Before Current"), NULL);
@@ -474,10 +474,10 @@ static void init_default_kb(void)
 		_("Toggle marker"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_NEXTMARKER, NULL,
 		GDK_period, GDK_CONTROL_MASK, "edit_gotonextmarker",
-		_("_Go to Next Marker"), "go_to_next_marker1");
+		_("Go to Ne_xt Marker"), "go_to_next_marker1");
 	add_kb(group, GEANY_KEYS_GOTO_PREVIOUSMARKER, NULL,
 		GDK_comma, GDK_CONTROL_MASK, "edit_gotopreviousmarker",
-		_("_Go to Previous Marker"), "go_to_previous_marker1");
+		_("Go to Pre_vious Marker"), "go_to_previous_marker1");
 	add_kb(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
 		GDK_t, GDK_CONTROL_MASK, "popup_gototagdefinition",
 		_("Go to Tag Definition"), "goto_tag_definition1");
