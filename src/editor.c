@@ -3213,7 +3213,7 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	gboolean break_loop = FALSE, single_line = FALSE;
 	GeanyFiletype *ft;
 
-	g_return_if_fail(editor != NULL && editor->document->file_type != NULL);
+	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, 0);
 
 	if (line < 0)
 	{	/* use selection or current line */
