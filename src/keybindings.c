@@ -295,7 +295,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_REDO, NULL,
 		GDK_y, GDK_CONTROL_MASK, "menu_redo", _("Redo"), "menu_redo2");
 	add_kb(group, GEANY_KEYS_EDITOR_DUPLICATELINE, NULL,
-		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("_Duplicate Line or Selection"),
+		GDK_d, GDK_CONTROL_MASK, "edit_duplicateline", _("D_uplicate Line or Selection"),
 		"duplicate_line_or_selection1");
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINE, NULL,
 		GDK_k, GDK_CONTROL_MASK, "edit_deleteline", _("_Delete Current Line(s)"),
@@ -347,7 +347,7 @@ static void init_default_kb(void)
 		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_copyline", _("_Copy Current Line(s)"),
 		"copy_current_lines1");
 	add_kb(group, GEANY_KEYS_CLIPBOARD_CUTLINE, NULL,
-		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("_Cut Current Line(s)"),
+		GDK_x, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_cutline", _("Cu_t Current Line(s)"),
 		"cut_current_lines1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_SELECT);
@@ -357,10 +357,10 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_SELECT_WORD, NULL,
 		GDK_w, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectword", _("Select current word"), NULL);
 	add_kb(group, GEANY_KEYS_SELECT_LINE, NULL,
-		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("_Select Current Line(s)"),
+		GDK_l, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectline", _("S_elect Current Line(s)"),
 		"select_current_lines1");
 	add_kb(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
-		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("_Select Current Paragraph"),
+		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Se_lect Current Paragraph"),
 		"select_current_paragraph1");
 	add_kb(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
 		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
