@@ -258,6 +258,7 @@ test_sources = \
 	test_input2.rs					\
 	traffic_signal.v				\
 	traits.php						\
+	ui5.controller.js				\
 	union.f							\
 	value.f							\
 	whitespaces.php					\

@@ -69,6 +69,7 @@ typedef enum eKeywordId {
 	KEYWORD_try,
 	KEYWORD_catch,
 	KEYWORD_finally,
+	KEYWORD_sap,
 	KEYWORD_return
 } keywordId;
 
@@ -158,6 +159,7 @@ static const keywordDesc JsKeywordTable [] = {
 	{ "try",		KEYWORD_try					},
 	{ "catch",		KEYWORD_catch				},
 	{ "finally",	KEYWORD_finally				},
+	{ "sap",	    KEYWORD_sap    				},
 	{ "return",		KEYWORD_return				}
 };
 
@@ -169,6 +171,7 @@ static const keywordDesc JsKeywordTable [] = {
 static void parseFunction (tokenInfo *const token);
 static boolean parseBlock (tokenInfo *const token, tokenInfo *const parent);
 static boolean parseLine (tokenInfo *const token, boolean is_inside_class);
+static void parseUI5 (tokenInfo *const token);
 
 static boolean isIdentChar (const int c)
 {
@@ -1629,6 +1632,56 @@ cleanUp:
 	return is_terminated;
 }
 
+static void parseUI5 (tokenInfo *const token)
+{
+	tokenInfo *const name = newToken ();
+	boolean is_inside_class = FALSE;
+	/*
+	 * SAPUI5 is built on top of jQuery.
+	 * It follows a standard format:
+	 *     sap.ui.controller("id.of.controller", {
+	 *         method_name : function... {
+	 *         },
+	 *
+	 *         method_name : function ... {
+	 *         }
+	 *     }
+	 *
+	 * Handle the parsing of the initial controller (and the 
+	 * same for "view") and then allow the methods to be
+	 * parsed as usual.
+	 */
+
+	readToken (token);
+
+	if (isType (token, TOKEN_PERIOD))
+	{
+		readToken (token);
+		while (! isType (token, TOKEN_OPEN_PAREN) )
+		{
+			readToken (token);
+		}
+		readToken (token);
+
+		if (isType (token, TOKEN_STRING))
+		{
+			copyToken(name, token);
+			readToken (token);
+		}
+
+		if (isType (token, TOKEN_COMMA))
+			readToken (token);
+
+		do
+		{
+			parseMethods (token, name);
+		} while (! isType (token, TOKEN_CLOSE_CURLY) );
+	}
+cleanUp:
+	deleteToken (name);
+
+}
+
 static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 {
 	boolean is_terminated = TRUE;
@@ -1691,6 +1744,8 @@ static void parseJsFile (tokenInfo *const token)
 
 		if (isType (token, TOKEN_KEYWORD) && token->keyword == KEYWORD_function)
 			parseFunction (token);
+		else if (isType (token, TOKEN_KEYWORD) && token->keyword == KEYWORD_sap)
+			parseUI5 (token);
 		else
 			parseLine (token, FALSE);
 	} while (TRUE);
