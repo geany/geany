@@ -2396,10 +2396,11 @@ static void create_taglist_popup_menu(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f = g_build_filename(app->configdir, "ignore.tags", NULL);
+	gchar *f;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
+	f = g_build_filename(app->configdir, "ignore.tags", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		load_c_ignore_tags();
 
