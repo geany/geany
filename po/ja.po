@@ -54,7 +54,7 @@ msgid "Insert _Function Description"
 msgstr "関数の説明を挿入(_F)"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "複数行コメントを挿入(_M)"
 
 #: ../data/geany.glade.h:7
@@ -86,7 +86,7 @@ msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" 文を挿入(_I)"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "複数の空白を挿入(_I)"
 
 #: ../data/geany.glade.h:15
@@ -1163,11 +1163,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "行末の空白やタブを除去します"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "タブを空白に置換"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "文書のすべてのタブを空白で置換します"
 
 #: ../data/geany.glade.h:245
@@ -1730,7 +1730,7 @@ msgid "Save _As..."
 msgstr "別名で保存..."
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "すべて保存(_L)"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2964
@@ -1759,7 +1759,7 @@ msgid "C_lose All"
 msgstr "すべて閉じる(_L)"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "コマンド(_C)"
 
 #: ../data/geany.glade.h:379
@@ -1832,7 +1832,7 @@ msgid "_Decrease Indent"
 msgstr "インデントを減らす(_D)"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "スマート行インデント(_S)"
 
 #: ../data/geany.glade.h:396
@@ -1872,7 +1872,7 @@ msgid "_Replace..."
 msgstr "置換(_R)..."
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "次のメッセージ(_M)"
 
 #: ../data/geany.glade.h:406
@@ -1880,11 +1880,11 @@ msgid "Pr_evious Message"
 msgstr "前のメッセージ(_E)"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "次のマーカーへ移動(_G)"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "前のマーカーへ移動(_G)"
 
 #: ../data/geany.glade.h:409
@@ -1928,7 +1928,7 @@ msgid "Show _Line Numbers"
 msgstr "行番号を表示(_L)"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "空白を表示(_W)"
 
 #: ../data/geany.glade.h:420
@@ -1936,7 +1936,7 @@ msgid "Show Line _Endings"
 msgstr "行末を表示(_E)"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "インデントを表示(_I)"
 
 #: ../data/geany.glade.h:422
@@ -1944,7 +1944,7 @@ msgid "Full_screen"
 msgstr "全画面表示(_S)"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "すべての追加ウィジェットを表示/非表示(_G)"
 
 #: ../data/geany.glade.h:424
@@ -2064,11 +2064,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "末尾の空白を除去(_S)"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "タブを空白で置換(_R)"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "空白をタブで置換(_Y)..."
 
 #: ../data/geany.glade.h:455
@@ -2145,7 +2145,7 @@ msgid "_Help"
 msgstr "ヘルプ(_H)"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "ショートカットキー(_K)"
 
 #: ../data/geany.glade.h:474
@@ -3298,7 +3298,7 @@ msgid "Redo"
 msgstr "やり直し"
 
 #: ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "行/選択範囲を複製(_D)"
 
 #: ../src/keybindings.c:305
@@ -3374,7 +3374,7 @@ msgid "Paste"
 msgstr "貼り付け"
 
 #: ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "現在の行を切り取り(_C)"
 
 #: ../src/keybindings.c:356
@@ -3386,11 +3386,11 @@ msgid "Select current word"
 msgstr "現在の単語を選択"
 
 #: ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "現在の行を選択(_S)"
 
 #: ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "現在の段落を選択(_S)"
 
 #: ../src/keybindings.c:366
@@ -3646,7 +3646,7 @@ msgid "Toggle Line breaking"
 msgstr "自動改行"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "タブを空白で置換"
 
 #: ../src/keybindings.c:574

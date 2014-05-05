@@ -52,7 +52,7 @@ msgid "Insert _Function Description"
 msgstr "Chèn _mô tả hàm"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Chèn _ghi chú đa dòng"
 
 #: ../data/geany.glade.h:7
@@ -85,7 +85,7 @@ msgstr "Chèn \"_include <...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
 #, fuzzy
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Chèn khoảng trắng xen kẽ"
 
 #: ../data/geany.glade.h:15
@@ -1199,11 +1199,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Gỡ bỏ các dấu cách theo sau, tab, và kết thúc dòng"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Thay thế các tab bằng dấu cách"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Thay thế bằng dấu cách mọi tab trong tài liệu"
 
 #: ../data/geany.glade.h:245
@@ -1796,7 +1796,7 @@ msgid "Save _As..."
 msgstr "Lưu dạng"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Lưu tất _cả"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1827,12 +1827,12 @@ msgstr "Đóng tất _cả"
 
 #: ../data/geany.glade.h:378
 #, fuzzy
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Lệnh"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
 #, fuzzy
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Cắt các dòng hiện tại"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1847,17 +1847,17 @@ msgstr "Xoá các dòng hiện tại"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
 #, fuzzy
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "_Nhân đôi dòng hay vùng chọn"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
 #, fuzzy
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Chọn các dòng hiện tại"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
 #, fuzzy
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Chọn đoạn văn hiện tại"
 
 #: ../data/geany.glade.h:385
@@ -1867,7 +1867,7 @@ msgstr "Ghi chú dòng"
 
 #: ../data/geany.glade.h:386
 #, fuzzy
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Ghi chú dòng"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1905,7 +1905,7 @@ msgstr "Thụt lề _kém"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
 #, fuzzy
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Thụt lề dòng khéo"
 
 #: ../data/geany.glade.h:396
@@ -1949,7 +1949,7 @@ msgid "_Replace..."
 msgstr "Tha_y thế"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Thông điệp tiế_p"
 
 #: ../data/geany.glade.h:406
@@ -1958,12 +1958,12 @@ msgstr "Thông điệp t_rước"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
 #, fuzzy
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Tới dấu tiếp"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
 #, fuzzy
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Về dấu trước"
 
 #: ../data/geany.glade.h:409
@@ -2014,7 +2014,7 @@ msgid "Show _Line Numbers"
 msgstr "Hiện _số hiệu dòng"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Hiện kh_oảng trắng"
 
 #: ../data/geany.glade.h:420
@@ -2022,7 +2022,7 @@ msgid "Show Line _Endings"
 msgstr "Hiện _kết thúc dòng"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "H_iện nét dẫn thụt lề"
 
 #: ../data/geany.glade.h:422
@@ -2030,7 +2030,7 @@ msgid "Full_screen"
 msgstr "T_oàn màn hình"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Bật/tắt mọi ô điều khiển bổ sun_g"
 
 #: ../data/geany.glade.h:424
@@ -2152,12 +2152,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Bỏ dấu cách theo _sau"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Tha_y thế các tab bằng dấu cách"
 
 #: ../data/geany.glade.h:454
 #, fuzzy
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Tha_y thế các dấu cách bằng Tab"
 
 #: ../data/geany.glade.h:455
@@ -2237,7 +2237,7 @@ msgid "_Help"
 msgstr "Trợ _giúp"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "_Phím tắt"
 
 #: ../data/geany.glade.h:474
@@ -3739,7 +3739,7 @@ msgid "Toggle Line breaking"
 msgstr "Bật/tắt ngắt dòng"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Thay thế bằng tab các dấu cách"
 
 #: ../src/keybindings.c:574

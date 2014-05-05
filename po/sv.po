@@ -52,7 +52,7 @@ msgid "Insert _Function Description"
 msgstr "Infoga funktionsbeskrivning"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Infoga flerradskommentar"
 
 #: ../data/geany.glade.h:7
@@ -84,7 +84,7 @@ msgid "_Insert \"include <...>\""
 msgstr "Infoga \"include <...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Infoga alternativt tomt tecken"
 
 #: ../data/geany.glade.h:15
@@ -1179,11 +1179,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Ersätt tab-tecken med mellanslag"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr ""
 "Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
 "stort)."
@@ -1756,7 +1756,7 @@ msgid "Save _As..."
 msgstr "Spara som"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Spara alla"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1786,11 +1786,11 @@ msgid "C_lose All"
 msgstr "Stäng alla"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Kommandon"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Klipp ut rad(er)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1802,15 +1802,15 @@ msgid "_Delete Current Line(s)"
 msgstr "Radera rad(er)"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Gör en kopia av raden eller markeringen"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Välj rad(er)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Välj paragraf"
 
 #: ../data/geany.glade.h:385
@@ -1818,7 +1818,7 @@ msgid "_Move Line(s) Up"
 msgstr "Flytta rad(er) uppåt"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Flytta  rad(er) nedåt"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1854,7 +1854,7 @@ msgid "_Decrease Indent"
 msgstr "Minska indrag"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Smart radindrag"
 
 #: ../data/geany.glade.h:396
@@ -1897,7 +1897,7 @@ msgid "_Replace..."
 msgstr "Ersätt"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Nästa meddelande"
 
 #: ../data/geany.glade.h:406
@@ -1905,11 +1905,11 @@ msgid "Pr_evious Message"
 msgstr "Föregående meddelande"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Gå till nästa markör"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Gå till föregående markör"
 
 #: ../data/geany.glade.h:409
@@ -1956,7 +1956,7 @@ msgid "Show _Line Numbers"
 msgstr "Visa radnummer"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Visa tomrum"
 
 #: ../data/geany.glade.h:420
@@ -1964,7 +1964,7 @@ msgid "Show Line _Endings"
 msgstr "Visa radslut"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Visa indragsmarkörer"
 
 #: ../data/geany.glade.h:422
@@ -1972,7 +1972,7 @@ msgid "Full_screen"
 msgstr "Helskärm"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Visa / göm verktygsfält"
 
 #: ../data/geany.glade.h:424
@@ -2092,12 +2092,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Ta bort _överflödiga mellanslag"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Ersätt tab med mellanslag"
 
 #: ../data/geany.glade.h:454
 #, fuzzy
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Ersätt mellanslag med tab"
 
 #: ../data/geany.glade.h:455
@@ -2176,7 +2176,7 @@ msgid "_Help"
 msgstr "Hjälp"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "Tangentbordsgenvägar"
 
 #: ../data/geany.glade.h:474
@@ -3655,7 +3655,7 @@ msgid "Toggle Line breaking"
 msgstr "Justera radbrytning (line-break)"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Ersätt mellanslag med tab-tecken"
 
 #: ../src/keybindings.c:574

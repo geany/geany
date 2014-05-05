@@ -52,7 +52,7 @@ msgid "Insert _Function Description"
 msgstr "Insereix Descripció de la _Funció"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Insereix Comentari _Multilínia"
 
 #: ../data/geany.glade.h:7
@@ -84,7 +84,7 @@ msgid "_Insert \"include <...>\""
 msgstr "_Insereix \"include <...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "_Insereix Espai en Blanc Alternatiu"
 
 #: ../data/geany.glade.h:15
@@ -1184,11 +1184,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Elimina els espais i tabulacions sobrants a final de línia"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Reemplaça tabulacions per espais"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Reemplaça totes les tabulacions al document per espais"
 
 #: ../data/geany.glade.h:245
@@ -1763,7 +1763,7 @@ msgid "Save _As..."
 msgstr "Desa _Com..."
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Desa-ho _Tot"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1792,11 +1792,11 @@ msgid "C_lose All"
 msgstr "_Tanca-ho Tot"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "_Ordres"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "_Talla la Línia(es) Actual"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1808,15 +1808,15 @@ msgid "_Delete Current Line(s)"
 msgstr "_Suprimeix la Línia(es) Actual"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Du_plica la Línia o Selecció"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "_Selecciona la Línia(es) Actual"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "_Selecciona el Paràgraf Actual"
 
 #: ../data/geany.glade.h:385
@@ -1824,7 +1824,7 @@ msgid "_Move Line(s) Up"
 msgstr "_Mou la Línia(es) Amunt"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "_Mou la Línia(es) Avall"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1860,7 +1860,7 @@ msgid "_Decrease Indent"
 msgstr "_Redueix el Sagnat"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "_Sagnat de Línia Intel·ligent"
 
 #: ../data/geany.glade.h:396
@@ -1900,7 +1900,7 @@ msgid "_Replace..."
 msgstr "_Reemplaça..."
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "_Missatge Següent"
 
 #: ../data/geany.glade.h:406
@@ -1908,11 +1908,11 @@ msgid "Pr_evious Message"
 msgstr "Missatge _Anterior"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Ves a la Marca _Següent"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Ves a la Marca _Anterior"
 
 #: ../data/geany.glade.h:409
@@ -1956,7 +1956,7 @@ msgid "Show _Line Numbers"
 msgstr "Mostra els Números de _Línia"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Mostra _Espais en Blanc"
 
 #: ../data/geany.glade.h:420
@@ -1964,7 +1964,7 @@ msgid "Show Line _Endings"
 msgstr "Mostra el _Final de Línia"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Mostra _Guies de Sagnat"
 
 #: ../data/geany.glade.h:422
@@ -1972,7 +1972,7 @@ msgid "Full_screen"
 msgstr "Pantalla _Completa"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Mostra o Amaga _Tots els Extres"
 
 #: ../data/geany.glade.h:424
@@ -2092,11 +2092,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Elimina espais _sobrants"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "_Reemplaça Tabulacions per Espais"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Ree_mplaça Espais per Tabulacions..."
 
 #: ../data/geany.glade.h:455
@@ -2173,7 +2173,7 @@ msgid "_Help"
 msgstr "A_juda"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "_Dreceres de Teclat"
 
 #: ../data/geany.glade.h:474
@@ -3646,7 +3646,7 @@ msgid "Toggle Line breaking"
 msgstr "Activa o desactiva el Trencament de línia"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Reemplaça espais per tabulacions"
 
 #: ../src/keybindings.c:574

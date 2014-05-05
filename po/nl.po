@@ -53,7 +53,7 @@ msgid "Insert _Function Description"
 msgstr "_Functiebschrijving Invoegen"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "_Multiregelcommentaar Invoegen"
 
 #: ../data/geany.glade.h:7
@@ -85,7 +85,7 @@ msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" _invoegen"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Voeg alternatieve lege _spaties in"
 
 #: ../data/geany.glade.h:15
@@ -1193,11 +1193,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Verwijdert lege spaties aan regeleinden"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Vervang tabs door spaties"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Vervangt alle tabs in het document door spaties"
 
 #: ../data/geany.glade.h:245
@@ -1775,7 +1775,7 @@ msgid "Save _As..."
 msgstr "Opslaan als"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "A_lles Opslaan"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1805,11 +1805,11 @@ msgid "C_lose All"
 msgstr "Alles sl_uiten"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "_Commando's"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "K_nip huidige regel(s)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1821,15 +1821,15 @@ msgid "_Delete Current Line(s)"
 msgstr "_Verwijder huidige regel(s)"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Kl_oon regel of selectie"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Selecteer huidige _regel(s)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Selecteer huidige _paragraaf"
 
 #: ../data/geany.glade.h:385
@@ -1837,7 +1837,7 @@ msgid "_Move Line(s) Up"
 msgstr "Verplaats regel(s) om_hoog"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Verplaats regel(s) om_laag"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1873,7 +1873,7 @@ msgid "_Decrease Indent"
 msgstr "Inspringing verkl_einen"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "_Slimme regel inspringing"
 
 #: ../data/geany.glade.h:396
@@ -1913,7 +1913,7 @@ msgid "_Replace..."
 msgstr "_Vervangen"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Vo_lgende Bericht"
 
 #: ../data/geany.glade.h:406
@@ -1921,11 +1921,11 @@ msgid "Pr_evious Message"
 msgstr "Vorige B_ericht"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Ga naar volgende _marker"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Ga naar vorige ma_rker"
 
 #: ../data/geany.glade.h:409
@@ -1970,7 +1970,7 @@ msgid "Show _Line Numbers"
 msgstr "_Regelnummers weergeven"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Lege spaties _weergeven"
 
 #: ../data/geany.glade.h:420
@@ -1978,7 +1978,7 @@ msgid "Show Line _Endings"
 msgstr "Regel_einden weergeven"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "_Inspringingsmarkeringen weergeven"
 
 #: ../data/geany.glade.h:422
@@ -1986,7 +1986,7 @@ msgid "Full_screen"
 msgstr "_Volledig scherm"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Verberg/toon alle _extra widgets"
 
 #: ../data/geany.glade.h:424
@@ -2106,11 +2106,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "_Lege spaties aan regeleinden verwijderen"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Vervang tabs door s_paties"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Vervang spaties door _tabs"
 
 #: ../data/geany.glade.h:455
@@ -2189,7 +2189,7 @@ msgid "_Help"
 msgstr "_Help"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "_Sneltoetsen"
 
 #: ../data/geany.glade.h:474
@@ -3673,7 +3673,7 @@ msgid "Toggle Line breaking"
 msgstr "Regelafbreking in/uitschakelen"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Vervang spaties door tabs"
 
 #: ../src/keybindings.c:574

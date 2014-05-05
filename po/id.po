@@ -49,7 +49,7 @@ msgid "Insert _Function Description"
 msgstr "Selipkan Deskripsi Fungsi (_F)"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Selipkan Komentar MultiBaris (_M)"
 
 #: ../data/geany.glade.h:7
@@ -81,7 +81,7 @@ msgid "_Insert \"include <...>\""
 msgstr "Selipkan \"include <...>\" (_I)"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Selipkan Whitespace Alternatif (_I)"
 
 #: ../data/geany.glade.h:15
@@ -1240,11 +1240,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Menghilangkan spasi dan tab yang mengikuti pada akhir suatu baris"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Ubah tab menjadi spasi"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Mengganti semua bentuk tab di dokumen dengan karakter spasi"
 
 #: ../data/geany.glade.h:245
@@ -1836,7 +1836,7 @@ msgid "Save _As..."
 msgstr "Simpan sebagai"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Simpan Semua (_L)"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1866,11 +1866,11 @@ msgid "C_lose All"
 msgstr "Tutup Semua (_L)"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Operasi (_C)"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Tenggor Baris (_T)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1882,15 +1882,15 @@ msgid "_Delete Current Line(s)"
 msgstr "Hapus Baris (_H)"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Duplikat Baris atau Blok-Blokan (_D)"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Blok Baris (_B)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Blok Paragraf (_S)"
 
 #: ../data/geany.glade.h:385
@@ -1900,7 +1900,7 @@ msgstr "Pindahkan baris ke atas"
 
 #: ../data/geany.glade.h:386
 #, fuzzy
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Pindahkan baris ke bawah"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1936,7 +1936,7 @@ msgid "_Decrease Indent"
 msgstr "Kurangi Indent (_D)"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Indent Ajaib (_S)"
 
 #: ../data/geany.glade.h:396
@@ -1979,7 +1979,7 @@ msgid "_Replace..."
 msgstr "Cari-Ganti (_R)"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Pesan Berikutnya (_M)"
 
 #: ../data/geany.glade.h:406
@@ -1987,11 +1987,11 @@ msgid "Pr_evious Message"
 msgstr "Pesan Sebelumnya (_E)"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Lompat ke Patokan Berikutnya (_G)"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Lompat ke Patokan Sebelumnya (_G)"
 
 #: ../data/geany.glade.h:409
@@ -2038,7 +2038,7 @@ msgid "Show _Line Numbers"
 msgstr "Tampilkan Nomor Baris (_L)"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Tampilkan White Space (_W)"
 
 #: ../data/geany.glade.h:420
@@ -2046,7 +2046,7 @@ msgid "Show Line _Endings"
 msgstr "Tampilkan Akhiran Baris (_E)"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Tampilkan Tengara Indentasi (_I)"
 
 #: ../data/geany.glade.h:422
@@ -2054,7 +2054,7 @@ msgid "Full_screen"
 msgstr "Fullscreen (_S)"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Balik Semua Widget Tambahan (_G)"
 
 #: ../data/geany.glade.h:424
@@ -2175,12 +2175,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Buang Spasi Berlebih (_S)"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Ganti Tab dengan Spasi (_R)"
 
 #: ../data/geany.glade.h:454
 #, fuzzy
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Ganti Spasi dengan Tab (_Y)"
 
 #: ../data/geany.glade.h:455
@@ -2259,7 +2259,7 @@ msgid "_Help"
 msgstr "_Bantuan (_H)"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "Tombol Singkat Keyboard (_K)"
 
 #: ../data/geany.glade.h:474
@@ -3758,7 +3758,7 @@ msgid "Toggle Line breaking"
 msgstr "Toggle Line breaking"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Ganti spasi dengan tab"
 
 #: ../src/keybindings.c:574

@@ -54,7 +54,7 @@ msgid "Insert _Function Description"
 msgstr "插入函数描述(_F)"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "插入多行注释(_M)"
 
 #: ../data/geany.glade.h:7
@@ -86,7 +86,7 @@ msgid "_Insert \"include <...>\""
 msgstr "插入“include <...>”(_I)"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "插入额外的空白(_I)"
 
 #: ../data/geany.glade.h:15
@@ -1118,11 +1118,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "去除行尾空格和制表符"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "用空格替换制表符"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "替换文档中所有制表符为空格"
 
 #: ../data/geany.glade.h:245
@@ -1667,7 +1667,7 @@ msgid "Save _As..."
 msgstr "另存为...(_A)"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "全部保存(_L)"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1696,11 +1696,11 @@ msgid "C_lose All"
 msgstr "全部关闭(_L)"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "命令(_C)"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "剪切当前行(_C)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1712,15 +1712,15 @@ msgid "_Delete Current Line(s)"
 msgstr "删除当前行(_D)"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "重复行或选中的文本(_D)"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "选择当前行(_S)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "选择当前段落(_S)"
 
 #: ../data/geany.glade.h:385
@@ -1728,7 +1728,7 @@ msgid "_Move Line(s) Up"
 msgstr "上移行(_M)"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "下移行(_M)"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1764,7 +1764,7 @@ msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "智能缩进(_S)"
 
 #: ../data/geany.glade.h:396
@@ -1804,7 +1804,7 @@ msgid "_Replace..."
 msgstr "替换...(_R)"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "下一个信息(_M)"
 
 #: ../data/geany.glade.h:406
@@ -1812,11 +1812,11 @@ msgid "Pr_evious Message"
 msgstr "前一个信息(_E)"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "到下一个标记(_G)"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "到上一个标记(_G)"
 
 #: ../data/geany.glade.h:409
@@ -1860,7 +1860,7 @@ msgid "Show _Line Numbers"
 msgstr "显示行号(_L)"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "显示空白(_W)"
 
 #: ../data/geany.glade.h:420
@@ -1868,7 +1868,7 @@ msgid "Show Line _Endings"
 msgstr "显示行尾(_E)"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "显示缩进标记(_I)"
 
 #: ../data/geany.glade.h:422
@@ -1876,7 +1876,7 @@ msgid "Full_screen"
 msgstr "全屏(_S)"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "开关所有附加部件(_G)"
 
 #: ../data/geany.glade.h:424
@@ -1996,11 +1996,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "去除行尾空白(_S)"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "替换制表符为空格(_R)"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "替换空格为制表符...(_Y)"
 
 #: ../data/geany.glade.h:455
@@ -2077,7 +2077,7 @@ msgid "_Help"
 msgstr "帮助(_H)"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "快捷键(_K)"
 
 #: ../data/geany.glade.h:474
@@ -3524,7 +3524,7 @@ msgid "Toggle Line breaking"
 msgstr "切换自动断行"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "替换空格为制表符"
 
 #: ../src/keybindings.c:574

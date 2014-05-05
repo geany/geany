@@ -51,7 +51,7 @@ msgid "Insert _Function Description"
 msgstr "Inserir descrición de _función"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Inserir comentario _multiliña"
 
 #: ../data/geany.glade.h:7
@@ -84,7 +84,7 @@ msgstr "_Inserir \"include <...>\""
 
 #: ../data/geany.glade.h:14
 #: ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "_Inserir espazo en branco alternativo"
 
 #: ../data/geany.glade.h:15
@@ -1028,11 +1028,11 @@ msgstr "Elimina espazos e tabulacións ao final dos ficheiros"
 
 #: ../data/geany.glade.h:243
 #: ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Substituír tabulacións por espazos"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Substitúe todas as tabulacións no documento por espazos"
 
 #: ../data/geany.glade.h:245
@@ -1556,7 +1556,7 @@ msgid "Save _As..."
 msgstr "Gardar c_omo..."
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Gardar _todos"
 
 #: ../data/geany.glade.h:372
@@ -1589,12 +1589,12 @@ msgid "C_lose All"
 msgstr "P_echar todos"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "_Ordes"
 
 #: ../data/geany.glade.h:379
 #: ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "_Cortar a(s) liña(s) actual(is)"
 
 #: ../data/geany.glade.h:380
@@ -1609,17 +1609,17 @@ msgstr "_Borrar a(s) liña(s) actual(is)"
 
 #: ../data/geany.glade.h:382
 #: ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "_Duplicar liña ou selección"
 
 #: ../data/geany.glade.h:383
 #: ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "_Seleccionar a(s) liña(s) actual(is)"
 
 #: ../data/geany.glade.h:384
 #: ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "_Seleccionar o parágrafo actual"
 
 #: ../data/geany.glade.h:385
@@ -1627,7 +1627,7 @@ msgid "_Move Line(s) Up"
 msgstr "_Mover liña(s) cara arriba"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "_Mover liña(s) cara abaixo"
 
 #: ../data/geany.glade.h:387
@@ -1667,7 +1667,7 @@ msgstr "_Diminuír a sangría"
 
 #: ../data/geany.glade.h:395
 #: ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "_Sangría intelixente de liñas"
 
 #: ../data/geany.glade.h:396
@@ -1709,7 +1709,7 @@ msgid "_Replace..."
 msgstr "Substituí_r..."
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Seguinte _mensaxe"
 
 #: ../data/geany.glade.h:406
@@ -1718,12 +1718,12 @@ msgstr "Ant_erior mensaxe"
 
 #: ../data/geany.glade.h:407
 #: ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "_Ir ao seguinte marcador"
 
 #: ../data/geany.glade.h:408
 #: ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "_Ir ao anterior marcador"
 
 #: ../data/geany.glade.h:409
@@ -1771,7 +1771,7 @@ msgid "Show _Line Numbers"
 msgstr "Mostrar números de _liña"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Mostrar espazos en _branco"
 
 #: ../data/geany.glade.h:420
@@ -1779,7 +1779,7 @@ msgid "Show Line _Endings"
 msgstr "Mostrar finais d_e liña"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Mostrar as gu_ías de sangría"
 
 #: ../data/geany.glade.h:422
@@ -1787,7 +1787,7 @@ msgid "Full_screen"
 msgstr "_Pantalla completa"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Intercambiar todos os wid_gets adicionais"
 
 #: ../data/geany.glade.h:424
@@ -1908,11 +1908,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Quitar e_spazos do final"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Substituí_r tabulacións por espazos"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Substituír espazos por _tabulacións..."
 
 #: ../data/geany.glade.h:455
@@ -1991,7 +1991,7 @@ msgid "_Help"
 msgstr "A_xuda"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "Atallos de t_eclado"
 
 #: ../data/geany.glade.h:474
@@ -3513,7 +3513,7 @@ msgid "Toggle Line breaking"
 msgstr "Des/Activar a rotura de liñas"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Substituír espazos por tabulacións"
 
 #: ../src/keybindings.c:574

@@ -57,7 +57,7 @@ msgstr "Вмъква коментар на функция"
 
 #: ../data/geany.glade.h:6
 #, fuzzy
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Вмъква многоредов коментар"
 
 #: ../data/geany.glade.h:7
@@ -93,7 +93,7 @@ msgstr "Вмъ_кни \"include·<...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
 #, fuzzy
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Вмъкни другия празен символ"
 
 #: ../data/geany.glade.h:15
@@ -1281,12 +1281,12 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Премахва табулациите, интервалите в края на реда"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Замени табулацията с интервали"
 
 #: ../data/geany.glade.h:244
 #, fuzzy
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Заменя всички табулации в документа с интервали"
 
 #: ../data/geany.glade.h:245
@@ -1913,7 +1913,7 @@ msgid "Save _As..."
 msgstr "Запази като"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Запази _всички"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1946,12 +1946,12 @@ msgstr "_Затвори Всички"
 
 #: ../data/geany.glade.h:378
 #, fuzzy
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Команда"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
 #, fuzzy
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Затвори текущия файл"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1966,17 +1966,17 @@ msgstr "Затвори текущия файл"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
 #, fuzzy
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "_Удвои реда или избрания текст"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
 #, fuzzy
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Избери текущата дума"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
 #, fuzzy
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Избери текущата дума"
 
 #: ../data/geany.glade.h:385
@@ -1986,7 +1986,7 @@ msgstr "Коментирай ред(ове)"
 
 #: ../data/geany.glade.h:386
 #, fuzzy
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Коментирай ред(ове)"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -2025,7 +2025,7 @@ msgstr "_Намали отстъпа"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
 #, fuzzy
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Умно вмъкване на реда"
 
 #: ../data/geany.glade.h:396
@@ -2070,7 +2070,7 @@ msgid "_Replace..."
 msgstr "_Замени"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "След_ващо съобщение"
 
 #: ../data/geany.glade.h:406
@@ -2080,12 +2080,12 @@ msgstr "Следващо съобщение"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
 #, fuzzy
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Отиди до следващия маркер"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
 #, fuzzy
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Отиди до предишния маркер"
 
 #: ../data/geany.glade.h:409
@@ -2137,7 +2137,7 @@ msgstr "Покажи _номерата на редовете"
 
 #: ../data/geany.glade.h:419
 #, fuzzy
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Показвай интервали и табулации"
 
 #: ../data/geany.glade.h:420
@@ -2147,7 +2147,7 @@ msgstr "Показвай края на редовете"
 
 #: ../data/geany.glade.h:421
 #, fuzzy
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Показвай ориентировачни занци за отстъп"
 
 #: ../data/geany.glade.h:422
@@ -2156,7 +2156,7 @@ msgstr "_Цял екран"
 
 #: ../data/geany.glade.h:423
 #, fuzzy
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Промяеня всички допълнителни Widget-и"
 
 #: ../data/geany.glade.h:424
@@ -2282,12 +2282,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Махни излишните символи на края"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:454
 #, fuzzy
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "_Замени табулациите с интервали"
 
 #: ../data/geany.glade.h:455
@@ -2370,7 +2370,7 @@ msgid "_Help"
 msgstr "_Помощ"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "Кл_авишни комбинации"
 
 #: ../data/geany.glade.h:474
@@ -3930,7 +3930,7 @@ msgstr "Об_ърни коментирането на реда"
 
 #: ../src/keybindings.c:572
 #, fuzzy
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "_Замени табулациите с интервали"
 
 #: ../src/keybindings.c:574

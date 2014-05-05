@@ -51,7 +51,7 @@ msgid "Insert _Function Description"
 msgstr "Függvény _leírás beszúrása"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Többsoros _megjegyzés beszúrása"
 
 #: ../data/geany.glade.h:7
@@ -84,7 +84,7 @@ msgstr "\"include <...>\" be_szúrása"
 
 #: ../data/geany.glade.h:14
 #: ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Másféle szóköz beszúrása"
 
 #: ../data/geany.glade.h:15
@@ -1028,11 +1028,11 @@ msgstr "Levágja a sorvégi szóköz és tabulátor karaktereket"
 
 #: ../data/geany.glade.h:243
 #: ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Tabulátorok cseréje szóközre"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "A dokumentumban az összes tabulátort szóközökre cseréli."
 
 #: ../data/geany.glade.h:245
@@ -1556,7 +1556,7 @@ msgid "Save _As..."
 msgstr "Mentés másként..."
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "_Mindet menti"
 
 #: ../data/geany.glade.h:372
@@ -1589,12 +1589,12 @@ msgid "C_lose All"
 msgstr "Öss_zeset bezár"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Paran_csok"
 
 #: ../data/geany.glade.h:379
 #: ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Aktuális sor(ok) kivágása"
 
 #: ../data/geany.glade.h:380
@@ -1609,17 +1609,17 @@ msgstr "Aktuális sor(ok) törlése"
 
 #: ../data/geany.glade.h:382
 #: ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Sor vagy kiválasztás duplikálása"
 
 #: ../data/geany.glade.h:383
 #: ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Aktuális sor(ok) kiválasztása"
 
 #: ../data/geany.glade.h:384
 #: ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Aktuális bekezdés kiválasztása"
 
 #: ../data/geany.glade.h:385
@@ -1627,7 +1627,7 @@ msgid "_Move Line(s) Up"
 msgstr "Sor(ok) _mozgatása felfelé"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Sor(ok) _mozgatása lefelé"
 
 #: ../data/geany.glade.h:387
@@ -1667,7 +1667,7 @@ msgstr "Behúzás _csökkentése"
 
 #: ../data/geany.glade.h:395
 #: ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Intelligens sorbehúzás"
 
 #: ../data/geany.glade.h:396
@@ -1709,7 +1709,7 @@ msgid "_Replace..."
 msgstr "_Csere..."
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "_Következő üzenet"
 
 #: ../data/geany.glade.h:406
@@ -1718,12 +1718,12 @@ msgstr "_Előző üzenet"
 
 #: ../data/geany.glade.h:407
 #: ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Következő jelölőhöz ugrás"
 
 #: ../data/geany.glade.h:408
 #: ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Előző jelölőhöz ugrás"
 
 #: ../data/geany.glade.h:409
@@ -1771,7 +1771,7 @@ msgid "Show _Line Numbers"
 msgstr "S_orszámok megjelenítése"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Szóközök m_egjelenítése"
 
 #: ../data/geany.glade.h:420
@@ -1779,7 +1779,7 @@ msgid "Show Line _Endings"
 msgstr "Sorvégek megje_lenítése"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "_Behúzás segédvonalak megjelenítése"
 
 #: ../data/geany.glade.h:422
@@ -1787,7 +1787,7 @@ msgid "Full_screen"
 msgstr "_Teljes képernyő"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Minden e_gyéb widget ki/bekapcsolása"
 
 #: ../data/geany.glade.h:424
@@ -1908,11 +1908,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "_Sorvégi szóközök levágása"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "_Tabulátorok cseréje szóközre"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Szóközök cseré_je tabulátorokra..."
 
 #: ../data/geany.glade.h:455
@@ -1991,7 +1991,7 @@ msgid "_Help"
 msgstr "_Súgó"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "Gyorsbillentyű_k"
 
 #: ../data/geany.glade.h:474
@@ -3511,7 +3511,7 @@ msgid "Toggle Line breaking"
 msgstr "Sor széttördelés be/kikapcsolása"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Szóközök cseréje tabulátorokra"
 
 #: ../src/keybindings.c:574

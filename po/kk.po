@@ -51,7 +51,7 @@ msgid "Insert _Function Description"
 msgstr "_Функция анықтамасын енгізу"
 
 #: ../data/geany.glade.h:6
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Кө_пжолдық комментарий енгізу"
 
 #: ../data/geany.glade.h:7
@@ -83,7 +83,7 @@ msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" кірі_стіру"
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "_Альтернативті бос аралықты енгізу"
 
 #: ../data/geany.glade.h:15
@@ -1112,11 +1112,11 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr ""
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Бос аралықтарды табуляциямен алмастыру"
 
 #: ../data/geany.glade.h:244
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Құжаттағы барлық табуляцияларды бос аралықтармен алмастырады"
 
 #: ../data/geany.glade.h:245
@@ -1656,7 +1656,7 @@ msgid "Save _As..."
 msgstr "Қ_алайша сақтау..."
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Барл_ығын сақтау"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1685,11 +1685,11 @@ msgid "C_lose All"
 msgstr "Бар_лығын жабу"
 
 #: ../data/geany.glade.h:378
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Кома_ндалар"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Ағы_мдағы жол(дар)ды қиып алу"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1701,15 +1701,15 @@ msgid "_Delete Current Line(s)"
 msgstr "Ағымдағы жол(дар)ды ө_шіру"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "Жол не таңдауды қа_йталау"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Ағымдағы ж_ол(дар)ды таңдау"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Ағымдағы а_бзацты таңдау"
 
 #: ../data/geany.glade.h:385
@@ -1717,7 +1717,7 @@ msgid "_Move Line(s) Up"
 msgstr "Жол(дар)ды жоғары жы_лжыту"
 
 #: ../data/geany.glade.h:386
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Жол(дар)ды төмен жы_лжыту"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1753,7 +1753,7 @@ msgid "_Decrease Indent"
 msgstr "Шегінуді кі_шірейту"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "\"Ақылды\" ш_егінуді қолдану"
 
 #: ../data/geany.glade.h:396
@@ -1793,7 +1793,7 @@ msgid "_Replace..."
 msgstr "Ал_мастыру..."
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Келе_сі хабарлама"
 
 #: ../data/geany.glade.h:406
@@ -1801,11 +1801,11 @@ msgid "Pr_evious Message"
 msgstr "Алдыңғ_ы хабарлама"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Келесі маркерге ө_ту"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Алдыңғы маркерге ө_ту"
 
 #: ../data/geany.glade.h:409
@@ -1849,7 +1849,7 @@ msgid "Show _Line Numbers"
 msgstr "Ж_ол нөмірлерін көрсету"
 
 #: ../data/geany.glade.h:419
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Бо_с аралықты көрсету"
 
 #: ../data/geany.glade.h:420
@@ -1857,7 +1857,7 @@ msgid "Show Line _Endings"
 msgstr "Жол а_яқтауларын көрсету"
 
 #: ../data/geany.glade.h:421
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Ше_гіну нұсқаулықтарын көрсету"
 
 #: ../data/geany.glade.h:422
@@ -1865,7 +1865,7 @@ msgid "Full_screen"
 msgstr "То_лық экранға"
 
 #: ../data/geany.glade.h:423
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Бар қо_салқы виджеттерді іске қосу не сөндіру"
 
 #: ../data/geany.glade.h:424
@@ -1985,11 +1985,11 @@ msgid "_Strip Trailing Spaces"
 msgstr "Ар_тық бос аралықтарды өшіру"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "Табул_яцияны бос аралықтармен алмастыру"
 
 #: ../data/geany.glade.h:454
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "Б_ос аралықтарды табуляциямен алмастыру..."
 
 #: ../data/geany.glade.h:455
@@ -2066,7 +2066,7 @@ msgid "_Help"
 msgstr "_Көмек"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "П_ернетақта жарлықтары"
 
 #: ../data/geany.glade.h:474
@@ -3519,7 +3519,7 @@ msgid "Toggle Line breaking"
 msgstr "Жол үзуді іске қосу не сөндіру"
 
 #: ../src/keybindings.c:572
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "Бос аралықтарды табуляциямен алмастыру"
 
 #: ../src/keybindings.c:574

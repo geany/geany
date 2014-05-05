@@ -55,7 +55,7 @@ msgstr "Додати опис функції"
 
 #: ../data/geany.glade.h:6
 #, fuzzy
-msgid "Insert _Multiline Comment"
+msgid "Insert Mu_ltiline Comment"
 msgstr "Додати багаторядковий коментар"
 
 #: ../data/geany.glade.h:7
@@ -91,7 +91,7 @@ msgstr "Д_одати \"include <...>\""
 
 #: ../data/geany.glade.h:14 ../src/keybindings.c:415
 #, fuzzy
-msgid "_Insert Alternative White Space"
+msgid "Insert Alternative _White Space"
 msgstr "Вставити альтернативний пробіл"
 
 #: ../data/geany.glade.h:15
@@ -1241,12 +1241,12 @@ msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Прибрати пробіли та відступи після тексту на кожному рядку"
 
 #: ../data/geany.glade.h:243 ../src/keybindings.c:570
-msgid "Replace tabs by space"
+msgid "Replace tabs with space"
 msgstr "Замінити відступи пробілами"
 
 #: ../data/geany.glade.h:244
 #, fuzzy
-msgid "Replaces all tabs in document by spaces"
+msgid "Replaces all tabs in document with spaces"
 msgstr "Замінити усі відступи у документі пробілами."
 
 #: ../data/geany.glade.h:245
@@ -1852,7 +1852,7 @@ msgid "Save _As..."
 msgstr "Зберегти усе"
 
 #: ../data/geany.glade.h:371
-msgid "Save A_ll"
+msgid "Sa_ve All"
 msgstr "Зберегти _усі"
 
 #: ../data/geany.glade.h:372 ../src/callbacks.c:433 ../src/document.c:2954
@@ -1885,12 +1885,12 @@ msgstr "_Закрити усе"
 
 #: ../data/geany.glade.h:378
 #, fuzzy
-msgid "_Commands"
+msgid "Co_mmands"
 msgstr "Команда"
 
 #: ../data/geany.glade.h:379 ../src/keybindings.c:350
 #, fuzzy
-msgid "_Cut Current Line(s)"
+msgid "Cu_t Current Line(s)"
 msgstr "Вирізати поточний рядок(-ки)"
 
 #: ../data/geany.glade.h:380 ../src/keybindings.c:347
@@ -1905,17 +1905,17 @@ msgstr "Знищити поточний рядок(-ки)"
 
 #: ../data/geany.glade.h:382 ../src/keybindings.c:298
 #, fuzzy
-msgid "_Duplicate Line or Selection"
+msgid "D_uplicate Line or Selection"
 msgstr "_Подвоїти рядок або виділене"
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:360
 #, fuzzy
-msgid "_Select Current Line(s)"
+msgid "S_elect Current Line(s)"
 msgstr "Виділити поточний рядок(-ки)"
 
 #: ../data/geany.glade.h:384 ../src/keybindings.c:363
 #, fuzzy
-msgid "_Select Current Paragraph"
+msgid "Se_lect Current Paragraph"
 msgstr "Виділити поточний параграф"
 
 #: ../data/geany.glade.h:385
@@ -1925,7 +1925,7 @@ msgstr "Закоментувати рядок(-ки)"
 
 #: ../data/geany.glade.h:386
 #, fuzzy
-msgid "_Move Line(s) Down"
+msgid "M_ove Line(s) Down"
 msgstr "Закоментувати рядок(-ки)"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
@@ -1963,7 +1963,7 @@ msgstr "З_меншити відступ"
 
 #: ../data/geany.glade.h:395 ../src/keybindings.c:393
 #, fuzzy
-msgid "_Smart Line Indent"
+msgid "S_mart Line Indent"
 msgstr "Встановити тип кін_ця файлу"
 
 #: ../data/geany.glade.h:396
@@ -2008,7 +2008,7 @@ msgid "_Replace..."
 msgstr "_Замінити"
 
 #: ../data/geany.glade.h:405
-msgid "Next _Message"
+msgid "Next Me_ssage"
 msgstr "Наступне по_відомлення"
 
 #: ../data/geany.glade.h:406
@@ -2018,12 +2018,12 @@ msgstr "Наступне повідомлення"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
 #, fuzzy
-msgid "_Go to Next Marker"
+msgid "Go to Ne_xt Marker"
 msgstr "Перейти до наступної мітки"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
 #, fuzzy
-msgid "_Go to Previous Marker"
+msgid "Go to Pre_vious Marker"
 msgstr "Перейти до попередньої мітки"
 
 #: ../data/geany.glade.h:409
@@ -2075,7 +2075,7 @@ msgstr "Показувати _номери рядків"
 
 #: ../data/geany.glade.h:419
 #, fuzzy
-msgid "Show _White Space"
+msgid "Show White S_pace"
 msgstr "Показувати пробіли"
 
 #: ../data/geany.glade.h:420
@@ -2085,7 +2085,7 @@ msgstr "Виділяти кінці рядків"
 
 #: ../data/geany.glade.h:421
 #, fuzzy
-msgid "Show _Indentation Guides"
+msgid "Show Indentation _Guides"
 msgstr "Показати керівників розподілення"
 
 #: ../data/geany.glade.h:422
@@ -2094,7 +2094,7 @@ msgstr "На у_весь екран"
 
 #: ../data/geany.glade.h:423
 #, fuzzy
-msgid "To_ggle All Additional Widgets"
+msgid "Toggle All _Additional Widgets"
 msgstr "Перемикач усіх додаткових віджетів"
 
 #: ../data/geany.glade.h:424
@@ -2218,12 +2218,12 @@ msgid "_Strip Trailing Spaces"
 msgstr "Видалити _пробіли після тексту"
 
 #: ../data/geany.glade.h:453
-msgid "_Replace Tabs by Spaces"
+msgid "Replace Tabs with S_paces"
 msgstr "_Заміняти відступи пробілами"
 
 #: ../data/geany.glade.h:454
 #, fuzzy
-msgid "Replace Spaces b_y Tabs..."
+msgid "_Replace Spaces with Tabs..."
 msgstr "_Заміняти відступи пробілами"
 
 #: ../data/geany.glade.h:455
@@ -2305,7 +2305,7 @@ msgid "_Help"
 msgstr "_Допомога"
 
 #: ../data/geany.glade.h:473
-msgid "_Keyboard Shortcuts"
+msgid "Keyboard _Shortcuts"
 msgstr "_Гарячі клавіші"
 
 #: ../data/geany.glade.h:474
@@ -3847,7 +3847,7 @@ msgstr "_Перемикач закоментованості рядку"
 
 #: ../src/keybindings.c:572
 #, fuzzy
-msgid "Replace spaces by tabs"
+msgid "Replace spaces with tabs"
 msgstr "_Заміняти відступи пробілами"
 
 #: ../src/keybindings.c:574
