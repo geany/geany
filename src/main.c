@@ -203,9 +203,9 @@ static void apply_settings(void)
 	}
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), ui_position_to_locale(interface_prefs.tab_pos_editor));
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), ui_position_to_locale(interface_prefs.tab_pos_msgwin));
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_position_to_locale(interface_prefs.tab_pos_sidebar));
 
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
@@ -218,7 +218,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
+	if (interface_prefs.sidebar_pos != ui_position_to_locale(GTK_POS_LEFT))
 		ui_swap_sidebar_pos();
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),

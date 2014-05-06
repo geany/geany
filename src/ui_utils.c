@@ -2292,6 +2292,37 @@ static void init_custom_style(void)
 }
 
 
+/* on RTL locales, force a few widgets LTR because they are configurable or display directions
+ *
+ * We don't swap notebooks but manually set the right tab position, because otherwise the tab
+ * alignment becomes wrong (e.g. on RTL locale tabs on top should be aligned on the right).
+ * Same for sidebar/editor paned, because it avoids mirroring some subtle defaults (like default width) */
+static void init_ltr_widgets(void)
+{
+	if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+	{
+		const gchar *widgets[] = {
+			/* widget_id        reason */
+			"vpaned1",       /* message window is orientable "bottom/right" */
+			"ltr-hbox1",     /* Settings reading "left/right" */
+			"ltr-hbox2",
+			"ltr-hbox3"
+		};
+		guint i;
+
+		for (i = 0; i < G_N_ELEMENTS(widgets); i++)
+		{
+			GtkWidget *widget = ui_builder_get_object(widgets[i]);
+
+			if (! GTK_IS_WIDGET(widget))
+				g_warning("Widget \"%s\" cannot be found", widgets[i]);
+			else
+				gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
+		}
+	}
+}
+
+
 void ui_init(void)
 {
 	init_custom_style();
@@ -2339,6 +2370,7 @@ void ui_init(void)
 		g_signal_connect(main_widgets.editor_menu, "hide", G_CALLBACK(on_editor_menu_hide), items);
 	}
 
+	init_ltr_widgets();
 	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
@@ -2897,4 +2929,19 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 		return TRUE;
 	}
 	return FALSE;
+}
+
+
+/* mirrors a position if the locale is RTL */
+GtkPositionType ui_position_to_locale(GtkPositionType pos)
+{
+	if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+	{
+		if (pos == GTK_POS_LEFT)
+			return GTK_POS_RIGHT;
+		else if (pos == GTK_POS_RIGHT)
+			return GTK_POS_LEFT;
+	}
+
+	return pos;
 }
