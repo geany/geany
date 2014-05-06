@@ -537,7 +537,9 @@ static void prefs_init_dialog(void)
 
 
 	/* Files settings */
-	if (file_prefs.tab_order_ltr)
+	/* tab_order_ltr is displayed swapped, because it actually means "start to end" rather
+	 * than "left to right" */
+	if (gtk_widget_get_default_direction() != GTK_TEXT_DIR_RTL && file_prefs.tab_order_ltr)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 	else
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
@@ -1012,7 +1014,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 
 		/* Files settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
+		/* tab_order_ltr is displayed swapped, because it actually means "start to end" rather
+		 * than "left to right" */
+		if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_left");
+		else
+			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_tab_right");
 		file_prefs.tab_order_ltr = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_tab_beside");
