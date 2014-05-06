@@ -2304,6 +2304,9 @@ static void init_ltr_widgets(void)
 		const gchar *widgets[] = {
 			/* widget_id        reason */
 			"vpaned1",       /* message window is orientable "bottom/right" */
+			"ltr-hbox1",     /* Settings reading "left/right" */
+			"ltr-hbox2",
+			"ltr-hbox3"
 		};
 		guint i;
 
