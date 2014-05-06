@@ -2898,3 +2898,18 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 	}
 	return FALSE;
 }
+
+
+/* mirrors a position if the locale is RTL */
+GtkPositionType ui_position_to_locale(GtkPositionType pos)
+{
+	if (gtk_widget_get_default_direction() == GTK_TEXT_DIR_RTL)
+	{
+		if (pos == GTK_POS_LEFT)
+			return GTK_POS_RIGHT;
+		else if (pos == GTK_POS_RIGHT)
+			return GTK_POS_LEFT;
+	}
+
+	return pos;
+}

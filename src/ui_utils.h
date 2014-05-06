@@ -348,6 +348,8 @@ gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
 
+GtkPositionType ui_position_to_locale(GtkPositionType pos);
+
 G_END_DECLS
 
 #endif
