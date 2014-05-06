@@ -1280,9 +1280,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), ui_position_to_locale(interface_prefs.tab_pos_editor));
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), ui_position_to_locale(interface_prefs.tab_pos_msgwin));
+		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_position_to_locale(interface_prefs.tab_pos_sidebar));
 
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < documents_array->len; i++)

@@ -203,9 +203,9 @@ static void apply_settings(void)
 	}
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), ui_position_to_locale(interface_prefs.tab_pos_editor));
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), ui_position_to_locale(interface_prefs.tab_pos_msgwin));
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_position_to_locale(interface_prefs.tab_pos_sidebar));
 
 	/* whether to show notebook tabs or not */
 	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
