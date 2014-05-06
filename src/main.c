@@ -218,7 +218,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
+	if (interface_prefs.sidebar_pos != ui_position_to_locale(GTK_POS_LEFT))
 		ui_swap_sidebar_pos();
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
