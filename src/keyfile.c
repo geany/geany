@@ -1203,7 +1203,7 @@ void configuration_open_files(void)
 		gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
 
 		/* if target page is current page, switch to another page first to really trigger an event */
-		if (target_page == cur_page)
+		if (target_page == cur_page && n_pages > 0)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), (cur_page + 1) % n_pages);
 
 		main_status.opening_session_files = FALSE;
