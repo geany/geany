@@ -53,8 +53,6 @@ static char const * const doubletriple = "\"\"\"";
 *   FUNCTION DEFINITIONS
 */
 
-#define vStringLast(vs) ((vs)->buffer[(vs)->length - 1])
-
 static boolean isIdentifierFirstCharacter (int c)
 {
 	return (boolean) (isalpha (c) || c == '_');
