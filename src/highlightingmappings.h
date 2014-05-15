@@ -1559,4 +1559,11 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
+/* Zephir */
+#define highlighting_lexer_ZEPHIR		SCLEX_PHPSCRIPT
+#define highlighting_styles_ZEPHIR		highlighting_styles_PHP
+#define highlighting_keywords_ZEPHIR	highlighting_keywords_PHP
+#define highlighting_properties_ZEPHIR	highlighting_properties_PHP
+
+
 #endif /* guard */
