@@ -212,6 +212,7 @@ test_sources = \
 	recursive.f95					\
 	refcurs.sql						\
 	regexp.js						\
+	return-hint.zep					\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
@@ -229,6 +230,7 @@ test_sources = \
 	simple.rb						\
 	simple.sh						\
 	simple.tcl						\
+	simple.zep						\
 	spurious_label_tags.c			\
 	sql_single_quote.sql			\
 	square_parens.f90				\
