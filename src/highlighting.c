@@ -1497,6 +1497,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_STRING ||
 				style == SCE_HBA_STRINGEOL ||
@@ -1669,6 +1670,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_COMMENTLINE ||
 				style == SCE_HB_COMMENTLINE ||
