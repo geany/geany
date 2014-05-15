@@ -61,7 +61,8 @@
     ObjcParser, \
     AsciidocParser, \
     AbaqusParser, \
-    RustParser
+    RustParser, \
+    ZephirParser
 
 #endif	/* _PARSERS_H */
 
