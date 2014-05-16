@@ -600,7 +600,7 @@ gboolean project_ask_close(void)
 {
 	if (app->project != NULL)
 	{
-		if (dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL,
+		if (dialogs_show_question_full(NULL, GTK_STOCK_CLOSE, GTK_STOCK_CANCEL, FALSE,
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is open."), app->project->name))
 		{
@@ -691,7 +691,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		{
 			gboolean create_dir;
 
-			create_dir = dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL,
+			create_dir = dialogs_show_question_full(NULL, GTK_STOCK_OK, GTK_STOCK_CANCEL, FALSE,
 				_("Create the project's base path directory?"),
 				_("The path \"%s\" does not exist."),
 				base_path);

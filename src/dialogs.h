@@ -60,7 +60,8 @@ void dialogs_show_file_properties(GeanyDocument *doc);
 gboolean dialogs_show_question(const gchar *text, ...) G_GNUC_PRINTF (1, 2);
 
 gboolean dialogs_show_question_full(GtkWidget *parent, const gchar *yes_btn, const gchar *no_btn,
-	const gchar *extra_text, const gchar *main_text, ...) G_GNUC_PRINTF (5, 6);
+	const gboolean is_yes_btn_default, const gchar *extra_text, const gchar *main_text, ...)
+	G_GNUC_PRINTF (6, 7);
 
 gint dialogs_show_prompt(GtkWidget *parent,
 		const gchar *btn_1, GtkResponseType response_1,

@@ -145,7 +145,7 @@ G_MODULE_EXPORT gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
 	}
 	else
 	if (! prefs.confirm_exit ||
-		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, FALSE, NULL,
 			_("Do you really want to quit?")))
 	{
 		quit_app();
@@ -430,7 +430,7 @@ G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_
 	base_name = g_path_get_basename(doc->file_name);
 	/* don't prompt if file hasn't been edited at all */
 	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
-		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL, FALSE,
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
