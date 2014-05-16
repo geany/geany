@@ -2077,3 +2077,76 @@ gchar *utils_parse_and_format_build_date(const gchar *input)
 
 	return g_strdup(input);
 }
+
+/*
+ * taken from glib and renamed so that it does not clash
+ * (looks like this is private api...)
+ */
+static gchar *
+_g_utf8_make_valid2 (const gchar *name)
+{
+	GString *string;
+	const gchar *remainder, *invalid;
+	gint remaining_bytes, valid_bytes;
+
+	g_return_val_if_fail (name != NULL, NULL);
+
+	string = NULL;
+	remainder = name;
+	remaining_bytes = strlen (name);
+
+	while (remaining_bytes != 0)
+	{
+		if (g_utf8_validate (remainder, remaining_bytes, &invalid))
+			break;
+		valid_bytes = invalid - remainder;
+
+		if (string == NULL)
+			string = g_string_sized_new (remaining_bytes);
+
+		g_string_append_len (string, remainder, valid_bytes);
+		/* append U+FFFD REPLACEMENT CHARACTER */
+		g_string_append (string, "\357\277\275");
+
+		remaining_bytes -= valid_bytes + 1;
+		remainder = invalid + 1;
+	}
+
+	if (string == NULL)
+		return g_strdup (name);
+
+	g_string_append (string, remainder);
+
+	g_assert (g_utf8_validate (string->str, -1, NULL));
+
+	return g_string_free (string, FALSE);
+}
+
+/**
+ * Turns an invalid utf8 string into a valid one.
+ * Only use if g_utf8_validate() returned FALSE.
+ * This loses some information of course but is needed for some function
+ * that require a valid utf8 string (like g_markup_escape_text for an example)
+ *
+ * @param text
+ * @param from_codeset: a codeset to try to convert from (can be NULL)
+ *
+ * @return a valid utf8 string.
+ **/
+gchar *utils_utf8_make_valid(const gchar * text, const char *from_codeset)
+{
+	gchar *utf8 = NULL;
+	
+	if (from_codeset)
+		utf8 = g_convert(text, -1, "UTF-8", from_codeset, NULL, NULL, NULL);
+
+	if (utf8 != NULL)
+		return utf8;
+
+	utf8 = g_locale_to_utf8(text, -1, NULL, NULL, NULL);
+	if (utf8 != NULL)
+		return utf8;
+	
+	return _g_utf8_make_valid2(text);
+}
+
