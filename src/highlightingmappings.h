@@ -253,7 +253,9 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
 	/* used for local structs and typedefs */
-	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE }
+	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE },
+	{ SCE_C_TASKMARKER,				"taskmarker",				FALSE },
+	{ SCE_C_ESCAPESEQUENCE,			"escapesequence",			FALSE }
 };
 static const HLKeyword highlighting_keywords_C[] =
 {

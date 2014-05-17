@@ -28,6 +28,8 @@ globalclass=class
 # """verbatim"""
 tripleverbatim=string_2
 hashquotedstring=string_2
+taskmarker=comment
+escapesequence=string_1
 
 [keywords]
 # all items must be in one line

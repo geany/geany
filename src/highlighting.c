@@ -1402,7 +1402,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
 				style == SCE_C_TRIPLEVERBATIM ||
-				style == SCE_C_HASHQUOTEDSTRING);
+				style == SCE_C_HASHQUOTEDSTRING ||
+				style == SCE_C_ESCAPESEQUENCE);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
@@ -1576,7 +1577,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
-				style == SCE_C_COMMENTDOCKEYWORDERROR);
+				style == SCE_C_COMMENTDOCKEYWORDERROR ||
+				style == SCE_C_TASKMARKER);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_COMMENT ||
