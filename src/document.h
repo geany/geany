@@ -36,6 +36,9 @@ G_BEGIN_DECLS
 #include "editor.h"
 #include "search.h"
 
+/* Forward-declared to avoid including filetypes.h here */
+struct GeanyFiletype;
+
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
 #elif defined(G_OS_UNIX)
@@ -75,7 +78,7 @@ extern GeanyFilePrefs file_prefs;
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-struct GeanyDocument
+typedef struct GeanyDocument
 {
 	/** Flag used to check if this document is valid when iterating @ref documents_array. */
 	gboolean		 is_valid;
@@ -96,7 +99,7 @@ struct GeanyDocument
 	struct GeanyEditor *editor;	/**< The editor associated with the document. */
 	/** The filetype for this document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
-	GeanyFiletype	*file_type;
+	struct GeanyFiletype	*file_type;
 	/** TMWorkObject object for this document, or @c NULL. */
 	TMWorkObject	*tm_file;
 	/** Whether this document is read-only. */
@@ -113,7 +116,8 @@ struct GeanyDocument
 	gchar 			*real_path;
 
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
-};
+}
+GeanyDocument;
 
 extern GPtrArray *documents_array;
 
@@ -170,7 +174,7 @@ extern GPtrArray *documents_array;
 
 /* These functions will replace the older functions. For now they have a documents_ prefix. */
 
-GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
+GeanyDocument* document_new_file(const gchar *filename, struct GeanyFiletype *ft, const gchar *text);
 
 GeanyDocument* document_new_file_if_non_open(void);
 
@@ -183,13 +187,13 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force);
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
 
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
-		GeanyFiletype *ft, const gchar *forced_enc);
+		struct GeanyFiletype *ft, const gchar *forced_enc);
 
 gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
 
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
-void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
+void document_set_filetype(GeanyDocument *doc, struct GeanyFiletype *type);
 
 void document_reload_config(GeanyDocument *doc);
 
@@ -222,11 +226,11 @@ gboolean document_account_for_unsaved(void);
 gboolean document_close_all(void);
 
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
-		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
+		gboolean readonly, struct GeanyFiletype *ft, const gchar *forced_enc);
 
 void document_open_file_list(const gchar *data, gsize length);
 
-void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+void document_open_files(const GSList *filenames, gboolean readonly, struct GeanyFiletype *ft,
 		const gchar *forced_enc);
 
 gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc,

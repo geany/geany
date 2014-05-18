@@ -27,6 +27,8 @@
 
 G_BEGIN_DECLS
 
+/* Forward-declared to avoid including document.h here */
+struct GeanyDocument;
 
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
@@ -253,34 +255,34 @@ void ui_init_stock_items(void);
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
 
-void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
+void ui_menu_add_document_items(GtkMenu *menu, struct GeanyDocument *active, GCallback callback);
 
-void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
+void ui_menu_add_document_items_sorted(GtkMenu *menu, struct GeanyDocument *active,
 		GCallback callback, GCompareFunc sort_func);
 
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
-void ui_update_statusbar(GeanyDocument *doc, gint pos);
+void ui_update_statusbar(struct GeanyDocument *doc, gint pos);
 
 
 /* This sets the window title according to the current filename. */
-void ui_set_window_title(GeanyDocument *doc);
+void ui_set_window_title(struct GeanyDocument *doc);
 
 void ui_set_editor_font(const gchar *font_name);
 
 void ui_set_fullscreen(void);
 
 
-void ui_update_popup_reundo_items(GeanyDocument *doc);
+void ui_update_popup_reundo_items(struct GeanyDocument *doc);
 
-void ui_update_popup_copy_items(GeanyDocument *doc);
+void ui_update_popup_copy_items(struct GeanyDocument *doc);
 
 void ui_update_popup_goto_items(gboolean enable);
 
 
-void ui_update_menu_copy_items(GeanyDocument *doc);
+void ui_update_menu_copy_items(struct GeanyDocument *doc);
 
-void ui_update_insert_include_item(GeanyDocument *doc, gint item);
+void ui_update_insert_include_item(struct GeanyDocument *doc, gint item);
 
 void ui_update_fold_items(void);
 
@@ -297,19 +299,19 @@ void ui_document_buttons_update(void);
 
 void ui_sidebar_show_hide(void);
 
-void ui_document_show_hide(GeanyDocument *doc);
+void ui_document_show_hide(struct GeanyDocument *doc);
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
 
 
 void ui_create_recent_menus(void);
 
-void ui_add_recent_document(GeanyDocument *doc);
+void ui_add_recent_document(struct GeanyDocument *doc);
 
 void ui_add_recent_project_file(const gchar *utf8_filename);
 
 
-void ui_update_tab_status(GeanyDocument *doc);
+void ui_update_tab_status(struct GeanyDocument *doc);
 
 
 typedef gboolean TVMatchCallback(gboolean);

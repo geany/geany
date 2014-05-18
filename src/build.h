@@ -26,6 +26,10 @@
 
 G_BEGIN_DECLS
 
+/* Forward-declared to avoid including their headers here */
+struct GeanyDocument;
+struct GeanyFiletype;
+
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
 /* * Geany Known Build Commands.
  * These commands are named after their default use.
@@ -164,9 +168,9 @@ void build_init(void);
 void build_finalize(void);
 
 /* menu configuration dialog functions */
-GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *data, GeanyFiletype *ft);
+GtkWidget *build_commands_table(struct GeanyDocument *doc, GeanyBuildSource dst, BuildTableData *data, struct GeanyFiletype *ft);
 
-void build_read_project(GeanyFiletype *ft, BuildTableData build_properties);
+void build_read_project(struct GeanyFiletype *ft, BuildTableData build_properties);
 
 void build_free_fields(BuildTableData data);
 
@@ -175,7 +179,7 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 
 /* build menu functions */
 
-void build_menu_update(GeanyDocument *doc);
+void build_menu_update(struct GeanyDocument *doc);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
@@ -202,7 +206,7 @@ void build_set_group_count(GeanyBuildGroup grp, gint count);
 
 guint build_get_group_count(const GeanyBuildGroup grp);
 
-gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+gchar **build_get_regex(GeanyBuildGroup grp, struct GeanyFiletype *ft, guint *from);
 
 G_END_DECLS
 

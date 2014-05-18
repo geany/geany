@@ -58,13 +58,6 @@ G_BEGIN_DECLS
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 
 
-
-/* Common forward declarations */
-typedef struct GeanyDocument GeanyDocument;
-typedef struct GeanyEditor GeanyEditor;
-typedef struct GeanyFiletype GeanyFiletype;
-
-
 /** Important application fields. */
 typedef struct GeanyApp
 {

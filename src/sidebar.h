@@ -24,6 +24,8 @@
 #ifndef GEANY_SIDEBAR_H
 #define GEANY_SIDEBAR_H 1
 
+/* Forward-declared to avoid including document.h here */
+struct GeanyDocument;
 
 typedef struct SidebarTreeviews
 {
@@ -48,17 +50,17 @@ void sidebar_init(void);
 
 void sidebar_finalize(void);
 
-void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
+void sidebar_update_tag_list(struct GeanyDocument *doc, gboolean update);
 
-void sidebar_openfiles_add(GeanyDocument *doc);
+void sidebar_openfiles_add(struct GeanyDocument *doc);
 
-void sidebar_openfiles_update(GeanyDocument *doc);
+void sidebar_openfiles_update(struct GeanyDocument *doc);
 
 void sidebar_openfiles_update_all(void);
 
-void sidebar_select_openfiles_item(GeanyDocument *doc);
+void sidebar_select_openfiles_item(struct GeanyDocument *doc);
 
-void sidebar_remove_document(GeanyDocument *doc);
+void sidebar_remove_document(struct GeanyDocument *doc);
 
 void sidebar_add_common_menu_items(GtkMenu *menu);
 

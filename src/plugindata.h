@@ -39,8 +39,10 @@ G_BEGIN_DECLS
 #undef GEANY
 #define GEANY(symbol_name) geany->symbol_name
 
-#include "editor.h"	/* GeanyIndentType */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
+#include "document.h" /* GeanyDocument */
+#include "editor.h"	/* GeanyEditor, GeanyIndentType */
+#include "filetypes.h" /* GeanyFiletype */
 #include "gtkcompat.h"
 
 

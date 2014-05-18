@@ -23,6 +23,9 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+/* Forward-declared to avoid including document.h here */
+struct GeanyDocument;
+
 extern const guint TM_GLOBAL_TYPE_MASK;
 
 enum
@@ -45,13 +48,13 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 
 const gchar *symbols_get_context_separator(gint ft_id);
 
-const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
+const GList *symbols_get_tag_list(struct GeanyDocument *doc, guint tag_types);
 
 GString *symbols_get_macro_list(gint lang);
 
 const gchar **symbols_get_html_entities(void);
 
-gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode);
+gboolean symbols_recreate_tag_list(struct GeanyDocument *doc, gint sort_mode);
 
 gint symbols_generate_global_tags(gint argc, gchar **argv, gboolean want_preprocess);
 
@@ -59,8 +62,8 @@ void symbols_show_load_tags_dialog(void);
 
 gboolean symbols_goto_tag(const gchar *name, gboolean definition);
 
-gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
+gint symbols_get_current_function(struct GeanyDocument *doc, const gchar **tagname);
 
-gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
+gint symbols_get_current_scope(struct GeanyDocument *doc, const gchar **tagname);
 
 #endif

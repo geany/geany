@@ -28,6 +28,8 @@ G_BEGIN_DECLS
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+/* Forward-declared to avoid including filetypes.h here */
+struct GeanyFiletype;
 
 /** Fields representing the different attributes of a Scintilla lexer style.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
@@ -43,7 +45,7 @@ GeanyLexerStyle;
 
 void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *configh);
 
-void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
+void highlighting_set_styles(ScintillaObject *sci, struct GeanyFiletype *ft);
 
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
