@@ -33,7 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
 
-#include "keybindings.h"
+#include "keybindingsprivate.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"

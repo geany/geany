@@ -25,9 +25,9 @@
  * @see GLib's @c gi18n-lib.h.
  **/
 
-G_BEGIN_DECLS
+#include <glib.h>
 
-#include "geany.h"
+G_BEGIN_DECLS
 
 #ifdef GETTEXT_PACKAGE
 # include <glib/gi18n-lib.h>

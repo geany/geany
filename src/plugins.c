@@ -49,7 +49,7 @@
 #include "encodings.h"
 #include "search.h"
 #include "highlighting.h"
-#include "keybindings.h"
+#include "keybindingsprivate.h"
 #include "navqueue.h"
 #include "main.h"
 #include "toolbar.h"

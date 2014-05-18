@@ -553,6 +553,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
+
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));

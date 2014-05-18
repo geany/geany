@@ -23,6 +23,7 @@
 #ifndef GEANY_PROJECTPRIVATE_H
 #define GEANY_PROJECTPRIVATE_H 1
 
+#include "project.h"
 
 typedef struct GeanyProjectPrivate
 {
@@ -31,6 +32,9 @@ typedef struct GeanyProjectPrivate
 	gboolean	strip_trailing_spaces;
 	gboolean	replace_tabs;
 	gboolean	ensure_convert_new_lines;
+	GPtrArray *build_filetypes_list; /* Project has custom filetype builds for these. */
+	gint long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
+	gint long_line_column; /* Long line marker position. */
 }
 GeanyProjectPrivate;
 

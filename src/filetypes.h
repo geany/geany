@@ -28,10 +28,6 @@ G_BEGIN_DECLS
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
-#ifdef GEANY_PRIVATE
-#include "build.h"
-#endif
-
 
 /* Do not change the order, only append. */
 typedef enum
@@ -147,20 +143,6 @@ struct GeanyFiletype
 	gint			  indent_width;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
-#ifdef GEANY_PRIVATE
-	/* Do not use following fields in plugins */
-	/* TODO: move these fields into filetypesprivate.h */
-	GeanyBuildCommand *filecmds;
-	GeanyBuildCommand *ftdefcmds;
-	GeanyBuildCommand *execcmds;
-	GeanyBuildCommand *homefilecmds;
-	GeanyBuildCommand *homeexeccmds;
-	GeanyBuildCommand *projfilecmds;
-	GeanyBuildCommand *projexeccmds;
-	gint			 project_list_entry;
-	gchar			 *projerror_regex_string;
-	gchar			 *homeerror_regex_string;
-#endif
 };
 
 extern GPtrArray *filetypes_array;

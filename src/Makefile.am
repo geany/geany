@@ -1,8 +1,15 @@
 ## Process this file with automake to produce Makefile.in
 
 
-EXTRA_DIST = gb.c win32.c win32.h plugindata.h \
-	documentprivate.h filetypesprivate.h pluginprivate.h projectprivate.h \
+EXTRA_DIST = \
+	gb.c \
+	win32.c win32.h \
+	plugindata.h \
+	documentprivate.h \
+	filetypesprivate.h \
+	keybindingsprivate.h \
+	pluginprivate.h \
+	projectprivate.h \
 	makefile.win32
 
 bin_PROGRAMS = geany

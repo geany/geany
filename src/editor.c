@@ -375,7 +375,7 @@ static gboolean is_style_php(gint style)
 static gint editor_get_long_line_type(void)
 {
 	if (app->project)
-		switch (app->project->long_line_behaviour)
+		switch (app->project->priv->long_line_behaviour)
 		{
 			case 0: /* marker disabled */
 				return 2;
@@ -394,8 +394,8 @@ static gint editor_get_long_line_type(void)
 
 static gint editor_get_long_line_column(void)
 {
-	if (app->project && app->project->long_line_behaviour != 1 /* use global settings */)
-		return app->project->long_line_column;
+	if (app->project && app->project->priv->long_line_behaviour != 1 /* use global settings */)
+		return app->project->priv->long_line_column;
 	else
 		return editor_prefs.long_line_column;
 }

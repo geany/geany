@@ -45,7 +45,7 @@
 #include "documentprivate.h"
 #include "msgwindow.h"
 #include "keyfile.h"
-#include "keybindings.h"
+#include "keybindingsprivate.h"
 #include "encodings.h"
 #include "project.h"
 #include "editor.h"
