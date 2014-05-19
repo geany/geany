@@ -73,6 +73,8 @@ typedef struct GeanyPluginPrivate
 	Plugin			*proxy;					/* The proxy that handles this plugin */
 	gpointer		proxy_data;				/* Data passed to the proxy hooks of above proxy, so
 											 * this gives the proxy a pointer to each plugin */
+	gint			proxied_count;			/* count of active plugins this provides a proxy for
+											 * (a count because of possibly nested proxies) */
 }
 GeanyPluginPrivate;
 

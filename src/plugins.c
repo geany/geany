@@ -99,6 +99,8 @@ static PluginProxy builtin_so_proxy = {
 
 static GPtrArray *active_proxies = NULL;
 
+static void plugin_free(Plugin *plugin);
+
 static GeanyData geany_data;
 
 static void
@@ -122,6 +124,30 @@ geany_data_init(void)
 	};
 
 	geany_data = gd;
+}
+
+
+/* In order to have nested proxies work the count of dependent plugins must propagate up.
+ * This prevents that any plugin in the tree is unloaded while a leaf plugin is active. */
+static void proxied_count_inc(Plugin *proxy)
+{
+	do
+	{
+		proxy->proxied_count += 1;
+		proxy = proxy->proxy;
+	} while (proxy != NULL);
+}
+
+
+static void proxied_count_dec(Plugin *proxy)
+{
+	g_warn_if_fail(proxy->proxied_count > 0);
+
+	do
+	{
+		proxy->proxied_count -= 1;
+		proxy = proxy->proxy;
+	} while (proxy != NULL);
 }
 
 
@@ -557,6 +583,7 @@ plugin_load(Plugin *plugin)
 	 * keep list sorted so tools menu items and plugin preference tabs are
 	 * sorted by plugin name */
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
+	proxied_count_inc(plugin->proxy);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename, plugin->info.name);
 	return TRUE;
@@ -847,10 +874,56 @@ plugin_cleanup(Plugin *plugin)
 		plugin->cb_data_destroy = NULL;
 	}
 
+	proxied_count_dec(plugin->proxy);
 	geany_debug("Unloaded: %s", plugin->filename);
 }
 
 
+/* Remove all plugins that proxy is a proxy for from plugin_list (and free) */
+static void free_subplugins(Plugin *proxy)
+{
+	GList *item;
+
+	item = plugin_list;
+	while (item)
+	{
+		GList *next = g_list_next(item);
+		if (proxy == ((Plugin *) item->data)->proxy)
+		{
+			/* plugin_free modifies plugin_list */
+			plugin_free((Plugin *) item->data);
+		}
+		item = next;
+	}
+}
+
+
+/* Returns true if the removal was successful (=> never for non-proxies) */
+static gboolean unregister_proxy(Plugin *proxy)
+{
+	PluginProxy *p;
+	guint i;
+	gboolean is_proxy = FALSE;
+
+	/* Remove the proxy from the proxy list first. It might appear more than once (once
+	 * for each extension), but if it doesn't appear at all it's not actually a proxy */
+	foreach_ptr_array(p, i, active_proxies)
+	{
+		if (p->plugin == proxy)
+		{
+			is_proxy = TRUE;
+			g_ptr_array_remove(active_proxies, p);
+			i -= 1;
+		}
+	}
+	return is_proxy;
+}
+
+
+/* Cleanup a plugin and free all resources allocated on behalf of it.
+ *
+ * If the plugin is a proxy then this also takes special care to unload all
+ * subplugin loaded through it (make sure none of them is active!) */
 static void
 plugin_free(Plugin *plugin)
 {
@@ -858,10 +931,17 @@ plugin_free(Plugin *plugin)
 
 	g_return_if_fail(plugin);
 	g_return_if_fail(plugin->proxy);
+	g_return_if_fail(plugin->proxied_count == 0);
 
 	proxy = plugin->proxy;
+	/* If this a proxy remove all depending subplugins. We can assume none of them is *activated*
+	 * (but potentially loaded). Note that free_subplugins() might call us through recursion */
 	if (is_active_plugin(plugin))
+	{
+		if (unregister_proxy(plugin))
+			free_subplugins(plugin);
 		plugin_cleanup(plugin);
+	}
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 	plugin_list = g_list_remove(plugin_list, plugin);
@@ -873,7 +953,6 @@ plugin_free(Plugin *plugin)
 
 	g_free(plugin->filename);
 	g_free(plugin);
-	plugin = NULL;
 }
 
 
@@ -1048,6 +1127,28 @@ static gchar *get_plugin_path(void)
 }
 
 
+/* See load_all_plugins(), this simply sorts items with lower hierarchy level first
+ * (where hierarchy level == number of intermediate proxies before the builtin so loader) */
+static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	while (TRUE)
+	{
+		if (pa->proxy == pb->proxy)
+			return 0;
+		else if (pa->proxy == &builtin_so_proxy_plugin)
+			return -1;
+		else if (pb->proxy == &builtin_so_proxy_plugin)
+			return 1;
+
+		pa = pa->proxy;
+		pb = pb->proxy;
+	}
+}
+
+
 /* Load (but don't initialize) all plugins for the Plugin Manager dialog */
 static void load_all_plugins(void)
 {
@@ -1071,6 +1172,13 @@ static void load_all_plugins(void)
 
 	/* finally load plugins from $prefix/lib/geany */
 	load_plugins_from_path(plugin_path_system);
+
+	/* It is important to sort any plugins that are proxied after their proxy because
+	 * pm_populate() needs the proxy to be loaded and active (if selected by user) in order
+	 * to properly set the value for the PLUGIN_COLUMN_CAN_UNCHECK column. The order between
+	 * sub-plugins does not matter, only between sub-plugins and their proxy, thus
+	 * sorting by hierarchy level is perfectly sufficient */
+	plugin_list = g_list_sort(plugin_list, cmp_plugin_by_proxy);
 
 	g_free(plugin_path_config);
 	g_free(plugin_path_system);
@@ -1195,6 +1303,15 @@ void plugins_init(void)
 }
 
 
+/* Same as plugin_free(), except it does nothing for proxies-in-use, to be called on
+ * finalize in a loop */
+static void plugin_free_leaf(Plugin *p)
+{
+	if (p->proxied_count == 0)
+		plugin_free(p);
+}
+
+
 /* called even if plugin support is disabled */
 void plugins_finalize(void)
 {
@@ -1203,11 +1320,11 @@ void plugins_finalize(void)
 		g_list_foreach(failed_plugins_list, (GFunc) g_free,	NULL);
 		g_list_free(failed_plugins_list);
 	}
-	if (active_plugin_list != NULL)
-	{
-		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	NULL);
-		g_list_free(active_plugin_list);
-	}
+	/* Have to loop because proxys cannot be unloaded until after all their
+	 * plugins are unloaded as well (the second loop should should catch all the remaining ones) */
+	while (active_plugin_list != NULL)
+		g_list_foreach(active_plugin_list, (GFunc) plugin_free_leaf, NULL);
+
 	g_strfreev(active_plugins_pref);
 }
 
@@ -1236,6 +1353,7 @@ gboolean plugins_have_preferences(void)
 enum
 {
 	PLUGIN_COLUMN_CHECK = 0,
+	PLUGIN_COLUMN_CAN_UNCHECK,
 	PLUGIN_COLUMN_PLUGIN,
 	PLUGIN_N_COLUMNS,
 	PM_BUTTON_KEYBINDINGS,
@@ -1247,7 +1365,7 @@ typedef struct
 {
 	GtkWidget *dialog;
 	GtkWidget *tree;
-	GtkListStore *store;
+	GtkTreeStore *store;
 	GtkWidget *filter_entry;
 	GtkWidget *configure_button;
 	GtkWidget *keybindings_button;
@@ -1319,24 +1437,7 @@ static gboolean find_iter_for_plugin(Plugin *p, GtkTreeModel *model, GtkTreeIter
 }
 
 
-static gboolean select_plugin(gpointer data)
-{
-	GtkTreeIter iter;
-	Plugin *p = data;
-	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
-
-	/* restore selection */
-	if (find_iter_for_plugin(p, model, &iter))
-	{
-		GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(pm_widgets.tree));
-		gtk_tree_selection_select_iter(sel, &iter);
-	}
-
-	return G_SOURCE_REMOVE;
-}
-
-
-static void pm_populate(GtkListStore *store);
+static void pm_populate(GtkTreeStore *store);
 
 
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
@@ -1352,7 +1453,6 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	guint prev_num_proxies;
 
 	gtk_tree_model_get_iter(model, &iter, path);
-	gtk_tree_path_free(path);
 
 	gtk_tree_model_get(model, &iter,
 		PLUGIN_COLUMN_CHECK, &old_state,
@@ -1360,7 +1460,10 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	/* no plugins item */
 	if (p == NULL)
+	{
+		gtk_tree_path_free(path);
 		return;
+	}
 
 	gtk_tree_model_filter_convert_iter_to_child_iter(
 		GTK_TREE_MODEL_FILTER(model), &store_iter, &iter);
@@ -1384,7 +1487,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	if (!p)
 	{
 		/* plugin file may no longer be on disk, or is now incompatible */
-		gtk_list_store_remove(pm_widgets.store, &store_iter);
+		gtk_tree_store_remove(pm_widgets.store, &store_iter);
 	}
 	else
 	{
@@ -1392,40 +1495,66 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 			keybindings_load_keyfile();		/* load shortcuts */
 
 		/* update model */
-		gtk_list_store_set(pm_widgets.store, &store_iter,
+		gtk_tree_store_set(pm_widgets.store, &store_iter,
 			PLUGIN_COLUMN_CHECK, state,
 			PLUGIN_COLUMN_PLUGIN, p, -1);
 
 		/* set again the sensitiveness of the configure and help buttons */
 		pm_update_buttons(p);
+
+		/* Depending on the state disable the checkbox for the proxy of this plugin, and
+		 * only re-enable if the proxy is not used by any other plugin */
+		if (p->proxy != &builtin_so_proxy_plugin)
+		{
+			GtkTreeIter parent;
+			gboolean can_uncheck;
+			GtkTreePath *store_path = gtk_tree_model_filter_convert_path_to_child_path(
+			                                GTK_TREE_MODEL_FILTER(model), path);
+
+			g_warn_if_fail(store_path != NULL);
+			if (gtk_tree_path_up(store_path))
+			{
+				gtk_tree_model_get_iter(GTK_TREE_MODEL(pm_widgets.store), &parent, store_path);
+
+				if (state)
+					can_uncheck = FALSE;
+				else
+					can_uncheck = p->proxy->proxied_count == 0;
+
+				gtk_tree_store_set(pm_widgets.store, &parent,
+					PLUGIN_COLUMN_CAN_UNCHECK, can_uncheck, -1);
+			}
+			gtk_tree_path_free(store_path);
+		}
 	}
 	/* We need to find out if a proxy was added or removed because that affects the plugin list
-	 * presented by the plugin manager. The current solution counts active_proxies twice,
-	 * this suboptimal from an algorithmic POV, however most efficient for the extremely small
-	 * number (at most 3) of pluxies we expect users to load */
+	 * presented by the plugin manager */
 	if (prev_num_proxies != active_proxies->len)
 	{
-		/* Rescan the plugin list as we now support more */
+		/* Rescan the plugin list as we now support more. Gives some "already loaded" warnings
+		 * they are unproblematic */
 		if (prev_num_proxies < active_proxies->len)
 			load_all_plugins();
+
 		pm_populate(pm_widgets.store);
-		/* restore selection. doesn't work if it's done immediately (same row keeps selected) */
-		g_idle_add(select_plugin, p);
+		gtk_tree_view_expand_row(GTK_TREE_VIEW(pm_widgets.tree), path, FALSE);
 	}
+
+	gtk_tree_path_free(path);
 	g_free(file_name);
 }
 
-static void pm_populate(GtkListStore *store)
+static void pm_populate(GtkTreeStore *store)
 {
 	GtkTreeIter iter;
 	GList *list;
 
-	gtk_list_store_clear(store);
+	gtk_tree_store_clear(store);
 	list = g_list_first(plugin_list);
 	if (list == NULL)
 	{
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
+		gtk_tree_store_append(store, &iter, NULL);
+		gtk_tree_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
 				PLUGIN_COLUMN_PLUGIN, NULL, -1);
 	}
 	else
@@ -1433,11 +1562,18 @@ static void pm_populate(GtkListStore *store)
 		for (; list != NULL; list = list->next)
 		{
 			Plugin *p = list->data;
+			GtkTreeIter parent;
 
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter,
+			if (p->proxy != &builtin_so_proxy_plugin
+			        && find_iter_for_plugin(p->proxy, GTK_TREE_MODEL(pm_widgets.store), &parent))
+				gtk_tree_store_append(store, &iter, &parent);
+			else
+				gtk_tree_store_append(store, &iter, NULL);
+
+			gtk_tree_store_set(store, &iter,
 				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
 				PLUGIN_COLUMN_PLUGIN, p,
+				PLUGIN_COLUMN_CAN_UNCHECK, (p->proxied_count == 0),
 				-1);
 		}
 	}
@@ -1450,26 +1586,33 @@ static gboolean pm_treeview_query_tooltip(GtkWidget *widget, gint x, gint y,
 	GtkTreeIter iter;
 	GtkTreePath *path;
 	Plugin *p = NULL;
+	gboolean can_uncheck = TRUE;
 
 	if (! gtk_tree_view_get_tooltip_context(GTK_TREE_VIEW(widget), &x, &y, keyboard_mode,
 			&model, &path, &iter))
 		return FALSE;
 
-	gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
+	gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, PLUGIN_COLUMN_CAN_UNCHECK, &can_uncheck, -1);
 	if (p != NULL)
 	{
-		gchar *markup;
-		gchar *details;
+		gchar *prefix, *suffix, *details, *markup;
+		const gchar *uchk;
 
+		uchk = can_uncheck ?
+		       "" : _("\n<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n");
+		/* Four allocations is less than ideal but meh */
 		details = g_strdup_printf(_("Version:\t%s\nAuthor(s):\t%s\nFilename:\t%s"),
 			p->info.version, p->info.author, p->filename);
-		markup = g_markup_printf_escaped("<b>%s</b>\n%s\n<small><i>\n%s</i></small>",
-			p->info.name, p->info.description, details);
+		prefix = g_markup_printf_escaped("<b>%s</b>\n%s\n", p->info.name, p->info.description);
+		suffix = g_markup_printf_escaped("<small><i>\n%s</i></small>", details);
+		markup = g_strconcat(prefix, uchk, suffix, NULL);
 
 		gtk_tooltip_set_markup(tooltip, markup);
 		gtk_tree_view_set_tooltip_row(GTK_TREE_VIEW(widget), tooltip, path);
 
 		g_free(details);
+		g_free(suffix);
+		g_free(prefix);
 		g_free(markup);
 	}
 	gtk_tree_path_free(path);
@@ -1605,7 +1748,7 @@ static void on_pm_tree_filter_entry_icon_release_cb(GtkEntry *entry, GtkEntryIco
 }
 
 
-static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
+static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *text_renderer, *checkbox_renderer;
 	GtkTreeViewColumn *column;
@@ -1618,7 +1761,8 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 
 	checkbox_renderer = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-		_("Active"), checkbox_renderer, "active", PLUGIN_COLUMN_CHECK, NULL);
+		_("Active"), checkbox_renderer,
+		"active", PLUGIN_COLUMN_CHECK, "activatable", PLUGIN_COLUMN_CAN_UNCHECK, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	g_signal_connect(checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
 
@@ -1760,9 +1904,10 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	/* prepare treeview */
 	pm_widgets.tree = gtk_tree_view_new();
-	pm_widgets.store = gtk_list_store_new(
-		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_POINTER);
+	pm_widgets.store = gtk_tree_store_new(
+		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 	pm_prepare_treeview(pm_widgets.tree, pm_widgets.store);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(pm_widgets.tree));
 	g_object_unref(pm_widgets.store);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
