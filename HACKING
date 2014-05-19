@@ -302,6 +302,78 @@ Example::
     {
         ...
 
+Header Includes
+---------------
+
+In order to make including various headers in Geany more convenient, each
+file should include what it uses. If there is a file named ``foo.c``, and a
+file named ``foo.h``, it should be possible to include ``foo.h`` on its own
+without depending on stuff in ``foo.c`` that is included for the first time
+before ``foo.h``.
+
+Private Headers
+^^^^^^^^^^^^^^^
+
+If there is some data that needs to be shared between various parts of the
+core code, put them in a "private header", that is, if the public header is
+called ``foo.h``, then make a ``fooprivate.h`` header that contains the
+non-public functions, types, globals, etc that are needed. Other core source
+files can then just include the ``foo.h`` and/or ``fooprivate.h`` depending
+what they need, without exposing that stuff to plugins.
+
+Order of Includes
+^^^^^^^^^^^^^^^^^
+
+Inside a source file the includes section should be ordered like this:
+
+1. Always include the ``config.h`` file at the start of every source file,
+   for example::
+
+    #ifdef HAVE_CONFIG_H
+    # include "config.h"
+    #endif
+
+   This allows the Autotools and other build systems use the ``./configure``
+   time settings. If you don't do this, there's likely to be a number of
+   macros that you'll have to define in the build system or custom headers.
+
+   Warning: Never include ``config.h`` in headers, and especially in "public"
+   headers that plugins might include.
+
+2. Then include the header that has the same name as the source file (if
+   applicable). For example, for a source file named ``foo.c``, include
+   the ``foo.h`` below the ``config.h`` include. If there is a
+   ``fooprivate.h``, ``foo.c`` will most likely want to include that too,
+   put it in with includes in #3.
+
+3. At this point, it should be safe to include all the headers that declare
+   whatever is needed. If everything generally "includes what it uses" and
+   all files included contain the appropriate multiple-declaration guards
+   then the order of includes is fairly arbitrary. Prefer to use English
+   alphabetic order if possible.
+
+4. By now it doesn't really matter about the order, nothing below here is
+   "our problem". Semi-arbitrarily, you should use an include order like this:
+
+    1. Standard C headers
+    2. Non-standard system headers (eg. ``windows.h`` or ``unistd.h``)
+    3. GLib/GTK+ or related headers
+
+5. Everything else that should not influence 1-4.
+
+Including in Header Files
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Headers should also include what they use. All of the types should defined in
+order to allow the header to be included stand-alone. For example, if a
+header uses a ``GtkWidget*``, it should ``#include <gtk/gtk.h>``. Or, if a
+headers uses a ``GPtrArray*``, it should ``#include <glib.h>`` to ensure that
+all of the types are declared, whether by pointers/opaquely or fully, as
+required. Since all headers will use a ``G_BEGIN_DECLS`` and ``G_END_DECLS``
+guard for C++, the bare minimum for a header is to include ``glib.h`` or
+``<gtk/gtk.h>`` or ``gtkcompat.h`` or some other header that makes those
+macros available.
+
 
 Committing
 ----------
