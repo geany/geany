@@ -23,16 +23,15 @@
 #ifndef GEANY_TOOLS_H
 #define GEANY_TOOLS_H 1
 
+#include "document.h"
+
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-/* Forward-declared to avoid including document.h here */
-struct GeanyDocument;
-
 void tools_create_insert_custom_command_menu_items(void);
 
-void tools_execute_custom_command(struct GeanyDocument *doc, const gchar *command);
+void tools_execute_custom_command(GeanyDocument *doc, const gchar *command);
 
 void tools_word_count(void);
 

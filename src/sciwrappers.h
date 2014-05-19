@@ -22,9 +22,10 @@
 #ifndef GEANY_SCI_WRAPPERS_H
 #define GEANY_SCI_WRAPPERS_H 1
 
-#include <gtk/gtk.h>
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
 
 G_BEGIN_DECLS
 

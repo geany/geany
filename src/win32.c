@@ -23,9 +23,10 @@
  * Special functions for the win32 platform, to provide native dialogs.
  */
 
-#include "geany.h"
 
 #ifdef G_OS_WIN32
+
+#include "geany.h"
 
 #define VC_EXTRALEAN
 #define WIN32_LEAN_AND_MEAN

@@ -24,7 +24,7 @@
 
 #ifdef G_OS_WIN32
 
-#include <gtk/gtk.h>
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 

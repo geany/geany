@@ -513,7 +513,7 @@ def build(bld):
     ###
     # Headers
     bld.install_files('${PREFIX}/include/geany', '''
-        src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
+        src/app.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
         src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
         src/prefs.h src/project.h src/search.h src/stash.h src/support.h
         src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h

@@ -32,11 +32,11 @@
 #ifndef GEANY_PLUGIN_DATA_H
 #define GEANY_PLUGIN_DATA_H 1
 
-#include <glib.h>
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
 #include "document.h" /* GeanyDocument */
 #include "editor.h"	/* GeanyEditor, GeanyIndentType */
 #include "filetypes.h" /* GeanyFiletype */
+
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
@@ -294,7 +294,6 @@ GeanyFunctions;
 
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
 
 /* See document.h */
 typedef struct DocumentFuncs

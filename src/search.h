@@ -30,10 +30,10 @@
 
 #include <glib.h>
 
+
 G_BEGIN_DECLS
 
-/* Forward-declared to avoid including their headers here */
-struct GeanyDocument;
+struct GeanyDocument; /* document.h includes this header */
 struct _ScintillaObject;
 struct Sci_TextToFind;
 

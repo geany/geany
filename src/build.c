@@ -28,8 +28,28 @@
  * Replace defines with enums.
  * Other TODOs in code. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "app.h"
 #include "build.h"
+#include "dialogs.h"
+#include "document.h"
+#include "filetypesprivate.h"
+#include "geanymenubuttonaction.h"
+#include "geanyobject.h"
+#include "keybindingsprivate.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "projectprivate.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -46,22 +66,6 @@
 # include <windows.h>
 #endif
 
-#include "prefs.h"
-#include "support.h"
-#include "document.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "dialogs.h"
-#include "msgwindow.h"
-#include "filetypesprivate.h"
-#include "keybindings.h"
-#include "vte.h"
-#include "projectprivate.h"
-#include "editor.h"
-#include "win32.h"
-#include "toolbar.h"
-#include "geanymenubuttonaction.h"
-#include "gtkcompat.h"
 
 /* g_spawn_async_with_pipes doesn't work on Windows */
 #ifdef G_OS_WIN32

@@ -29,6 +29,8 @@
 #ifndef GEANY_NAVQUEUE_H
 #define GEANY_NAVQUEUE_H 1
 
+#include "document.h"
+
 #include <glib.h>
 
 G_BEGIN_DECLS

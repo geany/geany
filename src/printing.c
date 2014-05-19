@@ -26,22 +26,26 @@
  * (basic code layout were adopted from Sylpheed's printing implementation, thanks)
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "printing.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "geany.h"
+#include "highlighting.h"
+#include "msgwindow.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "utils.h"
+#include "ui_utils.h"
+
 #include <math.h>
 #include <time.h>
 #include <string.h>
-
-#include "geany.h"
-#include "printing.h"
-#include "document.h"
-#include "sciwrappers.h"
-#include "editor.h"
-#include "utils.h"
-#include "support.h"
-#include "dialogs.h"
-#include "ui_utils.h"
-#include "msgwindow.h"
-#include "highlighting.h"
-#include "Scintilla.h"
 
 
 PrintingPrefs printing_prefs;

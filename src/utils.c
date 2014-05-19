@@ -23,7 +23,20 @@
  * General utility functions, non-GTK related.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "utils.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "templates.h"
+#include "ui_utils.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -41,20 +54,7 @@
 #endif
 
 #include <glib/gstdio.h>
-
 #include <gio/gio.h>
-
-#include "prefs.h"
-#include "support.h"
-#include "document.h"
-#include "filetypes.h"
-#include "dialogs.h"
-#include "win32.h"
-#include "project.h"
-#include "ui_utils.h"
-#include "templates.h"
-
-#include "utils.h"
 
 
 /**

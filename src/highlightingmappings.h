@@ -24,8 +24,11 @@
 #ifndef GEANY_HIGHLIGHTING_MAPPINGS_H
 #define GEANY_HIGHLIGHTING_MAPPINGS_H 1
 
-#include <glib.h>
 #include "Scintilla.h"
+#include "SciLexer.h"
+
+#include <glib.h>
+
 
 G_BEGIN_DECLS
 

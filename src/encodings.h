@@ -36,7 +36,7 @@
 #ifndef GEANY_ENCODINGS_H
 #define GEANY_ENCODINGS_H 1
 
-#include <glib.h>
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 

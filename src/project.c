@@ -23,29 +23,31 @@
  * Project Management.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "project.h"
+
+#include "app.h"
+#include "build.h"
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "keyfile.h"
+#include "main.h"
+#include "projectprivate.h"
+#include "sidebar.h"
+#include "stash.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
 
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
-
-#include "project.h"
-#include "projectprivate.h"
-
-#include "dialogs.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "document.h"
-#include "msgwindow.h"
-#include "main.h"
-#include "keyfile.h"
-#include "win32.h"
-#include "build.h"
-#include "editor.h"
-#include "stash.h"
-#include "sidebar.h"
-#include "filetypesprivate.h"
 
 
 ProjectPrefs project_prefs = { NULL, FALSE, FALSE };

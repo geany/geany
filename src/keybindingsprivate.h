@@ -23,8 +23,9 @@
 #ifndef GEANY_KEYBINDINGS_PRIVATE_H
 #define GEANY_KEYBINDINGS_PRIVATE_H 1
 
-#include <glib.h>
 #include "keybindings.h"
+
+#include <glib.h>
 
 G_BEGIN_DECLS
 

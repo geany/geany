@@ -22,7 +22,10 @@
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
-#include <gtk/gtk.h>
+#include "document.h"
+
+#include "gtkcompat.h"
+
 
 G_BEGIN_DECLS
 

@@ -24,16 +24,19 @@
  * Simple code navigation
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "sciwrappers.h"
-#include "document.h"
-#include "utils.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "editor.h"
 #include "navqueue.h"
+
+#include "document.h"
+#include "geanyobject.h"
+#include "sciwrappers.h"
 #include "toolbar.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
 
 
 /* for the navigation history queue */

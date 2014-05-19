@@ -51,10 +51,24 @@
  *
  */
 
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_SOCKET
+
+#include "socket.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "main.h"
+#include "support.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
 
 #ifndef G_OS_WIN32
 # include <sys/time.h>
@@ -77,16 +91,6 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
-#include "main.h"
-#include "socket.h"
-#include "document.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "encodings.h"
-#include "project.h"
 
 
 #ifdef G_OS_WIN32

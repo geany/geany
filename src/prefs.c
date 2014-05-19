@@ -29,42 +29,39 @@
  * New 'simple' prefs should use Stash code in keyfile.c - init_pref_groups().
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "prefs.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "editor.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanywraplabel.h"
+#include "keybindingsprivate.h"
+#include "keyfile.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "printing.h"
+#include "sidebar.h"
+#include "stash.h"
+#include "support.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
-
-#include "geany.h"
-
-#include "prefs.h"
-#include "support.h"
-#include "dialogs.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "msgwindow.h"
-#include "keyfile.h"
-#include "keybindingsprivate.h"
-#include "encodings.h"
-#include "project.h"
-#include "editor.h"
-#include "main.h"
-#include "sidebar.h"
-#include "printing.h"
-#include "geanywraplabel.h"
-#include "templates.h"
-#include "search.h"
-#include "toolbar.h"
-#include "tools.h"
-#include "stash.h"
-#include "keyfile.h"
-#include "filetypes.h"
-#include "win32.h"
-
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
 
 
 GeanyPrefs prefs;

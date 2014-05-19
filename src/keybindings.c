@@ -27,39 +27,36 @@
  * @see plugin_set_key_group().
  **/
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
+#include "keybindings.h"
+
+#include "app.h"
+#include "build.h"
+#include "callbacks.h"
+#include "documentprivate.h"
+#include "filetypes.h"
+#include "keybindingsprivate.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "notebook.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "support.h"
+#include "symbols.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
-
-#include "keybindingsprivate.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "callbacks.h"
-#include "prefs.h"
-#include "msgwindow.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "build.h"
-#include "tools.h"
-#include "navqueue.h"
-#include "symbols.h"
-#include "vte.h"
-#include "toolbar.h"
-#include "sidebar.h"
-#include "notebook.h"
-#include "geanywraplabel.h"
-#include "main.h"
-#include "search.h"
-#include "gtkcompat.h"
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
 
 
 GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers, in visual order */

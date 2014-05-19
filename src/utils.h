@@ -28,6 +28,7 @@
 #define GEANY_UTILS_H 1
 
 #include <glib.h>
+#include <gdk/gdk.h> /* for GdkColor */
 #include <time.h>
 
 G_BEGIN_DECLS

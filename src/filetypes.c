@@ -27,26 +27,31 @@
 /* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
  * only use GeanyFiletype for API functions. */
 
-#include <string.h>
-#include <glib/gstdio.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
 #include "filetypes.h"
-#include "filetypesprivate.h"
-#include "highlighting.h"
-#include "support.h"
-#include "templates.h"
-#include "document.h"
-#include "editor.h"
-#include "msgwindow.h"
-#include "utils.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "symbols.h"
 
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "document.h"
+#include "filetypesprivate.h"
+#include "geany.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "projectprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
 #include "tm_parser.h"
+#include "utils.h"
+#include "ui_utils.h"
 
 #include <stdlib.h>
+#include <string.h>
+
+#include <glib/gstdio.h>
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 

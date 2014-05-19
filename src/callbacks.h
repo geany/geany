@@ -22,10 +22,11 @@
 #ifndef GEANY_CALLBACKS_H
 #define GEANY_CALLBACKS_H 1
 
-#include <glib.h>
-#include "geany.h" /* necessary for interface.c */
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
+
+extern gboolean	ignore_callback;
 
 G_MODULE_EXPORT gboolean
 on_exit_clicked						(GtkWidget *widget, gpointer gdata);

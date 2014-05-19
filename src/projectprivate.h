@@ -23,8 +23,9 @@
 #ifndef GEANY_PROJECTPRIVATE_H
 #define GEANY_PROJECTPRIVATE_H 1
 
-#include <glib.h>
 #include "project.h"
+
+#include <glib.h>
 
 G_BEGIN_DECLS
 

@@ -16,6 +16,7 @@ bin_PROGRAMS = geany
 
 SRCS = \
 	about.c about.h \
+	app.h \
 	build.c build.h \
 	callbacks.c callbacks.h \
 	dialogs.c dialogs.h \
@@ -61,6 +62,7 @@ geany_includedir = $(includedir)/geany
 
 # only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
+	app.h \
 	build.h \
 	document.h \
 	editor.h \

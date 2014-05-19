@@ -23,13 +23,18 @@
 #ifndef GEANY_EDITOR_H
 #define GEANY_EDITOR_H 1
 
+#include "tm_tag.h" /* for TMTag */
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
 #include <glib.h>
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
+
 
 G_BEGIN_DECLS
 
-/* Forward-declared to avoid including document.h here */
+/* Forward-declared to avoid including document.h since it includes this header */
 struct GeanyDocument;
 
 /** Default character set to define which characters should be treated as part of a word. */

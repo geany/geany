@@ -23,13 +23,19 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
+#include "geany.h" /* for GEANY() macro */
+#include "tm_source_file.h" /* for langType */
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
 #include <glib.h>
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
+
 
 G_BEGIN_DECLS
 
-/* Forward-declared to avoid including document.h here */
+/* Forward-declared to avoid including document.h since it includes this header */
 struct GeanyDocument;
 
 /* Do not change the order, only append. */

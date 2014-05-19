@@ -28,38 +28,41 @@
  * filename_xx=pos;filetype UID;read only;Eencoding;use_tabs;auto_indent;line_wrapping;filename
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "keyfile.h"
+
+#include "app.h"
+#include "build.h"
+#include "document.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanyobject.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "printing.h"
+#include "project.h"
+#include "sciwrappers.h"
+#include "stash.h"
+#include "support.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#include "geany.h"
 
 #ifdef HAVE_VTE
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-
-#include "support.h"
-#include "keyfile.h"
-#include "prefs.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "sciwrappers.h"
-#include "encodings.h"
-#include "vte.h"
-#include "main.h"
-#include "msgwindow.h"
-#include "search.h"
-#include "project.h"
-#include "editor.h"
-#include "printing.h"
-#include "templates.h"
-#include "toolbar.h"
-#include "stash.h"
-#include "build.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill

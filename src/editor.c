@@ -33,40 +33,43 @@
  * Also some general Scintilla-related functions.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "editor.h"
+
+#include "app.h"
+#include "callbacks.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "keybindings.h"
+#include "main.h"
+#include "prefs.h"
+#include "projectprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "SciLexer.h"
+
+#include "gtkcompat.h"
 
 #include <ctype.h>
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 
-#include "SciLexer.h"
-#include "geany.h"
-
-#include "support.h"
-#include "editor.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "filetypesprivate.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "symbols.h"
-#include "callbacks.h"
-#include "templates.h"
-#include "keybindings.h"
-#include "project.h"
-#include "projectprivate.h"
-#include "main.h"
-#include "highlighting.h"
-#include "gtkcompat.h"
-
 
 /* Note: use sciwrappers.h instead where possible.
  * Do not use SSM in files unrelated to scintilla. */
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
-
 
 static GHashTable *snippet_hash = NULL;
 static GQueue *snippet_offsets = NULL;

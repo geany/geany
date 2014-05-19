@@ -22,7 +22,7 @@
 #ifndef GEANY_STASH_H
 #define GEANY_STASH_H 1
 
-#include <gtk/gtk.h>
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 

@@ -24,7 +24,33 @@
  *  Also Scintilla search actions.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "document.h"
+
+#include "app.h"
+#include "callbacks.h" /* for ignore_callback */
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "encodings.h"
+#include "filetypesprivate.h"
+#include "geany.h" /* FIXME: why is this needed for DOC_FILENAME()? should come from documentprivate.h/document.h */
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "notebook.h"
+#include "project.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
 
 #ifdef HAVE_SYS_TIME_H
 # include <sys/time.h>
@@ -48,35 +74,9 @@
 /*#define USE_GIO_FILEMON 1*/
 #include <gio/gio.h>
 
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "support.h"
-#include "sciwrappers.h"
-#include "editor.h"
-#include "dialogs.h"
-#include "msgwindow.h"
-#include "templates.h"
-#include "sidebar.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "encodings.h"
-#include "notebook.h"
-#include "main.h"
-#include "vte.h"
-#include "build.h"
-#include "symbols.h"
-#include "highlighting.h"
-#include "navqueue.h"
-#include "win32.h"
-#include "search.h"
-#include "filetypesprivate.h"
-#include "project.h"
-
-#include "SciLexer.h"
-
 
 GeanyFilePrefs file_prefs;
+
 
 /** Dynamic array of GeanyDocument pointers.
  * Once a pointer is added to this, it is never freed. This means you can keep a pointer

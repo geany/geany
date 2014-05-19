@@ -28,13 +28,14 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include "document.h"
+#include "filetypes.h"
+
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-/* Forward-declared to avoid including their headers here */
-struct GeanyDocument;
-struct GeanyFiletype;
+struct filetype;
 
 #define GEANY_TEMPLATES_INDENT 3
 #define GEANY_TEMPLATES_FORMAT_YEAR              C_("DefaultYear", "%Y")
@@ -69,20 +70,18 @@ GeanyTemplatePrefs;
 extern GeanyTemplatePrefs template_prefs;
 
 
-struct filetype;
-
 void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
-gchar *templates_get_template_changelog(struct GeanyDocument *doc);
+gchar *templates_get_template_changelog(GeanyDocument *doc);
 
-gchar *templates_get_template_function(struct GeanyDocument *doc, const gchar *func_name);
+gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_name);
 
-gchar *templates_get_template_licence(struct GeanyDocument *doc, gint licence_type);
+gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type);
 
 void templates_replace_common(GString *tmpl, const gchar *fname,
-	struct GeanyFiletype *ft, const gchar *func_name);
+	GeanyFiletype *ft, const gchar *func_name);
 
 void templates_replace_valist(GString *text,
 	const gchar *first_wildcard, ...) G_GNUC_NULL_TERMINATED;
