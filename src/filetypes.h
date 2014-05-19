@@ -23,6 +23,7 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
+#include <glib.h>
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
@@ -206,4 +207,4 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_FILETYPES_H */

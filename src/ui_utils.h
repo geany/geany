@@ -352,4 +352,4 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_UI_UTILS_H */

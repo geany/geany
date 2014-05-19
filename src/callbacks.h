@@ -19,9 +19,13 @@
  *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef GEANY_CALLBACKS_H
+#define GEANY_CALLBACKS_H 1
 
+#include <glib.h>
 #include "geany.h" /* necessary for interface.c */
 
+G_BEGIN_DECLS
 
 G_MODULE_EXPORT gboolean
 on_exit_clicked						(GtkWidget *widget, gpointer gdata);
@@ -678,3 +682,7 @@ on_detect_type_from_file_activate	  (GtkMenuItem	 *menuitem,
 G_MODULE_EXPORT void
 on_detect_width_from_file_activate	 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
+
+G_END_DECLS
+
+#endif /* GEANY_CALLBACKS_H */

@@ -23,6 +23,8 @@
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 #define GEANY_PROJECT_EXT				"geany"
@@ -92,4 +94,4 @@ void project_apply_prefs(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_PROJECT_H */

@@ -25,6 +25,9 @@
  * @see GLib's @c gi18n-lib.h.
  **/
 
+#ifndef GEANY_SUPPORT_H
+#define GEANY_SUPPORT_H 1
+
 #include <glib.h>
 
 G_BEGIN_DECLS
@@ -42,3 +45,5 @@ G_BEGIN_DECLS
 #endif
 
 G_END_DECLS
+
+#endif /* GEANY_SUPPORT_H */

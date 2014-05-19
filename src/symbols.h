@@ -23,6 +23,10 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -66,4 +70,6 @@ gint symbols_get_current_function(struct GeanyDocument *doc, const gchar **tagna
 
 gint symbols_get_current_scope(struct GeanyDocument *doc, const gchar **tagname);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_SYMBOLS_H */

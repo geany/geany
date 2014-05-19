@@ -34,7 +34,9 @@
  /* Stolen from anjuta */
 
 #ifndef GEANY_ENCODINGS_H
-#define GEANY_ENCODINGS_H
+#define GEANY_ENCODINGS_H 1
+
+#include <glib.h>
 
 G_BEGIN_DECLS
 
@@ -199,4 +201,4 @@ GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_ENCODINGS_H */

@@ -28,6 +28,8 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 /* Forward-declared to avoid including their headers here */
@@ -89,4 +91,4 @@ void templates_free_templates(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_TEMPLATES_H */

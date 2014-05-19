@@ -20,7 +20,9 @@
  */
 
 #ifndef GEANY_WRAP_LABEL_H
-#define GEANY_WRAP_LABEL_H
+#define GEANY_WRAP_LABEL_H 1
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

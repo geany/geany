@@ -20,7 +20,9 @@
  */
 
 #ifndef GEANY_STASH_H
-#define GEANY_STASH_H
+#define GEANY_STASH_H 1
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -101,4 +103,4 @@ void stash_tree_update(GtkTreeView *tree);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_STASH_H */

@@ -23,7 +23,7 @@
  * externs and function prototypes are implemented in main.c. */
 
 #ifndef GEANY_H
-#define GEANY_H
+#define GEANY_H 1
 
 #include <gtk/gtk.h>
 
@@ -93,4 +93,4 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_H */

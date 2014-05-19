@@ -24,6 +24,10 @@
 #ifndef GEANY_SIDEBAR_H
 #define GEANY_SIDEBAR_H 1
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -68,4 +72,6 @@ void sidebar_focus_openfiles_tab(void);
 
 void sidebar_focus_symbols_tab(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_SIDEBAR_H */

@@ -22,6 +22,8 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+#include <gtk/gtk.h>
+
 G_BEGIN_DECLS
 
 /** Function pointer type used for keybinding callbacks. */
@@ -276,4 +278,4 @@ void keybindings_dialog_show_prefs_scroll(const gchar *name);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_KEYBINDINGS_H */

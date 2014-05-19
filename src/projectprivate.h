@@ -23,7 +23,10 @@
 #ifndef GEANY_PROJECTPRIVATE_H
 #define GEANY_PROJECTPRIVATE_H 1
 
+#include <glib.h>
 #include "project.h"
+
+G_BEGIN_DECLS
 
 typedef struct GeanyProjectPrivate
 {
@@ -38,5 +41,6 @@ typedef struct GeanyProjectPrivate
 }
 GeanyProjectPrivate;
 
+G_END_DECLS
 
-#endif
+#endif /* GEANY_PROJECT_H */

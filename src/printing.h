@@ -23,6 +23,10 @@
 #ifndef GEANY_PRINTING_H
 #define GEANY_PRINTING_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -45,4 +49,6 @@ void printing_page_setup_gtk(void);
 
 void printing_print_doc(struct GeanyDocument *doc);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_PRINTING_H */

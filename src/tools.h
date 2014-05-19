@@ -23,6 +23,10 @@
 #ifndef GEANY_TOOLS_H
 #define GEANY_TOOLS_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -34,4 +38,6 @@ void tools_word_count(void);
 
 void tools_color_chooser(const gchar *color);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_TOOLS_H */

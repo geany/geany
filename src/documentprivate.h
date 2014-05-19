@@ -21,8 +21,11 @@
 
 
 #ifndef GEANY_DOCUMENT_PRIVATE_H
-#define GEANY_DOCUMENT_PRIVATE_H
+#define GEANY_DOCUMENT_PRIVATE_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 /* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
  * undo management */
@@ -86,4 +89,6 @@ typedef struct GeanyDocumentPrivate
 }
 GeanyDocumentPrivate;
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_DOCUMENT_PRIVATE_H */

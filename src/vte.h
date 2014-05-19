@@ -25,6 +25,9 @@
 
 #ifdef HAVE_VTE
 
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
 
 typedef struct
 {
@@ -81,6 +84,8 @@ void vte_send_selection_to_vte(void);
 
 void vte_select_all(void);
 
-#endif
+G_END_DECLS
 
-#endif
+#endif /* HAVE_VTE */
+
+#endif /* GEANY_VTE_H */

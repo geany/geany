@@ -24,6 +24,8 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 /* Forward-declared to avoid including their headers here */
@@ -210,4 +212,4 @@ gchar **build_get_regex(GeanyBuildGroup grp, struct GeanyFiletype *ft, guint *fr
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_BUILD_H */

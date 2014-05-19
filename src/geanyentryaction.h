@@ -21,7 +21,9 @@
 
 
 #ifndef GEANY_ENTRY_ACTION_H
-#define GEANY_ENTRY_ACTION_H
+#define GEANY_ENTRY_ACTION_H 1
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

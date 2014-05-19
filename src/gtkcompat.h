@@ -21,7 +21,7 @@
 /* Compatibility macros to support older GTK+ versions */
 
 #ifndef GTK_COMPAT_H
-#define GTK_COMPAT_H
+#define GTK_COMPAT_H 1
 
 #include <gtk/gtk.h>
 #if GTK_CHECK_VERSION(3, 0, 0)

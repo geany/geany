@@ -19,12 +19,14 @@
  *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef GEANY_SCIWRAPPERS_H
-#define GEANY_SCIWRAPPERS_H 1
+#ifndef GEANY_SCI_WRAPPERS_H
+#define GEANY_SCI_WRAPPERS_H 1
 
+#include <gtk/gtk.h>
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
 
+G_BEGIN_DECLS
 
 gchar*				sci_get_string				(ScintillaObject *sci, guint msg, gulong wParam);
 
@@ -189,4 +191,6 @@ gint				sci_text_width				(ScintillaObject *sci, gint styleNumber, const gchar *
 void				sci_move_selected_lines_down    (ScintillaObject *sci);
 void				sci_move_selected_lines_up      (ScintillaObject *sci);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_SCI_WRAPPERS_H */

@@ -22,6 +22,10 @@
 #ifndef GEANY_NOTEBOOK_H
 #define GEANY_NOTEBOOK_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -43,4 +47,6 @@ void notebook_switch_tablastused(void);
  * document yet). */
 gboolean notebook_switch_in_progress(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_NOTEBOOK_H */

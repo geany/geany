@@ -21,10 +21,13 @@
 
 
 #ifndef GEANY_FILETYPES_PRIVATE_H
-#define GEANY_FILETYPES_PRIVATE_H
+#define GEANY_FILETYPES_PRIVATE_H 1
 
+#include <glib.h>
 #include "filetypes.h"
 #include "build.h"
+
+G_BEGIN_DECLS
 
 /* Private GeanyFiletype fields */
 typedef struct GeanyFiletypePrivate
@@ -53,4 +56,6 @@ typedef struct GeanyFiletypePrivate
 }
 GeanyFiletypePrivate;
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_FILETYPES_PRIVATE_H */

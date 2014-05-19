@@ -23,10 +23,11 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
-G_BEGIN_DECLS
-
+#include <glib.h>
 #include "Scintilla.h"
 #include "ScintillaWidget.h"
+
+G_BEGIN_DECLS
 
 /* Forward-declared to avoid including filetypes.h here */
 struct GeanyFiletype;
@@ -59,4 +60,4 @@ void highlighting_show_color_scheme_dialog(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_HIGHLIGHTING_H */

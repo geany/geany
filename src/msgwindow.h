@@ -22,6 +22,8 @@
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
+#include <gtk/gtk.h>
+
 G_BEGIN_DECLS
 
 /**
@@ -104,4 +106,4 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_MSGWINDOW_H */

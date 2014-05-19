@@ -20,13 +20,15 @@
  */
 
 
-#ifndef GEANY_PLUGINPRIVATE_H
-#define GEANY_PLUGINPRIVATE_H
+#ifndef GEANY_PLUGIN_PRIVATE_H
+#define GEANY_PLUGIN_PRIVATE_H 1
 
+#include <gtk/gtk.h>
 #include "plugindata.h"
 #include "ui_utils.h"	/* GeanyAutoSeparator */
 #include "keybindings.h"	/* GeanyKeyGroup */
 
+G_BEGIN_DECLS
 
 typedef struct SignalConnection
 {
@@ -63,5 +65,6 @@ typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 
 void plugin_watch_object(Plugin *plugin, gpointer object);
 
+G_END_DECLS
 
-#endif /* GEANY_PLUGINPRIVATE_H */
+#endif /* GEANY_PLUGIN_PRIVATE_H */

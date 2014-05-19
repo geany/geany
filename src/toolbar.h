@@ -20,7 +20,9 @@
  */
 
 #ifndef GEANY_TOOLBAR_H
-#define GEANY_TOOLBAR_H
+#define GEANY_TOOLBAR_H 1
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
@@ -63,4 +65,4 @@ void toolbar_configure(GtkWindow *parent);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_TOOLBAR_H */

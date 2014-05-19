@@ -29,6 +29,8 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 #include "Scintilla.h"
@@ -301,4 +303,4 @@ GeanyDocument *document_clone(GeanyDocument *old_doc);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_DOCUMENT_H */

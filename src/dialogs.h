@@ -28,6 +28,10 @@
 #ifndef GEANY_DIALOGS_H
 #define GEANY_DIALOGS_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 /* Forward-declared to avoid including document.h here */
 struct GeanyDocument;
 
@@ -75,4 +79,6 @@ void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...) G_GNUC_PRI
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_DIALOGS_H */

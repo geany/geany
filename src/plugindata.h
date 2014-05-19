@@ -29,8 +29,15 @@
  * when making changes (see 'Keeping the plugin ABI stable' in the HACKING file). */
 
 
-#ifndef GEANY_PLUGINDATA_H
-#define GEANY_PLUGINDATA_H
+#ifndef GEANY_PLUGIN_DATA_H
+#define GEANY_PLUGIN_DATA_H 1
+
+#include <glib.h>
+#include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
+#include "document.h" /* GeanyDocument */
+#include "editor.h"	/* GeanyEditor, GeanyIndentType */
+#include "filetypes.h" /* GeanyFiletype */
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 
@@ -38,12 +45,6 @@ G_BEGIN_DECLS
  * First include geany.h, then plugindata.h, then other API headers. */
 #undef GEANY
 #define GEANY(symbol_name) geany->symbol_name
-
-#include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
-#include "document.h" /* GeanyDocument */
-#include "editor.h"	/* GeanyEditor, GeanyIndentType */
-#include "filetypes.h" /* GeanyFiletype */
-#include "gtkcompat.h"
 
 
 /** The Application Programming Interface (API) version, incremented
@@ -754,4 +755,4 @@ BuildFuncs;
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_PLUGIN_DATA_H */

@@ -21,11 +21,13 @@
  */
 
 
-#ifndef GEANY_HIGHLIGHTINGMAPPINGS_H
-#define GEANY_HIGHLIGHTINGMAPPINGS_H 1
+#ifndef GEANY_HIGHLIGHTING_MAPPINGS_H
+#define GEANY_HIGHLIGHTING_MAPPINGS_H 1
 
+#include <glib.h>
 #include "Scintilla.h"
 
+G_BEGIN_DECLS
 
 /* contains all filtypes informations in the form of:
  *  - highlighting_lexer_LANG:		the SCI lexer
@@ -1560,5 +1562,6 @@ static const HLKeyword highlighting_keywords_YAML[] =
 };
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
+G_END_DECLS
 
-#endif /* guard */
+#endif /* GEANY_HIGHLIGHTING_MAPPINGS_H */
