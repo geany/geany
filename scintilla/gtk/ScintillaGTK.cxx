@@ -759,9 +759,16 @@ void ScintillaGTK::Initialise() {
 #else
 	g_signal_connect(G_OBJECT(widtxt), "expose_event",
 			   G_CALLBACK(ScintillaGTK::ExposeText), this);
-	// Avoid background drawing flash
-	gtk_widget_set_double_buffered(widtxt, FALSE);
 #endif
+#if GTK_CHECK_VERSION(3,0,0)
+	// we need a runtime check because we don't want double buffering when
+	// running on >= 3.9.2
+	if (gtk_check_version(3,9,2) != NULL /* on < 3.9.2 */)
+#endif
+	{
+		// Avoid background drawing flash/missing redraws
+		gtk_widget_set_double_buffered(widtxt, FALSE);
+	}
 	gtk_widget_set_events(widtxt, GDK_EXPOSURE_MASK);
 	gtk_widget_set_size_request(widtxt, 100, 100);
 	adjustmentv = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, 0.0, 201.0, 1.0, 20.0, 20.0));
@@ -2444,9 +2451,12 @@ gboolean ScintillaGTK::DrawThis(cairo_t *cr) {
 // Starting from the following version, the expose event are not propagated
 // for double buffered non native windows, so we need to call it ourselves
 // or keep the default handler
-#if GTK_CHECK_VERSION(3,9,2)
-		gtk_container_propagate_draw(
-		    GTK_CONTAINER(PWidget(wMain)), PWidget(wText), cr);
+#if GTK_CHECK_VERSION(3,0,0)
+		// we want to forward on any >= 3.9.2 runtime
+		if (gtk_check_version(3,9,2) == NULL) {
+			gtk_container_propagate_draw(
+					GTK_CONTAINER(PWidget(wMain)), PWidget(wText), cr);
+		}
 #endif
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
