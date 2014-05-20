@@ -288,7 +288,7 @@ msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Bepaald of de standaard Windows of de GTK default dialogen gebruikt worden"
+"Bepaalt of de standaard Windows of de GTK default dialogen gebruikt worden"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
