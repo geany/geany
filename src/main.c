@@ -489,8 +489,8 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	l_locale_dir = g_strdup(locale_dir);
 #endif
 
-	bindtextdomain(package, l_locale_dir);
-	bind_textdomain_codeset(package, "UTF-8");
+	(void) bindtextdomain(package, l_locale_dir);
+	(void) bind_textdomain_codeset(package, "UTF-8");
 	g_free(l_locale_dir);
 }
 
