@@ -1238,6 +1238,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		doc->readonly = readonly || filedata.readonly;
 		sci_set_readonly(doc->editor->sci, doc->readonly);
+		doc->priv->protected = 0;
 
 		/* update line number margin width */
 		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
@@ -1491,6 +1492,22 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 }
 
 
+static void protect_document(GeanyDocument *doc)
+{
+	/* do not call queue_colourise because to we want to keep the text-changed indication! */
+	if (!doc->priv->protected++)
+		sci_set_readonly(doc->editor->sci, TRUE);
+}
+
+static void unprotect_document(GeanyDocument *doc)
+{
+	g_return_if_fail(doc->priv->protected > 0);
+
+	if (!--doc->priv->protected && doc->readonly == FALSE)
+		sci_set_readonly(doc->editor->sci, FALSE);
+}
+
+
 /* Return TRUE if the document doesn't have a full filename set.
  * This makes filenames without a path show the save as dialog, e.g. for file templates.
  * Otherwise just use the set filename instead of asking the user - e.g. for command-line
@@ -1517,9 +1534,11 @@ gboolean document_need_save_as(GeanyDocument *doc)
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
+	gboolean new_file;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	new_file = document_need_save_as(doc) || (utf8_fname != NULL && !strcmp(doc->file_name, utf8_fname));
 	if (utf8_fname != NULL)
 		SETPTR(doc->file_name, g_strdup(utf8_fname));
 
@@ -1539,6 +1558,15 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 			ignore_callback = FALSE;
 		}
 	}
+
+	if (new_file)
+	{
+		sci_set_readonly(doc->editor->sci, FALSE);
+		doc->readonly = FALSE;
+		if (doc->priv->protected > 0)
+			unprotect_document(doc);
+	}
+
 	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
@@ -1729,7 +1757,6 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 	return NULL;
 }
 
-
 /**
  *  Saves the document.
  *  Also shows the Save As dialog if necessary.
@@ -1773,7 +1800,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && (! doc->changed || doc->readonly))
+	if (doc->readonly || doc->priv->protected)
+		return FALSE;
+	if (!force && !doc->changed)
 		return FALSE;
 
 	fp = project_get_file_prefs();
@@ -2928,6 +2957,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
+	doc->priv->protected = 0;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->sci, doc->readonly);
@@ -3114,6 +3144,8 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
+	unprotect_document(doc);
+
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		document_reload_file(doc, doc->encoding);
 }
@@ -3131,7 +3163,7 @@ static void monitor_reload_file(GeanyDocument *doc)
 		_("The file '%s' on the disk is more recent than the current buffer."),
 		base_name);
 
-	document_set_text_changed(doc, TRUE);
+	protect_document(doc);
 
 	g_free(base_name);
 }
@@ -3142,6 +3174,8 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
                                                     GeanyDocument *doc)
 {
 	gboolean file_saved = FALSE;
+
+	unprotect_document(doc);
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		file_saved = dialogs_show_save_as();
@@ -3164,6 +3198,8 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 		_("Try to resave the file?"),
 		_("File \"%s\" was not found on disk!"),
 		doc->file_name);
+
+	protect_document(doc);
 }
 
 

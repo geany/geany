@@ -86,6 +86,9 @@ typedef struct GeanyDocumentPrivate
 	time_t			 mtime;
 	/* ID of the idle callback updating the tag list */
 	guint			 tag_list_update_source;
+	/* Whether it's temoporarily protected (read-only and saving is prevented). Does
+	 * not imply doc->readonly as writable files can be protected */
+	gint			 protected;
 }
 GeanyDocumentPrivate;
 
