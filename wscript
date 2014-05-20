@@ -135,7 +135,7 @@ geany_sources = set([
     'src/highlighting.c', 'src/keybindings.c',
     'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
-    'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
+    'src/sciwrappers.c', 'src/search.c', 'src/spawn.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
