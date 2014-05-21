@@ -23,6 +23,12 @@
 #ifndef GEANY_SYMBOLS_H
 #define GEANY_SYMBOLS_H 1
 
+#include "document.h"
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 extern const guint TM_GLOBAL_TYPE_MASK;
 
 enum
@@ -63,4 +69,6 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_SYMBOLS_H */

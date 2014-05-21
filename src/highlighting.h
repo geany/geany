@@ -23,11 +23,16 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+#include "filetypes.h"
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
+
+#include <glib.h>
+
 G_BEGIN_DECLS
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-
 
 /** Fields representing the different attributes of a Scintilla lexer style.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
@@ -57,4 +62,4 @@ void highlighting_show_color_scheme_dialog(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_HIGHLIGHTING_H */

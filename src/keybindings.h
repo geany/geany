@@ -22,6 +22,8 @@
 #ifndef GEANY_KEYBINDINGS_H
 #define GEANY_KEYBINDINGS_H 1
 
+#include "gtkcompat.h"
+
 G_BEGIN_DECLS
 
 /** Function pointer type used for keybinding callbacks. */
@@ -56,20 +58,6 @@ typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
 
 /** A collection of keybindings grouped together. */
 typedef struct GeanyKeyGroup GeanyKeyGroup;
-
-/* Plugins should not set these fields. */
-#ifdef GEANY_PRIVATE
-struct GeanyKeyGroup
-{
-	const gchar *name;		/* Group name used in the configuration file, such as @c "html_chars" */
-	const gchar *label;		/* Group label used in the preferences dialog keybindings tab */
-	GeanyKeyGroupCallback callback;	/* use this or individual keybinding callbacks */
-	gboolean plugin;		/* used by plugin */
-	GPtrArray *key_items;	/* pointers to GeanyKeyBinding structs */
-	gsize plugin_key_count;			/* number of keybindings the group holds */
-	GeanyKeyBinding *plugin_keys;	/* array of GeanyKeyBinding structs */
-};
-#endif
 
 
 extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
@@ -290,4 +278,4 @@ void keybindings_dialog_show_prefs_scroll(const gchar *name);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_KEYBINDINGS_H */

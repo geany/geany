@@ -21,44 +21,41 @@
 
 /* Code to manage, load and unload plugins. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_PLUGINS
 
-#include <string.h>
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-
-#include "prefix.h"
 #include "plugins.h"
-#include "plugindata.h"
-#include "support.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "templates.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "editor.h"
+
+#include "app.h"
 #include "dialogs.h"
-#include "msgwindow.h"
-#include "prefs.h"
-#include "geanywraplabel.h"
-/* #include "build.h" included in plugindata.h so it can use enums */
 #include "encodings.h"
-#include "search.h"
+#include "geanyobject.h"
+#include "geanywraplabel.h"
 #include "highlighting.h"
-#include "keybindings.h"
-#include "navqueue.h"
-#include "main.h"
-#include "toolbar.h"
-#include "stash.h"
-#include "symbols.h"
+#include "keybindingsprivate.h"
 #include "keyfile.h"
-#include "win32.h"
-#include "pluginutils.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "plugindata.h"
 #include "pluginprivate.h"
+#include "pluginutils.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
+#include <string.h>
 
 
 GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */

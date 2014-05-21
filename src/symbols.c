@@ -32,30 +32,35 @@
  * matching filetype is first loaded.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "symbols.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "documentprivate.h"
+#include "editor.h"
+#include "encodings.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "main.h"
+#include "navqueue.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "support.h"
+#include "tm_tag.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include "SciLexer.h"
-#include "geany.h"
+
+#include "gtkcompat.h"
 
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "prefix.h"
-#include "symbols.h"
-#include "utils.h"
-#include "filetypes.h"
-#include "encodings.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "support.h"
-#include "msgwindow.h"
-#include "sidebar.h"
-#include "main.h"
-#include "navqueue.h"
-#include "ui_utils.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "filetypesprivate.h"
-#include "search.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =

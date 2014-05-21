@@ -28,7 +28,14 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include "document.h"
+#include "filetypes.h"
+
+#include <glib.h>
+
 G_BEGIN_DECLS
+
+struct filetype;
 
 #define GEANY_TEMPLATES_INDENT 3
 #define GEANY_TEMPLATES_FORMAT_YEAR              C_("DefaultYear", "%Y")
@@ -63,8 +70,6 @@ GeanyTemplatePrefs;
 extern GeanyTemplatePrefs template_prefs;
 
 
-struct filetype;
-
 void templates_init(void);
 
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
@@ -85,4 +90,4 @@ void templates_free_templates(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_TEMPLATES_H */

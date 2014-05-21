@@ -23,24 +23,18 @@
  * externs and function prototypes are implemented in main.c. */
 
 #ifndef GEANY_H
-#define GEANY_H
+#define GEANY_H 1
 
-#include <gtk/gtk.h>
+/* This is included here for compatibility with when GeanyApp used to be
+ * defined in this header. Some plugins (ex. GeanyLua) include individual
+ * headers instead of geanyplugin.h for some reason so they wouldn't
+ * get the GeanyApp definition if this isn't here. */
+#include "app.h"
+
+#include <glib.h>
+
 
 G_BEGIN_DECLS
-
-#if defined(HAVE_CONFIG_H) && defined(GEANY_PRIVATE)
-#	include "config.h"
-#endif
-
-#include "tm_tagmanager.h"
-
-#ifndef PLAT_GTK
-#   define PLAT_GTK 1	/* needed when including ScintillaWidget.h */
-#endif
-
-/* Compatibility for sharing macros between API and core, overridden in plugindata.h */
-#define GEANY(symbol_name) symbol_name
 
 
 /* for detailed description look in the documentation, things are not
@@ -58,38 +52,6 @@ G_BEGIN_DECLS
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 
 
-
-/* Common forward declarations */
-typedef struct GeanyDocument GeanyDocument;
-typedef struct GeanyEditor GeanyEditor;
-typedef struct GeanyFiletype GeanyFiletype;
-
-
-/** Important application fields. */
-typedef struct GeanyApp
-{
-	gboolean			debug_mode;		/**< @c TRUE if debug messages should be printed. */
-	/** User configuration directory, usually @c ~/.config/geany.
-	 * This is a full path read by @ref tm_get_real_path().
-	 * @note Plugin configuration files should be saved as:
-	 * @code g_build_path(G_DIR_SEPARATOR_S, geany->app->configdir, "plugins", "pluginname",
-	 * 	"file.conf", NULL); @endcode */
-	gchar				*configdir;
-	gchar				*datadir;
-	gchar				*docdir;
-	const TMWorkspace	*tm_workspace;	/**< TagManager workspace/session tags. */
-	struct GeanyProject	*project;		/**< Currently active project or @c NULL if none is open. */
-}
-GeanyApp;
-
-extern GeanyApp *app;
-
-extern GObject *geany_object;
-
-
-extern gboolean	ignore_callback;
-
-
 /* prototype is here so that all files can use it. */
 void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 
@@ -98,6 +60,11 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 #define G_GNUC_WARN_UNUSED_RESULT
 #endif
 
+/* Re-defined by plugindata.h as something else */
+#ifndef GEANY
+# define GEANY(symbol_name) symbol_name
+#endif
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_H */

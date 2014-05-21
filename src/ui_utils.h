@@ -22,11 +22,12 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "document.h"
+
 #include <stdarg.h>
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
-
 
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
@@ -350,4 +351,4 @@ gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_UI_UTILS_H */

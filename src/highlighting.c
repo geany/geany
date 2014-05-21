@@ -25,30 +25,31 @@
  * Syntax highlighting for the different filetypes, using the Scintilla lexers.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+ 
+#include "highlighting.h"
+#include "highlightingmappings.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypesprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "SciLexer.h"
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <glib.h>
 #include <glib/gprintf.h>
-
-#include "SciLexer.h"
-#include "highlighting.h"
-#include "editor.h"
-#include "utils.h"
-#include "filetypes.h"
-#include "symbols.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "main.h"
-#include "support.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "dialogs.h"
-#include "filetypesprivate.h"
-
-#include "highlightingmappings.h"
 
 
 #define GEANY_COLORSCHEMES_SUBDIR "colorschemes"
