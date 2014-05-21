@@ -205,7 +205,7 @@ static void socket_get_document_list(gint sock)
 
 	do
 	{
-		n_read = socket_fd_read(sock, buf, sizeof(buf));
+		n_read = socket_fd_read(sock, buf, BUFFER_LENGTH);
 		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
 		 * byte not to output it and to be sure not to validate the loop condition */
 		if (n_read > 0 && buf[n_read - 1] == '\3')
@@ -213,7 +213,7 @@ static void socket_get_document_list(gint sock)
 		if (n_read > 0)
 			fwrite(buf, 1, n_read, stdout);
 	}
-	while (n_read >= sizeof(buf));
+	while (n_read >= BUFFER_LENGTH);
 }
 
 
