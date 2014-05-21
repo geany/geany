@@ -3148,6 +3148,8 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		document_reload_file(doc, doc->encoding);
+
+	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 }
 
 
@@ -3155,16 +3157,22 @@ static void monitor_reload_file(GeanyDocument *doc)
 {
 	gchar *base_name = g_path_get_basename(doc->file_name);
 
-	document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-		_("_Reload"), GTK_RESPONSE_ACCEPT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		NULL, GTK_RESPONSE_NONE,
-		_("Do you want to reload it?"),
-		_("The file '%s' on the disk is more recent than the current buffer."),
-		base_name);
+	/* show this message only once */
+	if (doc->priv->info_bars[MSG_TYPE_RELOAD] == NULL)
+	{
+		GtkWidget *bar;
 
-	protect_document(doc);
+		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
+				_("_Reload"), GTK_RESPONSE_ACCEPT,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				NULL, GTK_RESPONSE_NONE,
+				_("Do you want to reload it?"),
+				_("The file '%s' on the disk is more recent than the current buffer."),
+				base_name);
 
+		protect_document(doc);
+		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+	}
 	g_free(base_name);
 }
 
@@ -3186,20 +3194,31 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 		/* don't prompt more than once */
 		SETPTR(doc->real_path, NULL);
 	}
+
+	doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
 }
 
 
 static void monitor_resave_missing_file(GeanyDocument *doc)
 {
-	document_show_message(doc, GTK_MESSAGE_WARNING, on_monitor_resave_missing_file_response,
-		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		NULL, GTK_RESPONSE_NONE,
-		_("Try to resave the file?"),
-		_("File \"%s\" was not found on disk!"),
-		doc->file_name);
+	GtkWidget *bar;
 
-	protect_document(doc);
+	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
+	{
+		GtkWidget *bar;
+
+		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
+				on_monitor_resave_missing_file_response,
+				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				NULL, GTK_RESPONSE_NONE,
+				_("Try to resave the file?"),
+				_("File \"%s\" was not found on disk!"),
+				doc->file_name);
+
+		protect_document(doc);
+		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
+	}
 }
 
 
@@ -3253,6 +3272,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{
+		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
 		doc->priv->mtime = st.st_mtime;
 		monitor_reload_file(doc);
 		/* doc may be closed now */

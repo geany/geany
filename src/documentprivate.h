@@ -53,6 +53,13 @@ typedef struct FileEncoding
 }
 FileEncoding;
 
+enum
+{
+	MSG_TYPE_RELOAD,
+	MSG_TYPE_RESAVE,
+
+	NUM_MSG_TYPES
+};
 
 /* Private GeanyDocument fields */
 typedef struct GeanyDocumentPrivate
@@ -89,6 +96,8 @@ typedef struct GeanyDocumentPrivate
 	/* Whether it's temoporarily protected (read-only and saving is prevented). Does
 	 * not imply doc->readonly as writable files can be protected */
 	gint			 protected;
+	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
+	GtkWidget		*info_bars[NUM_MSG_TYPES];
 }
 GeanyDocumentPrivate;
 
