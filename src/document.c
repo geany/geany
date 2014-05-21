@@ -3126,37 +3126,33 @@ static void monitor_reload_file(GeanyDocument *doc)
 }
 
 
-static gboolean monitor_resave_missing_file(GeanyDocument *doc)
+static void on_monitor_resave_missing_file_response(GtkWidget *bar,
+                                                    gint response_id,
+                                                    GeanyDocument *doc)
 {
-	gboolean want_reload = FALSE;
 	gboolean file_saved = FALSE;
-	gint ret;
 
-	ret = dialogs_show_prompt(NULL,
-		_("Close _without saving"), GTK_RESPONSE_CLOSE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-		_("Try to resave the file?"),
-		_("File \"%s\" was not found on disk!"),
-		doc->file_name);
-	if (ret == GTK_RESPONSE_ACCEPT)
-	{
+	if (response_id == GTK_RESPONSE_ACCEPT)
 		file_saved = dialogs_show_save_as();
-		want_reload = TRUE;
-	}
-	else if (ret == GTK_RESPONSE_CLOSE)
+
+	if (!file_saved)
 	{
-		document_close(doc);
-	}
-	if (ret != GTK_RESPONSE_CLOSE && ! file_saved)
-	{
-		/* file is missing - set unsaved state */
 		document_set_text_changed(doc, TRUE);
 		/* don't prompt more than once */
 		SETPTR(doc->real_path, NULL);
 	}
+}
 
-	return want_reload;
+
+static void monitor_resave_missing_file(GeanyDocument *doc)
+{
+	document_show_message(doc, GTK_MESSAGE_WARNING, on_monitor_resave_missing_file_response,
+		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		NULL, GTK_RESPONSE_NONE,
+		_("Try to resave the file?"),
+		_("File \"%s\" was not found on disk!"),
+		doc->file_name);
 }
 
 
