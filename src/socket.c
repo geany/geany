@@ -275,10 +275,13 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
-	gchar *display_name = gdk_get_display();
+	gchar *display_name = NULL;
 	const gchar *hostname = g_get_host_name();
+	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
 
+	if (display != NULL)
+		display_name = g_strdup(gdk_display_get_name(display));
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");
 
