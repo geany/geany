@@ -27,22 +27,24 @@
  * @see GeanyMainWidgets::message_window_notebook to append a new notebook page.
  **/
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "support.h"
-#include "prefs.h"
+#include "msgwindow.h"
+
+#include "build.h"
+#include "document.h"
 #include "callbacks.h"
+#include "filetypes.h"
+#include "keybindings.h"
+#include "main.h"
+#include "navqueue.h"
+#include "prefs.h"
+#include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "build.h"
-#include "main.h"
 #include "vte.h"
-#include "navqueue.h"
-#include "editor.h"
-#include "msgwindow.h"
-#include "keybindings.h"
 
 #include <string.h>
 #include <stdlib.h>

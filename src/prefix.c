@@ -11,11 +11,9 @@
  * to br_*", try renaming prefix.c to prefix.cpp
  */
 
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
 
 /*
  * enrico - all the code below is only compiled and used if ENABLE_BINRELOC is set in config.h,

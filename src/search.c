@@ -24,23 +24,25 @@
  * Note that the basic text find functions are in document.c.
  */
 
-#include <gdk/gdkkeysyms.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
 #include "search.h"
-#include "prefs.h"
-#include "support.h"
-#include "utils.h"
+
+#include "app.h"
 #include "document.h"
-#include "msgwindow.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "editor.h"
 #include "encodings.h"
-#include "project.h"
 #include "keyfile.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "sciwrappers.h"
 #include "stash.h"
+#include "support.h"
 #include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include "gtkcompat.h"
 
 #include <unistd.h>
@@ -52,6 +54,7 @@
 # include <sys/wait.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
 
 enum
 {

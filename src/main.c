@@ -25,6 +25,45 @@
  * Handles program initialization and cleanup.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "main.h"
+
+#include "app.h"
+#include "build.h"
+#include "callbacks.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "keybindings.h"
+#include "keyfile.h"
+#include "log.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "notebook.h"
+#include "plugins.h"
+#include "prefs.h"
+#include "printing.h"
+#include "sidebar.h"
+#ifdef HAVE_SOCKET
+# include "socket.h"
+#endif
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
+
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>
@@ -33,55 +72,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "geany.h"
 #include <glib/gstdio.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
-#endif
-
-#include "main.h"
-#include "prefix.h"
-#include "prefs.h"
-#include "support.h"
-#include "callbacks.h"
-#include "log.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "keyfile.h"
-#include "win32.h"
-#include "msgwindow.h"
-#include "dialogs.h"
-#include "templates.h"
-#include "encodings.h"
-#include "sidebar.h"
-#include "notebook.h"
-#include "keybindings.h"
-#include "editor.h"
-#include "search.h"
-#include "build.h"
-#include "highlighting.h"
-#include "symbols.h"
-#include "project.h"
-#include "tools.h"
-#include "navqueue.h"
-#include "plugins.h"
-#include "printing.h"
-#include "toolbar.h"
-#include "geanyobject.h"
-
-#ifdef HAVE_SOCKET
-# include "socket.h"
-#endif
-
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
-
-#ifndef N_
-# define N_(String) (String)
 #endif
 
 
@@ -495,8 +489,8 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	l_locale_dir = g_strdup(locale_dir);
 #endif
 
-	bindtextdomain(package, l_locale_dir);
-	bind_textdomain_codeset(package, "UTF-8");
+	(void) bindtextdomain(package, l_locale_dir);
+	(void) bind_textdomain_codeset(package, "UTF-8");
 	g_free(l_locale_dir);
 }
 
@@ -553,6 +547,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
+
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));

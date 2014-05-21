@@ -23,18 +23,23 @@
  * Plugin utility functions.
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_PLUGINS
 
 #include "pluginutils.h"
-#include "pluginprivate.h"
 
-#include "ui_utils.h"
-#include "toolbar.h"
-#include "utils.h"
-#include "support.h"
+#include "app.h"
+#include "geanyobject.h"
+#include "plugindata.h"
+#include "pluginprivate.h"
 #include "plugins.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
 
 
 /** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.

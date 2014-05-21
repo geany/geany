@@ -23,25 +23,26 @@
  * Sidebar related code for the Symbol list and Open files GtkTreeViews.
  */
 
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
-#include "support.h"
-#include "callbacks.h"
 #include "sidebar.h"
-#include "document.h"
-#include "editor.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
 #include "documentprivate.h"
-#include "filetypes.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "symbols.h"
-#include "navqueue.h"
-#include "project.h"
-#include "stash.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
 #include "keyfile.h"
-#include "sciwrappers.h"
-#include "search.h"
+#include "navqueue.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 

@@ -24,22 +24,28 @@
  * document from.
  */
 
-#include <time.h>
-#include <string.h>
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "templates.h"
-#include "support.h"
-#include "utils.h"
+
+#include "app.h"
 #include "document.h"
 #include "encodings.h"
-#include "editor.h"
 #include "filetypes.h"
-#include "ui_utils.h"
-#include "toolbar.h"
+#include "geany.h"
 #include "geanymenubuttonaction.h"
-#include "project.h"
+#include "geanyobject.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
+#include <time.h>
+#include <string.h>
 
 
 GeanyTemplatePrefs template_prefs;

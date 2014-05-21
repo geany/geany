@@ -23,6 +23,8 @@
 #ifndef GEANY_PROJECT_H
 #define GEANY_PROJECT_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 #define GEANY_PROJECT_EXT				"geany"
@@ -41,12 +43,6 @@ typedef struct GeanyProject
 	gchar **file_patterns;	/**< Array of filename extension patterns. */
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
-#ifdef GEANY_PRIVATE
-	/* Do not use following fields in plugins */
-	GPtrArray *build_filetypes_list; /* Project has custom filetype builds for these. */
-	gint long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
-	gint long_line_column; /* Long line marker position. */
-#endif
 }
 GeanyProject;
 
@@ -98,4 +94,4 @@ void project_apply_prefs(void);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_PROJECT_H */

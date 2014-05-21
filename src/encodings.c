@@ -30,17 +30,21 @@
  */
  /* Stolen from anjuta */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "encodings.h"
+
+#include "app.h"
+#include "callbacks.h"
+#include "documentprivate.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include <string.h>
 
-#include "geany.h"
-#include "utils.h"
-#include "support.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "msgwindow.h"
-#include "encodings.h"
-#include "callbacks.h"
-#include "ui_utils.h"
 
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 #define PATTERN_HTMLMETA "<meta\\s+http-equiv\\s*=\\s*\"?content-type\"?\\s+content\\s*=\\s*\"text/x?html;\\s*charset=([a-z0-9_-]+)\"\\s*/?>"

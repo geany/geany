@@ -23,13 +23,16 @@
  * GTK-Bandit.
  */
 
+#include "utils.h"
+
+#include "gtkcompat.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <signal.h>
 #include <unistd.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
-#include "gtkcompat.h"
 
 #define MAX_PICS 10
 #define LOOP_DELAY 200000	/* micro seconds */

@@ -27,10 +27,11 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
-G_BEGIN_DECLS
-
+#include <glib.h>
+#include <gdk/gdk.h> /* for GdkColor */
 #include <time.h>
 
+G_BEGIN_DECLS
 
 /** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
 #define EMPTY(ptr) \
@@ -288,4 +289,4 @@ gchar *utils_parse_and_format_build_date(const gchar *input);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_UTILS_H */

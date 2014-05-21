@@ -23,15 +23,20 @@
 #ifndef GEANY_FILETYPES_H
 #define GEANY_FILETYPES_H 1
 
+#include "geany.h" /* for GEANY() macro */
+#include "tm_source_file.h" /* for langType */
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
+#include <glib.h>
+
+
 G_BEGIN_DECLS
 
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-
-#ifdef GEANY_PRIVATE
-#include "build.h"
-#endif
-
+/* Forward-declared to avoid including document.h since it includes this header */
+struct GeanyDocument;
 
 /* Do not change the order, only append. */
 typedef enum
@@ -118,7 +123,7 @@ GeanyFiletypeGroupID;
 	(((filetype_ptr) != NULL) ? (filetype_ptr)->id : GEANY_FILETYPES_NONE)
 
 /** Represents a filetype. */
-struct GeanyFiletype
+typedef struct GeanyFiletype
 {
 	filetype_id		  id;				/**< Index in @c filetypes_array. */
 	/** Represents the langType of tagmanager (see the table
@@ -138,7 +143,7 @@ struct GeanyFiletype
 	gboolean		  comment_use_indent;
 	GeanyFiletypeGroupID group;
 	gchar			 *error_regex_string;
-	GeanyFiletype	 *lexer_filetype;
+	struct GeanyFiletype	 *lexer_filetype;
 	gchar			 *mime_type;
 	GIcon			 *icon;
 	gchar			 *comment_single; /* single-line comment */
@@ -147,21 +152,8 @@ struct GeanyFiletype
 	gint			  indent_width;
 
 	struct GeanyFiletypePrivate	*priv;	/* must be last, append fields before this item */
-#ifdef GEANY_PRIVATE
-	/* Do not use following fields in plugins */
-	/* TODO: move these fields into filetypesprivate.h */
-	GeanyBuildCommand *filecmds;
-	GeanyBuildCommand *ftdefcmds;
-	GeanyBuildCommand *execcmds;
-	GeanyBuildCommand *homefilecmds;
-	GeanyBuildCommand *homeexeccmds;
-	GeanyBuildCommand *projfilecmds;
-	GeanyBuildCommand *projexeccmds;
-	gint			 project_list_entry;
-	gchar			 *projerror_regex_string;
-	gchar			 *homeerror_regex_string;
-#endif
-};
+}
+GeanyFiletype;
 
 extern GPtrArray *filetypes_array;
 
@@ -193,7 +185,7 @@ const GSList *filetypes_get_sorted_by_name(void);
 
 const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
-GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc);
+GeanyFiletype *filetypes_detect_from_document(struct GeanyDocument *doc);
 
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename);
 
@@ -221,4 +213,4 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_FILETYPES_H */
