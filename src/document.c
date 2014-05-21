@@ -3206,6 +3206,9 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
 	{
 		GtkWidget *bar;
+		bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
+		if (bar != NULL) /* the "file on disk is newer" warning is now moot */
+			gtk_info_bar_response(GTK_INFO_BAR(bar), GTK_RESPONSE_CANCEL);
 
 		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
 				on_monitor_resave_missing_file_response,
