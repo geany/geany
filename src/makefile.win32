@@ -66,7 +66,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 		keybindings.o keyfile.o log.o main.o msgwindow.o navqueue.o notebook.o \
 		plugins.o pluginutils.o prefs.o printing.o project.o sciwrappers.o search.o \
 		socket.o stash.o symbols.o templates.o toolbar.o tools.o sidebar.o \
-		ui_utils.o utils.o win32.o
+		ui_utils.o utils.o win32.o spawn.o
 
 .c.o:
 	$(CC) $(CFLAGS) -c $<
