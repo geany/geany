@@ -23,11 +23,29 @@
  * Special functions for the win32 platform, to provide native dialogs.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "win32.h"
 
 #ifdef G_OS_WIN32
 
-#include "geany.h"
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypes.h"
+#include "project.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include <ctype.h>
+#include <fcntl.h>
+#include <io.h>
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define VC_EXTRALEAN
 #define WIN32_LEAN_AND_MEAN
@@ -35,26 +53,9 @@
 #include <commdlg.h>
 #include <shellapi.h>
 #include <shlobj.h>
-#include <io.h>
-#include <fcntl.h>
-
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include <stdlib.h>
 
 #include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
-
-#include "document.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "sciwrappers.h"
-#include "dialogs.h"
-#include "filetypes.h"
-#include "project.h"
-#include "editor.h"
 
 #define BUFSIZE 4096
 #define CMDSIZE 32768
