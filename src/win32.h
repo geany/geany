@@ -22,9 +22,12 @@
 #ifndef GEANY_WIN32_H
 #define GEANY_WIN32_H 1
 
-#ifdef G_OS_WIN32
+#include "document.h"
 
 #include "gtkcompat.h"
+
+
+#ifdef G_OS_WIN32
 
 G_BEGIN_DECLS
 
