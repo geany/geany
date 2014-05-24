@@ -75,6 +75,8 @@
 /*#define USE_GIO_FILEMON 1*/
 #include <gio/gio.h>
 
+#include <gdk/gdkkeysyms.h>
+
 GeanyFilePrefs file_prefs;
 
 
@@ -3152,6 +3154,45 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 }
 
+static gboolean on_sci_key(GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+	GtkInfoBar *bar = GTK_INFO_BAR(data);
+
+	g_return_val_if_fail(event->type == GDK_KEY_PRESS, FALSE);
+
+	switch (event->keyval)
+	{
+		case GDK_KEY_Tab:
+		case GDK_KEY_ISO_Left_Tab:
+		{
+			GtkWidget *w = gtk_info_bar_get_action_area(bar);
+			GtkDirectionType dir = event->keyval == GDK_KEY_Tab ? GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD;
+			gtk_widget_child_focus(w, dir);
+			return TRUE;
+		}
+		case GDK_KEY_Escape:
+		{
+			gtk_info_bar_response(bar, GTK_RESPONSE_CANCEL);
+			return TRUE;
+		}
+		default:
+			return FALSE;
+	}
+}
+
+/* g_signal_handlers_disconnect_by_data is a macro that cannot be used as GCallback */
+static gint nonmacro_g_signal_handlers_disconnect_by_data(gpointer instance, gpointer data)
+{
+	return g_signal_handlers_disconnect_by_data(instance, data);
+}
+
+static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
+{
+	g_signal_connect(doc->editor->sci, "key-press-event",   G_CALLBACK(on_sci_key), bar);
+	/* make the signal disconnect automatically */
+	g_signal_connect_swapped(bar, "unrealize",
+			G_CALLBACK(nonmacro_g_signal_handlers_disconnect_by_data), doc->editor->sci);
+}
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
@@ -3172,6 +3213,7 @@ static void monitor_reload_file(GeanyDocument *doc)
 
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+		enable_key_intercept(doc, bar);
 	}
 	g_free(base_name);
 }
@@ -3221,6 +3263,7 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
+		enable_key_intercept(doc, bar);
 	}
 }
 
