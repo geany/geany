@@ -52,7 +52,7 @@ from waflib.Tools.compiler_cxx import cxx_compiler
 
 APPNAME = 'geany'
 VERSION = '1.25'
-LINGUAS_FILE = 'po/LINGUAS'
+LINGUAS_FILE = os.path.join('po', 'LINGUAS')
 MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
@@ -243,7 +243,7 @@ def configure(conf):
         _add_to_env_and_define(conf, 'LIBDIR', '%s/lib' % conf.env['PREFIX'], quote=True)
         conf.define('LOCALEDIR', os.path.join('share' 'locale'), quote=True)
         # overwrite LOCALEDIR to install message catalogues properly
-        conf.env['LOCALEDIR'] = os.path.join(conf.env['PREFIX'], 'share/locale')
+        conf.env['LOCALEDIR'] = os.path.join(conf.env['PREFIX'], 'share', 'locale')
         # DATADIR is defined in objidl.h, so we remove it from config.h but keep it in env
         conf.undefine('DATADIR')
         conf.env['DATADIR'] = os.path.join(conf.env['PREFIX'], 'data')
@@ -466,11 +466,11 @@ def build(bld):
                                  MINIMUM_GLIB_VERSION),
                            'prefix': bld.env['PREFIX'],
                            'exec_prefix': '${prefix}',
-                           'libdir': '${exec_prefix}/lib',
-                           'includedir': '${prefix}/include',
-                           'datarootdir': '${prefix}/share',
+                           'libdir': os.path.join('${exec_prefix}', 'lib'),
+                           'includedir': os.path.join('${prefix}', 'include'),
+                           'datarootdir': os.path.join('${prefix}', 'share'),
                            'datadir': '${datarootdir}',
-                           'localedir': '${datarootdir}/locale'})
+                           'localedir': os.path.join('${datarootdir}', 'locale')})
 
     if not is_win32:
         # geany.desktop
