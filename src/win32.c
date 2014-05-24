@@ -23,6 +23,7 @@
  * Special functions for the win32 platform, to provide native dialogs.
  */
 
+#include "win32.h"
 
 #ifdef G_OS_WIN32
 
@@ -44,8 +45,6 @@
 
 #include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
-
-#include "win32.h"
 
 #include "document.h"
 #include "support.h"
