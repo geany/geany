@@ -38,7 +38,6 @@
 #include "filetypesprivate.h"
 #include "geany.h" /* FIXME: why is this needed for DOC_FILENAME()? should come from documentprivate.h/document.h */
 #include "geanyobject.h"
-#include "geanywraplabel.h" /* for document_show_message() using GtkInfoBar */
 #include "highlighting.h"
 #include "main.h"
 #include "msgwindow.h"
@@ -3093,7 +3092,8 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_widget));
 
-	label = geany_wrap_label_new(NULL);
+	label = gtk_label_new(NULL);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 
 	gtk_label_set_markup(GTK_LABEL(label), markup);
 	g_free(markup);
@@ -3129,7 +3129,8 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	if (extra_text)
 	{
 		vbox = gtk_vbox_new(FALSE, 6);
-		extra_label = geany_wrap_label_new(extra_text);
+		extra_label = gtk_label_new(extra_text);
+		gtk_misc_set_alignment(GTK_MISC(extra_label), 0.0, 0.5);
 		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), extra_label, TRUE, TRUE, 0);
 		gtk_container_add(GTK_CONTAINER(hbox), vbox);
