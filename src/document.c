@@ -1372,6 +1372,10 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	/* Use cancel because the response handler would call this recursively */
+	if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL)
+		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RELOAD]), GTK_RESPONSE_CANCEL);
+
 	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly, doc->file_type, forced_enc);
@@ -3148,11 +3152,10 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
 	unprotect_document(doc);
+	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		document_reload_file(doc, doc->encoding);
-
-	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 }
 
 static gboolean on_sci_key(GtkWidget *w, GdkEventKey *event, gpointer data)
