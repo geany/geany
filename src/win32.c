@@ -464,7 +464,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER;
 	retval = GetSaveFileNameW(&of);
 
 	if (! retval)
