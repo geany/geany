@@ -487,7 +487,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_CLOSE, NULL);
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(notebook_tab_close_clicked_cb), page);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(notebook_tab_close_clicked_cb), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (page != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
@@ -635,7 +635,8 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* right-click is first handled here if it happened on a notebook tab */
 	if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, data);
+		/* show_tab_bar_popup_menu() needs the tab widget (GtkBox, parent of scintilla) */
+		show_tab_bar_popup_menu(event, gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci)));
 		return TRUE;
 	}
 
@@ -700,7 +701,7 @@ gint notebook_new_tab(GeanyDocument *this)
 		gtk_container_add(GTK_CONTAINER(align), btn);
 		gtk_box_pack_start(GTK_BOX(hbox), align, TRUE, TRUE, 0);
 
-		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
+		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), this);
 		/* button overrides event box, so make middle click on button also close tab */
 		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), this);
 		/* handle style modification to keep button small as possible even when theme change */
