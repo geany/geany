@@ -902,14 +902,14 @@ static void find_usage(gboolean in_session)
 	if (sci_has_selection(doc->editor->sci))
 	{	/* take selected text if there is a selection */
 		search_text = sci_get_selection_contents(doc->editor->sci);
-		flags = SCFIND_MATCHCASE;
+		flags = GEANY_FIND_MATCHCASE;
 	}
 	else
 	{
 		editor_find_current_word_sciwc(doc->editor, -1,
 			editor_info.current_word, GEANY_MAX_WORD_LENGTH);
 		search_text = g_strdup(editor_info.current_word);
-		flags = SCFIND_MATCHCASE | SCFIND_WHOLEWORD;
+		flags = GEANY_FIND_MATCHCASE | GEANY_FIND_WHOLEWORD;
 	}
 
 	search_find_usage(search_text, search_text, flags, in_session);
@@ -999,7 +999,7 @@ G_MODULE_EXPORT void on_find_next1_activate(GtkMenuItem *menuitem, gpointer user
 
 G_MODULE_EXPORT void on_find_previous1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	if (search_data.flags & SCFIND_REGEXP)
+	if (search_data.flags & GEANY_FIND_REGEXP)
 		/* Can't reverse search order for a regex (find next ignores search backwards) */
 		utils_beep();
 	else

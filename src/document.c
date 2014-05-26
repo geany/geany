@@ -1400,7 +1400,7 @@ static void replace_header_filename(GeanyDocument *doc)
 	ttf.chrg.cpMax = sci_get_position_from_line(doc->editor->sci, 4);
 	ttf.lpstrText = filebase;
 
-	if (search_find_text(doc->editor->sci, SCFIND_MATCHCASE | SCFIND_REGEXP, &ttf, NULL) != -1)
+	if (search_find_text(doc->editor->sci, GEANY_FIND_MATCHCASE | GEANY_FIND_REGEXP, &ttf, NULL) != -1)
 	{
 		sci_set_target_start(doc->editor->sci, ttf.chrgText.cpMin);
 		sci_set_target_end(doc->editor->sci, ttf.chrgText.cpMax);
@@ -1924,7 +1924,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
 		return -1;
 
 	/* Sci doesn't support searching backwards with a regex */
-	if (flags & SCFIND_REGEXP)
+	if (flags & GEANY_FIND_REGEXP)
 		search_backwards = FALSE;
 
 	if (!original_text)
@@ -2005,7 +2005,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		return -1;
 
 	/* Sci doesn't support searching backwards with a regex */
-	if (flags & SCFIND_REGEXP)
+	if (flags & GEANY_FIND_REGEXP)
 		search_backwards = FALSE;
 
 	if (!original_find_text)

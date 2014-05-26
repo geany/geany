@@ -1465,9 +1465,9 @@ static gboolean cb_func_search_action(guint key_id)
 				text = get_current_word_or_sel(doc, TRUE);
 
 			if (sci_has_selection(sci))
-				search_mark_all(doc, text, SCFIND_MATCHCASE);
+				search_mark_all(doc, text, GEANY_FIND_MATCHCASE);
 			else
-				search_mark_all(doc, text, SCFIND_MATCHCASE | SCFIND_WHOLEWORD);
+				search_mark_all(doc, text, GEANY_FIND_MATCHCASE | GEANY_FIND_WHOLEWORD);
 
 			g_free(text);
 			break;

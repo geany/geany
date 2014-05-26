@@ -61,6 +61,15 @@ enum GeanyFindSelOptions
 	GEANY_FIND_SEL_AGAIN
 };
 
+enum GeanyFindFlags
+{
+	GEANY_FIND_MATCHCASE = 1 << 0,
+	GEANY_FIND_WHOLEWORD = 1 << 1,
+	GEANY_FIND_WORDSTART = 1 << 2,
+	GEANY_FIND_REGEXP    = 1 << 3,
+	GEANY_FIND_MULTILINE = 1 << 4
+};
+
 /** Search preferences */
 typedef struct GeanySearchPrefs
 {
