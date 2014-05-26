@@ -204,7 +204,7 @@ SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
 !ifdef INCLUDE_GTK
-Section "GTK 2.16 Runtime Environment" SEC06
+Section "GTK 2.18 Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
 	SetOutPath "$INSTDIR\bin"
@@ -323,7 +323,7 @@ SectionEnd
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Manual in Text and HTML format."
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Symbol lists necessary for auto completion of symbols."
 !ifdef INCLUDE_GTK
-!insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need these files to run Geany. If you have already installed a GTK Runtime Environment (2.16 or higher), you can skip it."
+!insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "You need these files to run Geany. If you have already installed a GTK Runtime Environment (2.18 or higher), you can skip it."
 !endif
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} "Add context menu item 'Open With Geany'"
 !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} "Create shortcuts for Geany on the desktop and in the Quicklaunch Bar"

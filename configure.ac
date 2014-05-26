@@ -69,7 +69,7 @@ AS_IF([test "x$enable_gtk3" = xyes],
 	  [gtk_package=gtk+-3.0
 	   gtk_min_version=3.0],
 	  [gtk_package=gtk+-2.0
-	   gtk_min_version=2.16])
+	   gtk_min_version=2.18])
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
 
 # GTK/GLib/GIO checks
