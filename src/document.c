@@ -3070,7 +3070,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	va_list args;
 	gchar *text, *markup;
 	GtkWidget *hbox, *vbox, *icon, *label, *extra_label, *content_area;
-	GtkWidget *info_widget, *ok_button, *cancel_button, *parent;
+	GtkWidget *info_widget, *parent;
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
                                        document_get_notebook_page(doc));
 
@@ -3169,9 +3169,9 @@ static gboolean on_sci_key(GtkWidget *w, GdkEventKey *event, gpointer data)
 		case GDK_KEY_Tab:
 		case GDK_KEY_ISO_Left_Tab:
 		{
-			GtkWidget *w = gtk_info_bar_get_action_area(bar);
+			GtkWidget *btns = gtk_info_bar_get_action_area(bar);
 			GtkDirectionType dir = event->keyval == GDK_KEY_Tab ? GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD;
-			gtk_widget_child_focus(w, dir);
+			gtk_widget_child_focus(btns, dir);
 			return TRUE;
 		}
 		case GDK_KEY_Escape:
@@ -3247,8 +3247,6 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 
 static void monitor_resave_missing_file(GeanyDocument *doc)
 {
-	GtkWidget *bar;
-
 	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
 	{
 		GtkWidget *bar;
