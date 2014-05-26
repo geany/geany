@@ -608,6 +608,7 @@ static void tab_count_changed(void)
 static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	guint state;
+	GeanyDocument *doc = (GeanyDocument *) data;
 
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
@@ -620,8 +621,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* close tab on middle click */
 	if (event->button == 2)
 	{
-		document_remove_page(gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-			GTK_WIDGET(data)));
+		document_close(doc);
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 	/* switch last used tab on ctrl-click */
@@ -656,14 +656,18 @@ static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev
 /* Returns page number of notebook page, or -1 on error */
 gint notebook_new_tab(GeanyDocument *this)
 {
-	GtkWidget *hbox, *ebox;
+	GtkWidget *hbox, *ebox, *vbox;
 	gint tabnum;
 	GtkWidget *page;
 	gint cur_page;
 
 	g_return_val_if_fail(this != NULL, -1);
 
+	/* page is packed into a vbox so we can stack infobars above it */
+	vbox = gtk_vbox_new(FALSE, 0);
 	page = GTK_WIDGET(this->editor->sci);
+	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
+	gtk_widget_show(vbox);
 
 	this->priv->tab_label = gtk_label_new(NULL);
 
@@ -671,7 +675,7 @@ gint notebook_new_tab(GeanyDocument *this)
 	 * the close button, if any */
 	ebox = gtk_event_box_new();
 	gtk_widget_set_has_window(ebox, FALSE);
-	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+	g_signal_connect(ebox, "button-press-event", G_CALLBACK(notebook_tab_click), this);
 	/* focus the current document after clicking on a tab */
 	g_signal_connect_after(ebox, "button-release-event",
 		G_CALLBACK(focus_sci), NULL);
@@ -698,7 +702,7 @@ gint notebook_new_tab(GeanyDocument *this)
 
 		g_signal_connect(btn, "clicked", G_CALLBACK(notebook_tab_close_clicked_cb), page);
 		/* button overrides event box, so make middle click on button also close tab */
-		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), page);
+		g_signal_connect(btn, "button-press-event", G_CALLBACK(notebook_tab_click), this);
 		/* handle style modification to keep button small as possible even when theme change */
 		g_signal_connect(btn, "style-set", G_CALLBACK(notebook_tab_close_button_style_set), NULL);
 	}
@@ -712,28 +716,27 @@ gint notebook_new_tab(GeanyDocument *this)
 	else
 		cur_page = file_prefs.tab_order_ltr ? -2 /* hack: -2 + 1 = -1, last page */ : 0;
 	if (file_prefs.tab_order_ltr)
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
 			ebox, NULL, cur_page + 1);
 	else
-		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), page,
+		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), vbox,
 			ebox, NULL, cur_page);
 
 	tab_count_changed();
 
 	/* enable tab DnD */
-	gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), page, TRUE);
+	gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), vbox, TRUE);
 
 	return tabnum;
 }
 
 
 static void
-notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data)
+notebook_tab_close_clicked_cb(GtkButton *button, gpointer data)
 {
-	gint cur_page = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-		GTK_WIDGET(user_data));
+	GeanyDocument *doc = (GeanyDocument *) data;
 
-	document_remove_page(cur_page);
+	document_close(doc);
 }
 
 

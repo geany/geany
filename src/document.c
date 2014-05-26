@@ -74,6 +74,7 @@
 /*#define USE_GIO_FILEMON 1*/
 #include <gio/gio.h>
 
+#include <gdk/gdkkeysyms.h>
 
 GeanyFilePrefs file_prefs;
 
@@ -220,10 +221,47 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
  * @since 0.19 */
 gint document_get_notebook_page(GeanyDocument *doc)
 {
+	GtkWidget *parent;
+
 	g_return_val_if_fail(doc != NULL, -1);
 
-	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook),
-		GTK_WIDGET(doc->editor->sci));
+	parent = gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci));
+	g_return_val_if_fail(GTK_IS_BOX(parent), -1);
+
+	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), parent);
+}
+
+
+/*
+ * Recursively searches a containers children until it finds a
+ * Scintilla widget, or NULL if one was not found.
+ */
+static ScintillaObject *locate_sci_in_container(GtkWidget *container)
+{
+	ScintillaObject *sci = NULL;
+	GList *children, *iter;
+
+	g_return_val_if_fail(GTK_IS_CONTAINER(container), NULL);
+
+	children = gtk_container_get_children(GTK_CONTAINER(container));
+	for (iter = children; iter != NULL; iter = g_list_next(iter))
+	{
+		if (IS_SCINTILLA(iter->data))
+		{
+			sci = SCINTILLA(iter->data);
+			break;
+		}
+		else if (GTK_IS_CONTAINER(iter->data))
+		{
+			sci = locate_sci_in_container(iter->data);
+			if (IS_SCINTILLA(sci))
+				break;
+			sci = NULL;
+		}
+	}
+	g_list_free(children);
+
+	return sci;
 }
 
 
@@ -236,13 +274,17 @@ gint document_get_notebook_page(GeanyDocument *doc)
  **/
 GeanyDocument *document_get_from_page(guint page_num)
 {
+	GtkWidget *parent;
 	ScintillaObject *sci;
 
 	if (page_num >= documents_array->len)
 		return NULL;
 
-	sci = (ScintillaObject*)gtk_notebook_get_nth_page(
-				GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
+
+	sci = locate_sci_in_container(parent);
+	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
 
 	return document_find_by_sci(sci);
 }
@@ -255,14 +297,21 @@ GeanyDocument *document_get_from_page(guint page_num)
  **/
 GeanyDocument *document_get_current(void)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint cur_page;
+	GtkWidget *parent;
+	ScintillaObject *sci;
+
+	cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_page == -1)
 		return NULL;
 	else
 	{
-		ScintillaObject *sci = (ScintillaObject*)
-			gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+		parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
+		g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
+
+		sci = locate_sci_in_container(parent);
+		g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
 
 		return document_find_by_sci(sci);
 	}
@@ -1190,6 +1239,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		doc->readonly = readonly || filedata.readonly;
 		sci_set_readonly(doc->editor->sci, doc->readonly);
+		doc->priv->protected = 0;
 
 		/* update line number margin width */
 		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
@@ -1322,6 +1372,10 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	/* Use cancel because the response handler would call this recursively */
+	if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL)
+		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RELOAD]), GTK_RESPONSE_CANCEL);
+
 	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly, doc->file_type, forced_enc);
@@ -1443,6 +1497,22 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 }
 
 
+static void protect_document(GeanyDocument *doc)
+{
+	/* do not call queue_colourise because to we want to keep the text-changed indication! */
+	if (!doc->priv->protected++)
+		sci_set_readonly(doc->editor->sci, TRUE);
+}
+
+static void unprotect_document(GeanyDocument *doc)
+{
+	g_return_if_fail(doc->priv->protected > 0);
+
+	if (!--doc->priv->protected && doc->readonly == FALSE)
+		sci_set_readonly(doc->editor->sci, FALSE);
+}
+
+
 /* Return TRUE if the document doesn't have a full filename set.
  * This makes filenames without a path show the save as dialog, e.g. for file templates.
  * Otherwise just use the set filename instead of asking the user - e.g. for command-line
@@ -1469,9 +1539,11 @@ gboolean document_need_save_as(GeanyDocument *doc)
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
+	gboolean new_file;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	new_file = document_need_save_as(doc) || (utf8_fname != NULL && !strcmp(doc->file_name, utf8_fname));
 	if (utf8_fname != NULL)
 		SETPTR(doc->file_name, g_strdup(utf8_fname));
 
@@ -1491,6 +1563,15 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 			ignore_callback = FALSE;
 		}
 	}
+
+	if (new_file)
+	{
+		sci_set_readonly(doc->editor->sci, FALSE);
+		doc->readonly = FALSE;
+		if (doc->priv->protected > 0)
+			unprotect_document(doc);
+	}
+
 	replace_header_filename(doc);
 
 	ret = document_save_file(doc, TRUE);
@@ -1681,7 +1762,6 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 	return NULL;
 }
 
-
 /**
  *  Saves the document.
  *  Also shows the Save As dialog if necessary.
@@ -1725,7 +1805,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	}
 
 	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (! force && (! doc->changed || doc->readonly))
+	if (doc->readonly || doc->priv->protected)
+		return FALSE;
+	if (!force && !doc->changed)
 		return FALSE;
 
 	fp = project_get_file_prefs();
@@ -2880,6 +2962,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 		old_doc->editor->indent_width);
 	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
+	doc->priv->protected = 0;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
 	sci_set_readonly(doc->editor->sci, doc->readonly);
@@ -2952,59 +3035,240 @@ gboolean document_close_all(void)
 }
 
 
+/* *
+ * Shows a message related to a document.
+ *
+ * Use this whenever the user needs to see a document-related message,
+ * for example when the file was externally modified or deleted.
+ *
+ * Any of the buttons can be @c NULL.  If not @c NULL, @a btn_1's
+ * @a response_1 response will be the default for the @c GtkInfoBar or
+ * @c GtkDialog.
+ *
+ * @param doc @c GeanyDocument.
+ * @param msgtype The type of message.
+ * @param response_cb A callback function called when there's a response.
+ * @param btn_1 The first action area button.
+ * @param response_1 The response for @a btn_1.
+ * @param btn_2 The second action area button.
+ * @param response_2 The response for @a btn_2.
+ * @param btn_3 The third action area button.
+ * @param response_3 The response for @a btn_3.
+ * @param extra_text Text to show below the main message.
+ * @param format The text format for the main message.
+ * @param ... Used with @a format as in @c printf.
+ *
+ * @since 1.25
+ * */
+static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
+	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
+	const gchar *btn_1, GtkResponseType response_1,
+	const gchar *btn_2, GtkResponseType response_2,
+	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *extra_text, const gchar *format, ...)
+{
+	va_list args;
+	gchar *text, *markup;
+	GtkWidget *hbox, *vbox, *icon, *label, *extra_label, *content_area;
+	GtkWidget *info_widget, *ok_button, *cancel_button, *parent;
+	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
+                                       document_get_notebook_page(doc));
+
+	va_start(args, format);
+	text = g_strdup_vprintf(format, args);
+	va_end(args);
+
+	markup = g_strdup_printf("<span size=\"larger\">%s</span>", text);
+	g_free(text);
+
+	info_widget = gtk_info_bar_new();
+	/* must be done now else Gtk-WARNING: widget not within a GtkWindow */
+	gtk_box_pack_start(GTK_BOX(parent), info_widget, FALSE, TRUE, 0);
+
+	gtk_info_bar_set_message_type(GTK_INFO_BAR(info_widget), msgtype);
+
+	if (btn_1)
+		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_1, response_1);
+	if (btn_2)
+		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_2, response_2);
+	if (btn_3)
+		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_3, response_3);
+
+	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_widget));
+
+	label = gtk_label_new(NULL);
+	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+
+	gtk_label_set_markup(GTK_LABEL(label), markup);
+	g_free(markup);
+
+	g_signal_connect(info_widget, "response", G_CALLBACK(response_cb), doc);
+	g_signal_connect_after(info_widget, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+
+	hbox = gtk_hbox_new(FALSE, 12);
+	gtk_container_add(GTK_CONTAINER(content_area), hbox);
+
+	switch (msgtype)
+	{
+		case GTK_MESSAGE_INFO:
+			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
+			break;
+		case GTK_MESSAGE_WARNING:
+			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
+			break;
+		case GTK_MESSAGE_QUESTION:
+			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
+			break;
+		case GTK_MESSAGE_ERROR:
+			icon = gtk_image_new_from_stock(GTK_STOCK_DIALOG_ERROR, GTK_ICON_SIZE_DIALOG);
+			break;
+		default:
+			icon = NULL;
+			break;
+	}
+
+	if (icon)
+		gtk_box_pack_start(GTK_BOX(hbox), icon, FALSE, TRUE, 0);
+
+	if (extra_text)
+	{
+		vbox = gtk_vbox_new(FALSE, 6);
+		extra_label = gtk_label_new(extra_text);
+		gtk_misc_set_alignment(GTK_MISC(extra_label), 0.0, 0.5);
+		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
+		gtk_box_pack_start(GTK_BOX(vbox), extra_label, TRUE, TRUE, 0);
+		gtk_container_add(GTK_CONTAINER(hbox), vbox);
+	}
+	else
+		gtk_container_add(GTK_CONTAINER(hbox), label);
+
+	gtk_box_reorder_child(GTK_BOX(parent), info_widget, 0);
+
+	gtk_widget_show_all(info_widget);
+
+	return info_widget;
+}
+
+static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
+{
+	unprotect_document(doc);
+	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
+
+	if (response_id == GTK_RESPONSE_ACCEPT)
+		document_reload_file(doc, doc->encoding);
+}
+
+static gboolean on_sci_key(GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+	GtkInfoBar *bar = GTK_INFO_BAR(data);
+
+	g_return_val_if_fail(event->type == GDK_KEY_PRESS, FALSE);
+
+	switch (event->keyval)
+	{
+		case GDK_KEY_Tab:
+		case GDK_KEY_ISO_Left_Tab:
+		{
+			GtkWidget *w = gtk_info_bar_get_action_area(bar);
+			GtkDirectionType dir = event->keyval == GDK_KEY_Tab ? GTK_DIR_TAB_FORWARD : GTK_DIR_TAB_BACKWARD;
+			gtk_widget_child_focus(w, dir);
+			return TRUE;
+		}
+		case GDK_KEY_Escape:
+		{
+			gtk_info_bar_response(bar, GTK_RESPONSE_CANCEL);
+			return TRUE;
+		}
+		default:
+			return FALSE;
+	}
+}
+
+/* g_signal_handlers_disconnect_by_data is a macro that cannot be used as GCallback */
+static gint nonmacro_g_signal_handlers_disconnect_by_data(gpointer instance, gpointer data)
+{
+	return g_signal_handlers_disconnect_by_data(instance, data);
+}
+
+static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
+{
+	g_signal_connect(doc->editor->sci, "key-press-event",   G_CALLBACK(on_sci_key), bar);
+	/* make the signal disconnect automatically */
+	g_signal_connect_swapped(bar, "unrealize",
+			G_CALLBACK(nonmacro_g_signal_handlers_disconnect_by_data), doc->editor->sci);
+}
+
 static void monitor_reload_file(GeanyDocument *doc)
 {
 	gchar *base_name = g_path_get_basename(doc->file_name);
-	gint ret;
 
-	/* we use No instead of Cancel to avoid mnemonic clash */
-	ret = dialogs_show_prompt(NULL,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
-		GTK_STOCK_NO, GTK_RESPONSE_CANCEL,
-		_("_Reload"), GTK_RESPONSE_ACCEPT,
-		_("Do you want to reload it?"),
-		_("The file '%s' on the disk is more recent than\nthe current buffer."),
-		base_name);
+	/* show this message only once */
+	if (doc->priv->info_bars[MSG_TYPE_RELOAD] == NULL)
+	{
+		GtkWidget *bar;
+
+		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
+				_("_Reload"), GTK_RESPONSE_ACCEPT,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				NULL, GTK_RESPONSE_NONE,
+				_("Do you want to reload it?"),
+				_("The file '%s' on the disk is more recent than the current buffer."),
+				base_name);
+
+		protect_document(doc);
+		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+		enable_key_intercept(doc, bar);
+	}
 	g_free(base_name);
-
-	if (ret == GTK_RESPONSE_ACCEPT)
-		document_reload_file(doc, doc->encoding);
-	else if (ret == GTK_RESPONSE_CLOSE)
-		document_close(doc);
 }
 
 
-static gboolean monitor_resave_missing_file(GeanyDocument *doc)
+static void on_monitor_resave_missing_file_response(GtkWidget *bar,
+                                                    gint response_id,
+                                                    GeanyDocument *doc)
 {
-	gboolean want_reload = FALSE;
 	gboolean file_saved = FALSE;
-	gint ret;
 
-	ret = dialogs_show_prompt(NULL,
-		_("Close _without saving"), GTK_RESPONSE_CLOSE,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-		_("Try to resave the file?"),
-		_("File \"%s\" was not found on disk!"),
-		doc->file_name);
-	if (ret == GTK_RESPONSE_ACCEPT)
-	{
+	unprotect_document(doc);
+
+	if (response_id == GTK_RESPONSE_ACCEPT)
 		file_saved = dialogs_show_save_as();
-		want_reload = TRUE;
-	}
-	else if (ret == GTK_RESPONSE_CLOSE)
+
+	if (!file_saved)
 	{
-		document_close(doc);
-	}
-	if (ret != GTK_RESPONSE_CLOSE && ! file_saved)
-	{
-		/* file is missing - set unsaved state */
 		document_set_text_changed(doc, TRUE);
 		/* don't prompt more than once */
 		SETPTR(doc->real_path, NULL);
 	}
 
-	return want_reload;
+	doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
+}
+
+
+static void monitor_resave_missing_file(GeanyDocument *doc)
+{
+	GtkWidget *bar;
+
+	if (doc->priv->info_bars[MSG_TYPE_RESAVE] == NULL)
+	{
+		GtkWidget *bar;
+		bar = doc->priv->info_bars[MSG_TYPE_RELOAD];
+		if (bar != NULL) /* the "file on disk is newer" warning is now moot */
+			gtk_info_bar_response(GTK_INFO_BAR(bar), GTK_RESPONSE_CANCEL);
+
+		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
+				on_monitor_resave_missing_file_response,
+				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				NULL, GTK_RESPONSE_NONE,
+				_("Try to resave the file?"),
+				_("File \"%s\" was not found on disk!"),
+				doc->file_name);
+
+		protect_document(doc);
+		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
+		enable_key_intercept(doc, bar);
+	}
 }
 
 
@@ -3058,6 +3322,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{
+		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
 		doc->priv->mtime = st.st_mtime;
 		monitor_reload_file(doc);
 		/* doc may be closed now */
