@@ -1914,25 +1914,18 @@ G_MODULE_EXPORT void on_search1_activate(GtkMenuItem *menuitem, gpointer user_da
 
 
 /* simple implementation (vs. close all which doesn't close documents if cancelled),
- * if user_data is set, it is a GtkNotebook child widget */
+ * if user_data is set, it is the GeanyDocument to keep */
 G_MODULE_EXPORT void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i;
-	GeanyDocument *doc, *cur_doc;
+	GeanyDocument *cur_doc = user_data;
 
-	if (user_data != NULL)
-	{
-		gint page_num = gtk_notebook_page_num(
-			GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data));
-		cur_doc = document_get_from_page(page_num);
-	}
-	else
+	if (cur_doc == NULL)
 		cur_doc = document_get_current();
-
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		doc = documents[i];
+		GeanyDocument *doc = documents[i];
 
 		if (doc == cur_doc || ! doc->is_valid)
 			continue;

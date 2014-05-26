@@ -445,12 +445,10 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
-static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
+static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
 	GtkWidget *menu_item;
 	static GtkWidget *menu = NULL;
-	GeanyDocument *doc = NULL;
-	gint page_num;
 
 	if (menu == NULL)
 		menu = gtk_menu_new();
@@ -464,12 +462,6 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-
-	if (page != NULL)
-	{
-		page_num = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), page);
-		doc = document_get_from_page(page_num);
-	}
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, "Open in New _Window");
 	gtk_widget_show(menu_item);
@@ -488,13 +480,13 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(notebook_tab_close_clicked_cb), doc);
-	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (page != NULL));
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Ot_her Documents"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), page);
-	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (page != NULL));
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), doc);
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
 	gtk_widget_show(menu_item);
@@ -635,8 +627,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* right-click is first handled here if it happened on a notebook tab */
 	if (event->button == 3)
 	{
-		/* show_tab_bar_popup_menu() needs the tab widget (GtkBox, parent of scintilla) */
-		show_tab_bar_popup_menu(event, gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci)));
+		show_tab_bar_popup_menu(event, doc);
 		return TRUE;
 	}
 
