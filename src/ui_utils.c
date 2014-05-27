@@ -54,6 +54,7 @@
 
 #include <string.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include <gdk/gdkkeysyms.h>
 
 

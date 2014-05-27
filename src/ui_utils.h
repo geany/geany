@@ -24,7 +24,6 @@
 
 #include "document.h"
 
-#include <stdarg.h>
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
