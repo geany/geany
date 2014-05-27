@@ -1543,7 +1543,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	new_file = document_need_save_as(doc) || (utf8_fname != NULL && !strcmp(doc->file_name, utf8_fname));
+	new_file = document_need_save_as(doc) || (utf8_fname != NULL && strcmp(doc->file_name, utf8_fname) != 0);
 	if (utf8_fname != NULL)
 		SETPTR(doc->file_name, g_strdup(utf8_fname));
 
