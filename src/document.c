@@ -222,13 +222,20 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 gint document_get_notebook_page(GeanyDocument *doc)
 {
 	GtkWidget *parent;
+	GtkWidget *child;
 
 	g_return_val_if_fail(doc != NULL, -1);
 
-	parent = gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci));
-	g_return_val_if_fail(GTK_IS_BOX(parent), -1);
+	child = GTK_WIDGET(doc->editor->sci);
+	parent = gtk_widget_get_parent(child);
+	/* search for the direct notebook child, mirroring document_get_from_page() */
+	while (parent && ! GTK_IS_NOTEBOOK(parent))
+	{
+		child = parent;
+		parent = gtk_widget_get_parent(child);
+	}
 
-	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), parent);
+	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), child);
 }
 
 
