@@ -304,24 +304,12 @@ GeanyDocument *document_get_from_page(guint page_num)
  **/
 GeanyDocument *document_get_current(void)
 {
-	gint cur_page;
-	GtkWidget *parent;
-	ScintillaObject *sci;
-
-	cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 
 	if (cur_page == -1)
 		return NULL;
 	else
-	{
-		parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), cur_page);
-		g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
-
-		sci = locate_sci_in_container(parent);
-		g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
-
-		return document_find_by_sci(sci);
-	}
+		return document_get_from_page((guint) cur_page);
 }
 
 
