@@ -38,6 +38,7 @@
 #include "filetypesprivate.h"
 #include "geany.h" /* FIXME: why is this needed for DOC_FILENAME()? should come from documentprivate.h/document.h */
 #include "geanyobject.h"
+#include "geanywraplabel.h"
 #include "highlighting.h"
 #include "main.h"
 #include "msgwindow.h"
@@ -3091,9 +3092,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_widget));
 
-	label = gtk_label_new(NULL);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
-
+	label = geany_wrap_label_new(NULL);
 	gtk_label_set_markup(GTK_LABEL(label), markup);
 	g_free(markup);
 
@@ -3101,7 +3100,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	g_signal_connect_after(info_widget, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 12);
-	gtk_container_add(GTK_CONTAINER(content_area), hbox);
+	gtk_box_pack_start(GTK_BOX(content_area), hbox, TRUE, TRUE, 0);
 
 	switch (msgtype)
 	{
@@ -3128,14 +3127,13 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	if (extra_text)
 	{
 		vbox = gtk_vbox_new(FALSE, 6);
-		extra_label = gtk_label_new(extra_text);
-		gtk_misc_set_alignment(GTK_MISC(extra_label), 0.0, 0.5);
+		extra_label = geany_wrap_label_new(extra_text);
 		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), extra_label, TRUE, TRUE, 0);
-		gtk_container_add(GTK_CONTAINER(hbox), vbox);
+		gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
 	}
 	else
-		gtk_container_add(GTK_CONTAINER(hbox), label);
+		gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
 
 	gtk_box_reorder_child(GTK_BOX(parent), info_widget, 0);
 
