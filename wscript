@@ -457,6 +457,12 @@ def build(bld):
             appname         = 'geany')
 
     # geany.pc
+    if is_win32:
+        # replace backward slashes by forward slashes as they could be interepreted as escape
+        # characters
+        geany_pc_prefix = bld.env['PREFIX'].replace('\\', '/')
+    else:
+        geany_pc_prefix = bld.env['PREFIX']
     bld(
         source          = 'geany.pc.in',
         dct             = {'VERSION': VERSION,
@@ -464,13 +470,13 @@ def build(bld):
                                 (bld.env['gtk_package_name'],
                                  bld.env['minimum_gtk_version'],
                                  MINIMUM_GLIB_VERSION),
-                           'prefix': bld.env['PREFIX'],
+                           'prefix': geany_pc_prefix,
                            'exec_prefix': '${prefix}',
-                           'libdir': os.path.join('${exec_prefix}', 'lib'),
-                           'includedir': os.path.join('${prefix}', 'include'),
-                           'datarootdir': os.path.join('${prefix}', 'share'),
+                           'libdir': '${exec_prefix}/lib',
+                           'includedir': '${prefix}/include',
+                           'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
-                           'localedir': os.path.join('${datarootdir}', 'locale')})
+                           'localedir': '${datarootdir/locale'})
 
     if not is_win32:
         # geany.desktop
