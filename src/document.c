@@ -39,6 +39,7 @@
 #include "geany.h" /* FIXME: why is this needed for DOC_FILENAME()? should come from documentprivate.h/document.h */
 #include "geanyobject.h"
 #include "geanywraplabel.h"
+#include "gtkcompat.h"
 #include "highlighting.h"
 #include "main.h"
 #include "msgwindow.h"
