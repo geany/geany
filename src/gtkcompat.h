@@ -96,6 +96,11 @@ G_BEGIN_DECLS
 #if ! GTK_CHECK_VERSION(2, 20, 0)
 #	define gtk_widget_get_mapped(widget)	GTK_WIDGET_MAPPED(widget)
 #endif
+#if ! GTK_CHECK_VERSION(2, 22, 0)
+#	define GDK_KEY_Tab GDK_Tab
+#	define GDK_KEY_ISO_Left_Tab GDK_ISO_Left_Tab
+#	define GDK_KEY_Escape GDK_Escape
+#endif
 #if ! GTK_CHECK_VERSION(3, 0, 0)
 #	define gtk_widget_get_allocated_height(widget)	(((GtkWidget *) (widget))->allocation.height)
 #	define gtk_widget_get_allocated_width(widget)	(((GtkWidget *) (widget))->allocation.width)
@@ -130,6 +135,10 @@ G_BEGIN_DECLS
 #	define gtk_hscrollbar_new(adj)	gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, (adj))
 #endif
 
+#if !GLIB_CHECK_VERSION(2, 32, 0)
+#	define g_signal_handlers_disconnect_by_data(instance, data) \
+		g_signal_handlers_disconnect_matched ((instance), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, (data))
+#endif
 
 G_END_DECLS
 
