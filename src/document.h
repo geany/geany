@@ -172,9 +172,13 @@ GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const
 
 GeanyDocument *document_get_current(void);
 
+GtkNotebook *document_get_notebook(GeanyDocument *doc);
+
 GeanyDocument *document_get_from_notebook_child(GtkWidget *page);
 
-GeanyDocument* document_get_from_page(guint page_num);
+GeanyDocument *document_get_from_notebook(GtkNotebook *notebook, guint page_num);
+
+/* deprecated */ GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
@@ -255,9 +259,9 @@ gboolean document_account_for_unsaved(void);
 gboolean document_close_all(void);
 
 GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename, gint pos,
-		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
+		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc, GtkNotebook *notebook);
 
-void document_open_file_list(const gchar *data, gsize length);
+void document_open_file_list(const gchar *data, gsize length, GtkNotebook *notebook);
 
 gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolean inc,
 		gboolean backwards);

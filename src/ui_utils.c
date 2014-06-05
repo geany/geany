@@ -54,6 +54,7 @@
 #include "osx.h"
 
 #include "gtkcompat.h"
+#include "notebook.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -830,7 +831,7 @@ void ui_save_buttons_toggle(gboolean enable)
 	gboolean dirty_tabs = FALSE;
 
 	if (ui_prefs.allow_always_save)
-		enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
+		enable = notebook_get_num_tabs() > 0;
 
 	ui_widget_set_sensitive(widgets.save_buttons[0], enable);
 	ui_widget_set_sensitive(widgets.save_buttons[1], enable);
@@ -943,7 +944,7 @@ static void init_document_widgets(void)
 void ui_document_buttons_update(void)
 {
 	guint i;
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
+	gboolean enable = notebook_get_num_tabs() > 0;
 
 	for (i = 0; i < widgets.document_buttons->len; i++)
 	{
@@ -972,7 +973,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
 GEANY_API_SYMBOL
 void ui_add_document_sensitive(GtkWidget *widget)
 {
-	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
+	gboolean enable = notebook_get_num_tabs() > 0;
 
 	ui_widget_set_sensitive(widget, enable);
 
@@ -2220,9 +2221,9 @@ void ui_swap_sidebar_pos(void)
 	g_object_ref(right);
 	gtk_container_remove (GTK_CONTAINER (pane), left);
 	gtk_container_remove (GTK_CONTAINER (pane), right);
-	/* only scintilla notebook should expand */
-	gtk_paned_pack1(GTK_PANED(pane), right, right == main_widgets.notebook, TRUE);
-	gtk_paned_pack2(GTK_PANED(pane), left, left == main_widgets.notebook, TRUE);
+	/* only scintilla notebooks should expand */
+	gtk_paned_pack1(GTK_PANED(pane), right, right != main_widgets.sidebar_notebook, TRUE);
+	gtk_paned_pack2(GTK_PANED(pane), left, left != main_widgets.sidebar_notebook, TRUE);
 	g_object_unref(left);
 	g_object_unref(right);
 
@@ -2879,7 +2880,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	gchar *base_name, *label;
 	GPtrArray *sorted_documents;
 
-	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	len = notebook_get_num_tabs();
 
 	sorted_documents = g_ptr_array_sized_new(len);
 	/* copy the documents_array into the new one */

@@ -977,11 +977,14 @@ void keybindings_show_shortcuts(void)
 
 static gboolean check_fixed_kb(guint keyval, guint state)
 {
+	/* make these keybindings operate on the currently focussed notebook */
+	GtkNotebook *notebook = notebook_get_current_notebook();
+
 	/* check alt-0 to alt-9 for setting current notebook page */
 	if (state == GDK_MOD1_MASK && keyval >= GDK_0 && keyval <= GDK_9)
 	{
 		gint page = keyval - GDK_0 - 1;
-		gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+		gint npages = gtk_notebook_get_n_pages(notebook);
 
 		/* alt-0 is for the rightmost tab */
 		if (keyval == GDK_0)
@@ -990,7 +993,7 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (swap_alt_tab_order && ! file_prefs.tab_order_ltr)
 			page = (npages - 1) - page;
 
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page);
+		gtk_notebook_set_current_page(notebook, page);
 		return TRUE;
 	}
 	/* note: these are now overridden by default with move tab bindings */
@@ -1000,9 +1003,9 @@ static gboolean check_fixed_kb(guint keyval, guint state)
 		if (state == (GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK))
 		{
 			if (keyval == GDK_Page_Up)
-				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), 0);
+				gtk_notebook_set_current_page(notebook, 0);
 			if (keyval == GDK_Page_Down)
-				gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), -1);
+				gtk_notebook_set_current_page(notebook, -1);
 			return TRUE;
 		}
 	}
@@ -1080,7 +1083,7 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 				}
 				else
 				{	/* show tab bar menu */
-					trigger_button_event(main_widgets.notebook, event_time);
+					trigger_button_event(GTK_WIDGET(notebook_get_current_notebook()), event_time);
 					return TRUE;
 				}
 			}
@@ -1717,7 +1720,7 @@ static void switch_notebook_page(gint direction)
 	if (parent_is_notebook)
 		notebook = GTK_NOTEBOOK(focusw);
 	else
-		notebook = GTK_NOTEBOOK(main_widgets.notebook);
+		notebook = notebook_get_current_notebook();
 
 	/* now switch pages */
 	page_count = gtk_notebook_get_n_pages(notebook);
@@ -1776,7 +1779,7 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 static void cb_func_move_tab(guint key_id)
 {
 	GtkWidget *child;
-	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	GtkNotebook *nb = notebook_get_current_notebook();
 	gint cur_page = gtk_notebook_get_current_page(nb);
 
 	if (cur_page < 0)

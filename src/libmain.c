@@ -170,6 +170,7 @@ static void setup_window_position(void)
 static void apply_settings(void)
 {
 	ui_update_fold_items();
+	GtkNotebook *notebook;
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	toolbar_show_hide();
@@ -199,12 +200,14 @@ static void apply_settings(void)
 	}
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+	foreach_notebook(notebook)
+		gtk_notebook_set_tab_pos(notebook, interface_prefs.tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
 	/* whether to show notebook tabs or not */
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+	foreach_notebook(notebook)
+		gtk_notebook_set_show_tabs(notebook, interface_prefs.show_notebook_tabs);
 
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
@@ -928,13 +931,9 @@ static void load_startup_files(gint argc, gchar **argv)
 	if (load_session)
 	{
 		/* load session files into tabs, as they are found in the session_files variable */
+		ui_update_popup_copy_items(NULL);
+		ui_update_popup_reundo_items(NULL);
 		configuration_open_files();
-
-		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-		{
-			ui_update_popup_copy_items(NULL);
-			ui_update_popup_reundo_items(NULL);
-		}
 	}
 
 	open_cl_files(argc, argv);
@@ -1174,10 +1173,7 @@ gint main_lib(gint argc, gchar **argv)
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);
 
-	doc = document_get_current();
-	sidebar_select_openfiles_item(doc);
-	build_menu_update(doc);
-	sidebar_update_tag_list(doc, FALSE);
+	build_menu_update(NULL);
 
 #ifdef G_OS_WIN32
 	/* Manually realise the main window to be able to set the position but don't show it.
@@ -1187,7 +1183,6 @@ gint main_lib(gint argc, gchar **argv)
 	setup_window_position();
 
 	/* finally show the window */
-	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 

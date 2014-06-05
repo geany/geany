@@ -45,6 +45,7 @@
 #include "keybindingsprivate.h"
 #include "keyfile.h"
 #include "msgwindow.h"
+#include "notebook.h"
 #include "prefs.h"
 #include "printing.h"
 #include "sidebar.h"
@@ -868,6 +869,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	if (response == GTK_RESPONSE_OK || response == GTK_RESPONSE_APPLY)
 	{
+		GtkNotebook *notebook;
 		GtkWidget *widget;
 		guint i;
 		gboolean autoclose_brackets[5];
@@ -1278,9 +1280,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		toolbar_update_ui();
 		toolbar_show_hide();
 		ui_sidebar_show_hide();
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+		foreach_notebook(notebook)
+		{
+			gtk_notebook_set_show_tabs(notebook, interface_prefs.show_notebook_tabs);
+			gtk_notebook_set_tab_pos(notebook, interface_prefs.tab_pos_editor);
+		}
 
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
