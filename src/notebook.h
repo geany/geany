@@ -75,7 +75,7 @@ guint notebook_get_num_tabs(void);
 gint notebook_move_tab(GeanyPage *page, GtkNotebook *new_notebook);
 
 #define foreach_notebook(notebook)                                                 \
-	for (gint __idx = 0; __idx < main_widgets.notebooks->len; ++__idx)             \
+	for (guint __idx = 0; __idx < main_widgets.notebooks->len; ++__idx)             \
 		if (((notebook) = g_ptr_array_index(main_widgets.notebooks, (__idx))) || 1)
 
 #define notebook_get_primary() (g_ptr_array_index(main_widgets.notebooks, 0))
