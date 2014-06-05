@@ -215,3 +215,22 @@ gboolean geany_page_try_close(GeanyPage *self)
 
 	return ret;
 }
+
+
+void geany_page_set_active(GeanyPage *self, gboolean is_active)
+{
+	gchar *markup;
+	GtkWidget *ebox = self->tab_widget;
+	GtkWidget *label = gtk_bin_get_child(GTK_BIN(ebox));
+
+	if (is_active)
+	{
+		markup = g_markup_printf_escaped("<u>%s</u>", self->label);
+		gtk_label_set_markup(GTK_LABEL(label), markup);
+		g_free(markup);
+	}
+	else
+	{
+		gtk_label_set_text(GTK_LABEL(label), self->label);
+	}
+}

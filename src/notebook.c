@@ -120,12 +120,31 @@ static void update_mru_tabs_head(GeanyPage *page)
 static gboolean
 on_page_focused(GeanyPage *page, GdkEvent *event, gpointer user_data)
 {
+	GtkLabel      *label;
+	GtkNotebook   *notebook;
+	GtkWidget     *tab_widget;
+	gchar         *markup;
+
+
 	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
 		return FALSE;
 
+	if (!page) /* focus is removed from child. Not interesting to us */
+		return FALSE;
+
+	geany_page_set_active(page, TRUE);
+	/* update MRU to make ctrl-tab between notebooks work */
 	if (!switch_in_progress)
 		update_mru_tabs_head(page);
 
+	return FALSE;
+}
+
+
+static gboolean
+on_page_unfocused(GeanyPage *page, GdkEvent *event, gpointer user_data)
+{
+	geany_page_set_active(page, FALSE);
 	return FALSE;
 }
 
@@ -444,18 +463,14 @@ swap_notebooks(GeanyPage *page)
 }
 
 
-static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
+static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, GeanyPage *page)
 {
-	GeanyDocument *doc = data;
 	GtkNotebook *notebook_of_widget, *notebook_of_menu;
-
-	if (! DOC_VALID(doc))
-		return;
 
 	notebook_of_menu   = GTK_NOTEBOOK(g_object_get_data(G_OBJECT(gtk_widget_get_parent(GTK_WIDGET(menuitem))), "notebook"));
 
-	notebook_move_doc(notebook_of_menu, doc);
-	document_show_tab(doc);
+	notebook_move_tab(page, notebook_of_menu);
+	notebook_show_tab(page);
 }
 
 
@@ -508,7 +523,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkNotebook *nb, GtkW
 	gtk_container_foreach(GTK_CONTAINER(nb), (GtkCallback) add_page_to_menu, menu);
 
 	/* _full with NULL destroy so that the notebook won't be destroyed */
-	g_object_set_data_full(G_OBJECT(menu), "notebook", notebook, NULL);
+	g_object_set_data_full(G_OBJECT(menu), "notebook", nb, NULL);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
@@ -671,13 +686,11 @@ void notebook_free(void)
 }
 
 
-static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, GeanyPage *page)
 {
 	guint state;
-	GeanyPage *page = GEANY_PAGE(data);
-	GtkNotebook *notebook;
+	GtkNotebook *nb = GTK_NOTEBOOK(gtk_widget_get_parent(GTK_WIDGET(page)));
 
-	notebook = notebook_get_with_page_by_sci(doc->editor->sci, NULL);
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
@@ -703,7 +716,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* right-click is first handled here if it happened on a notebook tab */
 	if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, notebook, (GtkWidget *) page);
+		show_tab_bar_popup_menu(event, nb, (GtkWidget *) page);
 		return TRUE;
 	}
 
@@ -738,6 +751,9 @@ gint notebook_new_tab(GeanyPage *page, GtkNotebook *notebook)
 	g_return_val_if_fail(page != NULL, -1);
 
 	tab_widget = geany_page_get_tab_widget(page);
+
+	g_signal_connect(G_OBJECT(page), "focus-in-event",  G_CALLBACK(on_page_focused), NULL);
+	g_signal_connect(G_OBJECT(page), "focus-out-event", G_CALLBACK(on_page_unfocused), NULL);
 
 	/* get button press events for the tab label and the space between it and
 	 * the close button, if any */
