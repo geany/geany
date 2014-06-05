@@ -44,6 +44,7 @@ struct _GeanyPage
 
 	gchar                 *label;
 	GIcon                 *icon;
+	GtkWidget             *tab_widget;
 };
 
 struct _GeanyPageClass
@@ -51,8 +52,10 @@ struct _GeanyPageClass
 	GtkBoxClass           parent_class;
 };
 
+GType geany_page_get_type(void);
 
 GtkWidget *geany_page_new_with_label(const gchar *label);
+void geany_page_set_active(GeanyPage *self, gboolean is_active);
 
 static inline
 const gchar *geany_page_get_label(GeanyPage *self)
@@ -66,6 +69,14 @@ GIcon *geany_page_get_icon(GeanyPage *self)
 {
 	return self->icon;
 }
+
+static inline
+GtkWidget *geany_page_get_tab_widget(GeanyPage *self)
+{
+	return self->tab_widget;
+}
+
+gboolean geany_page_try_close(GeanyPage *self);
 
 G_END_DECLS
 

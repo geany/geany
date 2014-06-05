@@ -72,8 +72,6 @@ enum
 /* Private GeanyDocument fields */
 typedef struct GeanyDocumentPrivate
 {
-	/* GtkLabel shown in the notebook header. */
-	GtkWidget		*tab_label;
 	/* GtkTreeView object for this document within the Symbols treeview of the sidebar. */
 	GtkWidget		*tag_tree;
 	/* GtkTreeStore object for this document within the Symbols treeview of the sidebar. */

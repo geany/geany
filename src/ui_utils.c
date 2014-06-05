@@ -37,6 +37,7 @@
 #include "encodings.h"
 #include "filetypes.h"
 #include "geanymenubuttonaction.h"
+#include "geanypage.h"
 #include "keyfile.h"
 #include "main.h"
 #include "msgwindow.h"
@@ -1733,7 +1734,11 @@ void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text)
  * document status. */
 void ui_update_tab_status(GeanyDocument *doc)
 {
-	gtk_widget_set_name(doc->priv->tab_label, document_get_status_widget_class(doc));
+	gint page_num = document_get_notebook_page(doc);
+
+	GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	GtkWidget *tab_widget = geany_page_get_tab_widget(GEANY_PAGE(page));
+	gtk_widget_set_name(tab_widget, document_get_status_widget_class(doc));
 
 	sidebar_openfiles_update(doc);
 }
