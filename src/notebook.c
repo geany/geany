@@ -443,10 +443,14 @@ swap_notebooks(GeanyPage *page)
 static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
 {
 	GeanyDocument *doc = data;
+	GtkNotebook *notebook_of_widget, *notebook_of_menu;
 
 	if (! DOC_VALID(doc))
 		return;
 
+	notebook_of_menu   = GTK_NOTEBOOK(g_object_get_data(G_OBJECT(gtk_widget_get_parent(GTK_WIDGET(menuitem))), "notebook"));
+
+	notebook_move_doc(notebook_of_menu, doc);
 	document_show_tab(doc);
 }
 
@@ -480,12 +484,11 @@ static void add_page_to_menu(GeanyPage *page, GtkMenu *menu)
 }
 
 
-static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
+static void show_tab_bar_popup_menu(GdkEventButton *event, GtkNotebook *nb, GtkWidget *page)
 {
 	GtkWidget *menu_item;
 	static GtkWidget *menu = NULL;
 	GeanyDocument *doc = NULL;
-	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
 
 	if (page)
 	{
@@ -499,6 +502,9 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GtkWidget *page)
 	/* clear the old menu items */
 	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
 	gtk_container_foreach(GTK_CONTAINER(nb), (GtkCallback) add_page_to_menu, menu);
+
+	/* _full with NULL destroy so that the notebook won't be destroyed */
+	g_object_set_data_full(G_OBJECT(menu), "notebook", notebook, NULL);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
@@ -572,7 +578,7 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 	 * on a tab directly */
 	else if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, NULL);
+		show_tab_bar_popup_menu(event, notebook, NULL);
 		return TRUE;
 	}
 	return FALSE;
@@ -665,7 +671,9 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	guint state;
 	GeanyPage *page = GEANY_PAGE(data);
+	GtkNotebook *notebook;
 
+	notebook = notebook_get_with_page_by_sci(doc->editor->sci, NULL);
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
@@ -691,7 +699,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* right-click is first handled here if it happened on a notebook tab */
 	if (event->button == 3)
 	{
-		show_tab_bar_popup_menu(event, (GtkWidget *) page);
+		show_tab_bar_popup_menu(event, notebook, (GtkWidget *) page);
 		return TRUE;
 	}
 
