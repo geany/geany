@@ -129,6 +129,7 @@ on_page_focused(GeanyPage *page, GdkEvent *event, gpointer user_data)
 	return FALSE;
 }
 
+
 gint notebook_order_compare(GtkNotebook *notebook1, GtkNotebook *notebook2)
 {
 	if (notebook1 == notebook2)

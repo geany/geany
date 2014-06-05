@@ -31,6 +31,7 @@
 #include "document.h"
 
 #include "app.h"
+#include "build.h"
 #include "callbacks.h" /* for ignore_callback */
 #include "dialogs.h"
 #include "documentprivate.h"
@@ -666,11 +667,44 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 	return FALSE;
 }
 
-static gboolean set_current(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+
+static gboolean delayed_check_disk_status(gpointer data)
+{
+	document_check_disk_status(data, FALSE);
+	return FALSE;
+}
+
+
+/* Changes window-title after switching tabs and lots of other things.
+ * This connects to focus-in-event to catch cases where tabs are "switched" by focusing a
+ * different document notebook. This is too called on page switching as that implies focus change.
+ **/
+static gboolean on_sci_focus(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 	GeanyDocument *doc = user_data;
 
 	current = doc;
+	sidebar_select_openfiles_item(doc);
+	ui_save_buttons_toggle(doc->changed);
+	ui_set_window_title(doc);
+	ui_update_statusbar(doc, -1);
+	ui_update_popup_reundo_items(doc);
+	ui_document_show_hide(doc); /* update the document menu */
+	build_menu_update(doc);
+	sidebar_update_tag_list(doc, FALSE);
+	document_highlight_tags(doc);
+
+	/* We delay the check to avoid weird fast, unintended switching of notebook pages when
+	 * the 'file has changed' dialog is shown while the switch event is not yet completely
+	 * finished. So, we check after the switch has been performed to be safe. */
+	g_idle_add(delayed_check_disk_status, doc);
+
+#ifdef HAVE_VTE
+	vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
+#endif
+
+	g_signal_emit_by_name(geany_object, "document-activate", doc);
+
 	return FALSE;
 }
 
@@ -742,7 +776,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename, GtkNotebook *n
 	/* focus the current document after clicking on a tab */
 	gtk_container_set_focus_child((GtkContainer *) page, (GtkWidget *) doc->editor->sci);
 	g_signal_connect(page, "try-close", G_CALLBACK(close_page), doc);
-	g_signal_connect(doc->editor->sci, "focus-in-event", G_CALLBACK(set_current), doc);
+	g_signal_connect(doc->editor->sci, "focus-in-event", G_CALLBACK(on_sci_focus), doc);
 	notebook_new_tab(page, notebook);
 
 	/* select document in sidebar */

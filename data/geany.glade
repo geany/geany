@@ -8197,7 +8197,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="scrollable">True</property>
-                        <signal name="switch-page" handler="on_notebook1_switch_page_after" after="yes" swapped="no"/>
                       </object>
                       <packing>
                         <property name="resize">True</property>
@@ -8211,7 +8210,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="scrollable">True</property>
-                        <signal name="switch-page" handler="on_notebook1_switch_page_after" after="yes" swapped="no"/>
                       </object>
                       <packing>
                         <property name="resize">True</property>
