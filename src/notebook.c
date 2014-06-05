@@ -41,6 +41,7 @@
 
 #include "gtkcompat.h"
 #include "sciwrappers.h"
+#include "math.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -603,6 +604,90 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 	return FALSE;
 }
 
+static gint get_paned_size(GtkPaned *paned)
+{
+	switch (gtk_orientable_get_orientation(GTK_ORIENTABLE(paned)))
+	{
+		case GTK_ORIENTATION_HORIZONTAL:
+			return gtk_widget_get_allocated_width(GTK_WIDGET(paned));
+		case GTK_ORIENTATION_VERTICAL:
+			return gtk_widget_get_allocated_height(GTK_WIDGET(paned));
+		default:
+			g_assert_not_reached();
+	}
+}
+
+static void store_split_value(GtkPaned *paned)
+{
+	gint pos, max;
+
+	pos = gtk_paned_get_position(paned);
+	max = get_paned_size(paned);
+
+	pos = nearbyint((10000.0 * pos)/max);
+
+	g_object_set_data(G_OBJECT(paned), "split", GINT_TO_POINTER(pos));
+}
+
+gboolean on_handle_moved(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+	store_split_value(GTK_PANED(widget));
+}
+
+static gboolean relayout_notebooks(gpointer data)
+{
+	GtkPaned *paned = GTK_PANED(data);
+	GtkNotebook *n1, *n2;
+	gint minimized1, minimized2;
+	gint max;
+
+	max = get_paned_size(paned);
+	/* this must be called after the GtkPaned is realized and got size allocated */
+	g_return_val_if_fail(gtk_widget_get_realized(GTK_WIDGET(paned)), FALSE);
+	g_return_val_if_fail(max > 1, FALSE);
+
+	n1 = GTK_NOTEBOOK(gtk_paned_get_child1(paned));
+	minimized1 = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(n1), "minimized"));
+
+	n2 = GTK_NOTEBOOK(gtk_paned_get_child2(paned));
+	minimized2 = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(n2), "minimized"));
+
+	g_signal_handlers_disconnect_by_func(paned, on_handle_moved, NULL);
+	if (!minimized1 && !minimized2)
+	{
+		/* both notebooks show something: restore the user chosen handle position */
+		gint split = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(paned), "split"));
+		/* the split value is stored as percent * 1000 */
+		gfloat splitf = split/10000.0;
+		if (split != -1)
+		{
+			gtk_paned_set_position(paned, (gint) (max*splitf));
+			g_object_set_data(G_OBJECT(paned), "autosize", GINT_TO_POINTER(0));
+		}
+		else
+			gtk_paned_set_position(paned, max/2);
+		g_signal_connect_after(G_OBJECT(paned), "notify::position", G_CALLBACK(on_handle_moved), NULL);
+	}
+	else
+	{
+		/* one or both notebooks are emtpy. override position with automatic value
+		 * but remember the postition to restore it later */
+		gint pos = gtk_paned_get_position(paned);
+		if (!g_object_get_data(G_OBJECT(paned), "autosize"))
+			store_split_value(paned);
+		if (minimized1 && minimized2)
+			gtk_paned_set_position(paned, max/2);
+		else if (minimized2)
+			gtk_paned_set_position(paned, max);
+		else
+			gtk_paned_set_position(paned, 0);
+		g_object_set_data(G_OBJECT(paned), "autosize", GINT_TO_POINTER(1));
+	}
+
+	return FALSE;
+}
+
+
 /* call this after the number of tabs in main_widgets.notebook changes. */
 static void on_notebook_page_count_changed(GtkNotebook *notebook,
 										   GeanyPage *page,
@@ -628,7 +713,8 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_ALL,
 			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
 			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-		break;
+			g_object_set_data(G_OBJECT(notebook), "minimized", GINT_TO_POINTER(1));
+			break;
 
 		case 1:
 		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
@@ -636,8 +722,16 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
 		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
 			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-		break;
+			g_object_set_data(G_OBJECT(notebook), "minimized", GINT_TO_POINTER(0));
+			break;
+
+		default:
+			/* don't relayout unecessarily. need only to do this for 0->1 and 1->0 transistions */
+			return;
 	}
+	/* Do not relayout on the very initial call */
+	if (page)
+		g_idle_add(relayout_notebooks, gtk_widget_get_parent(GTK_WIDGET(notebook)));
 }
 
 
@@ -652,6 +746,9 @@ GPtrArray *notebook_init(void)
 
 	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook1"));
 	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook7"));
+
+	GtkWidget *paned = gtk_widget_get_parent(g_ptr_array_index(ret, 0));
+	g_object_set_data(G_OBJECT(paned), "split",      GINT_TO_POINTER(-1));
 
 	for (i = 0; i < max_notebooks; i++)
 	{
