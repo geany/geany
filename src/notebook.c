@@ -117,14 +117,17 @@ static void update_mru_tabs_head(GeanyPage *page)
 }
 
 
-/* before the tab changes, add the current document to the MRU list */
-static void on_notebook_switch_page(GtkNotebook *notebook,
-		GeanyPage *page, guint page_num, gpointer user_data)
+static gboolean
+on_page_focused(GeanyPage *page, GdkEvent *event, gpointer user_data)
 {
+	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
+		return FALSE;
+
 	if (!switch_in_progress)
 		update_mru_tabs_head(page);
-}
 
+	return FALSE;
+}
 
 gint notebook_order_compare(GtkNotebook *notebook1, GtkNotebook *notebook2)
 {
@@ -594,8 +597,11 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 
 	if (page && !main_status.quitting)
 	{
+		/* when adding a tab add it to the mru, even if it wasn't actually focused (for batch open) */
+		if (added)
+			update_mru_tabs_head(page);
 		/* when closing a tab remove it from the mru */
-		if (!added)
+		else
 			g_queue_remove(mru_tabs, page);
 	}
 
@@ -640,9 +646,6 @@ GPtrArray *notebook_init(void)
 
 		g_signal_connect(notebook, "drag-data-received",
 			G_CALLBACK(on_window_drag_data_received), NULL);
-
-		g_signal_connect(notebook, "switch-page",
-			G_CALLBACK(on_notebook_switch_page), NULL);
 
 		g_signal_connect(notebook, "page-added",
 			G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(1));
@@ -738,6 +741,8 @@ gint notebook_new_tab(GeanyPage *page, GtkNotebook *notebook)
 	/* get button press events for the tab label and the space between it and
 	 * the close button, if any */
 	g_signal_connect_object(tab_widget, "button-press-event", G_CALLBACK(notebook_tab_click), page, 0);
+	/* Use focus event to update tab mru */
+	g_signal_connect(page, "focus-in-event", G_CALLBACK(on_page_focused), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), tab_widget, FALSE, FALSE, 0);
