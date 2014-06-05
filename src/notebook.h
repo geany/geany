@@ -23,6 +23,7 @@
 #define GEANY_NOTEBOOK_H 1
 
 #include "document.h"
+#include "geanypage.h"
 
 #include <glib.h>
 
@@ -33,10 +34,14 @@ void notebook_init(void);
 void notebook_free(void);
 
 /* Returns page number of notebook page, or -1 on error */
-gint notebook_new_tab(GeanyDocument *doc);
+gint notebook_new_tab(GeanyPage *page);
 
 /* Always use this instead of gtk_notebook_remove_page(). */
-void notebook_remove_page(gint page_num);
+void notebook_remove_tab(GeanyPage *page);
+
+void notebook_destroy_tab(GeanyPage *page);
+
+void notebook_show_tab(GeanyPage *page);
 
 /* Switch notebook to the last used tab. Can be called repeatedly to get to the
  * previous tabs. */
