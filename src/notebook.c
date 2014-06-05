@@ -58,7 +58,7 @@ static GtkTargetEntry files_drop_targets[] = {
 };
 
 static const gsize MAX_MRU_DOCS = 20;
-static GQueue *mru_docs = NULL;
+static GQueue *mru_tabs = NULL;
 static guint mru_pos = 0;
 
 static gboolean switch_in_progress = FALSE;
@@ -76,15 +76,15 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		guint event_time, gpointer user_data);
 
 
-static void update_mru_docs_head(GeanyPage *page)
+static void update_mru_tabs_head(GeanyPage *page)
 {
 	g_return_if_fail(GEANY_IS_PAGE(page));
 
-	g_queue_remove(mru_docs, page);
-	g_queue_push_head(mru_docs, page);
+	g_queue_remove(mru_tabs, page);
+	g_queue_push_head(mru_tabs, page);
 
-	if (g_queue_get_length(mru_docs) > MAX_MRU_DOCS)
-		g_queue_pop_tail(mru_docs);
+	if (g_queue_get_length(mru_tabs) > MAX_MRU_DOCS)
+		g_queue_pop_tail(mru_tabs);
 }
 
 
@@ -94,12 +94,13 @@ static void on_notebook_switch_page(GtkNotebook *notebook,
 {
 	/* insert the very first document (when adding the second document and
 	 * switching to it). this is the other page (1-page_num) when there's only two of them */
-	if (g_queue_get_length(mru_docs) == 0 && gtk_notebook_get_n_pages(notebook) == 2)
-		update_mru_docs_head((GeanyPage *) gtk_notebook_get_nth_page(notebook, 1-page_num));
+	if (g_queue_get_length(mru_tabs) == 0 && gtk_notebook_get_n_pages(notebook) == 2)
+		update_mru_tabs_head((GeanyPage *) gtk_notebook_get_nth_page(notebook, 1-page_num));
 
 	if (!switch_in_progress)
-		update_mru_docs_head(page);
+		update_mru_tabs_head(page);
 }
+
 
 static GtkWidget *ui_minimal_dialog_new(GtkWindow *parent, const gchar *title)
 {
@@ -162,7 +163,7 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 
 		doc = document_get_current();
 		page = gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci));
-		update_mru_docs_head((GeanyPage *)page);
+		update_mru_tabs_head((GeanyPage *)page);
 		mru_pos = 0;
 		document_check_disk_status(doc, TRUE);
 	}
@@ -208,8 +209,8 @@ static void update_filename_label(void)
 		gtk_widget_show_all(switch_dialog);
 	}
 
-	queue_length = g_queue_get_length(mru_docs);
-	for (i = mru_pos; (i <= mru_pos + 3) && (page = g_queue_peek_nth(mru_docs, i % queue_length)); i++)
+	queue_length = g_queue_get_length(mru_tabs);
+	for (i = mru_pos; (i <= mru_pos + 3) && (page = g_queue_peek_nth(mru_tabs, i % queue_length)); i++)
 	{
 		const gchar *basename;
 
@@ -253,13 +254,13 @@ void notebook_switch_tablastused(void)
 	gboolean switch_start = !switch_in_progress;
 
 	mru_pos += 1;
-	last_page = g_queue_peek_nth(mru_docs, mru_pos);
+	last_page = g_queue_peek_nth(mru_tabs, mru_pos);
 
 	if (! last_page)
 	{
 		utils_beep();
 		mru_pos = 0;
-		last_page = g_queue_peek_nth(mru_docs, mru_pos);
+		last_page = g_queue_peek_nth(mru_tabs, mru_pos);
 	}
 	if (! last_page)
 		return;
@@ -526,9 +527,9 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 	if (page && !main_status.quitting)
 	{
 		if (added)
-			update_mru_docs_head(page);
+			update_mru_tabs_head(page);
 		else
-			g_queue_remove(mru_docs, page);
+			g_queue_remove(mru_tabs, page);
 	}
 
 	switch (gtk_notebook_get_n_pages(notebook))
@@ -548,7 +549,7 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 		/* this prevents the pop up window from showing when there's a single document */
 		if (!added && !main_status.quitting)
-			g_queue_clear(mru_docs);
+			g_queue_clear(mru_tabs);
 		break;
 	}
 }
@@ -561,7 +562,7 @@ void notebook_init(void)
 	g_signal_connect(main_widgets.notebook, "drag-data-received",
 		G_CALLBACK(on_window_drag_data_received), NULL);
 
-	mru_docs = g_queue_new();
+	mru_tabs = g_queue_new();
 	g_signal_connect(main_widgets.notebook, "switch-page",
 		G_CALLBACK(on_notebook_switch_page), NULL);
 
@@ -577,7 +578,7 @@ void notebook_init(void)
 
 void notebook_free(void)
 {
-	g_queue_free(mru_docs);
+	g_queue_free(mru_tabs);
 }
 
 
@@ -736,7 +737,7 @@ void notebook_remove_tab(GeanyPage *page)
 
 		if (file_prefs.tab_close_switch_to_mru)
 		{
-			GeanyPage *page = g_queue_peek_nth(mru_docs, 1);
+			GeanyPage *page = g_queue_peek_nth(mru_tabs, 1);
 			if (page)
 				cur_page = gtk_notebook_page_num(nb, (GtkWidget *)page);
 		}
