@@ -109,6 +109,7 @@ GPtrArray *session_files;
 static gchar *scribble_text = NULL;
 static gint scribble_pos = -1;
 static gint hpan_position;
+static gint hpan2_position;
 static gint vpan_position;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
@@ -612,6 +613,8 @@ static void save_ui_prefs(GKeyFile *config)
 				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1"))));
 		g_key_file_set_integer(config, PACKAGE, "msgwindow_position",
 				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1"))));
+		g_key_file_set_integer(config, PACKAGE, "editor_notebooks_position",
+				gtk_paned_get_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned2"))));
 
 		gtk_window_get_position(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[0], &ui_prefs.geometry[1]);
 		gtk_window_get_size(GTK_WINDOW(main_widgets.window), &ui_prefs.geometry[2], &ui_prefs.geometry[3]);
@@ -1102,6 +1105,7 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[4] = geo[4] != 0;
 	}
 	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	hpan2_position = utils_get_setting_integer(config, PACKAGE, "editor_notebooks_position", -1);
 	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
 				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
@@ -1351,6 +1355,7 @@ void configuration_apply_settings(void)
 	{
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
+		notebook_restore_paned_position(hpan2_position);
 	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.

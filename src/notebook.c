@@ -656,10 +656,17 @@ static gboolean relayout_notebooks(gpointer data)
 	if (!minimized1 && !minimized2)
 	{
 		/* both notebooks show something: restore the user chosen handle position */
+		gint ovr = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(paned), "override"));
 		gint split = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(paned), "split"));
 		/* the split value is stored as percent * 1000 */
 		gfloat splitf = split/10000.0;
-		if (split != -1)
+		if (G_UNLIKELY(ovr != -1))
+		{
+			gtk_paned_set_position(paned, ovr);
+			store_split_value(paned);
+			g_object_set_data(G_OBJECT(paned), "override", GINT_TO_POINTER(-1));
+		}
+		else if (split != -1)
 		{
 			gtk_paned_set_position(paned, (gint) (max*splitf));
 			g_object_set_data(G_OBJECT(paned), "autosize", GINT_TO_POINTER(0));
@@ -687,6 +694,14 @@ static gboolean relayout_notebooks(gpointer data)
 	return FALSE;
 }
 
+void notebook_restore_paned_position(gint position)
+{
+	GtkPaned *paned;
+
+	paned = GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned2"));
+	if (position != -1)
+		g_object_set_data(G_OBJECT(paned), "override", GINT_TO_POINTER(position));
+}
 
 /* call this after the number of tabs in main_widgets.notebook changes. */
 static void on_notebook_page_count_changed(GtkNotebook *notebook,
@@ -749,6 +764,7 @@ GPtrArray *notebook_init(void)
 
 	GtkWidget *paned = gtk_widget_get_parent(g_ptr_array_index(ret, 0));
 	g_object_set_data(G_OBJECT(paned), "split",      GINT_TO_POINTER(-1));
+	g_object_set_data(G_OBJECT(paned), "override",   GINT_TO_POINTER(-1));
 
 	for (i = 0; i < max_notebooks; i++)
 	{
