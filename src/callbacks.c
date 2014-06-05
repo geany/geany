@@ -45,6 +45,7 @@
 #include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
+#include "notebook.h"
 #include "plugins.h"
 #include "pluginutils.h"
 #include "prefs.h"
@@ -126,20 +127,23 @@ void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *cur_doc = document_get_current();
 	guint count = 0;
+	GtkNotebook *notebook;
 
-	/* iterate over documents in tabs order */
-	for (i = 0; i < max; i++)
+	foreach_notebook(notebook)
 	{
-		GeanyDocument *doc = document_get_from_page(i);
+		guint i, max = (guint) gtk_notebook_get_n_pages(notebook);
+		/* iterate over documents in tabs order */
+		for (i = 0; i < max; i++)
+		{
+			GeanyDocument *doc = document_get_from_page(i);
+			if (! doc->changed)
+				continue;
 
-		if (! doc->changed)
-			continue;
-
-		if (document_save_file(doc, FALSE))
-			count++;
+			if (document_save_file(doc, FALSE))
+				count++;
+		}
 	}
 	if (!count)
 		return;
@@ -1502,6 +1506,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		ui_lookup_widget(main_widgets.window, "menu_show_messages_window1"));
 	GtkCheckMenuItem *toolbari = GTK_CHECK_MENU_ITEM(
 		ui_lookup_widget(main_widgets.window, "menu_show_toolbar1"));
+	GtkNotebook *notebook;
 
 	/* get the initial state (necessary if Geany was closed with hide_all = TRUE) */
 	if (G_UNLIKELY(hide_all == -1))
@@ -1524,7 +1529,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
 		interface_prefs.show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+		foreach_notebook(notebook)
+			gtk_notebook_set_show_tabs(notebook, interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(FALSE);
 
@@ -1538,7 +1544,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
 		interface_prefs.show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+		foreach_notebook(notebook)
+			gtk_notebook_set_show_tabs(notebook, interface_prefs.show_notebook_tabs);
 
 		ui_statusbar_showhide(TRUE);
 
