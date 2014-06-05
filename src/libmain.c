@@ -258,7 +258,8 @@ static void main_init(void)
 	/* store important pointers for later reference */
 	main_widgets.toolbar = toolbar_init();
 	main_widgets.sidebar_notebook = ui_lookup_widget(main_widgets.window, "notebook3");
-	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
+	main_widgets.notebooks = notebook_init();
+	main_widgets.notebook = GTK_WIDGET(notebook_get_primary()); /* FIXME: remove to break ABI */
 	main_widgets.editor_menu = create_edit_menu1();
 	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
 	main_widgets.message_window_notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
@@ -1124,7 +1125,6 @@ gint main_lib(gint argc, gchar **argv)
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
-	notebook_init();
 	filetypes_init();
 	templates_init();
 	navqueue_init();

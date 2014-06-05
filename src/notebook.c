@@ -544,25 +544,46 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 	}
 }
 
-void notebook_init(void)
-{
-	g_signal_connect_after(main_widgets.notebook, "button-press-event",
-		G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
-	g_signal_connect(main_widgets.notebook, "drag-data-received",
-		G_CALLBACK(on_window_drag_data_received), NULL);
+GPtrArray *notebook_init(void)
+{
+	const int max_notebooks = 2;
+	gint i;
+	GtkNotebook *notebook;
+	GPtrArray *notebooks;
+
+	notebooks = g_ptr_array_sized_new(max_notebooks);
+
+	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook1"));
+	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook7"));
+
+	for (i = 0; i < max_notebooks; i++)
+	{
+		notebook = g_ptr_array_index(notebooks, i);
+
+		g_signal_connect_after(notebook, "button-press-event",
+			G_CALLBACK(notebook_tab_bar_click_cb), NULL);
+
+		g_signal_connect(notebook, "drag-data-received",
+			G_CALLBACK(on_window_drag_data_received), NULL);
+
+		g_signal_connect(notebook, "switch-page",
+			G_CALLBACK(on_notebook_switch_page), NULL);
+
+		g_signal_connect(notebook, "page-added",
+			G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(1));
+		g_signal_connect(notebook, "page-removed",
+			G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(0));
+
+		/* initialize for 0 pages */
+		on_notebook_page_count_changed(notebook, NULL, 1, GINT_TO_POINTER(0));
+	}
 
 	mru_tabs = g_queue_new();
-	g_signal_connect(main_widgets.notebook, "switch-page",
-		G_CALLBACK(on_notebook_switch_page), NULL);
-
-	g_signal_connect(main_widgets.notebook, "page-added",
-		G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(1));
-	g_signal_connect(main_widgets.notebook, "page-removed",
-		G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(0));
-
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+
+	return notebooks;
 }
 
 
