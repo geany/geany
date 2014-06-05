@@ -222,6 +222,8 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
 
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
+GPtrArray *document_array_sorted_copy(GCompareFunc fn);
+
 GeanyDocument *document_find_by_id(guint id);
 
 

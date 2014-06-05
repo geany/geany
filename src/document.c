@@ -3374,38 +3374,50 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 }
 
 
+GPtrArray *document_array_sorted_copy(GCompareFunc fn)
+{
+	GPtrArray *array_copy = g_ptr_array_sized_new(documents_array->len);
+	gint i, len = documents_array->len;
+
+	foreach_document(i)
+	{
+		GeanyDocument *doc = documents[i];
+		if (DOC_VALID(doc))
+			g_ptr_array_add(array_copy, doc);
+		else
+			len -= 1;
+	}
+
+	g_ptr_array_set_size(array_copy, len);
+	g_ptr_array_sort(array_copy, fn);
+
+	return array_copy;
+}
+
 /* @note If successful, this should always be followed up with a call to
  * document_close_all().
  * @return TRUE if all files were saved or had their changes discarded. */
 gboolean document_account_for_unsaved(void)
 {
 	guint i, p, page_count;
+	GPtrArray *array_copy;
+	GeanyDocument *doc;
 
-	GPtrArray *array_copy = g_ptr_array_sized_new(documents_array->len);
-
-	foreach_document(i)
-	{
-		GeanyDocument *doc = documents[i];
-		if (DOC_VALID(doc) && doc->changed)
-			g_ptr_array_add(array_copy, doc);
-	}
-
-	g_ptr_array_sort(array_copy, document_compare_by_tab_order);
+	array_copy = document_array_sorted_copy(document_compare_by_tab_order);
 
 	/* iterate over documents in tabs order */
-	for(i = 0; i < array_copy->len; i++)
+	foreach_ptr_array(doc, i, array_copy)
 	{
-		GeanyDocument *doc = g_ptr_array_index(array_copy, i);
-		if (! dialogs_show_unsaved_file(doc))
+		if (doc->changed && ! dialogs_show_unsaved_file(doc))
 		{
 			g_ptr_array_free(array_copy, TRUE);
 			return FALSE;
 		}
 	}
 	/* all documents should now be accounted for, so ignore any changes */
-	foreach_document (i)
+	foreach_ptr_array(doc, i, array_copy)
 	{
-		documents[i]->changed = FALSE;
+		doc->changed = FALSE;
 	}
 
 	g_ptr_array_free(array_copy, TRUE);
