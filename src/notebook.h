@@ -71,6 +71,14 @@ gint notebook_order_compare(GtkNotebook *notebook1, GtkNotebook *notebook2);
 guint notebook_get_num_tabs(void);
 
 /*
+ * Overrides the paned position upon the next re-layout of the editor notebooks
+ * (which happens when new tabs are added to an empty notebook or the last tab of a
+ * notebook is closed). This is intended to restore the paned position from stored
+ * configuration.
+ */
+void notebook_restore_paned_position(gint position);
+
+/*
  * Moves the tab containing doc to the specified notebook */
 gint notebook_move_tab(GeanyPage *page, GtkNotebook *new_notebook);
 
