@@ -42,7 +42,6 @@
 
 #include <gdk/gdkkeysyms.h>
 
-
 #define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
 
 static const GtkTargetEntry drag_targets[] =
