@@ -35,6 +35,7 @@
 #include "geanypage.h"
 #include "keybindings.h"
 #include "main.h"
+#include "sidebar.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -45,18 +46,17 @@
 
 #include <gdk/gdkkeysyms.h>
 
-#define GEANY_DND_NOTEBOOK_TAB_TYPE	"geany_dnd_notebook_tab"
-
-static const GtkTargetEntry drag_targets[] =
-{
-	{GEANY_DND_NOTEBOOK_TAB_TYPE, GTK_TARGET_SAME_APP | GTK_TARGET_SAME_WIDGET, 0}
+enum {
+	DROP_DATA_NOTEBOOK,
+	DROP_DATA_FILENAME,
 };
 
 static GtkTargetEntry files_drop_targets[] = {
-	{ "STRING",			0, 0 },
-	{ "UTF8_STRING",	0, 0 },
-	{ "text/plain",		0, 0 },
-	{ "text/uri-list",	0, 0 }
+	{ "GTK_NOTEBOOK_TAB",  	GTK_TARGET_SAME_APP, DROP_DATA_NOTEBOOK},
+	{ "STRING",				0, DROP_DATA_FILENAME },
+	{ "UTF8_STRING",		0, DROP_DATA_FILENAME },
+	{ "text/plain",			0, DROP_DATA_FILENAME },
+	{ "text/uri-list",		0, DROP_DATA_FILENAME }
 };
 
 static const gsize MAX_MRU_DOCS = 20;
@@ -74,6 +74,9 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		gint x, gint y, GtkSelectionData *data, guint target_type,
 		guint event_time, gpointer user_data);
 
+static gboolean
+on_window_drag_drop(GtkWidget *widget, GdkDragContext *drag_context,
+		gint x, gint y, guint event_time, gpointer user_data);
 
 static void
 swap_notebooks_cb(GtkButton *button, gpointer user_data);
@@ -703,6 +706,7 @@ void notebook_restore_paned_position(gint position)
 		g_object_set_data(G_OBJECT(paned), "override", GINT_TO_POINTER(position));
 }
 
+
 /* call this after the number of tabs in main_widgets.notebook changes. */
 static void on_notebook_page_count_changed(GtkNotebook *notebook,
 										   GeanyPage *page,
@@ -724,19 +728,10 @@ static void on_notebook_page_count_changed(GtkNotebook *notebook,
 	switch (gtk_notebook_get_n_pages(notebook))
 	{
 		case 0:
-		/* Enables DnD for dropping files into the empty notebook widget */
-		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_ALL,
-			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
-			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
 			g_object_set_data(G_OBJECT(notebook), "minimized", GINT_TO_POINTER(1));
 			break;
 
 		case 1:
-		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
-		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
-		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
-		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
 			g_object_set_data(G_OBJECT(notebook), "minimized", GINT_TO_POINTER(0));
 			break;
 
@@ -756,13 +751,14 @@ GPtrArray *notebook_init(void)
 	gint i;
 	GtkNotebook *notebook;
 	GPtrArray *notebooks;
+	static gchar notebook_group[] = "geany_notebooks";
+	GtkWidget *paned;
 
 	notebooks = g_ptr_array_sized_new(max_notebooks);
-
 	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook1"));
 	g_ptr_array_add(notebooks, ui_lookup_widget(main_widgets.window, "notebook7"));
 
-	GtkWidget *paned = gtk_widget_get_parent(g_ptr_array_index(ret, 0));
+	paned = gtk_widget_get_parent(g_ptr_array_index(notebooks, 0));
 	g_object_set_data(G_OBJECT(paned), "split",      GINT_TO_POINTER(-1));
 	g_object_set_data(G_OBJECT(paned), "override",   GINT_TO_POINTER(-1));
 
@@ -773,8 +769,26 @@ GPtrArray *notebook_init(void)
 		g_signal_connect_after(notebook, "button-press-event",
 			G_CALLBACK(notebook_tab_bar_click_cb), NULL);
 
-		g_signal_connect(notebook, "drag-data-received",
+		/* Enable DnD for dropping files and other notebook tabs into the notebook widget
+		 *
+		 * WORKAROUND: gtk's default behavior for GTK_DEST_DEFAULT_DROP leads to (pretty sure this
+		 * is a GTK bug):
+		 * Gtk-CRITICAL : gtk_selection_data_set: assertion `length <= 0' failed
+		 *
+		 * To workaround we install a custom "drag-drop" handler and mask GTK_DEST_DEFAULT_DROP
+		 * out. The "drag-drop" handler mimics GTK code by just calling gtk_drag_get_data() */
+		gtk_drag_dest_set(GTK_WIDGET(notebook), (GTK_DEST_DEFAULT_ALL & ~GTK_DEST_DEFAULT_DROP) ,
+			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
+			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
+		g_signal_connect(G_OBJECT(notebook), "drag-data-received",
 			G_CALLBACK(on_window_drag_data_received), NULL);
+		g_signal_connect(G_OBJECT(notebook), "drag-drop",
+			G_CALLBACK(on_window_drag_drop), NULL);
+#if GTK_CHECK_VERSION(2,24,0)
+		gtk_notebook_set_group_name(notebook, notebook_group);
+#else
+		gtk_notebook_set_group(notebook, (gpointer) notebook_group);
+#endif
 
 		g_signal_connect(notebook, "page-added",
 			G_CALLBACK(on_notebook_page_count_changed), GINT_TO_POINTER(1));
@@ -915,6 +929,7 @@ gint notebook_new_tab(GeanyPage *page, GtkNotebook *notebook)
 
 	/* enable tab DnD */
 	gtk_notebook_set_tab_reorderable(notebook, (GtkWidget *) page, TRUE);
+	gtk_notebook_set_tab_detachable(notebook, (GtkWidget *) page, TRUE);
 
 	return tabnum;
 }
@@ -945,6 +960,7 @@ gint notebook_move_tab(GeanyPage *page, GtkNotebook *new_notebook)
 
 	/* enable tab DnD */
 	gtk_notebook_set_tab_reorderable(new_notebook, child, TRUE);
+	gtk_notebook_set_tab_detachable(new_notebook, child, TRUE);
 
 	return page_num;
 }
@@ -1006,19 +1022,45 @@ void notebook_remove_tab(GeanyPage *page)
 	gtk_notebook_remove_page(nb, page_num);
 }
 
+static gboolean
+on_window_drag_drop(GtkWidget *widget, GdkDragContext *drag_context,
+		gint x, gint y, guint event_time, gpointer user_data)
+{
+	GdkAtom target = gtk_drag_dest_find_target(widget, drag_context, NULL);
+
+	if (target != GDK_NONE)
+		gtk_drag_get_data(widget, drag_context, target, event_time);
+
+	return TRUE;
+}
+
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		gint x, gint y, GtkSelectionData *data, guint target_type,
 		guint event_time, gpointer user_data)
 {
+	guint length;
 	gboolean success = FALSE;
-	gint length = gtk_selection_data_get_length(data);
-
-	if (length > 0 && gtk_selection_data_get_format(data) == 8)
-	{
-		document_open_file_list((const gchar *)gtk_selection_data_get_data(data), length, GTK_NOTEBOOK(widget));
-
+	/* If a notebook tab is gonna dropped just let
+	 * gtk do its magic */
+	if (target_type == DROP_DATA_NOTEBOOK)
 		success = TRUE;
+	/* otherwise it is a filename and we should handle it */
+	else if (target_type == DROP_DATA_FILENAME)
+	{
+		length = gtk_selection_data_get_length(data);
+		if (length > 0 && gtk_selection_data_get_format(data) == 8)
+		{
+			const gchar *seldata = (const gchar *)gtk_selection_data_get_data(data);
+			if (utils_is_uri(seldata))
+			{
+				document_open_file_list(seldata, length, GTK_NOTEBOOK(widget));
+				success = TRUE;
+			}
+		}
 	}
+	else
+		geany_debug("Unknown drag and drop data\n");
+
 	gtk_drag_finish(drag_context, success, FALSE, event_time);
 }
