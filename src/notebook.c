@@ -75,8 +75,6 @@ on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		gint x, gint y, GtkSelectionData *data, guint target_type,
 		guint event_time, gpointer user_data);
 
-static void setup_tab_dnd(void);
-
 
 static void update_mru_docs_head(GeanyDocument *doc)
 {
@@ -532,6 +530,30 @@ static gboolean notebook_tab_bar_click_cb(GtkWidget *widget, GdkEventButton *eve
 	return FALSE;
 }
 
+/* call this after the number of tabs in main_widgets.notebook changes. */
+static void on_notebook_page_count_changed(GtkNotebook *notebook,
+										   GtkWidget *page,
+										   guint page_num,
+										   gpointer user_data)
+{
+	switch (gtk_notebook_get_n_pages(notebook))
+	{
+		case 0:
+		/* Enables DnD for dropping files into the empty notebook widget */
+		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_ALL,
+			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
+			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
+		break;
+
+		case 1:
+		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
+		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
+		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
+		gtk_drag_dest_set(GTK_WIDGET(notebook), GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
+		break;
+	}
+}
 
 void notebook_init(void)
 {
@@ -547,57 +569,19 @@ void notebook_init(void)
 	g_signal_connect(geany_object, "document-close",
 		G_CALLBACK(on_document_close), NULL);
 
+	g_signal_connect(main_widgets.notebook, "page-added",
+			G_CALLBACK(on_notebook_page_count_changed), NULL);
+	g_signal_connect(main_widgets.notebook, "page-removed",
+			G_CALLBACK(on_notebook_page_count_changed), NULL);
+
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
-
-	setup_tab_dnd();
 }
 
 
 void notebook_free(void)
 {
 	g_queue_free(mru_docs);
-}
-
-
-static void setup_tab_dnd(void)
-{
-	GtkWidget *notebook = main_widgets.notebook;
-
-	g_signal_connect(notebook, "page-reordered", G_CALLBACK(notebook_page_reordered_cb), NULL);
-}
-
-
-static void
-notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
-	gpointer user_data)
-{
-	/* Not necessary to update open files treeview if it's sorted.
-	 * Note: if enabled, it's best to move the item instead of recreating all items. */
-	/*sidebar_openfiles_update_all();*/
-}
-
-
-/* call this after the number of tabs in main_widgets.notebook changes. */
-static void tab_count_changed(void)
-{
-	switch (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)))
-	{
-		case 0:
-		/* Enables DnD for dropping files into the empty notebook widget */
-		gtk_drag_dest_set(main_widgets.notebook, GTK_DEST_DEFAULT_ALL,
-			files_drop_targets,	G_N_ELEMENTS(files_drop_targets),
-			GDK_ACTION_COPY | GDK_ACTION_MOVE | GDK_ACTION_LINK | GDK_ACTION_ASK);
-		break;
-
-		case 1:
-		/* Disables DnD for dropping files into the notebook widget and enables the DnD for moving file
-		 * tabs. Files can still be dropped into the notebook widget because it will be handled by the
-		 * active Scintilla Widget (only dropping to the tab bar is not possible but it should be ok) */
-		gtk_drag_dest_set(main_widgets.notebook, GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-			drag_targets, G_N_ELEMENTS(drag_targets), GDK_ACTION_MOVE);
-		break;
-	}
 }
 
 
@@ -712,8 +696,6 @@ gint notebook_new_tab(GeanyPage *page)
 		tabnum = gtk_notebook_insert_page_menu(GTK_NOTEBOOK(main_widgets.notebook), (GtkWidget *)page,
 			hbox, NULL, cur_page);
 
-	tab_count_changed();
-
 	/* enable tab DnD */
 	gtk_notebook_set_tab_reorderable(GTK_NOTEBOOK(main_widgets.notebook), (GtkWidget *)page, TRUE);
 
@@ -770,8 +752,6 @@ void notebook_remove_tab(GeanyPage *page)
 
 	/* now remove the page (so we don't temporarily switch to the previous page) */
 	gtk_notebook_remove_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
-
-	tab_count_changed();
 }
 
 
