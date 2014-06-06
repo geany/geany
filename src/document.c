@@ -3207,18 +3207,13 @@ static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	}
 }
 
-/* g_signal_handlers_disconnect_by_data is a macro that cannot be used as GCallback */
-static void on_bar_unrealize(GtkWidget *bar, ScintillaObject *sci)
-{
-	g_signal_handlers_disconnect_by_func(sci, on_sci_key, bar);
-}
 
+/* Sets up a signal handler to intercept some keys during the lifetime of the GtkInfoBar */
 static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 {
-	g_signal_connect(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar);
-	/* make the signal disconnect automatically */
-	g_signal_connect(bar, "unrealize", G_CALLBACK(on_bar_unrealize), doc->editor->sci);
+	g_signal_connect_object(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar, 0);
 }
+
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
