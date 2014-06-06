@@ -3236,6 +3236,7 @@ static void monitor_reload_file(GeanyDocument *doc)
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
 
+		document_set_text_changed(doc, TRUE);
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		enable_key_intercept(doc, bar);
