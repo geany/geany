@@ -3256,13 +3256,6 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		file_saved = dialogs_show_save_as();
 
-	if (!file_saved)
-	{
-		document_set_text_changed(doc, TRUE);
-		/* don't prompt more than once */
-		SETPTR(doc->real_path, NULL);
-	}
-
 	doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
 }
 
@@ -3286,6 +3279,9 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 				doc->file_name);
 
 		protect_document(doc);
+		document_set_text_changed(doc, TRUE);
+		/* don't prompt more than once */
+		SETPTR(doc->real_path, NULL);
 		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
 		enable_key_intercept(doc, bar);
 	}
