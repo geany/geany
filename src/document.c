@@ -3211,6 +3211,8 @@ static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
 /* Sets up a signal handler to intercept some keys during the lifetime of the GtkInfoBar */
 static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 {
+	/* automatically focus editor again on bar close */
+	g_signal_connect_swapped(bar, "unrealize", G_CALLBACK(document_grab_focus), doc);
 	g_signal_connect_object(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar, 0);
 }
 
