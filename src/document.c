@@ -3177,8 +3177,10 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	unprotect_document(doc);
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
-	if (response_id == GTK_RESPONSE_ACCEPT)
+	if (response_id == GTK_RESPONSE_REJECT)
 		document_reload_file(doc, doc->encoding);
+	else if (response_id == GTK_RESPONSE_ACCEPT)
+		document_save_file(doc, FALSE);
 }
 
 static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -3227,9 +3229,9 @@ static void monitor_reload_file(GeanyDocument *doc)
 		GtkWidget *bar;
 
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-				_("_Reload"), GTK_RESPONSE_ACCEPT,
+				_("_Reload"), GTK_RESPONSE_REJECT,
+				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				NULL, GTK_RESPONSE_NONE,
 				_("Do you want to reload it?"),
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
