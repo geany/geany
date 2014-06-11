@@ -18,10 +18,10 @@ infixeol=function
 # all items must be in one line
 # use same keywords as in RStudio
 # https://github.com/rstudio/rstudio/blob/master/src/gwt/acesupport/acemode/r_highlight_rules.js
-primary=function if in break next repeat else for return switch while try tryCatch stop warning require library attach detach source setMethod setGeneric setGroupGeneric setClass setRefClass new
+primary=attach break detach else for function if in library new next repeat require return setClass setGeneric setGroupGeneric setMethod setRefClass source stop switch try tryCatch warning while
 # use same buildinConstants as in RStudio
-package=NULL NA TRUE FALSE T F Inf NaN NA_integer_ NA_real_ NA_character_ NA_complex_
-#package_other=acme aids aircondit amis aml banking barchart barley beaver bigcity boot brambles breslow bs bwplot calcium cane capability cav censboot channing city claridge cloth cloud coal condense contourplot control corr darwin densityplot dogs dotplot ducks empinf envelope environmental ethanol fir frets gpar grav gravity grob hirose histogram islay knn larrows levelplot llines logit lpoints lsegments lset ltext lvqinit lvqtest manaus melanoma melanoma motor multiedit neuro nitrofen nodal ns nuclear oneway parallel paulsen poisons polar qq qqmath remission rfs saddle salinity shingle simplex singer somgrid splom stripplot survival tau tmd tsboot tuna unit urine viewport wireframe wool xyplot
+package=F FALSE Inf NA NA_integer_ NA_real_ NA_character_ NA_complex_ NaN NULL T TRUE 
+package_other=
 
 [settings]
 # default extension used when saving files
