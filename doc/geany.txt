@@ -3127,6 +3127,7 @@ before the command is run.
 * %e - substituted by the name of the current file without the extension or path.
 * %f - substituted by the name of the current file without the path.
 * %p - if a project is open, substituted by the base path from the project.
+* %l - substituted by the line number at the current cursor position.
 
 .. note::
    If the basepath set in the project preferences is not an absolute path , then it is

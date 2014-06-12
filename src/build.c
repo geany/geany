@@ -43,6 +43,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "projectprivate.h"
+#include "sciwrappers.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"
@@ -712,8 +713,8 @@ static void parse_build_output(const gchar **output, gint status)
 #endif
 
 
-/* Replaces occurences of %e and %p with the appropriate filenames,
- * %d and %p replacements should be in UTF8 */
+/* Replaces occurences of %e and %p with the appropriate filenames and
+ * %l with current line number. %d and %p replacements should be in UTF8 */
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
 {
 	GString *stack;
@@ -721,6 +722,7 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 	gchar *replacement;
 	gchar *executable = NULL;
 	gchar *ret_str; /* to be freed when not in use anymore */
+	gint line_num;
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
@@ -743,6 +745,12 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 		executable = utils_remove_ext_from_filename(filename);
 		replacement = g_path_get_basename(executable);
 		utils_string_replace_all(stack, "%e", replacement);
+		g_free(replacement);
+
+		/* replace %l with the current 1-based line number */
+		line_num = sci_get_current_line(doc->editor->sci) + 1;
+		replacement = g_strdup_printf("%i", line_num);
+		utils_string_replace_all(stack, "%l", replacement);
 		g_free(replacement);
 	}
 
@@ -2187,7 +2195,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	++row;
 	label = gtk_label_new(NULL);
 	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
-		_("%d, %e, %f, %p are substituted in command and directory fields, see manual for details."));
+		_("%d, %e, %f, %p, %l are substituted in command and directory fields, see manual for details."));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
