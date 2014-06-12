@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-10-09 16:35+0100\n"
+"PO-Revision-Date: 2014-06-09 17:49+0100\n"
 "Last-Translator: Jože Klepec <joze.klepec@siol.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -285,7 +285,6 @@ msgstr ""
 
 # Original needs rewording!
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
 msgstr ""
 "Uporabi menijske izbire sistemskih pogovornih oken ali privzetih GTK "
@@ -293,7 +292,6 @@ msgstr ""
 
 # Original needs rewording!
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
@@ -3147,38 +3145,34 @@ msgid "%s file"
 msgstr "%s izvorna datoteka"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "Lupinski skript"
+msgstr "% skript"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "dokument XML"
+msgstr "%s dokument"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Lupina:"
+msgstr "Lupina"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Datoteka gradnje"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Padajoča slogovna predloga (CSS)"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Nastavitvena datoteka"
+msgstr "Nastavitve"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Gettext datoteka s prevodi"
+msgstr "Gettext prevod"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -4084,7 +4078,7 @@ msgid ""
 "<b>Project->Properties</b>.</i>"
 msgstr ""
 "<i>Opozorilo: teh nastavitev tekoči projekt ne upošteva (so prezrte). Glejte "
-"<b>Projekt->Možnosti</b>.</i>"
+"<b>Projekt->Lastnosti</b>.</i>"
 
 #: ../src/printing.c:159
 #, c-format
@@ -4586,7 +4580,7 @@ msgstr "Odstavek"
 
 #: ../src/symbols.c:725
 msgid "Group"
-msgstr "Skupina:"
+msgstr "Skupina"
 
 #: ../src/symbols.c:726
 msgid "Data"
@@ -4644,9 +4638,8 @@ msgstr "Zbirke"
 
 # lahko tudi: "Izvede:"
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Izvrši:"
+msgstr "Izvršitve"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4764,7 +4757,7 @@ msgstr "Spremenljivke / Signali"
 
 #: ../src/symbols.c:903
 msgid "Processes / Blocks / Components"
-msgstr "Postopki / Bloki / Komponente"
+msgstr "Postopki / Bloki / Sestavni deli"
 
 #: ../src/symbols.c:911
 msgid "Events"
@@ -4787,19 +4780,16 @@ msgid "Properties"
 msgstr "Lastnosti"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
-msgstr "Program"
+msgstr "Programi"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funkcije / Procedure"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Dopolnjevanja"
+msgstr "Sestavni deli"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4841,9 +4831,8 @@ msgstr "Zapisi"
 # &(tv_iters.tag_member), _("Members"),
 # &(tv_iters.tag_macro), _("Macros"),
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Spremenljivke"
+msgstr "Zunanje spremenljivke"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5197,24 +5186,29 @@ msgstr "%dV"
 msgid "RO "
 msgstr "BR "
 
+# PREpisovanje
 #. OVR = overwrite/overtype, INS = insert
 #: ../src/ui_utils.c:244
 msgid "OVR"
 msgstr "PRE"
 
+# VSTavljanje
 #: ../src/ui_utils.c:244
 msgid "INS"
 msgstr "VST"
 
+# RAZmik
 #: ../src/ui_utils.c:258
 msgid "TAB"
-msgstr "Raz"
+msgstr "RAZ"
 
+# PREsledek
 #. SP = space
 #: ../src/ui_utils.c:261
 msgid "SP"
-msgstr "Pre"
+msgstr "PRE"
 
+# Razmaki/Presledki
 #. T/S = tabs and spaces
 #: ../src/ui_utils.c:264
 msgid "T/S"
@@ -5402,7 +5396,7 @@ msgstr "Splošno"
 msgid "Base GType:"
 msgstr "Osnovni GType:"
 
-# lahko tudi: "Izvede:"
+# lahko tudi: "Izvede:", "Udejani:"
 #: ../plugins/classbuilder.c:535
 msgid "Implements:"
 msgstr "Izvrši:"
@@ -5765,7 +5759,7 @@ msgstr "Samodejno shrani"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Omogoči shranjevanje ob izgubljanju"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
