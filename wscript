@@ -476,7 +476,7 @@ def build(bld):
                            'includedir': '${prefix}/include',
                            'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
-                           'localedir': '${datarootdir/locale'})
+                           'localedir': '${datarootdir}/locale'})
 
     if not is_win32:
         # geany.desktop
