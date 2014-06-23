@@ -349,6 +349,8 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	/* setup printing scintilla object */
 	dinfo->sci = editor_create_widget(dinfo->doc->editor);
+	/* since we won't add the widget to any container, assume it's ownership */
+	g_object_ref_sink(dinfo->sci);
 	scintilla_send_message(dinfo->sci, SCI_SETDOCPOINTER, 0,
 			scintilla_send_message(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
 	highlighting_set_styles(dinfo->sci, dinfo->doc->file_type);
