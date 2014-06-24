@@ -2957,16 +2957,6 @@ GeanyDocument *document_index(gint idx)
 }
 
 
-/* create a new file and copy file content and properties */
-G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GeanyDocument *old_doc = document_get_current();
-
-	if (old_doc)
-		document_clone(old_doc);
-}
-
-
 GeanyDocument *document_clone(GeanyDocument *old_doc)
 {
 	gchar *text;

@@ -149,6 +149,7 @@ G_MODULE_EXPORT void on_reset_indentation1_activate(GtkMenuItem *menuitem, gpoin
 G_MODULE_EXPORT void on_mark_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 
 /* flag to indicate that an insert callback was triggered from the file menu,
@@ -237,6 +238,16 @@ G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *eve
 G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	document_new_file(NULL, NULL, NULL);
+}
+
+
+/* create a new file and copy file content and properties */
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *old_doc = document_get_current();
+
+	if (old_doc)
+		document_clone(old_doc);
 }
 
 
