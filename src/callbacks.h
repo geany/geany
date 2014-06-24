@@ -385,10 +385,6 @@ on_menu_remove_indicators1_activate	(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
-on_reload_as_activate				  (GtkMenuItem	 *menuitem,
-										gpointer		 user_data);
-
-G_MODULE_EXPORT void
 on_print1_activate					 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 

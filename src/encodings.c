@@ -360,11 +360,11 @@ static gchar *regex_match(GRegex *preg, const gchar *buffer, gsize size)
 static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	guint i = GPOINTER_TO_INT(user_data);
+	const gchar *charset = user_data;
 
-	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+	if (ignore_callback || doc == NULL || charset == NULL ||
 		! gtk_check_menu_item_get_active(menuitem) ||
-		utils_str_equal(encodings[i].charset, doc->encoding))
+		utils_str_equal(charset, doc->encoding))
 		return;
 
 	if (doc->readonly)
@@ -374,7 +374,16 @@ static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer 
 	}
 	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
-	document_set_encoding(doc, encodings[i].charset);
+	document_set_encoding(doc, charset);
+}
+
+static void encodings_reload_radio_item_change_cb(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	document_reload_prompt(doc, user_data);
 }
 
 
@@ -416,7 +425,7 @@ void encodings_init(void)
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
 	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(encodings_radio_item_change_cb);
-	cb_func[1] = G_CALLBACK(on_reload_as_activate);
+	cb_func[1] = G_CALLBACK(encodings_reload_radio_item_change_cb);
 
 	for (k = 0; k < 2; k++)
 	{
@@ -488,8 +497,8 @@ void encodings_init(void)
 							item = gtk_menu_item_new_with_label(label);
 						gtk_widget_show(item);
 						gtk_container_add(GTK_CONTAINER(submenu), item);
-						g_signal_connect(item, "activate",
-										cb_func[k], GINT_TO_POINTER(encodings[j].idx));
+						g_signal_connect(item, "activate", cb_func[k],
+								(gpointer) encodings[j].charset);
 						g_free(label);
 						break;
 					}

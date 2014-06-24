@@ -1382,6 +1382,38 @@ gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
 }
 
 
+/* also used for reloading when forced_enc is NULL */
+gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
+{
+	gchar *base_name;
+	gboolean result = FALSE;
+
+	g_return_if_fail(doc != NULL);
+
+	/* No need to reload "untitled" (non-file-backed) documents */
+	if (doc->file_name == NULL)
+		return FALSE;
+
+	if (forced_enc == NULL)
+		forced_enc = doc->encoding;
+
+	base_name = g_path_get_basename(doc->file_name);
+	/* don't prompt if file hasn't been edited at all */
+	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
+		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+		_("Any unsaved changes will be lost."),
+		_("Are you sure you want to reload '%s'?"), base_name))
+	{
+		result = document_reload_file(doc, forced_enc);
+		if (forced_enc != NULL)
+			ui_update_statusbar(doc, -1);
+	}
+	g_free(base_name);
+
+	return result;
+}
+
+
 static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
 #ifndef USE_GIO_FILEMON
