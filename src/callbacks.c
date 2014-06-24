@@ -126,7 +126,7 @@ static void quit_app(void)
 
 
 /* wrapper function to abort exit process if cancel button is pressed */
-G_MODULE_EXPORT gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
+gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
 {
 	main_status.quitting = TRUE;
 
@@ -386,7 +386,7 @@ G_MODULE_EXPORT void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data
 
 
 /* quit toolbar button */
-G_MODULE_EXPORT void on_toolbutton_quit_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_quit_clicked(GtkAction *action, gpointer user_data)
 {
 	on_exit_clicked(NULL, NULL);
 }
@@ -410,21 +410,21 @@ G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer us
 
 
 /* new file */
-G_MODULE_EXPORT void on_toolbutton_new_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_new_clicked(GtkAction *action, gpointer user_data)
 {
 	document_new_file(NULL, NULL, NULL);
 }
 
 
 /* open file */
-G_MODULE_EXPORT void on_toolbutton_open_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_open_clicked(GtkAction *action, gpointer user_data)
 {
 	dialogs_show_open_file();
 }
 
 
 /* save file */
-G_MODULE_EXPORT void on_toolbutton_save_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_save_clicked(GtkAction *action, gpointer user_data)
 {
 	on_save1_activate(NULL, user_data);
 }
@@ -454,21 +454,21 @@ static void do_toolbar_search(const gchar *text, gboolean incremental, gboolean 
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	do_toolbar_search(text, TRUE, FALSE);
 }
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	do_toolbar_search(text, FALSE, GPOINTER_TO_INT(user_data));
 }
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
@@ -536,19 +536,19 @@ G_MODULE_EXPORT void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer us
 
 
 /* close tab */
-G_MODULE_EXPORT void on_toolbutton_close_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_close_clicked(GtkAction *action, gpointer user_data)
 {
 	on_close1_activate(NULL, NULL);
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_close_all_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_close_all_clicked(GtkAction *action, gpointer user_data)
 {
 	on_close_all1_activate(NULL, NULL);
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_preferences_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_preferences_clicked(GtkAction *action, gpointer user_data)
 {
 	on_preferences1_activate(NULL, NULL);
 }
@@ -945,7 +945,7 @@ G_MODULE_EXPORT void on_show_color_chooser1_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
 }
@@ -1039,7 +1039,7 @@ G_MODULE_EXPORT void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gint offset;
@@ -1055,7 +1055,7 @@ G_MODULE_EXPORT void on_toolbutton_goto_entry_activate(GtkAction *action, const 
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data)
 {
 	GtkWidget *entry = toolbar_get_widget_child_by_name("GotoEntry");
 
@@ -1235,7 +1235,7 @@ G_MODULE_EXPORT void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	const gchar *format = NULL;
@@ -1295,7 +1295,7 @@ G_MODULE_EXPORT void on_insert_date_activate(GtkMenuItem *menuitem, gpointer use
 }
 
 
-G_MODULE_EXPORT void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gint pos = -1;
@@ -1352,7 +1352,7 @@ G_MODULE_EXPORT void on_menu_unfold_all1_activate(GtkMenuItem *menuitem, gpointe
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_run_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_run_clicked(GtkAction *action, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_RUN);
 }
@@ -1516,14 +1516,14 @@ G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpoint
 }
 
 
-G_MODULE_EXPORT void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	insert_callback_from_menu = TRUE;
 	on_insert_include_activate(menuitem, user_data);
 }
 
 
-G_MODULE_EXPORT void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	insert_callback_from_menu = TRUE;
 	on_insert_date_activate(menuitem, user_data);
@@ -1752,19 +1752,19 @@ G_MODULE_EXPORT void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem
 }
 
 
-G_MODULE_EXPORT void on_forward_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_forward_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	navqueue_go_forward();
 }
 
 
-G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	navqueue_go_back();
 }
 
 
-G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
+gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
 	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
@@ -1923,7 +1923,7 @@ G_MODULE_EXPORT void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, g
 }
 
 
-G_MODULE_EXPORT gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
+gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
 {
 
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)

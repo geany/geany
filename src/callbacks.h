@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 extern gboolean	ignore_callback;
 
-G_MODULE_EXPORT gboolean
+gboolean
 on_exit_clicked						(GtkWidget *widget, gpointer gdata);
 
 G_MODULE_EXPORT void
@@ -59,11 +59,11 @@ G_MODULE_EXPORT void
 on_change_font1_activate			   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_close_clicked			(GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_close_all_clicked		(GtkAction	   *action,
 										gpointer		 user_data);
 
@@ -95,11 +95,11 @@ G_MODULE_EXPORT void
 on_replace_tabs_activate			   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_search_clicked		   (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT gboolean
+gboolean
 toolbar_popup_menu					 (GtkWidget *widget,
 										GdkEventButton *event,
 										gpointer user_data);
@@ -140,12 +140,12 @@ G_MODULE_EXPORT void
 on_zoom_out1_activate				  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbar_search_entry_changed		(GtkAction *action,
 										const gchar *text,
 										gpointer user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbar_search_entry_activate	   (GtkAction *action,
 										const gchar *text,
 										gpointer user_data);
@@ -224,23 +224,23 @@ G_MODULE_EXPORT void
 on_find_in_files1_activate			 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_new_clicked			  (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_open_clicked			 (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_save_clicked			 (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_quit_clicked			 (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_preferences_clicked	  (GtkAction	   *action,
 										gpointer		 user_data);
 
@@ -256,7 +256,7 @@ G_MODULE_EXPORT void
 on_help1_activate					  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_compile_clicked		  (GtkAction	   *action,
 										gpointer		 user_data);
 
@@ -297,11 +297,11 @@ G_MODULE_EXPORT void
 on_comments_fileheader_activate		(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_insert_include_activate			 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_insert_date_activate				(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
@@ -342,14 +342,14 @@ G_MODULE_EXPORT void
 on_menu_unfold_all1_activate		   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_goto_entry_activate	  (GtkAction *action, const gchar *text, gpointer user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_goto_clicked			 (GtkAction	   *action,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_toolbutton_run_clicked			  (GtkAction	   *action,
 										gpointer		 user_data);
 
@@ -413,11 +413,11 @@ G_MODULE_EXPORT void
 on_menu_comments_gpl_activate		  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_menu_insert_include_activate		(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_menu_insert_date_activate		   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
@@ -469,11 +469,11 @@ G_MODULE_EXPORT void
 on_menu_toggle_all_additional_widgets1_activate
 										(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
-G_MODULE_EXPORT void
+void
 on_back_activate					   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT void
+void
 on_forward_activate					(GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
@@ -481,7 +481,7 @@ G_MODULE_EXPORT void
 on_file1_activate					  (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT gboolean
+gboolean
 on_motion_event						(GtkWidget	   *widget,
 										GdkEventMotion  *event,
 										gpointer		 user_data);
@@ -567,7 +567,7 @@ G_MODULE_EXPORT void
 on_send_selection_to_vte1_activate	 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
-G_MODULE_EXPORT gboolean
+gboolean
 on_window_state_event		 (GtkWidget		   *widget,
 										GdkEventWindowState *event,
 										gpointer			 user_data);
