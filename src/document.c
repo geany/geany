@@ -112,6 +112,12 @@ typedef struct
 static void document_undo_clear(GeanyDocument *doc);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
+static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
+	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
+	const gchar *btn_1, GtkResponseType response_1,
+	const gchar *btn_2, GtkResponseType response_2,
+	const gchar *btn_3, GtkResponseType response_3,
+	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
 
 
 /**
