@@ -74,7 +74,6 @@
 
 
 /* prototypes of Glade-only callback to let the compiler know they really are meant to be exported */
-G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_info1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_crlf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
@@ -460,13 +459,6 @@ G_MODULE_EXPORT void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data
 }
 
 
-/* quit toolbar button */
-void on_toolbutton_quit_clicked(GtkAction *action, gpointer user_data)
-{
-	on_exit_clicked(NULL, NULL);
-}
-
-
 /* reload file */
 G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 {
@@ -481,27 +473,6 @@ G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer us
 G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	dialogs_show_open_font();
-}
-
-
-/* new file */
-void on_toolbutton_new_clicked(GtkAction *action, gpointer user_data)
-{
-	document_new_file(NULL, NULL, NULL);
-}
-
-
-/* open file */
-void on_toolbutton_open_clicked(GtkAction *action, gpointer user_data)
-{
-	dialogs_show_open_file();
-}
-
-
-/* save file */
-void on_toolbutton_save_clicked(GtkAction *action, gpointer user_data)
-{
-	on_save1_activate(NULL, user_data);
 }
 
 
@@ -607,25 +578,6 @@ G_MODULE_EXPORT void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer us
 
 	sci_zoom_off(doc->editor->sci);
 	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
-}
-
-
-/* close tab */
-void on_toolbutton_close_clicked(GtkAction *action, gpointer user_data)
-{
-	on_close1_activate(NULL, NULL);
-}
-
-
-void on_toolbutton_close_all_clicked(GtkAction *action, gpointer user_data)
-{
-	on_close_all1_activate(NULL, NULL);
-}
-
-
-void on_toolbutton_preferences_clicked(GtkAction *action, gpointer user_data)
-{
-	on_preferences1_activate(NULL, NULL);
 }
 
 
@@ -1827,13 +1779,13 @@ G_MODULE_EXPORT void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem
 }
 
 
-void on_forward_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_toolbutton_forward_activate(GtkAction *menuitem, gpointer user_data)
 {
 	navqueue_go_forward();
 }
 
 
-void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_toolbutton_back_activate(GtkAction *menuitem, gpointer user_data)
 {
 	navqueue_go_back();
 }
