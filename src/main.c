@@ -1157,12 +1157,6 @@ gint main(gint argc, gchar **argv)
 	symbols_init();
 	editor_snippets_init();
 
-	/* registering some basic events */
-	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_window_delete_event), NULL);
-	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
-
-	g_signal_connect(msgwindow.scribble, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
-
 #ifdef HAVE_VTE
 	vte_init();
 #endif

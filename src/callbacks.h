@@ -28,8 +28,6 @@ G_BEGIN_DECLS
 
 extern gboolean	ignore_callback;
 
-gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata);
-
 G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data);
@@ -160,7 +158,7 @@ void on_toolbutton_back_activate(GtkAction *action, gpointer user_data);
 
 void on_toolbutton_forward_activate(GtkAction *action, gpointer user_data);
 
-gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data);
+G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data);
 
 G_MODULE_EXPORT gboolean on_escape_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
@@ -175,8 +173,6 @@ G_MODULE_EXPORT void on_close_other_documents1_activate(GtkMenuItem *menuitem, g
 G_MODULE_EXPORT void on_find_document_usage1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_MODULE_EXPORT void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, gpointer user_data);
-
-gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data);
 
 G_MODULE_EXPORT void on_plugin_preferences1_activate(GtkMenuItem *menuitem, gpointer user_data);
 

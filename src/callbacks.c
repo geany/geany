@@ -74,6 +74,7 @@
 
 
 /* prototypes of Glade-only callback to let the compiler know they really are meant to be exported */
+G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata);
 G_MODULE_EXPORT void on_info1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_crlf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
@@ -125,6 +126,7 @@ G_MODULE_EXPORT void on_debug_messages1_activate(GtkMenuItem *menuitem, gpointer
 G_MODULE_EXPORT void on_menu_show_white_space1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
 G_MODULE_EXPORT void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
 G_MODULE_EXPORT void on_menu_show_indentation_guides1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data);
 G_MODULE_EXPORT void on_customize_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data);
 G_MODULE_EXPORT void on_button_customize_toolbar_clicked(GtkButton *button, gpointer user_data);
 G_MODULE_EXPORT void on_cut_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
@@ -202,7 +204,7 @@ static void quit_app(void)
 
 
 /* wrapper function to abort exit process if cancel button is pressed */
-gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata)
+G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata)
 {
 	main_status.quitting = TRUE;
 
@@ -1952,7 +1954,7 @@ G_MODULE_EXPORT void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, g
 }
 
 
-gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
+G_MODULE_EXPORT gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
 {
 
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
