@@ -1394,7 +1394,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 	gchar *base_name;
 	gboolean result = FALSE;
 
-	g_return_if_fail(doc != NULL);
+	g_return_val_if_fail(doc != NULL, FALSE);
 
 	/* No need to reload "untitled" (non-file-backed) documents */
 	if (doc->file_name == NULL)
