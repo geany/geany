@@ -194,6 +194,8 @@ GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonl
 
 gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
 
+gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
+
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);

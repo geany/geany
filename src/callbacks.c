@@ -395,45 +395,11 @@ G_MODULE_EXPORT void on_toolbutton_quit_clicked(GtkAction *action, gpointer user
 /* reload file */
 G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 {
-	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
-}
-
-
-/* also used for reloading when user_data is -1 */
-G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
 	GeanyDocument *doc = document_get_current();
-	gchar *base_name;
-	gint i = GPOINTER_TO_INT(user_data);
-	const gchar *charset = NULL;
 
 	g_return_if_fail(doc != NULL);
 
-	/* No need to reload "untitled" (non-file-backed) documents */
-	if (doc->file_name == NULL)
-		return;
-
-	if (i >= 0)
-	{
-		if (i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL)
-			return;
-		charset = encodings[i].charset;
-	}
-	else
-		charset = doc->encoding;
-
-	base_name = g_path_get_basename(doc->file_name);
-	/* don't prompt if file hasn't been edited at all */
-	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
-		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-		_("Any unsaved changes will be lost."),
-		_("Are you sure you want to reload '%s'?"), base_name))
-	{
-		document_reload_file(doc, charset);
-		if (charset != NULL)
-			ui_update_statusbar(doc, -1);
-	}
-	g_free(base_name);
+	document_reload_prompt(doc, NULL);
 }
 
 
