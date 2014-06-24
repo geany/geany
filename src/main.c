@@ -788,13 +788,13 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-/* Signal handling removed since on_exit_clicked() uses functions that are
+/* Signal handling removed since on_quit1_activate() uses functions that are
  * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
 	{
-		on_exit_clicked(NULL, NULL);
+		on_quit1_activate(NULL, NULL);
 	}
 }
  */
@@ -1158,7 +1158,7 @@ gint main(gint argc, gchar **argv)
 	editor_snippets_init();
 
 	/* registering some basic events */
-	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
+	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_window_delete_event), NULL);
 	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
 
 	g_signal_connect(msgwindow.scribble, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);

@@ -185,7 +185,7 @@ static void verify_click_pos(GeanyDocument *doc)
 }
 
 
-/* should only be called from on_exit_clicked */
+/* should only be called from on_window_delete_event */
 static void quit_app(void)
 {
 	configuration_save();
@@ -202,7 +202,7 @@ static void quit_app(void)
 
 
 /* wrapper function to abort exit process if cancel button is pressed */
-gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
+gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata)
 {
 	main_status.quitting = TRUE;
 
@@ -299,7 +299,7 @@ G_MODULE_EXPORT void on_close1_activate(GtkMenuItem *menuitem, gpointer user_dat
 
 G_MODULE_EXPORT void on_quit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	on_exit_clicked(NULL, NULL);
+	on_window_delete_event(NULL, NULL, NULL);
 }
 
 
