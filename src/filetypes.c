@@ -87,21 +87,17 @@ enum TitleType
 /* Save adding many translation strings if the filetype name doesn't need translating */
 static gchar *filetype_make_title(const char *name, enum TitleType type)
 {
-	const gchar *fmt = NULL;
-
 	g_return_val_if_fail(name != NULL, NULL);
 
 	switch (type)
 	{
-		case TITLE_SOURCE_FILE:	fmt = _("%s source file"); break;
-		case TITLE_FILE:		fmt = _("%s file"); break;
-		case TITLE_SCRIPT:		fmt = _("%s script"); break;
-		case TITLE_DOCUMENT:	fmt = _("%s document"); break;
+		case TITLE_SOURCE_FILE:	return g_strdup_printf(_("%s source file"), name);
+		case TITLE_FILE:		return g_strdup_printf(_("%s file"), name);
+		case TITLE_SCRIPT:		return g_strdup_printf(_("%s script"), name);
+		case TITLE_DOCUMENT:	return g_strdup_printf(_("%s document"), name);
 		case TITLE_NONE: /* fall through */
-		default:				fmt = "%s"; break;
+		default:				return g_strdup(name);
 	}
-
-	return g_strdup_printf(fmt, name);
 }
 
 
