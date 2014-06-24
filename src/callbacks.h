@@ -155,10 +155,6 @@ on_toggle_case1_activate			   (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
-on_fullscreen1_activate				(GtkMenuItem	 *menuitem,
-										gpointer		 user_data);
-
-G_MODULE_EXPORT void
 on_show_toolbar1_toggled			   (GtkCheckMenuItem *checkmenuitem,
 										gpointer		 user_data);
 
@@ -168,10 +164,6 @@ on_fullscreen1_toggled				 (GtkCheckMenuItem *checkmenuitem,
 
 G_MODULE_EXPORT void
 on_markers_margin1_toggled			 (GtkCheckMenuItem *checkmenuitem,
-										gpointer		 user_data);
-
-G_MODULE_EXPORT void
-on_invisible1_activate				 (GtkMenuItem	 *menuitem,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
@@ -185,10 +177,6 @@ on_show_messages_window1_toggled	   (GtkCheckMenuItem *checkmenuitem,
 G_MODULE_EXPORT void
 on_menu_color_schemes_activate		   (GtkImageMenuItem *imagemenuitem,
 										gpointer user_data);
-
-G_MODULE_EXPORT void
-on_construct_completion1_activate	  (GtkMenuItem	 *menuitem,
-										gpointer		 user_data);
 
 G_MODULE_EXPORT void
 on_count_words1_activate			   (GtkMenuItem	 *menuitem,
@@ -311,15 +299,6 @@ on_comments_fileheader_activate		(GtkMenuItem	 *menuitem,
 
 G_MODULE_EXPORT void
 on_insert_include_activate			 (GtkMenuItem	 *menuitem,
-										gpointer		 user_data);
-
-G_MODULE_EXPORT void
-on_custom_date_dialog_response		 (GtkDialog *dialog,
-										gint response,
-										gpointer user_data);
-
-G_MODULE_EXPORT void
-on_custom_date_entry_activate		  (GtkEntry		*entry,
 										gpointer		 user_data);
 
 G_MODULE_EXPORT void
