@@ -73,6 +73,81 @@
 #include <time.h>
 
 
+/* prototypes of Glade-only callback to let the compiler know they really are meant to be exported */
+G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_info1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_crlf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_lf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_cr_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_markers_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_color_schemes_activate(GtkImageMenuItem *imagemenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_count_words1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_website1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_changelog_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_set_file_readonly1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_help_shortcuts1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_use_auto_indentation1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_fold_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_unfold_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_menu_write_unicode_bom1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_project1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_load_tags1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_file1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_tabs1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_spaces1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_page_setup1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_search1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_reload_configuration1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tabs_and_spaces1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_debug_messages1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_white_space1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_indentation_guides1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_customize_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_button_customize_toolbar_clicked(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void on_cut_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_copy_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_delete_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_duplicate_line_or_selection1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_select_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_select_current_paragraph1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_insert_alternative_white_space1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_go_to_next_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_go_to_previous_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_reflow_lines_block1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_smart_line_indent1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_goto_tag_definition1(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_goto_tag_declaration1(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_indent_width_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_reset_indentation1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_mark_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
+
+
 /* flag to indicate that an insert callback was triggered from the file menu,
  * so we need to store the current cursor position in editor_info.click_pos. */
 static gboolean insert_callback_from_menu = FALSE;
