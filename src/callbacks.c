@@ -201,6 +201,7 @@ G_MODULE_EXPORT void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_
 
 	ui_set_statusbar(FALSE, ngettext("%d file saved.", "%d files saved.", count), count);
 	/* saving may have changed window title, sidebar for another doc, so update */
+	document_show_tab(cur_doc);
 	sidebar_update_tag_list(cur_doc, TRUE);
 	ui_set_window_title(cur_doc);
 }
