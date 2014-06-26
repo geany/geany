@@ -20,10 +20,17 @@
  */
 
 
-#ifndef GEANYOBJECT_H
-#define GEANYOBJECT_H
+#ifndef GEANY_OBJECT_H
+#define GEANY_OBJECT_H 1
 
-#include <glib-object.h>
+#include "document.h"
+#include "editor.h"
+#include "filetypes.h"
+
+#include "Scintilla.h"
+
+#include "gtkcompat.h"
+
 
 G_BEGIN_DECLS
 
@@ -73,7 +80,7 @@ struct _GeanyObject
 	/* add your public declarations here */
 };
 
-struct SCNotification;
+extern GObject *geany_object;
 
 struct _GeanyObjectClass
 {
@@ -106,4 +113,4 @@ GObject*	geany_object_new		(void);
 
 G_END_DECLS
 
-#endif /* GEANYOBJECT_H */
+#endif /* GEANY_OBJECT_H */

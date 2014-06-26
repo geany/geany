@@ -24,7 +24,21 @@
  * For Plugins code see plugins.c.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "tools.h"
+
+#include "document.h"
+#include "keybindings.h"
+#include "sciwrappers.h"
+#include "spawn.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -36,20 +50,6 @@
 # include <sys/wait.h>
 # include <signal.h>
 #endif
-
-#include "tools.h"
-#include "support.h"
-#include "document.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "msgwindow.h"
-#include "keybindings.h"
-#include "templates.h"
-#include "win32.h"
-#include "dialogs.h"
-#include "spawn.h"
 
 
 enum

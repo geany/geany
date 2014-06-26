@@ -23,6 +23,11 @@
 #ifndef GEANY_PRINTING_H
 #define GEANY_PRINTING_H 1
 
+#include "document.h"
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 /* General printing preferences. */
 typedef struct PrintingPrefs
@@ -43,4 +48,6 @@ void printing_page_setup_gtk(void);
 
 void printing_print_doc(GeanyDocument *doc);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_PRINTING_H */

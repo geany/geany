@@ -19,9 +19,17 @@
  *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef GEANY_WIN32_H
+#define GEANY_WIN32_H 1
+
+#include "document.h"
+
+#include "gtkcompat.h"
+
 
 #ifdef G_OS_WIN32
 
+G_BEGIN_DECLS
 
 void win32_show_pref_file_dialog(GtkEntry *item);
 
@@ -58,4 +66,8 @@ gchar *win32_get_installation_dir(void);
 
 gchar *win32_expand_environment_variables(const gchar *str);
 
-#endif
+G_END_DECLS
+
+#endif /* G_OS_WIN32 */
+
+#endif /* GEANY_WIN32_H */

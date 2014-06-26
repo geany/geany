@@ -51,10 +51,24 @@
  *
  */
 
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_SOCKET
+
+#include "socket.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "main.h"
+#include "support.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
 
 #ifndef G_OS_WIN32
 # include <sys/time.h>
@@ -77,16 +91,6 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
-#include "main.h"
-#include "socket.h"
-#include "document.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "encodings.h"
-#include "project.h"
 
 
 #ifdef G_OS_WIN32
@@ -205,7 +209,7 @@ static void socket_get_document_list(gint sock)
 
 	do
 	{
-		n_read = socket_fd_read(sock, buf, sizeof(buf));
+		n_read = socket_fd_read(sock, buf, BUFFER_LENGTH);
 		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
 		 * byte not to output it and to be sure not to validate the loop condition */
 		if (n_read > 0 && buf[n_read - 1] == '\3')
@@ -213,7 +217,7 @@ static void socket_get_document_list(gint sock)
 		if (n_read > 0)
 			fwrite(buf, 1, n_read, stdout);
 	}
-	while (n_read >= sizeof(buf));
+	while (n_read >= BUFFER_LENGTH);
 }
 
 
@@ -275,10 +279,13 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
-	gchar *display_name = gdk_get_display();
+	gchar *display_name = NULL;
 	const gchar *hostname = g_get_host_name();
+	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
 
+	if (display != NULL)
+		display_name = g_strdup(gdk_display_get_name(display));
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");
 

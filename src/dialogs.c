@@ -23,7 +23,23 @@
  * File related dialogs, miscellaneous dialogs, font dialog.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "dialogs.h"
+
+#include "app.h"
+#include "build.h"
+#include "document.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "main.h"
+#include "support.h"
+#include "utils.h"
+#include "ui_utils.h"
+
+#include "gtkcompat.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <string.h>
@@ -39,23 +55,6 @@
 
 /* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
-
-#include "dialogs.h"
-
-#include "callbacks.h"
-#include "document.h"
-#include "filetypes.h"
-#include "win32.h"
-#include "sciwrappers.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "keybindings.h"
-#include "encodings.h"
-#include "build.h"
-#include "main.h"
-#include "project.h"
-#include "gtkcompat.h"
 
 
 enum

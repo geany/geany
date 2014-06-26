@@ -22,6 +22,8 @@
 #ifndef GEANY_PREFS_H
 #define GEANY_PREFS_H 1
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 /** General Preferences dialog settings. */
@@ -62,4 +64,4 @@ void prefs_kb_search_name(const gchar *search);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_PREFS_H */

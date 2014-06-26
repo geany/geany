@@ -76,13 +76,12 @@
  * should be efficient enough.
  */
 
-
-#include "geany.h"		/* necessary for utils.h, otherwise use gtk/gtk.h */
-#include <stdlib.h>		/* only for atoi() */
-#include "support.h"	/* only for _("text") */
-#include "utils.h"		/* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
-
 #include "stash.h"
+
+#include "support.h" /* only for _("text") */
+#include "utils.h"   /* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
+
+#include <stdlib.h> /* only for atoi() */
 
 
 /* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and

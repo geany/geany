@@ -27,26 +27,31 @@
 /* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
  * only use GeanyFiletype for API functions. */
 
-#include <string.h>
-#include <glib/gstdio.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
 #include "filetypes.h"
-#include "filetypesprivate.h"
-#include "highlighting.h"
-#include "support.h"
-#include "templates.h"
-#include "document.h"
-#include "editor.h"
-#include "msgwindow.h"
-#include "utils.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "symbols.h"
 
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "document.h"
+#include "filetypesprivate.h"
+#include "geany.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "projectprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
 #include "tm_parser.h"
+#include "utils.h"
+#include "ui_utils.h"
 
 #include <stdlib.h>
+#include <string.h>
+
+#include <glib/gstdio.h>
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
@@ -82,21 +87,17 @@ enum TitleType
 /* Save adding many translation strings if the filetype name doesn't need translating */
 static gchar *filetype_make_title(const char *name, enum TitleType type)
 {
-	const gchar *fmt = NULL;
-
 	g_return_val_if_fail(name != NULL, NULL);
 
 	switch (type)
 	{
-		case TITLE_SOURCE_FILE:	fmt = _("%s source file"); break;
-		case TITLE_FILE:		fmt = _("%s file"); break;
-		case TITLE_SCRIPT:		fmt = _("%s script"); break;
-		case TITLE_DOCUMENT:	fmt = _("%s document"); break;
+		case TITLE_SOURCE_FILE:	return g_strdup_printf(_("%s source file"), name);
+		case TITLE_FILE:		return g_strdup_printf(_("%s file"), name);
+		case TITLE_SCRIPT:		return g_strdup_printf(_("%s script"), name);
+		case TITLE_DOCUMENT:	return g_strdup_printf(_("%s document"), name);
 		case TITLE_NONE: /* fall through */
-		default:				fmt = "%s"; break;
+		default:				return g_strdup(name);
 	}
-
-	return g_strdup_printf(fmt, name);
 }
 
 
@@ -201,11 +202,12 @@ static GeanyFiletype *filetype_new(void)
 	ft->lang = -2;	/* assume no tagmanager parser */
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
-	ft->project_list_entry = -1; /* no entry */
 	ft->indent_width = -1;
 	ft->indent_type = -1;
 
 	ft->priv = g_new0(GeanyFiletypePrivate, 1);
+	ft->priv->project_list_entry = -1; /* no entry */
+
 	return ft;
 }
 
@@ -805,9 +807,9 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->comment_close);
 	g_free(ft->comment_single);
 	g_free(ft->context_action_cmd);
-	g_free(ft->filecmds);
-	g_free(ft->ftdefcmds);
-	g_free(ft->execcmds);
+	g_free(ft->priv->filecmds);
+	g_free(ft->priv->ftdefcmds);
+	g_free(ft->priv->execcmds);
 	g_free(ft->error_regex_string);
 	if (ft->icon)
 		g_object_unref(ft->icon);

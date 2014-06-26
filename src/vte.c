@@ -23,9 +23,24 @@
  * Virtual Terminal Emulation setup and handling code, using the libvte plugin library.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_VTE
+
+#include "vte.h"
+
+#include "callbacks.h"
+#include "document.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
 
 /* include stdlib.h AND unistd.h, because on GNU/Linux pid_t seems to be
  * in stdlib.h, on FreeBSD in unistd.h, sys/types.h is needed for C89 */
@@ -37,19 +52,6 @@
 #include <signal.h>
 #include <string.h>
 #include <errno.h>
-
-#include "vte.h"
-#include "support.h"
-#include "prefs.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "document.h"
-#include "msgwindow.h"
-#include "callbacks.h"
-#include "geanywraplabel.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "gtkcompat.h"
 
 
 VteInfo vte_info;
@@ -738,14 +740,14 @@ static void vte_drag_data_received(GtkWidget *widget, GdkDragContext *drag_conte
 }
 
 
-G_MODULE_EXPORT void on_check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *user_data)
+static void on_check_run_in_vte_toggled(GtkToggleButton *togglebutton, GtkWidget *user_data)
 {
 	g_return_if_fail(GTK_IS_WIDGET(user_data));
 	gtk_widget_set_sensitive(user_data, gtk_toggle_button_get_active(togglebutton));
 }
 
 
-G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
+static void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
 
@@ -757,13 +759,13 @@ G_MODULE_EXPORT void on_term_font_set(GtkFontButton *widget, gpointer user_data)
 }
 
 
-G_MODULE_EXPORT void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
+static void on_term_fg_color_set(GtkColorButton *widget, gpointer user_data)
 {
 	gtk_color_button_get_color(widget, &vc->colour_fore);
 }
 
 
-G_MODULE_EXPORT void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
+static void on_term_bg_color_set(GtkColorButton *widget, gpointer user_data)
 {
 	gtk_color_button_get_color(widget, &vc->colour_back);
 }

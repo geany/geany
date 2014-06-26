@@ -1219,7 +1219,7 @@ so the caret can move in the same direction longer before the policy is applied 
 
 If even is not set, instead of having symmetrical UZs,
 the left and bottom UZs are extended up to right and top UZs respectively.
-This way, we favour the displaying of useful information: the begining of lines,
+This way, we favour the displaying of useful information: the beginning of lines,
 where most code reside, and the lines after the caret, eg. the body of a function.
 
      |        |       |      |                                            |
@@ -3846,7 +3846,7 @@ long Editor::FormatRange(bool draw, Sci_RangeToFormat *pfr) {
 	vsPrint.rightMarginWidth = 0;
 
 	vsPrint.Refresh(*surfaceMeasure, pdoc->tabInChars);
-	// Determining width must hapen after fonts have been realised in Refresh
+	// Determining width must happen after fonts have been realised in Refresh
 	int lineNumberWidth = 0;
 	if (lineNumberIndex >= 0) {
 		lineNumberWidth = static_cast<int>(surfaceMeasure->WidthText(vsPrint.styles[STYLE_LINENUMBER].font,
@@ -6409,7 +6409,7 @@ void Editor::ButtonDownWithModifiers(Point pt, unsigned int curTime, int modifie
 					doubleClick = true;
 				} else if (selectionType == selWord) {
 					// Since we ended up here, we're inside a *triple* click, which should always select
-					// whole line irregardless of word wrap being enabled or not.
+					// whole line regardless of word wrap being enabled or not.
 					selectionType = selWholeLine;
 				} else {
 					selectionType = selChar;
@@ -6837,7 +6837,7 @@ bool Editor::Idle() {
 
 	// Add more idle things to do here, but make sure idleDone is
 	// set correctly before the function returns. returning
-	// false will stop calling this idle funtion until SetIdle() is
+	// false will stop calling this idle function until SetIdle() is
 	// called again.
 
 	idleDone = wrappingDone; // && thatDone && theOtherThingDone...

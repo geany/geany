@@ -28,17 +28,17 @@
 #ifndef GEANY_PLUGIN_H
 #define GEANY_PLUGIN_H 1
 
-#include "geany.h"
-#include "plugindata.h"
-
 /* Note: only include headers that define types or macros, not just functions */
+#include "app.h"
 #include "document.h"
 #include "editor.h"
 #include "encodings.h"
 #include "filetypes.h"
+#include "geany.h"
 #include "highlighting.h"
 #include "keybindings.h"
 #include "msgwindow.h"
+#include "plugindata.h"
 #include "prefs.h"
 #include "project.h"
 #include "search.h"

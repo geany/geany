@@ -21,8 +21,11 @@
 
 
 #ifndef GEANY_DOCUMENT_PRIVATE_H
-#define GEANY_DOCUMENT_PRIVATE_H
+#define GEANY_DOCUMENT_PRIVATE_H 1
 
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 /* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
  * undo management */
@@ -50,6 +53,13 @@ typedef struct FileEncoding
 }
 FileEncoding;
 
+enum
+{
+	MSG_TYPE_RELOAD,
+	MSG_TYPE_RESAVE,
+
+	NUM_MSG_TYPES
+};
 
 /* Private GeanyDocument fields */
 typedef struct GeanyDocumentPrivate
@@ -83,7 +93,14 @@ typedef struct GeanyDocumentPrivate
 	time_t			 mtime;
 	/* ID of the idle callback updating the tag list */
 	guint			 tag_list_update_source;
+	/* Whether it's temoporarily protected (read-only and saving is prevented). Does
+	 * not imply doc->readonly as writable files can be protected */
+	gint			 protected;
+	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
+	GtkWidget		*info_bars[NUM_MSG_TYPES];
 }
 GeanyDocumentPrivate;
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_DOCUMENT_PRIVATE_H */

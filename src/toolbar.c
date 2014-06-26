@@ -25,18 +25,22 @@
  */
 /* Utility functions to create the toolbar */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "toolbar.h"
+
+#include "app.h"
+#include "build.h"
+#include "callbacks.h"
+#include "document.h"
+#include "geanyentryaction.h"
+#include "geanymenubuttonaction.h"
+#include "main.h"
 #include "support.h"
 #include "ui_utils.h"
-#include "toolbar.h"
-#include "callbacks.h"
 #include "utils.h"
-#include "dialogs.h"
-#include "document.h"
-#include "build.h"
-#include "main.h"
-#include "geanymenubuttonaction.h"
-#include "geanyentryaction.h"
 
 #include <string.h>
 #include <glib/gstdio.h>

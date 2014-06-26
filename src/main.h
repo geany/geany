@@ -21,7 +21,11 @@
 
 
 #ifndef GEANY_MAIN_H
-#define GEANY_MAIN_H
+#define GEANY_MAIN_H 1
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 typedef struct
 {
@@ -68,4 +72,6 @@ gboolean main_is_realized(void);
 
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_MAIN_H */

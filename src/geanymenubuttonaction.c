@@ -23,12 +23,13 @@
  * This class is missing the action_create_menu_item() function and so can't be
  * used for creating menu items. */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
-#include "support.h"
-#include "utils.h"
 #include "geanymenubuttonaction.h"
 
+#include "utils.h"
 
 typedef struct _GeanyMenubuttonActionPrivate		GeanyMenubuttonActionPrivate;
 

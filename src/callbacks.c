@@ -24,7 +24,46 @@
  * main window. Callbacks not used by Glade should go elsewhere.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "callbacks.h"
+
+#include "about.h"
+#include "app.h"
+#include "build.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "keybindings.h"
+#include "keyfile.h"
+#include "log.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "plugins.h"
+#include "pluginutils.h"
+#include "prefs.h"
+#include "printing.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#ifdef HAVE_SOCKET
+# include "socket.h"
+#endif
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -32,50 +71,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <glib/gstdio.h>
 #include <time.h>
-
-#include "callbacks.h"
-#include "support.h"
-
-#include "keyfile.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "sciwrappers.h"
-#include "editor.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "about.h"
-#include "msgwindow.h"
-#include "build.h"
-#include "prefs.h"
-#include "templates.h"
-#include "sidebar.h"
-#include "keybindings.h"
-#include "encodings.h"
-#include "search.h"
-#include "main.h"
-#include "symbols.h"
-#include "tools.h"
-#include "project.h"
-#include "navqueue.h"
-#include "printing.h"
-#include "plugins.h"
-#include "log.h"
-#include "toolbar.h"
-#include "highlighting.h"
-#include "pluginutils.h"
-#include "gtkcompat.h"
-
-
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
-
-#ifdef HAVE_SOCKET
-# include "socket.h"
-#endif
-
 
 
 /* flag to indicate that an insert callback was triggered from the file menu,
@@ -400,45 +395,11 @@ G_MODULE_EXPORT void on_toolbutton_quit_clicked(GtkAction *action, gpointer user
 /* reload file */
 G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 {
-	on_reload_as_activate(NULL, GINT_TO_POINTER(-1));
-}
-
-
-/* also used for reloading when user_data is -1 */
-G_MODULE_EXPORT void on_reload_as_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
 	GeanyDocument *doc = document_get_current();
-	gchar *base_name;
-	gint i = GPOINTER_TO_INT(user_data);
-	const gchar *charset = NULL;
 
 	g_return_if_fail(doc != NULL);
 
-	/* No need to reload "untitled" (non-file-backed) documents */
-	if (doc->file_name == NULL)
-		return;
-
-	if (i >= 0)
-	{
-		if (i >= GEANY_ENCODINGS_MAX || encodings[i].charset == NULL)
-			return;
-		charset = encodings[i].charset;
-	}
-	else
-		charset = doc->encoding;
-
-	base_name = g_path_get_basename(doc->file_name);
-	/* don't prompt if file hasn't been edited at all */
-	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
-		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-		_("Any unsaved changes will be lost."),
-		_("Are you sure you want to reload '%s'?"), base_name))
-	{
-		document_reload_file(doc, charset);
-		if (charset != NULL)
-			ui_update_statusbar(doc, -1);
-	}
-	g_free(base_name);
+	document_reload_prompt(doc, NULL);
 }
 
 
@@ -1919,25 +1880,18 @@ G_MODULE_EXPORT void on_search1_activate(GtkMenuItem *menuitem, gpointer user_da
 
 
 /* simple implementation (vs. close all which doesn't close documents if cancelled),
- * if user_data is set, it is a GtkNotebook child widget */
+ * if user_data is set, it is the GeanyDocument to keep */
 G_MODULE_EXPORT void on_close_other_documents1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i;
-	GeanyDocument *doc, *cur_doc;
+	GeanyDocument *cur_doc = user_data;
 
-	if (user_data != NULL)
-	{
-		gint page_num = gtk_notebook_page_num(
-			GTK_NOTEBOOK(main_widgets.notebook), GTK_WIDGET(user_data));
-		cur_doc = document_get_from_page(page_num);
-	}
-	else
+	if (cur_doc == NULL)
 		cur_doc = document_get_current();
-
 
 	for (i = 0; i < documents_array->len; i++)
 	{
-		doc = documents[i];
+		GeanyDocument *doc = documents[i];
 
 		if (doc == cur_doc || ! doc->is_valid)
 			continue;

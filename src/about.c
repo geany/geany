@@ -24,17 +24,22 @@
  * About dialog and credits.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "about.h"
+
+#include "app.h"
+#include "gb.c"
 #include "geany.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "support.h"
 #include "geanywraplabel.h"
 #include "main.h"
-#include "templates.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
 
-#include "gb.c"
-
+#include "gtkcompat.h"
 
 #define HEADER "<span size=\"larger\" weight=\"bold\">Geany %s</span>"
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
@@ -115,8 +120,6 @@ static const gchar *contributors =
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
 
-static void header_eventbox_style_set(GtkWidget *widget);
-static void header_label_style_set(GtkWidget *widget);
 static void homepage_clicked(GtkButton *button, gpointer data);
 
 
@@ -184,10 +187,8 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_markup(GTK_LABEL(header_label), buffer);
 	gtk_widget_show(header_label);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_label, FALSE, FALSE, 0);
-	header_eventbox_style_set(header_eventbox);
-	header_label_style_set(header_label);
-	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
-	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
+	gtk_widget_set_state(header_eventbox, GTK_STATE_SELECTED);
+	gtk_widget_set_state(header_label, GTK_STATE_SELECTED);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* create notebook */
@@ -448,36 +449,6 @@ void about_dialog_show(void)
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
-}
-
-
-static void header_eventbox_style_set(GtkWidget *widget)
-{
-	static gint recursive = 0;
-	GtkStyle *style;
-
-	if (recursive > 0)
-		return;
-
-	++recursive;
-	style = gtk_widget_get_style(widget);
-	gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
-	--recursive;
-}
-
-
-static void header_label_style_set(GtkWidget *widget)
-{
-	static gint recursive = 0;
-	GtkStyle *style;
-
-	if (recursive > 0)
-		return;
-
-	++recursive;
-	style = gtk_widget_get_style(widget);
-	gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
-	--recursive;
 }
 
 
