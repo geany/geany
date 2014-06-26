@@ -152,10 +152,6 @@ G_MODULE_EXPORT void on_detect_width_from_file_activate(GtkMenuItem *menuitem, g
 G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 
-/* flag to indicate that an insert callback was triggered from the file menu,
- * so we need to store the current cursor position in editor_info.click_pos. */
-static gboolean insert_callback_from_menu = FALSE;
-
 /* represents the state at switching a notebook page(in the left treeviews widget), to not emit
  * the selection-changed signal from tv.tree_openfiles */
 /*static gboolean switch_tv_notebook_page = FALSE; */
@@ -173,18 +169,6 @@ static gboolean check_no_unsaved(void)
 		}
 	}
 	return TRUE;	/* no unsaved edits */
-}
-
-
-/* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
- * to prevent invalid cursor positions which can cause segfaults */
-static void verify_click_pos(GeanyDocument *doc)
-{
-	if (insert_callback_from_menu)
-	{
-		editor_info.click_pos = sci_get_current_position(doc->editor->sci);
-		insert_callback_from_menu = FALSE;
-	}
 }
 
 
@@ -1180,60 +1164,85 @@ G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpoint
 }
 
 
-G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void insert_multiline_comment(GeanyDocument *doc, gint pos)
 {
-	GeanyDocument *doc = document_get_current();
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (doc->file_type == NULL)
 	{
 		ui_set_statusbar(FALSE,
 			_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
-
 	if (doc->file_type->comment_open || doc->file_type->comment_single)
+	{
+		/* editor_insert_multiline_comment() uses editor_info.click_pos */
+		if (pos == -1)
+			editor_info.click_pos = sci_get_current_position(doc->editor->sci);
+		else
+			editor_info.click_pos = pos;
 		editor_insert_multiline_comment(doc->editor);
+	}
 	else
 		utils_beep();
 }
 
 
-G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
+	insert_multiline_comment(document_get_current(), editor_info.click_pos);
+}
+
+
+G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_multiline_comment(document_get_current(), -1);
+}
+
+
+static void insert_comment_template(GeanyDocument *doc, gint pos, guint template)
+{
 	gchar *text;
 
 	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+	g_return_if_fail(template < GEANY_MAX_TEMPLATES);
 
-	text = templates_get_template_licence(doc, GEANY_TEMPLATE_GPL);
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
 
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
+	text = templates_get_template_licence(doc, template);
 
 	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, pos, text);
 	sci_end_undo_action(doc->editor->sci);
 	g_free(text);
 }
 
 
+G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPL);
+}
+
+
+G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPL);
+}
+
+
 G_MODULE_EXPORT void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
-	gchar *text;
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_BSD);
+}
 
-	g_return_if_fail(doc != NULL);
 
-	text = templates_get_template_licence(doc, GEANY_TEMPLATE_BSD);
-
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
-
-	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
-	sci_end_undo_action(doc->editor->sci);
-	g_free(text);
-
+G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_BSD);
 }
 
 
@@ -1277,13 +1286,16 @@ G_MODULE_EXPORT void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
 {
-	GeanyDocument *doc = document_get_current();
 	const gchar *format = NULL;
 	gchar *time_str;
 
 	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
 
 	/* set default value */
 	if (utils_str_equal("", ui_prefs.custom_date_format))
@@ -1292,19 +1304,19 @@ void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
 	}
 
-	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
+	if (utils_str_equal(_("dd.mm.yyyy"), date_style))
 		format = "%d.%m.%Y";
-	else if (utils_str_equal(_("mm.dd.yyyy"), (gchar*) user_data))
+	else if (utils_str_equal(_("mm.dd.yyyy"), date_style))
 		format = "%m.%d.%Y";
-	else if (utils_str_equal(_("yyyy/mm/dd"), (gchar*) user_data))
+	else if (utils_str_equal(_("yyyy/mm/dd"), date_style))
 		format = "%Y/%m/%d";
-	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), date_style))
 		format = "%d.%m.%Y %H:%M:%S";
-	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), date_style))
 		format = "%m.%d.%Y %H:%M:%S";
-	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
+	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), date_style))
 		format = "%Y/%m/%d %H:%M:%S";
-	else if (utils_str_equal(_("_Use Custom Date Format"), (gchar*) user_data))
+	else if (utils_str_equal(_("_Use Custom Date Format"), date_style))
 		format = ui_prefs.custom_date_format;
 	else
 	{
@@ -1320,11 +1332,9 @@ void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 	time_str = utils_get_date_time(format, NULL);
 	if (time_str != NULL)
 	{
-		verify_click_pos(doc); /* make sure that the click_pos is valid */
-
 		sci_start_undo_action(doc->editor->sci);
-		sci_insert_text(doc->editor->sci, editor_info.click_pos, time_str);
-		sci_goto_pos(doc->editor->sci, editor_info.click_pos + strlen(time_str), FALSE);
+		sci_insert_text(doc->editor->sci, pos, time_str);
+		sci_goto_pos(doc->editor->sci, pos + strlen(time_str), FALSE);
 		sci_end_undo_action(doc->editor->sci);
 		g_free(time_str);
 	}
@@ -1337,33 +1347,59 @@ void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
-	gint pos = -1;
+	insert_date(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), -1, user_data);
+}
+
+
+/* @include include name or NULL for empty with cursor ready for typing it */
+static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
+{
+	gint pos_after = -1;
 	gchar *text;
 
 	g_return_if_fail(doc != NULL);
-	g_return_if_fail(user_data != NULL);
+	g_return_if_fail(include != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
 
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
 
-	if (utils_str_equal(user_data, "blank"))
+	if (utils_str_equal(include, "blank"))
 	{
 		text = g_strdup("#include \"\"\n");
-		pos = editor_info.click_pos + 10;
+		pos_after = pos + 10;
 	}
 	else
 	{
-		text = g_strconcat("#include <", user_data, ">\n", NULL);
+		text = g_strconcat("#include <", include, ">\n", NULL);
 	}
 
 	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, pos, text);
 	sci_end_undo_action(doc->editor->sci);
 	g_free(text);
-	if (pos >= 0)
-		sci_goto_pos(doc->editor->sci, pos, FALSE);
+	if (pos_after >= 0)
+		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
+}
+
+
+void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), -1, user_data);
 }
 
 
@@ -1534,41 +1570,6 @@ G_MODULE_EXPORT void on_previous_message1_activate(GtkMenuItem *menuitem, gpoint
 	if (! ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_msg),
 		msgwin_goto_messages_file_line))
 		ui_set_statusbar(FALSE, _("No more message items."));
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_multiline_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_gpl_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_bsd_activate(menuitem, user_data);
-}
-
-
-void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_insert_include_activate(menuitem, user_data);
-}
-
-
-void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_insert_date_activate(menuitem, user_data);
 }
 
 
