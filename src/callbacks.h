@@ -104,8 +104,6 @@ void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data);
 
 G_MODULE_EXPORT void on_line_wrapping1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
 
-void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data);
-
 void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data);
 
 void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data);
@@ -131,8 +129,6 @@ G_MODULE_EXPORT void on_menu_decrease_indent1_activate(GtkMenuItem *menuitem, gp
 G_MODULE_EXPORT void on_menu_toggle_line_commentation1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_MODULE_EXPORT void on_next_message1_activate(GtkMenuItem *menuitem, gpointer user_data);
-
-void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_MODULE_EXPORT void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
