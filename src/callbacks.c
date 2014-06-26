@@ -164,10 +164,9 @@ G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 G_MODULE_EXPORT void on_save1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	GeanyDocument *doc = document_get_current();
 
-	if (doc != NULL && cur_page >= 0)
+	if (doc != NULL)
 	{
 		document_save_file(doc, ui_prefs.allow_always_save);
 	}
