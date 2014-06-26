@@ -38,13 +38,13 @@
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "stash.h"
+#include "spawn.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"
 #include "utils.h"
 
 #include "gtkcompat.h"
-#include "spawn.h"
 
 #include <unistd.h>
 #include <string.h>
