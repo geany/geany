@@ -553,6 +553,49 @@ void ui_update_fold_items(void)
 }
 
 
+/* @include include name or NULL for empty with cursor ready for typing it */
+static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
+{
+	gint pos_after = -1;
+	gchar *text;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	if (! include)
+	{
+		text = g_strdup("#include \"\"\n");
+		pos_after = pos + 10;
+	}
+	else
+	{
+		text = g_strconcat("#include <", include, ">\n", NULL);
+	}
+
+	sci_start_undo_action(doc->editor->sci);
+	sci_insert_text(doc->editor->sci, pos, text);
+	sci_end_undo_action(doc->editor->sci);
+	g_free(text);
+	if (pos_after >= 0)
+		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
+}
+
+
+static void on_popup_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), -1, user_data);
+}
+
+
 static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
@@ -577,7 +620,7 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 		g_signal_connect(tmp_menu, "activate",
 					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
 		g_signal_connect(tmp_popup, "activate",
-					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
+					G_CALLBACK(on_popup_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
 	gtk_widget_show_all(edit_menu_item);
@@ -615,8 +658,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
@@ -624,8 +666,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_popup_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);

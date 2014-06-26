@@ -1359,50 +1359,6 @@ void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* @include include name or NULL for empty with cursor ready for typing it */
-static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
-{
-	gint pos_after = -1;
-	gchar *text;
-
-	g_return_if_fail(doc != NULL);
-	g_return_if_fail(include != NULL);
-	g_return_if_fail(pos == -1 || pos >= 0);
-
-	if (pos == -1)
-		pos = sci_get_current_position(doc->editor->sci);
-
-	if (utils_str_equal(include, "blank"))
-	{
-		text = g_strdup("#include \"\"\n");
-		pos_after = pos + 10;
-	}
-	else
-	{
-		text = g_strconcat("#include <", include, ">\n", NULL);
-	}
-
-	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, pos, text);
-	sci_end_undo_action(doc->editor->sci);
-	g_free(text);
-	if (pos_after >= 0)
-		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
-}
-
-
-void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_include(document_get_current(), editor_info.click_pos, user_data);
-}
-
-
-void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_include(document_get_current(), -1, user_data);
-}
-
-
 G_MODULE_EXPORT void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
