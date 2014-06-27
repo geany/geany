@@ -6252,6 +6252,8 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
+    <signal name="window-state-event" handler="on_window_state_event" swapped="no"/>
+    <signal name="delete-event" handler="on_window_delete_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>
@@ -8319,6 +8321,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="buffer">textbuffer1</property>
+                                <signal name="motion-notify-event" handler="on_motion_event" swapped="no"/>
                               </object>
                             </child>
                           </object>

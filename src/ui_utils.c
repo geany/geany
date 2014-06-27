@@ -553,6 +553,49 @@ void ui_update_fold_items(void)
 }
 
 
+/* @include include name or NULL for empty with cursor ready for typing it */
+static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
+{
+	gint pos_after = -1;
+	gchar *text;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	if (! include)
+	{
+		text = g_strdup("#include \"\"\n");
+		pos_after = pos + 10;
+	}
+	else
+	{
+		text = g_strconcat("#include <", include, ">\n", NULL);
+	}
+
+	sci_start_undo_action(doc->editor->sci);
+	sci_insert_text(doc->editor->sci, pos, text);
+	sci_end_undo_action(doc->editor->sci);
+	g_free(text);
+	if (pos_after >= 0)
+		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
+}
+
+
+static void on_popup_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), -1, user_data);
+}
+
+
 static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
@@ -577,7 +620,7 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 		g_signal_connect(tmp_menu, "activate",
 					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
 		g_signal_connect(tmp_popup, "activate",
-					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
+					G_CALLBACK(on_popup_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
 	gtk_widget_show_all(edit_menu_item);
@@ -615,8 +658,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
@@ -624,8 +666,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_popup_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
@@ -635,6 +676,79 @@ void ui_create_insert_menu_items(void)
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
+}
+
+
+static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
+{
+	const gchar *format = NULL;
+	gchar *time_str;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	/* set default value */
+	if (utils_str_equal("", ui_prefs.custom_date_format))
+	{
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+	}
+
+	if (utils_str_equal(_("dd.mm.yyyy"), date_style))
+		format = "%d.%m.%Y";
+	else if (utils_str_equal(_("mm.dd.yyyy"), date_style))
+		format = "%m.%d.%Y";
+	else if (utils_str_equal(_("yyyy/mm/dd"), date_style))
+		format = "%Y/%m/%d";
+	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), date_style))
+		format = "%d.%m.%Y %H:%M:%S";
+	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), date_style))
+		format = "%m.%d.%Y %H:%M:%S";
+	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), date_style))
+		format = "%Y/%m/%d %H:%M:%S";
+	else if (utils_str_equal(_("_Use Custom Date Format"), date_style))
+		format = ui_prefs.custom_date_format;
+	else
+	{
+		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
+				_("Enter here a custom date and time format. "
+				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				ui_prefs.custom_date_format);
+		if (str)
+			SETPTR(ui_prefs.custom_date_format, str);
+		return;
+	}
+
+	time_str = utils_get_date_time(format, NULL);
+	if (time_str != NULL)
+	{
+		sci_start_undo_action(doc->editor->sci);
+		sci_insert_text(doc->editor->sci, pos, time_str);
+		sci_goto_pos(doc->editor->sci, pos + strlen(time_str), FALSE);
+		sci_end_undo_action(doc->editor->sci);
+		g_free(time_str);
+	}
+	else
+	{
+		utils_beep();
+		ui_set_statusbar(TRUE,
+				_("Date format string could not be converted (possibly too long)."));
+	}
+}
+
+
+static void on_popup_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), -1, user_data);
 }
 
 
@@ -650,7 +764,7 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), label);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), label);
 }
 
 
@@ -693,7 +807,7 @@ void ui_create_insert_date_menu_items(void)
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), str);
 	ui_hookup_widget(main_widgets.editor_menu, item, "insert_date_custom2");
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));

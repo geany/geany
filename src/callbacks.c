@@ -73,9 +73,84 @@
 #include <time.h>
 
 
-/* flag to indicate that an insert callback was triggered from the file menu,
- * so we need to store the current cursor position in editor_info.click_pos. */
-static gboolean insert_callback_from_menu = FALSE;
+/* prototypes of Glade-only callback to let the compiler know they really are meant to be exported */
+G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata);
+G_MODULE_EXPORT void on_info1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_crlf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_lf_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_cr_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_hide_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_markers_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_color_schemes_activate(GtkImageMenuItem *imagemenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_count_words1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_website1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_donate_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_wiki_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_help_menu_item_bug_report_activate(GtkMenuItem *item, gpointer user_data);
+G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_changelog_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_set_file_readonly1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tv_notebook_switch_page(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_help_shortcuts1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_use_auto_indentation1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_fold_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_unfold_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_menu_write_unicode_bom1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_project1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_load_tags1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_file1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tv_notebook_switch_page_after(GtkNotebook *notebook, gpointer page, guint page_num, gpointer user_data);
+G_MODULE_EXPORT void on_tabs1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_spaces1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_page_setup1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_search1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_reload_configuration1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_tabs_and_spaces1_activate(GtkCheckMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_debug_messages1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_white_space1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT void on_menu_show_indentation_guides1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);
+G_MODULE_EXPORT gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data);
+G_MODULE_EXPORT void on_customize_toolbar1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_button_customize_toolbar_clicked(GtkButton *button, gpointer user_data);
+G_MODULE_EXPORT void on_cut_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_copy_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_delete_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_duplicate_line_or_selection1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_select_current_lines1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_select_current_paragraph1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_insert_alternative_white_space1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_go_to_next_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_go_to_previous_marker1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_reflow_lines_block1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_smart_line_indent1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_move_lines_up1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_move_lines_down1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_goto_tag_definition1(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_goto_tag_declaration1(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_indent_width_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_reset_indentation1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_mark_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer user_data);
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 
 /* represents the state at switching a notebook page(in the left treeviews widget), to not emit
  * the selection-changed signal from tv.tree_openfiles */
@@ -97,19 +172,7 @@ static gboolean check_no_unsaved(void)
 }
 
 
-/* set editor_info.click_pos to the current cursor position if insert_callback_from_menu is TRUE
- * to prevent invalid cursor positions which can cause segfaults */
-static void verify_click_pos(GeanyDocument *doc)
-{
-	if (insert_callback_from_menu)
-	{
-		editor_info.click_pos = sci_get_current_position(doc->editor->sci);
-		insert_callback_from_menu = FALSE;
-	}
-}
-
-
-/* should only be called from on_exit_clicked */
+/* should only be called from on_window_delete_event */
 static void quit_app(void)
 {
 	configuration_save();
@@ -126,7 +189,7 @@ static void quit_app(void)
 
 
 /* wrapper function to abort exit process if cancel button is pressed */
-G_MODULE_EXPORT gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
+G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata)
 {
 	main_status.quitting = TRUE;
 
@@ -159,6 +222,16 @@ G_MODULE_EXPORT gboolean on_exit_clicked(GtkWidget *widget, gpointer gdata)
 G_MODULE_EXPORT void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	document_new_file(NULL, NULL, NULL);
+}
+
+
+/* create a new file and copy file content and properties */
+G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *old_doc = document_get_current();
+
+	if (old_doc)
+		document_clone(old_doc);
 }
 
 
@@ -223,7 +296,7 @@ G_MODULE_EXPORT void on_close1_activate(GtkMenuItem *menuitem, gpointer user_dat
 
 G_MODULE_EXPORT void on_quit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	on_exit_clicked(NULL, NULL);
+	on_window_delete_event(NULL, NULL, NULL);
 }
 
 
@@ -385,13 +458,6 @@ G_MODULE_EXPORT void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data
 }
 
 
-/* quit toolbar button */
-G_MODULE_EXPORT void on_toolbutton_quit_clicked(GtkAction *action, gpointer user_data)
-{
-	on_exit_clicked(NULL, NULL);
-}
-
-
 /* reload file */
 G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 {
@@ -406,27 +472,6 @@ G_MODULE_EXPORT void on_toolbutton_reload_clicked(GtkAction *action, gpointer us
 G_MODULE_EXPORT void on_change_font1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	dialogs_show_open_font();
-}
-
-
-/* new file */
-G_MODULE_EXPORT void on_toolbutton_new_clicked(GtkAction *action, gpointer user_data)
-{
-	document_new_file(NULL, NULL, NULL);
-}
-
-
-/* open file */
-G_MODULE_EXPORT void on_toolbutton_open_clicked(GtkAction *action, gpointer user_data)
-{
-	dialogs_show_open_file();
-}
-
-
-/* save file */
-G_MODULE_EXPORT void on_toolbutton_save_clicked(GtkAction *action, gpointer user_data)
-{
-	on_save1_activate(NULL, user_data);
 }
 
 
@@ -454,21 +499,21 @@ static void do_toolbar_search(const gchar *text, gboolean incremental, gboolean 
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbar_search_entry_changed(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	do_toolbar_search(text, TRUE, FALSE);
 }
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbar_search_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	do_toolbar_search(text, FALSE, GPOINTER_TO_INT(user_data));
 }
 
 
 /* search text */
-G_MODULE_EXPORT void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean result;
@@ -525,25 +570,6 @@ G_MODULE_EXPORT void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer us
 	g_return_if_fail(doc != NULL);
 
 	sci_zoom_off(doc->editor->sci);
-}
-
-
-/* close tab */
-G_MODULE_EXPORT void on_toolbutton_close_clicked(GtkAction *action, gpointer user_data)
-{
-	on_close1_activate(NULL, NULL);
-}
-
-
-G_MODULE_EXPORT void on_toolbutton_close_all_clicked(GtkAction *action, gpointer user_data)
-{
-	on_close_all1_activate(NULL, NULL);
-}
-
-
-G_MODULE_EXPORT void on_toolbutton_preferences_clicked(GtkAction *action, gpointer user_data)
-{
-	on_preferences1_activate(NULL, NULL);
 }
 
 
@@ -938,7 +964,7 @@ G_MODULE_EXPORT void on_show_color_chooser1_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_compile_clicked(GtkAction *action, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_COMPILE);
 }
@@ -1032,7 +1058,7 @@ G_MODULE_EXPORT void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
+void on_toolbutton_goto_entry_activate(GtkAction *action, const gchar *text, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	gint offset;
@@ -1048,7 +1074,7 @@ G_MODULE_EXPORT void on_toolbutton_goto_entry_activate(GtkAction *action, const 
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data)
 {
 	GtkWidget *entry = toolbar_get_widget_child_by_name("GotoEntry");
 
@@ -1131,60 +1157,85 @@ G_MODULE_EXPORT void on_comments_function_activate(GtkMenuItem *menuitem, gpoint
 }
 
 
-G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void insert_multiline_comment(GeanyDocument *doc, gint pos)
 {
-	GeanyDocument *doc = document_get_current();
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
 
-	if (doc == NULL || doc->file_type == NULL)
+	if (doc->file_type == NULL)
 	{
 		ui_set_statusbar(FALSE,
 			_("Please set the filetype for the current file before using this function."));
 		return;
 	}
 
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
-
 	if (doc->file_type->comment_open || doc->file_type->comment_single)
+	{
+		/* editor_insert_multiline_comment() uses editor_info.click_pos */
+		if (pos == -1)
+			editor_info.click_pos = sci_get_current_position(doc->editor->sci);
+		else
+			editor_info.click_pos = pos;
 		editor_insert_multiline_comment(doc->editor);
+	}
 	else
 		utils_beep();
 }
 
 
-G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+G_MODULE_EXPORT void on_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
+	insert_multiline_comment(document_get_current(), editor_info.click_pos);
+}
+
+
+G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_multiline_comment(document_get_current(), -1);
+}
+
+
+static void insert_comment_template(GeanyDocument *doc, gint pos, guint template)
+{
 	gchar *text;
 
 	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+	g_return_if_fail(template < GEANY_MAX_TEMPLATES);
 
-	text = templates_get_template_licence(doc, GEANY_TEMPLATE_GPL);
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
 
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
+	text = templates_get_template_licence(doc, template);
 
 	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
+	sci_insert_text(doc->editor->sci, pos, text);
 	sci_end_undo_action(doc->editor->sci);
 	g_free(text);
 }
 
 
+G_MODULE_EXPORT void on_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPL);
+}
+
+
+G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPL);
+}
+
+
 G_MODULE_EXPORT void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
-	gchar *text;
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_BSD);
+}
 
-	g_return_if_fail(doc != NULL);
 
-	text = templates_get_template_licence(doc, GEANY_TEMPLATE_BSD);
-
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
-
-	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
-	sci_end_undo_action(doc->editor->sci);
-	g_free(text);
-
+G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_BSD);
 }
 
 
@@ -1228,96 +1279,6 @@ G_MODULE_EXPORT void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpoi
 }
 
 
-G_MODULE_EXPORT void on_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	const gchar *format = NULL;
-	gchar *time_str;
-
-	g_return_if_fail(doc != NULL);
-
-	/* set default value */
-	if (utils_str_equal("", ui_prefs.custom_date_format))
-	{
-		g_free(ui_prefs.custom_date_format);
-		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
-	}
-
-	if (utils_str_equal(_("dd.mm.yyyy"), (gchar*) user_data))
-		format = "%d.%m.%Y";
-	else if (utils_str_equal(_("mm.dd.yyyy"), (gchar*) user_data))
-		format = "%m.%d.%Y";
-	else if (utils_str_equal(_("yyyy/mm/dd"), (gchar*) user_data))
-		format = "%Y/%m/%d";
-	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), (gchar*) user_data))
-		format = "%d.%m.%Y %H:%M:%S";
-	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), (gchar*) user_data))
-		format = "%m.%d.%Y %H:%M:%S";
-	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), (gchar*) user_data))
-		format = "%Y/%m/%d %H:%M:%S";
-	else if (utils_str_equal(_("_Use Custom Date Format"), (gchar*) user_data))
-		format = ui_prefs.custom_date_format;
-	else
-	{
-		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
-				_("Enter here a custom date and time format. "
-				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
-				ui_prefs.custom_date_format);
-		if (str)
-			SETPTR(ui_prefs.custom_date_format, str);
-		return;
-	}
-
-	time_str = utils_get_date_time(format, NULL);
-	if (time_str != NULL)
-	{
-		verify_click_pos(doc); /* make sure that the click_pos is valid */
-
-		sci_start_undo_action(doc->editor->sci);
-		sci_insert_text(doc->editor->sci, editor_info.click_pos, time_str);
-		sci_goto_pos(doc->editor->sci, editor_info.click_pos + strlen(time_str), FALSE);
-		sci_end_undo_action(doc->editor->sci);
-		g_free(time_str);
-	}
-	else
-	{
-		utils_beep();
-		ui_set_statusbar(TRUE,
-				_("Date format string could not be converted (possibly too long)."));
-	}
-}
-
-
-G_MODULE_EXPORT void on_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	gint pos = -1;
-	gchar *text;
-
-	g_return_if_fail(doc != NULL);
-	g_return_if_fail(user_data != NULL);
-
-	verify_click_pos(doc); /* make sure that the click_pos is valid */
-
-	if (utils_str_equal(user_data, "blank"))
-	{
-		text = g_strdup("#include \"\"\n");
-		pos = editor_info.click_pos + 10;
-	}
-	else
-	{
-		text = g_strconcat("#include <", user_data, ">\n", NULL);
-	}
-
-	sci_start_undo_action(doc->editor->sci);
-	sci_insert_text(doc->editor->sci, editor_info.click_pos, text);
-	sci_end_undo_action(doc->editor->sci);
-	g_free(text);
-	if (pos >= 0)
-		sci_goto_pos(doc->editor->sci, pos, FALSE);
-}
-
-
 G_MODULE_EXPORT void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
@@ -1345,7 +1306,7 @@ G_MODULE_EXPORT void on_menu_unfold_all1_activate(GtkMenuItem *menuitem, gpointe
 }
 
 
-G_MODULE_EXPORT void on_toolbutton_run_clicked(GtkAction *action, gpointer user_data)
+void on_toolbutton_run_clicked(GtkAction *action, gpointer user_data)
 {
 	keybindings_send_command(GEANY_KEY_GROUP_BUILD, GEANY_KEYS_BUILD_RUN);
 }
@@ -1485,41 +1446,6 @@ G_MODULE_EXPORT void on_previous_message1_activate(GtkMenuItem *menuitem, gpoint
 	if (! ui_tree_view_find_previous(GTK_TREE_VIEW(msgwindow.tree_msg),
 		msgwin_goto_messages_file_line))
 		ui_set_statusbar(FALSE, _("No more message items."));
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_multiline_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_multiline_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_gpl_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_comments_bsd_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_insert_include_activate(menuitem, user_data);
-}
-
-
-G_MODULE_EXPORT void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	insert_callback_from_menu = TRUE;
-	on_insert_date_activate(menuitem, user_data);
 }
 
 
@@ -1745,19 +1671,19 @@ G_MODULE_EXPORT void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem
 }
 
 
-G_MODULE_EXPORT void on_forward_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_toolbutton_forward_activate(GtkAction *menuitem, gpointer user_data)
 {
 	navqueue_go_forward();
 }
 
 
-G_MODULE_EXPORT void on_back_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_toolbutton_back_activate(GtkAction *menuitem, gpointer user_data)
 {
 	navqueue_go_back();
 }
 
 
-G_MODULE_EXPORT gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
+gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
 	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
 		gtk_widget_grab_focus(widget);
