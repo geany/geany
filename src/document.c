@@ -791,7 +791,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	document_set_text_changed(doc, FALSE);
 	ui_document_show_hide(doc); /* update the document menu */
 
-	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+	sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 	/* bring it in front, jump to the start and grab the focus */
 	editor_goto_pos(doc->editor, 0, FALSE);
 	document_try_focus(doc, NULL);
@@ -1247,7 +1247,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		/* update line number margin width */
 		doc->priv->line_count = sci_get_line_count(doc->editor->sci);
-		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+		sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 
 		if (! reload)
 		{

@@ -934,7 +934,7 @@ static void auto_update_margin_width(GeanyEditor *editor)
 	if (editor->document->priv->line_count != next_linecount)
 	{
 		doc->priv->line_count = next_linecount;
-		sci_set_line_numbers(editor->sci, TRUE, 0);
+		sci_set_line_numbers(editor->sci, TRUE);
 	}
 }
 
@@ -1127,7 +1127,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 		case SCN_ZOOM:
 			/* recalculate line margin width */
-			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
+			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
@@ -5014,7 +5014,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
 	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin, 0);
+	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 
