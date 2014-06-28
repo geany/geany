@@ -157,61 +157,11 @@ G_MODULE_EXPORT void on_clone1_activate(GtkMenuItem *menuitem, gpointer user_dat
 /*static gboolean switch_tv_notebook_page = FALSE; */
 
 
-static gboolean check_no_unsaved(void)
-{
-	guint i;
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		if (documents[i]->is_valid && documents[i]->changed)
-		{
-			return FALSE;
-		}
-	}
-	return TRUE;	/* no unsaved edits */
-}
-
-
-/* should only be called from on_window_delete_event */
-static void quit_app(void)
-{
-	configuration_save();
-
-	if (app->project != NULL)
-		project_close(FALSE);	/* save project session files */
-
-	document_close_all();
-
-	main_status.quitting = TRUE;
-
-	main_quit();
-}
-
 
 /* wrapper function to abort exit process if cancel button is pressed */
 G_MODULE_EXPORT gboolean on_window_delete_event(GtkWidget *widget, GdkEvent *event, gpointer gdata)
 {
-	main_status.quitting = TRUE;
-
-	if (! check_no_unsaved())
-	{
-		if (document_account_for_unsaved())
-		{
-			quit_app();
-			return FALSE;
-		}
-	}
-	else
-	if (! prefs.confirm_exit ||
-		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
-			_("Do you really want to quit?")))
-	{
-		quit_app();
-		return FALSE;
-	}
-
-	main_status.quitting = FALSE;
-	return TRUE;
+	return !main_quit();
 }
 
 
@@ -296,7 +246,7 @@ G_MODULE_EXPORT void on_close1_activate(GtkMenuItem *menuitem, gpointer user_dat
 
 G_MODULE_EXPORT void on_quit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	on_window_delete_event(NULL, NULL, NULL);
+	main_quit();
 }
 
 

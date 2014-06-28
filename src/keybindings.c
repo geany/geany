@@ -39,6 +39,7 @@
 #include "documentprivate.h"
 #include "filetypes.h"
 #include "keybindingsprivate.h"
+#include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
@@ -1364,7 +1365,7 @@ static gboolean cb_func_file_action(guint key_id)
 			on_print1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_QUIT:
-			on_quit1_activate(NULL, NULL);
+			main_quit();
 			break;
 	}
 	return TRUE;
