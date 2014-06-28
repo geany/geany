@@ -72,6 +72,7 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=dmd -w -c "%f"
 linker=dmd -w -of"%e" "%f"
+run_cmd=rdmd "%f"
 # you can also use the gdc compiler, please use the "gdmd" wrapper script(included with gdc)
 #compiler=gdmd -w -c "%f"
 #linker=gdmd -w -of"%e" "%f"
