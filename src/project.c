@@ -110,6 +110,7 @@ void project_new(void)
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
+	gchar *tooltip;
 	PropertyDialogElements *e;
 
 	if (! project_ask_close())
@@ -143,6 +144,7 @@ void project_new(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(e->name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
+	gtk_widget_set_tooltip_text(e->name, _("Project name"));
 
 	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
 
@@ -153,6 +155,11 @@ void project_new(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(e->file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
+	tooltip = g_strdup_printf(
+		_("Path of the file representing the project and storing its settings. "
+		"It should normally have the \"%s\" extension."), "."GEANY_PROJECT_EXT);
+	gtk_widget_set_tooltip_text(e->file_name, tooltip);
+	g_free(tooltip);
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
