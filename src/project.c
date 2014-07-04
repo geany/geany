@@ -123,15 +123,9 @@ void project_new(void)
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
-	bbox = gtk_hbox_new(FALSE, 0);
-	button = gtk_button_new();
+	button = ui_button_new_with_image(GTK_STOCK_NEW, _("C_reate"));
 	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(e->dialog), button);
-	image = gtk_image_new_from_stock(GTK_STOCK_NEW, GTK_ICON_SIZE_BUTTON);
-	label = gtk_label_new_with_mnemonic(_("C_reate"));
-	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button), bbox);
 	gtk_dialog_add_action_widget(GTK_DIALOG(e->dialog), button, GTK_RESPONSE_OK);
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
