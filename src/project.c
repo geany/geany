@@ -723,6 +723,16 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		g_free(locale_filename);
 		return FALSE;
 	}
+	else if (new_project && g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
+			 ! dialogs_show_question_full(NULL, _("_Replace"), GTK_STOCK_CANCEL,
+				NULL,
+				_("The file '%s' already exists. Do you want to overwrite it?"),
+				file_name))
+	{
+		gtk_widget_grab_focus(e->file_name);
+		g_free(locale_filename);
+		return FALSE;
+	}
 	g_free(locale_filename);
 
 	if (app->project == NULL)
