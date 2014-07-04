@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>
 #include <time.h>
 #include <assert.h>
+#include <ctype.h>
 
 #include <new>
 #include <string>
@@ -16,14 +16,16 @@
 #include <map>
 #include <algorithm>
 
+#include <glib.h>
+#include <gmodule.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "Platform.h"
-
-#if PLAT_GTK_WIN32
+#if defined(__WIN32__) || defined(_MSC_VER)
 #include <windows.h>
 #endif
+
+#include "Platform.h"
 
 #include "ILexer.h"
 #include "Scintilla.h"
@@ -32,6 +34,9 @@
 #include "SciLexer.h"
 #endif
 #include "StringCopy.h"
+#ifdef SCI_LEXER
+#include "LexerModule.h"
+#endif
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -43,27 +48,24 @@
 #include "XPM.h"
 #include "LineMarker.h"
 #include "Style.h"
-#include "AutoComplete.h"
 #include "ViewStyle.h"
-#include "Decoration.h"
 #include "CharClassify.h"
+#include "Decoration.h"
 #include "CaseFolder.h"
 #include "Document.h"
+#include "CaseConvert.h"
+#include "UniConversion.h"
 #include "Selection.h"
 #include "PositionCache.h"
 #include "Editor.h"
+#include "AutoComplete.h"
 #include "ScintillaBase.h"
-#include "UniConversion.h"
-#include "CaseConvert.h"
-
-#include "scintilla-marshal.h"
 
 #ifdef SCI_LEXER
-#include <glib.h>
-#include <gmodule.h>
-#include "LexerModule.h"
 #include "ExternalLexer.h"
 #endif
+
+#include "scintilla-marshal.h"
 
 #include "Converter.h"
 
