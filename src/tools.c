@@ -163,12 +163,28 @@ static void cc_on_dialog_add_clicked(GtkButton *button, struct cc_dialog *cc)
 }
 
 
+static void scroll_to_cursor(GtkTreeView *view)
+{
+	GtkTreePath *path;
+	GtkTreeViewColumn *column;
+
+	gtk_tree_view_get_cursor(view, &path, &column);
+	if (path)
+	{
+		gtk_tree_view_scroll_to_cell(view, path, column, FALSE, 1.0, 1.0);
+		gtk_tree_path_free(path);
+	}
+}
+
 static void cc_on_dialog_remove_clicked(GtkButton *button, struct cc_dialog *cc)
 {
 	GtkTreeIter iter;
 
 	if (gtk_tree_selection_get_selected(cc->selection, NULL, &iter))
+	{
 		gtk_list_store_remove(cc->store, &iter);
+		scroll_to_cursor(GTK_TREE_VIEW(cc->view));
+	}
 }
 
 
@@ -186,6 +202,7 @@ static void cc_on_dialog_move_up_clicked(GtkButton *button, struct cc_dialog *cc
 			gtk_tree_model_get_iter(GTK_TREE_MODEL(cc->store), &prev, path))
 		{
 			gtk_list_store_move_before(cc->store, &iter, &prev);
+			scroll_to_cursor(GTK_TREE_VIEW(cc->view));
 		}
 		gtk_tree_path_free(path);
 	}
@@ -201,7 +218,10 @@ static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *
 		GtkTreeIter next = iter;
 
 		if (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc->store), &next))
+		{
 			gtk_list_store_move_after(cc->store, &iter, &next);
+			scroll_to_cursor(GTK_TREE_VIEW(cc->view));
+		}
 	}
 }
 
