@@ -135,6 +135,10 @@ static void emitRubyTag (vString* name, rubyKind kind)
 	tagEntryInfo tag;
 	vString* scope;
 
+	if (!RubyKinds[kind].enabled) {
+		return;
+	}
+
 	vStringTerminate (name);
 	scope = stringListToScope (nesting);
 
