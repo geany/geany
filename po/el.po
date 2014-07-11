@@ -1,16 +1,16 @@
 # translation of el.po to Greek
 # Greek translations for geany package.
-# Copyright (C) 2008 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2008-14 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Stavros Temertzidis <bullgr@gmail.com>, 2008.
+# Stavros Temertzidis <bullgr@gmail.com>, 2008-2014
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-08 20:58+0200\n"
-"PO-Revision-Date: 2014-06-27 10:45+0100\n"
-"Last-Translator: Stavros Temertzidis <bullgr@gmail.com>\n"
+"POT-Creation-Date: 2014-07-11 17:03+0200\n"
+"PO-Revision-Date: 2014-07-11 17:03+0200\n"
+"Last-Translator: Frank Lanitz <frlan@trabant>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "Εισαγωγή Καταχώρησης _ChangeLog "
 
 #: ../data/geany.glade.h:7
 msgid "Insert _Function Description"
-msgstr "Εισαγωγή Περιγραφής της Συνάρτησης"
+msgstr "Εισαγωγή _Περιγραφής της Συνάρτησης"
 
 #: ../data/geany.glade.h:8
 msgid "Insert Mu_ltiline Comment"
@@ -77,7 +77,7 @@ msgstr "Εισαγωγή Σημειώματος _GPL"
 
 #: ../data/geany.glade.h:12
 msgid "Insert _BSD License Notice"
-msgstr "Εισαγωγή Σημειώματος BSD License"
+msgstr "Εισαγωγή Σημειώματος _BSD License"
 
 #: ../data/geany.glade.h:13
 msgid "Insert Dat_e"
@@ -89,7 +89,7 @@ msgstr "αόρατο"
 
 #: ../data/geany.glade.h:15
 msgid "_Insert \"include <...>\""
-msgstr "Εισαγωγή \"include <...>\""
+msgstr "_Εισαγωγή \"include <...>\""
 
 #: ../data/geany.glade.h:16 ../src/keybindings.c:413
 msgid "Insert Alternative _White Space"
@@ -1767,7 +1767,7 @@ msgstr "_Σχολιασμός της/των Γραμμής(ών)"
 
 #: ../data/geany.glade.h:364
 msgid "U_ncomment Line(s)"
-msgstr "Α-ποσχολιασμός της/των Γραμμής(ών)"
+msgstr "Α_ποσχολιασμός της/των Γραμμής(ών)"
 
 #: ../data/geany.glade.h:365
 msgid "_Toggle Line Commentation"
@@ -1895,11 +1895,11 @@ msgstr "Πλήρης _Οθόνη"
 
 #: ../data/geany.glade.h:396
 msgid "Toggle All _Additional Widgets"
-msgstr "Ενεργοποίηση/Απενεργοποίηση Όλων των Επιπρόσθετων Widgets"
+msgstr "Ενεργοποίηση/Απενεργοποίηση _Όλων των Επιπρόσθετων Widgets"
 
 #: ../data/geany.glade.h:397
 msgid "Show Message _Window"
-msgstr "Προβολή Παράθυρου Μηνυμάτων"
+msgstr "Προβολή Παράθυρου _Μηνυμάτων"
 
 #: ../data/geany.glade.h:398
 msgid "Show _Toolbar"
@@ -1923,11 +1923,11 @@ msgstr "Αποκοπή _Γραμμής"
 
 #: ../data/geany.glade.h:403
 msgid "_Auto-indentation"
-msgstr "Αυτόματη Εσοχή"
+msgstr "_Αυτόματη Εσοχή"
 
 #: ../data/geany.glade.h:404
 msgid "In_dent Type"
-msgstr "Τύπος Εσοχής"
+msgstr "Τύ_πος Εσοχής"
 
 #: ../data/geany.glade.h:405
 msgid "_Detect from Content"
@@ -2031,7 +2031,7 @@ msgstr "Αναδ_ίπλωση Όλων"
 
 #: ../data/geany.glade.h:430
 msgid "Remove _Markers"
-msgstr "Απομάκρυνση _δεικτών"
+msgstr "Απομάκρυνση _Δεικτών"
 
 #: ../data/geany.glade.h:431
 msgid "Remove Error _Indicators"
@@ -4142,9 +4142,8 @@ msgid "C_reate"
 msgstr "Δ_ημιουργία"
 
 #: ../src/project.c:147
-#, fuzzy
 msgid "Project name"
-msgstr "Έργο"
+msgstr "Όνομα έργου"
 
 #: ../src/project.c:159
 #, c-format
@@ -4152,6 +4151,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Η διαδρομή του αρχείου που αντιπροσωπεύει το έργο και την αποθήκευση των "
+"ρυθμίσεών του. Θα πρέπει να έχει κανονικά το \"% s\" ως επέκταση."
 
 #: ../src/project.c:183 ../src/project.c:428
 msgid "Choose Project Base Path"
@@ -4299,7 +4300,7 @@ msgstr "_Επόμενο"
 
 #: ../src/search.c:474 ../src/search.c:632 ../src/search.c:871
 msgid "_Search for:"
-msgstr "Αναζήτηση για:"
+msgstr "_Αναζήτηση για:"
 
 #. Now add the multiple match options
 #: ../src/search.c:502
@@ -5240,7 +5241,7 @@ msgstr "yyyy/mm/dd hh:mm:ss"
 
 #: ../src/ui_utils.c:712 ../src/ui_utils.c:800
 msgid "_Use Custom Date Format"
-msgstr "Χρησιμοποιείστε Προσαρμοσμένη Διάταξη Ημερομηνίας"
+msgstr "_Χρησιμοποιείστε Προσαρμοσμένη Διάταξη Ημερομηνίας"
 
 #: ../src/ui_utils.c:716
 msgid "Custom Date Format"
@@ -5779,7 +5780,7 @@ msgstr "_Ενεργοποίηση"
 
 #: ../plugins/saveactions.c:614
 msgid "Auto save _interval:"
-msgstr "Αυτόματη αποθήκευση διαστήματος:"
+msgstr "Αυτόματη αποθήκευση _διαστήματος:"
 
 #: ../plugins/saveactions.c:622
 msgid "seconds"
@@ -5822,7 +5823,7 @@ msgstr ""
 #: ../plugins/saveactions.c:753
 msgid "Directory _levels to include in the backup destination:"
 msgstr ""
-"Επίπεδα φακέλου για συμπερίληψη στον προορισμό των αντιγράφων ασφαλείας:"
+"Επίπεδα _φακέλου για συμπερίληψη στον προορισμό των αντιγράφων ασφαλείας:"
 
 #: ../plugins/splitwindow.c:34
 msgid "Split Window"
