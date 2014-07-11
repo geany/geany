@@ -3177,8 +3177,10 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	unprotect_document(doc);
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
-	if (response_id == GTK_RESPONSE_ACCEPT)
+	if (response_id == GTK_RESPONSE_REJECT)
 		document_reload_file(doc, doc->encoding);
+	else if (response_id == GTK_RESPONSE_ACCEPT)
+		document_save_file(doc, FALSE);
 }
 
 static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
@@ -3207,18 +3209,15 @@ static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
 	}
 }
 
-/* g_signal_handlers_disconnect_by_data is a macro that cannot be used as GCallback */
-static void on_bar_unrealize(GtkWidget *bar, ScintillaObject *sci)
-{
-	g_signal_handlers_disconnect_by_func(sci, on_sci_key, bar);
-}
 
+/* Sets up a signal handler to intercept some keys during the lifetime of the GtkInfoBar */
 static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 {
-	g_signal_connect(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar);
-	/* make the signal disconnect automatically */
-	g_signal_connect(bar, "unrealize", G_CALLBACK(on_bar_unrealize), doc->editor->sci);
+	/* automatically focus editor again on bar close */
+	g_signal_connect_swapped(bar, "unrealize", G_CALLBACK(document_grab_focus), doc);
+	g_signal_connect_object(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar, 0);
 }
+
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
@@ -3230,13 +3229,14 @@ static void monitor_reload_file(GeanyDocument *doc)
 		GtkWidget *bar;
 
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-				_("_Reload"), GTK_RESPONSE_ACCEPT,
+				_("_Reload"), GTK_RESPONSE_REJECT,
+				GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				NULL, GTK_RESPONSE_NONE,
 				_("Do you want to reload it?"),
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
 
+		document_set_text_changed(doc, TRUE);
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		enable_key_intercept(doc, bar);
@@ -3255,13 +3255,6 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
 		file_saved = dialogs_show_save_as();
-
-	if (!file_saved)
-	{
-		document_set_text_changed(doc, TRUE);
-		/* don't prompt more than once */
-		SETPTR(doc->real_path, NULL);
-	}
 
 	doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
 }
@@ -3286,6 +3279,9 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 				doc->file_name);
 
 		protect_document(doc);
+		document_set_text_changed(doc, TRUE);
+		/* don't prompt more than once */
+		SETPTR(doc->real_path, NULL);
 		doc->priv->info_bars[MSG_TYPE_RESAVE] = bar;
 		enable_key_intercept(doc, bar);
 	}
