@@ -67,3 +67,12 @@ context_action_cmd=
 # (use only one of it at one time)
 compiler=python -m py_compile "%f"
 run_cmd=python "%f"
+
+[build-menu]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+FT_02_LB=_Lint
+FT_02_CM=pep8 --max-line-length=80 "%f"
+FT_02_WD=
+error_regex=(.+):([0-9]+):([0-9]+)

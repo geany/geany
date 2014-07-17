@@ -86,4 +86,10 @@ compiler=gcc -Wall -c "%f"
 linker=gcc -Wall -o "%e" "%f"
 run_cmd="./%e"
 
-
+[build-menu]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+FT_02_LB=_Lint
+FT_02_CM=cppcheck --language=c --enable=warning,style --template=gcc "%f"
+FT_02_WD=
