@@ -3214,7 +3214,8 @@ static gboolean on_sci_key(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 {
 	/* automatically focus editor again on bar close */
-	g_signal_connect_swapped(bar, "unrealize", G_CALLBACK(document_grab_focus), doc);
+	g_signal_connect_object(bar, "unrealize", G_CALLBACK(gtk_widget_grab_focus), doc->editor->sci,
+			G_CONNECT_SWAPPED);
 	g_signal_connect_object(doc->editor->sci, "key-press-event", G_CALLBACK(on_sci_key), bar, 0);
 }
 
