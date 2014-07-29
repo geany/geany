@@ -27,9 +27,11 @@ fooÌ8ÎBÖ0
 foo_field_1Ì8ÎFooÖ0
 gfuncÌ16Í<X:Testable+DoZ>(x:&X)Ö0
 ignoreÌ65536Ö0
+lifetime_and_charÌ16Í<'lifetime>(_: &'lifetime int)Ö0
 mainÌ16Í()Ö0
 my_methodÌ128Í(&self,_:int)ÎFooÖ0
 nestedÌ16Í()ÎmainÖ0
+not_hidden_by_charÌ16Í()Îlifetime_and_charÖ0
 only_fieldÌ8ÎS1Ö0
 preserve_string_delimsÌ16Í(_bar: extern r#"C"# fn())Ö0
 sizeÌ16384Ö0
