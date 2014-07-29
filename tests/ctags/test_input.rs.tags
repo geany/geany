@@ -31,6 +31,7 @@ mainÌ16Í()Ö0
 my_methodÌ128Í(&self,_:int)ÎFooÖ0
 nestedÌ16Í()ÎmainÖ0
 only_fieldÌ8ÎS1Ö0
+preserve_string_delimsÌ16Í(_bar: extern r#"C"# fn())Ö0
 sizeÌ16384Ö0
 some2Ì16Í(a:Animal)Ö0
 testÌ128Í(&self)ÎFooÖ0
