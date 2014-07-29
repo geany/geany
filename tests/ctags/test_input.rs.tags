@@ -49,4 +49,4 @@ test_macroÌ65536Ö0
 xÌ8ÎFoo2Ö0
 xÌ8ÎTraitedStructTestÖ0
 yÌ8ÎFoo2Ö0
-yadaÌ16Í(a:int,c:Foo,b:test_input2::fruit::SomeStruct) -> ~strÖ0
+yadaÌ16Í(a:int,c:Foo,b:test_input2::fruit::SomeStruct) -> StringÖ0
