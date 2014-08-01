@@ -325,6 +325,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	check_multiline = gtk_check_button_new_with_mnemonic(_("Use multiline matching"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_multiline), FALSE);
+	gtk_widget_set_sensitive(check_multiline, FALSE);
 	ui_hookup_widget(dialog, check_multiline, "check_multiline");
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_multiline), FALSE);
 	gtk_widget_set_tooltip_text(check_multiline, _("Use multi-line regular expression matching"));
