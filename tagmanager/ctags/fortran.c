@@ -214,7 +214,7 @@ static boolean NewLine = TRUE;
 static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
-static kindOption FortranKinds [] = {
+static kindOption FortranKinds [TAG_COUNT] = {
 	{ TRUE,  'b', "block data",	"block data"},
 	{ TRUE,  'c', "macro",		"common blocks"},
 	{ TRUE,  'e', "entry",		"entry points"},
@@ -490,7 +490,7 @@ static boolean isFileScope (const tagType type)
 static boolean includeTag (const tagType type)
 {
 	boolean include;
-	Assert (type != TAG_UNDEFINED);
+	Assert (type > TAG_UNDEFINED && type < TAG_COUNT);
 	include = FortranKinds [(int) type].enabled;
 	if (include && isFileScope (type))
 		include = Option.include.fileScope;
