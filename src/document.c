@@ -3250,12 +3250,10 @@ static void on_monitor_resave_missing_file_response(GtkWidget *bar,
                                                     gint response_id,
                                                     GeanyDocument *doc)
 {
-	gboolean file_saved = FALSE;
-
 	unprotect_document(doc);
 
 	if (response_id == GTK_RESPONSE_ACCEPT)
-		file_saved = dialogs_show_save_as();
+		dialogs_show_save_as();
 
 	doc->priv->info_bars[MSG_TYPE_RESAVE] = NULL;
 }
