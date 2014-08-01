@@ -38,6 +38,7 @@
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
+#include "win32.h"
 
 #include "gtkcompat.h"
 

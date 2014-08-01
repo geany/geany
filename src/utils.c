@@ -37,6 +37,7 @@
 #include "support.h"
 #include "templates.h"
 #include "ui_utils.h"
+#include "win32.h"
 
 #include <stdlib.h>
 #include <ctype.h>

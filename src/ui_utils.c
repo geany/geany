@@ -49,6 +49,7 @@
 #include "symbols.h"
 #include "toolbar.h"
 #include "utils.h"
+#include "win32.h"
 
 #include "gtkcompat.h"
 

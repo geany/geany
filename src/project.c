@@ -44,6 +44,7 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "win32.h"
 
 #include <string.h>
 #include <unistd.h>

@@ -52,6 +52,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "vte.h"
+#include "win32.h"
 
 #include "gtkcompat.h"
 

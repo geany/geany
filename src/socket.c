@@ -66,6 +66,7 @@
 #include "main.h"
 #include "support.h"
 #include "utils.h"
+#include "win32.h"
 
 #include "gtkcompat.h"
 
