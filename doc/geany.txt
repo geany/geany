@@ -5139,7 +5139,7 @@ After you are happy with your changes, create a patch e.g. by using::
 
 or even better, by creating a Git-formatted patch which will keep authoring
 and description data, by first committing your changes (doing so in a fresh
-new branch is recommended for `matser` not to diverge from upstream) and then
+new branch is recommended for `master` not to diverge from upstream) and then
 using git format-patch::
 
     % git checkout -b my-documentation-changes # create a fresh branch
