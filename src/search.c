@@ -333,8 +333,8 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	/* Search features */
 	fbox = gtk_vbox_new(FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), check_regexp, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(fbox), checkbox7, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(fbox), check_multiline, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox7, FALSE, FALSE, 0);
 
 	if (dialog != GTK_DIALOG(find_dlg.dialog))
 	{
