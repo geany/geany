@@ -660,6 +660,10 @@ static void findCmdTerm (tokenInfo *const token)
 		{
 			skipArgumentList(token);
 		}
+		else if ( isType (token, TOKEN_OPEN_SQUARE) )
+		{
+			skipArrayList(token);
+		}
 		else
 		{
 			readToken (token);

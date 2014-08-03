@@ -14,6 +14,7 @@ test_sources = \
 	68hc11.asm						\
 	angle_bracket.cpp				\
 	anonymous_functions.php			\
+	arraylist.js					\
 	array_ref_and_out.cs			\
 	array_spec.f90					\
 	array-spec.f90					\
