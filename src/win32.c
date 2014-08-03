@@ -83,68 +83,74 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
 
 
+/* The timer handle used to refresh windows below modal native dialogs. If
+ * ever more than one dialog can be shown at a time, this needs to be changed
+ * to be for specific dialogs. */
 static UINT_PTR dialog_timer = 0;
+
+
+G_INLINE_FUNC void win32_dialog_reset_timer(HWND hwnd)
+{
+	if (G_UNLIKELY(dialog_timer != 0))
+	{
+		KillTimer(hwnd, dialog_timer);
+		dialog_timer = 0;
+	}
+}
 
 
 VOID CALLBACK
 win32_dialog_update_main_window(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 {
 	gint i;
+
+	/* Pump the main window loop a bit, but not enough to lock-up.
+	 * The typical `while(gtk_events_pending()) gtk_main_iteration();`
+	 * loop causes the entire operating system to lock-up. */
 	for (i = 0; i < 4 && gtk_events_pending(); i++)
 		gtk_main_iteration();
-	dialog_timer = 0;
+
+	/* Cancel any pending timers since we just did an update */
+	win32_dialog_reset_timer(hwnd);
 }
 
 
-VOID CALLBACK win32_dialog_timer_expired(HWND hwnd, UINT msg, UINT_PTR idEvent, DWORD dwTime)
+G_INLINE_FUNC UINT_PTR win32_dialog_queue_main_window_redraw(HWND dlg, UINT msg,
+	WPARAM wParam, LPARAM lParam, gboolean postpone)
 {
-	while (gtk_events_pending())
-		gtk_main_iteration();
+	switch (msg)
+	{
+		/* Messages that likely mean the window below a dialog needs to be re-drawn. */
+		case WM_WINDOWPOSCHANGED:
+		case WM_MOVE:
+		case WM_SIZE:
+		case WM_THEMECHANGED:
+			if (postpone)
+			{
+				win32_dialog_reset_timer(dlg);
+				dialog_timer = SetTimer(dlg, 0, 33 /* around 30fps */, win32_dialog_update_main_window);
+			}
+			else
+				win32_dialog_update_main_window(dlg, msg, wParam, lParam);
+			break;
+	}
+	return 0; /* always let the default proc handle it */
 }
 
 
 /* This function is called for OPENFILENAME lpfnHook function and it establishes
- * a timer that is reset each time which will update the main window loop eventually */
+ * a timer that is reset each time which will update the main window loop eventually. */
 UINT_PTR CALLBACK win32_dialog_explorer_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
-	{
-		case WM_WINDOWPOSCHANGED:
-		case WM_MOVE:
-		case WM_SIZE:
-		case WM_THEMECHANGED:
-		{
-			if (dialog_timer != 0)
-				KillTimer(dlg, dialog_timer);
-			dialog_timer = SetTimer(dlg, 0, 33 /* around 30fps */, win32_dialog_update_main_window);
-		}
-	}
-	return 0; /* always let the default proc handle it */
+	return win32_dialog_queue_main_window_redraw(dlg, msg, wParam, lParam, TRUE);
 }
 
 
 /* This function is called for old-school win32 dialogs that accept a proper
- * lpfnHook function for all messages. It doesn't use a timer but instead checks
- * GTK+ events pending and clamps to some arbitrary limit to prevent freeze-ups. */
+ * lpfnHook function for all messages, it doesn't use a timer. */
 UINT_PTR CALLBACK win32_dialog_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
-	{
-		case WM_WINDOWPOSCHANGED:
-		case WM_MOVE:
-		case WM_SIZE:
-		case WM_THEMECHANGED:
-		{
-			/* Pump the main window loop a bit, but not enough to lock-up.
-			 * The typical `while(gtk_events_pending()) gtk_main_iteration();`
-			 * loop causes the entire operating system to lock-up. */
-			guint i;
-			for (i = 0; i < 4 && gtk_events_pending(); i++)
-				gtk_main_iteration();
-			break;
-		}
-	}
-	return 0; /* always let the default proc handle it */
+	return win32_dialog_queue_main_window_redraw(dlg, msg, wParam, lParam, FALSE);
 }
 
 
