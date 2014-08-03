@@ -328,7 +328,10 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	gtk_widget_set_sensitive(check_multiline, FALSE);
 	ui_hookup_widget(dialog, check_multiline, "check_multiline");
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_multiline), FALSE);
-	gtk_widget_set_tooltip_text(check_multiline, _("Use multi-line regular expression matching"));
+	gtk_widget_set_tooltip_text(check_multiline, _("Perform regular expression "
+		"matching on the whole buffer at once rather than line by line, allowing "
+		"matches to span multiple lines.  In this mode, newline characters are part "
+		"of the input and can be captured as normal characters by the pattern."));
 
 	/* Search features */
 	fbox = gtk_vbox_new(FALSE, 0);
