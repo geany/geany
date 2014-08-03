@@ -83,6 +83,71 @@ static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline
 static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
 
 
+static UINT_PTR dialog_timer = 0;
+
+
+VOID CALLBACK
+win32_dialog_update_main_window(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+{
+	gint i;
+	for (i = 0; i < 4 && gtk_events_pending(); i++)
+		gtk_main_iteration();
+	dialog_timer = 0;
+}
+
+
+VOID CALLBACK win32_dialog_timer_expired(HWND hwnd, UINT msg, UINT_PTR idEvent, DWORD dwTime)
+{
+	while (gtk_events_pending())
+		gtk_main_iteration();
+}
+
+
+/* This function is called for OPENFILENAME lpfnHook function and it establishes
+ * a timer that is reset each time which will update the main window loop eventually */
+UINT_PTR CALLBACK win32_dialog_explorer_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+		case WM_WINDOWPOSCHANGED:
+		case WM_MOVE:
+		case WM_SIZE:
+		case WM_THEMECHANGED:
+		{
+			if (dialog_timer != 0)
+				KillTimer(dlg, dialog_timer);
+			dialog_timer = SetTimer(dlg, 0, 33 /* around 30fps */, win32_dialog_update_main_window);
+		}
+	}
+	return 0; /* always let the default proc handle it */
+}
+
+
+/* This function is called for old-school win32 dialogs that accept a proper
+ * lpfnHook function for all messages. It doesn't use a timer but instead checks
+ * GTK+ events pending and clamps to some arbitrary limit to prevent freeze-ups. */
+UINT_PTR CALLBACK win32_dialog_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+		case WM_WINDOWPOSCHANGED:
+		case WM_MOVE:
+		case WM_SIZE:
+		case WM_THEMECHANGED:
+		{
+			/* Pump the main window loop a bit, but not enough to lock-up.
+			 * The typical `while(gtk_events_pending()) gtk_main_iteration();`
+			 * loop causes the entire operating system to lock-up. */
+			guint i;
+			for (i = 0; i < 4 && gtk_events_pending(); i++)
+				gtk_main_iteration();
+			break;
+		}
+	}
+	return 0; /* always let the default proc handle it */
+}
+
+
 static wchar_t *get_file_filters(void)
 {
 	gchar *string;
@@ -206,6 +271,7 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
  * folder when the dialog is initialised. Yeah, I like Windows. */
 INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
+	win32_dialog_hook_proc(hwnd, uMsg, lp, pData);
 	switch (uMsg)
 	{
 		case BFFM_INITIALIZED:
@@ -309,7 +375,8 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY;
+	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY | OFN_ENABLEHOOK;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	if (! allow_new_file)
 		of.Flags |= OFN_FILEMUSTEXIST;
 
@@ -371,7 +438,8 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 
 	retval = GetOpenFileNameW(&of);
 
@@ -464,7 +532,8 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER;
+	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetSaveFileNameW(&of);
 
 	if (! retval)
@@ -516,7 +585,8 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
 	if (! retval)
@@ -551,7 +621,8 @@ void win32_show_font_dialog(void)
 	cf.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cf.lpLogFont = &lf;
 	/* support CF_APPLY? */
-	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
+	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS | CF_ENABLEHOOK;
+	cf.lpfnHook = win32_dialog_hook_proc;
 
 	retval = ChooseFont(&cf);
 
@@ -578,7 +649,8 @@ void win32_show_color_dialog(const gchar *colour)
 	cc.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
 	cc.rgbResult = (colour != NULL) ? utils_parse_color_to_bgr(colour) : 0;
-	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
+	cc.Flags = CC_FULLOPEN | CC_RGBINIT | CC_ENABLEHOOK;
+	cc.lpfnHook = win32_dialog_hook_proc;
 
 	if (ChooseColor(&cc))
 	{
@@ -636,7 +708,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = L"exe";
-	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
 	if (!retval)
