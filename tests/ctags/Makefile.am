@@ -200,6 +200,7 @@ test_sources = \
 	objectivec_protocol.mm			\
 	Package.pm						\
 	php5_5_class_kw.php				\
+	parenthesis-rvalue.js			\
 	preprocessor.f90				\
 	procedure_pointer_module.f90	\
 	procpoint.f90					\
