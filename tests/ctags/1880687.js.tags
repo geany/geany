@@ -3,6 +3,9 @@ MyClassÌ1Ö0
 MyClass_sub1Ì128ÎMyClassÖ0
 MyClass_sub2Ì128ÎMyClassÖ0
 aÌ16Ö0
+aaÌ16Ö0
+aa_sub1Ì16ÎaaÖ0
+aa_sub2Ì16ÎaaÖ0
 bÌ16Ö0
 bazÌ16ÎfÖ0
 cÌ16Ö0
@@ -28,3 +31,12 @@ vÌ16Ö0
 wÌ16Ö0
 w_sub1Ì16ÎwÖ0
 w_sub2Ì16ÎwÖ0
+xÌ16Ö0
+x_sub1Ì16ÎxÖ0
+x_sub2Ì16ÎxÖ0
+yÌ16Ö0
+y_sub1Ì16ÎyÖ0
+y_sub2Ì16ÎyÖ0
+zÌ16Ö0
+z_sub1Ì16ÎzÖ0
+z_sub2Ì16ÎzÖ0

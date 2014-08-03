@@ -709,7 +709,7 @@ static void parseSwitch (tokenInfo *const token)
 
 }
 
-static void parseLoop (tokenInfo *const token)
+static boolean parseLoop (tokenInfo *const token)
 {
 	/*
 	 * Handles these statements
@@ -732,6 +732,7 @@ static void parseLoop (tokenInfo *const token)
 	 *	   }
 	 *	   while (number<5);
 	 */
+	boolean is_terminated = TRUE;
 
 	if (isKeyword (token, KEYWORD_for) || isKeyword (token, KEYWORD_while))
 	{
@@ -758,7 +759,7 @@ static void parseLoop (tokenInfo *const token)
 		}
 		else
 		{
-			parseLine(token, FALSE);
+			is_terminated = parseLine(token, FALSE);
 		}
 	}
 	else if (isKeyword (token, KEYWORD_do))
@@ -777,10 +778,11 @@ static void parseLoop (tokenInfo *const token)
 		}
 		else
 		{
-			parseLine(token, FALSE);
+			is_terminated = parseLine(token, FALSE);
 		}
 
-		readToken(token);
+		if (is_terminated)
+			readToken(token);
 
 		if (isKeyword (token, KEYWORD_while))
 		{
@@ -794,8 +796,12 @@ static void parseLoop (tokenInfo *const token)
 				 */
 				skipArgumentList(token);
 			}
+			if (! isType (token, TOKEN_SEMICOLON))
+				is_terminated = FALSE;
 		}
 	}
+
+	return is_terminated;
 }
 
 static boolean parseIf (tokenInfo *const token)
@@ -1654,7 +1660,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 			case KEYWORD_for:
 			case KEYWORD_while:
 			case KEYWORD_do:
-				parseLoop (token);
+				is_terminated = parseLoop (token);
 				break;
 			case KEYWORD_if:
 			case KEYWORD_else:
