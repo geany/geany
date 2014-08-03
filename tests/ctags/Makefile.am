@@ -112,6 +112,7 @@ test_sources = \
 	char-selector.f90				\
 	classes.php						\
 	common.f						\
+	complex-return.js				\
 	continuation.f90				\
 	countall.sql					\
 	cpp_destructor.cpp				\
