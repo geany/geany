@@ -30,6 +30,9 @@
 #include <string.h>
 
 
+#define SSM scintilla_send_message
+
+
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
 	VERSION, _("The Geany developer team"))
@@ -175,6 +178,21 @@ struct SciState
 	{
 		GArray *points;
 	} folding;
+	struct
+	{
+		gint mode;
+		/* wish for anonymous unions :) */
+		struct
+		{
+			guint main;
+			GArray *selections;
+		} lines; /* for stream/multiline selections */
+		struct
+		{
+			gint caret, anchor;
+			gint caret_vs, anchor_vs;
+		} rect; /* for rectangular selections */
+	} selection;
 };
 
 
@@ -238,21 +256,111 @@ static void set_sci_folding(ScintillaObject *sci, GArray *folding)
 }
 
 
+static void get_sci_selection(ScintillaObject *sci, struct SciState *state)
+{
+	state->selection.mode = (gint) SSM(sci, SCI_GETSELECTIONMODE, 0, 0);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+		{
+			gint i;
+			gint n_sels = (gint) SSM(sci, SCI_GETSELECTIONS, 0, 0);
+
+			state->selection.lines.selections = g_array_sized_new(FALSE, FALSE, sizeof (guint64), n_sels);
+			state->selection.lines.main = SSM(sci, SCI_GETMAINSELECTION, 0, 0);
+
+			for (i = 0; i < n_sels; i++)
+			{
+				gint caret, anchor;
+				guint64 combined;
+
+				caret = (gint) SSM(sci, SCI_GETSELECTIONNCARET, i, 0);
+				anchor = (gint) SSM(sci, SCI_GETSELECTIONNANCHOR, i, 0);
+
+				combined = ((guint64) caret << 32) | anchor;
+				g_array_append_val(state->selection.lines.selections, combined);
+			}
+			break;
+		}
+
+		case SC_SEL_RECTANGLE:
+		case SC_SEL_THIN:
+			state->selection.rect.caret = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONCARET, 0, 0);
+			state->selection.rect.caret_vs = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE, 0, 0);
+			state->selection.rect.anchor = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONANCHOR, 0, 0);
+			state->selection.rect.anchor_vs = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONANCHORVIRTUALSPACE, 0, 0);
+			break;
+	}
+}
+
+
+static void set_sci_selection(ScintillaObject *sci, struct SciState const *state)
+{
+	SSM(sci, SCI_SETSELECTIONMODE, state->selection.mode, 0);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+		{
+			guint i;
+			gint msg = SCI_SETSELECTION;
+
+			g_return_if_fail(state->selection.lines.selections != NULL);
+
+			for (i = 0; i < state->selection.lines.selections->len; i++)
+			{
+				guint64 combined = g_array_index(state->selection.lines.selections, guint64, i);
+				gint caret = (combined >> 32) & 0xffffffff;
+				gint anchor = combined & 0xffffffff;
+
+				SSM(sci, msg, caret, anchor);
+				msg = SCI_ADDSELECTION;
+			}
+			SSM(sci, SCI_SETMAINSELECTION, state->selection.lines.main, 0);
+			break;
+		}
+
+		case SC_SEL_RECTANGLE:
+		case SC_SEL_THIN:
+			SSM(sci, SCI_SETRECTANGULARSELECTIONCARET, state->selection.rect.caret, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONCARETVIRTUALSPACE, state->selection.rect.caret_vs, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONANCHOR, state->selection.rect.anchor, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONANCHORVIRTUALSPACE, state->selection.rect.anchor_vs, 0);
+			break;
+	}
+	SSM(sci, SCI_SETSELECTIONMODE, state->selection.mode, 0);
+}
+
+
 static void sci_state_init(struct SciState *state)
 {
 	state->scrolling.line = 0;
 	state->scrolling.column = 0;
 	state->folding.points = NULL;
+	state->selection.mode = SC_SEL_STREAM;
+	state->selection.lines.main = 0;
+	state->selection.lines.selections = NULL;
 }
 
 
 static void sci_state_unset(struct SciState *state)
 {
 	g_array_free(state->folding.points, TRUE);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+			if (state->selection.lines.selections)
+				g_array_free(state->selection.lines.selections, TRUE);
+			break;
+
+		default:
+			break;
+	}
 }
 
 
-/* FIXME: include selection? */
 static void save_sci_state(ScintillaObject *sci, struct SciState *state)
 {
 	/* scrolling */
@@ -260,11 +368,17 @@ static void save_sci_state(ScintillaObject *sci, struct SciState *state)
 
 	/* folding */
 	state->folding.points = get_sci_folding(sci);
+
+	/* selection(s) */
+	get_sci_selection(sci, state);
 }
 
 
 static void apply_sci_state(ScintillaObject *sci, struct SciState *state)
 {
+	/* selection(s) */
+	set_sci_selection(sci, state);
+
 	/* folding */
 	set_sci_folding(sci, state->folding.points);
 
