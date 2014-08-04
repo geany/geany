@@ -32,30 +32,35 @@
  * matching filetype is first loaded.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "symbols.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "documentprivate.h"
+#include "editor.h"
+#include "encodings.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "main.h"
+#include "navqueue.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "support.h"
+#include "tm_tag.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include "SciLexer.h"
-#include "geany.h"
+
+#include "gtkcompat.h"
 
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-
-#include "prefix.h"
-#include "symbols.h"
-#include "utils.h"
-#include "filetypes.h"
-#include "encodings.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "support.h"
-#include "msgwindow.h"
-#include "sidebar.h"
-#include "main.h"
-#include "navqueue.h"
-#include "ui_utils.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "filetypesprivate.h"
-#include "search.h"
 
 
 const guint TM_GLOBAL_TYPE_MASK =
@@ -300,6 +305,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_RUST:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
@@ -527,6 +533,7 @@ struct TreeviewSymbols
 	GtkTreeIter		 tag_macro;
 	GtkTreeIter		 tag_member;
 	GtkTreeIter		 tag_variable;
+	GtkTreeIter		 tag_externvar;
 	GtkTreeIter		 tag_namespace;
 	GtkTreeIter		 tag_struct;
 	GtkTreeIter		 tag_interface;
@@ -544,6 +551,7 @@ static void init_tag_iters(void)
 	tv_iters.tag_member.stamp = -1;
 	tv_iters.tag_macro.stamp = -1;
 	tv_iters.tag_variable.stamp = -1;
+	tv_iters.tag_externvar.stamp = -1;
 	tv_iters.tag_namespace.stamp = -1;
 	tv_iters.tag_struct.stamp = -1;
 	tv_iters.tag_interface.stamp = -1;
@@ -564,45 +572,6 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 		gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &x, &dummy);
 	}
 	return gtk_icon_theme_load_icon(icon_theme, icon_name, x, 0, NULL);
-}
-
-
-/* finds the next iter at any level
- * @param iter in/out, the current iter, will be changed to the next one
- * @param down whether to try the child iter
- * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
-static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
-{
-	GtkTreeIter guess;
-	GtkTreeIter copy = *iter;
-
-	/* go down if the item has children */
-	if (down && gtk_tree_model_iter_children(model, &guess, iter))
-		*iter = guess;
-	/* or to the next item at the same level */
-	else if (gtk_tree_model_iter_next(model, &copy))
-		*iter = copy;
-	/* or to the next item at a parent level */
-	else if (gtk_tree_model_iter_parent(model, &guess, iter))
-	{
-		copy = guess;
-		while(TRUE)
-		{
-			if (gtk_tree_model_iter_next(model, &copy))
-			{
-				*iter = copy;
-				return TRUE;
-			}
-			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
-				guess = copy;
-			else
-				return FALSE;
-		}
-	}
-	else
-		return FALSE;
-
-	return TRUE;
 }
 
 
@@ -771,7 +740,23 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_struct), _("Other"), NULL,
+				&(tv_iters.tag_other), _("Other"), NULL,
+				NULL);
+			break;
+		}
+		case GEANY_FILETYPES_RUST:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
+				&(tv_iters.tag_struct), _("Structures"), "classviewer-struct",
+				&(tv_iters.tag_interface), _("Traits"), "classviewer-class",
+				&(tv_iters.tag_class), _("Implementations"), "classviewer-class",
+				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
+				&(tv_iters.tag_type), _("Typedefs / Enums"), "classviewer-struct",
+				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_macro), _("Macros"), "classviewer-macro",
+				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL,
 				NULL);
 			break;
 		}
@@ -868,7 +853,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_member), _("Methods"), "classviewer-macro",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_namespace), _("Imports"), "classviewer-namespace",
+				&(tv_iters.tag_externvar), _("Imports"), "classviewer-namespace",
 				NULL);
 			break;
 		}
@@ -953,12 +938,14 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Module"), "classviewer-class",
+				&(tv_iters.tag_struct), _("Programs"), "classviewer-class",
 				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_member), _("Subroutines"), "classviewer-method",
+				&(tv_iters.tag_function), _("Functions / Subroutines"), "classviewer-method",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_type), _("Types"), "classviewer-namespace",
+				&(tv_iters.tag_class), _("Types"), "classviewer-class",
+				&(tv_iters.tag_member), _("Components"), "classviewer-member",
 				&(tv_iters.tag_macro), _("Blocks"), "classviewer-member",
+				&(tv_iters.tag_type), _("Enums"), "classviewer-struct",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
@@ -1019,6 +1006,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			}
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_externvar), _("Extern Variables"), "classviewer-var",
 				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL);
 		}
 	}
@@ -1155,6 +1143,11 @@ static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
 			iter = &tv_iters.tag_function;
 			break;
 		}
+		case tm_tag_externvar_t:
+		{
+			iter = &tv_iters.tag_externvar;
+			break;
+		}
 		case tm_tag_macro_t:
 		case tm_tag_macro_with_arg_t:
 		{
@@ -1287,7 +1280,7 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 	if (! cont && has_parent)
 	{
 		*iter = parent;
-		cont = next_iter(GTK_TREE_MODEL(store), iter, FALSE);
+		cont = ui_tree_model_iter_any_next(GTK_TREE_MODEL(store), iter, FALSE);
 	}
 
 	return cont;
@@ -1467,7 +1460,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 		if (! tag) /* most probably a toplevel, skip it */
-			cont = next_iter(model, &iter, TRUE);
+			cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 		else
 		{
 			GList *found_item;
@@ -1500,7 +1493,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				tags_table_remove(tags_table, found);
 				*tags = g_list_delete_link(*tags, found_item);
 
-				cont = next_iter(model, &iter, TRUE);
+				cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 			}
 
 			tm_tag_unref(tag);
@@ -1698,7 +1691,7 @@ gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode)
 {
 	GList *tags;
 
-	g_return_val_if_fail(doc != NULL, FALSE);
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
 
 	tags = get_tag_list(doc, tm_tag_max_t);
 	if (tags == NULL)
@@ -2209,6 +2202,8 @@ static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagnam
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
 
+	g_return_val_if_fail(doc == NULL || doc->is_valid, -1);
+
 	if (doc == NULL)	/* reset current function */
 	{
 		current_tag_changed(NULL, -1, -1, 0);
@@ -2406,10 +2401,11 @@ static void create_taglist_popup_menu(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f = g_build_filename(app->configdir, "ignore.tags", NULL);
+	gchar *f;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
+	f = g_build_filename(app->configdir, "ignore.tags", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		load_c_ignore_tags();
 

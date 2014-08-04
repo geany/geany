@@ -78,7 +78,7 @@ cat << EOF
 Scintilla update successful!
 
 Please check the diff and upgrade the style mappings in
-src/highlightingmappins.h.
+src/highlightingmappings.h.
 
 Check the diff of scintilla/include/SciLexer.h to see whether and which
 mapping to add or update (use git diff scintilla/include/SciLexer.h).

@@ -33,7 +33,17 @@ static kindOption PythonKinds[] = {
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "method",   "class methods"},
     {TRUE, 'v', "variable", "variables"},
-    {TRUE, 'i', "namespace", "imports"}
+    /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
+     * so we can jump to the real implementation (if known) instead of to the import statement */
+    {TRUE, 'x', "externvar", "imports"}
+};
+
+typedef enum {
+	A_PUBLIC, A_PRIVATE, A_PROTECTED
+} pythonAccess;
+
+static const char *const PythonAccesses[] = {
+	"public", "private", "protected"
 };
 
 static char const * const singletriple = "'''";
@@ -42,8 +52,6 @@ static char const * const doubletriple = "\"\"\"";
 /*
 *   FUNCTION DEFINITIONS
 */
-
-#define vStringLast(vs) ((vs)->buffer[(vs)->length - 1])
 
 static boolean isIdentifierFirstCharacter (int c)
 {
@@ -78,6 +86,29 @@ static const char *get_class_name_from_parent (const char *parent)
 	return result;
 }
 
+/* follows PEP-8, and always reports single-underscores as protected
+ * See:
+ * - http://www.python.org/dev/peps/pep-0008/#method-names-and-instance-variables
+ * - http://www.python.org/dev/peps/pep-0008/#designing-for-inheritance
+ */
+static pythonAccess accessFromIdentifier (const vString *const ident)
+{
+	const char *const p = vStringValue (ident);
+	const size_t len = vStringLength (ident);
+
+	/* not starting with "_", public */
+	if (len < 1 || p[0] != '_')
+		return A_PUBLIC;
+	/* "__...__": magic methods */
+	else if (len > 3 && p[1] == '_' && p[len - 2] == '_' && p[len - 1] == '_')
+		return A_PUBLIC;
+	/* "__...": name mangling */
+	else if (len > 1 && p[1] == '_')
+		return A_PRIVATE;
+	/* "_...": suggested as non-public, but easily accessible */
+	else
+		return A_PROTECTED;
+}
 
 /* Given a string with the contents of a line directly after the "def" keyword,
  * extract all relevant information and create a tag.
@@ -85,6 +116,7 @@ static const char *get_class_name_from_parent (const char *parent)
 static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
+	pythonAccess access;
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (function));
 
@@ -105,30 +137,22 @@ static void makeFunctionTag (vString *const function,
 		{
 			tag.kindName = PythonKinds[K_METHOD].name;
 			tag.kind = PythonKinds[K_METHOD].letter;
-			tag.extensionFields.scope [0] = "class";
+			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
 			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = "function";
+			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
 			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 	}
 
-	/* If a function starts with __, we mark it as file scope.
-	 * FIXME: What is the proper way to signal such attributes?
-	 * TODO: What does functions/classes starting with _ and __ mean in python?
-	 */
-	if (strncmp (vStringValue (function), "__", 2) == 0 &&
-		strcmp (vStringValue (function), "__init__") != 0)
-	{
-		tag.extensionFields.access = "private";
+	access = accessFromIdentifier (function);
+	tag.extensionFields.access = PythonAccesses [access];
+	/* FIXME: should we really set isFileScope in addition to access? */
+	if (access == A_PRIVATE)
 		tag.isFileScope = TRUE;
-	}
-	else
-	{
-		tag.extensionFields.access = "public";
-	}
+
 	makeTagEntry (&tag);
 }
 
@@ -146,12 +170,12 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 	{
 		if (is_class_parent)
 		{
-			tag.extensionFields.scope [0] = "class";
+			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
 			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = "function";
+			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
 			tag.extensionFields.scope [1] = vStringValue (parent);
 		}
 	}
@@ -167,7 +191,7 @@ static void makeVariableTag (vString *const var, vString *const parent)
 	tag.kind = PythonKinds[K_VARIABLE].letter;
 	if (vStringLength (parent) > 0)
 	{
-		tag.extensionFields.scope [0] = "class";
+		tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
 		tag.extensionFields.scope [1] = vStringValue (parent);
 	}
 	makeTagEntry (&tag);
@@ -703,6 +727,38 @@ static void findPythonTags (void)
 		
 		checkParent(nesting_levels, indent, parent);
 
+		/* Find global and class variables */
+		variable = findVariable(line);
+		if (variable)
+		{
+			const char *start = variable;
+			char *arglist;
+			boolean parent_is_class;
+
+			vStringClear (name);
+			while (isIdentifierCharacter ((int) *start))
+			{
+				vStringPut (name, (int) *start);
+				++start;
+			}
+			vStringTerminate (name);
+
+			parent_is_class = constructParentString(nesting_levels, indent, parent);
+			if (varIsLambda (variable, &arglist))
+			{
+				/* show class members or top-level script lambdas only */
+				if (parent_is_class || vStringLength(parent) == 0)
+					makeFunctionTag (name, parent, parent_is_class, arglist);
+				eFree (arglist);
+			}
+			else
+			{
+				/* skip variables in methods */
+				if (parent_is_class || vStringLength(parent) == 0)
+					makeVariableTag (name, parent);
+			}
+		}
+
 		/* Deal with multiline string start. */
 		longstring = find_triple_start(cp, &longStringLiteral);
 		if (longstring)
@@ -761,40 +817,6 @@ static void findPythonTags (void)
 					parseFunction(cp, name, parent, is_parent_class);
 
 				addNestingLevel(nesting_levels, indent, name, is_class);
-			}
-		}
-		/* Find global and class variables */
-		variable = findVariable(line);
-		if (variable)
-		{
-			const char *start = variable;
-			char *arglist;
-			boolean parent_is_class;
-
-			vStringClear (name);
-			while (isIdentifierCharacter ((int) *start))
-			{
-				vStringPut (name, (int) *start);
-				++start;
-			}
-			vStringTerminate (name);
-
-			parent_is_class = constructParentString(nesting_levels, indent, parent);
-			if (varIsLambda (variable, &arglist))
-			{
-				/* show class members or top-level script lambdas only */
-				if (parent_is_class || vStringLength(parent) == 0)
-					makeFunctionTag (name, parent, parent_is_class, arglist);
-				if (arglist != NULL)
-					eFree (arglist);
-			}
-			else
-			{
-				/* skip variables in methods */
-				if (! parent_is_class && vStringLength(parent) > 0)
-					continue;
-
-				makeVariableTag (name, parent);
 			}
 		}
 		/* Find and parse imports */

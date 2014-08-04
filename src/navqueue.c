@@ -24,16 +24,19 @@
  * Simple code navigation
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "sciwrappers.h"
-#include "document.h"
-#include "utils.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "editor.h"
 #include "navqueue.h"
+
+#include "document.h"
+#include "geanyobject.h"
+#include "sciwrappers.h"
 #include "toolbar.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
 
 
 /* for the navigation history queue */
@@ -50,7 +53,7 @@ static GtkAction *navigation_buttons[2];
 
 
 
-void navqueue_init()
+void navqueue_init(void)
 {
 	navigation_queue = g_queue_new();
 	nav_queue_pos = 0;
@@ -63,7 +66,7 @@ void navqueue_init()
 }
 
 
-void navqueue_free()
+void navqueue_free(void)
 {
 	while (! g_queue_is_empty(navigation_queue))
 	{
@@ -150,7 +153,8 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 {
 	gint pos;
 
-	g_return_val_if_fail(new_doc != NULL, FALSE);
+	g_return_val_if_fail(old_doc == NULL || old_doc->is_valid, FALSE);
+	g_return_val_if_fail(DOC_VALID(new_doc), FALSE);
 	g_return_val_if_fail(line >= 1, FALSE);
 
 	pos = sci_get_position_from_line(new_doc->editor->sci, line - 1);
@@ -184,7 +188,7 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 }
 
 
-void navqueue_go_back()
+void navqueue_go_back(void)
 {
 	filepos *fprev;
 
@@ -208,7 +212,7 @@ void navqueue_go_back()
 }
 
 
-void navqueue_go_forward()
+void navqueue_go_forward(void)
 {
 	filepos *fnext;
 

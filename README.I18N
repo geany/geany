@@ -25,9 +25,27 @@ When you have finished editing the file, check the file with:
 
 $ msgfmt -c --check-accelerators=_ it.po
 
-Please take care of menu accelerators(strings containing a "_"). The "_"
-character should also be in your translation. Additionally, it would be nice if
-these accelerators are not twice for two strings inside a dialog or sub menu.
+Please ensure you also translate the mnemonic letters (strings containing a
+"_" before a letter, also called "accelerators" on some platforms/toolkits).
+When the user wishes to activate a menu item using their keyboard, they will
+use this letter to pick an item from the menu.
+
+Here are a few notes on picking which letter to use:
+
+* Always follow platform/toolkit conventions (for example "t" for "Cut") even
+if they don't necessarily seem obvious.
+* Try to choose the first letter of the command name, where this is the most
+appropriate letter (for example "S" for "Save"), assuming it's not already
+used in the same menu.
+* Try not to use the same character more than once in the same menu as this
+will cause the user to have to press the mnemonic's key multiple times to
+select the correct menu item.
+* If there is no letter in the text that can easily be entered from a keyboard
+then choose another character that can be, and put it in parenthesis after the
+translated text.
+* Try not to change which letter is used whenever possible as it is not
+user-configurable and users may have become accustomed to using the existing
+mnemonic key.
 
 You can also use intl_stats.sh, e.g. by running the following command in the top
 source directory of Geany:

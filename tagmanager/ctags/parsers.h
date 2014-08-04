@@ -14,6 +14,7 @@
 #define _PARSERS_H
 
 /* Add the name of any new parser definition function here */
+/* keep tagmanager/src/tm_parser.h in sync */
 #define PARSER_LIST \
     CParser, \
     CppParser, \
@@ -59,55 +60,9 @@
     CobolParser, \
     ObjcParser, \
     AsciidocParser, \
-    AbaqusParser
-/*
-langType of each parser
- 0	CParser
- 1	CppParser
- 2	JavaParser
- 3	MakefileParser
- 4	PascalParser
- 5	PerlParser
- 6	PhpParser
- 7	PythonParser
- 8	LaTeXParser
- 9	AsmParser
-10	ConfParser
-11	SqlParser
-12	DocBookParser
-13	CssParser
-14	RubyParser
-15	TclParser
-16	ShParser
-17	DParser
-18	FortranParser
-19	FeriteParser
-20	DiffParser
-21	VhdlParser
-22	LuaParser
-23	JavaScriptParser
-24	HaskellParser
-25	CsharpParser
-26	FreeBasicParser
-27  HaxeParser
-28  RestParser
-29  HtmlParser
-30  F77Parser
-31  GLSLParser
-32  MatlabParser
-33  ValaParser
-34  ActionScriptParser
-35  NsisParser
-36  MarkdownParser
-37  Txt2tagsParser
-38  AbcParser
-39  Verilog
-40	RParser
-41	CobolParser
-42	ObjcParser
-43  AsciidocParser
-44	AbaqusParser
-*/
+    AbaqusParser, \
+    RustParser
+
 #endif	/* _PARSERS_H */
 
 /* vi:set tabstop=8 shiftwidth=4: */

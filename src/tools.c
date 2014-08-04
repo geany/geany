@@ -24,7 +24,21 @@
  * For Plugins code see plugins.c.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "tools.h"
+
+#include "document.h"
+#include "keybindings.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -36,19 +50,6 @@
 # include <sys/wait.h>
 # include <signal.h>
 #endif
-
-#include "tools.h"
-#include "support.h"
-#include "document.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "msgwindow.h"
-#include "keybindings.h"
-#include "templates.h"
-#include "win32.h"
-#include "dialogs.h"
 
 
 enum
@@ -163,12 +164,28 @@ static void cc_on_dialog_add_clicked(GtkButton *button, struct cc_dialog *cc)
 }
 
 
+static void scroll_to_cursor(GtkTreeView *view)
+{
+	GtkTreePath *path;
+	GtkTreeViewColumn *column;
+
+	gtk_tree_view_get_cursor(view, &path, &column);
+	if (path)
+	{
+		gtk_tree_view_scroll_to_cell(view, path, column, FALSE, 1.0, 1.0);
+		gtk_tree_path_free(path);
+	}
+}
+
 static void cc_on_dialog_remove_clicked(GtkButton *button, struct cc_dialog *cc)
 {
 	GtkTreeIter iter;
 
 	if (gtk_tree_selection_get_selected(cc->selection, NULL, &iter))
+	{
 		gtk_list_store_remove(cc->store, &iter);
+		scroll_to_cursor(GTK_TREE_VIEW(cc->view));
+	}
 }
 
 
@@ -186,6 +203,7 @@ static void cc_on_dialog_move_up_clicked(GtkButton *button, struct cc_dialog *cc
 			gtk_tree_model_get_iter(GTK_TREE_MODEL(cc->store), &prev, path))
 		{
 			gtk_list_store_move_before(cc->store, &iter, &prev);
+			scroll_to_cursor(GTK_TREE_VIEW(cc->view));
 		}
 		gtk_tree_path_free(path);
 	}
@@ -201,7 +219,10 @@ static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *
 		GtkTreeIter next = iter;
 
 		if (gtk_tree_model_iter_next(GTK_TREE_MODEL(cc->store), &next))
+		{
 			gtk_list_store_move_after(cc->store, &iter, &next);
+			scroll_to_cursor(GTK_TREE_VIEW(cc->view));
+		}
 	}
 }
 
@@ -290,7 +311,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 		return TRUE;
 	}
 
-	if (! data->error && data->buffer != NULL)
+	if (! data->error && data->buffer != NULL && DOC_VALID(data->doc))
 	{	/* Command completed successfully */
 		sci_replace_sel(data->doc->editor->sci, data->buffer->str);
 	}
@@ -356,7 +377,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	gint stdout_fd;
 	gint stderr_fd;
 
-	g_return_if_fail(doc != NULL && command != NULL);
+	g_return_if_fail(DOC_VALID(doc) && command != NULL);
 
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
@@ -697,7 +718,7 @@ static void cc_on_custom_command_activate(GtkMenuItem *menuitem, gpointer user_d
 	GeanyDocument *doc = document_get_current();
 	gint command_idx;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(DOC_VALID(doc));
 
 	command_idx = GPOINTER_TO_INT(user_data);
 
@@ -732,8 +753,11 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 	if (key_idx != -1)
 	{
 		kb = keybindings_lookup_item(GEANY_KEY_GROUP_FORMAT, key_idx);
-		gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
-			kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		if (kb->key > 0)
+		{
+			gtk_widget_add_accelerator(item, "activate", gtk_accel_group_new(),
+				kb->key, kb->mods, GTK_ACCEL_VISIBLE);
+		}
 	}
 	gtk_container_add(GTK_CONTAINER(me), item);
 	gtk_widget_show(item);
@@ -943,19 +967,20 @@ void tools_word_count(void)
 /*
  * color dialog callbacks
  */
-#ifndef G_OS_WIN32
 static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	switch (response)
 	{
 		case GTK_RESPONSE_OK:
+			gtk_widget_hide(ui_widgets.open_colorsel);
+			/* fall through */
+		case GTK_RESPONSE_APPLY:
 		{
 			GdkColor color;
 			GeanyDocument *doc = document_get_current();
 			gchar *hex;
 			GtkWidget *colorsel;
 
-			gtk_widget_hide(ui_widgets.open_colorsel);
 			g_return_if_fail(doc != NULL);
 
 			colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
@@ -971,21 +996,28 @@ static void on_color_dialog_response(GtkDialog *dialog, gint response, gpointer 
 			gtk_widget_hide(ui_widgets.open_colorsel);
 	}
 }
-#endif
 
 
 /* This shows the color selection dialog to choose a color. */
 void tools_color_chooser(const gchar *color)
 {
-#ifdef G_OS_WIN32
-	win32_show_color_dialog(color);
-#else
-	gchar *c = (gchar*) color;
+	GdkColor gc;
 	GtkWidget *colorsel;
+
+#ifdef G_OS_WIN32
+	if (interface_prefs.use_native_windows_dialogs)
+	{
+		win32_show_color_dialog(color);
+		return;
+	}
+#endif
 
 	if (ui_widgets.open_colorsel == NULL)
 	{
 		ui_widgets.open_colorsel = gtk_color_selection_dialog_new(_("Color Chooser"));
+		gtk_dialog_add_button(GTK_DIALOG(ui_widgets.open_colorsel), GTK_STOCK_APPLY, GTK_RESPONSE_APPLY);
+		ui_dialog_set_primary_button_order(GTK_DIALOG(ui_widgets.open_colorsel),
+				GTK_RESPONSE_APPLY, GTK_RESPONSE_CANCEL, GTK_RESPONSE_OK, -1);
 		gtk_widget_set_name(ui_widgets.open_colorsel, "GeanyDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_colorsel), GTK_WINDOW(main_widgets.window));
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
@@ -999,21 +1031,12 @@ void tools_color_chooser(const gchar *color)
 	else
 		colorsel = gtk_color_selection_dialog_get_color_selection(GTK_COLOR_SELECTION_DIALOG(ui_widgets.open_colorsel));
 	/* if color is non-NULL set it in the dialog as preselected color */
-	if (c != NULL && (c[0] == '0' || c[0] == '#'))
+	if (color != NULL && utils_parse_color(color, &gc))
 	{
-		GdkColor gc;
-
-		if (c[0] == '0' && c[1] == 'x')
-		{	/* we have a string of the format "0x00ff00" and we need it to "#00ff00" */
-			c[1] = '#';
-			c++;
-		}
-		gdk_color_parse(c, &gc);
 		gtk_color_selection_set_current_color(GTK_COLOR_SELECTION(colorsel), &gc);
 		gtk_color_selection_set_previous_color(GTK_COLOR_SELECTION(colorsel), &gc);
 	}
 
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_colorsel));
-#endif
 }

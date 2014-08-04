@@ -23,6 +23,9 @@
 #ifndef GEANY_KEYFILE_H
 #define GEANY_KEYFILE_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 extern GPtrArray *pref_groups;
 
@@ -55,4 +58,6 @@ void configuration_save_session_files(GKeyFile *config);
  * realisation of the main window */
 void configuration_apply_settings(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_KEYFILE_H */

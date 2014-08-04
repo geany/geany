@@ -17,6 +17,7 @@
 #include "tm_work_object.h"
 #include "tm_source_file.h"
 #include "tm_project.h"
+#include "tm_parser.h"
 
 /*! \mainpage Introduction
  \section Introduction

@@ -705,8 +705,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 	char chPrev = styler.SafeGetCharAt(startPos - 1);
 	char chNext = styler.SafeGetCharAt(startPos);
 	bool is_real_number = true;   // Differentiate between constants and ?-sequences.
-	// Ruby uses a different mask because bad indentation is marked by oring with 32
-	styler.StartAt(startPos, 127);
+	styler.StartAt(startPos);
 	styler.StartSegment(startPos);
 
     static int q_states[] = {SCE_RB_STRING_Q,
@@ -731,7 +730,7 @@ static void ColouriseRbDoc(unsigned int startPos, int length, int initStyle,
 
     // If anyone runs into this problem, I recommend raising this
     // value slightly higher to replacing the fixed array with a linked
-    // list.  Keep in mind this code will be called everytime the lexer
+    // list.  Keep in mind this code will be called every time the lexer
     // is invoked.
 
 #define INNER_STRINGS_MAX_COUNT 5
@@ -1776,4 +1775,4 @@ static const char * const rubyWordListDesc[] = {
 	0
 };
 
-LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc, 6);
+LexerModule lmRuby(SCLEX_RUBY, ColouriseRbDoc, "ruby", FoldRbDoc, rubyWordListDesc);

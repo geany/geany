@@ -23,6 +23,9 @@ codebk=attribute_unknown
 # default extension used when saving files
 extension=mdml
 
+# MIME type
+mime_type=text/x-markdown
+
 # sort tags by appearance
 symbol_list_sort_mode=1
 

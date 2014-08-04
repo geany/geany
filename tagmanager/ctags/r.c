@@ -27,9 +27,17 @@
   ch++
 
 #ifndef R_REGEX
-static kindOption RKinds [] = {
+typedef enum {
+  K_FUNCTION,
+  K_LIBRARY,
+  K_SOURCE,
+  KIND_COUNT
+} rKind;
+
+static kindOption RKinds [KIND_COUNT] = {
   { TRUE, 'f', "function",  "functions" },
-  { TRUE, 's', "other",  "libraries" }
+  { TRUE, 's', "other",  "libraries" },
+  { TRUE, 's', "other",  "sources" },
 };
 #endif
 
@@ -48,10 +56,12 @@ static void installRRegex (const langType language)
     "^[ \t]*(library|source|load|data)[\\(]([a-zA-Z0-9_]+)[\\)]", "\\2", "s,other", NULL);
 }
 #else
-static void makeRTag(const vString* const name, int kind)
+static void makeRTag(const vString* const name, rKind kind)
 {
   tagEntryInfo e;
   initTagEntry(&e, vStringValue(name));
+
+  Assert(kind < KIND_COUNT);
 
   e.kindName = RKinds[kind].name;
   e.kind     = RKinds[kind].letter;
@@ -59,7 +69,7 @@ static void makeRTag(const vString* const name, int kind)
   makeTagEntry(&e);
 }
 
-extern void createRTags(void)
+static void createRTags(void)
 {
   vString *vLine = vStringNew();
   vString *name = vStringNew();
@@ -82,7 +92,7 @@ extern void createRTags(void)
             cp += 7;
             SKIPSPACE(cp);
             if (*cp == '(')
-              ikind = 1;
+              ikind = K_LIBRARY;
             else
               cp -= 7;
           } else if (strncasecmp((const char*)cp, "source", (size_t)6) == 0) {
@@ -90,7 +100,7 @@ extern void createRTags(void)
             cp += 6;
             SKIPSPACE(cp);
             if (*cp == '(')
-              ikind = 2;
+              ikind = K_SOURCE;
             else
               cp -= 6;
           }
@@ -145,7 +155,7 @@ extern void createRTags(void)
               vStringTerminate(name);
               /* if the string really exists, make a tag of it */
               if (vStringLength(name) > 0)
-                makeRTag(name, 0);
+                makeRTag(name, K_FUNCTION);
 
               /* prepare for the next iteration */
               vStringClear(name);

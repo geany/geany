@@ -45,6 +45,9 @@ primary=__FILE__ load define_method attr_accessor attr_writer attr_reader and de
 # default extension used when saving files
 extension=rb
 
+# MIME type
+mime_type=application/x-ruby
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

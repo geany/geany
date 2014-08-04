@@ -56,14 +56,14 @@ enum WhiteSpaceVisibility {wsInvisible=0, wsVisibleAlways=1, wsVisibleAfterInden
 
 typedef std::map<FontSpecification, FontRealised *> FontMap;
 
-enum WrapMode { eWrapNone, eWrapWord, eWrapChar };
+enum WrapMode { eWrapNone, eWrapWord, eWrapChar, eWrapWhitespace };
 
 class ColourOptional : public ColourDesired {
 public:
 	bool isSet;
 	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) : ColourDesired(colour_), isSet(isSet_) {
 	}
-	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(lParam), isSet(wParam != 0) {
+	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<long>(lParam)), isSet(wParam != 0) {
 	}
 };
 
@@ -157,7 +157,7 @@ public:
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
 	~ViewStyle();
-	void Init(size_t stylesSize_=64);
+	void Init(size_t stylesSize_=256);
 	void Refresh(Surface &surface, int tabInChars);
 	void ReleaseAllExtendedStyles();
 	int AllocateExtendedStyles(int numberStyles);
@@ -169,6 +169,7 @@ public:
 	int ExternalMarginWidth() const;
 	bool ValidStyle(size_t styleIndex) const;
 	void CalcLargestMarkerHeight();
+	ColourOptional Background(int marksOfLine, bool caretActive, bool lineContainsCaret) const;
 	ColourDesired WrapColour() const;
 	bool SetWrapState(int wrapState_);
 	bool SetWrapVisualFlags(int wrapVisualFlags_);
@@ -178,7 +179,7 @@ public:
 
 private:
 	void AllocStyles(size_t sizeNew);
-	void CreateFont(const FontSpecification &fs);
+	void CreateAndAddFont(const FontSpecification &fs);
 	FontRealised *Find(const FontSpecification &fs);
 	void FindMaxAscentDescent();
 	// Private so can only be copied through copy constructor which ensures font names initialised correctly

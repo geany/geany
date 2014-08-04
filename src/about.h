@@ -20,10 +20,15 @@
  */
 
 
-#ifndef GEANY_ABOUT_DIALOG_H
-#define GEANY_ABOUT_DIALOG_H
+#ifndef GEANY_ABOUT_H
+#define GEANY_ABOUT_H 1
 
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 void about_dialog_show(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_ABOUT_H */

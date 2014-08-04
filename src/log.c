@@ -23,17 +23,22 @@
  * Logging functions and the debug messages window.
  */
 
-#include "geany.h"
-
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
 #endif
 
 #include "log.h"
+
+#include "app.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
 
+#include "gtkcompat.h"
+
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
 
 static GString *log_buffer = NULL;
 static GtkTextBuffer *dialog_textbuffer = NULL;

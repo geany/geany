@@ -23,25 +23,26 @@
  * Sidebar related code for the Symbol list and Open files GtkTreeViews.
  */
 
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
-#include "support.h"
-#include "callbacks.h"
 #include "sidebar.h"
-#include "document.h"
-#include "editor.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
 #include "documentprivate.h"
-#include "filetypes.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "symbols.h"
-#include "navqueue.h"
-#include "project.h"
-#include "stash.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
 #include "keyfile.h"
-#include "sciwrappers.h"
-#include "search.h"
+#include "navqueue.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 
@@ -187,6 +188,8 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 {
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
 		G_STMT_START { \
@@ -274,7 +277,7 @@ static void prepare_openfiles(void)
 
 	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
-	store_openfiles = gtk_tree_store_new(5, GDK_TYPE_PIXBUF, G_TYPE_STRING,
+	store_openfiles = gtk_tree_store_new(5, G_TYPE_ICON, G_TYPE_STRING,
 		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
@@ -285,11 +288,12 @@ static void prepare_openfiles(void)
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	g_object_set(icon_renderer, "stock-size", GTK_ICON_SIZE_MENU, NULL);
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-	gtk_tree_view_column_set_attributes(column, icon_renderer, "pixbuf", DOCUMENTS_ICON, NULL);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "gicon", DOCUMENTS_ICON, NULL);
 	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
 		"foreground-gdk", DOCUMENTS_COLOR, NULL);
@@ -411,7 +415,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
-	static GdkPixbuf *dir_icon = NULL;
+	static GIcon *dir_icon = NULL;
 
 	if (!documents_show_paths)
 		return NULL;
@@ -434,7 +438,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	}
 	/* no match, add dir parent */
 	if (!dir_icon)
-		dir_icon = ui_get_mime_icon("inode/directory", GTK_ICON_SIZE_MENU);
+		dir_icon = ui_get_mime_icon("inode/directory");
 
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
 	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
@@ -455,7 +459,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
-	static GdkPixbuf *file_icon = NULL;
+	static GIcon *file_icon = NULL;
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -470,7 +474,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		gtk_tree_path_free(path);
 	}
 	if (!file_icon)
-		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
+		file_icon = ui_get_mime_icon("text/plain");
 
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
@@ -505,7 +509,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
-		GdkPixbuf *icon = doc->file_type->icon;
+		GIcon *icon = doc->file_type->icon;
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 		if (icon)
@@ -529,7 +533,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 }
 
 
-void sidebar_openfiles_update_all()
+void sidebar_openfiles_update_all(void)
 {
 	guint i;
 
@@ -815,7 +819,7 @@ static void document_action(GeanyDocument *doc, gint action)
 		}
 		case OPENFILES_ACTION_RELOAD:
 		{
-			on_toolbutton_reload_clicked(NULL, NULL);
+			document_reload_prompt(doc, NULL);
 			break;
 		}
 	}
@@ -993,6 +997,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 		}
 		else
 			handled = taglist_go_to_selection(selection, 0, event->state);
+	}
+	else if (event->button == 2)
+	{
+		if (widget == tv.tree_openfiles)
+			on_openfiles_document_action(NULL, GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
 	}
 	else if (event->button == 3)
 	{

@@ -166,7 +166,7 @@ void SelectionRange::MinimizeVirtualSpace() {
 }
 
 Selection::Selection() : mainRange(0), moveExtends(false), tentativeMain(false), selType(selStream) {
-	AddSelection(SelectionPosition(0));
+	AddSelection(SelectionRange(SelectionPosition(0)));
 }
 
 Selection::~Selection() {
@@ -226,8 +226,24 @@ SelectionRange &Selection::Range(size_t r) {
 	return ranges[r];
 }
 
+const SelectionRange &Selection::Range(size_t r) const {
+	return ranges[r];
+}
+
 SelectionRange &Selection::RangeMain() {
 	return ranges[mainRange];
+}
+
+const SelectionRange &Selection::RangeMain() const {
+	return ranges[mainRange];
+}
+
+SelectionPosition Selection::Start() const {
+	if (IsRectangular()) {
+		return rangeRectangular.Start();
+	} else {
+		return ranges[mainRange].Start();
+	}
 }
 
 bool Selection::MoveExtends() const {
@@ -303,6 +319,21 @@ void Selection::AddSelection(SelectionRange range) {
 void Selection::AddSelectionWithoutTrim(SelectionRange range) {
 	ranges.push_back(range);
 	mainRange = ranges.size() - 1;
+}
+
+void Selection::DropSelection(size_t r) {
+	if ((ranges.size() > 1) && (r < ranges.size())) {
+		size_t mainNew = mainRange;
+		if (mainNew >= r) {
+			if (mainNew == 0) {
+				mainNew = ranges.size() - 2;
+			} else {
+				mainNew--;
+			}
+		}
+		ranges.erase(ranges.begin() + r);
+		mainRange = mainNew;
+	}
 }
 
 void Selection::TentativeSelection(SelectionRange range) {

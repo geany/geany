@@ -26,22 +26,26 @@
  * (basic code layout were adopted from Sylpheed's printing implementation, thanks)
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "printing.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "geany.h"
+#include "highlighting.h"
+#include "msgwindow.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "utils.h"
+#include "ui_utils.h"
+
 #include <math.h>
 #include <time.h>
 #include <string.h>
-
-#include "geany.h"
-#include "printing.h"
-#include "document.h"
-#include "sciwrappers.h"
-#include "editor.h"
-#include "utils.h"
-#include "support.h"
-#include "dialogs.h"
-#include "ui_utils.h"
-#include "msgwindow.h"
-#include "highlighting.h"
-#include "Scintilla.h"
 
 
 PrintingPrefs printing_prefs;
@@ -345,10 +349,12 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	/* setup printing scintilla object */
 	dinfo->sci = editor_create_widget(dinfo->doc->editor);
+	/* since we won't add the widget to any container, assume it's ownership */
+	g_object_ref_sink(dinfo->sci);
 	scintilla_send_message(dinfo->sci, SCI_SETDOCPOINTER, 0,
 			scintilla_send_message(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
 	highlighting_set_styles(dinfo->sci, dinfo->doc->file_type);
-	sci_set_line_numbers(dinfo->sci, printing_prefs.print_line_numbers, 0);
+	sci_set_line_numbers(dinfo->sci, printing_prefs.print_line_numbers);
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
@@ -624,8 +630,7 @@ static void print_external(GeanyDocument *doc)
 
 void printing_print_doc(GeanyDocument *doc)
 {
-	if (doc == NULL)
-		return;
+	g_return_if_fail(DOC_VALID(doc));
 
 	if (printing_prefs.use_gtk_printing)
 		printing_print_gtk(doc);

@@ -23,18 +23,23 @@
  * Plugin utility functions.
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_PLUGINS
 
 #include "pluginutils.h"
-#include "pluginprivate.h"
 
-#include "ui_utils.h"
-#include "toolbar.h"
-#include "utils.h"
-#include "support.h"
+#include "app.h"
+#include "geanyobject.h"
+#include "plugindata.h"
+#include "pluginprivate.h"
 #include "plugins.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
 
 
 /** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.
@@ -103,13 +108,33 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  * (if supported by @a signal_name).
  * @param callback The function to call when the signal is emitted.
  * @param user_data The user data passed to the signal handler.
- * @see plugin_callbacks. */
+ * @see plugin_callbacks.
+ *
+ * @warning Before version 1.25 (API < 218),
+ *          this should only be used on objects that outlive the plugin, never on
+ *          objects that will get destroyed before the plugin is unloaded.  For objects
+ *          created and destroyed by the plugin, you can simply use @c g_signal_connect(),
+ *          since all handlers are disconnected when the object is destroyed anyway.
+ *          For objects that may or may not outlive the plugin (like @link GeanyEditor.sci
+ *          a document's @c ScintillaObject @endlink, which is destroyed when the document
+ *          is closed), you currently have to manually handle both situations, when the
+ *          plugin is unloaded before the object is destroyed (and then, you have to
+ *          disconnect the signal on @c plugin_cleanup()), and when the object is destroyed
+ *          during the plugin's lifetime (in which case you cannot and should not disconnect
+ *          manually in @c plugin_cleanup() since it already has been disconnected and the
+ *          object has been destroyed), and disconnect yourself or not as appropriate.
+ * @note Since version 1.25 (API >= 218), the object lifetime is watched and so the above
+ *       restriction does not apply.  However, for objects destroyed by the plugin,
+ *       @c g_signal_connect() is safe and has lower overhead. */
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data)
 {
 	gulong id;
 	SignalConnection sc;
+
+	g_return_if_fail(plugin != NULL);
+	g_return_if_fail(object == NULL || G_IS_OBJECT(object));
 
 	if (!object)
 		object = geany_object;
@@ -124,6 +149,9 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 	sc.object = object;
 	sc.handler_id = id;
 	g_array_append_val(plugin->priv->signal_ids, sc);
+
+	/* watch the object lifetime to nuke our pointers to it */
+	plugin_watch_object(plugin->priv, object);
 }
 
 

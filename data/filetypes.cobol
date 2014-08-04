@@ -22,6 +22,9 @@ keywords=accept access add address advancing after alphabet alphabetic alphabeti
 # default extension used when saving files
 extension=cob
 
+# MIME type
+mime_type=text/x-cobol
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

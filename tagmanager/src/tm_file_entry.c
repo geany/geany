@@ -61,13 +61,13 @@ static TMFileType tm_file_entry_type(const char *path)
 	if (0 != g_lstat(path, &s))
 		return tm_file_unknown_t;
 #endif
-	if S_ISDIR(s.st_mode)
+	if (S_ISDIR(s.st_mode))
 		return tm_file_dir_t;
 #ifndef G_OS_WIN32
 	else if (S_ISLNK(s.st_mode))
 		return tm_file_link_t;
 #endif
-	else if S_ISREG(s.st_mode)
+	else if (S_ISREG(s.st_mode))
 		return tm_file_regular_t;
 	else
 		return tm_file_unknown_t;

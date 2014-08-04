@@ -51,10 +51,25 @@
  *
  */
 
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_SOCKET
+
+#include "socket.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "main.h"
+#include "support.h"
+#include "utils.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
+
 
 #ifndef G_OS_WIN32
 # include <sys/time.h>
@@ -64,9 +79,9 @@
 # include <netinet/in.h>
 # include <glib/gstdio.h>
 #else
-# include <gdk/gdkwin32.h>
-# include <windows.h>
 # include <winsock2.h>
+# include <windows.h>
+# include <gdk/gdkwin32.h>
 # include <ws2tcpip.h>
 #endif
 #include <string.h>
@@ -77,16 +92,6 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
-
-#include "main.h"
-#include "socket.h"
-#include "document.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "encodings.h"
-#include "project.h"
 
 
 #ifdef G_OS_WIN32
@@ -195,21 +200,25 @@ static void remove_socket_link_full(void)
 
 static void socket_get_document_list(gint sock)
 {
-	gchar doc_list[BUFFER_LENGTH];
-	gint doc_list_len;
+	gchar buf[BUFFER_LENGTH];
+	gint n_read;
 
 	if (sock < 0)
 		return;
 
 	socket_fd_write_all(sock, "doclist\n", 8);
 
-	doc_list_len = socket_fd_read(sock, doc_list, sizeof(doc_list));
-	if (doc_list_len >= BUFFER_LENGTH)
-		doc_list_len = BUFFER_LENGTH -1;
-	doc_list[doc_list_len] = '\0';
-	/* if we received ETX (end-of-text), there were no open files, so print only otherwise */
-	if (! utils_str_equal(doc_list, "\3"))
-		printf("%s", doc_list);
+	do
+	{
+		n_read = socket_fd_read(sock, buf, BUFFER_LENGTH);
+		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
+		 * byte not to output it and to be sure not to validate the loop condition */
+		if (n_read > 0 && buf[n_read - 1] == '\3')
+			n_read--;
+		if (n_read > 0)
+			fwrite(buf, 1, n_read, stdout);
+	}
+	while (n_read >= BUFFER_LENGTH);
 }
 
 
@@ -271,10 +280,13 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
-	gchar *display_name = gdk_get_display();
+	gchar *display_name = NULL;
 	const gchar *hostname = g_get_host_name();
+	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
 
+	if (display != NULL)
+		display_name = g_strdup(gdk_display_get_name(display));
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");
 
@@ -625,10 +637,8 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			gchar *doc_list = build_document_list();
 			if (!EMPTY(doc_list))
 				socket_fd_write_all(sock, doc_list, strlen(doc_list));
-			else
-				/* send ETX (end-of-text) in case we have no open files, we must send anything
-				 * otherwise the client would hang on reading */
-				socket_fd_write_all(sock, "\3", 1);
+			/* send ETX (end-of-text) so reader knows to stop reading */
+			socket_fd_write_all(sock, "\3", 1);
 			g_free(doc_list);
 		}
 		else if (strncmp(buf, "line", 4) == 0)

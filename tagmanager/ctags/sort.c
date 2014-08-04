@@ -65,7 +65,7 @@ extern void externalSortTags (const boolean toStdout)
     PE_CONST char *const sortOrder2 = "LC_ALL=C";
     const size_t length	= 4 + strlen (sortOrder1) + strlen (sortOrder2) +
 	    strlen (sortCommand) + (2 * strlen (tagFileName ()));
-    char *const cmd = (char *) g_malloc (length + 1);
+    char *const cmd = (char *) g_try_malloc (length + 1);
     int ret = -1;
 
     if (cmd != NULL)
@@ -165,7 +165,7 @@ extern void internalSortTags (const boolean toStdout)
      */
     size_t numTags = TagFile.numTags.added + TagFile.numTags.prev;
     const size_t tableSize = numTags * sizeof (char *);
-    char **const table = (char **) g_malloc (tableSize);	/* line pointers */
+    char **const table = (char **) g_try_malloc (tableSize);	/* line pointers */
     DebugStatement ( size_t mallocSize = tableSize; )	/* cumulative total */
 
     if (table == NULL)
@@ -191,7 +191,7 @@ extern void internalSortTags (const boolean toStdout)
 	{
 	    const size_t stringSize = strlen (line) + 1;
 
-	    table [i] = (char *) g_malloc (stringSize);
+	    table [i] = (char *) g_try_malloc (stringSize);
 	    if (table [i] == NULL)
 		failedSort (mio, "out of memory");
 	    DebugStatement ( mallocSize += stringSize; )
@@ -211,8 +211,8 @@ extern void internalSortTags (const boolean toStdout)
 
     PrintStatus (("sort memory: %ld bytes\n", (long) mallocSize));
     for (i = 0 ; i < numTags ; ++i)
-	free (table [i]);
-    free (table);
+	g_free (table [i]);
+    g_free (table);
 }
 
 #endif

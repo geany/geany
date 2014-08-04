@@ -24,6 +24,11 @@
 #ifndef GEANY_SIDEBAR_H
 #define GEANY_SIDEBAR_H 1
 
+#include "document.h"
+
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 typedef struct SidebarTreeviews
 {
@@ -66,4 +71,6 @@ void sidebar_focus_openfiles_tab(void);
 
 void sidebar_focus_symbols_tab(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_SIDEBAR_H */

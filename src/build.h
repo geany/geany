@@ -24,6 +24,11 @@
 #ifndef GEANY_BUILD_H
 #define GEANY_BUILD_H 1
 
+#include "document.h"
+#include "filetypes.h"
+
+#include "gtkcompat.h"
+
 G_BEGIN_DECLS
 
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
@@ -206,4 +211,4 @@ gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_BUILD_H */

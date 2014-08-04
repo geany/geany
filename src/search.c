@@ -24,23 +24,25 @@
  * Note that the basic text find functions are in document.c.
  */
 
-#include <gdk/gdkkeysyms.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
 #include "search.h"
-#include "prefs.h"
-#include "support.h"
-#include "utils.h"
+
+#include "app.h"
 #include "document.h"
-#include "msgwindow.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "editor.h"
 #include "encodings.h"
-#include "project.h"
 #include "keyfile.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "sciwrappers.h"
 #include "stash.h"
+#include "support.h"
 #include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include "gtkcompat.h"
 
 #include <unistd.h>
@@ -52,6 +54,7 @@
 # include <sys/wait.h>
 #endif
 
+#include <gdk/gdkkeysyms.h>
 
 enum
 {
@@ -168,6 +171,9 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data);
 
 static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data);
+
+static void
+on_replace_find_entry_activate(GtkEntry *entry, gpointer user_data);
 
 static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data);
@@ -391,7 +397,7 @@ void search_find_selection(GeanyDocument *doc, gboolean search_backwards)
 {
 	gchar *s = NULL;
 
-	g_return_if_fail(doc != NULL);
+	g_return_if_fail(DOC_VALID(doc));
 
 #ifdef G_OS_UNIX
 	if (search_prefs.find_selection_type == GEANY_FIND_SEL_X)
@@ -473,13 +479,12 @@ static void create_find_dialog(void)
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))), 50);
 	find_dlg.entry = gtk_bin_get_child(GTK_BIN(entry));
-	ui_hookup_widget(find_dlg.dialog, entry, "entry");
 
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate",
-			G_CALLBACK(on_find_entry_activate), NULL);
+			G_CALLBACK(on_find_entry_activate), entry);
 	ui_entry_add_activate_backward_signal(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry))));
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry)), "activate-backward",
-			G_CALLBACK(on_find_entry_activate_backward), NULL);
+			G_CALLBACK(on_find_entry_activate_backward), entry);
 	g_signal_connect(find_dlg.dialog, "response",
 			G_CALLBACK(on_find_dialog_response), entry);
 	g_signal_connect(find_dlg.dialog, "delete-event",
@@ -648,10 +653,12 @@ static void create_replace_dialog(void)
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
 			gtk_bin_get_child(GTK_BIN(entry_replace)));
+	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)), "activate",
+			G_CALLBACK(on_replace_find_entry_activate), NULL);
 	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
 			G_CALLBACK(on_replace_entry_activate), NULL);
 	g_signal_connect(replace_dlg.dialog, "response",
-			G_CALLBACK(on_replace_dialog_response), entry_replace);
+			G_CALLBACK(on_replace_dialog_response), NULL);
 	g_signal_connect(replace_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
@@ -849,8 +856,6 @@ static void create_fif_dialog(void)
 		*check_recursive, *check_extra, *entry_extra, *check_regexp, *combo_files_mode;
 	GtkWidget *dbox, *sbox, *lbox, *rbox, *hbox, *vbox, *ebox;
 	GtkSizeGroup *size_group;
-	gchar *encoding_string;
-	guint i;
 
 	fif_dlg.dialog = gtk_dialog_new_with_buttons(
 		_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -927,14 +932,7 @@ static void create_fif_dialog(void)
 	label2 = gtk_label_new_with_mnemonic(_("E_ncoding:"));
 	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
 
-	e_combo = gtk_combo_box_text_new();
-	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
-	{
-		encoding_string = encodings_to_string(&encodings[i]);
-		gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(e_combo), encoding_string);
-		g_free(encoding_string);
-	}
-	gtk_combo_box_set_wrap_width(GTK_COMBO_BOX(e_combo), 3);
+	e_combo = ui_create_encodings_combo_box(FALSE, GEANY_ENCODING_UTF_8);
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label2), e_combo);
 	fif_dlg.encoding_combo = e_combo;
 
@@ -1114,7 +1112,7 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	/* set the encoding of the current file */
 	if (doc != NULL)
 		enc_idx = encodings_get_idx_from_charset(doc->encoding);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(fif_dlg.encoding_combo), enc_idx);
+	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo), enc_idx);
 
 	/* put the focus to the directory entry if it is empty */
 	if (utils_str_equal(gtk_entry_get_text(GTK_ENTRY(entry)), ""))
@@ -1221,7 +1219,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 	struct Sci_TextToFind ttf;
 	GSList *match, *matches;
 
-	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(DOC_VALID(doc), 0);
 
 	/* clear previous search indicators */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
@@ -1253,8 +1251,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
 static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
-	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND,
-				ui_lookup_widget(GTK_WIDGET(entry), "entry"));
+	on_find_dialog_response(NULL, GEANY_RESPONSE_FIND, user_data);
 }
 
 
@@ -1265,8 +1262,7 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 	if (search_data.flags & SCFIND_REGEXP)
 		utils_beep();
 	else
-		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS,
-					ui_lookup_widget(GTK_WIDGET(entry), "entry"));
+		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS, user_data);
 }
 
 
@@ -1366,6 +1362,13 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (check_close)
 			gtk_widget_hide(find_dlg.dialog);
 	}
+}
+
+
+static void
+on_replace_find_entry_activate(GtkEntry *entry, gpointer user_data)
+{
+	on_replace_dialog_response(NULL, GEANY_RESPONSE_FIND, NULL);
 }
 
 
@@ -1591,8 +1594,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		GtkWidget *dir_combo = fif_dlg.dir_combo;
 		const gchar *utf8_dir =
 			gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(dir_combo))));
-		GeanyEncodingIndex enc_idx = gtk_combo_box_get_active(
-			GTK_COMBO_BOX(fif_dlg.encoding_combo));
+		GeanyEncodingIndex enc_idx =
+			ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(fif_dlg.encoding_combo));
 
 		if (G_UNLIKELY(EMPTY(utf8_dir)))
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
@@ -2125,7 +2128,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 	gint prev_line = -1;
 	GSList *match, *matches;
 
-	g_return_val_if_fail(doc != NULL, 0);
+	g_return_val_if_fail(DOC_VALID(doc), 0);
 
 	short_file_name = g_path_get_basename(DOC_FILENAME(doc));
 

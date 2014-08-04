@@ -89,24 +89,6 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 }
 
 
-/* checks if str is all the same character */
-static boolean issame(const char *str)
-{
-	char first = *str;
-
-	while (*str)
-	{
-		char c;
-
-		str++;
-		c = *str;
-		if (c && c != first)
-			return FALSE;
-	}
-	return TRUE;
-}
-
-
 static int get_kind(char c)
 {
 	int i;
@@ -150,42 +132,88 @@ static int utf8_strlen(const char *buf, int buf_len)
 }
 
 
-static void findAsciidocTags (void)
+static void findAsciidocTags(void)
 {
-	vString *name = vStringNew ();
+	vString *name = vStringNew();
 	const unsigned char *line;
+	unsigned char in_block = '\0';  /* holds the block marking char or \0 if not in block */
 
 	nestingLevels = nestingLevelsNew();
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = fileReadLine()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
 		int name_len_bytes = vStringLength(name);
 		int name_len = utf8_strlen(vStringValue(name), name_len_bytes);
 
 		/* if the name doesn't look like UTF-8, assume one-byte charset */
-		if (name_len < 0)
-			name_len = name_len_bytes;
-
-		/* underlines must be +-2 chars FIXME detect single line titles */
-		if (line_len > 2 && line_len >= name_len - 2 && line_len <= name_len + 2 &&
-			name_len > 0 && ispunct(line[0]) && issame((const char*) line))
+		if (name_len < 0) name_len = name_len_bytes;
+		
+		/* if its a title underline, or a delimited block marking character */
+		if (line[0] == '=' || line[0] == '-' || line[0] == '~' ||
+			line[0] == '^' || line[0] == '+' || line[0] == '.' ||
+			line[0] == '*' || line[0] == '_' || line[0] == '/')
 		{
-			char c = line[0];
-			int kind = get_kind(c);
-
-			if (kind >= 0)
+			int n_same;
+			for (n_same = 1; line[n_same] == line[0]; ++n_same);
+			
+			/* is it a two line title or a delimited block */
+			if (n_same == line_len)
 			{
+				/* if in a block, can't be block start or title, look for block end */
+				if (in_block)
+				{
+					if (line[0] == in_block) in_block = '\0';
+				}
+				
+				/* if its a =_~^+ and the same length +-2 as the line before then its a title */
+				/* (except in the special case its a -- open block start line) */
+				else if ((line[0] == '=' || line[0] == '-' || line[0] == '~' ||
+							line[0] == '^' || line[0] == '+') &&
+						line_len <= name_len + 2 && line_len >= name_len - 2 &&
+						!(line_len == 2 && line[0] == '-'))
+				{
+					int kind = get_kind((char)(line[0]));
+					if (kind >= 0)
+					{
+						makeAsciidocTag(name, kind);
+						continue;
+					}
+				}
+				
+				/* else if its 4 or more /+-.*_= (plus the -- special case) its a block start */
+				else if (((line[0] == '/' || line[0] == '+' || line[0] == '-' ||
+						   line[0] == '.' || line[0] == '*' || line[0] == '_' ||
+						   line[0] == '=') && line_len >= 4 )
+						 || (line[0] == '-' && line_len == 2))
+				{
+					in_block = line[0];
+				}
+			}
+			
+			/* otherwise is it a one line title */
+			else if (line[0] == '=' && n_same <= 5 && isspace(line[n_same]) &&
+					!in_block)
+			{
+				int kind = n_same - 1;
+				int start = n_same;
+				int end = line_len - 1;
+				while (line[end] == line[0])--end;
+				while (isspace(line[start]))++start;
+				while (isspace(line[end]))--end;
+				vStringClear(name);
+				vStringNCatS(name, (const char*)(&(line[start])), end - start + 1);
+				vStringTerminate(name);
 				makeAsciidocTag(name, kind);
 				continue;
 			}
 		}
-		vStringClear (name);
+		vStringClear(name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
 		vStringTerminate(name);
 	}
-	vStringDelete (name);
+	vStringDelete(name);
 	nestingLevelsFree(nestingLevels);
 }
 

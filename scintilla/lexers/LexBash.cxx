@@ -108,6 +108,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 	CharacterSet setWordStart(CharacterSet::setAlpha, "_");
 	// note that [+-] are often parts of identifiers in shell scripts
 	CharacterSet setWord(CharacterSet::setAlphaNum, "._+-");
+	CharacterSet setMetaCharacter(CharacterSet::setNone, "|&;()<> \t\r\n");
+	setMetaCharacter.Add(0);
 	CharacterSet setBashOperator(CharacterSet::setNone, "^&%()-+=|{}[]:;>,*/<?!.~@");
 	CharacterSet setSingleCharOp(CharacterSet::setNone, "rwxoRWXOezsfdlpSbctugkTBMACahGLNn");
 	CharacterSet setParam(CharacterSet::setAlphaNum, "$_");
@@ -627,7 +629,12 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 			} else if (setWordStart.Contains(sc.ch)) {
 				sc.SetState(SCE_SH_WORD);
 			} else if (sc.ch == '#') {
-				sc.SetState(SCE_SH_COMMENTLINE);
+				if (stylePrev != SCE_SH_WORD && stylePrev != SCE_SH_IDENTIFIER &&
+					(sc.currentPos == 0 || setMetaCharacter.Contains(sc.chPrev))) {
+					sc.SetState(SCE_SH_COMMENTLINE);
+				} else {
+					sc.SetState(SCE_SH_WORD);
+				}
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_SH_STRING);
 				QuoteStack.Start(sc.ch, BASH_DELIM_STRING);
@@ -760,6 +767,7 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
+	int skipHereCh = 0;
 	int lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
@@ -791,7 +799,15 @@ static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
 		// Here Document folding
 		if (style == SCE_SH_HERE_DELIM) {
 			if (ch == '<' && chNext == '<') {
-				levelCurrent++;
+				if (styler.SafeGetCharAt(i + 2) == '<') {
+					skipHereCh = 1;
+				} else {
+					if (skipHereCh == 0) {
+						levelCurrent++;
+					} else {
+						skipHereCh = 0;
+					}
+				}
 			}
 		} else if (style == SCE_SH_HERE_Q && styler.StyleAt(i+1) == SCE_SH_DEFAULT) {
 			levelCurrent--;

@@ -29,12 +29,19 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
-G_BEGIN_DECLS
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
 #include "editor.h"
+#include "filetypes.h"
+#include "geany.h"
 #include "search.h"
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* For ScintillaObject */
+
+#include <glib.h>
+
+
+G_BEGIN_DECLS
 
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
@@ -75,9 +82,9 @@ extern GeanyFilePrefs file_prefs;
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-struct GeanyDocument
+typedef struct GeanyDocument
 {
-	/** General flag to represent this document is active and all properties are set correctly. */
+	/** Flag used to check if this document is valid when iterating @ref documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -93,7 +100,7 @@ struct GeanyDocument
 	gchar 			*encoding;
 	/** Internally used flag to indicate whether the file of this document has a byte-order-mark. */
 	gboolean		 has_bom;
-	struct GeanyEditor *editor;	/**< The editor associated with the document. */
+	GeanyEditor *editor;	/**< The editor associated with the document. */
 	/** The filetype for this document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
@@ -113,14 +120,17 @@ struct GeanyDocument
 	gchar 			*real_path;
 
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
-};
+}
+GeanyDocument;
 
 extern GPtrArray *documents_array;
 
 
-/** Wraps documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL;
- * @see document_index(). */
+/** Wraps @ref documents_array so it can be used with C array syntax.
+ * @warning Always check the returned document is valid (@c doc->is_valid).
+ *
+ * Example: @code GeanyDocument *doc = documents[i]; @endcode
+ * @see documents_array(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
 /** @deprecated Use @ref foreach_document() instead.
@@ -131,22 +141,30 @@ extern GPtrArray *documents_array;
 #define documents_foreach(i) foreach_document(i)
 #endif
 
-/** Iterates all valid documents.
+/** Iterates all valid document indexes.
  * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
+ * @param i @c guint index for @ref documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * foreach_document(i)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
-/** @c NULL-safe way to check @c doc_ptr->is_valid.
- * This is useful when @a doc_ptr was stored some time earlier and documents may have been
- * closed since then.
+/** Null-safe way to check @ref GeanyDocument::is_valid.
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
-	(G_LIKELY((doc_ptr) != NULL && (doc_ptr)->is_valid))
+	((doc_ptr) != NULL && (doc_ptr)->is_valid)
 
 /**
  *  Returns the filename of the document passed or @c GEANY_STRING_UNTITLED
@@ -155,7 +173,6 @@ extern GPtrArray *documents_array;
  **/
 #define DOC_FILENAME(doc) \
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
-
 
 
 /* These functions will replace the older functions. For now they have a documents_ prefix. */
@@ -176,6 +193,8 @@ GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonl
 		GeanyFiletype *ft, const gchar *forced_enc);
 
 gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
+
+gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
 
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
@@ -287,4 +306,4 @@ GeanyDocument *document_clone(GeanyDocument *old_doc);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_DOCUMENT_H */

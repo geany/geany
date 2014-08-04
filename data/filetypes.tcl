@@ -33,6 +33,9 @@ expand=
 # default extension used when saving files
 extension=tcl
 
+# MIME type
+mime_type=text/x-tcl
+
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 

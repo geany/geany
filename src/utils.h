@@ -27,10 +27,13 @@
 #ifndef GEANY_UTILS_H
 #define GEANY_UTILS_H 1
 
-G_BEGIN_DECLS
-
+#include <string.h>
 #include <time.h>
 
+#include <glib.h>
+#include <gdk/gdk.h> /* for GdkColor */
+
+G_BEGIN_DECLS
 
 /** Returns @c TRUE if @a ptr is @c NULL or @c *ptr is @c FALSE. */
 #define EMPTY(ptr) \
@@ -209,8 +212,6 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 
-guint utils_invert_color(guint color);
-
 const gchar *utils_get_default_dir_utf8(void);
 
 gchar *utils_get_current_file_dir_utf8(void);
@@ -220,7 +221,11 @@ void utils_beep(void);
 gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 									 gulong display_unit);
 
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route);
+gboolean utils_parse_color(const gchar *spec, GdkColor *color);
+
+gint utils_color_to_bgr(const GdkColor *color);
+
+gint utils_parse_color_to_bgr(const gchar *spec);
 
 gchar *utils_get_current_time_string(void);
 
@@ -286,4 +291,4 @@ gchar *utils_parse_and_format_build_date(const gchar *input);
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_UTILS_H */

@@ -24,38 +24,39 @@
  * User Interface general utility functions.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
+#include "ui_utils.h"
+
+#include "app.h"
+#include "callbacks.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanymenubuttonaction.h"
+#include "keyfile.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "project.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "stash.h"
 #include "support.h"
+#include "symbols.h"
+#include "toolbar.h"
+#include "utils.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
 
 #include <string.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include <gdk/gdkkeysyms.h>
-
-#include "ui_utils.h"
-#include "dialogs.h"
-#include "prefs.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "support.h"
-#include "msgwindow.h"
-#include "utils.h"
-#include "callbacks.h"
-#include "encodings.h"
-#include "sidebar.h"
-#include "win32.h"
-#include "project.h"
-#include "editor.h"
-#include "plugins.h"
-#include "symbols.h"
-#include "toolbar.h"
-#include "geanymenubuttonaction.h"
-#include "main.h"
-#include "stash.h"
-#include "keyfile.h"
-#include "gtkcompat.h"
 
 
 #define DEFAULT_STATUSBAR_TEMPLATE N_(\
@@ -317,6 +318,8 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 /* updates the status bar document statistics */
 void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (! interface_prefs.statusbar_visible)
 		return; /* just do nothing if statusbar is not visible */
 
@@ -358,6 +361,8 @@ void ui_set_window_title(GeanyDocument *doc)
 {
 	GString *str;
 	GeanyProject *project = app->project;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -445,6 +450,8 @@ void ui_update_popup_reundo_items(GeanyDocument *doc)
 	gboolean enable_redo;
 	guint i, len;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL)
 	{
 		enable_undo = FALSE;
@@ -475,6 +482,8 @@ void ui_update_popup_copy_items(GeanyDocument *doc)
 	gboolean enable;
 	guint i, len;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL)
 		enable = FALSE;
 	else
@@ -501,6 +510,8 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (IS_SCINTILLA(focusw))
 		enable = (doc == NULL) ? FALSE : sci_has_selection(doc->editor->sci);
 	else
@@ -524,6 +535,8 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item)
 {
 	gboolean enable = FALSE;
 
+	g_return_if_fail(doc == NULL || doc->is_valid);
+
 	if (doc == NULL || doc->file_type == NULL)
 		enable = FALSE;
 	else if (doc->file_type->id == GEANY_FILETYPES_C ||  doc->file_type->id == GEANY_FILETYPES_CPP)
@@ -538,6 +551,49 @@ void ui_update_fold_items(void)
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_fold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "menu_unfold_all1"), editor_prefs.folding);
 	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "separator22"), editor_prefs.folding);
+}
+
+
+/* @include include name or NULL for empty with cursor ready for typing it */
+static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
+{
+	gint pos_after = -1;
+	gchar *text;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	if (! include)
+	{
+		text = g_strdup("#include \"\"\n");
+		pos_after = pos + 10;
+	}
+	else
+	{
+		text = g_strconcat("#include <", include, ">\n", NULL);
+	}
+
+	sci_start_undo_action(doc->editor->sci);
+	sci_insert_text(doc->editor->sci, pos, text);
+	sci_end_undo_action(doc->editor->sci);
+	g_free(text);
+	if (pos_after >= 0)
+		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
+}
+
+
+static void on_popup_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), -1, user_data);
 }
 
 
@@ -565,7 +621,7 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 		g_signal_connect(tmp_menu, "activate",
 					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
 		g_signal_connect(tmp_popup, "activate",
-					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
+					G_CALLBACK(on_popup_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
 	gtk_widget_show_all(edit_menu_item);
@@ -596,15 +652,14 @@ void ui_create_insert_menu_items(void)
 		"memory", "locale", NULL
 	};
 	const gchar *c_includes_stl[] = {
-		"bitset", "dequev", "list", "map", "set", "queue", "stack", "vector", "algorithm",
+		"bitset", "deque", "list", "map", "set", "queue", "stack", "vector", "algorithm",
 		"iterator", "functional", "string", "complex", "valarray", NULL
 	};
 
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
@@ -612,8 +667,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_popup_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
@@ -623,6 +677,79 @@ void ui_create_insert_menu_items(void)
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
+}
+
+
+static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
+{
+	const gchar *format = NULL;
+	gchar *time_str;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	/* set default value */
+	if (utils_str_equal("", ui_prefs.custom_date_format))
+	{
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+	}
+
+	if (utils_str_equal(_("dd.mm.yyyy"), date_style))
+		format = "%d.%m.%Y";
+	else if (utils_str_equal(_("mm.dd.yyyy"), date_style))
+		format = "%m.%d.%Y";
+	else if (utils_str_equal(_("yyyy/mm/dd"), date_style))
+		format = "%Y/%m/%d";
+	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), date_style))
+		format = "%d.%m.%Y %H:%M:%S";
+	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), date_style))
+		format = "%m.%d.%Y %H:%M:%S";
+	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), date_style))
+		format = "%Y/%m/%d %H:%M:%S";
+	else if (utils_str_equal(_("_Use Custom Date Format"), date_style))
+		format = ui_prefs.custom_date_format;
+	else
+	{
+		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
+				_("Enter here a custom date and time format. "
+				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				ui_prefs.custom_date_format);
+		if (str)
+			SETPTR(ui_prefs.custom_date_format, str);
+		return;
+	}
+
+	time_str = utils_get_date_time(format, NULL);
+	if (time_str != NULL)
+	{
+		sci_start_undo_action(doc->editor->sci);
+		sci_insert_text(doc->editor->sci, pos, time_str);
+		sci_goto_pos(doc->editor->sci, pos + strlen(time_str), FALSE);
+		sci_end_undo_action(doc->editor->sci);
+		g_free(time_str);
+	}
+	else
+	{
+		utils_beep();
+		ui_set_statusbar(TRUE,
+				_("Date format string could not be converted (possibly too long)."));
+	}
+}
+
+
+static void on_popup_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), -1, user_data);
 }
 
 
@@ -638,7 +765,7 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), label);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), label);
 }
 
 
@@ -681,7 +808,7 @@ void ui_create_insert_date_menu_items(void)
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), str);
 	ui_hookup_widget(main_widgets.editor_menu, item, "insert_date_custom2");
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
@@ -891,6 +1018,8 @@ void ui_document_show_hide(GeanyDocument *doc)
 	const gchar *widget_name;
 	GtkWidget *item;
 	const GeanyIndentPrefs *iprefs;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -1268,7 +1397,7 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
 				break;
 			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
-				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 				break;
 			case GEANY_EDITOR_SHOW_WHITE_SPACE:
 				sci_set_visible_white_spaces(doc->editor->sci, editor_prefs.show_white_space);
@@ -1329,6 +1458,64 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox, TRUE, TRUE, 0);
 	return vbox;
+}
+
+
+static GtkWidget *dialog_get_widget_for_response(GtkDialog *dialog, gint response_id)
+{
+#if GTK_CHECK_VERSION(2, 20, 0)
+	return gtk_dialog_get_widget_for_response(dialog, response_id);
+#else /* GTK < 2.20 */
+	/* base logic stolen from GTK */
+	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
+	GtkWidget *widget = NULL;
+	GList *children, *node;
+
+	children = gtk_container_get_children(GTK_CONTAINER(action_area));
+	for (node = children; node && ! widget; node = node->next)
+	{
+		if (gtk_dialog_get_response_for_widget(dialog, node->data) == response_id)
+			widget = node->data;
+	}
+	g_list_free(children);
+
+	return widget;
+#endif
+}
+
+
+/* Reorders a dialog's buttons
+ * @param dialog A dialog
+ * @param response First response ID to reorder
+ * @param ... more response IDs, terminated by -1
+ *
+ * Like gtk_dialog_set_alternative_button_order(), but reorders the default
+ * buttons layout, not the alternative one.  This is useful if you e.g. added a
+ * button to a dialog which already had some and need yours not to be on the
+ * end.
+ */
+/* Heavily based on gtk_dialog_set_alternative_button_order().
+ * This relies on the action area to be a GtkBox, but although not documented
+ * the API expose it to be a GtkHButtonBox though GtkBuilder, so it should be
+ * fine */
+void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
+{
+	va_list ap;
+	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
+	gint position;
+
+	va_start(ap, response);
+	for (position = 0; response != -1; position++)
+	{
+		GtkWidget *child = dialog_get_widget_for_response(dialog, response);
+		if (child)
+			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
+		else
+			g_warning("%s: no child button with response id %d.", G_STRFUNC, response);
+
+		response = va_arg(ap, gint);
+	}
+	va_end(ap);
 }
 
 
@@ -1679,8 +1866,7 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 		g_object_set_data_full(G_OBJECT(open_btn), "title", g_strdup(title),
 				(GDestroyNotify) g_free);
 	g_object_set_data(G_OBJECT(open_btn), "action", GINT_TO_POINTER(action));
-	ui_hookup_widget(open_btn, path_entry, "entry");
-	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), open_btn);
+	g_signal_connect(open_btn, "clicked", G_CALLBACK(ui_path_box_open_clicked), path_entry);
 }
 
 
@@ -1725,10 +1911,9 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
-	GtkWidget *path_box = GTK_WIDGET(user_data);
-	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(path_box), "action"));
-	GtkEntry *entry = g_object_get_data(G_OBJECT(path_box), "entry");
-	const gchar *title = g_object_get_data(G_OBJECT(path_box), "title");
+	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(button), "action"));
+	GtkEntry *entry = user_data;
+	const gchar *title = g_object_get_data(G_OBJECT(button), "title");
 	gchar *utf8_path = NULL;
 
 	/* TODO: extend for other actions */
@@ -1888,6 +2073,28 @@ static void create_config_files_menu(void)
 }
 
 
+/* adds factory icons with a named icon source using the stock items id */
+static void add_stock_icons(const GtkStockItem *items, gsize count)
+{
+	GtkIconFactory *factory = gtk_icon_factory_new();
+	GtkIconSource *source = gtk_icon_source_new();
+	gsize i;
+
+	for (i = 0; i < count; i++)
+	{
+		GtkIconSet *set = gtk_icon_set_new();
+
+		gtk_icon_source_set_icon_name(source, items[i].stock_id);
+		gtk_icon_set_add_source(set, source);
+		gtk_icon_factory_add(factory, items[i].stock_id, set);
+		gtk_icon_set_unref(set);
+	}
+	gtk_icon_source_free(source);
+	gtk_icon_factory_add_default(factory);
+	g_object_unref(factory);
+}
+
+
 void ui_init_stock_items(void)
 {
 	GtkStockItem items[] =
@@ -1897,7 +2104,8 @@ void ui_init_stock_items(void)
 		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
 	};
 
-	gtk_stock_add((GtkStockItem *) items, G_N_ELEMENTS(items));
+	gtk_stock_add(items, G_N_ELEMENTS(items));
+	add_stock_icons(items, G_N_ELEMENTS(items));
 }
 
 
@@ -2587,7 +2795,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		image = gtk_image_new_from_gicon(doc->file_type->icon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 
 		gtk_widget_show(menu_item);
@@ -2665,57 +2873,27 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 
 
 /* gets the icon that applies to a particular MIME type */
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
+GIcon *ui_get_mime_icon(const gchar *mime_type)
 {
-	GdkPixbuf *icon = NULL;
+	GIcon *icon = NULL;
 	gchar *ctype;
-	GIcon *gicon;
-	GtkIconInfo *info;
-	GtkIconTheme *theme;
-	gint real_size;
 
-	if (!gtk_icon_size_lookup(size, &real_size, NULL))
-	{
-		g_return_val_if_reached(NULL);
-	}
 	ctype = g_content_type_from_mime_type(mime_type);
-	if (ctype != NULL)
+	if (ctype)
 	{
-		gicon = g_content_type_get_icon(ctype);
-		theme = gtk_icon_theme_get_default();
-		info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
-		g_object_unref(gicon);
+		icon = g_content_type_get_icon(ctype);
 		g_free(ctype);
-
-		if (info != NULL)
-		{
-			icon = gtk_icon_info_load_icon(info, NULL);
-			gtk_icon_info_free(info);
-		}
 	}
 
-	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
-	if (icon == NULL)
+	/* fallback if icon lookup failed, like it might happen on Windows (?) */
+	if (! icon)
 	{
 		const gchar *stock_id = GTK_STOCK_FILE;
-		GtkIconSet *icon_set;
 
 		if (strstr(mime_type, "directory"))
 			stock_id = GTK_STOCK_DIRECTORY;
 
-		icon_set = gtk_icon_factory_lookup_default(stock_id);
-		if (icon_set)
-		{
-#if GTK_CHECK_VERSION(3, 0, 0)
-			GtkStyleContext *ctx = gtk_style_context_new();
-			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
-			g_object_unref(ctx);
-#else
-			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
-				gtk_widget_get_default_direction(),
-				GTK_STATE_NORMAL, size, NULL, NULL);
-#endif
-		}
+		icon = g_themed_icon_new(stock_id);
 	}
 	return icon;
 }
@@ -2743,4 +2921,95 @@ const gchar *ui_lookup_stock_label(const gchar *stock_id)
 
 	g_warning("No stock id '%s'!", stock_id);
 	return NULL;
+}
+
+
+/* finds the next iter at any level
+ * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
+ * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
+{
+	GtkTreeIter guess;
+	GtkTreeIter copy = *iter;
+
+	/* go down if the item has children */
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
+		*iter = guess;
+	/* or to the next item at the same level */
+	else if (gtk_tree_model_iter_next(model, &copy))
+		*iter = copy;
+	/* or to the next item at a parent level */
+	else if (gtk_tree_model_iter_parent(model, &guess, iter))
+	{
+		copy = guess;
+		while (TRUE)
+		{
+			if (gtk_tree_model_iter_next(model, &copy))
+			{
+				*iter = copy;
+				return TRUE;
+			}
+			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
+				guess = copy;
+			else
+				return FALSE;
+		}
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeIter iter;
+	GtkWidget *combo = gtk_combo_box_new();
+	GtkTreeStore *store = encodings_encoding_store_new(has_detect);
+
+	if (default_enc < 0 || default_enc >= GEANY_ENCODINGS_MAX)
+		default_enc = has_detect ? GEANY_ENCODINGS_MAX : GEANY_ENCODING_NONE;
+
+	gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(store));
+	if (encodings_encoding_store_get_iter(store, &iter, default_enc))
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo), renderer,
+			encodings_encoding_store_cell_data_func, NULL, NULL);
+
+	return combo;
+}
+
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo)
+{
+	GtkTreeIter iter;
+	gint enc = GEANY_ENCODING_NONE;
+
+	/* there should always be an active iter anyway, but we check just in case */
+	if (gtk_combo_box_get_active_iter(combo, &iter))
+	{
+		GtkTreeModel *model = gtk_combo_box_get_model(combo);
+		enc = encodings_encoding_store_get_encoding(GTK_TREE_STORE(model), &iter);
+	}
+
+	return enc;
+}
+
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+
+	if (encodings_encoding_store_get_iter(GTK_TREE_STORE(model), &iter, enc))
+	{
+		gtk_combo_box_set_active_iter(combo, &iter);
+		return TRUE;
+	}
+	return FALSE;
 }

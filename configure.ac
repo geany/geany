@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.24],
+AC_INIT([Geany], [1.25],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE([1.11 parallel-tests])
+AM_INIT_AUTOMAKE([1.11 -Wall parallel-tests subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
@@ -23,7 +23,10 @@ fi
 # why do we use this?
 AC_USE_SYSTEM_EXTENSIONS
 
+m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
 AC_PROG_CC
+AC_PROG_CC_C99
+AM_PROG_CC_C_O
 
 AC_PROG_CXX
 # check for C++ compiler explicitly and fail if none is found, do this check
@@ -110,6 +113,10 @@ GEANY_I18N
 GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
 AC_SUBST([GEANY_DATA_DIR])
 
+# Documentation tools
+GEANY_CHECK_DOCUTILS
+GEANY_CHECK_DOXYGEN
+
 # Output
 AC_CONFIG_FILES([
 		Makefile
@@ -134,6 +141,7 @@ AC_CONFIG_FILES([
 		src/Makefile
 		plugins/Makefile
 		po/Makefile.in
+		data/Makefile
 		doc/Makefile
 		doc/geany.1
 		geany.spec

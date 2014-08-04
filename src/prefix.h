@@ -15,7 +15,7 @@
  */
 
 #ifndef GEANY_PREFIX_H
-#define GEANY_PREFIX_H
+#define GEANY_PREFIX_H 1
 
 
 /*
@@ -23,6 +23,10 @@
  *          this only happens if configure option --enable-binreloc was used
  */
 #ifdef ENABLE_BINRELOC
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 
 /* WARNING, BEFORE YOU MODIFY PREFIX.C:
@@ -90,6 +94,7 @@ char *br_locate		(void *symbol);
 char *br_locate_prefix	(void *symbol);
 char *br_prepend_prefix	(void *symbol, char *path);
 
+G_END_DECLS
 
 #endif /* ENABLE_BINRELOC */
 

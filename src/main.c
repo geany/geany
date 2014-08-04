@@ -25,6 +25,46 @@
  * Handles program initialization and cleanup.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "main.h"
+
+#include "app.h"
+#include "build.h"
+#include "callbacks.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "keybindings.h"
+#include "keyfile.h"
+#include "log.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "notebook.h"
+#include "plugins.h"
+#include "prefs.h"
+#include "printing.h"
+#include "sidebar.h"
+#ifdef HAVE_SOCKET
+# include "socket.h"
+#endif
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
+
 #include <signal.h>
 #include <time.h>
 #include <sys/types.h>
@@ -33,55 +73,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "geany.h"
 #include <glib/gstdio.h>
 
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
-#endif
-
-#include "main.h"
-#include "prefix.h"
-#include "prefs.h"
-#include "support.h"
-#include "callbacks.h"
-#include "log.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "keyfile.h"
-#include "win32.h"
-#include "msgwindow.h"
-#include "dialogs.h"
-#include "templates.h"
-#include "encodings.h"
-#include "sidebar.h"
-#include "notebook.h"
-#include "keybindings.h"
-#include "editor.h"
-#include "search.h"
-#include "build.h"
-#include "highlighting.h"
-#include "symbols.h"
-#include "project.h"
-#include "tools.h"
-#include "navqueue.h"
-#include "plugins.h"
-#include "printing.h"
-#include "toolbar.h"
-#include "geanyobject.h"
-
-#ifdef HAVE_SOCKET
-# include "socket.h"
-#endif
-
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
-
-#ifndef N_
-# define N_(String) (String)
 #endif
 
 
@@ -91,6 +86,7 @@ gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback pro
 GeanyStatus	 main_status;
 CommandLineOptions cl_options;	/* fields initialised in parse_command_line_options */
 
+static gchar *original_cwd = NULL;
 
 static const gchar geany_lib_versions[] = "GTK %u.%u.%u, GLib %u.%u.%u";
 
@@ -313,7 +309,11 @@ gchar *main_get_argv_filename(const gchar *filename)
 	else
 	{
 		/* use current dir */
-		gchar *cur_dir = g_get_current_dir();
+		gchar *cur_dir = NULL;
+		if (original_cwd == NULL)
+			cur_dir = g_get_current_dir();
+		else
+			cur_dir = g_strdup(original_cwd);
 
 		result = g_strjoin(
 			G_DIR_SEPARATOR_S, cur_dir, filename, NULL);
@@ -380,13 +380,20 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 
 
 #ifdef G_OS_WIN32
-static void change_working_directory_on_windows(const gchar *install_dir)
+static void change_working_directory_on_windows(void)
 {
+	gchar *install_dir = win32_get_installation_dir();
+
+	/* remember original working directory for use with opening files from the command line */
+	original_cwd = g_get_current_dir();
+
 	/* On Windows, change the working directory to the Geany installation path to not lock
 	 * the directory of a file passed as command line argument (see bug #2626124).
 	 * This also helps if plugins or other code uses relative paths to load
 	 * any additional resources (e.g. share/geany-plugins/...). */
 	win32_set_working_directory(install_dir);
+
+	g_free(install_dir);
 }
 #endif
 
@@ -404,8 +411,6 @@ static void setup_paths(void)
 
 	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
 	doc_dir = g_build_filename(install_dir, "doc", NULL);
-
-	change_working_directory_on_windows(install_dir);
 
 	g_free(install_dir);
 #else
@@ -485,8 +490,8 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 	l_locale_dir = g_strdup(locale_dir);
 #endif
 
-	bindtextdomain(package, l_locale_dir);
-	bind_textdomain_codeset(package, "UTF-8");
+	(void) bindtextdomain(package, l_locale_dir);
+	(void) bind_textdomain_codeset(package, "UTF-8");
 	g_free(l_locale_dir);
 }
 
@@ -539,10 +544,11 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 			continue;
 
 		cl_options.goto_line = atoi((*argv)[i] + 1);
-		(*argv)[i] = "--dummy";
+		(*argv)[i] = (gchar *) "--dummy";
 	}
 
 	context = g_option_context_new(_("[FILES...]"));
+
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));
@@ -647,10 +653,9 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
-	gchar *conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
-	gchar *filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
-
-	gchar *templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *conf_file = NULL;
+	gchar *filedefs_dir = NULL;
+	gchar *templates_dir = NULL;
 
 	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
 	{
@@ -696,6 +701,10 @@ static gint create_config_dir(void)
 		geany_debug("creating config directory %s", app->configdir);
 		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
+
+	conf_file = g_build_filename(app->configdir, "geany.conf", NULL);
+	filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
+	templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
 	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
 	{	/* check whether geany.conf can be written */
@@ -780,13 +789,13 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-/* Signal handling removed since on_exit_clicked() uses functions that are
+/* Signal handling removed since main_quit() uses functions that are
  * illegal in signal handlers
 static void signal_cb(gint sig)
 {
 	if (sig == SIGTERM)
 	{
-		on_exit_clicked(NULL, NULL);
+		main_quit();
 	}
 }
  */
@@ -1027,6 +1036,10 @@ gint main(gint argc, gchar **argv)
 	gint config_dir_result;
 	const gchar *locale;
 
+#if ! GLIB_CHECK_VERSION(2, 36, 0)
+	g_type_init();
+#endif
+
 	log_handlers_init();
 
 	app = g_new0(GeanyApp, 1);
@@ -1073,25 +1086,33 @@ gint main(gint argc, gchar **argv)
 		socket_info.lock_socket = -1;
 		socket_info.lock_socket_tag = 0;
 		socket_info.lock_socket = socket_init(argc, argv);
-		/* Socket exists */
-		if (socket_info.lock_socket == -2)
+		/* Quit if filenames were sent to first instance or the list of open
+		 * documents has been printed */
+		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
+			cl_options.list_documents)
 		{
-			/* Quit if filenames were sent to first instance or the list of open
-			 * documents has been sent */
-			if (argc > 1 || cl_options.list_documents)
-			{
-				gdk_notify_startup_complete();
-				g_free(app->configdir);
-				g_free(app->datadir);
-				g_free(app->docdir);
-				g_free(app);
-				return 0;
-			}
-			/* Start a new instance if no command line strings were passed */
+			socket_finalize();
+			gdk_notify_startup_complete();
+			g_free(app->configdir);
+			g_free(app->datadir);
+			g_free(app->docdir);
+			g_free(app);
+			return 0;
+		}
+		/* Start a new instance if no command line strings were passed,
+		 * even if the socket already exists */
+		else if (socket_info.lock_socket == -2 /* socket already exists */)
+		{
 			socket_info.ignore_socket = TRUE;
 			cl_options.new_instance = TRUE;
 		}
 	}
+#endif
+
+#ifdef G_OS_WIN32
+	/* after we initialized the socket code and handled command line args,
+	 * let's change the working directory on Windows to not lock it */
+	change_working_directory_on_windows();
 #endif
 
 	locale = get_locale();
@@ -1136,12 +1157,6 @@ gint main(gint argc, gchar **argv)
 	document_init_doclist();
 	symbols_init();
 	editor_snippets_init();
-
-	/* registering some basic events */
-	g_signal_connect(main_widgets.window, "delete-event", G_CALLBACK(on_exit_clicked), NULL);
-	g_signal_connect(main_widgets.window, "window-state-event", G_CALLBACK(on_window_state_event), NULL);
-
-	g_signal_connect(msgwindow.scribble, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 
 #ifdef HAVE_VTE
 	vte_init();
@@ -1233,9 +1248,18 @@ static void queue_free(GQueue *queue)
 }
 
 
-void main_quit()
+static void do_main_quit(void)
 {
 	geany_debug("Quitting...");
+
+	configuration_save();
+
+	if (app->project != NULL)
+		project_close(FALSE);   /* save project session files */
+
+	document_close_all();
+
+	main_status.quitting = TRUE;
 
 #ifdef HAVE_SOCKET
 	socket_finalize();
@@ -1320,6 +1344,7 @@ void main_quit()
 	g_object_unref(geany_object);
 	geany_object = NULL;
 
+	g_free(original_cwd);
 	g_free(app);
 
 	ui_finalize_builder();
@@ -1327,6 +1352,47 @@ void main_quit()
 	gtk_main_quit();
 }
 
+
+static gboolean check_no_unsaved(void)
+{
+	guint i;
+
+	for (i = 0; i < documents_array->len; i++)
+	{
+		if (documents[i]->is_valid && documents[i]->changed)
+		{
+			return FALSE;
+		}
+	}
+	return TRUE;    /* no unsaved edits */
+}
+
+
+/* Returns false when quitting is aborted due to user cancellation */
+gboolean main_quit(void)
+{
+	main_status.quitting = TRUE;
+
+	if (! check_no_unsaved())
+	{
+		if (document_account_for_unsaved())
+		{
+			do_main_quit();
+			return TRUE;
+		}
+	}
+	else
+	if (! prefs.confirm_exit ||
+		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
+			_("Do you really want to quit?")))
+	{
+		do_main_quit();
+		return TRUE;
+	}
+
+	main_status.quitting = FALSE;
+	return FALSE;
+}
 
 /**
  *  Reloads most of Geany's configuration files without restarting. Currently the following

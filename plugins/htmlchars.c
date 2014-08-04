@@ -560,7 +560,7 @@ static void sc_fill_store(GtkTreeStore *store)
 		if (chars[i][1] == NULL)
 		{	/* add a category */
 			gtk_tree_store_append(store, &iter, NULL);
-			gtk_tree_store_set(store, &iter, COLUMN_CHARACTER, chars[i][0], -1);
+			gtk_tree_store_set(store, &iter, COLUMN_CHARACTER, _(chars[i][0]), -1);
 			if (parent_iter != NULL) gtk_tree_iter_free(parent_iter);
 			parent_iter = gtk_tree_iter_copy(&iter);
 		}

@@ -22,10 +22,11 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "document.h"
+
 #include "gtkcompat.h"
 
 G_BEGIN_DECLS
-
 
 /** Sets a name to lookup @a widget from @a owner.
  * @param owner Usually a window, dialog or popup menu.
@@ -185,6 +186,8 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
+void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...);
+
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
@@ -315,6 +318,7 @@ gboolean ui_tree_view_find_next(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down);
 
 void ui_statusbar_showhide(gboolean state);
 
@@ -334,10 +338,16 @@ gboolean ui_is_keyval_enter_or_return(guint keyval);
 
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size);
+GIcon *ui_get_mime_icon(const gchar *mime_type);
 
 void ui_focus_current_document(void);
 
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc);
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_UI_UTILS_H */

@@ -31,18 +31,21 @@
  * @see scintilla_send_message().
  */
 
-#include <string.h>
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "sciwrappers.h"
+
 #include "utils.h"
+
+#include <string.h>
+
 
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
-
 /* line numbers visibility */
-void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
+void sci_set_line_numbers(ScintillaObject *sci, gboolean set)
 {
 	if (set)
 	{
@@ -52,11 +55,6 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 
 		g_snprintf(tmp_str, 15, "_%d", len);
 		width = sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
-		if (extra_width)
-		{
-			g_snprintf(tmp_str, 15, "%d", extra_width);
-			width += sci_text_width(sci, STYLE_LINENUMBER, tmp_str);
-		}
 		SSM(sci, SCI_SETMARGINWIDTHN, 0, width);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 0, FALSE); /* use default behaviour */
 	}
@@ -69,7 +67,7 @@ void sci_set_line_numbers(ScintillaObject *sci, gboolean set, gint extra_width)
 
 void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const gchar *colour)
 {
-	glong colour_val = utils_strtod(colour, NULL, TRUE); /* Scintilla uses a "long" value */
+	glong colour_val = utils_parse_color_to_bgr(colour); /* Scintilla uses a "long" value */
 
 	if (column == 0)
 		type = 2;

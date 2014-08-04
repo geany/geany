@@ -23,29 +23,32 @@
  * Project Management.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "project.h"
+
+#include "app.h"
+#include "build.h"
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "keyfile.h"
+#include "main.h"
+#include "projectprivate.h"
+#include "sidebar.h"
+#include "stash.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "win32.h"
 
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
-
-#include "project.h"
-#include "projectprivate.h"
-
-#include "dialogs.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "document.h"
-#include "msgwindow.h"
-#include "main.h"
-#include "keyfile.h"
-#include "win32.h"
-#include "build.h"
-#include "editor.h"
-#include "stash.h"
-#include "sidebar.h"
-#include "filetypes.h"
 
 
 ProjectPrefs project_prefs = { NULL, FALSE, FALSE };
@@ -108,6 +111,7 @@ void project_new(void)
 	GtkWidget *button;
 	GtkWidget *bbox;
 	GtkWidget *label;
+	gchar *tooltip;
 	PropertyDialogElements *e;
 
 	if (! project_ask_close())
@@ -121,15 +125,9 @@ void project_new(void)
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
 	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
-	bbox = gtk_hbox_new(FALSE, 0);
-	button = gtk_button_new();
+	button = ui_button_new_with_image(GTK_STOCK_NEW, _("C_reate"));
 	gtk_widget_set_can_default(button, TRUE);
 	gtk_window_set_default(GTK_WINDOW(e->dialog), button);
-	image = gtk_image_new_from_stock(GTK_STOCK_NEW, GTK_ICON_SIZE_BUTTON);
-	label = gtk_label_new_with_mnemonic(_("C_reate"));
-	gtk_box_pack_start(GTK_BOX(bbox), image, FALSE, FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(bbox), label, FALSE, FALSE, 3);
-	gtk_container_add(GTK_CONTAINER(button), bbox);
 	gtk_dialog_add_action_widget(GTK_DIALOG(e->dialog), button, GTK_RESPONSE_OK);
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
@@ -147,6 +145,7 @@ void project_new(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(e->name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
 	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
+	gtk_widget_set_tooltip_text(e->name, _("Project name"));
 
 	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
 
@@ -157,6 +156,11 @@ void project_new(void)
 	gtk_entry_set_activates_default(GTK_ENTRY(e->file_name), TRUE);
 	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
 	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
+	tooltip = g_strdup_printf(
+		_("Path of the file representing the project and storing its settings. "
+		"It should normally have the \"%s\" extension."), "."GEANY_PROJECT_EXT);
+	gtk_widget_set_tooltip_text(e->file_name, tooltip);
+	g_free(tooltip);
 	button = gtk_button_new();
 	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
@@ -338,10 +342,10 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 	GeanyFiletype *ft = data;
 	if (ft != NULL)
 	{
-		SETPTR(ft->projfilecmds, NULL);
-		SETPTR(ft->projexeccmds, NULL);
-		SETPTR(ft->projerror_regex_string, NULL);
-		ft->project_list_entry = -1;
+		SETPTR(ft->priv->projfilecmds, NULL);
+		SETPTR(ft->priv->projexeccmds, NULL);
+		SETPTR(ft->priv->projerror_regex_string, NULL);
+		ft->priv->project_list_entry = -1;
 	}
 }
 
@@ -366,10 +370,10 @@ void project_close(gboolean open_default)
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 
 	/* remove project filetypes build entries */
-	if (app->project->build_filetypes_list != NULL)
+	if (app->project->priv->build_filetypes_list != NULL)
 	{
-		g_ptr_array_foreach(app->project->build_filetypes_list, remove_foreach_project_filetype, NULL);
-		g_ptr_array_free(app->project->build_filetypes_list, FALSE);
+		g_ptr_array_foreach(app->project->priv->build_filetypes_list, remove_foreach_project_filetype, NULL);
+		g_ptr_array_free(app->project->priv->build_filetypes_list, FALSE);
 	}
 
 	/* remove project non filetype build menu items */
@@ -523,7 +527,7 @@ static void show_project_properties(gboolean show_build)
 	gtk_entry_set_text(GTK_ENTRY(e.base_path), p->base_path);
 
 	radio_long_line_custom = ui_lookup_widget(e.dialog, "radio_long_line_custom_project");
-	switch (p->long_line_behaviour)
+	switch (p->priv->long_line_behaviour)
 	{
 		case 0: widget = ui_lookup_widget(e.dialog, "radio_long_line_disabled_project"); break;
 		case 1: widget = ui_lookup_widget(e.dialog, "radio_long_line_default_project"); break;
@@ -532,7 +536,7 @@ static void show_project_properties(gboolean show_build)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
 	widget = ui_lookup_widget(e.dialog, "spin_long_line_project");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->long_line_column);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->priv->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
 	if (p->description != NULL)
@@ -627,8 +631,8 @@ static GeanyProject *create_project(void)
 
 	project->file_patterns = NULL;
 
-	project->long_line_behaviour = 1 /* use global settings */;
-	project->long_line_column = editor_prefs.long_line_column;
+	project->priv->long_line_behaviour = 1 /* use global settings */;
+	project->priv->long_line_column = editor_prefs.long_line_column;
 
 	app->project = project;
 	return project;
@@ -720,6 +724,16 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		g_free(locale_filename);
 		return FALSE;
 	}
+	else if (new_project && g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
+			 ! dialogs_show_question_full(NULL, _("_Replace"), GTK_STOCK_CANCEL,
+				NULL,
+				_("The file '%s' already exists. Do you want to overwrite it?"),
+				file_name))
+	{
+		gtk_widget_grab_focus(e->file_name);
+		g_free(locale_filename);
+		return FALSE;
+	}
 	g_free(locale_filename);
 
 	if (app->project == NULL)
@@ -756,33 +770,33 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 			stash_group_update(node->data, e->dialog);
 
 		/* read the project build menu */
-		oldvalue = ft ? ft->projfilecmds : NULL;
+		oldvalue = ft ? ft->priv->projfilecmds : NULL;
 		build_read_project(ft, e->build_properties);
 
-		if (ft != NULL && ft->projfilecmds != oldvalue && ft->project_list_entry < 0)
+		if (ft != NULL && ft->priv->projfilecmds != oldvalue && ft->priv->project_list_entry < 0)
 		{
-			if (p->build_filetypes_list == NULL)
-				p->build_filetypes_list = g_ptr_array_new();
-			ft->project_list_entry = p->build_filetypes_list->len;
-			g_ptr_array_add(p->build_filetypes_list, ft);
+			if (p->priv->build_filetypes_list == NULL)
+				p->priv->build_filetypes_list = g_ptr_array_new();
+			ft->priv->project_list_entry = p->priv->build_filetypes_list->len;
+			g_ptr_array_add(p->priv->build_filetypes_list, ft);
 		}
 		build_menu_update(doc);
 
 		widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-			p->long_line_behaviour = 0;
+			p->priv->long_line_behaviour = 0;
 		else
 		{
 			widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project");
 			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-				p->long_line_behaviour = 1;
+				p->priv->long_line_behaviour = 1;
 			else
 				/* "Custom" radio button must be checked */
-				p->long_line_behaviour = 2;
+				p->priv->long_line_behaviour = 2;
 		}
 
 		widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
-		p->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
+		p->priv->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 		apply_editor_prefs();
 
 		/* get and set the project file patterns */
@@ -993,9 +1007,9 @@ static gboolean load_config(const gchar *filename)
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
-	p->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
+	p->priv->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
 		"long_line_behaviour", 1 /* follow global */);
-	p->long_line_column = utils_get_setting_integer(config, "long line marker",
+	p->priv->long_line_column = utils_get_setting_integer(config, "long line marker",
 		"long_line_column", editor_prefs.long_line_column);
 	apply_editor_prefs();
 
@@ -1062,8 +1076,8 @@ static gboolean write_config(gboolean emit_signal)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
-	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->long_line_behaviour);
-	g_key_file_set_integer(config, "long line marker", "long_line_column", p->long_line_column);
+	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
+	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
 	/* store the session files into the project too */
 	if (project_prefs.project_session)

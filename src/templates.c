@@ -24,22 +24,28 @@
  * document from.
  */
 
-#include <time.h>
-#include <string.h>
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "templates.h"
-#include "support.h"
-#include "utils.h"
+
+#include "app.h"
 #include "document.h"
 #include "encodings.h"
-#include "editor.h"
 #include "filetypes.h"
-#include "ui_utils.h"
-#include "toolbar.h"
+#include "geany.h"
 #include "geanymenubuttonaction.h"
-#include "project.h"
+#include "geanyobject.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
+#include <time.h>
+#include <string.h>
 
 
 GeanyTemplatePrefs template_prefs;
@@ -106,6 +112,8 @@ static void read_template(const gchar *name, gint id)
 static void convert_eol_characters(GString *template, GeanyDocument *doc)
 {
 	gint doc_eol_mode;
+
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
 	if (doc == NULL)
 		doc = document_get_current();
@@ -298,10 +306,11 @@ static void on_file_menu_hide(GtkWidget *item)
 /* reload templates if any file in the templates path is saved */
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *path;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
+	path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 	if (strncmp(doc->real_path, path, strlen(path)) == 0)
 	{
 		/* reload templates */
@@ -436,7 +445,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 {
 	GString *template;
 
-	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
 	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
 
 	template = g_string_new(templates[licence_type]);
@@ -502,9 +511,13 @@ gchar *templates_get_template_function(GeanyDocument *doc, const gchar *func_nam
 
 gchar *templates_get_template_changelog(GeanyDocument *doc)
 {
-	GString *result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
-	const gchar *file_type_name = (doc != NULL) ? doc->file_type->name : "";
+	GString *result;
+	const gchar *file_type_name;
 
+	g_return_val_if_fail(DOC_VALID(doc), NULL);
+
+	result = g_string_new(templates[GEANY_TEMPLATE_CHANGELOG]);
+	file_type_name = (doc->file_type != NULL) ? doc->file_type->name : "";
 	replace_static_values(result);
 	templates_replace_default_dates(result);
 	templates_replace_command(result, DOC_FILENAME(doc), file_type_name, NULL);
@@ -630,7 +643,7 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 		{
 			g_warning("templates_replace_command: %s", error->message);
 			g_error_free(error);
-			return NULL;
+			result = NULL;
 		}
 		g_strfreev(argv);
 		g_strfreev(env);

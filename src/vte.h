@@ -25,6 +25,9 @@
 
 #ifdef HAVE_VTE
 
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 typedef struct
 {
@@ -57,8 +60,8 @@ typedef struct
 	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
-	GdkColor *colour_fore;
-	GdkColor *colour_back;
+	GdkColor colour_fore;
+	GdkColor colour_back;
 } VteConfig;
 extern VteConfig *vc;
 
@@ -81,6 +84,8 @@ void vte_send_selection_to_vte(void);
 
 void vte_select_all(void);
 
-#endif
+G_END_DECLS
 
-#endif
+#endif /* HAVE_VTE */
+
+#endif /* GEANY_VTE_H */

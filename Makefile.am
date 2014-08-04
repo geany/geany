@@ -1,37 +1,17 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tagmanager scintilla src plugins icons po doc tests
+SUBDIRS = tagmanager scintilla src plugins icons po doc data tests
 
 AUTOMAKE_OPTIONS =	1.7
 
 ACLOCAL_AMFLAGS = -I m4
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-api-docs --enable-html-docs --enable-pdf-docs
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
 	geany.exe.manifest \
 	win32-config.h \
 	makefile.win32
-
-SYS_DATA_FILES = \
-	data/c99.tags \
-	data/php.tags \
-	data/python.tags \
-	data/pascal.tags \
-	data/html_entities.tags \
-	$(srcdir)/data/filetypes.* \
-	data/filetype_extensions.conf \
-	data/snippets.conf \
-	data/ui_toolbar.xml \
-	$(srcdir)/data/templates/* \
-	$(srcdir)/data/templates/files/* \
-	$(srcdir)/data/colorschemes/* \
-	$(top_srcdir)/data/geany.glade
-
-if GTK3
-	$(top_srcdir)/data/geany.css
-else
-	$(top_srcdir)/data/geany.gtkrc
-endif
 
 EXTRA_DIST = \
 	autogen.sh \
@@ -49,7 +29,6 @@ EXTRA_DIST = \
 	intltool-extract.in \
 	intltool-merge.in \
 	intltool-update.in \
-	$(SYS_DATA_FILES) \
 	$(WIN32_BUILD_FILES)
 
 DISTCLEANFILES = \
@@ -61,37 +40,10 @@ DISTCLEANFILES = \
 uninstall-local:
 	rm -rf $(DESTDIR)$(pkgdatadir);
 
-install-data-local: install-data-only
-	@$(NORMAL_INSTALL)
-
-install-data-only:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir); \
-	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2; \
-	for file in $(srcdir)/data/*; do \
-	  if test -f $$file; then \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/; \
-	  fi \
-	done
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/templates;
-	for file in $(srcdir)/data/templates/*; do \
-	  if test -f $$file; then \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/templates/; \
-	  fi \
-	done
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/templates/files;
-	for file in $(srcdir)/data/templates/files/*; do \
-	  if test -f $$file; then \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/templates/files/; \
-	  fi \
-	done
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/colorschemes;
-	for file in $(srcdir)/data/colorschemes/*; do \
-	  if test -f $$file; then \
-	    $(INSTALL_DATA) $$file $(DESTDIR)$(pkgdatadir)/colorschemes/; \
-	  fi \
-	done
-
+# manually install some files under another name
+install-data-local:
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
+	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2
 
 dist-hook:
 	@if test -d "$(top_srcdir)/.git"; then \

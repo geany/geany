@@ -13,6 +13,7 @@ word2=keyword_2
 string=string_1
 stringraw=string_2
 character=character
+userliteral=other
 uuid=other
 preprocessor=preprocessor
 operator=operator
@@ -27,6 +28,8 @@ globalclass=class
 # """verbatim"""
 tripleverbatim=string_2
 hashquotedstring=string_2
+taskmarker=comment
+escapesequence=string_1
 
 [keywords]
 # all items must be in one line
@@ -46,6 +49,9 @@ preprocessor.end.$(file.patterns.cpp)=endif
 [settings]
 # default extension used when saving files
 extension=c
+
+# MIME type
+mime_type=text/x-csrc
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789

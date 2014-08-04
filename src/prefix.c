@@ -11,11 +11,9 @@
  * to br_*", try renaming prefix.c to prefix.cpp
  */
 
-
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
-
 
 /*
  * enrico - all the code below is only compiled and used if ENABLE_BINRELOC is set in config.h,
@@ -53,7 +51,7 @@ static char *br_last_value = (char*)NULL;
 
 
 static void
-br_free_last_value ()
+br_free_last_value (void)
 {
 	if (br_last_value)
 		free (br_last_value);

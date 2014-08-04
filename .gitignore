@@ -13,6 +13,7 @@ deps.mak
 .lock-waf_*
 Makefile
 Makefile.in
+.dirstamp
 
 #-----------------------------------------------------------------------
 # / (root)
@@ -26,6 +27,7 @@ Makefile.in
 /config.guess
 /config.h
 /config.h.in
+/config.h.in~
 /config.log
 /config.status
 /config.sub
@@ -60,7 +62,9 @@ Makefile.in
 /stamp-h.in
 /*.tar.*
 /TODO.*
+# extracted Waf directory (without dot on Windows)
 /.waf-*
+/waf-*
 
 #-----------------------------------------------------------------------
 # /po/
@@ -93,9 +97,15 @@ Makefile.in
 # /doc/
 #-----------------------------------------------------------------------
 /doc/Doxyfile
+/doc/Doxyfile.stamp
 /doc/geany.1
 /doc/hacking.html
 /doc/*.pdf
+/doc/*.aux
+/doc/*.log
+/doc/*.out
+/doc/*.tex
+/doc/*.toc
 /doc/reference
 
 #-----------------------------------------------------------------------

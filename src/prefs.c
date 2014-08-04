@@ -29,42 +29,39 @@
  * New 'simple' prefs should use Stash code in keyfile.c - init_pref_groups().
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "prefs.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "editor.h"
+#include "encodings.h"
+#include "filetypes.h"
+#include "geanywraplabel.h"
+#include "keybindingsprivate.h"
+#include "keyfile.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "printing.h"
+#include "sidebar.h"
+#include "stash.h"
+#include "support.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "tools.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
+#include "gtkcompat.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
-
-#include "geany.h"
-
-#include "prefs.h"
-#include "support.h"
-#include "dialogs.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "msgwindow.h"
-#include "keyfile.h"
-#include "keybindings.h"
-#include "encodings.h"
-#include "project.h"
-#include "editor.h"
-#include "main.h"
-#include "sidebar.h"
-#include "printing.h"
-#include "geanywraplabel.h"
-#include "templates.h"
-#include "search.h"
-#include "toolbar.h"
-#include "tools.h"
-#include "stash.h"
-#include "keyfile.h"
-#include "filetypes.h"
-#include "win32.h"
-
-#ifdef HAVE_VTE
-# include "vte.h"
-#endif
 
 
 GeanyPrefs prefs;
@@ -396,7 +393,7 @@ static void kb_init(void)
 static void prefs_init_dialog(void)
 {
 	GtkWidget *widget;
-	GdkColor *color;
+	GdkColor color = {0};
 
 	/* Synchronize with Stash settings */
 	prefs_action(PREF_DISPLAY);
@@ -477,11 +474,9 @@ static void prefs_init_dialog(void)
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	color = g_new0(GdkColor, 1);
-	gdk_color_parse(editor_prefs.long_line_color, color);
+	utils_parse_color(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), color);
-	g_free(color);
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
@@ -549,8 +544,7 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.tab_order_beside);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-	/* luckily the index of the combo box items match the index of the encodings array */
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
+	ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_new_encoding);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
@@ -560,10 +554,10 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
 	if (file_prefs.default_open_encoding >= 0)
 	{
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), file_prefs.default_open_encoding);
 	}
 	else
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
+		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
 	if (file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
@@ -766,10 +760,10 @@ static void prefs_init_dialog(void)
 		gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), vc->font);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_fore");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_fore);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_fore);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
-		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), vc->colour_back);
+		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
 		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
@@ -1022,13 +1016,13 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		file_prefs.tab_order_beside = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");
-		file_prefs.default_new_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+		file_prefs.default_new_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		{
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_open_encoding");
-			file_prefs.default_open_encoding = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
+			file_prefs.default_open_encoding = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(widget));
 		}
 		else
 			file_prefs.default_open_encoding = -1;
@@ -1665,22 +1659,34 @@ void prefs_show_dialog(void)
 {
 	if (ui_widgets.prefs_dialog == NULL)
 	{
-		GtkListStore *encoding_list, *eol_list;
+		GtkListStore *eol_list;
 		GtkWidget *label;
-		guint i;
-		gchar *encoding_string;
 
 		ui_widgets.prefs_dialog = create_prefs_dialog();
 		gtk_widget_set_name(ui_widgets.prefs_dialog, "GeanyPrefsDialog");
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.prefs_dialog), GTK_WINDOW(main_widgets.window));
 
 		/* init the file encoding combo boxes */
-		encoding_list = ui_builder_get_object("encoding_list");
-		for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 		{
-			encoding_string = encodings_to_string(&encodings[i]);
-			list_store_append_text(encoding_list, encoding_string);
-			g_free(encoding_string);
+			struct {
+				const gchar *combo, *renderer;
+			} names[] = {
+				{ "combo_new_encoding", "combo_new_encoding_renderer" },
+				{ "combo_open_encoding", "combo_open_encoding_renderer" }
+			};
+			guint i;
+			GtkTreeStore *encoding_list = encodings_encoding_store_new(FALSE);
+
+			for (i = 0; i < G_N_ELEMENTS(names); i++)
+			{
+				GtkWidget *combo = ui_lookup_widget(ui_widgets.prefs_dialog, names[i].combo);
+
+				gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo),
+						ui_builder_get_object(names[i].renderer),
+						encodings_encoding_store_cell_data_func, NULL, NULL);
+				gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(encoding_list));
+			}
+			g_object_unref(encoding_list);
 		}
 
 		/* init the eol character combo box */
@@ -1688,6 +1694,7 @@ void prefs_show_dialog(void)
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CRLF));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_CR));
 		list_store_append_text(eol_list, utils_get_eol_name(SC_EOL_LF));
+
 
 		/* add manually GeanyWrapLabels because they can't be added with Glade */
 		/* page Tools */

@@ -23,7 +23,21 @@
  * General utility functions, non-GTK related.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "utils.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "templates.h"
+#include "ui_utils.h"
+#include "win32.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -41,20 +55,7 @@
 #endif
 
 #include <glib/gstdio.h>
-
 #include <gio/gio.h>
-
-#include "prefs.h"
-#include "support.h"
-#include "document.h"
-#include "filetypes.h"
-#include "dialogs.h"
-#include "win32.h"
-#include "project.h"
-#include "ui_utils.h"
-#include "templates.h"
-
-#include "utils.h"
 
 
 /**
@@ -584,11 +585,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
 	if (a == NULL && b == NULL) return TRUE;
 	else if (a == NULL || b == NULL) return FALSE;
 
-	while (*a == *b++)
-		if (*a++ == '\0')
-			return TRUE;
-
-	return FALSE;
+	return strcmp(a, b) == 0;
 }
 
 
@@ -863,28 +860,12 @@ gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gc
 
 gchar *utils_get_hex_from_color(GdkColor *color)
 {
-	gchar *buffer = g_malloc0(9);
-
 	g_return_val_if_fail(color != NULL, NULL);
 
-	g_snprintf(buffer, 8, "#%02X%02X%02X",
-	      (guint) (utils_scale_round(color->red / 256, 255)),
-	      (guint) (utils_scale_round(color->green / 256, 255)),
-	      (guint) (utils_scale_round(color->blue / 256, 255)));
-
-	return buffer;
-}
-
-
-guint utils_invert_color(guint color)
-{
-	guint r, g, b;
-
-	r = 0xffffff - color;
-	g = 0xffffff - (color >> 8);
-	b = 0xffffff - (color >> 16);
-
-	return (r | (g << 8) | (b << 16));
+	return g_strdup_printf("#%02X%02X%02X",
+		(guint) (utils_scale_round(color->red / 256, 255)),
+		(guint) (utils_scale_round(color->green / 256, 255)),
+		(guint) (utils_scale_round(color->blue / 256, 255)));
 }
 
 
@@ -968,50 +949,44 @@ gchar *utils_make_human_readable_str(guint64 size, gulong block_size,
 }
 
 
- static guint utils_get_value_of_hex(const gchar ch)
+/* converts a color representation using gdk_color_parse(), with additional
+ * support of the "0x" prefix as a synonym for "#" */
+gboolean utils_parse_color(const gchar *spec, GdkColor *color)
 {
-	if (ch >= '0' && ch <= '9')
-		return ch - '0';
-	else if (ch >= 'A' && ch <= 'F')
-		return ch - 'A' + 10;
-	else if (ch >= 'a' && ch <= 'f')
-		return ch - 'a' + 10;
-	else
-		return 0;
+	gchar buf[64] = {0};
+
+	g_return_val_if_fail(spec != NULL, -1);
+
+	if (spec[0] == '0' && (spec[1] == 'x' || spec[1] == 'X'))
+	{
+		/* convert to # format for GDK to understand it */
+		buf[0] = '#';
+		strncpy(buf + 1, spec + 2, sizeof(buf) - 2);
+		spec = buf;
+	}
+
+	return gdk_color_parse(spec, color);
 }
 
 
-/* utils_strtod() converts a string containing a hex colour ("0x00ff00") into an integer.
- * Basically, it is the same as strtod() would do, but it does not understand hex colour values,
- * before ANSI-C99. With with_route set, it takes strings of the format "#00ff00".
- * Returns -1 on failure. */
-gint utils_strtod(const gchar *source, gchar **end, gboolean with_route)
+/* converts a GdkColor to the packed 24 bits BGR format, as understood by Scintilla
+ * returns a 24 bits BGR color, or -1 on failure */
+gint utils_color_to_bgr(const GdkColor *c)
 {
-	guint red, green, blue, offset = 0;
+	g_return_val_if_fail(c != NULL, -1);
+	return (c->red / 256) | ((c->green / 256) << 8) | ((c->blue / 256) << 16);
+}
 
-	g_return_val_if_fail(source != NULL, -1);
 
-	if (with_route && (strlen(source) != 7 || source[0] != '#'))
+/* parses @p spec using utils_parse_color() and convert it to 24 bits BGR using
+ * utils_color_to_bgr() */
+gint utils_parse_color_to_bgr(const gchar *spec)
+{
+	GdkColor color;
+	if (utils_parse_color(spec, &color))
+		return utils_color_to_bgr(&color);
+	else
 		return -1;
-	else if (! with_route && (strlen(source) != 8 || source[0] != '0' ||
-		(source[1] != 'x' && source[1] != 'X')))
-	{
-		return -1;
-	}
-
-	/* offset is set to 1 when the string starts with 0x, otherwise it starts with #
-	 * and we don't need to increase the index */
-	if (! with_route)
-		offset = 1;
-
-	red = utils_get_value_of_hex(
-					source[1 + offset]) * 16 + utils_get_value_of_hex(source[2 + offset]);
-	green = utils_get_value_of_hex(
-					source[3 + offset]) * 16 + utils_get_value_of_hex(source[4 + offset]);
-	blue = utils_get_value_of_hex(
-					source[5 + offset]) * 16 + utils_get_value_of_hex(source[6 + offset]);
-
-	return (red | (green << 8) | (blue << 16));
 }
 
 
@@ -1802,13 +1777,13 @@ gboolean utils_is_remote_path(const gchar *path)
  * @see tm_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
-	GString *str = g_string_new(filename);
-	const gchar *c, *needle;
-	gchar *tmp;
-	gssize pos;
+	GString *str;
+	const gchar *needle;
 	gboolean preserve_double_backslash = FALSE;
 
 	g_return_if_fail(g_path_is_absolute(filename));
+
+	str = g_string_new(filename);
 
 	if (str->len >= 2 && strncmp(str->str, "\\\\", 2) == 0)
 		preserve_double_backslash = TRUE;
@@ -1828,11 +1803,13 @@ void utils_tidy_path(gchar *filename)
 	needle = G_DIR_SEPARATOR_S ".." G_DIR_SEPARATOR_S;
 	while (1)
 	{
-		c = strstr(str->str, needle);
+		const gchar *c = strstr(str->str, needle);
 		if (c == NULL)
 			break;
 		else
 		{
+			gssize pos, sub_len;
+
 			pos = c - str->str;
 			if (pos <= 3)
 				break;	/* bad path */
@@ -1841,17 +1818,20 @@ void utils_tidy_path(gchar *filename)
 			g_string_erase(str, pos, strlen(needle));
 			g_string_insert_c(str, pos, G_DIR_SEPARATOR);
 
-			tmp = g_strndup(str->str, pos);	/* path up to "/../" */
-			c = g_strrstr(tmp, G_DIR_SEPARATOR_S);
-			g_return_if_fail(c);
+			/* search for last "/" before found "/../" */
+			c = g_strrstr_len(str->str, pos, G_DIR_SEPARATOR_S);
+			sub_len = pos - (c - str->str);
+			if (! c)
+				break;	/* bad path */
 
-			pos = c - tmp;	/* position of previous "/" */
-			g_string_erase(str, pos, strlen(c));
-			g_free(tmp);
+			pos = c - str->str;	/* position of previous "/" */
+			g_string_erase(str, pos, sub_len);
 		}
 	}
-	g_return_if_fail(strlen(str->str) <= strlen(filename));
-	strcpy(filename, str->str);
+	if (str->len <= strlen(filename))
+		memcpy(filename, str->str, str->len + 1);
+	else
+		g_warn_if_reached();
 	g_string_free(str, TRUE);
 }
 
@@ -1987,9 +1967,6 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	const gchar *key, *value;
 	guint n, o;
 
-	/* get all the environ variables */
-	env = g_listenv();
-
 	/* count the additional variables */
 	va_start(args, first_varname);
 	for (o = 1; va_arg(args, gchar*) != NULL; o++);
@@ -1998,6 +1975,9 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	g_return_val_if_fail(o % 2 == 0, NULL);
 
 	o /= 2;
+
+	/* get all the environ variables */
+	env = g_listenv();
 
 	/* create an array large enough to hold the new environment */
 	n = g_strv_length(env);
