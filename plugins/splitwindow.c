@@ -305,7 +305,8 @@ static void swap_panes(void)
 		set_editor(&edit_window, real_doc->editor);
 		apply_sci_state(edit_window.sci, &real_state);
 
-		document_show_tab(view_doc);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(geany_data->main_widgets->notebook),
+				document_get_notebook_page(view_doc));
 		apply_sci_state(view_doc->editor->sci, &view_state);
 
 		sci_state_unset(&real_state);
