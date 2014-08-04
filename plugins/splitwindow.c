@@ -324,6 +324,24 @@ static void swap_panes(void)
 }
 
 
+#define FLAG_FORWARD	0x1
+#define FLAG_LOOP		0x2
+
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+/* see lenghty comment in on_event() */
+static gboolean on_target_sci_event(GtkWidget *widget, GdkEvent *event, guint *flags)
+{
+	if (event->type == GDK_MOTION_NOTIFY)
+		*flags &= ~FLAG_LOOP;
+	else if (event->type == GDK_BUTTON_RELEASE)
+		*flags &= ~(FLAG_LOOP | FLAG_FORWARD);
+
+	return FALSE;
+}
+#endif
+
+
 static gboolean on_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
 	switch (event->type)
@@ -344,12 +362,45 @@ static gboolean on_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 			{
 				/* Swap the event's window with the other sci view */
 				GdkEventAny *any_event = (GdkEventAny*) event;
+				guint flags = FLAG_FORWARD | FLAG_LOOP;
 
 				g_object_unref(any_event->window);
 				any_event->window = gtk_widget_get_window(GTK_WIDGET(doc->editor->sci));
 				g_object_ref(any_event->window);
 
-				gtk_main_do_event(event);
+#if GTK_CHECK_VERSION(3, 0, 0)
+				/* Apparently on GTK3 we have to flush the pending events before
+				 * we can add our own, otherwise it is just ignored [1].
+				 * However, doing so might lead to sending the button-release event
+				 * before the button-press one, starting an unwanted drag.
+				 * As I can't seem to find a way to prevent this, set up a handler
+				 * on the target ScintillaObject to get notified of two events:
+				 *
+				 * button-release:  If we get it, we don't forward the event so
+				 *                  at least it doesn't start the drag.
+				 * motion-notify:   Apparently it is almost always fired before
+				 *                  the button-release, so if we catch it we stop
+				 *                  iterating and try pushing our event (which will
+				 *                  most likely succeed as the target can handle
+				 *                  events)
+				 *
+				 * This is obviously one more hack, and it may lead to dropping the
+				 * event we wanted to forward, but at least we never start unwanted
+				 * drags.
+				 *
+				 * [1] Possibly because the widget is not yet re-mapped after we
+				 *     re-parented it.  But even though the target widget does
+				 *     receive a GDK_MAP event, it is not sufficient. */
+				g_signal_connect(doc->editor->sci, "event", G_CALLBACK(on_target_sci_event), &flags);
+
+				while (flags & FLAG_LOOP && gtk_events_pending())
+					gtk_main_iteration();
+
+				g_signal_handlers_disconnect_by_func(doc->editor->sci, on_target_sci_event, &flags);
+#endif
+
+				if (flags & FLAG_FORWARD)
+					gtk_main_do_event(event);
 			}
 
 			return TRUE;
