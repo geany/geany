@@ -738,6 +738,7 @@ static void split_view(gboolean horizontal)
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);
+	g_return_if_fail(plugin_state == STATE_UNSPLIT);
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
@@ -793,6 +794,8 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *pane = gtk_widget_get_parent(notebook);
 	GtkWidget *parent = gtk_widget_get_parent(pane);
+
+	g_return_if_fail(plugin_state != STATE_UNSPLIT);
 
 	set_state(STATE_UNSPLIT);
 
