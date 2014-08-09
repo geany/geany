@@ -239,8 +239,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.find_regexp,
 		"find_regexp", FALSE, "check_regexp");
-	stash_group_add_boolean(group, &settings.find_regexp_multiline,
-		"find_regexp_multiline", FALSE);
+	stash_group_add_toggle_button(group, &settings.find_regexp_multiline,
+		"find_regexp_multiline", FALSE, "check_multiline");
 	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
 		"find_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.find_escape_sequences,
@@ -257,8 +257,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.replace_regexp,
 		"replace_regexp", FALSE, "check_regexp");
-	stash_group_add_boolean(group, &settings.replace_regexp_multiline,
-		"replace_regexp_multiline", FALSE);
+	stash_group_add_toggle_button(group, &settings.replace_regexp_multiline,
+		"replace_regexp_multiline", FALSE, "check_multiline");
 	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
 		"replace_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.replace_escape_sequences,
@@ -306,7 +306,7 @@ static void on_widget_toggled_set_insensitive(
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
-			  *checkbox7, *hbox, *fbox, *mbox;
+			  *checkbox7, *check_multiline, *hbox, *fbox, *mbox;
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	ui_hookup_widget(dialog, check_regexp, "check_regexp");
@@ -316,33 +316,36 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	g_signal_connect(check_regexp, "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), dialog);
 
+	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
+	ui_hookup_widget(dialog, checkbox7, "check_escape");
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
+	gtk_widget_set_tooltip_text(checkbox7,
+		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+		  "corresponding control characters"));
+
+	check_multiline = gtk_check_button_new_with_mnemonic(_("Use multi-_line matching"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_multiline), FALSE);
+	gtk_widget_set_sensitive(check_multiline, FALSE);
+	ui_hookup_widget(dialog, check_multiline, "check_multiline");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_multiline), FALSE);
+	gtk_widget_set_tooltip_text(check_multiline, _("Perform regular expression "
+		"matching on the whole buffer at once rather than line by line, allowing "
+		"matches to span multiple lines.  In this mode, newline characters are part "
+		"of the input and can be captured as normal characters by the pattern."));
+
+	/* Search features */
+	fbox = gtk_vbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), check_regexp, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), check_multiline, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox7, FALSE, FALSE, 0);
+
 	if (dialog != GTK_DIALOG(find_dlg.dialog))
 	{
 		check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
 		ui_hookup_widget(dialog, check_back, "check_back");
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
+		gtk_container_add(GTK_CONTAINER(fbox), check_back);
 	}
-	else
-	{	/* align the two checkboxes at the top of the hbox */
-		GtkSizeGroup *label_size;
-		check_back = gtk_label_new(NULL);
-		label_size = gtk_size_group_new(GTK_SIZE_GROUP_VERTICAL);
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_back);
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_regexp);
-		g_object_unref(label_size);
-	}
-	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
-	ui_hookup_widget(dialog, checkbox7, "check_escape");
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
-	gtk_widget_set_tooltip_text(checkbox7,
-		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-		  "corresponding control characters"));
-
-	/* Search features */
-	fbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(fbox), check_regexp);
-	gtk_container_add(GTK_CONTAINER(fbox), checkbox7);
-	gtk_container_add(GTK_CONTAINER(fbox), check_back);
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 	ui_hookup_widget(dialog, checkbox1, "check_case");
@@ -362,9 +365,9 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	/* Matching options */
 	mbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox1);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox2);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox5);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox1, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox2, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox5, FALSE, FALSE, 0);
 
 	hbox = gtk_hbox_new(TRUE, 6);
 	gtk_container_add(GTK_CONTAINER(hbox), fbox);
@@ -1148,6 +1151,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkWidget *check_word = ui_lookup_widget(dialog, "check_word");
 		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
 		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
+		GtkWidget *check_multiline = ui_lookup_widget(dialog, "check_multiline");
 		gboolean replace = (dialog != find_dlg.dialog);
 		const char *back_button[2] = { "btn_previous" , "check_back" };
 
@@ -1156,6 +1160,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		gtk_widget_set_sensitive(ui_lookup_widget(dialog, back_button[replace]), ! regex_set);
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
+		gtk_widget_set_sensitive(check_multiline, regex_set);
 	}
 }
 
