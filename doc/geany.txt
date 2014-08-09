@@ -1231,6 +1231,10 @@ The syntax for the *Use regular expressions* option is shown in
 .. note::
     *Use escape sequences* is implied for regular expressions.
 
+The *Use multi-line matching* option enables multi-line regular
+expressions instead of single-line ones.  See `Regular expressions`_ for
+more details on the differences between the two modes.
+
 The *Use escape sequences* option will transform any escaped characters
 into their UTF-8 equivalent. For example, \\t will be transformed into
 a tab character. Other recognized symbols are: \\\\, \\n, \\r, \\uXXXX
@@ -1451,10 +1455,17 @@ options`_). The syntax is Perl compatible. Basic syntax is described
 in the table below. For full details, see
 http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html.
 
+By default regular expressions are matched on a line-by-line basis.
+If you are interested in multi-line regular expressions, matched against
+the whole buffer at once, see the section `Multi-line regular expressions`_
+below.
+
 .. note::
     1. The *Use escape sequences* dialog option always applies for regular
        expressions.
     2. Searching backwards with regular expressions is not supported.
+    3. The *Use multi-line matching* dialog option to select single or
+       multi-line matching.
 
 **In a regular expression, the following characters are interpreted:**
 
@@ -1530,6 +1541,30 @@ $       This matches the end of a line.
     This table is adapted from Scintilla and SciTE documentation,
     distributed under the `License for Scintilla and SciTE`_.
 
+
+Multi-line regular expressions
+``````````````````````````````
+
+.. note::
+    The *Use multi-line matching* dialog option enables multi-line
+    regular expressions.
+
+Multi-line regular expressions work just like single-line ones but a
+match can span several lines.
+
+While the syntax is the same, a few practical differences applies:
+
+======= ============================================================
+.       Matches any character but newlines.  This behavior can be changed
+        to also match newlines using the (?s) option, see
+        http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html#idp5671632
+
+[^...]  A negative range (see above) *will* match newlines if they are
+        not explicitly listed in that negative range.  For example, range
+        [^a-z] will match newlines, while range [^a-z\\r\\n] won't.
+        While this is the expected behavior, it can lead to tricky
+        problems if one doesn't think about it when writing an expression.
+======= ============================================================
 
 
 View menu

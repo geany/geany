@@ -95,12 +95,14 @@ static struct
 	gint fif_files_mode;
 	gchar *fif_files;
 	gboolean find_regexp;
+	gboolean find_regexp_multiline;
 	gboolean find_escape_sequences;
 	gboolean find_case_sensitive;
 	gboolean find_match_whole_word;
 	gboolean find_match_word_start;
 	gboolean find_close_dialog;
 	gboolean replace_regexp;
+	gboolean replace_regexp_multiline;
 	gboolean replace_escape_sequences;
 	gboolean replace_case_sensitive;
 	gboolean replace_match_whole_word;
@@ -237,6 +239,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.find_regexp,
 		"find_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.find_regexp_multiline,
+		"find_regexp_multiline", FALSE, "check_multiline");
 	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
 		"find_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.find_escape_sequences,
@@ -253,6 +257,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.replace_regexp,
 		"replace_regexp", FALSE, "check_regexp");
+	stash_group_add_toggle_button(group, &settings.replace_regexp_multiline,
+		"replace_regexp_multiline", FALSE, "check_multiline");
 	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
 		"replace_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.replace_escape_sequences,
@@ -300,7 +306,7 @@ static void on_widget_toggled_set_insensitive(
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
-			  *checkbox7, *hbox, *fbox, *mbox;
+			  *checkbox7, *check_multiline, *hbox, *fbox, *mbox;
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	ui_hookup_widget(dialog, check_regexp, "check_regexp");
@@ -310,33 +316,36 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	g_signal_connect(check_regexp, "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), dialog);
 
+	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
+	ui_hookup_widget(dialog, checkbox7, "check_escape");
+	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
+	gtk_widget_set_tooltip_text(checkbox7,
+		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+		  "corresponding control characters"));
+
+	check_multiline = gtk_check_button_new_with_mnemonic(_("Use multi-_line matching"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_multiline), FALSE);
+	gtk_widget_set_sensitive(check_multiline, FALSE);
+	ui_hookup_widget(dialog, check_multiline, "check_multiline");
+	gtk_button_set_focus_on_click(GTK_BUTTON(check_multiline), FALSE);
+	gtk_widget_set_tooltip_text(check_multiline, _("Perform regular expression "
+		"matching on the whole buffer at once rather than line by line, allowing "
+		"matches to span multiple lines.  In this mode, newline characters are part "
+		"of the input and can be captured as normal characters by the pattern."));
+
+	/* Search features */
+	fbox = gtk_vbox_new(FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), check_regexp, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), check_multiline, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox7, FALSE, FALSE, 0);
+
 	if (dialog != GTK_DIALOG(find_dlg.dialog))
 	{
 		check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
 		ui_hookup_widget(dialog, check_back, "check_back");
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
+		gtk_container_add(GTK_CONTAINER(fbox), check_back);
 	}
-	else
-	{	/* align the two checkboxes at the top of the hbox */
-		GtkSizeGroup *label_size;
-		check_back = gtk_label_new(NULL);
-		label_size = gtk_size_group_new(GTK_SIZE_GROUP_VERTICAL);
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_back);
-		gtk_size_group_add_widget(GTK_SIZE_GROUP(label_size), check_regexp);
-		g_object_unref(label_size);
-	}
-	checkbox7 = gtk_check_button_new_with_mnemonic(_("Use _escape sequences"));
-	ui_hookup_widget(dialog, checkbox7, "check_escape");
-	gtk_button_set_focus_on_click(GTK_BUTTON(checkbox7), FALSE);
-	gtk_widget_set_tooltip_text(checkbox7,
-		_("Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
-		  "corresponding control characters"));
-
-	/* Search features */
-	fbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(fbox), check_regexp);
-	gtk_container_add(GTK_CONTAINER(fbox), checkbox7);
-	gtk_container_add(GTK_CONTAINER(fbox), check_back);
 
 	checkbox1 = gtk_check_button_new_with_mnemonic(_("C_ase sensitive"));
 	ui_hookup_widget(dialog, checkbox1, "check_case");
@@ -356,9 +365,9 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	/* Matching options */
 	mbox = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox1);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox2);
-	gtk_container_add(GTK_CONTAINER(mbox), checkbox5);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox1, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox2, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(mbox), checkbox5, FALSE, FALSE, 0);
 
 	hbox = gtk_hbox_new(TRUE, 6);
 	gtk_container_add(GTK_CONTAINER(hbox), fbox);
@@ -1142,6 +1151,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		GtkWidget *check_word = ui_lookup_widget(dialog, "check_word");
 		GtkWidget *check_wordstart = ui_lookup_widget(dialog, "check_wordstart");
 		GtkWidget *check_escape = ui_lookup_widget(dialog, "check_escape");
+		GtkWidget *check_multiline = ui_lookup_widget(dialog, "check_multiline");
 		gboolean replace = (dialog != find_dlg.dialog);
 		const char *back_button[2] = { "btn_previous" , "check_back" };
 
@@ -1150,6 +1160,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 		gtk_widget_set_sensitive(ui_lookup_widget(dialog, back_button[replace]), ! regex_set);
 		gtk_widget_set_sensitive(check_word, ! regex_set);
 		gtk_widget_set_sensitive(check_wordstart, ! regex_set);
+		gtk_widget_set_sensitive(check_multiline, regex_set);
 	}
 }
 
@@ -1259,20 +1270,21 @@ static void
 on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 {
 	/* can't search backwards with a regexp */
-	if (search_data.flags & SCFIND_REGEXP)
+	if (search_data.flags & GEANY_FIND_REGEXP)
 		utils_beep();
 	else
 		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS, user_data);
 }
 
 
-static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint word_start)
+static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
 {
-	return (match_case ? SCFIND_MATCHCASE : 0) |
-		(regexp ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
-		(whole_word ? SCFIND_WHOLEWORD : 0) |
+	return (match_case ? GEANY_FIND_MATCHCASE : 0) |
+		(regexp ? GEANY_FIND_REGEXP : 0) |
+		(whole_word ? GEANY_FIND_WHOLEWORD : 0) |
+		(multiline ? GEANY_FIND_MULTILINE : 0) |
 		/* SCFIND_WORDSTART overrides SCFIND_WHOLEWORD, but we want the opposite */
-		(word_start && !whole_word ? SCFIND_WORDSTART : 0);
+		(word_start && !whole_word ? GEANY_FIND_WORDSTART : 0);
 }
 
 
@@ -1302,7 +1314,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
 		search_data.original_text = g_strdup(search_data.text);
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
-			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
+			settings.find_match_whole_word, settings.find_regexp, settings.find_regexp_multiline,
+			settings.find_match_word_start);
 
 		if (EMPTY(search_data.text))
 		{
@@ -1311,7 +1324,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-		if (search_data.flags & SCFIND_REGEXP)
+		if (search_data.flags & GEANY_FIND_REGEXP)
 		{
 			GRegex *regex = compile_regex(search_data.text, search_data.flags);
 			if (!regex)
@@ -1443,16 +1456,16 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	search_flags_re = int_search_flags(settings.replace_case_sensitive,
 		settings.replace_match_whole_word, settings.replace_regexp,
-		settings.replace_match_word_start);
+		settings.replace_regexp_multiline, settings.replace_match_word_start);
 
-	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
+	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & GEANY_FIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
 		goto fail;
 
 	original_find = g_strdup(find);
 	original_replace = g_strdup(replace);
 
-	if (search_flags_re & SCFIND_REGEXP)
+	if (search_flags_re & GEANY_FIND_REGEXP)
 	{
 		GRegex *regex = compile_regex(find, search_flags_re);
 		if (regex)
@@ -1919,11 +1932,13 @@ static GRegex *compile_regex(const gchar *str, gint sflags)
 {
 	GRegex *regex;
 	GError *error = NULL;
-	gint rflags = G_REGEX_MULTILINE;
+	gint rflags = 0;
 
-	if (~sflags & SCFIND_MATCHCASE)
+	if (sflags & GEANY_FIND_MULTILINE)
+		rflags |= G_REGEX_MULTILINE;
+	if (~sflags & GEANY_FIND_MATCHCASE)
 		rflags |= G_REGEX_CASELESS;
-	if (sflags & (SCFIND_WHOLEWORD | SCFIND_WORDSTART))
+	if (sflags & (GEANY_FIND_WHOLEWORD | GEANY_FIND_WORDSTART))
 	{
 		geany_debug("%s: Unsupported regex flags found!", G_STRFUNC);
 	}
@@ -1952,14 +1967,45 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 	const gchar *text;
 	GMatchInfo *minfo;
 	gint ret = -1;
+	gint offset = 0;
 
 	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
 
-	/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
-	text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	if (g_regex_get_compile_flags(regex) & G_REGEX_MULTILINE)
+	{
+		/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
+		text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+		g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL);
+	}
+	else /* single-line mode, manually match against each line */
+	{
+		gint line = sci_get_line_from_position(sci, pos);
+
+		for (;;)
+		{
+			gint start = sci_get_position_from_line(sci, line);
+			gint end = sci_get_line_end_position(sci, line);
+
+			text = (void*)scintilla_send_message(sci, SCI_GETRANGEPOINTER, start, end - start);
+			if (g_regex_match_full(regex, text, end - start, pos - start, 0, &minfo, NULL))
+			{
+				offset = start;
+				break;
+			}
+			else /* not found, try next line */
+			{
+				line ++;
+				if (line >= sci_get_line_count(sci))
+					break;
+				pos = sci_get_position_from_line(sci, line);
+				/* don't free last info, it's freed below */
+				g_match_info_free(minfo);
+			}
+		}
+	}
 
 	/* Warning: minfo will become invalid when 'text' does! */
-	if (g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL))
+	if (g_match_info_matches(minfo))
 	{
 		guint i;
 
@@ -1971,8 +2017,8 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 			gint start = -1, end = -1;
 
 			g_match_info_fetch_pos(minfo, (gint)i, &start, &end);
-			match->matches[i].start = start;
-			match->matches[i].end = end;
+			match->matches[i].start = offset + start;
+			match->matches[i].end = offset + end;
 		}
 		match->start = match->matches[0].start;
 		match->end = match->matches[0].end;
@@ -1987,12 +2033,23 @@ gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyM
 {
 	gint ret;
 
-	g_return_val_if_fail(! (flags & SCFIND_REGEXP), -1);
+	g_return_val_if_fail(! (flags & GEANY_FIND_REGEXP), -1);
 
 	ret = sci_search_prev(sci, flags, str);
 	if (ret != -1 && match_)
 		*match_ = match_info_new(flags, ret, ret + strlen(str));
 	return ret;
+}
+
+
+static gint geany_find_flags_to_sci_flags(gint flags)
+{
+	g_warn_if_fail(! (flags & GEANY_FIND_MULTILINE));
+
+	return ((flags & GEANY_FIND_MATCHCASE) ? SCFIND_MATCHCASE : 0) |
+		((flags & GEANY_FIND_WHOLEWORD) ? SCFIND_WHOLEWORD : 0) |
+		((flags & GEANY_FIND_REGEXP) ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
+		((flags & GEANY_FIND_WORDSTART) ? SCFIND_WORDSTART : 0);
 }
 
 
@@ -2003,9 +2060,9 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags, GeanyM
 	gint ret = -1;
 	gint pos;
 
-	if (~flags & SCFIND_REGEXP)
+	if (~flags & GEANY_FIND_REGEXP)
 	{
-		ret = sci_search_next(sci, flags, str);
+		ret = sci_search_next(sci, geany_find_flags_to_sci_flags(flags), str);
 		if (ret != -1 && match_)
 			*match_ = match_info_new(flags, ret, ret + strlen(str));
 		return ret;
@@ -2087,9 +2144,9 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 	GRegex *regex;
 	gint ret;
 
-	if (~flags & SCFIND_REGEXP)
+	if (~flags & GEANY_FIND_REGEXP)
 	{
-		ret = sci_find_text(sci, flags, ttf);
+		ret = sci_find_text(sci, geany_find_flags_to_sci_flags(flags), ttf);
 		if (ret != -1 && match_)
 			*match_ = match_info_new(flags, ttf->chrgText.cpMin, ttf->chrgText.cpMax);
 		return ret;
