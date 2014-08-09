@@ -95,12 +95,14 @@ static struct
 	gint fif_files_mode;
 	gchar *fif_files;
 	gboolean find_regexp;
+	gboolean find_regexp_multiline;
 	gboolean find_escape_sequences;
 	gboolean find_case_sensitive;
 	gboolean find_match_whole_word;
 	gboolean find_match_word_start;
 	gboolean find_close_dialog;
 	gboolean replace_regexp;
+	gboolean replace_regexp_multiline;
 	gboolean replace_escape_sequences;
 	gboolean replace_case_sensitive;
 	gboolean replace_match_whole_word;
@@ -237,6 +239,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.find_regexp,
 		"find_regexp", FALSE, "check_regexp");
+	stash_group_add_boolean(group, &settings.find_regexp_multiline,
+		"find_regexp_multiline", FALSE);
 	stash_group_add_toggle_button(group, &settings.find_case_sensitive,
 		"find_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.find_escape_sequences,
@@ -253,6 +257,8 @@ static void init_prefs(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group_add_toggle_button(group, &settings.replace_regexp,
 		"replace_regexp", FALSE, "check_regexp");
+	stash_group_add_boolean(group, &settings.replace_regexp_multiline,
+		"replace_regexp_multiline", FALSE);
 	stash_group_add_toggle_button(group, &settings.replace_case_sensitive,
 		"replace_case_sensitive", FALSE, "check_case");
 	stash_group_add_toggle_button(group, &settings.replace_escape_sequences,
@@ -1259,20 +1265,21 @@ static void
 on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 {
 	/* can't search backwards with a regexp */
-	if (search_data.flags & SCFIND_REGEXP)
+	if (search_data.flags & GEANY_FIND_REGEXP)
 		utils_beep();
 	else
 		on_find_dialog_response(NULL, GEANY_RESPONSE_FIND_PREVIOUS, user_data);
 }
 
 
-static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint word_start)
+static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
 {
-	return (match_case ? SCFIND_MATCHCASE : 0) |
-		(regexp ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
-		(whole_word ? SCFIND_WHOLEWORD : 0) |
+	return (match_case ? GEANY_FIND_MATCHCASE : 0) |
+		(regexp ? GEANY_FIND_REGEXP : 0) |
+		(whole_word ? GEANY_FIND_WHOLEWORD : 0) |
+		(multiline ? GEANY_FIND_MULTILINE : 0) |
 		/* SCFIND_WORDSTART overrides SCFIND_WHOLEWORD, but we want the opposite */
-		(word_start && !whole_word ? SCFIND_WORDSTART : 0);
+		(word_start && !whole_word ? GEANY_FIND_WORDSTART : 0);
 }
 
 
@@ -1302,7 +1309,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		search_data.text = g_strdup(gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(user_data)))));
 		search_data.original_text = g_strdup(search_data.text);
 		search_data.flags = int_search_flags(settings.find_case_sensitive,
-			settings.find_match_whole_word, settings.find_regexp, settings.find_match_word_start);
+			settings.find_match_whole_word, settings.find_regexp, settings.find_regexp_multiline,
+			settings.find_match_word_start);
 
 		if (EMPTY(search_data.text))
 		{
@@ -1311,7 +1319,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_widget_grab_focus(find_dlg.entry);
 			return;
 		}
-		if (search_data.flags & SCFIND_REGEXP)
+		if (search_data.flags & GEANY_FIND_REGEXP)
 		{
 			GRegex *regex = compile_regex(search_data.text, search_data.flags);
 			if (!regex)
@@ -1443,16 +1451,16 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	search_flags_re = int_search_flags(settings.replace_case_sensitive,
 		settings.replace_match_whole_word, settings.replace_regexp,
-		settings.replace_match_word_start);
+		settings.replace_regexp_multiline, settings.replace_match_word_start);
 
-	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & SCFIND_MATCHCASE)
+	if ((response != GEANY_RESPONSE_FIND) && (search_flags_re & GEANY_FIND_MATCHCASE)
 		&& (strcmp(find, replace) == 0))
 		goto fail;
 
 	original_find = g_strdup(find);
 	original_replace = g_strdup(replace);
 
-	if (search_flags_re & SCFIND_REGEXP)
+	if (search_flags_re & GEANY_FIND_REGEXP)
 	{
 		GRegex *regex = compile_regex(find, search_flags_re);
 		if (regex)
@@ -1919,11 +1927,13 @@ static GRegex *compile_regex(const gchar *str, gint sflags)
 {
 	GRegex *regex;
 	GError *error = NULL;
-	gint rflags = G_REGEX_MULTILINE;
+	gint rflags = 0;
 
-	if (~sflags & SCFIND_MATCHCASE)
+	if (sflags & GEANY_FIND_MULTILINE)
+		rflags |= G_REGEX_MULTILINE;
+	if (~sflags & GEANY_FIND_MATCHCASE)
 		rflags |= G_REGEX_CASELESS;
-	if (sflags & (SCFIND_WHOLEWORD | SCFIND_WORDSTART))
+	if (sflags & (GEANY_FIND_WHOLEWORD | GEANY_FIND_WORDSTART))
 	{
 		geany_debug("%s: Unsupported regex flags found!", G_STRFUNC);
 	}
@@ -2018,12 +2028,23 @@ gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyM
 {
 	gint ret;
 
-	g_return_val_if_fail(! (flags & SCFIND_REGEXP), -1);
+	g_return_val_if_fail(! (flags & GEANY_FIND_REGEXP), -1);
 
 	ret = sci_search_prev(sci, flags, str);
 	if (ret != -1 && match_)
 		*match_ = match_info_new(flags, ret, ret + strlen(str));
 	return ret;
+}
+
+
+static gint geany_find_flags_to_sci_flags(gint flags)
+{
+	g_warn_if_fail(! (flags & GEANY_FIND_MULTILINE));
+
+	return ((flags & GEANY_FIND_MATCHCASE) ? SCFIND_MATCHCASE : 0) |
+		((flags & GEANY_FIND_WHOLEWORD) ? SCFIND_WHOLEWORD : 0) |
+		((flags & GEANY_FIND_REGEXP) ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
+		((flags & GEANY_FIND_WORDSTART) ? SCFIND_WORDSTART : 0);
 }
 
 
@@ -2034,9 +2055,9 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags, GeanyM
 	gint ret = -1;
 	gint pos;
 
-	if (~flags & SCFIND_REGEXP)
+	if (~flags & GEANY_FIND_REGEXP)
 	{
-		ret = sci_search_next(sci, flags, str);
+		ret = sci_search_next(sci, geany_find_flags_to_sci_flags(flags), str);
 		if (ret != -1 && match_)
 			*match_ = match_info_new(flags, ret, ret + strlen(str));
 		return ret;
@@ -2118,9 +2139,9 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 	GRegex *regex;
 	gint ret;
 
-	if (~flags & SCFIND_REGEXP)
+	if (~flags & GEANY_FIND_REGEXP)
 	{
-		ret = sci_find_text(sci, flags, ttf);
+		ret = sci_find_text(sci, geany_find_flags_to_sci_flags(flags), ttf);
 		if (ret != -1 && match_)
 			*match_ = match_info_new(flags, ttf->chrgText.cpMin, ttf->chrgText.cpMax);
 		return ret;
