@@ -97,6 +97,10 @@ src/Document.cxx \
 src/Document.h \
 src/Editor.cxx \
 src/Editor.h \
+src/EditModel.cxx \
+src/EditModel.h \
+src/EditView.cxx \
+src/EditView.h \
 src/ExternalLexer.cxx \
 src/ExternalLexer.h \
 src/FontQuality.h \
@@ -106,6 +110,8 @@ src/KeyMap.cxx \
 src/KeyMap.h \
 src/LineMarker.cxx \
 src/LineMarker.h \
+src/MarginView.cxx \
+src/MarginView.h \
 src/Partitioning.h \
 src/PerLine.cxx \
 src/PerLine.h \

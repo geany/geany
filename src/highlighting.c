@@ -1550,8 +1550,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_RUST:
 			return (style == SCE_RUST_CHARACTER ||
+				style == SCE_RUST_BYTECHARACTER ||
 				style == SCE_RUST_STRING ||
 				style == SCE_RUST_STRINGR ||
+				style == SCE_RUST_BYTESTRING ||
+				style == SCE_RUST_BYTESTRINGR ||
 				style == SCE_RUST_LEXERROR);
 	}
 	return FALSE;

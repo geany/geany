@@ -18,9 +18,9 @@ extern "C" {
 #if defined(_WIN32)
 /* Return false on failure: */
 int Scintilla_RegisterClasses(void *hInstance);
-int Scintilla_ReleaseResources();
+int Scintilla_ReleaseResources(void);
 #endif
-int Scintilla_LinkLexers();
+int Scintilla_LinkLexers(void);
 
 #ifdef __cplusplus
 }
@@ -92,6 +92,9 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_SETBUFFEREDDRAW 2035
 #define SCI_SETTABWIDTH 2036
 #define SCI_GETTABWIDTH 2121
+#define SCI_CLEARTABSTOPS 2675
+#define SCI_ADDTABSTOP 2676
+#define SCI_GETNEXTTABSTOP 2677
 #define SC_CP_UTF8 65001
 #define SCI_SETCODEPAGE 2037
 #define MARKER_MAX 31
@@ -517,6 +520,11 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_APPENDTEXT 2282
 #define SCI_GETTWOPHASEDRAW 2283
 #define SCI_SETTWOPHASEDRAW 2284
+#define SC_PHASES_ONE 0
+#define SC_PHASES_TWO 1
+#define SC_PHASES_MULTIPLE 2
+#define SCI_GETPHASESDRAW 2673
+#define SCI_SETPHASESDRAW 2674
 #define SC_EFF_QUALITY_MASK 0xF
 #define SC_EFF_QUALITY_DEFAULT 0
 #define SC_EFF_QUALITY_NON_ANTIALIASED 1
@@ -952,7 +960,8 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SC_MOD_CONTAINER 0x40000
 #define SC_MOD_LEXERSTATE 0x80000
 #define SC_MOD_INSERTCHECK 0x100000
-#define SC_MODEVENTMASKALL 0x1FFFFF
+#define SC_MOD_CHANGETABSTOPS 0x200000
+#define SC_MODEVENTMASKALL 0x3FFFFF
 #define SC_UPDATE_CONTENT 0x1
 #define SC_UPDATE_SELECTION 0x2
 #define SC_UPDATE_V_SCROLL 0x4

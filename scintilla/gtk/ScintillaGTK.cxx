@@ -57,9 +57,13 @@
 #include "UniConversion.h"
 #include "Selection.h"
 #include "PositionCache.h"
+#include "EditModel.h"
+#include "MarginView.h"
+#include "EditView.h"
 #include "Editor.h"
 #include "AutoComplete.h"
 #include "ScintillaBase.h"
+#include "UnicodeFromUTF8.h"
 
 #ifdef SCI_LEXER
 #include "ExternalLexer.h"
@@ -186,13 +190,23 @@ public: 	// Public for scintilla_send_message
 	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
 private:
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-	virtual void SetTicking(bool on);
+	struct TimeThunk {
+		TickReason reason;
+		ScintillaGTK *scintilla;
+		guint timer;
+		TimeThunk() : reason(tickCaret), scintilla(NULL), timer(0) {}
+	};
+	TimeThunk timers[tickDwell+1];
+	virtual bool FineTickerAvailable();
+	virtual bool FineTickerRunning(TickReason reason);
+	virtual void FineTickerStart(TickReason reason, int millis, int tolerance);
+	virtual void FineTickerCancel(TickReason reason);
 	virtual bool SetIdle(bool on);
 	virtual void SetMouseCapture(bool on);
 	virtual bool HaveMouseCapture();
 	virtual bool PaintContains(PRectangle rc);
 	void FullPaint();
-	virtual PRectangle GetClientRectangle();
+	virtual PRectangle GetClientRectangle() const;
 	virtual void ScrollText(int linesToMove);
 	virtual void SetVerticalScrollPos();
 	virtual void SetHorizontalScrollPos();
@@ -280,6 +294,9 @@ private:
 	static void Commit(GtkIMContext *context, char *str, ScintillaGTK *sciThis);
 	void PreeditChangedThis();
 	static void PreeditChanged(GtkIMContext *context, ScintillaGTK *sciThis);
+
+	bool KoreanIME();
+
 	static void StyleSetText(GtkWidget *widget, GtkStyle *previous, void*);
 	static void RealizeText(GtkWidget *widget, void*);
 	static void Destroy(GObject *object);
@@ -300,7 +317,7 @@ private:
 	                             gint x, gint y, GtkSelectionData *selection_data, guint info, guint time);
 	static void DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	                        GtkSelectionData *selection_data, guint info, guint time);
-	static gboolean TimeOut(ScintillaGTK *sciThis);
+	static gboolean TimeOut(TimeThunk *tt);
 	static gboolean IdleCallback(ScintillaGTK *sciThis);
 	static gboolean StyleIdle(ScintillaGTK *sciThis);
 	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo);
@@ -624,22 +641,37 @@ void ScintillaGTK::MainForAll(GtkContainer *container, gboolean include_internal
 	}
 }
 
+namespace {
+
+class PreEditString {
+public:
+	gchar *str;
+	gint cursor_pos;
+	PangoAttrList *attrs;
+
+	PreEditString(GtkIMContext *im_context) {
+		gtk_im_context_get_preedit_string(im_context, &str, &attrs, &cursor_pos);
+	}
+	~PreEditString() {
+		g_free(str);
+		pango_attr_list_unref(attrs);
+	}
+};
+
+}
+
 gint ScintillaGTK::FocusInThis(GtkWidget *widget) {
 	try {
 		SetFocusState(true);
 		if (im_context != NULL) {
-			gchar *str = NULL;
-			gint cursor_pos;
-
-			gtk_im_context_get_preedit_string(im_context, &str, NULL, &cursor_pos);
+			PreEditString pes(im_context);
 			if (PWidget(wPreedit) != NULL) {
-				if (strlen(str) > 0) {
+				if (strlen(pes.str) > 0) {
 					gtk_widget_show(PWidget(wPreedit));
 				} else {
 					gtk_widget_hide(PWidget(wPreedit));
 				}
 			}
-			g_free(str);
 			gtk_im_context_focus_in(im_context);
 		}
 
@@ -829,11 +861,16 @@ void ScintillaGTK::Initialise() {
 		caret.period = 0;
 	}
 
-	SetTicking(true);
+	for (TickReason tr = tickCaret; tr <= tickDwell; tr = static_cast<TickReason>(tr + 1)) {
+		timers[tr].reason = tr;
+		timers[tr].scintilla = this;
+	}
 }
 
 void ScintillaGTK::Finalise() {
-	SetTicking(false);
+	for (TickReason tr = tickCaret; tr <= tickDwell; tr = static_cast<TickReason>(tr + 1)) {
+		FineTickerCancel(tr);
+	}
 	ScintillaBase::Finalise();
 }
 
@@ -1024,17 +1061,27 @@ sptr_t ScintillaGTK::DefWndProc(unsigned int, uptr_t, sptr_t) {
 	return 0;
 }
 
-void ScintillaGTK::SetTicking(bool on) {
-	if (timer.ticking != on) {
-		timer.ticking = on;
-		if (timer.ticking) {
-			timer.tickerID = reinterpret_cast<TickerID>(g_timeout_add(timer.tickSize,
-				reinterpret_cast<GSourceFunc>(TimeOut), this));
-		} else {
-			g_source_remove(GPOINTER_TO_UINT(timer.tickerID));
-		}
+/**
+* Report that this Editor subclass has a working implementation of FineTickerStart.
+*/
+bool ScintillaGTK::FineTickerAvailable() {
+	return true;
+}
+
+bool ScintillaGTK::FineTickerRunning(TickReason reason) {
+	return timers[reason].timer != 0;
+}
+
+void ScintillaGTK::FineTickerStart(TickReason reason, int millis, int /* tolerance */) {
+	FineTickerCancel(reason);
+	timers[reason].timer = g_timeout_add(millis, reinterpret_cast<GSourceFunc>(TimeOut), &timers[reason]);
+}
+
+void ScintillaGTK::FineTickerCancel(TickReason reason) {
+	if (timers[reason].timer) {
+		g_source_remove(timers[reason].timer);
+		timers[reason].timer = 0;
 	}
-	timer.ticksToWait = caret.period;
 }
 
 bool ScintillaGTK::SetIdle(bool on) {
@@ -1121,8 +1168,9 @@ void ScintillaGTK::FullPaint() {
 	wText.InvalidateAll();
 }
 
-PRectangle ScintillaGTK::GetClientRectangle() {
-	PRectangle rc = wMain.GetClientPosition();
+PRectangle ScintillaGTK::GetClientRectangle() const {
+	Window &win = const_cast<Window &>(wMain);
+	PRectangle rc = win.GetClientPosition();
 	if (verticalScrollBarVisible)
 		rc.right -= verticalScrollBarWidth;
 	if (horizontalScrollBarVisible && !Wrapping())
@@ -2220,19 +2268,13 @@ gboolean ScintillaGTK::KeyRelease(GtkWidget *widget, GdkEventKey *event) {
 
 gboolean ScintillaGTK::DrawPreeditThis(GtkWidget *widget, cairo_t *cr) {
 	try {
-		gchar *str;
-		gint cursor_pos;
-		PangoAttrList *attrs;
-
-		gtk_im_context_get_preedit_string(im_context, &str, &attrs, &cursor_pos);
-		PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), str);
-		pango_layout_set_attributes(layout, attrs);
+		PreEditString pes(im_context);
+		PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), pes.str);
+		pango_layout_set_attributes(layout, pes.attrs);
 
 		cairo_move_to(cr, 0, 0);
 		pango_cairo_show_layout(cr, layout);
 
-		g_free(str);
-		pango_attr_list_unref(attrs);
 		g_object_unref(layout);
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
@@ -2248,20 +2290,14 @@ gboolean ScintillaGTK::DrawPreedit(GtkWidget *widget, cairo_t *cr, ScintillaGTK 
 
 gboolean ScintillaGTK::ExposePreeditThis(GtkWidget *widget, GdkEventExpose *ose) {
 	try {
-		gchar *str;
-		gint cursor_pos;
-		PangoAttrList *attrs;
-
-		gtk_im_context_get_preedit_string(im_context, &str, &attrs, &cursor_pos);
-		PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), str);
-		pango_layout_set_attributes(layout, attrs);
+		PreEditString pes(im_context);
+		PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), pes.str);
+		pango_layout_set_attributes(layout, pes.attrs);
 
 		cairo_t *context = gdk_cairo_create(reinterpret_cast<GdkDrawable *>(WindowFromWidget(widget)));
 		cairo_move_to(context, 0, 0);
 		pango_cairo_show_layout(context, layout);
 		cairo_destroy(context);
-		g_free(str);
-		pango_attr_list_unref(attrs);
 		g_object_unref(layout);
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
@@ -2275,9 +2311,43 @@ gboolean ScintillaGTK::ExposePreedit(GtkWidget *widget, GdkEventExpose *ose, Sci
 
 #endif
 
+bool ScintillaGTK::KoreanIME() {
+	// Warn : for KoreanIME use only.
+	if (pdoc->TentativeActive()) {
+		return true;
+	}
+
+	bool koreanIME = false;
+	PreEditString utfval(im_context);
+
+	// Only need to check if the first preedit char is Korean.
+	// The rest will be handled in TentativeActive()
+	// which can handle backspace and CJK commons and so forth.
+
+	if (strlen(utfval.str) == 3) {  // One hangul char has 3byte.
+		int unicode = UnicodeFromUTF8(reinterpret_cast<unsigned char *>(utfval.str));
+		// Korean character ranges which are used for the first preedit chars.
+		// http://www.programminginkorean.com/programming/hangul-in-unicode/
+		bool HangulJamo = (0x1100 <= unicode && unicode <= 0x11FF);
+		bool HangulCompatibleJamo = (0x3130 <= unicode && unicode <= 0x318F);
+		bool HangulJamoExtendedA = (0xA960 <= unicode && unicode <= 0xA97F);
+		bool HangulJamoExtendedB = (0xD7B0 <= unicode && unicode <= 0xD7FF);
+		bool HangulSyllable = (0xAC00 <= unicode && unicode <= 0xD7A3);
+		koreanIME = (HangulJamo | HangulCompatibleJamo  | HangulSyllable
+					| HangulJamoExtendedA | HangulJamoExtendedB);
+	}
+	return koreanIME;
+}
+
 void ScintillaGTK::CommitThis(char *utfVal) {
 	try {
 		//~ fprintf(stderr, "Commit '%s'\n", utfVal);
+		if (pdoc->TentativeActive()) {
+			pdoc->TentativeUndo();
+		}
+
+		view.imeCaretBlockOverride = false;
+
 		if (IsUnicodeMode()) {
 			AddCharUTF(utfVal, strlen(utfVal));
 		} else {
@@ -2285,7 +2355,7 @@ void ScintillaGTK::CommitThis(char *utfVal) {
 			if (*source) {
 				Converter conv(source, "UTF-8", true);
 				if (conv) {
-					char localeVal[4] = "\0\0\0";
+					char localeVal[maxLenInputIME * 2];
 					char *pin = utfVal;
 					size_t inLeft = strlen(utfVal);
 					char *pout = localeVal;
@@ -2293,15 +2363,14 @@ void ScintillaGTK::CommitThis(char *utfVal) {
 					size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
 					if (conversions != ((size_t)(-1))) {
 						*pout = '\0';
-						for (int i = 0; localeVal[i]; i++) {
-							AddChar(localeVal[i]);
-						}
+						AddCharUTF(localeVal, strlen(localeVal));
 					} else {
 						fprintf(stderr, "Conversion failed '%s'\n", utfVal);
 					}
 				}
 			}
 		}
+		ShowCaretAtCurrentPosition();
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2313,36 +2382,99 @@ void ScintillaGTK::Commit(GtkIMContext *, char  *str, ScintillaGTK *sciThis) {
 
 void ScintillaGTK::PreeditChangedThis() {
 	try {
-		gchar *str;
-		PangoAttrList *attrs;
-		gint cursor_pos;
-		gtk_im_context_get_preedit_string(im_context, &str, &attrs, &cursor_pos);
-		if (strlen(str) > 0) {
-			PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), str);
-			pango_layout_set_attributes(layout, attrs);
+		if (KoreanIME()) {
+			// Copy & paste by johnsonj.
+			// Great thanks to
+			// jiniya from http://www.jiniya.net/tt/494  for DBCS input with AddCharUTF().
+			// BLUEnLIVE from http://zockr.tistory.com/1118 for UNDO and inOverstrike.
+			view.imeCaretBlockOverride = false; // If backspace.
 
-			gint w, h;
-			pango_layout_get_pixel_size(layout, &w, &h);
-			g_object_unref(layout);
+			if (pdoc->TentativeActive()) {
+				pdoc->TentativeUndo();
+			} else {
+				// No tentative undo means start of this composition so
+				// fill in any virtual spaces.
+				bool tmpOverstrike = inOverstrike;
+				inOverstrike = false;   // Not allowed to be deleted twice.
+				AddCharUTF("", 0);
+				inOverstrike = tmpOverstrike;
+			}
 
-			gint x, y;
-			gdk_window_get_origin(PWindow(wText), &x, &y);
+			PreEditString utfval(im_context);
 
-			Point pt = PointMainCaret();
-			if (pt.x < 0)
-				pt.x = 0;
-			if (pt.y < 0)
-				pt.y = 0;
+			if (strlen(utfval.str) >  maxLenInputIME * 3) {
+				return; // Do not allow over 200 chars.
+			}
 
-			gtk_window_move(GTK_WINDOW(PWidget(wPreedit)), x + pt.x, y + pt.y);
-			gtk_window_resize(GTK_WINDOW(PWidget(wPreedit)), w, h);
-			gtk_widget_show(PWidget(wPreedit));
-			gtk_widget_queue_draw_area(PWidget(wPreeditDraw), 0, 0, w, h);
-		} else {
-			gtk_widget_hide(PWidget(wPreedit));
+			char localeVal[maxLenInputIME * 2];
+			char *hanval = (char *)"";
+
+			if (IsUnicodeMode()) {
+				hanval = utfval.str;
+			} else {
+				const char *source = CharacterSetID();
+				if (*source) {
+					Converter conv(source, "UTF-8", true);
+					if (conv) {
+						char *pin = utfval.str;
+						size_t inLeft = strlen(utfval.str);
+						char *pout = localeVal;
+						size_t outLeft = sizeof(localeVal);
+						size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+						if (conversions != ((size_t)(-1))) {
+							*pout = '\0';
+							hanval = localeVal;
+						} else {
+							fprintf(stderr, "Conversion failed '%s'\n", utfval.str);
+						}
+					}
+				}
+			}
+
+			if (!pdoc->TentativeActive()) {
+				pdoc->TentativeStart();
+			}
+
+			bool tmpRecordingMacro = recordingMacro;
+			recordingMacro = false;
+			int hanlen = strlen(hanval);
+			AddCharUTF(hanval, hanlen);
+			recordingMacro = tmpRecordingMacro;
+
+			// For block caret which means KoreanIME is in composition.
+			view.imeCaretBlockOverride = true;
+			for (size_t r = 0; r < sel.Count(); r++) {
+				int positionInsert = sel.Range(r).Start().Position();
+				sel.Range(r).caret.SetPosition(positionInsert - hanlen);
+				sel.Range(r).anchor.SetPosition(positionInsert - hanlen);
+			}
+		} else { // Original code follows  for other IMEs.
+			PreEditString pes(im_context);
+			if (strlen(pes.str) > 0) {
+				PangoLayout *layout = gtk_widget_create_pango_layout(PWidget(wText), pes.str);
+				pango_layout_set_attributes(layout, pes.attrs);
+
+				gint w, h;
+				pango_layout_get_pixel_size(layout, &w, &h);
+				g_object_unref(layout);
+
+				gint x, y;
+				gdk_window_get_origin(PWindow(wText), &x, &y);
+
+				Point pt = PointMainCaret();
+				if (pt.x < 0)
+					pt.x = 0;
+				if (pt.y < 0)
+					pt.y = 0;
+
+				gtk_window_move(GTK_WINDOW(PWidget(wPreedit)), x + pt.x, y + pt.y);
+				gtk_window_resize(GTK_WINDOW(PWidget(wPreedit)), w, h);
+				gtk_widget_show(PWidget(wPreedit));
+				gtk_widget_queue_draw_area(PWidget(wPreeditDraw), 0, 0, w, h);
+			} else {
+				gtk_widget_hide(PWidget(wPreedit));
+			}
 		}
-		g_free(str);
-		pango_attr_list_unref(attrs);
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2711,8 +2843,8 @@ void ScintillaGTK::DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	}
 }
 
-int ScintillaGTK::TimeOut(ScintillaGTK *sciThis) {
-	sciThis->Tick();
+int ScintillaGTK::TimeOut(TimeThunk *tt) {
+	tt->scintilla->TickFor(tt->reason);
 	return 1;
 }
 

@@ -303,6 +303,12 @@ public:
 	void AddUndoAction(int token, bool mayCoalesce) { cb.AddUndoAction(token, mayCoalesce); }
 	void SetSavePoint();
 	bool IsSavePoint() const { return cb.IsSavePoint(); }
+
+	void TentativeStart() { cb.TentativeStart(); }
+	void TentativeCommit() { cb.TentativeCommit(); }
+	void TentativeUndo();
+	bool TentativeActive() const { return cb.TentativeActive(); }
+
 	const char * SCI_METHOD BufferPointer() { return cb.BufferPointer(); }
 	const char *RangePointer(int position, int rangeLength) { return cb.RangePointer(position, rangeLength); }
 	int GapPosition() const { return cb.GapPosition(); }
@@ -368,7 +374,7 @@ public:
 
 	void SetDefaultCharClasses(bool includeWordClass);
 	void SetCharClasses(const unsigned char *chars, CharClassify::cc newCharClass);
-	int GetCharsOfClass(CharClassify::cc charClass, unsigned char *buffer);
+	int GetCharsOfClass(CharClassify::cc characterClass, unsigned char *buffer);
 	void SCI_METHOD StartStyling(int position, char mask);
 	bool SCI_METHOD SetStyleFor(int length, char style);
 	bool SCI_METHOD SetStyles(int length, const char *styles);

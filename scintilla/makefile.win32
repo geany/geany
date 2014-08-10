@@ -130,10 +130,13 @@ SRCOBJS=\
 	Decoration.o \
 	Document.o \
 	Editor.o \
+	EditModel.o \
+	EditView.o \
 	ExternalLexer.o \
 	Indicator.o \
 	KeyMap.o \
 	LineMarker.o \
+	MarginView.o \
 	PerLine.o \
 	PositionCache.o \
 	RESearch.o \
