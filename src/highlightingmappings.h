@@ -1326,7 +1326,10 @@ static const HLStyle highlighting_styles_RUST[] =
 	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE },
 	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE },
 	{ SCE_RUST_MACRO,				"macro",					FALSE },
-	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE }
+	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE },
+	{ SCE_RUST_BYTESTRING,			"bytestring",				FALSE },
+	{ SCE_RUST_BYTESTRINGR,			"bytestringr",				FALSE },
+	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE }
 };
 static const HLKeyword highlighting_keywords_RUST[] =
 {
