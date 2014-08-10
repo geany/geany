@@ -527,6 +527,7 @@ void SurfaceImpl::Release() {
 }
 
 bool SurfaceImpl::Initialised() {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 	if (inited && context) {
 		if (cairo_status(context) == CAIRO_STATUS_SUCCESS) {
 			// Even when status is success, the target surface may have been
@@ -543,6 +544,7 @@ bool SurfaceImpl::Initialised() {
 		}
 		return cairo_status(context) == CAIRO_STATUS_SUCCESS;
 	}
+#endif
 	return inited;
 }
 
@@ -1085,6 +1087,10 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 							positions[i++] = iti.position - (ligatureLength - 1 - charInLig) * iti.distance / ligatureLength;
 						}
 						clusterStart = clusterEnd;
+					}
+					while (i < lenPositions) {
+						// If something failed, fill in rest of the positions
+						positions[i++] = clusterStart;
 					}
 					PLATFORM_ASSERT(i == lenPositions);
 				}
@@ -1799,6 +1805,7 @@ void ListBoxX::Select(int n) {
 }
 
 int ListBoxX::GetSelection() {
+	int index = -1;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1808,9 +1815,10 @@ int ListBoxX::GetSelection() {
 		int *indices = gtk_tree_path_get_indices(path);
 		// Don't free indices.
 		if (indices)
-			return indices[0];
+			index = indices[0];
+		gtk_tree_path_free(path);
 	}
-	return -1;
+	return index;
 }
 
 int ListBoxX::Find(const char *prefix) {

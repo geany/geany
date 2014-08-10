@@ -46,7 +46,6 @@ public:
 	std::string pat[MAXTAG];
 
 private:
-	void Init();
 	void Clear();
 	void ChSet(unsigned char c);
 	void ChSetWithCase(unsigned char c, bool caseSensitive);

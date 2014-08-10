@@ -209,6 +209,65 @@ void Document::SetSavePoint() {
 	NotifySavePoint(true);
 }
 
+void Document::TentativeUndo() {
+	CheckReadOnly();
+	if (enteredModification == 0) {
+		enteredModification++;
+		if (!cb.IsReadOnly()) {
+			bool startSavePoint = cb.IsSavePoint();
+			bool multiLine = false;
+			int steps = cb.TentativeSteps();
+			//Platform::DebugPrintf("Steps=%d\n", steps);
+			for (int step = 0; step < steps; step++) {
+				const int prevLinesTotal = LinesTotal();
+				const Action &action = cb.GetUndoStep();
+				if (action.at == removeAction) {
+					NotifyModified(DocModification(
+									SC_MOD_BEFOREINSERT | SC_PERFORMED_UNDO, action));
+				} else if (action.at == containerAction) {
+					DocModification dm(SC_MOD_CONTAINER | SC_PERFORMED_UNDO);
+					dm.token = action.position;
+					NotifyModified(dm);
+				} else {
+					NotifyModified(DocModification(
+									SC_MOD_BEFOREDELETE | SC_PERFORMED_UNDO, action));
+				}
+				cb.PerformUndoStep();
+				if (action.at != containerAction) {
+					ModifiedAt(action.position);
+				}
+
+				int modFlags = SC_PERFORMED_UNDO;
+				// With undo, an insertion action becomes a deletion notification
+				if (action.at == removeAction) {
+					modFlags |= SC_MOD_INSERTTEXT;
+				} else if (action.at == insertAction) {
+					modFlags |= SC_MOD_DELETETEXT;
+				}
+				if (steps > 1)
+					modFlags |= SC_MULTISTEPUNDOREDO;
+				const int linesAdded = LinesTotal() - prevLinesTotal;
+				if (linesAdded != 0)
+					multiLine = true;
+				if (step == steps - 1) {
+					modFlags |= SC_LASTSTEPINUNDOREDO;
+					if (multiLine)
+						modFlags |= SC_MULTILINEUNDOREDO;
+				}
+				NotifyModified(DocModification(modFlags, action.position, action.lenData,
+											   linesAdded, action.data));
+			}
+
+			bool endSavePoint = cb.IsSavePoint();
+			if (startSavePoint != endSavePoint)
+				NotifySavePoint(endSavePoint);
+				
+			cb.TentativeCommit();
+		}
+		enteredModification--;
+	}
+}
+
 int Document::GetMark(int line) {
 	return static_cast<LineMarkers *>(perLineData[ldMarkers])->MarkValue(line);
 }
