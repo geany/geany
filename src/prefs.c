@@ -70,21 +70,19 @@ GeanyToolPrefs tool_prefs;
 
 typedef struct
 {
-	GtkTreeIter iter;
 	GtkTreeStore *store;
 	GtkTreeView *tree;
-	GtkWidget *dialog_label;
 	gboolean edited;
 }
 KbData;
 
-static KbData global_kb_data = { {0}, NULL, NULL, NULL, FALSE };
+static KbData global_kb_data = { NULL, NULL, FALSE };
 static GtkTreeView *various_treeview = NULL;
 
 static GeanyKeyBinding *kb_index(guint gidx, guint kid);
 static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext, gchar *path, gchar *new_text, KbData *kbdata);
-static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, KbData *kbdata);
-static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, KbData *kbdata);
+static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, GtkLabel *label);
+static void kb_change_iter_shortcut(KbData *kbdata, GtkTreeIter *iter, const gchar *new_text);
 static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTreeIter *old_iter,
 		guint key, GdkModifierType mods, const gchar *shortcut);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -151,15 +149,16 @@ enum
 static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbdata)
 {
 	GtkTreeModel *model;
+	GtkTreeIter iter;
 	GtkTreeSelection *selection;
 	gchar *name;
 
 	selection = gtk_tree_view_get_selection(kbdata->tree);
-	if (gtk_tree_selection_get_selected(selection, &model, &kbdata->iter))
+	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
-		if (gtk_tree_model_iter_has_child(model, &kbdata->iter))
+		if (gtk_tree_model_iter_has_child(model, &iter))
 		{	/* double click on a section to expand or collapse it */
-			GtkTreePath *path = gtk_tree_model_get_path(model, &kbdata->iter);
+			GtkTreePath *path = gtk_tree_model_get_path(model, &iter);
 
 			if (gtk_tree_view_row_expanded(kbdata->tree, path))
 				gtk_tree_view_collapse_row(kbdata->tree, path);
@@ -170,11 +169,12 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 			return;
 		}
 
-		gtk_tree_model_get(model, &kbdata->iter, KB_TREE_ACTION, &name, -1);
+		gtk_tree_model_get(model, &iter, KB_TREE_ACTION, &name, -1);
 		if (name != NULL)
 		{
 			GtkWidget *dialog;
 			GtkWidget *label;
+			GtkWidget *accel_label;
 			gchar *str;
 
 			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
@@ -188,15 +188,22 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 			gtk_misc_set_padding(GTK_MISC(label), 5, 10);
 			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 
-			kbdata->dialog_label = gtk_label_new("");
-			gtk_misc_set_padding(GTK_MISC(kbdata->dialog_label), 5, 10);
-			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), kbdata->dialog_label);
+			accel_label = gtk_label_new("");
+			gtk_misc_set_padding(GTK_MISC(accel_label), 5, 10);
+			gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), accel_label);
 
 			g_signal_connect(dialog, "key-press-event",
-								G_CALLBACK(kb_grab_key_dialog_key_press_cb), kbdata);
-			g_signal_connect(dialog, "response", G_CALLBACK(kb_grab_key_dialog_response_cb), kbdata);
+								G_CALLBACK(kb_grab_key_dialog_key_press_cb), accel_label);
 
 			gtk_widget_show_all(dialog);
+			if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
+			{
+				const gchar *new_text = gtk_label_get_text(GTK_LABEL(accel_label));
+
+				kb_change_iter_shortcut(kbdata, &iter, new_text);
+			}
+			gtk_widget_destroy(dialog);
+
 			g_free(str);
 			g_free(name);
 		}
@@ -1400,10 +1407,12 @@ static void kb_cell_edited_cb(GtkCellRendererText *cellrenderertext,
 }
 
 
-static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, KbData *kbdata)
+static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *event, GtkLabel *label)
 {
 	gchar *str;
 	guint state;
+
+	g_return_val_if_fail(GTK_IS_LABEL(label), FALSE);
 
 	state = event->state & gtk_accelerator_get_default_mod_mask();
 
@@ -1412,22 +1421,10 @@ static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *
 
 	str = gtk_accelerator_name(event->keyval, state);
 
-	gtk_label_set_text(GTK_LABEL(kbdata->dialog_label), str);
+	gtk_label_set_text(label, str);
 	g_free(str);
 
 	return TRUE;
-}
-
-
-static void kb_grab_key_dialog_response_cb(GtkWidget *dialog, gint response, KbData *kbdata)
-{
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		const gchar *new_text = gtk_label_get_text(GTK_LABEL(kbdata->dialog_label));
-
-		kb_change_iter_shortcut(kbdata, &kbdata->iter, new_text);
-	}
-	gtk_widget_destroy(dialog);
 }
 
 
