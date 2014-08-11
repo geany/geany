@@ -922,24 +922,28 @@ on_input_numeric_activate(GtkEntry *entry, GtkDialog *dialog)
 }
 
 
-static void
-on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
+typedef struct
 {
-	gboolean persistent = (gboolean) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
+	GtkWidget *entry;
+	GtkWidget *combo;
 
+	GeanyInputCallback callback;
+	gpointer data;
+}
+InputDialogData;
+
+
+static void
+on_input_dialog_response(GtkDialog *dialog, gint response, InputDialogData *data)
+{
 	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		const gchar *str = gtk_entry_get_text(GTK_ENTRY(entry));
-		GeanyInputCallback input_cb =
-			(GeanyInputCallback) g_object_get_data(G_OBJECT(dialog), "input_cb");
-		gpointer input_cb_data = g_object_get_data(G_OBJECT(dialog), "input_cb_data");
+		const gchar *str = gtk_entry_get_text(GTK_ENTRY(data->entry));
 
-		if (persistent)
-		{
-			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
-			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), str, 0);
-		}
-		input_cb(str, input_cb_data);
+		if (data->combo != NULL)
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(data->combo), str, 0);
+
+		data->callback(str, data->data);
 	}
 	gtk_widget_hide(GTK_WIDGET(dialog));
 }
@@ -956,7 +960,8 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 						gboolean persistent, GeanyInputCallback input_cb, gpointer input_cb_data,
 						GCallback insert_text_cb, gpointer insert_text_cb_data)
 {
-	GtkWidget *dialog, *vbox, *entry;
+	GtkWidget *dialog, *vbox;
+	InputDialogData *data = g_malloc(sizeof *data);
 
 	dialog = gtk_dialog_new_with_buttons(title, parent,
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -965,9 +970,10 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
-	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
-	g_object_set_data(G_OBJECT(dialog), "input_cb_data", input_cb_data);
+	data->combo = NULL;
+	data->entry = NULL;
+	data->callback = input_cb;
+	data->data = input_cb_data;
 
 	if (label_text)
 	{
@@ -979,32 +985,30 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 
 	if (persistent)	/* remember previous entry text in a combo box */
 	{
-		GtkWidget *combo = gtk_combo_box_text_new_with_entry();
-
-		entry = gtk_bin_get_child(GTK_BIN(combo));
-		ui_entry_add_clear_icon(GTK_ENTRY(entry));
-		g_object_set_data(G_OBJECT(dialog), "combo", combo);
-		gtk_container_add(GTK_CONTAINER(vbox), combo);
+		data->combo = gtk_combo_box_text_new_with_entry();
+		data->entry = gtk_bin_get_child(GTK_BIN(data->combo));
+		ui_entry_add_clear_icon(GTK_ENTRY(data->entry));
+		gtk_container_add(GTK_CONTAINER(vbox), data->combo);
 	}
 	else
 	{
-		entry = gtk_entry_new();
-		ui_entry_add_clear_icon(GTK_ENTRY(entry));
-		gtk_container_add(GTK_CONTAINER(vbox), entry);
+		data->entry = gtk_entry_new();
+		ui_entry_add_clear_icon(GTK_ENTRY(data->entry));
+		gtk_container_add(GTK_CONTAINER(vbox), data->entry);
 	}
 
 	if (default_text != NULL)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entry), default_text);
+		gtk_entry_set_text(GTK_ENTRY(data->entry), default_text);
 	}
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
-	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
+	gtk_entry_set_max_length(GTK_ENTRY(data->entry), 255);
+	gtk_entry_set_width_chars(GTK_ENTRY(data->entry), 30);
 
 	if (insert_text_cb != NULL)
-		g_signal_connect(entry, "insert-text", insert_text_cb, insert_text_cb_data);
-	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
-	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
-	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
+		g_signal_connect(data->entry, "insert-text", insert_text_cb, insert_text_cb_data);
+	g_signal_connect(data->entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
+	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), data->entry);
+	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, (GClosureNotify)g_free, 0);
 
 	if (persistent)
 	{
