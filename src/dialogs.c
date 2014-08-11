@@ -945,11 +945,29 @@ on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 }
 
 
-static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
-		const gchar *label_text, const gchar *default_text, gboolean persistent,
-		GCallback insert_text_cb, gpointer insert_text_cb_data)
+/* Create and display an input dialog.
+ * persistent: whether to remember previous entry text in a combo box;
+ * 	in this case the dialog returned is not destroyed on a response,
+ * 	and can be reshown.
+ * Returns: the dialog widget. */
+static GtkWidget *
+dialogs_show_input_full(const gchar *title, GtkWindow *parent,
+						const gchar *label_text, const gchar *default_text,
+						gboolean persistent, GeanyInputCallback input_cb, gpointer input_cb_data,
+						GCallback insert_text_cb, gpointer insert_text_cb_data)
 {
-	GtkWidget *entry;
+	GtkWidget *dialog, *vbox, *entry;
+
+	dialog = gtk_dialog_new_with_buttons(title, parent,
+		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_box_set_spacing(GTK_BOX(vbox), 6);
+
+	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
+	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
+	g_object_set_data(G_OBJECT(dialog), "input_cb_data", input_cb_data);
 
 	if (label_text)
 	{
@@ -987,34 +1005,6 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
 	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
-}
-
-
-/* Create and display an input dialog.
- * persistent: whether to remember previous entry text in a combo box;
- * 	in this case the dialog returned is not destroyed on a response,
- * 	and can be reshown.
- * Returns: the dialog widget. */
-static GtkWidget *
-dialogs_show_input_full(const gchar *title, GtkWindow *parent,
-						const gchar *label_text, const gchar *default_text,
-						gboolean persistent, GeanyInputCallback input_cb, gpointer input_cb_data,
-						GCallback insert_text_cb, gpointer insert_text_cb_data)
-{
-	GtkWidget *dialog, *vbox;
-
-	dialog = gtk_dialog_new_with_buttons(title, parent,
-		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(dialog));
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	gtk_box_set_spacing(GTK_BOX(vbox), 6);
-
-	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
-	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
-	g_object_set_data(G_OBJECT(dialog), "input_cb_data", input_cb_data);
-
-	add_input_widgets(dialog, vbox, label_text, default_text, persistent, insert_text_cb, insert_text_cb_data);
 
 	if (persistent)
 	{
