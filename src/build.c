@@ -1361,7 +1361,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
  * Create build menu and handle callbacks (&toolbar callbacks)
  *
  *----------------------------------------------------------------*/
-static void on_make_custom_input_response(const gchar *input)
+static void on_make_custom_input_response(const gchar *input, gpointer data)
 {
 	GeanyDocument *doc = document_get_current();
 
@@ -1393,7 +1393,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 		{
 			dialog = dialogs_show_input_persistent(_("Custom Text"), GTK_WINDOW(main_widgets.window),
 				_("Enter custom text here, all entered text is appended to the command."),
-				build_info.custom_target, &on_make_custom_input_response);
+				build_info.custom_target, &on_make_custom_input_response, NULL);
 		}
 		else
 		{

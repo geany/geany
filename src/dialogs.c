@@ -932,13 +932,14 @@ on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 		const gchar *str = gtk_entry_get_text(GTK_ENTRY(entry));
 		GeanyInputCallback input_cb =
 			(GeanyInputCallback) g_object_get_data(G_OBJECT(dialog), "input_cb");
+		gpointer input_cb_data = g_object_get_data(G_OBJECT(dialog), "input_cb_data");
 
 		if (persistent)
 		{
 			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
 			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), str, 0);
 		}
-		input_cb(str);
+		input_cb(str, input_cb_data);
 	}
 	gtk_widget_hide(GTK_WIDGET(dialog));
 }
@@ -946,7 +947,7 @@ on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
 
 static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 		const gchar *label_text, const gchar *default_text, gboolean persistent,
-		GCallback insert_text_cb)
+		GCallback insert_text_cb, gpointer insert_text_cb_data)
 {
 	GtkWidget *entry;
 
@@ -982,7 +983,7 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
 
 	if (insert_text_cb != NULL)
-		g_signal_connect(entry, "insert-text", insert_text_cb, NULL);
+		g_signal_connect(entry, "insert-text", insert_text_cb, insert_text_cb_data);
 	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
 	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
 	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
@@ -997,7 +998,8 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 static GtkWidget *
 dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 						const gchar *label_text, const gchar *default_text,
-						gboolean persistent, GeanyInputCallback input_cb, GCallback insert_text_cb)
+						gboolean persistent, GeanyInputCallback input_cb, gpointer input_cb_data,
+						GCallback insert_text_cb, gpointer insert_text_cb_data)
 {
 	GtkWidget *dialog, *vbox;
 
@@ -1010,8 +1012,9 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 
 	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
 	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
+	g_object_set_data(G_OBJECT(dialog), "input_cb_data", input_cb_data);
 
-	add_input_widgets(dialog, vbox, label_text, default_text, persistent, insert_text_cb);
+	add_input_widgets(dialog, vbox, label_text, default_text, persistent, insert_text_cb, insert_text_cb_data);
 
 	if (persistent)
 	{
@@ -1032,18 +1035,16 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 GtkWidget *
 dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
 		const gchar *label_text, const gchar *default_text,
-		GeanyInputCallback input_cb)
+		GeanyInputCallback input_cb, gpointer input_cb_data)
 {
-	return dialogs_show_input_full(title, parent, label_text, default_text, TRUE, input_cb, NULL);
+	return dialogs_show_input_full(title, parent, label_text, default_text, TRUE, input_cb, input_cb_data, NULL, NULL);
 }
 
 
-/* ugly hack - user_data not supported for callback */
-static gchar *dialog_input = NULL;
-
-static void on_dialog_input(const gchar *str)
+static void on_dialog_input(const gchar *str, gpointer data)
 {
-	dialog_input = g_strdup(str);
+	gchar **dialog_input = data;
+	*dialog_input = g_strdup(str);
 }
 
 
@@ -1058,8 +1059,8 @@ static void on_dialog_input(const gchar *str)
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
-	dialog_input = NULL;
-	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, NULL);
+	gchar *dialog_input = NULL;
+	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, &dialog_input, NULL, NULL);
 	return dialog_input;
 }
 
@@ -1070,10 +1071,10 @@ gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *la
 gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
-	dialog_input = NULL;
+	gchar *dialog_input = NULL;
 	dialogs_show_input_full(
-		title, parent, label_text, default_text, FALSE, on_dialog_input,
-		G_CALLBACK(ui_editable_insert_text_callback));
+		title, parent, label_text, default_text, FALSE, on_dialog_input, &dialog_input,
+		G_CALLBACK(ui_editable_insert_text_callback), NULL);
 	return dialog_input;
 }
 
