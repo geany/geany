@@ -64,8 +64,6 @@ static struct
 	gchar *project_file_path; /* in UTF-8 */
 } local_prefs = { NULL };
 
-static gboolean entries_modified;
-
 /* simple struct to keep references to the elements of the properties dialog */
 typedef struct _PropertyDialogElements
 {
@@ -78,6 +76,7 @@ typedef struct _PropertyDialogElements
 	GtkWidget *patterns;
 	BuildTableData build_properties;
 	gint build_page_num;
+	gboolean entries_modified;
 } PropertyDialogElements;
 
 
@@ -112,7 +111,7 @@ void project_new(void)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	gchar *tooltip;
-	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0 };
+	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
 
 	if (! project_ask_close())
 		return;
@@ -130,8 +129,6 @@ void project_new(void)
 	gtk_dialog_add_action_widget(GTK_DIALOG(e.dialog), button, GTK_RESPONSE_OK);
 
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(e.dialog));
-
-	entries_modified = FALSE;
 
 	table = gtk_table_new(3, 2, FALSE);
 	gtk_table_set_row_spacings(GTK_TABLE(table), 5);
@@ -903,7 +900,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	gchar *name;
 	const gchar *project_dir = local_prefs.project_file_path;
 
-	if (entries_modified)
+	if (e->entries_modified)
 		return;
 
 	name = gtk_editable_get_chars(editable, 0, -1);
@@ -928,7 +925,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 	gtk_entry_set_text(GTK_ENTRY(e->base_path), base_path);
 	gtk_entry_set_text(GTK_ENTRY(e->file_name), file_name);
 
-	entries_modified = FALSE;
+	e->entries_modified = FALSE;
 
 	g_free(base_path);
 	g_free(file_name);
@@ -937,7 +934,7 @@ static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements 
 
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 {
-	entries_modified = TRUE;
+	e->entries_modified = TRUE;
 }
 
 
