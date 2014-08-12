@@ -922,70 +922,30 @@ on_input_numeric_activate(GtkEntry *entry, GtkDialog *dialog)
 }
 
 
-static void
-on_input_dialog_response(GtkDialog *dialog, gint response, GtkWidget *entry)
-{
-	gboolean persistent = (gboolean) GPOINTER_TO_INT(g_object_get_data(G_OBJECT(dialog), "has_combo"));
-
-	if (response == GTK_RESPONSE_ACCEPT)
-	{
-		const gchar *str = gtk_entry_get_text(GTK_ENTRY(entry));
-		GeanyInputCallback input_cb =
-			(GeanyInputCallback) g_object_get_data(G_OBJECT(dialog), "input_cb");
-
-		if (persistent)
-		{
-			GtkWidget *combo = (GtkWidget *) g_object_get_data(G_OBJECT(dialog), "combo");
-			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo), str, 0);
-		}
-		input_cb(str);
-	}
-	gtk_widget_hide(GTK_WIDGET(dialog));
-}
-
-
-static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
-		const gchar *label_text, const gchar *default_text, gboolean persistent,
-		GCallback insert_text_cb)
+typedef struct
 {
 	GtkWidget *entry;
+	GtkWidget *combo;
 
-	if (label_text)
+	GeanyInputCallback callback;
+	gpointer data;
+}
+InputDialogData;
+
+
+static void
+on_input_dialog_response(GtkDialog *dialog, gint response, InputDialogData *data)
+{
+	if (response == GTK_RESPONSE_ACCEPT)
 	{
-		GtkWidget *label = gtk_label_new(label_text);
-		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
-		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
-		gtk_container_add(GTK_CONTAINER(vbox), label);
-	}
+		const gchar *str = gtk_entry_get_text(GTK_ENTRY(data->entry));
 
-	if (persistent)	/* remember previous entry text in a combo box */
-	{
-		GtkWidget *combo = gtk_combo_box_text_new_with_entry();
+		if (data->combo != NULL)
+			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(data->combo), str, 0);
 
-		entry = gtk_bin_get_child(GTK_BIN(combo));
-		ui_entry_add_clear_icon(GTK_ENTRY(entry));
-		g_object_set_data(G_OBJECT(dialog), "combo", combo);
-		gtk_container_add(GTK_CONTAINER(vbox), combo);
+		data->callback(str, data->data);
 	}
-	else
-	{
-		entry = gtk_entry_new();
-		ui_entry_add_clear_icon(GTK_ENTRY(entry));
-		gtk_container_add(GTK_CONTAINER(vbox), entry);
-	}
-
-	if (default_text != NULL)
-	{
-		gtk_entry_set_text(GTK_ENTRY(entry), default_text);
-	}
-	gtk_entry_set_max_length(GTK_ENTRY(entry), 255);
-	gtk_entry_set_width_chars(GTK_ENTRY(entry), 30);
-
-	if (insert_text_cb != NULL)
-		g_signal_connect(entry, "insert-text", insert_text_cb, NULL);
-	g_signal_connect(entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
-	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), entry);
-	g_signal_connect(dialog, "response", G_CALLBACK(on_input_dialog_response), entry);
+	gtk_widget_hide(GTK_WIDGET(dialog));
 }
 
 
@@ -997,9 +957,11 @@ static void add_input_widgets(GtkWidget *dialog, GtkWidget *vbox,
 static GtkWidget *
 dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 						const gchar *label_text, const gchar *default_text,
-						gboolean persistent, GeanyInputCallback input_cb, GCallback insert_text_cb)
+						gboolean persistent, GeanyInputCallback input_cb, gpointer input_cb_data,
+						GCallback insert_text_cb, gpointer insert_text_cb_data)
 {
 	GtkWidget *dialog, *vbox;
+	InputDialogData *data = g_malloc(sizeof *data);
 
 	dialog = gtk_dialog_new_with_buttons(title, parent,
 		GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -1008,10 +970,45 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
-	g_object_set_data(G_OBJECT(dialog), "has_combo", GINT_TO_POINTER(persistent));
-	g_object_set_data(G_OBJECT(dialog), "input_cb", (gpointer) input_cb);
+	data->combo = NULL;
+	data->entry = NULL;
+	data->callback = input_cb;
+	data->data = input_cb_data;
 
-	add_input_widgets(dialog, vbox, label_text, default_text, persistent, insert_text_cb);
+	if (label_text)
+	{
+		GtkWidget *label = gtk_label_new(label_text);
+		gtk_label_set_line_wrap(GTK_LABEL(label), TRUE);
+		gtk_misc_set_alignment(GTK_MISC(label), 0, 0.5);
+		gtk_container_add(GTK_CONTAINER(vbox), label);
+	}
+
+	if (persistent)	/* remember previous entry text in a combo box */
+	{
+		data->combo = gtk_combo_box_text_new_with_entry();
+		data->entry = gtk_bin_get_child(GTK_BIN(data->combo));
+		ui_entry_add_clear_icon(GTK_ENTRY(data->entry));
+		gtk_container_add(GTK_CONTAINER(vbox), data->combo);
+	}
+	else
+	{
+		data->entry = gtk_entry_new();
+		ui_entry_add_clear_icon(GTK_ENTRY(data->entry));
+		gtk_container_add(GTK_CONTAINER(vbox), data->entry);
+	}
+
+	if (default_text != NULL)
+	{
+		gtk_entry_set_text(GTK_ENTRY(data->entry), default_text);
+	}
+	gtk_entry_set_max_length(GTK_ENTRY(data->entry), 255);
+	gtk_entry_set_width_chars(GTK_ENTRY(data->entry), 30);
+
+	if (insert_text_cb != NULL)
+		g_signal_connect(data->entry, "insert-text", insert_text_cb, insert_text_cb_data);
+	g_signal_connect(data->entry, "activate", G_CALLBACK(on_input_entry_activate), dialog);
+	g_signal_connect(dialog, "show", G_CALLBACK(on_input_dialog_show), data->entry);
+	g_signal_connect_data(dialog, "response", G_CALLBACK(on_input_dialog_response), data, (GClosureNotify)g_free, 0);
 
 	if (persistent)
 	{
@@ -1032,18 +1029,16 @@ dialogs_show_input_full(const gchar *title, GtkWindow *parent,
 GtkWidget *
 dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
 		const gchar *label_text, const gchar *default_text,
-		GeanyInputCallback input_cb)
+		GeanyInputCallback input_cb, gpointer input_cb_data)
 {
-	return dialogs_show_input_full(title, parent, label_text, default_text, TRUE, input_cb, NULL);
+	return dialogs_show_input_full(title, parent, label_text, default_text, TRUE, input_cb, input_cb_data, NULL, NULL);
 }
 
 
-/* ugly hack - user_data not supported for callback */
-static gchar *dialog_input = NULL;
-
-static void on_dialog_input(const gchar *str)
+static void on_dialog_input(const gchar *str, gpointer data)
 {
-	dialog_input = g_strdup(str);
+	gchar **dialog_input = data;
+	*dialog_input = g_strdup(str);
 }
 
 
@@ -1058,8 +1053,8 @@ static void on_dialog_input(const gchar *str)
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
-	dialog_input = NULL;
-	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, NULL);
+	gchar *dialog_input = NULL;
+	dialogs_show_input_full(title, parent, label_text, default_text, FALSE, on_dialog_input, &dialog_input, NULL, NULL);
 	return dialog_input;
 }
 
@@ -1070,10 +1065,10 @@ gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *la
 gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
-	dialog_input = NULL;
+	gchar *dialog_input = NULL;
 	dialogs_show_input_full(
-		title, parent, label_text, default_text, FALSE, on_dialog_input,
-		G_CALLBACK(ui_editable_insert_text_callback));
+		title, parent, label_text, default_text, FALSE, on_dialog_input, &dialog_input,
+		G_CALLBACK(ui_editable_insert_text_callback), NULL);
 	return dialog_input;
 }
 

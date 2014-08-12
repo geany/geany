@@ -34,7 +34,7 @@
 
 G_BEGIN_DECLS
 
-typedef void (*GeanyInputCallback)(const gchar *text);
+typedef void (*GeanyInputCallback)(const gchar *text, gpointer data);
 
 
 void dialogs_show_open_file(void);
@@ -56,7 +56,7 @@ gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent,
 	const gchar *label_text, const gchar *default_text);
 
 GtkWidget *dialogs_show_input_persistent(const gchar *title, GtkWindow *parent,
-	const gchar *label_text, const gchar *default_text, GeanyInputCallback input_cb);
+	const gchar *label_text, const gchar *default_text, GeanyInputCallback input_cb, gpointer input_cb_data);
 
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 	gdouble *value, gdouble min, gdouble max, gdouble step);
