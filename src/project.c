@@ -509,8 +509,6 @@ static void show_project_properties(gboolean show_build)
 
 	g_return_if_fail(app->project != NULL);
 
-	entries_modified = FALSE;
-
 	if (e.dialog == NULL)
 		create_properties_dialog(&e);
 
