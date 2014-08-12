@@ -680,7 +680,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		if (! g_path_is_absolute(locale_path))
 		{	/* relative base path, so add base dir of project file name */
 			gchar *dir = g_path_get_dirname(locale_filename);
-			SETPTR(locale_path, g_strconcat(dir, locale_path, NULL));
+			SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
 			g_free(dir);
 		}
 
