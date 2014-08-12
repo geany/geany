@@ -112,25 +112,24 @@ void project_new(void)
 	GtkWidget *bbox;
 	GtkWidget *label;
 	gchar *tooltip;
-	PropertyDialogElements *e;
+	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0 };
 
 	if (! project_ask_close())
 		return;
 
 	g_return_if_fail(app->project == NULL);
 
-	e = g_new0(PropertyDialogElements, 1);
-	e->dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
+	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
-	gtk_widget_set_name(e->dialog, "GeanyDialogProject");
+	gtk_widget_set_name(e.dialog, "GeanyDialogProject");
 	button = ui_button_new_with_image(GTK_STOCK_NEW, _("C_reate"));
 	gtk_widget_set_can_default(button, TRUE);
-	gtk_window_set_default(GTK_WINDOW(e->dialog), button);
-	gtk_dialog_add_action_widget(GTK_DIALOG(e->dialog), button, GTK_RESPONSE_OK);
+	gtk_window_set_default(GTK_WINDOW(e.dialog), button);
+	gtk_dialog_add_action_widget(GTK_DIALOG(e.dialog), button, GTK_RESPONSE_OK);
 
-	vbox = ui_dialog_vbox_new(GTK_DIALOG(e->dialog));
+	vbox = ui_dialog_vbox_new(GTK_DIALOG(e.dialog));
 
 	entries_modified = FALSE;
 
@@ -141,32 +140,32 @@ void project_new(void)
 	label = gtk_label_new(_("Name:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	e->name = gtk_entry_new();
-	gtk_entry_set_activates_default(GTK_ENTRY(e->name), TRUE);
-	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
-	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
-	gtk_widget_set_tooltip_text(e->name, _("Project name"));
+	e.name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e.name), TRUE);
+	ui_entry_add_clear_icon(GTK_ENTRY(e.name));
+	gtk_entry_set_max_length(GTK_ENTRY(e.name), MAX_NAME_LEN);
+	gtk_widget_set_tooltip_text(e.name, _("Project name"));
 
-	ui_table_add_row(GTK_TABLE(table), 0, label, e->name, NULL);
+	ui_table_add_row(GTK_TABLE(table), 0, label, e.name, NULL);
 
 	label = gtk_label_new(_("Filename:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	e->file_name = gtk_entry_new();
-	gtk_entry_set_activates_default(GTK_ENTRY(e->file_name), TRUE);
-	ui_entry_add_clear_icon(GTK_ENTRY(e->file_name));
-	gtk_entry_set_width_chars(GTK_ENTRY(e->file_name), 30);
+	e.file_name = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e.file_name), TRUE);
+	ui_entry_add_clear_icon(GTK_ENTRY(e.file_name));
+	gtk_entry_set_width_chars(GTK_ENTRY(e.file_name), 30);
 	tooltip = g_strdup_printf(
 		_("Path of the file representing the project and storing its settings. "
 		"It should normally have the \"%s\" extension."), "."GEANY_PROJECT_EXT);
-	gtk_widget_set_tooltip_text(e->file_name, tooltip);
+	gtk_widget_set_tooltip_text(e.file_name, tooltip);
 	g_free(tooltip);
 	button = gtk_button_new();
-	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), e);
+	g_signal_connect(button, "clicked", G_CALLBACK(on_file_save_button_clicked), &e);
 	image = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
 	gtk_container_add(GTK_CONTAINER(button), image);
 	bbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(bbox), e->file_name, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(bbox), e.file_name, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
 
 	ui_table_add_row(GTK_TABLE(table), 1, label, bbox, NULL);
@@ -174,33 +173,33 @@ void project_new(void)
 	label = gtk_label_new(_("Base path:"));
 	gtk_misc_set_alignment(GTK_MISC(label), 1, 0);
 
-	e->base_path = gtk_entry_new();
-	gtk_entry_set_activates_default(GTK_ENTRY(e->base_path), TRUE);
-	ui_entry_add_clear_icon(GTK_ENTRY(e->base_path));
-	gtk_widget_set_tooltip_text(e->base_path,
+	e.base_path = gtk_entry_new();
+	gtk_entry_set_activates_default(GTK_ENTRY(e.base_path), TRUE);
+	ui_entry_add_clear_icon(GTK_ENTRY(e.base_path));
+	gtk_widget_set_tooltip_text(e.base_path,
 		_("Base directory of all files that make up the project. "
 		"This can be a new path, or an existing directory tree. "
 		"You can use paths relative to the project filename."));
 	bbox = ui_path_box_new(_("Choose Project Base Path"),
-		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e->base_path));
+		GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, GTK_ENTRY(e.base_path));
 
 	ui_table_add_row(GTK_TABLE(table), 2, label, bbox, NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 
 	/* signals */
-	g_signal_connect(e->name, "changed", G_CALLBACK(on_name_entry_changed), e);
+	g_signal_connect(e.name, "changed", G_CALLBACK(on_name_entry_changed), &e);
 	/* run the callback manually to initialise the base_path and file_name fields */
-	on_name_entry_changed(GTK_EDITABLE(e->name), e);
+	on_name_entry_changed(GTK_EDITABLE(e.name), &e);
 
-	g_signal_connect(e->file_name, "changed", G_CALLBACK(on_entries_changed), e);
-	g_signal_connect(e->base_path, "changed", G_CALLBACK(on_entries_changed), e);
+	g_signal_connect(e.file_name, "changed", G_CALLBACK(on_entries_changed), &e);
+	g_signal_connect(e.base_path, "changed", G_CALLBACK(on_entries_changed), &e);
 
-	gtk_widget_show_all(e->dialog);
+	gtk_widget_show_all(e.dialog);
 
-	while (gtk_dialog_run(GTK_DIALOG(e->dialog)) == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(e, TRUE))
+		if (update_config(&e, TRUE))
 		{
 			if (!write_config(TRUE))
 				SHOW_ERR(_("Project file could not be written"));
@@ -213,8 +212,7 @@ void project_new(void)
 			}
 		}
 	}
-	gtk_widget_destroy(e->dialog);
-	g_free(e);
+	gtk_widget_destroy(e.dialog);
 }
 
 
