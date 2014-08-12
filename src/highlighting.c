@@ -1184,8 +1184,6 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 }
 
 
-static GtkWidget *scheme_tree = NULL;
-
 enum
 {
 	SCHEME_MARKUP,
@@ -1247,7 +1245,7 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 
 
 static void add_color_scheme_item(GtkListStore *store,
-	gchar *name, gchar *desc, const gchar *fn)
+	gchar *name, gchar *desc, const gchar *fn, GtkTreeIter *current_iter)
 {
 	GtkTreeIter iter;
 	gchar *markup;
@@ -1264,17 +1262,12 @@ static void add_color_scheme_item(GtkListStore *store,
 		SCHEME_FILE, fn, -1);
 	g_free(markup);
 
-	if (utils_str_equal(fn, editor_prefs.color_scheme))
-	{
-		GtkTreeSelection *treesel =
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
-
-		gtk_tree_selection_select_iter(treesel, &iter);
-	}
+	if (utils_str_equal(fn, editor_prefs.color_scheme) && current_iter)
+		*current_iter = iter;
 }
 
 
-static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
+static void add_color_scheme_file(GtkListStore *store, const gchar *fname, GtkTreeIter *current_iter)
 {
 	GKeyFile *hkeyfile, *skeyfile;
 	gchar *path, *theme_name, *theme_desc;
@@ -1287,7 +1280,7 @@ static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
 
 	theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
 	theme_desc = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
-	add_color_scheme_item(store, theme_name, theme_desc, theme_fn);
+	add_color_scheme_item(store, theme_name, theme_desc, theme_fn, current_iter);
 
 	g_free(path);
 	g_free(theme_fn);
@@ -1298,11 +1291,11 @@ static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
 }
 
 
-static gboolean add_color_scheme_items(GtkListStore *store)
+static gboolean add_color_scheme_items(GtkListStore *store, GtkTreeIter *current_iter)
 {
 	GSList *list, *node;
 
-	add_color_scheme_item(store, _("Default"), _("Default"), NULL);
+	add_color_scheme_item(store, _("Default"), _("Default"), NULL, current_iter);
 	list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
 
 	foreach_slist(node, list)
@@ -1310,7 +1303,7 @@ static gboolean add_color_scheme_items(GtkListStore *store)
 		gchar *fname = node->data;
 
 		if (g_str_has_suffix(fname, ".conf"))
-			add_color_scheme_file(store, fname);
+			add_color_scheme_file(store, fname, current_iter);
 
 		g_free(fname);
 	}
@@ -1335,6 +1328,7 @@ void highlighting_show_color_scheme_dialog(void)
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *treesel;
+	GtkTreeIter current_iter;
 	GtkWidget *vbox, *swin, *tree;
 	GeanyDocument *doc;
 
@@ -1344,7 +1338,7 @@ void highlighting_show_color_scheme_dialog(void)
 			_("The current filetype overrides the default style."),
 			_("This may cause color schemes to display incorrectly."));
 
-	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
@@ -1355,9 +1349,10 @@ void highlighting_show_color_scheme_dialog(void)
 		NULL, text_renderer, "markup", SCHEME_MARKUP, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	add_color_scheme_items(store);
+	add_color_scheme_items(store, &current_iter);
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	gtk_tree_selection_select_iter(treesel, &current_iter);
 	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
 
 	/* old dialog may still be showing */
