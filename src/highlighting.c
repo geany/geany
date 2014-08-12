@@ -1329,6 +1329,7 @@ void highlighting_show_color_scheme_dialog(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *treesel;
 	GtkTreeIter current_iter;
+	GtkTreePath *path;
 	GtkWidget *vbox, *swin, *tree;
 	GeanyDocument *doc;
 
@@ -1353,6 +1354,9 @@ void highlighting_show_color_scheme_dialog(void)
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_select_iter(treesel, &current_iter);
+	path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &current_iter);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, NULL, FALSE, 0, 0);
+	gtk_tree_path_free(path);
 	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
 
 	/* old dialog may still be showing */
