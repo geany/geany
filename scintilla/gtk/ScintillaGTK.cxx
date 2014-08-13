@@ -2402,7 +2402,7 @@ void ScintillaGTK::PreeditChangedThis() {
 
 			PreEditString utfval(im_context);
 
-			if (strlen(utfval.str) >  maxLenInputIME * 3) {
+			if ((strlen(utfval.str) == 0) || strlen(utfval.str) > maxLenInputIME * 3) {
 				return; // Do not allow over 200 chars.
 			}
 
