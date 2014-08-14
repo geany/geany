@@ -1202,6 +1202,17 @@ static const HLKeyword highlighting_keywords_POWERSHELL[] =
 #define highlighting_properties_POWERSHELL	EMPTY_PROPERTIES
 
 
+/* Protobuf */
+#define highlighting_lexer_PROTOBUF			SCLEX_CPP
+#define highlighting_styles_PROTOBUF		highlighting_styles_C
+static const HLKeyword highlighting_keywords_PROTOBUF[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE }
+};
+#define highlighting_properties_PROTOBUF	EMPTY_PROPERTIES
+
+
 /* Python */
 #define highlighting_lexer_PYTHON		SCLEX_PYTHON
 static const HLStyle highlighting_styles_PYTHON[] =

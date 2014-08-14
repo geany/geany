@@ -53,6 +53,7 @@ filetypes = \
 	filetypes.php \
 	filetypes.po \
 	filetypes.powershell \
+	filetypes.protobuf \
 	filetypes.python \
 	filetypes.r \
 	filetypes.restructuredtext \
