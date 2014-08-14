@@ -329,16 +329,32 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 }
 
 
+static void remove_session_files(GKeyFile *config)
+{
+	gchar **ptr;
+	gchar **keys = g_key_file_get_keys(config, "files", NULL, NULL);
+
+	foreach_strv(ptr, keys)
+	{
+		if (g_str_has_prefix(*ptr, "FILE_NAME_"))
+			g_key_file_remove_key(config, "files", *ptr, NULL);
+	}
+	g_strfreev(keys);
+}
+
+
 void configuration_save_session_files(GKeyFile *config)
 {
 	gint npage;
-	gchar *tmp;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
 	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
+
+	// clear existing entries first as they might not all be overwritten
+	remove_session_files(config);
 
 	/* store the filenames in the notebook tab order to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -354,23 +370,6 @@ void configuration_save_session_files(GKeyFile *config)
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
-		}
-	}
-	/* if open filenames less than saved session files, delete existing entries in the list */
-	i = j;
-	while (TRUE)
-	{
-		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
-		tmp = g_key_file_get_string(config, "files", entry, NULL);
-		if (G_UNLIKELY(tmp == NULL))
-		{
-			break;
-		}
-		else
-		{
-			g_key_file_remove_key(config, "files", entry, NULL);
-			g_free(tmp);
-			i++;
 		}
 	}
 
@@ -1036,6 +1035,27 @@ void configuration_save_default_session(void)
 
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
+
+	/* write the file */
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
+
+	g_key_file_free(config);
+	g_free(configfile);
+}
+
+
+void configuration_clear_default_session(void)
+{
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *data;
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	if (cl_options.load_session)
+		remove_session_files(config);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);

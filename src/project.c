@@ -99,6 +99,16 @@ static void init_stash_prefs(void);
 #define PROJECT_DIR _("projects")
 
 
+// returns whether we have working documents open
+static gboolean have_session_docs(void)
+{
+	gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	GeanyDocument *doc = document_get_current();
+
+	return npages > 1 || (npages == 1 && (doc->file_name || doc->changed));
+}
+
+
 /* TODO: this should be ported to Glade like the project preferences dialog,
  * then we can get rid of the PropertyDialogElements struct altogether as
  * widgets pointers can be accessed through ui_lookup_widget(). */
@@ -112,6 +122,27 @@ void project_new(void)
 	GtkWidget *label;
 	gchar *tooltip;
 	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
+
+	if (!app->project && project_prefs.project_session)
+	{
+		/* save session in case the dialog is cancelled */
+		configuration_save_default_session();
+		/* don't ask if the only doc is an unmodified new doc */
+		if (have_session_docs())
+		{
+			if (dialogs_show_question(
+				_("Move the current documents into the new project's session?")))
+			{
+				// don't reload session on closing project
+				configuration_clear_default_session();
+			}
+			else
+			{
+				if (!document_close_all())
+					return;
+			}
+		}
+	}
 
 	if (! project_ask_close())
 		return;
@@ -194,22 +225,36 @@ void project_new(void)
 
 	gtk_widget_show_all(e.dialog);
 
-	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
+	while (1)
 	{
+		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
+		{
+			// reload any documents that were closed
+			if (!app->project && !have_session_docs())
+			{
+				configuration_reload_default_session();
+				configuration_open_files();
+			}
+			break;
+		}
 		if (update_config(&e, TRUE))
 		{
+			// app->project is now set
 			if (!write_config(TRUE))
+			{
 				SHOW_ERR(_("Project file could not be written"));
+			}
 			else
 			{
 				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
-
 				ui_add_recent_project_file(app->project->file_name);
 				break;
 			}
 		}
 	}
 	gtk_widget_destroy(e.dialog);
+	document_new_file_if_non_open();
+	ui_focus_current_document();
 }
 
 
@@ -220,7 +265,6 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 		if (project_prefs.project_session)
 		{
 			configuration_open_files();
-			/* open a new file if no other file was opened */
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
@@ -328,6 +372,7 @@ static void update_ui(void)
 
 	ui_set_window_title(NULL);
 	build_menu_update(NULL);
+	// update project name
 	sidebar_openfiles_update_all();
 }
 
@@ -398,7 +443,6 @@ void project_close(gboolean open_default)
 		{
 			configuration_reload_default_session();
 			configuration_open_files();
-			/* open a new file if no other file was opened */
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
@@ -633,6 +677,7 @@ static GeanyProject *create_project(void)
 
 
 /* Verifies data for New & Properties dialogs.
+ * Creates app->project if NULL.
  * Returns: FALSE if the user needs to change any data. */
 static gboolean update_config(const PropertyDialogElements *e, gboolean new_project)
 {
@@ -1009,12 +1054,13 @@ static gboolean load_config(const gchar *filename)
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
 	if (project_prefs.project_session)
 	{
-		/* save current (non-project) session (it could has been changed since program startup) */
+		/* save current (non-project) session (it could have been changed since program startup) */
 		configuration_save_default_session();
 		/* now close all open files */
 		document_close_all();
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config, FALSE);
+		document_new_file_if_non_open();
 		ui_focus_current_document();
 	}
 	g_signal_emit_by_name(geany_object, "project-open", config);
