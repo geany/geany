@@ -926,6 +926,7 @@ static void create_fif_dialog(void)
 	dir_combo = gtk_combo_box_text_new_with_entry();
 	entry = gtk_bin_get_child(GTK_BIN(dir_combo));
 	ui_entry_add_clear_icon(GTK_ENTRY(entry));
+	gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label1), entry);
 	gtk_entry_set_width_chars(GTK_ENTRY(entry), 50);
 	fif_dlg.dir_combo = dir_combo;
@@ -1004,6 +1005,7 @@ static void create_fif_dialog(void)
 
 	entry_extra = gtk_entry_new();
 	ui_entry_add_clear_icon(GTK_ENTRY(entry_extra));
+	gtk_entry_set_activates_default(GTK_ENTRY(entry_extra), TRUE);
 	gtk_widget_set_sensitive(entry_extra, FALSE);
 	gtk_widget_set_tooltip_text(entry_extra, _("Other options to pass to Grep"));
 	ui_hookup_widget(fif_dlg.dialog, entry_extra, "entry_extra");
