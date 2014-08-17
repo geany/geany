@@ -2769,7 +2769,8 @@ Project management is optional in Geany. Currently it can be used for:
 
 A list of session files can be stored and opened with the project
 when the *Use project-based session files* preference is enabled,
-in the *Project* group of the `Preferences`_ dialog.
+in the `Projects`_ group of the `General Miscellaneous preferences`_ tab
+of the `Preferences`_ dialog.
 
 As long as a project is open, the Build menu will use
 the items defined in project's settings, instead of the defaults.
