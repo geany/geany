@@ -215,6 +215,7 @@ test_sources = \
 	recursive.f95					\
 	refcurs.sql						\
 	regexp.js						\
+	rules.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
