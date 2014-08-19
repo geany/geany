@@ -11,8 +11,12 @@ About this file
 This file contains information for anyone wanting to work on the Geany
 codebase. You should be aware of the open source licenses used - see
 the README file or the documentation. It is reStructuredText; the
-source file is HACKING. You can generate hacking.html by running ``make
-hacking-doc`` from the doc/ subdirectory.
+source file is HACKING.
+
+You can generate this file by:
+
+* Passing the *--enable-html-docs* option to ``configure``.
+* Running ``make`` from the doc/ subdirectory.
 
 Writing plugins
 ---------------
@@ -28,8 +32,12 @@ You should generate and read the plugin API documentation, see below.
 Plugin API documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^
 You can generate documentation for the plugin API using the doxygen
-tool. Run ``make api-doc`` in the doc subdirectory. The documentation
-will be output to doc/reference/index.html.
+tool:
+
+* Pass the *--enable-api-docs* option to ``configure``.
+* Run ``make`` from the doc/ subdirectory.
+
+The documentation will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
