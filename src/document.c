@@ -2033,7 +2033,7 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
  * @param original_text Text as it was entered by user, or @c NULL to use @c text
  */
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
 		gboolean scroll, GtkWidget *parent)
 {
 	gint selection_end, selection_start, search_pos;
@@ -2113,7 +2113,7 @@ gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *orig
  * @param original_find_text Text to find as it was entered by user, or @c NULL to use @c find_text
  */
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
-		const gchar *replace_text, gint flags, gboolean search_backwards)
+		const gchar *replace_text, GeanyFindFlags flags, gboolean search_backwards)
 {
 	gint selection_end, selection_start, search_pos;
 	GeanyMatchInfo *match = NULL;
@@ -2199,7 +2199,7 @@ static void show_replace_summary(GeanyDocument *doc, gint count, const gchar *or
  * Returns: the number of replacements made. */
 static guint
 document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-	gint flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
+	GeanyFindFlags flags, gint start, gint end, gboolean scroll_to_match, gint *new_range_end)
 {
 	gint count = 0;
 	struct Sci_TextToFind ttf;
@@ -2236,7 +2236,7 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 
 
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-						  const gchar *original_find_text, const gchar *original_replace_text, gint flags)
+						  const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags)
 {
 	gint selection_end, selection_start, selection_mode, selected_lines, last_line = 0;
 	gint max_column = 0, count = 0;
@@ -2339,7 +2339,7 @@ void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gcha
 
 /* returns number of replacements made. */
 gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		const gchar *original_find_text, const gchar *original_replace_text, gint flags)
+		const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags)
 {
 	gint len, count;
 	g_return_val_if_fail(doc != NULL && find_text != NULL && replace_text != NULL, FALSE);

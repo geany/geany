@@ -156,7 +156,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 
-static GRegex *compile_regex(const gchar *str, gint sflags);
+static GRegex *compile_regex(const gchar *str, GeanyFindFlags sflags);
 
 
 static void
@@ -1167,7 +1167,7 @@ on_find_replace_checkbutton_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
-static GeanyMatchInfo *match_info_new(gint flags, gint start, gint end)
+static GeanyMatchInfo *match_info_new(GeanyFindFlags flags, gint start, gint end)
 {
 	GeanyMatchInfo *info = g_slice_alloc(sizeof *info);
 
@@ -1192,7 +1192,7 @@ void geany_match_info_free(GeanyMatchInfo *info)
  * 	foreach_slist(node, matches)
  * 		geany_match_info_free(node->data);
  * 	g_slist_free(matches); */
-static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
+static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf)
 {
 	GSList *matches = NULL;
 	GeanyMatchInfo *info;
@@ -1226,7 +1226,7 @@ static GSList *find_range(ScintillaObject *sci, gint flags, struct Sci_TextToFin
 
 /* Clears markers if text is null/empty.
  * @return Number of matches marked. */
-gint search_mark_all(GeanyDocument *doc, const gchar *search_text, gint flags)
+gint search_mark_all(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
 {
 	gint count = 0;
 	struct Sci_TextToFind ttf;
@@ -1279,7 +1279,7 @@ on_find_entry_activate_backward(GtkEntry *entry, gpointer user_data)
 }
 
 
-static gboolean int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
+static GeanyFindFlags int_search_flags(gint match_case, gint whole_word, gint regexp, gint multiline, gint word_start)
 {
 	return (match_case ? GEANY_FIND_MATCHCASE : 0) |
 		(regexp ? GEANY_FIND_REGEXP : 0) |
@@ -1395,7 +1395,7 @@ on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 
 
 static void replace_in_session(GeanyDocument *doc,
-		gint search_flags_re, gboolean search_replace_escape_re,
+		GeanyFindFlags search_flags_re, gboolean search_replace_escape_re,
 		const gchar *find, const gchar *replace,
 		const gchar *original_find, const gchar *original_replace)
 {
@@ -1436,7 +1436,7 @@ static void
 on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gint search_flags_re;
+	GeanyFindFlags search_flags_re;
 	gboolean search_backwards_re, search_replace_escape_re;
 	gchar *find, *replace, *original_find = NULL, *original_replace = NULL;
 
@@ -1930,7 +1930,7 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 }
 
 
-static GRegex *compile_regex(const gchar *str, gint sflags)
+static GRegex *compile_regex(const gchar *str, GeanyFindFlags sflags)
 {
 	GRegex *regex;
 	GError *error = NULL;
@@ -2042,7 +2042,7 @@ static gint geany_find_flags_to_sci_flags(GeanyFindFlags flags)
 }
 
 
-gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
+gint search_find_prev(ScintillaObject *sci, const gchar *str, GeanyFindFlags flags, GeanyMatchInfo **match_)
 {
 	gint ret;
 
@@ -2055,7 +2055,7 @@ gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyM
 }
 
 
-gint search_find_next(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
+gint search_find_next(ScintillaObject *sci, const gchar *str, GeanyFindFlags flags, GeanyMatchInfo **match_)
 {
 	GeanyMatchInfo *match;
 	GRegex *regex;
@@ -2140,7 +2140,7 @@ gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, con
 }
 
 
-gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf, GeanyMatchInfo **match_)
+gint search_find_text(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf, GeanyMatchInfo **match_)
 {
 	GeanyMatchInfo *match = NULL;
 	GRegex *regex;
@@ -2179,7 +2179,7 @@ gint search_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *t
 }
 
 
-static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gint flags)
+static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
 {
 	gchar *buffer, *short_file_name;
 	struct Sci_TextToFind ttf;
@@ -2220,7 +2220,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, gi
 
 
 void search_find_usage(const gchar *search_text, const gchar *original_search_text,
-		gint flags, gboolean in_session)
+		GeanyFindFlags flags, gboolean in_session)
 {
 	GeanyDocument *doc;
 	gint count = 0;
@@ -2274,7 +2274,7 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
  * the new search range end (ttf->chrg.cpMax).
  * Note: Normally you would call sci_start/end_undo_action() around this call. */
 guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
-		gint flags, const gchar *replace_text)
+		GeanyFindFlags flags, const gchar *replace_text)
 {
 	gint count = 0;
 	gint offset = 0; /* difference between search pos and replace pos */

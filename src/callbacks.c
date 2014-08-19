@@ -828,7 +828,7 @@ G_MODULE_EXPORT void on_use_auto_indentation1_toggled(GtkCheckMenuItem *checkmen
 
 static void find_usage(gboolean in_session)
 {
-	gint flags;
+	GeanyFindFlags flags;
 	gchar *search_text;
 	GeanyDocument *doc = document_get_current();
 

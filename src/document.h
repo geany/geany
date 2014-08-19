@@ -242,17 +242,17 @@ gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolea
 		gboolean backwards);
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
 		gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
-		const gchar *replace_text, gint flags, gboolean search_backwards);
+		const gchar *replace_text, GeanyFindFlags flags, gboolean search_backwards);
 
 gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		const gchar *original_find_text, const gchar *original_replace_text, gint flags);
+		const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags);
 
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-						  const gchar *original_find_text, const gchar *original_replace_text, gint flags);
+						  const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags);
 
 void document_update_tags(GeanyDocument *doc);
 
