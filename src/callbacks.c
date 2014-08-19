@@ -442,7 +442,7 @@ static void do_toolbar_search(const gchar *text, gboolean incremental, gboolean 
 	gboolean result;
 
 	setup_find(text, backwards);
-	result = document_search_bar_find(doc, search_data.text, 0, incremental, backwards);
+	result = document_search_bar_find(doc, search_data.text, incremental, backwards);
 	if (search_data.search_bar)
 		ui_set_search_entry_background(toolbar_get_widget_child_by_name("SearchEntry"), result);
 }
@@ -474,7 +474,7 @@ void on_toolbutton_search_clicked(GtkAction *action, gpointer user_data)
 		const gchar *text = gtk_entry_get_text(GTK_ENTRY(entry));
 
 		setup_find(text, FALSE);
-		result = document_search_bar_find(doc, search_data.text, 0, FALSE, FALSE);
+		result = document_search_bar_find(doc, search_data.text, FALSE, FALSE);
 		if (search_data.search_bar)
 			ui_set_search_entry_background(entry, result);
 	}
