@@ -2031,20 +2031,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 }
 
 
-gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
-{
-	gint ret;
-
-	g_return_val_if_fail(! (flags & GEANY_FIND_REGEXP), -1);
-
-	ret = sci_search_prev(sci, flags, str);
-	if (ret != -1 && match_)
-		*match_ = match_info_new(flags, ret, ret + strlen(str));
-	return ret;
-}
-
-
-static gint geany_find_flags_to_sci_flags(gint flags)
+static gint geany_find_flags_to_sci_flags(GeanyFindFlags flags)
 {
 	g_warn_if_fail(! (flags & GEANY_FIND_MULTILINE));
 
@@ -2052,6 +2039,19 @@ static gint geany_find_flags_to_sci_flags(gint flags)
 		((flags & GEANY_FIND_WHOLEWORD) ? SCFIND_WHOLEWORD : 0) |
 		((flags & GEANY_FIND_REGEXP) ? SCFIND_REGEXP | SCFIND_POSIX : 0) |
 		((flags & GEANY_FIND_WORDSTART) ? SCFIND_WORDSTART : 0);
+}
+
+
+gint search_find_prev(ScintillaObject *sci, const gchar *str, gint flags, GeanyMatchInfo **match_)
+{
+	gint ret;
+
+	g_return_val_if_fail(! (flags & GEANY_FIND_REGEXP), -1);
+
+	ret = sci_search_prev(sci, geany_find_flags_to_sci_flags(flags), str);
+	if (ret != -1 && match_)
+		*match_ = match_info_new(flags, ret, ret + strlen(str));
+	return ret;
 }
 
 
