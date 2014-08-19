@@ -2270,6 +2270,7 @@ static void reflow_paragraph(GeanyEditor *editor)
 	reflow_lines(editor, column);
 	if (!sel)
 		sci_set_anchor(sci, -1);
+	sci_goto_pos(sci, sci_get_line_end_position(sci, sci_get_current_line(sci)), TRUE);
 
 	sci_end_undo_action(sci);
 }
