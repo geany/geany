@@ -216,6 +216,7 @@ test_sources = \
 	refcurs.sql						\
 	regexp.js						\
 	rules.t2t						\
+	sample.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
