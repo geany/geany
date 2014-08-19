@@ -248,6 +248,7 @@ test_sources = \
 	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
+	titles.t2t						\
 	traffic_signal.v				\
 	traits.php						\
 	union.f							\
