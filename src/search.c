@@ -2103,7 +2103,7 @@ gint search_replace_match(ScintillaObject *sci, const GeanyMatchInfo *match, con
 	sci_set_target_start(sci, match->start);
 	sci_set_target_end(sci, match->end);
 
-	if (! (match->flags & SCFIND_REGEXP))
+	if (! (match->flags & GEANY_FIND_REGEXP))
 		return sci_replace_target(sci, replace_text, FALSE);
 
 	str = g_string_new(replace_text);
