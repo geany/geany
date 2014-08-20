@@ -60,8 +60,7 @@ all-html-local: geany.html hacking.html
 
 clean-html-local:
 	-rm -f hacking.html
-# FIXME: why is the generated HTML manual checked-in to VCS?
-#	-rm -f geany.html
+	-rm -f geany.html
 
 else
 all-html-local:;
