@@ -14,9 +14,9 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_HTML],
 [
 	AC_ARG_ENABLE([html-docs],
 		[AS_HELP_STRING([--enable-html-docs],
-			[generate HTML documentation using rst2html [default=no]])],
+			[generate HTML documentation using rst2html [default=auto]])],
 		[geany_enable_html_docs="$enableval"],
-		[geany_enable_html_docs="no"])
+		[geany_enable_html_docs="auto"])
 	AC_ARG_VAR([RST2HTML], [Path to Docutils rst2html executable])
 	AS_IF([test "x$geany_enable_html_docs" != "xno"],
 	[
@@ -40,9 +40,9 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_PDF],
 [
 	AC_ARG_ENABLE([pdf-docs],
 		[AS_HELP_STRING([--enable-pdf-docs],
-			[generate PDF documentation using rst2pdf [default=no]])],
+			[generate PDF documentation using rst2pdf [default=auto]])],
 		[geany_enable_pdf_docs="$enableval"],
-		[geany_enable_pdf_docs="no"])
+		[geany_enable_pdf_docs="auto"])
 	AC_ARG_VAR([RST2PDF], [Path to Docutils rst2pdf executable])
 	AS_IF([test "x$geany_enable_pdf_docs" != "xno"],
 	[
