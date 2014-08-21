@@ -89,6 +89,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
+static void destroy_project(gboolean open_default);
 
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
@@ -229,20 +230,26 @@ void project_new(void)
 	{
 		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
 		{
-			// reload any documents that were closed
-			if (!app->project && !have_session_docs())
+			// any open docs were meant to be moved into the project
+			// rewrite default session because it was cleared
+			if (have_session_docs())
+				configuration_save_default_session();
+			else
 			{
+				// reload any documents that were closed
 				configuration_reload_default_session();
 				configuration_open_files();
 			}
 			break;
 		}
+		// dialog confirmed
 		if (update_config(&e, TRUE))
 		{
 			// app->project is now set
 			if (!write_config(TRUE))
 			{
 				SHOW_ERR(_("Project file could not be written"));
+				destroy_project(FALSE);
 			}
 			else
 			{
@@ -393,8 +400,6 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 /* open_default will make function reload default session files on close */
 void project_close(gboolean open_default)
 {
-	GSList *node;
-
 	g_return_if_fail(app->project != NULL);
 
 	/* save project session files, etc */
@@ -408,6 +413,15 @@ void project_close(gboolean open_default)
 			return;
 	}
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
+	destroy_project(open_default);
+}
+
+
+static void destroy_project(gboolean open_default)
+{
+	GSList *node;
+
+	g_return_if_fail(app->project != NULL);
 
 	/* remove project filetypes build entries */
 	if (app->project->priv->build_filetypes_list != NULL)
