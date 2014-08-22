@@ -34,54 +34,6 @@
 	geany_functions->p_plugin->plugin_idle_add
 #define plugin_builder_connect_signals \
 	geany_functions->p_plugin->plugin_builder_connect_signals
-#define document_new_file \
-	geany_functions->p_document->document_new_file
-#define document_get_current \
-	geany_functions->p_document->document_get_current
-#define document_get_from_page \
-	geany_functions->p_document->document_get_from_page
-#define document_find_by_filename \
-	geany_functions->p_document->document_find_by_filename
-#define document_find_by_real_path \
-	geany_functions->p_document->document_find_by_real_path
-#define document_save_file \
-	geany_functions->p_document->document_save_file
-#define document_open_file \
-	geany_functions->p_document->document_open_file
-#define document_open_files \
-	geany_functions->p_document->document_open_files
-#define document_remove_page \
-	geany_functions->p_document->document_remove_page
-#define document_reload_force \
-	geany_functions->p_document->document_reload_force
-#define document_set_encoding \
-	geany_functions->p_document->document_set_encoding
-#define document_set_text_changed \
-	geany_functions->p_document->document_set_text_changed
-#define document_set_filetype \
-	geany_functions->p_document->document_set_filetype
-#define document_close \
-	geany_functions->p_document->document_close
-#define document_index \
-	geany_functions->p_document->document_index
-#define document_save_file_as \
-	geany_functions->p_document->document_save_file_as
-#define document_rename_file \
-	geany_functions->p_document->document_rename_file
-#define document_get_status_color \
-	geany_functions->p_document->document_get_status_color
-#define document_get_basename_for_display \
-	geany_functions->p_document->document_get_basename_for_display
-#define document_get_notebook_page \
-	geany_functions->p_document->document_get_notebook_page
-#define document_compare_by_display_name \
-	geany_functions->p_document->document_compare_by_display_name
-#define document_compare_by_tab_order \
-	geany_functions->p_document->document_compare_by_tab_order
-#define document_compare_by_tab_order_reverse \
-	geany_functions->p_document->document_compare_by_tab_order_reverse
-#define document_find_by_id \
-	geany_functions->p_document->document_find_by_id
 #define editor_get_indent_prefs \
 	geany_functions->p_editor->editor_get_indent_prefs
 #define editor_create_widget \

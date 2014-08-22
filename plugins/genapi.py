@@ -44,7 +44,8 @@ def get_function_names():
         match = re.match("^\t&([a-z][a-z0-9_]+)", line)
         if match:
             symbol = match.group(1)
-            if not symbol.endswith('_funcs'):
+            if not (symbol.startswith('document_')
+                    or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()
     return names

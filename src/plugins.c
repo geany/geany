@@ -88,7 +88,37 @@ static PluginFuncs plugin_funcs = {
 	&plugin_builder_connect_signals
 };
 
-static DocumentFuncs doc_funcs = {
+/* See document.h */
+struct
+{
+	struct GeanyDocument*	(*document_new_file) (const gchar *utf8_filename, struct GeanyFiletype *ft,
+			const gchar *text);
+	struct GeanyDocument*	(*document_get_current) (void);
+	struct GeanyDocument*	(*document_get_from_page) (guint page_num);
+	struct GeanyDocument*	(*document_find_by_filename) (const gchar *utf8_filename);
+	struct GeanyDocument*	(*document_find_by_real_path) (const gchar *realname);
+	gboolean				(*document_save_file) (struct GeanyDocument *doc, gboolean force);
+	struct GeanyDocument*	(*document_open_file) (const gchar *locale_filename, gboolean readonly,
+			struct GeanyFiletype *ft, const gchar *forced_enc);
+	void		(*document_open_files) (const GSList *filenames, gboolean readonly,
+			struct GeanyFiletype *ft, const gchar *forced_enc);
+	gboolean	(*document_remove_page) (guint page_num);
+	gboolean	(*document_reload_file) (struct GeanyDocument *doc, const gchar *forced_enc);
+	void		(*document_set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
+	void		(*document_set_text_changed) (struct GeanyDocument *doc, gboolean changed);
+	void		(*document_set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
+	gboolean	(*document_close) (struct GeanyDocument *doc);
+	struct GeanyDocument*	(*document_index)(gint idx);
+	gboolean	(*document_save_file_as) (struct GeanyDocument *doc, const gchar *utf8_fname);
+	void		(*document_rename_file) (struct GeanyDocument *doc, const gchar *new_filename);
+	const GdkColor*	(*document_get_status_color) (struct GeanyDocument *doc);
+	gchar*		(*document_get_basename_for_display) (struct GeanyDocument *doc, gint length);
+	gint		(*document_get_notebook_page) (struct GeanyDocument *doc);
+	gint		(*document_compare_by_display_name) (gconstpointer a, gconstpointer b);
+	gint		(*document_compare_by_tab_order) (gconstpointer a, gconstpointer b);
+	gint		(*document_compare_by_tab_order_reverse) (gconstpointer a, gconstpointer b);
+	GeanyDocument*  (*document_find_by_id)(guint id);
+} doc_funcs = {
 	&document_new_file,
 	&document_get_current,
 	&document_get_from_page,
