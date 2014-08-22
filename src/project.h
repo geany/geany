@@ -66,7 +66,7 @@ void project_new(void);
 
 void project_open(void);
 
-void project_close(gboolean open_default);
+gboolean project_close(gboolean open_default);
 
 void project_properties(void);
 

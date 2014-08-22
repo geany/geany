@@ -398,9 +398,9 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 
 
 /* open_default will make function reload default session files on close */
-void project_close(gboolean open_default)
+gboolean project_close(gboolean open_default)
 {
-	g_return_if_fail(app->project != NULL);
+	g_return_val_if_fail(app->project != NULL, FALSE);
 
 	/* save project session files, etc */
 	if (!write_config(FALSE))
@@ -410,10 +410,11 @@ void project_close(gboolean open_default)
 	{
 		/* close all existing tabs first */
 		if (!document_close_all())
-			return;
+			return FALSE;
 	}
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
 	destroy_project(open_default);
+	return TRUE;
 }
 
 
@@ -659,8 +660,7 @@ gboolean project_ask_close(void)
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is open."), app->project->name))
 		{
-			project_close(FALSE);
-			return TRUE;
+			return project_close(FALSE);
 		}
 		else
 			return FALSE;
