@@ -202,6 +202,45 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 }
 
 
+/** Creates a new keybinding using a GeanyKeyBindingFunc and attaches is to a keybinding group
+ *
+ * If given the callback should return @c TRUE if the keybinding was handled, otherwise @c FALSE
+ * to allow other callbacks to be run. This allows for multiplexing keybindings on the same keys,
+ * depending on the focused widget (or context). If the callback is NULL the group's callback will
+ * be invoked, but the same rule applies.
+ *
+ * @param group Group.
+ * @param key_id Keybinding index for the group.
+ * @param cb New-style callback to be called when activated, or @c NULL to use the group callback.
+ * @param pdata Plugin-specific data passed back to the callback.
+ * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
+ * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
+ * @param kf_name Key name for the configuration file, such as @c "menu_new".
+ * @param label Label used in the preferences dialog keybindings tab. May contain
+ * underscores - these won't be displayed.
+ * @param menu_item Optional widget to set an accelerator for, or @c NULL.
+ * @return The keybinding - normally this is ignored.
+ *
+ * @since 1.26 (API 226)
+ * @see See plugin_set_key_group_full
+ **/
+GEANY_API_SYMBOL
+GeanyKeyBinding *keybindings_set_item_full(GeanyKeyGroup *group, gsize key_id,
+		GeanyKeyBindingFunc cb, gpointer pdata, guint key, GdkModifierType mod,
+		const gchar *kf_name, const gchar *label, GtkWidget *menu_item)
+{
+	GeanyKeyBinding *kb;
+
+	/* For now, this is intended for plugins only */
+	g_assert(group->plugin);
+
+	kb = keybindings_set_item(group, key_id, NULL, key, mod, kf_name, label, menu_item);
+	kb->cb_func = cb;
+	kb->cb_data = pdata;
+	return kb;
+}
+
+
 static void add_kb_group(GeanyKeyGroup *group,
 		const gchar *name, const gchar *label, GeanyKeyGroupCallback callback, gboolean plugin)
 {
