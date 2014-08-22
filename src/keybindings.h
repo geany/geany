@@ -37,12 +37,42 @@ G_BEGIN_DECLS
 #define GEANY_PRIMARY_MOD_MASK GDK_CONTROL_MASK
 #endif
 
+/** A collection of keybindings grouped together. */
+typedef struct GeanyKeyGroup GeanyKeyGroup;
+typedef struct GeanyKeyBinding GeanyKeyBinding;
+
+/** Function pointer type used for keybinding group callbacks.
+ *
+ * You should return @c TRUE to indicate handling the callback. (Occasionally, if the keybinding
+ * cannot apply in the current situation, it is useful to return @c FALSE to allow a later keybinding
+ * with the same key combination to handle it). */
+typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
+
+/** Function pointer type used for keybinding group callbacks, with userdata for passing context.
+ *
+ * You should return @c TRUE to indicate handling the callback. (Occasionally, if the keybinding
+ * cannot apply in the current situation, it is useful to return @c FALSE to allow a later keybinding
+ * with the same key combination to handle it).
+ *
+ * @since 1.26 (API 226) */
+typedef gboolean (*GeanyKeyGroupFunc)(GeanyKeyGroup *group, guint key_id, gpointer pdata);
+
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
+/** Function pointer type used for keybinding callbacks, with userdata for passing context
+ *
+ * You should return @c TRUE to indicate handling the callback. (Occasionally, if the keybinding
+ * cannot apply in the current situation, it is useful to return @c FALSE to allow a later keybinding
+ * with the same key combination to handle it).
+ *
+ * @since 1.26 (API 226) */
+typedef gboolean (*GeanyKeyBindingFunc)(GeanyKeyBinding *key, guint key_id, gpointer pdata);
+
 /** Represents a single keybinding action.
+ *
  * Use keybindings_set_item() to set. */
-typedef struct GeanyKeyBinding
+struct GeanyKeyBinding
 {
 	guint key;				/**< Key value in lower-case, such as @c GDK_a or 0 */
 	GdkModifierType mods;	/**< Modifier keys, such as @c GDK_CONTROL_MASK or 0 */
@@ -57,19 +87,9 @@ typedef struct GeanyKeyBinding
 	guint id;
 	guint default_key;
 	GdkModifierType default_mods;
-}
-GeanyKeyBinding;
-
-
-/** Function pointer type used for keybinding group callbacks.
- * You should return @c TRUE to indicate handling the callback. (Occasionally, if the keybinding
- * cannot apply in the current situation, it is useful to return @c FALSE to allow a later keybinding
- * with the same key combination to handle it). */
-typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
-
-/** A collection of keybindings grouped together. */
-typedef struct GeanyKeyGroup GeanyKeyGroup;
-
+	GeanyKeyBindingFunc cb_func;
+	gpointer cb_data;
+};
 
 /* Note: we don't need to break the plugin ABI when appending keybinding or keygroup IDs,
  * just make sure to insert immediately before the _COUNT item, so

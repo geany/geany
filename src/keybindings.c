@@ -194,6 +194,8 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 	kb->default_key = key;
 	kb->default_mods = mod;
 	kb->callback = callback;
+	kb->cb_func = NULL;
+	kb->cb_data = NULL;
 	kb->menu_item = menu_item;
 	kb->id = key_id;
 	return kb;
@@ -208,6 +210,8 @@ static void add_kb_group(GeanyKeyGroup *group,
 	group->name = name;
 	group->label = label;
 	group->callback = callback;
+	group->cb_func = NULL;
+	group->cb_data = NULL;
 	group->plugin = plugin;
 	group->key_items = g_ptr_array_new();
 }
@@ -1207,6 +1211,30 @@ gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
 }
 
 
+static gboolean run_kb(GeanyKeyBinding *kb, GeanyKeyGroup *group)
+{
+	gboolean handled = TRUE;
+	/* call the corresponding handler/callback functions for this shortcut.
+	 * Check the individual keybindings first (handler first, callback second) and
+	 * group second (again handler first, callback second) */
+	if (kb->cb_func)
+		handled = kb->cb_func(kb, kb->id, kb->cb_data);
+	else if (kb->callback)
+		kb->callback(kb->id);
+	else if (group->cb_func)
+		handled = group->cb_func(group, kb->id, group->cb_data);
+	else if (group->callback)
+		handled = group->callback(kb->id);
+	else
+	{
+		g_warning("No callback or handler for keybinding %s: %s!", group->name, kb->name);
+		return FALSE;
+	}
+
+	return handled;
+}
+
+
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
@@ -1249,20 +1277,8 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		{
 			if (keyval == kb->key && state == kb->mods)
 			{
-				/* call the corresponding callback function for this shortcut */
-				if (kb->callback)
-				{
-					kb->callback(kb->id);
+				if (run_kb(kb, group))
 					return TRUE;
-				}
-				else if (group->callback)
-				{
-					if (group->callback(kb->id))
-						return TRUE;
-					else
-						continue;	/* not handled */
-				}
-				g_warning("No callback for keybinding %s: %s!", group->name, kb->name);
 			}
 		}
 	}
@@ -1296,20 +1312,12 @@ GEANY_API_SYMBOL
 void keybindings_send_command(guint group_id, guint key_id)
 {
 	GeanyKeyBinding *kb;
+	GeanyKeyGroup *group;
 
 	kb = keybindings_lookup_item(group_id, key_id);
-	if (kb)
-	{
-		if (kb->callback)
-			kb->callback(key_id);
-		else
-		{
-			GeanyKeyGroup *group = keybindings_get_core_group(group_id);
-
-			if (group->callback)
-				group->callback(key_id);
-		}
-	}
+	group = keybindings_get_core_group(group_id);
+	if (kb && group)
+		run_kb(kb, group);
 }
 
 
