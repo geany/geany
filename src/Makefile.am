@@ -60,7 +60,6 @@ SRCS = \
 
 geany_includedir = $(includedir)/geany
 
-# only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
 	app.h \
 	build.h \
@@ -150,6 +149,9 @@ geany_LDADD = \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS)
 
+geany_LDFLAGS = \
+	-Wl,--no-export-dynamic
+
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
@@ -157,9 +159,9 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
+			-DG_LOG_DOMAIN=\""Geany"\" \
+			-fvisibility=hidden
 
 clean-local:
 
 endif
-

@@ -6,7 +6,7 @@ AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
-	-fvisibility=default
+	-fvisibility=hidden
 
 EXTRA_DIST = \
 	makefile.win32
