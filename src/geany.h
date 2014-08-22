@@ -32,10 +32,13 @@
 #include "app.h"
 
 #include <glib.h>
+#include <gmodule.h>
 
 
 G_BEGIN_DECLS
 
+/* Could be defined differently, e.g. __attribute__((visibility("default"))) */
+#define GEANY_EXPORT G_MODULE_EXPORT
 
 /* for detailed description look in the documentation, things are not
  * listed in the documentation should not be changed */
