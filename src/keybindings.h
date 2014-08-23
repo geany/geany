@@ -236,6 +236,12 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_CLONE,					/**< Keybinding. */
 	GEANY_KEYS_FILE_QUIT,						/**< Keybinding. */
+	GEANY_KEYS_EDITOR_LINEUP,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_LINEDOWN,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_CHARRIGHT,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_CHARLEFT,					/**< Keybinding. */
+  	GEANY_KEYS_EDITOR_DELETE,					/**< Keybinding. */
+	GEANY_KEYS_EDITOR_DELETEBACK,				/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
