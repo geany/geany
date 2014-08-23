@@ -76,6 +76,7 @@ geany_include_HEADERS = \
 	plugindata.h \
 	prefs.h \
 	project.h \
+	sciwrappers.h \
 	search.h \
 	stash.h \
 	support.h \

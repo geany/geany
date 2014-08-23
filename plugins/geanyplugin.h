@@ -41,6 +41,7 @@
 #include "plugindata.h"
 #include "prefs.h"
 #include "project.h"
+#include "sciwrappers.h"
 #include "search.h"
 #include "stash.h"
 #include "support.h"

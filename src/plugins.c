@@ -174,11 +174,66 @@ struct
 	&scintilla_new
 };
 
-/* Macro to prevent a duplicate macro being generated in geanyfunctions.h */
-#define _scintilla_send_message_macro	scintilla_send_message
+struct
+{
+	long int (*sci_send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
+			long unsigned int wParam, long int lParam);
+	void	(*sci_send_command) (struct _ScintillaObject *sci, gint cmd);
 
-static SciFuncs sci_funcs = {
-	&_scintilla_send_message_macro,
+	void	(*sci_start_undo_action) (struct _ScintillaObject *sci);
+	void	(*sci_end_undo_action) (struct _ScintillaObject *sci);
+	void	(*sci_set_text) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*sci_insert_text) (struct _ScintillaObject *sci, gint pos, const gchar *text);
+	void	(*sci_get_text) (struct _ScintillaObject *sci, gint len, gchar *text);
+	gint	(*sci_get_length) (struct _ScintillaObject *sci);
+	gint	(*sci_get_current_position) (struct _ScintillaObject *sci);
+	void	(*sci_set_current_position) (struct _ScintillaObject *sci, gint position,
+			 gboolean scroll_to_caret);
+	gint	(*sci_get_col_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*sci_get_line_from_position) (struct _ScintillaObject *sci, gint position);
+	gint	(*sci_get_position_from_line) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_replace_sel) (struct _ScintillaObject *sci, const gchar *text);
+	void	(*sci_get_selected_text) (struct _ScintillaObject *sci, gchar *text);
+	gint	(*sci_get_selected_text_length) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_start) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_end) (struct _ScintillaObject *sci);
+	gint	(*sci_get_selection_mode) (struct _ScintillaObject *sci);
+	void	(*sci_set_selection_mode) (struct _ScintillaObject *sci, gint mode);
+	void	(*sci_set_selection_start) (struct _ScintillaObject *sci, gint position);
+	void	(*sci_set_selection_end) (struct _ScintillaObject *sci, gint position);
+	void	(*sci_get_text_range) (struct _ScintillaObject *sci, gint start, gint end, gchar *text);
+	gchar*	(*sci_get_line) (struct _ScintillaObject *sci, gint line_num);
+	gint	(*sci_get_line_length) (struct _ScintillaObject *sci, gint line);
+	gint	(*sci_get_line_count) (struct _ScintillaObject *sci);
+	gboolean (*sci_get_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_ensure_line_is_visible) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_scroll_caret) (struct _ScintillaObject *sci);
+	gint	(*sci_find_matching_brace) (struct _ScintillaObject *sci, gint pos);
+	gint	(*sci_get_style_at) (struct _ScintillaObject *sci, gint position);
+	gchar	(*sci_get_char_at) (struct _ScintillaObject *sci, gint pos);
+	gint	(*sci_get_current_line) (struct _ScintillaObject *sci);
+	gboolean (*sci_has_selection) (struct _ScintillaObject *sci);
+	gint	(*sci_get_tab_width) (struct _ScintillaObject *sci);
+	void	(*sci_indicator_clear) (struct _ScintillaObject *sci, gint start, gint end);
+	void	(*sci_indicator_set) (struct _ScintillaObject *sci, gint indic);
+	gchar*	(*sci_get_contents) (struct _ScintillaObject *sci, gint len);
+	gchar*	(*sci_get_contents_range) (struct _ScintillaObject *sci, gint start, gint end);
+	gchar*	(*sci_get_selection_contents) (struct _ScintillaObject *sci);
+	void	(*sci_set_font) (struct _ScintillaObject *sci, gint style, const gchar *font, gint size);
+	gint	(*sci_get_line_end_position) (struct _ScintillaObject *sci, gint line);
+	void	(*sci_set_target_start) (struct _ScintillaObject *sci, gint start);
+	void	(*sci_set_target_end) (struct _ScintillaObject *sci, gint end);
+	gint	(*sci_replace_target) (struct _ScintillaObject *sci, const gchar *text, gboolean regex);
+	void	(*sci_set_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	void	(*sci_delete_marker_at_line) (struct _ScintillaObject *sci, gint line_number, gint marker);
+	gboolean (*sci_is_marker_set_at_line) (struct _ScintillaObject *sci, gint line, gint marker);
+	void 	(*sci_goto_line) (struct _ScintillaObject *sci, gint line, gboolean unfold);
+	gint	(*sci_find_text) (struct _ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
+	void	(*sci_set_line_indentation) (struct _ScintillaObject *sci, gint line, gint indent);
+	gint	(*sci_get_line_indentation) (struct _ScintillaObject *sci, gint line);
+	gint	(*sci_get_lexer) (struct _ScintillaObject *sci);
+} sci_funcs = {
+	&scintilla_send_message,
 	&sci_send_command,
 	&sci_start_undo_action,
 	&sci_end_undo_action,
