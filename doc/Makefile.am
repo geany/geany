@@ -58,7 +58,11 @@ hacking.html: $(srcdir)/geany.css $(top_srcdir)/HACKING
 
 all-local: geany.html hacking.html
 
-clean-local: clean-html-local
+# clean on 'maintainer-clean' rather than 'clean' in case it was not
+# built by Make but rather part of the distribution.  This is fine even
+# then, as configure will properly require what is needed to build it
+# again if it is missing.
+maintainer-clean-local: clean-html-local
 clean-html-local:
 	-rm -f hacking.html
 	-rm -f geany.html
