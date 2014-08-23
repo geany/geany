@@ -64,52 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define utils_str_equal \
-	geany_functions->p_utils->utils_str_equal
-#define utils_string_replace_all \
-	geany_functions->p_utils->utils_string_replace_all
-#define utils_get_file_list \
-	geany_functions->p_utils->utils_get_file_list
-#define utils_write_file \
-	geany_functions->p_utils->utils_write_file
-#define utils_get_locale_from_utf8 \
-	geany_functions->p_utils->utils_get_locale_from_utf8
-#define utils_get_utf8_from_locale \
-	geany_functions->p_utils->utils_get_utf8_from_locale
-#define utils_remove_ext_from_filename \
-	geany_functions->p_utils->utils_remove_ext_from_filename
-#define utils_mkdir \
-	geany_functions->p_utils->utils_mkdir
-#define utils_get_setting_boolean \
-	geany_functions->p_utils->utils_get_setting_boolean
-#define utils_get_setting_integer \
-	geany_functions->p_utils->utils_get_setting_integer
-#define utils_get_setting_string \
-	geany_functions->p_utils->utils_get_setting_string
-#define utils_spawn_sync \
-	geany_functions->p_utils->utils_spawn_sync
-#define utils_spawn_async \
-	geany_functions->p_utils->utils_spawn_async
-#define utils_str_casecmp \
-	geany_functions->p_utils->utils_str_casecmp
-#define utils_get_date_time \
-	geany_functions->p_utils->utils_get_date_time
-#define utils_open_browser \
-	geany_functions->p_utils->utils_open_browser
-#define utils_string_replace_first \
-	geany_functions->p_utils->utils_string_replace_first
-#define utils_str_middle_truncate \
-	geany_functions->p_utils->utils_str_middle_truncate
-#define utils_str_remove_chars \
-	geany_functions->p_utils->utils_str_remove_chars
-#define utils_get_file_list_full \
-	geany_functions->p_utils->utils_get_file_list_full
-#define utils_copy_environment \
-	geany_functions->p_utils->utils_copy_environment
-#define utils_find_open_xml_tag \
-	geany_functions->p_utils->utils_find_open_xml_tag
-#define utils_find_open_xml_tag_pos \
-	geany_functions->p_utils->utils_find_open_xml_tag_pos
 #define ui_dialog_vbox_new \
 	geany_functions->p_ui->ui_dialog_vbox_new
 #define ui_frame_new_with_alignment \

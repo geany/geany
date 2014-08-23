@@ -266,7 +266,7 @@ typedef struct GeanyFunctions
 	void						*p_document;		/**< See document.h */
 	void						*p_sci;				/**< See sciwrappers.h */
 	void						*p_templates;		/**< See templates.h */
-	struct UtilsFuncs			*p_utils;			/**< See utils.h */
+	void						*p_utils;			/**< See utils.h */
 	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
 	/** @deprecated Use ui_lookup_widget() instead. */
 	struct SupportFuncs			*p_support;
@@ -294,45 +294,6 @@ GeanyFunctions;
 
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
-/* See utils.h */
-typedef struct UtilsFuncs
-{
-	gboolean	(*utils_str_equal) (const gchar *a, const gchar *b);
-	guint		(*utils_string_replace_all) (GString *haystack, const gchar *needle,
-				 const gchar *replacement);
-	GSList*		(*utils_get_file_list) (const gchar *path, guint *length, GError **error);
-	gint		(*utils_write_file) (const gchar *filename, const gchar *text);
-	gchar*		(*utils_get_locale_from_utf8) (const gchar *utf8_text);
-	gchar*		(*utils_get_utf8_from_locale) (const gchar *locale_text);
-	gchar*		(*utils_remove_ext_from_filename) (const gchar *filename);
-	gint		(*utils_mkdir) (const gchar *path, gboolean create_parent_dirs);
-	gboolean	(*utils_get_setting_boolean) (GKeyFile *config, const gchar *section, const gchar *key,
-				 const gboolean default_value);
-	gint		(*utils_get_setting_integer) (GKeyFile *config, const gchar *section, const gchar *key,
-				 const gint default_value);
-	gchar*		(*utils_get_setting_string) (GKeyFile *config, const gchar *section, const gchar *key,
-				 const gchar *default_value);
-	gboolean	(*utils_spawn_sync) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-				 GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
-				 gchar **std_err, gint *exit_status, GError **error);
-	gboolean	(*utils_spawn_async) (const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-				 GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
-				 GError **error);
-	gint		(*utils_str_casecmp) (const gchar *s1, const gchar *s2);
-	gchar*		(*utils_get_date_time) (const gchar *format, time_t *time_to_use);
-	void		(*utils_open_browser) (const gchar *uri);
-	guint		(*utils_string_replace_first) (GString *haystack, const gchar *needle,
-				 const gchar *replace);
-	gchar*		(*utils_str_middle_truncate) (const gchar *string, guint truncate_length);
-	gchar*		(*utils_str_remove_chars) (gchar *string, const gchar *chars);
-	GSList*		(*utils_get_file_list_full)(const gchar *path, gboolean full_path, gboolean sort,
-				GError **error);
-	gchar**		(*utils_copy_environment)(const gchar **exclude_vars, const gchar *first_varname, ...);
-	gchar*		(*utils_find_open_xml_tag) (const gchar sel[], gint size);
-	const gchar*	(*utils_find_open_xml_tag_pos) (const gchar sel[], gint size);
-}
-UtilsFuncs;
 
 
 /* See main.h */
