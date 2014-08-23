@@ -45,6 +45,7 @@ def get_function_names():
         if match:
             symbol = match.group(1)
             if not (symbol.startswith('document_')
+                    or symbol.startswith('scintilla_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

@@ -49,6 +49,8 @@
 #include "ui_utils.h"
 #include "utils.h"
 
+#include "ScintillaWidget.h"
+
 #include "geanyfunctions.h"
 
 #endif

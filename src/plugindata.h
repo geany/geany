@@ -283,7 +283,7 @@ typedef struct GeanyFunctions
 	struct EditorFuncs			*p_editor;			/**< See editor.h */
 	struct MainFuncs			*p_main;			/**< See main.h */
 	struct PluginFuncs			*p_plugin;			/**< See pluginutils.c */
-	struct ScintillaFuncs		*p_scintilla;		/**< See ScintillaFuncs */
+	void						*p_scintilla;		/**< See ScintillaFuncs */
 	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
 	struct StashFuncs			*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
@@ -294,20 +294,6 @@ GeanyFunctions;
 
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
-struct _ScintillaObject;
-
-/** See http://scintilla.org for the full documentation. */
-typedef struct ScintillaFuncs
-{
-	/** Send Scintilla a message. */
-	long int	(*scintilla_send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
-			long unsigned int wParam, long int lParam);
-	/** Create a new ScintillaObject widget. */
-	GtkWidget*	(*scintilla_new)(void);
-}
-ScintillaFuncs;
-
 
 /** Wrapper functions for Scintilla messages.
  * See sciwrappers.h for the list of functions. */

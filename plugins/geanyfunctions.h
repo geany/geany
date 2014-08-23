@@ -64,10 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define scintilla_send_message \
-	geany_functions->p_scintilla->scintilla_send_message
-#define scintilla_new \
-	geany_functions->p_scintilla->scintilla_new
 #define sci_send_command \
 	geany_functions->p_sci->sci_send_command
 #define sci_start_undo_action \

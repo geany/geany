@@ -163,7 +163,13 @@ static EditorFuncs editor_funcs = {
 	&editor_insert_snippet
 };
 
-static ScintillaFuncs scintilla_funcs = {
+
+struct
+{
+	long int	(*scintilla_send_message) (struct _ScintillaObject *sci, unsigned int iMessage,
+			long unsigned int wParam, long int lParam);
+	GtkWidget*	(*scintilla_new)(void);
+}  scintilla_funcs = {
 	&scintilla_send_message,
 	&scintilla_new
 };
