@@ -64,12 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define keybindings_send_command \
-	geany_functions->p_keybindings->keybindings_send_command
-#define keybindings_set_item \
-	geany_functions->p_keybindings->keybindings_set_item
-#define keybindings_get_item \
-	geany_functions->p_keybindings->keybindings_get_item
 #define tm_get_real_path \
 	geany_functions->p_tm->tm_get_real_path
 #define tm_source_file_new \

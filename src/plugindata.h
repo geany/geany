@@ -272,7 +272,7 @@ typedef struct GeanyFunctions
 	void						*p_dialogs;			/**< See dialogs.h */
 	void						*p_msgwindow;
 	void						*p_encodings;		/**< See encodings.h */
-	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
+	void						*p_keybindings;		/**< See keybindings.h */
 	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
 	struct SearchFuncs			*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
@@ -302,24 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-struct GeanyKeyGroup;
-/* avoid including keybindings.h */
-typedef void (*_GeanyKeyCallback) (guint key_id);
-
-/* See keybindings.h */
-typedef struct KeybindingFuncs
-{
-	void		(*keybindings_send_command) (guint group_id, guint key_id);
-	struct GeanyKeyBinding* (*keybindings_set_item) (struct GeanyKeyGroup *group, gsize key_id,
-					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
-					const gchar *name, const gchar *label, GtkWidget *menu_item);
-	struct GeanyKeyBinding* (*keybindings_get_item)(struct GeanyKeyGroup *group, gsize key_id);
-
-}
-KeybindingFuncs;
-
 
 /* See highlighting.h */
 typedef struct HighlightingFuncs

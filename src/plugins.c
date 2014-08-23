@@ -466,7 +466,15 @@ struct
 	&encodings_get_charset_from_index
 };
 
-static KeybindingFuncs keybindings_funcs = {
+
+struct
+{
+	void		(*keybindings_send_command) (guint group_id, guint key_id);
+	GeanyKeyBinding* (*keybindings_set_item) (GeanyKeyGroup *group, gsize key_id,
+					GeanyKeyCallback callback, guint key, GdkModifierType mod,
+					const gchar *name, const gchar *label, GtkWidget *menu_item);
+	GeanyKeyBinding* (*keybindings_get_item)(GeanyKeyGroup *group, gsize key_id);
+} keybindings_funcs = {
 	&keybindings_send_command,
 	&keybindings_set_item,
 	&keybindings_get_item
