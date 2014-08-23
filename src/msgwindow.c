@@ -104,6 +104,7 @@ void msgwin_show_hide_tabs(void)
 /** Sets the Messages path for opening any parsed filenames without absolute path
  * from message lines.
  * @param messages_dir The directory. **/
+GEANY_EXPORT
 void msgwin_set_messages_dir(const gchar *messages_dir)
 {
 	g_free(msgwindow.messages_dir);
@@ -286,6 +287,7 @@ static const GdkColor *get_color(gint msg_color)
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
+GEANY_EXPORT
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
 	gchar *string;
@@ -359,6 +361,7 @@ void msgwin_show_hide(gboolean show)
  *
  * @since 0.15
  **/
+GEANY_EXPORT
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar *string;
@@ -417,6 +420,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
+GEANY_EXPORT
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
@@ -1199,6 +1203,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
  *
  * @since 0.15
  **/
+GEANY_EXPORT
 void msgwin_switch_tab(gint tabnum, gboolean show)
 {
 	GtkWidget *widget = NULL;	/* widget to focus */
@@ -1233,6 +1238,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
  *
  * @since 0.15
  **/
+GEANY_EXPORT
 void msgwin_clear_tab(gint tabnum)
 {
 	GtkListStore *store = NULL;

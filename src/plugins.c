@@ -433,7 +433,18 @@ struct
 	&ui_lookup_widget
 };
 
-static MsgWinFuncs msgwin_funcs = {
+
+struct
+{
+	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
+	void		(*msgwin_status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+	void		(*msgwin_compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+	void		(*msgwin_msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
+				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
+	void		(*msgwin_clear_tab) (gint tabnum);
+	void		(*msgwin_switch_tab) (gint tabnum, gboolean show);
+	void		(*msgwin_set_messages_dir) (const gchar *messages_dir);
+} msgwin_funcs = {
 	&msgwin_status_add,
 	&msgwin_compiler_add,
 	&msgwin_msg_add,

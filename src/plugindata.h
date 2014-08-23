@@ -270,8 +270,7 @@ typedef struct GeanyFunctions
 	void						*p_ui;				/**< See ui_utils.h */
 	void						*p_support;
 	void						*p_dialogs;			/**< See dialogs.h */
-	/** @deprecated Use @ref GeanyFunctions::p_msgwin instead. */
-	struct MsgWinFuncs			*p_msgwindow;
+	void						*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
 	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
@@ -283,7 +282,7 @@ typedef struct GeanyFunctions
 	struct MainFuncs			*p_main;			/**< See main.h */
 	struct PluginFuncs			*p_plugin;			/**< See pluginutils.c */
 	void						*p_scintilla;		/**< See ScintillaFuncs */
-	struct MsgWinFuncs			*p_msgwin;			/**< See msgwindow.h */
+	void						*p_msgwin;			/**< See msgwindow.h */
 	struct StashFuncs			*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
 	struct BuildFuncs			*p_build;			/**< See build.h */
@@ -303,21 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See msgwindow.h */
-typedef struct MsgWinFuncs
-{
-	/* status_add() does not set the status bar - use ui->set_statusbar() instead. */
-	void		(*msgwin_status_add) (const gchar *format, ...) G_GNUC_PRINTF (1, 2);
-	void		(*msgwin_compiler_add) (gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*msgwin_msg_add) (gint msg_color, gint line, struct GeanyDocument *doc,
-				 const gchar *format, ...) G_GNUC_PRINTF (4, 5);
-	void		(*msgwin_clear_tab) (gint tabnum);
-	void		(*msgwin_switch_tab) (gint tabnum, gboolean show);
-	void		(*msgwin_set_messages_dir) (const gchar *messages_dir);
-}
-MsgWinFuncs;
 
 
 /* See encodings.h */
