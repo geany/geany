@@ -415,12 +415,12 @@ static DialogFuncs dialog_funcs = {
 	&dialogs_show_input
 };
 
-/* Macro to prevent confusing macro being generated in geanyfunctions.h */
-#define _lookup_widget_macro	ui_lookup_widget
-
 /* deprecated */
-static SupportFuncs support_funcs = {
-	&_lookup_widget_macro
+struct
+{
+	GtkWidget*	(*support_lookup_widget) (GtkWidget *widget, const gchar *widget_name);
+} support_funcs = {
+	&ui_lookup_widget
 };
 
 static MsgWinFuncs msgwin_funcs = {

@@ -268,8 +268,7 @@ typedef struct GeanyFunctions
 	void						*p_templates;		/**< See templates.h */
 	void						*p_utils;			/**< See utils.h */
 	void						*p_ui;				/**< See ui_utils.h */
-	/** @deprecated Use ui_lookup_widget() instead. */
-	struct SupportFuncs			*p_support;
+	void						*p_support;
 	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
 	/** @deprecated Use @ref GeanyFunctions::p_msgwin instead. */
 	struct MsgWinFuncs			*p_msgwindow;
@@ -318,14 +317,6 @@ typedef struct DialogFuncs
 				const gchar *default_text);
 }
 DialogFuncs;
-
-
-/* @deprecated Use ui_lookup_widget() instead. */
-typedef struct SupportFuncs
-{
-	GtkWidget*	(*support_lookup_widget) (GtkWidget *widget, const gchar *widget_name);
-}
-SupportFuncs;
 
 
 /* See msgwindow.h */
