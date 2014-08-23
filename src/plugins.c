@@ -453,7 +453,14 @@ struct
 	&msgwin_set_messages_dir
 };
 
-static EncodingFuncs encoding_funcs = {
+
+struct
+{
+	gchar*			(*encodings_convert_to_utf8) (const gchar *buffer, gssize size, gchar **used_encoding);
+	gchar* 			(*encodings_convert_to_utf8_from_charset) (const gchar *buffer, gssize size,
+													 const gchar *charset, gboolean fast);
+	const gchar*	(*encodings_get_charset_from_index) (gint idx);
+} encoding_funcs = {
 	&encodings_convert_to_utf8,
 	&encodings_convert_to_utf8_from_charset,
 	&encodings_get_charset_from_index

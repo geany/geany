@@ -52,6 +52,7 @@ def get_function_names():
                     or symbol.startswith('ui_')
                     or symbol.startswith('dialogs_')
                     or symbol.startswith('msgwin_')
+                    or symbol.startswith('encodings_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

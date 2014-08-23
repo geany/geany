@@ -271,7 +271,7 @@ typedef struct GeanyFunctions
 	void						*p_support;
 	void						*p_dialogs;			/**< See dialogs.h */
 	void						*p_msgwindow;
-	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
+	void						*p_encodings;		/**< See encodings.h */
 	struct KeybindingFuncs		*p_keybindings;		/**< See keybindings.h */
 	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
 	struct SearchFuncs			*p_search;			/**< See search.h */
@@ -302,17 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See encodings.h */
-typedef struct EncodingFuncs
-{
-	gchar*			(*encodings_convert_to_utf8) (const gchar *buffer, gssize size, gchar **used_encoding);
-	gchar* 			(*encodings_convert_to_utf8_from_charset) (const gchar *buffer, gssize size,
-													 const gchar *charset, gboolean fast);
-	const gchar*	(*encodings_get_charset_from_index) (gint idx);
-}
-EncodingFuncs;
 
 
 struct GeanyKeyGroup;

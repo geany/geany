@@ -64,12 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define encodings_convert_to_utf8 \
-	geany_functions->p_encodings->encodings_convert_to_utf8
-#define encodings_convert_to_utf8_from_charset \
-	geany_functions->p_encodings->encodings_convert_to_utf8_from_charset
-#define encodings_get_charset_from_index \
-	geany_functions->p_encodings->encodings_get_charset_from_index
 #define keybindings_send_command \
 	geany_functions->p_keybindings->keybindings_send_command
 #define keybindings_set_item \
