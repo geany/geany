@@ -64,8 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define templates_get_template_fileheader \
-	geany_functions->p_templates->templates_get_template_fileheader
 #define utils_str_equal \
 	geany_functions->p_utils->utils_str_equal
 #define utils_string_replace_all \

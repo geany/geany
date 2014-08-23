@@ -288,7 +288,11 @@ struct
 	&sci_get_lexer
 };
 
-static TemplateFuncs template_funcs = {
+/* See templates.h */
+struct
+{
+	gchar*		(*templates_get_template_fileheader) (gint filetype_idx, const gchar *fname);
+} template_funcs = {
 	&templates_get_template_fileheader
 };
 

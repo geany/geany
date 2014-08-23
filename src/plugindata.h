@@ -265,7 +265,7 @@ typedef struct GeanyFunctions
 {
 	void						*p_document;		/**< See document.h */
 	void						*p_sci;				/**< See sciwrappers.h */
-	struct TemplateFuncs		*p_templates;		/**< See templates.h */
+	void						*p_templates;		/**< See templates.h */
 	struct UtilsFuncs			*p_utils;			/**< See utils.h */
 	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
 	/** @deprecated Use ui_lookup_widget() instead. */
@@ -294,14 +294,6 @@ GeanyFunctions;
 
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
-/* See templates.h */
-typedef struct TemplateFuncs
-{
-	gchar*		(*templates_get_template_fileheader) (gint filetype_idx, const gchar *fname);
-}
-TemplateFuncs;
-
 
 /* See utils.h */
 typedef struct UtilsFuncs
