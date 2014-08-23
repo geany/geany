@@ -50,6 +50,7 @@ def get_function_names():
                     or symbol.startswith('templates_')
                     or symbol.startswith('utils_')
                     or symbol.startswith('ui_')
+                    or symbol.startswith('dialogs_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

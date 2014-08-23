@@ -269,7 +269,7 @@ typedef struct GeanyFunctions
 	void						*p_utils;			/**< See utils.h */
 	void						*p_ui;				/**< See ui_utils.h */
 	void						*p_support;
-	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
+	void						*p_dialogs;			/**< See dialogs.h */
 	/** @deprecated Use @ref GeanyFunctions::p_msgwin instead. */
 	struct MsgWinFuncs			*p_msgwindow;
 	struct EncodingFuncs		*p_encodings;		/**< See encodings.h */
@@ -303,20 +303,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See dialogs.h */
-typedef struct DialogFuncs
-{
-	gboolean	(*dialogs_show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
-	void		(*dialogs_show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
-	gboolean	(*dialogs_show_save_as) (void);
-	gboolean	(*dialogs_show_input_numeric) (const gchar *title, const gchar *label_text,
-				 gdouble *value, gdouble min, gdouble max, gdouble step);
-	gchar*		(*dialogs_show_input)(const gchar *title, GtkWindow *parent, const gchar *label_text,
-				const gchar *default_text);
-}
-DialogFuncs;
 
 
 /* See msgwindow.h */

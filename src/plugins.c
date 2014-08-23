@@ -407,7 +407,17 @@ struct
 	&ui_lookup_stock_label
 };
 
-static DialogFuncs dialog_funcs = {
+
+struct
+{
+	gboolean	(*dialogs_show_question) (const gchar *text, ...) G_GNUC_PRINTF (1, 2);
+	void		(*dialogs_show_msgbox) (GtkMessageType type, const gchar *text, ...) G_GNUC_PRINTF (2, 3);
+	gboolean	(*dialogs_show_save_as) (void);
+	gboolean	(*dialogs_show_input_numeric) (const gchar *title, const gchar *label_text,
+				 gdouble *value, gdouble min, gdouble max, gdouble step);
+	gchar*		(*dialogs_show_input)(const gchar *title, GtkWindow *parent, const gchar *label_text,
+				const gchar *default_text);
+} dialog_funcs = {
 	&dialogs_show_question,
 	&dialogs_show_msgbox,
 	&dialogs_show_save_as,

@@ -64,16 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define dialogs_show_question \
-	geany_functions->p_dialogs->dialogs_show_question
-#define dialogs_show_msgbox \
-	geany_functions->p_dialogs->dialogs_show_msgbox
-#define dialogs_show_save_as \
-	geany_functions->p_dialogs->dialogs_show_save_as
-#define dialogs_show_input_numeric \
-	geany_functions->p_dialogs->dialogs_show_input_numeric
-#define dialogs_show_input \
-	geany_functions->p_dialogs->dialogs_show_input
 #define msgwin_status_add \
 	geany_functions->p_msgwin->msgwin_status_add
 #define msgwin_compiler_add \
