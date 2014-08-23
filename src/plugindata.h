@@ -267,7 +267,7 @@ typedef struct GeanyFunctions
 	void						*p_sci;				/**< See sciwrappers.h */
 	void						*p_templates;		/**< See templates.h */
 	void						*p_utils;			/**< See utils.h */
-	struct UIUtilsFuncs			*p_ui;				/**< See ui_utils.h */
+	void						*p_ui;				/**< See ui_utils.h */
 	/** @deprecated Use ui_lookup_widget() instead. */
 	struct SupportFuncs			*p_support;
 	struct DialogFuncs			*p_dialogs;			/**< See dialogs.h */
@@ -304,36 +304,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See ui_utils.h */
-typedef struct UIUtilsFuncs
-{
-	GtkWidget*	(*ui_dialog_vbox_new) (GtkDialog *dialog);
-	GtkWidget*	(*ui_frame_new_with_alignment) (const gchar *label_text, GtkWidget **alignment);
-	void		(*ui_set_statusbar) (gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
-	void		(*ui_table_add_row) (GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
-	GtkWidget*	(*ui_path_box_new) (const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
-	GtkWidget*	(*ui_button_new_with_image) (const gchar *stock_id, const gchar *text);
-	void		(*ui_add_document_sensitive) (GtkWidget *widget);
-	void		(*ui_widget_set_tooltip_text) (GtkWidget *widget, const gchar *text);
-	GtkWidget*	(*ui_image_menu_item_new) (const gchar *stock_id, const gchar *label);
-	GtkWidget*	(*ui_lookup_widget) (GtkWidget *widget, const gchar *widget_name);
-	void		(*ui_progress_bar_start) (const gchar *text);
-	void		(*ui_progress_bar_stop) (void);
-	void		(*ui_entry_add_clear_icon) (GtkEntry *entry);
-	void		(*ui_menu_add_document_items) (GtkMenu *menu, struct GeanyDocument *active,
-				GCallback callback);
-	void		(*ui_widget_modify_font_from_string) (GtkWidget *widget, const gchar *str);
-	gboolean	(*ui_is_keyval_enter_or_return) (guint keyval);
-	gint		(*ui_get_gtk_settings_integer) (const gchar *property_name, gint default_value);
-	void		(*ui_combo_box_add_to_history) (GtkComboBoxText *combo_entry,
-				const gchar *text, gint history_len);
-	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
-				GCallback callback, GCompareFunc compare_func);
-	const gchar* (*ui_lookup_stock_label)(const gchar *stock_id);
-}
-UIUtilsFuncs;
 
 
 /* See dialogs.h */

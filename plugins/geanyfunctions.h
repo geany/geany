@@ -64,46 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define ui_dialog_vbox_new \
-	geany_functions->p_ui->ui_dialog_vbox_new
-#define ui_frame_new_with_alignment \
-	geany_functions->p_ui->ui_frame_new_with_alignment
-#define ui_set_statusbar \
-	geany_functions->p_ui->ui_set_statusbar
-#define ui_table_add_row \
-	geany_functions->p_ui->ui_table_add_row
-#define ui_path_box_new \
-	geany_functions->p_ui->ui_path_box_new
-#define ui_button_new_with_image \
-	geany_functions->p_ui->ui_button_new_with_image
-#define ui_add_document_sensitive \
-	geany_functions->p_ui->ui_add_document_sensitive
-#define ui_widget_set_tooltip_text \
-	geany_functions->p_ui->ui_widget_set_tooltip_text
-#define ui_image_menu_item_new \
-	geany_functions->p_ui->ui_image_menu_item_new
-#define ui_lookup_widget \
-	geany_functions->p_ui->ui_lookup_widget
-#define ui_progress_bar_start \
-	geany_functions->p_ui->ui_progress_bar_start
-#define ui_progress_bar_stop \
-	geany_functions->p_ui->ui_progress_bar_stop
-#define ui_entry_add_clear_icon \
-	geany_functions->p_ui->ui_entry_add_clear_icon
-#define ui_menu_add_document_items \
-	geany_functions->p_ui->ui_menu_add_document_items
-#define ui_widget_modify_font_from_string \
-	geany_functions->p_ui->ui_widget_modify_font_from_string
-#define ui_is_keyval_enter_or_return \
-	geany_functions->p_ui->ui_is_keyval_enter_or_return
-#define ui_get_gtk_settings_integer \
-	geany_functions->p_ui->ui_get_gtk_settings_integer
-#define ui_combo_box_add_to_history \
-	geany_functions->p_ui->ui_combo_box_add_to_history
-#define ui_menu_add_document_items_sorted \
-	geany_functions->p_ui->ui_menu_add_document_items_sorted
-#define ui_lookup_stock_label \
-	geany_functions->p_ui->ui_lookup_stock_label
 #define dialogs_show_question \
 	geany_functions->p_dialogs->dialogs_show_question
 #define dialogs_show_msgbox \
