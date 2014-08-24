@@ -64,8 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define navqueue_goto_line \
-	geany_functions->p_navqueue->navqueue_goto_line
 #define main_reload_configuration \
 	geany_functions->p_main->main_reload_configuration
 #define main_locale_init \

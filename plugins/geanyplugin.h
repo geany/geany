@@ -39,6 +39,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "msgwindow.h"
+#include "navqueue.h"
 #include "plugindata.h"
 #include "prefs.h"
 #include "project.h"

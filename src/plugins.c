@@ -541,7 +541,12 @@ struct
 	&filetypes_get_sorted_by_name
 };
 
-static NavQueueFuncs navqueue_funcs = {
+
+struct
+{
+	gboolean		(*navqueue_goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
+					 gint line);
+} navqueue_funcs = {
 	&navqueue_goto_line
 };
 

@@ -277,7 +277,7 @@ typedef struct GeanyFunctions
 	void						*p_search;			/**< See search.h */
 	void						*p_highlighting;	/**< See highlighting.h */
 	void						*p_filetypes;		/**< See filetypes.h */
-	struct NavQueueFuncs		*p_navqueue;		/**< See navqueue.h */
+	void						*p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs			*p_editor;			/**< See editor.h */
 	struct MainFuncs			*p_main;			/**< See main.h */
 	struct PluginFuncs			*p_plugin;			/**< See pluginutils.c */
@@ -302,15 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See navqueue.h */
-typedef struct NavQueueFuncs
-{
-	gboolean		(*navqueue_goto_line) (struct GeanyDocument *old_doc, struct GeanyDocument *new_doc,
-					 gint line);
-}
-NavQueueFuncs;
 
 
 struct GeanyEditor;

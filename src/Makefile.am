@@ -74,6 +74,7 @@ geany_include_HEADERS = \
 	highlighting.h \
 	keybindings.h \
 	msgwindow.h \
+	navqueue.h \
 	plugindata.h \
 	prefs.h \
 	project.h \
