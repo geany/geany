@@ -34,36 +34,6 @@
 	geany_functions->p_plugin->plugin_idle_add
 #define plugin_builder_connect_signals \
 	geany_functions->p_plugin->plugin_builder_connect_signals
-#define editor_get_indent_prefs \
-	geany_functions->p_editor->editor_get_indent_prefs
-#define editor_create_widget \
-	geany_functions->p_editor->editor_create_widget
-#define editor_indicator_set_on_range \
-	geany_functions->p_editor->editor_indicator_set_on_range
-#define editor_indicator_set_on_line \
-	geany_functions->p_editor->editor_indicator_set_on_line
-#define editor_indicator_clear \
-	geany_functions->p_editor->editor_indicator_clear
-#define editor_set_indent_type \
-	geany_functions->p_editor->editor_set_indent_type
-#define editor_get_word_at_pos \
-	geany_functions->p_editor->editor_get_word_at_pos
-#define editor_get_eol_char_name \
-	geany_functions->p_editor->editor_get_eol_char_name
-#define editor_get_eol_char_len \
-	geany_functions->p_editor->editor_get_eol_char_len
-#define editor_get_eol_char \
-	geany_functions->p_editor->editor_get_eol_char
-#define editor_insert_text_block \
-	geany_functions->p_editor->editor_insert_text_block
-#define editor_get_eol_char_mode \
-	geany_functions->p_editor->editor_get_eol_char_mode
-#define editor_goto_pos \
-	geany_functions->p_editor->editor_goto_pos
-#define editor_find_snippet \
-	geany_functions->p_editor->editor_find_snippet
-#define editor_insert_snippet \
-	geany_functions->p_editor->editor_insert_snippet
 #define main_reload_configuration \
 	geany_functions->p_main->main_reload_configuration
 #define main_locale_init \

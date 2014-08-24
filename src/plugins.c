@@ -145,7 +145,33 @@ struct
 	&document_find_by_id
 };
 
-static EditorFuncs editor_funcs = {
+
+struct
+{
+	const GeanyIndentPrefs* (*editor_get_indent_prefs)(GeanyEditor *editor);
+	ScintillaObject* (*editor_create_widget)(GeanyEditor *editor);
+
+	void	(*editor_indicator_set_on_range) (GeanyEditor *editor, gint indic, gint start, gint end);
+	void	(*editor_indicator_set_on_line) (GeanyEditor *editor, gint indic, gint line);
+	void	(*editor_indicator_clear) (GeanyEditor *editor, gint indic);
+
+	void	(*editor_set_indent_type)(GeanyEditor *editor, GeanyIndentType type);
+	gchar*	(*editor_get_word_at_pos) (GeanyEditor *editor, gint pos, const gchar *wordchars);
+
+	const gchar*	(*editor_get_eol_char_name) (GeanyEditor *editor);
+	gint			(*editor_get_eol_char_len) (GeanyEditor *editor);
+	const gchar*	(*editor_get_eol_char) (GeanyEditor *editor);
+
+	void	(*editor_insert_text_block) (GeanyEditor *editor, const gchar *text,
+			 gint insert_pos, gint cursor_index, gint newline_indent_size,
+			 gboolean replace_newlines);
+
+	gint	(*editor_get_eol_char_mode) (GeanyEditor *editor);
+	gboolean (*editor_goto_pos) (GeanyEditor *editor, gint pos, gboolean mark);
+
+	const gchar* (*editor_find_snippet) (GeanyEditor *editor, const gchar *snippet_name);
+	void	(*editor_insert_snippet) (GeanyEditor *editor, gint pos, const gchar *snippet);
+} editor_funcs = {
 	&editor_get_indent_prefs,
 	&editor_create_widget,
 	&editor_indicator_set_on_range,
