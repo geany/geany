@@ -273,7 +273,7 @@ typedef struct GeanyFunctions
 	void						*p_msgwindow;
 	void						*p_encodings;		/**< See encodings.h */
 	void						*p_keybindings;		/**< See keybindings.h */
-	struct TagManagerFuncs		*p_tm;				/**< See tagmanager/src */
+	void						*p_tm;				/**< See tagmanager/src */
 	struct SearchFuncs			*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
@@ -335,20 +335,6 @@ typedef struct SearchFuncs
 	void		(*search_show_find_in_files_dialog) (const gchar *dir);
 }
 SearchFuncs;
-
-
-/* See tagmanager/include */
-typedef struct TagManagerFuncs
-{
-	gchar*			(*tm_get_real_path) (const gchar *file_name);
-	TMWorkObject*	(*tm_source_file_new) (const char *file_name, gboolean update, const char *name);
-	gboolean		(*tm_workspace_add_object) (TMWorkObject *work_object);
-	gboolean		(*tm_source_file_update) (TMWorkObject *source_file, gboolean force,
-					 gboolean recurse, gboolean update_parent);
-	void			(*tm_work_object_free) (gpointer work_object);
-	gboolean		(*tm_workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
-}
-TagManagerFuncs;
 
 
 /* See navqueue.h */
