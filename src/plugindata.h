@@ -283,7 +283,7 @@ typedef struct GeanyFunctions
 	void						*p_plugin;			/**< See pluginutils.c */
 	void						*p_scintilla;		/**< See ScintillaFuncs */
 	void						*p_msgwin;			/**< See msgwindow.h */
-	struct StashFuncs			*p_stash;			/**< See stash.h */
+	void						*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
 	struct BuildFuncs			*p_build;			/**< See build.h */
 }
@@ -292,49 +292,6 @@ GeanyFunctions;
 
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
-
-struct StashGroup;
-
-/* See stash.h */
-typedef struct StashFuncs
-{
-	struct StashGroup *(*stash_group_new)(const gchar *name);
-	void (*stash_group_add_boolean)(struct StashGroup *group, gboolean *setting,
-			const gchar *key_name, gboolean default_value);
-	void (*stash_group_add_integer)(struct StashGroup *group, gint *setting,
-			const gchar *key_name, gint default_value);
-	void (*stash_group_add_string)(struct StashGroup *group, gchar **setting,
-			const gchar *key_name, const gchar *default_value);
-	void (*stash_group_add_string_vector)(struct StashGroup *group, gchar ***setting,
-			const gchar *key_name, const gchar **default_value);
-	void (*stash_group_load_from_key_file)(struct StashGroup *group, GKeyFile *keyfile);
-	void (*stash_group_save_to_key_file)(struct StashGroup *group, GKeyFile *keyfile);
-	void (*stash_group_free)(struct StashGroup *group);
-	gboolean (*stash_group_load_from_file)(struct StashGroup *group, const gchar *filename);
-	gint (*stash_group_save_to_file)(struct StashGroup *group, const gchar *filename,
-			GKeyFileFlags flags);
-	void (*stash_group_add_toggle_button)(struct StashGroup *group, gboolean *setting,
-			const gchar *key_name, gboolean default_value, gconstpointer widget_id);
-	void (*stash_group_add_radio_buttons)(struct StashGroup *group, gint *setting,
-			const gchar *key_name, gint default_value,
-			gconstpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
-	void (*stash_group_add_spin_button_integer)(struct StashGroup *group, gint *setting,
-			const gchar *key_name, gint default_value, gconstpointer widget_id);
-	void (*stash_group_add_combo_box)(struct StashGroup *group, gint *setting,
-			const gchar *key_name, gint default_value, gconstpointer widget_id);
-	void (*stash_group_add_combo_box_entry)(struct StashGroup *group, gchar **setting,
-			const gchar *key_name, const gchar *default_value, gconstpointer widget_id);
-	void (*stash_group_add_entry)(struct StashGroup *group, gchar **setting,
-			const gchar *key_name, const gchar *default_value, gconstpointer widget_id);
-	void (*stash_group_add_widget_property)(struct StashGroup *group, gpointer setting,
-			const gchar *key_name, gpointer default_value, gconstpointer widget_id,
-			const gchar *property_name, GType type);
-	void (*stash_group_display)(struct StashGroup *group, GtkWidget *owner);
-	void (*stash_group_update)(struct StashGroup *group, GtkWidget *owner);
-	void (*stash_group_free_settings)(struct StashGroup *group);
-}
-StashFuncs;
 
 
 /* See symbols.h */

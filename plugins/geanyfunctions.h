@@ -16,46 +16,6 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
 
-#define stash_group_new \
-	geany_functions->p_stash->stash_group_new
-#define stash_group_add_boolean \
-	geany_functions->p_stash->stash_group_add_boolean
-#define stash_group_add_integer \
-	geany_functions->p_stash->stash_group_add_integer
-#define stash_group_add_string \
-	geany_functions->p_stash->stash_group_add_string
-#define stash_group_add_string_vector \
-	geany_functions->p_stash->stash_group_add_string_vector
-#define stash_group_load_from_key_file \
-	geany_functions->p_stash->stash_group_load_from_key_file
-#define stash_group_save_to_key_file \
-	geany_functions->p_stash->stash_group_save_to_key_file
-#define stash_group_free \
-	geany_functions->p_stash->stash_group_free
-#define stash_group_load_from_file \
-	geany_functions->p_stash->stash_group_load_from_file
-#define stash_group_save_to_file \
-	geany_functions->p_stash->stash_group_save_to_file
-#define stash_group_add_toggle_button \
-	geany_functions->p_stash->stash_group_add_toggle_button
-#define stash_group_add_radio_buttons \
-	geany_functions->p_stash->stash_group_add_radio_buttons
-#define stash_group_add_spin_button_integer \
-	geany_functions->p_stash->stash_group_add_spin_button_integer
-#define stash_group_add_combo_box \
-	geany_functions->p_stash->stash_group_add_combo_box
-#define stash_group_add_combo_box_entry \
-	geany_functions->p_stash->stash_group_add_combo_box_entry
-#define stash_group_add_entry \
-	geany_functions->p_stash->stash_group_add_entry
-#define stash_group_add_widget_property \
-	geany_functions->p_stash->stash_group_add_widget_property
-#define stash_group_display \
-	geany_functions->p_stash->stash_group_display
-#define stash_group_update \
-	geany_functions->p_stash->stash_group_update
-#define stash_group_free_settings \
-	geany_functions->p_stash->stash_group_free_settings
 #define symbols_get_context_separator \
 	geany_functions->p_symbols->symbols_get_context_separator
 #define build_activate_menu_item \

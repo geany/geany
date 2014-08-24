@@ -603,7 +603,44 @@ struct
 	&main_is_realized
 };
 
-static StashFuncs stash_funcs = {
+
+struct
+{
+	StashGroup *(*stash_group_new)(const gchar *name);
+	void (*stash_group_add_boolean)(StashGroup *group, gboolean *setting,
+			const gchar *key_name, gboolean default_value);
+	void (*stash_group_add_integer)(StashGroup *group, gint *setting,
+			const gchar *key_name, gint default_value);
+	void (*stash_group_add_string)(StashGroup *group, gchar **setting,
+			const gchar *key_name, const gchar *default_value);
+	void (*stash_group_add_string_vector)(StashGroup *group, gchar ***setting,
+			const gchar *key_name, const gchar **default_value);
+	void (*stash_group_load_from_key_file)(StashGroup *group, GKeyFile *keyfile);
+	void (*stash_group_save_to_key_file)(StashGroup *group, GKeyFile *keyfile);
+	void (*stash_group_free)(StashGroup *group);
+	gboolean (*stash_group_load_from_file)(StashGroup *group, const gchar *filename);
+	gint (*stash_group_save_to_file)(StashGroup *group, const gchar *filename,
+			GKeyFileFlags flags);
+	void (*stash_group_add_toggle_button)(StashGroup *group, gboolean *setting,
+			const gchar *key_name, gboolean default_value, gconstpointer widget_id);
+	void (*stash_group_add_radio_buttons)(StashGroup *group, gint *setting,
+			const gchar *key_name, gint default_value,
+			gconstpointer widget_id, gint enum_id, ...) G_GNUC_NULL_TERMINATED;
+	void (*stash_group_add_spin_button_integer)(StashGroup *group, gint *setting,
+			const gchar *key_name, gint default_value, gconstpointer widget_id);
+	void (*stash_group_add_combo_box)(StashGroup *group, gint *setting,
+			const gchar *key_name, gint default_value, gconstpointer widget_id);
+	void (*stash_group_add_combo_box_entry)(StashGroup *group, gchar **setting,
+			const gchar *key_name, const gchar *default_value, gconstpointer widget_id);
+	void (*stash_group_add_entry)(StashGroup *group, gchar **setting,
+			const gchar *key_name, const gchar *default_value, gconstpointer widget_id);
+	void (*stash_group_add_widget_property)(StashGroup *group, gpointer setting,
+			const gchar *key_name, gpointer default_value, gconstpointer widget_id,
+			const gchar *property_name, GType type);
+	void (*stash_group_display)(StashGroup *group, GtkWidget *owner);
+	void (*stash_group_update)(StashGroup *group, GtkWidget *owner);
+	void (*stash_group_free_settings)(StashGroup *group);
+} stash_funcs = {
 	&stash_group_new,
 	&stash_group_add_boolean,
 	&stash_group_add_integer,
