@@ -57,6 +57,7 @@ def get_function_names():
                     or symbol.startswith('tm_')
                     or symbol.startswith('search_')
                     or symbol.startswith('highlighting_')
+                    or symbol.startswith('filetypes_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

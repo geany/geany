@@ -64,16 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define filetypes_detect_from_file \
-	geany_functions->p_filetypes->filetypes_detect_from_file
-#define filetypes_lookup_by_name \
-	geany_functions->p_filetypes->filetypes_lookup_by_name
-#define filetypes_index \
-	geany_functions->p_filetypes->filetypes_index
-#define filetypes_get_display_name \
-	geany_functions->p_filetypes->filetypes_get_display_name
-#define filetypes_get_sorted_by_name \
-	geany_functions->p_filetypes->filetypes_get_sorted_by_name
 #define navqueue_goto_line \
 	geany_functions->p_navqueue->navqueue_goto_line
 #define main_reload_configuration \

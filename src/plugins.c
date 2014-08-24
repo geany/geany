@@ -523,7 +523,17 @@ struct
 	&highlighting_is_code_style
 };
 
-static FiletypeFuncs filetype_funcs = {
+
+struct
+{
+	GeanyFiletype*	(*filetypes_detect_from_file) (const gchar *utf8_filename);
+	GeanyFiletype*	(*filetypes_lookup_by_name) (const gchar *name);
+	GeanyFiletype*	(*filetypes_index)(gint idx);
+	const gchar*	(*filetypes_get_display_name)(GeanyFiletype *ft);
+	const GSList*	(*filetypes_get_sorted_by_name)(void);
+	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
+	 * appended functions */
+} filetype_funcs = {
 	&filetypes_detect_from_file,
 	&filetypes_lookup_by_name,
 	&filetypes_index,

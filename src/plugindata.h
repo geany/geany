@@ -276,7 +276,7 @@ typedef struct GeanyFunctions
 	void						*p_tm;				/**< See tagmanager/src */
 	void						*p_search;			/**< See search.h */
 	void						*p_highlighting;	/**< See highlighting.h */
-	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
+	void						*p_filetypes;		/**< See filetypes.h */
 	struct NavQueueFuncs		*p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs			*p_editor;			/**< See editor.h */
 	struct MainFuncs			*p_main;			/**< See main.h */
@@ -302,20 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-
-/* See filetypes.h */
-typedef struct FiletypeFuncs
-{
-	GeanyFiletype*	(*filetypes_detect_from_file) (const gchar *utf8_filename);
-	GeanyFiletype*	(*filetypes_lookup_by_name) (const gchar *name);
-	GeanyFiletype*	(*filetypes_index)(gint idx);
-	const gchar*	(*filetypes_get_display_name)(GeanyFiletype *ft);
-	const GSList*	(*filetypes_get_sorted_by_name)(void);
-	/* Remember to convert any filetype_id arguments to GeanyFiletype pointers in any
-	 * appended functions */
-}
-FiletypeFuncs;
 
 
 /* See navqueue.h */
