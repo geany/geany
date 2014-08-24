@@ -84,6 +84,7 @@ geany_include_HEADERS = \
 	search.h \
 	stash.h \
 	support.h \
+	symbols.h \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \

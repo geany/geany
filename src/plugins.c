@@ -663,7 +663,11 @@ struct
 	&stash_group_free_settings
 };
 
-static SymbolsFuncs symbols_funcs = {
+
+struct
+{
+	const gchar*	(*symbols_get_context_separator)(gint ft_id);
+} symbols_funcs = {
 	&symbols_get_context_separator
 };
 

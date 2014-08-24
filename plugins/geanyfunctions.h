@@ -16,8 +16,6 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
 
-#define symbols_get_context_separator \
-	geany_functions->p_symbols->symbols_get_context_separator
 #define build_activate_menu_item \
 	geany_functions->p_build->build_activate_menu_item
 #define build_get_current_menu_item \

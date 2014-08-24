@@ -284,7 +284,7 @@ typedef struct GeanyFunctions
 	void						*p_scintilla;		/**< See ScintillaFuncs */
 	void						*p_msgwin;			/**< See msgwindow.h */
 	void						*p_stash;			/**< See stash.h */
-	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
+	void						*p_symbols;			/**< See symbols.h */
 	struct BuildFuncs			*p_build;			/**< See build.h */
 }
 GeanyFunctions;
@@ -293,13 +293,6 @@ GeanyFunctions;
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
 
-
-/* See symbols.h */
-typedef struct SymbolsFuncs
-{
-	const gchar*	(*symbols_get_context_separator)(gint ft_id);
-}
-SymbolsFuncs;
 
 /* See build.h */
 typedef struct BuildFuncs

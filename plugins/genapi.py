@@ -63,6 +63,7 @@ def get_function_names():
                     or symbol.startswith('plugin_')
                     or symbol.startswith('main_')
                     or symbol.startswith('stash_')
+                    or symbol.startswith('symbols_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

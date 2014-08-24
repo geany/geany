@@ -49,6 +49,7 @@
 #include "search.h"
 #include "stash.h"
 #include "support.h"
+#include "symbols.h"
 #include "templates.h"
 #include "toolbar.h"
 #include "ui_utils.h"
