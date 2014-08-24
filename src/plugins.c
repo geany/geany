@@ -499,7 +499,11 @@ struct
 	&tm_workspace_remove_object
 };
 
-static SearchFuncs search_funcs = {
+
+struct
+{
+	void		(*search_show_find_in_files_dialog) (const gchar *dir);
+} search_funcs = {
 	&search_show_find_in_files_dialog
 };
 

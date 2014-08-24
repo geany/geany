@@ -274,7 +274,7 @@ typedef struct GeanyFunctions
 	void						*p_encodings;		/**< See encodings.h */
 	void						*p_keybindings;		/**< See keybindings.h */
 	void						*p_tm;				/**< See tagmanager/src */
-	struct SearchFuncs			*p_search;			/**< See search.h */
+	void						*p_search;			/**< See search.h */
 	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
 	struct NavQueueFuncs		*p_navqueue;		/**< See navqueue.h */
@@ -327,14 +327,6 @@ typedef struct FiletypeFuncs
 	 * appended functions */
 }
 FiletypeFuncs;
-
-
-/* See search.h */
-typedef struct SearchFuncs
-{
-	void		(*search_show_find_in_files_dialog) (const gchar *dir);
-}
-SearchFuncs;
 
 
 /* See navqueue.h */

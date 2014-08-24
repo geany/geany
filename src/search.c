@@ -1034,6 +1034,7 @@ static void create_fif_dialog(void)
  *
  * @since 0.14, plugin API 53
  */
+GEANY_EXPORT
 void search_show_find_in_files_dialog(const gchar *dir)
 {
 	search_show_find_in_files_dialog_full(NULL, dir);

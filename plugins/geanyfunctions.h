@@ -64,8 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define search_show_find_in_files_dialog \
-	geany_functions->p_search->search_show_find_in_files_dialog
 #define highlighting_get_style \
 	geany_functions->p_highlighting->highlighting_get_style
 #define highlighting_set_styles \
