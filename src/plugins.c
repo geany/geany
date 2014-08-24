@@ -507,7 +507,15 @@ struct
 	&search_show_find_in_files_dialog
 };
 
-static HighlightingFuncs highlighting_funcs = {
+
+struct
+{
+	const struct GeanyLexerStyle* (*highlighting_get_style) (gint ft_id, gint style_id);
+	void		(*highlighting_set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
+	gboolean	(*highlighting_is_string_style) (gint lexer, gint style);
+	gboolean	(*highlighting_is_comment_style) (gint lexer, gint style);
+	gboolean	(*highlighting_is_code_style) (gint lexer, gint style);
+} highlighting_funcs = {
 	&highlighting_get_style,
 	&highlighting_set_styles,
 	&highlighting_is_string_style,

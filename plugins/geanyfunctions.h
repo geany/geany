@@ -64,16 +64,6 @@
 	geany_functions->p_editor->editor_find_snippet
 #define editor_insert_snippet \
 	geany_functions->p_editor->editor_insert_snippet
-#define highlighting_get_style \
-	geany_functions->p_highlighting->highlighting_get_style
-#define highlighting_set_styles \
-	geany_functions->p_highlighting->highlighting_set_styles
-#define highlighting_is_string_style \
-	geany_functions->p_highlighting->highlighting_is_string_style
-#define highlighting_is_comment_style \
-	geany_functions->p_highlighting->highlighting_is_comment_style
-#define highlighting_is_code_style \
-	geany_functions->p_highlighting->highlighting_is_code_style
 #define filetypes_detect_from_file \
 	geany_functions->p_filetypes->filetypes_detect_from_file
 #define filetypes_lookup_by_name \

@@ -275,7 +275,7 @@ typedef struct GeanyFunctions
 	void						*p_keybindings;		/**< See keybindings.h */
 	void						*p_tm;				/**< See tagmanager/src */
 	void						*p_search;			/**< See search.h */
-	struct HighlightingFuncs	*p_highlighting;	/**< See highlighting.h */
+	void						*p_highlighting;	/**< See highlighting.h */
 	struct FiletypeFuncs		*p_filetypes;		/**< See filetypes.h */
 	struct NavQueueFuncs		*p_navqueue;		/**< See navqueue.h */
 	struct EditorFuncs			*p_editor;			/**< See editor.h */
@@ -302,17 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-/* See highlighting.h */
-typedef struct HighlightingFuncs
-{
-	const struct GeanyLexerStyle* (*highlighting_get_style) (gint ft_id, gint style_id);
-	void		(*highlighting_set_styles) (struct _ScintillaObject *sci, struct GeanyFiletype *ft);
-	gboolean	(*highlighting_is_string_style) (gint lexer, gint style);
-	gboolean	(*highlighting_is_comment_style) (gint lexer, gint style);
-	gboolean	(*highlighting_is_code_style) (gint lexer, gint style);
-}
-HighlightingFuncs;
 
 
 /* See filetypes.h */
