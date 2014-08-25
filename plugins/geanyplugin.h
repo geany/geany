@@ -40,6 +40,7 @@
 #include "keybindings.h"
 #include "msgwindow.h"
 #include "navqueue.h"
+#include "pluginutils.h"
 #include "plugindata.h"
 #include "prefs.h"
 #include "project.h"

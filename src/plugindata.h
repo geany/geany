@@ -280,7 +280,7 @@ typedef struct GeanyFunctions
 	void						*p_navqueue;		/**< See navqueue.h */
 	void						*p_editor;			/**< See editor.h */
 	struct MainFuncs			*p_main;			/**< See main.h */
-	struct PluginFuncs			*p_plugin;			/**< See pluginutils.c */
+	void						*p_plugin;			/**< See pluginutils.c */
 	void						*p_scintilla;		/**< See ScintillaFuncs */
 	void						*p_msgwin;			/**< See msgwindow.h */
 	struct StashFuncs			*p_stash;			/**< See stash.h */
@@ -302,30 +302,6 @@ typedef struct MainFuncs
 	gboolean	(*main_is_realized) (void);
 }
 MainFuncs;
-
-/* avoid including keybindings.h */
-typedef gboolean (*_GeanyKeyGroupCallback) (guint key_id);
-
-/* See pluginutils.c */
-typedef struct PluginFuncs
-{
-	void	(*plugin_add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
-	void	(*plugin_module_make_resident) (GeanyPlugin *plugin);
-	void	(*plugin_signal_connect) (GeanyPlugin *plugin,
-		GObject *object, const gchar *signal_name, gboolean after,
-		GCallback callback, gpointer user_data);
-	struct GeanyKeyGroup* (*plugin_set_key_group)(GeanyPlugin *plugin,
-		const gchar *section_name, gsize count, _GeanyKeyGroupCallback callback);
-	void	(*plugin_show_configure)(GeanyPlugin *plugin);
-	guint	(*plugin_timeout_add) (GeanyPlugin *plugin, guint interval, GSourceFunc function,
-		gpointer data);
-	guint	(*plugin_timeout_add_seconds) (GeanyPlugin *plugin, guint interval,
-		GSourceFunc function, gpointer data);
-	guint	(*plugin_idle_add) (GeanyPlugin *plugin, GSourceFunc function, gpointer data);
-	void	(*plugin_builder_connect_signals) (GeanyPlugin *plugin, GtkBuilder *builder, gpointer user_data);
-}
-PluginFuncs;
-
 
 struct StashGroup;
 

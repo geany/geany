@@ -75,8 +75,23 @@ static GtkWidget *menu_separator = NULL;
 static gchar *get_plugin_path(void);
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
-
-static PluginFuncs plugin_funcs = {
+struct
+{
+	void	(*plugin_add_toolbar_item)(GeanyPlugin *plugin, GtkToolItem *item);
+	void	(*plugin_module_make_resident) (GeanyPlugin *plugin);
+	void	(*plugin_signal_connect) (GeanyPlugin *plugin,
+		GObject *object, const gchar *signal_name, gboolean after,
+		GCallback callback, gpointer user_data);
+	GeanyKeyGroup* (*plugin_set_key_group)(GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
+	void	(*plugin_show_configure)(GeanyPlugin *plugin);
+	guint	(*plugin_timeout_add) (GeanyPlugin *plugin, guint interval, GSourceFunc function,
+		gpointer data);
+	guint	(*plugin_timeout_add_seconds) (GeanyPlugin *plugin, guint interval,
+		GSourceFunc function, gpointer data);
+	guint	(*plugin_idle_add) (GeanyPlugin *plugin, GSourceFunc function, gpointer data);
+	void	(*plugin_builder_connect_signals) (GeanyPlugin *plugin, GtkBuilder *builder, gpointer user_data);
+} plugin_funcs = {
 	&plugin_add_toolbar_item,
 	&plugin_module_make_resident,
 	&plugin_signal_connect,

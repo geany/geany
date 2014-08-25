@@ -16,24 +16,6 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
 
-#define plugin_add_toolbar_item \
-	geany_functions->p_plugin->plugin_add_toolbar_item
-#define plugin_module_make_resident \
-	geany_functions->p_plugin->plugin_module_make_resident
-#define plugin_signal_connect \
-	geany_functions->p_plugin->plugin_signal_connect
-#define plugin_set_key_group \
-	geany_functions->p_plugin->plugin_set_key_group
-#define plugin_show_configure \
-	geany_functions->p_plugin->plugin_show_configure
-#define plugin_timeout_add \
-	geany_functions->p_plugin->plugin_timeout_add
-#define plugin_timeout_add_seconds \
-	geany_functions->p_plugin->plugin_timeout_add_seconds
-#define plugin_idle_add \
-	geany_functions->p_plugin->plugin_idle_add
-#define plugin_builder_connect_signals \
-	geany_functions->p_plugin->plugin_builder_connect_signals
 #define main_reload_configuration \
 	geany_functions->p_main->main_reload_configuration
 #define main_locale_init \
