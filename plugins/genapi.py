@@ -61,6 +61,7 @@ def get_function_names():
                     or symbol.startswith('navqueue_')
                     or symbol.startswith('editor_')
                     or symbol.startswith('plugin_')
+                    or symbol.startswith('main_')
                     or symbol.endswith('_funcs')):
                 names.append(symbol)
     filep.close()

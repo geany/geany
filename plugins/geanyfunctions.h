@@ -16,12 +16,6 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H
 
-#define main_reload_configuration \
-	geany_functions->p_main->main_reload_configuration
-#define main_locale_init \
-	geany_functions->p_main->main_locale_init
-#define main_is_realized \
-	geany_functions->p_main->main_is_realized
 #define stash_group_new \
 	geany_functions->p_stash->stash_group_new
 #define stash_group_add_boolean \

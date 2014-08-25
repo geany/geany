@@ -38,6 +38,7 @@
 #include "geany.h"
 #include "highlighting.h"
 #include "keybindings.h"
+#include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "pluginutils.h"

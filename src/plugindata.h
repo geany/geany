@@ -279,7 +279,7 @@ typedef struct GeanyFunctions
 	void						*p_filetypes;		/**< See filetypes.h */
 	void						*p_navqueue;		/**< See navqueue.h */
 	void						*p_editor;			/**< See editor.h */
-	struct MainFuncs			*p_main;			/**< See main.h */
+	void						*p_main;			/**< See main.h */
 	void						*p_plugin;			/**< See pluginutils.c */
 	void						*p_scintilla;		/**< See ScintillaFuncs */
 	void						*p_msgwin;			/**< See msgwindow.h */
@@ -293,15 +293,6 @@ GeanyFunctions;
 /* For more information about these functions, see the main source code.
  * E.g. for p_document->new_file(), see document_new_file() in document.c. */
 
-
-/* See main.h */
-typedef struct MainFuncs
-{
-	void		(*main_reload_configuration) (void);
-	void		(*main_locale_init) (const gchar *locale_dir, const gchar *package);
-	gboolean	(*main_is_realized) (void);
-}
-MainFuncs;
 
 struct StashGroup;
 

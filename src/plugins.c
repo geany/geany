@@ -591,7 +591,13 @@ struct
 	&navqueue_goto_line
 };
 
-static MainFuncs main_funcs = {
+
+struct
+{
+	void		(*main_reload_configuration) (void);
+	void		(*main_locale_init) (const gchar *locale_dir, const gchar *package);
+	gboolean	(*main_is_realized) (void);
+} main_funcs = {
 	&main_reload_configuration,
 	&main_locale_init,
 	&main_is_realized

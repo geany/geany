@@ -73,6 +73,7 @@ geany_include_HEADERS = \
 	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
+	main.h \
 	msgwindow.h \
 	navqueue.h \
 	pluginutils.h \
