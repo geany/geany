@@ -30,6 +30,7 @@
 
 /* Note: only include headers that define types or macros, not just functions */
 #include "app.h"
+#include "build.h"
 #include "dialogs.h"
 #include "document.h"
 #include "editor.h"

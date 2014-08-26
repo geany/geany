@@ -38,7 +38,7 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
-	plugins.c plugins.h \
+	plugins.c pluginfuncs.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
 	prefs.c prefs.h \
@@ -63,8 +63,8 @@ geany_includedir = $(includedir)/geany
 # only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
 	app.h \
-	dialogs.h \
 	build.h \
+	dialogs.h \
 	document.h \
 	editor.h \
 	encodings.h \

@@ -257,56 +257,8 @@ GeanyData;
 
 #define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
 
+typedef void *GeanyFunctions[];
 
-/** This contains pointers to functions owned by Geany for plugins to use.
- * Functions from the core can be appended when needed by plugin authors, but may
- * require some changes. */
-typedef struct GeanyFunctions
-{
-	void						*p_document;		/**< See document.h */
-	void						*p_sci;				/**< See sciwrappers.h */
-	void						*p_templates;		/**< See templates.h */
-	void						*p_utils;			/**< See utils.h */
-	void						*p_ui;				/**< See ui_utils.h */
-	void						*p_support;
-	void						*p_dialogs;			/**< See dialogs.h */
-	void						*p_msgwindow;
-	void						*p_encodings;		/**< See encodings.h */
-	void						*p_keybindings;		/**< See keybindings.h */
-	void						*p_tm;				/**< See tagmanager/src */
-	void						*p_search;			/**< See search.h */
-	void						*p_highlighting;	/**< See highlighting.h */
-	void						*p_filetypes;		/**< See filetypes.h */
-	void						*p_navqueue;		/**< See navqueue.h */
-	void						*p_editor;			/**< See editor.h */
-	void						*p_main;			/**< See main.h */
-	void						*p_plugin;			/**< See pluginutils.c */
-	void						*p_scintilla;		/**< See ScintillaFuncs */
-	void						*p_msgwin;			/**< See msgwindow.h */
-	void						*p_stash;			/**< See stash.h */
-	void						*p_symbols;			/**< See symbols.h */
-	struct BuildFuncs			*p_build;			/**< See build.h */
-}
-GeanyFunctions;
-
-
-/* For more information about these functions, see the main source code.
- * E.g. for p_document->new_file(), see document_new_file() in document.c. */
-
-
-/* See build.h */
-typedef struct BuildFuncs
-{
-	void (*build_activate_menu_item)(const GeanyBuildGroup grp, const guint cmd);
-	const gchar *(*build_get_current_menu_item)(const GeanyBuildGroup grp, const guint cmd,
-			const GeanyBuildCmdEntries field);
-	void (*build_remove_menu_item)(const GeanyBuildSource src, const GeanyBuildGroup grp,
-			const gint cmd);
-	void (*build_set_menu_item)(const GeanyBuildSource src, const GeanyBuildGroup grp,
-			const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
-	guint (*build_get_group_count)(const GeanyBuildGroup grp);
-}
-BuildFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
