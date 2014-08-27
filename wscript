@@ -514,6 +514,11 @@ def build(bld):
                                'top_builddir': bld.out_dir,
                                'top_srcdir': bld.top_dir,})
 
+    # build HTML documentation if it is not part of the tree already, as it is required for install
+    # FIXME: replace this with automatic building if source changed/destination is missing
+    if not bld.path.find_resource('doc/geany.html'):
+        htmldoc(bld)
+
     ###
     # Install files
     ###

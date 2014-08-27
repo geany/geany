@@ -56,16 +56,17 @@ geany.html: $(srcdir)/geany.css $(srcdir)/geany.txt
 hacking.html: $(srcdir)/geany.css $(top_srcdir)/HACKING
 	$(AM_V_GEN)$(RST2HTML) -stg --stylesheet=$(srcdir)/geany.css $(top_srcdir)/HACKING $@
 
-all-html-local: geany.html hacking.html
+all-local: geany.html hacking.html
 
+# clean on 'maintainer-clean' rather than 'clean' in case it was not
+# built by Make but rather part of the distribution.  This is fine even
+# then, as configure will properly require what is needed to build it
+# again if it is missing.
+maintainer-clean-local: clean-html-local
 clean-html-local:
 	-rm -f hacking.html
-# FIXME: why is the generated HTML manual checked-in to VCS?
-#	-rm -f geany.html
+	-rm -f geany.html
 
-else
-all-html-local:;
-clean-html-local:;
 endif
 
 # PDF user manual
@@ -74,14 +75,12 @@ if WITH_RST2PDF
 geany-$(VERSION).pdf: geany.txt
 	$(AM_V_GEN)$(RST2PDF) $(srcdir)/geany.txt -o $@
 
-all-pdf-local: geany-$(VERSION).pdf
+all-local: geany-$(VERSION).pdf
 
+clean-local: clean-pdf-local
 clean-pdf-local:
 	-rm -f geany-$(VERSION).pdf
 
-else
-all-pdf-local:;
-clean-pdf-local:;
 endif
 
 # API Documentation
@@ -100,18 +99,13 @@ doxygen_sources = \
 Doxyfile.stamp: Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
-all-api-docs-local: Doxyfile.stamp
+all-local: Doxyfile.stamp
 
+clean-local: clean-api-docs-local
 clean-api-docs-local:
 	-rm -rf reference/ Doxyfile.stamp
 
-else
-all-api-docs-local:;
-clean-api-docs-local:;
 endif
-
-all-local: all-html-local all-pdf-local all-api-docs-local
-clean-local: clean-html-local clean-pdf-local clean-api-docs-local
 
 uninstall-local:
 	rm -rf $(DOCDIR);
