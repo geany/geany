@@ -3269,7 +3269,9 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
 		document_reload_file(doc, doc->encoding);
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
-		document_save_file(doc, FALSE);
+		document_save_file(doc, TRUE);
+	else if (response_id == GTK_RESPONSE_CANCEL)
+		document_set_text_changed(doc, TRUE);
 }
 
 
@@ -3327,7 +3329,6 @@ static void monitor_reload_file(GeanyDocument *doc)
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
 
-		document_set_text_changed(doc, TRUE);
 		protect_document(doc);
 		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
 		enable_key_intercept(doc, bar);
