@@ -118,6 +118,10 @@ typedef struct GeanyDocument
 	 * not be set elsewhere.
 	 * @see file_name. */
 	gchar 			*real_path;
+	/** A pseudo-unique ID for this document.
+	 * @c 0 is reserved as an unused value.
+	 * @see document_find_by_id(). */
+	guint			 id;
 
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
 }
@@ -207,6 +211,8 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
 GeanyDocument *document_index(gint idx);
 
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);
+
+GeanyDocument *document_find_by_id(guint id);
 
 gint document_get_notebook_page(GeanyDocument *doc);
 
