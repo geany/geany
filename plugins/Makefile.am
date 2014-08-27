@@ -55,7 +55,7 @@ all-local: \
 
 .c.dll:
 	$(CC) $(MINGW_CFLAGS) -o $@.o -c $<
-	$(CC) -shared $@.o $(GTK_LIBS) $(DLL_LD_FLAGS) -o $@
+	$(CC) -shared $@.o $(GTK_LIBS) $(DLL_LD_FLAGS) -o $@ $(top_srcdir)/src/geany_dll.a
 
 clean:
 	rm -f *.o *.dll

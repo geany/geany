@@ -10,7 +10,8 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	makefile.win32
+	makefile.win32 \
+	geany_dll.a
 
 bin_PROGRAMS = geany
 
@@ -125,7 +126,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-geany_LDFLAGS =	-mwindows -mms-bitfields
+geany_LDFLAGS =	-mwindows -mms-bitfields -Wl,--out-implib,geany_dll.a
 
 WINDRES = $(host_alias)-windres
 
