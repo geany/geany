@@ -2959,6 +2959,11 @@ sptr_t ScintillaGTK::DirectFunction(
 	return reinterpret_cast<ScintillaGTK *>(ptr)->WndProc(iMessage, wParam, lParam);
 }
 
+#if PLAT_GTK_WIN32
+__declspec(dllexport)
+#else
+__attribute__((visibility("default")))
+#endif
 sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
 	return psci->WndProc(iMessage, wParam, lParam);
@@ -2970,6 +2975,11 @@ static void scintilla_init(ScintillaObject *sci);
 extern void Platform_Initialise();
 extern void Platform_Finalise();
 
+#if PLAT_GTK_WIN32
+__declspec(dllexport)
+#else
+__attribute__((visibility("default")))
+#endif
 GType scintilla_get_type() {
 	static GType scintilla_type = 0;
 	try {
@@ -3107,6 +3117,11 @@ static void scintilla_init(ScintillaObject *sci) {
 	}
 }
 
+#if PLAT_GTK_WIN32
+__declspec(dllexport)
+#else
+__attribute__((visibility("default")))
+#endif
 GtkWidget* scintilla_new() {
 	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
 	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
