@@ -7,7 +7,7 @@ AC_DEFUN([GEANY_CHECK_DOXYGEN],
 			[AS_HELP_STRING([--enable-api-docs],
 					[generate API documentation using Doxygen [default=no]])],
 			[geany_with_doxygen="$enableval"],
-			[geany_with_doxygen="no"])
+			[geany_with_doxygen="auto"])
 
 	AC_ARG_VAR([DOXYGEN], [Path to Doxygen executable])
 
