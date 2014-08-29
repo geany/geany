@@ -232,6 +232,9 @@ def configure(conf):
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
+    # rst2html for the HTML manual
+    conf.env['RST2HTML'] = _find_rst2html(conf)
+
     # Windows specials
     if is_win32:
         if conf.env['PREFIX'].lower() == tempfile.gettempdir().lower():
@@ -456,6 +459,18 @@ def build(bld):
             install_path    = '${LOCALEDIR}',
             appname         = 'geany')
 
+    # HTML documentation (build if it is not part of the tree already, as it is required for install)
+    html_doc_filename = os.path.join(bld.out_dir, 'doc', 'geany.html')
+    if bld.env['RST2HTML']:
+        rst2html = bld.env['RST2HTML']
+        bld(
+            source  = ['doc/geany.txt'],
+            deps    = ['doc/geany.css'],
+            target  = 'doc/geany.html',
+            name    = 'geany.html',
+            cwd     = os.path.join(bld.path.abspath(), 'doc'),
+            rule    = '%s  -stg --stylesheet=geany.css geany.txt %s' % (rst2html, html_doc_filename))
+
     # geany.pc
     if is_win32:
         # replace backward slashes by forward slashes as they could be interepreted as escape
@@ -514,11 +529,6 @@ def build(bld):
                                'top_builddir': bld.out_dir,
                                'top_srcdir': bld.top_dir,})
 
-    # build HTML documentation if it is not part of the tree already, as it is required for install
-    # FIXME: replace this with automatic building if source changed/destination is missing
-    if not bld.path.find_resource('doc/geany.html'):
-        htmldoc(bld)
-
     ###
     # Install files
     ###
@@ -541,18 +551,21 @@ def build(bld):
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
-    html_dir = '' if is_win32 else 'html/'
-    html_name = 'Manual.html' if is_win32 else 'index.html'
     for filename in 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO'.split():
         basename = _uc_first(filename, bld)
         destination_filename = '%s%s' % (basename, ext)
         destination = os.path.join(base_dir, destination_filename)
         bld.install_as(destination, filename)
 
-    start_dir = bld.path.find_dir('doc/images')
-    bld.install_files('${DOCDIR}/%simages' % html_dir, start_dir.ant_glob('*.png'), cwd=start_dir)
+    # install HTML documentation only if it exists, i.e. it was built before
+    if os.path.exists(html_doc_filename):
+        html_dir = '' if is_win32 else 'html/'
+        html_name = 'Manual.html' if is_win32 else 'index.html'
+        start_dir = bld.path.find_dir('doc/images')
+        bld.install_files('${DOCDIR}/%simages' % html_dir, start_dir.ant_glob('*.png'), cwd=start_dir)
+        bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
+
     bld.install_as('${DOCDIR}/%s' % _uc_first('manual.txt', bld), 'doc/geany.txt')
-    bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
     bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')
     if is_win32:
         bld.install_as('${DOCDIR}/ReadMe.I18n.txt', 'README.I18N')
@@ -674,16 +687,6 @@ def apidoc(ctx):
     # update hacking.html
     cmd = _find_rst2html(ctx)
     ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
-    os.chdir('..')
-
-
-def htmldoc(ctx):
-    """generate HTML documentation"""
-    # first try rst2html.py as it is the upstream default, fall back to rst2html
-    cmd = _find_rst2html(ctx)
-    os.chdir('doc')
-    Logs.pprint('CYAN', 'Generating HTML documentation')
-    ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, 'geany.txt', 'geany.html'))
     os.chdir('..')
 
 
