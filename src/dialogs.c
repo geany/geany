@@ -123,8 +123,10 @@ static void file_chooser_set_filter_idx(GtkFileChooser *chooser, guint idx)
 }
 
 
-static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
+static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 {
+	gboolean ret = TRUE;
+
 	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
@@ -150,7 +152,18 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
-			document_open_files(filelist, ro, ft, charset);
+			const gchar *first = filelist->data;
+
+			// When there's only one filename it may have been typed manually
+			if (!filelist->next && !g_file_test(first, G_FILE_TEST_EXISTS))
+			{
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("\"%s\" was not found."), first);
+				ret = FALSE;
+			}
+			else
+			{
+				document_open_files(filelist, ro, ft, charset);
+			}
 			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
 		}
 		g_slist_free(filelist);
@@ -158,6 +171,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
+	return ret;
 }
 
 
@@ -456,7 +470,6 @@ void dialogs_show_open_file(void)
 #endif
 	{
 		GtkWidget *dialog = create_open_file_dialog();
-		gint response;
 
 		open_file_dialog_apply_settings(dialog);
 
@@ -467,8 +480,8 @@ void dialogs_show_open_file(void)
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 					app->project->base_path, NULL);
 
-		response = gtk_dialog_run(GTK_DIALOG(dialog));
-		open_file_dialog_handle_response(dialog, response);
+		while (!open_file_dialog_handle_response(dialog,
+			gtk_dialog_run(GTK_DIALOG(dialog))));
 		gtk_widget_destroy(dialog);
 	}
 	g_free(initdir);
