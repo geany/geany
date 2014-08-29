@@ -43,6 +43,7 @@ import sys
 import os
 import tempfile
 from waflib import Logs, Options, Scripting, Utils
+from waflib.Build import BuildContext
 from waflib.Configure import ConfigurationContext
 from waflib.Errors import WafError
 from waflib.TaskGen import feature, before_method
@@ -685,29 +686,28 @@ def updatepo(ctx):
 
 def apidoc(ctx):
     """generate API reference documentation"""
-    basedir = ctx.path.abspath()
+    ctx = BuildContext()  # create our own context to have ctx.top_dir
+    basedir = ctx.top_dir
     doxygen = _find_program(ctx, 'doxygen')
-    doxyfile = '%s/%s/doc/Doxyfile' % (basedir, out)
-    os.chdir('doc')
+    doxyfile = '%s/doc/Doxyfile' % ctx.out_dir
     Logs.pprint('CYAN', 'Generating API documentation')
     ret = ctx.exec_command('%s %s' % (doxygen, doxyfile))
     if ret != 0:
         raise WafError('Generating API documentation failed')
-    # update hacking.html
-    cmd = _find_rst2html(ctx)
-    ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
-    os.chdir('..')
 
 
 def hackingdoc(ctx):
     """generate HACKING documentation"""
-    os.chdir('doc')
+    ctx = BuildContext()  # create our own context to have ctx.top_dir
     Logs.pprint('CYAN', 'Generating HACKING documentation')
     cmd = _find_rst2html(ctx)
-    ret = ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
+    hacking_file = os.path.join(ctx.top_dir, 'HACKING')
+    hacking_html_file = os.path.join(ctx.top_dir, 'doc', 'hacking.html')
+    stylesheet = os.path.join(ctx.top_dir, 'doc', 'geany.css')
+    ret = ctx.exec_command('%s  -stg --stylesheet=%s %s %s' % (
+        cmd, stylesheet, hacking_file, hacking_html_file))
     if ret != 0:
         raise WafError('Generating HACKING documentation failed')
-    os.chdir('..')
 
 
 def _find_program(ctx, cmd, **kw):
