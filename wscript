@@ -233,7 +233,14 @@ def configure(conf):
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
     # rst2html for the HTML manual
-    conf.env['RST2HTML'] = _find_rst2html(conf)
+    if not conf.options.no_html_doc:
+        try:
+            conf.env['RST2HTML'] = _find_rst2html(conf)
+        except WafError:
+            error_msg = '''Documentation enabled but rst2html not found.
+You can explicitly disable building of the HTML manual with --disable-html-docs,
+but you then may not have a local copy of the HTML manual.'''
+            raise WafError(error_msg)
 
     # Windows specials
     if is_win32:
@@ -336,6 +343,9 @@ def options(opt):
     opt.add_option('--enable-gtk3', action='store_true', default=False,
         help='compile with GTK3 support (experimental) [[default: No]',
         dest='use_gtk3')
+    opt.add_option('--disable-html-docs', action='store_true', default=False,
+        help='do not generate HTML documentation using rst2html [[default: No]',
+        dest='no_html_doc')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
