@@ -343,9 +343,6 @@ def options(opt):
         help='documentation root', dest='docdir')
     opt.add_option('--libdir', type='string', default='',
         help='object code libraries', dest='libdir')
-    # Actions
-    opt.add_option('--hackingdoc', action='store_true', default=False,
-        help='generate HTML documentation from HACKING file', dest='hackingdoc')
 
 
 def build(bld):
@@ -687,6 +684,17 @@ def apidoc(ctx):
     # update hacking.html
     cmd = _find_rst2html(ctx)
     ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
+    os.chdir('..')
+
+
+def hackingdoc(ctx):
+    """generate HACKING documentation"""
+    os.chdir('doc')
+    Logs.pprint('CYAN', 'Generating HACKING documentation')
+    cmd = _find_rst2html(ctx)
+    ret = ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
+    if ret != 0:
+        raise WafError('Generating HACKING documentation failed')
     os.chdir('..')
 
 
