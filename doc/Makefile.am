@@ -113,6 +113,9 @@ uninstall-local:
 # manually install some files under another name
 install-data-local:
 	$(mkinstalldirs) $(DOCDIR)/html
-	$(INSTALL_DATA) $(srcdir)/geany.html $(DOCDIR)/html/index.html
+#	as we don't install with the automated mechanism so we can rename the file,
+#	we need to find the source file in the right location (either builddir or srcdir)
+	dir=$(builddir); test -f "$$dir/geany.html" || dir=$(srcdir); \
+	$(INSTALL_DATA) "$$dir/geany.html" $(DOCDIR)/html/index.html
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
