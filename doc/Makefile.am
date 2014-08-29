@@ -1,5 +1,6 @@
 man_MANS=geany.1
 
+if INSTALL_HTML_DOCS
 htmldocimagesdir = $(docdir)/html/images
 dist_htmldocimages_DATA = \
 	images/build_menu_commands_dialog.png \
@@ -23,6 +24,7 @@ dist_htmldocimages_DATA = \
 	images/pref_dialog_various.png \
 	images/pref_dialog_vte.png \
 	images/replace_dialog.png
+endif
 
 doc_DATA = \
 	$(top_srcdir)/AUTHORS \
@@ -112,10 +114,13 @@ uninstall-local:
 
 # manually install some files under another name
 install-data-local:
+if INSTALL_HTML_DOCS
 	$(mkinstalldirs) $(DOCDIR)/html
 #	as we don't install with the automated mechanism so we can rename the file,
 #	we need to find the source file in the right location (either builddir or srcdir)
 	dir=$(builddir); test -f "$$dir/geany.html" || dir=$(srcdir); \
 	$(INSTALL_DATA) "$$dir/geany.html" $(DOCDIR)/html/index.html
+endif
+	$(mkinstalldirs) $(DOCDIR)
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
 	$(INSTALL_DATA) $(top_srcdir)/scintilla/License.txt $(DOCDIR)/ScintillaLicense.txt
