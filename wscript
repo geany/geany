@@ -232,8 +232,10 @@ def configure(conf):
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
+    revision = _get_git_rev(conf)
+
     # rst2html for the HTML manual
-    if not conf.options.no_html_doc:
+    if not conf.options.no_html_doc and revision is not None:
         try:
             conf.env['RST2HTML'] = _find_rst2html(conf)
         except WafError:
@@ -274,8 +276,6 @@ but you then may not have a local copy of the HTML manual.'''
         _define_from_opt(conf, 'DOCDIR', conf.options.docdir, docdir)
         _define_from_opt(conf, 'LIBDIR', conf.options.libdir, libdir)
         _define_from_opt(conf, 'MANDIR', conf.options.mandir, mandir)
-
-    revision = _get_git_rev(conf)
 
     conf.define('ENABLE_NLS', 1)
     conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], quote=True)
@@ -565,7 +565,9 @@ def build(bld):
         bld.install_as(destination, filename)
 
     # install HTML documentation only if it exists, i.e. it was built before
-    if os.path.exists(html_doc_filename):
+    # local_html_doc_filename supports installing HTML doc from in-tree geany.html if it exists
+    local_html_doc_filename = os.path.join(bld.path.abspath(), 'doc', 'geany.html')
+    if os.path.exists(html_doc_filename) or os.path.exists(local_html_doc_filename):
         html_dir = '' if is_win32 else 'html/'
         html_name = 'Manual.html' if is_win32 else 'index.html'
         start_dir = bld.path.find_dir('doc/images')
