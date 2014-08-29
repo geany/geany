@@ -233,6 +233,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 /** Lookup an old document by its ID.
  * Useful when the corresponding document may have been closed since the
  * ID was retrieved.
+ * @param id The ID of the document to find
  * @return @c NULL if the document is no longer open.
  *
  * Example:
