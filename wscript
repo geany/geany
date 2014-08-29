@@ -714,9 +714,10 @@ def _find_program(ctx, cmd, **kw):
     def noop(*args):
         pass
 
-    ctx = ConfigurationContext()
-    ctx.to_log = noop
-    ctx.msg = noop
+    if ctx is None or not isinstance(ctx, ConfigurationContext):
+        ctx = ConfigurationContext()
+        ctx.to_log = noop
+        ctx.msg = noop
     return ctx.find_program(cmd, **kw)
 
 
