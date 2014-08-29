@@ -721,9 +721,9 @@ def _find_program(ctx, cmd, **kw):
 
 
 def _find_rst2html(ctx):
-    cmds = ['rst2html.py', 'rst2html']
+    cmds = ['rst2html', 'rst2html2']
     for command in cmds:
-        cmd = _find_program(ctx, command, mandatory=False)
+        cmd = _find_program(ctx, command, mandatory=False, exts=',.py')
         if cmd:
             break
     if not cmd:
