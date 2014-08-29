@@ -14,10 +14,14 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_HTML],
 [
 	AC_REQUIRE([GEANY_CHECK_REVISION])
 
+	AS_IF([test -f "$srcdir/doc/geany.html"],
+		[have_prebuilt_html_docs=yes],
+		[have_prebuilt_html_docs=no])
+
 	dnl we require rst2html by default unless we don't build from Git
 	dnl and already have the HTML manual built in-tree
 	html_docs_default=yes
-	AS_IF([test "$REVISION" = "-1" && test -f "$srcdir/doc/geany.html"],
+	AS_IF([test "$REVISION" = "-1" && test "x$have_prebuilt_html_docs" = xyes],
 		[html_docs_default=auto])
 
 	AC_ARG_ENABLE([html-docs],
@@ -40,6 +44,8 @@ but you then may not have a local copy of the HTML manual.])],
 			[geany_enable_html_docs="no"])
 	])
 	AM_CONDITIONAL([WITH_RST2HTML], [test "x$geany_enable_html_docs" != "xno"])
+	AM_CONDITIONAL([INSTALL_HTML_DOCS], [test "x$geany_enable_html_docs" != "xno" ||
+	                                     test "x$have_prebuilt_html_docs" = xyes])
 	GEANY_STATUS_ADD([Build HTML documentation], [$geany_enable_html_docs])
 ])
 dnl
