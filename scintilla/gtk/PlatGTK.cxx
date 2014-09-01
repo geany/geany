@@ -1225,9 +1225,19 @@ Surface *Surface::Allocate(int) {
 Window::~Window() {}
 
 void Window::Destroy() {
-	if (wid)
-		gtk_widget_destroy(GTK_WIDGET(wid));
-	wid = 0;
+	if (wid) {
+		ListBox *listbox = dynamic_cast<ListBox*>(this);
+		if (listbox) {
+			gtk_widget_hide(GTK_WIDGET(wid));
+			listbox->Clear();
+			// resize the window to the smallest possible size for it to adapt
+			// to future content
+			gtk_window_resize(GTK_WINDOW(wid), 1, 1);
+		} else {
+			gtk_widget_destroy(GTK_WIDGET(wid));
+			wid = 0;
+		}
+	}
 }
 
 bool Window::HasFocus() {
@@ -1432,6 +1442,10 @@ public:
 			g_hash_table_foreach((GHashTable *) pixhash, list_image_free, NULL);
 			g_hash_table_destroy((GHashTable *) pixhash);
 		}
+		if (wid) {
+			gtk_widget_destroy(GTK_WIDGET(wid));
+			wid = 0;
+		}
 	}
 	virtual void SetFont(Font &font);
 	virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_);
@@ -1524,6 +1538,11 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 }
 
 void ListBoxX::Create(Window &, int, Point, int, bool, int) {
+	if (wid) {
+		gtk_widget_realize(PWidget(wid));
+		return;
+	}
+
 	wid = gtk_window_new(GTK_WINDOW_POPUP);
 
 	GtkWidget *frame = gtk_frame_new(NULL);
