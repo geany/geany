@@ -1586,6 +1586,8 @@ static void protect_document(GeanyDocument *doc)
 	/* do not call queue_colourise because to we want to keep the text-changed indication! */
 	if (!doc->priv->protected++)
 		sci_set_readonly(doc->editor->sci, TRUE);
+
+	ui_update_tab_status(doc);
 }
 
 
@@ -1595,6 +1597,8 @@ static void unprotect_document(GeanyDocument *doc)
 
 	if (!--doc->priv->protected && doc->readonly == FALSE)
 		sci_set_readonly(doc->editor->sci, FALSE);
+
+	ui_update_tab_status(doc);
 }
 
 
@@ -2931,11 +2935,10 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data)
 enum
 {
 	STATUS_CHANGED,
-#ifdef USE_GIO_FILEMON
 	STATUS_DISK_CHANGED,
-#endif
 	STATUS_READONLY
 };
+
 static struct
 {
 	const gchar *name;
@@ -2943,9 +2946,7 @@ static struct
 	gboolean loaded;
 } document_status_styles[] = {
 	{ "geany-document-status-changed",      {0}, FALSE },
-#ifdef USE_GIO_FILEMON
 	{ "geany-document-status-disk-changed", {0}, FALSE },
-#endif
 	{ "geany-document-status-readonly",     {0}, FALSE }
 };
 
@@ -2956,8 +2957,10 @@ static gint document_get_status_id(GeanyDocument *doc)
 		return STATUS_CHANGED;
 #ifdef USE_GIO_FILEMON
 	else if (doc->priv->file_disk_status == FILE_CHANGED)
-		return STATUS_DISK_CHANGED;
+#else
+	else if (doc->priv->protected)
 #endif
+		return STATUS_DISK_CHANGED;
 	else if (doc->readonly)
 		return STATUS_READONLY;
 
