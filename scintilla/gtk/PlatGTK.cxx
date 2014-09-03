@@ -1226,17 +1226,19 @@ Window::~Window() {}
 
 void Window::Destroy() {
 	if (wid) {
-		ListBox *listbox = dynamic_cast<ListBox*>(this);
-		if (listbox) {
+		if (dynamic_cast<ListBox*>(this)) {
 			gtk_widget_hide(GTK_WIDGET(wid));
-			listbox->Clear();
+			// clear up window content
+			GtkWidget *child = gtk_bin_get_child(GTK_BIN(wid));
+			if (child)
+				gtk_widget_destroy(child);
 			// resize the window to the smallest possible size for it to adapt
 			// to future content
 			gtk_window_resize(GTK_WINDOW(wid), 1, 1);
 		} else {
 			gtk_widget_destroy(GTK_WIDGET(wid));
-			wid = 0;
 		}
+		wid = 0;
 	}
 }
 
@@ -1421,6 +1423,7 @@ enum {
 };
 
 class ListBoxX : public ListBox {
+	WindowID widCached;
 	WindowID list;
 	WindowID scroller;
 	void *pixhash;
@@ -1433,7 +1436,7 @@ public:
 	CallBackAction doubleClickAction;
 	void *doubleClickActionData;
 
-	ListBoxX() : list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
+	ListBoxX() : widCached(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
 		desiredVisibleRows(5), maxItemCharacters(0),
 		aveCharWidth(1), doubleClickAction(NULL), doubleClickActionData(NULL) {
 	}
@@ -1442,9 +1445,9 @@ public:
 			g_hash_table_foreach((GHashTable *) pixhash, list_image_free, NULL);
 			g_hash_table_destroy((GHashTable *) pixhash);
 		}
-		if (wid) {
-			gtk_widget_destroy(GTK_WIDGET(wid));
-			wid = 0;
+		if (widCached) {
+			gtk_widget_destroy(GTK_WIDGET(widCached));
+			wid = widCached = 0;
 		}
 	}
 	virtual void SetFont(Font &font);
@@ -1538,12 +1541,10 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 }
 
 void ListBoxX::Create(Window &, int, Point, int, bool, int) {
-	if (wid) {
-		gtk_widget_realize(PWidget(wid));
-		return;
-	}
+	if (widCached == 0)
+		widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
-	wid = gtk_window_new(GTK_WINDOW_POPUP);
+	wid = widCached;
 
 	GtkWidget *frame = gtk_frame_new(NULL);
 	gtk_widget_show(frame);
