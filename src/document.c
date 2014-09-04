@@ -3279,7 +3279,7 @@ static void monitor_reload_file(GeanyDocument *doc)
 
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
 				_("_Reload"), RESPONSE_DOCUMENT_RELOAD,
-				GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE,
+				_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
 				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 				_("Do you want to reload it?"),
 				_("The file '%s' on the disk is more recent than the current buffer."),
