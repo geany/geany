@@ -1,14 +1,14 @@
 # Swedish translations for geany package.
-# Copyright (C) 2007 - 2011 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2007 - 2014 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Tony Mattsson <superxorn@gmail.com>, 2007 - 2013
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-06-05 11:06+0100\n"
+"PO-Revision-Date: 2014-09-06 09:28+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -278,17 +278,14 @@ msgid ""
 msgstr "Ger automatiskt fokus till gränssnittskomponenter under muspekaren."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Använd Windows gränssnitt för att öppna / spara filer"
+msgstr "Använd Windows gränssnitt"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
-msgstr ""
-"Specificerar om Windows eller GTK skall användas vid öppna / spara filer"
+msgstr "Specificerar om Windows eller GTK skall användas"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -1656,46 +1653,39 @@ msgstr "Använd globala inställningar"
 
 #: ../data/geany.glade.h:347
 msgid "Size:"
-msgstr ""
+msgstr "Storlek:"
 
 #: ../data/geany.glade.h:348
-#, fuzzy
 msgid "Location:"
-msgstr "<b>Plats:</b>"
+msgstr "Plats:"
 
 #: ../data/geany.glade.h:349
-#, fuzzy
 msgid "Read-only:"
-msgstr ", skrivskyddad"
+msgstr "Skrivskyddad:"
 
 #: ../data/geany.glade.h:350
-#, fuzzy
 msgid "Encoding:"
 msgstr "Teckenkodning:"
 
 #: ../data/geany.glade.h:351
-#, fuzzy
 msgid "Modified:"
-msgstr "<b>Modifierad:</b>"
+msgstr "Modifierad:"
 
 #: ../data/geany.glade.h:352
-#, fuzzy
 msgid "Changed:"
-msgstr "Ändra"
+msgstr "Ändrad:"
 
 #: ../data/geany.glade.h:353
-#, fuzzy
 msgid "Accessed:"
-msgstr "<b>Skapad:</b>"
+msgstr "Senaste åtkomst:"
 
 #: ../data/geany.glade.h:354
 msgid "(only inside Geany)"
 msgstr "(endast inom Geany)"
 
 #: ../data/geany.glade.h:355
-#, fuzzy
 msgid "Permissions:"
-msgstr "<b>Behörighet:</b>"
+msgstr "Behörighet:"
 
 #: ../data/geany.glade.h:356
 msgid "Read:"
@@ -1742,18 +1732,16 @@ msgid "New (with _Template)"
 msgstr "Ny (med mall)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "Öppna"
+msgstr "Öppna..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "Senaste filer"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Spara som"
+msgstr "Spara som..."
 
 #: ../data/geany.glade.h:371
 msgid "Sa_ve All"
@@ -1773,9 +1761,8 @@ msgid "Page Set_up"
 msgstr "Sidinställningar"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Skriv ut"
+msgstr "Skriv ut..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1874,7 +1861,6 @@ msgid "P_lugin Preferences"
 msgstr "Inställningar för insticksmoduler"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
 msgstr "Sök"
 
@@ -1887,12 +1873,10 @@ msgid "Find _Previous"
 msgstr "Sök föregående"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
 msgstr "Sök i filer"
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
 msgstr "Ersätt"
 
@@ -1913,7 +1897,6 @@ msgid "Go to Pre_vious Marker"
 msgstr "Gå till föregående markör"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
 msgstr "Gå till rad"
 
@@ -1938,14 +1921,12 @@ msgid "_View"
 msgstr "Visa"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
 msgstr "Byt teckensnitt"
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "Färger"
+msgstr "Ändra färgschema"
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2096,9 +2077,8 @@ msgid "Replace Tabs with S_paces"
 msgstr "Ersätt tab med mellanslag"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Replace Spaces with Tabs..."
-msgstr "Ersätt mellanslag med tab"
+msgstr "Ersätt mellanslag med tab..."
 
 #: ../data/geany.glade.h:455
 msgid "_Fold All"
@@ -2121,7 +2101,6 @@ msgid "_Project"
 msgstr "Projekt"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
 msgstr "Nytt"
 
@@ -2167,9 +2146,8 @@ msgid "_Word Count"
 msgstr "Räkna ord"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Ladda taggar"
+msgstr "Ladda taggar..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2192,14 +2170,12 @@ msgid "Wi_ki"
 msgstr "Wiki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "Rapportera fel"
+msgstr "Rapportera fel..."
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "Donera"
+msgstr "Donera..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2495,9 +2471,8 @@ msgstr "_Exekvera"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "Kör Make med valbara parametrar"
+msgstr "Kör Make med valbara parametrar..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2757,9 +2732,9 @@ msgid "unknown"
 msgstr "okänd"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Egenskaper"
+msgstr "%s Egenskaper"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3118,38 +3093,34 @@ msgid "%s file"
 msgstr "%s fil"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
 msgstr "%s skriptfil"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "XML dokument"
+msgstr "%s dokument"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Skal:"
+msgstr "Skal"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Cascading StyleSheet"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
-msgstr "Config-fil"
+msgstr "Konfiguration"
 
 #: ../src/filetypes.c:179
-#, fuzzy
 msgid "Gettext translation"
-msgstr "Gettext översättningsfil"
+msgstr "Gettext översättnings"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
@@ -4585,12 +4556,11 @@ msgstr "Moduler"
 
 #: ../src/symbols.c:786 ../src/symbols.c:817
 msgid "Traits"
-msgstr ""
+msgstr "Egenskaper"
 
 #: ../src/symbols.c:787
-#, fuzzy
 msgid "Implementations"
-msgstr "Implementering:"
+msgstr "Implementeringar"
 
 #: ../src/symbols.c:789 ../src/symbols.c:1033
 msgid "Typedefs / Enums"
@@ -4721,26 +4691,23 @@ msgstr "Medlemmar"
 
 #: ../src/symbols.c:927 ../src/symbols.c:982
 msgid "Enums"
-msgstr ""
+msgstr "Enums"
 
 #: ../src/symbols.c:939
 msgid "Properties"
 msgstr "Egenskaper"
 
 #: ../src/symbols.c:975
-#, fuzzy
 msgid "Programs"
 msgstr "Program"
 
 #: ../src/symbols.c:977
-#, fuzzy
 msgid "Functions / Subroutines"
-msgstr "Funktioner / Procedurer"
+msgstr "Funktioner / Subrutiner"
 
 #: ../src/symbols.c:980
-#, fuzzy
 msgid "Components"
-msgstr "Komplettering"
+msgstr "Komponenter"
 
 #: ../src/symbols.c:981
 msgid "Blocks"
@@ -4775,9 +4742,8 @@ msgid "Structs"
 msgstr "Strukturer"
 
 #: ../src/symbols.c:1043
-#, fuzzy
 msgid "Extern Variables"
-msgstr "Variabler"
+msgstr "Externa variabler"
 
 #: ../src/symbols.c:1803
 #, c-format
@@ -5096,7 +5062,6 @@ msgid "H_ide Sidebar"
 msgstr "Göm sidolist"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
 msgstr "Sök i filer"
 
@@ -5361,19 +5326,16 @@ msgid "Create Cla_ss"
 msgstr "Skapa klass"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "C++ klass"
+msgstr "C++ klass..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "GTK+ klass"
+msgstr "GTK+ klass..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "PHP klass"
+msgstr "PHP klass..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5451,9 +5413,8 @@ msgid "HTML (name)"
 msgstr "HTML (namn)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "Infoga speciella HTML-tecken"
+msgstr "Infoga speciella HTML-tecken..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5531,15 +5492,13 @@ msgstr "Exportera"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Som HTML"
+msgstr "Som HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Som LATEX"
+msgstr "Som LATEX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5559,7 +5518,6 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
 msgstr "Öppna externt"
 
@@ -5689,7 +5647,7 @@ msgstr "Spara automatiskt"
 
 #: ../plugins/saveactions.c:600
 msgid "Enable save when losing _focus"
-msgstr ""
+msgstr "Spara när fokus förloras"
 
 #: ../plugins/saveactions.c:606 ../plugins/saveactions.c:668
 #: ../plugins/saveactions.c:709
@@ -5771,12 +5729,10 @@ msgid "_Top and Bottom"
 msgstr "Topp och botten"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
 msgstr "Sida vid sida"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
 msgstr "Topp och botten"
 
