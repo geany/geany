@@ -1,4 +1,4 @@
-/*
+﻿/*
  *      geanyobject.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
@@ -245,19 +245,11 @@ static void create_signals(GObjectClass *g_object_class)
 		G_TYPE_POINTER);
 
 	/* Project signals */
-<<<<<<< HEAD
-	geany_object_signals[GCB_PROJECT_NEW_CLOSE] = g_signal_new (
-		"project-new-close",
-		G_OBJECT_CLASS_TYPE (g_object_class),
-		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_new_close),
-=======
 	geany_object_signals[GCB_PROJECT_NEW] = g_signal_new (
 		"project-new",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
 		G_STRUCT_OFFSET (GeanyObjectClass, project_new),
->>>>>>> This patch make it possible for a plugin to detect when the user
 		NULL, NULL,
 		g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
