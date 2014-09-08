@@ -256,7 +256,7 @@ void project_new(void)
 				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
 				ui_add_recent_project_file(app->project->file_name);
 				
-				g_signal_emit_by_name(geany_object, "project-new-close", app->project);
+				g_signal_emit_by_name(geany_object, "project-new", app->project);
 				break;
 			}
 		}

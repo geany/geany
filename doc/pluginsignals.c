@@ -139,7 +139,7 @@ signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_da
  *        It must not be closed or freed.
  * @param user_data user data.
  */
-signal void (*project_new_close)(GObject *obj, GKeyFile *config, gpointer user_data);
+signal void (*project_new)(GObject *obj, GKeyFile *config, gpointer user_data);
 
 /** Sent after a project is opened but before session files are loaded.
  *
