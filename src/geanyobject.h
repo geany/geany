@@ -95,6 +95,7 @@ struct _GeanyObjectClass
 	void (*document_filetype_set)(GeanyDocument *doc, GeanyFiletype *filetype_old);
 	void (*document_activate)(GeanyDocument *doc);
 	void (*document_close)(GeanyDocument *doc);
+	void (*project_new_close)(void);
 	void (*project_open)(GKeyFile *keyfile);
 	void (*project_save)(GKeyFile *keyfile);
 	void (*project_close)(void);
