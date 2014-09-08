@@ -14,8 +14,26 @@
 WINDRES = windres.exe
 CC = gcc
 CXX = g++
+
+ifdef MSYS
+CP = cp
+RM = rm -f
+/ = /
+elif MAKE_MODE
+#
+# Unix like shell, like git
+#
+CP = cp
+RM = rm -f
+/ = /
+else
+#
+# Pure windows cmd window
+#
 CP = copy /y
 RM = del
+endif
+
 MKDIR = mkdir
 # $/ is used as a portable directory separator
 # strip is used to prevent line wrap
@@ -23,11 +41,6 @@ MKDIR = mkdir
 DESTDIR = C:/Program Files/Geany
 -include localwin32.mk
 
-ifdef MSYS
-CP = cp
-RM = rm -f
-/ = /
-endif
 
 all: config.h
 	$(MAKE) -C tagmanager/ctags -f makefile.win32

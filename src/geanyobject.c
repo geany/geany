@@ -245,6 +245,15 @@ static void create_signals(GObjectClass *g_object_class)
 		G_TYPE_POINTER);
 
 	/* Project signals */
+	geany_object_signals[GCB_PROJECT_NEW_CLOSE] = g_signal_new (
+		"project-new_close",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
+		NULL, NULL,
+		g_cclosure_marshal_VOID__POINTER,
+		G_TYPE_NONE, 1,
+		G_TYPE_POINTER);
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
