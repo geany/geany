@@ -2234,6 +2234,8 @@ void ui_init_prefs(void)
 		"msgwin_messages_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
 		"msgwin_scribble_visible", TRUE);
+	stash_group_add_integer(group, &interface_prefs.max_notebook_tab_width,
+		"max_notebook_tab_width", 30);
 }
 
 
