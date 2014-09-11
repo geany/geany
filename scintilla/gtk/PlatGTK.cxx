@@ -1226,12 +1226,11 @@ Window::~Window() {}
 
 void Window::Destroy() {
 	if (wid) {
-		if (dynamic_cast<ListBox*>(this)) {
+		ListBox *listbox = dynamic_cast<ListBox*>(this);
+		if (listbox) {
 			gtk_widget_hide(GTK_WIDGET(wid));
 			// clear up window content
-			GtkWidget *child = gtk_bin_get_child(GTK_BIN(wid));
-			if (child)
-				gtk_widget_destroy(child);
+			listbox->Clear();
 			// resize the window to the smallest possible size for it to adapt
 			// to future content
 			gtk_window_resize(GTK_WINDOW(wid), 1, 1);
@@ -1455,6 +1454,7 @@ public:
 	virtual void SetAverageCharWidth(int width);
 	virtual void SetVisibleRows(int rows);
 	virtual int GetVisibleRows() const;
+	int GetRowHeight();
 	virtual PRectangle GetDesiredRect();
 	virtual int CaretFromEdge();
 	virtual void Clear();
@@ -1541,10 +1541,12 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 }
 
 void ListBoxX::Create(Window &, int, Point, int, bool, int) {
-	if (widCached == 0)
-		widCached = gtk_window_new(GTK_WINDOW_POPUP);
+	if (widCached != 0) {
+		wid = widCached;
+		return;
+	}
 
-	wid = widCached;
+	wid = widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
 	GtkWidget *frame = gtk_frame_new(NULL);
 	gtk_widget_show(frame);
@@ -1598,7 +1600,6 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	gtk_widget_show(wid);
 	g_signal_connect(G_OBJECT(wid), "button_press_event",
 	                   G_CALLBACK(ButtonPress), this);
-	gtk_widget_realize(PWidget(wid));
 }
 
 void ListBoxX::SetFont(Font &scint_font) {
@@ -1625,6 +1626,21 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
+int ListBoxX::GetRowHeight()
+{
+	int row_height=0;
+	int vertical_separator=0;
+	int expander_size=0;
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
+	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
+	gtk_widget_style_get(PWidget(list),
+		"vertical-separator", &vertical_separator,
+		"expander-size", &expander_size, NULL);
+	row_height += vertical_separator;
+	row_height = Platform::Maximum(row_height, expander_size);
+	return row_height;
+}
+
 PRectangle ListBoxX::GetDesiredRect() {
 	// Before any size allocated pretend its 100 wide so not scrolled
 	PRectangle rc(0, 0, 100, 100);
@@ -1634,22 +1650,19 @@ PRectangle ListBoxX::GetDesiredRect() {
 			rows = desiredVisibleRows;
 
 		GtkRequisition req;
-#if GTK_CHECK_VERSION(3,0,0)
 		// This, apparently unnecessary call, ensures gtk_tree_view_column_cell_get_size
 		// returns reasonable values.
+#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
+#else
+		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
 #endif
 		int height;
 
 		// First calculate height of the clist for our desired visible
 		// row count otherwise it tries to expand to the total # of rows
 		// Get cell height
-		int row_width=0;
-		int row_height=0;
-		GtkTreeViewColumn * column =
-			gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-		gtk_tree_view_column_cell_get_size(column, NULL,
-			NULL, NULL, &row_width, &row_height);
+		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextList = gtk_widget_get_style_context(PWidget(list));
 		GtkBorder padding;
@@ -1661,7 +1674,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int ythickness = PWidget(list)->style->ythickness;
 		height = (rows * row_height
 		          + 2 * (ythickness
-		                 + GTK_CONTAINER(PWidget(list))->border_width + 1));
+		                 + GTK_CONTAINER(PWidget(list))->border_width));
 #endif
 		gtk_widget_set_size_request(GTK_WIDGET(PWidget(list)), -1, height);
 
@@ -1792,12 +1805,7 @@ void ListBoxX::Select(int n) {
 							+ adj->lower - adj->page_size / 2;
 #endif
 		// Get cell height
-		int row_width;
-		int row_height;
-		GtkTreeViewColumn * column =
-			gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-		gtk_tree_view_column_cell_get_size(column, NULL, NULL,
-											NULL, &row_width, &row_height);
+		int row_height = GetRowHeight();
 
 		int rows = Length();
 		if ((rows == 0) || (rows > desiredVisibleRows))
