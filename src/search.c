@@ -1968,10 +1968,15 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 {
 	const gchar *text;
 	GMatchInfo *minfo;
+	guint document_length;
 	gint ret = -1;
 	gint offset = 0;
 
-	g_return_val_if_fail(pos <= (guint)sci_get_length(sci), -1);
+	document_length = (guint)sci_get_length(sci);
+	if (document_length <= 0)
+		return -1; /* skip empty documents */
+
+	g_return_val_if_fail(pos <= document_length, -1);
 
 	if (g_regex_get_compile_flags(regex) & G_REGEX_MULTILINE)
 	{
