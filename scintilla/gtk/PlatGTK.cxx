@@ -1692,8 +1692,29 @@ PRectangle ListBoxX::GetDesiredRect() {
 		if (width < 12)
 			width = 12;
 		rc.right = width * (aveCharWidth + aveCharWidth / 3);
-		if (Length() > rows)
-			rc.right = rc.right + 16;
+		// Add horizontal padding and borders
+		int horizontal_separator=0;
+		gtk_widget_style_get(PWidget(list),
+			"horizontal-separator", &horizontal_separator, NULL);
+		rc.right += horizontal_separator;
+#if GTK_CHECK_VERSION(3,0,0)
+		rc.right += (padding.left + padding.right
+		             + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
+#else
+		rc.right += 2 * (PWidget(list)->style->xthickness
+		                 + GTK_CONTAINER(PWidget(list))->border_width);
+#endif
+		if (Length() > rows) {
+			// Add the width of the scrollbar
+			GtkWidget *vscrollbar =
+				gtk_scrolled_window_get_vscrollbar(GTK_SCROLLED_WINDOW(scroller));
+#if GTK_CHECK_VERSION(3,0,0)
+			gtk_widget_get_preferred_size(vscrollbar, NULL, &req);
+#else
+			gtk_widget_size_request(vscrollbar, &req);
+#endif
+			rc.right += req.width;
+		}
 	}
 	return rc;
 }
