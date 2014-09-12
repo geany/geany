@@ -1299,7 +1299,7 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
 
 	gtk_window_move(GTK_WINDOW(PWidget(wid)), ox, oy);
 
-	gtk_widget_set_size_request(PWidget(wid), sizex, sizey);
+	gtk_window_resize(GTK_WINDOW(wid), sizex, sizey);
 }
 
 PRectangle Window::GetClientPosition() {
@@ -1480,6 +1480,35 @@ ListBox *ListBox::Allocate() {
 	return lb;
 }
 
+// SmallScroller, a GtkScrolledWindow that can shrink very small, as
+// gtk_widget_set_size_request() cannot shrink widgets on GTK3
+typedef GtkScrolledWindow SmallScroller;
+typedef GtkScrolledWindowClass SmallScrollerClass;
+
+G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
+	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
+	*min = 1;
+}
+#else
+static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
+	GTK_WIDGET_CLASS(small_scroller_parent_class)->size_request(widget, req);
+	req->height = 1;
+}
+#endif
+
+static void small_scroller_class_init(SmallScrollerClass *klass) {
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS(klass)->get_preferred_height = small_scroller_get_preferred_height;
+#else
+	GTK_WIDGET_CLASS(klass)->size_request = small_scroller_size_request;
+#endif
+}
+
+static void small_scroller_init(SmallScroller *){}
+
 static gboolean ButtonPress(GtkWidget *, GdkEventButton* ev, gpointer p) {
 	try {
 		ListBoxX* lb = reinterpret_cast<ListBoxX*>(p);
@@ -1554,7 +1583,7 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 
-	scroller = gtk_scrolled_window_new(NULL, NULL);
+	scroller = g_object_new(small_scroller_get_type(), NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(scroller), 0);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroller),
 	                               GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -1676,18 +1705,8 @@ PRectangle ListBoxX::GetDesiredRect() {
 		          + 2 * (ythickness
 		                 + GTK_CONTAINER(PWidget(list))->border_width));
 #endif
-		gtk_widget_set_size_request(GTK_WIDGET(PWidget(list)), -1, height);
+		rc.bottom = height;
 
-		// Get the size of the scroller because we set usize on the window
-#if GTK_CHECK_VERSION(3,0,0)
-		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
-#else
-		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
-#endif
-		rc.right = req.width;
-		rc.bottom = Platform::Maximum(height, req.height);
-
-		gtk_widget_set_size_request(GTK_WIDGET(list), -1, -1);
 		int width = maxItemCharacters;
 		if (width < 12)
 			width = 12;
