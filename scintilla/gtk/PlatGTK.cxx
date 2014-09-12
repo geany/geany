@@ -1423,6 +1423,7 @@ enum {
 
 class ListBoxX : public ListBox {
 	WindowID widCached;
+	WindowID frame;
 	WindowID list;
 	WindowID scroller;
 	void *pixhash;
@@ -1435,7 +1436,7 @@ public:
 	CallBackAction doubleClickAction;
 	void *doubleClickActionData;
 
-	ListBoxX() : widCached(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
+	ListBoxX() : widCached(0), frame(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
 		desiredVisibleRows(5), maxItemCharacters(0),
 		aveCharWidth(1), doubleClickAction(NULL), doubleClickActionData(NULL) {
 	}
@@ -1577,9 +1578,9 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 
 	wid = widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
-	GtkWidget *frame = gtk_frame_new(NULL);
-	gtk_widget_show(frame);
-	gtk_container_add(GTK_CONTAINER(GetID()), frame);
+	frame = gtk_frame_new(NULL);
+	gtk_widget_show(PWidget(frame));
+	gtk_container_add(GTK_CONTAINER(GetID()), PWidget(frame));
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 
@@ -1682,9 +1683,9 @@ PRectangle ListBoxX::GetDesiredRect() {
 		// This, apparently unnecessary call, ensures gtk_tree_view_column_cell_get_size
 		// returns reasonable values.
 #if GTK_CHECK_VERSION(3,0,0)
-		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
+		gtk_widget_get_preferred_size(GTK_WIDGET(frame), NULL, &req);
 #else
-		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
+		gtk_widget_size_request(GTK_WIDGET(frame), &req);
 #endif
 		int height;
 
@@ -1693,16 +1694,15 @@ PRectangle ListBoxX::GetDesiredRect() {
 		// Get cell height
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
-		GtkStyleContext *styleContextList = gtk_widget_get_style_context(PWidget(list));
+		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
 		GtkBorder padding;
-		gtk_style_context_get_padding(styleContextList, GTK_STATE_FLAG_NORMAL, &padding);
+		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
 #else
-		int ythickness = PWidget(list)->style->ythickness;
 		height = (rows * row_height
-		          + 2 * (ythickness
+		          + 2 * (PWidget(frame)->style->ythickness
 		                 + GTK_CONTAINER(PWidget(list))->border_width));
 #endif
 		rc.bottom = height;
@@ -1720,7 +1720,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 		rc.right += (padding.left + padding.right
 		             + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
 #else
-		rc.right += 2 * (PWidget(list)->style->xthickness
+		rc.right += 2 * (PWidget(frame)->style->xthickness
 		                 + GTK_CONTAINER(PWidget(list))->border_width);
 #endif
 		if (Length() > rows) {
