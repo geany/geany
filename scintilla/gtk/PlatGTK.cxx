@@ -1226,12 +1226,11 @@ Window::~Window() {}
 
 void Window::Destroy() {
 	if (wid) {
-		if (dynamic_cast<ListBox*>(this)) {
+		ListBox *listbox = dynamic_cast<ListBox*>(this);
+		if (listbox) {
 			gtk_widget_hide(GTK_WIDGET(wid));
 			// clear up window content
-			GtkWidget *child = gtk_bin_get_child(GTK_BIN(wid));
-			if (child)
-				gtk_widget_destroy(child);
+			listbox->Clear();
 			// resize the window to the smallest possible size for it to adapt
 			// to future content
 			gtk_window_resize(GTK_WINDOW(wid), 1, 1);
@@ -1300,7 +1299,7 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
 
 	gtk_window_move(GTK_WINDOW(PWidget(wid)), ox, oy);
 
-	gtk_widget_set_size_request(PWidget(wid), sizex, sizey);
+	gtk_window_resize(GTK_WINDOW(wid), sizex, sizey);
 }
 
 PRectangle Window::GetClientPosition() {
@@ -1424,6 +1423,7 @@ enum {
 
 class ListBoxX : public ListBox {
 	WindowID widCached;
+	WindowID frame;
 	WindowID list;
 	WindowID scroller;
 	void *pixhash;
@@ -1436,7 +1436,7 @@ public:
 	CallBackAction doubleClickAction;
 	void *doubleClickActionData;
 
-	ListBoxX() : widCached(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
+	ListBoxX() : widCached(0), frame(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
 		desiredVisibleRows(5), maxItemCharacters(0),
 		aveCharWidth(1), doubleClickAction(NULL), doubleClickActionData(NULL) {
 	}
@@ -1455,6 +1455,7 @@ public:
 	virtual void SetAverageCharWidth(int width);
 	virtual void SetVisibleRows(int rows);
 	virtual int GetVisibleRows() const;
+	int GetRowHeight();
 	virtual PRectangle GetDesiredRect();
 	virtual int CaretFromEdge();
 	virtual void Clear();
@@ -1479,6 +1480,35 @@ ListBox *ListBox::Allocate() {
 	ListBoxX *lb = new ListBoxX();
 	return lb;
 }
+
+// SmallScroller, a GtkScrolledWindow that can shrink very small, as
+// gtk_widget_set_size_request() cannot shrink widgets on GTK3
+typedef GtkScrolledWindow SmallScroller;
+typedef GtkScrolledWindowClass SmallScrollerClass;
+
+G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
+
+#if GTK_CHECK_VERSION(3,0,0)
+static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
+	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
+	*min = 1;
+}
+#else
+static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
+	GTK_WIDGET_CLASS(small_scroller_parent_class)->size_request(widget, req);
+	req->height = 1;
+}
+#endif
+
+static void small_scroller_class_init(SmallScrollerClass *klass) {
+#if GTK_CHECK_VERSION(3,0,0)
+	GTK_WIDGET_CLASS(klass)->get_preferred_height = small_scroller_get_preferred_height;
+#else
+	GTK_WIDGET_CLASS(klass)->size_request = small_scroller_size_request;
+#endif
+}
+
+static void small_scroller_init(SmallScroller *){}
 
 static gboolean ButtonPress(GtkWidget *, GdkEventButton* ev, gpointer p) {
 	try {
@@ -1541,18 +1571,20 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 }
 
 void ListBoxX::Create(Window &, int, Point, int, bool, int) {
-	if (widCached == 0)
-		widCached = gtk_window_new(GTK_WINDOW_POPUP);
+	if (widCached != 0) {
+		wid = widCached;
+		return;
+	}
 
-	wid = widCached;
+	wid = widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
-	GtkWidget *frame = gtk_frame_new(NULL);
-	gtk_widget_show(frame);
-	gtk_container_add(GTK_CONTAINER(GetID()), frame);
+	frame = gtk_frame_new(NULL);
+	gtk_widget_show(PWidget(frame));
+	gtk_container_add(GTK_CONTAINER(GetID()), PWidget(frame));
 	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
 	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
 
-	scroller = gtk_scrolled_window_new(NULL, NULL);
+	scroller = g_object_new(small_scroller_get_type(), NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(scroller), 0);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroller),
 	                               GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -1598,7 +1630,6 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	gtk_widget_show(wid);
 	g_signal_connect(G_OBJECT(wid), "button_press_event",
 	                   G_CALLBACK(ButtonPress), this);
-	gtk_widget_realize(PWidget(wid));
 }
 
 void ListBoxX::SetFont(Font &scint_font) {
@@ -1625,6 +1656,21 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
+int ListBoxX::GetRowHeight()
+{
+	int row_height=0;
+	int vertical_separator=0;
+	int expander_size=0;
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
+	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
+	gtk_widget_style_get(PWidget(list),
+		"vertical-separator", &vertical_separator,
+		"expander-size", &expander_size, NULL);
+	row_height += vertical_separator;
+	row_height = Platform::Maximum(row_height, expander_size);
+	return row_height;
+}
+
 PRectangle ListBoxX::GetDesiredRect() {
 	// Before any size allocated pretend its 100 wide so not scrolled
 	PRectangle rc(0, 0, 100, 100);
@@ -1634,53 +1680,60 @@ PRectangle ListBoxX::GetDesiredRect() {
 			rows = desiredVisibleRows;
 
 		GtkRequisition req;
-#if GTK_CHECK_VERSION(3,0,0)
 		// This, apparently unnecessary call, ensures gtk_tree_view_column_cell_get_size
 		// returns reasonable values.
-		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
+#if GTK_CHECK_VERSION(3,0,0)
+		gtk_widget_get_preferred_size(GTK_WIDGET(frame), NULL, &req);
+#else
+		gtk_widget_size_request(GTK_WIDGET(frame), &req);
 #endif
 		int height;
 
 		// First calculate height of the clist for our desired visible
 		// row count otherwise it tries to expand to the total # of rows
 		// Get cell height
-		int row_width=0;
-		int row_height=0;
-		GtkTreeViewColumn * column =
-			gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-		gtk_tree_view_column_cell_get_size(column, NULL,
-			NULL, NULL, &row_width, &row_height);
+		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
-		GtkStyleContext *styleContextList = gtk_widget_get_style_context(PWidget(list));
+		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
 		GtkBorder padding;
-		gtk_style_context_get_padding(styleContextList, GTK_STATE_FLAG_NORMAL, &padding);
+		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
 #else
-		int ythickness = PWidget(list)->style->ythickness;
 		height = (rows * row_height
-		          + 2 * (ythickness
-		                 + GTK_CONTAINER(PWidget(list))->border_width + 1));
+		          + 2 * (PWidget(frame)->style->ythickness
+		                 + GTK_CONTAINER(PWidget(list))->border_width));
 #endif
-		gtk_widget_set_size_request(GTK_WIDGET(PWidget(list)), -1, height);
+		rc.bottom = height;
 
-		// Get the size of the scroller because we set usize on the window
-#if GTK_CHECK_VERSION(3,0,0)
-		gtk_widget_get_preferred_size(GTK_WIDGET(scroller), NULL, &req);
-#else
-		gtk_widget_size_request(GTK_WIDGET(scroller), &req);
-#endif
-		rc.right = req.width;
-		rc.bottom = Platform::Maximum(height, req.height);
-
-		gtk_widget_set_size_request(GTK_WIDGET(list), -1, -1);
 		int width = maxItemCharacters;
 		if (width < 12)
 			width = 12;
 		rc.right = width * (aveCharWidth + aveCharWidth / 3);
-		if (Length() > rows)
-			rc.right = rc.right + 16;
+		// Add horizontal padding and borders
+		int horizontal_separator=0;
+		gtk_widget_style_get(PWidget(list),
+			"horizontal-separator", &horizontal_separator, NULL);
+		rc.right += horizontal_separator;
+#if GTK_CHECK_VERSION(3,0,0)
+		rc.right += (padding.left + padding.right
+		             + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
+#else
+		rc.right += 2 * (PWidget(frame)->style->xthickness
+		                 + GTK_CONTAINER(PWidget(list))->border_width);
+#endif
+		if (Length() > rows) {
+			// Add the width of the scrollbar
+			GtkWidget *vscrollbar =
+				gtk_scrolled_window_get_vscrollbar(GTK_SCROLLED_WINDOW(scroller));
+#if GTK_CHECK_VERSION(3,0,0)
+			gtk_widget_get_preferred_size(vscrollbar, NULL, &req);
+#else
+			gtk_widget_size_request(vscrollbar, &req);
+#endif
+			rc.right += req.width;
+		}
 	}
 	return rc;
 }
@@ -1792,12 +1845,7 @@ void ListBoxX::Select(int n) {
 							+ adj->lower - adj->page_size / 2;
 #endif
 		// Get cell height
-		int row_width;
-		int row_height;
-		GtkTreeViewColumn * column =
-			gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-		gtk_tree_view_column_cell_get_size(column, NULL, NULL,
-											NULL, &row_width, &row_height);
+		int row_height = GetRowHeight();
 
 		int rows = Length();
 		if ((rows == 0) || (rows > desiredVisibleRows))
