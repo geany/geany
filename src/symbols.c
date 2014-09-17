@@ -50,6 +50,7 @@
 #include "sciwrappers.h"
 #include "sidebar.h"
 #include "support.h"
+#include "tm_parser.h"
 #include "tm_tag.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -272,7 +273,8 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
 			 * e.g. PHP classes in C++ files
 			 * lang = -2 disables the check */
-			if (tag->name && (tag_lang == lang || lang == -2))
+			if (tag->name && (tag_lang == lang || lang == -2 ||
+				(lang == TM_PARSER_CPP && tag_lang == TM_PARSER_C)))
 			{
 				if (j != 0)
 					g_string_append_c(s, ' ');
