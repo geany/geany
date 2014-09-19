@@ -1654,7 +1654,6 @@ cleanUp:
 static void parseUI5 (tokenInfo *const token)
 {
 	tokenInfo *const name = newToken ();
-	boolean is_inside_class = FALSE;
 	/*
 	 * SAPUI5 is built on top of jQuery.
 	 * It follows a standard format:
@@ -1696,9 +1695,8 @@ static void parseUI5 (tokenInfo *const token)
 			parseMethods (token, name);
 		} while (! isType (token, TOKEN_CLOSE_CURLY) );
 	}
-cleanUp:
-	deleteToken (name);
 
+	deleteToken (name);
 }
 
 static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
