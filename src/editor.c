@@ -1445,13 +1445,7 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
 		 * somebody wants it */
 		if (end_pos < sci_get_line_end_position (sci, match_line) - 1)
 		{
-			gint tab_width;
-
-			pos = sci_get_position_from_line(sci, match_line);
-			tab_width = sci_get_tab_width(sci);
-			ret = 0;
-			for (; pos <= end_pos; pos = sci_get_position_after(sci, pos))
-				ret += (sci_get_char_at(sci, pos) == '\t') ? tab_width : 1;
+			ret = sci_get_col_from_position(sci, end_pos + 1);
 			/* and then keep the smallest indent of a line between match and current,
 			 * not to restore a user reduced indent (e.g. for base_indent+1 style) */
 			for (++match_line; match_line < line; ++match_line)
