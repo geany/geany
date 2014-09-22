@@ -1695,11 +1695,13 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
-		GtkBorder padding;
+		GtkBorder padding, border;
 		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
+		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
 		height = (rows * row_height
 		          + padding.top + padding.bottom
-		          + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
+		          + border.top + border.bottom
+		          + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		height = (rows * row_height
 		          + 2 * (PWidget(frame)->style->ythickness
@@ -1718,7 +1720,8 @@ PRectangle ListBoxX::GetDesiredRect() {
 		rc.right += horizontal_separator;
 #if GTK_CHECK_VERSION(3,0,0)
 		rc.right += (padding.left + padding.right
-		             + 2 * (gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))) + 1));
+		             + border.left + border.right
+		             + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		rc.right += 2 * (PWidget(frame)->style->xthickness
 		                 + GTK_CONTAINER(PWidget(list))->border_width);
