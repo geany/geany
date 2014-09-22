@@ -39,10 +39,11 @@
 #include "geanyobject.h"
 
 /* extern in geany.h */
-GObject	*geany_object;
+GEANY_EXPORT GObject	*geany_object;
+/* Forward declare with GEANY_EXPORT, will be defined by G_DEFINE_TYPE macro */
+GEANY_EXPORT GType		geany_object_get_type	(void);
 
 static guint geany_object_signals[GCB_MAX] = { 0 };
-
 
 typedef struct _GeanyObjectPrivate GeanyObjectPrivate;
 
