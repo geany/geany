@@ -1409,7 +1409,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 
 
 /**
- *  Reloads the document with the specified file encoding
+ *  Reloads the document with the specified file encoding.
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
  *
  *  @param doc The document to reload.
@@ -3270,7 +3270,7 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
-		document_reload_file(doc, doc->encoding);
+		document_reload_prompt(doc, doc->encoding);
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
 		document_save_file(doc, TRUE);
 	else if (response_id == GTK_RESPONSE_CANCEL)
