@@ -1655,6 +1655,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 
 	if (new_file)
 	{
+		// assume user wants to throw away read-only setting
 		sci_set_readonly(doc->editor->sci, FALSE);
 		doc->readonly = FALSE;
 		if (doc->priv->protected > 0)
