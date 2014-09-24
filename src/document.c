@@ -3218,7 +3218,6 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	g_free(markup);
 
 	g_signal_connect(info_widget, "response", G_CALLBACK(response_cb), doc);
-	g_signal_connect_after(info_widget, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 12);
 	gtk_box_pack_start(GTK_BOX(content_area), hbox, TRUE, TRUE, 0);
@@ -3266,15 +3265,28 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
+	gboolean close = FALSE;
+
+	// disable info bar so actions complete normally
 	unprotect_document(doc);
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
-		document_reload_prompt(doc, doc->encoding);
+		close = document_reload_prompt(doc, doc->encoding);
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
-		document_save_file(doc, TRUE);
+		close = document_save_file(doc, TRUE);	// force overwrite
 	else if (response_id == GTK_RESPONSE_CANCEL)
+	{
 		document_set_text_changed(doc, TRUE);
+		close = TRUE;
+	}
+	if (!close)
+	{
+		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+		protect_document(doc);
+		return;
+	}
+	gtk_widget_destroy(bar);
 }
 
 
