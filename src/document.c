@@ -1929,11 +1929,14 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		return dialogs_show_save_as();
 	}
 
-	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (doc->readonly)
-		return FALSE;
 	if (!force && !doc->changed)
 		return FALSE;
+	if (doc->readonly)
+	{
+		ui_set_statusbar(TRUE,
+			_("Cannot save read-only document '%s'!"), DOC_FILENAME(doc));
+		return FALSE;
+	}
 	if (doc->priv->protected)
 	{
 		return save_file_handle_infobars(doc, force);
