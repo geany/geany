@@ -58,7 +58,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 219
+#define GEANY_API_VERSION 220
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -310,7 +310,7 @@ typedef struct DocumentFuncs
 	void		(*document_open_files) (const GSList *filenames, gboolean readonly,
 			struct GeanyFiletype *ft, const gchar *forced_enc);
 	gboolean	(*document_remove_page) (guint page_num);
-	gboolean	(*document_reload_file) (struct GeanyDocument *doc, const gchar *forced_enc);
+	gboolean	(*document_reload_force) (struct GeanyDocument *doc, const gchar *forced_enc);
 	void		(*document_set_encoding) (struct GeanyDocument *doc, const gchar *new_encoding);
 	void		(*document_set_text_changed) (struct GeanyDocument *doc, gboolean changed);
 	void		(*document_set_filetype) (struct GeanyDocument *doc, struct GeanyFiletype *type);
@@ -740,6 +740,8 @@ BuildFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
+
+#define document_reload_file document_reload_force
 
 /** @deprecated - copy into your plugin code if needed.
  * @c NULL-safe way to get the index of @a doc_ptr in the documents array. */

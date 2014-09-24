@@ -98,7 +98,7 @@ static DocumentFuncs doc_funcs = {
 	&document_open_file,
 	&document_open_files,
 	&document_remove_page,
-	&document_reload_file,
+	&document_reload_force,
 	&document_set_encoding,
 	&document_set_text_changed,
 	&document_set_filetype,

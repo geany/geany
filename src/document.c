@@ -1417,7 +1417,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
  *
  *  @return @c TRUE if the document was actually reloaded or @c FALSE otherwise.
  **/
-gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
+gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
 	GeanyDocument *new_doc;
@@ -1458,7 +1458,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
-		result = document_reload_file(doc, forced_enc);
+		result = document_reload_force(doc, forced_enc);
 		if (forced_enc != NULL)
 			ui_update_statusbar(doc, -1);
 	}

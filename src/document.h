@@ -196,7 +196,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc);
 
-gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
+gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
 
 gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
 
