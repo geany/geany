@@ -120,6 +120,7 @@ struct VteFunctions
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
+	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
 };
 
 
@@ -160,6 +161,18 @@ static const GtkTargetEntry dnd_targets[] =
   { "STRING", 0, TARGET_STRING },
   { "text/plain", 0, TARGET_TEXT_PLAIN },
 };
+
+
+/* replacement for vte_terminal_get_adjustment() when it's not available */
+static GtkAdjustment *default_vte_terminal_get_adjustment(VteTerminal *vte)
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+	if (GTK_IS_SCROLLABLE(vte))
+		return gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(vte));
+#endif
+	/* this is only valid in < 0.38, 0.38 broke ABI */
+	return vte->adjustment;
+}
 
 
 static gchar **vte_get_child_environment(void)
@@ -283,7 +296,7 @@ static void create_vte(void)
 	GtkWidget *vte, *scrollbar, *hbox;
 
 	vc->vte = vte = vf->vte_terminal_new();
-	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
+	scrollbar = gtk_vscrollbar_new(vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
 	gtk_widget_set_can_focus(scrollbar, FALSE);
 
 	/* create menu now so copy/paste shortcuts work */
@@ -517,6 +530,9 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_cursor_blinks);
 	BIND_REQUIRED_SYMBOL(vte_terminal_select_all);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_audible_bell);
+	if (! BIND_SYMBOL(vte_terminal_get_adjustment))
+		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
+		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;
 
 	#undef BIND_REQUIRED_SYMBOL
 	#undef BIND_SYMBOL
