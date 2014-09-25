@@ -59,7 +59,7 @@
 VteInfo vte_info = { FALSE, FALSE, FALSE, NULL, NULL };
 VteConfig *vc;
 
-static pid_t pid = 0;
+static GPid pid = 0;
 static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
@@ -88,6 +88,11 @@ typedef enum {
 	VTE_CURSOR_BLINK_OFF
 } VteTerminalCursorBlinkMode;
 
+typedef enum {
+	/* we don't care for the other possible values */
+	VTE_PTY_DEFAULT = 0
+} VtePtyFlags;
+
 
 /* Holds function pointers we need to access the VTE API. */
 struct VteFunctions
@@ -96,6 +101,11 @@ struct VteFunctions
 	pid_t (*vte_terminal_fork_command) (VteTerminal *terminal, const char *command, char **argv,
 										char **envv, const char *directory, gboolean lastlog,
 										gboolean utmp, gboolean wtmp);
+	gboolean (*vte_terminal_spawn_sync) (VteTerminal *terminal, VtePtyFlags pty_flags,
+										 const char *working_directory, char **argv, char **envv,
+										 GSpawnFlags spawn_flags, GSpawnChildSetupFunc child_setup,
+										 gpointer child_setup_data, GPid *child_pid,
+										 GCancellable *cancellable, GError **error);
 	void (*vte_terminal_set_size) (VteTerminal *terminal, glong columns, glong rows);
 	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
 	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
@@ -435,8 +445,20 @@ static void vte_start(GtkWidget *widget)
 	{
 		gchar **env = vte_get_child_environment();
 
-		pid = vf->vte_terminal_fork_command(VTE_TERMINAL(widget), argv[0], argv, env,
-											vte_info.dir, TRUE, TRUE, TRUE);
+		if (vf->vte_terminal_spawn_sync)
+		{
+			if (! vf->vte_terminal_spawn_sync(VTE_TERMINAL(widget), VTE_PTY_DEFAULT,
+											  vte_info.dir, argv, env, 0, NULL, NULL,
+											  &pid, NULL, NULL))
+			{
+				pid = -1;
+			}
+		}
+		else
+		{
+			pid = vf->vte_terminal_fork_command(VTE_TERMINAL(widget), argv[0], argv, env,
+												vte_info.dir, TRUE, TRUE, TRUE);
+		}
 		g_strfreev(env);
 		g_strfreev(argv);
 	}
@@ -503,7 +525,9 @@ static gboolean vte_register_symbols(GModule *mod)
 
 	BIND_REQUIRED_SYMBOL(vte_terminal_new);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_size);
-	BIND_REQUIRED_SYMBOL(vte_terminal_fork_command);
+	if (! BIND_SYMBOL(vte_terminal_spawn_sync))
+		/* vte_terminal_spawn_sync() is available only in 0.38 */
+		BIND_REQUIRED_SYMBOL(vte_terminal_fork_command);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_word_chars);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_mouse_autohide);
 	BIND_REQUIRED_SYMBOL(vte_terminal_reset);
