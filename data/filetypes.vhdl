@@ -4,6 +4,7 @@
 default=default
 comment=comment
 comment_line_bang=comment_line
+block_comment=comment
 number=number_1
 string=string_1
 operator=operator
