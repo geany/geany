@@ -261,6 +261,7 @@ void vte_init(void)
 	}
 	else
 	{
+		geany_debug("Loaded libvte from %s", g_module_name(module));
 		vf = g_new0(struct VteFunctions, 1);
 		if (vte_register_symbols(module))
 			vte_info.have_vte = TRUE;
