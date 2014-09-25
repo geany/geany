@@ -19,6 +19,7 @@ sqlplus=default
 sqlplus_prompt=default
 sqlplus_comment=comment
 quotedidentifier=identifier_2
+qoperator=operator
 
 [keywords]
 # all items must be in one line
