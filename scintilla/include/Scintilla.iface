@@ -243,6 +243,16 @@ val SC_CP_UTF8=65001
 # The SC_CP_UTF8 value can be used to enter Unicode mode.
 set void SetCodePage=2037(int codePage,)
 
+enu IMEInteraction=SC_IME_
+val SC_IME_WINDOWED=0
+val SC_IME_INLINE=1
+
+# Is the IME displayed in a winow or inline?
+get int GetIMEInteraction=2678(,)
+
+# Choose to display the the IME in a winow or inline.
+set void SetIMEInteraction=2679(int imeInteraction,) 
+
 enu MarkerSymbol=SC_MARK_
 val MARKER_MAX=31
 val SC_MARK_CIRCLE=0
@@ -2349,6 +2359,7 @@ fun void ScrollToEnd=2629(,)
 
 val SC_TECHNOLOGY_DEFAULT=0
 val SC_TECHNOLOGY_DIRECTWRITE=1
+val SC_TECHNOLOGY_DIRECTWRITERETAIN=2
 
 # Set the technology used.
 set void SetTechnology=2630(int technology,)
@@ -2700,6 +2711,7 @@ val SCLEX_DMAP=112
 val SCLEX_AS=113
 val SCLEX_DMIS=114
 val SCLEX_REGISTRY=115
+val SCLEX_BIBTEX=116
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -3703,6 +3715,7 @@ val SCE_VHDL_STDFUNCTION=11
 val SCE_VHDL_STDPACKAGE=12
 val SCE_VHDL_STDTYPE=13
 val SCE_VHDL_USERWORD=14
+val SCE_VHDL_BLOCK_COMMENT=15
 # Lexical states for SCLEX_CAML
 lex Caml=SCLEX_CAML SCE_CAML_
 val SCE_CAML_DEFAULT=0
@@ -3824,6 +3837,7 @@ val SCE_SQL_USER2=20
 val SCE_SQL_USER3=21
 val SCE_SQL_USER4=22
 val SCE_SQL_QUOTEDIDENTIFIER=23
+val SCE_SQL_QOPERATOR=24
 # Lexical states for SCLEX_SMALLTALK
 lex Smalltalk=SCLEX_SMALLTALK SCE_ST_
 val SCE_ST_DEFAULT=0
@@ -4512,6 +4526,15 @@ val SCE_REG_KEYPATH_GUID=9
 val SCE_REG_STRING_GUID=10
 val SCE_REG_PARAMETER=11
 val SCE_REG_OPERATOR=12
+# Lexical state for SCLEX_BIBTEX
+lex BibTeX=SCLEX_BIBTEX SCE_BIBTEX_
+val SCE_BIBTEX_DEFAULT=0
+val SCE_BIBTEX_ENTRY=1
+val SCE_BIBTEX_UNKNOWN_ENTRY=2
+val SCE_BIBTEX_KEY=3
+val SCE_BIBTEX_PARAMETER=4
+val SCE_BIBTEX_VALUE=5
+val SCE_BIBTEX_COMMENT=6
 
 # Events
 

@@ -937,6 +937,8 @@ void Document::CheckReadOnly() {
 // SetStyleAt does not change the persistent state of a document
 
 bool Document::DeleteChars(int pos, int len) {
+	if (pos < 0)
+		return false;
 	if (len <= 0)
 		return false;
 	if ((pos + len) > Length())
@@ -2198,8 +2200,8 @@ public:
 long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s,
                         bool caseSensitive, bool, bool, int flags,
                         int *length) {
-	bool posix = (flags & SCFIND_POSIX) != 0;
-	int increment = (minPos <= maxPos) ? 1 : -1;
+	const bool posix = (flags & SCFIND_POSIX) != 0;
+	const int increment = (minPos <= maxPos) ? 1 : -1;
 
 	int startPos = minPos;
 	int endPos = maxPos;
@@ -2217,7 +2219,7 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 	//     Search: \$(\([A-Za-z0-9_-]+\)\.\([A-Za-z0-9_.]+\))
 	//     Replace: $(\1-\2)
 	int lineRangeStart = doc->LineFromPosition(startPos);
-	int lineRangeEnd = doc->LineFromPosition(endPos);
+	const int lineRangeEnd = doc->LineFromPosition(endPos);
 	if ((increment == 1) &&
 		(startPos >= doc->LineEnd(lineRangeStart)) &&
 		(lineRangeStart < lineRangeEnd)) {
@@ -2233,9 +2235,9 @@ long BuiltinRegex::FindText(Document *doc, int minPos, int maxPos, const char *s
 	}
 	int pos = -1;
 	int lenRet = 0;
-	char searchEnd = s[*length - 1];
-	char searchEndPrev = (*length > 1) ? s[*length - 2] : '\0';
-	int lineRangeBreak = lineRangeEnd + increment;
+	const char searchEnd = s[*length - 1];
+	const char searchEndPrev = (*length > 1) ? s[*length - 2] : '\0';
+	const int lineRangeBreak = lineRangeEnd + increment;
 	for (int line = lineRangeStart; line != lineRangeBreak; line += increment) {
 		int startOfLine = doc->LineStart(line);
 		int endOfLine = doc->LineEnd(line);

@@ -811,9 +811,9 @@ void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsi
 #endif
 	int ucs = stride * height;
 	std::vector<unsigned char> image(ucs);
-	for (int y=0; y<height; y++) {
-		for (int x=0; x<width; x++) {
-			unsigned char *pixel = &image[0] + y*stride + x * 4;
+	for (int iy=0; iy<height; iy++) {
+		for (int ix=0; ix<width; ix++) {
+			unsigned char *pixel = &image[0] + iy*stride + ix * 4;
 			unsigned char alpha = pixelsImage[3];
 			pixel[2] = (*pixelsImage++) * alpha / 255;
 			pixel[1] = (*pixelsImage++) * alpha / 255;
@@ -822,12 +822,12 @@ void SurfaceImpl::DrawRGBAImage(PRectangle rc, int width, int height, const unsi
 		}
 	}
 
-	cairo_surface_t *psurf = cairo_image_surface_create_for_data(&image[0], CAIRO_FORMAT_ARGB32, width, height, stride);
-	cairo_set_source_surface(context, psurf, rc.left, rc.top);
+	cairo_surface_t *psurfImage = cairo_image_surface_create_for_data(&image[0], CAIRO_FORMAT_ARGB32, width, height, stride);
+	cairo_set_source_surface(context, psurfImage, rc.left, rc.top);
 	cairo_rectangle(context, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top);
 	cairo_fill(context);
 
-	cairo_surface_destroy(psurf);
+	cairo_surface_destroy(psurfImage);
 }
 
 void SurfaceImpl::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back) {
@@ -1625,10 +1625,10 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(list), "fixed-height-mode"))
 		g_object_set(G_OBJECT(list), "fixed-height-mode", TRUE, NULL);
 
-	GtkWidget *wid = PWidget(list);	// No code inside the G_OBJECT macro
-	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), wid);
-	gtk_widget_show(wid);
-	g_signal_connect(G_OBJECT(wid), "button_press_event",
+	GtkWidget *widget = PWidget(list);	// No code inside the G_OBJECT macro
+	gtk_container_add(GTK_CONTAINER(PWidget(scroller)), widget);
+	gtk_widget_show(widget);
+	g_signal_connect(G_OBJECT(widget), "button_press_event",
 	                   G_CALLBACK(ButtonPress), this);
 }
 
@@ -1658,6 +1658,14 @@ int ListBoxX::GetVisibleRows() const {
 
 int ListBoxX::GetRowHeight()
 {
+#if GTK_CHECK_VERSION(3,0,0)
+	// This version sometimes reports erroneous results on GTK2, but the GTK2
+	// version is inaccurate for GTK 3.14.
+	GdkRectangle rect;
+	GtkTreePath *path = gtk_tree_path_new_first();
+	gtk_tree_view_get_background_area(GTK_TREE_VIEW(list), path, NULL, &rect);
+	return rect.height;
+#else
 	int row_height=0;
 	int vertical_separator=0;
 	int expander_size=0;
@@ -1669,6 +1677,7 @@ int ListBoxX::GetRowHeight()
 	row_height += vertical_separator;
 	row_height = Platform::Maximum(row_height, expander_size);
 	return row_height;
+#endif
 }
 
 PRectangle ListBoxX::GetDesiredRect() {

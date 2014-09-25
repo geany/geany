@@ -55,6 +55,7 @@
 #include "Document.h"
 #include "CaseConvert.h"
 #include "UniConversion.h"
+#include "UnicodeFromUTF8.h"
 #include "Selection.h"
 #include "PositionCache.h"
 #include "EditModel.h"
@@ -63,7 +64,6 @@
 #include "Editor.h"
 #include "AutoComplete.h"
 #include "ScintillaBase.h"
-#include "UnicodeFromUTF8.h"
 
 #ifdef SCI_LEXER
 #include "ExternalLexer.h"
