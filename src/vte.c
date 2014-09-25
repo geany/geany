@@ -103,7 +103,7 @@ struct VteFunctions
 	GType (*vte_terminal_get_type) (void);
 	void (*vte_terminal_set_scroll_on_output) (VteTerminal *terminal, gboolean scroll);
 	void (*vte_terminal_set_scroll_on_keystroke) (VteTerminal *terminal, gboolean scroll);
-	void (*vte_terminal_set_font_from_string) (VteTerminal *terminal, const char *name);
+	void (*vte_terminal_set_font) (VteTerminal *terminal, const PangoFontDescription *font_desc);
 	void (*vte_terminal_set_scrollback_lines) (VteTerminal *terminal, glong lines);
 	gboolean (*vte_terminal_get_has_selection) (VteTerminal *terminal);
 	void (*vte_terminal_copy_clipboard) (VteTerminal *terminal);
@@ -512,7 +512,7 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_type);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_output);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_scroll_on_keystroke);
-	BIND_REQUIRED_SYMBOL(vte_terminal_set_font_from_string);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_font);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_scrollback_lines);
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
 	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
@@ -543,6 +543,8 @@ static gboolean vte_register_symbols(GModule *mod)
 
 void vte_apply_user_settings(void)
 {
+	PangoFontDescription *font_desc;
+
 	if (! ui_prefs.msgwindow_visible)
 		return;
 
@@ -550,7 +552,9 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_scroll_on_keystroke(VTE_TERMINAL(vc->vte), vc->scroll_on_key);
 	vf->vte_terminal_set_scroll_on_output(VTE_TERMINAL(vc->vte), vc->scroll_on_out);
 	vf->vte_terminal_set_emulation(VTE_TERMINAL(vc->vte), vc->emulation);
-	vf->vte_terminal_set_font_from_string(VTE_TERMINAL(vc->vte), vc->font);
+	font_desc = pango_font_description_from_string(vc->font);
+	vf->vte_terminal_set_font(VTE_TERMINAL(vc->vte), font_desc);
+	pango_font_description_free(font_desc);
 	vf->vte_terminal_set_color_foreground(VTE_TERMINAL(vc->vte), &vc->colour_fore);
 	vf->vte_terminal_set_color_bold(VTE_TERMINAL(vc->vte), &vc->colour_fore);
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), &vc->colour_back);
