@@ -684,6 +684,7 @@ static GeanyProject *create_project(void)
 
 	project->priv->long_line_behaviour = 1 /* use global settings */;
 	project->priv->long_line_column = editor_prefs.long_line_column;
+	project->priv->line_wrapping = editor_prefs.line_wrapping;
 
 	app->project = project;
 	return project;
@@ -1063,6 +1064,8 @@ static gboolean load_config(const gchar *filename)
 		"long_line_behaviour", 1 /* follow global */);
 	p->priv->long_line_column = utils_get_setting_integer(config, "long line marker",
 		"long_line_column", editor_prefs.long_line_column);
+	p->priv->line_wrapping = utils_get_setting_boolean(config, "line_wrapping",
+		"line_wrapping", editor_prefs.line_wrapping);
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
@@ -1132,6 +1135,7 @@ static gboolean write_config(gboolean emit_signal)
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
 	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
+	g_key_file_set_boolean(config, "line_wrapping", "line_wrapping", p->priv->line_wrapping);
 	/* store the session files into the project too */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
@@ -1289,6 +1293,12 @@ static void init_stash_prefs(void)
 		"strip_trailing_spaces", file_prefs.strip_trailing_spaces, "check_trailing_spaces1");
 	stash_group_add_toggle_button(group, &priv.replace_tabs,
 		"replace_tabs", file_prefs.replace_tabs, "check_replace_tabs1");
+	group = stash_group_new("file_prefs");
+	add_stash_group(group);
+
+	group = stash_group_new("line_wrapping");
+	stash_group_add_toggle_button(group, &priv.line_wrapping,
+		"line_wrapping", editor_prefs.line_wrapping, "check_line_wrapping1");
 	add_stash_group(group);
 	/* apply defaults */
 	kf = g_key_file_new();

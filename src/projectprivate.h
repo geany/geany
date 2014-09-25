@@ -39,6 +39,7 @@ typedef struct GeanyProjectPrivate
 	GPtrArray *build_filetypes_list; /* Project has custom filetype builds for these. */
 	gint long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
 	gint long_line_column; /* Long line marker position. */
+	gboolean line_wrapping;
 }
 GeanyProjectPrivate;
 

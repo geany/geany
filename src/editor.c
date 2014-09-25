@@ -375,6 +375,17 @@ static gboolean is_style_php(gint style)
 }
 
 
+static gint editor_get_line_wrapping(void)
+{
+	if (app->project)
+		return app->project->priv->line_wrapping;
+	if (!editor_prefs.line_wrapping)
+		return 0;
+	else
+		return editor_prefs.line_wrapping;
+}
+
+
 static gint editor_get_long_line_type(void)
 {
 	if (app->project)
@@ -415,6 +426,7 @@ get_default_prefs(void)
 	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(NULL);
 	eprefs.long_line_type = editor_get_long_line_type();
 	eprefs.long_line_column = editor_get_long_line_column();
+	eprefs.line_wrapping = editor_get_line_wrapping();
 	return &eprefs;
 }
 
@@ -5009,6 +5021,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, editor_prefs.completion_drops_rest_of_word, 0);
 
+	editor_set_line_wrapping(editor, editor_get_line_wrapping());
 	editor_set_indentation_guides(editor);
 
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
