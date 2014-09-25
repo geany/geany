@@ -52,8 +52,8 @@
 	geany_functions->p_document->document_open_files
 #define document_remove_page \
 	geany_functions->p_document->document_remove_page
-#define document_reload_file \
-	geany_functions->p_document->document_reload_file
+#define document_reload_force \
+	geany_functions->p_document->document_reload_force
 #define document_set_encoding \
 	geany_functions->p_document->document_set_encoding
 #define document_set_text_changed \

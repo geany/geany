@@ -1409,7 +1409,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 
 
 /**
- *  Reloads the document with the specified file encoding
+ *  Reloads the document with the specified file encoding.
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
  *
  *  @param doc The document to reload.
@@ -1417,7 +1417,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
  *
  *  @return @c TRUE if the document was actually reloaded or @c FALSE otherwise.
  **/
-gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc)
+gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
 	GeanyDocument *new_doc;
@@ -1458,7 +1458,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 		_("Any unsaved changes will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
-		result = document_reload_file(doc, forced_enc);
+		result = document_reload_force(doc, forced_enc);
 		if (forced_enc != NULL)
 			ui_update_statusbar(doc, -1);
 	}
@@ -3218,7 +3218,6 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	g_free(markup);
 
 	g_signal_connect(info_widget, "response", G_CALLBACK(response_cb), doc);
-	g_signal_connect_after(info_widget, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 12);
 	gtk_box_pack_start(GTK_BOX(content_area), hbox, TRUE, TRUE, 0);
@@ -3266,15 +3265,28 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
+	gboolean close = FALSE;
+
+	// disable info bar so actions complete normally
 	unprotect_document(doc);
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
-		document_reload_file(doc, doc->encoding);
+		close = document_reload_prompt(doc, doc->encoding);
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
-		document_save_file(doc, TRUE);
+		close = document_save_file(doc, TRUE);	// force overwrite
 	else if (response_id == GTK_RESPONSE_CANCEL)
+	{
 		document_set_text_changed(doc, TRUE);
+		close = TRUE;
+	}
+	if (!close)
+	{
+		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+		protect_document(doc);
+		return;
+	}
+	gtk_widget_destroy(bar);
 }
 
 
