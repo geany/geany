@@ -375,17 +375,6 @@ static gboolean is_style_php(gint style)
 }
 
 
-static gint editor_get_line_wrapping(void)
-{
-	if (app->project)
-		return app->project->priv->line_wrapping;
-	if (!editor_prefs.line_wrapping)
-		return 0;
-	else
-		return editor_prefs.line_wrapping;
-}
-
-
 static gint editor_get_long_line_type(void)
 {
 	if (app->project)
@@ -412,6 +401,12 @@ static gint editor_get_long_line_column(void)
 		return app->project->priv->long_line_column;
 	else
 		return editor_prefs.long_line_column;
+}
+
+
+static gboolean editor_get_line_wrapping(void)
+{
+	return app->project ? app->project->priv->line_wrapping : editor_prefs.line_wrapping;
 }
 
 
@@ -4767,7 +4762,7 @@ static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar 
  * @note The @c "sci-notify" signal is connected separately. */
 static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
-	ScintillaObject	*sci;
+	ScintillaObject *sci;
 
 	sci = SCINTILLA(scintilla_new());
 
@@ -4786,7 +4781,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	setup_sci_keys(sci);
 
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
+	sci_set_lines_wrapped(sci, editor->line_wrapping);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
@@ -4855,7 +4850,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	doc->editor = editor;	/* needed in case some editor functions/callbacks expect it */
 
 	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
-	editor->line_wrapping = editor_prefs.line_wrapping;
+	editor->line_wrapping = editor_get_line_wrapping();
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
 
@@ -4994,7 +4989,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 }
 
 
-/* Apply just the prefs that can change in the Preferences dialog */
+/* Apply non-document prefs that can change in the Preferences dialog */
 void editor_apply_update_prefs(GeanyEditor *editor)
 {
 	ScintillaObject *sci;
@@ -5021,7 +5016,6 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_autoc_max_height(sci, editor_prefs.symbolcompletion_max_height);
 	SSM(sci, SCI_AUTOCSETDROPRESTOFWORD, editor_prefs.completion_drops_rest_of_word, 0);
 
-	editor_set_line_wrapping(editor, editor_get_line_wrapping());
 	editor_set_indentation_guides(editor);
 
 	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
