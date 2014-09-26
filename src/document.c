@@ -1655,6 +1655,7 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 
 	if (new_file)
 	{
+		// assume user wants to throw away read-only setting
 		sci_set_readonly(doc->editor->sci, FALSE);
 		doc->readonly = FALSE;
 		if (doc->priv->protected > 0)
@@ -1928,11 +1929,14 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		return dialogs_show_save_as();
 	}
 
-	/* the "changed" flag should exclude the "readonly" flag, but check it anyway for safety */
-	if (doc->readonly)
-		return FALSE;
 	if (!force && !doc->changed)
 		return FALSE;
+	if (doc->readonly)
+	{
+		ui_set_statusbar(TRUE,
+			_("Cannot save read-only document '%s'!"), DOC_FILENAME(doc));
+		return FALSE;
+	}
 	if (doc->priv->protected)
 	{
 		return save_file_handle_infobars(doc, force);
