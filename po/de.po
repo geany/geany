@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-24 20:06+0200\n"
-"PO-Revision-Date: 2014-09-24 20:09+0200\n"
+"POT-Creation-Date: 2014-09-29 23:33+0200\n"
+"PO-Revision-Date: 2014-09-29 23:34+0200\n"
 "Last-Translator: Frank Lanitz <frlan@trabant>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
@@ -1683,7 +1683,7 @@ msgstr "Speichern _unter"
 msgid "Sa_ve All"
 msgstr "A_lle speichern"
 
-#: ../data/geany.glade.h:345 ../src/document.c:1457 ../src/document.c:3328
+#: ../data/geany.glade.h:345 ../src/document.c:1457 ../src/document.c:3344
 #: ../src/sidebar.c:709
 msgid "_Reload"
 msgstr "Neu _laden"
@@ -2578,8 +2578,8 @@ msgstr "Keine weiteren Nachrichten."
 msgid "Could not open file %s (File not found)"
 msgstr "Konnte Datei »%s« nicht öffnen (Datei nicht gefunden)."
 
-#: ../src/dialogs.c:160 ../src/document.c:2110 ../src/document.c:2175
-#: ../src/document.c:2183
+#: ../src/dialogs.c:160 ../src/document.c:2114 ../src/document.c:2179
+#: ../src/document.c:2187
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "»%s« wurde nicht gefunden."
@@ -2660,7 +2660,7 @@ msgstr ""
 "Öffnet die Datei schreibgeschützt. Bei Auswahl mehrerer Dateien, werden alle "
 "schreibgeschützt geöffnet."
 
-#: ../src/dialogs.c:532 ../src/document.c:1864
+#: ../src/dialogs.c:532 ../src/document.c:1865
 msgid "Overwrite?"
 msgstr "Überschreiben?"
 
@@ -2837,7 +2837,7 @@ msgstr "Möchten Sie »%s« wirklich neu laden?"
 msgid "Error renaming file."
 msgstr "Fehler beim Umbenennen der Datei."
 
-#: ../src/document.c:1696
+#: ../src/document.c:1697
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2846,7 +2846,7 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 nach »%s« ist ein Fehler aufgetreten. "
 "Die Datei wird <i>nicht</i> gespeichert."
 
-#: ../src/document.c:1717
+#: ../src/document.c:1718
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2855,55 +2855,60 @@ msgstr ""
 "Fehlermeldung: %s\n"
 "Der Fehler trat bei »%s« (Zeile: %d, Spalte: %d) auf."
 
-#: ../src/document.c:1721
+#: ../src/document.c:1722
 #, c-format
 msgid "Error message: %s."
 msgstr "Fehlermeldung: %s."
 
-#: ../src/document.c:1781
+#: ../src/document.c:1782
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fopen() fehlgeschlagen: %s"
 
-#: ../src/document.c:1799
+#: ../src/document.c:1800
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fwrite() fehlgeschlagen: %s"
 
-#: ../src/document.c:1813
+#: ../src/document.c:1814
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fclose() fehlgeschlagen: %s"
 
-#: ../src/document.c:1863 ../src/document.c:3329
+#: ../src/document.c:1864 ../src/document.c:3345
 msgid "_Overwrite"
 msgstr "Ü_berschreiben?"
 
-#: ../src/document.c:1865 ../src/document.c:3332
+#: ../src/document.c:1866 ../src/document.c:3348
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "Die Datei »%s« auf dem Datenträger ist aktueller als die momentan geöffnete "
 "Version."
 
-#: ../src/document.c:1873 ../src/document.c:3370
+#: ../src/document.c:1874 ../src/document.c:3386
 msgid "Try to resave the file?"
 msgstr "Versuchen die Datei erneut zu speichern?"
 
-#: ../src/document.c:1874 ../src/document.c:3371
+#: ../src/document.c:1875 ../src/document.c:3387
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "»%s« wurde nicht auf dem Datenträger gefunden."
 
-#: ../src/document.c:2002
+#: ../src/document.c:1937
+#, c-format
+msgid "Cannot save read-only document '%s'!"
+msgstr "Kann das nur zum Lesen geöffnete Dokument »%s« nicht speichern!"
+
+#: ../src/document.c:2006
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: ../src/document.c:2007
+#: ../src/document.c:2011
 #, c-format
 msgid ""
 "%s\n"
@@ -2914,47 +2919,47 @@ msgstr ""
 "\n"
 "Die Datei ist möglicherweise nicht vollständig auf der Festplatte gespeichert"
 
-#: ../src/document.c:2009
+#: ../src/document.c:2013
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: ../src/document.c:2033
+#: ../src/document.c:2037
 #, c-format
 msgid "File %s saved."
 msgstr "Datei »%s« wurde gespeichert."
 
-#: ../src/document.c:2183
+#: ../src/document.c:2187
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2272 ../src/search.c:1368 ../src/search.c:1419
+#: ../src/document.c:2276 ../src/search.c:1368 ../src/search.c:1419
 #: ../src/search.c:2263 ../src/search.c:2264
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
 
-#: ../src/document.c:2278
+#: ../src/document.c:2282
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 
-#: ../src/document.c:3331
+#: ../src/document.c:3347
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/editor.c:4367
+#: ../src/editor.c:4374
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: ../src/editor.c:4368
+#: ../src/editor.c:4375
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: ../src/editor.c:4531
+#: ../src/editor.c:4538
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -3912,29 +3917,29 @@ msgstr "Soll Geany wirklich beendet werden?"
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
-#: ../src/msgwindow.c:169
+#: ../src/msgwindow.c:176
 msgid "Status messages"
 msgstr "Meldungen"
 
-#: ../src/msgwindow.c:569
+#: ../src/msgwindow.c:578
 msgid "C_opy"
 msgstr "_Kopieren"
 
-#: ../src/msgwindow.c:578
+#: ../src/msgwindow.c:587
 msgid "Copy _All"
 msgstr "_Alles kopieren"
 
-#: ../src/msgwindow.c:608
+#: ../src/msgwindow.c:617
 msgid "_Hide Message Window"
 msgstr "Meldungs_fenster ausblenden"
 
-#: ../src/msgwindow.c:664
+#: ../src/msgwindow.c:673
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
 "Konnte die Datei »%s« nicht finden - Versuche den aktuellen Dokumentenpfad."
 
-#: ../src/msgwindow.c:1096
+#: ../src/msgwindow.c:1105
 msgid "The document has been closed."
 msgstr "Das Dokument wurde bereits geschlossen."
 
