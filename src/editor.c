@@ -404,6 +404,12 @@ static gint editor_get_long_line_column(void)
 }
 
 
+static gboolean editor_get_line_wrapping(void)
+{
+	return app->project ? app->project->priv->line_wrapping : editor_prefs.line_wrapping;
+}
+
+
 static const GeanyEditorPrefs *
 get_default_prefs(void)
 {
@@ -415,6 +421,7 @@ get_default_prefs(void)
 	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(NULL);
 	eprefs.long_line_type = editor_get_long_line_type();
 	eprefs.long_line_column = editor_get_long_line_column();
+	eprefs.line_wrapping = editor_get_line_wrapping();
 	return &eprefs;
 }
 
@@ -4755,7 +4762,7 @@ static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar 
  * @note The @c "sci-notify" signal is connected separately. */
 static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
-	ScintillaObject	*sci;
+	ScintillaObject *sci;
 
 	sci = SCINTILLA(scintilla_new());
 
@@ -4774,7 +4781,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	setup_sci_keys(sci);
 
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_lines_wrapped(sci, editor_prefs.line_wrapping);
+	sci_set_lines_wrapped(sci, editor->line_wrapping);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/*sci_set_caret_policy_y(sci, CARET_JUMPS | CARET_EVEN, 0);*/
 	SSM(sci, SCI_AUTOCSETSEPARATOR, '\n', 0);
@@ -4843,7 +4850,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	doc->editor = editor;	/* needed in case some editor functions/callbacks expect it */
 
 	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
-	editor->line_wrapping = editor_prefs.line_wrapping;
+	editor->line_wrapping = editor_get_line_wrapping();
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
 
@@ -4982,7 +4989,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 }
 
 
-/* Apply just the prefs that can change in the Preferences dialog */
+/* Apply non-document prefs that can change in the Preferences dialog */
 void editor_apply_update_prefs(GeanyEditor *editor)
 {
 	ScintillaObject *sci;

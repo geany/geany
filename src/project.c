@@ -1129,6 +1129,7 @@ static gboolean write_config(gboolean emit_signal)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
+	// editor settings
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
 	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
@@ -1245,22 +1246,29 @@ void project_apply_prefs(void)
 }
 
 
-static void add_stash_group(StashGroup *group)
+static void add_stash_group(StashGroup *group, gboolean apply_defaults)
 {
+	GKeyFile *kf;
+
 	stash_groups = g_slist_prepend(stash_groups, group);
+	if (!apply_defaults)
+		return;
+
+	kf = g_key_file_new();
+	stash_group_load_from_key_file(group, kf);
+	g_key_file_free(kf);
 }
 
 
 static void init_stash_prefs(void)
 {
 	StashGroup *group;
-	GKeyFile *kf;
 
 	group = stash_group_new("indentation");
 	/* copy global defaults */
 	indentation = *editor_get_indent_prefs(NULL);
 	stash_group_set_use_defaults(group, FALSE);
-	add_stash_group(group);
+	add_stash_group(group, FALSE);
 
 	stash_group_add_spin_button_integer(group, &indentation.width,
 		"indent_width", 4, "spin_indent_width_project");
@@ -1289,11 +1297,12 @@ static void init_stash_prefs(void)
 		"strip_trailing_spaces", file_prefs.strip_trailing_spaces, "check_trailing_spaces1");
 	stash_group_add_toggle_button(group, &priv.replace_tabs,
 		"replace_tabs", file_prefs.replace_tabs, "check_replace_tabs1");
-	add_stash_group(group);
-	/* apply defaults */
-	kf = g_key_file_new();
-	stash_group_load_from_key_file(group, kf);
-	g_key_file_free(kf);
+	add_stash_group(group, TRUE);
+
+	group = stash_group_new("editor");
+	stash_group_add_toggle_button(group, &priv.line_wrapping,
+		"line_wrapping", editor_prefs.line_wrapping, "check_line_wrapping1");
+	add_stash_group(group, TRUE);
 }
 
 
