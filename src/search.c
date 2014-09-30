@@ -1964,7 +1964,7 @@ static gchar *get_regex_match_string(const gchar *text, const GeanyMatchInfo *ma
 }
 
 
-static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatchInfo *match)
+static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean multiline, GeanyMatchInfo *match)
 {
 	const gchar *text;
 	GMatchInfo *minfo;
@@ -1978,7 +1978,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, GeanyMatc
 
 	g_return_val_if_fail(pos <= document_length, -1);
 
-	if (g_regex_get_compile_flags(regex) & G_REGEX_MULTILINE)
+	if (multiline)
 	{
 		/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
 		text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
@@ -2082,10 +2082,10 @@ gint search_find_next(ScintillaObject *sci, const gchar *str, GeanyFindFlags fla
 	match = match_info_new(flags, 0, 0);
 
 	pos = sci_get_current_position(sci);
-	ret = find_regex(sci, pos, regex, match);
+	ret = find_regex(sci, pos, regex, flags & GEANY_FIND_MULTILINE, match);
 	/* avoid re-matching the same position in case of empty matches */
 	if (ret == pos && match->matches[0].start == match->matches[0].end)
-		ret = find_regex(sci, pos + 1, regex, match);
+		ret = find_regex(sci, pos + 1, regex, flags & GEANY_FIND_MULTILINE, match);
 	if (ret >= 0)
 		sci_set_selection(sci, match->start, match->end);
 
@@ -2165,7 +2165,7 @@ gint search_find_text(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_Tex
 
 	match = match_info_new(flags, 0, 0);
 
-	ret = find_regex(sci, ttf->chrg.cpMin, regex, match);
+	ret = find_regex(sci, ttf->chrg.cpMin, regex, flags & GEANY_FIND_MULTILINE, match);
 	if (ret >= ttf->chrg.cpMax)
 		ret = -1;
 	else if (ret >= 0)
