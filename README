@@ -63,7 +63,7 @@ $ geany
 on a console or use the applications menu from your desktop environment.
 There a few command line options. See the manual page of Geany or run
 $ geany --help
-for details. Or look into the documention in the doc/ directory.
+for details. Or look into the documentation in the doc/ directory.
 The most important option probably is -c or --config, where you can
 specify an alternate configuration directory.
 
