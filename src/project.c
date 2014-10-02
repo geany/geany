@@ -1302,6 +1302,11 @@ static void init_stash_prefs(void)
 	group = stash_group_new("editor");
 	stash_group_add_toggle_button(group, &priv.line_wrapping,
 		"line_wrapping", editor_prefs.line_wrapping, "check_line_wrapping1");
+	stash_group_add_spin_button_integer(group, &priv.line_break_column,
+		"line_break_column", editor_prefs.line_break_column, "spin_line_break1");
+	stash_group_add_toggle_button(group, &priv.auto_continue_multiline,
+		"auto_continue_multiline", editor_prefs.auto_continue_multiline,
+		"check_auto_multiline1");
 	add_stash_group(group, TRUE);
 }
 

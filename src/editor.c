@@ -404,11 +404,8 @@ static gint editor_get_long_line_column(void)
 }
 
 
-static gboolean editor_get_line_wrapping(void)
-{
-	return app->project ? app->project->priv->line_wrapping : editor_prefs.line_wrapping;
-}
-
+#define get_project_pref(id)\
+	(app->project ? app->project->priv->id : editor_prefs.id)
 
 static const GeanyEditorPrefs *
 get_default_prefs(void)
@@ -421,7 +418,9 @@ get_default_prefs(void)
 	eprefs.indentation = (GeanyIndentPrefs*)editor_get_indent_prefs(NULL);
 	eprefs.long_line_type = editor_get_long_line_type();
 	eprefs.long_line_column = editor_get_long_line_column();
-	eprefs.line_wrapping = editor_get_line_wrapping();
+	eprefs.line_wrapping = get_project_pref(line_wrapping);
+	eprefs.line_break_column = get_project_pref(line_break_column);
+	eprefs.auto_continue_multiline = get_project_pref(auto_continue_multiline);
 	return &eprefs;
 }
 
@@ -560,11 +559,11 @@ static void check_line_breaking(GeanyEditor *editor, gint pos)
 	lstart = sci_get_position_from_line(sci, line);
 
 	/* use column instead of position which might be different with multibyte characters */
-	if (col < editor_prefs.line_break_column)
+	if (col < get_project_pref(line_break_column))
 		return;
 
 	/* look for the last space before line_break_column */
-	pos = MIN(pos, lstart + editor_prefs.line_break_column);
+	pos = MIN(pos, lstart + get_project_pref(line_break_column));
 
 	while (pos > lstart)
 	{
@@ -1241,7 +1240,7 @@ static void on_new_line_added(GeanyEditor *editor)
 		insert_indent_after_line(editor, line - 1);
 	}
 
-	if (editor_prefs.auto_continue_multiline)
+	if (get_project_pref(auto_continue_multiline))
 	{	/* " * " auto completion in multiline C/C++/D/Java comments */
 		auto_multiline(editor, line);
 	}
@@ -4850,7 +4849,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	doc->editor = editor;	/* needed in case some editor functions/callbacks expect it */
 
 	editor->auto_indent = (iprefs->auto_indent_mode != GEANY_AUTOINDENT_NONE);
-	editor->line_wrapping = editor_get_line_wrapping();
+	editor->line_wrapping = get_project_pref(line_wrapping);
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
 
