@@ -515,7 +515,7 @@ static void insert_build_page(PropertyDialogElements *e)
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
-	GtkWidget *base_path_button;
+	GtkWidget *wid;
 	static guint base_path_button_handler_id = 0;
 	static guint radio_long_line_handler_id = 0;
 
@@ -536,21 +536,21 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	/* Workaround for bug in Glade 3.8.1, see comment above signal handler */
 	if (base_path_button_handler_id == 0)
 	{
-		base_path_button = ui_lookup_widget(e->dialog, "button_project_dialog_base_path");
+		wid = ui_lookup_widget(e->dialog, "button_project_dialog_base_path");
 		base_path_button_handler_id =
-			g_signal_connect(base_path_button, "clicked",
-			G_CALLBACK(on_project_properties_base_path_button_clicked),
-			e->base_path);
+			g_signal_connect(wid, "clicked",
+				G_CALLBACK(on_project_properties_base_path_button_clicked),
+				e->base_path);
 	}
 
 	/* Same as above, should be in Glade but can't due to bug in 3.8.1 */
 	if (radio_long_line_handler_id == 0)
 	{
+		wid = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
 		radio_long_line_handler_id =
-			g_signal_connect(ui_lookup_widget(e->dialog,
-			"radio_long_line_custom_project"), "toggled",
-			G_CALLBACK(on_radio_long_line_custom_toggled),
-			ui_lookup_widget(e->dialog, "spin_long_line_project"));
+			g_signal_connect(wid, "toggled",
+				G_CALLBACK(on_radio_long_line_custom_toggled),
+				ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
 }
 
