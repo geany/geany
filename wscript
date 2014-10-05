@@ -121,7 +121,6 @@ tagmanager_sources = set([
     'tagmanager/src/tm_file_entry.c',
     'tagmanager/src/tm_source_file.c',
     'tagmanager/src/tm_tag.c',
-    'tagmanager/src/tm_tagmanager.c',
     'tagmanager/src/tm_work_object.c',
     'tagmanager/src/tm_workspace.c'])
 

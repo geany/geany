@@ -26,6 +26,5 @@ libtagmanager_a_SOURCES =\
 	tm_file_entry.c \
 	tm_source_file.c \
 	tm_tag.c \
-	tm_tagmanager.c \
 	tm_work_object.c \
 	tm_workspace.c
