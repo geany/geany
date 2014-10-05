@@ -26,7 +26,7 @@ extern "C"
 #define TM_WORK_OBJECT(work_object) ((TMWorkObject *) work_object)
 
 /*!
- A TMWorkObject structure is the base class for TMSourceFile and TMProject.
+ A TMWorkObject structure is the base class for TMSourceFile.
  This struct contains data common to all work objects, namely, a file name,
  time when the file was analyzed (for caching) and an array of tags which
  should be populated when the object is analyzed.
@@ -45,7 +45,7 @@ typedef struct TMWorkObject
  derived from TMWorkObject. The function should take a pointer to the
  object and a flag indicating whether the cache should be ignored, and
  update the object's tag array accordingly.
- \sa tm_work_object_update(), tm_workspace_update(), tm_project_update(),
+ \sa tm_work_object_update(), tm_workspace_update(),
  tm_source_file_update().
 */
 typedef gboolean (*TMUpdateFunc) (TMWorkObject *work_object, gboolean force
@@ -104,7 +104,7 @@ gboolean tm_work_object_init(TMWorkObject *work_object, guint type, const char *
  Initializes a new TMWorkObject structure and returns a pointer to it. You shouldn't
  have to call this function.
  \return NULL on failure
- \sa tm_source_file_new() , tm_project_new()
+ \sa tm_source_file_new()
 */
 TMWorkObject *tm_work_object_new(guint type, const char *file_name, gboolean create);
 
@@ -139,7 +139,7 @@ void tm_work_object_free(gpointer work_object);
  \param free_func The function to call to free the derived object.
  \param update_func The function to call to update the derived object.
  \return A unique ID for the derived class.
- \sa TMSourceFile , TMProject
+ \sa TMSourceFile
 */
 guint tm_work_object_register(GFreeFunc free_func, TMUpdateFunc update_func, TMFindFunc find_func);
 
@@ -156,11 +156,11 @@ void tm_work_object_write_tags(TMWorkObject *work_object, FILE *file, guint attr
  of the type to which the object belongs.
  \param work_object Pointer to a work object or an object derived from it.
  \param force Whether the cache is to be ignored.
- \param recurse Whether to recurse into child work objects (for workspace and projects).
+ \param recurse Whether to recurse into child work objects (for workspace).
  \param update_parent If set to TRUE, calls the update function of the parent if required.
  If you are calling this function, you should set this to TRUE.
  \return TRUE on success, FALSE on failure.
- \sa tm_source_file_update() , tm_project_update()
+ \sa tm_source_file_update()
 */
 gboolean tm_work_object_update(TMWorkObject *work_object, gboolean force
   , gboolean recurse, gboolean update_parent);

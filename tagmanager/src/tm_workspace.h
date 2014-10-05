@@ -23,10 +23,9 @@ extern "C"
 
 
 /*! The Tag Manager Workspace. This is a singleton work object containing a list
- of work objects. These can be either individual files or project containing
- multiple files. There is also a global tag list which can be loaded or
- created. This contains global tags gleaned from /usr/include, etc. and
- should be used for autocompletion, calltips, etc.
+ of work objects - individual source files. There is also a global tag list 
+ which can be loaded or created. This contains global tags gleaned from 
+ /usr/include, etc. and should be used for autocompletion, calltips, etc.
 */
 typedef struct
 {
@@ -43,8 +42,8 @@ typedef struct
 */
 const TMWorkspace *tm_get_workspace(void);
 
-/*! Adds a work object (source file or project) to the workspace.
- \param work_object The work object to add to the project.
+/*! Adds a work object (source file) to the workspace.
+ \param work_object The work object to add to the workspace.
  \return TRUE on success, FALSE on failure (e.g. object already exixts).
 */
 gboolean tm_workspace_add_object(TMWorkObject *work_object);
@@ -56,7 +55,7 @@ gboolean tm_workspace_add_object(TMWorkObject *work_object);
  \param file_name The name of the file to search.
  \param name_only If you want to match just the name and not the full path.
  \return Pointer to the work object matching the file name (NULL if not found).
- \sa tm_work_object_find(), tm_project_find_file().
+ \sa tm_work_object_find().
 */
 TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *file_name
   ,gboolean name_only);
@@ -105,7 +104,7 @@ void tm_workspace_recreate_tags_array(void);
  \param recurse If set to TRUE, updates all children before updating the tag image.
  \param update_parent This parameter is ignored for the workspace since it is at the
  top of the work object hierarchy.
- \sa tm_work_object_update(), tm_source_file_update(), tm_project_update()
+ \sa tm_work_object_update(), tm_source_file_update()
 */
 gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
   , gboolean recurse, gboolean update_parent);

@@ -11,12 +11,10 @@
 #define TM_TAGMANAGER_H
 
 #include "tm_tag.h"
-#include "tm_symbol.h"
 #include "tm_file_entry.h"
 #include "tm_workspace.h"
 #include "tm_work_object.h"
 #include "tm_source_file.h"
-#include "tm_project.h"
 #include "tm_parser.h"
 
 /*! \mainpage Introduction
@@ -35,7 +33,7 @@
 /*! \file
  Include this file in all programs using the tag manager library. Including this
  automatically includes all the necessary files, namely, tm_tag.h, tm_source_file.h
- , tm_project.h and tm_workspace.h
+ and tm_workspace.h
 */
 
 #endif /* TM_TAGMANAGER_H */
