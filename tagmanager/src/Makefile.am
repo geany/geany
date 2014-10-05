@@ -15,7 +15,6 @@ tagmanager_includedir = $(includedir)/geany/tagmanager
 tagmanager_include_HEADERS = \
 	tm_file_entry.h \
 	tm_parser.h \
-	tm_project.h \
 	tm_source_file.h \
 	tm_symbol.h \
 	tm_tag.h \
@@ -26,7 +25,6 @@ tagmanager_include_HEADERS = \
 
 libtagmanager_a_SOURCES =\
 	tm_file_entry.c \
-	tm_project.c \
 	tm_source_file.c \
 	tm_symbol.c \
 	tm_tag.c \

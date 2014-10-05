@@ -73,7 +73,7 @@ void tm_source_file_free(gpointer source_file);
  \param update_parent If set to TRUE, sends an update signal to parent if required. You should
  always set this to TRUE if you are calling this function directly.
  \return TRUE if the file was parsed, FALSE otherwise.
- \sa tm_work_object_update(), tm_project_update(), tm_workspace_update()
+ \sa tm_work_object_update(), tm_workspace_update()
 */
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
   , gboolean recurse, gboolean update_parent);
@@ -93,7 +93,7 @@ gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
  \param update_parent If set to TRUE, sends an update signal to parent if required. You should
  always set this to TRUE if you are calling this function directly.
  \return TRUE if the file was parsed, FALSE otherwise.
- \sa tm_work_object_update(), tm_project_update(), tm_workspace_update()
+ \sa tm_work_object_update(), tm_workspace_update()
 */
 gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_buf,
 			gint buf_size, gboolean update_parent);

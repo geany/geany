@@ -301,7 +301,7 @@ gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_bu
 	if ((source_file->parent) && update_parent)
 	{
 #ifdef TM_DEBUG
-		g_message("Updating parent [project] from buffer..");
+		g_message("Updating parent from buffer..");
 #endif
 		tm_work_object_update(source_file->parent, TRUE, FALSE, TRUE);
 	}

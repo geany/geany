@@ -13,9 +13,9 @@
  wide tag information.
 
  The workspace is intended to contain a list of global tags
- and a set of work objects (projects or individual files). You need not use the
+ and a set of work objects (individual files). You need not use the
  workspace, though, to use tag manager, unless you need things like global tags
- and a place to store all current open projects and individual files. TMWorkspace
+ and a place to store all current open files. TMWorkspace
  is derived from TMWorkObject.
 */
 
@@ -35,7 +35,6 @@
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
-#include "tm_project.h"
 
 
 static TMWorkspace *theWorkspace = NULL;
@@ -567,10 +566,7 @@ void tm_workspace_dump(void)
 			guint i;
 			for (i=0; i < theWorkspace->work_objects->len; ++i)
 			{
-				if (IS_TM_PROJECT(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i])))
-					tm_project_dump(TM_PROJECT(theWorkspace->work_objects->pdata[i]));
-				else
-					tm_work_object_dump(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i]));
+				tm_work_object_dump(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i]));
 			}
 		}
 	}
