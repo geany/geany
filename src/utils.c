@@ -2078,3 +2078,13 @@ gchar *utils_parse_and_format_build_date(const gchar *input)
 
 	return g_strdup(input);
 }
+
+
+gchar *utils_get_user_config_dir(void)
+{
+#ifdef G_OS_WIN32
+	return win32_get_user_config_dir();
+#else
+	return g_build_filename(g_get_user_data_dir(), "geany", NULL);
+#endif
+}

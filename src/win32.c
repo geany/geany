@@ -1497,4 +1497,31 @@ gchar *win32_get_installation_dir(void)
 }
 
 
+gchar *win32_get_user_config_dir(void)
+{
+	HRESULT hr;
+	wchar_t path[MAX_PATH];
+	LPSTR w_title[512];
+
+	hr = SHGetFolderPathAndSubDirW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, L"geany", path);
+	if (SUCCEEDED(hr))
+	{
+		// GLib always uses UTF-8 for filename encoding on Windows
+		int u8_size = WideCharToMultiByte(CP_UTF8, 0, path, -1, NULL, 0, NULL, NULL);
+		if (u8_size > 0)
+		{
+			gchar *u8_path = g_malloc0(u8_size + 1);
+			if (u8_path != NULL &&
+				WideCharToMultiByte(CP_UTF8, 0, path, -1, u8_path, u8_size, NULL, NULL))
+			{
+				return u8_path;
+			}
+		}
+	}
+
+	// glib fallback
+	g_warning("Failed to retrieve Windows config dir, falling back to default");
+	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
+}
+
 #endif

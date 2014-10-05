@@ -289,6 +289,8 @@ GDate *utils_parse_date(const gchar *input);
 
 gchar *utils_parse_and_format_build_date(const gchar *input);
 
+gchar *utils_get_user_config_dir(void);
+
 G_END_DECLS
 
 #endif /* GEANY_UTILS_H */
