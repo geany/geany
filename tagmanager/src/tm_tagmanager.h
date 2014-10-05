@@ -11,7 +11,6 @@
 #define TM_TAGMANAGER_H
 
 #include "tm_tag.h"
-#include "tm_symbol.h"
 #include "tm_file_entry.h"
 #include "tm_workspace.h"
 #include "tm_work_object.h"

@@ -16,7 +16,6 @@ tagmanager_include_HEADERS = \
 	tm_file_entry.h \
 	tm_parser.h \
 	tm_source_file.h \
-	tm_symbol.h \
 	tm_tag.h \
 	tm_tagmanager.h \
 	tm_work_object.h \
@@ -26,7 +25,6 @@ tagmanager_include_HEADERS = \
 libtagmanager_a_SOURCES =\
 	tm_file_entry.c \
 	tm_source_file.c \
-	tm_symbol.c \
 	tm_tag.c \
 	tm_tagmanager.c \
 	tm_work_object.c \
