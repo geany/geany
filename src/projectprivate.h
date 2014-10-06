@@ -31,15 +31,21 @@ G_BEGIN_DECLS
 
 typedef struct GeanyProjectPrivate
 {
-	struct GeanyIndentPrefs *indentation;
+	// file prefs
 	gboolean	final_new_line;
 	gboolean	strip_trailing_spaces;
 	gboolean	replace_tabs;
 	gboolean	ensure_convert_new_lines;
+
+	// editor prefs
+	struct GeanyIndentPrefs *indentation;
+	gboolean	line_wrapping;
+	gint		line_break_column;
+	gboolean	auto_continue_multiline;
+	gint		long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
+	gint		long_line_column; /* Long line marker position. */
+
 	GPtrArray *build_filetypes_list; /* Project has custom filetype builds for these. */
-	gint long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
-	gint long_line_column; /* Long line marker position. */
-	gboolean line_wrapping;
 }
 GeanyProjectPrivate;
 
