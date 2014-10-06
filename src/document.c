@@ -1937,10 +1937,9 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 			_("Cannot save read-only document '%s'!"), DOC_FILENAME(doc));
 		return FALSE;
 	}
+	document_check_disk_status(doc, TRUE);
 	if (doc->priv->protected)
-	{
 		return save_file_handle_infobars(doc, force);
-	}
 
 	fp = project_get_file_prefs();
 	/* replaces tabs with spaces but only if the current file is not a Makefile */
