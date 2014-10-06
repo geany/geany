@@ -68,10 +68,11 @@ void tm_source_file_free(gpointer source_file);
  also lost. The language parameter is automatically set the first time the file
  is parsed.
  \param source_file The source file to update.
- \param force Ignored. The source file is always updated.
+ \param force TRUE if update should be performed, FALSE otherwise.
  \param recurse This parameter is ignored for source files and is only there for consistency.
  \param update_parent If set to TRUE, sends an update signal to parent if required. You should
- always set this to TRUE if you are calling this function directly.
+ always set this to TRUE if you are calling this function directly and not performing
+ parent's update manually.
  \return TRUE if the file was parsed, FALSE otherwise.
  \sa tm_work_object_update(), tm_workspace_update()
 */
@@ -91,7 +92,8 @@ gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
  the use here.
  \param buf_size The size of text_buf.
  \param update_parent If set to TRUE, sends an update signal to parent if required. You should
- always set this to TRUE if you are calling this function directly.
+ always set this to TRUE if you are calling this function directly and not performing
+ parent's update manually.
  \return TRUE if the file was parsed, FALSE otherwise.
  \sa tm_work_object_update(), tm_workspace_update()
 */
