@@ -2085,6 +2085,6 @@ gchar *utils_get_user_config_dir(void)
 #ifdef G_OS_WIN32
 	return win32_get_user_config_dir();
 #else
-	return g_build_filename(g_get_user_data_dir(), "geany", NULL);
+	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
 #endif
 }
