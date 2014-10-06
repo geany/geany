@@ -1501,7 +1501,6 @@ gchar *win32_get_user_config_dir(void)
 {
 	HRESULT hr;
 	wchar_t path[MAX_PATH];
-	LPSTR w_title[512];
 
 	hr = SHGetFolderPathAndSubDirW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, L"geany", path);
 	if (SUCCEEDED(hr))
