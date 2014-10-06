@@ -605,6 +605,8 @@ typedef struct TagManagerFuncs
 					 gboolean recurse, gboolean update_parent);
 	void			(*tm_work_object_free) (gpointer work_object);
 	gboolean		(*tm_workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
+	gboolean 		(*tm_workspace_update) (TMWorkObject *workspace, gboolean force, 
+					 gboolean recurse, gboolean update_parent);
 }
 TagManagerFuncs;
 
