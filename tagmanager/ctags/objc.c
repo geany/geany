@@ -565,7 +565,7 @@ static void parseFields (vString * const ident, objcToken what)
 	}
 }
 
-objcKind methodKind;
+static objcKind methodKind;
 
 
 static vString *fullMethodName;
