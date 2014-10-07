@@ -318,3 +318,5 @@
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
 
+// Require at least XP for Windows API
+#define WINVER 0x0501
