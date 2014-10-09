@@ -2651,6 +2651,9 @@ extract_filetype_regex            Regex to extract filetype name from file     S
                                   via capture group one.
 **Search related**
 find_selection_type               See `Find selection`_.                       0           immediately
+scroll_on_replace_all             Scroll to the last replacement while         true        immediately
+                                  replacing all text. If false, Geany will 
+                                  keep cursor on old position.
 **Build Menu related**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.
