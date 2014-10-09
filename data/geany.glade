@@ -1407,12 +1407,12 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="check_replace_entry_activates_replace_and_find">
-                                    <property name="label" translatable="yes">Enter in replace entry does Replace &amp; Find</property>
+                                    <property name="label" translatable="yes">Enter in replace window activates Replace &amp; Find</property>
                                     <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">Enter in replace entry does Replace &amp; Find instead of Replace</property>
+                                    <property name="tooltip_text" translatable="yes">Enter in replace window activates Replace &amp; Find instead of Replace</property>
                                     <property name="use_underline">True</property>
                                     <property name="draw_indicator">True</property>
                                   </object>
