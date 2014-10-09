@@ -53,7 +53,12 @@ typedef struct GeanyApp
 }
 GeanyApp;
 
+
+#ifdef GEANY_PRIVATE
+
 extern GeanyApp *app;
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

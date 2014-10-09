@@ -12,7 +12,7 @@
 
 #include <glib.h>
 
-/*! \file
+/* \file
 The TMFileEntry structure and associated functions can be used
 for file and directory traversal. The following example demonstrates
 the use of TMFileEntry.
@@ -24,48 +24,48 @@ extern "C"
 {
 #endif
 
-/*! Enum defining file types */
+/* Enum defining file types */
 typedef enum
 {
-	tm_file_unknown_t, /*!< Unknown file type/file does not exist */
-	tm_file_regular_t, /*!< Is a regular file */
-	tm_file_dir_t, /*!< Is a directory */
-	tm_file_link_t /*!< Is a symbolic link */
+	tm_file_unknown_t, /* Unknown file type/file does not exist */
+	tm_file_regular_t, /* Is a regular file */
+	tm_file_dir_t, /* Is a directory */
+	tm_file_link_t /* Is a symbolic link */
 } TMFileType;
 
-/*!
+/*
  This example demonstrates the use of TMFileEntry and associated functions
  for managing file hierarchies in a project.
 
  \example tm_file_tree_dump.c
 */
 
-/*! This structure stores the file tree */
+/* This structure stores the file tree */
 typedef struct _TMFileEntry
 {
-	TMFileType type; /*!< File type */
-	char *path; /*!< Full path to the file (incl. dir and name) */
-	char *name; /*!< Just the file name (path minus the directory) */
-	char *version; /*!< CVS version in case there is a CVS entry for this file */
-	struct _TMFileEntry *parent; /*!< The parent directory file entry */
-	GSList *children; /*!< List of children (for directory) */
+	TMFileType type; /* File type */
+	char *path; /* Full path to the file (incl. dir and name) */
+	char *name; /* Just the file name (path minus the directory) */
+	char *version; /* CVS version in case there is a CVS entry for this file */
+	struct _TMFileEntry *parent; /* The parent directory file entry */
+	GSList *children; /* List of children (for directory) */
 } TMFileEntry;
 
-/*! Prototype for the function that gets called for each entry when
+/* Prototype for the function that gets called for each entry when
  tm_file_entry_foreach() is called.
 */
 typedef void (*TMFileEntryFunc) (TMFileEntry *entry, gpointer user_data
   , guint level);
 
-/*! Convinience casting macro */
+/* Convinience casting macro */
 #define TM_FILE_ENTRY(E) ((TMFileEntry *) (E))
 
-/*! Function that compares two file entries on name and returns the
+/* Function that compares two file entries on name and returns the
  difference
 */
 gint tm_file_entry_compare(TMFileEntry *e1, TMFileEntry *e2);
 
-/*! Function to create a new file entry structure.
+/* Function to create a new file entry structure.
 \param path Path to the file for which the entry is to be created.
 \param parent Should be NULL for the first call. Since the function calls
  itself recursively, this parameter is required to build the hierarchy.
@@ -91,13 +91,13 @@ TMFileEntry *tm_file_entry_new(const char *path, TMFileEntry *parent
   , GList *dir_match, GList *dir_unmatch, gboolean ignore_hidden_files
   , gboolean ignore_hidden_dirs);
 
-/*! Frees a TMFileEntry structure. Freeing is recursive, so all child
+/* Frees a TMFileEntry structure. Freeing is recursive, so all child
  entries are freed as well.
 \param entry The TMFileEntry structure to be freed.
 */
 void tm_file_entry_free(gpointer entry);
 
-/*! This will call the function func() for each file entry.
+/* This will call the function func() for each file entry.
 \param entry The root file entry.
 \param func The function to be called.
 \param user_data Extra information to be passed to the function.
@@ -107,7 +107,7 @@ void tm_file_entry_free(gpointer entry);
 void tm_file_entry_foreach(TMFileEntry *entry, TMFileEntryFunc func
   , gpointer user_data, guint level, gboolean reverse);
 
-/*! This is a sample function to show the use of tm_file_entry_foreach().
+/* This is a sample function to show the use of tm_file_entry_foreach().
 */
 void tm_file_entry_print(TMFileEntry *entry, gpointer user_data, guint level);
 

@@ -10,7 +10,7 @@
 #ifndef TM_TAG_H
 #define TM_TAG_H
 
-/*! \file
+/* \file
  The TMTag structure and the associated functions are used to manipulate
  tags and arrays of tags. Normally, you should not create tags individually
  but through an external interface such as tm_source_file_parse(), which generates
@@ -151,13 +151,16 @@ typedef struct _TMTag
 	gint refcount; /*!< the reference count of the tag */
 } TMTag;
 
+
+#ifdef GEANY_PRIVATE
+
 typedef enum {
 	TM_FILE_FORMAT_TAGMANAGER,
 	TM_FILE_FORMAT_PIPE,
 	TM_FILE_FORMAT_CTAGS
 } TMFileFormat;
 
-/*!
+/*
  Prototype for user-defined tag comparison function. This is the type
  of argument that needs to be passed to tm_tags_sort_custom() and
  tm_tags_dedup_custom(). The function should take two void pointers,
@@ -166,13 +169,13 @@ typedef enum {
 */
 typedef int (*TMTagCompareFunc) (const void *ptr1, const void *ptr2);
 
-/*! The GType for a TMTag */
+/* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
-/*! Gets the GType for a TMTag */
+/* Gets the GType for a TMTag */
 GType tm_tag_get_type(void) G_GNUC_CONST;
 
-/*!
+/*
  Initializes a TMTag structure with information from a tagEntryInfo struct
  used by the ctags parsers. Note that the TMTag structure must be malloc()ed
  before calling this function. This function is called by tm_tag_new() - you
@@ -184,7 +187,7 @@ GType tm_tag_get_type(void) G_GNUC_CONST;
 */
 gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry);
 
-/*!
+/*
  Initializes an already malloc()ed TMTag structure by reading a tag entry
  line from a file. The structure should be allocated beforehand.
  \param tag The TMTag structure to populate
@@ -194,18 +197,18 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 */
 gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp);
 
-/*!
+/*
  Same as tm_tag_init_from_file(), but using an alternative parser for PHP and
  LaTeX global tags files.
 */
 gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp);
 
-/*!
+/*
  Same as tm_tag_init_from_file(), but parsing CTags tag file format
 */
 gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp);
 
-/*!
+/*
  Creates a new tag structure from a tagEntryInfo pointer and a TMSOurceFile pointer
  and returns a pointer to it.
  \param file - Pointer to the TMSourceFile structure containing the tag
@@ -214,13 +217,13 @@ gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp);
 */
 TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
 
-/*!
+/*
  Same as tm_tag_new() except that the tag attributes are read from file.
  \param mode langType to use for the tag.
 */
 TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format);
 
-/*!
+/*
  Writes tag information to the given FILE *.
  \param tag The tag information to write.
  \param file FILE pointer to which the tag information is written.
@@ -229,7 +232,7 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
 */
 gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
 
-/*!
+/*
  Inbuilt tag comparison function. Do not call directly since it needs some
  static variables to be set. Always use tm_tags_sort() and tm_tags_dedup()
  instead.
@@ -239,7 +242,7 @@ int tm_tag_compare(const void *ptr1, const void *ptr2);
 gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
 	TMTagAttrType *sort_attributes, gboolean dedup);
 
-/*!
+/*
  Sort an array of tags on the specified attribuites using the inbuilt comparison
  function.
  \param tags_array The array of tags to be sorted
@@ -249,7 +252,7 @@ gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
 */
 gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup);
 
-/*!
+/*
  This function should be used whenever more involved sorting is required. For this,
  you need to write a function as per the prototype of TMTagCompareFunc() and pass
  the function as a parameter to this function.
@@ -263,7 +266,7 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gbo
 */
 gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_func, gboolean dedup);
 
-/*!
+/*
  This function will extract the tags of the specified types from an array of tags.
  The returned value is a GPtrArray which should be free-d with a call to
  g_ptr_array_free(array, TRUE). However, do not free the tags themselves since they
@@ -276,7 +279,7 @@ gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_fun
 */
 GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types);
 
-/*!
+/*
  Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() and
  tm_tags_custom_dedup() since these functions substitute duplicate entries with NULL
  \param tags_array Array of tags to dedup
@@ -284,7 +287,7 @@ GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types);
 */
 gboolean tm_tags_prune(GPtrArray *tags_array);
 
-/*!
+/*
  Deduplicates an array on tags using the inbuilt comparison function based on
  the attributes specified. Called by tm_tags_sort() when dedup is TRUE.
  \param tags_array Array of tags to dedup.
@@ -294,7 +297,7 @@ gboolean tm_tags_prune(GPtrArray *tags_array);
 */
 gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes);
 
-/*!
+/*
  This is a more powerful form of tm_tags_dedup() since it can accomodate user
  defined comparison functions. Called by tm_tags_custom_sort() is dedup is TRUE.
  \param tags_array Array of tags to dedup.
@@ -304,7 +307,7 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes);
 */
 gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_func);
 
-/*!
+/*
  Returns a pointer to the position of the first matching tag in a (sorted) tags array.
  The passed array of tags should be already sorted by name for optimal performance. If
  \c tags_array_sorted is set to FALSE, it may be unsorted but the lookup will be slower.
@@ -318,7 +321,7 @@ gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_fu
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 		gboolean partial, gboolean tags_array_sorted, int * tagCount);
 
-/*!
+/*
  Completely frees an array of tags.
  \param tags_array Array of tags to be freed.
  \param free_array Whether the GptrArray is to be freed as well.
@@ -326,62 +329,64 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all);
 
 #if 0
-/*!
+/*
  Destroys a TMTag structure, i.e. frees all elements except the tag itself.
  \param tag The TMTag structure to destroy
  \sa tm_tag_free()
 */
 void tm_tag_destroy(TMTag *tag);
 
-/*!
+/*
  Destroys all data in the tag and frees the tag structure as well.
  \param tag Pointer to a TMTag structure
 */
 void tm_tag_free(gpointer tag);
 #endif
 
-/*!
+/*
  Drops a reference from a TMTag. If the reference count reaches 0, this function
  destroys all data in the tag and frees the tag structure as well.
  \param tag Pointer to a TMTag structure
 */
 void tm_tag_unref(TMTag *tag);
 
-/*!
+/*
  Adds a reference to a TMTag.
  \param tag Pointer to a TMTag structure
  \return the passed-in TMTag
 */
 TMTag *tm_tag_ref(TMTag *tag);
 
-/*!
+/*
  Returns the type of tag as a string
  \param tag The tag whose type is required
 */
 const char *tm_tag_type_name(const TMTag *tag);
 
-/*!
+/*
  Returns the TMTagType given the name of the type. Reverse of tm_tag_type_name.
  \param tag_name Name of the tag type
 */
 TMTagType tm_tag_name_type(const char* tag_name);
 
-/*!
+/*
   Prints information about a tag to the given file pointer.
   \param tag The tag whose info is required.
   \fp The file pointer of teh file to print the info to.
 */
 void tm_tag_print(TMTag *tag, FILE *fp);
 
-/*!
+/*
   Prints info about all tags in the array to the given file pointer.
 */
 void tm_tags_array_print(GPtrArray *tags, FILE *fp);
 
-/*!
+/*
   Returns the depth of tag scope (useful for finding tag hierarchy
 */
 gint tm_tag_scope_depth(const TMTag *t);
+
+#endif /* GEANY_PRIVATE */
 
 #ifdef __cplusplus
 }

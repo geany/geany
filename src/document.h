@@ -43,15 +43,6 @@
 
 G_BEGIN_DECLS
 
-#if defined(G_OS_WIN32)
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
-#elif defined(G_OS_UNIX)
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
-#else
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CR
-#endif
-
-
 /** File Prefs. */
 typedef struct GeanyFilePrefs
 {
@@ -75,8 +66,6 @@ typedef struct GeanyFilePrefs
 	gboolean		tab_close_switch_to_mru;
 }
 GeanyFilePrefs;
-
-extern GeanyFilePrefs file_prefs;
 
 
 /**
@@ -126,8 +115,6 @@ typedef struct GeanyDocument
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
 }
 GeanyDocument;
-
-extern GPtrArray *documents_array;
 
 
 /** Wraps @ref documents_array so it can be used with C array syntax.
@@ -179,11 +166,11 @@ extern GPtrArray *documents_array;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
-/* These functions will replace the older functions. For now they have a documents_ prefix. */
-
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
-GeanyDocument* document_new_file_if_non_open(void);
+GeanyDocument *document_get_current(void);
+
+GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
@@ -191,34 +178,69 @@ GeanyDocument* document_find_by_real_path(const gchar *realname);
 
 gboolean document_save_file(GeanyDocument *doc, gboolean force);
 
-gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
-
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc);
 
+void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+		const gchar *forced_enc);
+
+gboolean document_remove_page(guint page_num);
+
 gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
 
-gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
+void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
-void document_reload_config(GeanyDocument *doc);
-
-void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
+gboolean document_close(GeanyDocument *doc);
 
 GeanyDocument *document_index(gint idx);
 
-GeanyDocument *document_find_by_sci(ScintillaObject *sci);
+gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
 
-GeanyDocument *document_find_by_id(guint id);
+void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
+
+const GdkColor *document_get_status_color(GeanyDocument *doc);
+
+gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
 gint document_get_notebook_page(GeanyDocument *doc);
 
-GeanyDocument* document_get_from_page(guint page_num);
+gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
-GeanyDocument *document_get_current(void);
+gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
+
+gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
+
+GeanyDocument *document_find_by_id(guint id);
+
+
+#ifdef GEANY_PRIVATE
+
+#if defined(G_OS_WIN32)
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
+#elif defined(G_OS_UNIX)
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
+#else
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CR
+#endif
+
+extern GPtrArray *documents_array;
+
+extern GeanyFilePrefs file_prefs;
+
+
+/* These functions will replace the older functions. For now they have a documents_ prefix. */
+
+GeanyDocument* document_new_file_if_non_open(void);
+
+gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
+
+void document_reload_config(GeanyDocument *doc);
+
+GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 
 void document_show_tab(GeanyDocument *doc);
 
@@ -226,11 +248,7 @@ void document_init_doclist(void);
 
 void document_finalize(void);
 
-gboolean document_remove_page(guint page_num);
-
 void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget);
-
-gboolean document_close(GeanyDocument *doc);
 
 gboolean document_account_for_unsaved(void);
 
@@ -240,9 +258,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		gboolean readonly, GeanyFiletype *ft, const gchar *forced_enc);
 
 void document_open_file_list(const gchar *data, gsize length);
-
-void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
-		const gchar *forced_enc);
 
 gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolean inc,
 		gboolean backwards);
@@ -266,8 +281,6 @@ void document_update_tag_list_in_idle(GeanyDocument *doc);
 
 void document_highlight_tags(GeanyDocument *doc);
 
-void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
-
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
 
 /* own Undo / Redo implementation to be able to undo / redo changes
@@ -288,10 +301,6 @@ void document_update_tab_label(GeanyDocument *doc);
 
 const gchar *document_get_status_widget_class(GeanyDocument *doc);
 
-const GdkColor *document_get_status_color(GeanyDocument *doc);
-
-gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
-
 gboolean document_need_save_as(GeanyDocument *doc);
 
 gboolean document_detect_indent_type(GeanyDocument *doc, GeanyIndentType *type_);
@@ -300,15 +309,11 @@ gboolean document_detect_indent_width(GeanyDocument *doc, gint *width_);
 
 void document_apply_indent_settings(GeanyDocument *doc);
 
-gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
-
-gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
-
-gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
-
 void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

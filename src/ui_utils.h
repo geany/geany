@@ -72,9 +72,6 @@ typedef struct GeanyInterfacePrefs
 GeanyInterfacePrefs;
 
 
-extern GeanyInterfacePrefs interface_prefs;
-
-
 /** Important widgets in the main window.
  * Accessed by @c geany->main_widgets. */
 typedef struct GeanyMainWidgets
@@ -93,6 +90,59 @@ typedef struct GeanyMainWidgets
 	GtkWidget	*project_menu;
 }
 GeanyMainWidgets;
+
+
+#define GEANY_STOCK_SAVE_ALL "geany-save-all"
+#define GEANY_STOCK_CLOSE_ALL "geany-close-all"
+#define GEANY_STOCK_BUILD "geany-build"
+
+
+GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
+
+GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
+
+void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+
+void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
+
+GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
+
+GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
+
+void ui_add_document_sensitive(GtkWidget *widget);
+
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+
+GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
+
+GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
+
+void ui_progress_bar_start(const gchar *text);
+
+void ui_progress_bar_stop(void);
+
+void ui_entry_add_clear_icon(GtkEntry *entry);
+
+void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
+
+void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
+		GCallback callback, GCompareFunc sort_func);
+
+void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
+
+gboolean ui_is_keyval_enter_or_return(guint keyval);
+
+gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
+
+void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
+		const gchar *text, gint history_len);
+
+const gchar *ui_lookup_stock_label(const gchar *stock_id);
+
+
+#ifdef GEANY_PRIVATE
+
+extern GeanyInterfacePrefs interface_prefs;
 
 extern GeanyMainWidgets main_widgets;
 
@@ -169,48 +219,22 @@ typedef enum
 GeanyUIEditorFeatures;
 
 
-#define GEANY_STOCK_SAVE_ALL "geany-save-all"
-#define GEANY_STOCK_CLOSE_ALL "geany-close-all"
-#define GEANY_STOCK_BUILD "geany-build"
-
-
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
-
-void ui_widget_modify_font_from_string(GtkWidget *wid, const gchar *str);
 
 void ui_menu_sort_by_label(GtkMenu *menu);
 
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
-
-GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
-
 void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...);
-
-GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
-
-GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
 void ui_hbutton_box_copy_layout(GtkButtonBox *master, GtkButtonBox *copy);
 
-void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
-		const gchar *text, gint history_len);
-
 void ui_combo_box_prepend_text_once(GtkComboBoxText *combo, const gchar *text);
-
-GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry);
 
 void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 		GtkFileChooserAction action, GtkEntry *entry);
 
-void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
-
 void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item);
-
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
-
-GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
 
 gpointer ui_builder_get_object (const gchar *name);
 
@@ -223,8 +247,6 @@ GtkWidget *create_window1(void);
 
 void ui_widget_set_sensitive(GtkWidget *widget, gboolean set);
 
-void ui_entry_add_clear_icon(GtkEntry *entry);
-
 void ui_entry_add_activate_backward_signal(GtkEntry *entry);
 
 void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
@@ -233,8 +255,6 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 GtkWidget *ui_label_new_bold(const gchar *text);
 
 void ui_label_set_markup(GtkLabel *label, const gchar *format, ...) G_GNUC_PRINTF(2, 3);
-
-const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
 /* End of general widget functions */
 
@@ -252,13 +272,6 @@ void ui_init_stock_items(void);
 
 void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 		GtkContainer *parent);
-
-void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback);
-
-void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
-		GCallback callback, GCompareFunc sort_func);
-
-void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void ui_update_statusbar(GeanyDocument *doc, gint pos);
 
@@ -322,21 +335,11 @@ gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gbo
 
 void ui_statusbar_showhide(gboolean state);
 
-void ui_add_document_sensitive(GtkWidget *widget);
-
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 
 void ui_update_view_editor_menu_items(void);
 
-void ui_progress_bar_start(const gchar *text);
-
-void ui_progress_bar_stop(void);
-
 void ui_swap_sidebar_pos(void);
-
-gboolean ui_is_keyval_enter_or_return(guint keyval);
-
-gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value);
 
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 
@@ -347,6 +350,8 @@ GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc);
 gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo);
 
 gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 
