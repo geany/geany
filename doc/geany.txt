@@ -1891,9 +1891,6 @@ Use the current file's directory for Find in Files
     active file. When this option is disabled, the directory of the last use of the Find in Files
     dialog is used. See `Find in Files`_ for details.
 
-Enter in replace window performs Replace & Find instead of Replace
-    Select Replace & Find as default action when pressing enter in Replace dialog.
-
 Projects
 ````````
 
@@ -2612,6 +2609,11 @@ extract_filetype_regex            Regex to extract filetype name from file     S
                                   via capture group one.
 **Search related**
 find_selection_type               See `Find selection`_.                       0           immediately
+**Replace related**
+replace_and_find_by_default       Set ``Replace & Find`` button as default so
+                                  it will be activated when the Enter key is
+                                  pressed while one of the text fields has
+                                  focus.                                       false       immediately
 **Build Menu related**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.

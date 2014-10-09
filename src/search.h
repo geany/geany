@@ -61,7 +61,7 @@ typedef struct GeanySearchPrefs
 	gboolean	use_current_word;		/**< Use current word for default search text */
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */
 	gboolean	hide_find_dialog;		/* hide the find dialog on next or previous */
-	gboolean	replace_entry_activates_replace_and_find;	/* enter in replace entry does Replace & Find */
+	gboolean	replace_and_find_by_default;	/* enter in replace window performs Replace & Find instead of Replace */
 	enum GeanyFindSelOptions find_selection_type;
 }
 GeanySearchPrefs;
