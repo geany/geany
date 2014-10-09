@@ -1891,7 +1891,7 @@ Use the current file's directory for Find in Files
     active file. When this option is disabled, the directory of the last use of the Find in Files
     dialog is used. See `Find in Files`_ for details.
 
-Enter in replace entry does Replace & Find instead of Replace
+Enter in replace window performs Replace & Find instead of Replace
     Select Replace & Find as default action when pressing enter in Replace dialog.
 
 Projects
