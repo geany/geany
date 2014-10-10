@@ -10,8 +10,8 @@
 #ifndef TM_SOURCE_FILE_H
 #define TM_SOURCE_FILE_H
 
-#include "tm_work_object.h"
-
+#include <stdio.h>
+#include <glib.h>
 
 #ifndef LIBCTAGS_DEFINED
 typedef int langType;
@@ -27,21 +27,22 @@ extern "C"
 #endif
 
 /* Casts a pointer to a pointer to a TMSourceFile structure */
-#define TM_SOURCE_FILE(work_object) ((TMSourceFile *) work_object)
+#define TM_SOURCE_FILE(source_file) ((TMSourceFile *) source_file)
 
-/* Checks whether the object is a TMSourceFile */
-#define IS_TM_SOURCE_FILE(source_file) (((TMWorkObject *) (source_file))->type \
-			== source_file_class_id)
+/* Evaluates to X is X is defined, else evaluates to Y */
+#define FALLBACK(X,Y) (X)?(X):(Y)
+
 
 /*!
- The TMSourceFile structure is derived from TMWorkObject and contains all it's
- attributes, plus an integer representing the language of the file.
+ The TMSourceFile structure represents the source file and its tags in the tag manager.
 */
 typedef struct
 {
-	TMWorkObject work_object; /*!< The base work object */
 	langType lang; /*!< Programming language used */
 	gboolean inactive; /*!< Whether this file should be scanned for tags */
+	char *file_name; /*!< Full file name (inc. path) */
+	char *short_name; /*!< Just the name of the file (without the path) */
+	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
 } TMSourceFile;
 
 /*! Initializes a TMSourceFile structure and returns a pointer to it. 
@@ -50,24 +51,29 @@ typedef struct
  * \param name Name of the used programming language, NULL for autodetection.
  * \return The created TMSourceFile object.
  * */
-TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name);
+TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const char *name);
 
-/*! Updates the source file by reparsing if the modification time is greater
- than the timestamp in the structure, or if force is TRUE. The tags array and
+/*! Updates the source file by reparsing. The tags array and
  the tags themselves are destroyed and re-created, hence any other tag arrays
  pointing to these tags should be rebuilt as well. All sorting information is
  also lost. The language parameter is automatically set the first time the file
  is parsed.
  \param source_file The source file to update.
- \param force Ignored. The source file is always updated.
- \param recurse This parameter is ignored for source files and is only there for consistency.
- \param update_parent If set to TRUE, sends an update signal to parent if required. You should
+ \param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
  always set this to TRUE if you are calling this function directly.
- \return TRUE if the file was parsed, FALSE otherwise.
- \sa tm_work_object_update(), tm_workspace_update()
 */
-gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
-  , gboolean recurse, gboolean update_parent);
+void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace);
+
+/*! Frees a TMSourceFile structure, including all contents */
+void tm_source_file_free(TMSourceFile *source_file);
+
+/*!
+ Given a file name, returns a newly allocated string containing the realpath()
+ of the file.
+ \param file_name The original file_name
+ \return A newly allocated string containing the real path to the file. NULL if none is available.
+*/
+gchar *tm_get_real_path(const gchar *file_name);
 
 
 #ifdef GEANY_PRIVATE
@@ -82,9 +88,6 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
 */
 void tm_source_file_destroy(TMSourceFile *source_file);
 
-/* Frees a TMSourceFile structure, including all contents */
-void tm_source_file_free(gpointer source_file);
-
 /* Updates the source file by reparsing the text-buffer passed as parameter.
  Ctags will use a parsing based on buffer instead of on files.
  You should call this function when you don't want a previous saving of the file
@@ -97,13 +100,12 @@ void tm_source_file_free(gpointer source_file);
  \param text_buf A text buffer. The user should take care of allocate and free it after
  the use here.
  \param buf_size The size of text_buf.
- \param update_parent If set to TRUE, sends an update signal to parent if required. You should
+ \param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
  always set this to TRUE if you are calling this function directly.
  \return TRUE if the file was parsed, FALSE otherwise.
- \sa tm_work_object_update(), tm_workspace_update()
 */
-gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_buf,
-			gint buf_size, gboolean update_parent);
+void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
+			gint buf_size, gboolean update_workspace);
 
 /* Parses the source file and regenarates the tags.
  \param source_file The source file to parse
@@ -137,13 +139,8 @@ int tm_source_file_tags(const tagEntryInfo *tag);
  \param attrs The attributes to write.
  \return TRUE on success, FALSE on failure.
 */
-gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs);
+gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs);
 
-/* Contains the id obtained by registering the TMSourceFile class as a child of
- TMWorkObject.
- \sa tm_work_object_register()
-*/
-extern guint source_file_class_id;
 
 /* Gets the name associated with the language index.
  \param lang The language index.

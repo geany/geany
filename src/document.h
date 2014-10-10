@@ -93,8 +93,8 @@ typedef struct GeanyDocument
 	/** The filetype for this document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
-	/** TMWorkObject object for this document, or @c NULL. */
-	TMWorkObject	*tm_file;
+	/** TMSourceFile object for this document, or @c NULL. */
+	TMSourceFile	*tm_file;
 	/** Whether this document is read-only. */
 	gboolean		 readonly;
 	/** Whether this document has been changed since it was last saved. */

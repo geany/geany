@@ -1289,7 +1289,7 @@ static void do_main_quit(void)
 	filetypes_free_types();
 	log_finalize();
 
-	tm_workspace_free(TM_WORK_OBJECT(app->tm_workspace));
+	tm_workspace_free();
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);

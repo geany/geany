@@ -24,9 +24,8 @@
 #endif
 #include <glib/gstdio.h>
 
-#include "tm_work_object.h"
 #include "tm_file_entry.h"
-
+#include "tm_source_file.h"
 
 #define FILE_NEW(T)		((T) = g_slice_new0(TMFileEntry))
 #define FILE_FREE(T)	g_slice_free(TMFileEntry, (T))

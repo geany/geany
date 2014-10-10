@@ -13,10 +13,9 @@
  wide tag information.
 
  The workspace is intended to contain a list of global tags
- and a set of work objects (individual files). You need not use the
+ and a set of individual source files. You need not use the
  workspace, though, to use tag manager, unless you need things like global tags
- and a place to store all current open files. TMWorkspace
- is derived from TMWorkObject.
+ and a place to store all current open files.
 */
 
 #include "general.h"
@@ -33,38 +32,24 @@
 #endif
 #include <glib/gstdio.h>
 
-#include "tm_tag.h"
 #include "tm_workspace.h"
 
 
 static TMWorkspace *theWorkspace = NULL;
-guint workspace_class_id = 0;
 
 static gboolean tm_create_workspace(void)
 {
-	workspace_class_id = tm_work_object_register(tm_workspace_free, tm_workspace_update
-		  , tm_workspace_find_object);
 	theWorkspace = g_new(TMWorkspace, 1);
-	if (FALSE == tm_work_object_init(TM_WORK_OBJECT(theWorkspace),
-		  workspace_class_id, NULL, TRUE))
-	{
-		g_free(theWorkspace);
-		theWorkspace = NULL;
-		g_warning("Failed to initialize workspace");
-		return FALSE;
-	}
+	theWorkspace->tags_array = NULL;
 
 	theWorkspace->global_tags = NULL;
-	theWorkspace->work_objects = NULL;
+	theWorkspace->source_files = NULL;
 	return TRUE;
 }
 
-void tm_workspace_free(gpointer workspace)
+void tm_workspace_free(void)
 {
 	guint i;
-
-	if (workspace != theWorkspace)
-		return;
 
 #ifdef TM_DEBUG
 	g_message("Workspace destroyed");
@@ -72,11 +57,11 @@ void tm_workspace_free(gpointer workspace)
 
 	if (theWorkspace)
 	{
-		if (theWorkspace->work_objects)
+		if (theWorkspace->source_files)
 		{
-			for (i=0; i < theWorkspace->work_objects->len; ++i)
-				tm_work_object_free(theWorkspace->work_objects->pdata[i]);
-			g_ptr_array_free(theWorkspace->work_objects, TRUE);
+			for (i=0; i < theWorkspace->source_files->len; ++i)
+				tm_source_file_free(theWorkspace->source_files->pdata[i]);
+			g_ptr_array_free(theWorkspace->source_files, TRUE);
 		}
 		if (theWorkspace->global_tags)
 		{
@@ -84,7 +69,8 @@ void tm_workspace_free(gpointer workspace)
 				tm_tag_unref(theWorkspace->global_tags->pdata[i]);
 			g_ptr_array_free(theWorkspace->global_tags, TRUE);
 		}
-		tm_work_object_destroy(TM_WORK_OBJECT(theWorkspace));
+		if (NULL != theWorkspace->tags_array)
+			g_ptr_array_free(theWorkspace->tags_array, TRUE);
 		g_free(theWorkspace);
 		theWorkspace = NULL;
 	}
@@ -97,35 +83,34 @@ const TMWorkspace *tm_get_workspace(void)
 	return theWorkspace;
 }
 
-gboolean tm_workspace_add_object(TMWorkObject *work_object)
+gboolean tm_workspace_add_source_file(TMSourceFile *source_file)
 {
 	/* theWorkspace should already have been created otherwise something went wrong */
 	if (NULL == theWorkspace)
 		return FALSE;
-	if (NULL == theWorkspace->work_objects)
-		theWorkspace->work_objects = g_ptr_array_new();
-	g_ptr_array_add(theWorkspace->work_objects, work_object);
-	work_object->parent = TM_WORK_OBJECT(theWorkspace);
+	if (NULL == theWorkspace->source_files)
+		theWorkspace->source_files = g_ptr_array_new();
+	g_ptr_array_add(theWorkspace->source_files, source_file);
 	return TRUE;
 }
 
-gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free, gboolean update)
+gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean do_free, gboolean update)
 {
 	guint i;
-	if ((NULL == theWorkspace) || (NULL == theWorkspace->work_objects)
-		  || (NULL == w))
+	if ((NULL == theWorkspace) || (NULL == theWorkspace->source_files)
+		  || (NULL == source_file))
 		return FALSE;
 
 
-	for (i=0; i < theWorkspace->work_objects->len; ++i)
+	for (i=0; i < theWorkspace->source_files->len; ++i)
 	{
-		if (theWorkspace->work_objects->pdata[i] == w)
+		if (theWorkspace->source_files->pdata[i] == source_file)
 		{
 			if (do_free)
-				tm_work_object_free(w);
-			g_ptr_array_remove_index_fast(theWorkspace->work_objects, i);
+				tm_source_file_free(source_file);
+			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			if (update)
-				tm_workspace_update(TM_WORK_OBJECT(theWorkspace), TRUE, FALSE, FALSE);
+				tm_workspace_update();
 			return TRUE;
 		}
 	}
@@ -291,7 +276,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	char *command;
 	guint i;
 	FILE *fp;
-	TMWorkObject *source_file;
+	TMSourceFile *source_file;
 	GPtrArray *tags_array;
 	GHashTable *includes_files_hash;
 	GList *includes_files = NULL;
@@ -462,30 +447,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	return TRUE;
 }
 
-TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *file_name
-  , gboolean name_only)
-{
-	TMWorkObject *w = NULL;
-	guint i;
-
-	if (work_object != TM_WORK_OBJECT(theWorkspace))
-		return NULL;
-	if ((NULL == theWorkspace) || (NULL == theWorkspace->work_objects)
-		|| (0 == theWorkspace->work_objects->len))
-		return NULL;
-	for (i = 0; i < theWorkspace->work_objects->len; ++i)
-	{
-		if (NULL != (w = tm_work_object_find(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i])
-			  , file_name, name_only)))
-			return w;
-	}
-	return NULL;
-}
-
 void tm_workspace_recreate_tags_array(void)
 {
 	guint i, j;
-	TMWorkObject *w;
+	TMSourceFile *w;
 	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t
 		, tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
 
@@ -493,19 +458,19 @@ void tm_workspace_recreate_tags_array(void)
 	g_message("Recreating workspace tags array");
 #endif
 
-	if ((NULL == theWorkspace) || (NULL == theWorkspace->work_objects))
+	if ((NULL == theWorkspace) || (NULL == theWorkspace->source_files))
 		return;
-	if (NULL != theWorkspace->work_object.tags_array)
-		g_ptr_array_set_size(theWorkspace->work_object.tags_array, 0);
+	if (NULL != theWorkspace->tags_array)
+		g_ptr_array_set_size(theWorkspace->tags_array, 0);
 	else
-		theWorkspace->work_object.tags_array = g_ptr_array_new();
+		theWorkspace->tags_array = g_ptr_array_new();
 
 #ifdef TM_DEBUG
-	g_message("Total %d objects", theWorkspace->work_objects->len);
+	g_message("Total %d objects", theWorkspace->source_files->len);
 #endif
-	for (i=0; i < theWorkspace->work_objects->len; ++i)
+	for (i=0; i < theWorkspace->source_files->len; ++i)
 	{
-		w = TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i]);
+		w = theWorkspace->source_files->pdata[i];
 #ifdef TM_DEBUG
 		g_message("Adding tags of %s", w->file_name);
 #endif
@@ -513,44 +478,26 @@ void tm_workspace_recreate_tags_array(void)
 		{
 			for (j = 0; j < w->tags_array->len; ++j)
 			{
-				g_ptr_array_add(theWorkspace->work_object.tags_array,
+				g_ptr_array_add(theWorkspace->tags_array,
 					  w->tags_array->pdata[j]);
 			}
 		}
 	}
 #ifdef TM_DEBUG
-	g_message("Total: %d tags", theWorkspace->work_object.tags_array->len);
+	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
-	tm_tags_sort(theWorkspace->work_object.tags_array, sort_attrs, TRUE);
+	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE);
 }
 
-gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
-  , gboolean recurse, gboolean UNUSED update_parent)
+void tm_workspace_update(void)
 {
-	guint i;
-	gboolean update_tags = force;
-
 #ifdef TM_DEBUG
 	g_message("Updating workspace");
 #endif
 
-	if (workspace != TM_WORK_OBJECT(theWorkspace))
-		return FALSE;
 	if (NULL == theWorkspace)
-		return TRUE;
-	if ((recurse) && (theWorkspace->work_objects))
-	{
-		for (i=0; i < theWorkspace->work_objects->len; ++i)
-		{
-			if (TRUE == tm_work_object_update(TM_WORK_OBJECT(
-				  theWorkspace->work_objects->pdata[i]), FALSE, TRUE, FALSE))
-				update_tags = TRUE;
-		}
-	}
-	if (update_tags)
-		tm_workspace_recreate_tags_array();
-	/* workspace->analyze_time = time(NULL); */
-	return update_tags;
+		return;
+	tm_workspace_recreate_tags_array();
 }
 
 void tm_workspace_dump(void)
@@ -560,13 +507,13 @@ void tm_workspace_dump(void)
 #ifdef TM_DEBUG
 		g_message("Dumping TagManager workspace tree..");
 #endif
-		tm_work_object_dump(TM_WORK_OBJECT(theWorkspace));
-		if (theWorkspace->work_objects)
+		if (theWorkspace->source_files)
 		{
 			guint i;
-			for (i=0; i < theWorkspace->work_objects->len; ++i)
+			for (i=0; i < theWorkspace->source_files->len; ++i)
 			{
-				tm_work_object_dump(TM_WORK_OBJECT(theWorkspace->work_objects->pdata[i]));
+				TMSourceFile *source_file = theWorkspace->source_files->pdata[i];
+				fprintf(stderr, "%s", source_file->file_name);
 			}
 		}
 	}
@@ -590,7 +537,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	else
 		tags = g_ptr_array_new();
 
-	matches[0] = tm_tags_find(theWorkspace->work_object.tags_array, name, partial, TRUE,
+	matches[0] = tm_tags_find(theWorkspace->tags_array, name, partial, TRUE,
 					&tagCount[0]);
 	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, TRUE, &tagCount[1]);
 
@@ -724,7 +671,7 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 	else
 		tags = g_ptr_array_new ();
 
-	fill_find_tags_array (tags, theWorkspace->work_object.tags_array,
+	fill_find_tags_array (tags, theWorkspace->tags_array,
 						  name, scope, type, partial, lang, FALSE);
 	if (global_search)
 	{
@@ -783,7 +730,7 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 		tag = TM_TAG (all->pdata[i]);
 		if (no_definitions && filename && tag->atts.entry.file &&
 			0 != strcmp (filename,
-						 tag->atts.entry.file->work_object.short_name))
+						 tag->atts.entry.file->short_name))
 		{
 			continue;
 		}
@@ -903,7 +850,7 @@ find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
 		tag = TM_TAG (all->pdata[i]);
 		if (filename && tag->atts.entry.file &&
 			0 != strcmp (filename,
-						 tag->atts.entry.file->work_object.short_name))
+						 tag->atts.entry.file->short_name))
 		{
 			continue;
 		}
@@ -996,7 +943,7 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 				continue;
 			}
 			filename = (tag->atts.entry.file ?
-						tag->atts.entry.file->work_object.short_name : NULL);
+						tag->atts.entry.file->short_name : NULL);
 			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
 			{
 				del = 1;
@@ -1026,14 +973,14 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 
 	if (tag && tag->atts.entry.file)
 	{
-		local = tm_tags_extract (tag->atts.entry.file->work_object.tags_array,
+		local = tm_tags_extract (tag->atts.entry.file->tags_array,
 								 (tm_tag_function_t |
 								  tm_tag_field_t | tm_tag_enumerator_t |
 								  tm_tag_namespace_t | tm_tag_class_t ));
 	}
 	else
 	{
-		local = tm_tags_extract (theWorkspace->work_object.tags_array,
+		local = tm_tags_extract (theWorkspace->tags_array,
 								 (tm_tag_function_t | tm_tag_prototype_t |
 								  tm_tag_member_t |
 								  tm_tag_field_t | tm_tag_enumerator_t |
@@ -1150,7 +1097,7 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 				continue;
 			}
 			filename = (tag->atts.entry.file ?
-						tag->atts.entry.file->work_object.short_name : NULL);
+						tag->atts.entry.file->short_name : NULL);
 			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
 			{
 				del = 1;
@@ -1180,14 +1127,14 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 
 	if (no_definitions && tag && tag->atts.entry.file)
 	{
-		local = tm_tags_extract (tag->atts.entry.file->work_object.tags_array,
+		local = tm_tags_extract (tag->atts.entry.file->tags_array,
 								 (tm_tag_function_t | tm_tag_prototype_t |
 								  tm_tag_member_t | tm_tag_field_t |
 								  tm_tag_method_t | tm_tag_enumerator_t));
 	}
 	else
 	{
-		local = tm_tags_extract (theWorkspace->work_object.tags_array,
+		local = tm_tags_extract (theWorkspace->tags_array,
 								 (tm_tag_function_t | tm_tag_prototype_t |
 								  tm_tag_member_t | tm_tag_field_t |
 								  tm_tag_method_t | tm_tag_enumerator_t));

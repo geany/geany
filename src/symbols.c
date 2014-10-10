@@ -333,17 +333,17 @@ GString *symbols_get_macro_list(gint lang)
 	gint tag_lang;
 	TMTag *tag;
 
-	if (app->tm_workspace->work_objects == NULL)
+	if (app->tm_workspace->source_files == NULL)
 		return NULL;
 
 	ftags = g_ptr_array_sized_new(50);
 	words = g_string_sized_new(200);
 
-	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
+	for (j = 0; j < app->tm_workspace->source_files->len; j++)
 	{
 		GPtrArray *tags;
 
-		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
+		tags = tm_tags_extract(TM_SOURCE_FILE(app->tm_workspace->source_files->pdata[j])->tags_array,
 			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
 		if (NULL != tags)
 		{
@@ -395,24 +395,21 @@ symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
 }
 
 
-static TMTag *find_work_object_tag(const TMWorkObject *workobj,
+static TMTag *find_source_file_tag(GPtrArray *tags_array,
 		const gchar *tag_name, guint type)
 {
 	GPtrArray *tags;
 	TMTag *tmtag;
 
-	if (G_LIKELY(workobj != NULL))
+	tags = tm_tags_extract(tags_array, type);
+	if (tags != NULL)
 	{
-		tags = tm_tags_extract(workobj->tags_array, type);
-		if (tags != NULL)
-		{
-			tmtag = symbols_find_tm_tag(tags, tag_name);
+		tmtag = symbols_find_tm_tag(tags, tag_name);
 
-			g_ptr_array_free(tags, TRUE);
+		g_ptr_array_free(tags, TRUE);
 
-			if (tmtag != NULL)
-				return tmtag;
-		}
+		if (tmtag != NULL)
+			return tmtag;
 	}
 	return NULL;	/* not found */
 }
@@ -421,19 +418,19 @@ static TMTag *find_work_object_tag(const TMWorkObject *workobj,
 static TMTag *find_workspace_tag(const gchar *tag_name, guint type)
 {
 	guint j;
-	const GPtrArray *work_objects = NULL;
+	const GPtrArray *source_files = NULL;
 
 	if (app->tm_workspace != NULL)
-		work_objects = app->tm_workspace->work_objects;
+		source_files = app->tm_workspace->source_files;
 
-	if (work_objects != NULL)
+	if (source_files != NULL)
 	{
-		for (j = 0; j < work_objects->len; j++)
+		for (j = 0; j < source_files->len; j++)
 		{
-			TMWorkObject *workobj = TM_WORK_OBJECT(work_objects->pdata[j]);
+			TMSourceFile *srcfile = source_files->pdata[j];
 			TMTag *tmtag;
 
-			tmtag = find_work_object_tag(workobj, tag_name, type);
+			tmtag = find_source_file_tag(srcfile->tags_array, tag_name, type);
 			if (tmtag != NULL)
 				return tmtag;
 		}
@@ -1941,7 +1938,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 
 	/* first look in the current document */
 	if (old_doc != NULL && old_doc->tm_file)
-		tmtag = find_work_object_tag(old_doc->tm_file, name, type);
+		tmtag = find_source_file_tag(old_doc->tm_file->tags_array, name, type);
 
 	/* if not found, look in the workspace */
 	if (tmtag == NULL)
@@ -1950,7 +1947,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 	if (tmtag != NULL)
 	{
 		GeanyDocument *new_doc = document_find_by_real_path(
-			tmtag->atts.entry.file->work_object.file_name);
+			tmtag->atts.entry.file->file_name);
 
 		if (new_doc)
 		{
@@ -1965,7 +1962,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 		else
 		{
 			/* not found in opened document, should open */
-			new_doc = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
+			new_doc = document_open_file(tmtag->atts.entry.file->file_name, FALSE, NULL, NULL);
 		}
 
 		if (navqueue_goto_line(old_doc, new_doc, tmtag->atts.entry.line))

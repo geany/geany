@@ -346,14 +346,14 @@
 	geany_functions->p_tm->tm_get_real_path
 #define tm_source_file_new \
 	geany_functions->p_tm->tm_source_file_new
-#define tm_workspace_add_object \
-	geany_functions->p_tm->tm_workspace_add_object
+#define tm_workspace_add_source_file \
+	geany_functions->p_tm->tm_workspace_add_source_file
 #define tm_source_file_update \
 	geany_functions->p_tm->tm_source_file_update
-#define tm_work_object_free \
-	geany_functions->p_tm->tm_work_object_free
-#define tm_workspace_remove_object \
-	geany_functions->p_tm->tm_workspace_remove_object
+#define tm_source_file_free \
+	geany_functions->p_tm->tm_source_file_free
+#define tm_workspace_remove_source_file \
+	geany_functions->p_tm->tm_workspace_remove_source_file
 #define search_show_find_in_files_dialog \
 	geany_functions->p_search->search_show_find_in_files_dialog
 #define highlighting_get_style \

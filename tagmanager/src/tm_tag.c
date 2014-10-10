@@ -218,9 +218,8 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 			return FALSE;
 		else
 		{
-			tag->name = g_strdup(file->work_object.file_name);
+			tag->name = g_strdup(file->file_name);
 			tag->type = tm_tag_file_t;
-			/* tag->atts.file.timestamp = file->work_object.analyze_time; */
 			tag->atts.file.lang = file->lang;
 			tag->atts.file.inactive = FALSE;
 			return TRUE;
@@ -1053,7 +1052,7 @@ void tm_tag_print(TMTag *tag, FILE *fp)
 	if (tag->atts.entry.inheritance)
 		fprintf(fp, " : from %s", tag->atts.entry.inheritance);
 	if ((tag->atts.entry.file) && (tag->atts.entry.line > 0))
-		fprintf(fp, "[%s:%ld]", tag->atts.entry.file->work_object.file_name
+		fprintf(fp, "[%s:%ld]", tag->atts.entry.file->file_name
 		  , tag->atts.entry.line);
 	fprintf(fp, "\n");
 }

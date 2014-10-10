@@ -12,7 +12,6 @@
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
-#include "tm_work_object.h"
 #include "tm_source_file.h"
 #ifdef GEANY_PRIVATE
 #include "tm_file_entry.h"

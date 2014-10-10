@@ -121,7 +121,6 @@ tagmanager_sources = set([
     'tagmanager/src/tm_file_entry.c',
     'tagmanager/src/tm_source_file.c',
     'tagmanager/src/tm_tag.c',
-    'tagmanager/src/tm_work_object.c',
     'tagmanager/src/tm_workspace.c'])
 
 scintilla_sources = set(['scintilla/gtk/scintilla-marshal.c'])
@@ -553,7 +552,7 @@ def build(bld):
     bld.install_files('${PREFIX}/include/geany/tagmanager', '''
         tagmanager/src/tm_source_file.h
         tagmanager/src/tm_tag.h
-        tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+        tagmanager/src/tm_tagmanager.h
         tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'

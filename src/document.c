@@ -140,7 +140,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
  * string returned by @c tm_get_real_path().
  *
  * @return The matching document, or @c NULL.
- * @note This is only really useful when passing a @c TMWorkObject::file_name.
+ * @note This is only really useful when passing a @c TMSourceFile::file_name.
  * @see GeanyDocument::real_path.
  * @see document_find_by_filename().
  *
@@ -714,7 +714,7 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
-	tm_workspace_remove_object(doc->tm_file, TRUE, !main_status.quitting);
+	tm_workspace_remove_source_file(doc->tm_file, TRUE, !main_status.quitting);
 
 	if (doc->priv->tag_tree)
 		gtk_widget_destroy(doc->priv->tag_tree);
@@ -2486,14 +2486,14 @@ void document_update_tags(GeanyDocument *doc)
 		doc->tm_file = tm_source_file_new(locale_filename, FALSE, name);
 		g_free(locale_filename);
 
-		if (doc->tm_file && !tm_workspace_add_object(doc->tm_file))
+		if (doc->tm_file && !tm_workspace_add_source_file(doc->tm_file))
 		{
-			tm_work_object_free(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
 			doc->tm_file = NULL;
 		}
 	}
 
-	/* early out if there's no work object and we couldn't create one */
+	/* early out if there's no tm source file and we couldn't create one */
 	if (doc->tm_file == NULL)
 	{
 		/* We must call sidebar_update_tag_list() before returning,
@@ -2555,12 +2555,12 @@ void document_highlight_tags(GeanyDocument *doc)
 		default:
 			return; /* early out if type keywords are not supported */
 	}
-	if (!app->tm_workspace->work_object.tags_array)
+	if (!app->tm_workspace->tags_array)
 		return;
 
 	/* get any type keywords and tell scintilla about them
 	 * this will cause the type keywords to be colourized in scintilla */
-	keywords_str = symbols_find_tags_as_string(app->tm_workspace->work_object.tags_array,
+	keywords_str = symbols_find_tags_as_string(app->tm_workspace->tags_array,
 		TM_GLOBAL_TYPE_MASK, doc->file_type->lang);
 	if (keywords_str)
 	{
@@ -2617,7 +2617,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		/* delete tm file object to force creation of a new one */
 		if (doc->tm_file != NULL)
 		{
-			tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
+			tm_workspace_remove_source_file(doc->tm_file, TRUE, TRUE);
 			doc->tm_file = NULL;
 		}
 		/* load tags files before highlighting (some lexers highlight global typenames) */

@@ -735,7 +735,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 	name = tag->atts.entry.var_type;
 	if (name)
 	{
-		TMWorkObject *obj = editor->document->tm_file;
+		TMSourceFile *obj = editor->document->tm_file;
 
 		tags = tm_workspace_find_scope_members(obj ? obj->tags_array : NULL,
 			name, TRUE, FALSE);

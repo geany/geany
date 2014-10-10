@@ -44,7 +44,7 @@ all: $(COMPLIB)
 clean:
 	-$(RM) deps.mak *.o $(COMPLIB)
 
-$(COMPLIB): tm_workspace.o tm_work_object.o tm_source_file.o tm_tag.o \
+$(COMPLIB): tm_workspace.o tm_source_file.o tm_tag.o \
 tm_file_entry.o
 	$(AR) rc $@ $^
 	$(RANLIB) $@

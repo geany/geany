@@ -18,35 +18,114 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <glib/gstdio.h>
+#ifdef G_OS_WIN32
+# define VC_EXTRALEAN
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h> /* for GetFullPathName */
+#endif
 
 #include "general.h"
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
 #define LIBCTAGS_DEFINED
-#include "tm_work_object.h"
+#include "tm_workspace.h"
 
 #include "tm_source_file.h"
 #include "tm_tag.h"
 
 
-guint source_file_class_id = 0;
 static TMSourceFile *current_source_file = NULL;
+
+static int get_path_max(const char *path)
+{
+#ifdef PATH_MAX
+	return PATH_MAX;
+#else
+	int path_max = pathconf(path, _PC_PATH_MAX);
+	if (path_max <= 0)
+		path_max = 4096;
+	return path_max;
+#endif
+}
+
+
+#ifdef G_OS_WIN32
+/* realpath implementation for Windows found at http://bugzilla.gnome.org/show_bug.cgi?id=342926
+ * this one is better than e.g. liberty's lrealpath because this one uses Win32 API and works
+ * with special chars within the filename */
+static char *realpath (const char *pathname, char *resolved_path)
+{
+  int size;
+
+  if (resolved_path != NULL)
+  {
+    int path_max = get_path_max(pathname);
+	size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
+    if (size > path_max)
+      return NULL;
+    else
+      return resolved_path;
+  }
+  else
+  {
+    size = GetFullPathNameA (pathname, 0, NULL, NULL);
+    resolved_path = g_new0 (char, size);
+    GetFullPathNameA (pathname, size, resolved_path, NULL);
+    return resolved_path;
+  }
+}
+#endif
+
+gchar *tm_get_real_path(const gchar *file_name)
+{
+	if (file_name)
+	{
+		gsize len = get_path_max(file_name) + 1;
+		gchar *path = g_malloc0(len);
+
+		if (realpath(file_name, path))
+			return path;
+		else
+			g_free(path);
+	}
+	return NULL;
+}
 
 gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
   , gboolean update, const char* name)
 {
-	if (0 == source_file_class_id)
-		source_file_class_id = tm_work_object_register(tm_source_file_free
-		  , tm_source_file_update, NULL);
+	struct stat s;
+	int status;
 
 #ifdef TM_DEBUG
 	g_message("Source File init: %s", file_name);
 #endif
 
-	if (FALSE == tm_work_object_init(&(source_file->work_object),
-		  source_file_class_id, file_name, FALSE))
-		return FALSE;
+	if (file_name != NULL)
+	{
+		status = g_stat(file_name, &s);
+		if (0 != status)
+		{
+			/* g_warning("Unable to stat %s", file_name);*/
+			return FALSE;
+		}
+		if (!S_ISREG(s.st_mode))
+		{
+			g_warning("%s: Not a regular file", file_name);
+			return FALSE;
+		}
+		source_file->file_name = tm_get_real_path(file_name);
+		source_file->short_name = strrchr(source_file->file_name, '/');
+		if (source_file->short_name)
+			++ source_file->short_name;
+		else
+			source_file->short_name = source_file->file_name;
+	}
+
+	source_file->tags_array = NULL;
 
 	source_file->inactive = FALSE;
 	if (NULL == LanguageTable)
@@ -65,11 +144,11 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 		source_file->lang = getNamedLanguage(name);
 
 	if (update)
-		tm_source_file_update(TM_WORK_OBJECT(source_file), TRUE, FALSE, FALSE);
+		tm_source_file_update(source_file, FALSE);
 	return TRUE;
 }
 
-TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name)
+TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const char *name)
 {
 	TMSourceFile *source_file = g_new(TMSourceFile, 1);
 	if (TRUE != tm_source_file_init(source_file, file_name, update, name))
@@ -77,24 +156,24 @@ TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const c
 		g_free(source_file);
 		return NULL;
 	}
-	return (TMWorkObject *) source_file;
+	return source_file;
 }
 
 void tm_source_file_destroy(TMSourceFile *source_file)
 {
 #ifdef TM_DEBUG
-	g_message("Destroying source file: %s", source_file->work_object.file_name);
+	g_message("Destroying source file: %s", source_file->file_name);
 #endif
 
-	if (NULL != TM_WORK_OBJECT(source_file)->tags_array)
+	g_free(source_file->file_name);
+	if (NULL != source_file->tags_array)
 	{
-		tm_tags_array_free(TM_WORK_OBJECT(source_file)->tags_array, TRUE);
-		TM_WORK_OBJECT(source_file)->tags_array = NULL;
+		tm_tags_array_free(source_file->tags_array, TRUE);
+		source_file->tags_array = NULL;
 	}
-	tm_work_object_destroy(&(source_file->work_object));
 }
 
-void tm_source_file_free(gpointer source_file)
+void tm_source_file_free(TMSourceFile *source_file)
 {
 	if (NULL != source_file)
 	{
@@ -109,13 +188,13 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 	gboolean status = TRUE;
 	int passCount = 0;
 
-	if ((NULL == source_file) || (NULL == source_file->work_object.file_name))
+	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
 		g_warning("Attempt to parse NULL file");
 		return FALSE;
 	}
 
-	file_name = source_file->work_object.file_name;
+	file_name = source_file->file_name;
 	if (NULL == LanguageTable)
 	{
 		initializeParsing();
@@ -135,8 +214,8 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 
 	while ((TRUE == status) && (passCount < 3))
 	{
-		if (source_file->work_object.tags_array)
-			tm_tags_array_free(source_file->work_object.tags_array, FALSE);
+		if (source_file->tags_array)
+			tm_tags_array_free(source_file->tags_array, FALSE);
 		if (fileOpen (file_name, source_file->lang))
 		{
 			if (LanguageTable [source_file->lang]->parser != NULL)
@@ -164,7 +243,7 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 	const char *file_name;
 	gboolean status = TRUE;
 
-	if ((NULL == source_file) || (NULL == source_file->work_object.file_name))
+	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
 		g_warning("Attempt to parse NULL file");
 		return FALSE;
@@ -175,7 +254,7 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		g_warning("Attempt to parse a NULL text buffer");
 	}
 
-	file_name = source_file->work_object.file_name;
+	file_name = source_file->file_name;
 	if (NULL == LanguageTable)
 	{
 		initializeParsing();
@@ -205,8 +284,8 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		int passCount = 0;
 		while ((TRUE == status) && (passCount < 3))
 		{
-			if (source_file->work_object.tags_array)
-				tm_tags_array_free(source_file->work_object.tags_array, FALSE);
+			if (source_file->tags_array)
+				tm_tags_array_free(source_file->tags_array, FALSE);
 			if (bufferOpen (text_buf, buf_size, file_name, source_file->lang))
 			{
 				if (LanguageTable [source_file->lang]->parser != NULL)
@@ -239,12 +318,12 @@ void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
 	if (NULL == arglist ||
 		NULL == tag_name ||
 		NULL == current_source_file ||
-		NULL == current_source_file->work_object.tags_array)
+		NULL == current_source_file->tags_array)
 	{
 		return;
 	}
 
-	tags = tm_tags_find(current_source_file->work_object.tags_array, tag_name, FALSE, FALSE,
+	tags = tm_tags_find(current_source_file->tags_array, tag_name, FALSE, FALSE,
 			&count);
 	if (tags != NULL && count == 1)
 	{
@@ -258,71 +337,70 @@ int tm_source_file_tags(const tagEntryInfo *tag)
 {
 	if (NULL == current_source_file)
 		return 0;
-	if (NULL == current_source_file->work_object.tags_array)
-		current_source_file->work_object.tags_array = g_ptr_array_new();
-	g_ptr_array_add(current_source_file->work_object.tags_array,
+	if (NULL == current_source_file->tags_array)
+		current_source_file->tags_array = g_ptr_array_new();
+	g_ptr_array_add(current_source_file->tags_array,
 	  tm_tag_new(current_source_file, tag));
 	return TRUE;
 }
 
-gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
-  , gboolean UNUSED recurse, gboolean update_parent)
+void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace)
 {
-	if (force)
-	{
-		tm_source_file_parse(TM_SOURCE_FILE(source_file));
-		tm_tags_sort(source_file->tags_array, NULL, FALSE);
-		/* source_file->analyze_time = tm_get_file_timestamp(source_file->file_name); */
-		if ((source_file->parent) && update_parent)
-		{
-			tm_work_object_update(source_file->parent, TRUE, FALSE, TRUE);
-		}
-		return TRUE;
-	}
-	else {
-#ifdef	TM_DEBUG
-		g_message ("no parsing of %s has been done", source_file->file_name);
+#ifdef TM_DEBUG
+	g_message("Source file updating based on source file %s", source_file->file_name);
 #endif
-		return FALSE;
+
+	tm_source_file_parse(source_file);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	if (update_workspace)
+	{
+#ifdef TM_DEBUG
+		g_message("Updating workspace from source file");
+#endif
+		tm_workspace_update();
 	}
+#ifdef TM_DEBUG
+	else
+		g_message("Skipping workspace update because update_workspace is %s"
+		  , update_workspace?"TRUE":"FALSE");
+
+#endif
 }
 
 
-gboolean tm_source_file_buffer_update(TMWorkObject *source_file, guchar* text_buf,
-			gint buf_size, gboolean update_parent)
+void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
+			gint buf_size, gboolean update_workspace)
 {
 #ifdef TM_DEBUG
 	g_message("Buffer updating based on source file %s", source_file->file_name);
 #endif
 
-	tm_source_file_buffer_parse (TM_SOURCE_FILE(source_file), text_buf, buf_size);
+	tm_source_file_buffer_parse (source_file, text_buf, buf_size);
 	tm_tags_sort(source_file->tags_array, NULL, FALSE);
-	/* source_file->analyze_time = time(NULL); */
-	if ((source_file->parent) && update_parent)
+	if (update_workspace)
 	{
 #ifdef TM_DEBUG
-		g_message("Updating parent from buffer..");
+		g_message("Updating workspace from buffer..");
 #endif
-		tm_work_object_update(source_file->parent, TRUE, FALSE, TRUE);
+		tm_workspace_update();
 	}
 #ifdef TM_DEBUG
 	else
-		g_message("Skipping parent update because parent is %s and update_parent is %s"
-		  , source_file->parent?"NOT NULL":"NULL", update_parent?"TRUE":"FALSE");
+		g_message("Skipping workspace update because update_workspace is %s"
+		  , update_workspace?"TRUE":"FALSE");
 
 #endif
-	return TRUE;
 }
 
 
-gboolean tm_source_file_write(TMWorkObject *source_file, FILE *fp, guint attrs)
+gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs)
 {
 	TMTag *tag;
 	guint i;
 
 	if (NULL != source_file)
 	{
-		if (NULL != (tag = tm_tag_new(TM_SOURCE_FILE(source_file), NULL)))
+		if (NULL != (tag = tm_tag_new(source_file, NULL)))
 		{
 			tm_tag_write(tag, fp, tm_tag_attr_max_t);
 			tm_tag_unref(tag);
@@ -367,4 +445,3 @@ gint tm_source_file_get_named_lang(const gchar *name)
 	}
 	return getNamedLanguage(name);
 }
-
