@@ -318,5 +318,8 @@
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
 
-// Require at least XP for Windows API
+// Need Windows XP for SHGetFolderPathAndSubDirW
 #define WINVER 0x0501
+
+// Needed for SHGFP_TYPE
+#define _WIN32_IE 0x0500
