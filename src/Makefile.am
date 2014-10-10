@@ -55,7 +55,8 @@ SRCS = \
 	tools.c tools.h \
 	sidebar.c sidebar.h \
 	ui_utils.c ui_utils.h \
-	utils.c utils.h
+	utils.c utils.h \
+	spawn.c spawn.h
 
 
 geany_includedir = $(includedir)/geany

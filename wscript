@@ -136,7 +136,7 @@ geany_sources = set([
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
-    'src/ui_utils.c', 'src/utils.c'])
+    'src/ui_utils.c', 'src/utils.c', 'src/spawn.c'])
 
 geany_icons = {
     'hicolor/16x16/apps':       ['16x16/classviewer-class.png',

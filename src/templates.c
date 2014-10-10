@@ -37,6 +37,7 @@
 #include "geany.h"
 #include "geanymenubuttonaction.h"
 #include "geanyobject.h"
+#include "spawn.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"
@@ -622,32 +623,27 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 						  const gchar *file_type, const gchar *func_name)
 {
 	gchar *result = NULL;
-	gchar **argv;
+	GError *error = NULL;
+	gchar **env;
 
-	if (g_shell_parse_argv(command, NULL, &argv, NULL))
+	file_name = (file_name != NULL) ? file_name : "";
+	file_type = (file_type != NULL) ? file_type : "";
+	func_name = (func_name != NULL) ? func_name : "";
+
+	env = utils_copy_environment(NULL,
+		"GEANY_FILENAME", file_name,
+		"GEANY_FILETYPE", file_type,
+		"GEANY_FUNCNAME", func_name,
+		NULL);
+
+	if (!spawn_with_capture(NULL, command, NULL, env, GTK_WINDOW(main_widgets.window), NULL,
+		&result, NULL, NULL, &error))
 	{
-		GError *error = NULL;
-		gchar **env;
-
-		file_name = (file_name != NULL) ? file_name : "";
-		file_type = (file_type != NULL) ? file_type : "";
-		func_name = (func_name != NULL) ? func_name : "";
-
-		env = utils_copy_environment(NULL,
-			"GEANY_FILENAME", file_name,
-			"GEANY_FILETYPE", file_type,
-			"GEANY_FUNCNAME", func_name,
-			NULL);
-		if (! utils_spawn_sync(NULL, argv, env, G_SPAWN_SEARCH_PATH,
-				NULL, NULL, &result, NULL, NULL, &error))
-		{
-			g_warning("templates_replace_command: %s", error->message);
-			g_error_free(error);
-			result = NULL;
-		}
-		g_strfreev(argv);
-		g_strfreev(env);
+		g_warning("templates_replace_command: %s", error->message);
+		g_error_free(error);
 	}
+
+	g_strfreev(env);
 	return result;
 }
 
