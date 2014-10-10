@@ -23,8 +23,6 @@ tagmanager_include_HEADERS = \
 libtagmanager_a_SOURCES =\
 	tm_tagmanager.h \
 	tm_parser.h \
-	tm_file_entry.h \
-	tm_file_entry.c \
 	tm_source_file.h \
 	tm_source_file.c \
 	tm_tag.h \

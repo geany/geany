@@ -118,7 +118,6 @@ ctags_sources = set([
     'tagmanager/ctags/vstring.c'])
 
 tagmanager_sources = set([
-    'tagmanager/src/tm_file_entry.c',
     'tagmanager/src/tm_source_file.c',
     'tagmanager/src/tm_tag.c',
     'tagmanager/src/tm_workspace.c'])

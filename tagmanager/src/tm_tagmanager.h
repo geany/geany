@@ -14,7 +14,6 @@
 #include "tm_workspace.h"
 #include "tm_source_file.h"
 #ifdef GEANY_PRIVATE
-#include "tm_file_entry.h"
 #include "tm_parser.h"
 #endif /* GEANY_PRIVATE */
 
