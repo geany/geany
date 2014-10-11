@@ -232,7 +232,7 @@ static void init_pref_groups(void)
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
-		"replace_and_find_by_default", FALSE);
+		"replace_and_find_by_default", TRUE);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 

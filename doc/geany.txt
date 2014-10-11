@@ -2652,7 +2652,7 @@ extract_filetype_regex            Regex to extract filetype name from file     S
 **Search related**
 find_selection_type               See `Find selection`_.                       0           immediately
 **Replace related**
-replace_and_find_by_default       Set ``Replace & Find`` button as default so  false       immediately
+replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately
                                   it will be activated when the Enter key is
                                   pressed while one of the text fields has
                                   focus.
