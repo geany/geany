@@ -1390,7 +1390,9 @@ on_replace_find_entry_activate(GtkEntry *entry, gpointer user_data)
 static void
 on_replace_entry_activate(GtkEntry *entry, gpointer user_data)
 {
-	on_replace_dialog_response(NULL, GEANY_RESPONSE_REPLACE, NULL);
+	on_replace_dialog_response(NULL,
+		search_prefs.replace_and_find_by_default ? GEANY_RESPONSE_REPLACE_AND_FIND : GEANY_RESPONSE_REPLACE,
+		NULL);
 }
 
 

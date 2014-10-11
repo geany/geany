@@ -2651,6 +2651,11 @@ extract_filetype_regex            Regex to extract filetype name from file     S
                                   via capture group one.
 **Search related**
 find_selection_type               See `Find selection`_.                       0           immediately
+**Replace related**
+replace_and_find_by_default       Set ``Replace & Find`` button as default so  false       immediately
+                                  it will be activated when the Enter key is
+                                  pressed while one of the text fields has
+                                  focus.
 **Build Menu related**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.
