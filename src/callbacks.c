@@ -1444,8 +1444,10 @@ G_MODULE_EXPORT void on_menu_project1_activate(GtkMenuItem *menuitem, gpointer u
 G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	gchar *sel = NULL;
+	GeanyFiletype *ft  = doc->file_type;
+	gchar *sel 		   = NULL;
 	const gchar *wc;
+
 
 #ifdef G_OS_WIN32
 	wc = GEANY_WORDCHARS "./-" "\\";
@@ -1460,47 +1462,81 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 
 	if (sel != NULL)
 	{
-		gchar *filename = NULL;
 
-		if (g_path_is_absolute(sel))
-			filename = g_strdup(sel);
-		else
-		{	/* relative filename, add the path of the current file */
-			gchar *path;
+		// (1) build the list of filename candidates +++++++++++++++++++
 
+		GSList* candidates 		= NULL;	// lists all filenames to test
+		GSList* iter_candidates = NULL;
+
+		if (g_path_is_absolute(sel)) // absolute path
+		{
+			candidates = g_slist_append(candidates, g_strdup(sel));
+		}
+		else 						// relative path
+		{
+			gchar *path = NULL;
+
+			// current working directory
 			path = utils_get_current_file_dir_utf8();
 			SETPTR(path, utils_get_locale_from_utf8(path));
 			if (!path)
 				path = g_get_current_dir();
 
-			filename = g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL);
+			candidates = g_slist_append(candidates,
+							g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 
-			if (! g_file_test(filename, G_FILE_TEST_EXISTS) &&
-				app->project != NULL && !EMPTY(app->project->base_path))
+			// project path
+			if (app->project != NULL && !EMPTY(app->project->base_path))
 			{
 				/* try the project's base path */
 				SETPTR(path, project_get_base_path());
 				SETPTR(path, utils_get_locale_from_utf8(path));
-				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
+
+				candidates = g_slist_append(candidates,
+							g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}
 			g_free(path);
-#ifdef G_OS_UNIX
-			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
 
-			if (! g_file_test(filename, G_FILE_TEST_EXISTS))
-				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+#ifdef G_OS_UNIX
+			// include directories ... makes only sense for C/ C++ header files
+			candidates = g_slist_append(candidates,
+							g_build_path(G_DIR_SEPARATOR_S, "/usr/local/include", sel, NULL));
+
+			candidates = g_slist_append(candidates,
+							g_build_path(G_DIR_SEPARATOR_S, "/usr/include", sel, NULL));
+
 #endif
 		}
 
-		if (g_file_test(filename, G_FILE_TEST_EXISTS))
+		// (2) test for file existence +++++++++++++++++++++++++++++++++
+		gchar *filename = NULL;
+		for(iter_candidates = candidates ; iter_candidates != NULL ; iter_candidates = iter_candidates->next)
+		{
+			filename = g_strdup((gchar*)(iter_candidates->data));
+			if ( g_file_test(filename, G_FILE_TEST_EXISTS))
+				break;
+
+			// append the default extension and test again
+			SETPTR(filename, g_build_path(".", filename, ft->extension, NULL));
+			if ( g_file_test(filename, G_FILE_TEST_EXISTS))
+				break;
+
+			g_free(filename);
+			filename = NULL;
+		}
+
+		// (3) ... and finally open the file +++++++++++++++++++++++++++
+		if (filename != NULL) // we already know the file exists
+		{
 			document_open_file(filename, FALSE, NULL, NULL);
+		}
 		else
 		{
 			SETPTR(sel, utils_get_utf8_from_locale(sel));
 			ui_set_statusbar(TRUE, _("Could not open file %s (File not found)"), sel);
 		}
 
+		g_slist_foreach(candidates, (GFunc)(&g_free), NULL);
 		g_free(filename);
 		g_free(sel);
 	}

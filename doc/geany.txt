@@ -574,6 +574,21 @@ order. It is not alphabetical as shown in the documents list
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
 
+Documents can be opened from selected text within the current
+document using the keybinding Ctrl-Shift-O (see the `File
+keybindings`_ section). Selected file names can be absolute or
+relative. In the latter case Geany tries to locate the file within
+your project path. If the file is not found the extension of the
+current file type is added to the file name. This feature is useful
+if class names and file names are equal.
+
+A short example in LaTeX:
+
+    \\include{chapter5}
+
+Selecting 'chapter5' opens the file chapter5.tex.
+
+
 Cloning documents
 ^^^^^^^^^^^^^^^^^
 The `Document->Clone` menu item copies the current document's text,
@@ -3340,7 +3355,8 @@ New                             Ctrl-N  (C)               Creates a new file.
 
 Open                            Ctrl-O  (C)               Opens a file.
 
-Open selected file              Ctrl-Shift-O              Opens the selected filename.
+Open selected file              Ctrl-Shift-O              Opens the selected filename. See the section
+                                                          called `Switching between documents`_.
 
 Re-open last closed tab                                   Re-opens the last closed document tab.
 
