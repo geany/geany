@@ -4823,6 +4823,8 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();
 	ScintillaObject *old, *sci;
+	GeanyIndentType old_indent_type = editor->indent_type;
+	gint old_indent_width = editor->indent_width;
 
 	/* temporarily change editor to use the new sci widget */
 	old = editor->sci;
@@ -4835,7 +4837,11 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 
 	/* if editor already had a widget, restore it */
 	if (old)
+	{
+		editor->indent_type = old_indent_type;
+		editor->indent_width = old_indent_width;
 		editor->sci = old;
+	}
 	return sci;
 }
 
