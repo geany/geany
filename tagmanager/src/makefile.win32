@@ -29,7 +29,7 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=-I ../ctags -I ../ -I . $(GTK_INCLUDES)
 
-CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DGEANY_PRIVATE -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
 ifdef DEBUG
 CFLAGS= -O0 -g $(CBASEFLAGS)
 else
