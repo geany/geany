@@ -835,6 +835,119 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gbo
 	return TRUE;
 }
 
+GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
+{
+	gint i;
+	for (i = 0; i < tags_array->len; i++)
+	{
+		TMTag *tag = tags_array->pdata[i];
+		
+		if (tag != NULL && tag->atts.entry.file == source_file)
+			tags_array->pdata[i] = NULL;
+	}
+	tm_tags_prune(tags_array);
+}
+
+/* Optimized merge sort for merging sorted values from one array to another
+ * where one of the arrays is much smaller than the other.
+ * The merge complexity depends mostly on the size of the small array
+ * and is almost independent of the size of the big array.
+ * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
+static GPtrArray *merge_big_small(GPtrArray *big_array, GPtrArray *small_array) {
+	gint i1 = 0;  /* index to big_array */
+	gint i2 = 0;  /* index to small_array */
+	/* on average, we are merging a value from small_array every 
+	 * len(big_array) / len(small_array) values - good approximation for fast jump
+	 * step size */
+	gint initial_step = big_array->len / small_array->len;
+	initial_step = initial_step > 4 ? initial_step : 1;
+	gint step = initial_step;
+	GPtrArray *res_array = g_ptr_array_sized_new(big_array->len + small_array->len);
+#ifdef TM_DEBUG
+	gint cmpnum = 0;
+#endif
+
+	while (i1 < big_array->len && i2 < small_array->len)
+	{
+		gint cmpval;
+		gpointer val1 = big_array->pdata[i1];
+		gpointer val2 = small_array->pdata[i2];
+
+		if (step > 4)  /* fast path start */
+		{
+			gint j1 = (i1 + step < big_array->len) ? i1 + step : big_array->len - 1;
+			
+			val1 = big_array->pdata[j1];
+#ifdef TM_DEBUG
+			cmpnum++;
+#endif
+			/* if the value in big_array after making the big step is still smaller
+			 * than the value in small_array, we can copy all the values inbetween
+			 * into the result without making expensive string comparisons */
+			if (tm_tag_compare(&val1, &val2) < 0)
+			{
+				while (i1 <= j1) 
+				{
+					val1 = big_array->pdata[i1];
+					g_ptr_array_add(res_array, val1);
+					i1++;
+				}
+				continue;
+			}
+			else 
+			{
+				/* lower the step and try again */
+				step /= 2;
+				continue;
+			}
+		}  /* fast path end */
+		
+#ifdef TM_DEBUG
+		cmpnum++;
+#endif
+		cmpval = tm_tag_compare(&val1, &val2);
+		if (cmpval < 0)
+		{
+			g_ptr_array_add(res_array, val1);
+			i1++;
+		}
+		else
+		{
+			g_ptr_array_add(res_array, val2);
+			i2++;
+			/* value from small_array gets merged - reset the step size */
+			step = initial_step;
+			if (cmpval == 0)
+				i1++;  /* remove the duplicate, keep just the newly merged value */
+		}
+	}
+	
+	/* end of one of the arrays reached - copy the rest from the other array */
+	while (i1 < big_array->len)
+		g_ptr_array_add(res_array, big_array->pdata[i1++]);
+	while (i2 < small_array->len)
+		g_ptr_array_add(res_array, small_array->pdata[i2++]);
+		
+#ifdef TM_DEBUG
+	printf("cmpnums: %d\n", cmpnum);
+	printf("total tags: %d\n", big_array->len);
+	printf("merged tags: %d\n\n", small_array->len);
+#endif
+
+	return res_array;
+}
+
+GPtrArray *tm_tags_merge_big_small(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes)
+{
+	GPtrArray *res_array;
+	
+	s_sort_attrs = sort_attributes;
+	s_partial = FALSE;
+	res_array = merge_big_small(big_array, small_array);
+	s_sort_attrs = NULL;
+	return res_array;
+}
+
 gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_func, gboolean dedup)
 {
 	if ((!tags_array) || (!tags_array->len))

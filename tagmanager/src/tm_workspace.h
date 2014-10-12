@@ -159,6 +159,9 @@ const GPtrArray *tm_workspace_get_parents(const gchar *name);
 */
 void tm_workspace_free(void);
 
+void tm_workspace_merge_file_tags(TMSourceFile *source_file);
+
+void tm_workspace_remove_file_tags(TMSourceFile *source_file);
 
 #endif /* GEANY_PRIVATE */
 

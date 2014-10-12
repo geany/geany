@@ -350,6 +350,12 @@ void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace)
 	g_message("Source file updating based on source file %s", source_file->file_name);
 #endif
 
+	if (update_workspace)
+	{
+		/* tm_source_file_parse() deletes the tag objects - remove the tags from
+		 * workspace while they exist and can be scanned */
+		tm_workspace_remove_file_tags(source_file);
+	}
 	tm_source_file_parse(source_file);
 	tm_tags_sort(source_file->tags_array, NULL, FALSE);
 	if (update_workspace)
@@ -357,7 +363,7 @@ void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace)
 #ifdef TM_DEBUG
 		g_message("Updating workspace from source file");
 #endif
-		tm_workspace_update();
+		tm_workspace_merge_file_tags(source_file);
 	}
 #ifdef TM_DEBUG
 	else
@@ -375,6 +381,12 @@ void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
 	g_message("Buffer updating based on source file %s", source_file->file_name);
 #endif
 
+	if (update_workspace)
+	{
+		/* tm_source_file_parse() deletes the tag objects - remove the tags from
+		 * workspace while they exist and can be scanned */
+		tm_workspace_remove_file_tags(source_file);
+	}
 	tm_source_file_buffer_parse (source_file, text_buf, buf_size);
 	tm_tags_sort(source_file->tags_array, NULL, FALSE);
 	if (update_workspace)
@@ -382,7 +394,7 @@ void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
 #ifdef TM_DEBUG
 		g_message("Updating workspace from buffer..");
 #endif
-		tm_workspace_update();
+		tm_workspace_merge_file_tags(source_file);
 	}
 #ifdef TM_DEBUG
 	else

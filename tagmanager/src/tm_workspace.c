@@ -106,11 +106,11 @@ gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean do_
 	{
 		if (theWorkspace->source_files->pdata[i] == source_file)
 		{
+			if (update)
+				tm_workspace_remove_file_tags(source_file);
 			if (do_free)
 				tm_source_file_free(source_file);
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
-			if (update)
-				tm_workspace_update();
 			return TRUE;
 		}
 	}
@@ -487,6 +487,30 @@ void tm_workspace_recreate_tags_array(void)
 	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
 	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE);
+}
+
+void tm_workspace_remove_file_tags(TMSourceFile *source_file)
+{
+	if (theWorkspace->tags_array != NULL)
+		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
+}
+
+void tm_workspace_merge_file_tags(TMSourceFile *source_file)
+{
+	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t,
+		tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
+
+	if (theWorkspace->tags_array == NULL)
+		theWorkspace->tags_array = g_ptr_array_new();
+		
+	if (source_file->tags_array != NULL)
+	{
+		GPtrArray *new_tags = tm_tags_merge_big_small(theWorkspace->tags_array, 
+			source_file->tags_array, sort_attrs);
+		/* tags owned by TMSourceFile - free just the pointer array */
+		g_ptr_array_free(theWorkspace->tags_array, TRUE);
+		theWorkspace->tags_array = new_tags;
+	}
 }
 
 void tm_workspace_update(void)
