@@ -1474,8 +1474,16 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 {
 	gchar *path = NULL;
 	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
-
-	resolve_link(GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window)), wfilename, &path);
+	HWND hWnd = NULL;
+	
+	if (main_widgets.window != NULL)
+	{
+		GdkWindow *window = gtk_widget_get_window(main_widgets.window);
+		if (window != NULL)
+			hWnd = GDK_WINDOW_HWND(window);
+	}
+	
+	resolve_link(hWnd, wfilename, &path);
 	g_free(wfilename);
 
 	if (path == NULL)
