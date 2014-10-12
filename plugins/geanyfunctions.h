@@ -354,6 +354,8 @@
 	geany_functions->p_tm->tm_source_file_free
 #define tm_workspace_remove_source_file \
 	geany_functions->p_tm->tm_workspace_remove_source_file
+#define tm_workspace_update \
+	geany_functions->p_tm->tm_workspace_update
 #define search_show_find_in_files_dialog \
 	geany_functions->p_search->search_show_find_in_files_dialog
 #define highlighting_get_style \

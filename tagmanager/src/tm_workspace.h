@@ -48,6 +48,11 @@ gboolean tm_workspace_add_source_file(TMSourceFile *source_file);
 */
 gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean do_free, gboolean update);
 
+/*! Calls tm_source_file_update() for all workspace member source files and creates
+ workspace tag array. Use if you want to globally refresh the workspace.
+*/
+void tm_workspace_update(void);
+
 
 #ifdef GEANY_PRIVATE
 
@@ -88,11 +93,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
  this is called automatically by tm_workspace_update().
 */
 void tm_workspace_recreate_tags_array(void);
-
-/* Calls tm_source_file_update() for all workspace member source files.
- Use if you want to globally refresh the workspace.
-*/
-void tm_workspace_update(void);
 
 /* Dumps the workspace tree - useful for debugging */
 void tm_workspace_dump(void);

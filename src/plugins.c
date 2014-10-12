@@ -293,7 +293,8 @@ static TagManagerFuncs tagmanager_funcs = {
 	&tm_workspace_add_source_file,
 	&tm_source_file_update,
 	&tm_source_file_free,
-	&tm_workspace_remove_source_file
+	&tm_workspace_remove_source_file,
+	&tm_workspace_update
 };
 
 static SearchFuncs search_funcs = {
