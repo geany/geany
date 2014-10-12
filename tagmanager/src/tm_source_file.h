@@ -44,7 +44,12 @@ typedef struct
 	gboolean inactive; /*!< Whether this file should be scanned for tags */
 } TMSourceFile;
 
-/*! Initializes a TMSourceFile structure and returns a pointer to it. */
+/*! Initializes a TMSourceFile structure and returns a pointer to it. 
+ * \param file_name The file name.
+ * \param update Update the tag array of the file.
+ * \param name Name of the used programming language, NULL for autodetection.
+ * \return The created TMSourceFile object.
+ * */
 TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name);
 
 /*! Updates the source file by reparsing if the modification time is greater
