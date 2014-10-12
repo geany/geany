@@ -1779,20 +1779,19 @@ static void cb_func_switch_tablastused(G_GNUC_UNUSED guint key_id)
 /* move document left/right/first/last */
 static void cb_func_move_tab(guint key_id)
 {
-	GtkWidget *sci;
+	GtkWidget *child;
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
 	gint cur_page = gtk_notebook_get_current_page(nb);
-	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL)
+	if (cur_page < 0)
 		return;
 
-	sci = GTK_WIDGET(doc->editor->sci);
+	child = gtk_notebook_get_nth_page(nb, cur_page);
 
 	switch (key_id)
 	{
 		case GEANY_KEYS_NOTEBOOK_MOVETABLEFT:
-			gtk_notebook_reorder_child(nb, sci, cur_page - 1);	/* notebook wraps around by default */
+			gtk_notebook_reorder_child(nb, child, cur_page - 1);	/* notebook wraps around by default */
 			break;
 		case GEANY_KEYS_NOTEBOOK_MOVETABRIGHT:
 		{
@@ -1800,14 +1799,14 @@ static void cb_func_move_tab(guint key_id)
 
 			if (npage == gtk_notebook_get_n_pages(nb))
 				npage = 0;	/* wraparound */
-			gtk_notebook_reorder_child(nb, sci, npage);
+			gtk_notebook_reorder_child(nb, child, npage);
 			break;
 		}
 		case GEANY_KEYS_NOTEBOOK_MOVETABFIRST:
-			gtk_notebook_reorder_child(nb, sci, (file_prefs.tab_order_ltr) ? 0 : -1);
+			gtk_notebook_reorder_child(nb, child, (file_prefs.tab_order_ltr) ? 0 : -1);
 			break;
 		case GEANY_KEYS_NOTEBOOK_MOVETABLAST:
-			gtk_notebook_reorder_child(nb, sci, (file_prefs.tab_order_ltr) ? -1 : 0);
+			gtk_notebook_reorder_child(nb, child, (file_prefs.tab_order_ltr) ? -1 : 0);
 			break;
 	}
 	return;
