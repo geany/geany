@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
 "PO-Revision-Date: 2013-03-05 10:14-0300\n"
-"Last-Translator: Adrovane Marques Kade <adrovane@gmail.com>\n"
+"Last-Translator: Marcelo Camargo <marcelocamargo@linuxmail.org>\n"
 "Language-Team: Portuguese <geany-i18n@uvena.de>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
@@ -715,11 +715,11 @@ msgstr "Largura:"
 
 #: ../data/geany.glade.h:143
 msgid "The width in chars of a single indent"
-msgstr "Largura em caracteres de uma única endentação"
+msgstr "Largura em caracteres de uma única indentação"
 
 #: ../data/geany.glade.h:144
 msgid "Auto-indent mode:"
-msgstr "Modo de endentação automática:"
+msgstr "Modo de indentação automática:"
 
 #: ../data/geany.glade.h:145
 msgid "Detect type from file"
@@ -730,7 +730,7 @@ msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
-"Detectar ou não o tipo de endentação a partir do conteúdo de um arquivo "
+"Detectar ou não o tipo de indentação a partir do conteúdo de um arquivo "
 "quando ele for aberto"
 
 #: ../data/geany.glade.h:147
@@ -741,7 +741,7 @@ msgstr "T_abs e espaços"
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
-"Usar espaços se a endentação total for menor do que a largura da tabulação, "
+"Usar espaços se a indentação total for menor do que a largura da tabulação, "
 "senão usa ambos"
 
 #: ../data/geany.glade.h:149
@@ -750,7 +750,7 @@ msgstr "E_spaços"
 
 #: ../data/geany.glade.h:150
 msgid "Use spaces when inserting indentation"
-msgstr "Usar espaços quando inserir endentação"
+msgstr "Usar espaços quando inserir indentação"
 
 #: ../data/geany.glade.h:151
 msgid "_Tabs"
@@ -758,7 +758,7 @@ msgstr "_Tabs"
 
 #: ../data/geany.glade.h:152
 msgid "Use one tab per indent"
-msgstr "Usar um tab por endentação"
+msgstr "Usar um tab por indentação"
 
 #: ../data/geany.glade.h:153
 msgid "Detect width from file"
@@ -784,7 +784,7 @@ msgstr "Endentações da tecla Tab"
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
-"Pressionar tab/shift-tab insere/remove endentação em vez de inserir um "
+"Pressionar tab/shift-tab insere/remove indentação em vez de inserir um "
 "caracter de tabulação"
 
 #: ../data/geany.glade.h:158
@@ -958,7 +958,7 @@ msgstr "Exibir guias de indentação"
 #: ../data/geany.glade.h:194
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
-"Exibir pequenas linhas pontilhadas para ajudar no uso da endentação correta"
+"Exibir pequenas linhas pontilhadas para ajudar no uso da indentação correta"
 
 #: ../data/geany.glade.h:195
 msgid "Show white space"
@@ -2160,11 +2160,11 @@ msgstr "_Fechar"
 
 #: ../data/geany.glade.h:463
 msgid "Apply the default indentation settings to all documents"
-msgstr "Aplicar configuração de endentação padrão a todos os documentos"
+msgstr "Aplicar configuração de indentação padrão a todos os documentos"
 
 #: ../data/geany.glade.h:464
 msgid "_Apply Default Indentation"
-msgstr "_Aplicar endentação padrão"
+msgstr "_Aplicar indentação padrão"
 
 #. build the code
 #: ../data/geany.glade.h:465 ../src/build.c:2566 ../src/build.c:2843
@@ -2862,12 +2862,12 @@ msgstr "Tabs e Espaços"
 #: ../src/document.c:1057
 #, c-format
 msgid "Setting %s indentation mode for %s."
-msgstr "Definindo %s modo de endentação para %s."
+msgstr "Definindo %s modo de indentação para %s."
 
 #: ../src/document.c:1068
 #, c-format
 msgid "Setting indentation width to %d for %s."
-msgstr "Definindo largura de endentação para %d para %s."
+msgstr "Definindo largura de indentação para %d para %s."
 
 #: ../src/document.c:1222
 #, c-format
@@ -3470,11 +3470,11 @@ msgstr "Diminuir indentação"
 
 #: ../src/keybindings.c:389
 msgid "Increase indent by one space"
-msgstr "Aumentar endentação em um espaço"
+msgstr "Aumentar indentação em um espaço"
 
 #: ../src/keybindings.c:391
 msgid "Decrease indent by one space"
-msgstr "Diminuir endentação em um espaço"
+msgstr "Diminuir indentação em um espaço"
 
 #: ../src/keybindings.c:395
 msgid "Send to Custom Command 1"
@@ -4975,11 +4975,11 @@ msgstr "Diminui o zoom do texto"
 
 #: ../src/toolbar.c:73
 msgid "Decrease indentation"
-msgstr "Diminuir endentação"
+msgstr "Diminuir indentação"
 
 #: ../src/toolbar.c:74
 msgid "Increase indentation"
-msgstr "Aumentar endentação"
+msgstr "Aumentar indentação"
 
 #: ../src/toolbar.c:75 ../src/toolbar.c:380
 msgid "Find the entered text in the current file"
