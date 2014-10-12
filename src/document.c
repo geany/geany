@@ -1440,7 +1440,7 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gchar *base_name;
-	gboolean result = FALSE;
+	gboolean prompt, result = FALSE;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -1453,9 +1453,11 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 
 	base_name = g_path_get_basename(doc->file_name);
 	/* don't prompt if file hasn't been edited at all */
-	if ((!doc->changed && !document_can_undo(doc) && !document_can_redo(doc)) ||
-		dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
-		_("Any unsaved changes will be lost."),
+	prompt = doc->changed || (document_can_undo(doc) || document_can_redo(doc));
+
+	if (!prompt || dialogs_show_question_full(NULL, _("_Reload"), GTK_STOCK_CANCEL,
+		doc->changed ? _("Any unsaved changes will be lost.") :
+			_("Undo history will be lost."),
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
 		result = document_reload_force(doc, forced_enc);
@@ -1463,7 +1465,6 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 			ui_update_statusbar(doc, -1);
 	}
 	g_free(base_name);
-
 	return result;
 }
 
@@ -3275,9 +3276,15 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 	doc->priv->info_bars[MSG_TYPE_RELOAD] = NULL;
 
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
-		close = document_reload_prompt(doc, doc->encoding);
+	{
+		close = doc->changed ?
+			document_reload_prompt(doc, doc->encoding) :
+			document_reload_force(doc, doc->encoding);
+	}
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
+	{
 		close = document_save_file(doc, TRUE);	// force overwrite
+	}
 	else if (response_id == GTK_RESPONSE_CANCEL)
 	{
 		document_set_text_changed(doc, TRUE);
