@@ -3771,6 +3771,30 @@ void editor_select_paragraph(GeanyEditor *editor)
 }
 
 
+void editor_select_matching_brace(GeanyEditor *editor)
+{
+	gint pos, match;
+	gint after_brace;
+
+	g_return_if_fail(editor != NULL);
+
+	pos = sci_get_current_position(editor->sci);
+	after_brace = pos > 0 && utils_isbrace(sci_get_char_at(editor->sci, pos - 1), TRUE);
+	pos -= after_brace;	/* set pos to the brace */
+
+	match = sci_find_matching_brace(editor->sci, pos);
+
+	if (match != -1 && match != pos)
+	{	/* select text in between braces */
+		if (match > pos)
+			pos   += 1;
+		else
+			match += 1;
+		sci_set_selection(editor->sci, pos, match);
+	}
+}
+
+
 /* Returns first line of block for GTK_DIR_UP, line after block
  * ends for GTK_DIR_DOWN or -1 if called on an empty line. */
 static gint find_block_stop(GeanyEditor *editor, gint line, gint direction)

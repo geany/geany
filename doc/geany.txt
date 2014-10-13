@@ -3468,6 +3468,12 @@ Select current word             Alt-Shift-W               Selects the current wo
 Select current paragraph        Alt-Shift-P               Selects the current paragraph under the cursor
                                                           which is defined by two empty lines around it.
 
+Select to matching brace        Ctrl-Shift-B              If the cursor is ahead or behind a brace, then the
+                                                          text in between both braces is selected. The cursor
+                                                          is moved to the brace which belongs to the current
+                                                          one. If this keyboard shortcut is pressed again,
+                                                          the cursor is moved back to the first brace.
+
 Select current line(s)          Alt-Shift-L               Selects the current line under the cursor (and any
                                                           partially selected lines).
 

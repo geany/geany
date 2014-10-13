@@ -360,6 +360,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_SELECT_PARAGRAPH, NULL,
 		GDK_p, GDK_SHIFT_MASK | GDK_MOD1_MASK, "edit_selectparagraph", _("Se_lect Current Paragraph"),
 		"select_current_paragraph1");
+	add_kb(group, GEANY_KEYS_SELECT_TO_MATCHINGBRACE, NULL,
+		GDK_b, GDK_SHIFT_MASK | GDK_CONTROL_MASK, "edit_select_tomatchingbrace",
+		_("Select to matching brace"), NULL);
 	add_kb(group, GEANY_KEYS_SELECT_WORDPARTLEFT, NULL,
 		0, 0, "edit_selectwordpartleft", _("Select to previous word part"), NULL);
 	add_kb(group, GEANY_KEYS_SELECT_WORDPARTRIGHT, NULL,
@@ -2420,6 +2423,9 @@ static gboolean cb_func_select_action(guint key_id)
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
 			editor_select_paragraph(doc->editor);
+			break;
+		case GEANY_KEYS_SELECT_TO_MATCHINGBRACE:
+			editor_select_matching_brace(doc->editor);
 			break;
 		case GEANY_KEYS_SELECT_WORDPARTLEFT:
 			sci_send_command(sci, SCI_WORDPARTLEFTEXTEND);

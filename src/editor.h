@@ -259,6 +259,8 @@ void editor_select_lines(GeanyEditor *editor, gboolean extra_line);
 
 void editor_select_paragraph(GeanyEditor *editor);
 
+void editor_select_matching_brace(GeanyEditor *editor);
+
 void editor_select_indent_block(GeanyEditor *editor);
 
 

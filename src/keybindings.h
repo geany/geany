@@ -109,6 +109,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_EDITOR_SCROLLTOLINE,				/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_UNFOLDALL,				/**< Keybinding. */
 	GEANY_KEYS_GOTO_MATCHINGBRACE,				/**< Keybinding. */
+	GEANY_KEYS_SELECT_TO_MATCHINGBRACE,			/**< Keybinding. */
 	GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE,		/**< Keybinding. */
 	GEANY_KEYS_CLIPBOARD_PASTE,					/**< Keybinding. */
 	GEANY_KEYS_BUILD_MAKE,						/**< Keybinding. */
