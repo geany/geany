@@ -64,10 +64,13 @@ all-local: geany.html hacking.html
 # built by Make but rather part of the distribution.  This is fine even
 # then, as configure will properly require what is needed to build it
 # again if it is missing.
-maintainer-clean-local: clean-html-local
+maintainer-clean-local: maintainer-clean-html-local
+maintainer-clean-html-local:
+	-rm -f geany.html
+
+clean-local: clean-html-local
 clean-html-local:
 	-rm -f hacking.html
-	-rm -f geany.html
 
 endif
 
