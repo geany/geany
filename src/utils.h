@@ -155,6 +155,8 @@ gboolean utils_isbrace(gchar c, gboolean include_angles);
 
 gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
+gboolean utils_is_closing_brace(gchar c, gboolean include_angles);
+
 gint utils_write_file(const gchar *filename, const gchar *text);
 
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size);

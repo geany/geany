@@ -194,6 +194,21 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
+gboolean utils_is_closing_brace(gchar c, gboolean include_angles)
+{
+	switch (c)
+	{
+		case '>':
+		return include_angles;
+
+		case ')':
+		case '}':
+		case ']':  return TRUE;
+		default:  return FALSE;
+	}
+}
+
+
 /**
  * Writes @a text into a file named @a filename.
  * If the file doesn't exist, it will be created.
