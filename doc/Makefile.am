@@ -108,7 +108,7 @@ all-local: Doxyfile.stamp
 
 clean-local: clean-api-docs-local
 clean-api-docs-local:
-	-rm -rf reference/ Doxyfile.stamp
+	-rm -rf reference/ Doxyfile.stamp doxygen_*
 
 endif
 
