@@ -113,7 +113,9 @@ clean-api-docs-local:
 endif
 
 uninstall-local:
-	rm -rf $(DOCDIR);
+	rm -f $(DOCDIR)/html/index.html
+	rm -f $(DOCDIR)/manual.txt
+	rm -f $(DOCDIR)/ScintillaLicense.txt
 
 # manually install some files under another name
 install-data-local:
