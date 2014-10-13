@@ -34,6 +34,7 @@
 #include "app.h"
 #include "geanyobject.h"
 #include "plugindata.h"
+#include "pluginexport.h"
 #include "pluginprivate.h"
 #include "plugins.h"
 #include "support.h"
@@ -48,6 +49,7 @@
  * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
  * @param plugin Must be @ref geany_plugin.
  * @param item The item to add. */
+GEANY_API_SYMBOL
 void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 {
 	GtkToolbar *toolbar = GTK_TOOLBAR(main_widgets.toolbar);
@@ -91,6 +93,7 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);
@@ -126,6 +129,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  * @note Since version 1.25 (API >= 218), the object lifetime is watched and so the above
  *       restriction does not apply.  However, for objects destroyed by the plugin,
  *       @c g_signal_connect() is safe and has lower overhead. */
+GEANY_API_SYMBOL
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data)
@@ -238,6 +242,7 @@ static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc
  * @see g_timeout_add()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc function, gpointer data)
 {
 	return plugin_source_add(plugin, g_timeout_source_new(interval), function, data);
@@ -257,6 +262,7 @@ guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc functi
  * @see g_timeout_add_seconds()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFunc function,
 		gpointer data)
 {
@@ -276,6 +282,7 @@ guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFun
  * @see g_idle_add()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
 {
 	return plugin_source_add(plugin, g_idle_source_new(), function, data);
@@ -290,6 +297,7 @@ guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
  * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
  * @since 0.19. */
+GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
 {
@@ -402,6 +410,7 @@ static void configure_plugins(Plugin *current_plugin)
  * @param plugin Must be @ref geany_plugin.
  * @since 0.19. */
 /* if NULL, show all plugins */
+GEANY_API_SYMBOL
 void plugin_show_configure(GeanyPlugin *plugin)
 {
 	Plugin *p;
@@ -489,6 +498,7 @@ static void connect_plugin_signals(GtkBuilder *builder, GObject *object,
  *
  * @since 1.24, plugin API 217.
  */
+GEANY_API_SYMBOL
 void plugin_builder_connect_signals(GeanyPlugin *plugin,
 	GtkBuilder *builder, gpointer user_data)
 {

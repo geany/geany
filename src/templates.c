@@ -37,6 +37,7 @@
 #include "geany.h"
 #include "geanymenubuttonaction.h"
 #include "geanyobject.h"
+#include "pluginexport.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"
@@ -478,6 +479,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 
 /* TODO change the signature to take a GeanyDocument? this would break plugin API/ABI */
+GEANY_API_SYMBOL
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];

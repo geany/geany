@@ -78,6 +78,7 @@
 
 #include "stash.h"
 
+#include "pluginexport.h" /* for GEANY_API_SYMBOL */
 #include "support.h" /* only for _("text") */
 #include "utils.h"   /* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
@@ -274,6 +275,7 @@ static void keyfile_action(SettingAction action, StashGroup *group, GKeyFile *ke
  * so that all Stash settings are initialized to defaults.
  * @param group .
  * @param keyfile Usually loaded from a configuration file first. */
+GEANY_API_SYMBOL
 void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_READ, group, keyfile);
@@ -284,6 +286,7 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile)
  * @a keyfile is usually written to a configuration file afterwards.
  * @param group .
  * @param keyfile . */
+GEANY_API_SYMBOL
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
 {
 	keyfile_action(SETTING_WRITE, group, keyfile);
@@ -298,6 +301,7 @@ void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile)
  * @return @c TRUE if a key file could be loaded.
  * @see stash_group_load_from_key_file().
  **/
+GEANY_API_SYMBOL
 gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename)
 {
 	GKeyFile *keyfile;
@@ -322,6 +326,7 @@ gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename)
  *         failed operation is returned.
  * @see stash_group_save_to_key_file().
  **/
+GEANY_API_SYMBOL
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags)
 {
@@ -346,6 +351,7 @@ gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 /** Creates a new group.
  * @param name Name used for @c GKeyFile group.
  * @return Group. */
+GEANY_API_SYMBOL
 StashGroup *stash_group_new(const gchar *name)
 {
 	StashGroup *group = g_new0(StashGroup, 1);
@@ -361,6 +367,7 @@ StashGroup *stash_group_new(const gchar *name)
  * Useful e.g. to avoid freeing strings individually.
  * @note This is *not* called by stash_group_free().
  * @param group . */
+GEANY_API_SYMBOL
 void stash_group_free_settings(StashGroup *group)
 {
 	StashPref *entry;
@@ -382,6 +389,7 @@ void stash_group_free_settings(StashGroup *group)
 
 /** Frees a group.
  * @param group . */
+GEANY_API_SYMBOL
 void stash_group_free(StashGroup *group)
 {
 	StashPref *entry;
@@ -442,6 +450,7 @@ add_pref(StashGroup *group, GType type, gpointer setting,
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value)
 {
@@ -454,6 +463,7 @@ void stash_group_add_boolean(StashGroup *group, gboolean *setting,
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value Value to use if the key doesn't exist when loading. */
+GEANY_API_SYMBOL
 void stash_group_add_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value)
 {
@@ -467,6 +477,7 @@ void stash_group_add_integer(StashGroup *group, gint *setting,
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value String to copy if the key doesn't exist when loading, or @c NULL. */
+GEANY_API_SYMBOL
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)
 {
@@ -480,6 +491,7 @@ void stash_group_add_string(StashGroup *group, gchar **setting,
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value Vector to copy if the key doesn't exist when loading. Usually @c NULL. */
+GEANY_API_SYMBOL
 void stash_group_add_string_vector(StashGroup *group, gchar ***setting,
 		const gchar *key_name, const gchar **default_value)
 {
@@ -734,6 +746,7 @@ static void pref_action(PrefAction action, StashGroup *group, GtkWidget *owner)
  * @param owner If non-NULL, used to lookup widgets by name, otherwise
  * widget pointers are assumed.
  * @see stash_group_update(). */
+GEANY_API_SYMBOL
 void stash_group_display(StashGroup *group, GtkWidget *owner)
 {
 	pref_action(PREF_DISPLAY, group, owner);
@@ -746,6 +759,7 @@ void stash_group_display(StashGroup *group, GtkWidget *owner)
  * @param owner If non-NULL, used to lookup widgets by name, otherwise
  * widget pointers are assumed.
  * @see stash_group_display(). */
+GEANY_API_SYMBOL
 void stash_group_update(StashGroup *group, GtkWidget *owner)
 {
 	pref_action(PREF_UPDATE, group, owner);
@@ -773,6 +787,7 @@ add_widget_pref(StashGroup *group, GType setting_type, gpointer setting,
  * @param default_value Value to use if the key doesn't exist when loading.
  * @param widget_id @c GtkWidget pointer or string to lookup widget later.
  * @see stash_group_add_radio_buttons(). */
+GEANY_API_SYMBOL
 void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value, StashWidgetID widget_id)
 {
@@ -795,6 +810,7 @@ void stash_group_add_toggle_button(StashGroup *group, gboolean *setting,
  * stash_group_add_radio_buttons(group, &which_one_setting, "which_one", BAR,
  * 	"radio_foo", FOO, "radio_bar", BAR, NULL);
  * @endcode */
+GEANY_API_SYMBOL
 void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value,
 		StashWidgetID widget_id, gint enum_id, ...)
@@ -845,6 +861,7 @@ void stash_group_add_radio_buttons(StashGroup *group, gint *setting,
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value Value to use if the key doesn't exist when loading.
  * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
+GEANY_API_SYMBOL
 void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
@@ -860,6 +877,7 @@ void stash_group_add_spin_button_integer(StashGroup *group, gint *setting,
  * @param default_value Value to use if the key doesn't exist when loading.
  * @param widget_id @c GtkWidget pointer or string to lookup widget later.
  * @see stash_group_add_combo_box_entry(). */
+GEANY_API_SYMBOL
 void stash_group_add_combo_box(StashGroup *group, gint *setting,
 		const gchar *key_name, gint default_value, StashWidgetID widget_id)
 {
@@ -876,6 +894,7 @@ void stash_group_add_combo_box(StashGroup *group, gint *setting,
  * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
 /* We could maybe also have something like stash_group_add_combo_box_entry_with_menu()
  * for the history list - or should that be stored as a separate setting? */
+GEANY_API_SYMBOL
 void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
@@ -890,6 +909,7 @@ void stash_group_add_combo_box_entry(StashGroup *group, gchar **setting,
  * @param key_name Name for key in a @c GKeyFile.
  * @param default_value Value to use if the key doesn't exist when loading.
  * @param widget_id @c GtkWidget pointer or string to lookup widget later. */
+GEANY_API_SYMBOL
 void stash_group_add_entry(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value, StashWidgetID widget_id)
 {
@@ -922,6 +942,7 @@ static GType object_get_property_type(GObject *object, const gchar *property_nam
  * @c GObject data.
  * @warning Currently only string GValue properties will be freed before setting; patch for
  * other types - see @c handle_widget_property(). */
+GEANY_API_SYMBOL
 void stash_group_add_widget_property(StashGroup *group, gpointer setting,
 		const gchar *key_name, gpointer default_value, StashWidgetID widget_id,
 		const gchar *property_name, GType type)
