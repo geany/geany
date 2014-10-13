@@ -44,6 +44,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginexport.h"
 #include "project.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -148,6 +149,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 GeanyDocument* document_find_by_real_path(const gchar *realname)
 {
 	guint i;
@@ -193,6 +195,7 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
  *  @return The matching document, or @c NULL.
  *  @see document_find_by_real_path().
  **/
+GEANY_API_SYMBOL
 GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 {
 	guint i;
@@ -256,6 +259,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
  * gboolean still_open = (doc != NULL);
  * @endcode
  * @since 1.25. */
+GEANY_API_SYMBOL
 GeanyDocument *document_find_by_id(guint id)
 {
 	guint i;
@@ -297,6 +301,7 @@ static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
  * @param doc The document.
  * @return The index.
  * @since 0.19 */
+GEANY_API_SYMBOL
 gint document_get_notebook_page(GeanyDocument *doc)
 {
 	GtkWidget *child = document_get_notebook_child(doc);
@@ -359,6 +364,7 @@ GeanyDocument *document_get_from_notebook_child(GtkWidget *page)
  *
  *  @return The corresponding document for the given notebook page, or @c NULL.
  **/
+GEANY_API_SYMBOL
 GeanyDocument *document_get_from_page(guint page_num)
 {
 	GtkWidget *parent;
@@ -377,6 +383,7 @@ GeanyDocument *document_get_from_page(guint page_num)
  *
  *  @return A pointer to the current document or @c NULL if there are no opened documents.
  **/
+GEANY_API_SYMBOL
 GeanyDocument *document_get_current(void)
 {
 	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
@@ -417,6 +424,7 @@ void document_finalize(void)
  *  @since 0.17
  */
 /* TODO make more use of this */
+GEANY_API_SYMBOL
 gchar *document_get_basename_for_display(GeanyDocument *doc, gint length)
 {
 	gchar *base_name, *short_name;
@@ -464,6 +472,7 @@ void document_update_tab_label(GeanyDocument *doc)
  * @param doc The document to use.
  * @param changed Whether the document state should indicate changes have been made.
  **/
+GEANY_API_SYMBOL
 void document_set_text_changed(GeanyDocument *doc, gboolean changed)
 {
 	g_return_if_fail(doc != NULL);
@@ -687,6 +696,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 gboolean document_close(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc, FALSE);
@@ -776,6 +786,7 @@ static gboolean remove_page(guint page_num)
  *
  *  @return @c TRUE if the document was actually removed or @c FALSE otherwise.
  **/
+GEANY_API_SYMBOL
 gboolean document_remove_page(guint page_num)
 {
 	gboolean done = remove_page(page_num);
@@ -817,6 +828,7 @@ GeanyDocument *document_new_file_if_non_open(void)
  *
  *  @return The new document.
  **/
+GEANY_API_SYMBOL
 GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
 {
 	GeanyDocument *doc;
@@ -900,6 +912,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
  *
  *  @return The document opened or @c NULL.
  **/
+GEANY_API_SYMBOL
 GeanyDocument *document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc)
 {
@@ -1495,6 +1508,7 @@ void document_open_file_list(const gchar *data, gsize length)
  *  @param ft The filetype for the document or @c NULL to auto-detect the filetype.
  *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
  **/
+GEANY_API_SYMBOL
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc)
 {
@@ -1516,6 +1530,7 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
  *
  *  @return @c TRUE if the document was actually reloaded or @c FALSE otherwise.
  **/
+GEANY_API_SYMBOL
 gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
@@ -1661,6 +1676,7 @@ static void replace_header_filename(GeanyDocument *doc)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 {
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
@@ -1726,6 +1742,7 @@ gboolean document_need_save_as(GeanyDocument *doc)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 {
 	gboolean ret;
@@ -2013,6 +2030,7 @@ static gboolean save_file_handle_infobars(GeanyDocument *doc, gboolean force)
  *
  *  @return @c TRUE if the file was saved or @c FALSE if the file could not or should not be saved.
  **/
+GEANY_API_SYMBOL
 gboolean document_save_file(GeanyDocument *doc, gboolean force)
 {
 	gchar *errmsg;
@@ -2726,6 +2744,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 /** Sets the filetype of the document (which controls syntax highlighting and tags)
  * @param doc The document to use.
  * @param type The filetype. */
+GEANY_API_SYMBOL
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type)
 {
 	gboolean ft_changed;
@@ -2778,6 +2797,7 @@ void document_reload_config(GeanyDocument *doc)
  *  @param doc The document to use.
  *  @param new_encoding The encoding to be set for the document.
  **/
+GEANY_API_SYMBOL
 void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 {
 	if (doc == NULL || new_encoding == NULL ||
@@ -3141,6 +3161,7 @@ const gchar *document_get_status_widget_class(GeanyDocument *doc)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 const GdkColor *document_get_status_color(GeanyDocument *doc)
 {
 	gint status;
@@ -3192,6 +3213,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GeanyDocument *document_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) documents_array->len) ? documents[idx] : NULL;
@@ -3633,6 +3655,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
  *
  * @since 0.21
  */
+GEANY_API_SYMBOL
 gint document_compare_by_display_name(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *((GeanyDocument**) a);
@@ -3662,6 +3685,7 @@ gint document_compare_by_display_name(gconstpointer a, gconstpointer b)
  *
  * @since 0.21 (GEANY_API_VERSION 209)
  */
+GEANY_API_SYMBOL
 gint document_compare_by_tab_order(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *((GeanyDocument**) a);
@@ -3691,6 +3715,7 @@ gint document_compare_by_tab_order(gconstpointer a, gconstpointer b)
  *
  * @since 0.21 (GEANY_API_VERSION 209)
  */
+GEANY_API_SYMBOL
 gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b)
 {
 	return -1 * document_compare_by_tab_order(a, b);

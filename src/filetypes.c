@@ -40,6 +40,7 @@
 #include "geany.h"
 #include "geanyobject.h"
 #include "highlighting.h"
+#include "pluginexport.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
 #include "support.h"
@@ -234,6 +235,7 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2, gpointer data)
  * The list does not change on subsequent calls.
  * @return The list - do not free.
  * @see filetypes_by_title. */
+GEANY_API_SYMBOL
 const GSList *filetypes_get_sorted_by_name(void)
 {
 	static GSList *list = NULL;
@@ -733,6 +735,7 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
  *  @return The detected filetype for @a utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
  *          if it could not be detected.
  **/
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
@@ -1215,6 +1218,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
@@ -1460,6 +1464,7 @@ void filetypes_reload_extensions(void)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
@@ -1497,6 +1502,7 @@ void filetypes_reload(void)
  * @param ft .
  * @return .
  * @since Geany 0.20 */
+GEANY_API_SYMBOL
 const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;

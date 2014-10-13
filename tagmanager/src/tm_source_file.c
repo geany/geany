@@ -34,6 +34,7 @@
 #define LIBCTAGS_DEFINED
 #include "tm_source_file.h"
 #include "tm_tag.h"
+#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 static TMSourceFile *current_source_file = NULL;
@@ -84,6 +85,7 @@ static char *realpath (const char *pathname, char *resolved_path)
  @param file_name The original file_name
  @return A newly allocated string containing the real path to the file. NULL if none is available.
 */
+GEANY_API_SYMBOL
 gchar *tm_get_real_path(const gchar *file_name)
 {
 	if (file_name)
@@ -195,6 +197,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
  * @param name Name of the used programming language, NULL for autodetection.
  * @return The created unparsed TMSourceFile object.
  * */
+GEANY_API_SYMBOL
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
 	TMSourceFile *source_file = g_new(TMSourceFile, 1);
@@ -225,6 +228,7 @@ static void tm_source_file_destroy(TMSourceFile *source_file)
  function the TMSourceFile has to be removed from the TMWorkspace. 
  @param source_file The source file to free.
 */
+GEANY_API_SYMBOL
 void tm_source_file_free(TMSourceFile *source_file)
 {
 	if (NULL != source_file)

@@ -32,6 +32,7 @@
 
 #include "document.h"
 #include "geanyobject.h"
+#include "pluginexport.h"
 #include "sciwrappers.h"
 #include "toolbar.h"
 #include "utils.h"
@@ -149,6 +150,7 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
  *
  *  @return @c TRUE if the cursor has changed the position to @a line or @c FALSE otherwise.
  **/
+GEANY_API_SYMBOL
 gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
 {
 	gint pos;

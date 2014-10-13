@@ -46,6 +46,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginexport.h"
 #include "plugins.h"
 #include "prefs.h"
 #include "printing.h"
@@ -415,6 +416,7 @@ static void setup_paths(void)
  *
  *  @since 0.19
  **/
+GEANY_API_SYMBOL
 gboolean main_is_realized(void)
 {
 	return main_status.main_window_realized;
@@ -445,6 +447,7 @@ gboolean main_is_realized(void)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void main_locale_init(const gchar *locale_dir, const gchar *package)
 {
 #ifdef HAVE_LOCALE_H
@@ -1381,6 +1384,7 @@ gboolean main_quit(void)
  *
  *  @since 0.15
  **/
+GEANY_API_SYMBOL
 void main_reload_configuration(void)
 {
 	/* reload templates */

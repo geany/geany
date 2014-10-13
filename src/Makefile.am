@@ -40,6 +40,7 @@ SRCS = \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
 	osx.c osx.h \
+	pluginexport.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
@@ -167,4 +168,3 @@ $(top_srcdir)/src/dynamicsymbols.list: $(top_srcdir)/data/geany.glade
 dynamic-symbols: $(top_srcdir)/src/dynamicsymbols.list
 
 endif
-
