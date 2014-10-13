@@ -10,7 +10,8 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	makefile.win32
+	makefile.win32 \
+	$(top_srcdir)/src/dynamicsymbols.list
 
 bin_PROGRAMS = geany
 
@@ -144,6 +145,8 @@ geany_LDADD = \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS)
 
+geany_LDFLAGS = -Wl,--dynamic-list="$(srcdir)/dynamicsymbols.list"
+
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
@@ -154,6 +157,12 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
 clean-local:
+
+# Helper rule to rebuild the dynamicsymbols.list file when handlers are
+# added to data/geany.glade. Run `make dynamic-symbols' from the src builddir.
+$(top_srcdir)/src/dynamicsymbols.list: $(top_srcdir)/data/geany.glade
+	-python $(top_srcdir)/scripts/dynamicsymbols.py -o $@ $(top_srcdir)/data/geany.glade
+dynamic-symbols: $(top_srcdir)/src/dynamicsymbols.list
 
 endif
 
