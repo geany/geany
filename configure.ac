@@ -117,6 +117,9 @@ AC_SUBST([GEANY_DATA_DIR])
 GEANY_CHECK_DOCUTILS
 GEANY_CHECK_DOXYGEN
 
+#FIXME: replace this with a real check that the compiler supports the argument
+CFLAGS="${CFLAGS} -fvisibility=hidden"
+
 # Output
 AC_CONFIG_FILES([
 		Makefile

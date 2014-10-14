@@ -38,6 +38,7 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "main.h"
+#include "pluginexport.h"
 #include "projectprivate.h"
 #include "sidebar.h"
 #include "stash.h"
@@ -471,7 +472,7 @@ static void destroy_project(gboolean open_default)
 /* Shows the file chooser dialog when base path button is clicked
  * FIXME: this should be connected in Glade but 3.8.1 has a bug
  * where it won't pass any objects as user data (#588824). */
-G_MODULE_EXPORT void
+GEANY_EXPORT_SYMBOL void
 on_project_properties_base_path_button_clicked(GtkWidget *button,
 	GtkWidget *base_path_entry)
 {
