@@ -1,22 +1,14 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
 EXTRA_DIST = \
-	makefile.win32 \
-	genapi.py
+	makefile.win32
 
 plugindir = $(libdir)/geany
 
 plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
-	geanyplugin.h \
-	geanyfunctions.h
-
-# systems without python should continue to build OK
-geanyfunctions.h: genapi.py ../src/plugins.c
-	python genapi.py || true
-
-all: geanyfunctions.h
-
+	geanyfunctions.h \
+	geanyplugin.h
 
 demoplugin_la_LDFLAGS    = -module -avoid-version -no-undefined
 classbuilder_la_LDFLAGS  = -module -avoid-version -no-undefined
