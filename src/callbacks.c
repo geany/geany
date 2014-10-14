@@ -45,6 +45,7 @@
 #include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
+#include "pluginexport.h"
 #include "plugins.h"
 #include "pluginutils.h"
 #include "prefs.h"
