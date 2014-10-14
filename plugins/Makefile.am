@@ -33,8 +33,7 @@ MINGW_CFLAGS = \
 			-I$(top_srcdir)/tagmanager/src \
 			-I$(top_srcdir)/scintilla/include \
 			$(GTK_CFLAGS) \
-			$(PLUGIN_CFLAGS) \
-			-fvisibility=default
+			$(PLUGIN_CFLAGS)
 
 .PHONY: all clean
 

@@ -101,7 +101,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
 	-I$(top_srcdir)/tagmanager/src \
-	@GTK_CFLAGS@ @GTHREAD_CFLAGS@
+	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ @LIBGEANY_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
@@ -120,6 +120,7 @@ libgeany_la_LIBADD = \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
+	@LIBGEANY_LIBS@ \
 	-lole32 -luuid -liberty -lwsock32
 
 geany_LDADD += geany_private.res
@@ -131,8 +132,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_PREFIX=\"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\" \
-			-fvisibility=hidden
+			-DG_LOG_DOMAIN=\""Geany"\"
 
 libgeany_la_LDFLAGS =	-mwindows -mms-bitfields
 
@@ -156,9 +156,8 @@ libgeany_la_LIBADD = \
 	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
-	$(INTLLIBS)
-
-libgeany_la_LDFLAGS = -Wl,--dynamic-list="$(srcdir)/dynamicsymbols.list"
+	$(INTLLIBS) \
+	@LIBGEANY_LIBS@
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
@@ -167,8 +166,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\" \
-			-fvisibility=hidden
+			-DG_LOG_DOMAIN=\""Geany"\"
 
 clean-local:
 

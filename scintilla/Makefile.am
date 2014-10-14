@@ -139,9 +139,10 @@ src/XPM.h \
 $(LEXER_SRCS)
 
 libscintilla_la_SOURCES = $(SRCS)
+libscintilla_la_LDFLAGS = @LIBGEANY_LIBS@
 
-AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@ \
-	-fvisibility=hidden
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib \
+	@GTK_CFLAGS@ @LIBGEANY_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h

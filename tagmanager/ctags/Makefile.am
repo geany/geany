@@ -4,7 +4,7 @@ AM_CPPFLAGS = \
 	-DG_LOG_DOMAIN=\"CTags\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
-	-fvisibility=hidden
+	@LIBGEANY_CFLAGS@
 
 EXTRA_DIST = \
 	makefile.win32
@@ -82,3 +82,4 @@ libctags_la_SOURCES = \
 	vstring.h \
 	$(parsers)
 
+libctags_la_LDFLAGS = @LIBGEANY_LIBS@
