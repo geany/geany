@@ -19,7 +19,6 @@ filebrowser_la_LDFLAGS   = -module -avoid-version -no-undefined
 splitwindow_la_LDFLAGS   = -module -avoid-version -no-undefined
 
 if PLUGINS
-
 # Plugins to be installed
 plugin_LTLIBRARIES = \
 	classbuilder.la \
@@ -49,13 +48,13 @@ saveactions_la_CFLAGS   = -DG_LOG_DOMAIN=\""SaveActions"\"
 filebrowser_la_CFLAGS   = -DG_LOG_DOMAIN=\""FileBrowser"\"
 splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
 
-demoplugin_la_LIBADD    = $(GTK_LIBS)
-classbuilder_la_LIBADD  = $(GTK_LIBS)
-htmlchars_la_LIBADD     = $(GTK_LIBS)
-export_la_LIBADD        = $(GTK_LIBS) -lm
-saveactions_la_LIBADD   = $(GTK_LIBS)
-filebrowser_la_LIBADD   = $(GTK_LIBS)
-splitwindow_la_LIBADD   = $(GTK_LIBS)
+demoplugin_la_LIBADD    = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+classbuilder_la_LIBADD  = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+htmlchars_la_LIBADD     = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+export_la_LIBADD        = $(top_builddir)/src/libgeany.la $(GTK_LIBS) -lm
+saveactions_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+filebrowser_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+splitwindow_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 
 endif # PLUGINS
 
