@@ -66,6 +66,7 @@ geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
 	app.h \
 	build.h \
+	dialogs.h \
 	document.h \
 	editor.h \
 	encodings.h \
@@ -74,13 +75,18 @@ geany_include_HEADERS = \
 	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
+	main.h \
 	msgwindow.h \
+	navqueue.h \
 	plugindata.h \
+	pluginutils.h \
 	prefs.h \
 	project.h \
+	sciwrappers.h \
 	search.h \
 	stash.h \
 	support.h \
+	symbols.h \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
