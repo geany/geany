@@ -1629,9 +1629,9 @@ const gchar *utils_get_default_dir_utf8(void)
  *  @param flags Flags from GSpawnFlags.
  *  @param child_setup A function to run in the child just before exec().
  *  @param user_data The user data for child_setup.
- *  @param std_out The return location for child output.
- *  @param std_err The return location for child error messages.
- *  @param exit_status The child exit status, as returned by waitpid().
+ *  @param std_out The return location for child output, or @a NULL.
+ *  @param std_err The return location for child error messages, or @a NULL.
+ *  @param exit_status The child exit status, as returned by waitpid(), or @a NULL.
  *  @param error The return location for error or @a NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
