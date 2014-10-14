@@ -16,8 +16,8 @@ src/geanyentryaction.c
 src/highlighting.c
 src/keybindings.c
 src/keyfile.c
+src/libmain.c
 src/log.c
-src/main.c
 src/msgwindow.c
 src/navqueue.c
 src/notebook.c

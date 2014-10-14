@@ -14,6 +14,10 @@ EXTRA_DIST = \
 	$(top_srcdir)/src/dynamicsymbols.list
 
 bin_PROGRAMS = geany
+lib_LTLIBRARIES = libgeany.la
+
+geany_SOURCES = main.c
+geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
 SRCS = \
 	about.c about.h \
@@ -35,7 +39,7 @@ SRCS = \
 	keybindings.c keybindings.h \
 	keyfile.c keyfile.h \
 	log.c log.h \
-	main.c main.h geany.h \
+	libmain.c main.h geany.h \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
@@ -106,18 +110,19 @@ nodist_EXTRA_geany_SOURCES = dummy.cxx
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
 
-geany_SOURCES = $(SRCS) win32.c win32.h
+libgeany_la_SOURCES = $(SRCS) win32.c win32.h
 
-geany_LDADD = \
-	$(top_builddir)/scintilla/libscintilla.a \
-	$(top_builddir)/tagmanager/ctags/libctags.a \
-	$(top_builddir)/tagmanager/mio/libmio.a \
-	$(top_builddir)/tagmanager/src/libtagmanager.a \
+libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/libscintilla.la \
+	$(top_builddir)/tagmanager/ctags/libctags.la \
+	$(top_builddir)/tagmanager/mio/libmio.la \
+	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
-	-lole32 -luuid -liberty -lwsock32 \
-	geany_private.res
+	-lole32 -luuid -liberty -lwsock32
+
+geany_LDADD += geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_DOCDIR=\"\" \
@@ -126,9 +131,10 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_PREFIX=\"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
+			-DG_LOG_DOMAIN=\""Geany"\" \
+			-fvisibility=hidden
 
-geany_LDFLAGS =	-mwindows -mms-bitfields
+libgeany_la_LDFLAGS =	-mwindows -mms-bitfields
 
 WINDRES = $(host_alias)-windres
 
@@ -141,18 +147,18 @@ clean-local:
 else
 # build Geany for all other platforms
 
-geany_SOURCES = $(SRCS) vte.c vte.h
+libgeany_la_SOURCES = $(SRCS) vte.c vte.h
 
-geany_LDADD = \
-	$(top_builddir)/scintilla/libscintilla.a \
-	$(top_builddir)/tagmanager/ctags/libctags.a \
-	$(top_builddir)/tagmanager/mio/libmio.a \
-	$(top_builddir)/tagmanager/src/libtagmanager.a \
+libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/libscintilla.la \
+	$(top_builddir)/tagmanager/ctags/libctags.la \
+	$(top_builddir)/tagmanager/mio/libmio.la \
+	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS)
 
-geany_LDFLAGS = -Wl,--dynamic-list="$(srcdir)/dynamicsymbols.list"
+libgeany_la_LDFLAGS = -Wl,--dynamic-list="$(srcdir)/dynamicsymbols.list"
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
@@ -161,7 +167,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
+			-DG_LOG_DOMAIN=\""Geany"\" \
+			-fvisibility=hidden
 
 clean-local:
 
@@ -172,4 +179,3 @@ $(top_srcdir)/src/dynamicsymbols.list: $(top_srcdir)/data/geany.glade
 dynamic-symbols: $(top_srcdir)/src/dynamicsymbols.list
 
 endif
-

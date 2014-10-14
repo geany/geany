@@ -3,12 +3,13 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/.. \
 	-DG_LOG_DOMAIN=\"CTags\"
 AM_CFLAGS = \
-	$(GTK_CFLAGS)
+	$(GTK_CFLAGS) \
+	-fvisibility=hidden
 
 EXTRA_DIST = \
 	makefile.win32
 
-noinst_LIBRARIES = libctags.a
+noinst_LTLIBRARIES = libctags.la
 
 parsers = \
 	abaqus.c \
@@ -51,7 +52,7 @@ parsers = \
 	verilog.c \
 	vhdl.c
 
-libctags_a_SOURCES = \
+libctags_la_SOURCES = \
 	args.c \
 	args.h \
 	ctags.c \
