@@ -39,7 +39,6 @@ extern "C"
 typedef struct
 {
 	langType lang; /*!< Programming language used */
-	gboolean inactive; /*!< Whether this file should be scanned for tags */
 	char *file_name; /*!< Full file name (inc. path) */
 	char *short_name; /*!< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */

@@ -96,7 +96,7 @@ typedef enum
 	tm_tag_attr_access_t = 2048, /*!< Access type (public/protected/private) */
 	tm_tag_attr_impl_t = 4096, /*!< Implementation (e.g. virtual) */
 	tm_tag_attr_lang_t = 8192, /*!< Language (File tag only) */
-	tm_tag_attr_inactive_t = 16384, /*!< Inactive file (File tag only) */
+	tm_tag_attr_inactive_t = 16384, /*!< Inactive file (File tag only, obsolete) */
 	tm_tag_attr_pointer_t = 32768, /*!< Pointer type */
 	tm_tag_attr_max_t = 65535 /*!< Maximum value */
 } TMTagAttrType;
@@ -145,7 +145,6 @@ typedef struct _TMTag
 		{
 			time_t timestamp; /*!< Time of parsing of the file */
 			langType lang; /*!< Programming language of the file */
-			gboolean inactive; /*!< Whether this file is to be parsed */
 		} file;
 	} atts;
 	gint refcount; /*!< the reference count of the tag */

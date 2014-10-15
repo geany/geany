@@ -127,7 +127,6 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 
 	source_file->tags_array = NULL;
 
-	source_file->inactive = FALSE;
 	if (NULL == LanguageTable)
 	{
 		initializeParsing();

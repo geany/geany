@@ -95,7 +95,7 @@ enum
 	TA_ACCESS,
 	TA_IMPL,
 	TA_LANG,
-	TA_INACTIVE,
+	TA_INACTIVE, /* Obsolete */
 	TA_POINTER
 };
 
@@ -221,7 +221,6 @@ gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_ent
 			tag->name = g_strdup(file->file_name);
 			tag->type = tm_tag_file_t;
 			tag->atts.file.lang = file->lang;
-			tag->atts.file.inactive = FALSE;
 			return TRUE;
 		}
 	}
@@ -341,14 +340,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 					else
 						tag->atts.file.lang = atoi((gchar*)start + 1);
 					break;
-				case TA_INACTIVE:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got inactive attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.inactive = (gboolean) atoi((gchar*)start + 1);
+				case TA_INACTIVE:  /* Obsolete */
 					break;
 				case TA_ACCESS:
 					tag->atts.entry.access = *(start + 1);
@@ -599,8 +591,6 @@ gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
 			fprintf(fp, "%c%ld", TA_TIME, tag->atts.file.timestamp);
 		if (attrs & tm_tag_attr_lang_t)
 			fprintf(fp, "%c%d", TA_LANG, tag->atts.file.lang);
-		if ((attrs & tm_tag_attr_inactive_t) && tag->atts.file.inactive)
-			fprintf(fp, "%c%d", TA_INACTIVE, tag->atts.file.inactive);
 	}
 	else
 	{
