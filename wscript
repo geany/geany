@@ -262,6 +262,9 @@ but you then may not have a local copy of the HTML manual.'''
             '-static-libgcc',
             '-static-libstdc++'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
+        # explicitly define Windows version for older Mingw environments
+        conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
+        conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
         # DATADIR and LOCALEDIR are defined by the intltool tool
