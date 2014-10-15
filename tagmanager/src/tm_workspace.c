@@ -7,7 +7,7 @@
 *
 */
 
-/*!
+/**
  * @file tm_workspace.h
  The TMWorkspace structure is meant to be used as a singleton to store application
  wide tag information.

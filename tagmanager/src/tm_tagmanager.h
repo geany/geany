@@ -17,20 +17,20 @@
 #include "tm_parser.h"
 #endif /* GEANY_PRIVATE */
 
-/*! \mainpage Introduction
- \section Introduction
+/** @mainpage Introduction
+ @section Introduction
  TagManager is a library and a set of utility programs which can be integrated into
  Integrated Development Environments to provide features such as code completion,
  calltips, etc. Tag Manager is based on <a href="http://ctags.sourceforge.net">
  Exuberent Ctags</a> with some added features.
- \section Licence
+ @section Licence
  TagManager is <a href="http://www.gnu.org/philosophy/free-sw.html">free software</a>,
  licenced under the <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>. You can only
  use it with free software (GPL compatible) projects. This is chiefly because it uses
  code from ctags which is under GPL.
 */
 
-/*! \file
+/** @file
  Include this file in all programs using the tag manager library. Including this
  automatically includes all the necessary files, namely, tm_tag.h, tm_source_file.h
  and tm_workspace.h

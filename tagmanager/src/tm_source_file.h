@@ -33,44 +33,44 @@ extern "C"
 #define FALLBACK(X,Y) (X)?(X):(Y)
 
 
-/*!
+/**
  The TMSourceFile structure represents the source file and its tags in the tag manager.
 */
 typedef struct
 {
-	langType lang; /*!< Programming language used */
-	char *file_name; /*!< Full file name (inc. path) */
-	char *short_name; /*!< Just the name of the file (without the path) */
-	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
+	langType lang; /**< Programming language used */
+	char *file_name; /**< Full file name (inc. path) */
+	char *short_name; /**< Just the name of the file (without the path) */
+	GPtrArray *tags_array; /**< Tags obtained by parsing the object */
 } TMSourceFile;
 
-/*! Initializes a TMSourceFile structure and returns a pointer to it. 
- * \param file_name The file name.
- * \param update Update the tag array of the file.
- * \param name Name of the used programming language, NULL for autodetection.
- * \return The created TMSourceFile object.
+/** Initializes a TMSourceFile structure and returns a pointer to it. 
+ * @param file_name The file name.
+ * @param update Update the tag array of the file.
+ * @param name Name of the used programming language, NULL for autodetection.
+ * @return The created TMSourceFile object.
  * */
 TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const char *name);
 
-/*! Updates the source file by reparsing. The tags array and
+/** Updates the source file by reparsing. The tags array and
  the tags themselves are destroyed and re-created, hence any other tag arrays
  pointing to these tags should be rebuilt as well. All sorting information is
  also lost. The language parameter is automatically set the first time the file
  is parsed.
- \param source_file The source file to update.
- \param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
+ @param source_file The source file to update.
+ @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
  always set this to TRUE if you are calling this function directly.
 */
 void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace);
 
-/*! Frees a TMSourceFile structure, including all contents */
+/** Frees a TMSourceFile structure, including all contents */
 void tm_source_file_free(TMSourceFile *source_file);
 
-/*!
+/**
  Given a file name, returns a newly allocated string containing the realpath()
  of the file.
- \param file_name The original file_name
- \return A newly allocated string containing the real path to the file. NULL if none is available.
+ @param file_name The original file_name
+ @return A newly allocated string containing the real path to the file. NULL if none is available.
 */
 gchar *tm_get_real_path(const gchar *file_name);
 
@@ -95,30 +95,30 @@ void tm_source_file_destroy(TMSourceFile *source_file);
  other tag arrays pointing to these tags should be rebuilt as well. All sorting
  information is also lost. The language parameter is automatically set the first
  time the file is parsed.
- \param source_file The source file to update with a buffer.
- \param text_buf A text buffer. The user should take care of allocate and free it after
+ @param source_file The source file to update with a buffer.
+ @param text_buf A text buffer. The user should take care of allocate and free it after
  the use here.
- \param buf_size The size of text_buf.
- \param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
+ @param buf_size The size of text_buf.
+ @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
  always set this to TRUE if you are calling this function directly.
- \return TRUE if the file was parsed, FALSE otherwise.
+ @return TRUE if the file was parsed, FALSE otherwise.
 */
 void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
 			gint buf_size, gboolean update_workspace);
 
 /* Parses the source file and regenarates the tags.
- \param source_file The source file to parse
- \return TRUE on success, FALSE on failure
- \sa tm_source_file_update()
+ @param source_file The source file to parse
+ @return TRUE on success, FALSE on failure
+ @see tm_source_file_update()
 */
 gboolean tm_source_file_parse(TMSourceFile *source_file);
 
 /* Parses the text-buffer and regenarates the tags.
- \param source_file The source file to parse
- \param text_buf The text buffer to parse
- \param buf_size The size of text_buf.
- \return TRUE on success, FALSE on failure
- \sa tm_source_file_update()
+ @param source_file The source file to parse
+ @param text_buf The text buffer to parse
+ @param buf_size The size of text_buf.
+ @return TRUE on success, FALSE on failure
+ @see tm_source_file_update()
 */
 gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size);
 
@@ -126,30 +126,30 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
  This function is registered into the ctags parser when a file is parsed for
  the first time. The function is then called by the ctags parser each time
  it finds a new tag. You should not have to use this function.
- \sa tm_source_file_parse()
+ @see tm_source_file_parse()
 */
 int tm_source_file_tags(const tagEntryInfo *tag);
 
 /*
  Writes all tags of a source file (including the file tag itself) to the passed
  file pointer.
- \param source_file The source file to write.
- \param fp The file pointer to write to.
- \param attrs The attributes to write.
- \return TRUE on success, FALSE on failure.
+ @param source_file The source file to write.
+ @param fp The file pointer to write to.
+ @param attrs The attributes to write.
+ @return TRUE on success, FALSE on failure.
 */
 gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs);
 
 
 /* Gets the name associated with the language index.
- \param lang The language index.
- \return The language name, or NULL.
+ @param lang The language index.
+ @return The language name, or NULL.
 */
 const gchar *tm_source_file_get_lang_name(gint lang);
 
 /* Gets the language index for \a name.
- \param name The language name.
- \return The language index, or -2.
+ @param name The language name.
+ @return The language index, or -2.
 */
 gint tm_source_file_get_named_lang(const gchar *name);
 
