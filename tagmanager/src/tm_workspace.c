@@ -154,6 +154,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	gsize orig_len;
 	guchar buf[BUFSIZ];
 	FILE *fp;
+	GPtrArray *file_tags, *new_tags;
 	TMTag *tag;
 	TMFileFormat format = TM_FILE_FORMAT_TAGMANAGER;
 
@@ -198,12 +199,21 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		}
 		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
 	}
+	
+	file_tags = g_ptr_array_new();
 	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode, format)))
-		g_ptr_array_add(theWorkspace->global_tags, tag);
+		g_ptr_array_add(file_tags, tag);
 	fclose(fp);
+	
+	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
-	tm_tags_merge(theWorkspace->global_tags, orig_len, global_tags_sort_attrs, TRUE);
+	new_tags = tm_tags_merge_big_small(theWorkspace->global_tags, 
+		file_tags, global_tags_sort_attrs);
+	g_ptr_array_free(theWorkspace->global_tags, TRUE);
+	g_ptr_array_free(file_tags, TRUE);
+	theWorkspace->global_tags = new_tags;
+
 	return TRUE;
 }
 
