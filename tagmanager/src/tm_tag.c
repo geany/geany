@@ -891,20 +891,32 @@ GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_a
  * The merge complexity depends mostly on the size of the small array
  * and is almost independent of the size of the big array.
  * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
-static GPtrArray *merge_big_small(GPtrArray *big_array, GPtrArray *small_array) {
+static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 	gint i1 = 0;  /* index to big_array */
 	gint i2 = 0;  /* index to small_array */
-	/* on average, we are merging a value from small_array every 
-	 * len(big_array) / len(small_array) values - good approximation for fast jump
-	 * step size */
-	gint initial_step = big_array->len / small_array->len;
-	initial_step = initial_step > 4 ? initial_step : 1;
-	gint step = initial_step;
+	gint initial_step;
+	initial_step;
+	gint step;
 	GPtrArray *res_array = g_ptr_array_sized_new(big_array->len + small_array->len);
 #ifdef TM_DEBUG
 	gint cmpnum = 0;
 #endif
 
+	/* swap the arrays if len(small) > len(big) */
+	if (small_array->len > big_array->len)
+	{
+		GPtrArray *tmp = small_array;
+		small_array = big_array;
+		big_array = tmp;
+	}
+	
+	/* on average, we are merging a value from small_array every 
+	 * len(big_array) / len(small_array) values - good approximation for fast jump
+	 * step size */
+	initial_step = big_array->len / small_array->len;
+	initial_step = initial_step > 4 ? initial_step : 1;
+	step = initial_step;
+	
 	while (i1 < big_array->len && i2 < small_array->len)
 	{
 		gint cmpval;
@@ -975,13 +987,13 @@ static GPtrArray *merge_big_small(GPtrArray *big_array, GPtrArray *small_array) 
 	return res_array;
 }
 
-GPtrArray *tm_tags_merge_big_small(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes)
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes)
 {
 	GPtrArray *res_array;
 	
 	s_sort_attrs = sort_attributes;
 	s_partial = FALSE;
-	res_array = merge_big_small(big_array, small_array);
+	res_array = merge(big_array, small_array);
 	s_sort_attrs = NULL;
 	return res_array;
 }

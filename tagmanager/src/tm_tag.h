@@ -191,7 +191,7 @@ int tm_tag_compare(const void *ptr1, const void *ptr2);
 
 GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 
-GPtrArray *tm_tags_merge_big_small(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes);
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes);
 
 gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup);
 

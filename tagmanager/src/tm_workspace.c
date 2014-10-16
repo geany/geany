@@ -208,7 +208,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
-	new_tags = tm_tags_merge_big_small(theWorkspace->global_tags, 
+	new_tags = tm_tags_merge(theWorkspace->global_tags, 
 		file_tags, global_tags_sort_attrs);
 	g_ptr_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(file_tags, TRUE);
@@ -555,7 +555,7 @@ void tm_workspace_merge_file_tags(TMSourceFile *source_file)
 		
 	if (source_file->tags_array != NULL)
 	{
-		GPtrArray *new_tags = tm_tags_merge_big_small(theWorkspace->tags_array, 
+		GPtrArray *new_tags = tm_tags_merge(theWorkspace->tags_array, 
 			source_file->tags_array, sort_attrs);
 		/* tags owned by TMSourceFile - free just the pointer array */
 		g_ptr_array_free(theWorkspace->tags_array, TRUE);
