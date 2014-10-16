@@ -497,7 +497,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
  all member source files. You shouldn't have to call this directly since
  this is called automatically by tm_workspace_update().
 */
-void tm_workspace_recreate_tags_array(void)
+static void tm_workspace_recreate_tags_array(void)
 {
 	guint i, j;
 	TMSourceFile *w;

@@ -165,21 +165,11 @@ typedef enum {
 
 GType tm_tag_get_type(void) G_GNUC_CONST;
 
-gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry);
-
-gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp);
-
-gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp);
-
-gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp);
-
 TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
 
 TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format);
 
 gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
-
-int tm_tag_compare(const void *ptr1, const void *ptr2);
 
 GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 

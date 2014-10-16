@@ -50,8 +50,6 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
     int includes_count, const char *tags_file, int lang);
 
-void tm_workspace_recreate_tags_array(void);
-
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
  , gboolean partial, langType lang);
 

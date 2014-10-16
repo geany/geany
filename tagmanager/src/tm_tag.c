@@ -219,7 +219,7 @@ static char get_tag_access(const char *access)
  @param tag_entry Tag information gathered by the ctags parser
  @return TRUE on success, FALSE on failure
 */
-gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
+static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
 	tag->refcount = 1;
 	if (NULL == tag_entry)
@@ -295,7 +295,7 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry)
  @param fp FILE pointer from where the tag line is read
  @return TRUE on success, FALSE on FAILURE
 */
-gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -392,7 +392,7 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 
 /* alternative parser for Pascal and LaTeX global tags files with the following format
  * tagname|return value|arglist|description\n */
-gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -439,7 +439,7 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
  Same as tm_tag_init_from_file(), but parsing CTags tag file format
  (http://ctags.sourceforge.net/FORMAT) 
 */
-gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	gchar buf[BUFSIZ];
 	gchar *p, *tab;
@@ -709,7 +709,7 @@ TMTag *tm_tag_ref(TMTag *tag)
  static variables to be set. Always use tm_tags_sort() and tm_tags_dedup()
  instead.
 */
-int tm_tag_compare(const void *ptr1, const void *ptr2)
+static int tm_tag_compare(const void *ptr1, const void *ptr2)
 {
 	unsigned int *sort_attr;
 	int returnval = 0;

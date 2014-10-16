@@ -100,8 +100,49 @@ gchar *tm_get_real_path(const gchar *file_name)
 	return NULL;
 }
 
+/*
+ This function is registered into the ctags parser when a file is parsed for
+ the first time. The function is then called by the ctags parser each time
+ it finds a new tag. You should not have to use this function.
+ @see tm_source_file_parse()
+*/
+static int tm_source_file_tags(const tagEntryInfo *tag)
+{
+	if (NULL == current_source_file)
+		return 0;
+	if (NULL == current_source_file->tags_array)
+		current_source_file->tags_array = g_ptr_array_new();
+	g_ptr_array_add(current_source_file->tags_array,
+	  tm_tag_new(current_source_file, tag));
+	return TRUE;
+}
+
+/* Set the argument list of tag identified by its name */
+static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
+{
+	int count;
+	TMTag **tags, *tag;
+
+	if (NULL == arglist ||
+		NULL == tag_name ||
+		NULL == current_source_file ||
+		NULL == current_source_file->tags_array)
+	{
+		return;
+	}
+
+	tags = tm_tags_find(current_source_file->tags_array, tag_name, FALSE, FALSE,
+			&count);
+	if (tags != NULL && count == 1)
+	{
+		tag = tags[0];
+		g_free(tag->atts.entry.arglist);
+		tag->atts.entry.arglist = g_strdup(arglist);
+	}
+}
+
 /* Initializes a TMSourceFile structure from a file name. */
-gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
+static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
   , gboolean update, const char* name)
 {
 	struct stat s;
@@ -175,7 +216,7 @@ TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const c
  source file and are also destroyed when the source file is destroyed. If pointers
  to these tags are used elsewhere, then those tag arrays should be rebuilt.
 */
-void tm_source_file_destroy(TMSourceFile *source_file)
+static void tm_source_file_destroy(TMSourceFile *source_file)
 {
 #ifdef TM_DEBUG
 	g_message("Destroying source file: %s", source_file->file_name);
@@ -204,7 +245,7 @@ void tm_source_file_free(TMSourceFile *source_file)
  @return TRUE on success, FALSE on failure
  @see tm_source_file_update()
 */
-gboolean tm_source_file_parse(TMSourceFile *source_file)
+static gboolean tm_source_file_parse(TMSourceFile *source_file)
 {
 	const char *file_name;
 	gboolean status = TRUE;
@@ -267,7 +308,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
  @return TRUE on success, FALSE on failure
  @see tm_source_file_update()
 */
-gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
+static gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
 {
 	const char *file_name;
 	gboolean status = TRUE;
@@ -337,47 +378,6 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		return TRUE;
 	}
 	return status;
-}
-
-/* Set the argument list of tag identified by its name */
-void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
-{
-	int count;
-	TMTag **tags, *tag;
-
-	if (NULL == arglist ||
-		NULL == tag_name ||
-		NULL == current_source_file ||
-		NULL == current_source_file->tags_array)
-	{
-		return;
-	}
-
-	tags = tm_tags_find(current_source_file->tags_array, tag_name, FALSE, FALSE,
-			&count);
-	if (tags != NULL && count == 1)
-	{
-		tag = tags[0];
-		g_free(tag->atts.entry.arglist);
-		tag->atts.entry.arglist = g_strdup(arglist);
-	}
-}
-
-/*
- This function is registered into the ctags parser when a file is parsed for
- the first time. The function is then called by the ctags parser each time
- it finds a new tag. You should not have to use this function.
- @see tm_source_file_parse()
-*/
-int tm_source_file_tags(const tagEntryInfo *tag)
-{
-	if (NULL == current_source_file)
-		return 0;
-	if (NULL == current_source_file->tags_array)
-		current_source_file->tags_array = g_ptr_array_new();
-	g_ptr_array_add(current_source_file->tags_array,
-	  tm_tag_new(current_source_file, tag));
-	return TRUE;
 }
 
 /** Updates the source file by reparsing. The tags array and
