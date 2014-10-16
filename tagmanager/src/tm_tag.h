@@ -17,8 +17,8 @@
  an array of tags for the given source file. Once the tag list is generated,
  you can do various operations such as:
  	-# Extract relevant tags using tm_tags_extract()
-	-# Sort an array of tags using tm_tags_sort() or tm_tags_custom_sort()
-	-# Deduplicate an array of tags using tm_tags_dedup() or tm_tags_dedup_custom().
+	-# Sort an array of tags using tm_tags_sort()
+	-# Deduplicate an array of tags using tm_tags_dedup().
 
  An important thing to remember here is that the tags operations such as extraction,
  sorting and deduplication do not change the tag itself in any way, but rather,
@@ -118,7 +118,7 @@ typedef enum
  pseudo tag. It should always be created indirectly with one of the tag
  creation functions such as tm_source_file_parse() or tm_tag_new_from_file().
  Once created, they can be sorted, deduped, etc. using functions such as
- tm_tags_custom_sort(), tm_tags_sort(), tm_tags_dedup() and tm_tags_custom_dedup()
+ tm_tags_sort() or tm_tags_dedup()
 */
 typedef struct _TMTag
 {
@@ -159,14 +159,6 @@ typedef enum {
 	TM_FILE_FORMAT_CTAGS
 } TMFileFormat;
 
-/*
- Prototype for user-defined tag comparison function. This is the type
- of argument that needs to be passed to tm_tags_sort_custom() and
- tm_tags_dedup_custom(). The function should take two void pointers,
- cast them to (TMTag **) and return 0, 1 or -1 depending on whether the
- first tag is equal to, greater than or less than the second tag.
-*/
-typedef int (*TMTagCompareFunc) (const void *ptr1, const void *ptr2);
 
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
@@ -195,15 +187,11 @@ GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttr
 
 gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup);
 
-gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_func, gboolean dedup);
-
 GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types);
 
 gboolean tm_tags_prune(GPtrArray *tags_array);
 
 gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes);
-
-gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_func);
 
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 		gboolean partial, gboolean tags_array_sorted, int * tagCount);

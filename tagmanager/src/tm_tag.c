@@ -785,8 +785,8 @@ int tm_tag_compare(const void *ptr1, const void *ptr2)
 }
 
 /*
- Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() and
- tm_tags_custom_dedup() since these functions substitute duplicate entries with NULL
+ Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since 
+ this function substitutes duplicate entries with NULL
  @param tags_array Array of tags to dedup
  @return TRUE on success, FALSE on failure
 */
@@ -824,29 +824,6 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
 		{
 			tags_array->pdata[i-1] = NULL;
 		}
-	}
-	tm_tags_prune(tags_array);
-	return TRUE;
-}
-
-/*
- This is a more powerful form of tm_tags_dedup() since it can accomodate user
- defined comparison functions. Called by tm_tags_custom_sort() is dedup is TRUE.
- @param tags_array Array of tags to dedup.
- @param compare_func Comparison function
- @return TRUE on success, FALSE on FAILURE
- @see TMTagCompareFunc
-*/
-gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_func)
-{
-	guint i;
-
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
-	for (i = 1; i < tags_array->len; ++i)
-	{
-		if (0 == compare_func(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i])))
-			tags_array->pdata[i-1] = NULL;
 	}
 	tm_tags_prune(tags_array);
 	return TRUE;
@@ -996,28 +973,6 @@ GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttr
 	res_array = merge(big_array, small_array);
 	s_sort_attrs = NULL;
 	return res_array;
-}
-
-/*
- This function should be used whenever more involved sorting is required. For this,
- you need to write a function as per the prototype of TMTagCompareFunc() and pass
- the function as a parameter to this function.
- @param tags_array Array of tags to be sorted
- @param compare_func A function which takes two pointers to (TMTag *)s and returns
- 0, 1 or -1 depending on whether the first value is equal to, greater than or less that
- the second
- @param dedup Whether to deduplicate the sorted array. Note that the same comparison
- function will be used
- @return TRUE on success, FALSE on failure
-*/
-gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_func, gboolean dedup)
-{
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
-	qsort(tags_array->pdata, tags_array->len, sizeof(gpointer), compare_func);
-	if (dedup)
-		tm_tags_custom_dedup(tags_array, compare_func);
-	return TRUE;
 }
 
 /*
