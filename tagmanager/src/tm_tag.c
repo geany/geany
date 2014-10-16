@@ -676,16 +676,6 @@ static void tm_tag_destroy(TMTag *tag)
 	}
 }
 
-#if 0
-/*
- Destroys all data in the tag and frees the tag structure as well.
- @param tag Pointer to a TMTag structure
-*/
-void tm_tag_free(gpointer tag)
-{
-	tm_tag_unref(tag);
-}
-#endif
 
 /*
  Drops a reference from a TMTag. If the reference count reaches 0, this function
