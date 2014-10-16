@@ -52,8 +52,6 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 
 void tm_workspace_recreate_tags_array(void);
 
-void tm_workspace_dump(void);
-
 const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
  , gboolean partial, langType lang);
 
@@ -66,21 +64,19 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
                                                  gboolean find_global,
                                                  gboolean no_definitions);
 
-const GPtrArray *
-tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *name,
-                                     gboolean search_global);
-
 const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const guint tag_types);
-
-const TMTag *tm_get_current_function(GPtrArray *file_tags, const gulong line);
-
-const GPtrArray *tm_workspace_get_parents(const gchar *name);
 
 void tm_workspace_free(void);
 
 void tm_workspace_merge_file_tags(TMSourceFile *source_file);
 
 void tm_workspace_remove_file_tags(TMSourceFile *source_file);
+
+
+#ifdef TM_DEBUG
+void tm_workspace_dump(void);
+#endif /* TM_DEBUG */
+
 
 #endif /* GEANY_PRIVATE */
 

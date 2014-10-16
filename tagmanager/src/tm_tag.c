@@ -1103,6 +1103,8 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	return (TMTag **) result;
 }
 
+#ifdef TM_DEBUG /* various debugging functions */
+
 /*
  Returns the type of tag as a string
  @param tag The tag whose type is required
@@ -1259,3 +1261,5 @@ gint tm_tag_scope_depth(const TMTag *t)
 	}
 	return depth;
 }
+
+#endif /* TM_DEBUG */

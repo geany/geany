@@ -69,8 +69,6 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 
 int tm_source_file_tags(const tagEntryInfo *tag);
 
-gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs);
-
 const gchar *tm_source_file_get_lang_name(gint lang);
 
 gint tm_source_file_get_named_lang(const gchar *name);

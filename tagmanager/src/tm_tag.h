@@ -208,6 +208,9 @@ void tm_tag_unref(TMTag *tag);
 
 TMTag *tm_tag_ref(TMTag *tag);
 
+
+#ifdef TM_DEBUG /* various debugging functions */
+
 const char *tm_tag_type_name(const TMTag *tag);
 
 TMTagType tm_tag_name_type(const char* tag_name);
@@ -217,6 +220,8 @@ void tm_tag_print(TMTag *tag, FILE *fp);
 void tm_tags_array_print(GPtrArray *tags, FILE *fp);
 
 gint tm_tag_scope_depth(const TMTag *t);
+
+#endif /* TM_DEBUG */
 
 #endif /* GEANY_PRIVATE */
 

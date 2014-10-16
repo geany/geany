@@ -577,26 +577,6 @@ void tm_workspace_update(void)
 	tm_workspace_recreate_tags_array();
 }
 
-/* Dumps the workspace tree - useful for debugging */
-void tm_workspace_dump(void)
-{
-	if (theWorkspace)
-	{
-#ifdef TM_DEBUG
-		g_message("Dumping TagManager workspace tree..");
-#endif
-		if (theWorkspace->source_files)
-		{
-			guint i;
-			for (i=0; i < theWorkspace->source_files->len; ++i)
-			{
-				TMSourceFile *source_file = theWorkspace->source_files->pdata[i];
-				fprintf(stderr, "%s", source_file->file_name);
-			}
-		}
-	}
-}
-
 /* Returns all matching tags found in the workspace.
  @param name The name of the tag to find.
  @param type The tag types to return (TMTagType). Can be a bitmask.
@@ -810,17 +790,6 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const guint tag_ty
 }
 
 
-/* Returns TMTag to function or method which "own" given line
- @param line Current line in edited file.
- @param file_tags A GPtrArray of edited file TMTag pointers.
- @return TMTag pointers to owner function. */
-const TMTag *
-tm_get_current_function (GPtrArray * file_tags, const gulong line)
-{
-	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
-}
-
-
 static int
 find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 						 const langType langJava, const char *name,
@@ -936,8 +905,184 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 	return (int) tags->len;
 }
 
+/* Returns all matching members tags found in given struct/union/class name.
+ @param name Name of the struct/union/class.
+ @param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
+ @return A GPtrArray of TMTag pointers to struct/union/class members */
+const GPtrArray *
+tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
+								 gboolean search_global, gboolean no_definitions)
+{
+	static GPtrArray *tags = NULL;
+	GPtrArray *local = NULL;
+	char *new_name = (char *) name;
+	char *filename = NULL;
+	int found = 0, del = 0;
+	static langType langJava = -1;
+	TMTag *tag = NULL;
+
+	/* FIXME */
+	/* langJava = getNamedLanguage ("Java"); */
+
+	g_return_val_if_fail ((theWorkspace && name && name[0] != '\0'), NULL);
+
+	if (!tags)
+		tags = g_ptr_array_new ();
+
+	while (1)
+	{
+		const GPtrArray *tags2;
+		int got = 0, types = (tm_tag_class_t | tm_tag_namespace_t |
+								tm_tag_struct_t | tm_tag_typedef_t |
+								tm_tag_union_t | tm_tag_enum_t);
+
+		if (file_tags)
+		{
+			g_ptr_array_set_size (tags, 0);
+			got = fill_find_tags_array (tags, file_tags,
+										  new_name, NULL, types, FALSE, -1, FALSE);
+		}
+		if (got)
+		{
+			tags2 = tags;
+		}
+		else
+		{
+			TMTagAttrType attrs[] = {
+				tm_tag_attr_name_t, tm_tag_attr_type_t,
+				tm_tag_attr_none_t
+			};
+			tags2 = tm_workspace_find (new_name, types, attrs, FALSE, -1);
+		}
+
+		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
+		{
+			if (tag->type == tm_tag_typedef_t && tag->atts.entry.var_type
+				&& tag->atts.entry.var_type[0] != '\0')
+			{
+				char *tmp_name;
+				tmp_name = tag->atts.entry.var_type;
+				if (strcmp(tmp_name, new_name) == 0) {
+					new_name = NULL;
+				}
+				else {
+					new_name = tmp_name;
+				}
+				continue;
+			}
+			filename = (tag->atts.entry.file ?
+						tag->atts.entry.file->short_name : NULL);
+			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
+			{
+				del = 1;
+				if (tag->atts.entry.file &&
+					tag->atts.entry.file->lang == langJava)
+				{
+					new_name = g_strdup_printf ("%s.%s",
+												tag->atts.entry.scope,
+												new_name);
+				}
+				else
+				{
+					new_name = g_strdup_printf ("%s::%s",
+												tag->atts.entry.scope,
+												new_name);
+				}
+			}
+			break;
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+
+	g_ptr_array_set_size (tags, 0);
+
+	if (no_definitions && tag && tag->atts.entry.file)
+	{
+		local = tm_tags_extract (tag->atts.entry.file->tags_array,
+								 (tm_tag_function_t | tm_tag_prototype_t |
+								  tm_tag_member_t | tm_tag_field_t |
+								  tm_tag_method_t | tm_tag_enumerator_t));
+	}
+	else
+	{
+		local = tm_tags_extract (theWorkspace->tags_array,
+								 (tm_tag_function_t | tm_tag_prototype_t |
+								  tm_tag_member_t | tm_tag_field_t |
+								  tm_tag_method_t | tm_tag_enumerator_t));
+	}
+	if (local)
+	{
+		found = find_scope_members_tags (local, tags, langJava, new_name,
+										 filename, no_definitions);
+		g_ptr_array_free (local, TRUE);
+	}
+	if (!found && search_global)
+	{
+		GPtrArray *global = tm_tags_extract (theWorkspace->global_tags,
+											 (tm_tag_member_t |
+											  tm_tag_prototype_t |
+											  tm_tag_field_t |
+											  tm_tag_method_t |
+											  tm_tag_function_t |
+											  tm_tag_enumerator_t
+											  |tm_tag_struct_t | tm_tag_typedef_t |
+											  tm_tag_union_t | tm_tag_enum_t));
+		if (global)
+		{
+			find_scope_members_tags (global, tags, langJava, new_name,
+									 filename, no_definitions);
+			g_ptr_array_free (global, TRUE);
+		}
+	}
+	if (del)
+	{
+		g_free (new_name);
+	}
+
+	return tags;
+}
+
+
+#ifdef TM_DEBUG
+
+/* Dumps the workspace tree - useful for debugging */
+void tm_workspace_dump(void)
+{
+	if (theWorkspace)
+	{
+#ifdef TM_DEBUG
+		g_message("Dumping TagManager workspace tree..");
+#endif
+		if (theWorkspace->source_files)
+		{
+			guint i;
+			for (i=0; i < theWorkspace->source_files->len; ++i)
+			{
+				TMSourceFile *source_file = theWorkspace->source_files->pdata[i];
+				fprintf(stderr, "%s", source_file->file_name);
+			}
+		}
+	}
+}
+#endif /* TM_DEBUG */
+
 
 #if 0
+
+/* Returns TMTag to function or method which "own" given line
+ @param line Current line in edited file.
+ @param file_tags A GPtrArray of edited file TMTag pointers.
+ @return TMTag pointers to owner function. */
+static const TMTag *
+tm_get_current_function (GPtrArray * file_tags, const gulong line)
+{
+	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
+}
+
+
 static int
 find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
 						 	const langType langJava, const char *name,
@@ -994,7 +1139,7 @@ find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
 	return (int) tags->len;
 }
 
-const GPtrArray *
+static const GPtrArray *
 tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *name,
 								 gboolean search_global)
 {
@@ -1138,152 +1283,11 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 
 	return tags;
 }
-#endif
-
-/* Returns all matching members tags found in given struct/union/class name.
- @param name Name of the struct/union/class.
- @param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
- @return A GPtrArray of TMTag pointers to struct/union/class members */
-const GPtrArray *
-tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
-								 gboolean search_global, gboolean no_definitions)
-{
-	static GPtrArray *tags = NULL;
-	GPtrArray *local = NULL;
-	char *new_name = (char *) name;
-	char *filename = NULL;
-	int found = 0, del = 0;
-	static langType langJava = -1;
-	TMTag *tag = NULL;
-
-	/* FIXME */
-	/* langJava = getNamedLanguage ("Java"); */
-
-	g_return_val_if_fail ((theWorkspace && name && name[0] != '\0'), NULL);
-
-	if (!tags)
-		tags = g_ptr_array_new ();
-
-	while (1)
-	{
-		const GPtrArray *tags2;
-		int got = 0, types = (tm_tag_class_t | tm_tag_namespace_t |
-								tm_tag_struct_t | tm_tag_typedef_t |
-								tm_tag_union_t | tm_tag_enum_t);
-
-		if (file_tags)
-		{
-			g_ptr_array_set_size (tags, 0);
-			got = fill_find_tags_array (tags, file_tags,
-										  new_name, NULL, types, FALSE, -1, FALSE);
-		}
-		if (got)
-		{
-			tags2 = tags;
-		}
-		else
-		{
-			TMTagAttrType attrs[] = {
-				tm_tag_attr_name_t, tm_tag_attr_type_t,
-				tm_tag_attr_none_t
-			};
-			tags2 = tm_workspace_find (new_name, types, attrs, FALSE, -1);
-		}
-
-		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
-		{
-			if (tag->type == tm_tag_typedef_t && tag->atts.entry.var_type
-				&& tag->atts.entry.var_type[0] != '\0')
-			{
-				char *tmp_name;
-				tmp_name = tag->atts.entry.var_type;
-				if (strcmp(tmp_name, new_name) == 0) {
-					new_name = NULL;
-				}
-				else {
-					new_name = tmp_name;
-				}
-				continue;
-			}
-			filename = (tag->atts.entry.file ?
-						tag->atts.entry.file->short_name : NULL);
-			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
-			{
-				del = 1;
-				if (tag->atts.entry.file &&
-					tag->atts.entry.file->lang == langJava)
-				{
-					new_name = g_strdup_printf ("%s.%s",
-												tag->atts.entry.scope,
-												new_name);
-				}
-				else
-				{
-					new_name = g_strdup_printf ("%s::%s",
-												tag->atts.entry.scope,
-												new_name);
-				}
-			}
-			break;
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-
-	g_ptr_array_set_size (tags, 0);
-
-	if (no_definitions && tag && tag->atts.entry.file)
-	{
-		local = tm_tags_extract (tag->atts.entry.file->tags_array,
-								 (tm_tag_function_t | tm_tag_prototype_t |
-								  tm_tag_member_t | tm_tag_field_t |
-								  tm_tag_method_t | tm_tag_enumerator_t));
-	}
-	else
-	{
-		local = tm_tags_extract (theWorkspace->tags_array,
-								 (tm_tag_function_t | tm_tag_prototype_t |
-								  tm_tag_member_t | tm_tag_field_t |
-								  tm_tag_method_t | tm_tag_enumerator_t));
-	}
-	if (local)
-	{
-		found = find_scope_members_tags (local, tags, langJava, new_name,
-										 filename, no_definitions);
-		g_ptr_array_free (local, TRUE);
-	}
-	if (!found && search_global)
-	{
-		GPtrArray *global = tm_tags_extract (theWorkspace->global_tags,
-											 (tm_tag_member_t |
-											  tm_tag_prototype_t |
-											  tm_tag_field_t |
-											  tm_tag_method_t |
-											  tm_tag_function_t |
-											  tm_tag_enumerator_t
-											  |tm_tag_struct_t | tm_tag_typedef_t |
-											  tm_tag_union_t | tm_tag_enum_t));
-		if (global)
-		{
-			find_scope_members_tags (global, tags, langJava, new_name,
-									 filename, no_definitions);
-			g_ptr_array_free (global, TRUE);
-		}
-	}
-	if (del)
-	{
-		g_free (new_name);
-	}
-
-	return tags;
-}
 
 /* Returns a list of parent classes for the given class name
  @param name Name of the class
  @return A GPtrArray of TMTag pointers (includes the TMTag for the class) */
-const GPtrArray *tm_workspace_get_parents(const gchar *name)
+static const GPtrArray *tm_workspace_get_parents(const gchar *name)
 {
 	static TMTagAttrType type[] = { tm_tag_attr_name_t, tm_tag_attr_none_t };
 	static GPtrArray *parents = NULL;
@@ -1330,3 +1334,5 @@ const GPtrArray *tm_workspace_get_parents(const gchar *name)
 	}
 	return parents;
 }
+
+#endif

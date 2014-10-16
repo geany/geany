@@ -465,40 +465,6 @@ void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
 #endif
 }
 
-
-/*
- Writes all tags of a source file (including the file tag itself) to the passed
- file pointer.
- @param source_file The source file to write.
- @param fp The file pointer to write to.
- @param attrs The attributes to write.
- @return TRUE on success, FALSE on failure.
-*/
-gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs)
-{
-	TMTag *tag;
-	guint i;
-
-	if (NULL != source_file)
-	{
-		if (NULL != (tag = tm_tag_new(source_file, NULL)))
-		{
-			tm_tag_write(tag, fp, tm_tag_attr_max_t);
-			tm_tag_unref(tag);
-			if (NULL != source_file->tags_array)
-			{
-				for (i=0; i < source_file->tags_array->len; ++i)
-				{
-					tag = TM_TAG(source_file->tags_array->pdata[i]);
-					if (TRUE != tm_tag_write(tag, fp, attrs))
-						return FALSE;
-				}
-			}
-		}
-	}
-	return TRUE;
-}
-
 /* Gets the name associated with the language index.
  @param lang The language index.
  @return The language name, or NULL.
@@ -534,3 +500,38 @@ gint tm_source_file_get_named_lang(const gchar *name)
 	}
 	return getNamedLanguage(name);
 }
+
+#if 0
+/*
+ Writes all tags of a source file (including the file tag itself) to the passed
+ file pointer.
+ @param source_file The source file to write.
+ @param fp The file pointer to write to.
+ @param attrs The attributes to write.
+ @return TRUE on success, FALSE on failure.
+*/
+static gboolean tm_source_file_write(TMSourceFile *source_file, FILE *fp, guint attrs)
+{
+	TMTag *tag;
+	guint i;
+
+	if (NULL != source_file)
+	{
+		if (NULL != (tag = tm_tag_new(source_file, NULL)))
+		{
+			tm_tag_write(tag, fp, tm_tag_attr_max_t);
+			tm_tag_unref(tag);
+			if (NULL != source_file->tags_array)
+			{
+				for (i=0; i < source_file->tags_array->len; ++i)
+				{
+					tag = TM_TAG(source_file->tags_array->pdata[i]);
+					if (TRUE != tm_tag_write(tag, fp, attrs))
+						return FALSE;
+				}
+			}
+		}
+	}
+	return TRUE;
+}
+#endif
