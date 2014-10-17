@@ -880,7 +880,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 	/* on average, we are merging a value from small_array every 
 	 * len(big_array) / len(small_array) values - good approximation for fast jump
 	 * step size */
-	initial_step = big_array->len / small_array->len;
+	initial_step = (small_array->len > 0) ? big_array->len / small_array->len : 1;
 	initial_step = initial_step > 4 ? initial_step : 1;
 	step = initial_step;
 	
