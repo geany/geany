@@ -254,6 +254,7 @@ static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *
 		if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
 			tag->type = tm_tag_macro_with_arg_t;
 		tag->file = file;
+		tag->lang = file->lang;
 		return TRUE;
 	}
 }

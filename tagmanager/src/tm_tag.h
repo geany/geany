@@ -136,9 +136,7 @@ typedef struct _TMTag
 	char *var_type; /**< Variable type (maps to struct for typedefs) */
 	char access; /**< Access type (public/protected/private/etc.) */
 	char impl; /**< Implementation (e.g. virtual) */
-	
-	langType lang; /**< Programming language of the file - set only for
-						global tags when the file member is NULL */
+	langType lang; /**< Programming language of the file */
 
 	gint refcount; /**< the reference count of the tag */
 } TMTag;

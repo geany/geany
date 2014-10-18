@@ -266,10 +266,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			/* tag->atts.file.lang contains the line of the tag if tag->file 
-			 * is not NULL (geany document); otherwise it's a global tag with lang 
-			 * information in tag->lang */
-			tag_lang = (tag->file) ? tag->file->lang : tag->lang;
+			tag_lang = tag->lang;
 
 			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
 			 * e.g. PHP classes in C++ files

@@ -611,9 +611,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	/* file tags */
 	if (matches[0] && *matches[0])
 	{
-		/* tag->atts.file.lang contains the line of the tag and
-		 * tags->file->lang contains the language */
-		tags_lang = (*matches[0])->file->lang;
+		tags_lang = (*matches[0])->lang;
 
 		for (tagIter=0;tagIter<tagCount[0];++tagIter)
 		{
@@ -637,8 +635,6 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	if (matches[1] && *matches[1])
 	{
 		int tags_lang_alt = 0;
-		/* tag->atts.file.lang contains the language and
-		 * tags->file is NULL */
 		tags_lang = (*matches[1])->lang;
 		/* tags_lang_alt is used to load C global tags only once for C and C++
 		 * lang = 1 is C++, lang = 0 is C
