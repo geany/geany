@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 23:33+0200\n"
-"PO-Revision-Date: 2014-09-29 23:34+0200\n"
-"Last-Translator: Frank Lanitz <frlan@trabant>\n"
+"POT-Creation-Date: 2014-10-18 19:50+0200\n"
+"PO-Revision-Date: 2014-10-18 19:52+0200\n"
+"Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1683,7 +1683,7 @@ msgstr "Speichern _unter"
 msgid "Sa_ve All"
 msgstr "A_lle speichern"
 
-#: ../data/geany.glade.h:345 ../src/document.c:1457 ../src/document.c:3344
+#: ../data/geany.glade.h:345 ../src/document.c:1458 ../src/document.c:3350
 #: ../src/sidebar.c:709
 msgid "_Reload"
 msgstr "Neu _laden"
@@ -2360,7 +2360,7 @@ msgstr "Ausführung fehlgeschlagen. Kein Arbeitsverzeichnis gefunden."
 msgid "%s (in directory: %s)"
 msgstr "%s (im Verzeichnis: %s)"
 
-#: ../src/build.c:840 ../src/build.c:1053 ../src/search.c:1729
+#: ../src/build.c:840 ../src/build.c:1053 ../src/search.c:1731
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
@@ -2660,7 +2660,7 @@ msgstr ""
 "Öffnet die Datei schreibgeschützt. Bei Auswahl mehrerer Dateien, werden alle "
 "schreibgeschützt geöffnet."
 
-#: ../src/dialogs.c:532 ../src/document.c:1865
+#: ../src/dialogs.c:532 ../src/document.c:1866
 msgid "Overwrite?"
 msgstr "Überschreiben?"
 
@@ -2751,7 +2751,7 @@ msgstr "Datei »%s« wurde geschlossen."
 msgid "New file \"%s\" opened."
 msgstr "Neue Datei »%s« geöffnet."
 
-#: ../src/document.c:909 ../src/document.c:1482
+#: ../src/document.c:909 ../src/document.c:1483
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei »%s« nicht öffnen (%s)."
@@ -2824,20 +2824,24 @@ msgstr "Datei »%s« geöffnet (%d%s)."
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: ../src/document.c:1458
+#: ../src/document.c:1459
 msgid "Any unsaved changes will be lost."
 msgstr "Alle ungesicherten Änderungen werden verloren gehen."
 
-#: ../src/document.c:1459
+#: ../src/document.c:1460
+msgid "Undo history will be lost."
+msgstr "Verlauf wird verloren gehen."
+
+#: ../src/document.c:1461
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Möchten Sie »%s« wirklich neu laden?"
 
-#: ../src/document.c:1577
+#: ../src/document.c:1578
 msgid "Error renaming file."
 msgstr "Fehler beim Umbenennen der Datei."
 
-#: ../src/document.c:1697
+#: ../src/document.c:1698
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2846,7 +2850,7 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 nach »%s« ist ein Fehler aufgetreten. "
 "Die Datei wird <i>nicht</i> gespeichert."
 
-#: ../src/document.c:1718
+#: ../src/document.c:1719
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2855,50 +2859,50 @@ msgstr ""
 "Fehlermeldung: %s\n"
 "Der Fehler trat bei »%s« (Zeile: %d, Spalte: %d) auf."
 
-#: ../src/document.c:1722
+#: ../src/document.c:1723
 #, c-format
 msgid "Error message: %s."
 msgstr "Fehlermeldung: %s."
 
-#: ../src/document.c:1782
+#: ../src/document.c:1783
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fopen() fehlgeschlagen: %s"
 
-#: ../src/document.c:1800
+#: ../src/document.c:1801
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fwrite() fehlgeschlagen: %s"
 
-#: ../src/document.c:1814
+#: ../src/document.c:1815
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fclose() fehlgeschlagen: %s"
 
-#: ../src/document.c:1864 ../src/document.c:3345
+#: ../src/document.c:1865 ../src/document.c:3351
 msgid "_Overwrite"
 msgstr "Ü_berschreiben?"
 
-#: ../src/document.c:1866 ../src/document.c:3348
+#: ../src/document.c:1867 ../src/document.c:3354
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "Die Datei »%s« auf dem Datenträger ist aktueller als die momentan geöffnete "
 "Version."
 
-#: ../src/document.c:1874 ../src/document.c:3386
+#: ../src/document.c:1875 ../src/document.c:3392
 msgid "Try to resave the file?"
 msgstr "Versuchen die Datei erneut zu speichern?"
 
-#: ../src/document.c:1875 ../src/document.c:3387
+#: ../src/document.c:1876 ../src/document.c:3393
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "»%s« wurde nicht auf dem Datenträger gefunden."
 
-#: ../src/document.c:1937
+#: ../src/document.c:1938
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Kann das nur zum Lesen geöffnete Dokument »%s« nicht speichern!"
@@ -2932,8 +2936,8 @@ msgstr "Datei »%s« wurde gespeichert."
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2276 ../src/search.c:1368 ../src/search.c:1419
-#: ../src/search.c:2263 ../src/search.c:2264
+#: ../src/document.c:2276 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2265 ../src/search.c:2266
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
@@ -2945,21 +2949,21 @@ msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 
-#: ../src/document.c:3347
+#: ../src/document.c:3353
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/editor.c:4374
+#: ../src/editor.c:4373
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: ../src/editor.c:4375
+#: ../src/editor.c:4374
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: ../src/editor.c:4538
+#: ../src/editor.c:4537
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -3741,12 +3745,12 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:993
+#: ../src/keyfile.c:995
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1220
+#: ../src/keyfile.c:1222
 msgid "Failed to load one or more session files."
 msgstr ""
 "Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
@@ -4452,68 +4456,68 @@ msgstr "_Zus. Optionen:"
 msgid "Other options to pass to Grep"
 msgstr "Andere Argumente, die an grep übergeben werden sollen"
 
-#: ../src/search.c:1371 ../src/search.c:2269 ../src/search.c:2272
+#: ../src/search.c:1371 ../src/search.c:2271 ../src/search.c:2274
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "%d Treffer für »%s« gefunden."
 msgstr[1] "%d Treffer für »%s« gefunden."
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "%u Treffer in %u Dokumenten ersetzt"
 
-#: ../src/search.c:1616
+#: ../src/search.c:1618
 msgid "Invalid directory for find in files."
 msgstr "Ungültiges Verzeichnis."
 
-#: ../src/search.c:1637
+#: ../src/search.c:1639
 msgid "No text to find."
 msgstr "Kein Text zum Suchen angegeben."
 
-#: ../src/search.c:1664
+#: ../src/search.c:1666
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
 "Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
 "Einstellungen überprüfen)."
 
-#: ../src/search.c:1671
+#: ../src/search.c:1673
 #, c-format
 msgid "Cannot parse extra options: %s"
 msgstr "Konnte die zusätzlichen Optionen nicht analysieren: %s"
 
-#: ../src/search.c:1737
+#: ../src/search.c:1739
 msgid "Searching..."
 msgstr "Suchen..."
 
-#: ../src/search.c:1748
+#: ../src/search.c:1750
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (im Verzeichnis: %s)"
 
-#: ../src/search.c:1789
+#: ../src/search.c:1791
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Konnte Verzeichnis nicht öffnen (%s)."
 
-#: ../src/search.c:1889
+#: ../src/search.c:1891
 msgid "Search failed."
 msgstr "Suche fehlgeschlagen."
 
-#: ../src/search.c:1913
+#: ../src/search.c:1915
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Suche mit %d Treffer abgeschlossen."
 msgstr[1] "Suche mit %d Treffern abgeschlossen."
 
-#: ../src/search.c:1921
+#: ../src/search.c:1923
 msgid "No matches found."
 msgstr "Keine Treffer gefunden."
 
-#: ../src/search.c:1951
+#: ../src/search.c:1953
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Fehler in Ausdruck: %s"
