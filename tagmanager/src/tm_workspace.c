@@ -543,7 +543,7 @@ gboolean tm_workspace_update(TMWorkObject *workspace, gboolean force
 		for (i=0; i < theWorkspace->work_objects->len; ++i)
 		{
 			if (TRUE == tm_work_object_update(TM_WORK_OBJECT(
-				  theWorkspace->work_objects->pdata[i]), FALSE, TRUE, FALSE))
+				  theWorkspace->work_objects->pdata[i]), TRUE, TRUE, FALSE))
 				update_tags = TRUE;
 		}
 	}

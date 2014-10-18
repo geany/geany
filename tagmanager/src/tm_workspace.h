@@ -99,10 +99,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 */
 void tm_workspace_recreate_tags_array(void);
 
-/* Calls tm_work_object_update() for all workspace member work objects.
+/** Calls tm_work_object_update() for all workspace member work objects.
  Use if you want to globally refresh the workspace.
  \param workspace Pointer to the workspace.
- \param force Whether the cache should be ignored.
+ \param force Whether tags are always updated.
  \param recurse If set to TRUE, updates all children before updating the tag image.
  \param update_parent This parameter is ignored for the workspace since it is at the
  top of the work object hierarchy.
