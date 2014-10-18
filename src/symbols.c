@@ -266,9 +266,10 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			/* tag->atts.file.lang contains (for some reason) the line of the tag if
-			 * tag->atts.entry.file is not NULL */
-			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
+			/* tag->atts.file.lang contains the line of the tag if tag->atts.entry.file 
+			 * is not NULL (geany document); otherwise it's a global tag with lang 
+			 * information in tag->atts.entry.lang */
+			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.entry.lang;
 
 			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
 			 * e.g. PHP classes in C++ files
@@ -351,7 +352,7 @@ GString *symbols_get_macro_list(gint lang)
 			{
 				tag = TM_TAG(tags->pdata[i]);
 				tag_lang = (tag->atts.entry.file) ?
-					tag->atts.entry.file->lang : tag->atts.file.lang;
+					tag->atts.entry.file->lang : tag->atts.entry.lang;
 
 				if (tag_lang == lang)
 					g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);

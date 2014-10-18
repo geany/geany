@@ -639,7 +639,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 		int tags_lang_alt = 0;
 		/* tag->atts.file.lang contains the language and
 		 * tags->atts.entry.file is NULL */
-		tags_lang = (*matches[1])->atts.file.lang;
+		tags_lang = (*matches[1])->atts.entry.lang;
 		/* tags_lang_alt is used to load C global tags only once for C and C++
 		 * lang = 1 is C++, lang = 0 is C
 		 * if we have lang 0, than accept also lang 1 for C++ */
@@ -682,7 +682,7 @@ static gboolean match_langs(gint lang, const TMTag *tag)
 	}
 	else
 	{	/* global tag */
-		if (lang == tag->atts.file.lang)
+		if (lang == tag->atts.entry.lang)
 			return TRUE;
 	}
 	return FALSE;

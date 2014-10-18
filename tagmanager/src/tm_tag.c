@@ -583,7 +583,7 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
 		TAG_FREE(tag);
 		return NULL;
 	}
-	tag->atts.file.lang = mode;
+	tag->atts.entry.lang = mode;
 	return tag;
 }
 
