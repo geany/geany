@@ -224,16 +224,7 @@ static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *
 	tag->refcount = 1;
 	if (NULL == tag_entry)
 	{
-		/* This is a file tag */
-		if (NULL == file)
-			return FALSE;
-		else
-		{
-			tag->name = g_strdup(file->file_name);
-			tag->type = tm_tag_file_t;
-			tag->atts.file.lang = file->lang;
-			return TRUE;
-		}
+		return FALSE;
 	}
 	else
 	{
@@ -348,23 +339,9 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 				case TA_INHERITS:
 					tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
 					break;
-				case TA_TIME:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got time attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.timestamp = atol((gchar*)start + 1);
+				case TA_TIME:  /* Obsolete */
 					break;
-				case TA_LANG:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got lang attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.lang = atoi((gchar*)start + 1);
+				case TA_LANG:  /* Obsolete */
 					break;
 				case TA_INACTIVE:  /* Obsolete */
 					break;
@@ -385,8 +362,7 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	}
 	if (NULL == tag->name)
 		return FALSE;
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->atts.entry.file = file;
 	return TRUE;
 }
 
@@ -430,8 +406,7 @@ static gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *
 
 	if (NULL == tag->name)
 		return FALSE;
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->atts.entry.file = file;
 	return TRUE;
 }
 
@@ -521,7 +496,7 @@ static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE
 						case 'c': tag->type = tm_tag_class_t; break;
 						case 'd': tag->type = tm_tag_macro_t; break;
 						case 'e': tag->type = tm_tag_enumerator_t; break;
-						case 'F': tag->type = tm_tag_file_t; break;
+						case 'F': tag->type = tm_tag_other_t; break;  /* Obsolete */
 						case 'f': tag->type = tm_tag_function_t; break;
 						case 'g': tag->type = tm_tag_enum_t; break;
 						case 'I': tag->type = tm_tag_class_t; break;
@@ -575,8 +550,7 @@ static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE
 		}
 	}
 
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->atts.entry.file = file;
 	return TRUE;
 }
 
@@ -625,34 +599,25 @@ gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
 	fprintf(fp, "%s", tag->name);
 	if (attrs & tm_tag_attr_type_t)
 		fprintf(fp, "%c%d", TA_TYPE, tag->type);
-	if (tag->type == tm_tag_file_t)
-	{
-		if (attrs & tm_tag_attr_time_t)
-			fprintf(fp, "%c%ld", TA_TIME, tag->atts.file.timestamp);
-		if (attrs & tm_tag_attr_lang_t)
-			fprintf(fp, "%c%d", TA_LANG, tag->atts.file.lang);
-	}
-	else
-	{
-		if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->atts.entry.arglist))
-			fprintf(fp, "%c%s", TA_ARGLIST, tag->atts.entry.arglist);
-		if (attrs & tm_tag_attr_line_t)
-			fprintf(fp, "%c%ld", TA_LINE, tag->atts.entry.line);
-		if (attrs & tm_tag_attr_local_t)
-			fprintf(fp, "%c%d", TA_LOCAL, tag->atts.entry.local);
-		if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->atts.entry.scope))
-			fprintf(fp, "%c%s", TA_SCOPE, tag->atts.entry.scope);
-		if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->atts.entry.inheritance))
-			fprintf(fp, "%c%s", TA_INHERITS, tag->atts.entry.inheritance);
-		if (attrs & tm_tag_attr_pointer_t)
-			fprintf(fp, "%c%d", TA_POINTER, tag->atts.entry.pointerOrder);
-		if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->atts.entry.var_type))
-			fprintf(fp, "%c%s", TA_VARTYPE, tag->atts.entry.var_type);
-		if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->atts.entry.access))
-			fprintf(fp, "%c%c", TA_ACCESS, tag->atts.entry.access);
-		if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->atts.entry.impl))
-			fprintf(fp, "%c%c", TA_IMPL, tag->atts.entry.impl);
-	}
+	if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->atts.entry.arglist))
+		fprintf(fp, "%c%s", TA_ARGLIST, tag->atts.entry.arglist);
+	if (attrs & tm_tag_attr_line_t)
+		fprintf(fp, "%c%ld", TA_LINE, tag->atts.entry.line);
+	if (attrs & tm_tag_attr_local_t)
+		fprintf(fp, "%c%d", TA_LOCAL, tag->atts.entry.local);
+	if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->atts.entry.scope))
+		fprintf(fp, "%c%s", TA_SCOPE, tag->atts.entry.scope);
+	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->atts.entry.inheritance))
+		fprintf(fp, "%c%s", TA_INHERITS, tag->atts.entry.inheritance);
+	if (attrs & tm_tag_attr_pointer_t)
+		fprintf(fp, "%c%d", TA_POINTER, tag->atts.entry.pointerOrder);
+	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->atts.entry.var_type))
+		fprintf(fp, "%c%s", TA_VARTYPE, tag->atts.entry.var_type);
+	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->atts.entry.access))
+		fprintf(fp, "%c%c", TA_ACCESS, tag->atts.entry.access);
+	if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->atts.entry.impl))
+		fprintf(fp, "%c%c", TA_IMPL, tag->atts.entry.impl);
+
 	if (fprintf(fp, "\n"))
 		return TRUE;
 	else
@@ -667,13 +632,10 @@ gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
 static void tm_tag_destroy(TMTag *tag)
 {
 	g_free(tag->name);
-	if (tm_tag_file_t != tag->type)
-	{
-		g_free(tag->atts.entry.arglist);
-		g_free(tag->atts.entry.scope);
-		g_free(tag->atts.entry.inheritance);
-		g_free(tag->atts.entry.var_type);
-	}
+	g_free(tag->atts.entry.arglist);
+	g_free(tag->atts.entry.scope);
+	g_free(tag->atts.entry.inheritance);
+	g_free(tag->atts.entry.var_type);
 }
 
 
@@ -1122,7 +1084,6 @@ const char *tm_tag_type_name(const TMTag *tag)
 		case tm_tag_externvar_t: return "extern";
 		case tm_tag_macro_t: return "define";
 		case tm_tag_macro_with_arg_t: return "macro";
-		case tm_tag_file_t: return "file";
 		default: return NULL;
 	}
 	return NULL;
@@ -1154,13 +1115,12 @@ TMTagType tm_tag_name_type(const char* tag_name)
 	else if (strcmp(tag_name, "extern") == 0) return tm_tag_externvar_t;
 	else if (strcmp(tag_name, "define") == 0) return tm_tag_macro_t;
 	else if (strcmp(tag_name, "macro") == 0) return tm_tag_macro_with_arg_t;
-	else if (strcmp(tag_name, "file") == 0) return tm_tag_file_t;
 	else return tm_tag_undef_t;
 }
 
 static const char *tm_tag_impl_name(TMTag *tag)
 {
-	g_return_val_if_fail(tag && (tm_tag_file_t != tag->type), NULL);
+	g_return_val_if_fail(tag, NULL);
 	if (TAG_IMPL_VIRTUAL == tag->atts.entry.impl)
 		return "virtual";
 	else
@@ -1169,7 +1129,7 @@ static const char *tm_tag_impl_name(TMTag *tag)
 
 static const char *tm_tag_access_name(TMTag *tag)
 {
-	g_return_val_if_fail(tag && (tm_tag_file_t != tag->type), NULL);
+	g_return_val_if_fail(tag, NULL);
 	if (TAG_ACCESS_PUBLIC == tag->atts.entry.access)
 		return "public";
 	else if (TAG_ACCESS_PROTECTED == tag->atts.entry.access)
@@ -1190,11 +1150,6 @@ void tm_tag_print(TMTag *tag, FILE *fp)
 	const char *laccess, *impl, *type;
 	if (!tag || !fp)
 		return;
-	if (tm_tag_file_t == tag->type)
-	{
-		fprintf(fp, "%s\n", tag->name);
-		return;
-	}
 	laccess = tm_tag_access_name(tag);
 	impl = tm_tag_impl_name(tag);
 	type = tm_tag_type_name(tag);

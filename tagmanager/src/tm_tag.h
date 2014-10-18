@@ -66,7 +66,7 @@ typedef enum
 	tm_tag_externvar_t = 32768, /**< Extern or forward declaration */
 	tm_tag_macro_t = 65536, /**<  Macro (without arguments) */
 	tm_tag_macro_with_arg_t = 131072, /**< Parameterized macro */
-	tm_tag_file_t = 262144, /**< File (Pseudo tag) */
+	tm_tag_file_t = 262144, /**< File (Pseudo tag) - obsolete */
 	tm_tag_other_t = 524288, /**< Other (non C/C++/Java tag) */
 	tm_tag_max_t = 1048575 /**< Maximum value of TMTagType */
 } TMTagType;
