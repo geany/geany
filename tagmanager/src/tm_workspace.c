@@ -612,8 +612,8 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	if (matches[0] && *matches[0])
 	{
 		/* tag->atts.file.lang contains the line of the tag and
-		 * tags->atts.entry.file->lang contains the language */
-		tags_lang = (*matches[0])->atts.entry.file->lang;
+		 * tags->file->lang contains the language */
+		tags_lang = (*matches[0])->file->lang;
 
 		for (tagIter=0;tagIter<tagCount[0];++tagIter)
 		{
@@ -638,8 +638,8 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	{
 		int tags_lang_alt = 0;
 		/* tag->atts.file.lang contains the language and
-		 * tags->atts.entry.file is NULL */
-		tags_lang = (*matches[1])->atts.entry.lang;
+		 * tags->file is NULL */
+		tags_lang = (*matches[1])->lang;
 		/* tags_lang_alt is used to load C global tags only once for C and C++
 		 * lang = 1 is C++, lang = 0 is C
 		 * if we have lang 0, than accept also lang 1 for C++ */
@@ -675,14 +675,14 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 
 static gboolean match_langs(gint lang, const TMTag *tag)
 {
-	if (tag->atts.entry.file)
+	if (tag->file)
 	{	/* workspace tag */
-		if (lang == tag->atts.entry.file->lang)
+		if (lang == tag->file->lang)
 			return TRUE;
 	}
 	else
 	{	/* global tag */
-		if (lang == tag->atts.entry.lang)
+		if (lang == tag->lang)
 			return TRUE;
 	}
 	return FALSE;
@@ -706,8 +706,8 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 	{
 		for (tagIter = 0; tagIter < count; ++tagIter)
 		{
-			if (! scope || (match[tagIter]->atts.entry.scope &&
-				0 == strcmp(match[tagIter]->atts.entry.scope, scope)))
+			if (! scope || (match[tagIter]->scope &&
+				0 == strcmp(match[tagIter]->scope, scope)))
 			{
 				if (type & match[tagIter]->type)
 				if (lang == -1 || match_langs(lang, match[tagIter]))
@@ -779,10 +779,10 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const guint tag_ty
 		{
 			TMTag *tag = TM_TAG (file_tags->pdata[i]);
 			if (tag && tag->type & tag_types &&
-				tag->atts.entry.line <= line && tag->atts.entry.line > matching_line)
+				tag->line <= line && tag->line > matching_line)
 			{
 				matching_tag = tag;
-				matching_line = tag->atts.entry.line;
+				matching_line = tag->line;
 			}
 		}
 	}
@@ -802,15 +802,15 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 	for (i = 0; (i < all->len); ++i)
 	{
 		tag = TM_TAG (all->pdata[i]);
-		if (no_definitions && filename && tag->atts.entry.file &&
+		if (no_definitions && filename && tag->file &&
 			0 != strcmp (filename,
-						 tag->atts.entry.file->short_name))
+						 tag->file->short_name))
 		{
 			continue;
 		}
-		if (tag && tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
+		if (tag && tag->scope && tag->scope[0] != '\0')
 		{
-			if (0 == strncmp (name, tag->atts.entry.scope, len))
+			if (0 == strncmp (name, tag->scope, len))
 			{
 				g_ptr_array_add (local, tag);
 			}
@@ -827,7 +827,7 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 		for (i = 0; (i < local->len); ++i)
 		{
 			tag = TM_TAG (local->pdata[i]);
-			scope = tag->atts.entry.scope;
+			scope = tag->scope;
 			if (scope && 0 == strcmp (name, scope))
 			{
 				g_ptr_array_add (tags, tag);
@@ -841,23 +841,23 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 				{
 					backup = s_backup[0];
 					s_backup[0] = '\0';
-					if (0 == strcmp (name, tag->atts.entry.scope))
+					if (0 == strcmp (name, tag->scope))
 					{
 						j = local->len;
 						s_backup[0] = backup;
 						break;
 					}
 				}
-				if (tag->atts.entry.file
-					&& tag->atts.entry.file->lang == langJava)
+				if (tag->file
+					&& tag->file->lang == langJava)
 				{
-					scope = strrchr (tag->atts.entry.scope, '.');
+					scope = strrchr (tag->scope, '.');
 					if (scope)
 						var_type = scope + 1;
 				}
 				else
 				{
-					scope = strrchr (tag->atts.entry.scope, ':');
+					scope = strrchr (tag->scope, ':');
 					if (scope)
 					{
 						var_type = scope + 1;
@@ -880,8 +880,8 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 						if (i == j)
 							continue;
 						tag2 = TM_TAG (local->pdata[j]);
-						if (tag2->atts.entry.var_type &&
-							0 == strcmp (var_type, tag2->atts.entry.var_type))
+						if (tag2->var_type &&
+							0 == strcmp (var_type, tag2->var_type))
 						{
 							break;
 						}
@@ -957,11 +957,11 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 
 		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
 		{
-			if (tag->type == tm_tag_typedef_t && tag->atts.entry.var_type
-				&& tag->atts.entry.var_type[0] != '\0')
+			if (tag->type == tm_tag_typedef_t && tag->var_type
+				&& tag->var_type[0] != '\0')
 			{
 				char *tmp_name;
-				tmp_name = tag->atts.entry.var_type;
+				tmp_name = tag->var_type;
 				if (strcmp(tmp_name, new_name) == 0) {
 					new_name = NULL;
 				}
@@ -970,22 +970,22 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 				}
 				continue;
 			}
-			filename = (tag->atts.entry.file ?
-						tag->atts.entry.file->short_name : NULL);
-			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
+			filename = (tag->file ?
+						tag->file->short_name : NULL);
+			if (tag->scope && tag->scope[0] != '\0')
 			{
 				del = 1;
-				if (tag->atts.entry.file &&
-					tag->atts.entry.file->lang == langJava)
+				if (tag->file &&
+					tag->file->lang == langJava)
 				{
 					new_name = g_strdup_printf ("%s.%s",
-												tag->atts.entry.scope,
+												tag->scope,
 												new_name);
 				}
 				else
 				{
 					new_name = g_strdup_printf ("%s::%s",
-												tag->atts.entry.scope,
+												tag->scope,
 												new_name);
 				}
 			}
@@ -999,9 +999,9 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 
 	g_ptr_array_set_size (tags, 0);
 
-	if (no_definitions && tag && tag->atts.entry.file)
+	if (no_definitions && tag && tag->file)
 	{
-		local = tm_tags_extract (tag->atts.entry.file->tags_array,
+		local = tm_tags_extract (tag->file->tags_array,
 								 (tm_tag_function_t | tm_tag_prototype_t |
 								  tm_tag_member_t | tm_tag_field_t |
 								  tm_tag_method_t | tm_tag_enumerator_t));
@@ -1098,16 +1098,16 @@ find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
 	for (i = 0; (i < all->len); ++i)
 	{
 		tag = TM_TAG (all->pdata[i]);
-		if (filename && tag->atts.entry.file &&
+		if (filename && tag->file &&
 			0 != strcmp (filename,
-						 tag->atts.entry.file->short_name))
+						 tag->file->short_name))
 		{
 			continue;
 		}
 
-		if (tag && tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
+		if (tag && tag->scope && tag->scope[0] != '\0')
 		{
-			if (0 == strncmp (name, tag->atts.entry.scope, len))
+			if (0 == strncmp (name, tag->scope, len))
 			{
 				g_ptr_array_add (local, tag);
 			}
@@ -1120,7 +1120,7 @@ find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
 		for (i = 0; (i < local->len); ++i)
 		{
 			tag = TM_TAG (local->pdata[i]);
-			scope = tag->atts.entry.scope;
+			scope = tag->scope;
 
 			/* if we wanna complete something like
 			 * namespace1::
@@ -1186,28 +1186,28 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 
 		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
 		{
-			if (tag->type == tm_tag_typedef_t && tag->atts.entry.var_type
-				&& tag->atts.entry.var_type[0] != '\0')
+			if (tag->type == tm_tag_typedef_t && tag->var_type
+				&& tag->var_type[0] != '\0')
 			{
-				new_name = tag->atts.entry.var_type;
+				new_name = tag->var_type;
 				continue;
 			}
-			filename = (tag->atts.entry.file ?
-						tag->atts.entry.file->short_name : NULL);
-			if (tag->atts.entry.scope && tag->atts.entry.scope[0] != '\0')
+			filename = (tag->file ?
+						tag->file->short_name : NULL);
+			if (tag->scope && tag->scope[0] != '\0')
 			{
 				del = 1;
-				if (tag->atts.entry.file &&
-					tag->atts.entry.file->lang == langJava)
+				if (tag->file &&
+					tag->file->lang == langJava)
 				{
 					new_name = g_strdup_printf ("%s.%s",
-												tag->atts.entry.scope,
+												tag->scope,
 												new_name);
 				}
 				else
 				{
 					new_name = g_strdup_printf ("%s::%s",
-												tag->atts.entry.scope,
+												tag->scope,
 												new_name);
 				}
 			}
@@ -1221,9 +1221,9 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 
 	g_ptr_array_set_size (tags, 0);
 
-	if (tag && tag->atts.entry.file)
+	if (tag && tag->file)
 	{
-		local = tm_tags_extract (tag->atts.entry.file->tags_array,
+		local = tm_tags_extract (tag->file->tags_array,
 								 (tm_tag_function_t |
 								  tm_tag_field_t | tm_tag_enumerator_t |
 								  tm_tag_namespace_t | tm_tag_class_t ));
@@ -1311,9 +1311,9 @@ static const GPtrArray *tm_workspace_get_parents(const gchar *name)
 	while (i < parents->len)
 	{
 		tag = TM_TAG(parents->pdata[i]);
-		if ((NULL != tag->atts.entry.inheritance) && (isalpha(tag->atts.entry.inheritance[0])))
+		if ((NULL != tag->inheritance) && (isalpha(tag->inheritance[0])))
 		{
-			klasses = g_strsplit(tag->atts.entry.inheritance, ",", 10);
+			klasses = g_strsplit(tag->inheritance, ",", 10);
 			for (klass = klasses; (NULL != *klass); ++ klass)
 			{
 				for (j=0; j < parents->len; ++j)

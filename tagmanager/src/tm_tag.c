@@ -233,27 +233,27 @@ static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *
 			return FALSE;
 		tag->name = g_strdup(tag_entry->name);
 		tag->type = get_tag_type(tag_entry->kindName);
-		tag->atts.entry.local = tag_entry->isFileScope;
-		tag->atts.entry.pointerOrder = 0;	/* backward compatibility (use var_type instead) */
-		tag->atts.entry.line = tag_entry->lineNumber;
+		tag->local = tag_entry->isFileScope;
+		tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
+		tag->line = tag_entry->lineNumber;
 		if (NULL != tag_entry->extensionFields.arglist)
-			tag->atts.entry.arglist = g_strdup(tag_entry->extensionFields.arglist);
+			tag->arglist = g_strdup(tag_entry->extensionFields.arglist);
 		if ((NULL != tag_entry->extensionFields.scope[1]) &&
 			(isalpha(tag_entry->extensionFields.scope[1][0]) ||
 			 tag_entry->extensionFields.scope[1][0] == '_' ||
 			 tag_entry->extensionFields.scope[1][0] == '$'))
-			tag->atts.entry.scope = g_strdup(tag_entry->extensionFields.scope[1]);
+			tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
 		if (tag_entry->extensionFields.inheritance != NULL)
-			tag->atts.entry.inheritance = g_strdup(tag_entry->extensionFields.inheritance);
+			tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
 		if (tag_entry->extensionFields.varType != NULL)
-			tag->atts.entry.var_type = g_strdup(tag_entry->extensionFields.varType);
+			tag->var_type = g_strdup(tag_entry->extensionFields.varType);
 		if (tag_entry->extensionFields.access != NULL)
-			tag->atts.entry.access = get_tag_access(tag_entry->extensionFields.access);
+			tag->access = get_tag_access(tag_entry->extensionFields.access);
 		if (tag_entry->extensionFields.implementation != NULL)
-			tag->atts.entry.impl = get_tag_impl(tag_entry->extensionFields.implementation);
-		if ((tm_tag_macro_t == tag->type) && (NULL != tag->atts.entry.arglist))
+			tag->impl = get_tag_impl(tag_entry->extensionFields.implementation);
+		if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
 			tag->type = tm_tag_macro_with_arg_t;
-		tag->atts.entry.file = file;
+		tag->file = file;
 		return TRUE;
 	}
 }
@@ -316,28 +316,28 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 			switch (*start)
 			{
 				case TA_LINE:
-					tag->atts.entry.line = atol((gchar*)start + 1);
+					tag->line = atol((gchar*)start + 1);
 					break;
 				case TA_LOCAL:
-					tag->atts.entry.local = atoi((gchar*)start + 1);
+					tag->local = atoi((gchar*)start + 1);
 					break;
 				case TA_TYPE:
 					tag->type = (TMTagType) atoi((gchar*)start + 1);
 					break;
 				case TA_ARGLIST:
-					tag->atts.entry.arglist = g_strdup((gchar*)start + 1);
+					tag->arglist = g_strdup((gchar*)start + 1);
 					break;
 				case TA_SCOPE:
-					tag->atts.entry.scope = g_strdup((gchar*)start + 1);
+					tag->scope = g_strdup((gchar*)start + 1);
 					break;
 				case TA_POINTER:
-					tag->atts.entry.pointerOrder = atoi((gchar*)start + 1);
+					tag->pointerOrder = atoi((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
-					tag->atts.entry.var_type = g_strdup((gchar*)start + 1);
+					tag->var_type = g_strdup((gchar*)start + 1);
 					break;
 				case TA_INHERITS:
-					tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
+					tag->inheritance = g_strdup((gchar*)start + 1);
 					break;
 				case TA_TIME:  /* Obsolete */
 					break;
@@ -346,10 +346,10 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 				case TA_INACTIVE:  /* Obsolete */
 					break;
 				case TA_ACCESS:
-					tag->atts.entry.access = *(start + 1);
+					tag->access = *(start + 1);
 					break;
 				case TA_IMPL:
-					tag->atts.entry.impl = *(start + 1);
+					tag->impl = *(start + 1);
 					break;
 				default:
 #ifdef GEANY_DEBUG
@@ -362,7 +362,7 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	}
 	if (NULL == tag->name)
 		return FALSE;
-	tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
@@ -397,8 +397,8 @@ static gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *
 
 			if (field_len >= 1) tag->name = g_strdup(fields[0]);
 			else tag->name = NULL;
-			if (field_len >= 2 && fields[1] != NULL) tag->atts.entry.var_type = g_strdup(fields[1]);
-			if (field_len >= 3 && fields[2] != NULL) tag->atts.entry.arglist = g_strdup(fields[2]);
+			if (field_len >= 2 && fields[1] != NULL) tag->var_type = g_strdup(fields[1]);
+			if (field_len >= 3 && fields[2] != NULL) tag->arglist = g_strdup(fields[2]);
 			tag->type = tm_tag_prototype_t;
 			g_strfreev(fields);
 		}
@@ -406,7 +406,7 @@ static gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *
 
 	if (NULL == tag->name)
 		return FALSE;
-	tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
@@ -455,7 +455,7 @@ static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE
 		}
 	}
 	else /* assume a line */
-		tag->atts.entry.line = atol(p);
+		tag->line = atol(p);
 	tab = strstr(p, ";\"");
 	/* read extension fields */
 	if (tab)
@@ -522,35 +522,35 @@ static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE
 			}
 			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
 			{
-				g_free(tag->atts.entry.inheritance);
-				tag->atts.entry.inheritance = g_strdup(value);
+				g_free(tag->inheritance);
+				tag->inheritance = g_strdup(value);
 			}
 			else if (0 == strcmp(key, "implementation")) /* implementation limit */
-				tag->atts.entry.impl = get_tag_impl(value);
+				tag->impl = get_tag_impl(value);
 			else if (0 == strcmp(key, "line")) /* line */
-				tag->atts.entry.line = atol(value);
+				tag->line = atol(value);
 			else if (0 == strcmp(key, "access")) /* access */
-				tag->atts.entry.access = get_tag_access(value);
+				tag->access = get_tag_access(value);
 			else if (0 == strcmp(key, "class") ||
 					 0 == strcmp(key, "enum") ||
 					 0 == strcmp(key, "function") ||
 					 0 == strcmp(key, "struct") ||
 					 0 == strcmp(key, "union")) /* Name of the class/enum/function/struct/union in which this tag is a member */
 			{
-				g_free(tag->atts.entry.scope);
-				tag->atts.entry.scope = g_strdup(value);
+				g_free(tag->scope);
+				tag->scope = g_strdup(value);
 			}
 			else if (0 == strcmp(key, "file")) /* static (local) tag */
-				tag->atts.entry.local = TRUE;
+				tag->local = TRUE;
 			else if (0 == strcmp(key, "signature")) /* arglist */
 			{
-				g_free(tag->atts.entry.arglist);
-				tag->atts.entry.arglist = g_strdup(value);
+				g_free(tag->arglist);
+				tag->arglist = g_strdup(value);
 			}
 		}
 	}
 
-	tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
@@ -583,7 +583,7 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
 		TAG_FREE(tag);
 		return NULL;
 	}
-	tag->atts.entry.lang = mode;
+	tag->lang = mode;
 	return tag;
 }
 
@@ -599,24 +599,24 @@ gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
 	fprintf(fp, "%s", tag->name);
 	if (attrs & tm_tag_attr_type_t)
 		fprintf(fp, "%c%d", TA_TYPE, tag->type);
-	if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->atts.entry.arglist))
-		fprintf(fp, "%c%s", TA_ARGLIST, tag->atts.entry.arglist);
+	if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->arglist))
+		fprintf(fp, "%c%s", TA_ARGLIST, tag->arglist);
 	if (attrs & tm_tag_attr_line_t)
-		fprintf(fp, "%c%ld", TA_LINE, tag->atts.entry.line);
+		fprintf(fp, "%c%ld", TA_LINE, tag->line);
 	if (attrs & tm_tag_attr_local_t)
-		fprintf(fp, "%c%d", TA_LOCAL, tag->atts.entry.local);
-	if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->atts.entry.scope))
-		fprintf(fp, "%c%s", TA_SCOPE, tag->atts.entry.scope);
-	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->atts.entry.inheritance))
-		fprintf(fp, "%c%s", TA_INHERITS, tag->atts.entry.inheritance);
+		fprintf(fp, "%c%d", TA_LOCAL, tag->local);
+	if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->scope))
+		fprintf(fp, "%c%s", TA_SCOPE, tag->scope);
+	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->inheritance))
+		fprintf(fp, "%c%s", TA_INHERITS, tag->inheritance);
 	if (attrs & tm_tag_attr_pointer_t)
-		fprintf(fp, "%c%d", TA_POINTER, tag->atts.entry.pointerOrder);
-	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->atts.entry.var_type))
-		fprintf(fp, "%c%s", TA_VARTYPE, tag->atts.entry.var_type);
-	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->atts.entry.access))
-		fprintf(fp, "%c%c", TA_ACCESS, tag->atts.entry.access);
-	if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->atts.entry.impl))
-		fprintf(fp, "%c%c", TA_IMPL, tag->atts.entry.impl);
+		fprintf(fp, "%c%d", TA_POINTER, tag->pointerOrder);
+	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->var_type))
+		fprintf(fp, "%c%s", TA_VARTYPE, tag->var_type);
+	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->access))
+		fprintf(fp, "%c%c", TA_ACCESS, tag->access);
+	if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->impl))
+		fprintf(fp, "%c%c", TA_IMPL, tag->impl);
 
 	if (fprintf(fp, "\n"))
 		return TRUE;
@@ -632,10 +632,10 @@ gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
 static void tm_tag_destroy(TMTag *tag)
 {
 	g_free(tag->name);
-	g_free(tag->atts.entry.arglist);
-	g_free(tag->atts.entry.scope);
-	g_free(tag->atts.entry.inheritance);
-	g_free(tag->atts.entry.var_type);
+	g_free(tag->arglist);
+	g_free(tag->scope);
+	g_free(tag->inheritance);
+	g_free(tag->var_type);
 }
 
 
@@ -708,27 +708,27 @@ static int tm_tag_compare(const void *ptr1, const void *ptr2)
 					return returnval;
 				break;
 			case tm_tag_attr_file_t:
-				if (0 != (returnval = (t1->atts.entry.file - t2->atts.entry.file)))
+				if (0 != (returnval = (t1->file - t2->file)))
 					return returnval;
 				break;
 			case tm_tag_attr_scope_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.scope, ""), FALLBACK(t2->atts.entry.scope, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->scope, ""), FALLBACK(t2->scope, ""))))
 					return returnval;
 				break;
 			case tm_tag_attr_arglist_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.arglist, ""), FALLBACK(t2->atts.entry.arglist, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->arglist, ""), FALLBACK(t2->arglist, ""))))
 				{
-					int line_diff = (t1->atts.entry.line - t2->atts.entry.line);
+					int line_diff = (t1->line - t2->line);
 
 					return line_diff ? line_diff : returnval;
 				}
 				break;
 			case tm_tag_attr_vartype_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.var_type, ""), FALLBACK(t2->atts.entry.var_type, ""))))
+				if (0 != (returnval = strcmp(FALLBACK(t1->var_type, ""), FALLBACK(t2->var_type, ""))))
 					return returnval;
 				break;
 			case tm_tag_attr_line_t:
-				if (0 != (returnval = (t1->atts.entry.line - t2->atts.entry.line)))
+				if (0 != (returnval = (t1->line - t2->line)))
 					return returnval;
 				break;
 		}
@@ -809,7 +809,7 @@ GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_a
 	{
 		TMTag *tag = tags_array->pdata[i];
 		
-		if (tag != NULL && tag->atts.entry.file == source_file)
+		if (tag != NULL && tag->file == source_file)
 			tags_array->pdata[i] = NULL;
 	}
 	tm_tags_prune(tags_array);
@@ -1121,7 +1121,7 @@ TMTagType tm_tag_name_type(const char* tag_name)
 static const char *tm_tag_impl_name(TMTag *tag)
 {
 	g_return_val_if_fail(tag, NULL);
-	if (TAG_IMPL_VIRTUAL == tag->atts.entry.impl)
+	if (TAG_IMPL_VIRTUAL == tag->impl)
 		return "virtual";
 	else
 		return NULL;
@@ -1130,11 +1130,11 @@ static const char *tm_tag_impl_name(TMTag *tag)
 static const char *tm_tag_access_name(TMTag *tag)
 {
 	g_return_val_if_fail(tag, NULL);
-	if (TAG_ACCESS_PUBLIC == tag->atts.entry.access)
+	if (TAG_ACCESS_PUBLIC == tag->access)
 		return "public";
-	else if (TAG_ACCESS_PROTECTED == tag->atts.entry.access)
+	else if (TAG_ACCESS_PROTECTED == tag->access)
 		return "protected";
-	else if (TAG_ACCESS_PRIVATE == tag->atts.entry.access)
+	else if (TAG_ACCESS_PRIVATE == tag->access)
 		return "private";
 	else
 		return NULL;
@@ -1159,18 +1159,18 @@ void tm_tag_print(TMTag *tag, FILE *fp)
 		fprintf(fp, "%s ", impl);
 	if (type)
 		fprintf(fp, "%s ", type);
-	if (tag->atts.entry.var_type)
-		fprintf(fp, "%s ", tag->atts.entry.var_type);
-	if (tag->atts.entry.scope)
-		fprintf(fp, "%s::", tag->atts.entry.scope);
+	if (tag->var_type)
+		fprintf(fp, "%s ", tag->var_type);
+	if (tag->scope)
+		fprintf(fp, "%s::", tag->scope);
 	fprintf(fp, "%s", tag->name);
-	if (tag->atts.entry.arglist)
-		fprintf(fp, "%s", tag->atts.entry.arglist);
-	if (tag->atts.entry.inheritance)
-		fprintf(fp, " : from %s", tag->atts.entry.inheritance);
-	if ((tag->atts.entry.file) && (tag->atts.entry.line > 0))
-		fprintf(fp, "[%s:%ld]", tag->atts.entry.file->file_name
-		  , tag->atts.entry.line);
+	if (tag->arglist)
+		fprintf(fp, "%s", tag->arglist);
+	if (tag->inheritance)
+		fprintf(fp, " : from %s", tag->inheritance);
+	if ((tag->file) && (tag->line > 0))
+		fprintf(fp, "[%s:%ld]", tag->file->file_name
+		  , tag->line);
 	fprintf(fp, "\n");
 }
 
@@ -1197,9 +1197,9 @@ gint tm_tag_scope_depth(const TMTag *t)
 {
 	gint depth;
 	char *s;
-	if(!(t && t->atts.entry.scope))
+	if(!(t && t->scope))
 		return 0;
-	for (s = t->atts.entry.scope, depth = 0; s; s = strstr(s, "::"))
+	for (s = t->scope, depth = 0; s; s = strstr(s, "::"))
 	{
 		++ depth;
 		++ s;

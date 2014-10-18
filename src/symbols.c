@@ -266,10 +266,10 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			/* tag->atts.file.lang contains the line of the tag if tag->atts.entry.file 
+			/* tag->atts.file.lang contains the line of the tag if tag->file 
 			 * is not NULL (geany document); otherwise it's a global tag with lang 
-			 * information in tag->atts.entry.lang */
-			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.entry.lang;
+			 * information in tag->lang */
+			tag_lang = (tag->file) ? tag->file->lang : tag->lang;
 
 			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
 			 * e.g. PHP classes in C++ files
@@ -351,8 +351,8 @@ GString *symbols_get_macro_list(gint lang)
 			for (i = 0; ((i < tags->len) && (i < editor_prefs.autocompletion_max_entries)); ++i)
 			{
 				tag = TM_TAG(tags->pdata[i]);
-				tag_lang = (tag->atts.entry.file) ?
-					tag->atts.entry.file->lang : tag->atts.entry.lang;
+				tag_lang = (tag->file) ?
+					tag->file->lang : tag->lang;
 
 				if (tag_lang == lang)
 					g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
@@ -466,7 +466,7 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 	ret = strcmp(tag_a->name, tag_b->name);
 	if (ret == 0)
 	{
-		return tag_a->atts.entry.line - tag_b->atts.entry.line;
+		return tag_a->line - tag_b->line;
 	}
 	return ret;
 }
@@ -482,15 +482,15 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 	if (a == NULL || b == NULL)
 		return 0;
 
-	ret = tag_a->atts.entry.line - tag_b->atts.entry.line;
+	ret = tag_a->line - tag_b->line;
 	if (ret == 0)
 	{
-		if (tag_a->atts.entry.scope == NULL)
-			return -(tag_a->atts.entry.scope != tag_b->atts.entry.scope);
-		if (tag_b->atts.entry.scope == NULL)
-			return tag_a->atts.entry.scope != tag_b->atts.entry.scope;
+		if (tag_a->scope == NULL)
+			return -(tag_a->scope != tag_b->scope);
+		if (tag_b->scope == NULL)
+			return tag_a->scope != tag_b->scope;
 		else
-			return strcmp(tag_a->atts.entry.scope, tag_b->atts.entry.scope);
+			return strcmp(tag_a->scope, tag_b->scope);
 	}
 	return ret;
 }
@@ -1035,7 +1035,7 @@ static void hide_empty_rows(GtkTreeStore *store)
 static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
 {
 	gchar *utf8_name;
-	const gchar *scope = tag->atts.entry.scope;
+	const gchar *scope = tag->scope;
 	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
 	gboolean doc_is_utf8 = FALSE;
 
@@ -1076,7 +1076,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (! doc_is_utf8)
 		g_free(utf8_name);
 
-	g_string_append_printf(buffer, " [%lu]", tag->atts.entry.line);
+	g_string_append_printf(buffer, " [%lu]", tag->line);
 
 	return buffer->str;
 }
@@ -1106,7 +1106,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 /* find the last word in "foo::bar::blah", e.g. "blah" */
 static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 {
-	const gchar *scope = tag->atts.entry.scope;
+	const gchar *scope = tag->scope;
 	const gchar *separator = symbols_get_context_separator(ft_id);
 	const gchar *str, *ptr;
 
@@ -1224,9 +1224,9 @@ static gboolean tag_equal(gconstpointer v1, gconstpointer v2)
 	const TMTag *t2 = v2;
 
 	return (t1->type == t2->type && strcmp(t1->name, t2->name) == 0 &&
-			utils_str_equal(t1->atts.entry.scope, t2->atts.entry.scope) &&
+			utils_str_equal(t1->scope, t2->scope) &&
 			/* include arglist in match to support e.g. C++ overloading */
-			utils_str_equal(t1->atts.entry.arglist, t2->atts.entry.arglist));
+			utils_str_equal(t1->arglist, t2->arglist));
 }
 
 
@@ -1240,15 +1240,15 @@ static guint tag_hash(gconstpointer v)
 	h = (h << 5) + h + tag->type;
 	for (p = tag->name; *p != '\0'; p++)
 		h = (h << 5) + h + *p;
-	if (tag->atts.entry.scope)
+	if (tag->scope)
 	{
-		for (p = tag->atts.entry.scope; *p != '\0'; p++)
+		for (p = tag->scope; *p != '\0'; p++)
 			h = (h << 5) + h + *p;
 	}
 	/* for e.g. C++ overloading */
-	if (tag->atts.entry.arglist)
+	if (tag->arglist)
 	{
-		for (p = tag->atts.entry.arglist; *p != '\0'; p++)
+		for (p = tag->arglist; *p != '\0'; p++)
 			h = (h << 5) + h + *p;
 	}
 
@@ -1346,7 +1346,7 @@ static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
 		glong delta;
 		data = node->data;
 
-#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->atts.entry.line - (glong) TM_TAG(b)->atts.entry.line)
+#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->line - (glong) TM_TAG(b)->line)
 
 		delta = TAG_DELTA(((GList *) node->data)->data, tag);
 		for (node = node->next; node; node = node->next)
@@ -1540,7 +1540,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 						gtk_tree_model_get(GTK_TREE_MODEL(store), node->data,
 								SYMBOLS_COLUMN_TAG, &parent_tag, -1);
 
-						d = tag->atts.entry.line - parent_tag->atts.entry.line;
+						d = tag->line - parent_tag->line;
 						if (! parent_search || (d >= 0 && d < delta))
 						{
 							delta = d;
@@ -1614,7 +1614,7 @@ static gboolean tag_has_missing_parent(const TMTag *tag, GtkTreeStore *store,
 		GtkTreeIter *iter)
 {
 	/* if the tag has a parent tag, it should be at depth >= 2 */
-	return !EMPTY(tag->atts.entry.scope) &&
+	return !EMPTY(tag->scope) &&
 		gtk_tree_store_iter_depth(store, iter) == 1;
 }
 
@@ -1664,7 +1664,7 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 				if (tag_a && tag_b)
 					if (!sort_by_name ||
 						(utils_str_equal(tag_a->name, tag_b->name) &&
-							utils_str_equal(tag_a->atts.entry.scope, tag_b->atts.entry.scope)))
+							utils_str_equal(tag_a->scope, tag_b->scope)))
 						cmp = compare_symbol_lines(tag_a, tag_b);
 			}
 		}
@@ -1948,13 +1948,13 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 	if (tmtag != NULL)
 	{
 		GeanyDocument *new_doc = document_find_by_real_path(
-			tmtag->atts.entry.file->file_name);
+			tmtag->file->file_name);
 
 		if (new_doc)
 		{
 			/* If we are already on the tag line, swap definition/declaration */
 			if (new_doc == old_doc &&
-				tmtag->atts.entry.line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
+				tmtag->line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
 			{
 				if (goto_tag(name, !definition))
 					return TRUE;
@@ -1963,10 +1963,10 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 		else
 		{
 			/* not found in opened document, should open */
-			new_doc = document_open_file(tmtag->atts.entry.file->file_name, FALSE, NULL, NULL);
+			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
 		}
 
-		if (navqueue_goto_line(old_doc, new_doc, tmtag->atts.entry.line))
+		if (navqueue_goto_line(old_doc, new_doc, tmtag->line))
 			return TRUE;
 	}
 	return FALSE;
@@ -2135,7 +2135,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_
 
 		if (tag)
 		{
-			gint tag_line = tag->atts.entry.line - 1;
+			gint tag_line = tag->line - 1;
 			gint last_child = line + 1;
 
 			/* if it may be a false positive because we're inside a fold level not inside anything
@@ -2150,8 +2150,8 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_
 
 			if (line <= last_child)
 			{
-				if (tag->atts.entry.scope)
-					*tagname = g_strconcat(tag->atts.entry.scope,
+				if (tag->scope)
+					*tagname = g_strconcat(tag->scope,
 							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
 				else
 					*tagname = g_strdup(tag->name);

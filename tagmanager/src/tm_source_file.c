@@ -136,8 +136,8 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 	if (tags != NULL && count == 1)
 	{
 		tag = tags[0];
-		g_free(tag->atts.entry.arglist);
-		tag->atts.entry.arglist = g_strdup(arglist);
+		g_free(tag->arglist);
+		tag->arglist = g_strdup(arglist);
 	}
 }
 

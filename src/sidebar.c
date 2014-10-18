@@ -904,7 +904,7 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 		if (! tag)
 			return FALSE;
 
-		line = tag->atts.entry.line;
+		line = tag->line;
 		if (line > 0)
 		{
 			GeanyDocument *doc = document_get_current();

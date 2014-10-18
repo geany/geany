@@ -124,26 +124,22 @@ typedef struct _TMTag
 {
 	char *name; /**< Name of tag */
 	TMTagType type; /**< Tag Type */
-	union
-	{
-		/** These are *real* tag attributes */
-		struct
-		{
-			TMSourceFile *file; /**< File in which the tag occurs; NULL for global tags */
-			gulong line; /**< Line number of the tag */
-			gboolean local; /**< Is the tag of local scope */
-			guint pointerOrder;
-			char *arglist; /**< Argument list (functions/prototypes/macros) */
-			char *scope; /**< Scope of tag */
-			char *inheritance; /**< Parent classes */
-			char *var_type; /**< Variable type (maps to struct for typedefs) */
-			char access; /**< Access type (public/protected/private/etc.) */
-			char impl; /**< Implementation (e.g. virtual) */
-			
-			langType lang; /**< Programming language of the file - set only for
-								global tags when the file member is NULL */
-		} entry;
-	} atts;
+	
+	/** These are tag attributes */
+	TMSourceFile *file; /**< File in which the tag occurs; NULL for global tags */
+	gulong line; /**< Line number of the tag */
+	gboolean local; /**< Is the tag of local scope */
+	guint pointerOrder;
+	char *arglist; /**< Argument list (functions/prototypes/macros) */
+	char *scope; /**< Scope of tag */
+	char *inheritance; /**< Parent classes */
+	char *var_type; /**< Variable type (maps to struct for typedefs) */
+	char access; /**< Access type (public/protected/private/etc.) */
+	char impl; /**< Implementation (e.g. virtual) */
+	
+	langType lang; /**< Programming language of the file - set only for
+						global tags when the file member is NULL */
+
 	gint refcount; /**< the reference count of the tag */
 } TMTag;
 
