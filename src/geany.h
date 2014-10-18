@@ -51,11 +51,6 @@ G_BEGIN_DECLS
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
 
-
-/* prototype is here so that all files can use it. */
-void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
-
-
 #ifndef G_GNUC_WARN_UNUSED_RESULT
 #define G_GNUC_WARN_UNUSED_RESULT
 #endif
@@ -64,6 +59,14 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 #ifndef GEANY
 # define GEANY(symbol_name) symbol_name
 #endif
+
+
+#ifdef GEANY_PRIVATE
+
+/* prototype is here so that all files can use it. */
+void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

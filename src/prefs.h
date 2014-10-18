@@ -42,9 +42,6 @@ typedef struct GeanyPrefs
 }
 GeanyPrefs;
 
-extern GeanyPrefs prefs;
-
-
 /** Tools preferences */
 typedef struct GeanyToolPrefs
 {
@@ -55,12 +52,18 @@ typedef struct GeanyToolPrefs
 }
 GeanyToolPrefs;
 
-extern GeanyToolPrefs tool_prefs;
 
+#ifdef GEANY_PRIVATE
+
+extern GeanyPrefs prefs;
+
+extern GeanyToolPrefs tool_prefs;
 
 void prefs_show_dialog(void);
 
 void prefs_kb_search_name(const gchar *search);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

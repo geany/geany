@@ -19,9 +19,6 @@ extern "C"
 {
 #endif
 
-/* Evaluates to X is X is defined, else evaluates to Y */
-#define FALLBACK(X,Y) (X)?(X):(Y)
-
 /* Macro to cast a pointer to (TMWorkObject *) */
 #define TM_WORK_OBJECT(work_object) ((TMWorkObject *) work_object)
 
@@ -40,6 +37,34 @@ typedef struct TMWorkObject
 	time_t analyze_time; /*!< UNUSED Time when the object was last analyzed */
 	GPtrArray *tags_array; /*!< Tags obtained by parsing the object */
 } TMWorkObject;
+
+
+/*!
+ Given a file name, returns a newly allocated string containing the realpath()
+ of the file.
+ \param file_name The original file_name
+ \return A newly allocated string containing the real path to the file. NULL if none is available.
+*/
+gchar *tm_get_real_path(const gchar *file_name);
+
+
+/*!
+ Deallocates a work object and it's component structures. The user can call this
+ function directly since it will automatically call the correct deallocator function
+ of the derived class if required.
+ \param work_object Pointer to a work object or an object derived from it.
+*/
+void tm_work_object_free(gpointer work_object);
+
+
+#ifdef GEANY_PRIVATE
+
+/* Evaluates to X is X is defined, else evaluates to Y */
+#define FALLBACK(X,Y) (X)?(X):(Y)
+
+#define TM_OBJECT_TYPE(work_object) ((TMWorkObject *) work_object)->type /*< Type of the work object */
+#define TM_OBJECT_FILE(work_object) ((TMWorkObject *) work_object)->file_name /*< File name of the work object */
+#define TM_OBJECT_TAGS(work_object) ((TMWorkObject *) work_object)->tags_array /*< Tag array of the work object */
 
 /* Prototype of the update function required to be written by all classes
  derived from TMWorkObject. The function should take a pointer to the
@@ -68,22 +93,10 @@ typedef TMWorkObject *(*TMFindFunc) (TMWorkObject *work_object, const char *file
 */
 typedef struct _TMWorkObjectClass
 {
-	GFreeFunc free_func; /*!< Function to free the derived object */
-	TMUpdateFunc update_func; /*!< Function to update the derived object */
-	TMFindFunc find_func; /*!< Function to locate contained work objects */
+	GFreeFunc free_func; /* Function to free the derived object */
+	TMUpdateFunc update_func; /* Function to update the derived object */
+	TMFindFunc find_func; /* Function to locate contained work objects */
 } TMWorkObjectClass;
-
-#define TM_OBJECT_TYPE(work_object) ((TMWorkObject *) work_object)->type /*< Type of the work object */
-#define TM_OBJECT_FILE(work_object) ((TMWorkObject *) work_object)->file_name /*< File name of the work object */
-#define TM_OBJECT_TAGS(work_object) ((TMWorkObject *) work_object)->tags_array /*< Tag array of the work object */
-
-/*!
- Given a file name, returns a newly allocated string containing the realpath()
- of the file.
- \param file_name The original file_name
- \return A newly allocated string containing the real path to the file. NULL if none is available.
-*/
-gchar *tm_get_real_path(const gchar *file_name);
 
 /*
  Initializes the work object structure. This function should be called by the
@@ -121,14 +134,6 @@ time_t tm_get_file_timestamp(const char *file_name);
  user shouldn't have to call this function.
 */
 void tm_work_object_destroy(TMWorkObject *work_object);
-
-/*!
- Deallocates a work object and it's component structures. The user can call this
- function directly since it will automatically call the correct deallocator function
- of the derived class if required.
- \param work_object Pointer to a work object or an object derived from it.
-*/
-void tm_work_object_free(gpointer work_object);
 
 /*
  This function should be called exactly once by all classes derived from TMWorkObject,
@@ -176,6 +181,8 @@ TMWorkObject *tm_work_object_find(TMWorkObject *work_object, const char *file_na
 
 /* Dumps the contents of a work object - useful for debugging */
 void tm_work_object_dump(const TMWorkObject *w);
+
+#endif /* GEANY_PRIVATE */
 
 #ifdef __cplusplus
 }

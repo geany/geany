@@ -33,10 +33,6 @@
 
 G_BEGIN_DECLS
 
-struct GeanyDocument; /* document.h includes this header */
-struct _ScintillaObject;
-struct Sci_TextToFind;
-
 typedef enum GeanyFindFlags
 {
 	GEANY_FIND_MATCHCASE = 1 << 0,
@@ -46,23 +42,6 @@ typedef enum GeanyFindFlags
 	GEANY_FIND_MULTILINE = 1 << 4
 }
 GeanyFindFlags;
-
-/* the flags given in the search dialog for "find next", also used by the search bar */
-typedef struct GeanySearchData
-{
-	gchar			*text;
-	GeanyFindFlags	flags;
-	gboolean		backwards;
-	/* set to TRUE when text was set by a search bar callback to keep track of
-	 * search bar background colour */
-	gboolean		search_bar;
-	/* text as it was entered by user */
-	gchar			*original_text;
-}
-GeanySearchData;
-
-extern GeanySearchData search_data;
-
 
 enum GeanyFindSelOptions
 {
@@ -83,9 +62,6 @@ typedef struct GeanySearchPrefs
 }
 GeanySearchPrefs;
 
-extern GeanySearchPrefs search_prefs;
-
-
 typedef struct GeanyMatchInfo
 {
 	GeanyFindFlags flags;
@@ -101,6 +77,34 @@ typedef struct GeanyMatchInfo
 }
 GeanyMatchInfo;
 
+void search_show_find_in_files_dialog(const gchar *dir);
+
+
+#ifdef GEANY_PRIVATE
+
+struct GeanyDocument; /* document.h includes this header */
+struct _ScintillaObject;
+struct Sci_TextToFind;
+
+
+/* the flags given in the search dialog for "find next", also used by the search bar */
+typedef struct GeanySearchData
+{
+	gchar			*text;
+	GeanyFindFlags	flags;
+	gboolean		backwards;
+	/* set to TRUE when text was set by a search bar callback to keep track of
+	 * search bar background colour */
+	gboolean		search_bar;
+	/* text as it was entered by user */
+	gchar			*original_text;
+}
+GeanySearchData;
+
+extern GeanySearchData search_data;
+
+extern GeanySearchPrefs search_prefs;
+
 
 void search_init(void);
 
@@ -109,8 +113,6 @@ void search_finalize(void);
 void search_show_find_dialog(void);
 
 void search_show_replace_dialog(void);
-
-void search_show_find_in_files_dialog(const gchar *dir);
 
 void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir);
 
@@ -134,6 +136,8 @@ gint search_replace_match(struct _ScintillaObject *sci, const GeanyMatchInfo *ma
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,
 		GeanyFindFlags flags, const gchar *replace_text);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

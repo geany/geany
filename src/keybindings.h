@@ -60,9 +60,6 @@ typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
 typedef struct GeanyKeyGroup GeanyKeyGroup;
 
 
-extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
-
-
 /* Note: we don't need to break the plugin ABI when appending keybinding or keygroup IDs,
  * just make sure to insert immediately before the _COUNT item, so
  * the existing enum values stay the same. */
@@ -240,6 +237,20 @@ enum GeanyKeyBindingID
 };
 
 
+void keybindings_send_command(guint group_id, guint key_id);
+
+GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
+		GeanyKeyCallback callback, guint key, GdkModifierType mod,
+		const gchar *name, const gchar *label, GtkWidget *menu_item);
+
+GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
+
+
+#ifdef GEANY_PRIVATE
+
+extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
+
+
 void keybindings_init(void);
 
 void keybindings_load_keyfile(void);
@@ -253,17 +264,9 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 
 void keybindings_free_group(GeanyKeyGroup *group);
 
-GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
-		GeanyKeyCallback callback, guint key, GdkModifierType mod,
-		const gchar *name, const gchar *label, GtkWidget *menu_item);
-
-GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
-
 gchar *keybindings_get_label(GeanyKeyBinding *kb);
 
 void keybindings_update_combo(GeanyKeyBinding *kb, guint key, GdkModifierType mods);
-
-void keybindings_send_command(guint group_id, guint key_id);
 
 GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id);
 
@@ -275,6 +278,8 @@ void keybindings_show_shortcuts(void);
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb);
 
 void keybindings_dialog_show_prefs_scroll(const gchar *name);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

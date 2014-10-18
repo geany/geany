@@ -44,22 +44,13 @@ typedef struct
 	gboolean inactive; /*!< Whether this file should be scanned for tags */
 } TMSourceFile;
 
-
-/* Initializes a TMSourceFile structure from a file name. */
-gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
-							 gboolean update, const char *name);
-
-/* Initializes a TMSourceFile structure and returns a pointer to it. */
+/*! Initializes a TMSourceFile structure and returns a pointer to it. 
+ * \param file_name The file name.
+ * \param update Update the tag array of the file.
+ * \param name Name of the used programming language, NULL for autodetection.
+ * \return The created TMSourceFile object.
+ * */
 TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name);
-
-/* Destroys the contents of the source file. Note that the tags are owned by the
- source file and are also destroyed when the source file is destroyed. If pointers
- to these tags are used elsewhere, then those tag arrays should be rebuilt.
-*/
-void tm_source_file_destroy(TMSourceFile *source_file);
-
-/* Frees a TMSourceFile structure, including all contents */
-void tm_source_file_free(gpointer source_file);
 
 /*! Updates the source file by reparsing if the modification time is greater
  than the timestamp in the structure, or if force is TRUE. The tags array and
@@ -78,7 +69,23 @@ void tm_source_file_free(gpointer source_file);
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
   , gboolean recurse, gboolean update_parent);
 
-/*! Updates the source file by reparsing the text-buffer passed as parameter.
+
+#ifdef GEANY_PRIVATE
+
+/* Initializes a TMSourceFile structure from a file name. */
+gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
+							 gboolean update, const char *name);
+
+/* Destroys the contents of the source file. Note that the tags are owned by the
+ source file and are also destroyed when the source file is destroyed. If pointers
+ to these tags are used elsewhere, then those tag arrays should be rebuilt.
+*/
+void tm_source_file_destroy(TMSourceFile *source_file);
+
+/* Frees a TMSourceFile structure, including all contents */
+void tm_source_file_free(gpointer source_file);
+
+/* Updates the source file by reparsing the text-buffer passed as parameter.
  Ctags will use a parsing based on buffer instead of on files.
  You should call this function when you don't want a previous saving of the file
  you're editing. It's useful for a "real-time" updating of the tags.
@@ -152,6 +159,8 @@ gint tm_source_file_get_named_lang(const gchar *name);
 
 /* Set the argument list of tag identified by its name */
 void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist);
+
+#endif /* GEANY_PRIVATE */
 
 #ifdef __cplusplus
 }

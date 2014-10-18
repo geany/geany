@@ -162,10 +162,22 @@ extern GPtrArray *filetypes_array;
  * @see filetypes_index(). */
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
 
-extern GSList *filetypes_by_title;
 
+GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name);
+
+GeanyFiletype *filetypes_index(gint idx);
+
+const gchar *filetypes_get_display_name(GeanyFiletype *ft);
+
+const GSList *filetypes_get_sorted_by_name(void);
+
+
+#ifdef GEANY_PRIVATE
+
+extern GSList *filetypes_by_title;
+
 
 GeanyFiletype *filetypes_find(GCompareFunc predicate, gpointer user_data);
 
@@ -179,17 +191,9 @@ void filetypes_reload_extensions(void);
 void filetypes_reload(void);
 
 
-GeanyFiletype *filetypes_index(gint idx);
-
-const GSList *filetypes_get_sorted_by_name(void);
-
-const gchar *filetypes_get_display_name(GeanyFiletype *ft);
-
 GeanyFiletype *filetypes_detect_from_document(struct GeanyDocument *doc);
 
 GeanyFiletype *filetypes_detect_from_extension(const gchar *utf8_filename);
-
-GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename);
 
 void filetypes_free_types(void);
 
@@ -210,6 +214,8 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 
 gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean single_first,
 		const gchar **co, const gchar **cc);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

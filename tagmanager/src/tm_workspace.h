@@ -21,7 +21,6 @@ extern "C"
 #endif
 
 
-
 /*! The Tag Manager Workspace. This is a singleton work object containing a list
  of work objects - individual source files. There is also a global tag list 
  which can be loaded or created. This contains global tags gleaned from 
@@ -34,6 +33,23 @@ typedef struct
     GPtrArray *work_objects; /*!< An array of TMWorkObject pointers */
 } TMWorkspace;
 
+/*! Adds a work object (source file) to the workspace.
+ \param work_object The work object to add to the workspace.
+ \return TRUE on success, FALSE on failure (e.g. object already exixts).
+*/
+gboolean tm_workspace_add_object(TMWorkObject *work_object);
+
+/*! Removes a member object from the workspace if it exists.
+ \param work_object Pointer to the work object to be removed.
+ \param do_free Whether the work object is to be freed as well.
+ \param update Whether to update workspace objects.
+ \return TRUE on success, FALSE on failure (e.g. the work object does not exist).
+*/
+gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean do_free, gboolean update);
+
+
+#ifdef GEANY_PRIVATE
+
 /* Since TMWorkspace is a singleton, you should not create multiple
  workspaces, but get a pointer to the workspace whenever required. The first
  time a pointer is requested, or a work object is added to the workspace,
@@ -41,12 +57,6 @@ typedef struct
  created workspace.
 */
 const TMWorkspace *tm_get_workspace(void);
-
-/*! Adds a work object (source file) to the workspace.
- \param work_object The work object to add to the workspace.
- \return TRUE on success, FALSE on failure (e.g. object already exixts).
-*/
-gboolean tm_workspace_add_object(TMWorkObject *work_object);
 
 /* Given a file name, returns a pointer to the object if the object's file
  name is same as the passed file name, otherwise retruns NULL. This is an
@@ -59,14 +69,6 @@ gboolean tm_workspace_add_object(TMWorkObject *work_object);
 */
 TMWorkObject *tm_workspace_find_object(TMWorkObject *work_object, const char *file_name
   ,gboolean name_only);
-
-/*! Removes a member object from the workspace if it exists.
- \param work_object Pointer to the work object to be removed.
- \param do_free Whether the work object is to be freed as well.
- \param update Whether to update workspace objects.
- \return TRUE on success, FALSE on failure (e.g. the work object does not exist).
-*/
-gboolean tm_workspace_remove_object(TMWorkObject *work_object, gboolean do_free, gboolean update);
 
 /* Loads the global tag list from the specified file. The global tag list should
  have been first created using tm_workspace_create_global_tags().
@@ -179,6 +181,8 @@ void tm_workspace_free(gpointer workspace);
  \sa tm_work_object_register()
 */
 extern guint workspace_class_id;
+
+#endif /* GEANY_PRIVATE */
 
 #ifdef __cplusplus
 }
