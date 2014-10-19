@@ -26,6 +26,9 @@
 
 G_BEGIN_DECLS
 
+/* Defined in auto-generated code in signalconn.c */
+void callbacks_connect(GtkBuilder *builder);
+
 extern gboolean	ignore_callback;
 
 void on_new1_activate(GtkMenuItem *menuitem, gpointer user_data);

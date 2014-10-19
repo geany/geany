@@ -24,25 +24,14 @@ dnl `__attribute__((visibility(...)))` extension and use it if so.
 		])
 	CFLAGS="${libgeany_backup_cflags}"
 
-dnl Try and see if we can use our list of dynamically exported symbols with
-dnl the linker and use it if so.
-	AC_MSG_CHECKING([whether linker supports --dynamic-list])
-	libgeany_backup_ldflags=$LDFLAGS
-	LDFLAGS=-Wl,--dynamic-list="${srcdir}/src/dynamicsymbols.list"
-	AC_LINK_IFELSE([
-			AC_LANG_PROGRAM([], [])
-		], [
-			LIBGEANY_LIBS="-Wl,--dynamic-list=\"\$(top_srcdir)/src/dynamicsymbols.list\""
-			AC_MSG_RESULT([yes])
-		], [
-			LIBGEANY_LIBS=""
-			AC_MSG_RESULT([no])
-		])
-	LDFLAGS="${libgeany_backup_ldflags}"
-
-	LIBGEANY_LIBS="${LIBGEANY_LIBS} -version-info ${libgeany_current}:${libgeany_revision}:${libgeany_age}"
+	LIBGEANY_LIBS="-version-info ${libgeany_current}:${libgeany_revision}:${libgeany_age}"
 
 	AC_SUBST([LIBGEANY_CFLAGS])
 	AC_SUBST([LIBGEANY_LIBS])
 
+dnl Check for utilities needed to do codegen
+	AC_PATH_PROG([SORT], [sort], [
+		AC_MSG_ERROR([The 'sort' utility is required, is it installed?])])
+	AC_PATH_PROG([UNIQ], [uniq], [
+		AC_MSG_ERROR([The 'uniq' utility is required, is it installed?])])
 ])

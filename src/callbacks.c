@@ -1988,3 +1988,5 @@ GEANY_EXPORT_SYMBOL void on_detect_width_from_file_activate(GtkMenuItem *menuite
 		ui_document_show_hide(doc);
 	}
 }
+
+#include "signalconn.c"
