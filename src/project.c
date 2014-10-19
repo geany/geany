@@ -474,8 +474,7 @@ static void destroy_project(gboolean open_default)
 /* Shows the file chooser dialog when base path button is clicked
  * FIXME: this should be connected in Glade but 3.8.1 has a bug
  * where it won't pass any objects as user data (#588824). */
-GEANY_EXPORT_SYMBOL void
-on_project_properties_base_path_button_clicked(GtkWidget *button,
+static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 	GtkWidget *base_path_entry)
 {
 	GtkWidget *dialog;
