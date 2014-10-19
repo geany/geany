@@ -2356,7 +2356,7 @@ void ui_init_builder(void)
 	}
 	g_free(interface_file);
 
-	gtk_builder_connect_signals(builder, NULL);
+	callbacks_connect(builder);
 
 	edit_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
 	prefs_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
