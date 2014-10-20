@@ -582,7 +582,7 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
 
 
 static void
-plugin_init(Plugin *plugin)
+plugin_load(Plugin *plugin)
 {
 	GeanyPlugin **p_geany_plugin;
 	PluginCallback *callbacks;
@@ -645,12 +645,12 @@ plugin_init(Plugin *plugin)
 
 
 /* Load and optionally init a plugin.
- * init_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
+ * load_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
  * available plugins in the plugin manager).
  * When add_to_list is set, the plugin will be added to the plugin manager's plugin_list. */
 static Plugin*
-plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
+plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
 	GModule *module;
@@ -758,8 +758,8 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 	plugin->public.info = &plugin->info;
 	plugin->public.priv = plugin;
 
-	if (init_plugin)
-		plugin_init(plugin);
+	if (load_plugin)
+		plugin_load(plugin);
 
 	if (add_to_list)
 		plugin_list = g_list_prepend(plugin_list, plugin);
