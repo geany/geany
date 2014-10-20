@@ -1,0 +1,24 @@
+# we use both C and C++, so advertize C++
+language: cpp
+compiler:
+  - gcc
+env:
+  - GTK3=no
+  - GTK3=yes
+before_install:
+  - sudo apt-get update -qq
+install:
+  - sudo apt-get install -y libgtk2.0-dev libgtk-3-dev intltool libtool
+  - sudo apt-get install -y python-docutils rst2pdf
+  # try not to install doxygen-latex because we don't need it and it's huge
+  - sudo apt-get install -y --no-install-recommends doxygen
+before_script:
+  - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=aggregate-return -Werror=implicit-function-declaration"
+script:
+  - >
+    NOCONFIGURE=1 ./autogen.sh          &&
+    mkdir _build                        &&
+    cd _build                           &&
+    ../configure --enable-gtk3=$GTK3    &&
+    make -j2                            &&
+    make -j2 check
