@@ -805,7 +805,7 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gbo
 
 GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 {
-	gint i;
+	guint i;
 	for (i = 0; i < tags_array->len; i++)
 	{
 		TMTag *tag = tags_array->pdata[i];
@@ -822,14 +822,14 @@ GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_a
  * and is almost independent of the size of the big array.
  * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
 static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
-	gint i1 = 0;  /* index to big_array */
-	gint i2 = 0;  /* index to small_array */
-	gint initial_step;
+	guint i1 = 0;  /* index to big_array */
+	guint i2 = 0;  /* index to small_array */
+	guint initial_step;
 	initial_step;
-	gint step;
+	guint step;
 	GPtrArray *res_array = g_ptr_array_sized_new(big_array->len + small_array->len);
 #ifdef TM_DEBUG
-	gint cmpnum = 0;
+	guint cmpnum = 0;
 #endif
 
 	/* swap the arrays if len(small) > len(big) */
@@ -855,7 +855,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 
 		if (step > 4)  /* fast path start */
 		{
-			gint j1 = (i1 + step < big_array->len) ? i1 + step : big_array->len - 1;
+			guint j1 = (i1 + step < big_array->len) ? i1 + step : big_array->len - 1;
 			
 			val1 = big_array->pdata[j1];
 #ifdef TM_DEBUG
@@ -909,9 +909,9 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 		g_ptr_array_add(res_array, small_array->pdata[i2++]);
 		
 #ifdef TM_DEBUG
-	printf("cmpnums: %d\n", cmpnum);
-	printf("total tags: %d\n", big_array->len);
-	printf("merged tags: %d\n\n", small_array->len);
+	printf("cmpnums: %u\n", cmpnum);
+	printf("total tags: %u\n", big_array->len);
+	printf("merged tags: %u\n\n", small_array->len);
 #endif
 
 	return res_array;
