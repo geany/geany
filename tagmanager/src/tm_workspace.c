@@ -33,7 +33,7 @@
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
-
+#include "tm_tag.h"
 
 static TMWorkspace *theWorkspace = NULL;
 
