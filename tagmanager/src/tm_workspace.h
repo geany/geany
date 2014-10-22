@@ -28,8 +28,8 @@ extern "C"
 */
 typedef struct
 {
-    GPtrArray *global_tags; /**< Global tags loaded at startup */
-    GPtrArray *source_files; /**< An array of TMSourceFile pointers */
+	GPtrArray *global_tags; /**< Global tags loaded at startup */
+	GPtrArray *source_files; /**< An array of TMSourceFile pointers */
 	GPtrArray *tags_array; /**< Sorted tags from all source files 
 		(just pointers to source file tags, the tag objects are owned by the source files) */
 } TMWorkspace;
@@ -48,14 +48,14 @@ const TMWorkspace *tm_get_workspace(void);
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-    int includes_count, const char *tags_file, int lang);
+	int includes_count, const char *tags_file, int lang);
 
-const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
- , gboolean partial, langType lang);
+const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs, 
+	gboolean partial, langType lang);
 
 const GPtrArray *
 tm_workspace_find_scoped (const char *name, const char *scope, gint type,
-    TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
+	TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
 
 const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
                                                  const char *scope_name,

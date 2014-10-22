@@ -58,24 +58,24 @@ static int get_path_max(const char *path)
  * with special chars within the filename */
 static char *realpath (const char *pathname, char *resolved_path)
 {
-  int size;
+	int size;
 
-  if (resolved_path != NULL)
-  {
-    int path_max = get_path_max(pathname);
-	size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
-    if (size > path_max)
-      return NULL;
-    else
-      return resolved_path;
-  }
-  else
-  {
-    size = GetFullPathNameA (pathname, 0, NULL, NULL);
-    resolved_path = g_new0 (char, size);
-    GetFullPathNameA (pathname, size, resolved_path, NULL);
-    return resolved_path;
-  }
+	if (resolved_path != NULL)
+	{
+		int path_max = get_path_max(pathname);
+		size = GetFullPathNameA (pathname, path_max, resolved_path, NULL);
+		if (size > path_max)
+			return NULL;
+		else
+			return resolved_path;
+	}
+	else
+	{
+		size = GetFullPathNameA (pathname, 0, NULL, NULL);
+		resolved_path = g_new0 (char, size);
+		GetFullPathNameA (pathname, size, resolved_path, NULL);
+		return resolved_path;
+	}
 }
 #endif
 
@@ -142,8 +142,8 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 }
 
 /* Initializes a TMSourceFile structure from a file name. */
-static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
-  , gboolean update, const char* name)
+static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
+	gboolean update, const char* name)
 {
 	struct stat s;
 	int status;
@@ -412,8 +412,8 @@ void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace)
 	}
 #ifdef TM_DEBUG
 	else
-		g_message("Skipping workspace update because update_workspace is %s"
-		  , update_workspace?"TRUE":"FALSE");
+		g_message("Skipping workspace update because update_workspace is %s",
+			update_workspace?"TRUE":"FALSE");
 
 #endif
 }
@@ -459,8 +459,8 @@ void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
 	}
 #ifdef TM_DEBUG
 	else
-		g_message("Skipping workspace update because update_workspace is %s"
-		  , update_workspace?"TRUE":"FALSE");
+		g_message("Skipping workspace update because update_workspace is %s",
+			update_workspace?"TRUE":"FALSE");
 
 #endif
 }

@@ -584,8 +584,8 @@ void tm_workspace_update(void)
              -1 for all
  @return Array of matching tags. Do not free() it since it is a static member.
 */
-const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs
- , gboolean partial, langType lang)
+const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs,
+	gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2];
