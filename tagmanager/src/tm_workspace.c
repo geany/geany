@@ -151,7 +151,6 @@ static TMTagAttrType global_tags_sort_attrs[] =
 */
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 {
-	gsize orig_len;
 	guchar buf[BUFSIZ];
 	FILE *fp;
 	GPtrArray *file_tags, *new_tags;
@@ -164,7 +163,6 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		return FALSE;
 	if (NULL == theWorkspace->global_tags)
 		theWorkspace->global_tags = g_ptr_array_new();
-	orig_len = theWorkspace->global_tags->len;
 	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
 	{
 		fclose(fp);

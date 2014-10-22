@@ -825,7 +825,6 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 	guint i1 = 0;  /* index to big_array */
 	guint i2 = 0;  /* index to small_array */
 	guint initial_step;
-	initial_step;
 	guint step;
 	GPtrArray *res_array = g_ptr_array_sized_new(big_array->len + small_array->len);
 #ifdef TM_DEBUG
