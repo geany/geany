@@ -848,8 +848,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 	
 	while (i1 < big_array->len && i2 < small_array->len)
 	{
-		gint cmpval;
-		gpointer val1 = big_array->pdata[i1];
+		gpointer val1;
 		gpointer val2 = small_array->pdata[i2];
 
 		if (step > 4)  /* fast path start */
@@ -871,36 +870,39 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 					g_ptr_array_add(res_array, val1);
 					i1++;
 				}
-				continue;
 			}
 			else 
 			{
 				/* lower the step and try again */
 				step /= 2;
-				continue;
 			}
 		}  /* fast path end */
-		
-#ifdef TM_DEBUG
-		cmpnum++;
-#endif
-		cmpval = tm_tag_compare(&val1, &val2);
-		if (cmpval < 0)
-		{
-			g_ptr_array_add(res_array, val1);
-			i1++;
-		}
 		else
 		{
-			g_ptr_array_add(res_array, val2);
-			i2++;
-			/* value from small_array gets merged - reset the step size */
-			step = initial_step;
-			if (cmpval == 0)
-				i1++;  /* remove the duplicate, keep just the newly merged value */
+			gint cmpval;
+			
+#ifdef TM_DEBUG
+			cmpnum++;
+#endif
+			val1 = big_array->pdata[i1];
+			cmpval = tm_tag_compare(&val1, &val2);
+			if (cmpval < 0)
+			{
+				g_ptr_array_add(res_array, val1);
+				i1++;
+			}
+			else
+			{
+				g_ptr_array_add(res_array, val2);
+				i2++;
+				/* value from small_array gets merged - reset the step size */
+				step = initial_step;
+				if (cmpval == 0)
+					i1++;  /* remove the duplicate, keep just the newly merged value */
+			}
 		}
 	}
-	
+
 	/* end of one of the arrays reached - copy the rest from the other array */
 	while (i1 < big_array->len)
 		g_ptr_array_add(res_array, big_array->pdata[i1++]);
