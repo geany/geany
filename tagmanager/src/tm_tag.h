@@ -162,7 +162,7 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
 
 gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
 
-GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
+void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 
 GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes);
 

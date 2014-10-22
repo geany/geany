@@ -803,7 +803,7 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gbo
 	return TRUE;
 }
 
-GPtrArray *tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
+void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 {
 	guint i;
 	for (i = 0; i < tags_array->len; i++)
