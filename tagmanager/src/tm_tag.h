@@ -124,6 +124,7 @@ typedef struct _TMTag
 {
 	char *name; /**< Name of tag */
 	TMTagType type; /**< Tag Type */
+	gint refcount; /* the reference count of the tag */
 	
 	/** These are tag attributes */
 	TMSourceFile *file; /**< File in which the tag occurs; NULL for global tags */
@@ -137,8 +138,6 @@ typedef struct _TMTag
 	char access; /**< Access type (public/protected/private/etc.) */
 	char impl; /**< Implementation (e.g. virtual) */
 	langType lang; /**< Programming language of the file */
-
-	gint refcount; /**< the reference count of the tag */
 } TMTag;
 
 
