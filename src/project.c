@@ -1153,6 +1153,18 @@ static gboolean write_config(gboolean emit_signal)
 }
 
 
+/** Forces the project file rewrite and emission of the project-save signal. Plugins 
+ * can use this function to save additional project data outside the project dialog.
+ *
+ *  @since 1.25
+ */
+void project_write_config(void)
+{
+	if (!write_config(TRUE))
+		SHOW_ERR(_("Project file could not be written"));
+}
+
+
 /* Constructs the project's base path which is used for "Make all" and "Execute".
  * The result is an absolute string in UTF-8 encoding which is either the same as
  * base path if it is absolute or it is built out of project file name's dir and base_path.

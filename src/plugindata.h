@@ -288,6 +288,7 @@ typedef struct GeanyFunctions
 	struct StashFuncs			*p_stash;			/**< See stash.h */
 	struct SymbolsFuncs			*p_symbols;			/**< See symbols.h */
 	struct BuildFuncs			*p_build;			/**< See build.h */
+	struct ProjectFuncs			*p_project;			/**< See project.h */
 }
 GeanyFunctions;
 
@@ -737,6 +738,13 @@ typedef struct BuildFuncs
 	guint (*build_get_group_count)(const GeanyBuildGroup grp);
 }
 BuildFuncs;
+
+/* See project.h */
+typedef struct ProjectFuncs
+{
+	void (*project_write_config)(void);
+}
+ProjectFuncs;
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
