@@ -302,6 +302,8 @@ but you then may not have a local copy of the HTML manual.'''
 
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
+    if conf.env['CC_NAME'] == 'gcc' and '-O' not in ''.join(conf.env['CFLAGS']):
+        conf.env.append_value('CFLAGS', ['-O2'])
     if revision is not None:
         conf.env.append_value('CFLAGS', ['-g', '-DGEANY_DEBUG'])
     # Scintilla flags
