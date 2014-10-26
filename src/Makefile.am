@@ -184,7 +184,7 @@ signalconn.c: $(glade_file) $(template_file)
 	$(AM_V_GEN)( \
 		echo '/* This file is auto-generated, do not edit. */' && \
 		$(SED) -n '/@callback_map@/q;p' "$(template_file)" && \
-		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/\tg_hash_table_insert(hash, "\1", G_CALLBACK(\1));/p' "$(glade_file)" \
+		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/\tg_hash_table_insert(hash, (gpointer) "\1", G_CALLBACK(\1));/p' "$(glade_file)" \
 			| $(SORT) | $(UNIQ) && \
 		$(SED) -n '/@callback_map@/{:l;n;p;b l}' "$(template_file)" \
 	) > $@ || { $(RM) $@ && exit 1; }
