@@ -104,7 +104,7 @@ AM_CPPFLAGS = \
 	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ @LIBGEANY_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
-nodist_EXTRA_geany_SOURCES = dummy.cxx
+nodist_EXTRA_libgeany_la_SOURCES = dummy.cxx
 
 
 if MINGW
