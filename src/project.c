@@ -562,6 +562,8 @@ static void show_project_properties(gboolean show_build)
 	GtkWidget *radio_long_line_custom;
 	static PropertyDialogElements e;
 	GSList *node;
+	gchar *entry_text;
+	GtkTextBuffer *buffer;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -591,20 +593,14 @@ static void show_project_properties(gboolean show_build)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->priv->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
-	if (p->description != NULL)
-	{	/* set text */
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
-		gtk_text_buffer_set_text(buffer, p->description, -1);
-	}
+	/* set text */
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
+	gtk_text_buffer_set_text(buffer, p->description ? p->description : "", -1);
 
-	if (p->file_patterns != NULL)
-	{	/* set the file patterns */
-		gchar *str;
-
-		str = g_strjoinv(" ", p->file_patterns);
-		gtk_entry_set_text(GTK_ENTRY(e.patterns), str);
-		g_free(str);
-	}
+	/* set the file patterns */
+	entry_text = p->file_patterns ? g_strjoinv(" ", p->file_patterns) : g_strdup("");
+	gtk_entry_set_text(GTK_ENTRY(e.patterns), entry_text);
+	g_free(entry_text);
 
 	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
