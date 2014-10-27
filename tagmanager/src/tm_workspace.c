@@ -92,7 +92,8 @@ const TMWorkspace *tm_get_workspace(void)
 	return theWorkspace;
 }
 
-/** Adds a source file to the workspace.
+/** Adds a source file to the workspace. At some point, tm_workspace_update_source_file()
+ has to be called to create the source file's tag array.
  @param source_file The source file to add to the workspace.
  @return TRUE on success, FALSE on failure (e.g. object already exixts).
 */
@@ -113,28 +114,25 @@ static void tm_workspace_remove_file_tags(TMSourceFile *source_file)
 		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 }
 
-/** Removes a member object from the workspace if it exists.
+/** Removes a source file from the workspace if it exists.
  @param source_file Pointer to the source file to be removed.
- @param do_free Whether the source file is to be freed as well.
- @param update Whether to update workspace objects.
+ @param update_workspace Whether to update workspace objects. Has to be TRUE unless
+	tm_workspace_update() is called later.
  @return TRUE on success, FALSE on failure (e.g. the source file does not exist).
 */
-gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean do_free, gboolean update)
+gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean update_workspace)
 {
 	guint i;
 	if ((NULL == theWorkspace) || (NULL == theWorkspace->source_files)
 		  || (NULL == source_file))
 		return FALSE;
 
-
 	for (i=0; i < theWorkspace->source_files->len; ++i)
 	{
 		if (theWorkspace->source_files->pdata[i] == source_file)
 		{
-			if (update)
+			if (update_workspace)
 				tm_workspace_remove_file_tags(source_file);
-			if (do_free)
-				tm_source_file_free(source_file);
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			return TRUE;
 		}
@@ -568,8 +566,8 @@ static void tm_workspace_merge_file_tags(TMSourceFile *source_file)
  also lost. The language parameter is automatically set the first time the file
  is parsed.
  @param source_file The source file to update.
- @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
- always set this to TRUE if you are calling this function directly.
+ @param update_workspace Whether to update workspace objects. Has to be TRUE unless
+	tm_workspace_update() is called later.
 */
 void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_workspace)
 {
@@ -647,8 +645,10 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 #endif
 }
 
-/** Calls tm_source_file_update() for all workspace member source files and creates
- workspace tag array. Use if you want to globally refresh the workspace.
+/** Recreates workspace tag array from all member TMSourceFile objects. Use if you 
+ want to globally refresh the workspace. This function does not call tm_source_file_update()
+ which should be called before this function on source files which need to be
+ reparsed.
 */
 void tm_workspace_update(void)
 {

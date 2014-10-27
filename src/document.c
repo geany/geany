@@ -714,7 +714,8 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
-	tm_workspace_remove_source_file(doc->tm_file, TRUE, !main_status.quitting);
+	tm_workspace_remove_source_file(doc->tm_file, !main_status.quitting);
+	tm_source_file_free(doc->tm_file);
 
 	if (doc->priv->tag_tree)
 		gtk_widget_destroy(doc->priv->tag_tree);
@@ -2617,7 +2618,8 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		/* delete tm file object to force creation of a new one */
 		if (doc->tm_file != NULL)
 		{
-			tm_workspace_remove_source_file(doc->tm_file, TRUE, TRUE);
+			tm_workspace_remove_source_file(doc->tm_file, TRUE);
+			tm_source_file_free(doc->tm_file);
 			doc->tm_file = NULL;
 		}
 		/* load tags files before highlighting (some lexers highlight global typenames) */

@@ -603,7 +603,7 @@ typedef struct TagManagerFuncs
 	gboolean		(*tm_workspace_add_source_file) (TMSourceFile *source_file);
 	void			(*tm_workspace_update_source_file) (TMSourceFile *source_file, gboolean update_workspace);
 	void			(*tm_source_file_free) (TMSourceFile *source_file);
-	gboolean		(*tm_workspace_remove_source_file) (TMSourceFile *source_file, gboolean do_free, gboolean update);
+	gboolean		(*tm_workspace_remove_source_file) (TMSourceFile *source_file, gboolean update);
 	void			(*tm_workspace_update) (void);
 }
 TagManagerFuncs;
