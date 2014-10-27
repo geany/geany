@@ -348,8 +348,8 @@
 	geany_functions->p_tm->tm_source_file_new
 #define tm_workspace_add_source_file \
 	geany_functions->p_tm->tm_workspace_add_source_file
-#define tm_source_file_update \
-	geany_functions->p_tm->tm_source_file_update
+#define tm_workspace_update_source_file \
+	geany_functions->p_tm->tm_workspace_update_source_file
 #define tm_source_file_free \
 	geany_functions->p_tm->tm_source_file_free
 #define tm_workspace_remove_source_file \

@@ -291,7 +291,7 @@ static TagManagerFuncs tagmanager_funcs = {
 	&tm_get_real_path,
 	&tm_source_file_new,
 	&tm_workspace_add_source_file,
-	&tm_source_file_update,
+	&tm_workspace_update_source_file,
 	&tm_source_file_free,
 	&tm_workspace_remove_source_file,
 	&tm_workspace_update

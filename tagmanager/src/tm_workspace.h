@@ -38,6 +38,8 @@ gboolean tm_workspace_add_source_file(TMSourceFile *source_file);
 
 gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean do_free, gboolean update);
 
+void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_workspace);
+
 void tm_workspace_update(void);
 
 
@@ -64,11 +66,10 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
 
 const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const guint tag_types);
 
+void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
+	gint buf_size, gboolean update_workspace);
+
 void tm_workspace_free(void);
-
-void tm_workspace_merge_file_tags(TMSourceFile *source_file);
-
-void tm_workspace_remove_file_tags(TMSourceFile *source_file);
 
 
 #ifdef TM_DEBUG

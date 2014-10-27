@@ -2483,7 +2483,7 @@ void document_update_tags(GeanyDocument *doc)
 
 		/* lookup the name rather than using filetype name to support custom filetypes */
 		name = tm_source_file_get_lang_name(doc->file_type->lang);
-		doc->tm_file = tm_source_file_new(locale_filename, FALSE, name);
+		doc->tm_file = tm_source_file_new(locale_filename, name);
 		g_free(locale_filename);
 
 		if (doc->tm_file && !tm_workspace_add_source_file(doc->tm_file))
@@ -2516,7 +2516,7 @@ void document_update_tags(GeanyDocument *doc)
 	/* Parse Scintilla's buffer directly using TagManager
 	 * Note: this buffer *MUST NOT* be modified */
 	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
-	tm_source_file_buffer_update(doc->tm_file, buffer_ptr, len, TRUE);
+	tm_workspace_update_source_file_buffer(doc->tm_file, buffer_ptr, len, TRUE);
 
 	sidebar_update_tag_list(doc, TRUE);
 	document_highlight_tags(doc);

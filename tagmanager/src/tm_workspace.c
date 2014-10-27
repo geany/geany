@@ -107,6 +107,12 @@ gboolean tm_workspace_add_source_file(TMSourceFile *source_file)
 	return TRUE;
 }
 
+static void tm_workspace_remove_file_tags(TMSourceFile *source_file)
+{
+	if (theWorkspace->tags_array != NULL)
+		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
+}
+
 /** Removes a member object from the workspace if it exists.
  @param source_file Pointer to the source file to be removed.
  @param do_free Whether the source file is to be freed as well.
@@ -447,7 +453,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		temp_file2 = temp_file;
 		temp_file = NULL;
 	}
-	source_file = tm_source_file_new(temp_file2, TRUE, tm_source_file_get_lang_name(lang));
+	source_file = tm_source_file_new(temp_file2, tm_source_file_get_lang_name(lang));
+	tm_workspace_update_source_file(source_file, FALSE);
 	if (NULL == source_file)
 	{
 		g_unlink(temp_file2);
@@ -537,13 +544,7 @@ static void tm_workspace_recreate_tags_array(void)
 	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE);
 }
 
-void tm_workspace_remove_file_tags(TMSourceFile *source_file)
-{
-	if (theWorkspace->tags_array != NULL)
-		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
-}
-
-void tm_workspace_merge_file_tags(TMSourceFile *source_file)
+static void tm_workspace_merge_file_tags(TMSourceFile *source_file)
 {
 	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t,
 		tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
@@ -559,6 +560,91 @@ void tm_workspace_merge_file_tags(TMSourceFile *source_file)
 		g_ptr_array_free(theWorkspace->tags_array, TRUE);
 		theWorkspace->tags_array = new_tags;
 	}
+}
+
+/** Updates the source file by reparsing. The tags array and
+ the tags themselves are destroyed and re-created, hence any other tag arrays
+ pointing to these tags should be rebuilt as well. All sorting information is
+ also lost. The language parameter is automatically set the first time the file
+ is parsed.
+ @param source_file The source file to update.
+ @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
+ always set this to TRUE if you are calling this function directly.
+*/
+void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_workspace)
+{
+#ifdef TM_DEBUG
+	g_message("Source file updating based on source file %s", source_file->file_name);
+#endif
+
+	if (update_workspace)
+	{
+		/* tm_source_file_parse() deletes the tag objects - remove the tags from
+		 * workspace while they exist and can be scanned */
+		tm_workspace_remove_file_tags(source_file);
+	}
+	tm_source_file_parse(source_file);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	if (update_workspace)
+	{
+#ifdef TM_DEBUG
+		g_message("Updating workspace from source file");
+#endif
+		tm_workspace_merge_file_tags(source_file);
+	}
+#ifdef TM_DEBUG
+	else
+		g_message("Skipping workspace update because update_workspace is %s",
+			update_workspace?"TRUE":"FALSE");
+
+#endif
+}
+
+
+/* Updates the source file by reparsing the text-buffer passed as parameter.
+ Ctags will use a parsing based on buffer instead of on files.
+ You should call this function when you don't want a previous saving of the file
+ you're editing. It's useful for a "real-time" updating of the tags.
+ The tags array and the tags themselves are destroyed and re-created, hence any
+ other tag arrays pointing to these tags should be rebuilt as well. All sorting
+ information is also lost. The language parameter is automatically set the first
+ time the file is parsed.
+ @param source_file The source file to update with a buffer.
+ @param text_buf A text buffer. The user should take care of allocate and free it after
+ the use here.
+ @param buf_size The size of text_buf.
+ @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
+ always set this to TRUE if you are calling this function directly.
+ @return TRUE if the file was parsed, FALSE otherwise.
+*/
+void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
+			gint buf_size, gboolean update_workspace)
+{
+#ifdef TM_DEBUG
+	g_message("Buffer updating based on source file %s", source_file->file_name);
+#endif
+
+	if (update_workspace)
+	{
+		/* tm_source_file_parse() deletes the tag objects - remove the tags from
+		 * workspace while they exist and can be scanned */
+		tm_workspace_remove_file_tags(source_file);
+	}
+	tm_source_file_buffer_parse (source_file, text_buf, buf_size);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	if (update_workspace)
+	{
+#ifdef TM_DEBUG
+		g_message("Updating workspace from buffer..");
+#endif
+		tm_workspace_merge_file_tags(source_file);
+	}
+#ifdef TM_DEBUG
+	else
+		g_message("Skipping workspace update because update_workspace is %s",
+			update_workspace?"TRUE":"FALSE");
+
+#endif
 }
 
 /** Calls tm_source_file_update() for all workspace member source files and creates

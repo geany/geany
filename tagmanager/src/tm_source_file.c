@@ -30,9 +30,8 @@
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
-#define LIBCTAGS_DEFINED
-#include "tm_workspace.h"
 
+#define LIBCTAGS_DEFINED
 #include "tm_source_file.h"
 #include "tm_tag.h"
 
@@ -143,7 +142,7 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 
 /* Initializes a TMSourceFile structure from a file name. */
 static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
-	gboolean update, const char* name)
+	const char* name)
 {
 	struct stat s;
 	int status;
@@ -190,21 +189,18 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	else
 		source_file->lang = getNamedLanguage(name);
 
-	if (update)
-		tm_source_file_update(source_file, FALSE);
 	return TRUE;
 }
 
 /** Initializes a TMSourceFile structure and returns a pointer to it. 
  * @param file_name The file name.
- * @param update Update the tag array of the file.
  * @param name Name of the used programming language, NULL for autodetection.
  * @return The created TMSourceFile object.
  * */
-TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const char *name)
+TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
 	TMSourceFile *source_file = g_new(TMSourceFile, 1);
-	if (TRUE != tm_source_file_init(source_file, file_name, update, name))
+	if (TRUE != tm_source_file_init(source_file, file_name, name))
 	{
 		g_free(source_file);
 		return NULL;
@@ -243,9 +239,8 @@ void tm_source_file_free(TMSourceFile *source_file)
 /* Parses the source file and regenarates the tags.
  @param source_file The source file to parse
  @return TRUE on success, FALSE on failure
- @see tm_source_file_update()
 */
-static gboolean tm_source_file_parse(TMSourceFile *source_file)
+gboolean tm_source_file_parse(TMSourceFile *source_file)
 {
 	const char *file_name;
 	gboolean status = TRUE;
@@ -306,9 +301,8 @@ static gboolean tm_source_file_parse(TMSourceFile *source_file)
  @param text_buf The text buffer to parse
  @param buf_size The size of text_buf.
  @return TRUE on success, FALSE on failure
- @see tm_source_file_update()
 */
-static gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
+gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
 {
 	const char *file_name;
 	gboolean status = TRUE;
@@ -380,90 +374,6 @@ static gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* t
 	return status;
 }
 
-/** Updates the source file by reparsing. The tags array and
- the tags themselves are destroyed and re-created, hence any other tag arrays
- pointing to these tags should be rebuilt as well. All sorting information is
- also lost. The language parameter is automatically set the first time the file
- is parsed.
- @param source_file The source file to update.
- @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
- always set this to TRUE if you are calling this function directly.
-*/
-void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace)
-{
-#ifdef TM_DEBUG
-	g_message("Source file updating based on source file %s", source_file->file_name);
-#endif
-
-	if (update_workspace)
-	{
-		/* tm_source_file_parse() deletes the tag objects - remove the tags from
-		 * workspace while they exist and can be scanned */
-		tm_workspace_remove_file_tags(source_file);
-	}
-	tm_source_file_parse(source_file);
-	tm_tags_sort(source_file->tags_array, NULL, FALSE);
-	if (update_workspace)
-	{
-#ifdef TM_DEBUG
-		g_message("Updating workspace from source file");
-#endif
-		tm_workspace_merge_file_tags(source_file);
-	}
-#ifdef TM_DEBUG
-	else
-		g_message("Skipping workspace update because update_workspace is %s",
-			update_workspace?"TRUE":"FALSE");
-
-#endif
-}
-
-
-/* Updates the source file by reparsing the text-buffer passed as parameter.
- Ctags will use a parsing based on buffer instead of on files.
- You should call this function when you don't want a previous saving of the file
- you're editing. It's useful for a "real-time" updating of the tags.
- The tags array and the tags themselves are destroyed and re-created, hence any
- other tag arrays pointing to these tags should be rebuilt as well. All sorting
- information is also lost. The language parameter is automatically set the first
- time the file is parsed.
- @param source_file The source file to update with a buffer.
- @param text_buf A text buffer. The user should take care of allocate and free it after
- the use here.
- @param buf_size The size of text_buf.
- @param update_workspace If set to TRUE, sends an update signal to the workspace if required. You should
- always set this to TRUE if you are calling this function directly.
- @return TRUE if the file was parsed, FALSE otherwise.
-*/
-void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
-			gint buf_size, gboolean update_workspace)
-{
-#ifdef TM_DEBUG
-	g_message("Buffer updating based on source file %s", source_file->file_name);
-#endif
-
-	if (update_workspace)
-	{
-		/* tm_source_file_parse() deletes the tag objects - remove the tags from
-		 * workspace while they exist and can be scanned */
-		tm_workspace_remove_file_tags(source_file);
-	}
-	tm_source_file_buffer_parse (source_file, text_buf, buf_size);
-	tm_tags_sort(source_file->tags_array, NULL, FALSE);
-	if (update_workspace)
-	{
-#ifdef TM_DEBUG
-		g_message("Updating workspace from buffer..");
-#endif
-		tm_workspace_merge_file_tags(source_file);
-	}
-#ifdef TM_DEBUG
-	else
-		g_message("Skipping workspace update because update_workspace is %s",
-			update_workspace?"TRUE":"FALSE");
-
-#endif
-}
 
 /* Gets the name associated with the language index.
  @param lang The language index.

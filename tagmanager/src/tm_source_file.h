@@ -44,9 +44,7 @@ typedef struct
 	GPtrArray *tags_array; /**< Tags obtained by parsing the object */
 } TMSourceFile;
 
-TMSourceFile *tm_source_file_new(const char *file_name, gboolean update, const char *name);
-
-void tm_source_file_update(TMSourceFile *source_file, gboolean update_workspace);
+TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
 
 void tm_source_file_free(TMSourceFile *source_file);
 
@@ -55,12 +53,13 @@ gchar *tm_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
 
-void tm_source_file_buffer_update(TMSourceFile *source_file, guchar* text_buf,
-			gint buf_size, gboolean update_workspace);
-
 const gchar *tm_source_file_get_lang_name(gint lang);
 
 gint tm_source_file_get_named_lang(const gchar *name);
+
+gboolean tm_source_file_parse(TMSourceFile *source_file);
+
+gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size);
 
 #endif /* GEANY_PRIVATE */
 
