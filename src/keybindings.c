@@ -43,7 +43,6 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "sidebar.h"

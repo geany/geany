@@ -48,7 +48,6 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"

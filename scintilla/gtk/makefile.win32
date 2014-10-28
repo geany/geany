@@ -33,6 +33,9 @@ vpath %.cxx ../src ../lexlib ../lexers
 
 INCLUDEDIRS=-I ../include -I ../src -I ../lexlib
 CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS)
+CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS) \
+	-DGEANY_EXPORT_SYMBOL="__declspec(dllexport)" \
+	-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL
 
 ifdef THREADS
 THREADFLAGS=

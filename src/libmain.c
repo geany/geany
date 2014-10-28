@@ -46,7 +46,6 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
-#include "pluginexport.h"
 #include "plugins.h"
 #include "prefs.h"
 #include "printing.h"

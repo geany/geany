@@ -40,7 +40,6 @@
 #include "keyfile.h"
 #include "main.h"
 #include "msgwindow.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "project.h"
 #include "sciwrappers.h"

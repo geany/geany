@@ -32,7 +32,6 @@
 #include "app.h"
 #include "dialogs.h"
 #include "document.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "support.h"

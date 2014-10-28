@@ -39,7 +39,6 @@
 #include "app.h"
 #include "callbacks.h"
 #include "documentprivate.h"
-#include "pluginexport.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"

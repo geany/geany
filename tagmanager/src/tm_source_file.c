@@ -34,7 +34,6 @@
 #define LIBCTAGS_DEFINED
 #include "tm_source_file.h"
 #include "tm_tag.h"
-#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 static TMSourceFile *current_source_file = NULL;

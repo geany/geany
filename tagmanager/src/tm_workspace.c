@@ -32,7 +32,6 @@
 
 #include "tm_workspace.h"
 #include "tm_tag.h"
-#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 /* when changing, always keep the three sort criteria below in sync */

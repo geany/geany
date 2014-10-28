@@ -32,7 +32,6 @@
 
 #include "document.h"
 #include "geanyobject.h"
-#include "pluginexport.h"
 #include "sciwrappers.h"
 #include "toolbar.h"
 #include "utils.h"
