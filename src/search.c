@@ -35,7 +35,6 @@
 #include "encodings.h"
 #include "keyfile.h"
 #include "msgwindow.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "stash.h"

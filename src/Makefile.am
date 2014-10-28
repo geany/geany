@@ -44,7 +44,6 @@ SRCS = \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
 	osx.c osx.h \
-	pluginexport.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
