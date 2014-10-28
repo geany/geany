@@ -40,7 +40,6 @@
 #include "keybindings.h"
 #include "main.h"
 #include "navqueue.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "support.h"
 #include "ui_utils.h"

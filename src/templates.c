@@ -37,7 +37,6 @@
 #include "geany.h"
 #include "geanymenubuttonaction.h"
 #include "geanyobject.h"
-#include "pluginexport.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"

@@ -41,7 +41,6 @@
 #include "geanyobject.h"
 #include "keybindingsprivate.h"
 #include "msgwindow.h"
-#include "pluginexport.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "support.h"

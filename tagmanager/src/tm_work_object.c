@@ -28,7 +28,6 @@
 
 #include "tm_tag.h"
 #include "tm_work_object.h"
-#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 static GPtrArray *s_work_object_subclasses = NULL;
 

@@ -40,7 +40,9 @@ vpath %.cxx gtk lexers lexlib src
 vpath %.c gtk
 
 INCLUDEDIRS=-I include -I src -I lexlib -I . $(GTK_INCLUDES)
-CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS) -mms-bitfields
+CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS) -mms-bitfields \
+	-DGEANY_EXPORT_SYMBOL="__declspec(dllexport)" \
+	-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL
 
 ifdef THREADS
 THREADFLAGS=

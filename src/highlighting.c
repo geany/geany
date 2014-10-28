@@ -37,7 +37,6 @@
 #include "document.h"
 #include "editor.h"
 #include "filetypesprivate.h"
-#include "pluginexport.h"
 #include "sciwrappers.h"
 #include "support.h"
 #include "symbols.h"

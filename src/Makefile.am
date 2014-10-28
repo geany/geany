@@ -43,7 +43,6 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
-	pluginexport.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \

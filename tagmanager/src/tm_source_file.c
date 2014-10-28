@@ -28,7 +28,6 @@
 
 #include "tm_source_file.h"
 #include "tm_tag.h"
-#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 guint source_file_class_id = 0;

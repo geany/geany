@@ -35,7 +35,6 @@
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
-#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 static TMWorkspace *theWorkspace = NULL;

@@ -40,7 +40,6 @@
 #include "geany.h"
 #include "geanyobject.h"
 #include "highlighting.h"
-#include "pluginexport.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
 #include "support.h"

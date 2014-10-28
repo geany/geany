@@ -35,7 +35,6 @@
 #include "encodings.h"
 #include "filetypes.h"
 #include "main.h"
-#include "pluginexport.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"

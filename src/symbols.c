@@ -47,7 +47,6 @@
 #include "geanyobject.h"
 #include "main.h"
 #include "navqueue.h"
-#include "pluginexport.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
 #include "support.h"

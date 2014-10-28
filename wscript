@@ -300,6 +300,19 @@ but you then may not have a local copy of the HTML manual.'''
 
     conf.write_config_header('config.h', remove=False)
 
+    # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
+    # FIXME: should I put quoting in the appended values or are they passed as-is?
+    if is_win32:
+        conf.env.append_value('CFLAGS', ['-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)'])
+    # FIXME: check for -fvisibility and the __attribute__((visibility)), or
+    #        at least for GCC >= 4
+    elif conf.env['CC_NAME'] == 'gcc':
+        conf.env.append_value('CFLAGS', ['-fvisibility=hidden',
+                                         '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))'])
+    else:  # unknown, define to nothing
+        conf.env.append_value('CFLAGS', ['-DGEANY_EXPORT_SYMBOL='])
+    conf.env.append_value('CFLAGS', ['-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL'])
+
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
     if revision is not None:

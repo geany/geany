@@ -38,7 +38,6 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "main.h"
-#include "pluginexport.h"
 #include "projectprivate.h"
 #include "sidebar.h"
 #include "stash.h"

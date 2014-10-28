@@ -37,7 +37,6 @@
 
 #include "sciwrappers.h"
 
-#include "pluginexport.h"
 #include "utils.h"
 
 #include <string.h>

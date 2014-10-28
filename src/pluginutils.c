@@ -34,7 +34,6 @@
 #include "app.h"
 #include "geanyobject.h"
 #include "plugindata.h"
-#include "pluginexport.h"
 #include "pluginprivate.h"
 #include "plugins.h"
 #include "support.h"

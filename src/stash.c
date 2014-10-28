@@ -78,7 +78,6 @@
 
 #include "stash.h"
 
-#include "pluginexport.h" /* for GEANY_API_SYMBOL */
 #include "support.h" /* only for _("text") */
 #include "utils.h"   /* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
