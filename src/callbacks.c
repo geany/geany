@@ -1552,7 +1552,6 @@ void on_toolbutton_back_activate(GtkAction *menuitem, gpointer user_data)
 }
 
 
-GEANY_EXPORT_SYMBOL
 gboolean on_motion_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
 	if (prefs.auto_focus && ! gtk_widget_has_focus(widget))
