@@ -1,5 +1,25 @@
 A patch to Scintilla 2.29 containing our changes to Scintilla
 (removing unused lexers and an updated marshallers file).
+diff --git a/scintilla/gtk/ScintillaGTK.cxx b/scintilla/gtk/ScintillaGTK.cxx
+index 18e3358..5c405bc 100644
+--- scintilla/gtk/ScintillaGTK.cxx
++++ scintilla/gtk/ScintillaGTK.cxx
+@@ -2959,6 +2959,7 @@ sptr_t ScintillaGTK::DirectFunction(
+ 	return reinterpret_cast<ScintillaGTK *>(ptr)->WndProc(iMessage, wParam, lParam);
+ }
+ 
++GEANY_API_SYMBOL
+ sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+ 	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
+ 	return psci->WndProc(iMessage, wParam, lParam);
+@@ -3107,6 +3108,7 @@ static void scintilla_init(ScintillaObject *sci) {
+ 	}
+ }
+ 
++GEANY_API_SYMBOL
+ GtkWidget* scintilla_new() {
+ 	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
+ 	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
 diff -Naur scintilla_orig/gtk/scintilla-marshal.c scintilla/gtk/scintilla-marshal.c
 --- scintilla_orig/gtk/scintilla-marshal.c	2010-10-27 23:15:45.000000000 +0200
 +++ scintilla/gtk/scintilla-marshal.c	2011-04-03 17:42:59.000000000 +0200
