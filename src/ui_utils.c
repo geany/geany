@@ -1293,8 +1293,12 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 	g_queue_remove(grf->recent_queue, data);
 	g_queue_push_head(grf->recent_queue, data);
 
-	/* remove the old menuitem for the filename */
 	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
+	/* make sure the previously first item is sensitive */
+	item = g_list_first(children);
+	if (item != NULL)
+		gtk_widget_set_sensitive(GTK_WIDGET(item->data), TRUE);
+	/* remove the old menuitem for the filename */
 	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 	if (item != NULL)
 		gtk_widget_destroy(GTK_WIDGET(item->data));
@@ -1314,6 +1318,9 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+	/* make the current project item insensitive */
+	if (grf->type == RECENT_FILE_PROJECT && app->project != NULL && g_strcmp0(app->project->file_name, utf8_filename) == 0)
+		gtk_widget_set_sensitive(GTK_WIDGET(tmp), FALSE);
 	/* then for the recent files menu in the tool bar */
 	if (grf->toolbar != NULL)
 	{
@@ -1337,8 +1344,12 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 
 	filename = g_queue_peek_head(grf->recent_queue);
 
-	/* clean the MRU list before adding an item (menubar) */
 	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
+	/* make sure the previously first item is sensitive */
+	item = g_list_first(children);
+	if (item != NULL)
+		gtk_widget_set_sensitive(GTK_WIDGET(item->data), TRUE);
+	/* clean the MRU list before adding an item (menubar) */
 	if (g_list_length(children) > file_prefs.mru_length - 1)
 	{
 		item = g_list_nth(children, file_prefs.mru_length - 1);
@@ -1356,6 +1367,9 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 	gtk_widget_show(tmp);
 	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
 	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+	/* make the current project item insensitive */
+	if (grf->type == RECENT_FILE_PROJECT && app->project != NULL && g_strcmp0(app->project->file_name, filename) == 0)
+		gtk_widget_set_sensitive(GTK_WIDGET(tmp), FALSE);
 
 	/* clean the MRU list before adding an item (toolbar) */
 	if (grf->toolbar != NULL)
