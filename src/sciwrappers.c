@@ -45,14 +45,6 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 
-/* These functions need to be exported for the plugin API but to avoid
- * modifying upstream sources, they are (re-)declared here with the
- * needed export attribute. */
-GEANY_API_SYMBOL sptr_t scintilla_send_message(ScintillaObject *sci,
-	unsigned int iMessage, uptr_t wParam, sptr_t lParam);
-GEANY_API_SYMBOL GtkWidget* scintilla_new(void);
-
-
 /* line numbers visibility */
 void sci_set_line_numbers(ScintillaObject *sci, gboolean set)
 {
