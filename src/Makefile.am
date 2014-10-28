@@ -121,7 +121,6 @@ libgeany_la_LIBADD = \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
-	@LIBGEANY_LIBS@ \
 	-lole32 -lwsock32 -lcomdlg32
 
 libgeany_la_LDFLAGS = -Wl,-luuid $(AM_LDFLAGS)
@@ -136,7 +135,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-libgeany_la_LDFLAGS +=	-mwindows -mms-bitfields -no-undefined
+libgeany_la_LDFLAGS += @LIBGEANY_LDFLAGS@ -mwindows -mms-bitfields -no-undefined
 
 WINDRES = $(host_alias)-windres
 
@@ -159,8 +158,7 @@ libgeany_la_LIBADD = \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \
-	$(INTLLIBS) \
-	@LIBGEANY_LIBS@
+	$(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
@@ -170,6 +168,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
+
+libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 clean-local:
 

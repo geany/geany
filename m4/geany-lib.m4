@@ -24,10 +24,10 @@ dnl `__attribute__((visibility(...)))` extension and use it if so.
 		])
 	CFLAGS="${libgeany_backup_cflags}"
 
-	LIBGEANY_LIBS="-version-info ${libgeany_current}:${libgeany_revision}:${libgeany_age}"
+	LIBGEANY_LDFLAGS="-version-info ${libgeany_current}:${libgeany_revision}:${libgeany_age}"
 
 	AC_SUBST([LIBGEANY_CFLAGS])
-	AC_SUBST([LIBGEANY_LIBS])
+	AC_SUBST([LIBGEANY_LDFLAGS])
 
 dnl Check for utilities needed to do codegen
 	AC_PATH_PROG([SORT], [sort], [

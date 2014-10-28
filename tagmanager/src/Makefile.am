@@ -30,5 +30,3 @@ libtagmanager_la_SOURCES =\
 	tm_tag.c \
 	tm_workspace.h \
 	tm_workspace.c
-
-libtagmanager_la_LDFLAGS = @LIBGEANY_LIBS@
