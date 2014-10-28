@@ -120,7 +120,6 @@ libgeany_la_LIBADD = \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
-	@LIBGEANY_LIBS@ \
 	-lole32 -luuid -liberty -lwsock32
 
 geany_LDADD += geany_private.res
@@ -134,7 +133,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-libgeany_la_LDFLAGS =	-mwindows -mms-bitfields
+libgeany_la_LDFLAGS =	@LIBGEANY_LDFLAGS@ -mwindows -mms-bitfields
 
 WINDRES = $(host_alias)-windres
 
@@ -156,8 +155,7 @@ libgeany_la_LIBADD = \
 	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
-	$(INTLLIBS) \
-	@LIBGEANY_LIBS@
+	$(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
@@ -167,6 +165,8 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
+
+libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 clean-local:
 

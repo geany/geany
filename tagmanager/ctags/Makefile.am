@@ -81,5 +81,3 @@ libctags_la_SOURCES = \
 	vstring.c \
 	vstring.h \
 	$(parsers)
-
-libctags_la_LDFLAGS = @LIBGEANY_LIBS@
