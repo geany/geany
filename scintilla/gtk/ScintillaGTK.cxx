@@ -3104,6 +3104,7 @@ sptr_t ScintillaGTK::DirectFunction(
 	return reinterpret_cast<ScintillaGTK *>(ptr)->WndProc(iMessage, wParam, lParam);
 }
 
+GEANY_API_SYMBOL
 sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
 	return psci->WndProc(iMessage, wParam, lParam);
@@ -3252,6 +3253,7 @@ static void scintilla_init(ScintillaObject *sci) {
 	}
 }
 
+GEANY_API_SYMBOL
 GtkWidget* scintilla_new() {
 	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
 	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
