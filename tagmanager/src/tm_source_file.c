@@ -109,10 +109,8 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 {
 	if (NULL == current_source_file)
 		return 0;
-	if (NULL == current_source_file->tags_array)
-		current_source_file->tags_array = g_ptr_array_new();
-	g_ptr_array_add(current_source_file->tags_array,
-	  tm_tag_new(current_source_file, tag));
+	g_ptr_array_add(current_source_file->tags_array, 
+		tm_tag_new(current_source_file, tag));
 	return TRUE;
 }
 
@@ -124,8 +122,7 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 
 	if (NULL == arglist ||
 		NULL == tag_name ||
-		NULL == current_source_file ||
-		NULL == current_source_file->tags_array)
+		NULL == current_source_file)
 	{
 		return;
 	}
@@ -172,7 +169,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			source_file->short_name = source_file->file_name;
 	}
 
-	source_file->tags_array = NULL;
+	source_file->tags_array = g_ptr_array_new();
 
 	if (NULL == LanguageTable)
 	{
@@ -219,11 +216,8 @@ static void tm_source_file_destroy(TMSourceFile *source_file)
 #endif
 
 	g_free(source_file->file_name);
-	if (NULL != source_file->tags_array)
-	{
-		tm_tags_array_free(source_file->tags_array, TRUE);
-		source_file->tags_array = NULL;
-	}
+	tm_tags_array_free(source_file->tags_array, TRUE);
+	source_file->tags_array = NULL;
 }
 
 /** Frees a TMSourceFile structure, including all contents */
@@ -272,8 +266,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 
 	while ((TRUE == status) && (passCount < 3))
 	{
-		if (source_file->tags_array)
-			tm_tags_array_free(source_file->tags_array, FALSE);
+		tm_tags_array_free(source_file->tags_array, FALSE);
 		if (fileOpen (file_name, source_file->lang))
 		{
 			if (LanguageTable [source_file->lang]->parser != NULL)
@@ -348,8 +341,7 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		int passCount = 0;
 		while ((TRUE == status) && (passCount < 3))
 		{
-			if (source_file->tags_array)
-				tm_tags_array_free(source_file->tags_array, FALSE);
+			tm_tags_array_free(source_file->tags_array, FALSE);
 			if (bufferOpen (text_buf, buf_size, file_name, source_file->lang))
 			{
 				if (LanguageTable [source_file->lang]->parser != NULL)

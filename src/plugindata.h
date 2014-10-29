@@ -600,10 +600,10 @@ typedef struct TagManagerFuncs
 {
 	gchar*			(*tm_get_real_path) (const gchar *file_name);
 	TMSourceFile*	(*tm_source_file_new) (const char *file_name, const char *name);
-	gboolean		(*tm_workspace_add_source_file) (TMSourceFile *source_file);
+	void			(*tm_workspace_add_source_file) (TMSourceFile *source_file);
 	void			(*tm_workspace_update_source_file) (TMSourceFile *source_file, gboolean update_workspace);
 	void			(*tm_source_file_free) (TMSourceFile *source_file);
-	gboolean		(*tm_workspace_remove_source_file) (TMSourceFile *source_file, gboolean update);
+	void			(*tm_workspace_remove_source_file) (TMSourceFile *source_file, gboolean update_workspace);
 	void			(*tm_workspace_update) (void);
 }
 TagManagerFuncs;

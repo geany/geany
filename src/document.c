@@ -2487,11 +2487,8 @@ void document_update_tags(GeanyDocument *doc)
 		doc->tm_file = tm_source_file_new(locale_filename, name);
 		g_free(locale_filename);
 
-		if (doc->tm_file && !tm_workspace_add_source_file(doc->tm_file))
-		{
-			tm_source_file_free(doc->tm_file);
-			doc->tm_file = NULL;
-		}
+		if (doc->tm_file)
+			tm_workspace_add_source_file(doc->tm_file);
 	}
 
 	/* early out if there's no tm source file and we couldn't create one */

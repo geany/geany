@@ -223,40 +223,36 @@ static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *
 {
 	tag->refcount = 1;
 	if (NULL == tag_entry)
-	{
 		return FALSE;
-	}
-	else
-	{
-		/* This is a normal tag entry */
-		if (NULL == tag_entry->name)
-			return FALSE;
-		tag->name = g_strdup(tag_entry->name);
-		tag->type = get_tag_type(tag_entry->kindName);
-		tag->local = tag_entry->isFileScope;
-		tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
-		tag->line = tag_entry->lineNumber;
-		if (NULL != tag_entry->extensionFields.arglist)
-			tag->arglist = g_strdup(tag_entry->extensionFields.arglist);
-		if ((NULL != tag_entry->extensionFields.scope[1]) &&
-			(isalpha(tag_entry->extensionFields.scope[1][0]) ||
-			 tag_entry->extensionFields.scope[1][0] == '_' ||
-			 tag_entry->extensionFields.scope[1][0] == '$'))
-			tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
-		if (tag_entry->extensionFields.inheritance != NULL)
-			tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
-		if (tag_entry->extensionFields.varType != NULL)
-			tag->var_type = g_strdup(tag_entry->extensionFields.varType);
-		if (tag_entry->extensionFields.access != NULL)
-			tag->access = get_tag_access(tag_entry->extensionFields.access);
-		if (tag_entry->extensionFields.implementation != NULL)
-			tag->impl = get_tag_impl(tag_entry->extensionFields.implementation);
-		if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
-			tag->type = tm_tag_macro_with_arg_t;
-		tag->file = file;
-		tag->lang = file->lang;
-		return TRUE;
-	}
+		
+	/* This is a normal tag entry */
+	if (NULL == tag_entry->name)
+		return FALSE;
+	tag->name = g_strdup(tag_entry->name);
+	tag->type = get_tag_type(tag_entry->kindName);
+	tag->local = tag_entry->isFileScope;
+	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
+	tag->line = tag_entry->lineNumber;
+	if (NULL != tag_entry->extensionFields.arglist)
+		tag->arglist = g_strdup(tag_entry->extensionFields.arglist);
+	if ((NULL != tag_entry->extensionFields.scope[1]) &&
+		(isalpha(tag_entry->extensionFields.scope[1][0]) ||
+		 tag_entry->extensionFields.scope[1][0] == '_' ||
+		 tag_entry->extensionFields.scope[1][0] == '$'))
+		tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
+	if (tag_entry->extensionFields.inheritance != NULL)
+		tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
+	if (tag_entry->extensionFields.varType != NULL)
+		tag->var_type = g_strdup(tag_entry->extensionFields.varType);
+	if (tag_entry->extensionFields.access != NULL)
+		tag->access = get_tag_access(tag_entry->extensionFields.access);
+	if (tag_entry->extensionFields.implementation != NULL)
+		tag->impl = get_tag_impl(tag_entry->extensionFields.implementation);
+	if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
+		tag->type = tm_tag_macro_with_arg_t;
+	tag->file = file;
+	tag->lang = file->lang;
+	return TRUE;
 }
 
 /*

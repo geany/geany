@@ -34,9 +34,9 @@ typedef struct
 		(just pointers to source file tags, the tag objects are owned by the source files) */
 } TMWorkspace;
 
-gboolean tm_workspace_add_source_file(TMSourceFile *source_file);
+void tm_workspace_add_source_file(TMSourceFile *source_file);
 
-gboolean tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean update_workspace);
+void tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean update_workspace);
 
 void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_workspace);
 
