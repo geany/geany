@@ -99,8 +99,11 @@ enum
 	TA_POINTER
 };
 
-static guint *s_sort_attrs = NULL;
-static gboolean s_partial = FALSE;
+typedef struct
+{
+	guint *sort_attrs;
+	gboolean partial;
+} TMSortOptions;
 
 static const char *s_tag_type_names[] = {
 	"class", /* classes */
@@ -664,36 +667,35 @@ TMTag *tm_tag_ref(TMTag *tag)
 }
 
 /*
- Inbuilt tag comparison function. Do not call directly since it needs some
- static variables to be set. Always use tm_tags_sort() and tm_tags_dedup()
- instead.
+ Inbuilt tag comparison function.
 */
-static int tm_tag_compare(const void *ptr1, const void *ptr2)
+static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
 {
 	unsigned int *sort_attr;
 	int returnval = 0;
 	TMTag *t1 = *((TMTag **) ptr1);
 	TMTag *t2 = *((TMTag **) ptr2);
+	TMSortOptions *sort_options = user_data;
 
 	if ((NULL == t1) || (NULL == t2))
 	{
 		g_warning("Found NULL tag");
 		return t2 - t1;
 	}
-	if (NULL == s_sort_attrs)
+	if (NULL == sort_options->sort_attrs)
 	{
-		if (s_partial)
+		if (sort_options->partial)
 			return strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 		else
 			return strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 	}
 
-	for (sort_attr = s_sort_attrs; *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
+	for (sort_attr = sort_options->sort_attrs; *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
 	{
 		switch (*sort_attr)
 		{
 			case tm_tag_attr_name_t:
-				if (s_partial)
+				if (sort_options->partial)
 					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 				else
 					returnval = strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
@@ -761,15 +763,16 @@ gboolean tm_tags_prune(GPtrArray *tags_array)
 */
 gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
 {
+	TMSortOptions sort_options;
 	guint i;
 
 	if ((!tags_array) || (!tags_array->len))
 		return TRUE;
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
 	for (i = 1; i < tags_array->len; ++i)
 	{
-		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i])))
+		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i]), &sort_options))
 		{
 			tags_array->pdata[i-1] = NULL;
 		}
@@ -788,12 +791,13 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
 */
 gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup)
 {
+	TMSortOptions sort_options;
+	
 	if ((!tags_array) || (!tags_array->len))
 		return TRUE;
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
-	qsort(tags_array->pdata, tags_array->len, sizeof(gpointer), tm_tag_compare);
-	s_sort_attrs = NULL;
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
+	g_ptr_array_sort_with_data(tags_array, tm_tag_compare, &sort_options);
 	if (dedup)
 		tm_tags_dedup(tags_array, sort_attributes);
 	return TRUE;
@@ -817,7 +821,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
  * The merge complexity depends mostly on the size of the small array
  * and is almost independent of the size of the big array.
  * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
-static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
+static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, TMSortOptions *sort_options) {
 	guint i1 = 0;  /* index to big_array */
 	guint i2 = 0;  /* index to small_array */
 	guint initial_step;
@@ -858,7 +862,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 			/* if the value in big_array after making the big step is still smaller
 			 * than the value in small_array, we can copy all the values inbetween
 			 * into the result without making expensive string comparisons */
-			if (tm_tag_compare(&val1, &val2) < 0)
+			if (tm_tag_compare(&val1, &val2, sort_options) < 0)
 			{
 				while (i1 <= j1) 
 				{
@@ -881,7 +885,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 			cmpnum++;
 #endif
 			val1 = big_array->pdata[i1];
-			cmpval = tm_tag_compare(&val1, &val2);
+			cmpval = tm_tag_compare(&val1, &val2, sort_options);
 			if (cmpval < 0)
 			{
 				g_ptr_array_add(res_array, val1);
@@ -917,11 +921,11 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array) {
 GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes)
 {
 	GPtrArray *res_array;
+	TMSortOptions sort_options;
 	
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
-	res_array = merge(big_array, small_array);
-	s_sort_attrs = NULL;
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
+	res_array = merge(big_array, small_array, &sort_options);
 	return res_array;
 }
 
@@ -973,13 +977,40 @@ void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all)
 	}
 }
 
+/* copy/pasted bsearch() from libc extended with user_data for comparison function
+ * and using glib types */
+static gpointer binary_search(gpointer key, gpointer base, size_t nmemb, 
+	GCompareDataFunc compar, gpointer user_data)
+{
+	gsize l, u, idx;
+	gpointer p;
+	gint comparison;
+
+	l = 0;
+	u = nmemb;
+	while (l < u)
+	{
+		idx = (l + u) / 2;
+		p = (gpointer) (((const gchar *) base) + (idx * sizeof(gpointer)));
+		comparison = (*compar) (key, p, user_data);
+		if (comparison < 0)
+			u = idx;
+		else if (comparison > 0)
+			l = idx + 1;
+		else
+			return (gpointer) p;
+	}
+
+	return NULL;
+}
+
 static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean partial,
-		gboolean tags_array_sorted)
+		gboolean tags_array_sorted, TMSortOptions *sort_options)
 {
 	if (tags_array_sorted)
 	{	/* fast binary search on sorted tags array */
-		return (TMTag **) bsearch(&tag, tags_array->pdata, tags_array->len
-		  , sizeof(gpointer), tm_tag_compare);
+		return (TMTag **) binary_search(&tag, tags_array->pdata, tags_array->len, 
+			tm_tag_compare, sort_options);
 	}
 	else
 	{	/* the slow way: linear search (to make it a bit faster, search reverse assuming
@@ -989,7 +1020,7 @@ static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean par
 		for (i = tags_array->len - 1; i >= 0; i--)
 		{
 			t = (TMTag **) &tags_array->pdata[i];
-			if (0 == tm_tag_compare(&tag, t))
+			if (0 == tm_tag_compare(&tag, t, sort_options))
 				return t;
 		}
 	}
@@ -1013,6 +1044,7 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	static TMTag *tag = NULL;
 	TMTag **result;
 	int tagMatches=0;
+	TMSortOptions sort_options;
 
 	if ((!tags_array) || (!tags_array->len))
 		return NULL;
@@ -1020,10 +1052,10 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	if (NULL == tag)
 		tag = g_new0(TMTag, 1);
 	tag->name = (char *) name;
-	s_sort_attrs = NULL;
-	s_partial = partial;
+	sort_options.sort_attrs = NULL;
+	sort_options.partial = partial;
 
-	result = tags_search(tags_array, tag, partial, tags_array_sorted);
+	result = tags_search(tags_array, tag, partial, tags_array_sorted, &sort_options);
 	/* There can be matches on both sides of result */
 	if (result)
 	{
@@ -1035,21 +1067,20 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 		adv++;
 		for (; adv <= last && *adv; ++ adv)
 		{
-			if (0 != tm_tag_compare(&tag, adv))
+			if (0 != tm_tag_compare(&tag, adv, &sort_options))
 				break;
 			++tagMatches;
 		}
 		/* Now look for matches from result and below */
 		for (; result >= (TMTag **) tags_array->pdata; -- result)
 		{
-			if (0 != tm_tag_compare(&tag, (TMTag **) result))
+			if (0 != tm_tag_compare(&tag, (TMTag **) result, &sort_options))
 				break;
 			++tagMatches;
 		}
 		*tagCount=tagMatches;
 		++ result;	/* Correct address for the last successful match */
 	}
-	s_partial = FALSE;
 	return (TMTag **) result;
 }
 
