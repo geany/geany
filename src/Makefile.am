@@ -125,7 +125,7 @@ geany_LDFLAGS =	-mwindows -mms-bitfields
 WINDRES = $(host_alias)-windres
 
 geany_private.res:
-	$(WINDRES) -i ../geany_private.rc --input-format=rc -o geany_private.res -O coff;
+	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o geany_private.res -O coff;
 
 clean-local:
 	rm -f geany_private.res
