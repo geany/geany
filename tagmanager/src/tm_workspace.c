@@ -177,11 +177,11 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 		g_ptr_array_add(file_tags, tag);
 	fclose(fp);
 	
-	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE);
+	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
 	new_tags = tm_tags_merge(theWorkspace->global_tags, 
-		file_tags, global_tags_sort_attrs);
+		file_tags, global_tags_sort_attrs, TRUE);
 	g_ptr_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(file_tags, TRUE);
 	theWorkspace->global_tags = new_tags;
@@ -443,7 +443,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	if (FALSE == tm_tags_sort(tags_array, global_tags_sort_attrs, TRUE))
+	if (FALSE == tm_tags_sort(tags_array, global_tags_sort_attrs, TRUE, FALSE))
 	{
 		tm_source_file_free(source_file);
 		return FALSE;
@@ -505,7 +505,7 @@ void tm_workspace_update(void)
 #ifdef TM_DEBUG
 	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
-	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE);
+	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE, FALSE);
 }
 
 static void tm_workspace_merge_file_tags(TMSourceFile *source_file)
@@ -514,7 +514,7 @@ static void tm_workspace_merge_file_tags(TMSourceFile *source_file)
 		tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
 
 	GPtrArray *new_tags = tm_tags_merge(theWorkspace->tags_array, 
-		source_file->tags_array, sort_attrs);
+		source_file->tags_array, sort_attrs, FALSE);
 	/* tags owned by TMSourceFile - free just the pointer array */
 	g_ptr_array_free(theWorkspace->tags_array, TRUE);
 	theWorkspace->tags_array = new_tags;
@@ -542,7 +542,7 @@ void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_
 		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 	}
 	tm_source_file_parse(source_file);
-	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE, TRUE);
 	if (update_workspace)
 	{
 #ifdef TM_DEBUG
@@ -589,7 +589,7 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 	}
 	tm_source_file_buffer_parse (source_file, text_buf, buf_size);
-	tm_tags_sort(source_file->tags_array, NULL, FALSE);
+	tm_tags_sort(source_file->tags_array, NULL, FALSE, TRUE);
 	if (update_workspace)
 	{
 #ifdef TM_DEBUG
@@ -693,7 +693,7 @@ const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *at
 	}
 
 	if (attrs)
-		tm_tags_sort(tags, attrs, TRUE);
+		tm_tags_sort(tags, attrs, TRUE, FALSE);
 	return tags;
 }
 
@@ -777,7 +777,7 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
 							  name, scope, type, partial, lang, FALSE);
 	}
 	if (attrs)
-		tm_tags_sort (tags, attrs, TRUE);
+		tm_tags_sort (tags, attrs, TRUE, FALSE);
 	return tags;
 }
 

@@ -761,7 +761,7 @@ gboolean tm_tags_prune(GPtrArray *tags_array)
  on the same criteria.
  @return TRUE on success, FALSE on failure
 */
-gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
+gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
 	TMSortOptions sort_options;
 	guint i;
@@ -774,6 +774,8 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
 	{
 		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i]), &sort_options))
 		{
+			if (unref_duplicates)
+				tm_tag_unref(tags_array->pdata[i-1]);
 			tags_array->pdata[i-1] = NULL;
 		}
 	}
@@ -789,7 +791,8 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
  @param dedup Whether to deduplicate the sorted array
  @return TRUE on success, FALSE on failure
 */
-gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup)
+gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, 
+	gboolean dedup, gboolean unref_duplicates)
 {
 	TMSortOptions sort_options;
 	
@@ -799,7 +802,7 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gbo
 	sort_options.partial = FALSE;
 	g_ptr_array_sort_with_data(tags_array, tm_tag_compare, &sort_options);
 	if (dedup)
-		tm_tags_dedup(tags_array, sort_attributes);
+		tm_tags_dedup(tags_array, sort_attributes, unref_duplicates);
 	return TRUE;
 }
 
@@ -821,7 +824,8 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
  * The merge complexity depends mostly on the size of the small array
  * and is almost independent of the size of the big array.
  * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
-static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, TMSortOptions *sort_options) {
+static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, 
+	TMSortOptions *sort_options, gboolean unref_duplicates) {
 	guint i1 = 0;  /* index to big_array */
 	guint i2 = 0;  /* index to small_array */
 	guint initial_step;
@@ -898,7 +902,11 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, TMSortOpti
 				/* value from small_array gets merged - reset the step size */
 				step = initial_step;
 				if (cmpval == 0)
+				{
 					i1++;  /* remove the duplicate, keep just the newly merged value */
+					if (unref_duplicates)
+						tm_tag_unref(val1);
+				}
 			}
 		}
 	}
@@ -918,14 +926,15 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, TMSortOpti
 	return res_array;
 }
 
-GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes)
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
+	TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
 	GPtrArray *res_array;
 	TMSortOptions sort_options;
 	
 	sort_options.sort_attrs = sort_attributes;
 	sort_options.partial = FALSE;
-	res_array = merge(big_array, small_array, &sort_options);
+	res_array = merge(big_array, small_array, &sort_options, unref_duplicates);
 	return res_array;
 }
 

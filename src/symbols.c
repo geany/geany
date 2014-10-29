@@ -365,7 +365,7 @@ GString *symbols_get_macro_list(gint lang)
 		return NULL;
 	}
 
-	tm_tags_sort(ftags, NULL, FALSE);
+	tm_tags_sort(ftags, NULL, FALSE, FALSE);
 	for (j = 0; j < ftags->len; j++)
 	{
 		if (j > 0)

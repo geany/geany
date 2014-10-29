@@ -163,15 +163,17 @@ gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
 
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 
-GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, TMTagAttrType *sort_attributes);
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
+	TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
-gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup);
+gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, 
+	gboolean dedup, gboolean unref_duplicates);
 
 GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types);
 
 gboolean tm_tags_prune(GPtrArray *tags_array);
 
-gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes);
+gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 		gboolean partial, gboolean tags_array_sorted, int * tagCount);

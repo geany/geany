@@ -1873,7 +1873,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 		TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, tm_tag_attr_scope_t,
 			tm_tag_attr_arglist_t, 0};
 
-		tm_tags_sort((GPtrArray *) tags, sort_attr, TRUE);
+		tm_tags_sort((GPtrArray *) tags, sort_attr, TRUE, FALSE);
 	}
 
 	/* if the current word has changed since last time, start with the first tag match */
