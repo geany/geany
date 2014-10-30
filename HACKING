@@ -105,7 +105,7 @@ See also the 'Building on Windows' document on the website.
 
 File organization
 -----------------
-callbacks.c is just for Glade callbacks.
+callbacks.c is just for older Glade callbacks.
 Avoid adding code to geany.h if it will fit better elsewhere.
 See the top of each ``src/*.c`` file for a brief description of what
 it's for.
@@ -159,7 +159,14 @@ Doc-comments
 Glade
 -----
 Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
-Callbacks for the user-interface should go in ``src/callbacks.c``.
+
+Use Glade 3.8.5. The 3.8 series still supports GTK+ 2, and earlier
+point releases did not preserve the order of XML elements, leading to
+unmanageable diffs.
+
+Originally, callbacks for the user-interface went in
+``src/callbacks.c``. New callbacks should probably go in a more
+relevant place.
 
 GTK versions & API documentation
 --------------------------------
@@ -616,11 +623,14 @@ Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
-First write or find a CTags compatible parser, foo.c. Note that there
-are some language patches for CTags at:
+First write or find a CTags compatible parser, foo.c. First check this
+ctags fork:
+https://github.com/fishman/ctags
+
+There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
-(You can also try the Anjuta project's tagmanager codebase.)
+(You can also try the Anjuta project's anjuta-tags codebase.)
 
 .. note::
     From Geany 1.22 GLib's GRegex engine is used instead of POSIX
