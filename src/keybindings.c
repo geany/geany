@@ -1420,10 +1420,15 @@ static gboolean cb_func_search_action(guint key_id)
 	GeanyDocument *doc = document_get_current();
 	ScintillaObject *sci;
 
-	if (key_id == GEANY_KEYS_SEARCH_FINDINFILES)
+	/* these work without docs */
+	switch (key_id)
 	{
-		on_find_in_files1_activate(NULL, NULL);	/* works without docs too */
-		return TRUE;
+		case GEANY_KEYS_SEARCH_FINDINFILES:
+			on_find_in_files1_activate(NULL, NULL); return TRUE;
+		case GEANY_KEYS_SEARCH_NEXTMESSAGE:
+			on_next_message1_activate(NULL, NULL); return TRUE;
+		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
+			on_previous_message1_activate(NULL, NULL); return TRUE;
 	}
 	if (!doc)
 		return TRUE;
@@ -1443,10 +1448,6 @@ static gboolean cb_func_search_action(guint key_id)
 			on_find_nextsel1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_REPLACE:
 			on_replace1_activate(NULL, NULL); break;
-		case GEANY_KEYS_SEARCH_NEXTMESSAGE:
-			on_next_message1_activate(NULL, NULL); break;
-		case GEANY_KEYS_SEARCH_PREVIOUSMESSAGE:
-			on_previous_message1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDUSAGE:
 			on_find_usage1_activate(NULL, NULL); break;
 		case GEANY_KEYS_SEARCH_FINDDOCUMENTUSAGE:
