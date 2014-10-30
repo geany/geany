@@ -161,6 +161,10 @@ Glade
 Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
 Callbacks for the user-interface should go in ``src/callbacks.c``.
 
+Use Glade 3.8.5. The 3.8 series still supports GTK+ 2, and earlier
+point releases did not preserve the order of XML elements, leading to
+unmanageable diffs.
+
 GTK versions & API documentation
 --------------------------------
 Geany requires GTK >= 2.16 and GLib >= 2.20. API symbols from newer
@@ -616,11 +620,13 @@ Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
-First write or find a CTags compatible parser, foo.c. Note that there
-are some language patches for CTags at:
+First write or find a CTags compatible parser, foo.c. Check this fork:
+https://github.com/fishman/ctags
+
+There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
-(You can also try the Anjuta project's tagmanager codebase.)
+(You can also try the Anjuta project's anjuta-tags codebase.)
 
 .. note::
     From Geany 1.22 GLib's GRegex engine is used instead of POSIX
