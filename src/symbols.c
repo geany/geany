@@ -64,11 +64,6 @@
 #include <stdlib.h>
 
 
-const guint TM_GLOBAL_TYPE_MASK =
-	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
-	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
-
-
 static gchar **html_entities = NULL;
 
 typedef struct
@@ -248,7 +243,7 @@ static void html_tags_loaded(void)
 }
 
 
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang)
+GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 {
 	guint j;
 	TMTag *tag;
@@ -256,9 +251,10 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 	GPtrArray *typedefs;
 	gint tag_lang;
 
-	g_return_val_if_fail(tags_array != NULL, NULL);
-
-	typedefs = tm_tags_extract(tags_array, tag_types);
+	if (global)
+		typedefs = tm_tags_extract(app->tm_workspace->global_tags, TM_GLOBAL_TYPE_MASK);
+	else
+		typedefs = app->tm_workspace->typename_array;
 
 	if ((typedefs) && (typedefs->len > 0))
 	{
@@ -280,7 +276,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
 			}
 		}
 	}
-	if (typedefs)
+	if (typedefs && global)
 		g_ptr_array_free(typedefs, TRUE);
 	return s;
 }

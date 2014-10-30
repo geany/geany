@@ -32,6 +32,7 @@ typedef struct
 	GPtrArray *source_files; /**< An array of TMSourceFile pointers */
 	GPtrArray *tags_array; /**< Sorted tags from all source files 
 		(just pointers to source file tags, the tag objects are owned by the source files) */
+	GPtrArray *typename_array; /**< Typename tags for syntax highlighting (pointers owned by source files) */
 } TMWorkspace;
 
 void tm_workspace_add_source_file(TMSourceFile *source_file);

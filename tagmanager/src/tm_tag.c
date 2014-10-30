@@ -78,6 +78,11 @@ static void log_tag_free(TMTag *tag)
 #endif /* DEBUG_TAG_REFS */
 
 
+const guint TM_GLOBAL_TYPE_MASK =
+	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
+
+
 /* Note: To preserve binary compatibility, it is very important
 	that you only *append* to this list ! */
 enum

@@ -433,23 +433,6 @@ void highlighting_free_styles(void)
 }
 
 
-static GString *get_global_typenames(gint lang)
-{
-	GString *s = NULL;
-
-	if (app->tm_workspace)
-	{
-		GPtrArray *tags_array = app->tm_workspace->global_tags;
-
-		if (tags_array)
-		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
-		}
-	}
-	return s;
-}
-
-
 static gchar*
 get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 {
@@ -823,7 +806,7 @@ static void merge_type_keywords(ScintillaObject *sci, guint ft_id, guint keyword
 	const gchar *user_words = style_sets[ft_id].keywords[keyword_idx];
 	GString *s;
 
-	s = get_global_typenames(filetypes[ft_id]->lang);
+	s = symbols_find_typenames_as_string(filetypes[ft_id]->lang, TRUE);
 	if (G_UNLIKELY(s == NULL))
 		s = g_string_sized_new(200);
 	else

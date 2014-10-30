@@ -143,6 +143,9 @@ typedef struct _TMTag
 
 #ifdef GEANY_PRIVATE
 
+extern const guint TM_GLOBAL_TYPE_MASK;
+
+
 typedef enum {
 	TM_FILE_FORMAT_TAGMANAGER,
 	TM_FILE_FORMAT_PIPE,

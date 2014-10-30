@@ -44,6 +44,7 @@ static gboolean tm_create_workspace(void)
 
 	theWorkspace->global_tags = g_ptr_array_new();
 	theWorkspace->source_files = g_ptr_array_new();
+	theWorkspace->typename_array = g_ptr_array_new();
 	return TRUE;
 }
 
@@ -63,6 +64,7 @@ void tm_workspace_free(void)
 	g_ptr_array_free(theWorkspace->source_files, TRUE);
 	tm_tags_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(theWorkspace->tags_array, TRUE);
+	g_ptr_array_free(theWorkspace->typename_array, TRUE);
 	g_free(theWorkspace);
 	theWorkspace = NULL;
 }
@@ -108,7 +110,10 @@ void tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean update_
 		if (theWorkspace->source_files->pdata[i] == source_file)
 		{
 			if (update_workspace)
+			{
 				tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
+				tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
+			}
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			return;
 		}
@@ -506,18 +511,19 @@ void tm_workspace_update(void)
 	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
 	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE, FALSE);
+	
+	theWorkspace->typename_array = tm_tags_extract(theWorkspace->tags_array, TM_GLOBAL_TYPE_MASK);
 }
 
-static void tm_workspace_merge_file_tags(TMSourceFile *source_file)
+static void tm_workspace_merge_tags(GPtrArray **big_array, GPtrArray *small_array)
 {
 	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t,
 		tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
 
-	GPtrArray *new_tags = tm_tags_merge(theWorkspace->tags_array, 
-		source_file->tags_array, sort_attrs, FALSE);
+	GPtrArray *new_tags = tm_tags_merge(*big_array, small_array, sort_attrs, FALSE);
 	/* tags owned by TMSourceFile - free just the pointer array */
-	g_ptr_array_free(theWorkspace->tags_array, TRUE);
-	theWorkspace->tags_array = new_tags;
+	g_ptr_array_free(*big_array, TRUE);
+	*big_array = new_tags;
 }
 
 /** Updates the source file by reparsing. The tags array and
@@ -540,15 +546,22 @@ void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_
 		/* tm_source_file_parse() deletes the tag objects - remove the tags from
 		 * workspace while they exist and can be scanned */
 		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
+		tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
 	}
 	tm_source_file_parse(source_file);
 	tm_tags_sort(source_file->tags_array, NULL, FALSE, TRUE);
 	if (update_workspace)
 	{
+		GPtrArray *sf_typedefs;
+
 #ifdef TM_DEBUG
 		g_message("Updating workspace from source file");
 #endif
-		tm_workspace_merge_file_tags(source_file);
+		tm_workspace_merge_tags(&theWorkspace->tags_array, source_file->tags_array);
+		
+		sf_typedefs = tm_tags_extract(source_file->tags_array, TM_GLOBAL_TYPE_MASK);
+		tm_workspace_merge_tags(&theWorkspace->typename_array, sf_typedefs);
+		g_ptr_array_free(sf_typedefs, TRUE);
 	}
 #ifdef TM_DEBUG
 	else
@@ -592,10 +605,16 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 	tm_tags_sort(source_file->tags_array, NULL, FALSE, TRUE);
 	if (update_workspace)
 	{
+		GPtrArray *sf_typedefs;
+
 #ifdef TM_DEBUG
 		g_message("Updating workspace from buffer..");
 #endif
-		tm_workspace_merge_file_tags(source_file);
+		tm_workspace_merge_tags(&theWorkspace->tags_array, source_file->tags_array);
+
+		sf_typedefs = tm_tags_extract(source_file->tags_array, TM_GLOBAL_TYPE_MASK);
+		tm_workspace_merge_tags(&theWorkspace->typename_array, sf_typedefs);
+		g_ptr_array_free(sf_typedefs, TRUE);
 	}
 #ifdef TM_DEBUG
 	else

@@ -34,8 +34,6 @@ const gchar *symbols_get_context_separator(gint ft_id);
 
 #ifdef GEANY_PRIVATE
 
-extern const guint TM_GLOBAL_TYPE_MASK;
-
 enum
 {
 	SYMBOLS_SORT_BY_NAME,
@@ -52,7 +50,7 @@ void symbols_reload_config_files(void);
 
 void symbols_global_tags_loaded(guint file_type_idx);
 
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang);
+GString *symbols_find_typenames_as_string(gint lang, gboolean global);
 
 const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
 
