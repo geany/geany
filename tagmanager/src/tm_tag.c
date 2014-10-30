@@ -809,13 +809,36 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 {
 	guint i;
-	for (i = 0; i < tags_array->len; i++)
+	GPtrArray *to_delete = g_ptr_array_sized_new(source_file->tags_array->len);
+	
+	for (i = 0; i < source_file->tags_array->len; i++)
 	{
-		TMTag *tag = tags_array->pdata[i];
+		guint j;
+		gint tag_count;
+		TMTag **found;
+		TMTag *tag = source_file->tags_array->pdata[i];
 		
-		if (tag != NULL && tag->file == source_file)
-			tags_array->pdata[i] = NULL;
+		found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
+		
+		for (j = 0; j < tag_count; j++)
+		{
+			if (*found != NULL && (*found)->file == source_file)
+			{
+				/* we cannot set the pointer to NULL now because the search wouldn't work */
+				g_ptr_array_add(to_delete, found);
+				break;
+			}
+			found++;
+		}
 	}
+
+	for (i = 0; i < to_delete->len; i++)
+	{
+		TMTag **tag = to_delete->pdata[i];
+		*tag = NULL;
+	}
+	g_ptr_array_free(to_delete, TRUE);
+
 	tm_tags_prune(tags_array);
 }
 
@@ -1055,6 +1078,7 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	int tagMatches=0;
 	TMSortOptions sort_options;
 
+	*tagCount = 0;
 	if ((!tags_array) || (!tags_array->len))
 		return NULL;
 
