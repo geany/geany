@@ -227,7 +227,7 @@ static void write_includes_file(FILE *fp, GList *includes_files)
 	while (node)
 	{
 		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
-		int str_len = strlen(str);
+		size_t str_len = strlen(str);
 
 		fwrite(str, str_len, 1, fp);
 		g_free(str);
@@ -324,7 +324,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	if (includes[0][0] == '"')	/* leading \" char for glob matching */
 	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
 	{
- 		int dirty_len = strlen(includes[idx_inc]);
+		size_t dirty_len = strlen(includes[idx_inc]);
 		char *clean_path = g_malloc(dirty_len - 1);
 
 		strncpy(clean_path, includes[idx_inc] + 1, dirty_len - 1);
@@ -638,7 +638,7 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 {
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2];
-	int len;
+	size_t len;
 	guint tagCount[2]={0,0}, tagIter;
 	gint tags_lang;
 
@@ -734,7 +734,7 @@ static gboolean match_langs(gint lang, const TMTag *tag)
 
 /* scope can be NULL.
  * lang can be -1 */
-static int
+static guint
 fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 					  const char *name, const char *scope, TMTagType type, gboolean partial,
 					  gint lang, gboolean first)
@@ -973,7 +973,7 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 	while (1)
 	{
 		const GPtrArray *tags2;
-		int got = 0;
+		guint got = 0;
 		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
 						   tm_tag_struct_t | tm_tag_typedef_t |
 						   tm_tag_union_t | tm_tag_enum_t);
@@ -1196,7 +1196,7 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 	while (1)
 	{
 		const GPtrArray *tags2;
-		int got = 0;
+		guint got = 0;
 		TMTagType types = (tm_tag_class_t
 						   tm_tag_struct_t | tm_tag_typedef_t |
 						   tm_tag_union_t | tm_tag_enum_t);

@@ -238,7 +238,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file)
 {
 	const char *file_name;
 	gboolean status = TRUE;
-	int passCount = 0;
+	guint passCount = 0;
 
 	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
@@ -338,7 +338,7 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 	}
 	else
 	{
-		int passCount = 0;
+		guint passCount = 0;
 		while ((TRUE == status) && (passCount < 3))
 		{
 			tm_tags_array_free(source_file->tags_array, FALSE);

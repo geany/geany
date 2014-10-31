@@ -351,10 +351,10 @@ static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 				case TA_INACTIVE:  /* Obsolete */
 					break;
 				case TA_ACCESS:
-					tag->access = *(start + 1);
+					tag->access = (char) *(start + 1);
 					break;
 				case TA_IMPL:
-					tag->impl = *(start + 1);
+					tag->impl = (char) *(start + 1);
 					break;
 				default:
 #ifdef GEANY_DEBUG
@@ -599,7 +599,7 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
  @param attrs Attributes to be written (bitmask).
  @return TRUE on success, FALSE on failure.
 */
-gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
+gboolean tm_tag_write(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 {
 	fprintf(fp, "%s", tag->name);
 	if (attrs & tm_tag_attr_type_t)
@@ -1056,11 +1056,11 @@ static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean par
 	else
 	{	/* the slow way: linear search (to make it a bit faster, search reverse assuming
 		 * that the tag to search was added recently) */
-		int i;
+		guint i;
 		TMTag **t;
-		for (i = tags_array->len - 1; i >= 0; i--)
+		for (i = tags_array->len; i > 0; i--)
 		{
-			t = (TMTag **) &tags_array->pdata[i];
+			t = (TMTag **) &tags_array->pdata[i - 1];
 			if (0 == tm_tag_compare(&tag, t, sort_options))
 				return t;
 		}
