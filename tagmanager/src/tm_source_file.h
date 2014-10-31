@@ -41,7 +41,7 @@ typedef struct
 	langType lang; /**< Programming language used */
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
-	GPtrArray *tags_array; /**< Tags obtained by parsing the object */
+	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object */
 } TMSourceFile;
 
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
@@ -57,9 +57,8 @@ const gchar *tm_source_file_get_lang_name(gint lang);
 
 gint tm_source_file_get_named_lang(const gchar *name);
 
-gboolean tm_source_file_parse(TMSourceFile *source_file);
-
-gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size);
+gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size,
+	gboolean use_buffer);
 
 #endif /* GEANY_PRIVATE */
 

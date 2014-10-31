@@ -714,7 +714,7 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
-	tm_workspace_remove_source_file(doc->tm_file, !main_status.quitting);
+	tm_workspace_remove_source_file(doc->tm_file);
 	tm_source_file_free(doc->tm_file);
 
 	if (doc->priv->tag_tree)
@@ -2501,20 +2501,11 @@ void document_update_tags(GeanyDocument *doc)
 		return;
 	}
 
-	len = sci_get_length(doc->editor->sci);
-	/* tm_source_file_buffer_update() below don't support 0-length data,
-	 * so just empty the tags array and leave */
-	if (len < 1)
-	{
-		tm_tags_array_free(doc->tm_file->tags_array, FALSE);
-		sidebar_update_tag_list(doc, FALSE);
-		return;
-	}
-
 	/* Parse Scintilla's buffer directly using TagManager
 	 * Note: this buffer *MUST NOT* be modified */
+	len = sci_get_length(doc->editor->sci);
 	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
-	tm_workspace_update_source_file_buffer(doc->tm_file, buffer_ptr, len, TRUE);
+	tm_workspace_update_source_file_buffer(doc->tm_file, buffer_ptr, len);
 
 	sidebar_update_tag_list(doc, TRUE);
 	document_highlight_tags(doc);
@@ -2614,7 +2605,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		/* delete tm file object to force creation of a new one */
 		if (doc->tm_file != NULL)
 		{
-			tm_workspace_remove_source_file(doc->tm_file, TRUE);
+			tm_workspace_remove_source_file(doc->tm_file);
 			tm_source_file_free(doc->tm_file);
 			doc->tm_file = NULL;
 		}

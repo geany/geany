@@ -189,10 +189,11 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	return TRUE;
 }
 
-/** Initializes a TMSourceFile structure and returns a pointer to it. 
+/** Initializes a TMSourceFile structure and returns a pointer to it. The
+ * TMSourceFile has to be added to TMWorkspace to start its parsing.
  * @param file_name The file name.
  * @param name Name of the used programming language, NULL for autodetection.
- * @return The created TMSourceFile object.
+ * @return The created unparsed TMSourceFile object.
  * */
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
@@ -220,7 +221,10 @@ static void tm_source_file_destroy(TMSourceFile *source_file)
 	source_file->tags_array = NULL;
 }
 
-/** Frees a TMSourceFile structure, including all contents */
+/** Frees a TMSourceFile structure, including all contents. Before calling this
+ function the TMSourceFile has to be removed from the TMWorkspace. 
+ @param source_file The source file to free.
+*/
 void tm_source_file_free(TMSourceFile *source_file)
 {
 	if (NULL != source_file)
@@ -230,72 +234,16 @@ void tm_source_file_free(TMSourceFile *source_file)
 	}
 }
 
-/* Parses the source file and regenarates the tags.
- @param source_file The source file to parse
- @return TRUE on success, FALSE on failure
-*/
-gboolean tm_source_file_parse(TMSourceFile *source_file)
-{
-	const char *file_name;
-	gboolean status = TRUE;
-	guint passCount = 0;
-
-	if ((NULL == source_file) || (NULL == source_file->file_name))
-	{
-		g_warning("Attempt to parse NULL file");
-		return FALSE;
-	}
-
-	file_name = source_file->file_name;
-	if (NULL == LanguageTable)
-	{
-		initializeParsing();
-		installLanguageMapDefaults();
-		if (NULL == TagEntryFunction)
-			TagEntryFunction = tm_source_file_tags;
-		if (NULL == TagEntrySetArglistFunction)
-			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
-	}
-	current_source_file = source_file;
-
-	if (LANG_AUTO == source_file->lang)
-		source_file->lang = getFileLanguage (file_name);
-
-	if (source_file->lang < 0 || ! LanguageTable [source_file->lang]->enabled)
-		return status;
-
-	while ((TRUE == status) && (passCount < 3))
-	{
-		tm_tags_array_free(source_file->tags_array, FALSE);
-		if (fileOpen (file_name, source_file->lang))
-		{
-			if (LanguageTable [source_file->lang]->parser != NULL)
-			{
-				LanguageTable [source_file->lang]->parser ();
-				fileClose ();
-				break;
-			}
-			else if (LanguageTable [source_file->lang]->parser2 != NULL)
-				status = LanguageTable [source_file->lang]->parser2 (passCount);
-			fileClose ();
-		}
-		else
-		{
-			g_warning("%s: Unable to open %s", G_STRFUNC, file_name);
-			return FALSE;
-		}
-		++ passCount;
-	}
-	return status;
-}
-
-/* Parses the text-buffer and regenarates the tags.
+/* Parses the text-buffer or source file and regenarates the tags.
  @param source_file The source file to parse
  @param text_buf The text buffer to parse
  @param buf_size The size of text_buf.
+ @param use_buffer Set FALSE to ignore the buffer and parse the file directly or
+ TRUE to parse the buffer and ignore the file content.
  @return TRUE on success, FALSE on failure
 */
-gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size)
+gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size,
+	gboolean use_buffer)
 {
 	const char *file_name;
 	gboolean status = TRUE;
@@ -306,9 +254,11 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		return FALSE;
 	}
 
-	if ((NULL == text_buf) || (0 == buf_size))
+	if (use_buffer && (NULL == text_buf || 0 == buf_size))
 	{
-		g_warning("Attempt to parse a NULL text buffer");
+		/* Empty buffer, "parse" by setting empty tag array */
+		tm_tags_array_free(source_file->tags_array, FALSE);
+		return TRUE;
 	}
 
 	file_name = source_file->file_name;
@@ -342,7 +292,7 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 		while ((TRUE == status) && (passCount < 3))
 		{
 			tm_tags_array_free(source_file->tags_array, FALSE);
-			if (bufferOpen (text_buf, buf_size, file_name, source_file->lang))
+			if (use_buffer && bufferOpen (text_buf, buf_size, file_name, source_file->lang))
 			{
 				if (LanguageTable [source_file->lang]->parser != NULL)
 				{
@@ -353,6 +303,18 @@ gboolean tm_source_file_buffer_parse(TMSourceFile *source_file, guchar* text_buf
 				else if (LanguageTable [source_file->lang]->parser2 != NULL)
 					status = LanguageTable [source_file->lang]->parser2 (passCount);
 				bufferClose ();
+			}
+			else if (!use_buffer && fileOpen (file_name, source_file->lang))
+			{
+				if (LanguageTable [source_file->lang]->parser != NULL)
+				{
+					LanguageTable [source_file->lang]->parser ();
+					fileClose ();
+					break;
+				}
+				else if (LanguageTable [source_file->lang]->parser2 != NULL)
+					status = LanguageTable [source_file->lang]->parser2 (passCount);
+				fileClose ();
 			}
 			else
 			{

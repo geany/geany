@@ -32,16 +32,19 @@ typedef struct
 	GPtrArray *source_files; /**< An array of TMSourceFile pointers */
 	GPtrArray *tags_array; /**< Sorted tags from all source files 
 		(just pointers to source file tags, the tag objects are owned by the source files) */
-	GPtrArray *typename_array; /**< Typename tags for syntax highlighting (pointers owned by source files) */
+	GPtrArray *typename_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
 } TMWorkspace;
+
 
 void tm_workspace_add_source_file(TMSourceFile *source_file);
 
-void tm_workspace_remove_source_file(TMSourceFile *source_file, gboolean update_workspace);
+void tm_workspace_update_source_file(TMSourceFile *source_file);
 
-void tm_workspace_update_source_file(TMSourceFile *source_file, gboolean update_workspace);
+void tm_workspace_remove_source_file(TMSourceFile *source_file);
 
-void tm_workspace_update(void);
+void tm_workspace_add_source_files(GPtrArray *source_files);
+
+void tm_workspace_remove_source_files(GPtrArray *source_files);
 
 
 #ifdef GEANY_PRIVATE
@@ -68,7 +71,7 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
 const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const TMTagType tag_types);
 
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
-	gint buf_size, gboolean update_workspace);
+	gint buf_size);
 
 void tm_workspace_free(void);
 
