@@ -633,7 +633,7 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
              -1 for all
  @return Array of matching tags. Do not free() it since it is a static member.
 */
-const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs,
+const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrType *attrs,
 	gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
@@ -735,7 +735,7 @@ static gboolean match_langs(gint lang, const TMTag *tag)
  * lang can be -1 */
 static int
 fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
-					  const char *name, const char *scope, int type, gboolean partial,
+					  const char *name, const char *scope, TMTagType type, gboolean partial,
 					  gint lang, gboolean first)
 {
 	TMTag **match;
@@ -777,7 +777,7 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
  @return Array of matching tags. Do not free() it since it is a static member.
 */
 const GPtrArray *
-tm_workspace_find_scoped (const char *name, const char *scope, gint type,
+tm_workspace_find_scoped (const char *name, const char *scope, TMTagType type,
 		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search)
 {
 	static GPtrArray *tags = NULL;
@@ -807,7 +807,7 @@ tm_workspace_find_scoped (const char *name, const char *scope, gint type,
  @param tag_types the tag types to include in the match
  @return TMTag pointers to owner tag. */
 const TMTag *
-tm_get_current_tag (GPtrArray * file_tags, const gulong line, const guint tag_types)
+tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType tag_types)
 {
 	TMTag *matching_tag = NULL;
 	if (file_tags && file_tags->len)
@@ -972,9 +972,10 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 	while (1)
 	{
 		const GPtrArray *tags2;
-		int got = 0, types = (tm_tag_class_t | tm_tag_namespace_t |
-								tm_tag_struct_t | tm_tag_typedef_t |
-								tm_tag_union_t | tm_tag_enum_t);
+		int got = 0;
+		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
+						   tm_tag_struct_t | tm_tag_typedef_t |
+						   tm_tag_union_t | tm_tag_enum_t);
 
 		if (file_tags)
 		{
@@ -1194,9 +1195,10 @@ tm_workspace_find_namespace_members (const GPtrArray * file_tags, const char *na
 	while (1)
 	{
 		const GPtrArray *tags2;
-		int got = 0, types = (tm_tag_class_t | tm_tag_namespace_t |
-								tm_tag_struct_t | tm_tag_typedef_t |
-								tm_tag_union_t | tm_tag_enum_t);
+		int got = 0;
+		TMTagType types = (tm_tag_class_t
+						   tm_tag_struct_t | tm_tag_typedef_t |
+						   tm_tag_union_t | tm_tag_enum_t);
 
 		if (file_tags)
 		{

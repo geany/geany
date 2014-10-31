@@ -143,7 +143,7 @@ typedef struct _TMTag
 
 #ifdef GEANY_PRIVATE
 
-extern const guint TM_GLOBAL_TYPE_MASK;
+extern const TMTagType TM_GLOBAL_TYPE_MASK;
 
 
 typedef enum {

@@ -78,7 +78,7 @@ static void log_tag_free(TMTag *tag)
 #endif /* DEBUG_TAG_REFS */
 
 
-const guint TM_GLOBAL_TYPE_MASK =
+const TMTagType TM_GLOBAL_TYPE_MASK =
 	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
 	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
 
@@ -131,7 +131,7 @@ static const char *s_tag_type_names[] = {
 	"other" /* Other tag type (non C/C++/Java) */
 };
 
-static int s_tag_types[] = {
+static TMTagType s_tag_types[] = {
 	tm_tag_class_t,
 	tm_tag_enum_t,
 	tm_tag_enumerator_t,
@@ -164,7 +164,7 @@ GType tm_tag_get_type(void)
 	return gtype;
 }
 
-static int get_tag_type(const char *tag_name)
+static TMTagType get_tag_type(const char *tag_name)
 {
 	unsigned int i;
 	int cmp;
@@ -981,7 +981,7 @@ GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array,
  the original array.
  @return an array of tags (NULL on failure)
 */
-GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types)
+GPtrArray *tm_tags_extract(GPtrArray *tags_array, TMTagType tag_types)
 {
 	GPtrArray *new_tags;
 	guint i;

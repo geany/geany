@@ -489,7 +489,7 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 }
 
 
-static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
+static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
 	TMTag *tag;
@@ -1922,8 +1922,8 @@ static void load_user_tags(filetype_id ft_id)
 
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
-	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	guint type;
+	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	TMTagType type;
 	TMTag *tmtag = NULL;
 	GeanyDocument *old_doc = document_get_current();
 
@@ -2113,7 +2113,7 @@ static gint get_fold_header_after(ScintillaObject *sci, gint line)
 }
 
 
-static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_types)
+static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType tag_types)
 {
 	gint line;
 	gint parent;
@@ -2190,7 +2190,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_
 }
 
 
-static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagname, guint tag_types)
+static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagname, TMTagType tag_types)
 {
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
@@ -2236,7 +2236,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 /* same as symbols_get_current_function() but finds class, namespaces and more */
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 {
-	guint tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
+	TMTagType tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
 			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
 
 	/* Python parser reports imports as namespaces which confuses the scope detection */

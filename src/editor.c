@@ -1831,7 +1831,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	const GPtrArray *tags;
-	const gint arg_types = tm_tag_function_t | tm_tag_prototype_t |
+	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTagAttrType *attrs = NULL;
 	TMTag *tag;

@@ -53,11 +53,11 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
 	int includes_count, const char *tags_file, int lang);
 
-const GPtrArray *tm_workspace_find(const char *name, int type, TMTagAttrType *attrs, 
+const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrType *attrs,
 	gboolean partial, langType lang);
 
 const GPtrArray *
-tm_workspace_find_scoped (const char *name, const char *scope, gint type,
+tm_workspace_find_scoped (const char *name, const char *scope, TMTagType type,
 	TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
 
 const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
@@ -65,7 +65,7 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
                                                  gboolean find_global,
                                                  gboolean no_definitions);
 
-const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const guint tag_types);
+const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const TMTagType tag_types);
 
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
 	gint buf_size, gboolean update_workspace);
