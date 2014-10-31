@@ -638,7 +638,8 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 {
 	static GPtrArray *tags = NULL;
 	TMTag **matches[2];
-	int len, tagCount[2]={0,0}, tagIter;
+	int len;
+	guint tagCount[2]={0,0}, tagIter;
 	gint tags_lang;
 
 	if (!name)
@@ -739,7 +740,7 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
 					  gint lang, gboolean first)
 {
 	TMTag **match;
-	int tagIter, count;
+	guint tagIter, count;
 
 	if ((!src) || (!dst) || (!name) || (!*name))
 		return 0;

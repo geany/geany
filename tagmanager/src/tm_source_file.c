@@ -117,7 +117,7 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 /* Set the argument list of tag identified by its name */
 static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
 {
-	int count;
+	guint count;
 	TMTag **tags, *tag;
 
 	if (NULL == arglist ||

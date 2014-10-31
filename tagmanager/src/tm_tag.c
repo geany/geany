@@ -819,7 +819,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 	for (i = 0; i < source_file->tags_array->len; i++)
 	{
 		guint j;
-		gint tag_count;
+		guint tag_count;
 		TMTag **found;
 		TMTag *tag = source_file->tags_array->pdata[i];
 		
@@ -1080,11 +1080,11 @@ static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean par
  @param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, gboolean tags_array_sorted, int * tagCount)
+		gboolean partial, gboolean tags_array_sorted, guint * tagCount)
 {
 	static TMTag *tag = NULL;
 	TMTag **result;
-	int tagMatches=0;
+	guint tagMatches=0;
 	TMSortOptions sort_options;
 
 	*tagCount = 0;
