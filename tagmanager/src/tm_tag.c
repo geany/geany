@@ -1045,7 +1045,7 @@ static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
 	return NULL;
 }
 
-static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean partial,
+static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag,
 		gboolean tags_array_sorted, TMSortOptions *sort_options)
 {
 	if (tags_array_sorted)
@@ -1097,7 +1097,7 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	sort_options.sort_attrs = NULL;
 	sort_options.partial = partial;
 
-	result = tags_search(tags_array, tag, partial, tags_array_sorted, &sort_options);
+	result = tags_search(tags_array, tag, tags_array_sorted, &sort_options);
 	/* There can be matches on both sides of result */
 	if (result)
 	{
