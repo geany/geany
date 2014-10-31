@@ -831,7 +831,9 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 			{
 				/* we cannot set the pointer to NULL now because the search wouldn't work */
 				g_ptr_array_add(to_delete, found);
-				break;
+				/* no break - if there are multiple tags of the same name, we would 
+				 * always find the first instance and wouldn't remove others; duplicates
+				 * in the to_delete list aren't a problem */
 			}
 			found++;
 		}
