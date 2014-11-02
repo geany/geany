@@ -183,6 +183,8 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 
 void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all);
 
+const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const TMTagType tag_types);
+
 void tm_tag_unref(TMTag *tag);
 
 TMTag *tm_tag_ref(TMTag *tag);

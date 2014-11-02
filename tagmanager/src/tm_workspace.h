@@ -68,8 +68,6 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
                                                  gboolean find_global,
                                                  gboolean no_definitions);
 
-const TMTag *tm_get_current_tag(GPtrArray *file_tags, const gulong line, const TMTagType tag_types);
-
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
 	gint buf_size);
 

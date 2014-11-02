@@ -834,35 +834,6 @@ tm_workspace_find_scoped (const char *name, const char *scope, TMTagType type,
 }
 
 
-/* Returns TMTag which "own" given line
- @param line Current line in edited file.
- @param file_tags A GPtrArray of edited file TMTag pointers.
- @param tag_types the tag types to include in the match
- @return TMTag pointers to owner tag. */
-const TMTag *
-tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType tag_types)
-{
-	TMTag *matching_tag = NULL;
-	if (file_tags && file_tags->len)
-	{
-		guint i;
-		gulong matching_line = 0;
-
-		for (i = 0; (i < file_tags->len); ++i)
-		{
-			TMTag *tag = TM_TAG (file_tags->pdata[i]);
-			if (tag && tag->type & tag_types &&
-				tag->line <= line && tag->line > matching_line)
-			{
-				matching_tag = tag;
-				matching_line = tag->line;
-			}
-		}
-	}
-	return matching_tag;
-}
-
-
 static int
 find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 						 const langType langJava, const char *name,
@@ -1141,17 +1112,6 @@ void tm_workspace_dump(void)
 
 
 #if 0
-
-/* Returns TMTag to function or method which "own" given line
- @param line Current line in edited file.
- @param file_tags A GPtrArray of edited file TMTag pointers.
- @return TMTag pointers to owner function. */
-static const TMTag *
-tm_get_current_function (GPtrArray * file_tags, const gulong line)
-{
-	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
-}
-
 
 static int
 find_namespace_members_tags (const GPtrArray * all, GPtrArray * tags,
