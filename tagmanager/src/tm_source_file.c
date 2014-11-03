@@ -246,7 +246,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 	gboolean use_buffer)
 {
 	const char *file_name;
-	gboolean status = TRUE;
+	gboolean retry = TRUE;
 
 	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
@@ -289,7 +289,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 	else
 	{
 		guint passCount = 0;
-		while ((TRUE == status) && (passCount < 3))
+		while (retry && passCount < 3)
 		{
 			tm_tags_array_free(source_file->tags_array, FALSE);
 			if (use_buffer && bufferOpen (text_buf, buf_size, file_name, source_file->lang))
@@ -298,10 +298,11 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 				{
 					LanguageTable [source_file->lang]->parser ();
 					bufferClose ();
+					retry = FALSE;
 					break;
 				}
 				else if (LanguageTable [source_file->lang]->parser2 != NULL)
-					status = LanguageTable [source_file->lang]->parser2 (passCount);
+					retry = LanguageTable [source_file->lang]->parser2 (passCount);
 				bufferClose ();
 			}
 			else if (!use_buffer && fileOpen (file_name, source_file->lang))
@@ -310,10 +311,11 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 				{
 					LanguageTable [source_file->lang]->parser ();
 					fileClose ();
+					retry = FALSE;
 					break;
 				}
 				else if (LanguageTable [source_file->lang]->parser2 != NULL)
-					status = LanguageTable [source_file->lang]->parser2 (passCount);
+					retry = LanguageTable [source_file->lang]->parser2 (passCount);
 				fileClose ();
 			}
 			else
@@ -323,9 +325,8 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 			}
 			++ passCount;
 		}
-		return TRUE;
 	}
-	return status;
+	return !retry;
 }
 
 
