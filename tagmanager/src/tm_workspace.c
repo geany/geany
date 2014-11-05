@@ -180,8 +180,8 @@ void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
  you're editing. It's useful for a "real-time" updating of the tags.
  The tags array and the tags themselves are destroyed and re-created, hence any
  other tag arrays pointing to these tags should be rebuilt as well. All sorting
- information is also lost. The language parameter is automatically set the first
- time the file is parsed.
+ information is also lost. The language parameter is automatically detected 
+ the first time the file is parsed if it is set to LANG_AUTO.
  @param source_file The source file to update with a buffer.
  @param text_buf A text buffer. The user should take care of allocate and free it after
  the use here.
