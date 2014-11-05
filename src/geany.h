@@ -32,9 +32,17 @@
 #include "app.h"
 
 #include <glib.h>
+#include <gmodule.h>
 
 
 G_BEGIN_DECLS
+
+/* Could be defined differently, e.g. __attribute__((visibility("default"))) */
+#ifdef G_PLATFORM_WIN32
+#define GEANY_EXPORT __declspec(dllexport)
+#else
+#define GEANY_EXPORT __attribute__((visibility("default")))
+#endif
 
 
 /* for detailed description look in the documentation, things are not

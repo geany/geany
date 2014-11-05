@@ -478,6 +478,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 
 /* TODO change the signature to take a GeanyDocument? this would break plugin API/ABI */
+GEANY_EXPORT
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];

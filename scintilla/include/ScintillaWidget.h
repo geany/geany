@@ -11,6 +11,10 @@
 
 #if defined(GTK)
 
+#ifndef SCI_EXPORT
+#define SCI_EXPORT
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

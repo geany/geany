@@ -10,7 +10,8 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	makefile.win32
+	makefile.win32 \
+	geany_dll.a
 
 bin_PROGRAMS = geany
 
@@ -38,7 +39,7 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
-	plugins.c plugins.h \
+	plugins.c pluginfuncs.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
 	prefs.c prefs.h \
@@ -60,10 +61,10 @@ SRCS = \
 
 geany_includedir = $(includedir)/geany
 
-# only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
 	app.h \
 	build.h \
+	dialogs.h \
 	document.h \
 	editor.h \
 	encodings.h \
@@ -72,13 +73,18 @@ geany_include_HEADERS = \
 	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
+	main.h \
 	msgwindow.h \
+	navqueue.h \
+	pluginutils.h \
 	plugindata.h \
 	prefs.h \
 	project.h \
+	sciwrappers.h \
 	search.h \
 	stash.h \
 	support.h \
+	symbols.h \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
@@ -120,7 +126,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-geany_LDFLAGS =	-mwindows -mms-bitfields
+geany_LDFLAGS =	-mwindows -mms-bitfields -Wl,--out-implib,geany_dll.a
 
 WINDRES = $(host_alias)-windres
 
@@ -144,6 +150,9 @@ geany_LDADD = \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS)
 
+geany_LDFLAGS = \
+	-Wl,--no-export-dynamic
+
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_DOCDIR=\""$(docdir)"\" \
 			-DGEANY_LIBDIR=\""$(libdir)"\" \
@@ -151,9 +160,9 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGEANY_PREFIX=\""$(prefix)"\" \
 			-DGEANY_PRIVATE \
 			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
+			-DG_LOG_DOMAIN=\""Geany"\" \
+			-fvisibility=hidden
 
 clean-local:
 
 endif
-

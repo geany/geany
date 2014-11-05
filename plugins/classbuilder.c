@@ -40,7 +40,6 @@ PLUGIN_SET_INFO(_("Class Builder"), _("Creates source files for new class types.
 
 static GtkWidget *main_menu_item = NULL;
 
-
 enum
 {
 	GEANY_CLASS_TYPE_CPP,

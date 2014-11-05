@@ -30,6 +30,8 @@
 
 /* Note: only include headers that define types or macros, not just functions */
 #include "app.h"
+#include "build.h"
+#include "dialogs.h"
 #include "document.h"
 #include "editor.h"
 #include "encodings.h"
@@ -37,17 +39,24 @@
 #include "geany.h"
 #include "highlighting.h"
 #include "keybindings.h"
+#include "main.h"
 #include "msgwindow.h"
+#include "navqueue.h"
+#include "pluginutils.h"
 #include "plugindata.h"
 #include "prefs.h"
 #include "project.h"
+#include "sciwrappers.h"
 #include "search.h"
 #include "stash.h"
 #include "support.h"
+#include "symbols.h"
 #include "templates.h"
 #include "toolbar.h"
 #include "ui_utils.h"
 #include "utils.h"
+
+#include "ScintillaWidget.h"
 
 #include "geanyfunctions.h"
 

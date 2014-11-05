@@ -298,6 +298,7 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
  *
  * @since 0.19
  */
+GEANY_EXPORT
 const gchar *symbols_get_context_separator(gint ft_id)
 {
 	switch (ft_id)
