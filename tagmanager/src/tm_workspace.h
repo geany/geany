@@ -38,8 +38,6 @@ typedef struct
 
 void tm_workspace_add_source_file(TMSourceFile *source_file);
 
-void tm_workspace_update_source_file(TMSourceFile *source_file);
-
 void tm_workspace_remove_source_file(TMSourceFile *source_file);
 
 void tm_workspace_add_source_files(GPtrArray *source_files);
@@ -67,6 +65,8 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
                                                  const char *scope_name,
                                                  gboolean find_global,
                                                  gboolean no_definitions);
+
+void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
 
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
 	gint buf_size);

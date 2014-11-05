@@ -154,9 +154,7 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 }
 
 
-/** Adds a source file to the workspace. At some point, tm_workspace_update_source_file()
- has to be called to parse the source file, create the source file's tag array
- and update the workspace tag arrays.
+/** Adds a source file to the workspace, parses it and updates the workspace tags.
  @param source_file The source file to add to the workspace.
 */
 void tm_workspace_add_source_file(TMSourceFile *source_file)
@@ -164,15 +162,15 @@ void tm_workspace_add_source_file(TMSourceFile *source_file)
 	g_return_if_fail(source_file != NULL);
 
 	g_ptr_array_add(theWorkspace->source_files, source_file);
+	update_source_file(source_file, NULL, 0, FALSE, TRUE);
 }
 
 
-/** Parses the source file, updates its tag array and the workspace tag arrays.
- @param source_file The source file to update.
-*/
-void tm_workspace_update_source_file(TMSourceFile *source_file)
+void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
 {
-	update_source_file(source_file, NULL, 0, FALSE, TRUE);
+	g_return_if_fail(source_file != NULL);
+
+	g_ptr_array_add(theWorkspace->source_files, source_file);
 }
 
 
@@ -277,7 +275,7 @@ void tm_workspace_add_source_files(GPtrArray *source_files)
 	{
 		TMSourceFile *source_file = source_files->pdata[i];
 		
-		tm_workspace_add_source_file(source_file);
+		tm_workspace_add_source_file_noupdate(source_file);
 		update_source_file(source_file, NULL, 0, FALSE, FALSE);
 	}
 	

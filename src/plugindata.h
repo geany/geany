@@ -602,7 +602,6 @@ typedef struct TagManagerFuncs
 	TMSourceFile*	(*tm_source_file_new) (const char *file_name, const char *name);
 	void			(*tm_source_file_free) (TMSourceFile *source_file);
 	void			(*tm_workspace_add_source_file) (TMSourceFile *source_file);
-	void			(*tm_workspace_update_source_file) (TMSourceFile *source_file);
 	void			(*tm_workspace_remove_source_file) (TMSourceFile *source_file);
 	void			(*tm_workspace_add_source_files) (GPtrArray *source_files);
 	void			(*tm_workspace_remove_source_files) (GPtrArray *source_files);
