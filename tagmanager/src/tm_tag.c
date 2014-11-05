@@ -695,7 +695,7 @@ static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user
 			return strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 	}
 
-	for (sort_attr = sort_options->sort_attrs; *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
+	for (sort_attr = sort_options->sort_attrs; returnval == 0 && *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
 	{
 		switch (*sort_attr)
 		{
@@ -704,36 +704,30 @@ static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user
 					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 				else
 					returnval = strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
-				if (0 != returnval)
-					return returnval;
-				break;
-			case tm_tag_attr_type_t:
-				if (0 != (returnval = (t1->type - t2->type)))
-					return returnval;
 				break;
 			case tm_tag_attr_file_t:
-				if (0 != (returnval = (t1->file - t2->file)))
-					return returnval;
+				returnval = t1->file - t2->file;
+				break;
+			case tm_tag_attr_line_t:
+				returnval = t1->line - t2->line;
+				break;
+			case tm_tag_attr_type_t:
+				returnval = t1->type - t2->type;
 				break;
 			case tm_tag_attr_scope_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->scope, ""), FALLBACK(t2->scope, ""))))
-					return returnval;
+				returnval = strcmp(FALLBACK(t1->scope, ""), FALLBACK(t2->scope, ""));
 				break;
 			case tm_tag_attr_arglist_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->arglist, ""), FALLBACK(t2->arglist, ""))))
+				returnval = strcmp(FALLBACK(t1->arglist, ""), FALLBACK(t2->arglist, ""));
+				if (returnval != 0)
 				{
 					int line_diff = (t1->line - t2->line);
 
-					return line_diff ? line_diff : returnval;
+					returnval = line_diff ? line_diff : returnval;
 				}
 				break;
 			case tm_tag_attr_vartype_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->var_type, ""), FALLBACK(t2->var_type, ""))))
-					return returnval;
-				break;
-			case tm_tag_attr_line_t:
-				if (0 != (returnval = (t1->line - t2->line)))
-					return returnval;
+				returnval = strcmp(FALLBACK(t1->var_type, ""), FALLBACK(t2->var_type, ""));
 				break;
 		}
 	}

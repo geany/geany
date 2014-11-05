@@ -33,6 +33,29 @@
 #include "tm_workspace.h"
 #include "tm_tag.h"
 
+
+/* when changing, always keep the three sort criteria below in sync */
+static TMTagAttrType workspace_tags_sort_attrs[] = 
+{ 
+	tm_tag_attr_name_t, tm_tag_attr_file_t, tm_tag_attr_line_t,
+	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
+};
+
+/* for file tags the file is always identical, don't use for sorting */
+static TMTagAttrType file_tags_sort_attrs[] = 
+{ 
+	tm_tag_attr_name_t, tm_tag_attr_line_t,
+	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
+};
+
+/* global tags don't have file/line information */
+static TMTagAttrType global_tags_sort_attrs[] =
+{
+	tm_tag_attr_name_t, 
+	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
+};
+
+
 static TMWorkspace *theWorkspace = NULL;
 
 
@@ -86,10 +109,7 @@ const TMWorkspace *tm_get_workspace(void)
 
 static void tm_workspace_merge_tags(GPtrArray **big_array, GPtrArray *small_array)
 {
-	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t,
-		tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
-
-	GPtrArray *new_tags = tm_tags_merge(*big_array, small_array, sort_attrs, FALSE);
+	GPtrArray *new_tags = tm_tags_merge(*big_array, small_array, workspace_tags_sort_attrs, FALSE);
 	/* tags owned by TMSourceFile - free just the pointer array */
 	g_ptr_array_free(*big_array, TRUE);
 	*big_array = new_tags;
@@ -111,7 +131,7 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 		tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
 	}
 	tm_source_file_parse(source_file, text_buf, buf_size, use_buffer);
-	tm_tags_sort(source_file->tags_array, NULL, FALSE, TRUE);
+	tm_tags_sort(source_file->tags_array, file_tags_sort_attrs, FALSE, TRUE);
 	if (update_workspace)
 	{
 		GPtrArray *sf_typedefs;
@@ -210,8 +230,6 @@ static void tm_workspace_update(void)
 {
 	guint i, j;
 	TMSourceFile *source_file;
-	TMTagAttrType sort_attrs[] = { tm_tag_attr_name_t, tm_tag_attr_file_t
-		, tm_tag_attr_scope_t, tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0};
 
 #ifdef TM_DEBUG
 	g_message("Recreating workspace tags array");
@@ -240,7 +258,7 @@ static void tm_workspace_update(void)
 #ifdef TM_DEBUG
 	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
-	tm_tags_sort(theWorkspace->tags_array, sort_attrs, TRUE, FALSE);
+	tm_tags_sort(theWorkspace->tags_array, workspace_tags_sort_attrs, TRUE, FALSE);
 	
 	theWorkspace->typename_array = tm_tags_extract(theWorkspace->tags_array, TM_GLOBAL_TYPE_MASK);
 }
@@ -294,13 +312,6 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 	
 	tm_workspace_update();
 }
-
-
-static TMTagAttrType global_tags_sort_attrs[] =
-{
-	tm_tag_attr_name_t, tm_tag_attr_scope_t,
-	tm_tag_attr_type_t, tm_tag_attr_arglist_t, 0
-};
 
 
 /* Loads the global tag list from the specified file. The global tag list should
