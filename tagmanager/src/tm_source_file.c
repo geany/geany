@@ -247,6 +247,8 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 {
 	const char *file_name;
 	gboolean retry = TRUE;
+	gboolean parse_file = FALSE;
+	gboolean free_buf = FALSE;
 
 	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
@@ -254,22 +256,37 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 		return FALSE;
 	}
 	
+	if (source_file->lang == LANG_IGNORE)
+	{
+		tm_tags_array_free(source_file->tags_array, FALSE);
+		return FALSE;
+	}
+	
 	file_name = source_file->file_name;
 	
 	if (!use_buffer)
 	{
-		if (!g_file_get_contents(file_name, (gchar**)&text_buf, (gsize*)&buf_size, NULL))
+		struct stat s;
+		
+		/* load file to memory and parse it from memory unless the file is too big */
+		if (g_stat(file_name, &s) != 0 || s.st_size > 10*1024*1024)
+			parse_file = TRUE;
+		else
 		{
-			g_warning("Unable to open %s", file_name);
-			return FALSE;
+			if (!g_file_get_contents(file_name, (gchar**)&text_buf, (gsize*)&buf_size, NULL))
+			{
+				g_warning("Unable to open %s", file_name);
+				return FALSE;
+			}
+			free_buf = TRUE;
 		}
 	}
 
-	if (NULL == text_buf || 0 == buf_size)
+	if (!parse_file && (NULL == text_buf || 0 == buf_size))
 	{
 		/* Empty buffer, "parse" by setting empty tag array */
 		tm_tags_array_free(source_file->tags_array, FALSE);
-		if (!use_buffer)
+		if (free_buf)
 			g_free(text_buf);
 		return TRUE;
 	}
@@ -304,7 +321,20 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 		while (retry && passCount < 3)
 		{
 			tm_tags_array_free(source_file->tags_array, FALSE);
-			if (bufferOpen (text_buf, buf_size, file_name, source_file->lang))
+			if (parse_file && fileOpen (file_name, source_file->lang))
+			{
+				if (LanguageTable [source_file->lang]->parser != NULL)
+				{
+					LanguageTable [source_file->lang]->parser ();
+					fileClose ();
+					retry = FALSE;
+					break;
+				}
+				else if (LanguageTable [source_file->lang]->parser2 != NULL)
+					retry = LanguageTable [source_file->lang]->parser2 (passCount);
+				fileClose ();
+			}
+			else if (!parse_file && bufferOpen (text_buf, buf_size, file_name, source_file->lang))
 			{
 				if (LanguageTable [source_file->lang]->parser != NULL)
 				{
@@ -326,11 +356,10 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint 
 		}
 	}
 	
-	if (!use_buffer)
+	if (free_buf)
 		g_free(text_buf);
 	return !retry;
 }
-
 
 /* Gets the name associated with the language index.
  @param lang The language index.
