@@ -2496,7 +2496,7 @@ msgstr "Nota: El elemento 2 abre un diálogo y añade la respuesta al comando."
 
 #: ../src/build.c:2174
 msgid "Execute commands"
-msgstr "Ejecutar comandos"
+msgstr "Comandos de ejecución"
 
 #: ../src/build.c:2186
 #, c-format
