@@ -1974,6 +1974,9 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	/* the passed arguments should be even (key, value pairs) */
 	g_return_val_if_fail(o % 2 == 0, NULL);
 
+	/* get all the environ variables */
+	env = g_listenv();
+
 	o /= 2;
 
 	/* get all the environ variables */

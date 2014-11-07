@@ -1038,7 +1038,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 {
 	gchar *utf8_name;
 	const gchar *scope = tag->atts.entry.scope;
-	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
+	gchar *buffer = NULL;
 	gboolean doc_is_utf8 = FALSE;
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
@@ -1059,28 +1059,20 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (utf8_name == NULL)
 		return NULL;
 
-	if (! buffer)
-		buffer = g_string_new(NULL);
-	else
-		g_string_truncate(buffer, 0);
-
 	/* check first char of scope is a wordchar */
 	if (!found_parent && scope &&
 		strpbrk(scope, GEANY_WORDCHARS) == scope)
 	{
 		const gchar *sep = symbols_get_context_separator(doc->file_type->id);
-
-		g_string_append(buffer, scope);
-		g_string_append(buffer, sep);
+		buffer = g_strdup_printf("%s%s%s [%lu]", scope, sep, utf8_name, tag->atts.entry.line);
 	}
-	g_string_append(buffer, utf8_name);
+	else
+		buffer = g_strdup_printf("%s [%lu]", utf8_name, tag->atts.entry.line);
 
 	if (! doc_is_utf8)
 		g_free(utf8_name);
 
-	g_string_append_printf(buffer, " [%lu]", tag->atts.entry.line);
-
-	return buffer->str;
+	return buffer;
 }
 
 
