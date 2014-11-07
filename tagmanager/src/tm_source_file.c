@@ -28,6 +28,7 @@
 
 #include "tm_source_file.h"
 #include "tm_tag.h"
+#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 guint source_file_class_id = 0;
@@ -69,6 +70,7 @@ gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name
 	return TRUE;
 }
 
+GEANY_API_SYMBOL
 TMWorkObject *tm_source_file_new(const char *file_name, gboolean update, const char *name)
 {
 	TMSourceFile *source_file = g_new(TMSourceFile, 1);
@@ -265,6 +267,7 @@ int tm_source_file_tags(const tagEntryInfo *tag)
 	return TRUE;
 }
 
+GEANY_API_SYMBOL
 gboolean tm_source_file_update(TMWorkObject *source_file, gboolean force
   , gboolean UNUSED recurse, gboolean update_parent)
 {

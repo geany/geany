@@ -37,6 +37,7 @@
 #include "document.h"
 #include "editor.h"
 #include "filetypesprivate.h"
+#include "pluginexport.h"
 #include "sciwrappers.h"
 #include "support.h"
 #include "symbols.h"
@@ -1084,6 +1085,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 /** Sets up highlighting and other visual settings.
  * @param sci Scintilla widget.
  * @param ft Filetype settings to use. */
+GEANY_API_SYMBOL
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
 	guint lexer_id = get_lexer_filetype(ft);
@@ -1170,6 +1172,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
  * @return A pointer to the style struct.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
+GEANY_API_SYMBOL
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
 	g_return_val_if_fail(ft_id >= 0 && (guint) ft_id < filetypes_array->len, NULL);
@@ -1389,6 +1392,7 @@ void highlighting_show_color_scheme_dialog(void)
  *
  * @return @c TRUE if the style is a string, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_string_style(gint lexer, gint style)
 {
 	/* Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char. */
@@ -1567,6 +1571,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is a comment, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_comment_style(gint lexer, gint style)
 {
 	switch (lexer)
@@ -1727,6 +1732,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is code, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_code_style(gint lexer, gint style)
 {
 	switch (lexer)

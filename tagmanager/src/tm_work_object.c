@@ -28,6 +28,7 @@
 
 #include "tm_tag.h"
 #include "tm_work_object.h"
+#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 static GPtrArray *s_work_object_subclasses = NULL;
 
@@ -72,6 +73,7 @@ static char *realpath (const char *pathname, char *resolved_path)
 }
 #endif
 
+GEANY_API_SYMBOL
 gchar *tm_get_real_path(const gchar *file_name)
 {
 	if (file_name)
@@ -200,6 +202,7 @@ void tm_work_object_destroy(TMWorkObject *work_object)
 	}
 }
 
+GEANY_API_SYMBOL
 void tm_work_object_free(gpointer work_object)
 {
 	if (NULL != work_object)

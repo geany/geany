@@ -43,6 +43,7 @@
 #include "msgwindow.h"
 #include "navqueue.h"
 #include "notebook.h"
+#include "pluginexport.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
@@ -115,6 +116,7 @@ static void add_popup_menu_accels(void);
  * @param key_id Keybinding index for the group.
  * @return The keybinding.
  * @since 0.19. */
+GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 {
 	if (group->plugin)
@@ -144,6 +146,7 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
  * underscores - these won't be displayed.
  * @param menu_item Optional widget to set an accelerator for, or @c NULL.
  * @return The keybinding - normally this is ignored. */
+GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		GeanyKeyCallback callback, guint key, GdkModifierType mod,
 		const gchar *kf_name, const gchar *label, GtkWidget *menu_item)
@@ -1298,6 +1301,7 @@ GeanyKeyBinding *keybindings_lookup_item(guint group_id, guint key_id)
  * 	Example: @code keybindings_send_command(GEANY_KEY_GROUP_FILE, GEANY_KEYS_FILE_OPEN); @endcode
  * 	@param group_id @ref GeanyKeyGroupID keybinding group index that contains the @a key_id keybinding.
  * 	@param key_id @ref GeanyKeyBindingID keybinding index. */
+GEANY_API_SYMBOL
 void keybindings_send_command(guint group_id, guint key_id)
 {
 	GeanyKeyBinding *kb;

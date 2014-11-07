@@ -75,6 +75,8 @@ gboolean main_handle_filename(const gchar *locale_filename);
 
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
 
+gint main_lib(gint argc, gchar **argv);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

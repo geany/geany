@@ -10,5 +10,5 @@ Name: Geany
 Description: A fast and lightweight IDE using GTK2
 Requires: @DEPENDENCIES@
 Version: @VERSION@
-Libs: -L${libdir}
+Libs: -L${libdir} -lgeany
 Cflags: -DGTK -I${includedir}/geany -I${includedir}/geany/tagmanager -I${includedir}/geany/scintilla

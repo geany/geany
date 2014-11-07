@@ -1,22 +1,14 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
 EXTRA_DIST = \
-	makefile.win32 \
-	genapi.py
+	makefile.win32
 
 plugindir = $(libdir)/geany
 
 plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
-	geanyplugin.h \
-	geanyfunctions.h
-
-# systems without python should continue to build OK
-geanyfunctions.h: genapi.py ../src/plugins.c
-	python genapi.py || true
-
-all: geanyfunctions.h
-
+	geanyfunctions.h \
+	geanyplugin.h
 
 demoplugin_la_LDFLAGS    = -module -avoid-version
 classbuilder_la_LDFLAGS  = -module -avoid-version
@@ -91,13 +83,13 @@ saveactions_la_CFLAGS   = -DG_LOG_DOMAIN=\""SaveActions"\"
 filebrowser_la_CFLAGS   = -DG_LOG_DOMAIN=\""FileBrowser"\"
 splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
 
-demoplugin_la_LIBADD    = $(GTK_LIBS)
-classbuilder_la_LIBADD  = $(GTK_LIBS)
-htmlchars_la_LIBADD     = $(GTK_LIBS)
-export_la_LIBADD        = $(GTK_LIBS) -lm
-saveactions_la_LIBADD   = $(GTK_LIBS)
-filebrowser_la_LIBADD   = $(GTK_LIBS)
-splitwindow_la_LIBADD   = $(GTK_LIBS)
+demoplugin_la_LIBADD    = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+classbuilder_la_LIBADD  = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+htmlchars_la_LIBADD     = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+export_la_LIBADD        = $(top_builddir)/src/libgeany.la $(GTK_LIBS) -lm
+saveactions_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+filebrowser_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+splitwindow_la_LIBADD   = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 
 endif # MINGW
 endif # PLUGINS

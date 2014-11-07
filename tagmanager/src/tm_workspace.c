@@ -35,6 +35,7 @@
 
 #include "tm_tag.h"
 #include "tm_workspace.h"
+#include "../src/pluginexport.h" /* for GEANY_API_SYMBOL */
 
 
 static TMWorkspace *theWorkspace = NULL;
@@ -97,6 +98,7 @@ const TMWorkspace *tm_get_workspace(void)
 	return theWorkspace;
 }
 
+GEANY_API_SYMBOL
 gboolean tm_workspace_add_object(TMWorkObject *work_object)
 {
 	/* theWorkspace should already have been created otherwise something went wrong */
@@ -109,6 +111,7 @@ gboolean tm_workspace_add_object(TMWorkObject *work_object)
 	return TRUE;
 }
 
+GEANY_API_SYMBOL
 gboolean tm_workspace_remove_object(TMWorkObject *w, gboolean do_free, gboolean update)
 {
 	guint i;

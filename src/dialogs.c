@@ -35,6 +35,7 @@
 #include "encodings.h"
 #include "filetypes.h"
 #include "main.h"
+#include "pluginexport.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -661,6 +662,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  *
  *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -722,6 +724,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @a text format string.
  **/
+GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
@@ -1063,6 +1066,7 @@ static void on_dialog_input(const gchar *str, gpointer data)
  * @param default_text Text to display in the input field, or @c NULL.
  * @return New copy of user input or @c NULL if cancelled.
  * @since 0.20. */
+GEANY_API_SYMBOL
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
@@ -1103,6 +1107,7 @@ gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step)
 {
@@ -1368,6 +1373,7 @@ static gint show_prompt(GtkWidget *parent,
  *
  *  @return @c TRUE if the user answered with Yes, otherwise @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_question(const gchar *text, ...)
 {
 	gchar *string;

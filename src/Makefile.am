@@ -10,9 +10,14 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	makefile.win32
+	makefile.win32 \
+	$(srcdir)/signalconn.c.in
 
 bin_PROGRAMS = geany
+lib_LTLIBRARIES = libgeany.la
+
+geany_SOURCES = main.c
+geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
 SRCS = \
 	about.c about.h \
@@ -34,10 +39,11 @@ SRCS = \
 	keybindings.c keybindings.h \
 	keyfile.c keyfile.h \
 	log.c log.h \
-	main.c main.h geany.h \
+	libmain.c main.h geany.h \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	pluginexport.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \
@@ -64,6 +70,7 @@ geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
 	app.h \
 	build.h \
+	dialogs.h \
 	document.h \
 	editor.h \
 	encodings.h \
@@ -72,13 +79,18 @@ geany_include_HEADERS = \
 	gtkcompat.h \
 	highlighting.h \
 	keybindings.h \
+	main.h \
 	msgwindow.h \
+	navqueue.h \
 	plugindata.h \
+	pluginutils.h \
 	prefs.h \
 	project.h \
+	sciwrappers.h \
 	search.h \
 	stash.h \
 	support.h \
+	symbols.h \
 	templates.h \
 	toolbar.h \
 	ui_utils.h \
@@ -89,27 +101,28 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
 	-I$(top_srcdir)/tagmanager/src \
-	@GTK_CFLAGS@ @GTHREAD_CFLAGS@
+	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ @LIBGEANY_CFLAGS@
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
-nodist_EXTRA_geany_SOURCES = dummy.cxx
+nodist_EXTRA_libgeany_la_SOURCES = dummy.cxx
 
 
 if MINGW
 # build Geany for Windows on non-Windows systems (cross-compile)
 
-geany_SOURCES = $(SRCS) win32.c win32.h
+libgeany_la_SOURCES = $(SRCS) win32.c win32.h
 
-geany_LDADD = \
-	$(top_builddir)/scintilla/libscintilla.a \
-	$(top_builddir)/tagmanager/ctags/libctags.a \
-	$(top_builddir)/tagmanager/mio/libmio.a \
-	$(top_builddir)/tagmanager/src/libtagmanager.a \
+libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/libscintilla.la \
+	$(top_builddir)/tagmanager/ctags/libctags.la \
+	$(top_builddir)/tagmanager/mio/libmio.la \
+	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
-	-lole32 -luuid -liberty -lwsock32 \
-	geany_private.res
+	-lole32 -luuid -liberty -lwsock32
+
+geany_LDADD += geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGEANY_DOCDIR=\"\" \
@@ -120,7 +133,7 @@ AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
-geany_LDFLAGS =	-mwindows -mms-bitfields
+libgeany_la_LDFLAGS =	@LIBGEANY_LDFLAGS@ -mwindows -mms-bitfields
 
 WINDRES = $(host_alias)-windres
 
@@ -133,13 +146,13 @@ clean-local:
 else
 # build Geany for all other platforms
 
-geany_SOURCES = $(SRCS) vte.c vte.h
+libgeany_la_SOURCES = $(SRCS) vte.c vte.h
 
-geany_LDADD = \
-	$(top_builddir)/scintilla/libscintilla.a \
-	$(top_builddir)/tagmanager/ctags/libctags.a \
-	$(top_builddir)/tagmanager/mio/libmio.a \
-	$(top_builddir)/tagmanager/src/libtagmanager.a \
+libgeany_la_LIBADD = \
+	$(top_builddir)/scintilla/libscintilla.la \
+	$(top_builddir)/tagmanager/ctags/libctags.la \
+	$(top_builddir)/tagmanager/mio/libmio.la \
+	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS)
@@ -153,7 +166,24 @@ AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
 			-DGTK \
 			-DG_LOG_DOMAIN=\""Geany"\"
 
+libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
+
 clean-local:
 
 endif
 
+callbacks.c: signalconn.c
+
+glade_file=$(top_srcdir)/data/geany.glade
+template_file=$(srcdir)/signalconn.c.in
+
+signalconn.c: $(glade_file) $(template_file)
+	$(AM_V_GEN)( \
+		echo '/* This file is auto-generated, do not edit. */' && \
+		$(SED) -n '/@callback_map@/q;p' "$(template_file)" && \
+		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/\tg_hash_table_insert(hash, (gpointer) "\1", G_CALLBACK(\1));/p' "$(glade_file)" \
+			| $(SORT) | $(UNIQ) && \
+		$(SED) -n '/@callback_map@/{:l;n;p;b l}' "$(template_file)" \
+	) > $@ || { $(RM) $@ && exit 1; }
+
+CLEANFILES = signalconn.c

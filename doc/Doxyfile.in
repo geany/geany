@@ -775,7 +775,6 @@ WARN_LOGFILE           =
 INPUT                  = @top_srcdir@/src/ \
                          @top_srcdir@/doc/ \
                          @top_srcdir@/plugins/geanyplugin.h \
-                         @top_srcdir@/plugins/geanyfunctions.h \
                          @top_srcdir@/tagmanager/src/tm_source_file.c \
                          @top_srcdir@/tagmanager/src/tm_source_file.h \
                          @top_srcdir@/tagmanager/src/tm_work_object.c \
