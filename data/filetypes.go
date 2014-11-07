@@ -13,7 +13,6 @@ docComment=a addindex addtogroup anchor arg attention author authors b brief bug
 [lexer_properties=C]
 
 [settings]
-lexer_filetype=C
 
 # default extension used when saving files
 extension=go

@@ -100,6 +100,7 @@ typedef enum
 	GEANY_FILETYPES_BATCH,
 	GEANY_FILETYPES_POWERSHELL,
 	GEANY_FILETYPES_RUST,
+	GEANY_FILETYPES_GO,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

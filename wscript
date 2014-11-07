@@ -82,6 +82,7 @@ ctags_sources = set([
     'tagmanager/ctags/entry.c',
     'tagmanager/ctags/fortran.c',
     'tagmanager/ctags/get.c',
+    'tagmanager/ctags/go.c',
     'tagmanager/ctags/haskell.c',
     'tagmanager/ctags/haxe.c',
     'tagmanager/ctags/html.c',

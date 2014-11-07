@@ -24,6 +24,7 @@ parsers = \
 	diff.c \
 	docbook.c \
 	fortran.c \
+	go.c \
 	haskell.c \
 	haxe.c \
 	html.c \

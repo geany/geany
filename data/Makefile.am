@@ -33,7 +33,7 @@ filetypes = \
 	filetypes.freebasic \
 	filetypes.Genie.conf \
 	filetypes.glsl \
-	filetypes.Go.conf \
+	filetypes.go \
 	filetypes.Graphviz.conf \
 	filetypes.haskell \
 	filetypes.haxe \
