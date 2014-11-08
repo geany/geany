@@ -222,6 +222,8 @@ static void apply_settings(void)
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
 		interface_prefs.msgwin_orientation);
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "hpaned2")),
+		interface_prefs.editor_split);
 }
 
 
