@@ -98,7 +98,6 @@ doxygen_sources = \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/plugins/geanyfunctions.h \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
-	$(top_srcdir)/tagmanager/src/tm_work_object.[ch] \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
 Doxyfile.stamp: Doxyfile $(doxygen_sources)

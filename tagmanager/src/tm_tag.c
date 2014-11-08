@@ -78,6 +78,11 @@ static void log_tag_free(TMTag *tag)
 #endif /* DEBUG_TAG_REFS */
 
 
+const TMTagType TM_GLOBAL_TYPE_MASK =
+	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
+
+
 /* Note: To preserve binary compatibility, it is very important
 	that you only *append* to this list ! */
 enum
@@ -95,12 +100,15 @@ enum
 	TA_ACCESS,
 	TA_IMPL,
 	TA_LANG,
-	TA_INACTIVE,
+	TA_INACTIVE, /* Obsolete */
 	TA_POINTER
 };
 
-static guint *s_sort_attrs = NULL;
-static gboolean s_partial = FALSE;
+typedef struct
+{
+	guint *sort_attrs;
+	gboolean partial;
+} TMSortOptions;
 
 static const char *s_tag_type_names[] = {
 	"class", /* classes */
@@ -123,7 +131,7 @@ static const char *s_tag_type_names[] = {
 	"other" /* Other tag type (non C/C++/Java) */
 };
 
-static int s_tag_types[] = {
+static TMTagType s_tag_types[] = {
 	tm_tag_class_t,
 	tm_tag_enum_t,
 	tm_tag_enumerator_t,
@@ -144,6 +152,7 @@ static int s_tag_types[] = {
 	tm_tag_other_t
 };
 
+/* Gets the GType for a TMTag */
 GType tm_tag_get_type(void)
 {
 	static GType gtype = 0;
@@ -155,7 +164,7 @@ GType tm_tag_get_type(void)
 	return gtype;
 }
 
-static int get_tag_type(const char *tag_name)
+static TMTagType get_tag_type(const char *tag_name)
 {
 	unsigned int i;
 	int cmp;
@@ -208,56 +217,59 @@ static char get_tag_access(const char *access)
 	return TAG_ACCESS_UNKNOWN;
 }
 
-gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
+/*
+ Initializes a TMTag structure with information from a tagEntryInfo struct
+ used by the ctags parsers. Note that the TMTag structure must be malloc()ed
+ before calling this function. This function is called by tm_tag_new() - you
+ should not need to call this directly.
+ @param tag The TMTag structure to initialize
+ @param file Pointer to a TMSourceFile struct (it is assigned to the file member)
+ @param tag_entry Tag information gathered by the ctags parser
+ @return TRUE on success, FALSE on failure
+*/
+static gboolean tm_tag_init(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
 	tag->refcount = 1;
 	if (NULL == tag_entry)
-	{
-		/* This is a file tag */
-		if (NULL == file)
-			return FALSE;
-		else
-		{
-			tag->name = g_strdup(file->work_object.file_name);
-			tag->type = tm_tag_file_t;
-			/* tag->atts.file.timestamp = file->work_object.analyze_time; */
-			tag->atts.file.lang = file->lang;
-			tag->atts.file.inactive = FALSE;
-			return TRUE;
-		}
-	}
-	else
-	{
-		/* This is a normal tag entry */
-		if (NULL == tag_entry->name)
-			return FALSE;
-		tag->name = g_strdup(tag_entry->name);
-		tag->type = get_tag_type(tag_entry->kindName);
-		tag->atts.entry.local = tag_entry->isFileScope;
-		tag->atts.entry.pointerOrder = 0;	/* backward compatibility (use var_type instead) */
-		tag->atts.entry.line = tag_entry->lineNumber;
-		if (NULL != tag_entry->extensionFields.arglist)
-			tag->atts.entry.arglist = g_strdup(tag_entry->extensionFields.arglist);
-		if ((NULL != tag_entry->extensionFields.scope[1]) &&
-			(isalpha(tag_entry->extensionFields.scope[1][0]) ||
-			 tag_entry->extensionFields.scope[1][0] == '_' ||
-			 tag_entry->extensionFields.scope[1][0] == '$'))
-			tag->atts.entry.scope = g_strdup(tag_entry->extensionFields.scope[1]);
-		if (tag_entry->extensionFields.inheritance != NULL)
-			tag->atts.entry.inheritance = g_strdup(tag_entry->extensionFields.inheritance);
-		if (tag_entry->extensionFields.varType != NULL)
-			tag->atts.entry.var_type = g_strdup(tag_entry->extensionFields.varType);
-		if (tag_entry->extensionFields.access != NULL)
-			tag->atts.entry.access = get_tag_access(tag_entry->extensionFields.access);
-		if (tag_entry->extensionFields.implementation != NULL)
-			tag->atts.entry.impl = get_tag_impl(tag_entry->extensionFields.implementation);
-		if ((tm_tag_macro_t == tag->type) && (NULL != tag->atts.entry.arglist))
-			tag->type = tm_tag_macro_with_arg_t;
-		tag->atts.entry.file = file;
-		return TRUE;
-	}
+		return FALSE;
+		
+	/* This is a normal tag entry */
+	if (NULL == tag_entry->name)
+		return FALSE;
+	tag->name = g_strdup(tag_entry->name);
+	tag->type = get_tag_type(tag_entry->kindName);
+	tag->local = tag_entry->isFileScope;
+	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
+	tag->line = tag_entry->lineNumber;
+	if (NULL != tag_entry->extensionFields.arglist)
+		tag->arglist = g_strdup(tag_entry->extensionFields.arglist);
+	if ((NULL != tag_entry->extensionFields.scope[1]) &&
+		(isalpha(tag_entry->extensionFields.scope[1][0]) ||
+		 tag_entry->extensionFields.scope[1][0] == '_' ||
+		 tag_entry->extensionFields.scope[1][0] == '$'))
+		tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
+	if (tag_entry->extensionFields.inheritance != NULL)
+		tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
+	if (tag_entry->extensionFields.varType != NULL)
+		tag->var_type = g_strdup(tag_entry->extensionFields.varType);
+	if (tag_entry->extensionFields.access != NULL)
+		tag->access = get_tag_access(tag_entry->extensionFields.access);
+	if (tag_entry->extensionFields.implementation != NULL)
+		tag->impl = get_tag_impl(tag_entry->extensionFields.implementation);
+	if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
+		tag->type = tm_tag_macro_with_arg_t;
+	tag->file = file;
+	tag->lang = file->lang;
+	return TRUE;
 }
 
+/*
+ Creates a new tag structure from a tagEntryInfo pointer and a TMSOurceFile pointer
+ and returns a pointer to it.
+ @param file - Pointer to the TMSourceFile structure containing the tag
+ @param tag_entry Contains tag information generated by ctags
+ @return the new TMTag structure. This should be free()-ed using tm_tag_free()
+*/
 TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
 	TMTag *tag;
@@ -271,7 +283,15 @@ TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry)
 	return tag;
 }
 
-gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
+/*
+ Initializes an already malloc()ed TMTag structure by reading a tag entry
+ line from a file. The structure should be allocated beforehand.
+ @param tag The TMTag structure to populate
+ @param file The TMSourceFile struct (assigned to the file member)
+ @param fp FILE pointer from where the tag line is read
+ @return TRUE on success, FALSE on FAILURE
+*/
+static gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -301,61 +321,40 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 			switch (*start)
 			{
 				case TA_LINE:
-					tag->atts.entry.line = atol((gchar*)start + 1);
+					tag->line = atol((gchar*)start + 1);
 					break;
 				case TA_LOCAL:
-					tag->atts.entry.local = atoi((gchar*)start + 1);
+					tag->local = atoi((gchar*)start + 1);
 					break;
 				case TA_TYPE:
 					tag->type = (TMTagType) atoi((gchar*)start + 1);
 					break;
 				case TA_ARGLIST:
-					tag->atts.entry.arglist = g_strdup((gchar*)start + 1);
+					tag->arglist = g_strdup((gchar*)start + 1);
 					break;
 				case TA_SCOPE:
-					tag->atts.entry.scope = g_strdup((gchar*)start + 1);
+					tag->scope = g_strdup((gchar*)start + 1);
 					break;
 				case TA_POINTER:
-					tag->atts.entry.pointerOrder = atoi((gchar*)start + 1);
+					tag->pointerOrder = atoi((gchar*)start + 1);
 					break;
 				case TA_VARTYPE:
-					tag->atts.entry.var_type = g_strdup((gchar*)start + 1);
+					tag->var_type = g_strdup((gchar*)start + 1);
 					break;
 				case TA_INHERITS:
-					tag->atts.entry.inheritance = g_strdup((gchar*)start + 1);
+					tag->inheritance = g_strdup((gchar*)start + 1);
 					break;
-				case TA_TIME:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got time attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.timestamp = atol((gchar*)start + 1);
+				case TA_TIME:  /* Obsolete */
 					break;
-				case TA_LANG:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got lang attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.lang = atoi((gchar*)start + 1);
+				case TA_LANG:  /* Obsolete */
 					break;
-				case TA_INACTIVE:
-					if (tm_tag_file_t != tag->type)
-					{
-						g_warning("Got inactive attribute for non-file tag %s", tag->name);
-						return FALSE;
-					}
-					else
-						tag->atts.file.inactive = (gboolean) atoi((gchar*)start + 1);
+				case TA_INACTIVE:  /* Obsolete */
 					break;
 				case TA_ACCESS:
-					tag->atts.entry.access = *(start + 1);
+					tag->access = (char) *(start + 1);
 					break;
 				case TA_IMPL:
-					tag->atts.entry.impl = *(start + 1);
+					tag->impl = (char) *(start + 1);
 					break;
 				default:
 #ifdef GEANY_DEBUG
@@ -368,14 +367,13 @@ gboolean tm_tag_init_from_file(TMTag *tag, TMSourceFile *file, FILE *fp)
 	}
 	if (NULL == tag->name)
 		return FALSE;
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
 /* alternative parser for Pascal and LaTeX global tags files with the following format
  * tagname|return value|arglist|description\n */
-gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	guchar buf[BUFSIZ];
 	guchar *start, *end;
@@ -404,8 +402,8 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 
 			if (field_len >= 1) tag->name = g_strdup(fields[0]);
 			else tag->name = NULL;
-			if (field_len >= 2 && fields[1] != NULL) tag->atts.entry.var_type = g_strdup(fields[1]);
-			if (field_len >= 3 && fields[2] != NULL) tag->atts.entry.arglist = g_strdup(fields[2]);
+			if (field_len >= 2 && fields[1] != NULL) tag->var_type = g_strdup(fields[1]);
+			if (field_len >= 3 && fields[2] != NULL) tag->arglist = g_strdup(fields[2]);
 			tag->type = tm_tag_prototype_t;
 			g_strfreev(fields);
 		}
@@ -413,13 +411,15 @@ gboolean tm_tag_init_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 
 	if (NULL == tag->name)
 		return FALSE;
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
-/* Reads ctags format (http://ctags.sourceforge.net/FORMAT) */
-gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
+/*
+ Same as tm_tag_init_from_file(), but parsing CTags tag file format
+ (http://ctags.sourceforge.net/FORMAT) 
+*/
+static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
 {
 	gchar buf[BUFSIZ];
 	gchar *p, *tab;
@@ -460,7 +460,7 @@ gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
 		}
 	}
 	else /* assume a line */
-		tag->atts.entry.line = atol(p);
+		tag->line = atol(p);
 	tab = strstr(p, ";\"");
 	/* read extension fields */
 	if (tab)
@@ -501,7 +501,7 @@ gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
 						case 'c': tag->type = tm_tag_class_t; break;
 						case 'd': tag->type = tm_tag_macro_t; break;
 						case 'e': tag->type = tm_tag_enumerator_t; break;
-						case 'F': tag->type = tm_tag_file_t; break;
+						case 'F': tag->type = tm_tag_other_t; break;  /* Obsolete */
 						case 'f': tag->type = tm_tag_function_t; break;
 						case 'g': tag->type = tm_tag_enum_t; break;
 						case 'I': tag->type = tm_tag_class_t; break;
@@ -527,39 +527,42 @@ gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
 			}
 			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
 			{
-				g_free(tag->atts.entry.inheritance);
-				tag->atts.entry.inheritance = g_strdup(value);
+				g_free(tag->inheritance);
+				tag->inheritance = g_strdup(value);
 			}
 			else if (0 == strcmp(key, "implementation")) /* implementation limit */
-				tag->atts.entry.impl = get_tag_impl(value);
+				tag->impl = get_tag_impl(value);
 			else if (0 == strcmp(key, "line")) /* line */
-				tag->atts.entry.line = atol(value);
+				tag->line = atol(value);
 			else if (0 == strcmp(key, "access")) /* access */
-				tag->atts.entry.access = get_tag_access(value);
+				tag->access = get_tag_access(value);
 			else if (0 == strcmp(key, "class") ||
 					 0 == strcmp(key, "enum") ||
 					 0 == strcmp(key, "function") ||
 					 0 == strcmp(key, "struct") ||
 					 0 == strcmp(key, "union")) /* Name of the class/enum/function/struct/union in which this tag is a member */
 			{
-				g_free(tag->atts.entry.scope);
-				tag->atts.entry.scope = g_strdup(value);
+				g_free(tag->scope);
+				tag->scope = g_strdup(value);
 			}
 			else if (0 == strcmp(key, "file")) /* static (local) tag */
-				tag->atts.entry.local = TRUE;
+				tag->local = TRUE;
 			else if (0 == strcmp(key, "signature")) /* arglist */
 			{
-				g_free(tag->atts.entry.arglist);
-				tag->atts.entry.arglist = g_strdup(value);
+				g_free(tag->arglist);
+				tag->arglist = g_strdup(value);
 			}
 		}
 	}
 
-	if (tm_tag_file_t != tag->type)
-		tag->atts.entry.file = file;
+	tag->file = file;
 	return TRUE;
 }
 
+/*
+ Same as tm_tag_new() except that the tag attributes are read from file.
+ @param mode langType to use for the tag.
+*/
 TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format)
 {
 	TMTag *tag;
@@ -585,70 +588,67 @@ TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileForma
 		TAG_FREE(tag);
 		return NULL;
 	}
-	tag->atts.file.lang = mode;
+	tag->lang = mode;
 	return tag;
 }
 
-gboolean tm_tag_write(TMTag *tag, FILE *fp, guint attrs)
+/*
+ Writes tag information to the given FILE *.
+ @param tag The tag information to write.
+ @param file FILE pointer to which the tag information is written.
+ @param attrs Attributes to be written (bitmask).
+ @return TRUE on success, FALSE on failure.
+*/
+gboolean tm_tag_write(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 {
 	fprintf(fp, "%s", tag->name);
 	if (attrs & tm_tag_attr_type_t)
 		fprintf(fp, "%c%d", TA_TYPE, tag->type);
-	if (tag->type == tm_tag_file_t)
-	{
-		if (attrs & tm_tag_attr_time_t)
-			fprintf(fp, "%c%ld", TA_TIME, tag->atts.file.timestamp);
-		if (attrs & tm_tag_attr_lang_t)
-			fprintf(fp, "%c%d", TA_LANG, tag->atts.file.lang);
-		if ((attrs & tm_tag_attr_inactive_t) && tag->atts.file.inactive)
-			fprintf(fp, "%c%d", TA_INACTIVE, tag->atts.file.inactive);
-	}
-	else
-	{
-		if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->atts.entry.arglist))
-			fprintf(fp, "%c%s", TA_ARGLIST, tag->atts.entry.arglist);
-		if (attrs & tm_tag_attr_line_t)
-			fprintf(fp, "%c%ld", TA_LINE, tag->atts.entry.line);
-		if (attrs & tm_tag_attr_local_t)
-			fprintf(fp, "%c%d", TA_LOCAL, tag->atts.entry.local);
-		if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->atts.entry.scope))
-			fprintf(fp, "%c%s", TA_SCOPE, tag->atts.entry.scope);
-		if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->atts.entry.inheritance))
-			fprintf(fp, "%c%s", TA_INHERITS, tag->atts.entry.inheritance);
-		if (attrs & tm_tag_attr_pointer_t)
-			fprintf(fp, "%c%d", TA_POINTER, tag->atts.entry.pointerOrder);
-		if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->atts.entry.var_type))
-			fprintf(fp, "%c%s", TA_VARTYPE, tag->atts.entry.var_type);
-		if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->atts.entry.access))
-			fprintf(fp, "%c%c", TA_ACCESS, tag->atts.entry.access);
-		if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->atts.entry.impl))
-			fprintf(fp, "%c%c", TA_IMPL, tag->atts.entry.impl);
-	}
+	if ((attrs & tm_tag_attr_arglist_t) && (NULL != tag->arglist))
+		fprintf(fp, "%c%s", TA_ARGLIST, tag->arglist);
+	if (attrs & tm_tag_attr_line_t)
+		fprintf(fp, "%c%ld", TA_LINE, tag->line);
+	if (attrs & tm_tag_attr_local_t)
+		fprintf(fp, "%c%d", TA_LOCAL, tag->local);
+	if ((attrs & tm_tag_attr_scope_t) && (NULL != tag->scope))
+		fprintf(fp, "%c%s", TA_SCOPE, tag->scope);
+	if ((attrs & tm_tag_attr_inheritance_t) && (NULL != tag->inheritance))
+		fprintf(fp, "%c%s", TA_INHERITS, tag->inheritance);
+	if (attrs & tm_tag_attr_pointer_t)
+		fprintf(fp, "%c%d", TA_POINTER, tag->pointerOrder);
+	if ((attrs & tm_tag_attr_vartype_t) && (NULL != tag->var_type))
+		fprintf(fp, "%c%s", TA_VARTYPE, tag->var_type);
+	if ((attrs & tm_tag_attr_access_t) && (TAG_ACCESS_UNKNOWN != tag->access))
+		fprintf(fp, "%c%c", TA_ACCESS, tag->access);
+	if ((attrs & tm_tag_attr_impl_t) && (TAG_IMPL_UNKNOWN != tag->impl))
+		fprintf(fp, "%c%c", TA_IMPL, tag->impl);
+
 	if (fprintf(fp, "\n"))
 		return TRUE;
 	else
 		return FALSE;
 }
 
+/*
+ Destroys a TMTag structure, i.e. frees all elements except the tag itself.
+ @param tag The TMTag structure to destroy
+ @see tm_tag_free()
+*/
 static void tm_tag_destroy(TMTag *tag)
 {
 	g_free(tag->name);
-	if (tm_tag_file_t != tag->type)
-	{
-		g_free(tag->atts.entry.arglist);
-		g_free(tag->atts.entry.scope);
-		g_free(tag->atts.entry.inheritance);
-		g_free(tag->atts.entry.var_type);
-	}
+	g_free(tag->arglist);
+	g_free(tag->scope);
+	g_free(tag->inheritance);
+	g_free(tag->var_type);
 }
 
-#if 0
-void tm_tag_free(gpointer tag)
-{
-	tm_tag_unref(tag);
-}
-#endif
 
+/*
+ Drops a reference from a TMTag. If the reference count reaches 0, this function
+ destroys all data in the tag and frees the tag structure as well.
+ @param tag Pointer to a TMTag structure
+*/
 void tm_tag_unref(TMTag *tag)
 {
 	/* be NULL-proof because tm_tag_free() was NULL-proof and we indent to be a
@@ -660,77 +660,86 @@ void tm_tag_unref(TMTag *tag)
 	}
 }
 
+/*
+ Adds a reference to a TMTag.
+ @param tag Pointer to a TMTag structure
+ @return the passed-in TMTag
+*/
 TMTag *tm_tag_ref(TMTag *tag)
 {
 	g_atomic_int_inc(&tag->refcount);
 	return tag;
 }
 
-int tm_tag_compare(const void *ptr1, const void *ptr2)
+/*
+ Inbuilt tag comparison function.
+*/
+static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
 {
 	unsigned int *sort_attr;
 	int returnval = 0;
 	TMTag *t1 = *((TMTag **) ptr1);
 	TMTag *t2 = *((TMTag **) ptr2);
+	TMSortOptions *sort_options = user_data;
 
 	if ((NULL == t1) || (NULL == t2))
 	{
 		g_warning("Found NULL tag");
 		return t2 - t1;
 	}
-	if (NULL == s_sort_attrs)
+	if (NULL == sort_options->sort_attrs)
 	{
-		if (s_partial)
+		if (sort_options->partial)
 			return strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 		else
 			return strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 	}
 
-	for (sort_attr = s_sort_attrs; *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
+	for (sort_attr = sort_options->sort_attrs; returnval == 0 && *sort_attr != tm_tag_attr_none_t; ++ sort_attr)
 	{
 		switch (*sort_attr)
 		{
 			case tm_tag_attr_name_t:
-				if (s_partial)
+				if (sort_options->partial)
 					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
 				else
 					returnval = strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
-				if (0 != returnval)
-					return returnval;
-				break;
-			case tm_tag_attr_type_t:
-				if (0 != (returnval = (t1->type - t2->type)))
-					return returnval;
 				break;
 			case tm_tag_attr_file_t:
-				if (0 != (returnval = (t1->atts.entry.file - t2->atts.entry.file)))
-					return returnval;
+				returnval = t1->file - t2->file;
+				break;
+			case tm_tag_attr_line_t:
+				returnval = t1->line - t2->line;
+				break;
+			case tm_tag_attr_type_t:
+				returnval = t1->type - t2->type;
 				break;
 			case tm_tag_attr_scope_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.scope, ""), FALLBACK(t2->atts.entry.scope, ""))))
-					return returnval;
+				returnval = strcmp(FALLBACK(t1->scope, ""), FALLBACK(t2->scope, ""));
 				break;
 			case tm_tag_attr_arglist_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.arglist, ""), FALLBACK(t2->atts.entry.arglist, ""))))
+				returnval = strcmp(FALLBACK(t1->arglist, ""), FALLBACK(t2->arglist, ""));
+				if (returnval != 0)
 				{
-					int line_diff = (t1->atts.entry.line - t2->atts.entry.line);
+					int line_diff = (t1->line - t2->line);
 
-					return line_diff ? line_diff : returnval;
+					returnval = line_diff ? line_diff : returnval;
 				}
 				break;
 			case tm_tag_attr_vartype_t:
-				if (0 != (returnval = strcmp(FALLBACK(t1->atts.entry.var_type, ""), FALLBACK(t2->atts.entry.var_type, ""))))
-					return returnval;
-				break;
-			case tm_tag_attr_line_t:
-				if (0 != (returnval = (t1->atts.entry.line - t2->atts.entry.line)))
-					return returnval;
+				returnval = strcmp(FALLBACK(t1->var_type, ""), FALLBACK(t2->var_type, ""));
 				break;
 		}
 	}
 	return returnval;
 }
 
+/*
+ Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since 
+ this function substitutes duplicate entries with NULL
+ @param tags_array Array of tags to dedup
+ @return TRUE on success, FALSE on failure
+*/
 gboolean tm_tags_prune(GPtrArray *tags_array)
 {
 	guint i, count;
@@ -743,18 +752,29 @@ gboolean tm_tags_prune(GPtrArray *tags_array)
 	return TRUE;
 }
 
-gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
+/*
+ Deduplicates an array on tags using the inbuilt comparison function based on
+ the attributes specified. Called by tm_tags_sort() when dedup is TRUE.
+ @param tags_array Array of tags to dedup.
+ @param sort_attributes Attributes the array is sorted on. They will be deduped
+ on the same criteria.
+ @return TRUE on success, FALSE on failure
+*/
+gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
+	TMSortOptions sort_options;
 	guint i;
 
 	if ((!tags_array) || (!tags_array->len))
 		return TRUE;
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
 	for (i = 1; i < tags_array->len; ++i)
 	{
-		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i])))
+		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i]), &sort_options))
 		{
+			if (unref_duplicates)
+				tm_tag_unref(tags_array->pdata[i-1]);
 			tags_array->pdata[i-1] = NULL;
 		}
 	}
@@ -762,91 +782,200 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes)
 	return TRUE;
 }
 
-gboolean tm_tags_custom_dedup(GPtrArray *tags_array, TMTagCompareFunc compare_func)
+/*
+ Sort an array of tags on the specified attribuites using the inbuilt comparison
+ function.
+ @param tags_array The array of tags to be sorted
+ @param sort_attributes Attributes to be sorted on (int array terminated by 0)
+ @param dedup Whether to deduplicate the sorted array
+ @return TRUE on success, FALSE on failure
+*/
+gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, 
+	gboolean dedup, gboolean unref_duplicates)
+{
+	TMSortOptions sort_options;
+	
+	if ((!tags_array) || (!tags_array->len))
+		return TRUE;
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
+	g_ptr_array_sort_with_data(tags_array, tm_tag_compare, &sort_options);
+	if (dedup)
+		tm_tags_dedup(tags_array, sort_attributes, unref_duplicates);
+	return TRUE;
+}
+
+void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 {
 	guint i;
-
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
-	for (i = 1; i < tags_array->len; ++i)
+	GPtrArray *to_delete = g_ptr_array_sized_new(source_file->tags_array->len);
+	
+	for (i = 0; i < source_file->tags_array->len; i++)
 	{
-		if (0 == compare_func(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i])))
-			tags_array->pdata[i-1] = NULL;
-	}
-	tm_tags_prune(tags_array);
-	return TRUE;
-}
-
-/* Sorts newly-added tags and merges them in order with existing tags.
- * This is much faster than resorting the whole array.
- * Note: Having the caller append to the existing array should be faster
- * than creating a new array which would likely get resized more than once.
- * tags_array: array with new (perhaps unsorted) tags appended.
- * orig_len: number of existing tags. */
-gboolean tm_tags_merge(GPtrArray *tags_array, gsize orig_len,
-	TMTagAttrType *sort_attributes, gboolean dedup)
-{
-	gpointer *copy, *a, *b;
-	gsize copy_len, i;
-
-	if ((!tags_array) || (!tags_array->len) || orig_len >= tags_array->len)
-		return TRUE;
-	if (!orig_len)
-		return tm_tags_sort(tags_array, sort_attributes, dedup);
-	copy_len = tags_array->len - orig_len;
-	copy = g_memdup(tags_array->pdata + orig_len, copy_len * sizeof(gpointer));
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
-	/* enforce copy sorted with same attributes for merge */
-	qsort(copy, copy_len, sizeof(gpointer), tm_tag_compare);
-	a = tags_array->pdata + orig_len - 1;
-	b = copy + copy_len - 1;
-	for (i = tags_array->len - 1;; i--)
-	{
-		gint cmp = tm_tag_compare(a, b);
-
-		tags_array->pdata[i] = (cmp >= 0) ? *a-- : *b--;
-		if (a < tags_array->pdata)
+		guint j;
+		guint tag_count;
+		TMTag **found;
+		TMTag *tag = source_file->tags_array->pdata[i];
+		
+		found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
+		
+		for (j = 0; j < tag_count; j++)
 		{
-			/* include remainder of copy as well as current value of b */
-			memcpy(tags_array->pdata, copy, ((b + 1) - copy) * sizeof(gpointer));
-			break;
+			if (*found != NULL && (*found)->file == source_file)
+			{
+				/* we cannot set the pointer to NULL now because the search wouldn't work */
+				g_ptr_array_add(to_delete, found);
+				/* no break - if there are multiple tags of the same name, we would 
+				 * always find the first instance and wouldn't remove others; duplicates
+				 * in the to_delete list aren't a problem */
+			}
+			found++;
 		}
-		if (b < copy)
-			break; /* remaining elements of 'a' are in place already */
-		g_assert(i != 0);
 	}
-	s_sort_attrs = NULL;
-	g_free(copy);
-	if (dedup)
-		tm_tags_dedup(tags_array, sort_attributes);
-	return TRUE;
+
+	for (i = 0; i < to_delete->len; i++)
+	{
+		TMTag **tag = to_delete->pdata[i];
+		*tag = NULL;
+	}
+	g_ptr_array_free(to_delete, TRUE);
+
+	tm_tags_prune(tags_array);
 }
 
-gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean dedup)
+/* Optimized merge sort for merging sorted values from one array to another
+ * where one of the arrays is much smaller than the other.
+ * The merge complexity depends mostly on the size of the small array
+ * and is almost independent of the size of the big array.
+ * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
+static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, 
+	TMSortOptions *sort_options, gboolean unref_duplicates) {
+	guint i1 = 0;  /* index to big_array */
+	guint i2 = 0;  /* index to small_array */
+	guint initial_step;
+	guint step;
+	GPtrArray *res_array = g_ptr_array_sized_new(big_array->len + small_array->len);
+#ifdef TM_DEBUG
+	guint cmpnum = 0;
+#endif
+
+	/* swap the arrays if len(small) > len(big) */
+	if (small_array->len > big_array->len)
+	{
+		GPtrArray *tmp = small_array;
+		small_array = big_array;
+		big_array = tmp;
+	}
+	
+	/* on average, we are merging a value from small_array every 
+	 * len(big_array) / len(small_array) values - good approximation for fast jump
+	 * step size */
+	initial_step = (small_array->len > 0) ? big_array->len / small_array->len : 1;
+	initial_step = initial_step > 4 ? initial_step : 1;
+	step = initial_step;
+	
+	while (i1 < big_array->len && i2 < small_array->len)
+	{
+		gpointer val1;
+		gpointer val2 = small_array->pdata[i2];
+
+		if (step > 4)  /* fast path start */
+		{
+			guint j1 = (i1 + step < big_array->len) ? i1 + step : big_array->len - 1;
+			
+			val1 = big_array->pdata[j1];
+#ifdef TM_DEBUG
+			cmpnum++;
+#endif
+			/* if the value in big_array after making the big step is still smaller
+			 * than the value in small_array, we can copy all the values inbetween
+			 * into the result without making expensive string comparisons */
+			if (tm_tag_compare(&val1, &val2, sort_options) < 0)
+			{
+				while (i1 <= j1) 
+				{
+					val1 = big_array->pdata[i1];
+					/* we allocated enough space so we are sure we don't need to reallocate
+					 * the array - copy and increment the size directly so it can be inlined */
+					res_array->pdata[res_array->len++] = val1;
+					i1++;
+				}
+			}
+			else 
+			{
+				/* lower the step and try again */
+				step /= 2;
+			}
+		}  /* fast path end */
+		else
+		{
+			gint cmpval;
+			
+#ifdef TM_DEBUG
+			cmpnum++;
+#endif
+			val1 = big_array->pdata[i1];
+			cmpval = tm_tag_compare(&val1, &val2, sort_options);
+			if (cmpval < 0)
+			{
+				g_ptr_array_add(res_array, val1);
+				i1++;
+			}
+			else
+			{
+				g_ptr_array_add(res_array, val2);
+				i2++;
+				/* value from small_array gets merged - reset the step size */
+				step = initial_step;
+				if (cmpval == 0)
+				{
+					i1++;  /* remove the duplicate, keep just the newly merged value */
+					if (unref_duplicates)
+						tm_tag_unref(val1);
+				}
+			}
+		}
+	}
+
+	/* end of one of the arrays reached - copy the rest from the other array */
+	while (i1 < big_array->len)
+		g_ptr_array_add(res_array, big_array->pdata[i1++]);
+	while (i2 < small_array->len)
+		g_ptr_array_add(res_array, small_array->pdata[i2++]);
+		
+#ifdef TM_DEBUG
+	printf("cmpnums: %u\n", cmpnum);
+	printf("total tags: %u\n", big_array->len);
+	printf("merged tags: %u\n\n", small_array->len);
+#endif
+
+	return res_array;
+}
+
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
+	TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
-	s_sort_attrs = sort_attributes;
-	s_partial = FALSE;
-	qsort(tags_array->pdata, tags_array->len, sizeof(gpointer), tm_tag_compare);
-	s_sort_attrs = NULL;
-	if (dedup)
-		tm_tags_dedup(tags_array, sort_attributes);
-	return TRUE;
+	GPtrArray *res_array;
+	TMSortOptions sort_options;
+	
+	sort_options.sort_attrs = sort_attributes;
+	sort_options.partial = FALSE;
+	res_array = merge(big_array, small_array, &sort_options, unref_duplicates);
+	return res_array;
 }
 
-gboolean tm_tags_custom_sort(GPtrArray *tags_array, TMTagCompareFunc compare_func, gboolean dedup)
-{
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
-	qsort(tags_array->pdata, tags_array->len, sizeof(gpointer), compare_func);
-	if (dedup)
-		tm_tags_custom_dedup(tags_array, compare_func);
-	return TRUE;
-}
-
-GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types)
+/*
+ This function will extract the tags of the specified types from an array of tags.
+ The returned value is a GPtrArray which should be free-d with a call to
+ g_ptr_array_free(array, TRUE). However, do not free the tags themselves since they
+ are not duplicated.
+ @param tags_array The original array of tags
+ @param tag_types - The tag types to extract. Can be a bitmask. For example, passing
+ (tm_tag_typedef_t | tm_tag_struct_t) will extract all typedefs and structures from
+ the original array.
+ @return an array of tags (NULL on failure)
+*/
+GPtrArray *tm_tags_extract(GPtrArray *tags_array, TMTagType tag_types)
 {
 	GPtrArray *new_tags;
 	guint i;
@@ -864,6 +993,11 @@ GPtrArray *tm_tags_extract(GPtrArray *tags_array, guint tag_types)
 	return new_tags;
 }
 
+/*
+ Completely frees an array of tags.
+ @param tags_array Array of tags to be freed.
+ @param free_array Whether the GptrArray is to be freed as well.
+*/
 void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all)
 {
 	if (tags_array)
@@ -878,46 +1012,86 @@ void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all)
 	}
 }
 
-static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag, gboolean partial,
-		gboolean tags_array_sorted)
+/* copy/pasted bsearch() from libc extended with user_data for comparison function
+ * and using glib types */
+static gpointer binary_search(gpointer key, gpointer base, size_t nmemb, 
+	GCompareDataFunc compar, gpointer user_data)
+{
+	gsize l, u, idx;
+	gpointer p;
+	gint comparison;
+
+	l = 0;
+	u = nmemb;
+	while (l < u)
+	{
+		idx = (l + u) / 2;
+		p = (gpointer) (((const gchar *) base) + (idx * sizeof(gpointer)));
+		comparison = (*compar) (key, p, user_data);
+		if (comparison < 0)
+			u = idx;
+		else if (comparison > 0)
+			l = idx + 1;
+		else
+			return (gpointer) p;
+	}
+
+	return NULL;
+}
+
+static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag,
+		gboolean tags_array_sorted, TMSortOptions *sort_options)
 {
 	if (tags_array_sorted)
 	{	/* fast binary search on sorted tags array */
-		return (TMTag **) bsearch(&tag, tags_array->pdata, tags_array->len
-		  , sizeof(gpointer), tm_tag_compare);
+		return (TMTag **) binary_search(&tag, tags_array->pdata, tags_array->len, 
+			tm_tag_compare, sort_options);
 	}
 	else
 	{	/* the slow way: linear search (to make it a bit faster, search reverse assuming
 		 * that the tag to search was added recently) */
-		int i;
+		guint i;
 		TMTag **t;
-		for (i = tags_array->len - 1; i >= 0; i--)
+		for (i = tags_array->len; i > 0; i--)
 		{
-			t = (TMTag **) &tags_array->pdata[i];
-			if (0 == tm_tag_compare(&tag, t))
+			t = (TMTag **) &tags_array->pdata[i - 1];
+			if (0 == tm_tag_compare(&tag, t, sort_options))
 				return t;
 		}
 	}
 	return NULL;
 }
 
+/*
+ Returns a pointer to the position of the first matching tag in a (sorted) tags array.
+ The passed array of tags should be already sorted by name for optimal performance. If
+ \c tags_array_sorted is set to FALSE, it may be unsorted but the lookup will be slower.
+ @param tags_array Tag array (may be sorted on name)
+ @param name Name of the tag to locate.
+ @param partial If TRUE, matches the first part of the name instead of doing exact match.
+ @param tags_array_sorted If TRUE, the passed \c tags_array is sorted by name so it can be
+ searched with binary search. Otherwise it is searched linear which is obviously slower.
+ @param tagCount Return location of the matched tags.
+*/
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, gboolean tags_array_sorted, int * tagCount)
+		gboolean partial, gboolean tags_array_sorted, guint * tagCount)
 {
 	static TMTag *tag = NULL;
 	TMTag **result;
-	int tagMatches=0;
+	guint tagMatches=0;
+	TMSortOptions sort_options;
 
+	*tagCount = 0;
 	if ((!tags_array) || (!tags_array->len))
 		return NULL;
 
 	if (NULL == tag)
 		tag = g_new0(TMTag, 1);
 	tag->name = (char *) name;
-	s_sort_attrs = NULL;
-	s_partial = partial;
+	sort_options.sort_attrs = NULL;
+	sort_options.partial = partial;
 
-	result = tags_search(tags_array, tag, partial, tags_array_sorted);
+	result = tags_search(tags_array, tag, tags_array_sorted, &sort_options);
 	/* There can be matches on both sides of result */
 	if (result)
 	{
@@ -929,24 +1103,70 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 		adv++;
 		for (; adv <= last && *adv; ++ adv)
 		{
-			if (0 != tm_tag_compare(&tag, adv))
+			if (0 != tm_tag_compare(&tag, adv, &sort_options))
 				break;
 			++tagMatches;
 		}
 		/* Now look for matches from result and below */
 		for (; result >= (TMTag **) tags_array->pdata; -- result)
 		{
-			if (0 != tm_tag_compare(&tag, (TMTag **) result))
+			if (0 != tm_tag_compare(&tag, (TMTag **) result, &sort_options))
 				break;
 			++tagMatches;
 		}
 		*tagCount=tagMatches;
 		++ result;	/* Correct address for the last successful match */
 	}
-	s_partial = FALSE;
 	return (TMTag **) result;
 }
 
+/* Returns TMTag which "own" given line
+ @param line Current line in edited file.
+ @param file_tags A GPtrArray of edited file TMTag pointers.
+ @param tag_types the tag types to include in the match
+ @return TMTag pointers to owner tag. */
+const TMTag *
+tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType tag_types)
+{
+	TMTag *matching_tag = NULL;
+	if (file_tags && file_tags->len)
+	{
+		guint i;
+		gulong matching_line = 0;
+
+		for (i = 0; (i < file_tags->len); ++i)
+		{
+			TMTag *tag = TM_TAG (file_tags->pdata[i]);
+			if (tag && tag->type & tag_types &&
+				tag->line <= line && tag->line > matching_line)
+			{
+				matching_tag = tag;
+				matching_line = tag->line;
+			}
+		}
+	}
+	return matching_tag;
+}
+
+#if 0
+/* Returns TMTag to function or method which "own" given line
+ @param line Current line in edited file.
+ @param file_tags A GPtrArray of edited file TMTag pointers.
+ @return TMTag pointers to owner function. */
+static const TMTag *
+tm_get_current_function (GPtrArray * file_tags, const gulong line)
+{
+	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
+}
+#endif
+
+
+#ifdef TM_DEBUG /* various debugging functions */
+
+/*
+ Returns the type of tag as a string
+ @param tag The tag whose type is required
+*/
 const char *tm_tag_type_name(const TMTag *tag)
 {
 	g_return_val_if_fail(tag, NULL);
@@ -970,12 +1190,15 @@ const char *tm_tag_type_name(const TMTag *tag)
 		case tm_tag_externvar_t: return "extern";
 		case tm_tag_macro_t: return "define";
 		case tm_tag_macro_with_arg_t: return "macro";
-		case tm_tag_file_t: return "file";
 		default: return NULL;
 	}
 	return NULL;
 }
 
+/*
+ Returns the TMTagType given the name of the type. Reverse of tm_tag_type_name.
+ @param tag_name Name of the tag type
+*/
 TMTagType tm_tag_name_type(const char* tag_name)
 {
 	g_return_val_if_fail(tag_name, tm_tag_undef_t);
@@ -998,14 +1221,13 @@ TMTagType tm_tag_name_type(const char* tag_name)
 	else if (strcmp(tag_name, "extern") == 0) return tm_tag_externvar_t;
 	else if (strcmp(tag_name, "define") == 0) return tm_tag_macro_t;
 	else if (strcmp(tag_name, "macro") == 0) return tm_tag_macro_with_arg_t;
-	else if (strcmp(tag_name, "file") == 0) return tm_tag_file_t;
 	else return tm_tag_undef_t;
 }
 
 static const char *tm_tag_impl_name(TMTag *tag)
 {
-	g_return_val_if_fail(tag && (tm_tag_file_t != tag->type), NULL);
-	if (TAG_IMPL_VIRTUAL == tag->atts.entry.impl)
+	g_return_val_if_fail(tag, NULL);
+	if (TAG_IMPL_VIRTUAL == tag->impl)
 		return "virtual";
 	else
 		return NULL;
@@ -1013,27 +1235,27 @@ static const char *tm_tag_impl_name(TMTag *tag)
 
 static const char *tm_tag_access_name(TMTag *tag)
 {
-	g_return_val_if_fail(tag && (tm_tag_file_t != tag->type), NULL);
-	if (TAG_ACCESS_PUBLIC == tag->atts.entry.access)
+	g_return_val_if_fail(tag, NULL);
+	if (TAG_ACCESS_PUBLIC == tag->access)
 		return "public";
-	else if (TAG_ACCESS_PROTECTED == tag->atts.entry.access)
+	else if (TAG_ACCESS_PROTECTED == tag->access)
 		return "protected";
-	else if (TAG_ACCESS_PRIVATE == tag->atts.entry.access)
+	else if (TAG_ACCESS_PRIVATE == tag->access)
 		return "private";
 	else
 		return NULL;
 }
 
+/*
+  Prints information about a tag to the given file pointer.
+  @param tag The tag whose info is required.
+  @param fp The file pointer of teh file to print the info to.
+*/
 void tm_tag_print(TMTag *tag, FILE *fp)
 {
 	const char *laccess, *impl, *type;
 	if (!tag || !fp)
 		return;
-	if (tm_tag_file_t == tag->type)
-	{
-		fprintf(fp, "%s\n", tag->name);
-		return;
-	}
 	laccess = tm_tag_access_name(tag);
 	impl = tm_tag_impl_name(tag);
 	type = tm_tag_type_name(tag);
@@ -1043,21 +1265,24 @@ void tm_tag_print(TMTag *tag, FILE *fp)
 		fprintf(fp, "%s ", impl);
 	if (type)
 		fprintf(fp, "%s ", type);
-	if (tag->atts.entry.var_type)
-		fprintf(fp, "%s ", tag->atts.entry.var_type);
-	if (tag->atts.entry.scope)
-		fprintf(fp, "%s::", tag->atts.entry.scope);
+	if (tag->var_type)
+		fprintf(fp, "%s ", tag->var_type);
+	if (tag->scope)
+		fprintf(fp, "%s::", tag->scope);
 	fprintf(fp, "%s", tag->name);
-	if (tag->atts.entry.arglist)
-		fprintf(fp, "%s", tag->atts.entry.arglist);
-	if (tag->atts.entry.inheritance)
-		fprintf(fp, " : from %s", tag->atts.entry.inheritance);
-	if ((tag->atts.entry.file) && (tag->atts.entry.line > 0))
-		fprintf(fp, "[%s:%ld]", tag->atts.entry.file->work_object.file_name
-		  , tag->atts.entry.line);
+	if (tag->arglist)
+		fprintf(fp, "%s", tag->arglist);
+	if (tag->inheritance)
+		fprintf(fp, " : from %s", tag->inheritance);
+	if ((tag->file) && (tag->line > 0))
+		fprintf(fp, "[%s:%ld]", tag->file->file_name
+		  , tag->line);
 	fprintf(fp, "\n");
 }
 
+/*
+  Prints info about all tags in the array to the given file pointer.
+*/
 void tm_tags_array_print(GPtrArray *tags, FILE *fp)
 {
 	guint i;
@@ -1071,16 +1296,21 @@ void tm_tags_array_print(GPtrArray *tags, FILE *fp)
 	}
 }
 
+/*
+  Returns the depth of tag scope (useful for finding tag hierarchy
+*/
 gint tm_tag_scope_depth(const TMTag *t)
 {
 	gint depth;
 	char *s;
-	if(!(t && t->atts.entry.scope))
+	if(!(t && t->scope))
 		return 0;
-	for (s = t->atts.entry.scope, depth = 0; s; s = strstr(s, "::"))
+	for (s = t->scope, depth = 0; s; s = strstr(s, "::"))
 	{
 		++ depth;
 		++ s;
 	}
 	return depth;
 }
+
+#endif /* TM_DEBUG */

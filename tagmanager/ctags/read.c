@@ -298,7 +298,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
  * This func is NOT THREAD SAFE.
  * The user should not tamper with the buffer while this func is executing.
  */
-extern boolean bufferOpen (unsigned char *buffer, int buffer_size, 
+extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 			   const char *const fileName, const langType language )
 {
     boolean opened = FALSE;

@@ -639,7 +639,7 @@ static void show_tags_list(GeanyEditor *editor, const GPtrArray *tags, gsize roo
 			g_string_append(words, tag->name);
 
 			/* for now, tag types don't all follow C, so just look at arglist */
-			if (!EMPTY(tag->atts.entry.arglist))
+			if (!EMPTY(tag->arglist))
 				g_string_append(words, "?2");
 			else
 				g_string_append(words, "?1");
@@ -732,10 +732,10 @@ static void autocomplete_scope(GeanyEditor *editor)
 		return;
 
 	tag = g_ptr_array_index(tags, 0);
-	name = tag->atts.entry.var_type;
+	name = tag->var_type;
 	if (name)
 	{
-		TMWorkObject *obj = editor->document->tm_file;
+		TMSourceFile *obj = editor->document->tm_file;
 
 		tags = tm_workspace_find_scope_members(obj ? obj->tags_array : NULL,
 			name, TRUE, FALSE);
@@ -1784,43 +1784,43 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 
 static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id)
 {
-	if (! tag->atts.entry.arglist)
+	if (! tag->arglist)
 		return FALSE;
 
 	if (ft_id != GEANY_FILETYPES_PASCAL)
 	{	/* usual calltips: "retval tagname (arglist)" */
-		if (tag->atts.entry.var_type)
+		if (tag->var_type)
 		{
 			guint i;
 
-			g_string_append(str, tag->atts.entry.var_type);
-			for (i = 0; i < tag->atts.entry.pointerOrder; i++)
+			g_string_append(str, tag->var_type);
+			for (i = 0; i < tag->pointerOrder; i++)
 			{
 				g_string_append_c(str, '*');
 			}
 			g_string_append_c(str, ' ');
 		}
-		if (tag->atts.entry.scope)
+		if (tag->scope)
 		{
 			const gchar *cosep = symbols_get_context_separator(ft_id);
 
-			g_string_append(str, tag->atts.entry.scope);
+			g_string_append(str, tag->scope);
 			g_string_append(str, cosep);
 		}
 		g_string_append(str, tag->name);
 		g_string_append_c(str, ' ');
-		g_string_append(str, tag->atts.entry.arglist);
+		g_string_append(str, tag->arglist);
 	}
 	else
 	{	/* special case Pascal calltips: "tagname (arglist) : retval" */
 		g_string_append(str, tag->name);
 		g_string_append_c(str, ' ');
-		g_string_append(str, tag->atts.entry.arglist);
+		g_string_append(str, tag->arglist);
 
-		if (!EMPTY(tag->atts.entry.var_type))
+		if (!EMPTY(tag->var_type))
 		{
 			g_string_append(str, " : ");
-			g_string_append(str, tag->atts.entry.var_type);
+			g_string_append(str, tag->var_type);
 		}
 	}
 
@@ -1831,7 +1831,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
 	const GPtrArray *tags;
-	const gint arg_types = tm_tag_function_t | tm_tag_prototype_t |
+	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTagAttrType *attrs = NULL;
 	TMTag *tag;
@@ -1862,7 +1862,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	{
 		tag = TM_TAG(tags->pdata[i]);
 
-		if (! tag->atts.entry.arglist)
+		if (! tag->arglist)
 			tags->pdata[i] = NULL;
 	}
 	tm_tags_prune((GPtrArray *) tags);
@@ -1873,7 +1873,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 		TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, tm_tag_attr_scope_t,
 			tm_tag_attr_arglist_t, 0};
 
-		tm_tags_sort((GPtrArray *) tags, sort_attr, TRUE);
+		tm_tags_sort((GPtrArray *) tags, sort_attr, TRUE, FALSE);
 	}
 
 	/* if the current word has changed since last time, start with the first tag match */

@@ -58,7 +58,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 220
+#define GEANY_API_VERSION 221
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -72,7 +72,7 @@ G_BEGIN_DECLS
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION (69 << GEANY_ABI_SHIFT)
+#define GEANY_ABI_VERSION (70 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.
@@ -599,12 +599,12 @@ SearchFuncs;
 typedef struct TagManagerFuncs
 {
 	gchar*			(*tm_get_real_path) (const gchar *file_name);
-	TMWorkObject*	(*tm_source_file_new) (const char *file_name, gboolean update, const char *name);
-	gboolean		(*tm_workspace_add_object) (TMWorkObject *work_object);
-	gboolean		(*tm_source_file_update) (TMWorkObject *source_file, gboolean force,
-					 gboolean recurse, gboolean update_parent);
-	void			(*tm_work_object_free) (gpointer work_object);
-	gboolean		(*tm_workspace_remove_object) (TMWorkObject *w, gboolean do_free, gboolean update);
+	TMSourceFile*	(*tm_source_file_new) (const char *file_name, const char *name);
+	void			(*tm_source_file_free) (TMSourceFile *source_file);
+	void			(*tm_workspace_add_source_file) (TMSourceFile *source_file);
+	void			(*tm_workspace_remove_source_file) (TMSourceFile *source_file);
+	void			(*tm_workspace_add_source_files) (GPtrArray *source_files);
+	void			(*tm_workspace_remove_source_files) (GPtrArray *source_files);
 }
 TagManagerFuncs;
 

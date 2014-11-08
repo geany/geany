@@ -17,20 +17,15 @@ tagmanager_include_HEADERS = \
 	tm_source_file.h \
 	tm_tag.h \
 	tm_tagmanager.h \
-	tm_work_object.h \
 	tm_workspace.h
 
 
 libtagmanager_a_SOURCES =\
 	tm_tagmanager.h \
 	tm_parser.h \
-	tm_file_entry.h \
-	tm_file_entry.c \
 	tm_source_file.h \
 	tm_source_file.c \
 	tm_tag.h \
 	tm_tag.c \
-	tm_work_object.c \
-	tm_work_object.h \
 	tm_workspace.h \
 	tm_workspace.c
