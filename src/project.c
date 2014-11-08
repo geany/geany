@@ -1070,8 +1070,6 @@ static gboolean load_config(const gchar *filename)
 		document_close_all();
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config, FALSE);
-		document_new_file_if_non_open();
-		ui_focus_current_document();
 	}
 	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
