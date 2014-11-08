@@ -714,8 +714,11 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
-	tm_workspace_remove_source_file(doc->tm_file);
-	tm_source_file_free(doc->tm_file);
+	if (doc->tm_file)
+	{
+		tm_workspace_remove_source_file(doc->tm_file);
+		tm_source_file_free(doc->tm_file);
+	}
 
 	if (doc->priv->tag_tree)
 		gtk_widget_destroy(doc->priv->tag_tree);

@@ -501,10 +501,13 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 		{
 			document_rename_file(doc, utf8_filename);
 		}
-		/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-		tm_workspace_remove_source_file(doc->tm_file);
-		tm_source_file_free(doc->tm_file);
-		doc->tm_file = NULL;
+		if (doc->tm_file)
+		{
+			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
+			tm_workspace_remove_source_file(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
+			doc->tm_file = NULL;
+		}
 	}
 	success = document_save_file_as(doc, utf8_filename);
 

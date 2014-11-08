@@ -202,9 +202,8 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 void tm_workspace_remove_source_file(TMSourceFile *source_file)
 {
 	guint i;
-	
-	if (!source_file)
-		return;
+
+	g_return_if_fail(source_file != NULL);
 
 	for (i=0; i < theWorkspace->source_files->len; ++i)
 	{
@@ -270,7 +269,9 @@ static void tm_workspace_update(void)
 void tm_workspace_add_source_files(GPtrArray *source_files)
 {
 	guint i;
-	
+
+	g_return_if_fail(source_files != NULL);
+
 	for (i = 0; i < source_files->len; i++)
 	{
 		TMSourceFile *source_file = source_files->pdata[i];
@@ -292,7 +293,9 @@ void tm_workspace_add_source_files(GPtrArray *source_files)
 void tm_workspace_remove_source_files(GPtrArray *source_files)
 {
 	guint i, j;
-	
+
+	g_return_if_fail(source_files != NULL);
+
 	//TODO: sort both arrays by pointer value and remove in single pass
 	for (i = 0; i < source_files->len; i++)
 	{
