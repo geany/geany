@@ -172,6 +172,11 @@ static void init_pref_groups(void)
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.editor_split,
+		"editor_split", GTK_ORIENTATION_HORIZONTAL,
+		"radio_editor_split_horiz", GTK_ORIENTATION_HORIZONTAL,
+		"radio_editor_split_vert", GTK_ORIENTATION_VERTICAL,
+		NULL);
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,

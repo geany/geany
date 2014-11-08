@@ -889,6 +889,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
 
+		widget = ui_lookup_widget(main_widgets.window, "hpaned2");
+		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.editor_split);
+
 		/* General settings */
 		/* startup */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");

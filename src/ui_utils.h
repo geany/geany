@@ -68,6 +68,7 @@ typedef struct GeanyInterfacePrefs
 	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
+	gint			editor_split;				/**< orientation of the editor split paned */
 }
 GeanyInterfacePrefs;
 
