@@ -157,15 +157,6 @@ GeanyPlugin;
 	}
 
 
-#ifndef GEANY_PRIVATE
-
-/* Prototypes for building plugins with -Wmissing-prototypes */
-gint plugin_version_check(gint abi_ver);
-void plugin_set_info(PluginInfo *info);
-
-#endif
-
-
 /** @deprecated - use plugin_set_key_group() instead.
  * @see PLUGIN_KEY_GROUP() macro. */
 typedef struct GeanyKeyGroupInfo
@@ -256,6 +247,23 @@ typedef struct GeanyData
 GeanyData;
 
 #define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
+
+
+#ifndef GEANY_PRIVATE
+
+/* Prototypes for building plugins with -Wmissing-prototypes
+ * Also allows the compiler to check if the signature of the plugin's
+ * symbol properly matches what we expect. */
+gint plugin_version_check(gint abi_ver);
+void plugin_set_info(PluginInfo *info);
+
+void plugin_init(GeanyData *data);
+GtkWidget *plugin_configure(GtkDialog *dialog);
+void plugin_configure_single(GtkWidget *parent);
+void plugin_help(void);
+void plugin_cleanup(void);
+
+#endif
 
 
 /** This contains pointers to functions owned by Geany for plugins to use.
