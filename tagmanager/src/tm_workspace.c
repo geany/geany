@@ -117,7 +117,7 @@ static void tm_workspace_merge_tags(GPtrArray **big_array, GPtrArray *small_arra
 
 
 static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
-	gint buf_size, gboolean use_buffer, gboolean update_workspace)
+	gsize buf_size, gboolean use_buffer, gboolean update_workspace)
 {
 #ifdef TM_DEBUG
 	g_message("Source file updating based on source file %s", source_file->file_name);
@@ -188,7 +188,7 @@ void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
  @param buf_size The size of text_buf.
 */
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
-	gint buf_size)
+	gsize buf_size)
 {
 	update_source_file(source_file, text_buf, buf_size, TRUE, TRUE);
 }

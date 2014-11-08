@@ -242,7 +242,7 @@ void tm_source_file_free(TMSourceFile *source_file)
  TRUE to parse the buffer and ignore the file content.
  @return TRUE on success, FALSE on failure
 */
-gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gint buf_size,
+gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize buf_size,
 	gboolean use_buffer)
 {
 	const char *file_name;

@@ -69,7 +69,7 @@ const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
 
 void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* text_buf,
-	gint buf_size);
+	gsize buf_size);
 
 void tm_workspace_free(void);
 
