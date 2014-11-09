@@ -49,7 +49,7 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([ftruncate fgetpos mkstemp strerror strstr])
+AC_CHECK_FUNCS([ftruncate fgetpos fnmatch mkstemp strerror strstr])
 
 # autoscan end
 

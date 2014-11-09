@@ -193,6 +193,7 @@ def configure(conf):
     _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)  # needed for CTags
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
+    conf.check_cc(function_name='fnmatch', header_name='fnmatch.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
@@ -259,7 +260,7 @@ but you then may not have a local copy of the HTML manual.'''
             '-mwindows',
             '-static-libgcc',
             '-static-libstdc++'])
-        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
+        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32'])
         # explicitly define Windows version for older Mingw environments
         conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
         conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE

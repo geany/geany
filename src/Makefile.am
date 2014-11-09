@@ -108,7 +108,7 @@ geany_LDADD = \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(INTLLIBS) \
-	-lole32 -luuid -liberty -lwsock32 \
+	-lole32 -luuid -lwsock32 \
 	geany_private.res
 
 AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
