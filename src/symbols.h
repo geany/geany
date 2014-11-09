@@ -54,8 +54,6 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global);
 
 const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
 
-GString *symbols_get_macro_list(gint lang);
-
 const gchar **symbols_get_html_entities(void);
 
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode);

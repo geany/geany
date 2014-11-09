@@ -234,8 +234,6 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
-void editor_show_macro_list(GeanyEditor *editor);
-
 gboolean editor_show_calltip(GeanyEditor *editor, gint pos);
 
 void editor_do_comment_toggle(GeanyEditor *editor);

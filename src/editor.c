@@ -2600,22 +2600,6 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos)
 }
 
 
-void editor_show_macro_list(GeanyEditor *editor)
-{
-	GString *words;
-
-	if (editor == NULL || editor->document->file_type == NULL)
-		return;
-
-	words = symbols_get_macro_list(editor->document->file_type->lang);
-	if (words == NULL)
-		return;
-
-	SSM(editor->sci, SCI_USERLISTSHOW, 1, (sptr_t) words->str);
-	g_string_free(words, TRUE);
-}
-
-
 static void insert_closing_tag(GeanyEditor *editor, gint pos, gchar ch, const gchar *tag_name)
 {
 	ScintillaObject *sci = editor->sci;

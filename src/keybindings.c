@@ -322,8 +322,6 @@ static void init_default_kb(void)
 		GDK_space, GDK_CONTROL_MASK, "edit_autocomplete", _("Complete word"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_CALLTIP, NULL,
 		GDK_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"), NULL);
-	add_kb(group, GEANY_KEYS_EDITOR_MACROLIST, NULL,
-		GDK_Return, GDK_CONTROL_MASK, "edit_macrolist", _("Show macro list"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
@@ -2046,9 +2044,6 @@ static gboolean cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
 			editor_show_calltip(doc->editor, -1);
-			break;
-		case GEANY_KEYS_EDITOR_MACROLIST:
-			editor_show_macro_list(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:
 			if (check_current_word(doc, FALSE))
