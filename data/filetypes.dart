@@ -17,6 +17,7 @@ mime_type=application/dart
 
 # Set Lexer
 lexer_filetype=Java
+tag_parser=Java
 
 # the following characters are these which a "word" can contains, see documentation
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
@@ -43,9 +44,3 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=0
 
-[build_settings]
-# %f will be replaced by the complete filename
-# %e will be replaced by the filename without extension
-# (use only one of it at one time)
-compiler=
-run=
