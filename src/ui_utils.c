@@ -1279,6 +1279,29 @@ static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_da
 }
 
 
+/* update the project menu item's sensitivity */
+void ui_update_recent_project_menu(void)
+{
+	GeanyRecentFiles *grf = recent_get_recent_projects();
+	GList *children, *item;
+
+	/* only need to update the menubar menu, the project doesn't have a toolbar item */
+	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
+	for (item = children; item; item = item->next)
+	{
+		gboolean sensitive = TRUE;
+
+		if (app->project)
+		{
+			const gchar *filename = gtk_menu_item_get_label(item->data);
+			sensitive = g_strcmp0(app->project->file_name, filename) != 0;
+		}
+		gtk_widget_set_sensitive(item->data, sensitive);
+	}
+	g_list_free(children);
+}
+
+
 static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFiles *grf, GtkWidget *menu)
 {
 	GtkWidget *child = gtk_menu_item_new_with_label(utf8_filename);
@@ -1327,6 +1350,9 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 			add_recent_file_menu_item(utf8_filename, grf, parents[i]);
 		g_list_free(children);
 	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 
@@ -1362,6 +1388,9 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 		/* create the new item */
 		add_recent_file_menu_item(filename, grf, parents[i]);
 	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 

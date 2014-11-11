@@ -381,6 +381,7 @@ static void update_ui(void)
 	build_menu_update(NULL);
 	// update project name
 	sidebar_openfiles_update_all();
+	ui_update_recent_project_menu();
 }
 
 
