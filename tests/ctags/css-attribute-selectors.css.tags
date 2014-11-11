@@ -1,12 +1,6 @@
 # format=tagmanager
-aÌ2048Ö0
-background-color: light-greenÌ2048Ö0
-body Ì2048Ö0
-color: greenÌ2048Ö0
-color: redÌ2048Ö0
-enÌ2048Ö0
-hrefÌ2048Ö0
-http:Ì2048Ö0
-https:Ì2048Ö0
-langÌ2048Ö0
-p Ì2048Ö0
+a[href^="http://"]Ì2048Ö0
+a[href^="https://"]Ì2048Ö0
+a[lang~=en]Ì2048Ö0
+bodyÌ2048Ö0
+pÌ2048Ö0

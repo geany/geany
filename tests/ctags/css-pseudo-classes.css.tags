@@ -1,23 +1,12 @@
 # format=tagmanager
-0n+1Ì2048Ö0
-1Ì2048Ö0
-10n+0Ì2048Ö0
-2nÌ2048Ö0
-2n+1Ì2048Ö0
-a:langÌ2048Ö0
-after Ì2048Ö0
-background-color: gray Ì2048Ö0
-background-color: light-gray Ì2048Ö0
-body :notÌ2048Ö0
-color: greenÌ2048Ö0
-color: limeÌ2048Ö0
-color: redÌ2048Ö0
-enÌ2048Ö0
-evenÌ2048Ö0
-first-childÌ2048Ö0
-n+3Ì2048Ö0
-oddÌ2048Ö0
-spanÌ2048Ö0
-span:notÌ2048Ö0
-span:nth-childÌ2048Ö0
-tr:nth-childÌ2048Ö0
+a:lang(en):afterÌ2048Ö0
+body :not(span)Ì2048Ö0
+span:not(:first-child)Ì2048Ö0
+span:nth-child(-n+3)Ì2048Ö0
+span:nth-child(0n+1)Ì2048Ö0
+span:nth-child(1)Ì2048Ö0
+tr:nth-child(10n+0)Ì2048Ö0
+tr:nth-child(2n)Ì2048Ö0
+tr:nth-child(2n+1)Ì2048Ö0
+tr:nth-child(even)Ì2048Ö0
+tr:nth-child(odd)Ì2048Ö0
