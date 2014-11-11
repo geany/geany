@@ -1,224 +1,259 @@
 /***************************************************************************
  * css.c
- * Character-based parser for Css definitions
- * Author - Iago Rubio <iagorubio(at)users.sourceforge.net>
- *        - Bronisław Białek <after89(at)gmail.com>
+ * Token-based parser for CSS definitions
+ * Author - Colomban Wendling <colomban@geany.org>
  **************************************************************************/
 #include "general.h"
 
-#include <string.h>
-#include <ctype.h>
+#include <string.h> 
+#include <ctype.h> 
 
-#include "parse.h"
-#include "read.h"
+#include "entry.h"
+#include "parse.h" 
+#include "read.h" 
 
 
 typedef enum eCssKinds {
-    K_NONE = -1, K_SELECTOR, K_ID, K_CLASS
+	K_CLASS, K_SELECTOR, K_ID
 } cssKind;
 
 static kindOption CssKinds [] = {
-    { TRUE, 's', "struct",  "selectors"  },
-    { TRUE, 'v', "variable",  "identities"  },
-    { TRUE, 'c', "class", "classes" }
+	{ TRUE, 'c', "class",		"classes" },
+	{ TRUE, 's', "struct",		"selectors" },
+	{ TRUE, 'v', "variable",	"identities" }
 };
 
-typedef enum _CssParserState {	/* state of parsing */
-	P_STATE_NONE,  				/* default state */
-	P_STATE_IN_COMMENT,			/* into a comment, only multi line in CSS */
-	P_STATE_IN_SINGLE_STRING,	/* into a single quoted string */
-	P_STATE_IN_DOUBLE_STRING,	/* into a double quoted string */
-	P_STATE_IN_DEFINITION,		/* on the body of the style definition, nothing for us */
-	P_STATE_IN_MEDIA,			/* on a @media declaration, can be multi-line */
-	P_STATE_IN_IMPORT,			/* on a @import declaration, can be multi-line */
-	P_STATE_IN_NAMESPACE,		/* on a @namespace declaration */
-	P_STATE_IN_PAGE,			/* on a @page declaration */
-	P_STATE_IN_FONTFACE,		/* on a @font-face declaration */
-	P_STATE_AT_END				/* end of parsing */
-} CssParserState;
+typedef enum {
+	/* any ASCII */
+	TOKEN_EOF = 257,
+	TOKEN_SELECTOR,
+	TOKEN_STRING
+} tokenType;
 
-static void makeCssSimpleTag( vString *name, cssKind kind, boolean delete )
+typedef struct {
+	tokenType type;
+	vString *string;
+} tokenInfo;
+
+
+static boolean isSelectorChar (const int c)
 {
-	vStringTerminate (name);
-	makeSimpleTag (name, CssKinds, kind);
-	vStringClear (name);
-	if( delete )
-		vStringDelete (name);
+	/* attribute selectors are handled separately */
+	return (isalnum (c) ||
+			c == '_' || // allowed char
+			c == '-' || // allowed char
+			c == '+' || // allow all sibling in a single tag
+			c == '>' || // allow all child in a single tag
+			c == '|' || // allow namespace separator
+			c == '(' || // allow pseudo-class arguments
+			c == ')' ||
+			c == '.' || // allow classes and selectors
+			c == ':' || // allow pseudo classes
+			c == '*' || // allow globs as P + *
+			c == '#');  // allow ids
 }
 
-static boolean isCssDeclarationAllowedChar( const unsigned char *cp )
+static void parseSelector (vString *const string, const int firstChar)
 {
-	return  isalnum ((int) *cp) ||
-			isspace ((int) *cp) ||
-			*cp == '_' ||	/* allowed char */
-			*cp == '-' ||	/* allowed char */
-			*cp == '+' ||   /* allow all sibling in a single tag */
-			*cp == '>' ||   /* allow all child in a single tag */
-			*cp == '{' || 	/* allow the start of the declaration */
-			*cp == '.' || 	/* allow classes and selectors */
-			*cp == ',' || 	/* allow multiple declarations */
-			*cp == ':' ||   /* allow pseudo classes */
-			*cp == '*' || 	/* allow globs as P + * */
-			*cp == '#';		/* allow ids */
-}
-
-static CssParserState parseCssDeclaration( const unsigned char **position, cssKind kind, const char *aname)
-{
-	const unsigned char *cp = *position;
-	vString *name = vStringNew ();
-	vStringCopyS(name, aname);
-
-	/* pick to the end of line including children and sibling
-	 * if declaration is multiline go for the next line */
-	while ( isCssDeclarationAllowedChar(cp) ||
-			*cp == '\0' ) 	/* track the end of line into the loop */
+	int c = firstChar;
+	do
 	{
-		if( *cp == ',' )
-		{
-			makeCssSimpleTag(name, kind, TRUE);
-			*position = cp;
-			return P_STATE_NONE;
-		}
-		else if( *cp == '{' || *cp == '\0' )
-		{ /* assume that line end is the same as a starting definition (i.e. the { is on the next line */
-			makeCssSimpleTag(name, kind, TRUE);
-			*position = cp;
-			return P_STATE_IN_DEFINITION;
-		}
-
-		vStringPut (name, (int) *cp);
-		++cp;
-	}
-
-	makeCssSimpleTag(name, kind, TRUE);
-	*position = cp;
-
-	return P_STATE_NONE;
+		vStringPut (string, (char) c);
+		c = fileGetc ();
+	} while (isSelectorChar (c));
+	fileUngetc (c);
+	vStringTerminate (string);
 }
 
-static CssParserState parseCssLine( const unsigned char *line, CssParserState state )
+static void readToken (tokenInfo *const token)
 {
-	vString *aux;
-	vString *stack = vStringNew ();
+	int c;
 
-	while( *line != '\0' ) /* fileReadLine returns NULL terminated strings */
+	vStringClear (token->string);
+
+getNextChar:
+
+	c = fileGetc ();
+	while (isspace (c))
+		c = fileGetc ();
+
+	token->type = c;
+	switch (c)
 	{
-		vStringClear (stack);
-		while (state == P_STATE_NONE &&
-			(isspace ((int) *line) || isalnum ((int) *line) || ( *line == '*' && *(line-1) != '/' )))
+		case EOF: token->type = TOKEN_EOF; break;
+
+		case '\'':
+		case '"':
 		{
-			if ((stack->length > 0 && isspace((int) *line)) || isalnum ((int) *line) || *line == '*') {
-				vStringPut(stack, (int) *line);
+			const int delimiter = c;
+			do
+			{
+				vStringPut (token->string, c);
+				c = fileGetc ();
+				if (c == '\\')
+					c = fileGetc ();
 			}
-
-			++line;
+			while (c != EOF && c != delimiter);
+			if (c != EOF)
+				vStringPut (token->string, c);
+			token->type = TOKEN_STRING;
+			break;
 		}
-		vStringTerminate (stack);
 
-		switch( state )
+		case '/': /* maybe comment start */
 		{
-			case P_STATE_NONE:
-				if( *line == '.' ) /* a class */
-					state = parseCssDeclaration( &line, K_CLASS, vStringValue(stack) );
-				else if( *line == '#' ) /* an id */
-					state = parseCssDeclaration( &line, K_ID, vStringValue(stack) );
-				else if( *line == '@' ) /* at-rules, we'll ignore them */
+			int d = fileGetc ();
+			if (d != '*')
+			{
+				fileUngetc (d);
+				vStringPut (token->string, c);
+				token->type = c;
+			}
+			else
+			{
+				d = fileGetc ();
+				do
 				{
-					++line;
-					aux = vStringNew();
-					while( !isspace((int) *line) )
-					{
-						vStringPut (aux, (int) *line);
-						++line;
-					}
-					vStringTerminate (aux);
-					if( strcmp( aux->buffer, "media" ) == 0 )
-						state = P_STATE_IN_MEDIA;
-					else if ( strcmp( aux->buffer, "import" ) == 0 )
-						state = P_STATE_IN_IMPORT;
-					else if ( strcmp( aux->buffer, "namespace" ) == 0 )
-						state = P_STATE_IN_NAMESPACE;
-					else if ( strcmp( aux->buffer, "page" ) == 0 )
-						state = P_STATE_IN_PAGE;
-					else if ( strcmp( aux->buffer, "font-face" ) == 0 )
-						state = P_STATE_IN_FONTFACE;
-					vStringDelete (aux);
+					c = d;
+					d = fileGetc ();
 				}
-				else if( *line == '*' && *(line-1) == '/' ) /* multi-line comment */
-					state = P_STATE_IN_COMMENT;
-				else if ( stack->length > 0 )
-					state = parseCssDeclaration( &line, K_SELECTOR, vStringValue(stack) );
-
-			break;
-			case P_STATE_IN_COMMENT:
-				if( *line == '/' && *(line-1) == '*')
-					state = P_STATE_NONE;
-			break;
-			case  P_STATE_IN_SINGLE_STRING:
-				if( *line == '\'' && *(line-1) != '\\' )
-					state = P_STATE_IN_DEFINITION; /* PAGE, FONTFACE and DEFINITION are treated the same way */
-			break;
-			case  P_STATE_IN_DOUBLE_STRING:
-				if( *line=='"' && *(line-1) != '\\' )
-					state = P_STATE_IN_DEFINITION; /* PAGE, FONTFACE and DEFINITION are treated the same way */
-			break;
-			case  P_STATE_IN_MEDIA:
-				/* skip to start of media body or line end */
-				while( *line != '{' )
-				{
-					if( *line == '\0' )
-						break;
-					++line;
-				}
-				if( *line == '{' )
-						state = P_STATE_NONE;
-			break;
-			case  P_STATE_IN_IMPORT:
-			case  P_STATE_IN_NAMESPACE:
-				/* skip to end of declaration or line end */
-				while( *line != ';' )
-				{
-					if( *line == '\0' )
-						break;
-					++line;
-				}
-				if( *line == ';' )
-					state = P_STATE_NONE;
-			break;
-			case P_STATE_IN_PAGE:
-			case P_STATE_IN_FONTFACE:
-			case P_STATE_IN_DEFINITION:
-				if( *line == '\0' )
-					line = fileReadLine ();
-				if( *line == '}' )
-					state = P_STATE_NONE;
-				else if( *line == '\'' )
-					state = P_STATE_IN_SINGLE_STRING;
-				else if( *line == '"' )
-					state = P_STATE_IN_DOUBLE_STRING;
-			break;
-			case P_STATE_AT_END:
-				return state;
+				while (d != EOF && ! (c == '*' && d == '/'));
+				goto getNextChar;
+			}
 			break;
 		}
-		if (line == NULL) return P_STATE_AT_END;
-		line++;
-	}
-	vStringDelete (stack);
 
-	return state;
+		default:
+			if (! isSelectorChar (c))
+			{
+				vStringPut (token->string, c);
+				token->type = c;
+			}
+			else
+			{
+				parseSelector (token->string, c);
+				token->type = TOKEN_SELECTOR;
+			}
+			break;
+	}
+}
+
+/* sets selector kind in @p kind if found, otherwise don't touches @p kind */
+static cssKind classifySelector (const vString *const selector)
+{
+	size_t i;
+
+	for (i = vStringLength (selector); i > 0; --i)
+	{
+		char c = vStringItem (selector, i - 1);
+		if (c == '.')
+			return K_CLASS;
+		else if (c == '#')
+			return K_ID;
+	}
+	return K_SELECTOR;
 }
 
 static void findCssTags (void)
 {
-    const unsigned char *line;
-	CssParserState state = P_STATE_NONE;
+	boolean readNextToken = TRUE;
+	tokenInfo token;
 
-    while ( (line = fileReadLine ()) != NULL )
-    {
-		state = parseCssLine( line, state );
-		if( state==P_STATE_AT_END ) return;
-    }
+	token.string = vStringNew ();
+
+	do
+	{
+		if (readNextToken)
+			readToken (&token);
+
+		readNextToken = TRUE;
+
+		if (token.type == '@')
+		{ /* At-rules, from the "@" to the next block or semicolon */
+			boolean useContents;
+			readToken (&token);
+			useContents = (strcmp (vStringValue (token.string), "media") == 0 ||
+						   strcmp (vStringValue (token.string), "supports") == 0);
+			while (token.type != TOKEN_EOF &&
+				   token.type != ';' && token.type != '{')
+			{
+				readToken (&token);
+			}
+			/* HACK: we *eat* the opening '{' for medias and the like so that
+			 *       the content is parsed as if it was at the root */
+			readNextToken = useContents && token.type == '{';
+		}
+		else if (token.type == TOKEN_SELECTOR)
+		{ /* collect selectors and make a tag */
+			cssKind kind = K_SELECTOR;
+			MIOPos filePosition;
+			unsigned long lineNumber;
+			vString *selector = vStringNew ();
+			do
+			{
+				if (vStringLength (selector) > 0)
+					vStringPut (selector, ' ');
+				vStringCat (selector, token.string);
+
+				kind = classifySelector (token.string);
+				lineNumber = getSourceLineNumber ();
+				filePosition = getInputFilePosition ();
+
+				readToken (&token);
+
+				/* handle attribute selectors */
+				if (token.type == '[')
+				{
+					int depth = 1;
+					while (depth > 0 && token.type != TOKEN_EOF)
+					{
+						vStringCat (selector, token.string);
+						readToken (&token);
+						if (token.type == '[')
+							depth++;
+						else if (token.type == ']')
+							depth--;
+					}
+					if (token.type != TOKEN_EOF)
+						vStringCat (selector, token.string);
+					readToken (&token);
+				}
+			}
+			while (token.type == TOKEN_SELECTOR);
+			/* we already consumed the next token, don't read it twice */
+			readNextToken = FALSE;
+
+			vStringTerminate (selector);
+			if (CssKinds[kind].enabled)
+			{
+				tagEntryInfo e;
+				initTagEntry (&e, vStringValue (selector));
+
+				e.lineNumber	= lineNumber;
+				e.filePosition	= filePosition;
+				e.kindName		= CssKinds[kind].name;
+				e.kind			= (char) CssKinds[kind].letter;
+
+				makeTagEntry (&e);
+			}
+			vStringDelete (selector);
+		}
+		else if (token.type == '{')
+		{ /* skip over { ... } */
+			int depth = 1;
+			while (depth > 0 && token.type != TOKEN_EOF)
+			{
+				readToken (&token);
+				if (token.type == '{')
+					depth++;
+				else if (token.type == '}')
+					depth--;
+			}
+		}
+	}
+	while (token.type != TOKEN_EOF);
+
+	vStringDelete (token.string);
 }
 
 /* parser definition */
@@ -232,3 +267,4 @@ extern parserDefinition* CssParser (void)
     def->parser     = findCssTags;
     return def;
 }
+

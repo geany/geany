@@ -116,6 +116,16 @@ test_sources = \
 	continuation.f90				\
 	countall.sql					\
 	cpp_destructor.cpp				\
+	css-at-rules.css				\
+	css-at-supports.css				\
+	css-attribute-selectors.css		\
+	css-comma-no-space.css			\
+	css-namespace-selectors.css		\
+	css-pseudo-classes.css			\
+	css-simple.css					\
+	css-singlequote-in-comment-issue2.css	\
+	css-tag-types.css				\
+	css-trivial.css					\
 	cython_sample.pyx				\
 	cython_sample2.pyx				\
 	cxx11enum.cpp					\
