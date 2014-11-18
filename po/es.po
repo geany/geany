@@ -5821,7 +5821,7 @@ msgstr "_Vertical"
 
 #: ../plugins/splitwindow.c:429
 msgid "Side by Side"
-msgstr "Yuxtapuestos"
+msgstr "Izquierda y derecha"
 
 #: ../plugins/splitwindow.c:431
 msgid "Top and Bottom"
