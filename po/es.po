@@ -5813,15 +5813,15 @@ msgstr "_Dividir ventana"
 
 #: ../plugins/splitwindow.c:408
 msgid "_Side by Side"
-msgstr "_Horizontal"
+msgstr "_Izquierda y derecha"
 
 #: ../plugins/splitwindow.c:413
 msgid "_Top and Bottom"
-msgstr "_Vertical"
+msgstr "_Arriba y abajo"
 
 #: ../plugins/splitwindow.c:429
 msgid "Side by Side"
-msgstr "Yuxtapuestos"
+msgstr "Izquierda y derecha"
 
 #: ../plugins/splitwindow.c:431
 msgid "Top and Bottom"
