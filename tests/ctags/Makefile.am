@@ -160,6 +160,7 @@ test_sources = \
 	invalid_name.f90				\
 	java_enum.java					\
 	js-scope.js						\
+	js-unknown-construct-nesting.js	\
 	jsFunc_tutorial.js				\
 	keyword_abstract.cs				\
 	keyword_catch_try.cs			\
