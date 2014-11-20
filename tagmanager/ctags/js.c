@@ -644,7 +644,7 @@ static void addToScope (tokenInfo* const token, vString* const extra)
  *	 Scanning functions
  */
 
-static void findCmdTerm (tokenInfo *const token)
+static boolean findCmdTerm (tokenInfo *const token)
 {
 	/*
 	 * Read until we find either a semicolon or closing brace.
@@ -672,6 +672,8 @@ static void findCmdTerm (tokenInfo *const token)
 			readToken (token);
 		}
 	}
+
+	return isType (token, TOKEN_SEMICOLON);
 }
 
 static void parseSwitch (tokenInfo *const token)
@@ -874,11 +876,9 @@ static boolean parseIf (tokenInfo *const token)
 	}
 	else
 	{
-		findCmdTerm (token);
-
 		/* The next token should only be read if this statement had its own
 		 * terminator */
-		read_next_token = isType (token, TOKEN_SEMICOLON);
+		read_next_token = findCmdTerm (token);
 	}
 	return read_next_token;
 }
@@ -1607,8 +1607,6 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	if (! isType (token, TOKEN_CLOSE_CURLY) &&
 	    ! isType (token, TOKEN_SEMICOLON))
 	{
-		findCmdTerm (token);
-
 		/*
 		 * Statements can be optionally terminated in the case of
 		 * statement prior to a close curly brace as in the
@@ -1621,8 +1619,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 		 *	   return 1;
 		 * }
 		 */
-		if (isType (token, TOKEN_CLOSE_CURLY))
-			is_terminated = FALSE;
+		is_terminated = findCmdTerm (token);
 	}
 
 cleanUp:
@@ -1717,8 +1714,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 				parseSwitch (token);
 				break;
 			case KEYWORD_return:
-				findCmdTerm (token);
-				is_terminated = isType (token, TOKEN_SEMICOLON);
+				is_terminated = findCmdTerm (token);
 				break;
 			default:
 				is_terminated = parseStatement (token, is_inside_class);
