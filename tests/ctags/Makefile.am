@@ -159,6 +159,7 @@ test_sources = \
 	intro.tex						\
 	invalid_name.f90				\
 	java_enum.java					\
+	js-scope.js						\
 	jsFunc_tutorial.js				\
 	keyword_abstract.cs				\
 	keyword_catch_try.cs			\
