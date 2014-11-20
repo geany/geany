@@ -1,0 +1,8 @@
+# format=tagmanager
+barÌ16ÎparentÖ0
+fooÌ16ÎparentÖ0
+helloÌ16Îparent.fooÖ0
+hello2Ì16Îparent.barÖ0
+hiÌ16Îparent.fooÖ0
+hi2Ì16Îparent.barÖ0
+parentÌ16Ö0

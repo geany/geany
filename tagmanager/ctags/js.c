@@ -170,7 +170,7 @@ static const keywordDesc JsKeywordTable [] = {
 /* Recursive functions */
 static void parseFunction (tokenInfo *const token);
 static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent);
-static boolean parseLine (tokenInfo *const token, boolean is_inside_class);
+static boolean parseLine (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class);
 static void parseUI5 (tokenInfo *const token);
 
 static boolean isIdentChar (const int c)
@@ -707,7 +707,7 @@ static void parseSwitch (tokenInfo *const token)
 	}
 }
 
-static boolean parseLoop (tokenInfo *const token)
+static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 {
 	/*
 	 * Handles these statements
@@ -753,11 +753,11 @@ static boolean parseLoop (tokenInfo *const token)
 			 * of the function.  If we find a "this." we know
 			 * it is a class, otherwise it is a function.
 			 */
-			parseBlock (token, token);
+			parseBlock (token, parent);
 		}
 		else
 		{
-			is_terminated = parseLine(token, FALSE);
+			is_terminated = parseLine(token, parent, FALSE);
 		}
 	}
 	else if (isKeyword (token, KEYWORD_do))
@@ -772,11 +772,11 @@ static boolean parseLoop (tokenInfo *const token)
 			 * of the function.  If we find a "this." we know
 			 * it is a class, otherwise it is a function.
 			 */
-			parseBlock (token, token);
+			parseBlock (token, parent);
 		}
 		else
 		{
-			is_terminated = parseLine(token, FALSE);
+			is_terminated = parseLine(token, parent, FALSE);
 		}
 
 		if (is_terminated)
@@ -802,7 +802,7 @@ static boolean parseLoop (tokenInfo *const token)
 	return is_terminated;
 }
 
-static boolean parseIf (tokenInfo *const token)
+static boolean parseIf (tokenInfo *const token, tokenInfo *const parent)
 {
 	boolean read_next_token = TRUE;
 	/*
@@ -872,7 +872,7 @@ static boolean parseIf (tokenInfo *const token)
 		 * of the function.  If we find a "this." we know
 		 * it is a class, otherwise it is a function.
 		 */
-		parseBlock (token, token);
+		parseBlock (token, parent);
 	}
 	else
 	{
@@ -967,7 +967,7 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 				 * Ignore the remainder of the line
 				 * findCmdTerm(token);
 				 */
-				read_next_token = parseLine (token, is_class);
+				read_next_token = parseLine (token, parent, is_class);
 
 				vStringCopy(token->scope, saveScope);
 			}
@@ -979,7 +979,7 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 				 */
 				vStringCopy(saveScope, token->scope);
 				addToScope (token, parent->string);
-				read_next_token = parseLine (token, is_class);
+				read_next_token = parseLine (token, parent, is_class);
 				vStringCopy(token->scope, saveScope);
 			}
 			else if (isKeyword (token, KEYWORD_function))
@@ -1002,7 +1002,7 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 				 * parseLine will detect this case and indicate
 				 * whether we should read an additional token.
 				 */
-				read_next_token = parseLine (token, is_class);
+				read_next_token = parseLine (token, parent, is_class);
 			}
 
 			/*
@@ -1133,7 +1133,7 @@ cleanUp:
 	return has_methods;
 }
 
-static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
+static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class)
 {
 	tokenInfo *const name = newToken ();
 	tokenInfo *const secondary_name = newToken ();
@@ -1208,7 +1208,7 @@ static boolean parseStatement (tokenInfo *const token, boolean is_inside_class)
 	       ! isType (token, TOKEN_EQUAL_SIGN)  )
 	{
 		if (isType (token, TOKEN_OPEN_CURLY))
-			parseBlock (token, token);
+			parseBlock (token, parent);
 
 		/* Potentially the name of the function */
 		readToken (token);
@@ -1680,7 +1680,7 @@ static void parseUI5 (tokenInfo *const token)
 	deleteToken (name);
 }
 
-static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
+static boolean parseLine (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class)
 {
 	boolean is_terminated = TRUE;
 	/*
@@ -1700,7 +1700,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 			case KEYWORD_for:
 			case KEYWORD_while:
 			case KEYWORD_do:
-				is_terminated = parseLoop (token);
+				is_terminated = parseLoop (token, parent);
 				break;
 			case KEYWORD_if:
 			case KEYWORD_else:
@@ -1708,7 +1708,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 			case KEYWORD_catch:
 			case KEYWORD_finally:
 				/* Common semantics */
-				is_terminated = parseIf (token);
+				is_terminated = parseIf (token, parent);
 				break;
 			case KEYWORD_switch:
 				parseSwitch (token);
@@ -1717,7 +1717,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 				is_terminated = findCmdTerm (token);
 				break;
 			default:
-				is_terminated = parseStatement (token, is_inside_class);
+				is_terminated = parseStatement (token, parent, is_inside_class);
 				break;
 		}
 	}
@@ -1728,7 +1728,7 @@ static boolean parseLine (tokenInfo *const token, boolean is_inside_class)
 		 * SEMICOLON terminated.  parseBlock needs to know this
 		 * so that it does not read the next token.
 		 */
-		is_terminated = parseStatement (token, is_inside_class);
+		is_terminated = parseStatement (token, parent, is_inside_class);
 	}
 	return is_terminated;
 }
@@ -1744,7 +1744,7 @@ static void parseJsFile (tokenInfo *const token)
 		else if (isType (token, TOKEN_KEYWORD) && token->keyword == KEYWORD_sap)
 			parseUI5 (token);
 		else
-			parseLine (token, FALSE);
+			parseLine (token, token, FALSE);
 	} while (TRUE);
 }
 
