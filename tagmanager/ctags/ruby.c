@@ -41,7 +41,7 @@ static kindOption RubyKinds [] = {
 	{ TRUE, 'C', "context", "contexts" }
 };
 
-static stringList* nesting = 0;
+static stringList* nesting = NULL;
 
 /*
 *   FUNCTION DEFINITIONS
@@ -113,10 +113,10 @@ static boolean parseRubyOperator (vString* name, const unsigned char** cp)
 	    "<=", "<", ">", ">=",
 	    "<=>", "==", "===", "!=", "=~", "!~",
 	    "`",
-	    0
+	    NULL
 	};
 	int i;
-	for (i = 0; RUBY_OPERATORS[i] != 0; ++i)
+	for (i = 0; RUBY_OPERATORS[i] != NULL; ++i)
 	{
 	    if (canMatch (cp, RUBY_OPERATORS[i]))
 	    {
@@ -160,7 +160,7 @@ static void emitRubyTag (vString* name, rubyKind kind)
 /* Tests whether 'ch' is a character in 'list'. */
 static boolean charIsIn (char ch, const char* list)
 {
-	return (strchr (list, ch) != 0);
+	return (strchr (list, ch) != NULL);
 }
 
 /* Advances 'cp' over leading whitespace. */
