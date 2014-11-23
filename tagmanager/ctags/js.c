@@ -58,6 +58,7 @@ typedef enum eKeywordId {
 	KEYWORD_capital_object,
 	KEYWORD_prototype,
 	KEYWORD_var,
+	KEYWORD_let,
 	KEYWORD_const,
 	KEYWORD_new,
 	KEYWORD_this,
@@ -153,6 +154,7 @@ static const keywordDesc JsKeywordTable [] = {
 	{ "Object",		KEYWORD_capital_object		},
 	{ "prototype",	KEYWORD_prototype			},
 	{ "var",		KEYWORD_var					},
+	{ "let",		KEYWORD_let					},
 	{ "const",		KEYWORD_const				},
 	{ "new",		KEYWORD_new					},
 	{ "this",		KEYWORD_this				},
@@ -1084,6 +1086,7 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 				vStringCopy(token->scope, saveScope);
 			}
 			else if (isKeyword (token, KEYWORD_var) ||
+					 isKeyword (token, KEYWORD_let) ||
 					 isKeyword (token, KEYWORD_const))
 			{
 				/*
@@ -1299,6 +1302,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 	 * var can preceed an inner function
 	 */
 	if ( isKeyword(token, KEYWORD_var) ||
+		 isKeyword(token, KEYWORD_let) ||
 		 isKeyword(token, KEYWORD_const) )
 	{
 		is_const = isKeyword(token, KEYWORD_const);

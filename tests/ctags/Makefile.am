@@ -162,6 +162,7 @@ test_sources = \
 	js-class-related-unterminated.js	\
 	js-const.js						\
 	js-implicit-semicolons.js		\
+	js-let.js						\
 	js-scope.js						\
 	js-signature.js					\
 	js-sub-block-scope.js			\
