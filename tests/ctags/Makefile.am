@@ -160,6 +160,7 @@ test_sources = \
 	invalid_name.f90				\
 	java_enum.java					\
 	js-class-related-unterminated.js	\
+	js-const.js						\
 	js-implicit-semicolons.js		\
 	js-scope.js						\
 	js-signature.js					\
