@@ -1229,6 +1229,8 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					}
 					else
 						addContext (name, token);
+
+					readToken (token);
 				}
 				else if ( isKeyword(token, KEYWORD_prototype) )
 				{
@@ -1321,7 +1323,8 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 						}
 					}
 				}
-				readToken (token);
+				else
+					readToken (token);
 			} while (isType (token, TOKEN_PERIOD));
 		}
 
