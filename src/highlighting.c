@@ -1540,6 +1540,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RUST_BYTESTRING ||
 				style == SCE_RUST_BYTESTRINGR ||
 				style == SCE_RUST_LEXERROR);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_CHARACTER ||
+				style == SCE_COFFEESCRIPT_STRING ||
+				style == SCE_COFFEESCRIPT_STRINGEOL);
 	}
 	return FALSE;
 }
@@ -1700,6 +1705,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_RUST_COMMENTLINE ||
 				style == SCE_RUST_COMMENTBLOCKDOC ||
 				style == SCE_RUST_COMMENTLINEDOC);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_COMMENTLINE ||
+				style == SCE_COFFEESCRIPT_COMMENTBLOCK ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT);
 	}
 	return FALSE;
 }
