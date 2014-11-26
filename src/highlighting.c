@@ -1001,6 +1001,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(CAML);
 		init_styleset_case(CMAKE);
 		init_styleset_case(COBOL);
+		init_styleset_case(COFFEESCRIPT);
 		init_styleset_case(CONF);
 		init_styleset_case(CSS);
 		init_styleset_case(D);
@@ -1084,6 +1085,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(CAML);
 		styleset_case(CMAKE);
 		styleset_case(COBOL);
+		styleset_case(COFFEESCRIPT);
 		styleset_case(CONF);
 		styleset_case(CSS);
 		styleset_case(D);
@@ -1538,6 +1540,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RUST_BYTESTRING ||
 				style == SCE_RUST_BYTESTRINGR ||
 				style == SCE_RUST_LEXERROR);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_CHARACTER ||
+				style == SCE_COFFEESCRIPT_STRING ||
+				style == SCE_COFFEESCRIPT_STRINGEOL);
 	}
 	return FALSE;
 }
@@ -1698,6 +1705,11 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_RUST_COMMENTLINE ||
 				style == SCE_RUST_COMMENTBLOCKDOC ||
 				style == SCE_RUST_COMMENTLINEDOC);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_COMMENTLINE ||
+				style == SCE_COFFEESCRIPT_COMMENTBLOCK ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT);
 	}
 	return FALSE;
 }
