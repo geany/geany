@@ -15,6 +15,7 @@ filetypes = \
 	filetypes.Clojure.conf \
 	filetypes.cmake \
 	filetypes.cobol \
+	filetypes.coffeescript \
 	filetypes.common \
 	filetypes.conf \
 	filetypes.cpp \

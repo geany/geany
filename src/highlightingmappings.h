@@ -333,6 +333,34 @@ static const HLKeyword highlighting_keywords_CMAKE[] =
 };
 #define highlighting_properties_CMAKE	EMPTY_PROPERTIES
 
+/* CoffeeScript */
+#define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
+static const HLStyle highlighting_styles_COFFEESCRIPT[] =
+{
+	{ SCE_COFFEESCRIPT_DEFAULT,			"default",		FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTLINE,			"commentline",		FALSE },
+	{ SCE_COFFEESCRIPT_NUMBER,			"number",		FALSE },
+	{ SCE_COFFEESCRIPT_WORD,			"word",			FALSE },
+	{ SCE_COFFEESCRIPT_STRING,			"string",		FALSE },
+	{ SCE_COFFEESCRIPT_CHARACTER,			"character",		FALSE },
+	{ SCE_COFFEESCRIPT_OPERATOR,			"operator",		FALSE },
+	{ SCE_COFFEESCRIPT_IDENTIFIER,			"identifier",		FALSE },
+	{ SCE_COFFEESCRIPT_STRINGEOL,			"stringeol",		FALSE },
+	{ SCE_COFFEESCRIPT_REGEX,			"regex",		FALSE },
+	{ SCE_COFFEESCRIPT_WORD2,			"word2",		FALSE },
+	{ SCE_COFFEESCRIPT_GLOBALCLASS,			"globalclass",		FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTBLOCK,		"commentblock",		FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX,		"verbose_regex",	FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE }
+};
+static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
+{
+	{ 0, "primary",	FALSE },
+	{ 1, "secondary",	FALSE },
+	{ 3, "globalclass",	FALSE }
+};
+#define highlighting_properties_COFFEESCRIPT	EMPTY_PROPERTIES
+
 
 /* CSS */
 #define highlighting_lexer_CSS			SCLEX_CSS
