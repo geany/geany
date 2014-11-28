@@ -62,7 +62,8 @@
     AsciidocParser, \
     AbaqusParser, \
     RustParser, \
-    GoParser
+    GoParser, \
+    JsonParser
 
 #endif	/* _PARSERS_H */
 
