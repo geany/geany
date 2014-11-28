@@ -138,7 +138,8 @@ static boolean isIdentChar (int c)
 	return (isalnum (c) || c == '+' || c == '-' || c == '.');
 }
 
-static void readToken (tokenInfo *const token)
+static void readTokenFull (tokenInfo *const token,
+						   boolean includeStringRepr)
 {
 	int c;
 
@@ -178,7 +179,8 @@ static void readToken (tokenInfo *const token)
 					break; /* break on invalid, unescaped, control characters */
 				else if (c == '"' || c == EOF)
 					break;
-				vStringPut (token->string, c);
+				if (includeStringRepr)
+					vStringPut (token->string, c);
 			}
 			vStringTerminate (token->string);
 			break;
@@ -208,6 +210,8 @@ static void readToken (tokenInfo *const token)
 			break;
 	}
 }
+
+#define readToken(t) (readTokenFull ((t), FALSE))
 
 static void pushScope (tokenInfo *const token,
 					   const tokenInfo *const parent,
@@ -287,7 +291,7 @@ static void parseValue (tokenInfo *const token)
 
 		do
 		{
-			readToken (token);
+			readTokenFull (token, TRUE);
 			if (token->type == TOKEN_STRING)
 			{
 				jsonKind tagKind = TAG_NULL; /* default in case of invalid value */
