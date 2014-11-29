@@ -321,6 +321,8 @@ void ui_add_recent_document(GeanyDocument *doc);
 
 void ui_add_recent_project_file(const gchar *utf8_filename);
 
+void ui_update_recent_project_menu(void);
+
 
 void ui_update_tab_status(GeanyDocument *doc);
 

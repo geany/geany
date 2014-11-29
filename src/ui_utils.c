@@ -1279,91 +1279,103 @@ static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_da
 }
 
 
+/* update the project menu item's sensitivity */
+void ui_update_recent_project_menu(void)
+{
+	GeanyRecentFiles *grf = recent_get_recent_projects();
+	GList *children, *item;
+
+	/* only need to update the menubar menu, the project doesn't have a toolbar item */
+	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
+	for (item = children; item; item = item->next)
+	{
+		gboolean sensitive = TRUE;
+
+		if (app->project)
+		{
+			const gchar *filename = gtk_menu_item_get_label(item->data);
+			sensitive = g_strcmp0(app->project->file_name, filename) != 0;
+		}
+		gtk_widget_set_sensitive(item->data, sensitive);
+	}
+	g_list_free(children);
+}
+
+
+static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFiles *grf, GtkWidget *menu)
+{
+	GtkWidget *child = gtk_menu_item_new_with_label(utf8_filename);
+
+	gtk_widget_show(child);
+	if (menu != grf->toolbar)
+		gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), child);
+	else
+	{
+		/* this is a bit ugly, but we need to use gtk_container_add(). Using
+		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal
+		 * which we need in GeanyMenubuttonAction */
+		gtk_container_add(GTK_CONTAINER(menu), child);
+		gtk_menu_reorder_child(GTK_MENU(menu), child, 0);
+	}
+	g_signal_connect(child, "activate", G_CALLBACK(grf->activate_cb), NULL);
+}
+
+
 static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf)
 {
-	GList *item, *children;
-	void *data;
-	GtkWidget *tmp;
+	GList *item;
+	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
+	guint i;
 
 	/* first reorder the queue */
 	item = g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp);
 	g_return_if_fail(item != NULL);
 
-	data = item->data;
-	g_queue_remove(grf->recent_queue, data);
-	g_queue_push_head(grf->recent_queue, data);
+	g_queue_unlink(grf->recent_queue, item);
+	g_queue_push_head_link(grf->recent_queue, item);
 
-	/* remove the old menuitem for the filename */
-	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
-	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-	if (item != NULL)
-		gtk_widget_destroy(GTK_WIDGET(item->data));
-	g_list_free(children);
-
-	if (grf->toolbar != NULL)
+	for (i = 0; i < G_N_ELEMENTS(parents); i++)
 	{
-		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
+		GList *children;
+
+		if (! parents[i])
+			continue;
+
+		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
 		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-		if (item != NULL)
-			gtk_widget_destroy(GTK_WIDGET(item->data));
+		/* either reorder or prepend a new one */
+		if (item)
+			gtk_menu_reorder_child(GTK_MENU(parents[i]), item->data, 0);
+		else
+			add_recent_file_menu_item(utf8_filename, grf, parents[i]);
 		g_list_free(children);
 	}
-	/* now prepend a new menuitem for the filename,
-	 * first for the recent files menu in the menu bar */
-	tmp = gtk_menu_item_new_with_label(utf8_filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
-	/* then for the recent files menu in the tool bar */
-	if (grf->toolbar != NULL)
-	{
-		tmp = gtk_menu_item_new_with_label(utf8_filename);
-		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
-		/* this is a bit ugly, but we need to use gtk_container_add(). Using
-		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal which we need in
-		 * GeanyMenubuttonAction */
-		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
-	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 
 static void update_recent_menu(GeanyRecentFiles *grf)
 {
-	GtkWidget *tmp;
 	gchar *filename;
-	GList *children, *item;
+	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
+	guint i;
 
 	filename = g_queue_peek_head(grf->recent_queue);
 
-	/* clean the MRU list before adding an item (menubar) */
-	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
-	if (g_list_length(children) > file_prefs.mru_length - 1)
+	for (i = 0; i < G_N_ELEMENTS(parents); i++)
 	{
-		item = g_list_nth(children, file_prefs.mru_length - 1);
-		while (item != NULL)
-		{
-			if (GTK_IS_MENU_ITEM(item->data))
-				gtk_widget_destroy(GTK_WIDGET(item->data));
-			item = g_list_next(item);
-		}
-	}
-	g_list_free(children);
+		GList *children;
 
-	/* create item for the menu bar menu */
-	tmp = gtk_menu_item_new_with_label(filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+		if (! parents[i])
+			continue;
 
-	/* clean the MRU list before adding an item (toolbar) */
-	if (grf->toolbar != NULL)
-	{
-		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
+		/* clean the MRU list before adding an item */
+		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
 		if (g_list_length(children) > file_prefs.mru_length - 1)
 		{
-			item = g_list_nth(children, file_prefs.mru_length - 1);
+			GList *item = g_list_nth(children, file_prefs.mru_length - 1);
 			while (item != NULL)
 			{
 				if (GTK_IS_MENU_ITEM(item->data))
@@ -1373,13 +1385,12 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 		}
 		g_list_free(children);
 
-		/* create item for the tool bar menu */
-		tmp = gtk_menu_item_new_with_label(filename);
-		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
-		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+		/* create the new item */
+		add_recent_file_menu_item(filename, grf, parents[i]);
 	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 
