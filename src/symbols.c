@@ -311,6 +311,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 
 		/* no context separator */
 		case GEANY_FILETYPES_ASCIIDOC:
+		case GEANY_FILETYPES_TXT2TAGS:
 			return "\x03";
 
 		default:

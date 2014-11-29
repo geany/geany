@@ -233,6 +233,8 @@ test_sources = \
 	recursive.f95					\
 	refcurs.sql						\
 	regexp.js						\
+	rules.t2t						\
+	sample.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
@@ -264,6 +266,7 @@ test_sources = \
 	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
+	titles.t2t						\
 	traffic_signal.v				\
 	traits.php						\
 	ui5.controller.js				\
