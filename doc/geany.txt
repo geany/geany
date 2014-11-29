@@ -2886,6 +2886,7 @@ the following items:
 
 * Compile
 * Build
+* Lint
 * Make All
 * Make Custom Target
 * Make Object
@@ -2925,6 +2926,20 @@ Interpreted languages do not use the Build command.
     commands is recommended; this will also make it easier for users to
     build your software.
 
+Lint
+````
+
+Source code linters are often used to find code that doesn't correspond to
+certain style guidelines: non-portable code, common or hard to find
+errors, code "smells", variables used before being set, unused functions,
+division by zero, constant conditions, etc. Linters inspect the code and
+issue warnings much like the compilers do. This is formally referred to as
+static code analysis.
+
+Some common linters are pre-configured for you in the Build menu (``pep8``
+for Python, ``cppcheck`` for C/C++, JSHint for JavaScript, ``xmllint`` for
+XML, ``hlint`` for Haskell, ``shellcheck`` for shell code, ...), but all
+these are standalone tools you need to obtain before using.
 
 Make
 ````

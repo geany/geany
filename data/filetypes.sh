@@ -52,8 +52,13 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
 
-[build_settings]
+[build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-run_cmd="./%f"
+FT_02_LB=_Lint
+FT_02_CM=shellcheck --format=gcc "%f"
+FT_02_WD=
+EX_00_LB=_Execute
+EX_00_CM="./%f"
+EX_00_WD=
