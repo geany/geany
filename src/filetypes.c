@@ -191,6 +191,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( POWERSHELL, NONE,         "PowerShell",       NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( COFFEESCRIPT, NONE,       "CoffeeScript",     NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( GO,         GO,           "Go",               NULL,                      SOURCE_FILE, COMPILED );
 }
 
 

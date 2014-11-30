@@ -262,6 +262,7 @@ test_sources = \
 	strings.rb						\
 	structure.f						\
 	tabindent.py					\
+	test.go							\
 	test.py							\
 	test.vhd						\
 	test_input.rs					\
