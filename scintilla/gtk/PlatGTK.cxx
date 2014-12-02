@@ -708,7 +708,7 @@ void SurfaceImpl::FillRectangle(PRectangle rc, ColourDesired back) {
 
 void SurfaceImpl::FillRectangle(PRectangle rc, Surface &surfacePattern) {
 	SurfaceImpl &surfi = static_cast<SurfaceImpl &>(surfacePattern);
-	bool canDraw = surfi.psurf;
+	bool canDraw = surfi.psurf != NULL;
 	if (canDraw) {
 		PLATFORM_ASSERT(context);
 		// Tile pattern over rectangle
@@ -842,7 +842,7 @@ void SurfaceImpl::Ellipse(PRectangle rc, ColourDesired fore, ColourDesired back)
 
 void SurfaceImpl::Copy(PRectangle rc, Point from, Surface &surfaceSource) {
 	SurfaceImpl &surfi = static_cast<SurfaceImpl &>(surfaceSource);
-	bool canDraw = surfi.psurf;
+	bool canDraw = surfi.psurf != NULL;
 	if (canDraw) {
 		PLATFORM_ASSERT(context);
 		cairo_set_source_surface(context, surfi.psurf,

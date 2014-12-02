@@ -407,7 +407,7 @@ static void FoldCoffeeScriptDoc(unsigned int startPos, int length, int,
 static const char *const csWordLists[] = {
             "Keywords",
             "Secondary keywords",
-            "Unused"
+            "Unused",
             "Global classes",
             0,
 };

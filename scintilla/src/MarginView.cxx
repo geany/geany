@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
@@ -102,6 +103,8 @@ MarginView::MarginView() {
 	pixmapSelMargin = 0;
 	pixmapSelPattern = 0;
 	pixmapSelPatternOffset1 = 0;
+	wrapMarkerPaddingRight = 3;
+	customDrawWrapMarker = NULL;
 }
 
 void MarginView::DropGraphics(bool freeObjects) {
@@ -391,9 +394,13 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 							rcNumber.top + vs.maxAscent, number, static_cast<int>(strlen(number)), drawAll);
 					} else if (vs.wrapVisualFlags & SC_WRAPVISUALFLAG_MARGIN) {
 						PRectangle rcWrapMarker = rcMarker;
-						rcWrapMarker.right -= 3;
+						rcWrapMarker.right -= wrapMarkerPaddingRight;
 						rcWrapMarker.left = rcWrapMarker.right - vs.styles[STYLE_LINENUMBER].aveCharWidth;
-						DrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						if (customDrawWrapMarker == NULL) {
+							DrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						} else {
+							customDrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						}
 					}
 				} else if (vs.ms[margin].style == SC_MARGIN_TEXT || vs.ms[margin].style == SC_MARGIN_RTEXT) {
 					if (firstSubLine) {

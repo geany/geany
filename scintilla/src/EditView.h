@@ -42,6 +42,8 @@ void DrawTextNoClipPhase(Surface *surface, PRectangle rc, const Style &style, XY
 void DrawStyledText(Surface *surface, const ViewStyle &vs, int styleOffset, PRectangle rcText,
 	const StyledText &st, size_t start, size_t length, DrawPhase phase);
 
+typedef void (*DrawTabArrowFn)(Surface *surface, PRectangle rcTab, int ymid);
+
 /**
 * EditView draws the main text area.
 */
@@ -77,6 +79,14 @@ public:
 
 	LineLayoutCache llc;
 	PositionCache posCache;
+
+	int tabArrowHeight; // draw arrow heads this many pixels above/below line midpoint
+	/** Some platforms, notably PLAT_CURSES, do not support Scintilla's native
+	 * DrawTabArrow function for drawing tab characters. Allow those platforms to
+	 * override it instead of creating a new method in the Surface class that
+	 * existing platforms must implement as empty. */
+	DrawTabArrowFn customDrawTabArrow;
+	DrawWrapMarkerFn customDrawWrapMarker;
 
 	EditView();
 	virtual ~EditView();

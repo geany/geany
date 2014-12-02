@@ -203,6 +203,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 
 	Point lastClick;
 	unsigned int lastClickTime;
+	Point doubleClickCloseThreshold;
 	int dwellDelay;
 	int ticksToDwell;
 	bool dwelling;

@@ -207,7 +207,7 @@ static void FoldNoBoxVHDLDoc(
   // Decided it would be smarter to have the lexer have all keywords included. Therefore I
   // don't check if the style for the keywords that I use to adjust the levels.
   char words[] =
-    "architecture begin case component else elsif end entity generate loop package process record then "
+    "architecture begin block case component else elsif end entity generate loop package process record then "
     "procedure function when";
   WordList keywords;
   keywords.Set(words);
@@ -369,6 +369,7 @@ static void FoldNoBoxVHDLDoc(
             strcmp(s, "architecture") == 0  ||
             strcmp(s, "case") == 0          ||
             strcmp(s, "generate") == 0      ||
+            strcmp(s, "block") == 0         ||
             strcmp(s, "loop") == 0          ||
             strcmp(s, "package") ==0        ||
             strcmp(s, "process") == 0       ||
