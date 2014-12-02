@@ -19,7 +19,6 @@
 #include "general.h"	/* must always come first */
 #include <ctype.h>	/* to define isalpha () */
 #include <string.h>
-#include <setjmp.h>
 #include <mio/mio.h>
 #ifdef DEBUG
 #include <stdio.h>
@@ -40,8 +39,6 @@
 /*
  *	 DATA DECLARATIONS
  */
-
-typedef enum eException { ExceptionNone, ExceptionEOF } exception_t;
 
 /*
  * Tracks class and function names already created
@@ -85,6 +82,7 @@ typedef struct sKeywordDesc {
 
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
+	TOKEN_EOF,
 	TOKEN_CHARACTER,
 	TOKEN_CLOSE_PAREN,
 	TOKEN_SEMICOLON,
@@ -125,8 +123,6 @@ typedef struct sTokenInfo {
 static tokenType LastTokenType;
 
 static langType Lang_js;
-
-static jmp_buf Exception;
 
 typedef enum {
 	JSTAG_FUNCTION,
@@ -364,11 +360,32 @@ static void parseString (vString *const string, const int delimiter)
 			end = TRUE;
 		else if (c == '\\')
 		{
-			c = fileGetc(); /* This maybe a ' or ". */
-			vStringPut(string, c);
+			/* Eat the escape sequence (\", \', etc).  We properly handle
+			 * <LineContinuation> by eating a whole \<CR><LF> not to see <LF>
+			 * as an unescaped character, which is invalid and handled below.
+			 * Also, handle the fact that <LineContinuation> produces an empty
+			 * sequence.
+			 * See ECMA-262 7.8.4 */
+			c = fileGetc();
+			if (c != '\r' && c != '\n')
+				vStringPut(string, c);
+			else if (c == '\r')
+			{
+				c = fileGetc();
+				if (c != '\n')
+					fileUngetc (c);
+			}
 		}
 		else if (c == delimiter)
 			end = TRUE;
+		else if (c == '\r' || c == '\n')
+		{
+			/* those are invalid when not escaped */
+			end = TRUE;
+			/* we don't want to eat the newline itself to let the automatic
+			 * semicolon insertion code kick in */
+			fileUngetc (c);
+		}
 		else
 			vStringPut (string, c);
 	}
@@ -458,7 +475,7 @@ getNextChar:
 
 	switch (c)
 	{
-		case EOF: longjmp (Exception, (int)ExceptionEOF);	break;
+		case EOF: token->type = TOKEN_EOF;					break;
 		case '(': token->type = TOKEN_OPEN_PAREN;			break;
 		case ')': token->type = TOKEN_CLOSE_PAREN;			break;
 		case ';': token->type = TOKEN_SEMICOLON;			break;
@@ -669,32 +686,18 @@ static void skipArgumentList (tokenInfo *const token, boolean include_newlines, 
 {
 	int nest_level = 0;
 
-	/*
-	 * Other databases can have arguments with fully declared
-	 * datatypes:
-	 *	 (	name varchar(30), text binary(10)  )
-	 * So we must check for nested open and closing parantheses
-	 */
-
 	if (isType (token, TOKEN_OPEN_PAREN))	/* arguments? */
 	{
 		nest_level++;
 		if (repr)
 			vStringPut (repr, '(');
-		while (! (isType (token, TOKEN_CLOSE_PAREN) && (nest_level == 0)))
+		while (nest_level > 0 && ! isType (token, TOKEN_EOF))
 		{
 			readTokenFull (token, FALSE, repr);
 			if (isType (token, TOKEN_OPEN_PAREN))
-			{
 				nest_level++;
-			}
-			if (isType (token, TOKEN_CLOSE_PAREN))
-			{
-				if (nest_level > 0)
-				{
-					nest_level--;
-				}
-			}
+			else if (isType (token, TOKEN_CLOSE_PAREN))
+				nest_level--;
 		}
 		readTokenFull (token, include_newlines, NULL);
 	}
@@ -713,20 +716,13 @@ static void skipArrayList (tokenInfo *const token, boolean include_newlines)
 	if (isType (token, TOKEN_OPEN_SQUARE))	/* arguments? */
 	{
 		nest_level++;
-		while (! (isType (token, TOKEN_CLOSE_SQUARE) && (nest_level == 0)))
+		while (nest_level > 0 && ! isType (token, TOKEN_EOF))
 		{
 			readToken (token);
 			if (isType (token, TOKEN_OPEN_SQUARE))
-			{
 				nest_level++;
-			}
-			if (isType (token, TOKEN_CLOSE_SQUARE))
-			{
-				if (nest_level > 0)
-				{
-					nest_level--;
-				}
-			}
+			else if (isType (token, TOKEN_CLOSE_SQUARE))
+				nest_level--;
 		}
 		readTokenFull (token, include_newlines, NULL);
 	}
@@ -762,8 +758,9 @@ static boolean findCmdTerm (tokenInfo *const token, boolean include_newlines)
 	 * Read until we find either a semicolon or closing brace.
 	 * Any nested braces will be handled within.
 	 */
-	while (! ( isType (token, TOKEN_SEMICOLON) ||
-				isType (token, TOKEN_CLOSE_CURLY) ) )
+	while (! isType (token, TOKEN_SEMICOLON) &&
+		   ! isType (token, TOKEN_CLOSE_CURLY) &&
+		   ! isType (token, TOKEN_EOF))
 	{
 		/* Handle nested blocks */
 		if ( isType (token, TOKEN_OPEN_CURLY))
@@ -1132,7 +1129,8 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 			 * If we find a statement without a terminator consider the
 			 * block finished, otherwise the stack will be off by one.
 			 */
-		} while (! isType (token, TOKEN_CLOSE_CURLY) && read_next_token );
+		} while (! isType (token, TOKEN_EOF) &&
+				 ! isType (token, TOKEN_CLOSE_CURLY) && read_next_token);
 	}
 
 	deleteToken (parent);
@@ -1209,7 +1207,8 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 
 						/* skip whatever is the value */
 						while (! isType (token, TOKEN_COMMA) &&
-						       ! isType (token, TOKEN_CLOSE_CURLY))
+						       ! isType (token, TOKEN_CLOSE_CURLY) &&
+						       ! isType (token, TOKEN_EOF))
 						{
 							if (isType (token, TOKEN_OPEN_CURLY))
 							{
@@ -1329,7 +1328,8 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 
 	while (! isType (token, TOKEN_CLOSE_CURLY) &&
 	       ! isType (token, TOKEN_SEMICOLON)   &&
-	       ! isType (token, TOKEN_EQUAL_SIGN)  )
+	       ! isType (token, TOKEN_EQUAL_SIGN)  &&
+	       ! isType (token, TOKEN_EOF))
 	{
 		if (isType (token, TOKEN_OPEN_CURLY))
 			parseBlock (token, parent);
@@ -1403,9 +1403,10 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 							readToken (method_body_token);
 							vStringCopy (method_body_token->scope, token->scope);
 
-							while (! ( isType (method_body_token, TOKEN_SEMICOLON) ||
-							           isType (method_body_token, TOKEN_CLOSE_CURLY) ||
-							           isType (method_body_token, TOKEN_OPEN_CURLY)) )
+							while (! isType (method_body_token, TOKEN_SEMICOLON) &&
+							       ! isType (method_body_token, TOKEN_CLOSE_CURLY) &&
+							       ! isType (method_body_token, TOKEN_OPEN_CURLY) &&
+							       ! isType (method_body_token, TOKEN_EOF))
 							{
 								if ( isType (method_body_token, TOKEN_OPEN_PAREN) )
 									skipArgumentList(method_body_token, FALSE,
@@ -1728,7 +1729,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 
 		if (parenDepth > 0)
 		{
-			while (parenDepth > 0)
+			while (parenDepth > 0 && ! isType (token, TOKEN_EOF))
 			{
 				if (isType (token, TOKEN_OPEN_PAREN))
 					parenDepth++;
@@ -1795,7 +1796,8 @@ static void parseUI5 (tokenInfo *const token)
 	if (isType (token, TOKEN_PERIOD))
 	{
 		readToken (token);
-		while (! isType (token, TOKEN_OPEN_PAREN) )
+		while (! isType (token, TOKEN_OPEN_PAREN) &&
+			   ! isType (token, TOKEN_EOF))
 		{
 			readToken (token);
 		}
@@ -1813,7 +1815,8 @@ static void parseUI5 (tokenInfo *const token)
 		do
 		{
 			parseMethods (token, name);
-		} while (! isType (token, TOKEN_CLOSE_CURLY) );
+		} while (! isType (token, TOKEN_CLOSE_CURLY) &&
+				 ! isType (token, TOKEN_EOF));
 	}
 
 	deleteToken (name);
@@ -1884,7 +1887,7 @@ static void parseJsFile (tokenInfo *const token)
 			parseUI5 (token);
 		else
 			parseLine (token, token, FALSE);
-	} while (TRUE);
+	} while (! isType (token, TOKEN_EOF));
 }
 
 static void initialize (const langType language)
@@ -1897,15 +1900,12 @@ static void initialize (const langType language)
 static void findJsTags (void)
 {
 	tokenInfo *const token = newToken ();
-	exception_t exception;
 
 	ClassNames = stringListNew ();
 	FunctionNames = stringListNew ();
 	LastTokenType = TOKEN_UNDEFINED;
 
-	exception = (exception_t) (setjmp (Exception));
-	while (exception == ExceptionNone)
-		parseJsFile (token);
+	parseJsFile (token);
 
 	stringListDelete (ClassNames);
 	stringListDelete (FunctionNames);
