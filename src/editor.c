@@ -709,9 +709,9 @@ static void autocomplete_scope(GeanyEditor *editor)
 
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 	{
-		if (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::"))
+		if (pos >= 2 && (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::")))
 			pos--;
-		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
+		else if (ft->id == GEANY_FILETYPES_CPP && pos >= 3 && match_last_chars(sci, pos, "->*"))
 			pos-=2;
 		else if (typed != '.')
 			return;
