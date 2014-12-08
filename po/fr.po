@@ -639,7 +639,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:128
 msgid "\"Smart\" home key"
-msgstr "Touche home \"intelligente\""
+msgstr "Touche home « intelligente »"
 
 #: ../data/geany.glade.h:129
 msgid ""
@@ -649,7 +649,7 @@ msgid ""
 "key always moves the caret to the start of the current line, regardless of "
 "its current position."
 msgstr ""
-"Quand la touche home \"intelligente\" est activée, la touche HOME déplacera "
+"Quand la touche home « intelligente » est activée, la touche HOME déplacera "
 "le curseur au premier caractère significatif de la ligne, à moins qu'il y "
 "soit déjà, auquel cas il sera déplacé au début de la ligne. Lorsque cette "
 "fonctionnalité est désactivée, la touche HOME déplace toujours le curseur au "
@@ -722,7 +722,7 @@ msgid ""
 "used to mark the comment as toggled."
 msgstr ""
 "Une chaîne de caractères qui est ajoutée quand on utilise la commande "
-"\"Commenter/Décommenter la ligne\", elle sert à marquer le commentaire."
+"« Commenter/Décommenter la ligne », elle sert à marquer le commentaire."
 
 #: ../data/geany.glade.h:142
 msgid "<b>Features</b>"
@@ -2392,14 +2392,14 @@ msgstr "Processus échoué (%s)"
 #: ../../po/../src/build.c:905
 #, c-format
 msgid "Failed to change the working directory to \"%s\""
-msgstr "Impossible de changer le dossier de travail pour \"%s\""
+msgstr "Impossible de changer le dossier de travail pour « %s »"
 
 #: ../../po/../src/build.c:935
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr ""
-"Impossible d'exécuter \"%s\" (le script de lancement n'a pas pu être créé : "
-"%s)"
+"Impossible d'exécuter « %s » (le script de lancement n'a pas pu être "
+"créé : %s)"
 
 #: ../../po/../src/build.c:990
 msgid ""
@@ -2414,7 +2414,7 @@ msgid ""
 "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Impossible d'analyser la commande de terminal \"%s\" (vérifiez les "
+"Impossible d'analyser la commande de terminal « %s » (vérifiez les "
 "paramètres de l'outil Terminal dans les préférences)"
 
 #: ../../po/../src/build.c:1036
@@ -2423,7 +2423,7 @@ msgid ""
 "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 "Preferences)"
 msgstr ""
-"Impossible de trouver le terminal \"%s\" (vérifiez le chemin vers l'outil "
+"Impossible de trouver le terminal « %s » (vérifiez le chemin vers l'outil "
 "Terminal dans les préférences)"
 
 #: ../../po/../src/build.c:1194
@@ -2613,7 +2613,7 @@ msgstr "Impossible d'ouvrir le fichier %s (fichier non trouvé)"
 #: ../../po/../src/document.c:2183 ../../po/../src/document.c:2191
 #, c-format
 msgid "\"%s\" was not found."
-msgstr "\"%s\" n'a pu être trouvé."
+msgstr "« %s » n'a pu être trouvé."
 
 #: ../../po/../src/dialogs.c:222 ../../po/../src/encodings.c:550
 msgid "Detect from file"
@@ -2736,7 +2736,7 @@ msgstr "Ne pas enre_gistrer"
 #: ../../po/../src/dialogs.c:811
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "Le fichier '%s' n'est pas enregistré."
+msgstr "Le fichier « %s » n'est pas enregistré."
 
 #: ../../po/../src/dialogs.c:812
 msgid "Do you want to save it before closing?"
@@ -2783,7 +2783,7 @@ msgstr "Fichier %s fermé."
 #: ../../po/../src/document.c:862
 #, c-format
 msgid "New file \"%s\" opened."
-msgstr "Nouveau fichier \"%s\" ouvert."
+msgstr "Nouveau fichier « %s » ouvert."
 
 #: ../../po/../src/document.c:913 ../../po/../src/document.c:1487
 #, c-format
@@ -2793,7 +2793,7 @@ msgstr "Impossible d'ouvrir le fichier %s (%s)"
 #: ../../po/../src/document.c:933
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "Le fichier \"%s\" n'est pas valide %s."
+msgstr "Le fichier « %s » n'est pas valide %s."
 
 #: ../../po/../src/document.c:939
 #, c-format
@@ -2801,7 +2801,7 @@ msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
-"Le fichier \"%s\" ne ressemble pas à un fichier texte ou son encodage n'est "
+"Le fichier « %s » ne ressemble pas à un fichier texte ou son encodage n'est "
 "pas supporté."
 
 #: ../../po/../src/document.c:949
@@ -2812,7 +2812,7 @@ msgid ""
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"Le fichier \"%s\" n'a pas pu être ouvert correctement et a été tronqué. Cela "
+"Le fichier « %s » n'a pas pu être ouvert correctement et a été tronqué. Cela "
 "peut se produire si le fichier contient un bit NULL. Soyez averti que son "
 "enregistrement peut causer une perte de données.\n"
 "Le fichier a été défini en lecture seule."
@@ -2869,7 +2869,7 @@ msgstr "L'historique d'annulation sera perdu."
 #: ../../po/../src/document.c:1465
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
-msgstr "Êtes-vous sur de vouloir recharger '%s' ?"
+msgstr "Êtes-vous sur de vouloir recharger « %s » ?"
 
 #: ../../po/../src/document.c:1582
 msgid "Error renaming file."
@@ -2882,7 +2882,7 @@ msgid ""
 "remains unsaved."
 msgstr ""
 "Une erreur s'est produite lors de la conversion du fichier depuis l'UTF-8 "
-"vers \"%s\". Le fichier reste non sauvegardé."
+"vers « %s ». Le fichier reste non sauvegardé."
 
 #: ../../po/../src/document.c:1723
 #, c-format
@@ -2891,7 +2891,7 @@ msgid ""
 "The error occurred at \"%s\" (line: %d, column: %d)."
 msgstr ""
 "Message d'erreur : %s\n"
-"L'erreur s'est produite à \"%s\" (ligne : %d, colonne : %d)."
+"L'erreur s'est produite à « %s » (ligne : %d, colonne : %d)."
 
 #: ../../po/../src/document.c:1727
 #, c-format
@@ -2902,17 +2902,17 @@ msgstr "Message d'erreur : %s."
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
-"Échec de l'ouverture du fichier '%s' pour écriture : fopen() a échoué : %s"
+"Échec de l'ouverture du fichier « %s » pour écriture : fopen() a échoué : %s"
 
 #: ../../po/../src/document.c:1805
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr "Échec de l'écriture du fichier '%s' : fwrite() a échoué : %s"
+msgstr "Échec de l'écriture du fichier « %s » : fwrite() a échoué : %s"
 
 #: ../../po/../src/document.c:1819
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr "Échec de la fermeture du fichier '%s' : fclose() a échoué : %s"
+msgstr "Échec de la fermeture du fichier « %s » : fclose() a échoué : %s"
 
 #: ../../po/../src/document.c:1869 ../../po/../src/document.c:3343
 msgid "_Overwrite"
@@ -2922,7 +2922,7 @@ msgstr "Écras_er"
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
-"Le fichier \"%s\" sur le disque est plus récent que le tampon actuel."
+"Le fichier « %s » sur le disque est plus récent que le tampon actuel."
 
 #: ../../po/../src/document.c:1879 ../../po/../src/document.c:3395
 msgid "Try to resave the file?"
@@ -2931,12 +2931,12 @@ msgstr "Essayer de sauvegarder à nouveau le fichier ?"
 #: ../../po/../src/document.c:1880 ../../po/../src/document.c:3396
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "Le fichier \"%s\" n'a pu être trouvé sur le disque !"
+msgstr "Le fichier « %s » n'a pu être trouvé sur le disque !"
 
 #: ../../po/../src/document.c:1942
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr "Impossible d'enregistrer le document en lecture seule \"%s\" !"
+msgstr "Impossible d'enregistrer le document en lecture seule « %s » !"
 
 #: ../../po/../src/document.c:2010
 #, c-format
@@ -2972,14 +2972,14 @@ msgstr "Recommencer la recherche ?"
 #: ../../po/../src/search.c:2266
 #, c-format
 msgid "No matches found for \"%s\"."
-msgstr "Aucune correspondance trouvée pour \"%s\"."
+msgstr "Aucune correspondance trouvée pour « %s »."
 
 #: ../../po/../src/document.c:2286
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] "%s : Remplacement de %d occurrence de \"%s\" par \"%s\"."
-msgstr[1] "%s : Remplacement de %d occurrences de \"%s\" par \"%s\"."
+msgstr[0] "%s : Remplacement de %d occurrence de « %s » par « %s »."
+msgstr[1] "%s : Remplacement de %d occurrences de « %s » par « %s »."
 
 #: ../../po/../src/document.c:3345
 msgid "Do you want to reload it?"
@@ -3242,7 +3242,7 @@ msgstr "sans titre"
 #: ../../po/../src/socket.c:171 ../../po/../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "Impossible de trouver le fichier '%s'."
+msgstr "Impossible de trouver le fichier « %s »."
 
 #: ../../po/../src/highlighting.c:1285
 msgid "Default"
@@ -3917,8 +3917,8 @@ msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
 "\"."
 msgstr ""
-"Votre dossier de configuration a été déplacé avec succès de \"%s\" vers \"%s"
-"\"."
+"Votre dossier de configuration a été déplacé avec succès de « %s » "
+"vers « %s »."
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
@@ -3928,8 +3928,8 @@ msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
-"Votre ancien dossier de configuration \"%s\" n'a pu être déplacé vers \"%s"
-"\" (%s). Veuillez déplacer manuellement le dossier vers le nouvel "
+"Votre ancien dossier de configuration « %s » n'a pu être déplacé vers "
+"« %s » (%s). Veuillez déplacer manuellement le dossier vers le nouvel "
 "emplacement."
 
 #: ../../po/../src/main.c:778
@@ -3982,7 +3982,7 @@ msgstr "Cac_her la fenêtre de message"
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
-"Impossible de trouver le fichier '%s' - essayez le chemin du document "
+"Impossible de trouver le fichier « %s » — essayez le chemin du document "
 "courant."
 
 #: ../../po/../src/msgwindow.c:1105
@@ -3999,7 +3999,7 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"Le plugin \"%s\" n'est pas compatible au niveau binaire avec cette version "
+"Le plugin « %s » n'est pas compatible au niveau binaire avec cette version "
 "de Geany - Veuillez le recompiler."
 
 #: ../../po/../src/plugins.c:1075
@@ -4049,7 +4049,7 @@ msgstr "Entrer une touche"
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
-"Tapez la combinaison de touches que vous souhaitez utiliser pour \"%s\""
+"Tapez la combinaison de touches que vous souhaitez utiliser pour « %s »"
 
 #: ../../po/../src/prefs.c:225 ../../po/../src/symbols.c:2355
 #: ../../po/../src/sidebar.c:743
@@ -4084,7 +4084,7 @@ msgstr "Écraser ce raccourci ?"
 #: ../../po/../src/prefs.c:1484
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
-msgstr "La combinaison '%s' est déjà utilisée pour \"%s\"."
+msgstr "La combinaison « %s » est déjà utilisée pour « %s »."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
@@ -4175,14 +4175,14 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Le fichier \"%s\" sera imprimé avec la commande suivante :\n"
+"Le fichier « %s » sera imprimé avec la commande suivante :\n"
 "\n"
 "%s"
 
 #: ../../po/../src/printing.c:617
 #, c-format
 msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "L'impression de \"%s\" a échoué (code de retour : %s)."
+msgstr "L'impression de « %s » a échoué (code de retour : %s)."
 
 #: ../../po/../src/printing.c:623
 #, c-format
@@ -4218,7 +4218,7 @@ msgid ""
 "should normally have the \"%s\" extension."
 msgstr ""
 "Chemin du fichier qui représente le project et contient ses "
-"préférences. Il devrait normalement avoir l'extension \"%s\"."
+"préférences. Il devrait normalement avoir l'extension « %s »."
 
 #: ../../po/../src/project.c:212 ../../po/../src/project.c:484
 msgid "Choose Project Base Path"
@@ -4231,13 +4231,13 @@ msgstr "Le fichier de projet n'a pas pu être écrit"
 #: ../../po/../src/project.c:256
 #, c-format
 msgid "Project \"%s\" created."
-msgstr "Projet  \"%s\" créé."
+msgstr "Projet  « %s » créé."
 
 #: ../../po/../src/project.c:296 ../../po/../src/project.c:328
 #: ../../po/../src/project.c:1021
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "Le fichier de projet \"%s\" n'a pu être chargé."
+msgstr "Le fichier de projet « %s » n'a pu être chargé."
 
 #: ../../po/../src/project.c:322 ../../po/../src/project.c:334
 msgid "Open Project"
@@ -4250,12 +4250,12 @@ msgstr "Fichiers de projet"
 #: ../../po/../src/project.c:416
 #, c-format
 msgid "Project \"%s\" closed."
-msgstr "Projet \"%s\" fermé."
+msgstr "Projet « %s » fermé."
 
 #: ../../po/../src/project.c:624
 #, c-format
 msgid "Project \"%s\" saved."
-msgstr "Projet \"%s\" enregistré."
+msgstr "Projet « %s » enregistré."
 
 #: ../../po/../src/project.c:657
 msgid "Do you want to close it before proceeding?"
@@ -4264,7 +4264,7 @@ msgstr "Voulez-vous le fermer avant de continuer ?"
 #: ../../po/../src/project.c:658
 #, c-format
 msgid "The '%s' project is open."
-msgstr "Le projet '%s' est ouvert."
+msgstr "Le projet « %s » est ouvert."
 
 #: ../../po/../src/project.c:707
 msgid "The specified project name is too short."
@@ -4286,7 +4286,7 @@ msgstr "Créer le dossier de base du projet ?"
 #: ../../po/../src/project.c:749
 #, c-format
 msgid "The path \"%s\" does not exist."
-msgstr "Le chemin \"%s\" est inexistant."
+msgstr "Le chemin « %s » est inexistant."
 
 #: ../../po/../src/project.c:758
 #, c-format
@@ -4305,7 +4305,7 @@ msgstr "R_emplacer"
 #: ../../po/../src/project.c:779 ../../po/../plugins/export.c:332
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "Le fichier '%s' existe déjà. Voulez-vous l'écraser ?"
+msgstr "Le fichier « %s » existe déjà. Voulez-vous l'écraser ?"
 
 #. initialise the dialog
 #: ../../po/../src/project.c:925 ../../po/../src/project.c:936
@@ -4315,7 +4315,7 @@ msgstr "Choix du nom du fichier du projet"
 #: ../../po/../src/project.c:1011
 #, c-format
 msgid "Project \"%s\" opened."
-msgstr "Projet  \"%s\" ouvert."
+msgstr "Projet « %s » ouvert."
 
 #: ../../po/../src/search.c:311 ../../po/../src/search.c:963
 msgid "_Use regular expressions"
@@ -4511,8 +4511,8 @@ msgstr "Autres options à passer à grep"
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "%d correspondances trouvées pour \"%s\"."
-msgstr[1] "%d correspondance trouvée pour \"%s\"."
+msgstr[0] "%d correspondances trouvées pour « %s »."
+msgstr[1] "%d correspondance trouvée pour « %s »."
 
 #: ../../po/../src/search.c:1427
 #, c-format
@@ -4531,8 +4531,8 @@ msgstr "Pas de texte à rechercher."
 #, c-format
 msgid "Cannot execute grep tool '%s'; check the path setting in Preferences."
 msgstr ""
-"Impossible d'exécuter l'outil grep '%s'; vérifiez la configuration du chemin "
-"dans les Préférences."
+"Impossible d'exécuter l'outil grep « %s » ; vérifiez la configuration "
+"du chemin dans les Préférences."
 
 #: ../../po/../src/search.c:1673
 #, c-format
@@ -4927,7 +4927,7 @@ msgstr "Variables externes"
 #: ../../po/../src/symbols.c:1775
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "Extension de fichier inconnue pour \"%s\".\n"
+msgstr "Extension de fichier inconnue pour « %s ».\n"
 
 #: ../../po/../src/symbols.c:1801
 #, c-format
@@ -4968,23 +4968,23 @@ msgstr "Fichiers de tag Geany (*.*.tags)"
 #: ../../po/../src/symbols.c:1850
 #, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "Chargement de %s fichiers de tags '%s'."
+msgstr "Chargement de %s fichiers de tags « %s »."
 
 #: ../../po/../src/symbols.c:1853
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr "Impossible de charger le fichier de tags '%s'."
+msgstr "Impossible de charger le fichier de tags « %s »."
 
 # Prochaine déclaration (recherche vers l'avant)
 #: ../../po/../src/symbols.c:1991
 #, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr "Déclaration suivante de \"%s\" non trouvée."
+msgstr "Déclaration suivante de « %s » non trouvée."
 
 #: ../../po/../src/symbols.c:1993
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "Définition de \"%s\" non trouvée."
+msgstr "Définition de « %s » non trouvée."
 
 #: ../../po/../src/symbols.c:2370
 msgid "Sort by _Name"
@@ -4997,7 +4997,7 @@ msgstr "Trier par ordre d'_apparition"
 #: ../../po/../src/templates.c:81
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr "Impossible de convertir le fichier de modèle \"%s\" en UTF-8"
+msgstr "Impossible de convertir le fichier de modèle « %s » en UTF-8"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../../po/../src/toolbar.c:58
@@ -5428,7 +5428,7 @@ msgstr "Unix (LF)"
 #: ../../po/../src/vte.c:439
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr "bibliothèque VTE invalide \"%s\" : symbole manquant \"%s\""
+msgstr "bibliothèque VTE invalide « %s » : symbole manquant « %s »"
 
 #: ../../po/../src/vte.c:588
 msgid "_Set Path From Document"
@@ -5578,7 +5578,7 @@ msgstr "Caractères HTML"
 
 #: ../../po/../plugins/htmlchars.c:40
 msgid "Inserts HTML character entities like '&amp;'."
-msgstr "Insérer des entités HTML telles que '&amp;'."
+msgstr "Insérer des entités HTML telles que « &amp; »."
 
 #: ../../po/../plugins/htmlchars.c:41 ../../po/../plugins/export.c:39
 #: ../../po/../plugins/filebrowser.c:50 ../../po/../plugins/saveactions.c:43
@@ -5712,12 +5712,12 @@ msgstr ""
 #: ../../po/../plugins/export.c:280
 #, c-format
 msgid "Document successfully exported as '%s'."
-msgstr "Document exporté avec succès vers '%s'."
+msgstr "Document exporté avec succès vers « %s »."
 
 #: ../../po/../plugins/export.c:282
 #, c-format
 msgid "File '%s' could not be written (%s)."
-msgstr "Le fichier '%s' n'a pu être écrit (%s)."
+msgstr "Le fichier « %s » n'a pu être écrit (%s)."
 
 #: ../../po/../plugins/export.c:750
 msgid "_Export"
@@ -5749,8 +5749,8 @@ msgstr "Trop d'éléments sélectionnés !"
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr ""
-"Impossible d'exécuter la commande '%s' configurée pour le programme externe "
-"(%s)."
+"Impossible d'exécuter la commande « %s » configurée pour le programme "
+"externe (%s)."
 
 #: ../../po/../plugins/filebrowser.c:613
 msgid "Open in _Geany"
@@ -5813,11 +5813,13 @@ msgid ""
 "%d will be replaced with the path name of the selected file without the "
 "filename"
 msgstr ""
-"La commande à lancer en utilisant \"Ouvrir dans un programme externe\". Vous "
-"pouvez utiliser les caractères de substitution %f et %d.\n"
-"%f sera remplacé par le nom du fichier en incluant son chemin complet\n"
-"%d sera remplacé par le nom du chemin vers le fichier sélectionné sans le "
-"nom du fichier"
+"La commande à lancer en utilisant « Ouvrir dans un programme "
+"externe ». Vous pouvez utiliser les caractères de substitution %f et "
+"%d.\n"
+"%f sera remplacé par le nom du fichier en incluant son chemin "
+"complet\n"
+"%d sera remplacé par le nom du chemin vers le fichier sélectionné "
+"sans le nom du fichier"
 
 #: ../../po/../plugins/filebrowser.c:1238
 msgid "Show hidden files"
@@ -5940,8 +5942,8 @@ msgstr "_Dossier de sauvegarde des fichiers :"
 #: ../../po/../plugins/saveactions.c:740
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"_Format de date / heure pour les fichiers sauvegardés (faire \"man strftime"
-"\" pour plus de détails) :"
+"_Format de date / heure pour les fichiers sauvegardés (faire « man "
+"strftime » pour plus de détails) :"
 
 #: ../../po/../plugins/saveactions.c:753
 msgid "Directory _levels to include in the backup destination:"
@@ -6695,8 +6697,8 @@ msgstr "En haut et en bas"
 #, fuzzy
 #~ msgid "Found %d matches for \"%s\"."
 #~ msgid_plural "Found %d matches for \"%s\"."
-#~ msgstr[0] "%d correspondances trouvées pour \"%s\"."
-#~ msgstr[1] "%d correspondances trouvées pour \"%s\"."
+#~ msgstr[0] "%d correspondances trouvées pour « %s »."
+#~ msgstr[1] "%d correspondances trouvées pour « %s »."
 
 #~ msgid "Failed to execute the terminal program"
 #~ msgstr "Impossible d'exécuter le programme du terminal"
