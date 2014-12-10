@@ -438,5 +438,7 @@
 	geany_functions->p_build->build_set_menu_item
 #define build_get_group_count \
 	geany_functions->p_build->build_get_group_count
+#define project_write_config \
+	geany_functions->p_project->project_write_config
 
 #endif

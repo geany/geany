@@ -47,6 +47,9 @@ typedef struct GeanyProject
 GeanyProject;
 
 
+void project_write_config(void);
+
+
 #ifdef GEANY_PRIVATE
 
 typedef struct ProjectPrefs
