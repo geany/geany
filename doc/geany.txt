@@ -450,7 +450,7 @@ using the appropriate command line option.
 Opening files from the command-line in a running instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Geany detects if there is an an instance of itself already running and opens files
+Geany detects if there is an instance of itself already running and opens files
 from the command-line in that instance. So, Geany can
 be used to view and edit files by opening them from other programs
 such as a file manager.
@@ -2489,17 +2489,17 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the the {year} wildcard. You can use any conversion specifiers
+    Specify a format for the {year} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
 Date
-    Specify a format for the the {date} wildcard. You can use any conversion specifiers
+    Specify a format for the {date} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
 Date & Time
-    Specify a format for the the {datetime} wildcard. You can use any conversion specifiers
+    Specify a format for the {datetime} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
