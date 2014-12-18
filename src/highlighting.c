@@ -1249,7 +1249,10 @@ static void add_color_scheme_item(GtkListStore *store,
 		SCHEME_FILE, fn, -1);
 	g_free(markup);
 
-	if (utils_str_equal(fn, editor_prefs.color_scheme) && current_iter)
+	/* select the current iter if the the color scheme matches, or if it's the
+	 * default (fn == NULL), in case of bad config file.  the default theme is
+	 * first anyway so if a later scheme matches it will override default */
+	if ((! fn || utils_str_equal(fn, editor_prefs.color_scheme)) && current_iter)
 		*current_iter = iter;
 }
 
