@@ -254,6 +254,8 @@ test_sources = \
 	simple.rb						\
 	simple.sh						\
 	simple.tcl						\
+	size_t_wchar_t_alias.d			\
+	size_t_wchar_t_typedef.c		\
 	spurious_label_tags.c			\
 	sql_single_quote.sql			\
 	square_parens.f90				\
