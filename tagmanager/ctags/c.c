@@ -477,7 +477,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "short",          KEYWORD_SHORT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "signal",         KEYWORD_SIGNAL,         { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "signed",         KEYWORD_SIGNED,         { 1, 1, 0, 0, 0, 0, 0 } },
-	{ "size_t",         KEYWORD_SIZE_T,         { 1, 1, 0, 0, 0, 1, 1 } },
+	{ "size_t",         KEYWORD_SIZE_T,         { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "state",          KEYWORD_STATE,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "static",         KEYWORD_STATIC,         { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "static_assert",  KEYWORD_STATIC_ASSERT,  { 0, 1, 0, 0, 0, 0, 0 } },
