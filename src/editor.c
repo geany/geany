@@ -4429,14 +4429,26 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 }
 
 
-void editor_strip_trailing_spaces(GeanyEditor *editor)
+void editor_strip_trailing_spaces(GeanyEditor *editor, gboolean ignore_selection)
 {
-	gint max_lines = sci_get_line_count(editor->sci);
+	gint start_line;
+	gint end_line;
 	gint line;
+
+	if (sci_has_selection(editor->sci) && !ignore_selection)
+	{
+		start_line = sci_get_line_from_position(editor->sci, sci_get_selection_start(editor->sci));
+		end_line = sci_get_line_from_position(editor->sci, sci_get_selection_end(editor->sci)) + 1;
+	}
+	else
+	{
+		start_line = 0;
+		end_line = sci_get_line_count(editor->sci);
+	}
 
 	sci_start_undo_action(editor->sci);
 
-	for (line = 0; line < max_lines; line++)
+	for (line = start_line; line < end_line; line++)
 	{
 		editor_strip_line_trailing_spaces(editor, line);
 	}
