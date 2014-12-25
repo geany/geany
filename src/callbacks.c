@@ -536,7 +536,7 @@ void on_replace_tabs_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(doc != NULL);
 
-	editor_replace_tabs(doc->editor);
+	editor_replace_tabs(doc->editor, FALSE);
 }
 
 
@@ -1652,7 +1652,7 @@ void on_replace_spaces_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(doc != NULL);
 
-	editor_replace_spaces(doc->editor);
+	editor_replace_spaces(doc->editor, FALSE);
 }
 
 
