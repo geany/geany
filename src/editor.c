@@ -4779,6 +4779,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
+	
+#ifdef GDK_WINDOWING_QUARTZ
+	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw */
+	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
+#endif
 
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)
