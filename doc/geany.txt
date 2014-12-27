@@ -3774,9 +3774,11 @@ Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
 Clone                                                     See `Cloning documents`_.
 
-Replace tabs with space                                   Replaces all tabs with the right amount of spaces.
+Replace tabs with space                                   Replaces all tabs with the right amount of spaces
+                                                          in the whole document, or the current selection.
 
-Replace spaces with tabs                                  Replaces leading spaces with tab characters.
+Replace spaces with tabs                                  Replaces leading spaces with tab characters in the
+                                                          whole document, or the current selection.
 
 Toggle current fold                                       Toggles the folding state of the current code block.
 
