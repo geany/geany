@@ -895,9 +895,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 				while (i1 <= j1) 
 				{
 					val1 = big_array->pdata[i1];
-					/* we allocated enough space so we are sure we don't need to reallocate
-					 * the array - copy and increment the size directly so it can be inlined */
-					res_array->pdata[res_array->len++] = val1;
+					g_ptr_array_add(res_array, val1);
 					i1++;
 				}
 			}
