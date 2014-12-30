@@ -77,7 +77,11 @@
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
+#ifdef __APPLE__
+#define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
+#else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
+#endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
