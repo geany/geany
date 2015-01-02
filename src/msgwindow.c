@@ -340,7 +340,7 @@ void msgwin_show_hide(gboolean show)
 		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")),
 		show);
 	ignore_callback = FALSE;
-	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	ui_widget_show_hide(main_widgets.message_window_notebook, show);
 	/* set the input focus back to the editor */
 	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
