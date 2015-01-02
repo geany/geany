@@ -26,6 +26,12 @@
 
 G_BEGIN_DECLS
 
+#ifdef __APPLE__
+#define GEANY_PRIMARY_MOD_MASK GDK_META_MASK
+#else
+#define GEANY_PRIMARY_MOD_MASK GDK_CONTROL_MASK
+#endif
+
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
@@ -246,6 +252,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
+GdkModifierType keybindings_get_modifiers(GdkModifierType mods);
 
 #ifdef GEANY_PRIVATE
 

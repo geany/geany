@@ -39,6 +39,7 @@
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "keybindings.h"
 
 #include "gtkcompat.h"
 
@@ -328,7 +329,7 @@ void vte_close(void)
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (ui_is_keyval_enter_or_return(event->keyval) ||
-		((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
+		((event->keyval == GDK_c) && (event->state & GEANY_PRIMARY_MOD_MASK)))
 	{
 		/* assume any text on the prompt has been executed when pressing Enter/Return */
 		clean = TRUE;
@@ -349,7 +350,7 @@ static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 		event->keyval == GDK_d ||
 		event->keyval == GDK_C ||
 		event->keyval == GDK_D) &&
-		event->state & GDK_CONTROL_MASK &&
+		event->state & GEANY_PRIMARY_MOD_MASK &&
 		! (event->state & GDK_SHIFT_MASK) && ! (event->state & GDK_MOD1_MASK))
 	{
 		vte_restart(widget);
@@ -560,14 +561,14 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_v, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
