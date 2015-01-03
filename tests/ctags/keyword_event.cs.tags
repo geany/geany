@@ -14,6 +14,7 @@ MyDelegateÌ128Í()Ö0Ïpublic delegate void
 MyDelegate1Ì128Í(int i)Ö0Ïpublic delegate void
 MyDelegate1Ì128Í()Ö0Ïpublic delegate void
 MyDelegate2Ì128Í(string s)Ö0Ïpublic delegate int
+MyDelegate2Ì128Í(string s)Ö0Ïpublic delegate void
 MyDelegate3Ì128Í(int i, object o)Ö0Ïpublic delegate void
 MyDelegate4Ì128Í()Ö0Ïpublic delegate void
 MyEvent2StorageÌ8ÎExplicitEventsSampleÖ0ÏMyDelegate2

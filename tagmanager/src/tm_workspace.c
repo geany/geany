@@ -52,7 +52,7 @@ static TMTagAttrType file_tags_sort_attrs[] =
 static TMTagAttrType global_tags_sort_attrs[] =
 {
 	tm_tag_attr_name_t, 
-	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
+	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, tm_tag_attr_vartype_t, 0
 };
 
 
