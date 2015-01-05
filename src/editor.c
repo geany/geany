@@ -4317,6 +4317,7 @@ void editor_fold_all(GeanyEditor *editor)
 void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 {
 	gint search_pos, pos_in_line, current_tab_true_length;
+	gint anchor_pos, caret_pos;
 	gint tab_len;
 	gchar *tab_str;
 	struct Sci_TextToFind ttf;
@@ -4337,6 +4338,8 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 	}
 	ttf.lpstrText = (gchar*) "\t";
 
+	anchor_pos = SSM(editor->sci, SCI_GETANCHOR, 0, 0);
+	caret_pos = sci_get_current_position(editor->sci);
 	while (TRUE)
 	{
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
@@ -4354,7 +4357,13 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax += current_tab_true_length - 1;
 		g_free(tab_str);
+
+		if (anchor_pos > search_pos)
+			anchor_pos += current_tab_true_length - 1;
+		if (caret_pos > search_pos)
+			caret_pos += current_tab_true_length - 1;
 	}
+	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
 }
 
@@ -4364,6 +4373,7 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 {
 	gint search_pos;
+	gint anchor_pos, caret_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
 	gchar *text;
@@ -4397,6 +4407,8 @@ void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 	}
 	ttf.lpstrText = text;
 
+	anchor_pos = SSM(editor->sci, SCI_GETANCHOR, 0, 0);
+	caret_pos = sci_get_current_position(editor->sci);
 	while (TRUE)
 	{
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
@@ -4415,7 +4427,13 @@ void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 		ttf.chrg.cpMin = search_pos;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax -= tab_len - 1;
+
+		if (anchor_pos > search_pos)
+			anchor_pos -= tab_len - 1;
+		if (caret_pos > search_pos)
+			caret_pos -= tab_len - 1;
 	}
+	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
 	g_free(text);
 }
