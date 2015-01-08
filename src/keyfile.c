@@ -74,6 +74,8 @@
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+#elif defined(__APPLE__)
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
