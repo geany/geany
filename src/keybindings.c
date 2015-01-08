@@ -110,6 +110,15 @@ static void cb_func_move_tab(guint key_id);
 static void add_popup_menu_accels(void);
 
 
+/** Gets significant modifiers from a GdkModifierType mask. The set of 
+ * significant modifiers corresponds to the default modifier mask as returned 
+ * by @c gtk_accelerator_get_default_mod_mask(). In addition, it improves
+ * the Command key handling on OS X by adding @c GEANY_PRIMARY_MOD_MASK
+ * when needed. For this reason it is preferred to use this function 
+ * instead of @c gtk_accelerator_set_default_mod_mask().
+ * @param mods GdkModifierType mask.
+ * @return Significant modifiers from the mask.
+ * @since 1.25. */
 GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 {
 #ifdef __APPLE__

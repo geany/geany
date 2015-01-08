@@ -565,7 +565,7 @@ typedef struct KeybindingFuncs
 					_GeanyKeyCallback callback, guint key, GdkModifierType mod,
 					const gchar *name, const gchar *label, GtkWidget *menu_item);
 	struct GeanyKeyBinding* (*keybindings_get_item)(struct GeanyKeyGroup *group, gsize key_id);
-
+	GdkModifierType (*keybindings_get_modifiers)(GdkModifierType mods);
 }
 KeybindingFuncs;
 
