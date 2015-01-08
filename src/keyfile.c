@@ -622,7 +622,7 @@ void configuration_save(void)
 }
 
 
-static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
+static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key, gboolean projects)
 {
 	gchar **recent_files;
 	gsize i, len = 0;
@@ -632,8 +632,14 @@ static void load_recent_files(GKeyFile *config, GQueue *queue, const gchar *key)
 	{
 		for (i = 0; (i < len) && (i < file_prefs.mru_length); i++)
 		{
-			gchar *filename = g_strdup(recent_files[i]);
-			g_queue_push_tail(queue, filename);
+			gchar *locale_filename = utils_get_locale_from_utf8(recent_files[i]);
+			
+			if (!projects || g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+			{
+				gchar *filename = g_strdup(recent_files[i]);
+				g_queue_push_tail(queue, filename);
+			}
+			g_free(locale_filename);
 		}
 		g_strfreev(recent_files);
 	}
@@ -656,8 +662,8 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 
 	if (read_recent_files)
 	{
-		load_recent_files(config, ui_prefs.recent_queue, "recent_files");
-		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+		load_recent_files(config, ui_prefs.recent_queue, "recent_files", FALSE);
+		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects", TRUE);
 	}
 
 	/* the project may load another list than the main setting */
