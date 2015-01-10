@@ -416,7 +416,7 @@ def build(bld):
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
-    scintilla_sources.update(files)
+    scintilla_sources.update([file.path_from(bld.srcnode) for file in files])
     bld(
         features        = ['c', 'cxx', 'cxxstlib'],
         name            = 'scintilla',
