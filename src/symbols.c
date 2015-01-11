@@ -320,60 +320,6 @@ const gchar *symbols_get_context_separator(gint ft_id)
 }
 
 
-GString *symbols_get_macro_list(gint lang)
-{
-	guint j, i;
-	GPtrArray *ftags;
-	GString *words;
-	gint tag_lang;
-	TMTag *tag;
-
-	if (app->tm_workspace->source_files == NULL)
-		return NULL;
-
-	ftags = g_ptr_array_sized_new(50);
-	words = g_string_sized_new(200);
-
-	for (j = 0; j < app->tm_workspace->source_files->len; j++)
-	{
-		GPtrArray *tags;
-
-		tags = tm_tags_extract(TM_SOURCE_FILE(app->tm_workspace->source_files->pdata[j])->tags_array,
-			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
-		if (NULL != tags)
-		{
-			for (i = 0; ((i < tags->len) && (i < editor_prefs.autocompletion_max_entries)); ++i)
-			{
-				tag = TM_TAG(tags->pdata[i]);
-				tag_lang = (tag->file) ?
-					tag->file->lang : tag->lang;
-
-				if (tag_lang == lang)
-					g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
-			}
-			g_ptr_array_free(tags, TRUE);
-		}
-	}
-
-	if (ftags->len == 0)
-	{
-		g_ptr_array_free(ftags, TRUE);
-		g_string_free(words, TRUE);
-		return NULL;
-	}
-
-	tm_tags_sort(ftags, NULL, FALSE, FALSE);
-	for (j = 0; j < ftags->len; j++)
-	{
-		if (j > 0)
-			g_string_append_c(words, '\n');
-		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
-	}
-	g_ptr_array_free(ftags, TRUE);
-	return words;
-}
-
-
 /* Note: if tags is sorted, we can use bsearch or tm_tags_find() to speed this up. */
 static TMTag *
 symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)

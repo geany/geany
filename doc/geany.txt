@@ -3415,9 +3415,6 @@ Complete word                   Ctrl-Space                Shows the autocompleti
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
                                                           method.
 
-Show macro list                 Ctrl-Return               Shows a list of available macros and variables in
-                                                          the workspace.
-
 Complete snippet                Tab                       If you type a construct like if or for and press
                                                           this key, it will be completed with a matching
                                                           template.
