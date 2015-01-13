@@ -2620,9 +2620,16 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
 
 static boolean inheritingDeclaration (declType decl)
 {
-	return (boolean) (decl == DECL_CLASS ||
-					  decl == DECL_STRUCT ||
-					  decl == DECL_INTERFACE);
+	/* enum base types */
+	if (decl == DECL_ENUM)
+	{
+		return (boolean) (isLanguage (Lang_cpp) || isLanguage (Lang_csharp) ||
+			isLanguage (Lang_d));
+	}
+	return (boolean) (
+		decl == DECL_CLASS ||
+		decl == DECL_STRUCT ||
+		decl == DECL_INTERFACE);
 }
 
 static void processColon (statementInfo *const st)
@@ -2638,22 +2645,11 @@ static void processColon (statementInfo *const st)
 	else
 	{
 		cppUngetc (c);
-		if (((isLanguage (Lang_cpp) &&
-				(st->declaration == DECL_CLASS || st->declaration == DECL_STRUCT)) ||
-			isLanguage (Lang_csharp) || isLanguage (Lang_d) || isLanguage (Lang_vala)) &&
+		if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp) || isLanguage (Lang_d) ||
+			isLanguage (Lang_vala)) &&
 			inheritingDeclaration (st->declaration))
 		{
 			readParents (st, ':');
-		}
-		else if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp)) &&
-				 st->declaration == DECL_ENUM)
-		{
-			/* skip enum's base type */
-			c = skipToOneOf ("{;");
-			if (c == '{')
-				setToken (st, TOKEN_BRACE_OPEN);
-			else if (c == ';')
-				setToken (st, TOKEN_SEMICOLON);
 		}
 		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
 		{
