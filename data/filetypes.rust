@@ -26,7 +26,7 @@ lexerror=error
 [keywords]
 # all items must be in one line
 primary=alignof as be box break const continue crate do else enum extern false fn for if impl in let loop match mod mut offsetof once priv proc pub pure ref return self sizeof static struct super trait true type typeof unsafe unsized use virtual while yield
-secondary=bool char f32 f64 i16 i32 i64 i8 int str u16 u32 u64 u8 uint
+secondary=bool char f32 f64 i16 i32 i64 i8 isize str u16 u32 u64 u8 usize
 tertiary=Self
 
 [lexer_properties]
