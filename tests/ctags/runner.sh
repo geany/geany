@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# error out on undefined variable expansion, usful for debugging
+# error out on undefined variable expansion, useful for debugging
 set -u
 
 # FIXME: get this from automake so we have $(EXEEXT)

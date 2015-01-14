@@ -243,6 +243,7 @@ test_sources = \
 	signature.cpp					\
 	simple.bas						\
 	simple.cbl						\
+	simple.d						\
 	simple.html						\
 	simple.js						\
 	simple.ksh						\
