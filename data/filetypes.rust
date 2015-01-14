@@ -25,7 +25,7 @@ lexerror=error
 
 [keywords]
 # all items must be in one line
-primary=abstract alignof as be box break const continue crate do else enum extern false final fn for if impl in let loop macro match mod move mut offsetof override priv pub pure ref return sizeof static self struct super true trait type typeof unsafe unsized use virtual where while yield
+primary=abstract alignof as be box break const continue crate do else enum extern false final fn for if impl in let loop macro match mod move mut offsetof override priv pub pure ref return self sizeof static struct super trait true type typeof unsafe unsized use virtual where while yield
 secondary=bool char f32 f64 i16 i32 i64 i8 int str u16 u32 u64 u8 uint
 tertiary=Self
 
