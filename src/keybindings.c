@@ -511,6 +511,16 @@ static void init_default_kb(void)
 		GDK_minus, GDK_CONTROL_MASK, "menu_zoomout", _("Zoom Out"), "menu_zoom_out1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMRESET, NULL,
 		GDK_0, GDK_CONTROL_MASK, "normal_size", _("Zoom Reset"), "normal_size1");
+	add_kb(group, GEANY_KEYS_VIEW_MARKERSMARGIN, NULL,
+		0, 0, "toggle_markersmargin", _("Show markers margin"), "menu_markers_margin1");
+	add_kb(group, GEANY_KEYS_VIEW_LINENUMBERS, NULL,
+		0, 0, "toggle_linenumbers", _("Show line numbers"), "menu_linenumber_margin1");
+	add_kb(group, GEANY_KEYS_VIEW_WHITESPACES, NULL,
+		0, 0, "toggle_whitespaces", _("Show white space"), "menu_show_white_space1");
+	add_kb(group, GEANY_KEYS_VIEW_LINEENDINGS, NULL,
+		0, 0, "toggle_lineendings", _("Show line endings"), "menu_show_line_endings1");
+	add_kb(group, GEANY_KEYS_VIEW_INDENTATIONGUIDES, NULL,
+		0, 0, "toggle_indentationguides", _("Show indentation guides"), "menu_show_indentation_guides1");
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_FOCUS);
 
@@ -1501,6 +1511,26 @@ static gboolean cb_func_view_action(guint key_id)
 			break;
 		case GEANY_KEYS_VIEW_ZOOMRESET:
 			on_normal_size1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_MARKERSMARGIN:
+			on_markers_margin1_toggled(NULL, NULL);
+			ui_update_view_editor_menu_items();
+			break;
+		case GEANY_KEYS_VIEW_LINENUMBERS:
+			on_show_line_numbers1_toggled(NULL, NULL);
+			ui_update_view_editor_menu_items();
+			break;
+		case GEANY_KEYS_VIEW_WHITESPACES:
+			on_menu_show_white_space1_toggled(NULL, NULL);
+			ui_update_view_editor_menu_items();
+			break;
+		case GEANY_KEYS_VIEW_LINEENDINGS:
+			on_menu_show_line_endings1_toggled(NULL, NULL);
+			ui_update_view_editor_menu_items();
+			break;
+		case GEANY_KEYS_VIEW_INDENTATIONGUIDES:
+			on_menu_show_indentation_guides1_toggled(NULL, NULL);
+			ui_update_view_editor_menu_items();
 			break;
 		default:
 			break;

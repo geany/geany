@@ -3691,6 +3691,16 @@ Zoom In                         Ctrl-+  (C)               Zooms in the text.
 Zoom Out                        Ctrl--  (C)               Zooms out the text.
 
 Zoom Reset                      Ctrl-0                    Reset any previous zoom on the text.
+
+Show Markers Margin                                       Shows or hides the markers margin
+
+Show Line Numbers                                         Shows or hides line numbers
+
+Show White Space                                          Shows or hides white spaces
+
+Show Line Endings                                         Shows or hides line endings
+
+Show Indentation Guides                                   Shows or hides indentation guides
 =============================== ========================= ==================================================
 
 Focus keybindings
