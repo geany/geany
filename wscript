@@ -308,17 +308,18 @@ but you then may not have a local copy of the HTML manual.'''
     conf.write_config_header('config.h', remove=False)
 
     # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
-    # FIXME: should I put quoting in the appended values or are they passed as-is?
     if is_win32:
-        conf.env.append_value('CFLAGS', ['-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)'])
+        geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)']
     # FIXME: check for -fvisibility and the __attribute__((visibility)), or
     #        at least for GCC >= 4
     elif conf.env['CC_NAME'] == 'gcc':
-        conf.env.append_value('CFLAGS', ['-fvisibility=hidden',
-                                         '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))'])
+        geany_symbol_flags = ['-fvisibility=hidden',
+                              '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
     else:  # unknown, define to nothing
-        conf.env.append_value('CFLAGS', ['-DGEANY_EXPORT_SYMBOL='])
-    conf.env.append_value('CFLAGS', ['-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL'])
+        geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=']
+    geany_symbol_flags.append('-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
+    conf.env.append_value('CFLAGS', geany_symbol_flags)
+    conf.env.append_value('CXXFLAGS', geany_symbol_flags)
 
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
