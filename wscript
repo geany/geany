@@ -186,6 +186,7 @@ def configure(conf):
     conf.load('compiler_c')
     is_win32 = _target_is_win32(conf)
 
+    visibility_hidden_supported = conf.check_cc(cflags=['-Werror', '-fvisibility=hidden'], mandatory=False)
     conf.check_cc(header_name='fcntl.h', mandatory=False)
     conf.check_cc(header_name='fnmatch.h', mandatory=False)
     conf.check_cc(header_name='glob.h', mandatory=False)
@@ -310,9 +311,7 @@ but you then may not have a local copy of the HTML manual.'''
     # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
     if is_win32:
         geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)']
-    # FIXME: check for -fvisibility and the __attribute__((visibility)), or
-    #        at least for GCC >= 4
-    elif conf.env['CC_NAME'] == 'gcc':
+    elif visibility_hidden_supported:
         geany_symbol_flags = ['-fvisibility=hidden',
                               '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
     else:  # unknown, define to nothing
