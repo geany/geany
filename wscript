@@ -58,6 +58,8 @@ MINIMUM_GTK_VERSION = '2.16.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
 MINIMUM_GLIB_VERSION = '2.20.0'
 
+GEANY_LIB_VERSION = '0.0.0'
+
 top = '.'
 out = '_build_'
 
@@ -131,7 +133,7 @@ geany_sources = set([
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
     'src/highlighting.c', 'src/keybindings.c',
-    'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
+    'src/keyfile.c', 'src/log.c', 'src/libmain.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c'
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
@@ -400,6 +402,7 @@ def build(bld):
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
             uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
+            use                     = ['geany'],
             install_path            = instpath)
 
     # CTags
@@ -454,23 +457,29 @@ def build(bld):
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
 
+    base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
+    # libgeany
     bld(
-        features        = ['c', 'cxx', 'cprogram'],
+        features        = ['c', 'cxx', 'cshlib'],
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M'],
-        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
+        uselib          = base_uselibs,
+        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
+        vnum            = GEANY_LIB_VERSION)
 
-    # geanyfunctions.h
+    # geany executable
     bld(
-        source  = ['plugins/genapi.py', 'src/plugins.c'],
-        name    = 'geanyfunctions.h',
-        before  = ['c', 'cxx'],
-        cwd     = '%s/plugins' % bld.path.abspath(),
-        rule    = '%s genapi.py -q' % sys.executable)
+        features        = ['c', 'cxx', 'cprogram'],
+        name            = 'geany_bin',
+        target          = 'geany',
+        source          = ['src/main.c'],
+        includes        = ['.', 'scintilla/include', 'tagmanager/src'],
+        defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
+        uselib          = base_uselibs,
+        use             = ['geany'])
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
