@@ -1550,6 +1550,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 			return (style == SCE_COFFEESCRIPT_CHARACTER ||
 				style == SCE_COFFEESCRIPT_STRING ||
 				style == SCE_COFFEESCRIPT_STRINGEOL);
+
+		case SCLEX_VERILOG:
+			return (style == SCE_V_STRING);
 	}
 	return FALSE;
 }
@@ -1715,6 +1718,12 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			return (style == SCE_COFFEESCRIPT_COMMENTLINE ||
 				style == SCE_COFFEESCRIPT_COMMENTBLOCK ||
 				style == SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT);
+
+		case SCLEX_VERILOG:
+			return (style == SCE_V_COMMENT ||
+				style == SCE_V_COMMENTLINE ||
+				style == SCE_V_COMMENTLINEBANG ||
+				style == SCE_V_COMMENT_WORD);
 	}
 	return FALSE;
 }
@@ -1741,6 +1750,12 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 		case SCLEX_LITERATEHASKELL:
 		{
 			if (style == SCE_HA_PREPROCESSOR)
+				return FALSE;
+			break;
+		}
+		case SCLEX_VERILOG:
+		{
+			if (style == SCE_V_PREPROCESSOR)
 				return FALSE;
 			break;
 		}
