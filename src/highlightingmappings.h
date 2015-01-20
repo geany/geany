@@ -268,7 +268,7 @@ static const HLKeyword highlighting_keywords_C[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE }
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 static const HLProperty highlighting_properties_C[] =
 {
@@ -467,7 +467,7 @@ static const HLKeyword highlighting_keywords_D[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 	{ 4, "types",		FALSE },
 };
 #define highlighting_properties_D		EMPTY_PROPERTIES
@@ -864,7 +864,7 @@ static const HLKeyword highlighting_keywords_JAVA[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "doccomment",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 	{ 4, "typedefs",	FALSE }
 };
 #define highlighting_properties_JAVA	highlighting_properties_C
@@ -1082,7 +1082,7 @@ static const HLKeyword highlighting_keywords_OBJECTIVEC[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE }
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 #define highlighting_properties_OBJECTIVEC	highlighting_properties_C
 
@@ -1372,7 +1372,7 @@ static const HLKeyword highlighting_keywords_RUST[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
 	{ 1, "secondary",	TRUE },
 	{ 2, "tertiary",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 #define highlighting_properties_RUST		EMPTY_PROPERTIES
 
