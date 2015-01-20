@@ -449,12 +449,12 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 	PRectangle rcClient = GetClientRectangle();
 	int offset = vs.lineHeight + static_cast<int>(rc.Height());
 	// adjust so it displays above the text.
-	if (rc.bottom > rcClient.bottom) {
+	if (rc.bottom > rcClient.bottom && rc.Height() < rcClient.Height()) {
 		rc.top -= offset;
 		rc.bottom -= offset;
 	}
 	// adjust so it displays below the text.
-	if (rc.top < rcClient.top) {
+	if (rc.top < rcClient.top && rc.Height() < rcClient.Height()) {
 		rc.top += offset;
 		rc.bottom += offset;
 	}

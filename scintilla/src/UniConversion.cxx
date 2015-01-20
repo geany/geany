@@ -82,10 +82,10 @@ unsigned int UTF8CharLength(unsigned char ch) {
 	}
 }
 
-unsigned int UTF16Length(const char *s, unsigned int len) {
-	unsigned int ulen = 0;
-	unsigned int charLen;
-	for (unsigned int i=0; i<len;) {
+size_t UTF16Length(const char *s, size_t len) {
+	size_t ulen = 0;
+	size_t charLen;
+	for (size_t i = 0; i<len;) {
 		unsigned char ch = static_cast<unsigned char>(s[i]);
 		if (ch < 0x80) {
 			charLen = 1;
@@ -103,10 +103,10 @@ unsigned int UTF16Length(const char *s, unsigned int len) {
 	return ulen;
 }
 
-unsigned int UTF16FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen) {
-	unsigned int ui=0;
+size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
+	size_t ui = 0;
 	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
-	unsigned int i=0;
+	size_t i = 0;
 	while ((i<len) && (ui<tlen)) {
 		unsigned char ch = us[i++];
 		if (ch < 0x80) {

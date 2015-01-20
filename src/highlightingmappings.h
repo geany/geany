@@ -1563,13 +1563,19 @@ static const HLStyle highlighting_styles_VERILOG[] =
 	{ SCE_V_OPERATOR,			"operator",				FALSE },
 	{ SCE_V_IDENTIFIER,			"identifier",			FALSE },
 	{ SCE_V_STRINGEOL,			"stringeol",			FALSE },
-	{ SCE_V_USER,				"userword",				FALSE }
+	{ SCE_V_USER,				"userword",				FALSE },
+	{ SCE_V_COMMENT_WORD,		"comment_word",			FALSE },
+	{ SCE_V_INPUT,				"input",				FALSE },
+	{ SCE_V_OUTPUT,				"output",				FALSE },
+	{ SCE_V_INOUT,				"inout",				FALSE },
+	{ SCE_V_PORT_CONNECT,		"port_connect",			FALSE }
 };
 static const HLKeyword highlighting_keywords_VERILOG[] =
 {
-	{ 0, "word",	FALSE },
-	{ 1, "word2",	FALSE },
-	{ 2, "word3",	FALSE }
+	{ 0, "word",		FALSE },
+	{ 1, "word2",		FALSE },
+	{ 2, "word3",		FALSE },
+	{ 4, "docComment",	FALSE }
 };
 #define highlighting_properties_VERILOG		EMPTY_PROPERTIES
 

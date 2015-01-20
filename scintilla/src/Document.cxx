@@ -37,6 +37,7 @@
 #include "Document.h"
 #include "RESearch.h"
 #include "UniConversion.h"
+#include "UnicodeFromUTF8.h"
 
 #ifdef SCI_NAMESPACE
 using namespace Scintilla;
@@ -766,19 +767,6 @@ bool Document::NextCharacter(int &pos, int moveDir) const {
 	}
 }
 
-static inline int UnicodeFromBytes(const unsigned char *us) {
-	if (us[0] < 0xC2) {
-		return us[0];
-	} else if (us[0] < 0xE0) {
-		return ((us[0] & 0x1F) << 6) + (us[1] & 0x3F);
-	} else if (us[0] < 0xF0) {
-		return ((us[0] & 0xF) << 12) + ((us[1] & 0x3F) << 6) + (us[2] & 0x3F);
-	} else if (us[0] < 0xF5) {
-		return ((us[0] & 0x7) << 18) + ((us[1] & 0x3F) << 12) + ((us[2] & 0x3F) << 6) + (us[3] & 0x3F);
-	}
-	return us[0];
-}
-
 // Return -1  on out-of-bounds
 int SCI_METHOD Document::GetRelativePosition(int positionStart, int characterOffset) const {
 	int pos = positionStart;
@@ -819,7 +807,7 @@ int SCI_METHOD Document::GetCharacterAndWidth(int position, int *pWidth) const {
 					character =  0xDC80 + leadByte;
 				} else {
 					bytesInCharacter = utf8status & UTF8MaskWidth;
-					character = UnicodeFromBytes(charBytes);
+					character = UnicodeFromUTF8(charBytes);
 				}
 			}
 		} else {
@@ -1610,7 +1598,7 @@ Document::CharacterExtracted Document::ExtractCharacter(int position) const {
 		// Treat as invalid and use up just one byte
 		return CharacterExtracted(unicodeReplacementChar, 1);
 	} else {
-		return CharacterExtracted(UnicodeFromBytes(charBytes), utf8status & UTF8MaskWidth);
+		return CharacterExtracted(UnicodeFromUTF8(charBytes), utf8status & UTF8MaskWidth);
 	}
 }
 

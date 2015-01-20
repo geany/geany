@@ -8,10 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
 #include <assert.h>
 #include <ctype.h>
 
+#include <cmath>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -1333,7 +1333,9 @@ void Editor::ShowCaretAtCurrentPosition() {
 
 void Editor::DropCaret() {
 	caret.active = false;
-	FineTickerCancel(tickCaret);
+	if (FineTickerAvailable()) {
+		FineTickerCancel(tickCaret);
+	}
 	InvalidateCaret();
 }
 
@@ -1896,6 +1898,13 @@ void Editor::AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS) {
 	if (recordingMacro) {
 		NotifyMacroRecord(SCI_REPLACESEL, 0, reinterpret_cast<sptr_t>(s));
 	}
+}
+
+void Editor::FillVirtualSpace() {
+	const bool tmpOverstrike = inOverstrike;
+	inOverstrike = false;         // not allow to be deleted twice.
+	AddCharUTF("", 0);
+	inOverstrike = tmpOverstrike;
 }
 
 void Editor::InsertPaste(const char *text, int len) {
@@ -3283,7 +3292,6 @@ int Editor::KeyCommand(unsigned int iMessage) {
 		break;
 	case SCI_EDITTOGGLEOVERTYPE:
 		inOverstrike = !inOverstrike;
-		DropCaret();
 		ShowCaretAtCurrentPosition();
 		ContainerNeedsUpdate(SC_UPDATE_CONTENT);
 		NotifyUpdateUI();
@@ -3779,9 +3787,9 @@ void Editor::GoToLine(int lineNo) {
 }
 
 static bool Close(Point pt1, Point pt2, Point threshold) {
-	if (abs(pt1.x - pt2.x) > threshold.x)
+	if (std::abs(pt1.x - pt2.x) > threshold.x)
 		return false;
-	if (abs(pt1.y - pt2.y) > threshold.y)
+	if (std::abs(pt1.y - pt2.y) > threshold.y)
 		return false;
 	return true;
 }
@@ -4000,7 +4008,7 @@ bool Editor::PointInSelMargin(Point pt) const {
 		PRectangle rcSelMargin = GetClientRectangle();
 		rcSelMargin.right = static_cast<XYPOSITION>(vs.textStart - vs.leftMarginWidth);
 		rcSelMargin.left = static_cast<XYPOSITION>(vs.textStart - vs.fixedColumnWidth);
-		return rcSelMargin.Contains(pt);
+		return rcSelMargin.ContainsWholePixel(pt);
 	} else {
 		return false;
 	}
@@ -4671,12 +4679,10 @@ void Editor::FineTickerCancel(TickReason) {
 void Editor::SetFocusState(bool focusState) {
 	hasFocus = focusState;
 	NotifyFocus(hasFocus);
-	if (hasFocus) {
-		ShowCaretAtCurrentPosition();
-	} else {
+	if (!hasFocus) {
 		CancelModes();
-		DropCaret();
 	}
+	ShowCaretAtCurrentPosition();
 }
 
 int Editor::PositionAfterArea(PRectangle rcArea) const {
