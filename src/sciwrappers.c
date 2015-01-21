@@ -861,11 +861,11 @@ gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
  * @param style The style.
  * @param font The font name.
  * @param size The font (fractional) size. */
-void sci_set_font_fract(ScintillaObject *sci, gint style, const gchar *font, double size)
+void sci_set_font_fract(ScintillaObject *sci, gint style, const gchar *font, gdouble size)
 {
 	SSM(sci, SCI_STYLESETFONT, (uptr_t) style, (sptr_t) font);
 
-  // Adding 0.5 is to round.
+	// Adding 0.5 is for rounding.
 	SSM(sci, SCI_STYLESETSIZEFRACTIONAL, (uptr_t) style, 100.0*size + 0.5);
 }
 
@@ -876,7 +876,7 @@ void sci_set_font_fract(ScintillaObject *sci, gint style, const gchar *font, dou
  * @param size The font size. */
 void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size)
 {
-  sci_set_font_fract(sci, style, font, size);
+	sci_set_font_fract(sci, style, font, size);
 }
 
 

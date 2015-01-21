@@ -72,7 +72,7 @@ gchar				sci_get_char_at				(ScintillaObject *sci, gint pos);
 
 void				sci_scroll_caret			(ScintillaObject *sci);
 gint				sci_find_text				(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf);
-void				sci_set_font_fract				(ScintillaObject *sci, gint style, const gchar *font, double size);
+void				sci_set_font_fract			(ScintillaObject *sci, gint style, const gchar *font, double size);
 void				sci_set_font				(ScintillaObject *sci, gint style, const gchar *font, gint size);
 void				sci_goto_line				(ScintillaObject *sci, gint line, gboolean unfold);
 gint				sci_get_style_at			(ScintillaObject *sci, gint position);
