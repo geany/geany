@@ -4591,19 +4591,20 @@ void editor_ensure_final_newline(GeanyEditor *editor)
 
 void editor_set_font(GeanyEditor *editor, const gchar *font)
 {
-	gint style, size;
+	gint style;
 	gchar *font_name;
 	PangoFontDescription *pfd;
+	gdouble size;
 
 	g_return_if_fail(editor);
 
 	pfd = pango_font_description_from_string(font);
-	size = pango_font_description_get_size(pfd) / PANGO_SCALE;
+	size = pango_font_description_get_size(pfd) / (gdouble) PANGO_SCALE;
 	font_name = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	pango_font_description_free(pfd);
 
 	for (style = 0; style <= STYLE_MAX; style++)
-		sci_set_font(editor->sci, style, font_name, size);
+		sci_set_font_fractional(editor->sci, style, font_name, size);
 
 	g_free(font_name);
 
