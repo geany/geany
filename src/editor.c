@@ -4460,12 +4460,12 @@ void editor_set_font(GeanyEditor *editor, const gchar *font)
 	g_return_if_fail(editor);
 
 	pfd = pango_font_description_from_string(font);
-	size = pango_font_description_get_size(pfd) / PANGO_SCALE;
+	size = (100*pango_font_description_get_size(pfd)) / PANGO_SCALE;
 	font_name = g_strdup_printf("!%s", pango_font_description_get_family(pfd));
 	pango_font_description_free(pfd);
 
 	for (style = 0; style <= STYLE_MAX; style++)
-		sci_set_font(editor->sci, style, font_name, size);
+		sci_set_font_fract(editor->sci, style, font_name, size/100.0);
 
 	g_free(font_name);
 
