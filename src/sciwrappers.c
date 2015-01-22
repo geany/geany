@@ -856,7 +856,7 @@ gint sci_find_text(ScintillaObject *sci, gint flags, struct Sci_TextToFind *ttf)
 	return (gint) SSM(sci, SCI_FINDTEXT, (uptr_t) flags, (sptr_t) ttf);
 }
 
-/** Sets the font for a particular style.
+/* * Sets the font for a particular style.
  * @param sci Scintilla widget.
  * @param style The style.
  * @param font The font name.
