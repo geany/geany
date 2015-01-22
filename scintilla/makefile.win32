@@ -11,6 +11,13 @@
 CXX = g++
 CC = gcc
 AR = ar
+
+ifdef GTK3
+GTKVERSION=gtk+-3.0
+else
+GTKVERSION=gtk+-2.0
+endif
+
 RANLIB = ranlib
 PREFIX = C:/libs
 RM = del
@@ -22,25 +29,12 @@ endif
 
 COMPLIB=scintilla.a
 
-GTK_INCLUDES= \
-	-I$(PREFIX)/include/gtk-2.0 \
-	-I$(PREFIX)/lib/gtk-2.0/include \
-	-I$(PREFIX)/include/atk-1.0 \
-	-I$(PREFIX)/include/cairo \
-	-I$(PREFIX)/include/gdk-pixbuf-2.0 \
-	-I$(PREFIX)/include/pango-1.0 \
-	-I$(PREFIX)/include/glib-2.0 \
-	-I$(PREFIX)/lib/glib-2.0/include \
-	-I$(PREFIX)/include \
-	-I$(PREFIX)/include/gettext
-
-
-vpath %.h gtk lexers lexlib src include
+vpath %.h gtk lexlib src include
 vpath %.cxx gtk lexers lexlib src
 vpath %.c gtk
 
-INCLUDEDIRS=-I include -I src -I lexlib -I . $(GTK_INCLUDES)
-CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS) -mms-bitfields
+INCLUDEDIRS=-I include -I src -I lexlib -I .
+CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS)
 
 ifdef THREADS
 THREADFLAGS=
@@ -48,113 +42,43 @@ else
 THREADFLAGS=-DG_THREADS_IMPL_NONE
 endif
 
+
 ifdef DEBUG
-CXXFLAGS=-DDEBUG -g -O0 $(CXXBASEFLAGS) $(THREADFLAGS)
+CTFLAGS=-DDEBUG -g -O0 $(CXXBASEFLAGS) $(THREADFLAGS)
 else
-CXXFLAGS=-DNDEBUG -Os $(CXXBASEFLAGS) $(THREADFLAGS)
+CTFLAGS=-DNDEBUG -Os $(CXXBASEFLAGS) $(THREADFLAGS)
 endif
 
-CONFIGFLAGS=$(GTK_INCLUDES)
+CFLAGS:=$(CTFLAGS)
+CXXTFLAGS:=--std=c++0x $(CTFLAGS) $(REFLAGS)
+
+CONFIGFLAGS:=$(shell pkg-config --cflags $(GTKVERSION))
 MARSHALLER=scintilla-marshal.o
 
 .cxx.o:
-	$(CXX) $(CXXFLAGS) -c $<
+	$(CXX) $(CONFIGFLAGS) $(CXXTFLAGS) $(CXXFLAGS) -c $<
 .c.o:
-	$(CC) $(CXXFLAGS) -c $<
+	$(CC) $(CONFIGFLAGS) $(CFLAGS) -w -c $<
 
-LEXOBJS=\
-LexAbaqus.o \
-LexAda.o \
-LexAsm.o \
-LexBash.o \
-LexCOBOL.o \
-LexCSS.o \
-LexCPP.o \
-LexCoffeeScript.o \
-LexHTML.o \
-LexOthers.o \
-LexPascal.o \
-LexPerl.o \
-LexPO.o \
-LexPowerShell.o \
-LexPython.o \
-LexSQL.o \
-LexCaml.o \
-LexTCL.o \
-LexTxt2tags.o \
-LexRuby.o \
-LexErlang.o \
-LexForth.o \
-LexFortran.o \
-LexVHDL.o \
-LexVerilog.o \
-LexMarkdown.o \
-LexMatlab.o \
-LexD.o \
-LexLaTeX.o \
-LexLisp.o \
-LexLua.o \
-LexHaskell.o \
-LexBasic.o \
-LexR.o \
-LexRust.o \
-LexYAML.o \
-LexCmake.o \
-LexNsis.o
+LEXOBJS:=$(addsuffix .o,$(basename $(notdir $(wildcard lexers/Lex*.cxx))))
 
 all: $(COMPLIB)
 
 clean:
-	-$(RM) deps.mak *.o $(COMPLIB)
-
-SRCOBJS=\
-	PlatGTK.o \
-	ScintillaGTK.o \
-	Accessor.o \
-	CharacterCategory.o \
-	CaseConvert.o \
-	CaseFolder.o \
-	CharacterSet.o \
-	LexerBase.o \
-	LexerModule.o \
-	LexerNoExceptions.o \
-	LexerSimple.o \
-	PropSetSimple.o \
-	StyleContext.o \
-	WordList.o \
-	AutoComplete.o \
-	CallTip.o \
-	Catalogue.o \
-	CellBuffer.o \
-	CharClassify.o \
-	ContractionState.o \
-	Decoration.o \
-	Document.o \
-	Editor.o \
-	EditModel.o \
-	EditView.o \
-	ExternalLexer.o \
-	Indicator.o \
-	KeyMap.o \
-	LineMarker.o \
-	MarginView.o \
-	PerLine.o \
-	PositionCache.o \
-	RESearch.o \
-	RunStyles.o \
-	ScintillaBase.o \
-	Selection.o \
-	Style.o \
-	UniConversion.o \
-	ViewStyle.o \
-	XPM.o
-
-$(COMPLIB): $(MARSHALLER) $(LEXOBJS) $(SRCOBJS)
-	$(AR) rc $@ $^
-	$(RANLIB) $@
+	-$(RM) deps.mak *.o $(COMPLIB) *.plist
 
 deps.mak:
-	$(CXX) -MM  $(CXXFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
+	$(CXX) -MM  $(CONFIGFLAGS) $(CXXTFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
+
+$(COMPLIB): Accessor.o CharacterSet.o LexerBase.o LexerModule.o LexerSimple.o StyleContext.o WordList.o \
+	CharClassify.o Decoration.o Document.o PerLine.o Catalogue.o CallTip.o CaseConvert.o CaseFolder.o \
+	ScintillaBase.o ContractionState.o EditModel.o Editor.o EditView.o ExternalLexer.o MarginView.o \
+	PropSetSimple.o PlatGTK.o \
+	KeyMap.o LineMarker.o PositionCache.o ScintillaGTK.o CellBuffer.o CharacterCategory.o ViewStyle.o \
+	RESearch.o RunStyles.o Selection.o Style.o Indicator.o AutoComplete.o UniConversion.o XPM.o \
+	$(MARSHALLER) $(LEXOBJS)
+	$(AR) rc $@ $^
+	$(RANLIB) $@
 
 # Generate header dependencies with "make deps.mak"
 include deps.mak
