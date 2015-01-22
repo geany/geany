@@ -1,11 +1,10 @@
 # Make file for Scintilla on Linux or compatible OS
-# Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
+# Copyright 1998-2010 by Neil Hodgson <neilh@scintilla.org>
 # The License.txt file describes the conditions under which this software may be distributed.
-# This makefile assumes GCC 3.1 is used and changes will be needed to use other compilers.
+# This makefile assumes GCC 4.3 is used and changes will be needed to use other compilers.
 # GNU make does not like \r\n line endings so should be saved to CVS in binary form.
-# Builds for GTK+ 2 if available else GTK+ 1.
-# To force GTK+ 2 build, define GTK2 on the make command line.
-# To force GTK+ 1 build, define GTK1 on the make command line.
+# Builds for GTK+ 2 and no longer supports GTK+ 1.
+# Also works with ming32-make on Windows.
 
 .SUFFIXES: .cxx .c .o .h .a
 CXX = g++
@@ -21,19 +20,18 @@ endif
 RANLIB = ranlib
 PREFIX = C:/libs
 RM = del
--include ../localwin32.mk
+-include ../../localwin32.mk
 
 ifdef MSYS
 RM = rm -f
 endif
 
-COMPLIB=scintilla.a
+COMPLIB=../scintilla.a
 
-vpath %.h gtk lexlib src include
-vpath %.cxx gtk lexers lexlib src
-vpath %.c gtk
+vpath %.h ../src ../include ../lexlib
+vpath %.cxx ../src ../lexlib ../lexers
 
-INCLUDEDIRS=-I include -I src -I lexlib -I .
+INCLUDEDIRS=-I ../include -I ../src -I ../lexlib
 CXXBASEFLAGS=-Wall -Wno-missing-braces -Wno-char-subscripts -DGTK -DSCI_LEXER $(INCLUDEDIRS)
 
 ifdef THREADS
@@ -60,7 +58,7 @@ MARSHALLER=scintilla-marshal.o
 .c.o:
 	$(CC) $(CONFIGFLAGS) $(CFLAGS) -w -c $<
 
-LEXOBJS:=$(addsuffix .o,$(basename $(notdir $(wildcard lexers/Lex*.cxx))))
+LEXOBJS:=$(addsuffix .o,$(basename $(notdir $(wildcard ../lexers/Lex*.cxx))))
 
 all: $(COMPLIB)
 
@@ -68,7 +66,7 @@ clean:
 	-$(RM) deps.mak *.o $(COMPLIB) *.plist
 
 deps.mak:
-	$(CXX) -MM  $(CONFIGFLAGS) $(CXXTFLAGS) gtk/*.cxx lexers/*.cxx lexlib/*.cxx src/*.cxx >deps.mak
+	$(CXX) -MM $(CONFIGFLAGS) $(CXXTFLAGS) *.cxx ../src/*.cxx ../lexlib/*.cxx ../lexers/*.cxx >deps.mak
 
 $(COMPLIB): Accessor.o CharacterSet.o LexerBase.o LexerModule.o LexerSimple.o StyleContext.o WordList.o \
 	CharClassify.o Decoration.o Document.o PerLine.o Catalogue.o CallTip.o CaseConvert.o CaseFolder.o \
