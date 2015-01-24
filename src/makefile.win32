@@ -51,7 +51,7 @@ ALL_GTK_LIBS= \
 	#"$(PREFIX)/lib/asprintf.lib" \
 	#"$(PREFIX)/lib/charset.lib" \
 
-WIN_LIBS=-mwindows -lole32 -luuid -liberty -lwsock32
+WIN_LIBS=-mwindows -lole32 -luuid -lwsock32
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 ifdef DEBUG
