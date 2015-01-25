@@ -234,6 +234,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_CLONE,					/**< Keybinding. */
 	GEANY_KEYS_FILE_QUIT,						/**< Keybinding. */
+	GEANY_KEYS_VIEW_LONGLINE,					/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
