@@ -176,7 +176,7 @@ static void apply_settings(void)
 	{
 		ignore_callback = TRUE;
 		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
-		gtk_widget_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"));
+		gtk_widget_hide(main_widgets.message_window_notebook);
 		ignore_callback = FALSE;
 	}
 	if (! ui_prefs.sidebar_visible)
