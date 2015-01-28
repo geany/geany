@@ -1973,6 +1973,12 @@ Show documents list
 Position
     Whether to place the sidebar on the left or right of the editor window.
 
+Message window
+``````````````
+
+Position
+    Whether to place the message window on the bottom or right of the editor window.
+
 Fonts
 `````
 
