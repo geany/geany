@@ -122,7 +122,9 @@ enum
 static guint doc_id_counter = 0;
 
 
+static void document_undo_clear_stack(GTrashStack **stack);
 static void document_undo_clear(GeanyDocument *doc);
+static void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data);
 static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
@@ -2701,14 +2703,14 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
  * to the encoding or the Unicode BOM (which are Scintilla independet).
  * All Scintilla events are stored in the undo / redo buffer and are passed through. */
 
-/* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
-void document_undo_clear(GeanyDocument *doc)
+/* Clears an Undo or Redo buffer. */
+void document_undo_clear_stack(GTrashStack **stack)
 {
 	undo_action *a;
 
-	while (g_trash_stack_height(&doc->priv->undo_actions) > 0)
+	while (g_trash_stack_height(stack) > 0)
 	{
-		a = g_trash_stack_pop(&doc->priv->undo_actions);
+		a = g_trash_stack_pop(stack);
 		if (G_LIKELY(a != NULL))
 		{
 			switch (a->type)
@@ -2719,30 +2721,25 @@ void document_undo_clear(GeanyDocument *doc)
 			g_free(a);
 		}
 	}
-	doc->priv->undo_actions = NULL;
+	*stack = NULL;
+}
 
-	while (g_trash_stack_height(&doc->priv->redo_actions) > 0)
-	{
-		a = g_trash_stack_pop(&doc->priv->redo_actions);
-		if (G_LIKELY(a != NULL))
-		{
-			switch (a->type)
-			{
-				case UNDO_ENCODING: g_free(a->data); break;
-				default: break;
-			}
-			g_free(a);
-		}
-	}
-	doc->priv->redo_actions = NULL;
+/* Clears the Undo and Redo buffer (to be called when reloading or closing the document) */
+void document_undo_clear(GeanyDocument *doc)
+{
+	document_undo_clear_stack(&doc->priv->undo_actions);
+	document_undo_clear_stack(&doc->priv->redo_actions);
 
 	if (! main_status.quitting && doc->editor != NULL)
 		document_set_text_changed(doc, FALSE);
 }
 
 
-/* note: this is called on SCN_MODIFIED notifications */
-void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
+/* Adds an undo action without clearing the redo stack. This function should
+ * not be called directly, generally (use document_undo_add() instead), but is
+ * used by document_redo() in order not to erase the redo stack while moving
+ * an action from the redo stack to the undo stack. */
+void document_undo_add_internal(GeanyDocument *doc, guint type, gpointer data)
 {
 	undo_action *action;
 
@@ -2759,6 +2756,15 @@ void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
 		document_set_text_changed(doc, TRUE);
 
 	ui_update_popup_reundo_items(doc);
+}
+
+/* note: this is called on SCN_MODIFIED notifications */
+void document_undo_add(GeanyDocument *doc, guint type, gpointer data)
+{
+	/* Clear the redo actions stack before adding the undo action. */
+	document_undo_clear_stack(&doc->priv->redo_actions);
+
+	document_undo_add_internal(doc, type, data);
 }
 
 
@@ -2872,14 +2878,14 @@ void document_redo(GeanyDocument *doc)
 		{
 			case UNDO_SCINTILLA:
 			{
-				document_undo_add(doc, UNDO_SCINTILLA, NULL);
+				document_undo_add_internal(doc, UNDO_SCINTILLA, NULL);
 
 				sci_redo(doc->editor->sci);
 				break;
 			}
 			case UNDO_BOM:
 			{
-				document_undo_add(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
+				document_undo_add_internal(doc, UNDO_BOM, GINT_TO_POINTER(doc->has_bom));
 
 				doc->has_bom = GPOINTER_TO_INT(action->data);
 				ui_update_statusbar(doc, -1);
@@ -2888,7 +2894,7 @@ void document_redo(GeanyDocument *doc)
 			}
 			case UNDO_ENCODING:
 			{
-				document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
+				document_undo_add_internal(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
 
