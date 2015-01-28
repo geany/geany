@@ -34,8 +34,16 @@ enum
 	UNDO_SCINTILLA = 0,
 	UNDO_ENCODING,
 	UNDO_BOM,
+	UNDO_RELOAD,
 	UNDO_ACTIONS_MAX
 };
+
+typedef struct UndoReloadData
+{
+	guint actions_count; /* How many following undo/redo actions need to be applied. */
+	gint eol_mode;       /* End-Of-Line mode before/after reloading. */
+}
+UndoReloadData;
 
 typedef enum
 {

@@ -2646,6 +2646,9 @@ use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        t
                                   correctly on some complex setups.
 gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false       immediately
                                   saving. Backup is named `filename~`.
+keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
+                                  reloading a file, and allow the operation
+                                  to be reverted.
 **Filetype related**
 extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.
@@ -3370,8 +3373,7 @@ Close all                       Ctrl-Shift-W              Closes all open files.
 
 Close                           Ctrl-W  (C)               Closes the current file.
 
-Reload file                     Ctrl-R  (C)               Reloads the current file. All unsaved changes
-                                                          will be lost.
+Reload file                     Ctrl-R  (C)               Reloads the current file.
 
 Print                           Ctrl-P  (C)               Prints the current file.
 
