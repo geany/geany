@@ -69,12 +69,12 @@ typedef enum {
 static langType Lang_json;
 
 static kindOption JsonKinds [] = {
-	{ TRUE,  'o', "object",		"objects"	},
-	{ TRUE,  'a', "array",		"arrays"	},
-	{ TRUE,  'n', "number",		"numbers"	},
-	{ TRUE,  's', "string",		"strings"	},
-	{ TRUE,  'b', "boolean",	"booleans"	},
-	{ TRUE,  'z', "null",		"nulls"		}
+	{ TRUE,  'o', "member",		"objects"	},
+	{ TRUE,  'a', "member",		"arrays"	},
+	{ TRUE,  'n', "member",		"numbers"	},
+	{ TRUE,  's', "member",		"strings"	},
+	{ TRUE,  'b', "member",		"booleans"	},
+	{ TRUE,  'z', "member",		"nulls"		}
 };
 
 static tokenInfo *newToken (void)
