@@ -41,6 +41,7 @@ filetypes = \
 	filetypes.html \
 	filetypes.java \
 	filetypes.javascript \
+	filetypes.JSON.conf \
 	filetypes.latex \
 	filetypes.lisp \
 	filetypes.lua \
