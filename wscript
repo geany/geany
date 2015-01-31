@@ -87,6 +87,7 @@ ctags_sources = set([
     'tagmanager/ctags/haxe.c',
     'tagmanager/ctags/html.c',
     'tagmanager/ctags/js.c',
+    'tagmanager/ctags/json.c',
     'tagmanager/ctags/keyword.c',
     'tagmanager/ctags/latex.c',
     'tagmanager/ctags/lregex.c',
