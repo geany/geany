@@ -1212,6 +1212,10 @@ typedef struct
 	GtkWidget *configure_button;
 	GtkWidget *keybindings_button;
 	GtkWidget *help_button;
+	GtkWidget *popup_menu;
+	GtkWidget *popup_configure_menu_item;
+	GtkWidget *popup_keybindings_menu_item;
+	GtkWidget *popup_help_menu_item;
 }
 PluginManagerWidgets;
 
@@ -1221,13 +1225,22 @@ static PluginManagerWidgets pm_widgets;
 static void pm_update_buttons(Plugin *p)
 {
 	gboolean is_active;
+	gboolean has_configure;
+	gboolean has_help;
+	gboolean has_keybindings;
 
 	is_active = is_active_plugin(p);
-	gtk_widget_set_sensitive(pm_widgets.configure_button,
-		(p->configure || p->configure_single) && is_active);
-	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
-	gtk_widget_set_sensitive(pm_widgets.keybindings_button,
-		p->key_group && p->key_group->plugin_key_count > 0 && is_active);
+	has_configure = (p->configure || p->configure_single) && is_active;
+	has_help = p->help != NULL && is_active;
+	has_keybindings = p->key_group && p->key_group->plugin_key_count > 0 && is_active;
+
+	gtk_widget_set_sensitive(pm_widgets.configure_button, has_configure);
+	gtk_widget_set_sensitive(pm_widgets.help_button, has_help);
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button, has_keybindings);
+
+	gtk_widget_set_sensitive(pm_widgets.popup_configure_menu_item, has_configure);
+	gtk_widget_set_sensitive(pm_widgets.popup_help_menu_item, has_help);
+	gtk_widget_set_sensitive(pm_widgets.popup_keybindings_menu_item, has_keybindings);
 }
 
 
@@ -1355,6 +1368,18 @@ static void pm_treeview_text_cell_data_func(GtkTreeViewColumn *column, GtkCellRe
 }
 
 
+static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *event,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	if (event->button == 3)
+	{
+		gtk_menu_popup(GTK_MENU(pm_widgets.popup_menu), NULL, NULL, NULL, NULL,
+				event->button, event->time);
+	}
+	return FALSE;
+}
+
+
 static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
@@ -1406,6 +1431,8 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
 	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
+
+	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
 
 	list = g_list_first(plugin_list);
 	if (list == NULL)
@@ -1490,7 +1517,7 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GtkWidget *vbox, *vbox2, *hbox, *swin, *label;
+	GtkWidget *vbox, *vbox2, *hbox, *swin, *label, *menu_item;
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
@@ -1532,6 +1559,28 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	g_signal_connect(pm_widgets.help_button, "clicked",
 		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
 
+	/* plugin popup menu */
+	pm_widgets.popup_menu = gtk_menu_new();
+
+	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
+	pm_widgets.popup_configure_menu_item = menu_item;
+
+	menu_item = gtk_image_menu_item_new_with_mnemonic(_("Keybindings"));
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
+	pm_widgets.popup_keybindings_menu_item = menu_item;
+
+	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP, NULL);
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
+	pm_widgets.popup_help_menu_item = menu_item;
+
+
 	hbox = gtk_hbox_new(FALSE, 0);
 	gtk_box_set_spacing(GTK_BOX(hbox), 6);
 	gtk_box_pack_end(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
@@ -1547,6 +1596,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
+	gtk_widget_show_all(pm_widgets.popup_menu);
 }
 
 
