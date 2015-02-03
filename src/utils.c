@@ -38,6 +38,7 @@
 #include "templates.h"
 #include "ui_utils.h"
 #include "win32.h"
+#include "osx.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -2087,4 +2088,62 @@ gchar *utils_get_user_config_dir(void)
 #else
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
 #endif
+}
+
+
+static gboolean is_osx_bundle(void)
+{
+#ifdef MAC_INTEGRATION
+	gchar *bundle_id = gtkosx_application_get_bundle_id();
+	if (bundle_id)
+	{
+		g_free(bundle_id);
+		return TRUE;
+	}
+#endif
+	return FALSE;
+}
+
+
+const gchar *utils_resource_dir(GeanyResourceDirType type)
+{
+	static const gchar *resdirs[RESOURCE_DIR_COUNT] = {NULL};
+
+	if (!resdirs[RESOURCE_DIR_DATA])
+	{
+#ifdef G_OS_WIN32
+		gchar *prefix = win32_get_installation_dir();
+
+		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
+		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
+		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
+		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
+		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", NULL);
+		g_free(prefix);
+#else
+		if (is_osx_bundle())
+		{
+# ifdef MAC_INTEGRATION
+			gchar *prefix = gtkosx_application_get_resource_path();
+			
+			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
+			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
+			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
+			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
+			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			g_free(prefix);
+# endif
+		}
+		else
+		{
+			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
+			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
+			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
+			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+		}
+#endif
+	}
+
+	return resdirs[type];
 }

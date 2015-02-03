@@ -62,6 +62,7 @@
 #include "utils.h"
 #include "vte.h"
 #include "win32.h"
+#include "osx.h"
 
 #include "gtkcompat.h"
 
@@ -224,16 +225,7 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	/* add our icon path in case we aren't installed in the system prefix */
-	gchar *path;
-#ifdef G_OS_WIN32
-	gchar *install_dir = win32_get_installation_dir();
-	path = g_build_filename(install_dir, "share", "icons", NULL);
-	g_free(install_dir);
-#else
-	path = g_build_filename(GEANY_DATADIR, "icons", NULL);
-#endif
-	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), path);
-	g_free(path);
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), utils_resource_dir(RESOURCE_DIR_ICON));
 
 	/* inits */
 	ui_init_stock_items();
@@ -400,30 +392,9 @@ static void change_working_directory_on_windows(void)
 
 static void setup_paths(void)
 {
-	gchar *data_dir;
-	gchar *doc_dir;
-
-	/* set paths */
-#ifdef G_OS_WIN32
-	/* use the installation directory(the one where geany.exe is located) as the base for the
-	 * documentation and data files */
-	gchar *install_dir = win32_get_installation_dir();
-
-	data_dir = g_build_filename(install_dir, "data", NULL); /* e.g. C:\Program Files\geany\data */
-	doc_dir = g_build_filename(install_dir, "doc", NULL);
-
-	g_free(install_dir);
-#else
-	data_dir = g_build_filename(GEANY_DATADIR, "geany", NULL); /* e.g. /usr/share/geany */
-	doc_dir = g_build_filename(GEANY_DOCDIR, "html", NULL);
-#endif
-
 	/* convert path names to locale encoding */
-	app->datadir = utils_get_locale_from_utf8(data_dir);
-	app->docdir = utils_get_locale_from_utf8(doc_dir);
-
-	g_free(data_dir);
-	g_free(doc_dir);
+	app->datadir = utils_get_locale_from_utf8(utils_resource_dir(RESOURCE_DIR_DATA));
+	app->docdir = utils_get_locale_from_utf8(utils_resource_dir(RESOURCE_DIR_DOC));
 }
 
 
@@ -473,26 +444,15 @@ gboolean main_is_realized(void)
  **/
 void main_locale_init(const gchar *locale_dir, const gchar *package)
 {
-	gchar *l_locale_dir = NULL;
-
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");
 #endif
 
 #ifdef G_OS_WIN32
-	{
-		gchar *install_dir = win32_get_installation_dir();
-		/* e.g. C:\Program Files\geany\lib\locale */
-		l_locale_dir = g_build_filename(install_dir, "share", "locale", NULL);
-		g_free(install_dir);
-	}
-#else
-	l_locale_dir = g_strdup(locale_dir);
+	locale_dir = utils_resource_dir(RESOURCE_DIR_LOCALE);
 #endif
-
-	(void) bindtextdomain(package, l_locale_dir);
+	(void) bindtextdomain(package, locale_dir);
 	(void) bind_textdomain_codeset(package, "UTF-8");
-	g_free(l_locale_dir);
 }
 
 
@@ -647,6 +607,11 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 		g_printerr("Geany: cannot open display\n");
 		exit(1);
 	}
+
+#ifdef MAC_INTEGRATION
+	/* Create GtkosxApplication singleton - should be created shortly after gtk_init() */
+	gtkosx_application_get();
+#endif
 }
 
 
@@ -1059,7 +1024,7 @@ gint main(gint argc, gchar **argv)
 	setup_gtk2_styles();
 #endif
 #ifdef ENABLE_NLS
-	main_locale_init(GEANY_LOCALEDIR, GETTEXT_PACKAGE);
+	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
 
@@ -1233,6 +1198,11 @@ gint main(gint argc, gchar **argv)
 	 * tell other components, mainly plugins, that startup is complete */
 	g_idle_add_full(G_PRIORITY_LOW, send_startup_complete, NULL, NULL);
 
+#ifdef MAC_INTEGRATION
+	/* OS X application ready - has to be called before entering main loop */
+	gtkosx_application_ready(gtkosx_application_get());
+#endif
+	
 	gtk_main();
 	return 0;
 }

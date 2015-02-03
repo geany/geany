@@ -10,6 +10,7 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
+	osx.h \
 	makefile.win32
 
 bin_PROGRAMS = geany
@@ -89,7 +90,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
 	-I$(top_srcdir)/tagmanager/src \
-	@GTK_CFLAGS@ @GTHREAD_CFLAGS@
+	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ $(MAC_INTEGRATION_CFLAGS)
 
 # tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
 nodist_EXTRA_geany_SOURCES = dummy.cxx
@@ -142,6 +143,7 @@ geany_LDADD = \
 	$(top_builddir)/tagmanager/src/libtagmanager.a \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
+	$(MAC_INTEGRATION_LIBS) \
 	$(INTLLIBS)
 
 AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
