@@ -1,5 +1,5 @@
 /*
- *      osx.h - this file is part of Geany, a fast and lightweight IDE
+ *      osx.c - this file is part of Geany, a fast and lightweight IDE
  *
  *      Copyright 2015 Jiri Techet <techet(at)gmail(dot)com>
  *
@@ -18,19 +18,32 @@
  *      51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef GEANY_OSX_H
-#define GEANY_OSX_H 1
-
 #ifdef MAC_INTEGRATION
 
-#include <gtkosxapplication.h>
+#include "osx.h"
 
-G_BEGIN_DECLS
+#include "ui_utils.h"
 
-void osx_ui_init(void);
+void osx_ui_init(void)
+{
+	GtkWidget *item;
+	GtkosxApplication *osx_app = gtkosx_application_get();
 
-G_END_DECLS
+	item = ui_lookup_widget(main_widgets.window, "menubar1");
+	gtk_widget_hide(item);
+	gtkosx_application_set_menu_bar(osx_app, GTK_MENU_SHELL(item));
+
+	item = ui_lookup_widget(main_widgets.window, "menu_quit1");
+	gtk_widget_hide(item);
+
+	item = ui_lookup_widget(main_widgets.window, "menu_info1");
+	gtkosx_application_insert_app_menu_item(osx_app, item, 0);
+
+	item = ui_lookup_widget(main_widgets.window, "menu_help1");
+	gtkosx_application_set_help_menu(osx_app, GTK_MENU_ITEM(item));
+
+	gtkosx_application_set_use_quartz_accelerators(osx_app, FALSE);
+}
 
 #endif /* MAC_INTEGRATION */
 
-#endif /* GEANY_OSX_H */

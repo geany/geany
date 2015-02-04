@@ -10,7 +10,6 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	osx.h \
 	makefile.win32
 
 bin_PROGRAMS = geany
@@ -39,6 +38,7 @@ SRCS = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
+	osx.c osx.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
 	prefix.c prefix.h \

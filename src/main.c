@@ -266,6 +266,9 @@ static void main_init(void)
 
 	ui_widgets.toolbar_menu = create_toolbar_popup_menu1();
 	ui_init();
+#ifdef MAC_INTEGRATION
+	osx_ui_init();
+#endif
 
 	/* set widget names for matching with .gtkrc-2.0 */
 	gtk_widget_set_name(main_widgets.window, "GeanyMainWindow");

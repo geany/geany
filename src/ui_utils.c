@@ -50,6 +50,7 @@
 #include "toolbar.h"
 #include "utils.h"
 #include "win32.h"
+#include "osx.h"
 
 #include "gtkcompat.h"
 
@@ -1307,6 +1308,19 @@ void ui_update_recent_project_menu(void)
 }
 
 
+/* Use instead of gtk_menu_reorder_child() to update the menubar properly on OS X */
+static void menu_reorder_child(GtkMenu *menu, GtkWidget *child, gint position)
+{
+	gtk_menu_reorder_child(menu, child, position);
+#ifdef MAC_INTEGRATION
+	/* On OS X GtkMenuBar is kept in sync with the native OS X menubar using
+	 * signals. Unfortunately gtk_menu_reorder_child() doesn't emit anything
+	 * so we have to update the OS X menubar manually. */
+	gtkosx_application_sync_menubar(gtkosx_application_get());
+#endif
+}
+
+
 static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFiles *grf, GtkWidget *menu)
 {
 	GtkWidget *child = gtk_menu_item_new_with_label(utf8_filename);
@@ -1320,7 +1334,7 @@ static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFil
 		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal
 		 * which we need in GeanyMenubuttonAction */
 		gtk_container_add(GTK_CONTAINER(menu), child);
-		gtk_menu_reorder_child(GTK_MENU(menu), child, 0);
+		menu_reorder_child(GTK_MENU(menu), child, 0);
 	}
 	g_signal_connect(child, "activate", G_CALLBACK(grf->activate_cb), NULL);
 }
@@ -1350,7 +1364,7 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
 		/* either reorder or prepend a new one */
 		if (item)
-			gtk_menu_reorder_child(GTK_MENU(parents[i]), item->data, 0);
+			menu_reorder_child(GTK_MENU(parents[i]), item->data, 0);
 		else
 			add_recent_file_menu_item(utf8_filename, grf, parents[i]);
 		g_list_free(children);
@@ -2781,7 +2795,7 @@ void ui_menu_sort_by_label(GtkMenu *menu)
 	pos = 0;
 	foreach_list(node, list)
 	{
-		gtk_menu_reorder_child(menu, node->data, pos);
+		menu_reorder_child(menu, node->data, pos);
 		pos++;
 	}
 	g_list_free(list);
