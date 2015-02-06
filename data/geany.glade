@@ -7726,7 +7726,7 @@
                                   <object class="GtkRadioMenuItem" id="cr">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Convert and Set to CR (_Mac)</property>
+                                    <property name="label" translatable="yes">Convert and Set to CR (Classic _Mac)</property>
                                     <property name="use_underline">True</property>
                                     <property name="group">crlf</property>
                                     <signal name="activate" handler="on_cr_activate" swapped="no"/>
