@@ -577,7 +577,9 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_int(config, config_home, "styling", "line_height",
 		0, 0, &common_style_set.styling[GCS_LINE_HEIGHT]);
 
+	g_free(common_style_set.wordchars);
 	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
+	g_free(whitespace_chars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 }
 

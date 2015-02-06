@@ -440,6 +440,7 @@ static void destroy_project(gboolean open_default)
 	g_free(app->project->description);
 	g_free(app->project->file_name);
 	g_free(app->project->base_path);
+	g_strfreev(app->project->file_patterns);
 
 	g_free(app->project);
 	app->project = NULL;
@@ -813,7 +814,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
-		SETPTR(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
+		SETPTR(p->description, gtk_text_buffer_get_text(buffer, &start, &end, FALSE));
 
 		foreach_slist(node, stash_groups)
 			stash_group_update(node->data, e->dialog);
