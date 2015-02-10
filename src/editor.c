@@ -313,14 +313,14 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 
 	if (event->button == 1)
 	{
-		guint state = event->state & gtk_accelerator_get_default_mod_mask();
+		guint state = keybindings_get_modifiers(event->state);
 
 		if (event->type == GDK_BUTTON_PRESS && editor_prefs.disable_dnd)
 		{
 			gint ss = sci_get_selection_start(editor->sci);
 			sci_set_selection_end(editor->sci, ss);
 		}
-		if (event->type == GDK_BUTTON_PRESS && state == GDK_CONTROL_MASK)
+		if (event->type == GDK_BUTTON_PRESS && state == GEANY_PRIMARY_MOD_MASK)
 		{
 			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
 
@@ -4779,6 +4779,11 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
+	
+#ifdef GDK_WINDOWING_QUARTZ
+	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw */
+	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
+#endif
 
 	/* only connect signals if this is for the document notebook, not split window */
 	if (editor->sci == NULL)

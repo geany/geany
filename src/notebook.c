@@ -617,8 +617,8 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 	/* switch last used tab on ctrl-click */
-	state = event->state & gtk_accelerator_get_default_mod_mask();
-	if (event->button == 1 && state == GDK_CONTROL_MASK)
+	state = keybindings_get_modifiers(event->state);
+	if (event->button == 1 && state == GEANY_PRIMARY_MOD_MASK)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_NOTEBOOK,
 			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);

@@ -35,6 +35,8 @@
 # include <windows.h>
 
 # define OPEN_CMD "explorer \"%d\""
+#elif defined(__APPLE__)
+# define OPEN_CMD "open \"%d\""
 #else
 # define OPEN_CMD "nautilus \"%d\""
 #endif

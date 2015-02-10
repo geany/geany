@@ -284,7 +284,8 @@ static EncodingFuncs encoding_funcs = {
 static KeybindingFuncs keybindings_funcs = {
 	&keybindings_send_command,
 	&keybindings_set_item,
-	&keybindings_get_item
+	&keybindings_get_item,
+	&keybindings_get_modifiers
 };
 
 static TagManagerFuncs tagmanager_funcs = {

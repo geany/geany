@@ -41,6 +41,7 @@
 #include "symbols.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "keybindings.h"
 
 #include <string.h>
 
@@ -912,7 +913,8 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				if (keyval != GDK_space && ! (state & GDK_CONTROL_MASK))
+				state = keybindings_get_modifiers(state);
+				if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
 					change_focus_to_editor(doc, NULL);
 				else
 					handled = FALSE;

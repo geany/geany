@@ -26,6 +26,17 @@
 
 G_BEGIN_DECLS
 
+/** Defines the primary modifier mask which is the Ctrl key mask on
+ * UNIX/Windows and Command key mask on OS X. When testing for the mask
+ * presence, use together with keybindings_get_modifiers() which adds 
+ * @c GEANY_PRIMARY_MOD_MASK when needed.
+ * @since 1.25. */
+#ifdef __APPLE__
+#define GEANY_PRIMARY_MOD_MASK GDK_META_MASK
+#else
+#define GEANY_PRIMARY_MOD_MASK GDK_CONTROL_MASK
+#endif
+
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
 
@@ -246,6 +257,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
+GdkModifierType keybindings_get_modifiers(GdkModifierType mods);
 
 #ifdef GEANY_PRIVATE
 

@@ -1697,7 +1697,7 @@ G_MODULE_EXPORT void on_page_setup1_activate(GtkMenuItem *menuitem, gpointer use
 
 G_MODULE_EXPORT gboolean on_escape_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	guint state = event->state & gtk_accelerator_get_default_mod_mask();
+	guint state = keybindings_get_modifiers(event->state);
 
 	/* make pressing escape in the sidebar and toolbar focus the editor */
 	if (event->keyval == GDK_Escape && state == 0)

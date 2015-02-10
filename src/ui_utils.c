@@ -2893,18 +2893,32 @@ GIcon *ui_get_mime_icon(const gchar *mime_type)
 	if (ctype)
 	{
 		icon = g_content_type_get_icon(ctype);
+		if (icon) 
+		{
+			GtkIconInfo *icon_info;
+
+			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_default(), icon, 16, 0);
+			if (!icon_info)
+			{
+				g_object_unref(icon);
+				icon = NULL;
+			}
+			else
+				gtk_icon_info_free(icon_info);
+		}
+
 		g_free(ctype);
 	}
 
 	/* fallback if icon lookup failed, like it might happen on Windows (?) */
 	if (! icon)
 	{
-		const gchar *stock_id = GTK_STOCK_FILE;
+		const gchar *icon_name = "text-x-generic";
 
 		if (strstr(mime_type, "directory"))
-			stock_id = GTK_STOCK_DIRECTORY;
+			icon_name = "folder";
 
-		icon = g_themed_icon_new(stock_id);
+		icon = g_themed_icon_new(icon_name);
 	}
 	return icon;
 }

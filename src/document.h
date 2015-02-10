@@ -223,10 +223,8 @@ GeanyDocument *document_find_by_id(guint id);
 
 #if defined(G_OS_WIN32)
 # define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
-#elif defined(G_OS_UNIX)
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
 #else
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CR
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
 #endif
 
 extern GeanyFilePrefs file_prefs;

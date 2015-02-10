@@ -5176,8 +5176,23 @@ you can configure the automatically added extension in the configure dialog
 in Geany's plugin manager.
 
 After the plugin was loaded in Geany's plugin manager, every file is
-copied into the configured backup directory when the file is saved in Geany.
+copied into the configured backup directory *after* the file has been saved
+in Geany.
 
+The created backup copy file permissions are set to read-write only for
+the user. This should help to not create world-readable files on possibly
+unsecure destination directories like /tmp (especially useful
+on multi-user systems).
+This applies only to non-Windows systems. On Windows, no explicit file
+permissions are set.
+
+
+Additionally, you can define how many levels of the original file's
+directory structure should be replicated in the backup copy path.
+For example, setting the option
+*Directory levels to include in the backup destination* to *2*
+cause the plugin to create the last two components of the original
+file's path in the backup copy path and place the new file there.
 
 
 Contributing to this document
