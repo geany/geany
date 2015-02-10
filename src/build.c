@@ -128,7 +128,7 @@ static guint build_items_count = 9;
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 #endif
-static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose, GError **error);
+static gboolean build_create_shellscript(const gchar *fname, const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -937,7 +937,7 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	/* RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it
 	 * contains no umlauts */
 	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-	result = build_create_shellscript(tmp, cmd_string, autoclose, &error);
+	result = build_create_shellscript(tmp, working_dir, cmd_string, autoclose, &error);
 	if (! result)
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
@@ -1279,13 +1279,15 @@ static void set_file_error_from_errno(GError **error, gint err, const gchar *pre
 
 /* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
  * fname is the full file name (including path) for the script to create */
-static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, gboolean autoclose, GError **error)
+static gboolean build_create_shellscript(const gchar *fname, const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
 {
 	FILE *fp;
 	gchar *str;
 	gboolean success = TRUE;
 #ifdef G_OS_WIN32
 	gchar *expanded_cmd;
+#else
+	gchar *escaped_dir;
 #endif
 
 	fp = g_fopen(fname, "w");
@@ -1300,11 +1302,13 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 	str = g_strdup_printf("%s\n\n%s\ndel \"%%0\"\n\npause\n", expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
 #else
+	escaped_dir = g_strescape(working_dir, NULL);
 	str = g_strdup_printf(
-		"#!/bin/sh\n\nrm $0\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\n", cmd, (autoclose) ? "" :
+		"#!/bin/sh\n\nrm $0\n\ncd \'%s\'\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
+		\n\n%s\n", escaped_dir, cmd, (autoclose) ? "" :
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
 			"dash\ndummy_var=\"\"\nread dummy_var");
+	g_free(escaped_dir);
 #endif
 
 	if (fputs(str, fp) < 0)
@@ -1320,6 +1324,14 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *cmd, g
 			set_file_error_from_errno(error, errno, "Failed to close file");
 		success = FALSE;
 	}
+#ifdef __APPLE__
+	if (g_chmod(fname, 0777) != 0)
+	{
+		if (error && ! *error) /* don't set error twice */
+			set_file_error_from_errno(error, errno, "Failed to make file executable");
+		success = FALSE;
+	}
+#endif
 
 	return success;
 }

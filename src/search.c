@@ -1841,8 +1841,10 @@ static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *e
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
 		gchar *msg, *utf8_msg;
+		GIOStatus st;
 
-		while (g_io_channel_read_line(source, &msg, NULL, NULL, NULL) && msg)
+		while ((st = g_io_channel_read_line(source, &msg, NULL, NULL, NULL)) != G_IO_STATUS_ERROR &&
+				st != G_IO_STATUS_EOF && msg)
 		{
 			utf8_msg = NULL;
 
@@ -1866,6 +1868,8 @@ static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *e
 				g_free(utf8_msg);
 			g_free(msg);
 		}
+		if (st == G_IO_STATUS_ERROR || st == G_IO_STATUS_EOF)
+			return FALSE;
 	}
 	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
 		return FALSE;
