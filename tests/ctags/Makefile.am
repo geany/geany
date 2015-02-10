@@ -228,6 +228,7 @@ test_sources = \
 	prototype.h						\
 	pure_elem.f95					\
 	py_constructor_arglist.py		\
+	py-skipped-string.py			\
 	qualified_types.f90				\
 	random.sql						\
 	readlob.sql						\
