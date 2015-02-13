@@ -122,10 +122,10 @@ static void add_popup_menu_accels(void);
 GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 {
 #ifdef __APPLE__
-    if (mods & GDK_MOD2_MASK)
-        mods |= GEANY_PRIMARY_MOD_MASK;
+	if (mods & GDK_MOD2_MASK)
+		mods |= GEANY_PRIMARY_MOD_MASK;
 #endif
-    return mods & gtk_accelerator_get_default_mod_mask();
+	return mods & gtk_accelerator_get_default_mod_mask();
 }
 
 
@@ -2251,15 +2251,15 @@ static void reflow_lines(GeanyEditor *editor, gint column)
 /* deselect last newline of selection, if any */
 static void sci_deselect_last_newline(ScintillaObject *sci)
 {
-    gint start, end;
+	gint start, end;
 
-    start = sci_get_selection_start(sci);
-    end = sci_get_selection_end(sci);
-    if (end > start && sci_get_col_from_position(sci, end) == 0)
-    {
-        end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end-1));
-        sci_set_selection(sci, start, end);
-    }
+	start = sci_get_selection_start(sci);
+	end = sci_get_selection_end(sci);
+	if (end > start && sci_get_col_from_position(sci, end) == 0)
+	{
+		end = sci_get_line_end_position(sci, sci_get_line_from_position(sci, end - 1));
+		sci_set_selection(sci, start, end);
+	}
 }
 
 
