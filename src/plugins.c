@@ -1209,6 +1209,7 @@ typedef struct
 	GtkWidget *dialog;
 	GtkWidget *tree;
 	GtkListStore *store;
+	GtkWidget *filter_entry;
 	GtkWidget *configure_button;
 	GtkWidget *keybindings_button;
 	GtkWidget *help_button;
@@ -1224,15 +1225,18 @@ static PluginManagerWidgets pm_widgets;
 
 static void pm_update_buttons(Plugin *p)
 {
-	gboolean is_active;
-	gboolean has_configure;
-	gboolean has_help;
-	gboolean has_keybindings;
+	gboolean is_active = FALSE;
+	gboolean has_configure = FALSE;
+	gboolean has_help = FALSE;
+	gboolean has_keybindings = FALSE;
 
-	is_active = is_active_plugin(p);
-	has_configure = (p->configure || p->configure_single) && is_active;
-	has_help = p->help != NULL && is_active;
-	has_keybindings = p->key_group && p->key_group->plugin_key_count > 0 && is_active;
+	if (p != NULL)
+	{
+		is_active = is_active_plugin(p);
+		has_configure = (p->configure || p->configure_single) && is_active;
+		has_help = p->help != NULL && is_active;
+		has_keybindings = p->key_group && p->key_group->plugin_key_count > 0 && is_active;
+	}
 
 	gtk_widget_set_sensitive(pm_widgets.configure_button, has_configure);
 	gtk_widget_set_sensitive(pm_widgets.help_button, has_help);
@@ -1265,18 +1269,24 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	gboolean old_state, state;
 	gchar *file_name;
 	GtkTreeIter iter;
+	GtkTreeIter store_iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
+	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
 	Plugin *p;
 
-	gtk_tree_model_get_iter(GTK_TREE_MODEL(pm_widgets.store), &iter, path);
+	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_path_free(path);
 
-	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
-		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
+	gtk_tree_model_get(model, &iter,
+		PLUGIN_COLUMN_CHECK, &old_state,
+		PLUGIN_COLUMN_PLUGIN, &p, -1);
 
 	/* no plugins item */
 	if (p == NULL)
 		return;
+
+	gtk_tree_model_filter_convert_iter_to_child_iter(
+		GTK_TREE_MODEL_FILTER(model), &store_iter, &iter);
 
 	state = ! old_state; /* toggle the state */
 
@@ -1295,7 +1305,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	if (!p)
 	{
 		/* plugin file may no longer be on disk, or is now incompatible */
-		gtk_list_store_remove(pm_widgets.store, &iter);
+		gtk_list_store_remove(pm_widgets.store, &store_iter);
 	}
 	else
 	{
@@ -1303,7 +1313,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 			keybindings_load_keyfile();		/* load shortcuts */
 
 		/* update model */
-		gtk_list_store_set(pm_widgets.store, &iter,
+		gtk_list_store_set(pm_widgets.store, &store_iter,
 			PLUGIN_COLUMN_CHECK, state,
 			PLUGIN_COLUMN_PLUGIN, p, -1);
 
@@ -1395,10 +1405,74 @@ static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *
 }
 
 
+static gboolean pm_tree_search(const gchar *key, const gchar *haystack)
+{
+	gchar *normalized_string = NULL;
+	gchar *normalized_key = NULL;
+	gchar *case_normalized_string = NULL;
+	gchar *case_normalized_key = NULL;
+	gboolean matched = FALSE;
+
+	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
+	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
+
+	if (normalized_string != NULL && normalized_key != NULL)
+	{
+		case_normalized_string = g_utf8_casefold(normalized_string, -1);
+		case_normalized_key = g_utf8_casefold(normalized_key, -1);
+		/* match not only start of plugin name but also any substring in the name */
+		if (strstr(case_normalized_string, case_normalized_key) != NULL)
+			matched = TRUE;
+	}
+
+	g_free(normalized_key);
+	g_free(normalized_string);
+	g_free(case_normalized_key);
+	g_free(case_normalized_string);
+
+	return matched;
+}
+
+
+static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+	Plugin *plugin;
+	gboolean matched;
+	const gchar *key;
+
+	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
+	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
+
+	/* first search the plugin name */
+	matched = pm_tree_search(key, plugin->info.name);
+	/* if not found, extend search to plugin description */
+	if (! matched)
+		matched = pm_tree_search(key, plugin->info.description);
+
+	return matched;
+}
+
+
+static void on_pm_tree_filter_entry_changed_cb(GtkEntry *entry, gpointer user_data)
+{
+	GtkTreeModel *filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
+	gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(filter_model));
+}
+
+
+static void on_pm_tree_filter_entry_icon_release_cb(GtkEntry *entry, GtkEntryIconPosition icon_pos,
+		GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1 && icon_pos == GTK_ENTRY_ICON_PRIMARY)
+		on_pm_tree_filter_entry_changed_cb(entry, user_data);
+}
+
+
 static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 {
 	GtkCellRenderer *text_renderer, *checkbox_renderer;
 	GtkTreeViewColumn *column;
+	GtkTreeModel *filter_model;
 	GtkTreeIter iter;
 	GList *list;
 	GtkTreeSelection *sel;
@@ -1455,12 +1529,19 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 				-1);
 		}
 	}
-	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
+	/* filter */
+	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
+	gtk_tree_model_filter_set_visible_func(
+		GTK_TREE_MODEL_FILTER(filter_model), pm_tree_filter_func, NULL, NULL);
+
+	/* set model to tree view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), filter_model);
 	g_object_unref(store);
+	g_object_unref(filter_model);
 }
 
 
-static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
+static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1498,39 +1579,71 @@ free_non_active_plugin(gpointer data, gpointer user_data)
 }
 
 
-/* Callback when plugin manager dialog closes, only ever has response of
- * GTK_RESPONSE_OK or GTK_RESPONSE_DELETE_EVENT and both are treated the same. */
+/* Callback when plugin manager dialog closes, responses GTK_RESPONSE_CLOSE and
+ * GTK_RESPONSE_DELETE_EVENT are treated the same. */
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	if (plugin_list != NULL)
+	switch (response)
 	{
-		/* remove all non-active plugins from the list */
-		g_list_foreach(plugin_list, free_non_active_plugin, NULL);
-		g_list_free(plugin_list);
-		plugin_list = NULL;
-	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
+		case GTK_RESPONSE_CLOSE:
+		case GTK_RESPONSE_DELETE_EVENT:
+			if (plugin_list != NULL)
+			{
+				/* remove all non-active plugins from the list */
+				g_list_foreach(plugin_list, free_non_active_plugin, NULL);
+				g_list_free(plugin_list);
+				plugin_list = NULL;
+			}
+			gtk_widget_destroy(GTK_WIDGET(dialog));
 
-	configuration_save();
+			configuration_save();
+			break;
+		case PM_BUTTON_CONFIGURE:
+		case PM_BUTTON_HELP:
+		case PM_BUTTON_KEYBINDINGS:
+			/* forward event to the generic handler */
+			pm_on_plugin_button_clicked(NULL, GINT_TO_POINTER(response));
+			break;
+	}
 }
 
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GtkWidget *vbox, *vbox2, *hbox, *swin, *label, *menu_item;
+	GtkWidget *vbox, *vbox2, *swin, *label, *menu_item, *filter_entry;
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
 
-	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
-						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+	pm_widgets.dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(pm_widgets.dialog), _("Plugins"));
+	gtk_window_set_transient_for(GTK_WINDOW(pm_widgets.dialog), GTK_WINDOW(main_widgets.window));
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(pm_widgets.dialog), TRUE);
+
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 500, 450);
 
+	pm_widgets.help_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_HELP, PM_BUTTON_HELP);
+	pm_widgets.configure_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_PREFERENCES, PM_BUTTON_CONFIGURE);
+	pm_widgets.keybindings_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), _("Keybindings"), PM_BUTTON_KEYBINDINGS);
+	gtk_dialog_add_button(GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_set_default_response(GTK_DIALOG(pm_widgets.dialog), GTK_RESPONSE_CLOSE);
+
+	/* filter */
+	pm_widgets.filter_entry = filter_entry = gtk_entry_new();
+	gtk_entry_set_icon_from_stock(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FIND);
+	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
+	g_signal_connect(filter_entry, "changed", G_CALLBACK(on_pm_tree_filter_entry_changed_cb), NULL);
+	g_signal_connect(filter_entry, "icon-release",
+		G_CALLBACK(on_pm_tree_filter_entry_icon_release_cb), NULL);
+
+	/* prepare treeview */
 	pm_widgets.tree = gtk_tree_view_new();
 	pm_widgets.store = gtk_list_store_new(
 		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_POINTER);
@@ -1543,21 +1656,6 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_container_add(GTK_CONTAINER(swin), pm_widgets.tree);
 
 	label = geany_wrap_label_new(_("Choose which plugins should be loaded at startup:"));
-
-	pm_widgets.keybindings_button = gtk_button_new_with_label(_("Keybindings"));
-	gtk_widget_set_sensitive(pm_widgets.keybindings_button, FALSE);
-	g_signal_connect(pm_widgets.keybindings_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
-
-	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
-	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
-	g_signal_connect(pm_widgets.configure_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
-
-	pm_widgets.help_button = gtk_button_new_from_stock(GTK_STOCK_HELP);
-	gtk_widget_set_sensitive(pm_widgets.help_button, FALSE);
-	g_signal_connect(pm_widgets.help_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
 
 	/* plugin popup menu */
 	pm_widgets.popup_menu = gtk_menu_new();
@@ -1580,23 +1678,21 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
 	pm_widgets.popup_help_menu_item = menu_item;
 
-
-	hbox = gtk_hbox_new(FALSE, 0);
-	gtk_box_set_spacing(GTK_BOX(hbox), 6);
-	gtk_box_pack_end(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
-	gtk_box_pack_end(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 0);
-
-	vbox2 = gtk_vbox_new(FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
+	/* put it together */
+	vbox2 = gtk_vbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), filter_entry, FALSE, FALSE, 0);
 	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox2), hbox, FALSE, TRUE, 0);
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
 	gtk_widget_show_all(pm_widgets.popup_menu);
+
+	/* set initial plugin buttons state, pass NULL as no plugin is selected by default */
+	pm_update_buttons(NULL);
+	gtk_widget_grab_focus(pm_widgets.filter_entry);
 }
 
 
