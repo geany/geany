@@ -5,14 +5,14 @@
 # Anna Talianova <anickat1@gmail.com>, 2008.
 # Karel Kolman <kolmis@gmail.com>, 2009-2011.
 # Miro Hrončok <miro@hroncok.cz>, 2013.
-# Stanislav Horáček <stanislav.horacek@gmail.com>, 2014.
+# Stanislav Horáček <stanislav.horacek@gmail.com>, 2014-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-03-30 20:46+0200\n"
-"PO-Revision-Date: 2013-01-05 19:00+0100\n"
+"PO-Revision-Date: 2015-02-15 14:28+0100\n"
 "Last-Translator: Stanislav Horáček <stanislav.horacek@gmail.com>\n"
 "Language-Team: Czech <geany-i18n@uvena.de>\n"
 "Language: cs\n"
@@ -211,12 +211,10 @@ msgid "Startup path:"
 msgstr "Výchozí cesta:"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"Výchozí cesta při otevírání a ukládání souborů. Musí jít o absolutní cestu. "
-"Ponechte prázdnou, pokud chcete používat aktuální pracovní adresář."
+"Výchozí cesta při otevírání a ukládání souborů. Musí jít o absolutní cestu."
 
 #: ../data/geany.glade.h:39
 msgid "Project files:"
@@ -296,18 +294,14 @@ msgstr ""
 "nástrojů a ve VTE."
 
 #: ../data/geany.glade.h:53
-#, fuzzy
 msgid "Use Windows native dialogs"
-msgstr "Používat nativní Windows dialogy pro otevření/uložení souborů"
+msgstr "Používat nativní dialogy Windows"
 
 #: ../data/geany.glade.h:54
-#, fuzzy
 msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
-msgstr ""
-"Zda používat nativní Windows dialogy pro otevření/uložení souborů nebo "
-"používat dialogy GTK"
+msgstr "Zda používat nativní dialogy Windows, nebo výchozí dialogy GTK"
 
 #: ../data/geany.glade.h:55
 msgid "<b>Miscellaneous</b>"
@@ -434,9 +428,8 @@ msgid "Bottom"
 msgstr "Dole"
 
 #: ../data/geany.glade.h:81
-#, fuzzy
 msgid "<b>Message window</b>"
-msgstr "Okno zpráv:"
+msgstr "<b>Okno zpráv</b>"
 
 #: ../data/geany.glade.h:82
 msgid "Symbol list:"
@@ -1282,7 +1275,7 @@ msgstr "Nástroje"
 
 #: ../data/geany.glade.h:263
 msgid "email address of the developer"
-msgstr "Emailová adresa vývojáře"
+msgstr "E-mailová adresa vývojáře"
 
 #: ../data/geany.glade.h:264
 msgid "Initials of the developer name"
@@ -1310,7 +1303,7 @@ msgstr "Společnost:"
 
 #: ../data/geany.glade.h:270
 msgid "Mail address:"
-msgstr "Emailová adresa:"
+msgstr "E-mailová adresa:"
 
 #: ../data/geany.glade.h:271
 msgid "Initials:"
@@ -1330,7 +1323,7 @@ msgstr "Datum:"
 
 #: ../data/geany.glade.h:275
 msgid "Date & time:"
-msgstr "Datum & čas:"
+msgstr "Datum a čas:"
 
 #: ../data/geany.glade.h:276
 msgid ""
@@ -1476,9 +1469,8 @@ msgid "Background color:"
 msgstr "Barva pozadí:"
 
 #: ../data/geany.glade.h:306
-#, fuzzy
 msgid "Background image:"
-msgstr "Pozadí"
+msgstr "Obrázek na pozadí:"
 
 #: ../data/geany.glade.h:307
 msgid "Scrollback lines:"
@@ -1493,14 +1485,12 @@ msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Nastaví barvu textu v okně terminálu."
 
 #: ../data/geany.glade.h:310
-#, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Nastaví barvu pozadí textu v okně terminálu"
 
 #: ../data/geany.glade.h:311
-#, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
-msgstr "Nastaví barvu pozadí textu v okně terminálu"
+msgstr "Nastaví cestu k obrázku na pozadí v okně terminálu"
 
 #: ../data/geany.glade.h:312
 msgid ""
@@ -1758,18 +1748,16 @@ msgid "New (with _Template)"
 msgstr "Nový (ze š_ablony)"
 
 #: ../data/geany.glade.h:368
-#, fuzzy
 msgid "_Open..."
-msgstr "_Otevřít"
+msgstr "_Otevřít..."
 
 #: ../data/geany.glade.h:369
 msgid "Recent _Files"
 msgstr "Nedávné _soubory"
 
 #: ../data/geany.glade.h:370
-#, fuzzy
 msgid "Save _As..."
-msgstr "Uložit jako"
+msgstr "Uložit _jako..."
 
 #: ../data/geany.glade.h:371
 msgid "Sa_ve All"
@@ -1789,9 +1777,8 @@ msgid "Page Set_up"
 msgstr "Nastavení strán_ky"
 
 #: ../data/geany.glade.h:375
-#, fuzzy
 msgid "_Print..."
-msgstr "Vytisknout"
+msgstr "V_ytisknout..."
 
 #: ../data/geany.glade.h:376 ../src/notebook.c:490
 msgid "Close Ot_her Documents"
@@ -1830,14 +1817,12 @@ msgid "Se_lect Current Paragraph"
 msgstr "Vybrat aktuální _odstavec"
 
 #: ../data/geany.glade.h:385
-#, fuzzy
 msgid "_Move Line(s) Up"
-msgstr "Přesunout řádek (řádky) výše"
+msgstr "_Přesunout řádek (řádky) výše"
 
 #: ../data/geany.glade.h:386
-#, fuzzy
 msgid "M_ove Line(s) Down"
-msgstr "Přesunout řádek (řádky) níže"
+msgstr "Pře_sunout řádek (řádky) níže"
 
 #: ../data/geany.glade.h:387 ../src/keybindings.c:402
 msgid "_Send Selection to Terminal"
@@ -1892,9 +1877,8 @@ msgid "P_lugin Preferences"
 msgstr "Nastavení p_luginů"
 
 #: ../data/geany.glade.h:400
-#, fuzzy
 msgid "_Find..."
-msgstr "Najít"
+msgstr "_Najít..."
 
 #: ../data/geany.glade.h:401
 msgid "Find _Next"
@@ -1905,22 +1889,20 @@ msgid "Find _Previous"
 msgstr "Najít _předchozí"
 
 #: ../data/geany.glade.h:403 ../src/symbols.c:2425
-#, fuzzy
 msgid "Find in F_iles..."
-msgstr "Najít v _souborech"
+msgstr "Najít v _souborech..."
 
 #: ../data/geany.glade.h:404
-#, fuzzy
 msgid "_Replace..."
-msgstr "_Nahradit"
+msgstr "Na_hradit..."
 
 #: ../data/geany.glade.h:405
 msgid "Next Me_ssage"
-msgstr "_Další zpráva"
+msgstr "D_alší zpráva"
 
 #: ../data/geany.glade.h:406
 msgid "Pr_evious Message"
-msgstr "_Předchozí zpráva"
+msgstr "Př_edchozí zpráva"
 
 #: ../data/geany.glade.h:407 ../src/keybindings.c:477
 msgid "Go to Ne_xt Marker"
@@ -1928,16 +1910,15 @@ msgstr "Přejít na další _značku"
 
 #: ../data/geany.glade.h:408 ../src/keybindings.c:480
 msgid "Go to Pre_vious Marker"
-msgstr "Přejít na _předchozí značku"
+msgstr "Přejít na předchozí z_načku"
 
 #: ../data/geany.glade.h:409
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "Jít na _řádek..."
+msgstr "Přejít na řáde_k..."
 
 #: ../data/geany.glade.h:410 ../src/keybindings.c:440
 msgid "Find Next _Selection"
-msgstr "Najít da_lší výskyt označeného textu"
+msgstr "Najít _další výskyt označeného textu"
 
 #: ../data/geany.glade.h:411 ../src/keybindings.c:442
 msgid "Find Pre_vious Selection"
@@ -1956,14 +1937,12 @@ msgid "_View"
 msgstr "Zo_brazit"
 
 #: ../data/geany.glade.h:415
-#, fuzzy
 msgid "Change _Font..."
-msgstr "Změnit _písmo"
+msgstr "Změni_t písmo..."
 
 #: ../data/geany.glade.h:416
-#, fuzzy
 msgid "Change _Color Scheme..."
-msgstr "_Schémata barev"
+msgstr "Změnit sc_héma barev..."
 
 #: ../data/geany.glade.h:417
 msgid "Show _Markers Margin"
@@ -2023,7 +2002,7 @@ msgstr "_Automatické odsazování"
 
 #: ../data/geany.glade.h:431
 msgid "In_dent Type"
-msgstr "Typ O_dsazení"
+msgstr "Typ o_dsazení"
 
 #: ../data/geany.glade.h:432
 msgid "_Detect from Content"
@@ -2102,9 +2081,8 @@ msgid "Convert and Set to CR (_Mac)"
 msgstr "Převést a nastavit na CR (_Mac)"
 
 #: ../data/geany.glade.h:451 ../src/keybindings.c:568
-#, fuzzy
 msgid "_Clone"
-msgstr "_Zavřít"
+msgstr "_Naklonovat"
 
 #: ../data/geany.glade.h:452
 msgid "_Strip Trailing Spaces"
@@ -2115,7 +2093,6 @@ msgid "Replace Tabs with S_paces"
 msgstr "Nahradit tabelátory _mezerami"
 
 #: ../data/geany.glade.h:454
-#, fuzzy
 msgid "_Replace Spaces with Tabs..."
 msgstr "Nahradit mezery t_abelátory"
 
@@ -2140,13 +2117,12 @@ msgid "_Project"
 msgstr "_Projekt"
 
 #: ../data/geany.glade.h:460
-#, fuzzy
 msgid "_New..."
-msgstr "_Nový"
+msgstr "_Nový..."
 
 #: ../data/geany.glade.h:461
 msgid "_Recent Projects"
-msgstr "_Nedávné projekty"
+msgstr "Ne_dávné projekty"
 
 #: ../data/geany.glade.h:462
 msgid "_Close"
@@ -2186,9 +2162,8 @@ msgid "_Word Count"
 msgstr "_Počet slov"
 
 #: ../data/geany.glade.h:471
-#, fuzzy
 msgid "Load Ta_gs..."
-msgstr "Načíst ta_gy"
+msgstr "Načíst ta_gy..."
 
 #: ../data/geany.glade.h:472
 msgid "_Help"
@@ -2211,14 +2186,12 @@ msgid "Wi_ki"
 msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:477
-#, fuzzy
 msgid "Report a _Bug..."
-msgstr "_Nahlásit chybu"
+msgstr "Nahlásit _chybu"
 
 #: ../data/geany.glade.h:478
-#, fuzzy
 msgid "_Donate..."
-msgstr "_Přispět"
+msgstr "_Přispět..."
 
 #: ../data/geany.glade.h:479 ../src/sidebar.c:124
 msgid "Symbols"
@@ -2510,9 +2483,8 @@ msgstr "_Spustit"
 
 #. build the code with make custom
 #: ../src/build.c:2618 ../src/build.c:2809 ../src/build.c:2863
-#, fuzzy
 msgid "Make Custom _Target..."
-msgstr "Make _vlastní cíl"
+msgstr "Make _vlastní cíl..."
 
 #. build the code with make object
 #: ../src/build.c:2620 ../src/build.c:2810 ../src/build.c:2871
@@ -2770,9 +2742,9 @@ msgid "unknown"
 msgstr "neznámý"
 
 #: ../src/dialogs.c:1214
-#, fuzzy, c-format
+#, c-format
 msgid "%s Properties"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti %s"
 
 #: ../src/dialogs.c:1247 ../src/ui_utils.c:285
 msgid "(with BOM)"
@@ -3135,31 +3107,28 @@ msgid "%s file"
 msgstr "%s soubor"
 
 #: ../src/filetypes.c:93
-#, fuzzy, c-format
+#, c-format
 msgid "%s script"
-msgstr "%s skript"
+msgstr "Skript %s"
 
 #: ../src/filetypes.c:94
-#, fuzzy, c-format
+#, c-format
 msgid "%s document"
-msgstr "XML dokument"
+msgstr "Dokument %s"
 
 #: ../src/filetypes.c:164
-#, fuzzy
 msgid "Shell"
-msgstr "Shell:"
+msgstr "Shell"
 
 #: ../src/filetypes.c:165
 msgid "Makefile"
 msgstr "Makefile"
 
 #: ../src/filetypes.c:169
-#, fuzzy
 msgid "Cascading Stylesheet"
 msgstr "Kaskádové styly"
 
 #: ../src/filetypes.c:178
-#, fuzzy
 msgid "Config"
 msgstr "Konfigurační soubor"
 
@@ -3170,15 +3139,15 @@ msgstr "Gettext jazykový soubor"
 
 #: ../src/filetypes.c:414
 msgid "_Programming Languages"
-msgstr "_Programovací Jazyky"
+msgstr "_Programovací jazyky"
 
 #: ../src/filetypes.c:415
 msgid "_Scripting Languages"
-msgstr "_Skriptovací Jazyky"
+msgstr "_Skriptovací jazyky"
 
 #: ../src/filetypes.c:416
 msgid "_Markup Languages"
-msgstr "_Značkovací Jazyky"
+msgstr "_Značkovací jazyky"
 
 #: ../src/filetypes.c:417
 msgid "M_iscellaneous"
@@ -3214,7 +3183,6 @@ msgid "Default"
 msgstr "Výchozí"
 
 #: ../src/highlighting.c:1343
-#, fuzzy
 msgid "The current filetype overrides the default style."
 msgstr "Současný typ souboru přepisuje výchozí styl."
 
@@ -3332,7 +3300,7 @@ msgstr "Znovu otevřít poslední zavřenou záložku"
 
 #: ../src/keybindings.c:277
 msgid "Quit"
-msgstr ""
+msgstr "Ukončit"
 
 #: ../src/keybindings.c:294
 msgid "Undo"
@@ -3558,9 +3526,8 @@ msgid "Go to End of Line"
 msgstr "Přejít na konec řádku"
 
 #: ../src/keybindings.c:492
-#, fuzzy
 msgid "Go to Start of Display Line"
-msgstr "Přejít na konec zobrazené části řádku"
+msgstr "Přejít na začátek zobrazené části řádku"
 
 #: ../src/keybindings.c:494
 msgid "Go to End of Display Line"
@@ -4392,7 +4359,7 @@ msgstr "Pro více informací viz manuál programu grep."
 
 #: ../src/search.c:964
 msgid "_Recurse in subfolders"
-msgstr "_Rekurzivně v podadresářích"
+msgstr "Rekurzivně v _podadresářích"
 
 #: ../src/search.c:977
 msgid "_Invert search results"
@@ -5139,7 +5106,6 @@ msgid "H_ide Sidebar"
 msgstr "S_krýt postranní panel"
 
 #: ../src/sidebar.c:720 ../plugins/filebrowser.c:630
-#, fuzzy
 msgid "_Find in Files..."
 msgstr "_Najít v souborech"
 
@@ -5406,19 +5372,16 @@ msgid "Create Cla_ss"
 msgstr "_Vytvořit třídu"
 
 #: ../plugins/classbuilder.c:1097
-#, fuzzy
 msgid "_C++ Class..."
-msgstr "_C++ třída"
+msgstr "_C++ třída..."
 
 #: ../plugins/classbuilder.c:1100
-#, fuzzy
 msgid "_GTK+ Class..."
-msgstr "_GTK+ třída"
+msgstr "_GTK+ třída..."
 
 #: ../plugins/classbuilder.c:1103
-#, fuzzy
 msgid "_PHP Class..."
-msgstr "_PHP třída"
+msgstr "_PHP třída..."
 
 #: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
@@ -5496,9 +5459,8 @@ msgid "HTML (name)"
 msgstr "HTML (entita)"
 
 #: ../plugins/htmlchars.c:739
-#, fuzzy
 msgid "_Insert Special HTML Characters..."
-msgstr "Vložit _speciální HTML znak"
+msgstr "Vložit _speciální HTML znaky..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:754
@@ -5576,15 +5538,13 @@ msgstr "_Export"
 
 #. HTML
 #: ../plugins/export.c:787
-#, fuzzy
 msgid "As _HTML..."
-msgstr "Jako _HTML"
+msgstr "Jako _HTML..."
 
 #. LaTeX
 #: ../plugins/export.c:793
-#, fuzzy
 msgid "As _LaTeX..."
-msgstr "Jako _LaTeX"
+msgstr "Jako _LaTeX..."
 
 #: ../plugins/filebrowser.c:45
 msgid "File Browser"
@@ -5604,7 +5564,6 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Spuštění externího příkazu '%s' selhalo (%s)."
 
 #: ../plugins/filebrowser.c:615
-#, fuzzy
 msgid "Open _Externally"
 msgstr "Otevřít _externě"
 
@@ -5812,15 +5771,13 @@ msgstr "_Vedle sebe"
 
 #: ../plugins/splitwindow.c:413
 msgid "_Top and Bottom"
-msgstr "Nad sebou"
+msgstr "_Nad sebou"
 
 #: ../plugins/splitwindow.c:429
-#, fuzzy
 msgid "Side by Side"
-msgstr "_Vedle sebe"
+msgstr "Vedle sebe"
 
 #: ../plugins/splitwindow.c:431
-#, fuzzy
 msgid "Top and Bottom"
 msgstr "Nad sebou"
 
