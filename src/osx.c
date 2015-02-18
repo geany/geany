@@ -23,6 +23,61 @@
 #include "osx.h"
 
 #include "ui_utils.h"
+#include "main.h"
+
+
+static gboolean app_block_termination_cb(GtkosxApplication *app, gpointer data)
+{
+	return !main_quit();
+}
+
+
+/* For some reason osx doesn't like when the NSApplicationOpenFile handler blocks for 
+ * a long time which may be caused by the project_ask_close() below. Finish the
+ * NSApplicationOpenFile handler immediately and perform the potentially blocking
+ * code on idle in this function. */
+static gboolean open_project_idle(gchar *locale_path)
+{
+	gchar *utf8_path;
+
+	utf8_path = utils_get_utf8_from_locale(locale_path);
+	if (app->project == NULL || 
+		(g_strcmp0(utf8_path, app->project->file_name) != 0 && project_ask_close()))
+		project_load_file_with_session(locale_path);
+	g_free(utf8_path);
+	g_free(locale_path);
+	return FALSE;
+}
+
+
+static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpointer user_data)
+{
+	gchar opened = FALSE;
+	gchar *locale_path;
+
+	locale_path = utils_get_locale_from_utf8(path);
+
+	if (!g_path_is_absolute(locale_path))
+	{
+		gchar *cwd = g_get_current_dir();
+		SETPTR(locale_path, g_build_filename(cwd, locale_path, NULL));
+		g_free(cwd);
+	}
+
+	if (g_str_has_suffix(path, ".geany"))
+	{
+		g_idle_add((GSourceFunc)open_project_idle, locale_path);
+		opened = TRUE;
+	}
+	else
+	{
+		opened = document_open_file(locale_path, FALSE, NULL, NULL) != NULL;
+		g_free(locale_path);
+	}
+
+	return opened;
+}
+
 
 void osx_ui_init(void)
 {
@@ -43,7 +98,11 @@ void osx_ui_init(void)
 	gtkosx_application_set_help_menu(osx_app, GTK_MENU_ITEM(item));
 
 	gtkosx_application_set_use_quartz_accelerators(osx_app, FALSE);
+
+	g_signal_connect(osx_app, "NSApplicationBlockTermination",
+					G_CALLBACK(app_block_termination_cb), NULL);
+	g_signal_connect(osx_app, "NSApplicationOpenFile",
+					G_CALLBACK(app_open_file_cb), NULL);
 }
 
 #endif /* MAC_INTEGRATION */
-
