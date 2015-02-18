@@ -2147,3 +2147,36 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 	return resdirs[type];
 }
+
+
+void utils_start_new_geany_instance(gchar *doc_path)
+{
+	gchar **argv;
+	const gchar *command = is_osx_bundle() ? "open" : "geany";
+	gchar *exec_path = g_find_program_in_path(command);
+
+	if (exec_path)
+	{
+		GError *err = NULL;
+
+		if (is_osx_bundle())
+		{
+			gchar *osx_argv[] = {exec_path, "-n", "-a", "Geany", doc_path, NULL};
+			argv = osx_argv;
+		}
+		else
+		{
+			gchar *unix_argv[] = {exec_path, "-i", doc_path, NULL};
+			argv = unix_argv;
+		}
+
+		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
+		{
+			g_printerr("Unable to open new window: %s", err->message);
+			g_error_free(err);
+		}
+		g_free(exec_path);
+	}
+	else
+		g_printerr("Unable to find 'geany'");
+}

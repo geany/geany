@@ -308,6 +308,8 @@ gchar *utils_get_user_config_dir(void);
 
 const gchar *utils_resource_dir(GeanyResourceDirType type);
 
+void utils_start_new_geany_instance(gchar *doc_path);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

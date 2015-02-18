@@ -22,6 +22,7 @@
 
 #include "osx.h"
 
+#include "utils.h"
 #include "ui_utils.h"
 #include "main.h"
 
@@ -79,9 +80,15 @@ static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpoint
 }
 
 
+static void on_new_window(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_data)
+{
+	utils_start_new_geany_instance(NULL);
+}
+
+
 void osx_ui_init(void)
 {
-	GtkWidget *item;
+	GtkWidget *item, *menu;
 	GtkosxApplication *osx_app = gtkosx_application_get();
 
 	item = ui_lookup_widget(main_widgets.window, "menubar1");
@@ -103,6 +110,12 @@ void osx_ui_init(void)
 					G_CALLBACK(app_block_termination_cb), NULL);
 	g_signal_connect(osx_app, "NSApplicationOpenFile",
 					G_CALLBACK(app_open_file_cb), NULL);
+
+	menu = gtk_menu_new();
+	item = gtk_menu_item_new_with_label("New Window");
+	g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(on_new_window), NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	gtkosx_application_set_dock_menu(osx_app, GTK_MENU_SHELL(menu));
 }
 
 #endif /* MAC_INTEGRATION */

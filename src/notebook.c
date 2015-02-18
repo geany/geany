@@ -419,29 +419,14 @@ static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
 
 static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gchar *geany_path;
 	GeanyDocument *doc = user_data;
+	gchar *doc_path;
 
 	g_return_if_fail(doc->is_valid);
 
-	geany_path = g_find_program_in_path("geany");
-
-	if (geany_path)
-	{
-		gchar *doc_path = utils_get_locale_from_utf8(doc->file_name);
-		gchar *argv[] = {geany_path, "-i", doc_path, NULL};
-		GError *err = NULL;
-
-		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(doc_path);
-		g_free(geany_path);
-	}
-	else
-		g_printerr("Unable to find 'geany'");
+	doc_path = utils_get_locale_from_utf8(doc->file_name);
+	utils_start_new_geany_instance(doc_path);
+	g_free(doc_path);
 }
 
 
