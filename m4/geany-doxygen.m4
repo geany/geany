@@ -13,9 +13,7 @@ AC_DEFUN([GEANY_CHECK_DOXYGEN],
 
 	AS_IF([test "x$geany_with_doxygen" != "xno"],
 	[
-		AS_IF([test "x$DOXYGEN" != "x"],
-			[geany_doxygen_path="$DOXYGEN"], [geany_doxygen_path="doxygen"])
-		AC_PATH_PROG([DOXYGEN], [$geany_doxygen_path], [no])
+		AC_PATH_PROG([DOXYGEN], [doxygen], [no])
 		AS_IF([test "x$DOXYGEN" != "xno"],
 			  [geany_with_doxygen=yes],
 			  [test "x$geany_with_doxygen" = xyes],
