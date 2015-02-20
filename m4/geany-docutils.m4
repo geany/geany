@@ -32,8 +32,7 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_HTML],
 	AC_ARG_VAR([RST2HTML], [Path to Docutils rst2html executable])
 	AS_IF([test "x$geany_enable_html_docs" != "xno"],
 	[
-dnl TODO: try rst2html.py first
-		AC_PATH_PROG([RST2HTML], [rst2html], [no])
+		AC_PATH_PROGS([RST2HTML], [rst2html rst2html.py], [no])
 		AS_IF([test "x$RST2HTML" != "xno"],
 			[geany_enable_html_docs="yes"],
 			[test "x$geany_enable_html_docs" = "xyes"],
@@ -61,7 +60,7 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_PDF],
 	AC_ARG_VAR([RST2PDF], [Path to Docutils rst2pdf executable])
 	AS_IF([test "x$geany_enable_pdf_docs" != "xno"],
 	[
-		AC_PATH_PROG([RST2PDF], [rst2pdf], [no])
+		AC_PATH_PROGS([RST2PDF], [rst2pdf rst2pdf.py], [no])
 		AS_IF([test "x$RST2PDF" != "xno"],
 			[geany_enable_pdf_docs="yes"],
 			[test "x$geany_enable_pdf_docs" = "xyes"],
