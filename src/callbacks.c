@@ -540,10 +540,7 @@ G_MODULE_EXPORT void on_notebook1_switch_page_after(GtkNotebook *notebook, gpoin
 	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
 		return;
 
-	if (page_num == (guint) -1 && page != NULL)
-		doc = document_find_by_sci(SCINTILLA(page));
-	else
-		doc = document_get_from_page(page_num);
+	doc = document_get_from_notebook_child(page);
 
 	if (doc != NULL)
 	{

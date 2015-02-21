@@ -172,6 +172,8 @@ GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const
 
 GeanyDocument *document_get_current(void);
 
+GeanyDocument *document_get_from_notebook_child(GtkWidget *page);
+
 GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);

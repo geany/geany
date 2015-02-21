@@ -338,6 +338,20 @@ static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 }
 
 
+/* Finds the document for the given notebook page widget */
+GeanyDocument *document_get_from_notebook_child(GtkWidget *page)
+{
+	ScintillaObject *sci;
+
+	g_return_val_if_fail(GTK_IS_BOX(page), NULL);
+
+	sci = locate_sci_in_container(page);
+	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
+
+	return document_find_by_sci(sci);
+}
+
+
 /**
  *  Finds the document for the given notebook page @a page_num.
  *
@@ -348,18 +362,13 @@ static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 GeanyDocument *document_get_from_page(guint page_num)
 {
 	GtkWidget *parent;
-	ScintillaObject *sci;
 
 	if (page_num >= documents_array->len)
 		return NULL;
 
 	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
-	g_return_val_if_fail(GTK_IS_BOX(parent), NULL);
 
-	sci = locate_sci_in_container(parent);
-	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
-
-	return document_find_by_sci(sci);
+	return document_get_from_notebook_child(parent);
 }
 
 
