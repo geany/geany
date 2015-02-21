@@ -3323,8 +3323,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	gchar *text, *markup;
 	GtkWidget *hbox, *vbox, *icon, *label, *extra_label, *content_area;
 	GtkWidget *info_widget, *parent;
-	parent = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook),
-                                       document_get_notebook_page(doc));
+	parent = document_get_notebook_child(doc);
 
 	va_start(args, format);
 	text = g_strdup_vprintf(format, args);
