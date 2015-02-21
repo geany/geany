@@ -645,7 +645,14 @@ static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev
 }
 
 
-/* Returns page number of notebook page, or -1 on error */
+/* Returns page number of notebook page, or -1 on error
+ *
+ * Note: the widget added to the notebook is *not* shown by this function, so you have to call
+ * something like `gtk_widget_show(document_get_notebook_child(doc))` when finished setting up the
+ * document.  This is necessary because when the notebook tab is added, the document isn't ready
+ * yet, and we  need the notebook to emit ::switch-page after it actually is.  Actually this
+ * doesn't prevent the signal to me emitted straight when we insert the page (this looks like a
+ * GTK bug), but it emits it again when showing the child, and it's all we need. */
 gint notebook_new_tab(GeanyDocument *this)
 {
 	GtkWidget *hbox, *ebox, *vbox;
@@ -659,7 +666,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	vbox = gtk_vbox_new(FALSE, 0);
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
-	gtk_widget_show(vbox);
 
 	this->priv->tab_label = gtk_label_new(NULL);
 

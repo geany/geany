@@ -272,11 +272,8 @@ GeanyDocument *document_find_by_id(guint id)
 }
 
 
-/** Gets the notebook page index for a document.
- * @param doc The document.
- * @return The index.
- * @since 0.19 */
-gint document_get_notebook_page(GeanyDocument *doc)
+/* gets the widget the main_widgets.notebook consider is its child for this document */
+static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
 {
 	GtkWidget *parent;
 	GtkWidget *child;
@@ -291,6 +288,18 @@ gint document_get_notebook_page(GeanyDocument *doc)
 		child = parent;
 		parent = gtk_widget_get_parent(child);
 	}
+
+	return child;
+}
+
+
+/** Gets the notebook page index for a document.
+ * @param doc The document.
+ * @return The index.
+ * @since 0.19 */
+gint document_get_notebook_page(GeanyDocument *doc)
+{
+	GtkWidget *child = document_get_notebook_child(doc);
 
 	return gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), child);
 }
@@ -839,6 +848,9 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 		ft = filetypes_detect_from_document(doc);
 
 	document_set_filetype(doc, ft); /* also re-parses tags */
+
+	/* now the document is fully ready, display it (see notebook_new_tab()) */
+	gtk_widget_show(document_get_notebook_child(doc));
 
 	ui_set_window_title(doc);
 	build_menu_update(doc);
@@ -1418,6 +1430,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 		}
+
+		/* now the document is fully ready, display it (see notebook_new_tab()) */
+		gtk_widget_show(document_get_notebook_child(doc));
 	}
 
 	g_free(display_filename);
