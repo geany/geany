@@ -1411,18 +1411,31 @@ static gboolean pm_tree_search(const gchar *key, const gchar *haystack)
 	gchar *normalized_key = NULL;
 	gchar *case_normalized_string = NULL;
 	gchar *case_normalized_key = NULL;
-	gboolean matched = FALSE;
+	gboolean matched = TRUE;
 
 	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
 	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
 
 	if (normalized_string != NULL && normalized_key != NULL)
 	{
+		GString *stripped_key;
+		gchar **subkey, **subkeys;
+
 		case_normalized_string = g_utf8_casefold(normalized_string, -1);
 		case_normalized_key = g_utf8_casefold(normalized_key, -1);
-		/* match not only start of plugin name but also any substring in the name */
-		if (strstr(case_normalized_string, case_normalized_key) != NULL)
-			matched = TRUE;
+		stripped_key = g_string_new(case_normalized_key);
+		do {} while (utils_string_replace_all(stripped_key, "  ", " "));
+		subkeys = g_strsplit(stripped_key->str, " ", -1);
+		g_string_free(stripped_key, TRUE);
+		foreach_strv(subkey, subkeys)
+		{
+			if (strstr(case_normalized_string, *subkey) == NULL)
+			{
+				matched = FALSE;
+				break;
+			}
+		}
+		g_strfreev(subkeys);
 	}
 
 	g_free(normalized_key);
@@ -1439,15 +1452,17 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	Plugin *plugin;
 	gboolean matched;
 	const gchar *key;
+	gchar *haystack, *filename;
 
 	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
 	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
 
-	/* first search the plugin name */
-	matched = pm_tree_search(key, plugin->info.name);
-	/* if not found, extend search to plugin description */
-	if (! matched)
-		matched = pm_tree_search(key, plugin->info.description);
+	filename = g_path_get_basename(plugin->filename);
+	haystack = g_strjoin(" ", plugin->info.name, plugin->info.description,
+					plugin->info.author, filename, NULL);
+	matched = pm_tree_search(key, haystack);
+	g_free(haystack);
+	g_free(filename);
 
 	return matched;
 }
