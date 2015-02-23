@@ -2679,9 +2679,9 @@ The extract_filetype_regex has the default value GEANY_DEFAULT_FILETYPE_REGEX.
 Statusbar Templates
 ```````````````````
 
-The default statusbar template is (note ``\t`` = tab):
+The default statusbar template is:
 
-``line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
+``line: %l / %L%T col: %C%T ch: %H%T sel: %s%T %w      %t      %mmode: %M      encoding: %e      filetype: %f      scope: %S``
 
 Settings the preference to an empty string will also cause Geany to use this
 internal default.
@@ -2695,6 +2695,8 @@ Placeholder   Description
   ``%L``      The total number of lines
   ``%c``      The current column number starting at 0
   ``%C``      The current column number starting at 1
+  ``%h``      The current character number starting at 0
+  ``%H``      The current character number starting at 1
   ``%s``      The number of selected characters or if only whole lines
               selected, the number of selected lines.
   ``%w``      Shows ``RO`` when the document is in read-only mode,
@@ -2711,6 +2713,7 @@ Placeholder   Description
   ``%r``      Shows whether the document is read-only (RO) or nothing.
   ``%Y``      The Scintilla style number at the caret position. This is
               useful if you're debugging color schemes or related code.
+  ``%T``      A single tab character.
 ============  ===========================================================
 
 Terminal (VTE) preferences

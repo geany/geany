@@ -60,9 +60,10 @@
 
 
 #define DEFAULT_STATUSBAR_TEMPLATE N_(\
-	"line: %l / %L\t "   \
-	"col: %c\t "         \
-	"sel: %s\t "         \
+	"line: %l / %L%T "   \
+	"col: %C%T "         \
+	"ch: %H%T "          \
+	"sel: %s%T "         \
 	"%w      %t      %m" \
 	"mode: %M      "     \
 	"encoding: %e      " \
@@ -221,6 +222,14 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 			case 'C':
 				g_string_append_printf(stats_str, "%d", col + 1);
 				break;
+			case 'h':
+				g_string_append_printf(stats_str, "%d",
+					pos - sci_get_position_from_line(doc->editor->sci, line));
+				break;
+			case 'H':
+				g_string_append_printf(stats_str, "%d",
+					pos - sci_get_position_from_line(doc->editor->sci, line) + 1);
+				break;
 			case 'p':
 				g_string_append_printf(stats_str, "%u", pos);
 				break;
@@ -297,6 +306,9 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				g_string_append_c(stats_str, ' ');
 				g_string_append_printf(stats_str, "%d",
 					sci_get_style_at(doc->editor->sci, pos));
+				break;
+			case 'T':
+				g_string_append_c(stats_str, '\t');
 				break;
 			default:
 				g_string_append_len(stats_str, expos, 1);
