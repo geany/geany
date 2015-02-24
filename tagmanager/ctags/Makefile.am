@@ -29,6 +29,7 @@ parsers = \
 	haxe.c \
 	html.c \
 	js.c \
+	json.c \
 	latex.c \
 	lregex.c \
 	lua.c \

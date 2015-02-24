@@ -247,6 +247,7 @@ test_sources = \
 	simple.d						\
 	simple.html						\
 	simple.js						\
+	simple.json						\
 	simple.ksh						\
 	simple.lua						\
 	simple.mak						\
