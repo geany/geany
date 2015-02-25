@@ -13,13 +13,56 @@ EXTRA_DIST = \
 	makefile.win32 \
 	$(srcdir)/signalconn.c.in
 
+AM_CPPFLAGS = \
+	-I$(top_srcdir) \
+	-I$(top_srcdir)/scintilla/include \
+	-I$(top_srcdir)/tagmanager/src \
+	-DGTK \
+	-DGEANY_PRIVATE \
+	-DG_LOG_DOMAIN=\""Geany"\" \
+	@LIBGEANY_CFLAGS@ \
+	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ \
+	$(MAC_INTEGRATION_CFLAGS)
+
 bin_PROGRAMS = geany
 lib_LTLIBRARIES = libgeany.la
 
 geany_SOURCES = main.c
 geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
-SRCS = \
+geany_includedir = $(includedir)/geany
+
+# only install headers that define types or macros, not just functions
+geany_include_HEADERS = \
+	app.h \
+	build.h \
+	dialogs.h \
+	document.h \
+	editor.h \
+	encodings.h \
+	filetypes.h \
+	geany.h \
+	gtkcompat.h \
+	highlighting.h \
+	keybindings.h \
+	main.h \
+	msgwindow.h \
+	navqueue.h \
+	plugindata.h \
+	pluginutils.h \
+	prefs.h \
+	project.h \
+	sciwrappers.h \
+	search.h \
+	stash.h \
+	support.h \
+	symbols.h \
+	templates.h \
+	toolbar.h \
+	ui_utils.h \
+	utils.h
+
+libgeany_la_SOURCES = \
 	about.c about.h \
 	app.h \
 	build.c build.h \
@@ -63,91 +106,7 @@ SRCS = \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
-
-geany_includedir = $(includedir)/geany
-
-# only install headers that define types or macros, not just functions
-geany_include_HEADERS = \
-	app.h \
-	build.h \
-	dialogs.h \
-	document.h \
-	editor.h \
-	encodings.h \
-	filetypes.h \
-	geany.h \
-	gtkcompat.h \
-	highlighting.h \
-	keybindings.h \
-	main.h \
-	msgwindow.h \
-	navqueue.h \
-	plugindata.h \
-	pluginutils.h \
-	prefs.h \
-	project.h \
-	sciwrappers.h \
-	search.h \
-	stash.h \
-	support.h \
-	symbols.h \
-	templates.h \
-	toolbar.h \
-	ui_utils.h \
-	utils.h
-
-
-AM_CPPFLAGS = \
-	-I$(top_srcdir) \
-	-I$(top_srcdir)/scintilla/include \
-	-I$(top_srcdir)/tagmanager/src \
-	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ $(MAC_INTEGRATION_CFLAGS) @LIBGEANY_CFLAGS@
-
-# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
-nodist_EXTRA_geany_SOURCES = dummy.cxx
-nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
-
-if MINGW
-# build Geany for Windows on non-Windows systems (cross-compile)
-
-libgeany_la_SOURCES = $(SRCS) win32.c win32.h
-
-libgeany_la_LIBADD = \
-	$(top_builddir)/scintilla/libscintilla.la \
-	$(top_builddir)/tagmanager/ctags/libctags.la \
-	$(top_builddir)/tagmanager/mio/libmio.la \
-	$(top_builddir)/tagmanager/src/libtagmanager.la \
-	@GTK_LIBS@ \
-	@GTHREAD_LIBS@ \
-	$(INTLLIBS) \
-	-lole32 -lwsock32 -lcomdlg32
-
-libgeany_la_LDFLAGS = -Wl,-luuid $(AM_LDFLAGS)
-geany_LDADD += geany_private.res  -lcomdlg32
-
-AM_CFLAGS = -DGEANY_DATADIR=\"data\" \
-			-DGEANY_DOCDIR=\"\" \
-			-DGEANY_LIBDIR=\"\" \
-			-DGEANY_LOCALEDIR=\"\" \
-			-DGEANY_PREFIX=\"\" \
-			-DGEANY_PRIVATE \
-			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
-
-libgeany_la_LDFLAGS += @LIBGEANY_LDFLAGS@ -mwindows -mms-bitfields -no-undefined
-
-WINDRES = $(host_alias)-windres
-
-geany_private.res: $(top_srcdir)/geany_private.rc
-	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
-
-clean-local:
-	rm -f geany_private.res
-
-else
-# build Geany for all other platforms
-
-libgeany_la_SOURCES = $(SRCS) vte.c vte.h
+libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
 	$(top_builddir)/scintilla/libscintilla.la \
@@ -159,18 +118,48 @@ libgeany_la_LIBADD = \
 	$(MAC_INTEGRATION_LIBS) \
 	$(INTLLIBS)
 
-AM_CFLAGS = -DGEANY_DATADIR=\""$(datadir)"\" \
-			-DGEANY_DOCDIR=\""$(docdir)"\" \
-			-DGEANY_LIBDIR=\""$(libdir)"\" \
-			-DGEANY_LOCALEDIR=\""$(localedir)"\" \
-			-DGEANY_PREFIX=\""$(prefix)"\" \
-			-DGEANY_PRIVATE \
-			-DGTK \
-			-DG_LOG_DOMAIN=\""Geany"\"
+# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
+nodist_EXTRA_geany_SOURCES = dummy.cxx
+nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
 
-libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
+CLEANFILES =
 
-clean-local:
+if MINGW
+
+AM_CPPFLAGS += \
+	-DGEANY_DATADIR=\"data\" \
+	-DGEANY_DOCDIR=\"\" \
+	-DGEANY_LIBDIR=\"\" \
+	-DGEANY_LOCALEDIR=\"\" \
+	-DGEANY_PREFIX=\"\"
+
+geany_LDADD += geany_private.res
+
+WINDRES = $(host_alias)-windres
+
+geany_private.res: $(top_srcdir)/geany_private.rc
+	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
+
+# build Geany for Windows on non-Windows systems (cross-compile)
+libgeany_la_SOURCES += win32.c win32.h
+
+libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
+
+libgeany_la_LDFLAGS += -Wl,-luuid -mwindows -mms-bitfields -no-undefined
+
+CLEANFILES += geany_private.res
+
+else
+# build Geany for all other platforms
+
+AM_CPPFLAGS += \
+	-DGEANY_DATADIR=\""$(datadir)"\" \
+	-DGEANY_DOCDIR=\""$(docdir)"\" \
+	-DGEANY_LIBDIR=\""$(libdir)"\" \
+	-DGEANY_LOCALEDIR=\""$(localedir)"\" \
+	-DGEANY_PREFIX=\""$(prefix)"\"
+
+libgeany_la_SOURCES += vte.c vte.h
 
 endif
 
@@ -188,4 +177,4 @@ signalconn.c: $(glade_file) $(template_file)
 		$(SED) -n '/@callback_map@/{:l;n;p;b l}' "$(template_file)" \
 	) > $@ || { $(RM) $@ && exit 1; }
 
-CLEANFILES = signalconn.c
+CLEANFILES += signalconn.c
