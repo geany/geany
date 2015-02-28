@@ -139,6 +139,8 @@ void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
+void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
+
 
 #ifdef GEANY_PRIVATE
 

@@ -142,7 +142,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	if (! interface_prefs.show_symbol_list_expanders)
 		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 	/* Tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -312,7 +312,7 @@ static void prepare_openfiles(void)
 	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 
 	/* tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));

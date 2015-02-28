@@ -1806,6 +1806,67 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb)
 }
 
 
+/* Shamelessly stolen from GTK */
+static gboolean ui_tree_view_query_tooltip_cb(GtkWidget *widget, gint x, gint y,
+		gboolean keyboard_tip, GtkTooltip *tooltip, gpointer data)
+{
+	GValue value = G_VALUE_INIT;
+	GValue transformed = G_VALUE_INIT;
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	GtkTreeModel *model;
+	GtkTreeView *tree_view = GTK_TREE_VIEW(widget);
+	gint column = GPOINTER_TO_INT(data);
+	gboolean tootlip_set = FALSE;
+
+	if (! gtk_tree_view_get_tooltip_context(tree_view, &x, &y, keyboard_tip, &model, &path, &iter))
+		return FALSE;
+
+	gtk_tree_model_get_value(model, &iter, column, &value);
+
+	g_value_init(&transformed, G_TYPE_STRING);
+	if (g_value_transform(&value, &transformed) && g_value_get_string(&transformed))
+	{
+		gtk_tooltip_set_text(tooltip, g_value_get_string(&transformed));
+		gtk_tree_view_set_tooltip_row(tree_view, tooltip, path);
+		tootlip_set = TRUE;
+	}
+
+	g_value_unset(&transformed);
+	g_value_unset(&value);
+	gtk_tree_path_free(path);
+
+	return tootlip_set;
+}
+
+
+/** Adds text tooltips to a tree view.
+ *
+ * This is similar to gtk_tree_view_set_tooltip_column() but considers the column contents to be
+ * text, not markup -- it uses gtk_tooltip_set_text() rather than gtk_tooltip_set_markup() to set
+ * the tooltip's value.
+ *
+ * @warning Unlike gtk_tree_view_set_tooltip_column() you currently cannot change or remove the
+ * tooltip column after it has been added.  Trying to do so will probably give funky results.
+ *
+ * @param tree_view The tree view
+ * @param column The column to get the tooltip from
+ *
+ * @since 1.25 (API 223)
+ */
+/* Note: @p column is int and not uint both to match gtk_tree_view_set_tooltip_column() signature
+ * and to allow future support of -1 to unset if ever wanted */
+void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column)
+{
+	g_return_if_fail(column >= 0);
+	g_return_if_fail(GTK_IS_TREE_VIEW(tree_view));
+
+	g_signal_connect(tree_view, "query-tooltip",
+			G_CALLBACK(ui_tree_view_query_tooltip_cb), GINT_TO_POINTER(column));
+	gtk_widget_set_has_tooltip(GTK_WIDGET(tree_view), TRUE);
+}
+
+
 /**
  * Modifies the font of a widget using gtk_widget_modify_font().
  *

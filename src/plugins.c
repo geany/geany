@@ -247,7 +247,8 @@ static UIUtilsFuncs uiutils_funcs = {
 	&ui_get_gtk_settings_integer,
 	&ui_combo_box_add_to_history,
 	&ui_menu_add_document_items_sorted,
-	&ui_lookup_stock_label
+	&ui_lookup_stock_label,
+	&ui_tree_view_set_tooltip_text_column
 };
 
 static DialogFuncs dialog_funcs = {

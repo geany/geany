@@ -308,6 +308,8 @@
 	geany_functions->p_ui->ui_menu_add_document_items_sorted
 #define ui_lookup_stock_label \
 	geany_functions->p_ui->ui_lookup_stock_label
+#define ui_tree_view_set_tooltip_text_column \
+	geany_functions->p_ui->ui_tree_view_set_tooltip_text_column
 #define dialogs_show_question \
 	geany_functions->p_dialogs->dialogs_show_question
 #define dialogs_show_msgbox \

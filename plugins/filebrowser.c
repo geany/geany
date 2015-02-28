@@ -850,7 +850,7 @@ static void prepare_file_view(void)
 	ui_widget_modify_font_from_string(file_view, geany->interface_prefs->tagbar_font);
 
 	/* tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_FILENAME);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));

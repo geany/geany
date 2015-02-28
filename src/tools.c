@@ -563,7 +563,7 @@ static void cc_show_dialog_custom_commands(void)
 	cc.store = gtk_list_store_new(CC_COLUMN_COUNT, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING,
 			G_TYPE_STRING, G_TYPE_STRING);
 	cc.view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(cc.store));
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(cc.view), TRUE);
 	cc.selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(cc.view));
 	/* ID column */

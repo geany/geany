@@ -58,7 +58,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 222
+#define GEANY_API_VERSION 223
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -501,6 +501,7 @@ typedef struct UIUtilsFuncs
 	void		(*ui_menu_add_document_items_sorted) (GtkMenu *menu, struct GeanyDocument *active,
 				GCallback callback, GCompareFunc compare_func);
 	const gchar* (*ui_lookup_stock_label)(const gchar *stock_id);
+	void		(*ui_tree_view_set_tooltip_text_column) (GtkTreeView *tree_view, gint column);
 }
 UIUtilsFuncs;
 
