@@ -1810,8 +1810,8 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb)
 static gboolean ui_tree_view_query_tooltip_cb(GtkWidget *widget, gint x, gint y,
 		gboolean keyboard_tip, GtkTooltip *tooltip, gpointer data)
 {
-	GValue value = G_VALUE_INIT;
-	GValue transformed = G_VALUE_INIT;
+	GValue value = { 0 };
+	GValue transformed = { 0 };
 	GtkTreeIter iter;
 	GtkTreePath *path;
 	GtkTreeModel *model;
