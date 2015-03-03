@@ -110,8 +110,12 @@ GEANY_CHECK_THE_FORCE dnl hehe
 # i18n
 GEANY_I18N
 
-GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
-AC_SUBST([GEANY_DATA_DIR])
+# double eval since datarootdir is usually defined as ${prefix}/share
+AM_COND_IF([MINGW],
+  [pkgdatadir='${prefix}/data'],
+  [pkgdatadir='${datarootdir}/geany'])
+AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
+AC_SUBST([pkgdatadir])
 
 # Documentation tools
 GEANY_CHECK_DOCUTILS
