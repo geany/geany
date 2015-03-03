@@ -398,6 +398,17 @@ gint sci_get_current_position(ScintillaObject *sci)
 }
 
 
+gint sci_get_cursor_virtual_space(ScintillaObject *sci)
+{
+	gint selection_mode = sci_get_selection_mode(sci);
+
+	return selection_mode == SC_SEL_RECTANGLE || selection_mode == SC_SEL_THIN ?
+		SSM(sci, SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE, 0, 0) :
+		SSM(sci, SCI_GETSELECTIONNCARETVIRTUALSPACE,
+			SSM(sci, SCI_GETMAINSELECTION, 0, 0), 0);
+}
+
+
 /** Sets the cursor position.
  * @param sci Scintilla widget.
  * @param position Position.

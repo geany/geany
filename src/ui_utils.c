@@ -185,7 +185,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 /* note: some comments below are for translators */
 static gchar *create_statusbar_statistics(GeanyDocument *doc,
-	guint line, guint col, guint pos)
+	guint line, guint vcol, guint pos)
 {
 	const gchar *cur_tag;
 	const gchar *fmt;
@@ -216,10 +216,10 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 					sci_get_line_count(doc->editor->sci));
 				break;
 			case 'c':
-				g_string_append_printf(stats_str, "%d", col);
+				g_string_append_printf(stats_str, "%d", vcol);
 				break;
 			case 'C':
-				g_string_append_printf(stats_str, "%d", col + 1);
+				g_string_append_printf(stats_str, "%d", vcol + 1);
 				break;
 			case 'p':
 				g_string_append_printf(stats_str, "%u", pos);
@@ -238,6 +238,10 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
 			}
+			case 'n' :
+				g_string_append_printf(stats_str, "%d",
+					sci_get_selected_text_length(doc->editor->sci) - 1);
+				break;
 			case 'w':
 				/* RO = read-only */
 				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
@@ -328,7 +332,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 
 	if (doc != NULL)
 	{
-		guint line, col;
+		guint line, vcol;
 		gchar *stats_str;
 
 		if (pos == -1)
@@ -339,11 +343,12 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
 		if (pos <= sci_get_length(doc->editor->sci))
-			col = sci_get_col_from_position(doc->editor->sci, pos);
+			vcol = sci_get_col_from_position(doc->editor->sci, pos);
 		else
-			col = 0;
+			vcol = 0;
+		vcol += sci_get_cursor_virtual_space(doc->editor->sci);
 
-		stats_str = create_statusbar_statistics(doc, line, col, pos);
+		stats_str = create_statusbar_statistics(doc, line, vcol, pos);
 
 		/* can be overridden by status messages */
 		set_statusbar(stats_str, TRUE);

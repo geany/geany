@@ -2693,10 +2693,14 @@ Placeholder   Description
 ============  ===========================================================
   ``%l``      The current line number starting at 1
   ``%L``      The total number of lines
-  ``%c``      The current column number starting at 0
-  ``%C``      The current column number starting at 1
+  ``%c``      The current column number starting at 0, including virtual
+              space.
+  ``%C``      The current column number starting at 1, including virtual
+              space.
   ``%s``      The number of selected characters or if only whole lines
               selected, the number of selected lines.
+  ``%n``      The number of selected characters, even if only whole lines
+              are selected.
   ``%w``      Shows ``RO`` when the document is in read-only mode,
               otherwise shows whether the editor is in overtype (OVR)
               or insert (INS) mode.
