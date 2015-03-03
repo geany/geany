@@ -42,7 +42,6 @@ gint 				sci_get_col_from_position	(ScintillaObject *sci, gint position);
 gint 				sci_get_line_from_position	(ScintillaObject *sci, gint position);
 gint 				sci_get_position_from_line	(ScintillaObject *sci, gint line);
 gint 				sci_get_current_position	(ScintillaObject *sci);
-gint 				sci_get_cursor_virtual_space(ScintillaObject *sci);
 void 				sci_set_current_position	(ScintillaObject *sci, gint position, gboolean scroll_to_caret);
 
 gint				sci_get_selection_start		(ScintillaObject *sci);
@@ -127,6 +126,7 @@ gint				sci_marker_previous			(ScintillaObject *sci, gint line, gint marker_mask
 
 gint 				sci_get_position_from_col (ScintillaObject *sci, gint line, gint col);
 void 				sci_set_current_line		(ScintillaObject *sci, gint line);
+gint 				sci_get_cursor_virtual_space(ScintillaObject *sci);
 
 void 				sci_cut						(ScintillaObject *sci);
 void 				sci_copy					(ScintillaObject *sci);
