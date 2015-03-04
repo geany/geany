@@ -280,7 +280,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				}
 				break;
 			case 'M':
-				g_string_append(stats_str, editor_get_eol_char_name(doc->editor));
+				g_string_append(stats_str, utils_get_eol_short_name(sci_get_eol_mode(doc->editor->sci)));
 				break;
 			case 'e':
 				g_string_append(stats_str,
