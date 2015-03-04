@@ -673,7 +673,11 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)
+	{
+		foreach_ptr_array(tmp_array, i, session_files)
+			g_strfreev(tmp_array);
 		g_ptr_array_free(session_files, TRUE);
+	}
 
 	session_files = g_ptr_array_new();
 	have_session_files = TRUE;
