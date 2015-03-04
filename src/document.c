@@ -278,7 +278,7 @@ static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
 	GtkWidget *parent;
 	GtkWidget *child;
 
-	g_return_val_if_fail(doc != NULL, -1);
+	g_return_val_if_fail(doc != NULL, NULL);
 
 	child = GTK_WIDGET(doc->editor->sci);
 	parent = gtk_widget_get_parent(child);
