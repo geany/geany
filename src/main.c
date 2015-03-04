@@ -932,11 +932,14 @@ static void load_startup_files(gint argc, gchar **argv)
 
 	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
 	{
+		gchar *filename = main_get_argv_filename(argv[1]);
+
 		/* project file specified: load it, but decide the session later */
-		main_load_project_from_command_line(argv[1], FALSE);
+		main_load_project_from_command_line(filename, FALSE);
 		argc--, argv++;
 		/* force session load if using project-based session files */
 		load_session = project_prefs.project_session;
+		g_free(filename);
 	}
 
 	/* Load the default session if:
