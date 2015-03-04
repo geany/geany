@@ -91,9 +91,9 @@ typedef struct RunInfo
 static RunInfo *run_info;
 
 #ifdef G_OS_WIN32
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script.bat";
+static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.bat";
 #else
-static const gchar RUN_SCRIPT_CMD[] = "./geany_run_script.sh";
+static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
 
 /* pack group (<8) and command (<32) into a user_data pointer */
@@ -128,7 +128,7 @@ static guint build_items_count = 9;
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
 #endif
-static gboolean build_create_shellscript(const gchar *fname, const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
+static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
 static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -879,54 +879,49 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 }
 
 
-/* Returns: NULL if there was an error, or the working directory the script was created in.
- * vte_cmd_nonscript is the location of a string which is filled with the command to be used
- * when vc->skip_run_script is set, otherwise it will be set to NULL */
-static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, guint cmdindex)
+/* Returns: NULL if there was an error, or the command to be executed. If Geany is
+ * set to use a run script, the returned value is a path to the script that runs
+ * the command; otherwise the command itself is returned. working_dir is a pointer
+ * to the working directory from which the command is executed. Both strings are
+ * in the locale encoding. */
+static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmdindex)
 {
 	GeanyBuildCommand *cmd = NULL;
-	gchar *working_dir = NULL;
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
-	gboolean result = FALSE;
-	gchar *tmp;
-	gchar *cmd_string;
+	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
 	GError *error = NULL;
-
-	if (vte_cmd_nonscript != NULL)
-		*vte_cmd_nonscript = NULL;
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string = build_replace_placeholder(doc, cmd->command);
+	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
-	working_dir = build_replace_placeholder(doc, cmd_working_dir); /* in utf-8 */
+	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir);
+	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
 	/* only test whether working dir exists, don't change it or else Windows support will break
 	 * (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
 	 *  dir where geany.exe was started from, so we can't change it) */
-	if (EMPTY(working_dir) || ! g_file_test(working_dir, G_FILE_TEST_EXISTS) ||
-		! g_file_test(working_dir, G_FILE_TEST_IS_DIR))
+	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
+		! g_file_test(*working_dir, G_FILE_TEST_IS_DIR))
 	{
 		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
-				!EMPTY(working_dir) ? working_dir : "<NULL>" );
-		utils_free_pointers(2, cmd_string, working_dir, NULL);
+				!EMPTY(working_dir_utf8) ? working_dir_utf8 : "<NULL>" );
+		utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, *working_dir, NULL);
 		return NULL;
 	}
+
+	cmd_string = utils_get_locale_from_utf8(cmd_string_utf8);
 
 #ifdef HAVE_VTE
 	if (vte_info.have_vte && vc->run_in_vte)
 	{
 		if (vc->skip_run_script)
 		{
-			if (vte_cmd_nonscript != NULL)
-				*vte_cmd_nonscript = cmd_string;
-			else
-				g_free(cmd_string);
-
-			return working_dir;
+			utils_free_pointers(2, cmd_string_utf8, working_dir_utf8, NULL);
+			return cmd_string;
 		}
 		else
 			/* don't wait for user input at the end of script when we are running in VTE */
@@ -934,38 +929,31 @@ static gchar *prepare_run_script(GeanyDocument *doc, gchar **vte_cmd_nonscript, 
 	}
 #endif
 
-	/* RUN_SCRIPT_CMD should be ok in UTF8 without converting in locale because it
-	 * contains no umlauts */
-	tmp = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-	result = build_create_shellscript(tmp, working_dir, cmd_string, autoclose, &error);
-	if (! result)
+	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
+	if (!run_cmd)
 	{
 		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
-			!EMPTY(cmd_string) ? cmd_string : NULL, error->message);
+			!EMPTY(cmd_string_utf8) ? cmd_string_utf8 : NULL, error->message);
 		g_error_free(error);
+		g_free(*working_dir);
 	}
 
-	utils_free_pointers(2, cmd_string, tmp, NULL);
-
-	if (result)
-		return working_dir;
-
-	g_free(working_dir);
-	return NULL;
+	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
+	return run_cmd;
 }
 
 
 static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 {
 	gchar *working_dir;
-	gchar *vte_cmd_nonscript = NULL;
+	gchar *run_cmd = NULL;
 	GError *error = NULL;
 
 	if (! DOC_VALID(doc) || doc->file_name == NULL)
 		return (GPid) 0;
 
-	working_dir = prepare_run_script(doc, &vte_cmd_nonscript, cmdindex);
-	if (working_dir == NULL)
+	run_cmd = prepare_run_cmd(doc, &working_dir, cmdindex);
+	if (run_cmd == NULL)
 		return (GPid) 0;
 
 	run_info[cmdindex].file_type_id = doc->file_type->id;
@@ -975,28 +963,23 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	{
 		gchar *vte_cmd;
 
-		if (vc->skip_run_script)
-		{
-			SETPTR(vte_cmd_nonscript, utils_get_utf8_from_locale(vte_cmd_nonscript));
-			vte_cmd = g_strconcat(vte_cmd_nonscript, "\n", NULL);
-			g_free(vte_cmd_nonscript);
-		}
-		else
-			vte_cmd = g_strconcat("\n/bin/sh ", RUN_SCRIPT_CMD, "\n", NULL);
+		/* VTE expects commands in UTF-8 */
+		SETPTR(run_cmd, utils_get_utf8_from_locale(run_cmd));
+		SETPTR(working_dir, utils_get_utf8_from_locale(working_dir));
 
-		/* change into current directory if it is not done by default */
-		if (! vc->follow_path)
-		{
-			/* we need to convert the working_dir back to UTF-8 because the VTE expects it */
-			gchar *utf8_working_dir = utils_get_utf8_from_locale(working_dir);
-			vte_cwd(utf8_working_dir, TRUE);
-			g_free(utf8_working_dir);
-		}
+		if (vc->skip_run_script)
+			vte_cmd = g_strconcat(run_cmd, "\n", NULL);
+		else
+			vte_cmd = g_strconcat("\n/bin/sh ", run_cmd, "\n", NULL);
+
+		vte_cwd(working_dir, TRUE);
 		if (! vte_send_cmd(vte_cmd))
 		{
 			ui_set_statusbar(FALSE,
 		_("Could not execute the file in the VTE because it probably contains a command."));
 			geany_debug("Could not execute the file in the VTE because it probably contains a command.");
+			if (!vc->skip_run_script)
+				g_unlink(run_cmd);
 		}
 
 		/* show the VTE */
@@ -1025,8 +1008,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				_("Could not parse terminal command \"%s\" "
 					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 			run_info[cmdindex].pid = (GPid) 1;
-			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-			g_unlink(script_path);
+			g_unlink(run_cmd);
 			goto free_strings;
 		}
 
@@ -1044,14 +1026,13 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				_("Could not find terminal \"%s\" "
 					"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
 			run_info[cmdindex].pid = (GPid) 1;
-			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-			g_unlink(script_path);
+			g_unlink(run_cmd);
 			goto free_strings;
 		}
 
 		for (i = 0; i < argv_len; i++)
 		{
-			utils_str_replace_all(&(argv[i]), "%c", RUN_SCRIPT_CMD);
+			utils_str_replace_all(&(argv[i]), "%c", run_cmd);
 		}
 
 		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
@@ -1060,8 +1041,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			geany_debug("g_spawn_async() failed: %s", error->message);
 			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 			g_error_free(error);
-			script_path = g_build_filename(working_dir, RUN_SCRIPT_CMD, NULL);
-			g_unlink(script_path);
+			g_unlink(run_cmd);
 			error = NULL;
 			run_info[cmdindex].pid = (GPid) 0;
 		}
@@ -1079,6 +1059,7 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	}
 
 	g_free(working_dir);
+	g_free(run_cmd);
 	return run_info[cmdindex].pid;
 }
 
@@ -1270,36 +1251,28 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 }
 
 
-static void set_file_error_from_errno(GError **error, gint err, const gchar *prefix)
-{
-	g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(err), "%s%s%s",
-		prefix ? prefix : "", prefix ? ": " : "", g_strerror(err));
-}
-
-
 /* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
- * fname is the full file name (including path) for the script to create */
-static gboolean build_create_shellscript(const gchar *fname, const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
+ * working_dir and cmd are both in the locale encoding
+ * it returns the full file name (including path) of the created script in the locale encoding */
+static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
 {
-	FILE *fp;
-	gchar *str;
+	gint fd;
+	gchar *str, *fname;
 	gboolean success = TRUE;
 #ifdef G_OS_WIN32
 	gchar *expanded_cmd;
 #else
 	gchar *escaped_dir;
 #endif
+	fd = g_file_open_tmp (RUN_SCRIPT_CMD, &fname, error);
+	if (fd < 0)
+		return NULL;
+	close(fd);
 
-	fp = g_fopen(fname, "w");
-	if (! fp)
-	{
-		set_file_error_from_errno(error, errno, "Failed to create file");
-		return FALSE;
-	}
 #ifdef G_OS_WIN32
 	/* Expand environment variables like %blah%. */
 	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf("%s\n\n%s\ndel \"%%0\"\n\npause\n", expanded_cmd, (autoclose) ? "" : "pause");
+	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
 #else
 	escaped_dir = g_strescape(working_dir, NULL);
@@ -1311,29 +1284,31 @@ static gboolean build_create_shellscript(const gchar *fname, const gchar *workin
 	g_free(escaped_dir);
 #endif
 
-	if (fputs(str, fp) < 0)
-	{
-		set_file_error_from_errno(error, errno, "Failed to write file");
+	if (!g_file_set_contents(fname, str, -1, error))
 		success = FALSE;
-	}
 	g_free(str);
-
-	if (fclose(fp) != 0)
-	{
-		if (error && ! *error) /* don't set error twice */
-			set_file_error_from_errno(error, errno, "Failed to close file");
-		success = FALSE;
-	}
 #ifdef __APPLE__
-	if (g_chmod(fname, 0777) != 0)
+	if (success && g_chmod(fname, 0777) != 0)
 	{
-		if (error && ! *error) /* don't set error twice */
-			set_file_error_from_errno(error, errno, "Failed to make file executable");
+		if (error)
+		{
+			gint errsv = errno;
+
+			g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errsv),
+					"Failed to make file executable: %s", g_strerror(errsv));
+		}
 		success = FALSE;
 	}
 #endif
 
-	return success;
+	if (!success)
+	{
+		g_unlink(fname);
+		g_free(fname);
+		fname = NULL;
+	}
+
+	return fname;
 }
 
 

@@ -3022,8 +3022,9 @@ The Terminal field of the tools preferences tab requires a command to
 execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
-which is created in the working directory set in the Build commands
-dialog, see `Build menu commands dialog`_ for details.
+which is created in the temporary directory and which changes the working
+directory to the directory set in the Build commands dialog, see 
+`Build menu commands dialog`_ for details.
 
 As an example the default (Linux) command is::
 
