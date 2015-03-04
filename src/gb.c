@@ -469,54 +469,20 @@ static GtkWidget *geany_pong_new(GtkWindow *parent)
 
 static gboolean gb_on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	static gchar text[] = "00000";
+	static gchar text[] = "geany";
 
-	switch (event->keyval)
+	if (event->keyval < 0x80)
 	{
-		case 'g':
+		memmove (text, &text[1], G_N_ELEMENTS(text) - 1);
+		text[G_N_ELEMENTS(text) - 2] = (gchar) event->keyval;
+
+		if (utils_str_equal(text, "geany"))
 		{
-			text[0] = 'g';
-			text[1] = '\0';
+			GtkWidget *pong = geany_pong_new(GTK_WINDOW(widget));
+			gtk_widget_show(pong);
 			return TRUE;
-			break;
-		}
-		case 'e':
-		{
-			text[1] = 'e';
-			text[2] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'a':
-		{
-			text[2] = 'a';
-			text[3] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'n':
-		{
-			text[3] = 'n';
-			text[4] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'y':
-		{
-			text[4] = 'y';
-			text[5] = '\0';
-			if (utils_str_equal(text, "geany"))
-			{
-				GtkWidget *pong = geany_pong_new(GTK_WINDOW(widget));
-				gtk_widget_show(pong);
-			}
-			return TRUE;
-			break;
-		}
-		default:
-		{
-			text[0] = '\0';
-			return FALSE;
 		}
 	}
+
+	return FALSE;
 }
