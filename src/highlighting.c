@@ -58,7 +58,7 @@
 #define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 
 
-static gchar *whitespace_chars;
+static gchar *whitespace_chars = NULL;
 
 
 typedef struct
@@ -112,7 +112,7 @@ static struct
 	gint fold_draw_line;
 
 	gchar			*wordchars;
-} common_style_set;
+} common_style_set = { { { 0 } }, 0, 0, 0, NULL };
 
 
 /* For filetypes.common [named_styles] section.
