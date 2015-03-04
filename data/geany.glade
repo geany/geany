@@ -7706,7 +7706,7 @@
                                   <object class="GtkRadioMenuItem" id="crlf">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Convert and Set to _CR/LF (Win)</property>
+                                    <property name="label" translatable="yes">Convert and Set to _CR/LF (Windows)</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_crlf_activate" swapped="no"/>
                                   </object>
