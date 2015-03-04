@@ -131,7 +131,7 @@ geany_sources = set([
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
     'src/highlighting.c', 'src/keybindings.c',
-    'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
+    'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
@@ -226,6 +226,10 @@ def configure(conf):
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion=gtk_package_name, uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+    if conf.options.enable_mac_integration:
+        pkgname = 'gtk-mac-integration-gtk3' if conf.options.use_gtk3 else 'gtk-mac-integration-gtk2'
+        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION', 
+            mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
     conf.env['minimum_gtk_version'] = minimum_gtk_version
@@ -347,6 +351,9 @@ def options(opt):
     opt.add_option('--enable-gtk3', action='store_true', default=False,
         help='compile with GTK3 support (experimental) [[default: No]',
         dest='use_gtk3')
+    opt.add_option('--enable-mac-integration', action='store_true', default=False,
+        help='use gtk-mac-integration to enable improved OS X integration [[default: No]',
+        dest='enable_mac_integration')
     opt.add_option('--disable-html-docs', action='store_true', default=False,
         help='do not generate HTML documentation using rst2html [[default: No]',
         dest='no_html_doc')
@@ -441,7 +448,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET', 'M'],
+        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
 
     # geanyfunctions.h

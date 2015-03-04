@@ -200,6 +200,18 @@ const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 #ifdef GEANY_PRIVATE
 
+typedef enum
+{
+	RESOURCE_DIR_DATA,
+	RESOURCE_DIR_ICON,
+	RESOURCE_DIR_DOC,
+	RESOURCE_DIR_LOCALE,
+	RESOURCE_DIR_PLUGIN,
+
+	RESOURCE_DIR_COUNT
+} GeanyResourceDirType;
+
+
 gint utils_get_line_endings(const gchar* buffer, gsize size);
 
 gboolean utils_isbrace(gchar c, gboolean include_angles);
@@ -293,6 +305,10 @@ GDate *utils_parse_date(const gchar *input);
 gchar *utils_parse_and_format_build_date(const gchar *input);
 
 gchar *utils_get_user_config_dir(void);
+
+const gchar *utils_resource_dir(GeanyResourceDirType type);
+
+void utils_start_new_geany_instance(gchar *doc_path);
 
 #endif /* GEANY_PRIVATE */
 

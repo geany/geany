@@ -1101,23 +1101,6 @@ static gboolean check_menu_key(GeanyDocument *doc, guint keyval, guint state, gu
 
 
 #ifdef HAVE_VTE
-static gboolean on_menu_expose_event(GtkWidget *widget, GdkEventExpose *event,
-		gpointer user_data)
-{
-	if (!gtk_widget_get_sensitive(widget))
-		gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
-	return FALSE;
-}
-
-
-#if GTK_CHECK_VERSION(3, 0, 0)
-static gboolean on_menu_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data)
-{
-	return on_menu_expose_event(widget, NULL, user_data);
-}
-#endif
-
-
 static gboolean set_sensitive(gpointer widget)
 {
 	gtk_widget_set_sensitive(GTK_WIDGET(widget), TRUE);
@@ -1158,16 +1141,7 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 	 * Note: maybe there's a better way of doing this ;-) */
 	widget = ui_lookup_widget(main_widgets.window, "menubar1");
 	gtk_widget_set_sensitive(widget, FALSE);
-	{
-		/* make the menubar sensitive before it is redrawn */
-		static gboolean connected = FALSE;
-		if (!connected)
-#if GTK_CHECK_VERSION(3, 0, 0)
-			g_signal_connect(widget, "draw", G_CALLBACK(on_menu_draw), NULL);
-#else
-			g_signal_connect(widget, "expose-event", G_CALLBACK(on_menu_expose_event), NULL);
-#endif
-	}
+	g_idle_add_full(G_PRIORITY_HIGH, set_sensitive, widget, NULL);
 
 	widget = main_widgets.editor_menu;
 	gtk_widget_set_sensitive(widget, FALSE);
