@@ -651,7 +651,14 @@ const gchar *vte_get_working_directory(void)
 
 	if (pid > 0)
 	{
+		/* make sure that we use linprocfs on all systems */
+#if defined(__FreeBSD__)
+		file = g_strdup_printf("/compat/linux/proc/%d/cwd", pid);
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
+		file = g_strdup_printf("/emul/linux/proc/%d/cwd", pid);
+#else
 		file = g_strdup_printf("/proc/%d/cwd", pid);
+#endif
 		length = readlink(file, buffer, sizeof(buffer));
 
 		if (length > 0 && *buffer == '/')
@@ -674,6 +681,45 @@ const gchar *vte_get_working_directory(void)
 				}
 				g_free(cwd);
 			}
+		}
+		else
+		{
+			gint status = 0;
+			gchar *stdout = NULL;
+			gchar *pid_str = g_strdup_printf("%d", pid);
+			gchar *argv[] = {"lsof", "-a", "-d", "cwd", "-F", "n", "-p", pid_str, NULL};
+
+			if (utils_spawn_sync(NULL, argv, NULL, G_SPAWN_SEARCH_PATH,
+					NULL, NULL, &stdout, NULL, &status, NULL))
+			{
+				if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+				{
+					gboolean pid_verified = FALSE;
+					gchar **line;
+					gchar **lines = g_strsplit(stdout, "\n", -1);
+
+					/* stdout is of the form: pPID\nnPATH (PID and PATH are actual values) */
+					foreach_strv(line, lines)
+					{
+						g_strstrip(*line);
+						if (*line[0] == 'p')
+						{
+							pid_verified = strcmp(*line + 1, pid_str) == 0;
+							if (!pid_verified)
+								break;
+						}
+						else if (*line[0] == 'n')
+						{
+							if (pid_verified)
+								vte_info.dir = g_strdup(*line + 1);
+							break;
+						}
+					}
+					g_strfreev(lines);
+				}
+				g_free(stdout);
+			}
+			g_free(pid_str);
 		}
 		g_free(file);
 	}
