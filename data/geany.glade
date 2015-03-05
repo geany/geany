@@ -8164,7 +8164,6 @@
                           <object class="GtkTreeView" id="treeview6">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="rules_hint">True</property>
                           </object>
                         </child>
                       </object>
