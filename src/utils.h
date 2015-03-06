@@ -226,6 +226,8 @@ const gchar *utils_get_eol_char(gint eol_mode);
 
 const gchar *utils_get_eol_name(gint eol_mode);
 
+const gchar *utils_get_eol_short_name(gint eol_mode);
+
 gboolean utils_atob(const gchar *str);
 
 void utils_tidy_path(gchar *filename);

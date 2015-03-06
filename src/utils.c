@@ -381,6 +381,17 @@ const gchar *utils_get_eol_name(gint eol_mode)
 }
 
 
+const gchar *utils_get_eol_short_name(gint eol_mode)
+{
+	switch (eol_mode)
+	{
+		case SC_EOL_CRLF: return _("CRLF"); break;
+		case SC_EOL_CR: return _("CR"); break;
+		default: return _("LF"); break;
+	}
+}
+
+
 const gchar *utils_get_eol_char(gint eol_mode)
 {
 	switch (eol_mode)
