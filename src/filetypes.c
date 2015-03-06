@@ -174,7 +174,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, "text/x-verilog",             COMPILED );
 	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        "text/x-patch",               MISC     );
 	FT_INIT( LISP,       NONE,         "Lisp",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ERLANG,     NONE,         "Erlang",           NULL,                      SOURCE_FILE, "text/x-erlang",              COMPILED );
+	FT_INIT( ERLANG,     ERLANG,       "Erlang",           NULL,                      SOURCE_FILE, "text/x-erlang",              COMPILED );
 	FT_INIT( CONF,       CONF,         "Conf",             _("Config"),               FILE,        NULL,                         MISC     );
 	FT_INIT( PO,         NONE,         "Po",               _("Gettext translation"),  FILE,        "text/x-gettext-translation", MISC     );
 	FT_INIT( HAXE,       HAXE,         "Haxe",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );

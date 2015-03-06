@@ -23,6 +23,7 @@ parsers = \
 	css.c \
 	diff.c \
 	docbook.c \
+	erlang.c \
 	fortran.c \
 	haskell.c \
 	haxe.c \
