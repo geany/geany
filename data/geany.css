@@ -9,6 +9,9 @@
 	-GtkButton-inner-border: 0;
 	padding: 0;
 }
+#geany-close-tab-button GtkImage {
+	padding: 0;
+}
 
 /* use monospaced font in search entries for easier reading of regexp (#1907117) */
 #GeanyDialogSearch GtkEntry {
