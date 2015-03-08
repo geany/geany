@@ -305,8 +305,8 @@ private:
 	static void PreeditChanged(GtkIMContext *context, ScintillaGTK *sciThis);
 	void MoveImeCarets(int pos);
 	void DrawImeIndicator(int indicator, int len);
-	void GetImeUnderlines(PangoAttrList *attrs, bool *normalInput);
-	void GetImeBackgrounds(PangoAttrList *attrs, bool *targetInput);
+	static void GetImeUnderlines(PangoAttrList *attrs, bool *normalInput);
+	static void GetImeBackgrounds(PangoAttrList *attrs, bool *targetInput);
 	void SetCandidateWindowPos();
 
 	static void StyleSetText(GtkWidget *widget, GtkStyle *previous, void*);
@@ -811,8 +811,10 @@ void ScintillaGTK::Initialise() {
 	if (gtk_check_version(3,9,2) != NULL /* on < 3.9.2 */)
 #endif
 	{
+#if !GTK_CHECK_VERSION(3,14,0)
 		// Avoid background drawing flash/missing redraws
 		gtk_widget_set_double_buffered(widtxt, FALSE);
+#endif
 	}
 	gtk_widget_set_events(widtxt, GDK_EXPOSURE_MASK);
 	gtk_widget_set_size_request(widtxt, 100, 100);
@@ -1670,7 +1672,7 @@ void ScintillaGTK::ReceivedDrop(GtkSelectionData *selection_data) {
 		drop.push_back('\0');
 		NotifyURIDropped(&drop[0]);
 	} else if ((TypeOfGSD(selection_data) == GDK_TARGET_STRING) || (TypeOfGSD(selection_data) == atomUTF8)) {
-		if (TypeOfGSD(selection_data) > 0) {
+		if (LengthOfGSD(selection_data) > 0) {
 			SelectionText selText;
 			GetGtkSelectionText(selection_data, selText);
 			DropAt(posDrop, selText.Data(), selText.Length(), false, selText.rectangular);

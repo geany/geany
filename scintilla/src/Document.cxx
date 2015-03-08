@@ -787,6 +787,27 @@ int SCI_METHOD Document::GetRelativePosition(int positionStart, int characterOff
 	return pos;
 }
 
+int Document::GetRelativePositionUTF16(int positionStart, int characterOffset) const {
+	int pos = positionStart;
+	if (dbcsCodePage) {
+		const int increment = (characterOffset > 0) ? 1 : -1;
+		while (characterOffset != 0) {
+			const int posNext = NextPosition(pos, increment);
+			if (posNext == pos)
+				return INVALID_POSITION;
+			if (abs(pos-posNext) > 3)	// 4 byte character = 2*UTF16.
+				characterOffset -= increment;
+			pos = posNext;
+			characterOffset -= increment;
+		}
+	} else {
+		pos = positionStart + characterOffset;
+		if ((pos < 0) || (pos > Length()))
+			return INVALID_POSITION;
+	}
+	return pos;
+}
+
 int SCI_METHOD Document::GetCharacterAndWidth(int position, int *pWidth) const {
 	int character;
 	int bytesInCharacter = 1;
@@ -1304,6 +1325,21 @@ int Document::CountCharacters(int startPos, int endPos) const {
 		if (IsCrLf(i))
 			i++;
 		i = NextPosition(i, 1);
+	}
+	return count;
+}
+
+int Document::CountUTF16(int startPos, int endPos) const {
+	startPos = MovePositionOutsideChar(startPos, 1, false);
+	endPos = MovePositionOutsideChar(endPos, -1, false);
+	int count = 0;
+	int i = startPos;
+	while (i < endPos) {
+		count++;
+		const int next = NextPosition(i, 1);
+		if ((next - i) > 3)
+			count++;
+		i = next;
 	}
 	return count;
 }
@@ -2347,6 +2383,9 @@ public:
 		doc(doc_), position(position_), characterIndex(0), lenBytes(0), lenCharacters(0) {
 		buffered[0] = 0;
 		buffered[1] = 0;
+		if (doc) {
+			ReadCharacter();
+		}
 	}
 	UTF8Iterator(const UTF8Iterator &other) {
 		doc = other.doc;
@@ -2369,10 +2408,8 @@ public:
 		}
 		return *this;
 	}
-	wchar_t operator*() {
-		if (lenCharacters == 0) {
-			ReadCharacter();
-		}
+	wchar_t operator*() const {
+		assert(lenCharacters != 0);
 		return buffered[characterIndex];
 	}
 	UTF8Iterator &operator++() {

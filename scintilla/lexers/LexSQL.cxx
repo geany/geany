@@ -444,7 +444,6 @@ void SCI_METHOD LexerSQL::Lex(unsigned int startPos, int length, int initStyle, 
 	StyleContext sc(startPos, length, initStyle, styler);
 	int styleBeforeDCKeyword = SCE_SQL_DEFAULT;
 	int offset = 0;
-	char qOperator = 0x00;
 
 	for (; sc.More(); sc.Forward(), offset++) {
 		// Determine if the current state should terminate.
@@ -559,29 +558,34 @@ void SCI_METHOD LexerSQL::Lex(unsigned int startPos, int length, int initStyle, 
 			}
 			break;
 		case SCE_SQL_QOPERATOR:
-			if (qOperator == 0x00) {
-				qOperator = sc.ch;	
-			} else {		
-				char qComplement = 0x00;						
-
-				if (qOperator == '<') {
-					qComplement = '>';
-				} else if (qOperator == '(') {
-					qComplement = ')';
-				} else if (qOperator == '{') {
-					qComplement = '}';
-				} else if (qOperator == '[') {
-					qComplement = ']';
-				} else {
-					qComplement = qOperator;
-				}	
-				
-				if (sc.Match(qComplement, '\'')) {
-					sc.Forward();
-					sc.ForwardSetState(SCE_SQL_DEFAULT);
-					qOperator = 0x00;	
+			// Locate the unique Q operator character
+			sc.Complete();
+			char qOperator = 0x00;
+			for (int styleStartPos = sc.currentPos; styleStartPos > 0; --styleStartPos) {
+				if (styler.StyleAt(styleStartPos - 1) != SCE_SQL_QOPERATOR) {
+					qOperator = styler.SafeGetCharAt(styleStartPos + 2);
+					break;
 				}
-		}
+			}
+			
+			char qComplement = 0x00;						
+
+			if (qOperator == '<') {
+				qComplement = '>';
+			} else if (qOperator == '(') {
+				qComplement = ')';
+			} else if (qOperator == '{') {
+				qComplement = '}';
+			} else if (qOperator == '[') {
+				qComplement = ']';
+			} else {
+				qComplement = qOperator;
+			}	
+				
+			if (sc.Match(qComplement, '\'')) {
+				sc.Forward();
+				sc.ForwardSetState(SCE_SQL_DEFAULT);
+			}
 			break;
 		}
 

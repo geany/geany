@@ -545,6 +545,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool PointIsHotspot(Point pt);
 	void SetHotSpotRange(Point *pt);
 	Range GetHotSpotRange() const;
+	void SetHoverIndicatorPosition(int position);
+	void SetHoverIndicatorPoint(Point pt);
 
 	int CodePage() const;
 	virtual bool ValidCodePage(int /* codePage */) const { return true; }

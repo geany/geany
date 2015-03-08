@@ -55,6 +55,12 @@ inline bool UTF8IsNEL(const unsigned char *us) {
 	return (us[0] == 0xc2) && (us[1] == 0x85);
 }
 
+enum { SURROGATE_LEAD_FIRST = 0xD800 };
+enum { SURROGATE_LEAD_LAST = 0xDBFF };
+inline unsigned int UTF16CharLength(wchar_t uch) {
+	return ((uch >= SURROGATE_LEAD_FIRST) && (uch <= SURROGATE_LEAD_LAST)) ? 2 : 1;
+}
+
 #ifdef SCI_NAMESPACE
 }
 #endif

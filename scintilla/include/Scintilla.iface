@@ -605,6 +605,9 @@ val INDIC_SQUIGGLELOW=11
 val INDIC_DOTBOX=12
 val INDIC_SQUIGGLEPIXMAP=13
 val INDIC_COMPOSITIONTHICK=14
+val INDIC_COMPOSITIONTHIN=15
+val INDIC_FULLBOX=16
+val INDIC_TEXTFORE=17
 val INDIC_IME=32
 val INDIC_IME_MAX=35
 val INDIC_MAX=35
@@ -631,6 +634,30 @@ set void IndicSetUnder=2510(int indic, bool under)
 
 # Retrieve whether indicator drawn under or over text.
 get bool IndicGetUnder=2511(int indic,)
+
+# Set a hover indicator to plain, squiggle or TT.
+set void IndicSetHoverStyle=2680(int indic, int style)
+
+# Retrieve the hover style of an indicator.
+get int IndicGetHoverStyle=2681(int indic,)
+
+# Set the foreground hover colour of an indicator.
+set void IndicSetHoverFore=2682(int indic, colour fore)
+
+# Retrieve the foreground hover colour of an indicator.
+get colour IndicGetHoverFore=2683(int indic,)
+
+val SC_INDICVALUEBIT=0x1000000
+val SC_INDICVALUEMASK=0xFFFFFF
+
+enu IndicFlag=SC_INDICFLAG_
+val SC_INDICFLAG_VALUEFORE=1
+
+# Set the attributes of an indicator.
+set void IndicSetFlags=2684(int indic, int flags)
+
+# Retrieve the attributes of an indicator.
+get int IndicGetFlags=2685(int indic,)
 
 # Set the foreground colour of all whitespace and whether to use this setting.
 fun void SetWhitespaceFore=2084(bool useSetting, colour fore)
@@ -1031,6 +1058,12 @@ set void SetTargetEnd=2192(position pos,)
 
 # Get the position that ends the target.
 get position GetTargetEnd=2193(,)
+
+# Sets both the start and end of the target in one call.
+fun void SetTargetRange=2686(position start, position end)
+
+# Retrieve the text in the target.
+get int GetTargetText=2687(, stringresult characters)
 
 # Replace the target text with the argument text.
 # Text is counted so it can contain NULs.
