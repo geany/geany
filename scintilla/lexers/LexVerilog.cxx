@@ -198,6 +198,15 @@ class LexerVerilog : public ILexerWithSubStyles {
 	OptionSetVerilog osVerilog;
 	enum { activeFlag = 0x40 };
 	SubStyles subStyles;
+
+	// states at end of line (EOL) during fold operations:
+	//		foldExternFlag: EOL while parsing an extern function/task declaration terminated by ';'
+	//		foldWaitDisableFlag: EOL while parsing wait or disable statement, terminated by "fork" or '('
+	//		typdefFlag: EOL while parsing typedef statement, terminated by ';'
+	enum {foldExternFlag = 0x01, foldWaitDisableFlag = 0x02, typedefFlag = 0x04};
+	// map using line number as key to store fold state information
+	std::map<int, int> foldState;
+
 public:
 	LexerVerilog() :
 		setWord(CharacterSet::setAlphaNum, "._", 0x80, true),
@@ -431,6 +440,7 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 
 	int activitySet = preproc.IsInactive() ? activeFlag : 0;
 	int lineEndNext = styler.LineEnd(curLine);
+	bool isEscapedId = false;    // true when parsing an escaped Identifier
 
 	for (; sc.More(); sc.Forward()) {
 		if (sc.atLineStart) {
@@ -453,6 +463,7 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 			vlls.Add(curLine, preproc);
 			// Update the line state, so it can be seen by next line
 			styler.SetLineState(curLine, lineState);
+			isEscapedId = false;    // EOL terminates an escaped Identifier
 		}
 
 		// Handle line continuation generically.
@@ -500,7 +511,7 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 				}
 				break;
 			case SCE_V_IDENTIFIER:
-				if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
+				if (!isEscapedId &&(!IsAWordChar(sc.ch) || (sc.ch == '.'))) {
 					char s[100];
 					lineState &= 0xff00;
 					sc.GetCurrent(s, sizeof(s));
@@ -581,6 +592,7 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 			vlls.Add(curLine, preproc);
 			// Update the line state, so it can be seen by next line
 			styler.SetLineState(curLine, lineState);
+			isEscapedId = false;    // EOL terminates an escaped Identifier
 		}
 
 		// Determine if a new state should be entered.
@@ -713,11 +725,18 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 						}
 					}
 				}
+			} else if (sc.ch == '\\') {
+				// escaped identifier, everything is ok up to whitespace
+				isEscapedId = true;
+				sc.SetState(SCE_V_IDENTIFIER|activitySet);
 			} else if (isoperator(static_cast<char>(sc.ch)) || sc.ch == '@' || sc.ch == '#') {
 				sc.SetState(SCE_V_OPERATOR|activitySet);
 				if (sc.ch == '.') lineState = kwDot;
 				if (sc.ch == ';') lineState = kwOther;
 			}
+		}
+		if (isEscapedId && isspacechar(sc.ch)) {
+			isEscapedId = false;
 		}
 	}
 	if (definitionsChanged) {
@@ -756,9 +775,20 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 	bool foldAtBrace  = 1;
 	bool foldAtParenthese  = 1;
 
+	int lineCurrent = styler.GetLine(startPos);
+	// Move back one line to be compatible with LexerModule::Fold behavior, fixes problem with foldComment behavior
+	if (lineCurrent > 0) {
+		lineCurrent--;
+		int newStartPos = styler.LineStart(lineCurrent);
+		length += startPos - newStartPos;
+		startPos = newStartPos;
+		initStyle = 0;
+		if (startPos > 0) {
+			initStyle = styler.StyleAt(startPos - 1);
+		}
+	}
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
-	int lineCurrent = styler.GetLine(startPos);
 	int levelCurrent = SC_FOLDLEVELBASE;
 	if (lineCurrent > 0)
 		levelCurrent = styler.LevelAt(lineCurrent-1) >> 16;
@@ -767,6 +797,20 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 	char chNext = styler[startPos];
 	int styleNext = MaskActive(styler.StyleAt(startPos));
 	int style = MaskActive(initStyle);
+
+	// restore fold state (if it exists) for prior line
+	int stateCurrent = 0;
+	std::map<int,int>::iterator foldStateIterator = foldState.find(lineCurrent-1);
+	if (foldStateIterator != foldState.end()) {
+		stateCurrent = foldStateIterator->second;
+	}
+
+	// remove all foldState entries after lineCurrent-1
+	foldStateIterator = foldState.upper_bound(lineCurrent-1);
+	if (foldStateIterator != foldState.end()) {
+		foldState.erase(foldStateIterator, foldState.end());
+	}
+
 	for (unsigned int i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
@@ -822,6 +866,28 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 					levelNext--;
 				}
 			}
+			// semicolons terminate external declarations
+			if (ch == ';') {
+				// extern and pure virtual declarations terminated by semicolon
+				if (stateCurrent & foldExternFlag) {
+					levelNext--;
+					stateCurrent &= ~foldExternFlag;
+				}
+				// wait and disable statements terminated by semicolon
+				if (stateCurrent & foldWaitDisableFlag) {
+					stateCurrent &= ~foldWaitDisableFlag;
+				}
+				// typedef statements terminated by semicolon
+				if (stateCurrent & typedefFlag) {
+					stateCurrent &= ~typedefFlag;
+				}
+			}
+			// wait and disable statements containing '(' will not contain "fork" keyword, special processing is not needed
+			if (ch == '(') {
+				if (stateCurrent & foldWaitDisableFlag) {
+					stateCurrent &= ~foldWaitDisableFlag;
+				}
+			}
 		}
 		if (style == SCE_V_OPERATOR) {
 			if (foldAtBrace) {
@@ -837,7 +903,6 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 			if (styler.Match(j, "case") ||
 				styler.Match(j, "casex") ||
 				styler.Match(j, "casez") ||
-				styler.Match(j, "class") ||
 				styler.Match(j, "function") ||
 				styler.Match(j, "generate") ||
 				styler.Match(j, "covergroup") ||
@@ -848,10 +913,19 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 				styler.Match(j, "specify") ||
 				styler.Match(j, "table") ||
 				styler.Match(j, "task") ||
-				styler.Match(j, "fork") ||
 				(styler.Match(j, "module") && options.foldAtModule) ||
 				styler.Match(j, "begin")) {
 				levelNext++;
+			} else if (styler.Match(j, "class")) {
+				// class does not introduce a block when used in a typedef statement
+				if (!(stateCurrent & typedefFlag))
+					levelNext++;
+			} else if (styler.Match(j, "fork")) {
+				// fork does not introduce a block when used in a wait or disable statement
+				if (stateCurrent & foldWaitDisableFlag) {
+					stateCurrent &= ~foldWaitDisableFlag;
+				} else
+					levelNext++;
 			} else if (styler.Match(j, "endcase") ||
 				styler.Match(j, "endclass") ||
 				styler.Match(j, "endfunction") ||
@@ -870,6 +944,16 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 				(styler.Match(j, "endmodule") && options.foldAtModule) ||
 				(styler.Match(j, "end") && !IsAWordChar(styler.SafeGetCharAt(j + 3)))) {
 				levelNext--;
+			} else if (styler.Match(j, "extern") ||
+				styler.Match(j, "pure")) {
+				// extern and pure virtual functions/tasks are terminated by ';' not endfunction/endtask
+				stateCurrent |= foldExternFlag;
+			} else if (styler.Match(j, "disable") ||
+				styler.Match(j, "wait")) {
+				// fork does not introduce a block when used in a wait or disable statement
+				stateCurrent |= foldWaitDisableFlag;
+			} else if (styler.Match(j, "typedef")) {
+				stateCurrent |= typedefFlag;
 			}
 		}
 		if (atEOL) {
@@ -882,6 +966,9 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 				lev |= SC_FOLDLEVELWHITEFLAG;
 			if (levelUse < levelNext)
 				lev |= SC_FOLDLEVELHEADERFLAG;
+			if (stateCurrent) {
+				foldState[lineCurrent] = stateCurrent;
+			}
 			if (lev != styler.LevelAt(lineCurrent)) {
 				styler.SetLevel(lineCurrent, lev);
 			}
