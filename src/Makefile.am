@@ -10,8 +10,7 @@ EXTRA_DIST = \
 	keybindingsprivate.h \
 	pluginprivate.h \
 	projectprivate.h \
-	makefile.win32 \
-	$(srcdir)/signalconn.c.in
+	makefile.win32
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
@@ -163,18 +162,15 @@ libgeany_la_SOURCES += vte.c vte.h
 
 endif
 
-callbacks.c: signalconn.c
+callbacks.c: signallist.i
 
 glade_file=$(top_srcdir)/data/geany.glade
-template_file=$(srcdir)/signalconn.c.in
 
-signalconn.c: $(glade_file) $(template_file)
+signallist.i: $(glade_file) Makefile
 	$(AM_V_GEN)( \
 		echo '/* This file is auto-generated, do not edit. */' && \
-		$(SED) -n '/@callback_map@/q;p' "$(template_file)" && \
-		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/\tg_hash_table_insert(hash, (gpointer) "\1", G_CALLBACK(\1));/p' "$(glade_file)" \
-			| $(SORT) | $(UNIQ) && \
-		$(SED) -n '/@callback_map@/{:l;n;p;b l}' "$(template_file)" \
+		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/ITEM(\1)/p' "$(glade_file)" \
+			| $(SORT) | $(UNIQ) \
 	) > $@ || { $(RM) $@ && exit 1; }
 
-CLEANFILES += signalconn.c
+CLEANFILES += signallist.i
