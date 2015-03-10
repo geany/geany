@@ -169,7 +169,7 @@ glade_file=$(top_srcdir)/data/geany.glade
 signallist.i: $(glade_file) Makefile
 	$(AM_V_GEN)( \
 		echo '/* This file is auto-generated, do not edit. */' && \
-		$(SED) -n 's/^.*handler="\([^"]\+\)".*$$/ITEM(\1)/p' "$(glade_file)" \
+		$(SED) -n 's/^.*handler="\([^"]\{1,\}\)".*$$/ITEM(\1)/p' "$(glade_file)" \
 			| $(SORT) | $(UNIQ) \
 	) > $@ || { $(RM) $@ && exit 1; }
 
