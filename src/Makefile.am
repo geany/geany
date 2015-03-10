@@ -20,7 +20,6 @@ AM_CPPFLAGS = \
 	-DGTK \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\""Geany"\" \
-	@LIBGEANY_CFLAGS@ \
 	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ \
 	$(MAC_INTEGRATION_CFLAGS)
 
@@ -106,6 +105,7 @@ libgeany_la_SOURCES = \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
+libgeany_la_CFLAGS  = $(AM_CPPFLAGS) @LIBGEANY_CFLAGS@
 libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
