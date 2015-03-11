@@ -1153,6 +1153,7 @@ static gboolean write_config(gboolean emit_signal)
  *
  *  @since 1.25
  */
+GEANY_API_SYMBOL
 void project_write_config(void)
 {
 	if (!write_config(TRUE))
