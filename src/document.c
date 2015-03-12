@@ -226,16 +226,8 @@ GeanyDocument *document_find_by_filename(const gchar *utf8_filename)
 /* returns the document which has sci, or NULL. */
 GeanyDocument *document_find_by_sci(ScintillaObject *sci)
 {
-	guint i;
-
-	g_return_val_if_fail(sci != NULL, NULL);
-
-	for (i = 0; i < documents_array->len; i++)
-	{
-		if (documents[i]->is_valid && documents[i]->editor->sci == sci)
-			return documents[i];
-	}
-	return NULL;
+	g_return_val_if_fail(IS_SCINTILLA(sci), NULL);
+	return g_object_get_data(G_OBJECT(sci), "geany-document");
 }
 
 
@@ -305,6 +297,15 @@ gint document_get_notebook_page(GeanyDocument *doc)
 }
 
 
+/* Check if the object is not only a Scintilla but also has our special
+ * "geany-document" tag, set in document_create(), so it can be distinguished
+ * from any other non-document Scintilla widgets. */
+static inline gboolean is_geany_scintilla(gpointer obj)
+{
+	return IS_SCINTILLA(obj) && (g_object_get_data(obj, "geany-document") != NULL);
+}
+
+
 /*
  * Recursively searches a containers children until it finds a
  * Scintilla widget, or NULL if one was not found.
@@ -319,7 +320,7 @@ static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 	children = gtk_container_get_children(GTK_CONTAINER(container));
 	for (iter = children; iter != NULL; iter = g_list_next(iter))
 	{
-		if (IS_SCINTILLA(iter->data))
+		if (is_geany_scintilla(iter->data))
 		{
 			sci = SCINTILLA(iter->data);
 			break;
@@ -327,7 +328,7 @@ static ScintillaObject *locate_sci_in_container(GtkWidget *container)
 		else if (GTK_IS_CONTAINER(iter->data))
 		{
 			sci = locate_sci_in_container(iter->data);
-			if (IS_SCINTILLA(sci))
+			if (is_geany_scintilla(sci))
 				break;
 			sci = NULL;
 		}
@@ -655,6 +656,10 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
 	doc->editor = editor_create(doc);
+
+	/* set a tag on the editor's Scintilla widget so we can tell it's ours */
+	g_object_set_data(G_OBJECT(doc->editor->sci), "geany-document", doc);
+
 #ifndef USE_GIO_FILEMON
 	doc->priv->last_check = time(NULL);
 #endif
