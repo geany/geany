@@ -44,6 +44,7 @@
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "support.h"
 #include "toolbar.h"
 #include "ui_utils.h"
@@ -60,19 +61,7 @@
 #include <errno.h>
 #include <glib/gstdio.h>
 
-#ifdef G_OS_UNIX
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-#else
-# include <windows.h>
-#endif
 
-
-/* g_spawn_async_with_pipes doesn't work on Windows */
-#ifdef G_OS_WIN32
-#define SYNC_SPAWN
-#endif
 
 /* Number of editor indicators to draw - limited as this can affect performance */
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
@@ -124,12 +113,10 @@ widgets;
 static guint build_groups_count[GEANY_GBG_COUNT] = { 3, 4, 2 };
 static guint build_items_count = 9;
 
-#ifndef SYNC_SPAWN
-static void build_exit_cb(GPid child_pid, gint status, gpointer user_data);
-static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data);
-#endif
+static void build_exit_cb(GPid pid, gint status, gpointer user_data);
+static void build_iofunc(GString *string, GIOCondition condition, gpointer data);
 static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
-static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
+static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
 static void on_set_build_commands_activate(GtkWidget *w, gpointer u);
@@ -673,47 +660,6 @@ static void clear_all_errors(void)
 }
 
 
-#ifdef SYNC_SPAWN
-static void parse_build_output(const gchar **output, gint status)
-{
-	guint x, i, len;
-	gchar *line, **lines;
-
-	for (x = 0; x < 2; x++)
-	{
-		if (!EMPTY(output[x]))
-		{
-			lines = g_strsplit_set(output[x], "\r\n", -1);
-			len = g_strv_length(lines);
-
-			for (i = 0; i < len; i++)
-			{
-				if (!EMPTY(lines[i]))
-				{
-					line = lines[i];
-					while (*line != '\0')
-					{	/* replace any control characters in the output */
-						if (*line < 32)
-							*line = 32;
-						line++;
-					}
-					process_build_output_line(lines[i], COLOR_BLACK);
-				}
-			}
-			g_strfreev(lines);
-		}
-	}
-
-	show_build_result_message(status != 0);
-	utils_beep();
-
-	build_info.pid = 0;
-	/* enable build items again */
-	build_menu_update(NULL);
-}
-#endif
-
-
 /* Replaces occurences of %e and %p with the appropriate filenames and
  * %l with current line number. %d and %p replacements should be in UTF8 */
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
@@ -782,42 +728,28 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 
 /* dir is the UTF-8 working directory to run cmd in. It can be NULL to use the
  * idx document directory */
-static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
+static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar **argv;
+#ifdef G_OS_UNIX
+	/* under Unix, start cmd via sh for compatibility */
+	gchar *argv[] = { "/bin/sh", "-c", (gchar *) cmd, NULL };
+#endif
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *utf8_cmd_string;
-#ifdef SYNC_SPAWN
-	gchar *output[2];
-	gint status;
-#else
-	gint stdout_fd;
-	gint stderr_fd;
-#endif
 
-	g_return_val_if_fail(doc == NULL || doc->is_valid, (GPid) -1);
+	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (!((doc != NULL && !EMPTY(doc->file_name)) || !EMPTY(dir)))
+	if ((doc == NULL || EMPTY(doc->file_name)) && EMPTY(dir))
 	{
 		geany_debug("Failed to run command with no working directory");
 		ui_set_statusbar(TRUE, _("Process failed, no working directory"));
-		return (GPid) 1;
+		return;
 	}
 
 	clear_all_errors();
 	SETPTR(current_dir_entered, NULL);
-
-#ifdef G_OS_WIN32
-	argv = g_strsplit(cmd, " ", 0);
-#else
-	argv = g_new0(gchar *, 4);
-	argv[0] = g_strdup("/bin/sh");
-	argv[1] = g_strdup("-c");
-	argv[2] = g_strdup(cmd);
-	argv[3] = NULL;
-#endif
 
 	utf8_cmd_string = utils_get_utf8_from_locale(cmd);
 	utf8_working_dir = !EMPTY(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
@@ -835,47 +767,22 @@ static GPid build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-#ifdef SYNC_SPAWN
-	if (! utils_spawn_sync(working_dir, argv, NULL, G_SPAWN_SEARCH_PATH,
-			NULL, NULL, &output[0], &output[1], &status, &error))
+#ifdef G_OS_WIN32
+	if (!spawn_with_callbacks(working_dir, cmd, NULL, NULL, 0, NULL, NULL, build_iofunc,
 #else
-	if (! g_spawn_async_with_pipes(working_dir, argv, NULL,
-			G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL,
-			&(build_info.pid), NULL, &stdout_fd, &stderr_fd, &error))
+	/* cmd is passed via argv, so check it explicitly */
+	if (!spawn_check_command(cmd, FALSE, &error) ||
+		!spawn_with_callbacks(working_dir, NULL, argv, NULL, 0, NULL, NULL, build_iofunc,
 #endif
+			GINT_TO_POINTER(0), 0, build_iofunc, GINT_TO_POINTER(1), 0, build_exit_cb,
+			NULL, &build_info.pid, &error))
 	{
 		geany_debug("build command spawning failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
-		g_strfreev(argv);
 		g_error_free(error);
-		g_free(working_dir);
-		error = NULL;
-		return (GPid) 0;
 	}
 
-#ifdef SYNC_SPAWN
-	parse_build_output((const gchar**) output, status);
-	g_free(output[0]);
-	g_free(output[1]);
-#else
-	if (build_info.pid != 0)
-	{
-		g_child_watch_add(build_info.pid, (GChildWatchFunc) build_exit_cb, NULL);
-		build_menu_update(doc);
-		ui_progress_bar_start(NULL);
-	}
-
-	/* use GIOChannels to monitor stdout and stderr */
-	utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(0));
-	utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-		TRUE, build_iofunc, GINT_TO_POINTER(1));
-#endif
-
-	g_strfreev(argv);
 	g_free(working_dir);
-
-	return build_info.pid;
 }
 
 
@@ -901,13 +808,10 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir);
 	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
-	/* only test whether working dir exists, don't change it or else Windows support will break
-	 * (gspawn-win32-helper.exe is used by GLib and must be in $PATH which means current working
-	 *  dir where geany.exe was started from, so we can't change it) */
 	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
 		! g_file_test(*working_dir, G_FILE_TEST_IS_DIR))
 	{
-		ui_set_statusbar(TRUE, _("Failed to change the working directory to \"%s\""),
+		ui_set_statusbar(TRUE, _("Invalid working directory \"%s\""),
 				!EMPTY(working_dir_utf8) ? working_dir_utf8 : "<NULL>" );
 		utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, *working_dir, NULL);
 		return NULL;
@@ -943,18 +847,17 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 }
 
 
-static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
+static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 {
 	gchar *working_dir;
 	gchar *run_cmd = NULL;
-	GError *error = NULL;
 
 	if (! DOC_VALID(doc) || doc->file_name == NULL)
-		return (GPid) 0;
+		return;
 
 	run_cmd = prepare_run_cmd(doc, &working_dir, cmdindex);
 	if (run_cmd == NULL)
-		return (GPid) 0;
+		return;
 
 	run_info[cmdindex].file_type_id = doc->file_type->id;
 
@@ -988,79 +891,35 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		msgwin_show_hide(TRUE);
 
 		run_info[cmdindex].pid = 1;
-
 		g_free(vte_cmd);
 	}
 	else
 #endif
 	{
-		gchar *locale_term_cmd = NULL;
-		gint argv_len, i;
-		gchar **argv = NULL;
-		gchar *script_path = NULL;
+		gchar *locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
+		GError *error = NULL;
 
-		/* get the terminal path */
-		locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
-		/* split the term_cmd, so arguments will work too */
-		if (!g_shell_parse_argv(locale_term_cmd, &argv_len, &argv, NULL))
-		{
-			ui_set_statusbar(TRUE,
-				_("Could not parse terminal command \"%s\" "
-					"(check Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
-			run_info[cmdindex].pid = (GPid) 1;
-			g_unlink(run_cmd);
-			goto free_strings;
-		}
+		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
 
-		/* check that terminal exists (to prevent misleading error messages) */
-		if (argv[0] != NULL)
+		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
+			&error))
 		{
-			gchar *tmp = argv[0];
-			/* g_find_program_in_path checks whether tmp exists and is executable */
-			argv[0] = g_find_program_in_path(tmp);
-			g_free(tmp);
+			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
+								(gpointer) &(run_info[cmdindex]));
+			build_menu_update(doc);
 		}
-		if (argv[0] == NULL)
+		else
 		{
-			ui_set_statusbar(TRUE,
-				_("Could not find terminal \"%s\" "
-					"(check path for Terminal tool setting in Preferences)"), tool_prefs.term_cmd);
-			run_info[cmdindex].pid = (GPid) 1;
-			g_unlink(run_cmd);
-			goto free_strings;
-		}
-
-		for (i = 0; i < argv_len; i++)
-		{
-			utils_str_replace_all(&(argv[i]), "%c", run_cmd);
-		}
-
-		if (! g_spawn_async(working_dir, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-							NULL, NULL, &(run_info[cmdindex].pid), &error))
-		{
-			geany_debug("g_spawn_async() failed: %s", error->message);
+			geany_debug("spawn_async() failed: %s", error->message);
 			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
 			g_error_free(error);
 			g_unlink(run_cmd);
-			error = NULL;
 			run_info[cmdindex].pid = (GPid) 0;
 		}
-
-		if (run_info[cmdindex].pid != 0)
-		{
-			g_child_watch_add(run_info[cmdindex].pid, (GChildWatchFunc) run_exit_cb,
-								(gpointer)&(run_info[cmdindex]));
-			build_menu_update(doc);
-		}
-		free_strings:
-		g_strfreev(argv);
-		g_free(locale_term_cmd);
-		g_free(script_path);
 	}
 
 	g_free(working_dir);
 	g_free(run_cmd);
-	return run_info[cmdindex].pid;
 }
 
 
@@ -1071,7 +930,6 @@ static void process_build_output_line(const gchar *str, gint color)
 	gint line;
 
 	msg = g_strdup(str);
-
 	g_strchomp(msg);
 
 	if (EMPTY(msg))
@@ -1108,29 +966,14 @@ static void process_build_output_line(const gchar *str, gint color)
 }
 
 
-#ifndef SYNC_SPAWN
-static gboolean build_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer data)
+static void build_iofunc(GString *string, GIOCondition condition, gpointer data)
 {
-	if (cond & (G_IO_IN | G_IO_PRI))
+	if (condition & (G_IO_IN | G_IO_PRI))
 	{
-		gchar *msg;
-		GIOStatus st;
-
-		while ((st = g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL)) == G_IO_STATUS_NORMAL && msg)
-		{
-			gint color = (GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK;
-
-			process_build_output_line(msg, color);
- 			g_free(msg);
-		}
-		if (st == G_IO_STATUS_ERROR || st == G_IO_STATUS_EOF) return FALSE;
+		process_build_output_line(string->str,
+			(GPOINTER_TO_INT(data)) ? COLOR_DARK_RED : COLOR_BLACK);
 	}
-	if (cond & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-		return FALSE;
-
-	return TRUE;
 }
-#endif
 
 
 gboolean build_parse_make_dir(const gchar *string, gchar **prefix)
@@ -1203,40 +1046,16 @@ static void show_build_result_message(gboolean failure)
 }
 
 
-#ifndef SYNC_SPAWN
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	gboolean failure = FALSE;
-
-#ifdef G_OS_WIN32
-	failure = status;
-#else
-	if (WIFEXITED(status))
-	{
-		if (WEXITSTATUS(status) != EXIT_SUCCESS)
-			failure = TRUE;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		/* the terminating signal: WTERMSIG (status)); */
-		failure = TRUE;
-	}
-	else
-	{	/* any other failure occured */
-		failure = TRUE;
-	}
-#endif
-	show_build_result_message(failure);
-
+	show_build_result_message(!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS);
 	utils_beep();
-	g_spawn_close_pid(child_pid);
 
 	build_info.pid = 0;
 	/* enable build items again */
 	build_menu_update(NULL);
 	ui_progress_bar_stop();
 }
-#endif
 
 
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
@@ -1788,25 +1607,17 @@ static void on_toolbutton_make_activate(GtkWidget *menuitem, gpointer user_data)
 
 static void kill_process(GPid *pid)
 {
-	gint result;
+	GError *error = NULL;
 
-#ifdef G_OS_WIN32
-	g_return_if_fail(*pid != NULL);
-	result = TerminateProcess(*pid, 0);
-	/* TerminateProcess() returns TRUE on success, for the check below we have to convert
-	 * it to FALSE (and vice versa) */
-	result = ! result;
-#else
-	g_return_if_fail(*pid > 1);
-	result = kill(*pid, SIGTERM);
-#endif
-
-	if (result != 0)
-		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), g_strerror(errno));
-	else
+	if (spawn_kill_process(*pid, &error))
 	{
 		*pid = 0;
 		build_menu_update(NULL);
+	}
+	else
+	{
+		ui_set_statusbar(TRUE, _("Process could not be stopped (%s)."), error->message);
+		g_error_free(error);
 	}
 }
 
