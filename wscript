@@ -457,6 +457,30 @@ def build(bld):
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
 
+    def gen_signallist(task):
+        from xml.etree import ElementTree
+
+        def find_handlers(xml_filename):
+            tree = ElementTree.parse(xml_filename)
+            signals = tree.getroot().findall(".//signal")
+            return [sig.attrib["handler"] for sig in signals]
+
+        handlers = []
+        for node in task.inputs:
+            handlers += find_handlers(node.abspath())
+        handlers = sorted(set(handlers))
+
+        for node in task.outputs:
+            node.write("/* This file is auto-generated, do not edit. */\n" +
+                       ''.join(["ITEM(%s)\n" % h for h in handlers]))
+
+    # signallist.i
+    bld(
+        source  = 'data/geany.glade',
+        target  = 'src/signallist.i',
+        name    = 'signallist.i',
+        rule    = gen_signallist)
+
     base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
     # libgeany
     bld(
@@ -464,7 +488,7 @@ def build(bld):
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
-        includes        = ['.', 'scintilla/include', 'tagmanager/src'],
+        includes        = ['.', 'scintilla/include', 'tagmanager/src', 'src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = base_uselibs,
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
