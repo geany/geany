@@ -3,7 +3,6 @@
 
 EXTRA_DIST = \
 	gb.c \
-	win32.c win32.h \
 	plugindata.h \
 	documentprivate.h \
 	filetypesprivate.h \
@@ -29,7 +28,6 @@ geany_SOURCES = main.c
 geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
 geany_includedir = $(includedir)/geany
-
 geany_include_HEADERS = \
 	app.h \
 	build.h \
@@ -139,9 +137,7 @@ geany_private.res: $(top_srcdir)/geany_private.rc
 	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
 
 libgeany_la_SOURCES += win32.c win32.h
-
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
-
 libgeany_la_LDFLAGS += -Wl,-luuid -mwindows -mms-bitfields -no-undefined
 
 CLEANFILES += geany_private.res
