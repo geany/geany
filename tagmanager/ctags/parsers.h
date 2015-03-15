@@ -29,6 +29,7 @@
     ConfParser, \
     SqlParser, \
     DocBookParser, \
+    ErlangParser, \
     CssParser, \
     RubyParser, \
     TclParser, \

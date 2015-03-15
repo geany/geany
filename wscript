@@ -79,6 +79,7 @@ ctags_sources = set([
     'tagmanager/ctags/ctags.c',
     'tagmanager/ctags/diff.c',
     'tagmanager/ctags/docbook.c',
+    'tagmanager/ctags/erlang.c',
     'tagmanager/ctags/entry.c',
     'tagmanager/ctags/fortran.c',
     'tagmanager/ctags/get.c',
