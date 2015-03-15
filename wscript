@@ -133,7 +133,7 @@ geany_sources = set([
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
     'src/highlighting.c', 'src/keybindings.c',
-    'src/keyfile.c', 'src/log.c', 'src/libmain.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c'
+    'src/keyfile.c', 'src/log.c', 'src/libmain.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
     'src/symbols.c',
