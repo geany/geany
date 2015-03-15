@@ -30,7 +30,6 @@ geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
 geany_includedir = $(includedir)/geany
 
-# only install headers that define types or macros, not just functions
 geany_include_HEADERS = \
 	app.h \
 	build.h \
@@ -124,6 +123,7 @@ nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
 CLEANFILES =
 
 if MINGW
+# build Geany for Windows (possibly on non-Windows systems -- cross-compile)
 
 AM_CPPFLAGS += \
 	-DGEANY_DATADIR=\"data\" \
@@ -139,7 +139,6 @@ WINDRES = $(host_alias)-windres
 geany_private.res: $(top_srcdir)/geany_private.rc
 	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
 
-# build Geany for Windows on non-Windows systems (cross-compile)
 libgeany_la_SOURCES += win32.c win32.h
 
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
