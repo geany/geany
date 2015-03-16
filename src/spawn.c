@@ -442,17 +442,20 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 {
 	g_return_val_if_fail(command_line != NULL || argv != NULL, FALSE);
 
-	if (command_line && !spawn_check_command(command_line, FALSE, error))
-		return FALSE;
-
 #ifdef G_OS_WIN32
 	GString *command;
 	GArray *environment = g_array_new(TRUE, FALSE, sizeof(char));
 	GPid pid;
 	gchar *failure;
 
-	while (command_line && strchr(CL_BLANKS, *command_line))
-		command_line++;
+	if (command_line)
+	{
+		if (!spawn_check_command(command_line, FALSE, error))
+			return FALSE;
+		/* checked command line contains at least 1 non-blank */
+		while (strchr(CL_BLANKS, *command_line))
+			command_line++;
+	}
 
 	command = g_string_new(command_line);
 
