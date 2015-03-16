@@ -114,6 +114,7 @@ test_sources = \
 	common.f						\
 	complex-return.js				\
 	continuation.f90				\
+	continuation.mak				\
 	countall.sql					\
 	cpp_destructor.cpp				\
 	css-at-rules.css				\
