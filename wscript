@@ -407,7 +407,8 @@ def build(bld):
 
     # CTags
     bld(
-        features        = ['c', 'cstlib'],
+        # cshlib must be after cstlib to use -fPIC btu still create static lib
+        features        = ['c', 'cstlib', 'cshlib'],
         source          = ctags_sources,
         name            = 'ctags',
         target          = 'ctags',
@@ -418,7 +419,8 @@ def build(bld):
 
     # Tagmanager
     bld(
-        features        = ['c', 'cstlib'],
+        # cshlib must be after cstlib to use -fPIC btu still create static lib
+        features        = ['c', 'cstlib', 'cshlib'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
@@ -429,7 +431,8 @@ def build(bld):
 
     # MIO
     bld(
-        features        = ['c', 'cstlib'],
+        # cshlib must be after cstlib to use -fPIC btu still create static lib
+        features        = ['c', 'cstlib', 'cshlib'],
         source          = mio_sources,
         name            = 'mio',
         target          = 'mio',
@@ -442,7 +445,8 @@ def build(bld):
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
     scintilla_sources.update([file.path_from(bld.srcnode) for file in files])
     bld(
-        features        = ['c', 'cxx', 'cxxstlib'],
+        # cshlib must be after cstlib to use -fPIC btu still create static lib
+        features        = ['c', 'cxx', 'cstlib', 'cxxstlib', 'cshlib', 'cxxshlib'],
         name            = 'scintilla',
         target          = 'scintilla',
         source          = scintilla_sources,
