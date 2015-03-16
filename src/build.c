@@ -731,10 +731,7 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-#ifdef G_OS_UNIX
-	/* under Unix, start cmd via sh for compatibility */
 	gchar *argv[] = { "/bin/sh", "-c", (gchar *) cmd, NULL };
-#endif
 	gchar *working_dir;
 	gchar *utf8_working_dir;
 	gchar *utf8_cmd_string;
@@ -761,21 +758,21 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	g_free(utf8_working_dir);
 	g_free(utf8_cmd_string);
 
+#ifdef G_OS_UNIX
+	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
+#else
+	argv[0] = NULL;  /* under Windows, run cmd directly */
+#endif
+
 	/* set the build info for the message window */
 	g_free(build_info.dir);
 	build_info.dir = g_strdup(working_dir);
 	build_info.file_type_id = (doc == NULL) ? GEANY_FILETYPES_NONE : doc->file_type->id;
 	build_info.message_count = 0;
 
-#ifdef G_OS_WIN32
-	if (!spawn_with_callbacks(working_dir, cmd, NULL, NULL, 0, NULL, NULL, build_iofunc,
-#else
-	/* cmd is passed via argv, so check it explicitly */
-	if (!spawn_check_command(cmd, FALSE, &error) ||
-		!spawn_with_callbacks(working_dir, NULL, argv, NULL, 0, NULL, NULL, build_iofunc,
-#endif
-			GINT_TO_POINTER(0), 0, build_iofunc, GINT_TO_POINTER(1), 0, build_exit_cb,
-			NULL, &build_info.pid, &error))
+	if (!spawn_with_callbacks(working_dir, cmd, argv, NULL, 0, NULL, NULL, build_iofunc,
+		GINT_TO_POINTER(0), 0, build_iofunc, GINT_TO_POINTER(1), 0, build_exit_cb, NULL,
+		&build_info.pid, &error))
 	{
 		geany_debug("build command spawning failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
