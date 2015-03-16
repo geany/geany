@@ -157,6 +157,7 @@ geany_icons = {
     'hicolor/32x32/actions':    ['32x32/geany-build.png',
                                  '32x32/geany-close-all.png',
                                  '32x32/geany-save-all.png'],
+    'hicolor/32x32/apps':       ['32x32/geany.png'],
     'hicolor/48x48/actions':    ['48x48/geany-build.png',
                                  '48x48/geany-close-all.png',
                                  '48x48/geany-save-all.png'],
