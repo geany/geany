@@ -63,6 +63,8 @@ typedef enum
  *
  *  If @c G_IO_IN or @c G_IO_PRI are set, the @a string will contain at least one character.
  *
+ *  The callback function may modify the @a string, but must not free it.
+ *
  *  @param string contains the child data if @c G_IO_IN or @c G_IO_PRI are set.
  *  @param condition the I/O condition which has been satisfied.
  *  @param data the passed to @c spawn_with_callbacks() with the callback.
