@@ -2160,7 +2160,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 }
 
 
-void utils_start_new_geany_instance(gchar *doc_path)
+void utils_start_new_geany_instance(const gchar *doc_path)
 {
 	gchar **argv;
 	const gchar *command = is_osx_bundle() ? "open" : "geany";
