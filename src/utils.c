@@ -2125,28 +2125,29 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 #ifdef G_OS_WIN32
 		gchar *prefix = win32_get_installation_dir();
 
+		resdirs[RESOURCE_DIR_PREFIX] = prefix;
 		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", NULL);
-		g_free(prefix);
 #else
 		if (is_osx_bundle())
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
+			resdirs[RESOURCE_DIR_PREFIX] = prefix;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
-			g_free(prefix);
 # endif
 		}
 		else
 		{
+			resdirs[RESOURCE_DIR_PREFIX] = GEANY_PREFIX;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
