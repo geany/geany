@@ -1396,12 +1396,6 @@ G_MODULE_EXPORT void on_previous_message1_activate(GtkMenuItem *menuitem, gpoint
 }
 
 
-G_MODULE_EXPORT void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data)
-{
-	project_new();
-}
-
-
 G_MODULE_EXPORT void on_project_open1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	project_open();
@@ -1476,7 +1470,7 @@ G_MODULE_EXPORT void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem,
 				app->project != NULL && !EMPTY(app->project->base_path))
 			{
 				/* try the project's base path */
-				SETPTR(path, project_get_base_path());
+				SETPTR(path, g_strdup(app->project->base_path));
 				SETPTR(path, utils_get_locale_from_utf8(path));
 				SETPTR(filename, g_build_path(G_DIR_SEPARATOR_S, path, sel, NULL));
 			}

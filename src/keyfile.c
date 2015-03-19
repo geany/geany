@@ -406,7 +406,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	/* general */
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
@@ -611,7 +610,7 @@ void configuration_save(void)
 	save_ui_prefs(config);
 	project_save_prefs(config);	/* save project filename, etc. */
 	save_recent_files(config, ui_prefs.recent_queue, "recent_files");
-	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+	save_recent_files(config, ui_prefs.recent_projects_queue, "recent_project_dirs");
 
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
@@ -668,7 +667,7 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 	if (read_recent_files)
 	{
 		load_recent_files(config, ui_prefs.recent_queue, "recent_files");
-		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_projects");
+		load_recent_files(config, ui_prefs.recent_projects_queue, "recent_project_dirs");
 	}
 
 	/* the project may load another list than the main setting */
@@ -753,7 +752,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
-	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);

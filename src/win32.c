@@ -222,22 +222,14 @@ static wchar_t *get_file_filter_all_files(void)
 }
 
 
-static wchar_t *get_filters(gboolean project_files)
+static wchar_t *get_filters(void)
 {
 	gchar *string;
 	gint len;
 	static wchar_t title[1024];
 
-	if (project_files)
-	{
-		string = g_strconcat(_("Geany project files"), "\t", "*." GEANY_PROJECT_EXT, "\t",
-			_("All files"), "\t", "*", "\t", NULL);
-	}
-	else
-	{
-		string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
-			_("All files"), "\t", "*", "\t", NULL);
-	}
+	string = g_strconcat(_("Executables"), "\t", "*.exe;*.bat;*.cmd", "\t",
+		_("All files"), "\t", "*", "\t", NULL);
 
 	/* replace all "\t"s by \0 */
 	len = strlen(string);
@@ -247,27 +239,6 @@ static wchar_t *get_filters(gboolean project_files)
 	g_free(string);
 
 	return title;
-}
-
-
-/* Converts the given UTF-8 filename or directory name into something usable for Windows and
- * returns the directory part of the given filename. */
-static wchar_t *get_dir_for_path(const gchar *utf8_filename)
-{
-	static wchar_t w_dir[MAX_PATH];
-	gchar *result;
-
-	if (g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
-		result = (gchar*) utf8_filename;
-	else
-		result = g_path_get_dirname(utf8_filename);
-
-	MultiByteToWideChar(CP_UTF8, 0, result, -1, w_dir, G_N_ELEMENTS(w_dir));
-
-	if (result != utf8_filename)
-		g_free(result);
-
-	return w_dir;
 }
 
 
@@ -302,14 +273,21 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 
 /* Shows a folder selection dialog.
  * initial_dir is expected in UTF-8
+ * set create_folders to TRUE to add the possibility to create a new folder
  * The selected folder name is returned. */
-gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir)
+gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir,
+								gboolean create_folders)
 {
 	BROWSEINFOW bi;
 	LPCITEMIDLIST pidl;
 	gchar *result = NULL;
 	wchar_t fname[MAX_PATH];
 	wchar_t w_title[512];
+	wchar_t w_dir[MAX_PATH];
+
+	w_dir[0] = '\0';
+	if (initial_dir != NULL)
+		MultiByteToWideChar(CP_UTF8, 0, initial_dir, -1, w_dir, G_N_ELEMENTS(w_dir));
 
 	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
 
@@ -321,8 +299,10 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	bi.pidlRoot = NULL;
 	bi.lpszTitle = w_title;
 	bi.lpfn = BrowseCallbackProc;
-	bi.lParam = (LPARAM) get_dir_for_path(initial_dir);
+	bi.lParam = (LPARAM) w_dir;
 	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
+	if (create_folders)
+		bi.ulFlags |= BIF_USENEWUI;
 
 	pidl = SHBrowseForFolderW(&bi);
 
@@ -337,73 +317,6 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
 	}
 	return result;
-}
-
-
-/* Shows a file open dialog.
- * If allow_new_file is set, the file to be opened doesn't have to exist.
- * initial_dir is expected in UTF-8
- * The selected file name is returned.
- * If project_file_filter is set, the file open dialog will have a file filter for Geany project
- * files, a filter for executables otherwise. */
-gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
-								      const gchar *initial_dir, gboolean allow_new_file,
-								      gboolean project_file_filter)
-{
-	OPENFILENAMEW of;
-	gint retval;
-	wchar_t fname[MAX_PATH];
-	wchar_t w_title[512];
-	gchar *filename;
-
-	fname[0] = '\0';
-
-	MultiByteToWideChar(CP_UTF8, 0, title, -1, w_title, G_N_ELEMENTS(w_title));
-
-	if (parent == NULL)
-		parent = main_widgets.window;
-
-	/* initialise file dialog info struct */
-	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
-	of.lStructSize = sizeof of;
-#endif
-	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
-	of.lpstrFilter = get_filters(project_file_filter);
-
-	of.lpstrCustomFilter = NULL;
-	of.nFilterIndex = 0;
-	of.lpstrFile = fname;
-	of.lpstrInitialDir = get_dir_for_path(initial_dir);
-	of.nMaxFile = 2048;
-	of.lpstrFileTitle = NULL;
-	of.lpstrTitle = w_title;
-	of.lpstrDefExt = L"";
-	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY | OFN_ENABLEHOOK;
-	of.lpfnHook = win32_dialog_explorer_hook_proc;
-	if (! allow_new_file)
-		of.Flags |= OFN_FILEMUSTEXIST;
-
-	retval = GetOpenFileNameW(&of);
-
-	if (! retval)
-	{
-		if (CommDlgExtendedError())
-		{
-			gchar *error;
-			error = g_strdup_printf("File dialog box error (%x)", (int)CommDlgExtendedError());
-			win32_message_dialog(NULL, GTK_MESSAGE_ERROR, error);
-			g_free(error);
-		}
-		return NULL;
-	}
-	/* convert the resulting filename into UTF-8 (from whatever encoding it has at this moment) */
-	filename = g_malloc0(MAX_PATH * 2);
-	WideCharToMultiByte(CP_UTF8, 0, fname, -1, filename, MAX_PATH * 2, NULL, NULL);
-
-	return filename;
 }
 
 
@@ -703,7 +616,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 #endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(ui_widgets.prefs_dialog));
 
-	of.lpstrFilter = get_filters(FALSE);
+	of.lpstrFilter = get_filters();
 	of.lpstrCustomFilter = NULL;
 	of.nFilterIndex = 1;
 

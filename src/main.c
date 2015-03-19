@@ -898,7 +898,7 @@ static void load_startup_files(gint argc, gchar **argv)
 {
 	gboolean load_session = FALSE;
 
-	if (argc > 1 && g_str_has_suffix(argv[1], ".geany"))
+	if (argc > 1 && g_str_has_suffix(argv[1], GEANY_PROJECT_FILENAME))
 	{
 		gchar *filename = main_get_argv_filename(argv[1]);
 

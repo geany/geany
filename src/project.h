@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-#define GEANY_PROJECT_EXT				"geany"
+#define GEANY_PROJECT_FILENAME				"project.geany"
 
 
 /** Structure for representing a project. */
@@ -36,7 +36,7 @@ typedef struct GeanyProject
 	gchar *name; 			/**< The name of the project. */
 	gchar *description; 	/**< Short description of the project. */
 	gchar *file_name; 		/**< Where the project file is stored (in UTF-8). */
-	gchar *base_path;		/**< Base path of the project directory (in UTF-8, maybe relative). */
+	gchar *base_path;		/**< Base path of the project directory (in UTF-8, absolute). */
 	/** Identifier whether it is a pure Geany project or modified/extended
 	 * by a plugin. */
 	gint type;
@@ -56,7 +56,6 @@ typedef struct ProjectPrefs
 {
 	gchar *session_file;
 	gboolean project_session;
-	gboolean project_file_in_basedir;
 } ProjectPrefs;
 
 extern ProjectPrefs project_prefs;
@@ -66,8 +65,6 @@ void project_init(void);
 
 void project_finalize(void);
 
-
-void project_new(void);
 
 void project_open(void);
 
@@ -83,8 +80,6 @@ gboolean project_ask_close(void);
 gboolean project_load_file(const gchar *locale_file_name);
 
 gboolean project_load_file_with_session(const gchar *locale_file_name);
-
-gchar *project_get_base_path(void);
 
 
 const struct GeanyFilePrefs *project_get_file_prefs(void);

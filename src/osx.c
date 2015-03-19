@@ -65,7 +65,7 @@ static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpoint
 		g_free(cwd);
 	}
 
-	if (g_str_has_suffix(path, ".geany"))
+	if (g_str_has_suffix(path, GEANY_PROJECT_FILENAME))
 	{
 		g_idle_add((GSourceFunc)open_project_idle, locale_path);
 		opened = TRUE;

@@ -1437,3 +1437,90 @@ gint dialogs_show_prompt(GtkWidget *parent,
 	g_free(string);
 	return result;
 }
+
+
+#ifndef G_OS_WIN32
+static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
+		const gchar *utf8_path, gboolean create_folders)
+{
+	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
+		GTK_WINDOW(main_widgets.window), action,
+		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
+	gchar *locale_path;
+	gchar *ret_path = NULL;
+
+	gtk_widget_set_name(dialog, "GeanyDialog");
+	locale_path = utils_get_locale_from_utf8(utf8_path);
+	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	{
+		gtk_file_chooser_set_create_folders(GTK_FILE_CHOOSER(dialog), create_folders);
+		if (locale_path)
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+	}
+	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+		if (locale_path)
+			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
+		else
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), g_get_home_dir());
+	}
+	g_free(locale_path);
+
+	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+	{
+		gchar *dir_locale;
+
+		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		ret_path = utils_get_utf8_from_locale(dir_locale);
+		g_free(dir_locale);
+	}
+	gtk_widget_destroy(dialog);
+	return ret_path;
+}
+#endif
+
+
+gchar *dialogs_show_open_dialog(GtkFileChooserAction action, const gchar *title, 
+								const gchar *initial_path, gboolean create_folders)
+{
+	gchar *utf8_path, *path;
+
+	/* TODO: extend for other actions */
+	g_return_val_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+						action == GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+
+	if (title == NULL)
+		title = action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ? _("Select Folder") : _("Select File");
+
+	path = utils_get_locale_from_utf8(initial_path);
+	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+		if (!g_path_is_absolute(path) || !g_file_test(path, G_FILE_TEST_IS_REGULAR))
+			SETPTR(path, NULL);
+		SETPTR(path, utils_get_utf8_from_locale(path));
+#ifdef G_OS_WIN32
+		utf8_path = win32_show_file_dialog(GTK_WINDOW(ui_widgets.prefs_dialog), title,
+						path);
+#else
+		utf8_path = run_file_chooser(title, action, path, create_folders);
+#endif
+	}
+	else
+	{
+		if (g_file_test(path, G_FILE_TEST_IS_REGULAR))
+			SETPTR(path, g_path_get_dirname(path));
+		if (!g_path_is_absolute(path) || !g_file_test(path, G_FILE_TEST_IS_DIR))
+			SETPTR(path, g_strdup(g_get_home_dir()));
+		SETPTR(path, utils_get_utf8_from_locale(path));
+#ifdef G_OS_WIN32
+		utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title,
+						path, create_folders);
+#else
+		utf8_path = run_file_chooser(title, action, path, create_folders);
+#endif
+	}
+	g_free(path);
+
+	return utf8_path;
+}

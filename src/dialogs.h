@@ -81,6 +81,9 @@ gint dialogs_show_prompt(GtkWidget *parent,
 
 void dialogs_show_msgbox_with_secondary(GtkMessageType type, const gchar *text, const gchar *secondary);
 
+gchar *dialogs_show_open_dialog(GtkFileChooserAction action, const gchar *title, const gchar *initial_path,
+								gboolean create_folders);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

@@ -573,7 +573,7 @@ static void handle_input_filename(const gchar *buf)
 	locale_filename = utils_get_locale_from_utf8(utf8_filename);
 	if (locale_filename)
 	{
-		if (g_str_has_suffix(locale_filename, ".geany"))
+		if (g_str_has_suffix(locale_filename, GEANY_PROJECT_FILENAME))
 		{
 			if (project_ask_close())
 				main_load_project_from_command_line(locale_filename, TRUE);

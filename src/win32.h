@@ -48,11 +48,8 @@ gboolean win32_message_dialog(GtkWidget *parent, GtkMessageType type, const gcha
 
 void win32_open_browser(const gchar *uri);
 
-gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
-								      const gchar *initial_dir, gboolean allow_new_file,
-								      gboolean project_file_filter);
-
-gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir);
+gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir,
+								gboolean create_folders);
 
 gint win32_check_write_permission(const gchar *dir);
 
