@@ -179,6 +179,44 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 }
 
 
+/* Rename old *.geany projects to project.geany */
+static gboolean convert_old_project(const gchar *dirname)
+{
+	GDir *dir;
+	const gchar *fname;
+	gboolean converted = FALSE;
+
+	dir = g_dir_open (dirname, 0, NULL);
+	while ((fname = g_dir_read_name(dir)) != NULL)
+	{
+		gchar *absname = g_build_filename(dirname, fname, NULL);
+
+		if (g_file_test(absname, G_FILE_TEST_IS_REGULAR) && g_str_has_suffix(fname, ".geany"))
+		{
+			gchar *utf8_fname = utils_get_utf8_from_locale(fname);
+
+			if (dialogs_show_question_full(NULL, GTK_STOCK_YES, GTK_STOCK_NO,
+				_("Do you want to rename it to 'project.geany' and open it? A new project will be created otherwise."),
+				_("Old Geany project '%s' found."), utf8_fname))
+			{
+				gchar *new_name = g_build_filename(dirname, GEANY_PROJECT_FILENAME, NULL);
+				g_rename(absname, new_name);
+				g_free(new_name);
+				converted = TRUE;
+			}
+
+			g_free(utf8_fname);
+			g_free(absname);
+			break;
+		}
+		g_free(absname);
+	}
+	g_dir_close(dir);
+
+	return converted;
+}
+
+
 void project_open(void)
 {
 	gchar *dirname;
@@ -190,10 +228,15 @@ void project_open(void)
 	if (dirname != NULL && project_ask_close())
 	{
 		gchar *filename;
+		gboolean project_exists;
 
 		filename = g_build_filename(dirname, GEANY_PROJECT_FILENAME, NULL);
+		project_exists = g_file_test(filename, G_FILE_TEST_IS_REGULAR);
 
-		if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+		if (!project_exists)
+			project_exists = convert_old_project(dirname);
+
+		if (project_exists)
 		{
 			/* try to load the config */
 			if (!project_load_file_with_session(filename))
