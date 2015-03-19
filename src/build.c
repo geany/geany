@@ -124,7 +124,7 @@ static void on_build_next_error(GtkWidget *menuitem, gpointer user_data);
 static void on_build_previous_error(GtkWidget *menuitem, gpointer user_data);
 static void kill_process(GPid *pid);
 static void show_build_result_message(gboolean failure);
-static void process_build_output_line(const gchar *line, gint color);
+static void process_build_output_line(gchar *msg, gint color);
 static void show_build_commands_dialog(void);
 static void on_build_menu_item(GtkWidget *w, gpointer user_data);
 
@@ -920,20 +920,16 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 }
 
 
-static void process_build_output_line(const gchar *str, gint color)
+static void process_build_output_line(gchar *msg, gint color)
 {
-	gchar *msg, *tmp;
+	gchar *tmp;
 	gchar *filename;
 	gint line;
 
-	msg = g_strdup(str);
 	g_strchomp(msg);
 
 	if (EMPTY(msg))
-	{
-		g_free(msg);
 		return;
-	}
 
 	if (build_parse_make_dir(msg, &tmp))
 	{
@@ -959,7 +955,6 @@ static void process_build_output_line(const gchar *str, gint color)
 	g_free(filename);
 
 	msgwin_compiler_add_string(color, msg);
-	g_free(msg);
 }
 
 
