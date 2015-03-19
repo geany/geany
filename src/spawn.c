@@ -174,6 +174,7 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
 		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 			_("Text ended before matching quote was found for %c."
 			  " (The text was '%s')"), '"', command_line);
+		g_free(program);
 		return FALSE;
 	}
 #else  /* G_OS_WIN32 */
