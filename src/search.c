@@ -37,6 +37,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "stash.h"
 #include "support.h"
 #include "toolbar.h"
@@ -149,10 +150,10 @@ static struct
 fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data);
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data);
+static void search_read_io(GString *string, GIOCondition condition, gpointer data);
+static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data);
 
-static void search_close_pid(GPid child_pid, gint status, gpointer user_data);
+static void search_finished(GPid child_pid, gint status, gpointer user_data);
 
 static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir);
 
@@ -1647,13 +1648,10 @@ static gboolean
 search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
 	const gchar *enc)
 {
-	gchar **argv_prefix, **argv, **opts_argv;
-	gchar *command_grep;
+	gchar **argv_prefix = g_new(gchar*, 3);
+	gchar *command_grep, *command_line;
+	gchar **argv;
 	gchar *search_text = NULL;
-	gint opts_argv_len, i;
-	GPid child_pid;
-	gint stdout_fd;
-	gint stderr_fd;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 	gssize utf8_text_len;
@@ -1662,18 +1660,11 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 
 	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
 	if (command_grep == NULL)
+		command_line = g_strdup_printf("%s %s --", tool_prefs.grep_cmd, opts);
+	else
 	{
-		ui_set_statusbar(TRUE, _("Cannot execute grep tool '%s';"
-			" check the path setting in Preferences."), tool_prefs.grep_cmd);
-		return FALSE;
-	}
-
-	if (! g_shell_parse_argv(opts, &opts_argv_len, &opts_argv, &error))
-	{
-		ui_set_statusbar(TRUE, _("Cannot parse extra options: %s"), error->message);
-		g_error_free(error);
+		command_line = g_strdup_printf("\"%s\" %s --", command_grep, opts);
 		g_free(command_grep);
-		return FALSE;
 	}
 
 	/* convert the search text in the preferred encoding (if the text is not valid UTF-8. assume
@@ -1686,74 +1677,58 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	if (search_text == NULL)
 		search_text = g_strdup(utf8_search_text);
 
-	/* set grep command and options */
-	argv_prefix = g_new0(gchar*, 1 + opts_argv_len + 3 + 1);	/* last +1 for recursive arg */
-
-	argv_prefix[0] = command_grep;
-	for (i = 0; i < opts_argv_len; i++)
-	{
-		argv_prefix[i + 1] = g_strdup(opts_argv[i]);
-	}
-	g_strfreev(opts_argv);
-
-	i++;	/* correct for tool_prefs.grep_cmd */
-	argv_prefix[i++] = g_strdup("--");
-	argv_prefix[i++] = search_text;
+	argv_prefix[0] = search_text;
 
 	/* finally add the arguments(files to be searched) */
-	if (strstr(argv_prefix[1], "r"))	/* recursive option set */
+	if (settings.fif_recursive)	/* recursive option set */
 	{
 		/* Use '.' so we get relative paths in the output */
-		argv_prefix[i++] = g_strdup(".");
-		argv_prefix[i++] = NULL;
+		argv_prefix[1] = g_strdup(".");
+		argv_prefix[2] = NULL;
 		argv = argv_prefix;
 	}
 	else
 	{
-		argv_prefix[i++] = NULL;
+		argv_prefix[1] = NULL;
 		argv = search_get_argv((const gchar**)argv_prefix, dir);
 		g_strfreev(argv_prefix);
-	}
 
-	if (argv == NULL)	/* no files */
-	{
-		return FALSE;
+		if (argv == NULL)	/* no files */
+		{
+			g_free(command_line);
+			return FALSE;
+		}
 	}
 
 	gtk_list_store_clear(msgwindow.store_msg);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
-	if (! g_spawn_async_with_pipes(dir, (gchar**)argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD,
-		NULL, NULL, &child_pid,
-		NULL, &stdout_fd, &stderr_fd, &error))
-	{
-		geany_debug("%s: g_spawn_async_with_pipes() failed: %s", G_STRFUNC, error->message);
-		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
-		g_error_free(error);
-		ret = FALSE;
+	/* we can pass 'enc' without strdup'ing it here because it's a global const string and
+	 * always exits longer than the lifetime of this function */
+	if (spawn_with_callbacks(dir, command_line, argv, NULL, 0, NULL, NULL, search_read_io,
+		(gpointer) enc, 0, search_read_io_stderr, (gpointer) enc, 0, search_finished, NULL,
+		NULL, &error))
+ 	{
+		gchar *utf8_command_line = utils_get_utf8_from_locale(command_line);
+		gchar *utf8_dir = utils_get_utf8_from_locale(dir);
+		gchar *utf8_str;
+ 
+ 		ui_progress_bar_start(_("Searching..."));
+ 		msgwin_set_messages_dir(dir);
+		utf8_str = g_strdup_printf(_("%s %s (in directory: %s)"),
+			utf8_command_line, utf8_search_text, utf8_dir);
+ 		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
+		utils_free_pointers(3, utf8_command_line, utf8_dir, utf8_str, NULL);
+ 		ret = TRUE;
 	}
 	else
 	{
-		gchar *str, *utf8_str;
-
-		ui_progress_bar_start(_("Searching..."));
-
-		msgwin_set_messages_dir(dir);
-		/* we can pass 'enc' without strdup'ing it here because it's a global const string and
-		 * always exits longer than the lifetime of this function */
-		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io, (gpointer) enc);
-		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-			TRUE, search_read_io_stderr, (gpointer) enc);
-		g_child_watch_add(child_pid, search_close_pid, NULL);
-
-		str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
-			tool_prefs.grep_cmd, opts, utf8_search_text, dir);
-		utf8_str = utils_get_utf8_from_locale(str);
-		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
-		utils_free_pointers(2, str, utf8_str, NULL);
-		ret = TRUE;
+		geany_debug("%s: spawn_with_callbacks() failed: %s", G_STRFUNC, error->message);
+		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
+		g_error_free(error);
 	}
+
+	g_free(command_line);
 	g_strfreev(argv);
 	return ret;
 }
@@ -1836,61 +1811,47 @@ static gchar **search_get_argv(const gchar **argv_prefix, const gchar *dir)
 }
 
 
-static gboolean read_fif_io(GIOChannel *source, GIOCondition condition, gchar *enc, gint msg_color)
+static void read_fif_io(gchar *msg, GIOCondition condition, gchar *enc, gint msg_color)
 {
 	if (condition & (G_IO_IN | G_IO_PRI))
 	{
-		gchar *msg, *utf8_msg;
-		GIOStatus st;
+		gchar *utf8_msg = NULL;
 
-		while ((st = g_io_channel_read_line(source, &msg, NULL, NULL, NULL)) != G_IO_STATUS_ERROR &&
-				st != G_IO_STATUS_EOF && msg)
+		g_strstrip(msg);
+		/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
+		if (enc != NULL)
 		{
-			utf8_msg = NULL;
-
-			g_strstrip(msg);
-			/* enc is NULL when encoding is set to UTF-8, so we can skip any conversion */
-			if (enc != NULL)
+			if (! g_utf8_validate(msg, -1, NULL))
 			{
-				if (! g_utf8_validate(msg, -1, NULL))
-				{
-					utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
-				}
-				if (utf8_msg == NULL)
-					utf8_msg = msg;
+				utf8_msg = g_convert(msg, -1, "UTF-8", enc, NULL, NULL, NULL);
 			}
-			else
+			if (utf8_msg == NULL)
 				utf8_msg = msg;
-
-			msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
-
-			if (utf8_msg != msg)
-				g_free(utf8_msg);
-			g_free(msg);
 		}
-		if (st == G_IO_STATUS_ERROR || st == G_IO_STATUS_EOF)
-			return FALSE;
+		else
+			utf8_msg = msg;
+
+		msgwin_msg_add_string(msg_color, -1, NULL, utf8_msg);
+
+		if (utf8_msg != msg)
+			g_free(utf8_msg);
 	}
-	if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-		return FALSE;
-
-	return TRUE;
 }
 
 
-static gboolean search_read_io(GIOChannel *source, GIOCondition condition, gpointer data)
+static void search_read_io(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(source, condition, data, COLOR_BLACK);
+	return read_fif_io(string->str, condition, data, COLOR_BLACK);
 }
 
 
-static gboolean search_read_io_stderr(GIOChannel *source, GIOCondition condition, gpointer data)
+static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(source, condition, data, COLOR_DARK_RED);
+	return read_fif_io(string->str, condition, data, COLOR_DARK_RED);
 }
 
 
-static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
+static void search_finished(GPid child_pid, gint status, gpointer user_data)
 {
 	const gchar *msg = _("Search failed.");
 #ifdef G_OS_UNIX
@@ -1931,7 +1892,6 @@ static void search_close_pid(GPid child_pid, gint status, gpointer user_data)
 			break;
 	}
 	utils_beep();
-	g_spawn_close_pid(child_pid);
 	ui_progress_bar_stop();
 }
 
