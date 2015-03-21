@@ -51,6 +51,7 @@
 #include "printing.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
+#include "spawn.h"
 #ifdef HAVE_SOCKET
 # include "socket.h"
 #endif
@@ -1554,7 +1555,7 @@ G_MODULE_EXPORT void on_context_action1_activate(GtkMenuItem *menuitem, gpointer
 	{
 		utils_str_replace_all(&command, "%s", word);
 
-		if (! g_spawn_command_line_async(command, &error))
+		if (!spawn_async(NULL, command, NULL, NULL, NULL, &error))
 		{
 			ui_set_statusbar(TRUE, "Context action command failed: %s", error->message);
 			g_error_free(error);
