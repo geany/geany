@@ -258,7 +258,7 @@ static void on_vte_realize(void)
 
 static void create_vte(void)
 {
-	GtkWidget *vte, *scrollbar, *hbox, *frame;
+	GtkWidget *vte, *scrollbar, *hbox;
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
@@ -268,10 +268,7 @@ static void create_vte(void)
 	vc->menu = vte_create_popup_menu();
 	g_object_ref_sink(vc->menu);
 
-	frame = gtk_frame_new(NULL);
-
 	hbox = gtk_hbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(frame), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
@@ -296,8 +293,8 @@ static void create_vte(void)
 
 	vte_start(vte);
 
-	gtk_widget_show_all(frame);
-	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
+	gtk_widget_show_all(hbox);
+	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, gtk_label_new(_("Terminal")), MSG_VTE);
 
 	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
 }

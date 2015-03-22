@@ -8135,7 +8135,6 @@
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">automatic</property>
                         <property name="vscrollbar_policy">automatic</property>
-                        <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="treeview2">
                             <property name="visible">True</property>
@@ -8159,7 +8158,6 @@
                       <object class="GtkScrolledWindow" id="scrolledwindow7">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="treeview6">
                             <property name="visible">True</property>
@@ -8529,10 +8527,12 @@
                     <property name="can_focus">True</property>
                     <property name="hscrollbar_policy">automatic</property>
                     <property name="vscrollbar_policy">automatic</property>
+                    <property name="shadow_type">in</property>
                     <child>
                       <object class="GtkViewport" id="viewport_project_dialog_description">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="shadow_type">none</property>
                         <child>
                           <object class="GtkTextView" id="textview_project_dialog_description">
                             <property name="visible">True</property>
