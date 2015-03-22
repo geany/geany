@@ -54,7 +54,7 @@ void configuration_clear_default_session(void);
 
 void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files);
 
-void configuration_save_session_files(GKeyFile *config);
+void configuration_save_session_files(GKeyFile *config, gboolean project);
 
 /* set some settings which are already read from the config file, but need other things, like the
  * realisation of the main window */
