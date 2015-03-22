@@ -823,7 +823,9 @@ void project_load_prefs(GKeyFile *config)
 		"project_file_path", NULL);
 	if (local_prefs.project_file_path == NULL)
 	{
-		local_prefs.project_file_path = g_build_filename(g_get_home_dir(), PROJECT_DIR, NULL);
+		gchar *utf8_dir = utils_get_utf8_from_locale(g_get_home_dir());
+		local_prefs.project_file_path = g_build_filename(utf8_dir, PROJECT_DIR, NULL);
+		g_free(utf8_dir);
 	}
 }
 
