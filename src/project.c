@@ -64,7 +64,7 @@ static struct
 } local_prefs = { NULL };
 
 /* simple struct to keep references to the elements of the properties dialog */
-typedef struct _PropertyDialogElements
+static struct
 {
 	GtkWidget *dialog;
 	GtkWidget *notebook;
@@ -74,10 +74,10 @@ typedef struct _PropertyDialogElements
 	GtkWidget *patterns;
 	BuildTableData build_properties;
 	gint build_page_num;
-} PropertyDialogElements;
+} project_dlg;
 
 
-static gboolean update_config(const PropertyDialogElements *e);
+static gboolean update_config(void);
 static gboolean load_config(const gchar *filename);
 static gboolean write_config(gboolean emit_signal);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
@@ -354,7 +354,7 @@ static void destroy_project(gboolean open_default)
 }
 
 
-static void insert_build_page(PropertyDialogElements *e)
+static void insert_build_page(void)
 {
 	GtkWidget *build_table, *label;
 	GeanyDocument *doc = document_get_current();
@@ -363,38 +363,38 @@ static void insert_build_page(PropertyDialogElements *e)
 	if (doc != NULL)
 		ft = doc->file_type;
 
-	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &(e->build_properties), ft);
+	build_table = build_commands_table(doc, GEANY_BCS_PROJ, &project_dlg.build_properties, ft);
 	gtk_container_set_border_width(GTK_CONTAINER(build_table), 6);
 	label = gtk_label_new(_("Build"));
-	e->build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(e->notebook),
+	project_dlg.build_page_num = gtk_notebook_append_page(GTK_NOTEBOOK(project_dlg.notebook),
 		build_table, label);
 }
 
 
-static void create_properties_dialog(PropertyDialogElements *e)
+static void create_properties_dialog(void)
 {
 	static guint radio_long_line_handler_id = 0;
 
-	e->dialog = create_project_dialog();
-	e->notebook = ui_lookup_widget(e->dialog, "project_notebook");
-	e->directory = ui_lookup_widget(e->dialog, "label_project_dialog_directory");
-	e->name = ui_lookup_widget(e->dialog, "entry_project_dialog_name");
-	e->description = ui_lookup_widget(e->dialog, "textview_project_dialog_description");
-	e->patterns = ui_lookup_widget(e->dialog, "entry_project_dialog_file_patterns");
+	project_dlg.dialog = create_project_dialog();
+	project_dlg.notebook = ui_lookup_widget(project_dlg.dialog, "project_notebook");
+	project_dlg.directory = ui_lookup_widget(project_dlg.dialog, "label_project_dialog_directory");
+	project_dlg.name = ui_lookup_widget(project_dlg.dialog, "entry_project_dialog_name");
+	project_dlg.description = ui_lookup_widget(project_dlg.dialog, "textview_project_dialog_description");
+	project_dlg.patterns = ui_lookup_widget(project_dlg.dialog, "entry_project_dialog_file_patterns");
 
-	gtk_entry_set_max_length(GTK_ENTRY(e->name), MAX_NAME_LEN);
+	gtk_entry_set_max_length(GTK_ENTRY(project_dlg.name), MAX_NAME_LEN);
 
-	ui_entry_add_clear_icon(GTK_ENTRY(e->name));
-	ui_entry_add_clear_icon(GTK_ENTRY(e->patterns));
+	ui_entry_add_clear_icon(GTK_ENTRY(project_dlg.name));
+	ui_entry_add_clear_icon(GTK_ENTRY(project_dlg.patterns));
 
 	/* Workaround for bug in Glade 3.8.1, see comment above signal handler */
 	if (radio_long_line_handler_id == 0)
 	{
-		GtkWidget *wid = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
+		GtkWidget *wid = ui_lookup_widget(project_dlg.dialog, "radio_long_line_custom_project");
 		radio_long_line_handler_id =
 			g_signal_connect(wid, "toggled",
 				G_CALLBACK(on_radio_long_line_custom_toggled),
-				ui_lookup_widget(e->dialog, "spin_long_line_project"));
+				ui_lookup_widget(project_dlg.dialog, "spin_long_line_project"));
 	}
 }
 
@@ -404,7 +404,6 @@ static gboolean show_project_properties(gboolean show_build)
 	GeanyProject *p = app->project;
 	GtkWidget *widget = NULL;
 	GtkWidget *radio_long_line_custom;
-	static PropertyDialogElements e;
 	GSList *node;
 	gchar *entry_text;
 	GtkTextBuffer *buffer;
@@ -412,57 +411,57 @@ static gboolean show_project_properties(gboolean show_build)
 
 	g_return_if_fail(app->project != NULL);
 
-	if (e.dialog == NULL)
-		create_properties_dialog(&e);
+	if (project_dlg.dialog == NULL)
+		create_properties_dialog();
 
-	insert_build_page(&e);
+	insert_build_page();
 
 	foreach_slist(node, stash_groups)
-		stash_group_display(node->data, e.dialog);
+		stash_group_display(node->data, project_dlg.dialog);
 
 	/* fill the elements with the appropriate data */
-	gtk_entry_set_text(GTK_ENTRY(e.name), p->name);
-	gtk_label_set_text(GTK_LABEL(e.directory), p->base_path);
+	gtk_entry_set_text(GTK_ENTRY(project_dlg.name), p->name);
+	gtk_label_set_text(GTK_LABEL(project_dlg.directory), p->base_path);
 
-	radio_long_line_custom = ui_lookup_widget(e.dialog, "radio_long_line_custom_project");
+	radio_long_line_custom = ui_lookup_widget(project_dlg.dialog, "radio_long_line_custom_project");
 	switch (p->priv->long_line_behaviour)
 	{
-		case 0: widget = ui_lookup_widget(e.dialog, "radio_long_line_disabled_project"); break;
-		case 1: widget = ui_lookup_widget(e.dialog, "radio_long_line_default_project"); break;
+		case 0: widget = ui_lookup_widget(project_dlg.dialog, "radio_long_line_disabled_project"); break;
+		case 1: widget = ui_lookup_widget(project_dlg.dialog, "radio_long_line_default_project"); break;
 		case 2: widget = radio_long_line_custom; break;
 	}
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
 
-	widget = ui_lookup_widget(e.dialog, "spin_long_line_project");
+	widget = ui_lookup_widget(project_dlg.dialog, "spin_long_line_project");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->priv->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
 	/* set text */
-	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(project_dlg.description));
 	gtk_text_buffer_set_text(buffer, p->description ? p->description : "", -1);
 
 	/* set the file patterns */
 	entry_text = p->file_patterns ? g_strjoinv(" ", p->file_patterns) : g_strdup("");
-	gtk_entry_set_text(GTK_ENTRY(e.patterns), entry_text);
+	gtk_entry_set_text(GTK_ENTRY(project_dlg.patterns), entry_text);
 	g_free(entry_text);
 
-	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
-	gtk_widget_show_all(e.dialog);
+	g_signal_emit_by_name(geany_object, "project-dialog-open", project_dlg.notebook);
+	gtk_widget_show_all(project_dlg.dialog);
 
 	/* note: notebook page must be shown before setting current page */
 	if (show_build)
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(project_dlg.notebook), project_dlg.build_page_num);
 	else
 	{
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(e.notebook), 0);
-		gtk_widget_grab_focus(e.name);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(project_dlg.notebook), 0);
+		gtk_widget_grab_focus(project_dlg.name);
 	}
 
-	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
+	while (gtk_dialog_run(GTK_DIALOG(project_dlg.dialog)) == GTK_RESPONSE_OK)
 	{
-		if (update_config(&e))
+		if (update_config())
 		{
-			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e.notebook);
+			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", project_dlg.notebook);
 			if (!write_config(TRUE))
 				SHOW_ERR(_("Project file could not be written"));
 			else
@@ -474,10 +473,10 @@ static gboolean show_project_properties(gboolean show_build)
 		}
 	}
 
-	build_free_fields(e.build_properties);
-	g_signal_emit_by_name(geany_object, "project-dialog-close", e.notebook);
-	gtk_notebook_remove_page(GTK_NOTEBOOK(e.notebook), e.build_page_num);
-	gtk_widget_hide(e.dialog);
+	build_free_fields(project_dlg.build_properties);
+	g_signal_emit_by_name(geany_object, "project-dialog-close", project_dlg.notebook);
+	gtk_notebook_remove_page(GTK_NOTEBOOK(project_dlg.notebook), project_dlg.build_page_num);
+	gtk_widget_hide(project_dlg.dialog);
 	return config_written;
 }
 
@@ -537,7 +536,7 @@ static GeanyProject *create_project(void)
 
 /* Verifies data for the Properties dialog.
  * Returns: FALSE if the user needs to change any data. */
-static gboolean update_config(const PropertyDialogElements *e)
+static gboolean update_config(void)
 {
 	const gchar *name;
 	gsize name_len;
@@ -553,20 +552,20 @@ static gboolean update_config(const PropertyDialogElements *e)
 	GString *str;
 	GSList *node;
 
-	g_return_val_if_fail(e != NULL, TRUE);
+	g_return_val_if_fail(project_dlg.dialog != NULL, TRUE);
 
-	name = gtk_entry_get_text(GTK_ENTRY(e->name));
+	name = gtk_entry_get_text(GTK_ENTRY(project_dlg.name));
 	name_len = strlen(name);
 	if (name_len == 0)
 	{
 		SHOW_ERR(_("The specified project name is too short."));
-		gtk_widget_grab_focus(e->name);
+		gtk_widget_grab_focus(project_dlg.name);
 		return FALSE;
 	}
 	else if (name_len > MAX_NAME_LEN)
 	{
 		SHOW_ERR1(_("The specified project name is too long (max. %d characters)."), MAX_NAME_LEN);
-		gtk_widget_grab_focus(e->name);
+		gtk_widget_grab_focus(project_dlg.name);
 		return FALSE;
 	}
 
@@ -574,17 +573,17 @@ static gboolean update_config(const PropertyDialogElements *e)
 	SETPTR(p->name, g_strdup(name));
 
 	/* get and set the project description */
-	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(project_dlg.description));
 	gtk_text_buffer_get_start_iter(buffer, &start);
 	gtk_text_buffer_get_end_iter(buffer, &end);
 	SETPTR(p->description, gtk_text_buffer_get_text(buffer, &start, &end, FALSE));
 
 	foreach_slist(node, stash_groups)
-		stash_group_update(node->data, e->dialog);
+		stash_group_update(node->data, project_dlg.dialog);
 
 	/* read the project build menu */
 	oldvalue = ft ? ft->priv->projfilecmds : NULL;
-	build_read_project(ft, e->build_properties);
+	build_read_project(ft, project_dlg.build_properties);
 
 	if (ft != NULL && ft->priv->projfilecmds != oldvalue && ft->priv->project_list_entry < 0)
 	{
@@ -595,12 +594,12 @@ static gboolean update_config(const PropertyDialogElements *e)
 	}
 	build_menu_update(doc);
 
-	widget = ui_lookup_widget(e->dialog, "radio_long_line_disabled_project");
+	widget = ui_lookup_widget(project_dlg.dialog, "radio_long_line_disabled_project");
 	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 		p->priv->long_line_behaviour = 0;
 	else
 	{
-		widget = ui_lookup_widget(e->dialog, "radio_long_line_default_project");
+		widget = ui_lookup_widget(project_dlg.dialog, "radio_long_line_default_project");
 		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
 			p->priv->long_line_behaviour = 1;
 		else
@@ -608,12 +607,12 @@ static gboolean update_config(const PropertyDialogElements *e)
 			p->priv->long_line_behaviour = 2;
 	}
 
-	widget = ui_lookup_widget(e->dialog, "spin_long_line_project");
+	widget = ui_lookup_widget(project_dlg.dialog, "spin_long_line_project");
 	p->priv->long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 	apply_editor_prefs();
 
 	/* get and set the project file patterns */
-	tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(e->patterns)));
+	tmp = g_strdup(gtk_entry_get_text(GTK_ENTRY(project_dlg.patterns)));
 	g_strfreev(p->file_patterns);
 	g_strstrip(tmp);
 	str = g_string_new(tmp);
