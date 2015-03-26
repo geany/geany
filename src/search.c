@@ -1619,21 +1619,17 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			ui_set_statusbar(FALSE, _("Invalid directory for find in files."));
 		else if (!EMPTY(search_text))
 		{
-			gchar *locale_dir;
 			GString *opts = get_grep_options();
 			const gchar *enc = (enc_idx == GEANY_ENCODING_UTF_8) ? NULL :
 				encodings_get_charset_from_index(enc_idx);
 
-			locale_dir = utils_get_locale_from_utf8(utf8_dir);
-
-			if (search_find_in_files(search_text, locale_dir, opts->str, enc))
+			if (search_find_in_files(search_text, utf8_dir, opts->str, enc))
 			{
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(search_combo), search_text, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(fif_dlg.files_combo), NULL, 0);
 				ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(dir_combo), utf8_dir, 0);
 				gtk_widget_hide(fif_dlg.dialog);
 			}
-			g_free(locale_dir);
 			g_string_free(opts, TRUE);
 		}
 		else
@@ -1645,18 +1641,18 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 
 
 static gboolean
-search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gchar *opts,
+search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const gchar *opts,
 	const gchar *enc)
 {
-	gchar **argv_prefix = g_new(gchar*, 3);
-	gchar *command_grep, *command_line;
-	gchar **argv;
+	gchar **argv_prefix, **argv;
+	gchar *command_grep;
+	gchar *command_line, *dir;
 	gchar *search_text = NULL;
 	GError *error = NULL;
 	gboolean ret = FALSE;
 	gssize utf8_text_len;
 
-	if (EMPTY(utf8_search_text) || ! dir) return TRUE;
+	if (EMPTY(utf8_search_text) || ! utf8_dir) return TRUE;
 
 	command_grep = g_find_program_in_path(tool_prefs.grep_cmd);
 	if (command_grep == NULL)
@@ -1677,7 +1673,9 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 	if (search_text == NULL)
 		search_text = g_strdup(utf8_search_text);
 
+	argv_prefix = g_new(gchar*, 3);
 	argv_prefix[0] = search_text;
+	dir = utils_get_locale_from_utf8(utf8_dir);
 
 	/* finally add the arguments(files to be searched) */
 	if (settings.fif_recursive)	/* recursive option set */
@@ -1709,16 +1707,14 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		(gpointer) enc, 0, search_read_io_stderr, (gpointer) enc, 0, search_finished, NULL,
 		NULL, &error))
  	{
-		gchar *utf8_command_line = utils_get_utf8_from_locale(command_line);
-		gchar *utf8_dir = utils_get_utf8_from_locale(dir);
 		gchar *utf8_str;
  
  		ui_progress_bar_start(_("Searching..."));
  		msgwin_set_messages_dir(dir);
-		utf8_str = g_strdup_printf(_("%s %s (in directory: %s)"),
-			utf8_command_line, utf8_search_text, utf8_dir);
+		utf8_str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
+			tool_prefs.grep_cmd, opts, utf8_search_text, utf8_dir);
  		msgwin_msg_add_string(COLOR_BLUE, -1, NULL, utf8_str);
-		utils_free_pointers(3, utf8_command_line, utf8_dir, utf8_str, NULL);
+		g_free(utf8_str);
  		ret = TRUE;
 	}
 	else
@@ -1728,7 +1724,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *dir, const gcha
 		g_error_free(error);
 	}
 
-	g_free(command_line);
+	utils_free_pointers(2, dir, command_line, NULL);
 	g_strfreev(argv);
 	return ret;
 }
