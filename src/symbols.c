@@ -1079,7 +1079,7 @@ static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 }
 
 
-static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
+static GtkTreeIter *get_tag_type_iter(TMTagType tag_type)
 {
 	GtkTreeIter *iter = NULL;
 
@@ -1456,7 +1456,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		GtkTreeIter *parent;
 
-		parent = get_tag_type_iter(tag->type, doc->file_type->id);
+		parent = get_tag_type_iter(tag->type);
 		if (G_UNLIKELY(! parent))
 			geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
 		else
