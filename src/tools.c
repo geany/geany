@@ -205,8 +205,8 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	GError *error = NULL;
 	gchar *sel;
 	SpawnWriteData input;
-	GString *output = g_string_sized_new(256);
-	GString *errors = g_string_new(NULL);
+	GString *output;
+	GString *errors;
 	gint status;
 
 	g_return_if_fail(doc != NULL && command != NULL);
@@ -217,11 +217,13 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	sel = sci_get_selection_contents(doc->editor->sci);
 	input.ptr = sel;
 	input.size = strlen(sel);
+	output = g_string_sized_new(256);
+	errors = g_string_new(NULL);
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
 	if (spawn_sync(NULL, command, NULL, NULL, &input, output, errors, &status, &error))
 	{
-		if (*errors->str)
+		if (errors->len > 0)
 		{
 			g_warning("%s: %s\n", command, errors->str);
 			ui_set_statusbar(TRUE,
@@ -235,7 +237,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 			ui_set_statusbar(TRUE,
 				_("The executed custom command exited with an unsuccessful exit code."));
 		}
-		else if (output)
+		else
 		{   /* Command completed successfully */
 			sci_replace_sel(doc->editor->sci, output->str);
 		}
