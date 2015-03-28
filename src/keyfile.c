@@ -947,7 +947,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	#ifdef G_OS_WIN32
 		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " \"%f\"", NULL);
 	#else
-		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " %f", NULL);
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " '%f'", NULL);
 	#endif
 	}
 	else
