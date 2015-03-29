@@ -44,7 +44,7 @@ typedef enum
 	SPAWN_LINE_BUFFERED        = 0x00,  /**< stdout/stderr are line buffered [default]. */
 	SPAWN_STDOUT_UNBUFFERED    = 0x02,  /**< stdout is not buffered. */
 	SPAWN_STDERR_UNBUFFERED    = 0x04,  /**< stderr is not buffered. */
-	SPAWN_UNBUFFERED           = 0x06,  /**< stdout/stderr are line buffered. */
+	SPAWN_UNBUFFERED           = 0x06,  /**< stdout/stderr are not buffered. */
 	/* recursive modes */
 	SPAWN_STDIN_RECURSIVE      = 0x08,  /**< The stdin callback is recursive. */
 	SPAWN_STDOUT_RECURSIVE     = 0x10,  /**< The stdout callback is recursive. */
@@ -62,8 +62,6 @@ typedef enum
  *  at @a string->len.
  *
  *  If @c G_IO_IN or @c G_IO_PRI are set, the @a string will contain at least one character.
- *
- *  The callback function may modify the @a string, but must not free it.
  *
  *  @param string contains the child data if @c G_IO_IN or @c G_IO_PRI are set.
  *  @param condition the I/O condition which has been satisfied.
