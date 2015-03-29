@@ -664,13 +664,15 @@ gboolean project_load_file(const gchar *locale_file_name)
  * The filename is expected in the locale encoding. */
 static gboolean load_config(const gchar *filename)
 {
-	GKeyFile *config;
+	GKeyFile *config, *session_config;
 	GeanyProject *p;
 	GSList *node;
+	gchar *session_filename;
 
 	/* there should not be an open project */
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
+	/* project file */
 	config = g_key_file_new();
 	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL))
 	{
@@ -696,6 +698,22 @@ static gboolean load_config(const gchar *filename)
 	apply_editor_prefs();
 
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
+
+	/* session file */
+	session_config = g_key_file_new();
+	session_filename = g_path_get_dirname(filename);
+	SETPTR(session_filename, g_build_filename(session_filename, GEANY_PROJECT_SESSION_FILENAME, NULL));
+	if (g_key_file_load_from_file(session_config, session_filename, G_KEY_FILE_NONE, NULL))
+	{
+		g_key_file_free(config);
+		config = session_config;
+	}
+	else
+	{
+		/* session file not present, try to load the session from Geany project file */
+		g_key_file_free(session_config);
+	}
+
 	if (project_prefs.project_session)
 	{
 		/* save current (non-project) session (it could have been changed since program startup) */
@@ -706,7 +724,9 @@ static gboolean load_config(const gchar *filename)
 		configuration_load_session_files(config, FALSE);
 	}
 	g_signal_emit_by_name(geany_object, "project-open", config);
+
 	g_key_file_free(config);
+	g_free(session_filename);
 
 	update_ui();
 	return TRUE;
@@ -740,6 +760,7 @@ static gboolean write_config(gboolean emit_signal)
 
 	p = app->project;
 
+	/* project file */
 	config = g_key_file_new();
 	/* try to load an existing config to keep manually added comments */
 	filename = utils_get_locale_from_utf8(p->file_name);
@@ -762,14 +783,33 @@ static gboolean write_config(gboolean emit_signal)
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
 	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
-	/* store the session files into the project too */
+	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
+
+	/* write the file */
+	data = g_key_file_to_data(config, NULL, NULL);
+	ret = (utils_write_file(filename, data) == 0);
+
+	g_free(data);
+	g_free(filename);
+	g_key_file_free(config);
+	
+	if (!ret)
+		return FALSE;
+
+	/* sesson file */
+	config = g_key_file_new();
+	filename = g_build_filename(p->base_path, GEANY_PROJECT_SESSION_FILENAME, NULL);
+	SETPTR(filename, utils_get_locale_from_utf8(filename));
+	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
+
+	/* store the session files */
 	if (project_prefs.project_session)
 		configuration_save_session_files(config, TRUE);
-	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
 	if (emit_signal)
 	{
 		g_signal_emit_by_name(geany_object, "project-save", config);
 	}
+
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	ret = (utils_write_file(filename, data) == 0);

@@ -1429,7 +1429,7 @@
                                 <property name="can_focus">False</property>
                                 <child>
                                   <object class="GtkCheckButton" id="check_project_session">
-                                    <property name="label" translatable="yes">Use project-based session files</property>
+                                    <property name="label" translatable="yes">Use per-project session files</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>

@@ -905,7 +905,7 @@ static void load_startup_files(gint argc, gchar **argv)
 		/* project file specified: load it, but decide the session later */
 		main_load_project_from_command_line(filename, FALSE);
 		argc--, argv++;
-		/* force session load if using project-based session files */
+		/* force session load if using per-project session files */
 		load_session = project_prefs.project_session;
 		g_free(filename);
 	}
@@ -914,7 +914,7 @@ static void load_startup_files(gint argc, gchar **argv)
 	 * 1. "Load files from the last session" is active.
 	 * 2. --no-session is not specified.
 	 * 3. We are a primary instance.
-	 * Has no effect if a CL project is loaded and using project-based session files. */
+	 * Has no effect if a CL project is loaded and using per-project session files. */
 	if (prefs.load_session && cl_options.load_session && !cl_options.new_instance)
 	{
 		if (app->project == NULL)
