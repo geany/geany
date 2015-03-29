@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-#define GEANY_PROJECT_FILENAME				"project.geany"
+#define GEANY_PROJECT_FILENAME				"geany_project.geany"
 #define GEANY_PROJECT_SESSION_FILENAME		"geany_session.conf"
 
 /** Structure for representing a project. */
