@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-04 19:03+0100\n"
-"PO-Revision-Date: 2015-03-04 19:04+0100\n"
+"POT-Creation-Date: 2015-03-31 07:09+0200\n"
+"PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
 "Language: de\n"
@@ -1641,7 +1641,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:301
+#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:298
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1684,7 +1684,7 @@ msgid "Sa_ve All"
 msgstr "A_lle speichern"
 
 #: ../data/geany.glade.h:345 ../src/document.c:1558 ../src/document.c:3489
-#: ../src/sidebar.c:710
+#: ../src/sidebar.c:711
 msgid "_Reload"
 msgstr "Neu _laden"
 
@@ -3196,29 +3196,29 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1218 ../src/main.c:838 ../src/socket.c:171
+#: ../src/highlighting.c:1220 ../src/main.c:838 ../src/socket.c:171
 #: ../src/templates.c:233
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1288
+#: ../src/highlighting.c:1290
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1329
+#: ../src/highlighting.c:1331
 msgid "The current filetype overrides the default style."
 msgstr ""
 "Der aktuelle Dateityp überschreibt die Standardeinstellungen für die "
 "Darstellung."
 
-#: ../src/highlighting.c:1330
+#: ../src/highlighting.c:1332
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 "Dies kann dazu führen, dass eventuell Farbprofile nicht korrekt angezeigt "
 "werden."
 
-#: ../src/highlighting.c:1355
+#: ../src/highlighting.c:1357
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3263,7 +3263,7 @@ msgstr "Ansicht"
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:256 ../src/keybindings.c:608 ../src/project.c:511
+#: ../src/keybindings.c:256 ../src/keybindings.c:608 ../src/project.c:512
 #: ../src/ui_utils.c:2195
 msgid "Build"
 msgstr "Erstellen"
@@ -3740,12 +3740,12 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:1006
+#: ../src/keyfile.c:1010
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1233
+#: ../src/keyfile.c:1237
 msgid "Failed to load one or more session files."
 msgstr ""
 "Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
@@ -4003,11 +4003,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:225 ../src/symbols.c:2298 ../src/sidebar.c:744
+#: ../src/prefs.c:225 ../src/symbols.c:2298 ../src/sidebar.c:745
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2303 ../src/sidebar.c:750
+#: ../src/prefs.c:230 ../src/symbols.c:2303 ../src/sidebar.c:751
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4172,11 +4172,11 @@ msgstr ""
 "Der Pfad der Datei repräsentiert das Projekt und beinhaltet dessen "
 "Einstellungen. Gewöhnlich sollte sie die »%s« Dateiendung besitzen."
 
-#: ../src/project.c:212 ../src/project.c:484
+#: ../src/project.c:212 ../src/project.c:485
 msgid "Choose Project Base Path"
 msgstr "Auswahl des Projektbasisverzeichnisses"
 
-#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1159
+#: ../src/project.c:251 ../src/project.c:622 ../src/project.c:1160
 msgid "Project file could not be written"
 msgstr "Projektdatei konnte nicht geschrieben werden."
 
@@ -4185,7 +4185,7 @@ msgstr "Projektdatei konnte nicht geschrieben werden."
 msgid "Project \"%s\" created."
 msgstr "Projekt »%s« erstellt."
 
-#: ../src/project.c:296 ../src/project.c:328 ../src/project.c:1021
+#: ../src/project.c:296 ../src/project.c:328 ../src/project.c:1022
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Die Projektdatei »%s« konnte nicht geladen werden."
@@ -4203,67 +4203,67 @@ msgstr "Projektdateien"
 msgid "Project \"%s\" closed."
 msgstr "Projekt »%s« geschlossen."
 
-#: ../src/project.c:624
+#: ../src/project.c:625
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt »%s« gespeichert."
 
-#: ../src/project.c:657
+#: ../src/project.c:658
 msgid "Do you want to close it before proceeding?"
 msgstr "Möchten Sie das Projekt schließen bevor Sie fortfahren?"
 
-#: ../src/project.c:658
+#: ../src/project.c:659
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Das Projekt »%s« ist geöffnet."
 
-#: ../src/project.c:707
+#: ../src/project.c:708
 msgid "The specified project name is too short."
 msgstr "Der eingegebene Projektname ist zu kurz."
 
-#: ../src/project.c:713
+#: ../src/project.c:714
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Der eingegebene Projektname ist zu lang (max. %d Zeichen)."
 
-#: ../src/project.c:725
+#: ../src/project.c:726
 msgid "You have specified an invalid project filename."
 msgstr "Sie haben einen ungültigen Dateinamen angegeben."
 
-#: ../src/project.c:748
+#: ../src/project.c:749
 msgid "Create the project's base path directory?"
 msgstr "Soll das Projektbasisverzeichnis erstellt werden?"
 
-#: ../src/project.c:749
+#: ../src/project.c:750
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Der Pfad »%s« existiert nicht."
 
-#: ../src/project.c:758
+#: ../src/project.c:759
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Projektverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/project.c:771
+#: ../src/project.c:772
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projektdatei konnte nicht geschrieben werden (%s)."
 
-#: ../src/project.c:777 ../src/search.c:630
+#: ../src/project.c:778 ../src/search.c:630
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../src/project.c:779 ../plugins/export.c:332
+#: ../src/project.c:780 ../plugins/export.c:332
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Datei »%s« existiert bereits. Soll sie überschrieben werden?"
 
 #. initialise the dialog
-#: ../src/project.c:925 ../src/project.c:936
+#: ../src/project.c:926 ../src/project.c:937
 msgid "Choose Project Filename"
 msgstr "Auswahl des Projektdateinamens"
 
-#: ../src/project.c:1011
+#: ../src/project.c:1012
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt »%s« geöffnet."
@@ -5150,27 +5150,27 @@ msgstr "Wörter:"
 msgid "Characters:"
 msgstr "Buchstaben:"
 
-#: ../src/sidebar.c:177
+#: ../src/sidebar.c:178
 msgid "No tags found"
 msgstr "Keine Symbole gefunden"
 
-#: ../src/sidebar.c:594
+#: ../src/sidebar.c:595
 msgid "Show S_ymbol List"
 msgstr "S_ymbolliste anzeigen"
 
-#: ../src/sidebar.c:606
+#: ../src/sidebar.c:607
 msgid "Show _Document List"
 msgstr "_Dokumentenliste anzeigen"
 
-#: ../src/sidebar.c:618 ../plugins/filebrowser.c:665
+#: ../src/sidebar.c:619 ../plugins/filebrowser.c:665
 msgid "H_ide Sidebar"
 msgstr "Seitenleiste _verstecken"
 
-#: ../src/sidebar.c:723 ../plugins/filebrowser.c:636
+#: ../src/sidebar.c:724 ../plugins/filebrowser.c:636
 msgid "_Find in Files..."
 msgstr "In _Dateien suchen..."
 
-#: ../src/sidebar.c:733
+#: ../src/sidebar.c:734
 msgid "Show _Paths"
 msgstr "_Pfade anzeigen"
 
@@ -5342,24 +5342,36 @@ msgstr "Klassischer Apple (CR)"
 msgid "Unix (LF)"
 msgstr "Unix (LF)"
 
-#: ../src/vte.c:440
+#: ../src/utils.c:388
+msgid "CRLF"
+msgstr "CRLF"
+
+#: ../src/utils.c:389
+msgid "CR"
+msgstr "CR"
+
+#: ../src/utils.c:390
+msgid "LF"
+msgstr "LF"
+
+#: ../src/vte.c:437
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Ungültige VTE-Bibliothek \"%s\": Es fehlt das Symbol \"%s\""
 
-#: ../src/vte.c:589
+#: ../src/vte.c:586
 msgid "_Set Path From Document"
 msgstr "Pfad des Dokumentes _übernehmen"
 
-#: ../src/vte.c:594
+#: ../src/vte.c:591
 msgid "_Restart Terminal"
 msgstr "Terminal _neustarten"
 
-#: ../src/vte.c:617
+#: ../src/vte.c:614
 msgid "_Input Methods"
 msgstr "Eingabe_methoden"
 
-#: ../src/vte.c:711
+#: ../src/vte.c:708
 msgid ""
 "Could not change the directory in the VTE because it probably contains a "
 "command."
@@ -5862,28 +5874,28 @@ msgstr "Teilt das Editorfenster in zwei Teilfenster."
 msgid "Show the current document"
 msgstr "Zeige das aktuelle Dokument"
 
-#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:418
-#: ../plugins/splitwindow.c:433
+#: ../plugins/splitwindow.c:290 ../plugins/splitwindow.c:423
+#: ../plugins/splitwindow.c:438
 msgid "_Unsplit"
 msgstr "Teilung _aufheben"
 
-#: ../plugins/splitwindow.c:400
+#: ../plugins/splitwindow.c:405
 msgid "_Split Window"
 msgstr "Fenster _teilen"
 
-#: ../plugins/splitwindow.c:408
+#: ../plugins/splitwindow.c:413
 msgid "_Side by Side"
 msgstr "_Seite an Seite"
 
-#: ../plugins/splitwindow.c:413
+#: ../plugins/splitwindow.c:418
 msgid "_Top and Bottom"
 msgstr "_Oben und Unten"
 
-#: ../plugins/splitwindow.c:429
+#: ../plugins/splitwindow.c:434
 msgid "Side by Side"
 msgstr "Seite an Seite"
 
-#: ../plugins/splitwindow.c:431
+#: ../plugins/splitwindow.c:436
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
 
