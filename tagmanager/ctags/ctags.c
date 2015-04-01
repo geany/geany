@@ -599,11 +599,7 @@ extern FILE *tempFile (const char *const mode, char **const pName)
 	tmpdir = TMPDIR;
     name = xMalloc (strlen (tmpdir) + 1 + strlen (template) + 1, char);
     sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, template);
-#ifdef G_OS_WIN32
-    fd = mkstemps(name, 0);
-#else
     fd = mkstemp(name);
-#endif
 #else
     name = xMalloc (L_tmpnam, char);
     if (tmpnam (name) != name)
