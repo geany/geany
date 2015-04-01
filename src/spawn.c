@@ -1184,6 +1184,7 @@ int main(int argc, char **argv)
 
 		while (read_line("command line: ", command_line, sizeof command_line))
 		{
+			char working_directory[0x100];
 			char args[4][0x100];
 			char envs[4][0x100];
 			char *argv[] = { args[0], args[1], args[2], args[3], NULL };
@@ -1191,6 +1192,8 @@ int main(int argc, char **argv)
 			int i;
 			GPid pid;
 			GError *error = NULL;
+
+			read_line("working directory: ", working_directory, sizeof working_directory);
 
 			fputs("up to 4 arguments\n", stderr);
 			for (i = 0; i < 4 && read_line("argument: ", args[i], sizeof args[i]); i++);
@@ -1200,8 +1203,9 @@ int main(int argc, char **argv)
 			for (i = 0; i < 4 && read_line("variable: ", envs[i], sizeof envs[i]); i++);
 			envp[i] = NULL;
 
-			if (spawn_async_with_pipes(NULL, *command_line ? command_line : NULL, argv,
-				i ? envp : NULL, &pid, NULL, NULL, NULL, &error))
+			if (spawn_async_with_pipes(*working_directory ? working_directory : NULL,
+				*command_line ? command_line : NULL, argv, i ? envp : NULL, &pid, NULL,
+				NULL, NULL, &error))
 			{
 				GMainLoop *loop = g_main_loop_new(NULL, TRUE);
 
