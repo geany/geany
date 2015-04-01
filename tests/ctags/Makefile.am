@@ -200,6 +200,7 @@ test_sources = \
 	line_directives.c				\
 	local.c							\
 	macros.c						\
+	make-variable-on-cmdline.mak	\
 	masm.asm						\
 	matlab_backtracking.m			\
 	matlab_test.m					\
