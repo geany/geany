@@ -63,7 +63,6 @@ GEANY_LIB_VERSION = '0.0.0'
 top = '.'
 out = '_build_'
 
-
 mio_sources = set(['tagmanager/mio/mio.c'])
 
 ctags_sources = set([
@@ -269,7 +268,7 @@ but you then may not have a local copy of the HTML manual.'''
             '-mwindows',
             '-static-libgcc',
             '-static-libstdc++'])
-        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32'])
+        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'comdlg32'])
         # explicitly define Windows version for older Mingw environments
         conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
         conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE
@@ -285,6 +284,12 @@ but you then may not have a local copy of the HTML manual.'''
         _define_from_opt(conf, 'DOCDIR', conf.options.docdir, docdir)
         _define_from_opt(conf, 'LIBDIR', conf.options.libdir, libdir)
         _define_from_opt(conf, 'MANDIR', conf.options.mandir, mandir)
+        # The check could be improved, -fPIC iso only really necessary on 64bit linux
+        # It is needed because waf doesn't realize the static files go into
+        # a shared library
+        conf.env.append_value('CFLAGS_cstlib', '-fPIC')
+        conf.env.append_value('CFLAGS_cxxstlib', '-fPIC')
+        conf.env.append_value('CXXFLAGS_cxxstlib', '-fPIC')
 
     conf.define('ENABLE_NLS', 1)
     conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], quote=True)
@@ -482,7 +487,11 @@ def build(bld):
         rule    = gen_signallist)
 
     base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
+
     # libgeany
+    instpath = '${PREFIX}/bin' if is_win32 else '${LIBDIR}'
+    linkflags = bld.env['LINKFLAGS_cprogram']
+
     bld(
         features        = ['c', 'cxx', 'cshlib'],
         name            = 'geany',
@@ -492,7 +501,9 @@ def build(bld):
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = base_uselibs,
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
-        vnum            = GEANY_LIB_VERSION)
+        linkflags       = linkflags,
+        vnum            = GEANY_LIB_VERSION,
+        install_path    = instpath)
 
     # geany executable
     bld(
@@ -598,11 +609,36 @@ def build(bld):
     ###
     # Headers
     bld.install_files('${PREFIX}/include/geany', '''
-        src/app.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-        src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
-        src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-        src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
-        plugins/geanyplugin.h plugins/geanyfunctions.h''')
+        src/app.h
+        src/build.h
+        src/dialogs.h
+        src/document.h
+        src/editor.h
+        src/encodings.h
+        src/filetypes.h
+        src/geany.h
+        src/highlighting.h
+        src/keybindings.h
+        src/main.h
+        src/msgwindow.h
+        src/navqueue.h
+        src/plugindata.h
+        src/pluginutils.h
+        src/prefs.h
+        src/project.h
+        src/sciwrappers.h
+        src/search.h
+        src/stash.h
+        src/support.h
+        src/symbols.h
+        src/templates.h
+        src/toolbar.h
+        src/ui_utils.h
+        src/utils.h
+        src/gtkcompat.h
+        plugins/geanyplugin.h
+        plugins/geanyfunctions.h
+        ''')
     bld.install_files('${PREFIX}/include/geany/scintilla', '''
         scintilla/include/SciLexer.h scintilla/include/Scintilla.h
         scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
