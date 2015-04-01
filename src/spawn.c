@@ -75,7 +75,7 @@
 
 
 /**
- *  Checks whether a command line is valid.
+ *  Checks whether a command line is syntactically valid and extracts the program name from it.
  *
  *  All OS:
  *     - any leading spaces and tabs are ignored
@@ -84,20 +84,20 @@
  *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
  *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
  *  Windows:
- *     - a quoted program name must be entirely inside the quotes. It's hard to believe, but
- *	   "C:\Foo\Bar".pdf is actually executed as "C:\Foo\Bar.exe", and .pdf is completely
- *	   ignored, not even passed as an argument
- *     - the standard Windows quoting rules are used: double quote is escaped with slash, and
- *       any literal slashes before a double quote must be duplicated.
+ *     - a quoted program name must be entirely inside the quotes. No "C:\Foo\Bar".pdf or
+ *	   "C:\Foo\Bar".bat, which would be executed by Windows as C:\Foo\Bar.exe
+ *     - an unquoted program name may not contain spaces. Foo Bar Qux will not be considered
+ *       "Foo Bar.exe" Qux or "Foo Bar Qux.exe", depending on what executables exist, as
+ *       Windows normally does.
+ *     - the standard Windows quoting and escaping rules are used: double quote is escaped with
+ *       backslash, and any literal backslashes before a double quote must be duplicated.
  *
- *  @param command_line the command line to check.
- *  @param execute whether to check, using @c g_find_program_in_path(), if the program specified
- *         in the command line exists and is executable.
+ *  @param command_line the command line to check and get the program name from.
  *  @param error return location for error.
  *
- *  @return @c TRUE on success, @c FALSE if an error was set.
+ *  @return allocated string with the program name on success, @c NULL on error.
  **/
-gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error)
+gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 {
 	gchar *program;
 
@@ -188,6 +188,31 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
 	program = g_strdup(argv[0]);
 	g_strfreev(argv);
 #endif  /* G_OS_WIN32 */
+
+	return program;
+}
+
+
+/**
+ *  Checks whether a command line is valid.
+ *
+ *  Checks if @a command_line is syntactically valid using @c spawn_get_program_name().
+ *
+ *  If @a execute is TRUE, also checks, using @c g_find_program_in_path(), if the program
+ *  specified in @a command_line exists and is executable.
+ *
+ *  @param command_line the command line to check.
+ *  @param execute whether to check if the command line is really executable.
+ *  @param error return location for error.
+ *
+ *  @return @c TRUE on success, @c FALSE on error.
+ */
+gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error)
+{
+	gchar *program = spawn_get_program_name(command_line, error);
+
+	if (!program)
+		return FALSE;
 
 	if (execute)
 	{
@@ -445,20 +470,40 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 
 #ifdef G_OS_WIN32
 	GString *command;
-	GArray *environment = g_array_new(TRUE, FALSE, sizeof(char));
+	GArray *environment;
 	GPid pid;
 	gchar *failure;
 
 	if (command_line)
 	{
-		if (!spawn_check_command(command_line, FALSE, error))
-			return FALSE;
-		/* checked command line contains at least 1 non-blank */
-		while (strchr(CL_BLANKS, *command_line))
-			command_line++;
-	}
+		gchar *program = spawn_get_program_name(command_line, error);
+		const gchar *arguments;
 
-	command = g_string_new(command_line);
+		if (!program)
+			return FALSE;
+
+		command = g_string_new(NULL);
+		arguments = strstr(command_line, program) + strlen(program);
+
+		if (*arguments == '"')
+		{
+			g_string_append(command, program);
+			arguments++;
+		}
+		else
+		{
+			/* quote the first token, to avoid Windows attemps to run two or more
+			   unquoted tokens as a program until an existing file name is found */
+			g_string_printf(command, "\"%s\"", program);
+		}
+
+		g_string_append(command, arguments);
+		g_free(program);
+	}
+	else
+		command = g_string_new(NULL);
+
+	environment = g_array_new(TRUE, FALSE, sizeof(char));
 
 	while (argv && *argv)
 		spawn_append_argument(command, *argv++);

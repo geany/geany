@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+gchar *spawn_get_program_name(const gchar *command_line, GError **error);
+
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error);
 
 gboolean spawn_kill_process(GPid pid, GError **error);
