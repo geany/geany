@@ -34,6 +34,7 @@
 
 /* Only include public headers here */
 #include "app.h"
+#include "build.h"
 #include "dialogs.h"
 #include "document.h"
 #include "editor.h"
@@ -59,5 +60,7 @@
 #include "toolbar.h"
 #include "ui_utils.h"
 #include "utils.h"
+
+#include "gtkcompat.h"
 
 #endif
