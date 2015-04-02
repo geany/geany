@@ -757,10 +757,8 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 
 	/* replace %p with the current project's (absolute) base directory */
 	replacement = NULL; /* prevent double free if no replacement found */
-	if (app->project)
-	{
-		replacement = project_get_base_path();
-	}
+	if (app->project && !EMPTY(app->project->base_path))
+		replacement = g_strdup(app->project->base_path);
 	else if (strstr(stack->str, "%p"))
 	{   /* fall back to %d */
 		ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
@@ -2578,8 +2576,9 @@ void build_load_menu(GKeyFile *config, GeanyBuildSource src, gpointer p)
 		case GEANY_BCS_PROJ:
 			if (non_ft_pref == NULL)
 				non_ft_pref = g_new0(GeanyBuildCommand, build_groups_count[GEANY_GBG_NON_FT]);
-			basedir = project_get_base_path();
-			if (basedir == NULL)
+			if (app->project && !EMPTY(app->project->base_path))
+				basedir = g_strdup(app->project->base_path);
+			else
 				basedir = g_strdup("%d");
 			bvalue = g_key_file_get_boolean(config, "project", "make_in_base_path", NULL);
 			if (bvalue)

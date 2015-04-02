@@ -1184,6 +1184,7 @@ static void recent_project_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpoi
 	gchar *utf8_filename = ui_menu_item_get_text(menuitem);
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
+	SETPTR(locale_filename, g_build_filename(locale_filename, GEANY_PROJECT_FILENAME, NULL));
 	if (project_ask_close() && project_load_file_with_session(locale_filename))
 		recent_file_loaded(utf8_filename, recent_get_recent_projects());
 
@@ -1299,8 +1300,8 @@ void ui_update_recent_project_menu(void)
 
 		if (app->project)
 		{
-			const gchar *filename = gtk_menu_item_get_label(item->data);
-			sensitive = g_strcmp0(app->project->file_name, filename) != 0;
+			const gchar *dir = gtk_menu_item_get_label(item->data);
+			sensitive = g_strcmp0(app->project->base_path, dir) != 0;
 		}
 		gtk_widget_set_sensitive(item->data, sensitive);
 	}
@@ -1961,84 +1962,18 @@ void ui_setup_open_button_callback(GtkWidget *open_btn, const gchar *title,
 }
 
 
-#ifndef G_OS_WIN32
-static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
-		const gchar *utf8_path)
-{
-	GtkWidget *dialog = gtk_file_chooser_dialog_new(title,
-		GTK_WINDOW(main_widgets.window), action,
-		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_OK, NULL);
-	gchar *locale_path;
-	gchar *ret_path = NULL;
-
-	gtk_widget_set_name(dialog, "GeanyDialog");
-	locale_path = utils_get_locale_from_utf8(utf8_path);
-	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	{
-		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
-	}
-	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
-	{
-		if (g_path_is_absolute(locale_path))
-			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
-	}
-	g_free(locale_path);
-
-	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
-	{
-		gchar *dir_locale;
-
-		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		ret_path = utils_get_utf8_from_locale(dir_locale);
-		g_free(dir_locale);
-	}
-	gtk_widget_destroy(dialog);
-	return ret_path;
-}
-#endif
-
-
 static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 {
 	GtkFileChooserAction action = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(button), "action"));
 	GtkEntry *entry = user_data;
 	const gchar *title = g_object_get_data(G_OBJECT(button), "title");
-	gchar *utf8_path = NULL;
+	gchar *utf8_path;
 
-	/* TODO: extend for other actions */
-	g_return_if_fail(action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
-					 action == GTK_FILE_CHOOSER_ACTION_OPEN);
-
-	if (title == NULL)
-		title = (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER) ?
-			_("Select Folder") : _("Select File");
-
-	if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
-	{
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_file_dialog(GTK_WINDOW(ui_widgets.prefs_dialog), title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
-		utf8_path = run_file_chooser(title, action, gtk_entry_get_text(GTK_ENTRY(entry)));
-#endif
-	}
-	else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	{
-		gchar *path = g_path_get_dirname(gtk_entry_get_text(GTK_ENTRY(entry)));
-#ifdef G_OS_WIN32
-		utf8_path = win32_show_folder_dialog(ui_widgets.prefs_dialog, title,
-						gtk_entry_get_text(GTK_ENTRY(entry)));
-#else
-		utf8_path = run_file_chooser(title, action, path);
-#endif
-		g_free(path);
-	}
+	utf8_path = dialogs_show_open_dialog(action, title, gtk_entry_get_text(entry), FALSE);
 
 	if (utf8_path != NULL)
 	{
-		gtk_entry_set_text(GTK_ENTRY(entry), utf8_path);
+		gtk_entry_set_text(entry, utf8_path);
 		g_free(utf8_path);
 	}
 }

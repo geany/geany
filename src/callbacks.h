@@ -130,8 +130,6 @@ G_MODULE_EXPORT void on_menu_toggle_line_commentation1_activate(GtkMenuItem *men
 
 G_MODULE_EXPORT void on_next_message1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
-G_MODULE_EXPORT void on_project_new1_activate(GtkMenuItem *menuitem, gpointer user_data);
-
 G_MODULE_EXPORT void on_project_open1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_MODULE_EXPORT void on_project_close1_activate(GtkMenuItem *menuitem, gpointer user_data);

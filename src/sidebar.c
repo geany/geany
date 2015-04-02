@@ -362,16 +362,14 @@ static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 static gchar *get_doc_folder(const gchar *path)
 {
 	gchar *tmp_dirname = g_strdup(path);
-	gchar *project_base_path;
 	gchar *dirname = NULL;
 	const gchar *home_dir = g_get_home_dir();
 	const gchar *rest;
 
 	/* replace the project base path with the project name */
-	project_base_path = project_get_base_path();
-
-	if (project_base_path != NULL)
+	if (app->project && !EMPTY(app->project->base_path))
 	{
+		gchar *project_base_path = g_strdup(app->project->base_path);
 		gsize len = strlen(project_base_path);
 
 		/* remove trailing separator so we can match base path exactly */
