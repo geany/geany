@@ -201,6 +201,7 @@ test_sources = \
 	local.c							\
 	macros.c						\
 	make-comment-in-rule.mak		\
+	make-gnumake-pattern-rules.mak	\
 	make-multi-target.mak			\
 	make-target-with-parentheses.mak	\
 	make-variable-on-cmdline.mak	\
