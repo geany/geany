@@ -49,6 +49,7 @@
 #include "spawn.h"
 
 #ifdef G_OS_WIN32
+# include <ctype.h>    /* isspace() */
 # include <fcntl.h>    /* _O_RDONLY, _O_WRONLY */
 # include <io.h>       /* _open_osfhandle, _close */
 # include <windows.h>
@@ -63,7 +64,6 @@
 #endif
 
 #ifdef G_OS_WIN32
-# define CL_BLANKS " \t"  /* possible blank characters in a Windows command line */
 /* Each 4KB under Windows seem to come in 2 portions, so 2K + 2K is more
    balanced than 4095 + 1. May be different on the latest Windows/glib? */
 # define DEFAULT_IO_LENGTH 2048
@@ -78,17 +78,19 @@
  *  Checks whether a command line is syntactically valid and extracts the program name from it.
  *
  *  All OS:
- *     - any leading spaces and tabs are ignored
- *     - a command consisting solely of spaces and tabs is invalid
+ *     - any leading spaces, tabs and new lines are skipped
+ *     - an empty command is invalid
  *  Unix:
  *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
  *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
  *  Windows:
+ *     - leading carriage returns are skipped too
  *     - a quoted program name must be entirely inside the quotes. No "C:\Foo\Bar".pdf or
  *	   "C:\Foo\Bar".bat, which would be executed by Windows as C:\Foo\Bar.exe
  *     - an unquoted program name may not contain spaces. Foo Bar Qux will not be considered
  *       "Foo Bar.exe" Qux or "Foo Bar Qux.exe", depending on what executables exist, as
  *       Windows normally does.
+ *     - the program name must be separated from the arguments by at least one space or tab
  *     - the standard Windows quoting and escaping rules are used: double quote is escaped with
  *       backslash, and any literal backslashes before a double quote must be duplicated.
  *
@@ -107,7 +109,7 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	g_return_val_if_fail(command_line != NULL, FALSE);
 
-	while (*command_line && strchr(CL_BLANKS, *command_line))
+	while (*command_line && strchr(" \t\r\n", *command_line))
 		command_line++;
 
 	if (!*command_line)
@@ -117,6 +119,9 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
 	}
+
+	/* To prevent Windows from doing something weird, we want to be 100% sure that the
+	   character after the program name is a delimiter, so we allow space and tab only. */
 
 	if (*command_line == '"')
 	{
@@ -131,7 +136,7 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 			return FALSE;
 		}
 
-		if (!strchr(CL_BLANKS, s[1]))  /* strchr() catches s[1] == '\0' */
+		if (!strchr(" \t", s[1]))  /* strchr() catches s[1] == '\0' */
 		{
 			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 				_("A quoted Windows program name must be entirely inside the quotes"));
@@ -143,7 +148,7 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 		const gchar *quote = strchr(command_line, '"');
 
 		/* strchr() catches *s == '\0', and the for body is empty */
-		for (s = command_line; !strchr(CL_BLANKS, *s); s++);
+		for (s = command_line; !strchr(" \t", *s); s++);
 
 		if (quote && quote < s)
 		{
@@ -388,8 +393,11 @@ static void spawn_append_argument(GString *command, const char *text)
 		g_string_append_c(command, ' ');
 
 	for (s = text; *s; s++)
-		if (*s == '"' || g_ascii_isspace(*s))  /* are all RTL-s standartized? */
+	{
+		/* g_ascii_isspace() fails for '\v', and locale spaces (if any) will do no harm */
+		if (*s == '"' || isspace(*s))
 			break;
+	}
 
 	if (*text && !*s)
 		g_string_append(command, text);
@@ -1153,7 +1161,7 @@ int main(int argc, char **argv)
 {
 	char *test_type;
 
-	if (argc < 2)
+	if (argc != 2)
 	{
 		fputs("usage: spawn <test-type>\n", stderr);
 		return 1;
