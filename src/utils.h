@@ -202,6 +202,7 @@ const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 typedef enum
 {
+	RESOURCE_DIR_PREFIX,
 	RESOURCE_DIR_DATA,
 	RESOURCE_DIR_ICON,
 	RESOURCE_DIR_DOC,

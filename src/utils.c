@@ -2125,28 +2125,29 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 #ifdef G_OS_WIN32
 		gchar *prefix = win32_get_installation_dir();
 
+		resdirs[RESOURCE_DIR_PREFIX] = prefix;
 		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", NULL);
-		g_free(prefix);
 #else
 		if (is_osx_bundle())
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
+			resdirs[RESOURCE_DIR_PREFIX] = prefix;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
-			g_free(prefix);
 # endif
 		}
 		else
 		{
+			resdirs[RESOURCE_DIR_PREFIX] = GEANY_PREFIX;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
@@ -2162,32 +2163,14 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	gchar **argv;
-	const gchar *command = is_osx_bundle() ? "open" : "geany";
-	gchar *exec_path = g_find_program_in_path(command);
+	gchar *exec_path = g_build_filename(utils_resource_dir(RESOURCE_DIR_PREFIX), "bin", "geany", NULL);
+	gchar *argv[] = { exec_path, "-i", doc_path, NULL };
+	GError *err = NULL;
 
-	if (exec_path)
+	if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
 	{
-		GError *err = NULL;
-
-		if (is_osx_bundle())
-		{
-			gchar *osx_argv[] = {exec_path, "-n", "-a", "Geany", doc_path, NULL};
-			argv = osx_argv;
-		}
-		else
-		{
-			gchar *unix_argv[] = {exec_path, "-i", doc_path, NULL};
-			argv = unix_argv;
-		}
-
-		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(exec_path);
+		g_printerr("Unable to open new window: %s", err->message);
+		g_error_free(err);
 	}
-	else
-		g_printerr("Unable to find 'geany'");
+	g_free(exec_path);
 }
