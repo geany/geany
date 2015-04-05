@@ -319,6 +319,7 @@ but you then may not have a local copy of the HTML manual.'''
     elif visibility_hidden_supported:
         geany_symbol_flags = ['-fvisibility=hidden',
                               '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
+        conf.env['CFLAGS_plugin'] = '-fvisibility=default'
     else:  # unknown, define to nothing
         geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=']
     geany_symbol_flags.append('-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
@@ -406,6 +407,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
+            cflags                  = bld.env['CFLAGS_plugin'],
             uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
             use                     = ['geany'],
             install_path            = instpath)
