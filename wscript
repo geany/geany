@@ -489,9 +489,6 @@ def build(bld):
     base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
 
     # libgeany
-    instpath = '${PREFIX}/bin' if is_win32 else '${LIBDIR}'
-    linkflags = bld.env['LINKFLAGS_cprogram']
-
     bld(
         features        = ['c', 'cxx', 'cshlib'],
         name            = 'geany',
@@ -501,9 +498,9 @@ def build(bld):
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = base_uselibs,
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
-        linkflags       = linkflags,
+        linkflags       = bld.env['LINKFLAGS_cprogram'],
         vnum            = GEANY_LIB_VERSION,
-        install_path    = instpath)
+        install_path    = '${PREFIX}/bin' if is_win32 else '${LIBDIR}')
 
     # geany executable
     bld(
