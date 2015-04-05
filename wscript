@@ -505,7 +505,7 @@ def build(bld):
         install_path    = '${PREFIX}/bin' if is_win32 else '${LIBDIR}')
 
     # geany executable
-    bld(
+    t = bld(
         features        = ['c', 'cxx', 'cprogram'],
         name            = 'geany_bin',
         target          = 'geany',
@@ -514,6 +514,9 @@ def build(bld):
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = base_uselibs,
         use             = ['geany'])
+    if not is_win32:
+        # http://www.freehackers.org/~tnagy/testdoc/single.html#common_c
+        t.rpath = bld.env['LIBDIR']
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
