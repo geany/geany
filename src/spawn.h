@@ -24,6 +24,15 @@
 
 #include <glib.h>
 
+#ifdef G_OS_WIN32
+# define WIFEXITED(status) TRUE
+# define WEXITSTATUS(status) (status)
+# define WIFSIGNALLED(status) FALSE
+#else
+# include <sys/types.h>
+# include <sys/wait.h>
+#endif
+
 gchar *spawn_get_program_name(const gchar *command_line, GError **error);
 
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error);
@@ -94,11 +103,5 @@ void spawn_get_exit_status_cb(GPid pid, gint status, gpointer exit_status);
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error);
-
-#ifdef G_OS_WIN32
-#define WIFEXITED(status) TRUE
-#define WEXITSTATUS(status) (status)
-#define WIFSIGNALLED(status) FALSE
-#endif /* G_OS_WIN32 */
 
 #endif  /* GEANY_SPAWN_H */
