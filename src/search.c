@@ -50,11 +50,6 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifdef G_OS_UNIX
-# include <sys/types.h>
-# include <sys/wait.h>
-#endif
-
 #include <gdk/gdkkeysyms.h>
 
 enum

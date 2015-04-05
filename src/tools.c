@@ -46,11 +46,6 @@
 #include <string.h>
 #include <errno.h>
 
-#ifdef G_OS_UNIX
-# include <sys/types.h>
-# include <sys/wait.h>
-#endif
-
 
 enum
 {

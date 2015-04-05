@@ -1068,9 +1068,6 @@ gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, g
 /* tests, not part of the API */
 #ifdef SPAWN_TEST
 #include <stdio.h>
-#ifndef WIFEXITED
-#include <sys/wait.h>  /* WIFEXITED */
-#endif
 
 
 static gboolean read_line(const char *prompt, char *buffer, size_t size)
