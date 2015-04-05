@@ -23,5 +23,6 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H 1
 
+#include "geanyplugin.h"
 
 #endif /* GEANY_FUNCTIONS */
