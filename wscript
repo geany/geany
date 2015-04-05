@@ -309,16 +309,18 @@ but you then may not have a local copy of the HTML manual.'''
 
     # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
     if is_win32:
-        geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=__declspec(dllexport)']
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__declspec(dllexport)']
     elif visibility_hidden_supported:
-        geany_symbol_flags = ['-fvisibility=hidden',
-                              '-DGEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
-        conf.env['CFLAGS_plugin'] = '-fvisibility=default'
+        geanyexport_cflags = ['-fvisibility=hidden']
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
     else:  # unknown, define to nothing
-        geany_symbol_flags = ['-DGEANY_EXPORT_SYMBOL=']
-    geany_symbol_flags.append('-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
-    conf.env.append_value('CFLAGS', geany_symbol_flags)
-    conf.env.append_value('CXXFLAGS', geany_symbol_flags)
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=']
+    geanyexport_defines.append('GEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
+    conf.env['DEFINES_geanyexport'] = geanyexport_defines
+    conf.env['CFLAGS_geanyexport'] = geanyexport_cflags
+    conf.env['CXXFLAGS_geanyexport'] = geanyexport_cflags
 
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
@@ -401,7 +403,6 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            cflags                  = bld.env['CFLAGS_plugin'],
             uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
             use                     = ['geany'],
             install_path            = instpath)
@@ -414,7 +415,7 @@ def build(bld):
         target          = 'ctags',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="CTags"',
-        uselib          = ['cshlib', 'GLIB'])
+        uselib          = ['cshlib', 'GLIB', 'geanyexport'])
 
     # Tagmanager
     bld.objects(
@@ -424,7 +425,7 @@ def build(bld):
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = ['GEANY_PRIVATE', 'G_LOG_DOMAIN="Tagmanager"'],
-        uselib          = ['cshlib', 'GTK', 'GLIB'])
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
 
     # MIO
     bld.objects(
@@ -434,7 +435,7 @@ def build(bld):
         target          = 'mio',
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
-        uselib          = ['cshlib', 'GTK', 'GLIB'])
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
@@ -445,7 +446,7 @@ def build(bld):
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['cshlib', 'cxxshlib', 'GTK', 'GLIB', 'GMODULE', 'M'])
+        uselib          = ['cshlib', 'cxxshlib', 'GTK', 'GLIB', 'GMODULE', 'M', 'geanyexport'])
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -488,7 +489,7 @@ def build(bld):
         source          = geany_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src', 'src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = base_uselibs,
+        uselib          = base_uselibs + ['geanyexport'],
         use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
         linkflags       = bld.env['LINKFLAGS_cprogram'],
         vnum            = GEANY_LIB_VERSION,
@@ -502,7 +503,7 @@ def build(bld):
         source          = ['src/main.c'],
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = base_uselibs,
+        uselib          = base_uselibs + ['geanyexport'],
         use             = ['geany'])
     if not is_win32:
         # http://www.freehackers.org/~tnagy/testdoc/single.html#common_c
