@@ -23,9 +23,5 @@
 #ifndef GEANY_FUNCTIONS_H
 #define GEANY_FUNCTIONS_H 1
 
-/* This remains so that older plugins that contain a `GeanyFunctions *geany_functions;`
- * variable in their plugin - as was previously required - will still compile
- * without changes.  */
-typedef struct GeanyFunctionsUndefined GeanyFunctions;
 
 #endif /* GEANY_FUNCTIONS */

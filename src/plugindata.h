@@ -268,6 +268,11 @@ void plugin_cleanup(void);
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
 
+/* This remains so that older plugins that contain a `GeanyFunctions *geany_functions;`
+ * variable in their plugin - as was previously required - will still compile
+ * without changes.  */
+typedef struct GeanyFunctionsUndefined GeanyFunctions;
+
 #define document_reload_file document_reload_force
 
 /** @deprecated - copy into your plugin code if needed.
