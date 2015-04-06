@@ -284,12 +284,6 @@ but you then may not have a local copy of the HTML manual.'''
         _define_from_opt(conf, 'DOCDIR', conf.options.docdir, docdir)
         _define_from_opt(conf, 'LIBDIR', conf.options.libdir, libdir)
         _define_from_opt(conf, 'MANDIR', conf.options.mandir, mandir)
-        # The check could be improved, -fPIC iso only really necessary on 64bit linux
-        # It is needed because waf doesn't realize the static files go into
-        # a shared library
-        conf.env.append_value('CFLAGS_cstlib', '-fPIC')
-        conf.env.append_value('CFLAGS_cxxstlib', '-fPIC')
-        conf.env.append_value('CXXFLAGS_cxxstlib', '-fPIC')
 
     conf.define('ENABLE_NLS', 1)
     conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], quote=True)
@@ -413,49 +407,45 @@ def build(bld):
             install_path            = instpath)
 
     # CTags
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = ctags_sources,
         name            = 'ctags',
         target          = 'ctags',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="CTags"',
-        uselib          = ['GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GLIB'])
 
     # Tagmanager
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = ['GEANY_PRIVATE', 'G_LOG_DOMAIN="Tagmanager"'],
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GTK', 'GLIB'])
 
     # MIO
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = mio_sources,
         name            = 'mio',
         target          = 'mio',
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GTK', 'GLIB'])
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
     scintilla_sources.update([file.path_from(bld.srcnode) for file in files])
-    bld(
-        features        = ['c', 'cxx', 'cxxstlib'],
+    bld.objects(
+        features        = ['c', 'cxx'],
         name            = 'scintilla',
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'M'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'cxxshlib', 'GTK', 'GLIB', 'GMODULE', 'M'])
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -491,8 +481,8 @@ def build(bld):
     base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
 
     # libgeany
-    bld(
-        features        = ['c', 'cxx', 'cshlib'],
+    bld.shlib(
+        features        = ['c', 'cxx'],
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
@@ -505,8 +495,8 @@ def build(bld):
         install_path    = '${PREFIX}/bin' if is_win32 else '${LIBDIR}')
 
     # geany executable
-    t = bld(
-        features        = ['c', 'cxx', 'cprogram'],
+    t = bld.program(
+        features        = ['c', 'cxx'],
         name            = 'geany_bin',
         target          = 'geany',
         source          = ['src/main.c'],
