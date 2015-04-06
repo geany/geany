@@ -861,6 +861,13 @@ static void load_dialog_prefs(GKeyFile *config)
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
+#ifdef __APPLE__
+		/* Geany is started using launchd on OS X and we don't get any environment variables
+		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
+		if (strcmp(shell, "/bin/bash") == 0)
+			shell = "/bin/bash -l";
+#endif
+
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
