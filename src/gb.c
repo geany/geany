@@ -145,7 +145,7 @@ static void create_window(GtkWindow *parent)
 	g_signal_connect(button4, "clicked", G_CALLBACK(help_clicked_cb), parent);
 	g_signal_connect(button5, "clicked", G_CALLBACK(close_clicked_cb), NULL);
 
-	gtk_widget_grab_focus(button4);
+	gtk_widget_grab_focus(button1);
 }
 
 
