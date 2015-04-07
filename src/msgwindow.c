@@ -177,6 +177,7 @@ static void prepare_status_tree_view(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_status), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_status), FALSE);
+	gtk_widget_set_can_focus(msgwindow.tree_status, FALSE);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
 
@@ -205,6 +206,7 @@ static void prepare_msg_tree_view(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
+	gtk_widget_set_can_focus(msgwindow.tree_msg, FALSE);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
 
@@ -242,6 +244,7 @@ static void prepare_compiler_tree_view(void)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
+	gtk_widget_set_can_focus(msgwindow.tree_compiler, FALSE);
 
 	ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
 
@@ -314,6 +317,7 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
 		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
+	gtk_widget_set_can_focus(msgwindow.tree_compiler, TRUE);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
@@ -403,6 +407,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gtk_list_store_set(msgwindow.store_msg, &iter,
 		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
 		color, MSG_COL_STRING, utf8_msg, -1);
+	gtk_widget_set_can_focus(msgwindow.tree_msg, TRUE);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -437,6 +442,7 @@ void msgwin_status_add(const gchar *format, ...)
 	/* add message to Status window */
 	gtk_list_store_append(msgwindow.store_status, &iter);
 	gtk_list_store_set(msgwindow.store_status, &iter, 0, statusmsg, -1);
+	gtk_widget_set_can_focus(msgwindow.tree_status, TRUE);
 	g_free(statusmsg);
 
 	if (G_LIKELY(main_status.main_window_realized))
@@ -1240,15 +1246,20 @@ void msgwin_clear_tab(gint tabnum)
 	switch (tabnum)
 	{
 		case MSG_MESSAGE:
+			gtk_widget_set_can_focus(msgwindow.tree_msg, FALSE);
 			store = msgwindow.store_msg;
 			break;
 
 		case MSG_COMPILER:
+			gtk_widget_set_can_focus(msgwindow.tree_compiler, FALSE);
 			gtk_list_store_clear(msgwindow.store_compiler);
 			build_menu_update(NULL);	/* update next error items */
 			return;
 
-		case MSG_STATUS: store = msgwindow.store_status; break;
+		case MSG_STATUS:
+			gtk_widget_set_can_focus(msgwindow.tree_status, FALSE);
+			store = msgwindow.store_status;
+			break;
 		default: return;
 	}
 	if (store == NULL)
