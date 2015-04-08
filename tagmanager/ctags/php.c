@@ -227,6 +227,7 @@ typedef struct {
 } tokenInfo;
 
 static langType Lang_php;
+static langType Lang_zephir;
 
 static boolean InPhp = FALSE; /* whether we are between <? ?> */
 
@@ -240,14 +241,14 @@ static struct {
 static vString *CurrentNamesapce;
 
 
-static void buildPhpKeywordHash (void)
+static void buildPhpKeywordHash (const langType language)
 {
 	const size_t count = sizeof (PhpKeywordTable) / sizeof (PhpKeywordTable[0]);
 	size_t i;
 	for (i = 0; i < count ; i++)
 	{
 		const keywordDesc* const p = &PhpKeywordTable[i];
-		addKeyword (p->name, Lang_php, (int) p->id);
+		addKeyword (p->name, language, (int) p->id);
 	}
 }
 
@@ -974,7 +975,7 @@ getNextChar:
 			else
 			{
 				parseIdentifier (token->string, c);
-				token->keyword = analyzeToken (token->string, Lang_php);
+				token->keyword = analyzeToken (token->string, getSourceLanguage ());
 				if (token->keyword == KEYWORD_NONE)
 					token->type = TOKEN_IDENTIFIER;
 				else
@@ -1178,6 +1179,17 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 		vStringDelete (arglist);
 
 		readToken (token); /* normally it's an open brace or "use" keyword */
+	}
+
+	/* if parsing Zephir, skip function return type hint */
+	if (getSourceLanguage () == Lang_zephir && token->type == TOKEN_OPERATOR)
+	{
+		do
+			readToken (token);
+		while (token->type != TOKEN_EOF &&
+			   token->type != TOKEN_OPEN_CURLY &&
+			   token->type != TOKEN_CLOSE_CURLY &&
+			   token->type != TOKEN_SEMICOLON);
 	}
 
 	/* skip use(...) */
@@ -1435,11 +1447,10 @@ static void enterScope (tokenInfo *const parentToken,
 	deleteToken (token);
 }
 
-static void findPhpTags (void)
+static void findTags (void)
 {
 	tokenInfo *const token = newToken ();
 
-	InPhp = FALSE;
 	CurrentStatement.access = ACCESS_UNDEFINED;
 	CurrentStatement.impl = IMPL_UNDEFINED;
 	CurrentNamesapce = vStringNew ();
@@ -1454,10 +1465,28 @@ static void findPhpTags (void)
 	deleteToken (token);
 }
 
-static void initialize (const langType language)
+static void findPhpTags (void)
+{
+	InPhp = FALSE;
+	findTags ();
+}
+
+static void findZephirTags (void)
+{
+	InPhp = TRUE;
+	findTags ();
+}
+
+static void initializePhpParser (const langType language)
 {
 	Lang_php = language;
-	buildPhpKeywordHash ();
+	buildPhpKeywordHash (language);
+}
+
+static void initializeZephirParser (const langType language)
+{
+	Lang_zephir = language;
+	buildPhpKeywordHash (language);
 }
 
 extern parserDefinition* PhpParser (void)
@@ -1468,7 +1497,19 @@ extern parserDefinition* PhpParser (void)
 	def->kindCount  = KIND_COUNT (PhpKinds);
 	def->extensions = extensions;
 	def->parser     = findPhpTags;
-	def->initialize = initialize;
+	def->initialize = initializePhpParser;
+	return def;
+}
+
+extern parserDefinition* ZephirParser (void)
+{
+	static const char *const extensions [] = { "zep", NULL };
+	parserDefinition* def = parserNew ("Zephir");
+	def->kinds      = PhpKinds;
+	def->kindCount  = KIND_COUNT (PhpKinds);
+	def->extensions = extensions;
+	def->parser     = findZephirTags;
+	def->initialize = initializeZephirParser;
 	return def;
 }
 

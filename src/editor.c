@@ -1261,6 +1261,7 @@ static gboolean lexer_has_braces(ScintillaObject *sci)
 		case SCLEX_CPP:
 		case SCLEX_D:
 		case SCLEX_HTML:	/* for PHP & JS */
+		case SCLEX_PHPSCRIPT:
 		case SCLEX_PASCAL:	/* for multiline comments? */
 		case SCLEX_BASH:
 		case SCLEX_PERL:
@@ -2871,6 +2872,7 @@ static gint get_multiline_comment_style(GeanyEditor *editor, gint line_start)
 	{
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 		{
 			if (is_style_php(sci_get_style_at(editor->sci, line_start)))
 				style_comment = SCE_HPHP_COMMENT;
@@ -3408,6 +3410,7 @@ static gboolean in_block_comment(gint lexer, gint style)
 				style == SCE_D_COMMENTNESTED);
 
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (style == SCE_HPHP_COMMENT);
 
 		case SCLEX_CSS:
@@ -4956,6 +4959,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 		/* C-like (structured) languages benefit from the "look both" method */
 		case SCLEX_CPP:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 		case SCLEX_XML:
 		case SCLEX_PERL:
 		case SCLEX_LATEX:

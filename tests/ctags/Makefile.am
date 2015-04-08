@@ -237,6 +237,7 @@ test_sources = \
 	recursive.f95					\
 	refcurs.sql						\
 	regexp.js						\
+	return-hint.zep					\
 	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\
@@ -258,6 +259,7 @@ test_sources = \
 	simple.rb						\
 	simple.sh						\
 	simple.tcl						\
+	simple.zep						\
 	size_t_wchar_t_alias.d			\
 	size_t_wchar_t_typedef.c		\
 	spurious_label_tags.c			\

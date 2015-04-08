@@ -302,6 +302,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_RUST:
+		case GEANY_FILETYPES_ZEPHIR:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
@@ -724,6 +725,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_ZEPHIR:
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",

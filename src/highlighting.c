@@ -1046,6 +1046,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(VERILOG);
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
+		init_styleset_case(ZEPHIR);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1131,6 +1132,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(VERILOG);
 		styleset_case(XML);
 		styleset_case(YAML);
+		styleset_case(ZEPHIR);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
@@ -1490,6 +1492,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_STRING ||
 				style == SCE_HBA_STRINGEOL ||
@@ -1674,6 +1677,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_COMMENTLINE ||
 				style == SCE_HB_COMMENTLINE ||

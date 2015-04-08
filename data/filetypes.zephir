@@ -1,0 +1,24 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling=HTML]
+
+[keywords=HTML]
+# all items must be in one line
+# these are Zephir instructions, overriding PHP list
+php=abstract bool break case catch class const continue default empty else false fetch finally fixed float for foreach function if int integer interface isset let long namespace new null private protected public return static string switch this throw true try typeof uint ulong unlikely var void while
+
+[lexer_properties=PHP]
+
+[settings=PHP]
+# default extension used when saving files
+extension=zep
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=zephir build
