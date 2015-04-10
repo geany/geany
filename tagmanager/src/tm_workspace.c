@@ -157,6 +157,7 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 /** Adds a source file to the workspace, parses it and updates the workspace tags.
  @param source_file The source file to add to the workspace.
 */
+GEANY_API_SYMBOL
 void tm_workspace_add_source_file(TMSourceFile *source_file)
 {
 	g_return_if_fail(source_file != NULL);
@@ -199,6 +200,7 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
  pointer call tm_source_file_free() on it.
  @param source_file Pointer to the source file to be removed.
 */
+GEANY_API_SYMBOL
 void tm_workspace_remove_source_file(TMSourceFile *source_file)
 {
 	guint i;
@@ -266,6 +268,7 @@ static void tm_workspace_update(void)
  tm_workspace_update_source_file() separately for each of the files.
  @param source_files The source files to be added to the workspace.
 */
+GEANY_API_SYMBOL
 void tm_workspace_add_source_files(GPtrArray *source_files)
 {
 	guint i;
@@ -290,6 +293,7 @@ void tm_workspace_add_source_files(GPtrArray *source_files)
  call tm_source_file_free() on each of them.
  @param source_files The source files to be removed from the workspace.
 */
+GEANY_API_SYMBOL
 void tm_workspace_remove_source_files(GPtrArray *source_files)
 {
 	guint i, j;

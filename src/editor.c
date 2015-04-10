@@ -1202,6 +1202,7 @@ get_default_indent_prefs(void)
  * settings may have changed, or if this function has been called for a different editor.
  * @param editor The editor, or @c NULL to get the default indent prefs.
  * @return The indent prefs. */
+GEANY_API_SYMBOL
 const GeanyIndentPrefs *
 editor_get_indent_prefs(GeanyEditor *editor)
 {
@@ -1726,6 +1727,7 @@ void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, 
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars)
 {
 	static gchar cword[GEANY_MAX_WORD_LENGTH];
@@ -2343,6 +2345,7 @@ static void fix_indentation(GeanyEditor *editor, GString *buf)
  * @warning Make sure all \\t tab chars in @a text are intended as indent widths or alignment,
  * not hard tabs, as those won't be preserved.
  * @note This doesn't scroll the cursor in view afterwards. **/
+GEANY_API_SYMBOL
 void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint insert_pos,
 		gint cursor_index, gint newline_indent_size, gboolean replace_newlines)
 {
@@ -4064,6 +4067,7 @@ void editor_indicator_clear_errors(GeanyEditor *editor)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void editor_indicator_clear(GeanyEditor *editor, gint indic)
 {
 	glong last_pos;
@@ -4089,6 +4093,7 @@ void editor_indicator_clear(GeanyEditor *editor, gint indic)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 {
 	gint start, end;
@@ -4138,6 +4143,7 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, gint end)
 {
 	g_return_if_fail(editor != NULL);
@@ -4191,6 +4197,7 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
  *
  *  @since 0.20
  */
+GEANY_API_SYMBOL
 gint editor_get_eol_char_mode(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4212,6 +4219,7 @@ gint editor_get_eol_char_mode(GeanyEditor *editor)
  *
  *  @since 0.19
  */
+GEANY_API_SYMBOL
 const gchar *editor_get_eol_char_name(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4233,6 +4241,7 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
  *
  *  @since 0.19
  */
+GEANY_API_SYMBOL
 gint editor_get_eol_char_len(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4258,6 +4267,7 @@ gint editor_get_eol_char_len(GeanyEditor *editor)
  *
  *  @since 0.19
  */
+GEANY_API_SYMBOL
 const gchar *editor_get_eol_char(GeanyEditor *editor)
 {
 	gint mode = file_prefs.default_eol_character;
@@ -4492,6 +4502,7 @@ void editor_set_line_wrapping(GeanyEditor *editor, gboolean wrap)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 {
 	editor_set_indent(editor, type, editor->indent_width);
@@ -4567,6 +4578,7 @@ gboolean editor_goto_line(GeanyEditor *editor, gint line_no, gint offset)
  *
  *  @since 0.20
  **/
+GEANY_API_SYMBOL
 gboolean editor_goto_pos(GeanyEditor *editor, gint pos, gboolean mark)
 {
 	g_return_val_if_fail(editor, FALSE);
@@ -4811,6 +4823,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 ScintillaObject *editor_create_widget(GeanyEditor *editor)
 {
 	const GeanyIndentPrefs *iprefs = get_default_indent_prefs();
@@ -5141,6 +5154,7 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
  * @param snippet_name Snippet name.
  * @return snippet or @c NULL if it was not found. Must not be freed.
  */
+GEANY_API_SYMBOL
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
 {
 	const gchar *subhash_name = editor ? editor->document->file_type->name : "Default";
@@ -5157,6 +5171,7 @@ const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)
  * @param pos .
  * @param snippet .
  */
+GEANY_API_SYMBOL
 void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 {
 	GString *pattern;

@@ -292,6 +292,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
  *
  * @since 0.19
  */
+GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
 	switch (ft_id)
