@@ -3116,6 +3116,7 @@ static void scintilla_init(ScintillaObject *sci);
 extern void Platform_Initialise();
 extern void Platform_Finalise();
 
+GEANY_API_SYMBOL
 GType scintilla_get_type() {
 	static GType scintilla_type = 0;
 	try {
