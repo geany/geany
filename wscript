@@ -51,7 +51,8 @@ from waflib.Tools.compiler_c import c_compiler
 from waflib.Tools.compiler_cxx import cxx_compiler
 
 
-APPNAME = 'geany'
+PACKAGE_NAME = 'Geany'
+APPNAME = PACKAGE_NAME.lower()
 VERSION = '1.25'
 LINGUAS_FILE = os.path.join('po', 'LINGUAS')
 MINIMUM_GTK_VERSION = '2.16.0'
@@ -564,6 +565,15 @@ def build(bld):
                            'localedir': '${datarootdir}/locale'})
 
     if not is_win32:
+        # geany.desktop.in
+        bld(
+            features    = 'subst',
+            source      = 'geany.desktop.in.in',
+            target      = 'geany.desktop.in',
+            dct         = { 'VERSION': VERSION,
+                            'PACKAGE_NAME': PACKAGE_NAME,
+                            'GEANY_BINDIR': bld.env['BINDIR'] })
+
         # geany.desktop
         if bld.env['INTLTOOL']:
             bld(
