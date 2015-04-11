@@ -17,7 +17,7 @@ EXTRA_DIST = \
 	autogen.sh \
 	wscript \
 	waf \
-	geany.desktop.in \
+	geany.desktop.in.in \
 	geany.pc.in \
 	geany.spec \
 	ChangeLog.pre-0-17 \
@@ -33,6 +33,7 @@ EXTRA_DIST = \
 
 DISTCLEANFILES = \
 	geany.desktop \
+	geany.desktop.in \
 	intltool-extract \
 	intltool-merge \
 	intltool-update

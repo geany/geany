@@ -126,6 +126,8 @@ GEANY_CHECK_DOXYGEN
 # libgeany
 GEANY_LIB_INIT
 
+AC_SUBST([GEANY_BINDIR], [$(eval echo "$(eval echo "$bindir")")])
+
 # Output
 AC_CONFIG_FILES([
 		Makefile
@@ -153,6 +155,7 @@ AC_CONFIG_FILES([
 		data/Makefile
 		doc/Makefile
 		doc/geany.1
+		geany.desktop.in
 		geany.spec
 		geany.pc
 		doc/Doxyfile

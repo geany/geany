@@ -36,6 +36,7 @@ Makefile.in
 /depcomp
 /geany.1
 /geany.desktop
+/geany.desktop.in
 /geany.glade.bak
 /geany.gladep.bak
 /geany.pc
