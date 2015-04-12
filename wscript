@@ -599,6 +599,9 @@ def build(bld):
                                'top_builddir': bld.out_dir,
                                'top_srcdir': bld.top_dir,})
 
+    # disable build/install phase interleaving
+    bld.add_group()
+
     ###
     # Install files
     ###
