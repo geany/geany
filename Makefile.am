@@ -74,6 +74,12 @@ rpm: dist
 pkgconfig_DATA = geany.pc
 pkgconfigdir = $(libdir)/pkgconfig
 
+geany.desktop.in: $(top_srcdir)/geany.desktop.in.in
+	$(AM_V_GEN)$(SED) \
+		-e 's|@PACKAGE_NAME[@]|@PACKAGE_NAME@|' \
+		-e 's|@bindir[@]|$(bindir)|' \
+			$(top_srcdir)/geany.desktop.in.in > $@
+
 desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
