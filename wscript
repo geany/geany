@@ -140,6 +140,8 @@ geany_sources = set([
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
 
+geany_bin_sources = set(['src/main.c'])
+
 geany_icons = {
     'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
                                  '16x16/classviewer-macro.png',
@@ -232,7 +234,7 @@ def configure(conf):
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
     if conf.options.enable_mac_integration:
         pkgname = 'gtk-mac-integration-gtk3' if conf.options.use_gtk3 else 'gtk-mac-integration-gtk2'
-        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION', 
+        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION',
             mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
@@ -456,6 +458,7 @@ def build(bld):
     if is_win32:
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
+        geany_bin_sources.add('geany_private.rc')
 
     def gen_signallist(task):
         from xml.etree import ElementTree
@@ -502,7 +505,7 @@ def build(bld):
         features        = ['c', 'cxx'],
         name            = 'geany_bin',
         target          = 'geany',
-        source          = ['src/main.c'],
+        source          = geany_bin_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
         uselib          = base_uselibs + ['geanyexport'],
