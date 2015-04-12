@@ -36,7 +36,6 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 
 
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 GeanyPlugin		*geany_plugin;
 
 

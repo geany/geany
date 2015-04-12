@@ -32,7 +32,6 @@
 
 
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
