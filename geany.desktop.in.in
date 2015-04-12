@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Version=@VERSION@
+Version=1.0
 _Name=@PACKAGE_NAME@
 _GenericName=Integrated Development Environment
 _Comment=A fast and lightweight IDE using GTK2

@@ -570,8 +570,7 @@ def build(bld):
             features    = 'subst',
             source      = 'geany.desktop.in.in',
             target      = 'geany.desktop.in',
-            dct         = { 'VERSION': VERSION,
-                            'PACKAGE_NAME': PACKAGE_NAME,
+            dct         = { 'PACKAGE_NAME': PACKAGE_NAME,
                             'GEANY_BINDIR': bld.env['BINDIR'] })
 
         # geany.desktop
