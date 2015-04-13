@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.23\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-11 17:41+0200\n"
-"PO-Revision-Date: 2015-04-12 17:28+0200\n"
+"PO-Revision-Date: 2015-04-13 14:10+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -4338,7 +4338,7 @@ msgstr ""
 
 #: ../../po/../src/search.c:326
 msgid "Use multi-_line matching"
-msgstr "Correspondances multi-lignes"
+msgstr "Correspondances multi-_lignes"
 
 #: ../../po/../src/search.c:331
 msgid ""
