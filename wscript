@@ -477,7 +477,7 @@ def build(bld):
     # signallist.i
     bld(
         source  = 'data/geany.glade',
-        target  = 'src/signallist.i',
+        target  = bld.path.get_bld().make_node('src/signallist.i'),
         name    = 'signallist.i',
         rule    = gen_signallist)
 
@@ -536,7 +536,7 @@ def build(bld):
         bld(
             source  = ['doc/geany.txt'],
             deps    = ['doc/geany.css'],
-            target  = 'doc/geany.html',
+            target  = bld.path.get_bld().make_node('doc/geany.html'),
             name    = 'geany.html',
             cwd     = os.path.join(bld.path.abspath(), 'doc'),
             rule    = '%s  -stg --stylesheet=geany.css geany.txt %s' % (rst2html, html_doc_filename))
