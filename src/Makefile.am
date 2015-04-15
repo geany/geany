@@ -81,10 +81,8 @@ libgeany_la_SOURCES = \
 	msgwindow.c msgwindow.h \
 	navqueue.c navqueue.h \
 	notebook.c notebook.h \
-	osx.c osx.h \
 	plugins.c plugins.h \
 	pluginutils.c pluginutils.h \
-	prefix.c prefix.h \
 	prefs.c prefs.h \
 	printing.c printing.h \
 	project.c project.h \
@@ -100,6 +98,14 @@ libgeany_la_SOURCES = \
 	sidebar.c sidebar.h \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
+
+if ENABLE_BINRELOC
+libgeany_la_SOURCES += prefix.c prefix.h
+endif
+
+if ENABLE_MAC_INTEGRATION
+libgeany_la_SOURCES += osx.c osx.h
+endif
 
 libgeany_la_CFLAGS  = $(AM_CPPFLAGS) @LIBGEANY_CFLAGS@
 libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
