@@ -29,6 +29,10 @@ FILETYPE			VFT_APP
 			VALUE "ProductVersion", VER_FILEVERSION_STR
 		}
 	}
+    BLOCK "VarFileInfo"
+    {
+      VALUE "Translation", 0x409, 0x04E4
+    }
 }
 
 APP_MANIFEST RT_MANIFEST "geany.exe.manifest"
