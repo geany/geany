@@ -774,7 +774,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 }
 
 
-/* try to parse the file and line number where the error occured described in line
+/* try to parse the file and line number where the error occurred described in line
  * and when something useful is found, it stores the line number in *line and the
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
@@ -983,7 +983,7 @@ static void parse_compiler_error_line(const gchar *string,
 				data.file_idx = 1;
 				break;
 			}
-			/* don't accidently find libtool versions x:y:x and think it is a file name */
+			/* don't accidentally find libtool versions x:y:x and think it is a file name */
 			if (strstr(string, "libtool --mode=link") == NULL)
 			{
 				data.pattern = ":";
@@ -1000,7 +1000,7 @@ static void parse_compiler_error_line(const gchar *string,
 }
 
 
-/* try to parse the file and line number where the error occured described in string
+/* try to parse the file and line number where the error occurred described in string
  * and when something useful is found, it stores the line number in *line and the
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.

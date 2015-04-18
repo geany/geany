@@ -716,7 +716,7 @@ static void parse_build_output(const gchar **output, gint status)
 #endif
 
 
-/* Replaces occurences of %e and %p with the appropriate filenames and
+/* Replaces occurrences of %e and %p with the appropriate filenames and
  * %l with current line number. %d and %p replacements should be in UTF8 */
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
 {
@@ -1224,7 +1224,7 @@ static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 		failure = TRUE;
 	}
 	else
-	{	/* any other failure occured */
+	{	/* any other failure occurred */
 		failure = TRUE;
 	}
 #endif

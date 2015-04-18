@@ -31,7 +31,7 @@
  * To use plugin signals in Geany, you have two options:
  *
  * -# Create a PluginCallback array with the @ref plugin_callbacks symbol. List the signals
- *    you want to listen to and create the appropiate signal callbacks for each signal.
+ *    you want to listen to and create the appropriate signal callbacks for each signal.
  *    The callback array is read @a after plugin_init() has been called.
  * -# Use plugin_signal_connect(), which can be called at any time and can also connect
  *    to non-Geany signals (such as GTK widget signals).
