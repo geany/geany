@@ -187,14 +187,12 @@ so there is no need to include @a gtk/gtk.h yourself.
 
 @note
 @a plugindata.h contains the biggest part of the plugin API and provides some basic macros.
-@a geanyfunctions.h provides some macros for convenient access to plugin API functions.
 
-Then you should define three basic variables which will give access to data fields and
-functions provided by the plugin API.
+Then you should define two basic variables which will give access to data fields
+provided by the plugin API.
 @code
 GeanyPlugin			*geany_plugin;
 GeanyData			*geany_data;
-GeanyFunctions		*geany_functions;
 @endcode
 
 Now you can go on and write your first lines for your new plugin. As mentioned before,
@@ -363,7 +361,6 @@ Once this is done, your first plugin is ready. Congratulations!
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 
 PLUGIN_VERSION_CHECK(211)
 

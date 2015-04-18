@@ -1,7 +1,7 @@
 
 SUBDIRS = include
 
-noinst_LIBRARIES=libscintilla.a
+noinst_LTLIBRARIES=libscintilla.la
 
 AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
@@ -139,13 +139,14 @@ src/XPM.cxx \
 src/XPM.h \
 $(LEXER_SRCS)
 
-libscintilla_a_SOURCES = $(SRCS)
+libscintilla_la_SOURCES = $(SRCS)
 
-AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib \
+	@GTK_CFLAGS@ @LIBGEANY_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --body > gtk/scintilla-marshal.c
 
 EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt \
-	makefile.win32
+	gtk/makefile.win32

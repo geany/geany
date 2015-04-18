@@ -1046,6 +1046,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(VERILOG);
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
+		init_styleset_case(ZEPHIR);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1071,6 +1072,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 /** Sets up highlighting and other visual settings.
  * @param sci Scintilla widget.
  * @param ft Filetype settings to use. */
+GEANY_API_SYMBOL
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
 	guint lexer_id = get_lexer_filetype(ft);
@@ -1131,6 +1133,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(VERILOG);
 		styleset_case(XML);
 		styleset_case(YAML);
+		styleset_case(ZEPHIR);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
@@ -1159,6 +1162,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
  * @return A pointer to the style struct.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
+GEANY_API_SYMBOL
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
 	g_return_val_if_fail(ft_id >= 0 && (guint) ft_id < filetypes_array->len, NULL);
@@ -1364,7 +1368,7 @@ void highlighting_show_color_scheme_dialog(void)
 		GEANY_DEFAULT_DIALOG_HEIGHT * 7/4, GEANY_DEFAULT_DIALOG_HEIGHT);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_ETCHED_IN);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
@@ -1381,6 +1385,7 @@ void highlighting_show_color_scheme_dialog(void)
  *
  * @return @c TRUE if the style is a string, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_string_style(gint lexer, gint style)
 {
 	/* Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char. */
@@ -1490,6 +1495,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_STRING ||
 				style == SCE_HBA_STRINGEOL ||
@@ -1567,6 +1573,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is a comment, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_comment_style(gint lexer, gint style)
 {
 	switch (lexer)
@@ -1674,6 +1681,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_COMMENTLINE ||
 				style == SCE_HB_COMMENTLINE ||
@@ -1738,6 +1746,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is code, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_code_style(gint lexer, gint style)
 {
 	switch (lexer)

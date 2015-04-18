@@ -70,6 +70,7 @@
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
@@ -203,6 +204,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  * @return 0 if the file was successfully written, otherwise the @c errno of the
  *         failed operation is returned.
  **/
+GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	g_return_val_if_fail(filename != NULL, ENOENT);
@@ -262,6 +264,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
  * @param size .
  * @return The tag name (newly allocated) or @c NULL if no opening tag was found.
  */
+GEANY_API_SYMBOL
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 {
 	const gchar *cur, *begin;
@@ -286,6 +289,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
  * @param size .
  * @return pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
  */
+GEANY_API_SYMBOL
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size)
 {
 	/* stolen from anjuta and modified */
@@ -493,6 +497,7 @@ static gchar *utf8_strdown(const gchar *str)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 {
 	gchar *tmp1, *tmp2;
@@ -535,6 +540,7 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
  *  @since 0.17
  */
 /* This following function is taken from Gedit. */
+GEANY_API_SYMBOL
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 {
 	GString *truncated;
@@ -551,7 +557,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 
 	g_return_val_if_fail(g_utf8_validate(string, length, NULL), NULL);
 
-	/* It doesnt make sense to truncate strings to less than the size of the delimiter plus 2
+	/* It doesn't make sense to truncate strings to less than the size of the delimiter plus 2
 	 * characters (one on each side) */
 	delimiter_length = g_utf8_strlen(delimiter, -1);
 	if (truncate_length < (delimiter_length + 2))
@@ -584,6 +590,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
  *
  *  @return @c TRUE if @a a equals @a b, else @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
 	/* (taken from libexo from os-cillation) */
@@ -601,6 +608,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
  **/
+GEANY_API_SYMBOL
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
 	gchar *last_dot;
@@ -719,6 +727,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
 	const struct tm *tm;
@@ -787,6 +796,7 @@ gchar *utils_get_initials(const gchar *name)
  *  @return The value associated with @a key as an integer, or the given default value if the value
  *          could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
 							   const gint default_value)
 {
@@ -817,6 +827,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
  *  @return The value associated with @a key as a boolean, or the given default value if the value
  *          could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
 								   const gboolean default_value)
 {
@@ -847,6 +858,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @return A newly allocated string, either the value for @a key or a copy of the given
  *          default value if it could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,
 								const gchar *default_value)
 {
@@ -1240,6 +1252,7 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
  *  @return The converted string in locale encoding, or a copy of the input string if conversion
  *    failed. Should be freed with g_free(). If @a utf8_text is @c NULL, @c NULL is returned.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 {
 #ifdef G_OS_WIN32
@@ -1268,6 +1281,7 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
  *  @return The converted string in UTF-8 encoding, or a copy of the input string if conversion
  *    failed. Should be freed with g_free(). If @a locale_text is @c NULL, @c NULL is returned.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 {
 #ifdef G_OS_WIN32
@@ -1357,6 +1371,7 @@ gchar **utils_strv_new(const gchar *first, ...)
  *  @return 0 if the directory was successfully created, otherwise the @c errno of the
  *          failed operation is returned.
  **/
+GEANY_API_SYMBOL
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 {
 	gint mode = 0700;
@@ -1393,6 +1408,7 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  * freed when no longer needed.
  * @see utils_get_file_list().
  **/
+GEANY_API_SYMBOL
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error)
 {
 	GSList *list = NULL;
@@ -1437,6 +1453,7 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
  *         freed when no longer needed.
  * @see utils_get_file_list_full().
  **/
+GEANY_API_SYMBOL
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 {
 	GSList *list = utils_get_file_list_full(path, FALSE, TRUE, error);
@@ -1524,6 +1541,7 @@ gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace
  *
  * @return Number of replacements made.
  **/
+GEANY_API_SYMBOL
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
 	guint count = 0;
@@ -1557,6 +1575,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
 {
 	gint pos = utils_string_find(haystack, 0, -1, needle);
@@ -1640,6 +1659,7 @@ const gchar *utils_get_default_dir_utf8(void)
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
+GEANY_API_SYMBOL
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 						  gchar **std_err, gint *exit_status, GError **error)
@@ -1672,6 +1692,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
+GEANY_API_SYMBOL
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error)
@@ -1827,6 +1848,7 @@ void utils_tidy_path(gchar *filename)
  *
  *  @see @c g_strdelimit.
  **/
+GEANY_API_SYMBOL
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 {
 	const gchar *r;
@@ -1938,6 +1960,7 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  *
  * @return The new environment array.
  **/
+GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)
 {
 	gchar **result;
@@ -2128,9 +2151,9 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 }
 
 
-void utils_start_new_geany_instance(gchar *doc_path)
+void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	gchar **argv;
+	const gchar *const *argv;
 	const gchar *command = is_osx_bundle() ? "open" : "geany";
 	gchar *exec_path = g_find_program_in_path(command);
 
@@ -2140,16 +2163,16 @@ void utils_start_new_geany_instance(gchar *doc_path)
 
 		if (is_osx_bundle())
 		{
-			gchar *osx_argv[] = {exec_path, "-n", "-a", "Geany", doc_path, NULL};
+			const gchar *const osx_argv[] = {exec_path, "-n", "-a", "Geany", doc_path, NULL};
 			argv = osx_argv;
 		}
 		else
 		{
-			gchar *unix_argv[] = {exec_path, "-i", doc_path, NULL};
+			const gchar *const unix_argv[] = {exec_path, "-i", doc_path, NULL};
 			argv = unix_argv;
 		}
 
-		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
+		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
 		{
 			g_printerr("Unable to open new window: %s", err->message);
 			g_error_free(err);

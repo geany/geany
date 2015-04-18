@@ -6,7 +6,9 @@ DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
 	-DGEANY_PREFIX=\"\" \
-	-DGTK
+	-DGTK \
+	-DGEANY_EXPORT_SYMBOL="__declspec(dllexport)" \
+	-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL
 
 .SUFFIXES: .c .o .h .a
 WINDRES = windres.exe

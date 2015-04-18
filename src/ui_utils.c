@@ -165,6 +165,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 /** Displays text on the statusbar.
  * @param log Whether the message should be recorded in the Status window.
  * @param format A @c printf -style string. */
+GEANY_API_SYMBOL
 void ui_set_statusbar(gboolean log, const gchar *format, ...)
 {
 	gchar *string;
@@ -966,6 +967,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 void ui_add_document_sensitive(GtkWidget *widget)
 {
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
@@ -1459,6 +1461,7 @@ void ui_update_view_editor_menu_items(void)
  * @param label_text The label text.
  * @param alignment An address to store the alignment widget pointer.
  * @return The frame widget, setting the alignment container for packing child widgets. */
+GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
 {
 	GtkWidget *label, *align;
@@ -1481,6 +1484,7 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 /** Makes a fixed border for dialogs without increasing the button box border.
  * @param dialog The parent container for the @c GtkVBox.
  * @return The packed @c GtkVBox. */
+GEANY_API_SYMBOL
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
@@ -1488,29 +1492,6 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox, TRUE, TRUE, 0);
 	return vbox;
-}
-
-
-static GtkWidget *dialog_get_widget_for_response(GtkDialog *dialog, gint response_id)
-{
-#if GTK_CHECK_VERSION(2, 20, 0)
-	return gtk_dialog_get_widget_for_response(dialog, response_id);
-#else /* GTK < 2.20 */
-	/* base logic stolen from GTK */
-	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
-	GtkWidget *widget = NULL;
-	GList *children, *node;
-
-	children = gtk_container_get_children(GTK_CONTAINER(action_area));
-	for (node = children; node && ! widget; node = node->next)
-	{
-		if (gtk_dialog_get_response_for_widget(dialog, node->data) == response_id)
-			widget = node->data;
-	}
-	g_list_free(children);
-
-	return widget;
-#endif
 }
 
 
@@ -1537,7 +1518,7 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
 	va_start(ap, response);
 	for (position = 0; response != -1; position++)
 	{
-		GtkWidget *child = dialog_get_widget_for_response(dialog, response);
+		GtkWidget *child = gtk_dialog_get_widget_for_response(dialog, response);
 		if (child)
 			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
 		else
@@ -1555,6 +1536,7 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
  * @param text Button label text, can include mnemonics.
  * @return The new @c GtkButton.
  */
+GEANY_API_SYMBOL
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 {
 	GtkWidget *image, *button;
@@ -1575,6 +1557,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GtkWidget *
 ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 {
@@ -1605,6 +1588,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
 	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
@@ -1697,6 +1681,7 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
  * @param combo_entry .
  * @param text Text to add, or @c NULL for current entry text.
  * @param history_len Max number of items, or @c 0 for default. */
+GEANY_API_SYMBOL
 void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len)
 {
@@ -1875,6 +1860,7 @@ static gboolean ui_tree_view_query_tooltip_cb(GtkWidget *widget, gint x, gint y,
  */
 /* Note: @p column is int and not uint both to match gtk_tree_view_set_tooltip_column() signature
  * and to allow future support of -1 to unset if ever wanted */
+GEANY_API_SYMBOL
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column)
 {
 	g_return_if_fail(column >= 0);
@@ -1892,6 +1878,7 @@ void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column)
  * @param widget The widget.
  * @param str The font name as expected by pango_font_description_from_string().
  */
+GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
@@ -1913,6 +1900,7 @@ void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
  * @return The @c GtkHBox.
  */
 /* @see ui_setup_open_button_callback(). */
+GEANY_API_SYMBOL
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry)
 {
 	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
@@ -2063,6 +2051,7 @@ void ui_statusbar_showhide(gboolean state)
  * @param table
  * @param row The row number of the table.
  */
+GEANY_API_SYMBOL
 void ui_table_add_row(GtkTable *table, gint row, ...)
 {
 	va_list args;
@@ -2435,7 +2424,7 @@ void ui_init_builder(void)
 	}
 	g_free(interface_file);
 
-	gtk_builder_connect_signals(builder, NULL);
+	callbacks_connect(builder);
 
 	edit_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
 	prefs_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
@@ -2642,6 +2631,7 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
  * @since 0.16
  * @deprecated 0.21 use gtk_widget_set_tooltip_text() instead
  */
+GEANY_API_SYMBOL
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 {
 	gtk_widget_set_tooltip_text(widget, text);
@@ -2659,6 +2649,7 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
@@ -2737,6 +2728,7 @@ static gboolean progress_bar_pulse(gpointer data)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == 0);
@@ -2756,6 +2748,7 @@ void ui_progress_bar_start(const gchar *text)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void ui_progress_bar_stop(void)
 {
 	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
@@ -2837,6 +2830,7 @@ GtkWidget *ui_label_new_bold(const gchar *text)
  * the corresponding document pointer as @c user_data.
  * @warning You should check @c doc->is_valid in the callback.
  * @since 0.19 */
+GEANY_API_SYMBOL
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
 	ui_menu_add_document_items_sorted(menu, active, callback, NULL);
@@ -2857,6 +2851,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.
  * @warning You should check @c doc->is_valid in the callback.
  * @since 0.21 */
+GEANY_API_SYMBOL
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)
 {
@@ -2916,6 +2911,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
  * @param keyval A keyval.
  * @return @c TRUE if @a keyval is the one of the Enter/Return key values, otherwise @c FALSE.
  * @since 0.19 */
+GEANY_API_SYMBOL
 gboolean ui_is_keyval_enter_or_return(guint keyval)
 {
 	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
@@ -2928,6 +2924,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
  * @param default_value The default value in case the value could not be read.
  * @return The value for the property if it exists, otherwise the @a default_value.
  * @since 0.19 */
+GEANY_API_SYMBOL
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value)
 {
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(G_OBJECT(
@@ -3017,6 +3014,7 @@ void ui_focus_current_document(void)
  * @param stock_id stock_id to lookup e.g. @c GTK_STOCK_OPEN.
  * @return The label text for stock
  * @since Geany 1.22 */
+GEANY_API_SYMBOL
 const gchar *ui_lookup_stock_label(const gchar *stock_id)
 {
 	GtkStockItem item;

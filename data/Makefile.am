@@ -69,7 +69,8 @@ filetypes = \
 	filetypes.verilog \
 	filetypes.vhdl \
 	filetypes.xml \
-	filetypes.yaml
+	filetypes.yaml \
+	filetypes.zephir
 
 tagfiles = \
 	c99.tags \

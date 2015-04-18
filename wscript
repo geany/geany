@@ -54,13 +54,14 @@ from waflib.Tools.compiler_cxx import cxx_compiler
 APPNAME = 'geany'
 VERSION = '1.25'
 LINGUAS_FILE = os.path.join('po', 'LINGUAS')
-MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GTK_VERSION = '2.24.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
-MINIMUM_GLIB_VERSION = '2.20.0'
+MINIMUM_GLIB_VERSION = '2.28.0'
+
+GEANY_LIB_VERSION = '0.0.0'
 
 top = '.'
 out = '_build_'
-
 
 mio_sources = set(['tagmanager/mio/mio.c'])
 
@@ -79,6 +80,7 @@ ctags_sources = set([
     'tagmanager/ctags/ctags.c',
     'tagmanager/ctags/diff.c',
     'tagmanager/ctags/docbook.c',
+    'tagmanager/ctags/erlang.c',
     'tagmanager/ctags/entry.c',
     'tagmanager/ctags/fortran.c',
     'tagmanager/ctags/get.c',
@@ -131,12 +133,14 @@ geany_sources = set([
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
     'src/highlighting.c', 'src/keybindings.c',
-    'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
+    'src/keyfile.c', 'src/log.c', 'src/libmain.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
     'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/spawn.c', 'src/stash.c',
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
+
+geany_bin_sources = set(['src/main.c'])
 
 geany_icons = {
     'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
@@ -157,6 +161,7 @@ geany_icons = {
     'hicolor/32x32/actions':    ['32x32/geany-build.png',
                                  '32x32/geany-close-all.png',
                                  '32x32/geany-save-all.png'],
+    'hicolor/32x32/apps':       ['32x32/geany.png'],
     'hicolor/48x48/actions':    ['48x48/geany-build.png',
                                  '48x48/geany-close-all.png',
                                  '48x48/geany-save-all.png'],
@@ -184,6 +189,7 @@ def configure(conf):
     conf.load('compiler_c')
     is_win32 = _target_is_win32(conf)
 
+    visibility_hidden_supported = conf.check_cc(cflags=['-Werror', '-fvisibility=hidden'], mandatory=False)
     conf.check_cc(header_name='fcntl.h', mandatory=False)
     conf.check_cc(header_name='fnmatch.h', mandatory=False)
     conf.check_cc(header_name='glob.h', mandatory=False)
@@ -228,7 +234,7 @@ def configure(conf):
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
     if conf.options.enable_mac_integration:
         pkgname = 'gtk-mac-integration-gtk3' if conf.options.use_gtk3 else 'gtk-mac-integration-gtk2'
-        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION', 
+        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION',
             mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
@@ -266,7 +272,7 @@ but you then may not have a local copy of the HTML manual.'''
             '-mwindows',
             '-static-libgcc',
             '-static-libstdc++'])
-        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32'])
+        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'comdlg32'])
         # explicitly define Windows version for older Mingw environments
         conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
         conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE
@@ -304,6 +310,21 @@ but you then may not have a local copy of the HTML manual.'''
     _define_from_opt(conf, 'HAVE_VTE', not conf.options.no_vte, None)
 
     conf.write_config_header('config.h', remove=False)
+
+    # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
+    if is_win32:
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__declspec(dllexport)']
+    elif visibility_hidden_supported:
+        geanyexport_cflags = ['-fvisibility=hidden']
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
+    else:  # unknown, define to nothing
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=']
+    geanyexport_defines.append('GEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
+    conf.env['DEFINES_geanyexport'] = geanyexport_defines
+    conf.env['CFLAGS_geanyexport'] = geanyexport_cflags
+    conf.env['CXXFLAGS_geanyexport'] = geanyexport_cflags
 
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
@@ -387,52 +408,49 @@ def build(bld):
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
             uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
+            use                     = ['geany'],
             install_path            = instpath)
 
     # CTags
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = ctags_sources,
         name            = 'ctags',
         target          = 'ctags',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="CTags"',
-        uselib          = ['GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GLIB', 'geanyexport'])
 
     # Tagmanager
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = ['GEANY_PRIVATE', 'G_LOG_DOMAIN="Tagmanager"'],
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
 
     # MIO
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = mio_sources,
         name            = 'mio',
         target          = 'mio',
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
     scintilla_sources.update([file.path_from(bld.srcnode) for file in files])
-    bld(
-        features        = ['c', 'cxx', 'cxxstlib'],
+    bld.objects(
+        features        = ['c', 'cxx'],
         name            = 'scintilla',
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'M'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'cxxshlib', 'GTK', 'GLIB', 'GMODULE', 'M', 'geanyexport'])
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
@@ -440,24 +458,61 @@ def build(bld):
     if is_win32:
         geany_sources.add('src/win32.c')
         geany_sources.add('geany_private.rc')
+        geany_bin_sources.add('geany_private.rc')
 
+    def gen_signallist(task):
+        from xml.etree import ElementTree
+
+        def find_handlers(xml_filename):
+            tree = ElementTree.parse(xml_filename)
+            signals = tree.getroot().findall(".//signal")
+            return [sig.attrib["handler"] for sig in signals]
+
+        handlers = []
+        for node in task.inputs:
+            handlers += find_handlers(node.abspath())
+        handlers = sorted(set(handlers))
+
+        for node in task.outputs:
+            node.write("/* This file is auto-generated, do not edit. */\n" +
+                       ''.join(["ITEM(%s)\n" % h for h in handlers]))
+
+    # signallist.i
     bld(
-        features        = ['c', 'cxx', 'cprogram'],
+        source  = 'data/geany.glade',
+        target  = bld.path.get_bld().make_node('src/signallist.i'),
+        name    = 'signallist.i',
+        rule    = gen_signallist)
+
+    base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
+
+    # libgeany
+    bld.shlib(
+        features        = ['c', 'cxx'],
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
+        includes        = ['.', 'scintilla/include', 'tagmanager/src', 'src'],
+        defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
+        uselib          = base_uselibs + ['geanyexport'],
+        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
+        linkflags       = bld.env['LINKFLAGS_cprogram'],
+        vnum            = GEANY_LIB_VERSION,
+        install_path    = '${PREFIX}/bin' if is_win32 else '${LIBDIR}')
+
+    # geany executable
+    t = bld.program(
+        features        = ['c', 'cxx'],
+        name            = 'geany_bin',
+        target          = 'geany',
+        source          = geany_bin_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M'],
-        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
-
-    # geanyfunctions.h
-    bld(
-        source  = ['plugins/genapi.py', 'src/plugins.c'],
-        name    = 'geanyfunctions.h',
-        before  = ['c', 'cxx'],
-        cwd     = '%s/plugins' % bld.path.abspath(),
-        rule    = '%s genapi.py -q' % sys.executable)
+        uselib          = base_uselibs + ['geanyexport'],
+        use             = ['geany'])
+    if not is_win32:
+        # http://www.freehackers.org/~tnagy/testdoc/single.html#common_c
+        t.rpath = bld.env['LIBDIR']
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
@@ -484,7 +539,7 @@ def build(bld):
         bld(
             source  = ['doc/geany.txt'],
             deps    = ['doc/geany.css'],
-            target  = 'doc/geany.html',
+            target  = bld.path.get_bld().make_node('doc/geany.html'),
             name    = 'geany.html',
             cwd     = os.path.join(bld.path.abspath(), 'doc'),
             rule    = '%s  -stg --stylesheet=geany.css geany.txt %s' % (rst2html, html_doc_filename))
@@ -547,16 +602,44 @@ def build(bld):
                                'top_builddir': bld.out_dir,
                                'top_srcdir': bld.top_dir,})
 
+    # disable build/install phase interleaving
+    bld.add_group()
+
     ###
     # Install files
     ###
     # Headers
     bld.install_files('${PREFIX}/include/geany', '''
-        src/app.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-        src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
-        src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-        src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
-        plugins/geanyplugin.h plugins/geanyfunctions.h''')
+        src/app.h
+        src/build.h
+        src/dialogs.h
+        src/document.h
+        src/editor.h
+        src/encodings.h
+        src/filetypes.h
+        src/geany.h
+        src/highlighting.h
+        src/keybindings.h
+        src/main.h
+        src/msgwindow.h
+        src/navqueue.h
+        src/plugindata.h
+        src/pluginutils.h
+        src/prefs.h
+        src/project.h
+        src/sciwrappers.h
+        src/search.h
+        src/stash.h
+        src/support.h
+        src/symbols.h
+        src/templates.h
+        src/toolbar.h
+        src/ui_utils.h
+        src/utils.h
+        src/gtkcompat.h
+        plugins/geanyplugin.h
+        plugins/geanyfunctions.h
+        ''')
     bld.install_files('${PREFIX}/include/geany/scintilla', '''
         scintilla/include/SciLexer.h scintilla/include/Scintilla.h
         scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')

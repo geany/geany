@@ -24,6 +24,7 @@ fi
 AC_USE_SYSTEM_EXTENSIONS
 
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
+LT_INIT([disable-static])
 AC_PROG_CC
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
@@ -69,12 +70,12 @@ AS_IF([test "x$enable_gtk3" = xyes],
 	  [gtk_package=gtk+-3.0
 	   gtk_min_version=3.0],
 	  [gtk_package=gtk+-2.0
-	   gtk_min_version=2.16])
+	   gtk_min_version=2.24])
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
 
 # GTK/GLib/GIO checks
 gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.20"
-gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
+gtk_modules_private="gio-2.0 >= 2.28 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
@@ -121,6 +122,9 @@ AC_SUBST([pkgdatadir])
 # Documentation tools
 GEANY_CHECK_DOCUTILS
 GEANY_CHECK_DOXYGEN
+
+# libgeany
+GEANY_LIB_INIT
 
 # Output
 AC_CONFIG_FILES([

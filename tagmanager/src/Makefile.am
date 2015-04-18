@@ -5,12 +5,13 @@ AM_CPPFLAGS = \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
 AM_CFLAGS = \
-	$(GTK_CFLAGS)
+	$(GTK_CFLAGS) \
+	@LIBGEANY_CFLAGS@
 
 EXTRA_DIST = \
 	makefile.win32
 
-noinst_LIBRARIES = libtagmanager.a
+noinst_LTLIBRARIES = libtagmanager.la
 
 tagmanager_includedir = $(includedir)/geany/tagmanager
 tagmanager_include_HEADERS = \
@@ -20,7 +21,7 @@ tagmanager_include_HEADERS = \
 	tm_workspace.h
 
 
-libtagmanager_a_SOURCES =\
+libtagmanager_la_SOURCES =\
 	tm_tagmanager.h \
 	tm_parser.h \
 	tm_source_file.h \

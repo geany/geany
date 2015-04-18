@@ -292,6 +292,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
  *
  * @since 0.19
  */
+GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
 	switch (ft_id)
@@ -302,6 +303,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case GEANY_FILETYPES_PHP:
 		case GEANY_FILETYPES_RUST:
+		case GEANY_FILETYPES_ZEPHIR:
 			return "::";
 
 		/* avoid confusion with other possible separators in group/section name */
@@ -724,6 +726,7 @@ static void add_top_level_items(GeanyDocument *doc)
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_ZEPHIR:
 		{
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
@@ -1079,7 +1082,7 @@ static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 }
 
 
-static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
+static GtkTreeIter *get_tag_type_iter(TMTagType tag_type)
 {
 	GtkTreeIter *iter = NULL;
 
@@ -1456,7 +1459,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		GtkTreeIter *parent;
 
-		parent = get_tag_type_iter(tag->type, doc->file_type->id);
+		parent = get_tag_type_iter(tag->type);
 		if (G_UNLIKELY(! parent))
 			geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
 		else

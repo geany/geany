@@ -174,6 +174,7 @@ static void create_default_tag_tree(void)
 	tv.default_tag_tree = gtk_viewport_new(
 		gtk_scrolled_window_get_hadjustment(scrolled_window),
 		gtk_scrolled_window_get_vadjustment(scrolled_window));
+	gtk_viewport_set_shadow_type(GTK_VIEWPORT(tv.default_tag_tree), GTK_SHADOW_NONE);
 	label = gtk_label_new(_("No tags found"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.1f, 0.01f);
 	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);

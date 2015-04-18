@@ -496,6 +496,7 @@ static GeanyBuildCommand *get_build_group(const GeanyBuildSource src, const Gean
  * Updates the menu.
  *
  **/
+GEANY_API_SYMBOL
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd)
 {
 	GeanyBuildCommand *bc;
@@ -556,6 +557,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
  *         This is a pointer to an internal structure and must not be freed.
  *
  **/
+GEANY_API_SYMBOL
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries fld)
 {
@@ -596,7 +598,7 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
  * @param val the value to set the field to, is copied
  *
  **/
-
+GEANY_API_SYMBOL
 void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries fld, const gchar *val)
 {
@@ -641,7 +643,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
  * @param cmd the index of the command within the group.
  *
  **/
-
+GEANY_API_SYMBOL
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd)
 {
 	on_build_menu_item(NULL, GRP_CMD_TO_POINTER(grp, cmd));
@@ -660,7 +662,7 @@ static void clear_all_errors(void)
 }
 
 
-/* Replaces occurences of %e and %p with the appropriate filenames and
+/* Replaces occurrences of %e and %p with the appropriate filenames and
  * %l with current line number. %d and %p replacements should be in UTF8 */
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
 {
@@ -2585,7 +2587,7 @@ void build_set_group_count(GeanyBuildGroup grp, gint count)
  * @return a count of the number of commands in the group
  *
  **/
-
+GEANY_API_SYMBOL
 guint build_get_group_count(const GeanyBuildGroup grp)
 {
 	g_return_val_if_fail(grp < GEANY_GBG_COUNT, 0);
