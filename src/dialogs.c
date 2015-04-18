@@ -430,7 +430,7 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
 	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
 
-	/* we can't know the initial position of combo boxes, so retreive it the first time */
+	/* we can't know the initial position of combo boxes, so retrieve it the first time */
 	if (! initialized)
 	{
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
@@ -457,7 +457,7 @@ void dialogs_show_open_file(void)
 	initdir = utils_get_current_file_dir_utf8();
 
 	/* use project or default startup directory (if set) if no files are open */
-	/** TODO should it only be used when initally open the dialog and not on every show? */
+	/** TODO should it only be used when initially open the dialog and not on every show? */
 	if (! initdir)
 		initdir = g_strdup(utils_get_default_dir_utf8());
 

@@ -325,7 +325,7 @@ static gboolean cc_replace_sel_cb(gpointer user_data)
 
 
 /* check whether the executed command failed and if so do nothing.
- * If it returned with a sucessful exit code, replace the selection. */
+ * If it returned with a successful exit code, replace the selection. */
 static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
 	struct cc_data *data = user_data;
@@ -344,7 +344,7 @@ static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
 			data->error = TRUE;
 		}
 		else
-		{	/* any other failure occured */
+		{	/* any other failure occurred */
 			data->error = TRUE;
 		}
 #else

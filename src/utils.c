@@ -564,7 +564,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 
 	g_return_val_if_fail(g_utf8_validate(string, length, NULL), NULL);
 
-	/* It doesnt make sense to truncate strings to less than the size of the delimiter plus 2
+	/* It doesn't make sense to truncate strings to less than the size of the delimiter plus 2
 	 * characters (one on each side) */
 	delimiter_length = g_utf8_strlen(delimiter, -1);
 	if (truncate_length < (delimiter_length + 2))
