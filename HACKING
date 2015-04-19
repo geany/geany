@@ -171,15 +171,10 @@ Geany requires GTK >= 2.24 and GLib >= 2.28. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.24 API documentation may not be available online
-anymore, so we put it on http://www.geany.org/manual/gtk/. There
-is also a tarball with all available files for download and use with
-devhelp.
-
-Using the 2.24 API documentation of the GTK libs (including GLib, GDK
-and Pango) has the advantages that you don't get confused by any
-newer API additions and you don't have to take care about whether
-you can use them or not.
+It is recommended to use the 2.24 API documentation of the GTK 
+libs (including GLib, GDK and Pango) has the advantages 
+that you don't get confused by any newer API additions and you 
+don't have to take care about whether you can use them or not.
 
 Coding
 ------
