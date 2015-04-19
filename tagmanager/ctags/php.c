@@ -238,7 +238,7 @@ static struct {
 } CurrentStatement;
 
 /* Current namespace */
-static vString *CurrentNamesapce;
+static vString *CurrentNamespace;
 
 
 static void buildPhpKeywordHash (const langType language)
@@ -289,9 +289,9 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 	else
 		vStringClear (fullScope);
 
-	if (vStringLength (CurrentNamesapce) > 0)
+	if (vStringLength (CurrentNamespace) > 0)
 	{
-		vStringCopy (fullScope, CurrentNamesapce);
+		vStringCopy (fullScope, CurrentNamespace);
 		parentKind = K_NAMESPACE;
 	}
 
@@ -371,7 +371,7 @@ static void makeClassOrIfaceTag (const phpKind kind, const tokenInfo *const toke
 static void makeFunctionTag (const tokenInfo *const token,
 							 const vString *const arglist,
 							 const accessType access, const implType impl)
-{ 
+{
 	if (PhpKinds[K_FUNCTION].enabled)
 	{
 		tagEntryInfo e;
@@ -687,7 +687,7 @@ static int skipWhitespaces (int c)
 }
 
 /* <script[:white:]+language[:white:]*=[:white:]*(php|'php'|"php")[:white:]*>
- * 
+ *
  * This is ugly, but the whole "<script language=php>" tag is and we can't
  * really do better without adding a lot of code only for this */
 static boolean isOpenScriptLanguagePhp (int c)
@@ -1352,7 +1352,7 @@ static boolean parseNamespace (tokenInfo *const token)
 {
 	tokenInfo *nsToken = newToken ();
 
-	vStringClear (CurrentNamesapce);
+	vStringClear (CurrentNamespace);
 	copyToken (nsToken, token, FALSE);
 
 	do
@@ -1360,18 +1360,18 @@ static boolean parseNamespace (tokenInfo *const token)
 		readToken (token);
 		if (token->type == TOKEN_IDENTIFIER)
 		{
-			if (vStringLength (CurrentNamesapce) > 0)
-				vStringPut (CurrentNamesapce, '\\');
-			vStringCat (CurrentNamesapce, token->string);
+			if (vStringLength (CurrentNamespace) > 0)
+				vStringPut (CurrentNamespace, '\\');
+			vStringCat (CurrentNamespace, token->string);
 		}
 	}
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_SEMICOLON &&
 		   token->type != TOKEN_OPEN_CURLY);
 
-	vStringTerminate (CurrentNamesapce);
-	if (vStringLength (CurrentNamesapce) > 0)
-		makeNamespacePhpTag (nsToken, CurrentNamesapce);
+	vStringTerminate (CurrentNamespace);
+	if (vStringLength (CurrentNamespace) > 0)
+		makeNamespacePhpTag (nsToken, CurrentNamespace);
 
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, NULL, -1);
@@ -1453,7 +1453,7 @@ static void findTags (void)
 
 	CurrentStatement.access = ACCESS_UNDEFINED;
 	CurrentStatement.impl = IMPL_UNDEFINED;
-	CurrentNamesapce = vStringNew ();
+	CurrentNamespace = vStringNew ();
 
 	do
 	{
@@ -1461,7 +1461,7 @@ static void findTags (void)
 	}
 	while (token->type != TOKEN_EOF); /* keep going even with unmatched braces */
 
-	vStringDelete (CurrentNamesapce);
+	vStringDelete (CurrentNamespace);
 	deleteToken (token);
 }
 
