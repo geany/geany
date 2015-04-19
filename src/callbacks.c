@@ -1187,9 +1187,27 @@ void on_print1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-	g_return_if_fail(IS_SCINTILLA(focusw));
 
-	sci_select_all(SCINTILLA(focusw));
+	/* special case for Select All in the scribble widget */
+	if (focusw == msgwindow.scribble)
+	{
+		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
+	}
+	/* special case for Select All in the VTE widget */
+#ifdef HAVE_VTE
+	else if (vte_info.have_vte && focusw == vc->vte)
+	{
+		vte_select_all();
+	}
+#endif
+	else if (GTK_IS_EDITABLE(focusw))
+	{
+		gtk_editable_select_region(GTK_EDITABLE(focusw), 0, -1);
+	}
+	else if (IS_SCINTILLA(focusw))
+	{
+		sci_select_all(SCINTILLA(focusw));
+	}
 }
 
 
