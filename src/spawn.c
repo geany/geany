@@ -654,7 +654,8 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	SpawnChannelData *sc = (SpawnChannelData *) data;
 	GString *line_buffer = sc->line_buffer;
 	GString *buffer = sc->buffer ? sc->buffer : g_string_sized_new(sc->max_length);
-	GIOCondition failure = condition & G_IO_FAILURE;
+	GIOCondition input_cond = condition & (G_IO_IN | G_IO_PRI);
+	GIOCondition failure_cond = condition & G_IO_FAILURE;
 	/*
 	 * - Normally, read only once. With IO watches, our data processing must be immediate,
 	 *   which may give the child time to emit more data, and a read loop may combine it into
@@ -662,7 +663,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	 * - On failure, read in a loop. It won't block now, there will be no more data, and the
 	 *   IO watch is not guaranteed to be called again (under Windows this is the last call).
 	 */
-	if (condition & (G_IO_IN | G_IO_PRI))
+	if (input_cond)
 	{
 		gsize chars_read;
 		GIOStatus status;
@@ -693,15 +694,14 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 					{
 						g_string_append_len(buffer, line_buffer->str, line_len);
 						g_string_erase(line_buffer, 0, line_len);
-						/* data only, failures are reported separately below */
-						sc->cb.read(buffer, condition & (G_IO_IN | G_IO_PRI),
-							sc->cb_data);
+						/* input only, failures are reported separately below */
+						sc->cb.read(buffer, input_cond, sc->cb_data);
 						g_string_truncate(buffer, 0);
 						n = 0;
 					}
 				}
 
-				if (!failure)
+				if (!failure_cond)
 					break;
 			}
 		}
@@ -711,10 +711,10 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 				&chars_read, NULL)) == G_IO_STATUS_NORMAL)
 			{
 				g_string_set_size(buffer, chars_read);
-				/* data only, failures are reported separately below */
-				sc->cb.read(buffer, condition & (G_IO_IN | G_IO_PRI), sc->cb_data);
+				/* input only, failures are reported separately below */
+				sc->cb.read(buffer, input_cond, sc->cb_data);
 
-				if (!failure)
+				if (!failure_cond)
 					break;
 			}
 		}
@@ -723,33 +723,33 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 		   of error conditions, so we convert the termination statuses into conditions.
 		   Should not hurt the other OS. */
 		if (status == G_IO_STATUS_ERROR)
-			failure |= G_IO_ERR;
+			failure_cond |= G_IO_ERR;
 		else if (status == G_IO_STATUS_EOF)
-			failure |= G_IO_HUP;
+			failure_cond |= G_IO_HUP;
 	}
 
-	if (failure)  /* we must signal the callback */
+	if (failure_cond)  /* we must signal the callback */
 	{
 		if (line_buffer && line_buffer->len)  /* flush the line buffer */
 		{
 			g_string_append_len(buffer, line_buffer->str, line_buffer->len);
 			/* all data may be from a previous call */
-			if (!(condition & (G_IO_IN | G_IO_PRI)))
-				condition |= G_IO_IN;
+			if (!input_cond)
+				input_cond = G_IO_IN;
 		}
 		else
 		{
-			condition &= ~(G_IO_IN | G_IO_PRI);
+			input_cond = 0;
 			g_string_truncate(buffer, 0);
 		}
 
-		sc->cb.read(buffer, condition | failure, sc->cb_data);
+		sc->cb.read(buffer, input_cond | failure_cond, sc->cb_data);
 	}
 
 	if (buffer != sc->buffer)
 		g_string_free(buffer, TRUE);
 
-	return !failure;
+	return !failure_cond;
 }
 
 
