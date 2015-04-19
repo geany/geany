@@ -228,16 +228,13 @@ void on_redo1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_cut1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
-	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
-		sci_cut(doc->editor->sci);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (IS_SCINTILLA(focusw))
+		sci_cut(SCINTILLA(focusw));
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -248,16 +245,13 @@ void on_cut1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_copy1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
-	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
-		sci_copy(doc->editor->sci);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (IS_SCINTILLA(focusw))
+		sci_copy(SCINTILLA(focusw));
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -268,18 +262,13 @@ void on_copy1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_paste1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_paste_clipboard(GTK_EDITABLE(focusw));
-	else
-	if (IS_SCINTILLA(focusw) && doc != NULL)
-	{
-		sci_paste(doc->editor->sci);
-	}
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (IS_SCINTILLA(focusw))
+		sci_paste(SCINTILLA(focusw));
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -291,16 +280,13 @@ void on_paste1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_delete1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_delete_selection(GTK_EDITABLE(focusw));
-	else
-	if (IS_SCINTILLA(focusw) && doc != NULL && sci_has_selection(doc->editor->sci))
-		sci_clear(doc->editor->sci);
-	else
-	if (GTK_IS_TEXT_VIEW(focusw))
+	else if (IS_SCINTILLA(focusw) && sci_has_selection(SCINTILLA(focusw)))
+		sci_clear(SCINTILLA(focusw));
+	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
 			GTK_TEXT_VIEW(focusw));
@@ -1200,10 +1186,10 @@ void on_print1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GeanyDocument *doc = document_get_current();
-	g_return_if_fail(doc != NULL);
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
+	g_return_if_fail(IS_SCINTILLA(focusw));
 
-	sci_select_all(doc->editor->sci);
+	sci_select_all(SCINTILLA(focusw));
 }
 
 
