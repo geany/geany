@@ -1831,10 +1831,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 
 static gboolean cb_func_clipboard_action(guint key_id)
 {
-	GeanyDocument *doc = document_get_current();
-
-	if (doc == NULL)
-		return TRUE;
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	switch (key_id)
 	{
@@ -1848,10 +1845,12 @@ static gboolean cb_func_clipboard_action(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_send_command(doc->editor->sci, SCI_LINECOPY);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_send_command(doc->editor->sci, SCI_LINECUT);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_LINECUT);
 			break;
 	}
 	return TRUE;
