@@ -734,6 +734,26 @@ static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user
 	return returnval;
 }
 
+gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
+{
+	if (a == b)
+		return TRUE;
+
+	return (a->line == b->line &&
+			a->file == b->file /* ptr comparison */ &&
+			strcmp(FALLBACK(a->name, ""), FALLBACK(b->name, "")) == 0 &&
+			a->type == b->type &&
+			a->local == b->local &&
+			a->pointerOrder == b->pointerOrder &&
+			a->access == b->access &&
+			a->impl == b->impl &&
+			a->lang == b->lang &&
+			strcmp(FALLBACK(a->scope, ""), FALLBACK(b->scope, "")) == 0 &&
+			strcmp(FALLBACK(a->arglist, ""), FALLBACK(b->arglist, "")) == 0 &&
+			strcmp(FALLBACK(a->inheritance, ""), FALLBACK(b->inheritance, "")) == 0 &&
+			strcmp(FALLBACK(a->var_type, ""), FALLBACK(b->var_type, "")) == 0);
+}
+
 /*
  Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since 
  this function substitutes duplicate entries with NULL

@@ -1422,9 +1422,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				cont = tree_store_remove_row(store, &iter);
 			else /* tag still exist, update it */
 			{
-				const gchar *name;
 				const gchar *parent_name;
-				gchar *tooltip;
 				TMTag *found = found_item->data;
 
 				parent_name = get_parent_name(found, doc->file_type->id);
@@ -1432,16 +1430,22 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
 					parent_name = NULL;
 
-				/* only update fields that (can) have changed (name that holds line
-				 * number, tooltip, and the tag itself) */
-				name = get_symbol_name(doc, found, parent_name != NULL);
-				tooltip = get_symbol_tooltip(doc, found);
-				gtk_tree_store_set(store, &iter,
-						SYMBOLS_COLUMN_NAME, name,
-						SYMBOLS_COLUMN_TOOLTIP, tooltip,
-						SYMBOLS_COLUMN_TAG, found,
-						-1);
-				g_free(tooltip);
+				if (!tm_tags_equal(tag, found))
+				{
+					const gchar *name;
+					gchar *tooltip;
+
+					/* only update fields that (can) have changed (name that holds line
+					 * number, tooltip, and the tag itself) */
+					name = get_symbol_name(doc, found, parent_name != NULL);
+					tooltip = get_symbol_tooltip(doc, found);
+					gtk_tree_store_set(store, &iter,
+							SYMBOLS_COLUMN_NAME, name,
+							SYMBOLS_COLUMN_TOOLTIP, tooltip,
+							SYMBOLS_COLUMN_TAG, found,
+							-1);
+					g_free(tooltip);
+				}
 
 				update_parents_table(parents_table, found, parent_name, &iter);
 
