@@ -200,6 +200,11 @@ test_sources = \
 	line_directives.c				\
 	local.c							\
 	macros.c						\
+	make-comment-in-rule.mak		\
+	make-gnumake-pattern-rules.mak	\
+	make-multi-target.mak			\
+	make-target-with-parentheses.mak	\
+	make-variable-on-cmdline.mak	\
 	masm.asm						\
 	matlab_backtracking.m			\
 	matlab_test.m					\
