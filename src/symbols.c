@@ -1521,10 +1521,9 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			gtk_tree_store_append(store, &iter, parent);
 			name = get_symbol_name(doc, tag, parent_name != NULL);
 			tooltip = get_symbol_tooltip(doc, tag);
-			gtk_tree_store_set(store, &iter,
+			gtk_tree_store_insert_with_values(store, &iter, parent, -1,
 					SYMBOLS_COLUMN_NAME, name,
 					SYMBOLS_COLUMN_TOOLTIP, tooltip,
 					SYMBOLS_COLUMN_ICON, icon,
