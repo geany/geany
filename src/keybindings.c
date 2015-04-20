@@ -1831,10 +1831,7 @@ static void goto_matching_brace(GeanyDocument *doc)
 
 static gboolean cb_func_clipboard_action(guint key_id)
 {
-	GeanyDocument *doc = document_get_current();
-
-	if (doc == NULL)
-		return TRUE;
+	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	switch (key_id)
 	{
@@ -1848,10 +1845,12 @@ static gboolean cb_func_clipboard_action(guint key_id)
 			on_paste1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_CLIPBOARD_COPYLINE:
-			sci_send_command(doc->editor->sci, SCI_LINECOPY);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_LINECOPY);
 			break;
 		case GEANY_KEYS_CLIPBOARD_CUTLINE:
-			sci_send_command(doc->editor->sci, SCI_LINECUT);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_LINECUT);
 			break;
 	}
 	return TRUE;
@@ -2359,46 +2358,11 @@ static gboolean cb_func_format_action(guint key_id)
 }
 
 
-/* common function for select keybindings, only valid when scintilla has focus. */
+/* common function for select keybindings, valid for scintilla and/or gtk_editable objects. */
 static gboolean cb_func_select_action(guint key_id)
 {
-	GeanyDocument *doc;
-	ScintillaObject *sci;
+	GeanyDocument *doc = document_get_current();
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
-	GtkWidget *toolbar_search_entry = toolbar_get_widget_child_by_name("SearchEntry");
-	GtkWidget *toolbar_goto_entry = toolbar_get_widget_child_by_name("GotoEntry");
-
-	/* special case for Select All in the scribble widget */
-	if (key_id == GEANY_KEYS_SELECT_ALL && focusw == msgwindow.scribble)
-	{
-		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
-		return TRUE;
-	}
-	/* special case for Select All in the VTE widget */
-#ifdef HAVE_VTE
-	else if (key_id == GEANY_KEYS_SELECT_ALL && vte_info.have_vte && focusw == vc->vte)
-	{
-		vte_select_all();
-		return TRUE;
-	}
-#endif
-	/* special case for Select All in the toolbar search widget */
-	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_search_entry)
-	{
-		gtk_editable_select_region(GTK_EDITABLE(toolbar_search_entry), 0, -1);
-		return TRUE;
-	}
-	else if (key_id == GEANY_KEYS_SELECT_ALL && focusw == toolbar_goto_entry)
-	{
-		gtk_editable_select_region(GTK_EDITABLE(toolbar_goto_entry), 0, -1);
-		return TRUE;
-	}
-
-	doc = document_get_current();
-	/* keybindings only valid when scintilla widget has focus */
-	if (doc == NULL || focusw != GTK_WIDGET(doc->editor->sci))
-		return TRUE;
-	sci = doc->editor->sci;
 
 	switch (key_id)
 	{
@@ -2406,19 +2370,24 @@ static gboolean cb_func_select_action(guint key_id)
 			on_menu_select_all1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_SELECT_WORD:
-			editor_select_word(doc->editor);
+			if (doc != NULL)
+				editor_select_word(doc->editor);
 			break;
 		case GEANY_KEYS_SELECT_LINE:
-			editor_select_lines(doc->editor, FALSE);
+			if (doc != NULL)
+				editor_select_lines(doc->editor, FALSE);
 			break;
 		case GEANY_KEYS_SELECT_PARAGRAPH:
-			editor_select_paragraph(doc->editor);
+			if (doc != NULL)
+				editor_select_paragraph(doc->editor);
 			break;
 		case GEANY_KEYS_SELECT_WORDPARTLEFT:
-			sci_send_command(sci, SCI_WORDPARTLEFTEXTEND);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_WORDPARTLEFTEXTEND);
 			break;
 		case GEANY_KEYS_SELECT_WORDPARTRIGHT:
-			sci_send_command(sci, SCI_WORDPARTRIGHTEXTEND);
+			if (IS_SCINTILLA(focusw))
+				sci_send_command(SCINTILLA(focusw), SCI_WORDPARTRIGHTEXTEND);
 			break;
 	}
 	return TRUE;
