@@ -1189,9 +1189,9 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	/* special case for Select All in the scribble widget */
-	if (focusw == msgwindow.scribble)
+	if (GTK_IS_TEXT_VIEW(focusw))
 	{
-		g_signal_emit_by_name(msgwindow.scribble, "select-all", TRUE);
+		g_signal_emit_by_name(focusw, "select-all", TRUE);
 	}
 	/* special case for Select All in the VTE widget */
 #ifdef HAVE_VTE
