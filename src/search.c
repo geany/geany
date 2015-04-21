@@ -2045,7 +2045,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 
 static gint geany_find_flags_to_sci_flags(GeanyFindFlags flags)
 {
-	g_warn_if_fail(! (flags & GEANY_FIND_MULTILINE));
+	g_warn_if_fail(! (flags & GEANY_FIND_REGEXP) || ! (flags & GEANY_FIND_MULTILINE));
 
 	return ((flags & GEANY_FIND_MATCHCASE) ? SCFIND_MATCHCASE : 0) |
 		((flags & GEANY_FIND_WHOLEWORD) ? SCFIND_WHOLEWORD : 0) |
