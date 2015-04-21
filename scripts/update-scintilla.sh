@@ -74,16 +74,20 @@ Don't forget to add new files to the build system.
 EOF
 fi
 
+# check for possible changes to styles
+if ! git diff --quiet scintilla/include/SciLexer.h; then
+	cat << EOF
+
+Check the diff of scintilla/include/SciLexer.h to see whether and which
+mapping to add or update in src/highlightingmappings.h
+(use git diff scintilla/include/SciLexer.h).
+Don't forget to also update the comment and string styles in
+src/highlighting.c.
+EOF
+fi
+
 # summary
 cat << EOF
 
-Please check the diff and upgrade the style mappings in
-src/highlightingmappings.h.
-
-Check the diff of scintilla/include/SciLexer.h to see whether and which
-mapping to add or update (use git diff scintilla/include/SciLexer.h).
-Don't forget to also update the comment and string styles in
-src/highlighting.c.
-
-Finally, add or update the appropriate line in NEWS.
+Don't forget to add or update the appropriate line in NEWS.
 EOF
