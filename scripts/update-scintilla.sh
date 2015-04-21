@@ -56,8 +56,7 @@ done
 git apply -p0 scintilla/scintilla_changes.patch || {
 	echo "scintilla_changes.patch doesn't apply, please update it and retry."
 	echo "Changes for the catalogue are:"
-	git diff -p -R scintilla/src/Catalogue.cxx | tee
-	echo "Make sure to strip the leading a/ and b/!"
+	git diff -p -R --src-prefix= --dst-prefix= scintilla/src/Catalogue.cxx | cat
 	exit 1
 }
 
