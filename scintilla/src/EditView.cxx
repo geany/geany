@@ -173,6 +173,7 @@ const XYPOSITION epsilon = 0.0001f;	// A small nudge to avoid floating point pre
 
 EditView::EditView() {
 	ldTabstops = NULL;
+	tabWidthMinimumPixels = 2; // needed for calculating tab stops for fractional proportional fonts
 	hideSelection = false;
 	drawOverstrikeCaret = true;
 	bufferedDraw = true;
@@ -220,10 +221,10 @@ void EditView::ClearAllTabstops() {
 }
 
 XYPOSITION EditView::NextTabstopPos(int line, XYPOSITION x, XYPOSITION tabWidth) const {
-	int next = GetNextTabstop(line, static_cast<int>(x + 2));
+	int next = GetNextTabstop(line, static_cast<int>(x + tabWidthMinimumPixels));
 	if (next > 0)
 		return static_cast<XYPOSITION>(next);
-	return (static_cast<int>((x + 2) / tabWidth) + 1) * tabWidth;
+	return (static_cast<int>((x + tabWidthMinimumPixels) / tabWidth) + 1) * tabWidth;
 }
 
 bool EditView::ClearTabstops(int line) {

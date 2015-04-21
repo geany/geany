@@ -257,7 +257,7 @@ next:
 				sc.ForwardSetState(SCE_TCL_DEFAULT);
 				visibleChars = true; // necessary if a " is the first and only character on a line
 				goto next;
-			} else if (sc.ch == '[' || sc.ch == ']' || sc.ch == '$' || sc.ch == '(') {
+			} else if (sc.ch == '[' || sc.ch == ']' || sc.ch == '$') {
 				sc.SetState(SCE_TCL_OPERATOR);
 				expected = sc.ch == '[';
 				sc.ForwardSetState(SCE_TCL_IN_QUOTE);
@@ -324,10 +324,7 @@ next:
 					break;
 				case '$':
 					subParen = 0;
-					if (sc.chNext == '(') {
-						//$("") jquery selector?!
-						sc.SetState(SCE_TCL_OPERATOR);
-					} else if (sc.chNext != '{') {
+					if (sc.chNext != '{') {
 						sc.SetState(SCE_TCL_SUBSTITUTION);
 					} else {
 						sc.SetState(SCE_TCL_OPERATOR);  // $

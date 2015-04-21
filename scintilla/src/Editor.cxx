@@ -2056,6 +2056,7 @@ void Editor::PasteRectangular(SelectionPosition pos, const char *ptr, int len) {
 			sel.RangeMain().caret.SetPosition(PositionFromLineX(line, xInsert));
 			if ((XFromPosition(sel.MainCaret()) < xInsert) && (i + 1 < len)) {
 				while (XFromPosition(sel.MainCaret()) < xInsert) {
+					assert(pdoc);
 					const int lengthInserted = pdoc->InsertString(sel.MainCaret(), " ", 1);
 					sel.RangeMain().caret.Add(lengthInserted);
 				}
@@ -6226,6 +6227,7 @@ sptr_t Editor::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 		return TextWidth(static_cast<int>(wParam), CharPtrFromSPtr(lParam));
 
 	case SCI_TEXTHEIGHT:
+		RefreshStyleData();
 		return vs.lineHeight;
 
 	case SCI_SETENDATLASTLINE:

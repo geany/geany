@@ -160,6 +160,7 @@ class ScintillaGTK : public ScintillaBase {
 	Window wPreedit;
 	Window wPreeditDraw;
 	GtkIMContext *im_context;
+	PangoScript lastNonCommonScript;
 
 	// Wheel mouse support
 	unsigned int linesPerScroll;
@@ -397,7 +398,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		verticalScrollBarWidth(30), horizontalScrollBarHeight(30),
 		evbtn(0), capturedMouse(false), dragWasDropped(false),
 		lastKey(0), rectangularSelectionModifier(SCMOD_CTRL), parentClass(0),
-		im_context(NULL),
+		im_context(NULL), lastNonCommonScript(PANGO_SCRIPT_INVALID_CODE),
 		lastWheelMouseDirection(0),
 		wheelMouseIntensity(0),
 		rgnUpdate(0),
@@ -2359,10 +2360,10 @@ gboolean ScintillaGTK::ExposePreedit(GtkWidget *widget, GdkEventExpose *ose, Sci
 #endif
 
 bool ScintillaGTK::KoreanIME() {
-	PreEditString preeditStr(im_context);
-	PangoLanguage *pLang = pango_language_from_string("ko-KR"); // RFC-3066
-	bool koreanIme = pango_language_includes_script(pLang,  preeditStr.pscript);
-	return koreanIme;
+	PreEditString pes(im_context);
+	if (pes.pscript != PANGO_SCRIPT_COMMON)
+		lastNonCommonScript = pes.pscript;
+	return lastNonCommonScript == PANGO_SCRIPT_HANGUL;
 }
 
 void ScintillaGTK::MoveImeCarets(int pos) {
@@ -2622,7 +2623,7 @@ void ScintillaGTK::PreeditChangedWindowedThis() {
 }
 
 void ScintillaGTK::PreeditChanged(GtkIMContext *, ScintillaGTK *sciThis) {
-	if (sciThis->imeInteraction == imeInline) {
+	if ((sciThis->imeInteraction == imeInline) || (sciThis->KoreanIME())) {
 		sciThis->PreeditChangedInlineThis();
 	} else {
 		sciThis->PreeditChangedWindowedThis();

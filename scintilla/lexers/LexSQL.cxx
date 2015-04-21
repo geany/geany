@@ -54,12 +54,12 @@ static inline bool IsADoxygenChar(int ch) {
 	        ch == '}' || ch == '[' || ch == ']');
 }
 
-static inline bool IsANumberChar(int ch) {
+static inline bool IsANumberChar(int ch, int chPrev) {
 	// Not exactly following number definition (several dots are seen as OK, etc.)
 	// but probably enough in most cases.
 	return (ch < 0x80) &&
 	       (isdigit(ch) || toupper(ch) == 'E' ||
-	        ch == '.' || ch == '-' || ch == '+');
+	        ch == '.' || ((ch == '-' || ch == '+') && chPrev < 0x80 && toupper(chPrev) == 'E'));
 }
 
 typedef unsigned int sql_state_t;
@@ -453,7 +453,7 @@ void SCI_METHOD LexerSQL::Lex(unsigned int startPos, int length, int initStyle, 
 			break;
 		case SCE_SQL_NUMBER:
 			// We stop the number definition on non-numerical non-dot non-eE non-sign char
-			if (!IsANumberChar(sc.ch)) {
+			if (!IsANumberChar(sc.ch, sc.chPrev)) {
 				sc.SetState(SCE_SQL_DEFAULT);
 			}
 			break;
@@ -594,7 +594,8 @@ void SCI_METHOD LexerSQL::Lex(unsigned int startPos, int length, int initStyle, 
 			if (sc.Match('q', '\'') || sc.Match('Q', '\'')) {
 				sc.SetState(SCE_SQL_QOPERATOR);			
 				sc.Forward();
-			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
+			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext)) ||
+			          ((sc.ch == '-' || sc.ch == '+') && IsADigit(sc.chNext) && !IsADigit(sc.chPrev))) {
 				sc.SetState(SCE_SQL_NUMBER);
 			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_SQL_IDENTIFIER);

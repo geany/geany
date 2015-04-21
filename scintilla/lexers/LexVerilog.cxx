@@ -118,6 +118,7 @@ public:
 struct OptionsVerilog {
 	bool foldComment;
 	bool foldPreprocessor;
+	bool foldPreprocessorElse;
 	bool foldCompact;
 	bool foldAtElse;
 	bool foldAtModule;
@@ -128,6 +129,7 @@ struct OptionsVerilog {
 	OptionsVerilog() {
 		foldComment = false;
 		foldPreprocessor = false;
+		foldPreprocessorElse = false;
 		foldCompact = false;
 		foldAtElse = false;
 		foldAtModule = false;
@@ -161,6 +163,8 @@ struct OptionSetVerilog : public OptionSet<OptionsVerilog> {
 			"Set to 1 to style input, output, and inout ports differently from regular keywords.");
 		DefineProperty("lexer.verilog.allupperkeywords", &OptionsVerilog::allUppercaseDocKeyword,
 			"Set to 1 to style identifiers that are all uppercase as documentation keyword.");
+		DefineProperty("lexer.verilog.fold.preprocessor.else", &OptionsVerilog::foldPreprocessorElse,
+			"This option enables folding on `else and `elsif preprocessor directives.");
 	}
 };
 
@@ -342,7 +346,7 @@ int SCI_METHOD LexerVerilog::WordListSet(int n, const char *wl) {
 }
 
 static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_' || ch == '\''|| ch == '$');
+	return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '\''|| ch == '$');
 }
 
 static inline bool IsAWordStart(const int ch) {
@@ -549,7 +553,7 @@ void SCI_METHOD LexerVerilog::Lex(unsigned int startPos, int length, int initSty
 				}
 				break;
 			case SCE_V_PREPROCESSOR:
-				if (!IsAWordChar(sc.ch) && !sc.atLineEnd) {
+				if (!IsAWordChar(sc.ch) || sc.atLineEnd) {
 					sc.SetState(SCE_V_DEFAULT|activitySet);
 				}
 				break;
@@ -852,8 +856,29 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 					j++;
 				}
 				if (styler.Match(j, "if")) {
+					if (options.foldPreprocessorElse) {
+						// Measure the minimum before a begin to allow
+						// folding on "end else begin"
+						if (levelMinCurrent > levelNext) {
+							levelMinCurrent = levelNext;
+						}
+					}
 					levelNext++;
-				} else if (styler.Match(j, "end")) {
+				} else if (options.foldPreprocessorElse && styler.Match(j, "else")) {
+					levelNext--;
+					if (levelMinCurrent > levelNext) {
+						levelMinCurrent = levelNext;
+					}
+					levelNext++;
+				} else if (options.foldPreprocessorElse && styler.Match(j, "elsif")) {
+					levelNext--;
+					// Measure the minimum before a begin to allow
+					// folding on "end else begin"
+					if (levelMinCurrent > levelNext) {
+						levelMinCurrent = levelNext;
+					}
+					levelNext++;
+				} else if (styler.Match(j, "endif")) {
 					levelNext--;
 				}
 			}
@@ -913,8 +938,14 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 				styler.Match(j, "specify") ||
 				styler.Match(j, "table") ||
 				styler.Match(j, "task") ||
-				(styler.Match(j, "module") && options.foldAtModule) ||
-				styler.Match(j, "begin")) {
+				(styler.Match(j, "module") && options.foldAtModule)) {
+				levelNext++;
+			} else if (styler.Match(j, "begin")) {
+				// Measure the minimum before a begin to allow
+				// folding on "end else begin"
+				if (levelMinCurrent > levelNext) {
+					levelMinCurrent = levelNext;
+				}
 				levelNext++;
 			} else if (styler.Match(j, "class")) {
 				// class does not introduce a block when used in a typedef statement
@@ -958,7 +989,7 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 		}
 		if (atEOL) {
 			int levelUse = levelCurrent;
-			if (options.foldAtElse) {
+			if (options.foldAtElse||options.foldPreprocessorElse) {
 				levelUse = levelMinCurrent;
 			}
 			int lev = levelUse | levelNext << 16;
