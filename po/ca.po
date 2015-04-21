@@ -97,11 +97,11 @@ msgstr "Obre el F_itxer Seleccionat"
 
 #: ../data/geany.glade.h:17 ../src/symbols.c:2415
 msgid "Find _Usage"
-msgstr "Ús de la _Cerca"
+msgstr "Cerca _usos"
 
 #: ../data/geany.glade.h:18 ../src/symbols.c:2420
 msgid "Find _Document Usage"
-msgstr "Ús de la Cerca de Documents"
+msgstr "Cerca usos al _document"
 
 #: ../data/geany.glade.h:19
 msgid "Go to _Tag Definition"
@@ -2005,7 +2005,7 @@ msgstr "Sagnat _Automàtic"
 
 #: ../data/geany.glade.h:431
 msgid "In_dent Type"
-msgstr "Tipus de Sagnat"
+msgstr "Tipus de _Sagnat"
 
 #: ../data/geany.glade.h:432
 msgid "_Detect from Content"
@@ -5231,7 +5231,7 @@ msgstr "Llibreria VTE no vàlida \"%s\": manca el símbol \"%s\""
 
 #: ../src/vte.c:586
 msgid "_Set Path From Document"
-msgstr "Especifica el Directori del Document"
+msgstr "_Especifica el Directori del Document"
 
 #: ../src/vte.c:591
 msgid "_Restart Terminal"
