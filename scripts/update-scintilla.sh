@@ -60,6 +60,9 @@ git apply -p0 scintilla/scintilla_changes.patch || {
 	exit 1
 }
 
+# show a nice success banner
+echo "Scintilla update successful!" | sed 'h;s/./=/g;p;x;p;x'
+
 #check whether there are new files
 if git status -unormal -s scintilla | grep '^??'; then
 	cat <<EOF
@@ -73,8 +76,6 @@ fi
 
 # summary
 cat << EOF
-
-Scintilla update successful!
 
 Please check the diff and upgrade the style mappings in
 src/highlightingmappings.h.
