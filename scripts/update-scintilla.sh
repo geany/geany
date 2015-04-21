@@ -56,10 +56,12 @@ done
 git apply -p0 scintilla/scintilla_changes.patch || {
 	echo "scintilla_changes.patch doesn't apply, please update it and retry."
 	echo "Changes for the catalogue are:"
-	git diff -p -R scintilla/src/Catalogue.cxx | tee
-	echo "Make sure to strip the leading a/ and b/!"
+	git diff -p -R --src-prefix= --dst-prefix= scintilla/src/Catalogue.cxx | cat
 	exit 1
 }
+
+# show a nice success banner
+echo "Scintilla update successful!" | sed 'h;s/./=/g;p;x;p;x'
 
 #check whether there are new files
 if git status -unormal -s scintilla | grep '^??'; then
@@ -72,18 +74,20 @@ Don't forget to add new files to the build system.
 EOF
 fi
 
+# check for possible changes to styles
+if ! git diff --quiet scintilla/include/SciLexer.h; then
+	cat << EOF
+
+Check the diff of scintilla/include/SciLexer.h to see whether and which
+mapping to add or update in src/highlightingmappings.h
+(use git diff scintilla/include/SciLexer.h).
+Don't forget to also update the comment and string styles in
+src/highlighting.c.
+EOF
+fi
+
 # summary
 cat << EOF
 
-Scintilla update successful!
-
-Please check the diff and upgrade the style mappings in
-src/highlightingmappings.h.
-
-Check the diff of scintilla/include/SciLexer.h to see whether and which
-mapping to add or update (use git diff scintilla/include/SciLexer.h).
-Don't forget to also update the comment and string styles in
-src/highlighting.c.
-
-Finally, add or update the appropriate line in NEWS.
+Don't forget to add or update the appropriate line in NEWS.
 EOF
