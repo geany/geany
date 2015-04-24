@@ -98,7 +98,10 @@
  *  @param error return location for error.
  *
  *  @return allocated string with the program name on success, @c NULL on error.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 {
 	gchar *program;
@@ -211,7 +214,10 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
- */
+ *
+ *  @since 1.25
+ **/
+GEANY_API_SYMBOL
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error)
 {
 	gchar *program = spawn_get_program_name(command_line, error);
@@ -251,7 +257,10 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
  *  error code, or for programs terminated with Ctrl+C / Ctrl+Break).
  *
  *  @return @c TRUE on success, @c FALSE on error.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 gboolean spawn_kill_process(GPid pid, GError **error)
 {
 #ifdef G_OS_WIN32
@@ -469,7 +478,10 @@ static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED g
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, GPid *child_pid, gint *stdin_fd, gint *stdout_fd,
 	gint *stderr_fd, GError **error)
@@ -586,7 +598,10 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
  *
  *  See @c spawn_async_with_pipes() for a full description; this function simply calls
  *  @c g_spawn_async_with_pipes() without any pipes.
- */
+ *
+ *  @since 1.25
+ **/
+GEANY_API_SYMBOL
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error)
 {
@@ -867,7 +882,10 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, SpawnFlags spawn_flags, GIOFunc stdin_cb, gpointer stdin_data,
 	SpawnReadFunc stdout_cb, gpointer stdout_data, gsize stdout_max_length,
@@ -997,7 +1015,10 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
  *
  *  @return @c TRUE if the remaining size is > 0 and @a condition does not indicate any error,
  *  @c FALSE otherwise.
- */
+ *
+ *  @since 1.25
+ **/
+GEANY_API_SYMBOL
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data)
 {
 	if ((condition & G_IO_OUT) && data->size)
@@ -1029,7 +1050,10 @@ static void spawn_append_gstring_cb(GString *string, GIOCondition condition, gpo
 /**
  *  Convinience @c GChildWatchFunc callback that copies the child exit status into a gint
  *  pointed by @a exit_status.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit_status)
 {
 	*(gint *) exit_status = status;
@@ -1058,7 +1082,10 @@ void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
+ *
+ *  @since 1.25
  **/
+GEANY_API_SYMBOL
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error)
