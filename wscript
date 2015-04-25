@@ -457,7 +457,6 @@ def build(bld):
         geany_sources.add('src/vte.c')
     if is_win32:
         geany_sources.add('src/win32.c')
-        geany_sources.add('geany_private.rc')
         geany_bin_sources.add('geany_private.rc')
 
     def gen_signallist(task):
