@@ -106,6 +106,7 @@ ctags_sources = set([
     'tagmanager/ctags/r.c',
     'tagmanager/ctags/perl.c',
     'tagmanager/ctags/php.c',
+    'tagmanager/ctags/powershell.c',
     'tagmanager/ctags/python.c',
     'tagmanager/ctags/read.c',
     'tagmanager/ctags/rest.c',

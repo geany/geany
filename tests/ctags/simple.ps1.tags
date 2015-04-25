@@ -1,0 +1,16 @@
+# format=tagmanager
+A-Global-Scope-FunctionÌ16Í()Ö0
+ALocalVarÌ16384Ö0
+BasePathÌ16384Ö0
+ErrorActionPreferenceÌ16384Ö0
+LoadTemplateÌ16Í($template)Ö0
+LogMessageÌ16Í()Ö0
+LogMessageOKÌ16Í()Ö0
+MainÌ16Í()Ö0
+MyFilterÌ16Ö0
+MyPrivateFilterÌ16Ö0
+Read-Configuration-FileÌ16Í()Ö0
+SecondLevelNestedFunctionÌ16Í()ÎTopLevelFunctionÖ0
+SettingsÌ16384Ö0
+ThirdLevelNestedFunctionÌ16Í()ÎTopLevelFunction::SecondLevelNestedFunctionÖ0
+TopLevelFunctionÌ16Í()Ö0
