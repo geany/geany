@@ -736,10 +736,9 @@ void vte_cwd(const gchar *filename, gboolean force)
 			gchar *cmd = g_strconcat(vc->send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
-				ui_set_statusbar(FALSE,
-		_("Could not change the directory in the VTE because it probably contains a command."));
-				geany_debug(
-		"Could not change the directory in the VTE because it probably contains a command.");
+				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
+				ui_set_statusbar(FALSE, "%s", msg);
+				geany_debug("%s", msg);
 			}
 			g_free(quoted_path);
 			g_free(cmd);

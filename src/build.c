@@ -977,9 +977,9 @@ static GPid build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		vte_cwd(working_dir, TRUE);
 		if (! vte_send_cmd(vte_cmd))
 		{
-			ui_set_statusbar(FALSE,
-		_("Could not execute the file in the VTE because it probably contains a command."));
-			geany_debug("Could not execute the file in the VTE because it probably contains a command.");
+			const gchar *msg = _("File not executed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
+			ui_set_statusbar(FALSE, "%s", msg);
+			geany_debug("%s", msg);
 			if (!vc->skip_run_script)
 				g_unlink(run_cmd);
 		}
