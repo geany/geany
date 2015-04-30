@@ -1790,7 +1790,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 	if (! tag->arglist)
 		return FALSE;
 
-	if (ft_id != GEANY_FILETYPES_PASCAL)
+	if (ft_id != GEANY_FILETYPES_PASCAL && ft_id != GEANY_FILETYPES_GO)
 	{	/* usual calltips: "retval tagname (arglist)" */
 		if (tag->var_type)
 		{
@@ -1815,14 +1815,15 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 		g_string_append(str, tag->arglist);
 	}
 	else
-	{	/* special case Pascal calltips: "tagname (arglist) : retval" */
+	{	/* special case Pascal/Go calltips: "tagname (arglist) : retval"
+		 * (with ':' omitted for Go) */
 		g_string_append(str, tag->name);
 		g_string_append_c(str, ' ');
 		g_string_append(str, tag->arglist);
 
 		if (!EMPTY(tag->var_type))
 		{
-			g_string_append(str, " : ");
+			g_string_append(str, ft_id == GEANY_FILETYPES_PASCAL ? " : " : " ");
 			g_string_append(str, tag->var_type);
 		}
 	}
