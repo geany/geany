@@ -346,7 +346,9 @@ void filetypes_init_types(void)
 	{
 		filetype_add(filetypes[ft_id]);
 	}
-	init_custom_filetypes(app->datadir);
+	f = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, NULL);
+	init_custom_filetypes(f);
+	g_free(f);
 	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	init_custom_filetypes(f);
 	g_free(f);
@@ -536,7 +538,7 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	SETPTR(path, g_build_filename(app->datadir, "filetypes.", NULL));
+	SETPTR(path, g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
@@ -1012,7 +1014,7 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 	if (user)
 		file_name = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 	else
-		file_name = g_build_filename(app->datadir, base_name, NULL);
+		file_name = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 
 	g_free(ext);
 	g_free(base_name);
