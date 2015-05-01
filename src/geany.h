@@ -41,6 +41,7 @@ G_BEGIN_DECLS
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
+#define GEANY_TAGS_SUBDIR				"tags"
 #define GEANY_CODENAME					"Malvek"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_WIKI						"http://wiki.geany.org/"

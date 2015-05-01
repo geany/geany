@@ -243,7 +243,7 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	if (! tfi->tags_loaded)
 	{
-		gchar *fname = g_build_filename(app->datadir, tfi->tag_file, NULL);
+		gchar *fname = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
 
 		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
@@ -263,7 +263,7 @@ static void html_tags_loaded(void)
 	tfi = &tag_file_info[GTF_HTML_ENTITIES];
 	if (! tfi->tags_loaded)
 	{
-		gchar *file = g_build_filename(app->datadir, tfi->tag_file, NULL);
+		gchar *file = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
 
 		html_entities = utils_read_file_in_array(file);
 		tfi->tags_loaded = TRUE;
@@ -1762,13 +1762,13 @@ static void init_user_tags(void)
 	const GSList *node;
 	gchar *dir;
 
-	dir = g_build_filename(app->configdir, "tags", NULL);
+	dir = g_build_filename(app->configdir, GEANY_TAGS_SUBDIR, NULL);
 	/* create the user tags dir for next time if it doesn't exist */
 	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
 		utils_mkdir(dir, FALSE);
 	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 
-	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
+	SETPTR(dir, g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, NULL));
 	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 	g_free(dir);
 
