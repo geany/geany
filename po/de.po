@@ -322,7 +322,7 @@ msgid ""
 "Defines whether to use the Windows native dialogs or whether to use the GTK "
 "default dialogs"
 msgstr ""
-"Bestimmt, ob Dialoge im Stil von Windows oder von Gtk geöffnet werden sollen"
+"Bestimmt, ob Dialoge im Stil von Windows oder von GTK geöffnet werden sollen"
 
 #: ../data/geany.glade.h:61
 msgid "<b>Miscellaneous</b>"
@@ -339,11 +339,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:64
 msgid "Hide the Find dialog"
-msgstr "Suche ausbleden"
+msgstr "Suche ausblenden"
 
 #: ../data/geany.glade.h:65
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr "Suche nach klicken von »nächstes« oder »vorheriges« ausblenden."
+msgstr "Suche nach Klicken von »nächstes« oder »vorheriges« ausblenden."
 
 #: ../data/geany.glade.h:66
 msgid "Use the current word under the cursor for Find dialogs"
@@ -1251,7 +1251,7 @@ msgstr "Gibt die Länge der Liste der zuletzt geöffneten Dateien an"
 
 #: ../data/geany.glade.h:251
 msgid "Disk check timeout:"
-msgstr "Zeitinterval zum Prüfen auf Dateiänderungen:"
+msgstr "Zeitintervall zum Prüfen auf Dateiänderungen:"
 
 #: ../data/geany.glade.h:252
 msgid ""
@@ -1373,7 +1373,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Geben Sie ein Datumsformat für den Platzhalter {datetime} an. Dabei können "
-"alle Platzhalter verwendet werden, die auch in der ANSI C Funktion "
+"alle Platzhalter verwendet werden, die auch in der ANSI-C-Funktion "
 "»strftime« zum Einsatz kommen können."
 
 #: ../data/geany.glade.h:280
@@ -1382,7 +1382,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Geben Sie ein Datumsformat für den Platzhalter {year} an. Dabei können alle "
-"Platzhalter verwendet werden, die auch in der ANSI C Funktion »strftime« zum "
+"Platzhalter verwendet werden, die auch in der ANSI-C-Funktion »strftime« zum "
 "Einsatz kommen können."
 
 #: ../data/geany.glade.h:281
@@ -1391,7 +1391,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Geben Sie ein Datumsformat für den Platzhalter {date} an. Dabei können alle "
-"Platzhalter verwendet werden, die auch in der ANSI C Funktion »strftime« zum "
+"Platzhalter verwendet werden, die auch in der ANSI-C-Funktion »strftime« zum "
 "Einsatz kommen können."
 
 #: ../data/geany.glade.h:282
@@ -1479,7 +1479,7 @@ msgid ""
 "with the ANSI C strftime function."
 msgstr ""
 "Geben Sie ein Datumsformat an, das für jeden Seitenkopf benutzt wird. Dabei "
-"können alle Platzhalter verwendet werden, die auch in der ANSI C Funktion "
+"können alle Platzhalter verwendet werden, die auch in der ANSI-C-Funktion "
 "»strftime« zum Einsatz kommen können."
 
 #: ../data/geany.glade.h:301
@@ -1585,7 +1585,7 @@ msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Erlaubt das integrierte Terminal über Tastenkürzel anzusprechen (mit "
-"Ausnahme des Fokus Kommandos)"
+"Ausnahme des Fokus-Kommandos)"
 
 #: ../data/geany.glade.h:325
 msgid "Disable menu shortcut key (F10 by default)"
@@ -3134,7 +3134,7 @@ msgstr "%s Quelldatei"
 #: ../src/filetypes.c:96
 #, c-format
 msgid "%s script"
-msgstr "%s Skript Datei"
+msgstr "%s Skript-Datei"
 
 #: ../src/filetypes.c:97
 #, c-format
@@ -4304,8 +4304,8 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 "Führt die Erkennung des Suchmusters auf das komplette Dokument, anstatt "
-"Zeile für Zeile, aus. dies erlaubt es, auch Muster zu finden, die über "
-"mehrer Zeilen gehen. In diesem Modus sind Zeilenumbrüche »normale« Zeichen "
+"Zeile für Zeile, aus. Dies erlaubt es, auch Muster zu finden, die über "
+"mehrere Zeilen gehen. In diesem Modus sind Zeilenumbrüche »normale« Zeichen "
 "und können in das Suchmuster integriert werden."
 
 #: ../src/search.c:344
@@ -4656,7 +4656,7 @@ msgstr "Module"
 
 #: ../src/symbols.c:692 ../src/symbols.c:735
 msgid "Traits"
-msgstr "Characteristika"
+msgstr "Charakteristika"
 
 #: ../src/symbols.c:693
 msgid "Implementations"
@@ -5287,7 +5287,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Hier kann ein benutzerdefiniertes Datumsformat eingegeben werden. Dabei "
-"funktionieren alle Platzhalter der ANSI C Funktion »strftime«."
+"funktionieren alle Platzhalter der ANSI-C-Funktion »strftime«."
 
 #: ../src/ui_utils.c:745
 msgid "Date format string could not be converted (possibly too long)."
@@ -5446,7 +5446,7 @@ msgstr "Quellen für Basis:"
 
 #: ../plugins/classbuilder.c:503
 msgid "Base header:"
-msgstr "Basis Headerdatei:"
+msgstr "Basis-Headerdatei:"
 
 #: ../plugins/classbuilder.c:511
 msgid "Global"
@@ -5454,7 +5454,7 @@ msgstr "Global"
 
 #: ../plugins/classbuilder.c:530
 msgid "Base GType:"
-msgstr "Basis GType:"
+msgstr "Basis-GType:"
 
 #: ../plugins/classbuilder.c:535
 msgid "Implements:"
@@ -5482,7 +5482,7 @@ msgstr "Singleton"
 
 #: ../plugins/classbuilder.c:579
 msgid "Constructor type:"
-msgstr "Konstruktor Typ:"
+msgstr "Konstruktor-Typ:"
 
 #: ../plugins/classbuilder.c:1091
 msgid "Create Cla_ss"
@@ -5820,7 +5820,7 @@ msgstr "A_ktivieren"
 
 #: ../plugins/saveactions.c:628
 msgid "Auto save _interval:"
-msgstr "_Interval für Autospeicherung:"
+msgstr "_Intervall für Autospeicherung:"
 
 #: ../plugins/saveactions.c:636
 msgid "seconds"
