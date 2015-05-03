@@ -192,6 +192,9 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
+	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
+		return; /* don't bother updating symbol tree if we don't see it */
+
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
 		G_STMT_START { \
@@ -1081,6 +1084,14 @@ static void on_save_settings(void)
 }
 
 
+static void on_sidebar_switch_page(GtkNotebook *notebook,
+	gpointer page, guint page_num, gpointer user_data)
+{
+	if (page_num == TREEVIEW_SYMBOL)
+		sidebar_update_tag_list(document_get_current(), TRUE);
+}
+
+
 void sidebar_init(void)
 {
 	StashGroup *group;
@@ -1103,6 +1114,8 @@ void sidebar_init(void)
 	/* tabs may have changed when sidebar is reshown */
 	g_signal_connect(main_widgets.sidebar_notebook, "show",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	g_signal_connect_after(main_widgets.sidebar_notebook, "switch-page",
+		G_CALLBACK(on_sidebar_switch_page), NULL);
 
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }

@@ -1422,7 +1422,6 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				cont = tree_store_remove_row(store, &iter);
 			else /* tag still exist, update it */
 			{
-				const gchar *name;
 				const gchar *parent_name;
 				TMTag *found = found_item->data;
 
@@ -1431,13 +1430,22 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
 					parent_name = NULL;
 
-				/* only update fields that (can) have changed (name that holds line
-				 * number, and the tag itself) */
-				name = get_symbol_name(doc, found, parent_name != NULL);
-				gtk_tree_store_set(store, &iter,
-						SYMBOLS_COLUMN_NAME, name,
-						SYMBOLS_COLUMN_TAG, found,
-						-1);
+				if (!tm_tags_equal(tag, found))
+				{
+					const gchar *name;
+					gchar *tooltip;
+
+					/* only update fields that (can) have changed (name that holds line
+					 * number, tooltip, and the tag itself) */
+					name = get_symbol_name(doc, found, parent_name != NULL);
+					tooltip = get_symbol_tooltip(doc, found);
+					gtk_tree_store_set(store, &iter,
+							SYMBOLS_COLUMN_NAME, name,
+							SYMBOLS_COLUMN_TOOLTIP, tooltip,
+							SYMBOLS_COLUMN_TAG, found,
+							-1);
+					g_free(tooltip);
+				}
 
 				update_parents_table(parents_table, found, parent_name, &iter);
 
@@ -1513,10 +1521,9 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			gtk_tree_store_append(store, &iter, parent);
 			name = get_symbol_name(doc, tag, parent_name != NULL);
 			tooltip = get_symbol_tooltip(doc, tag);
-			gtk_tree_store_set(store, &iter,
+			gtk_tree_store_insert_with_values(store, &iter, parent, 0,
 					SYMBOLS_COLUMN_NAME, name,
 					SYMBOLS_COLUMN_TOOLTIP, tooltip,
 					SYMBOLS_COLUMN_ICON, icon,

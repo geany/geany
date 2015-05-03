@@ -189,6 +189,7 @@ void tm_tag_unref(TMTag *tag);
 
 TMTag *tm_tag_ref(TMTag *tag);
 
+gboolean tm_tags_equal(const TMTag *a, const TMTag *b);
 
 #ifdef TM_DEBUG /* various debugging functions */
 
