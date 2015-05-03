@@ -63,6 +63,8 @@ static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gchar *gtk_menu_key_accel = NULL;
+static GtkWidget *terminal_label = NULL;
+static guint terminal_label_update_source = 0;
 
 /* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
@@ -295,7 +297,8 @@ static void create_vte(void)
 	vte_start(vte);
 
 	gtk_widget_show_all(hbox);
-	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, gtk_label_new(_("Terminal")), MSG_VTE);
+	terminal_label = gtk_label_new(_("Terminal"));
+	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, terminal_label, MSG_VTE);
 
 	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
 }
@@ -323,13 +326,42 @@ void vte_close(void)
 }
 
 
+static gboolean set_dirty_idle(gpointer user_data)
+{
+	gtk_widget_set_name(terminal_label, "geany-terminal-dirty");
+	terminal_label_update_source = 0;
+	return FALSE;
+}
+
+
+static void set_clean(gboolean value)
+{
+	if (clean != value)
+	{
+		if (terminal_label)
+		{
+			if (terminal_label_update_source > 0)
+			{
+				g_source_remove(terminal_label_update_source);
+				terminal_label_update_source = 0;
+			}
+			if (value)
+				gtk_widget_set_name(terminal_label, NULL);
+			else
+				terminal_label_update_source = g_timeout_add(150, set_dirty_idle, NULL);
+		}
+		clean = value;
+	}
+}
+
+
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (ui_is_keyval_enter_or_return(event->keyval) ||
 		((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
 	{
 		/* assume any text on the prompt has been executed when pressing Enter/Return */
-		clean = TRUE;
+		set_clean(TRUE);
 	}
 	return FALSE;
 }
@@ -359,7 +391,7 @@ static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
 {
-	clean = FALSE;
+	set_clean(FALSE);
 }
 
 
@@ -382,7 +414,7 @@ static void vte_start(GtkWidget *widget)
 	else
 		pid = 0; /* use 0 as invalid pid */
 
-	clean = TRUE;
+	set_clean(TRUE);
 }
 
 
@@ -395,7 +427,7 @@ static void vte_restart(GtkWidget *widget)
 		pid = 0;
 	}
 	vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
-	clean = TRUE;
+	set_clean(TRUE);
 }
 
 
@@ -628,7 +660,7 @@ gboolean vte_send_cmd(const gchar *cmd)
 	if (clean)
 	{
 		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
-		clean = TRUE; /* vte_terminal_feed_child() also marks the vte as not clean */
+		set_clean(TRUE); /* vte_terminal_feed_child() also marks the vte as not clean */
 		return TRUE;
 	}
 	else
@@ -704,10 +736,9 @@ void vte_cwd(const gchar *filename, gboolean force)
 			gchar *cmd = g_strconcat(vc->send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
-				ui_set_statusbar(FALSE,
-		_("Could not change the directory in the VTE because it probably contains a command."));
-				geany_debug(
-		"Could not change the directory in the VTE because it probably contains a command.");
+				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
+				ui_set_statusbar(FALSE, "%s", msg);
+				geany_debug("%s", msg);
 			}
 			g_free(quoted_path);
 			g_free(cmd);

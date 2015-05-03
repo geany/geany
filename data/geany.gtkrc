@@ -39,3 +39,6 @@ style "geany-document-status-readonly-style" {
 widget "*.geany-document-status-changed" style "geany-document-status-changed-style"
 widget "*.geany-document-status-disk-changed" style "geany-document-status-disk-changed-style"
 widget "*.geany-document-status-readonly" style "geany-document-status-readonly-style"
+
+# red "Terminal" label when terminal dirty
+widget "*.geany-terminal-dirty" style "geany-document-status-changed-style"
