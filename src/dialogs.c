@@ -80,7 +80,7 @@ filesel_state = {
 	{
 		0,
 		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
-		GEANY_FILETYPES_NONE, /* default filetype is detect from extension */
+		-1, /* default filetype is detect from extension */
 		FALSE,
 		FALSE
 	}
@@ -142,7 +142,7 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
 
 		/* ignore detect from file item */
-		if (filesel_state.open.filetype_idx > 0)
+		if (filesel_state.open.filetype_idx >= 0)
 			ft = filetypes_index(filesel_state.open.filetype_idx);
 
 		filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
@@ -219,7 +219,7 @@ static GtkWidget *create_filetype_combo_box(void)
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 
 	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
-			0, GEANY_FILETYPES_NONE, 1, _("Detect from file"), -1);
+			0, -1 /* auto-detect */, 1, _("Detect from file"), -1);
 
 	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
 			0, -1, 1, _("Programming Languages"), -1);
@@ -233,9 +233,6 @@ static GtkWidget *create_filetype_combo_box(void)
 	foreach_slist (node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
-
-		if (ft->id == GEANY_FILETYPES_NONE)
-			continue;
 
 		switch (ft->group)
 		{
@@ -263,9 +260,10 @@ static GtkWidget *create_filetype_combo_box(void)
 }
 
 
+/* the filetype, or -1 for auto-detect */
 static gint filetype_combo_box_get_active_filetype(GtkComboBox *combo)
 {
-	gint id = 0;
+	gint id = -1;
 	GtkTreeIter iter;
 
 	if (gtk_combo_box_get_active_iter(combo, &iter))
