@@ -32,6 +32,7 @@
 
 #include "tm_workspace.h"
 #include "tm_tag.h"
+#include "tm_parser.h"
 
 
 /* when changing, always keep the three sort criteria below in sync */
@@ -670,6 +671,31 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 }
 
 
+static void add_filtered_tags(GPtrArray *tags, TMTag **matches, guint tagCount,
+	TMTagType type, langType lang)
+{
+	guint tagIter;
+
+	for (tagIter = 0; tagIter < tagCount; ++tagIter)
+	{
+		gint tag_lang = (*matches)->lang;
+		gint tag_lang_alt = tag_lang;
+
+		/* Accept CPP tags for C lang and vice versa */
+		if (tag_lang == TM_PARSER_C)
+			tag_lang_alt = TM_PARSER_CPP;
+		else if (tag_lang == TM_PARSER_CPP)
+			tag_lang_alt = TM_PARSER_C;
+
+		if ((type & (*matches)->type) &&
+			(lang == -1 || tag_lang == lang || tag_lang_alt == lang))
+			g_ptr_array_add(tags, *matches);
+
+		matches++;
+	}
+}
+
+
 /* Returns all matching tags found in the workspace.
  @param name The name of the tag to find.
  @param type The tag types to return (TMTagType). Can be a bitmask.
@@ -683,83 +709,25 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 	gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
-	TMTag **matches[2];
-	size_t len;
-	guint tagCount[2]={0,0}, tagIter;
+	TMTag **matches;
+	guint tagCount;
 
-	if (!name)
+	if (!name || !*name)
 		return NULL;
-	len = strlen(name);
-	if (!len)
-		return NULL;
+
 	if (tags)
 		g_ptr_array_set_size(tags, 0);
 	else
 		tags = g_ptr_array_new();
 
-	matches[0] = tm_tags_find(theWorkspace->tags_array, name, partial, TRUE,
-					&tagCount[0]);
-	matches[1] = tm_tags_find(theWorkspace->global_tags, name, partial, TRUE, &tagCount[1]);
-
-	/* file tags */
-	if (matches[0] && *matches[0])
-	{
-		for (tagIter=0;tagIter<tagCount[0];++tagIter)
-		{
-			gint tag_lang = (*matches[0])->lang;
-
-			if ((type & (*matches[0])->type) && (lang == -1 || tag_lang == lang))
-				g_ptr_array_add(tags, *matches[0]);
-			if (partial)
-			{
-				if (0 != strncmp((*matches[0])->name, name, len))
-					break;
-			}
-			else
-			{
-				if (0 != strcmp((*matches[0])->name, name))
-					break;
-			}
-			++ matches[0];
-		}
-	}
-
-	/* global tags */
-	if (matches[1] && *matches[1])
-	{
-		for (tagIter=0;tagIter<tagCount[1];++tagIter)
-		{
-			gint tag_lang = (*matches[1])->lang;
-			gint tag_lang_alt = 0;
-
-			/* tag_lang_alt is used to load C global tags only once for C and C++
-			 * lang = 1 is C++, lang = 0 is C
-			 * if we have lang 0, than accept also lang 1 for C++ */
-			if (tag_lang == 0)	/* C or C++ */
-				tag_lang_alt = 1;
-			else
-				tag_lang_alt = tag_lang; /* otherwise just ignore it */
-
-			if ((type & (*matches[1])->type) && (lang == -1 ||
-				tag_lang == lang || tag_lang_alt == lang))
-				g_ptr_array_add(tags, *matches[1]);
-
-			if (partial)
-			{
-				if (0 != strncmp((*matches[1])->name, name, len))
-					break;
-			}
-			else
-			{
-				if (0 != strcmp((*matches[1])->name, name))
-					break;
-			}
-			++ matches[1];
-		}
-	}
+	matches = tm_tags_find(theWorkspace->tags_array, name, partial, TRUE, &tagCount);
+	add_filtered_tags(tags, matches, tagCount, type, lang);
+	matches = tm_tags_find(theWorkspace->global_tags, name, partial, TRUE, &tagCount);
+	add_filtered_tags(tags, matches, tagCount, type, lang);
 
 	if (attrs)
 		tm_tags_sort(tags, attrs, TRUE, FALSE);
+
 	return tags;
 }
 
