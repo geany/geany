@@ -686,7 +686,6 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 	TMTag **matches[2];
 	size_t len;
 	guint tagCount[2]={0,0}, tagIter;
-	gint tags_lang;
 
 	if (!name)
 		return NULL;
@@ -705,11 +704,11 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 	/* file tags */
 	if (matches[0] && *matches[0])
 	{
-		tags_lang = (*matches[0])->lang;
-
 		for (tagIter=0;tagIter<tagCount[0];++tagIter)
 		{
-			if ((type & (*matches[0])->type) && (lang == -1 || tags_lang == lang))
+			gint tag_lang = (*matches[0])->lang;
+
+			if ((type & (*matches[0])->type) && (lang == -1 || tag_lang == lang))
 				g_ptr_array_add(tags, *matches[0]);
 			if (partial)
 			{
@@ -728,20 +727,21 @@ const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrTy
 	/* global tags */
 	if (matches[1] && *matches[1])
 	{
-		int tags_lang_alt = 0;
-		tags_lang = (*matches[1])->lang;
-		/* tags_lang_alt is used to load C global tags only once for C and C++
-		 * lang = 1 is C++, lang = 0 is C
-		 * if we have lang 0, than accept also lang 1 for C++ */
-		if (tags_lang == 0)	/* C or C++ */
-			tags_lang_alt = 1;
-		else
-			tags_lang_alt = tags_lang; /* otherwise just ignore it */
-
 		for (tagIter=0;tagIter<tagCount[1];++tagIter)
 		{
+			gint tag_lang = (*matches[1])->lang;
+			gint tag_lang_alt = 0;
+
+			/* tag_lang_alt is used to load C global tags only once for C and C++
+			 * lang = 1 is C++, lang = 0 is C
+			 * if we have lang 0, than accept also lang 1 for C++ */
+			if (tag_lang == 0)	/* C or C++ */
+				tag_lang_alt = 1;
+			else
+				tag_lang_alt = tag_lang; /* otherwise just ignore it */
+
 			if ((type & (*matches[1])->type) && (lang == -1 ||
-				tags_lang == lang || tags_lang_alt == lang))
+				tag_lang == lang || tag_lang_alt == lang))
 				g_ptr_array_add(tags, *matches[1]);
 
 			if (partial)
