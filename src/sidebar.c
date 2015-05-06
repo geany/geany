@@ -192,6 +192,9 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
+	if (update)
+		doc->priv->tag_tree_dirty = TRUE;
+
 	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
 		return; /* don't bother updating symbol tree if we don't see it */
 
@@ -219,7 +222,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		return;
 	}
 
-	if (update)
+	if (doc->priv->tag_tree_dirty)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)
 		{
@@ -232,6 +235,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		}
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+		doc->priv->tag_tree_dirty = FALSE;
 	}
 
 	if (doc->has_tags)
@@ -1088,7 +1092,7 @@ static void on_sidebar_switch_page(GtkNotebook *notebook,
 	gpointer page, guint page_num, gpointer user_data)
 {
 	if (page_num == TREEVIEW_SYMBOL)
-		sidebar_update_tag_list(document_get_current(), TRUE);
+		sidebar_update_tag_list(document_get_current(), FALSE);
 }
 
 

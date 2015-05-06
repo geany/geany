@@ -78,6 +78,8 @@ typedef struct GeanyDocumentPrivate
 	GtkWidget		*tag_tree;
 	/* GtkTreeStore object for this document within the Symbols treeview of the sidebar. */
 	GtkTreeStore	*tag_store;
+	/* Indicates whether tag tree has to be updated */
+	gboolean		tag_tree_dirty;
 	/* Iter for this document within the Open Files treeview of the sidebar. */
 	GtkTreeIter		 iter;
 	/* Used by the Undo/Redo management code. */
