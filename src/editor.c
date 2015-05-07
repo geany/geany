@@ -726,7 +726,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 	if (!name)
 		return;
 
-	tags = tm_workspace_find(name, tm_tag_max_t, NULL, FALSE, ft->lang);
+	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, ft->lang);
 	g_free(name);
 	if (!tags || tags->len == 0)
 		return;
@@ -1844,7 +1844,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	g_return_val_if_fail(ft && word && *word, NULL);
 
 	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
-	tags = tm_workspace_find(word, tm_tag_max_t, attrs, FALSE, ft->lang);
+	tags = tm_workspace_find(word, NULL, tm_tag_max_t, attrs, FALSE, ft->lang);
 	if (tags->len == 0)
 		return NULL;
 
@@ -1854,8 +1854,8 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 		(tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
 	{
 		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
-		tags = tm_workspace_find_scoped("this", tag->name,
-			arg_types, attrs, FALSE, ft->lang, TRUE);
+		tags = tm_workspace_find("this", tag->name,
+			arg_types, attrs, FALSE, ft->lang);
 		if (tags->len == 0)
 			return NULL;
 	}
@@ -2036,7 +2036,7 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 
 	doc = editor->document;
 
-	tags = tm_workspace_find(root, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
+	tags = tm_workspace_find(root, NULL, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
 	if (tags)
 	{
 		show_tags_list(editor, tags, rootlen);

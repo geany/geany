@@ -671,11 +671,17 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 }
 
 
-static void add_filtered_tags(GPtrArray *tags, TMTag **matches, guint tagCount,
-	TMTagType type, langType lang)
+static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
+	const char *name, const char *scope, TMTagType type, gboolean partial, langType lang)
 {
+	TMTag **matches;
 	guint tagIter;
+	guint tagCount;
 
+	if (!src || !dst || !name || !*name)
+		return 0;
+
+	matches = tm_tags_find(src, name, partial, TRUE, &tagCount);
 	for (tagIter = 0; tagIter < tagCount; ++tagIter)
 	{
 		gint tag_lang = (*matches)->lang;
@@ -687,103 +693,19 @@ static void add_filtered_tags(GPtrArray *tags, TMTag **matches, guint tagCount,
 		else if (tag_lang == TM_PARSER_CPP)
 			tag_lang_alt = TM_PARSER_C;
 
-		if ((type & (*matches)->type) &&
+		if ((!scope || g_strcmp0((*matches)->scope, scope) == 0) &&
+			(type & (*matches)->type) &&
 			(lang == -1 || tag_lang == lang || tag_lang_alt == lang))
-			g_ptr_array_add(tags, *matches);
+			g_ptr_array_add(dst, *matches);
 
 		matches++;
 	}
-}
 
-
-/* Returns all matching tags found in the workspace.
- @param name The name of the tag to find.
- @param type The tag types to return (TMTagType). Can be a bitmask.
- @param attrs The attributes to sort and dedup on (0 terminated integer array).
- @param partial Whether partial match is allowed.
- @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
-             -1 for all
- @return Array of matching tags. Do not free() it since it is a static member.
-*/
-const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrType *attrs,
-	gboolean partial, langType lang)
-{
-	static GPtrArray *tags = NULL;
-	TMTag **matches;
-	guint tagCount;
-
-	if (!name || !*name)
-		return NULL;
-
-	if (tags)
-		g_ptr_array_set_size(tags, 0);
-	else
-		tags = g_ptr_array_new();
-
-	matches = tm_tags_find(theWorkspace->tags_array, name, partial, TRUE, &tagCount);
-	add_filtered_tags(tags, matches, tagCount, type, lang);
-	matches = tm_tags_find(theWorkspace->global_tags, name, partial, TRUE, &tagCount);
-	add_filtered_tags(tags, matches, tagCount, type, lang);
-
-	if (attrs)
-		tm_tags_sort(tags, attrs, TRUE, FALSE);
-
-	return tags;
-}
-
-
-static gboolean match_langs(gint lang, const TMTag *tag)
-{
-	if (tag->file)
-	{	/* workspace tag */
-		if (lang == tag->file->lang)
-			return TRUE;
-	}
-	else
-	{	/* global tag */
-		if (lang == tag->lang)
-			return TRUE;
-	}
-	return FALSE;
-}
-
-
-/* scope can be NULL.
- * lang can be -1 */
-static guint
-fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
-					  const char *name, const char *scope, TMTagType type, gboolean partial,
-					  gint lang, gboolean first)
-{
-	TMTag **match;
-	guint tagIter, count;
-
-	if ((!src) || (!dst) || (!name) || (!*name))
-		return 0;
-
-	match = tm_tags_find (src, name, partial, TRUE, &count);
-	if (count && match && *match)
-	{
-		for (tagIter = 0; tagIter < count; ++tagIter)
-		{
-			if (! scope || (match[tagIter]->scope &&
-				0 == strcmp(match[tagIter]->scope, scope)))
-			{
-				if (type & match[tagIter]->type)
-				if (lang == -1 || match_langs(lang, match[tagIter]))
-				{
-					g_ptr_array_add (dst, match[tagIter]);
-					if (first)
-						break;
-				}
-			}
-		}
-	}
 	return dst->len;
 }
 
 
-/* Returns all matching tags found in the workspace. Adapted from tm_workspace_find, Anjuta 2.02
+/* Returns all matching tags found in the workspace.
  @param name The name of the tag to find.
  @param scope The scope name of the tag to find, or NULL.
  @param type The tag types to return (TMTagType). Can be a bitmask.
@@ -793,27 +715,23 @@ fill_find_tags_array (GPtrArray *dst, const GPtrArray *src,
              -1 for all
  @return Array of matching tags. Do not free() it since it is a static member.
 */
-const GPtrArray *
-tm_workspace_find_scoped (const char *name, const char *scope, TMTagType type,
-		TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search)
+const GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
+	TMTagAttrType *attrs, gboolean partial, langType lang)
 {
 	static GPtrArray *tags = NULL;
+	guint tagCount;
 
 	if (tags)
-		g_ptr_array_set_size (tags, 0);
+		g_ptr_array_set_size(tags, 0);
 	else
-		tags = g_ptr_array_new ();
+		tags = g_ptr_array_new();
 
-	fill_find_tags_array (tags, theWorkspace->tags_array,
-						  name, scope, type, partial, lang, FALSE);
-	if (global_search)
-	{
-		/* for a scoped tag, I think we always want the same language */
-		fill_find_tags_array (tags, theWorkspace->global_tags,
-							  name, scope, type, partial, lang, FALSE);
-	}
+	fill_find_tags_array(tags, theWorkspace->tags_array, name, NULL, type, partial, lang);
+	fill_find_tags_array(tags, theWorkspace->global_tags, name, NULL, type, partial, lang);
+
 	if (attrs)
-		tm_tags_sort (tags, attrs, TRUE, FALSE);
+		tm_tags_sort(tags, attrs, TRUE, FALSE);
+
 	return tags;
 }
 
@@ -970,7 +888,7 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 		{
 			g_ptr_array_set_size (tags, 0);
 			got = fill_find_tags_array (tags, file_tags,
-										  new_name, NULL, types, FALSE, -1, FALSE);
+										  new_name, NULL, types, FALSE, -1);
 		}
 		if (got)
 		{
@@ -982,7 +900,7 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
 				tm_tag_attr_name_t, tm_tag_attr_type_t,
 				tm_tag_attr_none_t
 			};
-			tags2 = tm_workspace_find (new_name, types, attrs, FALSE, -1);
+			tags2 = tm_workspace_find (new_name, NULL, types, attrs, FALSE, -1);
 		}
 
 		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
