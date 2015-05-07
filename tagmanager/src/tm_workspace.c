@@ -671,6 +671,20 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 }
 
 
+static gboolean langs_compatible(langType lang, langType other)
+{
+	if (lang == other || lang == -1 || other == -1)
+		return TRUE;
+	/* Accept CPP tags for C lang and vice versa */
+	else if (lang == TM_PARSER_C && other == TM_PARSER_CPP)
+		return TRUE;
+	else if (lang == TM_PARSER_CPP && other == TM_PARSER_C)
+		return TRUE;
+
+	return FALSE;
+}
+
+
 static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	const char *name, const char *scope, TMTagType type, gboolean partial, langType lang)
 {
@@ -684,18 +698,9 @@ static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	matches = tm_tags_find(src, name, partial, TRUE, &tagCount);
 	for (tagIter = 0; tagIter < tagCount; ++tagIter)
 	{
-		gint tag_lang = (*matches)->lang;
-		gint tag_lang_alt = tag_lang;
-
-		/* Accept CPP tags for C lang and vice versa */
-		if (tag_lang == TM_PARSER_C)
-			tag_lang_alt = TM_PARSER_CPP;
-		else if (tag_lang == TM_PARSER_CPP)
-			tag_lang_alt = TM_PARSER_C;
-
 		if ((!scope || g_strcmp0((*matches)->scope, scope) == 0) &&
 			(type & (*matches)->type) &&
-			(lang == -1 || tag_lang == lang || tag_lang_alt == lang))
+			langs_compatible(lang, (*matches)->lang))
 			g_ptr_array_add(dst, *matches);
 
 		matches++;
@@ -713,18 +718,15 @@ static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
  @param partial Whether partial match is allowed.
  @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
              -1 for all
- @return Array of matching tags. Do not free() it since it is a static member.
+ @return Array of matching tags.
 */
-const GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
+GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
 	TMTagAttrType *attrs, gboolean partial, langType lang)
 {
-	static GPtrArray *tags = NULL;
+	GPtrArray *tags;
 	guint tagCount;
 
-	if (tags)
-		g_ptr_array_set_size(tags, 0);
-	else
-		tags = g_ptr_array_new();
+	tags = g_ptr_array_new();
 
 	fill_find_tags_array(tags, theWorkspace->tags_array, name, NULL, type, partial, lang);
 	fill_find_tags_array(tags, theWorkspace->global_tags, name, NULL, type, partial, lang);
@@ -738,8 +740,7 @@ const GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagTyp
 
 static int
 find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
-						 const langType langJava, const char *name,
-						 const char *filename, gboolean no_definitions)
+						 const char *name, langType lang)
 {
 	GPtrArray *local = g_ptr_array_new ();
 	unsigned int i;
@@ -748,13 +749,8 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 	for (i = 0; (i < all->len); ++i)
 	{
 		tag = TM_TAG (all->pdata[i]);
-		if (no_definitions && filename && tag->file &&
-			0 != strcmp (filename,
-						 tag->file->short_name))
-		{
-			continue;
-		}
-		if (tag && tag->scope && tag->scope[0] != '\0')
+		if (tag && tag->scope && tag->scope[0] != '\0' &&
+			langs_compatible(tag->lang, lang))
 		{
 			if (0 == strncmp (name, tag->scope, len))
 			{
@@ -795,7 +791,7 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 					}
 				}
 				if (tag->file
-					&& tag->file->lang == langJava)
+					&& tag->file->lang == TM_PARSER_JAVA)
 				{
 					scope = strrchr (tag->scope, '.');
 					if (scope)
@@ -853,142 +849,118 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 
 
 /* Returns all matching members tags found in given struct/union/class name.
- @param name Name of the struct/union/class.
  @param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
+ @param name Name of the struct/union/class.
  @return A GPtrArray of TMTag pointers to struct/union/class members */
-const GPtrArray *
-tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name,
-								 gboolean search_global, gboolean no_definitions)
+GPtrArray *
+tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name, langType lang)
 {
-	static GPtrArray *tags = NULL;
-	GPtrArray *local = NULL;
-	char *new_name = (char *) name;
-	char *filename = NULL;
-	int found = 0, del = 0;
-	static langType langJava = -1;
-	TMTag *tag = NULL;
+	gboolean has_members = FALSE;
+	GPtrArray *tags;
+	gchar *type_name;
+	guint i;
 
-	/* FIXME */
-	/* langJava = getNamedLanguage ("Java"); */
+	g_return_val_if_fail(name && *name, NULL);
 
-	g_return_val_if_fail ((theWorkspace && name && name[0] != '\0'), NULL);
+	type_name = g_strdup(name);
 
-	if (!tags)
-		tags = g_ptr_array_new ();
-
-	while (1)
+	/* First check if type_name is a type that can possibly contain members.
+	 * Try to resolve intermediate typedefs to get the real type name. Also
+	 * add scope information to the name if applicable. The only result of this
+	 * part is the updated type_name and boolean has_members.
+	 * The loop below loops only when resolving typedefs - avoid possibly infinite
+	 * loop when typedefs create a cycle by adding some limits. */
+	for (i = 0; i < 5; i++)
 	{
-		const GPtrArray *tags2;
-		guint got = 0;
+		guint j;
+		TMTag *tag = NULL;
+		GPtrArray *type_tags;
 		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
 						   tm_tag_struct_t | tm_tag_typedef_t |
 						   tm_tag_union_t | tm_tag_enum_t);
 
+		/* try to get the type from file_tags first */
+		type_tags = g_ptr_array_new();
 		if (file_tags)
-		{
-			g_ptr_array_set_size (tags, 0);
-			got = fill_find_tags_array (tags, file_tags,
-										  new_name, NULL, types, FALSE, -1);
-		}
-		if (got)
-		{
-			tags2 = tags;
-		}
-		else
+			fill_find_tags_array(type_tags, file_tags, type_name, NULL, types, FALSE, lang);
+
+		/* file not specified or type definition not in the file */
+		if (type_tags->len == 0)
 		{
 			TMTagAttrType attrs[] = {
 				tm_tag_attr_name_t, tm_tag_attr_type_t,
 				tm_tag_attr_none_t
 			};
-			tags2 = tm_workspace_find (new_name, NULL, types, attrs, FALSE, -1);
+
+			g_ptr_array_free(type_tags, TRUE);
+			type_tags = tm_workspace_find(type_name, NULL, types, attrs, FALSE, lang);
 		}
 
-		if ((tags2) && (tags2->len == 1) && (tag = TM_TAG (tags2->pdata[0])))
+		if (type_tags)
 		{
-			if (tag->type == tm_tag_typedef_t && tag->var_type
-				&& tag->var_type[0] != '\0')
+			for (j = 0; j < type_tags->len; j++)
 			{
-				char *tmp_name;
-				tmp_name = tag->var_type;
-				if (strcmp(tmp_name, new_name) == 0) {
-					new_name = NULL;
-				}
-				else {
-					new_name = tmp_name;
-				}
-				continue;
+				tag = TM_TAG(type_tags->pdata[j]);
+				/* prefer non-typedef tags because we can be sure they contain members */
+				if (tag->type != tm_tag_typedef_t)
+					break;
 			}
-			filename = (tag->file ?
-						tag->file->short_name : NULL);
-			if (tag->scope && tag->scope[0] != '\0')
+		}
+
+		g_ptr_array_free(type_tags, TRUE);
+
+		if (!tag) /* not a type that can contain members */
+			break;
+
+		/* intermediate typedef - resolve to the real type */
+		if (tag->type == tm_tag_typedef_t && tag->var_type && tag->var_type[0] != '\0')
+		{
+			g_free(type_name);
+			type_name = g_strdup(tag->var_type);
+			continue;
+		}
+		else /* real type with members */
+		{
+			has_members = TRUE;
+			if (tag->scope && *(tag->scope))
 			{
-				del = 1;
-				if (tag->file &&
-					tag->file->lang == langJava)
-				{
-					new_name = g_strdup_printf ("%s.%s",
-												tag->scope,
-												new_name);
-				}
+				gchar *tmp_name = type_name;
+
+				if (tag->file && tag->file->lang == TM_PARSER_JAVA)
+					type_name = g_strdup_printf("%s.%s", tag->scope, type_name);
 				else
-				{
-					new_name = g_strdup_printf ("%s::%s",
-												tag->scope,
-												new_name);
-				}
+					type_name = g_strdup_printf("%s::%s", tag->scope, type_name);
+				g_free(tmp_name);
 			}
 			break;
 		}
-		else
+	}
+
+	tags = g_ptr_array_new();
+
+	if (has_members)
+	{
+		GPtrArray *extracted;
+		TMTagType member_types = (tm_tag_function_t | tm_tag_prototype_t |
+									tm_tag_member_t | tm_tag_field_t |
+									tm_tag_method_t | tm_tag_enumerator_t);
+
+		/* Now get the tags from tags_array and global_tags corresponding to type_name */
+		extracted = tm_tags_extract(theWorkspace->tags_array, member_types);
+		if (extracted)
 		{
-			return NULL;
+			find_scope_members_tags(extracted, tags, type_name, lang);
+			g_ptr_array_free(extracted, TRUE);
+		}
+		extracted = tm_tags_extract(theWorkspace->global_tags, member_types);
+		if (extracted)
+		{
+			find_scope_members_tags(extracted, tags, type_name, lang);
+			g_ptr_array_free(extracted, TRUE);
 		}
 	}
 
-	g_ptr_array_set_size (tags, 0);
-
-	if (no_definitions && tag && tag->file)
-	{
-		local = tm_tags_extract (tag->file->tags_array,
-								 (tm_tag_function_t | tm_tag_prototype_t |
-								  tm_tag_member_t | tm_tag_field_t |
-								  tm_tag_method_t | tm_tag_enumerator_t));
-	}
-	else
-	{
-		local = tm_tags_extract (theWorkspace->tags_array,
-								 (tm_tag_function_t | tm_tag_prototype_t |
-								  tm_tag_member_t | tm_tag_field_t |
-								  tm_tag_method_t | tm_tag_enumerator_t));
-	}
-	if (local)
-	{
-		found = find_scope_members_tags (local, tags, langJava, new_name,
-										 filename, no_definitions);
-		g_ptr_array_free (local, TRUE);
-	}
-	if (!found && search_global)
-	{
-		GPtrArray *global = tm_tags_extract (theWorkspace->global_tags,
-											 (tm_tag_member_t |
-											  tm_tag_prototype_t |
-											  tm_tag_field_t |
-											  tm_tag_method_t |
-											  tm_tag_function_t |
-											  tm_tag_enumerator_t
-											  |tm_tag_struct_t | tm_tag_typedef_t |
-											  tm_tag_union_t | tm_tag_enum_t));
-		if (global)
-		{
-			find_scope_members_tags (global, tags, langJava, new_name,
-									 filename, no_definitions);
-			g_ptr_array_free (global, TRUE);
-		}
-	}
-	if (del)
-	{
-		g_free (new_name);
-	}
+	g_free(type_name);
 
 	return tags;
 }
