@@ -703,9 +703,10 @@ static void autocomplete_scope(GeanyEditor *editor)
 	gint pos = sci_get_current_position(editor->sci);
 	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar *name;
-	const GPtrArray *tags = NULL;
+	GPtrArray *tags;
 	const TMTag *tag;
 	GeanyFiletype *ft = editor->document->file_type;
+	guint i;
 
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 	{
@@ -728,20 +729,27 @@ static void autocomplete_scope(GeanyEditor *editor)
 
 	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, ft->lang);
 	g_free(name);
-	if (!tags || tags->len == 0)
-		return;
 
-	tag = g_ptr_array_index(tags, 0);
-	name = tag->var_type;
-	if (name)
+	foreach_ptr_array(tag, i, tags)
 	{
-		TMSourceFile *obj = editor->document->tm_file;
+		if (tag->var_type)
+		{
+			TMSourceFile *sf = editor->document->tm_file;
+			GPtrArray *member_tags;
+			gboolean found;
 
-		tags = tm_workspace_find_scope_members(obj ? obj->tags_array : NULL,
-			name, TRUE, FALSE);
-		if (tags)
-			show_tags_list(editor, tags, 0);
+			member_tags = tm_workspace_find_scope_members(sf ? sf->tags_array : NULL,
+								tag->var_type,
+								sf ? sf->lang : -1);
+			found = member_tags && member_tags->len > 0;
+			if (found)
+				show_tags_list(editor, member_tags, 0);
+			g_ptr_array_free(member_tags, TRUE);
+			if (found)
+				break;
+		}
 	}
+	g_ptr_array_free(tags, TRUE);
 }
 
 
@@ -1838,7 +1846,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 
 static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 {
-	const GPtrArray *tags;
+	GPtrArray *tags;
 	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 		tm_tag_method_t | tm_tag_macro_with_arg_t;
 	TMTagAttrType *attrs = NULL;
@@ -1851,18 +1859,25 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
 	tags = tm_workspace_find(word, NULL, tm_tag_max_t, attrs, FALSE, ft->lang);
 	if (tags->len == 0)
+	{
+		g_ptr_array_free(tags, TRUE);
 		return NULL;
+	}
 
 	tag = TM_TAG(tags->pdata[0]);
 
 	if (ft->id == GEANY_FILETYPES_D &&
 		(tag->type == tm_tag_class_t || tag->type == tm_tag_struct_t))
 	{
+		g_ptr_array_free(tags, TRUE);
 		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
 		tags = tm_workspace_find("this", tag->name,
 			arg_types, attrs, FALSE, ft->lang);
 		if (tags->len == 0)
+		{
+			g_ptr_array_free(tags, TRUE);
 			return NULL;
+		}
 	}
 
 	/* remove tags with no argument list */
@@ -1875,7 +1890,10 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	}
 	tm_tags_prune((GPtrArray *) tags);
 	if (tags->len == 0)
+	{
+		g_ptr_array_free(tags, TRUE);
 		return NULL;
+	}
 	else
 	{	/* remove duplicate calltips */
 		TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, tm_tag_attr_scope_t,
@@ -1912,6 +1930,9 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 			break;
 		}
 	}
+
+	g_ptr_array_free(tags, TRUE);
+
 	if (str)
 	{
 		gchar *result = str->str;
@@ -2034,20 +2055,21 @@ static gboolean
 autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
-	const GPtrArray *tags;
+	GPtrArray *tags;
 	GeanyDocument *doc;
+	gboolean found;
 
 	g_return_val_if_fail(editor, FALSE);
 
 	doc = editor->document;
 
 	tags = tm_workspace_find(root, NULL, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
-	if (tags)
-	{
+	found = tags->len > 0;
+	if (found)
 		show_tags_list(editor, tags, rootlen);
-		return tags->len > 0;
-	}
-	return FALSE;
+	g_ptr_array_free(tags, TRUE);
+
+	return found;
 }
 
 
