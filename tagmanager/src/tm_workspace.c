@@ -56,6 +56,10 @@ static TMTagAttrType global_tags_sort_attrs[] =
 	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
 };
 
+static TMTagType TM_MEMBER_TYPE_MASK =
+	tm_tag_function_t | tm_tag_prototype_t |
+	tm_tag_member_t | tm_tag_field_t |
+	tm_tag_method_t | tm_tag_enumerator_t;
 
 static TMWorkspace *theWorkspace = NULL;
 
@@ -68,6 +72,9 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->global_tags = g_ptr_array_new();
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
+	theWorkspace->global_typename_array = g_ptr_array_new();
+	theWorkspace->member_array = g_ptr_array_new();
+	theWorkspace->global_member_array = g_ptr_array_new();
 	return TRUE;
 }
 
@@ -89,6 +96,9 @@ void tm_workspace_free(void)
 	tm_tags_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(theWorkspace->tags_array, TRUE);
 	g_ptr_array_free(theWorkspace->typename_array, TRUE);
+	g_ptr_array_free(theWorkspace->global_typename_array, TRUE);
+	g_ptr_array_free(theWorkspace->member_array, TRUE);
+	g_ptr_array_free(theWorkspace->global_member_array, TRUE);
 	g_free(theWorkspace);
 	theWorkspace = NULL;
 }
@@ -117,6 +127,16 @@ static void tm_workspace_merge_tags(GPtrArray **big_array, GPtrArray *small_arra
 }
 
 
+static void merge_extracted_tags(GPtrArray **dest, GPtrArray *src, TMTagType tag_types)
+{
+	GPtrArray *arr;
+
+	arr = tm_tags_extract(src, tag_types);
+	tm_workspace_merge_tags(dest, arr);
+	g_ptr_array_free(arr, TRUE);
+}
+
+
 static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 	gsize buf_size, gboolean use_buffer, gboolean update_workspace)
 {
@@ -130,21 +150,19 @@ static void update_source_file(TMSourceFile *source_file, guchar* text_buf,
 		 * workspace while they exist and can be scanned */
 		tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 		tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
+		tm_tags_remove_file_tags(source_file, theWorkspace->member_array);
 	}
 	tm_source_file_parse(source_file, text_buf, buf_size, use_buffer);
 	tm_tags_sort(source_file->tags_array, file_tags_sort_attrs, FALSE, TRUE);
 	if (update_workspace)
 	{
-		GPtrArray *sf_typedefs;
-
 #ifdef TM_DEBUG
 		g_message("Updating workspace from source file");
 #endif
 		tm_workspace_merge_tags(&theWorkspace->tags_array, source_file->tags_array);
-		
-		sf_typedefs = tm_tags_extract(source_file->tags_array, TM_GLOBAL_TYPE_MASK);
-		tm_workspace_merge_tags(&theWorkspace->typename_array, sf_typedefs);
-		g_ptr_array_free(sf_typedefs, TRUE);
+
+		merge_extracted_tags(&(theWorkspace->typename_array), source_file->tags_array, TM_GLOBAL_TYPE_MASK);
+		merge_extracted_tags(&(theWorkspace->member_array), source_file->tags_array, TM_MEMBER_TYPE_MASK);
 	}
 #ifdef TM_DEBUG
 	else
@@ -214,6 +232,7 @@ void tm_workspace_remove_source_file(TMSourceFile *source_file)
 		{
 			tm_tags_remove_file_tags(source_file, theWorkspace->tags_array);
 			tm_tags_remove_file_tags(source_file, theWorkspace->typename_array);
+			tm_tags_remove_file_tags(source_file, theWorkspace->member_array);
 			g_ptr_array_remove_index_fast(theWorkspace->source_files, i);
 			return;
 		}
@@ -262,6 +281,7 @@ static void tm_workspace_update(void)
 
 	g_ptr_array_free(theWorkspace->typename_array, TRUE);
 	theWorkspace->typename_array = tm_tags_extract(theWorkspace->tags_array, TM_GLOBAL_TYPE_MASK);
+	theWorkspace->member_array = tm_tags_extract(theWorkspace->tags_array, TM_MEMBER_TYPE_MASK);
 }
 
 
@@ -385,6 +405,11 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
 	g_ptr_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(file_tags, TRUE);
 	theWorkspace->global_tags = new_tags;
+
+	g_ptr_array_free(theWorkspace->global_typename_array, TRUE);
+	theWorkspace->global_typename_array = tm_tags_extract(new_tags, TM_GLOBAL_TYPE_MASK);
+	g_ptr_array_free(theWorkspace->global_member_array, TRUE);
+	theWorkspace->global_member_array = tm_tags_extract(new_tags, TM_MEMBER_TYPE_MASK);
 
 	return TRUE;
 }
@@ -939,23 +964,12 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name, 
 	if (has_members)
 	{
 		GPtrArray *extracted;
-		TMTagType member_types = (tm_tag_function_t | tm_tag_prototype_t |
-									tm_tag_member_t | tm_tag_field_t |
-									tm_tag_method_t | tm_tag_enumerator_t);
 
 		/* Now get the tags from tags_array and global_tags corresponding to type_name */
-		extracted = tm_tags_extract(theWorkspace->tags_array, member_types);
-		if (extracted)
-		{
-			find_scope_members_tags(extracted, tags, type_name, lang);
-			g_ptr_array_free(extracted, TRUE);
-		}
-		extracted = tm_tags_extract(theWorkspace->global_tags, member_types);
-		if (extracted)
-		{
-			find_scope_members_tags(extracted, tags, type_name, lang);
-			g_ptr_array_free(extracted, TRUE);
-		}
+		if (theWorkspace->member_array)
+			find_scope_members_tags(theWorkspace->member_array, tags, type_name, lang);
+		if (theWorkspace->global_member_array)
+			find_scope_members_tags(theWorkspace->global_member_array, tags, type_name, lang);
 	}
 
 	g_free(type_name);

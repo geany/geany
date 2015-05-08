@@ -281,7 +281,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 	gint tag_lang;
 
 	if (global)
-		typedefs = tm_tags_extract(app->tm_workspace->global_tags, TM_GLOBAL_TYPE_MASK);
+		typedefs = app->tm_workspace->global_typename_array;
 	else
 		typedefs = app->tm_workspace->typename_array;
 
@@ -305,8 +305,6 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 			}
 		}
 	}
-	if (typedefs && global)
-		g_ptr_array_free(typedefs, TRUE);
 	return s;
 }
 
