@@ -703,10 +703,8 @@ static void autocomplete_scope(GeanyEditor *editor)
 	gint pos = sci_get_current_position(editor->sci);
 	gchar typed = sci_get_char_at(sci, pos - 1);
 	gchar *name;
-	GPtrArray *tags;
-	const TMTag *tag;
 	GeanyFiletype *ft = editor->document->file_type;
-	guint i;
+	GPtrArray *tags;
 
 	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
 	{
@@ -727,29 +725,14 @@ static void autocomplete_scope(GeanyEditor *editor)
 	if (!name)
 		return;
 
-	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, ft->lang);
-	g_free(name);
-
-	foreach_ptr_array(tag, i, tags)
+	tags = tm_workspace_find_scope_members(editor->document->tm_file, name);
+	if (tags)
 	{
-		if (tag->var_type)
-		{
-			TMSourceFile *sf = editor->document->tm_file;
-			GPtrArray *member_tags;
-			gboolean found;
-
-			member_tags = tm_workspace_find_scope_members(sf ? sf->tags_array : NULL,
-								tag->var_type,
-								sf ? sf->lang : -1);
-			found = member_tags && member_tags->len > 0;
-			if (found)
-				show_tags_list(editor, member_tags, 0);
-			g_ptr_array_free(member_tags, TRUE);
-			if (found)
-				break;
-		}
+		show_tags_list(editor, tags, 0);
+		g_ptr_array_free(tags, TRUE);
 	}
-	g_ptr_array_free(tags, TRUE);
+
+	g_free(name);
 }
 
 
