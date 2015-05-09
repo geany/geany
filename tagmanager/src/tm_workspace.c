@@ -871,15 +871,12 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 }
 
 
-/* Returns all matching members tags found in given struct/union/class name.
- @param file_tags A GPtrArray of edited file TMTag pointers (for search speedup, can be NULL).
- @param name Name of the struct/union/class.
- @return A GPtrArray of TMTag pointers to struct/union/class members */
-GPtrArray *
-tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name, langType lang)
+static GPtrArray *
+find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
+	const char *name, langType lang)
 {
 	gboolean has_members = FALSE;
-	GPtrArray *tags;
+	GPtrArray *tags = NULL;
 	gchar *type_name;
 	guint i;
 
@@ -895,32 +892,17 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name, 
 	 * loop when typedefs create a cycle by adding some limits. */
 	for (i = 0; i < 5; i++)
 	{
-		guint j;
 		TMTag *tag = NULL;
 		GPtrArray *type_tags;
 		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
 						   tm_tag_struct_t | tm_tag_typedef_t |
 						   tm_tag_union_t | tm_tag_enum_t);
 
-		/* try to get the type from file_tags first */
 		type_tags = g_ptr_array_new();
-		if (file_tags)
-			fill_find_tags_array(type_tags, file_tags, type_name, NULL, types, FALSE, lang);
-
-		/* file not specified or type definition not in the file */
-		if (type_tags->len == 0)
-		{
-			TMTagAttrType attrs[] = {
-				tm_tag_attr_name_t, tm_tag_attr_type_t,
-				tm_tag_attr_none_t
-			};
-
-			g_ptr_array_free(type_tags, TRUE);
-			type_tags = tm_workspace_find(type_name, NULL, types, attrs, FALSE, lang);
-		}
-
+		fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, FALSE, lang);
 		if (type_tags)
 		{
+			guint j;
 			for (j = 0; j < type_tags->len; j++)
 			{
 				tag = TM_TAG(type_tags->pdata[j]);
@@ -959,22 +941,79 @@ tm_workspace_find_scope_members (const GPtrArray * file_tags, const char *name, 
 		}
 	}
 
-	tags = g_ptr_array_new();
-
 	if (has_members)
 	{
-		GPtrArray *extracted;
-
-		/* Now get the tags from tags_array and global_tags corresponding to type_name */
-		if (theWorkspace->member_array)
-			find_scope_members_tags(theWorkspace->member_array, tags, type_name, lang);
-		if (theWorkspace->global_member_array)
-			find_scope_members_tags(theWorkspace->global_member_array, tags, type_name, lang);
+		tags = g_ptr_array_new();
+		find_scope_members_tags(member_array, tags, type_name, lang);
+		if (tags->len == 0)
+		{
+			g_ptr_array_free(tags, TRUE);
+			tags = NULL;
+		}
 	}
 
 	g_free(type_name);
 
 	return tags;
+}
+
+
+static GPtrArray *
+find_scope_members_all(const GPtrArray *var_array, const GPtrArray *searched_array,
+		GPtrArray *member_array, langType lang)
+{
+	GPtrArray *member_tags = NULL;
+	guint i;
+
+	/* there may be several variables with the same name - try each of them until
+	 * we find something */
+	for (i = 0; i < var_array->len; i++)
+	{
+		TMTag *tag = TM_TAG(var_array->pdata[i]);
+
+		if (tag->var_type)
+		{
+			member_tags = find_scope_members(searched_array, member_array,
+							tag->var_type, lang);
+			if (member_tags)
+				break;
+		}
+	}
+
+	return member_tags;
+}
+
+
+/* Returns all matching members tags found in given struct/union/class name.
+ @param source_file TMSourceFile of the edited source file or NULL if not available
+ @param name Name of the variable whose members are searched
+ @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
+GPtrArray *
+tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name)
+{
+	langType lang = source_file ? source_file->lang : -1;
+	GPtrArray *tags, *member_tags = NULL;
+
+	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, lang);
+
+	if (source_file)
+	{
+		GPtrArray *file_members = tm_tags_extract(source_file->tags_array, TM_MEMBER_TYPE_MASK);
+
+		member_tags = find_scope_members_all(tags, source_file->tags_array,
+							file_members, lang);
+		g_ptr_array_free(file_members, TRUE);
+	}
+	if (!member_tags)
+		member_tags = find_scope_members_all(tags, theWorkspace->tags_array,
+							theWorkspace->member_array, lang);
+	if (!member_tags)
+		member_tags = find_scope_members_all(tags, theWorkspace->global_tags,
+							theWorkspace->global_member_array, lang);
+
+	g_ptr_array_free(tags, TRUE);
+
+	return member_tags;
 }
 
 
