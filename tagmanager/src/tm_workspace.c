@@ -720,7 +720,7 @@ static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	if (!src || !dst || !name || !*name)
 		return 0;
 
-	matches = tm_tags_find(src, name, partial, TRUE, &tagCount);
+	matches = tm_tags_find(src, name, partial, &tagCount);
 	for (tagIter = 0; tagIter < tagCount; ++tagIter)
 	{
 		if ((!scope || g_strcmp0((*matches)->scope, scope) == 0) &&
