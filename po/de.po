@@ -3124,17 +3124,17 @@ msgstr "Nahöstlich"
 #: ../src/filetypes.c:94
 #, c-format
 msgid "%s source file"
-msgstr "%s Quelldatei"
+msgstr "%s-Quelldatei"
 
 #: ../src/filetypes.c:95
 #, c-format
 msgid "%s file"
-msgstr "%s Datei"
+msgstr "%s-Datei"
 
 #: ../src/filetypes.c:96
 #, c-format
 msgid "%s script"
-msgstr "%s Skript-Datei"
+msgstr "%s-Skript-Datei"
 
 #: ../src/filetypes.c:97
 #, c-format
