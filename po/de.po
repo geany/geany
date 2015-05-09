@@ -2873,13 +2873,13 @@ msgstr ""
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
-"Konnte Datei »%s« nicht zum Schreiben öffnen: fwrite() fehlgeschlagen: %s"
+"Konnte Datei »%s« nicht schreiben: fwrite() fehlgeschlagen: %s"
 
 #: ../src/document.c:1915
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
-"Konnte Datei »%s« nicht zum Schreiben öffnen: fclose() fehlgeschlagen: %s"
+"Konnte Datei »%s« nicht schließen: fclose() fehlgeschlagen: %s"
 
 #: ../src/document.c:1965 ../src/document.c:3490
 msgid "_Overwrite"
