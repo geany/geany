@@ -761,42 +761,39 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 }
 
 
-static void add_member(GPtrArray * tags, TMTag *tag)
+static GPtrArray *
+find_scope_members_tags (const GPtrArray * all, const char *scope, langType lang)
 {
-	gboolean add = TRUE;
-
-	if (tags->len > 0)
-	{
-		TMTag *last_tag = TM_TAG(tags->pdata[tags->len-1]);
-		/* add only if it's from the same file - this prevents mixing tags from
-		 * structs with identical name (typically the anonymous ones) so we
-		 * only get members from a single one. For workspace tags it adds
-		 * all members because there's no file associated. */
-		add = last_tag->file == tag->file;
-	}
-	if (add)
-		/* the first file name "wins" */
-		g_ptr_array_add (tags, tag);
-}
-
-
-static void
-find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
-						 const char *scope, langType lang)
-{
+	GPtrArray *tags = g_ptr_array_new();
+	TMSourceFile *last_file = NULL;
 	guint i;
 
 	for (i = 0; i < all->len; ++i)
 	{
 		TMTag *tag = TM_TAG (all->pdata[i]);
 
-		if (tag && tag->scope && tag->scope[0] != '\0' &&
+		if (tag && (tag->file == last_file || last_file == NULL) &&
+			tag->scope && tag->scope[0] != '\0' &&
 			langs_compatible(tag->lang, lang) &&
 			strcmp(scope, tag->scope) == 0)
 		{
-			add_member (tags, tag);
+			g_ptr_array_add (tags, tag);
+			/* once set, always the same thanks to the if above
+			 * add only if it's from the same file - this prevents mixing tags from
+			 * structs with identical name (typically the anonymous ones) so we
+			 * only get members from a single one. For workspace tags it adds
+			 * all members because there's no file associated. */
+			last_file = tag->file;
 		}
 	}
+
+	if (tags->len == 0)
+	{
+		g_ptr_array_free(tags, TRUE);
+		return NULL;
+	}
+
+	return tags;
 }
 
 
@@ -871,15 +868,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 	}
 
 	if (has_members)
-	{
-		tags = g_ptr_array_new();
-		find_scope_members_tags(member_array, tags, type_name, lang);
-		if (tags->len == 0)
-		{
-			g_ptr_array_free(tags, TRUE);
-			tags = NULL;
-		}
-	}
+		tags = find_scope_members_tags(member_array, type_name, lang);
 
 	g_free(type_name);
 
