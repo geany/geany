@@ -60,8 +60,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
 	TMTagAttrType *attrs, gboolean partial, langType lang);
 
-GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
-                                           const char *scope_name, langType lang);
+GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name);
+
 
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
 
