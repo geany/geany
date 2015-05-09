@@ -2899,7 +2899,7 @@ msgstr "Versuchen die Datei erneut zu speichern?"
 #: ../src/document.c:1976 ../src/document.c:3543
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "»%s« wurde nicht auf dem Datenträger gefunden."
+msgstr "»%s« wurde nicht auf dem Datenträger gefunden!"
 
 #: ../src/document.c:2038
 #, c-format
@@ -2920,7 +2920,7 @@ msgid ""
 msgstr ""
 "%s\n"
 "\n"
-"Die Datei ist möglicherweise nicht vollständig auf der Festplatte gespeichert"
+"Die Datei ist möglicherweise nicht vollständig auf der Festplatte gespeichert!"
 
 #: ../src/document.c:2113
 msgid "Error saving file."
@@ -5998,7 +5998,7 @@ msgstr "Oben und Unten"
 #~ "einem neuen Reiter."
 
 #~ msgid "The editor font is not a monospaced font!"
-#~ msgstr "Die eingestellte Schriftart für den Editor ist nicht dicktengleich."
+#~ msgstr "Die eingestellte Schriftart für den Editor ist nicht dicktengleich!"
 
 #~ msgid "Text will be wrongly spaced."
 #~ msgstr "Der Text wird falsch eingerückt."
