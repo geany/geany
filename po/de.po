@@ -3129,7 +3129,7 @@ msgstr "%s Quelldatei"
 #: ../src/filetypes.c:95
 #, c-format
 msgid "%s file"
-msgstr "%s Quelldatei"
+msgstr "%s Datei"
 
 #: ../src/filetypes.c:96
 #, c-format
