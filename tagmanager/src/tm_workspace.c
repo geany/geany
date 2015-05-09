@@ -761,6 +761,25 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 }
 
 
+static void add_member(GPtrArray * tags, TMTag *tag)
+{
+	gboolean add = TRUE;
+
+	if (tags->len > 0)
+	{
+		TMTag *last_tag = TM_TAG(tags->pdata[tags->len-1]);
+		/* add only if it's from the same file - this prevents mixing tags from
+		 * structs with identical name (typically the anonymous ones) so we
+		 * only get members from a single one. For workspace tags it adds
+		 * all members because there's no file associated. */
+		add = last_tag->file == tag->file;
+	}
+	if (add)
+		/* the first file name "wins" */
+		g_ptr_array_add (tags, tag);
+}
+
+
 static int
 find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 						 const char *name, langType lang)
@@ -795,7 +814,7 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 			scope = tag->scope;
 			if (scope && 0 == strcmp (name, scope))
 			{
-				g_ptr_array_add (tags, tag);
+				add_member (tags, tag);
 				continue;
 			}
 			s_backup = NULL;
@@ -862,7 +881,7 @@ find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
 			}
 			if (j == local->len)
 			{
-				g_ptr_array_add (tags, tag);
+				add_member (tags, tag);
 			}
 		}
 	}
