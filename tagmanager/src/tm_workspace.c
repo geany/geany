@@ -764,9 +764,15 @@ static const gchar *scope_sep(langType lang)
 }
 
 
-/* Gets all members of type_tag; search them inside the all array */
+/* Gets all members of type_tag; search them inside the all array.
+ * The namespace parameter determines whether we are performing the "namespace"
+ * search (user has typed something like "A::" where A is a type) or "scope" search
+ * (user has typed "a." where a is a global struct-like variable). With the
+ * namespace search we return all direct descendants of any type while with the
+ * scope search we return all descendants (including non-direct) and only those
+ * which can be invoked on the variable (member, method, etc.). */
 static GPtrArray *
-find_scope_members_tags (const GPtrArray *all, TMTag *type_tag)
+find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace)
 {
 	TMTagType member_types =
 		tm_tag_function_t | tm_tag_prototype_t |
@@ -777,6 +783,9 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag)
 	gchar *scope;
 	size_t scope_len;
 	guint i;
+
+	if (namespace)
+		member_types = tm_tag_max_t;
 
 	if (type_tag->scope && *(type_tag->scope))
 		scope = g_strconcat(type_tag->scope, scope_sep(type_tag->lang), type_tag->name, NULL);
@@ -793,7 +802,8 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag)
 			langs_compatible(tag->lang, type_tag->lang) &&
 			strncmp(scope, tag->scope, scope_len) == 0)
 		{
-			if (tag->scope[scope_len] == '\0' || tag->scope[scope_len] == sep)
+			if ((namespace && tag->scope[scope_len] == '\0' && scope[scope_len] == '\0') ||
+				(!namespace && (tag->scope[scope_len] == '\0' || tag->scope[scope_len] == sep)))
 				g_ptr_array_add (tags, tag);
 		}
 	}
@@ -812,7 +822,8 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag)
 
 /* Gets all members of the type with the given name; search them inside tags_array */
 static GPtrArray *
-find_scope_members (const GPtrArray *tags_array, const char *name, langType lang)
+find_scope_members (const GPtrArray *tags_array, const char *name, langType lang,
+					gboolean namespace)
 {
 	gboolean has_members = FALSE;
 	GPtrArray *tags = NULL;
@@ -834,8 +845,11 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 	{
 		guint j;
 		GPtrArray *type_tags;
-		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
-						   tm_tag_struct_t | tm_tag_union_t | tm_tag_typedef_t);
+		TMTagType types = (tm_tag_class_t | tm_tag_struct_t |
+						   tm_tag_union_t | tm_tag_typedef_t);
+
+		if (namespace)
+			types ^= tm_tag_enum_t; /* | tm_tag_namespace_t | tm_tag_package_t | */
 
 		type_tags = g_ptr_array_new();
 		if (tag && tag->file)
@@ -880,41 +894,45 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 
 	if (has_members)
 		/* use the same file as the composite type if file information available */
-		tags = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag);
+		tags = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
 
 	return tags;
 }
 
 
-/* For an array of variable tags var_array, find members inside their types */
+/* For an array of variable/type tags, find members inside the types */
 static GPtrArray *
-find_scope_members_all(GPtrArray *var_array, GPtrArray *searched_array, langType lang)
+find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang)
 {
 	GPtrArray *member_tags = NULL;
 	guint i;
 
-	/* there may be several variables with the same name - try each of them until
+	/* there may be several variables/types with the same name - try each of them until
 	 * we find something */
-	for (i = 0; i < var_array->len; i++)
+	for (i = 0; i < tags->len; i++)
 	{
-		TMTag *tag = TM_TAG(var_array->pdata[i]);
+		TMTag *tag = TM_TAG(tags->pdata[i]);
+		TMTagType types = (tm_tag_class_t | /* tm_tag_namespace_t | tm_tag_package_t | */
+						   tm_tag_struct_t | tm_tag_union_t |
+						   tm_tag_enum_t | tm_tag_typedef_t);
 
-		if (tag->var_type)
-		{
-			member_tags = find_scope_members(searched_array, tag->var_type, lang);
-			if (member_tags)
-				break;
-		}
+		if (tag->type & types)  /* type: namespace search */
+			member_tags = find_scope_members(searched_array, tag->name, lang, TRUE);
+		else if (tag->var_type)  /* variable: scope search */
+			member_tags = find_scope_members(searched_array, tag->var_type, lang, FALSE);
+
+		if (member_tags)
+			break;
 	}
 
 	return member_tags;
 }
 
 
-/* Returns all member tags of a struct/union/class if the provided variable name is of such
-   a type.
+/* Returns all member tags of a struct/union/class if the provided name is a variable
+ of of such a type or the name of the type.
  @param source_file TMSourceFile of the edited source file or NULL if not available
- @param name Name of the variable whose members are searched
+ @param name Name of the variable/type whose members are searched
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name)
@@ -922,7 +940,7 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name)
 	langType lang = source_file ? source_file->lang : -1;
 	GPtrArray *tags, *member_tags = NULL;
 
-	/* tags corresponding to the variable name */
+	/* tags corresponding to the variable/type name */
 	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, lang);
 
 	/* Start searching inside the source file, continue with workspace tags and
