@@ -1328,7 +1328,7 @@ msgstr "Datum in čas:"
 
 #: ../data/geany.glade.h:276
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Določite obliko za  zamenjavo{datetime}. Uporabite lahko katerikoli "
@@ -1336,7 +1336,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:277
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Določite obliko za zamenjavo {year}. Uporabite lahko katerikoli pretvorbeni "
@@ -1344,7 +1344,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:278
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Določite obliko za zamenjavo {date}. Uporabite lahko katerikoli pretvorbeni "

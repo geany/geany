@@ -1342,7 +1342,7 @@ msgstr "Ngày Giờ :"
 
 #: ../data/geany.glade.h:276
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Ghi rõ định dạng cho ký hiệu đại diện ngày/giờ {datetime}. Có thể sử dụng "
@@ -1350,7 +1350,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:277
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Ghi rõ định dạng cho ký hiệu đại diện năm {year}. Có thể sử dụng bất cứ đặc "
@@ -1358,7 +1358,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:278
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Ghi rõ định dạng cho ký hiệu đại diện ngày tháng {date}. Có thể sử dụng bất "

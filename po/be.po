@@ -1339,7 +1339,7 @@ msgstr "Дата & Час:"
 
 #: ../data/geany.glade.h:276
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Вызначце фармат для групавога знака {datetime}. Можна выкарыстоўваць любыя "
@@ -1347,7 +1347,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:277
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Вызначце фармат для групавога знака {year}. Можна выкарыстоўваць любыя "
@@ -1355,7 +1355,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:278
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Вызначце фармат для групавога знака {date}. Можна выкарыстоўваць любыя "

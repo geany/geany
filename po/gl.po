@@ -1159,15 +1159,15 @@ msgid "Date & time:"
 msgstr "Data e Hora:"
 
 #: ../data/geany.glade.h:276
-msgid "Specify a format for the the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgid "Specify a format for the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
 msgstr "Especifique un formato para o comodín {datetime}. Pode usar calquera especificador de conversión que poida ser usado coa función strftime de ANSI C."
 
 #: ../data/geany.glade.h:277
-msgid "Specify a format for the the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgid "Specify a format for the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
 msgstr "Especifique un formato para o comodín {year}. Pode usar calquera especificador de conversión que poida ser usado coa función strftime de ANSI C."
 
 #: ../data/geany.glade.h:278
-msgid "Specify a format for the the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
+msgid "Specify a format for the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function."
 msgstr "Especifique un formato para o comodín {date}. Pode usar calquera especificador de conversión que poida ser usado coa función strftime de ANSI C."
 
 #: ../data/geany.glade.h:279

@@ -1356,7 +1356,7 @@ msgstr "일시:"
 
 #: ../data/geany.glade.h:276
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "{날짜시간} 형식지정.\n"
@@ -1364,7 +1364,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:277
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "{년도} 형식지정.\n"
@@ -1372,7 +1372,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:278
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "{날짜} 형식지정.\n"
