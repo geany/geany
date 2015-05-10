@@ -59,7 +59,7 @@ static TMTagAttrType global_tags_sort_attrs[] =
 static TMTagType TM_MEMBER_TYPE_MASK =
 	tm_tag_function_t | tm_tag_prototype_t |
 	tm_tag_member_t | tm_tag_field_t |
-	tm_tag_method_t | tm_tag_enumerator_t;
+	tm_tag_method_t;
 
 static TMWorkspace *theWorkspace = NULL;
 
@@ -824,8 +824,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 		TMTag *tag = NULL;
 		GPtrArray *type_tags;
 		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
-						   tm_tag_struct_t | tm_tag_typedef_t |
-						   tm_tag_union_t | tm_tag_enum_t);
+						   tm_tag_struct_t | tm_tag_union_t | tm_tag_typedef_t);
 
 		type_tags = g_ptr_array_new();
 		if (typedef_file)
