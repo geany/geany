@@ -780,12 +780,13 @@ static const gchar *scope_sep(langType lang)
 
 
 static GPtrArray *
-find_scope_members_tags (const GPtrArray * all, const char *scope, langType lang)
+find_scope_members_tags (const GPtrArray * all, const char *scope, langType lang,
+	TMSourceFile *tag_file)
 {
 	GPtrArray *tags = g_ptr_array_new();
 	size_t scope_len = strlen (scope);
 	gchar sep = scope_sep(lang)[0];
-	TMSourceFile *last_file = NULL;
+	TMSourceFile *last_file = tag_file;
 	guint i;
 
 	for (i = 0; i < all->len; ++i)
@@ -824,6 +825,7 @@ static GPtrArray *
 find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 	const char *name, langType lang)
 {
+	TMSourceFile *typedef_file = NULL;
 	gboolean has_members = FALSE;
 	GPtrArray *tags = NULL;
 	gchar *type_name;
@@ -841,6 +843,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 	 * loop when typedefs create a cycle by adding some limits. */
 	for (i = 0; i < 5; i++)
 	{
+		guint j;
 		TMTag *tag = NULL;
 		GPtrArray *type_tags;
 		TMTagType types = (tm_tag_class_t | tm_tag_namespace_t |
@@ -848,17 +851,25 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 						   tm_tag_union_t | tm_tag_enum_t);
 
 		type_tags = g_ptr_array_new();
-		fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, FALSE, lang);
-		if (type_tags)
+		if (typedef_file)
 		{
-			guint j;
-			for (j = 0; j < type_tags->len; j++)
-			{
-				tag = TM_TAG(type_tags->pdata[j]);
-				/* prefer non-typedef tags because we can be sure they contain members */
-				if (tag->type != tm_tag_typedef_t)
-					break;
-			}
+			/* If we have typedef_file, which is the file where the typedef was
+			 * defined, search in the file first. This helps for
+			 * "typedef struct {...}" cases where the typedef resolves to
+			 * anon_struct_* and searching for it in the whole workspace returns
+			 * too many (wrong) results. */
+			fill_find_tags_array(type_tags, typedef_file->tags_array, type_name,
+								 NULL, types, FALSE, lang);
+		}
+		if (type_tags->len == 0)
+			fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, FALSE, lang);
+
+		for (j = 0; j < type_tags->len; j++)
+		{
+			tag = TM_TAG(type_tags->pdata[j]);
+			/* prefer non-typedef tags because we can be sure they contain members */
+			if (tag->type != tm_tag_typedef_t)
+				break;
 		}
 
 		g_ptr_array_free(type_tags, TRUE);
@@ -871,6 +882,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 		{
 			g_free(type_name);
 			type_name = g_strdup(tag->var_type);
+			typedef_file = tag->file;
 			continue;
 		}
 		else /* real type with members */
@@ -888,7 +900,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 	}
 
 	if (has_members)
-		tags = find_scope_members_tags(member_array, type_name, lang);
+		tags = find_scope_members_tags(member_array, type_name, lang, typedef_file);
 
 	g_free(type_name);
 
