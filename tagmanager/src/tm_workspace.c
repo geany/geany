@@ -763,12 +763,28 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 }
 
 
+static const gchar *scope_sep(langType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_C:
+		case TM_PARSER_CPP:
+		case TM_PARSER_PHP:
+		case TM_PARSER_RUST:
+			return "::";
+		default:
+			break;
+	}
+	return ".";
+}
+
+
 static GPtrArray *
 find_scope_members_tags (const GPtrArray * all, const char *scope, langType lang)
 {
 	GPtrArray *tags = g_ptr_array_new();
 	size_t scope_len = strlen (scope);
-	gchar sep = lang == TM_PARSER_JAVA ? '.' : ':';
+	gchar sep = scope_sep(lang)[0];
 	TMSourceFile *last_file = NULL;
 	guint i;
 
@@ -864,10 +880,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 			{
 				gchar *tmp_name = type_name;
 
-				if (tag->file && tag->file->lang == TM_PARSER_JAVA)
-					type_name = g_strdup_printf("%s.%s", tag->scope, type_name);
-				else
-					type_name = g_strdup_printf("%s::%s", tag->scope, type_name);
+				type_name = g_strconcat(tag->scope, scope_sep(lang), type_name, NULL);
 				g_free(tmp_name);
 			}
 			break;
