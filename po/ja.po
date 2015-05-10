@@ -3731,7 +3731,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Geanyのインストール先ディレクトリを表示"
 
 #: ../src/main.c:134
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "すべてのファイルを読み込み専用で開く(ヘルプを参照)"
 
 #: ../src/main.c:135

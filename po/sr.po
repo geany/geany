@@ -3655,7 +3655,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Штампај Geany инсталациони префикс"
 
 #: ../src/libmain.c:135
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Отвори све ФАЈЛОВЕ у режиму само за читање (види документацију)"
 
 #: ../src/libmain.c:136

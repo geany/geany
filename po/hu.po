@@ -3656,7 +3656,7 @@ msgid "Print Geany's installation prefix"
 msgstr "A Geany telepítés prefix nyomtatása"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Minden fájlt csak olvasásra nyit meg (ld. dokumentációt)"
 
 #: ../src/main.c:139

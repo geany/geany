@@ -3670,7 +3670,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Geany-дің орнату префиксін шығару"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Барлық ФАЙЛДАРДЫ тек оқу үшін режимінде ашу (құжаттаманы қараңыз)"
 
 #: ../src/main.c:139

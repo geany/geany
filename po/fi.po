@@ -3823,7 +3823,7 @@ msgstr "Tulosta Geanyn asennuspolku"
 
 #: ../src/main.c:138
 #, fuzzy
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Avaa kaikki TIEDOSTOT vain-luku mudossa (katso dokumentoinnista)"
 
 #: ../src/main.c:139

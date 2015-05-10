@@ -3671,7 +3671,7 @@ msgid "Print Geany's installation prefix"
 msgstr "打印 Geany 安装前辍"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "以只读方式打开所有文件 (参见文档)"
 
 #: ../src/main.c:139

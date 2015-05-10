@@ -3781,7 +3781,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Rodyti Geany diegimo vietą"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Visus FAILUS atverti tik skaitymo režimu (peržiūrėkite dokumentaciją)"
 
 #: ../src/main.c:139

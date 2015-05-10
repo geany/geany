@@ -3774,7 +3774,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Geany'nin kurulduğu dizinleri göster"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Tüm DOSYALARI okuma modunda aç (yardım sayfalarına bkz)"
 
 #: ../src/main.c:139

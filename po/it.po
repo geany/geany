@@ -3888,7 +3888,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Stampa il prefisso del percorso di installazione di Geany"
 
 #: ../src/main.c:133
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Apri tutti i file in sola lettura (vedi documantazione)"
 
 #: ../src/main.c:134

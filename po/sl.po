@@ -3831,7 +3831,7 @@ msgstr "Izpiši Geanyjevo namestitveno predpono"
 
 # It's far more user friendly to see capsed ALL instead of FILES. Or even both? I suggest here <i><b> </i></b> :)))
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Odpri VSE datoteke v načinu samo za branje (glej dokumentacijo).  "
 
 #: ../src/main.c:139

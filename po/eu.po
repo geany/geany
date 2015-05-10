@@ -3677,7 +3677,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Inprimatu Geany-ren instalazio-aurrizkia"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr ""
 "Ireki FITXATEGI guztiak irakurtzeko soilik moduan (ikusi dokumentazioa)"
 

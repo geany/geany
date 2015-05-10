@@ -3484,7 +3484,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Cetak prefiks instalasi Geany"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Buka seluruh BERKAS pada mode hanya-baca (lihat dokumentasi)"
 
 #: ../src/main.c:139

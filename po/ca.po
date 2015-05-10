@@ -3800,7 +3800,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Mostra el prefix d'instal·lació de Geany"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Obre tots els FITXERS en mode només lectura (vegeu la documentació)"
 
 #: ../src/main.c:139
