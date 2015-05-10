@@ -34,8 +34,6 @@ typedef struct
 		(just pointers to source file tags, the tag objects are owned by the source files) */
 	GPtrArray *typename_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
 	GPtrArray *global_typename_array; /* Like above for global tags */
-	GPtrArray *member_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
-	GPtrArray *global_member_array; /* Like above for global tags */
 } TMWorkspace;
 
 
