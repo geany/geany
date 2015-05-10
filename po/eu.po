@@ -4099,7 +4099,7 @@ msgstr "Erabili _ihes-sekuentziak"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "Ordezkatu \\\\, \\t, \\n, \\r eta \\uXXXX (Unicode kararaktereak) dagozkien "

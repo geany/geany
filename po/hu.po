@@ -4070,7 +4070,7 @@ msgstr "_Escape szekvenciák használata"
 #: ../src/search.c:329
 msgid ""
 "Replace \\\\, \\t, \\n"
-", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters"
+", \\r and \\uXXXX (Unicode characters) with the corresponding control characters"
 msgstr ""
 "Helyettesítse a \\\\, \\t, \\n"
 ", \\r és \\uXXXX (Unicode karakterek) jeleket a megfelelő vezérlőkarakterekkel."

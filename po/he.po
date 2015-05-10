@@ -4129,7 +4129,7 @@ msgstr "החלפת _תווי בקרה"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr "מחליף ‎\\\\, \\t, \\n, \\r ו-‎\\uXXXX (תווי יוניקוד) בתווי בקרה מתאימים"
 

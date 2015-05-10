@@ -4155,7 +4155,7 @@ msgstr "使用逸出序列(_E)"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr "以相應的控制字元置換 \\\\，\\t,\\n，\\r 和 \\uXXXX (萬國碼字元) "
 

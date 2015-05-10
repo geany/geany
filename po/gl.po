@@ -4072,7 +4072,7 @@ msgstr "Usar secuencias de _escape"
 #: ../src/search.c:329
 msgid ""
 "Replace \\\\, \\t, \\n"
-", \\r and \\uXXXX (Unicode chararacters) with the corresponding control characters"
+", \\r and \\uXXXX (Unicode characters) with the corresponding control characters"
 msgstr ""
 "Substituír \\\\, \\t, \\n"
 ", \\r e \\uXXXX (caracteres unicode) polos correspondentes caracteres de control"

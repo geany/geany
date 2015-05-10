@@ -4445,7 +4445,7 @@ msgstr "Користуватися escape-_послідовністю"
 #: ../src/search.c:329
 #, fuzzy
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "Заміняти \\\\, \\t, \\n, \\r і \\uXXXX (символи Юнікоду) з відповідними "

@@ -4275,7 +4275,7 @@ msgstr "Выкарыстоўваць паслядоўнасці змены"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "Замяняць \\\\, \\t, \\n, \\r і \\uXXXX (Літары юнікоду) на адпаведныя "

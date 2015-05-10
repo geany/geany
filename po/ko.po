@@ -4351,7 +4351,7 @@ msgstr "예외처리문자 사용(_e)"
 #: ../src/search.c:329
 #, fuzzy
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "\\\\, \\uXXXX(유니코드 문자), \\t, \\n, \\r 등을 상응하는 제어문자로 바꿉니"
