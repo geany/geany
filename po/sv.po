@@ -1317,7 +1317,7 @@ msgstr "Datum och tid:"
 
 #: ../data/geany.glade.h:276
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Skriv in ett format för {datetime}. Du kan använda de "
@@ -1325,7 +1325,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:277
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Skriv in ett format för att använda för {year}. Du kan använda den syntax "
@@ -1333,7 +1333,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:278
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Skriv in ett format för att använda till fältet {date}. Du kan använda den "
@@ -3775,7 +3775,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Visa Geany's installationsprefix"
 
 #: ../src/main.c:138
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Öppna alla filer som skrivskyddade (se dokumentation)"
 
 #: ../src/main.c:139
@@ -4207,7 +4207,7 @@ msgstr "Använd escape-sekvenser"
 
 #: ../src/search.c:329
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "Ersätt \\\\, \\t, \\n, \\r and \\uXXXX (Unicode tecken) med korresponderande "

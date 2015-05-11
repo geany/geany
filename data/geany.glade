@@ -5175,7 +5175,7 @@
                                   <object class="GtkEntry" id="entry_template_datetime">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Specify a format for the the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
+                                    <property name="tooltip_text" translatable="yes">Specify a format for the {datetime} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>
@@ -5193,7 +5193,7 @@
                                   <object class="GtkEntry" id="entry_template_year">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Specify a format for the the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
+                                    <property name="tooltip_text" translatable="yes">Specify a format for the {year} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>
@@ -5211,7 +5211,7 @@
                                   <object class="GtkEntry" id="entry_template_date">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">Specify a format for the the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
+                                    <property name="tooltip_text" translatable="yes">Specify a format for the {date} wildcard. You can use any conversion specifiers which can be used with the ANSI C strftime function.</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>

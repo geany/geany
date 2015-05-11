@@ -1369,7 +1369,7 @@ msgstr "Data & ora:"
 
 #: ../data/geany.glade.h:279
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Inserire qui un formato per il jolly {datetime} (data e ora). Si possono "
@@ -1378,7 +1378,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:280
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Inserire qui un formato per il jolly {year} (anno). Si possono usare tutti "
@@ -1387,7 +1387,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:281
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Inserire qui un formato per il jolly {date} (data). Si possono usare tutti "
@@ -3888,7 +3888,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Stampa il prefisso del percorso di installazione di Geany"
 
 #: ../src/main.c:133
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Apri tutti i file in sola lettura (vedi documantazione)"
 
 #: ../src/main.c:134
@@ -4324,7 +4324,7 @@ msgstr "Usa sequenze di _escape"
 
 #: ../src/search.c:332
 msgid ""
-"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode chararacters) with the "
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
 "Sostituisci \\\\, \\t, \\n, \\r e \\uXXXX (Caratteri Unicode) con i "

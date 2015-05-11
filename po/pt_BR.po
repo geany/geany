@@ -1344,7 +1344,7 @@ msgstr "Data & hora:"
 
 #: ../data/geany.glade.h:279
 msgid ""
-"Specify a format for the the {datetime} wildcard. You can use any conversion "
+"Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Especifique um formato para o curinga {datetime}. Você pode usar qualquer "
@@ -1353,7 +1353,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:280
 msgid ""
-"Specify a format for the the {year} wildcard. You can use any conversion "
+"Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Especifique um formato para o curinga {year}. Você pode usar qualquer "
@@ -1362,7 +1362,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:281
 msgid ""
-"Specify a format for the the {date} wildcard. You can use any conversion "
+"Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Especifique um formato para o curinga {date}. Você pode usar qualquer "
@@ -3817,7 +3817,7 @@ msgid "Print Geany's installation prefix"
 msgstr "Imprimir o prefixo de instalação do Geany"
 
 #: ../src/main.c:134
-msgid "Open all FILES in read-only mode (see documention)"
+msgid "Open all FILES in read-only mode (see documentation)"
 msgstr "Abrir todos os ARQUIVOS em modo somente-leitura (veja a documentação)"
 
 #: ../src/main.c:135
