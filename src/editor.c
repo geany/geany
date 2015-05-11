@@ -657,7 +657,9 @@ static gboolean match_last_chars(ScintillaObject *sci, gint pos, const gchar *st
 	gchar *buf;
 
 	g_return_val_if_fail(len < 100, FALSE);
-	g_return_val_if_fail((gint)len <= pos, FALSE);
+
+	if ((gint)len > pos)
+		return FALSE;
 
 	buf = g_alloca(len + 1);
 	sci_get_text_range(sci, pos - len, pos, buf);
@@ -706,11 +708,15 @@ static void autocomplete_scope(GeanyEditor *editor)
 	GeanyFiletype *ft = editor->document->file_type;
 	GPtrArray *tags;
 
-	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP)
+	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP ||
+		ft->id == GEANY_FILETYPES_PHP || ft->id == GEANY_FILETYPES_RUST)
 	{
-		if (pos >= 2 && (match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "::")))
+		if (match_last_chars(sci, pos, "::"))
 			pos--;
-		else if (ft->id == GEANY_FILETYPES_CPP && pos >= 3 && match_last_chars(sci, pos, "->*"))
+		else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
+				 match_last_chars(sci, pos, "->"))
+			pos--;
+		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
 			pos-=2;
 		else if (typed != '.')
 			return;
@@ -719,7 +725,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 		return;
 
 	/* allow for a space between word and operator */
-	if (isspace(sci_get_char_at(sci, pos - 2)))
+	while (pos >= 2 && isspace(sci_get_char_at(sci, pos - 2)))
 		pos--;
 	name = editor_get_word_at_pos(editor, pos - 1, NULL);
 	if (!name)
