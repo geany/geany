@@ -255,6 +255,7 @@ test_sources = \
 	regexp.js						\
 	return-hint.zep					\
 	return-types.go					\
+	ruby-sf-bug-364.rb				\
 	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\

@@ -194,6 +194,10 @@ static rubyKind parseIdentifier (
 	{
 		also_ok = "_.?!=";
 	}
+	else if (kind == K_SINGLETON)
+	{
+		also_ok = "_?!=";
+	}
 	else if (kind == K_DESCRIBE || kind == K_CONTEXT)
 	{
 		also_ok = " ,\".#_?!='/-";
@@ -237,7 +241,10 @@ static rubyKind parseIdentifier (
 				vStringClear (name);
 				return parseIdentifier (cp, name, K_SINGLETON);
 			}
+		}
 
+		if (kind == K_METHOD || kind == K_SINGLETON)
+		{
 			/* Recognize characters which mark the end of a method name. */
 			if (charIsIn (last_char, "?!="))
 			{
