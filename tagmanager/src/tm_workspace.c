@@ -800,7 +800,8 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		if (tag && (tag->type & member_types) &&
 			tag->scope && tag->scope[0] != '\0' &&
 			langs_compatible(tag->lang, type_tag->lang) &&
-			strncmp(scope, tag->scope, scope_len) == 0)
+			strncmp(scope, tag->scope, scope_len) == 0 &&
+			(!namespace || !g_str_has_prefix(tag->name, "anon_")))
 		{
 			if ((namespace && tag->scope[scope_len] == '\0' && scope[scope_len] == '\0') ||
 				(!namespace && (tag->scope[scope_len] == '\0' || tag->scope[scope_len] == sep)))
