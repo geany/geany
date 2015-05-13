@@ -900,9 +900,58 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 }
 
 
+/* Checks whether member with member_scope directly accessible from method with
+ * method_scope */
+static gboolean member_at_method_scope(const gchar *method_scope, const gchar *member_scope,
+	langType lang)
+{
+	const gchar *sep = scope_sep(lang);
+	gboolean ret = FALSE;
+	gchar **comps;
+	guint len;
+
+	/* method scope is in the form ...::class_name::method_name */
+	comps = g_strsplit (method_scope, sep, 0);
+	len = g_strv_length(comps);
+	if (len > 1)
+	{
+		gchar *method, *inner_scope, *cls, *cls_scope;
+		GPtrArray *tags;
+
+		/* get method/member scope */
+		method = comps[len - 1];
+		comps[len - 1] = NULL;
+		inner_scope = g_strjoinv(sep, comps);
+		comps[len - 1] = method;
+
+		/* get class scope */
+		cls = comps[len - 2];
+		comps[len - 2] = NULL;
+		cls_scope = g_strjoinv(sep, comps);
+		comps[len - 2] = cls;
+
+		/* check whether the class exists */
+		tags = tm_workspace_find(cls, cls_scope, tm_tag_class_t | tm_tag_struct_t, NULL, FALSE, lang);
+		ret = tags->len > 0;
+
+		/* check whether member inside the class */
+		if (ret)
+			ret = g_strcmp0(member_scope, inner_scope) == 0;
+
+		g_ptr_array_free(tags, TRUE);
+		g_free(cls_scope);
+		g_free(inner_scope);
+	}
+
+	g_strfreev(comps);
+	return ret;
+}
+
+
 /* For an array of variable/type tags, find members inside the types */
 static GPtrArray *
-find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang)
+find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang,
+	gboolean member, const gchar *current_scope)
 {
 	GPtrArray *member_tags = NULL;
 	guint i;
@@ -920,13 +969,17 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
 			member_tags = find_scope_members(searched_array, tag->name, lang, TRUE);
 		else if (tag->var_type)  /* variable: scope search */
 		{
-			gchar *tag_type = g_strdup(tag->var_type);
+			if (!(tag->type & (tm_tag_field_t | tm_tag_member_t)) || member ||
+				member_at_method_scope(current_scope, tag->scope, lang))
+			{
+				gchar *tag_type = g_strdup(tag->var_type);
 
-			/* remove pointers in case the type contains them */
-			g_strdelimit(tag_type, "*", ' ');
-			g_strstrip(tag_type);
-			member_tags = find_scope_members(searched_array, tag_type, lang, FALSE);
-			g_free(tag_type);
+				/* remove pointers in case the type contains them */
+				g_strdelimit(tag_type, "*", ' ');
+				g_strstrip(tag_type);
+				member_tags = find_scope_members(searched_array, tag_type, lang, FALSE);
+				g_free(tag_type);
+			}
 		}
 
 		if (member_tags)
@@ -942,9 +995,12 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
  @param source_file TMSourceFile of the edited source file or NULL if not available
  @param name Name of the variable/type whose members are searched
  @param function TRUE if the name is a name of a function
+ @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
+ @param current_scope The current scope in the editor
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
-tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name, gboolean function)
+tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
+	gboolean function, gboolean member, const gchar *current_scope)
 {
 	langType lang = source_file ? source_file->lang : -1;
 	GPtrArray *tags, *member_tags = NULL;
@@ -963,11 +1019,14 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name, gb
 	 * end with global tags. This way we find the "closest" tag to the current
 	 * file in case there are more of them. */
 	if (source_file)
-		member_tags = find_scope_members_all(tags, source_file->tags_array, lang);
+		member_tags = find_scope_members_all(tags, source_file->tags_array,
+											 lang, member, current_scope);
 	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang);
+		member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang,
+											 member, current_scope);
 	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang);
+		member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang,
+											 member, current_scope);
 
 	g_ptr_array_free(tags, TRUE);
 
