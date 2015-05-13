@@ -75,6 +75,7 @@ static GHashTable *snippet_hash = NULL;
 static GQueue *snippet_offsets = NULL;
 static gint snippet_cursor_insert_pos;
 static GtkAccelGroup *snippet_accel_group = NULL;
+static gboolean autocomplete_scope_shown = FALSE;
 
 static const gchar geany_cursor_marker[] = "__GEANY_CURSOR_MARKER__";
 
@@ -699,7 +700,7 @@ static void request_reshowing_calltip(SCNotification *nt)
 }
 
 
-static void autocomplete_scope(GeanyEditor *editor)
+static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
@@ -709,7 +710,21 @@ static void autocomplete_scope(GeanyEditor *editor)
 	GPtrArray *tags;
 	gboolean function = FALSE;
 	gboolean member;
+	gboolean ret = FALSE;
 	const gchar *current_scope;
+
+	if (autocomplete_scope_shown)
+	{
+		/* move at the operator position */
+		pos -= rootlen;
+
+		/* allow for a space between word and operator */
+		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+			pos--;
+
+		if (pos > 0)
+			typed = sci_get_char_at(sci, pos - 1);
+	}
 
 	if (typed == '.')
 		pos -= 1;
@@ -724,10 +739,10 @@ static void autocomplete_scope(GeanyEditor *editor)
 		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
 			pos-=3;
 		else
-			return;
+			return FALSE;
 	}
 	else
-		return;
+		return FALSE;
 
 	/* allow for a space between word and operator */
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
@@ -751,7 +766,7 @@ static void autocomplete_scope(GeanyEditor *editor)
 
 	name = editor_get_word_at_pos(editor, pos, NULL);
 	if (!name)
-		return;
+		return FALSE;
 
 	/* check if invoked on member */
 	pos -= strlen(name);
@@ -765,11 +780,32 @@ static void autocomplete_scope(GeanyEditor *editor)
 				member, current_scope);
 	if (tags)
 	{
-		show_tags_list(editor, tags, 0);
+		GPtrArray *filtered = NULL;
+		TMTag *tag;
+		guint i;
+
+		foreach_ptr_array(tag, i, tags)
+		{
+			if (g_str_has_prefix(tag->name, root))
+			{
+				if (!filtered)
+					filtered = g_ptr_array_new();
+				g_ptr_array_add(filtered, tag);
+			}
+		}
+
+		if (filtered)
+		{
+			show_tags_list(editor, filtered, rootlen);
+			g_ptr_array_free(filtered, TRUE);
+			ret = TRUE;
+		}
+
 		g_ptr_array_free(tags, TRUE);
 	}
 
 	g_free(name);
+	return ret;
 }
 
 
@@ -1124,6 +1160,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_AUTOCCANCELLED:
 			/* now that autocomplete is finishing or was cancelled, reshow calltips
 			 * if they were showing */
+			autocomplete_scope_shown = FALSE;
 			request_reshowing_calltip(nt);
 			break;
 
@@ -2244,7 +2281,6 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	if (!force && !highlighting_is_code_style(lexer, style))
 		return FALSE;
 
-	autocomplete_scope(editor);
 	ret = autocomplete_check_html(editor, style, pos);
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
@@ -2258,7 +2294,24 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	root = cword;
 	rootlen = strlen(root);
 
-	if (!ret && rootlen > 0)
+	if (ret || force)
+	{
+		if (autocomplete_scope_shown)
+		{
+			autocomplete_scope_shown = FALSE;
+			if (!ret)
+				sci_send_command(sci, SCI_AUTOCCANCEL);
+		}
+	}
+	else
+	{
+		ret = autocomplete_scope(editor, root, rootlen);
+		if (!ret && autocomplete_scope_shown)
+			sci_send_command(sci, SCI_AUTOCCANCEL);
+		autocomplete_scope_shown = ret;
+	}
+
+	if (!ret && rootlen > 0 && !autocomplete_scope_shown)
 	{
 		if (ft->id == GEANY_FILETYPES_PHP && style == SCE_HPHP_DEFAULT &&
 			rootlen == 3 && strcmp(root, "php") == 0 && pos >= 5 &&
