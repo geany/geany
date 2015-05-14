@@ -133,7 +133,7 @@ static void init_builtin_filetypes(void)
 	 * --------------------------------------------------------------------------------------------------------------------------
 	 *       [0]         [1]           [2]                 [3]                        [4]          [5]      */
 	FT_INIT( NONE,       NONE,         "None",             _("None"),                 NONE,        NONE     );
-	FT_INIT( C,          C,            "C",                NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( C,          CPP,          "C",                NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( CPP,        CPP,          "C++",              NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( OBJECTIVEC, OBJC,         "Objective-C",      NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( CS,         CSHARP,       "C#",               NULL,                      SOURCE_FILE, COMPILED );
