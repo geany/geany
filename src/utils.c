@@ -34,6 +34,7 @@
 #include "document.h"
 #include "prefs.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "support.h"
 #include "templates.h"
 #include "ui_utils.h"
@@ -76,29 +77,21 @@ void utils_open_browser(const gchar *uri)
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gboolean again = TRUE;
+	gchar *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
 
-	while (again)
+	while (!spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
 	{
-		gchar *cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
+		gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+			_("Failed to spawn the configured browser command. "
+			  "Please correct it or enter another one."),
+			tool_prefs.browser_cmd);
 
-		if (g_spawn_command_line_async(cmdline, NULL))
-			again = FALSE;
-		else
-		{
-			gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
-				_("Failed to spawn the configured browser command. "
-				  "Please correct it or enter another one."),
-				tool_prefs.browser_cmd);
+		if (new_cmd == NULL) /* user canceled */
+			break;
 
-			if (new_cmd == NULL) /* user canceled */
-				again = FALSE;
-			else
-				SETPTR(tool_prefs.browser_cmd, new_cmd);
-		}
-		g_free(cmdline);
+		SETPTR(tool_prefs.browser_cmd, new_cmd);
 	}
 #endif
 }
@@ -1651,15 +1644,14 @@ const gchar *utils_get_default_dir_utf8(void)
 
 
 /**
- *  Wraps g_spawn_sync() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps @c spawn_sync(), which see.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
+ *  @param flags Ignored.
+ *  @param child_setup Ignored.
+ *  @param user_data Ignored.
  *  @param std_out The return location for child output, or @a NULL.
  *  @param std_err The return location for child error messages, or @a NULL.
  *  @param exit_status The child exit status, as returned by waitpid(), or @a NULL.
@@ -1672,40 +1664,29 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 						  gchar **std_err, gint *exit_status, GError **error)
 {
-	gboolean result;
-
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
+	GString *output = std_out ? g_string_new(NULL) : NULL;
+	GString *errors = std_err ? g_string_new(NULL) : NULL;
+	gboolean result = spawn_sync(dir, NULL, argv, env, NULL, output, errors, exit_status, error);
 
 	if (std_out)
-		*std_out = NULL;
+		*std_out = g_string_free(output, !result);
 
 	if (std_err)
-		*std_err = NULL;
-
-#ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status, error);
-#else
-	result = g_spawn_sync(dir, argv, env, flags, NULL, NULL, std_out, std_err, exit_status, error);
-#endif
+		*std_err = g_string_free(errors, !result);
 
 	return result;
 }
 
 
 /**
- *  Wraps g_spawn_async() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps @c spawn_async(), which see.
  *
  *  @param dir The child's current working directory, or @a NULL to inherit parent's.
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
+ *  @param flags Ignored.
+ *  @param child_setup Ignored.
+ *  @param user_data Ignored.
  *  @param child_pid The return location for child process ID, or NULL.
  *  @param error The return location for error or @a NULL.
  *
@@ -1716,20 +1697,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error)
 {
-	gboolean result;
-
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
-
-#ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL, error);
-#else
-	result = g_spawn_async(dir, argv, env, flags, NULL, NULL, child_pid, error);
-#endif
-	return result;
+	return spawn_async(dir, NULL, argv, env, child_pid, error);
 }
 
 

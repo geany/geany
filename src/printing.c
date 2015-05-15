@@ -39,6 +39,7 @@
 #include "highlighting.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -600,16 +601,15 @@ static void print_external(GeanyDocument *doc)
 			doc->file_name, cmdline))
 	{
 		GError *error = NULL;
-
-#ifdef G_OS_WIN32
-		gchar *tmp_cmdline = g_strdup(cmdline);
-#else
 		/* /bin/sh -c emulates the system() call and makes complex commands possible
-		 * but only needed on non-win32 systems due to the lack of win32's shell capabilities */
-		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
-#endif
+		 * but only on non-win32 systems due to the lack of win32's shell capabilities */
+	#ifdef G_OS_UNIX
+		gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
 
-		if (! g_spawn_command_line_async(tmp_cmdline, &error))
+		if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+	#else
+		if (!spawn_async(NULL, cmdline, NULL, NULL, NULL, &error))
+	#endif
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Printing of \"%s\" failed (return code: %s)."),
@@ -620,7 +620,6 @@ static void print_external(GeanyDocument *doc)
 		{
 			msgwin_status_add(_("File %s printed."), doc->file_name);
 		}
-		g_free(tmp_cmdline);
 	}
 	g_free(cmdline);
 }

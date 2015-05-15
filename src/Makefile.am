@@ -89,6 +89,7 @@ libgeany_la_SOURCES = \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
 	socket.c socket.h \
+	spawn.c spawn.h \
 	stash.c stash.h \
 	support.h \
 	symbols.c symbols.h \
