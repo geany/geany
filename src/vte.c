@@ -259,6 +259,13 @@ static void on_vte_realize(void)
 }
 
 
+static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
+{
+	vte_start(vc->vte);
+	return FALSE;
+}
+
+
 static void create_vte(void)
 {
 	GtkWidget *vte, *scrollbar, *hbox;
@@ -294,7 +301,8 @@ static void create_vte(void)
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
-	vte_start(vte);
+	/* start shell on idle otherwise the initial prompt can get corrupted */
+	g_idle_add(vte_start_idle, NULL);
 
 	gtk_widget_show_all(hbox);
 	terminal_label = gtk_label_new(_("Terminal"));
