@@ -482,6 +482,10 @@ static void popEnclosingContext (void)
 static void addTag (vString * const ident, int kind)
 {
 	tagEntryInfo toCreate;
+
+	if (! ObjcKinds[kind].enabled)
+		return;
+
 	prepareTag (&toCreate, ident, kind);
 	makeTagEntry (&toCreate);
 }
