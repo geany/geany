@@ -1,5 +1,5 @@
-# Brazilian Portuguese translations for PACKAGE package.
-# Copyright (C) 2006-2013 GEANY'S COPYRIGHT HOLDER
+# Brazilian Portuguese translations for geany package.
+# Copyright (C) 2006-2015 GEANY'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Alexandre Moreira <alexandream@gmail.com>, 2006
 # Adrovane Marques Kade <adrovane@gmail.com>, 2007-2013
@@ -7,7 +7,7 @@
 # Felipe Braga <fbobraga@gmail.com>, 2015.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.23\n"
+"Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-17 02:36+0000\n"
 "PO-Revision-Date: 2015-05-17 18:43-0200\n"
