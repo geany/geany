@@ -163,7 +163,7 @@ static const GtkTargetEntry dnd_targets[] =
 
 static gchar **vte_get_child_environment(void)
 {
-	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", NULL};
+	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", "TERM_PROGRAM", NULL};
 
 	return utils_copy_environment(exclude_vars, "TERM", "xterm", NULL);
 }
