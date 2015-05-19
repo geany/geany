@@ -29,6 +29,7 @@ src/project.c
 src/sciwrappers.c
 src/search.c
 src/socket.c
+src/spawn.c
 src/stash.c
 src/symbols.c
 src/templates.c
