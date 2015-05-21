@@ -109,6 +109,8 @@ typedef struct
 {
 	guint *sort_attrs;
 	gboolean partial;
+	const GPtrArray *tags_array;
+	gboolean first;
 } TMSortOptions;
 
 static const char *s_tag_type_names[] = {
@@ -1084,6 +1086,31 @@ static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
 	return NULL;
 }
 
+static gint tag_search_cmp(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
+{
+	gint res = tm_tag_compare(ptr1, ptr2, user_data);
+
+	if (res == 0)
+	{
+		TMSortOptions *sort_options = user_data;
+		const GPtrArray *tags_array = sort_options->tags_array;
+		TMTag **tag = (TMTag **) ptr2;
+
+		/* if previous/next (depending on sort options) tag equal, we haven't
+		 * found the first/last tag in a sequence of equal tags yet */
+		if (sort_options->first && ptr2 != &tags_array->pdata[0]) {
+			if (tm_tag_compare(ptr1, tag - 1, user_data) == 0)
+				return -1;
+		}
+		else if (!sort_options->first && ptr2 != &tags_array->pdata[tags_array->len-1])
+		{
+			if (tm_tag_compare(ptr1, tag + 1, user_data) == 0)
+				return 1;
+		}
+	}
+	return res;
+}
+
 /*
  Returns a pointer to the position of the first matching tag in a (sorted) tags array.
  The passed array of tags must be already sorted by name (searched with binary search).
@@ -1093,51 +1120,40 @@ static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
  @param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, guint * tagCount)
+		gboolean partial, guint *tagCount)
 {
-	static TMTag *tag = NULL;
-	TMTag **result;
-	guint tagMatches=0;
+	TMTag *tag, **first;
 	TMSortOptions sort_options;
 
 	*tagCount = 0;
-	if ((!tags_array) || (!tags_array->len))
+	if (!tags_array || !tags_array->len)
 		return NULL;
 
-	if (NULL == tag)
-		tag = g_new0(TMTag, 1);
+	tag = g_new0(TMTag, 1);
 	tag->name = (char *) name;
+
 	sort_options.sort_attrs = NULL;
 	sort_options.partial = partial;
+	sort_options.tags_array = tags_array;
+	sort_options.first = TRUE;
+	first = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
+			tag_search_cmp, &sort_options);
 
-	result = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
-			tm_tag_compare, &sort_options);
-	/* There can be matches on both sides of result */
-	if (result)
+	if (first)
 	{
-		TMTag **last = (TMTag **) &tags_array->pdata[tags_array->len - 1];
-		TMTag **adv;
+		TMTag **last;
+		unsigned first_pos;
 
-		/* First look for any matches after result */
-		adv = result;
-		adv++;
-		for (; adv <= last && *adv; ++ adv)
-		{
-			if (0 != tm_tag_compare(&tag, adv, &sort_options))
-				break;
-			++tagMatches;
-		}
-		/* Now look for matches from result and below */
-		for (; result >= (TMTag **) tags_array->pdata; -- result)
-		{
-			if (0 != tm_tag_compare(&tag, (TMTag **) result, &sort_options))
-				break;
-			++tagMatches;
-		}
-		*tagCount=tagMatches;
-		++ result;	/* Correct address for the last successful match */
+		sort_options.first = FALSE;
+		first_pos = first - (TMTag **)tags_array->pdata;
+		/* search between the first element and end */
+		last = (TMTag **)binary_search(&tag, first, tags_array->len - first_pos,
+				tag_search_cmp, &sort_options);
+		*tagCount = last - first + 1;
 	}
-	return (TMTag **) result;
+
+	g_free(tag);
+	return (TMTag **) first;
 }
 
 /* Returns TMTag which "own" given line
