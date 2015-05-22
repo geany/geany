@@ -857,10 +857,7 @@ find_scope_members (const GPtrArray *tags_array, GPtrArray *member_array,
 			{
 				gchar *tmp_name = type_name;
 
-				if (tag->file && tag->file->lang == TM_PARSER_JAVA)
-					type_name = g_strdup_printf("%s.%s", tag->scope, type_name);
-				else
-					type_name = g_strdup_printf("%s::%s", tag->scope, type_name);
+				type_name = g_strconcat(tag->scope, tm_tag_context_separator(lang), type_name, NULL);
 				g_free(tmp_name);
 			}
 			break;

@@ -17,6 +17,7 @@
 #include "read.h"
 #define LIBCTAGS_DEFINED
 #include "tm_tag.h"
+#include "tm_parser.h"
 
 
 #define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
@@ -1165,6 +1166,35 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType ta
 		}
 	}
 	return matching_tag;
+}
+
+const gchar *tm_tag_context_separator(langType lang)
+{
+	switch (lang)
+	{
+		case TM_PARSER_C:	/* for C++ .h headers or C structs */
+		case TM_PARSER_CPP:
+		case TM_PARSER_GLSL:	/* for structs */
+		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
+		case TM_PARSER_PHP:
+		case TM_PARSER_POWERSHELL:
+		case TM_PARSER_RUST:
+		case TM_PARSER_ZEPHIR:
+			return "::";
+
+		/* avoid confusion with other possible separators in group/section name */
+		case TM_PARSER_CONF:
+		case TM_PARSER_REST:
+			return ":::";
+
+		/* no context separator */
+		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_TXT2TAGS:
+			return "\x03";
+
+		default:
+			return ".";
+	}
 }
 
 #if 0
