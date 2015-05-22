@@ -191,6 +191,8 @@ TMTag *tm_tag_ref(TMTag *tag);
 
 gboolean tm_tags_equal(const TMTag *a, const TMTag *b);
 
+const gchar *tm_tag_context_separator(langType lang);
+
 #ifdef TM_DEBUG /* various debugging functions */
 
 const char *tm_tag_type_name(const TMTag *tag);
