@@ -780,113 +780,23 @@ static void add_member(GPtrArray * tags, TMTag *tag)
 }
 
 
-static int
+static void
 find_scope_members_tags (const GPtrArray * all, GPtrArray * tags,
-						 const char *name, langType lang)
+						 const char *scope, langType lang)
 {
-	GPtrArray *local = g_ptr_array_new ();
-	unsigned int i;
-	TMTag *tag;
-	size_t len = strlen (name);
-	for (i = 0; (i < all->len); ++i)
+	guint i;
+
+	for (i = 0; i < all->len; ++i)
 	{
-		tag = TM_TAG (all->pdata[i]);
+		TMTag *tag = TM_TAG (all->pdata[i]);
+
 		if (tag && tag->scope && tag->scope[0] != '\0' &&
-			langs_compatible(tag->lang, lang))
+			langs_compatible(tag->lang, lang) &&
+			strcmp(scope, tag->scope) == 0)
 		{
-			if (0 == strncmp (name, tag->scope, len))
-			{
-				g_ptr_array_add (local, tag);
-			}
+			add_member (tags, tag);
 		}
 	}
-	if (local->len > 0)
-	{
-		unsigned int j;
-		TMTag *tag2;
-		char backup = 0;
-		char *s_backup = NULL;
-		char *var_type = NULL;
-		char *scope;
-		for (i = 0; (i < local->len); ++i)
-		{
-			tag = TM_TAG (local->pdata[i]);
-			scope = tag->scope;
-			if (scope && 0 == strcmp (name, scope))
-			{
-				add_member (tags, tag);
-				continue;
-			}
-			s_backup = NULL;
-			j = 0;				/* someone could write better code :P */
-			while (scope)
-			{
-				if (s_backup)
-				{
-					backup = s_backup[0];
-					s_backup[0] = '\0';
-					if (0 == strcmp (name, tag->scope))
-					{
-						j = local->len;
-						s_backup[0] = backup;
-						break;
-					}
-				}
-				if (tag->file
-					&& tag->file->lang == TM_PARSER_JAVA)
-				{
-					scope = strrchr (tag->scope, '.');
-					if (scope)
-						var_type = scope + 1;
-				}
-				else
-				{
-					scope = strrchr (tag->scope, ':');
-					if (scope)
-					{
-						var_type = scope + 1;
-						scope--;
-					}
-				}
-				if (s_backup)
-				{
-					s_backup[0] = backup;
-				}
-				if (scope)
-				{
-					if (s_backup)
-					{
-						backup = s_backup[0];
-						s_backup[0] = '\0';
-					}
-					for (j = 0; (j < local->len); ++j)
-					{
-						if (i == j)
-							continue;
-						tag2 = TM_TAG (local->pdata[j]);
-						if (tag2->var_type &&
-							0 == strcmp (var_type, tag2->var_type))
-						{
-							break;
-						}
-					}
-					if (s_backup)
-						s_backup[0] = backup;
-				}
-				if (j < local->len)
-				{
-					break;
-				}
-				s_backup = scope;
-			}
-			if (j == local->len)
-			{
-				add_member (tags, tag);
-			}
-		}
-	}
-	g_ptr_array_free (local, TRUE);
-	return (int) tags->len;
 }
 
 
