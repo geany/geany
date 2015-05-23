@@ -1,7 +1,7 @@
 Geany 1.25 (unreleased)
 
     General
-    * Improved MacOS X support (PR#396, PR#419, PR#420, Jiří Techet).
+    * Improve MacOS X support (PR#396, PR#419, PR#420, Jiří Techet).
     * Improve subprocess spawning (especially on Windows) (PR#441,
       Dimitar Zhekov).
     * Huge tag management performance improvement (auto-completion,
