@@ -56,6 +56,10 @@ static TMTagAttrType global_tags_sort_attrs[] =
 	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
 };
 
+static TMTagType TM_TYPE_WITH_MEMBERS =
+	tm_tag_class_t | tm_tag_struct_t | tm_tag_union_t |
+	tm_tag_enum_t | tm_tag_interface_t;
+
 static TMWorkspace *theWorkspace = NULL;
 
 
@@ -756,10 +760,7 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 static GPtrArray *
 find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespace)
 {
-	TMTagType member_types =
-		tm_tag_function_t | tm_tag_prototype_t |
-		tm_tag_member_t | tm_tag_field_t |
-		tm_tag_method_t;
+	TMTagType member_types = tm_tag_max_t & ~(TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t);
 	GPtrArray *tags = g_ptr_array_new();
 	gchar *scope;
 	guint i;
@@ -823,11 +824,10 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 	{
 		guint j;
 		GPtrArray *type_tags;
-		TMTagType types = (tm_tag_class_t | tm_tag_struct_t |
-						   tm_tag_union_t | tm_tag_typedef_t);
+		TMTagType types = TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t;
 
-		if (namespace)
-			types |= tm_tag_enum_t;
+		if (!namespace)
+			types &= ~tm_tag_enum_t;
 
 		type_tags = g_ptr_array_new();
 		if (tag && tag->file)
@@ -913,8 +913,8 @@ static gboolean member_at_method_scope(GPtrArray *tags, const gchar *method_scop
 			GPtrArray *cls_tags = g_ptr_array_new();
 
 			/* check whether the class exists */
-			fill_find_tags_array(cls_tags, src, cls, cls_scope,
-				tm_tag_class_t | tm_tag_struct_t | tm_tag_interface_t, FALSE, lang);
+			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS,
+				FALSE, lang);
 			ret = cls_tags->len > 0;
 			g_ptr_array_free(cls_tags, TRUE);
 		}
@@ -941,8 +941,8 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
 	for (i = 0; i < tags->len && !member_tags; i++)
 	{
 		TMTag *tag = TM_TAG(tags->pdata[i]);
-		TMTagType types = (tm_tag_class_t | tm_tag_struct_t | tm_tag_union_t |
-						   tm_tag_enum_t | tm_tag_typedef_t);
+		TMTagType member_types = tm_tag_member_t | tm_tag_field_t | tm_tag_method_t;
+		TMTagType types = TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t;
 
 		if (tag->type & types)  /* type: namespace search */
 			member_tags = find_scope_members(searched_array, tag->name, lang, TRUE);
@@ -953,7 +953,7 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
 			 * (which means user has typed something like foo.bar.) or if we are
 			 * inside a method where foo is a class member, we want scope completion
 			 * for foo. */
-			if (!(tag->type & (tm_tag_field_t | tm_tag_member_t)) || member ||
+			if (!(tag->type & member_types) || member ||
 				member_at_method_scope(tags, current_scope, tag, lang))
 			{
 				gchar *tag_type = g_strdup(tag->var_type);
@@ -985,13 +985,13 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 {
 	langType lang = source_file ? source_file->lang : -1;
 	GPtrArray *tags, *member_tags = NULL;
+	TMTagType function_types = tm_tag_function_t | tm_tag_method_t |
+		tm_tag_macro_with_arg_t | tm_tag_prototype_t;
 	TMTagType tag_type = tm_tag_max_t &
-				~(tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t |
-				  tm_tag_macro_t | tm_tag_macro_with_arg_t |
-				  tm_tag_function_t | tm_tag_method_t);
+		~(function_types | tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t);
 
 	if (function)
-		tag_type = tm_tag_function_t | tm_tag_method_t;
+		tag_type = function_types;
 
 	/* tags corresponding to the variable/type name */
 	tags = tm_workspace_find(name, NULL, tag_type, NULL, FALSE, lang);
