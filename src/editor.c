@@ -707,31 +707,51 @@ static void autocomplete_scope(GeanyEditor *editor)
 	gchar *name;
 	GeanyFiletype *ft = editor->document->file_type;
 	GPtrArray *tags;
+	gboolean function = FALSE;
 
-	if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP ||
+	if (typed == '.')
+		pos -= 1;
+	else if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP ||
 		ft->id == GEANY_FILETYPES_PHP || ft->id == GEANY_FILETYPES_RUST)
 	{
 		if (match_last_chars(sci, pos, "::"))
-			pos--;
+			pos-=2;
 		else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
 				 match_last_chars(sci, pos, "->"))
-			pos--;
-		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
 			pos-=2;
-		else if (typed != '.')
+		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
+			pos-=3;
+		else
 			return;
 	}
-	else if (typed != '.')
+	else
 		return;
 
 	/* allow for a space between word and operator */
-	while (pos >= 2 && isspace(sci_get_char_at(sci, pos - 2)))
+	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
-	name = editor_get_word_at_pos(editor, pos - 1, NULL);
+
+	/* if function, skip to matching brace */
+	if (pos > 0 && sci_get_char_at(sci, pos - 1) == ')')
+	{
+		gint brace_pos = sci_find_matching_brace(sci, pos - 1);
+
+		if (brace_pos != -1)
+		{
+			pos = brace_pos;
+			function = TRUE;
+		}
+
+		/* allow for a space between opening brace and function name */
+		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+			pos--;
+	}
+
+	name = editor_get_word_at_pos(editor, pos, NULL);
 	if (!name)
 		return;
 
-	tags = tm_workspace_find_scope_members(editor->document->tm_file, name);
+	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function);
 	if (tags)
 	{
 		show_tags_list(editor, tags, 0);
