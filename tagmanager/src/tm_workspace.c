@@ -895,7 +895,15 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
 		if (tag->type & types)  /* type: namespace search */
 			member_tags = find_scope_members(searched_array, tag->name, lang, TRUE);
 		else if (tag->var_type)  /* variable: scope search */
-			member_tags = find_scope_members(searched_array, tag->var_type, lang, FALSE);
+		{
+			gchar *tag_type = g_strdup(tag->var_type);
+
+			/* remove pointers in case the type contains them */
+			g_strdelimit(tag_type, "*^", ' ');
+			g_strstrip(tag_type);
+			member_tags = find_scope_members(searched_array, tag_type, lang, FALSE);
+			g_free(tag_type);
+		}
 	}
 
 	return member_tags;
@@ -906,15 +914,23 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
  of such a type or the name of the type.
  @param source_file TMSourceFile of the edited source file or NULL if not available
  @param name Name of the variable/type whose members are searched
+ @param function TRUE if the name is a name of a function
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
-tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name)
+tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name, gboolean function)
 {
 	langType lang = source_file ? source_file->lang : -1;
 	GPtrArray *tags, *member_tags = NULL;
+	TMTagType tag_type = tm_tag_max_t &
+				~(tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t |
+				  tm_tag_macro_t | tm_tag_macro_with_arg_t |
+				  tm_tag_function_t | tm_tag_method_t);
+
+	if (function)
+		tag_type = tm_tag_function_t | tm_tag_method_t;
 
 	/* tags corresponding to the variable/type name */
-	tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, FALSE, lang);
+	tags = tm_workspace_find(name, NULL, tag_type, NULL, FALSE, lang);
 
 	/* Start searching inside the source file, continue with workspace tags and
 	 * end with global tags. This way we find the "closest" tag to the current
