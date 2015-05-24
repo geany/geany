@@ -805,6 +805,7 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 					gboolean namespace)
 {
 	gboolean has_members = FALSE;
+	gboolean typedef_struct = FALSE;
 	GPtrArray *tags = NULL;
 	TMTag *tag = NULL;
 	const gchar *type_name;
@@ -839,6 +840,7 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 			 * too many (wrong) results. */
 			fill_find_tags_array(type_tags, tag->file->tags_array, type_name,
 								 NULL, types, FALSE, lang);
+			typedef_struct = type_tags->len > 0;
 		}
 		if (type_tags->len == 0)
 			fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, FALSE, lang);
@@ -870,7 +872,10 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 		}
 	}
 
-	if (has_members)
+	/* ignore anon_struct_* and similar unless we resolved a typedef to it within
+	 * a single file so we can be sure we don't pick a wrong anon_struct_* from
+	 * a different file */
+	if (has_members && (typedef_struct || !tm_tag_is_anon(tag)))
 		/* use the same file as the composite type if file information available */
 		tags = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
 
