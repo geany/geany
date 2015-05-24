@@ -602,6 +602,7 @@ void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID 
 	cairo_set_line_width(context, 1);
 	createdGC = true;
 	inited = true;
+	et = surfImpl->et;
 }
 
 void SurfaceImpl::PenColour(ColourDesired fore) {
@@ -1483,7 +1484,22 @@ ListBox *ListBox::Allocate() {
 
 // SmallScroller, a GtkScrolledWindow that can shrink very small, as
 // gtk_widget_set_size_request() cannot shrink widgets on GTK3
-typedef GtkScrolledWindow SmallScroller;
+typedef struct {
+	GtkScrolledWindow parent;
+	/* Workaround ABI issue with Windows GTK2 bundle and GCC > 3.
+	   See http://lists.geany.org/pipermail/devel/2015-April/thread.html#9379
+
+	   GtkScrolledWindow contains a bitfield, and GCC 3.4 and 4.8 don't agree
+	   on the size of the structure (regardless of -mms-bitfields):
+	   - GCC 3.4 has sizeof(GtkScrolledWindow)=88
+	   - GCC 4.8 has sizeof(GtkScrolledWindow)=84
+	   As Windows GTK2 bundle is built with GCC 3, it requires types derived
+	   from GtkScrolledWindow to be at least 88 bytes, which means we need to
+	   add some fake padding to fill in the extra 4 bytes.
+	   There is however no other issue with the layout difference as we never
+	   access any GtkScrolledWindow fields ourselves. */
+	int padding;
+} SmallScroller;
 typedef GtkScrolledWindowClass SmallScrollerClass;
 
 G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)

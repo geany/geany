@@ -928,9 +928,10 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 			if (styler.Match(j, "case") ||
 				styler.Match(j, "casex") ||
 				styler.Match(j, "casez") ||
+				styler.Match(j, "covergroup") ||
 				styler.Match(j, "function") ||
 				styler.Match(j, "generate") ||
-				styler.Match(j, "covergroup") ||
+				styler.Match(j, "interface") ||
 				styler.Match(j, "package") ||
 				styler.Match(j, "primitive") ||
 				styler.Match(j, "program") ||
@@ -962,6 +963,7 @@ void SCI_METHOD LexerVerilog::Fold(unsigned int startPos, int length, int initSt
 				styler.Match(j, "endfunction") ||
 				styler.Match(j, "endgenerate") ||
 				styler.Match(j, "endgroup") ||
+				styler.Match(j, "endinterface") ||
 				styler.Match(j, "endpackage") ||
 				styler.Match(j, "endprimitive") ||
 				styler.Match(j, "endprogram") ||
