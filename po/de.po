@@ -5,7 +5,7 @@
 # Frank Lanitz <frank@frank.uvena.de> 2006 - 2015
 # Dominic Hopf <dh@dmaphy.de> 2008 - 2009
 #
-# Basic guidelines for this translation: http://i18n.xfce.org/wiki/team_de
+# Basic guidelines for this translation: http://wiki.xfce.org/de/translations
 #
 msgid ""
 msgstr ""
