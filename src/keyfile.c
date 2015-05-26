@@ -861,6 +861,13 @@ static void load_dialog_prefs(GKeyFile *config)
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
+#ifdef __APPLE__
+		/* Geany is started using launchd on OS X and we don't get any environment variables
+		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
+		if (strcmp(shell, "/bin/bash") == 0)
+			shell = "/bin/bash -l";
+#endif
+
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
@@ -875,7 +882,7 @@ static void load_dialog_prefs(GKeyFile *config)
 			"send_selection_unsafe", FALSE);
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
+		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
