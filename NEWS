@@ -50,7 +50,7 @@ Geany 1.25 (unreleased)
       (Issue#483).
 
     Editor
-    * Update Scintilla to version 3.5.3 (#1041).
+    * Update Scintilla to version 3.5.6 (#1041).
     * Do not comment out blank lines when toggling comments (PR#79, Igor
       Shaula).
     * Improve handling of Verilog strings and comments.
