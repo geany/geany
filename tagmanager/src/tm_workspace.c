@@ -1107,7 +1107,7 @@ static const GPtrArray *tm_workspace_get_parents(const gchar *name)
 		parents = g_ptr_array_new();
 	else
 		g_ptr_array_set_size(parents, 0);
-	matches = tm_workspace_find(name, tm_tag_class_t, type, FALSE, -1);
+	matches = tm_workspace_find(name, NULL, tm_tag_class_t, type, -1);
 	if ((NULL == matches) || (0 == matches->len))
 		return NULL;
 	g_ptr_array_add(parents, matches->pdata[0]);
@@ -1126,7 +1126,7 @@ static const GPtrArray *tm_workspace_get_parents(const gchar *name)
 				}
 				if (parents->len == j)
 				{
-					matches = tm_workspace_find(*klass, tm_tag_class_t, type, FALSE, -1);
+					matches = tm_workspace_find(*klass, NULL, tm_tag_class_t, type, -1);
 					if ((NULL != matches) && (0 < matches->len))
 						g_ptr_array_add(parents, matches->pdata[0]);
 				}
