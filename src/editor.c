@@ -708,6 +708,8 @@ static void autocomplete_scope(GeanyEditor *editor)
 	GeanyFiletype *ft = editor->document->file_type;
 	GPtrArray *tags;
 	gboolean function = FALSE;
+	gboolean member;
+	const gchar *current_scope;
 
 	if (typed == '.')
 		pos -= 1;
@@ -751,7 +753,17 @@ static void autocomplete_scope(GeanyEditor *editor)
 	if (!name)
 		return;
 
-	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function);
+	/* check if invoked on member */
+	pos -= strlen(name);
+	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+		pos--;
+	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, "::") ||
+			 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
+
+	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
+		current_scope = "";
+	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
+				member, current_scope);
 	if (tags)
 	{
 		show_tags_list(editor, tags, 0);
