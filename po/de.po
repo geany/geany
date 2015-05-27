@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 07:55+0200\n"
+"POT-Creation-Date: 2015-05-27 21:53+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -1641,7 +1641,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:300
+#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:308
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2366,6 +2366,7 @@ msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
 
 #: ../src/build.c:813
+#, c-format
 msgid "Invalid working directory \"%s\""
 msgstr "Ungültiges Arbeitsverzeichnis »%s«!"
 
@@ -3722,12 +3723,12 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:1011
+#: ../src/keyfile.c:1018
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1238
+#: ../src/keyfile.c:1245
 msgid "Failed to load one or more session files."
 msgstr ""
 "Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
@@ -4498,6 +4499,33 @@ msgstr ""
 "benutzen.\n"
 " Dies ist ein schwerwiegendes Problem, so dass Geany nun beendet werden "
 "muss. "
+
+#: ../src/spawn.c:122
+#, c-format
+msgid "Text was empty (or contained only whitespace)"
+msgstr "Text war leer (oder hat nur Leerzeichen enthalten)"
+
+#: ../src/spawn.c:137 ../src/spawn.c:183
+#, c-format
+msgid "Text ended before matching quote was found for %c. (The text was '%s')"
+msgstr "Text hörte vor dem schließenden Zeichen für %c auf. (Der Text war »%s«)"
+
+#: ../src/spawn.c:145 ../src/spawn.c:159
+#, c-format
+msgid "A quoted Windows program name must be entirely inside the quotes"
+msgstr ""
+"Ein Windows-Programm-Name in Anführungszeichen muss den kompletten "
+"Namen beinhalten."
+
+#. or SPAWN error?
+#: ../src/spawn.c:235
+msgid "Program '%s' not found"
+msgstr "Programm »%s« nicht gefunden."
+
+#: ../src/spawn.c:272
+
+msgid "TerminateProcess() failed: %s"
+msgstr "TerminateProcess() fehlgeschlagen: %s"
 
 #: ../src/stash.c:1137
 msgid "Name"
@@ -5320,24 +5348,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:469
+#: ../src/vte.c:477
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Ungültige VTE-Bibliothek \"%s\": Es fehlt das Symbol \"%s\""
 
-#: ../src/vte.c:618
+#: ../src/vte.c:626
 msgid "_Set Path From Document"
 msgstr "Pfad des Dokumentes _übernehmen"
 
-#: ../src/vte.c:623
+#: ../src/vte.c:631
 msgid "_Restart Terminal"
 msgstr "Terminal _neustarten"
 
-#: ../src/vte.c:646
+#: ../src/vte.c:654
 msgid "_Input Methods"
 msgstr "Eingabe_methoden"
 
-#: ../src/vte.c:739
+#: ../src/vte.c:747
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5882,9 +5910,6 @@ msgstr "Oben und Unten"
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Konnte die zusätzlichen Optionen nicht analysieren: %s"
-
-#~ msgid "Command not found"
-#~ msgstr "Kommando konnte nicht gefunden werden"
 
 #~ msgid "Process timed out after %.02f s!"
 #~ msgstr "Der Prozess hat das Zeitlimit nach %.02f s erreicht!"
