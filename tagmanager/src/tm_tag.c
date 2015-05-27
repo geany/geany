@@ -1224,18 +1224,6 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 	return FALSE;
 }
 
-#if 0
-/* Returns TMTag to function or method which "own" given line
- @param line Current line in edited file.
- @param file_tags A GPtrArray of edited file TMTag pointers.
- @return TMTag pointers to owner function. */
-static const TMTag *
-tm_get_current_function (GPtrArray * file_tags, const gulong line)
-{
-	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
-}
-#endif
-
 
 #ifdef TM_DEBUG /* various debugging functions */
 
