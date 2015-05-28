@@ -779,7 +779,8 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		if (tag && (tag->type & member_types) &&
 			tag->scope && tag->scope[0] != '\0' &&
 			langs_compatible(tag->lang, type_tag->lang) &&
-			strcmp(scope, tag->scope) == 0)
+			strcmp(scope, tag->scope) == 0 &&
+			(!namespace || !tm_tag_is_anon(tag)))
 		{
 			g_ptr_array_add (tags, tag);
 		}
