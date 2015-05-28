@@ -698,7 +698,7 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
 				&(tv_iters.tag_macro), _("Macros"), "classviewer-macro",
 				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL,
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
 		}
@@ -707,10 +707,13 @@ static void add_top_level_items(GeanyDocument *doc)
 			tag_list_add_groups(tag_store,
 				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
 				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
+				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
+				&(tv_iters.tag_struct), _("Structs"), "classviewer-struct",
 				&(tv_iters.tag_type), _("Types"), "classviewer-struct",
+				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
 				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL,
+				&(tv_iters.tag_member), _("Members"), "classviewer-member",
+				&(tv_iters.tag_other), _("Other"), "classviewer-other",
 				NULL);
 			break;
 		}
