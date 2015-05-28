@@ -243,6 +243,7 @@ test_sources = \
 	refcurs.sql						\
 	regexp.js						\
 	return-hint.zep					\
+	return-types.go					\
 	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\

@@ -528,7 +528,7 @@ static boolean skipType (tokenInfo *const token)
 
 static void makeTag (tokenInfo *const token, const goKind kind,
 	tokenInfo *const parent_token, const goKind parent_kind,
-	const char *argList)
+	const char *argList, const char *varType)
 {
 	const char *const name = vStringValue (token->string);
 
@@ -544,6 +544,8 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	e.kind = GoKinds [kind].letter;
 	if (argList)
 		e.extensionFields.arglist = argList;
+	if (varType)
+		e.extensionFields.varType = varType;
 
 	if (parent_kind != GOTAG_UNDEFINED && parent_token != NULL)
 	{
@@ -569,7 +571,7 @@ static void parsePackage (tokenInfo *const token)
 	readToken (token);
 	if (isType (token, TOKEN_IDENTIFIER))
 	{
-		makeTag (token, GOTAG_PACKAGE, NULL, GOTAG_UNDEFINED, NULL);
+		makeTag (token, GOTAG_PACKAGE, NULL, GOTAG_UNDEFINED, NULL, NULL);
 		if (!scope && Option.include.qualifiedTags)
 		{
 			scope = vStringNew ();
@@ -594,6 +596,7 @@ static void parseFunctionOrMethod (tokenInfo *const token)
 
 	if (isType (token, TOKEN_IDENTIFIER))
 	{
+		vString *argList;
 		tokenInfo *functionToken = copyToken (token);
 
 		// Start recording signature
@@ -605,17 +608,27 @@ static void parseFunctionOrMethod (tokenInfo *const token)
 
 		vStringStripLeading (signature);
 		vStringStripTrailing (signature);
-		makeTag (functionToken, GOTAG_FUNCTION, NULL, GOTAG_UNDEFINED, signature->buffer);
-		deleteToken (functionToken);
-		vStringDelete(signature);
-
-		// Stop recording signature
-		signature = NULL;
+		argList = signature;
+		signature = vStringNew ();
 
 		readToken (token);
 
 		// Skip over result.
 		skipType (token);
+
+		// Remove the extra { we have just read
+		vStringStripTrailing (signature);
+		vStringChop (signature);
+
+		vStringStripLeading (signature);
+		vStringStripTrailing (signature);
+		makeTag (functionToken, GOTAG_FUNCTION, NULL, GOTAG_UNDEFINED, argList->buffer, signature->buffer);
+		deleteToken (functionToken);
+		vStringDelete(signature);
+		vStringDelete(argList);
+
+		// Stop recording signature
+		signature = NULL;
 
 		// Skip over function body.
 		if (isType (token, TOKEN_OPEN_CURLY))
@@ -655,11 +668,11 @@ static void parseStructMembers (tokenInfo *const token, tokenInfo *const parent_
 					if (memberCandidate)
 					{
 						// if we are here, there was a comma and memberCandidate isn't an anonymous field
-						makeTag (memberCandidate, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL);
+						makeTag (memberCandidate, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL, NULL);
 						deleteToken (memberCandidate);
 						memberCandidate = NULL;
 					}
-					makeTag (token, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL);
+					makeTag (token, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL, NULL);
 				}
 				readToken (token);
 			}
@@ -672,7 +685,7 @@ static void parseStructMembers (tokenInfo *const token, tokenInfo *const parent_
 		// type into memberCandidate and skipType() should return FALSE so no tag should
 		// be generated in this case.
 		if (skipType (token) && memberCandidate)
-			makeTag (memberCandidate, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL);
+			makeTag (memberCandidate, GOTAG_MEMBER, parent_token, GOTAG_STRUCT, NULL, NULL);
 
 		if (memberCandidate)
 			deleteToken (memberCandidate);
@@ -725,15 +738,15 @@ static void parseConstTypeVar (tokenInfo *const token, goKind kind)
 					typeToken = copyToken (token);
 					readToken (token);
 					if (isKeyword (token, KEYWORD_struct))
-						makeTag (typeToken, GOTAG_STRUCT, NULL, GOTAG_UNDEFINED, NULL);
+						makeTag (typeToken, GOTAG_STRUCT, NULL, GOTAG_UNDEFINED, NULL, NULL);
 					else if (isKeyword (token, KEYWORD_interface))
-						makeTag (typeToken, GOTAG_INTERFACE, NULL, GOTAG_UNDEFINED, NULL);
+						makeTag (typeToken, GOTAG_INTERFACE, NULL, GOTAG_UNDEFINED, NULL, NULL);
 					else
-						makeTag (typeToken, kind, NULL, GOTAG_UNDEFINED, NULL);
+						makeTag (typeToken, kind, NULL, GOTAG_UNDEFINED, NULL, NULL);
 					break;
 				}
 				else
-					makeTag (token, kind, NULL, GOTAG_UNDEFINED, NULL);
+					makeTag (token, kind, NULL, GOTAG_UNDEFINED, NULL, NULL);
 				readToken (token);
 			}
 			if (!isType (token, TOKEN_COMMA))
