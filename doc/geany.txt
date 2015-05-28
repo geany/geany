@@ -4170,7 +4170,8 @@ wordchars
     *Example:* (look at system filetypes.\* files)
 
     .. note::
-        This overrides the *whitespace_chars* filetypes.common setting.
+        This overrides the *wordchars* filetypes.common setting, and
+        has precedence over the *whitespace_chars* setting.
 
 comment_single
     A character or string which is used to comment code. If you want to use
@@ -4651,6 +4652,15 @@ whitespace_chars
     This should include space (\\s) and tab (\\t).
 
     *Example:* ``whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~``
+
+wordchars
+    These characters define word boundaries when making selections
+    and searching using word matching options.
+
+    *Example:* ``wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789``
+
+    .. note::
+        This has precedence over the *whitespace_chars* setting.
 
 
 
