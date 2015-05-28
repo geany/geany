@@ -171,10 +171,11 @@ static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh,
 }
 
 
-static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars)
+static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars,
+		const gchar *default_wordchars)
 {
 	*wordchars = utils_get_setting(string, configh, config,
-		"settings", "wordchars", GEANY_WORDCHARS);
+		"settings", "wordchars", default_wordchars);
 }
 
 
@@ -578,7 +579,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 		0, 0, &common_style_set.styling[GCS_LINE_HEIGHT]);
 
 	g_free(common_style_set.wordchars);
-	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
+	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars, GEANY_WORDCHARS);
 	g_free(whitespace_chars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 }
@@ -1054,7 +1055,8 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	}
 
 	/* should be done in filetypes.c really: */
-	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
+	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars,
+			common_style_set.wordchars);
 }
 
 
