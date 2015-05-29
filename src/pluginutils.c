@@ -318,6 +318,7 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
  * @param count Number of keybindings for the group.
  * @param cb New-style group callback, or @c NULL if you only want individual keybinding callbacks.
  * @param pdata Plugin specific data, passed to the group callback.
+ * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
  * @return The plugin's keybinding group.
  *
  * @since 1.26 (API 226)
@@ -326,13 +327,15 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
  **/
 GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group_full(GeanyPlugin *plugin,
-		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata)
+		const gchar *section_name, gsize count,
+		GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify)
 {
 	GeanyKeyGroup *group;
 
 	group = plugin_set_key_group(plugin, section_name, count, NULL);
 	group->cb_func = cb;
 	group->cb_data = pdata;
+	group->cb_data_destroy = destroy_notify;
 
 	return group;
 }

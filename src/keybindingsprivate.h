@@ -40,6 +40,7 @@ struct GeanyKeyGroup
 	GeanyKeyBinding *plugin_keys;	/* array of GeanyKeyBinding structs */
 	GeanyKeyGroupFunc cb_func;	/* use this or individual keybinding callbacks (new style) */
 	gpointer cb_data;
+	GDestroyNotify cb_data_destroy; /* used to destroy handler_data */
 };
 
 G_END_DECLS

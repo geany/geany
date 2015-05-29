@@ -55,7 +55,7 @@ struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
 GeanyKeyGroup *plugin_set_key_group_full(struct GeanyPlugin *plugin,
-		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata);
+		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify);
 
 void plugin_show_configure(struct GeanyPlugin *plugin);
 

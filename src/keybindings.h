@@ -89,6 +89,7 @@ struct GeanyKeyBinding
 	GdkModifierType default_mods;
 	GeanyKeyBindingFunc cb_func;
 	gpointer cb_data;
+	GDestroyNotify cb_data_destroy;
 };
 
 /* Note: we don't need to break the plugin ABI when appending keybinding or keygroup IDs,
@@ -276,8 +277,9 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
 		const gchar *name, const gchar *label, GtkWidget *menu_item);
 
 GeanyKeyBinding *keybindings_set_item_full(GeanyKeyGroup *group, gsize key_id,
-		GeanyKeyBindingFunc cb, gpointer pdata, guint key, GdkModifierType mod,
-		const gchar *kf_name, const gchar *label, GtkWidget *menu_item);
+		guint key, GdkModifierType mod, const gchar *kf_name, const gchar *label,
+		GtkWidget *menu_item, GeanyKeyBindingFunc func, gpointer pdata,
+		GDestroyNotify destroy_notify);
 
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
