@@ -1507,7 +1507,8 @@ G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
 #if GTK_CHECK_VERSION(3,0,0)
 static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
 	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
-	*min = 1;
+	if (*min > 1)
+		*min = 1;
 }
 #else
 static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
