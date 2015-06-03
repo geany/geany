@@ -678,7 +678,19 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 	switch (action)
 	{
 		case PREF_DISPLAY:
-			g_object_set(object, name, entry->setting, NULL);
+			if (entry->setting_type == G_TYPE_BOOLEAN)
+				g_object_set(object, name, *(gboolean*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_INT)
+				g_object_set(object, name, *(gint*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_STRING)
+				g_object_set(object, name, *(gchararray*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_STRV)
+				g_object_set(object, name, *(gchararray**)entry->setting, NULL);
+			else
+			{
+				g_warning("Unhandled type %s for %s in %s()!", g_type_name(entry->setting_type),
+						entry->key_name, G_STRFUNC);
+			}
 			break;
 		case PREF_UPDATE:
 			if (entry->setting_type == G_TYPE_STRING)
