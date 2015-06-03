@@ -694,8 +694,9 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 			break;
 		case PREF_UPDATE:
 			if (entry->setting_type == G_TYPE_STRING)
-				g_free(entry->setting);
-			/* TODO: Which other types need freeing here? */
+				g_free(*(gchararray*)entry->setting);
+			else if (entry->setting_type == G_TYPE_STRV)
+				g_strfreev(*(gchararray**)entry->setting);
 
 			g_object_get(object, name, entry->setting, NULL);
 			break;
