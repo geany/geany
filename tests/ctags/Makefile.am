@@ -134,6 +134,7 @@ test_sources = \
 	debian_432872.f90				\
 	directives.c					\
 	dopbl2.f						\
+	dotted-names.json				\
 	enum.c							\
 	enum.f90						\
 	enum.java						\
