@@ -837,7 +837,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 		TMTag **found;
 		TMTag *tag = source_file->tags_array->pdata[i];
 		
-		found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
+		found = tm_tags_find(tags_array, tag->name, FALSE, &tag_count);
 		
 		for (j = 0; j < tag_count; j++)
 		{
@@ -1057,42 +1057,16 @@ static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
 	return NULL;
 }
 
-static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag,
-		gboolean tags_array_sorted, TMSortOptions *sort_options)
-{
-	if (tags_array_sorted)
-	{	/* fast binary search on sorted tags array */
-		return (TMTag **) binary_search(&tag, tags_array->pdata, tags_array->len, 
-			tm_tag_compare, sort_options);
-	}
-	else
-	{	/* the slow way: linear search (to make it a bit faster, search reverse assuming
-		 * that the tag to search was added recently) */
-		guint i;
-		TMTag **t;
-		for (i = tags_array->len; i > 0; i--)
-		{
-			t = (TMTag **) &tags_array->pdata[i - 1];
-			if (0 == tm_tag_compare(&tag, t, sort_options))
-				return t;
-		}
-	}
-	return NULL;
-}
-
 /*
  Returns a pointer to the position of the first matching tag in a (sorted) tags array.
- The passed array of tags should be already sorted by name for optimal performance. If
- \c tags_array_sorted is set to FALSE, it may be unsorted but the lookup will be slower.
- @param tags_array Tag array (may be sorted on name)
+ The passed array of tags must be already sorted by name (searched with binary search).
+ @param tags_array Tag array (sorted on name)
  @param name Name of the tag to locate.
  @param partial If TRUE, matches the first part of the name instead of doing exact match.
- @param tags_array_sorted If TRUE, the passed \c tags_array is sorted by name so it can be
- searched with binary search. Otherwise it is searched linear which is obviously slower.
  @param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, gboolean tags_array_sorted, guint * tagCount)
+		gboolean partial, guint * tagCount)
 {
 	static TMTag *tag = NULL;
 	TMTag **result;
@@ -1109,7 +1083,8 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	sort_options.sort_attrs = NULL;
 	sort_options.partial = partial;
 
-	result = tags_search(tags_array, tag, tags_array_sorted, &sort_options);
+	result = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
+			tm_tag_compare, &sort_options);
 	/* There can be matches on both sides of result */
 	if (result)
 	{
