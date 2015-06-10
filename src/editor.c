@@ -884,7 +884,8 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 		{
 			/* Adding a fold point */
 			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
-			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+			if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0))
+				expand(sci, &line, TRUE, FALSE, 0, levelPrev);
 		}
 	}
 	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)
@@ -893,22 +894,25 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 		{	/* Removing the fold from one that has been contracted so should expand
 			 * otherwise lines are left invisible with no way to make them visible */
 			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
-			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+			if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0))
+				expand(sci, &line, TRUE, FALSE, 0, levelPrev);
 		}
 	}
 	if (! (levelNow & SC_FOLDLEVELWHITEFLAG) &&
 			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
-		/* See if should still be hidden */
-		gint parentLine = sci_get_fold_parent(sci, line);
-		if (parentLine < 0)
-		{
-			SSM(sci, SCI_SHOWLINES, line, line);
-		}
-		else if (sci_get_fold_expanded(sci, parentLine) &&
-				sci_get_line_is_visible(sci, parentLine))
-		{
-			SSM(sci, SCI_SHOWLINES, line, line);
+		if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0)) {
+			/* See if should still be hidden */
+			gint parentLine = sci_get_fold_parent(sci, line);
+			if (parentLine < 0)
+			{
+				SSM(sci, SCI_SHOWLINES, line, line);
+			}
+			else if (sci_get_fold_expanded(sci, parentLine) &&
+					sci_get_line_is_visible(sci, parentLine))
+			{
+				SSM(sci, SCI_SHOWLINES, line, line);
+			}
 		}
 	}
 }
