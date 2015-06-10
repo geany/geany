@@ -235,6 +235,7 @@ test_sources = \
 	pure_elem.f95					\
 	py_constructor_arglist.py		\
 	py-skipped-string.py			\
+	python-anonymous-nestlevel_ctags-bug-356.py	\
 	qualified_types.f90				\
 	random.sql						\
 	readlob.sql						\
