@@ -2407,4 +2407,13 @@ void symbols_finalize(void)
 {
 	g_strfreev(html_entities);
 	g_strfreev(c_tags_ignore);
+
+	g_object_unref(class_icon);
+	g_object_unref(macro_icon);
+	g_object_unref(member_icon);
+	g_object_unref(method_icon);
+	g_object_unref(namespace_icon);
+	g_object_unref(other_icon);
+	g_object_unref(struct_icon);
+	g_object_unref(var_icon);
 }
