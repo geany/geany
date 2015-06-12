@@ -568,20 +568,14 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 		gchar *title = va_arg(args, gchar*);
 		GdkPixbuf *icon = va_arg(args, gchar *);
 
-		if (icon)
-			g_object_ref(icon);
-
 		g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, title);
 
 		if (!find_toplevel_iter(tree_store, iter, title))
 			gtk_tree_store_append(tree_store, iter, NULL);
 
-		if (G_IS_OBJECT(icon))
-		{
+		if (icon)
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
-			g_object_unref(icon);
-		}
 		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);
