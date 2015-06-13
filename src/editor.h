@@ -134,6 +134,7 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
+	gboolean	unindent_labels; // whether to unindent labels and access modifiers in c/c++
 }
 GeanyEditorPrefs;
 

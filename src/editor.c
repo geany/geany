@@ -114,6 +114,8 @@ static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
 static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
 static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line);
 static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
+static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line);
+static void editor_change_line_indent(GeanyEditor *editor, gint line, gboolean increase);
 
 
 void editor_snippets_free(void)
@@ -1234,15 +1236,57 @@ editor_get_indent_prefs(GeanyEditor *editor)
 }
 
 
+static inline gboolean lines_have_same_indentation(ScintillaObject *sci, gint line1, gint line2)
+{
+	return (sci_get_line_indentation(sci, line1) == sci_get_line_indentation(sci, line2));
+}
+
+
+static inline gboolean lexer_has_labels(ScintillaObject *sci)
+{
+	switch (sci_get_lexer(sci))
+	{
+		case SCLEX_CPP:
+			return TRUE;
+		default:
+			return FALSE;
+	}
+}
+
+
+static inline gboolean unindent_labels_enabled(ScintillaObject *sci)
+{
+	return (lexer_has_labels(sci) &&
+			editor_prefs.unindent_labels &&
+			(editor_prefs.indentation->auto_indent_mode == GEANY_AUTOINDENT_CURRENTCHARS ||
+			 editor_prefs.indentation->auto_indent_mode == GEANY_AUTOINDENT_MATCHBRACES));
+}
+
+
+static inline gboolean is_label_line(ScintillaObject *sci, gint line)
+{
+	if (line >= 0)
+		return (sci_get_char_at(sci, get_sci_line_code_end_position(sci, line)) == ':');
+	return FALSE;
+}
+
+
 static void on_new_line_added(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line = sci_get_current_line(sci);
 
-	/* simple indentation */
+	/* fairly simple indentation */
 	if (editor->auto_indent)
 	{
 		insert_indent_after_line(editor, line - 1);
+		if (unindent_labels_enabled(sci) &&
+			is_label_line(sci, line - 1) &&
+			lines_have_same_indentation(sci, line, line - 1))
+		{
+			editor_change_line_indent(editor, line - 1, FALSE);
+			sci_set_current_position(sci, sci_get_line_end_position(sci, line), FALSE);
+		}
 	}
 
 	if (get_project_pref(auto_continue_multiline))

@@ -227,6 +227,8 @@ static void init_pref_groups(void)
 		"use_gtk_word_boundaries", TRUE);
 	stash_group_add_boolean(group, &editor_prefs.complete_snippets_whilst_editing,
 		"complete_snippets_whilst_editing", FALSE);
+	stash_group_add_boolean(group, &editor_prefs.unindent_labels,
+		"unindent_labels", TRUE);
 	stash_group_add_boolean(group, &file_prefs.use_safe_file_saving,
 		atomic_file_saving_key, FALSE);
 	stash_group_add_boolean(group, &file_prefs.gio_unsafe_save_backup,

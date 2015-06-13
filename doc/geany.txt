@@ -2581,6 +2581,13 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
 indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
+unindent_labels                   For filetypes that support "labels", for     true        immediately
+                                  example C/C++ labels, switch cases, or C++
+                                  access modifiers, when using the "basic"
+                                  or "match braces" auto-indent mode and
+                                  auto-indenting a new line, if the previous
+                                  line has a label, it will be unindented by
+                                  one level, if needed.
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
