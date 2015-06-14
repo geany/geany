@@ -2969,12 +2969,14 @@ GIcon *ui_get_mime_icon(const gchar *mime_type)
 	ctype = g_content_type_from_mime_type(mime_type);
 	if (ctype)
 	{
+		GdkScreen *screen = gdk_screen_get_default();
+
 		icon = g_content_type_get_icon(ctype);
-		if (icon) 
+		if (screen && icon)
 		{
 			GtkIconInfo *icon_info;
 
-			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_default(), icon, 16, 0);
+			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_for_screen(screen), icon, 16, 0);
 			if (!icon_info)
 			{
 				g_object_unref(icon);
