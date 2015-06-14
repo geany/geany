@@ -526,6 +526,12 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 
 	ui_update_statusbar(editor->document, pos);
 
+	if (editor_prefs.highlight_current_word &&
+		search_mark_current_word(editor->document) == 0)
+	{
+		editor_indicator_clear(editor, GEANY_INDICATOR_HIGHLIGHT_WORD);
+	}
+
 #if 0
 	/** experimental code for inverting selections */
 	{

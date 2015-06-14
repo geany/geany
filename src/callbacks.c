@@ -1438,6 +1438,7 @@ void on_remove_markers1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
 	sci_marker_delete_all(doc->editor->sci, 1);	/* delete user markers */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
+	editor_indicator_clear(doc->editor, GEANY_INDICATOR_HIGHLIGHT_WORD);
 }
 
 

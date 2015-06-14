@@ -68,7 +68,9 @@ typedef enum
 	/** Indicator used to highlight search results in the document. This is a
 	 *  rounded box around the text. */
 	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */
-	GEANY_INDICATOR_SEARCH = 8
+	GEANY_INDICATOR_SEARCH = 8,
+	/** Indicator used to highlight occurrences of the current word, if enabled. */
+	GEANY_INDICATOR_HIGHLIGHT_WORD
 }
 GeanyIndicator;
 
@@ -134,6 +136,8 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
+	gboolean	highlight_current_word;
+	gboolean	highlight_single_word;
 }
 GeanyEditorPrefs;
 

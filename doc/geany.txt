@@ -2314,6 +2314,9 @@ Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
     Otherwise you can scroll one more page even if there are no real lines.
 
+Highlight occurrences of current word
+    When enabled if there is a word at the caret position, all occurrences
+    of that word will be highlighted.
 
 Long line marker
 ````````````````
@@ -2581,6 +2584,11 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
 indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
+highlight_single_word             When "Highlight current word" preference     false       immediately
+                                  is enabled, this setting controls whether
+                                  to highlight the current word if no other
+                                  occurrences of it are found in the
+                                  document.
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
@@ -4482,6 +4490,14 @@ current_line
     true/false).
 
     *Example:* ``current_line=0x0;0xe5e5e5;true;false``
+
+current_word
+    The style for coloring the background of the current word when the
+    "Highlight occurrences of current word" preference is enabled. It
+    takes only one argument, the color of the inidicator background. The
+    color is made semi-transparent to improve the visual appearance.
+
+    *Example:* ``current_word=0xffffff``
 
 indent_guide
     The style for coloring the indentation guides. Only the first and

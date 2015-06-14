@@ -2182,3 +2182,18 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	else
 		g_printerr("Unable to find 'geany'");
 }
+
+
+void utils_slist_free_full(GSList *list, GDestroyNotify deleter)
+{
+#if GLIB_CHECK_VERSION(2, 28, 0)
+	g_slist_free_full(list, deleter);
+#else
+	if (deleter)
+	{
+		for (GSList *it = list; it != NULL; it = g_slist_next(it))
+			deleter(it->data);
+	}
+	g_slist_free(list);
+#endif
+}
