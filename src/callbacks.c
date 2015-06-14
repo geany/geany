@@ -1916,6 +1916,13 @@ static void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer u
 }
 
 
+static void check_highlight_current_word_toggled_cb(GtkToggleButton *button, gpointer user_data)
+{
+	GtkWidget *hbox = ui_lookup_widget(ui_widgets.prefs_dialog, "hbox_highlight_current_word");
+	gtk_widget_set_sensitive(hbox, gtk_toggle_button_get_active(button));
+}
+
+
 static void builder_connect_func(GtkBuilder *builder, GObject *object,
 	const gchar *signal_name, const gchar *handler_name, GObject *connect_obj,
 	GConnectFlags flags, gpointer user_data)

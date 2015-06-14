@@ -210,6 +210,8 @@ static void init_pref_groups(void)
 		"color_scheme", NULL);
 	stash_group_add_toggle_button(group, &editor_prefs.highlight_current_word,
 		"highlight_current_word", FALSE, "check_highlight_current_word");
+	stash_group_add_toggle_button(group, &editor_prefs.highlight_double_click,
+		"highlight_word_double_click", FALSE, "radio_highlight_word_double_click");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,

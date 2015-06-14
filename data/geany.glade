@@ -3799,17 +3799,70 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="check_highlight_current_word">
-                                    <property name="label" translatable="yes">Highlight occurrences of current word</property>
+                                    <property name="label" translatable="yes">Highlight occurrences of word</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="tooltip_text" translatable="yes">When enabled, all occurrences of the current word will automatically be highlighted using a special style.</property>
+                                    <property name="tooltip_text" translatable="yes">Highlight word either at cursor position or when double-clicked with the mouse, using a special style.</property>
                                     <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="check_highlight_current_word_toggled_cb" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="expand">True</property>
                                     <property name="fill">True</property>
                                     <property name="position">7</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkAlignment" id="alignment_highlight_current_word">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="left_padding">24</property>
+                                    <child>
+                                      <object class="GtkHBox" id="hbox_highlight_current_word">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="spacing">6</property>
+                                        <child>
+                                          <object class="GtkRadioButton" id="radio_highlight_word_auto">
+                                            <property name="label" translatable="yes">At cursor position</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="tooltip_text" translatable="yes">The current word at the caret position will be highlighted automatically.</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">0</property>
+                                          </packing>
+                                        </child>
+                                        <child>
+                                          <object class="GtkRadioButton" id="radio_highlight_word_double_click">
+                                            <property name="label" translatable="yes">On mouse double-click</property>
+                                            <property name="visible">True</property>
+                                            <property name="can_focus">True</property>
+                                            <property name="receives_default">False</property>
+                                            <property name="tooltip_text" translatable="yes">When a word is double-clicked with the mouse, all occurrences of that word will be highlighted.</property>
+                                            <property name="active">True</property>
+                                            <property name="draw_indicator">True</property>
+                                            <property name="group">radio_highlight_word_auto</property>
+                                          </object>
+                                          <packing>
+                                            <property name="expand">False</property>
+                                            <property name="fill">True</property>
+                                            <property name="position">1</property>
+                                          </packing>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">8</property>
                                   </packing>
                                 </child>
                               </object>

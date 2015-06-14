@@ -138,6 +138,7 @@ typedef struct GeanyEditorPrefs
 	gint		autocompletion_update_freq;
 	gboolean	highlight_current_word;
 	gboolean	highlight_single_word;
+	gboolean	highlight_double_click;
 }
 GeanyEditorPrefs;
 
