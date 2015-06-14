@@ -312,8 +312,6 @@ const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
 
-void utils_slist_free_full(GSList *list, GDestroyNotify deleter);
-
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

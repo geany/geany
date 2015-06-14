@@ -1256,7 +1256,7 @@ static gint search_mark_all_internal(GeanyDocument *doc, const gchar *search_tex
 				editor_indicator_set_on_range(doc->editor, indic, info->start, info->end);
 		}
 	}
-	utils_slist_free_full(matches, (GDestroyNotify) geany_match_info_free);
+	g_slist_free_full(matches, (GDestroyNotify) geany_match_info_free);
 
 	return count;
 }
