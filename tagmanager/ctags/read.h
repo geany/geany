@@ -70,7 +70,8 @@ typedef struct sInputFile {
     MIO		*mio;		/* stream used for reading the file */
     unsigned long lineNumber;	/* line number in the input file */
     MIOPos	filePosition;	/* file position of current line */
-    int		ungetch;	/* a single character that was ungotten */
+    unsigned int ungetchIdx;
+    int		ungetchBuf[3];	/* characters that were ungotten */
     boolean	eof;		/* have we reached the end of file? */
     boolean	newLine;	/* will the next character begin a new line? */
 
