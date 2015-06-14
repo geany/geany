@@ -529,7 +529,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	if (editor_prefs.highlight_current_word &&
 		search_mark_current_word(editor->document) == 0)
 	{
-		editor_indicator_clear(editor, GEANY_INDICATOR_HIGHLIGHT_WORD);
+		search_unmark_current_word(editor->document);
 	}
 
 #if 0

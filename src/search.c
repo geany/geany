@@ -1287,6 +1287,31 @@ gint search_mark_current_word(GeanyDocument *doc)
 }
 
 
+void search_unmark_current_word(GeanyDocument *doc)
+{
+	if (DOC_VALID(doc))
+		editor_indicator_clear(doc->editor, GEANY_INDICATOR_HIGHLIGHT_WORD);
+}
+
+
+gint search_mark_all_current_words(void)
+{
+	gint count = 0;
+	guint i = 0;
+	foreach_document(i)
+		count += search_mark_current_word(documents[i]);
+	return count;
+}
+
+
+void search_unmark_all_current_words(void)
+{
+	guint i = 0;
+	foreach_document(i)
+		search_unmark_current_word(documents[i]);
+}
+
+
 static void
 on_find_entry_activate(GtkEntry *entry, gpointer user_data)
 {
