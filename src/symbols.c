@@ -2425,5 +2425,8 @@ void symbols_finalize(void)
 	g_strfreev(c_tags_ignore);
 
 	for (i = 0; i < G_N_ELEMENTS(symbols_icons); i++)
-		g_object_unref(symbols_icons[i].pixbuf);
+	{
+		if (symbols_icons[i].pixbuf)
+			g_object_unref(symbols_icons[i].pixbuf);
+	}
 }
