@@ -87,6 +87,7 @@ static gboolean write_config(gboolean emit_signal);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
+static void on_combo_auto_indent_mode_project_changed(GtkComboBox *combo, GtkWidget *check);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
@@ -553,6 +554,10 @@ static void create_properties_dialog(PropertyDialogElements *e)
 				G_CALLBACK(on_radio_long_line_custom_toggled),
 				ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
+
+	g_signal_connect(ui_lookup_widget(e->dialog, "combo_auto_indent_mode_project"),
+			"changed", G_CALLBACK(on_combo_auto_indent_mode_project_changed),
+			ui_lookup_widget(e->dialog, "check_align_paren_project"));
 }
 
 
@@ -1000,6 +1005,12 @@ static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget 
 }
 
 
+static void on_combo_auto_indent_mode_project_changed(GtkComboBox *widget, GtkWidget *check)
+{
+	gtk_widget_set_sensitive(check, gtk_combo_box_get_active(widget) >= GEANY_AUTOINDENT_CURRENTCHARS);
+}
+
+
 gboolean project_load_file(const gchar *locale_file_name)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
@@ -1293,6 +1304,10 @@ static void init_stash_prefs(void)
 		"detect_indent", FALSE, "check_detect_indent_type_project");
 	stash_group_add_toggle_button(group, &indentation.detect_width,
 		"detect_indent_width", FALSE, "check_detect_indent_width_project");
+	stash_group_add_toggle_button(group, &indentation.paren_align,
+		"align_parentheses", FALSE, "check_align_paren_project");
+	stash_group_add_toggle_button(group, &indentation.align_with_spaces,
+		"align_with_spaces", TRUE, "check_align_with_spaces_project");
 	stash_group_add_combo_box(group, (gint*)(gpointer)&indentation.auto_indent_mode,
 		"indent_mode", GEANY_AUTOINDENT_CURRENTCHARS, "combo_auto_indent_mode_project");
 

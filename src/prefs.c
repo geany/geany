@@ -1586,6 +1586,12 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 }
 
 
+static void on_combo_auto_indent_mode_changed(GtkComboBox *widget, GtkWidget *check)
+{
+	gtk_widget_set_sensitive(check, gtk_combo_box_get_active(widget) >= GEANY_AUTOINDENT_CURRENTCHARS);
+}
+
+
 static void open_preferences_help(void)
 {
 	gchar *uri;
@@ -1717,6 +1723,10 @@ void prefs_show_dialog(void)
 		gtk_misc_set_padding(GTK_MISC(label), 6, 0);
 		gtk_box_pack_start(GTK_BOX(ui_lookup_widget(ui_widgets.prefs_dialog,
 			"label_project_indent_warning")), label, FALSE, TRUE, 5);
+
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "combo_auto_indent_mode"),
+				"changed", G_CALLBACK(on_combo_auto_indent_mode_changed),
+				ui_lookup_widget(ui_widgets.prefs_dialog, "check_align_paren"));
 
 		/* add the clear icon to GtkEntry widgets in the dialog */
 		{

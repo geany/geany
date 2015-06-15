@@ -89,6 +89,8 @@ typedef struct GeanyIndentPrefs
 	GeanyAutoIndent	auto_indent_mode;
 	gboolean		detect_type;
 	gboolean		detect_width;
+	gboolean		paren_align;
+	gboolean		align_with_spaces;
 }
 GeanyIndentPrefs;
 
