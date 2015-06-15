@@ -66,13 +66,13 @@ static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on 
  * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
 
-static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
-
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
 static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft);
 static void read_filetype_config(void);
+static void create_set_filetype_menu(gboolean config);
+static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user);
 
 
 enum TitleType
@@ -354,28 +354,43 @@ void filetypes_init_types(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f;
+	gchar *f, *basename;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
 	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		filetypes_reload_extensions();
-
 	g_free(f);
-	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
-	if (utils_str_equal(doc->real_path, f))
+
+	basename = g_path_get_basename(doc->real_path);
+	if (g_str_has_prefix(basename, "filetypes."))
 	{
 		guint i;
 
-		/* Note: we don't reload other filetypes, even though the named styles may have changed.
-		 * The user can do this manually with 'Tools->Reload Configuration' */
-		filetypes_load_config(GEANY_FILETYPES_NONE, TRUE);
+		for (i = 0; i < filetypes_array->len; i++)
+		{
+			GeanyFiletype *ft = filetypes[i];
 
-		foreach_document(i)
-			document_reload_config(documents[i]);
+			f = filetypes_get_filename(ft, TRUE);
+			if (utils_str_equal(doc->real_path, f))
+			{
+				guint j;
+
+				/* Note: we don't reload other filetypes, even though the named styles may have changed.
+				 * The user can do this manually with 'Tools->Reload Configuration' */
+				filetypes_load_config(i, TRUE);
+
+				foreach_document(j)
+					document_reload_config(documents[j]);
+
+				g_free(f);
+				break;
+			}
+			g_free(f);
+		}
 	}
-	g_free(f);
+	g_free(basename);
 }
 
 
@@ -389,11 +404,13 @@ static void setup_config_file_menus(void)
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
+	create_set_filetype_menu(TRUE);
+
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 
 
-static void create_sub_menu(GtkWidget *parent, GeanyFiletypeGroupID group_id, const gchar *title)
+static GtkWidget *create_sub_menu(GtkWidget *parent, const gchar *title)
 {
 	GtkWidget *menu, *item;
 
@@ -402,29 +419,44 @@ static void create_sub_menu(GtkWidget *parent, GeanyFiletypeGroupID group_id, co
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 	gtk_container_add(GTK_CONTAINER(parent), item);
 	gtk_widget_show(item);
-	group_menus[group_id] = menu;
+
+	return menu;
 }
 
 
-static void create_set_filetype_menu(void)
+static void create_set_filetype_menu(gboolean config)
 {
+	GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
 	GSList *node;
-	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
+	GtkWidget *menu;
 
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous"));
+	menu = config ? ui_widgets.config_files_filetype_menu :
+		ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 
-	/* Append all filetypes to the filetype menu */
+	group_menus[GEANY_FILETYPE_GROUP_COMPILED] = create_sub_menu(menu, _("_Programming Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_SCRIPT] = create_sub_menu(menu, _("_Scripting Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_MARKUP] = create_sub_menu(menu, _("_Markup Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_MISC] = create_sub_menu(menu, _("M_iscellaneous"));
+
+	/* Append all filetypes to the menu */
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
+		GtkWidget *parent = (ft->group != GEANY_FILETYPE_GROUP_NONE) ? group_menus[ft->group] : menu;
 
-		if (ft->group != GEANY_FILETYPE_GROUP_NONE)
-			create_radio_menu_item(group_menus[ft->group], ft);
+		/* we already have filetypes.common config entry */
+		if (config && ft->id == GEANY_FILETYPES_NONE)
+			continue;
+
+		if (config)
+		{
+			gchar *filename = filetypes_get_filename(ft, TRUE);
+
+			ui_add_config_file_menu_item(filename, NULL, GTK_CONTAINER(parent));
+			g_free(filename);
+		}
 		else
-			create_radio_menu_item(filetype_menu, ft);
+			create_radio_menu_item(parent, ft);
 	}
 }
 
@@ -432,7 +464,7 @@ static void create_set_filetype_menu(void)
 void filetypes_init(void)
 {
 	filetypes_init_types();
-	create_set_filetype_menu();
+	create_set_filetype_menu(FALSE);
 	setup_config_file_menus();
 }
 

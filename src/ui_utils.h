@@ -184,6 +184,7 @@ typedef struct UIWidgets
 	GtkWidget	*print_page_setup;
 	GtkWidget	*recent_projects_menuitem;
 	GtkWidget	*recent_projects_menu_menubar;
+	GtkWidget	*config_files_filetype_menu;
 
 	/* dialogs */
 	GtkWidget	*open_colorsel;
@@ -222,8 +223,6 @@ GeanyUIEditorFeatures;
 
 
 void ui_widget_show_hide(GtkWidget *widget, gboolean show);
-
-void ui_menu_sort_by_label(GtkMenu *menu);
 
 gchar *ui_menu_item_get_text(GtkMenuItem *menu_item);
 
