@@ -1603,10 +1603,11 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 }
 
 
-static gint get_indent_size_after_line(GeanyEditor *editor, gint line, gint *align)
+static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint *size_, gint *align)
 {
 	ScintillaObject *sci = editor->sci;
 	gint size;
+	gboolean changed = FALSE;
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	g_return_val_if_fail(line >= 0, 0);
@@ -1624,7 +1625,10 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line, gint *ali
 			if (parenthesis_witdh > size)
 				*align = parenthesis_witdh - size;
 			if (parenthesis_witdh >= 0)
+			{
 				size = parenthesis_witdh;
+				changed = TRUE;
+			}
 		}
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
@@ -1639,12 +1643,19 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line, gint *ali
 			sci_get_lexer(sci) == SCLEX_XML) &&
 			editor->document->file_type->priv->xml_indent_tags)
 		{
-			size += iprefs->width * get_xml_indent(sci, line);
+			additional_indent = iprefs->width * get_xml_indent(sci, line);
 		}
 
-		size += additional_indent;
+		if (additional_indent)
+		{
+			size += additional_indent;
+			changed = TRUE;
+		}
 	}
-	return size;
+
+	*size_ = size;
+
+	return changed;
 }
 
 
@@ -1652,15 +1663,15 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_indent = sci_get_line_indentation(sci, line);
-	gint align = 0;
-	gint size = get_indent_size_after_line(editor, line, &align);
+	gint align = 0, size = 0;
+	gboolean changed = get_indent_size_after_line(editor, line, &size, &align);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gchar *text;
 
 	if (size == 0)
 		return;
 
-	if (iprefs->type == GEANY_INDENT_TYPE_TABS && size == line_indent)
+	if (iprefs->type == GEANY_INDENT_TYPE_TABS && size == line_indent && !changed)
 	{
 		/* support tab indents, space aligns style - copy last line 'indent' exactly */
 		gint start = sci_get_position_from_line(sci, line);
