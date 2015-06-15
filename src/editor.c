@@ -1218,14 +1218,18 @@ static gint get_tab_width(const GeanyIndentPrefs *indent_prefs)
 /* Returns a string containing width chars of whitespace, filled with simple space
  * characters or with the right number of tab characters, according to the indent prefs.
  * (Result is filled with tabs *and* spaces if width isn't a multiple of
- * the tab width). */
+ * the tab width, or if align is > 0).
+ * @param align is the part of @p width that should be considered alignment */
 static gchar *
-get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
+get_whitespace(const GeanyIndentPrefs *iprefs, gint width, gint align)
 {
 	g_return_val_if_fail(width >= 0, NULL);
 
 	if (width == 0)
 		return g_strdup("");
+
+	if (FALSE /* FIXME */) /* don't align with spaces */
+		align = 0;
 
 	if (iprefs->type == GEANY_INDENT_TYPE_SPACES)
 	{
@@ -1234,8 +1238,8 @@ get_whitespace(const GeanyIndentPrefs *iprefs, gint width)
 	else
 	{	/* first fill text with tabs and fill the rest with spaces */
 		const gint tab_width = get_tab_width(iprefs);
-		gint tabs = width / tab_width;
-		gint spaces = width % tab_width;
+		gint tabs = (width - align) / tab_width;
+		gint spaces = ((width - align) % tab_width) + align;
 		gint len = tabs + spaces;
 		gchar *str;
 
@@ -1599,7 +1603,7 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 }
 
 
-static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
+static gint get_indent_size_after_line(GeanyEditor *editor, gint line, gint *align)
 {
 	ScintillaObject *sci = editor->sci;
 	gint size;
@@ -1617,6 +1621,8 @@ static gint get_indent_size_after_line(GeanyEditor *editor, gint line)
 		{
 			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs);
 
+			if (parenthesis_witdh > size)
+				*align = parenthesis_witdh - size;
 			if (parenthesis_witdh >= 0)
 				size = parenthesis_witdh;
 		}
@@ -1646,7 +1652,8 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 {
 	ScintillaObject *sci = editor->sci;
 	gint line_indent = sci_get_line_indentation(sci, line);
-	gint size = get_indent_size_after_line(editor, line);
+	gint align = 0;
+	gint size = get_indent_size_after_line(editor, line, &align);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gchar *text;
 
@@ -1663,7 +1670,7 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 	}
 	else
 	{
-		text = get_whitespace(iprefs, size);
+		text = get_whitespace(iprefs, size, align);
 	}
 	sci_add_text(sci, text);
 	g_free(text);
@@ -1798,7 +1805,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 			gint line_start;
 			gint brace_line = sci_get_line_from_position(sci, start_brace);
 			gint size = sci_get_line_indentation(sci, brace_line);
-			gchar *ind = get_whitespace(iprefs, size);
+			gchar *ind = get_whitespace(iprefs, size, 0);
 			gchar *text = g_strconcat(ind, "}", NULL);
 
 			line_start = sci_get_position_from_line(sci, line);
@@ -3842,7 +3849,7 @@ void editor_insert_alternative_whitespace(GeanyEditor *editor)
 			iprefs.type = GEANY_INDENT_TYPE_TABS;
 			break;
 	}
-	text = get_whitespace(&iprefs, iprefs.width);
+	text = get_whitespace(&iprefs, iprefs.width, 0);
 	sci_add_text(editor->sci, text);
 	g_free(text);
 }
