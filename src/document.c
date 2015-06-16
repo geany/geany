@@ -663,6 +663,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	doc->index = new_idx;
 	doc->file_name = g_strdup(utf8_filename);
 	doc->editor = editor_create(doc);
+	doc->priv->typenames = NULL;
 #ifndef USE_GIO_FILEMON
 	doc->priv->last_check = time(NULL);
 #endif
@@ -743,6 +744,7 @@ static gboolean remove_page(guint page_num)
 	g_free(doc->priv->saved_encoding.encoding);
 	g_free(doc->file_name);
 	g_free(doc->real_path);
+	g_free(doc->priv->typenames);
 	if (doc->tm_file)
 	{
 		tm_workspace_remove_source_file(doc->tm_file);
@@ -2631,8 +2633,7 @@ void document_update_tags(GeanyDocument *doc)
 /* Re-highlights type keywords without re-parsing the whole document. */
 void document_highlight_tags(GeanyDocument *doc)
 {
-	GString *keywords_str;
-	gchar *keywords;
+	gchar *typenames;
 	gint keyword_idx;
 
 	/* some filetypes support type keywords (such as struct names), but not
@@ -2665,13 +2666,16 @@ void document_highlight_tags(GeanyDocument *doc)
 		return;
 
 	/* get any type keywords and tell scintilla about them
-	 * this will cause the type keywords to be colourized in scintilla */
-	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
-	if (keywords_str)
+	 * this will cause the type keywords to be colourized in scintilla
+	 * do nothing if the keywords don't change */
+	typenames = symbols_find_workspace_typenames(doc);
+	/* typenames is always sorted and deduped so we can compare with the previous value */
+	if (g_strcmp0(typenames, doc->priv->typenames) == 0)
+		g_free(typenames);
+	else
 	{
-		keywords = g_string_free(keywords_str, FALSE);
-		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
-		g_free(keywords);
+		SETPTR(doc->priv->typenames, typenames);
+		sci_set_keywords(doc->editor->sci, keyword_idx, typenames);
 		queue_colourise(doc); /* force re-highlighting the entire document */
 	}
 }
