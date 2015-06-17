@@ -1444,6 +1444,13 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line, gint *l
 		gint match_line;
 
 		end_pos = pos + 1;
+		/* advance past spaces on the right of the parenthesis, e.g. for styles like
+		 * if( foo &&
+		 *     bar ) ...
+		 */
+		while (sci_get_char_at(sci, end_pos + 1) == ' ')
+			end_pos++;
+
 		match_line = sci_get_line_from_position(sci, end_pos);
 		if (line_matched)
 			*line_matched = match_line;
