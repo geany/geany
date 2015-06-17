@@ -1690,7 +1690,11 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 		gint start = sci_get_position_from_line(sci, line_matched);
 		gint end = sci_get_line_indent_position(sci, line_matched);
 
-		text = sci_get_contents_range(sci, start, end);
+		if (end > start) /* sci_get_contents_range() doesn't like if start==end */
+			text = sci_get_contents_range(sci, start, end);
+		else
+			text = g_strdup("");
+
 		if (size > line_indent)
 		{
 			gchar *extra_text = get_whitespace(iprefs, size - line_indent, size - line_indent);
