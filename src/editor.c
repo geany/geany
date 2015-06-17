@@ -1603,11 +1603,13 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 }
 
 
+/* returns whether the indentation *level* changed.
+ * new sizes and alignment are returned in @p size_ and @p align */
 static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint *size_, gint *align)
 {
 	ScintillaObject *sci = editor->sci;
 	gint size;
-	gboolean changed = FALSE;
+	gboolean lvl_changed = FALSE;
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 
 	g_return_val_if_fail(line >= 0, 0);
@@ -1622,13 +1624,17 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint 
 		{
 			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs);
 
+			/* FIXME: keep nested alignment, like
+			 * 
+			 * \tfoo(1,
+			 * \t    bar(2,
+			 * \t        3),
+			 * \t    4) <-- here, needs to copy align of l2
+			 */
 			if (parenthesis_witdh > size)
 				*align = parenthesis_witdh - size;
 			if (parenthesis_witdh >= 0)
-			{
 				size = parenthesis_witdh;
-				changed = TRUE;
-			}
 		}
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
@@ -1649,13 +1655,13 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint 
 		if (additional_indent)
 		{
 			size += additional_indent;
-			changed = TRUE;
+			lvl_changed = TRUE;
 		}
 	}
 
 	*size_ = size;
 
-	return changed;
+	return lvl_changed;
 }
 
 
@@ -1664,20 +1670,26 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 	ScintillaObject *sci = editor->sci;
 	gint line_indent = sci_get_line_indentation(sci, line);
 	gint align = 0, size = 0;
-	gboolean changed = get_indent_size_after_line(editor, line, &size, &align);
+	gboolean lvl_changed = get_indent_size_after_line(editor, line, &size, &align);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gchar *text;
 
 	if (size == 0)
 		return;
 
-	if (iprefs->type == GEANY_INDENT_TYPE_TABS && size == line_indent && !changed)
+	if (! lvl_changed && iprefs->type != GEANY_INDENT_TYPE_SPACES && size >= line_indent)
 	{
 		/* support tab indents, space aligns style - copy last line 'indent' exactly */
 		gint start = sci_get_position_from_line(sci, line);
 		gint end = sci_get_line_indent_position(sci, line);
 
 		text = sci_get_contents_range(sci, start, end);
+		if (size > line_indent)
+		{
+			gchar *extra_text = get_whitespace(iprefs, size - line_indent, size - line_indent);
+			SETPTR(text, g_strconcat(text, extra_text, NULL));
+			g_free(extra_text);
+		}
 	}
 	else
 	{
