@@ -196,6 +196,8 @@ static void init_prefs(void)
 		"pref_search_always_wrap", FALSE, "check_hide_find_dialog");
 	stash_group_add_toggle_button(group, &search_prefs.use_current_file_dir,
 		"pref_search_current_file_dir", TRUE, "check_fif_current_dir");
+	stash_group_add_toggle_button(group, &search_prefs.use_project_base_dir,
+		"pref_search_project_base_dir", FALSE, "check_fif_project_base_dir");
 	stash_group_add_boolean(group, &find_dlg.all_expanded, "find_all_expanded", FALSE);
 	stash_group_add_boolean(group, &replace_dlg.all_expanded, "replace_all_expanded", FALSE);
 	/* dialog positions */
@@ -1078,6 +1080,8 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.dir_combo));
 	if (!EMPTY(dir))
 		cur_dir = g_strdup(dir);	/* custom directory argument passed */
+	else if (search_prefs.use_project_base_dir && app->project && !EMPTY(app->project->base_path))
+		cur_dir = project_get_base_path();
 	else
 	{
 		if (search_prefs.use_current_file_dir)
