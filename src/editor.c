@@ -1416,7 +1416,7 @@ static gint get_sci_line_code_end_position(ScintillaObject *sci, gint line)
 
 
 /* returns the real indentation width, not the depth */
-static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
+static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line, gint *line_matched)
 {
 	gint pos, pos_start = 0;
 	gint ret = -1, depth = 0;
@@ -1445,6 +1445,8 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
 
 		end_pos = pos + 1;
 		match_line = sci_get_line_from_position(sci, end_pos);
+		if (line_matched)
+			*line_matched = match_line;
 		/* don't indent if it would use the full line size since it is unlikely
 		 * somebody wants it */
 		if (end_pos < sci_get_line_end_position (sci, match_line) - 1)
@@ -1458,7 +1460,11 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line)
 
 				line_indent = sci_get_line_indentation(sci, match_line);
 				if (ret < 0 || line_indent < ret)
+				{
+					if (line_matched)
+						*line_matched = match_line;
 					ret = line_indent;
+				}
 			}
 		}
 	}
@@ -1485,7 +1491,7 @@ static gint get_last_occurrence_on_code_line(ScintillaObject *sci, gint line, gc
 
 
 /* returns the real indentation width, not the depth */
-static gint get_matching_parenthesis_indent(ScintillaObject *sci, gint line)
+static gint get_matching_parenthesis_indent(ScintillaObject *sci, gint line, gint *line_matched)
 {
 	gint width = -1;
 	gint pos;
@@ -1499,6 +1505,8 @@ static gint get_matching_parenthesis_indent(ScintillaObject *sci, gint line)
 		{
 			line = sci_get_line_from_position(sci, match_pos);
 			width = sci_get_line_indentation(sci, line);
+			if (line_matched)
+				*line_matched = line;
 		}
 	}
 	return width;
@@ -1532,18 +1540,18 @@ static gint line_unmatched_parentheses(ScintillaObject *sci, gint line)
 
 /* returns the real indentation width, not the depth */
 static gint get_parenthesis_indent(ScintillaObject *sci, gint line,
-		const GeanyIndentPrefs *iprefs)
+		const GeanyIndentPrefs *iprefs, gint *line_matched)
 {
 	gint size = -1;
 
 	/* don't play with parentheses indentation if last line have no parenthesis */
 	if (line_unmatched_parentheses(sci, line) != 0)
 	{
-		gint parenthesis_witdh = get_open_parenthesis_indent(sci, line);
+		gint parenthesis_witdh = get_open_parenthesis_indent(sci, line, line_matched);
 
 		if (parenthesis_witdh < 0 &&
 			iprefs->auto_indent_mode > GEANY_AUTOINDENT_CURRENTCHARS /* FIXME? */)
-			parenthesis_witdh = get_matching_parenthesis_indent(sci, line);
+			parenthesis_witdh = get_matching_parenthesis_indent(sci, line, line_matched);
 		if (parenthesis_witdh >= 0)
 			size = parenthesis_witdh;
 	}
@@ -1605,7 +1613,8 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 
 /* returns whether the indentation *level* changed.
  * new sizes and alignment are returned in @p size_ and @p align */
-static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint *size_, gint *align)
+static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
+		gint *size_, gint *align, gint *line_matched)
 {
 	ScintillaObject *sci = editor->sci;
 	gint size;
@@ -1615,6 +1624,7 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint 
 	g_return_val_if_fail(line >= 0, 0);
 
 	size = sci_get_line_indentation(sci, line);
+	*line_matched = line;
 
 	if (iprefs->auto_indent_mode > GEANY_AUTOINDENT_BASIC)
 	{
@@ -1622,15 +1632,8 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line, gint 
 
 		if (iprefs->paren_align)
 		{
-			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs);
+			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs, line_matched);
 
-			/* FIXME: keep nested alignment, like
-			 * 
-			 * \tfoo(1,
-			 * \t    bar(2,
-			 * \t        3),
-			 * \t    4) <-- here, needs to copy align of l2
-			 */
 			if (parenthesis_witdh > size)
 				*align = parenthesis_witdh - size;
 			if (parenthesis_witdh >= 0)
@@ -1670,18 +1673,22 @@ static void insert_indent_after_line(GeanyEditor *editor, gint line)
 	ScintillaObject *sci = editor->sci;
 	gint line_indent = sci_get_line_indentation(sci, line);
 	gint align = 0, size = 0;
-	gboolean lvl_changed = get_indent_size_after_line(editor, line, &size, &align);
+	gint line_matched = 0;
+	gboolean lvl_changed = get_indent_size_after_line(editor, line, &size, &align, &line_matched);
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gchar *text;
 
 	if (size == 0)
 		return;
 
+	if (line_matched != line)
+		line_indent = sci_get_line_indentation(sci, line_matched);
+
 	if (! lvl_changed && iprefs->type != GEANY_INDENT_TYPE_SPACES && size >= line_indent)
 	{
 		/* support tab indents, space aligns style - copy last line 'indent' exactly */
-		gint start = sci_get_position_from_line(sci, line);
-		gint end = sci_get_line_indent_position(sci, line);
+		gint start = sci_get_position_from_line(sci, line_matched);
+		gint end = sci_get_line_indent_position(sci, line_matched);
 
 		text = sci_get_contents_range(sci, start, end);
 		if (size > line_indent)
@@ -1832,7 +1839,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 			gchar *text;
 
 			if (iprefs->paren_align && line_unmatched_parentheses(sci, brace_line) < 0)
-				size = get_matching_parenthesis_indent(sci, brace_line);
+				size = get_matching_parenthesis_indent(sci, brace_line, NULL);
 			if (size < 0)
 				size = sci_get_line_indentation(sci, brace_line);
 
