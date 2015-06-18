@@ -336,6 +336,10 @@ but you then may not have a local copy of the HTML manual.'''
     conf.env.append_value('CFLAGS', ['-DGTK'])
     conf.env.append_value('CXXFLAGS',
         ['-DNDEBUG', '-DGTK', '-DSCI_LEXER', '-DG_THREADS_IMPL_NONE'])
+    if conf.env['CXX_NAME'] == 'gcc' and '-O' not in ''.join(conf.env['CXXFLAGS']):
+        conf.env.append_value('CXXFLAGS', ['-O2'])
+    if revision is not None:
+        conf.env.append_value('CXXFLAGS', ['-g'])
 
     # summary
     Logs.pprint('BLUE', 'Summary:')
