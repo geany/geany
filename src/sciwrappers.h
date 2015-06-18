@@ -158,7 +158,6 @@ void				sci_use_popup				(ScintillaObject *sci, gboolean enable);
 void				sci_goto_pos				(ScintillaObject *sci, gint pos, gboolean unfold);
 void				sci_set_search_anchor		(ScintillaObject *sci);
 void				sci_set_anchor				(ScintillaObject *sci, gint pos);
-void				sci_scroll_lines			(ScintillaObject *sci, gint lines);
 void				sci_scroll_columns			(ScintillaObject *sci, gint columns);
 gint				sci_search_next				(ScintillaObject *sci, gint flags, const gchar *text);
 gint				sci_search_prev				(ScintillaObject *sci, gint flags, const gchar *text);
@@ -170,13 +169,9 @@ void				sci_assign_cmdkey			(ScintillaObject *sci, gint key, gint command);
 void				sci_selection_duplicate		(ScintillaObject *sci);
 void				sci_line_duplicate			(ScintillaObject *sci);
 
-void				sci_target_from_selection	(ScintillaObject *sci);
-gint				sci_get_target_end			(ScintillaObject *sci);
-
 void				sci_set_keywords			(ScintillaObject *sci, guint k, const gchar *text);
 void				sci_set_lexer				(ScintillaObject *sci, guint lexer_id);
 void				sci_set_readonly			(ScintillaObject *sci, gboolean readonly);
-gint				sci_get_zoom				(ScintillaObject *sci);
 
 gint				sci_get_lines_selected		(ScintillaObject *sci);
 gint				sci_get_first_visible_line	(ScintillaObject *sci);

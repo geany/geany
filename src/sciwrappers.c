@@ -273,12 +273,6 @@ void sci_zoom_off(ScintillaObject *sci)
 }
 
 
-gint sci_get_zoom(ScintillaObject *sci)
-{
-	return (gint) SSM(sci, SCI_GETZOOM, 0, 0);
-}
-
-
 /** Sets a line marker.
  * @param sci Scintilla widget.
  * @param line_number Line number.
@@ -857,12 +851,6 @@ void sci_scroll_caret(ScintillaObject *sci)
 }
 
 
-void sci_scroll_lines(ScintillaObject *sci, gint lines)
-{
-	SSM(sci, SCI_LINESCROLL, 0, lines);
-}
-
-
 void sci_scroll_columns(ScintillaObject *sci, gint columns)
 {
 	SSM(sci, SCI_LINESCROLL, (uptr_t) columns, 0);
@@ -1027,12 +1015,6 @@ GEANY_API_SYMBOL
 void sci_insert_text(ScintillaObject *sci, gint pos, const gchar *text)
 {
 	SSM(sci, SCI_INSERTTEXT, (uptr_t) pos, (sptr_t) text);
-}
-
-
-void sci_target_from_selection(ScintillaObject *sci)
-{
-	SSM(sci, SCI_TARGETFROMSELECTION, 0, 0);
 }
 
 
@@ -1300,12 +1282,6 @@ void sci_set_scroll_stop_at_last_line(ScintillaObject *sci, gboolean set)
 void sci_cancel(ScintillaObject *sci)
 {
 	SSM(sci, SCI_CANCEL, 0, 0);
-}
-
-
-gint sci_get_target_end(ScintillaObject *sci)
-{
-	return (gint) SSM(sci, SCI_GETTARGETEND, 0, 0);
 }
 
 
