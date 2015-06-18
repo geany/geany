@@ -1424,8 +1424,7 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line, gint *l
 
 	lexer = sci_get_lexer (sci);
 	pos = sci_get_line_end_position(sci, line) - 1;
-	/*if (one_line)
-		pos_start = sci_get_position_from_line(sci, line);*/
+	pos_start = sci_get_position_from_line(sci, line);
 	for (; pos >= pos_start && depth >= 0; pos--)
 	{
 		if (highlighting_is_code_style (lexer, sci_get_style_at (sci, pos)))
@@ -1437,11 +1436,17 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line, gint *l
 			else if (ch == '(')
 				depth--;
 		}
+		/* if we reached the start of the line and it wasn't balanced yet,
+		 * continue on prev line */
+		if (pos == pos_start && line > 0 && depth > 0)
+		{
+			line--;
+			pos_start = sci_get_position_from_line(sci, line);
+		}
 	}
 	if (depth < 0)
 	{
 		gint end_pos;
-		gint match_line;
 
 		end_pos = pos + 1;
 		/* advance past spaces on the right of the parenthesis, e.g. for styles like
@@ -1451,28 +1456,13 @@ static gint get_open_parenthesis_indent(ScintillaObject *sci, gint line, gint *l
 		while (sci_get_char_at(sci, end_pos + 1) == ' ')
 			end_pos++;
 
-		match_line = sci_get_line_from_position(sci, end_pos);
 		if (line_matched)
-			*line_matched = match_line;
+			*line_matched = line;
 		/* don't indent if it would use the full line size since it is unlikely
 		 * somebody wants it */
-		if (end_pos < sci_get_line_end_position (sci, match_line) - 1)
+		if (end_pos < sci_get_line_end_position (sci, line) - 1)
 		{
 			ret = sci_get_col_from_position(sci, end_pos + 1);
-			/* and then keep the smallest indent of a line between match and current,
-			 * not to restore a user reduced indent (e.g. for base_indent+1 style) */
-			for (++match_line; match_line < line; ++match_line)
-			{
-				gint line_indent;
-
-				line_indent = sci_get_line_indentation(sci, match_line);
-				if (ret < 0 || line_indent < ret)
-				{
-					if (line_matched)
-						*line_matched = match_line;
-					ret = line_indent;
-				}
-			}
 		}
 	}
 	return ret;
