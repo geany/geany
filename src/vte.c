@@ -33,6 +33,7 @@
 
 #include "callbacks.h"
 #include "document.h"
+#include "geanyobject.h"
 #include "msgwindow.h"
 #include "prefs.h"
 #include "sciwrappers.h"
@@ -184,6 +185,15 @@ static void override_menu_key(void)
 }
 
 
+static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
+}
+
+
 void vte_init(void)
 {
 	if (vte_info.have_vte == FALSE)
@@ -247,6 +257,8 @@ void vte_init(void)
 
 	/* setup the F10 menu override (so it works before the widget is first realised). */
 	override_menu_key();
+
+	g_signal_connect(geany_object, "geany-startup-complete", G_CALLBACK(on_startup_complete), NULL);
 }
 
 
