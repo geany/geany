@@ -587,7 +587,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 	for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
 	{
 		gchar *title = va_arg(args, gchar*);
-		guint icon_id = va_arg(args, gchar *);
+		guint icon_id = va_arg(args, guint);
 		GdkPixbuf *icon = NULL;
 
 		if (icon_id < N_ICONS)
