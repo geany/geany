@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the geany package.
 # Damián Viano <des@damianv.com.ar>, 2006, 2007.
 # Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
-# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2014.
+# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2014-03-31 07:23+0100\n"
+"POT-Creation-Date: 2015-06-21 02:36+0000\n"
+"PO-Revision-Date: 2015-06-21 14:21+0100\n"
 "Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -1140,7 +1140,6 @@ msgid "Open new documents from the command-line"
 msgstr "Abrir nuevos documentos desde la línea de comandos"
 
 #: ../data/geany.glade.h:230
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Crear un archivo nuevo por cada archivo de los indicados por línea de "
@@ -1638,7 +1637,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:308
+#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:320
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1984,18 +1983,16 @@ msgid "Set Line E_ndings"
 msgstr "Establecer fi_n de línea"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Convertir a y establecer _CR/LF (Win)"
+msgstr "Convertir a y establecer _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Convertir a y establecer _LF (Unix)"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Convertir a y establecer CR (_Mac)"
+msgstr "Convertir a y establecer CR (_Mac clásico)"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:586
 msgid "_Clone"
@@ -2363,9 +2360,9 @@ msgid "Process failed (%s)"
 msgstr "El proceso ha fallado (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Error al cambiar el directorio de trabajo a «%s»"
+msgstr "Directorio de trabajo incorrecto «%s»"
 
 #: ../src/build.c:838
 #, c-format
@@ -2377,6 +2374,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"No se ha ejecutado el archivo porque la terminal podría contener input "
+"(pulse Ctrl+C o Enter para limpiarlo)."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2483,13 +2482,12 @@ msgid "Execute commands"
 msgstr "Comandos de ejecución"
 
 #: ../src/build.c:1991
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"Los comodines %d, %e, %f y %p se sustituirán en los campos de comandos y "
-"directorios. Consulte el manual para más información."
+"%d, %e, %f, %p y %l se sustituirán en los campos de comandos y directorios, "
+"consulte el manual para más información."
 
 #: ../src/build.c:2149
 msgid "Set Build Commands"
@@ -2565,19 +2563,16 @@ msgid "Detect from file"
 msgstr "Detectar desde archivo"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
-msgstr "Lenguajes de _programación"
+msgstr "Lenguajes de programación"
 
 #: ../src/dialogs.c:227
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "Lenguajes de _script"
+msgstr "Lenguajes de script"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
-msgstr "Lenguajes de _etiquetas"
+msgstr "Lenguajes de etiquetas"
 
 #: ../src/dialogs.c:307
 msgid "_More Options"
@@ -2628,7 +2623,6 @@ msgid "Open File"
 msgstr "Abrir archivo"
 
 #: ../src/dialogs.c:380
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "_Ver"
@@ -2809,9 +2803,8 @@ msgid "Any unsaved changes will be lost."
 msgstr "Se perderá cualquier cambio no guardado."
 
 #: ../src/document.c:1574
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Se perderá cualquier cambio no guardado."
+msgstr "Se perderá el historial de deshacer."
 
 #: ../src/document.c:1575
 #, c-format
@@ -2865,16 +2858,13 @@ msgstr ""
 "Ha ocurrido un error al cerrar el archivo «%s»: ha fallado fclose(): %s"
 
 #: ../src/document.c:1981 ../src/document.c:3512
-#, fuzzy
 msgid "_Overwrite"
-msgstr "¿Desea sobreescribir?"
+msgstr "S_obreescribir"
 
 #: ../src/document.c:1983 ../src/document.c:3515
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"El archivo «%s» del disco es más reciente\n"
-"que la vista actual."
+msgstr "El archivo «%s» del disco es más reciente que la vista actual."
 
 #: ../src/document.c:1991 ../src/document.c:3564
 msgid "Try to resave the file?"
@@ -2888,7 +2878,7 @@ msgstr "No se ha encontrado el archivo «%s» en el disco."
 #: ../src/document.c:2055
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "No se puede guardar el archivo de solo lectura «%s»."
 
 #: ../src/document.c:2123
 #, c-format
@@ -3915,7 +3905,7 @@ msgstr "No se encontró el archivo «%s», probando la ruta del documento actual
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "El documento ha sido cerrado."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
@@ -3941,6 +3931,9 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Versión:\t%s\n"
+"Autor(es):\t%s\n"
+"Archivo:\t%s"
 
 #: ../src/plugins.c:1037
 msgid "No plugins available."
@@ -4117,7 +4110,7 @@ msgstr "proyectos"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "¿Desea mover los documentos actuales a la sesión nueva del proyecto?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4128,9 +4121,8 @@ msgid "C_reate"
 msgstr "C_rear"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Proyecto"
+msgstr "Nombre del proyecto"
 
 #: ../src/project.c:188
 #, c-format
@@ -4138,6 +4130,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Ruta del archivo que representa el proyecto y almacena sus ajustes. Debería "
+"tener la extensión «%s»."
 
 #: ../src/project.c:212 ../src/project.c:484
 msgid "Choose Project Base Path"
@@ -4262,7 +4256,7 @@ msgstr ""
 
 #: ../src/search.c:322
 msgid "Use multi-_line matching"
-msgstr ""
+msgstr "Usar coincidencias multilíneas"
 
 #: ../src/search.c:327
 msgid ""
@@ -4271,6 +4265,10 @@ msgid ""
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Realizar la comparación por expresión regular del archivo completo de una "
+"sola vez en vez de línea por línea, permitiendo que las coincidencias estén "
+"en varias líneas. En este modo los caracteres de cambio de línea son parte "
+"de la entrada y pueden ser capturadas como caracteres normales por el patrón."
 
 #: ../src/search.c:340
 msgid "Search _backwards"
@@ -4484,28 +4482,32 @@ msgstr ""
 #: ../src/spawn.c:122
 #, c-format
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "El texto estaba vacío (o contenía solo espacios en blanco)"
 
 #: ../src/spawn.c:137 ../src/spawn.c:183
 #, c-format
 msgid "Text ended before matching quote was found for %c. (The text was '%s')"
 msgstr ""
+"Se acabó el teto antes de encontrar las comillas correspondientes a %c. (El "
+"texto era «%s»)"
 
 #: ../src/spawn.c:145 ../src/spawn.c:159
 #, c-format
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
+"El nombre de un programa de Windows debe estar escrito completamente dentro "
+"de las comillas"
 
 #. or SPAWN error?
 #: ../src/spawn.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Program '%s' not found"
-msgstr "Comando no encontrado"
+msgstr "No se ha encontrado el programa «%s»"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "El proceso ha fallado (%s)"
+msgstr "Ha fallado TerminateProcess(): %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5284,9 +5286,8 @@ msgid "Select File"
 msgstr "Seleccionar archivo"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Recargar configuración"
+msgstr "Con_figuración de tipo de archivo"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5313,14 +5314,12 @@ msgstr ""
 "Corríjalo o escriba uno diferente."
 
 #: ../src/utils.c:374
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Mac clásico (CR)"
 
 #: ../src/utils.c:376
 msgid "Unix (LF)"
@@ -5328,38 +5327,40 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:385
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:386
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:387
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
-#: ../src/vte.c:477
+#: ../src/vte.c:489
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "biblioteca VTE no válida «%s»: falta el símbolo «%s»"
 
-#: ../src/vte.c:626
+#: ../src/vte.c:638
 msgid "_Set Path From Document"
 msgstr "_Establecer ruta desde el documento"
 
-#: ../src/vte.c:631
+#: ../src/vte.c:643
 msgid "_Restart Terminal"
 msgstr "_Reiniciar terminal"
 
-#: ../src/vte.c:654
+#: ../src/vte.c:666
 msgid "_Input Methods"
 msgstr "Métodos de _entrada"
 
-#: ../src/vte.c:747
+#: ../src/vte.c:759
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"No se ha cambiado de directorio porque el terminal podría contener input "
+"(pulse Ctrl+C o Enter para limpiarlo)."
 
 #: ../src/win32.c:208
 msgid "Geany project files"
@@ -5654,9 +5655,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "No se ha podido ejecutar el comando externo configurado «%s» (%s)."
 
 #: ../plugins/filebrowser.c:651
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Abrir archivo"
+msgstr "Abrir en _Geany"
 
 #: ../plugins/filebrowser.c:657
 msgid "Open _Externally"
