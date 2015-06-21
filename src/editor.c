@@ -1627,15 +1627,6 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
 	{
 		gint additional_indent = 0;
 
-		if (iprefs->paren_align)
-		{
-			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs, line_matched);
-
-			if (parenthesis_witdh > size)
-				*align = parenthesis_witdh - size;
-			if (parenthesis_witdh >= 0)
-				size = parenthesis_witdh;
-		}
 		if (lexer_has_braces(sci))
 			additional_indent = iprefs->width * get_brace_indent(sci, line);
 		else if (sci_get_lexer(sci) == SCLEX_PYTHON) /* Python/Cython */
@@ -1650,6 +1641,52 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
 			editor->document->file_type->priv->xml_indent_tags)
 		{
 			additional_indent = iprefs->width * get_xml_indent(sci, line);
+		}
+
+		if (iprefs->paren_align)
+		{
+			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs, line_matched);
+
+			/* only apply parentheses indent if there is no other changes, or if it
+			 * would reduce alignment -- e.g. in case of
+			 *
+			 * if (foo &&
+			 *     bar) {
+			 *   // here, needs to reduce alignment
+			 * }
+			 *
+			 * Not touching alignment if there are other changes allows not to align
+			 * in cases like e.g. JavaScript object literals:
+			 *
+			 * foo({
+			 *   // no alignment
+			 * });
+			 *
+			 * This looks sound as in such a case parentheses alignment would probably
+			 * be incorrect anyway, as it would align on the parenthesis and not the
+			 * open curly brace:
+			 *
+			 * foo({
+			 *     // probably incorrect
+			 * });
+			 *
+			 * It would however be interesting to be able to also align on curly
+			 * braces (and possibly square braces too) so we could handle cases like
+			 * that:
+			 *
+			 * foo({ 1, 2, 3,
+			 *       4, 5, 6 });
+			 *
+			 * Potentially, we might want to align on any kind of braces.  Not sure if
+			 * it's in the scope of this though.
+			 */
+			if (! additional_indent || parenthesis_witdh < size)
+			{
+				if (parenthesis_witdh > size)
+					*align = parenthesis_witdh - size;
+				if (parenthesis_witdh >= 0)
+					size = parenthesis_witdh;
+			}
 		}
 
 		if (additional_indent)
