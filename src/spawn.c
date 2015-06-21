@@ -74,7 +74,7 @@
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
 
 
-/**
+/*
  *  Checks whether a command line is syntactically valid and extracts the program name from it.
  *
  *  All OS:
@@ -101,7 +101,6 @@
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 {
 	gchar *program;
@@ -201,7 +200,7 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 }
 
 
-/**
+/*
  *  Checks whether a command line is valid.
  *
  *  Checks if @a command_line is syntactically valid using @c spawn_get_program_name().
@@ -217,7 +216,6 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error)
 {
 	gchar *program = spawn_get_program_name(command_line, error);
@@ -245,7 +243,7 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
 }
 
 
-/**
+/*
  *  Kills a process.
  *
  *  @param pid id of the process to kill.
@@ -260,7 +258,6 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_kill_process(GPid pid, GError **error)
 {
 #ifdef G_OS_WIN32
@@ -453,7 +450,7 @@ static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED g
 #endif /* G_OS_WIN32 */
 
 
-/**
+/*
  *  Executes a child program asynchronously and setups pipes.
  *
  *  This is the low-level spawning function. Please use @c spawn_with_callbacks() unless
@@ -481,7 +478,6 @@ static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED g
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, GPid *child_pid, gint *stdin_fd, gint *stdout_fd,
 	gint *stderr_fd, GError **error)
@@ -593,7 +589,7 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 }
 
 
-/**
+/*
  *  Executes a child asynchronously.
  *
  *  See @c spawn_async_with_pipes() for a full description; this function simply calls
@@ -601,7 +597,6 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error)
 {
@@ -835,7 +830,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 }
 
 
-/**
+/*
  *  Executes a child program and setups callbacks.
  *
  *  A command line or an argument vector must be passed. If both are present, the argument
@@ -885,7 +880,6 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, SpawnFlags spawn_flags, GIOFunc stdin_cb, gpointer stdin_data,
 	SpawnReadFunc stdout_cb, gpointer stdout_data, gsize stdout_max_length,
@@ -1000,7 +994,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 }
 
 
-/**
+/*
  *  Writes (a portion of) the data pointed by @a data->ptr to the @a channel.
  *
  *  If @c G_IO_OUT in @a condition is set, and the @a data->size is > 0, attempts to write
@@ -1018,7 +1012,6 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data)
 {
 	if ((condition & G_IO_OUT) && data->size)
@@ -1047,20 +1040,19 @@ static void spawn_append_gstring_cb(GString *string, GIOCondition condition, gpo
 }
 
 
-/**
+/*
  *  Convinience @c GChildWatchFunc callback that copies the child exit status into a gint
  *  pointed by @a exit_status.
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit_status)
 {
 	*(gint *) exit_status = status;
 }
 
 
-/**
+/*
  *  Executes a child synchronously.
  *
  *  A command line or an argument vector must be passed. If both are present, the argument
@@ -1085,7 +1077,6 @@ void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit
  *
  *  @since 1.25
  **/
-GEANY_API_SYMBOL
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error)
