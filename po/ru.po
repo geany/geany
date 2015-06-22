@@ -5,13 +5,13 @@
 # Denis Koryavov <dkoryavov@yandex.ru>, 2010.
 # Igor Burmistrov <meyday@yandex.ru>, 2012
 # Maxim Musatov <m1kc@yandex.ru>, 2012
-# Pavel Roschin <roschin@scriptumplus.ru>, 2014
+# Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2014-09-12 19:13+0400\n"
+"PO-Revision-Date: 2015-06-22 11:01+0300\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -1954,18 +1954,16 @@ msgid "Set Line E_ndings"
 msgstr "Установить _окончания строк"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Заменить окончания строк на _CR/LF (Win)"
+msgstr "Заменить окончания строк на _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Заменить окончания строк на _LF (Unix)"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Заменить окончания строк на CR (_Mac)"
+msgstr "Заменить окончания строк на CR (классический _Mac)"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:586
 msgid "_Clone"
@@ -2331,9 +2329,9 @@ msgid "Process failed (%s)"
 msgstr "Процесс дал сбой (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Не могу сменить рабочий каталог на \"%s\""
+msgstr "Некорректный рабочий каталог \"%s\""
 
 #: ../src/build.c:838
 #, c-format
@@ -2345,6 +2343,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Файл не выполнен, так как терминал может содержать незавершённую команду "
+"(нажмите Ctrl+C или Enter, чтобы очистить терминал)."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2454,12 +2454,11 @@ msgid "Execute commands"
 msgstr "Выполнить команды"
 
 #: ../src/build.c:1991
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"Шаблоны для подстановки в команду и рабочий каталог: %d, %e, %f и %p, "
+"Шаблоны для подстановки в команду и рабочий каталог: %d, %e, %f, %p и %l, "
 "смотрите руководство для более детальной информации."
 
 #: ../src/build.c:2149
@@ -2777,9 +2776,8 @@ msgid "Any unsaved changes will be lost."
 msgstr "Все несохранённые изменения будут потеряны."
 
 #: ../src/document.c:1574
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Все несохранённые изменения будут потеряны."
+msgstr "Вся история изменений будет потеряна."
 
 #: ../src/document.c:1575
 #, c-format
@@ -2829,9 +2827,8 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Не удалось закрыть файл '%s': ошибка в fclose(): %s"
 
 #: ../src/document.c:1981 ../src/document.c:3512
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Перезаписать?"
+msgstr "_Перезаписать"
 
 #: ../src/document.c:1983 ../src/document.c:3515
 #, c-format
@@ -2850,7 +2847,7 @@ msgstr "Файл \"%s\" не найден на диске!"
 #: ../src/document.c:2055
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Не удалось сохранить документ '%s', доступный только для чтения!"
 
 #: ../src/document.c:2123
 #, c-format
@@ -4448,28 +4445,28 @@ msgstr ""
 #: ../src/spawn.c:122
 #, c-format
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Текст команды пуст (или содержит только пробелы)"
 
 #: ../src/spawn.c:137 ../src/spawn.c:183
 #, c-format
 msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
+msgstr "Не найдена парная кавычка для %c. (Текст команды: '%s')"
 
 #: ../src/spawn.c:145 ../src/spawn.c:159
 #, c-format
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
+msgstr "Экранированная команда Windows должна быть полностью заключена в кавычки"
 
 #. or SPAWN error?
 #: ../src/spawn.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Program '%s' not found"
-msgstr "Команда не найдена"
+msgstr "Команда '%s' не найдена"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "Процесс дал сбой (%s)"
+msgstr "Сбой в TerminateProcess(): %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4598,7 +4595,7 @@ msgstr "Модули"
 
 #: ../src/symbols.c:718 ../src/symbols.c:765
 msgid "Traits"
-msgstr ""
+msgstr "Типажи"
 
 #: ../src/symbols.c:719
 msgid "Implementations"
@@ -5244,9 +5241,8 @@ msgid "Select File"
 msgstr "Выбрать файл"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Обновить настройки"
+msgstr "Настройка типов _файлов"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5273,18 +5269,16 @@ msgstr ""
 "Пожалуйста, исправьте её или замените другой."
 
 #: ../src/utils.c:374
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr ""
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Мac (CR)"
+msgstr "Классический Мac (CR)"
 
 #: ../src/utils.c:376
 msgid "Unix (LF)"
-msgstr "Unix (LF)"
+msgstr ""
 
 #: ../src/utils.c:385
 msgid "CRLF"
@@ -5320,6 +5314,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Каталог не изменён, так как терминал может содержать незавершённую команду "
+"(нажмите Ctrl+C или Enter, чтобы очистить терминал)."
 
 #: ../src/win32.c:208
 msgid "Geany project files"
