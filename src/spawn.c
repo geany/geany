@@ -117,8 +117,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (!*command_line)
 	{
-		/* TL note: from glib */
 		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
+			/* TL note: from glib */
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
 	}
@@ -132,8 +132,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 		/* Windows allows "foo.exe, but we may have extra arguments */
 		if ((s = strchr(command_line, '"')) == NULL)
 		{
-			/* TL note: from glib */
 			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+				/* TL note: from glib */
 				_("Text ended before matching quote was found for %c."
 				  " (The text was '%s')"), '"', command_line);
 			return FALSE;
@@ -178,8 +178,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (open_quote)
 	{
-		/* TL note: from glib */
 		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			/* TL note: from glib */
 			_("Text ended before matching quote was found for %c."
 			  " (The text was '%s')"), '"', command_line);
 		g_free(program);
