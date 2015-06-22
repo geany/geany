@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2015-06-22 15:39+0200\n"
+"PO-Revision-Date: 2015-06-22 23:59+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -2176,14 +2176,14 @@ msgstr "Dossier de base :"
 
 #: ../data/geany.glade.h:463
 msgid "File patterns:"
-msgstr "Modèles de fichier :"
+msgstr "Motifs de fichier :"
 
 #: ../data/geany.glade.h:464
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
-"Liste de modèles de fichier, séparés par une espace, à utiliser dans le "
+"Liste de motifs de fichier, séparés par une espace, à utiliser dans le "
 "dialogue de recherche dans les fichiers (par ex. *.c *.h)"
 
 #: ../data/geany.glade.h:465 ../src/project.c:209
@@ -4179,7 +4179,7 @@ msgstr "Le fichier de projet n'a pas pu être écrit"
 #: ../src/project.c:256
 #, c-format
 msgid "Project \"%s\" created."
-msgstr "Projet  « %s » créé."
+msgstr "Projet « %s » créé."
 
 #: ../src/project.c:296 ../src/project.c:328 ../src/project.c:1021
 #, c-format
@@ -4404,18 +4404,18 @@ msgid ""
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
-"Tous : recherche dans tous les fichiers\n"
-"Projet : utilise les modèles de fichier définis dans les propriétés du "
+"Tous : recherche dans tous les fichiers\n"
+"Projet : utilise les motifs de fichier définis dans les propriétés du "
 "projet\n"
-"Personnalisé : utilise les modèles de fichiers spécifiés manuellement"
+"Personnalisé : utilise les motifs de fichiers spécifiés manuellement"
 
 #: ../src/search.c:895
 msgid "Fi_les:"
-msgstr "Fi_chiers"
+msgstr "Fi_chiers :"
 
 #: ../src/search.c:907
 msgid "File patterns, e.g. *.c *.h"
-msgstr "Modèles de fichier, par ex. *.c *.h"
+msgstr "Motifs de fichier, par ex. *.c *.h"
 
 #: ../src/search.c:919
 msgid "_Directory:"
@@ -5737,7 +5737,7 @@ msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
 msgstr ""
-"Filtre vos fichiers avec vos jokers habituels. Séparez chaque modèle par une "
+"Filtre vos fichiers avec vos jokers habituels. Séparez chaque motif par une "
 "espace."
 
 #: ../plugins/filebrowser.c:1164
@@ -5795,9 +5795,7 @@ msgstr "Actions d'enregistrement"
 
 #: ../plugins/saveactions.c:43
 msgid "This plugin provides different actions related to saving of files."
-msgstr ""
-"Ce plugin fournit différentes actions relatives à l'enregistrement des "
-"fichiers."
+msgstr "Fournit différentes actions relatives à l'enregistrement des fichiers."
 
 #: ../plugins/saveactions.c:175
 #, c-format
@@ -5900,7 +5898,7 @@ msgstr "Diviser la fenêtre"
 
 #: ../plugins/splitwindow.c:34
 msgid "Splits the editor view into two windows."
-msgstr "Diviser  en deux la fenêtre d'édition"
+msgstr "Diviser la fenêtre d'édition en deux"
 
 #: ../plugins/splitwindow.c:272
 msgid "Show the current document"
