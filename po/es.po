@@ -4256,7 +4256,7 @@ msgstr ""
 
 #: ../src/search.c:322
 msgid "Use multi-_line matching"
-msgstr "Usar coincidencias multilíneas"
+msgstr "Usar coincidencias multi_líneas"
 
 #: ../src/search.c:327
 msgid ""
