@@ -4,22 +4,23 @@
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@gmail.com>
+# Pedro Albuquerque <palbuquerque73@openmailbox.com>, 2015.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2015-04-11 15:11+0100\n"
-"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
-"Language-Team: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"POT-Creation-Date: 2015-06-22 02:36+0000\n"
+"PO-Revision-Date: 2015-06-22 20:22+0100\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
+"Language-Team: Português <palbuquerque73@openmailbox.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -58,9 +59,8 @@ msgid "Insert _ChangeLog Entry"
 msgstr "_Inserir entrada no diário de alterações"
 
 #: ../data/geany.glade.h:7
-#, fuzzy
 msgid "Insert _Function Description"
-msgstr "Inserir descrição de _Função"
+msgstr "Inserir descrição da _Função"
 
 #: ../data/geany.glade.h:8
 msgid "Insert Mu_ltiline Comment"
@@ -1012,13 +1012,12 @@ msgstr ""
 
 #: ../data/geany.glade.h:206
 msgid "Stop scrolling at last line"
-msgstr "Parar deslocamento na última linha"
+msgstr "Parar rolamento na última linha"
 
 #: ../data/geany.glade.h:207
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
-"Se o deslocamento de uma página deve terminar após a última linha do "
-"documento"
+"Se o rolamento de uma página deve terminar após a última linha do documento"
 
 #: ../data/geany.glade.h:208
 msgid "<b>Display</b>"
@@ -1503,7 +1502,7 @@ msgstr "Imagem de fundo:"
 
 #: ../data/geany.glade.h:310
 msgid "Scrollback lines:"
-msgstr "Linhas de deslocamento:"
+msgstr "Linhas de rolamento:"
 
 #: ../data/geany.glade.h:311
 msgid "Shell:"
@@ -1539,21 +1538,20 @@ msgstr ""
 
 #: ../data/geany.glade.h:317
 msgid "Scroll on keystroke"
-msgstr "Deslocar ao premir uma tecla"
+msgstr "Rolar ao premir uma tecla"
 
 #: ../data/geany.glade.h:318
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr "Se se desloca o texto até ao fim caso uma tecla seja premida."
+msgstr "Se se rola o texto até ao fim caso uma tecla seja premida."
 
 #: ../data/geany.glade.h:319
 msgid "Scroll on output"
-msgstr "Deslocar na saída"
+msgstr "Rolar na saída"
 
 #: ../data/geany.glade.h:320
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr ""
-"Se se desloca o texto até ao fim sempre que algum texto é gerado por um "
-"comando"
+"Se se rola o texto até ao fim sempre que algum texto é gerado por um comando"
 
 #: ../data/geany.glade.h:321
 msgid "Cursor blinks"
@@ -1625,7 +1623,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:308
+#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:320
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -2347,9 +2345,9 @@ msgid "Process failed (%s)"
 msgstr "Erro no processo (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Erro ao mudar a pasta de trabalho para \"%s\""
+msgstr "Pasta de trabalho \"%s\" inválida"
 
 #: ../src/build.c:838
 #, c-format
@@ -2362,6 +2360,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Ficheiro não executado porque o terminal pode conter dados inseridos (prima "
+"Ctrl+C ou Enter para o limpar)."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -3297,15 +3297,15 @@ msgstr "_Transpor a linha atual"
 
 #: ../src/keybindings.c:330
 msgid "Scroll to current line"
-msgstr "Deslocar até à linha atual"
+msgstr "Rolar até à linha atual"
 
 #: ../src/keybindings.c:332
 msgid "Scroll up the view by one line"
-msgstr "Deslocar a vista uma linha para cima"
+msgstr "Rolar a vista uma linha para cima"
 
 #: ../src/keybindings.c:334
 msgid "Scroll down the view by one line"
-msgstr "Deslocar a vista uma linha para baixo"
+msgstr "Rolar a vista uma linha para baixo"
 
 #: ../src/keybindings.c:336
 msgid "Complete snippet"
@@ -4453,28 +4453,31 @@ msgstr ""
 #: ../src/spawn.c:122
 #, c-format
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "O texto estava vazio (ou só continha espaços)"
 
 #: ../src/spawn.c:137 ../src/spawn.c:183
 #, c-format
 msgid "Text ended before matching quote was found for %c. (The text was '%s')"
 msgstr ""
+"O texto terminou antes da aspa correspondente a %c ser encontrada (o texto "
+"era \"%s\")."
 
 #: ../src/spawn.c:145 ../src/spawn.c:159
 #, c-format
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
+"Um nome citado de um programa Windows tem de estar inteiramente entre aspas"
 
 #. or SPAWN error?
 #: ../src/spawn.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Program '%s' not found"
-msgstr "Comando não encontrado"
+msgstr "Programa \"%s\" não encontrado"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "Erro no processo (%s)"
+msgstr "Falha no TerminateProcess(): %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5252,9 +5255,8 @@ msgid "Select File"
 msgstr "Selecionar ficheiro"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Recarregar a configuração"
+msgstr "Configuração de tipo de _Ficheiro"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5304,28 +5306,30 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:477
+#: ../src/vte.c:489
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Biblioteca VTE inválida \"%s\": símbolo \"%s\" em falta"
 
-#: ../src/vte.c:626
+#: ../src/vte.c:638
 msgid "_Set Path From Document"
 msgstr "Definir camin_Ho a partir do documento"
 
-#: ../src/vte.c:631
+#: ../src/vte.c:643
 msgid "_Restart Terminal"
 msgstr "_Reiniciar o terminal"
 
-#: ../src/vte.c:654
+#: ../src/vte.c:666
 msgid "_Input Methods"
 msgstr "Métodos de _Inserção"
 
-#: ../src/vte.c:747
+#: ../src/vte.c:759
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Pasta não alterado porque o terminal pode conter dados inseridos (prima Ctrl"
+"+C ou Enter para o limpar)."
 
 #: ../src/win32.c:208
 msgid "Geany project files"
