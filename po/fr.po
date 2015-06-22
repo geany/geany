@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2015-04-13 14:10+0200\n"
+"PO-Revision-Date: 2015-06-22 15:39+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -2381,9 +2381,9 @@ msgid "Process failed (%s)"
 msgstr "Processus échoué (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Impossible de changer le dossier de travail pour « %s »"
+msgstr "Dossier de travail invalide « %s »"
 
 #: ../src/build.c:838
 #, c-format
@@ -2397,6 +2397,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Le fichier n'a pas été exécuté car le terminal contient peut-être une entrée "
+"utilisateur. Utilisez Ctrl+C ou Entrée pour vider le terminal."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -4517,28 +4519,32 @@ msgstr ""
 #: ../src/spawn.c:122
 #, c-format
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Le texte était vide (ou ne contenait que des espaces)"
 
 #: ../src/spawn.c:137 ../src/spawn.c:183
 #, c-format
 msgid "Text ended before matching quote was found for %c. (The text was '%s')"
 msgstr ""
+"Le texte s'est terminé avant que des guillemets correspondants ne soient "
+"recontrés pour %c (le texte était « %s »)."
 
 #: ../src/spawn.c:145 ../src/spawn.c:159
 #, c-format
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
+"Un nom de programme Windows entre guillemets doit être entièrement entre les "
+"guillemets"
 
 #. or SPAWN error?
 #: ../src/spawn.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Program '%s' not found"
-msgstr "Commande introuvable"
+msgstr "Programme « %s » introuvable"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "Processus échoué (%s)"
+msgstr "TerminateProcess() a échoué : %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5322,9 +5328,8 @@ msgid "Select File"
 msgstr "Choisir un fichier"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Mettre à jour la configuration"
+msgstr "Configuration des types de _fichier"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5396,6 +5401,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Le dossier courant n'a pas été changé car le terminal contient peut-être une "
+"entrée utilisateur. Utilisez Ctrl+C ou Entrée pour vider le terminal."
 
 #: ../src/win32.c:208
 msgid "Geany project files"
