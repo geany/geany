@@ -49,6 +49,7 @@
 #include "spawn.h"
 
 #ifdef G_OS_WIN32
+# include "win32defines.h"
 # include <ctype.h>    /* isspace() */
 # include <fcntl.h>    /* _O_RDONLY, _O_WRONLY */
 # include <io.h>       /* _open_osfhandle, _close */

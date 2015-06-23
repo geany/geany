@@ -31,6 +31,8 @@
 
 #ifdef G_OS_WIN32
 
+#include "win32defines.h"
+
 #include "dialogs.h"
 #include "document.h"
 #include "editor.h"
@@ -47,8 +49,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <commdlg.h>
 #include <shellapi.h>

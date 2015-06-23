@@ -147,7 +147,7 @@ WINDRES = $(host_alias)-windres
 geany_private.res: $(top_srcdir)/geany_private.rc
 	$(WINDRES) -i $(top_srcdir)/geany_private.rc --input-format=rc -o $@ -O coff
 
-libgeany_la_SOURCES += win32.c win32.h
+libgeany_la_SOURCES += win32.c win32.h win32defines.h
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
 libgeany_la_LDFLAGS += -Wl,-luuid -mwindows -mms-bitfields -no-undefined
 
