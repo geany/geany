@@ -81,6 +81,7 @@ AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
+AC_SUBST([GTK_VERSION])
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
@@ -155,6 +156,7 @@ AC_CONFIG_FILES([
 		doc/geany.1
 		geany.spec
 		geany.pc
+		geany.nsi
 		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile

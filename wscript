@@ -239,6 +239,7 @@ def configure(conf):
             mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['gtk_version'] = gtk_version
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
@@ -566,6 +567,15 @@ def build(bld):
                            'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
                            'localedir': '${datarootdir}/locale'})
+
+    # geany.nsi
+    bld(
+        features        = 'subst',
+        source          = 'geany.nsi.in',
+        target          = 'geany.nsi',
+        dct             = {'VERSION': VERSION,
+                           'GTK_VERSION': bld.env['gtk_version']},
+        install_path    = None)
 
     if not is_win32:
         # geany.desktop

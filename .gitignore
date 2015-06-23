@@ -39,6 +39,7 @@ Makefile.in
 /geany.glade.bak
 /geany.gladep.bak
 /geany.pc
+/geany.nsi
 /geany.spec
 /geany_private.res
 /global.tags.old
