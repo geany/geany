@@ -222,6 +222,15 @@ static void apply_settings(void)
 }
 
 
+static void on_window_active_changed(GtkWindow *window, GParamSpec *pspec, gpointer data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc && gtk_window_is_active(window))
+		document_check_disk_status(doc, TRUE);
+}
+
+
 static void main_init(void)
 {
 	/* add our icon path in case we aren't installed in the system prefix */
@@ -248,6 +257,7 @@ static void main_init(void)
 	main_status.opening_session_files	= FALSE;
 
 	main_widgets.window = create_window1();
+	g_signal_connect(main_widgets.window, "notify::is-active", G_CALLBACK(on_window_active_changed), NULL);
 
 	/* add recent projects to the Project menu */
 	ui_widgets.recent_projects_menuitem = ui_lookup_widget(main_widgets.window, "recent_projects1");
