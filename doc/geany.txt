@@ -3211,7 +3211,7 @@ Build menu keyboard shortcuts
 `````````````````````````````
 
 Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-independent menu items, the first two execute menu items and the fixed menu items.
+independent menu items, the first execute menu item and the fixed menu items.
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
