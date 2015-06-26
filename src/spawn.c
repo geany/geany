@@ -360,7 +360,11 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	{
 		failed = NULL;
 		CloseHandle(process.hThread);  /* we don't need this */
-		*hprocess = process.hProcess;
+
+		if (hprocess)
+			*hprocess = process.hProcess;
+		else
+			CloseHandle(process.hProcess);
 	}
 
 leave:
@@ -444,12 +448,6 @@ static void spawn_append_argument(GString *command, const char *text)
 		g_string_append_c(command, '"');
 	}
 }
-
-
-static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED gpointer data)
-{
-	g_spawn_close_pid(pid);
-}
 #endif /* G_OS_WIN32 */
 
 
@@ -491,7 +489,6 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 #ifdef G_OS_WIN32
 	GString *command;
 	GArray *environment;
-	GPid pid;
 	gchar *failure;
 
 	if (command_line)
@@ -539,8 +536,7 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 	}
 
 	failure = spawn_create_process_with_pipes(command->str, working_directory,
-		envp ? environment->data : NULL, child_pid ? child_pid : &pid,
-		stdin_fd, stdout_fd, stderr_fd);
+		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
 
 	g_string_free(command, TRUE);
 	g_array_free(environment, TRUE);
@@ -551,8 +547,6 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 		g_free(failure);
 		return FALSE;
 	}
-	else if (!child_pid)
-		g_child_watch_add(pid, spawn_close_pid, NULL);
 
 	return TRUE;
 #else  /* G_OS_WIN32 */
