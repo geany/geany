@@ -59,6 +59,7 @@
 
 #ifdef SPAWN_TEST
 # define _
+# define GEANY_API_SYMBOL
 #else
 # include "support.h"
 #endif
