@@ -33,6 +33,7 @@
 #include "dialogs.h"
 #include "document.h"
 #include "prefs.h"
+#include "prefix.h"
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
