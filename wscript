@@ -397,7 +397,7 @@ def build(bld):
 
     def build_plugin(plugin_name, install=True, uselib_add=[]):
         if install:
-            instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany'
+            instpath = '${LIBDIR}/geany'
         else:
             instpath = None
 
