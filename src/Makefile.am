@@ -27,6 +27,10 @@ lib_LTLIBRARIES = libgeany.la
 geany_SOURCES = main.c
 geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
 
+if ENABLE_BINRELOC
+geany_LDFLAGS = -Wl,-rpath='$$ORIGIN/../lib'
+endif
+
 geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
 	app.h \
