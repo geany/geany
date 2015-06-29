@@ -163,7 +163,7 @@ static gboolean on_key_release_event(GtkWidget *widget, GdkEventKey *ev, gpointe
 
 		doc = document_get_current();
 		page = gtk_widget_get_parent(GTK_WIDGET(doc->editor->sci));
-		update_mru_tabs_head((GeanyPage *)page);
+		update_mru_tabs_head((GeanyPage *) page);
 		mru_pos = 0;
 		document_check_disk_status(doc, TRUE);
 	}
@@ -268,6 +268,7 @@ void notebook_switch_tablastused(void)
 	switch_in_progress = TRUE;
 	page_num = gtk_notebook_page_num(GTK_NOTEBOOK(main_widgets.notebook), last_page);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
+	gtk_widget_grab_focus((GtkWidget *) last_page);
 
 	/* if there's a modifier key, we can switch back in MRU order each time unless
 	 * the key is released */
@@ -281,17 +282,6 @@ void notebook_switch_tablastused(void)
 gboolean notebook_switch_in_progress(void)
 {
 	return switch_in_progress;
-}
-
-
-static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
-{
-	GeanyDocument *doc = document_get_current();
-
-	if (doc != NULL && event->button == 1)
-		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
-
-	return FALSE;
 }
 
 
@@ -651,8 +641,6 @@ gint notebook_new_tab(GeanyPage *page)
 	/* get button press events for the tab label and the space between it and
 	 * the close button, if any */
 	g_signal_connect_object(tab_widget, "button-press-event", G_CALLBACK(notebook_tab_click), page, 0);
-	/* focus the current document after clicking on a tab */
-	g_signal_connect_after(tab_widget, "button-release-event", G_CALLBACK(focus_sci), NULL);
 
 	hbox = gtk_hbox_new(FALSE, 2);
 	gtk_box_pack_start(GTK_BOX(hbox), tab_widget, FALSE, FALSE, 0);
