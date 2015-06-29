@@ -102,6 +102,8 @@ GeanyFilePrefs file_prefs;
  * @see documents. */
 GPtrArray *documents_array = NULL;
 
+/* pointer to the current document, updated when the corresponding sci gets the focus */
+static GeanyDocument *current;
 
 /* an undo action, also used for redo actions */
 typedef struct
@@ -387,12 +389,10 @@ GeanyDocument *document_get_from_page(guint page_num)
 GEANY_API_SYMBOL
 GeanyDocument *document_get_current(void)
 {
-	gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
-
-	if (cur_page == -1)
+	if (!DOC_VALID(current))
 		return NULL;
-	else
-		return document_get_from_page((guint) cur_page);
+
+	return current;
 }
 
 
@@ -618,6 +618,25 @@ static void update_tab_label(GObject *obj, GParamSpec *pspec, gpointer user_data
 }
 
 
+static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+
+	if (event->button == 1)
+		gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+
+	return FALSE;
+}
+
+static gboolean set_current(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+	GeanyDocument *doc = user_data;
+
+	current = doc;
+	return FALSE;
+}
+
+
 static GeanyPage *create_tab_page(GeanyDocument *doc)
 {
 	GeanyPage *page;
@@ -631,6 +650,7 @@ static GeanyPage *create_tab_page(GeanyDocument *doc)
 	tab_widget = geany_page_get_tab_widget(page);
 	gtk_widget_set_tooltip_text(tab_widget, DOC_FILENAME(doc));
 	g_signal_connect_object(page, "notify::label", G_CALLBACK(update_tab_label), tab_widget, 0);
+	g_signal_connect(tab_widget, "button-release-event", G_CALLBACK(focus_sci), doc);
 
 	g_free(label_text);
 	return page;
@@ -681,9 +701,11 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 
 	page = create_tab_page(doc);
 	gtk_box_pack_start((GtkBox *) page, (GtkWidget *) doc->editor->sci, TRUE, TRUE, 0);
-	g_signal_connect((gpointer) page, "try-close", G_CALLBACK(close_page), doc);
+	/* focus the current document after clicking on a tab */
+	gtk_container_set_focus_child((GtkContainer *) page, (GtkWidget *) doc->editor->sci);
+	g_signal_connect(page, "try-close", G_CALLBACK(close_page), doc);
+	g_signal_connect(doc->editor->sci, "focus-in-event", G_CALLBACK(set_current), doc);
 	notebook_new_tab(page);
-	document_grab_focus(doc);
 
 	/* select document in sidebar */
 	{
