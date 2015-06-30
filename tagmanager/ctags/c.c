@@ -425,7 +425,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
 	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
 	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
-	{ "final",          KEYWORD_FINAL,          { 0, 1, 0, 1, 0, 0, 1 } },
+	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0, 1, 1 } },
@@ -2969,7 +2969,15 @@ static void tagCheck (statementInfo *const st)
 				tokenInfo *name_token = (tokenInfo *)prev;
 				boolean free_name_token = FALSE;
 
-				if (isType (name_token, TOKEN_NAME))
+				/* C++ 11 allows class <name> final { ... } */
+				if (isLanguage (Lang_cpp) && isType (prev, TOKEN_NAME) &&
+					strcmp("final", vStringValue(prev->name)) == 0 &&
+					isType(prev2, TOKEN_NAME))
+				{
+					name_token = (tokenInfo *)prev2;
+					copyToken (st->blockName, name_token);
+				}
+				else if (isType (name_token, TOKEN_NAME))
 				{
 					if (!isLanguage (Lang_vala))
 						copyToken (st->blockName, name_token);
@@ -2993,13 +3001,6 @@ static void tagCheck (statementInfo *const st)
 								break;
 						}
 					}
-				}
-				/* C++ 11 allows class <name> final { ... } */
-				else if (isLanguage (Lang_cpp) && isType (prev, TOKEN_KEYWORD) &&
-						 prev->keyword == KEYWORD_FINAL && isType(prev2, TOKEN_NAME))
-				{
-					name_token = (tokenInfo *)prev2;
-					copyToken (st->blockName, name_token);
 				}
 				else if (isLanguage (Lang_csharp))
 					makeTag (prev, st, FALSE, TAG_PROPERTY);
