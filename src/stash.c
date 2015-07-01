@@ -979,7 +979,7 @@ struct StashTreeValue
 {
 	const gchar *group_name;
 	StashPref *pref;
-	union
+	struct
 	{
 		gchararray tree_string;
 		gint tree_int;
@@ -1075,8 +1075,8 @@ static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
 	StashTreeValue *value;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	if (value->pref->setting_type == G_TYPE_STRING)
-		g_free(value->data.tree_string);
+	/* don't access value->pref as it might already have been freed */
+	g_free(value->data.tree_string);
 	g_free(value);
 
 	return FALSE;
