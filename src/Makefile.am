@@ -26,9 +26,10 @@ lib_LTLIBRARIES = libgeany.la
 
 geany_SOURCES = main.c
 geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)
+geany_LDFLAGS =
 
 if ENABLE_BINRELOC
-geany_LDFLAGS = -Wl,-rpath='$$ORIGIN/../lib'
+geany_LDFLAGS += -Wl,-rpath='$$ORIGIN/../lib'
 endif
 
 geany_includedir = $(includedir)/geany
@@ -150,8 +151,9 @@ geany_private.res: $(top_srcdir)/geany_private.rc
 libgeany_la_SOURCES += win32.c win32.h win32defines.h
 libgeany_la_LIBADD  += -lole32 -lwsock32 -lcomdlg32
 libgeany_la_LDFLAGS += -Wl,-luuid -mwindows -mms-bitfields -no-undefined
+geany_LDFLAGS       += -mwindows -mms-bitfields
 
-CLEANFILES += geany_private.res
+CLEANFILES          += geany_private.res
 
 else
 # build Geany for all other platforms
