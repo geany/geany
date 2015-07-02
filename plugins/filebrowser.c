@@ -233,7 +233,7 @@ static void add_item(const gchar *name)
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
-	utf8_fullname = utils_get_locale_from_utf8(fname);
+	utf8_fullname = utils_get_utf8_from_locale(fname);
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
 
