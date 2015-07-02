@@ -651,10 +651,15 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 }
 
 
-static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboolean focus_editor)
+static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean focus_editor)
 {
-	if (!filename || line <= -1)
+	gboolean ret = FALSE;
+	gchar *filename;
+
+	if (!fname || line <= -1)
 		return FALSE;
+
+	filename = utils_get_locale_from_utf8(fname);
 
 	/* If the path doesn't exist, try the current document.
 	 * This happens when we receive build messages in the wrong order - after the
@@ -675,8 +680,8 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboole
 			if (g_file_test(name, G_FILE_TEST_EXISTS))
 			{
 				ui_set_statusbar(FALSE, _("Could not find file '%s' - trying the current document path."),
-					filename);
-				filename = name;
+					fname);
+				SETPTR(filename, name);
 			}
 			else
 				g_free(name);
@@ -695,8 +700,6 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboole
 
 		if (doc != NULL)
 		{
-			gboolean ret;
-
 			if (! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
@@ -704,10 +707,13 @@ static gboolean goto_compiler_file_line(const gchar *filename, gint line, gboole
 			if (ret && focus_editor)
 				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 
-			return ret;
+			ret = TRUE;
 		}
 	}
-	return FALSE;
+
+	g_free(filename);
+
+	return ret;
 }
 
 
@@ -1009,7 +1015,7 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		gchar **filename, gint *line)
 {
 	GeanyFiletype *ft;
-	gchar *trimmed_string;
+	gchar *trimmed_string, *utf8_dir;
 
 	*filename = NULL;
 	*line = -1;
@@ -1018,8 +1024,10 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		return;
 
 	if (dir == NULL)
-		dir = build_info.dir;
-	g_return_if_fail(dir != NULL);
+		utf8_dir = utils_get_utf8_from_locale(build_info.dir);
+	else
+		utf8_dir = g_strdup(dir);
+	g_return_if_fail(utf8_dir != NULL);
 
 	trimmed_string = g_strdup(string);
 	g_strchug(trimmed_string); /* remove possible leading whitespace */
@@ -1032,8 +1040,9 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 		/* fallback to default old-style parsing */
 		parse_compiler_error_line(trimmed_string, filename, line);
 	}
-	make_absolute(filename, dir);
+	make_absolute(filename, utf8_dir);
 	g_free(trimmed_string);
+	g_free(utf8_dir);
 }
 
 
@@ -1052,7 +1061,7 @@ static void msgwin_parse_generic_line(const gchar *string, gchar **filename, gin
 	/* extract the filename */
 	if (fields[0] != NULL)
 	{
-		*filename = g_strdup(fields[0]);
+		*filename = utils_get_locale_from_utf8(fields[0]);
 		if (msgwindow.messages_dir != NULL)
 			make_absolute(filename, msgwindow.messages_dir);
 
