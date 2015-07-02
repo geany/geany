@@ -1952,7 +1952,8 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	if (! highlighting_is_code_style(lexer, style))
 		return FALSE;
 
-	word[0] = '\0';
+	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+		pos--;
 
 	if (utils_is_closing_brace(sci_get_char_at(sci, pos - 1), TRUE))
 	{
@@ -1962,6 +1963,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 			return FALSE;
 	}
 
+	word[0] = '\0';
 	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
 
 	if (word[0] == '\0')
@@ -4804,7 +4806,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
-	
+
 #ifdef GDK_WINDOWING_QUARTZ
 	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw */
 	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);

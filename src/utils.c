@@ -157,8 +157,8 @@ gint utils_get_line_endings(const gchar* buffer, gsize size)
 
 gboolean utils_isbrace(gchar c, gboolean include_angles)
 {
-	return utils_is_opening_brace(c, include_angles)
-		|| utils_is_closing_brace(c, include_angles);
+	return utils_is_opening_brace(c, include_angles) ||
+		utils_is_closing_brace(c, include_angles);
 }
 
 
@@ -2130,7 +2130,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
