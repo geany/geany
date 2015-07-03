@@ -1088,9 +1088,9 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
 #else
-	escaped_dir = g_strescape(working_dir, NULL);
+	escaped_dir = g_shell_quote(working_dir);
 	str = g_strdup_printf(
-		"#!/bin/sh\n\nrm $0\n\ncd \'%s\'\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
+		"#!/bin/sh\n\nrm $0\n\ncd %s\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
 		\n\n%s\n", escaped_dir, cmd, (autoclose) ? "" :
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
 			"dash\ndummy_var=\"\"\nread dummy_var");
