@@ -5,20 +5,30 @@ compiler:
 env:
   - GTK3=no
   - GTK3=yes
+  - GTK3=no MINGW=yes
+  - GTK3=yes MINGW=yes
 before_install:
   - sudo apt-get update -qq
 install:
-  - sudo apt-get install -y libgtk2.0-dev libgtk-3-dev intltool libtool
+  - sudo apt-get install -y intltool libtool
+  - test -n "$MINGW" || sudo apt-get install -y libgtk2.0-dev libgtk-3-dev
+  - test -z "$MINGW" || sudo apt-get install -y mingw-w64-tools g++-mingw-w64-i686 gcc-mingw-w64-i686 binutils-mingw-w64-i686
   - sudo apt-get install -y python-docutils rst2pdf
   # try not to install doxygen-latex because we don't need it and it's huge
   - sudo apt-get install -y --no-install-recommends doxygen
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=aggregate-return -Werror=implicit-function-declaration"
 script:
+  - NOCONFIGURE=1 ./autogen.sh
   - >
-    NOCONFIGURE=1 ./autogen.sh          &&
-    mkdir _build                        &&
-    cd _build                           &&
-    ../configure --enable-gtk3=$GTK3    &&
-    make -j2                            &&
-    make -j2 check
+    if [ -n "$MINGW" ]; then
+      arg=-2; [ "$GTK3" = yes ] && arg=-3;
+      unset CC CXX;
+      sh ./scripts/cross-build-mingw.sh $arg;
+    else
+      mkdir _build                        &&
+      cd _build                           &&
+      ../configure --enable-gtk3=$GTK3    &&
+      make -j2                            &&
+      make -j2 check;
+    fi
