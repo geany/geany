@@ -3,11 +3,7 @@
 EXTRA_DIST = \
 	makefile.win32
 
-if MINGW
-plugindir = $(libdir)
-else
 plugindir = $(libdir)/geany
-endif
 
 plugins_includedir = $(includedir)/geany
 plugins_include_HEADERS = \
