@@ -43,6 +43,7 @@ parsers = \
 	pascal.c \
 	perl.c \
 	php.c \
+	powershell.c \
 	python.c \
 	r.c \
 	rest.c \

@@ -266,6 +266,7 @@ test_sources = \
 	simple.mak						\
 	simple.php						\
 	simple.pl						\
+	simple.ps1						\
 	simple.py						\
 	simple.rb						\
 	simple.sh						\

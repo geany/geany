@@ -188,7 +188,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, MARKUP   );
 	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( BATCH,      NONE,         "Batch",            NULL,                      SCRIPT,      SCRIPT   );
-	FT_INIT( POWERSHELL, NONE,         "PowerShell",       NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( POWERSHELL, POWERSHELL,   "PowerShell",       NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( COFFEESCRIPT, NONE,       "CoffeeScript",     NULL,                      SOURCE_FILE, SCRIPT   );
 	FT_INIT( GO,         GO,           "Go",               NULL,                      SOURCE_FILE, COMPILED );

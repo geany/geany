@@ -315,7 +315,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
  * type.
  * @param ft_id File type identifier.
  * @return The context separator string.
- * 
+ *
  * Returns non-printing sequence "\x03" ie ETX (end of text) for filetypes
  * without a context separator.
  *
@@ -331,6 +331,7 @@ const gchar *symbols_get_context_separator(gint ft_id)
 		case GEANY_FILETYPES_GLSL:	/* for structs */
 		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_POWERSHELL:
 		case GEANY_FILETYPES_RUST:
 		case GEANY_FILETYPES_ZEPHIR:
 			return "::";
