@@ -179,3 +179,16 @@ signallist.i: $(glade_file) Makefile
 	) > $@ || { $(RM) $@ && exit 1; }
 
 CLEANFILES += signallist.i
+
+# Ubuntu ld has a bug so that libtool sees /usr/local/lib as a system path so
+# doesn't add RPATH, but ld requires explicit ldconfig there, unlike when
+# installing in /usr/lib.  So, workaround this by calling it explicitly when
+# installing in /usr/local/lib and libgeany is not found by the linker.
+fix-ubuntu-libdir:
+	if test "$(DESTDIR)$(libdir)" = /usr/local/lib && \
+	   LANG=C ldd "$(DESTDIR)$(bindir)/geany" | grep -q 'libgeany.*not found' \
+	; then \
+		ldconfig "$(DESTDIR)$(libdir)"; \
+	fi
+
+install-exec-hook: fix-ubuntu-libdir
