@@ -22,7 +22,7 @@ AM_CPPFLAGS = \
 	$(MAC_INTEGRATION_CFLAGS)
 
 bin_PROGRAMS = geany
-lib_LTLIBRARIES = libgeany.la
+pkglib_LTLIBRARIES = libgeany.la
 
 geany_SOURCES = main.c
 geany_LDADD = libgeany.la $(GTK_LIBS) $(GTHREAD_LIBS) $(INTLLIBS)

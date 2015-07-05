@@ -1,6 +1,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
+pkglibdir=${libdir}/@PACKAGE@
 includedir=@includedir@
 datarootdir=@datarootdir@
 datadir=@datadir@
@@ -10,5 +11,5 @@ Name: Geany
 Description: A fast and lightweight IDE using GTK2
 Requires: @DEPENDENCIES@
 Version: @VERSION@
-Libs: -L${libdir} -lgeany
+Libs: -L${pkglibdir} -lgeany
 Cflags: -DGTK -I${includedir}/geany -I${includedir}/geany/tagmanager -I${includedir}/geany/scintilla
