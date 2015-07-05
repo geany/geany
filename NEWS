@@ -11,6 +11,8 @@ Geany 1.25 (unreleased)
     * Depend on GTK 2.24 and GLib 2.28.
     * Add per-project line wrapping, line breaking and comment
       continuation settings.
+    * The plugin API is now split out of the main executable into libgeany,
+      a shared library plugins have to link against.
 
     Bug fixes
     * Fix applying filetype-specific indentation settings for newly
