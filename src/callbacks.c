@@ -1373,7 +1373,7 @@ void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_d
 #ifdef G_OS_WIN32
 	wc = GEANY_WORDCHARS "./-" "\\";
 #else
-	wc = GEANY_WORDCHARS "./-";
+	wc = GEANY_WORDCHARS "./-+";
 #endif
 
 	g_return_if_fail(doc != NULL);
