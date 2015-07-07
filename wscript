@@ -239,6 +239,7 @@ def configure(conf):
             mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['gtk_version'] = gtk_version
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
@@ -274,9 +275,6 @@ but you then may not have a local copy of the HTML manual.'''
             '-static-libgcc',
             '-static-libstdc++'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'comdlg32'])
-        # explicitly define Windows version for older Mingw environments
-        conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
-        conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
         # DATADIR and LOCALEDIR are defined by the intltool tool
@@ -569,6 +567,15 @@ def build(bld):
                            'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
                            'localedir': '${datarootdir}/locale'})
+
+    # geany.nsi
+    bld(
+        features        = 'subst',
+        source          = 'geany.nsi.in',
+        target          = 'geany.nsi',
+        dct             = {'VERSION': VERSION,
+                           'GTK_VERSION': bld.env['gtk_version']},
+        install_path    = None)
 
     if not is_win32:
         # geany.desktop

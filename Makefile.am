@@ -44,6 +44,15 @@ uninstall-local:
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)
 	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(pkgdatadir)/GPL-2
+if MINGW
+	$(INSTALL_DATA) $(srcdir)/AUTHORS $(DESTDIR)$(prefix)/Authors.txt
+	$(INSTALL_DATA) $(srcdir)/ChangeLog $(DESTDIR)$(prefix)/Changelog.txt
+	$(INSTALL_DATA) $(srcdir)/COPYING $(DESTDIR)$(prefix)/Copying.txt
+	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(prefix)/Readme.txt
+	$(INSTALL_DATA) $(srcdir)/NEWS $(DESTDIR)$(prefix)/News.txt
+	$(INSTALL_DATA) $(srcdir)/THANKS $(DESTDIR)$(prefix)/Thanks.txt
+	$(INSTALL_DATA) $(srcdir)/TODO $(DESTDIR)$(prefix)/Todo.txt
+endif
 
 dist-hook:
 	@if test -d "$(top_srcdir)/.git"; then \
