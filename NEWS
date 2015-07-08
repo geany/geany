@@ -31,11 +31,12 @@ Geany 1.25 (unreleased)
       Techet).
     * Fix function return type in symbol list tooltips in some cases
       (PR#475, Jiří Techet).
+    * Fix VTE path following on startup.
 
     Interface
     * Show document-related dialogs embedded in the main window ("info
       bars") (PR#277, Matthew Brush and Thomas Martitz).
-    * Plugin manager dialog cleanup (PR#251).
+    * Plugin manager dialog cleanup and overhaul (PR#251, PR#414).
     * Filetypes can now define the MIME type used to select their icon
       (PR#179).
     * Close documents in the sidebar with middle mouse button (PR#172,
@@ -50,6 +51,7 @@ Geany 1.25 (unreleased)
     * Add "dirty" terminal indication (PR#476, Jiří Techet).
     * Allow to select the None filetype in the Open File dialog
       (Issue#483).
+    * Add configuration menu entries for all filetypes (PR#491, Jiří Techet).
 
     Editor
     * Update Scintilla to version 3.5.6 (#1041).
@@ -58,6 +60,8 @@ Geany 1.25 (unreleased)
     * Improve handling of Verilog strings and comments.
     * Keep undo history when reloading files (PR#188, Arthur
       Rosenstein).
+    * Respect filetype.common's wordchars if a filetype doesn't have its own
+      (Issue#492, PR#501).
 
     Search
     * Add support for single-line regular expressions (PR#310).
@@ -70,8 +74,9 @@ Geany 1.25 (unreleased)
     * Add JSON filetype.
     * Add Zephir filetype.
     * Add CoffeScript filetype (PR#230, Mark Dresselhaus).
-    * Add Go tags parser (PR#373, Jiří Techet).
+    * Add Go tags parser (PR#373, PR#481, Issue#238, Jiří Techet).
     * Add Erlang tags parser (PR#445, Beng Tan).
+    * Add PowerShell tags parser (PR#477).
     * Many JavaScript parsing fixes and improvements.
     * Many CSS parser fixes and improvements.
     * Many Txt2tags parsing fixes and improvements (feature #690).
@@ -91,18 +96,27 @@ Geany 1.25 (unreleased)
     * Recognize `.vbs` files as FreeBasic (PR#171, Nicolas Karolak).
     * Recognize `.tpl` files as HTML.
     * Recognize `.xtpl` files as XML.
+    * Recognize `.xpm` files as C.
+    * Recognize more Bash files (PR#291, Peter Bittner).
     * Update templates for Python and Vala.
     * Add template for HTML5.
     * Fix parsing of some Python triple-quoted strings.
     * Add some linting tools to some filetype's default Build menu.
+    * Fix scope of some Python symbols.
+    * Fix support of trigraphs in C-like languages.
+    * Add support of digraphs in C-like languages.
+    * Add support of `final`, `override` and `noexcpet` C++11 keywords
+      (PR#544).
 
     Internationalization
-    * Update translations: ca, cs, de, el, es, fr, id, it, ja, nl, pl,
-                           pt_BR, pt, ru, sl, sr, sv.
+    * Update translations: be, ca, cs, de, el, es, fr, id, it, ja, nl, pl,
+                           pt_BR, pt, ru, sl, sr, sv, zh_CN.
 
     Plugins
     * File Browser: use "explorer" as the default open command on
                     Windows.
+    * File Browser: use icons based on the detected file's MIME type (PR#455,
+                    Jiří Techet).
     * Save Actions: use mode 0600 for backup copies (#833, PR#413).
     * Split Window: Fix a few keybindings (cut, copy, paste, delete,
                     select all) (PR#467, Alex).
@@ -135,6 +149,8 @@ Geany 1.25 (unreleased)
       dialog (PR#113, Adam Coyne).
     * View -> Change Font now respects the native dialog setting.
     * Fix main window freeze when displaying native dialogs.
+    * Use the same plugin directory as other platforms (PR#540, Thomas
+      Martitz).
 
 
 Geany 1.24.1 (April 16, 2014)
