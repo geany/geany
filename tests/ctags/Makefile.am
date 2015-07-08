@@ -132,6 +132,10 @@ test_sources = \
 	cython_sample.pyx				\
 	cython_sample2.pyx				\
 	cxx11enum.cpp					\
+	cxx11-final.cpp					\
+	cxx11-noexcept.cpp				\
+	cxx11-override.cpp				\
+	cxx14-combined.cpp				\
 	db-trig.sql						\
 	debian_432872.f90				\
 	directives.c					\
