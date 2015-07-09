@@ -48,24 +48,24 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error);
 
-/** Flags passed to @c spawn_with_callbacks(), which see. */
+/* Flags passed to @c spawn_with_callbacks(), which see. */
 typedef enum
 {
-	SPAWN_ASYNC                = 0x00,  /**< Asynchronous execution [default]. */
-	SPAWN_SYNC                 = 0x01,  /**< Synchronous execution. */
+	SPAWN_ASYNC                = 0x00,  /* Asynchronous execution [default]. */
+	SPAWN_SYNC                 = 0x01,  /* Synchronous execution. */
 	/* buffering modes */
-	SPAWN_LINE_BUFFERED        = 0x00,  /**< stdout/stderr are line buffered [default]. */
-	SPAWN_STDOUT_UNBUFFERED    = 0x02,  /**< stdout is not buffered. */
-	SPAWN_STDERR_UNBUFFERED    = 0x04,  /**< stderr is not buffered. */
-	SPAWN_UNBUFFERED           = 0x06,  /**< stdout/stderr are not buffered. */
+	SPAWN_LINE_BUFFERED        = 0x00,  /* stdout/stderr are line buffered [default]. */
+	SPAWN_STDOUT_UNBUFFERED    = 0x02,  /* stdout is not buffered. */
+	SPAWN_STDERR_UNBUFFERED    = 0x04,  /* stderr is not buffered. */
+	SPAWN_UNBUFFERED           = 0x06,  /* stdout/stderr are not buffered. */
 	/* recursive modes */
-	SPAWN_STDIN_RECURSIVE      = 0x08,  /**< The stdin callback is recursive. */
-	SPAWN_STDOUT_RECURSIVE     = 0x10,  /**< The stdout callback is recursive. */
-	SPAWN_STDERR_RECURSIVE     = 0x20,  /**< The stderr callback is recursive. */
-	SPAWN_RECURSIVE            = 0x38   /**< All callbacks are recursive. */
+	SPAWN_STDIN_RECURSIVE      = 0x08,  /* The stdin callback is recursive. */
+	SPAWN_STDOUT_RECURSIVE     = 0x10,  /* The stdout callback is recursive. */
+	SPAWN_STDERR_RECURSIVE     = 0x20,  /* The stderr callback is recursive. */
+	SPAWN_RECURSIVE            = 0x38   /* All callbacks are recursive. */
 } SpawnFlags;
 
-/**
+/*
  *  Specifies the type of function passed to @c spawn_with_callbacks() as stdout or stderr
  *  callback.
  *
@@ -88,14 +88,14 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 	SpawnReadFunc stderr_cb, gpointer stderr_data, gsize stderr_max_length,
 	GChildWatchFunc exit_cb, gpointer exit_data, GPid *child_pid, GError **error);
 
-/** 
+/*
  *  A simple structure used by @c spawn_write_data() to write data to a channel.
  *  See @c spawn_write_data() for more information.
  */
 typedef struct _SpawnWriteData
 {
-	const gchar *ptr;   /**< Pointer to the data. May be NULL if the size is 0. */
-	gsize size;         /**< Size of the data. */
+	const gchar *ptr;   /* Pointer to the data. May be NULL if the size is 0. */
+	gsize size;         /* Size of the data. */
 } SpawnWriteData;
 
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data);
