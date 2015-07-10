@@ -15,6 +15,8 @@
 
 # You may change those
 HOST=i686-w64-mingw32
+GTK2_BUNDLE_ZIP="http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip"
+GTK3_BUNDLE_ZIP="http://win32builder.gnome.org/gtk+-bundle_3.8.2-20131001_win32.zip"
 BUILDDIR=_build-cross-mingw
 GTK3=no
 CONFIGUREFLAGS="--enable-nls"
@@ -40,9 +42,9 @@ shift $((OPTIND - 1))
 
 CONFIGUREFLAGS="$CONFIGUREFLAGS --enable-gtk3=$GTK3"
 if [ "$GTK3" = yes ]; then
-  BUNDLE_ZIP="http://win32builder.gnome.org/gtk+-bundle_3.8.2-20131001_win32.zip"
+  BUNDLE_ZIP="$GTK3_BUNDLE_ZIP"
 else
-  BUNDLE_ZIP="http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip"
+  BUNDLE_ZIP="$GTK2_BUNDLE_ZIP"
 fi
 
 # USAGE: fetch_and_unzip URL DEST_PREFIX
