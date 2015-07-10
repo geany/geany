@@ -1,6 +1,7 @@
 Geany 1.25 (unreleased)
 
     General
+    * GTK3 support, while not enabled by default, is now considered stable.
     * Improve MacOS X support (PR#396, PR#419, PR#420, Jiří Techet).
     * Improve subprocess spawning (especially on Windows) (PR#441,
       Dimitar Zhekov).
