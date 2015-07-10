@@ -26,8 +26,8 @@ msgid "Integrated Development Environment"
 msgstr "Integrált Fejlesztői Felület"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Gyors és pehelykönnyű IDE GTK2 alapokon"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Gyors és pehelykönnyű IDE GTK+ alapokon"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"

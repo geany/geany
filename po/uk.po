@@ -27,8 +27,8 @@ msgid "Integrated Development Environment"
 msgstr "Об'єднане середовище розробки"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Швидке та легке графічне середовище, що використовує GTK2"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Швидке та легке графічне середовище, що використовує GTK+"
 
 #: ../data/geany.glade.h:1
 #, fuzzy

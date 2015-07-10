@@ -29,7 +29,7 @@ msgstr "Вградена среда за разработка"
 
 #: ../geany.desktop.in.h:3
 #, fuzzy
-msgid "A fast and lightweight IDE using GTK2"
+msgid "A fast and lightweight IDE using GTK+"
 msgstr "Бърза и лека среда за разработване"
 
 #: ../data/geany.glade.h:1

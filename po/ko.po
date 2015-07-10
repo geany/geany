@@ -27,8 +27,8 @@ msgid "Integrated Development Environment"
 msgstr "통합 개발 환경"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "빠르고 가벼운 GTK2 기반의 통합개발환경"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "빠르고 가벼운 GTK+ 기반의 통합개발환경"
 
 #: ../data/geany.glade.h:1
 #, fuzzy

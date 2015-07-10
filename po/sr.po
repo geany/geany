@@ -31,7 +31,7 @@ msgid "Integrated Development Environment"
 msgstr "Интегрисано развојно окружење"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
+msgid "A fast and lightweight IDE using GTK+"
 msgstr "Брзо и лагано GTK развојно окружење"
 
 #: ../data/geany.glade.h:1

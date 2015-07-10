@@ -27,8 +27,8 @@ msgid "Integrated Development Environment"
 msgstr "Entornu Integráu de Desarrollu"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Un IDE rápidu y llixeru basáu en GTK2"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Un IDE rápidu y llixeru basáu en GTK+"
 
 #: ../data/geany.glade.h:1
 #, fuzzy

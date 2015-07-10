@@ -89,7 +89,7 @@ PKG_CHECK_MODULES([GTHREAD], [$gthread_modules])
 AC_SUBST([GTHREAD_CFLAGS])
 AC_SUBST([GTHREAD_LIBS])
 
-# --disable-deprecated switch for GTK2 purification
+# --disable-deprecated switch for GTK purification
 AC_ARG_ENABLE([deprecated],
 		[AS_HELP_STRING([--disable-deprecated], [Disable deprecated GTK functions.])],
 		[GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"],
