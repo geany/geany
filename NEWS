@@ -129,11 +129,9 @@ Geany 1.25 (unreleased)
     * Add pseudo-unique document IDs through GeanyDocument::id and
       document_find_by_id(). This is a safer API for keeping a reference
       to a document for a long time (PR#256).
-    * Add convenient and portable spawning API: spawn_sync()
-      spawn_async(), spawn_async_with_pipes(), spawn_with_callbacks(),
-      spawn_kill_process(), spawn_get_program_name(),
-      spawn_check_command(), spawn_write_data(),
-      spawn_get_exit_status_cb() (PR#441, Dimitar Zhekov).
+    * Add convenient and portable spawning API: spawn_sync(), spawn_async(),
+      spawn_with_callbacks(), spawn_kill_process(), spawn_check_command(),
+      spawn_write_data() (PR#441, Dimitar Zhekov).
     * plugin_signal_connect() is now safe to use also with objects
       destroyed before unloading the plugin.
     * Add document_reload_force() to replace document_reload_file().
