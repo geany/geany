@@ -66,7 +66,18 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=cargo test
-linker=cargo build --release
+compiler=rustc "%f"
+linker=rustc -o "%e" "%f"
 run_cmd="./%e"
 
+
+[build-menu]
+NF_00_LB=Cargo Build
+NF_00_CM=cargo build --release
+NF_00_WD=
+NF_01_LB=Cargo Test
+NF_01_CM=cargo test 
+NF_01_WD=
+EX_01_LB=Cargo Run
+EX_01_CM=cargo run --release
+EX_01_WD=
