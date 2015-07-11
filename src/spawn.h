@@ -35,15 +35,9 @@
 
 G_BEGIN_DECLS
 
-gchar *spawn_get_program_name(const gchar *command_line, GError **error);
-
 gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError **error);
 
 gboolean spawn_kill_process(GPid pid, GError **error);
-
-gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *command_line,
-	gchar **argv, gchar **envp, GPid *child_pid, gint *stdin_fd, gint *stdout_fd,
-	gint *stderr_fd, GError **error);
 
 gboolean spawn_async(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, GPid *child_pid, GError **error);
@@ -99,8 +93,6 @@ typedef struct _SpawnWriteData
 } SpawnWriteData;
 
 gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWriteData *data);
-
-void spawn_get_exit_status_cb(GPid pid, gint status, gpointer exit_status);
 
 gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, gchar **argv,
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
