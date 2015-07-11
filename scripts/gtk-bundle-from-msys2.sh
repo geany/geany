@@ -58,6 +58,9 @@ getpkg() {
 	fi
 }
 
+LIBS=$(getpkg gcc-libs)
+INTL=$(getpkg gettext)
+ICONV=$(getpkg libiconv)
 GLIB=$(getpkg glib2)
 ATK=$(getpkg atk)
 PANGO=$(getpkg pango)
@@ -67,6 +70,9 @@ GTK=$(getpkg $gtk)
 
 cat <<EOF
 Using:
+gcc-libs: $LIBS
+intl: $INTL
+iconv: $ICONV
 glib: $GLIB
 atk: $ATK
 pango: $PANGO
@@ -76,7 +82,7 @@ $gtk: $GTK
 EOF
 
 
-for i in $GLIB $ATK $PANGO $CAURIO $ADW $GTK; do
+for i in $LIBS $INTL $ICONV $GLIB $ATK $PANGO $CAURIO $ADW $GTK; do
 	if [ "$use_cache" = "yes" -a -e "$i" ]; then
 		echo "Extracting $i from cache"
 		tar xaf $i
