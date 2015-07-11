@@ -58,25 +58,38 @@ getpkg() {
 	fi
 }
 
-GLIB=$(getpkg glib2)
-ATK=$(getpkg atk)
-PANGO=$(getpkg pango)
-CAIRO=$(getpkg cairo)
-ADW=$(getpkg adwaita-icon-theme)
-GTK=$(getpkg $gtk)
+pkgs="
+libwinpthread
+gcc-libs
+zlib
+expat
+libffi
+libiconv
+bzip2
+libffi
+libpng
+gettext
+glib2
+harfbuzz
+fontconfig
+freetype
+atk
+pango
+cairo
+adwaita-icon-theme
+$gtk
+"
 
-cat <<EOF
-Using:
-glib: $GLIB
-atk: $ATK
-pango: $PANGO
-cairo: $CAIRO
-adwaita $ADW
-$gtk: $GTK
-EOF
+for i in $pkgs; do
+	pkg=$(getpkg $i)
+	files="$files $pkg"
+	echo "Using: $pkg"
+	if [ "$i" = "$gtk" ]; then
+		GTK="$pkg"
+	fi
+done
 
-
-for i in $GLIB $ATK $PANGO $CAURIO $ADW $GTK; do
+for i in $files; do
 	if [ "$use_cache" = "yes" -a -e "$i" ]; then
 		echo "Extracting $i from cache"
 		tar xaf $i
@@ -84,8 +97,10 @@ for i in $GLIB $ATK $PANGO $CAURIO $ADW $GTK; do
 		echo "Download $i using curl"
 		curl -L "$i" | tar -x --xz
 	fi
-	echo "Running post_install script"
-	test -f .INSTALL && /bin/bash -c ". .INSTALL; post_install"
+	if [ -f .INSTALL ]; then
+		echo "Running post_install script"
+		/bin/bash -c ". .INSTALL; post_install"
+	fi
 	if [ "$make_zip" = "yes" -a "$i" = "$GTK" ]; then
 		VERSION=$(grep ^pkgver .PKGINFO | sed -e 's,^pkgver = ,,' -e 's,-.*$,,')
 	fi
