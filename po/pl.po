@@ -34,8 +34,8 @@ msgid "Integrated Development Environment"
 msgstr "Zintegrowane środowisko programistyczne"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Szybkie i lekkie środowisko programistyczne oparte na GTK2"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Szybkie i lekkie środowisko programistyczne oparte na GTK+"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"

@@ -27,8 +27,8 @@ msgid "Integrated Development Environment"
 msgstr "סביבת פיתוח משולבת"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "סביבת פיתוח משולבת קטנה וקלת משקל העושה שימוש ב־GTK2"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "סביבת פיתוח משולבת קטנה וקלת משקל העושה שימוש ב־GTK+"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"

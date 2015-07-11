@@ -26,7 +26,7 @@ msgid "Integrated Development Environment"
 msgstr "Integorvané Vývojové Prostredie"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
+msgid "A fast and lightweight IDE using GTK+"
 msgstr "Rýchle vývojové prostredie"
 
 #: ../data/geany.glade.h:1

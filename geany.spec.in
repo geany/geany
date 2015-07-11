@@ -5,7 +5,7 @@
 Name:          geany
 Version:       @VERSION@
 Release:       1
-Summary:       A fast and lightweight IDE using GTK2
+Summary:       A fast and lightweight IDE using GTK+
 
 Group:         Development/Tools
 License:       GPLv2+

@@ -43,8 +43,8 @@ msgstr "Integrované vývojové prostředí"
 # ###
 #
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Rychlé a lehké IDE pro GTK2"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Rychlé a lehké IDE pro GTK+"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"

@@ -31,8 +31,8 @@ msgid "Integrated Development Environment"
 msgstr "Integroitu ohjelmointiympäristö"
 
 #: ../geany.desktop.in.h:3
-msgid "A fast and lightweight IDE using GTK2"
-msgstr "Nopea ja kevyt GTK2-pohjainen ohjelmointiympäristö"
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Nopea ja kevyt GTK+-pohjainen ohjelmointiympäristö"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
