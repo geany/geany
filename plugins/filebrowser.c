@@ -477,7 +477,7 @@ static void open_external(const gchar *fname, gboolean dir_found)
 
 	cmd = g_string_free(cmd_str, FALSE);
 	locale_cmd = utils_get_locale_from_utf8(cmd);
-	if (! g_spawn_command_line_async(locale_cmd, &error))
+	if (! spawn_async(NULL, locale_cmd, NULL, NULL, NULL, &error))
 	{
 		gchar *c = strchr(cmd, ' ');
 
