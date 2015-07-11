@@ -106,7 +106,7 @@ Geany 1.25 (unreleased)
     * Fix scope of some Python symbols.
     * Fix support of trigraphs in C-like languages.
     * Add support of digraphs in C-like languages.
-    * Add support of `final`, `override` and `noexcpet` C++11 keywords
+    * Add support of `final`, `override` and `noexcept` C++11 keywords
       (PR#544).
 
     Internationalization
@@ -123,7 +123,7 @@ Geany 1.25 (unreleased)
                     select all) (PR#467, Alex).
 
     API
-    * Hide private API (PR#351, Jiří Techet, and #429, Matthew Brush and
+    * Hide private API (PR#351, Jiří Techet, and PR#429, Matthew Brush and
       Thomas Martitz).
     * Cleaner and safer TagManager API (Part of PR#356, Jiří Techet).
     * Entry point prototypes are now checked by the compiler (PR#359).
