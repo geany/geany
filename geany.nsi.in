@@ -172,7 +172,7 @@ SectionEnd
 Section "Plugins" SEC02
 	SectionIn 1
 	SetOverwrite ifnewer
-	SetOutPath "$INSTDIR\lib"
+	SetOutPath "$INSTDIR\lib\geany"
 	File "${RESOURCEDIR}\lib\geany\*.dll"
 SectionEnd
 
