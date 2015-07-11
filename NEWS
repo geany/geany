@@ -59,8 +59,8 @@ Geany 1.25 (unreleased)
     * Do not comment out blank lines when toggling comments (PR#79, Igor
       Shaula).
     * Improve handling of Verilog strings and comments.
-    * Keep undo history when reloading files (PR#188, Arthur
-      Rosenstein).
+    * Support for keeping undo history when reloading files (PR#188, Arthur
+      Rosenstein).  This is not enabled by default in this release.
     * Respect filetype.common's wordchars if a filetype doesn't have its own
       (Issue#492, PR#501).
 
