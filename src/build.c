@@ -1042,7 +1042,7 @@ static void show_build_result_message(gboolean failure)
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	show_build_result_message(!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS);
+	show_build_result_message(!SPAWN_WIFEXITED(status) || SPAWN_WEXITSTATUS(status) != EXIT_SUCCESS);
 	utils_beep();
 
 	build_info.pid = 0;
