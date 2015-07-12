@@ -1164,8 +1164,8 @@ static void print_status(gint status)
 {
 	fputs("finished, ", stderr);
 
-	if (WIFEXITED(status))
-		fprintf(stderr, "exit code %d\n", WEXITSTATUS(status));
+	if (SPAWN_WIFEXITED(status))
+		fprintf(stderr, "exit code %d\n", SPAWN_WEXITSTATUS(status));
 	else
 		fputs("abnormal termination\n", stderr);
 }

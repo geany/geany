@@ -1849,11 +1849,11 @@ static void search_finished(GPid child_pid, gint status, gpointer user_data)
 #ifdef G_OS_UNIX
 	gint exit_status = 1;
 
-	if (WIFEXITED(status))
+	if (SPAWN_WIFEXITED(status))
 	{
 		exit_status = WEXITSTATUS(status);
 	}
-	else if (WIFSIGNALED(status))
+	else if (SPAWN_WIFSIGNALED(status))
 	{
 		exit_status = -1;
 		g_warning("Find in Files: The command failed unexpectedly (signal received).");
