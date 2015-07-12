@@ -169,7 +169,7 @@ void on_close_allafter1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		GeanyDocument *doc = documents[i];
 
-		if (doc == cur_doc || ! doc->is_valid)
+		if (! doc->is_valid)
 	  		continue;
 
 		if (! document_close(doc))
