@@ -27,7 +27,7 @@
 #ifdef G_OS_WIN32
 # define WIFEXITED(status) TRUE
 # define WEXITSTATUS(status) (status)
-# define WIFSIGNALLED(status) FALSE
+# define WIFSIGNALED(status) FALSE
 #else
 # include <sys/types.h>
 # include <sys/wait.h>
