@@ -1833,13 +1833,13 @@ static void read_fif_io(gchar *msg, GIOCondition condition, gchar *enc, gint msg
 
 static void search_read_io(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(string->str, condition, data, COLOR_BLACK);
+	read_fif_io(string->str, condition, data, COLOR_BLACK);
 }
 
 
 static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(string->str, condition, data, COLOR_DARK_RED);
+	read_fif_io(string->str, condition, data, COLOR_DARK_RED);
 }
 
 
