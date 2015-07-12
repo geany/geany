@@ -25,6 +25,7 @@
 #define WIN32_LEAN_AND_MEAN
 /* Need Windows XP for SHGetFolderPathAndSubDirW */
 #define WINVER 0x0501
+#define _WIN32_WINNT 0x0501
 /* Needed for SHGFP_TYPE */
 #define _WIN32_IE 0x0500
 
