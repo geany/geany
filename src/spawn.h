@@ -25,12 +25,15 @@
 #include <glib.h>
 
 #ifdef G_OS_WIN32
-# define WIFEXITED(status) TRUE
-# define WEXITSTATUS(status) (status)
-# define WIFSIGNALED(status) FALSE
+# define SPAWN_WIFEXITED(status) TRUE
+# define SPAWN_WEXITSTATUS(status) (status)
+# define SPAWN_WIFSIGNALED(status) FALSE
 #else
 # include <sys/types.h>
 # include <sys/wait.h>
+# define SPAWN_WIFEXITED(status) WIFEXITED(status)      /**< non-zero if the child exited normally */
+# define SPAWN_WEXITSTATUS(status) WEXITSTATUS(status)  /**< exit status of a child if exited normally */
+# define SPAWN_WIFSIGNALED(status) WIFSIGNALED(status)  /**< non-zero if the child exited due to signal */
 #endif
 
 G_BEGIN_DECLS

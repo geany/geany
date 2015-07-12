@@ -39,6 +39,10 @@
  * This module does not depend on Geany when compiled for testing (-DSPAWN_TEST).
  */
 
+/** @file spawn.h
+ * Portable and convenient process spawning and communication.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -1164,8 +1168,8 @@ static void print_status(gint status)
 {
 	fputs("finished, ", stderr);
 
-	if (WIFEXITED(status))
-		fprintf(stderr, "exit code %d\n", WEXITSTATUS(status));
+	if (SPAWN_WIFEXITED(status))
+		fprintf(stderr, "exit code %d\n", SPAWN_WEXITSTATUS(status));
 	else
 		fputs("abnormal termination\n", stderr);
 }
