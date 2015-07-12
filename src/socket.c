@@ -57,6 +57,8 @@
 
 #ifdef HAVE_SOCKET
 
+#include "win32defines.h" /* should always come before any system headers */
+
 #include "socket.h"
 
 #include "app.h"
@@ -79,7 +81,6 @@
 # include <netinet/in.h>
 # include <glib/gstdio.h>
 #else
-# include "win32defines.h"
 # include <winsock2.h>
 # include <windows.h>
 # include <gdk/gdkwin32.h>
