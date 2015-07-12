@@ -39,6 +39,10 @@
  * This module does not depend on Geany when compiled for testing (-DSPAWN_TEST).
  */
 
+/** @file spawn.h
+ * Portable and convenient process spawning and communication.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
