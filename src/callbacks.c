@@ -234,7 +234,10 @@ void on_cut1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_cut_clipboard(GTK_EDITABLE(focusw));
 	else if (IS_SCINTILLA(focusw))
-		sci_cut(SCINTILLA(focusw));
+		if (editor_prefs.no_selection_copy && !sci_has_selection(SCINTILLA(focusw)))
+			sci_send_command(SCINTILLA(focusw), SCI_LINECUT);
+		else
+			sci_cut(SCINTILLA(focusw));
 	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(
@@ -251,7 +254,10 @@ void on_copy1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	if (GTK_IS_EDITABLE(focusw))
 		gtk_editable_copy_clipboard(GTK_EDITABLE(focusw));
 	else if (IS_SCINTILLA(focusw))
-		sci_copy(SCINTILLA(focusw));
+		if (editor_prefs.no_selection_copy && !sci_has_selection(SCINTILLA(focusw)))
+			sci_send_command(SCINTILLA(focusw), SCI_LINECOPY);
+		else
+			sci_copy(SCINTILLA(focusw));
 	else if (GTK_IS_TEXT_VIEW(focusw))
 	{
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(

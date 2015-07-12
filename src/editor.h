@@ -134,6 +134,8 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
+	gboolean	no_selection_copy;
+	gboolean	no_selection_cut;
 }
 GeanyEditorPrefs;
 

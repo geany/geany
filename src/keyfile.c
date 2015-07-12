@@ -244,6 +244,10 @@ static void init_pref_groups(void)
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.no_selection_copy,
+		"no_selection_copies_line", FALSE);
+	stash_group_add_boolean(group, &editor_prefs.no_selection_cut,
+		"no_selection_cuts_line", FALSE);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 

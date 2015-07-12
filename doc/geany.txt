@@ -2575,6 +2575,11 @@ complete_snippets_whilst_editing  Whether to allow completion of snippets      f
                                   position on the line). Only used when the
                                   keybinding `Complete snippet` is set to
                                   ``Space``.
+no_selection_copies_line          When enabled the copy command will copy the
+                                  contents of the current line if no text is
+                                  selected.                                    false       immediately
+no_selection_cuts_line            When enabled the cut command will cut the
+                                  the current line if no text is selected.     false       immediately
 show_editor_scrollbars            Whether to display scrollbars. If set to     true        immediately
                                   false, the horizontal and vertical
                                   scrollbars are hidden completely.
