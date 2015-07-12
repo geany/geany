@@ -157,6 +157,27 @@ void on_close_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+void on_close_allafter1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	guint i;
+	GeanyDocument *cur_doc = user_data;
+
+	if (cur_doc == NULL)
+		cur_doc = document_get_current();
+
+	for (i = cur_doc->index + 1; i < documents_array->len; i++)
+	{
+		GeanyDocument *doc = documents[i];
+
+		if (doc == cur_doc || ! doc->is_valid)
+	  		continue;
+
+		if (! document_close(doc))
+	  		break;
+	}
+}
+
+
 void on_close1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
