@@ -640,6 +640,7 @@ def build(bld):
         src/project.h
         src/sciwrappers.h
         src/search.h
+        src/spawn.h
         src/stash.h
         src/support.h
         src/symbols.h

@@ -54,6 +54,7 @@ geany_include_HEADERS = \
 	project.h \
 	sciwrappers.h \
 	search.h \
+	spawn.h \
 	stash.h \
 	support.h \
 	symbols.h \
