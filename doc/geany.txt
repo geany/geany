@@ -17,7 +17,7 @@
 :Date: 2014-04-16
 :Version: |(version)|
 
-Copyright © 2005-2014
+Copyright © 2005-2015
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -3023,7 +3023,7 @@ execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
 which is created in the temporary directory and which changes the working
-directory to the directory set in the Build commands dialog, see 
+directory to the directory set in the Build commands dialog, see
 `Build menu commands dialog`_ for details.
 
 As an example the default (Linux) command is::
