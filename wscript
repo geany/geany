@@ -52,7 +52,7 @@ from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
-VERSION = '1.25'
+VERSION = '1.26'
 LINGUAS_FILE = os.path.join('po', 'LINGUAS')
 MINIMUM_GTK_VERSION = '2.24.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
