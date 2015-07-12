@@ -1846,8 +1846,7 @@ static void search_read_io_stderr(GString *string, GIOCondition condition, gpoin
 static void search_finished(GPid child_pid, gint status, gpointer user_data)
 {
 	const gchar *msg = _("Search failed.");
-#ifdef G_OS_UNIX
-	gint exit_status = 1;
+	gint exit_status;
 
 	if (SPAWN_WIFEXITED(status))
 	{
@@ -1858,9 +1857,10 @@ static void search_finished(GPid child_pid, gint status, gpointer user_data)
 		exit_status = -1;
 		g_warning("Find in Files: The command failed unexpectedly (signal received).");
 	}
-#else
-	gint exit_status = status;
-#endif
+	else
+	{
+		exit_status = 1;
+	}
 
 	switch (exit_status)
 	{
