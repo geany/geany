@@ -226,7 +226,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 				"Your selection was not changed. Error message: %s"),
 				errors->str);
 		}
-		else if (!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS)
+		else if (!SPAWN_WIFEXITED(status) || SPAWN_WEXITSTATUS(status) != EXIT_SUCCESS)
 		{
 			/* TODO maybe include the exit code in the error message */
 			ui_set_statusbar(TRUE,
