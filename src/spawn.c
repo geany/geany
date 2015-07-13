@@ -47,8 +47,6 @@
 # include "config.h"
 #endif
 
-#include "win32defines.h" /* should always come before any system headers */
-
 #include <errno.h>
 #include <string.h>
 

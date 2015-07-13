@@ -27,7 +27,10 @@
 # include "config.h"
 #endif
 
-#include "win32defines.h" /* should always come before any system headers */
+/* Need Windows XP for SHGetFolderPathAndSubDirW */
+#define _WIN32_WINNT 0x0501
+/* Needed for SHGFP_TYPE */
+#define _WIN32_IE 0x0500
 
 #include "win32.h"
 

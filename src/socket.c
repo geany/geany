@@ -57,8 +57,6 @@
 
 #ifdef HAVE_SOCKET
 
-#include "win32defines.h" /* should always come before any system headers */
-
 #include "socket.h"
 
 #include "app.h"
