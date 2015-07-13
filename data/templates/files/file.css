@@ -1,0 +1,27 @@
+
+/* Tags */
+*{} 
+html{}
+body{}
+header{}
+nav{}
+nav a:link,nav a:visited{}
+nav a:hover{}
+section{}
+article{}
+footer{}
+
+/* Identifiers */
+#IDhere{}
+
+/* Class */
+.CLASShere{}
+
+/* @Media  queries*/
+@media all and (max-width:645px){
+	section{}
+	
+	#IDhere{}
+	
+	.CLASShere{}
+}
