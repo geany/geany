@@ -170,6 +170,7 @@ static void setup_window_position(void)
 static void apply_settings(void)
 {
 	ui_update_fold_items();
+	GtkNotebook *notebook;
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	toolbar_show_hide();
@@ -199,12 +200,14 @@ static void apply_settings(void)
 	}
 
 	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
+	foreach_notebook(notebook)
+		gtk_notebook_set_tab_pos(notebook, interface_prefs.tab_pos_editor);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
 	/* whether to show notebook tabs or not */
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+	foreach_notebook(notebook)
+		gtk_notebook_set_show_tabs(notebook, interface_prefs.show_notebook_tabs);
 
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
@@ -219,6 +222,8 @@ static void apply_settings(void)
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
 		interface_prefs.msgwin_orientation);
+	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "hpaned2")),
+		interface_prefs.editor_split);
 }
 
 
@@ -258,7 +263,8 @@ static void main_init(void)
 	/* store important pointers for later reference */
 	main_widgets.toolbar = toolbar_init();
 	main_widgets.sidebar_notebook = ui_lookup_widget(main_widgets.window, "notebook3");
-	main_widgets.notebook = ui_lookup_widget(main_widgets.window, "notebook1");
+	main_widgets.notebooks = notebook_init();
+	main_widgets.notebook = GTK_WIDGET(notebook_get_primary()); /* FIXME: remove to break ABI */
 	main_widgets.editor_menu = create_edit_menu1();
 	main_widgets.tools_menu = ui_lookup_widget(main_widgets.window, "tools1_menu");
 	main_widgets.message_window_notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
@@ -927,13 +933,9 @@ static void load_startup_files(gint argc, gchar **argv)
 	if (load_session)
 	{
 		/* load session files into tabs, as they are found in the session_files variable */
+		ui_update_popup_copy_items(NULL);
+		ui_update_popup_reundo_items(NULL);
 		configuration_open_files();
-
-		if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) == 0)
-		{
-			ui_update_popup_copy_items(NULL);
-			ui_update_popup_reundo_items(NULL);
-		}
 	}
 
 	open_cl_files(argc, argv);
@@ -1124,7 +1126,6 @@ gint main_lib(gint argc, gchar **argv)
 	ui_create_insert_menu_items();
 	ui_create_insert_date_menu_items();
 	keybindings_init();
-	notebook_init();
 	filetypes_init();
 	templates_init();
 	navqueue_init();
@@ -1174,10 +1175,7 @@ gint main_lib(gint argc, gchar **argv)
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);
 
-	doc = document_get_current();
-	sidebar_select_openfiles_item(doc);
-	build_menu_update(doc);
-	sidebar_update_tag_list(doc, FALSE);
+	build_menu_update(NULL);
 
 #ifdef G_OS_WIN32
 	/* Manually realise the main window to be able to set the position but don't show it.
@@ -1187,7 +1185,6 @@ gint main_lib(gint argc, gchar **argv)
 	setup_window_position();
 
 	/* finally show the window */
-	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
 	main_status.main_window_realized = TRUE;
 

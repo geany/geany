@@ -60,6 +60,7 @@
 #include "SciLexer.h"
 
 #include "gtkcompat.h"
+#include "notebook.h"
 
 #include <ctype.h>
 #include <string.h>
@@ -507,16 +508,10 @@ static void on_margin_click(GeanyEditor *editor, SCNotification *nt)
 	}
 }
 
-
-static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
+void editor_update_ui(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(sci);
-
-	/* since Scintilla 2.24, SCN_UPDATEUI is also sent on scrolling though we don't need to handle
-	 * this and so ignore every SCN_UPDATEUI events except for content and selection changes */
-	if (! (nt->updated & SC_UPDATE_CONTENT) && ! (nt->updated & SC_UPDATE_SELECTION))
-		return;
 
 	/* undo / redo menu update */
 	ui_update_popup_reundo_items(editor->document);
@@ -542,6 +537,16 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 #endif
 }
 
+
+static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
+{
+	/* since Scintilla 2.24, SCN_UPDATEUI is also sent on scrolling though we don't need to handle
+	 * this and so ignore every SCN_UPDATEUI events except for content and selection changes */
+	if (! (nt->updated & SC_UPDATE_CONTENT) && ! (nt->updated & SC_UPDATE_SELECTION))
+		return;
+
+	editor_update_ui(editor);
+}
 
 static void check_line_breaking(GeanyEditor *editor, gint pos)
 {
@@ -1014,6 +1019,7 @@ void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint sc
 static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, G_GNUC_UNUSED gpointer data)
 {
+	/* NOTE: sci might be invalid for some notifications on when quitting Geany */
 	ScintillaObject *sci = editor->sci;
 	GeanyDocument *doc = editor->document;
 
@@ -1115,7 +1121,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_URIDROPPED:
 			if (nt->text != NULL)
 			{
-				document_open_file_list(nt->text, strlen(nt->text));
+				GtkNotebook *notebook = document_get_notebook(doc);
+				document_open_file_list(nt->text, strlen(nt->text), notebook);
 			}
 			break;
 

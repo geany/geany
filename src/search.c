@@ -45,6 +45,7 @@
 #include "utils.h"
 
 #include "gtkcompat.h"
+#include "notebook.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -1399,18 +1400,22 @@ static void replace_in_session(GeanyDocument *doc,
 		const gchar *original_find, const gchar *original_replace)
 {
 	guint n, page_count, rep_count = 0, file_count = 0;
+	GtkNotebook *notebook;
 
 	/* replace in all documents following notebook tab order */
-	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	for (n = 0; n < page_count; n++)
+	foreach_notebook(notebook)
 	{
-		GeanyDocument *tmp_doc = document_get_from_page(n);
-		gint reps = 0;
+		page_count = gtk_notebook_get_n_pages(notebook);
+		for (n = 0; n < page_count; n++)
+		{
+			GeanyDocument *tmp_doc = document_get_from_notebook(notebook, n);
+			gint reps = 0;
 
-		reps = document_replace_all(tmp_doc, find, replace, original_find, original_replace, search_flags_re);
-		rep_count += reps;
-		if (reps)
-			file_count++;
+			reps = document_replace_all(tmp_doc, find, replace, original_find, original_replace, search_flags_re);
+			rep_count += reps;
+			if (reps)
+				file_count++;
+		}
 	}
 	if (file_count == 0)
 	{

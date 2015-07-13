@@ -23,20 +23,28 @@
 #define GEANY_NOTEBOOK_H 1
 
 #include "document.h"
+#include "geanypage.h"
 
 #include <glib.h>
+#include "Scintilla.h"
+#include "ScintillaWidget.h"
 
 G_BEGIN_DECLS
 
-void notebook_init(void);
+/* Returns an array of notebooks that are used by the UI */
+GPtrArray* notebook_init(void);
 
 void notebook_free(void);
 
 /* Returns page number of notebook page, or -1 on error */
-gint notebook_new_tab(GeanyDocument *doc);
+gint notebook_new_tab(GeanyPage *page, GtkNotebook *notebook);
 
 /* Always use this instead of gtk_notebook_remove_page(). */
-void notebook_remove_page(gint page_num);
+void notebook_remove_tab(GeanyPage *page);
+
+void notebook_destroy_tab(GeanyPage *page);
+
+void notebook_show_tab(GeanyPage *page);
 
 /* Switch notebook to the last used tab. Can be called repeatedly to get to the
  * previous tabs. */
@@ -45,6 +53,40 @@ void notebook_switch_tablastused(void);
 /* Returns TRUE when MRU tab switch is in progress (i.e. not at the final 
  * document yet). */
 gboolean notebook_switch_in_progress(void);
+
+/*
+ * Returns the active notebook across all notebooks.
+ * This is the notebook that contains the current document */
+GtkNotebook *notebook_get_current_notebook(void);
+
+/*
+ * Get the order of two notebooks. Can be used as compare func for sorting functions.
+ *
+ * Returns 0 if both pointer are the same, -1 if notebook1 sorts before notebook2 and 1 if notebook2
+ * sorts before notebook. */
+gint notebook_order_compare(GtkNotebook *notebook1, GtkNotebook *notebook2);
+
+/*
+ * Returns the number of open tabs in all notebooks */
+guint notebook_get_num_tabs(void);
+
+/*
+ * Overrides the paned position upon the next re-layout of the editor notebooks
+ * (which happens when new tabs are added to an empty notebook or the last tab of a
+ * notebook is closed). This is intended to restore the paned position from stored
+ * configuration.
+ */
+void notebook_restore_paned_position(gint position);
+
+/*
+ * Moves the tab containing doc to the specified notebook */
+gint notebook_move_tab(GeanyPage *page, GtkNotebook *new_notebook);
+
+#define foreach_notebook(notebook)                                                 \
+	for (gint __idx = 0; __idx < main_widgets.notebooks->len; ++__idx)             \
+		if (((notebook) = g_ptr_array_index(main_widgets.notebooks, (__idx))) || 1)
+
+#define notebook_get_primary() (g_ptr_array_index(main_widgets.notebooks, 0))
 
 G_END_DECLS
 

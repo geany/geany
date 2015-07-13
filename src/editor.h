@@ -226,6 +226,8 @@ void editor_destroy(GeanyEditor *editor);
 
 void editor_sci_notify_cb(GtkWidget *widget, gint scn, gpointer scnt, gpointer data);
 
+void editor_update_ui(GeanyEditor *editor);
+
 gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean force);
 
 gboolean editor_complete_word_part(GeanyEditor *editor);
