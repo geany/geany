@@ -69,7 +69,7 @@ other useful notes.
 
 @page guidelines Plugin Writing Guidelines
 
-@section intro Introduction
+@section intro_guidelines Introduction
 
 The following hints and guidelines are only recommendations. Nobody is forced to follow
 them at all.
@@ -140,7 +140,7 @@ geany-devel at uvena.de or the plugin author directly.
 
 @page howto Plugin HowTo
 
-@section intro Introduction
+@section intro_howto Introduction
 
 Since Geany 0.12 there is a plugin interface to extend Geany's functionality and
 add new features. This document gives a brief overview about how to add new

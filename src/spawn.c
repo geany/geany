@@ -198,15 +198,17 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
  *  All OS:
  *     - any leading spaces, tabs and new lines are skipped
  *     - an empty command is invalid
+ *
  *  Unix:
  *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
  *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
+ *
  *  Windows:
  *     - leading carriage returns are skipped too
  *     - a quoted program name must be entirely inside the quotes. No "C:\Foo\Bar".pdf or
- *       "C:\Foo\Bar".bat, which would be executed by Windows as C:\Foo\Bar.exe
- *     - an unquoted program name may not contain spaces. Foo Bar Qux will not be considered
- *       "Foo Bar.exe" Qux or "Foo Bar Qux.exe", depending on what executables exist, as
+ *       "C:\Foo\Bar".bat, which would be executed by Windows as `C:\Foo\Bar.exe`
+ *     - an unquoted program name may not contain spaces. `Foo Bar Qux` will not be considered
+ *       `"Foo Bar.exe" Qux` or `"Foo Bar Qux.exe"`, depending on what executables exist, as
  *       Windows normally does.
  *     - the program name must be separated from the arguments by at least one space or tab
  *     - the standard Windows quoting and escaping rules are used: double quote is escaped with
@@ -851,7 +853,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  The synchronous execution may not be combined with recursive callbacks.
  *
- *  In line buffered mode, the child input is broken on '\n', "\r\n", '\r', '\0' and max length.
+ *  In line buffered mode, the child input is broken on `\n`, `\r\n`, `\r`, `\0` and max length.
  *
  *  All I/O callbacks are guaranteed to be invoked at least once with @c G_IO_ERR, @c G_IO_HUP
  *  or @c G_IO_NVAL set (except for a @a stdin_cb which returns @c FALSE before that). For the
@@ -1020,6 +1022,10 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
  *  callback data, make sure that @c stdin_data exists while the child is being executed.
  *  (For example, on asynchronous execution, you can allocate the data in the heap, and free
  *  it in your @c spawn_with_callbacks() @c exit_cb callback.)
+ *
+ * @param channel the channel to write data to.
+ * @param condition condition to check for @c G_IO_OUT.
+ * @param data @c SpawnWriteData to write to @a channel.
  *
  *  @return @c TRUE if the remaining size is > 0 and @a condition does not indicate any error,
  *  @c FALSE otherwise.
