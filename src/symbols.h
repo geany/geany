@@ -50,7 +50,9 @@ void symbols_reload_config_files(void);
 
 void symbols_global_tags_loaded(guint file_type_idx);
 
-GString *symbols_find_typenames_as_string(gint lang, gboolean global);
+GString *symbols_find_global_typenames(langType lang);
+
+gchar *symbols_find_workspace_typenames(GeanyDocument *doc);
 
 const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
 

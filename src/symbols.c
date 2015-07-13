@@ -272,42 +272,148 @@ static void html_tags_loaded(void)
 }
 
 
-GString *symbols_find_typenames_as_string(gint lang, gboolean global)
+static gboolean tag_of_lang_type(TMTag *tag, langType lang)
+{
+	langType tag_lang = tag->lang;
+
+	/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
+	 * e.g. PHP classes in C++ files
+	 * lang = -2 disables the check */
+	return tag_lang == lang || lang == -2 ||
+		(lang == TM_PARSER_CPP && tag_lang == TM_PARSER_C);
+}
+
+
+GString *symbols_find_global_typenames(langType lang)
 {
 	guint j;
-	TMTag *tag;
-	GString *s = NULL;
+	GString *s;
 	GPtrArray *typedefs;
-	gint tag_lang;
 
-	if (global)
-		typedefs = tm_tags_extract(app->tm_workspace->global_tags, TM_GLOBAL_TYPE_MASK);
-	else
-		typedefs = app->tm_workspace->typename_array;
-
-	if ((typedefs) && (typedefs->len > 0))
+	typedefs = tm_tags_extract(app->tm_workspace->global_tags, TM_GLOBAL_TYPE_MASK);
+	s = g_string_sized_new(typedefs->len * 10);
+	for (j = 0; j < typedefs->len; ++j)
 	{
-		s = g_string_sized_new(typedefs->len * 10);
-		for (j = 0; j < typedefs->len; ++j)
-		{
-			tag = TM_TAG(typedefs->pdata[j]);
-			tag_lang = tag->lang;
+		TMTag *tag = TM_TAG(typedefs->pdata[j]);
 
-			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
-			 * e.g. PHP classes in C++ files
-			 * lang = -2 disables the check */
-			if (tag->name && (tag_lang == lang || lang == -2 ||
-				(lang == TM_PARSER_CPP && tag_lang == TM_PARSER_C)))
+		if (tag->name && tag_of_lang_type(tag, lang))
+		{
+			if (j != 0)
+				g_string_append_c(s, ' ');
+			g_string_append(s, tag->name);
+		}
+	}
+	g_ptr_array_free(typedefs, TRUE);
+	return s;
+}
+
+
+/* Gets intersection of words found in doc and app->tm_workspace->typename_array
+ * in the format Scintilla expects, sorted by name */
+gchar *symbols_find_workspace_typenames(GeanyDocument *doc)
+{
+	guint i;
+	guchar *buffer;
+	gsize buffer_len;
+	GString *typename, *res;
+	gboolean within_typename, first;
+	gboolean *presence_map, *word_start_chars, *word_chars;
+	GPtrArray *typedefs = app->tm_workspace->typename_array;
+	GHashTable *typename_table;
+
+	/* Go through the typedefs array and:
+	 * - find which characters can appear at the beginning of a typename (word_start_chars)
+	 * - find which characters can appear inside a typename (word_chars)
+	 * - store (typedef name)->(index to typedefs) into typename_table hash table */
+	word_start_chars = g_new0(gboolean, 256);
+	word_chars = g_new0(gboolean, 256);
+	typename_table = g_hash_table_new(g_str_hash, g_str_equal);
+	for (i = 0; i < typedefs->len; i++)
+	{
+		TMTag *tag = TM_TAG(typedefs->pdata[i]);
+
+		if (tag->name && tag_of_lang_type(tag, doc->file_type->lang))
+		{
+			guchar *c = tag->name;
+
+			first = TRUE;
+			while (*c)
 			{
-				if (j != 0)
-					g_string_append_c(s, ' ');
-				g_string_append(s, tag->name);
+				if (first)
+				{
+					word_start_chars[*c] = TRUE;
+					first = FALSE;
+				}
+				else
+					word_chars[*c] = TRUE;
+				c++;
+			}
+			g_hash_table_insert(typename_table, tag->name, GINT_TO_POINTER(i));
+		}
+	}
+
+	/* Identify typename candidates in the current document using word_chars and
+	 * word_start_chars and check if they are inside typename_table. If so, set
+	 * TRUE value at the appropriate place in presence_map which determines if at
+	 * the given position inside typedefs is a word from the current document. */
+	buffer = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	buffer_len = sci_get_length(doc->editor->sci) + 1; /* include the trailing \0 */
+	typename = g_string_sized_new(100);
+	presence_map = g_new0(gboolean, typedefs->len);
+	within_typename = FALSE;
+	for (i = 0; i < buffer_len; i++)
+	{
+		guchar c = buffer[i];
+
+		if (!within_typename)
+		{
+			if (word_start_chars[c])
+			{
+				within_typename = TRUE;
+				g_string_append_c(typename, c);
+			}
+		}
+		else
+		{
+			if (word_chars[c])
+				g_string_append_c(typename, c);
+			else
+			{
+				gpointer value;
+
+				/* There is always \0 at the end of buffer so we can be sure we
+				 * get here also at the end of the file */
+				if (g_hash_table_lookup_extended(typename_table, typename->str, NULL, &value))
+					presence_map[GPOINTER_TO_INT(value)] = TRUE;
+				g_string_truncate(typename, 0);
+				within_typename = FALSE;
 			}
 		}
 	}
-	if (typedefs && global)
-		g_ptr_array_free(typedefs, TRUE);
-	return s;
+	g_string_free(typename, TRUE);
+
+	/* Construct the keyword string in the format Scintilla expects */
+	first = TRUE;
+	res = g_string_sized_new(500);
+	for (i = 0; i < typedefs->len; i++)
+	{
+		if (presence_map[i])
+		{
+			TMTag *tag = TM_TAG(typedefs->pdata[i]);
+
+			if (!first)
+				g_string_append_c(res, ' ');
+			g_string_append(res, tag->name);
+			first = FALSE;
+		}
+	}
+
+	g_free(presence_map);
+	g_free(word_start_chars);
+	g_free(word_chars);
+	g_hash_table_unref(typename_table);
+
+	return g_string_free(res, FALSE);
 }
 
 

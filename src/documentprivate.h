@@ -108,6 +108,8 @@ typedef struct GeanyDocumentPrivate
 	gint			 protected;
 	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
 	GtkWidget		*info_bars[NUM_MSG_TYPES];
+	/* String containing typenames highlighted by Scintilla */
+	gchar			*typenames;
 }
 GeanyDocumentPrivate;
 

@@ -809,10 +809,8 @@ static void merge_type_keywords(ScintillaObject *sci, guint ft_id, guint keyword
 	const gchar *user_words = style_sets[ft_id].keywords[keyword_idx];
 	GString *s;
 
-	s = symbols_find_typenames_as_string(filetypes[ft_id]->lang, TRUE);
-	if (G_UNLIKELY(s == NULL))
-		s = g_string_sized_new(200);
-	else
+	s = symbols_find_global_typenames(filetypes[ft_id]->lang);
+	if (s->len > 0)
 		g_string_append_c(s, ' '); /* append a space as delimiter to the existing list of words */
 
 	g_string_append(s, user_words);
