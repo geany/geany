@@ -62,14 +62,6 @@ G_BEGIN_DECLS
 #	define gtk_combo_box_text_get_active_text	gtk_combo_box_get_active_text
 #endif
 
-/* GtkDialog */
-/* GTK 2.22 deprecated dialog separators and 3.0 removed them
- * We keep those however in case 2.16 has separators by default */
-#if GTK_CHECK_VERSION(3, 0, 0)
-#	define gtk_dialog_set_has_separator(dialog, setting)	/* nothing */
-#	define GTK_DIALOG_NO_SEPARATOR							0
-#endif
-
 /* GtkWidget */
 #if ! GTK_CHECK_VERSION(3, 0, 0)
 #	define gtk_widget_get_allocated_height(widget)	(((GtkWidget *) (widget))->allocation.height)
