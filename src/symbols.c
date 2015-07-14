@@ -989,12 +989,17 @@ static void hide_empty_rows(GtkTreeStore *store)
 }
 
 
-static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
+static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent,
+	GHashTable *typedef_table)
 {
+	gchar *name = tag->name;
 	gchar *utf8_name;
 	const gchar *scope = tag->scope;
 	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
 	gboolean doc_is_utf8 = FALSE;
+
+	if (tm_tag_is_anon(tag) && g_hash_table_lookup(typedef_table, name))
+		name = g_hash_table_lookup(typedef_table, name);
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 	 * for None at this point completely */
@@ -1003,13 +1008,13 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 		doc_is_utf8 = TRUE;
 	else /* normally the tags will always be in UTF-8 since we parse from our buffer, but a
 		  * plugin might have called tm_source_file_update(), so check to be sure */
-		doc_is_utf8 = g_utf8_validate(tag->name, -1, NULL);
+		doc_is_utf8 = g_utf8_validate(name, -1, NULL);
 
 	if (! doc_is_utf8)
-		utf8_name = encodings_convert_to_utf8_from_charset(tag->name,
+		utf8_name = encodings_convert_to_utf8_from_charset(name,
 			-1, doc->encoding, TRUE);
 	else
-		utf8_name = tag->name;
+		utf8_name = name;
 
 	if (utf8_name == NULL)
 		return NULL;
@@ -1380,6 +1385,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 {
 	GtkTreeStore *store = doc->priv->tag_store;
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
+	GHashTable *typedef_table;
 	GHashTable *parents_table;
 	GHashTable *tags_table;
 	GtkTreeIter iter;
@@ -1391,6 +1397,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice_list);
 	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
 	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
+	typedef_table = g_hash_table_new(g_str_hash, g_str_equal);
 	foreach_list(item, *tags)
 	{
 		TMTag *tag = item->data;
@@ -1401,6 +1408,9 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		name = get_parent_name(tag, doc->file_type->id);
 		if (name)
 			g_hash_table_insert(parents_table, (gpointer) name, NULL);
+
+		if (tag->type == tm_tag_typedef_t && tag->var_type)
+			g_hash_table_insert(typedef_table, tag->var_type, tag->name);
 	}
 
 	/* First pass, update existing rows or delete them.
@@ -1439,7 +1449,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 					/* only update fields that (can) have changed (name that holds line
 					 * number, tooltip, and the tag itself) */
-					name = get_symbol_name(doc, found, parent_name != NULL);
+					name = get_symbol_name(doc, found, parent_name != NULL, typedef_table);
 					tooltip = get_symbol_tooltip(doc, found);
 					gtk_tree_store_set(store, &iter,
 							SYMBOLS_COLUMN_NAME, name,
@@ -1523,7 +1533,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			name = get_symbol_name(doc, tag, parent_name != NULL);
+			name = get_symbol_name(doc, tag, parent_name != NULL, typedef_table);
 			tooltip = get_symbol_tooltip(doc, tag);
 			gtk_tree_store_insert_with_values(store, &iter, parent, 0,
 					SYMBOLS_COLUMN_NAME, name,
@@ -1543,6 +1553,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	}
 
 	g_hash_table_destroy(parents_table);
+	g_hash_table_destroy(typedef_table);
 	tags_table_destroy(tags_table);
 }
 
