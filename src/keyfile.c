@@ -105,8 +105,6 @@ static gchar *scribble_text = NULL;
 static gint scribble_pos = -1;
 static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
-static gint hpan_position;
-static gint vpan_position;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
 static GPtrArray *keyfile_groups = NULL;
@@ -1047,8 +1045,8 @@ static void load_ui_prefs(GKeyFile *config)
 		ui_prefs.geometry[3] = MAX(-1, geo[3]);
 		ui_prefs.geometry[4] = geo[4] != 0;
 	}
-	hpan_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
-	vpan_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
+	ui_prefs.treeview_position = utils_get_setting_integer(config, PACKAGE, "treeview_position", 156);
+	ui_prefs.msgwindow_position = utils_get_setting_integer(config, PACKAGE, "msgwindow_position", (geo) ?
 				(GEANY_MSGWIN_HEIGHT + geo[3] - 440) :
 				(GEANY_MSGWIN_HEIGHT + GEANY_WINDOW_DEFAULT_HEIGHT - 440));
 
@@ -1286,13 +1284,6 @@ void configuration_apply_settings(void)
 		gtk_text_buffer_place_cursor(buffer, &iter);
 	}
 	g_free(scribble_text);
-
-	/* set the position of the hpaned and vpaned */
-	if (prefs.save_winpos)
-	{
-		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
-		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
-	}
 
 	/* set fullscreen after initial draw so that returning to normal view is the right size.
 	 * fullscreen mode is disabled by default, so act only if it is true */
