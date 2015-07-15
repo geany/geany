@@ -31,6 +31,7 @@
 #include "document.h"
 
 #include "app.h"
+#include "build.h"
 #include "callbacks.h" /* for ignore_callback */
 #include "dialogs.h"
 #include "documentprivate.h"
@@ -671,12 +672,36 @@ static gboolean focus_sci(GtkWidget *widget, GdkEventButton *event, gpointer use
 	return FALSE;
 }
 
-static gboolean set_current(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+
+/* Changes window-title after switching tabs and lots of other things.
+ * This connects to focus-in-event to catch cases where tabs are "switched" by focusing a
+ * different document notebook. This is too called on page switching as that implies focus change.
+ **/
+static void on_page_selected(GtkWidget *page, gpointer user_data)
 {
 	GeanyDocument *doc = user_data;
 
+	/* Don't run twice, can happen if a page is switched to and immediately focused (common case) */
+	if (doc == current)
+		return;
+
 	current = doc;
-	return FALSE;
+	sidebar_select_openfiles_item(doc);
+	ui_save_buttons_toggle(doc->changed);
+	ui_set_window_title(doc);
+	ui_update_statusbar(doc, -1);
+	ui_update_popup_reundo_items(doc);
+	ui_document_show_hide(doc); /* update the document menu */
+	build_menu_update(doc);
+	sidebar_update_tag_list(doc, FALSE);
+	document_highlight_tags(doc);
+	document_check_disk_status(doc, TRUE);
+
+#ifdef HAVE_VTE
+	vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
+#endif
+
+	g_signal_emit_by_name(geany_object, "document-activate", doc);
 }
 
 
@@ -747,7 +772,7 @@ static GeanyDocument *document_create(const gchar *utf8_filename, GtkNotebook *n
 	/* focus the current document after clicking on a tab */
 	gtk_container_set_focus_child((GtkContainer *) page, (GtkWidget *) doc->editor->sci);
 	g_signal_connect(page, "try-close", G_CALLBACK(close_page), doc);
-	g_signal_connect(doc->editor->sci, "focus-in-event", G_CALLBACK(set_current), doc);
+	g_signal_connect(page, "selected", G_CALLBACK(on_page_selected), doc);
 	notebook_new_tab(page, notebook);
 
 	/* select document in sidebar */

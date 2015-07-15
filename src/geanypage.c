@@ -44,6 +44,7 @@ enum {
 
 enum {
 	SIG_TRY_CLOSE,
+	SIG_SELECTED,
 
 	NUM_SIGNALS
 };
@@ -81,6 +82,33 @@ static void geany_cclosure_marshal_BOOL__VOID(GClosure *closure, GValue *return_
 	v_return = callback(data1, data2);
 
 	g_value_set_boolean(return_value, v_return);
+}
+
+
+static gboolean
+on_page_mapped_focused(GtkWidget *w, GdkEvent *event, GeanyPage *page)
+{
+	g_signal_emit(page, signals[SIG_SELECTED], (GQuark) 0);
+
+	return FALSE;
+}
+
+
+static void on_page_set_focus_child(GeanyPage *page, GtkWidget *widget, gpointer data)
+{
+	GtkWidget *old = gtk_container_get_focus_child(GTK_CONTAINER(page));
+	/* We might be called with widget == NULL if something else is focused. We ignore this
+	 * because we need to know the previous focus child to disconnect signals. This doesn't seem
+	 * to cause any problems (if turns out we have to store the previous widget elsewhere). */
+	if (widget && widget != old)
+	{
+		g_signal_connect_object(widget, "focus-in-event",  G_CALLBACK(on_page_mapped_focused), page, 0);
+		g_signal_connect_object(widget, "map-event",  G_CALLBACK(on_page_mapped_focused), page, 0);
+		if (old)
+			g_object_disconnect(old, "any_signal", G_CALLBACK(on_page_mapped_focused), page, NULL);
+		g_signal_chain_from_overridden_handler(page, widget, data);
+	}
+	/* If the widget has previously been set as focus child we have nothing to do. */
 }
 
 
@@ -176,6 +204,15 @@ static void geany_page_class_init (GeanyPageClass * klass)
 	                    0, NULL, NULL,
 	                    geany_cclosure_marshal_BOOL__VOID,
 	                    G_TYPE_BOOLEAN, 0);
+	signals[SIG_SELECTED] = g_signal_new (g_intern_static_string("selected"),
+	                    G_OBJECT_CLASS_TYPE (oklass),
+	                    G_SIGNAL_RUN_FIRST,
+	                    0, NULL, NULL,
+	                    g_cclosure_marshal_VOID__VOID,
+	                    G_TYPE_NONE, 0);
+
+	g_signal_override_class_handler("set-focus-child", GEANY_TYPE_PAGE,
+	                                G_CALLBACK(on_page_set_focus_child));
 }
 
 

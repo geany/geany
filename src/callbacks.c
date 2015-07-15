@@ -436,41 +436,6 @@ void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* Changes window-title after switching tabs and lots of other things.
- * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
-static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
-		guint page_num, gpointer user_data)
-{
-	GeanyDocument *doc;
-
-	if (G_UNLIKELY(main_status.opening_session_files || main_status.closing_all))
-		return;
-
-	doc = document_get_from_notebook_child(page);
-
-	if (doc != NULL)
-	{
-		sidebar_select_openfiles_item(doc);
-		ui_save_buttons_toggle(doc->changed);
-		ui_set_window_title(doc);
-		ui_update_statusbar(doc, -1);
-		ui_update_popup_reundo_items(doc);
-		ui_document_show_hide(doc); /* update the document menu */
-		build_menu_update(doc);
-		sidebar_update_tag_list(doc, FALSE);
-		document_highlight_tags(doc);
-
-		document_check_disk_status(doc, TRUE);
-
-#ifdef HAVE_VTE
-		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
-#endif
-
-		g_signal_emit_by_name(geany_object, "document-activate", doc);
-	}
-}
-
-
 static void on_tv_notebook_switch_page(GtkNotebook *notebook, gpointer page,
 		guint page_num, gpointer user_data)
 {
