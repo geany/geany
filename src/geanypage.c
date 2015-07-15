@@ -88,7 +88,30 @@ static void geany_cclosure_marshal_BOOL__VOID(GClosure *closure, GValue *return_
 static gboolean
 on_page_mapped_focused(GtkWidget *w, GdkEvent *event, GeanyPage *page)
 {
+	if (event->type == GDK_FOCUS_CHANGE)
+	{
+		GtkWidget *ebox = page->tab_widget;
+		GtkWidget *label = gtk_bin_get_child(GTK_BIN(ebox));
+		gchar *markup;
+
+		markup = g_markup_printf_escaped("<u>%s</u>", page->label);
+		gtk_label_set_markup(GTK_LABEL(label), markup);
+		g_free(markup);
+	}
+
 	g_signal_emit(page, signals[SIG_SELECTED], (GQuark) 0);
+
+	return FALSE;
+}
+
+
+static gboolean
+on_page_unfocused(GtkWidget *w, GdkEvent *event, GeanyPage *page)
+{
+	GtkWidget *ebox = page->tab_widget;
+	GtkWidget *label = gtk_bin_get_child(GTK_BIN(ebox));
+
+	gtk_label_set_text(GTK_LABEL(label), page->label);
 
 	return FALSE;
 }
@@ -104,8 +127,10 @@ static void on_page_set_focus_child(GeanyPage *page, GtkWidget *widget, gpointer
 	{
 		g_signal_connect_object(widget, "focus-in-event",  G_CALLBACK(on_page_mapped_focused), page, 0);
 		g_signal_connect_object(widget, "map-event",  G_CALLBACK(on_page_mapped_focused), page, 0);
+		g_signal_connect_object(widget, "focus-out-event", G_CALLBACK(on_page_unfocused), page, 0);
 		if (old)
-			g_object_disconnect(old, "any_signal", G_CALLBACK(on_page_mapped_focused), page, NULL);
+			g_object_disconnect(old, "any_signal", G_CALLBACK(on_page_mapped_focused), page,
+			                         "any_signal", G_CALLBACK(on_page_unfocused), page, NULL);
 		g_signal_chain_from_overridden_handler(page, widget, data);
 	}
 	/* If the widget has previously been set as focus child we have nothing to do. */
