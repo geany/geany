@@ -82,12 +82,12 @@
 #ifdef __APPLE__
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Helvetica Medium 12"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
 #define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
