@@ -342,7 +342,7 @@ Short option  Long option              Function
 -g            --generate-tags          Generate a global tags file (see
                                        `Generating a global tags file`_).
 
--P            --no-preprocessing       Don't preprocess C/C++ files when generating tags.
+-P            --no-preprocessing       Don't preprocess C/C++ files when generating tags file.
 
 -i            --new-instance           Do not open files in a running instance, force opening
                                        a new instance. Only available if Geany was compiled
@@ -894,8 +894,8 @@ To ease navigation in source files and especially between
 different files, Geany lets you jump between different navigation
 points. Currently, this works for the following:
 
-* `Go to tag declaration`_
-* `Go to tag definition`_
+* `Go to symbol declaration`_
+* `Go to symbol definition`_
 * Symbol list items
 * Build errors
 * Message items
@@ -981,7 +981,7 @@ Autocompletion
 ^^^^^^^^^^^^^^
 
 Geany can offer a list of possible completions for symbols defined in the
-tags and for all words in a document.
+tags files and for all words in open documents.
 
 The autocompletion list for symbols is presented when the first few
 characters of the symbol are typed (configurable, see `Editor Completions
@@ -1038,7 +1038,7 @@ When you type ``foo.`` it will show an autocompletion list with 'i' and
 'c' symbols.
 
 It only works for languages that set parent scope names for e.g. struct
-members. Currently this means C-like languages. The C tag parser only
+members. Currently this means C-like languages. The C parser only
 parses global scopes, so this won't work for structs or objects declared
 in local scope.
 
@@ -1191,8 +1191,8 @@ and the editor window's popup menu:
 * Find usage
 * Find in files
 * Replace
-* Go to tag definition
-* Go to tag declaration
+* Go to symbol definition
+* Go to symbol declaration
 * Go to line
 
 See also `Search`_ preferences.
@@ -1415,27 +1415,27 @@ documents. *Replace All In Selection* will replace all matching text
 in the current selection of the current document.
 
 
-Go to tag definition
-^^^^^^^^^^^^^^^^^^^^
+Go to symbol definition
+^^^^^^^^^^^^^^^^^^^^^^^
 
-If the current word or selection is the name of a tag definition
-(e.g. a function name) and the file containing the tag definition is
+If the current word or selection is the name of a symbol definition
+(e.g. a function name) and the file containing the symbol definition is
 open, this command will switch to that file and go to the
 corresponding line number. The current word is either the word
 nearest the edit cursor, or the word underneath the popup menu click
 position when the popup menu is used.
 
 .. note::
-    If the corresponding tag is on the current line, Geany will first
-    look for a tag declaration instead, as this is more useful.
-    Likewise *Go to tag declaration* will search for a tag definition
+    If the corresponding symbol is on the current line, Geany will first
+    look for a symbol declaration instead, as this is more useful.
+    Likewise *Go to symbol declaration* will search for a symbol definition
     first in this case also.
 
 
-Go to tag declaration
-^^^^^^^^^^^^^^^^^^^^^
+Go to symbol declaration
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-Like *Go to tag definition*, but for a forward declaration such as a
+Like *Go to symbol definition*, but for a forward declaration such as a
 C function prototype or ``extern`` declaration instead of a function
 body.
 
@@ -1596,46 +1596,43 @@ translations, e.g.::
     key[de]=Hallo
     key[fr_FR]=Bonjour
 
-Tags
-----
+Symbols and tags files
+----------------------
 
-Tags are information that relates symbols in a program with the
-source file location of the declaration and definition.
+Upon opening, files of supported filetypes are parsed to extract the symbol
+information (aka "workspace symbols"). You can also have Geany automatically
+load external files containing the symbol information (aka "global
+tags files") upon startup, or manually using *Tools --> Load Tags File*.
 
-Geany has built-in functionality for generating tag information (aka
-"workspace tags") for supported filetypes when you open a file.  You
-can also have Geany automatically load external tag files (aka "global
-tags files") upon startup, or manually using *Tools --> Load Tags*.
-
-Geany uses its own tag file format, similar to what ``ctags`` uses
+Geany uses its own tags file format, similar to what ``ctags`` uses
 (but is incompatible with ctags). You use Geany to generate global
 tags files, as described below.
 
 
-Workspace tags
-^^^^^^^^^^^^^^
+Workspace symbols
+^^^^^^^^^^^^^^^^^
 
-Tags for each document are parsed whenever a file is loaded, saved or
+Each document is parsed for symbols whenever a file is loaded, saved or
 modified (see *Symbol list update frequency* preference in the `Editor
 Completions preferences`_). These are shown in the Symbol list in the
-Sidebar. These tags are also used for autocompletion of symbols and calltips
+Sidebar. These symbols are also used for autocompletion and calltips
 for all documents open in the current session that have the same filetype.
 
-The *Go to Tag* commands can be used with all workspace tags. See
-`Go to tag definition`_.
+The *Go to Symbol* commands can be used with all workspace symbols. See
+`Go to symbol definition`_.
 
 
-Global tags
-^^^^^^^^^^^
+Global tags files
+^^^^^^^^^^^^^^^^^
 
-Global tags are used to provide autocompletion of symbols and calltips
-without having to open the corresponding source files. This is intended
+Global tags files are used to provide symbols for autocompletion and calltips
+without having to open the source files containing these symbols. This is intended
 for library APIs, as the tags file only has to be updated when you upgrade
 the library.
 
 You can load a custom global tags file in two ways:
 
-* Using the *Load Tags* command in the Tools menu.
+* Using the *Load Tags File* command in the Tools menu.
 * By moving or symlinking tags files to the ``tags`` subdirectory of
   one of the `configuration file paths`_ before starting Geany.
 
@@ -1645,15 +1642,16 @@ the format::
     name.lang_ext.tags
 
 *lang_ext* is one of the extensions set for the filetype associated
-with the tags. See the section called `Filetype extensions`_ for
+with the tags parser. See the section called `Filetype extensions`_ for
 more information.
 
 
 Default global tags files
 `````````````````````````
 
-For some languages, a list of global tags is loaded when the
-corresponding filetype is first used. Currently these are for:
+Some global tags files are distributed with Geany and will be loaded
+automatically when the corresponding filetype is first used. Currently
+this includes global tags files for these languages:
 
 * C
 * Pascal
@@ -1681,32 +1679,32 @@ might fail.
 
 
 The Tagmanager format is a bit more complex and is used for files
-created by the ``geany -g`` command. There is one tag per line.
-Different tag attributes like the return value or the argument list
+created by the ``geany -g`` command. There is one symbol per line.
+Different symbol attributes like the return value or the argument list
 are separated with different characters indicating the type of the
-following argument.  This is the more complete and recommended tag
+following argument.  This is the more complete and recommended tags file
 format.
 
 Pipe-separated format
 *********************
 The Pipe-separated format is easier to read and write.
-There is one tag per line and different tag attributes are separated
+There is one symbol per line and different symbol attributes are separated
 by the pipe character (``|``). A line looks like::
 
     basename|string|(string path [, string suffix])|
 
-| The first field is the tag name (usually a function name).
+| The first field is the symbol name (usually a function name).
 | The second field is the type of the return value.
-| The third field is the argument list for this tag.
-| The fourth field is the description for this tag but
+| The third field is the argument list for this symbol.
+| The fourth field is the description for this symbol but
   currently unused and should be left empty.
 
-Except for the first field (tag name), all other field can be left
+Except for the first field (symbol name), all other field can be left
 empty but the pipe separator must appear for them.
 
-You can easily write your own global tag files using this format.
+You can easily write your own global tags files using this format.
 Just save them in your tags directory, as described earlier in the
-section `Global tags`_.
+section `Global tags files`_.
 
 CTags format
 ************
@@ -1724,12 +1722,12 @@ Generating a global tags file
 You can generate your own global tags files by parsing a list of
 source files. The command is::
 
-    geany -g [-P] <Tag File> <File list>
+    geany -g [-P] <Tags File> <File list>
 
-* Tag File filename should be in the format described earlier --
-  see the section called `Global tags`_.
+* Tags File filename should be in the format described earlier --
+  see the section called `Global tags files`_.
 * File list is a list of filenames, each with a full path (unless
-  you are generating C/C++ tags and have set the CFLAGS environment
+  you are generating C/C++ tags files and have set the CFLAGS environment
   variable appropriately).
 * ``-P`` or ``--no-preprocessing`` disables using the C pre-processor
   to process ``#include`` directives for C/C++ source files. Use this
@@ -1742,17 +1740,17 @@ Example for the wxD library for the D programming language::
     geany -g wxd.d.tags /home/username/wxd/wx/*.d
 
 
-Generating C/C++ tag files
-**************************
+Generating C/C++ tags files
+***************************
 You may need to first setup the `C ignore.tags`_ file.
 
-For C/C++ tag files gcc is required by default, so that header files
+For C/C++ tags files gcc is required by default, so that header files
 can be preprocessed to include any other headers they depend upon. If
 you do not want this, use the ``-P`` option described above.
 
 For preprocessing, the environment variable CFLAGS should be set with
 appropriate ``-I/path`` include paths. The following example works with
-the bash shell, generating tags for the GnomeUI library::
+the bash shell, generating a tags file for the GnomeUI library::
 
     CFLAGS=`pkg-config --cflags libgnomeui-2.0` geany -g gnomeui.c.tags \
     /usr/include/libgnomeui-2.0/gnome.h
@@ -1761,8 +1759,8 @@ You can adapt this command to use CFLAGS and header files appropriate
 for whichever libraries you want.
 
 
-Generating tag files on Windows
-*******************************
+Generating tags files on Windows
+********************************
 This works basically the same as on other platforms::
 
     "c:\program files\geany\bin\geany" -g c:\mytags.php.tags c:\code\somefile.php
@@ -1771,12 +1769,12 @@ This works basically the same as on other platforms::
 C ignore.tags
 ^^^^^^^^^^^^^
 
-You can ignore certain tags for C-based languages if they would lead
+You can ignore certain symbols for C-based languages if they would lead
 to wrong parsing of the code. Use the *Tools->Configuration
 Files->ignore.tags* menu item to open the user ``ignore.tags`` file.
 See also `Configuration file paths`_.
 
-List all tag names you want to ignore in this file, separated by spaces
+List all symbol names you want to ignore in this file, separated by spaces
 and/or newlines.
 
 Example::
@@ -1790,7 +1788,7 @@ This will parse code like:
 ``gchar **utils_strv_new(const gchar *first, ...)
 G_GNUC_NULL_TERMINATED;``
 
-More detailed information about ignore tags usage from the Exuberant Ctags
+More detailed information about ignore.tags usage from the Exuberant Ctags
 manual page:
 
     Specifies a list of identifiers which are to be specially handled
@@ -2222,7 +2220,7 @@ Autocomplete symbols
 Autocomplete all words in document
     When you start to type a word, Geany will search the whole document for
     words starting with the typed part to complete it, assuming there
-    are no tag names to show.
+    are no symbol names to show.
 
 Drop rest of word on completion
     Remove any word part to the right of the cursor when choosing a
@@ -2241,7 +2239,7 @@ Max. symbol name suggestions
 Symbol list update frequency
     The minimum delay (in milliseconds) between two symbol list updates.
 
-    This option determines how frequently the tag list is updated for the
+    This option determines how frequently the symbol list is updated for the
     current document. The smaller the delay, the more up-to-date the symbol
     list (and then the completions); but rebuilding the symbol list has a
     cost in performance, especially with large files.
@@ -3420,9 +3418,9 @@ Scroll up by one line           Alt-Up                    Scrolls the view.
 Scroll down by one line         Alt-Down                  Scrolls the view.
 
 Complete word                   Ctrl-Space                Shows the autocompletion list. If already showing
-                                                          tag completion, it shows document word completion
+                                                          symbol completion, it shows document word completion
                                                           instead, even if it is not enabled for automatic
-                                                          completion. Likewise if no tag suggestions are
+                                                          completion. Likewise if no symbol suggestions are
                                                           available, it shows document word completion.
 
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
@@ -3656,11 +3654,11 @@ Goto next marker                Ctrl-.                    Goto the next marker i
 
 Goto previous marker            Ctrl-,                    Goto the previous marker in the current document.
 
-Go to tag definition            Ctrl-T                    Jump to the definition of the current word or
-                                                          selection. See `Go to tag definition`_.
+Go to symbol definition         Ctrl-T                    Jump to the definition of the current word or
+                                                          selection. See `Go to symbol definition`_.
 
-Go to tag declaration           Ctrl-Shift-T              Jump to the declaration of the current word or
-                                                          selection. See `Go to tag declaration`_.
+Go to symbol declaration        Ctrl-Shift-T              Jump to the declaration of the current word or
+                                                          selection. See `Go to symbol declaration`_.
 
 Go to Start of Line             Home                      Move the caret to the start of the line.
                                                           Behaves differently if smart_home_key_ is set.
@@ -3784,7 +3782,7 @@ Fold all                                                  Folds all contractible
 
 Unfold all                                                Unfolds all contracted code blocks.
 
-Reload symbol list                   Ctrl-Shift-R         Reloads the tag/symbol list.
+Reload symbol list                   Ctrl-Shift-R         Reloads the symbol list.
 
 Toggle Line wrapping                                      Enables or disables wrapping of long lines.
 
@@ -4031,7 +4029,7 @@ support for the following has been implemented:
 * `Filetype group membership`_.
 * Reading filetype settings in the ``[settings]`` section, including:
     * Using an existing syntax highlighting lexer (`lexer_filetype`_ key).
-    * Using an existing tag parser (`tag_parser`_ key).
+    * Using an existing tags parser (`tag_parser`_ key).
 * Build commands (``[build-menu]`` section).
 * Loading global tags files (sharing the ``tag_parser`` filetype's namespace).
 
@@ -4264,12 +4262,12 @@ lexer_filetype
 symbol_list_sort_mode
     What the default symbol list sort order should be.
 
-    =====   =====================================
+    =====   ========================================
     Value   Meaning
-    =====   =====================================
-    0       Sort tags by name
-    1       Sort tags by appearance (line number)
-    =====   =====================================
+    =====   ========================================
+    0       Sort symbols by name
+    1       Sort symbols by appearance (line number)
+    =====   ========================================
 
 .. _xml_indent_tags:
 
@@ -4589,7 +4587,7 @@ translucency
     *Example:* ``translucency=256;256;false;false``
 
 marker_line
-    The style for a highlighted line (e.g when using Goto line or goto tag).
+    The style for a highlighted line (e.g when using Goto line or goto symbol).
     The foreground color (first argument) is only used when the Markers margin
     is enabled (see View menu).
 
@@ -5332,7 +5330,7 @@ Editor
 * Alt-scroll wheel moves up/down a page.
 * Ctrl-scroll wheel zooms in/out.
 * Shift-scroll wheel scrolls 8 characters right/left.
-* Ctrl-click on a word in a document to perform *Go to Tag Definition*.
+* Ctrl-click on a word in a document to perform *Go to Symbol Definition*.
 * Ctrl-click on a bracket/brace to perform *Go to Matching Brace*.
 
 Interface

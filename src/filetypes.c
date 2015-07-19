@@ -951,7 +951,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
 		if (ft->lang < 0)
-			geany_debug("Cannot find tag parser '%s' for custom filetype '%s'.", result, ft->name);
+			geany_debug("Cannot find tags parser '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
 

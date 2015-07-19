@@ -498,10 +498,10 @@ static void init_default_kb(void)
 		_("Go to Pre_vious Marker"), "go_to_previous_marker1");
 	add_kb(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
 		GDK_t, GEANY_PRIMARY_MOD_MASK, "popup_gototagdefinition",
-		_("Go to Tag Definition"), "goto_tag_definition1");
+		_("Go to Symbol Definition"), "goto_tag_definition1");
 	add_kb(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
 		GDK_t, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "popup_gototagdeclaration",
-		_("Go to Tag Declaration"), "goto_tag_declaration1");
+		_("Go to Symbol Declaration"), "goto_tag_declaration1");
 	add_kb(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_LINEEND, NULL,
