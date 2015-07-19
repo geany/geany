@@ -574,6 +574,33 @@ order. It is not alphabetical as shown in the documents list
 See the `Notebook tab keybindings`_ section for useful
 shortcuts including for Most-Recently-Used document switching.
 
+Document list views
+^^^^^^^^^^^^^^^^^^^
+
+There are three different ways to display documents on sidebar if *Show 
+documents list* is active. To switch between views press the right mouse button 
+on documents list and select one of those radio buttons:
+
+Documents Only
+    Show only ordered document's file names.
+
+    .. image:: ./images/sidebar_documents_only.png
+
+Show Paths
+    Show opened documents as two-level tree in which first level is a full 
+    directory path to document and second level is a file name.
+
+    .. image:: ./images/sidebar_show_paths.png
+
+Show Tree
+    Show opened documents as tree similar to directory tree, but it shows only 
+    directories that contains opened files. Directories that doesn't contain 
+    files are shown as paths (similar to *Show Paths* mode). Home directory 
+    always shortened to ``~``. If there is an active project, it makes a tree 
+    of project documents inside project name.
+
+    .. image:: ./images/sidebar_show_tree.png
+
 Cloning documents
 ^^^^^^^^^^^^^^^^^
 The `Document->Clone` menu item copies the current document's text,
