@@ -297,7 +297,7 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	bi.lpszTitle = w_title;
 	bi.lpfn = BrowseCallbackProc;
 	bi.lParam = (LPARAM) get_dir_for_path(initial_dir);
-	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
+	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT | BIF_USENEWUI;
 
 	pidl = SHBrowseForFolderW(&bi);
 
@@ -340,11 +340,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
 	of.lpstrFilter = get_filters(project_file_filter);
 
@@ -356,7 +352,8 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY | OFN_ENABLEHOOK;
+	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	if (! allow_new_file)
 		of.Flags |= OFN_FILEMUSTEXIST;
@@ -403,11 +400,7 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 	of.lpstrFilter = get_file_filters();
 
@@ -419,7 +412,8 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	of.lpfnHook = win32_dialog_explorer_hook_proc;
 
 	retval = GetOpenFileNameW(&of);
@@ -497,11 +491,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFilter = get_file_filter_all_files();
@@ -513,7 +503,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetSaveFileNameW(&of);
 
@@ -554,11 +544,7 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFile = w_file;
@@ -566,7 +552,7 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
@@ -671,11 +657,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 
 	/* initialize file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(ui_widgets.prefs_dialog));
 
 	of.lpstrFilter = get_filters(FALSE);
@@ -689,7 +671,8 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = L"exe";
-	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK;
+	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
 	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
