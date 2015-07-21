@@ -1102,12 +1102,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			 * if they were showing */
 			request_reshowing_calltip(nt);
 			break;
-
-#ifdef GEANY_DEBUG
-		case SCN_STYLENEEDED:
-			geany_debug("style");
-			break;
-#endif
 		case SCN_NEEDSHOWN:
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
 			break;
