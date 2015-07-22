@@ -1631,9 +1631,9 @@ guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 /* Get project or default startup directory (if set), or NULL. */
 const gchar *utils_get_default_dir_utf8(void)
 {
-	if (app->project && !EMPTY(app->project->base_path))
+	if (app->project)
 	{
-		return app->project->base_path;
+		return project_get_base_path();
 	}
 
 	if (!EMPTY(prefs.default_open_path))
