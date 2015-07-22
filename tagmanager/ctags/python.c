@@ -239,25 +239,35 @@ static const char *skipEverything (const char *cp)
 	int match;
 	for (; *cp; cp++)
 	{
+		if (*cp == '#')
+			return strchr(cp, '\0');
+
 		match = 0;
-		if (*cp == '"' || *cp == '\'' || *cp == '#')
+		if (*cp == '"' || *cp == '\'')
 			match = 1;
 
 		/* these checks find unicode, binary (Python 3) and raw strings */
-		if (!match && (
-			!strncasecmp(cp, "u'", 2) || !strncasecmp(cp, "u\"", 2) ||
-			!strncasecmp(cp, "r'", 2) || !strncasecmp(cp, "r\"", 2) ||
-			!strncasecmp(cp, "b'", 2) || !strncasecmp(cp, "b\"", 2)))
+		if (!match)
 		{
-			match = 1;
-			cp += 1;
-		}
-		if (!match && (
-			!strncasecmp(cp, "ur'", 3) || !strncasecmp(cp, "ur\"", 3) ||
-			!strncasecmp(cp, "br'", 3) || !strncasecmp(cp, "br\"", 3)))
-		{
-			match = 1;
-			cp += 2;
+			boolean r_first = (*cp == 'r' || *cp == 'R');
+
+			/* "r" | "R" | "u" | "U" | "b" | "B" */
+			if (r_first || *cp == 'u' || *cp == 'U' ||  *cp == 'b' || *cp == 'B')
+			{
+				unsigned int i = 1;
+
+				/*  r_first -> "rb" | "rB" | "Rb" | "RB"
+				   !r_first -> "ur" | "UR" | "Ur" | "uR" | "br" | "Br" | "bR" | "BR" */
+				if (( r_first && (cp[i] == 'b' || cp[i] == 'B')) ||
+					(!r_first && (cp[i] == 'r' || cp[i] == 'R')))
+					i++;
+
+				if (cp[i] == '\'' || cp[i] == '"')
+				{
+					match = 1;
+					cp += i;
+				}
+			}
 		}
 		if (match)
 		{
@@ -463,10 +473,8 @@ static boolean constructParentString(NestingLevels *nls, int indent,
 	return is_class;
 }
 
-/* Check whether parent's indentation level is higher than the current level and
- * if so, remove it.
- */
-static void checkParent(NestingLevels *nls, int indent, vString *parent)
+/* Check indentation level and truncate nesting levels accordingly */
+static void checkIndent(NestingLevels *nls, int indent)
 {
 	int i;
 	NestingLevel *n;
@@ -474,14 +482,10 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 	for (i = 0; i < nls->n; i++)
 	{
 		n = nls->levels + i;
-		/* is there a better way to compare two vStrings? */
-		if (n && strcmp(vStringValue(parent), vStringValue(n->name)) == 0)
+		if (n && indent <= n->indentation)
 		{
-			if (indent <= n->indentation)
-			{
-				/* remove this level by clearing its name */
-				vStringClear(n->name);
-			}
+			/* truncate levels */
+			nls->n = i;
 			break;
 		}
 	}
@@ -749,7 +753,7 @@ static void findPythonTags (void)
 			continue;
 		}
 		
-		checkParent(nesting_levels, indent, parent);
+		checkIndent(nesting_levels, indent);
 
 		/* Find global and class variables */
 		variable = findVariable(line);

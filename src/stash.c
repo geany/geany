@@ -678,12 +678,25 @@ static void handle_widget_property(GtkWidget *widget, StashPref *entry,
 	switch (action)
 	{
 		case PREF_DISPLAY:
-			g_object_set(object, name, entry->setting, NULL);
+			if (entry->setting_type == G_TYPE_BOOLEAN)
+				g_object_set(object, name, *(gboolean*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_INT)
+				g_object_set(object, name, *(gint*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_STRING)
+				g_object_set(object, name, *(gchararray*)entry->setting, NULL);
+			else if (entry->setting_type == G_TYPE_STRV)
+				g_object_set(object, name, *(gchararray**)entry->setting, NULL);
+			else
+			{
+				g_warning("Unhandled type %s for %s in %s()!", g_type_name(entry->setting_type),
+						entry->key_name, G_STRFUNC);
+			}
 			break;
 		case PREF_UPDATE:
 			if (entry->setting_type == G_TYPE_STRING)
-				g_free(entry->setting);
-			/* TODO: Which other types need freeing here? */
+				g_free(*(gchararray*)entry->setting);
+			else if (entry->setting_type == G_TYPE_STRV)
+				g_strfreev(*(gchararray**)entry->setting);
 
 			g_object_get(object, name, entry->setting, NULL);
 			break;
@@ -966,7 +979,7 @@ struct StashTreeValue
 {
 	const gchar *group_name;
 	StashPref *pref;
-	union
+	struct
 	{
 		gchararray tree_string;
 		gint tree_int;
@@ -1062,8 +1075,8 @@ static gboolean stash_tree_discard_value(GtkTreeModel *model, GtkTreePath *path,
 	StashTreeValue *value;
 
 	gtk_tree_model_get(model, iter, STASH_TREE_VALUE, &value, -1);
-	if (value->pref->setting_type == G_TYPE_STRING)
-		g_free(value->data.tree_string);
+	/* don't access value->pref as it might already have been freed */
+	g_free(value->data.tree_string);
 	g_free(value);
 
 	return FALSE;

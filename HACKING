@@ -98,7 +98,7 @@ See `Committing`_ for more information.
 
 Windows tools
 -------------
-* Git: http://git-scm.com/ and http://code.google.com/p/msysgit/
+* Git: http://git-scm.com/ and http://msysgit.github.io/
 * diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
 
 See also the 'Building on Windows' document on the website.
@@ -498,7 +498,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-http://geany.org/manual/geany.html#custom-filetypes. Don't forget to
+http://geany.org/manual/index.html#custom-filetypes. Don't forget to
 update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
 .. warning::

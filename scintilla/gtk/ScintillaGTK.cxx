@@ -657,7 +657,7 @@ public:
 	gunichar *uniStr;
 	PangoScript pscript;
 
-	PreEditString(GtkIMContext *im_context) {
+	explicit PreEditString(GtkIMContext *im_context) {
 		gtk_im_context_get_preedit_string(im_context, &str, &attrs, &cursor_pos);
 		validUTF8 = g_utf8_validate(str, strlen(str), NULL);
 		uniStr = g_utf8_to_ucs4_fast(str, strlen(str), &uniStrLen);

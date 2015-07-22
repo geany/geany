@@ -39,9 +39,15 @@
  * This module does not depend on Geany when compiled for testing (-DSPAWN_TEST).
  */
 
+/** @file spawn.h
+ * Portable and convenient process spawning and communication.
+ */
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#include "win32defines.h" /* should always come before any system headers */
 
 #include <errno.h>
 #include <string.h>
@@ -59,6 +65,7 @@
 
 #ifdef SPAWN_TEST
 # define _
+# define GEANY_API_SYMBOL
 #else
 # include "support.h"
 #endif
@@ -74,35 +81,17 @@
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
 
 
-/**
+/*
  *  Checks whether a command line is syntactically valid and extracts the program name from it.
  *
- *  All OS:
- *     - any leading spaces, tabs and new lines are skipped
- *     - an empty command is invalid
- *  Unix:
- *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
- *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
- *  Windows:
- *     - leading carriage returns are skipped too
- *     - a quoted program name must be entirely inside the quotes. No "C:\Foo\Bar".pdf or
- *	   "C:\Foo\Bar".bat, which would be executed by Windows as C:\Foo\Bar.exe
- *     - an unquoted program name may not contain spaces. Foo Bar Qux will not be considered
- *       "Foo Bar.exe" Qux or "Foo Bar Qux.exe", depending on what executables exist, as
- *       Windows normally does.
- *     - the program name must be separated from the arguments by at least one space or tab
- *     - the standard Windows quoting and escaping rules are used: double quote is escaped with
- *       backslash, and any literal backslashes before a double quote must be duplicated.
+ *  See @c spawn_check_command() for details.
  *
  *  @param command_line the command line to check and get the program name from.
  *  @param error return location for error.
  *
  *  @return allocated string with the program name on success, @c NULL on error.
- *
- *  @since 1.25
- **/
-GEANY_API_SYMBOL
-gchar *spawn_get_program_name(const gchar *command_line, GError **error)
+ */
+static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 {
 	gchar *program;
 
@@ -117,8 +106,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (!*command_line)
 	{
-		/* TL note: from glib */
 		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
+			/* TL note: from glib */
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
 	}
@@ -132,8 +121,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 		/* Windows allows "foo.exe, but we may have extra arguments */
 		if ((s = strchr(command_line, '"')) == NULL)
 		{
-			/* TL note: from glib */
 			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+				/* TL note: from glib */
 				_("Text ended before matching quote was found for %c."
 				  " (The text was '%s')"), '"', command_line);
 			return FALSE;
@@ -178,8 +167,8 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (open_quote)
 	{
-		/* TL note: from glib */
 		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			/* TL note: from glib */
 			_("Text ended before matching quote was found for %c."
 			  " (The text was '%s')"), '"', command_line);
 		g_free(program);
@@ -204,7 +193,24 @@ gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 /**
  *  Checks whether a command line is valid.
  *
- *  Checks if @a command_line is syntactically valid using @c spawn_get_program_name().
+ *  Checks if @a command_line is syntactically valid.
+ *
+ *  All OS:
+ *     - any leading spaces, tabs and new lines are skipped
+ *     - an empty command is invalid
+ *  Unix:
+ *     - the standard shell quoting and escaping rules are used, see @c g_shell_parse_argv()
+ *     - as a consequence, an unqouted # at the start of an argument comments to the end of line
+ *  Windows:
+ *     - leading carriage returns are skipped too
+ *     - a quoted program name must be entirely inside the quotes. No "C:\Foo\Bar".pdf or
+ *       "C:\Foo\Bar".bat, which would be executed by Windows as C:\Foo\Bar.exe
+ *     - an unquoted program name may not contain spaces. Foo Bar Qux will not be considered
+ *       "Foo Bar.exe" Qux or "Foo Bar Qux.exe", depending on what executables exist, as
+ *       Windows normally does.
+ *     - the program name must be separated from the arguments by at least one space or tab
+ *     - the standard Windows quoting and escaping rules are used: double quote is escaped with
+ *       backslash, and any literal backslashes before a double quote must be duplicated.
  *
  *  If @a execute is TRUE, also checks, using @c g_find_program_in_path(), if the program
  *  specified in @a command_line exists and is executable.
@@ -360,7 +366,11 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	{
 		failed = NULL;
 		CloseHandle(process.hThread);  /* we don't need this */
-		*hprocess = process.hProcess;
+
+		if (hprocess)
+			*hprocess = process.hProcess;
+		else
+			CloseHandle(process.hProcess);
 	}
 
 leave:
@@ -444,16 +454,10 @@ static void spawn_append_argument(GString *command, const char *text)
 		g_string_append_c(command, '"');
 	}
 }
-
-
-static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED gpointer data)
-{
-	g_spawn_close_pid(pid);
-}
 #endif /* G_OS_WIN32 */
 
 
-/**
+/*
  *  Executes a child program asynchronously and setups pipes.
  *
  *  This is the low-level spawning function. Please use @c spawn_with_callbacks() unless
@@ -478,11 +482,8 @@ static void spawn_close_pid(GPid pid, G_GNUC_UNUSED gint status, G_GNUC_UNUSED g
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
- *
- *  @since 1.25
- **/
-GEANY_API_SYMBOL
-gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *command_line,
+ */
+static gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *command_line,
 	gchar **argv, gchar **envp, GPid *child_pid, gint *stdin_fd, gint *stdout_fd,
 	gint *stderr_fd, GError **error)
 {
@@ -491,7 +492,6 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 #ifdef G_OS_WIN32
 	GString *command;
 	GArray *environment;
-	GPid pid;
 	gchar *failure;
 
 	if (command_line)
@@ -539,8 +539,7 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 	}
 
 	failure = spawn_create_process_with_pipes(command->str, working_directory,
-		envp ? environment->data : NULL, child_pid ? child_pid : &pid,
-		stdin_fd, stdout_fd, stderr_fd);
+		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
 
 	g_string_free(command, TRUE);
 	g_array_free(environment, TRUE);
@@ -551,8 +550,6 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 		g_free(failure);
 		return FALSE;
 	}
-	else if (!child_pid)
-		g_child_watch_add(pid, spawn_close_pid, NULL);
 
 	return TRUE;
 #else  /* G_OS_WIN32 */
@@ -596,8 +593,19 @@ gboolean spawn_async_with_pipes(const gchar *working_directory, const gchar *com
 /**
  *  Executes a child asynchronously.
  *
- *  See @c spawn_async_with_pipes() for a full description; this function simply calls
- *  @c g_spawn_async_with_pipes() without any pipes.
+ *  A command line or an argument vector must be passed. If both are present, the argument
+ *  vector is appended to the command line. An empty command line is not allowed.
+ *
+ *  If a @a child_pid is passed, it's your responsibility to invoke @c g_spawn_close_pid().
+ *
+ *  @param working_directory child's current working directory, or @c NULL.
+ *  @param command_line child program and arguments, or @c NULL.
+ *  @param argv child's argument vector, or @c NULL.
+ *  @param envp child's environment, or @c NULL.
+ *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param error return location for error.
+ *
+ *  @return @c TRUE on success, @c FALSE on error.
  *
  *  @since 1.25
  **/
@@ -1047,14 +1055,7 @@ static void spawn_append_gstring_cb(GString *string, GIOCondition condition, gpo
 }
 
 
-/**
- *  Convinience @c GChildWatchFunc callback that copies the child exit status into a gint
- *  pointed by @a exit_status.
- *
- *  @since 1.25
- **/
-GEANY_API_SYMBOL
-void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit_status)
+static void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpointer exit_status)
 {
 	*(gint *) exit_status = status;
 }
@@ -1168,8 +1169,8 @@ static void print_status(gint status)
 {
 	fputs("finished, ", stderr);
 
-	if (WIFEXITED(status))
-		fprintf(stderr, "exit code %d\n", WEXITSTATUS(status));
+	if (SPAWN_WIFEXITED(status))
+		fprintf(stderr, "exit code %d\n", SPAWN_WEXITSTATUS(status));
 	else
 		fputs("abnormal termination\n", stderr);
 }

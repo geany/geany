@@ -260,6 +260,7 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 		lev = 0;
 	} else if (strcmp(s, "associate") == 0 || strcmp(s, "block") == 0
 	        || strcmp(s, "blockdata") == 0 || strcmp(s, "select") == 0
+	        || strcmp(s, "selecttype") == 0 || strcmp(s, "selectcase") == 0
 	        || strcmp(s, "do") == 0 || strcmp(s, "enum") ==0
 	        || strcmp(s, "function") == 0 || strcmp(s, "interface") == 0
 	        || strcmp(s, "module") == 0 || strcmp(s, "program") == 0

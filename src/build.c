@@ -1042,7 +1042,7 @@ static void show_build_result_message(gboolean failure)
 
 static void build_exit_cb(GPid child_pid, gint status, gpointer user_data)
 {
-	show_build_result_message(!WIFEXITED(status) || WEXITSTATUS(status) != EXIT_SUCCESS);
+	show_build_result_message(!SPAWN_WIFEXITED(status) || SPAWN_WEXITSTATUS(status) != EXIT_SUCCESS);
 	utils_beep();
 
 	build_info.pid = 0;
@@ -1088,9 +1088,9 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
 #else
-	escaped_dir = g_strescape(working_dir, NULL);
+	escaped_dir = g_shell_quote(working_dir);
 	str = g_strdup_printf(
-		"#!/bin/sh\n\nrm $0\n\ncd \'%s\'\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
+		"#!/bin/sh\n\nrm $0\n\ncd %s\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
 		\n\n%s\n", escaped_dir, cmd, (autoclose) ? "" :
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
 			"dash\ndummy_var=\"\"\nread dummy_var");
@@ -1670,14 +1670,28 @@ typedef struct RowWidgets
 	gboolean used_dst;
 } RowWidgets;
 
-static GdkColor *insensitive_color;
+#if GTK_CHECK_VERSION(3,0,0)
+typedef GdkRGBA InsensitiveColor;
+#else
+typedef GdkColor InsensitiveColor;
+#endif
+static InsensitiveColor insensitive_color;
 
-static void set_row_color(RowWidgets *r, GdkColor *color )
+static void set_row_color(RowWidgets *r, InsensitiveColor *color)
 {
 	enum GeanyBuildCmdEntries i;
 
 	for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)
+	{
+		if (i == GEANY_BC_LABEL)
+			continue;
+
+#if GTK_CHECK_VERSION(3,0,0)
+		gtk_widget_override_color(r->entries[i], GTK_STATE_FLAG_NORMAL, color);
+#else
 		gtk_widget_modify_text(r->entries[i], GTK_STATE_NORMAL, color);
+#endif
+	}
 }
 
 
@@ -1716,7 +1730,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 		}
 	}
 	r->used_dst = FALSE;
-	set_row_color(r, insensitive_color);
+	set_row_color(r, &insensitive_color);
 	r->cleared = TRUE;
 }
 
@@ -1795,7 +1809,11 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	text = g_strdup_printf("%d.", cmd + 1);
 	label = gtk_label_new(text);
 	g_free(text);
-	insensitive_color = &(gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE]);
+#if GTK_CHECK_VERSION(3,0,0)
+	gtk_style_context_get_color(gtk_widget_get_style_context(label), GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
+#else
+	insensitive_color = gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE];
+#endif
 	gtk_table_attach(table, label, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
 	roww = g_new0(RowWidgets, 1);
@@ -1848,7 +1866,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 		set_build_command_entry_text(roww->entries[i], str);
 	}
 	if (bc != NULL && (dst > src))
-		set_row_color(roww, insensitive_color);
+		set_row_color(roww, &insensitive_color);
 	if (bc != NULL && (src > dst || (grp == GEANY_GBG_FT && (doc == NULL || doc->file_type == NULL))))
 	{
 		for (i = 0; i < GEANY_BC_CMDENTRIES_COUNT; i++)

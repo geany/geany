@@ -884,7 +884,8 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 		{
 			/* Adding a fold point */
 			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
-			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+			if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0))
+				expand(sci, &line, TRUE, FALSE, 0, levelPrev);
 		}
 	}
 	else if (levelPrev & SC_FOLDLEVELHEADERFLAG)
@@ -893,22 +894,25 @@ static void fold_changed(ScintillaObject *sci, gint line, gint levelNow, gint le
 		{	/* Removing the fold from one that has been contracted so should expand
 			 * otherwise lines are left invisible with no way to make them visible */
 			SSM(sci, SCI_SETFOLDEXPANDED, line, 1);
-			expand(sci, &line, TRUE, FALSE, 0, levelPrev);
+			if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0))
+				expand(sci, &line, TRUE, FALSE, 0, levelPrev);
 		}
 	}
 	if (! (levelNow & SC_FOLDLEVELWHITEFLAG) &&
 			((levelPrev & SC_FOLDLEVELNUMBERMASK) > (levelNow & SC_FOLDLEVELNUMBERMASK)))
 	{
-		/* See if should still be hidden */
-		gint parentLine = sci_get_fold_parent(sci, line);
-		if (parentLine < 0)
-		{
-			SSM(sci, SCI_SHOWLINES, line, line);
-		}
-		else if (sci_get_fold_expanded(sci, parentLine) &&
-				sci_get_line_is_visible(sci, parentLine))
-		{
-			SSM(sci, SCI_SHOWLINES, line, line);
+		if (!SSM(sci, SCI_GETALLLINESVISIBLE, 0, 0)) {
+			/* See if should still be hidden */
+			gint parentLine = sci_get_fold_parent(sci, line);
+			if (parentLine < 0)
+			{
+				SSM(sci, SCI_SHOWLINES, line, line);
+			}
+			else if (sci_get_fold_expanded(sci, parentLine) &&
+					sci_get_line_is_visible(sci, parentLine))
+			{
+				SSM(sci, SCI_SHOWLINES, line, line);
+			}
 		}
 	}
 }
@@ -1098,12 +1102,6 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			 * if they were showing */
 			request_reshowing_calltip(nt);
 			break;
-
-#ifdef GEANY_DEBUG
-		case SCN_STYLENEEDED:
-			geany_debug("style");
-			break;
-#endif
 		case SCN_NEEDSHOWN:
 			ensure_range_visible(sci, nt->position, nt->position + nt->length, FALSE);
 			break;
@@ -1790,7 +1788,7 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 	if (! tag->arglist)
 		return FALSE;
 
-	if (ft_id != GEANY_FILETYPES_PASCAL)
+	if (ft_id != GEANY_FILETYPES_PASCAL && ft_id != GEANY_FILETYPES_GO)
 	{	/* usual calltips: "retval tagname (arglist)" */
 		if (tag->var_type)
 		{
@@ -1815,14 +1813,15 @@ static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id
 		g_string_append(str, tag->arglist);
 	}
 	else
-	{	/* special case Pascal calltips: "tagname (arglist) : retval" */
+	{	/* special case Pascal/Go calltips: "tagname (arglist) : retval"
+		 * (with ':' omitted for Go) */
 		g_string_append(str, tag->name);
 		g_string_append_c(str, ' ');
 		g_string_append(str, tag->arglist);
 
 		if (!EMPTY(tag->var_type))
 		{
-			g_string_append(str, " : ");
+			g_string_append(str, ft_id == GEANY_FILETYPES_PASCAL ? " : " : " ");
 			g_string_append(str, tag->var_type);
 		}
 	}

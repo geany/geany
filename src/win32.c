@@ -27,6 +27,8 @@
 # include "config.h"
 #endif
 
+#include "win32defines.h" /* should always come before any system headers */
+
 #include "win32.h"
 
 #ifdef G_OS_WIN32
@@ -47,8 +49,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <commdlg.h>
 #include <shellapi.h>
@@ -982,14 +982,14 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 	gchar *path = NULL;
 	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
 	HWND hWnd = NULL;
-	
+
 	if (main_widgets.window != NULL)
 	{
 		GdkWindow *window = gtk_widget_get_window(main_widgets.window);
 		if (window != NULL)
 			hWnd = GDK_WINDOW_HWND(window);
 	}
-	
+
 	resolve_link(hWnd, wfilename, &path);
 	g_free(wfilename);
 

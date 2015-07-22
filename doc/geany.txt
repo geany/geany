@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.25
+.. |(version)| replace:: 1.26
 .. -*- reStructuredText -*-
 
 =======
@@ -14,10 +14,10 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2014-04-16
+:Date: 2015-07-12
 :Version: |(version)|
 
-Copyright © 2005-2014
+Copyright © 2005-2015
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -41,7 +41,7 @@ Geany is a small and lightweight Integrated Development Environment. It
 was developed to provide a small and fast IDE, which has only a few
 dependencies on other packages. Another goal was to be as independent
 as possible from a particular Desktop Environment like KDE or GNOME -
-Geany only requires the GTK2 runtime libraries.
+Geany only requires the GTK+ runtime libraries.
 
 Some basic features of Geany:
 
@@ -2652,7 +2652,7 @@ use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        t
                                   correctly on some complex setups.
 gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false       immediately
                                   saving. Backup is named `filename~`.
-keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
+keep_edit_history_on_reload_125   Whether to maintain the edit history when    false       immediately
                                   reloading a file, and allow the operation
                                   to be reverted.
 **Filetype related**
@@ -3023,7 +3023,7 @@ execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
 which is created in the temporary directory and which changes the working
-directory to the directory set in the Build commands dialog, see 
+directory to the directory set in the Build commands dialog, see
 `Build menu commands dialog`_ for details.
 
 As an example the default (Linux) command is::
@@ -3211,7 +3211,7 @@ Build menu keyboard shortcuts
 `````````````````````````````
 
 Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-independent menu items, the first two execute menu items and the fixed menu items.
+independent menu items, the first execute menu item and the fixed menu items.
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
@@ -4170,7 +4170,8 @@ wordchars
     *Example:* (look at system filetypes.\* files)
 
     .. note::
-        This overrides the *whitespace_chars* filetypes.common setting.
+        This overrides the *wordchars* filetypes.common setting, and
+        has precedence over the *whitespace_chars* setting.
 
 comment_single
     A character or string which is used to comment code. If you want to use
@@ -4651,6 +4652,15 @@ whitespace_chars
     This should include space (\\s) and tab (\\t).
 
     *Example:* ``whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~``
+
+wordchars
+    These characters define word boundaries when making selections
+    and searching using word matching options.
+
+    *Example:* ``wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789``
+
+    .. note::
+        This has precedence over the *whitespace_chars* setting.
 
 
 

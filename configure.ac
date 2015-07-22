@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.25],
+AC_INIT([Geany], [1.26],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -74,13 +74,14 @@ AS_IF([test "x$enable_gtk3" = xyes],
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
 
 # GTK/GLib/GIO checks
-gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.20"
+gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.28"
 gtk_modules_private="gio-2.0 >= 2.28 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
+AC_SUBST([GTK_VERSION])
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
@@ -88,7 +89,7 @@ PKG_CHECK_MODULES([GTHREAD], [$gthread_modules])
 AC_SUBST([GTHREAD_CFLAGS])
 AC_SUBST([GTHREAD_LIBS])
 
-# --disable-deprecated switch for GTK2 purification
+# --disable-deprecated switch for GTK purification
 AC_ARG_ENABLE([deprecated],
 		[AS_HELP_STRING([--disable-deprecated], [Disable deprecated GTK functions.])],
 		[GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"],
@@ -155,6 +156,7 @@ AC_CONFIG_FILES([
 		doc/geany.1
 		geany.spec
 		geany.pc
+		geany.nsi
 		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile

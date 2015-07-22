@@ -108,6 +108,8 @@ test_sources = \
 	bug960316.v						\
 	bug961001.v						\
 	byte.f							\
+	c-digraphs.c					\
+	c-trigraphs.c					\
 	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
@@ -130,10 +132,15 @@ test_sources = \
 	cython_sample.pyx				\
 	cython_sample2.pyx				\
 	cxx11enum.cpp					\
+	cxx11-final.cpp					\
+	cxx11-noexcept.cpp				\
+	cxx11-override.cpp				\
+	cxx14-combined.cpp				\
 	db-trig.sql						\
 	debian_432872.f90				\
 	directives.c					\
 	dopbl2.f						\
+	dotted-names.json				\
 	enum.c							\
 	enum.f90						\
 	enum.java						\
@@ -235,6 +242,8 @@ test_sources = \
 	pure_elem.f95					\
 	py_constructor_arglist.py		\
 	py-skipped-string.py			\
+	python-anonymous-nestlevel_ctags-bug-356.py	\
+	python-comments.py				\
 	qualified_types.f90				\
 	random.sql						\
 	readlob.sql						\
@@ -243,6 +252,7 @@ test_sources = \
 	refcurs.sql						\
 	regexp.js						\
 	return-hint.zep					\
+	return-types.go					\
 	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\
@@ -260,6 +270,7 @@ test_sources = \
 	simple.mak						\
 	simple.php						\
 	simple.pl						\
+	simple.ps1						\
 	simple.py						\
 	simple.rb						\
 	simple.sh						\

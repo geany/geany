@@ -33,6 +33,7 @@
 #include "dialogs.h"
 #include "document.h"
 #include "prefs.h"
+#include "prefix.h"
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
@@ -2123,7 +2124,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
-		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", NULL);
+		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())

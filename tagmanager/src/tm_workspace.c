@@ -258,7 +258,8 @@ static void tm_workspace_update(void)
 	g_message("Total: %d tags", theWorkspace->tags_array->len);
 #endif
 	tm_tags_sort(theWorkspace->tags_array, workspace_tags_sort_attrs, TRUE, FALSE);
-	
+
+	g_ptr_array_free(theWorkspace->typename_array, TRUE);
 	theWorkspace->typename_array = tm_tags_extract(theWorkspace->tags_array, TM_GLOBAL_TYPE_MASK);
 }
 

@@ -7,7 +7,7 @@ datadir=@datadir@
 localedir=@localedir@
 
 Name: Geany
-Description: A fast and lightweight IDE using GTK2
+Description: A fast and lightweight IDE using GTK+
 Requires: @DEPENDENCIES@
 Version: @VERSION@
 Libs: -L${libdir} -lgeany

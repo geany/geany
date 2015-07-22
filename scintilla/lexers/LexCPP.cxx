@@ -1092,7 +1092,6 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 			} else if (options.backQuotedStrings && sc.Match('`')) {
 				sc.SetState(SCE_C_STRINGRAW|activitySet);
 				rawStringTerminator = "`";
-				sc.Forward();
 			} else if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				if (lastWordWasUUID) {
 					sc.SetState(SCE_C_UUID|activitySet);
@@ -1246,11 +1245,10 @@ void SCI_METHOD LexerCPP::Lex(unsigned int startPos, int length, int initStyle, 
 							}
 						} else if (sc.Match("undef")) {
 							if (options.updatePreprocessor && !preproc.IsInactive()) {
-								std::string restOfLine = GetRestOfLine(styler, sc.currentPos + 5, true);
+								const std::string restOfLine = GetRestOfLine(styler, sc.currentPos + 5, false);
 								std::vector<std::string> tokens = Tokenize(restOfLine);
-								std::string key;
 								if (tokens.size() >= 1) {
-									key = tokens[0];
+									const std::string key = tokens[0];
 									preprocessorDefinitions.erase(key);
 									ppDefineHistory.push_back(PPDefinition(lineCurrent, key, "", true));
 									definitionsChanged = true;

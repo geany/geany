@@ -648,8 +648,6 @@ process:
 
 				if (next == NEWLINE)
 					continue;
-				else if (next == '?')
-					cppUngetc (next);
 				else
 					fileUngetc (next);
 				break;
@@ -675,12 +673,48 @@ process:
 						case '-':          c = '~';       break;
 						case '=':          c = '#';       goto process;
 						default:
+							fileUngetc ('?');
 							fileUngetc (next);
-							cppUngetc ('?');
 							break;
 					}
 				}
 			} break;
+
+			/* digraphs:
+			 * input:  <:  :>  <%  %>  %:  %:%:
+			 * output: [   ]   {   }   #   ##
+			 */
+			case '<':
+			{
+				int next = fileGetc ();
+				switch (next)
+				{
+					case ':':	c = '['; break;
+					case '%':	c = '{'; break;
+					default: fileUngetc (next);
+				}
+				goto enter;
+			}
+			case ':':
+			{
+				int next = fileGetc ();
+				if (next == '>')
+					c = ']';
+				else
+					fileUngetc (next);
+				goto enter;
+			}
+			case '%':
+			{
+				int next = fileGetc ();
+				switch (next)
+				{
+					case '>':	c = '}'; break;
+					case ':':	c = '#'; goto process;
+					default: fileUngetc (next);
+				}
+				goto enter;
+			}
 
 			default:
 				if (c == '@' && Cpp.hasAtLiteralStrings)
@@ -692,7 +726,10 @@ process:
 						c = skipToEndOfString (TRUE);
 						break;
 					}
+					else
+						fileUngetc (next);
 				}
+			enter:
 				Cpp.directive.accept = FALSE;
 				if (directive)
 					ignore = handleDirective (c);

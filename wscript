@@ -52,7 +52,7 @@ from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
-VERSION = '1.25'
+VERSION = '1.26'
 LINGUAS_FILE = os.path.join('po', 'LINGUAS')
 MINIMUM_GTK_VERSION = '2.24.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
@@ -106,6 +106,7 @@ ctags_sources = set([
     'tagmanager/ctags/r.c',
     'tagmanager/ctags/perl.c',
     'tagmanager/ctags/php.c',
+    'tagmanager/ctags/powershell.c',
     'tagmanager/ctags/python.c',
     'tagmanager/ctags/read.c',
     'tagmanager/ctags/rest.c',
@@ -238,6 +239,7 @@ def configure(conf):
             mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['gtk_version'] = gtk_version
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
 
@@ -273,9 +275,6 @@ but you then may not have a local copy of the HTML manual.'''
             '-static-libgcc',
             '-static-libstdc++'])
         conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'comdlg32'])
-        # explicitly define Windows version for older Mingw environments
-        conf.define('WINVER', '0x0501', quote=False)  # for SHGetFolderPathAndSubDirW
-        conf.define('_WIN32_IE', '0x0500', quote=False)  # for SHGFP_TYPE
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
         # DATADIR and LOCALEDIR are defined by the intltool tool
@@ -336,6 +335,10 @@ but you then may not have a local copy of the HTML manual.'''
     conf.env.append_value('CFLAGS', ['-DGTK'])
     conf.env.append_value('CXXFLAGS',
         ['-DNDEBUG', '-DGTK', '-DSCI_LEXER', '-DG_THREADS_IMPL_NONE'])
+    if conf.env['CXX_NAME'] == 'gcc' and '-O' not in ''.join(conf.env['CXXFLAGS']):
+        conf.env.append_value('CXXFLAGS', ['-O2'])
+    if revision is not None:
+        conf.env.append_value('CXXFLAGS', ['-g'])
 
     # summary
     Logs.pprint('BLUE', 'Summary:')
@@ -397,7 +400,7 @@ def build(bld):
 
     def build_plugin(plugin_name, install=True, uselib_add=[]):
         if install:
-            instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany'
+            instpath = '${LIBDIR}/geany'
         else:
             instpath = None
 
@@ -565,6 +568,15 @@ def build(bld):
                            'datadir': '${datarootdir}',
                            'localedir': '${datarootdir}/locale'})
 
+    # geany.nsi
+    bld(
+        features        = 'subst',
+        source          = 'geany.nsi.in',
+        target          = 'geany.nsi',
+        dct             = {'VERSION': VERSION,
+                           'GTK_VERSION': bld.env['gtk_version']},
+        install_path    = None)
+
     if not is_win32:
         # geany.desktop
         if bld.env['INTLTOOL']:
@@ -628,6 +640,7 @@ def build(bld):
         src/project.h
         src/sciwrappers.h
         src/search.h
+        src/spawn.h
         src/stash.h
         src/support.h
         src/symbols.h

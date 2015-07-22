@@ -120,6 +120,7 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *progress_bar_create(void);
+static void ui_menu_sort_by_label(GtkMenu *menu);
 
 
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
@@ -2148,6 +2149,12 @@ static void create_config_files_menu(void)
 	item = ui_lookup_widget(main_widgets.window, "configuration_files1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 
+	item = gtk_menu_item_new_with_mnemonic(_("_Filetype Configuration"));
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	ui_widgets.config_files_filetype_menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), ui_widgets.config_files_filetype_menu);
+	gtk_widget_show(item);
+
 	/* sort menu after all items added */
 	g_idle_add(sort_menu, widgets.config_files_menu);
 }
@@ -2768,6 +2775,12 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 	gchar *sa, *sb;
 	gint result;
 
+	/* put entries with submenus at the end of the menu */
+	if (gtk_menu_item_get_submenu(item_a) && !gtk_menu_item_get_submenu(item_b))
+		return 1;
+	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
+		return -1;
+
 	sa = ui_menu_item_get_text(item_a);
 	sb = ui_menu_item_get_text(item_b);
 	result = utils_str_casecmp(sa, sb);
@@ -2778,7 +2791,7 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 
 
 /* Currently @a menu should contain only GtkMenuItems with labels. */
-void ui_menu_sort_by_label(GtkMenu *menu)
+static void ui_menu_sort_by_label(GtkMenu *menu)
 {
 	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
 	GList *node;
@@ -2969,12 +2982,14 @@ GIcon *ui_get_mime_icon(const gchar *mime_type)
 	ctype = g_content_type_from_mime_type(mime_type);
 	if (ctype)
 	{
+		GdkScreen *screen = gdk_screen_get_default();
+
 		icon = g_content_type_get_icon(ctype);
-		if (icon) 
+		if (screen && icon)
 		{
 			GtkIconInfo *icon_info;
 
-			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_default(), icon, 16, 0);
+			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_for_screen(screen), icon, 16, 0);
 			if (!icon_info)
 			{
 				g_object_unref(icon);

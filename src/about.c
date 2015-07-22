@@ -45,7 +45,7 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT _("Copyright (c)  2005-2014\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
+#define COPYRIGHT _("Copyright (c)  2005-2015\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
 
 static const gchar *translators[][2] = {
 	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
@@ -170,7 +170,6 @@ static GtkWidget *create_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
 	/* create header */

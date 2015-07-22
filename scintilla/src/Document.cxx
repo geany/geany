@@ -216,6 +216,8 @@ void Document::SetSavePoint() {
 }
 
 void Document::TentativeUndo() {
+	if (!TentativeActive())
+		return;
 	CheckReadOnly();
 	if (enteredModification == 0) {
 		enteredModification++;

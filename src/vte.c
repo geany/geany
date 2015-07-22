@@ -33,6 +33,7 @@
 
 #include "callbacks.h"
 #include "document.h"
+#include "geanyobject.h"
 #include "msgwindow.h"
 #include "prefs.h"
 #include "sciwrappers.h"
@@ -163,7 +164,7 @@ static const GtkTargetEntry dnd_targets[] =
 
 static gchar **vte_get_child_environment(void)
 {
-	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", NULL};
+	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", "TERM_PROGRAM", NULL};
 
 	return utils_copy_environment(exclude_vars, "TERM", "xterm", NULL);
 }
@@ -181,6 +182,15 @@ static void override_menu_key(void)
 	else
 		gtk_settings_set_string_property(gtk_settings_get_default(),
 			"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+}
+
+
+static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 }
 
 
@@ -247,6 +257,8 @@ void vte_init(void)
 
 	/* setup the F10 menu override (so it works before the widget is first realised). */
 	override_menu_key();
+
+	g_signal_connect(geany_object, "geany-startup-complete", G_CALLBACK(on_startup_complete), NULL);
 }
 
 
@@ -256,6 +268,13 @@ static void on_vte_realize(void)
 	vte_apply_user_settings();
 
 	vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
+}
+
+
+static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
+{
+	vte_start(vc->vte);
+	return FALSE;
 }
 
 
@@ -294,7 +313,8 @@ static void create_vte(void)
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
-	vte_start(vte);
+	/* start shell on idle otherwise the initial prompt can get corrupted */
+	g_idle_add(vte_start_idle, NULL);
 
 	gtk_widget_show_all(hbox);
 	terminal_label = gtk_label_new(_("Terminal"));

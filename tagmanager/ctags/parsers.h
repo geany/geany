@@ -65,7 +65,8 @@
     RustParser, \
     GoParser, \
     JsonParser, \
-    ZephirParser
+    ZephirParser, \
+    PowerShellParser
 
 #endif	/* _PARSERS_H */
 

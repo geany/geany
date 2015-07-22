@@ -1833,34 +1833,34 @@ static void read_fif_io(gchar *msg, GIOCondition condition, gchar *enc, gint msg
 
 static void search_read_io(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(string->str, condition, data, COLOR_BLACK);
+	read_fif_io(string->str, condition, data, COLOR_BLACK);
 }
 
 
 static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data)
 {
-	return read_fif_io(string->str, condition, data, COLOR_DARK_RED);
+	read_fif_io(string->str, condition, data, COLOR_DARK_RED);
 }
 
 
 static void search_finished(GPid child_pid, gint status, gpointer user_data)
 {
 	const gchar *msg = _("Search failed.");
-#ifdef G_OS_UNIX
-	gint exit_status = 1;
+	gint exit_status;
 
-	if (WIFEXITED(status))
+	if (SPAWN_WIFEXITED(status))
 	{
-		exit_status = WEXITSTATUS(status);
+		exit_status = SPAWN_WEXITSTATUS(status);
 	}
-	else if (WIFSIGNALED(status))
+	else if (SPAWN_WIFSIGNALED(status))
 	{
 		exit_status = -1;
 		g_warning("Find in Files: The command failed unexpectedly (signal received).");
 	}
-#else
-	gint exit_status = status;
-#endif
+	else
+	{
+		exit_status = 1;
+	}
 
 	switch (exit_status)
 	{

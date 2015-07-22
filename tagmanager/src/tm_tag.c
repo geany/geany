@@ -828,37 +828,63 @@ gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 {
 	guint i;
-	GPtrArray *to_delete = g_ptr_array_sized_new(source_file->tags_array->len);
-	
-	for (i = 0; i < source_file->tags_array->len; i++)
+
+	/* Now we choose between an algorithm with complexity O(tags_array->len) and
+	 * O(source_file->tags_array->len * log(tags_array->len)). The latter algorithm
+	 * is better when tags_array contains many times more tags than
+	 * source_file->tags_array so instead of trying to find the removed tags
+	 * linearly, binary search is used. The constant 20 is more or less random
+	 * but seems to work well. It's exact value isn't so critical because it's
+	 * the extremes where the difference is the biggest: when
+	 * source_file->tags_array->len == tags_array->len (single file open) and
+	 * source_file->tags_array->len << tags_array->len (the number of tags
+	 * from the file is a small fraction of all tags).
+	 */
+	if (source_file->tags_array->len != 0 &&
+		tags_array->len / source_file->tags_array->len < 20)
 	{
-		guint j;
-		guint tag_count;
-		TMTag **found;
-		TMTag *tag = source_file->tags_array->pdata[i];
-		
-		found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
-		
-		for (j = 0; j < tag_count; j++)
+		for (i = 0; i < tags_array->len; i++)
 		{
-			if (*found != NULL && (*found)->file == source_file)
-			{
-				/* we cannot set the pointer to NULL now because the search wouldn't work */
-				g_ptr_array_add(to_delete, found);
-				/* no break - if there are multiple tags of the same name, we would 
-				 * always find the first instance and wouldn't remove others; duplicates
-				 * in the to_delete list aren't a problem */
-			}
-			found++;
+			TMTag *tag = tags_array->pdata[i];
+
+			if (tag->file == source_file)
+				tags_array->pdata[i] = NULL;
 		}
 	}
-
-	for (i = 0; i < to_delete->len; i++)
+	else
 	{
-		TMTag **tag = to_delete->pdata[i];
-		*tag = NULL;
+		GPtrArray *to_delete = g_ptr_array_sized_new(source_file->tags_array->len);
+
+		for (i = 0; i < source_file->tags_array->len; i++)
+		{
+			guint j;
+			guint tag_count;
+			TMTag **found;
+			TMTag *tag = source_file->tags_array->pdata[i];
+
+			found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
+
+			for (j = 0; j < tag_count; j++)
+			{
+				if (*found != NULL && (*found)->file == source_file)
+				{
+					/* we cannot set the pointer to NULL now because the search wouldn't work */
+					g_ptr_array_add(to_delete, found);
+					/* no break - if there are multiple tags of the same name, we would
+					 * always find the first instance and wouldn't remove others; duplicates
+					 * in the to_delete list aren't a problem */
+				}
+				found++;
+			}
+		}
+
+		for (i = 0; i < to_delete->len; i++)
+		{
+			TMTag **tag = to_delete->pdata[i];
+			*tag = NULL;
+		}
+		g_ptr_array_free(to_delete, TRUE);
 	}
-	g_ptr_array_free(to_delete, TRUE);
 
 	tm_tags_prune(tags_array);
 }

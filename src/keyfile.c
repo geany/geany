@@ -82,12 +82,12 @@
 #ifdef __APPLE__
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Helvetica Medium 12"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
 #define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
 #define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
@@ -234,7 +234,7 @@ static void init_pref_groups(void)
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
 		"use_gio_unsafe_file_saving", TRUE);
 	stash_group_add_boolean(group, &file_prefs.keep_edit_history_on_reload,
-		"keep_edit_history_on_reload", TRUE);
+		"keep_edit_history_on_reload_125", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -861,6 +861,13 @@ static void load_dialog_prefs(GKeyFile *config)
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
+#ifdef __APPLE__
+		/* Geany is started using launchd on OS X and we don't get any environment variables
+		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
+		if (strcmp(shell, "/bin/bash") == 0)
+			shell = "/bin/bash -l";
+#endif
+
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
@@ -875,7 +882,7 @@ static void load_dialog_prefs(GKeyFile *config)
 			"send_selection_unsafe", FALSE);
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
+		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
