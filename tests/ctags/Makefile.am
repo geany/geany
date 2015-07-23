@@ -255,6 +255,7 @@ test_sources = \
 	regexp.js						\
 	return-hint.zep					\
 	return-types.go					\
+	ruby-block-call.rb				\
 	ruby-doc.rb						\
 	ruby-sf-bug-364.rb				\
 	rules.t2t						\
