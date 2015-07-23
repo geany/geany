@@ -257,6 +257,7 @@ test_sources = \
 	return-types.go					\
 	ruby-block-call.rb				\
 	ruby-doc.rb						\
+	ruby-namespaced-class.rb		\
 	ruby-sf-bug-364.rb				\
 	rules.t2t						\
 	sample.t2t						\
