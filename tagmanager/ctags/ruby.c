@@ -49,6 +49,8 @@ static stringList* nesting = NULL;
 *   FUNCTION DEFINITIONS
 */
 
+static void enterUnnamedScope (void);
+
 /*
 * Returns a string describing the scope in 'list'.
 * We record the current scope as a list of entered scopes.
@@ -341,6 +343,7 @@ static void readAndEmitTag (const unsigned char** cp, rubyKind expected_kind)
 			*
 			* For now, we don't create any.
 			*/
+			enterUnnamedScope ();
 		}
 		else
 		{
