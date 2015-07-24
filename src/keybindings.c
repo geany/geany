@@ -75,6 +75,8 @@ static const gboolean swap_alt_tab_order = FALSE;
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
+gboolean on_search_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+
 static gboolean check_current_word(GeanyDocument *doc, gboolean sci_word);
 static gboolean read_current_word(GeanyDocument *doc, gboolean sci_word);
 static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word);
@@ -1204,6 +1206,83 @@ gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
 		keyval = key_kp_translate(keyval);
 
 	return (keyval == kb->key && state == kb->mods);
+}
+
+/* Search dialogs keypress event handler */
+gboolean on_search_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
+{
+        guint state, keyval;
+        gsize g, i;
+        GeanyDocument *doc;
+        GeanyKeyGroup *group;
+        GeanyKeyBinding *kb;
+
+        if (ev->keyval == 0)
+                return FALSE;
+
+        doc = document_get_current();
+        if (doc)
+                document_check_disk_status(doc, FALSE);
+
+        keyval = ev->keyval;
+        state = ev->state & gtk_accelerator_get_default_mod_mask();
+        /* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
+        if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
+                if (keyval >= GDK_A && keyval <= GDK_Z)
+                        keyval += GDK_a - GDK_A;
+
+        if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
+                keyval = key_kp_translate(keyval);
+
+        /*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
+
+        /* special cases */
+#ifdef HAVE_VTE
+        if (vte_info.have_vte && check_vte(state, keyval))
+                return FALSE;
+#endif
+        if (check_menu_key(doc, keyval, state, ev->time))
+                return TRUE;
+
+      
+        foreach_ptr_array(group, g, keybinding_groups)
+        {
+                //continue on groups that hook keys needed by the Serach dialog boxes
+                if(     group == keybindings_get_core_group(GEANY_KEY_GROUP_EDITOR)             ||
+                        group == keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD)  ||
+                        group == keybindings_get_core_group(GEANY_KEY_GROUP_SELECT)             ||
+                        group == keybindings_get_core_group(GEANY_KEY_GROUP_INSERT)             ||
+                        group == keybindings_get_core_group(GEANY_KEY_GROUP_GOTO)               ||
+                        group == keybindings_get_core_group(GEANY_KEYS_HELP_HELP)
+                        )
+                        continue;
+                        
+                foreach_ptr_array(kb, i, group->key_items)
+                {       
+                        if (keyval == kb->key && state == kb->mods)
+                        {
+                                /* call the corresponding callback function for this shortcut */
+                                if (kb->callback)
+                                {
+                                        kb->callback(kb->id);
+                                        return TRUE;
+                                }
+                                else if (group->callback)
+                                {
+                                        if (group->callback(kb->id))
+                                                return TRUE;
+                                        else
+                                                continue;       /* not handled */
+                                }
+                                g_warning("No callback for keybinding %s: %s!", group->name, kb->name);
+                        }
+                }
+        }
+                
+        /* fixed keybindings can be overridden by user bindings, so check them last */
+        if (check_fixed_kb(keyval, state))
+                return TRUE;
+        return FALSE;
 }
 
 
