@@ -106,9 +106,14 @@ static boolean canMatch (const unsigned char** s, const char* literal,
 	return TRUE;
 }
 
+static boolean isIdentChar (int c)
+{
+	return (isalnum (c) || c == '_');
+}
+
 static boolean notIdentChar (int c)
 {
-	return ! (isalnum (c) || c == '_');
+	return ! isIdentChar (c);
 }
 
 static boolean notOperatorChar (int c)
@@ -252,19 +257,19 @@ static rubyKind parseIdentifier (
 	const char* also_ok;
 	if (kind == K_METHOD)
 	{
-		also_ok = "_.?!=";
+		also_ok = ".?!=";
 	}
 	else if (kind == K_SINGLETON)
 	{
-		also_ok = "_?!=";
+		also_ok = "?!=";
 	}
 	else if (kind == K_DESCRIBE || kind == K_CONTEXT)
 	{
-		also_ok = " ,\".#_?!='/-";
+		also_ok = " ,\".#?!='/-";
 	}
 	else
 	{
-		also_ok = "_";
+		also_ok = "";
 	}
 
 	skipWhitespace (cp);
@@ -285,7 +290,7 @@ static rubyKind parseIdentifier (
 	}
 
 	/* Copy the identifier into 'name'. */
-	while (**cp != 0 && (**cp == ':' || isalnum (**cp) || charIsIn (**cp, also_ok)))
+	while (**cp != 0 && (**cp == ':' || isIdentChar (**cp) || charIsIn (**cp, also_ok)))
 	{
 		char last_char = **cp;
 
@@ -539,7 +544,7 @@ static void findRubyTags (void)
 			{
 				do
 					++cp;
-				while (isalnum (*cp) || *cp == '_');
+				while (isIdentChar (*cp));
 			}
 		}
 	}
