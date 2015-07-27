@@ -1252,8 +1252,7 @@ gboolean on_search_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
                         group == keybindings_get_core_group(GEANY_KEY_GROUP_CLIPBOARD)  ||
                         group == keybindings_get_core_group(GEANY_KEY_GROUP_SELECT)             ||
                         group == keybindings_get_core_group(GEANY_KEY_GROUP_INSERT)             ||
-                        group == keybindings_get_core_group(GEANY_KEY_GROUP_GOTO)               ||
-                        group == keybindings_get_core_group(GEANY_KEYS_HELP_HELP)
+                        group == keybindings_get_core_group(GEANY_KEY_GROUP_GOTO)
                         )
                         continue;
                         
