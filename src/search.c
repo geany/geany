@@ -562,6 +562,12 @@ void search_show_find_dialog(void)
 
 	sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
+if(replace_dlg.dialog)
+        {gtk_widget_destroy(replace_dlg.dialog);replace_dlg.dialog=NULL;}
+if(fif_dlg.dialog)
+        {gtk_widget_destroy(fif_dlg.dialog);fif_dlg.dialog=NULL;}
+
+
 	if (find_dlg.dialog == NULL)
 	{
 		create_find_dialog();
@@ -571,11 +577,13 @@ void search_show_find_dialog(void)
 
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
 		gtk_widget_show_all(find_dlg.dialog);
+		g_signal_connect (GTK_DIALOG (find_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
+
 	}
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
+//		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
