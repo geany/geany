@@ -746,10 +746,11 @@ void search_show_replace_dialog(void)
 
 	sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
-if(replace_dlg.dialog)
-        {gtk_widget_destroy(replace_dlg.dialog);replace_dlg.dialog=NULL;}
+if(find_dlg.dialog)
+        {gtk_widget_destroy(find_dlg.dialog);find_dlg.dialog=NULL;}
 if(fif_dlg.dialog)
         {gtk_widget_destroy(fif_dlg.dialog);fif_dlg.dialog=NULL;}
+
 
 
 	if (replace_dlg.dialog == NULL)
@@ -761,7 +762,7 @@ if(fif_dlg.dialog)
 
 		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
 		gtk_widget_show_all(replace_dlg.dialog);
-                g_signal_connect (GTK_DIALOG (find_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
+                g_signal_connect (GTK_DIALOG (replace_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
 	}
 	else
 	{
