@@ -2154,24 +2154,29 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	const gchar *const *argv;
 	const gchar *command = is_osx_bundle() ? "open" : "geany";
 	gchar *exec_path = g_find_program_in_path(command);
 
 	if (exec_path)
 	{
 		GError *err = NULL;
+		const gchar *argv[6]; // max args + 1
+		gint argc = 0;
 
+		argv[argc++] = exec_path;
 		if (is_osx_bundle())
 		{
-			const gchar *const osx_argv[] = {exec_path, "-n", "-a", "Geany", doc_path, NULL};
-			argv = osx_argv;
+			argv[argc++] = "-n";
+			argv[argc++] = "-a";
+			argv[argc++] = "Geany";
+			argv[argc++] = doc_path;
 		}
 		else
 		{
-			const gchar *const unix_argv[] = {exec_path, "-i", doc_path, NULL};
-			argv = unix_argv;
+			argv[argc++] = "-i";
+			argv[argc++] = doc_path;
 		}
+		argv[argc] = NULL;
 
 		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
 		{
