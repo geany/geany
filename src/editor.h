@@ -137,6 +137,31 @@ typedef struct GeanyEditorPrefs
 }
 GeanyEditorPrefs;
 
+/**
+ * Flags that control which features are enabled in the editor.
+ *
+ * GEANY_EDITOR_FEATURE_NONE disables all features, GEANY_EDITOR_FEATURE_ALL
+ * enables them all (the default), the others can be used to enable
+ * specific features.
+ *
+ * @since 1.25 (Plugin API 225)
+ * @see editor_get_feature, editor_set_feature
+ */
+typedef enum
+{
+	GEANY_EDITOR_FEATURE_NONE             = 0,
+	GEANY_EDITOR_FEATURE_AUTO_COMPLETION  = (1<<0),
+	GEANY_EDITOR_FEATURE_ERROR_INDICATORS = (1<<1),
+	GEANY_EDITOR_FEATURE_MARGIN_MARKERS   = (1<<2),
+	GEANY_EDITOR_FEATURE_CALLTIPS         = (1<<3),
+	GEANY_EDITOR_FEATURE_ALL =
+		(GEANY_EDITOR_FEATURE_AUTO_COMPLETION |
+		 GEANY_EDITOR_FEATURE_ERROR_INDICATORS |
+		 GEANY_EDITOR_FEATURE_MARGIN_MARKERS |
+		 GEANY_EDITOR_FEATURE_CALLTIPS)
+}
+GeanyEditorFeature;
+
 /** Editor-owned fields for each document. */
 typedef struct GeanyEditor
 {
@@ -149,6 +174,7 @@ typedef struct GeanyEditor
 	GeanyIndentType	 indent_type;	/* Use editor_get_indent_prefs() instead. */
 	gboolean		 line_breaking;	/**< Whether to split long lines as you type. */
 	gint			 indent_width;
+	GeanyEditorFeature features; /**< Flags that control which editor features are enabled */
 }
 GeanyEditor;
 
@@ -322,6 +348,10 @@ void editor_apply_update_prefs(GeanyEditor *editor);
 gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag);
 
 void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers);
+
+gboolean editor_get_feature(GeanyEditor *editor, GeanyEditorFeature feature);
+
+gboolean editor_set_feature(GeanyEditor *editor, GeanyEditorFeature feature, gboolean enabled);
 
 #endif /* GEANY_PRIVATE */
 
