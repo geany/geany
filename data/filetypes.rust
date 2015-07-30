@@ -62,11 +62,22 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
 
-[build_settings]
-# %f will be replaced by the complete filename
-# %e will be replaced by the filename without extension
-# (use only one of it at one time)
-compiler=rustc "%f"
-linker=rustc -o "%e" "%f"
-run_cmd="./%e"
-
+[build-menu]
+FT_00_LB=Compile
+FT_00_CM=rustc "%f"
+FT_00_WD=
+NF_00_LB=Cargo Build
+NF_00_CM=cargo build
+NF_00_WD=
+NF_01_LB=Cargo Test
+NF_01_CM=cargo test 
+NF_01_WD=
+NF_02_LB=Cargo Bench
+NF_02_CM=cargo bench
+NF_02_WD=
+EX_00_LB=Run
+EX_00_CM="./%e"
+EX_00_WD=
+EX_01_LB=Cargo Run
+EX_01_CM=cargo run
+EX_01_WD=
