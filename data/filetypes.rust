@@ -60,7 +60,7 @@ context_action_cmd=
 [indentation]
 #width=4
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
-#type=1
+#type=0
 
 [build-menu]
 FT_00_LB=Compile
