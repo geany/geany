@@ -32,6 +32,7 @@
 #include "app.h"
 #include "dialogs.h"
 #include "document.h"
+#include "keyfile.h"
 #include "prefs.h"
 #include "prefix.h"
 #include "sciwrappers.h"
@@ -55,6 +56,19 @@
 #endif
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>
+#endif
+
+#ifdef G_OS_WIN32
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+#endif
+
+#ifdef __APPLE__
+# include <mach-o/dyld.h> // Used to find self executable
+#endif
+
+#if defined(__FreeBSD__)
+# include <sys/sysctl.h> // Used to find self executable
 #endif
 
 #include <glib/gstdio.h>
@@ -2152,39 +2166,119 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 }
 
 
+// Attempts to get the path to the executable for this Geany instance
+static gchar *utils_find_self_executable(void)
+{
+#ifndef G_OS_WIN32
+	// Some *nixes have a file which links to the current exectuable path
+	static const gchar *path_files[] =
+	{
+		"/proc/self/exe",     // Linux
+		"/proc/curproc/file", // DragonFly BSD and FreeBSD w/ procfs
+		"/proc/curproc/exe",  // NetBSD
+		NULL,
+	};
+	
+	for (const gchar **test_path = path_files; *test_path != NULL; test_path++)
+	{
+		if (g_file_test(*test_path, G_FILE_TEST_EXISTS))
+		{
+			gchar *exe_file = tm_get_real_path(*test_path);
+			if (exe_file != NULL)
+			{
+				if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
+					return exe_file;
+				g_free(exe_file);
+			}
+		}
+	}
+	
+# if defined(__FreeBSD__)
+	{
+	// FreeBSD doesn't have procfs mounted by default, so use sysctl()
+	int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
+	gsize path_len = PATH_MAX;
+	gchar *exe_file = g_malloc0(path_len + 1);
+	if (sysctl(mib, 4, exe_file, &path_len, NULL, 0) == 0)
+		return exe_file;
+	g_free(exe_file);
+	}
+# elif defined(__APPLE__)
+#  if defined(MAC_INTEGRATION)
+	// GtkOSX integration library provides a wrapper to get path from bundle
+	if (is_osx_bundle())
+	{
+		gchar *exec_file = gtkosx_application_get_executable_path();
+		if (exec_file != NULL)
+			return exe_file;
+	}
+#  endif
+	{
+	// If not in a bundle, use the OSX call to get current executable
+	gsize path_len = PATH_MAX;
+	gchar *exe_file = g_malloc0(path_len + 1);
+	if (_NSGetExecutablePath(exe_file, &path_len) == 0)
+	{
+		gchar *abs_exe_file = tm_get_real_path(exe_file);
+		g_free(exe_file);
+		return abs_exe_file;
+	}
+	g_free(exe_file);
+	}
+#endif
+
+#else
+	{
+	// On Win32, GetModuleFileName() can give the path to the current executable
+	gchar *exe_file = g_malloc0(MAXPATHLEN + 1);
+	if (GetModuleFileName(NULL, exe_file, MAXPATHLEN) > 0)
+	{
+		if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
+			return exe_file;
+		g_free(exe_file);
+	}
+	}
+#endif
+
+	// If we get to here, none of the platform-specific ways worked
+	
+	// Try using the installation directory
+	gchar *exe_file = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
+	if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
+		return exe_file;
+	g_free(exe_file);
+
+	// Fallback to using some program from the search path
+	return g_find_program_in_path("geany");
+}
+
+
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	const gchar *command = is_osx_bundle() ? "open" : "geany";
-	gchar *exec_path = g_find_program_in_path(command);
-
-	if (exec_path)
+	gchar *exec_path = utils_find_self_executable();
+	if (exec_path == NULL)
 	{
-		GError *err = NULL;
-		const gchar *argv[6]; // max args + 1
-		gint argc = 0;
-
-		argv[argc++] = exec_path;
-		if (is_osx_bundle())
-		{
-			argv[argc++] = "-n";
-			argv[argc++] = "-a";
-			argv[argc++] = "Geany";
-			argv[argc++] = doc_path;
-		}
-		else
-		{
-			argv[argc++] = "-i";
-			argv[argc++] = doc_path;
-		}
-		argv[argc] = NULL;
-
-		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(exec_path);
+		ui_set_statusbar(TRUE, _("Unable to locate Geany executable"));
+		return;
 	}
-	else
-		g_printerr("Unable to find 'geany'");
+
+	const gchar *argv[6]; // max args + 1
+	argv[0] = exec_path;
+	argv[1] = "-c";
+	argv[2] = app->configdir;
+	argv[3] = "-i";
+	argv[4] = doc_path;
+	argv[5] = NULL;
+
+	// Ensure the configuration is saved to disk before launching the new instance
+	configuration_save();
+
+	GError *error = NULL;
+	if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &error))
+	{
+		ui_set_statusbar(TRUE, _("Unable to open new Geany window: %s"), error->message);
+		g_error_free(error);
+	}
+
+	g_free(exec_path);
 }
