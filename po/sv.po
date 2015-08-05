@@ -1,14 +1,14 @@
 # Swedish translations for geany package.
-# Copyright (C) 2007 - 2014 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2007 - 2015 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Tony Mattsson <superxorn@gmail.com>, 2007 - 2014
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2014-09-06 09:28+0100\n"
+"PO-Revision-Date: 2015-08-05 09:27+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -1111,9 +1111,8 @@ msgid "Open new documents from the command-line"
 msgstr "Öppna nya dokument från kommandotolken"
 
 #: ../data/geany.glade.h:230
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
-msgstr "Skapa en ny fil för varje filnamn som inte existerar."
+msgstr "Skapa en ny fil för varje filnamn i kommandotolken som inte existerar."
 
 #: ../data/geany.glade.h:231
 msgid "Default end of line characters:"
@@ -1936,18 +1935,16 @@ msgid "Set Line E_ndings"
 msgstr "Ange radslut"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Konvertera till CR/LF (Win)"
+msgstr "Konvertera till CR/LF (Windows)"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konvertera till LF (Unix)"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Konvertera till CR (Mac)"
+msgstr "Konvertera till CR (Klassisk Mac)"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:586
 msgid "_Clone"
@@ -2312,9 +2309,9 @@ msgid "Process failed (%s)"
 msgstr "Processen misslyckades (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Misslyckades ändra arbetssökvägen till \"%s\""
+msgstr "Ogiltig mapp \"%s\""
 
 #: ../src/build.c:838
 #, c-format
@@ -2326,6 +2323,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Filen exekverades in därför terminalen kanske innehåller inmatad information "
+"(tryck Ctrl+C eller RETUR-tangenten för att rensa)."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2433,13 +2432,12 @@ msgid "Execute commands"
 msgstr "Exekvera kommandon"
 
 #: ../src/build.c:1991
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p byts ut i kommando- och sökvägsfält, se i instruktionsboken "
-"för ytterligare information."
+"%d, %e, %f, %p, %l byts ut i kommando- och sökvägsfält, se i "
+"instruktionsboken för ytterligare information."
 
 #: ../src/build.c:2149
 msgid "Set Build Commands"
@@ -2514,17 +2512,14 @@ msgid "Detect from file"
 msgstr "Upptäck från fil"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
 msgstr "Programmeringsspråk"
 
 #: ../src/dialogs.c:227
-#, fuzzy
 msgid "Scripting Languages"
 msgstr "Skriptspråk"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
 msgstr "Märkningsspråk"
 
@@ -2575,7 +2570,6 @@ msgid "Open File"
 msgstr "Öppna fil"
 
 #: ../src/dialogs.c:380
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "Visa"
@@ -2756,9 +2750,8 @@ msgid "Any unsaved changes will be lost."
 msgstr "Alla osparade ändringar kommer att förloras."
 
 #: ../src/document.c:1574
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Alla osparade ändringar kommer att förloras."
+msgstr "Redigeringshistoria för ångra-funktionen kommer att förloras."
 
 #: ../src/document.c:1575
 #, c-format
@@ -2808,16 +2801,13 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Misslyckades stänga filen '%s': fclose() fel: %s"
 
 #: ../src/document.c:1981 ../src/document.c:3512
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Skriv över?"
+msgstr "Skriv över"
 
 #: ../src/document.c:1983 ../src/document.c:3515
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"Filen '%s' på disken är nyare än\n"
-"nuvarande i editorn."
+msgstr "Filen '%s' på disken är nyare än den som är laddad i editorn."
 
 #: ../src/document.c:1991 ../src/document.c:3564
 msgid "Try to resave the file?"
@@ -2831,7 +2821,7 @@ msgstr "Filen \"%s\" kunde ej hittas! Spara igen?"
 #: ../src/document.c:2055
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Kan inte spara det skrivskyddade dokumentet '%s'!"
 
 #: ../src/document.c:2123
 #, c-format
@@ -3847,7 +3837,7 @@ msgstr "Kunde inte hitta filen '%s' - försöker med sökvägen för dokument."
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "Dokumentet har stängts."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
@@ -3873,6 +3863,9 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Version:\t%s\n"
+"Författare:\t%s\n"
+"Filnamn:\t%s"
 
 #: ../src/plugins.c:1037
 msgid "No plugins available."
@@ -4047,7 +4040,7 @@ msgstr "projekt"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Vill du flytta aktuellt dokument till det nya projektets session?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4058,9 +4051,8 @@ msgid "C_reate"
 msgstr "Skapa"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Projekt"
+msgstr "Projektnamn"
 
 #: ../src/project.c:188
 #, c-format
@@ -4068,6 +4060,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Sökvägen till filen där projektets inställningar lagras. Den borde ha "
+"filnamnstillägget \"%s\"."
 
 #: ../src/project.c:212 ../src/project.c:484
 msgid "Choose Project Base Path"
@@ -4190,7 +4184,7 @@ msgstr ""
 
 #: ../src/search.c:322
 msgid "Use multi-_line matching"
-msgstr ""
+msgstr "Använd flerraders matchning"
 
 #: ../src/search.c:327
 msgid ""
@@ -4199,6 +4193,10 @@ msgid ""
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Utför en matchning för reguljärt uttryck på hela buffern samtidigt i stället "
+"för rad-för-rad, så att träffar kan hittas som löper över flera rader. I "
+"detta läge uppfattas radslutstecken som en del av matchningen och uppfattas "
+"som vanliga tecken."
 
 #: ../src/search.c:340
 msgid "Search _backwards"
@@ -4409,28 +4407,29 @@ msgstr ""
 #: ../src/spawn.c:122
 #, c-format
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Texten var tom (eller innehöll bara tomt utrymme)"
 
 #: ../src/spawn.c:137 ../src/spawn.c:183
 #, c-format
 msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
+msgstr "Texten tog slut innan matchning kunde hittas för %c. (Texten var '%s')"
 
 #: ../src/spawn.c:145 ../src/spawn.c:159
 #, c-format
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
+"Ett Windows-program inom citattecken måste hålla sig helt inom citat-tecknen."
 
 #. or SPAWN error?
 #: ../src/spawn.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Program '%s' not found"
-msgstr "Kommandot kunde ej hittas."
+msgstr "Programet '%s' kunde ej hittas"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "Processen misslyckades (%s)"
+msgstr "TerminateProcess() misslyckades: %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5201,9 +5200,8 @@ msgid "Select File"
 msgstr "Välj fil"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "Ladda om konfigurationen"
+msgstr "Konfigurationen av filtyper"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5230,14 +5228,12 @@ msgstr ""
 "skriv in ett annat."
 
 #: ../src/utils.c:374
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Klassisk Mac (CR)"
 
 #: ../src/utils.c:376
 msgid "Unix (LF)"
@@ -5245,15 +5241,15 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:385
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:386
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:387
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:477
 #, c-format
@@ -5277,6 +5273,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Mappen ändrades inte därför komanndotolen kan innehålla inmatad information "
+"(tryck Ctrl+C eller RETUR-tangenten för att rensa)."
 
 #: ../src/win32.c:208
 msgid "Geany project files"
@@ -5570,9 +5568,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
 
 #: ../plugins/filebrowser.c:651
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Öppna fil"
+msgstr "Öppna i Geany"
 
 #: ../plugins/filebrowser.c:657
 msgid "Open _Externally"

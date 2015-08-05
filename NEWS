@@ -1,5 +1,7 @@
 Geany 1.26 (unreleased)
 
+    Internationalization
+    * Update translations: sv
 
 Geany 1.25 (July 12, 2015)
 
@@ -147,7 +149,7 @@ Geany 1.25 (July 12, 2015)
     * Add scintilla_get_type().
 
     Windows
-    * Use native Windows quoting rules for commands (on Windows, part of 
+    * Use native Windows quoting rules for commands (on Windows, part of
       subprocess spawning improvements).
     * Prompt before overwriting existing files when using native Save As
       dialog (PR#113, Adam Coyne).
