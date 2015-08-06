@@ -37,6 +37,7 @@ typedef struct GeanyProject
 	gchar *description; 	/**< Short description of the project. */
 	gchar *file_name; 		/**< Where the project file is stored (in UTF-8). */
 	gchar *base_path;		/**< Base path of the project directory (in UTF-8, maybe relative). */
+	gchar *abs_path;	/**< Base path of the project directory (in UTF-8, guaranteed absolute). */
 	/** Identifier whether it is a pure Geany project or modified/extended
 	 * by a plugin. */
 	gint type;

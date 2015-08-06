@@ -440,6 +440,7 @@ static void destroy_project(gboolean open_default)
 	g_free(app->project->description);
 	g_free(app->project->file_name);
 	g_free(app->project->base_path);
+	g_free(app->project->abs_path);
 	g_strfreev(app->project->file_patterns);
 
 	g_free(app->project);
@@ -796,6 +797,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	SETPTR(p->file_name, g_strdup(file_name));
 	/* use "." if base_path is empty */
 	SETPTR(p->base_path, g_strdup(!EMPTY(base_path) ? base_path : "./"));
+	SETPTR(p->abs_path, project_get_base_path());
 
 	if (! new_project)	/* save properties specific fields */
 	{
@@ -1054,6 +1056,7 @@ static gboolean load_config(const gchar *filename)
 	p->description = utils_get_setting_string(config, "project", "description", "");
 	p->file_name = utils_get_utf8_from_locale(filename);
 	p->base_path = utils_get_setting_string(config, "project", "base_path", "");
+	p->abs_path = project_get_base_path();
 	p->file_patterns = g_key_file_get_string_list(config, "project", "file_patterns", NULL, NULL);
 
 	p->priv->long_line_behaviour = utils_get_setting_integer(config, "long line marker",
@@ -1148,7 +1151,7 @@ static gboolean write_config(gboolean emit_signal)
 }
 
 
-/** Forces the project file rewrite and emission of the project-save signal. Plugins 
+/** Forces the project file rewrite and emission of the project-save signal. Plugins
  * can use this function to save additional project data outside the project dialog.
  *
  *  @since 1.25
