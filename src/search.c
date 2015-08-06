@@ -1069,10 +1069,10 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 
 	/* add project's base path directory to the dir list, we do this here once
 	 * (in create_fif_dialog() it would fail if a project is opened after dialog creation) */
-	if (app->project != NULL && !EMPTY(app->project->base_path))
+	if (app->project != NULL && !EMPTY(app->project->abs_path))
 	{
 		ui_combo_box_prepend_text_once(GTK_COMBO_BOX_TEXT(fif_dlg.dir_combo),
-			app->project->base_path);
+			app->project->abs_path);
 	}
 
 	entry = gtk_bin_get_child(GTK_BIN(fif_dlg.dir_combo));
@@ -1704,7 +1704,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 		NULL, &error))
  	{
 		gchar *utf8_str;
- 
+
  		ui_progress_bar_start(_("Searching..."));
  		msgwin_set_messages_dir(dir);
 		utf8_str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),

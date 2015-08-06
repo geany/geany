@@ -168,9 +168,9 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		}
 		g_slist_free(filelist);
 	}
-	if (app->project && !EMPTY(app->project->base_path))
+	if (app->project && !EMPTY(app->project->abs_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
-			app->project->base_path, NULL);
+			app->project->abs_path, NULL);
 	return ret;
 }
 
@@ -474,9 +474,9 @@ void dialogs_show_open_file(void)
 		if (initdir != NULL && g_path_is_absolute(initdir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
-		if (app->project && !EMPTY(app->project->base_path))
+		if (app->project && !EMPTY(app->project->abs_path))
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
-					app->project->base_path, NULL);
+					app->project->abs_path, NULL);
 
 		while (!open_file_dialog_handle_response(dialog,
 			gtk_dialog_run(GTK_DIALOG(dialog))));
@@ -637,9 +637,9 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 		g_free(fname);
 	}
 
-	if (app->project && !EMPTY(app->project->base_path))
+	if (app->project && !EMPTY(app->project->abs_path))
 		gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
-			app->project->base_path, NULL);
+			app->project->abs_path, NULL);
 
 	/* Run the dialog synchronously, pausing this function call */
 	do
@@ -648,9 +648,9 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 	}
 	while (! save_as_dialog_handle_response(dialog, resp));
 
-	if (app->project && !EMPTY(app->project->base_path))
+	if (app->project && !EMPTY(app->project->abs_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
-			app->project->base_path, NULL);
+			app->project->abs_path, NULL);
 
 	gtk_widget_destroy(dialog);
 
