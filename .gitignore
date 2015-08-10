@@ -99,6 +99,7 @@ Makefile.in
 # /doc/
 #-----------------------------------------------------------------------
 /doc/Doxyfile
+/doc/Doxyfile-gi
 /doc/Doxyfile.stamp
 /doc/geany.1
 /doc/geany.html

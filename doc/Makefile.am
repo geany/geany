@@ -99,14 +99,24 @@ doxygen_sources = \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
-Doxyfile.stamp: Doxyfile $(doxygen_sources)
-	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
+# set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
+# in headers (even though it's correctly documented in the corresponding .c file) only
+# for xml output
+Doxyfile-gi: Doxyfile
+	$(AM_V_GEN)$(SED) \
+		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
+		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
+		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
+		$< > $@ || { $(RM) $@ && exit 1; }
+
+Doxyfile.stamp: Doxyfile Doxyfile-gi $(doxygen_sources)
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && $(DOXYGEN) Doxyfile && echo "" > $@
 
 all-local: Doxyfile.stamp
 
 clean-local: clean-api-docs-local
 clean-api-docs-local:
-	-rm -rf reference/ Doxyfile.stamp doxygen_*
+	-rm -rf reference/ xml/ Doxyfile.stamp doxygen_*
 
 endif
 
