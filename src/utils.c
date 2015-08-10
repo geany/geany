@@ -60,6 +60,10 @@
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
+#ifdef MAC_INTEGRATION
+#include <sys/sysctl.h>
+#endif
+
 
 /**
  *  Tries to open the given URI in a browser.
@@ -2094,7 +2098,7 @@ gchar *utils_get_user_config_dir(void)
 }
 
 
-static gboolean is_osx_bundle(void)
+gboolean utils_is_osx_bundle(void)
 {
 #ifdef MAC_INTEGRATION
 	gchar *bundle_id = gtkosx_application_get_bundle_id();
@@ -2124,7 +2128,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
 		g_free(prefix);
 #else
-		if (is_osx_bundle())
+		if (utils_is_osx_bundle())
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
@@ -2154,37 +2158,56 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	const gchar *command = is_osx_bundle() ? "open" : "geany";
-	gchar *exec_path = g_find_program_in_path(command);
+	const gchar *std_argv[] = { app->executable, "-i", "-c", app->configdir, doc_path, NULL };
+#ifdef MAC_INTEGRATION
+	const gchar *osx_argv[] = { "open", "-n", "-a", "Geany", doc_path, "--args", "-i",
+		"-c", app->configdir, NULL };
+#endif
+	const gchar *const *argv = std_argv;
+	GError *err = NULL;
 
-	if (exec_path)
+	if (!app->executable)
 	{
-		GError *err = NULL;
-		const gchar *argv[6]; // max args + 1
-		gint argc = 0;
-
-		argv[argc++] = exec_path;
-		if (is_osx_bundle())
+		if (utils_is_osx_bundle())
 		{
-			argv[argc++] = "-n";
-			argv[argc++] = "-a";
-			argv[argc++] = "Geany";
-			argv[argc++] = doc_path;
+		#ifdef MAC_INTEGRATION
+			char str[256];
+			size_t size = sizeof str;
+
+			argv = osx_argv;
+			/* --args is since OSX 10.6.x = Darwin 10.x */
+			if (sysctlbyname("kern.osrelease", str, &size, NULL, 0) == -1 || atoi(str) < 10)
+				osx_argv[5] = NULL;
+		#endif
 		}
 		else
 		{
-			argv[argc++] = "-i";
-			argv[argc++] = doc_path;
-		}
-		argv[argc] = NULL;
+			const gchar *prgname = g_get_prgname();
 
-		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
+		#ifdef G_OS_UNIX
+			if (prgname && strcmp(prgname, "geany"))
+		#else
+			if (prgname && g_ascii_strcasecmp(prgname, "geany") &&
+				g_ascii_strcasecmp(prgname, "geany.exe"))
+		#endif
+			{
+				/* g_find_program_in_path() is deprecated, so try to spawn it */
+				std_argv[0] = prgname;
+
+				if (spawn_async(NULL, NULL, (gchar **) argv, NULL, NULL, NULL))
+					return;
+			}
+
+		#ifdef G_OS_UNIX
+			/* >> place any UNIX-specific methods here << */
+		#endif
+			std_argv[0] = "geany";
 		}
-		g_free(exec_path);
 	}
-	else
-		g_printerr("Unable to find 'geany'");
+
+	if (!spawn_async(NULL, NULL, (gchar **) argv, NULL, NULL, &err))
+	{
+		g_printerr("Unable to open new window: %s", err->message);
+		g_error_free(err);
+	}
 }

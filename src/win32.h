@@ -68,6 +68,8 @@ gchar *win32_expand_environment_variables(const gchar *str);
 
 gchar *win32_get_user_config_dir(void);
 
+gchar *win32_get_executable_path(void);
+
 G_END_DECLS
 
 #endif /* G_OS_WIN32 */

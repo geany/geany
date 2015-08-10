@@ -620,6 +620,44 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 }
 
 
+static void setup_executable_name(gint argc, gchar **argv)
+{
+#ifdef G_OS_WIN32
+	/* argv[0] is always that of Geany, but the path functions have problems */
+	app->executable = win32_get_executable_path();
+#endif
+
+	if (utils_is_osx_bundle())
+	{
+	#ifdef MAC_INTEGRATION
+		/* Is (re)start via script is allowed in a bundle?.. */
+		app->executable = gtkosx_application_get_executable_path();
+	#endif
+	}
+	else if (!app->executable)
+	{
+		if (argc > 0 && *argv[0])
+		{
+			gchar *base = g_path_get_basename(argv[0]);
+
+			/* basename may result from PATH search, not CWD */
+			if (strcmp(base, argv[0]))
+			{
+				app->executable = tm_get_real_path(argv[0]);
+
+				if (app->executable && !g_file_test(app->executable, G_FILE_TEST_IS_EXECUTABLE))
+				{
+					g_free(app->executable);
+					app->executable = NULL;
+				}
+			}
+
+			g_free(base);
+		}
+	}
+}
+
+
 static gint create_config_dir(void)
 {
 	gint saved_errno = 0;
@@ -1036,6 +1074,7 @@ gint main_lib(gint argc, gchar **argv)
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
+	setup_executable_name(argc, argv);
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)
 	/* Initialize GLib's thread system in case any plugins want to use it or their
@@ -1070,6 +1109,7 @@ gint main_lib(gint argc, gchar **argv)
 			g_free(app->configdir);
 			g_free(app->datadir);
 			g_free(app->docdir);
+			g_free(app->executable);
 			g_free(app);
 			return 0;
 		}
@@ -1272,6 +1312,7 @@ static void do_main_quit(void)
 	g_free(app->configdir);
 	g_free(app->datadir);
 	g_free(app->docdir);
+	g_free(app->executable);
 	g_free(prefs.default_open_path);
 	g_free(prefs.custom_plugin_path);
 	g_free(ui_prefs.custom_date_format);

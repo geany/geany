@@ -308,6 +308,8 @@ gchar *utils_parse_and_format_build_date(const gchar *input);
 
 gchar *utils_get_user_config_dir(void);
 
+gboolean utils_is_osx_bundle(void);
+
 const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);

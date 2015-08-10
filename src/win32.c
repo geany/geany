@@ -1024,4 +1024,12 @@ gchar *win32_get_user_config_dir(void)
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
 }
 
+
+gchar *win32_get_executable_path(void)
+{
+	gchar buffer[MAX_PATH];
+
+	return GetModuleFileName(NULL, buffer, MAX_PATH) ? g_strdup(buffer) : NULL;
+}
+
 #endif
