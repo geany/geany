@@ -123,6 +123,7 @@ AC_SUBST([pkgdatadir])
 # Documentation tools
 GEANY_CHECK_DOCUTILS
 GEANY_CHECK_DOXYGEN
+GEANY_CHECK_PYTHON
 
 # libgeany
 GEANY_LIB_INIT

@@ -104,19 +104,39 @@ doxygen_sources = \
 # for xml output
 Doxyfile-gi: Doxyfile
 	$(AM_V_GEN)$(SED) \
+		-e 's,addtogir=@internal,addtogir=,' \
 		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
 		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
 		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
+		-e 's,^\(SORT_MEMBER_DOCS.*\)YES,\1NO,' \
+		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
 		$< > $@ || { $(RM) $@ && exit 1; }
 
 Doxyfile.stamp: Doxyfile Doxyfile-gi $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && $(DOXYGEN) Doxyfile && echo "" > $@
 
-all-local: Doxyfile.stamp
+ALL_TARGETS = Doxyfile.stamp
+
+if WITH_PYTHON
+
+geany-scintilla-gtkdoc.h: geany-gtkdoc.h
+
+geany-gtkdoc.h: Doxyfile.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) \
+	-o geany-gtkdoc.h --sci-output geany-scintilla-gtkdoc.h
+
+ALL_TARGETS += geany-gtkdoc.h geany-scintilla-gtkdoc.h
+
+geany_includedir = $(includedir)/geany/gtkdoc
+geany_include_HEADERS = geany-gtkdoc.h geany-scintilla-gtkdoc.h
+
+endif
+
+all-local: $(ALL_TARGETS)
 
 clean-local: clean-api-docs-local
 clean-api-docs-local:
-	-rm -rf reference/ xml/ Doxyfile.stamp doxygen_*
+	-rm -rf reference/ xml/ doxygen_* $(ALL_TARGETS)
 
 endif
 

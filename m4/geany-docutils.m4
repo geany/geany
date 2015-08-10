@@ -70,3 +70,16 @@ AC_DEFUN([GEANY_CHECK_DOCUTILS_PDF],
 	AM_CONDITIONAL([WITH_RST2PDF], [test "x$geany_enable_pdf_docs" != "xno"])
 	GEANY_STATUS_ADD([Build PDF documentation], [$geany_enable_pdf_docs])
 ])
+
+dnl
+dnl GEANY_CHECK_PYTHON
+dnl For gtkdoc header generation
+dnl
+AC_DEFUN([GEANY_CHECK_PYTHON],
+[
+	AM_PATH_PYTHON([2.7], [], [])
+
+	AM_CONDITIONAL([WITH_PYTHON], [test -n "$PYTHON"])
+	AM_COND_IF([WITH_PYTHON],
+		[GEANY_STATUS_ADD([Using Python version], [$PYTHON_VERSION])])
+])
