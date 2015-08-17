@@ -885,7 +885,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
 #else
-	doc->priv->mtime = time(NULL);
+	doc->priv->mtime = 0;
 #endif
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
@@ -3616,12 +3616,6 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 		monitor_resave_missing_file(doc);
 		/* doc may be closed now */
 		ret = TRUE;
-	}
-	else if (! use_gio_filemon && /* ignore check when using GIO */
-		doc->priv->mtime > cur_time)
-	{
-		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
-		/* Note: on Windows st.st_mtime can be newer than cur_time */
 	}
 	else if (doc->priv->mtime < st.st_mtime)
 	{
