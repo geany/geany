@@ -4,6 +4,9 @@ AnimalÌ2Ö0
 BÌ2048Ö0
 BarÌ2048Ö0
 BazÌ2048Ö0
+CÌ1Ö0
+CÌ2048Ö0
+DÌ32Ö0
 DoZÌ32Ö0
 FooÌ1Ö0
 FooÌ2048Ö0
@@ -14,6 +17,7 @@ SuperTraitTestÌ32Ö0
 TestableÌ32Ö0
 TraitedStructTestÌ1Ö0
 TraitedStructTestÌ2048Ö0
+aÌ8ÎCÖ0
 a_anteaterÌ4ÎAnimalÖ0
 a_bearÌ4ÎAnimalÖ0
 a_catÌ4ÎAnimalÖ0
