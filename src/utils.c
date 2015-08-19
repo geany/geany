@@ -58,19 +58,6 @@
 # include <sys/types.h>
 #endif
 
-#ifdef G_OS_WIN32
-# define WIN32_LEAN_AND_MEAN
-# include <windows.h>
-#endif
-
-#ifdef __APPLE__
-# include <mach-o/dyld.h> // Used to find self executable
-#endif
-
-#if defined(__FreeBSD__)
-# include <sys/sysctl.h> // Used to find self executable
-#endif
-
 #include <glib/gstdio.h>
 #include <gio/gio.h>
 
@@ -2169,42 +2156,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 // Attempts to get the path to the executable for this Geany instance
 static gchar *utils_find_self_executable(void)
 {
-#ifndef G_OS_WIN32
-	// Some *nixes have a file which links to the current exectuable path
-	static const gchar *path_files[] =
-	{
-		"/proc/self/exe",     // Linux
-		"/proc/curproc/file", // DragonFly BSD and FreeBSD w/ procfs
-		"/proc/curproc/exe",  // NetBSD
-		NULL,
-	};
-	
-	for (const gchar **test_path = path_files; *test_path != NULL; test_path++)
-	{
-		if (g_file_test(*test_path, G_FILE_TEST_EXISTS))
-		{
-			gchar *exe_file = tm_get_real_path(*test_path);
-			if (exe_file != NULL)
-			{
-				if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
-					return exe_file;
-				g_free(exe_file);
-			}
-		}
-	}
-	
-# if defined(__FreeBSD__)
-	{
-	// FreeBSD doesn't have procfs mounted by default, so use sysctl()
-	int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
-	gsize path_len = PATH_MAX;
-	gchar *exe_file = g_malloc0(path_len + 1);
-	if (sysctl(mib, 4, exe_file, &path_len, NULL, 0) == 0)
-		return exe_file;
-	g_free(exe_file);
-	}
-# elif defined(__APPLE__)
-#  if defined(MAC_INTEGRATION)
+#if defined(MAC_INTEGRATION)
 	// GtkOSX integration library provides a wrapper to get path from bundle
 	if (is_osx_bundle())
 	{
@@ -2212,36 +2164,8 @@ static gchar *utils_find_self_executable(void)
 		if (exec_file != NULL)
 			return exe_file;
 	}
-#  endif
-	{
-	// If not in a bundle, use the OSX call to get current executable
-	gsize path_len = PATH_MAX;
-	gchar *exe_file = g_malloc0(path_len + 1);
-	if (_NSGetExecutablePath(exe_file, &path_len) == 0)
-	{
-		gchar *abs_exe_file = tm_get_real_path(exe_file);
-		g_free(exe_file);
-		return abs_exe_file;
-	}
-	g_free(exe_file);
-	}
 #endif
 
-#else
-	{
-	// On Win32, GetModuleFileName() can give the path to the current executable
-	gchar *exe_file = g_malloc0(MAXPATHLEN + 1);
-	if (GetModuleFileName(NULL, exe_file, MAXPATHLEN) > 0)
-	{
-		if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
-			return exe_file;
-		g_free(exe_file);
-	}
-	}
-#endif
-
-	// If we get to here, none of the platform-specific ways worked
-	
 	// Try using the installation directory
 	gchar *exe_file = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
 	if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
