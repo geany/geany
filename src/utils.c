@@ -2156,18 +2156,17 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 // Attempts to get the path to the executable for this Geany instance
 static gchar *utils_find_self_executable(void)
 {
+	gchar *exe_file;
+
 #if defined(MAC_INTEGRATION)
 	// GtkOSX integration library provides a wrapper to get path from bundle
-	if (is_osx_bundle())
-	{
-		gchar *exec_file = gtkosx_application_get_executable_path();
-		if (exec_file != NULL)
-			return exe_file;
-	}
+	exe_file = gtkosx_application_get_executable_path();
+	if (exe_file != NULL)
+		return exe_file;
 #endif
 
 	// Try using the installation directory
-	gchar *exe_file = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
+	exe_file = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
 	if (g_file_test(exe_file, G_FILE_TEST_IS_EXECUTABLE))
 		return exe_file;
 	g_free(exe_file);
