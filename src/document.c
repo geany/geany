@@ -2062,10 +2062,10 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	fp = project_get_file_prefs();
 	/* replaces tabs with spaces but only if the current file is not a Makefile */
 	if (fp->replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
-		editor_replace_tabs(doc->editor);
+		editor_replace_tabs(doc->editor, TRUE);
 	/* strip trailing spaces */
 	if (fp->strip_trailing_spaces)
-		editor_strip_trailing_spaces(doc->editor);
+		editor_strip_trailing_spaces(doc->editor, TRUE);
 	/* ensure the file has a newline at the end */
 	if (fp->final_new_line)
 		editor_ensure_final_newline(doc->editor);

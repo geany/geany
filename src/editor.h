@@ -295,13 +295,13 @@ void editor_fold_all(GeanyEditor *editor);
 
 void editor_unfold_all(GeanyEditor *editor);
 
-void editor_replace_tabs(GeanyEditor *editor);
+void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection);
 
-void editor_replace_spaces(GeanyEditor *editor);
+void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection);
 
 void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line);
 
-void editor_strip_trailing_spaces(GeanyEditor *editor);
+void editor_strip_trailing_spaces(GeanyEditor *editor, gboolean ignore_selection);
 
 void editor_ensure_final_newline(GeanyEditor *editor);
 

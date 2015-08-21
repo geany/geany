@@ -536,7 +536,7 @@ void on_replace_tabs_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(doc != NULL);
 
-	editor_replace_tabs(doc->editor);
+	editor_replace_tabs(doc->editor, FALSE);
 }
 
 
@@ -1608,7 +1608,7 @@ static void on_strip_trailing_spaces1_activate(GtkMenuItem *menuitem, gpointer u
 	doc = document_get_current();
 	g_return_if_fail(doc != NULL);
 
-	editor_strip_trailing_spaces(doc->editor);
+	editor_strip_trailing_spaces(doc->editor, FALSE);
 }
 
 
@@ -1652,7 +1652,7 @@ void on_replace_spaces_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 	g_return_if_fail(doc != NULL);
 
-	editor_replace_spaces(doc->editor);
+	editor_replace_spaces(doc->editor, FALSE);
 }
 
 

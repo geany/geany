@@ -4314,9 +4314,10 @@ void editor_fold_all(GeanyEditor *editor)
 }
 
 
-void editor_replace_tabs(GeanyEditor *editor)
+void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 {
 	gint search_pos, pos_in_line, current_tab_true_length;
+	gint anchor_pos, caret_pos;
 	gint tab_len;
 	gchar *tab_str;
 	struct Sci_TextToFind ttf;
@@ -4325,10 +4326,20 @@ void editor_replace_tabs(GeanyEditor *editor)
 
 	sci_start_undo_action(editor->sci);
 	tab_len = sci_get_tab_width(editor->sci);
-	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(editor->sci);
+	if (sci_has_selection(editor->sci) && !ignore_selection)
+	{
+		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
+		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
+	}
+	else
+	{
+		ttf.chrg.cpMin = 0;
+		ttf.chrg.cpMax = sci_get_length(editor->sci);
+	}
 	ttf.lpstrText = (gchar*) "\t";
 
+	anchor_pos = SSM(editor->sci, SCI_GETANCHOR, 0, 0);
+	caret_pos = sci_get_current_position(editor->sci);
 	while (TRUE)
 	{
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
@@ -4346,15 +4357,23 @@ void editor_replace_tabs(GeanyEditor *editor)
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax += current_tab_true_length - 1;
 		g_free(tab_str);
+
+		if (anchor_pos > search_pos)
+			anchor_pos += current_tab_true_length - 1;
+		if (caret_pos > search_pos)
+			caret_pos += current_tab_true_length - 1;
 	}
+	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
 }
 
 
-/* Replaces all occurrences all spaces of the length of a given tab_width. */
-void editor_replace_spaces(GeanyEditor *editor)
+/* Replaces all occurrences all spaces of the length of a given tab_width,
+ * optionally restricting the search to the current selection. */
+void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 {
 	gint search_pos;
+	gint anchor_pos, caret_pos;
 	static gdouble tab_len_f = -1.0; /* keep the last used value */
 	gint tab_len;
 	gchar *text;
@@ -4376,10 +4395,20 @@ void editor_replace_spaces(GeanyEditor *editor)
 	text = g_strnfill(tab_len, ' ');
 
 	sci_start_undo_action(editor->sci);
-	ttf.chrg.cpMin = 0;
-	ttf.chrg.cpMax = sci_get_length(editor->sci);
+	if (sci_has_selection(editor->sci) && !ignore_selection)
+	{
+		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
+		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
+	}
+	else
+	{
+		ttf.chrg.cpMin = 0;
+		ttf.chrg.cpMax = sci_get_length(editor->sci);
+	}
 	ttf.lpstrText = text;
 
+	anchor_pos = SSM(editor->sci, SCI_GETANCHOR, 0, 0);
+	caret_pos = sci_get_current_position(editor->sci);
 	while (TRUE)
 	{
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
@@ -4398,7 +4427,13 @@ void editor_replace_spaces(GeanyEditor *editor)
 		ttf.chrg.cpMin = search_pos;
 		/* update end of range now text has changed */
 		ttf.chrg.cpMax -= tab_len - 1;
+
+		if (anchor_pos > search_pos)
+			anchor_pos -= tab_len - 1;
+		if (caret_pos > search_pos)
+			caret_pos -= tab_len - 1;
 	}
+	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
 	g_free(text);
 }
@@ -4429,14 +4464,32 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 }
 
 
-void editor_strip_trailing_spaces(GeanyEditor *editor)
+void editor_strip_trailing_spaces(GeanyEditor *editor, gboolean ignore_selection)
 {
-	gint max_lines = sci_get_line_count(editor->sci);
+	gint start_line;
+	gint end_line;
 	gint line;
+
+	if (sci_has_selection(editor->sci) && !ignore_selection)
+	{
+		gint selection_start = sci_get_selection_start(editor->sci);
+		gint selection_end = sci_get_selection_end(editor->sci);
+
+		start_line = sci_get_line_from_position(editor->sci, selection_start);
+		end_line = sci_get_line_from_position(editor->sci, selection_end);
+
+		if (sci_get_col_from_position(editor->sci, selection_end) > 0)
+			end_line++;
+	}
+	else
+	{
+		start_line = 0;
+		end_line = sci_get_line_count(editor->sci);
+	}
 
 	sci_start_undo_action(editor->sci);
 
-	for (line = 0; line < max_lines; line++)
+	for (line = start_line; line < end_line; line++)
 	{
 		editor_strip_line_trailing_spaces(editor, line);
 	}
