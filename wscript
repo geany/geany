@@ -45,7 +45,7 @@ import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Build import BuildContext
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import WafError
+from waflib.Errors import ConfigurationError, WafError
 from waflib.TaskGen import feature, before_method
 from waflib.Tools.compiler_c import c_compiler
 from waflib.Tools.compiler_cxx import cxx_compiler
@@ -221,10 +221,7 @@ def configure(conf):
     _load_intltool_if_available(conf)
 
     # GTK / GIO version check
-    gtk_package_name = 'gtk+-3.0' if conf.options.use_gtk3 else 'gtk+-2.0'
-    minimum_gtk_version = MINIMUM_GTK3_VERSION if conf.options.use_gtk3 else MINIMUM_GTK_VERSION
-    conf.check_cfg(package=gtk_package_name, atleast_version=minimum_gtk_version, uselib_store='GTK',
-        mandatory=True, args='--cflags --libs')
+    gtk_package_name, minimum_gtk_version = _check_for_gtk2_and_gtk3(conf)
     conf.check_cfg(package='glib-2.0', atleast_version=MINIMUM_GLIB_VERSION, uselib_store='GLIB',
         mandatory=True, args='--cflags --libs')
     conf.check_cfg(package='gmodule-2.0', uselib_store='GMODULE',
@@ -347,6 +344,33 @@ but you then may not have a local copy of the HTML manual.'''
         conf.msg('Compiling Git revision', revision)
 
 
+def _check_for_gtk2_and_gtk3(conf):
+    gtk_package_name = 'gtk+-2.0'
+    minimum_gtk_version = MINIMUM_GTK_VERSION
+    if not conf.options.use_gtk3:
+        try:
+            _check_for_gtk_package(conf, gtk_package_name, minimum_gtk_version)
+        except ConfigurationError:
+            pass  # fall through to check for GTK3 below
+        else:
+            return gtk_package_name, minimum_gtk_version
+
+    # fallback to GTK3
+    gtk_package_name = 'gtk+-3.0'
+    minimum_gtk_version = MINIMUM_GTK3_VERSION
+    _check_for_gtk_package(conf, gtk_package_name, minimum_gtk_version)
+    return gtk_package_name, minimum_gtk_version
+
+
+def _check_for_gtk_package(conf, gtk_package_name, minimum_gtk_version):
+    conf.check_cfg(
+        package=gtk_package_name,
+        atleast_version=minimum_gtk_version,
+        uselib_store='GTK',
+        mandatory=True,
+        args='--cflags --libs')
+
+
 def options(opt):
     # Disable MSVC detection on win32: building Geany with MSVC is currently not supported
     # If anyone wants to add support for building with MSVC, this hack should be removed.
@@ -370,7 +394,7 @@ def options(opt):
         help='compile without support for an embedded virtual terminal [[default: No]',
         dest='no_vte')
     opt.add_option('--enable-gtk3', action='store_true', default=False,
-        help='compile with GTK3 support (experimental) [[default: No]',
+        help='compile against GTK3 [[default: No]',
         dest='use_gtk3')
     opt.add_option('--enable-mac-integration', action='store_true', default=False,
         help='use gtk-mac-integration to enable improved OS X integration [[default: No]',
