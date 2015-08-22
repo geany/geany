@@ -42,3 +42,5 @@ mod mineral {
 	fn chalk() {
 	}
 }
+
+fn main() {}

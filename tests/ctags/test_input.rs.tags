@@ -13,6 +13,7 @@ FooÌ2048Ö0
 Foo2Ì2048Ö0
 ParametrizedTraitÌ32Ö0
 S1Ì2048Ö0
+SomeStructÌ2048Îtest_input2Ö0
 SuperTraitTestÌ32Ö0
 TestableÌ32Ö0
 TraitedStructTestÌ1Ö0
@@ -50,7 +51,8 @@ test2Ì128Í(&self)ÎFooÖ0
 test2Ì128Í(&self)ÎTestableÖ0
 test_input2Ì256Ö0
 test_macroÌ65536Ö0
+where_fooÌ16Í<T>(a: T) where T: SendÖ0
 xÌ8ÎFoo2Ö0
 xÌ8ÎTraitedStructTestÖ0
 yÌ8ÎFoo2Ö0
-yadaÌ16Í(a:isize,c:Foo,b:test_input2::fruit::SomeStruct) -> StringÖ0
+yadaÌ16Í(a:isize, c:Foo, b:test_input2::SomeStruct) -> StringÖ0
