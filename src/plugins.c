@@ -206,8 +206,9 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 	{
 		cb = &callbacks[i];
 
+		/* Pass the callback data as default user_data if none was set by the plugin itself */
 		plugin_signal_connect(&plugin->public, NULL, cb->signal_name, cb->after,
-			cb->callback, cb->user_data);
+			cb->callback, cb->user_data ? cb->user_data : plugin->cb_data);
 	}
 }
 

@@ -185,7 +185,9 @@ typedef struct PluginCallback
 	GCallback	callback;
 	/** Set to TRUE to connect your handler with g_signal_connect_after(). */
 	gboolean	after;
-	/** The user data passed to the signal handler. */
+	/** The user data passed to the signal handler. If set to NULL then the signal
+	 * handler will receive the data set with geany_plugin_register_full() or
+	 * geany_plugin_set_data() */
 	gpointer	user_data;
 }
 PluginCallback;

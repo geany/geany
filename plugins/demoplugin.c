@@ -43,7 +43,11 @@ static gchar *welcome_text = NULL;
 static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
 								 SCNotification *nt, gpointer data)
 {
-	GeanyData *geany_data = data;
+	/* data == GeanyPlugin because the data member of PluginCallback was set to NULL
+	 * and this plugin has called geany_plugin_set_data() with the GeanyPlugin pointer as
+	 * data */
+	GeanyPlugin *plugin = data;
+	GeanyData *geany_data = plugin->geany_data;
 
 	/* For detailed documentation about the SCNotification struct, please see
 	 * http://www.scintilla.org/ScintillaDoc.html#Notifications. */
@@ -137,8 +141,14 @@ static gboolean demo_init(GeanyPlugin *plugin, gpointer data)
 
 	welcome_text = g_strdup(_("Hello World!"));
 
-	demo_callbacks[0].user_data = geany_data;
-
+	/* This might seem strange but is a method to get the GeanyPlugin pointer passed to
+	 * on_editor_notify(). PluginCallback functions get the same data that was set via
+	 * GEANY_PLUING_REGISTER_FULL() or geany_plugin_set_data() by default (unless the data pointer
+	 * was set to non-NULL at compile time).
+	 * This is really only done for demoing PluginCallback. Actual plugins will use real custom
+	 * data and perhaps embed the GeanyPlugin or GeanyData pointer their if they also use
+	 * PluginCallback. */
+	geany_plugin_set_data(plugin, plugin, NULL);
 	return TRUE;
 }
 
