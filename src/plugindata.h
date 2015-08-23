@@ -275,6 +275,14 @@ void plugin_cleanup(void);
  *
  * For all glory details please read @ref howto.
  *
+ * Because the plugin is not yet enabled by the user you may not call plugin API functions inside
+ * this function, except for the API functions below which are required for proper registration.
+ *
+ * API functions which are allowed to be called within this function:
+ *  - main_locale_init()
+ *  - geany_plugin_register() (and GEANY_PLUGIN_REGISTER())
+ *  - geany_plugin_register_full() (and GEANY_PLUGIN_REGISTER_FULL())
+ *
  * @param plugin The unique plugin handle to your plugin. You must set some fields here.
  *
  * @since 1.26 (API 225)

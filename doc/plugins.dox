@@ -37,6 +37,9 @@ This is the Geany API documentation. It should be considered work in progress.
 We will try to document as many functions and structs as possible.
 
 @warning Do not use any symbol not in the documentation - it may change.
+@warning Except for exceptions stated in the documentation for geany_load_module(), no API function
+may be called if the plugin is not enabled (between the calls to their GeanyFuncs::init and
+GeanyFuncs::cleanup functions).
 
 @section pluginsupport Plugin Support
 - @link howto Plugin HowTo @endlink - get started
