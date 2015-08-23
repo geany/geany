@@ -261,7 +261,12 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
 /** Register a plugin to Geany.
  *
  * The plugin will show up in the plugin manager. The user can interact with
- * it based on the callbacks it provides and installed GUI elements.
+ * it based on the functions it provides and installed GUI elements.
+ *
+ * You must initialize the info and funcs fields of @ref GeanyPlugin
+ * appropriately prior to calling this, otherwise registration will fail. For
+ * info at least a valid name must be set (possibly localized). For funcs,
+ * at least init() and cleanup() functions must be implemented and set.
  *
  * The return value must be checked. It may be FALSE if the plugin failed to register which can
  * mainly happen for two reasons (future Geany versions may add new failure conditions):
@@ -275,7 +280,6 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
  * @param api_version The API version the plugin is compiled against (pass GEANY_API_VERSION)
  * @param min_api_version The minimum API version required by the plugin
  * @param abi_version The exact ABI version the plugin is compiled against (pass GEANY_ABI_VERSION)
- * @param cbs A statically allocated @ref GeanyPluginFuncs structure filled with callbacks
  * @param pdata A data pointer to store plugin-specific data, will be passed to the plugin's callbacks
  *
  * @return TRUE if the plugin was successfully registered. Otherwise FALSE.
@@ -285,9 +289,10 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
  **/
 GEANY_API_SYMBOL
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_api_version,
-                               gint abi_version, GeanyPluginFuncs *cbs, gpointer pdata)
+                               gint abi_version, gpointer pdata)
 {
 	Plugin *p;
+	GeanyPluginFuncs *cbs = plugin->funcs;
 
 	g_return_val_if_fail(plugin != NULL, FALSE);
 
@@ -295,19 +300,12 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 	/* Prevent registering incompatible plugins. */
 	if (! plugin_check_version(p, PLUGIN_VERSION_CODE(api_version, abi_version)))
 		return FALSE;
-	/* If it ever becomes necessary we can save the api version in Plugin
-	 * and apply compat code on a per-plugin basis, because we learn about
-	 * the requested API version here. Also if we add to GeanyPluginFuncs then
-	 * we have to inspect the plugin's api so that we don't misinterpret
-	 * function pointers the plugin doesn't know anything about. */
-	p->cbs.n = *cbs;
-	p->cb_data = pdata;
 
 	/* Only init and cleanup callbacks are truly mandatory. */
 	if (! cbs->init || ! cbs->cleanup)
 	{
 		geany_debug("Plugin '%s' has no %s function - ignoring plugin!",
-				cbs->init ? "cleanup" : "init", g_module_name(p->module));
+				 g_module_name(p->module), cbs->init ? "cleanup" : "init");
 	}
 	else
 	{
@@ -316,6 +314,10 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 		if (! EMPTY(p->info.name))
 			p->flags = LOADED_OK;
 	}
+
+	/* If it ever becomes necessary we can save the api version in Plugin
+	 * and apply compat code on a per-plugin basis, because we learn about
+	 * the requested API version here. For now it's not necessary. */
 
 	return PLUGIN_LOADED_OK(p);
 }
@@ -487,8 +489,9 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 	plugin->filename = g_strdup(fname);
 	plugin->public.geany_data = &geany_data;
 	plugin->public.priv = plugin;
-	/* Fields of plugin->info must to be initialized by the plugin */
+	/* Fields of plugin->info/funcs must to be initialized by the plugin */
 	plugin->public.info = &plugin->info;
+	plugin->public.funcs = &plugin->cbs.n;
 
 	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
 	if (p_geany_load_module)
