@@ -119,7 +119,7 @@ item_activate(GtkMenuItem *menuitem, gpointer gdata)
 
 
 /* Called by Geany to initialize the plugin */
-static void demo_init(GeanyPlugin *plugin, gpointer data)
+static gboolean demo_init(GeanyPlugin *plugin, gpointer data)
 {
 	GtkWidget *demo_item;
 	GeanyData *geany_data = plugin->geany_data;
@@ -138,6 +138,8 @@ static void demo_init(GeanyPlugin *plugin, gpointer data)
 	welcome_text = g_strdup(_("Hello World!"));
 
 	demo_callbacks[0].user_data = geany_data;
+
+	return TRUE;
 }
 
 
@@ -202,7 +204,7 @@ static void demo_cleanup(GeanyPlugin *plugin, gpointer data)
 	g_free(welcome_text);
 }
 
-gboolean geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin)
 {
 	/* main_locale_init() must be called for your package before any localization can be done */
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
@@ -217,5 +219,5 @@ gboolean geany_load_module(GeanyPlugin *plugin)
 	plugin->funcs->cleanup = demo_cleanup;
 	plugin->funcs->callbacks = demo_callbacks;
 
-	return GEANY_PLUGIN_REGISTER(plugin, 225);
+	GEANY_PLUGIN_REGISTER(plugin, 225);
 }

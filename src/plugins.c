@@ -330,10 +330,11 @@ struct LegacyRealFuncs
 };
 
 /* Wrappers to support legacy plugins are below */
-static void legacy_init(GeanyPlugin *plugin, gpointer pdata)
+static gboolean legacy_init(GeanyPlugin *plugin, gpointer pdata)
 {
 	struct LegacyRealFuncs *h = pdata;
 	h->init(plugin->geany_data);
+	return TRUE;
 }
 
 static void legacy_cleanup(GeanyPlugin *plugin, gpointer pdata)
@@ -427,9 +428,10 @@ static void register_legacy_plugin(Plugin *plugin, GModule *module)
 }
 
 
-static void
+static gboolean
 plugin_load(Plugin *plugin)
 {
+	gboolean init_ok = TRUE;
 	/* Start the plugin. Legacy plugins require additional cruft. */
 	if (PLUGIN_IS_LEGACY(plugin))
 	{
@@ -449,6 +451,7 @@ plugin_load(Plugin *plugin)
 			*plugin_fields = &plugin->fields;
 		read_key_group(plugin);
 
+		/* Legacy plugin_init() cannot fail. */
 		plugin->cbs.init(&plugin->public, plugin->cb_data);
 
 		/* now read any plugin-owned data that might have been set in plugin_init() */
@@ -459,8 +462,11 @@ plugin_load(Plugin *plugin)
 	}
 	else
 	{
-		plugin->cbs.init(&plugin->public, plugin->cb_data);
+		init_ok = plugin->cbs.init(&plugin->public, plugin->cb_data);
 	}
+
+	if (! init_ok)
+		return FALSE;
 
 	/* new-style plugins set their callbacks in geany_load_module() */
 	if (plugin->cbs.callbacks)
@@ -472,6 +478,7 @@ plugin_load(Plugin *plugin)
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
 
 	geany_debug("Loaded:   %s (%s)", plugin->filename, plugin->info.name);
+	return TRUE;
 }
 
 
@@ -485,7 +492,7 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
 	GModule *module;
-	gboolean (*p_geany_load_module)(GeanyPlugin *);
+	void (*p_geany_load_module)(GeanyPlugin *);
 
 	g_return_val_if_fail(fname, NULL);
 	g_return_val_if_fail(g_module_supported(), NULL);
@@ -567,8 +574,13 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 		goto err;
 	}
 
-	if (load_plugin)
-		plugin_load(plugin);
+	if (load_plugin && !plugin_load(plugin))
+	{
+		/* Handle failing init same as failing to load for now. In future we
+		 * could present a informational UI or something */
+		geany_debug("Plugin failed to initialize \"%s\" - ignoring plugin!", fname);
+		goto err;
+	}
 
 	if (add_to_list)
 		plugin_list = g_list_prepend(plugin_list, plugin);
