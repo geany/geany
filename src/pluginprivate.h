@@ -32,25 +32,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct GeanyData GeanyData;
-
 typedef struct SignalConnection
 {
 	GObject	*object;
 	gulong	handler_id;
 }
 SignalConnection;
-
-typedef struct _GeanyPluginFuncsLegacy
-{
-	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugins configure dialog, optional */
-	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional */
-	void		(*help) (void);						/* Called when the plugin should show some help, optional */
-	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
-	void		(*set_info) (PluginInfo *info);		/* Called to let the plugin provide metadata for the PM dialog */
-}
-GeanyPluginFuncsLegacy;
 
 typedef enum _LoadedFlags {
 	LOADED_OK = 0x01,
@@ -65,13 +52,8 @@ typedef struct GeanyPluginPrivate
 	PluginInfo		info;				/* plugin name, description, etc */
 	GeanyPlugin		public;				/* fields the plugin can read */
 
-	union {
-		GeanyPluginFuncs n;					/* new-style callbacks, set by geany_plugin_register()
-											 * NULL for legacy plugins (they do not call
-											 * geany_plugin_register()) */
-		GeanyPluginFuncsLegacy l;			/* old callbacks, complete with set_info(), version_check()
-											 * and configure_single. Deprecated */
-	} cbs;
+	GeanyPluginFuncs cbs;					/* Callbacks set by geany_plugin_register() */
+	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional and deprecated */
 
 	/* extra stuff */
 	PluginFields	fields;

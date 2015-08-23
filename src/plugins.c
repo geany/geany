@@ -321,6 +321,45 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 	return PLUGIN_LOADED_OK(p);
 }
 
+struct LegacyRealFuncs
+{
+	void       (*init) (GeanyData *data);
+	GtkWidget* (*configure) (GtkDialog *dialog);
+	void       (*help) (void);
+	void       (*cleanup) (void);
+};
+
+/* Wrappers to support legacy plugins are below */
+static void legacy_init(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	h->init(plugin->geany_data);
+}
+
+static void legacy_cleanup(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	/* Can be NULL because it's optional for legacy plugins */
+	if (h->cleanup)
+		h->cleanup();
+}
+
+static void legacy_help(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	h->help();
+}
+
+static GtkWidget *legacy_configure(GeanyPlugin *plugin, GtkDialog *parent, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	return h->configure(parent);
+}
+
+static void free_legacy_cbs(gpointer data)
+{
+	g_slice_free(struct LegacyRealFuncs, data);
+}
 
 /* This function is the equivalent of geany_plugin_register() for legacy-style
  * plugins which we continue to load for the time being. */
@@ -328,24 +367,28 @@ static void register_legacy_plugin(Plugin *plugin, GModule *module)
 {
 	gint (*p_version_check) (gint abi_version);
 	void (*p_set_info) (PluginInfo *info);
+	void (*p_init) (GeanyData *geany_data);
 	GeanyData **p_geany_data;
+	struct LegacyRealFuncs *h;
 
-#define CHECK_FUNC(__x, p)                                                                \
-	if (! g_module_symbol(module, "plugin_" #__x, (void *) (p)))                          \
+#define CHECK_FUNC(__x)                                                                   \
+	if (! g_module_symbol(module, "plugin_" #__x, (void *) (&p_##__x)))                   \
 	{                                                                                     \
 		geany_debug("Plugin \"%s\" has no plugin_" #__x "() function - ignoring plugin!", \
 				g_module_name(plugin->module));                                           \
 		return;                                                                           \
 	}
-	CHECK_FUNC(version_check, &p_version_check);
-	CHECK_FUNC(set_info, &p_set_info);
-	CHECK_FUNC(init, &plugin->cbs.l.init);
+	CHECK_FUNC(version_check);
+	CHECK_FUNC(set_info);
+	CHECK_FUNC(init);
 #undef CHECK_FUNC
 
 	/* We must verify the version first. If the plugin has become incompatible any
 	 * further actions should be considered invalid and therefore skipped. */
 	if (! plugin_check_version(plugin, p_version_check(GEANY_ABI_VERSION)))
 		return;
+
+	h = g_slice_new(struct LegacyRealFuncs);
 
 	/* Since the version check passed we can proceed with setting basic fields and
 	 * calling its set_info() (which might want to call Geany functions already). */
@@ -356,31 +399,38 @@ static void register_legacy_plugin(Plugin *plugin, GModule *module)
 	p_set_info(&plugin->info);
 
 	/* If all went well we can set the remaining callbacks and let it go for good. */
-	g_module_symbol(module, "plugin_configure", (void *) &plugin->cbs.l.configure);
-	g_module_symbol(module, "plugin_configure_single", (void *) &plugin->cbs.l.configure_single);
-	g_module_symbol(module, "plugin_help", (void *) &plugin->cbs.l.help);
-	g_module_symbol(module, "plugin_cleanup", (void *) &plugin->cbs.l.cleanup);
-
+	h->init = p_init;
+	g_module_symbol(module, "plugin_configure", (void *) &h->configure);
+	g_module_symbol(module, "plugin_configure_single", (void *) &plugin->configure_single);
+	g_module_symbol(module, "plugin_help", (void *) &h->help);
+	g_module_symbol(module, "plugin_cleanup", (void *) &h->cleanup);
+	/* pointer to callbacks struct can be stored directly, no wrapper necessary */
+	g_module_symbol(module, "plugin_callbacks", (void *) &plugin->cbs.callbacks);
 	if (app->debug_mode)
 	{
-		if (plugin->cbs.l.configure && plugin->cbs.l.configure_single)
+		if (h->configure && plugin->configure_single)
 			g_warning("Plugin '%s' implements plugin_configure_single() unnecessarily - "
 				"only plugin_configure() will be used!",
 				plugin->info.name);
-		if (plugin->cbs.l.cleanup == NULL)
+		if (h->cleanup == NULL)
 			g_warning("Plugin '%s' has no plugin_cleanup() function - there may be memory leaks!",
 				plugin->info.name);
 	}
 
+	plugin->cbs.init = legacy_init;
+	plugin->cbs.cleanup = legacy_cleanup;
+	plugin->cbs.configure = h->configure ? legacy_configure : NULL;
+	plugin->cbs.help = h->help ? legacy_help : NULL;
+
 	plugin->flags = LOADED_OK | IS_LEGACY;
+	geany_plugin_set_data(&plugin->public, h, free_legacy_cbs);
 }
 
 
 static void
 plugin_load(Plugin *plugin)
 {
-	PluginCallback *callbacks;
-
+	/* Start the plugin. Legacy plugins require additional cruft. */
 	if (PLUGIN_IS_LEGACY(plugin))
 	{
 		GeanyPlugin **p_geany_plugin;
@@ -399,26 +449,22 @@ plugin_load(Plugin *plugin)
 			*plugin_fields = &plugin->fields;
 		read_key_group(plugin);
 
-		/* start the plugin */
-		plugin->cbs.l.init(&geany_data);
+		plugin->cbs.init(&plugin->public, plugin->cb_data);
 
 		/* now read any plugin-owned data that might have been set in plugin_init() */
 		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
 		{
 			ui_add_document_sensitive(plugin->fields.menu_item);
 		}
-
-		g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
 	}
 	else
 	{
-		plugin->cbs.n.init(&plugin->public, plugin->cb_data);
-		callbacks = plugin->cbs.n.callbacks;
+		plugin->cbs.init(&plugin->public, plugin->cb_data);
 	}
 
 	/* new-style plugins set their callbacks in geany_load_module() */
-	if (callbacks)
-		add_callbacks(plugin, callbacks);
+	if (plugin->cbs.callbacks)
+		add_callbacks(plugin, plugin->cbs.callbacks);
 
 	/* remember which plugins are active.
 	 * keep list sorted so tools menu items and plugin preference tabs are
@@ -490,7 +536,7 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 	plugin->public.priv = plugin;
 	/* Fields of plugin->info/funcs must to be initialized by the plugin */
 	plugin->public.info = &plugin->info;
-	plugin->public.funcs = &plugin->cbs.n;
+	plugin->public.funcs = &plugin->cbs;
 
 	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
 	if (p_geany_load_module)
@@ -617,11 +663,8 @@ plugin_cleanup(Plugin *plugin)
 {
 	GtkWidget *widget;
 
-	/* With geany_plugin_register() cleanup is mandatory */
-	if (! PLUGIN_IS_LEGACY(plugin))
-		plugin->cbs.n.cleanup(&plugin->public, plugin->cb_data);
-	else if (plugin->cbs.l.cleanup)
-		plugin->cbs.l.cleanup();
+	/* With geany_register_plugin cleanup is mandatory */
+	plugin->cbs.cleanup(&plugin->public, plugin->cb_data);
 
 	remove_callbacks(plugin);
 	remove_sources(plugin);
@@ -945,12 +988,7 @@ gboolean plugins_have_preferences(void)
 	foreach_list(item, active_plugin_list)
 	{
 		Plugin *plugin = item->data;
-		gboolean result;
-		if (! PLUGIN_IS_LEGACY(plugin))
-			result = plugin->cbs.n.configure != NULL;
-		else
-			result = plugin->cbs.l.configure != NULL || plugin->cbs.l.configure_single != NULL;
-		if (result)
+		if (plugin->configure_single != NULL || plugin->cbs.configure != NULL)
 			return TRUE;
 	}
 
@@ -997,16 +1035,8 @@ static void pm_update_buttons(Plugin *p)
 
 	if (p != NULL && is_active_plugin(p))
 	{
-		if (PLUGIN_IS_LEGACY(p))
-		{
-			has_configure = p->cbs.l.configure || p->cbs.l.configure_single;
-			has_help = p->cbs.l.help != NULL;
-		}
-		else
-		{
-			has_configure = p->cbs.n.configure != NULL;
-			has_help = p->cbs.n.help != NULL;
-		}
+		has_configure = p->cbs.configure || p->configure_single;
+		has_help = p->cbs.help != NULL;
 		has_keybindings = p->key_group && p->key_group->plugin_key_count;
 	}
 
@@ -1345,12 +1375,7 @@ static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointe
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP)
-			{
-				if (PLUGIN_IS_LEGACY(p))
-					p->cbs.l.help();
-				else
-					p->cbs.n.help(&p->public, p->cb_data);
-			}
+				p->cbs.help(&p->public, p->cb_data);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
 				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}

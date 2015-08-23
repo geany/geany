@@ -310,7 +310,7 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 
 static void on_pref_btn_clicked(gpointer btn, Plugin *p)
 {
-	p->cbs.l.configure_single(main_widgets.window);
+	p->configure_single(main_widgets.window);
 }
 
 
@@ -318,16 +318,9 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 {
 	GtkWidget *page = NULL;	/* some plugins don't have prefs */
 
-	if (!PLUGIN_IS_LEGACY(p))
+	if (p->cbs.configure)
 	{
-		if (p->cbs.n.configure)
-			page = p->cbs.n.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
-	}
-	else if (p->cbs.l.configure)
-		page = p->cbs.l.configure(GTK_DIALOG(dialog));
-
-	if (page)
-	{
+		page = p->cbs.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
 		if (! GTK_IS_WIDGET(page))
 		{
 			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
@@ -344,7 +337,7 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 			gtk_box_pack_start(GTK_BOX(page), align, TRUE, TRUE, 0);
 		}
 	}
-	else if (PLUGIN_IS_LEGACY(p) && p->cbs.l.configure_single)
+	else if (p->configure_single)
 	{
 		GtkWidget *align = gtk_alignment_new(0.5, 0.5, 0, 0);
 		GtkWidget *btn;
@@ -427,12 +420,12 @@ void plugin_show_configure(GeanyPlugin *plugin)
 	}
 	p = plugin->priv;
 
-	if (!PLUGIN_IS_LEGACY(p) || p->cbs.l.configure)
+	if (p->cbs.configure)
 		configure_plugins(p);
 	else
 	{
-		g_return_if_fail(p->cbs.l.configure_single);
-		p->cbs.l.configure_single(main_widgets.window);
+		g_return_if_fail(p->configure_single);
+		p->configure_single(main_widgets.window);
 	}
 }
 
@@ -531,7 +524,8 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
  * by passing g_object_unref() as @a free_func, so that member functions can be used
  * for the @ref GeanyPluginFuncs (via wrappers) but you can set completely custom data.
  *
- * Be aware that this can only be called once.
+ * Be aware that this can only be called once and only by plugins registered via
+ * @ref geany_plugin_register(). So-called legacy plugins cannot use this function.
  *
  * @param plugin The plugin provided by Geany
  * @param pdata The plugin's data to associate, must not be @c NULL
