@@ -520,4 +520,51 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 }
 
 
+/** Add additional data that corresponds to the plugin.
+ *
+ * This is the data pointer passed to the individual plugin callbacks. It may be
+ * called as soon as geany_plugin_register() was called with success. When the
+ * plugin is unloaded, @a free_func is invoked for the data, which connects the
+ * data to the plugin's own life time.
+ *
+ * One intended use case is to set GObjects as data and have them destroyed automatically
+ * by passing g_object_unref() as @a free_func, so that member functions can be used
+ * for the @ref GeanyPluginFuncs (via wrappers) but you can set completely custom data.
+ *
+ * Be aware that this can only be called once.
+ *
+ * @param plugin The plugin provided by Geany
+ * @param pdata The plugin's data to associate, must not be @c NULL
+ * @param free_func The destroy notify
+ *
+ * @since 1.26 (API 225)
+ */
+GEANY_API_SYMBOL
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify free_func)
+{
+	Plugin *p = plugin->priv;
+
+	g_return_if_fail(PLUGIN_LOADED_OK(p));
+	/* Do not allow calling this only to set a notify. */
+	g_return_if_fail(pdata != NULL);
+	/* The rationale to allow only setting the data once is the following:
+	 * In the future we want to support proxy plugins (which bind non-C plugins to
+	 * Geany's plugin api). These proxy plugins might need to own the data pointer
+	 * on behalf of the proxied plugin. However, if not, then the plugin should be
+	 * free to use it. This way we can make sure the plugin doesn't accidently trash
+	 * its proxy.
+	 *
+	 * Better a more limited API now that can be opened up later than a potentially
+	 * wrong one that can only be replaced by another one. */
+	if (p->cb_data != NULL || p->cb_data_destroy != NULL)
+	{
+		g_warning("Double call to %s(), ignored!", G_STRFUNC);
+		return;
+	}
+
+	p->cb_data = pdata;
+	p->cb_data_destroy = free_func;
+}
+
+
 #endif

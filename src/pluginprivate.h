@@ -81,6 +81,7 @@ typedef struct GeanyPluginPrivate
 	GList			*sources;				/* GSources to destroy when unloading */
 
 	gpointer		cb_data;				/* user data passed back to functions in GeanyPluginFuncs */
+	GDestroyNotify	cb_data_destroy;		/* called when the plugin is unloaded, for cb_data */
 	LoadedFlags		flags;					/* bit-or of LoadedFlags */
 }
 GeanyPluginPrivate;

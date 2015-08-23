@@ -280,7 +280,6 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
  * @param api_version The API version the plugin is compiled against (pass GEANY_API_VERSION)
  * @param min_api_version The minimum API version required by the plugin
  * @param abi_version The exact ABI version the plugin is compiled against (pass GEANY_ABI_VERSION)
- * @param pdata A data pointer to store plugin-specific data, will be passed to the plugin's callbacks
  *
  * @return TRUE if the plugin was successfully registered. Otherwise FALSE.
  *
@@ -289,7 +288,7 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
  **/
 GEANY_API_SYMBOL
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_api_version,
-                               gint abi_version, gpointer pdata)
+                               gint abi_version)
 {
 	Plugin *p;
 	GeanyPluginFuncs *cbs = plugin->funcs;
@@ -531,6 +530,8 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 	return plugin;
 
 err:
+	if (plugin->cb_data_destroy)
+		plugin->cb_data_destroy(plugin->cb_data);
 	if (! g_module_close(module))
 		g_warning("%s: %s", fname, g_module_error());
 	g_free(plugin->filename);
@@ -646,11 +647,14 @@ plugin_free(Plugin *plugin)
 		plugin_cleanup(plugin);
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
+	plugin_list = g_list_remove(plugin_list, plugin);
+
+	/* cb_data_destroy might be plugin code and must be called before unloading the module */
+	if (plugin->cb_data_destroy)
+		plugin->cb_data_destroy(plugin->cb_data);
 
 	if (! g_module_close(plugin->module))
 		g_warning("%s: %s", plugin->filename, g_module_error());
-
-	plugin_list = g_list_remove(plugin_list, plugin);
 
 	g_free(plugin->filename);
 	g_free(plugin);

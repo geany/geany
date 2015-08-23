@@ -305,7 +305,8 @@ struct GeanyPluginFuncs
 };
 
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_api_version,
-                               gint abi_version, gpointer pdata);
+                               gint abi_version);
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify destroy_notify);
 
 /** Convinience macro to register a plugin.
  *
@@ -313,9 +314,9 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
  *
  * @since 1.26 (API 225)
  **/
-#define GEANY_PLUGIN_REGISTER(plugin, min_api_version, pdata) \
+#define GEANY_PLUGIN_REGISTER(plugin, min_api_version) \
 	geany_plugin_register((plugin), GEANY_API_VERSION, \
-	                      (min_api_version), GEANY_ABI_VERSION, pdata)
+	                      (min_api_version), GEANY_ABI_VERSION)
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
