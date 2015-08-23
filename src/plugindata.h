@@ -273,9 +273,12 @@ void plugin_cleanup(void);
  * Then fill in GeanyPlugin::info and GeanyPlugin::funcs of the passed @p plugin. Finally
  * GEANY_PLUGIN_REGISTER() and specify a minimum supported API version.
  *
+ * For all glory details please read @ref howto.
+ *
  * @param plugin The unique plugin handle to your plugin. You must set some fields here.
  *
  * @since 1.26 (API 225)
+ * @see @ref howto
  */
 void geany_load_module(GeanyPlugin *plugin);
 
@@ -291,6 +294,7 @@ void geany_load_module(GeanyPlugin *plugin);
  * pointer.
  *
  * @since 1.26 (API 225)
+ * @see @ref howto
  **/
 struct GeanyPluginFuncs
 {
@@ -315,6 +319,7 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify de
  * It simply calls geany_plugin_register() with GEANY_API_VERSION and GEANY_ABI_VERSION.
  *
  * @since 1.26 (API 225)
+ * @see @ref howto
  **/
 #define GEANY_PLUGIN_REGISTER(plugin, min_api_version) \
 	geany_plugin_register((plugin), GEANY_API_VERSION, \
