@@ -39,6 +39,12 @@ typedef struct SignalConnection
 }
 SignalConnection;
 
+typedef enum _LoadedFlags {
+	LOADED_OK = 0x01,
+	IS_LEGACY = 0x02,
+	LOAD_DATA = 0x04,
+}
+LoadedFlags;
 
 typedef struct GeanyPluginPrivate
 {
@@ -47,11 +53,8 @@ typedef struct GeanyPluginPrivate
 	PluginInfo		info;				/* plugin name, description, etc */
 	GeanyPlugin		public;				/* fields the plugin can read */
 
-	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugins configure dialog, optional */
-	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional */
-	void		(*help) (void);						/* Called when the plugin should show some help, optional */
-	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
+	GeanyPluginFuncs cbs;					/* Callbacks set by geany_plugin_register() */
+	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional and deprecated */
 
 	/* extra stuff */
 	PluginFields	fields;
@@ -59,8 +62,16 @@ typedef struct GeanyPluginPrivate
 	GeanyAutoSeparator	toolbar_separator;
 	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */
 	GList			*sources;				/* GSources to destroy when unloading */
+
+	gpointer		cb_data;				/* user data passed back to functions in GeanyPluginFuncs */
+	GDestroyNotify	cb_data_destroy;		/* called when the plugin is unloaded, for cb_data */
+	LoadedFlags		flags;					/* bit-or of LoadedFlags */
 }
 GeanyPluginPrivate;
+
+#define PLUGIN_LOADED_OK(p) (((p)->flags & LOADED_OK) != 0)
+#define PLUGIN_IS_LEGACY(p) (((p)->flags & IS_LEGACY) != 0)
+#define PLUGIN_HAS_LOAD_DATA(p) (((p)->flags & LOAD_DATA) != 0)
 
 typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 

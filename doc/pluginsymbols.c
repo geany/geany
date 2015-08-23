@@ -23,7 +23,12 @@
 
 /**
  * @file pluginsymbols.c
- * Symbols declared from within plugins.
+ * Symbols declared from within plugins, all of this is <b>deprecated</b>.
+ *
+ * @deprecated This is the legacy way of making plugins for Geany. Refer to @ref howto for the
+ * reworked process and @ref legacy to learn how to port your plugin to that new world.
+ * Meanwhile Geany will still load plugins programmed against this interface (even the items that
+ * are marked deprecated individually such as @ref plugin_fields).
  *
  * Geany looks for these symbols (arrays, pointers and functions) when initializing
  * plugins. Some of them are optional, i.e. they can be omitted; others are required
@@ -106,4 +111,3 @@ void plugin_cleanup();
  * or something else.
  * Can be omitted when not needed. */
 void plugin_help();
-

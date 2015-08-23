@@ -108,17 +108,6 @@ typedef struct PluginInfo
 PluginInfo;
 
 
-/** Basic information for the plugin and identification.
- * @see geany_plugin. */
-typedef struct GeanyPlugin
-{
-	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
-
-	struct GeanyPluginPrivate *priv;	/* private */
-}
-GeanyPlugin;
-
-
 /** Sets the plugin name and some other basic information about a plugin.
  *
  * @note If you want some of the arguments to be translated, see @ref PLUGIN_SET_TRANSLATABLE_INFO()
@@ -196,7 +185,9 @@ typedef struct PluginCallback
 	GCallback	callback;
 	/** Set to TRUE to connect your handler with g_signal_connect_after(). */
 	gboolean	after;
-	/** The user data passed to the signal handler. */
+	/** The user data passed to the signal handler. If set to NULL then the signal
+	 * handler will receive the data set with geany_plugin_register_full() or
+	 * geany_plugin_set_data() */
 	gpointer	user_data;
 }
 PluginCallback;
@@ -248,6 +239,19 @@ GeanyData;
 
 #define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
 
+typedef struct GeanyPluginFuncs GeanyPluginFuncs;
+
+/** Basic information for the plugin and identification.
+ * @see geany_plugin. */
+typedef struct GeanyPlugin
+{
+	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
+	GeanyData	*geany_data;	/**< Pointer to global GeanyData intance */
+	GeanyPluginFuncs *funcs;	/**< Functions implemented by the plugin, set in geany_load_module() */
+
+	struct GeanyPluginPrivate *priv;	/* private */
+}
+GeanyPlugin;
 
 #ifndef GEANY_PRIVATE
 
@@ -263,7 +267,85 @@ void plugin_configure_single(GtkWidget *parent);
 void plugin_help(void);
 void plugin_cleanup(void);
 
+/** Called by Geany when a plugin library is loaded.
+ *
+ * This is the original entry point. Implement and export this function to be loadable at all.
+ * Then fill in GeanyPlugin::info and GeanyPlugin::funcs of the passed @p plugin. Finally
+ * GEANY_PLUGIN_REGISTER() and specify a minimum supported API version.
+ *
+ * For all glory details please read @ref howto.
+ *
+ * Because the plugin is not yet enabled by the user you may not call plugin API functions inside
+ * this function, except for the API functions below which are required for proper registration.
+ *
+ * API functions which are allowed to be called within this function:
+ *  - main_locale_init()
+ *  - geany_plugin_register() (and GEANY_PLUGIN_REGISTER())
+ *  - geany_plugin_register_full() (and GEANY_PLUGIN_REGISTER_FULL())
+ *
+ * @param plugin The unique plugin handle to your plugin. You must set some fields here.
+ *
+ * @since 1.26 (API 225)
+ * @see @ref howto
+ */
+void geany_load_module(GeanyPlugin *plugin);
+
 #endif
+
+/** Callback functions that need to be implemented for every plugin.
+ *
+ * These callbacks should be registered by the plugin within Geany's call to
+ * geany_load_module() by calling geany_plugin_register() with an instance of this type.
+ *
+ * Geany will then call the callbacks at appropriate times. Each gets passed the
+ * plugin-defined data pointer as well as the corresponding GeanyPlugin instance
+ * pointer.
+ *
+ * @since 1.26 (API 225)
+ * @see @ref howto
+ **/
+struct GeanyPluginFuncs
+{
+	/** Array of plugin-provided signal handlers @see PluginCallback */
+	PluginCallback *callbacks;
+	/** Called to initialize the plugin, when the user activates it (must not be @c NULL) */
+	gboolean    (*init)      (GeanyPlugin *plugin, gpointer pdata);
+	/** plugins configure dialog, optional (can be @c NULL) */
+	GtkWidget*  (*configure) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
+	/** Called when the plugin should show some help, optional (can be @c NULL) */
+	void        (*help)      (GeanyPlugin *plugin, gpointer pdata);
+	/** Called when the plugin is disabled or when Geany exits (must not be @c NULL) */
+	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
+};
+
+gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
+                               gint min_api_version, gint abi_version);
+gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
+                                    gint min_api_version, gint abi_version,
+                                    gpointer data, GDestroyNotify free_func);
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
+
+/** Convinience macro to register a plugin.
+ *
+ * It simply calls geany_plugin_register() with GEANY_API_VERSION and GEANY_ABI_VERSION.
+ *
+ * @since 1.26 (API 225)
+ * @see @ref howto
+ **/
+#define GEANY_PLUGIN_REGISTER(plugin, min_api_version) \
+	geany_plugin_register((plugin), GEANY_API_VERSION, \
+	                      (min_api_version), GEANY_ABI_VERSION)
+
+/** Convinience macro to register a plugin with data.
+ *
+ * It simply calls geany_plugin_register_full() with GEANY_API_VERSION and GEANY_ABI_VERSION.
+ *
+ * @since 1.26 (API 225)
+ * @see @ref howto
+ **/
+#define GEANY_PLUGIN_REGISTER_FULL(plugin, min_api_version, pdata, free_func) \
+	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
+	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED

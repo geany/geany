@@ -5,6 +5,7 @@
  * Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
  * Copyright 2009-2012 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
  * Copyright 2014 Matthew Brush <matt(at)geany(dot)org>
+ * Copyright 2015 Thomas Martitz <kugel(at)rockbox(dot)org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,10 +37,13 @@ This is the Geany API documentation. It should be considered work in progress.
 We will try to document as many functions and structs as possible.
 
 @warning Do not use any symbol not in the documentation - it may change.
+@warning Except for exceptions stated in the documentation for geany_load_module(), no API function
+may be called if the plugin is not enabled (between the calls to their GeanyFuncs::init and
+GeanyFuncs::cleanup functions).
 
 @section pluginsupport Plugin Support
 - @link howto Plugin HowTo @endlink - get started
-- @link pluginsymbols.c Plugin Symbols @endlink
+- @ref legacy
 - @link plugindata.h Plugin Datatypes and Macros @endlink
 - @link pluginsignals.c Plugin Signals @endlink
 - @link pluginutils.h Plugin Utility Functions @endlink
@@ -170,75 +174,176 @@ Geany's website at http://www.geany.org/Support/BuildingOnWin32.
 
 @section helloworld "Hello World"
 
-When writing a plugin, you will find a couple of functions or macros which are mandatory
-and some which are free to use for implementing some useful feature once your plugin
-becomes more powerful like including a configuration or help dialog.
+@note This section describes the new entry points for plugins introduced with Geany 1.26. A short
+summary of the legacy entry points is given at page @ref legacy but they are deprecated should not
+be used any more.
 
-You should start your plugin with including some of the needed C header files and defining
-some basic global variables which will help you to access all needed functions of the plugin
-API in a more comfortable way.
+When writing a plugin you will find a couple of functions which are mandatory and some which can be
+implemented optionally for implementing some useful features once your plugin becomes more
+powerful. For example to provide a configuration or help dialog.
 
-Let's start with the very basic headers and add more later if necessary.
+@subsection beginning First steps for any Plugin
+
+You should start your plugin with including <geanyplugin.h> and exporting a function named @a
+geany_load_module(). In this function you must fill in basic information that Geany uses to learn
+more about your plugin and present it to the user. You also must define some hooks that enable
+Geany to actually execute your code.
+
+Please also do not forget about license headers which are by convention at the start of source
+files. You can use templates provided by Geany to get started. Without a proper license it will be
+difficult for packagers to pick up and distribute your plugin.
+
+As mentioned above, start with the very fundamental header that gets you all goodies of Geany's
+plugin API. @a geanyplugin.h includes all of the Geany API and also the necessary GTK header
+files so there is no need to include @a gtk/gtk.h yourself. In fact it includes a utility header
+that helps supporting GTK+2 and GTK+3 in the same source.
+
 @code
 #include <geanyplugin.h>
 @endcode
 
-@a geanyplugin.h includes all of the Geany API and also the necessary GTK header files,
-so there is no need to include @a gtk/gtk.h yourself.
+@note If you use autoconf then config.h must be included even before that as usual.
 
-@note
-@a plugindata.h contains the biggest part of the plugin API and provides some basic macros.
+Now you can go on and write your first lines for your new plugin. As mentioned before, you will
+need to implement a couple of functions. The first mandatory one is @a geany_load_module(). Geany
+uses the presence fo this function to identify a library as a plugin. When Geany scans the
+pre-defined and user-configured plugin directories, it will take a look at each shared library (or
+DLL on Windows) to see if it exports a @a geany_load_module() symbol. Files lacking these will be
+ignored. The second mandatory one is an initialization function that is only called when the plugin
+becomes actually enabled (by the user or at startup).
 
-Then you should define two basic variables which will give access to data fields
-provided by the plugin API.
+@subsection register Registering a Plugin
+
+Geany will always invoke this geany_load_module(), regardless of whether the user activates your
+plugin. In fact its purpose to probe if the plugin should even be presented to the user. Therefore
+you must use this function to register your plugin. Geany will pass a pointer to a GeanyPlugin
+instance which acts as a unique handle to your plugin. Use this pointer for registering and later
+API calls. It won't change for the life time of the plugin. Registering the plugin consists of a
+number of steps:
+
+  1. Filling in GeanyPlugin::info with metadata that is shown to the user.
+    - @ref PluginInfo::name : The name of your plugin
+    - @ref PluginInfo::description : A brief description.
+    - @ref PluginInfo::version : The plugin's version.
+    - @ref PluginInfo::author : Your contact information, preferably in the form "Name <email>".
+    .
+    Filling in all of them is recommended to provide the best user experience, but only the name is
+    truly mandatory. Since all of the strings are shown to the user they should be human readable.
+  2. Filling in GeanyPlugin::funcs with function pointers that are called by Geany.
+    - @ref GeanyPluginFuncs::init : an initialization function
+    - @ref GeanyPluginFuncs::cleanup : a finalization function
+    - @ref GeanyPluginFuncs::configure : a function that provides configuration (optional)
+    - @ref GeanyPluginFuncs::help : a function that provides help (optional)
+    - @ref GeanyPluginFuncs::callbacks : a pointer to an array of PluginCallback (optional).
+    .
+    @a init and @a cleanup are mandatory, the other ones depend on how advanced your plugin is.
+    Furthermore, @a init is called on startup and when the user activates your plugin in the Plugin
+    Manager, and @a cleanup is called on exit and when the user deactivates it. So use these to do
+    advanced initialization and teardown as to not waste resources when the plugin is not even
+    enabled.
+  3. Actually registering by calling GEANY_PLUGIN_REGISTER() or GEANY_PLUGIN_REGISTER_FULL().
+   - Usually you should use GEANY_PLUGIN_REGISTER() to register your plugin, passing the
+    GeanyPlugin pointer that you received and filled out as above. GEANY_PLUGIN_REGISTER() also
+    takes the minimum API version number you want to support (see @ref versions for details). Please
+    also <b>check the return value</b>. Geany may refuse to load your plugin due to
+    incompatibilities, you should then abort any extra setup. GEANY_PLUGIN_REGISTER() is a macro
+    wrapping geany_plugin_register() which takes additional the API and ABI that you should not pass
+    manually.
+   - If you require a plugin-specific context or state to be passed to your GeanyPlugin::funcs then
+    use GEANY_PLUGIN_REGISTER_FULL() to register. This one takes additional parameters for adding
+    user data to your plugin. That user data pointer is subsequently passed back to your functions.
+    It allows, for example, to set instance pointer to objects in case your plugin isn't written in
+    pure C, enabling you to use member functions as plugin functions. You may also set such data
+    later on, for example in your @ref GeanyPluginFuncs::init routine to defer costly allocations
+    to when the plugin is actually activated by the user. However, you then have to call
+    geany_plugin_set_data().
+
+
+@subsection versions On API and ABI Versions
+As previously mentioned @a geany_plugin_register() takes a number of versions as arguments:
+  1. api_version
+  2. min_api_version
+  3. abi_version
+
+These refer to Geany's versioning scheme to manage plugin compatibility. The following rules apply:
+  - Plugins are compiled against a specific Geany version on the build machine. This version of
+    Geany has specific ABI and API versions, which will be compiled into the plugin. Both are
+    managed automatically, by calling GEANY_PLUGIN_REGISTER().
+  - The Geany version that loads the plugin may be different, possibly even have different API and
+    ABI versions.
+  - The ABI version is the primary plugin compatibility criteria. The ABI version of the running
+    Geany and the one that's compiled into the plugin must match exactly (==). In case of mismatch,
+    the affected plugins need to be recompiled (generally without source code changes) against the
+    running Geany. The ABI is usually stable even across multiple releases of Geany.
+  - The API version is secondary. It doesn't have to match exactly, however a plugin can report
+    a minimum API version that it requires to run. Geany will check if its own API is larger than
+    that (>=) and will otherwise refuse to load the plugin. The API version is incremented when
+    functions or variables are added to the API which often happens more than once within a release
+    cycle.
+  - The API version the plugin is compiled against is still relevant for enabling compatibility
+    code inside Geany (for cases where incrementing the ABI version could be avoided).
+
+Instead of calling geany_plugin_register() directly it is very highly recommended to use
+GEANY_PLUGIN_REGISTER(). This is a convenient way to pass Geany's current API and ABI versions
+without requiring future code changes whenever either one changes. In fact, the promise that
+plugins need to be just recompiled on ABI change can hold if the plugins use this macro. You still
+want to pass the API version needed at minimum to run your plugin. The value is defined in
+plugindata.h by @ref GEANY_API_VERSION. In most cases this should be your minimum. Nevertheless when
+setting this value, you should choose the lowest possible version here to make the plugin
+compatible with a bigger number of versions of Geany. The absolute minimum is 225 which introduced
+the new plugin entry points.
+
+To increase your flexibility the API version of the running Geany is passed to geany_load_module().
+You can use this information to toggle API-specific code. This comes handy, for example to enable
+optional code that requires a recent API version without raising your minimum required API version.
+This enables running the plugin against more Geany versions, although perhaps at reduced
+functionality.
+
+@subsection example Example
+
+Going back to our "Hello World" plugin here is example code that properly adds the HelloWorld
+plugin to Geany.
+
 @code
-GeanyPlugin			*geany_plugin;
-GeanyData			*geany_data;
-@endcode
+/* License blob */
 
-Now you can go on and write your first lines for your new plugin. As mentioned before,
-you will need to implement and fill out a couple of functions/macros to make the plugin work.
-So let's start with PLUGIN_VERSION_CHECK().
+#include <geanyplugin.h>
 
-PLUGIN_VERSION_CHECK() is a convenient way to tell Geany which version of Geany's plugin API
-is needed at minimum to run your plugin. The value is defined in
-@a plugindata.h by @a GEANY_API_VERSION. In most cases this should be your minimum.
-Nevertheless when setting this value, you should choose the lowest possible version here to
-make the plugin compatible with a bigger number of versions of Geany.
 
-For the next step, you will need to tell Geany some basic information about your plugin
-which will be shown in the plugin manager dialog.
-
-To do this you should use the PLUGIN_SET_INFO() macro, which expects 4 parameters:
-- Plugin name
-- Short description
-- Version
-- Author
-
-Based on this, the line could look like:
-@code
-PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
-				"1.0", "John Doe <john.doe@example.org>");
-@endcode
-
-Once this is done, you will need to implement the function which will be executed when the
-plugin is loaded. Part of that function could be adding and removing of an item to
-Geany's Tools menu, setting up keybindings or registering some callbacks. Also you will
-need to implement the function that is called when your plugin is unloaded.
-These functions are called plugin_init() and plugin_cleanup(). Let's see what this
-looks like:
-@code
-PLUGIN_VERSION_CHECK(211)
-
-PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
-				"1.0", "Joe Doe <joe.doe@example.org>");
-
-void plugin_init(GeanyData *data)
+static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 {
+	printf("Hello World from plugin!\n");
+
+	/* Perform advanced set up here */
+
+	return TRUE;
 }
 
-void plugin_cleanup(void)
+
+static void hello_cleanup(GeanyPlugin *plugin, gpointer pdata)
 {
+	printf("Bye World :-(\n");
+}
+
+
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+	/* Step 1: Set metadata */
+	plugin->info->name = "HelloWorld";
+	plugin->info->description = "Just another tool to say hello world";
+	plugin->info->version = "1.0";
+	plugin->info->author = "John Doe <john.doe@example.org>";
+
+	/* Step 2: Set functions */
+	plugin->funcs->init = hello_init;
+	plugin->funcs->cleanup = hello_cleanup;
+
+	/* Step 3: Register! */
+	if (GEANY_PLUGIN_REGISTER(plugin, 225))
+		return;
+	/* alternatively:
+	GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, free_func); */
 }
 @endcode
 
@@ -246,21 +351,20 @@ If you think this plugin seems not to implement any functionality right now and 
 some memory, you are right. But it should compile and load/unload in Geany nicely.
 Now you have the very basic layout of a new plugin. Great, isn't it?
 
-@note
-
-If you would rather write the plugin in C++, you can do that by marking the
-plugin functions that it implements as @c extern @c "C", for example:
+If you would rather write the plugin in C++, you can do that by marking @a geany_load_module()
+as <c> extern "C" </c>, for example:
 
 @code
 
-extern "C" void plugin_init(GeanyData *data)
+extern "C" void geany_load_module(GeanyPlugin *plugin)
 {
 }
 
-extern "C" void plugin_cleanup(void)
-{
-}
 @endcode
+
+You can also create an instance of a class and set that as data pointer (with
+GEANY_PLUGIN_REGISTER_FULL()). With small wrappers that shuffle the parameters you can even use
+member functions for @ref GeanyPlugin::funcs etc.
 
 @section building Building
 
@@ -275,8 +379,6 @@ Then make the plugin library plugin.so (or plugin.dll on Windows):
 If all went OK, put the library into one of the paths Geany looks for plugins,
 e.g. $prefix/lib/geany. See @ref paths "Installation paths" for details.
 
-@note
-
 If you are writing the plugin in C++, then you will need to use your C++
 compiler here, for example @c g++.
 
@@ -284,11 +386,12 @@ compiler here, for example @c g++.
 
 Let's go on and implement some real functionality.
 
-As mentioned before, plugin_init() will be called when the plugin is loaded in Geany.
-So it should implement everything that needs to be done during startup. In this case,
-we'd like to add a menu item to Geany's Tools menu which runs a dialog printing "Hello World".
+As mentioned before, GeanyPluginFuncs::init() will be called when the plugin is activated by
+Geany. So it should implement everything that needs to be done during startup. In this case, we'd
+like to add a menu item to Geany's Tools menu which runs a dialog printing "Hello World".
+
 @code
-void plugin_init(GeanyData *data)
+static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 {
 	GtkWidget *main_menu_item;
 
@@ -297,26 +400,27 @@ void plugin_init(GeanyData *data)
 	gtk_widget_show(main_menu_item);
 
 	// Attach the new menu item to the Tools menu
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
+	gtk_container_add(GTK_CONTAINER(plugin->geany_data->main_widgets->tools_menu),
 		main_menu_item);
 
 	// Connect the menu item with a callback function
 	// which is called when the item is clicked
 	g_signal_connect(main_menu_item, "activate",
 		G_CALLBACK(item_activate_cb), NULL);
+
+	return TRUE;
 }
 @endcode
 
-This will add an item to the Tools menu and connect this item to a function which implements
-what should be done when the menu item is activated by the user.
-This is done by g_signal_connect(). The Tools menu can be accessed with
-geany->main_widgets->tools_menu. The structure @a main_widgets contains pointers to the
-main GUI elements in Geany.
+This will add an item to the Tools menu and connect this item to a function which implements what
+should be done when the menu item is activated by the user. This is done by g_signal_connect(). The
+Tools menu can be accessed with plugin->geany_data->main_widgets->tools_menu. The structure
+GeanyMainWidgets contains pointers to all main GUI elements in Geany.
 
 Geany has a simple API for showing message dialogs. So our function contains
 only a few lines:
 @code
-void item_activate_cb(GtkMenuItem *menuitem, gpointer user_data)
+static void item_activate_cb(GtkMenuItem *menuitem, gpointer user_data)
 {
 	dialogs_show_msgbox(GTK_MESSAGE_INFO, "Hello World");
 }
@@ -326,27 +430,36 @@ For the moment you don't need to worry about the parameters of that function.
 
 Now we need to clean up properly when the plugin is unloaded.
 
-To remove the menu item from the Tools menu, you can use gtk_widget_destroy().
-gtk_widget_destroy() expects a pointer to a GtkWidget object.
+To remove the menu item from the Tools menu you can use gtk_widget_destroy().
 
-First you should add gtk_widget_destroy() to your plugin_cleanup() function.
-The argument for gtk_widget_destroy() is the widget object you created earlier in
-plugin_init(). To be able to access this pointer in plugin_cleanup(), you need to move
-its definition from plugin_init() into the global context so its visibility will increase
-and it can be accessed in all functions.
+First you should add gtk_widget_destroy() to your GeanyPluginFuncs::cleanup() function. The
+argument for gtk_widget_destroy() is the widget object you created earlier in
+GeanyPluginFuncs::init(). To be able to access this pointer in GeanyPluginFuncs::cleanup() you can
+use geany_plugin_set_data() to set plugin-defined data pointer to the widget. Alternatively, you
+can store the pointer in some global variable so its visibility will increase and it can be
+accessed in all functions.
+
 @code
-static GtkWidget *main_menu_item = NULL;
-
+/* alternative: global variable:
+static GtkWidget *main_menu_item;
+*/
 // ...
-void plugin_init(GeanyData *data)
+static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 {
+	GtkWidget *main_menu_item;
+
+	// Create a new menu item and show it
 	main_menu_item = gtk_menu_item_new_with_mnemonic("Hello World");
 	gtk_widget_show(main_menu_item);
 // ...
+	geany_plugin_set_data(plugin, main_menu_item, NULL);
+	return TRUE;
 }
 
-void plugin_cleanup(void)
+static void hello_cleanup(GeanyPlugin *plugin, gpointer pdata)
 {
+	GtkWidget *main_menu_item = (GtkWidget *) pdata;
+// ...
 	gtk_widget_destroy(main_menu_item);
 }
 @endcode
@@ -358,81 +471,82 @@ Once this is done, your first plugin is ready. Congratulations!
 @section listing Complete listing (without comments)
 
 @code
+
 #include <geanyplugin.h>
 
-GeanyPlugin		*geany_plugin;
-GeanyData		*geany_data;
-
-PLUGIN_VERSION_CHECK(211)
-
-PLUGIN_SET_INFO("HelloWorld", "Just another tool to say hello world",
-				"1.0", "John Doe <john.doe@example.org>");
-
-
-static GtkWidget *main_menu_item = NULL;
-
-static void item_activate_cb(GtkMenuItem *menuitem, gpointer gdata)
+static void item_activate_cb(GtkMenuItem *menuitem, gpointer user_data)
 {
 	dialogs_show_msgbox(GTK_MESSAGE_INFO, "Hello World");
 }
 
-void plugin_init(GeanyData *data)
+
+static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 {
+	GtkWidget *main_menu_item;
+
+	// Create a new menu item and show it
 	main_menu_item = gtk_menu_item_new_with_mnemonic("Hello World");
 	gtk_widget_show(main_menu_item);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
-		main_menu_item);
+	gtk_container_add(GTK_CONTAINER(plugin->geany_data->main_widgets->tools_menu),
+			main_menu_item);
 	g_signal_connect(main_menu_item, "activate",
-		G_CALLBACK(item_activate_cb), NULL);
+			G_CALLBACK(item_activate_cb), NULL);
+
+	geany_plugin_set_data(plugin, main_menu_item, NULL);
+	return TRUE;
 }
 
-void plugin_cleanup(void)
+
+static void hello_cleanup(GeanyPlugin *plugin, gpointer pdata)
 {
+	GtkWidget *main_menu_item = (GtkWidget *) pdata;
+
 	gtk_widget_destroy(main_menu_item);
 }
- @endcode
+
+
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+	plugin->info->name = "HelloWorld";
+	plugin->info->description = "Just another tool to say hello world";
+	plugin->info->version = "1.0";
+	plugin->info->author = "John Doe <john.doe@example.org>";
+
+	plugin->funcs->init = hello_init;
+	plugin->funcs->cleanup = hello_cleanup;
+
+	GEANY_PLUGIN_REGISTER(plugin, 225);
+}
+@endcode
 
 
 Now you might like to look at Geany's source code for core plugins such as
 @a plugins/demoplugin.c.
 
-@section furtherimprovements Furter Improvements and next steps
+@section furtherimprovements Further Improvements and next steps
 @subsection translatable_plugin_information Translatable plugin information
 
 After having written our first plugin, there is still room for improvement.
 
-By default, PLUGIN_SET_INFO() does not allow translation of the basic plugin
-information for plugins which are not shipped with Geany's core distribution.
-Since most plugins are not shipped with Geany's core, it makes sense to
-enable translation when the plugin is loaded so that it gets translated
-inside Geany's Plugin Manager.  As of Geany 0.19, the plugin API contains
-the PLUGIN_SET_TRANSLATABLE_INFO() macro which enables translation of the
-basic plugin details passed to PLUGIN_SET_INFO() when the plugin is loaded.
+By default, @ref geany_load_module() is not prepared to allow translation of the basic plugin
+information, except plugins which are shipped with Geany's core distribution, because custom
+gettext catalogs are not setup. Since most plugins are not shipped with Geany's core, it makes
+sense to setup gettext when the plugin is loaded so that it gets translated inside Geany's Plugin
+Manager. The solution is to call the API function main_locale_init() inside @ref
+geany_load_module() and then use gettext's _() as usual.
 
-PLUGIN_SET_TRANSLATABLE_INFO() takes two more parameters than PLUGIN_SET_INFO(),
-for a total of six parameters.
-
- - Localedir
- - Gettextpackage
- - Plugin name
- - Short description
- - Version
- - Author
-
-The @a Localdir and the @a Gettextpackage parameters are usually set inside
-the build system.  If this has been done, the call for example HelloWorld
-plugin could look like:
-
+The invocation will most probably look similar to this:
 @code
-PLUGIN_SET_TRANSLATABLE_INFO(
-	LOCALEDIR, GETTEXT_PACKAGE, _("Hello World"),
-	_("Just another tool to say hello world"),
-	"1.0", "John Doe <john.doe@example.org>");
+// ...
+	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
+	plugin->info->name = _("HelloWorld");
+	plugin->info->description = _("Just another tool to say hello world");
+	plugin->info->version = "1.0";
+	plugin->info->author = "John Doe <john.doe@example.org>";
 @endcode
 
-When using this macro, you should use the gettext macro @a _() to mark
-the strings like name and the short description as translatable as well. You
-can see how this is done in the above example.
+The @a LOCALEDIR and the @a GETTEXT_PACKAGE parameters are usually set inside the build system.
 
 As you can see the author's information is not marked as translatable in
 this example.  The community has agreed that the best practice here is to
@@ -442,32 +556,173 @@ native spelling inside parenthesis, where applicable.
 @subsection plugin_i18n Using i18n/l10n inside Plugin
 
 
-You can (and should) also mark other strings beside the plugin's meta
-information as translatable.  Strings used in menu entries, information
-boxes or configuration dialogs should also be translatable as well.  Geany
-offers a way to enable this in the plugin's code using the main_locale_init()
-function provided by the plugin API. This function takes the same two
-parameters discussed in the previous section; @a GETTEXT_PACKAGE and
-@a LOCALEDIR.
+You can (and should) also mark other strings beside the plugin's meta information as translatable.
+Strings used in menu entries, information boxes or configuration dialogs should be translatable as
+well.
 
-The main_locale_init() function is best called during initialization in the
-plugin's plugin_init() function.  Adding this to the HelloWorld example could
-look like:
 @code
-void plugin_init(GeanyData *data)
+static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 {
 	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-	main_menu_item = gtk_menu_item_new_with_mnemonic("Hello World");
-	gtk_widget_show(main_menu_item);
-	gtk_container_add(GTK_CONTAINER(geany->main_widgets->tools_menu),
-		main_menu_item);
-	g_signal_connect(main_menu_item, "activate",
-		G_CALLBACK(item_activate_cb), NULL);
+	main_menu_item = gtk_menu_item_new_with_mnemonic(_("Hello World"));
+// ...
 }
 @endcode
 
-@note If you've previously called the PLUGIN_SET_TRANSLATABLE_INFO() you do not
-need to call main_locale_init() yourself, as this has been already been
-done for you.
+@page legacy Porting guide from legacy entry points to the current ones
+
+@section intro_legacy Introduction
+
+This page briefly describes the deprecated, legacy plugin entry points. These have been in place
+prior to Geany 1.26 and are still loadable and working for the time being. However, do not create
+new plugins against these. For this reason, the actual description here is rather minimalistic and
+concentrates on porting legacy plugins to the new interface. Basically it's main purpose
+is to give newcomers an idea of what they are looking at if they come across a legacy plugin.
+
+@section overview Overview
+
+The legacy entry points consist of a number of pre-defined symbols (functions and variables)
+exported by plugins. There is no active registration procedure. It is implicit simply by exporting
+the mandatory symbols. The entirety of the symbols is described at the page @link pluginsymbols.c
+Plugin Symbols @endlink.
+
+At the very least plugins must define the functions @a plugin_init(GeanyData *) and @a
+plugin_version_check(gint). Additionally, an instance of the struct PluginInfo named plugin_info
+must be exported as well, this contains the same metadata already known from GeanyPlugin::info. The
+functions plugin_cleanup(), plugin_help(), plugin_configure(GtkDialog *) and
+plugin_configure_single(GtkWidget *) are optional, however Geany prints a warning if
+plugin_cleanup() is missing and only one of plugin_configure(GtkDialog *) and
+plugin_configure_single(GtkWidget *) is used for any single plugin.
+
+By convention, plugin_version_check() is implicitely defined through the use of PLUGIN_VERSION_CHECK(),
+and similarly plugin_info is defined through PLUGIN_SET_INFO() or PLUGIN_SET_TRANSLATABLE_INFO().
+
+The functions should generally perform the same tasks as their eqivalents in GeanyPlugin::funcs.
+
+Geany also recognized numerous variable fields if the plugin exported them globally, and actually
+set a few of them inside the plugins data section.
+
+@section porting Porting a Legacy Plugin
+
+Given a legacy plugin it can be modified to use the new entry points without much effort. This
+section gives a basic recipe that should work for most existing plugins. The transition should
+be easy and painless so it is recommended that you adapt your plugin as soon as possible.
+
+@note This guide is intentionally minimalistic (in terms of suggested code changes) in order to
+allow adaption to the current entry points as quickly as possible and without a lot effort. It
+should also work even for rather complex plugins comprising multiple source files. On the other hand
+it does not make use of new features such as geany_plugin_set_data().
+
+@subsection functions Functions
+
+Probably the biggest hurdle is the dropped support of the long-deprecated
+plugin_configure_single(). This means you first have to port the configuration dialog (if any) to
+the combined plugin dialog. While you previously created a custom dialog you now attach the main
+widget of that dialog to the combined plugin dialog simply by returning it from
+GeanyPluginFuncs::configure. You don't actually add it, Geany will do that for you. The pointer to
+the dialog is passed to @a configure simply to allow you to connect to its "response" or "close"
+signals.
+
+The following lists the function mapping of previous @a plugin_* functions to the new @a
+GeanyPlugin::funcs. They are semantically the same, however the new functions receive more
+parameters which you may use or not.
+
+  - plugin_init() => GeanyPlugin->funcs->init
+  - plugin_cleanup() => GeanyPlugin->funcs->cleanup
+  - plugin_help() => GeanyPlugin->funcs->help
+  - plugin_configure() => GeanyPlugin->funcs->configure
+
+@note @ref GeanyPluginFuncs::init() should return a boolean value: whether or not the plugin loaded
+succesfully. Since legacy plugins couldn't fail in plugin_init() you should return @c TRUE
+unconditionally.
+
+@note Again, plugin_configure_single() is not supported anymore.
+
+@subsection Variables
+
+Exported global variables are not recognized anymore. They are replaced in the following ways:
+
+@ref plugin_info is simply removed. Instead, you have to assign the values to GeanyPlugin::info
+yourself, and it must be done inside your @a geany_load_module().
+
+Example:
+
+@code
+PLUGIN_SET_INFO(
+	"HelloWorld",
+	"Just another tool to say hello world",
+	"1.0", "John Doe <john.doe@example.org>");
+@endcode
+
+becomes
+
+@code
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+// ...
+	plugin->info->name = "HelloWorld";
+	plugin->info->description = "Just another tool to say hello world";
+	plugin->info->version = "1.0";
+	plugin->info->author = "John Doe <john.doe@example.org>";
+// ...
+}
+@endcode
+@note Refer to @ref translatable_plugin_information for i18n support for the metadata.
+
+
+The @ref plugin_callbacks array is supported by assigning the GeanyPluginFuncs::callbacks to
+the array.
+
+@ref plugin_fields is not supported anymore. Use ui_add_document_sensitive() instead.
+@ref PLUGIN_KEY_GROUP and @ref plugin_key_group are also not supported anymore. Use
+plugin_set_key_group() and keybindings_set_item() respectively.
+
+Additionally, Geany traditionally set a few variables. This is not the case anymore. @ref
+geany_functions has been removed in 1.25 and since then existed only for compatibility and has been
+empty. You can simply remove its declaration from your source code. @ref geany_plugin is passed to
+each @ref GeanyPluginFuncs function. You need to store it yourself somewhere if you need it
+elsewhere. @ref geany_data is now available as a member of GeanyPlugin.
+
+@code
+GeanyPlugin *geany_plugin;
+GeanyData *geany_data;
+
+static gboolean my_init(GeanyPlugin *plugin, gpointer pdata)
+{
+// ...
+	geany_plugin = plugin;
+	geany_data = plugin->geany_data;
+	return TRUE;
+}
+@endcode
+
+@ref geany_plugin is now also passed by default to the PluginCallback signal handlers as data
+pointer if it's set to NULL.
+
+@code
+static PluginCallback plugin_callbacks[] = {
+	{ "editor-notify", (GCallback) &on_editor_notify_cb, FALSE, NULL },
+// ...
+};
+
+static gboolean on_editor_notify_cb(GObject *object, GeanyEditor *editor,
+									SCNotification *nt, gpointer data)
+{
+	GeanyPlugin *plugin = data;
+//...
+}
+
+
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+// ...
+	plugin->funcs->callbacks = plugin_callbacks;
+// ...
+}
+}
+@endcode
+
 
 */

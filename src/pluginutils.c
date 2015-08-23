@@ -318,10 +318,9 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 {
 	GtkWidget *page = NULL;	/* some plugins don't have prefs */
 
-	if (p->configure)
+	if (p->cbs.configure)
 	{
-		page = p->configure(GTK_DIALOG(dialog));
-
+		page = p->cbs.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
 		if (! GTK_IS_WIDGET(page))
 		{
 			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
@@ -421,7 +420,7 @@ void plugin_show_configure(GeanyPlugin *plugin)
 	}
 	p = plugin->priv;
 
-	if (p->configure)
+	if (p->cbs.configure)
 		configure_plugins(p);
 	else
 	{
@@ -511,6 +510,59 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 	data.plugin = plugin;
 
 	gtk_builder_connect_signals_full(builder, connect_plugin_signals, &data);
+}
+
+
+/** Add additional data that corresponds to the plugin.
+ *
+ * @p pdata is the pointer going to be passed to the individual plugin callbacks
+ * of GeanyPlugin::funcs. When the  plugin is cleaned up, @p free_func is invoked for the data,
+ * which connects the data to the time the plugin is enabled.
+ *
+ * One intended use case is to set GObjects as data and have them destroyed automatically
+ * by passing g_object_unref() as @a free_func, so that member functions can be used
+ * for the @ref GeanyPluginFuncs (via wrappers) but you can set completely custom data.
+ *
+ * Be aware that this can only be called once and only by plugins registered via
+ * @ref geany_plugin_register(). So-called legacy plugins cannot use this function.
+ *
+ * @note This function must not be called if the plugin was registered with
+ * geany_plugin_register_full().
+ *
+ * @param plugin The plugin provided by Geany
+ * @param pdata The plugin's data to associate, must not be @c NULL
+ * @param free_func The destroy notify
+ *
+ * @since 1.26 (API 225)
+ */
+GEANY_API_SYMBOL
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify free_func)
+{
+	Plugin *p = plugin->priv;
+
+	g_return_if_fail(PLUGIN_LOADED_OK(p));
+	/* Do not allow calling this only to set a notify. */
+	g_return_if_fail(pdata != NULL);
+	/* The rationale to allow only setting the data once is the following:
+	 * In the future we want to support proxy plugins (which bind non-C plugins to
+	 * Geany's plugin api). These proxy plugins might need to own the data pointer
+	 * on behalf of the proxied plugin. However, if not, then the plugin should be
+	 * free to use it. This way we can make sure the plugin doesn't accidently trash
+	 * its proxy.
+	 *
+	 * Better a more limited API now that can be opened up later than a potentially
+	 * wrong one that can only be replaced by another one. */
+	if (p->cb_data != NULL || p->cb_data_destroy != NULL)
+	{
+		if (PLUGIN_HAS_LOAD_DATA(p))
+			g_warning("Invalid call to %s(), geany_plugin_register_full() was used. Ignored!\n", G_STRFUNC);
+		else
+			g_warning("Double call to %s(), ignored!", G_STRFUNC);
+		return;
+	}
+
+	p->cb_data = pdata;
+	p->cb_data_destroy = free_func;
 }
 
 

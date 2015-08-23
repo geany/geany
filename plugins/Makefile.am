@@ -40,7 +40,7 @@ saveactions_la_SOURCES   = saveactions.c
 filebrowser_la_SOURCES   = filebrowser.c
 splitwindow_la_SOURCES   = splitwindow.c
 
-demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\"
+demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\" -DLOCALEDIR=\""$(LOCALEDIR)"\"
 classbuilder_la_CFLAGS  = -DG_LOG_DOMAIN=\""Classbuilder"\"
 htmlchars_la_CFLAGS     = -DG_LOG_DOMAIN=\""HTMLChars"\"
 export_la_CFLAGS        = -DG_LOG_DOMAIN=\""Export"\"
