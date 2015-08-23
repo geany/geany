@@ -42,6 +42,7 @@ SignalConnection;
 typedef enum _LoadedFlags {
 	LOADED_OK = 0x01,
 	IS_LEGACY = 0x02,
+	LOAD_DATA = 0x04,
 }
 LoadedFlags;
 
@@ -70,6 +71,7 @@ GeanyPluginPrivate;
 
 #define PLUGIN_LOADED_OK(p) (((p)->flags & LOADED_OK) != 0)
 #define PLUGIN_IS_LEGACY(p) (((p)->flags & IS_LEGACY) != 0)
+#define PLUGIN_HAS_LOAD_DATA(p) (((p)->flags & LOAD_DATA) != 0)
 
 typedef GeanyPluginPrivate Plugin;	/* shorter alias */
 

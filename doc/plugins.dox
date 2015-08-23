@@ -238,20 +238,22 @@ number of steps:
     Manager, and @a cleanup is called on exit and when the user deactivates it. So use these to do
     advanced initialization and teardown as to not waste resources when the plugin is not even
     enabled.
-  3. Actually registering by calling GEANY_PLUGIN_REGISTER(), passing the GeanyPlugin pointer that
-    you received and filled out as above. GEANY_PLUGIN_REGISTER() also takes the minimum API
-    version number you want to support (see @ref versions for details). Please also <b>check the
-    return value</b>. Geany may refuse to load your plugin due to
+  3. Actually registering by calling GEANY_PLUGIN_REGISTER() or GEANY_PLUGIN_REGISTER_FULL().
+   - Usually you should use GEANY_PLUGIN_REGISTER() to register your plugin, passing the
+    GeanyPlugin pointer that you received and filled out as above. GEANY_PLUGIN_REGISTER() also
+    takes the minimum API version number you want to support (see @ref versions for details). Please
+    also <b>check the return value</b>. Geany may refuse to load your plugin due to
     incompatibilities, you should then abort any extra setup. GEANY_PLUGIN_REGISTER() is a macro
-    wrapping geany_plugin_register() which takes additional the API and ABI that you should not
-    pass manually.
-  4. Optionally setting user data that is passed to GeanyPlugin::funcs with geany_plugin_set_data().
-    Here you can set a data pointer that is passed back to your functions called by Geany. This
-    allows to avoid global variables which may be useful. It also allows to set instance pointer
-    to objects in case your plugin isn't written in pure C, enabling you to use member functions
-    as plugin functions.
-    You may also call this function later on, for example in your @ref GeanyPluginFuncs::init
-    routine to defer costly allocations to when the plugin is actually activated by the user.
+    wrapping geany_plugin_register() which takes additional the API and ABI that you should not pass
+    manually.
+   - If you require a plugin-specific context or state to be passed to your GeanyPlugin::funcs then
+    use GEANY_PLUGIN_REGISTER_FULL() to register. This one takes additional parameters for adding
+    user data to your plugin. That user data pointer is subsequently passed back to your functions.
+    It allows, for example, to set instance pointer to objects in case your plugin isn't written in
+    pure C, enabling you to use member functions as plugin functions. You may also set such data
+    later on, for example in your @ref GeanyPluginFuncs::init routine to defer costly allocations
+    to when the plugin is actually activated by the user. However, you then have to call
+    geany_plugin_set_data().
 
 
 @subsection versions On API and ABI Versions
@@ -337,9 +339,8 @@ void geany_load_module(GeanyPlugin *plugin)
 	/* Step 3: Register! */
 	if (GEANY_PLUGIN_REGISTER(plugin, 225))
 		return;
-
-	/* Step 4: call geany_plugin_set_data(), not done here
-	geany_plugin_set_data(plugin, data, free_func); */
+	/* alternatively:
+	GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, free_func); */
 }
 @endcode
 
@@ -359,8 +360,8 @@ extern "C" void geany_load_module(GeanyPlugin *plugin)
 @endcode
 
 You can also create an instance of a class and set that as data pointer (with
-geany_plugin_set_data()). With small wrappers that shuffle the parameters you can even use member
-functions for @ref GeanyPlugin::funcs etc.
+GEANY_PLUGIN_REGISTER_FULL()). With small wrappers that shuffle the parameters you can even use
+member functions for @ref GeanyPlugin::funcs etc.
 
 @section building Building
 

@@ -310,9 +310,12 @@ struct GeanyPluginFuncs
 	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
 };
 
-gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_api_version,
-                               gint abi_version);
-void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify destroy_notify);
+gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
+                               gint min_api_version, gint abi_version);
+gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
+                                    gint min_api_version, gint abi_version,
+                                    gpointer data, GDestroyNotify free_func);
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convinience macro to register a plugin.
  *
@@ -324,6 +327,17 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify de
 #define GEANY_PLUGIN_REGISTER(plugin, min_api_version) \
 	geany_plugin_register((plugin), GEANY_API_VERSION, \
 	                      (min_api_version), GEANY_ABI_VERSION)
+
+/** Convinience macro to register a plugin with data.
+ *
+ * It simply calls geany_plugin_register_full() with GEANY_API_VERSION and GEANY_ABI_VERSION.
+ *
+ * @since 1.26 (API 225)
+ * @see @ref howto
+ **/
+#define GEANY_PLUGIN_REGISTER_FULL(plugin, min_api_version, pdata, free_func) \
+	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
+	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED

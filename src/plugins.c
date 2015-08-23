@@ -297,6 +297,9 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 	g_return_val_if_fail(plugin != NULL, FALSE);
 
 	p = plugin->priv;
+	/* already registered successfully */
+	g_return_val_if_fail(!PLUGIN_LOADED_OK(p), FALSE);
+
 	/* Prevent registering incompatible plugins. */
 	if (! plugin_check_version(p, PLUGIN_VERSION_CODE(api_version, abi_version)))
 		return FALSE;
@@ -320,6 +323,51 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 	 * the requested API version here. For now it's not necessary. */
 
 	return PLUGIN_LOADED_OK(p);
+}
+
+
+/** Register a plugin to Geany, with plugin-defined data.
+ *
+ * This is a variant of geany_plugin_register() that also allows to set the plugin-defined data.
+ * Refer to that function for more details on registering in general.
+ *
+ * @p pdata is the pointer going to be passed to the individual plugin callbacks
+ * of GeanyPlugin::funcs. When the plugin module is unloaded, @p free_func is invoked on
+ * @p pdata, which connects the data to the plugin's module life time.
+ *
+ * You cannot use geany_plugin_set_data() after registering with this function. Use
+ * geany_plugin_register() if you need to.
+ *
+ * Do not call this directly. Use GEANY_PLUGIN_REGISTER_FULL() instead which automatically
+ * handles @p api_version and @p abi_version.
+ *
+ * @param plugin The plugin provided by Geany.
+ * @param api_version The API version the plugin is compiled against (pass GEANY_API_VERSION).
+ * @param min_api_version The minimum API version required by the plugin.
+ * @param abi_version The exact ABI version the plugin is compiled against (pass GEANY_ABI_VERSION).
+ * @param pdata Pointer to the plugin-defined data. Must not be @c NULL.
+ * @param free_func Function used to deallocate @a pdata, may be @c NULL.
+ *
+ * @return TRUE if the plugin was successfully registered. Otherwise FALSE.
+ *
+ * @since 1.26 (API 225)
+ * @see GEANY_PLUGIN_REGISTER_FULL()
+ * @see geany_plugin_register()
+ **/
+GEANY_API_SYMBOL
+gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version, gint min_api_version,
+									gint abi_version, gpointer pdata, GDestroyNotify free_func)
+{
+	if (geany_plugin_register(plugin, api_version, min_api_version, abi_version))
+	{
+		geany_plugin_set_data(plugin, pdata, free_func);
+		/* We use LOAD_DATA to indicate that pdata cb_data was set during loading/registration
+		 * as opposed to during GeanyPluginFuncs::init(). In the latter case we call free_func
+		 * after GeanyPluginFuncs::cleanup() */
+		plugin->priv->flags |= LOAD_DATA;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 struct LegacyRealFuncs
@@ -688,6 +736,16 @@ plugin_cleanup(Plugin *plugin)
 	widget = plugin->toolbar_separator.widget;
 	if (widget)
 		gtk_widget_destroy(widget);
+
+	if (!PLUGIN_HAS_LOAD_DATA(plugin) && plugin->cb_data_destroy)
+	{
+		/* If the plugin has used geany_plugin_set_data(), destroy the data here. But don't
+		 * if it was already set through geany_plugin_register_full() because we couldn't call
+		 * its init() anymore (not without completely reloading it anyway). */
+		plugin->cb_data_destroy(plugin->cb_data);
+		plugin->cb_data = NULL;
+		plugin->cb_data_destroy = NULL;
+	}
 
 	geany_debug("Unloaded: %s", plugin->filename);
 }

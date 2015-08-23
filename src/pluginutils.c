@@ -515,10 +515,9 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 
 /** Add additional data that corresponds to the plugin.
  *
- * This is the data pointer passed to the individual plugin callbacks. It may be
- * called as soon as geany_plugin_register() was called with success. When the
- * plugin is unloaded, @a free_func is invoked for the data, which connects the
- * data to the plugin's own life time.
+ * @p pdata is the pointer going to be passed to the individual plugin callbacks
+ * of GeanyPlugin::funcs. When the  plugin is cleaned up, @p free_func is invoked for the data,
+ * which connects the data to the time the plugin is enabled.
  *
  * One intended use case is to set GObjects as data and have them destroyed automatically
  * by passing g_object_unref() as @a free_func, so that member functions can be used
@@ -526,6 +525,9 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
  *
  * Be aware that this can only be called once and only by plugins registered via
  * @ref geany_plugin_register(). So-called legacy plugins cannot use this function.
+ *
+ * @note This function must not be called if the plugin was registered with
+ * geany_plugin_register_full().
  *
  * @param plugin The plugin provided by Geany
  * @param pdata The plugin's data to associate, must not be @c NULL
@@ -552,7 +554,10 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify f
 	 * wrong one that can only be replaced by another one. */
 	if (p->cb_data != NULL || p->cb_data_destroy != NULL)
 	{
-		g_warning("Double call to %s(), ignored!", G_STRFUNC);
+		if (PLUGIN_HAS_LOAD_DATA(p))
+			g_warning("Invalid call to %s(), geany_plugin_register_full() was used. Ignored!\n", G_STRFUNC);
+		else
+			g_warning("Double call to %s(), ignored!", G_STRFUNC);
 		return;
 	}
 
