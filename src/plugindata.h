@@ -347,6 +347,15 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
 
+/* Hooks that need to be implemented for every proxy */
+typedef struct _GeanyProxyFuncs
+{
+	void		(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugins, const gchar *filename, gpointer pdata);
+	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugins, gpointer pdata);
+}
+GeanyProxyFuncs;
+
+
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
 

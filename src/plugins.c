@@ -75,8 +75,31 @@ static GtkWidget *menu_separator = NULL;
 static gchar *get_plugin_path(void);
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
-static GeanyData geany_data;
+typedef struct {
+	gchar		extension[8];
+	Plugin		*plugin; /* &builtin_so_proxy_plugin for native plugins */
+} PluginProxy;
 
+
+static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, const gchar *filename, gpointer pdata);
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer pdata);
+
+static Plugin builtin_so_proxy_plugin = {
+	.proxy_cbs = {
+		.load = plugin_load_gmodule,
+		.unload = plugin_unload_gmodule,
+	},
+	/* rest of Plugin can be NULL/0 */
+};
+
+static PluginProxy builtin_so_proxy = {
+	.extension = G_MODULE_SUFFIX,
+	.plugin = &builtin_so_proxy_plugin,
+};
+
+static GPtrArray *active_proxies = NULL;
+
+static GeanyData geany_data;
 
 static void
 geany_data_init(void)
@@ -105,16 +128,15 @@ geany_data_init(void)
 /* Prevent the same plugin filename being loaded more than once.
  * Note: g_module_name always returns the .so name, even when Plugin::filename is a .la file. */
 static gboolean
-plugin_loaded(GModule *module)
+plugin_loaded(Plugin *plugin)
 {
 	gchar *basename_module, *basename_loaded;
 	GList *item;
 
-	basename_module = g_path_get_basename(g_module_name(module));
+	basename_module = g_path_get_basename(plugin->filename);
 	for (item = plugin_list; item != NULL; item = g_list_next(item))
 	{
-		basename_loaded = g_path_get_basename(
-			g_module_name(((Plugin*)item->data)->module));
+		basename_loaded = g_path_get_basename(((Plugin*)item->data)->filename);
 
 		if (utils_str_equal(basename_module, basename_loaded))
 		{
@@ -131,7 +153,7 @@ plugin_loaded(GModule *module)
 	 * would cause a crash. */
 	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
 	{
-		basename_loaded = g_path_get_basename(g_module_name(((Plugin*)item->data)->module));
+		basename_loaded = g_path_get_basename(((Plugin*)item->data)->filename);
 
 		if (utils_str_equal(basename_module, basename_loaded))
 		{
@@ -168,19 +190,19 @@ static Plugin *find_active_plugin_by_name(const gchar *filename)
 static gboolean
 plugin_check_version(Plugin *plugin, int plugin_version_code)
 {
-	GModule *module = plugin->module;
+	const gchar *name = g_module_name(plugin->module);
 	if (plugin_version_code < 0)
 	{
 		msgwin_status_add(_("The plugin \"%s\" is not binary compatible with this "
-			"release of Geany - please recompile it."), g_module_name(module));
+			"release of Geany - please recompile it."), name);
 		geany_debug("Plugin \"%s\" is not binary compatible with this "
-			"release of Geany - recompile it.", g_module_name(module));
+			"release of Geany - recompile it.", name);
 		return FALSE;
 	}
-	if (plugin_version_code > GEANY_API_VERSION)
+	else if (plugin_version_code > GEANY_API_VERSION)
 	{
 		geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
-			g_module_name(module), plugin_version_code);
+			name, plugin_version_code);
 		return FALSE;
 	}
 	return TRUE;
@@ -425,7 +447,7 @@ static void register_legacy_plugin(Plugin *plugin, GModule *module)
 	if (! g_module_symbol(module, "plugin_" #__x, (void *) (&p_##__x)))                   \
 	{                                                                                     \
 		geany_debug("Plugin \"%s\" has no plugin_" #__x "() function - ignoring plugin!", \
-				g_module_name(plugin->module));                                           \
+				g_module_name(module));                                                   \
 		return;                                                                           \
 	}
 	CHECK_FUNC(version_check);
@@ -481,8 +503,9 @@ static gboolean
 plugin_load(Plugin *plugin)
 {
 	gboolean init_ok = TRUE;
+
 	/* Start the plugin. Legacy plugins require additional cruft. */
-	if (PLUGIN_IS_LEGACY(plugin))
+	if (PLUGIN_IS_LEGACY(plugin) && plugin->proxy == &builtin_so_proxy_plugin)
 	{
 		GeanyPlugin **p_geany_plugin;
 		PluginInfo **p_info;
@@ -531,20 +554,70 @@ plugin_load(Plugin *plugin)
 }
 
 
+static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *fname, gpointer pdata)
+{
+	GModule *module;
+	void (*p_geany_load_module)(GeanyPlugin *);
+
+	g_return_val_if_fail(g_module_supported(), NULL);
+	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
+	 * causing a segfault. Without that flag the module will safely fail to load.
+	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
+	 * otherwise not be detected due to the shadowing of Geany's app variable.
+	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
+	 * function from a plugin will be shadowed. */
+	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
+	if (!module)
+	{
+		geany_debug("Can't load plugin: %s", g_module_error());
+		return;
+	}
+
+	subplugin->priv->module = module;
+	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
+	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
+	if (p_geany_load_module)
+	{
+		/* This is a new style plugin. It should fill in plugin->info and then call
+		 * geany_plugin_register() in its geany_load_module() to successfully load.
+		 * The ABI and API checks are performed by geany_plugin_register() (i.e. by us).
+		 * We check the LOADED_OK flag separately to protect us against buggy plugins
+		 * who ignore the result of geany_plugin_register() and register anyway */
+		p_geany_load_module(subplugin);
+	}
+	else
+	{
+		/* This is the legacy / deprecated code path. It does roughly the same as
+		 * geany_load_module() and geany_plugin_register() together for the new ones */
+		register_legacy_plugin(subplugin->priv, module);
+	}
+	/* We actually check the LOADED_OK flag later */
+}
+
+
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer pdata)
+{
+	GModule *module = subplugin->priv->module;
+
+	g_return_if_fail(module);
+
+	if (! g_module_close(module))
+		g_warning("%s: %s", subplugin->priv->filename, g_module_error());
+}
+
+
 /* Load and optionally init a plugin.
  * load_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
  * available plugins in the plugin manager).
  * When add_to_list is set, the plugin will be added to the plugin manager's plugin_list. */
 static Plugin*
-plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
+plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
-	GModule *module;
-	void (*p_geany_load_module)(GeanyPlugin *);
 
 	g_return_val_if_fail(fname, NULL);
-	g_return_val_if_fail(g_module_supported(), NULL);
+	g_return_val_if_fail(proxy, NULL);
 
 	/* find the plugin in the list of already loaded, active plugins and use it, otherwise
 	 * load the module */
@@ -563,53 +636,24 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 		return plugin;
 	}
 
-	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
-	 * causing a segfault. Without that flag the module will safely fail to load.
-	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
-	 * otherwise not be detected due to the shadowing of Geany's app variable.
-	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
-	 * function from a plugin will be shadowed. */
-	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
-	if (! module)
-	{
-		geany_debug("Can't load plugin: %s", g_module_error());
-		return NULL;
-	}
-
-	if (plugin_loaded(module))
-	{
-		geany_debug("Plugin \"%s\" already loaded.", fname);
-
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		return NULL;
-	}
-
 	plugin = g_new0(Plugin, 1);
-	plugin->module = module;
 	plugin->filename = g_strdup(fname);
+	plugin->proxy = proxy;
 	plugin->public.geany_data = &geany_data;
 	plugin->public.priv = plugin;
 	/* Fields of plugin->info/funcs must to be initialized by the plugin */
 	plugin->public.info = &plugin->info;
 	plugin->public.funcs = &plugin->cbs;
 
-	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
-	if (p_geany_load_module)
+	if (plugin_loaded(plugin))
 	{
-		/* This is a new style plugin. It should fill in plugin->info and then call
-		 * geany_plugin_register() in its geany_load_module() to successfully load.
-		 * The ABI and API checks are performed by geany_plugin_register() (i.e. by us).
-		 * We check the LOADED_OK flag separately to protect us against buggy plugins
-		 * who ignore the result of geany_plugin_register() and register anyway */
-		p_geany_load_module(&plugin->public);
+		geany_debug("Plugin \"%s\" already loaded.", fname);
+		goto err;
 	}
-	else
-	{
-		/* This is the legacy / deprecated code path. It does roughly the same as
-		 * geany_load_module() and geany_plugin_register() together for the new ones */
-		register_legacy_plugin(plugin, module);
-	}
+
+	/* Load plugin, this should read its name etc. It must also call
+	 * geany_plugin_register() for the following PLUGIN_LOADED_OK condition */
+	proxy->proxy_cbs.load(&proxy->public, &plugin->public, fname, proxy->cb_data);
 
 	if (! PLUGIN_LOADED_OK(plugin))
 	{
@@ -617,10 +661,12 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 		goto err;
 	}
 
+	/* The proxy assumes success, therefore we have to call unload from here
+	 * on in case of errors */
 	if (EMPTY(plugin->info.name))
 	{
 		geany_debug("No plugin name set for \"%s\" - ignoring plugin!", fname);
-		goto err;
+		goto err_unload;
 	}
 
 	if (load_plugin && !plugin_load(plugin))
@@ -628,7 +674,7 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 		/* Handle failing init same as failing to load for now. In future we
 		 * could present a informational UI or something */
 		geany_debug("Plugin failed to initialize \"%s\" - ignoring plugin!", fname);
-		goto err;
+		goto err_unload;
 	}
 
 	if (add_to_list)
@@ -636,11 +682,11 @@ plugin_new(const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 
 	return plugin;
 
-err:
+err_unload:
 	if (plugin->cb_data_destroy)
 		plugin->cb_data_destroy(plugin->cb_data);
-	if (! g_module_close(module))
-		g_warning("%s: %s", fname, g_module_error());
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, proxy->cb_data);
+err:
 	g_free(plugin->filename);
 	g_free(plugin);
 	return NULL;
@@ -754,21 +800,19 @@ plugin_cleanup(Plugin *plugin)
 static void
 plugin_free(Plugin *plugin)
 {
-	g_return_if_fail(plugin);
-	g_return_if_fail(plugin->module);
+	Plugin *proxy;
 
+	g_return_if_fail(plugin);
+	g_return_if_fail(plugin->proxy);
+
+	proxy = plugin->proxy;
 	if (is_active_plugin(plugin))
 		plugin_cleanup(plugin);
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 	plugin_list = g_list_remove(plugin_list, plugin);
 
-	/* cb_data_destroy might be plugin code and must be called before unloading the module */
-	if (plugin->cb_data_destroy)
-		plugin->cb_data_destroy(plugin->cb_data);
-
-	if (! g_module_close(plugin->module))
-		g_warning("%s: %s", plugin->filename, g_module_error());
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, proxy->cb_data);
 
 	g_free(plugin->filename);
 	g_free(plugin);
@@ -830,6 +874,36 @@ static gboolean check_plugin_path(const gchar *fname)
 }
 
 
+/* Retuns NULL if this ain't a plugin,
+ * otherwise it returns the appropriate PluginProxy instance to load it */
+static PluginProxy* is_plugin(const gchar *file)
+{
+	PluginProxy *proxy;
+	const gchar *ext;
+	guint i;
+
+	/* extract file extension to avoid g_str_has_suffix() in the loop */
+	ext = (const gchar *)strrchr(file, '.');
+	if (ext == NULL)
+		return FALSE;
+	/* ensure the dot is really part of the filename */
+	else if (strchr(ext, G_DIR_SEPARATOR) != NULL)
+		return FALSE;
+
+	ext += 1;
+	/* O(n*m), (m being extensions per proxy) doesn't scale very well in theory
+	 * but not a problem in practice yet */
+	foreach_ptr_array(proxy, i, active_proxies)
+	{
+		if (utils_str_casecmp(ext, proxy->extension) == 0)
+		{
+			return proxy;
+		}
+	}
+	return NULL;
+}
+
+
 /* load active plugins at startup */
 static void
 load_active_plugins(void)
@@ -843,9 +917,19 @@ load_active_plugins(void)
 	{
 		const gchar *fname = active_plugins_pref[i];
 
+#ifdef G_OS_WIN32
+		/* ensure we have canonical paths */
+		gchar *p = fname;
+		while ((p = strchr(p, '/')) != NULL)
+			*p = G_DIR_SEPARATOR;
+#endif
+
 		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
 		{
-			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
+			PluginProxy *proxy = NULL;
+			if (check_plugin_path(fname))
+				proxy = is_plugin(fname);
+			if (proxy == NULL || plugin_new(proxy->plugin, fname, TRUE, FALSE) == NULL)
 				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
 		}
 	}
@@ -856,20 +940,18 @@ static void
 load_plugins_from_path(const gchar *path)
 {
 	GSList *list, *item;
-	gchar *fname, *tmp;
 	gint count = 0;
 
 	list = utils_get_file_list(path, NULL, NULL);
 
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
-		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
-			continue;
+		gchar *fname = g_build_filename(path, item->data, NULL);
+		PluginProxy *proxy = is_plugin(fname);
 
-		fname = g_build_filename(path, item->data, NULL);
-		if (plugin_new(fname, FALSE, TRUE))
+		if (proxy != NULL && plugin_new(proxy->plugin, fname, FALSE, TRUE))
 			count++;
+
 		g_free(fname);
 	}
 
@@ -1028,6 +1110,9 @@ void plugins_init(void)
 
 	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
+
+	active_proxies = g_ptr_array_sized_new(1);
+	g_ptr_array_add(active_proxies, &builtin_so_proxy);
 }
 
 
@@ -1146,6 +1231,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
 	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
 	Plugin *p;
+	Plugin *proxy;
 
 	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_path_free(path);
@@ -1163,8 +1249,9 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 	state = ! old_state; /* toggle the state */
 
-	/* save the filename of the plugin */
+	/* save the filename and proxy of the plugin */
 	file_name = g_strdup(p->filename);
+	proxy = p->proxy;
 
 	/* unload plugin module */
 	if (!state)
@@ -1174,7 +1261,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
-	p = plugin_new(file_name, state, TRUE);
+	p = plugin_new(proxy, file_name, state, TRUE);
 	if (!p)
 	{
 		/* plugin file may no longer be on disk, or is now incompatible */

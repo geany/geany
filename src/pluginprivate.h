@@ -46,6 +46,8 @@ typedef enum _LoadedFlags {
 }
 LoadedFlags;
 
+typedef struct GeanyPluginPrivate Plugin;	/* shorter alias */
+
 typedef struct GeanyPluginPrivate
 {
 	GModule 		*module;
@@ -66,15 +68,16 @@ typedef struct GeanyPluginPrivate
 	gpointer		cb_data;				/* user data passed back to functions in GeanyPluginFuncs */
 	GDestroyNotify	cb_data_destroy;		/* called when the plugin is unloaded, for cb_data */
 	LoadedFlags		flags;					/* bit-or of LoadedFlags */
+
+	/* proxy plugin support */
+	GeanyProxyFuncs	proxy_cbs;
+	Plugin			*proxy;					/* The proxy that handles this plugin */
 }
 GeanyPluginPrivate;
 
 #define PLUGIN_LOADED_OK(p) (((p)->flags & LOADED_OK) != 0)
 #define PLUGIN_IS_LEGACY(p) (((p)->flags & IS_LEGACY) != 0)
 #define PLUGIN_HAS_LOAD_DATA(p) (((p)->flags & LOAD_DATA) != 0)
-
-typedef GeanyPluginPrivate Plugin;	/* shorter alias */
-
 
 void plugin_watch_object(Plugin *plugin, gpointer object);
 
