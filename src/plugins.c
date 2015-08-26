@@ -1278,6 +1278,9 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 }
 
 
+static void pm_populate(GtkListStore *store);
+
+
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
 {
 	gboolean old_state, state;
@@ -1339,6 +1342,33 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	g_free(file_name);
 }
 
+static void pm_populate(GtkListStore *store)
+{
+	GtkTreeIter iter;
+	GList *list;
+
+	gtk_list_store_clear(store);
+	list = g_list_first(plugin_list);
+	if (list == NULL)
+	{
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
+				PLUGIN_COLUMN_PLUGIN, NULL, -1);
+	}
+	else
+	{
+		for (; list != NULL; list = list->next)
+		{
+			Plugin *p = list->data;
+
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter,
+				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
+				PLUGIN_COLUMN_PLUGIN, p,
+				-1);
+		}
+	}
+}
 
 static gboolean pm_treeview_query_tooltip(GtkWidget *widget, gint x, gint y,
 		gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data)
@@ -1504,8 +1534,6 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 	GtkCellRenderer *text_renderer, *checkbox_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeModel *filter_model;
-	GtkTreeIter iter;
-	GList *list;
 	GtkTreeSelection *sel;
 
 	g_signal_connect(tree, "query-tooltip", G_CALLBACK(pm_treeview_query_tooltip), NULL);
@@ -1539,27 +1567,6 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
 
-	list = g_list_first(plugin_list);
-	if (list == NULL)
-	{
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
-				PLUGIN_COLUMN_PLUGIN, NULL, -1);
-	}
-	else
-	{
-		Plugin *p;
-		for (; list != NULL; list = list->next)
-		{
-			p = list->data;
-
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter,
-				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
-				PLUGIN_COLUMN_PLUGIN, p,
-				-1);
-		}
-	}
 	/* filter */
 	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
 	gtk_tree_model_filter_set_visible_func(
@@ -1567,8 +1574,9 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
 
 	/* set model to tree view */
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), filter_model);
-	g_object_unref(store);
 	g_object_unref(filter_model);
+
+	pm_populate(store);
 }
 
 
@@ -1679,6 +1687,7 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	pm_widgets.store = gtk_list_store_new(
 		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 	pm_prepare_treeview(pm_widgets.tree, pm_widgets.store);
+	g_object_unref(pm_widgets.store);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
