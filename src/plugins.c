@@ -81,8 +81,8 @@ typedef struct {
 } PluginProxy;
 
 
-static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, const gchar *filename, gpointer pdata);
-static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer pdata);
+static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, const gchar *filename, gpointer pdata);
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer load_data, gpointer pdata);
 
 static Plugin builtin_so_proxy_plugin = {
 	.proxy_cbs = {
@@ -190,22 +190,27 @@ static Plugin *find_active_plugin_by_name(const gchar *filename)
 static gboolean
 plugin_check_version(Plugin *plugin, int plugin_version_code)
 {
-	const gchar *name = g_module_name(plugin->module);
+	gboolean ret = TRUE;
 	if (plugin_version_code < 0)
 	{
+		gchar *name = g_path_get_basename(plugin->filename);
 		msgwin_status_add(_("The plugin \"%s\" is not binary compatible with this "
 			"release of Geany - please recompile it."), name);
 		geany_debug("Plugin \"%s\" is not binary compatible with this "
 			"release of Geany - recompile it.", name);
-		return FALSE;
+		ret = FALSE;
+		g_free(name);
 	}
 	else if (plugin_version_code > GEANY_API_VERSION)
 	{
+		gchar *name = g_path_get_basename(plugin->filename);
 		geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
 			name, plugin_version_code);
-		return FALSE;
+		ret = FALSE;
+		g_free(name);
 	}
-	return TRUE;
+
+	return ret;
 }
 
 
@@ -239,9 +244,10 @@ static void read_key_group(Plugin *plugin)
 {
 	GeanyKeyGroupInfo *p_key_info;
 	GeanyKeyGroup **p_key_group;
+	GModule *module = plugin->proxy_data;
 
-	g_module_symbol(plugin->module, "plugin_key_group_info", (void *) &p_key_info);
-	g_module_symbol(plugin->module, "plugin_key_group", (void *) &p_key_group);
+	g_module_symbol(module, "plugin_key_group_info", (void *) &p_key_info);
+	g_module_symbol(module, "plugin_key_group", (void *) &p_key_group);
 	if (p_key_info && p_key_group)
 	{
 		GeanyKeyGroupInfo *key_info = p_key_info;
@@ -329,8 +335,10 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 	/* Only init and cleanup callbacks are truly mandatory. */
 	if (! cbs->init || ! cbs->cleanup)
 	{
-		geany_debug("Plugin '%s' has no %s function - ignoring plugin!",
-				 g_module_name(p->module), cbs->init ? "cleanup" : "init");
+		gchar *name = g_path_get_basename(p->filename);
+		geany_debug("Plugin '%s' has no %s function - ignoring plugin!", name,
+		            cbs->init ? "cleanup" : "init");
+		g_free(name);
 	}
 	else
 	{
@@ -510,15 +518,16 @@ plugin_load(Plugin *plugin)
 		GeanyPlugin **p_geany_plugin;
 		PluginInfo **p_info;
 		PluginFields **plugin_fields;
+		GModule *module = plugin->proxy_data;
 		/* set these symbols before plugin_init() is called
 		 * we don't set geany_data since it is set directly by plugin_new() */
-		g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
+		g_module_symbol(module, "geany_plugin", (void *) &p_geany_plugin);
 		if (p_geany_plugin)
 			*p_geany_plugin = &plugin->public;
-		g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
+		g_module_symbol(module, "plugin_info", (void *) &p_info);
 		if (p_info)
 			*p_info = &plugin->info;
-		g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
+		g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
 		if (plugin_fields)
 			*plugin_fields = &plugin->fields;
 		read_key_group(plugin);
@@ -554,7 +563,7 @@ plugin_load(Plugin *plugin)
 }
 
 
-static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *fname, gpointer pdata)
+static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *fname, gpointer pdata)
 {
 	GModule *module;
 	void (*p_geany_load_module)(GeanyPlugin *);
@@ -570,10 +579,9 @@ static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, cons
 	if (!module)
 	{
 		geany_debug("Can't load plugin: %s", g_module_error());
-		return;
+		return NULL;
 	}
 
-	subplugin->priv->module = module;
 	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
 	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
 	if (p_geany_load_module)
@@ -592,14 +600,15 @@ static void plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, cons
 		register_legacy_plugin(subplugin->priv, module);
 	}
 	/* We actually check the LOADED_OK flag later */
+	return module;
 }
 
 
-static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer pdata)
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata)
 {
-	GModule *module = subplugin->priv->module;
+	GModule *module = (GModule *) load_data;
 
-	g_return_if_fail(module);
+	g_return_if_fail(module != NULL);
 
 	if (! g_module_close(module))
 		g_warning("%s: %s", subplugin->priv->filename, g_module_error());
@@ -653,7 +662,7 @@ plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add
 
 	/* Load plugin, this should read its name etc. It must also call
 	 * geany_plugin_register() for the following PLUGIN_LOADED_OK condition */
-	proxy->proxy_cbs.load(&proxy->public, &plugin->public, fname, proxy->cb_data);
+	plugin->proxy_data = proxy->proxy_cbs.load(&proxy->public, &plugin->public, fname, proxy->cb_data);
 
 	if (! PLUGIN_LOADED_OK(plugin))
 	{
@@ -666,6 +675,16 @@ plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add
 	if (EMPTY(plugin->info.name))
 	{
 		geany_debug("No plugin name set for \"%s\" - ignoring plugin!", fname);
+		goto err_unload;
+	}
+
+	/* cb_data_destroy() frees plugin->cb_data. If that pointer also passed to unload() afterwards
+	 * then that would become a use-after-free. Disallow this combination. If a proxy
+	 * needs the same pointer it must not use a destroy func but free manually in its unload(). */
+	if (plugin->proxy_data == proxy->cb_data && plugin->cb_data_destroy)
+	{
+		geany_debug("Proxy of plugin \"%s\" specified invalid data - ignoring plugin!", fname);
+		plugin->proxy_data = NULL;
 		goto err_unload;
 	}
 
@@ -685,7 +704,7 @@ plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add
 err_unload:
 	if (plugin->cb_data_destroy)
 		plugin->cb_data_destroy(plugin->cb_data);
-	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, proxy->cb_data);
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, plugin->proxy_data, proxy->cb_data);
 err:
 	g_free(plugin->filename);
 	g_free(plugin);
@@ -758,6 +777,40 @@ static void remove_sources(Plugin *plugin)
 }
 
 
+/* Make the GModule backing plugin resident (if it's GModule-backed at all) */
+void plugin_make_resident(Plugin *plugin)
+{
+	if (plugin->proxy == &builtin_so_proxy_plugin)
+	{
+		g_return_if_fail(plugin->proxy_data != NULL);
+		g_module_make_resident(plugin->proxy_data);
+	}
+	else
+		g_warning("Skipping g_module_make_resident() for non-native plugin");
+}
+
+
+/* Retrieve the address of a symbol sym located in plugin, if it's GModule-backed */
+gpointer plugin_get_module_symbol(Plugin *plugin, const gchar *sym)
+{
+	gpointer symbol;
+
+	if (plugin->proxy == &builtin_so_proxy_plugin)
+	{
+		g_return_val_if_fail(plugin->proxy_data != NULL, NULL);
+		if (g_module_symbol(plugin->proxy_data, sym, &symbol))
+			return symbol;
+		else
+			g_warning("Failed to locate signal handler for '%s': %s",
+				sym, g_module_error());
+	}
+	else /* TODO: Could possibly support this via a new proxy hook */
+		g_warning("Failed to locate signal handler for '%s': Not supported for non-native plugins",
+			sym);
+	return NULL;
+}
+
+
 static gboolean is_active_plugin(Plugin *plugin)
 {
 	return (g_list_find(active_plugin_list, plugin) != NULL);
@@ -812,7 +865,10 @@ plugin_free(Plugin *plugin)
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
 	plugin_list = g_list_remove(plugin_list, plugin);
 
-	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, proxy->cb_data);
+	/* cb_data_destroy might be plugin code and must be called before unloading the module. */
+	if (plugin->cb_data_destroy)
+		plugin->cb_data_destroy(plugin->cb_data);
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, plugin->proxy_data, proxy->cb_data);
 
 	g_free(plugin->filename);
 	g_free(plugin);

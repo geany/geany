@@ -350,8 +350,8 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 /* Hooks that need to be implemented for every proxy */
 typedef struct _GeanyProxyFuncs
 {
-	void		(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugins, const gchar *filename, gpointer pdata);
-	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugins, gpointer pdata);
+	gpointer	(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *filename, gpointer pdata);
+	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
 }
 GeanyProxyFuncs;
 

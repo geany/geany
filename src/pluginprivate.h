@@ -50,7 +50,6 @@ typedef struct GeanyPluginPrivate Plugin;	/* shorter alias */
 
 typedef struct GeanyPluginPrivate
 {
-	GModule 		*module;
 	gchar			*filename;				/* plugin filename (/path/libname.so) */
 	PluginInfo		info;				/* plugin name, description, etc */
 	GeanyPlugin		public;				/* fields the plugin can read */
@@ -72,6 +71,8 @@ typedef struct GeanyPluginPrivate
 	/* proxy plugin support */
 	GeanyProxyFuncs	proxy_cbs;
 	Plugin			*proxy;					/* The proxy that handles this plugin */
+	gpointer		proxy_data;				/* Data passed to the proxy hooks of above proxy, so
+											 * this gives the proxy a pointer to each plugin */
 }
 GeanyPluginPrivate;
 
@@ -80,6 +81,8 @@ GeanyPluginPrivate;
 #define PLUGIN_HAS_LOAD_DATA(p) (((p)->flags & LOAD_DATA) != 0)
 
 void plugin_watch_object(Plugin *plugin, gpointer object);
+void plugin_make_resident(Plugin *plugin);
+gpointer plugin_get_module_symbol(Plugin *plugin, const gchar *sym);
 
 G_END_DECLS
 
