@@ -1301,6 +1301,41 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 }
 
 
+static gboolean find_iter_for_plugin(Plugin *p, GtkTreeModel *model, GtkTreeIter *iter)
+{
+	Plugin *pp;
+	gboolean valid;
+
+	for (valid = gtk_tree_model_get_iter_first(model, iter);
+	     valid;
+	     valid = gtk_tree_model_iter_next(model, iter))
+	{
+		gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &pp, -1);
+		if (p == pp)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+static gboolean select_plugin(gpointer data)
+{
+	GtkTreeIter iter;
+	Plugin *p = data;
+	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
+
+	/* restore selection */
+	if (find_iter_for_plugin(p, model, &iter))
+	{
+		GtkTreeSelection *sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(pm_widgets.tree));
+		gtk_tree_selection_select_iter(sel, &iter);
+	}
+
+	return G_SOURCE_REMOVE;
+}
+
+
 static void pm_populate(GtkListStore *store);
 
 
@@ -1314,6 +1349,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
 	Plugin *p;
 	Plugin *proxy;
+	guint prev_num_proxies;
 
 	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_path_free(path);
@@ -1334,6 +1370,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	/* save the filename and proxy of the plugin */
 	file_name = g_strdup(p->filename);
 	proxy = p->proxy;
+	prev_num_proxies = active_proxies->len;
 
 	/* unload plugin module */
 	if (!state)
@@ -1361,6 +1398,19 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 
 		/* set again the sensitiveness of the configure and help buttons */
 		pm_update_buttons(p);
+	}
+	/* We need to find out if a proxy was added or removed because that affects the plugin list
+	 * presented by the plugin manager. The current solution counts active_proxies twice,
+	 * this suboptimal from an algorithmic POV, however most efficient for the extremely small
+	 * number (at most 3) of pluxies we expect users to load */
+	if (prev_num_proxies != active_proxies->len)
+	{
+		/* Rescan the plugin list as we now support more */
+		if (prev_num_proxies < active_proxies->len)
+			load_all_plugins();
+		pm_populate(pm_widgets.store);
+		/* restore selection. doesn't work if it's done immediately (same row keeps selected) */
+		g_idle_add(select_plugin, p);
 	}
 	g_free(file_name);
 }
@@ -1524,6 +1574,9 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	gchar *haystack, *filename;
 
 	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
+
+	if (!plugin)
+		return FALSE;
 	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
 
 	filename = g_path_get_basename(plugin->filename);
