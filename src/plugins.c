@@ -964,31 +964,38 @@ static PluginProxy* is_plugin(const gchar *file)
 static void
 load_active_plugins(void)
 {
-	guint i, len;
+	guint i, len, proxies;
 
 	if (active_plugins_pref == NULL || (len = g_strv_length(active_plugins_pref)) == 0)
 		return;
 
-	for (i = 0; i < len; i++)
+	/* If proxys are loaded we have to restart to load plugins that sort before their proxy */
+	do
 	{
-		const gchar *fname = active_plugins_pref[i];
+		proxies = active_proxies->len;
+		g_list_free_full(failed_plugins_list, (GDestroyNotify) g_free);
+		failed_plugins_list = NULL;
+		for (i = 0; i < len; i++)
+		{
+			gchar *fname = active_plugins_pref[i];
 
 #ifdef G_OS_WIN32
-		/* ensure we have canonical paths */
-		gchar *p = fname;
-		while ((p = strchr(p, '/')) != NULL)
-			*p = G_DIR_SEPARATOR;
+			/* ensure we have canonical paths */
+			gchar *p = fname;
+			while ((p = strchr(p, '/')) != NULL)
+				*p = G_DIR_SEPARATOR;
 #endif
 
-		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
-		{
-			PluginProxy *proxy = NULL;
-			if (check_plugin_path(fname))
-				proxy = is_plugin(fname);
-			if (proxy == NULL || plugin_new(proxy->plugin, fname, TRUE, FALSE) == NULL)
-				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
+			if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+			{
+				PluginProxy *proxy = NULL;
+				if (check_plugin_path(fname))
+					proxy = is_plugin(fname);
+				if (proxy == NULL || plugin_new(proxy->plugin, fname, TRUE, FALSE) == NULL)
+					failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
+			}
 		}
-	}
+	} while (proxies != active_proxies->len);
 }
 
 
