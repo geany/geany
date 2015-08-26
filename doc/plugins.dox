@@ -43,6 +43,7 @@ GeanyFuncs::cleanup functions).
 
 @section pluginsupport Plugin Support
 - @link howto Plugin HowTo @endlink - get started
+- @ref proxy
 - @ref legacy
 - @link plugindata.h Plugin Datatypes and Macros @endlink
 - @link pluginsignals.c Plugin Signals @endlink
@@ -721,6 +722,402 @@ void geany_load_module(GeanyPlugin *plugin)
 	plugin->funcs->callbacks = plugin_callbacks;
 // ...
 }
+}
+@endcode
+
+
+@page proxy Proxy Plugin HowTo
+
+@section proxy_intro Introduction
+
+Geany has built-in support for plugins. These plugins can alter the way Geany operates in many
+imaginable ways which leaves little to be desired.
+
+However, there is one significant short-coming. Due to the infrastructure, Geany's built-in support
+only covers plugins written in C, perhaps C++ and Vala. Basically all languages which can be
+compiled into native shared libraries and can link GTK libraries. This excludes dynamic languages
+such as Python.
+
+Geany provides a mechanism to enable support for those languages. Native plugins can register as
+proxy plugins by being a normal plugin to the Geany-side and by providing a bridge to write plugins
+in another language on the other side.
+
+These plugins are also called sub-plugins. This refers to the relation to their proxy.
+To Geany they are first-class citizens.
+
+@section proxy_protocol Writing a Proxy Plugin
+
+The basic idea is that a proxy plugin provides methods to match, load and unload one or more
+sub-plugin plugins in an abstract manner:
+
+ - Matching consists of providing a list of supported file extensions for the sub-plugins and
+   a mechanism to resolve file extension uncertainty or ambiguity. The matching makes the plugin
+   visible to the user within the Plugin Manager.
+ - Loading consists of loading the sub-plugin's file, passing the file to some form of interpreter
+   and calling GEANY_PLUGIN_REGISTER() or GEANY_PLUGIN_REGISTER_FULL() on behalf of the sub-plugin
+   at some point.
+ - Unloading simply reverses the effect of loading.
+
+For providing these methods, GeanyPlugin has a field GeanyProxyFuncs which contains three function
+pointers which must be initialized proir to calling geany_plugin_register_proxy(). This should be
+done in the GeanyPluginFuncs::init function of the proxy plugin.
+
+ - In the call to geany_plugin_register_proxy() the proxy plugin passes a list of file extensions.
+   When Geany scans through its plugin directories as usual it will also look for files with
+   that extensions and consider found files as plugin candidate.
+ - GeanyProxyFuncs::probe may be implemented to probe if a plugin candidate (that has one of the
+   provided file extensions) is actually a plugin. This may depend on the plugin file itself in
+   case of ambiguity or availability of runtime dependencies or even configuration.
+   @ref PROXY_IGNORED or @ref PROXY_MATCHED should be returned, possibly in combination
+   with the @ref PROXY_NOLOAD flag. Not implementing GeanyProxyFuncs::probe at all is eqivalent to
+   always returning @ref PROXY_MATCHED.
+ - GeanyProxyFuncs::load must be implemented to actually load the plugin. It is called by Geany
+   when the user enables the sub-plugin. What "loading" means is entirely up to the proxy plugin and
+   probably depends on the interpreter of the dynamic language that shall be supported. After
+   setting everything up as necessary GEANY_PLUGIN_REGISTER() or GEANY_PLUGIN_REGISTER_FULL() must
+   be called to register the sub-plugin.
+ - GeanyProxyFuncs::unload must be implemented and is called when the user unchecks the sub-plugin
+   or when Geany exits. Here, the proxy should release any references or memory associated to the
+   sub-plugin. Note that if GeanyProxyFuncs::load didn't succeed, i.e. didn't successfully register
+   the sub-plugin, then this function won't be called.
+
+GeanyProxyFuncs::load and GeanyProxyFuncs::unload receive two GeanyPlugin pointers: One that
+corresponds to the proxy itself and another that corresponds to the sub-plugin. The sub-plugin's
+one may be used to call various API functions on behalf of the sub-plugin, including
+GEANY_PLUGIN_REGISTER() and GEANY_PLUGIN_REGISTER_FULL().
+
+GeanyProxyFuncs::load may return a pointer that is passed back to GeanyProxyFuncs::unload. This can
+be used to store proxy-defined but sub-plugin-specific data required for unloading. However, this
+pointer is not passed to the sub-plugin's GeanyPluginFuncs. To arrange for that, you want to call
+GEANY_PLUGIN_REGISTER_FULL(). This method is the key to enable proxy plugins to wrap the
+GeanyPluginFuncs of all sub-plugins and yet multiplex between multiple sub-plugin, for example by
+storing a per-sub-plugin interpreter context.
+
+@note If the pointer returned from GeanyProxyFuncs::load is the same that is passed to
+GEANY_PLUGIN_REGISTER_FULL() then you must pass NULL as free_func, because that would be invoked
+prior to unloading. Insert the corresponding code into GeanyProxyFuncs::unload.
+
+@section proxy_compat_guideline Guideline for Checking Compatiblity
+
+Determining if a plugin candidate is compatible is not a single test. There are multiple levels and
+each should be handled differently in order to give the user a consistent feedback.
+
+Consider the 5 basic cases:
+
+1) A candidate comes with a suitable file extension but is not a workable plugin file at all. For
+example, your proxy supports plugins written in a shell script (.sh) but the shebang of that script
+points to an incompatible shell (or even lacks a shebang). You should check for this in
+GeanyProxyFuncs::probe() and return @ref PROXY_IGNORED which hides that script from the Plugin
+Manager and allows other enabled proxy plugins to pick it up. GeanyProxyFuncs::probe() returning
+@ref PROXY_IGNORED is an indication that the candidate is meant for another proxy, or the user
+placed the file by accident in one of Geany's plugin directories. In other words the candidate
+simply doesn't correspond to your proxy. Thus any noise by debug messages for this case is
+undesirable.
+
+2) A proxy plugin provides its own, versioned API to sub-plugin. The API version of the sub-plugin
+is not compatible with the API exposed by the proxy. GeanyProxyFuncs::probe() should never perform
+a version check because its sole purpose is to indicate a proxy's correspondence to a given
+candidate. It should return @ref PROXY_MATCHED instead. Later, Geany will invoke the
+GeanyProxyFuncs::load(), and this function is the right place for a version check. If it fails then
+you simply do not call GEANY_PLUGIN_REGISTER(), but rather print a debug message. The result is
+that the sub-plugin is not shown in the Plugin Manager at all. This is consistent with the
+treatment of native plugins by Geany.
+
+3) The sub-plugin is also depending on Geany's API version (whether it is or not depends on the
+design of the proxy). In this case do not do anything special but forward the API version the
+sub-plugin is written/compiled against to GEANY_PLUGIN_REGISTER(). Here, Geany will perform its own
+compatiblity check, allowing for a consistent user feedback. The result is again that the
+sub-plugin is hidden from the Plugin Manager, like in case 2. But Geany will print a debug message
+so you can skip that.
+
+
+If you have even more cases try to fit it into case 1 or 2, depending on whether other proxy
+plugins should get a chance to load the candidate or not.
+
+@section proxy_dep_guideline Guideline for Runtime Errors
+
+A sub-plugin might not be able to run even if it's perfectly compatible with its proxy. This
+includes the case when it lacks certain runtime dependencies such as programs or modules but also
+syntactic problems or other errors.
+
+There are two basic classes:
+
+1) Runtime errors that can be determined at load time. For example, the shebang of a script
+indicates a specific interpeter version but that version is not installed on the system. Your proxy
+should respond the same way as for version-incompatible plugins: don't register the plugin at
+all, but leave a message the user suggesting what has to be installed in order to work. Handle
+syntax errors in the scripts of sub-plugins the same way if possible.
+
+2) Runtime errors that cannot be determined without actually running the plugin. An example would
+be missing modules in Python scripts. If your proxy has no way of foreseeing the problem the plugin
+will be registered normally. However, you can catch runtime errors by implementing
+GeanyPluginFuncs::init() on the plugin's behalf. This is called after user activation and allows to
+indicate errors by returning @c FALSE. However, allowing the user to enable a plugin and then
+disabling anyway is a poor user experience.
+
+Therefore, if possible, try to fail fast and disallow registration.
+
+@section Proxy Plugin Example
+
+In this section a dumb example proxy plugin is shown in order to give a practical starting point.
+The sub-plugin are not actually code but rather a ini-style description of one or more menu items
+that are added to Geany's tools menu and a help dialog. Real world sub-plugins would contain actual
+code, usually written in a scripting language.
+
+A sub-plugin file looks like this:
+
+@code{.ini}
+#!!PROXY_MAGIC!!
+
+[Init]
+item0 = Bam
+item1 = Foo
+item2 = Bar
+
+[Help]
+text = I'm a simple test. Nothing to see!
+
+[Info]
+name = Demo Proxy Tester
+description = I'm a simple test. Nothing to see!
+version = 0.1
+author = The Geany developer team
+@endcode
+
+The first line acts as a verification that this file is truly a sub-plugin. Within the [Init] section
+there is the menu items for Geany's tools menu. The [Help] section declares the sub-plugins help
+text which is shown in its help dialog (via GeanyPluginFuncs::help). The [Info] section is
+used as-is for filling the sub-plugins PluginInfo fields.
+
+That's it, this dumb format is purely declarative and contains no logic. Yet we will create plugins
+from it.
+
+We start by registering the proxy plugin to Geany. There is nothing special to it compared to
+normal plugins. A proxy plugin must also fill its own @ref PluginInfo and @ref GeanyPluginFuncs,
+followed by registering through GEANY_PLUGIN_REGISTER().
+
+
+@code{.c}
+
+/* Called by Geany to initialize the plugin. */
+static gboolean demoproxy_init(GeanyPlugin *plugin, gpointer pdata)
+{
+	// ...
+}
+
+
+/* Called by Geany before unloading the plugin. */
+static void demoproxy_cleanup(GeanyPlugin *plugin, gpointer data)
+{
+	// ...
+}
+
+
+G_MODULE_EXPORT
+void geany_load_module(GeanyPlugin *plugin)
+{
+	plugin->info->name = _("Demo Proxy");
+	plugin->info->description = _("Example Proxy.");
+	plugin->info->version = "0.1";
+	plugin->info->author = _("The Geany developer team");
+
+	plugin->funcs->init = demoproxy_init;
+	plugin->funcs->cleanup = demoproxy_cleanup;
+
+	GEANY_PLUGIN_REGISTER(plugin, 225);
+}
+
+@endcode
+
+The next step is to actually register as a proxy plugin. This is done in demoproxy_init().
+As previously mentioned, it needs a list of accepted file extensions and a set of callback
+functions.
+
+@code{.c}
+static gboolean demoproxy_init(GeanyPlugin *plugin, gpointer pdata)
+{
+	const gchar *extensions[] = { "ini", "px", NULL };
+
+	plugin->proxy_funcs->probe  = demoproxy_probe;
+	plugin->proxy_funcs->load   = demoproxy_load;
+	plugin->proxy_funcs->unload = demoproxy_unload;
+
+	return geany_plugin_register_proxy(plugin, extensions);
+}
+
+@endcode
+
+The callback functions deserve a closer look.
+
+As already mentioned the file format includes a magic first line which must be present.
+GeanyProxyFuncs::probe() verifies that it's present and avoids showing the sub-plugin in the
+Plugin Manager if not.
+
+@code{.c}
+static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer pdata)
+{
+	/* We know the extension is right (Geany checks that). For demo purposes we perform an
+	 * additional check. This is not necessary when the extension is unique enough. */
+	gboolean match = FALSE;
+	gchar linebuf[128];
+	FILE *f = fopen(filename, "r");
+	if (f != NULL)
+	{
+		if (fgets(linebuf, sizeof(linebuf), f) != NULL)
+			match = utils_str_equal(linebuf, "#!!PROXY_MAGIC!!\n");
+		fclose(f);
+	}
+	return match ? PROXY_MATCHED : PROXY_IGNORED;
+}
+@endcode
+
+GeanyProxyFuncs::load is a bit more complex. It reads the file, fills the sub-plugin's PluginInfo
+fields and calls GEANY_PLUGIN_REGISTER_FULL(). Additionally, it creates a per-plugin context that
+holds GKeyFile instance (a poor man's interpeter context). You can also see that it does not call
+GEANY_PLUGIN_REGISTER_FULL() if g_key_file_load_from_file() found an error (probably a syntax
+problem) which means the sub-plugin cannot be enabled.
+
+It also installs wrapper functions for the sub-plugin's GeanyPluginFuncs as ini files aren't code.
+It's very likely that your proxy needs something similar because you can only install function
+pointers to native code.
+
+@code{.c}
+typedef struct {
+	GKeyFile       *file;
+	gchar          *help_text;
+	GSList         *menu_items;
+}
+PluginContext;
+
+
+static gboolean proxy_init(GeanyPlugin *plugin, gpointer pdata);
+static void proxy_help(GeanyPlugin *plugin, gpointer pdata);
+static void proxy_cleanup(GeanyPlugin *plugin, gpointer pdata);
+
+
+static gpointer demoproxy_load(GeanyPlugin *proxy, GeanyPlugin *plugin,
+                               const gchar *filename, gpointer pdata)
+{
+	GKeyFile *file;
+	gboolean result;
+
+	file = g_key_file_new();
+	result = g_key_file_load_from_file(file, filename, 0, NULL);
+
+	if (result)
+	{
+		PluginContext *data = g_new0(PluginContext, 1);
+		data->file = file;
+
+		plugin->info->name = g_key_file_get_locale_string(data->file, "Info", "name", NULL, NULL);
+		plugin->info->description = g_key_file_get_locale_string(data->file, "Info", "description", NULL, NULL);
+		plugin->info->version = g_key_file_get_locale_string(data->file, "Info", "version", NULL, NULL);
+		plugin->info->author = g_key_file_get_locale_string(data->file, "Info", "author", NULL, NULL);
+
+		plugin->funcs->init = proxy_init;
+		plugin->funcs->help = proxy_help;
+		plugin->funcs->cleanup = proxy_cleanup;
+
+		/* Cannot pass g_free as free_func be Geany calls it before unloading, and since 
+		 * demoproxy_unload() accesses the data this would be catastrophic */
+		GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, NULL);
+		return data;
+	}
+
+	g_key_file_free(file);
+	return NULL;
+}
+@endcode
+
+demoproxy_unload() simply releases all resources aquired in demoproxy_load(). It does not have to
+do anything else in for unloading.
+
+@code{.c}
+static void demoproxy_unload(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer load_data, gpointer pdata)
+{
+	PluginContext *data = load_data;
+
+	g_free((gchar *)plugin->info->name);
+	g_free((gchar *)plugin->info->description);
+	g_free((gchar *)plugin->info->version);
+	g_free((gchar *)plugin->info->author);
+
+	g_key_file_free(data->file);
+	g_free(data);
+}
+@endcode
+
+Finally the demo_proxy's wrapper GeanyPluginFuncs. They are called for each possible sub-plugin and
+therefore have to multiplex between each using the plugin-defined data pointer. Each is called by
+Geany as if it were an ordinary, native plugin.
+
+proxy_init() actually reads the sub-plugin's file using GKeyFile APIs. It prepares for the help
+dialog and installs the menu items. proxy_help() is called when the user clicks the help button in
+the Plugin Manager. Consequently, this fires up a suitable dialog, although with a dummy message.
+proxy_cleanup() frees all memory allocated in proxy_init().
+
+@code{.c}
+static gboolean proxy_init(GeanyPlugin *plugin, gpointer pdata)
+{
+	PluginContext *data;
+	gint i = 0;
+	gchar *text;
+
+	data = (PluginContext *) pdata;
+
+	/* Normally, you would instruct the VM/interpreter to call into the actual plugin. The
+	 * plugin would be identified by pdata. Because there is no interpreter for
+	 * .ini files we do it inline, as this is just a demo */
+	data->help_text = g_key_file_get_locale_string(data->file, "Help", "text", NULL, NULL);
+	while (TRUE)
+	{
+		GtkWidget *item;
+		gchar *key = g_strdup_printf("item%d", i++);
+		text = g_key_file_get_locale_string(data->file, "Init", key, NULL, NULL);
+		g_free(key);
+
+		if (!text)
+			break;
+
+		item = gtk_menu_item_new_with_label(text);
+		gtk_widget_show(item);
+		gtk_container_add(GTK_CONTAINER(plugin->geany_data->main_widgets->tools_menu), item);
+		gtk_widget_set_sensitive(item, FALSE);
+		data->menu_items = g_slist_prepend(data->menu_items, (gpointer) item);
+		g_free(text);
+	}
+
+	return TRUE;
+}
+
+
+static void proxy_help(GeanyPlugin *plugin, gpointer pdata)
+{
+	PluginContext *data;
+	GtkWidget *dialog;
+
+	data = (PluginContext *) pdata;
+
+	dialog = gtk_message_dialog_new(
+		GTK_WINDOW(plugin->geany_data->main_widgets->window),
+		GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_MESSAGE_INFO,
+		GTK_BUTTONS_OK,
+		"%s", data->help_text);
+	gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
+		_("(From the %s plugin)"), plugin->info->name);
+
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+
+
+static void proxy_cleanup(GeanyPlugin *plugin, gpointer pdata)
+{
+	PluginContext *data = (PluginContext *) pdata;
+
+	g_slist_free_full(data->menu_items, (GDestroyNotify) gtk_widget_destroy);
+	g_free(data->help_text);
 }
 @endcode
 

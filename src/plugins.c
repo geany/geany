@@ -653,6 +653,7 @@ plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add
 	/* Fields of plugin->info/funcs must to be initialized by the plugin */
 	plugin->public.info = &plugin->info;
 	plugin->public.funcs = &plugin->cbs;
+	plugin->public.proxy_funcs = &plugin->proxy_cbs;
 
 	if (plugin_loaded(plugin))
 	{
@@ -1757,5 +1758,56 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 	gtk_widget_grab_focus(pm_widgets.filter_entry);
 }
 
+
+/** Register the plugin as a proxy for other plugins
+ *
+ * Proxy plugins register a list of file extensions and a set of callbacks that are called
+ * appropriately. A plugin can be a proxy for multiple types of sub-plugins by handling
+ * separate file extensions, however they must share the same set of hooks, because this
+ * function can only be called at most once per plugin.
+ *
+ * Each callback receives the plugin-defined data as parameter (see geany_plugin_register()). The
+ * callbacks must be set prior to calling this, by assigning to @a plugin->proxy_funcs.
+ * GeanyProxyFuncs::load and GeanyProxyFuncs::unload must be implemented.
+ *
+ * Nested proxies are unsupported at this point (TODO).
+ *
+ * @note It is entirely up to the proxy to provide access to Geany's plugin API. Native code
+ * can naturally call Geany's API directly, for interpreted languages the proxy has to
+ * implement some kind of bindings that the plugin can use.
+ *
+ * @see proxy for detailed documentation and an example.
+ *
+ * @param plugin The pointer to the plugin's GeanyPlugin instance
+ * @param extensions A @c NULL-terminated string array of file extensions, excluding the dot.
+ * @return @c TRUE if the proxy was successfully registered, otherwise @c FALSE
+ *
+ * @since 1.26 (API 226)
+ */
+GEANY_API_SYMBOL
+gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions)
+{
+	Plugin *p;
+	const gchar **ext;
+
+	g_return_val_if_fail(plugin != NULL, FALSE);
+	g_return_val_if_fail(extensions != NULL, FALSE);
+	g_return_val_if_fail(*extensions != NULL, FALSE);
+	g_return_val_if_fail(plugin->proxy_funcs->load != NULL, FALSE);
+	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
+
+	p = plugin->priv;
+
+	foreach_strv(ext, extensions)
+	{
+		PluginProxy *proxy = g_new(PluginProxy, 1);
+		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
+		proxy->plugin = p;
+		/* prepend, so that plugins automatically override core providers for a given extension */
+		g_ptr_array_insert(active_proxies, 0, proxy);
+	}
+
+	return TRUE;
+}
 
 #endif

@@ -240,6 +240,7 @@ GeanyData;
 #define geany			geany_data	/**< Simple macro for @c geany_data that reduces typing. */
 
 typedef struct GeanyPluginFuncs GeanyPluginFuncs;
+typedef struct GeanyProxyFuncs GeanyProxyFuncs;
 
 /** Basic information for the plugin and identification.
  * @see geany_plugin. */
@@ -248,7 +249,8 @@ typedef struct GeanyPlugin
 	PluginInfo	*info;	/**< Fields set in plugin_set_info(). */
 	GeanyData	*geany_data;	/**< Pointer to global GeanyData intance */
 	GeanyPluginFuncs *funcs;	/**< Functions implemented by the plugin, set in geany_load_module() */
-
+	GeanyProxyFuncs	*proxy_funcs; /**< Hooks implemented by the plugin if it wants to act as a proxy
+									   Must be set prior to calling geany_plugin_register_proxy() */
 	struct GeanyPluginPrivate *priv;	/* private */
 }
 GeanyPlugin;
@@ -347,24 +349,55 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
 
+/** Return values for GeanyProxyHooks::probe()
+ *
+ * Only @c PROXY_IGNORED, @c PROXY_MATCHED or @c PROXY_MATCHED|PROXY_NOLOAD
+ * are valid return values.
+ *
+ * @see geany_plugin_register_proxy() for a full description of the proxy plugin mechanisms.
+ *
+ * @since 1.26 (API 226)
+ */
 typedef enum
 {
+	/** The proxy is not responsible at all, and Geany or other plugins are free
+	 * to probe it.
+	 **/
 	PROXY_IGNORED,
+	/** The proxy is responsible for this file, and creates a plugin for it */
 	PROXY_MATCHED,
 
+	/** The proxy is does not directly load it, but it's still tied to the proxy
+	 *
+	 * This is for plugins that come in multiple files where only one of these
+	 * files is relevant for the plugin creation (for the PM dialog). The other
+	 * files should be ignored by Geany and other proxies. Example: libpeas has
+	 * a .plugin and a .so per plugin. Geany should not process the .so file
+	 * if there is a corresponding .plugin.
+	 */
 	PROXY_NOLOAD = 0x100,
 }
 GeanyProxyProbeResults;
 
-/* Hooks that need to be implemented for every proxy */
-typedef struct _GeanyProxyFuncs
-{
-	gint		(*probe)     (GeanyPlugin *proxy, const gchar *filename, gpointer pdata);
-	gpointer	(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *filename, gpointer pdata);
-	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
-}
-GeanyProxyFuncs;
 
+/** Hooks that need to be implemented by every proxy
+ *
+ * @see geany_plugin_register_proxy() for a full description of the proxy mechanism.
+ *
+ * @since 1.26 (API 226)
+ **/
+struct GeanyProxyFuncs
+{
+	/** Called to determine whether the proxy is truly responsible for the requested plugin.
+	 * A NULL pointer assumes the probe() function would always return @ref PROXY_MATCHED */
+	gint		(*probe)     (GeanyPlugin *proxy, const gchar *filename, gpointer pdata);
+	/** Called after probe(), to perform the actual job of loading the plugin */
+	gpointer	(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *filename, gpointer pdata);
+	/** Called when the user initiates unloading of a plugin, e.g. on Geany exit */
+	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
+};
+
+gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED
