@@ -32,6 +32,8 @@
 #include "app.h"
 #include "dialogs.h"
 #include "document.h"
+#include "keyfile.h"
+#include "main.h"
 #include "prefs.h"
 #include "prefix.h"
 #include "sciwrappers.h"
@@ -2094,6 +2096,7 @@ gchar *utils_get_user_config_dir(void)
 }
 
 
+#ifndef G_OS_WIN32
 static gboolean is_osx_bundle(void)
 {
 #ifdef MAC_INTEGRATION
@@ -2106,6 +2109,7 @@ static gboolean is_osx_bundle(void)
 #endif
 	return FALSE;
 }
+#endif
 
 
 const gchar *utils_resource_dir(GeanyResourceDirType type)
@@ -2117,28 +2121,29 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 #ifdef G_OS_WIN32
 		gchar *prefix = win32_get_installation_dir();
 
+		resdirs[RESOURCE_DIR_PREFIX] = prefix;
 		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
-		g_free(prefix);
 #else
 		if (is_osx_bundle())
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
+			resdirs[RESOURCE_DIR_PREFIX] = prefix;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
-			g_free(prefix);
 # endif
 		}
 		else
 		{
+			resdirs[RESOURCE_DIR_PREFIX] = GEANY_PREFIX;
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
@@ -2152,39 +2157,84 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 }
 
 
+/* "Reverse parse" GOptionEntry */
+static gchar *utils_option_entry_reverse_parse(const GOptionEntry *optentry)
+{
+	gchar *s = NULL;
+
+	switch (optentry->arg)
+	{
+		case G_OPTION_ARG_NONE:
+			{
+				gboolean val = *(gboolean *)optentry->arg_data;
+				gboolean reverse = (optentry->flags & G_OPTION_FLAG_REVERSE);
+				if ((val && !reverse) || (!val && reverse)) /* logical XOR */
+					s = g_strdup_printf("--%s", optentry->long_name);
+			}
+			break;
+
+		case G_OPTION_ARG_INT:
+			if (*(gint *)optentry->arg_data)
+				s = g_strdup_printf("--%s=%d", optentry->long_name, *(gint *)optentry->arg_data);
+			break;
+
+		case G_OPTION_ARG_STRING:
+		case G_OPTION_ARG_FILENAME:
+			if (*(gchar **)optentry->arg_data)
+				s = g_strdup_printf("--%s=%s", optentry->long_name, *(gchar **)optentry->arg_data);
+			break;
+
+		default:
+			g_warning("%s: %s: %d\n", G_STRFUNC, "Unsupported option entry type", optentry->arg);
+	}
+
+	return s;
+}
+
+
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	const gchar *command = is_osx_bundle() ? "open" : "geany";
-	gchar *exec_path = g_find_program_in_path(command);
+	gchar **argv;
+	int i, persistent;
+	int argc;
+	GError *error = NULL;
 
-	if (exec_path)
+	for (i = 0, persistent = 0; optentries[i].long_name; i++)
+		if (optentries_aux[i].persistent)
+			persistent++;
+
+	argv = g_new0(gchar *, persistent + 5);  /* exectuable, -i, --, doc_path, NULL */
+	argv[0] = g_build_filename(utils_resource_dir(RESOURCE_DIR_PREFIX), "bin", "geany", NULL);
+
+	if (!g_file_test(argv[0], G_FILE_TEST_IS_EXECUTABLE))
 	{
-		GError *err = NULL;
-		const gchar *argv[6]; // max args + 1
-		gint argc = 0;
-
-		argv[argc++] = exec_path;
-		if (is_osx_bundle())
-		{
-			argv[argc++] = "-n";
-			argv[argc++] = "-a";
-			argv[argc++] = "Geany";
-			argv[argc++] = doc_path;
-		}
-		else
-		{
-			argv[argc++] = "-i";
-			argv[argc++] = doc_path;
-		}
-		argv[argc] = NULL;
-
-		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(exec_path);
+		g_free(argv[0]);
+		argv[0] = g_strdup("geany");
 	}
-	else
-		g_printerr("Unable to find 'geany'");
+
+	for (i = 0, argc = 1; optentries[i].long_name; i++)
+	{
+		if (optentries_aux[i].persistent)
+		{
+			char *option = utils_option_entry_reverse_parse(&optentries[i]);
+
+			if (option)
+				argv[argc++] = option;
+		}
+	}
+
+	argv[argc++] = g_strdup("-i");
+	argv[argc++] = g_strdup("--");
+	argv[argc] = g_strdup(doc_path);
+
+	/* Ensure the configuration is saved to disk before launching the new instance */
+	configuration_save();
+
+	if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+	{
+		ui_set_statusbar(TRUE, _("Unable to open new Geany window: %s"), error->message);
+		g_error_free(error);
+	}
+
+	g_strfreev(argv);
 }

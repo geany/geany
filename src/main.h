@@ -52,6 +52,17 @@ CommandLineOptions;
 extern CommandLineOptions cl_options;
 
 
+/* Information about command line entries that can not be stored in GOptionEntry. */
+typedef struct
+{
+	gboolean persistent;  /* The option should be passed to "New Window" */
+}
+GeanyOptionEntryAux;
+
+extern GOptionEntry optentries[];
+extern GeanyOptionEntryAux optentries_aux[];
+
+
 typedef struct GeanyStatus
 {
 	gboolean	opening_session_files;	/* state at startup while opening session files */

@@ -113,7 +113,7 @@ static gboolean no_plugins = FALSE;
 static gboolean dummy = FALSE;
 
 /* in alphabetical order of short options */
-static GOptionEntry entries[] =
+GOptionEntry optentries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
@@ -141,10 +141,41 @@ static GOptionEntry entries[] =
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose_mode, N_("Be verbose"), NULL },
 	{ "version", 'V', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
 	{ "dummy", 0, G_OPTION_FLAG_HIDDEN, G_OPTION_ARG_NONE, &dummy, NULL, NULL }, /* for +NNN line number arguments */
+	/* add new options here *and* in `optentries_aux' below */
 	{ NULL, 0, 0, 0, NULL, NULL, NULL }
 };
 
 
+GeanyOptionEntryAux optentries_aux[] = {
+	{FALSE}, /* "column" */
+	{TRUE},  /* "config" */
+	{FALSE}, /* "ft-names */
+	{FALSE}, /* "generate-tags" */
+	{FALSE}, /* "no-preprocessing" */
+#ifdef HAVE_SOCKET
+	{FALSE}, /* "new-instance" */
+	{TRUE},  /* "socket-file" */
+	{FALSE}, /* "list-documents" */
+#endif
+	{FALSE}, /* "line" */
+	{TRUE},  /* "no-msgwin" */
+	{TRUE},  /* "no-ctags" */
+#ifdef HAVE_PLUGINS
+	{TRUE},  /* "no-plugins" */
+#endif
+	{FALSE}, /* "print-prefix" */
+	{FALSE}, /* "read-only" */
+	{FALSE}, /* "no-session" */
+#ifdef HAVE_VTE
+	{TRUE},  /* "no-terminal" */
+	{TRUE},  /* "vte-lib" */
+#endif
+	{TRUE},  /* "verbose" */
+	{FALSE}, /* "version" */
+	{FALSE}  /* "dummy" */
+};
+
+ 
 static void setup_window_position(void)
 {
 	/* interprets the saved window geometry */
@@ -514,7 +545,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	context = g_option_context_new(_("[FILES...]"));
 
-	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+	g_option_context_add_main_entries(context, optentries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));
 	g_option_context_parse(context, argc, argv, &error);
