@@ -9,18 +9,17 @@ msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-20 11:22+0200\n"
-"PO-Revision-Date: 2012-02-08 11:28-0000\n"
+"PO-Revision-Date: 2015-09-04 17:01+0100\n"
 "Last-Translator: فيصل شامخ <chamfay@gmail.com>\n"
 "Language-Team: فيصل شامخ <chamfay@gmail.com>\n"
-"Language: \n"
+"Language: ar_DZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Arabic\n"
-"X-Poedit-Country: ALGERIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -145,7 +144,7 @@ msgstr "اﻷحرف الحالية"
 
 #: ../data/geany.glade.h:26
 msgid "Match braces"
-msgstr ""
+msgstr "مطابقة الأقواس"
 
 #: ../data/geany.glade.h:27
 msgid "Left"
@@ -797,7 +796,7 @@ msgstr "تكملة تلقائية لجميع كلمات المستند"
 
 #: ../data/geany.glade.h:172
 msgid "Drop rest of word on completion"
-msgstr ""
+msgstr "احذف باقي الكلمة عند التكملة"
 
 #: ../data/geany.glade.h:173
 msgid "Max. symbol name suggestions:"
@@ -1670,9 +1669,8 @@ msgid "Find in F_iles..."
 msgstr "اِبحث في الملفات"
 
 #: ../data/geany.glade.h:377
-#, fuzzy
 msgid "_Replace..."
-msgstr "استبدِل"
+msgstr "_استبدِل..."
 
 #: ../data/geany.glade.h:378
 msgid "Next Me_ssage"
@@ -1691,9 +1689,8 @@ msgid "Go to Pre_vious Marker"
 msgstr "اذهب إلى العلامة السابقة"
 
 #: ../data/geany.glade.h:382
-#, fuzzy
 msgid "_Go to Line..."
-msgstr "اذهب إلى السطر"
+msgstr "ا_ذهب إلى السطر..."
 
 #: ../data/geany.glade.h:383 ../src/keybindings.c:458
 msgid "Find Next _Selection"
@@ -1877,9 +1874,8 @@ msgid "Replace Tabs with S_paces"
 msgstr "استبدل الإزاحات بالمسافات"
 
 #: ../data/geany.glade.h:427
-#, fuzzy
 msgid "_Replace Spaces with Tabs..."
-msgstr "استبدل المسافات بالإزاحات"
+msgstr "ا_ستبدل المسافات بالإزاحات..."
 
 #: ../data/geany.glade.h:428
 msgid "_Fold All"
@@ -2014,8 +2010,8 @@ msgstr "خصائص المشروع"
 msgid "Filename:"
 msgstr "اسم الملف:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169
-#: ../plugins/classbuilder.c:468 ../plugins/classbuilder.c:478
+#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:468
+#: ../plugins/classbuilder.c:478
 msgid "Name:"
 msgstr "الاسم:"
 
@@ -2761,6 +2757,10 @@ msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/document.c:3514
 msgid "Do you want to reload it?"
@@ -4142,7 +4142,7 @@ msgstr "استبدِل الكل"
 
 #: ../src/search.c:706
 msgid "In Se_lection"
-msgstr ""
+msgstr "في الت_حديد"
 
 #: ../src/search.c:708
 msgid "Replace all matches found in the currently selected text"
@@ -4213,6 +4213,10 @@ msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/search.c:1424
 #, c-format
@@ -4251,6 +4255,10 @@ msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #: ../src/search.c:1880
 msgid "No matches found."
@@ -4291,9 +4299,9 @@ msgid "Program '%s' not found"
 msgstr "اﻷمر غير موجود"
 
 #: ../src/spawn.c:272
-#, fuzzy, c-format
+#, c-format
 msgid "TerminateProcess() failed: %s"
-msgstr "فشل المهمة (%s)"
+msgstr "TerminateProcess() فشلت: %s"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5239,7 +5247,7 @@ msgstr ""
 
 #: ../plugins/classbuilder.c:578
 msgid "Constructor type:"
-msgstr "نوع الباني (المشيد):"
+msgstr "نوع الباني (المشيّد):"
 
 #: ../plugins/classbuilder.c:1090
 msgid "Create Cla_ss"
@@ -5268,9 +5276,8 @@ msgstr "محارف HTML"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr ""
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
-#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
-#: ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
+#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "فريق تطوير Geany"
 
@@ -5547,6 +5554,10 @@ msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:442
