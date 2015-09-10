@@ -32,6 +32,7 @@
 #include "app.h"
 #include "dialogs.h"
 #include "document.h"
+#include "keyfile.h"
 #include "main.h"
 #include "prefs.h"
 #include "prefix.h"
@@ -2164,37 +2165,41 @@ const gchar *utils_resource_path(GeanyResourcePathType type)
 
 void utils_start_new_geany_instance(const gchar *doc_path)
 {
-	const gchar *command = is_osx_bundle() ? "open" : "geany";
-	gchar *exec_path = g_find_program_in_path(command);
+	gchar **pers_argv = main_get_persistent_argv();
+	gint pers_argc;
+	gchar **argv;
+	int argc;
+	GError *error = NULL;
 
-	if (exec_path)
+	/* count only, the for body is empty */
+	for (pers_argc = 0; pers_argv[pers_argc]; pers_argc++);
+
+	argc = pers_argc + 3;  /* exectuable, -i, <persistent>, doc_path */
+	argv = g_new(gchar *, argc + 1);
+
+	argv[0] = g_strdup(utils_resource_path(RESOURCE_PATH_EXECUTABLE));
+	argv[1] = g_strdup("-i");
+
+	memcpy(argv + 2, pers_argv, pers_argc * sizeof(char *));
+	g_free(pers_argv);  /* elements are freed via argv */
+
+#ifdef G_OS_UNIX
+	argv[argc - 1] = g_strdup(doc_path);  /* POSIX filenames are native */
+#else
+	/* On conversion failure, pass the NULL to open an empty window, instead
+	   of replacing it with a definitely wrong UTF-8 "fallback" file name. */
+	argv[argc - 1] = doc_path ? g_locale_from_utf8(doc_path, -1, NULL, NULL, NULL) : NULL;
+#endif
+	argv[argc] = NULL;
+
+	/* Ensure the configuration is saved to disk before launching the new instance */
+	configuration_save();
+
+	if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
 	{
-		GError *err = NULL;
-		const gchar *argv[6]; // max args + 1
-		gint argc = 0;
-
-		argv[argc++] = exec_path;
-		if (is_osx_bundle())
-		{
-			argv[argc++] = "-n";
-			argv[argc++] = "-a";
-			argv[argc++] = "Geany";
-			argv[argc++] = doc_path;
-		}
-		else
-		{
-			argv[argc++] = "-i";
-			argv[argc++] = doc_path;
-		}
-		argv[argc] = NULL;
-
-		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(exec_path);
+		ui_set_statusbar(TRUE, _("Unable to open new Geany window: %s"), error->message);
+		g_error_free(error);
 	}
-	else
-		g_printerr("Unable to find 'geany'");
+
+	g_strfreev(argv);
 }
