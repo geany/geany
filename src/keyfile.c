@@ -515,11 +515,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
 			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
-			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
-				vc->send_selection_unsafe);
-		if (!g_key_file_has_key(config, "VTE", "send_cmd_prefix", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "send_cmd_prefix", vc->send_cmd_prefix);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -745,9 +740,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* read stash prefs */
-	settings_action(config, SETTING_READ);
-
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
@@ -858,6 +850,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
 	if (vte_info.load_vte)
 	{
+		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
@@ -878,8 +871,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			vte_info.dir = g_strdup("/");
 
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
-			"send_selection_unsafe", FALSE);
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
@@ -888,13 +879,21 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->send_cmd_prefix = utils_get_setting_string(config, "VTE", "send_cmd_prefix", "");
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
+
+		/* various VTE prefs.
+		 * this can't be done in init_pref_groups() because we need to know the value of
+		 * vte_info.load_vte, and `vc` to be initialized */
+		group = stash_group_new("VTE");
+		configuration_add_various_pref_group(group);
+
+		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
+		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);
 	}
 #endif
 	/* templates */
@@ -940,12 +939,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
-	/* build menu */
-	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
-	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
-	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
-	build_load_menu(config, GEANY_BCS_PREF, NULL);
-
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 
@@ -972,6 +965,16 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
+
+	/* read stash prefs */
+	settings_action(config, SETTING_READ);
+
+	/* build menu
+	 * after stash prefs as it uses some of them */
+	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 
 
