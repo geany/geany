@@ -282,6 +282,8 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
 		GDK_s, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "menu_saveall", _("Save all"),
 		"menu_save_all1");
+	add_kb(group, GEANY_KEYS_FILE_PROPERTIES, NULL,
+		0, 0, "file_properties", _("Properties"), "properties1");
 	add_kb(group, GEANY_KEYS_FILE_PRINT, NULL,
 		GDK_p, GEANY_PRIMARY_MOD_MASK, "menu_print", _("Print"), "print1");
 	add_kb(group, GEANY_KEYS_FILE_CLOSE, NULL,
@@ -1358,6 +1360,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_PROPERTIES:
+			on_file_properties_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_QUIT:
 			main_quit();
