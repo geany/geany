@@ -202,14 +202,15 @@ const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 typedef enum
 {
-	RESOURCE_DIR_DATA,
-	RESOURCE_DIR_ICON,
-	RESOURCE_DIR_DOC,
-	RESOURCE_DIR_LOCALE,
-	RESOURCE_DIR_PLUGIN,
+	RESOURCE_PATH_DATA_DIR,
+	RESOURCE_PATH_ICON_DIR,
+	RESOURCE_PATH_DOC_DIR,
+	RESOURCE_PATH_LOCALE_DIR,
+	RESOURCE_PATH_PLUGIN_DIR,
+	RESOURCE_PATH_EXECUTABLE,
 
-	RESOURCE_DIR_COUNT
-} GeanyResourceDirType;
+	RESOURCE_PATH_COUNT
+} GeanyResourcePathType;
 
 
 gint utils_get_line_endings(const gchar* buffer, gsize size);
@@ -308,7 +309,7 @@ gchar *utils_parse_and_format_build_date(const gchar *input);
 
 gchar *utils_get_user_config_dir(void);
 
-const gchar *utils_resource_dir(GeanyResourceDirType type);
+const gchar *utils_resource_path(GeanyResourcePathType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
 

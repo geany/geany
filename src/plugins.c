@@ -883,7 +883,7 @@ load_plugins_from_path(const gchar *path)
 
 static gchar *get_plugin_path(void)
 {
-	return g_strdup(utils_resource_dir(RESOURCE_DIR_PLUGIN));
+	return g_strdup(utils_resource_path(RESOURCE_PATH_PLUGIN_DIR));
 }
 
 

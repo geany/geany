@@ -32,6 +32,7 @@
 #include "app.h"
 #include "dialogs.h"
 #include "document.h"
+#include "main.h"
 #include "prefs.h"
 #include "prefix.h"
 #include "sciwrappers.h"
@@ -2108,20 +2109,21 @@ static gboolean is_osx_bundle(void)
 }
 
 
-const gchar *utils_resource_dir(GeanyResourceDirType type)
+const gchar *utils_resource_path(GeanyResourcePathType type)
 {
-	static const gchar *resdirs[RESOURCE_DIR_COUNT] = {NULL};
+	static const gchar *respaths[RESOURCE_PATH_COUNT] = {NULL};
 
-	if (!resdirs[RESOURCE_DIR_DATA])
+	if (!respaths[RESOURCE_PATH_DATA_DIR])
 	{
 #ifdef G_OS_WIN32
 		gchar *prefix = win32_get_installation_dir();
 
-		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
-		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
-		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
-		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
-		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		respaths[RESOURCE_PATH_DATA_DIR] = g_build_filename(prefix, "data", NULL);
+		respaths[RESOURCE_PATH_ICON_DIR] = g_build_filename(prefix, "share", "icons", NULL);
+		respaths[RESOURCE_PATH_DOC_DIR] = g_build_filename(prefix, "doc", NULL);
+		respaths[RESOURCE_PATH_LOCALE_DIR] = g_build_filename(prefix, "share", "locale", NULL);
+		respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(prefix, "lib", "geany", NULL);
+		respaths[RESOURCE_PATH_EXECUTABLE] = g_build_filename(prefix, "bin", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())
@@ -2129,26 +2131,34 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
 			
-			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
-			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
-			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
-			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
-			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			respaths[RESOURCE_PATH_DATA_DIR] = g_build_filename(prefix, "share", "geany", NULL);
+			respaths[RESOURCE_PATH_ICON_DIR] = g_build_filename(prefix, "share", "icons", NULL);
+			respaths[RESOURCE_PATH_DOC_DIR] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
+			respaths[RESOURCE_PATH_LOCALE_DIR] = g_build_filename(prefix, "share", "locale", NULL);
+			respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(prefix, "lib", "geany", NULL);
+			respaths[RESOURCE_PATH_EXECUTABLE] = gtkosx_application_get_executable_path();
 			g_free(prefix);
 # endif
 		}
 		else
 		{
-			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
-			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
-			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
-			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
-			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			respaths[RESOURCE_PATH_DATA_DIR] = g_build_filename(GEANY_DATADIR, "geany", NULL);
+			respaths[RESOURCE_PATH_ICON_DIR] = g_build_filename(GEANY_DATADIR, "icons", NULL);
+			respaths[RESOURCE_PATH_DOC_DIR] = g_build_filename(GEANY_DOCDIR, "html", NULL);
+			respaths[RESOURCE_PATH_LOCALE_DIR] = g_build_filename(GEANY_LOCALEDIR, NULL);
+			respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			respaths[RESOURCE_PATH_EXECUTABLE] = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
 		}
 #endif
 	}
 
-	return resdirs[type];
+	if (!respaths[RESOURCE_PATH_EXECUTABLE] ||
+		!g_file_test(respaths[RESOURCE_PATH_EXECUTABLE], G_FILE_TEST_IS_EXECUTABLE))
+	{
+		respaths[RESOURCE_PATH_EXECUTABLE] = "geany";
+	}
+
+	return respaths[type];
 }
 
 

@@ -336,7 +336,7 @@ static void apply_settings(void)
 static void main_init(void)
 {
 	/* add our icon path in case we aren't installed in the system prefix */
-	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), utils_resource_dir(RESOURCE_DIR_ICON));
+	gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), utils_resource_path(RESOURCE_PATH_ICON_DIR));
 
 	/* inits */
 	ui_init_stock_items();
@@ -507,8 +507,8 @@ static void change_working_directory_on_windows(void)
 static void setup_paths(void)
 {
 	/* convert path names to locale encoding */
-	app->datadir = utils_get_locale_from_utf8(utils_resource_dir(RESOURCE_DIR_DATA));
-	app->docdir = utils_get_locale_from_utf8(utils_resource_dir(RESOURCE_DIR_DOC));
+	app->datadir = utils_get_locale_from_utf8(utils_resource_path(RESOURCE_PATH_DATA_DIR));
+	app->docdir = utils_get_locale_from_utf8(utils_resource_path(RESOURCE_PATH_DOC_DIR));
 }
 
 
@@ -565,7 +565,7 @@ void main_locale_init(const gchar *locale_dir, const gchar *package)
 #endif
 
 #ifdef G_OS_WIN32
-	locale_dir = utils_resource_dir(RESOURCE_DIR_LOCALE);
+	locale_dir = utils_resource_path(RESOURCE_PATH_LOCALE_DIR);
 #endif
 	(void) bindtextdomain(package, locale_dir);
 	(void) bind_textdomain_codeset(package, "UTF-8");
@@ -1144,7 +1144,7 @@ gint main_lib(gint argc, gchar **argv)
 	setup_gtk2_styles();
 #endif
 #ifdef ENABLE_NLS
-	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
+	main_locale_init(utils_resource_path(RESOURCE_PATH_LOCALE_DIR), GETTEXT_PACKAGE);
 #endif
 	parse_command_line_options(&argc, &argv);
 
