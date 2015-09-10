@@ -65,6 +65,8 @@ GeanyStatus;
 extern GeanyStatus main_status;
 
 
+gchar **main_get_persistent_argv(void);
+
 const gchar *main_get_version_string(void);
 
 gchar *main_get_argv_filename(const gchar *filename);

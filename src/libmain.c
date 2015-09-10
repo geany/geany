@@ -145,6 +145,117 @@ static GOptionEntry entries[] =
 };
 
 
+/* Information about command line entries that can not be stored in GOptionEntry. */
+typedef struct
+{
+	gboolean persistent;  /* The option should be passed to "New Window" */
+}
+GeanyOptionEntryAux;
+
+
+static GeanyOptionEntryAux optentries_aux[] = {
+	{FALSE}, /* "column" */
+	{TRUE},  /* "config" */
+	{FALSE}, /* "ft-names */
+	{FALSE}, /* "generate-tags" */
+	{FALSE}, /* "no-preprocessing" */
+#ifdef HAVE_SOCKET
+	{FALSE}, /* "new-instance" */
+	{FALSE},  /* "socket-file" */
+	{FALSE}, /* "list-documents" */
+#endif
+	{FALSE}, /* "line" */
+	{TRUE},  /* "no-msgwin" */
+	{TRUE},  /* "no-ctags" */
+#ifdef HAVE_PLUGINS
+	{TRUE},  /* "no-plugins" */
+#endif
+	{FALSE}, /* "print-prefix" */
+	{FALSE}, /* "read-only" */
+	{FALSE}, /* "no-session" */
+#ifdef HAVE_VTE
+	{TRUE},  /* "no-terminal" */
+	{TRUE},  /* "vte-lib" */
+#endif
+	{TRUE},  /* "verbose" */
+	{FALSE}, /* "version" */
+	{FALSE}  /* "dummy" */
+};
+
+
+static gchar *option_entry_reverse_parse(const GOptionEntry *optentry)
+{
+	gchar *s = NULL;
+
+	switch (optentry->arg)
+	{
+		case G_OPTION_ARG_NONE :
+		{
+			gboolean val = *(gboolean *)optentry->arg_data;
+			gboolean reverse = (optentry->flags & G_OPTION_FLAG_REVERSE);
+
+			if ((val && !reverse) || (!val && reverse)) /* logical XOR */
+				s = g_strdup_printf("--%s", optentry->long_name);
+			break;
+		}
+
+		case G_OPTION_ARG_INT :
+			if (*(gint *)optentry->arg_data)
+				s = g_strdup_printf("--%s=%d", optentry->long_name, *(gint *)optentry->arg_data);
+			break;
+
+		case G_OPTION_ARG_STRING :
+		case G_OPTION_ARG_FILENAME :
+			if (*(gchar **)optentry->arg_data)
+			{
+				s = g_strdup_printf("--%s=%s", optentry->long_name, *(gchar **)optentry->arg_data);
+			#ifdef G_OS_UNIX
+				if (optentry->arg == G_OPTION_ARG_FILENAME)
+					break;  /* POSIX filenames are native */
+			#endif
+				/* On conversion failure, return NULL to skip the option, instead of
+				   a wrong UTF-8 "fallback" value. Besides, we currently have only
+				   "config" and "vte-lib" here, and they're almost surely ascii. */
+				SETPTR(s, g_locale_from_utf8(s, -1, NULL, NULL, NULL));
+			}
+			break;
+
+		default:
+			g_warning("%s: %s: %d\n", G_STRFUNC, "Unsupported option entry type", optentry->arg);
+	}
+
+	return s;
+}
+
+
+/* get the options that should be passed to a new window */
+gchar **main_get_persistent_argv(void)
+{
+	gchar **argv;
+	int i, argc;
+
+	for (i = 0, argc = 0; entries[i].long_name; i++)
+		if (optentries_aux[i].persistent)
+			argc++;
+
+	argv = g_new(gchar *, argc + 1);
+
+	for (i = 0, argc = 0; entries[i].long_name; i++)
+	{
+		if (optentries_aux[i].persistent)
+		{
+			char *option = option_entry_reverse_parse(&entries[i]);
+
+			if (option)
+				argv[argc++] = option;
+		}
+	}
+
+	argv[argc] = NULL;
+	return argv;
+}
+
+
 static void setup_window_position(void)
 {
 	/* interprets the saved window geometry */
