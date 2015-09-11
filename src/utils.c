@@ -2126,6 +2126,8 @@ const gchar *utils_resource_path(GeanyResourcePathType type)
 		respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(prefix, "lib", "geany", NULL);
 		respaths[RESOURCE_PATH_EXECUTABLE] = g_build_filename(prefix, "bin", "geany", NULL);
 		g_free(prefix);
+		if (!g_file_test(respaths[RESOURCE_PATH_EXECUTABLE], G_FILE_TEST_IS_EXECUTABLE))
+			respaths[RESOURCE_PATH_EXECUTABLE] = "geany";
 #else
 		if (is_osx_bundle())
 		{
@@ -2139,6 +2141,8 @@ const gchar *utils_resource_path(GeanyResourcePathType type)
 			respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(prefix, "lib", "geany", NULL);
 			respaths[RESOURCE_PATH_EXECUTABLE] = gtkosx_application_get_executable_path();
 			g_free(prefix);
+			if (!respaths[RESOURCE_PATH_EXECUTABLE])
+				respaths[RESOURCE_PATH_EXECUTABLE] = "geany";
 # endif
 		}
 		else
@@ -2149,14 +2153,10 @@ const gchar *utils_resource_path(GeanyResourcePathType type)
 			respaths[RESOURCE_PATH_LOCALE_DIR] = g_build_filename(GEANY_LOCALEDIR, NULL);
 			respaths[RESOURCE_PATH_PLUGIN_DIR] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
 			respaths[RESOURCE_PATH_EXECUTABLE] = g_build_filename(GEANY_PREFIX, "bin", "geany", NULL);
+			if (!g_file_test(respaths[RESOURCE_PATH_EXECUTABLE], G_FILE_TEST_IS_EXECUTABLE))
+				respaths[RESOURCE_PATH_EXECUTABLE] = "geany";
 		}
 #endif
-	}
-
-	if (!respaths[RESOURCE_PATH_EXECUTABLE] ||
-		!g_file_test(respaths[RESOURCE_PATH_EXECUTABLE], G_FILE_TEST_IS_EXECUTABLE))
-	{
-		respaths[RESOURCE_PATH_EXECUTABLE] = "geany";
 	}
 
 	return respaths[type];
