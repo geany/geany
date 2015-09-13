@@ -413,8 +413,8 @@ static void spawn_append_argument(GString *command, const char *text)
 
 	for (s = text; *s; s++)
 	{
-		/* g_ascii_isspace() fails for '\v', and locale spaces (if any) will do no harm */
-		if (*s == '"' || isspace(*s))
+		/* locale often confuses msvcrt, and we'd better quote controls as well */
+		if (*s == '"' || *s <= 32 || *s >= 127 || isspace(*s))
 			break;
 	}
 
