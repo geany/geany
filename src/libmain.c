@@ -680,7 +680,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	if (alternate_config)
 	{
 		geany_debug("alternate config: %s", alternate_config);
-		app->configdir = alternate_config;
+		app->configdir = g_strdup(alternate_config);
 	}
 	else
 	{
