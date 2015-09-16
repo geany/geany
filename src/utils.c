@@ -1405,8 +1405,8 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  * @param sort Whether to sort alphabetically (UTF-8 safe).
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- * freed when no longer needed.
+ * @return @elementtype{filename} @transfer{full} A newly allocated list or @c NULL if
+ * no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list().
  **/
 GEANY_API_SYMBOL
@@ -1450,8 +1450,8 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
  *               unless @c NULL.
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- *         freed when no longer needed.
+ * @return  @elementtype{filename} @transfer{full} A newly allocated list or @c NULL
+ * if no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list_full().
  **/
 GEANY_API_SYMBOL
@@ -1651,7 +1651,7 @@ const gchar *utils_get_default_dir_utf8(void)
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup Ignored.
+ *  @param child_setup @skip Ignored.
  *  @param user_data Ignored.
  *  @param std_out The return location for child output, or @c NULL.
  *  @param std_err The return location for child error messages, or @c NULL.
@@ -1686,7 +1686,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup Ignored.
+ *  @param child_setup @skip Ignored.
  *  @param user_data Ignored.
  *  @param child_pid The return location for child process ID, or NULL.
  *  @param error The return location for error or @c NULL.
@@ -1955,11 +1955,12 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  *
  * The argument list must be @c NULL-terminated.
  *
+ *
  * @param exclude_vars @c NULL-terminated array of variable names to exclude.
  * @param first_varname Name of the first variable to copy into the new array.
  * @param ... Key-value pairs of variable names and values, @c NULL-terminated.
  *
- * @return The new environment array. Use @c g_strfreev() to free it.
+ * @return @transfer{full} The new environment array. Use @c g_strfreev() to free it.
  **/
 GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)

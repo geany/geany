@@ -4871,7 +4871,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 /** Creates a new Scintilla @c GtkWidget based on the settings for @a editor.
  * @param editor Editor settings.
- * @return The new widget.
+ * @return @transfer{floating} The new widget.
  *
  * @since 0.15
  **/

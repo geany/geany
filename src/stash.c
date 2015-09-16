@@ -359,7 +359,7 @@ static void free_stash_pref(StashPref *pref)
 
 /** Creates a new group.
  * @param name Name used for @c GKeyFile group.
- * @return Group. */
+ * @return @transfer{full} Group. */
 GEANY_API_SYMBOL
 StashGroup *stash_group_new(const gchar *name)
 {

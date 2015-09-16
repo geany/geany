@@ -133,7 +133,7 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 /** Looks up a keybinding item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @return The keybinding.
+ * @return @transfer{none} The keybinding.
  * @since 0.19. */
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
@@ -216,11 +216,11 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL.
- * @param cb New-style callback to be called when activated, or @c NULL to use the group callback.
- * @param pdata Plugin-specific data passed back to the callback.
+ * @param menu_item @null Optional widget to set an accelerator for, or @c NULL.
+ * @param cb @null New-style callback to be called when activated, or @c NULL to use the group callback.
+ * @param pdata Plugin-specific data passed back to the callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
- * @return The keybinding - normally this is ignored.
+ * @return @transfer{none} The keybinding - normally this is ignored.
  *
  * @since 1.26 (API 226)
  * @see See plugin_set_key_group_full
