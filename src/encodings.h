@@ -40,6 +40,7 @@
 
 G_BEGIN_DECLS
 
+/** Internally used member for grouping in GeanyEncoding */
 typedef enum
 {
 	NONE = 0,

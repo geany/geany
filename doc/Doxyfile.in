@@ -249,6 +249,12 @@ ALIASES                = "signal=- @ref  " \
                          "signals=@b Signals:  " \
                          "endsignals=  "
 
+ALIASES               += "transfer{1}=\a \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly (transfer: \1) \endhtmlonly"
+ALIASES               += "elementtype{1}=\a \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly (element-type: \1) \endhtmlonly"
+ALIASES               += "scope{1}=\a \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly (element-type: \1) \endhtmlonly"
+ALIASES               += "skip=\a \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
+
+
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
 # will allow you to use the command class in the itcl::class meaning.

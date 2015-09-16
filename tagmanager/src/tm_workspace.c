@@ -267,7 +267,7 @@ static void tm_workspace_update(void)
 /** Adds multiple source files to the workspace and updates the workspace tag arrays.
  This is more efficient than calling tm_workspace_add_source_file() and
  tm_workspace_update_source_file() separately for each of the files.
- @param source_files The source files to be added to the workspace.
+ @param source_files @elementtype{TMSourceFile} The source files to be added to the workspace.
 */
 GEANY_API_SYMBOL
 void tm_workspace_add_source_files(GPtrArray *source_files)
@@ -292,7 +292,7 @@ void tm_workspace_add_source_files(GPtrArray *source_files)
  arrays. This is more efficient than calling tm_workspace_remove_source_file()
  separately for each of the files. To completely free the TMSourceFile pointers
  call tm_source_file_free() on each of them.
- @param source_files The source files to be removed from the workspace.
+ @param source_files @elementtype{TMSourceFile} The source files to be removed from the workspace.
 */
 GEANY_API_SYMBOL
 void tm_workspace_remove_source_files(GPtrArray *source_files)

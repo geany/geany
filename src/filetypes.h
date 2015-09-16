@@ -38,7 +38,10 @@ G_BEGIN_DECLS
 /* Forward-declared to avoid including document.h since it includes this header */
 struct GeanyDocument;
 
-/* Do not change the order, only append. */
+/** IDs of known filetypes
+ *
+ * @ref filetypes_array will contain an item for each. Use filetypes_array->len to
+ * determine the number of known filetypes at runtime */
 typedef enum
 {
 	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
@@ -106,8 +109,13 @@ typedef enum
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
-filetype_id;
+GeanyFiletypeID;
 
+#define filetype_id GeanyFiletypeID
+
+/** Filetype categories
+ *
+ * These are used to provide submenus for each category in the GUI */
 typedef enum
 {
 	GEANY_FILETYPE_GROUP_NONE,
@@ -128,7 +136,7 @@ GeanyFiletypeGroupID;
 /** Represents a filetype. */
 typedef struct GeanyFiletype
 {
-	filetype_id		  id;				/**< Index in @c filetypes_array. */
+	GeanyFiletypeID	  id;				/**< Index in @c filetypes_array. */
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;

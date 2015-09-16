@@ -1461,7 +1461,10 @@ void ui_update_view_editor_menu_items(void)
 /** Creates a GNOME HIG-style frame (with no border and indented child alignment).
  * @param label_text The label text.
  * @param alignment An address to store the alignment widget pointer.
- * @return The frame widget, setting the alignment container for packing child widgets. */
+ *
+ * @return @transfer{floating} The frame widget, setting the alignment container for
+ * packing child widgets.
+ **/
 GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
 {
@@ -1484,7 +1487,8 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 
 /** Makes a fixed border for dialogs without increasing the button box border.
  * @param dialog The parent container for the @c GtkVBox.
- * @return The packed @c GtkVBox. */
+ *
+ * @return @transfer{none} The packed @c GtkVBox. */
 GEANY_API_SYMBOL
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
@@ -1535,7 +1539,8 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
  * @c gtk_button_new_from_stock().
  * @param stock_id A @c GTK_STOCK_NAME string.
  * @param text Button label text, can include mnemonics.
- * @return The new @c GtkButton.
+ *
+ * @return @transfer{floating} The new @c GtkButton.
  */
 GEANY_API_SYMBOL
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
@@ -1554,7 +1559,7 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 /** Creates a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
- * @return The new @c GtkImageMenuItem.
+ * @return @transfer{floating} The new @c GtkImageMenuItem.
  *
  *  @since 0.16
  */
@@ -1898,7 +1903,8 @@ void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
  * @param action The mode of the file chooser.
  * @param entry Can be an unpacked @c GtkEntry, or the child of an unpacked widget,
  * such as @c GtkComboBoxEntry.
- * @return The @c GtkHBox.
+ *
+ * @return @transfer{floating} The @c GtkHBox.
  */
 /* @see ui_setup_open_button_callback(). */
 GEANY_API_SYMBOL
@@ -2651,7 +2657,8 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * you want returned.
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
- * @return The widget found.
+ *
+ * @return @transfer{none} The widget found.
  * @see ui_hookup_widget().
  *
  *  @since 0.16
@@ -2839,10 +2846,11 @@ GtkWidget *ui_label_new_bold(const gchar *text)
 /** Adds a list of document items to @a menu.
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
- * @param callback is used for each menu item's @c "activate" signal and will be passed
- * the corresponding document pointer as @c user_data.
+ * @param callback is used for each menu item's @c "activate" signal and will be
+ * passed the corresponding document pointer as @c user_data.
  * @warning You should check @c doc->is_valid in the callback.
- * @since 0.19 */
+ * @since 0.19
+ * @skip */
 GEANY_API_SYMBOL
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
@@ -2863,7 +2871,8 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * the corresponding document pointer as @c user_data.
  * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.
  * @warning You should check @c doc->is_valid in the callback.
- * @since 0.21 */
+ * @since 0.21
+ * @skip */
 GEANY_API_SYMBOL
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)
