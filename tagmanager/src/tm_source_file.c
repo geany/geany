@@ -170,7 +170,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			source_file->short_name = source_file->file_name;
 	}
 
-	source_file->tags_array = g_ptr_array_new();
+	source_file->tags_array = g_ptr_array_new_with_free_func((GDestroyNotify) tm_tag_unref);
 
 	if (NULL == LanguageTable)
 	{
@@ -199,12 +199,24 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 GEANY_API_SYMBOL
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
-	TMSourceFile *source_file = g_new(TMSourceFile, 1);
+	TMSourceFile *source_file = g_slice_new(TMSourceFile);
 	if (TRUE != tm_source_file_init(source_file, file_name, name))
 	{
-		g_free(source_file);
+		g_slice_free(TMSourceFile, source_file);
 		return NULL;
 	}
+	return source_file;
+}
+
+
+TMSourceFile *tm_source_file_dup(TMSourceFile *src)
+{
+	TMSourceFile *source_file = g_slice_dup(TMSourceFile, src);
+	source_file->lang = src->lang;
+	source_file->file_name = g_strdup(src->file_name);
+	source_file->short_name = source_file->file_name;
+	source_file->short_name += src->short_name - src->file_name;
+	source_file->tags_array = g_ptr_array_ref(src->tags_array);
 	return source_file;
 }
 
@@ -233,8 +245,25 @@ void tm_source_file_free(TMSourceFile *source_file)
 	if (NULL != source_file)
 	{
 		tm_source_file_destroy(source_file);
-		g_free(source_file);
+		g_slice_free(TMSourceFile, source_file);
 	}
+}
+
+/** Gets the GBoxed-derived GType for TMSourceFile
+ *
+ * @return TMSourceFile type . */
+GEANY_API_SYMBOL
+GType tm_source_file_get_type(void)
+{
+	static volatile gsize type = 0;
+	if (g_once_init_enter(&type))
+	{
+		GType g_type = g_boxed_type_register_static(g_intern_static_string("TMSourceFile"),
+		                                            (GBoxedCopyFunc) tm_source_file_dup,
+		                                            (GBoxedFreeFunc) tm_source_file_free);
+		g_once_init_leave(&type, g_type);
+	}
+	return type;
 }
 
 /* Parses the text-buffer or source file and regenarates the tags.

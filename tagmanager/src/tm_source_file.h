@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <glib.h>
+#include <glib-object.h>
 
 #ifndef LIBCTAGS_DEFINED
 typedef int langType;
@@ -43,6 +44,8 @@ typedef struct
 	char *short_name; /**< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object */
 } TMSourceFile;
+
+GType tm_source_file_get_type(void);
 
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
 
