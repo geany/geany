@@ -568,7 +568,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	if (alternate_config)
 	{
-		geany_debug("alternate config: %s", alternate_config);
+		geany_debug("Using alternate configuration directory");
 		app->configdir = alternate_config;
 	}
 	else
@@ -668,7 +668,7 @@ static gint create_config_dir(void)
 			g_free(old_dir);
 		}
 #endif
-		geany_debug("creating config directory %s", app->configdir);
+		geany_debug("Creating configuration directory");
 		saved_errno = utils_mkdir(app->configdir, TRUE);
 	}
 
@@ -737,9 +737,6 @@ For more information read the documentation (in ", app->docdir, G_DIR_SEPARATOR_
 static gint setup_config_dir(void)
 {
 	gint mkdir_result = 0;
-
-	/* convert configdir to locale encoding to avoid troubles */
-	SETPTR(app->configdir, utils_get_locale_from_utf8(app->configdir));
 
 	mkdir_result = create_config_dir();
 	if (mkdir_result != 0)
@@ -1013,6 +1010,7 @@ gint main_lib(gint argc, gchar **argv)
 	GeanyDocument *doc;
 	gint config_dir_result;
 	const gchar *locale;
+	gchar *utf8_configdir;
 
 #if ! GLIB_CHECK_VERSION(2, 36, 0)
 	g_type_init();
@@ -1101,7 +1099,9 @@ gint main_lib(gint argc, gchar **argv)
 		gtk_major_version, gtk_minor_version, gtk_micro_version,
 		glib_major_version, glib_minor_version, glib_micro_version);
 	geany_debug("System data dir: %s", app->datadir);
-	geany_debug("User config dir: %s", app->configdir);
+	utf8_configdir = utils_get_utf8_from_locale(app->configdir);
+	geany_debug("User config dir: %s", utf8_configdir);
+	g_free(utf8_configdir);
 
 	/* create the object so Geany signals can be connected in init() functions */
 	geany_object = geany_object_new();
