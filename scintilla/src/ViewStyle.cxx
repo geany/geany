@@ -8,12 +8,14 @@
 #include <string.h>
 #include <assert.h>
 
+#include <stdexcept>
 #include <vector>
 #include <map>
 
 #include "Platform.h"
 
 #include "Scintilla.h"
+#include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"

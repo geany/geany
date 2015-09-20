@@ -351,7 +351,8 @@ static const HLStyle highlighting_styles_COFFEESCRIPT[] =
 	{ SCE_COFFEESCRIPT_GLOBALCLASS,				"globalclass",			FALSE },
 	{ SCE_COFFEESCRIPT_COMMENTBLOCK,			"commentblock",			FALSE },
 	{ SCE_COFFEESCRIPT_VERBOSE_REGEX,			"verbose_regex",		FALSE },
-	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE }
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE },
+	{ SCE_COFFEESCRIPT_INSTANCEPROPERTY,		"instanceproperty",		FALSE }
 };
 static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
 {

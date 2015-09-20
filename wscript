@@ -654,7 +654,8 @@ def build(bld):
         ''')
     bld.install_files('${PREFIX}/include/geany/scintilla', '''
         scintilla/include/SciLexer.h scintilla/include/Scintilla.h
-        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
+        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h
+        scintilla/include/Sci_Position.h ''')
     bld.install_files('${PREFIX}/include/geany/tagmanager', '''
         tagmanager/src/tm_source_file.h
         tagmanager/src/tm_tag.h

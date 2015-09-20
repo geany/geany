@@ -11,6 +11,7 @@ lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \
 lexers/LexBasic.cxx \
+lexers/LexBatch.cxx \
 lexers/LexCOBOL.cxx \
 lexers/LexCPP.cxx \
 lexers/LexCSS.cxx \
@@ -18,6 +19,7 @@ lexers/LexCaml.cxx \
 lexers/LexCmake.cxx \
 lexers/LexCoffeeScript.cxx \
 lexers/LexD.cxx \
+lexers/LexDiff.cxx \
 lexers/LexErlang.cxx \
 lexers/LexForth.cxx \
 lexers/LexFortran.cxx \
@@ -26,13 +28,15 @@ lexers/LexHaskell.cxx \
 lexers/LexLaTeX.cxx \
 lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
+lexers/LexMake.cxx \
 lexers/LexMarkdown.cxx \
 lexers/LexMatlab.cxx \
 lexers/LexNsis.cxx \
-lexers/LexOthers.cxx \
+lexers/LexNull.cxx \
 lexers/LexPascal.cxx \
 lexers/LexPerl.cxx \
 lexers/LexPowerShell.cxx \
+lexers/LexProps.cxx \
 lexers/LexPython.cxx \
 lexers/LexPO.cxx \
 lexers/LexR.cxx \
@@ -116,6 +120,7 @@ src/MarginView.h \
 src/Partitioning.h \
 src/PerLine.cxx \
 src/PerLine.h \
+src/Position.h \
 src/PositionCache.cxx \
 src/PositionCache.h \
 src/RESearch.cxx \

@@ -25,6 +25,7 @@
 #include "Scintilla.h"
 
 #include "StringCopy.h"
+#include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -389,9 +390,17 @@ void EditView::LayoutLine(const EditModel &model, int line, Surface *surface, co
 				else if (vstyle.styles[ll->styles[numCharsInLine]].caseForce == Style::caseLower)
 					allSame = allSame &&
 					(ll->chars[numCharsInLine] == static_cast<char>(tolower(chDoc)));
-				else	// Style::caseUpper
+				else if (vstyle.styles[ll->styles[numCharsInLine]].caseForce == Style::caseUpper)
 					allSame = allSame &&
 					(ll->chars[numCharsInLine] == static_cast<char>(toupper(chDoc)));
+				else	{ // Style::caseCamel
+					if ((model.pdoc->WordCharClass(ll->chars[numCharsInLine]) == CharClassify::ccWord) && 
+					  ((numCharsInLine == 0) || (model.pdoc->WordCharClass(ll->chars[numCharsInLine - 1]) != CharClassify::ccWord))) {
+						allSame = allSame && (ll->chars[numCharsInLine] == static_cast<char>(toupper(chDoc)));
+					} else {
+						allSame = allSame && (ll->chars[numCharsInLine] == static_cast<char>(tolower(chDoc)));
+					}
+				}
 				numCharsInLine++;
 			}
 			allSame = allSame && (ll->styles[numCharsInLine] == styleByte);	// For eolFilled
@@ -434,6 +443,14 @@ void EditView::LayoutLine(const EditModel &model, int line, Surface *surface, co
 					ll->chars[charInLine] = static_cast<char>(toupper(chDoc));
 				else if (vstyle.styles[ll->styles[charInLine]].caseForce == Style::caseLower)
 					ll->chars[charInLine] = static_cast<char>(tolower(chDoc));
+				else if (vstyle.styles[ll->styles[charInLine]].caseForce == Style::caseCamel) {
+					if ((model.pdoc->WordCharClass(ll->chars[charInLine]) == CharClassify::ccWord) && 
+					  ((charInLine == 0) || (model.pdoc->WordCharClass(ll->chars[charInLine - 1]) != CharClassify::ccWord))) {
+						ll->chars[charInLine] = static_cast<char>(toupper(chDoc));
+					} else {
+						ll->chars[charInLine] = static_cast<char>(tolower(chDoc));
+					}
+				}				
 			}
 		}
 		ll->xHighlightGuide = 0;
@@ -756,6 +773,8 @@ static void SimpleAlphaRectangle(Surface *surface, PRectangle rc, ColourDesired 
 
 static void DrawTextBlob(Surface *surface, const ViewStyle &vsDraw, PRectangle rcSegment,
 	const char *s, ColourDesired textBack, ColourDesired textFore, bool fillBackground) {
+	if (rcSegment.Empty())
+		return;
 	if (fillBackground) {
 		surface->FillRectangle(rcSegment, textBack);
 	}
@@ -1268,7 +1287,7 @@ void EditView::DrawBackground(Surface *surface, const EditModel &model, const Vi
 		rcSegment.right = ll->positions[ts.end()] + xStart - static_cast<XYPOSITION>(subLineStart);
 		// Only try to draw if really visible - enhances performance by not calling environment to
 		// draw strings that are completely past the right side of the window.
-		if (rcSegment.Intersects(rcLine)) {
+		if (!rcSegment.Empty() && rcSegment.Intersects(rcLine)) {
 			// Clip to line rectangle, since may have a huge position which will not work with some platforms
 			if (rcSegment.left < rcLine.left)
 				rcSegment.left = rcLine.left;

@@ -15,6 +15,7 @@ verbose_regex=regex
 verbose_regex_comment=comment
 word2=keyword_2
 word=keyword_1
+instanceproperty=identifier_2
 
 
 [settings]

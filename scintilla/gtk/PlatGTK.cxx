@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <sstream>
 
 #include <glib.h>
 #include <gmodule.h>
@@ -40,12 +41,6 @@
 #define USE_LOCK defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE)
 
 #include "Converter.h"
-
-#if GTK_CHECK_VERSION(2,20,0)
-#define IS_WIDGET_FOCUSSED(w) (gtk_widget_has_focus(GTK_WIDGET(w)))
-#else
-#define IS_WIDGET_FOCUSSED(w) (GTK_WIDGET_HAS_FOCUS(w))
-#endif
 
 static const double kPi = 3.14159265358979323846;
 
@@ -79,11 +74,7 @@ static cairo_surface_t *CreateSimilarSurface(GdkWindow *window, cairo_content_t 
 }
 
 static GdkWindow *WindowFromWidget(GtkWidget *w) {
-#if GTK_CHECK_VERSION(3,0,0)
 	return gtk_widget_get_window(w);
-#else
-	return w->window;
-#endif
 }
 
 #ifdef _MSC_VER
@@ -459,6 +450,8 @@ const char *CharacterSetID(int characterSet) {
 		return "ASCII";
 	case SC_CHARSET_RUSSIAN:
 		return "KOI8-R";
+	case SC_CHARSET_OEM866:
+		return "CP866";
 	case SC_CHARSET_CYRILLIC:
 		return "CP1251";
 	case SC_CHARSET_SHIFTJIS:
@@ -1243,7 +1236,7 @@ void Window::Destroy() {
 }
 
 bool Window::HasFocus() {
-	return IS_WIDGET_FOCUSSED(wid);
+	return gtk_widget_has_focus(GTK_WIDGET(wid));
 }
 
 PRectangle Window::GetPosition() {
@@ -1251,11 +1244,7 @@ PRectangle Window::GetPosition() {
 	PRectangle rc(0, 0, 1000, 1000);
 	if (wid) {
 		GtkAllocation allocation;
-#if GTK_CHECK_VERSION(3,0,0)
 		gtk_widget_get_allocation(PWidget(wid), &allocation);
-#else
-		allocation = PWidget(wid)->allocation;
-#endif
 		rc.left = allocation.x;
 		rc.top = allocation.y;
 		if (allocation.width > 20) {
@@ -1338,28 +1327,30 @@ void Window::SetCursor(Cursor curs) {
 		return;
 
 	cursorLast = curs;
+	GdkDisplay *pdisplay = gtk_widget_get_display(PWidget(wid));
+
 	GdkCursor *gdkCurs;
 	switch (curs) {
 	case cursorText:
-		gdkCurs = gdk_cursor_new(GDK_XTERM);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_XTERM);
 		break;
 	case cursorArrow:
-		gdkCurs = gdk_cursor_new(GDK_LEFT_PTR);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_LEFT_PTR);
 		break;
 	case cursorUp:
-		gdkCurs = gdk_cursor_new(GDK_CENTER_PTR);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_CENTER_PTR);
 		break;
 	case cursorWait:
-		gdkCurs = gdk_cursor_new(GDK_WATCH);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_WATCH);
 		break;
 	case cursorHand:
-		gdkCurs = gdk_cursor_new(GDK_HAND2);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_HAND2);
 		break;
 	case cursorReverseArrow:
-		gdkCurs = gdk_cursor_new(GDK_RIGHT_PTR);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_RIGHT_PTR);
 		break;
 	default:
-		gdkCurs = gdk_cursor_new(GDK_LEFT_PTR);
+		gdkCurs = gdk_cursor_new_for_display(pdisplay, GDK_LEFT_PTR);
 		cursorLast = cursorArrow;
 		break;
 	}
@@ -1429,17 +1420,26 @@ class ListBoxX : public ListBox {
 	WindowID scroller;
 	void *pixhash;
 	GtkCellRenderer* pixbuf_renderer;
+	GtkCellRenderer* renderer;
 	RGBAImageSet images;
 	int desiredVisibleRows;
 	unsigned int maxItemCharacters;
 	unsigned int aveCharWidth;
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkCssProvider *cssProvider;
+#endif
 public:
 	CallBackAction doubleClickAction;
 	void *doubleClickActionData;
 
 	ListBoxX() : widCached(0), frame(0), list(0), scroller(0), pixhash(NULL), pixbuf_renderer(0),
+		renderer(0),
 		desiredVisibleRows(5), maxItemCharacters(0),
-		aveCharWidth(1), doubleClickAction(NULL), doubleClickActionData(NULL) {
+		aveCharWidth(1),
+#if GTK_CHECK_VERSION(3,0,0)
+		cssProvider(NULL),
+#endif
+		doubleClickAction(NULL), doubleClickActionData(NULL) {
 	}
 	virtual ~ListBoxX() {
 		if (pixhash) {
@@ -1450,6 +1450,12 @@ public:
 			gtk_widget_destroy(GTK_WIDGET(widCached));
 			wid = widCached = 0;
 		}
+#if GTK_CHECK_VERSION(3,0,0)
+		if (cssProvider) {
+			g_object_unref(cssProvider);
+			cssProvider = NULL;
+		}
+#endif
 	}
 	virtual void SetFont(Font &font);
 	virtual void Create(Window &parent, int ctrlID, Point location_, int lineHeight_, bool unicodeMode_, int technology_);
@@ -1551,7 +1557,11 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 	recursive calls to this function after the value is updated and w->style to
 	be set to a new object */
 
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3,16,0)
+	// On recent releases of GTK+, it does not appear necessary to set the list box colours.
+	// This may be because of common themes and may be needed with other themes.
+	// The *override* calls are deprecated now, so only call them for older versions of GTK+.
+#elif GTK_CHECK_VERSION(3,0,0)
 	GtkStyleContext *styleContext = gtk_widget_get_style_context(w);
 	if (styleContext == NULL)
 		return;
@@ -1593,6 +1603,12 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 		return;
 	}
 
+#if GTK_CHECK_VERSION(3,0,0)
+	if (!cssProvider) {
+		cssProvider = gtk_css_provider_new();
+	}
+#endif
+	
 	wid = widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
 	frame = gtk_frame_new(NULL);
@@ -1615,6 +1631,14 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_signal_connect(G_OBJECT(list), "style-set", G_CALLBACK(StyleSet), NULL);
 
+#if GTK_CHECK_VERSION(3,0,0)
+	GtkStyleContext *styleContext = gtk_widget_get_style_context(GTK_WIDGET(list));
+	if (styleContext) {
+		gtk_style_context_add_provider(styleContext, GTK_STYLE_PROVIDER(cssProvider),
+			GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	}
+#endif
+
 	GtkTreeSelection *selection =
 		gtk_tree_view_get_selection(GTK_TREE_VIEW(list));
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
@@ -1632,7 +1656,7 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	gtk_tree_view_column_add_attribute(column, pixbuf_renderer,
 										"pixbuf", PIXBUF_COLUMN);
 
-	GtkCellRenderer* renderer = gtk_cell_renderer_text_new();
+	renderer = gtk_cell_renderer_text_new();
 	gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), 1);
 	gtk_tree_view_column_pack_start(column, renderer, TRUE);
 	gtk_tree_view_column_add_attribute(column, renderer,
@@ -1654,7 +1678,21 @@ void ListBoxX::SetFont(Font &scint_font) {
 	if (Created() && PFont(scint_font)->pfd) {
 		// Current font is Pango font
 #if GTK_CHECK_VERSION(3,0,0)
-		gtk_widget_override_font(PWidget(list), PFont(scint_font)->pfd);
+		if (cssProvider) {
+			PangoFontDescription *pfd = PFont(scint_font)->pfd;
+			std::ostringstream ssFontSetting;
+			ssFontSetting << "GtkTreeView { ";
+			ssFontSetting << "font-family: " << pango_font_description_get_family(pfd) <<  "; ";
+			ssFontSetting << "font-size:";
+			ssFontSetting << static_cast<double>(pango_font_description_get_size(pfd)) / PANGO_SCALE;
+			ssFontSetting << "px; ";
+			ssFontSetting << "font-weight:"<< pango_font_description_get_weight(pfd) << "; ";
+			ssFontSetting << "}";
+			gtk_css_provider_load_from_data(GTK_CSS_PROVIDER(cssProvider),
+				ssFontSetting.str().c_str(), -1, NULL);
+		}
+		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), -1);
+		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), 1);
 #else
 		gtk_widget_modify_font(PWidget(list), PFont(scint_font)->pfd);
 #endif
@@ -1865,14 +1903,12 @@ void ListBoxX::Select(int n) {
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkAdjustment *adj =
 			gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(list));
-		gfloat value = ((gfloat)n / total) * (gtk_adjustment_get_upper(adj) - gtk_adjustment_get_lower(adj))
-							+ gtk_adjustment_get_lower(adj) - gtk_adjustment_get_page_size(adj) / 2;
 #else
 		GtkAdjustment *adj =
 			gtk_tree_view_get_vadjustment(GTK_TREE_VIEW(list));
-		gfloat value = ((gfloat)n / total) * (adj->upper - adj->lower)
-							+ adj->lower - adj->page_size / 2;
 #endif
+		gfloat value = ((gfloat)n / total) * (gtk_adjustment_get_upper(adj) - gtk_adjustment_get_lower(adj))
+							+ gtk_adjustment_get_lower(adj) - gtk_adjustment_get_page_size(adj) / 2;
 		// Get cell height
 		int row_height = GetRowHeight();
 
@@ -1886,13 +1922,8 @@ void ListBoxX::Select(int n) {
 		}
 		// Clamp it.
 		value = (value < 0)? 0 : value;
-#if GTK_CHECK_VERSION(3,0,0)
 		value = (value > (gtk_adjustment_get_upper(adj) - gtk_adjustment_get_page_size(adj)))?
 					(gtk_adjustment_get_upper(adj) - gtk_adjustment_get_page_size(adj)) : value;
-#else
-		value = (value > (adj->upper - adj->page_size))?
-					(adj->upper - adj->page_size) : value;
-#endif
 
 		// Set it.
 		gtk_adjustment_set_value(adj, value);
@@ -2026,12 +2057,7 @@ Menu::Menu() : mid(0) {}
 void Menu::CreatePopUp() {
 	Destroy();
 	mid = gtk_menu_new();
-#if GLIB_CHECK_VERSION(2,10,0)
-	 g_object_ref_sink(G_OBJECT(mid));
-#else
-	g_object_ref(G_OBJECT(mid));
-	gtk_object_sink(GTK_OBJECT(G_OBJECT(mid)));
-#endif
+	g_object_ref_sink(G_OBJECT(mid));
 }
 
 void Menu::Destroy() {
