@@ -50,7 +50,7 @@ cp -v "$SCI_SRC"/version.txt      scintilla         || exit 1
 # now copy the lexers we use
 git ls-files scintilla/lexers/*.cxx | sed 's%^scintilla/%./%' | while read f; do
   cp -v "$SCI_SRC/$f" "scintilla/$f" || exit 1
-done
+done || exit 1
 
 # apply our patch
 git apply -p0 scintilla/scintilla_changes.patch || {
