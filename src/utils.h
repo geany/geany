@@ -116,6 +116,14 @@ G_BEGIN_DECLS
 #define foreach_slist(node, list) \
 	foreach_list(node, list)
 
+/* Iterates all the nodes in @a list. Safe against removal during iteration
+ * @param node should be a (@c GList*).
+ * @param list @c GList to traverse. */
+#define foreach_list_safe(node, list) \
+	for (GList *_node = (list), *_next = (list) ? (list)->next : NULL; \
+	     (node = _node) != NULL; \
+	     _node = _next, _next = _next ? _next->next : NULL)
+
 /** Iterates through each unsorted filename in a @c GDir.
  * @param filename (@c const @c gchar*) locale-encoded filename, without path. Do not modify or free.
  * @param dir @c GDir created with @c g_dir_open(). Call @c g_dir_close() afterwards.

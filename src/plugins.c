@@ -97,7 +97,7 @@ static PluginProxy builtin_so_proxy = {
 	.plugin = &builtin_so_proxy_plugin,
 };
 
-static GPtrArray *active_proxies = NULL;
+static GQueue active_proxies = G_QUEUE_INIT;
 
 static void plugin_free(Plugin *plugin);
 
@@ -901,19 +901,18 @@ static void free_subplugins(Plugin *proxy)
 /* Returns true if the removal was successful (=> never for non-proxies) */
 static gboolean unregister_proxy(Plugin *proxy)
 {
-	PluginProxy *p;
-	guint i;
 	gboolean is_proxy = FALSE;
+	GList *node;
 
 	/* Remove the proxy from the proxy list first. It might appear more than once (once
 	 * for each extension), but if it doesn't appear at all it's not actually a proxy */
-	foreach_ptr_array(p, i, active_proxies)
+	foreach_list_safe(node, active_proxies.head)
 	{
+		PluginProxy *p = node->data;
 		if (p->plugin == proxy)
 		{
 			is_proxy = TRUE;
-			g_ptr_array_remove(active_proxies, p);
-			i -= 1;
+			g_queue_delete_link(&active_proxies, node);
 		}
 	}
 	return is_proxy;
@@ -1014,9 +1013,8 @@ static gboolean check_plugin_path(const gchar *fname)
  * otherwise it returns the appropriate PluginProxy instance to load it */
 static PluginProxy* is_plugin(const gchar *file)
 {
-	PluginProxy *proxy;
+	GList *node;
 	const gchar *ext;
-	guint i;
 
 	/* extract file extension to avoid g_str_has_suffix() in the loop */
 	ext = (const gchar *)strrchr(file, '.');
@@ -1029,8 +1027,9 @@ static PluginProxy* is_plugin(const gchar *file)
 	ext += 1;
 	/* O(n*m), (m being extensions per proxy) doesn't scale very well in theory
 	 * but not a problem in practice yet */
-	foreach_ptr_array(proxy, i, active_proxies)
+	foreach_list(node, active_proxies.head)
 	{
+		PluginProxy *proxy = node->data;
 		if (utils_str_casecmp(ext, proxy->extension) == 0)
 		{
 			Plugin *p = proxy->plugin;
@@ -1067,7 +1066,7 @@ load_active_plugins(void)
 	/* If proxys are loaded we have to restart to load plugins that sort before their proxy */
 	do
 	{
-		proxies = active_proxies->len;
+		proxies = active_proxies.length;
 		g_list_free_full(failed_plugins_list, (GDestroyNotify) g_free);
 		failed_plugins_list = NULL;
 		for (i = 0; i < len; i++)
@@ -1090,7 +1089,7 @@ load_active_plugins(void)
 					failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
 			}
 		}
-	} while (proxies != active_proxies->len);
+	} while (proxies != active_proxies.length);
 }
 
 
@@ -1298,8 +1297,7 @@ void plugins_init(void)
 	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
 
-	active_proxies = g_ptr_array_sized_new(1);
-	g_ptr_array_add(active_proxies, &builtin_so_proxy);
+	g_queue_push_head(&active_proxies, &builtin_so_proxy);
 }
 
 
@@ -1473,7 +1471,7 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	/* save the filename and proxy of the plugin */
 	file_name = g_strdup(p->filename);
 	proxy = p->proxy;
-	prev_num_proxies = active_proxies->len;
+	prev_num_proxies = active_proxies.length;
 
 	/* unload plugin module */
 	if (!state)
@@ -1529,11 +1527,11 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	}
 	/* We need to find out if a proxy was added or removed because that affects the plugin list
 	 * presented by the plugin manager */
-	if (prev_num_proxies != active_proxies->len)
+	if (prev_num_proxies != active_proxies.length)
 	{
 		/* Rescan the plugin list as we now support more. Gives some "already loaded" warnings
 		 * they are unproblematic */
-		if (prev_num_proxies < active_proxies->len)
+		if (prev_num_proxies < active_proxies.length)
 			load_all_plugins();
 
 		pm_populate(pm_widgets.store);
@@ -2002,7 +2000,7 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
 		proxy->plugin = p;
 		/* prepend, so that plugins automatically override core providers for a given extension */
-		g_ptr_array_insert(active_proxies, 0, proxy);
+		g_queue_push_head(&active_proxies, proxy);
 	}
 
 	return TRUE;
