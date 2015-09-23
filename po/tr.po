@@ -4188,7 +4188,7 @@ msgstr ""
 "karakterleri ile yer değiştir"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr ""
 
 #: ../src/search.c:327

@@ -4234,7 +4234,7 @@ msgstr ""
 "caracteres de controle correspondentes"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr "Utilizar casamento multi_linhas"
 
 #: ../src/search.c:327

@@ -4277,7 +4277,7 @@ msgstr ""
 "entsprechenden Sonderzeichen"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr "_Mehrzeilen-Erkennung (multi-line matching) benutzen"
 
 #: ../src/search.c:327

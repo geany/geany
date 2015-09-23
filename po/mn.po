@@ -4360,7 +4360,7 @@ msgstr ""
 
 #: ../src/search.c:322
 #, fuzzy
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr "Автомат догол мөрийг _хэрэглэ"
 
 #: ../src/search.c:327
