@@ -55,44 +55,118 @@ static void findShTags (void)
     while ((line = fileReadLine ()) != NULL)
     {
 	const unsigned char* cp = line;
-	boolean functionFound = FALSE;
 
-	if (line [0] == '#')
-	    continue;
-
-	while (isspace (*cp))
-	    cp++;
-	if (strncmp ((const char*) cp, "function", (size_t) 8) == 0  &&
-	    isspace ((int) cp [8]))
-	{
-	    functionFound = TRUE;
-	    cp += 8;
-	    if (! isspace ((int) *cp))
-		continue;
-	    while (isspace ((int) *cp))
-		++cp;
-	}
-	if (! (isalnum ((int) *cp) || *cp == '_'))
-	    continue;
-	while (isalnum ((int) *cp)  ||  *cp == '_')
-	{
-	    vStringPut (name, (int) *cp);
-	    ++cp;
-	}
-	vStringTerminate (name);
 	while (isspace ((int) *cp))
 	    ++cp;
-	if (*cp++ == '(')
+
+	if (*cp == '#')
+	    continue;
+
+	boolean functionFound;
+	boolean allAreDigits = TRUE;
+
+	if (strncmp ((const char*) cp, "function", (size_t) 8) == 0  && isspace ((int) cp [8]))
 	{
+	    cp += 9;
+
 	    while (isspace ((int) *cp))
 		++cp;
-	    if (*cp == ')'  && ! hackReject (name))
-		functionFound = TRUE;
+
+	    if (*cp == '\0')
+		continue;
+
+	    functionFound = TRUE;
+	    const unsigned char* start = cp;
+
+	    do
+	    {
+		switch (*cp)
+		{
+		case '"':
+		case '$':
+		case '&':
+		case '\'':
+		case ')':
+		case ';':
+		case '<':
+		case '=':
+		case '>':
+		case '`':
+		    functionFound = FALSE;
+		    break;
+		default:
+		    if (allAreDigits && ! isdigit ((int) *cp))
+			allAreDigits = FALSE;
+
+		    vStringPut (name, (int) *cp);
+		    ++cp;
+		}
+	    }
+	    while (functionFound && *cp != '\0' && ! isspace ((int) *cp) && *cp != '(');
+
+	    if (cp == start)
+		continue;
+
+	    if (functionFound)
+	    {
+		if (allAreDigits)
+		    functionFound = FALSE;
+		else
+		{
+		    while (isspace ((int) *cp))
+			++cp;
+
+		    if (*cp == '(')
+		    {
+			while (isspace ((int) *++cp))
+			    ;
+
+			if (*cp != ')')
+			    functionFound = FALSE;
+		    }
+		}
+	    }
 	}
-	if (functionFound)
+	else
+	{
+	    if (! (isalnum ((int) *cp) || *cp == '_'))
+		continue;
+
+	    do
+	    {
+		if (! isdigit ((int) *cp))
+		    allAreDigits = FALSE;
+
+		vStringPut (name, (int) *cp);
+		++cp;
+	    } while (isalnum ((int) *cp) || *cp == '_');
+
+	    functionFound = FALSE;
+
+	    if (! allAreDigits)
+	    {
+		while (isspace ((int) *cp))
+		    ++cp;
+
+		if (*cp == '(')
+		{
+		    while (isspace ((int) *++cp))
+			;
+
+		    if (*cp == ')')
+			functionFound = TRUE;
+		}
+	    }
+	}
+
+	vStringTerminate (name);
+
+	if (functionFound && ! hackReject (name))
 	    makeSimpleTag (name, ShKinds, K_FUNCTION);
+
 	vStringClear (name);
     }
+
     vStringDelete (name);
 }
 
