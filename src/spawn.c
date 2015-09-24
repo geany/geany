@@ -639,6 +639,7 @@ typedef struct _SpawnChannelData
 		SpawnReadFunc read;
 	} cb;
 	gpointer cb_data;
+	gboolean shutdown;
 	/* stdout/stderr only */
 	GString *buffer;       /* NULL if recursive */
 	GString *line_buffer;  /* NULL if char buffered */
@@ -650,7 +651,9 @@ static void spawn_destroy_cb(gpointer data)
 {
 	SpawnChannelData *sc = (SpawnChannelData *) data;
 
-	g_io_channel_shutdown(sc->channel, FALSE, NULL);
+	if (sc->shutdown)
+		g_io_channel_shutdown(sc->channel, FALSE, NULL);
+
 	sc->channel = NULL;
 
 	if (sc->buffer)
@@ -859,7 +862,8 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *  resources associated with the callback.
  *
  *  The @a stdin_cb may write to @c channel only once per invocation, only if @c G_IO_OUT is
- *  set, and only a non-zero number of characters.
+ *  set, and only a non-zero number of characters. If @c SPAWN_LEAVE_STDIN_OPEN is passed
+ *  in @a spawn_flags, the @c channel will not be closed when @a stdin_cb returns @c FALSE.
  *
  *  @c stdout_cb and @c stderr_cb may modify the received strings in any way, but must not
  *  free them.
@@ -943,6 +947,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 			if (i == 0)
 			{
 				sc->cb.write = stdin_cb;
+				sc->shutdown = !(spawn_flags & SPAWN_LEAVE_STDIN_OPEN);
 				condition = G_IO_OUT | G_IO_FAILURE;
 				callback = (GSourceFunc) spawn_write_cb;
 			}
@@ -951,6 +956,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 				gboolean line_buffered = !(spawn_flags &
 					((SPAWN_STDOUT_UNBUFFERED >> 1) << i));
 
+				sc->shutdown = TRUE;
 				condition = G_IO_IN | G_IO_PRI | G_IO_FAILURE;
 				callback = (GSourceFunc) spawn_read_cb;
 
