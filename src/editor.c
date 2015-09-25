@@ -492,7 +492,7 @@ void editor_toggle_fold(GeanyEditor *editor, gint line, gint modifiers)
 static void on_margin_click(GeanyEditor *editor, SCNotification *nt)
 {
 	/* left click to marker margin marks the line */
-	if (nt->margin == 1)
+	if (nt->margin == 1 && editor_get_feature(editor, GEANY_EDITOR_FEATURE_MARGIN_MARKERS))
 	{
 		gint line = sci_get_line_from_position(editor->sci, nt->position);
 
@@ -1930,6 +1930,9 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	g_return_val_if_fail(editor != NULL, FALSE);
 	g_return_val_if_fail(editor->document->file_type != NULL, FALSE);
 
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_CALLTIPS))
+		return FALSE;
+
 	sci = editor->sci;
 
 	lexer = sci_get_lexer(sci);
@@ -2182,6 +2185,9 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL, FALSE);
+
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_AUTO_COMPLETION))
+		return FALSE;
 
 	if (! editor_prefs.auto_complete_symbols && ! force)
 		return FALSE;
@@ -4053,6 +4059,8 @@ void editor_display_current_line(GeanyEditor *editor, gfloat percent_of_view)
  */
 void editor_indicator_clear_errors(GeanyEditor *editor)
 {
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_ERROR_INDICATORS))
+		return;
 	editor_indicator_clear(editor, GEANY_INDICATOR_ERROR);
 	sci_marker_delete_all(editor->sci, 0);	/* remove the yellow error line marker */
 }
@@ -4072,6 +4080,9 @@ void editor_indicator_clear(GeanyEditor *editor, gint indic)
 	glong last_pos;
 
 	g_return_if_fail(editor != NULL);
+
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_ERROR_INDICATORS))
+		return;
 
 	last_pos = sci_get_length(editor->sci);
 	if (last_pos > 0)
@@ -4101,6 +4112,9 @@ void editor_indicator_set_on_line(GeanyEditor *editor, gint indic, gint line)
 
 	g_return_if_fail(editor != NULL);
 	g_return_if_fail(line >= 0);
+
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_ERROR_INDICATORS))
+		return;
 
 	start = sci_get_position_from_line(editor->sci, line);
 	end = sci_get_position_from_line(editor->sci, line + 1);
@@ -4147,6 +4161,9 @@ void editor_indicator_set_on_range(GeanyEditor *editor, gint indic, gint start, 
 {
 	g_return_if_fail(editor != NULL);
 	if (start >= end)
+		return;
+
+	if (! editor_get_feature(editor, GEANY_EDITOR_FEATURE_ERROR_INDICATORS))
 		return;
 
 	sci_indicator_set(editor->sci, indic);
@@ -4915,6 +4932,7 @@ GeanyEditor *editor_create(GeanyDocument *doc)
 	editor->line_wrapping = get_project_pref(line_wrapping);
 	editor->scroll_percent = -1.0F;
 	editor->line_breaking = FALSE;
+	editor->features = GEANY_EDITOR_FEATURE_ALL;
 
 	editor->sci = editor_create_widget(editor);
 	return editor;
@@ -5232,4 +5250,67 @@ void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 	snippets_make_replacements(editor, pattern);
 	editor_insert_text_block(editor, pattern->str, pos, -1, -1, TRUE);
 	g_string_free(pattern, TRUE);
+}
+
+
+/**
+ * Retrieve whether the given editor feature is enabled.
+ *
+ * @param editor The editor to get which features are enabled from.
+ * @param feature The feature (or bitwise combination of features) to
+ * determine if enabled or not.
+ * @return @c TRUE if the feature is enabled, @c FALSE if not.
+ *
+ * @note The features returned here are separate from, and override
+ * any user preference, and are typically set by plugins.
+ *
+ * @since 1.25 (Plugin API 225)
+ * @see editor_set_feature, GeanyEditorFeature
+ */
+GEANY_API_SYMBOL
+gboolean editor_get_feature(GeanyEditor *editor, GeanyEditorFeature feature)
+{
+	g_return_val_if_fail(editor != NULL, FALSE);
+	return (editor->features & feature);
+}
+
+
+/**
+ * Set whether an editor feature is enabled.
+ *
+ * By default, all features are enabled, relying on user preferences
+ * to change the default. Plugins can use this function to change
+ * which features Geany will provide, to enable plugins to provide some
+ * of those features. For example, a debugger plugin might like to
+ * disable margin markers in order to provide its own markers for
+ * "set breakpoint on line".
+ *
+ * @param editor The editor to set feature on.
+ * @param feature The feature to enable or disable.
+ * @param enabled If @c TRUE the feature will be enabled, if @c FALSE
+ * it will be disabled.
+ * @return The previous value of the feature, that is @c TRUE if the
+ * feature used to be enabled or @c FALSE if it used to be disabled.
+ *
+ * @note The features returned here are separate from, and override
+ * any user preference, and are typically set by plugins.
+ *
+ * @warning It may be surprising to users when a plugin overrides their
+ * preferences. Plugins should be very careful with how they provide
+ * alternative implementations of these features. A plugin should never
+ * disable a feature that does not conflict with one the plugin provides.
+ *
+ * @since 1.25 (Plugin API 225)
+ * @see editor_get_feature, GeanyEditorFeature
+ */
+GEANY_API_SYMBOL
+gboolean editor_set_feature(GeanyEditor *editor, GeanyEditorFeature feature, gboolean enabled)
+{
+	g_return_val_if_fail(editor != NULL, FALSE);
+	gboolean old_value = editor_get_feature(editor, feature);
+	if (enabled)
+		editor->features |= feature;
+	else
+		editor->features &= ~feature;
+	return old_value;
 }
