@@ -1985,6 +1985,8 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 {
 	Plugin *p;
 	const gchar **ext;
+	PluginProxy *proxy;
+	GList *node;
 
 	g_return_val_if_fail(plugin != NULL, FALSE);
 	g_return_val_if_fail(extensions != NULL, FALSE);
@@ -1993,10 +1995,17 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
 
 	p = plugin->priv;
+	/* Check if this was called aready. We want to reserve for the use case of calling
+	 * this again to set new supported extensions (for example, based on proxy configuration). */
+	foreach_list(node, active_proxies.head)
+	{
+		proxy = node->data;
+		g_return_if_fail(p != proxy->plugin);
+	}
 
 	foreach_strv(ext, extensions)
 	{
-		PluginProxy *proxy = g_new(PluginProxy, 1);
+		proxy = g_new(PluginProxy, 1);
 		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
 		proxy->plugin = p;
 		/* prepend, so that plugins automatically override core providers for a given extension */
