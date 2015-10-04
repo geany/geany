@@ -4255,7 +4255,7 @@ msgstr ""
 "de control correspondiente"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr "Usar coincidencias multi_líneas"
 
 #: ../src/search.c:327

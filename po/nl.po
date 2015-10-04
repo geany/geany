@@ -4227,7 +4227,7 @@ msgstr ""
 "stuurtekens"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr "Gebruik _meerregelige matching"
 
 #: ../src/search.c:327
