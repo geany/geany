@@ -4076,7 +4076,7 @@ msgid ""
 msgstr "Asenda \\\\, \\t, \\n, \\r ja \\uXXXX (Unicode sümbolid) juhtmärkidega"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr ""
 
 #: ../src/search.c:327

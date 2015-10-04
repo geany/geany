@@ -4066,8 +4066,8 @@ msgid ""
 msgstr "替换 \\\\、\\t、\\n、\\r 和 \\uXXXX (Unicode字符串) 为对应的控制字符。"
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
-msgstr "使用多行匹配(_L)"
+msgid "Use multi-line matchin_g"
+msgstr "使用多行匹配(_G)"
 
 #: ../src/search.c:327
 msgid ""

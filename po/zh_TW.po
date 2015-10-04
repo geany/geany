@@ -4140,7 +4140,7 @@ msgid ""
 msgstr "以相應的控制字元置換 \\\\，\\t,\\n，\\r 和 \\uXXXX (萬國碼字元) "
 
 #: ../src/search.c:322
-msgid "Use multi-_line matching"
+msgid "Use multi-line matchin_g"
 msgstr ""
 
 #: ../src/search.c:327
