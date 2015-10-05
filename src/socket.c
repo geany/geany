@@ -225,7 +225,7 @@ static void socket_get_document_list(gint sock)
 #ifndef G_OS_WIN32
 static void check_socket_permissions(void)
 {
-	struct stat socket_stat;
+	GStatBuf socket_stat;
 
 	if (g_lstat(socket_info.file_name, &socket_stat) == 0)
 	{	/* If the user id of the process is not the same as the owner of the socket
