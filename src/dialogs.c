@@ -1152,7 +1152,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
 	gchar *short_name;
 #ifdef HAVE_SYS_TYPES_H
-	struct stat st;
+	GStatBuf st;
 	off_t filesize;
 	mode_t mode;
 	gchar *locale_filename;

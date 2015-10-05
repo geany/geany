@@ -421,7 +421,7 @@ extern char* newUpperString (const char* str)
 
 extern long unsigned int getFileSize (const char *const name)
 {
-    struct stat fileStatus;
+    GStatBuf fileStatus;
     unsigned long size = 0;
 
     if (g_stat (name, &fileStatus) == 0)
@@ -436,7 +436,7 @@ static boolean isSymbolicLink (const char *const name)
 #if defined (MSDOS) || defined (WIN32) || defined (VMS) || defined (__EMX__) || defined (AMIGA)
     return FALSE;
 #else
-    struct stat fileStatus;
+    GStatBuf fileStatus;
     boolean result = FALSE;
 
     if (g_lstat (name, &fileStatus) == 0)
@@ -448,7 +448,7 @@ static boolean isSymbolicLink (const char *const name)
 
 static boolean isNormalFile (const char *const name)
 {
-    struct stat fileStatus;
+    GStatBuf fileStatus;
     boolean result = FALSE;
 
     if (g_stat (name, &fileStatus) == 0)
@@ -460,7 +460,7 @@ static boolean isNormalFile (const char *const name)
 
 extern boolean isExecutable (const char *const name)
 {
-    struct stat fileStatus;
+    GStatBuf fileStatus;
     boolean result = FALSE;
 
     if (g_stat (name, &fileStatus) == 0)
@@ -473,7 +473,7 @@ extern boolean isSameFile (const char *const name1, const char *const name2)
 {
     boolean result = FALSE;
 #ifdef HAVE_STAT_ST_INO
-    struct stat stat1, stat2;
+    GStatBuf stat1, stat2;
 
     if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
 	result = (boolean) (stat1.st_ino == stat2.st_ino);
@@ -488,7 +488,7 @@ static boolean isSetUID (const char *const name)
 #if defined (VMS) || defined (MSDOS) || defined (WIN32) || defined (__EMX__) || defined (AMIGA)
     return FALSE;
 #else
-    struct stat fileStatus;
+    GStatBuf fileStatus;
     boolean result = FALSE;
 
     if (g_stat (name, &fileStatus) == 0)
@@ -520,7 +520,7 @@ static boolean isDirectory (const char *const name)
 	eFree (fib);
     }
 #else
-    struct stat fileStatus;
+    GStatBuf fileStatus;
 
     if (g_stat (name, &fileStatus) == 0)
 	result = (boolean) S_ISDIR (fileStatus.st_mode);
@@ -531,7 +531,7 @@ static boolean isDirectory (const char *const name)
 
 extern boolean doesFileExist (const char *const fileName)
 {
-    struct stat fileStatus;
+    GStatBuf fileStatus;
 
     return (boolean) (g_stat (fileName, &fileStatus) == 0);
 }
