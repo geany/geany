@@ -142,7 +142,7 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
 	const char* name)
 {
-	struct stat s;
+	GStatBuf s;
 	int status;
 
 #ifdef TM_DEBUG
@@ -269,7 +269,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	
 	if (!use_buffer)
 	{
-		struct stat s;
+		GStatBuf s;
 		
 		/* load file to memory and parse it from memory unless the file is too big */
 		if (g_stat(file_name, &s) != 0 || s.st_size > 10*1024*1024)

@@ -935,7 +935,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	FileData *filedata, const gchar *forced_enc)
 {
 	GError *err = NULL;
-	struct stat st;
+	GStatBuf st;
 
 	filedata->data = NULL;
 	filedata->len = 0;
@@ -1586,7 +1586,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
 #ifndef USE_GIO_FILEMON
-	struct stat st;
+	GStatBuf st;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -3583,7 +3583,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
 	time_t cur_time = 0;
-	struct stat st;
+	GStatBuf st;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
 
