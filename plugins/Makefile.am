@@ -1,7 +1,8 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
 EXTRA_DIST = \
-	makefile.win32
+	makefile.win32 \
+	demoproxytest.px
 
 plugindir = $(libdir)/geany
 
@@ -11,6 +12,7 @@ plugins_include_HEADERS = \
 	geanyplugin.h
 
 demoplugin_la_LDFLAGS    = -module -avoid-version -no-undefined
+demoproxy_la_LDFLAGS     = -module -avoid-version -no-undefined
 classbuilder_la_LDFLAGS  = -module -avoid-version -no-undefined
 htmlchars_la_LDFLAGS     = -module -avoid-version -no-undefined
 export_la_LDFLAGS        = -module -avoid-version -no-undefined
@@ -30,9 +32,11 @@ plugin_LTLIBRARIES = \
 
 # Plugins not to be installed
 noinst_LTLIBRARIES = \
-	demoplugin.la
+	demoplugin.la  \
+	demoproxy.la
 
 demoplugin_la_SOURCES    = demoplugin.c
+demoproxy_la_SOURCES     = demoproxy.c
 classbuilder_la_SOURCES  = classbuilder.c
 htmlchars_la_SOURCES     = htmlchars.c
 export_la_SOURCES        = export.c
@@ -41,6 +45,7 @@ filebrowser_la_SOURCES   = filebrowser.c
 splitwindow_la_SOURCES   = splitwindow.c
 
 demoplugin_la_CFLAGS    = -DG_LOG_DOMAIN=\""Demoplugin"\" -DLOCALEDIR=\""$(LOCALEDIR)"\"
+demoproxy_la_CFLAGS     = -DG_LOG_DOMAIN=\""Demoproxy"\"
 classbuilder_la_CFLAGS  = -DG_LOG_DOMAIN=\""Classbuilder"\"
 htmlchars_la_CFLAGS     = -DG_LOG_DOMAIN=\""HTMLChars"\"
 export_la_CFLAGS        = -DG_LOG_DOMAIN=\""Export"\"
@@ -49,6 +54,7 @@ filebrowser_la_CFLAGS   = -DG_LOG_DOMAIN=\""FileBrowser"\"
 splitwindow_la_CFLAGS   = -DG_LOG_DOMAIN=\""SplitWindow"\"
 
 demoplugin_la_LIBADD    = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
+demoproxy_la_LIBADD     = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 classbuilder_la_LIBADD  = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 htmlchars_la_LIBADD     = $(top_builddir)/src/libgeany.la $(GTK_LIBS)
 export_la_LIBADD        = $(top_builddir)/src/libgeany.la $(GTK_LIBS) -lm

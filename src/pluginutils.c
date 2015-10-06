@@ -96,8 +96,7 @@ GEANY_API_SYMBOL
 void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);
-
-	g_module_make_resident(plugin->priv->module);
+	plugin_make_resident(plugin->priv);
 }
 
 
@@ -444,12 +443,7 @@ static void connect_plugin_signals(GtkBuilder *builder, GObject *object,
 	gpointer symbol = NULL;
 	struct BuilderConnectData *data = user_data;
 
-	if (!g_module_symbol(data->plugin->priv->module, handler_name, &symbol))
-	{
-		g_warning("Failed to locate signal handler for '%s': %s",
-			signal_name, g_module_error());
-		return;
-	}
+	symbol = plugin_get_module_symbol(data->plugin->priv, handler_name);
 
 	plugin_signal_connect(data->plugin, object, signal_name, FALSE,
 		G_CALLBACK(symbol) /*ub?*/, data->user_data);
@@ -503,7 +497,6 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 	struct BuilderConnectData data = { NULL };
 
 	g_return_if_fail(plugin != NULL && plugin->priv != NULL);
-	g_return_if_fail(plugin->priv->module != NULL);
 	g_return_if_fail(GTK_IS_BUILDER(builder));
 
 	data.user_data = user_data;
