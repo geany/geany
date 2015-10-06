@@ -80,6 +80,10 @@
 
 #include <gdk/gdkkeysyms.h>
 
+
+#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
+
+
 GeanyFilePrefs file_prefs;
 
 
@@ -885,7 +889,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 #ifdef USE_GIO_FILEMON
 	monitor_file_setup(doc);
 #else
-	doc->priv->mtime = time(NULL);
+	doc->priv->mtime = 0;
 #endif
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
@@ -930,12 +934,60 @@ typedef struct
 } FileData;
 
 
+static gboolean get_mtime(const gchar *locale_filename, time_t *time)
+{
+	GError *error = NULL;
+	const gchar *err_msg = NULL;
+
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = g_file_new_for_path(locale_filename);
+		GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED, G_FILE_QUERY_INFO_NONE, NULL, &error);
+
+		if (info)
+		{
+			GTimeVal timeval;
+
+			g_file_info_get_modification_time(info, &timeval);
+			g_object_unref(info);
+			*time = timeval.tv_sec;
+		}
+		else if (error)
+			err_msg = error->message;
+
+		g_object_unref(file);
+	}
+	else
+	{
+		GStatBuf st;
+
+		if (g_stat(locale_filename, &st) == 0)
+			*time = st.st_mtime;
+		else
+			err_msg = g_strerror(errno);
+	}
+
+	if (err_msg)
+	{
+		gchar *utf8_filename = utils_get_utf8_from_locale(locale_filename);
+
+		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"),
+			utf8_filename, err_msg);
+		g_free(utf8_filename);
+	}
+
+	if (error)
+		g_error_free(error);
+
+	return err_msg == NULL;
+}
+
+
 /* loads textfile data, verifies and converts to forced_enc or UTF-8. Also handles BOM. */
 static gboolean load_text_file(const gchar *locale_filename, const gchar *display_filename,
 	FileData *filedata, const gchar *forced_enc)
 {
 	GError *err = NULL;
-	struct stat st;
 
 	filedata->data = NULL;
 	filedata->len = 0;
@@ -943,23 +995,26 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	filedata->bom = FALSE;
 	filedata->readonly = FALSE;
 
-	if (g_stat(locale_filename, &st) != 0)
-	{
-		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"),
-			display_filename, g_strerror(errno));
+	if (!get_mtime(locale_filename, &filedata->mtime))
 		return FALSE;
+
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = g_file_new_for_path(locale_filename);
+
+		g_file_load_contents(file, NULL, &filedata->data, &filedata->len, NULL, &err);
+		g_object_unref(file);
 	}
+	else
+		g_file_get_contents(locale_filename, &filedata->data, &filedata->len, &err);
 
-	filedata->mtime = st.st_mtime;
-
-	if (! g_file_get_contents(locale_filename, &filedata->data, NULL, &err))
+	if (err)
 	{
 		ui_set_statusbar(TRUE, "%s", err->message);
 		g_error_free(err);
 		return FALSE;
 	}
 
-	filedata->len = (gsize) st.st_size;
 	if (! encodings_convert_to_utf8_auto(&filedata->data, &filedata->len, forced_enc,
 				&filedata->enc, &filedata->bom, &filedata->readonly))
 	{
@@ -1583,25 +1638,13 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 }
 
 
-static gboolean document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
+static void document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
 {
 #ifndef USE_GIO_FILEMON
-	struct stat st;
+	g_return_if_fail(doc != NULL);
 
-	g_return_val_if_fail(doc != NULL, FALSE);
-
-	/* stat the file to get the timestamp, otherwise on Windows the actual
-	 * timestamp can be ahead of time(NULL) */
-	if (g_stat(locale_filename, &st) != 0)
-	{
-		ui_set_statusbar(TRUE, _("Could not open file %s (%s)"), doc->file_name,
-			g_strerror(errno));
-		return FALSE;
-	}
-
-	doc->priv->mtime = st.st_mtime; /* get the modification time from file and keep it */
+	get_mtime(locale_filename, &doc->priv->mtime); /* get the modification time from file and keep it */
 #endif
-	return TRUE;
 }
 
 
@@ -1867,7 +1910,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
-	else if (file_prefs.use_gio_unsafe_file_saving)
+	else if (USE_GIO_FILE_OPERATIONS)
 	{
 		GFile *fp;
 
@@ -3583,7 +3626,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
 	time_t cur_time = 0;
-	struct stat st;
+	time_t mtime;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
 
@@ -3611,22 +3654,16 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
-	if (g_stat(locale_filename, &st) != 0)
+	if (!get_mtime(locale_filename, &mtime))
 	{
 		monitor_resave_missing_file(doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}
-	else if (! use_gio_filemon && /* ignore check when using GIO */
-		doc->priv->mtime > cur_time)
-	{
-		g_warning("%s: Something is wrong with the time stamps.", G_STRFUNC);
-		/* Note: on Windows st.st_mtime can be newer than cur_time */
-	}
-	else if (doc->priv->mtime < st.st_mtime)
+	else if (doc->priv->mtime < mtime)
 	{
 		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
-		doc->priv->mtime = st.st_mtime;
+		doc->priv->mtime = mtime;
 		monitor_reload_file(doc);
 		/* doc may be closed now */
 		ret = TRUE;
