@@ -33,12 +33,14 @@
 
 #include "callbacks.h"
 #include "document.h"
+#include "geanyobject.h"
 #include "msgwindow.h"
 #include "prefs.h"
 #include "sciwrappers.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "keybindings.h"
 
 #include "gtkcompat.h"
 
@@ -62,6 +64,8 @@ static gboolean clean = TRUE;
 static GModule *module = NULL;
 static struct VteFunctions *vf;
 static gchar *gtk_menu_key_accel = NULL;
+static GtkWidget *terminal_label = NULL;
+static guint terminal_label_update_source = 0;
 
 /* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
@@ -160,7 +164,7 @@ static const GtkTargetEntry dnd_targets[] =
 
 static gchar **vte_get_child_environment(void)
 {
-	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", NULL};
+	const gchar *exclude_vars[] = {"COLUMNS", "LINES", "TERM", "TERM_PROGRAM", NULL};
 
 	return utils_copy_environment(exclude_vars, "TERM", "xterm", NULL);
 }
@@ -178,6 +182,15 @@ static void override_menu_key(void)
 	else
 		gtk_settings_set_string_property(gtk_settings_get_default(),
 			"gtk-menu-bar-accel", gtk_menu_key_accel, "Geany");
+}
+
+
+static void on_startup_complete(G_GNUC_UNUSED GObject *dummy)
+{
+	GeanyDocument *doc = document_get_current();
+
+	if (doc)
+		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);
 }
 
 
@@ -205,9 +218,9 @@ void vte_init(void)
 		gint i;
 		const gchar *sonames[] = {
 #if GTK_CHECK_VERSION(3, 0, 0)
-			"libvte2_90.so", "libvte2_90.so.9",
+			"libvte2_90.so", "libvte2_90.so.9", "libvte2_90.dylib",
 #else
-			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9", "libvte.dylib",
 #endif
 			NULL
 		};
@@ -244,6 +257,8 @@ void vte_init(void)
 
 	/* setup the F10 menu override (so it works before the widget is first realised). */
 	override_menu_key();
+
+	g_signal_connect(geany_object, "geany-startup-complete", G_CALLBACK(on_startup_complete), NULL);
 }
 
 
@@ -256,9 +271,16 @@ static void on_vte_realize(void)
 }
 
 
+static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
+{
+	vte_start(vc->vte);
+	return FALSE;
+}
+
+
 static void create_vte(void)
 {
-	GtkWidget *vte, *scrollbar, *hbox, *frame;
+	GtkWidget *vte, *scrollbar, *hbox;
 
 	vc->vte = vte = vf->vte_terminal_new();
 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(vte)->adjustment));
@@ -268,10 +290,7 @@ static void create_vte(void)
 	vc->menu = vte_create_popup_menu();
 	g_object_ref_sink(vc->menu);
 
-	frame = gtk_frame_new(NULL);
-
 	hbox = gtk_hbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(frame), hbox);
 	gtk_box_pack_start(GTK_BOX(hbox), vte, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(hbox), scrollbar, FALSE, FALSE, 0);
 
@@ -294,10 +313,12 @@ static void create_vte(void)
 	g_signal_connect(vte, "motion-notify-event", G_CALLBACK(on_motion_event), NULL);
 	g_signal_connect(vte, "drag-data-received", G_CALLBACK(vte_drag_data_received), NULL);
 
-	vte_start(vte);
+	/* start shell on idle otherwise the initial prompt can get corrupted */
+	g_idle_add(vte_start_idle, NULL);
 
-	gtk_widget_show_all(frame);
-	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), frame, gtk_label_new(_("Terminal")), MSG_VTE);
+	gtk_widget_show_all(hbox);
+	terminal_label = gtk_label_new(_("Terminal"));
+	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, terminal_label, MSG_VTE);
 
 	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
 }
@@ -325,13 +346,42 @@ void vte_close(void)
 }
 
 
+static gboolean set_dirty_idle(gpointer user_data)
+{
+	gtk_widget_set_name(terminal_label, "geany-terminal-dirty");
+	terminal_label_update_source = 0;
+	return FALSE;
+}
+
+
+static void set_clean(gboolean value)
+{
+	if (clean != value)
+	{
+		if (terminal_label)
+		{
+			if (terminal_label_update_source > 0)
+			{
+				g_source_remove(terminal_label_update_source);
+				terminal_label_update_source = 0;
+			}
+			if (value)
+				gtk_widget_set_name(terminal_label, NULL);
+			else
+				terminal_label_update_source = g_timeout_add(150, set_dirty_idle, NULL);
+		}
+		clean = value;
+	}
+}
+
+
 static gboolean vte_keyrelease_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
 	if (ui_is_keyval_enter_or_return(event->keyval) ||
 		((event->keyval == GDK_c) && (event->state & GDK_CONTROL_MASK)))
 	{
 		/* assume any text on the prompt has been executed when pressing Enter/Return */
-		clean = TRUE;
+		set_clean(TRUE);
 	}
 	return FALSE;
 }
@@ -361,7 +411,7 @@ static gboolean vte_keypress_cb(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer user_data)
 {
-	clean = FALSE;
+	set_clean(FALSE);
 }
 
 
@@ -384,7 +434,7 @@ static void vte_start(GtkWidget *widget)
 	else
 		pid = 0; /* use 0 as invalid pid */
 
-	clean = TRUE;
+	set_clean(TRUE);
 }
 
 
@@ -397,7 +447,7 @@ static void vte_restart(GtkWidget *widget)
 		pid = 0;
 	}
 	vf->vte_terminal_reset(VTE_TERMINAL(widget), TRUE, TRUE);
-	clean = TRUE;
+	set_clean(TRUE);
 }
 
 
@@ -560,14 +610,14 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_c, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_c, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_COPY));
 
 	item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, NULL);
 	gtk_widget_add_accelerator(item, "activate", accel_group,
-		GDK_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
+		GDK_v, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, GTK_ACCEL_VISIBLE);
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(menu), item);
 	g_signal_connect(item, "activate", G_CALLBACK(vte_popup_menu_clicked), GINT_TO_POINTER(POPUP_PASTE));
@@ -630,7 +680,7 @@ gboolean vte_send_cmd(const gchar *cmd)
 	if (clean)
 	{
 		vf->vte_terminal_feed_child(VTE_TERMINAL(vc->vte), cmd, strlen(cmd));
-		clean = TRUE; /* vte_terminal_feed_child() also marks the vte as not clean */
+		set_clean(TRUE); /* vte_terminal_feed_child() also marks the vte as not clean */
 		return TRUE;
 	}
 	else
@@ -706,10 +756,9 @@ void vte_cwd(const gchar *filename, gboolean force)
 			gchar *cmd = g_strconcat(vc->send_cmd_prefix, "cd ", quoted_path, "\n", NULL);
 			if (! vte_send_cmd(cmd))
 			{
-				ui_set_statusbar(FALSE,
-		_("Could not change the directory in the VTE because it probably contains a command."));
-				geany_debug(
-		"Could not change the directory in the VTE because it probably contains a command.");
+				const gchar *msg = _("Directory not changed because the terminal may contain some input (press Ctrl+C or Enter to clear it).");
+				ui_set_statusbar(FALSE, "%s", msg);
+				geany_debug("%s", msg);
 			}
 			g_free(quoted_path);
 			g_free(cmd);

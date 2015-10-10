@@ -89,6 +89,7 @@ static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e)
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
+static void destroy_project(gboolean open_default);
 
 
 #define SHOW_ERR(args) dialogs_show_msgbox(GTK_MESSAGE_ERROR, args)
@@ -97,6 +98,16 @@ static void init_stash_prefs(void);
 /* "projects" is part of the default project base path so be careful when translating
  * please avoid special characters and spaces, look at the source for details or ask Frank */
 #define PROJECT_DIR _("projects")
+
+
+// returns whether we have working documents open
+static gboolean have_session_docs(void)
+{
+	gint npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	GeanyDocument *doc = document_get_current();
+
+	return npages > 1 || (npages == 1 && (doc->file_name || doc->changed));
+}
 
 
 /* TODO: this should be ported to Glade like the project preferences dialog,
@@ -112,6 +123,27 @@ void project_new(void)
 	GtkWidget *label;
 	gchar *tooltip;
 	PropertyDialogElements e = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, FALSE };
+
+	if (!app->project && project_prefs.project_session)
+	{
+		/* save session in case the dialog is cancelled */
+		configuration_save_default_session();
+		/* don't ask if the only doc is an unmodified new doc */
+		if (have_session_docs())
+		{
+			if (dialogs_show_question(
+				_("Move the current documents into the new project's session?")))
+			{
+				// don't reload session on closing project
+				configuration_clear_default_session();
+			}
+			else
+			{
+				if (!document_close_all())
+					return;
+			}
+		}
+	}
 
 	if (! project_ask_close())
 		return;
@@ -194,22 +226,42 @@ void project_new(void)
 
 	gtk_widget_show_all(e.dialog);
 
-	while (gtk_dialog_run(GTK_DIALOG(e.dialog)) == GTK_RESPONSE_OK)
+	while (1)
 	{
+		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
+		{
+			// any open docs were meant to be moved into the project
+			// rewrite default session because it was cleared
+			if (have_session_docs())
+				configuration_save_default_session();
+			else
+			{
+				// reload any documents that were closed
+				configuration_reload_default_session();
+				configuration_open_files();
+			}
+			break;
+		}
+		// dialog confirmed
 		if (update_config(&e, TRUE))
 		{
+			// app->project is now set
 			if (!write_config(TRUE))
+			{
 				SHOW_ERR(_("Project file could not be written"));
+				destroy_project(FALSE);
+			}
 			else
 			{
 				ui_set_statusbar(TRUE, _("Project \"%s\" created."), app->project->name);
-
 				ui_add_recent_project_file(app->project->file_name);
 				break;
 			}
 		}
 	}
 	gtk_widget_destroy(e.dialog);
+	document_new_file_if_non_open();
+	ui_focus_current_document();
 }
 
 
@@ -220,7 +272,6 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 		if (project_prefs.project_session)
 		{
 			configuration_open_files();
-			/* open a new file if no other file was opened */
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
@@ -328,7 +379,9 @@ static void update_ui(void)
 
 	ui_set_window_title(NULL);
 	build_menu_update(NULL);
+	// update project name
 	sidebar_openfiles_update_all();
+	ui_update_recent_project_menu();
 }
 
 
@@ -346,11 +399,9 @@ static void remove_foreach_project_filetype(gpointer data, gpointer user_data)
 
 
 /* open_default will make function reload default session files on close */
-void project_close(gboolean open_default)
+gboolean project_close(gboolean open_default)
 {
-	GSList *node;
-
-	g_return_if_fail(app->project != NULL);
+	g_return_val_if_fail(app->project != NULL, FALSE);
 
 	/* save project session files, etc */
 	if (!write_config(FALSE))
@@ -360,9 +411,19 @@ void project_close(gboolean open_default)
 	{
 		/* close all existing tabs first */
 		if (!document_close_all())
-			return;
+			return FALSE;
 	}
 	ui_set_statusbar(TRUE, _("Project \"%s\" closed."), app->project->name);
+	destroy_project(open_default);
+	return TRUE;
+}
+
+
+static void destroy_project(gboolean open_default)
+{
+	GSList *node;
+
+	g_return_if_fail(app->project != NULL);
 
 	/* remove project filetypes build entries */
 	if (app->project->priv->build_filetypes_list != NULL)
@@ -379,6 +440,7 @@ void project_close(gboolean open_default)
 	g_free(app->project->description);
 	g_free(app->project->file_name);
 	g_free(app->project->base_path);
+	g_strfreev(app->project->file_patterns);
 
 	g_free(app->project);
 	app->project = NULL;
@@ -398,7 +460,6 @@ void project_close(gboolean open_default)
 		{
 			configuration_reload_default_session();
 			configuration_open_files();
-			/* open a new file if no other file was opened */
 			document_new_file_if_non_open();
 			ui_focus_current_document();
 		}
@@ -412,8 +473,7 @@ void project_close(gboolean open_default)
 /* Shows the file chooser dialog when base path button is clicked
  * FIXME: this should be connected in Glade but 3.8.1 has a bug
  * where it won't pass any objects as user data (#588824). */
-G_MODULE_EXPORT void
-on_project_properties_base_path_button_clicked(GtkWidget *button,
+static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 	GtkWidget *base_path_entry)
 {
 	GtkWidget *dialog;
@@ -456,7 +516,7 @@ static void insert_build_page(PropertyDialogElements *e)
 
 static void create_properties_dialog(PropertyDialogElements *e)
 {
-	GtkWidget *base_path_button;
+	GtkWidget *wid;
 	static guint base_path_button_handler_id = 0;
 	static guint radio_long_line_handler_id = 0;
 
@@ -477,21 +537,21 @@ static void create_properties_dialog(PropertyDialogElements *e)
 	/* Workaround for bug in Glade 3.8.1, see comment above signal handler */
 	if (base_path_button_handler_id == 0)
 	{
-		base_path_button = ui_lookup_widget(e->dialog, "button_project_dialog_base_path");
+		wid = ui_lookup_widget(e->dialog, "button_project_dialog_base_path");
 		base_path_button_handler_id =
-			g_signal_connect(base_path_button, "clicked",
-			G_CALLBACK(on_project_properties_base_path_button_clicked),
-			e->base_path);
+			g_signal_connect(wid, "clicked",
+				G_CALLBACK(on_project_properties_base_path_button_clicked),
+				e->base_path);
 	}
 
 	/* Same as above, should be in Glade but can't due to bug in 3.8.1 */
 	if (radio_long_line_handler_id == 0)
 	{
+		wid = ui_lookup_widget(e->dialog, "radio_long_line_custom_project");
 		radio_long_line_handler_id =
-			g_signal_connect(ui_lookup_widget(e->dialog,
-			"radio_long_line_custom_project"), "toggled",
-			G_CALLBACK(on_radio_long_line_custom_toggled),
-			ui_lookup_widget(e->dialog, "spin_long_line_project"));
+			g_signal_connect(wid, "toggled",
+				G_CALLBACK(on_radio_long_line_custom_toggled),
+				ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
 }
 
@@ -503,6 +563,8 @@ static void show_project_properties(gboolean show_build)
 	GtkWidget *radio_long_line_custom;
 	static PropertyDialogElements e;
 	GSList *node;
+	gchar *entry_text;
+	GtkTextBuffer *buffer;
 
 	g_return_if_fail(app->project != NULL);
 
@@ -532,20 +594,14 @@ static void show_project_properties(gboolean show_build)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), (gdouble)p->priv->long_line_column);
 	on_radio_long_line_custom_toggled(GTK_TOGGLE_BUTTON(radio_long_line_custom), widget);
 
-	if (p->description != NULL)
-	{	/* set text */
-		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
-		gtk_text_buffer_set_text(buffer, p->description, -1);
-	}
+	/* set text */
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e.description));
+	gtk_text_buffer_set_text(buffer, p->description ? p->description : "", -1);
 
-	if (p->file_patterns != NULL)
-	{	/* set the file patterns */
-		gchar *str;
-
-		str = g_strjoinv(" ", p->file_patterns);
-		gtk_entry_set_text(GTK_ENTRY(e.patterns), str);
-		g_free(str);
-	}
+	/* set the file patterns */
+	entry_text = p->file_patterns ? g_strjoinv(" ", p->file_patterns) : g_strdup("");
+	gtk_entry_set_text(GTK_ENTRY(e.patterns), entry_text);
+	g_free(entry_text);
 
 	g_signal_emit_by_name(geany_object, "project-dialog-open", e.notebook);
 	gtk_widget_show_all(e.dialog);
@@ -601,8 +657,7 @@ gboolean project_ask_close(void)
 			_("Do you want to close it before proceeding?"),
 			_("The '%s' project is open."), app->project->name))
 		{
-			project_close(FALSE);
-			return TRUE;
+			return project_close(FALSE);
 		}
 		else
 			return FALSE;
@@ -633,6 +688,7 @@ static GeanyProject *create_project(void)
 
 
 /* Verifies data for New & Properties dialogs.
+ * Creates app->project if NULL.
  * Returns: FALSE if the user needs to change any data. */
 static gboolean update_config(const PropertyDialogElements *e, gboolean new_project)
 {
@@ -757,7 +813,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 		buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(e->description));
 		gtk_text_buffer_get_start_iter(buffer, &start);
 		gtk_text_buffer_get_end_iter(buffer, &end);
-		SETPTR(p->description, g_strdup(gtk_text_buffer_get_text(buffer, &start, &end, FALSE)));
+		SETPTR(p->description, gtk_text_buffer_get_text(buffer, &start, &end, FALSE));
 
 		foreach_slist(node, stash_groups)
 			stash_group_update(node->data, e->dialog);
@@ -1009,13 +1065,12 @@ static gboolean load_config(const gchar *filename)
 	build_load_menu(config, GEANY_BCS_PROJ, (gpointer)p);
 	if (project_prefs.project_session)
 	{
-		/* save current (non-project) session (it could has been changed since program startup) */
+		/* save current (non-project) session (it could have been changed since program startup) */
 		configuration_save_default_session();
 		/* now close all open files */
 		document_close_all();
 		/* read session files so they can be opened with configuration_open_files() */
 		configuration_load_session_files(config, FALSE);
-		ui_focus_current_document();
 	}
 	g_signal_emit_by_name(geany_object, "project-open", config);
 	g_key_file_free(config);
@@ -1069,6 +1124,7 @@ static gboolean write_config(gboolean emit_signal)
 		g_key_file_set_string_list(config, "project", "file_patterns",
 			(const gchar**) p->file_patterns, g_strv_length(p->file_patterns));
 
+	// editor settings
 	g_key_file_set_integer(config, "long line marker", "long_line_behaviour", p->priv->long_line_behaviour);
 	g_key_file_set_integer(config, "long line marker", "long_line_column", p->priv->long_line_column);
 
@@ -1089,6 +1145,19 @@ static gboolean write_config(gboolean emit_signal)
 	g_key_file_free(config);
 
 	return ret;
+}
+
+
+/** Forces the project file rewrite and emission of the project-save signal. Plugins 
+ * can use this function to save additional project data outside the project dialog.
+ *
+ *  @since 1.25
+ */
+GEANY_API_SYMBOL
+void project_write_config(void)
+{
+	if (!write_config(TRUE))
+		SHOW_ERR(_("Project file could not be written"));
 }
 
 
@@ -1185,22 +1254,29 @@ void project_apply_prefs(void)
 }
 
 
-static void add_stash_group(StashGroup *group)
+static void add_stash_group(StashGroup *group, gboolean apply_defaults)
 {
+	GKeyFile *kf;
+
 	stash_groups = g_slist_prepend(stash_groups, group);
+	if (!apply_defaults)
+		return;
+
+	kf = g_key_file_new();
+	stash_group_load_from_key_file(group, kf);
+	g_key_file_free(kf);
 }
 
 
 static void init_stash_prefs(void)
 {
 	StashGroup *group;
-	GKeyFile *kf;
 
 	group = stash_group_new("indentation");
 	/* copy global defaults */
 	indentation = *editor_get_indent_prefs(NULL);
 	stash_group_set_use_defaults(group, FALSE);
-	add_stash_group(group);
+	add_stash_group(group, FALSE);
 
 	stash_group_add_spin_button_integer(group, &indentation.width,
 		"indent_width", 4, "spin_indent_width_project");
@@ -1229,11 +1305,17 @@ static void init_stash_prefs(void)
 		"strip_trailing_spaces", file_prefs.strip_trailing_spaces, "check_trailing_spaces1");
 	stash_group_add_toggle_button(group, &priv.replace_tabs,
 		"replace_tabs", file_prefs.replace_tabs, "check_replace_tabs1");
-	add_stash_group(group);
-	/* apply defaults */
-	kf = g_key_file_new();
-	stash_group_load_from_key_file(group, kf);
-	g_key_file_free(kf);
+	add_stash_group(group, TRUE);
+
+	group = stash_group_new("editor");
+	stash_group_add_toggle_button(group, &priv.line_wrapping,
+		"line_wrapping", editor_prefs.line_wrapping, "check_line_wrapping1");
+	stash_group_add_spin_button_integer(group, &priv.line_break_column,
+		"line_break_column", editor_prefs.line_break_column, "spin_line_break1");
+	stash_group_add_toggle_button(group, &priv.auto_continue_multiline,
+		"auto_continue_multiline", editor_prefs.auto_continue_multiline,
+		"check_auto_multiline1");
+	add_stash_group(group, TRUE);
 }
 
 

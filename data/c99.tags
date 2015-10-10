@@ -1358,6 +1358,7 @@ sinhÌ1024Í(double __x)Ö0Ïdouble
 sinhfÌ1024Í(float __x)Ö0Ïfloat
 sinhlÌ1024Í(long double __x)Ö0Ïlong double
 sinlÌ1024Í(long double __x)Ö0Ïlong double
+size_tÌ4096Ö0Ï__SIZE_TYPE__
 snprintfÌ1024Í(char * __s, size_t __maxlen, const char * __format, ...)Ö0Ïint
 sprintfÌ1024Í(char * __s, const char * __format, ...)Ö0Ïint
 sqrtÌ1024Í(double __x)Ö0Ïdouble

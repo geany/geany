@@ -80,7 +80,7 @@ filesel_state = {
 	{
 		0,
 		GEANY_ENCODINGS_MAX, /* default encoding is detect from file */
-		GEANY_FILETYPES_NONE, /* default filetype is detect from extension */
+		-1, /* default filetype is detect from extension */
 		FALSE,
 		FALSE
 	}
@@ -123,8 +123,10 @@ static void file_chooser_set_filter_idx(GtkFileChooser *chooser, guint idx)
 }
 
 
-static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
+static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 {
+	gboolean ret = TRUE;
+
 	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
 	{
 		GSList *filelist;
@@ -140,7 +142,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		filesel_state.open.filetype_idx = filetype_combo_box_get_active_filetype(GTK_COMBO_BOX(filetype_combo));
 
 		/* ignore detect from file item */
-		if (filesel_state.open.filetype_idx > 0)
+		if (filesel_state.open.filetype_idx >= 0)
 			ft = filetypes_index(filesel_state.open.filetype_idx);
 
 		filesel_state.open.encoding_idx = ui_encodings_combo_box_get_active_encoding(GTK_COMBO_BOX(encoding_combo));
@@ -150,7 +152,18 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
-			document_open_files(filelist, ro, ft, charset);
+			const gchar *first = filelist->data;
+
+			// When there's only one filename it may have been typed manually
+			if (!filelist->next && !g_file_test(first, G_FILE_TEST_EXISTS))
+			{
+				dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("\"%s\" was not found."), first);
+				ret = FALSE;
+			}
+			else
+			{
+				document_open_files(filelist, ro, ft, charset);
+			}
 			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
 		}
 		g_slist_free(filelist);
@@ -158,6 +171,7 @@ static void open_file_dialog_handle_response(GtkWidget *dialog, gint response)
 	if (app->project && !EMPTY(app->project->base_path))
 		gtk_file_chooser_remove_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 			app->project->base_path, NULL);
+	return ret;
 }
 
 
@@ -205,7 +219,7 @@ static GtkWidget *create_filetype_combo_box(void)
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
 
 	gtk_tree_store_insert_with_values(store, &iter_detect, NULL, -1,
-			0, GEANY_FILETYPES_NONE, 1, _("Detect from file"), -1);
+			0, -1 /* auto-detect */, 1, _("Detect from file"), -1);
 
 	gtk_tree_store_insert_with_values(store, &iter_compiled, NULL, -1,
 			0, -1, 1, _("Programming Languages"), -1);
@@ -219,9 +233,6 @@ static GtkWidget *create_filetype_combo_box(void)
 	foreach_slist (node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
-
-		if (ft->id == GEANY_FILETYPES_NONE)
-			continue;
 
 		switch (ft->group)
 		{
@@ -249,9 +260,10 @@ static GtkWidget *create_filetype_combo_box(void)
 }
 
 
+/* the filetype, or -1 for auto-detect */
 static gint filetype_combo_box_get_active_filetype(GtkComboBox *combo)
 {
-	gint id = 0;
+	gint id = -1;
 	GtkTreeIter iter;
 
 	if (gtk_combo_box_get_active_iter(combo, &iter))
@@ -416,7 +428,7 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 	GtkWidget *encoding_combo = ui_lookup_widget(dialog, "encoding_combo");
 	GtkWidget *expander = ui_lookup_widget(dialog, "more_options_expander");
 
-	/* we can't know the initial position of combo boxes, so retreive it the first time */
+	/* we can't know the initial position of combo boxes, so retrieve it the first time */
 	if (! initialized)
 	{
 		filesel_state.open.filter_idx = file_chooser_get_filter_idx(GTK_FILE_CHOOSER(dialog));
@@ -443,7 +455,7 @@ void dialogs_show_open_file(void)
 	initdir = utils_get_current_file_dir_utf8();
 
 	/* use project or default startup directory (if set) if no files are open */
-	/** TODO should it only be used when initally open the dialog and not on every show? */
+	/** TODO should it only be used when initially open the dialog and not on every show? */
 	if (! initdir)
 		initdir = g_strdup(utils_get_default_dir_utf8());
 
@@ -456,7 +468,6 @@ void dialogs_show_open_file(void)
 #endif
 	{
 		GtkWidget *dialog = create_open_file_dialog();
-		gint response;
 
 		open_file_dialog_apply_settings(dialog);
 
@@ -467,8 +478,8 @@ void dialogs_show_open_file(void)
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 					app->project->base_path, NULL);
 
-		response = gtk_dialog_run(GTK_DIALOG(dialog));
-		open_file_dialog_handle_response(dialog, response);
+		while (!open_file_dialog_handle_response(dialog,
+			gtk_dialog_run(GTK_DIALOG(dialog))));
 		gtk_widget_destroy(dialog);
 	}
 	g_free(initdir);
@@ -488,9 +499,13 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 		{
 			document_rename_file(doc, utf8_filename);
 		}
-		/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-		tm_workspace_remove_object(doc->tm_file, TRUE, TRUE);
-		doc->tm_file = NULL;
+		if (doc->tm_file)
+		{
+			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
+			tm_workspace_remove_source_file(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
+			doc->tm_file = NULL;
+		}
 	}
 	success = document_save_file_as(doc, utf8_filename);
 
@@ -648,6 +663,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
  *
  *  @return @c TRUE if the file was saved, otherwise @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_save_as(void)
 {
 	GeanyDocument *doc = document_get_current();
@@ -709,6 +725,7 @@ static void show_msgbox_dialog(GtkWidget *dialog, GtkMessageType type, GtkWindow
  *  @param text Printf()-style format string.
  *  @param ... Arguments for the @a text format string.
  **/
+GEANY_API_SYMBOL
 void dialogs_show_msgbox(GtkMessageType type, const gchar *text, ...)
 {
 #ifndef G_OS_WIN32
@@ -878,12 +895,8 @@ void dialogs_show_open_font(void)
 		gtk_window_set_type_hint(GTK_WINDOW(ui_widgets.open_fontsel), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_widget_set_name(ui_widgets.open_fontsel, "GeanyDialog");
 
-#if GTK_CHECK_VERSION(2, 20, 0)
-		/* apply button doesn't have a getter and is hidden by default, but we'd like to show it */
 		apply_button = gtk_dialog_get_widget_for_response(GTK_DIALOG(ui_widgets.open_fontsel), GTK_RESPONSE_APPLY);
-#else
-		apply_button = GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel)->apply_button;
-#endif
+
 		if (apply_button)
 			gtk_widget_show(apply_button);
 
@@ -1050,6 +1063,7 @@ static void on_dialog_input(const gchar *str, gpointer data)
  * @param default_text Text to display in the input field, or @c NULL.
  * @return New copy of user input or @c NULL if cancelled.
  * @since 0.20. */
+GEANY_API_SYMBOL
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,
 	const gchar *default_text)
 {
@@ -1090,6 +1104,7 @@ gchar *dialogs_show_input_goto_line(const gchar *title, GtkWindow *parent, const
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 									gdouble *value, gdouble min, gdouble max, gdouble step)
 {
@@ -1137,7 +1152,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
 	gchar *short_name;
 #ifdef HAVE_SYS_TYPES_H
-	struct stat st;
+	GStatBuf st;
 	off_t filesize;
 	mode_t mode;
 	gchar *locale_filename;
@@ -1355,6 +1370,7 @@ static gint show_prompt(GtkWidget *parent,
  *
  *  @return @c TRUE if the user answered with Yes, otherwise @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean dialogs_show_question(const gchar *text, ...)
 {
 	gchar *string;

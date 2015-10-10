@@ -1,7 +1,7 @@
 
 SUBDIRS = include
 
-noinst_LIBRARIES=libscintilla.a
+noinst_LTLIBRARIES=libscintilla.la
 
 AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DG_THREADS_IMPL_NONE
 
@@ -11,12 +11,15 @@ lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
 lexers/LexBash.cxx \
 lexers/LexBasic.cxx \
+lexers/LexBatch.cxx \
 lexers/LexCOBOL.cxx \
 lexers/LexCPP.cxx \
 lexers/LexCSS.cxx \
 lexers/LexCaml.cxx \
 lexers/LexCmake.cxx \
+lexers/LexCoffeeScript.cxx \
 lexers/LexD.cxx \
+lexers/LexDiff.cxx \
 lexers/LexErlang.cxx \
 lexers/LexForth.cxx \
 lexers/LexFortran.cxx \
@@ -25,13 +28,15 @@ lexers/LexHaskell.cxx \
 lexers/LexLaTeX.cxx \
 lexers/LexLisp.cxx \
 lexers/LexLua.cxx \
+lexers/LexMake.cxx \
 lexers/LexMarkdown.cxx \
 lexers/LexMatlab.cxx \
 lexers/LexNsis.cxx \
-lexers/LexOthers.cxx \
+lexers/LexNull.cxx \
 lexers/LexPascal.cxx \
 lexers/LexPerl.cxx \
 lexers/LexPowerShell.cxx \
+lexers/LexProps.cxx \
 lexers/LexPython.cxx \
 lexers/LexPO.cxx \
 lexers/LexR.cxx \
@@ -115,6 +120,7 @@ src/MarginView.h \
 src/Partitioning.h \
 src/PerLine.cxx \
 src/PerLine.h \
+src/Position.h \
 src/PositionCache.cxx \
 src/PositionCache.h \
 src/RESearch.cxx \
@@ -138,13 +144,14 @@ src/XPM.cxx \
 src/XPM.h \
 $(LEXER_SRCS)
 
-libscintilla_a_SOURCES = $(SRCS)
+libscintilla_la_SOURCES = $(SRCS)
 
-AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib @GTK_CFLAGS@
+AM_CPPFLAGS = -I$(top_srcdir) -I$(srcdir)/include -I$(srcdir)/src -I$(srcdir)/lexlib \
+	@GTK_CFLAGS@ @LIBGEANY_CFLAGS@
 
 marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --body > gtk/scintilla-marshal.c
 
 EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt \
-	makefile.win32
+	gtk/makefile.win32

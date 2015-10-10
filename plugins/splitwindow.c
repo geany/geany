@@ -36,7 +36,6 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 
 
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 GeanyPlugin		*geany_plugin;
 
 
@@ -299,7 +298,7 @@ static void split_view(gboolean horizontal)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
-	GtkWidget *pane, *toolbar, *box;
+	GtkWidget *pane, *toolbar, *box, *splitwin_notebook;
 	GeanyDocument *doc = document_get_current();
 	gint width = gtk_widget_get_allocated_width(notebook) / 2;
 	gint height = gtk_widget_get_allocated_height(notebook) / 2;
@@ -321,8 +320,13 @@ static void split_view(gboolean horizontal)
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(pane), box);
 	edit_window.vbox = box;
+
+	/* used just to make the split window look the same as the main editor */
+	splitwin_notebook = gtk_notebook_new();
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(splitwin_notebook), FALSE);
+	gtk_notebook_append_page(GTK_NOTEBOOK(splitwin_notebook), box, NULL);
+	gtk_container_add(GTK_CONTAINER(pane), splitwin_notebook);
 
 	set_editor(&edit_window, doc->editor);
 

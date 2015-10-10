@@ -6,7 +6,9 @@ DEFINES = -DHAVE_CONFIG_H \
 	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
 	-DGEANY_PREFIX=\"\" \
-	-DGTK
+	-DGTK \
+	-DGEANY_EXPORT_SYMBOL="__declspec(dllexport)" \
+	-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL
 
 .SUFFIXES: .c .o .h .a
 WINDRES = windres.exe
@@ -51,7 +53,7 @@ ALL_GTK_LIBS= \
 	#"$(PREFIX)/lib/asprintf.lib" \
 	#"$(PREFIX)/lib/charset.lib" \
 
-WIN_LIBS=-mwindows -lole32 -luuid -liberty -lwsock32
+WIN_LIBS=-mwindows -lole32 -luuid -lwsock32
 
 CBASEFLAGS=-Wall -pipe -mms-bitfields $(DEFINES) $(INCLUDEDIRS)
 ifdef DEBUG
@@ -65,7 +67,7 @@ OBJS =	about.o build.o callbacks.o dialogs.o document.o editor.o encodings.o fil
 		geanyentryaction.o geanymenubuttonaction.o geanyobject.o geanywraplabel.o highlighting.o \
 		keybindings.o keyfile.o log.o main.o msgwindow.o navqueue.o notebook.o \
 		plugins.o pluginutils.o prefs.o printing.o project.o sciwrappers.o search.o \
-		socket.o stash.o symbols.o templates.o toolbar.o tools.o sidebar.o \
+		socket.o spawn.o stash.o symbols.o templates.o toolbar.o tools.o sidebar.o \
 		ui_utils.o utils.o win32.o
 
 .c.o:

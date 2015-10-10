@@ -77,7 +77,6 @@ optionValues Option = {
     NULL,		/* -I */
     FALSE,		/* -a */
     FALSE,		/* -B */
-    FALSE,		/* -e */
 #ifdef MACROS_USE_PATTERNS
     EX_PATTERN,		/* -n, --excmd */
 #else
@@ -90,6 +89,7 @@ optionValues Option = {
     NULL,		/* -L */
     NULL,		/* -o */
     NULL,		/* -h */
+    NULL, 		/* --etags-include */
     DEFAULT_FILE_FORMAT,/* --format */
     FALSE,		/* --if0 */
     FALSE,		/* --kind-long */
@@ -101,7 +101,7 @@ optionValues Option = {
     FALSE,		/* --tag-relative */
     FALSE,		/* --totals */
     FALSE,		/* --line-directives */
-	FALSE,
+    FALSE,		/* --nest */
 };
 
 

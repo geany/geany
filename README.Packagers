@@ -30,6 +30,9 @@ Geany still has a fallback mechanism for syntax highlighting (if
 filetypes.common is installed) but several other features for certain
 filetypes will fail (mainly build support).
 
+For 32 bit builds targetting systems which support large filesystems
+(eg XFS) it may be necessary to build with -D_FILE_OFFSET_BITS=64.
+
 
 Testing your package
 --------------------

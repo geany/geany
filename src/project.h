@@ -47,6 +47,11 @@ typedef struct GeanyProject
 GeanyProject;
 
 
+void project_write_config(void);
+
+
+#ifdef GEANY_PRIVATE
+
 typedef struct ProjectPrefs
 {
 	gchar *session_file;
@@ -66,7 +71,7 @@ void project_new(void);
 
 void project_open(void);
 
-void project_close(gboolean open_default);
+gboolean project_close(gboolean open_default);
 
 void project_properties(void);
 
@@ -91,6 +96,8 @@ void project_load_prefs(GKeyFile *config);
 void project_setup_prefs(void);
 
 void project_apply_prefs(void);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

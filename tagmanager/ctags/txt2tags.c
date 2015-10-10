@@ -1,5 +1,6 @@
 /*
 *   Copyright (c) 2009, Eric Forgeot
+*   Copyright (c) 2014, Colomban Wendling <colomban@geany.org>
 *
 *   Based on work by Jon Strait
 *
@@ -19,102 +20,165 @@
 
 #include "parse.h"
 #include "read.h"
+#include "nestlevel.h"
 #include "vstring.h"
+
+
+/* as any character may happen in an input, use something highly unlikely */
+#define SCOPE_SEPARATOR '\x3' /* ASCII ETX */
 
 /*
 *   DATA DEFINITIONS
 */
 
 typedef enum {
-	K_SECTION = 0, K_HEADER
+	K_SECTION = 0
 } Txt2tagsKind;
 
 static kindOption Txt2tagsKinds[] = {
-	{ TRUE, 'm', "member", "sections" },
-	{ TRUE, 's', "struct",  "header1"}
+	{ TRUE, 'm', "member", "sections" }
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static void parse_title (vString* const name, const char control_char)
-{
-	char *text = vStringValue(name);
-	char *p = text;
-	int offset_start = 0;
-	boolean in_or_after_title = FALSE;
-
-	while (p != NULL && *p != '\0')
-	{
-		if (*p == control_char)
-		{
-			if (in_or_after_title)
-				break;
-			else
-				offset_start++;
-		}
-		else
-			in_or_after_title = TRUE;
-		p++;
-	}
-	*p = '\0';
-	vStringCopyS(name, text + offset_start);
-	vStringStripLeading(name);
-	vStringStripTrailing(name);
-}
-
-static void makeTxt2tagsTag (const vString* const name, boolean name_before, Txt2tagsKind type)
+static void makeTxt2tagsTag (const vString* const name,
+                             const NestingLevels *const nls,
+                             Txt2tagsKind type)
 {
 	tagEntryInfo e;
+	vString *scope = NULL;
 	kindOption *kind = &Txt2tagsKinds[type];
 	initTagEntry (&e, vStringValue(name));
 
-	if (name_before)
-		e.lineNumber--;	/* we want the line before the underline chars */
 	e.kindName = kind->name;
 	e.kind = kind->letter;
 
+	if (nls->n > 0) {
+		int i;
+		kindOption *parentKind;
+
+		scope = vStringNew();
+		for (i = 0; i < nls->n; i++) {
+			if (vStringLength(scope) > 0)
+				vStringPut(scope, SCOPE_SEPARATOR);
+			vStringCat(scope, nls->levels[i].name);
+		}
+		parentKind = &Txt2tagsKinds[nls->levels[nls->n - 1].type];
+
+		e.extensionFields.scope[0] = parentKind->name;
+		e.extensionFields.scope[1] = vStringValue(scope);
+	}
+
 	makeTagEntry(&e);
+
+	vStringDelete(scope);
+}
+
+/* matches: ^ *[=_-]{20,} *$ */
+static boolean isTxt2tagsLine (const unsigned char *line)
+{
+	unsigned int len;
+
+	while (isspace(*line)) line++;
+	for (len = 0; *line == '=' || *line == '-' || *line == '_'; len++)
+		line++;
+	while (isspace(*line)) line++;
+
+	return len >= 20 && *line == 0;
+}
+
+static boolean parseTxt2tagsTitle (const unsigned char *line,
+                                   vString *const title,
+                                   int *const depth_)
+{
+	const int MAX_TITLE_DEPTH = 5; /* maximum length of a title delimiter */
+	unsigned char delim;
+	int delim_delta = 0;
+	const unsigned char *end;
+
+	/* skip leading spaces, but no tabs (probably because they create quotes) */
+	while (*line == ' ') line++;
+
+	/* normal/numbered titles */
+	if (*line != '=' && *line != '+')
+		return FALSE;
+
+	delim = *line;
+
+	/* find the start delimiter length */
+	while (*line == delim && delim_delta < MAX_TITLE_DEPTH+1)
+	{
+		line++;
+		delim_delta++;
+	}
+	while (isspace(*line))
+		line++;
+
+	if (delim_delta > MAX_TITLE_DEPTH) /* invalid */
+		return FALSE;
+
+	*depth_ = delim_delta;
+
+	/* find the end delimiter */
+	end = line + strlen((const char *) line) - 1;
+	while (end > line && isspace(*end)) end--;
+	/* skip a possible label: \[[A-Za-z0-9_-]+\] */
+	if (*end == ']')
+	{
+		end--;
+		while (end > line && (isalnum(*end) || *end == '_' || *end == '-'))
+			end--;
+		if (*end != '[') /* invalid */
+			return FALSE;
+		end--;
+	}
+	while (end > line && *end == delim && delim_delta >= 0)
+	{
+		delim_delta--;
+		end--;
+	}
+	while (end > line && isspace(*end)) end--;
+	end++;
+
+	/* if start and end delimiters are not identical, or the the name is empty */
+	if (delim_delta != 0 || (end - line) <= 0)
+		return FALSE;
+
+	vStringNCopyS(title, (const char *) line, end - line);
+	return TRUE;
 }
 
 static void findTxt2tagsTags (void)
 {
+	NestingLevels *nls = nestingLevelsNew();
 	vString *name = vStringNew();
 	const unsigned char *line;
 
 	while ((line = fileReadLine()) != NULL)
 	{
-		/*int name_len = vStringLength(name);*/
+		int depth;
 
-		/* underlines must be the same length or more */
-		/*if (name_len > 0 &&	(line[0] == '=' || line[0] == '-') && issame((const char*) line))
+		if (isTxt2tagsLine(line))
+			; /* skip not to improperly match titles */
+		else if (parseTxt2tagsTitle(line, name, &depth))
 		{
-			makeTxt2tagsTag(name, TRUE);
-		}*/
-		if (line[0] == '=' || line[0] == '+') {
- 			/*vStringClear(name);*/
-			vStringCatS(name, (const char *) line);
+			NestingLevel *nl = nestingLevelsGetCurrent(nls);
+			while (nl && nl->indentation >= depth)
+			{
+				nestingLevelsPop(nls);
+				nl = nestingLevelsGetCurrent(nls);
+			}
+
 			vStringTerminate(name);
-			parse_title(name, line[0]);
-			makeTxt2tagsTag(name, FALSE, K_SECTION);
-		}
-		/* TODO what exactly should this match?
-		 * K_HEADER ('struct') isn't matched in src/symbols.c */
-		else if (strcmp((char*)line, "°") == 0) {
-			/*vStringClear(name);*/
-			vStringCatS(name, (const char *) line);
-			vStringTerminate(name);
-			makeTxt2tagsTag(name, FALSE, K_HEADER);
-		}
-		else {
-			vStringClear (name);
-			if (! isspace(*line))
-				vStringCatS(name, (const char*) line);
-			vStringTerminate(name);
+			makeTxt2tagsTag(name, nls, K_SECTION);
+			nestingLevelsPush(nls, name, K_SECTION);
+			nestingLevelsGetCurrent(nls)->indentation = depth;
 		}
 	}
 	vStringDelete (name);
+	nestingLevelsFree(nls);
 }
 
 extern parserDefinition* Txt2tagsParser (void)

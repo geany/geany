@@ -8,12 +8,14 @@
 #include <string.h>
 #include <assert.h>
 
+#include <stdexcept>
 #include <vector>
 #include <map>
 
 #include "Platform.h"
 
 #include "Scintilla.h"
+#include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -101,8 +103,14 @@ ViewStyle::ViewStyle(const ViewStyle &source) {
 		markers[mrk] = source.markers[mrk];
 	}
 	CalcLargestMarkerHeight();
+	indicatorsDynamic = 0;
+	indicatorsSetFore = 0;
 	for (int ind=0; ind<=INDIC_MAX; ind++) {
 		indicators[ind] = source.indicators[ind];
+		if (indicators[ind].IsDynamic())
+			indicatorsDynamic++;
+		if (indicators[ind].OverridesTextFore())
+			indicatorsSetFore++;
 	}
 
 	selColours = source.selColours;
@@ -192,17 +200,13 @@ void ViewStyle::Init(size_t stylesSize_) {
 	// There are no image markers by default, so no need for calling CalcLargestMarkerHeight()
 	largestMarkerHeight = 0;
 
-	indicators[0].style = INDIC_SQUIGGLE;
-	indicators[0].under = false;
-	indicators[0].fore = ColourDesired(0, 0x7f, 0);
-	indicators[1].style = INDIC_TT;
-	indicators[1].under = false;
-	indicators[1].fore = ColourDesired(0, 0, 0xff);
-	indicators[2].style = INDIC_PLAIN;
-	indicators[2].under = false;
-	indicators[2].fore = ColourDesired(0xff, 0, 0);
+	indicators[0] = Indicator(INDIC_SQUIGGLE, ColourDesired(0, 0x7f, 0));
+	indicators[1] = Indicator(INDIC_TT, ColourDesired(0, 0, 0xff));
+	indicators[2] = Indicator(INDIC_PLAIN, ColourDesired(0xff, 0, 0));
 
 	technology = SC_TECHNOLOGY_DEFAULT;
+	indicatorsDynamic = 0;
+	indicatorsSetFore = 0;
 	lineHeight = 1;
 	lineOverlap = 0;
 	maxAscent = 1;
@@ -323,6 +327,14 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 	for (unsigned int k=0; k<styles.size(); k++) {
 		FontRealised *fr = Find(styles[k]);
 		styles[k].Copy(fr->font, *fr);
+	}
+	indicatorsDynamic = 0;
+	indicatorsSetFore = 0;
+	for (int ind = 0; ind <= INDIC_MAX; ind++) {
+		if (indicators[ind].IsDynamic())
+			indicatorsDynamic++;
+		if (indicators[ind].OverridesTextFore())
+			indicatorsSetFore++;
 	}
 	maxAscent = 1;
 	maxDescent = 1;

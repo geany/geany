@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
@@ -24,6 +25,7 @@
 #include "Scintilla.h"
 
 #include "StringCopy.h"
+#include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -102,6 +104,8 @@ MarginView::MarginView() {
 	pixmapSelMargin = 0;
 	pixmapSelPattern = 0;
 	pixmapSelPatternOffset1 = 0;
+	wrapMarkerPaddingRight = 3;
+	customDrawWrapMarker = NULL;
 }
 
 void MarginView::DropGraphics(bool freeObjects) {
@@ -260,8 +264,10 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 				PLATFORM_ASSERT(visibleLine < model.cs.LinesDisplayed());
 				const int lineDoc = model.cs.DocFromDisplay(visibleLine);
 				PLATFORM_ASSERT(model.cs.GetVisible(lineDoc));
-				const bool firstSubLine = visibleLine == model.cs.DisplayFromDoc(lineDoc);
-				const bool lastSubLine = visibleLine == model.cs.DisplayLastFromDoc(lineDoc);
+				const int firstVisibleLine = model.cs.DisplayFromDoc(lineDoc);
+				const int lastVisibleLine = model.cs.DisplayLastFromDoc(lineDoc);
+				const bool firstSubLine = visibleLine == firstVisibleLine;
+				const bool lastSubLine = visibleLine == lastVisibleLine;
 
 				int marks = model.pdoc->GetMark(lineDoc);
 				if (!firstSubLine)
@@ -391,14 +397,18 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 							rcNumber.top + vs.maxAscent, number, static_cast<int>(strlen(number)), drawAll);
 					} else if (vs.wrapVisualFlags & SC_WRAPVISUALFLAG_MARGIN) {
 						PRectangle rcWrapMarker = rcMarker;
-						rcWrapMarker.right -= 3;
+						rcWrapMarker.right -= wrapMarkerPaddingRight;
 						rcWrapMarker.left = rcWrapMarker.right - vs.styles[STYLE_LINENUMBER].aveCharWidth;
-						DrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						if (customDrawWrapMarker == NULL) {
+							DrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						} else {
+							customDrawWrapMarker(surface, rcWrapMarker, false, vs.styles[STYLE_LINENUMBER].fore);
+						}
 					}
 				} else if (vs.ms[margin].style == SC_MARGIN_TEXT || vs.ms[margin].style == SC_MARGIN_RTEXT) {
-					if (firstSubLine) {
-						const StyledText stMargin = model.pdoc->MarginStyledText(lineDoc);
-						if (stMargin.text && ValidStyledText(vs, vs.marginStyleOffset, stMargin)) {
+					const StyledText stMargin = model.pdoc->MarginStyledText(lineDoc);
+					if (stMargin.text && ValidStyledText(vs, vs.marginStyleOffset, stMargin)) {
+						if (firstSubLine) {
 							surface->FillRectangle(rcMarker,
 								vs.styles[stMargin.StyleAt(0) + vs.marginStyleOffset].back);
 							if (vs.ms[margin].style == SC_MARGIN_RTEXT) {
@@ -407,6 +417,12 @@ void MarginView::PaintMargin(Surface *surface, int topLine, PRectangle rc, PRect
 							}
 							DrawStyledText(surface, vs, vs.marginStyleOffset, rcMarker,
 								stMargin, 0, stMargin.length, drawAll);
+						} else {
+							// if we're displaying annotation lines, color the margin to match the associated document line
+							const int annotationLines = model.pdoc->AnnotationLines(lineDoc);
+							if (annotationLines && (visibleLine > lastVisibleLine - annotationLines)) {
+								surface->FillRectangle(rcMarker, vs.styles[stMargin.StyleAt(0) + vs.marginStyleOffset].back);
+							}
 						}
 					}
 				}

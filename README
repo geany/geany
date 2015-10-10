@@ -8,8 +8,8 @@ Geany is a small and lightweight integrated development environment.
 It was developed to provide a small and fast IDE, which has only a
 few dependencies from other packages. Another goal was to be as independent
 as possible from a special Desktop Environment like KDE or GNOME. So it
-is using only the GTK2 toolkit and therefore you need only the
-GTK2 runtime libraries to run Geany.
+is using only the GTK+ toolkit and therefore you need only the
+GTK+ runtime libraries to run Geany.
 
 
 Features
@@ -28,8 +28,8 @@ The basic features of Geany are:
 
 Requirements
 ------------
-For compiling Geany yourself, you will need the GTK (>= 2.16.0)
-libraries and header files. You will also need its dependency libraries
+For compiling Geany yourself, you will need the GTK2 (>= 2.24) or
+GTK3 libraries and header files. You will also need its dependency libraries
 and header files, such as Pango, Glib and ATK. All these files are
 available at http://www.gtk.org.
 
@@ -63,7 +63,7 @@ $ geany
 on a console or use the applications menu from your desktop environment.
 There a few command line options. See the manual page of Geany or run
 $ geany --help
-for details. Or look into the documention in the doc/ directory.
+for details. Or look into the documentation in the doc/ directory.
 The most important option probably is -c or --config, where you can
 specify an alternate configuration directory.
 
@@ -102,7 +102,7 @@ file.
 
 
 --
-2005-2014 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
+2005-2015 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
 enrico(dot)troeger(at)uvena(dot)de
 nick(dot)treleaven(at)btinternet(dot)com
 lists(dot)ban(at)herbesfolles(dot)org

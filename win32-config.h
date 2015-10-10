@@ -311,10 +311,9 @@
 /* #undef volatile */
 
 /* Version number of package */
-#define VERSION "1.25"
+#define VERSION "1.26"
 
 #define REVISION "-1"
 
 /* Define if you want to detect a running instance */
 #define HAVE_SOCKET 1
-

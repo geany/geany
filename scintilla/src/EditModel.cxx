@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
@@ -24,6 +25,7 @@
 #include "Scintilla.h"
 
 #include "StringCopy.h"
+#include "Position.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -61,8 +63,10 @@ EditModel::EditModel() {
 	bracesMatchStyle = STYLE_BRACEBAD;
 	highlightGuideColumn = 0;
 	primarySelection = true;
+	imeInteraction = imeWindowed;
 	foldFlags = 0;
 	hotspot = Range(invalidPosition);
+	hoverIndicatorPos = invalidPosition;
 	wrapWidth = LineLayout::wrapWidthInfinite;
 	pdoc = new Document();
 	pdoc->AddRef();

@@ -36,10 +36,6 @@ typedef gconstpointer StashWidgetID;
 
 StashGroup *stash_group_new(const gchar *name);
 
-void stash_group_set_various(StashGroup *group, gboolean write_once);
-
-void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults);
-
 void stash_group_add_boolean(StashGroup *group, gboolean *setting,
 		const gchar *key_name, gboolean default_value);
 
@@ -56,15 +52,12 @@ void stash_group_load_from_key_file(StashGroup *group, GKeyFile *keyfile);
 
 void stash_group_save_to_key_file(StashGroup *group, GKeyFile *keyfile);
 
+void stash_group_free(StashGroup *group);
+
 gboolean stash_group_load_from_file(StashGroup *group, const gchar *filename);
 
 gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 		GKeyFileFlags flags);
-
-void stash_group_free_settings(StashGroup *group);
-
-void stash_group_free(StashGroup *group);
-
 
 /* *** GTK-related functions *** */
 
@@ -95,11 +88,24 @@ void stash_group_display(StashGroup *group, GtkWidget *owner);
 
 void stash_group_update(StashGroup *group, GtkWidget *owner);
 
+void stash_group_free_settings(StashGroup *group);
+
+
+#ifdef GEANY_PRIVATE
+
+void stash_group_set_various(StashGroup *group, gboolean write_once);
+
+void stash_group_set_use_defaults(StashGroup *group, gboolean use_defaults);
+
+/* *** GTK-related functions *** */
+
 void stash_tree_setup(GPtrArray *group_array, GtkTreeView *tree);
 
 void stash_tree_display(GtkTreeView *tree);
 
 void stash_tree_update(GtkTreeView *tree);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

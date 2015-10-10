@@ -178,7 +178,7 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 			gchar *str;
 
 			dialog = gtk_dialog_new_with_buttons(_("Grab Key"), GTK_WINDOW(ui_widgets.prefs_dialog),
-					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_NO_SEPARATOR,
+					GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 
@@ -1414,7 +1414,7 @@ static gboolean kb_grab_key_dialog_key_press_cb(GtkWidget *dialog, GdkEventKey *
 
 	g_return_val_if_fail(GTK_IS_LABEL(label), FALSE);
 
-	state = event->state & gtk_accelerator_get_default_mod_mask();
+	state = keybindings_get_modifiers(event->state);
 
 	if (event->keyval == GDK_Escape)
 		return FALSE;	/* close the dialog, don't allow escape when detecting keybindings. */

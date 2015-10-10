@@ -91,23 +91,41 @@ static const char *get_class_name_from_parent (const char *parent)
  * - http://www.python.org/dev/peps/pep-0008/#method-names-and-instance-variables
  * - http://www.python.org/dev/peps/pep-0008/#designing-for-inheritance
  */
-static pythonAccess accessFromIdentifier (const vString *const ident)
+static pythonAccess accessFromIdentifier (const vString *const ident,
+	pythonKind kind, boolean has_parent, boolean parent_is_class)
 {
 	const char *const p = vStringValue (ident);
 	const size_t len = vStringLength (ident);
 
+	/* inside a function/method, private */
+	if (has_parent && !parent_is_class)
+		return A_PRIVATE;
 	/* not starting with "_", public */
-	if (len < 1 || p[0] != '_')
+	else if (len < 1 || p[0] != '_')
 		return A_PUBLIC;
 	/* "__...__": magic methods */
-	else if (len > 3 && p[1] == '_' && p[len - 2] == '_' && p[len - 1] == '_')
+	else if (kind == K_METHOD && parent_is_class &&
+			 len > 3 && p[1] == '_' && p[len - 2] == '_' && p[len - 1] == '_')
 		return A_PUBLIC;
 	/* "__...": name mangling */
-	else if (len > 1 && p[1] == '_')
+	else if (parent_is_class && len > 1 && p[1] == '_')
 		return A_PRIVATE;
 	/* "_...": suggested as non-public, but easily accessible */
 	else
 		return A_PROTECTED;
+}
+
+static void addAccessFields (tagEntryInfo *const entry,
+	const vString *const ident, pythonKind kind,
+	boolean has_parent, boolean parent_is_class)
+{
+	pythonAccess access;
+
+	access = accessFromIdentifier (ident, kind, has_parent, parent_is_class);
+	entry->extensionFields.access = PythonAccesses [access];
+	/* FIXME: should we really set isFileScope in addition to access? */
+	if (access == A_PRIVATE)
+		entry->isFileScope = TRUE;
 }
 
 /* Given a string with the contents of a line directly after the "def" keyword,
@@ -116,7 +134,6 @@ static pythonAccess accessFromIdentifier (const vString *const ident)
 static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
-	pythonAccess access;
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (function));
 
@@ -147,11 +164,8 @@ static void makeFunctionTag (vString *const function,
 		}
 	}
 
-	access = accessFromIdentifier (function);
-	tag.extensionFields.access = PythonAccesses [access];
-	/* FIXME: should we really set isFileScope in addition to access? */
-	if (access == A_PRIVATE)
-		tag.isFileScope = TRUE;
+	addAccessFields (&tag, function, is_class_parent ? K_METHOD : K_FUNCTION,
+		vStringLength (parent) > 0, is_class_parent);
 
 	makeTagEntry (&tag);
 }
@@ -180,10 +194,13 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 		}
 	}
 	tag.extensionFields.inheritance = vStringValue (inheritance);
+	addAccessFields (&tag, class, K_CLASS, vStringLength (parent) > 0,
+		is_class_parent);
 	makeTagEntry (&tag);
 }
 
-static void makeVariableTag (vString *const var, vString *const parent)
+static void makeVariableTag (vString *const var, vString *const parent,
+	boolean is_class_parent)
 {
 	tagEntryInfo tag;
 	initTagEntry (&tag, vStringValue (var));
@@ -194,6 +211,8 @@ static void makeVariableTag (vString *const var, vString *const parent)
 		tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
 		tag.extensionFields.scope [1] = vStringValue (parent);
 	}
+	addAccessFields (&tag, var, K_VARIABLE, vStringLength (parent) > 0,
+		is_class_parent);
 	makeTagEntry (&tag);
 }
 
@@ -220,25 +239,35 @@ static const char *skipEverything (const char *cp)
 	int match;
 	for (; *cp; cp++)
 	{
+		if (*cp == '#')
+			return strchr(cp, '\0');
+
 		match = 0;
-		if (*cp == '"' || *cp == '\'' || *cp == '#')
+		if (*cp == '"' || *cp == '\'')
 			match = 1;
 
 		/* these checks find unicode, binary (Python 3) and raw strings */
-		if (!match && (
-			!strncasecmp(cp, "u'", 2) || !strncasecmp(cp, "u\"", 2) ||
-			!strncasecmp(cp, "r'", 2) || !strncasecmp(cp, "r\"", 2) ||
-			!strncasecmp(cp, "b'", 2) || !strncasecmp(cp, "b\"", 2)))
+		if (!match)
 		{
-			match = 1;
-			cp += 1;
-		}
-		if (!match && (
-			!strncasecmp(cp, "ur'", 3) || !strncasecmp(cp, "ur\"", 3) ||
-			!strncasecmp(cp, "br'", 3) || !strncasecmp(cp, "br\"", 3)))
-		{
-			match = 1;
-			cp += 2;
+			boolean r_first = (*cp == 'r' || *cp == 'R');
+
+			/* "r" | "R" | "u" | "U" | "b" | "B" */
+			if (r_first || *cp == 'u' || *cp == 'U' ||  *cp == 'b' || *cp == 'B')
+			{
+				unsigned int i = 1;
+
+				/*  r_first -> "rb" | "rB" | "Rb" | "RB"
+				   !r_first -> "ur" | "UR" | "Ur" | "uR" | "br" | "Br" | "bR" | "BR" */
+				if (( r_first && (cp[i] == 'b' || cp[i] == 'B')) ||
+					(!r_first && (cp[i] == 'r' || cp[i] == 'R')))
+					i++;
+
+				if (cp[i] == '\'' || cp[i] == '"')
+				{
+					match = 1;
+					cp += i;
+				}
+			}
 		}
 		if (match)
 		{
@@ -247,6 +276,8 @@ static const char *skipEverything (const char *cp)
 		}
 		if (isIdentifierFirstCharacter ((int) *cp))
 			return cp;
+		if (match)
+			cp--; /* avoid jumping over the character after a skipped string */
 	}
 	return cp;
 }
@@ -442,10 +473,8 @@ static boolean constructParentString(NestingLevels *nls, int indent,
 	return is_class;
 }
 
-/* Check whether parent's indentation level is higher than the current level and
- * if so, remove it.
- */
-static void checkParent(NestingLevels *nls, int indent, vString *parent)
+/* Check indentation level and truncate nesting levels accordingly */
+static void checkIndent(NestingLevels *nls, int indent)
 {
 	int i;
 	NestingLevel *n;
@@ -453,14 +482,10 @@ static void checkParent(NestingLevels *nls, int indent, vString *parent)
 	for (i = 0; i < nls->n; i++)
 	{
 		n = nls->levels + i;
-		/* is there a better way to compare two vStrings? */
-		if (n && strcmp(vStringValue(parent), vStringValue(n->name)) == 0)
+		if (n && indent <= n->indentation)
 		{
-			if (indent <= n->indentation)
-			{
-				/* remove this level by clearing its name */
-				vStringClear(n->name);
-			}
+			/* truncate levels */
+			nls->n = i;
 			break;
 		}
 	}
@@ -517,6 +542,7 @@ static char const *find_triple_start(char const *string, char const **which)
 			}
 			cp = skipString(cp);
 			if (!*cp) break;
+			cp--; /* avoid jumping over the character after a skipped string */
 		}
 	}
 	return NULL;
@@ -603,9 +629,11 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 		while (*ptr && *ptr != '=' && *ptr != '(' && !isspace(*ptr)) {
 			/* skip over e.g. 'cpdef numpy.ndarray[dtype=double, ndim=1]' */
 			if(*ptr == '[') {
-				while(*ptr && *ptr != ']') ptr++;
+				while (*ptr && *ptr != ']') ptr++;
+				if (*ptr) ptr++;
+			} else {
+				ptr++;
 			}
-			ptr++;
 		}
 		if (!*ptr || *ptr == '=') return NULL;
 		if (*ptr == '(') {
@@ -725,7 +753,7 @@ static void findPythonTags (void)
 			continue;
 		}
 		
-		checkParent(nesting_levels, indent, parent);
+		checkIndent(nesting_levels, indent);
 
 		/* Find global and class variables */
 		variable = findVariable(line);
@@ -755,7 +783,7 @@ static void findPythonTags (void)
 			{
 				/* skip variables in methods */
 				if (parent_is_class || vStringLength(parent) == 0)
-					makeVariableTag (name, parent);
+					makeVariableTag (name, parent, parent_is_class);
 			}
 		}
 

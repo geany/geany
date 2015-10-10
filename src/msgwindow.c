@@ -66,6 +66,22 @@ ParseData;
 
 MessageWindow msgwindow;
 
+enum
+{
+	MSG_COL_LINE = 0,
+	MSG_COL_DOC_ID,
+	MSG_COL_COLOR,
+	MSG_COL_STRING,
+	MSG_COL_COUNT
+};
+
+enum
+{
+	COMPILER_COL_COLOR = 0,
+	COMPILER_COL_STRING,
+	COMPILER_COL_COUNT
+};
+
 
 static void prepare_msg_tree_view(void);
 static void prepare_status_tree_view(void);
@@ -88,6 +104,7 @@ void msgwin_show_hide_tabs(void)
 /** Sets the Messages path for opening any parsed filenames without absolute path
  * from message lines.
  * @param messages_dir The directory. **/
+GEANY_API_SYMBOL
 void msgwin_set_messages_dir(const gchar *messages_dir)
 {
 	g_free(msgwindow.messages_dir);
@@ -177,15 +194,15 @@ static void prepare_msg_tree_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	/* line, doc, fg, str */
-	msgwindow.store_msg = gtk_list_store_new(4, G_TYPE_INT, G_TYPE_POINTER,
+	/* line, doc id, fg, str */
+	msgwindow.store_msg = gtk_list_store_new(MSG_COL_COUNT, G_TYPE_INT, G_TYPE_UINT,
 		GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 	g_object_unref(msgwindow.store_msg);
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
-		"foreground-gdk", 2, "text", 3, NULL);
+		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_msg), FALSE);
@@ -216,12 +233,13 @@ static void prepare_compiler_tree_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	msgwindow.store_compiler = gtk_list_store_new(2, GDK_TYPE_COLOR, G_TYPE_STRING);
+	msgwindow.store_compiler = gtk_list_store_new(COMPILER_COL_COUNT, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
 	g_object_unref(msgwindow.store_compiler);
 
 	renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(NULL, renderer, "foreground-gdk", 0, "text", 1, NULL);
+	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
+		"foreground-gdk", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);
 
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(msgwindow.tree_compiler), FALSE);
@@ -269,6 +287,7 @@ static const GdkColor *get_color(gint msg_color)
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
+GEANY_API_SYMBOL
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 {
 	gchar *string;
@@ -295,7 +314,8 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 		utf8_msg = (gchar *) msg;
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
-	gtk_list_store_set(msgwindow.store_compiler, &iter, 0, color, 1, utf8_msg, -1);
+	gtk_list_store_set(msgwindow.store_compiler, &iter,
+		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
@@ -322,7 +342,7 @@ void msgwin_show_hide(gboolean show)
 		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")),
 		show);
 	ignore_callback = FALSE;
-	ui_widget_show_hide(ui_lookup_widget(main_widgets.window, "scrolledwindow1"), show);
+	ui_widget_show_hide(main_widgets.message_window_notebook, show);
 	/* set the input focus back to the editor */
 	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
@@ -341,6 +361,7 @@ void msgwin_show_hide(gboolean show)
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
 {
 	gchar *string;
@@ -382,7 +403,9 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 		utf8_msg = tmp;
 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
-	gtk_list_store_set(msgwindow.store_msg, &iter, 0, line, 1, doc, 2, color, 3, utf8_msg, -1);
+	gtk_list_store_set(msgwindow.store_msg, &iter,
+		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
+		color, MSG_COL_STRING, utf8_msg, -1);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -397,6 +420,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
  *  @param format @c printf()-style format string.
  *  @param ... Arguments for the @c format string.
  **/
+GEANY_API_SYMBOL
 void msgwin_status_add(const gchar *format, ...)
 {
 	GtkTreeIter iter;
@@ -447,7 +471,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 	GtkTreeSelection *selection;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gint str_idx = 1;
+	gint str_idx = COMPILER_COL_STRING;
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
@@ -462,7 +486,7 @@ on_compiler_treeview_copy_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 		case MSG_MESSAGE:
 		tv = msgwindow.tree_msg;
-		str_idx = 3;
+		str_idx = MSG_COL_STRING;
 		break;
 	}
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv));
@@ -487,7 +511,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 	GtkListStore *store = msgwindow.store_compiler;
 	GtkTreeIter iter;
 	GString *str = g_string_new("");
-	gint str_idx = 1;
+	gint str_idx = COMPILER_COL_STRING;
 	gboolean valid;
 
 	switch (GPOINTER_TO_INT(user_data))
@@ -503,7 +527,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 
 		case MSG_MESSAGE:
 		store = msgwindow.store_msg;
-		str_idx = 3;
+		str_idx = MSG_COL_STRING;
 		break;
 	}
 
@@ -613,7 +637,7 @@ find_prev_build_dir(GtkTreePath *cur, GtkTreeModel *model, gchar **prefix)
 		if (gtk_tree_model_get_iter(model, &iter, cur))
 		{
 			gchar *string;
-			gtk_tree_model_get(model, &iter, 1, &string, -1);
+			gtk_tree_model_get(model, &iter, COMPILER_COL_STRING, &string, -1);
 			if (string != NULL && build_parse_make_dir(string, prefix))
 			{
 				g_free(string);
@@ -699,7 +723,7 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		/* if the item is not coloured red, it's not an error line */
-		gtk_tree_model_get(model, &iter, 0, &color, -1);
+		gtk_tree_model_get(model, &iter, COMPILER_COL_COLOR, &color, -1);
 		if (color == NULL || ! gdk_color_equal(color, &color_error))
 		{
 			if (color != NULL)
@@ -708,7 +732,7 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 		}
 		gdk_color_free(color);
 
-		gtk_tree_model_get(model, &iter, 1, &string, -1);
+		gtk_tree_model_get(model, &iter, COMPILER_COL_STRING, &string, -1);
 		if (string != NULL)
 		{
 			gint line;
@@ -750,7 +774,7 @@ static void make_absolute(gchar **filename, const gchar *dir)
 }
 
 
-/* try to parse the file and line number where the error occured described in line
+/* try to parse the file and line number where the error occurred described in line
  * and when something useful is found, it stores the line number in *line and the
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
@@ -959,7 +983,7 @@ static void parse_compiler_error_line(const gchar *string,
 				data.file_idx = 1;
 				break;
 			}
-			/* don't accidently find libtool versions x:y:x and think it is a file name */
+			/* don't accidentally find libtool versions x:y:x and think it is a file name */
 			if (strstr(string, "libtool --mode=link") == NULL)
 			{
 				data.pattern = ":";
@@ -976,7 +1000,7 @@ static void parse_compiler_error_line(const gchar *string,
 }
 
 
-/* try to parse the file and line number where the error occured described in string
+/* try to parse the file and line number where the error occurred described in string
  * and when something useful is found, it stores the line number in *line and the
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
@@ -1069,17 +1093,28 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 	if (gtk_tree_selection_get_selected(selection, &model, &iter))
 	{
 		gint line;
+		guint id;
 		gchar *string;
 		GeanyDocument *doc;
 		GeanyDocument *old_doc = document_get_current();
 
-		gtk_tree_model_get(model, &iter, 0, &line, 1, &doc, 3, &string, -1);
-		/* doc may have been closed, so check doc->index: */
-		if (line >= 0 && DOC_VALID(doc))
+		gtk_tree_model_get(model, &iter,
+			MSG_COL_LINE, &line, MSG_COL_DOC_ID, &id, MSG_COL_STRING, &string, -1);
+		if (line >= 0 && id > 0)
 		{
-			ret = navqueue_goto_line(old_doc, doc, line);
-			if (ret && focus_editor)
-				gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+			/* check doc is still open */
+			doc = document_find_by_id(id);
+			if (!doc)
+			{
+				ui_set_statusbar(FALSE, _("The document has been closed."));
+				utils_beep();
+			}
+			else
+			{
+				ret = navqueue_goto_line(old_doc, doc, line);
+				if (ret && focus_editor)
+					gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
+			}
 		}
 		else if (line < 0 && string != NULL)
 		{
@@ -1168,6 +1203,7 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 void msgwin_switch_tab(gint tabnum, gboolean show)
 {
 	GtkWidget *widget = NULL;	/* widget to focus */
@@ -1202,6 +1238,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 void msgwin_clear_tab(gint tabnum)
 {
 	GtkListStore *store = NULL;

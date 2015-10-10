@@ -116,6 +116,14 @@ G_BEGIN_DECLS
 #define foreach_slist(node, list) \
 	foreach_list(node, list)
 
+/* Iterates all the nodes in @a list. Safe against removal during iteration
+ * @param node should be a (@c GList*).
+ * @param list @c GList to traverse. */
+#define foreach_list_safe(node, list) \
+	for (GList *_node = (list), *_next = (list) ? (list)->next : NULL; \
+	     (node = _node) != NULL; \
+	     _node = _next, _next = _next ? _next->next : NULL)
+
 /** Iterates through each unsorted filename in a @c GDir.
  * @param filename (@c const @c gchar*) locale-encoded filename, without path. Do not modify or free.
  * @param dir @c GDir created with @c g_dir_open(). Call @c g_dir_close() afterwards.
@@ -147,19 +155,76 @@ G_BEGIN_DECLS
 	for (i = 0; i < size; i++)
 
 
+gboolean utils_str_equal(const gchar *a, const gchar *b);
+
+guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
+
+GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
+
+GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
+
+gint utils_write_file(const gchar *filename, const gchar *text);
+
+gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
+
+gchar *utils_get_utf8_from_locale(const gchar *locale_text);
+
+gchar *utils_remove_ext_from_filename(const gchar *filename);
+
+gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
+
+gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
+
+gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
+
+gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
+
+gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
+						  gchar **std_err, gint *exit_status, GError **error);
+
+gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
+						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
+						   GError **error);
+
+gint utils_str_casecmp(const gchar *s1, const gchar *s2);
+
+gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
+
 void utils_open_browser(const gchar *uri);
+
+guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
+
+gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
+
+gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
+
+gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
+
+gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
+
+const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
+
+
+#ifdef GEANY_PRIVATE
+
+typedef enum
+{
+	RESOURCE_DIR_DATA,
+	RESOURCE_DIR_ICON,
+	RESOURCE_DIR_DOC,
+	RESOURCE_DIR_LOCALE,
+	RESOURCE_DIR_PLUGIN,
+
+	RESOURCE_DIR_COUNT
+} GeanyResourceDirType;
+
 
 gint utils_get_line_endings(const gchar* buffer, gsize size);
 
 gboolean utils_isbrace(gchar c, gboolean include_angles);
 
 gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
-
-gint utils_write_file(const gchar *filename, const gchar *text);
-
-gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
-
-const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
 gboolean utils_is_short_html_tag(const gchar *tag_name);
 
@@ -168,6 +233,8 @@ void utils_ensure_same_eol_characters(GString *string, gint target_eol_mode);
 const gchar *utils_get_eol_char(gint eol_mode);
 
 const gchar *utils_get_eol_name(gint eol_mode);
+
+const gchar *utils_get_eol_short_name(gint eol_mode);
 
 gboolean utils_atob(const gchar *str);
 
@@ -179,19 +246,11 @@ const gchar *utils_path_skip_root(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
-gboolean utils_str_equal(const gchar *a, const gchar *b);
-
-gchar *utils_remove_ext_from_filename(const gchar *filename);
-
 gchar utils_brace_opposite(gchar ch);
 
 gint utils_string_find(GString *haystack, gint start, gint end, const gchar *needle);
 
 gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace);
-
-guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace);
-
-guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace);
 
 guint utils_string_regex_replace_all(GString *haystack, GRegex *regex,
 		guint match_num, const gchar *replace, gboolean literal);
@@ -200,15 +259,7 @@ void utils_str_replace_all(gchar **haystack, const gchar *needle, const gchar *r
 
 gint utils_strpos(const gchar* haystack, const gchar *needle);
 
-gchar *utils_get_date_time(const gchar *format, time_t *time_to_use);
-
 gchar *utils_get_initials(const gchar *name);
-
-gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key, const gboolean default_value);
-
-gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key, const gint default_value);
-
-gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key, const gchar *default_value);
 
 gchar *utils_get_hex_from_color(GdkColor *color);
 
@@ -238,21 +289,11 @@ gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash);
 
 gboolean utils_wrap_string(gchar *string, gint wrapstart);
 
-gchar *utils_get_locale_from_utf8(const gchar *utf8_text);
-
-gchar *utils_get_utf8_from_locale(const gchar *locale_text);
-
 void utils_free_pointers(gsize arg_count, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_join(gchar **first, gchar **second) G_GNUC_WARN_UNUSED_RESULT;
-
-gint utils_mkdir(const gchar *path, gboolean create_parent_dirs);
-
-GSList *utils_get_file_list(const gchar *path, guint *length, GError **error);
-
-GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error);
 
 GSList *utils_get_config_files(const gchar *subdir);
 
@@ -263,31 +304,23 @@ gboolean utils_str_has_upper(const gchar *str);
 gint utils_is_file_writable(const gchar *locale_filename);
 
 
-gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
-						  gchar **std_err, gint *exit_status, GError **error);
-
-gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
-						   GError **error);
-
-gint utils_str_casecmp(const gchar *s1, const gchar *s2);
-
 gchar *utils_get_path_from_uri(const gchar *uri);
 
 gboolean utils_is_uri(const gchar *uri);
 
 gboolean utils_is_remote_path(const gchar *path);
 
-gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length);
-
-gchar *utils_str_remove_chars(gchar *string, const gchar *chars);
-
-gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...) G_GNUC_NULL_TERMINATED;
-
 GDate *utils_parse_date(const gchar *input);
 
 gchar *utils_parse_and_format_build_date(const gchar *input);
+
+gchar *utils_get_user_config_dir(void);
+
+const gchar *utils_resource_dir(GeanyResourceDirType type);
+
+void utils_start_new_geany_instance(const gchar *doc_path);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

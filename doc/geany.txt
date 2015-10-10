@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.25
+.. |(version)| replace:: 1.26
 .. -*- reStructuredText -*-
 
 =======
@@ -14,10 +14,10 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2014-04-16
+:Date: 2015-07-12
 :Version: |(version)|
 
-Copyright © 2005-2014
+Copyright © 2005-2015
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -41,7 +41,7 @@ Geany is a small and lightweight Integrated Development Environment. It
 was developed to provide a small and fast IDE, which has only a few
 dependencies on other packages. Another goal was to be as independent
 as possible from a particular Desktop Environment like KDE or GNOME -
-Geany only requires the GTK2 runtime libraries.
+Geany only requires the GTK+ runtime libraries.
 
 Some basic features of Geany:
 
@@ -103,7 +103,7 @@ Installation
 Requirements
 ------------
 
-You will need the GTK (>= 2.16.0) libraries and their dependencies
+You will need the GTK (>= 2.24) libraries and their dependencies
 (Pango, GLib and ATK). Your distro should provide packages for these,
 usually installed by default. For Windows, you can download an installer
 from the website which bundles these libraries.
@@ -120,7 +120,7 @@ Source compilation
 ------------------
 
 Compiling Geany is quite easy.
-To do so, you need the GTK (>= 2.16.0) libraries and header files.
+To do so, you need the GTK (>= 2.24) libraries and header files.
 You also need the Pango, GLib and ATK libraries and header files.
 All these files are available at http://www.gtk.org, but very often
 your distro will provide development packages to save the trouble of
@@ -450,7 +450,7 @@ using the appropriate command line option.
 Opening files from the command-line in a running instance
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Geany detects if there is an an instance of itself already running and opens files
+Geany detects if there is an instance of itself already running and opens files
 from the command-line in that instance. So, Geany can
 be used to view and edit files by opening them from other programs
 such as a file manager.
@@ -1973,6 +1973,12 @@ Show documents list
 Position
     Whether to place the sidebar on the left or right of the editor window.
 
+Message window
+``````````````
+
+Position
+    Whether to place the message window on the bottom or right of the editor window.
+
 Fonts
 `````
 
@@ -2489,17 +2495,17 @@ Initial version
     The initial version of files you will be creating.
 
 Year
-    Specify a format for the the {year} wildcard. You can use any conversion specifiers
+    Specify a format for the {year} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
 Date
-    Specify a format for the the {date} wildcard. You can use any conversion specifiers
+    Specify a format for the {date} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
 Date & Time
-    Specify a format for the the {datetime} wildcard. You can use any conversion specifiers
+    Specify a format for the {datetime} wildcard. You can use any conversion specifiers
     which can be used with the ANSI C strftime function.  For details please see
     http://man.cx/strftime.
 
@@ -2646,11 +2652,19 @@ use_gio_unsafe_file_saving        Whether to use GIO as the unsafe file        t
                                   correctly on some complex setups.
 gio_unsafe_save_backup            Make a backup when using GIO unsafe file     false       immediately
                                   saving. Backup is named `filename~`.
+keep_edit_history_on_reload_125   Whether to maintain the edit history when    false       immediately
+                                  reloading a file, and allow the operation
+                                  to be reverted.
 **Filetype related**
 extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.
 **Search related**
 find_selection_type               See `Find selection`_.                       0           immediately
+**Replace related**
+replace_and_find_by_default       Set ``Replace & Find`` button as default so  true        immediately
+                                  it will be activated when the Enter key is
+                                  pressed while one of the text fields has
+                                  focus.
 **Build Menu related**
 number_ft_menu_items              The maximum number of menu items in the      2           on restart
                                   filetype section of the Build menu.
@@ -2679,10 +2693,14 @@ Placeholder   Description
 ============  ===========================================================
   ``%l``      The current line number starting at 1
   ``%L``      The total number of lines
-  ``%c``      The current column number starting at 0
-  ``%C``      The current column number starting at 1
+  ``%c``      The current column number starting at 0, including virtual
+              space.
+  ``%C``      The current column number starting at 1, including virtual
+              space.
   ``%s``      The number of selected characters or if only whole lines
               selected, the number of selected lines.
+  ``%n``      The number of selected characters, even if only whole lines
+              are selected.
   ``%w``      Shows ``RO`` when the document is in read-only mode,
               otherwise shows whether the editor is in overtype (OVR)
               or insert (INS) mode.
@@ -2881,6 +2899,7 @@ the following items:
 
 * Compile
 * Build
+* Lint
 * Make All
 * Make Custom Target
 * Make Object
@@ -2920,6 +2939,20 @@ Interpreted languages do not use the Build command.
     commands is recommended; this will also make it easier for users to
     build your software.
 
+Lint
+````
+
+Source code linters are often used to find code that doesn't correspond to
+certain style guidelines: non-portable code, common or hard to find
+errors, code "smells", variables used before being set, unused functions,
+division by zero, constant conditions, etc. Linters inspect the code and
+issue warnings much like the compilers do. This is formally referred to as
+static code analysis.
+
+Some common linters are pre-configured for you in the Build menu (``pep8``
+for Python, ``cppcheck`` for C/C++, JSHint for JavaScript, ``xmllint`` for
+XML, ``hlint`` for Haskell, ``shellcheck`` for shell code, ...), but all
+these are standalone tools you need to obtain before using.
 
 Make
 ````
@@ -2989,8 +3022,9 @@ The Terminal field of the tools preferences tab requires a command to
 execute the terminal program and to pass it the name of the Geany run
 script that it should execute in a Bourne compatible shell (eg /bin/sh).
 The marker "%c" is substituted with the name of the Geany run script,
-which is created in the working directory set in the Build commands
-dialog, see `Build menu commands dialog`_ for details.
+which is created in the temporary directory and which changes the working
+directory to the directory set in the Build commands dialog, see
+`Build menu commands dialog`_ for details.
 
 As an example the default (Linux) command is::
 
@@ -3163,6 +3197,7 @@ before the command is run.
 * %e - substituted by the name of the current file without the extension or path.
 * %f - substituted by the name of the current file without the path.
 * %p - if a project is open, substituted by the base path from the project.
+* %l - substituted by the line number at the current cursor position.
 
 .. note::
    If the basepath set in the project preferences is not an absolute path , then it is
@@ -3176,7 +3211,7 @@ Build menu keyboard shortcuts
 `````````````````````````````
 
 Keyboard shortcuts can be defined for the first two filetype menu items, the first three
-independent menu items, the first two execute menu items and the fixed menu items.
+independent menu items, the first execute menu item and the fixed menu items.
 In the keybindings configuration dialog (see `Keybinding preferences`_)
 these items are identified by the default labels shown in the `Build Menu`_ section above.
 
@@ -3349,8 +3384,7 @@ Close all                       Ctrl-Shift-W              Closes all open files.
 
 Close                           Ctrl-W  (C)               Closes the current file.
 
-Reload file                     Ctrl-R  (C)               Reloads the current file. All unsaved changes
-                                                          will be lost.
+Reload file                     Ctrl-R  (C)               Reloads the current file.
 
 Print                           Ctrl-P  (C)               Prints the current file.
 
@@ -3393,9 +3427,6 @@ Complete word                   Ctrl-Space                Shows the autocompleti
 
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
                                                           method.
-
-Show macro list                 Ctrl-Return               Shows a list of available macros and variables in
-                                                          the workspace.
 
 Complete snippet                Tab                       If you type a construct like if or for and press
                                                           this key, it will be completed with a matching
@@ -3743,9 +3774,11 @@ Action                               Default shortcut     Description
 ==================================== ==================== ==================================================
 Clone                                                     See `Cloning documents`_.
 
-Replace tabs with space                                   Replaces all tabs with the right amount of spaces.
+Replace tabs with space                                   Replaces all tabs with the right amount of spaces
+                                                          in the whole document, or the current selection.
 
-Replace spaces with tabs                                  Replaces leading spaces with tab characters.
+Replace spaces with tabs                                  Replaces leading spaces with tab characters in the
+                                                          whole document, or the current selection.
 
 Toggle current fold                                       Toggles the folding state of the current code block.
 
@@ -4139,7 +4172,8 @@ wordchars
     *Example:* (look at system filetypes.\* files)
 
     .. note::
-        This overrides the *whitespace_chars* filetypes.common setting.
+        This overrides the *wordchars* filetypes.common setting, and
+        has precedence over the *whitespace_chars* setting.
 
 comment_single
     A character or string which is used to comment code. If you want to use
@@ -4620,6 +4654,15 @@ whitespace_chars
     This should include space (\\s) and tab (\\t).
 
     *Example:* ``whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~``
+
+wordchars
+    These characters define word boundaries when making selections
+    and searching using word matching options.
+
+    *Example:* ``wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789``
+
+    .. note::
+        This has precedence over the *whitespace_chars* setting.
 
 
 
@@ -5150,8 +5193,23 @@ you can configure the automatically added extension in the configure dialog
 in Geany's plugin manager.
 
 After the plugin was loaded in Geany's plugin manager, every file is
-copied into the configured backup directory when the file is saved in Geany.
+copied into the configured backup directory *after* the file has been saved
+in Geany.
 
+The created backup copy file permissions are set to read-write only for
+the user. This should help to not create world-readable files on possibly
+unsecure destination directories like /tmp (especially useful
+on multi-user systems).
+This applies only to non-Windows systems. On Windows, no explicit file
+permissions are set.
+
+
+Additionally, you can define how many levels of the original file's
+directory structure should be replicated in the backup copy path.
+For example, setting the option
+*Directory levels to include in the backup destination* to *2*
+cause the plugin to create the last two components of the original
+file's path in the backup copy path and place the new file there.
 
 
 Contributing to this document

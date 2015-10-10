@@ -38,6 +38,9 @@ typedef struct GeanyToolbarPrefs
 }
 GeanyToolbarPrefs;
 
+
+#ifdef GEANY_PRIVATE
+
 extern GeanyToolbarPrefs toolbar_prefs;
 
 
@@ -62,6 +65,8 @@ GtkWidget *toolbar_init(void);
 void toolbar_finalize(void);
 
 void toolbar_configure(GtkWindow *parent);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

@@ -227,6 +227,7 @@ typedef struct {
 } tokenInfo;
 
 static langType Lang_php;
+static langType Lang_zephir;
 
 static boolean InPhp = FALSE; /* whether we are between <? ?> */
 
@@ -237,17 +238,17 @@ static struct {
 } CurrentStatement;
 
 /* Current namespace */
-static vString *CurrentNamesapce;
+static vString *CurrentNamespace;
 
 
-static void buildPhpKeywordHash (void)
+static void buildPhpKeywordHash (const langType language)
 {
 	const size_t count = sizeof (PhpKeywordTable) / sizeof (PhpKeywordTable[0]);
 	size_t i;
 	for (i = 0; i < count ; i++)
 	{
 		const keywordDesc* const p = &PhpKeywordTable[i];
-		addKeyword (p->name, Lang_php, (int) p->id);
+		addKeyword (p->name, language, (int) p->id);
 	}
 }
 
@@ -288,9 +289,9 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 	else
 		vStringClear (fullScope);
 
-	if (vStringLength (CurrentNamesapce) > 0)
+	if (vStringLength (CurrentNamespace) > 0)
 	{
-		vStringCopy (fullScope, CurrentNamesapce);
+		vStringCopy (fullScope, CurrentNamespace);
 		parentKind = K_NAMESPACE;
 	}
 
@@ -370,7 +371,7 @@ static void makeClassOrIfaceTag (const phpKind kind, const tokenInfo *const toke
 static void makeFunctionTag (const tokenInfo *const token,
 							 const vString *const arglist,
 							 const accessType access, const implType impl)
-{ 
+{
 	if (PhpKinds[K_FUNCTION].enabled)
 	{
 		tagEntryInfo e;
@@ -686,7 +687,7 @@ static int skipWhitespaces (int c)
 }
 
 /* <script[:white:]+language[:white:]*=[:white:]*(php|'php'|"php")[:white:]*>
- * 
+ *
  * This is ugly, but the whole "<script language=php>" tag is and we can't
  * really do better without adding a lot of code only for this */
 static boolean isOpenScriptLanguagePhp (int c)
@@ -974,7 +975,7 @@ getNextChar:
 			else
 			{
 				parseIdentifier (token->string, c);
-				token->keyword = analyzeToken (token->string, Lang_php);
+				token->keyword = analyzeToken (token->string, getSourceLanguage ());
 				if (token->keyword == KEYWORD_NONE)
 					token->type = TOKEN_IDENTIFIER;
 				else
@@ -1180,6 +1181,17 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 		readToken (token); /* normally it's an open brace or "use" keyword */
 	}
 
+	/* if parsing Zephir, skip function return type hint */
+	if (getSourceLanguage () == Lang_zephir && token->type == TOKEN_OPERATOR)
+	{
+		do
+			readToken (token);
+		while (token->type != TOKEN_EOF &&
+			   token->type != TOKEN_OPEN_CURLY &&
+			   token->type != TOKEN_CLOSE_CURLY &&
+			   token->type != TOKEN_SEMICOLON);
+	}
+
 	/* skip use(...) */
 	if (token->type == TOKEN_KEYWORD && token->keyword == KEYWORD_use)
 	{
@@ -1340,7 +1352,7 @@ static boolean parseNamespace (tokenInfo *const token)
 {
 	tokenInfo *nsToken = newToken ();
 
-	vStringClear (CurrentNamesapce);
+	vStringClear (CurrentNamespace);
 	copyToken (nsToken, token, FALSE);
 
 	do
@@ -1348,18 +1360,18 @@ static boolean parseNamespace (tokenInfo *const token)
 		readToken (token);
 		if (token->type == TOKEN_IDENTIFIER)
 		{
-			if (vStringLength (CurrentNamesapce) > 0)
-				vStringPut (CurrentNamesapce, '\\');
-			vStringCat (CurrentNamesapce, token->string);
+			if (vStringLength (CurrentNamespace) > 0)
+				vStringPut (CurrentNamespace, '\\');
+			vStringCat (CurrentNamespace, token->string);
 		}
 	}
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_SEMICOLON &&
 		   token->type != TOKEN_OPEN_CURLY);
 
-	vStringTerminate (CurrentNamesapce);
-	if (vStringLength (CurrentNamesapce) > 0)
-		makeNamespacePhpTag (nsToken, CurrentNamesapce);
+	vStringTerminate (CurrentNamespace);
+	if (vStringLength (CurrentNamespace) > 0)
+		makeNamespacePhpTag (nsToken, CurrentNamespace);
 
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, NULL, -1);
@@ -1435,14 +1447,13 @@ static void enterScope (tokenInfo *const parentToken,
 	deleteToken (token);
 }
 
-static void findPhpTags (void)
+static void findTags (void)
 {
 	tokenInfo *const token = newToken ();
 
-	InPhp = FALSE;
 	CurrentStatement.access = ACCESS_UNDEFINED;
 	CurrentStatement.impl = IMPL_UNDEFINED;
-	CurrentNamesapce = vStringNew ();
+	CurrentNamespace = vStringNew ();
 
 	do
 	{
@@ -1450,14 +1461,32 @@ static void findPhpTags (void)
 	}
 	while (token->type != TOKEN_EOF); /* keep going even with unmatched braces */
 
-	vStringDelete (CurrentNamesapce);
+	vStringDelete (CurrentNamespace);
 	deleteToken (token);
 }
 
-static void initialize (const langType language)
+static void findPhpTags (void)
+{
+	InPhp = FALSE;
+	findTags ();
+}
+
+static void findZephirTags (void)
+{
+	InPhp = TRUE;
+	findTags ();
+}
+
+static void initializePhpParser (const langType language)
 {
 	Lang_php = language;
-	buildPhpKeywordHash ();
+	buildPhpKeywordHash (language);
+}
+
+static void initializeZephirParser (const langType language)
+{
+	Lang_zephir = language;
+	buildPhpKeywordHash (language);
 }
 
 extern parserDefinition* PhpParser (void)
@@ -1468,7 +1497,19 @@ extern parserDefinition* PhpParser (void)
 	def->kindCount  = KIND_COUNT (PhpKinds);
 	def->extensions = extensions;
 	def->parser     = findPhpTags;
-	def->initialize = initialize;
+	def->initialize = initializePhpParser;
+	return def;
+}
+
+extern parserDefinition* ZephirParser (void)
+{
+	static const char *const extensions [] = { "zep", NULL };
+	parserDefinition* def = parserNew ("Zephir");
+	def->kinds      = PhpKinds;
+	def->kindCount  = KIND_COUNT (PhpKinds);
+	def->extensions = extensions;
+	def->parser     = findZephirTags;
+	def->initialize = initializeZephirParser;
 	return def;
 }
 
