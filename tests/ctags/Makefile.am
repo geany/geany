@@ -226,6 +226,7 @@ test_sources = \
 	namespaces2.php					\
 	namespaces.php					\
 	no_terminator.js				\
+	non-ascii-ident1.php			\
 	numlib.f90						\
 	objectivec_implementation.mm	\
 	objectivec_interface.mm			\
