@@ -1572,12 +1572,12 @@ View menu
 The View menu allows various elements of the main window to be shown
 or hidden, and also provides various display-related editor options.
 
-Color schemes menu
-^^^^^^^^^^^^^^^^^^
-The Color schemes menu is available under the *View->Editor* submenu.
-It lists various color schemes for editor highlighting styles,
-including the default scheme first. Other items are available based
-on what color scheme files Geany found at startup.
+Color schemes dialog
+^^^^^^^^^^^^^^^^^^^^
+The Color Schemes dialog is available under the *View->Change Color Scheme*
+menu item. It lists various color schemes for editor highlighting
+styles, including the default scheme first. Other items are available
+based on what color scheme files Geany found at startup.
 
 Color scheme files are read from the `Configuration file paths`_ under
 the ``colorschemes`` subdirectory. They should have the extension
