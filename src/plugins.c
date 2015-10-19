@@ -2000,7 +2000,7 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 	foreach_list(node, active_proxies.head)
 	{
 		proxy = node->data;
-		g_return_if_fail(p != proxy->plugin);
+		g_return_val_if_fail(p != proxy->plugin, FALSE);
 	}
 
 	foreach_strv(ext, extensions)
