@@ -74,6 +74,23 @@
 # define DEFAULT_IO_LENGTH 2048
 #else
 # define DEFAULT_IO_LENGTH 4096
+
+/* helper function that cuts glib citing of the original text on bad quoting: it may be long,
+   and only the caller knows whether it's UTF-8. Thought we lose the ' or " failed info. */
+static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar ***argvp,
+	GError **error)
+{
+	GError *gerror = NULL;
+
+	if (g_shell_parse_argv(command_line, argcp, argvp, &gerror))
+		return TRUE;
+
+	g_set_error_literal(error, gerror->domain, gerror->code,
+		gerror->code == G_SHELL_ERROR_BAD_QUOTING ?
+		_("Text ended before matching quote was found") : gerror->message);
+	g_error_free(gerror);
+	return FALSE;
+}
 #endif
 
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
@@ -104,7 +121,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (!*command_line)
 	{
-		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
+		g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
 			/* TL note: from glib */
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
@@ -119,16 +136,14 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 		/* Windows allows "foo.exe, but we may have extra arguments */
 		if ((s = strchr(command_line, '"')) == NULL)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
-				/* TL note: from glib */
-				_("Text ended before matching quote was found for %c."
-				  " (The text was '%s')"), '"', command_line);
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+				_("Text ended before matching quote was found"));
 			return FALSE;
 		}
 
 		if (!strchr(" \t", s[1]))  /* strchr() catches s[1] == '\0' */
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 				_("A quoted Windows program name must be entirely inside the quotes"));
 			return FALSE;
 		}
@@ -142,7 +157,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 		if (quote && quote < s)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 				_("A quoted Windows program name must be entirely inside the quotes"));
 			return FALSE;
 		}
@@ -165,10 +180,8 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (open_quote)
 	{
-		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
-			/* TL note: from glib */
-			_("Text ended before matching quote was found for %c."
-			  " (The text was '%s')"), '"', command_line);
+		g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			_("Text ended before matching quote was found"));
 		g_free(program);
 		return FALSE;
 	}
@@ -176,7 +189,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 	int argc;
 	char **argv;
 
-	if (!g_shell_parse_argv(command_line, &argc, &argv, error))
+	if (!spawn_parse_argv(command_line, &argc, &argv, error))
 		return FALSE;
 
 	/* empty string results in parse error, so argv[0] is not NULL */
@@ -237,8 +250,8 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
 
 		if (!executable)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_FAILED,  /* or SPAWN error? */
-				_("Program '%s' not found"), program);
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_FAILED,
+				_("Program not found"));
 			g_free(program);
 			return FALSE;
 		}
@@ -274,15 +287,14 @@ gboolean spawn_kill_process(GPid pid, GError **error)
 	{
 		gchar *message = g_win32_error_message(GetLastError());
 
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED,
-			_("TerminateProcess() failed: %s"), message);
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, message);
 		g_free(message);
 		return FALSE;
 	}
 #else
 	if (kill(pid, SIGTERM))
 	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", g_strerror(errno));
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, g_strerror(errno));
 		return FALSE;
 	}
 #endif
@@ -379,8 +391,12 @@ leave:
 		if (!message)
 			message = g_win32_error_message(GetLastError());
 
+	#ifdef SPAWN_TEST
 		failure = g_strdup_printf("%s() failed: %s", failed, message);
 		g_free(message);
+	#else
+		failure = message;
+	#endif
 	}
 
 	if (pipe_io)
@@ -546,7 +562,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 	if (failure)
 	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", failure);
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
 		g_free(failure);
 		return FALSE;
 	}
@@ -562,7 +578,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		int argc = 0;
 		char **cl_argv;
 
-		if (!g_shell_parse_argv(command_line, &cl_argc, &cl_argv, error))
+		if (!spawn_parse_argv(command_line, &cl_argc, &cl_argv, error))
 			return FALSE;
 
 		if (argv)
