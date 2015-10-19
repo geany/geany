@@ -572,6 +572,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	int cl_argc;
 	char **full_argv;
 	gboolean spawned;
+	GError *gerror = NULL;
 
 	if (command_line)
 	{
@@ -593,7 +594,83 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 	spawned = g_spawn_async_with_pipes(working_directory, full_argv, envp,
 		G_SPAWN_SEARCH_PATH | (child_pid ? G_SPAWN_DO_NOT_REAP_CHILD : 0), NULL, NULL,
-		child_pid, stdin_fd, stdout_fd, stderr_fd, error);
+		child_pid, stdin_fd, stdout_fd, stderr_fd, &gerror);
+
+	if (!spawned)
+	{
+		gint en = 0;
+		const gchar *message = gerror->message;
+
+		/* try to cut glib citing of the program name or working directory: they may be long,
+		   and only the caller knows whether they're UTF-8. We lose the exact chdir error. */
+		switch (gerror->code)
+		{
+		#ifdef EACCES
+			case G_SPAWN_ERROR_ACCES : en = EACCES; break;
+		#endif
+		#ifdef EPERM
+			case G_SPAWN_ERROR_PERM : en = EPERM; break;
+		#endif
+		#ifdef E2BIG
+			case G_SPAWN_ERROR_TOO_BIG : en = E2BIG; break;
+		#endif
+		#ifdef ENOEXEC
+			case G_SPAWN_ERROR_NOEXEC : en = ENOEXEC; break;
+		#endif
+		#ifdef ENAMETOOLONG
+			case G_SPAWN_ERROR_NAMETOOLONG : en = ENAMETOOLONG; break;
+		#endif
+		#ifdef ENOENT
+			case G_SPAWN_ERROR_NOENT : en = ENOENT; break;
+		#endif
+		#ifdef ENOMEM
+			case G_SPAWN_ERROR_NOMEM : en = ENOMEM; break;
+		#endif
+		#ifdef ENOTDIR
+			case G_SPAWN_ERROR_NOTDIR : en = ENOTDIR; break;
+		#endif
+		#ifdef ELOOP
+			case G_SPAWN_ERROR_LOOP : en = ELOOP; break;
+		#endif
+		#ifdef ETXTBUSY
+			case G_SPAWN_ERROR_TXTBUSY : en = ETXTBUSY; break;
+		#endif
+		#ifdef EIO
+			case G_SPAWN_ERROR_IO : en = EIO; break;
+		#endif
+		#ifdef ENFILE
+			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
+		#endif
+		#ifdef EMFILE 
+			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
+		#endif
+		#ifdef EINVAL
+			case G_SPAWN_ERROR_INVAL : en = EINVAL; break;
+		#endif
+		#ifdef EISDIR
+			case G_SPAWN_ERROR_ISDIR : en = EISDIR; break;
+		#endif
+		#ifdef ELIBBAD
+			case G_SPAWN_ERROR_LIBBAD : en = ELIBBAD; break;
+		#endif
+			case G_SPAWN_ERROR_CHDIR :
+			{
+				message = _("Failed to change to the working directory");
+				break;
+			}
+			case G_SPAWN_ERROR_FAILED :
+			{
+				message = _("Unknown error executing child process");
+				break;
+			}
+		}
+
+		if (en)
+			message = g_strerror(en);
+
+		g_set_error_literal(error, gerror->domain, gerror->code, message);
+		g_error_free(gerror);
+	}
 
 	if (full_argv != argv)
 	{
