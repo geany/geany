@@ -612,8 +612,9 @@ static void print_external(GeanyDocument *doc)
 	#endif
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("Printing of \"%s\" failed (return code: %s)."),
-				doc->file_name, error->message);
+				_("Cannot execute print command \"%s\": %s. "
+				"Check the path setting in Preferences."),
+				printing_prefs.external_print_cmd, error->message);
 			g_error_free(error);
 		}
 		else
