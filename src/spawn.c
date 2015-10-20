@@ -334,7 +334,7 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 			if (!CreatePipe(&hpipe[pindex[i][0]], &hpipe[pindex[i][1]], NULL, 0))
 			{
 				hpipe[pindex[i][0]] = hpipe[pindex[i][1]] = NULL;
-				failed = "CreatePipe";
+				failed = "create pipe";
 				goto leave;
 			}
 
@@ -344,21 +344,21 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 
 				if ((*fd[i] = _open_osfhandle((intptr_t) hpipe[i], mode[i])) == -1)
 				{
-					failed = "_open_osfhandle";
+					failed = "convert pipe handle to file descriptor";
 					message = g_strdup(g_strerror(errno));
 					goto leave;
 				}
 			}
 			else if (!CloseHandle(hpipe[i]))
 			{
-				failed = "CloseHandle";
+				failed = "close pipe";
 				goto leave;
 			}
 
 			if (!SetHandleInformation(hpipe[i + 3], HANDLE_FLAG_INHERIT,
 				HANDLE_FLAG_INHERIT))
 			{
-				failed = "SetHandleInformation";
+				failed = "set pipe handle to inheritable";
 				goto leave;
 			}
 		}
@@ -371,7 +371,7 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
 		environment, working_directory, &startup, &process))
 	{
-		failed = "CreateProcess";
+		failed = "";  /* report the message only */
 		/* further errors will not be reported */
 	}
 	else
@@ -389,14 +389,24 @@ leave:
 	if (failed)
 	{
 		if (!message)
-			message = g_win32_error_message(GetLastError());
+		{
+			size_t len;
 
-	#ifdef SPAWN_TEST
-		failure = g_strdup_printf("%s() failed: %s", failed, message);
-		g_free(message);
-	#else
-		failure = message;
-	#endif
+			message = g_win32_error_message(GetLastError());
+			len = strlen(message);
+
+			/* unlike g_strerror(), the g_win32_error messages may include a final '.' */
+			if (len > 0 && message[len - 1] == '.')
+				message[len - 1] = '\0';
+		}
+
+		if (*failed == '\0')
+			failure = message;
+		else
+		{
+			failure = g_strdup_printf("Failed to %s (%s)", failed, message);
+			g_free(message);
+		}
 	}
 
 	if (pipe_io)
