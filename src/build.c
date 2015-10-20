@@ -909,8 +909,8 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		else
 		{
-			geany_debug("spawn_async() failed: %s", error->message);
-			ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
+			ui_set_statusbar(TRUE, _("Cannot execute terminal command \"%s\": %s. "
+				"Check the path setting in Preferences."), tool_prefs.term_cmd, error->message);
 			g_error_free(error);
 			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
