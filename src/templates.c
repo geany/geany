@@ -617,7 +617,8 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 	}
 	else
 	{
-		g_warning("templates_replace_command: %s", error->message);
+		g_warning(_("Cannot execute template replacement command \"%s\": %s. "
+			"Check the path setting in template."), command, error->message);
 		g_error_free(error);
 	}
 
