@@ -45,7 +45,7 @@ import tempfile
 from waflib import Logs, Options, Scripting, Utils
 from waflib.Build import BuildContext
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import WafError
+from waflib.Errors import ConfigurationError, WafError
 from waflib.TaskGen import feature, before_method
 from waflib.Tools.compiler_c import c_compiler
 from waflib.Tools.compiler_cxx import cxx_compiler
@@ -188,6 +188,7 @@ def configure(conf):
     conf.check_waf_version(mini='1.6.1')
 
     conf.load('compiler_c')
+    _check_c99(conf)
     is_win32 = _target_is_win32(conf)
 
     visibility_hidden_supported = conf.check_cc(cflags=['-Werror', '-fvisibility=hidden'], mandatory=False)
@@ -410,7 +411,7 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
+            uselib                  = ['GTK', 'GLIB', 'GMODULE', 'C99'] + uselib_add,
             use                     = ['geany'],
             install_path            = instpath)
 
@@ -422,7 +423,7 @@ def build(bld):
         target          = 'ctags',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="CTags"',
-        uselib          = ['cshlib', 'GLIB', 'geanyexport'])
+        uselib          = ['cshlib', 'GLIB', 'geanyexport', 'C99'])
 
     # Tagmanager
     bld.objects(
@@ -432,7 +433,7 @@ def build(bld):
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = ['GEANY_PRIVATE', 'G_LOG_DOMAIN="Tagmanager"'],
-        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport', 'C99'])
 
     # MIO
     bld.objects(
@@ -486,7 +487,7 @@ def build(bld):
         name    = 'signallist.i',
         rule    = gen_signallist)
 
-    base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M']
+    base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M', 'C99']
 
     # libgeany
     bld.shlib(
@@ -914,3 +915,57 @@ def _uc_first(string, ctx):
     if _target_is_win32(ctx):
         return string.title()
     return string
+
+
+# Copied from Geany-Plugins
+def _check_c99(conf):
+    # FIXME: improve some checks?
+    # TODO: look at Autoconf's C99 checks?
+    fragment = '''
+    // single-line comments
+
+    #include <stdbool.h>
+
+    struct s { int a, b; };
+
+    // inlines
+    static inline void fun_inline(struct s param) {}
+
+    int main(void) {
+        _Bool b = false;
+
+        // variable declaration in for body
+        for (int i = 0; i < 2; i++);
+
+        // compound literals
+        fun_inline((struct s) { 1, 2 });
+
+        // mixed declarations and code
+        int mixed = 0;
+
+        // named initializers
+        struct s name_inited = {
+            .a = 42,
+            .b = 64
+        };
+
+        return (b || mixed || ! name_inited.a);
+    }
+    '''
+
+    exc = None
+    # list of flags is stolen from Autoconf 2.69
+    flags = ['', '-std=gnu99', '-std=c99', '-c99', '-AC99',
+             '-D_STDC_C99=', '-qlanglvl=extc99']
+    for flag in flags:
+        try:
+            desc = ['with flag %s' % flag, 'with no flags'][not flag]
+            conf.check_cc(fragment=fragment, uselib_store='C99', cflags=flag,
+                          msg="Checking for C99 support (%s)" % desc)
+            exc = None
+            break
+        except ConfigurationError as e:
+            exc = e
+    if exc:
+        raise exc
+    return True
