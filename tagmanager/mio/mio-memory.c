@@ -241,6 +241,7 @@ mem_puts (MIO          *mio,
   return rv;
 }
 
+G_GNUC_PRINTF (2, 0)
 static gint
 mem_vprintf (MIO         *mio,
              const gchar *format,
