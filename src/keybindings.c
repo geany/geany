@@ -2036,7 +2036,7 @@ static gboolean cb_func_goto_action(guint key_id)
 			sci_send_command(doc->editor->sci, SCI_LINEEND);
 			break;
 		case GEANY_KEYS_GOTO_LINESTARTVISUAL:
-			sci_send_command(doc->editor->sci, SCI_HOMEDISPLAY);
+			sci_send_command(doc->editor->sci, editor_prefs.smart_home_key ? SCI_VCHOMEDISPLAY : SCI_HOMEDISPLAY);
 			break;
 		case GEANY_KEYS_GOTO_LINEENDVISUAL:
 			sci_send_command(doc->editor->sci, SCI_LINEENDDISPLAY);
