@@ -1691,11 +1691,11 @@ void ListBoxX::SetFont(Font &scint_font) {
 			gtk_css_provider_load_from_data(GTK_CSS_PROVIDER(cssProvider),
 				ssFontSetting.str().c_str(), -1, NULL);
 		}
-		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), -1);
-		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), 1);
 #else
 		gtk_widget_modify_font(PWidget(list), PFont(scint_font)->pfd);
 #endif
+		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), -1);
+		gtk_cell_renderer_text_set_fixed_height_from_font(GTK_CELL_RENDERER_TEXT(renderer), 1);
 	}
 }
 
