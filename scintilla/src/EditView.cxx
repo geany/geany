@@ -711,12 +711,14 @@ int EditView::StartEndDisplayLine(Surface *surface, const EditModel &model, int 
 		int posInLine = pos - posLineStart;
 		if (posInLine <= ll->maxLineLength) {
 			for (int subLine = 0; subLine < ll->lines; subLine++) {
-				if ((posInLine >= ll->LineStart(subLine)) && (posInLine <= ll->LineStart(subLine + 1))) {
+				if ((posInLine >= ll->LineStart(subLine)) &&
+				    (posInLine <= ll->LineStart(subLine + 1)) &&
+				    (posInLine <= ll->numCharsBeforeEOL)) {
 					if (start) {
 						posRet = ll->LineStart(subLine) + posLineStart;
 					} else {
 						if (subLine == ll->lines - 1)
-							posRet = ll->LineStart(subLine + 1) + posLineStart;
+							posRet = ll->numCharsBeforeEOL + posLineStart;
 						else
 							posRet = ll->LineStart(subLine + 1) + posLineStart - 1;
 					}
