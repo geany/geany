@@ -40,8 +40,9 @@ GNU versions of these tools are recommended.
 
 Installation
 ------------
-Installing Geany is done by the following three commands:
-$ ./configure
+Installing Geany is done by the following commands:
+$ libtoolize
+$ ./autogen.sh
 $ make
 (as root)
 % make install
