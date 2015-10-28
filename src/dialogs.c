@@ -1354,7 +1354,7 @@ static gint show_prompt(GtkWidget *parent,
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
-	if (ret == GTK_RESPONSE_CANCEL)
+	if (ret == GTK_RESPONSE_CANCEL || ret == GTK_RESPONSE_DELETE_EVENT)
 		ret = response_2;
 	return ret;
 }
