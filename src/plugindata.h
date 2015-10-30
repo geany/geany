@@ -286,11 +286,12 @@ void plugin_cleanup(void);
  *  - geany_plugin_register_full() (and GEANY_PLUGIN_REGISTER_FULL())
  *
  * @param plugin The unique plugin handle to your plugin. You must set some fields here.
+ * @param module The GModule that corresponds to the plugin's loadable module.
  *
  * @since 1.26 (API 225)
  * @see @ref howto
  */
-void geany_load_module(GeanyPlugin *plugin);
+void geany_load_module(GeanyPlugin *plugin, GModule *module);
 
 #endif
 

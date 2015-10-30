@@ -328,7 +328,7 @@ static void hello_cleanup(GeanyPlugin *plugin, gpointer pdata)
 
 
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 	/* Step 1: Set metadata */
 	plugin->info->name = "HelloWorld";
@@ -357,7 +357,7 @@ as <c> extern "C" </c>, for example:
 
 @code
 
-extern "C" void geany_load_module(GeanyPlugin *plugin)
+extern "C" void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 }
 
@@ -507,7 +507,7 @@ static void hello_cleanup(GeanyPlugin *plugin, gpointer pdata)
 
 
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 	plugin->info->name = "HelloWorld";
 	plugin->info->description = "Just another tool to say hello world";
@@ -659,7 +659,7 @@ becomes
 
 @code
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 // ...
 	plugin->info->name = "HelloWorld";
@@ -716,7 +716,7 @@ static gboolean on_editor_notify_cb(GObject *object, GeanyEditor *editor,
 
 
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 // ...
 	plugin->funcs->callbacks = plugin_callbacks;
@@ -914,7 +914,7 @@ static void demoproxy_cleanup(GeanyPlugin *plugin, gpointer data)
 
 
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 	plugin->info->name = _("Demo Proxy");
 	plugin->info->description = _("Example Proxy.");

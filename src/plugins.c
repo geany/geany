@@ -593,7 +593,7 @@ plugin_load(Plugin *plugin)
 static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *fname, gpointer pdata)
 {
 	GModule *module;
-	void (*p_geany_load_module)(GeanyPlugin *);
+	void (*p_geany_load_module)(GeanyPlugin *, GModule *);
 
 	g_return_val_if_fail(g_module_supported(), NULL);
 	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
@@ -618,7 +618,7 @@ static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, 
 		 * The ABI and API checks are performed by geany_plugin_register() (i.e. by us).
 		 * We check the LOADED_OK flag separately to protect us against buggy plugins
 		 * who ignore the result of geany_plugin_register() and register anyway */
-		p_geany_load_module(subplugin);
+		p_geany_load_module(subplugin, module);
 	}
 	else
 	{
