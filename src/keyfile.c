@@ -234,7 +234,7 @@ static void init_pref_groups(void)
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
 		"use_gio_unsafe_file_saving", TRUE);
 	stash_group_add_boolean(group, &file_prefs.keep_edit_history_on_reload,
-		"keep_edit_history_on_reload_125", FALSE);
+		"keep_edit_history_on_reload", TRUE);
 	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
 		"show_keep_edit_history_on_reload_msg", TRUE);
 	/* for backwards-compatibility */
