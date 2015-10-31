@@ -1575,6 +1575,24 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 }
 
 
+static void on_keep_edit_history_on_reload_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
+{
+	if (response_id == GTK_RESPONSE_NO)
+	{
+		file_prefs.keep_edit_history_on_reload = FALSE;
+		document_reload_force(doc, doc->encoding);
+	}
+	else if (response_id == GTK_RESPONSE_CANCEL)
+	{
+		/* this condition cannot be reached via info bar buttons, but by our code
+		 * to replace this bar with a higher priority one */
+		file_prefs.show_keep_edit_history_on_reload_msg = TRUE;
+	}
+	doc->priv->info_bars[MSG_TYPE_POST_RELOAD] = NULL;
+	gtk_widget_destroy(bar);
+}
+
+
 /**
  *  Reloads the document with the specified file encoding.
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
@@ -1589,6 +1607,7 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
 	GeanyDocument *new_doc;
+	GtkWidget *bar;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -1599,6 +1618,21 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 	/* try to set the cursor to the position before reloading */
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly, doc->file_type, forced_enc);
+
+	if (file_prefs.keep_edit_history_on_reload && file_prefs.show_keep_edit_history_on_reload_msg)
+	{
+		bar = document_show_message(doc, GTK_MESSAGE_INFO,
+						on_keep_edit_history_on_reload_response,
+						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+						_("Discard history"), GTK_RESPONSE_NO,
+						NULL, 0, _("The buffer's previous state is stored in the history and "
+						"undoing restores it. You can disable this by discarding the history upon "
+						"reload. This message will not be displayed again but "
+						"Your choice can be changed in the various preferences."),
+						_("The file has been reloaded."));
+		doc->priv->info_bars[MSG_TYPE_POST_RELOAD] = bar;
+		file_prefs.show_keep_edit_history_on_reload_msg = FALSE;
+	}
 
 	return (new_doc != NULL);
 }
