@@ -29,6 +29,7 @@
 #include "gtkcompat.h"
 #include <string.h>
 
+#include <gdk/gdkkeysyms.h>
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
@@ -45,6 +46,7 @@ enum
 	KB_SPLIT_HORIZONTAL,
 	KB_SPLIT_VERTICAL,
 	KB_SPLIT_UNSPLIT,
+	KB_FOCUS_SPLIT_WINDOW,
 	KB_COUNT
 };
 
@@ -409,6 +411,14 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void switch_focus_to_split_window( void )
+{
+	GtkWidget *sci_widget = GTK_WIDGET(edit_window.sci);
+	if (!gtk_widget_has_focus(sci_widget))
+		gtk_widget_grab_focus(sci_widget);
+}
+
+
 static void kb_activate(guint key_id)
 {
 	switch (key_id)
@@ -424,6 +434,10 @@ static void kb_activate(guint key_id)
 		case KB_SPLIT_UNSPLIT:
 			if (plugin_state != STATE_UNSPLIT)
 				on_unsplit(NULL, NULL);
+			break;
+		case KB_FOCUS_SPLIT_WINDOW:
+			if (plugin_state != STATE_UNSPLIT)
+				switch_focus_to_split_window();
 			break;
 	}
 }
@@ -468,6 +482,8 @@ void plugin_init(GeanyData *data)
 		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+	keybindings_set_item(key_group, KB_FOCUS_SPLIT_WINDOW, kb_activate,
+		GDK_F3, 0, "focus_split_window", _("Switch to Split Window"), NULL);
 }
 
 
