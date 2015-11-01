@@ -2258,7 +2258,6 @@ msgid "Other:"
 msgstr "Andere:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -3973,7 +3972,7 @@ msgstr "Zum Dokument wechseln"
 
 #: ../src/notebook.c:451
 msgid "Open in New _Window"
-msgstr "Datei in neuem Fenster öffnen"
+msgstr "Datei in neuem _Fenster öffnen"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -4523,7 +4522,6 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (im Verzeichnis: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
