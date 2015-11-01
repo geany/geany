@@ -771,7 +771,6 @@ static void split_view(gboolean horizontal)
 
 	toolbar = create_toolbar();
 	gtk_widget_show_all(toolbar);
-	/* FIXME: notebook's action widgets is a 2.20 feature... */
 	gtk_notebook_set_action_widget(GTK_NOTEBOOK(edit_window.notebook), toolbar, GTK_PACK_END);
 	gtk_container_add(GTK_CONTAINER(pane), edit_window.notebook);
 
