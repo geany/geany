@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2009-05-31 13:56+0100\n"
 "Last-Translator: Laurent HOELTGEN <laurent.hoeltgen@googlemail.com>\n"
 "Language-Team: Letzebuergesch\n"
@@ -2421,7 +2421,7 @@ msgstr "Konnt d'Aarbechtsverzeechnis net an \"%s\" änneren"
 msgid "%s (in directory: %s)"
 msgstr "%s (am Ordner: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess feelgeschloen (%s)"
@@ -2441,6 +2441,15 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
+"Astellungen."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2628,6 +2637,23 @@ msgstr "Keng weider Meldungen."
 #, fuzzy, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Konnt den fichier %s (%s) net opmaachen"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
+"Astellungen."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Konnt dei agestallten extern Commande '%s' (%s) net ausféieren."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4225,11 +4251,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Den Fichier %s konnt net gedréckt gin (Code: %s)"
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
+"Astellungen."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Den Fichier %s gouf gedréckt"
@@ -4569,6 +4599,14 @@ msgstr "Am gaang ze sichen..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (am Ordner: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
+"Astellungen."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4603,33 +4641,32 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "\"%s\" konnt net fonnt ginn."
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Prozess feelgeschloen (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Konnt d'Aarbechtsverzeechnis net an \"%s\" änneren"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 #, fuzzy
@@ -5043,6 +5080,13 @@ msgstr "No _Optrieden sënneren"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr ""
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5222,10 +5266,14 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Déi benotzerdefinéiert Commande huet mat engem Feeler opgehaalen."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Benotzerdefinéiert Commande feelgeschloen: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
+"Astellungen."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -6053,6 +6101,16 @@ msgstr "Sa_itenleescht verstoppen"
 msgid "Top and Bottom"
 msgstr "Ënnen"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Den Fichier %s konnt net gedréckt gin (Code: %s)"
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Prozess feelgeschloen (%s)"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Benotzerdefinéiert Commande feelgeschloen: %s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -6091,12 +6149,6 @@ msgstr "Ënnen"
 #, fuzzy
 #~ msgid "Plugin:"
 #~ msgstr "Plugin"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Kann den Programm grep '%s' net ausféieren; kontrolléiert den Pad an den "
-#~ "Astellungen."
 
 #~ msgid ""
 #~ "Could not change the directory in the VTE because it probably contains a "

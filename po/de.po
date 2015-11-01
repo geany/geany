@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2361,7 +2361,7 @@ msgstr "Ausführung fehlgeschlagen. Kein Arbeitsverzeichnis gefunden."
 msgid "%s (in directory: %s)"
 msgstr "%s (im Verzeichnis: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prozess fehlgeschlagen (%s)"
@@ -2384,6 +2384,15 @@ msgid ""
 msgstr ""
 "Datei konnte nicht ausgeführt werden, da das Terminal nicht leer zu sein "
 "scheint. Es könnte helfen Strg+C oder Enter im Terminal zu drücken."
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Einstellungen überprüfen)."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2560,6 +2569,23 @@ msgstr "Keine weiteren Nachrichten."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Konnte Datei »%s« nicht öffnen (Datei nicht gefunden)."
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Einstellungen überprüfen)."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Kann angegebenen externen Befehl »%s« nicht ausführen (%s)."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2819,10 +2845,10 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
-"Der Status vor dem Neuladen wird in den Verlauf des Dokumentes "
-"geschrieben, so dass mit der »Rückgängig«-Funktion der alte "
-"Stand wieder hergestellt werden kann. Diese Funktion kann deaktiviert "
-"werden. Diese Nachricht wird nicht noch einmal angezeigt."
+"Der Status vor dem Neuladen wird in den Verlauf des Dokumentes geschrieben, "
+"so dass mit der »Rückgängig«-Funktion der alte Stand wieder hergestellt "
+"werden kann. Diese Funktion kann deaktiviert werden. Diese Nachricht wird "
+"nicht noch einmal angezeigt."
 
 #: ../src/document.c:1632
 msgid "The file has been reloaded."
@@ -3970,10 +3996,12 @@ msgstr "_Plugin-Verwaltung"
 #: ../src/plugins.c:1600
 msgid ""
 "\n"
-"<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n"
-msgstr "\n"
-"<i>Andere Plugins hängen von diesem ab. Bitte diese zuerst beenden um dieses Plugin zu deaktivieren.</i>"
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</"
+"i>\n"
+msgstr ""
 "\n"
+"<i>Andere Plugins hängen von diesem ab. Bitte diese zuerst beenden um dieses "
+"Plugin zu deaktivieren.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
@@ -4149,11 +4177,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Einstellungen überprüfen)."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Datei »%s« wurde gedruckt."
@@ -4497,6 +4529,14 @@ msgstr "Suchen..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (im Verzeichnis: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Einstellungen überprüfen)."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4534,36 +4574,36 @@ msgstr ""
 " Dies ist ein schwerwiegendes Problem, so dass Geany nun beendet werden "
 "muss. "
 
-#. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
-msgid "Text was empty (or contained only whitespace)"
-msgstr "Text war leer (oder hat nur Leerzeichen enthalten)"
-
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+#, fuzzy
+msgid "Text ended before matching quote was found"
 msgstr ""
 "Text hörte vor dem schließenden Zeichen für %c auf. (Der Text war »%s«)"
 
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#. TL note: from glib
+#: ../src/spawn.c:126
+msgid "Text was empty (or contained only whitespace)"
+msgstr "Text war leer (oder hat nur Leerzeichen enthalten)"
+
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Ein Windows-Programm-Name in Anführungszeichen muss den kompletten Namen "
 "beinhalten."
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Programm »%s« nicht gefunden."
 
-#: ../src/spawn.c:278
-#, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "TerminateProcess() fehlgeschlagen: %s"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Ausführung fehlgeschlagen. Kein Arbeitsverzeichnis gefunden."
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4956,6 +4996,13 @@ msgstr "Nach _Auftreten sortieren"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Konnte die Vorlage »%s« nicht nach UTF-8 umwandeln."
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5130,10 +5177,14 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Das ausgeführte Kommando wurde mit einem Fehler beendet."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Benutzerdefiniertes Kommando war nicht erfolgreich: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Einstellungen überprüfen)."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5930,6 +5981,15 @@ msgstr "Seite an Seite"
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
+
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "TerminateProcess() fehlgeschlagen: %s"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Benutzerdefiniertes Kommando war nicht erfolgreich: %s"
+
 #~ msgid ""
 #~ "Could not parse terminal command \"%s\" (check Terminal tool setting in "
 #~ "Preferences)"
@@ -5943,12 +6003,6 @@ msgstr "Oben und Unten"
 #~ msgstr ""
 #~ "Konnte das Terminalprogramm »%s« nicht finden (Pfad zum Terminalprogramm "
 #~ "in den Einstellungen überprüfen)"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
-#~ "Einstellungen überprüfen)."
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Konnte die zusätzlichen Optionen nicht analysieren: %s"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
@@ -2452,7 +2452,7 @@ msgstr "Помилка при спробі змінити робочу дире�
 msgid "%s (in directory: %s)"
 msgstr "%s (у теці: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Помилка процесу (%s)"
@@ -2472,6 +2472,14 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2665,6 +2673,22 @@ msgstr "Більше не залишилося повідомлень."
 #, fuzzy, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Файл %s (%s) відкрити неможливо"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr ""
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4293,11 +4317,14 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Друкування \"%s\" завершилося помилкою (повернутий код: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Файл %s надруковано."
@@ -4638,6 +4665,13 @@ msgstr "_Пошук"
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (у теці: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4671,33 +4705,32 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "\"%s\" не знайдено."
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Помилка процесу (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Помилка при спробі змінити робочу директорію на \"%s\""
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 #, fuzzy
@@ -5113,6 +5146,13 @@ msgstr "Сортувати за _створенням"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr ""
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5295,10 +5335,13 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
 
-#: ../src/tools.c:243
+#: ../src/tools.c:242
 #, fuzzy, c-format
-msgid "Custom command failed: %s"
-msgstr "Не встановлено жодної власної команди."
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -6131,6 +6174,17 @@ msgstr "Прибрати _бокову панель"
 msgid "Top and Bottom"
 msgstr "Низовина"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Друкування \"%s\" завершилося помилкою (повернутий код: %s)."
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Помилка процесу (%s)"
+
+#, fuzzy
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Не встановлено жодної власної команди."
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -6168,12 +6222,6 @@ msgstr "Низовина"
 #, fuzzy
 #~ msgid "Plugin:"
 #~ msgstr "Додаток"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Неможливо виконати інструмент виділення '%s'; перевірте шлях у "
-#~ "налаштуваннях."
 
 #~ msgid ""
 #~ "Could not change the directory in the VTE because it probably contains a "

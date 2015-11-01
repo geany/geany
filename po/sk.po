@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2014-02-12 15:46+0100\n"
 "Last-Translator: Tomáš Havlas <tomas.havlas@raven-systems.eu>\n"
 "Language-Team: Slovak\n"
@@ -2295,7 +2295,7 @@ msgstr "Proces zlyhal, chýba pracovný priečinok"
 msgid "%s (in directory: %s)"
 msgstr "%s (v priečinku: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Proces zlyhal (%s)"
@@ -2316,6 +2316,15 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
+"Nastaveniach."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2493,6 +2502,23 @@ msgstr "Žiadne ďalšie správy."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Nie je možné otvoriť súbor %s (Súbor nebol nájdený)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
+"Nastaveniach."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Nie je možné spustiť nastavený externý príkaz '%s' (%s)."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4054,11 +4080,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Tlač \"%s\" zlyhala (návratová hodnota: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
+"Nastaveniach."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Súbor %s bol vytlačený."
@@ -4396,6 +4426,14 @@ msgstr "Vyhľadávanie ..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (v priečinku: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
+"Nastaveniach."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4433,33 +4471,32 @@ msgstr ""
 "používateľom.\n"
 "Jedná sa o fatálnu chybu a Geany bude ukončený."
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Príkaz nebol nájdený"
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Proces zlyhal (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Proces zlyhal, chýba pracovný priečinok"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4855,6 +4892,13 @@ msgstr "Zoradiť podľa _výskytu"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Pri prevode šablóny \"%s\" na UTF-8 nastala chyba"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5026,10 +5070,14 @@ msgstr "Vykonaný príkaz vrátil chybu. Výber nebol upravený. Chybová správ
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Spustený príkaz skončil neúspešne."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Vlastný príkaz zlyhal: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
+"Nastaveniach."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5827,6 +5875,16 @@ msgstr "Vedľa seba"
 msgid "Top and Bottom"
 msgstr "Nad sebou"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Tlač \"%s\" zlyhala (návratová hodnota: %s)."
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Proces zlyhal (%s)"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Vlastný príkaz zlyhal: %s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -5868,12 +5926,6 @@ msgstr "Nad sebou"
 
 #~ msgid "Author(s):"
 #~ msgstr "Autor:"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Nie je možné spustiť nástroj grep '%s'; skontrolujte cestu uvedenú v "
-#~ "Nastaveniach."
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Nie je možné spracovať parametre: %s"

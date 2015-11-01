@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Драган Брозовић <chajbo@ro.ro>\n"
 "Language-Team: \n"
@@ -2236,7 +2236,7 @@ msgstr "Процес није успео, нема радне фасцикле"
 msgid "%s (in directory: %s)"
 msgstr "%s·(у директоријуму:·%s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Процес није успео (%s)"
@@ -2256,6 +2256,15 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
+"Подешавањима)"
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2429,6 +2438,23 @@ msgstr "Нема више порука."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Не могу отворити фајл %s (Фајл не постоји)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
+"Подешавањима)"
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Није могуће извршити кофигурисану спољну команду '%s' (%s)."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -3975,11 +4001,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Штампање \"%s\" није успело (повратни код: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
+"Подешавањима)"
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Фајл %s је одштампан."
@@ -4316,6 +4346,14 @@ msgstr "Претраживање..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s·%s·--·%s·(у фасцикли:·%s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
+"Подешавањима)"
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4350,33 +4388,32 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Команда не постоји"
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Процес није успео (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Процес није успео, нема радне фасцикле"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4777,6 +4814,13 @@ msgstr "Сортирај по _изгледу"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Неуспела конверзија шаблона \"%s\" у UTF-8"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -4946,10 +4990,14 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr ""
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Неуспела прилагођена команда: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
+"Подешавањима)"
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5741,6 +5789,16 @@ msgstr "Упоредо"
 msgid "Top and Bottom"
 msgstr "Врх и дно"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Штампање \"%s\" није успело (повратни код: %s)."
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Процес није успео (%s)"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Неуспела прилагођена команда: %s"
+
 #, fuzzy
 #~ msgid ""
 #~ "Could not parse terminal command \"%s\" (check Terminal tool setting in "
@@ -5752,13 +5810,6 @@ msgstr "Врх и дно"
 #~ msgid ""
 #~ "Could not find terminal \"%s\" (check path for Terminal tool setting in "
 #~ "Preferences)"
-#~ msgstr ""
-#~ "Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
-#~ "Подешавањима)"
-
-#, fuzzy
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
 #~ msgstr ""
 #~ "Није могуће наћи терминал \"%s\" (проверите путању за терминал у "
 #~ "Подешавањима)"

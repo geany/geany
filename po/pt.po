@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2015-10-19 13:41+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
 "Language-Team: Português <palbuquerque73@openmailbox.com>\n"
@@ -2338,7 +2338,7 @@ msgstr "Processo falhou, sem pasta de trabalho"
 msgid "%s (in directory: %s)"
 msgstr "%s (na pasta: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Erro no processo (%s)"
@@ -2361,6 +2361,15 @@ msgid ""
 msgstr ""
 "Ficheiro não executado porque o terminal pode conter dados inseridos (prima "
 "Ctrl+C ou Enter para o limpar)."
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
+"Preferências."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2534,6 +2543,23 @@ msgstr "Sem mais mensagens."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Impossível abrir o ficheiro %s (ficheiro não encontrado)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
+"Preferências."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Impossível executar o comando externo personalizado '%s' (%s). "
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4098,11 +4124,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "A impressão de \"%s\" falhou (código devolvido: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
+"Preferências."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "O ficheiro %s foi imprimido."
@@ -4445,6 +4475,14 @@ msgstr "A procurar..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (na pasta: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
+"Preferências."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4481,36 +4519,36 @@ msgstr ""
 "executada por outro utilizador.\n"
 "Isto originou um erro fatal e o Geany será agora encerrado."
 
-#. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
-msgid "Text was empty (or contained only whitespace)"
-msgstr "O texto estava vazio (ou só continha espaços)"
-
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+#, fuzzy
+msgid "Text ended before matching quote was found"
 msgstr ""
 "O texto terminou antes da aspa correspondente a %c ser encontrada (o texto "
 "era \"%s\")."
 
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#. TL note: from glib
+#: ../src/spawn.c:126
+msgid "Text was empty (or contained only whitespace)"
+msgstr "O texto estava vazio (ou só continha espaços)"
+
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Um nome citado de um programa Windows tem de estar inteiramente entre aspas"
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Programa \"%s\" não encontrado"
 
-#: ../src/spawn.c:278
-#, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Falha no TerminateProcess(): %s"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Processo falhou, sem pasta de trabalho"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4903,6 +4941,13 @@ msgstr "Ordenar por _Aparência"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Falha ao converter o modelo de ficheiro \"%s\" para UTF-8"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5078,10 +5123,14 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "O comando personalizado executado terminou com um código de insucesso."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Comando personalizado falhou: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
+"Preferências."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5881,6 +5930,15 @@ msgstr "Lado a lado"
 msgid "Top and Bottom"
 msgstr "Topo e base"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "A impressão de \"%s\" falhou (código devolvido: %s)."
+
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Falha no TerminateProcess(): %s"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Comando personalizado falhou: %s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -5901,12 +5959,6 @@ msgstr "Topo e base"
 #~ msgstr ""
 #~ "Impossível encontrar o terminal \"%s\" (verifique o caminho para o "
 #~ "terminal nas Preferências)"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Erro ao executar o comando grep '%s'; verifique a definição do caminho "
-#~ "nas Preferências."
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Incapaz de interpretar opões extra: %s"

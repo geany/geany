@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2013-01-31 18:18+0200\n"
 "Last-Translator: Markus Liukka <markus_DOT_liukka_AT_gmailDOT_com>\n"
 "Language-Team: Finnish\n"
@@ -2337,7 +2337,7 @@ msgstr "Prosessi epäonnistui, työkansiota ei ole"
 msgid "%s (in directory: %s)"
 msgstr "%s (kansiossa %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Prosessi epäonnistui (%s)"
@@ -2359,6 +2359,13 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2534,6 +2541,21 @@ msgstr "Ei muita viestejä."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Tiedoston %s avaaminen epäonnistui (Tiedostoa ei löytnyt)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Ulkoisen komennon \"%s\" suoritus epäonnistui (%s)"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4105,11 +4127,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Tiedoston \"%s\" tulostus epäonnistui (paluuarvo: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Tiedosto %s tulostettu."
@@ -4444,6 +4468,12 @@ msgstr "Etsitään..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (kansiossa: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4477,33 +4507,32 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Komentoa ei löytynyt"
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Prosessi epäonnistui (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Prosessi epäonnistui, työkansiota ei ole"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 #, fuzzy
@@ -4909,6 +4938,13 @@ msgstr "Järjestä _esiintymisen mukaan"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Tiedoston  \"%s\" kääntäminen  UTF-8-muotoon epäonnistui"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5084,10 +5120,12 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Mukautettu komennon palautusarvo kertoo sen epäonnistuneen."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Mukautettu komento epäonnistui: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5898,6 +5936,16 @@ msgstr "_Rinnakkain"
 msgid "Top and Bottom"
 msgstr "_Allekkain"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Tiedoston \"%s\" tulostus epäonnistui (paluuarvo: %s)."
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Prosessi epäonnistui (%s)"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Mukautettu komento epäonnistui: %s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -5944,10 +5992,6 @@ msgstr "_Allekkain"
 
 #~ msgid "Author(s):"
 #~ msgstr "Tekijä(t):"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr "Grep-komentoa \"%s\" ei voi suorittaa. Tarkista polku asetuksista."
 
 #~ msgid ""
 #~ "Could not change the directory in the VTE because it probably contains a "

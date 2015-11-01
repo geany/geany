@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2012-02-06 03:56+0800\n"
 "Last-Translator: BlueT - Matthew Lien - 練喆明 <BlueT@BlueT.org>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -2276,7 +2276,7 @@ msgstr "處理失敗，沒有工作目錄"
 msgid "%s (in directory: %s)"
 msgstr "%s (在此目錄中：%s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "處理失敗 (%s)"
@@ -2296,6 +2296,13 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2467,6 +2474,21 @@ msgstr "沒有更多訊息項目。"
 #, fuzzy, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "無法開啟檔案 %s (%s)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "無法執行已組配的外部命令「%s」(%s)。"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4012,11 +4034,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "列印「%s」時失敗 (回傳碼：%s)。"
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "檔案 %s 已列印。"
@@ -4349,6 +4373,12 @@ msgstr "搜尋中…"
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (於目錄：%s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4383,33 +4413,32 @@ msgstr ""
 "Geany 嘗試存取由其他使用者所執行另一個實體的 Unix 領域通訊端。\n"
 "這是個嚴重的錯誤，而 Geany 將會立即離開。"
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "找不到命令"
 
-#: ../src/spawn.c:278
-#, fuzzy, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "處理失敗 (%s)"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "處理失敗，沒有工作目錄"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 #, fuzzy
@@ -4812,6 +4841,13 @@ msgstr "依據出現排序(_A)"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "轉換模板檔案「%s」到 UTF-8 時失敗"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -4982,10 +5018,12 @@ msgstr "所執行的自訂命令回傳了一個錯誤。您的選取區域未被
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "所執行的自訂命令以失敗的結束代碼離開。"
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "自訂命令失敗：%s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5782,6 +5820,16 @@ msgstr "並排(_S)"
 msgid "Top and Bottom"
 msgstr "頂端和底部(_T)"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "列印「%s」時失敗 (回傳碼：%s)。"
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "處理失敗 (%s)"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "自訂命令失敗：%s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -5822,10 +5870,6 @@ msgstr "頂端和底部(_T)"
 
 #~ msgid "Author(s):"
 #~ msgstr "作者："
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr "無法執行 grep 工具 '%s'；檢查在偏好設定中的路徑設定。"
 
 #~ msgid ""
 #~ "Could not change the directory in the VTE because it probably contains a "

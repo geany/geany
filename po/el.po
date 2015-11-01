@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2015-10-30 12:52+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
@@ -2365,7 +2365,7 @@ msgstr "Η διαδικασία απέτυχε, δεν υπάρχει ο φάκ�
 msgid "%s (in directory: %s)"
 msgstr "%s (στο φάκελο: %s)"
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Η διαδικασία απέτυχε (%s)"
@@ -2389,6 +2389,15 @@ msgid ""
 msgstr ""
 "Το αρχείο δεν εκτελέστηκε λόγω του ότι το τερματικό μπορεί να έχει κάποια "
 "είσοδο (πατήστε τα πλήκτρα Ctrl+C ή Enter για να το καθαρίσετε)."
+
+#: ../src/build.c:912
+#, fuzzy, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
+"ρυθμίσεων στις Ιδιότητες."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2570,6 +2579,24 @@ msgstr "Δεν υπάρχουν άλλα στοιχεία μηνυμάτων."
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Δεν ήταν δυνατόν το άνοιγμα του αρχείου %s (το αρχείο δεν βρέθηκε)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
+"ρυθμίσεων στις Ιδιότητες."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί η προσαρμοσμένη εξωτερική εντολή %s' (%s)."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4148,11 +4175,15 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Η εκτύπωση του \"%s\" απέτυχε (επιστροφή κωδικού: %s)."
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
+"ρυθμίσεων στις Ιδιότητες."
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Το αρχείο %s εκτυπώθηκε."
@@ -4497,6 +4528,14 @@ msgstr "Αναζήτηση..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (στο φάκελο: %s)"
 
+#: ../src/search.c:1718
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
+"ρυθμίσεων στις Ιδιότητες."
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4533,37 +4572,37 @@ msgstr ""
 "instance που εκτελείται από άλλο χρήστη.\n"
 "Αυτό είναι ένα καίριο σφάλμα και το Geany θα τερματίσει."
 
-#. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
-msgid "Text was empty (or contained only whitespace)"
-msgstr "Το κείμενο ήταν κενό (ή περιείχε μόνο χαρακτήρες κενού διαστήματος)"
-
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+#, fuzzy
+msgid "Text ended before matching quote was found"
 msgstr ""
 "Το κείμενο τελείωσε χωρίς να βρεθεί απόσπασμα που να ταιριάζει για το %c. "
 "(Το κείμενο ήταν '%s')"
 
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#. TL note: from glib
+#: ../src/spawn.c:126
+msgid "Text was empty (or contained only whitespace)"
+msgstr "Το κείμενο ήταν κενό (ή περιείχε μόνο χαρακτήρες κενού διαστήματος)"
+
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Ένα αναφερόμενο πρόγραμμα των Windows πρέπει να είναι ολόκληρο εντός των "
 "εισαγωγικών."
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Το πρόγραμμα '%s' δεν βρέθηκε"
 
-#: ../src/spawn.c:278
-#, c-format
-msgid "TerminateProcess() failed: %s"
-msgstr "Το TerminateProcess() απέτυχε: %s"
+#: ../src/spawn.c:668
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Η διαδικασία απέτυχε, δεν υπάρχει ο φάκελος εργασίας"
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
+msgstr ""
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4956,6 +4995,13 @@ msgstr "Ταξινόμηση κατά _Εμφάνιση"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Αποτυχία μετατροπής του πρότυπου αρχείου \"%s\" σε UTF-8"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -5132,10 +5178,14 @@ msgstr ""
 "Η εκτελεστέα προσαρμοσμένη εντολή τερματίστηκε με έναν ανεπιτυχή κώδικα "
 "εξόδου (exit code)."
 
-#: ../src/tools.c:243
-#, c-format
-msgid "Custom command failed: %s"
-msgstr "Η προσαρμοσμένη εντολή απέτυχε: %s"
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
+"ρυθμίσεων στις Ιδιότητες."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5941,6 +5991,15 @@ msgstr "Από Πλευρά σε Πλευρά"
 msgid "Top and Bottom"
 msgstr "Άνω και κάτω"
 
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Η εκτύπωση του \"%s\" απέτυχε (επιστροφή κωδικού: %s)."
+
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Το TerminateProcess() απέτυχε: %s"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Η προσαρμοσμένη εντολή απέτυχε: %s"
+
 #~ msgid ""
 #~ "Could not execute the file in the VTE because it probably contains a "
 #~ "command."
@@ -5964,12 +6023,6 @@ msgstr "Άνω και κάτω"
 
 #~ msgid "Show macro list"
 #~ msgstr "Εμφάνιση λίστας μακροεντολών"
-
-#~ msgid ""
-#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
-#~ msgstr ""
-#~ "Δεν ήταν δυνατόν να εκτελεστεί το εργαλείο grep '%s', ελέγξτε τη διαδρομή "
-#~ "ρυθμίσεων στις Ιδιότητες."
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Δεν είναι δυνατόν να επεξεργαστούν οι έξτρα επιλογές: %s"

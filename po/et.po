@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 17:41+0100\n"
+"POT-Creation-Date: 2015-11-01 19:03+0100\n"
 "PO-Revision-Date: 2012-12-27 16:38+0300\n"
 "Last-Translator: Andreas Ots <andreasots@gmail.com>\n"
 "Language-Team: Estonian\n"
@@ -2230,7 +2230,7 @@ msgstr ""
 msgid "%s (in directory: %s)"
 msgstr ""
 
-#: ../src/build.c:780 ../src/build.c:913 ../src/search.c:1719
+#: ../src/build.c:780
 #, c-format
 msgid "Process failed (%s)"
 msgstr ""
@@ -2249,6 +2249,13 @@ msgstr "\"%s\" käivitamine ebaõnnestus (käivitusskripti loomine nurjus: %s)"
 msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
+msgstr ""
+
+#: ../src/build.c:912
+#, c-format
+msgid ""
+"Cannot execute terminal command \"%s\": %s. Check the path setting in "
+"Preferences."
 msgstr ""
 
 #: ../src/build.c:1020
@@ -2422,6 +2429,20 @@ msgstr ""
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Faili %s avamine ebaõnnestus (Faili ei leitud)"
+
+#: ../src/callbacks.c:1473
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1478
+msgid "Check the path setting in Preferences."
+msgstr ""
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1491
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Välise käsu '%s' käivitamine ebaõnnestus (%s)."
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -3949,10 +3970,12 @@ msgstr ""
 
 #: ../src/printing.c:615
 #, c-format
-msgid "Printing of \"%s\" failed (return code: %s)."
-msgstr "Faili \"%s\" trükkimine ebaõnnestus (veakood: %s)."
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
 
-#: ../src/printing.c:621
+#: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
 msgstr "Fail %s trükitud."
@@ -4287,6 +4310,12 @@ msgstr "Otsimine..."
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (kaustas: %s)"
 
+#: ../src/search.c:1718
+#, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+
 #: ../src/search.c:1758
 #, c-format
 msgid "Could not open directory (%s)"
@@ -4320,32 +4349,30 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
+#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+msgid "Text ended before matching quote was found"
+msgstr ""
+
 #. TL note: from glib
-#: ../src/spawn.c:109
-#, c-format
+#: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#. TL note: from glib
-#: ../src/spawn.c:124 ../src/spawn.c:170
-#, c-format
-msgid "Text ended before matching quote was found for %c. (The text was '%s')"
-msgstr ""
-
-#: ../src/spawn.c:132 ../src/spawn.c:146
-#, c-format
+#: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#. or SPAWN error?
-#: ../src/spawn.c:241
-#, fuzzy, c-format
-msgid "Program '%s' not found"
+#: ../src/spawn.c:254
+#, fuzzy
+msgid "Program not found"
 msgstr "Käsku ei leitud"
 
-#: ../src/spawn.c:278
-#, c-format
-msgid "TerminateProcess() failed: %s"
+#: ../src/spawn.c:668
+msgid "Failed to change to the working directory"
+msgstr ""
+
+#: ../src/spawn.c:673
+msgid "Unknown error executing child process"
 msgstr ""
 
 #: ../src/stash.c:1150
@@ -4746,6 +4773,13 @@ msgstr "Sorteeri _välimuse järgi"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Mallifaili \"%s\" teisendamine UTF-8 ebaõnnestus"
 
+#: ../src/templates.c:620
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
@@ -4917,10 +4951,12 @@ msgstr ""
 msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Käivitatud kohandatud käsk lõpetas veakoodiga."
 
-#: ../src/tools.c:243
+#: ../src/tools.c:242
 #, c-format
-msgid "Custom command failed: %s"
-msgstr "Kohandatud käsk ebaõnnestus: %s"
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5711,6 +5747,12 @@ msgstr "_Kõrvuti"
 #, fuzzy
 msgid "Top and Bottom"
 msgstr "_Ülemine ja alumine"
+
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Faili \"%s\" trükkimine ebaõnnestus (veakood: %s)."
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Kohandatud käsk ebaõnnestus: %s"
 
 #~ msgid "Detect by file extension"
 #~ msgstr "Tuvasta faililaiendist"
