@@ -1607,7 +1607,6 @@ msgid "Follow path of the current file"
 msgstr "Pfad der aktuellen Datei setzen"
 
 #: ../data/geany.glade.h:328
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Legt fest, ob »cd $path« in der VTE ausgeführt werden soll, wenn Sie "
@@ -2269,7 +2268,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2811,7 +2810,7 @@ msgstr ", schreibgeschützt"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Verlauf verwerfen"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2820,11 +2819,14 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Der Status vor dem Neuladen wird in den Verlauf des Dokumentes "
+"geschrieben, so dass mit der »Rückgängig«-Funktion der alte "
+"Stand wieder hergestellt werden kann. Diese Funktion kann deaktiviert "
+"werden. Diese Nachricht wird nicht noch einmal angezeigt."
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "Das Dokument wurde bereits geschlossen."
+msgstr "Das Dokument wurde neu geladen."
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
@@ -3949,9 +3951,8 @@ msgid "Switch to Document"
 msgstr "Zum Dokument wechseln"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Datei in _Geany öffnen"
+msgstr "Datei in neuem Fenster öffnen"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -3969,9 +3970,10 @@ msgstr "_Plugin-Verwaltung"
 #: ../src/plugins.c:1600
 msgid ""
 "\n"
-"<i>Other plugins depend on this. Disable them first to allow deactivation.</"
-"i>\n"
-msgstr ""
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n"
+msgstr "\n"
+"<i>Andere Plugins hängen von diesem ab. Bitte diese zuerst beenden um dieses Plugin zu deaktivieren.</i>"
+"\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
