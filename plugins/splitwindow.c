@@ -109,8 +109,15 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set)
 }
 
 
+static void update_tab_label_style(EditWindow *editwin)
+{
+	gtk_widget_set_name(editwin->name_label,
+		SSM(editwin->sci, SCI_GETMODIFY, 0, 0) ? "geany-document-status-changed" : NULL);
+}
+
+
 static void on_sci_notify(ScintillaObject *sci, gint param,
-		SCNotification *nt, gpointer data)
+		SCNotification *nt, EditWindow *editwin)
 {
 	gint line;
 
@@ -137,6 +144,11 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 				line = sci_get_line_from_position(sci, nt->position);
 				scintilla_send_message(sci, SCI_TOGGLEFOLD, line, 0);
 			}
+			break;
+
+		case SCN_SAVEPOINTREACHED:
+		case SCN_SAVEPOINTLEFT:
+			update_tab_label_style(editwin);
 			break;
 
 		default: break;
@@ -576,10 +588,11 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 	gtk_notebook_append_page(GTK_NOTEBOOK(editwin->notebook), GTK_WIDGET(editwin->sci), box);
 
 	sync_to_current(editwin->sci, editor->sci);
+	update_tab_label_style(editwin);
 
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
-			G_CALLBACK(on_sci_notify), NULL);
+			G_CALLBACK(on_sci_notify), editwin);
 	g_signal_connect(editwin->sci, "event",
 			G_CALLBACK(on_event), NULL);
 
