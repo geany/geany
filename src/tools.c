@@ -240,8 +240,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	else
 	{
 		ui_set_statusbar(TRUE, _("Cannot execute custom command \"%s\": %s. "
-			"Check the path setting in Preferences."), command, error->message);
-		g_error_free(error);
+			"Check the path setting in Custom Commands."), command, error->message);
 		g_error_free(error);
 	}
 
