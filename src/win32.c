@@ -812,7 +812,7 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 		g_free(err);
 		return NULL;
 	}
-	hConHandle = _open_osfhandle((long)lStdHandle, _O_TEXT);
+	hConHandle = _open_osfhandle(((intptr_t))lStdHandle, _O_TEXT);
 	if (hConHandle == -1)
 	{
 		gchar *err = g_win32_error_message(GetLastError());
