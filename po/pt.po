@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-20 22:41+0200\n"
+"POT-Creation-Date: 2015-11-01 17:41+0100\n"
 "PO-Revision-Date: 2015-10-19 13:41+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
 "Language-Team: Português <palbuquerque73@openmailbox.com>\n"
@@ -1662,7 +1662,7 @@ msgstr "Gr_Avar como..."
 msgid "Sa_ve All"
 msgstr "Gra_Var tudo"
 
-#: ../data/geany.glade.h:345 ../src/document.c:1627 ../src/document.c:3554
+#: ../data/geany.glade.h:345 ../src/document.c:1661 ../src/document.c:3588
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Recarregar"
@@ -2535,8 +2535,8 @@ msgstr "Sem mais mensagens."
 msgid "Could not open file %s (File not found)"
 msgstr "Impossível abrir o ficheiro %s (ficheiro não encontrado)"
 
-#: ../src/dialogs.c:160 ../src/document.c:2274 ../src/document.c:2339
-#: ../src/document.c:2347
+#: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
+#: ../src/document.c:2381
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" não foi encontrado."
@@ -2619,7 +2619,7 @@ msgstr ""
 "Abre o ficheiro em modo só de leitura. Se escolher mais do que um ficheiro, "
 "todos serão abertos em modo só de leitura."
 
-#: ../src/dialogs.c:534 ../src/document.c:2025
+#: ../src/dialogs.c:534 ../src/document.c:2059
 msgid "Overwrite?"
 msgstr "Sobrescrever?"
 
@@ -2783,24 +2783,41 @@ msgstr "Ficheiro %s aberto (%d%s)."
 msgid ", read-only"
 msgstr ", só de leitura"
 
+#: ../src/document.c:1627
+msgid "Discard history"
+msgstr ""
+
 #: ../src/document.c:1628
+msgid ""
+"The buffer's previous state is stored in the history and undoing restores "
+"it. You can disable this by discarding the history upon reload. This message "
+"will not be displayed again but Your choice can be changed in the various "
+"preferences."
+msgstr ""
+
+#: ../src/document.c:1632
+#, fuzzy
+msgid "The file has been reloaded."
+msgstr "O documento foi fechado."
+
+#: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
 msgstr "Quaisquer alterações não gravadas serão perdidas."
 
-#: ../src/document.c:1629
+#: ../src/document.c:1663
 msgid "Undo history will be lost."
 msgstr "Histórico de desfazer será perdido."
 
-#: ../src/document.c:1630
+#: ../src/document.c:1664
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Tem a certeza que quer recarregar '%s'?"
 
-#: ../src/document.c:1736
+#: ../src/document.c:1770
 msgid "Error renaming file."
 msgstr "Erro ao renomear o ficheiro."
 
-#: ../src/document.c:1857
+#: ../src/document.c:1891
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2809,7 +2826,7 @@ msgstr ""
 "Ocorreu um erro ao converter o ficheiro de UTF-8 para \"%s\". O ficheiro "
 "continua por gravar."
 
-#: ../src/document.c:1878
+#: ../src/document.c:1912
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2818,56 +2835,56 @@ msgstr ""
 "Mensagem de erro: %s\n"
 "O erro ocorreu em \"%s\" (linha: %d, coluna: %d)."
 
-#: ../src/document.c:1882
+#: ../src/document.c:1916
 #, c-format
 msgid "Error message: %s."
 msgstr "Mensagem de erro: %s."
 
-#: ../src/document.c:1942
+#: ../src/document.c:1976
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 "Falha ao abrir o ficheiro '%s' para escrita: a função fopen() falhou: %s"
 
-#: ../src/document.c:1960
+#: ../src/document.c:1994
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Falha ao escrever o ficheiro '%s': a função fwrite() falhou: %s"
 
-#: ../src/document.c:1974
+#: ../src/document.c:2008
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Falha ao fechar o ficheiro '%s': a função fclose() falhou: %s"
 
-#: ../src/document.c:2024 ../src/document.c:3555
+#: ../src/document.c:2058 ../src/document.c:3589
 msgid "_Overwrite"
 msgstr "S_Obrescrever"
 
-#: ../src/document.c:2026 ../src/document.c:3558
+#: ../src/document.c:2060 ../src/document.c:3592
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "O ficheiro '%s' em disco é mais recente que o da memória atual."
 
-#: ../src/document.c:2034 ../src/document.c:3607
+#: ../src/document.c:2068 ../src/document.c:3641
 msgid "Try to resave the file?"
 msgstr "Tentar novamente gravar o ficheiro?"
 
-#: ../src/document.c:2035 ../src/document.c:3608
+#: ../src/document.c:2069 ../src/document.c:3642
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "O ficheiro \"%s\" não foi encontrado no disco!"
 
-#: ../src/document.c:2098
+#: ../src/document.c:2132
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Impossível gravar o documento '%s'. É só de leitura!"
 
-#: ../src/document.c:2166
+#: ../src/document.c:2200
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Erro ao gravar o ficheiro (%s)."
 
-#: ../src/document.c:2171
+#: ../src/document.c:2205
 #, c-format
 msgid ""
 "%s\n"
@@ -2878,33 +2895,33 @@ msgstr ""
 "\n"
 "O ficheiro em disco pode agora estar truncado!"
 
-#: ../src/document.c:2173
+#: ../src/document.c:2207
 msgid "Error saving file."
 msgstr "Erro ao gravar ficheiro."
 
-#: ../src/document.c:2197
+#: ../src/document.c:2231
 #, c-format
 msgid "File %s saved."
 msgstr "Ficheiro %s gravado."
 
-#: ../src/document.c:2347
+#: ../src/document.c:2381
 msgid "Wrap search and find again?"
 msgstr "Terminar procura e localizar de novo?"
 
-#: ../src/document.c:2436 ../src/search.c:1365 ../src/search.c:1418
+#: ../src/document.c:2470 ../src/search.c:1365 ../src/search.c:1418
 #: ../src/search.c:2221 ../src/search.c:2222
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Ocorrências de \"%s\" não encontradas."
 
-#: ../src/document.c:2442
+#: ../src/document.c:2476
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: substituída %d ocorrência de \"%s\" por \"%s\"."
 msgstr[1] "%s: substituídas %d ocorrências de \"%s\" por \"%s\"."
 
-#: ../src/document.c:3557
+#: ../src/document.c:3591
 msgid "Do you want to reload it?"
 msgstr "Quer recarregá-lo?"
 
@@ -3150,7 +3167,7 @@ msgstr "Má expressão regular para ficheiros do tipo %s: %s"
 msgid "untitled"
 msgstr "sem título"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:844 ../src/socket.c:171
+#: ../src/highlighting.c:1226 ../src/libmain.c:841 ../src/socket.c:171
 #: ../src/templates.c:234
 #, c-format
 msgid "Could not find file '%s'."
@@ -3690,11 +3707,11 @@ msgstr "Atalhos de teclado"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Os seguintes atalhos de teclado são configuráveis:"
 
-#: ../src/keyfile.c:1018
+#: ../src/keyfile.c:1020
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Escreva aqui o que quiser, use como um caderno de rascunhos"
 
-#: ../src/keyfile.c:1245
+#: ../src/keyfile.c:1247
 msgid "Failed to load one or more session files."
 msgstr "Falha ao carregar um ou mais ficheiros de sessão."
 
@@ -3819,7 +3836,7 @@ msgstr ""
 "A pasta de configurações antiga \"%s\" não pode ser movida para \"%s\" (%s). "
 "Por favor, mova a pasta manualmente para a nova localização."
 
-#: ../src/libmain.c:748
+#: ../src/libmain.c:745
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
