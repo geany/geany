@@ -9,6 +9,7 @@ secondary=@class @defs @dynamic @encode @end @implementation @interface @optiona
 docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
 
 [lexer_properties=C]
+lexer.cpp.verbatim.strings.allow.escapes=1
 
 [settings]
 # default extension used when saving files

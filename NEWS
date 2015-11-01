@@ -1,4 +1,163 @@
-Geany 1.25 (unreleased)
+Geany 1.26 (unreleased)
+
+    Internationalization
+    * Update translations: sv, el, pt
+
+
+Geany 1.25 (July 12, 2015)
+
+    General
+    * GTK3 support, while not enabled by default, is now considered stable.
+    * Improve MacOS X support (PR#396, PR#419, PR#420, Jiří Techet).
+    * Improve subprocess spawning (especially on Windows) (PR#441,
+      Dimitar Zhekov).
+    * Huge tag management performance improvement (auto-completion,
+      calltips, etc.) (PR#356, Jiří Techet).
+    * Remove broken "Show macro list" keybinding and feature (PR#378).
+    * Add %l substitution to build commands (PR#289, Martin Spacek).
+    * Depend on GTK 2.24 and GLib 2.28.
+    * Add per-project line wrapping, line breaking and comment
+      continuation settings.
+    * The plugin API is now split out of the main executable into libgeany,
+      a shared library plugins have to link against.
+
+    Bug fixes
+    * Fix applying filetype-specific indentation settings for newly
+      opened files.
+    * Fix relative project base path when creating a new project
+      (#1062).
+    * Fix next/previous keybindings when no files are open.
+    * Fix markup injection in some tooltips (#1091).
+    * Use absolute project path for projects opened from the command
+      line (PR#431, Jiří Techet).
+    * Fix goto tag in some cases when the same symbol name appears in
+      different languages (PR#487, Jiří Techet).
+    * Fix UI updating after loading a project.
+    * Fix the currently selected document after Save All.
+    * Fix leftovers in the Project dialog in some cases (PR#363, Jiří
+      Techet).
+    * Fix function return type in symbol list tooltips in some cases
+      (PR#475, Jiří Techet).
+    * Fix VTE path following on startup.
+
+    Interface
+    * Show document-related dialogs embedded in the main window ("info
+      bars") (PR#277, Matthew Brush and Thomas Martitz).
+    * Plugin manager dialog cleanup and overhaul (PR#251, PR#414).
+    * Filetypes can now define the MIME type used to select their icon
+      (PR#179).
+    * Close documents in the sidebar with middle mouse button (PR#172,
+      Pavel Roschin).
+    * Ask whether to replace project files when creating a project.
+    * Ask whether to adopt the open documents when creating a new
+      project (PR#315).
+    * Allow to disable the list of recent files.
+    * Fix many shadow inconsistencies (PR#411, Jiří Techet).
+    * Add virtual column and selected chars to the statusbar (Patch #10,
+      Dimitar Zhekov).
+    * Add "dirty" terminal indication (PR#476, Jiří Techet).
+    * Allow to select the None filetype in the Open File dialog
+      (Issue#483).
+    * Add configuration menu entries for all filetypes (PR#491, Jiří Techet).
+
+    Editor
+    * Update Scintilla to version 3.5.6 (#1041).
+    * Do not comment out blank lines when toggling comments (PR#79, Igor
+      Shaula).
+    * Improve handling of Verilog strings and comments.
+    * Support for keeping undo history when reloading files (PR#188, Arthur
+      Rosenstein).  This is not enabled by default in this release.
+    * Respect filetype.common's wordchars if a filetype doesn't have its own
+      (Issue#492, PR#501).
+
+    Search
+    * Add support for single-line regular expressions (PR#310).
+    * Default action is now "Replace & Find" in the replace dialog but
+      can be configured (Roland Pallai).
+    * Activate default action from all fields in the Find in Files
+      dialog (#959).
+
+    Filetypes
+    * Add JSON filetype.
+    * Add Zephir filetype.
+    * Add CoffeScript filetype (PR#230, Mark Dresselhaus).
+    * Add Go tags parser (PR#373, PR#481, Issue#238, Jiří Techet).
+    * Add Erlang tags parser (PR#445, Beng Tan).
+    * Add PowerShell tags parser (PR#477).
+    * Many JavaScript parsing fixes and improvements.
+    * Many CSS parser fixes and improvements.
+    * Many Txt2tags parsing fixes and improvements (feature #690).
+    * Make parser fixes and improvements.
+    * Parse D enum base type (PR#404).
+    * Various small Rust fixes (PR#306, SiegeLord).
+    * Highlight C types in C++.
+    * Add some missing C11 keywords.
+    * Add some missing SQL keywords.
+    * Fix and add some CSS keywords (PR#333, Hannes Heute).
+    * Fix some FreeBasic keywords (#691).
+    * Add some missing D keywords (PR#293, Danyal Zia).
+    * Fix R keywords and wordchars (PR#273, landroni).
+    * Fix styling of some CSS elements.
+    * Fix styling of Lua preprocessor.
+    * Fix style of PHP variables interpolation.
+    * Recognize `.vbs` files as FreeBasic (PR#171, Nicolas Karolak).
+    * Recognize `.tpl` files as HTML.
+    * Recognize `.xtpl` files as XML.
+    * Recognize `.xpm` files as C.
+    * Recognize more Bash files (PR#291, Peter Bittner).
+    * Update templates for Python and Vala.
+    * Add template for HTML5.
+    * Fix parsing of some Python triple-quoted strings.
+    * Add some linting tools to some filetype's default Build menu.
+    * Fix scope of some Python symbols.
+    * Fix support of trigraphs in C-like languages.
+    * Add support of digraphs in C-like languages.
+    * Add support of `final`, `override` and `noexcept` C++11 keywords
+      (PR#544).
+
+    Internationalization
+    * Update translations: be, ca, cs, de, el, es, fr, id, it, ja, nl, pl,
+                           pt_BR, pt, ru, sl, sr, sv, zh_CN.
+
+    Plugins
+    * File Browser: use "explorer" as the default open command on
+                    Windows.
+    * File Browser: use icons based on the detected file's MIME type (PR#455,
+                    Jiří Techet).
+    * Save Actions: use mode 0600 for backup copies (#833, PR#413).
+    * Split Window: Fix a few keybindings (cut, copy, paste, delete,
+                    select all) (PR#467, Alex).
+
+    API
+    * Hide private API (PR#351, Jiří Techet, and PR#429, Matthew Brush and
+      Thomas Martitz).
+    * Cleaner and safer TagManager API (Part of PR#356, Jiří Techet).
+    * Entry point prototypes are now checked by the compiler (PR#359).
+    * Add pseudo-unique document IDs through GeanyDocument::id and
+      document_find_by_id(). This is a safer API for keeping a reference
+      to a document for a long time (PR#256).
+    * Add convenient and portable spawning API: spawn_sync(), spawn_async(),
+      spawn_with_callbacks(), spawn_kill_process(), spawn_check_command(),
+      spawn_write_data() (PR#441, Dimitar Zhekov).
+    * plugin_signal_connect() is now safe to use also with objects
+      destroyed before unloading the plugin.
+    * Add document_reload_force() to replace document_reload_file().
+    * Add project_write_config() (PR#361, Jiří Techet).
+    * Add keybindings_get_modifiers() and GEANY_PRIMARY_MOD_MASK (Jiří
+      Techet).
+    * Fix emission of the 'document-activate' signal in some cases.
+    * Add ui_tree_view_set_tooltip_text_column().
+    * Add scintilla_get_type().
+
+    Windows
+    * Use native Windows quoting rules for commands (on Windows, part of
+      subprocess spawning improvements).
+    * Prompt before overwriting existing files when using native Save As
+      dialog (PR#113, Adam Coyne).
+    * View -> Change Font now respects the native dialog setting.
+    * Fix main window freeze when displaying native dialogs.
+    * Use the same plugin directory as other platforms (PR#540, Thomas
+      Martitz).
 
 
 Geany 1.24.1 (April 16, 2014)

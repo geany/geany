@@ -34,8 +34,16 @@ enum
 	UNDO_SCINTILLA = 0,
 	UNDO_ENCODING,
 	UNDO_BOM,
+	UNDO_RELOAD,
 	UNDO_ACTIONS_MAX
 };
+
+typedef struct UndoReloadData
+{
+	guint actions_count; /* How many following undo/redo actions need to be applied. */
+	gint eol_mode;       /* End-Of-Line mode before/after reloading. */
+}
+UndoReloadData;
 
 typedef enum
 {
@@ -57,6 +65,7 @@ enum
 {
 	MSG_TYPE_RELOAD,
 	MSG_TYPE_RESAVE,
+	MSG_TYPE_POST_RELOAD,
 
 	NUM_MSG_TYPES
 };
@@ -70,6 +79,8 @@ typedef struct GeanyDocumentPrivate
 	GtkWidget		*tag_tree;
 	/* GtkTreeStore object for this document within the Symbols treeview of the sidebar. */
 	GtkTreeStore	*tag_store;
+	/* Indicates whether tag tree has to be updated */
+	gboolean		tag_tree_dirty;
 	/* Iter for this document within the Open Files treeview of the sidebar. */
 	GtkTreeIter		 iter;
 	/* Used by the Undo/Redo management code. */
@@ -93,7 +104,7 @@ typedef struct GeanyDocumentPrivate
 	time_t			 mtime;
 	/* ID of the idle callback updating the tag list */
 	guint			 tag_list_update_source;
-	/* Whether it's temoporarily protected (read-only and saving is prevented). Does
+	/* Whether it's temporarily protected (read-only and saving needs confirmation). Does
 	 * not imply doc->readonly as writable files can be protected */
 	gint			 protected;
 	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */

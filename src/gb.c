@@ -169,15 +169,13 @@ static GtkWidget *create_help_dialog(GtkWindow *parent)
 	scrolledwindow1 = gtk_scrolled_window_new(NULL, NULL);
 	gtk_widget_show(scrolledwindow1);
 	gtk_box_pack_start(GTK_BOX (dialog_vbox1), scrolledwindow1, TRUE, TRUE, 3);
-	gtk_container_set_border_width(GTK_CONTAINER(scrolledwindow1), 2);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwindow1), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow1), GTK_SHADOW_OUT);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow1), GTK_SHADOW_IN);
 
 	textview1 = gtk_text_view_new();
 	gtk_widget_show(textview1);
 	gtk_container_add(GTK_CONTAINER(scrolledwindow1), textview1);
 	gtk_widget_set_size_request(textview1, 450, -1);
-	gtk_container_set_border_width(GTK_CONTAINER(textview1), 1);
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(textview1), FALSE);
 	gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(textview1), FALSE);
 	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview1), GTK_WRAP_WORD);

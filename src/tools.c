@@ -33,6 +33,7 @@
 #include "document.h"
 #include "keybindings.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -44,12 +45,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
-
-#ifdef G_OS_UNIX
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <signal.h>
-#endif
 
 
 enum
@@ -76,26 +71,6 @@ struct cc_dialog
 	GtkWidget *button_down;
 };
 
-/* data required by the custom command callbacks */
-struct cc_data
-{
-	const gchar *command;	/* command launched */
-	GeanyDocument *doc;		/* document in which replace the selection */
-	GString *buffer;		/* buffer holding stdout content, or NULL */
-	gboolean error;			/* whether and error occurred */
-	gboolean finished;		/* whether the command has finished */
-};
-
-
-static gboolean cc_exists_command(const gchar *command)
-{
-	gchar *path = g_find_program_in_path(command);
-
-	g_free(path);
-
-	return path != NULL;
-}
-
 
 /* update STATUS and TOOLTIP columns according to cmd */
 static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, const gchar *cmd)
@@ -103,19 +78,9 @@ static void cc_dialog_update_row_status(GtkListStore *store, GtkTreeIter *iter, 
 	GError *err = NULL;
 	const gchar *stock_id = GTK_STOCK_NO;
 	gchar *tooltip = NULL;
-	gint argc;
-	gchar **argv;
 
-	if (EMPTY(cmd))
+	if (EMPTY(cmd) || spawn_check_command(cmd, TRUE, &err))
 		stock_id = GTK_STOCK_YES;
-	else if (g_shell_parse_argv(cmd, &argc, &argv, &err))
-	{
-		if (argc > 0 && cc_exists_command(argv[0]))
-			stock_id = GTK_STOCK_YES;
-		else
-			tooltip = g_strdup_printf(_("Invalid command: %s"), _("Command not found"));
-		g_strfreev(argv);
-	}
 	else
 	{
 		tooltip = g_strdup_printf(_("Invalid command: %s"), err->message);
@@ -227,218 +192,61 @@ static void cc_on_dialog_move_down_clicked(GtkButton *button, struct cc_dialog *
 }
 
 
-static gboolean cc_iofunc(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
-{
-	struct cc_data *data = user_data;
-
-	if (cond & (G_IO_IN | G_IO_PRI))
-	{
-		gchar *msg = NULL;
-		GIOStatus rv;
-		GError *err = NULL;
-
-		if (! data->buffer)
-			data->buffer = g_string_sized_new(256);
-
-		do
-		{
-			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, &err);
-			if (msg != NULL)
-			{
-				g_string_append(data->buffer, msg);
-				g_free(msg);
-			}
-			if (G_UNLIKELY(err != NULL))
-			{
-				geany_debug("%s: %s", G_STRFUNC, err->message);
-				g_error_free(err);
-				err = NULL;
-			}
-		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
-
-		if (G_UNLIKELY(rv != G_IO_STATUS_EOF))
-		{	/* Something went wrong? */
-			g_warning("%s: %s\n", G_STRFUNC, "Incomplete command output");
-		}
-	}
-	return FALSE;
-}
-
-
-static gboolean cc_iofunc_err(GIOChannel *ioc, GIOCondition cond, gpointer user_data)
-{
-	struct cc_data *data = user_data;
-
-	if (cond & (G_IO_IN | G_IO_PRI))
-	{
-		gchar *msg = NULL;
-		GString *str = g_string_sized_new(256);
-		GIOStatus rv;
-
-		do
-		{
-			rv = g_io_channel_read_line(ioc, &msg, NULL, NULL, NULL);
-			if (msg != NULL)
-			{
-				g_string_append(str, msg);
-				g_free(msg);
-			}
-		} while (rv == G_IO_STATUS_NORMAL || rv == G_IO_STATUS_AGAIN);
-
-		if (!EMPTY(str->str))
-		{
-			g_warning("%s: %s\n", data->command, str->str);
-			ui_set_statusbar(TRUE,
-				_("The executed custom command returned an error. "
-				"Your selection was not changed. Error message: %s"),
-				str->str);
-			data->error = TRUE;
-
-		}
-		g_string_free(str, TRUE);
-	}
-	data->finished = TRUE;
-	return FALSE;
-}
-
-
-static gboolean cc_replace_sel_cb(gpointer user_data)
-{
-	struct cc_data *data = user_data;
-
-	if (! data->finished)
-	{	/* keep this function in the main loop until cc_iofunc_err() has finished */
-		return TRUE;
-	}
-
-	if (! data->error && data->buffer != NULL && DOC_VALID(data->doc))
-	{	/* Command completed successfully */
-		sci_replace_sel(data->doc->editor->sci, data->buffer->str);
-	}
-
-	if (data->buffer)
-		g_string_free(data->buffer, TRUE);
-	g_slice_free1(sizeof *data, data);
-
-	return FALSE;
-}
-
-
-/* check whether the executed command failed and if so do nothing.
- * If it returned with a sucessful exit code, replace the selection. */
-static void cc_exit_cb(GPid child_pid, gint status, gpointer user_data)
-{
-	struct cc_data *data = user_data;
-
-	/* if there was already an error, skip further checks */
-	if (! data->error)
-	{
-#ifdef G_OS_UNIX
-		if (WIFEXITED(status))
-		{
-			if (WEXITSTATUS(status) != EXIT_SUCCESS)
-				data->error = TRUE;
-		}
-		else if (WIFSIGNALED(status))
-		{	/* the terminating signal: WTERMSIG (status)); */
-			data->error = TRUE;
-		}
-		else
-		{	/* any other failure occured */
-			data->error = TRUE;
-		}
-#else
-		data->error = ! win32_get_exit_status(child_pid);
-#endif
-
-		if (data->error)
-		{	/* here we are sure data->error was set due to an unsuccessful exit code
-			 * and so we add an error message */
-			/* TODO maybe include the exit code in the error message */
-			ui_set_statusbar(TRUE,
-				_("The executed custom command exited with an unsuccessful exit code."));
-		}
-	}
-
-	g_idle_add(cc_replace_sel_cb, data);
-	g_spawn_close_pid(child_pid);
-}
-
-
 /* Executes command (which should include all necessary command line args) and passes the current
  * selection through the standard input of command. The whole output of command replaces the
  * current selection. */
 void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 {
 	GError *error = NULL;
-	GPid pid;
-	gchar **argv;
-	gint stdin_fd;
-	gint stdout_fd;
-	gint stderr_fd;
+	gchar *sel;
+	SpawnWriteData input;
+	GString *output;
+	GString *errors;
+	gint status;
 
-	g_return_if_fail(DOC_VALID(doc) && command != NULL);
-
+	g_return_if_fail(doc != NULL && command != NULL);
+ 
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
 
-	if (!g_shell_parse_argv(command, NULL, &argv, &error))
-	{
-		ui_set_statusbar(TRUE, _("Custom command failed: %s"), error->message);
-		g_error_free(error);
-		return;
-	}
+	sel = sci_get_selection_contents(doc->editor->sci);
+	input.ptr = sel;
+	input.size = strlen(sel);
+	output = g_string_sized_new(256);
+	errors = g_string_new(NULL);
 	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
 
-	if (g_spawn_async_with_pipes(NULL, argv, NULL, G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
-						NULL, NULL, &pid, &stdin_fd, &stdout_fd, &stderr_fd, &error))
+	if (spawn_sync(NULL, command, NULL, NULL, &input, output, errors, &status, &error))
 	{
-		gchar *sel;
-		gint remaining, wrote;
-		struct cc_data *data = g_slice_alloc(sizeof *data);
-
-		data->error = FALSE;
-		data->finished = FALSE;
-		data->buffer = NULL;
-		data->doc = doc;
-		data->command = command;
-
-		g_child_watch_add(pid, cc_exit_cb, data);
-
-		/* use GIOChannel to monitor stdout */
-		utils_set_up_io_channel(stdout_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc, data);
-		/* copy program's stderr to Geany's stdout to help error tracking */
-		utils_set_up_io_channel(stderr_fd, G_IO_IN | G_IO_PRI | G_IO_ERR | G_IO_HUP | G_IO_NVAL,
-				FALSE, cc_iofunc_err, data);
-
-		/* get selection */
-		sel = sci_get_selection_contents(doc->editor->sci);
-
-		/* write data to the command */
-		remaining = strlen(sel);
-		do
+		if (errors->len > 0)
 		{
-			wrote = write(stdin_fd, sel, remaining);
-			if (G_UNLIKELY(wrote < 0))
-			{
-				g_warning("%s: %s: %s\n", G_STRFUNC, "Failed sending data to command",
-										g_strerror(errno));
-				break;
-			}
-			remaining -= wrote;
-		} while (remaining > 0);
-		close(stdin_fd);
-		g_free(sel);
+			g_warning("%s: %s\n", command, errors->str);
+			ui_set_statusbar(TRUE,
+				_("The executed custom command returned an error. "
+				"Your selection was not changed. Error message: %s"),
+				errors->str);
+		}
+		else if (!SPAWN_WIFEXITED(status) || SPAWN_WEXITSTATUS(status) != EXIT_SUCCESS)
+		{
+			/* TODO maybe include the exit code in the error message */
+			ui_set_statusbar(TRUE,
+				_("The executed custom command exited with an unsuccessful exit code."));
+		}
+		else
+		{   /* Command completed successfully */
+			sci_replace_sel(doc->editor->sci, output->str);
+		}
 	}
 	else
 	{
-		geany_debug("g_spawn_async_with_pipes() failed: %s", error->message);
+		geany_debug("spawn_sync() failed: %s", error->message);
 		ui_set_statusbar(TRUE, _("Custom command failed: %s"), error->message);
 		g_error_free(error);
 	}
 
-	g_strfreev(argv);
+	g_string_free(output, TRUE);
+	g_string_free(errors, TRUE);
+	g_free(sel);
 }
 
 
@@ -563,7 +371,7 @@ static void cc_show_dialog_custom_commands(void)
 	cc.store = gtk_list_store_new(CC_COLUMN_COUNT, G_TYPE_UINT, G_TYPE_STRING, G_TYPE_STRING,
 			G_TYPE_STRING, G_TYPE_STRING);
 	cc.view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(cc.store));
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(cc.view), CC_COLUMN_TOOLTIP);
 	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(cc.view), TRUE);
 	cc.selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(cc.view));
 	/* ID column */

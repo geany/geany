@@ -4,16 +4,21 @@ AnimalÌ2Ö0
 BÌ2048Ö0
 BarÌ2048Ö0
 BazÌ2048Ö0
+CÌ1Ö0
+CÌ2048Ö0
+DÌ32Ö0
 DoZÌ32Ö0
 FooÌ1Ö0
 FooÌ2048Ö0
 Foo2Ì2048Ö0
 ParametrizedTraitÌ32Ö0
 S1Ì2048Ö0
+SomeStructÌ2048Îtest_input2Ö0
 SuperTraitTestÌ32Ö0
 TestableÌ32Ö0
 TraitedStructTestÌ1Ö0
 TraitedStructTestÌ2048Ö0
+aÌ8ÎCÖ0
 a_anteaterÌ4ÎAnimalÖ0
 a_bearÌ4ÎAnimalÖ0
 a_catÌ4ÎAnimalÖ0
@@ -27,9 +32,9 @@ fooÌ8ÎBÖ0
 foo_field_1Ì8ÎFooÖ0
 gfuncÌ16Í<X:Testable+DoZ>(x:&X)Ö0
 ignoreÌ65536Ö0
-lifetime_and_charÌ16Í<'lifetime>(_: &'lifetime int)Ö0
+lifetime_and_charÌ16Í<'lifetime>(_: &'lifetime isize)Ö0
 mainÌ16Í()Ö0
-my_methodÌ128Í(&self,_:int)ÎFooÖ0
+my_methodÌ128Í(&self,_:isize)ÎFooÖ0
 nestedÌ16Í()ÎmainÖ0
 not_hidden_by_charÌ16Í()Îlifetime_and_charÖ0
 only_fieldÌ8ÎS1Ö0
@@ -46,7 +51,8 @@ test2Ì128Í(&self)ÎFooÖ0
 test2Ì128Í(&self)ÎTestableÖ0
 test_input2Ì256Ö0
 test_macroÌ65536Ö0
+where_fooÌ16Í<T>(a: T) where T: SendÖ0
 xÌ8ÎFoo2Ö0
 xÌ8ÎTraitedStructTestÖ0
 yÌ8ÎFoo2Ö0
-yadaÌ16Í(a:int,c:Foo,b:test_input2::fruit::SomeStruct) -> StringÖ0
+yadaÌ16Í(a:isize, c:Foo, b:test_input2::SomeStruct) -> StringÖ0

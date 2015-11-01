@@ -29,7 +29,10 @@
 
 G_BEGIN_DECLS
 
-extern const guint TM_GLOBAL_TYPE_MASK;
+const gchar *symbols_get_context_separator(gint ft_id);
+
+
+#ifdef GEANY_PRIVATE
 
 enum
 {
@@ -47,13 +50,9 @@ void symbols_reload_config_files(void);
 
 void symbols_global_tags_loaded(guint file_type_idx);
 
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang);
-
-const gchar *symbols_get_context_separator(gint ft_id);
+GString *symbols_find_typenames_as_string(gint lang, gboolean global);
 
 const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
-
-GString *symbols_get_macro_list(gint lang);
 
 const gchar **symbols_get_html_entities(void);
 
@@ -68,6 +67,8 @@ gboolean symbols_goto_tag(const gchar *name, gboolean definition);
 gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname);
 
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

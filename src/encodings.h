@@ -53,56 +53,6 @@ typedef enum
 	GEANY_ENCODING_GROUPS_MAX
 } GeanyEncodingGroup;
 
-
-/** Structure to represent an encoding to be used in Geany. */
-typedef struct
-{
-	/** The index of the encoding, must be one of GeanyEncodingIndex. */
-	gint   				 idx;
-	/** Internally used member for grouping */
-	gint   				 order;
-	/** Internally used member for grouping */
-	GeanyEncodingGroup   group;
-	/** String representation of the encoding, e.g. "ISO-8859-3" */
-	const gchar			*charset;
-	/** Translatable and descriptive name of the encoding, e.g. "South European" */
-	const gchar			*name;
-} GeanyEncoding;
-
-
-const GeanyEncoding* encodings_get_from_charset(const gchar *charset);
-const GeanyEncoding* encodings_get_from_index(gint idx);
-
-gchar* encodings_to_string(const GeanyEncoding* enc);
-const gchar* encodings_get_charset(const GeanyEncoding* enc);
-const gchar* encodings_get_charset_from_index(gint idx);
-
-void encodings_select_radio_item(const gchar *charset);
-
-void encodings_init(void);
-void encodings_finalize(void);
-
-GtkTreeStore *encodings_encoding_store_new(gboolean has_detect);
-
-gint encodings_encoding_store_get_encoding(GtkTreeStore *store, GtkTreeIter *iter);
-
-gboolean encodings_encoding_store_get_iter(GtkTreeStore *store, GtkTreeIter *iter, gint enc);
-
-void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout, GtkCellRenderer *cell,
-		GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
-
-gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding);
-
-/* Converts a string from the given charset to UTF-8.
- * If fast is set, no further checks are performed. */
-gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
-											  const gchar *charset, gboolean fast);
-
-gboolean encodings_is_unicode_charset(const gchar *string);
-
-gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
-		gchar **used_encoding, gboolean *has_bom, gboolean *partial);
-
 /*
  * The original versions of the following tables are taken from profterm
  *
@@ -191,6 +141,59 @@ typedef enum
 	GEANY_ENCODINGS_MAX
 } GeanyEncodingIndex;
 
+/** Structure to represent an encoding to be used in Geany. */
+typedef struct
+{
+	/** The index of the encoding, must be one of GeanyEncodingIndex. */
+	gint   				 idx;
+	/** Internally used member for grouping */
+	gint   				 order;
+	/** Internally used member for grouping */
+	GeanyEncodingGroup   group;
+	/** String representation of the encoding, e.g. "ISO-8859-3" */
+	const gchar			*charset;
+	/** Translatable and descriptive name of the encoding, e.g. "South European" */
+	const gchar			*name;
+} GeanyEncoding;
+
+
+gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding);
+
+/* Converts a string from the given charset to UTF-8.
+ * If fast is set, no further checks are performed. */
+gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
+											  const gchar *charset, gboolean fast);
+
+const gchar* encodings_get_charset_from_index(gint idx);
+
+
+#ifdef GEANY_PRIVATE
+
+const GeanyEncoding* encodings_get_from_charset(const gchar *charset);
+const GeanyEncoding* encodings_get_from_index(gint idx);
+
+gchar* encodings_to_string(const GeanyEncoding* enc);
+const gchar* encodings_get_charset(const GeanyEncoding* enc);
+
+void encodings_select_radio_item(const gchar *charset);
+
+void encodings_init(void);
+void encodings_finalize(void);
+
+GtkTreeStore *encodings_encoding_store_new(gboolean has_detect);
+
+gint encodings_encoding_store_get_encoding(GtkTreeStore *store, GtkTreeIter *iter);
+
+gboolean encodings_encoding_store_get_iter(GtkTreeStore *store, GtkTreeIter *iter, gint enc);
+
+void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout, GtkCellRenderer *cell,
+		GtkTreeModel *tree_model, GtkTreeIter *iter, gpointer data);
+
+gboolean encodings_is_unicode_charset(const gchar *string);
+
+gboolean encodings_convert_to_utf8_auto(gchar **buf, gsize *size, const gchar *forced_enc,
+		gchar **used_encoding, gboolean *has_bom, gboolean *partial);
+
 
 extern GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 
@@ -198,6 +201,8 @@ extern GeanyEncoding encodings[GEANY_ENCODINGS_MAX];
 GeanyEncodingIndex encodings_scan_unicode_bom(const gchar *string, gsize len, guint *bom_len);
 
 GeanyEncodingIndex encodings_get_idx_from_charset(const gchar *charset);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

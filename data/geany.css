@@ -9,6 +9,9 @@
 	-GtkButton-inner-border: 0;
 	padding: 0;
 }
+#geany-close-tab-button GtkImage {
+	padding: 0;
+}
 
 /* use monospaced font in search entries for easier reading of regexp (#1907117) */
 #GeanyDialogSearch GtkEntry {
@@ -33,4 +36,9 @@
 }
 #geany-document-status-readonly {
 	color: #007f00;
+}
+
+/* red "Terminal" label when terminal dirty */
+#geany-terminal-dirty {
+	color: #ff0000;
 }

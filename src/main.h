@@ -27,6 +27,15 @@
 
 G_BEGIN_DECLS
 
+void main_reload_configuration(void);
+
+void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
+
+gboolean main_is_realized(void);
+
+
+#ifdef GEANY_PRIVATE
+
 typedef struct
 {
 	gboolean	new_instance;
@@ -64,13 +73,11 @@ gboolean main_quit(void);
 
 gboolean main_handle_filename(const gchar *locale_filename);
 
-void main_reload_configuration(void);
-
-void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
-
-gboolean main_is_realized(void);
-
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
+
+gint main_lib(gint argc, gchar **argv);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

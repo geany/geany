@@ -96,7 +96,7 @@ static int opposite(int ch) {
 	return ch;
 }
 
-static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
+static void ColouriseBashDoc(Sci_PositionU startPos, Sci_Position length, int initStyle,
 							 WordList *keywordlists[], Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
@@ -223,14 +223,14 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 
 	int numBase = 0;
 	int digit;
-	unsigned int endPos = startPos + length;
+	Sci_PositionU endPos = startPos + length;
 	int cmdState = BASH_CMD_START;
 	int testExprType = 0;
 
 	// Always backtracks to the start of a line that is not a continuation
 	// of the previous line (i.e. start of a bash command segment)
-	int ln = styler.GetLine(startPos);
-	if (ln > 0 && startPos == static_cast<unsigned int>(styler.LineStart(ln)))
+	Sci_Position ln = styler.GetLine(startPos);
+	if (ln > 0 && startPos == static_cast<Sci_PositionU>(styler.LineStart(ln)))
 		ln--;
 	for (;;) {
 		startPos = styler.LineStart(ln);
@@ -419,8 +419,6 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 						sc.Forward();
 						HereDoc.Quoted = true;
 						HereDoc.State = 1;
-					} else if (!HereDoc.Indent && sc.chNext == '-') {	// <<- indent case
-						HereDoc.Indent = true;
 					} else if (setHereDoc.Contains(sc.chNext)) {
 						// an unquoted here-doc delimiter, no special handling
 						// TODO check what exactly bash considers part of the delim
@@ -469,7 +467,7 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 				if (sc.atLineStart) {
 					sc.SetState(SCE_SH_HERE_Q);
 					int prefixws = 0;
-					while (IsASpace(sc.ch) && !sc.atLineEnd) {	// whitespace prefix
+					while (sc.ch == '\t' && !sc.atLineEnd) {	// tabulation prefix
 						sc.Forward();
 						prefixws++;
 					}
@@ -481,7 +479,8 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 					char s[HERE_DELIM_MAX];
 					sc.GetCurrent(s, sizeof(s));
 					if (sc.LengthCurrent() == 0) {  // '' or "" delimiters
-						if (prefixws == 0 && HereDoc.Quoted && HereDoc.DelimiterLength == 0)
+						if ((prefixws == 0 || HereDoc.Indent) &&
+							HereDoc.Quoted && HereDoc.DelimiterLength == 0)
 							sc.SetState(SCE_SH_DEFAULT);
 						break;
 					}
@@ -672,7 +671,12 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 			} else if (sc.Match('<', '<')) {
 				sc.SetState(SCE_SH_HERE_DELIM);
 				HereDoc.State = 0;
-				HereDoc.Indent = false;
+				if (sc.GetRelative(2) == '-') {	// <<- indent case
+					HereDoc.Indent = true;
+					sc.Forward();
+				} else {
+					HereDoc.Indent = false;
+				}
 			} else if (sc.ch == '-'	&&	// one-char file test operators
 					   setSingleCharOp.Contains(sc.chNext) &&
 					   !setWord.Contains(sc.GetRelative(2)) &&
@@ -748,10 +752,10 @@ static void ColouriseBashDoc(unsigned int startPos, int length, int initStyle,
 	sc.Complete();
 }
 
-static bool IsCommentLine(int line, Accessor &styler) {
-	int pos = styler.LineStart(line);
-	int eol_pos = styler.LineStart(line + 1) - 1;
-	for (int i = pos; i < eol_pos; i++) {
+static bool IsCommentLine(Sci_Position line, Accessor &styler) {
+	Sci_Position pos = styler.LineStart(line);
+	Sci_Position eol_pos = styler.LineStart(line + 1) - 1;
+	for (Sci_Position i = pos; i < eol_pos; i++) {
 		char ch = styler[i];
 		if (ch == '#')
 			return true;
@@ -761,19 +765,19 @@ static bool IsCommentLine(int line, Accessor &styler) {
 	return false;
 }
 
-static void FoldBashDoc(unsigned int startPos, int length, int, WordList *[],
+static void FoldBashDoc(Sci_PositionU startPos, Sci_Position length, int, WordList *[],
 						Accessor &styler) {
 	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
-	unsigned int endPos = startPos + length;
+	Sci_PositionU endPos = startPos + length;
 	int visibleChars = 0;
 	int skipHereCh = 0;
-	int lineCurrent = styler.GetLine(startPos);
+	Sci_Position lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
 	char chNext = styler[startPos];
 	int styleNext = styler.StyleAt(startPos);
-	for (unsigned int i = startPos; i < endPos; i++) {
+	for (Sci_PositionU i = startPos; i < endPos; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
 		int style = styleNext;

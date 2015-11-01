@@ -1,0 +1,20 @@
+# format=tagmanager
+0Ì64ÎphoneNumbersÖ0
+1Ì64ÎphoneNumbersÖ0
+addressÌ64Ö0
+ageÌ64Ö0
+childrenÌ64Ö0
+cityÌ64ÎaddressÖ0
+firstNameÌ64Ö0
+height_cmÌ64Ö0
+isAliveÌ64Ö0
+lastNameÌ64Ö0
+numberÌ64ÎphoneNumbers.0Ö0
+numberÌ64ÎphoneNumbers.1Ö0
+phoneNumbersÌ64Ö0
+postalCodeÌ64ÎaddressÖ0
+spouseÌ64Ö0
+stateÌ64ÎaddressÖ0
+streetAddressÌ64ÎaddressÖ0
+typeÌ64ÎphoneNumbers.0Ö0
+typeÌ64ÎphoneNumbers.1Ö0

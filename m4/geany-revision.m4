@@ -9,8 +9,8 @@ AC_DEFUN([GEANY_CHECK_REVISION],
 	AC_MSG_CHECKING([for Git revision])
 	# try Git first
 	GIT=`which git 2>/dev/null`
-	if test -d ".git" -a "x${GIT}" != "x" -a -x "${GIT}"; then
-		REVISION=`git rev-parse --short --revs-only HEAD || 0`
+	if test -d "$srcdir/.git" -a "x${GIT}" != "x" -a -x "${GIT}"; then
+		REVISION=`cd "$srcdir"; "${GIT}" rev-parse --short --revs-only HEAD 2>/dev/null || echo 0`
 	fi
 
 	if test "x${REVISION}" != "x0"; then

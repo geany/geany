@@ -14,11 +14,16 @@ ifdef MSYS
 CP = cp
 endif
 
-doc: geany.txt
-	$(RST2HTML) -stg --stylesheet=geany.css $^ geany.html
+# no PDF rule yet
+all: html api-doc
 
-hacking-doc: ../HACKING
-	$(RST2HTML) -stg --stylesheet=geany.css $^ hacking.html
+html: geany.html hacking.html
+
+geany.html: geany.txt geany.css
+	$(RST2HTML) -stg --stylesheet=geany.css $< $@
+
+hacking.html: ../HACKING geany.css
+	$(RST2HTML) -stg --stylesheet=geany.css $< $@
 
 # FIXME: we should also replace @VERSION@
 Doxyfile: Doxyfile.in

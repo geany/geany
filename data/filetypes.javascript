@@ -38,11 +38,11 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=1
 
-[build_settings]
+[build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=
-run=
-
-
+FT_02_LB=_Lint
+FT_02_CM=jshint "%f"
+FT_02_WD=
+error_regex=([^:]+): line ([0-9]+), col ([0-9]+)

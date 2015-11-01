@@ -108,21 +108,39 @@ test_sources = \
 	bug960316.v						\
 	bug961001.v						\
 	byte.f							\
+	c-digraphs.c					\
+	c-trigraphs.c					\
 	case_sensitivity.php			\
 	char-selector.f90				\
 	classes.php						\
 	common.f						\
 	complex-return.js				\
 	continuation.f90				\
+	continuation.mak				\
 	countall.sql					\
 	cpp_destructor.cpp				\
+	css-at-rules.css				\
+	css-at-supports.css				\
+	css-attribute-selectors.css		\
+	css-comma-no-space.css			\
+	css-namespace-selectors.css		\
+	css-pseudo-classes.css			\
+	css-simple.css					\
+	css-singlequote-in-comment-issue2.css	\
+	css-tag-types.css				\
+	css-trivial.css					\
 	cython_sample.pyx				\
 	cython_sample2.pyx				\
 	cxx11enum.cpp					\
+	cxx11-final.cpp					\
+	cxx11-noexcept.cpp				\
+	cxx11-override.cpp				\
+	cxx14-combined.cpp				\
 	db-trig.sql						\
 	debian_432872.f90				\
 	directives.c					\
 	dopbl2.f						\
+	dotted-names.json				\
 	enum.c							\
 	enum.f90						\
 	enum.java						\
@@ -149,6 +167,16 @@ test_sources = \
 	intro.tex						\
 	invalid_name.f90				\
 	java_enum.java					\
+	js-broken-strings.js			\
+	js-class-related-unterminated.js	\
+	js-const.js						\
+	js-implicit-semicolons.js		\
+	js-let.js						\
+	js-scope.js						\
+	js-signature.js					\
+	js-string-continuation.js		\
+	js-sub-block-scope.js			\
+	js-unknown-construct-nesting.js	\
 	jsFunc_tutorial.js				\
 	keyword_abstract.cs				\
 	keyword_catch_try.cs			\
@@ -179,6 +207,11 @@ test_sources = \
 	line_directives.c				\
 	local.c							\
 	macros.c						\
+	make-comment-in-rule.mak		\
+	make-gnumake-pattern-rules.mak	\
+	make-multi-target.mak			\
+	make-target-with-parentheses.mak	\
+	make-variable-on-cmdline.mak	\
 	masm.asm						\
 	matlab_backtracking.m			\
 	matlab_test.m					\
@@ -193,6 +226,7 @@ test_sources = \
 	namespaces2.php					\
 	namespaces.php					\
 	no_terminator.js				\
+	non-ascii-ident1.php			\
 	numlib.f90						\
 	objectivec_implementation.mm	\
 	objectivec_interface.mm			\
@@ -208,6 +242,9 @@ test_sources = \
 	prototype.h						\
 	pure_elem.f95					\
 	py_constructor_arglist.py		\
+	py-skipped-string.py			\
+	python-anonymous-nestlevel_ctags-bug-356.py	\
+	python-comments.py				\
 	qualified_types.f90				\
 	random.sql						\
 	readlob.sql						\
@@ -215,23 +252,33 @@ test_sources = \
 	recursive.f95					\
 	refcurs.sql						\
 	regexp.js						\
+	return-hint.zep					\
+	return-types.go					\
+	rules.t2t						\
+	sample.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
 	signature.cpp					\
 	simple.bas						\
 	simple.cbl						\
+	simple.d						\
 	simple.html						\
 	simple.js						\
+	simple.json						\
 	simple.ksh						\
 	simple.lua						\
 	simple.mak						\
 	simple.php						\
 	simple.pl						\
+	simple.ps1						\
 	simple.py						\
 	simple.rb						\
 	simple.sh						\
 	simple.tcl						\
+	simple.zep						\
+	size_t_wchar_t_alias.d			\
+	size_t_wchar_t_typedef.c		\
 	spurious_label_tags.c			\
 	sql_single_quote.sql			\
 	square_parens.f90				\
@@ -242,12 +289,16 @@ test_sources = \
 	strings.rb						\
 	structure.f						\
 	tabindent.py					\
+	test.erl						\
+	test.go							\
 	test.py							\
 	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
+	titles.t2t						\
 	traffic_signal.v				\
 	traits.php						\
+	ui5.controller.js				\
 	union.f							\
 	value.f							\
 	whitespaces.php					\

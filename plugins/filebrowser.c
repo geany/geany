@@ -33,11 +33,16 @@
 
 #ifdef G_OS_WIN32
 # include <windows.h>
+
+# define OPEN_CMD "explorer \"%d\""
+#elif defined(__APPLE__)
+# define OPEN_CMD "open \"%d\""
+#else
+# define OPEN_CMD "nautilus \"%d\""
 #endif
 
 GeanyPlugin *geany_plugin;
 GeanyData *geany_data;
-GeanyFunctions *geany_functions;
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
@@ -62,6 +67,7 @@ enum
 	FILEVIEW_COLUMN_ICON = 0,
 	FILEVIEW_COLUMN_NAME,
 	FILEVIEW_COLUMN_FILENAME, /* the full filename, including path for display as tooltip */
+	FILEVIEW_COLUMN_IS_DIR,
 	FILEVIEW_N_COLUMNS
 };
 
@@ -178,6 +184,39 @@ static gboolean check_filtered(const gchar *base_name)
 }
 
 
+static GIcon *get_icon(const gchar *fname)
+{
+	GIcon *icon = NULL;
+	gchar *ctype;
+
+	ctype = g_content_type_guess(fname, NULL, 0, NULL);
+
+	if (ctype)
+	{
+		icon = g_content_type_get_icon(ctype);
+		if (icon)
+		{
+			GtkIconInfo *icon_info;
+
+			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_default(), icon, 16, 0);
+			if (!icon_info)
+			{
+				g_object_unref(icon);
+				icon = NULL;
+			}
+			else
+				gtk_icon_info_free(icon_info);
+		}
+		g_free(ctype);
+	}
+
+	if (!icon)
+		icon = g_themed_icon_new("text-x-generic");
+
+	return icon;
+}
+
+
 /* name is in locale encoding */
 static void add_item(const gchar *name)
 {
@@ -185,6 +224,7 @@ static void add_item(const gchar *name)
 	gchar *fname, *utf8_name, *utf8_fullname;
 	const gchar *sep;
 	gboolean dir;
+	GIcon *icon;
 
 	if (G_UNLIKELY(EMPTY(name)))
 		return;
@@ -220,11 +260,15 @@ static void add_item(const gchar *name)
 
 		gtk_list_store_append(file_store, &iter);
 	}
+
+	icon = dir ? g_themed_icon_new("folder") : get_icon(utf8_name);
 	gtk_list_store_set(file_store, &iter,
-		FILEVIEW_COLUMN_ICON, (dir) ? GTK_STOCK_DIRECTORY : GTK_STOCK_FILE,
+		FILEVIEW_COLUMN_ICON, icon,
 		FILEVIEW_COLUMN_NAME, utf8_name,
 		FILEVIEW_COLUMN_FILENAME, utf8_fullname,
+		FILEVIEW_COLUMN_IS_DIR, dir,
 		-1);
+	g_object_unref(icon);
 done:
 	g_free(utf8_name);
 	g_free(utf8_fullname);
@@ -236,6 +280,7 @@ static void add_top_level_entry(void)
 {
 	GtkTreeIter iter;
 	gchar *utf8_dir;
+	GIcon *icon;
 
 	if (EMPTY(g_path_skip_root(current_dir)))
 		return;	/* ignore 'C:\' or '/' */
@@ -246,11 +291,14 @@ static void add_top_level_entry(void)
 	gtk_list_store_prepend(file_store, &iter);
 	last_dir_iter = gtk_tree_iter_copy(&iter);
 
+	icon = g_themed_icon_new("folder");
 	gtk_list_store_set(file_store, &iter,
-		FILEVIEW_COLUMN_ICON, GTK_STOCK_DIRECTORY,
+		FILEVIEW_COLUMN_ICON, icon,
 		FILEVIEW_COLUMN_NAME, "..",
 		FILEVIEW_COLUMN_FILENAME, utf8_dir,
+		FILEVIEW_COLUMN_IS_DIR, TRUE,
 		-1);
+	g_object_unref(icon);
 	g_free(utf8_dir);
 }
 
@@ -380,21 +428,15 @@ static gboolean is_folder_selected(GList *selected_items)
 
 	for (item = selected_items; item != NULL; item = g_list_next(item))
 	{
-		gchar *icon;
 		GtkTreeIter iter;
 		GtkTreePath *treepath;
 
 		treepath = (GtkTreePath*) item->data;
 		gtk_tree_model_get_iter(model, &iter, treepath);
-		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_ICON, &icon, -1);
+		gtk_tree_model_get(model, &iter, FILEVIEW_COLUMN_IS_DIR, &dir_found, -1);
 
-		if (utils_str_equal(icon, GTK_STOCK_DIRECTORY))
-		{
-			dir_found = TRUE;
-			g_free(icon);
+		if (dir_found)
 			break;
-		}
-		g_free(icon);
 	}
 	return dir_found;
 }
@@ -435,7 +477,7 @@ static void open_external(const gchar *fname, gboolean dir_found)
 
 	cmd = g_string_free(cmd_str, FALSE);
 	locale_cmd = utils_get_locale_from_utf8(cmd);
-	if (! g_spawn_command_line_async(locale_cmd, &error))
+	if (! spawn_async(NULL, locale_cmd, NULL, NULL, NULL, &error))
 	{
 		gchar *c = strchr(cmd, ' ');
 
@@ -823,7 +865,7 @@ static void prepare_file_view(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 
-	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+	file_store = gtk_list_store_new(FILEVIEW_N_COLUMNS, G_TYPE_ICON, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(file_view), GTK_TREE_MODEL(file_store));
 	g_object_unref(file_store);
@@ -832,7 +874,7 @@ static void prepare_file_view(void)
 	text_renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-	gtk_tree_view_column_set_attributes(column, icon_renderer, "stock-id", FILEVIEW_COLUMN_ICON, NULL);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "gicon", FILEVIEW_COLUMN_ICON, NULL);
 	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", FILEVIEW_COLUMN_NAME, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(file_view), column);
@@ -844,7 +886,7 @@ static void prepare_file_view(void)
 	ui_widget_modify_font_from_string(file_view, geany->interface_prefs->tagbar_font);
 
 	/* tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_FILENAME);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(file_view), FILEVIEW_COLUMN_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(file_view));
@@ -919,14 +961,14 @@ static GtkWidget *make_filterbar(void)
 static gboolean completion_match_func(GtkEntryCompletion *completion, const gchar *key,
 									  GtkTreeIter *iter, gpointer user_data)
 {
-	gchar *str, *icon;
+	gchar *str;
+	gboolean is_dir;
 	gboolean result = FALSE;
 
 	gtk_tree_model_get(GTK_TREE_MODEL(file_store), iter,
-		FILEVIEW_COLUMN_ICON, &icon, FILEVIEW_COLUMN_NAME, &str, -1);
+		FILEVIEW_COLUMN_IS_DIR, &is_dir, FILEVIEW_COLUMN_NAME, &str, -1);
 
-	if (str != NULL && icon != NULL && utils_str_equal(icon, GTK_STOCK_DIRECTORY) &&
-		! g_str_has_suffix(key, G_DIR_SEPARATOR_S))
+	if (str != NULL && is_dir && !g_str_has_suffix(key, G_DIR_SEPARATOR_S))
 	{
 		/* key is something like "/tmp/te" and str is a filename like "test",
 		 * so strip the path from key to make them comparable */
@@ -937,7 +979,6 @@ static gboolean completion_match_func(GtkEntryCompletion *completion, const gcha
 		g_free(str_lowered);
 	}
 	g_free(str);
-	g_free(icon);
 
 	return result;
 }
@@ -987,7 +1028,7 @@ static void load_settings(void)
 		"filebrowser", G_DIR_SEPARATOR_S, "filebrowser.conf", NULL);
 	g_key_file_load_from_file(config, config_file, G_KEY_FILE_NONE, NULL);
 
-	open_cmd = utils_get_setting_string(config, "filebrowser", "open_command", "nautilus \"%d\"");
+	open_cmd = utils_get_setting_string(config, "filebrowser", "open_command", OPEN_CMD);
 	/* g_key_file_get_boolean defaults to FALSE */
 	show_hidden_files = g_key_file_get_boolean(config, "filebrowser", "show_hidden_files", NULL);
 	hide_object_files = utils_get_setting_boolean(config, "filebrowser", "hide_object_files", TRUE);

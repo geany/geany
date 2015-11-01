@@ -76,7 +76,7 @@ typedef enum eKeywordId
 	KEYWORD_LOCAL, KEYWORD_LONG,
 	KEYWORD_M_BAD_STATE, KEYWORD_M_BAD_TRANS, KEYWORD_M_STATE, KEYWORD_M_TRANS,
 	KEYWORD_MODULE, KEYWORD_MUTABLE,
-	KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NEWCOV, KEYWORD_NATIVE,
+	KEYWORD_NAMESPACE, KEYWORD_NEW, KEYWORD_NEWCOV, KEYWORD_NATIVE, KEYWORD_NOEXCEPT,
 	KEYWORD_OPERATOR, KEYWORD_OUT, KEYWORD_OUTPUT, KEYWORD_OVERLOAD, KEYWORD_OVERRIDE,
 	KEYWORD_PACKED, KEYWORD_PORT, KEYWORD_PACKAGE, KEYWORD_PRIVATE,
 	KEYWORD_PROGRAM, KEYWORD_PROTECTED, KEYWORD_PUBLIC,
@@ -425,7 +425,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "extends",        KEYWORD_EXTENDS,        { 0, 0, 0, 1, 1, 0, 0 } },
 	{ "extern",         KEYWORD_EXTERN,         { 1, 1, 1, 0, 1, 1, 0 } },
 	{ "extern",         KEYWORD_NAMESPACE,      { 0, 0, 0, 0, 0, 0, 1 } },	/* parse block */
-	{ "final",          KEYWORD_FINAL,          { 0, 1, 0, 1, 0, 0, 1 } },
+	{ "final",          KEYWORD_FINAL,          { 0, 0, 0, 1, 0, 0, 1 } },
 	{ "finally",        KEYWORD_FINALLY,        { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "float",          KEYWORD_FLOAT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "for",            KEYWORD_FOR,            { 1, 1, 1, 1, 0, 1, 1 } },
@@ -457,6 +457,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "native",         KEYWORD_NATIVE,         { 0, 0, 0, 1, 0, 0, 0 } },
 	{ "new",            KEYWORD_NEW,            { 0, 1, 1, 1, 0, 1, 1 } },
 	{ "newcov",         KEYWORD_NEWCOV,         { 0, 0, 0, 0, 1, 0, 0 } },
+	{ "noexcept",       KEYWORD_NOEXCEPT,       { 0, 1, 0, 0, 0, 0, 0 } },
 	{ "operator",       KEYWORD_OPERATOR,       { 0, 1, 1, 0, 0, 0, 0 } },
 	{ "out",            KEYWORD_OUT,            { 0, 0, 0, 0, 0, 1, 1 } },
 	{ "output",         KEYWORD_OUTPUT,         { 0, 0, 0, 0, 1, 0, 0 } },
@@ -477,7 +478,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "short",          KEYWORD_SHORT,          { 1, 1, 1, 1, 0, 1, 1 } },
 	{ "signal",         KEYWORD_SIGNAL,         { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "signed",         KEYWORD_SIGNED,         { 1, 1, 0, 0, 0, 0, 0 } },
-	{ "size_t",         KEYWORD_SIZE_T,         { 1, 1, 0, 0, 0, 1, 1 } },
+	{ "size_t",         KEYWORD_SIZE_T,         { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "state",          KEYWORD_STATE,          { 0, 0, 0, 0, 1, 0, 0 } },
 	{ "static",         KEYWORD_STATIC,         { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "static_assert",  KEYWORD_STATIC_ASSERT,  { 0, 1, 0, 0, 0, 0, 0 } },
@@ -506,7 +507,7 @@ static const keywordDesc KeywordTable [] = {
 	{ "virtual",        KEYWORD_VIRTUAL,        { 0, 1, 1, 0, 1, 1, 0 } },
 	{ "void",           KEYWORD_VOID,           { 1, 1, 1, 1, 1, 1, 1 } },
 	{ "volatile",       KEYWORD_VOLATILE,       { 1, 1, 1, 1, 0, 0, 1 } },
-	{ "wchar_t",        KEYWORD_WCHAR_T,        { 1, 1, 1, 0, 0, 0, 1 } },
+	{ "wchar_t",        KEYWORD_WCHAR_T,        { 0, 1, 1, 0, 0, 0, 0 } },
 	{ "weak",           KEYWORD_WEAK,           { 0, 0, 0, 0, 0, 1, 0 } },
 	{ "while",          KEYWORD_WHILE,          { 1, 1, 1, 1, 0, 1, 1 } }
 };
@@ -2242,6 +2243,7 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 					case KEYWORD_ATTRIBUTE:	skipParens ();	break;
 					case KEYWORD_THROW:	skipParens ();		break;
 					case KEYWORD_CONST:						break;
+					case KEYWORD_NOEXCEPT:					break;
 					case KEYWORD_TRY:						break;
 					case KEYWORD_VOLATILE:					break;
 
@@ -2262,7 +2264,13 @@ static boolean skipPostArgumentStuff (statementInfo *const st,
 						break;
 
 					default:
-						if (isType (token, TOKEN_NONE))
+						/* "override" and "final" are only keywords in the declaration of a virtual
+						 * member function, so need to be handled specially, not as keywords */
+						if (isLanguage(Lang_cpp) && isType (token, TOKEN_NAME) &&
+							(strcmp ("override", vStringValue (token->name)) == 0 ||
+							 strcmp ("final", vStringValue (token->name)) == 0))
+							;
+						else if (isType (token, TOKEN_NONE))
 							;
 						else if (info->isKnrParamList  &&  info->parameterCount > 0)
 							++elementCount;
@@ -2620,9 +2628,16 @@ static void addContext (statementInfo *const st, const tokenInfo* const token)
 
 static boolean inheritingDeclaration (declType decl)
 {
-	return (boolean) (decl == DECL_CLASS ||
-					  decl == DECL_STRUCT ||
-					  decl == DECL_INTERFACE);
+	/* enum base types */
+	if (decl == DECL_ENUM)
+	{
+		return (boolean) (isLanguage (Lang_cpp) || isLanguage (Lang_csharp) ||
+			isLanguage (Lang_d));
+	}
+	return (boolean) (
+		decl == DECL_CLASS ||
+		decl == DECL_STRUCT ||
+		decl == DECL_INTERFACE);
 }
 
 static void processColon (statementInfo *const st)
@@ -2638,22 +2653,11 @@ static void processColon (statementInfo *const st)
 	else
 	{
 		cppUngetc (c);
-		if (((isLanguage (Lang_cpp) &&
-				(st->declaration == DECL_CLASS || st->declaration == DECL_STRUCT)) ||
-			isLanguage (Lang_csharp) || isLanguage (Lang_d) || isLanguage (Lang_vala)) &&
+		if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp) || isLanguage (Lang_d) ||
+			isLanguage (Lang_vala)) &&
 			inheritingDeclaration (st->declaration))
 		{
 			readParents (st, ':');
-		}
-		else if ((isLanguage (Lang_cpp) || isLanguage (Lang_csharp)) &&
-				 st->declaration == DECL_ENUM)
-		{
-			/* skip enum's base type */
-			c = skipToOneOf ("{;");
-			if (c == '{')
-				setToken (st, TOKEN_BRACE_OPEN);
-			else if (c == ';')
-				setToken (st, TOKEN_SEMICOLON);
 		}
 		else if (parentDecl (st) == DECL_STRUCT || parentDecl (st) == DECL_CLASS)
 		{
@@ -2973,7 +2977,15 @@ static void tagCheck (statementInfo *const st)
 				tokenInfo *name_token = (tokenInfo *)prev;
 				boolean free_name_token = FALSE;
 
-				if (isType (name_token, TOKEN_NAME))
+				/* C++ 11 allows class <name> final { ... } */
+				if (isLanguage (Lang_cpp) && isType (prev, TOKEN_NAME) &&
+					strcmp("final", vStringValue(prev->name)) == 0 &&
+					isType(prev2, TOKEN_NAME))
+				{
+					name_token = (tokenInfo *)prev2;
+					copyToken (st->blockName, name_token);
+				}
+				else if (isType (name_token, TOKEN_NAME))
 				{
 					if (!isLanguage (Lang_vala))
 						copyToken (st->blockName, name_token);
@@ -2997,13 +3009,6 @@ static void tagCheck (statementInfo *const st)
 								break;
 						}
 					}
-				}
-				/* C++ 11 allows class <name> final { ... } */
-				else if (isLanguage (Lang_cpp) && isType (prev, TOKEN_KEYWORD) &&
-						 prev->keyword == KEYWORD_FINAL && isType(prev2, TOKEN_NAME))
-				{
-					name_token = (tokenInfo *)prev2;
-					copyToken (st->blockName, name_token);
 				}
 				else if (isLanguage (Lang_csharp))
 					makeTag (prev, st, FALSE, TAG_PROPERTY);
