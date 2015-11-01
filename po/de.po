@@ -2386,13 +2386,11 @@ msgstr ""
 "scheint. Es könnte helfen Strg+C oder Enter im Terminal zu drücken."
 
 #: ../src/build.c:912
-#, fuzzy, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
-"Einstellungen überprüfen)."
+"Konnte das Kommando für das Terminal »%s« nicht ausführen. Sind die Einstellungen korrekt? Die Fehlermeldung lautete: %s"
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2572,20 +2570,17 @@ msgstr "Konnte Datei »%s« nicht öffnen (Datei nicht gefunden)."
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Bitte den Pfad in der Dateityp-Konfiguration überprüfen."
 
 #: ../src/callbacks.c:1478
-#, fuzzy
+
 msgid "Check the path setting in Preferences."
-msgstr ""
-"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
-"Einstellungen überprüfen)."
+msgstr "Bitte die Pfad-Einstellungen in den Einstellungen überprüfen"
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Kann angegebenen externen Befehl »%s« nicht ausführen (%s)."
+msgstr "Kann angegebenen externen Befehl »%s« nicht ausführen: %s. %s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -4177,13 +4172,11 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
-"Einstellungen überprüfen)."
+"Konnte das Kommando zum Drucken »%s« nicht ausführen. Sind die Pfadeinstellungen korrekt? Die Fehlermeldung lautete: %s"
 
 #: ../src/printing.c:622
 #, c-format
@@ -4534,7 +4527,7 @@ msgstr "%s %s -- %s (im Verzeichnis: %s)"
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
+"Konnte das grep Kommando »%s« nicht finden. Fehlermeldung: %s (Pfad zum Grep Kommando in den "
 "Einstellungen überprüfen)."
 
 #: ../src/search.c:1758
@@ -4575,10 +4568,9 @@ msgstr ""
 "muss. "
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
-#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr ""
-"Text hörte vor dem schließenden Zeichen für %c auf. (Der Text war »%s«)"
+msgstr "Der Text endete, bevor das schleißende Zeichen gefunden wurde."
+
 
 #. TL note: from glib
 #: ../src/spawn.c:126
@@ -4592,18 +4584,16 @@ msgstr ""
 "beinhalten."
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "Programm »%s« nicht gefunden."
+msgstr "Programm nicht gefunden."
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Ausführung fehlgeschlagen. Kein Arbeitsverzeichnis gefunden."
+msgstr "Konnte das Arbeitsverzeichnis nicht wechseln."
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Unbekannter Fehler beim Ausführen des Kind-Prozess aufgetreten."
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5001,7 +4991,7 @@ msgstr "Konnte die Vorlage »%s« nicht nach UTF-8 umwandeln."
 msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
-msgstr ""
+msgstr "Konnte das Kommando »%s« aus dem Template »%s« nicht ausführen. Prüfen Sie den Pfad in der Vorlage."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5178,13 +5168,12 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Das ausgeführte Kommando wurde mit einem Fehler beendet."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Konnte das grep Kommando »%s« nicht finden (Pfad zum Grep Kommando in den "
-"Einstellungen überprüfen)."
+"Konnte das benutzerdefinierte Kommando »%s« nicht finden: %s. Prüfen "
+"Sie die Pfadeinstellungen."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
