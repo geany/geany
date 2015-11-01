@@ -239,8 +239,8 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	}
 	else
 	{
-		geany_debug("spawn_sync() failed: %s", error->message);
-		ui_set_statusbar(TRUE, _("Custom command failed: %s"), error->message);
+		ui_set_statusbar(TRUE, _("Cannot execute custom command \"%s\": %s. "
+			"Check the path setting in Custom Commands."), command, error->message);
 		g_error_free(error);
 	}
 

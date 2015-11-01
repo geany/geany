@@ -1715,8 +1715,8 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 	}
 	else
 	{
-		geany_debug("%s: spawn_with_callbacks() failed: %s", G_STRFUNC, error->message);
-		ui_set_statusbar(TRUE, _("Process failed (%s)"), error->message);
+		ui_set_statusbar(TRUE, _("Cannot execute grep tool \"%s\": %s. "
+			"Check the path setting in Preferences."), tool_prefs.grep_cmd, error->message);
 		g_error_free(error);
 	}
 

@@ -74,6 +74,23 @@
 # define DEFAULT_IO_LENGTH 2048
 #else
 # define DEFAULT_IO_LENGTH 4096
+
+/* helper function that cuts glib citing of the original text on bad quoting: it may be long,
+   and only the caller knows whether it's UTF-8. Thought we lose the ' or " failed info. */
+static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar ***argvp,
+	GError **error)
+{
+	GError *gerror = NULL;
+
+	if (g_shell_parse_argv(command_line, argcp, argvp, &gerror))
+		return TRUE;
+
+	g_set_error_literal(error, gerror->domain, gerror->code,
+		gerror->code == G_SHELL_ERROR_BAD_QUOTING ?
+		_("Text ended before matching quote was found") : gerror->message);
+	g_error_free(gerror);
+	return FALSE;
+}
 #endif
 
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
@@ -104,7 +121,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (!*command_line)
 	{
-		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
+		g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_EMPTY_STRING,
 			/* TL note: from glib */
 			_("Text was empty (or contained only whitespace)"));
 		return FALSE;
@@ -119,16 +136,14 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 		/* Windows allows "foo.exe, but we may have extra arguments */
 		if ((s = strchr(command_line, '"')) == NULL)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
-				/* TL note: from glib */
-				_("Text ended before matching quote was found for %c."
-				  " (The text was '%s')"), '"', command_line);
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+				_("Text ended before matching quote was found"));
 			return FALSE;
 		}
 
 		if (!strchr(" \t", s[1]))  /* strchr() catches s[1] == '\0' */
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 				_("A quoted Windows program name must be entirely inside the quotes"));
 			return FALSE;
 		}
@@ -142,7 +157,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 		if (quote && quote < s)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
 				_("A quoted Windows program name must be entirely inside the quotes"));
 			return FALSE;
 		}
@@ -165,10 +180,8 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 
 	if (open_quote)
 	{
-		g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
-			/* TL note: from glib */
-			_("Text ended before matching quote was found for %c."
-			  " (The text was '%s')"), '"', command_line);
+		g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_BAD_QUOTING,
+			_("Text ended before matching quote was found"));
 		g_free(program);
 		return FALSE;
 	}
@@ -176,7 +189,7 @@ static gchar *spawn_get_program_name(const gchar *command_line, GError **error)
 	int argc;
 	char **argv;
 
-	if (!g_shell_parse_argv(command_line, &argc, &argv, error))
+	if (!spawn_parse_argv(command_line, &argc, &argv, error))
 		return FALSE;
 
 	/* empty string results in parse error, so argv[0] is not NULL */
@@ -237,8 +250,8 @@ gboolean spawn_check_command(const gchar *command_line, gboolean execute, GError
 
 		if (!executable)
 		{
-			g_set_error(error, G_SHELL_ERROR, G_SHELL_ERROR_FAILED,  /* or SPAWN error? */
-				_("Program '%s' not found"), program);
+			g_set_error_literal(error, G_SHELL_ERROR, G_SHELL_ERROR_FAILED,
+				_("Program not found"));
 			g_free(program);
 			return FALSE;
 		}
@@ -274,15 +287,14 @@ gboolean spawn_kill_process(GPid pid, GError **error)
 	{
 		gchar *message = g_win32_error_message(GetLastError());
 
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED,
-			_("TerminateProcess() failed: %s"), message);
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, message);
 		g_free(message);
 		return FALSE;
 	}
 #else
 	if (kill(pid, SIGTERM))
 	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", g_strerror(errno));
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, g_strerror(errno));
 		return FALSE;
 	}
 #endif
@@ -322,7 +334,7 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 			if (!CreatePipe(&hpipe[pindex[i][0]], &hpipe[pindex[i][1]], NULL, 0))
 			{
 				hpipe[pindex[i][0]] = hpipe[pindex[i][1]] = NULL;
-				failed = "CreatePipe";
+				failed = "create pipe";
 				goto leave;
 			}
 
@@ -332,21 +344,21 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 
 				if ((*fd[i] = _open_osfhandle((intptr_t) hpipe[i], mode[i])) == -1)
 				{
-					failed = "_open_osfhandle";
+					failed = "convert pipe handle to file descriptor";
 					message = g_strdup(g_strerror(errno));
 					goto leave;
 				}
 			}
 			else if (!CloseHandle(hpipe[i]))
 			{
-				failed = "CloseHandle";
+				failed = "close pipe";
 				goto leave;
 			}
 
 			if (!SetHandleInformation(hpipe[i + 3], HANDLE_FLAG_INHERIT,
 				HANDLE_FLAG_INHERIT))
 			{
-				failed = "SetHandleInformation";
+				failed = "set pipe handle to inheritable";
 				goto leave;
 			}
 		}
@@ -359,7 +371,7 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
 		environment, working_directory, &startup, &process))
 	{
-		failed = "CreateProcess";
+		failed = "";  /* report the message only */
 		/* further errors will not be reported */
 	}
 	else
@@ -377,10 +389,24 @@ leave:
 	if (failed)
 	{
 		if (!message)
-			message = g_win32_error_message(GetLastError());
+		{
+			size_t len;
 
-		failure = g_strdup_printf("%s() failed: %s", failed, message);
-		g_free(message);
+			message = g_win32_error_message(GetLastError());
+			len = strlen(message);
+
+			/* unlike g_strerror(), the g_win32_error messages may include a final '.' */
+			if (len > 0 && message[len - 1] == '.')
+				message[len - 1] = '\0';
+		}
+
+		if (*failed == '\0')
+			failure = message;
+		else
+		{
+			failure = g_strdup_printf("Failed to %s (%s)", failed, message);
+			g_free(message);
+		}
 	}
 
 	if (pipe_io)
@@ -546,7 +572,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 	if (failure)
 	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", failure);
+		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
 		g_free(failure);
 		return FALSE;
 	}
@@ -556,13 +582,14 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	int cl_argc;
 	char **full_argv;
 	gboolean spawned;
+	GError *gerror = NULL;
 
 	if (command_line)
 	{
 		int argc = 0;
 		char **cl_argv;
 
-		if (!g_shell_parse_argv(command_line, &cl_argc, &cl_argv, error))
+		if (!spawn_parse_argv(command_line, &cl_argc, &cl_argv, error))
 			return FALSE;
 
 		if (argv)
@@ -577,7 +604,83 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 	spawned = g_spawn_async_with_pipes(working_directory, full_argv, envp,
 		G_SPAWN_SEARCH_PATH | (child_pid ? G_SPAWN_DO_NOT_REAP_CHILD : 0), NULL, NULL,
-		child_pid, stdin_fd, stdout_fd, stderr_fd, error);
+		child_pid, stdin_fd, stdout_fd, stderr_fd, &gerror);
+
+	if (!spawned)
+	{
+		gint en = 0;
+		const gchar *message = gerror->message;
+
+		/* try to cut glib citing of the program name or working directory: they may be long,
+		   and only the caller knows whether they're UTF-8. We lose the exact chdir error. */
+		switch (gerror->code)
+		{
+		#ifdef EACCES
+			case G_SPAWN_ERROR_ACCES : en = EACCES; break;
+		#endif
+		#ifdef EPERM
+			case G_SPAWN_ERROR_PERM : en = EPERM; break;
+		#endif
+		#ifdef E2BIG
+			case G_SPAWN_ERROR_TOO_BIG : en = E2BIG; break;
+		#endif
+		#ifdef ENOEXEC
+			case G_SPAWN_ERROR_NOEXEC : en = ENOEXEC; break;
+		#endif
+		#ifdef ENAMETOOLONG
+			case G_SPAWN_ERROR_NAMETOOLONG : en = ENAMETOOLONG; break;
+		#endif
+		#ifdef ENOENT
+			case G_SPAWN_ERROR_NOENT : en = ENOENT; break;
+		#endif
+		#ifdef ENOMEM
+			case G_SPAWN_ERROR_NOMEM : en = ENOMEM; break;
+		#endif
+		#ifdef ENOTDIR
+			case G_SPAWN_ERROR_NOTDIR : en = ENOTDIR; break;
+		#endif
+		#ifdef ELOOP
+			case G_SPAWN_ERROR_LOOP : en = ELOOP; break;
+		#endif
+		#ifdef ETXTBUSY
+			case G_SPAWN_ERROR_TXTBUSY : en = ETXTBUSY; break;
+		#endif
+		#ifdef EIO
+			case G_SPAWN_ERROR_IO : en = EIO; break;
+		#endif
+		#ifdef ENFILE
+			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
+		#endif
+		#ifdef EMFILE 
+			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
+		#endif
+		#ifdef EINVAL
+			case G_SPAWN_ERROR_INVAL : en = EINVAL; break;
+		#endif
+		#ifdef EISDIR
+			case G_SPAWN_ERROR_ISDIR : en = EISDIR; break;
+		#endif
+		#ifdef ELIBBAD
+			case G_SPAWN_ERROR_LIBBAD : en = ELIBBAD; break;
+		#endif
+			case G_SPAWN_ERROR_CHDIR :
+			{
+				message = _("Failed to change to the working directory");
+				break;
+			}
+			case G_SPAWN_ERROR_FAILED :
+			{
+				message = _("Unknown error executing child process");
+				break;
+			}
+		}
+
+		if (en)
+			message = g_strerror(en);
+
+		g_set_error_literal(error, gerror->domain, gerror->code, message);
+		g_error_free(gerror);
+	}
 
 	if (full_argv != argv)
 	{

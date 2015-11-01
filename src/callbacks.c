@@ -1452,6 +1452,7 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	gchar *word, *command;
 	GError *error = NULL;
 	GeanyDocument *doc = document_get_current();
+	const gchar *check_msg;
 
 	g_return_if_fail(doc != NULL);
 
@@ -1469,22 +1470,30 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		!EMPTY(doc->file_type->context_action_cmd))
 	{
 		command = g_strdup(doc->file_type->context_action_cmd);
+		check_msg = _("Check the path setting in Filetype configuration.");
 	}
 	else
 	{
 		command = g_strdup(tool_prefs.context_action_cmd);
+		check_msg = _("Check the path setting in Preferences.");
 	}
 
 	/* substitute the wildcard %s and run the command if it is non empty */
 	if (G_LIKELY(!EMPTY(command)))
 	{
-		utils_str_replace_all(&command, "%s", word);
+		gchar *command_line = g_strdup(command);
 
-		if (!spawn_async(NULL, command, NULL, NULL, NULL, &error))
+		utils_str_replace_all(&command_line, "%s", word);
+
+		if (!spawn_async(NULL, command_line, NULL, NULL, NULL, &error))
 		{
-			ui_set_statusbar(TRUE, "Context action command failed: %s", error->message);
+			/* G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes */
+			ui_set_statusbar(TRUE, _("Cannot execute context action command \"%s\": %s. %s"),
+				error->domain == G_SHELL_ERROR ? command_line : command, error->message,
+				check_msg);
 			g_error_free(error);
 		}
+		g_free(command_line);
 	}
 	g_free(word);
 	g_free(command);
