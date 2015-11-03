@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@openmailbox.com>, 2015.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2015-10-19 13:41+0100\n"
-"Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
-"Language-Team: Português <palbuquerque73@openmailbox.com>\n"
+"POT-Creation-Date: 2015-11-02 02:36+0000\n"
+"PO-Revision-Date: 2015-11-02 08:53+0000\n"
+"Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\\n\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
@@ -1701,7 +1701,7 @@ msgstr "_Copiar linha(s) atual(is)"
 
 #: ../data/geany.glade.h:354 ../src/keybindings.c:380
 msgid "_Delete Current Line(s)"
-msgstr "_Apagar linha(s) atual(is)"
+msgstr "_Eliminar linha(s) atual(is)"
 
 #: ../data/geany.glade.h:355 ../src/keybindings.c:377
 msgid "D_uplicate Line or Selection"
@@ -2124,8 +2124,8 @@ msgstr "Propriedades do projeto"
 msgid "Filename:"
 msgstr "Nome do ficheiro:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
+#: ../data/geany.glade.h:460 ../src/project.c:169
+#: ../plugins/classbuilder.c:467 ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Nome:"
 
@@ -2363,13 +2363,13 @@ msgstr ""
 "Ctrl+C ou Enter para o limpar)."
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
-"Preferências."
+"Impossível executar o comando de terminal \"%s\": %s; verifique a definição "
+"do caminho nas Preferências."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2546,20 +2546,17 @@ msgstr "Impossível abrir o ficheiro %s (ficheiro não encontrado)"
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Verifique a definição de caminho na configuração de tipo de ficheiro."
 
 #: ../src/callbacks.c:1478
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr ""
-"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
-"Preferências."
+msgstr "Verifique a definição do caminho nas Preferências."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Impossível executar o comando externo personalizado '%s' (%s). "
+msgstr "Impossível executar o comando de ação contextual \"%s\": %s. %s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2811,7 +2808,7 @@ msgstr ", só de leitura"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Descartar histórico"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2820,11 +2817,14 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"O estado anterior do buffer é armazenado no histórico e desfazer restaura-o. "
+"Pode desativar isto descartando o histórico quando recarrega. Esta mensagem "
+"não será mostrada novamente mas a sua escolha pode ser alterada nas várias "
+"preferências."
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "O documento foi fechado."
+msgstr "O documento foi recarregado."
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
@@ -3331,7 +3331,7 @@ msgstr "Refazer"
 
 #: ../src/keybindings.c:384
 msgid "Delete to line end"
-msgstr "Apagar até ao final da linha"
+msgstr "Eliminar até ao final da linha"
 
 #: ../src/keybindings.c:387
 msgid "_Transpose Current Line"
@@ -4124,13 +4124,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
-"Preferências."
+"Erro ao executar o comando de impressao \"%s\": %s. Verifique a definição do "
+"caminho nas Preferências."
 
 #: ../src/printing.c:622
 #, c-format
@@ -4476,12 +4476,12 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (na pasta: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
-"Preferências."
+"Erro ao executar o comando grep \"%s\": %s. Verifique a definição do caminho "
+"nas Preferências."
 
 #: ../src/search.c:1758
 #, c-format
@@ -4520,11 +4520,8 @@ msgstr ""
 "Isto originou um erro fatal e o Geany será agora encerrado."
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
-#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr ""
-"O texto terminou antes da aspa correspondente a %c ser encontrada (o texto "
-"era \"%s\")."
+msgstr "O texto terminou antes da aspa correspondente ser encontrada"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
@@ -4537,18 +4534,16 @@ msgstr ""
 "Um nome citado de um programa Windows tem de estar inteiramente entre aspas"
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "Programa \"%s\" não encontrado"
+msgstr "Programa não encontrado"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Processo falhou, sem pasta de trabalho"
+msgstr "Falha ao alterar a pasta de trabalho"
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Erro desconhecido ao executar processo filho"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4947,6 +4942,8 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
+"Impossível executar o comando \"%s\" do modelo : %s. Verifique o caminho no "
+"modelo."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -4983,7 +4980,7 @@ msgstr "Colar o conteúdo da área de transferência"
 
 #: ../src/toolbar.c:67
 msgid "Delete the current selection"
-msgstr "Apagar a seleção atual"
+msgstr "Eliminar a seleção atual"
 
 #: ../src/toolbar.c:68
 msgid "Undo the last modification"
@@ -5124,13 +5121,13 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "O comando personalizado executado terminou com um código de insucesso."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Erro ao executar o comando grep '%s'; verifique a definição do caminho nas "
-"Preferências."
+"Impossível executar o comando personalizado \"%s\": %s. Verifique a "
+"definição do caminho nos comandos personalizados."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5537,8 +5534,9 @@ msgstr "Caracteres HTML"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Insere entidades de caracteres HTML como o '&amp;'."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
-#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "A equipa responsável pelo Geany"
 
