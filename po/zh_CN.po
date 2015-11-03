@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2014.
+# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2015-06-23 23:08-0800\n"
+"POT-Creation-Date: 2015-11-02 02:36+0000\n"
+"PO-Revision-Date: 2015-11-02 12:16-0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.8.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
@@ -1486,7 +1486,6 @@ msgid "Follow path of the current file"
 msgstr "跟随当前文件路径"
 
 #: ../data/geany.glade.h:328
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "当切换打开的文件时是否执行“cd $path”"
 
@@ -2125,7 +2124,6 @@ msgid "Other:"
 msgstr "其他："
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -2135,7 +2133,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2247,11 +2245,11 @@ msgid ""
 msgstr "因为终端中可能含有一些输入，没有执行文件（按 Ctrl+C 或回车键清除）。"
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
-msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
+msgstr "无法执行终端命令“%s”：%s。请检查首选项中的路径设置。"
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2424,18 +2422,17 @@ msgstr "无法打开文件 %s (文件不存在)"
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "请检查文件类型设置中的路径设置。"
 
 #: ../src/callbacks.c:1478
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
+msgstr "请检查首选项中的路径设置。"
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "无法执行设置的外部命令“%s” (%s)。"
+msgstr "无法执行上下文动作命令“%s”：%s。%s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2675,7 +2672,7 @@ msgstr "，只读"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "清除历史"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2684,11 +2681,12 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"缓冲区的上一个状态存储在历史中，可以由撤销恢复。你可以在重新载入时清除历史，"
+"以禁用这一行为。这条消息不会再次显示，但你可以在首选项中修改这一设置。"
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "文件已关闭。"
+msgstr "文件已被重新载入。"
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
@@ -3781,9 +3779,8 @@ msgid "Switch to Document"
 msgstr "切换到文档"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "用 _Geany 打开"
+msgstr "在新窗口中打开(_W)"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -3802,6 +3799,8 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"有其他插件依赖于该插件。请先禁用其他插件。\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
@@ -3964,11 +3963,11 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
-msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
+msgstr "无法执行打印命令“%s”：%s。请检查首选项中的路径设置。"
 
 #: ../src/printing.c:622
 #, c-format
@@ -4304,10 +4303,10 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (在目录 %s 中)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
-msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
+msgstr "无法执行 Grep 工具“%s”：%s。请检查首选项中的路径设置。"
 
 #: ../src/search.c:1758
 #, c-format
@@ -4344,9 +4343,8 @@ msgstr ""
 "这是一个致命错误，Geany 即将退出。"
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
-#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr "已找到匹配的引号 %c 之前的文本。（文本为“%s”）"
+msgstr "已找到匹配的引号之前的文本"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
@@ -4358,18 +4356,16 @@ msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr "被引号包含的 Windows 程序必须整个包含于引号中"
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "程序“%s”未找到"
+msgstr "程序未找到"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "进程失败，没有工作目录"
+msgstr "无法变更工作目录"
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "执行子进程时发生未知错误"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4765,7 +4761,7 @@ msgstr "未能将模板文件“%s”转换为 UTF-8"
 msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
-msgstr ""
+msgstr "无法执行模版中的命令“%s”：%s。请检查模版中的路径。"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -4937,11 +4933,11 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "运行的自定义命令返回一个错误退出代码。"
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
-msgstr "无法执行 Grep 工具“%s”，请检查首选项中的设置。"
+msgstr "无法执行自定义命令“%s”：%s。请检查自定义命令设置中的路径设置。"
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
