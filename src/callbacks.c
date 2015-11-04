@@ -431,13 +431,6 @@ void on_normal_size1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static gboolean delayed_check_disk_status(gpointer data)
-{
-	document_check_disk_status(data, FALSE);
-	return FALSE;
-}
-
-
 /* Changes window-title after switching tabs and lots of other things.
  * note: using 'after' makes Scintilla redraw before the UI, appearing more responsive */
 static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
@@ -462,10 +455,7 @@ static void on_notebook1_switch_page_after(GtkNotebook *notebook, gpointer page,
 		sidebar_update_tag_list(doc, FALSE);
 		document_highlight_tags(doc);
 
-		/* We delay the check to avoid weird fast, unintended switching of notebook pages when
-		 * the 'file has changed' dialog is shown while the switch event is not yet completely
-		 * finished. So, we check after the switch has been performed to be safe. */
-		g_idle_add(delayed_check_disk_status, doc);
+		document_check_disk_status(doc, TRUE);
 
 #ifdef HAVE_VTE
 		vte_cwd((doc->real_path != NULL) ? doc->real_path : doc->file_name, FALSE);

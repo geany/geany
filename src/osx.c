@@ -86,14 +86,6 @@ static void on_new_window(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointer user_dat
 }
 
 
-static void app_active_cb(GtkosxApplication* app, G_GNUC_UNUSED gpointer user_data)
-{
-	GeanyDocument *doc = document_get_current();
-	if (doc)
-		document_check_disk_status(doc, TRUE);
-}
-
-
 void osx_ui_init(void)
 {
 	GtkWidget *item, *menu;
@@ -118,8 +110,6 @@ void osx_ui_init(void)
 					G_CALLBACK(app_block_termination_cb), NULL);
 	g_signal_connect(osx_app, "NSApplicationOpenFile",
 					G_CALLBACK(app_open_file_cb), NULL);
-	g_signal_connect(osx_app, "NSApplicationDidBecomeActive",
-					G_CALLBACK(app_active_cb), NULL);
 
 	menu = gtk_menu_new();
 	item = gtk_menu_item_new_with_label("New Window");
