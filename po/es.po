@@ -6,11 +6,11 @@
 # Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2015.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2015-06-21 14:21+0100\n"
-"Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
+"POT-Creation-Date: 2015-11-02 02:36+0000\n"
+"PO-Revision-Date: 2015-11-02 09:11+0100\n"
+"Last-Translator: Lucas Vieites <lucas.vieites@gmail.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1603,10 +1603,9 @@ msgid "Follow path of the current file"
 msgstr "Seguir la ruta del archivo actual"
 
 #: ../data/geany.glade.h:328
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
-"Indica si se ejecutará «cd $path» cuando se cambie entre archivos abiertos"
+"Indica si se ejecuta «cd $path» cuando se cambie entre archivos abiertos"
 
 #: ../data/geany.glade.h:329
 msgid "Execute programs in the VTE"
@@ -2140,8 +2139,8 @@ msgstr "Propiedades del proyecto"
 msgid "Filename:"
 msgstr "Nombre de archivo:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
+#: ../data/geany.glade.h:460 ../src/project.c:169
+#: ../plugins/classbuilder.c:467 ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Nombre:"
 
@@ -2252,7 +2251,6 @@ msgid "Other:"
 msgstr "Otros:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -2262,7 +2260,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2379,12 +2377,12 @@ msgstr ""
 "(pulse Ctrl+C o Enter para limpiarlo)."
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"No se ha podido encontrar la herramienta grep «%s»; verifique la ruta en "
+"No se ha podido encontrar el comando «%s»: %s. Verifique la ruta en "
 "«Preferencias»."
 
 #: ../src/build.c:1020
@@ -2563,20 +2561,17 @@ msgstr "No se ha podido abrir el archivo %s (No se ha encontrado el archivo)"
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Compruebe el ajuste de la ruta en Configuración de tipos de archivo"
 
 #: ../src/callbacks.c:1478
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr ""
-"No se ha podido encontrar la herramienta grep «%s»; verifique la ruta en "
-"«Preferencias»."
+msgstr "Verifique la ruta en «Preferencias»."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "No se ha podido ejecutar el comando externo configurado «%s» (%s)."
+msgstr "No se ha podido ejecutar el comando de acción de contexto «%s»: %s. %s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2827,7 +2822,7 @@ msgstr ", sólo lectura"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Borrar historia"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2836,11 +2831,14 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"El estado anterior del búfer se almacena en la historia y deshacer lo "
+"restaura. Puede desactivar esto al Borrar historia al recargar. No se "
+"volverá a mostrar este mensaje pero puede cambiar su elección mediante los "
+"ajustes en Preferencias."
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "El documento ha sido cerrado."
+msgstr "El documento ha sido recargado."
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
@@ -3956,9 +3954,8 @@ msgid "Switch to Document"
 msgstr "Cambiar a documento"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Abrir en _Geany"
+msgstr "Abrir en _Ventana nueva"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -3979,6 +3976,9 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Otros plugins dependen de estos. Desactívelos antes para permitir "
+"desactivación.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
@@ -4150,13 +4150,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"No se ha podido encontrar la herramienta grep «%s»; verifique la ruta en "
-"«Preferencias»."
+"No se ha podido encontrar la herramienta de impresión «%s»: %s. Verifique la "
+"ruta en «Preferencias»."
 
 #: ../src/printing.c:622
 #, c-format
@@ -4505,11 +4505,11 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (en directorio: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"No se ha podido encontrar la herramienta grep «%s»; verifique la ruta en "
+"No se ha podido encontrar la herramienta grep «%s»: %s. Verifique la ruta en "
 "«Preferencias»."
 
 #: ../src/search.c:1758
@@ -4549,11 +4549,8 @@ msgstr ""
 "Esto es un error grave y Geany se cerrará."
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
-#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr ""
-"Se acabó el teto antes de encontrar las comillas correspondientes a %c. (El "
-"texto era «%s»)"
+msgstr "Se acabó el texto antes de encontrar las comillas correspondientes"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
@@ -4567,18 +4564,16 @@ msgstr ""
 "de las comillas"
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "No se ha encontrado el programa «%s»"
+msgstr "No se ha encontrado el programa"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "El proceso ha fallado, no hay directorio de trabajo"
+msgstr "No se ha podido cambiar el directorio de trabajo"
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Error desconocido al ejecutar proceso hijo"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4977,6 +4972,8 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
+"No se puede ejecutar el comando «%s» desde la plantilla: %s. Compruebe la "
+"ruta en la plantilla."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5153,13 +5150,13 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "El comando personalizado ejecutado salió con un código de error."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"No se ha podido encontrar la herramienta grep «%s»; verifique la ruta en "
-"«Preferencias»."
+"No se ha podido encontrar el comando personalizado «%s»: %s. Verifique la "
+"ruta en «Preferencias»."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5568,8 +5565,9 @@ msgstr "Caracteres HTML"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Insertar entidades HTML para carácteras como «&amp;»."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
-#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "El equipo de desarrollo de Geany"
 
