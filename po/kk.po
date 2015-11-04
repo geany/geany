@@ -1,14 +1,14 @@
 # Kazakh translation for geany.
-# Copyright (C) 2010-2014 The Geany team
+# Copyright (C) 2015 The Geany team
 # This file is distributed under the same license as the Geany package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2014.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2014-04-09 19:08+0600\n"
+"POT-Creation-Date: 2015-11-02 09:57+0500\n"
+"PO-Revision-Date: 2015-11-02 21:42+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.5\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -259,6 +259,7 @@ msgid ""
 "Whether to beep if an error occurred or when the compilation process has "
 "finished"
 msgstr ""
+"Қате орын алса немесе компиляция үрдісі аяқталған кезде дыбысты беру керек пе"
 
 #: ../data/geany.glade.h:53
 msgid "Switch to status message list at new message"
@@ -332,6 +333,8 @@ msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
+"Табу, Файлдардан табу немесе Алмастыру сұхбаттарын ашқан кезде ешнәрсе "
+"таңдалмаған болса, курсор астындағы ағымдағы сөзді қолдану"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current file's directory for Find in Files"
@@ -350,6 +353,8 @@ msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
 msgstr ""
+"Жобаның сессия файлдарын сақтау керек пе, және жобаны қайта ашқан кезде "
+"оларды ашу керек пе"
 
 #: ../data/geany.glade.h:72
 msgid "Store project file inside the project base directory"
@@ -622,13 +627,15 @@ msgstr "Кодты жинау"
 
 #: ../data/geany.glade.h:133
 msgid "Fold/unfold all children of a fold point"
-msgstr ""
+msgstr "Бүктеу нүктесінің барлық ұрпақтарын бүктеу/жазық қылу"
 
 #: ../data/geany.glade.h:134
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
+"Бүктеу нүктесінің барлық ұрпақтарын бүктеу/жазық қылу. Бүктеу таңбасына басу "
+"кезінде Shift пернесін ұстау арқылы керісінше әрекетке әкеледі."
 
 #: ../data/geany.glade.h:135
 msgid "Use indicators to show compile errors"
@@ -642,11 +649,13 @@ msgstr ""
 
 #: ../data/geany.glade.h:137
 msgid "Newline strips trailing spaces"
-msgstr ""
+msgstr "Жаңа жол артық бос аралықтарды алып тастайды"
 
 #: ../data/geany.glade.h:138
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
+"Жаңа жолға өту нәтижесінде оның алдыңдағы жолда артық бос аралықтарды алып "
+"тастауды іске қосу"
 
 #: ../data/geany.glade.h:139
 msgid "Line breaking column:"
@@ -731,7 +740,7 @@ msgstr "Енін файлдан анықтау"
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
-msgstr ""
+msgstr "Файл ашылған кезде шегіну енін файл құрамасынан анықтау керек пе"
 
 #: ../data/geany.glade.h:158
 msgid "Type:"
@@ -758,13 +767,15 @@ msgstr "Шегіну"
 
 #: ../data/geany.glade.h:163
 msgid "Snippet completion"
-msgstr ""
+msgstr "Сниппеттерді толықтыру"
 
 #: ../data/geany.glade.h:164
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
+"Белгіленген таңбалардың қысқа тізбегін жазып, бір шертумен оны күрделірек "
+"жолға дейін толықтыру"
 
 #: ../data/geany.glade.h:165
 msgid "XML/HTML tag auto-closing"
@@ -1055,7 +1066,7 @@ msgstr "Жаңа құжаттарды командалық жолдан ашу"
 
 #: ../data/geany.glade.h:230
 msgid "Create a new file for each command-line filename that doesn't exist"
-msgstr ""
+msgstr "Командалық жолдың әр жоқ болып тұрған файл атына жаңа файлды жасау"
 
 #: ../data/geany.glade.h:231
 msgid "Default end of line characters:"
@@ -1091,6 +1102,7 @@ msgstr "Үнсіз келісім бойынша кодтауы (бар болы
 #: ../data/geany.glade.h:238
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
+"Бар болып тұрған Unicode-емес файлдарын ашу кезіндегі қолданылатын кодталу"
 
 #: ../data/geany.glade.h:239
 msgid "<b>Encodings</b>"
@@ -1106,21 +1118,23 @@ msgstr "Файлдың соңында жаңа жолға өту бар екен
 
 #: ../data/geany.glade.h:242
 msgid "Ensure consistent line endings"
-msgstr ""
+msgstr "Біртектес жол аяқтауларын қамтамасыз ету"
 
 #: ../data/geany.glade.h:243
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
+"Бір файлда әр түрлі жол аяқтауларын қолдануды болдырмау үшін, сақтау алдында "
+"олардың түрлендіруін қамтамасыз ету"
 
 #: ../data/geany.glade.h:244
 msgid "Strip trailing spaces and tabs"
-msgstr ""
+msgstr "Артық бос аралықтар мен табуляцияны өшіру"
 
 #: ../data/geany.glade.h:245
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr ""
+msgstr "Жолдар соңынан артық бос аралықтар мен табуляцияны өшіреді"
 
 #: ../data/geany.glade.h:246 ../src/keybindings.c:647
 msgid "Replace tabs with space"
@@ -1140,7 +1154,7 @@ msgstr "Соңғы файлдар тізімінің ұзындығы:"
 
 #: ../data/geany.glade.h:250
 msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr ""
+msgstr "Жуырдағы файлдар тізімінде сақталатын файлдар санын анықтайды"
 
 #: ../data/geany.glade.h:251
 msgid "Disk check timeout:"
@@ -1432,7 +1446,7 @@ msgstr "Пернелерді басу кезінде айналдыру"
 
 #: ../data/geany.glade.h:318
 msgid "Whether to scroll to the bottom if a key was pressed"
-msgstr ""
+msgstr "Перне басылған кезде ең төменге дейін айналдыру керек пе"
 
 #: ../data/geany.glade.h:319
 msgid "Scroll on output"
@@ -1440,7 +1454,7 @@ msgstr "Шығыс болса, айналдыру"
 
 #: ../data/geany.glade.h:320
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr ""
+msgstr "Жаңа шығыс бар кезде, ең төменге айналдыру керек пе"
 
 #: ../data/geany.glade.h:321
 msgid "Cursor blinks"
@@ -1850,18 +1864,16 @@ msgid "Set Line E_ndings"
 msgstr "Жол а_яқтауларын орнату"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Түрлендіру жә_не CR/LF (Win) етіп орнату"
+msgstr "Түрлендіру және _CR/LF (Windows) етіп орнату"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Түр_лендіру және LF (Unix) етіп орнату"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Түрл_ендіру және CR (Mac) етіп орнату"
+msgstr "Түрлендіру және CR (Классикалық Mac) етіп орнату"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:645
 msgid "_Clone"
@@ -2115,7 +2127,6 @@ msgid "Other:"
 msgstr "Басқа:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -2125,13 +2136,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"Барлық құқықтары қорғалған."
+"All rights reserved."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2223,9 +2234,9 @@ msgid "Process failed (%s)"
 msgstr "Үрдіс сәтсіз (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Жұмыс бумасын \"%s\" етіп орнату сәтсіз"
+msgstr "\"%s\" жұмыс бумасы жарамсыз"
 
 #: ../src/build.c:838
 #, c-format
@@ -2239,13 +2250,11 @@ msgid ""
 msgstr ""
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
-"тексеріңіз."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2421,17 +2430,14 @@ msgid "Check the path setting in Filetype configuration."
 msgstr ""
 
 #: ../src/callbacks.c:1478
-#, fuzzy
 msgid "Check the path setting in Preferences."
 msgstr ""
-"grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
-"тексеріңіз."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Бапталған '%s' сыртқы командасын орындау мүмкін емес (%s)."
+msgstr ""
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2445,19 +2451,16 @@ msgid "Detect from file"
 msgstr "Файлдан анықтау"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
-msgstr "_Бағдарламалау тілдері"
+msgstr "Бағдарламалау тілдері"
 
 #: ../src/dialogs.c:227
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "_Скрипттеу тілдері"
+msgstr "Скрипттеу тілдері"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
-msgstr "Б_елгілеу тілдері"
+msgstr "Белгілеу тілдері"
 
 #: ../src/dialogs.c:307
 msgid "_More Options"
@@ -2508,10 +2511,9 @@ msgid "Open File"
 msgstr "Файлды ашу"
 
 #: ../src/dialogs.c:380
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
-msgstr "Қа_рау"
+msgstr "Қ_арап шығу"
 
 #: ../src/dialogs.c:382
 msgid ""
@@ -2690,18 +2692,16 @@ msgid ""
 msgstr ""
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "%s файлы қайта жүктелді."
+msgstr "Файл қайта жүктелді."
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
 msgstr "Барлық сақталмаған өзгерістер жоғалады."
 
 #: ../src/document.c:1663
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Барлық сақталмаған өзгерістер жоғалады."
+msgstr "Болдырмау тарихы жоғалады."
 
 #: ../src/document.c:1664
 #, c-format
@@ -2749,16 +2749,13 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "'%s' файлын жабу сәтсіз: fclose() сәтсіз: %s"
 
 #: ../src/document.c:2058 ../src/document.c:3589
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Үстінен жазу керек пе?"
+msgstr "Ү_стінен жазу"
 
 #: ../src/document.c:2060 ../src/document.c:3592
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"Дискідегі '%s' файлы ағымдағы\n"
-"буферден жаңалау."
+msgstr "Дискідегі '%s' файлы ағымдағы буферден жаңалау."
 
 #: ../src/document.c:2068 ../src/document.c:3641
 msgid "Try to resave the file?"
@@ -2772,7 +2769,7 @@ msgstr "\"%s\" файлы дисктен табылмады!"
 #: ../src/document.c:2132
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "'%s' тек оқу үшін ашылған құжатты сақтау мүмкін емес!"
 
 #: ../src/document.c:2200
 #, c-format
@@ -2863,15 +2860,15 @@ msgstr "Орта Еуропалық"
 #: ../src/encodings.c:87 ../src/encodings.c:88 ../src/encodings.c:90
 #: ../src/encodings.c:91 ../src/encodings.c:92
 msgid "Cyrillic"
-msgstr "Кириллица"
+msgstr "Кирилл жазуы"
 
 #: ../src/encodings.c:93
 msgid "Cyrillic/Russian"
-msgstr "Кириллица/Ресей"
+msgstr "Кирилл жазуы/Ресей"
 
 #: ../src/encodings.c:94
 msgid "Cyrillic/Ukrainian"
-msgstr "Кириллица/Украин"
+msgstr "Кирилл жазуы/Украин"
 
 #: ../src/encodings.c:95
 msgid "Romanian"
@@ -3042,7 +3039,7 @@ msgstr "Әр тү_рлі"
 
 #: ../src/filetypes.c:1200 ../src/win32.c:156
 msgid "All Source"
-msgstr ""
+msgstr "Барлық бастапқы кодтар"
 
 #. create meta file filter "All files"
 #: ../src/filetypes.c:1225 ../src/project.c:350 ../src/win32.c:146
@@ -3612,6 +3609,8 @@ msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
 msgstr ""
+"Бірінші ашылған файл үшін бастапқы баған нөмірін орнату (--line опциясымен "
+"бірге қолданылғанда пайдалы)"
 
 #: ../src/libmain.c:119
 msgid "Use an alternate configuration directory"
@@ -3644,7 +3643,7 @@ msgstr ""
 
 #: ../src/libmain.c:126
 msgid "Return a list of open documents in a running Geany instance"
-msgstr ""
+msgstr "Орындалып тұрған Geany нұсқасының ашық құжаттар тізімін қайтарады"
 
 #: ../src/libmain.c:128
 msgid "Set initial line number for the first opened file"
@@ -3782,16 +3781,15 @@ msgstr ""
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "Құжат жабылды."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
 msgstr "Құжатқа ауысу"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Файлды ашу"
+msgstr "Жаңа тере_зеде ашу"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -3799,6 +3797,8 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
+"\"%s\" плагині Geany-дің бұл нұсқасымен екілік үйлесімді емес - оны қайта "
+"жинаңыз."
 
 #: ../src/plugins.c:1224
 msgid "_Plugin Manager"
@@ -3810,6 +3810,9 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Басқа плагиндер осыған тәуелді. Белсенді емес қылу үшін алдымен оларды "
+"сөндіріңіз.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
@@ -3819,6 +3822,9 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Нұсқасы:\t%s\n"
+"Автор(лар):\t%s\n"
+"Файл аты:\t%s"
 
 #: ../src/plugins.c:1630
 msgid "No plugins available."
@@ -3916,6 +3922,8 @@ msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
 msgstr ""
+"<i>Ескерту: бұл баптаулардан ағымдағы жоба басымдылау болады. <b>Жоба-"
+">Қасиеттері</b> қараңыз.</i>"
 
 #: ../src/printing.c:164
 #, c-format
@@ -3970,13 +3978,11 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
-"тексеріңіз."
 
 #: ../src/printing.c:622
 #, c-format
@@ -3991,7 +3997,7 @@ msgstr "жобалар"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Ағымдағы құжаттарды жаңа жобаның сессиясына жылжыту керек пе?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4002,9 +4008,8 @@ msgid "C_reate"
 msgstr "Жаса_у"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Жоба"
+msgstr "Жоба атауы"
 
 #: ../src/project.c:188
 #, c-format
@@ -4123,17 +4128,19 @@ msgstr ""
 
 #: ../src/search.c:315
 msgid "Use _escape sequences"
-msgstr ""
+msgstr "_Экрандау тізбектерін қолдану"
 
 #: ../src/search.c:319
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
+"\\\\, \\t, \\n, \\r және \\uXXXX (Unicode таңбалары) сәйкес келетін басқару "
+"таңбаларымен алмастыру"
 
 #: ../src/search.c:322
 msgid "Use multi-line matchin_g"
-msgstr ""
+msgstr "Көпжолдық сәйкес_тендіруді қолдану"
 
 #: ../src/search.c:327
 msgid ""
@@ -4313,12 +4320,10 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (бумадан: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
-"тексеріңіз."
 
 #: ../src/search.c:1758
 #, c-format
@@ -4354,30 +4359,28 @@ msgstr ""
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
 msgid "Text ended before matching quote was found"
-msgstr ""
+msgstr "Мәтін сәйкес келетін тырнақша табылғанға дейін аяқталды"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Мәтін бос болды (немесе тек бос аралықтан тұрды)"
 
 #: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "Команда табылмады."
+msgstr "Бағдарлама табылмады"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Үрдіс сәтсіз, жұмыс бумасы жоқ"
+msgstr "Жұмыс бумасына ауысу қатемен аяқталды"
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Ұрпақ үрдісін орындау кезіндегі белгісіз қате"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4949,13 +4952,11 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Орындалған таңдауыңызша команда сәтсіз шығу кодымен аяқталды."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
-"тексеріңіз."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5160,9 +5161,8 @@ msgid "Select File"
 msgstr "Файлды таңдау"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "Ба_птауларды қайта жүктеу"
+msgstr "_Файлдық түр баптаулары"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5189,14 +5189,12 @@ msgstr ""
 "түзетіңіз не басқасын көрсетіңіз."
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:376
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Классикалық Mac (CR)"
 
 #: ../src/utils.c:377
 msgid "Unix (LF)"
@@ -5204,15 +5202,15 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:386
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:387
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:388
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:489
 #, c-format
@@ -5525,9 +5523,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Бапталған '%s' сыртқы командасын орындау мүмкін емес (%s)."
 
 #: ../plugins/filebrowser.c:651
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Файлды ашу"
+msgstr "Geany көме_гімен ашу"
 
 #: ../plugins/filebrowser.c:657
 msgid "Open _Externally"
@@ -5749,9 +5746,11 @@ msgstr "Үсті мен астында"
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "\"%s\" басып шығару сәтсіз (қайтару коды: %s)."
 
-#, fuzzy
+#~ msgid "Program '%s' not found"
+#~ msgstr "'%s' бағдарламасы табылмады"
+
 #~ msgid "TerminateProcess() failed: %s"
-#~ msgstr "Үрдіс сәтсіз (%s)"
+#~ msgstr "TerminateProcess() сәтсіз: %s"
 
 #~ msgid "Custom command failed: %s"
 #~ msgstr "Таңдауыңызша команда сәтсіз аяқталды: %s"
@@ -5793,6 +5792,12 @@ msgstr "Үсті мен астында"
 
 #~ msgid "Author(s):"
 #~ msgstr "Автор(лар):"
+
+#~ msgid ""
+#~ "Cannot execute grep tool '%s'; check the path setting in Preferences."
+#~ msgstr ""
+#~ "grep '%s' сайманын орындау мүмкін емес; Баптаулардағы оның орнатуын "
+#~ "тексеріңіз."
 
 #~ msgid "Cannot parse extra options: %s"
 #~ msgstr "Қосымша опцияларды талдау мүмкін емес: %s"
