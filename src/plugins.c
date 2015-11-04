@@ -1478,6 +1478,9 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 		/* save shortcuts (only need this group, but it doesn't take long) */
 		keybindings_write_to_file();
 
+	/* plugin_new() below may cause a tree view refresh with invalid p - set to NULL */
+	gtk_tree_store_set(pm_widgets.store, &store_iter,
+		PLUGIN_COLUMN_PLUGIN, NULL, -1);
 	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
