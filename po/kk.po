@@ -1873,7 +1873,7 @@ msgstr "Түр_лендіру және LF (Unix) етіп орнату"
 
 #: ../data/geany.glade.h:423
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Түрлендіру және CR (Классикалық Mac) етіп орнату"
+msgstr "Түрлендіру жә_не CR (Классикалық Mac) етіп орнату"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:645
 msgid "_Clone"
