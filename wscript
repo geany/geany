@@ -349,6 +349,15 @@ but you then may not have a local copy of the HTML manual.'''
     conf.msg('Use virtual terminal support', conf.options.no_vte and 'no' or 'yes')
     if revision is not None:
         conf.msg('Compiling Git revision', revision)
+    # deprecation warning
+    _show_deprecation_warning(conf)
+
+
+def _show_deprecation_warning(ctx):
+    Logs.pprint(
+        'RED',
+        'The Waf build system is deprecated and will be removed in the removed in Geany 1.27. '
+        'Please use the Autotools build system.')
 
 
 def options(opt):
@@ -393,6 +402,7 @@ def options(opt):
 
 def build(bld):
     is_win32 = _target_is_win32(bld)
+    bld.add_post_fun(_show_deprecation_warning)
 
     if bld.cmd == 'clean':
         _remove_linguas_file()
