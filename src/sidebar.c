@@ -41,6 +41,7 @@
 #include "symbols.h"
 #include "ui_utils.h"
 #include "utils.h"
+#include "keybindings.h"
 
 #include <string.h>
 
@@ -141,7 +142,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	if (! interface_prefs.show_symbol_list_expanders)
 		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 	/* Tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -173,6 +174,7 @@ static void create_default_tag_tree(void)
 	tv.default_tag_tree = gtk_viewport_new(
 		gtk_scrolled_window_get_hadjustment(scrolled_window),
 		gtk_scrolled_window_get_vadjustment(scrolled_window));
+	gtk_viewport_set_shadow_type(GTK_VIEWPORT(tv.default_tag_tree), GTK_SHADOW_NONE);
 	label = gtk_label_new(_("No tags found"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.1f, 0.01f);
 	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
@@ -189,6 +191,12 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
+
+	if (update)
+		doc->priv->tag_tree_dirty = TRUE;
+
+	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
+		return; /* don't bother updating symbol tree if we don't see it */
 
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
@@ -214,7 +222,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		return;
 	}
 
-	if (update)
+	if (doc->priv->tag_tree_dirty)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)
 		{
@@ -227,6 +235,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		}
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+		doc->priv->tag_tree_dirty = FALSE;
 	}
 
 	if (doc->has_tags)
@@ -311,7 +320,7 @@ static void prepare_openfiles(void)
 	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 
 	/* tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -904,7 +913,7 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 		if (! tag)
 			return FALSE;
 
-		line = tag->atts.entry.line;
+		line = tag->line;
 		if (line > 0)
 		{
 			GeanyDocument *doc = document_get_current();
@@ -912,7 +921,8 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				if (keyval != GDK_space && ! (state & GDK_CONTROL_MASK))
+				state = keybindings_get_modifiers(state);
+				if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
 					change_focus_to_editor(doc, NULL);
 				else
 					handled = FALSE;
@@ -1078,6 +1088,14 @@ static void on_save_settings(void)
 }
 
 
+static void on_sidebar_switch_page(GtkNotebook *notebook,
+	gpointer page, guint page_num, gpointer user_data)
+{
+	if (page_num == TREEVIEW_SYMBOL)
+		sidebar_update_tag_list(document_get_current(), FALSE);
+}
+
+
 void sidebar_init(void)
 {
 	StashGroup *group;
@@ -1100,6 +1118,8 @@ void sidebar_init(void)
 	/* tabs may have changed when sidebar is reshown */
 	g_signal_connect(main_widgets.sidebar_notebook, "show",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	g_signal_connect_after(main_widgets.sidebar_notebook, "switch-page",
+		G_CALLBACK(on_sidebar_switch_page), NULL);
 
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }

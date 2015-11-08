@@ -31,6 +31,51 @@
 
 G_BEGIN_DECLS
 
+/** Groups of Build menu items. */
+typedef enum
+{
+	GEANY_GBG_FT,		/* *< filetype items */
+	GEANY_GBG_NON_FT,	/* *< non filetype items.*/
+	GEANY_GBG_EXEC,		/* *< execute items */
+	GEANY_GBG_COUNT		/* *< count of groups. */
+} GeanyBuildGroup;
+
+/** Build menu item sources in increasing priority */
+typedef enum
+{
+	GEANY_BCS_DEF,		/* *< Default values. */
+	GEANY_BCS_FT,		/* *< System filetype values. */
+	GEANY_BCS_HOME_FT,	/* *< Filetypes in ~/.config/geany/filedefs */
+	GEANY_BCS_PREF,		/* *< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ_FT,	/* *< Project file filetype command */
+	GEANY_BCS_PROJ,		/* *< Project file if open. */
+	GEANY_BCS_COUNT		/* *< Count of sources. */
+} GeanyBuildSource;
+
+/** The entries of a command for a menu item */
+typedef enum GeanyBuildCmdEntries
+{
+	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
+	GEANY_BC_COMMAND,			/* *< The command to run. */
+	GEANY_BC_WORKING_DIR,		/* *< The directory to run in */
+	GEANY_BC_CMDENTRIES_COUNT	/* *< Count of entries */
+} GeanyBuildCmdEntries;
+
+void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
+
+const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
+                                         const GeanyBuildCmdEntries field);
+
+void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
+
+void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
+                         const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
+
+guint build_get_group_count(const GeanyBuildGroup grp);
+
+
+#ifdef GEANY_PRIVATE
+
 /* Order is important (see GBO_TO_GBG, GBO_TO_CMD below) */
 /* * Geany Known Build Commands.
  * These commands are named after their default use.
@@ -46,15 +91,6 @@ typedef enum
 	GEANY_GBO_EXEC,			/* *< default execute ./%e */
 	GEANY_GBO_COUNT			/* *< count of how many */
 } GeanyBuildType;
-
-/** Groups of Build menu items. */
-typedef enum
-{
-	GEANY_GBG_FT,		/* *< filetype items */
-	GEANY_GBG_NON_FT,	/* *< non filetype items.*/
-	GEANY_GBG_EXEC,		/* *< execute items */
-	GEANY_GBG_COUNT		/* *< count of groups. */
-} GeanyBuildGroup;
 
 /* include the fixed widgets in an array indexed by groups */
 #define GBG_FIXED GEANY_GBG_COUNT
@@ -99,18 +135,6 @@ enum GeanyBuildFixedMenuItems
 	GBF_COUNT
 };
 
-/** Build menu item sources in increasing priority */
-typedef enum
-{
-	GEANY_BCS_DEF,		/* *< Default values. */
-	GEANY_BCS_FT,		/* *< System filetype values. */
-	GEANY_BCS_HOME_FT,	/* *< Filetypes in ~/.config/geany/filedefs */
-	GEANY_BCS_PREF,		/* *< Preferences file ~/.config/geany/geany.conf */
-	GEANY_BCS_PROJ_FT,	/* *< Project file filetype command */
-	GEANY_BCS_PROJ,		/* *< Project file if open. */
-	GEANY_BCS_COUNT		/* *< Count of sources. */
-} GeanyBuildSource;
-
 typedef struct GeanyBuildInfo
 {
 	GeanyBuildGroup	 grp;
@@ -123,15 +147,6 @@ typedef struct GeanyBuildInfo
 } GeanyBuildInfo;
 
 extern GeanyBuildInfo build_info;
-
-/** The entries of a command for a menu item */
-typedef enum GeanyBuildCmdEntries
-{
-	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
-	GEANY_BC_COMMAND,			/* *< The command to run. */
-	GEANY_BC_WORKING_DIR,		/* *< The directory to run in */
-	GEANY_BC_CMDENTRIES_COUNT	/* *< Count of entries */
-} GeanyBuildCmdEntries;
 
 /* * The command for a menu item. */
 typedef struct GeanyBuildCommand
@@ -184,17 +199,7 @@ void build_menu_update(GeanyDocument *doc);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
 
-void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
-
 GeanyBuildCommand *build_get_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const guint cmd);
-
-const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
-                                         const GeanyBuildCmdEntries field);
-
-void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
-                         const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
-
-void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
@@ -205,9 +210,9 @@ void build_save_menu(GKeyFile *config, gpointer ptr, GeanyBuildSource src);
 
 void build_set_group_count(GeanyBuildGroup grp, gint count);
 
-guint build_get_group_count(const GeanyBuildGroup grp);
-
 gchar **build_get_regex(GeanyBuildGroup grp, GeanyFiletype *ft, guint *from);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 

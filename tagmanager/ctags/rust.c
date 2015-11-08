@@ -24,7 +24,7 @@
 /*
 *   MACROS
 */
-#define MAX_STRING_LENGTH 64
+#define MAX_STRING_LENGTH 256
 
 /*
 *   DATA DECLARATIONS
@@ -117,9 +117,7 @@ static void writeCurTokenToStr (lexerState *lexer, vString *out_str)
 			vStringCat(out_str, lexer->token_str);
 			break;
 		case TOKEN_STRING:
-			vStringPut(out_str, '"');
 			vStringCat(out_str, lexer->token_str);
-			vStringPut(out_str, '"');
 			break;
 		case TOKEN_WHITESPACE:
 			vStringPut(out_str, ' ');
@@ -152,6 +150,14 @@ static void advanceNChar (lexerState *lexer, int n)
 		advanceChar(lexer);
 }
 
+/* Store the current character in lexerState::token_str if there is space
+ * (set by MAX_STRING_LENGTH), and then read the next character from the file */
+static void advanceAndStoreChar (lexerState *lexer)
+{
+	if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
+		vStringPut(lexer->token_str, (char) lexer->cur_c);
+	advanceChar(lexer);
+}
 
 static boolean isWhitespace (int c)
 {
@@ -182,19 +188,30 @@ static void scanWhitespace (lexerState *lexer)
 }
 
 /* Normal line comments start with two /'s and continue until the next \n
- * (NOT any other newline character!). Additionally, a shebang in the beginning
- * of the file also counts as a line comment.
+ * (potentially after a \r). Additionally, a shebang in the beginning of the
+ * file also counts as a line comment as long as it is not this sequence: #![ .
  * Block comments start with / followed by a * and end with a * followed by a /.
  * Unlike in C/C++ they nest. */
 static void scanComments (lexerState *lexer)
 {
-	/* // or #! */
-	if (lexer->next_c == '/' || lexer->next_c == '!')
+	/* // */
+	if (lexer->next_c == '/')
 	{
 		advanceNChar(lexer, 2);
 		while (lexer->cur_c != EOF && lexer->cur_c != '\n')
 			advanceChar(lexer);
 	}
+	/* #! */
+	else if (lexer->next_c == '!')
+	{
+		advanceNChar(lexer, 2);
+		/* If it is exactly #![ then it is not a comment, but an attribute */
+		if (lexer->cur_c == '[')
+			return;
+		while (lexer->cur_c != EOF && lexer->cur_c != '\n')
+			advanceChar(lexer);
+	}
+	/* block comment */
 	else if (lexer->next_c == '*')
 	{
 		int level = 1;
@@ -224,8 +241,7 @@ static void scanIdentifier (lexerState *lexer)
 	vStringClear(lexer->token_str);
 	do
 	{
-		vStringPut(lexer->token_str, (char) lexer->cur_c);
-		advanceChar(lexer);
+		advanceAndStoreChar(lexer);
 	} while(lexer->cur_c != EOF && isIdentifierContinue(lexer->cur_c));
 }
 
@@ -237,16 +253,14 @@ static void scanIdentifier (lexerState *lexer)
 static void scanString (lexerState *lexer)
 {
 	vStringClear(lexer->token_str);
-	advanceChar(lexer);
+	advanceAndStoreChar(lexer);
 	while (lexer->cur_c != EOF && lexer->cur_c != '"')
 	{
 		if (lexer->cur_c == '\\' && lexer->next_c == '"')
-			advanceChar(lexer);
-		if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
-			vStringPut(lexer->token_str, (char) lexer->cur_c);
-		advanceChar(lexer);
+			advanceAndStoreChar(lexer);
+		advanceAndStoreChar(lexer);
 	}
-	advanceChar(lexer);
+	advanceAndStoreChar(lexer);
 }
 
 /* Raw strings look like this: r"" or r##""## where the number of
@@ -255,50 +269,73 @@ static void scanRawString (lexerState *lexer)
 {
 	size_t num_initial_hashes = 0;
 	vStringClear(lexer->token_str);
-	advanceChar(lexer);
+	advanceAndStoreChar(lexer);
 	/* Count how many leading hashes there are */
 	while (lexer->cur_c == '#')
 	{
 		num_initial_hashes++;
-		advanceChar(lexer);
+		advanceAndStoreChar(lexer);
 	}
 	if (lexer->cur_c != '"')
 		return;
-	advanceChar(lexer);
+	advanceAndStoreChar(lexer);
 	while (lexer->cur_c != EOF)
 	{
-		if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
-			vStringPut(lexer->token_str, (char) lexer->cur_c);
 		/* Count how many trailing hashes there are. If the number is equal or more
 		 * than the number of leading hashes, break. */
 		if (lexer->cur_c == '"')
 		{
 			size_t num_trailing_hashes = 0;
-			advanceChar(lexer);
+			advanceAndStoreChar(lexer);
 			while (lexer->cur_c == '#' && num_trailing_hashes < num_initial_hashes)
 			{
 				num_trailing_hashes++;
 
-				if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH)
-					vStringPut(lexer->token_str, (char) lexer->cur_c);
-				advanceChar(lexer);
+				advanceAndStoreChar(lexer);
 			}
 			if (num_trailing_hashes == num_initial_hashes)
-			{
-				/* Strip the trailing hashes and quotes */
-				if (vStringLength(lexer->token_str) < MAX_STRING_LENGTH && vStringLength(lexer->token_str) > num_trailing_hashes + 1)
-				{
-					lexer->token_str->length = vStringLength(lexer->token_str) - num_trailing_hashes - 1;
-					lexer->token_str->buffer[lexer->token_str->length] = '\0';
-				}
 				break;
-			}
 		}
 		else
 		{
-			advanceChar(lexer);
+			advanceAndStoreChar(lexer);
 		}
 	}
+}
+
+/* This deals with character literals: 'n', '\n', '\uFFFF'; and lifetimes:
+ * 'lifetime. We'll use this approximate regexp for the literals:
+ * \' \\ [^']+ \' or \' [^'] \' or \' \\ \' \'. Either way, we'll treat this
+ * token as a string, so it gets preserved as is for function signatures with
+ * lifetimes. */
+static void scanCharacterOrLifetime (lexerState *lexer)
+{
+	vStringClear(lexer->token_str);
+	advanceAndStoreChar(lexer);
+
+	if (lexer->cur_c == '\\')
+	{
+		advanceAndStoreChar(lexer);
+		/* The \' \\ \' \' (literally '\'') case */
+		if (lexer->cur_c == '\'' && lexer->next_c == '\'')
+		{
+			advanceAndStoreChar(lexer);
+			advanceAndStoreChar(lexer);
+		}
+		/* The \' \\ [^']+ \' case */
+		else
+		{
+			while (lexer->cur_c != EOF && lexer->cur_c != '\'')
+				advanceAndStoreChar(lexer);
+		}
+	}
+	/* The \' [^'] \' case */
+	else if (lexer->cur_c != '\'' && lexer->next_c == '\'')
+	{
+		advanceAndStoreChar(lexer);
+		advanceAndStoreChar(lexer);
+	}
+	/* Otherwise it is malformed, or a lifetime */
 }
 
 /* Advances the parser one token, optionally skipping whitespace
@@ -341,6 +378,11 @@ static int advanceToken (lexerState *lexer, boolean skip_whitspace)
 		else if (lexer->cur_c == 'r' && (lexer->next_c == '#' || lexer->next_c == '"'))
 		{
 			scanRawString(lexer);
+			return lexer->cur_token = TOKEN_STRING;
+		}
+		else if (lexer->cur_c == '\'')
+		{
+			scanCharacterOrLifetime(lexer);
 			return lexer->cur_token = TOKEN_STRING;
 		}
 		else if (isIdentifierStart(lexer->cur_c))
@@ -608,7 +650,8 @@ static void parseQualifiedType (lexerState *lexer, vString* name)
 	{
 		if (lexer->cur_token == TOKEN_IDENT)
 		{
-			if (strcmp(lexer->token_str->buffer, "for") == 0)
+			if (strcmp(lexer->token_str->buffer, "for") == 0
+				|| strcmp(lexer->token_str->buffer, "where") == 0)
 				break;
 			vStringClear(name);
 			vStringCat(name, lexer->token_str);

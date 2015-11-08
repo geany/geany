@@ -298,7 +298,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
  * This func is NOT THREAD SAFE.
  * The user should not tamper with the buffer while this func is executing.
  */
-extern boolean bufferOpen (unsigned char *buffer, int buffer_size, 
+extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 			   const char *const fileName, const langType language )
 {
     boolean opened = FALSE;
@@ -428,7 +428,12 @@ readnext:
 
 extern void fileUngetc (int c)
 {
-    File.ungetch = c;
+    const size_t len = sizeof File.ungetchBuf / sizeof File.ungetchBuf[0];
+
+    Assert (File.ungetchIdx < len);
+    /* we cannot rely on the assertion that might be disabled in non-debug mode */
+    if (File.ungetchIdx < len)
+	File.ungetchBuf[File.ungetchIdx++] = c;
 }
 
 static vString *iFileGetLine (void)
@@ -468,10 +473,9 @@ extern int fileGetc (void)
      *	other processing on it, though, because we already did that the
      *	first time it was read through fileGetc ().
      */
-    if (File.ungetch != '\0')
+    if (File.ungetchIdx > 0)
     {
-	c = File.ungetch;
-	File.ungetch = '\0';
+	c = File.ungetchBuf[--File.ungetchIdx];
 	return c;	    /* return here to avoid re-calling debugPutc () */
     }
     do

@@ -1,0 +1,11 @@
+# format=tagmanager
+#footerÌ16384Ö0
+*Ì2048Ö0
+.foo aÌ2048Ö0
+.foo bÌ2048Ö0
+.headerÌ1Ö0
+.redÌ1Ö0
+div.magicÌ1Ö0
+htmlÌ2048Ö0
+ul > li > aÌ2048Ö0
+ul liÌ2048Ö0

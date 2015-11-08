@@ -145,7 +145,7 @@ struct _MIO {
                          const gchar *s);
   gint    (*v_vprintf)  (MIO         *mio,
                          const gchar *format,
-                         va_list      ap);
+                         va_list      ap) G_GNUC_PRINTF (2, 0);
   void    (*v_clearerr) (MIO *mio);
   gint    (*v_eof)      (MIO *mio);
   gint    (*v_error)    (MIO *mio);
@@ -198,7 +198,7 @@ gint        mio_puts                (MIO         *mio,
 
 gint        mio_vprintf             (MIO         *mio,
                                      const gchar *format,
-                                     va_list      ap);
+                                     va_list      ap) G_GNUC_PRINTF (2, 0);
 gint        mio_printf              (MIO         *mio,
                                      const gchar *format,
                                      ...) G_GNUC_PRINTF (2, 3);

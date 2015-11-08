@@ -43,23 +43,25 @@ import sys
 import os
 import tempfile
 from waflib import Logs, Options, Scripting, Utils
+from waflib.Build import BuildContext
 from waflib.Configure import ConfigurationContext
-from waflib.Errors import WafError
+from waflib.Errors import ConfigurationError, WafError
 from waflib.TaskGen import feature, before_method
 from waflib.Tools.compiler_c import c_compiler
 from waflib.Tools.compiler_cxx import cxx_compiler
 
 
 APPNAME = 'geany'
-VERSION = '1.25'
+VERSION = '1.26'
 LINGUAS_FILE = os.path.join('po', 'LINGUAS')
-MINIMUM_GTK_VERSION = '2.16.0'
+MINIMUM_GTK_VERSION = '2.24.0'
 MINIMUM_GTK3_VERSION = '3.0.0'
-MINIMUM_GLIB_VERSION = '2.20.0'
+MINIMUM_GLIB_VERSION = '2.28.0'
+
+GEANY_LIB_VERSION = '0.0.0'
 
 top = '.'
 out = '_build_'
-
 
 mio_sources = set(['tagmanager/mio/mio.c'])
 
@@ -78,13 +80,16 @@ ctags_sources = set([
     'tagmanager/ctags/ctags.c',
     'tagmanager/ctags/diff.c',
     'tagmanager/ctags/docbook.c',
+    'tagmanager/ctags/erlang.c',
     'tagmanager/ctags/entry.c',
     'tagmanager/ctags/fortran.c',
     'tagmanager/ctags/get.c',
+    'tagmanager/ctags/go.c',
     'tagmanager/ctags/haskell.c',
     'tagmanager/ctags/haxe.c',
     'tagmanager/ctags/html.c',
     'tagmanager/ctags/js.c',
+    'tagmanager/ctags/json.c',
     'tagmanager/ctags/keyword.c',
     'tagmanager/ctags/latex.c',
     'tagmanager/ctags/lregex.c',
@@ -101,6 +106,7 @@ ctags_sources = set([
     'tagmanager/ctags/r.c',
     'tagmanager/ctags/perl.c',
     'tagmanager/ctags/php.c',
+    'tagmanager/ctags/powershell.c',
     'tagmanager/ctags/python.c',
     'tagmanager/ctags/read.c',
     'tagmanager/ctags/rest.c',
@@ -117,13 +123,8 @@ ctags_sources = set([
     'tagmanager/ctags/vstring.c'])
 
 tagmanager_sources = set([
-    'tagmanager/src/tm_file_entry.c',
-    'tagmanager/src/tm_project.c',
     'tagmanager/src/tm_source_file.c',
-    'tagmanager/src/tm_symbol.c',
     'tagmanager/src/tm_tag.c',
-    'tagmanager/src/tm_tagmanager.c',
-    'tagmanager/src/tm_work_object.c',
     'tagmanager/src/tm_workspace.c'])
 
 scintilla_sources = set(['scintilla/gtk/scintilla-marshal.c'])
@@ -133,12 +134,14 @@ geany_sources = set([
     'src/editor.c', 'src/encodings.c', 'src/filetypes.c', 'src/geanyentryaction.c',
     'src/geanymenubuttonaction.c', 'src/geanyobject.c', 'src/geanywraplabel.c',
     'src/highlighting.c', 'src/keybindings.c',
-    'src/keyfile.c', 'src/log.c', 'src/main.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c',
+    'src/keyfile.c', 'src/log.c', 'src/libmain.c', 'src/msgwindow.c', 'src/navqueue.c', 'src/notebook.c', 'src/osx.c',
     'src/plugins.c', 'src/pluginutils.c', 'src/prefix.c', 'src/prefs.c', 'src/printing.c', 'src/project.c',
-    'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/stash.c',
+    'src/sciwrappers.c', 'src/search.c', 'src/socket.c', 'src/spawn.c', 'src/stash.c',
     'src/symbols.c',
     'src/templates.c', 'src/toolbar.c', 'src/tools.c', 'src/sidebar.c',
     'src/ui_utils.c', 'src/utils.c'])
+
+geany_bin_sources = set(['src/main.c'])
 
 geany_icons = {
     'hicolor/16x16/apps':       ['16x16/classviewer-class.png',
@@ -159,6 +162,7 @@ geany_icons = {
     'hicolor/32x32/actions':    ['32x32/geany-build.png',
                                  '32x32/geany-close-all.png',
                                  '32x32/geany-save-all.png'],
+    'hicolor/32x32/apps':       ['32x32/geany.png'],
     'hicolor/48x48/actions':    ['48x48/geany-build.png',
                                  '48x48/geany-close-all.png',
                                  '48x48/geany-save-all.png'],
@@ -184,8 +188,10 @@ def configure(conf):
     conf.check_waf_version(mini='1.6.1')
 
     conf.load('compiler_c')
+    _check_c99(conf)
     is_win32 = _target_is_win32(conf)
 
+    visibility_hidden_supported = conf.check_cc(cflags=['-Werror', '-fvisibility=hidden'], mandatory=False)
     conf.check_cc(header_name='fcntl.h', mandatory=False)
     conf.check_cc(header_name='fnmatch.h', mandatory=False)
     conf.check_cc(header_name='glob.h', mandatory=False)
@@ -197,6 +203,7 @@ def configure(conf):
     _add_to_env_and_define(conf, 'HAVE_REGCOMP', 1)  # needed for CTags
 
     conf.check_cc(function_name='fgetpos', header_name='stdio.h', mandatory=False)
+    conf.check_cc(function_name='fnmatch', header_name='fnmatch.h', mandatory=False)
     conf.check_cc(function_name='ftruncate', header_name='unistd.h', mandatory=False)
     conf.check_cc(function_name='mkstemp', header_name='stdlib.h', mandatory=False)
     conf.check_cc(function_name='strstr', header_name='string.h')
@@ -227,10 +234,27 @@ def configure(conf):
     conf.check_cfg(package='gio-2.0', uselib_store='GIO', args='--cflags --libs', mandatory=True)
     gtk_version = conf.check_cfg(modversion=gtk_package_name, uselib_store='GTK') or 'Unknown'
     conf.check_cfg(package='gthread-2.0', uselib_store='GTHREAD', args='--cflags --libs')
+    if conf.options.enable_mac_integration:
+        pkgname = 'gtk-mac-integration-gtk3' if conf.options.use_gtk3 else 'gtk-mac-integration-gtk2'
+        conf.check_cfg(package=pkgname, uselib_store='MAC_INTEGRATION',
+            mandatory=True, args='--cflags --libs')
     # remember GTK version for the build step
     conf.env['gtk_package_name'] = gtk_package_name
+    conf.env['gtk_version'] = gtk_version
     conf.env['minimum_gtk_version'] = minimum_gtk_version
     conf.env['use_gtk3'] = conf.options.use_gtk3
+
+    revision = _get_git_rev(conf)
+
+    # rst2html for the HTML manual
+    if not conf.options.no_html_doc and revision is not None:
+        try:
+            conf.env['RST2HTML'] = _find_rst2html(conf)
+        except WafError:
+            error_msg = '''Documentation enabled but rst2html not found.
+You can explicitly disable building of the HTML manual with --disable-html-docs,
+but you then may not have a local copy of the HTML manual.'''
+            raise WafError(error_msg)
 
     # Windows specials
     if is_win32:
@@ -251,7 +275,7 @@ def configure(conf):
             '-mwindows',
             '-static-libgcc',
             '-static-libstdc++'])
-        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'iberty'])
+        conf.env.append_value('LIB_WIN32', ['wsock32', 'uuid', 'ole32', 'comdlg32'])
     else:
         conf.env['cshlib_PATTERN'] = '%s.so'
         # DATADIR and LOCALEDIR are defined by the intltool tool
@@ -264,8 +288,6 @@ def configure(conf):
         _define_from_opt(conf, 'DOCDIR', conf.options.docdir, docdir)
         _define_from_opt(conf, 'LIBDIR', conf.options.libdir, libdir)
         _define_from_opt(conf, 'MANDIR', conf.options.mandir, mandir)
-
-    revision = _get_git_rev(conf)
 
     conf.define('ENABLE_NLS', 1)
     conf.define('GEANY_LOCALEDIR', '' if is_win32 else conf.env['LOCALEDIR'], quote=True)
@@ -289,14 +311,35 @@ def configure(conf):
 
     conf.write_config_header('config.h', remove=False)
 
+    # GEANY_EXPORT_SYMBOL and GEANY_API_SYMBOL
+    if is_win32:
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__declspec(dllexport)']
+    elif visibility_hidden_supported:
+        geanyexport_cflags = ['-fvisibility=hidden']
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=__attribute__((visibility("default")))']
+    else:  # unknown, define to nothing
+        geanyexport_cflags = []
+        geanyexport_defines = ['GEANY_EXPORT_SYMBOL=']
+    geanyexport_defines.append('GEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL')
+    conf.env['DEFINES_geanyexport'] = geanyexport_defines
+    conf.env['CFLAGS_geanyexport'] = geanyexport_cflags
+    conf.env['CXXFLAGS_geanyexport'] = geanyexport_cflags
+
     # some more compiler flags
     conf.env.append_value('CFLAGS', ['-DHAVE_CONFIG_H'])
+    if conf.env['CC_NAME'] == 'gcc' and '-O' not in ''.join(conf.env['CFLAGS']):
+        conf.env.append_value('CFLAGS', ['-O2'])
     if revision is not None:
         conf.env.append_value('CFLAGS', ['-g', '-DGEANY_DEBUG'])
     # Scintilla flags
     conf.env.append_value('CFLAGS', ['-DGTK'])
     conf.env.append_value('CXXFLAGS',
         ['-DNDEBUG', '-DGTK', '-DSCI_LEXER', '-DG_THREADS_IMPL_NONE'])
+    if conf.env['CXX_NAME'] == 'gcc' and '-O' not in ''.join(conf.env['CXXFLAGS']):
+        conf.env.append_value('CXXFLAGS', ['-O2'])
+    if revision is not None:
+        conf.env.append_value('CXXFLAGS', ['-g'])
 
     # summary
     Logs.pprint('BLUE', 'Summary:')
@@ -333,6 +376,12 @@ def options(opt):
     opt.add_option('--enable-gtk3', action='store_true', default=False,
         help='compile with GTK3 support (experimental) [[default: No]',
         dest='use_gtk3')
+    opt.add_option('--enable-mac-integration', action='store_true', default=False,
+        help='use gtk-mac-integration to enable improved OS X integration [[default: No]',
+        dest='enable_mac_integration')
+    opt.add_option('--disable-html-docs', action='store_true', default=False,
+        help='do not generate HTML documentation using rst2html [[default: No]',
+        dest='no_html_doc')
     # Paths
     opt.add_option('--mandir', type='string', default='',
         help='man documentation', dest='mandir')
@@ -340,9 +389,6 @@ def options(opt):
         help='documentation root', dest='docdir')
     opt.add_option('--libdir', type='string', default='',
         help='object code libraries', dest='libdir')
-    # Actions
-    opt.add_option('--hackingdoc', action='store_true', default=False,
-        help='generate HTML documentation from HACKING file', dest='hackingdoc')
 
 
 def build(bld):
@@ -355,7 +401,7 @@ def build(bld):
 
     def build_plugin(plugin_name, install=True, uselib_add=[]):
         if install:
-            instpath = '${PREFIX}/lib' if is_win32 else '${LIBDIR}/geany'
+            instpath = '${LIBDIR}/geany'
         else:
             instpath = None
 
@@ -365,78 +411,111 @@ def build(bld):
             includes                = ['.', 'src/', 'scintilla/include', 'tagmanager/src'],
             defines                 = 'G_LOG_DOMAIN="%s"' % plugin_name,
             target                  = plugin_name,
-            uselib                  = ['GTK', 'GLIB', 'GMODULE'] + uselib_add,
+            uselib                  = ['GTK', 'GLIB', 'GMODULE', 'C99'] + uselib_add,
+            use                     = ['geany'],
             install_path            = instpath)
 
     # CTags
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = ctags_sources,
         name            = 'ctags',
         target          = 'ctags',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
         defines         = 'G_LOG_DOMAIN="CTags"',
-        uselib          = ['GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GLIB', 'geanyexport', 'C99'])
 
     # Tagmanager
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = tagmanager_sources,
         name            = 'tagmanager',
         target          = 'tagmanager',
         includes        = ['.', 'tagmanager', 'tagmanager/ctags'],
-        defines         = 'G_LOG_DOMAIN="Tagmanager"',
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        defines         = ['GEANY_PRIVATE', 'G_LOG_DOMAIN="Tagmanager"'],
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport', 'C99'])
 
     # MIO
-    bld(
-        features        = ['c', 'cstlib'],
+    bld.objects(
+        features        = ['c'],
         source          = mio_sources,
         name            = 'mio',
         target          = 'mio',
         includes        = ['.', 'tagmanager/mio/'],
         defines         = 'G_LOG_DOMAIN="MIO"',
-        uselib          = ['GTK', 'GLIB'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'GTK', 'GLIB', 'geanyexport'])
 
     # Scintilla
     files = bld.srcnode.ant_glob('scintilla/**/*.cxx', src=True, dir=False)
-    scintilla_sources.update(files)
-    bld(
-        features        = ['c', 'cxx', 'cxxstlib'],
+    scintilla_sources.update([file.path_from(bld.srcnode) for file in files])
+    bld.objects(
+        features        = ['c', 'cxx'],
         name            = 'scintilla',
         target          = 'scintilla',
         source          = scintilla_sources,
         includes        = ['.', 'scintilla/include', 'scintilla/src', 'scintilla/lexlib'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'M'],
-        install_path    = None)  # do not install this library
+        uselib          = ['cshlib', 'cxxshlib', 'GTK', 'GLIB', 'GMODULE', 'M', 'geanyexport'])
 
     # Geany
     if bld.env['HAVE_VTE'] == 1:
         geany_sources.add('src/vte.c')
     if is_win32:
         geany_sources.add('src/win32.c')
-        geany_sources.add('geany_private.rc')
+        geany_bin_sources.add('geany_private.rc')
 
+    def gen_signallist(task):
+        from xml.etree import ElementTree
+
+        def find_handlers(xml_filename):
+            tree = ElementTree.parse(xml_filename)
+            signals = tree.getroot().findall(".//signal")
+            return [sig.attrib["handler"] for sig in signals]
+
+        handlers = []
+        for node in task.inputs:
+            handlers += find_handlers(node.abspath())
+        handlers = sorted(set(handlers))
+
+        for node in task.outputs:
+            node.write("/* This file is auto-generated, do not edit. */\n" +
+                       ''.join(["ITEM(%s)\n" % h for h in handlers]))
+
+    # signallist.i
     bld(
-        features        = ['c', 'cxx', 'cprogram'],
+        source  = 'data/geany.glade',
+        target  = bld.path.get_bld().make_node('src/signallist.i'),
+        name    = 'signallist.i',
+        rule    = gen_signallist)
+
+    base_uselibs = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'MAC_INTEGRATION', 'SUNOS_SOCKET', 'M', 'C99']
+
+    # libgeany
+    bld.shlib(
+        features        = ['c', 'cxx'],
         name            = 'geany',
         target          = 'geany',
         source          = geany_sources,
+        includes        = ['.', 'scintilla/include', 'tagmanager/src', 'src'],
+        defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
+        uselib          = base_uselibs + ['geanyexport'],
+        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'],
+        linkflags       = bld.env['LINKFLAGS_cprogram'],
+        vnum            = GEANY_LIB_VERSION,
+        install_path    = '${PREFIX}/bin' if is_win32 else '${LIBDIR}')
+
+    # geany executable
+    t = bld.program(
+        features        = ['c', 'cxx'],
+        name            = 'geany_bin',
+        target          = 'geany',
+        source          = geany_bin_sources,
         includes        = ['.', 'scintilla/include', 'tagmanager/src'],
         defines         = ['G_LOG_DOMAIN="Geany"', 'GEANY_PRIVATE'],
-        uselib          = ['GTK', 'GLIB', 'GMODULE', 'GIO', 'GTHREAD', 'WIN32', 'SUNOS_SOCKET', 'M'],
-        use             = ['scintilla', 'ctags', 'tagmanager', 'mio'])
-
-    # geanyfunctions.h
-    bld(
-        source  = ['plugins/genapi.py', 'src/plugins.c'],
-        name    = 'geanyfunctions.h',
-        before  = ['c', 'cxx'],
-        cwd     = '%s/plugins' % bld.path.abspath(),
-        rule    = '%s genapi.py -q' % sys.executable)
+        uselib          = base_uselibs + ['geanyexport'],
+        use             = ['geany'])
+    if not is_win32:
+        # http://www.freehackers.org/~tnagy/testdoc/single.html#common_c
+        t.rpath = bld.env['LIBDIR']
 
     # Plugins
     if bld.env['HAVE_PLUGINS'] == 1:
@@ -455,6 +534,18 @@ def build(bld):
             podir           = 'po',
             install_path    = '${LOCALEDIR}',
             appname         = 'geany')
+
+    # HTML documentation (build if it is not part of the tree already, as it is required for install)
+    html_doc_filename = os.path.join(bld.out_dir, 'doc', 'geany.html')
+    if bld.env['RST2HTML']:
+        rst2html = bld.env['RST2HTML']
+        bld(
+            source  = ['doc/geany.txt'],
+            deps    = ['doc/geany.css'],
+            target  = bld.path.get_bld().make_node('doc/geany.html'),
+            name    = 'geany.html',
+            cwd     = os.path.join(bld.path.abspath(), 'doc'),
+            rule    = '%s  -stg --stylesheet=geany.css geany.txt %s' % (rst2html, html_doc_filename))
 
     # geany.pc
     if is_win32:
@@ -477,6 +568,15 @@ def build(bld):
                            'datarootdir': '${prefix}/share',
                            'datadir': '${datarootdir}',
                            'localedir': '${datarootdir}/locale'})
+
+    # geany.nsi
+    bld(
+        features        = 'subst',
+        source          = 'geany.nsi.in',
+        target          = 'geany.nsi',
+        dct             = {'VERSION': VERSION,
+                           'GTK_VERSION': bld.env['gtk_version']},
+        install_path    = None)
 
     if not is_win32:
         # geany.desktop
@@ -514,40 +614,74 @@ def build(bld):
                                'top_builddir': bld.out_dir,
                                'top_srcdir': bld.top_dir,})
 
+    # disable build/install phase interleaving
+    bld.add_group()
+
     ###
     # Install files
     ###
     # Headers
     bld.install_files('${PREFIX}/include/geany', '''
-        src/app.h src/document.h src/editor.h src/encodings.h src/filetypes.h src/geany.h
-        src/highlighting.h src/keybindings.h src/msgwindow.h src/plugindata.h
-        src/prefs.h src/project.h src/search.h src/stash.h src/support.h
-        src/templates.h src/toolbar.h src/ui_utils.h src/utils.h src/build.h src/gtkcompat.h
-        plugins/geanyplugin.h plugins/geanyfunctions.h''')
+        src/app.h
+        src/build.h
+        src/dialogs.h
+        src/document.h
+        src/editor.h
+        src/encodings.h
+        src/filetypes.h
+        src/geany.h
+        src/highlighting.h
+        src/keybindings.h
+        src/main.h
+        src/msgwindow.h
+        src/navqueue.h
+        src/plugindata.h
+        src/pluginutils.h
+        src/prefs.h
+        src/project.h
+        src/sciwrappers.h
+        src/search.h
+        src/spawn.h
+        src/stash.h
+        src/support.h
+        src/symbols.h
+        src/templates.h
+        src/toolbar.h
+        src/ui_utils.h
+        src/utils.h
+        src/gtkcompat.h
+        plugins/geanyplugin.h
+        plugins/geanyfunctions.h
+        ''')
     bld.install_files('${PREFIX}/include/geany/scintilla', '''
         scintilla/include/SciLexer.h scintilla/include/Scintilla.h
-        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h ''')
+        scintilla/include/Scintilla.iface scintilla/include/ScintillaWidget.h
+        scintilla/include/Sci_Position.h ''')
     bld.install_files('${PREFIX}/include/geany/tagmanager', '''
-        tagmanager/src/tm_file_entry.h tagmanager/src/tm_project.h
-        tagmanager/src/tm_source_file.h tagmanager/src/tm_parser.h
-        tagmanager/src/tm_symbol.h tagmanager/src/tm_tag.h
-        tagmanager/src/tm_tagmanager.h tagmanager/src/tm_work_object.h
+        tagmanager/src/tm_source_file.h
+        tagmanager/src/tm_tag.h
+        tagmanager/src/tm_tagmanager.h
         tagmanager/src/tm_workspace.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
-    html_dir = '' if is_win32 else 'html/'
-    html_name = 'Manual.html' if is_win32 else 'index.html'
     for filename in 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO'.split():
         basename = _uc_first(filename, bld)
         destination_filename = '%s%s' % (basename, ext)
         destination = os.path.join(base_dir, destination_filename)
         bld.install_as(destination, filename)
 
-    start_dir = bld.path.find_dir('doc/images')
-    bld.install_files('${DOCDIR}/%simages' % html_dir, start_dir.ant_glob('*.png'), cwd=start_dir)
+    # install HTML documentation only if it exists, i.e. it was built before
+    # local_html_doc_filename supports installing HTML doc from in-tree geany.html if it exists
+    local_html_doc_filename = os.path.join(bld.path.abspath(), 'doc', 'geany.html')
+    if os.path.exists(html_doc_filename) or os.path.exists(local_html_doc_filename):
+        html_dir = '' if is_win32 else 'html/'
+        html_name = 'Manual.html' if is_win32 else 'index.html'
+        start_dir = bld.path.find_dir('doc/images')
+        bld.install_files('${DOCDIR}/%simages' % html_dir, start_dir.ant_glob('*.png'), cwd=start_dir)
+        bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
+
     bld.install_as('${DOCDIR}/%s' % _uc_first('manual.txt', bld), 'doc/geany.txt')
-    bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
     bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')
     if is_win32:
         bld.install_as('${DOCDIR}/ReadMe.I18n.txt', 'README.I18N')
@@ -658,44 +792,45 @@ def updatepo(ctx):
 
 def apidoc(ctx):
     """generate API reference documentation"""
-    basedir = ctx.path.abspath()
+    ctx = BuildContext()  # create our own context to have ctx.top_dir
+    basedir = ctx.top_dir
     doxygen = _find_program(ctx, 'doxygen')
-    doxyfile = '%s/%s/doc/Doxyfile' % (basedir, out)
-    os.chdir('doc')
+    doxyfile = '%s/doc/Doxyfile' % ctx.out_dir
     Logs.pprint('CYAN', 'Generating API documentation')
     ret = ctx.exec_command('%s %s' % (doxygen, doxyfile))
     if ret != 0:
         raise WafError('Generating API documentation failed')
-    # update hacking.html
-    cmd = _find_rst2html(ctx)
-    ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, '../HACKING', 'hacking.html'))
-    os.chdir('..')
 
 
-def htmldoc(ctx):
-    """generate HTML documentation"""
-    # first try rst2html.py as it is the upstream default, fall back to rst2html
+def hackingdoc(ctx):
+    """generate HACKING documentation"""
+    ctx = BuildContext()  # create our own context to have ctx.top_dir
+    Logs.pprint('CYAN', 'Generating HACKING documentation')
     cmd = _find_rst2html(ctx)
-    os.chdir('doc')
-    Logs.pprint('CYAN', 'Generating HTML documentation')
-    ctx.exec_command('%s  -stg --stylesheet=geany.css %s %s' % (cmd, 'geany.txt', 'geany.html'))
-    os.chdir('..')
+    hacking_file = os.path.join(ctx.top_dir, 'HACKING')
+    hacking_html_file = os.path.join(ctx.top_dir, 'doc', 'hacking.html')
+    stylesheet = os.path.join(ctx.top_dir, 'doc', 'geany.css')
+    ret = ctx.exec_command('%s  -stg --stylesheet=%s %s %s' % (
+        cmd, stylesheet, hacking_file, hacking_html_file))
+    if ret != 0:
+        raise WafError('Generating HACKING documentation failed')
 
 
 def _find_program(ctx, cmd, **kw):
     def noop(*args):
         pass
 
-    ctx = ConfigurationContext()
-    ctx.to_log = noop
-    ctx.msg = noop
+    if ctx is None or not isinstance(ctx, ConfigurationContext):
+        ctx = ConfigurationContext()
+        ctx.to_log = noop
+        ctx.msg = noop
     return ctx.find_program(cmd, **kw)
 
 
 def _find_rst2html(ctx):
-    cmds = ['rst2html.py', 'rst2html']
+    cmds = ['rst2html', 'rst2html2']
     for command in cmds:
-        cmd = _find_program(ctx, command, mandatory=False)
+        cmd = _find_program(ctx, command, mandatory=False, exts=',.py')
         if cmd:
             break
     if not cmd:
@@ -780,3 +915,57 @@ def _uc_first(string, ctx):
     if _target_is_win32(ctx):
         return string.title()
     return string
+
+
+# Copied from Geany-Plugins
+def _check_c99(conf):
+    # FIXME: improve some checks?
+    # TODO: look at Autoconf's C99 checks?
+    fragment = '''
+    // single-line comments
+
+    #include <stdbool.h>
+
+    struct s { int a, b; };
+
+    // inlines
+    static inline void fun_inline(struct s param) {}
+
+    int main(void) {
+        _Bool b = false;
+
+        // variable declaration in for body
+        for (int i = 0; i < 2; i++);
+
+        // compound literals
+        fun_inline((struct s) { 1, 2 });
+
+        // mixed declarations and code
+        int mixed = 0;
+
+        // named initializers
+        struct s name_inited = {
+            .a = 42,
+            .b = 64
+        };
+
+        return (b || mixed || ! name_inited.a);
+    }
+    '''
+
+    exc = None
+    # list of flags is stolen from Autoconf 2.69
+    flags = ['', '-std=gnu99', '-std=c99', '-c99', '-AC99',
+             '-D_STDC_C99=', '-qlanglvl=extc99']
+    for flag in flags:
+        try:
+            desc = ['with flag %s' % flag, 'with no flags'][not flag]
+            conf.check_cc(fragment=fragment, uselib_store='C99', cflags=flag,
+                          msg="Checking for C99 support (%s)" % desc)
+            exc = None
+            break
+        except ConfigurationError as e:
+            exc = e
+    if exc:
+        raise exc
+    return True

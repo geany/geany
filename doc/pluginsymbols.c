@@ -23,7 +23,12 @@
 
 /**
  * @file pluginsymbols.c
- * Symbols declared from within plugins.
+ * Symbols declared from within plugins, all of this is <b>deprecated</b>.
+ *
+ * @deprecated This is the legacy way of making plugins for Geany. Refer to @ref howto for the
+ * reworked process and @ref legacy to learn how to port your plugin to that new world.
+ * Meanwhile Geany will still load plugins programmed against this interface (even the items that
+ * are marked deprecated individually such as @ref plugin_fields).
  *
  * Geany looks for these symbols (arrays, pointers and functions) when initializing
  * plugins. Some of them are optional, i.e. they can be omitted; others are required
@@ -79,7 +84,7 @@ KeyBindingGroup *plugin_key_group;
  * The dialog will show all plugins that support this symbol together.
  * @param dialog The plugin preferences dialog widget - this should only be used to
  * connect the @c "response" signal. If settings should be read from the dialog, the
- * reponse will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
+ * response will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
  * @return A container widget holding preference widgets.
  * @note Using @link stash.h Stash @endlink can make implementing preferences easier.
  * @see plugin_configure_single(). */
@@ -106,4 +111,3 @@ void plugin_cleanup();
  * or something else.
  * Can be omitted when not needed. */
 void plugin_help();
-

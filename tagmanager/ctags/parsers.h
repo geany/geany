@@ -29,6 +29,7 @@
     ConfParser, \
     SqlParser, \
     DocBookParser, \
+    ErlangParser, \
     CssParser, \
     RubyParser, \
     TclParser, \
@@ -61,7 +62,11 @@
     ObjcParser, \
     AsciidocParser, \
     AbaqusParser, \
-    RustParser
+    RustParser, \
+    GoParser, \
+    JsonParser, \
+    ZephirParser, \
+    PowerShellParser
 
 #endif	/* _PARSERS_H */
 

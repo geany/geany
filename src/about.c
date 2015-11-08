@@ -45,9 +45,9 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT _("Copyright (c)  2005-2014\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
+#define COPYRIGHT _("Copyright (c)  2005-2015\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
 
-const gchar *translators[][2] = {
+static const gchar *translators[][2] = {
 	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Siamashka &lt;yurand2@gmail.com&gt;" },
@@ -79,7 +79,7 @@ const gchar *translators[][2] = {
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
-	{ "ru", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "ru", "brahmann_ &lt;brahmann@lifec0re.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
@@ -92,7 +92,7 @@ const gchar *translators[][2] = {
 };
 static const guint translators_len = G_N_ELEMENTS(translators);
 
-const gchar *prev_translators[][2] = {
+static const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
 	{ "pl", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" }
@@ -120,6 +120,8 @@ static const gchar *contributors =
 "Tyler Mulligan, Walery Studennikov, Yura Siamashka";
 
 
+static void header_eventbox_style_set(GtkWidget *widget);
+static void header_label_style_set(GtkWidget *widget);
 static void homepage_clicked(GtkButton *button, gpointer data);
 
 
@@ -168,7 +170,6 @@ static GtkWidget *create_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
 	/* create header */
@@ -187,8 +188,10 @@ static GtkWidget *create_dialog(void)
 	gtk_label_set_markup(GTK_LABEL(header_label), buffer);
 	gtk_widget_show(header_label);
 	gtk_box_pack_start(GTK_BOX(header_hbox), header_label, FALSE, FALSE, 0);
-	gtk_widget_set_state(header_eventbox, GTK_STATE_SELECTED);
-	gtk_widget_set_state(header_label, GTK_STATE_SELECTED);
+	header_eventbox_style_set(header_eventbox);
+	header_label_style_set(header_label);
+	g_signal_connect_after(header_eventbox, "style-set", G_CALLBACK(header_eventbox_style_set), NULL);
+	g_signal_connect_after(header_label, "style-set", G_CALLBACK(header_label_style_set), NULL);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), header_eventbox, FALSE, FALSE, 0);
 
 	/* create notebook */
@@ -449,6 +452,22 @@ void about_dialog_show(void)
 
 	gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
+}
+
+
+static void header_eventbox_style_set(GtkWidget *widget)
+{
+	GtkStyle *style = gtk_widget_get_style(widget);
+	if (! gdk_color_equal(&style->bg[GTK_STATE_NORMAL], &style->bg[GTK_STATE_SELECTED]))
+		gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
+}
+
+
+static void header_label_style_set(GtkWidget *widget)
+{
+	GtkStyle *style = gtk_widget_get_style(widget);
+	if (! gdk_color_equal(&style->fg[GTK_STATE_NORMAL], &style->fg[GTK_STATE_SELECTED]))
+		gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
 }
 
 

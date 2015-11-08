@@ -92,6 +92,7 @@ file_puts (MIO          *mio,
   return fputs (s, mio->impl.file.fp);
 }
 
+G_GNUC_PRINTF (2, 0)
 static gint
 file_vprintf (MIO         *mio,
               const gchar *format,

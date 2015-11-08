@@ -29,7 +29,6 @@
 #include "geanyplugin.h"
 
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
@@ -437,7 +436,6 @@ static void show_dialog_create_class(gint type)
 			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 			GTK_STOCK_OK, GTK_RESPONSE_OK,
 			NULL);
-	gtk_dialog_set_has_separator(GTK_DIALOG(cc_dlg->dialog), TRUE);
 
 	switch (type)
 	{

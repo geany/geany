@@ -39,6 +39,7 @@
 #include "highlighting.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#include "spawn.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -523,9 +524,7 @@ static void printing_print_gtk(GeanyDocument *doc)
 
 	gtk_print_operation_set_unit(op, GTK_UNIT_POINTS);
 	gtk_print_operation_set_show_progress(op, TRUE);
-#if GTK_CHECK_VERSION(2, 18, 0)
 	gtk_print_operation_set_embed_page_setup(op, TRUE);
-#endif
 
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), &dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), &dinfo);
@@ -602,27 +601,26 @@ static void print_external(GeanyDocument *doc)
 			doc->file_name, cmdline))
 	{
 		GError *error = NULL;
-
-#ifdef G_OS_WIN32
-		gchar *tmp_cmdline = g_strdup(cmdline);
-#else
 		/* /bin/sh -c emulates the system() call and makes complex commands possible
-		 * but only needed on non-win32 systems due to the lack of win32's shell capabilities */
-		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
-#endif
+		 * but only on non-win32 systems due to the lack of win32's shell capabilities */
+	#ifdef G_OS_UNIX
+		gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
 
-		if (! g_spawn_command_line_async(tmp_cmdline, &error))
+		if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+	#else
+		if (!spawn_async(NULL, cmdline, NULL, NULL, NULL, &error))
+	#endif
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("Printing of \"%s\" failed (return code: %s)."),
-				doc->file_name, error->message);
+				_("Cannot execute print command \"%s\": %s. "
+				"Check the path setting in Preferences."),
+				printing_prefs.external_print_cmd, error->message);
 			g_error_free(error);
 		}
 		else
 		{
 			msgwin_status_add(_("File %s printed."), doc->file_name);
 		}
-		g_free(tmp_cmdline);
 	}
 	g_free(cmdline);
 }

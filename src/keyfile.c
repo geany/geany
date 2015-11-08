@@ -74,16 +74,25 @@
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+#elif defined(__APPLE__)
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
+#ifdef __APPLE__
+#define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
+#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
+#else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
+#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+#endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
@@ -224,6 +233,10 @@ static void init_pref_groups(void)
 		"gio_unsafe_save_backup", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
 		"use_gio_unsafe_file_saving", TRUE);
+	stash_group_add_boolean(group, &file_prefs.keep_edit_history_on_reload,
+		"keep_edit_history_on_reload", TRUE);
+	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
+		"show_keep_edit_history_on_reload_msg", TRUE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -231,6 +244,8 @@ static void init_pref_groups(void)
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
+	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
+		"replace_and_find_by_default", TRUE);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
@@ -329,16 +344,32 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 }
 
 
+static void remove_session_files(GKeyFile *config)
+{
+	gchar **ptr;
+	gchar **keys = g_key_file_get_keys(config, "files", NULL, NULL);
+
+	foreach_strv(ptr, keys)
+	{
+		if (g_str_has_prefix(*ptr, "FILE_NAME_"))
+			g_key_file_remove_key(config, "files", *ptr, NULL);
+	}
+	g_strfreev(keys);
+}
+
+
 void configuration_save_session_files(GKeyFile *config)
 {
 	gint npage;
-	gchar *tmp;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
 	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
+
+	// clear existing entries first as they might not all be overwritten
+	remove_session_files(config);
 
 	/* store the filenames in the notebook tab order to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -354,23 +385,6 @@ void configuration_save_session_files(GKeyFile *config)
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
-		}
-	}
-	/* if open filenames less than saved session files, delete existing entries in the list */
-	i = j;
-	while (TRUE)
-	{
-		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
-		tmp = g_key_file_get_string(config, "files", entry, NULL);
-		if (G_UNLIKELY(tmp == NULL))
-		{
-			break;
-		}
-		else
-		{
-			g_key_file_remove_key(config, "files", entry, NULL);
-			g_free(tmp);
-			i++;
 		}
 	}
 
@@ -661,7 +675,11 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)
+	{
+		foreach_ptr_array(tmp_array, i, session_files)
+			g_strfreev(tmp_array);
 		g_ptr_array_free(session_files, TRUE);
+	}
 
 	session_files = g_ptr_array_new();
 	have_session_files = TRUE;
@@ -845,6 +863,13 @@ static void load_dialog_prefs(GKeyFile *config)
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
+#ifdef __APPLE__
+		/* Geany is started using launchd on OS X and we don't get any environment variables
+		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
+		if (strcmp(shell, "/bin/bash") == 0)
+			shell = "/bin/bash -l";
+#endif
+
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
@@ -859,7 +884,7 @@ static void load_dialog_prefs(GKeyFile *config)
 			"send_selection_unsafe", FALSE);
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
+		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
@@ -925,19 +950,20 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
-#ifdef G_OS_WIN32
+
 	if (!EMPTY(tmp_string2))
 	{
-		/* single quote paths on Win32 for g_spawn_command_line_async */
-		tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
+	#ifdef G_OS_WIN32
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " \"%f\"", NULL);
+	#else
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " '%f'", NULL);
+	#endif
 	}
 	else
 	{
 		tmp_string = g_strdup("");
 	}
-#else
-	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
-#endif
+
 	printing_prefs.external_print_cmd = utils_get_setting_string(config, "printing", "print_cmd", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
@@ -1036,6 +1062,27 @@ void configuration_save_default_session(void)
 
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
+
+	/* write the file */
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
+
+	g_key_file_free(config);
+	g_free(configfile);
+}
+
+
+void configuration_clear_default_session(void)
+{
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *data;
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	if (cl_options.load_session)
+		remove_session_files(config);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);

@@ -419,29 +419,14 @@ static void tab_bar_menu_activate_cb(GtkMenuItem *menuitem, gpointer data)
 
 static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gchar *geany_path;
 	GeanyDocument *doc = user_data;
+	gchar *doc_path;
 
 	g_return_if_fail(doc->is_valid);
 
-	geany_path = g_find_program_in_path("geany");
-
-	if (geany_path)
-	{
-		gchar *doc_path = utils_get_locale_from_utf8(doc->file_name);
-		gchar *argv[] = {geany_path, "-i", doc_path, NULL};
-		GError *err = NULL;
-
-		if (!utils_spawn_async(NULL, argv, NULL, 0, NULL, NULL, NULL, &err))
-		{
-			g_printerr("Unable to open new window: %s", err->message);
-			g_error_free(err);
-		}
-		g_free(doc_path);
-		g_free(geany_path);
-	}
-	else
-		g_printerr("Unable to find 'geany'");
+	doc_path = utils_get_locale_from_utf8(doc->file_name);
+	utils_start_new_geany_instance(doc_path);
+	g_free(doc_path);
 }
 
 
@@ -463,7 +448,7 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, "Open in New _Window");
+	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate",
@@ -617,8 +602,8 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */
 	}
 	/* switch last used tab on ctrl-click */
-	state = event->state & gtk_accelerator_get_default_mod_mask();
-	if (event->button == 1 && state == GDK_CONTROL_MASK)
+	state = keybindings_get_modifiers(event->state);
+	if (event->button == 1 && state == GEANY_PRIMARY_MOD_MASK)
 	{
 		keybindings_send_command(GEANY_KEY_GROUP_NOTEBOOK,
 			GEANY_KEYS_NOTEBOOK_SWITCHTABLASTUSED);
@@ -645,7 +630,14 @@ static void notebook_tab_close_button_style_set(GtkWidget *btn, GtkRcStyle *prev
 }
 
 
-/* Returns page number of notebook page, or -1 on error */
+/* Returns page number of notebook page, or -1 on error
+ *
+ * Note: the widget added to the notebook is *not* shown by this function, so you have to call
+ * something like `gtk_widget_show(document_get_notebook_child(doc))` when finished setting up the
+ * document.  This is necessary because when the notebook tab is added, the document isn't ready
+ * yet, and we  need the notebook to emit ::switch-page after it actually is.  Actually this
+ * doesn't prevent the signal to me emitted straight when we insert the page (this looks like a
+ * GTK bug), but it emits it again when showing the child, and it's all we need. */
 gint notebook_new_tab(GeanyDocument *this)
 {
 	GtkWidget *hbox, *ebox, *vbox;
@@ -659,7 +651,6 @@ gint notebook_new_tab(GeanyDocument *this)
 	vbox = gtk_vbox_new(FALSE, 0);
 	page = GTK_WIDGET(this->editor->sci);
 	gtk_box_pack_start(GTK_BOX(vbox), page, TRUE, TRUE, 0);
-	gtk_widget_show(vbox);
 
 	this->priv->tab_label = gtk_label_new(NULL);
 

@@ -39,19 +39,23 @@ typedef struct SignalConnection
 }
 SignalConnection;
 
+typedef enum _LoadedFlags {
+	LOADED_OK = 0x01,
+	IS_LEGACY = 0x02,
+	LOAD_DATA = 0x04,
+}
+LoadedFlags;
+
+typedef struct GeanyPluginPrivate Plugin;	/* shorter alias */
 
 typedef struct GeanyPluginPrivate
 {
-	GModule 		*module;
 	gchar			*filename;				/* plugin filename (/path/libname.so) */
 	PluginInfo		info;				/* plugin name, description, etc */
 	GeanyPlugin		public;				/* fields the plugin can read */
 
-	void		(*init) (GeanyData *data);			/* Called when the plugin is enabled */
-	GtkWidget*	(*configure) (GtkDialog *dialog);	/* plugins configure dialog, optional */
-	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional */
-	void		(*help) (void);						/* Called when the plugin should show some help, optional */
-	void		(*cleanup) (void);					/* Called when the plugin is disabled or when Geany exits */
+	GeanyPluginFuncs cbs;					/* Callbacks set by geany_plugin_register() */
+	void		(*configure_single) (GtkWidget *parent); /* plugin configure dialog, optional and deprecated */
 
 	/* extra stuff */
 	PluginFields	fields;
@@ -59,13 +63,28 @@ typedef struct GeanyPluginPrivate
 	GeanyAutoSeparator	toolbar_separator;
 	GArray			*signal_ids;			/* SignalConnection's to disconnect when unloading */
 	GList			*sources;				/* GSources to destroy when unloading */
+
+	gpointer		cb_data;				/* user data passed back to functions in GeanyPluginFuncs */
+	GDestroyNotify	cb_data_destroy;		/* called when the plugin is unloaded, for cb_data */
+	LoadedFlags		flags;					/* bit-or of LoadedFlags */
+
+	/* proxy plugin support */
+	GeanyProxyFuncs	proxy_cbs;
+	Plugin			*proxy;					/* The proxy that handles this plugin */
+	gpointer		proxy_data;				/* Data passed to the proxy hooks of above proxy, so
+											 * this gives the proxy a pointer to each plugin */
+	gint			proxied_count;			/* count of active plugins this provides a proxy for
+											 * (a count because of possibly nested proxies) */
 }
 GeanyPluginPrivate;
 
-typedef GeanyPluginPrivate Plugin;	/* shorter alias */
-
+#define PLUGIN_LOADED_OK(p) (((p)->flags & LOADED_OK) != 0)
+#define PLUGIN_IS_LEGACY(p) (((p)->flags & IS_LEGACY) != 0)
+#define PLUGIN_HAS_LOAD_DATA(p) (((p)->flags & LOAD_DATA) != 0)
 
 void plugin_watch_object(Plugin *plugin, gpointer object);
+void plugin_make_resident(Plugin *plugin);
+gpointer plugin_get_module_symbol(Plugin *plugin, const gchar *sym);
 
 G_END_DECLS
 

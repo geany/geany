@@ -29,7 +29,9 @@ GTK_INCLUDES= \
 
 INCLUDEDIRS=-I ../ctags -I ../ -I . $(GTK_INCLUDES)
 
-CBASEFLAGS=-Wall -pipe -mms-bitfields -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS)
+CBASEFLAGS=-Wall -pipe -mms-bitfields -DGEANY_PRIVATE -DPACKAGE=\"geany\" -Wno-missing-braces -Wno-char-subscripts $(INCLUDEDIRS) \
+	-DGEANY_EXPORT_SYMBOL="__declspec(dllexport)" \
+	-DGEANY_API_SYMBOL=GEANY_EXPORT_SYMBOL
 ifdef DEBUG
 CFLAGS= -O0 -g $(CBASEFLAGS)
 else
@@ -44,8 +46,7 @@ all: $(COMPLIB)
 clean:
 	-$(RM) deps.mak *.o $(COMPLIB)
 
-$(COMPLIB): tm_workspace.o tm_work_object.o tm_source_file.o tm_project.o tm_tag.o \
-tm_symbol.o tm_file_entry.o tm_tagmanager.o
+$(COMPLIB): tm_workspace.o tm_source_file.o tm_tag.o 
 	$(AR) rc $@ $^
 	$(RANLIB) $@
 

@@ -978,7 +978,7 @@ static TBEditorWidget *tb_editor_create_dialog(GtkWindow *parent)
 	swin_available = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin_available),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_available), GTK_SHADOW_ETCHED_IN);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_available), GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(swin_available), tree_available);
 
 	tree_used = gtk_tree_view_new();
@@ -999,7 +999,7 @@ static TBEditorWidget *tb_editor_create_dialog(GtkWindow *parent)
 	swin_used = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin_used),
 		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_used), GTK_SHADOW_ETCHED_IN);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin_used), GTK_SHADOW_IN);
 	gtk_container_add(GTK_CONTAINER(swin_used), tree_used);
 
 	/* drag'n'drop */

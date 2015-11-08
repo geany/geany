@@ -11,8 +11,12 @@ About this file
 This file contains information for anyone wanting to work on the Geany
 codebase. You should be aware of the open source licenses used - see
 the README file or the documentation. It is reStructuredText; the
-source file is HACKING. You can generate hacking.html by running ``make
-hacking-doc`` from the doc/ subdirectory.
+source file is HACKING.
+
+You can generate this file by:
+
+* Passing the *--enable-html-docs* option to ``configure``.
+* Running ``make`` from the doc/ subdirectory.
 
 Writing plugins
 ---------------
@@ -28,8 +32,12 @@ You should generate and read the plugin API documentation, see below.
 Plugin API documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^
 You can generate documentation for the plugin API using the doxygen
-tool. Run ``make api-doc`` in the doc subdirectory. The documentation
-will be output to doc/reference/index.html.
+tool:
+
+* Pass the *--enable-api-docs* option to ``configure``.
+* Run ``make`` from the doc/ subdirectory.
+
+The documentation will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
@@ -90,7 +98,7 @@ See `Committing`_ for more information.
 
 Windows tools
 -------------
-* Git: http://git-scm.com/ and http://code.google.com/p/msysgit/
+* Git: http://git-scm.com/ and http://msysgit.github.io/
 * diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
 
 See also the 'Building on Windows' document on the website.
@@ -153,21 +161,20 @@ Glade
 Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
 Callbacks for the user-interface should go in ``src/callbacks.c``.
 
+Use Glade 3.8.5. The 3.8 series still supports GTK+ 2, and earlier
+point releases did not preserve the order of XML elements, leading to
+unmanageable diffs.
+
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.16 and GLib >= 2.20. API symbols from newer
+Geany requires GTK >= 2.24 and GLib >= 2.28. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.16 API documentation may not be available online
-anymore, so we put it on http://www.geany.org/manual/gtk/. There
-is also a tarball with all available files for download and use with
-devhelp.
-
-Using the 2.16 API documentation of the GTK libs (including GLib, GDK
-and Pango) has the advantages that you don't get confused by any
-newer API additions and you don't have to take care about whether
-you can use them or not.
+It is recommended to use the 2.24 API documentation of the GTK 
+libs (including GLib, GDK and Pango) has the advantages 
+that you don't get confused by any newer API additions and you 
+don't have to take care about whether you can use them or not.
 
 Coding
 ------
@@ -175,8 +182,8 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.20 and GTK 2.16. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.16 (of
+* Your code should build against GLib 2.27.3 and GTK 2.24. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
 * Variables should be declared before statements. You can use
@@ -491,7 +498,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-http://geany.org/manual/geany.html#custom-filetypes. Don't forget to
+http://geany.org/manual/index.html#custom-filetypes. Don't forget to
 update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
 .. warning::
@@ -608,11 +615,13 @@ Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
-First write or find a CTags compatible parser, foo.c. Note that there
-are some language patches for CTags at:
+First write or find a CTags compatible parser, foo.c. Check this fork:
+https://github.com/fishman/ctags
+
+There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
-(You can also try the Anjuta project's tagmanager codebase.)
+(You can also try the Anjuta project's anjuta-tags codebase.)
 
 .. note::
     From Geany 1.22 GLib's GRegex engine is used instead of POSIX
@@ -667,6 +676,22 @@ source file.
 When you have these two files, you have to list your new test along the
 other ones in the ``test_source`` variable in ``tests/ctags/Makefile.am``.
 Please keep this list sorted alphabetically.
+
+Upgrading Scintilla
+-------------------
+
+To upgrade the local Scintilla copy, use the ``scripts/update-scintilla.sh``
+script.
+
+To use it, you need to first obtain a copy of the Scintilla sources you want
+to update to.  This will generally mean checking out a release tag from the
+Scintilla Mercurial repository, or extracting a tarball.
+
+Then, just run the script from Geany's to source directory passing the path
+to the Scintilla source directory as first argument, and follow the
+instructions, if any::
+
+    ./scripts/update-scintilla.sh /path/to/scintilla/
 
 GDB
 ---

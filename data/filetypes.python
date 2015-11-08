@@ -61,9 +61,17 @@ context_action_cmd=
 # 0 is spaces, 1 is tabs, 2 is tab & spaces
 #type=0
 
-[build_settings]
+[build-menu]
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=python -m py_compile "%f"
-run_cmd=python "%f"
+FT_00_LB=_Compile
+FT_00_CM=python -m py_compile "%f"
+FT_00_WD=
+FT_02_LB=_Lint
+FT_02_CM=pep8 --max-line-length=80 "%f"
+FT_02_WD=
+error_regex=(.+):([0-9]+):([0-9]+)
+EX_00_LB=_Execute
+EX_00_CM=python "%f"
+EX_00_WD=

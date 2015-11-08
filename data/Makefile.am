@@ -15,6 +15,7 @@ filetypes = \
 	filetypes.Clojure.conf \
 	filetypes.cmake \
 	filetypes.cobol \
+	filetypes.coffeescript \
 	filetypes.common \
 	filetypes.conf \
 	filetypes.cpp \
@@ -33,13 +34,14 @@ filetypes = \
 	filetypes.freebasic \
 	filetypes.Genie.conf \
 	filetypes.glsl \
-	filetypes.Go.conf \
+	filetypes.go \
 	filetypes.Graphviz.conf \
 	filetypes.haskell \
 	filetypes.haxe \
 	filetypes.html \
 	filetypes.java \
 	filetypes.javascript \
+	filetypes.JSON.conf \
 	filetypes.latex \
 	filetypes.lisp \
 	filetypes.lua \
@@ -67,7 +69,8 @@ filetypes = \
 	filetypes.verilog \
 	filetypes.vhdl \
 	filetypes.xml \
-	filetypes.yaml
+	filetypes.yaml \
+	filetypes.zephir
 
 tagfiles = \
 	c99.tags \

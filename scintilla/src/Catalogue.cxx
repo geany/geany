@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <ctype.h>
 
+#include <stdexcept>
 #include <vector>
 
 #include "ILexer.h"
@@ -84,6 +85,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmCaml);
 	LINK_LEXER(lmCmake);
 	LINK_LEXER(lmCOBOL);
+	LINK_LEXER(lmCoffeeScript);
 	LINK_LEXER(lmCPP);
 	LINK_LEXER(lmCss);
 	LINK_LEXER(lmD);
@@ -106,6 +108,7 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmOctave);
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
+	LINK_LEXER(lmPHPSCRIPT);
 	LINK_LEXER(lmPO);
 	LINK_LEXER(lmPowerShell);
 	LINK_LEXER(lmProps);

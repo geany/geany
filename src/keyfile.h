@@ -50,6 +50,8 @@ void configuration_reload_default_session(void);
 
 void configuration_save_default_session(void);
 
+void configuration_clear_default_session(void);
+
 void configuration_load_session_files(GKeyFile *config, gboolean read_recent_files);
 
 void configuration_save_session_files(GKeyFile *config);

@@ -54,6 +54,9 @@ guint plugin_idle_add(struct GeanyPlugin *plugin, GSourceFunc function, gpointer
 struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
+GeanyKeyGroup *plugin_set_key_group_full(struct GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify);
+
 void plugin_show_configure(struct GeanyPlugin *plugin);
 
 void plugin_builder_connect_signals(struct GeanyPlugin *plugin,

@@ -41,20 +41,15 @@ G_BEGIN_DECLS
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Veed"
+#define GEANY_CODENAME					"Rosset"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_WIKI						"http://wiki.geany.org/"
 #define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"
-#define GEANY_DONATE					"https://sourceforge.net/donate/index.php?group_id=153444"
+#define GEANY_DONATE					"http://www.geany.org/service/donate/"
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_DEFAULT_DIALOG_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900
 #define GEANY_WINDOW_DEFAULT_HEIGHT		600
-
-
-/* prototype is here so that all files can use it. */
-void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
-
 
 #ifndef G_GNUC_WARN_UNUSED_RESULT
 #define G_GNUC_WARN_UNUSED_RESULT
@@ -64,6 +59,14 @@ void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
 #ifndef GEANY
 # define GEANY(symbol_name) symbol_name
 #endif
+
+
+#ifdef GEANY_PRIVATE
+
+/* prototype is here so that all files can use it. */
+void geany_debug(gchar const *format, ...) G_GNUC_PRINTF (1, 2);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 
