@@ -2,14 +2,14 @@
 # Copyright (C) 2007-2011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Fajar Wahyu <fajarwahyuabdillah@gmail.com>, 2012.
-# Samsul Ma'arif <mail@samsul.web.id>, 2014.
+# Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2014-07-25 03:49+0700\n"
+"PO-Revision-Date: 2015-11-08 22:32+0700\n"
 "Last-Translator: Samsul Ma'arif <mail@samsul.web.id>\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
@@ -67,7 +67,7 @@ msgstr "Ada _Lagi"
 
 #: ../data/geany.glade.h:10
 msgid "Insert File _Header"
-msgstr "Selipkan _Header"
+msgstr "Selipkan Berkas _Header"
 
 #: ../data/geany.glade.h:11
 msgid "Insert _GPL Notice"
@@ -99,7 +99,7 @@ msgstr "_Cari"
 
 #: ../data/geany.glade.h:18
 msgid "Open Selected F_ile"
-msgstr "Buka File Terp_ilih"
+msgstr "Buka Berkas Terp_ilih"
 
 #: ../data/geany.glade.h:19 ../src/symbols.c:2368
 msgid "Find _Usage"
@@ -164,15 +164,15 @@ msgstr "Preferensi"
 
 #: ../data/geany.glade.h:32
 msgid "Load files from the last session"
-msgstr "Angkat file dari sesi terakhir"
+msgstr "Muat berkas dari sesi terakhir"
 
 #: ../data/geany.glade.h:33
 msgid "Opens at startup the files from the last session"
-msgstr "Ketika memulai Geany, buka file dari sesi terakhir"
+msgstr "Ketika memulai Geany, buka berkas dari sesi terakhir"
 
 #: ../data/geany.glade.h:34
 msgid "Load virtual terminal support"
-msgstr "Angkat dukungan terminal virtual"
+msgstr "Muat dukungan terminal virtual"
 
 #: ../data/geany.glade.h:35
 msgid ""
@@ -196,8 +196,7 @@ msgstr "Ingat posisi dan geometri window"
 
 #: ../data/geany.glade.h:39
 msgid "Saves the window position and geometry and restores it at the start"
-msgstr ""
-"Ingat posisi dan geometri window lalu terapkan itu ketika memulai Geany"
+msgstr "Ingat posisi dan geometri window lalu terapkan itu ketika memulai Geany"
 
 #: ../data/geany.glade.h:40
 msgid "Confirm exit"
@@ -219,15 +218,15 @@ msgstr "Path Aktivasi:"
 msgid ""
 "Path to start in when opening or saving files. Must be an absolute path."
 msgstr ""
-"Path dimulai untuk membuka dan menyimpan file. Path direktori harus absolut."
+"Path dimulai untuk membuka dan menyimpan berkas. Path direktori harus absolut."
 
 #: ../data/geany.glade.h:45
 msgid "Project files:"
-msgstr "File Proyek:"
+msgstr "Berkas Proyek:"
 
 #: ../data/geany.glade.h:46
 msgid "Path to start in when opening project files"
-msgstr "Path standar untuk membuka file proyek"
+msgstr "Path standar untuk membuka berkas proyek"
 
 #: ../data/geany.glade.h:47
 msgid "Extra plugin path:"
@@ -239,13 +238,13 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
-"Secara default, Geany akan mengangkat file pada path instalasi global dan "
-"direktori konfigurasi. Path yang dimasukkan disini akan menjadi path plugin "
+"Secara default, Geany akan memuat berkas pada lokasi instalasi global dan "
+"direktori konfigurasi. Lokasi yang dimasukkan disini akan menjadi path plugin "
 "tambahan yang akan dicari Geany. Kosongkan saja bila tidak dipakai."
 
 #: ../data/geany.glade.h:49
 msgid "<b>Paths</b>"
-msgstr "<b>Path</b>"
+msgstr "<b>Lokasi</b>"
 
 #: ../data/geany.glade.h:50
 msgid "Startup"
@@ -347,14 +346,14 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Pakai segera kata yang ada di bawah kursor mouse ketika membuka kotak "
-"Pencarian, Pencarian di File, atau Kotak Ganti-Kata, dan tanpa perlu di "
+"Pencarian, Pencarian di Berkas, atau Kotak Ganti-Kata, dan tanpa perlu di "
 "seleksi."
 
 #: ../data/geany.glade.h:68
 msgid "Use the current file's directory for Find in Files"
 msgstr ""
-"Pakai segera direktori file yang sedang dibuka untuk kotak Pencarian pada "
-"File"
+"Pakai segera direktori berkas yang sedang dibuka untuk kotak Pencarian pada "
+"Berkas"
 
 #: ../data/geany.glade.h:69
 msgid "<b>Search</b>"
@@ -362,19 +361,19 @@ msgstr "<b>Pencarian</b>"
 
 #: ../data/geany.glade.h:70
 msgid "Use project-based session files"
-msgstr "Pakai sesi file berdasarkan proyek"
+msgstr "Pakai sesi berkas berdasarkan proyek"
 
 #: ../data/geany.glade.h:71
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
 msgstr ""
-"Menentukan apakah ingin menyimpan sesi file proyek dan membukanya ketika "
+"Menentukan apakah ingin menyimpan sesi berkas proyek dan membukanya ketika "
 "membuka-ulang proyek"
 
 #: ../data/geany.glade.h:72
 msgid "Store project file inside the project base directory"
-msgstr "Simpan file proyek di dalam direktori acuan proyek"
+msgstr "Simpan berkas proyek di dalam direktori acuan proyek"
 
 #: ../data/geany.glade.h:73
 msgid ""
@@ -383,7 +382,7 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"Jika aktif, maka file proyek akan disimpan di direktori acuan proyek ketika "
+"Jika aktif, maka berkas proyek akan disimpan di direktori acuan proyek ketika "
 "membuat proyek baru. Tenang saja, Anda masih bisa mengganti path direktori "
 "proyeknya di kotak dialog Proyek Baru."
 
@@ -498,11 +497,11 @@ msgstr "Penempatan tab baru:"
 
 #: ../data/geany.glade.h:99
 msgid "File tabs will be placed on the left of the notebook"
-msgstr "Tab akan ditaruh di sebelah kiri"
+msgstr "Tab berkas akan ditaruh di sebelah kiri"
 
 #: ../data/geany.glade.h:100
 msgid "File tabs will be placed on the right of the notebook"
-msgstr "Tab akan ditaruh di sebelah kanan"
+msgstr "Tab berkas akan ditaruh di sebelah kanan"
 
 #: ../data/geany.glade.h:101
 msgid "Next to current"
@@ -534,7 +533,7 @@ msgstr "<b>Tab Editor</b>"
 
 #: ../data/geany.glade.h:107
 msgid "Sidebar:"
-msgstr "Panel Pinggir:"
+msgstr "Panel Samping:"
 
 #: ../data/geany.glade.h:108
 msgid "<b>Tab positions</b>"
@@ -738,15 +737,15 @@ msgstr "Mode Indent-Otomatis:"
 
 #: ../data/geany.glade.h:148
 msgid "Detect type from file"
-msgstr "Deteksi tipe dari file"
+msgstr "Deteksi tipe dari berkas"
 
 #: ../data/geany.glade.h:149
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
-"Menentukan apakah ingin mendeteksi tipe indentasi dari isi file ketika "
-"membuka file"
+"Menentukan apakah ingin mendeteksi tipe indentasi dari isi berkas ketika "
+"membuka berkas"
 
 #: ../data/geany.glade.h:150
 msgid "T_abs and spaces"
@@ -777,15 +776,15 @@ msgstr "Pakai satu tab per indent"
 
 #: ../data/geany.glade.h:156
 msgid "Detect width from file"
-msgstr "Deteksi lebar dari file"
+msgstr "Deteksi lebar dari berkas"
 
 #: ../data/geany.glade.h:157
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr ""
-"Menentukan apakah ingin mendeteksi lebar indentasi dari isi file ketika "
-"membuka file"
+"Menentukan apakah ingin mendeteksi lebar indentasi dari isi berkas ketika "
+"membuka berkas"
 
 #: ../data/geany.glade.h:158
 msgid "Type:"
@@ -903,7 +902,7 @@ msgid ""
 msgstr ""
 "Minimal delay (in milliseconds) between two automatic updates of the symbol "
 "list. Note that a too short delay may have performance impact, especially "
-"with large files. A delay of 0 disables real-time updates."
+"with large berkas. A delay of 0 disables real-time updates."
 
 #: ../data/geany.glade.h:181
 msgid "<b>Completions</b>"
@@ -1143,9 +1142,8 @@ msgid "Open new documents from the command-line"
 msgstr "Buka dokumen baru dari terminal"
 
 #: ../data/geany.glade.h:230
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
-msgstr "Mulai file baru untuk masing-masing nama file terminal yang tidak ada"
+msgstr "Buat berkas baru untuk masing-masing nama berkas baris-perintah yang tidak ada"
 
 #: ../data/geany.glade.h:231
 msgid "Default end of line characters:"
@@ -1153,19 +1151,19 @@ msgstr "Karakter penanda akhir baris standar:"
 
 #: ../data/geany.glade.h:232
 msgid "<b>New files</b>"
-msgstr "<b>File baru</b>"
+msgstr "<b>Berkas baru</b>"
 
 #: ../data/geany.glade.h:233
 msgid "Default encoding (new files):"
-msgstr "Encoding standar (file baru):"
+msgstr "Encoding standar (berkas baru):"
 
 #: ../data/geany.glade.h:234
 msgid "Sets the default encoding for newly created files"
-msgstr "Tetapkan encoding standar untuk file yang baru dibuat"
+msgstr "Tetapkan encoding standar untuk berkas yang baru dibuat"
 
 #: ../data/geany.glade.h:235
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Gunakan encoding persisten ketika membuka file non-Unicode"
+msgstr "Gunakan encoding persisten ketika membuka berkas non-Unicode"
 
 #: ../data/geany.glade.h:236
 msgid ""
@@ -1173,18 +1171,18 @@ msgid ""
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
-"Opsi ini me-non-aktifkan pendeteksian otomatis dari encoding file ketika "
-"membuka file non-Unicode dan membuka file dengan encoding yang telah "
+"Opsi ini me-non-aktifkan pendeteksian otomatis dari encoding berkas ketika "
+"membuka berkas non-Unicode dan membuka berkas dengan encoding yang telah "
 "ditentukan (biasanya tidak diperlukan)"
 
 #: ../data/geany.glade.h:237
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Encoding standar (file non-Unicode yang telah terbuka):"
+msgstr "Encoding standar (berkas non-Unicode yang telah terbuka):"
 
 #: ../data/geany.glade.h:238
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
-"Tetapkan encoding standar untuk membuka file non-Unicoding yang telah ada"
+"Tetapkan encoding standar untuk membuka berkas non-Unicoding yang telah ada"
 
 #: ../data/geany.glade.h:239
 msgid "<b>Encodings</b>"
@@ -1192,11 +1190,11 @@ msgstr "<b>Encoding</b>"
 
 #: ../data/geany.glade.h:240
 msgid "Ensure new line at file end"
-msgstr "Pastikan baris baru di akhir file"
+msgstr "Pastikan baris baru di akhir berkas"
 
 #: ../data/geany.glade.h:241
 msgid "Ensures that at the end of the file is a new line"
-msgstr "Memastikan adanya baris baru di penghujung akhir dari file"
+msgstr "Memastikan adanya baris baru di penghujung akhir dari berkas"
 
 #: ../data/geany.glade.h:242
 msgid "Ensure consistent line endings"
@@ -1207,8 +1205,8 @@ msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
-"Memastikan karakter newline selalu dikonversi sebelum disimpan, untuk "
-"menghindari penutupan baris yang tercampur pada file yang sama"
+"Memastikan karakter baris-baru selalu dikonversi sebelum disimpan, untuk "
+"menghindari penutupan baris yang tercampur pada berkas yang sama"
 
 #: ../data/geany.glade.h:244
 msgid "Strip trailing spaces and tabs"
@@ -1228,15 +1226,15 @@ msgstr "Mengganti semua bentuk tab di dokumen dengan karakter spasi"
 
 #: ../data/geany.glade.h:248
 msgid "<b>Saving files</b>"
-msgstr "<b>Menyimpan file</b>"
+msgstr "<b>Menyimpan berkas</b>"
 
 #: ../data/geany.glade.h:249
 msgid "Recent files list length:"
-msgstr "Jumlah daftar riwayat file:"
+msgstr "Jumlah daftar riwayat berkas:"
 
 #: ../data/geany.glade.h:250
 msgid "Specifies the number of files which are stored in the Recent files list"
-msgstr "Menentukan jumlah file yang akan ditampilkan pada Daftar riwayat file"
+msgstr "Menentukan jumlah berkas yang akan ditampilkan pada Daftar riwayat berkas"
 
 #: ../data/geany.glade.h:251
 msgid "Disk check timeout:"
@@ -1247,13 +1245,13 @@ msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
-"Seberapa sering memeriksa perubahan file dokumen yang ada pada disk (satuan "
+"Seberapa sering memeriksa perubahan berkas dokumen yang ada pada disk (satuan "
 "detik). Jika diisi 0 (nol), Geany akan menganggap pemeriksaan dinonaktifkan."
 
 #: ../data/geany.glade.h:253 ../src/prefs.c:1607 ../src/symbols.c:628
 #: ../plugins/filebrowser.c:1160
 msgid "Files"
-msgstr "File"
+msgstr "Berkas"
 
 #: ../data/geany.glade.h:254
 msgid "Terminal:"
@@ -1322,7 +1320,7 @@ msgstr "Versi inisial:"
 
 #: ../data/geany.glade.h:269
 msgid "Version number, which a new file initially has"
-msgstr "Nomer versi yang secara inisial dimiliki oleh file baru"
+msgstr "Nomer versi yang secara inisial dimiliki oleh berkas baru"
 
 #: ../data/geany.glade.h:270
 msgid "Company name"
@@ -1412,7 +1410,7 @@ msgstr "Command:"
 #: ../data/geany.glade.h:289
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
-msgstr "Lokasi command untuk mencetak file (gunakan %f untuk nama file)"
+msgstr "Lokasi perintah untuk mencetak berkas (gunakan %f untuk nama berkas)"
 
 #: ../data/geany.glade.h:290
 msgid "Use an external command for printing"
@@ -1447,17 +1445,17 @@ msgid ""
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
 "Tambahkan sedikit header di setiap halaman yang memiliki nomer halaman, nama "
-"file, dan tanggal sekarang (lihat di bawah). Header ini memakan tempat 3 "
+"berkas, dan tanggal sekarang (lihat di bawah). Header ini memakan tempat 3 "
 "baris."
 
 #: ../data/geany.glade.h:297 ../src/printing.c:267
 msgid "Use the basename of the printed file"
-msgstr "Gunakan basename file yang dicetak"
+msgstr "Gunakan basename berkas yang dicetak"
 
 #: ../data/geany.glade.h:298
 msgid "Print only the basename (without the path) of the printed file"
 msgstr ""
-"Hanya cetak base name saja (tanpa lokasi direktorinya) dari file yang dicetak"
+"Hanya cetak base name saja (tanpa lokasi direktorinya) dari berkas yang dicetak"
 
 #: ../data/geany.glade.h:299 ../src/printing.c:275
 msgid "Date format:"
@@ -1592,14 +1590,12 @@ msgstr ""
 
 #: ../data/geany.glade.h:327
 msgid "Follow path of the current file"
-msgstr "Ikuti lokasi path dari file yang sekarang"
+msgstr "Ikuti lokasi path dari berkas yang sekarang"
 
 #: ../data/geany.glade.h:328
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr ""
-"Menentukan apakah mengeksekusi \\\"cd $path\\\" ketika Anda berpindah antar "
-"file yang terbuka"
+msgstr "Menentukan apakah mengeksekusi \"cd $path\" ketika Anda berpindah antar "
+"berkas yang terbuka"
 
 #: ../data/geany.glade.h:329
 msgid "Execute programs in the VTE"
@@ -1647,15 +1643,15 @@ msgstr "Lain-Lain"
 
 #: ../data/geany.glade.h:339
 msgid "_File"
-msgstr "_File"
+msgstr "_Berkas"
 
 #: ../data/geany.glade.h:340
 msgid "New (with _Template)"
-msgstr "Bikin (pakai _Template)"
+msgstr "Buat (pakai _Template)"
 
 #: ../data/geany.glade.h:341
 msgid "_Open..."
-msgstr "_Buka"
+msgstr "B_uka"
 
 #: ../data/geany.glade.h:342
 msgid "Recent _Files"
@@ -1663,7 +1659,7 @@ msgstr "Riwayat _Berkas"
 
 #: ../data/geany.glade.h:343
 msgid "Save _As..."
-msgstr "Simpan s_ebagai..."
+msgstr "Simpan S_ebagai..."
 
 #: ../data/geany.glade.h:344
 msgid "Sa_ve All"
@@ -1964,7 +1960,7 @@ msgstr "_Tulis Unicode BOM"
 
 #: ../data/geany.glade.h:418
 msgid "Set File_type"
-msgstr "Teta_pkan Filetype"
+msgstr "Teta_pkan Tipe Berkas"
 
 #: ../data/geany.glade.h:419
 msgid "Set _Encoding"
@@ -1975,18 +1971,16 @@ msgid "Set Line E_ndings"
 msgstr "Tetapkan Akhira_n Baris"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Konversi dan Permanenkan ke mode _CR/LF (Win)"
+msgstr "Konversi dan Permanenkan ke mode _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konversi dan Permanenkan ke _LF (Unix)"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Konversi dan Permanenkan ke CR (_MAC)"
+msgstr "Konversi dan Permanenkan ke CR (_Mac Klasik)"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:645
 msgid "_Clone"
@@ -2131,7 +2125,7 @@ msgstr "Atribut Proyek"
 
 #: ../data/geany.glade.h:459 ../src/project.c:180
 msgid "Filename:"
-msgstr "Nama file:"
+msgstr "Nama berkas:"
 
 #: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
 #: ../plugins/classbuilder.c:477
@@ -2148,15 +2142,15 @@ msgstr "Base path:"
 
 #: ../data/geany.glade.h:463
 msgid "File patterns:"
-msgstr "Pola File:"
+msgstr "Pola berkas:"
 
 #: ../data/geany.glade.h:464
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
-"Daftar pola file yang dipisahkan oleh tanda spasi digunakan untuk dialog "
-"cari di file (contoh *.c *.h)"
+"Daftar pola berkas yang dipisahkan oleh tanda spasi digunakan untuk dialog "
+"cari di berkas (contoh *.c *.h)"
 
 #: ../data/geany.glade.h:465 ../src/project.c:209
 msgid ""
@@ -2164,9 +2158,9 @@ msgid ""
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
-"Direktori dasar untuk semua file yang melingkupi proyek. Ini bisa berupa "
+"Direktori dasar untuk semua berkas yang melingkupi proyek. Ini bisa berupa "
 "lokasi baru, atau direktori yang sudah ada. Anda dapat menggunakan lokasi "
-"yang relatif terhadap nama file proyek."
+"yang relatif terhadap nama berkas proyek."
 
 #: ../data/geany.glade.h:466 ../src/keybindings.c:317
 msgid "Project"
@@ -2245,7 +2239,6 @@ msgid "Other:"
 msgstr "Lainnya:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -2255,13 +2248,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Hak Cipta (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"All rights reserved."
+"Semua hak dilindungi."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2274,7 +2267,7 @@ msgstr "Sebuah IDE yang cepat dan ringan"
 #: ../src/about.c:234
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(Dibangun pada / setelah %s)"
+msgstr "(Dibangun pada atau setelah %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:266
@@ -2314,7 +2307,7 @@ msgstr "Kontributor"
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
-"Beberapa kontributor lainnya (untuk daftar yang lebih lengkap, lihatlah file "
+"Beberapa kontributor lainnya (untuk daftar yang lebih lengkap, lihatlah berkas "
 "%s):"
 
 #: ../src/about.c:407
@@ -2341,7 +2334,7 @@ msgstr "gagal mengganti  %%p, tidak ada proyek yang aktif"
 
 #: ../src/build.c:746
 msgid "Process failed, no working directory"
-msgstr "Proses gagal, working directory tidak ada"
+msgstr "Proses gagal, direktori kerja tidak ada"
 
 #: ../src/build.c:759
 #, c-format
@@ -2354,9 +2347,9 @@ msgid "Process failed (%s)"
 msgstr "Proses gagal (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Gagal mengganti working directory ke \"%s\""
+msgstr "Direktori kerja salah \"%s\""
 
 #: ../src/build.c:838
 #, c-format
@@ -2368,14 +2361,16 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Berkas tidak dieksekusi karena terminal mungkin berisi beberapa masukan (tekan "
+"Ctrl+C atau tekan Enter untuk membersihkannya)."
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Tidak bisa mengeksekusi grep tool '%s'; periksalah pengaturan lokasinya pada "
+"Tidak dapat mengeksekusi perintah terminal \"%s\": %s. Periksalah pengaturan lokasinya pada "
 "Preferensi."
 
 #: ../src/build.c:1020
@@ -2406,28 +2401,28 @@ msgstr "Kesalahan _Sebelumnya"
 #. arguments
 #: ../src/build.c:1293 ../src/build.c:2706
 msgid "_Set Build Commands"
-msgstr "_Atur Build Commands"
+msgstr "_Atur Perintah Build"
 
 #: ../src/build.c:1579 ../src/toolbar.c:376
 msgid "Build the current file"
-msgstr "Build file yang sekarang sedang ditampilkan"
+msgstr "Build berkas yang sekarang sedang ditampilkan"
 
 #: ../src/build.c:1590
 msgid "Build the current file with Make and the default target"
 msgstr ""
-"Build file yang sekarang sedang ditampilkan dengan menggunakan command Make "
+"Build berkas yang sekarang sedang ditampilkan dengan menggunakan command Make "
 "dan default target"
 
 #: ../src/build.c:1592
 msgid "Build the current file with Make and the specified target"
 msgstr ""
-"Build file yang sekarang sedang ditampilkan dengan menggunakan command Make "
+"Build berkas yang sekarang sedang ditampilkan dengan menggunakan command Make "
 "dan target yang telah ditentukan"
 
 #: ../src/build.c:1594
 msgid "Compile the current file with Make"
 msgstr ""
-"Build file yang sekarang sedang ditampilkan dengan menggunakan command Make"
+"Build berkas yang sekarang sedang ditampilkan dengan menggunakan command Make"
 
 #: ../src/build.c:1613
 #, c-format
@@ -2470,7 +2465,7 @@ msgstr "%s perintah"
 
 #: ../src/build.c:1919
 msgid "No filetype"
-msgstr "Tidak ada filetype"
+msgstr "Tidak ada tipe berkas"
 
 #: ../src/build.c:1928 ../src/build.c:1963
 msgid "Error regular expression:"
@@ -2491,12 +2486,11 @@ msgid "Execute commands"
 msgstr "Eksekusi perintah"
 
 #: ../src/build.c:2009
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p telah diganti pada field command dan directory, detilnya "
+"%d, %e, %f, %p, %l telah diganti pada field perintah dan directory, detilnya "
 "lihat manual."
 
 #: ../src/build.c:2167
@@ -2534,8 +2528,8 @@ msgstr "_Make Semua"
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
-msgstr[0] "%d file tersimpan."
-msgstr[1] "%d file tersimpan."
+msgstr[0] "%d berkas tersimpan."
+msgstr[1] "%d berkas tersimpan."
 
 #: ../src/callbacks.c:895 ../src/keybindings.c:545
 msgid "Go to Line"
@@ -2548,7 +2542,7 @@ msgstr "Masukkan baris yang dituju:"
 #: ../src/callbacks.c:997 ../src/callbacks.c:1023
 msgid ""
 "Please set the filetype for the current file before using this function."
-msgstr "Atur terlebih dahulu filetype untuk file ini, sebelum memakai fungsi."
+msgstr "Atur terlebih dahulu tipe-berkas untuk berkas ini, sebelum memakai fungsi."
 
 #: ../src/callbacks.c:1313 ../src/callbacks.c:1321
 msgid "No more message items."
@@ -2557,25 +2551,21 @@ msgstr "Tidak ada pesan."
 #: ../src/callbacks.c:1424
 #, c-format
 msgid "Could not open file %s (File not found)"
-msgstr "Tidak bisa membuka file %s (Tidak ditemukan)"
+msgstr "Tidak bisa membuka berkas %s (Tidak ditemukan)"
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Periksa pengaturan lokasi di konfigurasi Tipeberkas"
 
 #: ../src/callbacks.c:1478
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr ""
-"Tidak bisa mengeksekusi grep tool '%s'; periksalah pengaturan lokasinya pada "
-"Preferensi."
+msgstr "Periksa lokasi pengaturan di Preferensi."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr ""
-"Tidak bisa mengeksekusi perintah eksternal '%s' (%s) yang terkonfigurasi."
+msgstr "Tidak dapat mengeksekusi konteks perintah aksi \"%s\": %s. %s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2586,22 +2576,19 @@ msgstr "\"%s\" tidak ketemu."
 #. auto-detect
 #: ../src/dialogs.c:222 ../src/encodings.c:551
 msgid "Detect from file"
-msgstr "Deteksikan dari file"
+msgstr "Deteksikan dari berkas"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
-msgstr "Bahasa _Pemrograman"
+msgstr "Bahasa Pemrograman"
 
 #: ../src/dialogs.c:227
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "Bahasa _Scripting"
+msgstr "Bahasa Scripting"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
-msgstr "Bahasa _Markup"
+msgstr "Bahasa Markup"
 
 #: ../src/dialogs.c:307
 msgid "_More Options"
@@ -2624,16 +2611,16 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"Secara eksplisit mendefinisikan sebuah encoding untuk file jika tidak "
+"Secara eksplisit mendefinisikan sebuah encoding untuk berkas jika tidak "
 "terdeteksi. Hal ini berguna ketika Anda yakin bahwa Geany tidak bisa "
 "mendeteksi encoding dari \n"
-"suatu file. Catatan: jika Anda memilih beberapa file sekaligus, Geany akan "
-"menganggap semua file itu dibuka dengan menggunakan encoding ini."
+"suatu berkas. Catatan: jika Anda memilih beberapa berkas sekaligus, Geany akan "
+"menganggap semua berkas itu dibuka dengan menggunakan encoding ini."
 
 #. line 2 with filetype combo
 #: ../src/dialogs.c:341
 msgid "Set filetype:"
-msgstr "Tetapkan filetype:"
+msgstr "Tetapkan tipe-berkas:"
 
 #: ../src/dialogs.c:350
 msgid ""
@@ -2642,28 +2629,27 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "filetype."
 msgstr ""
-"Secara eksplisit mendefinisikan filetype dari suatu file, jika tidak dapat "
+"Secara eksplisit mendefinisikan tipe-berkas dari suatu berkas, jika tidak dapat "
 "dideteksi melalui ekstensinya. \n"
-"Catatan: jika Anda memilih beberapa file sekaligus, Geany akan menganggap "
-"semua file itu dibuka dengan filetype ini."
+"Catatan: jika Anda memilih beberapa berkas sekaligus, Geany akan menganggap "
+"semua berkas itu dibuka dengan tipe-berkas ini."
 
 #: ../src/dialogs.c:376 ../src/dialogs.c:466
 msgid "Open File"
-msgstr "Buka File"
+msgstr "Buka Berkas"
 
 #: ../src/dialogs.c:380
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
-msgstr "Tam_pilan"
+msgstr "Tam_pilkan"
 
 #: ../src/dialogs.c:382
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
 msgstr ""
-"Membuka file secara read-only. Jika Anda membuka file lebih dari satu, maka "
-"file-file itu akan dibuka secara read-only semua."
+"Membuka berkas secara hanya-baca. Jika Anda membuka berkas lebih dari satu, maka "
+"berkas-berkas itu akan dibuka secara hanya-baca semua."
 
 #: ../src/dialogs.c:534 ../src/document.c:2059
 msgid "Overwrite?"
@@ -2671,11 +2657,11 @@ msgstr "Timpa?"
 
 #: ../src/dialogs.c:535
 msgid "Filename already exists!"
-msgstr "Nama file sudah ada!"
+msgstr "Nama berkas sudah ada!"
 
 #: ../src/dialogs.c:564 ../src/dialogs.c:678
 msgid "Save File"
-msgstr "Simpan File"
+msgstr "Simpan Berkas"
 
 #: ../src/dialogs.c:573
 msgid "R_ename"
@@ -2683,7 +2669,7 @@ msgstr "Ganti _Nama"
 
 #: ../src/dialogs.c:574
 msgid "Save the file and rename it"
-msgstr "Simpan lalu ganti nama file-nya"
+msgstr "Simpan lalu ganti nama berkasnya"
 
 #: ../src/dialogs.c:696 ../src/win32.c:730
 msgid "Error"
@@ -2709,7 +2695,7 @@ msgstr "_Jangan Simpan"
 #: ../src/dialogs.c:811
 #, c-format
 msgid "The file '%s' is not saved."
-msgstr "File '%s' tidak tersimpan."
+msgstr "Berkas '%s' tidak tersimpan."
 
 #: ../src/dialogs.c:812
 msgid "Do you want to save it before closing?"
@@ -2724,8 +2710,8 @@ msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr ""
-"Sebuah kesalahan terjadi atau informasi file tidak bisa didapatkan (cnth. "
-"dari file baru)."
+"Sebuah kesalahan terjadi atau informasi berkas tidak bisa didapatkan (cnth. "
+"dari berkas baru)."
 
 #: ../src/dialogs.c:1203 ../src/dialogs.c:1204 ../src/dialogs.c:1205
 #: ../src/dialogs.c:1211 ../src/dialogs.c:1212 ../src/dialogs.c:1213
@@ -2749,22 +2735,22 @@ msgstr "(tanpa BOM)"
 #: ../src/document.c:744
 #, c-format
 msgid "File %s closed."
-msgstr "File %s ditutup."
+msgstr "Berkas %s ditutup."
 
 #: ../src/document.c:900
 #, c-format
 msgid "New file \"%s\" opened."
-msgstr "File baru \"%s\" dibuka."
+msgstr "Berkas baru \"%s\" dibuka."
 
 #: ../src/document.c:974
 #, c-format
 msgid "Could not open file %s (%s)"
-msgstr "Tidak bisa membuka file %s (%s)"
+msgstr "Tidak bisa membuka berkas %s (%s)"
 
 #: ../src/document.c:1023
 #, c-format
 msgid "The file \"%s\" is not valid %s."
-msgstr "File \"%s\" merupakan %s yang tidak valid."
+msgstr "Berkas \"%s\" merupakan %s yang tidak valid."
 
 #: ../src/document.c:1029
 #, c-format
@@ -2772,7 +2758,7 @@ msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
-"File \"%s\" sepertinya bukan file teks, atau mungkin encodingnya tidak "
+"Berkas \"%s\" sepertinya bukan berkas teks, atau mungkin encodingnya tidak "
 "dikenali."
 
 #: ../src/document.c:1039
@@ -2783,8 +2769,8 @@ msgid ""
 "cause data loss.\n"
 "The file was set to read-only."
 msgstr ""
-"File \"%s\" tidak bisa dibuka dengan benar dan telah terpotong. Hal ini "
-"terjadi bila file tersebut memiliki byte NULL. Berhati-hatilah karena "
+"Berkas \"%s\" tidak bisa dibuka dengan benar dan telah terpotong. Hal ini "
+"terjadi bila berkas tersebut memiliki byte NULL. Berhati-hatilah karena "
 "menyimpannya akan \n"
 "menyebabkan kehilangan data. Oleh karena itu, Geany membukanya secara read-"
 "only."
@@ -2816,7 +2802,7 @@ msgstr "Mengatur lebar indentasi ke %d untuk %s."
 #: ../src/document.c:1497
 #, c-format
 msgid "File %s reloaded."
-msgstr "File %s dibuka ulang"
+msgstr "Berkas %s dibuka ulang"
 
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
@@ -2824,7 +2810,7 @@ msgstr "File %s dibuka ulang"
 #: ../src/document.c:1505
 #, c-format
 msgid "File %s opened(%d%s)."
-msgstr "File %s terbuka(%d%s)."
+msgstr "Berkas %s terbuka(%d%s)."
 
 #: ../src/document.c:1507
 msgid ", read-only"
@@ -2832,7 +2818,7 @@ msgstr ", read-only"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Buang sejarah"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2841,20 +2827,22 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Kondisi buffer sebelumnya tersimpan di sejarah dan membatalkan pengembaliannya."
+"Anda dapat menonaktifkannya dengan membatalkan sejarah saat memuat ulang. Pesan"
+"ini tidak akan ditampilkan lagi, tetapi pilihan Anda tidak dapat diubah dalam"
+"berbagai preferensi."
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "File %s dibuka ulang"
+msgstr "Berkas %s telah dibuka ulang"
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
 msgstr "Perubahan yang belum disimpan akan hilang."
 
 #: ../src/document.c:1663
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Perubahan yang belum disimpan akan hilang."
+msgstr "Pembatalan sejarah akan hilang."
 
 #: ../src/document.c:1664
 #, c-format
@@ -2863,7 +2851,7 @@ msgstr "Yakin mau me-reload '%s'?"
 
 #: ../src/document.c:1770
 msgid "Error renaming file."
-msgstr "Kesalahan dalam mengganti nama."
+msgstr "Kesalahan dalam mengganti nama berkas."
 
 #: ../src/document.c:1891
 #, c-format
@@ -2871,8 +2859,8 @@ msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
-"Sebuah kesalahan terjadi ketika mengkonversi file dari UTF-8 pada \"%s\". "
-"File tetap tidak tersimpan."
+"Sebuah kesalahan terjadi ketika mengkonversi berkas dari UTF-8 pada \"%s\". "
+"Berkas tetap tidak tersimpan."
 
 #: ../src/document.c:1912
 #, c-format
@@ -2891,48 +2879,45 @@ msgstr "Pesan kesalahan: %s."
 #: ../src/document.c:1976
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
-msgstr "Gagal membuka file '%s' untuk menulis: fopen() gagal: %s"
+msgstr "Gagal membuka berkas '%s' untuk menulis: fopen() gagal: %s"
 
 #: ../src/document.c:1994
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
-msgstr "Gagal menulis file '%s': fwrite() gagal: %s"
+msgstr "Gagal menulis berkas '%s': fwrite() gagal: %s"
 
 #: ../src/document.c:2008
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
-msgstr "Gagal menutup file '%s': fclose() gagal: %s"
+msgstr "Gagal menutup berkas '%s': fclose() gagal: %s"
 
 #: ../src/document.c:2058 ../src/document.c:3589
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Timpa?"
+msgstr "_Timpa?"
 
 #: ../src/document.c:2060 ../src/document.c:3592
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"File '%s' pada hardisk lebih baru daripada \n"
-"yang ada di buffer."
+msgstr "Berkas '%s' pada hardisk lebih baru daripada yang ada di buffer."
 
 #: ../src/document.c:2068 ../src/document.c:3641
 msgid "Try to resave the file?"
-msgstr "Mau mencoba menyimpan-ulang file?"
+msgstr "Mau mencoba menyimpan-ulang berkas?"
 
 #: ../src/document.c:2069 ../src/document.c:3642
 #, c-format
 msgid "File \"%s\" was not found on disk!"
-msgstr "File \"%s\" tidak ketemu di hardisk!"
+msgstr "Berkas \"%s\" tidak ketemu di hardisk!"
 
 #: ../src/document.c:2132
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Tidak dapat menyimpan dokumen hanya-baca '%s'!"
 
 #: ../src/document.c:2200
 #, c-format
 msgid "Error saving file (%s)."
-msgstr "Kesalahan menyimpan file (%s)."
+msgstr "Kesalahan menyimpan berkas (%s)."
 
 #: ../src/document.c:2205
 #, c-format
@@ -2943,16 +2928,16 @@ msgid ""
 msgstr ""
 "%s\n"
 "\n"
-"File ini di hardisk sepertinya akan terpotong!"
+"Berkas ini di hardisk sepertinya akan terpotong!"
 
 #: ../src/document.c:2207
 msgid "Error saving file."
-msgstr "Kesalahan menyimpan file."
+msgstr "Kesalahan menyimpan berkas."
 
 #: ../src/document.c:2231
 #, c-format
 msgid "File %s saved."
-msgstr "File %s tersimpan."
+msgstr "Berkas %s tersimpan."
 
 #: ../src/document.c:2381
 msgid "Wrap search and find again?"
@@ -3145,12 +3130,12 @@ msgstr "Timur Tengah"
 #: ../src/filetypes.c:94
 #, c-format
 msgid "%s source file"
-msgstr "%s file sumber"
+msgstr "%s berkas sumber"
 
 #: ../src/filetypes.c:95
 #, c-format
 msgid "%s file"
-msgstr "%s file"
+msgstr "%s berkas"
 
 #: ../src/filetypes.c:96
 #, c-format
@@ -3206,22 +3191,22 @@ msgstr "Semua Sumber"
 #: ../src/filetypes.c:1225 ../src/project.c:350 ../src/win32.c:146
 #: ../src/win32.c:191 ../src/win32.c:212 ../src/win32.c:217
 msgid "All files"
-msgstr "Semua file"
+msgstr "Semua berkas"
 
 #: ../src/filetypes.c:1274
 #, c-format
 msgid "Bad regex for filetype %s: %s"
-msgstr "Regex payah untuk filetype %s: %s"
+msgstr "Regex payah untuk tipe-berkas %s: %s"
 
 #: ../src/geany.h:49
 msgid "untitled"
-msgstr "kasihjuduldonk"
+msgstr "tanpa judul"
 
 #: ../src/highlighting.c:1226 ../src/libmain.c:841 ../src/socket.c:171
 #: ../src/templates.c:234
 #, c-format
 msgid "Could not find file '%s'."
-msgstr "Tidak bisa menemukan file '%s'."
+msgstr "Tidak bisa menemukan berkas '%s'."
 
 #: ../src/highlighting.c:1296
 msgid "Default"
@@ -3229,7 +3214,7 @@ msgstr "Standar"
 
 #: ../src/highlighting.c:1337
 msgid "The current filetype overrides the default style."
-msgstr "Filetype sekarang mengabaikan style bawaan."
+msgstr "Tipe-berkas sekarang mengabaikan style bawaan."
 
 #: ../src/highlighting.c:1338
 msgid "This may cause color schemes to display incorrectly."
@@ -3242,7 +3227,7 @@ msgstr "Skema Warna"
 #. visual group order
 #: ../src/keybindings.c:306 ../src/symbols.c:655
 msgid "File"
-msgstr "File"
+msgstr "Berkas"
 
 #: ../src/keybindings.c:308
 msgid "Clipboard"
@@ -3307,7 +3292,7 @@ msgstr "Buka"
 
 #: ../src/keybindings.c:336
 msgid "Open selected file"
-msgstr "Buka file yang dipilih"
+msgstr "Buka berkas yang dipilih"
 
 #: ../src/keybindings.c:338
 msgid "Save"
@@ -3335,7 +3320,7 @@ msgstr "Tutup semua"
 
 #: ../src/keybindings.c:352
 msgid "Reload file"
-msgstr "Buka ulang file"
+msgstr "Buka ulang berkas"
 
 #: ../src/keybindings.c:354
 msgid "Re-open last closed tab"
@@ -3511,7 +3496,7 @@ msgstr "Ganti"
 
 #: ../src/keybindings.c:523 ../src/search.c:866
 msgid "Find in Files"
-msgstr "Cari di dalam File"
+msgstr "Cari di dalam Berkas"
 
 #: ../src/keybindings.c:526
 msgid "Next Message"
@@ -3765,14 +3750,14 @@ msgstr ""
 
 #: ../src/keyfile.c:1247
 msgid "Failed to load one or more session files."
-msgstr "Gagal mengangkat satu atau lebih file sesi"
+msgstr "Gagal mengangkat satu atau lebih berkas sesi"
 
 #: ../src/libmain.c:118
 msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
 msgstr ""
-"Atur nomer kolom inisial untuk file yang terbuka pertama kali (berguna jika "
+"Atur nomer kolom inisial untuk berkas yang terbuka pertama kali (berguna jika "
 "dipakai bersamaan dengan --line)"
 
 #: ../src/libmain.c:119
@@ -3781,15 +3766,15 @@ msgstr "Pakai direktori konfigurasi alternatif"
 
 #: ../src/libmain.c:120
 msgid "Print internal filetype names"
-msgstr "Cetak nama filetype internal"
+msgstr "Cetak nama tipe-berkas internal"
 
 #: ../src/libmain.c:121
 msgid "Generate global tags file (see documentation)"
-msgstr "Ciptakan file tag global (lihat dokumentasi)"
+msgstr "Ciptakan berkas tag global (lihat dokumentasi)"
 
 #: ../src/libmain.c:122
 msgid "Don't preprocess C/C++ files when generating tags"
-msgstr "Jangan mem-preproses file C/C++ ketika menciptakan tag"
+msgstr "Jangan mem-preproses berkas C/C++ ketika menciptakan tag"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -3809,7 +3794,7 @@ msgstr "Menampilkan daftar dokumen yang dibuka pada instance Geany berjalan"
 
 #: ../src/libmain.c:128
 msgid "Set initial line number for the first opened file"
-msgstr "Atur nomer baris inisial untuk file yang pertama kali dibuka"
+msgstr "Atur nomer baris inisial untuk berkas yang pertama kali dibuka"
 
 #: ../src/libmain.c:129
 msgid "Don't show message window at startup"
@@ -3833,7 +3818,7 @@ msgstr "Buka seluruh BERKAS pada mode hanya-baca (lihat dokumentasi)"
 
 #: ../src/libmain.c:136
 msgid "Don't load the previous session's files"
-msgstr "Jangan mengangkat sesi file sebelumnya"
+msgstr "Jangan mengangkat sesi berkas sebelumnya"
 
 #: ../src/libmain.c:138
 msgid "Don't load terminal support"
@@ -3841,7 +3826,7 @@ msgstr "Jangan mengangkat dukungan terminal"
 
 #: ../src/libmain.c:139
 msgid "Filename of libvte.so"
-msgstr "Nama file dari libvte.so"
+msgstr "Nama berkas dari libvte.so"
 
 #: ../src/libmain.c:141
 msgid "Be verbose"
@@ -3853,7 +3838,7 @@ msgstr "Tampilkan versi dan keluar"
 
 #: ../src/libmain.c:515
 msgid "[FILES...]"
-msgstr "[FILES...]"
+msgstr "[BERKAS...]"
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:549
@@ -3915,7 +3900,7 @@ msgstr "Serius mau keluar?"
 
 #: ../src/libmain.c:1408
 msgid "Configuration files reloaded."
-msgstr "File konfigurasi dimuat ulang."
+msgstr "Berkas konfigurasi dimuat ulang."
 
 #: ../src/log.c:186
 msgid "Debug Messages"
@@ -3944,20 +3929,19 @@ msgstr "Sembun_yikan Window Pesan"
 #: ../src/msgwindow.c:677
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
-msgstr "Tidak bisa mencari file '%s' - mencoba lokasi dokumen saat ini."
+msgstr "Tidak bisa mencari berkas '%s' - mencoba lokasi dokumen saat ini."
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "Dokumen telah ditutup."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
 msgstr "Bertukar ke Dokumen"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Buka File"
+msgstr "Buka di _Jendela Baru"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -3978,6 +3962,9 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Pengaya lain bergantung pada ini. Nonaktifkan mereka dulu untuk menonaktifkan ini."
+"</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1602
@@ -3987,6 +3974,10 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Versi:\t%s\n"
+"Penulis:\t%s\n"
+"Nama berkas:\t%s"
+
 
 #: ../src/plugins.c:1630
 msgid "No plugins available."
@@ -4103,7 +4094,7 @@ msgstr "Pengaturan Dokumen"
 
 #: ../src/printing.c:269
 msgid "Print only the basename(without the path) of the printed file"
-msgstr "Hanya cetak basename (tanpa lokasi) dari file yang dicetak"
+msgstr "Hanya cetak basename (tanpa lokasi) dari berkas yang dicetak"
 
 #: ../src/printing.c:421
 msgid "Paginating"
@@ -4142,23 +4133,23 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"File \"%s\" akan dicetak dengan perintah berikut:\n"
+"Berkas \"%s\" akan dicetak dengan perintah berikut:\n"
 "\n"
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Tidak bisa mengeksekusi grep tool '%s'; periksalah pengaturan lokasinya pada "
+"Tidak bisa mengeksekusi perintah cetak \"%s\": %s. Periksalah pengaturan lokasinya pada "
 "Preferensi."
 
 #: ../src/printing.c:622
 #, c-format
 msgid "File %s printed."
-msgstr "File %s dicetak."
+msgstr "Berkas %s dicetak."
 
 #. "projects" is part of the default project base path so be careful when translating
 #. * please avoid special characters and spaces, look at the source for details or ask Frank
@@ -4168,7 +4159,7 @@ msgstr "proyek"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Pindah dokumen saat ini ke sesi proyek baru?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4179,9 +4170,8 @@ msgid "C_reate"
 msgstr "_Buat"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Proyek"
+msgstr "Nama proyek"
 
 #: ../src/project.c:188
 #, c-format
@@ -4189,6 +4179,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Lokasi berkas merepresentasikan proyek dan menyimpan pengaturannya."
+"Normalnya memiliki ekstensi \"%s\"."
 
 #: ../src/project.c:212 ../src/project.c:484
 msgid "Choose Project Base Path"
@@ -4196,7 +4188,7 @@ msgstr "Pilih Lokasi Dasar Proyek"
 
 #: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
 msgid "Project file could not be written"
-msgstr "File proyek tidak bisa ditulis"
+msgstr "Berkas proyek tidak bisa ditulis"
 
 #: ../src/project.c:256
 #, c-format
@@ -4206,7 +4198,7 @@ msgstr "Proyek \"%s\" dibuat."
 #: ../src/project.c:296 ../src/project.c:328 ../src/project.c:1021
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
-msgstr "File proyek \"%s\" tidak bisa diangkat."
+msgstr "Berkas proyek \"%s\" tidak bisa diangkat."
 
 #: ../src/project.c:322 ../src/project.c:334
 msgid "Open Project"
@@ -4214,7 +4206,7 @@ msgstr "Buka Proyek"
 
 #: ../src/project.c:354
 msgid "Project files"
-msgstr "File proyek"
+msgstr "Berkas proyek"
 
 #: ../src/project.c:416
 #, c-format
@@ -4246,7 +4238,7 @@ msgstr "Nama proyek yang dimasukkan terlalu panjang (maks. %d karakter)."
 
 #: ../src/project.c:725
 msgid "You have specified an invalid project filename."
-msgstr "Anda telah memasukkan nama file proyek yang tidak valid."
+msgstr "Anda telah memasukkan nama berkas proyek yang tidak valid."
 
 #: ../src/project.c:748
 msgid "Create the project's base path directory?"
@@ -4274,12 +4266,12 @@ msgstr "Cari-_Ganti"
 #: ../src/project.c:779 ../plugins/export.c:331
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
-msgstr "File '%s' telah ada. Ingin menimpanya?"
+msgstr "Berkas '%s' telah ada. Ingin menimpanya?"
 
 #. initialise the dialog
 #: ../src/project.c:925 ../src/project.c:936
 msgid "Choose Project Filename"
-msgstr "Pilih Nama File Proyek"
+msgstr "Pilih Nama Berkas Proyek"
 
 #: ../src/project.c:1011
 #, c-format
@@ -4312,7 +4304,7 @@ msgstr ""
 
 #: ../src/search.c:322
 msgid "Use multi-line matchin_g"
-msgstr ""
+msgstr "Gunakan ke_cocokan multi-baris"
 
 #: ../src/search.c:327
 msgid ""
@@ -4321,6 +4313,10 @@ msgid ""
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Lakukan ekspresi reguler yang cocok pada seluruh buffer sekaligus daripada"
+"baris per baris, mengizinkan yang cocok untuk dibentangkan beberapa baris."
+"Dalam mode ini, karakter baris baru merupakan bagian dari masukan dan ditangkap"
+"sebagai karakter biasa oleh pola tersebut."
 
 #: ../src/search.c:340
 msgid "Search _backwards"
@@ -4419,9 +4415,9 @@ msgid ""
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
-"Semua: mencari semua file pada direktori\n"
-"Proyek: gunakan pola file yang telah ditentukan pada pengaturan proyek\n"
-"Custom: menentukan pola file secara manual"
+"Semua: mencari semua berkas pada direktori\n"
+"Proyek: gunakan pola berkas yang telah ditentukan pada pengaturan proyek\n"
+"Custom: menentukan pola berkas secara manual"
 
 #: ../src/search.c:895
 msgid "Fi_les:"
@@ -4429,7 +4425,7 @@ msgstr "Ber_kas:"
 
 #: ../src/search.c:907
 msgid "File patterns, e.g. *.c *.h"
-msgstr "Pola file, contoh *.c *.h"
+msgstr "Pola berkas, contoh *.c *.h"
 
 #: ../src/search.c:919
 msgid "_Directory:"
@@ -4477,7 +4473,7 @@ msgstr "Mengganti %u item yang ditemukan pada %u dokumen."
 
 #: ../src/search.c:1615
 msgid "Invalid directory for find in files."
-msgstr "Direktori tidak valid untuk fitur cari di file."
+msgstr "Direktori tidak valid untuk fitur cari di berkas."
 
 #: ../src/search.c:1632
 msgid "No text to find."
@@ -4493,11 +4489,11 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (pada direktori: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"Tidak bisa mengeksekusi grep tool '%s'; periksalah pengaturan lokasinya pada "
+"Tidak bisa mengeksekusi alat grep \"%s\": %s. Periksalah pengaturan lokasinya pada "
 "Preferensi."
 
 #: ../src/search.c:1758
@@ -4538,31 +4534,28 @@ msgstr ""
 
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
 msgid "Text ended before matching quote was found"
-msgstr ""
+msgstr "Teks berakhir sebelum kutipan yang cocok ditemukan"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Teks kosong (atau hanya berisi spasi)"
 
 #: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
+msgstr "Kutipan program Windoes harus berada dalam kutipan seluruhnya"
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "Perintah tidak ditemukan"
+msgstr "Program tidak ditemukan"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Proses gagal, working directory tidak ada"
+msgstr "Gagal mengganti direktori kerja"
 
 #: ../src/spawn.c:673
-#, fuzzy
 msgid "Unknown error executing child process"
-msgstr "unknown error while trying to spawn a process for %s"
+msgstr "Kesalahan tidak diketahui saat mengeksekusi anak proses"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -4884,13 +4877,13 @@ msgstr "Variabel Eksternal"
 #: ../src/symbols.c:1756
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
-msgstr "Ekstensi filetype tidak diketahui untuk \"%s\".\n"
+msgstr "Ekstensi tipe-berkas tidak diketahui untuk \"%s\".\n"
 
 #: ../src/symbols.c:1782
 #, c-format
 msgid "Failed to create tags file, perhaps because no tags were found.\n"
 msgstr ""
-"Gagal membuat file tag, kemungkinan karena tidak ada tag yang ditemukan. \n"
+"Gagal membuat berkas tag, kemungkinan karena tidak ada tag yang ditemukan. \n"
 
 #: ../src/symbols.c:1789
 #, c-format
@@ -4898,7 +4891,7 @@ msgid ""
 "Usage: %s -g <Tag File> <File list>\n"
 "\n"
 msgstr ""
-"Pemakaian: %s -g <File Tag> <Daftar file>\n"
+"Pemakaian: %s -g <Tag Berkas> <Daftar berkas>\n"
 "\n"
 
 #: ../src/symbols.c:1790
@@ -4918,18 +4911,18 @@ msgstr "Angkat Tag"
 
 #: ../src/symbols.c:1811
 msgid "Geany tag files (*.*.tags)"
-msgstr "File tag Geany (*.*.tags)"
+msgstr "Berkas tag Geany (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1831
 #, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "Terangkat %s file tag '%s'."
+msgstr "Terangkat %s berkas tag '%s'."
 
 #: ../src/symbols.c:1834
 #, c-format
 msgid "Could not load tags file '%s'."
-msgstr "Tidak dapat mengangkat file tag '%s'."
+msgstr "Tidak dapat mengangkat berkas tag '%s'."
 
 #: ../src/symbols.c:1972
 #, c-format
@@ -4952,7 +4945,7 @@ msgstr "Urutkan berdasarkan _Kemunculan"
 #: ../src/templates.c:83
 #, c-format
 msgid "Failed to convert template file \"%s\" to UTF-8"
-msgstr "Gagal mengkonversi file template \"%s\" ke UTF-8"
+msgstr "Gagal mengkonversi berkas template \"%s\" ke UTF-8"
 
 #: ../src/templates.c:620
 #, c-format
@@ -4960,27 +4953,29 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
+"Tidak dapat mengeksekusi perintah \"%s\" dari template: %s. Periksa lokasi "
+"di dalam template."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
 msgid "Save the current file"
-msgstr "Simpan file ini"
+msgstr "Simpan berkas ini"
 
 #: ../src/toolbar.c:60
 msgid "Save all open files"
-msgstr "Simpan semua file yang terbuka"
+msgstr "Simpan semua berkas yang terbuka"
 
 #: ../src/toolbar.c:61
 msgid "Reload the current file from disk"
-msgstr "Buka ulang file ini dari disk"
+msgstr "Buka ulang berkas ini dari disk"
 
 #: ../src/toolbar.c:62
 msgid "Close the current file"
-msgstr "Tutup file ini"
+msgstr "Tutup berkas ini"
 
 #: ../src/toolbar.c:63
 msgid "Close all open files"
-msgstr "Tutup semua file yang terbuka"
+msgstr "Tutup semua berkas yang terbuka"
 
 #: ../src/toolbar.c:64
 msgid "Cut the current selection"
@@ -5008,11 +5003,11 @@ msgstr "Ulangi modifikasi terakhir"
 
 #: ../src/toolbar.c:72
 msgid "Compile the current file"
-msgstr "Kompilasi file yang sekarang"
+msgstr "Kompilasi berkas yang sekarang"
 
 #: ../src/toolbar.c:73
 msgid "Run or view the current file"
-msgstr "Jalankan atau tampilkan file yang sekarang"
+msgstr "Jalankan atau tampilkan berkas yang sekarang"
 
 #: ../src/toolbar.c:74
 msgid ""
@@ -5039,7 +5034,7 @@ msgstr "Tambah indentasi"
 
 #: ../src/toolbar.c:79 ../src/toolbar.c:384
 msgid "Find the entered text in the current file"
-msgstr "Cari teks yang diketik pada file ini"
+msgstr "Cari teks yang diketik pada berkas ini"
 
 #: ../src/toolbar.c:80 ../src/toolbar.c:394
 msgid "Jump to the entered line number"
@@ -5063,19 +5058,19 @@ msgstr "Ganti teks pada dokumen ini"
 
 #: ../src/toolbar.c:360
 msgid "Create a new file"
-msgstr "Buat file baru"
+msgstr "Buat berkas baru"
 
 #: ../src/toolbar.c:361
 msgid "Create a new file from a template"
-msgstr "Buat file baru dari template"
+msgstr "Buat berkas baru dari template"
 
 #: ../src/toolbar.c:368
 msgid "Open an existing file"
-msgstr "Buka file yang telah ada"
+msgstr "Buka berkas yang telah ada"
 
 #: ../src/toolbar.c:369
 msgid "Open a recent file"
-msgstr "Buka file barusan"
+msgstr "Buka berkas barusan"
 
 #: ../src/toolbar.c:377
 msgid "Choose more build actions"
@@ -5139,13 +5134,13 @@ msgstr ""
 "pengakhiran yang tidak berhasil."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Tidak bisa mengeksekusi grep tool '%s'; periksalah pengaturan lokasinya pada "
-"Preferensi."
+"Tidak bisa mengeksekusi perintah pilihan \"%s\": %s. Periksalah pengaturan lokasinya pada "
+"Perintah Pilihan."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5213,11 +5208,11 @@ msgstr "Sembunyikan Panel Samp_ing"
 
 #: ../src/sidebar.c:731 ../plugins/filebrowser.c:672
 msgid "_Find in Files..."
-msgstr "_Cari di File"
+msgstr "_Cari di Berkas"
 
 #: ../src/sidebar.c:741
 msgid "Show _Paths"
-msgstr "Tampilkan _Path"
+msgstr "Tampilkan _Lokasi"
 
 #: ../src/ui_utils.c:64
 msgid ""
@@ -5225,7 +5220,7 @@ msgid ""
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
 "baris: %l / %L\t kol: %c\t sel: %s\t %w      %t      %mmode: %M      "
-"encoding: %e      filetipe: %f      scope: %S"
+"encoding: %e      tipe-berkas: %f      scope: %S"
 
 #. L = lines
 #: ../src/ui_utils.c:240
@@ -5350,12 +5345,11 @@ msgstr "Pilih Folder"
 
 #: ../src/ui_utils.c:2005
 msgid "Select File"
-msgstr "Pilih File"
+msgstr "Pilih Berkas"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "Muat-_Ulang Konfigurasi"
+msgstr "Tipe _Berkas Konfigurasi"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5382,14 +5376,12 @@ msgstr ""
 "masukkan yang lain."
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:376
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Mac Klasik (CR)"
 
 #: ../src/utils.c:377
 msgid "Unix (LF)"
@@ -5397,15 +5389,15 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:386
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:387
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:388
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:489
 #, c-format
@@ -5429,10 +5421,12 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Direktori tidak berubah karena terminal mungkin berisi beberapa masukan (tekan"
+"Ctrl+C atau Enter untuk membersihkannya)."
 
 #: ../src/win32.c:211
 msgid "Geany project files"
-msgstr "File proyek Geany"
+msgstr "Berkas proyek Geany"
 
 #: ../src/win32.c:216
 msgid "Executables"
@@ -5444,7 +5438,7 @@ msgstr "Class Builder"
 
 #: ../plugins/classbuilder.c:36
 msgid "Creates source files for new class types."
-msgstr "Buat file sumber untuk tipe class yang baru."
+msgstr "Buat berkas sumber untuk tipe class yang baru."
 
 #: ../plugins/classbuilder.c:433
 msgid "Create Class"
@@ -5472,11 +5466,11 @@ msgstr "Class"
 
 #: ../plugins/classbuilder.c:482
 msgid "Header file:"
-msgstr "File header:"
+msgstr "Berkas header:"
 
 #: ../plugins/classbuilder.c:484
 msgid "Source file:"
-msgstr "File sumber:"
+msgstr "Berkas sumber:"
 
 #: ../plugins/classbuilder.c:486
 msgid "Inheritance"
@@ -5655,11 +5649,11 @@ msgstr "Ekspor"
 
 #: ../plugins/export.c:37
 msgid "Exports the current file into different formats."
-msgstr "Ekspor file yang sekarang ke format lain."
+msgstr "Ekspor berkas yang sekarang ke format lain."
 
 #: ../plugins/export.c:169
 msgid "Export File"
-msgstr "Ekspor File"
+msgstr "Ekspor Berkas"
 
 #: ../plugins/export.c:187
 msgid "_Insert line numbers"
@@ -5688,7 +5682,7 @@ msgstr "Dokumen berhasil diekspor sebagai '%s'."
 #: ../plugins/export.c:281
 #, c-format
 msgid "File '%s' could not be written (%s)."
-msgstr "File '%s' tidak bisa ditulis (%s)."
+msgstr "Berkas '%s' tidak bisa ditulis (%s)."
 
 #: ../plugins/export.c:749
 msgid "_Export"
@@ -5706,11 +5700,11 @@ msgstr "Sebagai _LaTeX"
 
 #: ../plugins/filebrowser.c:50
 msgid "File Browser"
-msgstr "Penjelajah File"
+msgstr "Penjelajah Berkas"
 
 #: ../plugins/filebrowser.c:50
 msgid "Adds a file browser tab to the sidebar."
-msgstr "Tambahkan tab penjelajah file ke panel pinggir."
+msgstr "Tambahkan tab penjelajah berkas ke panel pinggir."
 
 #: ../plugins/filebrowser.c:417
 msgid "Too many items selected!"
@@ -5723,9 +5717,8 @@ msgstr ""
 "Tidak bisa mengeksekusi perintah eksternal '%s' (%s) yang terkonfigurasi."
 
 #: ../plugins/filebrowser.c:651
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Buka File"
+msgstr "Buka di _Geany"
 
 #: ../plugins/filebrowser.c:657
 msgid "Open _Externally"
@@ -5733,7 +5726,7 @@ msgstr "Buka secara _Eksternal"
 
 #: ../plugins/filebrowser.c:682
 msgid "Show _Hidden Files"
-msgstr "Tampilkan File yang _Tersembunyi"
+msgstr "Tampilkan Berkas yang _Tersembunyi"
 
 #: ../plugins/filebrowser.c:912
 msgid "Up"
@@ -5745,7 +5738,7 @@ msgstr "Segarkan"
 
 #: ../plugins/filebrowser.c:922
 msgid "Home"
-msgstr "Home"
+msgstr "Rumah"
 
 #: ../plugins/filebrowser.c:927
 msgid "Set path from document"
@@ -5759,11 +5752,11 @@ msgstr "Saring:"
 msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
-msgstr "Saring file Anda dengan wildcard. Pisahkan beberapa pola dengan spasi."
+msgstr "Saring berkas Anda dengan wildcard. Pisahkan beberapa pola dengan spasi."
 
 #: ../plugins/filebrowser.c:1164
 msgid "Focus File List"
-msgstr "Daftar File Fokus"
+msgstr "Daftar Berkas Fokus"
 
 #: ../plugins/filebrowser.c:1166
 msgid "Focus Path Entry"
@@ -5784,20 +5777,20 @@ msgid ""
 msgstr ""
 "Perintah yang dieksekusi ketika menggunakan \"Buka dengan\". Anda dapat "
 "memakai %f dan %d wildcard.\n"
-"%f akan diganti dengan nama file termasuk lokasi path lengkap\n"
-"%d akan diganti dengan nama lokasi dari file terpilih tanpa nama filenya"
+"%f akan diganti dengan nama berkas termasuk lokasi path lengkap\n"
+"%d akan diganti dengan nama lokasi dari berkas terpilih tanpa nama berkasnya"
 
 #: ../plugins/filebrowser.c:1275
 msgid "Show hidden files"
-msgstr "Tampilkan file yang tersembunyi"
+msgstr "Tampilkan berkas yang tersembunyi"
 
 #: ../plugins/filebrowser.c:1283
 msgid "Hide file extensions:"
-msgstr "Sembunyikan ekstensi file:"
+msgstr "Sembunyikan ekstensi berkas:"
 
 #: ../plugins/filebrowser.c:1302
 msgid "Follow the path of the current file"
-msgstr "Ikuti lokasi path dari file yang sekarang"
+msgstr "Ikuti lokasi path dari berkas yang sekarang"
 
 #: ../plugins/filebrowser.c:1308
 msgid "Use the project's base directory"
@@ -5816,7 +5809,7 @@ msgstr "Operasi Penyimpanan"
 msgid "This plugin provides different actions related to saving of files."
 msgstr ""
 "Plugin ini memberikan operasi yang berbeda yang berhubungan dengan "
-"penyimpanan file."
+"penyimpanan berkas."
 
 #: ../plugins/saveactions.c:175
 #, c-format
@@ -5827,19 +5820,19 @@ msgstr "Copy-an Backup: Direktori tidak bisa dibuat (%s)."
 #: ../plugins/saveactions.c:209
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr "Copy-an Backup: File tidak bisa dibaca (%s)."
+msgstr "Copy-an Backup: Berkas tidak bisa dibaca (%s)."
 
 #: ../plugins/saveactions.c:234
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr "Copy-an Backup: File tidak bisa disimpan (%s)."
+msgstr "Copy-an Backup: Berkas tidak bisa disimpan (%s)."
 
 #: ../plugins/saveactions.c:371
 #, c-format
 msgid "Autosave: Saved %d file automatically."
-msgid_plural "Autosave: Saved %d files automatically."
-msgstr[0] "Simpan Otomatis: Menyimpan file %d secara otomatis."
-msgstr[1] "Simpan Otomatis: Menyimpan file %d secara otomatis."
+msgid_plural "Autosave: Saved %d file automatically."
+msgstr[0] "Simpan Otomatis: Menyimpan berkas %d secara otomatis."
+msgstr[1] "Simpan Otomatis: Menyimpan berkas %d secara otomatis."
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:442
@@ -5873,15 +5866,15 @@ msgstr "detik"
 
 #: ../plugins/saveactions.c:644
 msgid "_Print status message if files have been automatically saved"
-msgstr "_Cetak pesan status bila file telah disimpan otomatis"
+msgstr "_Cetak pesan status bila berkas telah disimpan otomatis"
 
 #: ../plugins/saveactions.c:652
 msgid "Save only current open _file"
-msgstr "Simpan hanya _file aktif yang terbuka"
+msgstr "Simpan hanya _berkas aktif yang terbuka"
 
 #: ../plugins/saveactions.c:659
 msgid "Sa_ve all open files"
-msgstr "Simpan semua file yang terbuka (_V)"
+msgstr "Simpan semua berkas yang terbuka (_V)"
 
 #: ../plugins/saveactions.c:679
 msgid "Instant Save"
@@ -5889,7 +5882,7 @@ msgstr "Simpan Cepat"
 
 #: ../plugins/saveactions.c:689
 msgid "_Filetype to use for newly opened files:"
-msgstr "_Filetype yang dipakai untuk file yang baru dibuka:"
+msgstr "_Tipe-berkas yang dipakai untuk berkas yang baru dibuka:"
 
 #: ../plugins/saveactions.c:720
 msgid "Backup Copy"
@@ -5897,12 +5890,12 @@ msgstr "Salinan Backup"
 
 #: ../plugins/saveactions.c:730
 msgid "_Directory to save backup files in:"
-msgstr "_Direktori untuk menyimpan file backup:"
+msgstr "_Direktori untuk menyimpan berkas backup:"
 
 #: ../plugins/saveactions.c:753
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Format _tanggal/waktu untuk file backup (detilnya lihat \"man strftime\"):"
+"Format _tanggal/waktu untuk berkas backup (detilnya lihat \"man strftime\"):"
 
 #: ../plugins/saveactions.c:766
 msgid "Directory _levels to include in the backup destination:"
