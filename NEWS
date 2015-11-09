@@ -1,7 +1,58 @@
 Geany 1.26 (unreleased)
 
+    General
+    * New plugin API (Thomas Martitz, PR#469).
+    * Add support for "proxy" plugins (Thomas Martitz, PR#629).
+
+    Bug fixes
+    * Fix "Open in New Window" command (Issue#590).
+    * Fix spurious "source file has been modified" (Jiří Techet, Issue#605,
+      PR#621).
+    * Don't open more than one document for non-existing paths from the CLI
+      (https://bugs.launchpad.net/linuxmint/+bug/1482558, PR#646).
+    * Fix configuration directory encoding on non-UTF-8 non-Windows systems
+      (Dimitar Zhekov, PR#658).
+
+    Interface
+    * Use monospace font for the message window by default (Jiří Techet,
+      Issue#435, PR#580).
+    * Fix mnemonic conflict in "Use multi-line matching" (Ross Konsolebox,
+      Issue#589, PR#647).
+
+    Editor
+    * Update Scintilla to version 3.6.1.
+    * Keeping undo history when reloading files is now enabled by default
+      (Thomas Martitz, Issue#562, PR#672).
+    * "Strip trailing spaces", "Replace tabs" and "Replace spaces" now
+      follow the current selection (Pavel Sountsov, PR#394).
+    * Respect Smart Home Key setting in Go To Start of Display Line.
+    * Check whether the document is newer on disk when the window gets
+      focused (Jiří Techet, PR#533).
+
+    Filetypes
+    * Add Cargo build commands for Rust (Wayne Nilsen, PR#557).
+    * Add recent Perl keywords (Olivier Duclos, PR#599).
+    * Improvements to the Rust filetype (Pavel Sountsov, PR#613).
+    * Add multiline comment to Haskell (Abel Serrano Juste, PR#638).
+    * Recognize `.adoc` is as Asciidoc (PR#708, PR#711).
+    * Recognize `.mml` and `.mathml` as XML (Devyn Collier Johnson, PR#731).
+
     Internationalization
     * Updated translations: de, el, es, fr, kk, pt, sv, ru
+    * Fix internationalization of "Open in New Window" items.
+
+    API
+    * New plugin API, `geany_load_module()`, `geany_plugin_register()`,
+      `GEANY_PLUGIN_REGISTER()`, `geany_plugin_register_full()`,
+      `GEANY_PLUGIN_REGISTER_FULL()` (Thomas Martitz, PR#469).
+    * Add support for "proxy" plugins, `geany_plugin_register_proxy()`
+      (Thomas Martitz, PR#629).
+    * Allow `user_data` parameter and `destroy_notify` callback to
+      keybindings with new `keybindings_set_item_full()` and
+      `plugin_set_key_group_full()` (Thomas Martitz, PR#376).
+
+    Windows
+    * Restore modern design of native file dialogs (Issue#578).
 
 
 Geany 1.25 (July 12, 2015)
