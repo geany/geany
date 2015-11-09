@@ -38,7 +38,7 @@ Geany 1.26 (unreleased)
     * Recognize `.mml` and `.mathml` as XML (Devyn Collier Johnson, PR#731).
 
     Internationalization
-    * Updated translations: de, el, es, fr, kk, pt, sv, ru
+    * Updated translations: de, el, es, fr, id, kk, pt, sk, sv, ru
     * Fix internationalization of "Open in New Window" items.
 
     API
