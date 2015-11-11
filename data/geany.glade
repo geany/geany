@@ -361,21 +361,120 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="insert_gpl_notice1">
+                      <object class="GtkMenuItem" id="insert_agpl2_notice1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Insert _GPL Notice</property>
+                        <property name="label" translatable="yes">Insert AGPL v2 Notice</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_comments_gpl_activate" swapped="no"/>
+                        <signal name="activate" handler="on_comments_agpl2_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="insert_bsd_license_notice1">
+                      <object class="GtkMenuItem" id="insert_agpl3_notice1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Insert _BSD License Notice</property>
+                        <property name="label" translatable="yes">Insert AGPL v3 Notice</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_comments_bsd_activate" swapped="no"/>
+                        <signal name="activate" handler="on_comments_agpl3_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_apache2_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _APACHE 2 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_apache2_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_bsd_2_clause_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert BSD-2-CLAUSE Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_bsd_2_clause_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_bsd_3_clause_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _BSD-3-Clause Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_bsd_3_clause_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_cc0_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _CC0 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_cc0_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_gpl2_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert GPL v2 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_gpl2_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_gpl3_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _GPL v3 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_gpl3_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_lgpl2_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert LGPL v2 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_lgpl2_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_lgpl3_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _LGPL v3 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_lgpl3_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_mit_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert MIT Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_mit_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_mpl2_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _MPL v2 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_mpl2_activate" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="insert_zlib_libpng_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _zlib-libpng Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_zlib_libpng_activate" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -6901,21 +7000,120 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="insert_gpl_notice2">
+                                  <object class="GtkMenuItem" id="insert_agpl2_notice2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Insert _GPL Notice</property>
+                                    <property name="label" translatable="yes">Insert AGPL v2 Notice</property>
                                     <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_menu_comments_gpl_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_menu_comments_agpl2_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkMenuItem" id="insert_bsd_license_notice2">
+                                  <object class="GtkMenuItem" id="insert_agpl3_notice2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Insert _BSD License Notice</property>
+                                    <property name="label" translatable="yes">Insert AGPL v3 Notice</property>
                                     <property name="use_underline">True</property>
-                                    <signal name="activate" handler="on_menu_comments_bsd_activate" swapped="no"/>
+                                    <signal name="activate" handler="on_menu_comments_agpl3_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_apache2_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _APACHE 2 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_apache2_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_bsd_2_clause_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert BSD-2-CLAUSE Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_bsd_2_clause_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_bsd_3_clause_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _BSD-3-Clause Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_bsd_3_clause_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_cc0_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _CC0 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_cc0_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_gpl2_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert GPL v2 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_gpl2_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_gpl3_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _GPL v3 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_gpl3_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_lgpl2_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert LGPL v2 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_lgpl2_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_lgpl3_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _LGPL v3 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_lgpl3_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_mit_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert MIT Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_mit_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_mpl2_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _MPL v2 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_mpl2_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_zlib_libpng_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _zlib-libpng Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_zlib_libpng_activate" swapped="no"/>
                                   </object>
                                 </child>
                               </object>
