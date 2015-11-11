@@ -95,11 +95,22 @@ template_files = \
 	templates/files/program.pas
 
 templates = \
-	templates/bsd \
 	templates/changelog \
 	templates/fileheader \
 	templates/function \
-	templates/gpl
+	templates/agpl2 \
+	templates/agpl3 \
+	templates/apache2 \
+	templates/bsd-2-clause \
+	templates/bsd-3-clause \
+	templates/cc0 \
+	templates/gpl2 \
+	templates/gpl3 \
+	templates/lgpl2 \
+	templates/lgpl3 \
+	templates/mit \
+	templates/mpl2 \
+	templates/zlib-libpng
 
 nobase_dist_pkgdata_DATA = \
 	$(colorschemes) \
