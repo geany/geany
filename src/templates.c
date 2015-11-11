@@ -131,8 +131,19 @@ static void init_general_templates(void)
 {
 	/* read the contents */
 	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
-	read_template("gpl", GEANY_TEMPLATE_GPL);
-	read_template("bsd", GEANY_TEMPLATE_BSD);
+	read_template("agpl2", GEANY_TEMPLATE_AGPL2);
+	read_template("agpl3", GEANY_TEMPLATE_AGPL3);
+	read_template("apache2", GEANY_TEMPLATE_APACHE2);
+	read_template("bsd-2-clause", GEANY_TEMPLATE_BSD_2_CLAUSE);
+	read_template("bsd-3-clause", GEANY_TEMPLATE_BSD_3_CLAUSE);
+	read_template("cc0", GEANY_TEMPLATE_CC0);
+	read_template("gpl2", GEANY_TEMPLATE_GPL2);
+	read_template("gpl3", GEANY_TEMPLATE_GPL3);
+	read_template("lgpl2", GEANY_TEMPLATE_LGPL2);
+	read_template("lgpl3", GEANY_TEMPLATE_LGPL3);
+	read_template("mit", GEANY_TEMPLATE_MIT);
+	read_template("mpl2", GEANY_TEMPLATE_MPL2);
+	read_template("zlib-libpng", GEANY_TEMPLATE_ZLIB_LIBPNG);
 	read_template("function", GEANY_TEMPLATE_FUNCTION);
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
 }
@@ -425,7 +436,7 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	GString *template;
 
 	g_return_val_if_fail(DOC_VALID(doc), NULL);
-	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
+	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_AGPL2 || licence_type == GEANY_TEMPLATE_AGPL3 || licence_type == GEANY_TEMPLATE_APACHE2 || licence_type == GEANY_TEMPLATE_BSD_2_CLAUSE || licence_type == GEANY_TEMPLATE_BSD_3_CLAUSE || licence_type == GEANY_TEMPLATE_CC0 || licence_type == GEANY_TEMPLATE_GPL2 || licence_type == GEANY_TEMPLATE_GPL3 || licence_type == GEANY_TEMPLATE_LGPL2 || licence_type == GEANY_TEMPLATE_LGPL3 || licence_type == GEANY_TEMPLATE_MIT || licence_type == GEANY_TEMPLATE_MPL2 || licence_type == GEANY_TEMPLATE_ZLIB_LIBPNG, NULL);
 
 	template = g_string_new(templates[licence_type]);
 	replace_static_values(template);
@@ -446,8 +457,19 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 	filetypes_load_config(ft->id, FALSE);	/* load any user extension setting */
 
 	templates_replace_valist(template,
-		"{gpl}", templates[GEANY_TEMPLATE_GPL],
-		"{bsd}", templates[GEANY_TEMPLATE_BSD],
+		"{agpl2}", templates[GEANY_TEMPLATE_AGPL2],
+		"{agpl3}", templates[GEANY_TEMPLATE_AGPL3],
+		"{apache2}", templates[GEANY_TEMPLATE_APACHE2],
+		"{bsd-2-clause}", templates[GEANY_TEMPLATE_BSD_2_CLAUSE],
+		"{bsd-3-clause}", templates[GEANY_TEMPLATE_BSD_3_CLAUSE],
+		"{cc0}", templates[GEANY_TEMPLATE_CC0],
+		"{gpl2}", templates[GEANY_TEMPLATE_GPL2],
+		"{gpl3}", templates[GEANY_TEMPLATE_GPL3],
+		"{lgpl2}", templates[GEANY_TEMPLATE_LGPL2],
+		"{lgpl3}", templates[GEANY_TEMPLATE_LGPL3],
+		"{mit}", templates[GEANY_TEMPLATE_MIT],
+		"{mpl2}", templates[GEANY_TEMPLATE_MPL2],
+		"{zlib-libpng}", templates[GEANY_TEMPLATE_ZLIB_LIBPNG],
 		NULL);
 
 	/* we don't replace other wildcards here otherwise they would get done twice for files */
