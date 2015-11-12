@@ -46,6 +46,9 @@ $ make
 (as root)
 % make install
 
+If you are building from a Git clone rather than a source tarball, you need
+to run ./autogen.sh first.
+
 For more configuration details run
 $ ./configure --help
 
