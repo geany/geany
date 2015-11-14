@@ -12,15 +12,23 @@ file=data/filetypes.python
 
 [ -f "$file" ]
 
-py2_builtins=$(python2 -c 'print("\n".join(dir(__builtins__)))')
-py3_builtins=$(python3 -c 'print("\n".join(dir(__builtins__)))')
+py_2_and_3() {
+  python2 "$@" && python3 "$@"
+}
 
-# merge Python 2 and 3 keywords but exclude the ones that are already listed primary=
-identifiers=$( (echo "$py2_builtins" && echo "$py3_builtins") | python -c '\
+# sort_filter [exclude...]
+sort_filter() {
+  python -c '\
 from sys import stdin; \
-builtins=set(stdin.read().strip().split("\n")); \
-exclude=["False", "None", "True", "exec"]; \
-print(" ".join(sorted([i for i in builtins if i not in exclude])))
-')
+items=set(stdin.read().strip().split("\n")); \
+exclude=['"$(for a in "$@"; do printf "'%s', " "$a"; done)"']; \
+print(" ".join(sorted([i for i in items if i not in exclude])))
+'
+}
+
+builtins=$(py_2_and_3 -c 'print("\n".join(dir(__builtins__)))')
+
+# builtins, but excluding keywords that are already listed in primary=
+identifiers=$(echo "$builtins" | sort_filter False None True exec)
 
 sed -e "s/^identifiers=.*$/identifiers=$identifiers/" -i "$file"
