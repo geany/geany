@@ -26,9 +26,13 @@ print(" ".join(sorted([i for i in items if i not in exclude])))
 '
 }
 
+keywords=$(py_2_and_3 -c 'from keyword import kwlist; print("\n".join(kwlist))')
 builtins=$(py_2_and_3 -c 'print("\n".join(dir(__builtins__)))')
 
+primary=$(echo "$keywords" | sort_filter)
 # builtins, but excluding keywords that are already listed in primary=
-identifiers=$(echo "$builtins" | sort_filter False None True exec)
+identifiers=$(echo "$builtins" | sort_filter $primary)
 
-sed -e "s/^identifiers=.*$/identifiers=$identifiers/" -i "$file"
+sed -e "s/^primary=.*$/primary=$primary/" \
+    -e "s/^identifiers=.*$/identifiers=$identifiers/" \
+    -i "$file"
