@@ -92,6 +92,25 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
  *
  * @param plugin Must be @ref geany_plugin.
  *
+ * @warning This cannot be used from inside `geany_load_module()` using the new plugin API.
+ * You generally should only call this from your plugin's `GeanyPluginFuncs::init()`
+ * function if possible to avoid possible extra resource usage when your plugin isn't
+ * actually activated. If you really need your module to be resident whenever it has been
+ * loaded (i.e. you create GTypes directly in your `geany_load_module()`), you need to use
+ * GLib's
+ * [g_module_check_init()](https://developer.gnome.org/glib/stable/glib-Dynamic-Loading-of-Modules.html#GModuleCheckInit)
+ * hook and call
+ * [g_module_make_resident()](https://developer.gnome.org/glib/unstable/glib-Dynamic-Loading-of-Modules.html#g-module-make-resident)
+ * from there:
+ * @code
+ * G_MODULE_EXPORT
+ * const gchar *g_module_check_init(GModule *module)
+ * {
+ * 	g_module_make_resident(module);
+ * 	return NULL;
+ * }
+ * @endcode
+ *
  *  @since 0.16
  */
 GEANY_API_SYMBOL
