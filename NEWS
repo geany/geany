@@ -32,6 +32,7 @@ Geany 1.26 (unreleased)
     Filetypes
     * Add Cargo build commands for Rust (Wayne Nilsen, PR#557).
     * Add recent Perl keywords (Olivier Duclos, PR#599).
+    * Add missing Python 3 keywords and builtins (PR#755).
     * Improvements to the Rust filetype (Pavel Sountsov, PR#613).
     * Add multiline comment to Haskell (Abel Serrano Juste, PR#638).
     * Recognize `.adoc` is as Asciidoc (PR#708, PR#711).
