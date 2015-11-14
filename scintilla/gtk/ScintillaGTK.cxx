@@ -302,6 +302,7 @@ private:
 
 	static void StyleSetText(GtkWidget *widget, GtkStyle *previous, void*);
 	static void RealizeText(GtkWidget *widget, void*);
+	static void Dispose(GObject *object);
 	static void Destroy(GObject *object);
 	static void SelectionReceived(GtkWidget *widget, GtkSelectionData *selection_data,
 	                              guint time);
@@ -617,8 +618,10 @@ void ScintillaGTK::UnMap(GtkWidget *widget) {
 void ScintillaGTK::ForAll(GtkCallback callback, gpointer callback_data) {
 	try {
 		(*callback) (PWidget(wText), callback_data);
-		(*callback) (PWidget(scrollbarv), callback_data);
-		(*callback) (PWidget(scrollbarh), callback_data);
+		if (PWidget(scrollbarv))
+			(*callback) (PWidget(scrollbarv), callback_data);
+		if (PWidget(scrollbarh))
+			(*callback) (PWidget(scrollbarh), callback_data);
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2584,6 +2587,27 @@ void ScintillaGTK::RealizeText(GtkWidget *widget, void*) {
 
 static GObjectClass *scintilla_class_parent_class;
 
+void ScintillaGTK::Dispose(GObject *object) {
+	try {
+		ScintillaObject *scio = reinterpret_cast<ScintillaObject *>(object);
+		ScintillaGTK *sciThis = reinterpret_cast<ScintillaGTK *>(scio->pscin);
+
+		if (PWidget(sciThis->scrollbarv)) {
+			gtk_widget_unparent(PWidget(sciThis->scrollbarv));
+			sciThis->scrollbarv = NULL;
+		}
+
+		if (PWidget(sciThis->scrollbarh)) {
+			gtk_widget_unparent(PWidget(sciThis->scrollbarh));
+			sciThis->scrollbarh = NULL;
+		}
+
+		scintilla_class_parent_class->dispose(object);
+	} catch (...) {
+		// Its dying so nowhere to save the status
+	}
+}
+
 void ScintillaGTK::Destroy(GObject *object) {
 	try {
 		ScintillaObject *scio = reinterpret_cast<ScintillaObject *>(object);
@@ -2594,9 +2618,6 @@ void ScintillaGTK::Destroy(GObject *object) {
 		ScintillaGTK *sciThis = reinterpret_cast<ScintillaGTK *>(scio->pscin);
 		//Platform::DebugPrintf("Destroying %x %x\n", sciThis, object);
 		sciThis->Finalise();
-
-		gtk_widget_unparent(PWidget(sciThis->scrollbarv));
-		gtk_widget_unparent(PWidget(sciThis->scrollbarh));
 
 		delete sciThis;
 		scio->pscin = 0;
@@ -3114,6 +3135,7 @@ void ScintillaGTK::ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_
 	// in Initialise() may require coordinate translation?)
 
 	object_class->finalize = Destroy;
+	object_class->dispose = Dispose;
 #if GTK_CHECK_VERSION(3,0,0)
 	widget_class->get_preferred_width = GetPreferredWidth;
 	widget_class->get_preferred_height = GetPreferredHeight;
