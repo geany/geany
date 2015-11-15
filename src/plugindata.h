@@ -284,6 +284,7 @@ void plugin_cleanup(void);
  *  - main_locale_init()
  *  - geany_plugin_register() (and GEANY_PLUGIN_REGISTER())
  *  - geany_plugin_register_full() (and GEANY_PLUGIN_REGISTER_FULL())
+ *  - plugin_module_make_resident()
  *
  * @param plugin The unique plugin handle to your plugin. You must set some fields here.
  *
