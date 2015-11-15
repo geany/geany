@@ -21,6 +21,9 @@ Geany 1.26 (unreleased)
 
     Editor
     * Update Scintilla to version 3.6.1.
+    * Fix completion popup height when view is zoomed (Issue#702).
+    * Fix Go To End Of Display Line when wrapping is on and EOL are visible
+      (Issue#712).
     * Keeping undo history when reloading files is now enabled by default
       (Thomas Martitz, Issue#562, PR#672).
     * "Strip trailing spaces", "Replace tabs" and "Replace spaces" now
