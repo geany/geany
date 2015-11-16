@@ -10,7 +10,7 @@ index 0871ca2..49dc278 100644
  
 +GEANY_API_SYMBOL
  sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
- 	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
+ 	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
  	return psci->WndProc(iMessage, wParam, lParam);
 @@ -3115,6 +3116,7 @@ static void scintilla_init(ScintillaObject *sci);
  extern void Platform_Initialise();

@@ -204,11 +204,11 @@ public:
 static const int maxCoordinate = 32000;
 
 static FontHandle *PFont(Font &f) {
-	return reinterpret_cast<FontHandle *>(f.GetID());
+	return static_cast<FontHandle *>(f.GetID());
 }
 
 static GtkWidget *PWidget(WindowID wid) {
-	return reinterpret_cast<GtkWidget *>(wid);
+	return static_cast<GtkWidget *>(wid);
 }
 
 Point Point::FromLong(long lpoint) {
@@ -559,7 +559,7 @@ void SurfaceImpl::Init(SurfaceID sid, WindowID wid) {
 	PLATFORM_ASSERT(sid);
 	Release();
 	PLATFORM_ASSERT(wid);
-	context = cairo_reference(reinterpret_cast<cairo_t *>(sid));
+	context = cairo_reference(static_cast<cairo_t *>(sid));
 	pcontext = gtk_widget_create_pango_context(PWidget(wid));
 	// update the Pango context in case sid isn't the widget's surface
 	pango_cairo_update_context(context, pcontext);
@@ -1535,7 +1535,7 @@ static void small_scroller_init(SmallScroller *){}
 
 static gboolean ButtonPress(GtkWidget *, GdkEventButton* ev, gpointer p) {
 	try {
-		ListBoxX* lb = reinterpret_cast<ListBoxX*>(p);
+		ListBoxX* lb = static_cast<ListBoxX*>(p);
 		if (ev->type == GDK_2BUTTON_PRESS && lb->doubleClickAction != NULL) {
 			lb->doubleClickAction(lb->doubleClickActionData);
 			return TRUE;
@@ -2066,8 +2066,8 @@ void Menu::Destroy() {
 	mid = 0;
 }
 
-static void  MenuPositionFunc(GtkMenu *, gint *x, gint *y, gboolean *, gpointer userData) {
-	sptr_t intFromPointer = reinterpret_cast<sptr_t>(userData);
+static void MenuPositionFunc(GtkMenu *, gint *x, gint *y, gboolean *, gpointer userData) {
+	sptr_t intFromPointer = GPOINTER_TO_INT(userData);
 	*x = intFromPointer & 0xffff;
 	*y = intFromPointer >> 16;
 }
@@ -2075,7 +2075,7 @@ static void  MenuPositionFunc(GtkMenu *, gint *x, gint *y, gboolean *, gpointer 
 void Menu::Show(Point pt, Window &) {
 	int screenHeight = gdk_screen_height();
 	int screenWidth = gdk_screen_width();
-	GtkMenu *widget = reinterpret_cast<GtkMenu *>(mid);
+	GtkMenu *widget = static_cast<GtkMenu *>(mid);
 	gtk_widget_show_all(GTK_WIDGET(widget));
 	GtkRequisition requisition;
 #if GTK_CHECK_VERSION(3,0,0)
@@ -2090,7 +2090,7 @@ void Menu::Show(Point pt, Window &) {
 		pt.y = screenHeight - requisition.height;
 	}
 	gtk_menu_popup(widget, NULL, NULL, MenuPositionFunc,
-		reinterpret_cast<void *>((static_cast<int>(pt.y) << 16) | static_cast<int>(pt.x)), 0,
+		GINT_TO_POINTER((static_cast<int>(pt.y) << 16) | static_cast<int>(pt.x)), 0,
 		gtk_get_current_event_time());
 }
 

@@ -111,7 +111,7 @@ using namespace Scintilla;
 #endif
 
 static GdkWindow *PWindow(const Window &w) {
-	GtkWidget *widget = reinterpret_cast<GtkWidget *>(w.GetID());
+	GtkWidget *widget = static_cast<GtkWidget *>(w.GetID());
 	return gtk_widget_get_window(widget);
 }
 
@@ -323,9 +323,9 @@ private:
 	                             gint x, gint y, GtkSelectionData *selection_data, guint info, guint time);
 	static void DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	                        GtkSelectionData *selection_data, guint info, guint time);
-	static gboolean TimeOut(TimeThunk *tt);
-	static gboolean IdleCallback(ScintillaGTK *sciThis);
-	static gboolean StyleIdle(ScintillaGTK *sciThis);
+	static gboolean TimeOut(gpointer ptt);
+	static gboolean IdleCallback(gpointer pSci);
+	static gboolean StyleIdle(gpointer pSci);
 	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo);
 	static void PopUpCB(GtkMenuItem *menuItem, ScintillaGTK *sciThis);
 
@@ -376,12 +376,12 @@ static const GtkTargetEntry clipboardPasteTargets[] = {
 static const gint nClipboardPasteTargets = ELEMENTS(clipboardPasteTargets);
 
 static GtkWidget *PWidget(Window &w) {
-	return reinterpret_cast<GtkWidget *>(w.GetID());
+	return static_cast<GtkWidget *>(w.GetID());
 }
 
 static ScintillaGTK *ScintillaFromWidget(GtkWidget *widget) {
-	ScintillaObject *scio = reinterpret_cast<ScintillaObject *>(widget);
-	return reinterpret_cast<ScintillaGTK *>(scio->pscin);
+	ScintillaObject *scio = SCINTILLA(widget);
+	return static_cast<ScintillaGTK *>(scio->pscin);
 }
 
 ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
@@ -1079,7 +1079,7 @@ bool ScintillaGTK::FineTickerRunning(TickReason reason) {
 
 void ScintillaGTK::FineTickerStart(TickReason reason, int millis, int /* tolerance */) {
 	FineTickerCancel(reason);
-	timers[reason].timer = g_timeout_add(millis, reinterpret_cast<GSourceFunc>(TimeOut), &timers[reason]);
+	timers[reason].timer = g_timeout_add(millis, TimeOut, &timers[reason]);
 }
 
 void ScintillaGTK::FineTickerCancel(TickReason reason) {
@@ -1095,8 +1095,7 @@ bool ScintillaGTK::SetIdle(bool on) {
 		if (!idler.state) {
 			idler.state = true;
 			idler.idlerID = reinterpret_cast<IdlerID>(
-				g_idle_add_full(G_PRIORITY_DEFAULT_IDLE,
-					reinterpret_cast<GSourceFunc>(IdleCallback), this, NULL));
+				g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, IdleCallback, this, NULL));
 		}
 	} else {
 		// Stop idler, if it's running
@@ -1487,7 +1486,7 @@ void ScintillaGTK::AddToPopUp(const char *label, int cmd, bool enabled) {
 	else
 		menuItem = gtk_separator_menu_item_new();
 	gtk_menu_shell_append(GTK_MENU_SHELL(popup.GetID()), menuItem);
-	g_object_set_data(G_OBJECT(menuItem), "CmdNum", reinterpret_cast<void *>(cmd));
+	g_object_set_data(G_OBJECT(menuItem), "CmdNum", GINT_TO_POINTER(cmd));
 	g_signal_connect(G_OBJECT(menuItem),"activate", G_CALLBACK(PopUpCB), this);
 
 	if (cmd) {
@@ -2610,12 +2609,12 @@ void ScintillaGTK::Dispose(GObject *object) {
 
 void ScintillaGTK::Destroy(GObject *object) {
 	try {
-		ScintillaObject *scio = reinterpret_cast<ScintillaObject *>(object);
+		ScintillaObject *scio = SCINTILLA(object);
 
 		// This avoids a double destruction
 		if (!scio->pscin)
 			return;
-		ScintillaGTK *sciThis = reinterpret_cast<ScintillaGTK *>(scio->pscin);
+		ScintillaGTK *sciThis = static_cast<ScintillaGTK *>(scio->pscin);
 		//Platform::DebugPrintf("Destroying %x %x\n", sciThis, object);
 		sciThis->Finalise();
 
@@ -2960,12 +2959,14 @@ void ScintillaGTK::DragDataGet(GtkWidget *widget, GdkDragContext *context,
 	}
 }
 
-int ScintillaGTK::TimeOut(TimeThunk *tt) {
+int ScintillaGTK::TimeOut(gpointer ptt) {
+	TimeThunk *tt = static_cast<TimeThunk *>(ptt);
 	tt->scintilla->TickFor(tt->reason);
 	return 1;
 }
 
-gboolean ScintillaGTK::IdleCallback(ScintillaGTK *sciThis) {
+gboolean ScintillaGTK::IdleCallback(gpointer pSci) {
+	ScintillaGTK *sciThis = static_cast<ScintillaGTK *>(pSci);
 	// Idler will be automatically stopped, if there is nothing
 	// to do while idle.
 #ifndef GDK_VERSION_3_6
@@ -2984,10 +2985,11 @@ gboolean ScintillaGTK::IdleCallback(ScintillaGTK *sciThis) {
 	return ret;
 }
 
-gboolean ScintillaGTK::StyleIdle(ScintillaGTK *sciThis) {
+gboolean ScintillaGTK::StyleIdle(gpointer pSci) {
 #ifndef GDK_VERSION_3_6
 	gdk_threads_enter();
 #endif
+	ScintillaGTK *sciThis = static_cast<ScintillaGTK *>(pSci);
 	sciThis->IdleWork();
 #ifndef GDK_VERSION_3_6
 	gdk_threads_leave();
@@ -3001,13 +3003,12 @@ void ScintillaGTK::QueueIdleWork(WorkNeeded::workItems items, int upTo) {
 	if (!workNeeded.active) {
 		// Only allow one style needed to be queued
 		workNeeded.active = true;
-		g_idle_add_full(G_PRIORITY_HIGH_IDLE,
-			reinterpret_cast<GSourceFunc>(StyleIdle), this, NULL);
+		g_idle_add_full(G_PRIORITY_HIGH_IDLE, StyleIdle, this, NULL);
 	}
 }
 
 void ScintillaGTK::PopUpCB(GtkMenuItem *menuItem, ScintillaGTK *sciThis) {
-	guint action = (sptr_t)(g_object_get_data(G_OBJECT(menuItem), "CmdNum"));
+	guint action = GPOINTER_TO_UINT(g_object_get_data(G_OBJECT(menuItem), "CmdNum"));
 	if (action) {
 		sciThis->Command(action);
 	}
@@ -3078,7 +3079,7 @@ sptr_t ScintillaGTK::DirectFunction(
 
 GEANY_API_SYMBOL
 sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
-	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
+	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
 	return psci->WndProc(iMessage, wParam, lParam);
 }
 
@@ -3232,7 +3233,7 @@ GtkWidget* scintilla_new() {
 }
 
 void scintilla_set_id(ScintillaObject *sci, uptr_t id) {
-	ScintillaGTK *psci = reinterpret_cast<ScintillaGTK *>(sci->pscin);
+	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
 	psci->ctrlID = id;
 }
 
