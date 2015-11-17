@@ -5,14 +5,14 @@
 #  <dario.santomarco@gmail.com>, 2006.
 #  <M.Baldinelli@agora.it>, 2006 - 2009
 # Giuliano Manzitti <giuliano1979@hotmail.com>, 2011
-# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2014
+# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2014-04-01 21:33+0200\n"
-"Last-Translator: Federico Reghenzani <federico.dev@reghe.net>\n"
+"POT-Creation-Date: 2015-11-15 02:36+0000\n"
+"PO-Revision-Date: 2015-11-17 21:58+0100\n"
+"Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team:  <geany-i18n@uvena.de>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -1149,7 +1149,6 @@ msgid "Open new documents from the command-line"
 msgstr "Apre nuovi documenti dalla linea di comando"
 
 #: ../data/geany.glade.h:230
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Crea un nuovo file per ogni nome file da riga di comando che non esiste"
@@ -1410,7 +1409,7 @@ msgstr "_Cambia"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Scorciatoie da tastiera</b>"
 
-#: ../data/geany.glade.h:286 ../src/plugins.c:1891 ../src/plugins.c:1928
+#: ../data/geany.glade.h:286 ../src/plugins.c:1894 ../src/plugins.c:1931
 #: ../src/prefs.c:1613
 msgid "Keybindings"
 msgstr "Scorciatoie da tastiera"
@@ -1608,10 +1607,8 @@ msgid "Follow path of the current file"
 msgstr "Segui il percorso del file corrente"
 
 #: ../data/geany.glade.h:328
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr ""
-"Se eseguire \\\"cd $path\\\" quando si passa da un file aperto all'altro"
+msgstr "Se eseguire \"cd $path\" quando si passa da un file aperto all'altro"
 
 #: ../data/geany.glade.h:329
 msgid "Execute programs in the VTE"
@@ -1991,18 +1988,16 @@ msgid "Set Line E_ndings"
 msgstr "Imposta termi_natori di riga"
 
 #: ../data/geany.glade.h:421
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Converti e imposta a _CR/LF (Win)"
+msgstr "Converti e imposta a _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:422
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Converti e imposta a _LF (Unix)"
 
 #: ../data/geany.glade.h:423
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Converti e imposta a CR (_Mac)"
+msgstr "Converti e imposta a CR (_Mac classico)"
 
 #: ../data/geany.glade.h:424 ../src/keybindings.c:645
 msgid "_Clone"
@@ -2156,8 +2151,8 @@ msgstr "Proprietà del progetto"
 msgid "Filename:"
 msgstr "Nome del file:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
+#: ../data/geany.glade.h:460 ../src/project.c:169
+#: ../plugins/classbuilder.c:467 ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Nome:"
 
@@ -2279,7 +2274,6 @@ msgid "Other:"
 msgstr "Altri:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
@@ -2289,13 +2283,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"Tutti i diritti riservati."
+"All rights reserved."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2388,9 +2382,9 @@ msgid "Process failed (%s)"
 msgstr "Processo fallito (%s)"
 
 #: ../src/build.c:813
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Impossibile cambiare la cartella di lavoro in \"%s\""
+msgstr "Invalida directory di lavoro \"%s\""
 
 #: ../src/build.c:838
 #, c-format
@@ -2402,15 +2396,17 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"File non eseguito perché il terminale potrebbe contenere dell'input (premere "
+"Ctrl+C o Enter per pulirlo)."
 
 #: ../src/build.c:912
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute terminal command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Impossibile eseguire il programma grep '%s'; verificarne il percorso nelle "
-"Preferenze."
+"Impossibile eseguire il comando di terminale \"%s\": %s. Verificarne il "
+"percorso nelle Preferenze."
 
 #: ../src/build.c:1020
 msgid "Compilation failed."
@@ -2521,13 +2517,12 @@ msgid "Execute commands"
 msgstr "Esegui comandi"
 
 #: ../src/build.c:2009
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p verranno sostituiti nei comandi e nei campi delle cartelle, "
-"vedere il manuale per i dettagli."
+"%d, %e, %f, %p, %l verranno sostituiti nei comandi e nei campi delle "
+"cartelle, vedere il manuale per i dettagli."
 
 #: ../src/build.c:2167
 msgid "Set Build Commands"
@@ -2568,46 +2563,43 @@ msgid_plural "%d files saved."
 msgstr[0] "%d file salvato."
 msgstr[1] "%d file salvati."
 
-#: ../src/callbacks.c:895 ../src/keybindings.c:545
+#: ../src/callbacks.c:885 ../src/keybindings.c:545
 msgid "Go to Line"
 msgstr "Vai alla riga"
 
-#: ../src/callbacks.c:896
+#: ../src/callbacks.c:886
 msgid "Enter the line you want to go to:"
 msgstr "Inserire la riga a cui si vuole andare:"
 
-#: ../src/callbacks.c:997 ../src/callbacks.c:1023
+#: ../src/callbacks.c:987 ../src/callbacks.c:1013
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Impostare il tipo di file per il file corrente prima di usare questa "
 "funzione."
 
-#: ../src/callbacks.c:1313 ../src/callbacks.c:1321
+#: ../src/callbacks.c:1303 ../src/callbacks.c:1311
 msgid "No more message items."
 msgstr "Non ci sono altri messaggi."
 
-#: ../src/callbacks.c:1424
+#: ../src/callbacks.c:1414
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Impossibile aprire il file %s (File non trovato)"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1463
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Controllare il percorso nella configurazione tipo file."
 
-#: ../src/callbacks.c:1478
-#, fuzzy
+#: ../src/callbacks.c:1468
 msgid "Check the path setting in Preferences."
-msgstr ""
-"Impossibile eseguire il programma grep '%s'; verificarne il percorso nelle "
-"Preferenze."
+msgstr "Verificare il percorso nelle Preferenze."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1491
-#, fuzzy, c-format
+#: ../src/callbacks.c:1481
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Impossibile eseguire il comando esterno configurato '%s' (%s)."
+msgstr "Impossibile eseguire il comando di azione contestuale \"%s\": %s. %s"
 
 #: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
 #: ../src/document.c:2381
@@ -2621,19 +2613,16 @@ msgid "Detect from file"
 msgstr "Individua dal file"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
-msgstr "Linguaggi di _programmazione"
+msgstr "Linguaggi di programmazione"
 
 #: ../src/dialogs.c:227
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "Linguaggi di _scripting"
+msgstr "Linguaggi di scripting"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
-msgstr "Linguaggi di _markup"
+msgstr "Linguaggi di markup"
 
 #: ../src/dialogs.c:307
 msgid "_More Options"
@@ -2684,7 +2673,6 @@ msgid "Open File"
 msgstr "Apri file"
 
 #: ../src/dialogs.c:380
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "_Visualizza"
@@ -2865,7 +2853,7 @@ msgstr ", sola lettura"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Scarta storico"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2874,20 +2862,22 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Lo stato precedente del buffer è salvato nello storico ed un annullamento lo "
+"ripristina. Puoi disabilitare questo scartando lo storico nel ricaricamento. "
+"Questo messaggio non sarà mostrato nuovamente ma la tua scelta può essere "
+"cambiata nelle impostazioni varie."
 
 #: ../src/document.c:1632
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "File %s ricaricato."
+msgstr "Il file è stato ricaricato."
 
 #: ../src/document.c:1662
 msgid "Any unsaved changes will be lost."
 msgstr "Le modifiche non salvate andranno perse."
 
 #: ../src/document.c:1663
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Le modifiche non salvate andranno perse."
+msgstr "Lo storico di annullamento andrà perso."
 
 #: ../src/document.c:1664
 #, c-format
@@ -2937,16 +2927,13 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Chiusura file '%s' fallita: fclose() fallita: %s"
 
 #: ../src/document.c:2058 ../src/document.c:3589
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Sovrascrivere?"
+msgstr "_Sovrascrivere"
 
 #: ../src/document.c:2060 ../src/document.c:3592
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"Il file '%s' presente sul disco è più recente della\n"
-"copia che si sta editando."
+msgstr "Il file '%s' presente sul disco è più recente del buffer corrente."
 
 #: ../src/document.c:2068 ../src/document.c:3641
 msgid "Try to resave the file?"
@@ -2960,7 +2947,7 @@ msgstr "File \"%s\" non trovato sul disco!"
 #: ../src/document.c:2132
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Impossibile salvare documento in sola lettura '%s'!"
 
 #: ../src/document.c:2200
 #, c-format
@@ -3255,7 +3242,7 @@ msgstr "Espressione regolare non valida per il tipo di file %s: %s"
 msgid "untitled"
 msgstr "senza nome"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:841 ../src/socket.c:171
+#: ../src/highlighting.c:1226 ../src/libmain.c:851 ../src/socket.c:171
 #: ../src/templates.c:234
 #, c-format
 msgid "Could not find file '%s'."
@@ -3893,26 +3880,26 @@ msgstr "Messaggi verbosi"
 msgid "Show version and exit"
 msgstr "Mostra versione ed esci"
 
-#: ../src/libmain.c:515
+#: ../src/libmain.c:525
 msgid "[FILES...]"
 msgstr "[FILE...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:549
+#: ../src/libmain.c:559
 #, c-format
 msgid "built on %s with "
 msgstr "generato il %s con"
 
-#: ../src/libmain.c:642
+#: ../src/libmain.c:652
 msgid "Move it now?"
 msgstr "Spostare ora?"
 
-#: ../src/libmain.c:644
+#: ../src/libmain.c:654
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany deve spostare la vecchia directory di configurazione prima dell'avvio."
 
-#: ../src/libmain.c:653
+#: ../src/libmain.c:663
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3923,7 +3910,7 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:663
+#: ../src/libmain.c:673
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3932,7 +3919,7 @@ msgstr ""
 "Impossibile spostare la vecchia directory di configurazione \"%s\" in \"%s"
 "\" (%s). Spostare manualmente la directory nella nuova posizione."
 
-#: ../src/libmain.c:745
+#: ../src/libmain.c:755
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3944,21 +3931,21 @@ msgstr ""
 "configurazione.\n"
 "Avviare ugualmente Geany?"
 
-#: ../src/libmain.c:1144
+#: ../src/libmain.c:1154
 #, c-format
 msgid "This is Geany %s."
 msgstr "Questo è Geany %s."
 
-#: ../src/libmain.c:1146
+#: ../src/libmain.c:1156
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Impossibile creare la cartella di configurazione (%s)."
 
-#: ../src/libmain.c:1370
+#: ../src/libmain.c:1380
 msgid "Do you really want to quit?"
 msgstr "Si vuole veramente uscire?"
 
-#: ../src/libmain.c:1408
+#: ../src/libmain.c:1418
 msgid "Configuration files reloaded."
 msgstr "File di configurazione ricaricato."
 
@@ -3995,16 +3982,15 @@ msgstr ""
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "Il documento è stato chiuso."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
 msgstr "Passa al documento"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Apri file"
+msgstr "Apri in _nuova finestra"
 
 #: ../src/plugins.c:223
 #, c-format
@@ -4019,39 +4005,45 @@ msgstr ""
 msgid "_Plugin Manager"
 msgstr "Gestione _Plugin"
 
-#: ../src/plugins.c:1600
+#: ../src/plugins.c:1603
 msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Altri plugin dipendono da questo. Disabilitarli prima per consentire la "
+"disattivazione.</i>\n"
 
 #. Four allocations is less than ideal but meh
-#: ../src/plugins.c:1602
+#: ../src/plugins.c:1605
 #, c-format
 msgid ""
 "Version:\t%s\n"
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Versione:\t%s\n"
+"Autore(i):\t%s\n"
+"Nomefile:\t%s"
 
-#: ../src/plugins.c:1630
+#: ../src/plugins.c:1633
 msgid "No plugins available."
 msgstr "Nessun plugin disponibile."
 
-#: ../src/plugins.c:1762
+#: ../src/plugins.c:1765
 msgid "Active"
 msgstr "Attivo"
 
-#: ../src/plugins.c:1769
+#: ../src/plugins.c:1772
 msgid "Plugin"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1876
+#: ../src/plugins.c:1879
 msgid "Plugins"
 msgstr "Plugin"
 
-#: ../src/plugins.c:1917
+#: ../src/plugins.c:1920
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Selezionare i plugin da caricare all'avvio:"
 
@@ -4202,13 +4194,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Impossibile eseguire il programma grep '%s'; verificarne il percorso nelle "
-"Preferenze."
+"Impossibile eseguire il comando di stampa \"%s\": %s. Verificarne il "
+"percorso nelle Preferenze."
 
 #: ../src/printing.c:622
 #, c-format
@@ -4223,7 +4215,7 @@ msgstr "progetti"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Spostare il documento corrente nella sessione del nuovo progetto?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4234,9 +4226,8 @@ msgid "C_reate"
 msgstr "C_rea"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Progetto"
+msgstr "Nome progetto"
 
 #: ../src/project.c:188
 #, c-format
@@ -4244,6 +4235,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Percorso del file che rappresenta il progetto e ne contiene le impostazioni. "
+"Dovrebbe normalmente avere estensione \"%s\"."
 
 #: ../src/project.c:212 ../src/project.c:484
 msgid "Choose Project Base Path"
@@ -4368,7 +4361,7 @@ msgstr ""
 
 #: ../src/search.c:322
 msgid "Use multi-line matchin_g"
-msgstr ""
+msgstr "Utilizza _corrispondenza multi-riga"
 
 #: ../src/search.c:327
 msgid ""
@@ -4377,6 +4370,10 @@ msgid ""
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Utilizzare le espressioni regolari sull'intero buffer e non riga per riga, "
+"consentendo corrispondenze multi-riga. In questo modo, i caratteri a capo "
+"sono parte dell'input e possono essere processati come normali caratteri nel "
+"pattern."
 
 #: ../src/search.c:340
 msgid "Search _backwards"
@@ -4550,12 +4547,12 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (nella directory: %s)"
 
 #: ../src/search.c:1718
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"Impossibile eseguire il programma grep '%s'; verificarne il percorso nelle "
-"Preferenze."
+"Impossibile eseguire il programma grep \"%s\": %s. Verificarne il percorso "
+"nelle Preferenze."
 
 #: ../src/search.c:1758
 #, c-format
@@ -4596,29 +4593,29 @@ msgstr ""
 #: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
 msgid "Text ended before matching quote was found"
 msgstr ""
+"Il testo è terminato prima che le corrispondenti virgolette siano state "
+"trovate"
 
 #. TL note: from glib
 #: ../src/spawn.c:126
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Il testo era vuoto (o conteneva solo spazi bianchi)"
 
 #: ../src/spawn.c:147 ../src/spawn.c:161
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
+msgstr "Un nome programma di Windows deve essere interamente tra virgolette"
 
 #: ../src/spawn.c:254
-#, fuzzy
 msgid "Program not found"
-msgstr "Comando non trovato"
+msgstr "Programma non trovato"
 
 #: ../src/spawn.c:668
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Processo fallito, nessuna cartella di lavoro"
+msgstr "Fallimento nel cambio directory di lavoro"
 
 #: ../src/spawn.c:673
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Errore sconosciuto nell'esecuzione processo figlio"
 
 #: ../src/stash.c:1150
 msgid "Name"
@@ -5022,6 +5019,8 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
+"Impossibile eseguire il comando \"%s\" da template: %s. Controllare il "
+"percorso nel template."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5201,13 +5200,13 @@ msgstr ""
 "insuccesso."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Impossibile eseguire il programma grep '%s'; verificarne il percorso nelle "
-"Preferenze."
+"Impossibile eseguire il comando personalizzato \"%s\": %s. Controllare "
+"l'impostazione del percorso nei comandi personalizzati."
 
 #: ../src/tools.c:357 ../src/tools.c:620
 msgid "Set Custom Commands"
@@ -5421,9 +5420,8 @@ msgid "Select File"
 msgstr "Seleziona file"
 
 #: ../src/ui_utils.c:2152
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Ricarica la configurazione"
+msgstr "Configurazione _tipo file"
 
 #: ../src/ui_utils.c:2189
 msgid "Save All"
@@ -5450,14 +5448,12 @@ msgstr ""
 "inserirne un'altro."
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:376
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Mac classico (CR)"
 
 #: ../src/utils.c:377
 msgid "Unix (LF)"
@@ -5465,15 +5461,15 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:386
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:387
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:388
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:489
 #, c-format
@@ -5497,6 +5493,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Directory non cambiata perché il terminale potrebbe contenere dell'input "
+"(premere Ctrl+C o Enter per pulirlo)."
 
 #: ../src/win32.c:211
 msgid "Geany project files"
@@ -5628,8 +5626,9 @@ msgstr "Caratteri HTML"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Inserisce entità carattere HTML, come '&amp;'."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
-#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "Il gruppo di sviluppatori di Geany"
 
@@ -5797,9 +5796,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Impossibile eseguire il comando esterno configurato '%s' (%s)."
 
 #: ../plugins/filebrowser.c:651
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Apri file"
+msgstr "Apri in _Geany"
 
 #: ../plugins/filebrowser.c:657
 msgid "Open _Externally"
