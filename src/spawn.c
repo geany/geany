@@ -68,6 +68,10 @@
 # include "support.h"
 #endif
 
+#if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
+# define G_SPAWN_ERROR_TOO_BIG G_SPAWN_ERROR_2BIG
+#endif
+
 #ifdef G_OS_WIN32
 /* Each 4KB under Windows seem to come in 2 portions, so 2K + 2K is more
    balanced than 4095 + 1. May be different on the latest Windows/glib? */
