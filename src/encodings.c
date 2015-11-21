@@ -1009,7 +1009,7 @@ handle_bom(BufferData *buffer)
 	/* use filedata->len here because the contents are already converted into UTF-8 */
 	buffer->len -= bom_len;
 	/* overwrite the BOM with the remainder of the file contents, plus the NULL terminator. */
-	g_memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
+	memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
 	buffer->data = g_realloc(buffer->data, buffer->len + 1);
 }
 
