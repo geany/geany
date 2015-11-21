@@ -4474,7 +4474,7 @@ caret_width
     a maximum of three pixel. Use the width 0 to make the caret
     invisible.
 
-    *Example:* ``caret=1;0;false;false``
+    *Example:* ``caret_width=3``
 
 current_line
     The style for coloring the background of the current line. Only
