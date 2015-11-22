@@ -15,8 +15,6 @@ WIN32_BUILD_FILES = \
 
 EXTRA_DIST = \
 	autogen.sh \
-	wscript \
-	waf \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \

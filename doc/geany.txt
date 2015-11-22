@@ -132,8 +132,7 @@ of these tools are recommended.
 Autotools based build system
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Autotools based build system is very mature and has been well tested.
-To use it, you just need the Make tool, preferably GNU Make.
+To compile Geany yourself, you just need the Make tool, preferably GNU Make.
 
 Then run the following commands::
 
@@ -148,65 +147,6 @@ Or via sudo::
 
     % sudo make install
 
-Waf based build system
-^^^^^^^^^^^^^^^^^^^^^^
-
-The Waf build system is still quite young and under heavy development but already in a
-usable state. In contrast to the Autotools system, Waf needs Python. So before using Waf, you need
-to install Python on your system.
-The advantage of the Waf build system over the Autotools based build system is that the whole
-build process might be a bit faster. Especially when you use the Waf
-cache feature for repetitive builds (e.g. when changing only a few source files
-to test something) will become much faster since Waf will cache and re-use the
-unchanged built files and only compile the changed code again. See `Waf Cache`_ for details.
-To build Geany with Waf as run::
-
-    $ ./waf configure
-    $ ./waf build
-
-Then as root::
-
-    % ./waf install
-
-Waf cache
-`````````
-
-The Waf build system has a nice and interesting feature which can help  to avoid
-a lot of unnecessary rebuilding of unchanged code. This often happens when developing new features
-or trying to debug something in Geany.
-Waf is able to store and retrieve the object files from a cache. This cache is declared
-using the environment variable ``WAFCACHE``.
-A possible location of the cache directory could be ``~/.cache/waf``. In order to make use of
-this, you first need to create this directory::
-
-    $ mkdir -p ~/.cache/waf
-
-then add the environment variable to your shell configuration (the following example is for
-Bash and should be adjusted to your used shell)::
-
-    export WAFCACHE=/home/username/.cache/waf
-
-Remember to replace ``username`` with your actual username.
-
-More information about the Waf cache feature are available at
-http://code.google.com/p/waf/wiki/CacheObjectFiles.
-
-Cleaning the cache
-******************
-You should be careful about the size of the cache directory as it may
-grow rapidly over time.
-Waf doesn't do any cleaning or other house-keeping of the cache yet, so you need to keep it
-clean by yourself.
-An easy way to keep it clean is to run the following command regularly to remove old
-cached files::
-
-    $ find /home/username/.cache/waf -mtime +14 -exec rm {} \;
-
-This will delete all files in the cache directory which are older than 14 days.
-
-For details about the ``find`` command and its options, check its manual page.
-
-
 Custom installation
 ^^^^^^^^^^^^^^^^^^^
 The configure script supports several common options, for a detailed
@@ -214,11 +154,6 @@ list, type::
 
     $ ./configure --help
 
-or::
-
-    $ ./waf --help
-
-(depending on which build system you use).
 
 You may also want to read the INSTALL file for advanced installation
 options.

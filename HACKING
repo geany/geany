@@ -171,9 +171,9 @@ Geany requires GTK >= 2.24 and GLib >= 2.28. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-It is recommended to use the 2.24 API documentation of the GTK 
-libs (including GLib, GDK and Pango) has the advantages 
-that you don't get confused by any newer API additions and you 
+It is recommended to use the 2.24 API documentation of the GTK
+libs (including GLib, GDK and Pango) has the advantages
+that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
 
 Coding
@@ -484,7 +484,6 @@ Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
 * Add foo.c, foo.h to SRCS in path/Makefile.am.
 * Add foo.o to OBJS in path/makefile.win32.
-* Add path/foo.c to geany_sources in wscript.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -548,7 +547,6 @@ When adding a lexer, update:
 
 * scintilla/Makefile.am
 * scintilla/makefile.win32
-* wscript
 * scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and
@@ -637,7 +635,6 @@ Method
 ``````
 * Add foo.c to SRCS in Makefile.am.
 * Add foo.o to OBJS in makefile.win32.
-* Add path/foo.c to geany_sources in wscript.
 * Add Foo to parsers.h
 * Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.

@@ -10,7 +10,6 @@
 deps.mak
 .deps/
 .libs/
-.lock-waf_*
 Makefile
 Makefile.in
 .dirstamp
@@ -20,7 +19,6 @@ Makefile.in
 #-----------------------------------------------------------------------
 /aclocal.m4
 /autom4te.cache
-/_build_
 /build-aux/
 /build-stamp
 /codenames
@@ -48,8 +46,6 @@ Makefile.in
 /intltool-*
 /libtool
 /localwin32.mk
-/.lock-wscript
-/.lock-wafbuild
 /ltmain.sh
 /m4/lt*.m4
 /m4/intltool.m4
@@ -63,9 +59,6 @@ Makefile.in
 /stamp-h.in
 /*.tar.*
 /TODO.*
-# extracted Waf directory (without dot on Windows)
-/.waf-*
-/waf-*
 
 #-----------------------------------------------------------------------
 # /po/
