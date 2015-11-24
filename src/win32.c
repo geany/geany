@@ -816,7 +816,7 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 	if (hConHandle == -1)
 	{
 		gchar *err = g_win32_error_message(GetLastError());
-		g_warning("_open_osfhandle(%ld, _O_TEXT) failed: %s", (long)lStdHandle, err);
+		g_warning("_open_osfhandle(handle(%ld), _O_TEXT) failed: %s", (long)handle, err);
 		g_free(err);
 		return NULL;
 	}
