@@ -440,6 +440,8 @@ void encodings_init(void)
 	{
 		GSList *group = NULL;
 		GtkWidget *submenus[GEANY_ENCODING_GROUPS_MAX];
+		gint orders[GEANY_ENCODING_GROUPS_MAX] = { 0 };
+		guint n_added = 0;
 
 		for (guint i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
 		{
@@ -455,36 +457,36 @@ void encodings_init(void)
 			}
 		}
 
-		/** TODO can it be optimized? ATM 3782 runs at line "if (encodings[j].group ...)" */
-		for (guint i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
+		/** TODO can it be optimized? ATM 882 runs at line "if (encodings[i].order ...)" */
+		do
 		{
-			for (gint order = 0; order < group_sizes[i]; order++)
+			for (guint i = 0; i < G_N_ELEMENTS(encodings); i++)
 			{
-				for (guint j = 0; j < GEANY_ENCODINGS_MAX; j++)
+				if (encodings[i].order == orders[encodings[i].group])
 				{
-					if (encodings[j].group == i && encodings[j].order == order)
-					{
-						GtkWidget *item;
-						gchar *label = encodings_to_string(&encodings[j]);
+					GtkWidget *item;
+					gchar *label = encodings_to_string(&encodings[i]);
 
-						if (k == 0) /* Set Encoding menu */
-						{
-							item = gtk_radio_menu_item_new_with_label(group, label);
-							group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
-							radio_items[j] = item;
-						}
-						else
-							item = gtk_menu_item_new_with_label(label);
-						gtk_widget_show(item);
-						gtk_container_add(GTK_CONTAINER(submenus[i]), item);
-						g_signal_connect(item, "activate", cb_func[k],
-								(gpointer) encodings[j].charset);
-						g_free(label);
-						break;
+					if (k == 0) /* Set Encoding menu */
+					{
+						item = gtk_radio_menu_item_new_with_label(group, label);
+						group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+						radio_items[i] = item;
 					}
+					else
+						item = gtk_menu_item_new_with_label(label);
+					gtk_widget_show(item);
+					gtk_container_add(GTK_CONTAINER(submenus[encodings[i].group]), item);
+					g_signal_connect(item, "activate", cb_func[k],
+							(gpointer) encodings[i].charset);
+					g_free(label);
+
+					orders[encodings[i].group]++;
+					n_added++;
 				}
 			}
 		}
+		while (n_added < G_N_ELEMENTS(encodings));
 	}
 }
 
