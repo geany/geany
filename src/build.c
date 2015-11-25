@@ -1160,7 +1160,8 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 	if (cmd_cat != NULL)
 		g_free(full_command);
 	build_menu_update(doc);
-
+	if (build_info.pid)
+		ui_progress_bar_start(NULL);
 }
 
 
