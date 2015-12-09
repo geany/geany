@@ -848,24 +848,16 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 
 /* Gets all members of the type with the given name; search them inside tags_array */
 static GPtrArray *
-find_scope_members (const GPtrArray *tags_array, const char *name, langType lang,
-					gboolean namespace)
+find_scope_members (const GPtrArray *tags_array, const gchar *type_name, TMSourceFile *file,
+	langType lang, gboolean namespace)
 {
-	gboolean has_members = FALSE;
-	gboolean typedef_struct = FALSE;
-	GPtrArray *tags = NULL;
-	TMTag *tag = NULL;
-	const gchar *type_name;
 	guint i;
 
-	g_return_val_if_fail(name && *name, NULL);
+	g_return_val_if_fail(type_name && *type_name, NULL);
 
-	type_name = name;
-
-	/* First check if type_name is a type that can possibly contain members.
+	/* Check if type_name is a type that can possibly contain members.
 	 * Try to resolve intermediate typedefs to get the real type name. Also
-	 * add scope information to the name if applicable. The only result of this
-	 * part is the TMTag tag and boolean has_members.
+	 * add scope information to the name if applicable.
 	 * The loop below loops only when resolving typedefs - avoid possibly infinite
 	 * loop when typedefs create a cycle by adding some limits. */
 	for (i = 0; i < 5; i++)
@@ -873,60 +865,52 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 		guint j;
 		GPtrArray *type_tags;
 		TMTagType types = TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t;
+		TMTag *tag = NULL;
 
 		if (!namespace)
 			types &= ~tm_tag_enum_t;
 
 		type_tags = g_ptr_array_new();
-		if (tag && tag->file)
-		{
-			/* If we have tag, it means it contains the typedef from the previous
-			 * iteration; search in its file first. This helps for
-			 * "typedef struct {...}" cases where the typedef resolves to
-			 * anon_struct_* and searching for it in the whole workspace returns
-			 * too many (wrong) results. */
-			fill_find_tags_array(type_tags, tag->file->tags_array, type_name,
-								 NULL, types, lang);
-			typedef_struct = type_tags->len > 0;
-		}
-		if (type_tags->len == 0)
-			fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, lang);
+		fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, lang);
 
-		tag = NULL;
 		for (j = 0; j < type_tags->len; j++)
 		{
-			tag = TM_TAG(type_tags->pdata[j]);
+			TMTag *test_tag = TM_TAG(type_tags->pdata[j]);
+
+			/* anonymous type defined in a different file than the variable -
+			 * this isn't the type we are looking for */
+			if (tm_tag_is_anon(test_tag) && (file != test_tag->file || test_tag->file == NULL))
+				continue;
+
+			tag = test_tag;
+
 			/* prefer non-typedef tags because we can be sure they contain members */
-			if (tag->type != tm_tag_typedef_t)
+			if (test_tag->type != tm_tag_typedef_t)
 				break;
 		}
 
 		g_ptr_array_free(type_tags, TRUE);
 
 		if (!tag) /* not a type that can contain members */
-			break;
+			return NULL;
 
 		/* intermediate typedef - resolve to the real type */
-		if (tag->type == tm_tag_typedef_t && tag->var_type && tag->var_type[0] != '\0')
+		if (tag->type == tm_tag_typedef_t)
 		{
-			type_name = tag->var_type;
-			continue;
+			if (tag->var_type && tag->var_type[0] != '\0')
+			{
+				type_name = tag->var_type;
+				file = tag->file;
+				continue;
+			}
+			return NULL;
 		}
 		else /* real type with members */
-		{
-			has_members = TRUE;
-			break;
-		}
+			/* use the same file as the composite type if file information available */
+			return find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
 	}
 
-	/* ignore anon_struct_* and similar unless we resolved a typedef to it within
-	 * a single file so we can be sure we don't pick a wrong anon_struct_* from
-	 * a different file */
-	if (has_members && (typedef_struct || !tm_tag_is_anon(tag)))
-		/* use the same file as the composite type if file information available */
-		tags = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
-
-	return tags;
+	return NULL;
 }
 
 
@@ -996,7 +980,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
 		TMTagType types = TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t;
 
 		if (tag->type & types)  /* type: namespace search */
-			member_tags = find_scope_members(searched_array, tag->name, lang, TRUE);
+			member_tags = find_scope_members(searched_array, tag->name, tag->file, lang, TRUE);
 		else if (tag->var_type)  /* variable: scope search */
 		{
 			/* The question now is whether we should use member tags (such as
@@ -1012,7 +996,7 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
 				/* remove pointers in case the type contains them */
 				g_strdelimit(tag_type, "*^", ' ');
 				g_strstrip(tag_type);
-				member_tags = find_scope_members(searched_array, tag_type, lang, FALSE);
+				member_tags = find_scope_members(searched_array, tag_type, tag->file, lang, FALSE);
 				g_free(tag_type);
 			}
 		}
