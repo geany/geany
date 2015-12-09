@@ -705,6 +705,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	ScintillaObject *sci = editor->sci;
 	gint pos = sci_get_current_position(editor->sci);
 	gchar typed = sci_get_char_at(sci, pos - 1);
+	gchar brace_char;
 	gchar *name;
 	GeanyFiletype *ft = editor->document->file_type;
 	GPtrArray *tags;
@@ -748,18 +749,19 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
 
-	/* if function, skip to matching brace */
-	if (pos > 0 && sci_get_char_at(sci, pos - 1) == ')')
+	/* if function or array index, skip to matching brace */
+	brace_char = sci_get_char_at(sci, pos - 1);
+	if (pos > 0 && (brace_char == ')' || brace_char == ']'))
 	{
 		gint brace_pos = sci_find_matching_brace(sci, pos - 1);
 
 		if (brace_pos != -1)
 		{
 			pos = brace_pos;
-			function = TRUE;
+			function = brace_char == ')';
 		}
 
-		/* allow for a space between opening brace and function name */
+		/* allow for a space between opening brace and name */
 		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 			pos--;
 	}
