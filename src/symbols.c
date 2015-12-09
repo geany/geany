@@ -998,8 +998,13 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
 	gboolean doc_is_utf8 = FALSE;
 
-	if (tm_tag_is_anon(tag) && g_hash_table_lookup(typedef_table, name))
-		name = g_hash_table_lookup(typedef_table, name);
+	if (tm_tag_is_anon(tag))
+	{
+		if (g_hash_table_lookup(typedef_table, name))
+			name = g_hash_table_lookup(typedef_table, name);
+		else
+			name = (char *)tm_tag_get_anon_name(tag);
+	}
 
 	/* encodings_convert_to_utf8_from_charset() fails with charset "None", so skip conversion
 	 * for None at this point completely */

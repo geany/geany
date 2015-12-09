@@ -1224,6 +1224,30 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 	return FALSE;
 }
 
+const gchar *tm_tag_get_anon_name(const TMTag *tag)
+{
+	static gchar name[64];
+
+	name[0] = '\0';
+	if (tm_tag_is_anon(tag) && strlen(tag->name) < 64)
+	{
+		if (tag->lang == TM_PARSER_C || tag->lang == TM_PARSER_CPP)
+		{
+			gchar *start = strstr(tag->name, "_") + 1;
+			gchar *end = g_strrstr(tag->name, "_");
+			strncpy(name, start, end - start);
+			name[end - start] = '\0';
+		}
+		else if (tag->lang == TM_PARSER_FORTRAN || tag->lang == TM_PARSER_F77)
+		{
+			gchar *end = strstr(tag->name, "#");
+			strncpy(name, tag->name, end - tag->name);
+			name[end - tag->name] = '\0';
+		}
+	}
+
+	return name;
+}
 
 #ifdef TM_DEBUG /* various debugging functions */
 

@@ -195,6 +195,8 @@ const gchar *tm_tag_context_separator(langType lang);
 
 gboolean tm_tag_is_anon(const TMTag *tag);
 
+const gchar *tm_tag_get_anon_name(const TMTag *tag);
+
 #ifdef TM_DEBUG /* various debugging functions */
 
 const char *tm_tag_type_name(const TMTag *tag);
