@@ -980,7 +980,13 @@ find_scope_members_all(GPtrArray *tags, GPtrArray *searched_array, langType lang
 		TMTagType types = TM_TYPE_WITH_MEMBERS | tm_tag_typedef_t;
 
 		if (tag->type & types)  /* type: namespace search */
-			member_tags = find_scope_members(searched_array, tag->name, tag->file, lang, TRUE);
+		{
+			if (tag->type & tm_tag_typedef_t)
+				member_tags = find_scope_members(searched_array, tag->name, tag->file, lang, TRUE);
+			else
+				member_tags = find_scope_members_tags(tag->file ? tag->file->tags_array : searched_array,
+					tag, TRUE);
+		}
 		else if (tag->var_type)  /* variable: scope search */
 		{
 			/* The question now is whether we should use member tags (such as
