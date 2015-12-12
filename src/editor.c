@@ -4687,12 +4687,28 @@ static gboolean editor_check_colourise(GeanyEditor *editor)
 		return FALSE;
 
 	doc->priv->colourise_needed = FALSE;
-	sci_colourise(editor->sci, 0, -1);
 
-	/* now that the current document is colourised, fold points are now accurate,
-	 * so force an update of the current function/tag. */
-	symbols_get_current_function(NULL, NULL);
-	ui_update_statusbar(NULL, -1);
+	if (doc->priv->full_colourise)
+	{
+		sci_colourise(editor->sci, 0, -1);
+
+		/* now that the current document is colourised, fold points are now accurate,
+		 * so force an update of the current function/tag. */
+		symbols_get_current_function(NULL, NULL);
+		ui_update_statusbar(NULL, -1);
+	}
+	else
+	{
+		gint start_line, end_line, start, end;
+
+		start_line = SSM(doc->editor->sci, SCI_GETFIRSTVISIBLELINE, 0, 0);
+		end_line = start_line + SSM(editor->sci, SCI_LINESONSCREEN, 0, 0);
+		start_line = SSM(editor->sci, SCI_DOCLINEFROMVISIBLE, start_line, 0);
+		end_line = SSM(editor->sci, SCI_DOCLINEFROMVISIBLE, end_line, 0);
+		start = sci_get_position_from_line(editor->sci, start_line);
+		end = sci_get_line_end_position(editor->sci, end_line);
+		sci_colourise(editor->sci, start, end);
+	}
 
 	return TRUE;
 }
