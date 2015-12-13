@@ -311,7 +311,9 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	void *environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
 {
 	enum { WRITE_STDIN, READ_STDOUT, READ_STDERR, READ_STDIN, WRITE_STDOUT, WRITE_STDERR };
-	STARTUPINFO startup;
+	wchar_t w_command_line[MAX_PATH];
+	wchar_t w_working_directory[MAX_PATH];
+	STARTUPINFOW startup;
 	PROCESS_INFORMATION process;
 	HANDLE hpipe[6] = { NULL, NULL, NULL, NULL, NULL, NULL };
 	int *fd[3] = { stdin_fd, stdout_fd, stderr_fd };
@@ -372,8 +374,29 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	startup.hStdOutput = hpipe[WRITE_STDOUT];
 	startup.hStdError = hpipe[WRITE_STDERR];
 
-	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
-		environment, working_directory, &startup, &process))
+	if (! MultiByteToWideChar(
+		CP_UTF8, 0, working_directory, -1, w_working_directory, G_N_ELEMENTS(w_working_directory)))
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		message = g_strdup_printf(
+			"Failed to convert working directory to multi-byte string: %s", err);
+		g_free(err);
+		failed = "";  /* report the message only */
+		goto leave;
+	}
+	if (! MultiByteToWideChar(
+		CP_UTF8, 0, command_line, -1, w_command_line, G_N_ELEMENTS(w_command_line)))
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		message = g_strdup_printf(
+			"Failed to convert command line to multi-byte string: %s", err);
+		g_free(err);
+		failed = "";  /* report the message only */
+		goto leave;
+	}
+
+	if (!CreateProcessW(NULL, w_command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
+		environment, w_working_directory, &startup, &process))
 	{
 		failed = "";  /* report the message only */
 		/* further errors will not be reported */
