@@ -4561,6 +4561,13 @@ void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type)
 }
 
 
+/** Sets the indent width for @a editor.
+ * @param editor Editor.
+ * @param width New indent width.
+ *
+ * @since 1.27 (API 227)
+ */
+GEANY_API_SYMBOL
 void editor_set_indent_width(GeanyEditor *editor, gint width)
 {
 	editor_set_indent(editor, editor->indent_type, width);
