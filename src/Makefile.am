@@ -5,6 +5,7 @@ EXTRA_DIST = \
 	gb.c \
 	plugindata.h \
 	documentprivate.h \
+	encodingsprivate.h \
 	filetypesprivate.h \
 	keybindingsprivate.h \
 	pluginprivate.h \

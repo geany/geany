@@ -33,6 +33,7 @@
 #include "app.h"
 #include "document.h"
 #include "encodings.h"
+#include "encodingsprivate.h"
 #include "keyfile.h"
 #include "msgwindow.h"
 #include "prefs.h"

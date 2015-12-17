@@ -32,7 +32,7 @@
 
 #include "app.h"
 #include "document.h"
-#include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geany.h"
 #include "geanymenubuttonaction.h"

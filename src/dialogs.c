@@ -33,6 +33,7 @@
 #include "build.h"
 #include "document.h"
 #include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "main.h"
 #include "support.h"

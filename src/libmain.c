@@ -36,7 +36,7 @@
 #include "callbacks.h"
 #include "dialogs.h"
 #include "document.h"
-#include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanyobject.h"
 #include "highlighting.h"
