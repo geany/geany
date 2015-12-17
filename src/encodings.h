@@ -46,10 +46,7 @@ G_BEGIN_DECLS
  * Copyright (C) 2002 Red Hat, Inc.
  */
 
-/**
- * @enum GeanyEncodingIndex
- * List of known and supported encodings.
- **/
+/** List of known and supported encodings. */
 typedef enum
 {
 	GEANY_ENCODING_ISO_8859_1,

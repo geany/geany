@@ -119,7 +119,7 @@ geany_data_init(void)
 		&search_prefs,
 		&tool_prefs,
 		&template_prefs,
-		&build_info,
+		NULL, /* Remove field on next ABI break (abi-todo) */
 		filetypes_by_title
 	};
 

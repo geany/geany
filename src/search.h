@@ -54,7 +54,7 @@ enum GeanyFindSelOptions
 typedef struct GeanySearchPrefs
 {
 	gboolean	always_wrap;			/* don't ask whether to wrap search */
-	gboolean	use_current_word;		/**< Use current word for default search text */
+	gboolean	use_current_word;		/* Use current word for default search text */
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */
 	gboolean	hide_find_dialog;		/* hide the find dialog on next or previous */
 	gboolean	replace_and_find_by_default;	/* enter in replace window performs Replace & Find instead of Replace */
