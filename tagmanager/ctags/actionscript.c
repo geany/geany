@@ -85,7 +85,7 @@ static void installActionScriptRegex (const langType language)
 	    "\\1", "p,prototype", NULL);
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* ActionScriptParser (void)
 
 {

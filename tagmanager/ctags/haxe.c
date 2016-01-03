@@ -212,7 +212,7 @@ another:
 }
 
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* HaxeParser (void)
 {
 	static const char *const extensions [] = { "hx", NULL };

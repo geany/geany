@@ -634,7 +634,7 @@ parameters which you may use or not.
   - plugin_configure() => GeanyPlugin->funcs->configure
 
 @note @ref GeanyPluginFuncs::init() should return a boolean value: whether or not the plugin loaded
-succesfully. Since legacy plugins couldn't fail in plugin_init() you should return @c TRUE
+successfully. Since legacy plugins couldn't fail in plugin_init() you should return @c TRUE
 unconditionally.
 
 @note Again, plugin_configure_single() is not supported anymore.
@@ -797,7 +797,7 @@ storing a per-sub-plugin interpreter context.
 GEANY_PLUGIN_REGISTER_FULL() then you must pass NULL as free_func, because that would be invoked
 prior to unloading. Insert the corresponding code into GeanyProxyFuncs::unload.
 
-@section proxy_compat_guideline Guideline for Checking Compatiblity
+@section proxy_compat_guideline Guideline for Checking Compatibility
 
 Determining if a plugin candidate is compatible is not a single test. There are multiple levels and
 each should be handled differently in order to give the user a consistent feedback.
@@ -826,7 +826,7 @@ treatment of native plugins by Geany.
 3) The sub-plugin is also depending on Geany's API version (whether it is or not depends on the
 design of the proxy). In this case do not do anything special but forward the API version the
 sub-plugin is written/compiled against to GEANY_PLUGIN_REGISTER(). Here, Geany will perform its own
-compatiblity check, allowing for a consistent user feedback. The result is again that the
+compatibility check, allowing for a consistent user feedback. The result is again that the
 sub-plugin is hidden from the Plugin Manager, like in case 2. But Geany will print a debug message
 so you can skip that.
 
@@ -1029,7 +1029,7 @@ static gpointer demoproxy_load(GeanyPlugin *proxy, GeanyPlugin *plugin,
 }
 @endcode
 
-demoproxy_unload() simply releases all resources aquired in demoproxy_load(). It does not have to
+demoproxy_unload() simply releases all resources acquired in demoproxy_load(). It does not have to
 do anything else in for unloading.
 
 @code{.c}

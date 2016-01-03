@@ -59,7 +59,7 @@
 # define USE_REPLACEMENT_TRUNCATE
 #endif
 
-/*  Hack for rediculous practice of Microsoft Visual C++.
+/*  Hack for ridiculous practice of Microsoft Visual C++.
  */
 #if defined (WIN32) && defined (_MSC_VER)
 # define chsize		_chsize

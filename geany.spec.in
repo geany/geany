@@ -34,7 +34,7 @@ Requires:      glib2, gtk2, pango
 BuildRequires: glib2-devel, gtk2-devel, pango-devel, gettext, intltool
 
 %description
-Geany is a small and fast integrated development enviroment with basic
+Geany is a small and fast integrated development environment with basic
 features and few dependencies to other packages or Desktop Environments.
 
 Some features:

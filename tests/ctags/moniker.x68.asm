@@ -23,7 +23,7 @@ START   	MOVEA.L #PROMPT1,A1             Pointer to start of prompt text
         
 *       	Get firstname
 *		=============
-        	MOVEA.L #F_NAME,A1              Pointer to store teh sentance
+        	MOVEA.L #F_NAME,A1              Pointer to store the sentance
         	MOVE.B  #READSTR,D0             Set up readstring function
         	TRAP    #15                     Get string from KB
         	MOVE.W  D1,D4                   Save length of input string to d4
@@ -46,7 +46,7 @@ START   	MOVEA.L #PROMPT1,A1             Pointer to start of prompt text
 *		=======================================
 SURNAME 	MOVEA.L #PROMPT2,A1             Pointer to start of prompt text
         	MOVE.B  #PRTSTR,D0              Set up print string function
-        	MOVE.W  #(F_NAME-PROMPT2),D1    The prompt string lenght
+        	MOVE.W  #(F_NAME-PROMPT2),D1    The prompt string length
         	TRAP    #15                     Print Prompt
         
 *       	Get surname
@@ -78,7 +78,7 @@ INITIAL 	MOVEA.L #F_NAME,A1              Move the first char to A1
 
 PRNSURNAME	MOVEA.L #S_NAME,A1              Pointer to start of prompt text
         	MOVE.B  #0,D0                   Set up print string function
-        	MOVE.W  D3,D1                   The prompt string lenght
+        	MOVE.W  D3,D1                   The prompt string length
         	TRAP    #15                     Print Prompt
 
 QUIT    	STOP    #$2700                  Stop the prorgam

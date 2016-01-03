@@ -55,7 +55,7 @@ static void installHtmlRegex (const langType language)
 		"\\2", "v,variable,H3 heading", "i");
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* HtmlParser (void)
 {
 	static const char *const extensions [] = { "htm", "html", NULL };
