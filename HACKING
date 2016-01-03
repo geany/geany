@@ -64,7 +64,7 @@ current Git (see `Committing`_)::
 
 We also accept patches against other releases, but it's more work for us.
 
-If you're not using Git, although you're strongly suggested to used it,
+If you're not using Git, although you're strongly suggested to use it,
 you can use the diff command::
 
     $ diff -u originalpath modifiedpath > new-feature.patch
