@@ -2247,9 +2247,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		if (!found)
 			break;
 
-		sci_set_current_position(sci, pos + 1, FALSE);
-		sci_cancel(sci); /* don't select from completion list */
-		sci_send_command(sci, SCI_NEWLINE);
+		sci_insert_text(sci, pos + 1, editor_get_eol_char(editor));
 		line++;
 	}
 	return line - start_line;
