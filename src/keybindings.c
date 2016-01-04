@@ -2244,7 +2244,11 @@ static gint split_line(GeanyEditor *editor, gint column)
 				}
 			}
 		}
-		if (!found)
+		/* don't split right before a space */
+		while (pos + 1 <= lend && sci_get_char_at(sci, pos + 1) == GDK_space)
+			pos++;
+
+		if (!found || pos >= lend)
 			break;
 
 		sci_insert_text(sci, pos + 1, editor_get_eol_char(editor));
