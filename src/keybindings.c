@@ -2216,7 +2216,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		gint pos;
 
 		/* don't split on a trailing space of a line */
-		if (sci_get_char_at(sci, lend - 1) == GDK_space)
+		if (sci_get_char_at(sci, lend - 1) == ' ')
 			lend--;
 
 		/* detect when the line is short enough and no more splitting is needed */
@@ -2227,7 +2227,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		found = FALSE;
 		for (pos = edge - 1; pos > lstart; pos--)
 		{
-			if (sci_get_char_at(sci, pos) == GDK_space)
+			if (sci_get_char_at(sci, pos) == ' ')
 			{
 				found = TRUE;
 				break;
@@ -2237,7 +2237,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		{
 			for (pos = edge; pos < lend; pos++)
 			{
-				if (sci_get_char_at(sci, pos) == GDK_space)
+				if (sci_get_char_at(sci, pos) == ' ')
 				{
 					found = TRUE;
 					break;
@@ -2245,7 +2245,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 			}
 		}
 		/* don't split right before a space */
-		while (pos + 1 <= lend && sci_get_char_at(sci, pos + 1) == GDK_space)
+		while (pos + 1 <= lend && sci_get_char_at(sci, pos + 1) == ' ')
 			pos++;
 
 		if (!found || pos >= lend)
