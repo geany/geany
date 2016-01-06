@@ -855,7 +855,7 @@ static boolean isContextualStatement (const statementInfo *const st)
 	{
 		if (isLanguage (Lang_vala))
 		{
-			/* All can be a contextual statment as properties can be of any type */
+			/* All can be a contextual statement as properties can be of any type */
 			result = TRUE;
 		}
 		else
@@ -977,7 +977,7 @@ static void reinitStatementWithToken (statementInfo *const st,
 	token = activeToken (st);
 	copyToken (token, save);
 	deleteToken (save);
-	++st->tokenIndex;	/* this is quite save becouse current tokenIndex = 0 */
+	++st->tokenIndex;	/* this is quite safe because current tokenIndex = 0 */
 }
 
 static void initStatement (statementInfo *const st, statementInfo *const parent)

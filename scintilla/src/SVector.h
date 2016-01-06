@@ -101,7 +101,7 @@ public:
 		len = 0;
 	}
 	/** @brief Grow vector size.
-	 * Doesn't allow a vector to be shrinked. */
+	 * Doesn't allow a vector to be shrunk. */
 	void SetLength(unsigned int newLength) {
 		if (newLength > len) {
 			if (newLength >= size) {

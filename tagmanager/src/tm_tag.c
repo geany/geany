@@ -1291,7 +1291,7 @@ static const char *tm_tag_access_name(TMTag *tag)
 /*
   Prints information about a tag to the given file pointer.
   @param tag The tag whose info is required.
-  @param fp The file pointer of teh file to print the info to.
+  @param fp The file pointer of the file to print the info to.
 */
 void tm_tag_print(TMTag *tag, FILE *fp)
 {
