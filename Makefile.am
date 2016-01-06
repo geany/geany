@@ -20,7 +20,6 @@ EXTRA_DIST = \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
-	ChangeLog.pre-0-17 \
 	ChangeLog.pre-1-22 \
 	HACKING \
 	README.I18N \
