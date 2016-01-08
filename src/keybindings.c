@@ -476,6 +476,18 @@ static void init_default_kb(void)
 		GDK_2, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
 		GDK_3, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD4, NULL,
+		0, 0, "edit_sendtocmd4", _("Send to Custom Command 4"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD5, NULL,
+		0, 0, "edit_sendtocmd5", _("Send to Custom Command 5"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD6, NULL,
+		0, 0, "edit_sendtocmd6", _("Send to Custom Command 6"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD7, NULL,
+		0, 0, "edit_sendtocmd7", _("Send to Custom Command 7"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD8, NULL,
+		0, 0, "edit_sendtocmd8", _("Send to Custom Command 8"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD9, NULL,
+		0, 0, "edit_sendtocmd9", _("Send to Custom Command 9"), NULL);
 	/* may fit better in editor group */
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
@@ -2430,6 +2442,30 @@ static gboolean cb_func_format_action(guint key_id)
 		case GEANY_KEYS_FORMAT_SENDTOCMD3:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
 				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD4:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 3)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[3]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD5:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 4)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[4]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD6:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 5)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[5]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD7:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 6)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[6]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD8:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 7)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[7]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD9:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 8)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[8]);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
