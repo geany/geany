@@ -203,8 +203,14 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	GString *output;
 	GString *errors;
 	gint status;
+	gchar *command_line;
 
 	g_return_if_fail(doc != NULL && command != NULL);
+
+	command_line = g_strdup(command);
+
+	if (doc->real_path)
+		utils_str_replace_all(&command_line, "%f", doc->real_path);
  
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
@@ -214,9 +220,9 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	input.size = strlen(sel);
 	output = g_string_sized_new(256);
 	errors = g_string_new(NULL);
-	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
+	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command_line);
 
-	if (spawn_sync(NULL, command, NULL, NULL, &input, output, errors, &status, &error))
+	if (spawn_sync(NULL, command_line, NULL, NULL, &input, output, errors, &status, &error))
 	{
 		if (errors->len > 0)
 		{
@@ -246,6 +252,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 
 	g_string_free(output, TRUE);
 	g_string_free(errors, TRUE);
+	g_free(command_line);
 	g_free(sel);
 }
 
