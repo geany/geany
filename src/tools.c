@@ -203,8 +203,14 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	GString *output;
 	GString *errors;
 	gint status;
+	gchar *command_line;
 
 	g_return_if_fail(doc != NULL && command != NULL);
+
+	command_line = g_strdup(command);
+
+	if (doc->real_path)
+		utils_str_replace_all(&command_line, "%f", doc->real_path);
  
 	if (! sci_has_selection(doc->editor->sci))
 		editor_select_lines(doc->editor, FALSE);
@@ -214,9 +220,9 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 	input.size = strlen(sel);
 	output = g_string_sized_new(256);
 	errors = g_string_new(NULL);
-	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command);
+	ui_set_statusbar(TRUE, _("Passing data and executing custom command: %s"), command_line);
 
-	if (spawn_sync(NULL, command, NULL, NULL, &input, output, errors, &status, &error))
+	if (spawn_sync(NULL, command_line, NULL, NULL, &input, output, errors, &status, &error))
 	{
 		if (errors->len > 0)
 		{
@@ -246,6 +252,7 @@ void tools_execute_custom_command(GeanyDocument *doc, const gchar *command)
 
 	g_string_free(output, TRUE);
 	g_string_free(errors, TRUE);
+	g_free(command_line);
 	g_free(sel);
 }
 
@@ -554,6 +561,12 @@ static void cc_insert_custom_command_items(GtkMenu *me, const gchar *label, cons
 		case 0: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD1; break;
 		case 1: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD2; break;
 		case 2: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD3; break;
+		case 3: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD4; break;
+		case 4: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD5; break;
+		case 5: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD6; break;
+		case 6: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD7; break;
+		case 7: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD8; break;
+		case 8: key_idx = GEANY_KEYS_FORMAT_SENDTOCMD9; break;
 	}
 
 	item = gtk_menu_item_new_with_label(label);
