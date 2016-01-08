@@ -673,7 +673,7 @@ getNextChar:
 }
 
 /*
- * reads an indentifier, possibly quoted:
+ * reads an identifier, possibly quoted:
  * 		identifier
  * 		"identifier"
  * 		[identifier]
@@ -1186,7 +1186,7 @@ static void parseDeclareANSI (tokenInfo *const token, const boolean local)
 	 *		 DECLARE varname2 datatype;
 	 *		 ...
 	 *
-	 * This differ from PL/SQL where DECLARE preceeds the BEGIN block
+	 * This differ from PL/SQL where DECLARE precedes the BEGIN block
 	 * and the DECLARE keyword is not repeated.
 	 */
 	while (isKeyword (token, KEYWORD_declare))

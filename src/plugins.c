@@ -1013,7 +1013,7 @@ static gboolean check_plugin_path(const gchar *fname)
 }
 
 
-/* Retuns NULL if this ain't a plugin,
+/* Returns NULL if this ain't a plugin,
  * otherwise it returns the appropriate PluginProxy instance to load it */
 static PluginProxy* is_plugin(const gchar *file)
 {
@@ -2002,7 +2002,7 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
 
 	p = plugin->priv;
-	/* Check if this was called aready. We want to reserve for the use case of calling
+	/* Check if this was called already. We want to reserve for the use case of calling
 	 * this again to set new supported extensions (for example, based on proxy configuration). */
 	foreach_list(node, active_proxies.head)
 	{

@@ -51,7 +51,7 @@ See `Rules to contribute`_ for more information.
 
 Patches
 -------
-We are happy to receive patches, but the prefered way is to make a pull
+We are happy to receive patches, but the preferred way is to make a pull
 request on our Github repository. If you don't want to make a pull request,
 you can send your patches on the devel mailing list, but the rules are the same:
 see `Rules to contribute`_ for more information.
@@ -64,7 +64,7 @@ current Git (see `Committing`_)::
 
 We also accept patches against other releases, but it's more work for us.
 
-If you're not using Git, although you're strongly suggested to used it,
+If you're not using Git, although you're strongly suggested to use it,
 you can use the diff command::
 
     $ diff -u originalpath modifiedpath > new-feature.patch

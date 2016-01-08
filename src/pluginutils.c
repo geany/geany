@@ -573,8 +573,8 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify f
 	 * In the future we want to support proxy plugins (which bind non-C plugins to
 	 * Geany's plugin api). These proxy plugins might need to own the data pointer
 	 * on behalf of the proxied plugin. However, if not, then the plugin should be
-	 * free to use it. This way we can make sure the plugin doesn't accidently trash
-	 * its proxy.
+	 * free to use it. This way we can make sure the plugin doesn't accidentally
+	 * trash its proxy.
 	 *
 	 * Better a more limited API now that can be opened up later than a potentially
 	 * wrong one that can only be replaced by another one. */

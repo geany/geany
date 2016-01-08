@@ -284,7 +284,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir)
 {
 	BROWSEINFOW bi;
-	LPCITEMIDLIST pidl;
+	LPITEMIDLIST pidl;
 	gchar *result = NULL;
 	wchar_t fname[MAX_PATH];
 	wchar_t w_title[512];
@@ -305,14 +305,14 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	pidl = SHBrowseForFolderW(&bi);
 
 	/* convert the strange Windows folder list item something into an usual path string ;-) */
-	if (pidl != 0)
+	if (pidl != NULL)
 	{
 		if (SHGetPathFromIDListW(pidl, fname))
 		{
 			result = g_malloc0(MAX_PATH * 2);
 			WideCharToMultiByte(CP_UTF8, 0, fname, -1, result, MAX_PATH * 2, NULL, NULL);
 		}
-		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
+		CoTaskMemFree(pidl);
 	}
 	return result;
 }
