@@ -55,8 +55,8 @@ AC_CHECK_FUNCS([ftruncate fgetpos fnmatch mkstemp strerror strstr])
 # autoscan end
 
 
-# check for SVN revision
-GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
+# check for VCS revision
+GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 

@@ -4,7 +4,7 @@ Quick Guide for new translations
 If you would like to translate Geany into another language, have a look at the
 language statistics page at [1] first to see if your desired language already
 exists. If it already exists, please read the "Notes for updating translations"
-section. Otherwise, get the SVN version of Geany, change to the po directory and
+section. Otherwise, get the Git version of Geany, change to the po directory and
 start the new translation with:
 
 $ msginit -l ll_CC -o ll.po -i geany.pot
