@@ -6407,7 +6407,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkImageMenuItem" id="preferences2">
+                          <object class="GtkImageMenuItem" id="properties1">
                             <property name="label">gtk-properties</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>

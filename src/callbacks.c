@@ -1124,7 +1124,7 @@ static void on_comments_fileheader_activate(GtkMenuItem *menuitem, gpointer user
 }
 
 
-static void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	g_return_if_fail(doc != NULL);
