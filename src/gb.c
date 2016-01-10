@@ -3,6 +3,7 @@
  *
  *      Copyright 2005-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
  *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2014 Colomban Wendling <ban(at)herbesfolles(dot)org>
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -20,1780 +21,468 @@
  */
 
 /*
- * GTK-Bandit.
+ * A small Pong-like.
  */
 
 #include "utils.h"
 
 #include "gtkcompat.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <signal.h>
-#include <unistd.h>
-#include <gdk-pixbuf/gdk-pixdata.h>
 
-#define MAX_PICS 10
-#define LOOP_DELAY 200000	/* micro seconds */
-
-#define IMAGE_BUTTON_UP		10
-#define IMAGE_BUTTON_DOWN	11
+#define AREA_SIZE 300
+#define BALL_SIZE 4
+#define BORDER_THIKNESS 4
+#define HANDLE_THIKNESS 4
+#define HANDLE_SHRINK 3
 
 
-gushort bout;
-gint points;
-gushort iconset;
-GtkWidget *image1, *image2, *image3, *image4, *label1, *label2, *label3, *okbutton1, *textview1;
-gchar info_texts[4][50];
-const gchar *help_text;
-gboolean is_running;
-static GdkPixbuf **icons;
-
-static GtkWidget *gb_window = NULL;
-
-static gint gb_destroyapp (GtkWidget *widget, gpointer gdata);
-static gint destroydialog (GtkWidget *widget, gpointer data);
-static void update_labels(GtkWidget *window, gint init, gint won);
-static void arm_clicked_cb(GtkButton *button, gpointer user_data);
-static void help_clicked_cb(GtkButton *button, gpointer user_data);
-static void close_clicked_cb(GtkButton *button, gpointer user_data);
+#define GEANY_TYPE_PONG		(geany_pong_get_type())
+#define GEANY_PONG(o)		(G_TYPE_CHECK_INSTANCE_CAST((o), GEANY_TYPE_PONG, GeanyPong))
+#define GEANY_IS_PONG(o)	(G_TYPE_CHECK_INSTANCE_TYPE((o), GEANY_TYPE_PONG))
 
 
+typedef struct _GeanyPong GeanyPong;
+typedef struct _GeanyPongClass GeanyPongClass;
 
-static void create_window(GtkWindow *parent)
+struct _GeanyPong
 {
-	GtkWidget *vbox1;
-	GtkWidget *hbox1;
-	GtkWidget *button1;
-	GtkWidget *hbox2;
-	GtkWidget *button4;
-	GtkWidget *button5;
+	GtkDialog parent;
+	/* no need for private data as the whole thing is private */
 
-	gb_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title(GTK_WINDOW(gb_window), "Happy Easter!");
-	gtk_window_set_resizable(GTK_WINDOW(gb_window), FALSE);
-	gtk_window_set_position(GTK_WINDOW(gb_window), GTK_WIN_POS_CENTER);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(gb_window), TRUE);
-	gtk_window_set_type_hint(GTK_WINDOW(gb_window), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(gb_window), FALSE);
-	gtk_window_set_modal(GTK_WINDOW(gb_window), TRUE);
-	gtk_window_set_skip_pager_hint(GTK_WINDOW(gb_window), TRUE);
-	gtk_window_set_transient_for(GTK_WINDOW(gb_window), parent);
+	GtkWidget *score_label;
+	GtkWidget *area;
 
-	vbox1 = gtk_vbox_new(FALSE, 0);
-	gtk_widget_show(vbox1);
-	gtk_container_add(GTK_CONTAINER(gb_window), vbox1);
+	gint area_height;
+	gint area_width;
 
-	label2 = gtk_label_new("title");
-	gtk_widget_show(label2);
-	gtk_box_pack_start(GTK_BOX(vbox1), label2, FALSE, FALSE, 5);
+	guint ball_speed;
+	gdouble ball_pos[2];
+	gdouble ball_vec[2];
+	gint handle_width;
+	gint handle_pos;
 
-	hbox1 = gtk_hbox_new(TRUE, 4);
-	gtk_widget_show(hbox1);
-	gtk_box_pack_start(GTK_BOX(vbox1), hbox1, TRUE, FALSE, 5);
-	gtk_container_set_border_width(GTK_CONTAINER(hbox1), 4);
+	guint score;
 
-	image1 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show(image1);
-	gtk_box_pack_start(GTK_BOX(hbox1), image1, TRUE, FALSE, 0);
+	guint source_id;
+};
 
-	image2 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show(image2);
-	gtk_box_pack_start(GTK_BOX(hbox1), image2, TRUE, FALSE, 0);
+struct _GeanyPongClass
+{
+	GtkDialogClass parent_class;
+};
 
-	image3 = gtk_image_new_from_stock(GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_set_name(image3, "image3");
-	gtk_widget_show(image3);
-	gtk_box_pack_start(GTK_BOX(hbox1), image3, TRUE, FALSE, 0);
 
-	button1 = gtk_button_new();
-	gtk_widget_show(button1);
-	gtk_box_pack_start(GTK_BOX(hbox1), button1, FALSE, FALSE, 0);
-	gtk_container_set_border_width(GTK_CONTAINER(button1), 4);
-	gtk_button_set_relief(GTK_BUTTON(button1), GTK_RELIEF_NONE);
-	gtk_button_set_focus_on_click(GTK_BUTTON(button1), FALSE);
+static void geany_pong_finalize(GObject *obj);
+static void geany_pong_response(GtkDialog *self, gint response);
+static GType geany_pong_get_type(void) G_GNUC_CONST;
 
-	image4 = gtk_image_new_from_pixbuf(icons[IMAGE_BUTTON_UP]);
-	gtk_widget_show(image4);
-	gtk_container_add(GTK_CONTAINER(button1), image4);
 
-	label3 = gtk_label_new("label3");
-	gtk_widget_show(label3);
-	gtk_box_pack_start(GTK_BOX(vbox1), label3, FALSE, FALSE, 0);
+G_DEFINE_TYPE(GeanyPong, geany_pong, GTK_TYPE_DIALOG)
 
-	label1 = gtk_label_new("points");
-	gtk_widget_show(label1);
-	gtk_box_pack_start(GTK_BOX(vbox1), label1, FALSE, FALSE, 5);
 
-	hbox2 = gtk_hbox_new(FALSE, 5);
-	gtk_widget_show(hbox2);
-	gtk_box_set_homogeneous(GTK_BOX(hbox2), TRUE);
-	gtk_box_pack_start(GTK_BOX(vbox1), hbox2, TRUE, FALSE, 0);
+#if GTK_CHECK_VERSION(3, 0, 0)
+static void geany_pong_set_cairo_source_color(cairo_t *cr, GdkRGBA *c, gdouble a)
+{
+	cairo_set_source_rgba(cr, c->red, c->green, c->blue, MIN(c->alpha, a));
+}
+#else
+static void geany_pong_set_cairo_source_color(cairo_t *cr, GdkColor *c, gdouble a)
+{
+	cairo_set_source_rgba(cr, c->red/65535.0, c->green/65535.0, c->blue/65535.0, a);
+}
+#endif
 
-	button4 = gtk_button_new_from_stock(GTK_STOCK_HELP);
-	gtk_widget_show(button4);
-	gtk_box_pack_start(GTK_BOX(hbox2), button4, FALSE, FALSE, 0);
-	gtk_container_set_border_width(GTK_CONTAINER(button4), 5);
 
-	button5 = gtk_button_new_from_stock(GTK_STOCK_CLOSE);
-	gtk_widget_show(button5);
-	gtk_box_pack_start(GTK_BOX(hbox2), button5, FALSE, FALSE, 0);
-	gtk_container_set_border_width(GTK_CONTAINER(button5), 5);
+static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *self)
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+	/* we use the window style context because the area one has a transparent
+	 * background and we want something to paint for the overlay */
+	GtkStyleContext *ctx = gtk_widget_get_style_context(GTK_WIDGET(self));
+	GdkRGBA fg, bg;
 
-	g_signal_connect(button1, "clicked", G_CALLBACK(arm_clicked_cb), NULL);
-	g_signal_connect(button4, "clicked", G_CALLBACK(help_clicked_cb), parent);
-	g_signal_connect(button5, "clicked", G_CALLBACK(close_clicked_cb), NULL);
+	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_ACTIVE, &fg);
+	gtk_style_context_get_background_color(ctx, GTK_STATE_FLAG_BACKDROP, &bg);
+#else
+	GtkStyle *style = gtk_widget_get_style(area);
+	GdkColor fg = style->fg[GTK_STATE_NORMAL];
+	GdkColor bg = style->bg[GTK_STATE_NORMAL];
+#endif
 
-	gtk_widget_grab_focus(button4);
+	self->area_width = gtk_widget_get_allocated_width(area);
+	self->area_height = gtk_widget_get_allocated_height(area);
+
+	cairo_set_line_width(cr, BORDER_THIKNESS);
+
+	/* draw the border */
+	cairo_rectangle(cr, BORDER_THIKNESS/2, BORDER_THIKNESS/2,
+			self->area_width - BORDER_THIKNESS, self->area_height /* we don't wanna see the bottom */);
+	geany_pong_set_cairo_source_color(cr, &fg, 1.0);
+	cairo_stroke(cr);
+
+	/* draw the handle */
+	cairo_rectangle(cr, self->handle_pos - self->handle_width/2, self->area_height - HANDLE_THIKNESS,
+						self->handle_width, HANDLE_THIKNESS);
+	cairo_fill(cr);
+
+	/* draw the ball */
+	cairo_arc(cr, self->ball_pos[0], self->ball_pos[1], BALL_SIZE, 0, 2*G_PI);
+	cairo_fill(cr);
+
+	/* if not running, add an info */
+	if (! self->source_id || self->handle_width < 1)
+	{
+		PangoLayout *layout;
+		gint pw, ph;
+		gdouble scale;
+
+		geany_pong_set_cairo_source_color(cr, &bg, 0.8);
+		cairo_rectangle(cr, 0, 0, self->area_width, self->area_height);
+		cairo_paint(cr);
+
+		geany_pong_set_cairo_source_color(cr, &fg, 1.0);
+		layout = pango_cairo_create_layout(cr);
+#if GTK_CHECK_VERSION(3, 0, 0)
+		PangoFontDescription *font = NULL;
+		gtk_style_context_get(ctx, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_FONT, &font, NULL);
+		if (font)
+		{
+			pango_layout_set_font_description(layout, font);
+			pango_font_description_free(font);
+		}
+#else
+		pango_layout_set_font_description(layout, style->font_desc);
+#endif
+		if (! self->handle_width)
+			pango_layout_set_markup(layout, "<b>You won!</b>\n<small>OK, go back to work now.</small>", -1);
+		else
+			pango_layout_set_text(layout, "Click to Play", -1);
+		pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+		pango_layout_get_pixel_size(layout, &pw, &ph);
+
+		scale = MIN(0.9 * self->area_width / pw, 0.9 * self->area_height / ph);
+		cairo_move_to(cr, (self->area_width - pw * scale) / 2, (self->area_height - ph * scale) / 2);
+		cairo_scale(cr, scale, scale);
+		pango_cairo_show_layout(cr, layout);
+
+		g_object_unref(layout);
+	}
+
+	return TRUE;
 }
 
 
-static GtkWidget *create_help_dialog(GtkWindow *parent)
+#if ! GTK_CHECK_VERSION(3, 0, 0)
+static gboolean geany_pong_area_expose(GtkWidget *area, GdkEventExpose *event, GeanyPong *self)
 {
-	GtkWidget *help_dialog;
-	GtkWidget *dialog_vbox1;
-	GtkWidget *scrolledwindow1;
-	GtkWidget *dialog_action_area1;
+	cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(area));
+	gboolean ret;
 
-	help_dialog = gtk_dialog_new();
-	gtk_container_set_border_width(GTK_CONTAINER(help_dialog), 1);
-	gtk_window_set_title(GTK_WINDOW(help_dialog), "Help");
-	gtk_window_set_type_hint(GTK_WINDOW(help_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_modal(GTK_WINDOW(help_dialog), TRUE);
-	gtk_window_set_transient_for(GTK_WINDOW(help_dialog), parent);
+	ret = geany_pong_area_draw(area, cr, self);
+	cairo_destroy(cr);
 
-	dialog_vbox1 = gtk_dialog_get_content_area(GTK_DIALOG(help_dialog));
-	gtk_widget_show(dialog_vbox1);
+	return ret;
+}
+#endif
 
-	scrolledwindow1 = gtk_scrolled_window_new(NULL, NULL);
-	gtk_widget_show(scrolledwindow1);
-	gtk_box_pack_start(GTK_BOX (dialog_vbox1), scrolledwindow1, TRUE, TRUE, 3);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwindow1), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow1), GTK_SHADOW_IN);
 
-	textview1 = gtk_text_view_new();
-	gtk_widget_show(textview1);
-	gtk_container_add(GTK_CONTAINER(scrolledwindow1), textview1);
-	gtk_widget_set_size_request(textview1, 450, -1);
-	gtk_text_view_set_editable(GTK_TEXT_VIEW(textview1), FALSE);
-	gtk_text_view_set_accepts_tab(GTK_TEXT_VIEW(textview1), FALSE);
-	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview1), GTK_WRAP_WORD);
-	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textview1), FALSE);
-	gtk_text_view_set_pixels_above_lines(GTK_TEXT_VIEW(textview1), 1);
-	gtk_text_view_set_pixels_below_lines(GTK_TEXT_VIEW(textview1), 1);
-	gtk_text_view_set_pixels_inside_wrap(GTK_TEXT_VIEW(textview1), 1);
-	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(textview1), 1);
-	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(textview1), 1);
-
-	dialog_action_area1 = gtk_dialog_get_action_area(GTK_DIALOG(help_dialog));
-	gtk_widget_show(dialog_action_area1);
-	gtk_button_box_set_layout(GTK_BUTTON_BOX(dialog_action_area1), GTK_BUTTONBOX_END);
-
-	okbutton1 = gtk_button_new_from_stock(GTK_STOCK_OK);
-	gtk_widget_show(okbutton1);
-	gtk_dialog_add_action_widget(GTK_DIALOG(help_dialog), okbutton1, GTK_RESPONSE_OK);
-	gtk_widget_set_can_default(okbutton1, TRUE);
-
-	return help_dialog;
+static void geany_pong_reset_ball(GeanyPong *self)
+{
+	self->ball_speed = 5;
+	self->ball_pos[0] = self->area_width / 2;
+	self->ball_pos[1] = self->area_height / 2;
+	self->ball_vec[0] = g_random_double_range(.2, .8);
+	self->ball_vec[1] = 1.0 - self->ball_vec[0];
+	if (g_random_boolean())
+		self->ball_vec[0] *= -1;
 }
 
 
-static gint destroydialog(GtkWidget *widget, gpointer data)
+static void geany_pong_update_score(GeanyPong *self)
 {
-	gtk_widget_destroy(GTK_WIDGET(data));
-	return (FALSE);
+	gchar buf[16];
+
+	g_snprintf(buf, sizeof buf, "%u", self->score);
+	gtk_label_set_text(GTK_LABEL(self->score_label), buf);
 }
 
 
-static void close_clicked_cb(GtkButton *button, gpointer user_data)
+static gboolean geany_pong_area_timeout(gpointer data)
 {
-	gb_destroyapp(GTK_WIDGET(button), user_data);
-}
+	GeanyPong *self = data;
+	const gdouble x = BORDER_THIKNESS + BALL_SIZE/2;
+	const gdouble y = BORDER_THIKNESS + BALL_SIZE/2;
+	const gdouble w = self->area_width - BORDER_THIKNESS - BALL_SIZE/2;
+	const gdouble h = self->area_height - HANDLE_THIKNESS - BALL_SIZE/2;
+	const gdouble old_ball_pos[2] = { self->ball_pos[0], self->ball_pos[1] };
+	const gdouble step[2] = { self->ball_speed * self->ball_vec[0],
+							  self->ball_speed * self->ball_vec[1] };
 
+	/* left & right */
+	if (self->ball_pos[0] + step[0] >= w ||
+		self->ball_pos[0] + step[0] <= x)
+		self->ball_vec[0] = -self->ball_vec[0];
+	/* top */
+	if (self->ball_pos[1] + step[1] <= y)
+		self->ball_vec[1] = -self->ball_vec[1];
+	/* bottom */
+	if (self->ball_pos[1] + step[1] >= h)
+	{
+		if (self->ball_pos[0] + step[0] >= self->handle_pos - self->handle_width/2 &&
+			self->ball_pos[0] + step[0] <= self->handle_pos + self->handle_width/2 &&
+			/* only bounce *above* the handle, not below */
+			self->ball_pos[1] <= h)
+		{
+			self->score += self->ball_speed * 2;
+			geany_pong_update_score(self);
 
-static gint get_points(gushort a, gushort b, gushort c)
-{
-	if (a == b && b == c)
-		return 2;
-	else if (a == b || b == c || a == c)
-		return 1;
+			self->ball_vec[1] = -self->ball_vec[1];
+			self->ball_speed++;
+			self->handle_width -= HANDLE_SHRINK;
+			/* we don't allow a handle smaller than a shrink step */
+			if (self->handle_width < HANDLE_SHRINK)
+			{
+				self->handle_width = 0;
+				self->source_id = 0;
+			}
+		}
+		/* let the ball fall completely off before losing */
+		else if (self->ball_pos[1] + step[1] >= self->area_height + BALL_SIZE)
+		{	/* lost! */
+			self->source_id = 0;
+			geany_pong_reset_ball(self);
+		}
+	}
+
+	if (self->source_id)
+	{
+		self->ball_pos[0] += self->ball_speed * self->ball_vec[0];
+		self->ball_pos[1] += self->ball_speed * self->ball_vec[1];
+	}
+
+	if (! self->source_id)
+	{
+		/* we will draw a text all over, just invalidate everything */
+		gtk_widget_queue_draw(self->area);
+	}
 	else
-		return 0;
-}
-
-
-/* ensure all three icons are different */
-static void ensure_different_icons(gushort *a, gushort *b, gushort *c)
-{
-	if (*a == *b)
-		*b = (gushort) ((*b + 1) % MAX_PICS);
-	if (*b == *c)
-		*c = (gushort) ((*c + 1) % MAX_PICS);
-}
-
-
-static void arm_clicked_cb(GtkButton *button, gpointer user_data)
-{
-	gushort erg_a, erg_b, erg_c, l, m, n;
-	gint i, loops;
-
-	if (is_running)
-		return;	/* prevent multiple clicks */
-	is_running = TRUE;
-	/* change button-image */
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_DOWN]);
-
-	bout++;
-	update_labels(gb_window, FALSE, 3);
-
-	l = (gushort) g_random_int_range(0, MAX_PICS);
-	m = (gushort) g_random_int_range(0, MAX_PICS);
-	n = (gushort) g_random_int_range(0, MAX_PICS);
-	erg_a = (gushort) g_random_int_range(0, MAX_PICS);
-	erg_b = (gushort) g_random_int_range(0, MAX_PICS);
-	erg_c = (gushort) g_random_int_range(0, MAX_PICS);
-
-	ensure_different_icons(&l, &m, &n);
-
-	/* assign icons */
-	loops = 30;
-	for (i = 0; i < loops; i++)
 	{
-		if (l > 9) l = 0;
-		if (m > 9) m = 0;
-		if (n > 9) n = 0;
-		/* simulate stopping of first and second slot */
-		if (i < (loops - 10))
-			gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[l]);
-		else
-			gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[erg_a]);
-		if (i < (loops - 5))
-			gtk_image_set_from_pixbuf(GTK_IMAGE(image2), icons[m]);
-		else
-			gtk_image_set_from_pixbuf(GTK_IMAGE(image2), icons[erg_b]);
+		/* compute the rough bounding box to redraw the ball */
+		const gint bb[4] = {
+			(gint) MIN(self->ball_pos[0], old_ball_pos[0]) - BALL_SIZE - 1,
+			(gint) MIN(self->ball_pos[1], old_ball_pos[1]) - BALL_SIZE - 1,
+			(gint) MAX(self->ball_pos[0], old_ball_pos[0]) + BALL_SIZE + 1,
+			(gint) MAX(self->ball_pos[1], old_ball_pos[1]) + BALL_SIZE + 1
+		};
 
-		gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[n]);
-		l++;
-		m++;
-		n++;
-		/* refresh()-replacement */
-		while (g_main_context_iteration(NULL, FALSE));
-		g_usleep(LOOP_DELAY);
+		gtk_widget_queue_draw_area(self->area, bb[0], bb[1], bb[2] - bb[0], bb[3] - bb[1]);
+		/* always redraw the handle in case it has moved */
+		gtk_widget_queue_draw_area(self->area,
+				BORDER_THIKNESS, self->area_height - HANDLE_THIKNESS,
+				self->area_width - BORDER_THIKNESS*2, HANDLE_THIKNESS);
 	}
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[erg_c]);
 
-	i = get_points(erg_a, erg_b, erg_c);
-	points += i * 50;
-
-	update_labels(gb_window, FALSE, i);
-
-	/* change button image */
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image4), icons[IMAGE_BUTTON_UP]);
-	is_running = FALSE;
-
+	return self->source_id != 0;
 }
 
 
-static void help_clicked_cb(GtkButton *button, gpointer user_data)
+static gboolean geany_pong_area_button_press(GtkWidget *area, GdkEventButton *event, GeanyPong *self)
 {
-	GtkWidget *dialog = create_help_dialog(user_data);
-	GtkTextBuffer *buffer;
-
-	g_signal_connect(dialog, "delete-event", G_CALLBACK(destroydialog), G_OBJECT(dialog));
-	g_signal_connect(okbutton1, "clicked", G_CALLBACK(destroydialog), G_OBJECT(dialog));
-
-	buffer = gtk_text_buffer_new(NULL);
-	gtk_text_buffer_set_text(buffer, help_text, -1);
-	gtk_text_view_set_buffer(GTK_TEXT_VIEW(textview1), buffer);
-
-	gtk_widget_show(dialog);
-}
-
-
-static void init_strings(void)
-{
-	help_text = "GTK-Bandit - the one-armed bandit\n\nYour job in this game is to pull the arm of the bandit and then the figures begins to roll. Now hope that the rolls stop with the same figures and you will get 100 points. If you have anyhow two equal figures, you will get 50 points. Otherwise you won't get anything.\n";
-
-	strcpy(info_texts[0], "Sorry boy, no equal figures in this turn.\n");
-	strcpy(info_texts[1], "Ok, anyway two figures are equal.\n");
-	strcpy(info_texts[2], "You lucky bastard, all three figures are equal.\n");
-	strcpy(info_texts[3], "\n");
-}
-
-
-static void update_labels(GtkWidget *window, gint init, gint won)
-{
-	gchar pts[50];
-
-	if (init)
+	if (event->type == GDK_BUTTON_PRESS &&
+		self->handle_width > 0)
 	{
-		gtk_label_set_text(GTK_LABEL(label2), "GTK-Bandit - The one-armed bandit");
-	}
-	gtk_label_set_text(GTK_LABEL(label3), info_texts[won]);
-
-	g_snprintf(pts, 50, "Points: %4d\tRound: %2d\n", points, bout);
-	gtk_label_set_text(GTK_LABEL(label1), pts);
-
-}
-
-
-/* The icons pic1 to pic10 are taken from the Rodent icon theme and are licenced as GPLv2. */
-static const GdkPixdata pic1 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2645, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\315\0\0\0\0\7\0\0\0\16\0\0\0\25\0\0\0\33\0\0\0\37\0\0\0\26\0\0\0\21"
-  "\0\0\0\6\202\0\0\0\0\1\0\0\0\1\223\0\0\0\0\14\0\0\0\2\3\2\1:\2\2\1e\15"
-  "\13\3\251\10\6\2\317\0\0\0\335\0\0\0\340\6\4\0\325\15\12\2\275\10\6\2"
-  "|\1\1\0K\0\0\0\30\222\0\0\0\0\22\0\0\0\2\1\1\0""7\20\15\5\242\7\6\2\347"
-  "\0\0\0\377\12\10\2\377*!\13\3776*\16\3779-\16\377-#\11\377\31\23\4\377"
-  "\0\0\0\377\3\2\0\374\16\12\1\277\15\11\2_\0\0\0\22\0\0\0\0\0\0\0\1\213"
-  "\0\0\0\0\24\11\4\4\0\0\0\0\0\0\0\0\4\16\13\4v\2\1\0\337\0\0\0\3770'\17"
-  "\377\225y0\375\300\234<\376\334\261A\376\350\271B\376\353\272>\376\336"
-  "\2565\376\307\232+\376\244|\37\375Q=\14\377\0\0\0\377\0\0\0\366\15\11"
-  "\1\244\0\0\0&\213\0\0\0\0\26\1\0\0\0\0\0\0\0\0\0\0\25\14\11\4\217\1\1"
-  "\0\377\22\17\5\377\244\2078\377\355\304S\376\360\306T\377\352\300Q\376"
-  "\344\272L\377\340\267G\376\337\263B\377\337\261=\376\341\2607\377\345"
-  "\2611\376\345\255)\377\302\220\34\376;+\6\377\0\0\0\377\20\13\1\277\1"
-  "\1\0C\214\0\0\0\0\25\15\12\4\207\0\0\0\3770(\20\377\326\261M\376\360"
-  "\311Z\377\341\275W\376\343\276X\377\343\276V\376\342\273R\377\341\271"
-  "N\376\337\266H\377\336\262B\376\334\256:\377\331\2523\376\327\244+\377"
-  "\334\245$\377\337\244\34\377kM\11\377\0\0\0\377\17\13\0\301\0\0\0(\212"
-  "\0\0\0\0\27\14\11\4f\0\0\0\376)\"\15\377\356\306X\376\352\305\\\377\344"
-  "\302^\377\345\304`\376\345\304a\377\345\303_\376\344\300Z\377\342\275"
-  "U\376\341\271N\377\337\266H\376\334\261\77\377\333\2558\376\331\250/"
-  "\377\326\242'\376\327\237\37\377\351\251\27\376mN\7\377\0\0\0\377\14"
-  "\10\1\245\0\0\0\13\210\0\0\0\0\31\0\0\0\215\2\2\0\330\27\22\7\377\334"
-  "\267O\376\370\321a\377\356\312c\376\350\310f\377\347\310h\376\347\311"
-  "i\377\346\307f\376\345\304`\377\344\300Z\376\342\274R\377\340\270L\376"
-  "\336\263C\377\334\256;\376\331\2512\377\331\245*\376\335\245\"\377\340"
-  "\244\32\376\350\246\20\377J4\3\377\0\0\0\366\4\3\0\250\0\0\0!\206\0\0"
-  "\0\0\1\0\0\0a\202\0\0\0\377\24\27\23\10\376hW&\377\263\230I\377\312\256"
-  "X\376\364\325s\377\374\336{\376\363\326w\377\351\314n\376\345\305e\377"
-  "\344\302^\376\341\275V\377\336\270N\376\336\264F\377\344\266@\376\352"
-  "\2678\377\347\261/\376\300\220\37\377\254~\24\376jM\10\377&\33\1\376"
-  "\202\0\0\0\377\1\0\0\0\213\206\0\0\0\0\25\0\0\0\234\0\0\0\377\0\0\0\376"
-  "\0\0\0\377\0\0\0\376\0\0\0\377\17\15\6\376D<!\377sg;\376\244\222U\377"
-  "\335\302l\376\361\321n\377\355\313e\376\353\305\\\377\352\302S\376\332"
-  "\261E\377\243\203.\376qX\33\377I8\16\376\23\16\3\377\0\0\0\376\202\0"
-  "\0\0\377\3\0\0\0\376\0\0\0\377\0\0\0\302\206\0\0\0\0\26\0\0\0e\1\1\0"
-  "\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0"
-  "\0\376\0\0\0\377\1\0\0\376\30\24\13\377)\"\21\376*$\21\377\32\26\12\376"
-  "\4\3\1\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377"
-  "\202\0\0\0\376\3\0\0\0\377\12\10\1\246\0\0\0\6\205\0\0\0\0\33\0\0\0h"
-  "\7\5\2\377\1\1\0\375\0\0\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377"
-  "\0\0\0\376\1\1\0\377\1\1\0\376\0\0\0\377$\37\17\376A7\31\377\0\0\0\376"
-  "\0\0\0\377\1\1\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377"
-  "\0\0\0\376\13\10\0\376\22\14\1\377\23\15\0\313\0\0\0\25\204\0\0\0\0\34"
-  "\0\0\0\5\4\3\0\214\21\15\4\377\203i'\376\12\10\3\377\0\0\0\376\1\1\0"
-  "\377\0\0\0\376\0\0\0\377\0\0\0\376\1\0\0\377\0\0\0\376\6\6\3\377\317"
-  "\256R\376\342\274T\377\31\25\10\376\0\0\0\377\1\0\0\376\0\0\0\377\0\0"
-  "\0\376\0\0\0\377\1\1\0\376\0\0\0\377\4\3\0\376\247v\11\376;*\3\377\0"
-  "\0\0\341\0\0\0\34\204\0\0\0\0\34\0\0\0\12\12\6\2\251\25\20\5\377\330"
-  "\254=\376\265\2249\377\"\34\14\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0"
-  "\0\376\0\0\0\377\15\13\6\376\257\222E\377\351\303X\376\351\300Q\377\304"
-  "\237\77\376\35\27\10\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0"
-  "\0\376(\34\2\377\252x\11\376\363\254\15\376A.\3\377\0\0\0\341\0\0\0)"
-  "\204\0\0\0\0\34\0\0\0\11\10\7\1\243\24\17\4\377\304\2333\376\357\301"
-  "F\377\341\267H\376\213r/\377UF\37\3766,\24\377<3\27\376kY)\377\322\261"
-  "P\376\361\311Y\377\340\271N\376\336\265H\377\352\274F\376\330\253:\377"
-  "u[\33\376\77/\14\3770$\7\376H5\11\377\211b\14\376\332\232\15\377\331"
-  "\232\14\376\344\241\15\376\77-\3\377\0\0\0\342\0\0\0&\204\0\0\0\0\34"
-  "\0\0\0\4\1\2\0\206\7\5\1\377\271\221,\376\345\266=\377\334\261A\376\366"
-  "\310M\377\370\313R\376\351\300R\377\354\304T\376\363\311V\377\342\273"
-  "O\376\336\267K\377\337\266G\376\336\262B\377\334\256<\376\333\2545\377"
-  "\350\2632\376\343\255*\377\333\244!\376\347\251\30\377\350\245\20\376"
-  "\317\222\13\377\322\225\14\376\333\233\14\3762#\2\377\1\1\0\340\0\0\0"
-  "\32\205\0\0\0\0\33\0\0\0e\0\0\0\377\234x!\375\346\2647\377\334\256:\376"
-  "\213p(\377\257\213+\376\360\302H\377\354\300K\376\336\264G\377\335\263"
-  "E\376\335\262C\377\334\261\77\376\333\256:\377\332\2535\376\330\247/"
-  "\377\326\243)\376\337\247#\377\351\253\34\376\261{\3\377zU\2\376\317"
-  "\222\14\377\326\227\14\376\304\212\13\376\34\24\1\377\13\10\0\307\0\0"
-  "\0\22\205\0\0\0\0\33\3\2\0C\0\0\0\366YD\20\377\345\260/\376\330\246,"
-  "\376WQB\377\222\222\221\376dT+\377\217q%\376\316\241.\377\327\2511\376"
-  "\334\2542\377\340\2574\376\337\2550\377\331\245&\376\323\235\34\377\314"
-  "\225\23\376\226l\15\377]F\20\376\234\227\213\377BEK\376\312\213\1\377"
-  "\334\233\14\376\241r\11\375\0\0\0\377\7\5\0{\0\0\0\5\205\0\0\0\0\32\0"
-  "\0\0\21\5\4\1\276\14\10\1\377\325\241$\376\337\251(\376\220o\36\377\306"
-  "\312\325\376\377\377\377\377\300\302\306\376tqk\377vmV\376\203p=\377"
-  "\216p(\376\217p$\377\203l5\376wkO\377okc\376\261\262\264\377\375\377"
-  "\377\376\335\343\357\377\177a\36\376\323\223\4\377\337\236\14\376H3\4"
-  "\377\2\1\0\371\1\1\0K\207\0\0\0\0\31\14\11\1u\0\0\0\375kP\17\377\361"
-  "\264&\377\275\214\31\377|vf\376\377\377\377\377\377\377\377\376\377\377"
-  "\377\377\377\377\377\376\346\350\357\377\315\320\326\376\312\314\322"
-  "\377\343\345\354\376\375\377\377\377\377\377\377\376\377\377\377\377"
-  "\377\377\377\376\222\222\222\377\236k\0\376\342\240\14\377\262\177\12"
-  "\377\0\0\0\377\16\12\0\267\0\0\0\20\207\0\0\0\0\32\0\0\0\24\7\5\0\301"
-  "\3\2\0\377\256\200\25\375\362\263!\377jM\14\376\322\326\335\377\377\377"
-  "\377\376\376\376\376\377\377\377\377\376\377\377\377\377\377\377\377"
-  "\376\377\377\377\377\377\377\377\376\377\377\377\377\376\376\376\376"
-  "\377\377\377\377\356\361\371\376^G\23\377\341\237\13\377\330\231\14\377"
-  "*\36\2\377\0\0\0\357\11\6\0N\0\0\0\0\0\0\0\1\207\0\0\0\0\27\5\4\0N\1"
-  "\1\0\354\22\15\1\377\314\224\24\376\323\227\14\377`XD\377\375\377\377"
-  "\376\377\377\377\377\376\376\376\376\376\376\376\377\377\377\377\376"
-  "\377\377\377\377\377\377\377\376\376\376\376\377\377\377\377\376\377"
-  "\377\377\377lki\376\267~\0\377\347\244\15\376O8\4\377\0\0\0\377\13\10"
-  "\0\216\0\0\0\12\212\0\0\0\0\25\14\11\1p\0\0\0\363\23\15\0\377\270\203"
-  "\14\375\302\207\2\377a\\O\376\361\364\374\377\377\377\377\376\375\375"
-  "\375\377\375\375\375\376\375\375\375\377\374\374\374\376\377\377\377"
-  "\377\377\377\377\376qqo\377\241m\0\377\337\235\12\376D0\3\377\0\0\0\377"
-  "\12\10\1\247\0\0\0\24\211\0\0\0\0\30\4\3\0\0\0\0\0\0\0\0\0\5\14\11\0"
-  "t\2\1\0\355\2\1\0\377zW\7\377\265}\0\376nZ.\376\241\240\234\376\377\377"
-  "\377\377\377\377\377\376\376\377\377\377\377\377\377\376\267\267\265"
-  "\377n`A\376\256w\0\376\251x\13\377\35\24\1\377\0\0\0\377\14\11\0\237"
-  "\0\0\0*\0\0\0\0\0\0\0\1\214\0\0\0\0\23\6\5\1Q\5\3\0\307\0\0\0\377\31"
-  "\21\1\377gE\0\377hG\0\375L9\17\376YE\32\376_K\36\376M:\20\376iJ\1\376"
-  "zR\0\3762#\2\377\0\0\0\377\0\0\0\343\14\10\0\202\0\0\0\15\0\0\0\0eJ\15"
-  "\0\213\0\0\0\0\1\3\2\0\0\202\0\0\0\0\17\0\0\0\33\13\10\0~\6\4\0\307\0"
-  "\0\0\376\0\0\0\377\"\30\1\377.\40\0\3771\"\0\377(\34\1\377\11\6\0\377"
-  "\0\0\0\377\4\3\0\333\13\10\1\242\0\0\1""8\0\0\0\5\223\0\0\0\0\12\1\1"
-  "\0\32\2\1\0K\1\0\1u\7\5\0\237\7\5\0\271\7\5\0\301\7\6\0\251\4\3\0\206"
-  "\1\1\0[\4\2\0/\230\0\0\0\0\6\0\0\0\1\0\0\0\10\0\0\0\15\0\0\0\20\0\0\0"
-  "\12\0\0\0\5\315\0\0\0\0",
-};
-
-
-static const GdkPixdata pic2 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2907, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\217\0\0\0\0\3\0\0\0\35\0\0\0>\0\0\0!\233\0\0\0\0\6\0\0\0\11\0\0\0\201"
-  "\23\1\0\344'\4\2\351\13\0\0\332\0\0\0E\231\0\0\0\0\10\0\0\0O\6\0\0\312"
-  "\\\16\6\377\261\30\13\377\266\25\11\377\217\15\6\377\35\1\0\364\0\0\0"
-  "<\223\0\0\0\0\27\10\2\1\30\0\0\0-\0\0\0+\0\0\0I\0\0\0\254<\13\5\374\232"
-  "\33\14\377\307\37\15\375\262\30\13\377\254\24\11\377\264\21\7\376\214"
-  "\11\4\377\25\0\0\334\0\0\0'\0\0\0)\0\0\0O\0\0\0r\0\0\0\212\0\0\0}\0\0"
-  "\0q\0\0\0c\0\0\0C\2\0\0\34\211\0\0\0\0\30\0\0\0+*\13\5\377\\\30\13\377"
-  "X\26\11\377\227\"\17\377\315)\23\377\305#\20\376\267\35\14\376\263\30"
-  "\13\377\257\25\11\377\252\20\7\376\266\14\5\376L\3\1\377!\0\0\371\77"
-  "\0\0\376J\0\0\377d\0\0\377u\0\0\377g\0\0\377U\0\0\377B\0\0\377\34\0\0"
-  "\332\0\0\0\216\0\0\0)\210\0\0\0\0\30\0\0\0\22Z\31\13\377\374D\37\375"
-  "\3428\31\376\320/\25\376\302'\22\377\275\"\17\377\267\35\14\377\263\30"
-  "\13\376\257\25\11\377\252\20\7\376\246\14\5\377\217\7\3\376L\0\0\377"
-  "\264\0\0\376\243\0\0\377\237\0\0\376\235\0\0\376\237\0\0\376\242\0\0"
-  "\377\256\0\0\377p\0\0\377\0\0\0\260\0\0\0D\207\0\0\0\0\31\33\7\3\1\0"
-  "\0\0\0""8\20\7\351\3208\31\377\3245\27\376\312.\24\376\303'\22\377\275"
-  "\"\17\376\267\35\14\377\263\30\13\376\257\25\11\377\252\20\7\376\243"
-  "\13\5\377\257\10\3\376>\1\0\377x\0\0\376\237\0\0\377\231\0\0\376\230"
-  "\0\0\377\231\0\0\377\227\0\0\376\247\0\0\377U\0\0\377\0\0\0\221\0\0\0"
-  "\1\206\0\0\0\0\1\305.\27\0\202\0\0\0\0\26\14\4\1\263\2671\26\377\330"
-  "6\30\377\312.\24\376\303'\22\377\275\"\17\376\267\35\14\377\263\30\13"
-  "\376\257\25\11\377\262\21\7\376\257\15\5\377e\5\2\376A\0\0\377\224\0"
-  "\0\376\233\0\0\377\231\0\0\376\230\0\0\376\234\0\0\376\244\0\0\377X\0"
-  "\0\377\0\0\0\245\0\0\0\13\206\0\0\0\0\30\37\12\2\0\0\0\0\0\0\0\0\25\0"
-  "\0\0\201#\10\3\364\241+\23\377\3347\30\377\311.\24\376\303'\22\377\273"
-  "!\17\376\267\34\14\377\276\32\14\376\276\26\12\377\215\16\6\376G\4\1"
-  "\377M\0\0\376\237\0\0\377\233\0\0\376\230\0\0\377\227\0\0\376\240\0\0"
-  "\376\234\0\0\377E\0\0\377\0\0\0\207\202\0\0\0\0\1\4\0\0\0\206\0\0\0\0"
-  "\26\0\0\0d(\12\5\344\225\"\17\377\213\35\15\377\205%\21\376\3459\32\377"
-  "\3210\25\376\310)\23\377\276#\20\376\253\34\14\377o\20\7\376A\7\3\377"
-  "J\1\0\376~\0\0\377\244\0\0\376\230\0\0\377\232\0\0\376\237\0\0\377\233"
-  "\0\0\377p\0\0\377&\0\0\350\0\0\0G\210\0\0\0\0\27\0\0\0\14\0\0\0\244e"
-  "\30\13\377\315.\25\377\316'\21\377\247\31\12\376Q\23\10\377\204#\20\377"
-  "s\32\13\376b\20\7\377P\7\3\376A\1\0\377k\0\0\376\224\0\0\377\234\0\0"
-  "\376\236\0\0\377\227\0\0\376\240\0\0\377\240\0\0\376o\0\0\377G\23\2\377"
-  "\0\0\0\377\3\13\0\263\210\0\0\0\0\31\0\0\0\36\0\0\0\274\203\37\16\377"
-  "\321,\24\376\274\40\16\376\265\32\13\377\263\25\11\377\212\13\4\376l"
-  "\2\0\377r\0\0\376\200\0\0\377\227\0\0\376\247\0\0\377\236\0\0\376\231"
-  "\0\0\377\237\0\0\376\231\0\0\377\225\0\0\376`\0\0\377=\4\0\376}[\12\377"
-  "\322\236\30\376\\B\7\376\0\0\0\377\21\14\0\211\206\0\0\0\0\35\0\0\0\15"
-  "\0\0\0\245\202\35\15\377\322)\22\377\271\35\15\376\260\26\12\376\253"
-  "\21\7\376\244\13\4\377\244\5\1\376\241\0\0\377\236\0\0\376\234\0\0\377"
-  "\232\0\0\376\237\0\0\377\250\0\0\376\222\0\0\377k\0\0\376_\22\7\377I"
-  "2\20\376]ZE\377\211\220\211\376\205{\\\377\277\214\25\376\341\241\21"
-  "\376,\37\1\377\0\0\0\361\13\7\0""6\0\0\0\0\1\0\0\0\203\0\0\0\0\35\0\0"
-  "\0D\12\2\0\305\236\34\14\377\306\34\14\377\270\25\11\377\260\16\6\377"
-  "\251\10\3\377\243\2\0\376\237\0\0\377\233\0\0\377\232\0\0\376\225\0\0"
-  "\377\226\0\0\376q\15\15\377A\4\5\376^1\30\377\220|<\376\314\260J\377"
-  "\211v\77\376\370\372\377\377\377\377\377\376\377\377\377\377ynW\376\326"
-  "\226\7\376\241r\11\377\0\0\0\377\13\10\0\227\0\0\0\0\0\0\0\1\203\0\0"
-  "\0\0\34\0\0\0!\0\0\0\217.\6\2\360w\14\5\377u\10\3\377u\4\1\377z\0\0\377"
-  "p\0\0\376e\0\0\377e\7\2\377X\23\17\376XCD\377\20\13\13\376gmm\377\273"
-  "\306\312\376\263\241S\377\373\330i\376\330\261E\377\250\240\211\376\332"
-  "\334\342\377$$#\376\246\246\246\377\241\240\235\376\300\210\5\377\336"
-  "\235\15\376\34\24\1\377\7\5\0\326\10\6\0\24\205\0\0\0\0\33\5\0\0\16\0"
-  "\0\0,\0\0\0V\0\0\0^\0\0\0x\11\5\1\343\22\23\7\377\227\2023\376\307\254"
-  "J\377xtO\376\264\272\302\377\0\0\0\376\0\0\0\377yz~\376\307\253Y\377"
-  "\352\307_\376\341\271I\377\217\204e\376^bj\377\0\0\0\376*+.\377sqk\376"
-  "\315\222\12\377\332\232\14\377_C\5\377\2\1\0\376\4\2\0""8\211\0\0\0\0"
-  "\27\0\0\0\7\2\4\0\3300'\15\377\356\301H\376\363\311U\377\306\247O\376"
-  "jjg\377\37!)\37615=\377pfH\376\353\307]\377\341\274U\376\351\300O\377"
-  "\253\2139\376ggh\377\21\25\37\376:<A\377\235{.\376\326\227\13\377\335"
-  "\234\14\376\202\\\7\376\0\0\0\377\1\1\0I\211\0\0\0\0\27\0\0\0\30\0\0"
-  "\0\3436*\15\377\350\271B\376\337\266H\377\350\277Q\376\276\237I\377\243"
-  "\220Y\376\252\224T\377\333\270S\376\345\300V\377\340\272O\376\335\263"
-  "F\377\344\266>\376\263\214)\377\255\213<\376\261\207#\377\322\230\23"
-  "\376\322\225\15\377\336\235\14\376\215d\7\375\0\0\0\377\0\0\0Q\211\0"
-  "\0\0\0\27\0\0\0\22\10\7\1\327+\"\11\377\334\2557\376\340\264A\377\336"
-  "\264F\376\347\276N\377\347\275N\376\351\300P\377\345\275P\376\337\266"
-  "J\377\336\264E\376\334\260>\377\332\2547\376\341\255.\377\336\247#\376"
-  "\334\242\33\377\323\230\22\376\320\223\13\377\335\234\14\376yU\6\376"
-  "\0\0\0\377\2\1\0E\211\0\0\0\0\27\0\0\0\14\25\20\4\302\21\15\3\377\304"
-  "\230,\376\343\262:\377\345\267\77\376\350\272B\377\346\272D\376\347\273"
-  "F\377\346\271E\376\343\267B\377\341\263>\376\340\2607\377\340\2550\376"
-  "\337\251'\377\335\244\37\376\333\237\25\377\334\234\15\376\317\223\13"
-  "\377\335\234\14\376L6\4\377\6\4\0\370\5\3\0""4\212\0\0\0\0\26\24\17\3"
-  "u\0\0\0\377\223p\34\375\352\2642\377\227w'\376\250\2105\377\244\200%"
-  "\376\241}\40\377\254\205#\376\270\216$\377\301\223\40\376\270\213\33"
-  "\377\253\177\25\376\236s\14\377\233n\7\376\250{\26\377\205`\15\376\314"
-  "\220\13\376\324\226\14\376\7\5\0\377\11\6\0\301\15\10\0\7\212\0\0\0\0"
-  "\27\1\1\0>\17\13\2\370&\34\6\377\352\261)\376\230r\31\376BA=\377\261"
-  "\264\275\376\312\313\316\377\277\275\270\376\255\250\233\377\237\227"
-  "\203\376\251\242\223\377\271\266\257\376\307\307\310\377\302\307\321"
-  "\376VWY\377pP\13\376\346\242\13\377}X\7\377\0\0\0\377\21\14\0\205\0\0"
-  "\0\0\0\0\0\1\212\0\0\0\0\24\27\21\2\237\0\0\0\377zZ\17\377\357\262\""
-  "\377\313\231\"\377~g1\376\261\261\260\377\333\340\353\376\377\377\377"
-  "\377\377\377\377\376\377\377\377\377\350\356\372\376\276\300\304\377"
-  "\200nF\376\261}\12\377\347\243\13\377\277\207\13\376\12\7\0\377\6\4\0"
-  "\331\0\0\0\33\214\0\0\0\0\23\5\4\0""3\24\16\2\341\0\0\0\377\234q\20\376"
-  "\352\253\33\376\345\250\32\376\247v\11\377\224p\36\376\214yO\377\206"
-  "~l\376\212zV\377\220o$\376\231i\0\377\325\225\6\376\342\240\15\377\324"
-  "\226\14\376%\32\2\377\4\2\0\377\21\14\0f\216\0\0\0\0\21\13\10\0J\24\16"
-  "\1\360\0\0\0\377}Y\10\376\330\232\20\377\346\244\20\377\326\227\11\376"
-  "\313\215\1\377\307\210\0\376\312\213\0\377\321\221\3\376\337\235\12\376"
-  "\345\242\15\377\255z\11\376\37\25\1\377\0\0\0\377\17\11\0\211\215\0\0"
-  "\0\0\1\36\7\3\0\202\0\0\0\0\22\0\0\0k\14\12\0\350\0\0\0\377\37\33\0\376"
-  "\211c\7\377\314\220\13\376\332\232\14\377\330\231\14\376\327\231\14\377"
-  "\331\231\14\376\247w\11\376K9\3\377\0\0\0\377\0\0\0\376\20\12\0\255\0"
-  "\0\0\16\0\0\0\0\21\4\1\1\215\0\0\0\0\5F\23\10\254\234+\23\376\2745\27"
-  "\375p\37\15\371/\10\6\377\202\0\0\0\377\13\40\30\1\3777'\3\377,\40\2"
-  "\377\0\6\0\377\0\0\0\376\24\0\3\377\\\30\13\374\2756\30\375\3047\31\373"
-  "l\36\15\361\0\0\0.\215\0\0\0\0\23\0\0\0G\236&\21\377\3375\30\377\321"
-  "2\26\376\3355\30\377\3335\27\376\251(\21\376y\34\13\376\20\2\1\370\0"
-  "\0\0\375\0\0\0\371O\21\7\373\235%\20\377\3100\25\376\3416\30\377\320"
-  "2\26\377\3171\26\376\3212\26\377>\16\6\255\215\0\0\0\0\24""9\11\4x\250"
-  "\36\15\377\301\"\17\377\275\"\17\377\274\"\17\377\276\"\17\376\307$\20"
-  "\376\324'\21\376Y\20\7\376\0\0\0\376\31\4\1\376\272\"\16\376\317&\21"
-  "\377\301#\17\376\274!\17\377\275\"\17\376\274!\17\377\277\"\17\377s\24"
-  "\10\326\0\0\0\12\214\0\0\0\0\24'\5\1g\230\23\10\377\272\27\12\377\261"
-  "\26\12\376\262\26\12\376\265\27\12\377\270\27\12\377\277\27\12\377I\10"
-  "\3\377\0\0\0\377\24\2\0\377\244\24\10\377\276\27\12\377\267\27\12\377"
-  "\263\26\12\376\261\26\12\376\262\26\12\376\267\27\12\377]\13\4\316\0"
-  "\0\0\1\214\0\0\0\0\25\0\0\0!V\6\2\370\236\13\4\377\257\14\4\377\250\14"
-  "\4\377\222\12\4\377\177\12\3\377v\11\3\3672\3\0\256\1\0\0\253\24\0\0"
-  "\246e\7\2\331\177\12\3\377\211\12\3\377\241\13\4\377\257\14\4\377\247"
-  "\14\4\377{\11\3\377\14\0\0o\0\0\0\0A\6\3\0\212\0\0\0\0\11""6\2\1\0\0"
-  "\0\0\0\0\0\0#9\1\0\232L\1\0\320H\1\0\2730\0\0w\0\0\0A\0\0\0+\203\0\0"
-  "\0\0\11\0\0\0\22\0\0\0=\36\0\0ZB\1\0\244L\1\0\320F\1\0\270\12\0\0U\0"
-  "\0\0\0\"\2\0\1\204\0\0\0\0",
-};
-
-
-static const GdkPixdata pic3 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2383, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\354\0\0\0\0\10\1\1\0\34\0\0\0H\0\0\0Z\0\0\0k\0\0\0o\0\0\0\\\0\0\0N\1"
-  "\1\0(\225\0\0\0\0\16\0\0\0\3\1\0\0<\2\2\1\230\0\0\0\310\0\0\0\366\14"
-  "\11\2\377\26\21\5\377\30\23\5\377\16\12\2\377\0\0\0\375\0\0\0\321\0\0"
-  "\0\244\5\3\0S\0\0\0\12\221\0\0\0\0\20\4\3\1\35\0\0\0\206\0\0\0\347\11"
-  "\7\2\377]J\34\377\241\201/\377\275\2275\375\310\2375\375\312\2361\376"
-  "\275\222*\375\245~\40\377jP\22\377\27\21\2\377\0\0\0\357\0\0\0\236\2"
-  "\1\0""5\217\0\0\0\0\22\2\2\0""0\0\0\0\276\1\0\0\377iV\"\377\332\263I"
-  "\377\357\304P\376\354\301M\377\350\275I\377\344\271E\376\343\265@\377"
-  "\344\264:\376\346\2623\377\346\260-\376\332\244#\377\177]\21\377\14\11"
-  "\0\377\0\0\0\324\2\1\0N\215\0\0\0\0\24\2\2\0-\0\0\0\311\20\15\5\377\261"
-  "\222=\376\370\316Y\376\341\274T\377\341\273S\377\342\273R\376\341\271"
-  "O\377\337\267J\376\336\263D\377\335\260>\376\333\2546\377\330\247/\376"
-  "\325\242'\376\347\254\"\376\300\214\24\375$\32\2\377\0\0\0\334\2\1\0"
-  "T\213\0\0\0\0\26\4\3\1\32\0\0\0\274\16\13\4\377\321\254I\377\356\307"
-  "Z\376\343\300[\377\351\306`\376\343\301]\377\343\300[\376\343\276W\377"
-  "\341\273R\376\340\267K\377\336\264D\376\333\257<\377\331\2524\376\334"
-  "\251-\377\327\242%\376\332\240\33\377\331\234\23\377$\32\2\377\0\0\0"
-  "\330\2\1\0""7\212\0\0\0\0\27\0\0\0|\0\0\0\377\254\216<\377\365\315]\376"
-  "\350\304Z\376\320\260P\377\270\235J\376\330\271X\377\356\314e\376\347"
-  "\304_\377\342\277X\376\341\272P\377\337\266H\376\345\270A\377\325\245"
-  "-\376\262\206\33\377\270\207\25\376\324\233\24\377\341\243\26\377\300"
-  "\210\13\375\16\12\0\377\0\0\0\247\0\0\0\13\210\0\0\0\0\30\0\0\0""0\0"
-  "\0\0\342^M\37\377\376\323\\\376\330\265Q\377i^<\376opp\377\222\222\221"
-  "\376iig\377\177p\77\376\357\315f\377\343\300\\\376\341\274T\377\353\300"
-  "N\376\236\200/\377^YM\376\220\217\217\377\204\204\205\376ZO5\377\264"
-  "\200\11\376\350\245\20\376\206_\7\377\0\0\0\363\6\3\0[\206\0\0\0\0\33"
-  "\0\0\0\1\0\0\0\0\4\3\1\211\0\0\0\377\322\255F\377\347\277Q\377k`@\377"
-  "\312\314\324\376\377\377\377\377\377\377\377\376\377\377\377\377\241"
-  "\244\256\376~l6\377\365\321h\376\347\301X\377\270\2269\376eee\377\377"
-  "\377\377\376\377\377\377\377\377\377\377\376\367\372\377\377SK7\376\311"
-  "\213\3\376\330\231\14\377\37\26\1\377\0\0\0\255\0\0\0\1\206\0\0\0\0\32"
-  "\0\0\0\17\0\0\0\276H;\26\377\357\304P\376\310\244B\376qrs\377\377\377"
-  "\377\376\301\301\301\377]]]\376\302\302\302\377\377\377\377\376leO\377"
-  "\341\300[\376\371\320_\377eU*\376\361\364\374\377\361\361\361\376xxx"
-  "\377\207\207\207\376\377\377\377\377\251\254\263\376\221d\1\377\347\243"
-  "\15\376tR\7\377\0\0\0\333\1\0\0""2\206\0\0\0\0\32\0\0\0""7\0\0\0\347"
-  "\222v,\377\357\304P\377\302\237>\376{{|\377\377\377\377\376\2\2\2\377"
-  "\0\0\0\376\5\5\5\377\351\353\360\376}wc\377\331\270U\376\373\321^\377"
-  "]O(\376\377\377\377\377a``\376\0\0\0\377\0\0\0\376\226\226\225\377\306"
-  "\312\321\376\211`\3\377\345\242\15\376\251w\11\376\2\1\0\377\0\0\0V\206"
-  "\0\0\0\0\32\0\0\0I\0\0\0\376\257\2152\377\350\275J\377\340\270H\376]"
-  "VD\377\377\377\377\376$$#\377\0\0\0\376,,+\377\273\276\306\376p`3\377"
-  "\365\317b\376\351\301U\377\237\2010\376\243\245\254\377\220\220\220\376"
-  "\0\0\0\377\0\0\0\376\262\263\265\377nkc\376\273\202\0\377\332\233\14"
-  "\376\277\207\13\375\25\17\1\377\0\0\0k\206\0\0\0\0\33\0\0\0V\14\11\2"
-  "\377\273\2252\376\351\274G\377\362\306P\376\310\245B\377ZUG\376\214\216"
-  "\225\377oqw\376npu\377e[\77\376\335\272T\377\343\275U\376\337\267M\377"
-  "\350\273D\376wb)\377vwy\376z}\204\377ux\201\376jf\\\377\242t\16\376\330"
-  "\225\0\377\267\200\7\376\311\216\14\376!\27\1\377\0\0\0\202\0\0\0\2\205"
-  "\0\0\0\0\33\0\0\0V\13\11\2\377\277\226/\376\323\251=\377\211p,\376\263"
-  "\2213\377\346\274H\376\257\223D\377\215zD\376\262\225D\377\343\275Q\376"
-  "\346\277U\377\337\270M\376\336\264F\377\335\262A\376\343\2628\377\266"
-  "\213!\376\221s+\377\246\200%\376\263~\2\377\226h\0\376yjL\377:6*\376"
-  "\312\215\6\376\37\26\1\377\0\0\0\201\0\0\0\2\205\0\0\0\0\32\0\0\0I\0"
-  "\0\0\376\265\214)\377\302\227+\377onm\376\237\237\237\377dW5\376\225"
-  "{2\377\326\256A\376\341\267E\377\332\261B\376\336\264B\377\340\265@\376"
-  "\337\262;\377\332\2532\376\323\242'\377\325\240\40\376\276\214\25\377"
-  "|[\20\376zmR\377\275\300\310\376\332\337\354\377\217o'\376\300\206\2"
-  "\375\24\16\1\377\0\0\0j\206\0\0\0\0\32\0\0\0""6\0\0\0\347\221o\35\377"
-  "\342\255+\377\206yX\376\377\377\377\377\374\377\377\376\310\312\316\377"
-  "\212\211\205\376soe\377~t\\\376\204tL\377\210s;\376\210q6\377\202pE\376"
-  "{pV\377plb\376\227\226\224\377\336\342\351\376\377\377\377\377\377\377"
-  "\377\376\253\256\263\377\234i\0\376\263~\11\376\1\0\0\377\0\0\0U\206"
-  "\0\0\0\0\32\0\0\0\15\0\0\0\276D3\13\377\370\2750\376eR#\376\361\364\374"
-  "\377\374\374\374\376\377\377\377\377\377\377\377\376\377\377\377\377"
-  "\377\377\377\376\354\357\364\377\334\337\345\376\332\334\342\377\354"
-  "\357\365\376\377\377\377\377\377\377\377\376\377\377\377\377\377\377"
-  "\377\376\372\372\372\377\377\377\377\376aR0\377\341\236\11\376uS\6\377"
-  "\0\0\0\333\1\0\0""1\205\0\0\0\0\33\0\0\0\1\0\0\0\0\3\3\0\206\0\0\0\377"
-  "\313\232\"\377\266\207\25\377\203\203\201\377\377\377\377\376\376\376"
-  "\376\377\376\376\376\376\377\377\377\377\377\377\377\376\377\377\377"
-  "\377\377\377\377\376\377\377\377\377\377\377\377\376\377\377\377\377"
-  "\377\377\377\376\376\376\376\377\376\376\376\376\377\377\377\377\235"
-  "\237\244\376\224d\0\376\342\240\15\377\35\25\1\377\0\0\0\253\0\0\2\0"
-  "\207\0\0\0\0\30\0\0\0-\0\0\0\340U\77\13\377\360\261\34\376s]*\377\344"
-  "\347\357\376\377\377\377\377\376\376\376\376\377\377\377\377\377\377"
-  "\377\376\377\377\377\377\377\377\377\376\377\377\377\377\377\377\377"
-  "\376\377\377\377\377\377\377\377\376\376\376\376\377\377\377\377\376"
-  "\364\367\376\377cS1\376\343\235\1\376\202\\\7\377\0\0\0\363\5\3\0W\211"
-  "\0\0\0\0\27\0\0\0x\0\0\0\377\247z\22\377\303\214\16\376nkc\376\377\377"
-  "\377\377\377\377\377\376\376\376\376\377\377\377\377\376\376\376\376"
-  "\377\377\377\377\376\376\376\376\377\377\377\377\376\377\377\377\377"
-  "\376\376\376\376\377\377\377\377\377\377\377\376lh`\376\271\200\0\377"
-  "\307\215\13\375\15\11\0\377\0\0\0\244\0\0\0\11\211\0\0\0\0\26\4\3\0\26"
-  "\0\0\0\270\12\7\0\377\312\222\23\377\255y\1\376onk\377\363\366\375\376"
-  "\377\377\377\377\377\377\377\376\377\377\377\377\377\377\377\376\377"
-  "\377\377\377\377\377\377\376\377\377\377\377\377\377\377\376\362\365"
-  "\375\377nli\376\245p\0\377\343\241\16\377%\32\2\377\0\0\0\325\2\2\0""1"
-  "\213\0\0\0\0\24\3\2\0(\0\0\0\307\13\7\0\377\255z\11\376\310\213\2\376"
-  "_K\40\377\243\246\254\377\326\332\342\376\377\377\377\377\377\377\377"
-  "\376\377\377\377\377\377\377\377\376\332\336\345\377\242\245\252\376"
-  "aN#\376\304\207\0\376\310\215\11\375\"\30\1\377\0\0\0\333\2\1\0N\215"
-  "\0\0\0\0\22\3\2\0+\0\0\0\274\0\0\0\377dF\5\377\316\221\10\377\244p\0"
-  "\376\217l\36\377\206uP\377}ua\376|tc\377\203tQ\376\212j\40\377\241m\0"
-  "\376\331\230\7\377~Y\7\377\11\6\0\377\0\0\0\323\2\2\0I\217\0\0\0\0\20"
-  "\4\3\0\31\0\0\0\177\0\0\0\346\12\10\0\377_C\3\377\230i\1\377\253u\0\376"
-  "\263z\0\375\265{\0\375\254v\0\375\237n\1\377oN\5\377\31\21\1\377\0\0"
-  "\0\357\0\0\0\227\2\1\0.\222\0\0\0\0\15\1\0\0""4\1\1\0\221\0\0\0\306\0"
-  "\0\0\362\11\6\0\377\21\14\1\377\23\16\1\377\12\7\0\377\0\0\0\371\0\0"
-  "\0\317\0\0\0\240\4\3\0I\0\0\0\5\225\0\0\0\0\10\1\1\0\25\0\0\0@\0\0\0"
-  "T\0\0\0e\0\0\0h\0\0\0W\0\0\0G\1\1\0!\227\0\0\0\0\1\0\0\0\1\324\0\0\0"
-  "\0",
-};
-
-
-static const GdkPixdata pic4 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2995, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\210\0\0\0\0\5\207\253\35\0\0\0\0\0\317\221\13\0\322\224\12\0\320\224"
-  "\12\1\203\321\223\14\1\7\320\224\14\1\320\223\14\1\320\225\14\1\320\224"
-  "\13\1\320\223\14\1\321\224\13\0\321\222\13\0\216\0\0\0\0\2\313\231\0"
-  "\0\327\222\24\0\223\0\0\0\0\1\321\224\13\0\207\0\0\0\0\3\316\223\14\0"
-  "\0\0\0\0\320\223\12\1\203\0\0\0\0\21\321\224\16\35\321\223\14@\320\223"
-  "\13q\321\224\13\211\320\224\13\244\321\223\14\274\321\223\14\327\321"
-  "\223\14\346\320\224\14\337\320\223\14\327\320\224\14\316\320\224\13\310"
-  "\320\223\14\274\321\224\13\227\321\223\13g\320\223\15E\321\224\13+\203"
-  "\0\0\0\0\1\320\223\13\1\204\0\0\0\0\2\321\213\27\0\322\227\10\0\202\0"
-  "\0\0\0\6\322\222\11\31\321\223\13\220\321\224\14\302\321\223\14\351\320"
-  "\224\14\377\321\224\13\377\202\320\223\14\377\2\321\224\14\377\323\225"
-  "\14\377\202\324\226\14\377\13\323\225\14\377\321\224\13\377\320\223\13"
-  "\377\321\224\13\377\320\223\14\377\320\224\13\377\320\224\14\377\321"
-  "\224\14\367\321\223\14\320\320\223\14{\322\220\11\27\202\0\0\0\0\11\320"
-  "\224\13\0\0\0\0\0\322\225\11\0\321\230\7\0\0\0\0\0\323\222\15\21\320"
-  "\223\13\230\321\224\13\377\321\223\14\377\202\320\223\13\377\25\321\223"
-  "\13\377\320\223\13\377\322\224\14\377\330\231\14\357\326\230\14\341\314"
-  "\220\13\331\305\214\13\324\304\213\13\327\313\220\13\327\326\227\14\325"
-  "\332\232\14\327\322\225\13\351\320\223\13\377\321\224\14\377\321\224"
-  "\13\377\321\223\14\377\320\224\13\377\321\223\14\377\321\224\13\377\320"
-  "\223\14\234\324\217\16\4\204\0\0\0\0\30\320\225\14\23\321\224\14\336"
-  "\321\223\13\377\320\223\14\377\321\224\14\377\320\223\13\377\321\224"
-  "\13\321\330\233\14\211\350\243\15F\271\203\12A`D\5`3%\3s\14\10\0m\0\0"
-  "\0o\0\0\0s\6\4\0k\35\24\2i8(\3N\231l\7*\364\253\15.\342\237\14N\321\224"
-  "\14{\320\223\13\303\321\224\14\377\202\321\223\13\377\22\320\224\13\377"
-  "\321\224\13\266\0\0\0\0\321\223\14\1\321\225\13\0\0\0\0\0\321\224\13"
-  "\204\320\223\14\377\321\224\14\377\321\224\13\336\320\224\13|\306\212"
-  "\4\13\0\0\0\0\0\0\0\1\0\0\0<\0\0\1\213\0\0\0\266\0\0\0\350\204\0\0\0"
-  "\377\5\0\0\0\357\0\0\0\301\0\0\0\226\0\0\0H\0\0\0\3\202\0\0\0\0\15\324"
-  "\231\13\23\320\224\14n\320\224\14\352\321\223\13\377\320\223\14\377\317"
-  "\222\14#\0\0\0\0\321\224\13\0\0\0\0\0\321\224\13\234\320\223\14\377\321"
-  "\224\14\377\321\223\13\242\202\0\0\0\0\20\2\1\0,\1\0\0\206\0\0\0\332"
-  "\0\0\0\377.%\15\377zb$\377\250\2070\376\262\2150\375\263\214,\375\250"
-  "\202%\375\203d\32\3778*\11\377\0\0\0\377\0\0\0\341\0\0\0\221\0\0\0""7"
-  "\202\0\0\0\0&\320\223\14i\320\224\14\355\321\223\13\377\321\224\14\377"
-  "\323\222\13&\0\0\0\0\312\232\14\0\0\0\0\0\320\224\14\77\321\223\14\377"
-  "\320\224\13\377\322\224\14\377\324\225\14\377\220f\7\311\24\16\2\270"
-  "\0\0\0\3716-\22\377\263\224<\377\357\304P\376\354\301N\377\354\300K\377"
-  "\351\273G\376\347\270@\377\350\267;\376\346\2623\377\346\257,\376\271"
-  "\213\35\377A0\10\377\0\0\0\377\21\13\1\307}X\7\276\321\224\13\357\322"
-  "\225\14\377\321\224\13\377\320\224\14\377\321\223\13\273\0\0\0\0\321"
-  "\223\14\1\203\0\0\0\0\33\320\223\14b\320\223\13\377\331\231\14\377\247"
-  "v\11\377G2\4\377\0\0\0\377jW%\377\361\310V\376\351\302W\377\340\273T"
-  "\377\342\274S\376\341\272P\377\337\267K\376\336\264E\377\335\260>\376"
-  "\332\2546\377\327\246/\376\333\245&\377\350\254\40\376xW\14\376\0\0\0"
-  "\377:(\2\377\233n\10\377\331\231\14\377\320\223\13\377\321\223\13\231"
-  "\327\215\13\10\203\0\0\0\0\1\320\224\15\0\202\0\0\0\0\30\377\306\15\21"
-  "\246v\11\226L6\4\361\0\0\0\377|g-\377\367\316\\\376\356\312_\377\370"
-  "\322f\376\360\314d\377\344\301]\376\343\277X\377\341\274S\376\340\270"
-  "K\377\336\264D\376\333\256<\377\347\2647\376\352\263-\377\345\253$\376"
-  "\346\250\32\377\214d\13\376\0\0\0\377C/\3\372\236p\11\271\377\302\17"
-  "\31\202\0\0\0\0\1\320\224\14\0\206\0\0\0\0\27\0\0\0M\0\0\0\347NA\33\377"
-  "\363\313Z\377\353\307]\376\251\220E\377k_8\376\226\202C\377\350\307b"
-  "\376\350\306b\377\344\300Y\376\341\273Q\377\342\271J\376\337\261:\377"
-  "\200f#\376aO%\377y]\32\376\323\231\24\377\347\246\24\376bE\5\377\0\0"
-  "\0\370\0\0\0^\0\0\0\2\210\0\0\0\0\30\0\0\0'\0\0\0\266\17\14\4\377\323"
-  "\257J\375\370\321a\377\206s:\376\226\227\235\377\375\377\377\376\276"
-  "\300\307\377oeC\376\354\313e\377\343\301^\376\341\274T\377\344\272G\376"
-  "p_4\377\310\314\324\376\377\377\377\377\316\323\337\376lX,\377\333\235"
-  "\21\376\325\226\13\376\40\27\1\377\0\0\0\312\0\0\0""4\210\0\0\0\0\32"
-  "\0\0\0U\0\0\0\345cQ\40\377\372\317Y\377\276\237E\377\224\221\212\376"
-  "\377\377\377\377\377\377\377\376\377\377\377\377\261\263\267\376\252"
-  "\223I\377\354\312d\376\347\302Y\377\270\2267\376\233\234\236\377\377"
-  "\377\377\376\331\331\330\377\377\377\377\376\264\265\267\377\227j\2\376"
-  "\350\244\14\377}X\7\377\0\0\0\354\2\2\0n\0\0\0\0\0\0\0\1\206\0\0\0\0"
-  "\31\6\5\1\226\0\0\0\372\271\227;\377\361\307U\377\234\2025\377\311\313"
-  "\321\376\273\273\274\377\0\0\0\376EED\377\353\355\363\376\203tE\377\365"
-  "\322g\376\355\306[\377\230}3\376\335\337\344\377iii\376\0\0\0\377778"
-  "\376\276\303\313\377\221g\6\376\332\231\12\377\312\217\13\377\0\0\0\377"
-  "\6\4\0\244\0\0\0\13\206\0\0\0\0\32\0\0\0\26\0\0\0\247\17\13\3\377\345"
-  "\271G\377\350\277Q\376\255\217:\377\257\257\260\376CDG\377\0\0\0\376"
-  "\0\0\0\377\203\206\216\376\250\223R\377\357\313b\376\345\277U\377\277"
-  "\2338\376\227\227\230\377WWY\376\0\0\0\377\23\24\30\376\242\245\254\377"
-  "\231k\2\376\330\230\12\377\332\233\14\376(\34\2\377\0\0\0\266\0\0\0%"
-  "\206\0\0\0\0\32\0\0\0%\0\0\0\263*!\13\377\347\271D\376\336\267J\376\355"
-  "\305V\377\202q@\376qu\200\377\32\33\37\376>AI\377]VB\376\351\304\\\377"
-  "\341\276W\376\340\271O\377\343\267C\376\212xH\377fjq\37658\77\377FKX"
-  "\376|b$\377\327\231\17\376\321\223\13\377\332\232\14\376H2\4\377\0\0"
-  "\0\307\0\0\0""4\206\0\0\0\0\32\0\0\0/\0\0\0\2759,\15\377\345\267@\377"
-  "\335\263E\376\341\272N\377\336\270O\376\231\204E\377}t[\376\224\203Q"
-  "\377\323\261Q\376\347\302X\377\341\273Q\376\340\267K\377\341\266D\376"
-  "\330\2525\377\240\177+\376\234\204K\377\236y\"\376\322\230\24\377\322"
-  "\226\17\376\320\223\13\377\333\233\14\376W=\4\377\0\0\0\323\0\0\0\77"
-  "\206\0\0\0\0\32\0\0\0#\0\0\0\261(\37\10\377\342\2639\376\333\257\77\376"
-  "\336\264E\377\343\272L\376\350\300P\377\343\274N\376\350\300R\377\347"
-  "\300T\376\340\270N\377\337\266I\376\336\263C\377\333\257=\376\334\255"
-  "6\377\341\255-\376\330\241\36\377\335\243\33\376\325\232\24\377\320\224"
-  "\14\376\320\223\13\377\332\232\14\377D0\3\377\0\0\0\305\0\0\0""3\206"
-  "\0\0\0\0\32\0\0\0\26\0\0\0\252\16\13\2\377\343\2604\377\330\2537\376"
-  "\335\261>\377\340\265C\376\336\265G\377\336\265I\376\337\266I\377\337"
-  "\266I\376\336\264F\377\335\262A\376\333\257<\377\332\2546\376\331\250"
-  "/\377\327\244(\376\325\237\40\377\323\233\30\376\324\227\17\377\321\224"
-  "\13\376\317\222\13\377\334\233\14\376(\34\2\377\0\0\0\267\0\0\0&\207"
-  "\0\0\0\0\31\6\5\1\220\0\0\0\367\255\204!\377\336\2541\376\330\2515\377"
-  "\342\262:\376\353\273=\377\355\276B\376\354\275C\377\351\273A\376\346"
-  "\267\77\377\343\263;\376\342\2616\377\343\2570\376\344\255)\377\345\253"
-  "#\376\344\247\32\377\340\241\17\376\327\230\13\377\316\222\13\376\321"
-  "\224\14\376\305\213\13\377\0\0\0\377\6\4\0\237\0\0\0\10\207\0\0\0\0\32"
-  "\0\0\0T\0\0\0\346[E\17\377\364\271-\377\263\214)\3778/\27\376xg>\377"
-  "xd1\376t]&\377\203h(\376\220q$\377\235y\35\376\234v\31\377\216l\34\376"
-  "\177b\34\377pV\31\376u\\$\377r]-\3765(\14\377\260~\15\376\350\244\14"
-  "\377yU\6\377\0\0\0\355\2\1\0n\0\0\0\0\0\0\0\1\206\0\0\0\0\30\0\0\0#\0"
-  "\0\0\254\10\5\1\377\277\217\34\375\345\255&\377\232u\32\376lia\377\332"
-  "\340\360\376\377\377\377\377\343\345\353\376\316\320\325\377\275\276"
-  "\303\376\275\277\303\377\316\320\326\376\344\347\355\377\377\377\377"
-  "\376\330\340\361\377lg\\\376\232l\6\377\334\233\14\377\315\221\13\376"
-  "\26\17\1\377\0\0\0\301\0\0\0.\211\0\0\0\0\27\0\0\0^\0\0\0\355\77.\7\377"
-  "\345\251\35\376\341\247\40\377\272\210\22\377v]#\376\202\201\200\377"
-  "\353\356\365\376\377\377\377\377\377\377\377\376\377\377\377\377\377"
-  "\377\377\376\350\353\362\377\200~|\376vY\27\377\271\177\0\376\332\232"
-  "\14\377\343\241\15\376Z@\5\377\0\0\0\374\0\0\0n\4\2\0\6\211\0\0\0\0\26"
-  "\0\0\0\27\5\3\0\221\0\0\0\374`F\10\377\341\243\26\377\333\240\31\377"
-  "\332\236\23\376\270\204\12\377uX\24\376iS\37\377\177nH\376~lD\377hP\33"
-  "\376vU\15\377\270~\0\376\327\226\4\377\326\230\14\377\337\236\14\377"
-  "\200Z\7\377\0\0\0\377\3\2\0\242\0\0\0$\213\0\0\0\0\26\0\0\0""4\0\0\0"
-  "\247\0\0\0\377R:\5\377\335\235\17\376\333\235\20\377\326\231\20\377\340"
-  "\240\20\376\342\240\15\377\315\217\4\376\316\217\4\377\341\237\13\376"
-  "\336\235\14\377\324\226\14\376\332\232\14\377\342\240\15\376kK\6\377"
-  "\0\0\0\377\0\0\0\266\0\0\0B\0\0\0\0\0\0\0\1\213\0\0\0\0\22\0\0\0""6\1"
-  "\0\0\235\0\0\0\364!\27\1\377\227k\10\375\327\230\13\376\342\240\14\377"
-  "\332\232\14\377\331\231\14\376\330\231\14\377\331\232\14\377\341\237"
-  "\14\377\333\233\14\376\242s\11\3751\"\2\377\0\0\0\374\0\0\0\253\1\0\0"
-  "B\217\0\0\0\0\20\0\0\0+\4\3\0\204\0\0\0\317\0\0\0\377'\34\2\377W=\4\377"
-  "\213b\10\377\241r\11\377\244t\11\377\216e\10\377cE\5\377.\40\2\377\0"
-  "\0\0\377\0\0\0\332\5\3\0\216\0\0\0""6\221\0\0\0\0\16\0\0\0\4\1\0\0G\0"
-  "\0\0~\0\0\0\304\0\0\0\341\0\0\0\352\0\0\0\361\0\0\0\363\0\0\0\353\0\0"
-  "\0\343\0\0\0\314\0\0\0\207\1\1\0M\0\0\0\11\224\0\0\0\0\12\0\0\0\17\0"
-  "\0\0&\0\0\0L\2\1\0j\4\3\0\201\5\3\0\205\2\1\0m\0\0\0Q\0\0\0*\0\0\0\22"
-  "\273\0\0\0\0\1\0\0\0\1\217\0\0\0\0",
-};
-
-
-static const GdkPixdata pic5 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 3157, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\212\0\0\0\0\1\0\0\0\1\202\0\0\0\0\6\0\0\0\10\0\0\0\23\1\1\0\35\1\1\0"
-  "\34\0\0\0\23\0\0\0\7\230\0\0\0\0\12\3\2\0\27\0\0\0g\0\0\0\245\0\0\0\325"
-  "\0\0\0\346\0\0\0\345\0\0\0\323\0\0\0\236\0\0\0`\3\2\0\17\225\0\0\0\0"
-  "\14\0\0\0J\0\0\0\302\0\0\0\377\25\21\6\377<1\22\377P\77\25\377M<\23\377"
-  "8,\14\377\20\14\2\377\0\0\0\377\0\0\0\267\0\0\0>\222\0\0\0\0\20\0\0\0"
-  "\14\0\0\0~\0\0\0\361\0\0\0\377\206n-\376\317\252F\376\361\305N\376\362"
-  "\303I\376\361\300B\376\353\2708\376\305\227(\376uX\23\377\0\0\0\377\0"
-  "\0\0\351\1\0\0o\0\0\0\6\220\0\0\0\0\22\2\2\1}\0\0\0\3776-\23\377\312"
-  "\251K\377\366\316_\376\352\304Y\376\343\275T\377\340\271N\376\336\265"
-  "F\377\335\260>\376\341\2575\377\356\265.\376\264\206\32\377&\33\3\377"
-  "\0\0\0\377\2\1\0h\0\0\0\0\0\0\0\1\215\0\0\0\0\22\3\2\1""7\0\0\0\350%"
-  "\36\15\377\361\312[\376\345\301X\377\327\266U\377\346\304^\376\350\305"
-  "_\377\342\275V\376\337\270M\377\344\270E\376\324\245-\377\265\211\35"
-  "\376\325\234\30\377\327\235\27\376\20\13\0\377\0\0\0\333\3\2\0(\215\0"
-  "\0\0\0\24\0\0\0\23\0\0\0\272\1\1\0\377\307\246I\376\322\262U\376\205"
-  "\177p\376\234\234\233\377\203{^\376\340\301`\377\345\302^\376\344\276"
-  "T\377\304\237<\376\200yj\377\277\300\303\376~xi\377\304\217\25\376\246"
-  "v\13\376\0\0\0\377\0\0\0\246\0\0\0\13\214\0\0\0\0\24\2\1\0N\0\0\0\370"
-  "mZ%\377\357\306S\377\216\205l\377\377\377\377\376\377\377\377\377\357"
-  "\361\371\376\216}K\377\363\320f\376\360\307V\377\202qE\376\377\377\377"
-  "\377\351\351\350\376\377\377\377\377\212zS\376\334\231\4\377O8\4\377"
-  "\0\0\0\361\1\0\0;\212\0\0\0\0\26\0\0\0\1\0\0\0\0\2\2\0\227\0\0\0\377"
-  "\316\251E\377\336\270L\377\247\244\234\377\227\227\230\376\0\0\0\377"
-  "\227\231\237\376\224\210c\377\365\320e\376\347\277O\377\236\220l\376"
-  "\233\235\243\377\0\0\0\376mnp\377\234\226\210\376\320\221\2\377\250w"
-  "\11\377\0\0\0\377\2\2\0\201\214\0\0\0\0\26\0\0\0\266\23\17\4\377\350"
-  "\275K\376\335\267J\376\243\232~\377TW`\376\0\0\0\377LP[\376\235\213T"
-  "\377\360\313`\376\357\306T\377\225\177F\376}\202\216\377\0\0\0\3768="
-  "I\377\232\200C\376\322\223\7\377\325\227\13\377\1\1\0\377\1\0\0\243\0"
-  "\0\0\0\0\0\0\1\211\0\0\0\0\25\0\0\0\13\0\0\0\301.$\13\377\346\272E\377"
-  "\345\274N\376\307\246H\377\202x\\\376d`V\377\202uL\376\347\302Y\377\341"
-  "\274T\376\337\267K\377\333\257<\376\210s>\377\213\201f\376\204l4\377"
-  "\310\220\21\376\323\225\14\377\330\231\14\376\25\17\1\377\0\0\0\265\213"
-  "\0\0\0\0\25\0\0\0\5\0\0\0\275#\33\10\377\345\267\77\376\333\262D\376"
-  "\346\276P\377\337\271L\376\314\252I\377\353\304U\376\342\274R\377\340"
-  "\270L\376\336\264D\377\334\257=\376\344\2611\377\315\230\33\376\334\242"
-  "\32\377\323\230\24\376\316\221\13\377\332\232\14\376\15\11\0\377\0\0"
-  "\0\257\214\0\0\0\0\26\0\0\0\252\4\3\0\377\335\2545\377\333\256;\376\344"
-  "\267C\377\343\270H\376\344\272K\377\337\266I\376\335\263F\377\334\261"
-  "A\376\333\255;\377\331\2514\376\327\245+\377\330\242#\376\326\234\31"
-  "\377\327\230\15\376\320\223\13\376\307\214\13\377\0\0\0\377\2\1\0\226"
-  "\0\0\0\0\0\0\0\1\212\0\0\0\0\24\3\2\0x\0\0\0\377\243}!\377\342\2604\377"
-  "\241\200-\377\315\2437\376\327\2512\377\325\2470\376\324\245-\377\323"
-  "\243*\376\322\240#\377\320\234\35\376\316\227\25\377\320\226\20\376\271"
-  "\205\20\377\242s\14\376\341\237\14\377\203\\\7\377\0\0\0\373\2\1\0c\214"
-  "\0\0\0\0\24\0\0\0.\0\0\0\345,\40\7\377\342\253(\376ya%\377]\\Z\376\241"
-  "\237\233\377\232\224\207\376\217\207v\377\216\205p\376\216\206q\377\216"
-  "\207v\376\236\231\215\377\226\225\224\376QOI\377\223i\12\377\325\226"
-  "\13\376\33\23\1\377\0\0\0\332\0\0\0\37\215\0\0\0\0\22\0\0\0o\0\0\0\377"
-  "sU\20\377\367\270%\377\260\206\"\376\225\214v\377\334\336\343\376\377"
-  "\377\377\377\377\377\377\376\377\377\377\377\377\377\377\376\305\305"
-  "\310\377\222\201Y\376\270\201\6\377\362\253\14\376W>\5\377\0\0\0\372"
-  "\0\0\0]\216\0\0\0\0\22\0\0\0B\0\0\0\336\0\0\0\377\224l\17\377\351\252"
-  "\30\376\321\225\14\377\233r\23\376{a&\377\210r\77\376\204l5\377{^\35"
-  "\376\250u\3\377\323\221\0\376\346\242\13\377\200Z\7\377\0\0\0\377\0\0"
-  "\0\316\0\0\0(\212\0\0\0\0\27*\33\2\0\0\0\0\0\0\0\0\15\0\0\0\250;)\3\372"
-  "\212b\7\377\211a\10\376&\32\1\377\77-\4\376\320\223\17\377\346\244\20"
-  "\376\353\246\15\377\342\237\7\376\344\240\7\377\352\245\13\376\343\241"
-  "\15\377\310\216\13\3766'\3\377$\32\1\377\203]\7\376yV\6\377)\35\2\362"
-  "\0\0\0\214\202\0\0\0\0\1\30\20\1\0\205\0\0\0\0\32\0\0\0\1\0\0\0\0\0\0"
-  "\0+\23\16\1\347\207`\7\377\333\233\14\377\337\236\14\377\327\230\14\376"
-  "\335\234\14\377cF\5\376\23\15\0\376pO\6\377\246v\11\376\262~\12\376\261"
-  "}\12\376\244t\11\376gI\5\377\23\15\0\376kL\6\377\340\236\15\376\327\230"
-  "\14\376\336\235\14\377\326\227\14\377rQ\6\377\11\5\0\316\0\0\0\24\207"
-  "\0\0\0\0\32\0\0\0\33\23\14\1\350\246u\11\377\343\240\15\375\316\222\13"
-  "\377\326\227\14\377\246v\11\377\253y\12\377\353\246\15\376\254z\11\376"
-  "\11\6\0\377\0\0\0\375\12\7\0\377\11\6\0\377\0\0\0\375\17\13\1\377\262"
-  "~\12\376\355\250\15\376\235o\10\377\271\203\12\377\322\225\14\377\316"
-  "\222\13\377\346\243\15\376\215d\10\377\5\3\0\316\0\0\0\6\205\0\0\0\0"
-  "\34\14\13\7\20\0\0\0\312\235o\10\377\337\236\14\376\322\224\14\376\321"
-  "\224\14\376\320\223\13\376\302\212\13\3768(\3\376\335\235\14\377\340"
-  "\236\14\376\264\177\12\377\10\5\0\356\0\0\1\221\0\0\0\225\16\12\0\360"
-  "\277\207\13\377\337\236\14\376\326\227\14\3776'\3\376\314\220\13\376"
-  "\317\222\13\376\321\224\14\377\321\224\14\376\343\241\15\376\202\\\7"
-  "\377\0\0\0\254:.\26\6\203\0\0\0\0\177\0\0\0\234\0\0\1\354dG\5\377\341"
-  "\237\14\377\324\226\14\377\277\207\12\377\317\223\13\376\327\230\13\376"
-  "\327\230\14\376\4\2\0\376\222e\1\377\344\241\14\377\345\242\15\377|V"
-  "\2\377\0\0\0\333\0\0\0\336\207^\4\377\342\240\15\377\345\242\14\377\200"
-  "Y\1\377\30\21\0\376\332\232\14\376\327\230\14\376\315\221\13\377\307"
-  "\215\13\377\322\224\14\377\340\236\14\377N7\4\377\0\0\1\347\2\1\1\220"
-  "\0\0\0\0\16\15\15\12\0\0\2\341I\77*\377\311\215\6\377\330\231\14\376"
-  "\266\201\13\3777(\7\377\330\230\13\376\244u\12\377\315\220\7\377YH\40"
-  "\37773,\376\250u\2\377\320\220\2\376Z@\6\376\220\223\231\377^bj\377g"
-  "G\1\376\336\233\7\376\246t\3\376(('\376kP\26\377\312\216\10\377\257|"
-  "\12\377\313\217\13\3776'\5\376\310\215\13\377\330\231\14\376\272\202"
-  "\5\377E@5\377\0\0\2\323\0\0\0\0\17\13\1\11\0\0\0\325kL\10\377\350\244"
-  "\14\376\344\241\14\3778(\4\376xV\13\377\336\235\14\376:+\12\377\311\214"
-  "\5\376\177\\\20\377\264\271\303\376\77<5\377RC\37\376\274\276\304\377"
-  "\332\332\331\376\261\261\260\377\250\252\254\376UB\31\37753-\376\250"
-  "\255\270\377\204\\\1\376\272\202\6\377G4\14\376\345\242\14\377\\C\14"
-  "\376R:\4\377\345\241\12\376\346\242\14\376V>\10\377\0\0\0\310\0\0\0\0"
-  "\13\10\0\14\0\0\0\330\204\\\3\377\315\216\3\376O7\2\377\0\0\1\376\325"
-  "\226\13\377\271\202\12\376+\37\2\377\351\245\14\376\201U\0\377\256\262"
-  "\274\376\232\233\237\377\377\377\377\376\343\343\343\377(((\376+++\377"
-  "\361\362\363\376y|\204\377\34\35!\37626A\377\227i\3\376\334\234\13\377"
-  "*\36\4\376\313\217\13\377\302\211\11\376\0\3\17\377iK\10\376\336\232"
-  "\4\377qO\5\377\0\0\0\310\0\0\0\0\177\20\20\20\12\0\0\0\326VN=\377laH"
-  "\376\31\36+\377B-\0\376\346\243\15\377~Y\7\3768(\3\377\363\254\14\376"
-  "\202V\0\377\245\251\265\376\230\230\230\377\377\377\377\376\311\311\311"
-  "\377\0\0\0\376\0\0\0\377\332\332\332\376AAA\377\0\0\0\376\16\22\33\377"
-  "\234o\12\376\355\247\14\377.!\2\376\236o\7\377\330\226\4\376RH.\377\213"
-  "\217\231\376[L(\377LE3\377\0\0\0\310\0\0\0\0""888\11\0\0\0\325\346\347"
-  "\352\377\377\377\377\37658@\377{U\0\376\350\244\14\3778*\15\3767'\3\377"
-  "\356\250\14\376\201U\0\377\244\251\265\376\230\230\231\377\377\377\377"
-  "\376\313\313\313\377\0\0\0\376\0\0\0\377\334\334\334\376III\377\0\0\0"
-  "\376\20\25\37\377\232m\11\376\345\242\14\377-\40\3\376J7\13\377\346\240"
-  "\7\376hK\10\377\316\322\331\376\377\377\377\377\311\312\315\377\0\0\0"
-  "\310\0\0\0\0""555\11\0\0\0\325\341\341\341\377\377\377\377\37614=\377"
-  "\204[\0\376\234j\0\377\77CK\3767(\7\377\350\244\15\376zO\0\377\246\252"
-  "\264\376\230\230\231\377\377\377\377\376\313\313\313\377\0\0\0\376\0"
-  "\0\0\377\334\334\334\376III\377\0\0\0\376\12\17\33\377\234m\4\376\337"
-  "\236\15\377'\35\6\376TSR\377\242j\0\376nK\0\377\275\277\306\376\377\377"
-  "\377\377\305\305\305\377\0\0\0\310\0\0\0\0""555\11\0\0\0\325\341\341"
-  "\341\377\377\377\377\376===\377\0\0\0\376CCE\377\260\261\264\376\0\0"
-  "\0\377kI\0\376YK+\377\350\351\354\376\216\216\217\377\377\377\377\376"
-  "\311\311\311\377\0\0\0\376\0\0\0\377\332\332\332\376III\377\0\0\0\376"
-  "BDH\377pZ'\376pM\1\377\0\0\0\376\310\311\314\377SQN\376CB@\377\362\362"
-  "\363\376\377\377\377\377\305\305\305\377\0\0\0\310\11\0\0\0\0""111\12"
-  "\0\0\0\332\350\350\350\377\377\377\377\377\77\77\77\377\0\0\0\377|||"
-  "\377\320\320\320\377\202\0\0\0\377\5\313\314\316\377\377\377\377\377"
-  "\215\215\215\377\377\377\377\377\320\320\320\377\202\0\0\0\377\5\341"
-  "\341\341\377KKK\377\0\0\0\377yyy\377\265\267\274\377\202\0\0\0\377\20"
-  "\353\353\353\377\377\377\377\377\220\220\220\377\376\376\376\377\377"
-  "\377\377\377\313\313\313\377\0\0\0\315\0\0\0\0\35\35\35\2\0\0\0\3172"
-  "22\377;;;\377\15\15\15\377\0\0\0\377\31\31\31\377,,,\377\202\0\0\0\377"
-  "\202888\377\3\35\35\35\377:::\377,,,\377\202\0\0\0\377\5""000\377\20"
-  "\20\20\377\0\0\0\377\31\31\31\377555\377\202\0\0\0\377\7""111\377:::"
-  "\377\35\35\35\377666\377:::\377,,,\377\0\0\0\277\202\0\0\0\0\7\10\10"
-  "\10$\0\0\0\77\0\0\0;\0\0\0\77\3\3\3D\0\0\0\77\0\0\0;\202\3\3\3D\202\0"
-  "\0\0;\12\0\0\0A\0\0\0;\0\0\0<\2\2\2C\1\1\1D\0\0\0;\0\0\0>\3\3\3F\0\0"
-  "\0\77\0\0\0;\202\3\3\3D\202\0\0\0;\1\0\0\0A\202\0\0\0;\3\0\0\0\77\13"
-  "\13\13\36\0\0\0\0",
-};
-
-
-static const GdkPixdata pic6 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2626, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\316\0\0\0\0\4\0\0\0\10\0\0\0\15\0\0\0\16\0\0\0\11\231\0\0\0\0\12\0\0"
-  "\0\15\0\0\0\77\0\0\0_\0\0\0k\0\0\0\177\0\0\0\202\0\0\0l\0\0\0a\0\0\0"
-  "E\0\0\0\24\224\0\0\0\0\5\0\0\0\27\0\0\0`\3\2\0\246\0\0\0\320\0\0\0\371"
-  "\204\0\0\0\377\5\0\0\0\373\0\0\0\324\3\2\0\251\0\0\0k\0\0\0\36\221\0"
-  "\0\0\0\20\0\0\0B\0\0\0\236\0\0\0\347\0\0\0\377/&\15\377zb$\377\245\204"
-  "/\375\257\213/\376\257\211,\376\244\177%\375}_\31\3774'\10\377\0\0\0"
-  "\377\0\0\0\352\0\0\0\247\0\0\0O\216\0\0\0\0\24\2\1\0\4\0\0\0Z\0\0\0\311"
-  "\0\0\0\377<1\23\377\274\232\77\377\356\303O\376\354\301M\377\354\300"
-  "K\377\350\274F\376\347\270@\377\351\267;\376\346\2624\377\345\257,\376"
-  "\274\215\36\377B1\10\377\0\0\0\377\0\0\0\321\1\0\0h\0\0\0\13\214\0\0"
-  "\0\0\24\0\0\0Z\0\0\0\317\0\0\1\377\204n1\376\361\311Z\376\350\302Y\377"
-  "\345\300W\377\356\307X\376\347\277Q\377\337\267J\376\336\263D\377\344"
-  "\266@\376\347\266:\377\333\2521\376\332\246)\376\346\254\"\376\214f\20"
-  "\375\3\2\0\377\0\0\0\327\0\0\0j\212\0\0\0\0\30\5\3\0\27\0\0\0\215\0\0"
-  "\0\354\0\0\0\377>0\14\377VC\24\376I8\16\377L;\21\376\\M#\377xh4\376\322"
-  "\261R\377\361\311W\376\357\304P\377\307\241>\376nX\40\377XD\22\376H4"
-  "\10\377F3\7\376R;\7\377A.\4\377\0\0\0\377\0\0\0\356\0\0\0\224\6\5\1\24"
-  "\206\0\0\0\0\33\0\0\0\7\0\0\0\213\0\0\0\355K6\4\377\223h\10\377\250w"
-  "\11\376\274\204\11\377\301\210\11\376\306\214\12\377\277\207\11\376\250"
-  "u\6\377vP\0\376</\15\377\205p4\376|g-\377:+\7\376|V\2\377\252x\10\376"
-  "\301\210\12\377\306\214\13\376\301\210\12\376\272\203\12\377\246u\11"
-  "\376\221f\10\377C/\3\377\0\0\0\352\0\0\0|\204\0\0\0\0\36\0\0\0\25\0\0"
-  "\0\302F1\3\377\306\214\13\377\333\233\14\377\337\235\14\376\333\233\14"
-  "\377\326\227\14\377\324\226\14\376\323\226\14\377\324\226\14\376\333"
-  "\233\14\377\365\256\16\376U;\1\377\0\0\0\376\0\0\0\377kK\4\376\367\256"
-  "\16\377\332\232\14\376\324\226\14\377\323\226\14\376\324\226\14\377\326"
-  "\227\14\376\333\233\14\377\336\235\14\376\333\233\14\377\300\210\13\377"
-  "9(\3\377\0\0\0\263\0\0\0\15\202\0\0\0\0\177\0\0\0\244X>\4\377\336\235"
-  "\14\375\324\226\14\376\317\223\13\376\321\224\14\377\321\224\14\376\315"
-  "\221\13\377\315\221\13\376\323\225\14\377\331\232\14\376\273\204\12\377"
-  "hJ\6\376\0\0\0\377\0\0\0\376\0\0\0\377\5\3\0\376uR\6\377\277\207\13\376"
-  "\331\232\14\377\323\225\14\376\314\221\13\377\316\222\13\376\321\224"
-  "\14\377\320\223\13\376\317\223\13\376\325\227\14\376\334\233\14\375G"
-  "2\4\377\0\0\0\217\0\0\0\0\4\3\0\37\3\2\0\357\323\225\13\377\322\225\14"
-  "\376\320\223\13\377\321\224\14\376\320\223\13\377\332\232\14\376~Y\7"
-  "\377\24\16\1\376\12\7\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0"
-  "\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377\14\10\0\376"
-  "\24\16\1\377\215d\7\376\333\233\14\377\320\223\13\376\321\224\14\377"
-  "\320\223\13\376\325\226\14\376\307\215\13\377\0\0\0\343\25\16\1\21\0"
-  "\0\0""9(\34\2\370\324\226\14\377\317\222\13\376\327\230\14\377\324\226"
-  "\14\376\320\223\13\377\323\225\14\376\341\240\14\377\314\221\13\376\244"
-  "t\11\377\221g\10\376R:\4\377\0\0\0\376\0\0\0\377\0\0\0\376\0\0\0\377"
-  "\0\0\0\376\4\2\0\377[@\5\376\223h\10\377\247v\11\376\320\223\14\377\341"
-  "\237\15\376\321\224\14\377\320\223\13\376\325\226\14\377\326\230\14\376"
-  "\316\222\13\376\323\225\14\377\20\13\0\361\0\0\0'\0\0\0J@-\3\375\326"
-  "\227\14\377\321\224\14\377\261~\12\377\313\220\13\376\324\226\14\377"
-  "\301\211\13\376{W\7\377\312\217\13\376\360\252\15\377\344\241\15\376"
-  "\332\232\14\377\313\220\13\376`E\5\377\1\1\0\376\2\1\0\377oN\6\376\322"
-  "\224\14\377\332\232\14\376\345\242\15\377\357\251\15\376\304\212\13\377"
-  "vS\6\376\311\216\13\377\323\226\14\376\310\216\13\377\264\177\12\376"
-  "\321\224\14\376\324\226\14\377&\32\2\370\0\0\0""7B\0\0\0G=,\3\374\326"
-  "\227\14\377\333\233\14\377uS\6\377P8\4\376\344\241\15\377\312\217\13"
-  "\376F1\3\377\16\12\0\376I3\4\377\244s\10\376\320\222\12\377\331\231\13"
-  "\376\345\242\14\377\"\30\1\3761\"\2\377\360\251\15\376\326\227\13\377"
-  "\317\222\12\376\236p\10\377A-\3\376\15\11\0\377P8\4\376\322\224\14\377"
-  "\341\237\14\376\77,\3\377\207_\7\376\333\233\14\376\323\226\14\377#\31"
-  "\2\367\0\0\0""5\0\0\0A3$\3\373\325\227\14\377\323\225\14\376\326\227"
-  "\14\377\37\26\1\376pO\5\377\341\237\15\376\336\235\14\377\262~\12\376"
-  "\4\2\0\377\11\11\6\376\6\6\3\377\23\14\0\376\21\12\0\377\0\0\0\376\0"
-  "\0\0\377\25\15\0\376\21\14\0\377\7\5\2\376\5\4\2\377\20\13\0\376\275"
-  "\206\12\377\337\235\14\376\340\236\14\377\\@\5\376,\37\2\377\334\234"
-  "\14\376\321\224\14\376\324\226\14\377\33\23\1\365\0\0\0""0\0\0\0%\10"
-  "\6\0\363\202\327\230\14\377;\357\251\15\377eH\7\376\12\11\6\377\204\\"
-  "\4\376\342\240\14\377\341\237\14\376\244s\6\377L=\27\376\301\240D\377"
-  "\250\213:\376\240\2035\377\213q+\376\216r(\377\235|*\376\244\200'\377"
-  "\270\216%\376>-\10\377\264\177\11\376\340\237\14\377\341\237\15\376w"
-  "T\6\377\4\3\0\376zV\6\377\353\246\15\376\331\231\14\377\314\220\13\377"
-  "\0\0\0\350\14\10\0\30\0\0\0\0\0\0\0\256dG\5\377\277\207\12\377\234n\10"
-  "\377/\"\4\376\305\231/\377D6\23\376T;\1\377\332\232\14\376\263~\10\377"
-  "H8\22\376\355\301K\377\351\275I\376\353\275F\377\352\273B\376\350\270"
-  "<\377\347\2657\376\343\257/\377\341\253)\3769)\5\377\305\213\12\376\322"
-  "\225\14\377K4\3\376O8\3\377\264\177\11\3774$\2\376\244t\11\377\300\207"
-  "\12\377R:\4\377\0\0\0\232\202\0\0\0\0\36\0\0\0\"\0\0\0\272\21\14\0\344"
-  "\0\0\0\364\27\21\4\377\352\262.\376\346\2624\376x_\36\377.\40\3\376'"
-  "\34\3\377\252\210/\376\345\266\77\377\334\256<\376\333\2559\377\332\254"
-  "6\376\331\2511\377\330\246-\376\326\243'\377\336\246\"\376\226o\22\377"
-  "$\32\1\376/!\1\377~Y\6\376\337\236\14\377\343\241\15\376%\32\1\377\0"
-  "\0\0\370\17\12\0\351\0\0\0\260\0\0\0\30\204\0\0\0\0\32\0\0\0\23\0\0\0"
-  "\241\0\0\0\377\245}\33\377\341\253*\377\343\2570\377\324\2440\376\330"
-  "\2502\377\356\2704\376\344\260/\377\344\257/\376\343\256,\377\342\254"
-  "(\376\341\252$\377\341\247\40\376\337\244\32\377\335\240\24\376\345\244"
-  "\20\377\321\224\13\376\315\221\13\377\333\233\14\376\326\227\14\376\264"
-  "\177\12\377\0\0\0\377\0\0\0\256\0\0\0!\207\0\0\0\0\30\0\0\0Q\0\0\0\343"
-  "3%\6\377\343\251!\376\331\244$\377\332\245&\376\270\215&\377}g2\376\207"
-  "tE\377\214yI\376\215zJ\377\215xI\376\215xH\377\216yF\376\213uB\377\206"
-  "p=\376{b,\377\224l\22\376\323\225\12\377\321\224\14\376\344\241\15\376"
-  "\77-\3\377\0\0\0\351\0\0\0d\210\0\0\0\0\30\0\0\0\16\0\0\0\221\0\0\0\377"
-  "pQ\14\376\347\252\35\376\325\236\35\376\313\227\34\377\210j%\376\202"
-  "nC\377\225\206e\376\227\210f\377\215zM\376\216zN\377\230\212h\376\221"
-  "\201\\\377\202l=\376\200c\40\377\266\201\14\376\322\224\13\376\342\240"
-  "\15\376\177Y\7\376\0\0\0\377\0\0\0\241\0\0\0\31\211\0\0\0\0\26\0\0\0"
-  "6\1\1\0\300\0\0\0\377\221i\15\377\345\246\26\376\327\235\27\377\335\241"
-  "\30\376\337\241\23\377\317\224\13\376\317\223\12\377\333\234\15\376\331"
-  "\231\10\377\313\214\0\376\316\216\0\377\334\231\5\376\333\232\11\377"
-  "\326\227\14\376\342\240\15\376\237p\10\377\0\0\0\377\0\0\0\314\0\0\0"
-  "G\213\0\0\0\0\24\0\0\0M\0\0\0\312\0\0\0\377mM\6\376\335\235\16\376\331"
-  "\232\17\377\317\223\16\377\322\226\16\376\322\225\15\377\320\223\13\376"
-  "\321\223\13\377\322\225\13\376\322\224\14\377\316\222\13\376\326\230"
-  "\14\377\340\237\14\376~Y\7\376\0\0\0\377\0\0\0\323\1\0\0_\214\0\0\0\0"
-  "\24<1\1\0\0\0\0L\1\0\0\302\0\0\0\377/!\2\377\243t\11\377\336\235\14\376"
-  "\334\233\14\377\336\235\14\377\335\234\14\376\334\234\14\377\336\235"
-  "\14\376\334\234\14\377\336\235\14\376\255{\11\3777'\3\377\0\0\0\377\0"
-  "\0\0\313\1\0\0\\\0\0\0\5\216\0\0\0\0\20\0\0\0""6\0\0\0\223\0\0\0\343"
-  "\0\0\0\377\36\25\1\377dG\5\377\223h\10\376\237p\11\375\240q\11\375\224"
-  "i\10\376jK\6\377$\31\2\377\0\0\0\377\0\0\0\346\0\0\0\234\0\0\0B\221\0"
-  "\0\0\0\5\0\0\0\16\0\0\0S\3\2\0\236\0\0\0\306\0\0\0\360\204\0\0\0\377"
-  "\5\0\0\0\363\0\0\0\312\3\2\0\242\0\0\0_\0\0\0\25\224\0\0\0\0\12\0\0\0"
-  "\1\0\0\0/\0\0\0U\0\0\0a\0\0\0q\0\0\0s\0\0\0b\0\0\0X\0\0\0""6\0\0\0\6"
-  "\231\0\0\0\0\4\377\275\0\0\0\0\0\6\0\0\0\7\3\1\0\1\316\0\0\0\0",
-};
-
-
-static const GdkPixdata pic7 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2443, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\313\0\0\0\0\1\0\0\0\1\210\0\0\0\0\1\0\0\0\1\227\0\0\0\0\10\0\0\0\6\0"
-  "\0\0/\0\0\0C\0\0\0Q\0\0\0T\0\0\0F\0\0\0""5\0\0\0\17\226\0\0\0\0\15\0"
-  "\0\0#\3\3\1n\0\0\0\253\0\0\0\314\0\0\0\350\0\0\0\371\0\0\0\375\0\0\0"
-  "\354\0\0\0\326\0\0\0\264\5\3\0\202\0\0\0""1\0\0\0\1\221\0\0\0\0\20\0"
-  "\0\0\16\0\0\0\\\0\0\0\300\0\0\0\362\16\12\3\377QA\27\377\210m&\377\233"
-  "z)\377\236|&\377\215m\37\377eN\23\377\40\30\5\377\0\0\0\370\0\0\0\327"
-  "\0\0\0t\0\0\0\34\217\0\0\0\0\22\0\0\0\34\3\3\1\220\0\0\0\362!\33\12\377"
-  "\221v/\377\352\277L\377\351\276K\376\354\277I\377\353\275E\376\351\271"
-  "@\377\351\267:\376\344\2612\376\344\256+\376\256\202\33\3779*\7\377\0"
-  "\0\0\377\0\0\0\260\0\0\0/\215\0\0\0\0\24\0\0\0\31\0\0\0\233\0\0\0\374"
-  "SC\34\377\344\275P\375\356\306V\377\337\272R\377\340\272Q\376\340\271"
-  "N\377\337\266I\376\336\263C\377\335\260=\376\331\2536\377\326\245/\376"
-  "\335\247'\377\345\252\40\376{Z\15\377\0\0\0\377\0\0\0\277\0\0\0""2\211"
-  "\0\0\0\0\1\0\0\0\1\202\0\0\0\0\25\2\1\0\213\0\0\0\372\207p/\377\377\337"
-  "c\376\377\331e\376\373\325f\376\374\326g\377\373\325e\376\372\322`\377"
-  "\371\317[\376\367\313S\377\364\306K\376\362\301B\377\360\274:\376\355"
-  "\2660\377\356\263'\376\373\271\36\376\265\202\17\377\13\10\0\377\0\0"
-  "\0\265\0\2\3\23\207\0\0\0\0\34\0\0\0\1\0\0\0\0\0\0\0\202\0\0\0\315\0"
-  "\0\0\361\0\0\0\377>7\31\37671\31\37682\33\37792\35\376:3\34\377<3\33"
-  "\376=2\32\377>2\30\376\77""0\25\377@/\23\376@.\20\377\77,\15\376>*\11"
-  "\377=)\6\376:&\2\376E-\0\376\16\6\0\377\0\0\0\374\0\0\0\325\0\0\0\224"
-  "\0\0\0\0\0\0\0\1\205\0\0\0\0\32\0\0\0%\10\3\0\377U\"\11\377d-\12\377"
-  "b1\11\376S*\3\376Q-\1\376Q1\0\377O6\0\376D4\0\37772\3\376)/\5\377\35"
-  ".\7\376\20,\12\377\3*\14\376\4+\21\377\10,\26\376\13.\35\377\16.\"\376"
-  "\21""0(\377\24""1.\376#:4\376)>:\377(::\377\6\10\10\377\0\0\0D\206\0"
-  "\0\0\0\32\0\0\0\2051\21\5\377\363b\33\376\354l\30\377\350t\25\376\346"
-  "\177\23\377\344\211\21\376\342\224\16\377\340\235\14\376\305\232\20\377"
-  "\247\224\25\376\207\217\31\377j\212\36\376I\205#\377,\200'\376-\2013"
-  "\3775\203\77\376<\206K\377C\210W\376J\212d\377Q\214o\376Y\216|\377`\222"
-  "\210\376n\235\237\376\37*-\377\0\0\0\240\206\0\0\0\0\33\0\0\0\321y,\16"
-  "\377\350^\32\377\330c\26\377\327l\24\376\325v\21\377\324\177\20\376\322"
-  "\211\15\377\320\222\13\376\267\217\17\377\232\212\24\376}\205\27\377"
-  "b\200\34\376D|\40\377(w$\376*w/\3771z:\3768|F\377>~P\376E\200]\377K\202"
-  "g\376S\204s\377X\206}\376d\217\220\377E^d\377\0\0\0\340\11\14\14\20\204"
-  "\0\0\0\0\34\6\2\0""7\0\0\0\377\270C\26\377\353_\32\376\334e\26\377\326"
-  "l\24\376\325v\21\377\324\177\20\376\322\211\15\377\320\222\13\376\267"
-  "\217\17\377\232\212\24\376}\205\27\377b\200\34\376D|\40\377(w$\376*w"
-  "/\3771z:\3768|F\377>~P\376E\200]\377K\202g\376S\204s\377Z\211\200\376"
-  "e\221\222\377e\211\223\377\0\0\0\377\1\2\3I\204\0\0\0\0\34\0\0\0\17\0"
-  "\0\0\301\10\2\0\377}3\15\376\336e\27\377\353v\26\376\336z\22\377\325"
-  "\177\20\376\320\210\15\377\317\221\13\376\266\217\17\377\232\211\24\376"
-  "}\204\27\377b\200\34\376D|\40\377(w$\376)w/\3771y:\3768{F\377>}P\376"
-  "E\201]\377O\210l\376[\221~\377Z\207~\376C_`\376\14\20\22\377\0\0\0\333"
-  "\0\0\0\34\205\0\0\0\0\32\2\1\0@\1\1\0\356\0\0\0\377\36\11\1\377V'\5\376"
-  "\217L\11\377\304t\15\376\332\216\16\377\330\227\14\376\277\226\20\377"
-  "\243\221\25\376\204\215\31\377i\211\35\376H\204#\377+~&\376,~2\3774\177"
-  "=\376:\201I\377A\204T\376=vW\377*RF\376\23*-\377\3\17\25\376\0\0\0\376"
-  "\4\2\0\377\0\0\1_\206\0\0\0\0\32\0\0\0A\0\0\0\335t[\34\377q^\40\3771"
-  "+\21\376\26\24\11\377\0\0\0\376\0\0\0\377\26\14\0\376-\"\0\37794\4\376"
-  "AG\12\377AW\22\376-U\26\377\20A\23\376\7.\23\377\2\36\21\376\0\14\13"
-  "\377\0\0\5\376\0\0\0\377\34\20\0\376@(\0\377\202X\1\376\241r\10\376\3"
-  "\2\0\377\0\0\0[\206\0\0\0\0\32\0\0\0""5\0\0\0\317aJ\25\377\366\302>\376"
-  "\355\275B\376\322\252@\377\267\225;\376\237\2036\377\210q0\376hV&\377"
-  "M\77\35\3760$\21\377\25\15\7\376\25\13\5\3773!\13\376O8\20\377gK\22\376"
-  "\203`\24\377\225n\23\376\254}\21\377\312\217\15\376\344\241\14\377\352"
-  "\245\15\376\232m\11\377\0\0\0\374\0\0\0T\206\0\0\0\0\32\0\0\0!\0\0\0"
-  "\2722&\11\377\343\2602\376\331\2535\376\341\263=\377\350\272C\376\354"
-  "\277H\377\354\300J\376\352\276I\377\351\275H\376\346\271E\377\344\266"
-  "@\376\342\263;\377\342\2626\376\342\257/\377\342\254)\376\343\250!\377"
-  "\341\244\32\376\333\234\20\377\325\227\13\376\320\223\13\377\335\234"
-  "\14\377tR\6\377\0\0\0\343\0\0\0B\207\0\0\0\0\31\6\4\1\234\0\0\0\377\321"
-  "\237'\377\330\246.\377\335\2544\377\347\2668\376\345\265:\377\343\264"
-  "<\376\341\263=\377\337\261;\376\334\2569\377\332\2535\376\330\2501\377"
-  "\331\246,\376\331\245'\377\331\242\40\376\331\237\31\377\332\234\21\376"
-  "\333\232\12\377\333\233\13\376\316\222\13\377\337\235\14\376+\36\2\377"
-  "\0\0\0\272\0\0\0\31\207\0\0\0\0\32\1\1\0Y\0\0\0\352pT\21\377\352\261"
-  ")\377\303\226'\377\227w%\376\245~\37\377\257\205\34\376\276\220\40\377"
-  "\311\231#\376\325\242'\377\340\253*\376\346\256(\377\332\242\37\376\314"
-  "\224\25\377\277\210\12\376\262|\1\377\242n\0\376\234o\11\377\230l\14"
-  "\376\330\230\14\377\254z\11\377\0\0\0\374\5\3\0\216\0\0\0\0\0\0\0\1\206"
-  "\0\0\0\0\30\0\0\0\37\0\0\0\260\21\15\1\377\321\233\35\375\323\236!\376"
-  ":/\23\376nr|\377\256\254\245\376\234\224\202\377\210}a\376}mI\377r`4"
-  "\376lY*\377vd:\376\201qO\377\215\201h\376\243\234\215\377\250\250\252"
-  "\376;=A\377wU\11\376\352\245\14\3768(\3\377\0\0\0\333\0\0\0""9\211\0"
-  "\0\0\0\27\1\0\0T\0\0\0\352<+\6\377\343\246\33\376\340\244\33\376\202"
-  "e\37\377\222\222\220\376\343\351\365\377\377\377\377\376\377\377\377"
-  "\377\376\377\377\376\371\374\377\377\377\377\377\376\377\377\377\377"
-  "\377\377\377\376\303\310\325\377ujS\376\254x\6\376\361\252\14\376sQ\6"
-  "\377\0\0\0\377\0\0\0{\0\0\0\4\211\0\0\0\0\26\0\0\0\14\4\2\0\207\0\0\0"
-  "\367\\B\7\377\340\242\25\376\346\247\27\376\252w\2\376x^#\377sqk\376"
-  "\246\247\247\377\332\335\345\376\362\366\376\377\305\310\315\376\215"
-  "\213\207\377nfT\376\206\\\0\377\311\214\4\376\354\247\16\376\221f\10"
-  "\377\0\0\0\377\2\1\0\256\0\0\0!\213\0\0\0\0\24\0\0\0\32\0\0\0\226\0\0"
-  "\0\370@-\3\377\315\222\14\375\347\244\16\377\322\224\6\377\303\206\0"
-  "\376\241o\0\377{Y\14\376iN\23\377\212a\6\376\263z\0\377\310\211\0\376"
-  "\343\237\11\377\340\237\14\376lL\6\377\0\0\0\377\0\0\0\271\0\0\0""1\215"
-  "\0\0\0\0\22\0\0\0\34\4\3\0\212\0\0\0\355\26\20\1\377yV\7\377\324\226"
-  "\13\377\331\232\14\376\342\240\15\376\353\246\15\376\356\250\14\377\347"
-  "\244\15\376\335\235\15\376\333\233\14\377\232m\10\377.!\2\377\0\0\0\374"
-  "\2\1\0\252\0\0\0.\217\0\0\0\0\20\0\0\0\16\0\0\0Y\0\0\0\270\0\0\0\356"
-  "\5\3\0\377>,\3\377rQ\6\377\207_\7\377\215d\10\377xU\7\377T;\4\377\23"
-  "\16\1\377\0\0\0\365\0\0\0\320\0\0\0n\0\0\0\35\222\0\0\0\0\15\0\0\0#\2"
-  "\2\0i\4\2\0\246\0\0\0\304\0\0\0\340\0\0\0\362\0\0\0\366\0\0\0\345\0\0"
-  "\0\315\0\0\0\256\5\4\0|\0\0\0""0\0\0\0\2\225\0\0\0\0\10\0\0\0\5\0\0\0"
-  ".\0\0\0C\0\0\0Q\0\0\0T\0\0\0F\0\0\0""5\0\0\0\16\227\0\0\0\0\1\0\0\0\1"
-  "\210\0\0\0\0\1\0\0\0\1\313\0\0\0\0",
-};
-
-
-static const GdkPixdata pic8 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2681, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\217\0\0\0\0\1\0\0\0\1\203\0\0\0\0\1\0\0\0\1\235\0\0\0\0\1\0\0\0\1\232"
-  "\0\0\0\0\13\0\0\0\15\0\0\0%\2\1\0e\4\3\1\221\1\1\0\244\0\0\0\251\1\1"
-  "\0\242\4\3\0\222\2\1\0`\0\0\0'\0\0\0\12\224\0\0\0\0\15\2\1\0<\0\0\0\226"
-  "\0\0\0\336\0\0\0\362\0\0\0\376\14\11\2\377\35\26\6\377\12\10\2\377\0"
-  "\0\0\376\0\0\0\357\0\0\0\337\0\0\0\216\2\1\0<\221\0\0\0\0\23\0\0\0\23"
-  "\3\3\1\207\0\0\0\336\3\3\0\377G:\26\377\224x.\377\326\253\77\377\344"
-  "\266@\377\342\263;\377\340\2576\377\325\244-\377\215k\32\377D3\12\377"
-  "\0\0\0\377\0\0\0\341\3\2\0~\0\0\0\25\0\0\0\0\0\0\0\1\214\0\0\0\0\23\1"
-  "\1\0!\0\0\0\235\0\0\0\374>2\24\377\301\237A\375\362\307R\376\353\302"
-  "P\377\337\267J\376\334\263F\377\334\261A\376\332\255;\377\332\2525\376"
-  "\342\2570\377\352\262*\376\261\203\31\3756'\5\377\0\0\0\371\0\0\0\231"
-  "\2\1\0\34\214\0\0\0\0\25\0\0\0\24\1\0\0\246\0\0\0\377r^(\377\357\307"
-  "W\376\356\307Y\376\342\276W\376\342\276V\377\342\274T\376\341\272O\377"
-  "\337\266I\376\336\262B\377\334\257;\376\331\2523\377\327\245,\376\336"
-  "\247$\377\344\247\34\376^D\10\377\0\0\0\377\0\0\0\231\0\0\0\24\212\0"
-  "\0\0\0\26\0\0\0\4\0\0\0~\0\0\0\375mZ&\377\371\320\\\376\356\311_\376"
-  "\347\305c\377\351\310e\376\360\314d\377\343\301[\376\342\275V\377\341"
-  "\272P\376\337\265H\377\335\262@\376\345\265;\377\325\2461\376\323\240"
-  "'\377\337\246\40\377\345\246\27\376^C\6\377\0\0\0\371\3\2\0}\212\0\0"
-  "\0\0\27\0\0\0A\0\0\0\344A6\26\377\363\313Y\376\353\307^\377\241\213I"
-  "\376]M\40\377dT'\376\265\236U\377\356\314g\376\344\301\\\377\342\275"
-  "U\376\336\267L\377\354\277H\376\211n'\377N;\15\376M9\12\377}^\25\376"
-  "\334\241\31\377\340\240\17\3765%\2\377\0\0\0\340\2\1\0<\210\0\0\0\0\31"
-  "\0\0\0\3\3\2\1\237\0\0\0\377\306\244E\377\361\312]\377\226\201A\377c"
-  "C\0\376\307\212\5\377\275\203\2\376X=\0\377\267\240W\376\360\316g\377"
-  "\343\277Y\376\356\305S\377\214s0\376lJ\0\377\332\231\10\376\335\233\11"
-  "\377\201Z\4\376tV\20\377\353\250\22\377\253x\11\375\0\0\0\377\0\0\0\217"
-  "\0\0\0\12\207\0\0\0\0\31\0\0\0""3\0\0\0\330UE\33\377\360\306T\376\337"
-  "\275[\376=+\2\377\254w\1\376\241x\32\377\244z\33\376\222d\0\377J;\25"
-  "\376\351\312i\377\344\301[\376\354\303U\377A2\14\376\223h\11\377uZ\37"
-  "\376z]\34\377\232n\12\376>+\0\377\305\216\20\376\351\245\15\376C0\3\377"
-  "\0\0\0\335\0\0\0$\207\0\0\0\0\31\0\0\0[\0\0\0\377\236\2001\377\355\303"
-  "R\377\337\273R\376EA6\377\231\232\232\376\12\16\26\377\13\16\27\376\202"
-  "\203\204\377JC6\376\343\302^\377\347\303\\\376\322\256H\377_W\77\376"
-  "\210\215\231\377\0\0\7\376\0\0\7\377\214\220\233\376d]P\377\256{\6\376"
-  "\343\240\14\377\203]\7\377\0\0\0\360\2\1\0^\206\0\0\0\0\34\0\0\0\6\0"
-  "\0\0\201\21\15\4\377\307\240<\375\347\276O\377\332\264I\376\220\216\203"
-  "\377\214\215\221\376\0\0\0\377\0\0\0\376`bi\377\235\223u\376\344\300"
-  "X\377\342\277X\376\357\304P\377\200qJ\376\215\220\230\377\0\0\0\376\0"
-  "\0\0\377\235\241\252\376\205vS\377\322\224\11\376\322\225\13\377\307"
-  "\214\13\377\0\0\0\376\4\3\0\221\0\0\0\0\0\0\0\1\204\0\0\0\0\32\0\0\0"
-  "\13\0\0\0\226!\32\10\377\324\252>\376\344\273K\377\352\302R\376\230\201"
-  "A\377|~\207\376\27\32!\377\20\23\33\376[[\\\377\260\226I\376\355\310"
-  "]\377\342\274S\376\345\274M\377\266\2236\376jih\37747\77\376;\77G\377"
-  "vwz\376\234q\15\377\332\233\17\376\316\222\13\377\326\230\14\377\6\4"
-  "\0\377\2\1\0\242\206\0\0\0\0\32\0\0\0\17\0\0\0\250+!\12\377\335\260<"
-  "\376\341\267E\377\341\270L\376\353\302R\377\235\204\77\376odD\377nbA"
-  "\376\267\233K\377\355\307[\376\342\274S\377\340\271M\376\335\263F\377"
-  "\347\270\77\376\274\223,\377r]-\376mY+\377\254~\24\376\335\237\22\377"
-  "\320\223\14\376\317\222\13\377\327\230\14\377\27\20\1\377\0\0\0\251\206"
-  "\0\0\0\0\32\0\0\0\13\0\0\0\230!\31\7\377\322\2454\376\341\264@\377\336"
-  "\264E\376\336\266J\377\353\303S\376\355\305U\377\357\307V\376\351\302"
-  "V\377\337\272P\376\340\270L\377\336\265G\376\334\261@\377\332\2559\376"
-  "\335\2542\377\350\261,\376\346\254\"\377\330\237\33\376\320\225\20\377"
-  "\320\223\13\376\316\222\13\377\327\230\14\377\6\4\0\377\2\1\0\244\206"
-  "\0\0\0\0\34\0\0\0\6\0\0\0\177\21\15\3\377\301\226+\375\342\2629\377\334"
-  "\257=\376\334\262B\377\336\264F\376\340\267I\377\340\267J\376\337\266"
-  "I\377\336\265G\376\336\263C\377\335\260\77\376\333\2559\377\331\2523"
-  "\376\330\245,\377\327\242%\376\324\235\34\377\322\230\25\376\320\224"
-  "\14\377\320\223\13\376\321\224\14\376\306\214\13\377\0\0\0\375\4\2\0"
-  "\217\0\0\0\0\0\0\0\1\205\0\0\0\0\31\0\0\0_\0\0\0\377\240z\37\376\346"
-  "\2623\377\332\2526\376\334\256:\377\346\270\77\376\352\273B\377\351\273"
-  "B\376\346\270@\377\346\270\77\376\345\265<\377\343\2628\376\343\2572"
-  "\377\342\255,\376\340\251$\377\337\244\35\376\331\235\22\377\331\232"
-  "\15\376\323\225\13\377\317\223\14\376\334\233\14\377\214c\10\377\0\0"
-  "\0\362\2\1\0a\207\0\0\0\0\31\1\1\0""2\0\0\0\325P;\15\377\347\260+\376"
-  "\314\235+\376t]\"\377w^\40\376\205h\34\377\251\2103\376\245\202(\377"
-  "\231u\32\376\237y\32\377\246~\32\376\234s\23\377\230o\20\376\226m\15"
-  "\377\230m\13\376\247\200&\377iQ\32\376mP\22\377\317\222\11\376\343\241"
-  "\14\376B.\4\377\0\0\0\333\0\0\0\"\207\0\0\0\0\31\0\0\0\4\1\1\0\244\0"
-  "\0\0\377\302\221\36\377\352\257%\377~^\17\377\24\26\31\376FL\\\377\0"
-  "\0\1\376~\201\210\377\267\274\307\376\277\300\303\377\273\271\267\376"
-  "\303\304\306\377\302\305\314\376\273\300\315\377\250\260\300\376PT]\377"
-  "UC\33\376\273\204\14\377\340\237\14\376\261}\12\375\1\1\0\377\0\0\0\222"
-  "\0\0\0\14\210\0\0\0\0\27\2\1\0\77\0\0\0\3325%\0\377V>\3\376[\\`\377\377"
-  "\377\377\376ZXV\377\260\202\26\376\242}#\377uc8\376\257\256\255\377\313"
-  "\317\332\376\304\310\320\377\262\260\253\376\206wU\377tY\37\376\270\201"
-  "\7\377\333\232\11\376\326\227\13\376\332\233\14\3763$\2\377\0\0\0\334"
-  "\2\1\0""9\212\0\0\0\0\25\0\0\0\266\35\40%\377\270\272\300\376\377\377"
-  "\377\377\246\251\263\376S8\0\377\344\251\37\376\337\245\36\377\337\243"
-  "\31\376\241r\5\377\216f\14\376\223f\2\377\244p\0\376\313\215\2\377\341"
-  "\237\14\376\323\226\15\377\323\225\14\376\345\242\15\376bE\5\377\0\0"
-  "\0\372\3\2\0\202\211\0\0\0\0\3\0\0\0-\10\10\10\307\205\205\205\377\202"
-  "\377\377\377\377\22\365\366\370\376=4!\376\315\220\6\377\320\226\22\376"
-  "\321\226\21\377\322\226\20\376\331\233\16\377\331\231\12\376\332\231"
-  "\12\377\330\230\13\376\323\225\14\377\317\222\13\376\325\227\14\377\335"
-  "\235\14\376^B\5\377\0\0\0\377\0\0\0\227\0\0\0\21\205\0\0\0\0\1\12\7\0"
-  "\0\202\0\0\0\0\27\0\0\0\23314=\377\340\341\345\377\377\377\377\376\373"
-  "\373\373\377\377\377\377\377~\177\203\377\30\14\0\377\273\204\12\377"
-  "\336\236\14\376\335\235\14\377\331\231\13\376\326\227\13\377\324\226"
-  "\13\376\326\227\14\377\330\231\14\376\335\235\14\377\340\237\14\376\265"
-  "\200\12\3777&\3\377\0\0\0\373\1\1\0\240\1\0\0\36\205\0\0\0\0\32\0\0\1"
-  "\0\0\0\0\0\0\0\0%\33\23\1\365^D\11\377T<\7\377LH>\376\345\347\354\376"
-  "\377\377\377\377\335\335\335\377\0\0\0\342\0\0\0\325\0\0\0\377J4\4\377"
-  "\225j\10\377\266\201\12\375\306\214\13\376\317\222\14\376\305\213\13"
-  "\376\271\203\12\375\222g\10\377K5\4\377\0\0\0\377\0\0\0\342\0\0\0x\0"
-  "\0\0\20\206\0\0\0\0\31\10\4\0\1\0\0\0\0\21\14\0\255\244t\11\377\352\246"
-  "\14\375\353\247\16\377\232i\0\377FA5\376\377\377\377\377DDD\377\0\0\0"
-  "&\1\0\0""8\1\1\0\243\0\0\0\323\0\0\0\377\15\11\0\377\35\25\1\377&\33"
-  "\2\377\34\24\1\377\16\12\0\377\0\0\0\377\0\0\0\325\3\2\0\233\0\0\0<\0"
-  "\0\0\3\207\0\0\0\0\12\15\11\1\2\0\0\0\0""7&\3\362\323\225\14\377\324"
-  "\226\14\376\320\223\14\376\353\247\16\376_E\11\377^bj\377\0\0\0p\202"
-  "\0\0\0\0\12\0\0\0\2\1\0\0/\0\0\0^\0\0\0\177\0\0\0\230\0\0\0\247\0\0\0"
-  "\226\0\0\0\201\0\0\0Y\0\0\0""0\212\0\0\0\0\11\11\6\0\1\0\0\0\0\26\17"
-  "\1\302\264\177\12\377\337\236\14\376\320\223\13\376\344\241\14\376rQ"
-  "\13\377\0\0\10\314\206\0\0\0\0\5\0\0\0\6\0\0\0\13\0\0\0\17\0\0\0\13\0"
-  "\0\0\6\216\0\0\0\0\11\0\0\0""8B.\3\377\312\217\13\377\356\250\15\373"
-  "\315\221\13\377)\35\2\377\0\0\0\31\0\0\0\0\14\14\14\0\230\0\0\0\0\7\0"
-  "\0\0E)\34\1\350\77,\3\377$\31\1\355\0\0\0H\0\0\0\0\1\0\0\1\233\0\0\0"
-  "\0\1\0\0\0\6\202\0\0\0\0\1\205a\10\0\232\0\0\0\0\5\1\0\0\0\12\7\0\1\1"
-  "\0\0\0\6\4\0\1\1\0\0\0\230\0\0\0\0",
-};
-
-
-static const GdkPixdata pic9 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2523, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\313\0\0\0\0\1\0\0\0\1\210\0\0\0\0\1\0\0\0\1\227\0\0\0\0\3\0\0\0\5\0"
-  "\0\0/\0\0\0A\202\0\0\0X\3\0\0\0A\0\0\0.\0\0\0\5\226\0\0\0\0\4\0\0\0""1"
-  "\0\0\0\211\0\0\0\325\0\0\0\360\203\0\0\0\367\5\0\0\0\370\0\0\0\361\0"
-  "\0\0\326\0\0\0\211\0\0\0""2\222\0\0\0\0\20\0\0\0\36\0\0\0\222\0\0\0\370"
-  "\0\0\0\347\0\0\0\251\0\0\0r\0\0\0d\0\0\0^\0\0\0]\0\0\0c\0\0\0q\0\0\0"
-  "\250\0\0\0\347\0\0\0\370\0\0\0\223\0\0\0\36\217\0\0\0\0\10\0\0\0;\0\0"
-  "\0\341\0\0\0\366\0\0\0\214\0\0\0T\4\3\1x\0\0\0\253\0\0\0\306\202\0\0"
-  "\0\326\10\0\0\0\306\0\0\0\253\4\3\0u\0\0\0Q\0\0\0\211\0\0\0\364\0\0\0"
-  "\342\0\0\0=\215\0\0\0\0\24\0\0\0S\0\0\0\366\0\0\0\310\1\1\0W\0\0\0~\0"
-  "\0\0\335\0\0\0\377\25\21\5\377QA\26\377iT\33\377iR\31\377P>\21\377\25"
-  "\20\3\377\0\0\0\377\0\0\0\334\0\0\0{\1\1\0Q\0\0\0\307\0\0\0\367\0\0\0"
-  "S\213\0\0\0\0\26\0\0\0""8\0\0\0\365\0\0\0\266\0\0\0S\0\0\0\263\0\0\0"
-  "\377@5\25\377\273\231>\377\350\276L\377\352\276J\376\351\274E\376\350"
-  "\270\77\377\345\2648\376\341\255/\377\264\210\40\377=-\10\377\0\0\0\377"
-  "\0\0\0\263\0\0\0K\0\0\0\264\0\0\0\366\0\0\0""9\211\0\0\0\0\30\0\0\0\21"
-  "\0\0\0\324\0\0\0\320\2\1\0T\0\0\0\306\0\0\0\377\224z4\377\360\310W\376"
-  "\351\302W\377\340\273S\376\340\271P\377\337\267K\376\336\263D\377\333"
-  "\256=\376\330\2513\377\337\253,\377\344\253$\376\213e\20\377\0\0\0\377"
-  "\0\0\0\306\2\1\0K\0\0\0\315\0\0\0\326\0\0\0\21\206\0\0\0\0\34\0\0\0\1"
-  "\0\0\0\0\0\0\0\200\0\0\0\367\0\0\0h\0\0\0\260\0\0\0\377\256\221\77\377"
-  "\375\324b\376\366\321d\376\365\320f\377\350\305`\376\343\277Y\377\342"
-  "\275T\376\340\267K\377\334\262C\376\341\262<\377\346\2610\376\345\254"
-  "%\377\360\261\40\376\243u\16\377\0\0\0\377\0\0\0\256\0\0\0a\0\0\0\367"
-  "\0\0\0\204\0\0\0\0\0\0\0\1\203\0\0\0\0\36\33\0\0\0\0\0\0\0\0\0\0""3\0"
-  "\0\0\364\1\0\0\362\11\1\0\341\0\0\0\376\207p/\377\373\323`\377\302\245"
-  "M\377}pG\376\177qH\377\310\254V\376\357\315f\377\343\277Z\376\340\272"
-  "P\377\352\275I\376\256\211,\377tc9\376sb7\377\242x\22\376\351\251\25"
-  "\377}Y\7\377\0\0\0\377\12\1\0\333\0\0\0\357\0\0\0\366\0\0\0@\0\0\0\0"
-  "\243\0\0\0\203\0\0\0\0\34\5\0\0+\0\0\0\342j\0\0\377\330\0\0\377V\0\0"
-  "\377\40$\16\377\365\314Y\376\305\246K\377}|z\377\377\377\377\376\377"
-  "\377\377\377zyt\376\320\263Y\377\347\304`\376\345\277V\377\277\2339\376"
-  "\207\206\205\377\377\377\377\376\377\377\377\377\216\217\220\376\253"
-  "z\12\377\344\242\16\376\36\35\2\377N\0\0\377\305\0\0\377X\0\0\377\0\0"
-  "\0\344\2\0\0;\204\0\0\0\0\35\0\0\0\265\210\0\0\377\377\0\0\376\356\0"
-  "\0\376\0\0\0\376\230}2\376\377\325^\377|l=\376\377\377\377\377\321\321"
-  "\321\376\276\276\275\377\372\374\377\376\202sD\377\365\321h\376\362\312"
-  "Z\377|j7\376\377\377\377\377\232\232\231\376yyy\377\367\373\377\376v"
-  "]$\377\355\250\16\377\220e\7\376\0\0\0\376\351\0\0\376\361\0\0\376x\0"
-  "\0\377\0\0\0\300\0\0\0\6\202\0\0\0\0\36\0\0\0IA\0\0\377\377\0\0\376\370"
-  "\0\0\376\250\0\0\376\4\15\4\377\311\242@\376\373\320[\377\203uL\376\323"
-  "\325\334\377\0\0\0\376\0\0\0\377\273\275\304\376\206yQ\377\366\322f\376"
-  "\362\312X\377\205tF\376\310\313\322\377\0\0\0\376\0\0\0\377\254\260\270"
-  "\376\200h2\377\347\244\14\376\276\205\12\377\6\14\1\376\242\0\0\377\344"
-  "\0\0\376\343\0\0\3767\0\0\377\0\0\0[\202\0\0\0\0\36\0\0\0~v\0\0\377\377"
-  "\0\0\376\371\0\0\377}\0\0\376\40#\14\377\337\264E\376\355\304T\377\260"
-  "\225J\376~\201\206\377\10\12\16\376\0\0\0\377`af\376\275\243V\377\352"
-  "\306^\376\346\277S\377\274\231=\376}~\200\377+-4\376\10\13\22\377`bf"
-  "\376\256\200\26\377\332\233\15\376\321\223\13\377\36\35\2\376y\0\0\377"
-  "\346\0\0\377\342\0\0\376p\0\0\377\0\0\0\215\202\0\0\0\0^\0\0\0\245\250"
-  "\0\0\377\375\0\0\376\375\0\0\377b\0\0\376,-\17\377\353\274D\376\340\267"
-  "J\377\351\301R\376\217{A\377xtg\376gcU\377\227\203F\376\355\307[\377"
-  "\340\273S\376\336\267K\377\347\272C\376\232z(\377\207{^\376\200tX\377"
-  "\224n\27\376\333\235\20\377\321\224\14\376\336\234\14\377)&\3\376^\0"
-  "\0\377\352\0\0\376\331\0\0\376\233\0\0\377\0\0\0\265\3\0\0\4\0\0\0\0"
-  "\0\0\0\231\230\0\0\377\377\0\0\376\374\0\0\377l\0\0\376()\14\377\345"
-  "\265=\376\340\265D\377\340\267K\376\353\302R\377\314\251G\376\321\256"
-  "L\377\354\305W\376\341\273Q\377\340\270L\376\336\264E\377\333\257=\376"
-  "\344\2627\377\323\240#\376\320\231\30\377\335\242\32\376\320\225\17\377"
-  "\323\225\13\376\331\231\14\377&#\3\376h\0\0\377\351\0\0\376\333\0\0\376"
-  "\223\0\0\377\0\0\0\253@\0\0\1\0\0\0\0\0\0\0oa\0\0\377\377\0\0\375\367"
-  "\0\0\377\214\0\0\376\27\32\7\377\321\2421\376\341\263<\377\334\261A\376"
-  "\335\264F\377\344\272K\376\344\273L\377\337\267J\376\336\265G\377\335"
-  "\262C\376\334\257=\377\332\2536\376\330\246.\377\330\244'\376\326\237"
-  "\35\377\321\227\24\376\320\223\14\377\326\227\14\376\311\216\13\377\27"
-  "\27\1\376\207\0\0\377\344\0\0\376\346\0\0\376^\0\0\377\0\0\0\201\202"
-  "\0\0\0\0=\0\0\0""1\37\0\0\362\340\0\0\377\376\0\0\376\311\0\0\377\0\0"
-  "\0\377\263\210$\376\345\2636\377\330\2539\376\336\260:\377\331\2534\376"
-  "\335\2578\377\337\261:\376\342\262:\377\344\2638\376\342\2572\377\335"
-  "\251)\376\330\242\37\377\324\233\25\376\320\224\13\377\323\225\15\376"
-  "\316\221\14\377\334\233\14\376\257z\11\377\0\0\0\376\302\0\0\376\345"
-  "\0\0\376\322\0\0\377$\0\0\375\0\0\0>\0\0\0\0\0\0\0\1\0\0\0\0\0\0\0\211"
-  "G\0\0\377\345\0\0\377\377\0\0\375#\0\0\376cP\22\376\361\267.\377x]\33"
-  "\376GB:\377\237\217h\376\224~F\377\230}:\376\235~/\377\242}%\376\240"
-  "|#\377\232x(\376\224u/\377\222x<\376\226\204\\\377>9-\376\214c\12\377"
-  "\350\244\14\377aI\5\376\40\0\0\376\377\0\0\376\342\0\0\377L\0\0\377\0"
-  "\0\0\232\202\0\0\0\0\40\2\0\0\0\0\0\0\0\25\0\0\20\0\0\0\221*\0\0\377"
-  "`\0\0\377:\0\0\377\0\1\0\377\314\230\37\376\343\252\"\377\223v2\377\213"
-  "\214\220\376\344\353\374\377\344\350\362\376\332\335\344\377\313\316"
-  "\325\376\315\320\327\377\334\340\350\376\346\353\367\377\335\345\370"
-  "\376\200}w\377\234t\32\376\337\234\7\377\307\215\13\376\0\1\0\377C\0"
-  "\0\377n\0\0\377,\0\0\377\0\0\0\234\35\0\0\23\0\0\0\0\1\0\0\0\204\0\0"
-  "\0\0\33\0\0\0H\0\0\0p\0\0\0\255\0\0\0\3553%\5\377\337\245\34\376\341"
-  "\246\34\377\270\207\20\376va.\377\261\256\243\376\312\315\323\377\330"
-  "\333\343\376\323\327\336\377\313\315\323\376\247\237\217\377vZ\32\376"
-  "\277\203\0\377\334\233\11\377\333\233\14\3762#\2\377\0\0\0\356\0\0\0"
-  "\246\0\0\0y\0\0\0GF\0\0\0\0\0\0\0\3\0\0\0\203\0\0\0\0\1\1\0\0\0\203\0"
-  "\0\0\0\24\1\0\0\22\0\0\0\206\0\0\0\377H3\6\377\336\240\24\376\341\244"
-  "\27\377\337\242\25\377\253y\6\376\231l\6\377\231q\27\376\231o\21\377"
-  "\227h\0\376\261z\0\377\337\235\12\376\335\234\15\377\335\235\14\376H"
-  "3\4\377\0\0\0\377\0\0\0\200\21\0\0\6\215\0\0\0\0\22\1\1\0\24\0\0\0\227"
-  "\0\0\0\367+\36\2\377\254y\12\375\344\242\16\376\341\237\14\377\332\232"
-  "\12\377\324\224\6\376\325\225\7\377\332\232\11\376\340\236\13\377\344"
-  "\241\15\376\254z\11\375-\40\2\377\0\0\0\370\0\0\0\223\4\3\0\13\215\0"
-  "\0\0\0\11\0\0\0\1\0\0\0\0\0\0\0\30\2\2\0\200\0\0\0\350\0\0\0\377F1\3"
-  "\377\213b\7\377\301\211\13\377\202\324\226\14\377\7\301\211\13\377\213"
-  "b\7\377F1\3\377\0\0\0\377\0\0\0\350\2\1\0{\0\0\0\21\221\0\0\0\0\6\0\0"
-  "\0\2\1\1\0I\0\0\0\234\0\0\0\345\0\0\0\362\0\0\0\376\202\0\0\0\377\5\0"
-  "\0\0\376\0\0\0\363\0\0\0\346\0\0\0\232\1\1\0D\225\0\0\0\0\4\0\0\0\20"
-  "\0\0\0""0\2\1\0n\3\2\0\226\202\3\2\0\244\4\3\2\0\225\2\1\0k\0\0\0-\0"
-  "\0\0\15\271\0\0\0\0\1\0\0\0\1\202\0\0\0\0\1\0\0\0\1\316\0\0\0\0",
-};
-
-
-static const GdkPixdata pic10 = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 2261, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  128, /* rowstride */
-  32, /* width */
-  32, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\316\0\0\0\0\1\0\0\0\1\202\0\0\0\0\6\0\0\0\20\4\3\1\35\5\4\1""0\5\4\1"
-  "'\0\1\0\30\0\0\0\11\230\0\0\0\0\12\3\2\1&\0\0\0~\0\0\0\302\0\0\0\351"
-  "\0\0\0\353\0\0\0\351\0\0\0\340\0\0\0\241\0\0\0]\13\7\2\7\224\0\0\0\0"
-  "\15\0\0\0\2\6\4\2a\0\0\0\325\11\7\2\377A4\24\377u^!\377\215p&\377\202"
-  "e\37\377[F\23\377$\33\6\377\0\0\0\377\0\0\0\243\0\0\0""0\222\0\0\0\0"
-  "\17\2\2\1\15\0\0\0\225\0\0\0\3727-\23\377\307\244E\375\361\306R\376\357"
-  "\304O\377\350\274G\376\350\270\77\377\357\2729\376\332\246*\376\205d"
-  "\25\377\0\0\0\377\0\0\0\333\1\1\0R\221\0\0\0\0\20\3\2\0\201\0\0\0\377"
-  "\177j-\377\365\315]\376\373\324c\376\344\301Z\376\341\275U\377\340\272"
-  "O\376\336\264F\377\333\256<\376\346\2634\377\366\272+\376\305\221\31"
-  "\377%\33\2\377\0\0\0\336\0\0\0""2\217\0\0\0\0\22\1\1\0;\0\0\0\355^N!"
-  "\377\377\331b\376\270\234K\376\226\202G\377\333\273\\\376\352\307b\377"
-  "\343\276W\376\337\267L\377\343\266@\376\234|+\377\201g+\376\310\223\25"
-  "\377\311\222\23\377\0\0\0\377\0\0\0\250\11\7\0\10\215\0\0\0\0\23\0\0"
-  "\0\20\0\0\0\276%\36\14\377\352\302T\376\262\231O\376\255\257\265\376"
-  "\377\377\377\377\201}p\376\341\301^\377\344\301^\376\357\306T\377\214"
-  "t5\376\326\331\341\377\377\377\377\376\217\205o\377\320\224\15\376\207"
-  "_\6\377\0\0\0\377\0\0\0c\215\0\0\0\0\24\4\3\1=\0\0\0\363\220v0\377\352"
-  "\302O\377\230\221{\377\367\370\373\376\241\241\240\377\344\345\352\376"
-  "\240\215R\377\364\320f\376\322\255D\377\252\241\211\376\312\314\321\377"
-  "www\376\303\306\314\377\240u\24\377\337\234\11\376(\34\2\377\0\0\0\254"
-  "\0\0\0\14\214\0\0\0\0\24\2\2\0{\0\0\0\377\335\264G\377\332\265I\377\247"
-  "\241\221\377deg\376\0\0\0\377\214\216\223\376\241\220Z\377\364\317c\376"
-  "\323\255B\377\251\237\206\376!#)\377\0\0\0\376MOV\377\255\203#\376\352"
-  "\244\11\377dG\5\377\0\0\0\347\2\1\0\36\214\0\0\0\0\24\0\0\0\223\34\26"
-  "\6\377\345\272F\377\345\276O\376\256\227V\377OR[\376\30\33#\377ONI\376"
-  "\342\301^\377\342\277X\376\355\302O\377\234\202=\376`ci\37727C\376l`"
-  "F\377\306\216\17\376\336\235\13\377\207`\7\377\0\0\0\354\4\3\0""3\212"
-  "\0\0\0\0\26\0\0\0\1\0\0\0\0\0\0\0\236&\36\10\377\344\266@\377\337\266"
-  "I\376\345\275O\377\251\220J\376\217\177Q\377\312\253Q\376\352\303W\377"
-  "\340\271O\376\336\264F\377\342\263;\376\256\2121\377\223v0\376\316\227"
-  "\30\377\325\230\20\376\330\230\13\376\225i\10\377\0\0\0\356\4\3\0\77"
-  "\214\0\0\0\0\24\0\0\0\213\20\14\3\377\343\2639\377\333\257\77\376\340"
-  "\267H\377\350\277N\376\355\304Q\377\344\275P\376\337\267K\377\336\264"
-  "F\376\334\260>\377\331\2536\376\337\253-\377\340\250\"\376\325\234\27"
-  "\377\321\225\15\376\334\234\14\377}Y\7\377\0\0\0\354\4\3\0*\214\0\0\0"
-  "\0\24\4\3\0d\0\0\0\372\277\224(\377\334\2546\377\335\257:\377\351\271"
-  "=\376\351\273B\377\352\274B\376\352\273A\377\350\267=\376\347\2645\377"
-  "\345\257,\376\342\251!\377\337\242\26\376\330\230\13\377\316\221\13\376"
-  "\343\241\15\376K5\4\377\0\0\0\323\0\0\0\25\214\0\0\0\0\24\0\0\0\27\0"
-  "\0\0\343dK\21\377\357\267/\376`O$\377}nI\376\231\204P\377\213t=\376\204"
-  "l0\377\210m*\376\204i)\377\205k,\376\220v;\377\216xE\376UF$\377\261~"
-  "\14\376\315\220\12\375\21\14\0\377\0\0\0\222\0\0\0\4\214\0\0\0\0\23\0"
-  "\0\0N\0\0\0\345\0\0\0\377\264\205\32\376\317\234$\377\203pD\376\275\302"
-  "\315\377\367\374\377\376\377\377\377\377\377\377\377\376\377\377\377"
-  "\377\377\377\377\376\325\334\352\377\224\214}\376\232o\15\376\345\242"
-  "\14\376F1\3\377\0\0\0\347\2\1\0""6\213\0\0\0\0\24\5\7\11\4\0\0\0\252"
-  "@<6\377\215\203w\377OJF\376\17\11\0\377\336\243\32\377\342\245\27\376"
-  "\256~\20\377\235\206S\376\227\216{\377\246\240\225\376\237\227\202\377"
-  "\236\216k\376\236t\25\377\301\204\0\376\356\250\14\376\214c\10\377\0"
-  "\0\0\377\4\3\0w\211\0\0\0\0\1\0\0\0\1\202\0\0\0\0\24\0\0\0\177und\377"
-  "\344\326\304\377\255\242\224\376\377\370\343\376son\376\31\17\0\377\236"
-  "r\16\376\223j\13\377U:\0\376E.\0\377D-\0\376O4\0\377fD\0\376\267\177"
-  "\3\377\333\233\14\376oN\6\377\0\0\0\377\0\0\0\255\0\0\0\12\207\0\0\0"
-  "\0\1\3\3\0\0\202\0\0\0\0\25\0\0\0\24\0\0\0V\5\6\11\341\321\303\262\377"
-  "\370\351\325\377}uk\376\350\332\307\377\351\332\310\376\0\0\0\377!\27"
-  "\2\376`C\4\377\212a\7\376\240q\11\377\244t\12\376\227k\11\377pO\6\376"
-  "8(\3\376\35\25\1\377\0\0\0\356\0\0\0\222\3\2\0\32\207\0\0\0\0\30\0\0"
-  "\0\1\0\0\0\0""76\0\1\0\0\0q\"\30\1\366dF\1\3779*\11\377\312\276\261\376"
-  "\377\361\335\376\260\245\226\376\213\202v\377\225\217\211\376A-\0\377"
-  "\351\245\16\375\362\253\16\375\361\252\15\376\357\251\15\376\354\247"
-  "\15\377\342\240\15\377\340\237\14\376\331\231\14\376|W\6\377\5\3\0\367"
-  "\2\0\0""0\207\0\0\0\0\33\3\3\0\0\0\0\0\0\0\0\0#\0\0\0\307\\A\5\377\311"
-  "\216\13\377\357\251\15\375\211^\0\376_^`\377\372\354\335\377\377\366"
-  "\341\376\375\355\331\377b\\U\377\0\0\0\360/!\3\377<+\3\377M6\4\377H3"
-  "\4\3761#\2\377\35\25\1\377\227k\10\376\327\230\14\377\347\243\15\376"
-  "xU\6\377\0\0\0\247\0\0\0\0\0\0\0\1\206\0\0\0\0\32\0\0\0\11\13\10\0\326"
-  "\236p\11\377\356\251\15\377\330\231\14\376\321\224\14\377\332\232\14"
-  "\377jI\0\376HB6\377\206~v\377JE\77\377\0\0\0\270\0\0\0\1\0\0\0\35\0\0"
-  "\0Q\0\0\0]\0\0\0\353~Y\7\377\331\232\14\377\322\225\14\377\320\223\13"
-  "\377\336\235\14\376\224i\10\377\0\0\0\270\0\0\0\0\0\0\0\1\206\0\0\0\0"
-  "\13\0\0\0.,\40\2\377\271\203\12\377dF\5\377\310\216\13\377\322\225\14"
-  "\376\321\224\14\377\344\242\15\376\274\204\6\376%\27\0\377\0\0\0\211"
-  "\205\0\0\0\0\10\6\4\0\276J5\4\377lL\6\377\276\206\12\376\325\227\14\377"
-  "\332\233\14\377Z@\5\377\0\0\0q\211\0\0\0\0\13\4\3\0\220\3\2\0\377oO\6"
-  "\376\332\232\14\377\316\222\13\376\271\203\12\377\260}\12\377\336\235"
-  "\14\376\303\212\12\377\25\17\1\347\0\0\0'\204\0\0\0\0\12\0\0\0E\33\23"
-  "\1\377\210`\7\377\306\214\13\376\322\225\14\376\336\235\14\377\215d\10"
-  "\377\0\0\0\262\0\0\0\0\0\0\0\1\207\0\0\0\0\15\0\0\0\13=*\3\377\353\246"
-  "\15\377\216e\10\376\261}\12\377\253y\12\376W=\4\377\330\231\14\377\334"
-  "\234\14\376\221f\10\377\0\0\0\275\0\0\0\0\12\11\1\0\202\0\0\0\0\10\0"
-  "\0\0A+\36\2\377\337\235\15\377\333\233\14\377\330\230\14\377\313\217"
-  "\13\377<*\3\377\0\0\0\217\210\0\0\0\0\15\0\0\0\1\0\0\0\0\0\0\0\241;)"
-  "\3\377O8\4\376\351\245\15\377\233m\10\376\0\0\0\377\324\226\14\376\330"
-  "\231\14\376\333\233\14\376=+\3\377\0\0\0,\204\0\0\0\0\6\0\0\0\215\40"
-  "\27\1\377_C\5\377=+\3\377\0\0\0\355\0\0\0\206\213\0\0\0\0\13*\36\3\17"
-  "\0\0\0\253S:\4\377\347\244\15\377dG\5\377\0\0\0\271F1\4\377\254y\12\377"
-  "\335\235\14\377H2\4\377\0\0\0_\205\0\0\0\0\4\0\0\0:\0\0\0f\0\0\0O\5\3"
-  "\0\26\213\0\0\0\0\1\17\13\1\0\202\0\0\0\0\11\0\0\0\2345%\2\377\4\3\0"
-  "\305\0\0\0\0\0\0\0Y\6\5\0\261\2\1\0\322\14\7\0\257\2\2\0\24\230\0\0\0"
-  "\0\2\0\0\0""8\0\0\0\26\203\0\0\0\0\1,\40\0\4\323\0\0\0\0",
-};
-
-
-static const GdkPixdata bup = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 1194, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  180, /* rowstride */
-  45, /* width */
-  80, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\1\377\377\377\2\243\0\0\0\0\10\377\377\377\7\377\377\377\12\377\377"
-  "\377\3\377\377\377\11\377\377\377\15\377\377\377'\377\377\377\33\377"
-  "\377\377\11\244\0\0\0\0\202\377\377\377\10\1\377\377\377\35\202\0\0\0"
-  "\377\4\377\377\377(\377\377\377\11\377\377\377\30\377\377\377\20\243"
-  "\0\0\0\0\4\377\377\377\20\377\377\377\2\377\377\377\33\0\0\0\352\203"
-  "\0\0\0\377\3\377\377\377\40\377\377\377\17\377\377\377\10\242\0\0\0\0"
-  "\4\377\377\377\6\377\377\377!\377\377\377\5\377\377\377\17\204\0\0\0"
-  "\377\3\377\377\377#\377\377\377\24\377\377\377\1\242\0\0\0\0\5\377\377"
-  "\377\7\377\377\377\1\377\377\377\3\377\377\3770\377\377\377\15\202\0"
-  "\0\0\377\3\377\377\377.\377\377\377\23\377\377\377\15\243\0\0\0\0\7\377"
-  "\377\377\3\377\377\377\2\377\377\377\33\0\0\0\333\377\377\377\10\377"
-  "\377\377\21\377\377\377\16\202\377\377\377\3\1\377\377\377\12\243\0\0"
-  "\0\0\6\377\377\377\1\377\377\377\25\0\0\0\377\377\377\377\16\377\377"
-  "\377\1\377\377\377\3\202\377\377\377\1\1\377\377\377\17\243\0\0\0\0\7"
-  "\377\377\377\2\377\377\377+\0\0\0\377\377\377\377\17\377\377\377\3\377"
-  "\377\377\13\377\377\377\3\202\377\377\377\7\1\377\377\377\2\242\0\0\0"
-  "\0\4\377\377\377\4\377\377\377D\0\0\0\377\377\377\377,\203\377\377\377"
-  "\1\3\377\377\377\4\377\377\377\14\377\377\377\5\242\0\0\0\0\4\377\377"
-  "\377\4\377\377\377\22\0\0\0\377\377\377\377)\204\0\0\0\0\3\377\377\377"
-  "\2\377\377\377\4\377\377\377\2\242\0\0\0\0\3\377\377\377!\0\0\0\352\377"
-  "\377\377\22\205\0\0\0\0\1\377\377\377\2\243\0\0\0\0\3\377\377\377!\0"
-  "\0\0\377\377\377\377\14\251\0\0\0\0\3\377\377\377\24\0\0\0\377\377\377"
-  "\377>\251\0\0\0\0\3\377\377\3775\0\0\0\377\377\377\377.\251\0\0\0\0\4"
-  "\377\377\377\30\0\0\0\352\377\377\377.\377\377\377\1\247\0\0\0\0\4\377"
-  "\377\377\1\377\377\377.\0\0\0\377\377\377\377!\204\0\0\0\0\1\377\377"
-  "\377\1\244\0\0\0\0\3\377\377\377\30\0\0\0\311\377\377\377/\204\0\0\0"
-  "\0\1\377\377\377\6\244\0\0\0\0\3\377\377\377\10\0\0\0\377\377\377\377"
-  "\25\204\0\0\0\0\1\377\377\377\2\244\0\0\0\0\3\377\377\377\1\0\0\0\377"
-  "\377\377\377\30\204\0\0\0\0\1\377\377\377\1\244\0\0\0\0\3\377\377\377"
-  "\16\0\0\0\377\377\377\377-\251\0\0\0\0\3\377\377\377\3\0\0\0\377\377"
-  "\377\377\33\251\0\0\0\0\4\377\377\377\6\0\0\0\377\377\377\3773\377\377"
-  "\377\1\250\0\0\0\0\3\377\377\377\24\0\0\0\360\377\377\377)\251\0\0\0"
-  "\0\3\377\377\377\17\0\0\0\377\377\377\377!\251\0\0\0\0\4\377\377\377"
-  "\7\0\0\0\332\377\377\377%\377\377\377\1\250\0\0\0\0\3\377\377\377\13"
-  "\0\0\0\377\377\377\377\17\251\0\0\0\0\4\377\377\377\6\0\0\0\377\377\377"
-  "\377\31\377\377\377\1\250\0\0\0\0\3\377\377\377\15\0\0\0\254\377\377"
-  "\377\16\251\0\0\0\0\3\377\377\377\5\0\0\0\377\377\377\377\7\251\0\0\0"
-  "\0\3\377\377\377\2\0\0\0\215\377\377\377\10\251\0\0\0\0\3\377\377\377"
-  "\14\0\0\0\345\377\377\377\37\251\0\0\0\0\3\377\377\377\11\0\0\0\377\377"
-  "\377\377\35\251\0\0\0\0\3\377\377\377\2\0\0\0\310\377\377\377\32\251"
-  "\0\0\0\0\3\377\377\377\5\0\0\0\377\377\377\377)\251\0\0\0\0\3\377\377"
-  "\377\24\0\0\0\377\377\377\377\24\244\0\0\0\0\1\377\377\377\1\204\0\0"
-  "\0\0\3\377\377\377\27\0\0\0\377\377\377\377\"\251\0\0\0\0\3\377\377\377"
-  "*\0\0\0\377\377\377\377\40\251\0\0\0\0\3\377\377\377-\0\0\0\377\377\377"
-  "\377!\224\0\0\0\0\1\377\377\377\2\224\0\0\0\0\3\377\377\377\36\0\0\0"
-  "\377\377\377\377\10\251\0\0\0\0\3\377\377\377\13\0\0\0\377\377\377\377"
-  "\11\251\0\0\0\0\3\377\377\377\23\0\0\0\332\377\377\377\32\252\0\0\0\0"
-  "\2\377\377\377\6\377\377\377\1\252\0\0\0\0\1\377\377\377\1\254\0\0\0"
-  "\0\1\377\377\377\3\255\0\0\0\0\1\377\377\377\4\254\0\0\0\0\1\377\377"
-  "\377\6\254\0\0\0\0\1\377\377\377\5\254\0\0\0\0\1\377\377\377\7\377\0"
-  "\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377"
-  "\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\327\0\0\0\0"
-};
-
-
-static const GdkPixdata bdown = {
-  0x47646b50, /* Pixbuf magic: 'GdkP' */
-  24 + 1189, /* header length + pixel_data length */
-  0x2010002, /* pixdata_type */
-  180, /* rowstride */
-  45, /* width */
-  80, /* height */
-  /* pixel_data: */
-  (guint8*)
-  "\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0"
-  "\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\377\0\0\0\0\253"
-  "\0\0\0\0\1\377\377\377\7\254\0\0\0\0\1\377\377\377\5\254\0\0\0\0\1\377"
-  "\377\377\6\254\0\0\0\0\1\377\377\377\4\377\0\0\0\0\206\0\0\0\0\3\377"
-  "\377\377\3\377\377\377\6\377\377\377\1\252\0\0\0\0\4\377\377\377\1\377"
-  "\377\377\23\0\0\0\332\377\377\377\32\253\0\0\0\0\3\377\377\377\13\0\0"
-  "\0\377\377\377\377\11\253\0\0\0\0\3\377\377\377\36\0\0\0\377\377\377"
-  "\377\10\253\0\0\0\0\3\377\377\377-\0\0\0\377\377\377\377!\224\0\0\0\0"
-  "\1\377\377\377\2\226\0\0\0\0\3\377\377\377*\0\0\0\377\377\377\377\40"
-  "\246\0\0\0\0\1\377\377\377\1\204\0\0\0\0\3\377\377\377\27\0\0\0\377\377"
-  "\377\377\"\253\0\0\0\0\3\377\377\377\24\0\0\0\377\377\377\377\24\253"
-  "\0\0\0\0\3\377\377\377\5\0\0\0\377\377\377\377)\253\0\0\0\0\3\377\377"
-  "\377\2\0\0\0\310\377\377\377\32\253\0\0\0\0\3\377\377\377\11\0\0\0\377"
-  "\377\377\377\35\253\0\0\0\0\3\377\377\377\14\0\0\0\345\377\377\377\37"
-  "\253\0\0\0\0\3\377\377\377\2\0\0\0\215\377\377\377\10\253\0\0\0\0\3\377"
-  "\377\377\5\0\0\0\377\377\377\377\7\253\0\0\0\0\3\377\377\377\15\0\0\0"
-  "\254\377\377\377\16\253\0\0\0\0\4\377\377\377\6\0\0\0\377\377\377\377"
-  "\31\377\377\377\1\252\0\0\0\0\3\377\377\377\13\0\0\0\377\377\377\377"
-  "\17\253\0\0\0\0\4\377\377\377\7\0\0\0\332\377\377\377%\377\377\377\1"
-  "\252\0\0\0\0\3\377\377\377\17\0\0\0\377\377\377\377!\253\0\0\0\0\3\377"
-  "\377\377\24\0\0\0\360\377\377\377)\253\0\0\0\0\4\377\377\377\6\0\0\0"
-  "\377\377\377\3773\377\377\377\1\252\0\0\0\0\3\377\377\377\3\0\0\0\377"
-  "\377\377\377\33\253\0\0\0\0\3\377\377\377\16\0\0\0\377\377\377\377-\253"
-  "\0\0\0\0\3\377\377\377\1\0\0\0\377\377\377\377\30\204\0\0\0\0\1\377\377"
-  "\377\1\246\0\0\0\0\3\377\377\377\10\0\0\0\377\377\377\377\25\204\0\0"
-  "\0\0\1\377\377\377\2\246\0\0\0\0\3\377\377\377\30\0\0\0\311\377\377\377"
-  "/\204\0\0\0\0\1\377\377\377\6\245\0\0\0\0\4\377\377\377\1\377\377\377"
-  ".\0\0\0\377\377\377\377!\204\0\0\0\0\1\377\377\377\1\246\0\0\0\0\4\377"
-  "\377\377\30\0\0\0\352\377\377\377.\377\377\377\1\252\0\0\0\0\3\377\377"
-  "\3775\0\0\0\377\377\377\377.\253\0\0\0\0\3\377\377\377\24\0\0\0\377\377"
-  "\377\377>\253\0\0\0\0\3\377\377\377!\0\0\0\377\377\377\377\14\253\0\0"
-  "\0\0\3\377\377\377!\0\0\0\352\377\377\377\22\205\0\0\0\0\1\377\377\377"
-  "\2\244\0\0\0\0\4\377\377\377\4\377\377\377\22\0\0\0\377\377\377\377)"
-  "\204\0\0\0\0\3\377\377\377\2\377\377\377\4\377\377\377\2\243\0\0\0\0"
-  "\4\377\377\377\4\377\377\377D\0\0\0\377\377\377\377,\203\377\377\377"
-  "\1\3\377\377\377\4\377\377\377\14\377\377\377\5\244\0\0\0\0\7\377\377"
-  "\377\2\377\377\377+\0\0\0\377\377\377\377\17\377\377\377\3\377\377\377"
-  "\13\377\377\377\3\202\377\377\377\7\1\377\377\377\2\244\0\0\0\0\6\377"
-  "\377\377\1\377\377\377\25\0\0\0\377\377\377\377\16\377\377\377\1\377"
-  "\377\377\3\202\377\377\377\1\1\377\377\377\17\244\0\0\0\0\7\377\377\377"
-  "\3\377\377\377\2\377\377\377\33\0\0\0\333\377\377\377\10\377\377\377"
-  "\21\377\377\377\16\202\377\377\377\3\1\377\377\377\12\243\0\0\0\0\5\377"
-  "\377\377\7\377\377\377\1\377\377\377\3\377\377\3770\377\377\377\15\202"
-  "\0\0\0\377\3\377\377\377.\377\377\377\23\377\377\377\15\243\0\0\0\0\4"
-  "\377\377\377\6\377\377\377!\377\377\377\5\377\377\377\17\204\0\0\0\377"
-  "\3\377\377\377#\377\377\377\24\377\377\377\1\243\0\0\0\0\4\377\377\377"
-  "\20\377\377\377\2\377\377\377\33\0\0\0\352\203\0\0\0\377\3\377\377\377"
-  "\40\377\377\377\17\377\377\377\10\244\0\0\0\0\202\377\377\377\10\1\377"
-  "\377\377\35\202\0\0\0\377\6\377\377\377(\377\377\377\11\377\377\377\30"
-  "\377\377\377\20\0\0\0\0\377\377\377\2\243\0\0\0\0\11\377\377\377\7\377"
-  "\377\377\12\377\377\377\3\377\377\377\11\377\377\377\15\377\377\377'"
-  "\377\377\377\33\377\377\377\11\0\0\0\0"
-};
-
-
-static void load_images(void)
-{
-	icons = g_new(GdkPixbuf*, 13);
-	icons[0] = gdk_pixbuf_from_pixdata(&pic1, FALSE, NULL);
-	icons[1] = gdk_pixbuf_from_pixdata(&pic2, FALSE, NULL);
-	icons[2] = gdk_pixbuf_from_pixdata(&pic3, FALSE, NULL);
-	icons[3] = gdk_pixbuf_from_pixdata(&pic4, FALSE, NULL);
-	icons[4] = gdk_pixbuf_from_pixdata(&pic5, FALSE, NULL);
-	icons[5] = gdk_pixbuf_from_pixdata(&pic6, FALSE, NULL);
-	icons[6] = gdk_pixbuf_from_pixdata(&pic7, FALSE, NULL);
-	icons[7] = gdk_pixbuf_from_pixdata(&pic8, FALSE, NULL);
-	icons[8] = gdk_pixbuf_from_pixdata(&pic9, FALSE, NULL);
-	icons[9] = gdk_pixbuf_from_pixdata(&pic10, FALSE, NULL);
-	icons[IMAGE_BUTTON_UP] = gdk_pixbuf_from_pixdata(&bup, FALSE, NULL);
-	icons[IMAGE_BUTTON_DOWN] = gdk_pixbuf_from_pixdata(&bdown, FALSE, NULL);
-}
-
-
-static void init_images(void)
-{
-	gushort l, m, n;
-
-	/* define start images */
-	l = (gushort) g_random_int_range(0, MAX_PICS);
-	m = (gushort) g_random_int_range(0, MAX_PICS);
-	n = (gushort) g_random_int_range(0, MAX_PICS);
-
-	ensure_different_icons(&l, &m, &n);
-
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image1), icons[l]);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image2), icons[m]);
-	gtk_image_set_from_pixbuf(GTK_IMAGE(image3), icons[n]);
-}
-
-
-/* main exit function */
-gint gb_destroyapp(GtkWidget *widget, gpointer gdata)
-{
-	if (is_running)
+		if (! self->source_id)
+			self->source_id = g_timeout_add(1000/60, geany_pong_area_timeout, self);
+		else
+		{
+			g_source_remove(self->source_id);
+			self->source_id = 0;
+		}
+		gtk_widget_queue_draw(area);
 		return TRUE;
-	if (GTK_IS_WINDOW(gb_window))
-		gtk_widget_destroy(gb_window);
-	gb_window = NULL;
+	}
+
 	return FALSE;
 }
 
 
-static void gb_start_bandit(GtkWindow *parent)
+static gboolean geany_pong_area_motion_notify(GtkWidget *area, GdkEventMotion *event, GeanyPong *self)
 {
-	load_images();
-	create_window(parent);
-	g_signal_connect(gb_window, "delete-event", G_CALLBACK(gb_destroyapp), NULL);
+	self->handle_pos = (gint) event->x;
+	/* clamp so the handle is always fully in */
+	if (self->handle_pos < self->handle_width/2 + BORDER_THIKNESS)
+		self->handle_pos = self->handle_width/2 + BORDER_THIKNESS;
+	else if (self->handle_pos > self->area_width - self->handle_width/2 - BORDER_THIKNESS)
+		self->handle_pos = self->area_width - self->handle_width/2 - BORDER_THIKNESS;
 
-	points = 0;
-	bout = 0;
-	init_images();
-	init_strings();
-	update_labels(gb_window, TRUE, 3);
+	return TRUE;
+}
 
-	gtk_widget_show(gb_window);
+
+static void geany_pong_class_init(GeanyPongClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS(klass);
+	GtkDialogClass *dialog_class = GTK_DIALOG_CLASS(klass);
+
+	object_class->finalize = geany_pong_finalize;
+	dialog_class->response = geany_pong_response;
+}
+
+
+static void geany_pong_init(GeanyPong *self)
+{
+	GtkWidget *vbox;
+	GtkWidget *hbox;
+	GtkWidget *label;
+
+	self->score = 0;
+	self->source_id = 0;
+	self->area_height = AREA_SIZE;
+	self->area_width = AREA_SIZE;
+	self->handle_width = self->area_width / 2;
+	self->handle_pos = self->area_width / 2;
+	geany_pong_reset_ball(self);
+
+	gtk_window_set_title(GTK_WINDOW(self), "Happy Easter!");
+	gtk_window_set_position(GTK_WINDOW(self), GTK_WIN_POS_CENTER_ON_PARENT);
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(self), TRUE);
+	gtk_window_set_modal(GTK_WINDOW(self), TRUE);
+	gtk_window_set_skip_pager_hint(GTK_WINDOW(self), TRUE);
+	gtk_window_set_resizable(GTK_WINDOW(self), FALSE);
+
+	vbox = gtk_vbox_new(FALSE, 0);
+	gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
+	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(self))), vbox, TRUE, TRUE, 0);
+
+	hbox = gtk_hbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+
+	label = gtk_label_new("Score:");
+	gtk_misc_set_alignment(GTK_MISC(label), 1.0, 0.5);
+	gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+
+	self->score_label = gtk_label_new("0");
+	gtk_box_pack_start(GTK_BOX(hbox), self->score_label, FALSE, FALSE, 0);
+
+	self->area = gtk_drawing_area_new();
+	gtk_widget_add_events(self->area, GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	g_signal_connect(self->area, "draw", G_CALLBACK(geany_pong_area_draw), self);
+#else
+	g_signal_connect(self->area, "expose-event", G_CALLBACK(geany_pong_area_expose), self);
+#endif
+	g_signal_connect(self->area, "button-press-event", G_CALLBACK(geany_pong_area_button_press), self);
+	g_signal_connect(self->area, "motion-notify-event", G_CALLBACK(geany_pong_area_motion_notify), self);
+	gtk_widget_set_size_request(self->area, AREA_SIZE, AREA_SIZE);
+	gtk_box_pack_start(GTK_BOX(vbox), self->area, TRUE, TRUE, 0);
+
+	gtk_dialog_add_buttons(GTK_DIALOG(self),
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+		NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(self), GTK_RESPONSE_HELP);
+	gtk_widget_grab_focus(gtk_dialog_get_widget_for_response(GTK_DIALOG(self), GTK_RESPONSE_HELP));
+
+	gtk_widget_show_all(vbox);
+}
+
+
+static void geany_pong_finalize(GObject *obj)
+{
+	GeanyPong *self = GEANY_PONG(obj);
+
+	if (self->source_id)
+		g_source_remove(self->source_id);
+
+	G_OBJECT_CLASS(geany_pong_parent_class)->finalize(obj);
+}
+
+
+static void geany_pong_help(GeanyPong *self)
+{
+	GtkWidget *dialog;
+	GtkWidget *vbox;
+	GtkWidget *scrolledwindow;
+	GtkWidget *textview;
+	GtkTextBuffer *buffer;
+
+	dialog = gtk_dialog_new_with_buttons("Help", GTK_WINDOW(self),
+		GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+		GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE, NULL);
+	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
+	gtk_container_set_border_width(GTK_CONTAINER(dialog), 1);
+	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+
+	vbox = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+
+	scrolledwindow = gtk_scrolled_window_new(NULL, NULL);
+	gtk_box_pack_start(GTK_BOX(vbox), scrolledwindow, TRUE, TRUE, 0);
+	gtk_container_set_border_width(GTK_CONTAINER(scrolledwindow), 5);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolledwindow), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(scrolledwindow), GTK_SHADOW_IN);
+
+	textview = gtk_text_view_new();
+	gtk_container_add(GTK_CONTAINER(scrolledwindow), textview);
+	gtk_widget_set_size_request(textview, 450, -1);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(textview), FALSE);
+	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_WORD);
+	gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(textview), FALSE);
+	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(textview), 2);
+	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(textview), 2);
+
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textview));
+	gtk_text_buffer_set_text(buffer,
+		"A small Pong-like\n"
+		"\n"
+		"Click to start, and then bounce the ball off the walls without it "
+		"falling down the bottom edge. You control the bottom handle with "
+		"the mouse, but beware! the ball goes faster and faster and the "
+		"handle grows smaller and smaller!", -1);
+
+	gtk_widget_show_all(dialog);
+	gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_widget_destroy(dialog);
+}
+
+
+static void geany_pong_response(GtkDialog *self, gint response)
+{
+	g_return_if_fail(GEANY_IS_PONG(self));
+
+	switch (response)
+	{
+		case GTK_RESPONSE_HELP:
+			geany_pong_help(GEANY_PONG(self));
+			break;
+
+		default:
+			gtk_widget_destroy(GTK_WIDGET(self));
+	}
+}
+
+
+static GtkWidget *geany_pong_new(GtkWindow *parent)
+{
+	return g_object_new(GEANY_TYPE_PONG, "transient-for", parent, NULL);
 }
 
 
 static gboolean gb_on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
-	static gchar text[] = "00000";
+	static gchar text[] = "geany";
 
-	switch (event->keyval)
+	if (event->keyval < 0x80)
 	{
-		case 'g':
+		memmove (text, &text[1], G_N_ELEMENTS(text) - 1);
+		text[G_N_ELEMENTS(text) - 2] = (gchar) event->keyval;
+
+		if (utils_str_equal(text, "geany"))
 		{
-			text[0] = 'g';
-			text[1] = '\0';
+			GtkWidget *pong = geany_pong_new(GTK_WINDOW(widget));
+			gtk_widget_show(pong);
 			return TRUE;
-			break;
-		}
-		case 'e':
-		{
-			text[1] = 'e';
-			text[2] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'a':
-		{
-			text[2] = 'a';
-			text[3] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'n':
-		{
-			text[3] = 'n';
-			text[4] = '\0';
-			return TRUE;
-			break;
-		}
-		case 'y':
-		{
-			text[4] = 'y';
-			text[5] = '\0';
-			if (utils_str_equal(text, "geany"))
-				gb_start_bandit(GTK_WINDOW(widget));
-			return TRUE;
-			break;
-		}
-		default:
-		{
-			text[0] = '\0';
-			return FALSE;
 		}
 	}
+
+	return FALSE;
 }
