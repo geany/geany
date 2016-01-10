@@ -59,7 +59,7 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 	TMTagAttrType *attrs, gboolean partial, langType lang);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function);
+	gboolean function, gboolean member, const gchar *current_scope);
 
 
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
