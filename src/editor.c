@@ -713,6 +713,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean member;
 	gboolean ret = FALSE;
 	const gchar *current_scope;
+	const gchar *context_sep = tm_tag_context_separator(ft->lang);
 
 	if (autocomplete_scope_shown)
 	{
@@ -727,21 +728,16 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 			typed = sci_get_char_at(sci, pos - 1);
 	}
 
+	/* make sure to keep in sync with similar checks below */
 	if (typed == '.')
 		pos -= 1;
-	else if (ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP ||
-		ft->id == GEANY_FILETYPES_PHP || ft->id == GEANY_FILETYPES_RUST)
-	{
-		if (match_last_chars(sci, pos, "::"))
-			pos-=2;
-		else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
-				 match_last_chars(sci, pos, "->"))
-			pos-=2;
-		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
-			pos-=3;
-		else
-			return FALSE;
-	}
+	else if (match_last_chars(sci, pos, context_sep))
+		pos -= strlen(context_sep);
+	else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
+			match_last_chars(sci, pos, "->"))
+		pos -= 2;
+	else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
+		pos -= 3;
 	else
 		return FALSE;
 
@@ -774,7 +770,8 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	pos -= strlen(name);
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
-	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, "::") ||
+	/* make sure to keep in sync with similar checks above */
+	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, context_sep) ||
 			 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
 
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)

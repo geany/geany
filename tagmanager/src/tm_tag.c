@@ -1368,11 +1368,12 @@ void tm_tags_array_print(GPtrArray *tags, FILE *fp)
 */
 gint tm_tag_scope_depth(const TMTag *t)
 {
+	const gchar *context_sep = tm_tag_context_separator(t->lang);
 	gint depth;
 	char *s;
 	if(!(t && t->scope))
 		return 0;
-	for (s = t->scope, depth = 0; s; s = strstr(s, "::"))
+	for (s = t->scope, depth = 0; s; s = strstr(s, context_sep))
 	{
 		++ depth;
 		++ s;
