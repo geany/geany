@@ -45,8 +45,6 @@ typedef struct
 #define SOURCE_FILE_NEW(S) ((S) = g_slice_new(TMSourceFilePriv))
 #define SOURCE_FILE_FREE(S) g_slice_free(TMSourceFilePriv, (TMSourceFilePriv *) S)
 
-static TMSourceFile *current_source_file = NULL;
-
 static int get_path_max(const char *path)
 {
 #ifdef PATH_MAX
@@ -110,7 +108,7 @@ gchar *tm_get_real_path(const gchar *file_name)
 }
 
 /* add argument list of __init__() Python methods to the class tag */
-static void update_python_arglist(const TMTag *tag)
+static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source_file)
 {
 	guint i;
 	const char *parent_tag_name;
@@ -144,15 +142,13 @@ static void update_python_arglist(const TMTag *tag)
  it finds a new tag. You should not have to use this function.
  @see tm_source_file_parse()
 */
-static int tm_source_file_tags(const tagEntryInfo *tag)
+static int tm_source_file_tags(const tagEntryInfo *tag, void *user_data)
 {
-	if (NULL == current_source_file)
-		return 0;
-
+	TMSourceFile *current_source_file = user_data;
 	TMTag *tm_tag = tm_tag_new(current_source_file, tag);
 
 	if (tm_tag->lang == TM_PARSER_PYTHON)
-		update_python_arglist(tm_tag);
+		update_python_arglist(tm_tag, current_source_file);
 
 	g_ptr_array_add(current_source_file->tags_array, tm_tag);
 
@@ -163,7 +159,6 @@ void tm_source_file_ctags_init()
 {
 	initializeParsing();
 	installLanguageMapDefaults();
-	TagEntryFunction = tm_source_file_tags;
 }
 
 /* Initializes a TMSourceFile structure from a file name. */
@@ -340,7 +335,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		return TRUE;
 	}
 
-	current_source_file = source_file;
 	if (! LanguageTable [source_file->lang]->enabled)
 	{
 #ifdef TM_DEBUG
@@ -349,6 +343,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	}
 	else
 	{
+		setTagEntryFunction(tm_source_file_tags, source_file);
 		guint passCount = 0;
 		while (retry && passCount < 3)
 		{

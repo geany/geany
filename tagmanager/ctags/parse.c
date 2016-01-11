@@ -33,10 +33,18 @@ static parserDefinitionFunc* BuiltInParsers[] = { PARSER_LIST };
 parserDefinition** LanguageTable = NULL;
 static unsigned int LanguageCount = 0;
 tagEntryFunction TagEntryFunction = NULL;
+void *TagEntryUserData = NULL;
 
 /*
 *   FUNCTION DEFINITIONS
 */
+
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
+{
+    TagEntryFunction = entry_function;
+    TagEntryUserData = user_data;
+}
+
 
 extern void makeSimpleTag (const vString* const name,
 			   kindOption* const kinds, const int kind)

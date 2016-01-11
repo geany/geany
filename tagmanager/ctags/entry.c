@@ -393,7 +393,7 @@ extern void makeTagEntry (const tagEntryInfo *const tag)
 	int length = 0;
 
 	if (NULL != TagEntryFunction)
-		length = TagEntryFunction(tag);
+		length = TagEntryFunction(tag, TagEntryUserData);
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);
