@@ -377,7 +377,7 @@ void ui_set_window_title(GeanyDocument *doc)
 
 	str = g_string_new(NULL);
 
-	if (doc != NULL)
+	if (doc != NULL && interface_prefs.titlebar_show_filename)
 	{
 		g_string_append(str, doc->changed ? "*" : "");
 
@@ -2321,6 +2321,8 @@ void ui_init_prefs(void)
 		"msgwin_messages_visible", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
 		"msgwin_scribble_visible", TRUE);
+	stash_group_add_boolean(group, &interface_prefs.titlebar_show_filename,
+		"titlebar_show_filename", TRUE);
 }
 
 

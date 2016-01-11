@@ -2607,6 +2607,8 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
+titlebar_show_filename            Whether to include the current filename      true        immediately
+                                  in the window title bar
 **VTE related**
 emulation                         Terminal emulation mode. Only change this    xterm       immediately
                                   if you have VTE termcap files other than
