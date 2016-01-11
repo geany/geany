@@ -400,12 +400,6 @@ extern void makeTagEntry (const tagEntryInfo *const tag)
     }
 }
 
-extern void setTagArglistByName (const char *tag_name, const char *arglist)
-{
-    if (NULL != TagEntrySetArglistFunction)
-	TagEntrySetArglistFunction(tag_name, arglist);
-}
-
 extern void initTagEntry (tagEntryInfo *const e, const char *const name)
 {
     Assert (File.source.name != NULL);

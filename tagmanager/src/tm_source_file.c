@@ -109,6 +109,35 @@ gchar *tm_get_real_path(const gchar *file_name)
 	return NULL;
 }
 
+/* add argument list of __init__() Python methods to the class tag */
+static void update_python_arglist(const TMTag *tag)
+{
+	guint i;
+	const char *parent_tag_name;
+
+	if (tag->type != tm_tag_method_t || tag->scope == NULL ||
+		g_strcmp0(tag->name, "__init__") != 0)
+		return;
+
+	parent_tag_name = strrchr(tag->scope, '.');
+	if (parent_tag_name)
+		parent_tag_name++;
+	else
+		parent_tag_name = tag->scope;
+
+	/* going in reverse order because the tag was added recently */
+	for (i = current_source_file->tags_array->len; i > 0; i--)
+	{
+		TMTag *prev_tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
+		if (g_strcmp0(prev_tag->name, parent_tag_name) == 0)
+		{
+			g_free(prev_tag->arglist);
+			prev_tag->arglist = g_strdup(tag->arglist);
+			break;
+		}
+	}
+}
+
 /*
  This function is registered into the ctags parser when a file is parsed for
  the first time. The function is then called by the ctags parser each time
@@ -119,34 +148,15 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 {
 	if (NULL == current_source_file)
 		return 0;
-	g_ptr_array_add(current_source_file->tags_array, 
-		tm_tag_new(current_source_file, tag));
+
+	TMTag *tm_tag = tm_tag_new(current_source_file, tag);
+
+	if (tm_tag->lang == TM_PARSER_PYTHON)
+		update_python_arglist(tm_tag);
+
+	g_ptr_array_add(current_source_file->tags_array, tm_tag);
+
 	return TRUE;
-}
-
-/* Set the argument list of tag identified by its name */
-static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
-{
-	guint i;
-
-	if (NULL == arglist ||
-		NULL == tag_name ||
-		NULL == current_source_file)
-	{
-		return;
-	}
-
-	/* going in reverse order because the tag was added recently */
-	for (i = current_source_file->tags_array->len; i > 0; i--)
-	{
-		TMTag *tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
-		if (g_strcmp0(tag->name, tag_name) == 0)
-		{
-			g_free(tag->arglist);
-			tag->arglist = g_strdup(arglist);
-			break;
-		}
-	}
 }
 
 /* Initializes a TMSourceFile structure from a file name. */
@@ -189,8 +199,6 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
-		if (NULL == TagEntrySetArglistFunction)
-			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 
 	if (name == NULL)
@@ -339,8 +347,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
-		if (NULL == TagEntrySetArglistFunction)
-			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	current_source_file = source_file;
 	if (! LanguageTable [source_file->lang]->enabled)
@@ -407,8 +413,6 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
-		if (NULL == TagEntrySetArglistFunction)
-			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	return getLanguageName(lang);
 }
@@ -425,8 +429,6 @@ TMParserType tm_source_file_get_named_lang(const gchar *name)
 		installLanguageMapDefaults();
 		if (NULL == TagEntryFunction)
 			TagEntryFunction = tm_source_file_tags;
-		if (NULL == TagEntrySetArglistFunction)
-			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	return getNamedLanguage(name);
 }
