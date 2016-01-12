@@ -40,8 +40,8 @@ struct GeanyDocument;
 
 /** IDs of known filetypes
  *
- * @ref filetypes_array will contain an item for each. Use filetypes_array->len to
- * determine the number of known filetypes at runtime */
+ * @ref filetypes will contain an item for each. Use GeanyData::filetypes_array to
+ * determine the known filetypes at runtime */
 typedef enum
 {
 	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
@@ -133,7 +133,7 @@ GeanyFiletypeGroupID;
 /** Represents a filetype. */
 typedef struct GeanyFiletype
 {
-	GeanyFiletypeID	  id;				/**< Index in @c filetypes_array. */
+	GeanyFiletypeID	  id;				/**< Index in @ref filetypes. */
 	/** Represents the langType of tagmanager (see the table
 	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
 	langType 		  lang;
@@ -163,7 +163,7 @@ typedef struct GeanyFiletype
 }
 GeanyFiletype;
 
-/** Wraps @ref filetypes_array so it can be used with C array syntax.
+/** Wraps @ref GeanyData::filetypes_array so it can be used with C array syntax.
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...;
  * @see filetypes_index(). */
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
