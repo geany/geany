@@ -2811,7 +2811,10 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
 		queue_colourise(doc);
-		doc->priv->symbol_list_sort_mode = type->priv->symbol_list_sort_mode;
+		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
+			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
+		else
+			doc->priv->symbol_list_sort_mode = type->priv->symbol_list_sort_mode;
 	}
 
 	document_update_tags(doc);

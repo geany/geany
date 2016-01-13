@@ -1901,6 +1901,14 @@ static void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer us
 }
 
 
+static void on_show_symbol_list_toggled(GtkToggleButton *button, gpointer user_data)
+{
+	GtkWidget *widget = ui_lookup_widget(ui_widgets.prefs_dialog, "box_show_symbol_list_children");
+
+	gtk_widget_set_sensitive(widget, gtk_toggle_button_get_active(button));
+}
+
+
 static void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
