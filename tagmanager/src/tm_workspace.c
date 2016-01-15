@@ -700,28 +700,26 @@ static gboolean langs_compatible(langType lang, langType other)
 }
 
 
-static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
-	const char *name, const char *scope, TMTagType type, gboolean partial, langType lang)
+static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
+	const char *name, const char *scope, TMTagType type, langType lang)
 {
-	TMTag **matches;
-	guint tagIter;
-	guint tagCount;
+	TMTag **tag;
+	guint i, num;
 
 	if (!src || !dst || !name || !*name)
-		return 0;
+		return;
 
-	matches = tm_tags_find(src, name, partial, &tagCount);
-	for (tagIter = 0; tagIter < tagCount; ++tagIter)
+	tag = tm_tags_find(src, name, FALSE, &num);
+	for (i = 0; i < num; ++i)
 	{
-		if ((type & (*matches)->type) &&
-			langs_compatible(lang, (*matches)->lang) &&
-			(!scope || g_strcmp0((*matches)->scope, scope) == 0))
-			g_ptr_array_add(dst, *matches);
-
-		matches++;
+		if ((type & (*tag)->type) &&
+			langs_compatible(lang, (*tag)->lang) &&
+			(!scope || g_strcmp0((*tag)->scope, scope) == 0))
+		{
+			g_ptr_array_add(dst, *tag);
+		}
+		tag++;
 	}
-
-	return dst->len;
 }
 
 
@@ -730,21 +728,70 @@ static guint fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
  @param scope The scope name of the tag to find, or NULL.
  @param type The tag types to return (TMTagType). Can be a bitmask.
  @param attrs The attributes to sort and dedup on (0 terminated integer array).
- @param partial Whether partial match is allowed.
  @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
              -1 for all
  @return Array of matching tags.
 */
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
-	TMTagAttrType *attrs, gboolean partial, langType lang)
+	TMTagAttrType *attrs, langType lang)
 {
 	GPtrArray *tags = g_ptr_array_new();
 
-	fill_find_tags_array(tags, theWorkspace->tags_array, name, scope, type, partial, lang);
-	fill_find_tags_array(tags, theWorkspace->global_tags, name, scope, type, partial, lang);
+	fill_find_tags_array(tags, theWorkspace->tags_array, name, scope, type, lang);
+	fill_find_tags_array(tags, theWorkspace->global_tags, name, scope, type, lang);
 
 	if (attrs)
 		tm_tags_sort(tags, attrs, TRUE, FALSE);
+
+	return tags;
+}
+
+
+static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
+	const char *name, langType lang, guint max_num)
+{
+	TMTag **tag, *last = NULL;
+	guint i, count, num;
+
+	if (!src || !dst || !name || !*name)
+		return;
+
+	num = 0;
+	tag = tm_tags_find(src, name, TRUE, &count);
+	for (i = 0; i < count && num < max_num; ++i)
+	{
+		if (langs_compatible(lang, (*tag)->lang) &&
+			!tm_tag_is_anon(*tag) &&
+			(!last || g_strcmp0(last->name, (*tag)->name) != 0))
+		{
+			g_ptr_array_add(dst, *tag);
+			last = *tag;
+			num++;
+		}
+		tag++;
+	}
+}
+
+
+/* Returns tags with the specified prefix sorted by name. If there are several
+ tags with the same name, only one of them appears in the resulting array.
+ @param prefix The prefix of the tag to find.
+ @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
+             -1 for all.
+ @param max_num The maximum number of tags to return.
+ @return Array of matching tags sorted by their name.
+*/
+GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, guint max_num)
+{
+	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
+	GPtrArray *tags = g_ptr_array_new();
+
+	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix, lang, max_num);
+	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix, lang, max_num);
+
+	tm_tags_sort(tags, attrs, TRUE, FALSE);
+	if (tags->len > max_num)
+		tags->len = max_num;
 
 	return tags;
 }
@@ -839,11 +886,11 @@ find_scope_members (const GPtrArray *tags_array, const char *name, langType lang
 			 * anon_struct_* and searching for it in the whole workspace returns
 			 * too many (wrong) results. */
 			fill_find_tags_array(type_tags, tag->file->tags_array, type_name,
-								 NULL, types, FALSE, lang);
+								 NULL, types, lang);
 			typedef_struct = type_tags->len > 0;
 		}
 		if (type_tags->len == 0)
-			fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, FALSE, lang);
+			fill_find_tags_array(type_tags, tags_array, type_name, NULL, types, lang);
 
 		tag = NULL;
 		for (j = 0; j < type_tags->len; j++)
@@ -918,8 +965,7 @@ static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *metho
 			GPtrArray *cls_tags = g_ptr_array_new();
 
 			/* check whether the class exists */
-			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS,
-				FALSE, lang);
+			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS, lang);
 			ret = cls_tags->len > 0;
 			g_ptr_array_free(cls_tags, TRUE);
 		}
@@ -999,7 +1045,7 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 		tag_type = function_types;
 
 	/* tags corresponding to the variable/type name */
-	tags = tm_workspace_find(name, NULL, tag_type, NULL, FALSE, lang);
+	tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
 
 	/* Start searching inside the source file, continue with workspace tags and
 	 * end with global tags. This way we find the "closest" tag to the current

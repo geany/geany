@@ -1903,7 +1903,6 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	GPtrArray *tags;
 	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 		tm_tag_method_t | tm_tag_macro_with_arg_t;
-	TMTagAttrType *attrs = NULL;
 	TMTag *tag;
 	GString *str = NULL;
 	guint i;
@@ -1911,7 +1910,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	g_return_val_if_fail(ft && word && *word, NULL);
 
 	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
-	tags = tm_workspace_find(word, NULL, tm_tag_max_t, attrs, FALSE, ft->lang);
+	tags = tm_workspace_find(word, NULL, tm_tag_max_t, NULL, ft->lang);
 	if (tags->len == 0)
 	{
 		g_ptr_array_free(tags, TRUE);
@@ -1925,8 +1924,7 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	{
 		g_ptr_array_free(tags, TRUE);
 		/* user typed e.g. 'new Classname(' so lookup D constructor Classname::this() */
-		tags = tm_workspace_find("this", tag->name,
-			arg_types, attrs, FALSE, ft->lang);
+		tags = tm_workspace_find("this", tag->name, arg_types, NULL, ft->lang);
 		if (tags->len == 0)
 		{
 			g_ptr_array_free(tags, TRUE);
@@ -2108,7 +2106,6 @@ autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
 static gboolean
 autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
-	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags;
 	GeanyDocument *doc;
 	gboolean found;
@@ -2117,7 +2114,7 @@ autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
 
 	doc = editor->document;
 
-	tags = tm_workspace_find(root, NULL, tm_tag_max_t, attrs, TRUE, doc->file_type->lang);
+	tags = tm_workspace_find_prefix(root, doc->file_type->lang, editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);

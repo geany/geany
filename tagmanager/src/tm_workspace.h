@@ -56,7 +56,9 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	int includes_count, const char *tags_file, int lang);
 
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
-	TMTagAttrType *attrs, gboolean partial, langType lang);
+	TMTagAttrType *attrs, langType lang);
+
+GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, guint max_num);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	gboolean function, gboolean member, const gchar *current_scope);
