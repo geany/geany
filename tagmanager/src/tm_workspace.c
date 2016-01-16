@@ -1039,6 +1039,22 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
 }
 
 
+static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrArray *searched_array, langType lang)
+{
+	GPtrArray *member_tags = NULL;
+	guint i;
+
+	for (i = 0; i < tags->len && !member_tags; i++)
+	{
+		TMTag *tag = TM_TAG(tags->pdata[i]);
+
+		member_tags = find_scope_members_tags(searched_array, tag, TRUE);
+	}
+
+	return member_tags;
+}
+
+
 /* Returns all member tags of a struct/union/class if the provided name is a variable
  of such a type or the name of the type.
  @param source_file TMSourceFile of the edited source file or NULL if not available
@@ -1046,10 +1062,11 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
  @param function TRUE if the name is a name of a function
  @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
  @param current_scope The current scope in the editor
+ @param search_namespace Whether to search the contents of namespace (e.g. after MyNamespace::)
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope)
+	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
 {
 	langType lang = source_file ? source_file->lang : -1;
 	GPtrArray *tags, *member_tags = NULL;
@@ -1059,26 +1076,40 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 		~(function_types | tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t);
 	TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, 0};
 
-	if (function)
-		tag_type = function_types;
+	if (search_namespace)
+	{
+		tags = tm_workspace_find(name, NULL, tm_tag_namespace_t, NULL, lang);
 
-	/* tags corresponding to the variable/type name */
-	tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+		member_tags = find_namespace_members_all(tags, theWorkspace->tags_array, lang);
+		if (!member_tags)
+			member_tags = find_namespace_members_all(tags, theWorkspace->global_tags, lang);
 
-	/* Start searching inside the source file, continue with workspace tags and
-	 * end with global tags. This way we find the "closest" tag to the current
-	 * file in case there are more of them. */
-	if (source_file)
-		member_tags = find_scope_members_all(tags, source_file->tags_array,
-											 lang, member, current_scope);
+		g_ptr_array_free(tags, TRUE);
+	}
+
 	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang,
-											 member, current_scope);
-	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang,
-											 member, current_scope);
+	{
+		if (function)
+			tag_type = function_types;
 
-	g_ptr_array_free(tags, TRUE);
+		/* tags corresponding to the variable/type name */
+		tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+
+		/* Start searching inside the source file, continue with workspace tags and
+		 * end with global tags. This way we find the "closest" tag to the current
+		 * file in case there are more of them. */
+		if (source_file)
+			member_tags = find_scope_members_all(tags, source_file->tags_array,
+												 lang, member, current_scope);
+		if (!member_tags)
+			member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang,
+												 member, current_scope);
+		if (!member_tags)
+			member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang,
+												 member, current_scope);
+
+		g_ptr_array_free(tags, TRUE);
+	}
 
 	tm_tags_dedup(member_tags, sort_attr, FALSE);
 

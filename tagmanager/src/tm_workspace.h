@@ -61,7 +61,7 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, guint max_num);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope);
+	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace);
 
 
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
