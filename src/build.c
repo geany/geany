@@ -67,6 +67,8 @@
 #define GEANY_BUILD_ERR_HIGHLIGHT_MAX 50
 
 
+gboolean build_execute_autoclose = FALSE;
+
 GeanyBuildInfo build_info = {GEANY_GBG_FT, 0, 0, NULL, GEANY_FILETYPES_NONE, NULL, 0};
 
 static gchar *current_dir_entered = NULL;
@@ -794,7 +796,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 {
 	GeanyBuildCommand *cmd = NULL;
 	const gchar *cmd_working_dir;
-	gboolean autoclose = FALSE;
+	gboolean autoclose = build_execute_autoclose;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
 	GError *error = NULL;
 

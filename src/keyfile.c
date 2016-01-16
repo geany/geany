@@ -259,6 +259,8 @@ static void init_pref_groups(void)
 		"number_non_ft_menu_items", 0);
 	stash_group_add_integer(group, &build_menu_prefs.number_exec_menu_items,
 		"number_exec_menu_items", 0);
+	stash_group_add_boolean(group, &build_execute_autoclose,
+		"build_execute_autoclose", FALSE);
 }
 
 
