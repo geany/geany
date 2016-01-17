@@ -226,6 +226,8 @@ gboolean utils_isbrace(gchar c, gboolean include_angles);
 
 gboolean utils_is_opening_brace(gchar c, gboolean include_angles);
 
+gboolean utils_is_closing_brace(gchar c, gboolean include_angles);
+
 gboolean utils_is_short_html_tag(const gchar *tag_name);
 
 void utils_ensure_same_eol_characters(GString *string, gint target_eol_mode);

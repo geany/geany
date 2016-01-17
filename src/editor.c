@@ -1505,7 +1505,7 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 /* Finds a corresponding matching brace to the given pos
  * (this is taken from Scintilla Editor.cxx,
  * fit to work with close_block) */
-static gint brace_match(ScintillaObject *sci, gint pos)
+static gint brace_match(ScintillaObject *sci, gint pos, gboolean include_angles)
 {
 	gchar chBrace = sci_get_char_at(sci, pos);
 	gchar chSeek = utils_brace_opposite(chBrace);
@@ -1521,7 +1521,7 @@ static gint brace_match(ScintillaObject *sci, gint pos)
 
 	styBrace = sci_get_style_at(sci, pos);
 
-	if (utils_is_opening_brace(chBrace, editor_prefs.brace_match_ltgt))
+	if (utils_is_opening_brace(chBrace, include_angles))
 		direction = 1;
 
 	pos += direction;
@@ -1583,7 +1583,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 
 	if (iprefs->auto_indent_mode == GEANY_AUTOINDENT_MATCHBRACES)
 	{
-		gint start_brace = brace_match(sci, pos);
+		gint start_brace = brace_match(sci, pos, editor_prefs.brace_match_ltgt);
 
 		if (start_brace >= 0)
 		{
@@ -1951,8 +1951,20 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	if (! highlighting_is_code_style(lexer, style))
 		return FALSE;
 
+	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+		pos--;
+
+	if (utils_is_closing_brace(sci_get_char_at(sci, pos - 1), TRUE))
+	{
+		/* optional parameters here, so move backwords from current position to skip it */
+		pos = brace_match(sci, pos - 1, TRUE);
+		if (pos == -1)
+			return FALSE;
+	}
+
 	word[0] = '\0';
 	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
+
 	if (word[0] == '\0')
 		return FALSE;
 
@@ -4846,7 +4858,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
-	
+
 #ifdef GDK_WINDOWING_QUARTZ
 	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw */
 	SSM(sci, SCI_SETBUFFEREDDRAW, 0, 0);
