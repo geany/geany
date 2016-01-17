@@ -347,17 +347,37 @@ gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 }
 
 
+static void free_stash_pref(StashPref *entry)
+{
+	if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
+	{
+		g_free(entry->extra.radio_buttons);
+	}
+	g_slice_free(StashPref, entry);
+}
+
+
 /** Creates a new group.
  * @param name Name used for @c GKeyFile group.
- * @return Group. */
+ * @return @transfer{full} Group. */
 GEANY_API_SYMBOL
 StashGroup *stash_group_new(const gchar *name)
 {
-	StashGroup *group = g_new0(StashGroup, 1);
+	StashGroup *group = g_slice_new0(StashGroup);
 
 	group->name = name;
-	group->entries = g_ptr_array_new();
+	group->entries = g_ptr_array_new_with_free_func((GDestroyNotify) free_stash_pref);
 	group->use_defaults = TRUE;
+	return group;
+}
+
+
+StashGroup *stash_group_dup(StashGroup *src)
+{
+	StashGroup *group = g_slice_dup(StashGroup, src);
+
+	group->entries = g_ptr_array_ref(src->entries);
+
 	return group;
 }
 
@@ -391,19 +411,26 @@ void stash_group_free_settings(StashGroup *group)
 GEANY_API_SYMBOL
 void stash_group_free(StashGroup *group)
 {
-	StashPref *entry;
-	guint i;
+	g_ptr_array_unref(group->entries);
+	g_slice_free(StashGroup, group);
+}
 
-	foreach_ptr_array(entry, i, group->entries)
+
+/** Gets the GBoxed-derived GType for StashGroup
+ *
+ * @return StashGroup type . */
+GEANY_API_SYMBOL
+GType stash_group_get_type(void)
+{
+	static volatile gsize type = 0;
+	if (g_once_init_enter(&type))
 	{
-		if (entry->widget_type == GTK_TYPE_RADIO_BUTTON)
-		{
-			g_free(entry->extra.radio_buttons);
-		}
-		g_slice_free(StashPref, entry);
+		GType g_type = g_boxed_type_register_static(g_intern_static_string("StashGroup"),
+		                                           (GBoxedCopyFunc) stash_group_dup,
+		                                           (GBoxedFreeFunc) stash_group_free);
+		g_once_init_leave(&type, g_type);
 	}
-	g_ptr_array_free(group->entries, TRUE);
-	g_free(group);
+	return type;
 }
 
 

@@ -50,12 +50,13 @@ typedef enum
 }
 GeanyIndentType;
 
+/** Auto indentation modes */
 typedef enum
 {
-	GEANY_AUTOINDENT_NONE = 0,
-	GEANY_AUTOINDENT_BASIC,
-	GEANY_AUTOINDENT_CURRENTCHARS,
-	GEANY_AUTOINDENT_MATCHBRACES
+	GEANY_AUTOINDENT_NONE = 0,	/**< Autoindent Disabled */
+	GEANY_AUTOINDENT_BASIC,		/**< Very basic mode */
+	GEANY_AUTOINDENT_CURRENTCHARS, 	/**< Autoindent based on the first char of the previous line */
+	GEANY_AUTOINDENT_MATCHBRACES	/**< Autoindent based on the position of the opening brace */
 }
 GeanyAutoIndent;
 

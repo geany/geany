@@ -128,7 +128,9 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  *          object has been destroyed), and disconnect yourself or not as appropriate.
  * @note Since version 1.25 (API >= 218), the object lifetime is watched and so the above
  *       restriction does not apply.  However, for objects destroyed by the plugin,
- *       @c g_signal_connect() is safe and has lower overhead. */
+ *       @c g_signal_connect() is safe and has lower overhead.
+ * @skip
+ **/
 GEANY_API_SYMBOL
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
@@ -241,6 +243,7 @@ static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc
  *
  * @see g_timeout_add()
  * @since 0.21, plugin API 205.
+ * @skip
  */
 GEANY_API_SYMBOL
 guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc function, gpointer data)
@@ -261,6 +264,7 @@ guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc functi
  *
  * @see g_timeout_add_seconds()
  * @since 0.21, plugin API 205.
+ * @skip
  */
 GEANY_API_SYMBOL
 guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFunc function,
@@ -281,6 +285,7 @@ guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFun
  *
  * @see g_idle_add()
  * @since 0.21, plugin API 205.
+ * @skip
  */
 GEANY_API_SYMBOL
 guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
@@ -296,7 +301,8 @@ guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
  * @param count Number of keybindings for the group.
  * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
- * @since 0.19. */
+ * @since 0.19.
+ * @skip */
 GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)

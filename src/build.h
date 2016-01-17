@@ -55,10 +55,10 @@ typedef enum
 /** The entries of a command for a menu item */
 typedef enum GeanyBuildCmdEntries
 {
-	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
-	GEANY_BC_COMMAND,			/* *< The command to run. */
-	GEANY_BC_WORKING_DIR,		/* *< The directory to run in */
-	GEANY_BC_CMDENTRIES_COUNT	/* *< Count of entries */
+	GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
+	GEANY_BC_COMMAND,			/**< The command to run. */
+	GEANY_BC_WORKING_DIR,		/**< The directory to run in */
+	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
@@ -73,6 +73,20 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 
 guint build_get_group_count(const GeanyBuildGroup grp);
 
+/** Structure describing a single build
+ *
+ * GeanyData has a pointer to a singleton instance of this that is updated whenever the
+ * user launches a build process */
+typedef struct GeanyBuildInfo
+{
+	GeanyBuildGroup	 grp;
+	guint			 cmd;
+	GPid			 pid;	/* process id of the spawned process */
+	gchar			*dir;
+	guint			 file_type_id;
+	gchar			*custom_target;
+	gint			 message_count;
+} GeanyBuildInfo;
 
 #ifdef GEANY_PRIVATE
 
@@ -134,17 +148,6 @@ enum GeanyBuildFixedMenuItems
 	GBF_SEP_4,
 	GBF_COUNT
 };
-
-typedef struct GeanyBuildInfo
-{
-	GeanyBuildGroup	 grp;
-	guint			 cmd;
-	GPid			 pid;	/* process id of the spawned process */
-	gchar			*dir;
-	guint			 file_type_id;
-	gchar			*custom_target;
-	gint			 message_count;
-} GeanyBuildInfo;
 
 extern GeanyBuildInfo build_info;
 

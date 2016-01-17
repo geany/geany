@@ -106,7 +106,7 @@ all-local: Doxyfile.stamp
 
 clean-local: clean-api-docs-local
 clean-api-docs-local:
-	-rm -rf reference/ Doxyfile.stamp doxygen_*
+	-rm -rf reference/ xml/ Doxyfile.stamp doxygen_*
 
 endif
 
@@ -114,15 +114,18 @@ uninstall-local:
 	rm -f $(DOCDIR)/html/index.html
 	rm -f $(DOCDIR)/manual.txt
 	rm -f $(DOCDIR)/ScintillaLicense.txt
+	rm -f $(DOCDIR)/xml/*
 
 # manually install some files under another name
 install-data-local:
 if INSTALL_HTML_DOCS
 	$(mkinstalldirs) $(DOCDIR)/html
+	$(mkinstalldirs) $(DOCDIR)/xml
 #	as we don't install with the automated mechanism so we can rename the file,
 #	we need to find the source file in the right location (either builddir or srcdir)
 	dir=$(builddir); test -f "$$dir/geany.html" || dir=$(srcdir); \
 	$(INSTALL_DATA) "$$dir/geany.html" $(DOCDIR)/html/index.html
+	$(INSTALL_DATA) -t $(DOCDIR)/xml xml/*
 endif
 	$(mkinstalldirs) $(DOCDIR)
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt

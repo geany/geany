@@ -55,7 +55,14 @@
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
-GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
+/** Dynamic array of filetype pointers
+ *
+ * List the list is dynamically expanded for custom filetypes filetypes so don't expect
+ * the list of known filetypes to be a constant.
+ *
+ * @elementtype{GeanyFiletype}
+ * */
+GPtrArray *filetypes_array = NULL;
 
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
 
@@ -233,7 +240,7 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2, gpointer data)
 
 /** Gets a list of filetype pointers sorted by name.
  * The list does not change on subsequent calls.
- * @return The list - do not free.
+ * @return @elementtype{GeanyFiletype} @transfer{none} The list - do not free.
  * @see filetypes_by_title. */
 GEANY_API_SYMBOL
 const GSList *filetypes_get_sorted_by_name(void)
@@ -764,8 +771,8 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
  *
  *  @param utf8_filename The filename in UTF-8 encoding.
  *
- *  @return The detected filetype for @a utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
- *          if it could not be detected.
+ *  @return @transfer{none} The detected filetype for @a utf8_filename or
+ *           @c filetypes[GEANY_FILETYPES_NONE] if it could not be detected.
  **/
 GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
@@ -1246,7 +1253,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 
 /** Finds a filetype pointer from its @a name field.
  * @param name Filetype name.
- * @return The filetype found, or @c NULL.
+ * @return @transfer{none} The filetype found, or @c NULL.
  *
  * @since 0.15
  **/
@@ -1492,7 +1499,7 @@ void filetypes_reload_extensions(void)
 /** Accessor function for @ref GeanyData::filetypes_array items.
  * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
  * @param idx @c filetypes_array index.
- * @return The filetype, or @c NULL if @a idx is out of range.
+ * @return @transfer{none} The filetype, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
  */
