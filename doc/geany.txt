@@ -3558,7 +3558,7 @@ Smart line indent                                         Indents the current li
 
 Send to Custom Command 1 (2,3)  Ctrl-1 (2,3)              Passes the current selection to a configured
                                                           external command (available for the first
-                                                          three configured commands, see
+                                                          9 configured commands, see
                                                           `Sending text through custom commands`_ for
                                                           details).
 
