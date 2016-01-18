@@ -232,7 +232,7 @@ typedef struct GeanyData
 	struct GeanySearchPrefs		*search_prefs;		/**< Search-related settings */
 	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
-	struct GeanyBuildInfo		*build_info;		/**< Current build information */
+	gpointer					*_compat;			/* Remove field on next ABI break (abi-todo) */
 	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
 }
 GeanyData;

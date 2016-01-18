@@ -1783,7 +1783,7 @@ static gint find_start_bracket(ScintillaObject *sci, gint pos)
 }
 
 
-static gboolean append_calltip(GString *str, const TMTag *tag, filetype_id ft_id)
+static gboolean append_calltip(GString *str, const TMTag *tag, GeanyFiletypeID ft_id)
 {
 	if (! tag->arglist)
 		return FALSE;

@@ -35,6 +35,7 @@
 #endif
 
 #include "encodings.h"
+#include "encodingsprivate.h"
 
 #include "app.h"
 #include "callbacks.h"

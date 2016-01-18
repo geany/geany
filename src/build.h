@@ -34,31 +34,31 @@ G_BEGIN_DECLS
 /** Groups of Build menu items. */
 typedef enum
 {
-	GEANY_GBG_FT,		/* *< filetype items */
-	GEANY_GBG_NON_FT,	/* *< non filetype items.*/
-	GEANY_GBG_EXEC,		/* *< execute items */
-	GEANY_GBG_COUNT		/* *< count of groups. */
+	GEANY_GBG_FT,		/**< filetype items */
+	GEANY_GBG_NON_FT,	/**< non filetype items.*/
+	GEANY_GBG_EXEC,		/**< execute items */
+	GEANY_GBG_COUNT		/**< count of groups. */
 } GeanyBuildGroup;
 
 /** Build menu item sources in increasing priority */
 typedef enum
 {
-	GEANY_BCS_DEF,		/* *< Default values. */
-	GEANY_BCS_FT,		/* *< System filetype values. */
-	GEANY_BCS_HOME_FT,	/* *< Filetypes in ~/.config/geany/filedefs */
-	GEANY_BCS_PREF,		/* *< Preferences file ~/.config/geany/geany.conf */
-	GEANY_BCS_PROJ_FT,	/* *< Project file filetype command */
-	GEANY_BCS_PROJ,		/* *< Project file if open. */
-	GEANY_BCS_COUNT		/* *< Count of sources. */
+	GEANY_BCS_DEF,		/**< Default values. */
+	GEANY_BCS_FT,		/**< System filetype values. */
+	GEANY_BCS_HOME_FT,	/**< Filetypes in ~/.config/geany/filedefs */
+	GEANY_BCS_PREF,		/**< Preferences file ~/.config/geany/geany.conf */
+	GEANY_BCS_PROJ_FT,	/**< Project file filetype command */
+	GEANY_BCS_PROJ,		/**< Project file if open. */
+	GEANY_BCS_COUNT		/**< Count of sources. */
 } GeanyBuildSource;
 
 /** The entries of a command for a menu item */
 typedef enum GeanyBuildCmdEntries
 {
-	GEANY_BC_LABEL,				/* *< The menu item label, _ marks mnemonic */
-	GEANY_BC_COMMAND,			/* *< The command to run. */
-	GEANY_BC_WORKING_DIR,		/* *< The directory to run in */
-	GEANY_BC_CMDENTRIES_COUNT	/* *< Count of entries */
+	GEANY_BC_LABEL,				/**< The menu item label, _ marks mnemonic */
+	GEANY_BC_COMMAND,			/**< The command to run. */
+	GEANY_BC_WORKING_DIR,		/**< The directory to run in */
+	GEANY_BC_CMDENTRIES_COUNT	/**< Count of entries */
 } GeanyBuildCmdEntries;
 
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);

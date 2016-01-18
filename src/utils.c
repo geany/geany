@@ -1647,16 +1647,16 @@ const gchar *utils_get_default_dir_utf8(void)
 /**
  *  Wraps @c spawn_sync(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
  *  @param child_setup Ignored.
  *  @param user_data Ignored.
- *  @param std_out The return location for child output, or @a NULL.
- *  @param std_err The return location for child error messages, or @a NULL.
- *  @param exit_status The child exit status, as returned by waitpid(), or @a NULL.
- *  @param error The return location for error or @a NULL.
+ *  @param std_out The return location for child output, or @c NULL.
+ *  @param std_err The return location for child error messages, or @c NULL.
+ *  @param exit_status The child exit status, as returned by waitpid(), or @c NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
@@ -1682,14 +1682,14 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 /**
  *  Wraps @c spawn_async(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
  *  @param child_setup Ignored.
  *  @param user_data Ignored.
  *  @param child_pid The return location for child process ID, or NULL.
- *  @param error The return location for error or @a NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
@@ -1959,7 +1959,7 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  * @param first_varname Name of the first variable to copy into the new array.
  * @param ... Key-value pairs of variable names and values, @c NULL-terminated.
  *
- * @return The new environment array.
+ * @return The new environment array. Use @c g_strfreev() to free it.
  **/
 GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)

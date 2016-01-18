@@ -524,7 +524,7 @@ void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup gr
  * @param grp the group of the specified menu item.
  * @param cmd the index of the command within the group.
  *
- * @return a pointer to the @a GeanyBuildCommand structure or @a NULL if it doesn't exist.
+ * @return a pointer to the @a GeanyBuildCommand structure or @c NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
  *
  * @see build_menu_update
@@ -553,7 +553,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
  * @param cmd the index of the command within the group.
  * @param fld the field to return
  *
- * @return a pointer to the constant string or @a NULL if it doesn't exist.
+ * @return a pointer to the constant string or @c NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
  *
  **/

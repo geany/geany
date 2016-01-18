@@ -34,7 +34,7 @@
 #include "callbacks.h"
 #include "dialogs.h"
 #include "documentprivate.h"
-#include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanymenubuttonaction.h"
 #include "keyfile.h"
