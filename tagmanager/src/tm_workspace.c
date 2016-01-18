@@ -941,6 +941,7 @@ static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *metho
 		comps[len - 2] = NULL;
 		cls_scope = g_strjoinv(sep, comps);
 		comps[len - 2] = cls;
+		cls_scope = strlen(cls_scope) > 0 ? cls_scope : NULL;
 
 		/* check whether member inside the class */
 		if (g_strcmp0(member_tag->scope, member_scope) == 0)
@@ -949,7 +950,7 @@ static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *metho
 			GPtrArray *cls_tags = g_ptr_array_new();
 
 			/* check whether the class exists */
-			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS, lang);
+			fill_find_tags_array(cls_tags, src, cls, cls_scope, TM_TYPE_WITH_MEMBERS | tm_tag_namespace_t, lang);
 			ret = cls_tags->len > 0;
 			g_ptr_array_free(cls_tags, TRUE);
 		}
