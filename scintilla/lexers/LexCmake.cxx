@@ -54,7 +54,7 @@ static bool CmakeNextLineHasElse(Sci_PositionU start, Sci_PositionU end, Accesso
         }
     }
 
-    if ( nNextLine == -1 ) // We never found the next line...
+    if ( nNextLine == -1 ) // We never foudn the next line...
         return false;
 
     for ( Sci_PositionU firstChar = nNextLine; firstChar < end; firstChar++ ) {

@@ -112,7 +112,7 @@ long Platform::SendScintillaPointer(WindowID w, unsigned int msg, unsigned long 
 void EXT_LEXER_DECL Fold(unsigned int lexer, Sci_PositionU startPos, Sci_Position length,
 	int initStyle, char *words[], WindowID window, char *props)
 {
-	// below useless evaluation(s) to suppress "not used" warnings
+	// below useless evaluation(s) to supress "not used" warnings
 	lexer;
 	// build expected data structures and do the Fold
 	InternalLexOrFold(1, startPos, length, initStyle, words, window, props);
@@ -126,7 +126,7 @@ int EXT_LEXER_DECL GetLexerCount()
 
 void EXT_LEXER_DECL GetLexerName(unsigned int Index, char *name, int buflength)
 {
-	// below useless evaluation(s) to suppress "not used" warnings
+	// below useless evaluation(s) to supress "not used" warnings
 	Index;
 	// return as much of our lexer name as will fit (what's up with Index?)
 	if (buflength > 0) {
@@ -141,7 +141,7 @@ void EXT_LEXER_DECL GetLexerName(unsigned int Index, char *name, int buflength)
 void EXT_LEXER_DECL Lex(unsigned int lexer, Sci_PositionU startPos, Sci_Position length,
 	int initStyle, char *words[], WindowID window, char *props)
 {
-	// below useless evaluation(s) to suppress "not used" warnings
+	// below useless evaluation(s) to supress "not used" warnings
 	lexer;
 	// build expected data structures and do the Lex
 	InternalLexOrFold(0, startPos, length, initStyle, words, window, props);

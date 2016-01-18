@@ -1608,7 +1608,7 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 		cssProvider = gtk_css_provider_new();
 	}
 #endif
-	
+
 	wid = widCached = gtk_window_new(GTK_WINDOW_POPUP);
 
 	frame = gtk_frame_new(NULL);
