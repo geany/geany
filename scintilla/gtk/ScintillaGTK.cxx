@@ -3052,6 +3052,7 @@ sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_
 	return psci->WndProc(iMessage, wParam, lParam);
 }
 
+GEANY_API_SYMBOL
 sptr_t scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	return scintilla_send_message(sci, iMessage, wParam, lParam);
 }
@@ -3093,6 +3094,7 @@ GType scintilla_get_type() {
 	return scintilla_type;
 }
 
+GEANY_API_SYMBOL
 GType scintilla_object_get_type() {
 	return scintilla_get_type();
 }
@@ -3210,6 +3212,7 @@ GtkWidget* scintilla_new() {
 	return widget;
 }
 
+GEANY_API_SYMBOL
 GtkWidget *scintilla_object_new() {
 	return scintilla_new();
 }
