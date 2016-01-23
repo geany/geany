@@ -3120,7 +3120,7 @@ static boolean findCTags (const unsigned int passCount)
 	contextual_fake_count = 0;
 
 	Assert (passCount < 3);
-	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp));
+	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp), isLanguage (Lang_cpp));
 
 	exception = (exception_t) setjmp (Exception);
 	retry = FALSE;

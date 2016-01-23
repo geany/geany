@@ -62,6 +62,7 @@ typedef struct sCppState {
 	int		ungetch, ungetch2;   /* ungotten characters, if any */
 	boolean resolveRequired;     /* must resolve if/else/elif/endif branch */
 	boolean hasAtLiteralStrings; /* supports @"c:\" strings */
+	boolean hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
 		boolean	accept;          /* is a directive syntactically permitted? */
@@ -83,6 +84,7 @@ static cppState Cpp = {
 	'\0', '\0',  /* ungetch characters */
 	FALSE,       /* resolveRequired */
 	FALSE,       /* hasAtLiteralStrings */
+	FALSE,       /* hasCxxRawLiteralStrings */
 	{
 		DRCTV_NONE,  /* state */
 		FALSE,       /* accept */
@@ -106,7 +108,8 @@ extern unsigned int getDirectiveNestLevel (void)
 	return Cpp.directive.nestLevel;
 }
 
-extern void cppInit (const boolean state, const boolean hasAtLiteralStrings)
+extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
+                     const boolean hasCxxRawLiteralStrings)
 {
 	BraceFormat = state;
 
@@ -114,6 +117,7 @@ extern void cppInit (const boolean state, const boolean hasAtLiteralStrings)
 	Cpp.ungetch2        = '\0';
 	Cpp.resolveRequired = FALSE;
 	Cpp.hasAtLiteralStrings = hasAtLiteralStrings;
+	Cpp.hasCxxRawLiteralStrings = hasCxxRawLiteralStrings;
 
 	Cpp.directive.state     = DRCTV_NONE;
 	Cpp.directive.accept    = TRUE;
@@ -533,6 +537,55 @@ static int skipToEndOfString (boolean ignoreBackslash)
 	return STRING_SYMBOL;  /* symbolic representation of string */
 }
 
+static int isCxxRawLiteralDelimiterChar (int c)
+{
+	return (c != ' ' && c != '\f' && c != '\n' && c != '\r' && c != '\t' && c != '\v' &&
+	        c != '(' && c != ')' && c != '\\');
+}
+
+static int skipToEndOfCxxRawLiteralString (void)
+{
+	int c = fileGetc ();
+
+	if (c != '(' && ! isCxxRawLiteralDelimiterChar (c))
+	{
+		fileUngetc (c);
+		c = skipToEndOfString (FALSE);
+	}
+	else
+	{
+		char delim[16];
+		unsigned int delimLen = 0;
+		boolean collectDelim = TRUE;
+
+		do
+		{
+			if (collectDelim)
+			{
+				if (isCxxRawLiteralDelimiterChar (c) &&
+				    delimLen < (sizeof delim / sizeof *delim))
+					delim[delimLen++] = c;
+				else
+					collectDelim = FALSE;
+			}
+			else if (c == ')')
+			{
+				unsigned int i = 0;
+
+				while ((c = fileGetc ()) != EOF && i < delimLen && delim[i] == c)
+					i++;
+				if (i == delimLen && c == DOUBLE_QUOTE)
+					break;
+				else
+					fileUngetc (c);
+			}
+		}
+		while ((c = fileGetc ()) != EOF);
+		c = STRING_SYMBOL;
+	}
+	return c;
+}
+
 /*  Skips to the end of the three (possibly four) 'c' sequence, returning a
  *  special character to symbolically represent a generic character.
  *  Also detects Vera numbers that include a base specifier (ie. 'b1010).
@@ -728,6 +781,43 @@ process:
 					}
 					else
 						fileUngetc (next);
+				}
+				else if (c == 'R' && Cpp.hasCxxRawLiteralStrings)
+				{
+					/* OMG!11 HACK!!11  Get the previous character.
+					 *
+					 * We need to know whether the previous character was an identifier or not,
+					 * because "R" has to be on its own, not part of an identifier.  This allows
+					 * for constructs like:
+					 *
+					 * 	#define FOUR "4"
+					 * 	const char *p = FOUR"5";
+					 *
+					 * which is not a raw literal, but a preprocessor concatenation.
+					 *
+					 * FIXME: handle
+					 *
+					 * 	const char *p = R\
+					 * 	"xxx(raw)xxx";
+					 *
+					 * which is perfectly valid (yet probably very unlikely). */
+					const unsigned char *base = (unsigned char *) vStringValue (File.line);
+					int prev = '\n';
+					if (File.currentLine - File.ungetchIdx - 2 >= base)
+						prev = (int) *(File.currentLine - File.ungetchIdx - 2);
+
+					if (! isident (prev))
+					{
+						int next = fileGetc ();
+						if (next != DOUBLE_QUOTE)
+							fileUngetc (next);
+						else
+						{
+							Cpp.directive.accept = FALSE;
+							c = skipToEndOfCxxRawLiteralString ();
+							break;
+						}
+					}
 				}
 			enter:
 				Cpp.directive.accept = FALSE;
