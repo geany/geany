@@ -501,6 +501,18 @@ extern int fileGetc (void)
     return c;
 }
 
+/* returns the nth previous character (0 meaning current), or def if nth cannot
+ * be accessed.  Note that this can't access previous line data. */
+extern int fileGetNthPrevC (unsigned int nth, int def)
+{
+	const unsigned char *base = (unsigned char *) vStringValue (File.line);
+
+	if (File.currentLine - File.ungetchIdx - 1 - nth >= base)
+		return (int) *(File.currentLine - File.ungetchIdx - 1 - nth);
+	else
+		return def;
+}
+
 extern int fileSkipToCharacter (int c)
 {
 	int d;
