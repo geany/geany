@@ -802,8 +802,12 @@ process:
 					 *
 					 * which is perfectly valid (yet probably very unlikely). */
 					int prev = fileGetNthPrevC (1, 0);
+					int prev2 = fileGetNthPrevC (2, 0);
+					int prev3 = fileGetNthPrevC (3, 0);
 
-					if (! isident (prev))
+					if (! isident (prev) ||
+					    (! isident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
+					    (! isident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
 						int next = fileGetc ();
 						if (next != DOUBLE_QUOTE)
