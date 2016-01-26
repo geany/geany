@@ -1,0 +1,20 @@
+# format=tagmanager
+func1Ì1024Í()Ö0Ïconst volatile unsigned int
+func2Ì1024Í()Ö0Ïtype1
+func3Ì1024Í()Ö0Ïconst type1_t
+func4Ì1024Í()Ö0Ïtype1
+func5Ì1024Í()Ö0Ïtype1_t
+func6Ì1024Í()Ö0Ïconst std::string
+func7Ì1024Í()Ö0Ïstd::string
+memb1Ì64Îtype1Ö0Ïunsigned int
+nextÌ64Îtype1Ö0Ïtype1
+type1Ì2048Ö0
+type1_tÌ4096Ö0Ïtype1
+type2_tÌ4096Ö0Ïunsigned long int
+var1Ì16384Ö0Ïconst volatile unsigned int
+var2Ì16384Ö0Ïtype1
+var3Ì16384Ö0Ïconst type1_t
+var4Ì16384Ö0Ïtype1
+var5Ì16384Ö0Ïtype1_t
+var6Ì16384Ö0Ïconst std::string
+var7Ì16384Ö0Ïstd::string

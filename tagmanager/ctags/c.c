@@ -518,7 +518,8 @@ static const keywordDesc KeywordTable [] = {
 */
 static void createTags (const unsigned int nestLevel, statementInfo *const parent);
 static void copyToken (tokenInfo *const dest, const tokenInfo *const src);
-static const char *getVarType (const statementInfo *const st);
+static const char *getVarType (const statementInfo *const st,
+							   const tokenInfo *const token);
 
 /*
 *   FUNCTION DEFINITIONS
@@ -1186,6 +1187,7 @@ static const char* accessField (const statementInfo *const st)
 }
 
 static void addOtherFields (tagEntryInfo* const tag, const tagType type,
+							const tokenInfo *const nameToken,
 							const statementInfo *const st, vString *const scope)
 {
 	/*  For selected tag types, append an extension flag designating the
@@ -1254,40 +1256,90 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		if (((TOKEN_NAME == st->firstToken->type) || isDataTypeKeyword(st->firstToken))
 			&& (0 != strcmp(vStringValue(st->firstToken->name), tag->name)))
 		{
-			tag->extensionFields.varType = getVarType(st);
+			tag->extensionFields.varType = getVarType(st, nameToken);
 		}
 	}
 }
 
-static const char *getVarType (const statementInfo *const st)
+static const char *getVarType (const statementInfo *const st,
+							   const tokenInfo *const nameToken)
 {
 	static vString *vt = NULL;
 	unsigned int i;
+	unsigned int end = st->tokenIndex;
+	boolean seenType = FALSE;
 
-	if (! st->gotArgs)
-		return vStringValue(st->firstToken->name);	/* ignore non-functions */
+	switch (st->declaration) {
+		case DECL_BASE:
+		case DECL_FUNCTION:
+		case DECL_FUNCTION_TEMPLATE:
+			break;
+		default:
+			return vStringValue(st->firstToken->name);
+	}
 
 	if (vt == NULL)
 		vt = vStringNew();
 	else
 		vStringClear(vt);
 
+	/* find the end of the type signature in the token list */
 	for (i = 0; i < st->tokenIndex; i++)
+	{
+		const tokenInfo *const t = st->token[i];
+
+		/* stop if we find the token used to generate the tag name, or
+		 * a name token in the middle yet not preceded by a scope separator */
+		if ((t == nameToken ||
+		     (t->type == nameToken->type &&
+		      t->keyword == nameToken->keyword &&
+		      t->lineNumber == nameToken->lineNumber &&
+		      strcmp(vStringValue(t->name), vStringValue(nameToken->name)) == 0)) ||
+		    (t->type == TOKEN_NAME && seenType &&
+		     (i > 0 && st->token[i - 1]->type != TOKEN_DOUBLE_COLON)))
+		{
+			break;
+		}
+		if (t->type != TOKEN_DOUBLE_COLON)
+			end = i + 1;
+		if (t->type == TOKEN_NAME)
+			seenType = TRUE;
+		else if (t->type == TOKEN_KEYWORD && isDataTypeKeyword(t))
+			seenType = TRUE;
+	}
+
+	/* ugly historic workaround when we can't figure out the type */
+	if (end < 2 && ! st->gotArgs)
+		return vStringValue(st->firstToken->name);
+
+	for (i = 0; i < end; i++)
 	{
 		tokenInfo *t = st->token[i];
 
 		switch (t->type)
 		{
 			case TOKEN_NAME:	/* user typename */
-				if (strcmp(vStringValue(t->name), vStringValue(st->firstToken->name)) != 0)
-					continue;
 				break;
 			case TOKEN_KEYWORD:
-				if (t->keyword != KEYWORD_EXTERN && t->keyword != KEYWORD_STATIC)	/* uninteresting keywords */
+				if ((t->keyword != KEYWORD_EXTERN && t->keyword != KEYWORD_STATIC) &&	/* uninteresting keywords */
+				    (st->gotArgs ||
+				     /* ignore uninteresting keywords for non-functions */
+				     (t->keyword != KEYWORD_PUBLIC &&
+				      t->keyword != KEYWORD_PRIVATE &&
+				      t->keyword != KEYWORD_PROTECTED &&
+				      t->keyword != KEYWORD_FINAL &&
+				      t->keyword != KEYWORD_TYPEDEF &&
+				      /* hack for D static conditions */
+				      t->keyword != KEYWORD_IF)))
+				{
 					break;
+				}
 				continue;
 			case TOKEN_STAR: vStringCatS(vt, " *"); continue;
 			case TOKEN_ARRAY: vStringCatS(vt, "[]"); continue;
+			case TOKEN_DOUBLE_COLON:
+				vStringCatS(vt, "::");
+				continue;
 			default: continue;
 		}
 		if (vStringLength(vt) > 0)
@@ -1426,7 +1478,7 @@ static void makeTag (const tokenInfo *const token,
 		e.type = type;
 
 		findScopeHierarchy (scope, st);
-		addOtherFields (&e, type, st, scope);
+		addOtherFields (&e, type, token, st, scope);
 
 #ifdef DEBUG_C
 		printTagEntry(&e);

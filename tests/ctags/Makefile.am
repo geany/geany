@@ -301,6 +301,7 @@ test_sources = \
 	ui5.controller.js				\
 	union.f							\
 	value.f							\
+	var-and-return-type.cpp			\
 	whitespaces.php					\
 	$(NULL)
 test_results = $(test_sources:=.tags)
