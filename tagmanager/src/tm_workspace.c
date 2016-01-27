@@ -846,14 +846,37 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 }
 
 
+static gchar *strip_type(const gchar *scoped_name, langType lang)
+{
+	if (scoped_name != NULL)
+	{
+		/* remove scope prefix */
+		const gchar *sep = tm_tag_context_separator(lang);
+		const gchar *base = g_strrstr(scoped_name, sep);
+		gchar *name = base ? g_strdup(base + strlen(sep)) : g_strdup(scoped_name);
+
+		/* remove pointers */
+		g_strdelimit(name, "*^", ' ');
+		g_strstrip(name);
+
+		return name;
+	}
+	return NULL;
+}
+
+
 /* Gets all members of the type with the given name; search them inside tags_array */
 static GPtrArray *
-find_scope_members (const GPtrArray *tags_array, const gchar *type_name, TMSourceFile *file,
+find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile *file,
 	langType lang, gboolean namespace)
 {
+	GPtrArray *res = NULL;
+	gchar *type_name;
 	guint i;
 
-	g_return_val_if_fail(type_name && *type_name, NULL);
+	g_return_val_if_fail(name && *name, NULL);
+
+	type_name = g_strdup(name);
 
 	/* Check if type_name is a type that can possibly contain members.
 	 * Try to resolve intermediate typedefs to get the real type name. Also
@@ -892,25 +915,31 @@ find_scope_members (const GPtrArray *tags_array, const gchar *type_name, TMSourc
 		g_ptr_array_free(type_tags, TRUE);
 
 		if (!tag) /* not a type that can contain members */
-			return NULL;
+			break;
 
 		/* intermediate typedef - resolve to the real type */
 		if (tag->type == tm_tag_typedef_t)
 		{
 			if (tag->var_type && tag->var_type[0] != '\0')
 			{
-				type_name = tag->var_type;
+				g_free(type_name);
+				type_name = strip_type(tag->var_type, tag->lang);
 				file = tag->file;
 				continue;
 			}
-			return NULL;
+			break;
 		}
 		else /* real type with members */
+		{
 			/* use the same file as the composite type if file information available */
-			return find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
+			res = find_scope_members_tags(tag->file ? tag->file->tags_array : tags_array, tag, namespace);
+			break;
+		}
 	}
 
-	return NULL;
+	g_free(type_name);
+
+	return res;
 }
 
 
@@ -998,11 +1027,8 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
 			if (!(tag->type & member_types) || member ||
 				member_at_method_scope(tags, current_scope, tag, lang))
 			{
-				gchar *tag_type = g_strdup(tag->var_type);
+				gchar *tag_type = strip_type(tag->var_type, tag->lang);
 
-				/* remove pointers in case the type contains them */
-				g_strdelimit(tag_type, "*^", ' ');
-				g_strstrip(tag_type);
 				member_tags = find_scope_members(searched_array, tag_type, tag->file, lang, FALSE);
 				g_free(tag_type);
 			}
