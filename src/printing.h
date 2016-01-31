@@ -36,6 +36,7 @@ typedef struct PrintingPrefs
 	gboolean print_line_numbers;
 	gboolean print_page_numbers;
 	gboolean print_page_header;
+	gboolean print_blackonwhite;
 	gboolean page_header_basename;
 	gchar *page_header_datefmt;
 	gchar *external_print_cmd;

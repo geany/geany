@@ -78,6 +78,7 @@ typedef struct
 	GtkWidget *check_print_pageheader;
 	GtkWidget *check_print_basename;
 	GtkWidget *entry_print_dateformat;
+	GtkWidget *check_print_blackonwhite;
 } PrintWidgets;
 
 
@@ -204,6 +205,9 @@ static void custom_widget_apply(GtkPrintOperation *operation, GtkWidget *widget,
 
 	printing_prefs.page_header_basename =
 		gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w->check_print_basename));
+		
+	printing_prefs.print_blackonwhite = 
+		gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(w->check_print_blackonwhite));
 
 	g_free(printing_prefs.page_header_datefmt);
 	printing_prefs.page_header_datefmt =
@@ -251,6 +255,11 @@ static GtkWidget *create_custom_widget(GtkPrintOperation *operation, gpointer us
 	gtk_widget_set_tooltip_text(w->check_print_pageheader, _("Add a little header to every page containing the page number, the filename and the current date (see below). It takes 3 lines of the page."));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_pageheader), printing_prefs.print_page_header);
 	g_signal_connect(w->check_print_pageheader, "toggled", G_CALLBACK(on_page_header_toggled), w);
+	
+	w->check_print_blackonwhite = gtk_check_button_new_with_mnemonic(_("Print text black on white background"));
+	gtk_box_pack_start(GTK_BOX(page), w->check_print_blackonwhite, FALSE, FALSE, 0);
+	gtk_widget_set_tooltip_text(w->check_print_blackonwhite, _("Always print text black on white background"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w->check_print_blackonwhite), printing_prefs.print_blackonwhite);
 
 	frame33 = gtk_frame_new(NULL);
 	gtk_box_pack_start(GTK_BOX(page), frame33, FALSE, FALSE, 0);
@@ -359,7 +368,10 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
 	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
+	if( printing_prefs.print_blackonwhite )
+		scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_BLACKONWHITE, 0);
+	else
+		scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
 
 	/* Scintilla doesn't respect the context resolution, so we'll scale ourselves.
 	 * Actually Scintilla simply doesn't know about the resolution since it creates its own

@@ -512,6 +512,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, "printing", "print_line_numbers", printing_prefs.print_line_numbers);
 	g_key_file_set_boolean(config, "printing", "print_page_numbers", printing_prefs.print_page_numbers);
 	g_key_file_set_boolean(config, "printing", "print_page_header", printing_prefs.print_page_header);
+	g_key_file_set_boolean(config, "printing", "print_blackonwhite", printing_prefs.print_blackonwhite);
 	g_key_file_set_boolean(config, "printing", "page_header_basename", printing_prefs.page_header_basename);
 	g_key_file_set_string(config, "printing", "page_header_datefmt", printing_prefs.page_header_datefmt);
 
@@ -979,6 +980,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_line_numbers = utils_get_setting_boolean(config, "printing", "print_line_numbers", TRUE);
 	printing_prefs.print_page_numbers = utils_get_setting_boolean(config, "printing", "print_page_numbers", TRUE);
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
+	printing_prefs.print_blackonwhite = utils_get_setting_boolean(config, "printing", "print_blackonwhite", FALSE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
 }

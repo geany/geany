@@ -735,6 +735,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_page_header);
 	on_prefs_print_page_header_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
+	
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_blackonwhite");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.print_blackonwhite);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), printing_prefs.page_header_basename);
@@ -1215,6 +1218,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_pageheader");
 		printing_prefs.print_page_header = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_blackonwhite");
+		printing_prefs.print_blackonwhite = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_print_basename");
 		printing_prefs.page_header_basename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
