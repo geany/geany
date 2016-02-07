@@ -6,41 +6,6 @@ import re
 from lxml import etree
 from optparse import OptionParser
 
-xml_dir = None
-outfile = None
-scioutfile = None
-
-parser = OptionParser(usage="usage: %prog [options] XML_DIR")
-parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
-	action="store", dest="xml_dir")
-parser.add_option("-d", "--outdir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
-	action="store", dest="outdir", default=".")
-parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
-	action="store", dest="outfile")
-parser.add_option("--sci-output", metavar="FILE", help="Write scintilla_object_* output to FILE",
-	action="store", dest="scioutfile")
-(opts,args) = parser.parse_args()
-
-xml_dir = args[0]
-if (opts.outfile):
-	outfile = open(opts.outfile, "w+")
-else:
-	outfile=sys.stdout
-
-if (opts.scioutfile):
-	scioutfile = open(opts.scioutfile, "w+")
-else:
-	scioutfile = outfile
-
-if (outfile is None):
-	sys.stderr.write("no output file\n")
-	exit(1)
-
-if not (os.path.exists(xml_dir)):
-	sys.stderr.write("invalid xml directory\n")
-	exit(1)
-
-
 # " asd\nxxx  " => "asd xxx"
 def normalize_text(s):
 	return s.replace("\n", " ").lstrip().rstrip()
@@ -58,10 +23,6 @@ def fix_definition(s):
 assert(fix_definition("bool flag") == "bool flag")
 assert(fix_definition("bool FooBar::flag") == "bool flag")
 assert(fix_definition("void(* _GeanyObjectClass::project_open) (GKeyFile *keyfile)") == "void(* project_open) (GKeyFile *keyfile)")
-
-transform = etree.XSLT(etree.parse(os.path.join(xml_dir, "combine.xslt")))
-doc = etree.parse(os.path.join(xml_dir, "index.xml"))
-root = transform(doc)
 
 class AtAt(object):
 
@@ -361,51 +322,95 @@ class DoxyFunction(DoxyElement):
 			e.add_return(x[0])
 		return e
 
-other = []
-typedefs = []
+def main(args):
 
-c_files = root.xpath(".//compounddef[@kind='file']/compoundname[substring(.,string-length(.)-1)='.c']/..")
-h_files = root.xpath(".//compounddef[@kind='file']/compoundname[substring(.,string-length(.)-1)='.h']/..")
+	xml_dir = None
+	outfile = None
+	scioutfile = None
 
-for f in h_files:
-	if not (f.find("compoundname").text.endswith("private.h")):
-		for n0 in f.xpath(".//*/memberdef[@kind='typedef' and @prot='public']"):
-			if not (n0.find("type").text.replace("G_BEGIN_DECLS", "").lstrip().startswith("enum")):
-				e = DoxyTypedef.from_memberdef(n0)
-				typedefs.append(e)
+	parser = OptionParser(usage="usage: %prog [options] XML_DIR")
+	parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
+		action="store", dest="xml_dir")
+	parser.add_option("-d", "--outdir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
+		action="store", dest="outdir", default=".")
+	parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
+		action="store", dest="outfile")
+	parser.add_option("--sci-output", metavar="FILE", help="Write scintilla_object_* output to FILE",
+		action="store", dest="scioutfile")
+	opts, args = parser.parse_args(args[1:])
 
-	for n0 in f.xpath(".//*/memberdef[@kind='enum' and @prot='public']"):
-		e = DoxyEnum.from_memberdef(n0)
+	xml_dir = args[0]
+	if (opts.outfile):
+		outfile = open(opts.outfile, "w+")
+	else:
+		outfile=sys.stdout
+
+	if (opts.scioutfile):
+		scioutfile = open(opts.scioutfile, "w+")
+	else:
+		scioutfile = outfile
+
+	if (outfile is None):
+		sys.stderr.write("no output file\n")
+		return 1
+
+	if not (os.path.exists(xml_dir)):
+		sys.stderr.write("invalid xml directory\n")
+		return 1
+
+	transform = etree.XSLT(etree.parse(os.path.join(xml_dir, "combine.xslt")))
+	doc = etree.parse(os.path.join(xml_dir, "index.xml"))
+	root = transform(doc)
+
+	other = []
+	typedefs = []
+
+	c_files = root.xpath(".//compounddef[@kind='file']/compoundname[substring(.,string-length(.)-1)='.c']/..")
+	h_files = root.xpath(".//compounddef[@kind='file']/compoundname[substring(.,string-length(.)-1)='.h']/..")
+
+	for f in h_files:
+		if not (f.find("compoundname").text.endswith("private.h")):
+			for n0 in f.xpath(".//*/memberdef[@kind='typedef' and @prot='public']"):
+				if not (n0.find("type").text.replace("G_BEGIN_DECLS", "").lstrip().startswith("enum")):
+					e = DoxyTypedef.from_memberdef(n0)
+					typedefs.append(e)
+
+		for n0 in f.xpath(".//*/memberdef[@kind='enum' and @prot='public']"):
+			e = DoxyEnum.from_memberdef(n0)
+			other.append(e)
+
+	for n0 in root.xpath(".//compounddef[@kind='struct' and @prot='public']"):
+		e = DoxyStruct.from_compounddef(n0)
 		other.append(e)
 
-for n0 in root.xpath(".//compounddef[@kind='struct' and @prot='public']"):
-	e = DoxyStruct.from_compounddef(n0)
-	other.append(e)
+	for f in c_files:
+		for n0 in f.xpath(".//*/memberdef[@kind='function' and @prot='public']"):
+			e = DoxyFunction.from_memberdef(n0)
+			other.append(e)
 
-for f in c_files:
-	for n0 in f.xpath(".//*/memberdef[@kind='function' and @prot='public']"):
-		e = DoxyFunction.from_memberdef(n0)
-		other.append(e)
+	outfile.write("#include <glib.h>\n")
+	outfile.write("#include <gtk/gtk.h>\n")
+	outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
+	outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
+	outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
 
-outfile.write("#include <glib.h>\n")
-outfile.write("#include <gtk/gtk.h>\n")
-outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
-outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
-outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
+	# write typedefs first, they are possibly undocumented but still required (even
+	# if they are documented, they must be written out without gtkdoc)
+	for e in typedefs:
+		outfile.write(e.definition)
+		outfile.write("\n\n")
 
-# write typedefs first, they are possibly undocumented but still required (even
-# if they are documented, they must be written out without gtkdoc)
-for e in typedefs:
-	outfile.write(e.definition)
-	outfile.write("\n\n")
+	for e in filter(lambda x: x.is_documented(), other):
+		outfile.write("\n\n")
+		outfile.write(e.to_gtkdoc())
+		outfile.write(e.definition)
+		outfile.write("\n\n")
+		if (e.name.startswith("sci_")):
+			scioutfile.write(e.to_gtkdoc().replace("sci_", "scintilla_object_"))
+			scioutfile.write(e.definition.replace("sci_", "scintilla_object_"))
+			scioutfile.write("\n\n")
 
-for e in filter(lambda x: x.is_documented(), other):
-	outfile.write("\n\n")
-	outfile.write(e.to_gtkdoc())
-	outfile.write(e.definition)
-	outfile.write("\n\n")
-	if (e.name.startswith("sci_")):
-		scioutfile.write(e.to_gtkdoc().replace("sci_", "scintilla_object_"))
-		scioutfile.write(e.definition.replace("sci_", "scintilla_object_"))
-		scioutfile.write("\n\n")
+	return 0
 
+if __name__ == "__main__":
+	sys.exit(main(sys.argv))
