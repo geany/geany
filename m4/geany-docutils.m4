@@ -79,7 +79,20 @@ AC_DEFUN([GEANY_CHECK_PYTHON],
 [
 	AM_PATH_PYTHON([2.7], [], [])
 
-	AM_CONDITIONAL([WITH_PYTHON], [test -n "$PYTHON"])
+	have_python=no
+	AS_IF([test -n "$PYTHON"], [
+		AC_MSG_CHECKING([for python lxml package])
+		$PYTHON -c 'import lxml' 1>&2 2>/dev/null
+		AS_IF([test $? -eq 0], [
+			AC_MSG_RESULT([found])
+			have_python=yes
+		], [
+			AC_MSG_RESULT([not found])
+			have_python=no
+		])
+	])
+
+	AM_CONDITIONAL([WITH_PYTHON], [test "x$have_python" = "xyes"])
 	AM_COND_IF([WITH_PYTHON],
 		[GEANY_STATUS_ADD([Using Python version], [$PYTHON_VERSION])])
 ])
