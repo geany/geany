@@ -16,9 +16,9 @@ assert(normalize_text(" asd\nxxx  ") == "asd xxx")
 # doxygen records some definitions in C++ style, fix those
 # "bool FooBar::flag" => "bool flag"
 # void(* _GeanyObjectClass::project_open) (GKeyFile *keyfile) => void(* project_open) (GKeyFile *keyfile)
-prog = re.compile(r'[_a-zA-Z][_0-9a-zA-Z]*::')
+CXX_NAMESPACE_RE = re.compile(r'[_a-zA-Z][_0-9a-zA-Z]*::')
 def fix_definition(s):
-    return prog.sub(r"", s);
+    return CXX_NAMESPACE_RE.sub(r"", s);
 
 assert(fix_definition("bool flag") == "bool flag")
 assert(fix_definition("bool FooBar::flag") == "bool flag")
