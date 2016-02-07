@@ -53,10 +53,8 @@ class AtDoc(object):
     def cb(self, type, str):
         if (type == "param"):
             words = str.split(" ", 2);
-            #~ self.params.append(GtkDocParam.new(words[0], words[1].rstrip, self.annot))
             self.annot = []
         elif (type == "return"):
-            #~ self.retval = GtkDocReturn.new(str.rstrip, self.annot)
             self.annot = []
         elif (type == "since"):
             self.since = str.rstrip()
@@ -105,7 +103,6 @@ class DoxygenProcess(object):
         return "".join(filter(None, parts))
 
     def get_program_listing(self, xml):
-        #~ return "--- CODE ---"
         from lxml.etree import tostring
         arr = ["", "|[<!-- language=\"C\" -->"]
         for l in xml.getchildren():
@@ -113,8 +110,6 @@ class DoxygenProcess(object):
                 # a codeline is of the form
                 # <highlight class="normal">GeanyDocument<sp/>*doc<sp/>=<sp/>...;</highlight>
                 # <sp/> tags must be replaced with spaces, then just use the text
-                #~ html = self.stringify_children(l)
-                #~ print(etree.HTML(html))
                 h = l.find("highlight")
                 if h is not None:
                     html = tostring(h).decode("utf-8")
