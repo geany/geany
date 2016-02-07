@@ -6,23 +6,33 @@ import re
 from lxml import etree
 from optparse import OptionParser
 
-# " asd\nxxx  " => "asd xxx"
 def normalize_text(s):
-    return s.replace("\n", " ").lstrip().rstrip()
+    r"""
+    Normalizes whitespace in text.
 
-assert(normalize_text("asd xxx") == "asd xxx")
-assert(normalize_text(" asd\nxxx  ") == "asd xxx")
+    >>> normalize_text("asd xxx")
+    'asd xxx'
+    >>> normalize_text(" asd\nxxx  ")
+    'asd xxx'
+    """
+    return s.replace("\n", " ").strip()
 
-# doxygen records some definitions in C++ style, fix those
-# "bool FooBar::flag" => "bool flag"
-# void(* _GeanyObjectClass::project_open) (GKeyFile *keyfile) => void(* project_open) (GKeyFile *keyfile)
 CXX_NAMESPACE_RE = re.compile(r'[_a-zA-Z][_0-9a-zA-Z]*::')
 def fix_definition(s):
-    return CXX_NAMESPACE_RE.sub(r"", s);
+    """
+    Removes C++ name qualifications from some definitions.
 
-assert(fix_definition("bool flag") == "bool flag")
-assert(fix_definition("bool FooBar::flag") == "bool flag")
-assert(fix_definition("void(* _GeanyObjectClass::project_open) (GKeyFile *keyfile)") == "void(* project_open) (GKeyFile *keyfile)")
+    For example:
+
+    >>> fix_definition("bool flag")
+    'bool flag'
+    >>> fix_definition("bool FooBar::flag")
+    'bool flag'
+    >>> fix_definition("void(* _GeanyObjectClass::project_open) (GKeyFile *keyfile)")
+    'void(* project_open) (GKeyFile *keyfile)'
+
+    """
+    return CXX_NAMESPACE_RE.sub(r"", s);
 
 class AtAt(object):
 
