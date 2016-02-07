@@ -111,6 +111,9 @@ Makefile.in
 /doc/*.tex
 /doc/*.toc
 /doc/reference
+/doc/geany-gtkdoc.h
+/doc/geany-scintilla-gtkdoc.h
+/doc/xml/
 
 #-----------------------------------------------------------------------
 # /tests/
