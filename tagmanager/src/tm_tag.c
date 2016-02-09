@@ -17,6 +17,7 @@
 #include "read.h"
 #define LIBCTAGS_DEFINED
 #include "tm_tag.h"
+#include "tm_parser.h"
 
 
 #define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
@@ -108,6 +109,8 @@ typedef struct
 {
 	guint *sort_attrs;
 	gboolean partial;
+	const GPtrArray *tags_array;
+	gboolean first;
 } TMSortOptions;
 
 static const char *s_tag_type_names[] = {
@@ -860,7 +863,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 			TMTag **found;
 			TMTag *tag = source_file->tags_array->pdata[i];
 
-			found = tm_tags_find(tags_array, tag->name, FALSE, TRUE, &tag_count);
+			found = tm_tags_find(tags_array, tag->name, FALSE, &tag_count);
 
 			for (j = 0; j < tag_count; j++)
 			{
@@ -1081,85 +1084,71 @@ static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
 	return NULL;
 }
 
-static TMTag **tags_search(const GPtrArray *tags_array, TMTag *tag,
-		gboolean tags_array_sorted, TMSortOptions *sort_options)
+static gint tag_search_cmp(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
 {
-	if (tags_array_sorted)
-	{	/* fast binary search on sorted tags array */
-		return (TMTag **) binary_search(&tag, tags_array->pdata, tags_array->len, 
-			tm_tag_compare, sort_options);
-	}
-	else
-	{	/* the slow way: linear search (to make it a bit faster, search reverse assuming
-		 * that the tag to search was added recently) */
-		guint i;
-		TMTag **t;
-		for (i = tags_array->len; i > 0; i--)
+	gint res = tm_tag_compare(ptr1, ptr2, user_data);
+
+	if (res == 0)
+	{
+		TMSortOptions *sort_options = user_data;
+		const GPtrArray *tags_array = sort_options->tags_array;
+		TMTag **tag = (TMTag **) ptr2;
+
+		/* if previous/next (depending on sort options) tag equal, we haven't
+		 * found the first/last tag in a sequence of equal tags yet */
+		if (sort_options->first && ptr2 != &tags_array->pdata[0]) {
+			if (tm_tag_compare(ptr1, tag - 1, user_data) == 0)
+				return -1;
+		}
+		else if (!sort_options->first && ptr2 != &tags_array->pdata[tags_array->len-1])
 		{
-			t = (TMTag **) &tags_array->pdata[i - 1];
-			if (0 == tm_tag_compare(&tag, t, sort_options))
-				return t;
+			if (tm_tag_compare(ptr1, tag + 1, user_data) == 0)
+				return 1;
 		}
 	}
-	return NULL;
+	return res;
 }
 
 /*
  Returns a pointer to the position of the first matching tag in a (sorted) tags array.
- The passed array of tags should be already sorted by name for optimal performance. If
- \c tags_array_sorted is set to FALSE, it may be unsorted but the lookup will be slower.
- @param tags_array Tag array (may be sorted on name)
+ The passed array of tags must be already sorted by name (searched with binary search).
+ @param tags_array Tag array (sorted on name)
  @param name Name of the tag to locate.
  @param partial If TRUE, matches the first part of the name instead of doing exact match.
- @param tags_array_sorted If TRUE, the passed \c tags_array is sorted by name so it can be
- searched with binary search. Otherwise it is searched linear which is obviously slower.
  @param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, gboolean tags_array_sorted, guint * tagCount)
+		gboolean partial, guint *tagCount)
 {
-	static TMTag *tag = NULL;
-	TMTag **result;
-	guint tagMatches=0;
+	TMTag *tag, **first;
 	TMSortOptions sort_options;
 
 	*tagCount = 0;
-	if ((!tags_array) || (!tags_array->len))
+	if (!tags_array || !tags_array->len)
 		return NULL;
 
-	if (NULL == tag)
-		tag = g_new0(TMTag, 1);
+	tag = g_new0(TMTag, 1);
 	tag->name = (char *) name;
+
 	sort_options.sort_attrs = NULL;
 	sort_options.partial = partial;
+	sort_options.tags_array = tags_array;
+	sort_options.first = TRUE;
+	first = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
+			tag_search_cmp, &sort_options);
 
-	result = tags_search(tags_array, tag, tags_array_sorted, &sort_options);
-	/* There can be matches on both sides of result */
-	if (result)
+	if (first)
 	{
-		TMTag **last = (TMTag **) &tags_array->pdata[tags_array->len - 1];
-		TMTag **adv;
+		TMTag **last;
 
-		/* First look for any matches after result */
-		adv = result;
-		adv++;
-		for (; adv <= last && *adv; ++ adv)
-		{
-			if (0 != tm_tag_compare(&tag, adv, &sort_options))
-				break;
-			++tagMatches;
-		}
-		/* Now look for matches from result and below */
-		for (; result >= (TMTag **) tags_array->pdata; -- result)
-		{
-			if (0 != tm_tag_compare(&tag, (TMTag **) result, &sort_options))
-				break;
-			++tagMatches;
-		}
-		*tagCount=tagMatches;
-		++ result;	/* Correct address for the last successful match */
+		sort_options.first = FALSE;
+		last = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
+				tag_search_cmp, &sort_options);
+		*tagCount = last - first + 1;
 	}
-	return (TMTag **) result;
+
+	g_free(tag);
+	return (TMTag **) first;
 }
 
 /* Returns TMTag which "own" given line
@@ -1190,18 +1179,73 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType ta
 	return matching_tag;
 }
 
-#if 0
-/* Returns TMTag to function or method which "own" given line
- @param line Current line in edited file.
- @param file_tags A GPtrArray of edited file TMTag pointers.
- @return TMTag pointers to owner function. */
-static const TMTag *
-tm_get_current_function (GPtrArray * file_tags, const gulong line)
+const gchar *tm_tag_context_separator(langType lang)
 {
-	return tm_get_current_tag (file_tags, line, tm_tag_function_t | tm_tag_method_t);
-}
-#endif
+	switch (lang)
+	{
+		case TM_PARSER_C:	/* for C++ .h headers or C structs */
+		case TM_PARSER_CPP:
+		case TM_PARSER_GLSL:	/* for structs */
+		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
+		case TM_PARSER_PHP:
+		case TM_PARSER_POWERSHELL:
+		case TM_PARSER_RUST:
+		case TM_PARSER_ZEPHIR:
+			return "::";
 
+		/* avoid confusion with other possible separators in group/section name */
+		case TM_PARSER_CONF:
+		case TM_PARSER_REST:
+			return ":::";
+
+		/* no context separator */
+		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_TXT2TAGS:
+			return "\x03";
+
+		default:
+			return ".";
+	}
+}
+
+gboolean tm_tag_is_anon(const TMTag *tag)
+{
+	guint i;
+	char dummy;
+
+	if (tag->lang == TM_PARSER_C || tag->lang == TM_PARSER_CPP)
+		return sscanf(tag->name, "anon_%*[a-z]_%u%c", &i, &dummy) == 1;
+	else if (tag->lang == TM_PARSER_FORTRAN || tag->lang == TM_PARSER_F77)
+		return sscanf(tag->name, "Structure#%u%c", &i, &dummy) == 1 ||
+			sscanf(tag->name, "Interface#%u%c", &i, &dummy) == 1 ||
+			sscanf(tag->name, "Enum#%u%c", &i, &dummy) == 1;
+	return FALSE;
+}
+
+const gchar *tm_tag_get_anon_name(const TMTag *tag)
+{
+	static gchar name[64];
+
+	name[0] = '\0';
+	if (tm_tag_is_anon(tag) && strlen(tag->name) < 64)
+	{
+		if (tag->lang == TM_PARSER_C || tag->lang == TM_PARSER_CPP)
+		{
+			gchar *start = strstr(tag->name, "_") + 1;
+			gchar *end = g_strrstr(tag->name, "_");
+			strncpy(name, start, end - start);
+			name[end - start] = '\0';
+		}
+		else if (tag->lang == TM_PARSER_FORTRAN || tag->lang == TM_PARSER_F77)
+		{
+			gchar *end = strstr(tag->name, "#");
+			strncpy(name, tag->name, end - tag->name);
+			name[end - tag->name] = '\0';
+		}
+	}
+
+	return name;
+}
 
 #ifdef TM_DEBUG /* various debugging functions */
 

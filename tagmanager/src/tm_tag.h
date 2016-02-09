@@ -179,7 +179,7 @@ gboolean tm_tags_prune(GPtrArray *tags_array);
 gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, gboolean tags_array_sorted, guint * tagCount);
+		gboolean partial, guint * tagCount);
 
 void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all);
 
@@ -190,6 +190,12 @@ void tm_tag_unref(TMTag *tag);
 TMTag *tm_tag_ref(TMTag *tag);
 
 gboolean tm_tags_equal(const TMTag *a, const TMTag *b);
+
+const gchar *tm_tag_context_separator(langType lang);
+
+gboolean tm_tag_is_anon(const TMTag *tag);
+
+const gchar *tm_tag_get_anon_name(const TMTag *tag);
 
 #ifdef TM_DEBUG /* various debugging functions */
 

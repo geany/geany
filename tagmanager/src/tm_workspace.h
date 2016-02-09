@@ -33,6 +33,7 @@ typedef struct
 	GPtrArray *tags_array; /**< Sorted tags from all source files 
 		(just pointers to source file tags, the tag objects are owned by the source files) */
 	GPtrArray *typename_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
+	GPtrArray *global_typename_array; /* Like above for global tags */
 } TMWorkspace;
 
 
@@ -54,17 +55,14 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
 	int includes_count, const char *tags_file, int lang);
 
-const GPtrArray *tm_workspace_find(const char *name, TMTagType type, TMTagAttrType *attrs,
-	gboolean partial, langType lang);
+GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
+	TMTagAttrType *attrs, langType lang);
 
-const GPtrArray *
-tm_workspace_find_scoped (const char *name, const char *scope, TMTagType type,
-	TMTagAttrType *attrs, gboolean partial, langType lang, gboolean global_search);
+GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, gint max_num);
 
-const GPtrArray *tm_workspace_find_scope_members(const GPtrArray *file_tags,
-                                                 const char *scope_name,
-                                                 gboolean find_global,
-                                                 gboolean no_definitions);
+GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
+	gboolean function, gboolean member, const gchar *current_scope);
+
 
 void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file);
 
