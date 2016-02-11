@@ -126,8 +126,7 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 /* Set the argument list of tag identified by its name */
 static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
 {
-	guint count;
-	TMTag **tags, *tag;
+	guint i;
 
 	if (NULL == arglist ||
 		NULL == tag_name ||
@@ -136,13 +135,16 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 		return;
 	}
 
-	tags = tm_tags_find(current_source_file->tags_array, tag_name, FALSE, FALSE,
-			&count);
-	if (tags != NULL && count == 1)
+	/* going in reverse order because the tag was added recently */
+	for (i = current_source_file->tags_array->len; i > 0; i--)
 	{
-		tag = tags[0];
-		g_free(tag->arglist);
-		tag->arglist = g_strdup(arglist);
+		TMTag *tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
+		if (g_strcmp0(tag->name, tag_name) == 0)
+		{
+			g_free(tag->arglist);
+			tag->arglist = g_strdup(arglist);
+			break;
+		}
 	}
 }
 

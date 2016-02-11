@@ -281,7 +281,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 	gint tag_lang;
 
 	if (global)
-		typedefs = tm_tags_extract(app->tm_workspace->global_tags, TM_GLOBAL_TYPE_MASK);
+		typedefs = app->tm_workspace->global_typename_array;
 	else
 		typedefs = app->tm_workspace->typename_array;
 
@@ -305,8 +305,6 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 			}
 		}
 	}
-	if (typedefs && global)
-		g_ptr_array_free(typedefs, TRUE);
 	return s;
 }
 
@@ -324,31 +322,7 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	switch (ft_id)
-	{
-		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
-		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_GLSL:	/* for structs */
-		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_POWERSHELL:
-		case GEANY_FILETYPES_RUST:
-		case GEANY_FILETYPES_ZEPHIR:
-			return "::";
-
-		/* avoid confusion with other possible separators in group/section name */
-		case GEANY_FILETYPES_CONF:
-		case GEANY_FILETYPES_REST:
-			return ":::";
-
-		/* no context separator */
-		case GEANY_FILETYPES_ASCIIDOC:
-		case GEANY_FILETYPES_TXT2TAGS:
-			return "\x03";
-
-		default:
-			return ".";
-	}
+	return tm_tag_context_separator(filetypes[ft_id]->lang);
 }
 
 
