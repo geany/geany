@@ -3,4 +3,4 @@ IMyInterfaceÌ32Ö0
 IndexerClassÌ1Ö0
 MainÌ128Í()ÎMainClassÖ0Ïpublic void
 MainClassÌ1Ö0
-myArrayÌ8ÎIndexerClassÖ0Ïint
+myArrayÌ8ÎIndexerClassÖ0Ïint[]

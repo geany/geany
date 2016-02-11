@@ -13,7 +13,7 @@ barÌ16Í()ÎClassÖ0Ïpublic AliasInt
 barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
 conditionalÌ16384Ö0ÏT
 fooÌ4ÎEnumÖ0
-globalVarÌ16384Ö0Ï__gshared
+globalVarÌ16384Ö0Ï__gshared int
 iÌ16384Ö0Ïint
 mainÌ16Í(string[] args)Ö0Ïvoid
 objÌ16384Ö0ÏObject
