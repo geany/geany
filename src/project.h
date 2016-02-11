@@ -40,7 +40,7 @@ typedef struct GeanyProject
 	/** Identifier whether it is a pure Geany project or modified/extended
 	 * by a plugin. */
 	gint type;
-	gchar **file_patterns;	/**< Array of filename extension patterns. */
+	GStrv file_patterns;	/**< Array of filename extension patterns. */
 
 	struct GeanyProjectPrivate	*priv;	/* must be last, append fields before this item */
 }
