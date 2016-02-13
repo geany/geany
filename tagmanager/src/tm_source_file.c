@@ -399,7 +399,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
  @param lang The language index.
  @return The language name, or NULL.
 */
-const gchar *tm_source_file_get_lang_name(gint lang)
+const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
 	if (NULL == LanguageTable)
 	{
@@ -417,7 +417,7 @@ const gchar *tm_source_file_get_lang_name(gint lang)
  @param name The language name.
  @return The language index, or TM_PARSER_NONE.
 */
-gint tm_source_file_get_named_lang(const gchar *name)
+TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
 	if (NULL == LanguageTable)
 	{

@@ -53,12 +53,12 @@ const TMWorkspace *tm_get_workspace(void);
 gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
 
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-	int includes_count, const char *tags_file, int lang);
+	int includes_count, const char *tags_file, TMParserType lang);
 
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
-	TMTagAttrType *attrs, langType lang);
+	TMTagAttrType *attrs, TMParserType lang);
 
-GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, guint max_num);
+GPtrArray *tm_workspace_find_prefix(const char *prefix, TMParserType lang, guint max_num);
 
 GPtrArray *tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace);

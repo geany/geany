@@ -562,9 +562,9 @@ static gboolean tm_tag_init_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE
 
 /*
  Same as tm_tag_new() except that the tag attributes are read from file.
- @param mode langType to use for the tag.
+ @param mode TMParserType to use for the tag.
 */
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, gint mode, TMFileFormat format)
+TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, TMParserType mode, TMFileFormat format)
 {
 	TMTag *tag;
 	gboolean result = FALSE;
@@ -1182,7 +1182,7 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType ta
 	return matching_tag;
 }
 
-const gchar *tm_tag_context_separator(langType lang)
+const gchar *tm_tag_context_separator(TMParserType lang)
 {
 	switch (lang)
 	{
@@ -1226,7 +1226,7 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 }
 
 
-gboolean tm_tag_langs_compatible(langType lang, langType other)
+gboolean tm_tag_langs_compatible(TMParserType lang, TMParserType other)
 {
 	if (lang == TM_PARSER_NONE || other == TM_PARSER_NONE)
 		return FALSE;

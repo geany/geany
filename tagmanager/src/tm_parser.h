@@ -10,9 +10,10 @@
 #ifndef TM_PARSER_H
 #define TM_PARSER_H
 
+typedef gint TMParserType;
 
 /* keep in sync with ctags/parsers.h */
-typedef enum
+enum
 {
 	TM_PARSER_NONE = -2, /* keep in sync with ctags LANG_IGNORE */
 	TM_PARSER_C = 0,
@@ -67,7 +68,7 @@ typedef enum
 	TM_PARSER_ZEPHIR,
 	TM_PARSER_POWERSHELL,
 	TM_PARSER_COUNT
-} TMParserType;
+};
 
 
 #endif /* TM_PARSER_H */
