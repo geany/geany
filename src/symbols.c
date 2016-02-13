@@ -287,17 +287,21 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 
 	if ((typedefs) && (typedefs->len > 0))
 	{
+		const gchar *last_name = "";
+
 		s = g_string_sized_new(typedefs->len * 10);
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
 			tag_lang = tag->lang;
 
-			if (tag->name && tm_tag_langs_compatible(lang, tag_lang))
+			if (tag->name && tm_tag_langs_compatible(lang, tag_lang) &&
+				strcmp(tag->name, last_name) != 0)
 			{
 				if (j != 0)
 					g_string_append_c(s, ' ');
 				g_string_append(s, tag->name);
+				last_name = tag->name;
 			}
 		}
 	}
