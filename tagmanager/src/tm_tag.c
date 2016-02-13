@@ -1226,6 +1226,22 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 }
 
 
+gboolean tm_tag_langs_compatible(langType lang, langType other)
+{
+	if (lang == TM_PARSER_NONE || other == TM_PARSER_NONE)
+		return FALSE;
+	if (lang == other)
+		return TRUE;
+	/* Accept CPP tags for C lang and vice versa */
+	else if (lang == TM_PARSER_C && other == TM_PARSER_CPP)
+		return TRUE;
+	else if (lang == TM_PARSER_CPP && other == TM_PARSER_C)
+		return TRUE;
+
+	return FALSE;
+}
+
+
 #ifdef TM_DEBUG /* various debugging functions */
 
 /*
