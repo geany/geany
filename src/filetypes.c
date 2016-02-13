@@ -202,7 +202,7 @@ static GeanyFiletype *filetype_new(void)
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
-	ft->lang = -2;	/* assume no tagmanager parser */
+	ft->lang = TM_PARSER_NONE;	/* assume no tagmanager parser */
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
 	ft->indent_width = -1;

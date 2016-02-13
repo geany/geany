@@ -34,6 +34,7 @@
 #define LIBCTAGS_DEFINED
 #include "tm_source_file.h"
 #include "tm_tag.h"
+#include "tm_parser.h"
 
 typedef struct
 {
@@ -193,7 +194,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	}
 
 	if (name == NULL)
-		source_file->lang = LANG_AUTO;
+		source_file->lang = TM_PARSER_NONE;
 	else
 		source_file->lang = getNamedLanguage(name);
 
@@ -203,7 +204,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 /** Initializes a TMSourceFile structure and returns a pointer to it. The
  * TMSourceFile has to be added to TMWorkspace to start its parsing.
  * @param file_name The file name.
- * @param name Name of the used programming language, NULL for autodetection.
+ * @param name Name of the used programming language, NULL to disable parsing.
  * @return The created unparsed TMSourceFile object.
  * */
 GEANY_API_SYMBOL
@@ -297,7 +298,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		return FALSE;
 	}
 	
-	if (source_file->lang == LANG_IGNORE)
+	if (source_file->lang == TM_PARSER_NONE)
 	{
 		tm_tags_array_free(source_file->tags_array, FALSE);
 		return FALSE;
@@ -342,15 +343,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 			TagEntrySetArglistFunction = tm_source_file_set_tag_arglist;
 	}
 	current_source_file = source_file;
-	if (LANG_AUTO == source_file->lang)
-		source_file->lang = getFileLanguage (file_name);
-	if (source_file->lang == LANG_IGNORE)
-	{
-#ifdef TM_DEBUG
-		g_warning("ignoring %s (unknown language)\n", file_name);
-#endif
-	}
-	else if (! LanguageTable [source_file->lang]->enabled)
+	if (! LanguageTable [source_file->lang]->enabled)
 	{
 #ifdef TM_DEBUG
 		g_warning("ignoring %s (language disabled)\n", file_name);
@@ -422,7 +415,7 @@ const gchar *tm_source_file_get_lang_name(gint lang)
 
 /* Gets the language index for \a name.
  @param name The language name.
- @return The language index, or -2.
+ @return The language index, or TM_PARSER_NONE.
 */
 gint tm_source_file_get_named_lang(const gchar *name)
 {

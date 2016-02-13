@@ -295,8 +295,8 @@ GString *symbols_find_typenames_as_string(gint lang, gboolean global)
 
 			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
 			 * e.g. PHP classes in C++ files
-			 * lang = -2 disables the check */
-			if (tag->name && (tag_lang == lang || lang == -2 ||
+			 * lang = TM_PARSER_NONE disables the check */
+			if (tag->name && (tag_lang == lang || lang == TM_PARSER_NONE ||
 				(lang == TM_PARSER_CPP && tag_lang == TM_PARSER_C)))
 			{
 				if (j != 0)

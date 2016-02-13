@@ -10,18 +10,11 @@
 #ifndef TM_PARSER_H
 #define TM_PARSER_H
 
-#ifndef LIBCTAGS_DEFINED
-/* from ctags/parse.h */
-#	define LANG_AUTO   (-1)
-#	define LANG_IGNORE (-2)
-#endif
-
 
 /* keep in sync with ctags/parsers.h */
 typedef enum
 {
-	TM_PARSER_NONE = LANG_IGNORE,
-	TM_PARSER_AUTO = LANG_AUTO,
+	TM_PARSER_NONE = -2, /* keep in sync with ctags LANG_IGNORE */
 	TM_PARSER_C = 0,
 	TM_PARSER_CPP,
 	TM_PARSER_JAVA,
