@@ -1202,8 +1202,10 @@ gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, g
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error)
 {
-	g_string_truncate(stdout_data, 0);
-	g_string_truncate(stderr_data, 0);
+	if (stdout_data)
+		g_string_truncate(stdout_data, 0);
+	if (stderr_data)
+		g_string_truncate(stderr_data, 0);
 
 	return spawn_with_callbacks(working_directory, command_line, argv, envp, SPAWN_SYNC |
 		SPAWN_UNBUFFERED, stdin_data ? (GIOFunc) spawn_write_data : NULL, stdin_data,
