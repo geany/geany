@@ -950,7 +950,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 }
 
 
-/**
+/** @girskip
  *  Executes a child program and setups callbacks.
  *
  *  A command line or an argument vector must be passed. If both are present, the argument
@@ -999,7 +999,6 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *  @return @c TRUE on success, @c FALSE on error.
  *
  *  @since 1.25
- *  @skip
  **/
 GEANY_API_SYMBOL
 gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *command_line,

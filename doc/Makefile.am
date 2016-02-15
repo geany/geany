@@ -104,7 +104,7 @@ doxygen_sources = \
 # for xml output
 Doxyfile-gi: Doxyfile
 	$(AM_V_GEN)$(SED) \
-		-e 's,addtogir=@internal,addtogir=,' \
+		-e 's,gironly=@internal,gironly=,' \
 		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
 		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
 		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \

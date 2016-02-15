@@ -1651,7 +1651,7 @@ const gchar *utils_get_default_dir_utf8(void)
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup @skip Ignored.
+ *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
  *  @param std_out The return location for child output, or @c NULL.
  *  @param std_err The return location for child error messages, or @c NULL.
@@ -1686,7 +1686,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param argv The child's argument vector.
  *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup @skip Ignored.
+ *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
  *  @param child_pid The return location for child process ID, or NULL.
  *  @param error The return location for error or @c NULL.

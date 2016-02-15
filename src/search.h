@@ -43,7 +43,7 @@ typedef enum GeanyFindFlags
 }
 GeanyFindFlags;
 
-/** @addtogir
+/** @gironly
  * Find selection options */
 typedef enum
 {

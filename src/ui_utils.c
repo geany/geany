@@ -2843,14 +2843,15 @@ GtkWidget *ui_label_new_bold(const gchar *text)
 }
 
 
-/** Adds a list of document items to @a menu.
+/** @girskip
+ * Adds a list of document items to @a menu.
  * @param menu Menu.
  * @param active Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be
  * passed the corresponding document pointer as @c user_data.
  * @warning You should check @c doc->is_valid in the callback.
  * @since 0.19
- * @skip */
+ **/
 GEANY_API_SYMBOL
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
@@ -2858,7 +2859,8 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
 }
 
 
-/** Adds a list of document items to @a menu.
+/** @girskip
+ * Adds a list of document items to @a menu.
  *
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
@@ -2872,7 +2874,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.
  * @warning You should check @c doc->is_valid in the callback.
  * @since 0.21
- * @skip */
+ **/
 GEANY_API_SYMBOL
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)

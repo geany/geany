@@ -248,16 +248,16 @@ ALIASES                = "signal=- @ref  " \
                          "signaldesc=" \
                          "signals=@b Signals:  " \
                          "endsignals=  " \
-                         "addtogir=@internal"
+                         "gironly=@internal"
 
 ALIASES               += "transfer{1}=\a \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly (transfer: \1) \endhtmlonly"
 ALIASES               += "elementtype{1}=\a \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly (element-type: \1) \endhtmlonly"
 ALIASES               += "scope{1}=\a \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly (scope: \1) \endhtmlonly"
-ALIASES               += "skip=\a \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
-ALIASES               += "null=\a \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
-ALIASES               += "cb=\a \xmlonly <simplesect kind=\"geany:cb\"></simplesect>\endxmlonly"
-ALIASES               += "cbdata=\a \xmlonly <simplesect kind=\"geany:cbdata\"></simplesect>\endxmlonly"
-ALIASES               += "cbfree=\a \xmlonly <simplesect kind=\"geany:cbfree\"></simplesect>\endxmlonly"
+ALIASES               += "girskip=\a \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
+ALIASES               += "nullable=\a \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
+ALIASES               += "cb=\a \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
+ALIASES               += "cbdata=\a \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
+ALIASES               += "cbfree=\a \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
 
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
@@ -845,8 +845,7 @@ RECURSIVE              = NO
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                = @top_srcdir@/doc/geany-gtkdoc.h \
-                         @top_srcdir@/doc/geany-scintilla-gtkdoc.h
+EXCLUDE                = @top_srcdir@/doc/geany-gtkdoc.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded

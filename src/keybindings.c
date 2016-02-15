@@ -150,7 +150,8 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
-/** Fills a GeanyKeyBinding struct item.
+/** @girskip
+ * Fills a GeanyKeyBinding struct item.
  * @note Always set @a key and @a mod to 0, otherwise you will likely
  * cause conflicts with the user's custom, other plugin's keybindings or
  * future default keybindings.
@@ -216,8 +217,8 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item @null Optional widget to set an accelerator for, or @c NULL.
- * @param cb @null New-style callback to be called when activated, or @c NULL to use the group callback.
+ * @param menu_item @nullable Optional widget to set an accelerator for.
+ * @param cb @nullable New-style callback to be called when activated, or @c NULL to use the group callback.
  * @param pdata Plugin-specific data passed back to the callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
  * @return @transfer{none} The keybinding - normally this is ignored.
