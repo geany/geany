@@ -113,22 +113,22 @@ Doxyfile-gi: Doxyfile
 		$< > $@ || { $(RM) $@ && exit 1; }
 
 Doxyfile.stamp: Doxyfile Doxyfile-gi $(doxygen_sources)
-	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && $(DOXYGEN) Doxyfile && echo "" > $@
+	$(AM_V_at)$(DOXYGEN) Doxyfile-gi
+	$(AM_V_at)$(DOXYGEN) Doxyfile
+	$(AM_V_GEN)echo "" > $@
 
 ALL_TARGETS = Doxyfile.stamp
 
 if WITH_PYTHON
 
-geany-scintilla-gtkdoc.h: geany-gtkdoc.h
-
 geany-gtkdoc.h: Doxyfile.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
 	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) \
-	-o geany-gtkdoc.h --sci-output geany-scintilla-gtkdoc.h
+	-o geany-gtkdoc.h
 
-ALL_TARGETS += geany-gtkdoc.h geany-scintilla-gtkdoc.h
+ALL_TARGETS += geany-gtkdoc.h
 
-geany_includedir = $(includedir)/geany/gtkdoc
-geany_include_HEADERS = geany-gtkdoc.h geany-scintilla-gtkdoc.h
+geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
+geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
 
 endif
 
