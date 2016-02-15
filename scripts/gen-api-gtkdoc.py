@@ -156,7 +156,7 @@ class DoxygenProcess(object):
                 s += n.text if n.text else ""
             if n.tag == "simplesect":
                 ss = self.at.cb(n.get("kind"), self.__process_element(n))
-                s += ss if ss + "\n" else ""
+                s += ss + "\n" if ss else ""
             if n.tag == "programlisting":
                 s += self.get_program_listing(n)
             if n.tag == "xrefsect":
@@ -331,7 +331,6 @@ def main(args):
 
     xml_dir = None
     outfile = None
-    scioutfile = None
 
     parser = OptionParser(usage="usage: %prog [options] XML_DIR")
     parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
@@ -340,24 +339,9 @@ def main(args):
         action="store", dest="outdir", default=".")
     parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
         action="store", dest="outfile")
-    parser.add_option("--sci-output", metavar="FILE", help="Write scintilla_object_* output to FILE",
-        action="store", dest="scioutfile")
     opts, args = parser.parse_args(args[1:])
 
     xml_dir = args[0]
-    if (opts.outfile):
-        outfile = open(opts.outfile, "w+")
-    else:
-        outfile=sys.stdout
-
-    if (opts.scioutfile):
-        scioutfile = open(opts.scioutfile, "w+")
-    else:
-        scioutfile = outfile
-
-    if (outfile is None):
-        sys.stderr.write("no output file\n")
-        return 1
 
     if not (os.path.exists(xml_dir)):
         sys.stderr.write("invalid xml directory\n")
@@ -393,27 +377,37 @@ def main(args):
             e = DoxyFunction.from_memberdef(n0)
             other.append(e)
 
-    outfile.write("#include <glib.h>\n")
-    outfile.write("#include <gtk/gtk.h>\n")
-    outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
-    outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
-    outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
+    if (opts.outfile):
+        try:
+            outfile = open(opts.outfile, "w+")
+        except OSError as err:
+            sys.stderr.write("failed to open \"%s\" for writing (%s)\n" % (opts.outfile, err.strerror))
+            return 1
+    else:
+        outfile = sys.stdout
 
-    # write typedefs first, they are possibly undocumented but still required (even
-    # if they are documented, they must be written out without gtkdoc)
-    for e in typedefs:
-        outfile.write(e.definition)
-        outfile.write("\n\n")
+    try:
+        outfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
+        outfile.write("#include <glib.h>\n")
+        outfile.write("#include <gtk/gtk.h>\n\n")
+        outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
+        outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
+        outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
 
-    for e in filter(lambda x: x.is_documented(), other):
-        outfile.write("\n\n")
-        outfile.write(e.to_gtkdoc())
-        outfile.write(e.definition)
-        outfile.write("\n\n")
-        if (e.name.startswith("sci_")):
-            scioutfile.write(e.to_gtkdoc().replace("sci_", "scintilla_object_"))
-            scioutfile.write(e.definition.replace("sci_", "scintilla_object_"))
-            scioutfile.write("\n\n")
+        # write typedefs first, they are possibly undocumented but still required (even
+        # if they are documented, they must be written out without gtkdoc)
+        for e in typedefs:
+            outfile.write(e.definition)
+            outfile.write("\n\n")
+
+        for e in filter(lambda x: x.is_documented(), other):
+            outfile.write("\n\n")
+            outfile.write(e.to_gtkdoc())
+            outfile.write(e.definition)
+            outfile.write("\n\n")
+    except BrokenPipeError:
+        # probably piped to head or tail
+        return 0
 
     return 0
 
