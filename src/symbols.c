@@ -54,7 +54,6 @@
 #include "tm_tag.h"
 #include "ui_utils.h"
 #include "utils.h"
-#include "keybindings.h"
 
 #include "SciLexer.h"
 
@@ -63,7 +62,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-#include <gdk/gdkkeysyms.h>
 
 
 static gchar **html_entities = NULL;
@@ -84,13 +82,6 @@ enum	/* Geany tag files */
 	GTF_LATEX,
 	GTF_PYTHON,
 	GTF_MAX
-};
-
-enum {
-	PIXBUF_COLUMN,
-	TEXT_COLUMN,
-	TAG_COLUMN,
-	N_COLUMNS
 };
 
 static TagFileInfo tag_file_info[GTF_MAX] =
@@ -146,9 +137,6 @@ static struct
 	GtkWidget *find_in_files;
 }
 symbol_menu;
-
-static GtkWidget *tag_goto_popup = NULL;
-static GtkWidget *tag_goto_tree_view = NULL;
 
 static void html_tags_loaded(void);
 static void load_user_tags(filetype_id ft_id);
@@ -1840,22 +1828,10 @@ static void load_user_tags(filetype_id ft_id)
 }
 
 
-static void on_focus_out(GtkWidget *list, GdkEventFocus *unused, gpointer *user_data)
+static void on_goto_popup_item_activate(GtkMenuItem *item, TMTag *tag)
 {
-	gtk_widget_hide(tag_goto_popup);
-}
-
-
-static void on_row_activated(GtkTreeView *tree_view, GtkTreePath *path,
-	GtkTreeViewColumn *column, gpointer user_data)
-{
-	GtkTreeModel *model = gtk_tree_view_get_model(tree_view);
 	GeanyDocument *new_doc, *old_doc;
-	GtkTreeIter iter;
-	TMTag *tag;
 
-	gtk_tree_model_get_iter(model, &iter, path);
-	gtk_tree_model_get(model, &iter, TAG_COLUMN, &tag, -1);
 	g_return_if_fail(tag);
 
 	old_doc = document_get_current();
@@ -1863,23 +1839,6 @@ static void on_row_activated(GtkTreeView *tree_view, GtkTreePath *path,
 
 	if (new_doc)
 		navqueue_goto_line(old_doc, new_doc, tag->line);
-
-	gtk_widget_hide(tag_goto_popup);
-	tm_tag_unref(tag);
-}
-
-
-static gboolean on_key_pressed(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
-{
-	guint state = event->state & gtk_accelerator_get_default_mod_mask();
-
-	if (event->keyval == GDK_Escape && state == 0)
-	{
-		gtk_widget_hide(tag_goto_popup);
-		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
-		return TRUE;
-	}
-	return FALSE;
 }
 
 
@@ -1918,106 +1877,84 @@ static guint get_tag_class(const TMTag *tag)
 }
 
 
-static void create_goto_popup(void)
+/* positions a popup below the caret from the ScintillaObject in @p data */
+static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
 {
-	GtkWidget *frame, *scroller;
-	GtkListStore *store;
-	GtkTreeSelection *selection;
-	GtkTreeViewColumn *column;
-	GtkCellRenderer *renderer;
+	ScintillaObject *sci = data;
+	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+	gint pos = sci_get_current_position(sci);
+	gint line = sci_get_line_from_position(sci, pos);
+	gint line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
+	gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
+	gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
 
-	tag_goto_popup = g_object_new(GTK_TYPE_WINDOW, "type", GTK_WINDOW_TOPLEVEL, NULL);
-	gtk_widget_set_can_focus(tag_goto_popup, TRUE);
-	gtk_window_set_type_hint(GTK_WINDOW(tag_goto_popup), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_decorated(GTK_WINDOW(tag_goto_popup), FALSE);
-	gtk_window_set_transient_for(GTK_WINDOW(tag_goto_popup), GTK_WINDOW(main_widgets.window));
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(tag_goto_popup), TRUE);
-	gtk_window_set_position(GTK_WINDOW(tag_goto_popup), GTK_WIN_POS_CENTER_ON_PARENT);
-	gtk_widget_set_size_request(tag_goto_popup, 250, 150);
+	gdk_window_get_origin(window, x, y);
 
-	frame = gtk_frame_new(NULL);
-	gtk_container_add(GTK_CONTAINER(tag_goto_popup), frame);
-	gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
-	gtk_container_set_border_width(GTK_CONTAINER(frame), 0);
-
-	scroller = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_set_border_width(GTK_CONTAINER(scroller), 0);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroller),
-		GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-	gtk_container_add(GTK_CONTAINER(frame), scroller);
-
-	/* TreeView and its model */
-	store = gtk_list_store_new(N_COLUMNS, GDK_TYPE_PIXBUF, G_TYPE_STRING, TM_TYPE_TAG);
-	tag_goto_tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
-	gtk_widget_set_can_focus(tag_goto_tree_view, TRUE);
-	gtk_container_add(GTK_CONTAINER(scroller), tag_goto_tree_view);
-	g_signal_connect(tag_goto_tree_view, "focus-out-event", G_CALLBACK(on_focus_out), tag_goto_popup);
-	g_signal_connect(tag_goto_tree_view, "row-activated", G_CALLBACK(on_row_activated), NULL);
-	g_signal_connect(tag_goto_tree_view, "key-press-event", G_CALLBACK(on_key_pressed), NULL);
-
-	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tag_goto_tree_view));
-	gtk_tree_selection_set_mode(selection, GTK_SELECTION_SINGLE);
-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tag_goto_tree_view), FALSE);
-	gtk_tree_view_set_reorderable(GTK_TREE_VIEW(tag_goto_tree_view), FALSE);
-
-	/* Columns */
-	column = gtk_tree_view_column_new();
-	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_FIXED);
-
-	renderer = gtk_cell_renderer_pixbuf_new();
-	gtk_tree_view_column_pack_start(column, renderer, FALSE);
-	gtk_tree_view_column_add_attribute(column, renderer, "pixbuf", PIXBUF_COLUMN);
-
-	renderer = gtk_cell_renderer_text_new();
-	gtk_tree_view_column_pack_start(column, renderer, TRUE);
-	gtk_tree_view_column_add_attribute(column, renderer, "markup", TEXT_COLUMN);
-
-	gtk_tree_view_append_column(GTK_TREE_VIEW(tag_goto_tree_view), column);
-
-	gtk_widget_show_all(frame);
+	*x += pos_x;
+	*y += pos_y + line_height;
+	*push_in = TRUE;
 }
 
 
-static void show_goto_popup(GPtrArray *tags, gboolean have_best)
+static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_best)
 {
-	gboolean first = TRUE;
-	GtkTreePath *path;
-	GtkTreeModel *model;
-	GtkTreeIter iter;
+	GtkWidget *first = NULL;
+	GtkWidget *menu;
+	GdkEvent *event;
 	TMTag *tmtag;
 	guint i;
 
-	if (!tag_goto_popup)
-		create_goto_popup();
-
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(tag_goto_tree_view));
-	gtk_list_store_clear(GTK_LIST_STORE(model));
+	menu = gtk_menu_new();
 
 	foreach_ptr_array(tmtag, i, tags)
 	{
+		GtkWidget *item;
+		GtkWidget *label;
+		GtkWidget *image;
 		gchar *fname = g_path_get_basename(tmtag->file->file_name);
 		gchar *text;
 
-		if (first && have_best)
+		if (! first && have_best)
 			text = g_markup_printf_escaped("<b>%s: %lu</b>", fname, tmtag->line);
 		else
 			text = g_markup_printf_escaped("%s: %lu", fname, tmtag->line);
 
-		gtk_list_store_insert_with_values(GTK_LIST_STORE(model), &iter, -1,
-				PIXBUF_COLUMN, symbols_icons[get_tag_class(tmtag)].pixbuf,
-				TEXT_COLUMN, text,
-				TAG_COLUMN, tmtag, -1);
+		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
+		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, NULL);
+		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
+		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		if (! first)
+			first = item;
 
 		g_free(text);
 		g_free(fname);
-		first = FALSE;
 	}
 
-	path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor (GTK_TREE_VIEW(tag_goto_tree_view), path, NULL, FALSE);
-	gtk_tree_path_free(path);
+	gtk_widget_show_all(menu);
 
-	gtk_window_present(GTK_WINDOW(tag_goto_popup));
+	/* FIXME: this should get the real event directly instead of looking it up */
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+	{
+		GdkEventButton *event_button = (GdkEventButton *) event;
+		/* FIXME: should this also use the position func?  as the cursor must be on the location
+		 *        under the cursor at this point anyway, it might give prettier alignment.
+		 *        But might as well be farther from the pointer or otherwise misaligned with the
+		 *        pointer, so maybe not. */
+		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event_button->button, event_button->time);
+	}
+	else
+	{
+		if (first) /* always select the first item for better keyboard navigation */
+			g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
+		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
+		               0, gtk_get_current_event_time ());
+	}
+	if (event)
+		gdk_event_free(event);
 }
 
 
@@ -2141,7 +2078,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 			if (tag != best_tag)
 				g_ptr_array_add(tags, tag);
 		}
-		show_goto_popup(tags, best_tag != NULL);
+		show_goto_popup(old_doc, tags, best_tag != NULL);
 
 		g_ptr_array_free(tags, TRUE);
 		found = TRUE;
