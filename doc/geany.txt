@@ -4316,15 +4316,16 @@ As of Geany 0.19 this section is supplemented by the `[build-menu] section`_.
 Values that are set in the [build-menu] section will override those in this section.
 
 error_regex
-    This is a regular expression to parse a filename
-    and line number from build output. If undefined, Geany will fall
-    back to its default error message parsing.
+    This is a Perl-compatible regular expression (PCRE) to parse a filename
+    (absolute or relative) and line number from the build output.
+    If undefined, Geany will fall back to its default error message parsing.
 
-    Only the first two matches will be read by Geany. Geany will look for
-    a match that is purely digits, and use this for the line number. The
-    remaining match will be used as the filename.
+    Only the first two match groups will be read by Geany. These groups can
+    occur in any order: the match group consisting of only digits will be used
+    as the line number, and the other group as the filename.  In no group
+    consists of only digits, the match will fail.
 
-    *Example:* ``error_regex=(.+):([0-9]+):[0-9]+``
+    *Example:* ``error_regex=^(.+):([0-9]+):[0-9]+``
 
     This will parse a message such as:
     ``test.py:7:24: E202 whitespace before ']'``
