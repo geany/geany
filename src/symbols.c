@@ -190,7 +190,7 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
 	result = tm_workspace_load_global_tags(tags_file, ft->lang);
 	if (result)
 	{
-		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
+		geany_debug("Loaded %s (%s), %u symbol(s).", tags_file, ft->name,
 			(guint) (get_tag_count() - old_tag_count));
 	}
 	return result;
@@ -1753,14 +1753,14 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 		symbols_finalize(); /* free c_tags_ignore data */
 		if (! status)
 		{
-			g_printerr(_("Failed to create tags file, perhaps because no tags "
+			g_printerr(_("Failed to create tags file, perhaps because no symbols "
 				"were found.\n"));
 			return 1;
 		}
 	}
 	else
 	{
-		g_printerr(_("Usage: %s -g <Tag File> <File list>\n\n"), argv[0]);
+		g_printerr(_("Usage: %s -g <Tags File> <File list>\n\n"), argv[0]);
 		g_printerr(_("Example:\n"
 			"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags"
 			" /usr/include/gtk-2.0/gtk/gtk.h\n"), argv[0]);
@@ -1775,14 +1775,14 @@ void symbols_show_load_tags_dialog(void)
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
 
-	dialog = gtk_file_chooser_dialog_new(_("Load Tags"), GTK_WINDOW(main_widgets.window),
+	dialog = gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
 		GTK_FILE_CHOOSER_ACTION_OPEN,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK,
 		NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("Geany tag files (*.*.tags)"));
+	gtk_file_filter_set_name(filter, _("Geany tags file (*.*.tags)"));
 	gtk_file_filter_add_pattern(filter, "*.*.tags");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
