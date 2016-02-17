@@ -2026,6 +2026,17 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 		pos--;
 
+	/* skip possible generic/template specification, like foo<int>() */
+	if (sci_get_char_at(sci, pos - 1) == '>')
+	{
+		pos = sci_find_matching_brace(sci, pos - 1);
+		if (pos == -1)
+			return FALSE;
+
+		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+			pos--;
+	}
+
 	word[0] = '\0';
 	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0')
