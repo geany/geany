@@ -2023,6 +2023,9 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	if (! highlighting_is_code_style(lexer, style))
 		return FALSE;
 
+	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+		pos--;
+
 	word[0] = '\0';
 	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
 	if (word[0] == '\0')
