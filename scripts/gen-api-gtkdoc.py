@@ -58,17 +58,14 @@ class AtDoc(object):
             self.annot = []
         elif (type == "since"):
             self.since = str.rstrip()
-        elif (type == "geany:skip"):
-            self.annot.append("skip")
-        elif (type == "geany:nullable") or (type == "geany:skip"):
+        elif type in ("geany:nullable",
+                      "geany:skip",
+                      "geany:closure",
+                      "geany:destroy"):
             self.annot.append(type.split(":")[1])
-        elif (type == "geany:cb"):
-            self.annot.append("scope notified")
-        elif (type == "geany:cbdata"):
-            self.annot.append("closure")
-        elif (type == "geany:cbfree"):
-            self.annot.append("destroy")
-        elif (type == "geany:transfer") or (type == "geany:element-type") or (type == "geany:scope"):
+        elif type in ("geany:transfer",
+                      "geany:element-type",
+                      "geany:scope"):
             type = type.split(":")[1]
             self.annot.append("%s %s" % (type, str))
         elif (type ==  "see"):
