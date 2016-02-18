@@ -1935,26 +1935,10 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 	gtk_widget_show_all(menu);
 
-	/* FIXME: this should get the real event directly instead of looking it up */
-	event = gtk_get_current_event();
-	if (event && event->type == GDK_BUTTON_PRESS)
-	{
-		GdkEventButton *event_button = (GdkEventButton *) event;
-		/* FIXME: should this also use the position func?  as the cursor must be on the location
-		 *        under the cursor at this point anyway, it might give prettier alignment.
-		 *        But might as well be farther from the pointer or otherwise misaligned with the
-		 *        pointer, so maybe not. */
-		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event_button->button, event_button->time);
-	}
-	else
-	{
-		if (first) /* always select the first item for better keyboard navigation */
-			g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
-		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
-		               0, gtk_get_current_event_time ());
-	}
-	if (event)
-		gdk_event_free(event);
+	if (first) /* always select the first item for better keyboard navigation */
+		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
+				   0, gtk_get_current_event_time ());
 }
 
 
