@@ -119,7 +119,7 @@ Doxyfile.stamp: Doxyfile Doxyfile-gi $(doxygen_sources)
 
 ALL_TARGETS = Doxyfile.stamp
 
-if WITH_PYTHON
+if ENABLE_GTKDOC_HEADER
 
 geany-gtkdoc.h: Doxyfile.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
 	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) \
