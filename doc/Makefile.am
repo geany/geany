@@ -99,6 +99,17 @@ doxygen_sources = \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
+Doxyfile.stamp: Doxyfile $(doxygen_sources)
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
+
+ALL_LOCAL_TARGETS = Doxyfile.stamp
+CLEAN_LOCAL_TARGETS = clean-api-docs-local
+
+clean-api-docs-local:
+	-rm -rf reference/ Doxyfile.stamp doxygen_*
+
+if ENABLE_GTKDOC_HEADER
+
 # set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
 # in headers (even though it's correctly documented in the corresponding .c file) only
 # for xml output
@@ -112,31 +123,27 @@ Doxyfile-gi: Doxyfile
 		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
 		$< > $@ || { $(RM) $@ && exit 1; }
 
-Doxyfile.stamp: Doxyfile Doxyfile-gi $(doxygen_sources)
-	$(AM_V_at)$(DOXYGEN) Doxyfile-gi
-	$(AM_V_at)$(DOXYGEN) Doxyfile
-	$(AM_V_GEN)echo "" > $@
+# we depend on Doxyfile.stamp not have this run in parallel with it to avoid
+# concurrent Doxygen runs, which might overwrite each other's files
+Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_sources)
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
 
-ALL_TARGETS = Doxyfile.stamp
-
-if ENABLE_GTKDOC_HEADER
-
-geany-gtkdoc.h: Doxyfile.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
-	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) \
-	-o geany-gtkdoc.h
-
-ALL_TARGETS += geany-gtkdoc.h
+geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@
 
 geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
 nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
 
+ALL_LOCAL_TARGETS += geany-gtkdoc.h
+CLEAN_LOCAL_TARGETS += clean-gtkdoc-header-local
+
+clean-gtkdoc-header-local:
+	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h
+
 endif
 
-all-local: $(ALL_TARGETS)
-
-clean-local: clean-api-docs-local
-clean-api-docs-local:
-	-rm -rf reference/ xml/ doxygen_* Doxyfile-gi $(ALL_TARGETS)
+all-local: $(ALL_LOCAL_TARGETS)
+clean-local: $(CLEAN_LOCAL_TARGETS)
 
 endif
 
