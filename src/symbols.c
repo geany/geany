@@ -1892,7 +1892,7 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 
 	*x += pos_x;
 	*y += pos_y + line_height;
-	*push_in = TRUE;
+	*push_in = FALSE;
 }
 
 
