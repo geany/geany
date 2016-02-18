@@ -15,6 +15,7 @@ WIN32_BUILD_FILES = \
 
 EXTRA_DIST = \
 	autogen.sh \
+	scripts/gen-api-gtkdoc.py \
 	wscript \
 	waf \
 	geany.desktop.in \

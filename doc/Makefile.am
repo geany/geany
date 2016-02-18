@@ -128,7 +128,7 @@ geany-gtkdoc.h: Doxyfile.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
 ALL_TARGETS += geany-gtkdoc.h
 
 geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
-geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
+nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
 
 endif
 
@@ -136,7 +136,7 @@ all-local: $(ALL_TARGETS)
 
 clean-local: clean-api-docs-local
 clean-api-docs-local:
-	-rm -rf reference/ xml/ doxygen_* $(ALL_TARGETS)
+	-rm -rf reference/ xml/ doxygen_* Doxyfile-gi $(ALL_TARGETS)
 
 endif
 
