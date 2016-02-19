@@ -1888,13 +1888,30 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
 	gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
 	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
+	gint offset_left = 0;
+	gint offset_right = 0;
 	gint monitor_num;
 	GdkRectangle monitor;
 	GtkRequisition req;
+	GdkEvent *event;
 
 	gdk_window_get_origin(window, x, y);
 	*x += pos_x;
 	*y += pos_y;
+
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+	{
+		GdkEventButton *event_button = (GdkEventButton *) event;
+
+		/* Caret is placed either before or after the letter which was clicked.
+		 * Compute offset between the caret and click position and make sure
+		 * the popup is shown outside the mouse pointer. */
+		if (event_button->x >= pos_x && pos + 1 < sci_get_length(sci))
+			offset_right = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos + 1) - pos_x;
+		else if (event_button->x <= pos_x && pos > 0)
+			offset_left = pos_x - scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos - 1);
+	}
 
 	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
 
@@ -1913,17 +1930,19 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	/* put on one size of the X position, but within the monitor */
 	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
 	{
-		if (*x - req.width >= monitor.x)
-			*x -= req.width;
+		if (*x - req.width - offset_left >= monitor.x)
+			*x -= req.width + offset_left;
 		else if (*x + req.width > monitor.x + monitor.width)
 			*x = monitor.x;
+		else
+			*x += offset_right;
 	}
 	else
 	{
-		if (*x + req.width <= monitor.x + monitor.width)
-			*x = MAX(monitor.x, *x);
-		else if (*x - req.width >= monitor.x)
-			*x -= req.width;
+		if (*x + req.width + offset_right <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x + offset_right);
+		else if (*x - req.width - offset_left >= monitor.x)
+			*x -= req.width + offset_left;
 		else
 			*x = monitor.x + MAX(0, monitor.width - req.width);
 	}
