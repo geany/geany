@@ -292,11 +292,14 @@ class DoxyStruct(DoxyElement):
             # Exception: there are no typedefs for GeanyFooPrivate so skip those. Their exact
             # type isn't needed anyway
             s = fix_definition(p.find("definition").text).lstrip()
+            proc = DoxygenProcess()
+            brief = proc.process_element(p.find("briefdescription"))
+            private = (normalize_text(brief) == "")
             words = s.split()
             if (words[0] == "struct"):
                 if not (words[1].endswith("Private") or words[1].endswith("Private*")):
                     s = " ".join(words[1:])
-            d += "\t%s;\n"  % s
+            d += "\t/*< %s >*/\n\t%s;\n" % ("private" if private else "public", s)
 
         d += "};\n"
         e = DoxyStruct(name, d)
