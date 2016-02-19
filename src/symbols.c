@@ -1877,7 +1877,7 @@ static guint get_tag_class(const TMTag *tag)
 }
 
 
-/* positions a popup below the caret from the ScintillaObject in @p data */
+/* positions a popup at the caret from the ScintillaObject in @p data */
 static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
 {
 	ScintillaObject *sci = data;
@@ -1887,11 +1887,58 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	gint line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
 	gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
 	gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
+	gint monitor_num;
+	GdkRectangle monitor;
+	GtkRequisition req;
 
 	gdk_window_get_origin(window, x, y);
-
 	*x += pos_x;
-	*y += pos_y + line_height;
+	*y += pos_y;
+
+	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
+#else
+	gtk_widget_size_request(GTK_WIDGET(menu), &req);
+#endif
+
+#if GTK_CHECK_VERSION(3, 4, 0)
+	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
+#else
+	gdk_screen_get_monitor_geometry(screen, monitor_num, &monitor);
+#endif
+
+	/* put on one size of the X position, but within the monitor */
+	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
+	{
+		if (*x - req.width >= monitor.x)
+			*x -= req.width;
+		else if (*x + req.width > monitor.x + monitor.width)
+			*x = monitor.x;
+	}
+	else
+	{
+		if (*x + req.width <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x);
+		else if (*x - req.width >= monitor.x)
+			*x -= req.width;
+		else
+			*x = monitor.x + MAX(0, monitor.width - req.width);
+	}
+
+	/* try to put, in order:
+	 * 1. below the Y position, under the line
+	 * 2. above the Y position
+	 * 3. within the monitor */
+	if (*y + line_height + req.height <= monitor.y + monitor.height)
+		*y = MAX(monitor.y, *y + line_height);
+	else if (*y - req.height >= monitor.y)
+		*y = *y - req.height;
+	else
+		*y = monitor.y + MAX(0, monitor.height - req.height);
+
 	*push_in = FALSE;
 }
 
