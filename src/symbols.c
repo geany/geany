@@ -1893,17 +1893,14 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	gint monitor_num;
 	GdkRectangle monitor;
 	GtkRequisition req;
-	GdkEvent *event;
+	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
 
 	gdk_window_get_origin(window, x, y);
 	*x += pos_x;
 	*y += pos_y;
 
-	event = gtk_get_current_event();
-	if (event && event->type == GDK_BUTTON_PRESS)
+	if (event_button)
 	{
-		GdkEventButton *event_button = (GdkEventButton *) event;
-
 		/* Caret is placed either before or after the letter which was clicked.
 		 * Compute offset between the caret and click position and make sure
 		 * the popup is shown outside the mouse pointer. */
@@ -1967,6 +1964,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	GtkWidget *first = NULL;
 	GtkWidget *menu;
 	GdkEvent *event;
+	GdkEventButton *button_event = NULL;
 	TMTag *tmtag;
 	guint i;
 
@@ -2003,8 +2001,17 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 	if (first) /* always select the first item for better keyboard navigation */
 		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
+
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+		button_event = (GdkEventButton *) event;
+	else
+		gdk_event_free(event);
+
+	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
+	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
-				   0, gtk_get_current_event_time ());
+				   button_event ? button_event->button : 0, gtk_get_current_event_time ());
 }
 
 
