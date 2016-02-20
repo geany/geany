@@ -24,6 +24,7 @@
 #define GEANY_PROJECT_H 1
 
 #include <glib.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
