@@ -1880,34 +1880,34 @@ static guint get_tag_class(const TMTag *tag)
 /* positions a popup at the caret from the ScintillaObject in @p data */
 static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
 {
-	ScintillaObject *sci = data;
-	GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
-	gint pos = sci_get_current_position(sci);
-	gint line = sci_get_line_from_position(sci, pos);
-	gint line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
-	gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
-	gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+	gint line_height;
 	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
-	gint offset_left = 0;
-	gint offset_right = 0;
 	gint monitor_num;
 	GdkRectangle monitor;
 	GtkRequisition req;
 	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
 
-	gdk_window_get_origin(window, x, y);
-	*x += pos_x;
-	*y += pos_y;
-
 	if (event_button)
 	{
-		/* Caret is placed either before or after the letter which was clicked.
-		 * Compute offset between the caret and click position and make sure
-		 * the popup is shown outside the mouse pointer. */
-		if (event_button->x >= pos_x && pos + 1 < sci_get_length(sci))
-			offset_right = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos + 1) - pos_x;
-		else if (event_button->x <= pos_x && pos > 0)
-			offset_left = pos_x - scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos - 1);
+		/* if we got a mouse click, popup at that position */
+		*x = (gint) event_button->x_root;
+		*y = (gint) event_button->y_root;
+		line_height = 0; /* we don't want to offset below the line or anything */
+	}
+	else /* keyboard positioning */
+	{
+		ScintillaObject *sci = data;
+		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+		gint pos = sci_get_current_position(sci);
+		gint line = sci_get_line_from_position(sci, pos);
+		gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
+		gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+
+		line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
+
+		gdk_window_get_origin(window, x, y);
+		*x += pos_x;
+		*y += pos_y;
 	}
 
 	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
@@ -1927,19 +1927,17 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	/* put on one size of the X position, but within the monitor */
 	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
 	{
-		if (*x - req.width - offset_left >= monitor.x)
-			*x -= req.width + offset_left;
+		if (*x - req.width >= monitor.x)
+			*x -= req.width;
 		else if (*x + req.width > monitor.x + monitor.width)
 			*x = monitor.x;
-		else
-			*x += offset_right;
 	}
 	else
 	{
-		if (*x + req.width + offset_right <= monitor.x + monitor.width)
-			*x = MAX(monitor.x, *x + offset_right);
-		else if (*x - req.width - offset_left >= monitor.x)
-			*x -= req.width + offset_left;
+		if (*x + req.width <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x);
+		else if (*x - req.width >= monitor.x)
+			*x -= req.width;
 		else
 			*x = monitor.x + MAX(0, monitor.width - req.width);
 	}
