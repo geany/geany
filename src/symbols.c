@@ -1927,17 +1927,19 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 	/* put on one size of the X position, but within the monitor */
 	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
 	{
-		if (*x - req.width >= monitor.x)
-			*x -= req.width;
+		if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
 		else if (*x + req.width > monitor.x + monitor.width)
 			*x = monitor.x;
+		else
+			*x += 1;
 	}
 	else
 	{
-		if (*x + req.width <= monitor.x + monitor.width)
-			*x = MAX(monitor.x, *x);
-		else if (*x - req.width >= monitor.x)
-			*x -= req.width;
+		if (*x + req.width + 1 <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x + 1);
+		else if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
 		else
 			*x = monitor.x + MAX(0, monitor.width - req.width);
 	}
