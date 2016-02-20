@@ -272,13 +272,13 @@ static void html_tags_loaded(void)
 }
 
 
-GString *symbols_find_typenames_as_string(gint lang, gboolean global)
+GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 {
 	guint j;
 	TMTag *tag;
 	GString *s = NULL;
 	GPtrArray *typedefs;
-	gint tag_lang;
+	TMParserType tag_lang;
 
 	if (global)
 		typedefs = app->tm_workspace->global_typename_array;

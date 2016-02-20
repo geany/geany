@@ -103,7 +103,7 @@ static gchar *filetype_make_title(const char *name, enum TitleType type)
 
 /* name argument (ie filetype name) must not be translated as it is used for
  * filetype lookup. Use filetypes_get_display_name() instead.*/
-static void ft_init(filetype_id ft_id, int lang, const char *name,
+static void ft_init(filetype_id ft_id, TMParserType lang, const char *name,
 	const char *title_name, enum TitleType title_type,
 	GeanyFiletypeGroupID group_id)
 {
@@ -950,7 +950,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result != NULL)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
-		if (ft->lang < 0)
+		if (ft->lang == TM_PARSER_NONE)
 			geany_debug("Cannot find tags parser '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
@@ -1240,7 +1240,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 {
 	g_return_val_if_fail(ft != NULL, FALSE);
 
-	return ft->lang >= 0;
+	return ft->lang != TM_PARSER_NONE;
 }
 
 

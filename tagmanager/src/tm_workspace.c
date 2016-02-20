@@ -337,7 +337,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
  @return TRUE on success, FALSE on failure.
  @see tm_workspace_create_global_tags()
 */
-gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
+gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 {
 	guchar buf[BUFSIZ];
 	FILE *fp;
@@ -1042,7 +1042,7 @@ static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrAr
 
 /* Returns all member tags of a struct/union/class if the provided name is a variable
  of such a type or the name of the type.
- @param source_file TMSourceFile of the edited source file or NULL if not available
+ @param source_file TMSourceFile of the edited source file
  @param name Name of the variable/type whose members are searched
  @param function TRUE if the name is a name of a function
  @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
@@ -1053,7 +1053,7 @@ GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
 {
-	TMParserType lang = source_file ? source_file->lang : -1;
+	TMParserType lang = source_file->lang;
 	GPtrArray *tags, *member_tags = NULL;
 	TMTagType function_types = tm_tag_function_t | tm_tag_method_t |
 		tm_tag_macro_with_arg_t | tm_tag_prototype_t;

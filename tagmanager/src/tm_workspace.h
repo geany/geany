@@ -50,7 +50,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files);
 
 const TMWorkspace *tm_get_workspace(void);
 
-gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode);
+gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode);
 
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
 	int includes_count, const char *tags_file, TMParserType lang);
