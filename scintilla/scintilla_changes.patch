@@ -4,7 +4,7 @@ diff --git scintilla/gtk/ScintillaGTK.cxx scintilla/gtk/ScintillaGTK.cxx
 index 0871ca2..49dc278 100644
 --- scintilla/gtk/ScintillaGTK.cxx
 +++ scintilla/gtk/ScintillaGTK.cxx
-@@ -3046,6 +3046,7 @@ sptr_t ScintillaGTK::DirectFunction(
+@@ -3046,11 +3046,13 @@ sptr_t ScintillaGTK::DirectFunction(
  }
  
  /* legacy name for scintilla_object_send_message */
@@ -12,7 +12,13 @@ index 0871ca2..49dc278 100644
  sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
  	ScintillaGTK *psci = static_cast<ScintillaGTK *>(sci->pscin);
  	return psci->WndProc(iMessage, wParam, lParam);
-@@ -3062,6 +3062,7 @@ extern void Platform_Initialise();
+ }
+ 
++GEANY_API_SYMBOL
+ sptr_t scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+ 	return scintilla_send_message(sci, iMessage, wParam, lParam);
+ }
+@@ -3062,6 +3064,7 @@ extern void Platform_Initialise();
  extern void Platform_Finalise();
  
  /* legacy name for scintilla_object_get_type */
@@ -20,7 +26,15 @@ index 0871ca2..49dc278 100644
  GType scintilla_get_type() {
  	static GType scintilla_type = 0;
  	try {
-@@ -3200,6 +3200,7 @@ static void scintilla_init(ScintillaObject *sci) {
+@@ -3091,6 +3094,7 @@ GType scintilla_get_type() {
+ 	return scintilla_type;
+ }
+ 
++GEANY_API_SYMBOL
+ GType scintilla_object_get_type() {
+ 	return scintilla_get_type();
+ }
+@@ -3200,6 +3204,7 @@ static void scintilla_init(ScintillaObje
  }
  
  /* legacy name for scintilla_object_new */
@@ -28,6 +42,14 @@ index 0871ca2..49dc278 100644
  GtkWidget* scintilla_new() {
  	GtkWidget *widget = GTK_WIDGET(g_object_new(scintilla_get_type(), NULL));
  	gtk_widget_set_direction(widget, GTK_TEXT_DIR_LTR);
+@@ -3207,6 +3212,7 @@ GtkWidget* scintilla_new() {
+ 	return widget;
+ }
+ 
++GEANY_API_SYMBOL
+ GtkWidget *scintilla_object_new() {
+ 	return scintilla_new();
+ }
 diff --git scintilla/gtk/scintilla-marshal.c scintilla/gtk/scintilla-marshal.c
 index be57b7c..cee3e73 100644
 --- scintilla/gtk/scintilla-marshal.c

@@ -500,7 +500,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="goto_tag_definition2">
-        <property name="label" translatable="yes">Go to _Tag Definition</property>
+        <property name="label" translatable="yes">Go to Symbol Defini_tion</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
@@ -7283,7 +7283,7 @@
                                   <object class="GtkMenuItem" id="goto_tag_definition1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Go to _Tag Definition</property>
+                                    <property name="label" translatable="yes">Go to Symbol Defini_tion</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_goto_tag_definition1" swapped="no"/>
                                   </object>
@@ -7292,7 +7292,7 @@
                                   <object class="GtkMenuItem" id="goto_tag_declaration1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Go to T_ag Declaration</property>
+                                    <property name="label" translatable="yes">Go to Symbol Decl_aration</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_goto_tag_declaration1" swapped="no"/>
                                   </object>
@@ -8049,7 +8049,7 @@
                           <object class="GtkMenuItem" id="load_tags1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Load Ta_gs...</property>
+                            <property name="label" translatable="yes">Load Ta_gs File...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_load_tags1_activate" swapped="no"/>
                           </object>

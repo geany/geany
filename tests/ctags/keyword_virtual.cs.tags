@@ -14,6 +14,6 @@ MainÌ128Í()ÎTestClassÖ0Ïpublic void
 SphereÌ1ÎTestClassÖ0
 SphereÌ128Í(double r)ÎTestClass.SphereÖ0
 TestClassÌ1Ö0
-piÌ8ÎTestClass.DimensionsÖ0Ïdouble
+piÌ8ÎTestClass.DimensionsÖ0Ïconst double
 xÌ8ÎTestClass.DimensionsÖ0Ïdouble
 yÌ8ÎTestClass.DimensionsÖ0Ïdouble

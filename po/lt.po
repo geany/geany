@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-01 19:03+0100\n"
-"PO-Revision-Date: 2014-04-06 08:42+0200\n"
-"Last-Translator: Algimantas Margevičius <algimantas@margevicius.lt>\n"
+"PO-Revision-Date: 2016-02-08 08:29+0200\n"
+"Last-Translator: Zygimantus <zygimantus@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
 msgid "Geany"
@@ -2092,8 +2092,8 @@ msgstr "Projekto savybės"
 msgid "Filename:"
 msgstr "Failo vardas:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
+#: ../data/geany.glade.h:460 ../src/project.c:169
+#: ../plugins/classbuilder.c:467 ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Pavadinimas:"
 
@@ -2539,9 +2539,8 @@ msgid "Detect from file"
 msgstr "Aptikti iš failo"
 
 #: ../src/dialogs.c:225
-#, fuzzy
 msgid "Programming Languages"
-msgstr "_Programavimo kalbos"
+msgstr "Programavimo kalbos"
 
 #: ../src/dialogs.c:227
 #, fuzzy
@@ -2549,9 +2548,8 @@ msgid "Scripting Languages"
 msgstr "_Scenarijų kalbos"
 
 #: ../src/dialogs.c:229
-#, fuzzy
 msgid "Markup Languages"
-msgstr "_Išvaizdos kalbos"
+msgstr "Žymėjimo kalbos"
 
 #: ../src/dialogs.c:307
 msgid "_More Options"
@@ -2776,7 +2774,7 @@ msgstr ", tik skaitymui"
 
 #: ../src/document.c:1627
 msgid "Discard history"
-msgstr ""
+msgstr "Išvalyti istoriją"
 
 #: ../src/document.c:1628
 msgid ""
@@ -2846,9 +2844,8 @@ msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Nepavyko užverti failo „%s“: fclose() klaida: %s"
 
 #: ../src/document.c:2058 ../src/document.c:3589
-#, fuzzy
 msgid "_Overwrite"
-msgstr "Perrašyti?"
+msgstr "Perrašyti"
 
 #: ../src/document.c:2060 ../src/document.c:3592
 #, fuzzy, c-format
@@ -3893,7 +3890,7 @@ msgstr "Rasti failo „%s“ nepavyko - bandomas dabartinis dokumento kelias."
 
 #: ../src/msgwindow.c:1109
 msgid "The document has been closed."
-msgstr ""
+msgstr "Dokumentas buvo uždarytas."
 
 #: ../src/notebook.c:199
 msgid "Switch to Document"
@@ -3931,6 +3928,9 @@ msgid ""
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Versija:\t%s\n"
+"Autorius(-iai):\t%s\n"
+"Failas:\t%s"
 
 #: ../src/plugins.c:1630
 msgid "No plugins available."
@@ -5326,15 +5326,15 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:386
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:387
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:388
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:489
 #, c-format
@@ -5483,8 +5483,9 @@ msgstr "HTML simboliai"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Įterpia HTML simbolių atitikmenis tokius kaip „&amp;“."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
-#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:40 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "Geany kūrėjų komanda"
 

@@ -35,6 +35,14 @@
 #include "tm_source_file.h"
 #include "tm_tag.h"
 
+typedef struct
+{
+	TMSourceFile public;
+	guint refcount;
+} TMSourceFilePriv;
+
+#define SOURCE_FILE_NEW(S) ((S) = g_slice_new(TMSourceFilePriv))
+#define SOURCE_FILE_FREE(S) g_slice_free(TMSourceFilePriv, (TMSourceFilePriv *) S)
 
 static TMSourceFile *current_source_file = NULL;
 
@@ -118,8 +126,7 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 /* Set the argument list of tag identified by its name */
 static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arglist)
 {
-	guint count;
-	TMTag **tags, *tag;
+	guint i;
 
 	if (NULL == arglist ||
 		NULL == tag_name ||
@@ -128,13 +135,16 @@ static void tm_source_file_set_tag_arglist(const char *tag_name, const char *arg
 		return;
 	}
 
-	tags = tm_tags_find(current_source_file->tags_array, tag_name, FALSE, FALSE,
-			&count);
-	if (tags != NULL && count == 1)
+	/* going in reverse order because the tag was added recently */
+	for (i = current_source_file->tags_array->len; i > 0; i--)
 	{
-		tag = tags[0];
-		g_free(tag->arglist);
-		tag->arglist = g_strdup(arglist);
+		TMTag *tag = (TMTag *) current_source_file->tags_array->pdata[i - 1];
+		if (g_strcmp0(tag->name, tag_name) == 0)
+		{
+			g_free(tag->arglist);
+			tag->arglist = g_strdup(arglist);
+			break;
+		}
 	}
 }
 
@@ -199,12 +209,26 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 GEANY_API_SYMBOL
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
-	TMSourceFile *source_file = g_new(TMSourceFile, 1);
-	if (TRUE != tm_source_file_init(source_file, file_name, name))
+	TMSourceFilePriv *priv;
+
+	SOURCE_FILE_NEW(priv);
+	if (TRUE != tm_source_file_init(&priv->public, file_name, name))
 	{
-		g_free(source_file);
+		SOURCE_FILE_FREE(priv);
 		return NULL;
 	}
+	priv->refcount = 1;
+	return &priv->public;
+}
+
+
+static TMSourceFile *tm_source_file_dup(TMSourceFile *source_file)
+{
+	TMSourceFilePriv *priv = (TMSourceFilePriv *) source_file;
+
+	g_return_val_if_fail(NULL != source_file, NULL);
+
+	g_atomic_int_inc(&priv->refcount);
 	return source_file;
 }
 
@@ -223,19 +247,33 @@ static void tm_source_file_destroy(TMSourceFile *source_file)
 	source_file->tags_array = NULL;
 }
 
-/** Frees a TMSourceFile structure, including all contents. Before calling this
- function the TMSourceFile has to be removed from the TMWorkspace. 
- @param source_file The source file to free.
+/** Decrements the reference count of @a source_file
+ *
+ * If the reference count drops to 0, then @a source_file is freed, including all contents.
+ * Make sure the @a source_file is already removed from any TMWorkSpace before the
+ * this happens.
+ * @param source_file The source file to free.
+ * @see tm_workspace_remove_source_file()
 */
 GEANY_API_SYMBOL
 void tm_source_file_free(TMSourceFile *source_file)
 {
-	if (NULL != source_file)
+	TMSourceFilePriv *priv = (TMSourceFilePriv *) source_file;
+
+	if (NULL != priv && g_atomic_int_dec_and_test(&priv->refcount))
 	{
 		tm_source_file_destroy(source_file);
-		g_free(source_file);
+		SOURCE_FILE_FREE(priv);
 	}
 }
+
+/** Gets the GBoxed-derived GType for TMSourceFile
+ *
+ * @return TMSourceFile type . */
+GEANY_API_SYMBOL
+GType tm_source_file_get_type(void);
+
+G_DEFINE_BOXED_TYPE(TMSourceFile, tm_source_file, tm_source_file_dup, tm_source_file_free);
 
 /* Parses the text-buffer or source file and regenarates the tags.
  @param source_file The source file to parse

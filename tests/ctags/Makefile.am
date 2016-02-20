@@ -135,6 +135,7 @@ test_sources = \
 	cxx11-final.cpp					\
 	cxx11-noexcept.cpp				\
 	cxx11-override.cpp				\
+	cxx11-raw-strings.cpp			\
 	cxx14-combined.cpp				\
 	db-trig.sql						\
 	debian_432872.f90				\
@@ -301,6 +302,7 @@ test_sources = \
 	ui5.controller.js				\
 	union.f							\
 	value.f							\
+	var-and-return-type.cpp			\
 	whitespaces.php					\
 	$(NULL)
 test_results = $(test_sources:=.tags)
