@@ -93,9 +93,9 @@ gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
 #ifndef GEANY_DISABLE_DEPRECATED
-void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text);
-void				sci_get_selected_text		(ScintillaObject *sci, gchar *text);
-void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text);
+void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text) G_GNUC_DEPRECATED_FOR(sci_get_contents);
+void				sci_get_selected_text		(ScintillaObject *sci, gchar *text) G_GNUC_DEPRECATED_FOR(sci_get_selection_contents);
+void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text) G_GNUC_DEPRECATED_FOR(sci_get_contents_range);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
 #ifdef GEANY_PRIVATE

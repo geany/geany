@@ -354,7 +354,7 @@ gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 /* This remains so that older plugins that contain a `GeanyFunctions *geany_functions;`
  * variable in their plugin - as was previously required - will still compile
  * without changes.  */
-typedef struct GeanyFunctionsUndefined GeanyFunctions;
+typedef struct GeanyFunctionsUndefined GeanyFunctions G_GNUC_DEPRECATED;
 
 /** @deprecated - use plugin_set_key_group() instead.
  * @see PLUGIN_KEY_GROUP() macro. */
@@ -363,7 +363,7 @@ typedef struct GeanyKeyGroupInfo
 	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
 	gsize count;			/**< The number of keybindings the group will hold */
 }
-GeanyKeyGroupInfo;
+GeanyKeyGroupInfo G_GNUC_DEPRECATED_FOR(plugin_set_key_group);
 
 /** @deprecated - use plugin_set_key_group() instead.
  * Declare and initialise a keybinding group.
@@ -404,7 +404,7 @@ typedef struct PluginFields
 	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
 	GtkWidget	*menu_item;
 }
-PluginFields;
+PluginFields G_GNUC_DEPRECATED_FOR(ui_add_document_sensitive);
 
 #define document_reload_file document_reload_force
 

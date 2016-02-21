@@ -142,7 +142,7 @@ void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
 
 
 #ifndef GEANY_DISABLE_DEPRECATED
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) G_GNUC_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
 
