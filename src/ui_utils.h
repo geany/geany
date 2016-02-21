@@ -112,8 +112,6 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
 void ui_add_document_sensitive(GtkWidget *widget);
 
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
-
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name);
@@ -141,6 +139,11 @@ void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
+
+
+#ifndef GEANY_DISABLE_DEPRECATED
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 
 #ifdef GEANY_PRIVATE

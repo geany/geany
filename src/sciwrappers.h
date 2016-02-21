@@ -53,9 +53,7 @@ void 				sci_set_selection_start		(ScintillaObject *sci, gint position);
 void				sci_set_selection_end		(ScintillaObject *sci, gint position);
 
 gint				sci_get_length				(ScintillaObject *sci);
-void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text);
 gchar*				sci_get_contents			(ScintillaObject *sci, gint buffer_len);
-void				sci_get_selected_text		(ScintillaObject *sci, gchar *text);
 gint				sci_get_selected_text_length(ScintillaObject *sci);
 gchar*				sci_get_selection_contents	(ScintillaObject *sci);
 gchar*				sci_get_line				(ScintillaObject *sci, gint line_num);
@@ -75,7 +73,6 @@ gint				sci_find_text				(ScintillaObject *sci, gint flags, struct Sci_TextToFin
 void				sci_set_font				(ScintillaObject *sci, gint style, const gchar *font, gint size);
 void				sci_goto_line				(ScintillaObject *sci, gint line, gboolean unfold);
 gint				sci_get_style_at			(ScintillaObject *sci, gint position);
-void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text);
 gchar*				sci_get_contents_range		(ScintillaObject *sci, gint start, gint end);
 void				sci_insert_text				(ScintillaObject *sci, gint pos, const gchar *text);
 
@@ -95,6 +92,11 @@ void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
+#ifndef GEANY_DISABLE_DEPRECATED
+void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text);
+void				sci_get_selected_text		(ScintillaObject *sci, gchar *text);
+void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar *text);
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 #ifdef GEANY_PRIVATE
 
