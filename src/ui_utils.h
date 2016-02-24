@@ -22,6 +22,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "geany.h" /* for GEANY_DEPRECATED */
 #include "document.h"
 
 #include "gtkcompat.h"
@@ -142,7 +143,7 @@ void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
 
 
 #ifndef GEANY_DISABLE_DEPRECATED
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) G_GNUC_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
 
