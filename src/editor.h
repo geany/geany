@@ -167,6 +167,8 @@ void editor_indicator_clear(GeanyEditor *editor, gint indic);
 
 void editor_set_indent_type(GeanyEditor *editor, GeanyIndentType type);
 
+void editor_set_indent_width(GeanyEditor *editor, gint width);
+
 gchar *editor_get_word_at_pos(GeanyEditor *editor, gint pos, const gchar *wordchars);
 
 const gchar *editor_get_eol_char_name(GeanyEditor *editor);
@@ -306,8 +308,6 @@ void editor_strip_trailing_spaces(GeanyEditor *editor, gboolean ignore_selection
 void editor_ensure_final_newline(GeanyEditor *editor);
 
 void editor_insert_color(GeanyEditor *editor, const gchar *colour);
-
-void editor_set_indent_width(GeanyEditor *editor, gint width);
 
 void editor_set_indent(GeanyEditor *editor, GeanyIndentType type, gint width);
 
