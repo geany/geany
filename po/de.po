@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-28 19:45+0100\n"
+"POT-Creation-Date: 2016-02-24 22:09+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -96,7 +96,7 @@ msgstr "unsichtbar"
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" ei_nfügen"
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:494
+#: ../data/geany.glade.h:16 ../src/keybindings.c:506
 msgid "Insert Alternative _White Space"
 msgstr "Alternatives _Leerzeichen einfügen"
 
@@ -108,17 +108,18 @@ msgstr "_Suchen"
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2368
+#: ../data/geany.glade.h:19 ../src/symbols.c:2342
 msgid "Find _Usage"
 msgstr "_Auftreten finden"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2373
+#: ../data/geany.glade.h:20 ../src/symbols.c:2347
 msgid "Find _Document Usage"
 msgstr "_Auftreten im Dokument finden"
 
 #: ../data/geany.glade.h:21
-msgid "Go to _Tag Definition"
-msgstr "Gehe zur _Tagdefinition"
+
+msgid "Go to Symbol Defini_tion"
+msgstr "Gehe zur Symbol-Definition"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -165,7 +166,7 @@ msgstr "Oben"
 msgid "Bottom"
 msgstr "Unten"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:504
+#: ../data/geany.glade.h:31 ../src/keybindings.c:516
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -1072,7 +1073,7 @@ msgstr "Farbe:"
 msgid "Sets the color of the long line marker"
 msgstr "Stellt die Farbe der »Umbruchhilfe für lange Zeilen« ein"
 
-#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:825
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
 msgid "Color Chooser"
 msgstr "Farbwähler"
 
@@ -1245,7 +1246,7 @@ msgstr "Leerzeichen und Tabulatoren am Zeilenende entfernen"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Entfernt Leerzeichen und Tabulatoren am Ende einer Zeile"
 
-#: ../data/geany.glade.h:250 ../src/keybindings.c:649
+#: ../data/geany.glade.h:250 ../src/keybindings.c:661
 msgid "Replace tabs with space"
 msgstr "Tabulatoren durch Leerzeichen ersetzen"
 
@@ -1277,7 +1278,7 @@ msgstr ""
 "Wie oft soll auf Veränderungen geprüft werden? Angabe in Sekunden. 0 "
 "deaktiviert die Funktion."
 
-#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:628
+#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:602
 #: ../plugins/filebrowser.c:1160
 msgid "Files"
 msgstr "Dateien"
@@ -1699,7 +1700,7 @@ msgstr "Speichern _unter"
 msgid "Sa_ve All"
 msgstr "A_lle speichern"
 
-#: ../data/geany.glade.h:349 ../src/document.c:1662 ../src/document.c:3592
+#: ../data/geany.glade.h:349 ../src/document.c:1666 ../src/document.c:3596
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "Neu _laden"
@@ -1760,11 +1761,11 @@ msgstr "Zeile(n) nach _oben bewegen"
 msgid "M_ove Line(s) Down"
 msgstr "Zeile(n) nach _unten bewegen"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:481
+#: ../data/geany.glade.h:364 ../src/keybindings.c:493
 msgid "_Send Selection to Terminal"
 msgstr "_Auswahl an Terminal senden"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:483
+#: ../data/geany.glade.h:365 ../src/keybindings.c:495
 msgid "_Reflow Lines/Block"
 msgstr "_Neuformatieren der Zeile/des Abschnitts"
 
@@ -1808,7 +1809,7 @@ msgstr "K_ommentare einfügen"
 msgid "Preference_s"
 msgstr "E_instellungen"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:507
+#: ../data/geany.glade.h:376 ../src/keybindings.c:519
 msgid "P_lugin Preferences"
 msgstr "Plugin-_Einstellungen"
 
@@ -1824,7 +1825,7 @@ msgstr "_Nächstes"
 msgid "Find _Previous"
 msgstr "_Vorheriges"
 
-#: ../data/geany.glade.h:380 ../src/symbols.c:2378
+#: ../data/geany.glade.h:380 ../src/symbols.c:2352
 msgid "Find in F_iles..."
 msgstr "In _Dateien suchen..."
 
@@ -1840,11 +1841,11 @@ msgstr "Nä_chste Nachricht"
 msgid "Pr_evious Message"
 msgstr "V_orherige Nachricht"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:556
+#: ../data/geany.glade.h:384 ../src/keybindings.c:568
 msgid "Go to Ne_xt Marker"
 msgstr "Zur _nächsten Markierung springen"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:559
+#: ../data/geany.glade.h:385 ../src/keybindings.c:571
 msgid "Go to Pre_vious Marker"
 msgstr "Zur _vorherigen Markierung springen"
 
@@ -1852,21 +1853,21 @@ msgstr "Zur _vorherigen Markierung springen"
 msgid "_Go to Line..."
 msgstr "_Gehe zu Zeile..."
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:519
+#: ../data/geany.glade.h:387 ../src/keybindings.c:531
 msgid "Find Next _Selection"
 msgstr "Auswahl _vorwärts im Dokument finden "
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:521
+#: ../data/geany.glade.h:388 ../src/keybindings.c:533
 msgid "Find Pre_vious Selection"
 msgstr "Auswahl _rückwärts im Dokument finden"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:538
+#: ../data/geany.glade.h:389 ../src/keybindings.c:550
 msgid "_Mark All"
 msgstr "_Alles markieren"
 
 #: ../data/geany.glade.h:390
-msgid "Go to T_ag Declaration"
-msgstr "Gehe zur T_agdeklaration"
+msgid "Go to Symbol Decl_aration"
+msgstr "Gehe zur Symbol-Deklaration"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -2016,7 +2017,7 @@ msgstr "Auf _LF setzen und umwandeln (Unix)"
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Auf CR setzen und umwandeln (Klassischer _Apple)"
 
-#: ../data/geany.glade.h:428 ../src/keybindings.c:647
+#: ../data/geany.glade.h:428 ../src/keybindings.c:659
 msgid "_Clone"
 msgstr "_Klonen"
 
@@ -2098,8 +2099,8 @@ msgid "_Word Count"
 msgstr "_Wörter zählen"
 
 #: ../data/geany.glade.h:448
-msgid "Load Ta_gs..."
-msgstr "_Tags laden..."
+msgid "Load Ta_gs File..."
+msgstr "_Symbole laden..."
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -2469,12 +2470,12 @@ msgstr "Keine weiteren Fehlermeldungen."
 msgid "Set menu item label"
 msgstr "Bezeichnung für den Menüeintrag definieren"
 
-#: ../src/build.c:1780 ../src/symbols.c:683 ../src/tools.c:397
+#: ../src/build.c:1780 ../src/symbols.c:657 ../src/tools.c:397
 msgid "Label"
 msgstr "Label"
 
 #. command column, holding status and command display
-#: ../src/build.c:1781 ../src/symbols.c:678 ../src/tools.c:382
+#: ../src/build.c:1781 ../src/symbols.c:652 ../src/tools.c:382
 msgid "Command"
 msgstr "Kommando"
 
@@ -2563,7 +2564,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%d Datei gespeichert."
 msgstr[1] "%d Dateien gespeichert."
 
-#: ../src/callbacks.c:885 ../src/keybindings.c:547
+#: ../src/callbacks.c:885 ../src/keybindings.c:559
 msgid "Go to Line"
 msgstr "Gehe zu Zeile"
 
@@ -2599,8 +2600,8 @@ msgstr "Bitte die Pfad-Einstellungen in den Einstellungen überprüfen"
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Kann angegebenen externen Befehl »%s« nicht ausführen: %s. %s"
 
-#: ../src/dialogs.c:161 ../src/document.c:2309 ../src/document.c:2374
-#: ../src/document.c:2382
+#: ../src/dialogs.c:161 ../src/document.c:2313 ../src/document.c:2378
+#: ../src/document.c:2386
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "»%s« wurde nicht gefunden."
@@ -2682,7 +2683,7 @@ msgstr ""
 "Öffnet die Datei schreibgeschützt. Bei Auswahl mehrerer Dateien, werden alle "
 "schreibgeschützt geöffnet."
 
-#: ../src/dialogs.c:535 ../src/document.c:2060
+#: ../src/dialogs.c:535 ../src/document.c:2064
 msgid "Overwrite?"
 msgstr "Überschreiben?"
 
@@ -2746,7 +2747,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2182 ../src/symbols.c:2198 ../src/ui_utils.c:289
+#: ../src/symbols.c:2156 ../src/symbols.c:2172 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -2763,27 +2764,27 @@ msgstr "(mit BOM)"
 msgid "(without BOM)"
 msgstr "(ohne BOM)"
 
-#: ../src/document.c:745
+#: ../src/document.c:749
 #, c-format
 msgid "File %s closed."
 msgstr "Datei »%s« wurde geschlossen."
 
-#: ../src/document.c:901
+#: ../src/document.c:905
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Neue Datei »%s« geöffnet."
 
-#: ../src/document.c:975
+#: ../src/document.c:979
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Konnte Datei »%s« nicht öffnen (%s)."
 
-#: ../src/document.c:1024
+#: ../src/document.c:1028
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Die Datei »%s« ist kein gültiges %s."
 
-#: ../src/document.c:1030
+#: ../src/document.c:1034
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2792,7 +2793,7 @@ msgstr ""
 "Die Datei »%s« scheint keine Textdatei zu sein, oder die Zeichenkodierung "
 "wird nicht unterstützt."
 
-#: ../src/document.c:1040
+#: ../src/document.c:1044
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2805,31 +2806,31 @@ msgstr ""
 "enthält und kann zu Datenverlust beim Speichern führen!\n"
 "Die Datei wird schreibgeschützt geöffnet."
 
-#: ../src/document.c:1252
+#: ../src/document.c:1256
 msgid "Spaces"
 msgstr "Leerzeichen"
 
-#: ../src/document.c:1255
+#: ../src/document.c:1259
 msgid "Tabs"
 msgstr "Tabulatoren"
 
-#: ../src/document.c:1258
+#: ../src/document.c:1262
 msgid "Tabs and Spaces"
 msgstr "Tabulatoren und Leerzeichen"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1263
+#: ../src/document.c:1267
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Setze Einrückungsmodus %s für »%s«."
 
-#: ../src/document.c:1274
+#: ../src/document.c:1278
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "Setze Einrückungsbreite auf %d für »%s«."
 
-#: ../src/document.c:1498
+#: ../src/document.c:1502
 #, c-format
 msgid "File %s reloaded."
 msgstr "Datei »%s« neu geladen."
@@ -2837,20 +2838,20 @@ msgstr "Datei »%s« neu geladen."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1506
+#: ../src/document.c:1510
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Datei »%s« geöffnet (%d%s)."
 
-#: ../src/document.c:1508
+#: ../src/document.c:1512
 msgid ", read-only"
 msgstr ", schreibgeschützt"
 
-#: ../src/document.c:1628
+#: ../src/document.c:1632
 msgid "Discard history"
 msgstr "Verlauf verwerfen"
 
-#: ../src/document.c:1629
+#: ../src/document.c:1633
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2862,28 +2863,28 @@ msgstr ""
 "werden kann. Diese Funktion kann deaktiviert werden. Diese Nachricht wird "
 "nicht noch einmal angezeigt."
 
-#: ../src/document.c:1633
+#: ../src/document.c:1637
 msgid "The file has been reloaded."
 msgstr "Das Dokument wurde neu geladen."
 
-#: ../src/document.c:1663
+#: ../src/document.c:1667
 msgid "Any unsaved changes will be lost."
 msgstr "Alle ungesicherten Änderungen werden verloren gehen."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1668
 msgid "Undo history will be lost."
 msgstr "Verlauf wird verloren gehen."
 
-#: ../src/document.c:1665
+#: ../src/document.c:1669
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Möchten Sie »%s« wirklich neu laden?"
 
-#: ../src/document.c:1771
+#: ../src/document.c:1775
 msgid "Error renaming file."
 msgstr "Fehler beim Umbenennen der Datei."
 
-#: ../src/document.c:1892
+#: ../src/document.c:1896
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2892,7 +2893,7 @@ msgstr ""
 "Beim Konvertieren der Datei von UTF-8 nach »%s« ist ein Fehler aufgetreten. "
 "Die Datei wird <i>nicht</i> gespeichert."
 
-#: ../src/document.c:1913
+#: ../src/document.c:1917
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2901,58 +2902,58 @@ msgstr ""
 "Fehlermeldung: %s\n"
 "Der Fehler trat bei »%s« (Zeile: %d, Spalte: %d) auf."
 
-#: ../src/document.c:1917
+#: ../src/document.c:1921
 #, c-format
 msgid "Error message: %s."
 msgstr "Fehlermeldung: %s."
 
-#: ../src/document.c:1977
+#: ../src/document.c:1981
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 "Konnte Datei »%s« nicht zum Schreiben öffnen: fopen() fehlgeschlagen: %s"
 
-#: ../src/document.c:1995
+#: ../src/document.c:1999
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Konnte Datei »%s« nicht schreiben: fwrite() fehlgeschlagen: %s"
 
-#: ../src/document.c:2009
+#: ../src/document.c:2013
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Konnte Datei »%s« nicht schließen: fclose() fehlgeschlagen: %s"
 
-#: ../src/document.c:2059 ../src/document.c:3593
+#: ../src/document.c:2063 ../src/document.c:3597
 msgid "_Overwrite"
 msgstr "Ü_berschreiben?"
 
-#: ../src/document.c:2061 ../src/document.c:3596
+#: ../src/document.c:2065 ../src/document.c:3600
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "Die Datei »%s« auf dem Datenträger ist aktueller als die momentan geöffnete "
 "Version."
 
-#: ../src/document.c:2069 ../src/document.c:3645
+#: ../src/document.c:2073 ../src/document.c:3649
 msgid "Try to resave the file?"
 msgstr "Versuchen die Datei erneut zu speichern?"
 
-#: ../src/document.c:2070 ../src/document.c:3646
+#: ../src/document.c:2074 ../src/document.c:3650
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "»%s« wurde nicht auf dem Datenträger gefunden!"
 
-#: ../src/document.c:2133
+#: ../src/document.c:2137
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Kann das nur zum Lesen geöffnete Dokument »%s« nicht speichern!"
 
-#: ../src/document.c:2201
+#: ../src/document.c:2205
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Fehler beim Speichern der Datei (%s)."
 
-#: ../src/document.c:2206
+#: ../src/document.c:2210
 #, c-format
 msgid ""
 "%s\n"
@@ -2964,47 +2965,47 @@ msgstr ""
 "Die Datei ist möglicherweise nicht vollständig auf der Festplatte "
 "gespeichert!"
 
-#: ../src/document.c:2208
+#: ../src/document.c:2212
 msgid "Error saving file."
 msgstr "Fehler beim Speichern der Datei."
 
-#: ../src/document.c:2232
+#: ../src/document.c:2236
 #, c-format
 msgid "File %s saved."
 msgstr "Datei »%s« wurde gespeichert."
 
-#: ../src/document.c:2382
+#: ../src/document.c:2386
 msgid "Wrap search and find again?"
 msgstr "Suche vom Dokumentanfang bzw. -ende neu beginnen?"
 
-#: ../src/document.c:2471 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2475 ../src/search.c:1366 ../src/search.c:1419
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Keine Treffer für »%s« gefunden."
 
-#: ../src/document.c:2477
+#: ../src/document.c:2481
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 msgstr[1] "%s: %d mal wurde »%s« mit »%s« ersetzt."
 
-#: ../src/document.c:3595
+#: ../src/document.c:3599
 msgid "Do you want to reload it?"
 msgstr "Möchten Sie die Datei neu laden?"
 
-#: ../src/editor.c:4388
+#: ../src/editor.c:4490
 msgid "Enter Tab Width"
 msgstr "Tabulatorbreite:"
 
-#: ../src/editor.c:4389
+#: ../src/editor.c:4491
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Geben Sie die Anzahl der Leerzeichen an, welche durch den Tabulator ersetzt "
 "werden sollen."
 
-#: ../src/editor.c:4587
+#: ../src/editor.c:4689
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Achtung: Keine gewöhnliche harte Tabulatorbreite:: %d != 8!"
@@ -3265,7 +3266,7 @@ msgid "Color Schemes"
 msgstr "Farbschemata"
 
 #. visual group order
-#: ../src/keybindings.c:306 ../src/symbols.c:655
+#: ../src/keybindings.c:306 ../src/symbols.c:629
 msgid "File"
 msgstr "Datei"
 
@@ -3301,16 +3302,16 @@ msgstr "Gehe zu"
 msgid "View"
 msgstr "Ansicht"
 
-#: ../src/keybindings.c:316 ../src/symbols.c:804
+#: ../src/keybindings.c:316 ../src/symbols.c:778
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:318 ../src/keybindings.c:672 ../src/project.c:511
+#: ../src/keybindings.c:318 ../src/keybindings.c:684 ../src/project.c:511
 #: ../src/ui_utils.c:2191
 msgid "Build"
 msgstr "Erstellen"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:697
+#: ../src/keybindings.c:320 ../src/keybindings.c:709
 msgid "Help"
 msgstr "Hilfe"
 
@@ -3346,7 +3347,7 @@ msgstr "Speichern unter"
 msgid "Save all"
 msgstr "Alle speichern"
 
-#: ../src/keybindings.c:345 ../src/symbols.c:888
+#: ../src/keybindings.c:345 ../src/symbols.c:862
 msgid "Properties"
 msgstr "Eigenschaften"
 
@@ -3506,283 +3507,307 @@ msgstr "Zum 2. benutzerdefinierten Kommando senden"
 msgid "Send to Custom Command 3"
 msgstr "Zum 3. benutzerdefinierten Kommando senden"
 
+#: ../src/keybindings.c:480
+msgid "Send to Custom Command 4"
+msgstr "Zum 4. benutzerdefinierten Kommando senden"
+
+#: ../src/keybindings.c:482
+msgid "Send to Custom Command 5"
+msgstr "Zum 5. benutzerdefinierten Kommando senden"
+
+#: ../src/keybindings.c:484
+msgid "Send to Custom Command 6"
+msgstr "Zum 6. benutzerdefinierten Kommando senden"
+
 #: ../src/keybindings.c:486
+msgid "Send to Custom Command 7"
+msgstr "Zum 7. benutzerdefinierten Kommando senden"
+
+#: ../src/keybindings.c:488
+msgid "Send to Custom Command 8"
+msgstr "Zum 8. benutzerdefinierten Kommando senden"
+
+#: ../src/keybindings.c:490
+msgid "Send to Custom Command 9"
+msgstr "Zum 9. benutzerdefinierten Kommando senden"
+
+#: ../src/keybindings.c:498
 msgid "Join lines"
 msgstr "Zeilen zusammenführen"
 
-#: ../src/keybindings.c:491
+#: ../src/keybindings.c:503
 msgid "Insert date"
 msgstr "Datum einfügen"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:509
 msgid "Insert New Line Before Current"
 msgstr "Neue Zeile vor der aktuellen einfügen"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:511
 msgid "Insert New Line After Current"
 msgstr "Neue Zeile hinter der aktuellen Einfügen"
 
-#: ../src/keybindings.c:512 ../src/search.c:464
+#: ../src/keybindings.c:524 ../src/search.c:464
 msgid "Find"
 msgstr "Suchen"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:526
 msgid "Find Next"
 msgstr "Weitersuchen"
 
-#: ../src/keybindings.c:516
+#: ../src/keybindings.c:528
 msgid "Find Previous"
 msgstr "Vorheriges"
 
-#: ../src/keybindings.c:523 ../src/search.c:617
+#: ../src/keybindings.c:535 ../src/search.c:617
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: ../src/keybindings.c:525 ../src/search.c:867
+#: ../src/keybindings.c:537 ../src/search.c:867
 msgid "Find in Files"
 msgstr "In Dateien suchen"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:540
 msgid "Next Message"
 msgstr "Nächste Nachricht"
 
-#: ../src/keybindings.c:530
+#: ../src/keybindings.c:542
 msgid "Previous Message"
 msgstr "Vorherige Nachricht"
 
-#: ../src/keybindings.c:533
+#: ../src/keybindings.c:545
 msgid "Find Usage"
 msgstr "Auftreten finden"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:548
 msgid "Find Document Usage"
 msgstr "Auftreten im Dokument finden"
 
-#: ../src/keybindings.c:543 ../src/toolbar.c:70
+#: ../src/keybindings.c:555 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Navigiert eine Position nach hinten"
 
-#: ../src/keybindings.c:545 ../src/toolbar.c:71
+#: ../src/keybindings.c:557 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Navigiert eine Position nach vorne"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:562
 msgid "Go to matching brace"
 msgstr "Springe zur passenden Klammer"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:565
 msgid "Toggle marker"
 msgstr "Markierung setzen"
 
-#: ../src/keybindings.c:562
-msgid "Go to Tag Definition"
-msgstr "Gehe zur Tagdefinition"
+#: ../src/keybindings.c:574
+msgid "Go to Symbol Definition"
+msgstr "Gehe zur Symbol-Definition"
 
-#: ../src/keybindings.c:565
-msgid "Go to Tag Declaration"
-msgstr "Gehe zur Tagdeklaration"
+#: ../src/keybindings.c:577
+msgid "Go to Symbol Declaration"
+msgstr "Gehe zur Symbol-Deklaration"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:579
 msgid "Go to Start of Line"
 msgstr "Gehe zum Zeilenanfang"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:581
 msgid "Go to End of Line"
 msgstr "Gehe zum Zeilenende"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:583
 msgid "Go to Start of Display Line"
 msgstr "Gehe zum sichtbaren Zeilenbeginn"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:585
 msgid "Go to End of Display Line"
 msgstr "Gehe zum angezeigten Zeilenende"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:587
 msgid "Go to Previous Word Part"
 msgstr "Zum vorherigen Teilwort springen"
 
-#: ../src/keybindings.c:577
+#: ../src/keybindings.c:589
 msgid "Go to Next Word Part"
 msgstr "Zum nächsten Teilwort springen"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:594
 msgid "Toggle All Additional Widgets"
 msgstr "Zusätzliche Infofenster ein-/ausblenden"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:597
 msgid "Fullscreen"
 msgstr "Vollbild"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:599
 msgid "Toggle Messages Window"
 msgstr "Meldungsfenster verstecken"
 
-#: ../src/keybindings.c:590
+#: ../src/keybindings.c:602
 msgid "Toggle Sidebar"
 msgstr "Seitenleiste ausblenden"
 
-#: ../src/keybindings.c:592
+#: ../src/keybindings.c:604
 msgid "Zoom In"
 msgstr "Hineinzoomen"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:606
 msgid "Zoom Out"
 msgstr "Herauszoomen"
 
-#: ../src/keybindings.c:596
+#: ../src/keybindings.c:608
 msgid "Zoom Reset"
 msgstr "Vergrößerung zurücksetzen"
 
-#: ../src/keybindings.c:601
+#: ../src/keybindings.c:613
 msgid "Switch to Editor"
 msgstr "Zum Editor wechseln"
 
-#: ../src/keybindings.c:603
+#: ../src/keybindings.c:615
 msgid "Switch to Search Bar"
 msgstr "Zu dem Suchfenster wechseln"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:617
 msgid "Switch to Message Window"
 msgstr "Meldungsfenster anzeigen"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:619
 msgid "Switch to Compiler"
 msgstr "Wechsle zum Compiler"
 
-#: ../src/keybindings.c:609
+#: ../src/keybindings.c:621
 msgid "Switch to Messages"
 msgstr "Zu den Meldungen wechseln"
 
-#: ../src/keybindings.c:611
+#: ../src/keybindings.c:623
 msgid "Switch to Scribble"
 msgstr "Zu den Notizen wechseln"
 
-#: ../src/keybindings.c:613
+#: ../src/keybindings.c:625
 msgid "Switch to VTE"
 msgstr "Zur VTE wechseln"
 
-#: ../src/keybindings.c:615
+#: ../src/keybindings.c:627
 msgid "Switch to Sidebar"
 msgstr "Zur Seitenleiste wechseln"
 
-#: ../src/keybindings.c:617
+#: ../src/keybindings.c:629
 msgid "Switch to Sidebar Symbol List"
 msgstr "Zur Symbolliste der Seitenleiste springen"
 
-#: ../src/keybindings.c:619
+#: ../src/keybindings.c:631
 msgid "Switch to Sidebar Document List"
 msgstr "Zur Dokumentenliste der Seitenleiste springen"
 
-#: ../src/keybindings.c:624
+#: ../src/keybindings.c:636
 msgid "Switch to left document"
 msgstr "Zum linken Dokument wechseln"
 
-#: ../src/keybindings.c:626
+#: ../src/keybindings.c:638
 msgid "Switch to right document"
 msgstr "Zum rechten Dokument wechseln"
 
-#: ../src/keybindings.c:628
+#: ../src/keybindings.c:640
 msgid "Switch to last used document"
 msgstr "Zum letzten Dokument wechseln"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:643
 msgid "Move document left"
 msgstr "Dateireiter nach links verschieben"
 
-#: ../src/keybindings.c:634
+#: ../src/keybindings.c:646
 msgid "Move document right"
 msgstr "Dateireiter nach rechts verschieben"
 
-#: ../src/keybindings.c:636
+#: ../src/keybindings.c:648
 msgid "Move document first"
 msgstr "Dateireiter an den Anfang verschieben"
 
-#: ../src/keybindings.c:638
+#: ../src/keybindings.c:650
 msgid "Move document last"
 msgstr "Dateireiter ans Ende verschieben"
 
-#: ../src/keybindings.c:643
+#: ../src/keybindings.c:655
 msgid "Toggle Line wrapping"
 msgstr "Visuellen Zeilenumbruch umschalten"
 
-#: ../src/keybindings.c:645
+#: ../src/keybindings.c:657
 msgid "Toggle Line breaking"
 msgstr "Automatischen Zeilenumbruch umschalten"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:663
 msgid "Replace spaces with tabs"
 msgstr "Leerzeichen durch Tabulatoren ersetzen"
 
-#: ../src/keybindings.c:653
+#: ../src/keybindings.c:665
 msgid "Toggle current fold"
 msgstr "Aktuelle Faltung umschalten"
 
-#: ../src/keybindings.c:655
+#: ../src/keybindings.c:667
 msgid "Fold all"
 msgstr "Alle einblenden"
 
-#: ../src/keybindings.c:657
+#: ../src/keybindings.c:669
 msgid "Unfold all"
 msgstr "Alle ausblenden"
 
-#: ../src/keybindings.c:659
+#: ../src/keybindings.c:671
 msgid "Reload symbol list"
 msgstr "Symbolliste neuladen"
 
-#: ../src/keybindings.c:661
+#: ../src/keybindings.c:673
 msgid "Remove Markers"
 msgstr "Markierungen entfernen"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:675
 msgid "Remove Error Indicators"
 msgstr "Fehlermarkierungen entfernen"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:677
 msgid "Remove Markers and Error Indicators"
 msgstr "Fehlermarkierungen und andere Markierungen entfernen"
 
-#: ../src/keybindings.c:670 ../src/toolbar.c:72
+#: ../src/keybindings.c:682 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Kompilieren"
 
-#: ../src/keybindings.c:674
+#: ../src/keybindings.c:686
 msgid "Make all"
 msgstr "Make all"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:689
 msgid "Make custom target"
 msgstr "Make mit eigenem Target"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:691
 msgid "Make object"
 msgstr "Make Objekt-Datei"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:693
 msgid "Next error"
 msgstr "Nächster Fehler"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:695
 msgid "Previous error"
 msgstr "Vorheriger Fehler"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:697
 msgid "Run"
 msgstr "Ausführen"
 
-#: ../src/keybindings.c:687
+#: ../src/keybindings.c:699
 msgid "Build options"
 msgstr "Optionen bei der Erzeugung"
 
-#: ../src/keybindings.c:692
+#: ../src/keybindings.c:704
 msgid "Show Color Chooser"
 msgstr "Farbwähler öffnen"
 
-#: ../src/keybindings.c:962
+#: ../src/keybindings.c:974
 msgid "Keyboard Shortcuts"
 msgstr "Tastenkürzel"
 
-#: ../src/keybindings.c:974
+#: ../src/keybindings.c:986
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
@@ -3818,8 +3843,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Erstelle globale Tag-Datei (Dokumentation beachten)"
 
 #: ../src/libmain.c:122
-msgid "Don't preprocess C/C++ files when generating tags"
-msgstr "C/C++ Präprozessor überspringen, wenn eine Tag-Datei erstellt wird"
+msgid "Don't preprocess C/C++ files when generating tags file"
+msgstr "C/C++ Präprozessoranweisungen überspringen, wenn eine Tag-Datei erstellt wird"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4064,11 +4089,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:225 ../src/symbols.c:2336 ../src/sidebar.c:752
+#: ../src/prefs.c:225 ../src/symbols.c:2310 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2341 ../src/sidebar.c:758
+#: ../src/prefs.c:230 ../src/symbols.c:2315 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -4621,333 +4646,331 @@ msgstr "Unbekannter Fehler beim Ausführen des Kind-Prozess aufgetreten."
 msgid "Value"
 msgstr "Wert"
 
-#: ../src/symbols.c:634 ../src/symbols.c:684 ../src/symbols.c:794
+#: ../src/symbols.c:608 ../src/symbols.c:658 ../src/symbols.c:768
 msgid "Chapter"
 msgstr "Kapitel"
 
-#: ../src/symbols.c:635 ../src/symbols.c:680 ../src/symbols.c:795
+#: ../src/symbols.c:609 ../src/symbols.c:654 ../src/symbols.c:769
 msgid "Section"
 msgstr "Abschnitt"
 
-#: ../src/symbols.c:636
+#: ../src/symbols.c:610
 msgid "Sect1"
 msgstr "Sect1"
 
-#: ../src/symbols.c:637
+#: ../src/symbols.c:611
 msgid "Sect2"
 msgstr "Sect2"
 
-#: ../src/symbols.c:638
+#: ../src/symbols.c:612
 msgid "Sect3"
 msgstr "Sect3"
 
-#: ../src/symbols.c:639
+#: ../src/symbols.c:613
 msgid "Appendix"
 msgstr "Anhang"
 
-#: ../src/symbols.c:640 ../src/symbols.c:685 ../src/symbols.c:710
-#: ../src/symbols.c:726 ../src/symbols.c:741 ../src/symbols.c:752
-#: ../src/symbols.c:853 ../src/symbols.c:864 ../src/symbols.c:877
-#: ../src/symbols.c:891 ../src/symbols.c:903 ../src/symbols.c:915
-#: ../src/symbols.c:932 ../src/symbols.c:961 ../src/symbols.c:993
+#: ../src/symbols.c:614 ../src/symbols.c:659 ../src/symbols.c:684
+#: ../src/symbols.c:700 ../src/symbols.c:715 ../src/symbols.c:726
+#: ../src/symbols.c:827 ../src/symbols.c:838 ../src/symbols.c:851
+#: ../src/symbols.c:865 ../src/symbols.c:877 ../src/symbols.c:889
+#: ../src/symbols.c:906 ../src/symbols.c:935 ../src/symbols.c:967
 msgid "Other"
 msgstr "Sonstiges"
 
-#: ../src/symbols.c:646 ../src/symbols.c:923 ../src/symbols.c:971
+#: ../src/symbols.c:620 ../src/symbols.c:897 ../src/symbols.c:945
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:647 ../src/symbols.c:737 ../src/symbols.c:849
-#: ../src/symbols.c:901 ../src/symbols.c:913 ../src/symbols.c:928
-#: ../src/symbols.c:942
+#: ../src/symbols.c:621 ../src/symbols.c:711 ../src/symbols.c:823
+#: ../src/symbols.c:875 ../src/symbols.c:887 ../src/symbols.c:902
+#: ../src/symbols.c:916
 msgid "Types"
 msgstr "Typen"
 
-#: ../src/symbols.c:648
+#: ../src/symbols.c:622
 msgid "Type constructors"
 msgstr "Typkonstruktoren"
 
-#: ../src/symbols.c:649 ../src/symbols.c:671 ../src/symbols.c:692
-#: ../src/symbols.c:709 ../src/symbols.c:721 ../src/symbols.c:734
-#: ../src/symbols.c:749 ../src/symbols.c:763 ../src/symbols.c:773
-#: ../src/symbols.c:837 ../src/symbols.c:887 ../src/symbols.c:910
-#: ../src/symbols.c:955 ../src/symbols.c:979
+#: ../src/symbols.c:623 ../src/symbols.c:645 ../src/symbols.c:666
+#: ../src/symbols.c:683 ../src/symbols.c:695 ../src/symbols.c:708
+#: ../src/symbols.c:723 ../src/symbols.c:737 ../src/symbols.c:747
+#: ../src/symbols.c:811 ../src/symbols.c:861 ../src/symbols.c:884
+#: ../src/symbols.c:929 ../src/symbols.c:953
 msgid "Functions"
 msgstr "Funktionen"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:628
 msgid "Program"
 msgstr "Programm"
 
-#: ../src/symbols.c:656 ../src/symbols.c:664 ../src/symbols.c:670
+#: ../src/symbols.c:630 ../src/symbols.c:638 ../src/symbols.c:644
 msgid "Sections"
 msgstr "Abschnitte"
 
-#: ../src/symbols.c:657
+#: ../src/symbols.c:631
 msgid "Paragraph"
 msgstr "Absatz"
 
-#: ../src/symbols.c:658
+#: ../src/symbols.c:632
 msgid "Group"
 msgstr "Gruppe"
 
-#: ../src/symbols.c:659
+#: ../src/symbols.c:633
 msgid "Data"
 msgstr "Daten"
 
-#: ../src/symbols.c:665
+#: ../src/symbols.c:639
 msgid "Keys"
 msgstr "Indizes"
 
-#: ../src/symbols.c:672 ../src/symbols.c:723 ../src/symbols.c:739
-#: ../src/symbols.c:765 ../src/symbols.c:838 ../src/symbols.c:863
-#: ../src/symbols.c:889 ../src/symbols.c:902 ../src/symbols.c:911
-#: ../src/symbols.c:927 ../src/symbols.c:962 ../src/symbols.c:991
+#: ../src/symbols.c:646 ../src/symbols.c:697 ../src/symbols.c:713
+#: ../src/symbols.c:739 ../src/symbols.c:812 ../src/symbols.c:837
+#: ../src/symbols.c:863 ../src/symbols.c:876 ../src/symbols.c:885
+#: ../src/symbols.c:901 ../src/symbols.c:936 ../src/symbols.c:965
 msgid "Variables"
 msgstr "Variablen"
 
-#: ../src/symbols.c:679
+#: ../src/symbols.c:653
 msgid "Environment"
 msgstr "Umgebung"
 
-#: ../src/symbols.c:681 ../src/symbols.c:796
+#: ../src/symbols.c:655 ../src/symbols.c:770
 msgid "Subsection"
 msgstr "Unterabschnitt"
 
-#: ../src/symbols.c:682 ../src/symbols.c:797
+#: ../src/symbols.c:656 ../src/symbols.c:771
 msgid "Subsubsection"
 msgstr "Unterunterabschnitt"
 
-#: ../src/symbols.c:693 ../src/symbols.c:718
+#: ../src/symbols.c:667 ../src/symbols.c:692
 msgid "Structures"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:674
 msgid "Parts"
 msgstr "Parts"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:675
 msgid "Assembly"
 msgstr "Assembly"
 
-#: ../src/symbols.c:702
+#: ../src/symbols.c:676
 msgid "Steps"
 msgstr "Steps"
 
-#: ../src/symbols.c:717 ../src/symbols.c:815 ../src/symbols.c:861
+#: ../src/symbols.c:691 ../src/symbols.c:789 ../src/symbols.c:835
 msgid "Modules"
 msgstr "Module"
 
-#: ../src/symbols.c:719 ../src/symbols.c:766
+#: ../src/symbols.c:693 ../src/symbols.c:740
 msgid "Traits"
 msgstr "Charakteristika"
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:694
 msgid "Implementations"
 msgstr "Implementierungen"
 
-#: ../src/symbols.c:722 ../src/symbols.c:982
+#: ../src/symbols.c:696 ../src/symbols.c:956
 msgid "Typedefs / Enums"
 msgstr "Typendefinition und Enumerates"
 
-#: ../src/symbols.c:724 ../src/symbols.c:940 ../src/symbols.c:949
-#: ../src/symbols.c:988
+#: ../src/symbols.c:698 ../src/symbols.c:914 ../src/symbols.c:923
+#: ../src/symbols.c:962
 msgid "Macros"
 msgstr "Makros"
 
-#: ../src/symbols.c:725 ../src/symbols.c:818 ../src/symbols.c:827
-#: ../src/symbols.c:836 ../src/symbols.c:874 ../src/symbols.c:900
+#: ../src/symbols.c:699 ../src/symbols.c:792 ../src/symbols.c:801
+#: ../src/symbols.c:810 ../src/symbols.c:848 ../src/symbols.c:874
 msgid "Methods"
 msgstr "Methoden"
 
-#: ../src/symbols.c:733 ../src/symbols.c:748 ../src/symbols.c:846
-#: ../src/symbols.c:871 ../src/symbols.c:884
+#: ../src/symbols.c:707 ../src/symbols.c:722 ../src/symbols.c:820
+#: ../src/symbols.c:845 ../src/symbols.c:858
 msgid "Package"
 msgstr "Package"
 
-#: ../src/symbols.c:735 ../src/symbols.c:761 ../src/symbols.c:872
-#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:925
-#: ../src/symbols.c:978
+#: ../src/symbols.c:709 ../src/symbols.c:735 ../src/symbols.c:846
+#: ../src/symbols.c:859 ../src/symbols.c:872 ../src/symbols.c:899
+#: ../src/symbols.c:952
 msgid "Interfaces"
 msgstr "Interfaces"
 
-#: ../src/symbols.c:736 ../src/symbols.c:981
+#: ../src/symbols.c:710 ../src/symbols.c:955
 msgid "Structs"
 msgstr "Strukturen"
 
-#: ../src/symbols.c:738 ../src/symbols.c:751 ../src/symbols.c:764
-#: ../src/symbols.c:890 ../src/symbols.c:912
+#: ../src/symbols.c:712 ../src/symbols.c:725 ../src/symbols.c:738
+#: ../src/symbols.c:864 ../src/symbols.c:886
 msgid "Constants"
 msgstr "Konstanten"
 
-#: ../src/symbols.c:740 ../src/symbols.c:875 ../src/symbols.c:980
+#: ../src/symbols.c:714 ../src/symbols.c:849 ../src/symbols.c:954
 msgid "Members"
 msgstr "Instanzvariablen"
 
-#: ../src/symbols.c:750 ../src/symbols.c:914 ../src/symbols.c:939
+#: ../src/symbols.c:724 ../src/symbols.c:888 ../src/symbols.c:913
 msgid "Labels"
 msgstr "Label"
 
-#: ../src/symbols.c:760 ../src/symbols.c:825 ../src/symbols.c:974
+#: ../src/symbols.c:734 ../src/symbols.c:799 ../src/symbols.c:948
 msgid "Namespaces"
 msgstr "Namensräume"
 
-#: ../src/symbols.c:762 ../src/symbols.c:784 ../src/symbols.c:816
-#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:977
+#: ../src/symbols.c:736 ../src/symbols.c:758 ../src/symbols.c:790
+#: ../src/symbols.c:800 ../src/symbols.c:809 ../src/symbols.c:847
+#: ../src/symbols.c:860 ../src/symbols.c:873 ../src/symbols.c:951
 msgid "Classes"
 msgstr "Klassen"
 
-#: ../src/symbols.c:774
+#: ../src/symbols.c:748
 msgid "Anchors"
 msgstr "Anker"
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:749
 msgid "H1 Headings"
 msgstr "Überschrift (H1)"
 
-#: ../src/symbols.c:776
+#: ../src/symbols.c:750
 msgid "H2 Headings"
 msgstr "Überschrift (H2)"
 
-#: ../src/symbols.c:777
+#: ../src/symbols.c:751
 msgid "H3 Headings"
 msgstr "Überschrift (H3)"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:759
 msgid "ID Selectors"
 msgstr "ID"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:760
 msgid "Type Selectors"
 msgstr "Typ"
 
-#: ../src/symbols.c:805
+#: ../src/symbols.c:779
 msgid "Section Level 1"
 msgstr "Überschrift Ebene 1"
 
-#: ../src/symbols.c:806
+#: ../src/symbols.c:780
 msgid "Section Level 2"
 msgstr "Überschrift Ebene 2"
 
-#: ../src/symbols.c:807
+#: ../src/symbols.c:781
 msgid "Section Level 3"
 msgstr "Überschrift Ebene 3"
 
-#: ../src/symbols.c:808
+#: ../src/symbols.c:782
 msgid "Section Level 4"
 msgstr "Überschrift Ebene 4"
 
-#: ../src/symbols.c:817
+#: ../src/symbols.c:791
 msgid "Singletons"
 msgstr "Singletons"
 
-#: ../src/symbols.c:828 ../src/symbols.c:956
+#: ../src/symbols.c:802 ../src/symbols.c:930
 msgid "Procedures"
 msgstr "Prozeduren"
 
-#: ../src/symbols.c:839
+#: ../src/symbols.c:813
 msgid "Imports"
 msgstr "Importe"
 
-#: ../src/symbols.c:847
+#: ../src/symbols.c:821
 msgid "Entities"
 msgstr "Entitäten"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:822
 msgid "Architectures"
 msgstr "Architekturen"
 
-#: ../src/symbols.c:850
+#: ../src/symbols.c:824
 msgid "Functions / Procedures"
 msgstr "Funktionen/Prozeduren"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:825
 msgid "Variables / Signals"
 msgstr "Variablen/Signale"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:826
 msgid "Processes / Blocks / Components"
 msgstr "Prozesse/Blöcke/Komponenten"
 
-#: ../src/symbols.c:860
+#: ../src/symbols.c:834
 msgid "Events"
 msgstr "Ereignisse"
 
-#: ../src/symbols.c:862
+#: ../src/symbols.c:836
 msgid "Functions / Tasks"
 msgstr "Funktionen"
 
-#: ../src/symbols.c:876 ../src/symbols.c:931
+#: ../src/symbols.c:850 ../src/symbols.c:905
 msgid "Enums"
 msgstr "Enums"
 
-#: ../src/symbols.c:924
+#: ../src/symbols.c:898
 msgid "Programs"
 msgstr "Programme"
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:900
 msgid "Functions / Subroutines"
 msgstr "Funktionen/Prozeduren"
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:903
 msgid "Components"
 msgstr "Komponenten"
 
-#: ../src/symbols.c:930
+#: ../src/symbols.c:904
 msgid "Blocks"
 msgstr "Blöcke"
 
-#: ../src/symbols.c:941
+#: ../src/symbols.c:915
 msgid "Defines"
 msgstr "Definitionen"
 
-#: ../src/symbols.c:948
+#: ../src/symbols.c:922
 msgid "Targets"
 msgstr "Targets"
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:931
 msgid "Indexes"
 msgstr "Indizies"
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:932
 msgid "Tables"
 msgstr "Tabellen"
 
-#: ../src/symbols.c:959
+#: ../src/symbols.c:933
 msgid "Triggers"
 msgstr "Trigger"
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:934
 msgid "Views"
 msgstr "Ansichten"
 
-#: ../src/symbols.c:992
+#: ../src/symbols.c:966
 msgid "Extern Variables"
 msgstr "Externe Variablen"
 
-#: ../src/symbols.c:1756
+#: ../src/symbols.c:1730
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Unbekannte Dateierweiterung für »%s«.\n"
 
-#: ../src/symbols.c:1782
-#, c-format
-msgid "Failed to create tags file, perhaps because no tags were found.\n"
+#: ../src/symbols.c:1756
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
-"Die Tag-Datei konnte nicht erstellt werden, möglicherweise konnten keine "
-"Tags gefunden werden.\n"
+"Die Tag-Datei konnte nicht erstellt werden -- Möglicherweise konnten keine "
+"Symbole gefunden werden.\n"
 
-#: ../src/symbols.c:1789
-#, c-format
+#: ../src/symbols.c:1763
 msgid ""
-"Usage: %s -g <Tag File> <File list>\n"
+"Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
 "Verwendung: %s -g <Tag-Datei> <Datei-Liste>\n"
 "\n"
 
-#: ../src/symbols.c:1790
+#: ../src/symbols.c:1764
 #, c-format
 msgid ""
 "Example:\n"
@@ -4958,40 +4981,40 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1804
-msgid "Load Tags"
-msgstr "Tags laden"
+#: ../src/symbols.c:1778
+msgid "Load Tags File"
+msgstr "Tag-Datei laden"
 
-#: ../src/symbols.c:1811
-msgid "Geany tag files (*.*.tags)"
+#: ../src/symbols.c:1785
+msgid "Geany tags file (*.*.tags)"
 msgstr "Geany Tag-Datei (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1831
+#: ../src/symbols.c:1805
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s Tag-Datei »%s« geladen."
 
-#: ../src/symbols.c:1834
+#: ../src/symbols.c:1808
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
-#: ../src/symbols.c:1972
+#: ../src/symbols.c:1946
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:1974
+#: ../src/symbols.c:1948
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2351
+#: ../src/symbols.c:2325
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2358
+#: ../src/symbols.c:2332
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
@@ -5192,7 +5215,7 @@ msgstr ""
 "Konnte das benutzerdefinierte Kommando »%s« nicht finden: %s. Prüfen Sie die "
 "Pfadeinstellungen."
 
-#: ../src/tools.c:357 ../src/tools.c:620
+#: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
 msgstr "Benutzerdefiniertes Kommandos einstellen"
 
@@ -5208,40 +5231,40 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
-#: ../src/tools.c:591
+#: ../src/tools.c:597
 msgid "No custom commands defined."
 msgstr "Keine Kommandos definiert."
 
-#: ../src/tools.c:689
+#: ../src/tools.c:695
 msgid "Word Count"
 msgstr "Wörter zählen"
 
-#: ../src/tools.c:698
+#: ../src/tools.c:704
 msgid "selection"
 msgstr "Auswahl"
 
-#: ../src/tools.c:703
+#: ../src/tools.c:709
 msgid "whole document"
 msgstr "Vollständiges Dokument"
 
-#: ../src/tools.c:712
+#: ../src/tools.c:718
 msgid "Range:"
 msgstr "Bereich:"
 
-#: ../src/tools.c:724
+#: ../src/tools.c:730
 msgid "Lines:"
 msgstr "Zeilen:"
 
-#: ../src/tools.c:738
+#: ../src/tools.c:744
 msgid "Words:"
 msgstr "Wörter:"
 
-#: ../src/tools.c:752
+#: ../src/tools.c:758
 msgid "Characters:"
 msgstr "Buchstaben:"
 
 #: ../src/sidebar.c:178
-msgid "No tags found"
+msgid "No symbols found"
 msgstr "Keine Symbole gefunden"
 
 #: ../src/sidebar.c:602
@@ -5986,6 +6009,12 @@ msgstr "Seite an Seite"
 #: ../plugins/splitwindow.c:435
 msgid "Top and Bottom"
 msgstr "Oben und Unten"
+
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "Gehe zur _Tagdefinition"
+
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "Gehe zur T_agdeklaration"
 
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "Drucken der Datei »%s« ist fehlgeschlagen (Rückgabewert: %s)."
