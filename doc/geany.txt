@@ -4573,14 +4573,14 @@ line_wrap_indent
 
 translucency
     Translucency for the current line (first argument) and the selection
-    (second argument). Values between 0 and 256 are accepted.
+    (second argument). Values between 0 and 255 are accepted.
 
     Note for Windows 95, 98 and ME users:
-    keep this value at 256 to disable translucency otherwise Geany might crash.
+    keep this value at 255 to disable translucency otherwise Geany might crash.
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``translucency=256;256;false;false``
+    *Example:* ``translucency=255;255;false;false``
 
 marker_line
     The style for a highlighted line (e.g when using Goto line or goto symbol).
@@ -4609,15 +4609,15 @@ marker_mark
     *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
 
 marker_translucency
-    Translucency for the line marker (first argument) and the search marker
-    (second argument). Values between 0 and 256 are accepted.
+    Translucency for the line marker (first argument) and the mark marker
+    (second argument). Values between 0 and 255 are accepted.
 
     Note for Windows 95, 98 and ME users:
-    keep this value at 256 to disable translucency otherwise Geany might crash.
+    keep this value at 255 to disable translucency otherwise Geany might crash.
 
     Only the first and second arguments are interpreted.
 
-    *Example:* ``marker_translucency=256;256;false;false``
+    *Example:* ``marker_translucency=255;255;false;false``
 
 line_height
     Amount of space to be drawn above and below the line's baseline.

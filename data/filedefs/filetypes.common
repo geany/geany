@@ -24,8 +24,8 @@ fold_symbol_highlight=fold_symbol_highlight
 current_line=current_line
 
 # translucency for the current line(first argument) and the selection (second argument)
-# values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
-# keep this value at 256 to disable translucency otherwise Geany might crash
+# values between 0 and 255 are accepted. Note for Windows 95, 98 and ME users:
+# keep this value at 255 to disable translucency otherwise Geany might crash
 translucency=256;256
 
 # style for a highlighted line (e.g when using Goto line or goto tag)
@@ -39,7 +39,7 @@ marker_search=marker_search
 # style for a marked line (e.g when using the "Toggle Marker" keybinding (Ctrl-M))
 marker_mark=marker_mark
 
-# translucency for the line marker(first argument) and the search marker (second argument)
+# translucency (0-255) for the line marker(first argument) and the mark marker (second argument)
 marker_translucency=256;256
 
 # colour of the caret(the blinking cursor), only first and third argument is interpreted
