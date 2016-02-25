@@ -1652,7 +1652,7 @@ const gchar *utils_get_default_dir_utf8(void)
  *  @param env The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
- *  @param user_data Ignored.
+ *  @param user_data @girskip Ignored.
  *  @param std_out The return location for child output, or @c NULL.
  *  @param std_err The return location for child error messages, or @c NULL.
  *  @param exit_status The child exit status, as returned by waitpid(), or @c NULL.
@@ -1954,7 +1954,6 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  * the environment.
  *
  * The argument list must be @c NULL-terminated.
- *
  *
  * @param exclude_vars @c NULL-terminated array of variable names to exclude.
  * @param first_varname Name of the first variable to copy into the new array.

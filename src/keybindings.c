@@ -217,7 +217,7 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item @nullable Optional widget to set an accelerator for.
+ * @param menu_item @nullable Optional widget to set an accelerator for, or @c NULL.
  * @param cb @nullable New-style callback to be called when activated, or @c NULL to use the group callback.
  * @param pdata Plugin-specific data passed back to the callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
