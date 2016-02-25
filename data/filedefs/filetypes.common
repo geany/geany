@@ -42,6 +42,9 @@ marker_mark=marker_mark
 # translucency (0-255) for the line marker(first argument) and the mark marker (second argument)
 marker_translucency=256;256
 
+# translucency (0-255) for the search marker's outline (first argument) and background (second argument)
+marker_search_translucency=50;60
+
 # colour of the caret(the blinking cursor), only first and third argument is interpreted
 # set the third argument to true to change the caret into a block caret
 caret=caret
