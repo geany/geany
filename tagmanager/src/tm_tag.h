@@ -137,7 +137,7 @@ typedef struct _TMTag
 	char *var_type; /**< Variable type (maps to struct for typedefs) */
 	char access; /**< Access type (public/protected/private/etc.) */
 	char impl; /**< Implementation (e.g. virtual) */
-	TMParserType lang; /**< Programming language of the file */
+	TMParserType lang; /* Programming language of the file */
 } TMTag;
 
 

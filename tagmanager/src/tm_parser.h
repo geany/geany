@@ -12,6 +12,9 @@
 
 typedef gint TMParserType;
 
+
+#ifdef GEANY_PRIVATE
+
 /* keep in sync with ctags/parsers.h */
 enum
 {
@@ -70,5 +73,6 @@ enum
 	TM_PARSER_COUNT
 };
 
+#endif /* GEANY_PRIVATE */
 
 #endif /* TM_PARSER_H */

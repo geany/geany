@@ -134,7 +134,7 @@ GeanyFiletypeGroupID;
 typedef struct GeanyFiletype
 {
 	GeanyFiletypeID	  id;				/**< Index in @ref filetypes. */
-	/** Represents the TMParserType of tagmanager (see the table
+	/* Represents the TMParserType of tagmanager (see the table
 	 * in tagmanager/src/tm_parser.h). */
 	TMParserType	  lang;
 	/** Untranslated short name, such as "C", "None".

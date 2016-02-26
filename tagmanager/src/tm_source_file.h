@@ -37,7 +37,7 @@ extern "C"
 */
 typedef struct
 {
-	TMParserType lang; /**< Programming language used */
+	TMParserType lang; /* Programming language used */
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object */
