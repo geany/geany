@@ -671,7 +671,8 @@ def build(bld):
         tagmanager/src/tm_source_file.h
         tagmanager/src/tm_tag.h
         tagmanager/src/tm_tagmanager.h
-        tagmanager/src/tm_workspace.h ''')
+        tagmanager/src/tm_workspace.h
+        tagmanager/src/tm_parser.h ''')
     # Docs
     base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
