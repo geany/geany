@@ -250,14 +250,16 @@ ALIASES                = "signal=- @ref  " \
                          "endsignals=  " \
                          "gironly=@internal"
 
-ALIASES               += "transfer{1}=\a \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly (transfer: \1) \endhtmlonly"
-ALIASES               += "elementtype{1}=\a \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly (element-type: \1) \endhtmlonly"
-ALIASES               += "scope{1}=\a \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly (scope: \1) \endhtmlonly"
-ALIASES               += "girskip=\a \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
-ALIASES               += "nullable=\a \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
-ALIASES               += "cb=\a \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
-ALIASES               += "cbdata=\a \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
-ALIASES               += "cbfree=\a \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
+# Apparently Doxygen doesn't seem to like \<type>only without a previous command, so create a no-op
+ALIASES               += "noop=\if FALSE \endif"
+ALIASES               += "transfer{1}=\noop \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly (transfer: \1) \endhtmlonly"
+ALIASES               += "elementtype{1}=\noop \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly (element-type: \1) \endhtmlonly"
+ALIASES               += "scope{1}=\noop \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly (scope: \1) \endhtmlonly"
+ALIASES               += "girskip=\noop \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
+ALIASES               += "nullable=\noop \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
+ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
+ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
+ALIASES               += "cbfree=\noop \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
 
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
