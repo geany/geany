@@ -1253,7 +1253,7 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 
 /** Finds a filetype pointer from its @a name field.
  * @param name Filetype name.
- * @return @transfer{none} The filetype found, or @c NULL.
+ * @return @transfer{none} @nullable The filetype found, or @c NULL.
  *
  * @since 0.15
  **/
@@ -1499,7 +1499,7 @@ void filetypes_reload_extensions(void)
 /** Accessor function for @ref GeanyData::filetypes_array items.
  * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
  * @param idx @c filetypes_array index.
- * @return @transfer{none} The filetype, or @c NULL if @a idx is out of range.
+ * @return @transfer{none} @nullable The filetype, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
  */

@@ -1685,7 +1685,7 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
 /** Prepends @a text to the drop down list, removing a duplicate element in
  * the list if found. Also ensures there are <= @a history_len elements.
  * @param combo_entry .
- * @param text Text to add, or @c NULL for current entry text.
+ * @param text @nullable Text to add, or @c NULL for current entry text.
  * @param history_len Max number of items, or @c 0 for default. */
 GEANY_API_SYMBOL
 void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
@@ -1899,7 +1899,7 @@ void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
  * file chooser, replacing entry text (if successful) with the path returned from the
  * @c GtkFileChooser.
  * @note @a entry can be the child of an unparented widget, such as @c GtkComboBoxEntry.
- * @param title The file chooser dialog title, or @c NULL.
+ * @param title @nullable The file chooser dialog title, or @c NULL.
  * @param action The mode of the file chooser.
  * @param entry Can be an unpacked @c GtkEntry, or the child of an unpacked widget,
  * such as @c GtkComboBoxEntry.
@@ -2738,7 +2738,7 @@ static gboolean progress_bar_pulse(gpointer data)
  * In this case, you need to show and hide the widget yourself. You can find some example code
  * in @c src/printing.c.
  *
- * @param text The text to be shown as the progress bar label or NULL to leave it empty.
+ * @param text @nullable The text to be shown as the progress bar label or @c NULL to leave it empty.
  *
  *  @since 0.16
  **/
@@ -2846,7 +2846,7 @@ GtkWidget *ui_label_new_bold(const gchar *text)
 /** @girskip
  * Adds a list of document items to @a menu.
  * @param menu Menu.
- * @param active Which document to highlight, or @c NULL.
+ * @param active @nullable Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be
  * passed the corresponding document pointer as @c user_data.
  * @warning You should check @c doc->is_valid in the callback.
@@ -2868,7 +2868,7 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
- * @param active Which document to highlight, or @c NULL.
+ * @param active @nullable Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be passed
  * the corresponding document pointer as @c user_data.
  * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.

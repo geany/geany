@@ -263,7 +263,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return The tag name (newly allocated) or @c NULL if no opening tag was found.
+ * @return @nullable The tag name (newly allocated) or @c NULL if no opening tag was found.
  */
 GEANY_API_SYMBOL
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
@@ -288,7 +288,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
+ * @return @nullable pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
  */
 GEANY_API_SYMBOL
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size)
@@ -490,8 +490,8 @@ static gchar *utf8_strdown(const gchar *str)
  *
  *  The input strings should be in UTF-8 or locale encoding.
  *
- *  @param s1 Pointer to first string or @c NULL.
- *  @param s2 Pointer to second string or @c NULL.
+ *  @param s1 @nullable Pointer to first string or @c NULL.
+ *  @param s2 @nullable Pointer to second string or @c NULL.
  *
  *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
  *          to be less than, to match, or to be greater than @a s2.
@@ -586,8 +586,8 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
  *  @c NULL-safe string comparison. Returns @c TRUE if both @a a and @a b are @c NULL
  *  or if @a a and @a b refer to valid strings which are equal.
  *
- *  @param a Pointer to first string or @c NULL.
- *  @param b Pointer to second string or @c NULL.
+ *  @param a @nullable Pointer to first string or @c NULL.
+ *  @param b @nullable Pointer to second string or @c NULL.
  *
  *  @return @c TRUE if @a a equals @a b, else @c FALSE.
  **/
@@ -722,7 +722,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
  *
  *  @param format The format string to pass to strftime(3). See the strftime(3)
  *                documentation for details, in UTF-8 encoding.
- *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
+ *  @param time_to_use @nullable The date/time to use, in time_t format or @c NULL to use the current time.
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
  *
@@ -1405,7 +1405,7 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  * @param sort Whether to sort alphabetically (UTF-8 safe).
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return @elementtype{filename} @transfer{full} A newly allocated list or @c NULL if
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL if
  * no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list().
  **/
@@ -1450,7 +1450,7 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
  *               unless @c NULL.
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return  @elementtype{filename} @transfer{full} A newly allocated list or @c NULL
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL
  * if no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list_full().
  **/
@@ -1647,9 +1647,9 @@ const gchar *utils_get_default_dir_utf8(void)
 /**
  *  Wraps @c spawn_sync(), which see.
  *
- *  @param dir The child's current working directory, or @c NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @c NULL to inherit parent's.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data @girskip Ignored.
@@ -1682,13 +1682,13 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 /**
  *  Wraps @c spawn_async(), which see.
  *
- *  @param dir The child's current working directory, or @c NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @c NULL to inherit parent's.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
- *  @param child_pid The return location for child process ID, or NULL.
+ *  @param child_pid @nullable The return location for child process ID, or @c NULL.
  *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.

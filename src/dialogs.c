@@ -1058,11 +1058,11 @@ static void on_dialog_input(const gchar *str, gpointer data)
 
 /** Asks the user for text input.
  * @param title Dialog title.
- * @param parent The currently focused window, usually @c geany->main_widgets->window.
+ * @param parent @nullable The currently focused window, usually @c geany->main_widgets->window.
  * 	@c NULL can be used but is discouraged due to window manager effects.
- * @param label_text Label text, or @c NULL.
- * @param default_text Text to display in the input field, or @c NULL.
- * @return New copy of user input or @c NULL if cancelled.
+ * @param label_text @nullable Label text, or @c NULL.
+ * @param default_text @nullable Text to display in the input field, or @c NULL.
+ * @return @nullable New copy of user input or @c NULL if cancelled.
  * @since 0.20. */
 GEANY_API_SYMBOL
 gchar *dialogs_show_input(const gchar *title, GtkWindow *parent, const gchar *label_text,

@@ -495,7 +495,7 @@ void stash_group_add_integer(StashGroup *group, gint *setting,
  * @param group .
  * @param setting Address of setting variable.
  * @param key_name Name for key in a @c GKeyFile.
- * @param default_value String to copy if the key doesn't exist when loading, or @c NULL. */
+ * @param default_value @nullable String to copy if the key doesn't exist when loading, or @c NULL. */
 GEANY_API_SYMBOL
 void stash_group_add_string(StashGroup *group, gchar **setting,
 		const gchar *key_name, const gchar *default_value)

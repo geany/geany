@@ -1198,7 +1198,7 @@ get_default_indent_prefs(void)
  * Prefs can be different according to project or document.
  * @warning Always get a fresh result instead of keeping a pointer to it if the editor/project
  * settings may have changed, or if this function has been called for a different editor.
- * @param editor The editor, or @c NULL to get the default indent prefs.
+ * @param editor @nullable The editor, or @c NULL to get the default indent prefs.
  * @return The indent prefs. */
 GEANY_API_SYMBOL
 const GeanyIndentPrefs *
@@ -1720,7 +1720,7 @@ void editor_find_current_word_sciwc(GeanyEditor *editor, gint pos, gchar *word, 
  *                   as part of a word. May be @c NULL to use the default wordchars,
  *                   see @ref GEANY_WORDCHARS.
  *
- *  @return A newly-allocated string containing the word at the given @a pos or @c NULL.
+ *  @return @nullable A newly-allocated string containing the word at the given @a pos or @c NULL.
  *          Should be freed when no longer needed.
  *
  *  @since 0.16
@@ -4191,7 +4191,7 @@ void editor_insert_color(GeanyEditor *editor, const gchar *colour)
  *  Retrieves the end of line characters mode (LF, CR/LF, CR) in the given editor.
  *  If @a editor is @c NULL, the default end of line characters are used.
  *
- *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @param editor @nullable The editor to operate on, or @c NULL to query the default value.
  *  @return The used end of line characters mode.
  *
  *  @since 0.20
@@ -4213,7 +4213,7 @@ gint editor_get_eol_char_mode(GeanyEditor *editor)
  *  (LF, CR/LF, CR) in the given editor.
  *  If @a editor is @c NULL, the default end of line characters are used.
  *
- *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @param editor @nullable The editor to operate on, or @c NULL to query the default value.
  *  @return The name of the end of line characters.
  *
  *  @since 0.19
@@ -4235,7 +4235,7 @@ const gchar *editor_get_eol_char_name(GeanyEditor *editor)
  *  If @a editor is @c NULL, the default end of line characters are used.
  *  The returned value is 1 for CR and LF and 2 for CR/LF.
  *
- *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @param editor @nullable The editor to operate on, or @c NULL to query the default value.
  *  @return The length of the end of line characters.
  *
  *  @since 0.19
@@ -4261,7 +4261,7 @@ gint editor_get_eol_char_len(GeanyEditor *editor)
  *  If @a editor is @c NULL, the default end of line characters are used.
  *  The returned value is either "\n", "\r\n" or "\r".
  *
- *  @param editor The editor to operate on, or @c NULL to query the default value.
+ *  @param editor @nullable The editor to operate on, or @c NULL to query the default value.
  *  @return The end of line characters.
  *
  *  @since 0.19
@@ -5202,9 +5202,9 @@ void editor_indent(GeanyEditor *editor, gboolean increase)
  * If @a editor is passed, returns a snippet specific to the document filetype.
  * If @a editor is @c NULL, returns a snippet from the default set.
  *
- * @param editor Editor or @c NULL.
+ * @param editor @nullable Editor or @c NULL.
  * @param snippet_name Snippet name.
- * @return snippet or @c NULL if it was not found. Must not be freed.
+ * @return @nullable snippet or @c NULL if it was not found. Must not be freed.
  */
 GEANY_API_SYMBOL
 const gchar *editor_find_snippet(GeanyEditor *editor, const gchar *snippet_name)

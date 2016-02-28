@@ -260,7 +260,7 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
  *  @param idx @ref GeanyEncodingIndex to retrieve the corresponding character set.
  *
  *
- *  @return The charset according to idx, or @c NULL if the index is invalid.
+ *  @return @nullable The charset according to idx, or @c NULL if the index is invalid.
  *
  *  @since 0.13
  **/
@@ -777,7 +777,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
  *  @param size the length of the string, or -1 if the string is nul-terminated.
  *  @param used_encoding @out @optional return location of the detected encoding of the input string, or @c NULL.
  *
- *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *  @return @nullable If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
 GEANY_API_SYMBOL

@@ -105,7 +105,7 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 /** @girskip
  * Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
  * @param plugin Must be @ref geany_plugin.
- * @param object Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
+ * @param object @nullable Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
  * @param signal_name The name of the signal. For a list of available
  * signals, please see the @link pluginsignals.c Signal documentation @endlink.
  * @param after Set to @c TRUE to call your handler after the main signal handlers have been called
@@ -300,7 +300,7 @@ guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
  * @param plugin Must be @ref geany_plugin.
  * @param section_name Name used in the configuration file, such as @c "html_chars".
  * @param count Number of keybindings for the group.
- * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
+ * @param callback @nullable Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
  * @since 0.19.
  **/
