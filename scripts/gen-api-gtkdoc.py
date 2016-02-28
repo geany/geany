@@ -59,6 +59,8 @@ class AtDoc(object):
         elif (type == "since"):
             self.since = str.rstrip()
         elif type in ("geany:nullable",
+                      "geany:optional",
+                      "geany:out",
                       "geany:skip",
                       "geany:closure",
                       "geany:destroy"):

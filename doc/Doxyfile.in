@@ -257,6 +257,8 @@ ALIASES               += "elementtype{1}=\noop \xmlonly <simplesect kind=\"geany
 ALIASES               += "scope{1}=\noop \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly <em>(scope: \1)</em> \endhtmlonly"
 ALIASES               += "girskip=\noop \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
 ALIASES               += "nullable=\noop \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
+ALIASES               += "out=\noop \xmlonly <simplesect kind=\"geany:out\"></simplesect>\endxmlonly \htmlonly <em>(output parameter)</em> \endhtmlonly"
+ALIASES               += "optional=\noop \xmlonly <simplesect kind=\"geany:optional\"></simplesect>\endxmlonly"
 ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
 ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
 ALIASES               += "cbfree=\noop \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
