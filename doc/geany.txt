@@ -1425,6 +1425,13 @@ corresponding line number. The current word is either the word
 nearest the edit cursor, or the word underneath the popup menu click
 position when the popup menu is used.
 
+If there are more symbols with the same name to which the goto can be performed,
+a pop up is shown with a list of all the occurrences. After selecting a symbol
+from the list Geany jumps to the corresponding symbol location. Geany tries to
+suggest the nearest symbol (symbol from the current file, other open documents
+or current directory) as the best candidate for the goto and places this symbol
+at the beginning of the list typed in boldface.
+
 .. note::
     If the corresponding symbol is on the current line, Geany will first
     look for a symbol declaration instead, as this is more useful.
