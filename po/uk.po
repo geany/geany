@@ -4,9 +4,9 @@
 # Boris Dibrov <dibrov.bor@gmail.com>, 2007, 2008
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
+"POT-Creation-Date: 2016-02-28 14:14+0100\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Poedit-Country: UKRAINE\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
 msgstr "Geany"
 
@@ -99,7 +99,7 @@ msgstr "невидимий"
 msgid "_Insert \"include <...>\""
 msgstr "Д_одати \"include <...>\""
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:492
+#: ../data/geany.glade.h:16 ../src/keybindings.c:506
 #, fuzzy
 msgid "Insert Alternative _White Space"
 msgstr "Вставити альтернативний пробіл"
@@ -112,19 +112,19 @@ msgstr "_Пошук"
 msgid "Open Selected F_ile"
 msgstr "Відкрити _обраний файл"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2368
+#: ../data/geany.glade.h:19 ../src/symbols.c:2557
 #, fuzzy
 msgid "Find _Usage"
 msgstr "Користування пошуком"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2373
+#: ../data/geany.glade.h:20 ../src/symbols.c:2562
 #, fuzzy
 msgid "Find _Document Usage"
 msgstr "Користування пошуком"
 
 #: ../data/geany.glade.h:21
 #, fuzzy
-msgid "Go to _Tag Definition"
+msgid "Go to Symbol Defini_tion"
 msgstr "Перейти до визначення ярлика"
 
 #: ../data/geany.glade.h:22
@@ -173,7 +173,7 @@ msgstr "Вершина"
 msgid "Bottom"
 msgstr "Низовина"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:502
+#: ../data/geany.glade.h:31 ../src/keybindings.c:516
 msgid "Preferences"
 msgstr "Налаштування"
 
@@ -407,7 +407,7 @@ msgstr ""
 msgid "<b>Projects</b>"
 msgstr "<b>Проекти</b>"
 
-#: ../data/geany.glade.h:75 ../src/dialogs.c:231
+#: ../data/geany.glade.h:75 ../src/dialogs.c:232
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Інше</b>"
@@ -416,7 +416,7 @@ msgstr "<b>Інше</b>"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1599
+#: ../data/geany.glade.h:76 ../src/prefs.c:1598
 msgid "General"
 msgstr "Загальне"
 
@@ -429,82 +429,101 @@ msgid "Toggle the symbol list on and off"
 msgstr "Активізація або відключення списку символів"
 
 #: ../data/geany.glade.h:79
+msgid "Default symbol sorting mode"
+msgstr ""
+
+#: ../data/geany.glade.h:80
+#, fuzzy
+msgid "Default sorting mode:"
+msgstr "Кодування за замовчанням (для нових файлів):"
+
+#: ../data/geany.glade.h:81 ../src/stash.c:1170
+#, fuzzy
+msgid "Name"
+msgstr "Назва:"
+
+#: ../data/geany.glade.h:82
+#, fuzzy
+msgid "Appearance"
+msgstr "<b>Вигляд</b>"
+
+#: ../data/geany.glade.h:83
 msgid "Show documents list"
 msgstr "Показати список документів"
 
-#: ../data/geany.glade.h:80
+#: ../data/geany.glade.h:84
 msgid "Toggle the documents list on and off"
 msgstr "Активізація або відключення списку документів"
 
-#: ../data/geany.glade.h:81
+#: ../data/geany.glade.h:85
 #, fuzzy
 msgid "Show sidebar"
 msgstr "Показати _бічну панель"
 
-#: ../data/geany.glade.h:82
+#: ../data/geany.glade.h:86
 #, fuzzy
 msgid "Position:"
 msgstr "Опис:"
 
-#: ../data/geany.glade.h:83
+#: ../data/geany.glade.h:87
 msgid "<b>Sidebar</b>"
 msgstr "<b>Бічна панель</b>"
 
-#: ../data/geany.glade.h:84
+#: ../data/geany.glade.h:88
 #, fuzzy
 msgid "<b>Message window</b>"
 msgstr "Вікно повідомлень:"
 
-#: ../data/geany.glade.h:85
+#: ../data/geany.glade.h:89
 msgid "Symbol list:"
 msgstr "Список символів:"
 
-#: ../data/geany.glade.h:86
+#: ../data/geany.glade.h:90
 msgid "Message window:"
 msgstr "Вікно повідомлень:"
 
-#: ../data/geany.glade.h:87
+#: ../data/geany.glade.h:91
 msgid "Editor:"
 msgstr "Редактор:"
 
-#: ../data/geany.glade.h:88
+#: ../data/geany.glade.h:92
 msgid "Sets the font for the message window"
 msgstr "Встановити шрифт для вікна повідомлень"
 
-#: ../data/geany.glade.h:89
+#: ../data/geany.glade.h:93
 msgid "Sets the font for the symbol list"
 msgstr "Встановити шрифт для списку символів"
 
-#: ../data/geany.glade.h:90
+#: ../data/geany.glade.h:94
 msgid "Sets the editor font"
 msgstr "Встановити шрифт для редактора"
 
-#: ../data/geany.glade.h:91
+#: ../data/geany.glade.h:95
 msgid "<b>Fonts</b>"
 msgstr "<b>Шрифти</b>"
 
-#: ../data/geany.glade.h:92
+#: ../data/geany.glade.h:96
 msgid "Show status bar"
 msgstr "Показати панель статусу"
 
-#: ../data/geany.glade.h:93
+#: ../data/geany.glade.h:97
 #, fuzzy
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Показувати панель статусу у низовині головного вікна."
 
-#: ../data/geany.glade.h:94 ../src/prefs.c:1601
+#: ../data/geany.glade.h:98 ../src/prefs.c:1600
 msgid "Interface"
 msgstr "Інтерфейс"
 
-#: ../data/geany.glade.h:95
+#: ../data/geany.glade.h:99
 msgid "Show editor tabs"
 msgstr "Показати вкладки редактору"
 
-#: ../data/geany.glade.h:96
+#: ../data/geany.glade.h:100
 msgid "Show close buttons"
 msgstr "Показати кнопки зачинення"
 
-#: ../data/geany.glade.h:97
+#: ../data/geany.glade.h:101
 #, fuzzy
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
@@ -513,140 +532,140 @@ msgstr ""
 "Показувати маленьку кнопку-хрестик у вкладках файлів для полегшеного "
 "закриття файлу при натисканні на нього (потребує перезапуску Geany)."
 
-#: ../data/geany.glade.h:98
+#: ../data/geany.glade.h:102
 msgid "Placement of new file tabs:"
 msgstr "Розташування нових вкладок з файлами:"
 
-#: ../data/geany.glade.h:99
+#: ../data/geany.glade.h:103
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Вкладки з файлами будуть розташовані зліва від блокноту"
 
-#: ../data/geany.glade.h:100
+#: ../data/geany.glade.h:104
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Вкладки з файлами будуть розташовані зправа від блокноту"
 
-#: ../data/geany.glade.h:101
+#: ../data/geany.glade.h:105
 #, fuzzy
 msgid "Next to current"
 msgstr "Зберегти поточний файл"
 
-#: ../data/geany.glade.h:102
+#: ../data/geany.glade.h:106
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
 
-#: ../data/geany.glade.h:103
+#: ../data/geany.glade.h:107
 #, fuzzy
 msgid "Double-clicking hides all additional widgets"
 msgstr "Перемикач усіх додаткових віджетів"
 
-#: ../data/geany.glade.h:104
+#: ../data/geany.glade.h:108
 #, fuzzy
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr "Перемикач усіх додаткових віджетів"
 
-#: ../data/geany.glade.h:105
+#: ../data/geany.glade.h:109
 #, fuzzy
 msgid "Switch to last used document after closing a tab"
 msgstr "Перемкнутися до останнього використаного документу"
 
-#: ../data/geany.glade.h:106
+#: ../data/geany.glade.h:110
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Вкладки редактору</b>"
 
-#: ../data/geany.glade.h:107
+#: ../data/geany.glade.h:111
 msgid "Sidebar:"
 msgstr "Бічна панель:"
 
-#: ../data/geany.glade.h:108
+#: ../data/geany.glade.h:112
 msgid "<b>Tab positions</b>"
 msgstr "<b>Розташування вкладки</b>"
 
-#: ../data/geany.glade.h:109
+#: ../data/geany.glade.h:113
 #, fuzzy
 msgid "Notebook tabs"
 msgstr "Команди вкладки блокноту"
 
-#: ../data/geany.glade.h:110
+#: ../data/geany.glade.h:114
 #, fuzzy
 msgid "Show t_oolbar"
 msgstr "Показати панель інструментів"
 
-#: ../data/geany.glade.h:111
+#: ../data/geany.glade.h:115
 msgid "_Append toolbar to the menu"
 msgstr ""
 
-#: ../data/geany.glade.h:112
+#: ../data/geany.glade.h:116
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../data/geany.glade.h:113 ../src/toolbar.c:943
+#: ../data/geany.glade.h:117 ../src/toolbar.c:943
 #, fuzzy
 msgid "Customize Toolbar"
 msgstr "Показувати панель _інструментів"
 
-#: ../data/geany.glade.h:114
+#: ../data/geany.glade.h:118
 msgid "System _default"
 msgstr ""
 
-#: ../data/geany.glade.h:115
+#: ../data/geany.glade.h:119
 #, fuzzy
 msgid "Images _and text"
 msgstr "Текст та зображення"
 
-#: ../data/geany.glade.h:116
+#: ../data/geany.glade.h:120
 #, fuzzy
 msgid "_Images only"
 msgstr "Тільки зображення"
 
-#: ../data/geany.glade.h:117
+#: ../data/geany.glade.h:121
 #, fuzzy
 msgid "_Text only"
 msgstr "Тільки текст"
 
-#: ../data/geany.glade.h:118
+#: ../data/geany.glade.h:122
 #, fuzzy
 msgid "<b>Icon style</b>"
 msgstr "<b>Шрифти</b>"
 
-#: ../data/geany.glade.h:119
+#: ../data/geany.glade.h:123
 msgid "S_ystem default"
 msgstr ""
 
-#: ../data/geany.glade.h:120
+#: ../data/geany.glade.h:124
 #, fuzzy
 msgid "_Small icons"
 msgstr "Маленькі кнопки"
 
-#: ../data/geany.glade.h:121
+#: ../data/geany.glade.h:125
 #, fuzzy
 msgid "_Very small icons"
 msgstr "Маленькі кнопки"
 
-#: ../data/geany.glade.h:122
+#: ../data/geany.glade.h:126
 #, fuzzy
 msgid "_Large icons"
 msgstr "Великі кнопки"
 
-#: ../data/geany.glade.h:123
+#: ../data/geany.glade.h:127
 #, fuzzy
 msgid "<b>Icon size</b>"
 msgstr "<b>Розмір:</b>"
 
-#: ../data/geany.glade.h:124
+#: ../data/geany.glade.h:128
 msgid "<b>Toolbar</b>"
 msgstr "<b>Панель інструментів</b>"
 
-#: ../data/geany.glade.h:125 ../src/prefs.c:1603
+#: ../data/geany.glade.h:129 ../src/prefs.c:1602
 msgid "Toolbar"
 msgstr "Панель інструментів"
 
-#: ../data/geany.glade.h:126
+#: ../data/geany.glade.h:130
 msgid "Line wrapping"
 msgstr "Переніс рядку"
 
-#: ../data/geany.glade.h:127
+#: ../data/geany.glade.h:131
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
@@ -656,11 +675,11 @@ msgstr ""
 "перенесення рядків потребує великої продуктивності для великих документів, "
 "тому на повільних комп'ютерах варто не вмикати."
 
-#: ../data/geany.glade.h:128
+#: ../data/geany.glade.h:132
 msgid "\"Smart\" home key"
 msgstr ""
 
-#: ../data/geany.glade.h:129
+#: ../data/geany.glade.h:133
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -669,11 +688,11 @@ msgid ""
 "its current position."
 msgstr ""
 
-#: ../data/geany.glade.h:130
+#: ../data/geany.glade.h:134
 msgid "Disable Drag and Drop"
 msgstr "Заборонити перетягування"
 
-#: ../data/geany.glade.h:131
+#: ../data/geany.glade.h:135
 #, fuzzy
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
@@ -682,17 +701,17 @@ msgstr ""
 "Повністю заборонити перетягування у вікні редактору щоб унеможливити "
 "переміщення мишею будь якого виділення назовні або до вікна редактору."
 
-#: ../data/geany.glade.h:132
+#: ../data/geany.glade.h:136
 #, fuzzy
 msgid "Code folding"
 msgstr "Дозволити згортку"
 
-#: ../data/geany.glade.h:133
+#: ../data/geany.glade.h:137
 #, fuzzy
 msgid "Fold/unfold all children of a fold point"
 msgstr "Згорнути/розгорнути усі вкладені згортки у місці згортання"
 
-#: ../data/geany.glade.h:134
+#: ../data/geany.glade.h:138
 #, fuzzy
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
@@ -701,11 +720,11 @@ msgstr ""
 "Згорнути або розгорнути усі внутрішні згортання у позиції. При натисненні "
 "Shift і кліку по символу згортки відбувається зміна його стану."
 
-#: ../data/geany.glade.h:135
+#: ../data/geany.glade.h:139
 msgid "Use indicators to show compile errors"
 msgstr "Виділяти рядки, на котрих були помилки компіляції"
 
-#: ../data/geany.glade.h:136
+#: ../data/geany.glade.h:140
 #, fuzzy
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
@@ -714,170 +733,170 @@ msgstr ""
 "Використовувати індикатори (хвилясті стрічки під текстом) для виділення "
 "рядків на котрих були попередження або помилки компіляції."
 
-#: ../data/geany.glade.h:137
+#: ../data/geany.glade.h:141
 msgid "Newline strips trailing spaces"
 msgstr "Новий рядок видаляє пробіли у кінці попереднього"
 
-#: ../data/geany.glade.h:138
+#: ../data/geany.glade.h:142
 #, fuzzy
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
 "Дозволити при початку нового рядку видаляти пробіли після тексту "
 "попереднього рядку"
 
-#: ../data/geany.glade.h:139
+#: ../data/geany.glade.h:143
 msgid "Line breaking column:"
 msgstr ""
 
-#: ../data/geany.glade.h:140
+#: ../data/geany.glade.h:144
 #, fuzzy
 msgid "Comment toggle marker:"
 msgstr "Межа довгого рядку:"
 
-#: ../data/geany.glade.h:141
+#: ../data/geany.glade.h:145
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
 msgstr ""
 
-#: ../data/geany.glade.h:142
+#: ../data/geany.glade.h:146
 msgid "<b>Features</b>"
 msgstr "<b>Додаткові можливості</b>"
 
-#: ../data/geany.glade.h:143
+#: ../data/geany.glade.h:147
 #, fuzzy
 msgid "Features"
 msgstr "<b>Додаткові можливості</b>"
 
-#: ../data/geany.glade.h:144
+#: ../data/geany.glade.h:148
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 
-#: ../data/geany.glade.h:145
+#: ../data/geany.glade.h:149
 #, fuzzy
 msgid "Width:"
 msgstr "Пише:"
 
-#: ../data/geany.glade.h:146
+#: ../data/geany.glade.h:150
 #, fuzzy
 msgid "The width in chars of a single indent"
 msgstr "Ширина абзацу у кількості звичайних символів"
 
-#: ../data/geany.glade.h:147
+#: ../data/geany.glade.h:151
 msgid "Auto-indent mode:"
 msgstr "Режим авто-абзацу:"
 
-#: ../data/geany.glade.h:148
+#: ../data/geany.glade.h:152
 #, fuzzy
 msgid "Detect type from file"
 msgstr "Визначити з файлу"
 
-#: ../data/geany.glade.h:149
+#: ../data/geany.glade.h:153
 #, fuzzy
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr "Визначати тип абзацу з вмісту файлу під час відкриття."
 
-#: ../data/geany.glade.h:150
+#: ../data/geany.glade.h:154
 #, fuzzy
 msgid "T_abs and spaces"
 msgstr "_Заміняти відступи пробілами"
 
-#: ../data/geany.glade.h:151
+#: ../data/geany.glade.h:155
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 
-#: ../data/geany.glade.h:152
+#: ../data/geany.glade.h:156
 #, fuzzy
 msgid "_Spaces"
 msgstr "Пробіли"
 
-#: ../data/geany.glade.h:153
+#: ../data/geany.glade.h:157
 msgid "Use spaces when inserting indentation"
 msgstr ""
 
-#: ../data/geany.glade.h:154
+#: ../data/geany.glade.h:158
 #, fuzzy
 msgid "_Tabs"
 msgstr "відступи"
 
-#: ../data/geany.glade.h:155
+#: ../data/geany.glade.h:159
 msgid "Use one tab per indent"
 msgstr ""
 
-#: ../data/geany.glade.h:156
+#: ../data/geany.glade.h:160
 #, fuzzy
 msgid "Detect width from file"
 msgstr "Визначити з файлу"
 
-#: ../data/geany.glade.h:157
+#: ../data/geany.glade.h:161
 #, fuzzy
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr "Визначати тип абзацу з вмісту файлу під час відкриття."
 
-#: ../data/geany.glade.h:158
+#: ../data/geany.glade.h:162
 msgid "Type:"
 msgstr "Тип:"
 
-#: ../data/geany.glade.h:159
+#: ../data/geany.glade.h:163
 #, fuzzy
 msgid "Tab key indents"
 msgstr "Збільшити відступ"
 
-#: ../data/geany.glade.h:160
+#: ../data/geany.glade.h:164
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 
-#: ../data/geany.glade.h:161
+#: ../data/geany.glade.h:165
 msgid "<b>Indentation</b>"
 msgstr "<b>Абзац</b>"
 
-#: ../data/geany.glade.h:162
+#: ../data/geany.glade.h:166
 #, fuzzy
 msgid "Indentation"
 msgstr "<b>Абзац</b>"
 
-#: ../data/geany.glade.h:163
+#: ../data/geany.glade.h:167
 msgid "Snippet completion"
 msgstr ""
 
-#: ../data/geany.glade.h:164
+#: ../data/geany.glade.h:168
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
 
-#: ../data/geany.glade.h:165
+#: ../data/geany.glade.h:169
 #, fuzzy
 msgid "XML/HTML tag auto-closing"
 msgstr "Авто-завершення теґів XML"
 
-#: ../data/geany.glade.h:166
+#: ../data/geany.glade.h:170
 msgid "Insert matching closing tag for XML/HTML"
 msgstr ""
 
-#: ../data/geany.glade.h:167
+#: ../data/geany.glade.h:171
 msgid "Automatic continuation of multi-line comments"
 msgstr ""
 
-#: ../data/geany.glade.h:168
+#: ../data/geany.glade.h:172
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
 
-#: ../data/geany.glade.h:169
+#: ../data/geany.glade.h:173
 msgid "Autocomplete symbols"
 msgstr ""
 
-#: ../data/geany.glade.h:170
+#: ../data/geany.glade.h:174
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
@@ -885,162 +904,162 @@ msgstr ""
 "Автоматичне завершення знайомих слів у відкритому файлі (назви функцій, "
 "глобальні змінні, ...)"
 
-#: ../data/geany.glade.h:171
+#: ../data/geany.glade.h:175
 msgid "Autocomplete all words in document"
 msgstr ""
 
-#: ../data/geany.glade.h:172
+#: ../data/geany.glade.h:176
 msgid "Drop rest of word on completion"
 msgstr ""
 
-#: ../data/geany.glade.h:173
+#: ../data/geany.glade.h:177
 msgid "Max. symbol name suggestions:"
 msgstr ""
 
-#: ../data/geany.glade.h:174
+#: ../data/geany.glade.h:178
 msgid "Completion list height:"
 msgstr ""
 
-#: ../data/geany.glade.h:175
+#: ../data/geany.glade.h:179
 #, fuzzy
 msgid "Characters to type for autocompletion:"
 msgstr "Символи до друку для завершення:"
 
-#: ../data/geany.glade.h:176
+#: ../data/geany.glade.h:180
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
 
-#: ../data/geany.glade.h:177
+#: ../data/geany.glade.h:181
 #, fuzzy
 msgid "Display height in rows for the autocompletion list"
 msgstr "Номери рядків для показу у списку авто-доповнення"
 
-#: ../data/geany.glade.h:178
+#: ../data/geany.glade.h:182
 #, fuzzy
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr "Номери рядків для показу у списку авто-доповнення"
 
-#: ../data/geany.glade.h:179
+#: ../data/geany.glade.h:183
 msgid "Symbol list update frequency:"
 msgstr ""
 
-#: ../data/geany.glade.h:180
+#: ../data/geany.glade.h:184
 msgid ""
 "Minimal delay (in milliseconds) between two automatic updates of the symbol "
 "list. Note that a too short delay may have performance impact, especially "
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
 
-#: ../data/geany.glade.h:181
+#: ../data/geany.glade.h:185
 msgid "<b>Completions</b>"
 msgstr "<b>Завершення</b>"
 
-#: ../data/geany.glade.h:182
+#: ../data/geany.glade.h:186
 msgid "Parenthesis ( )"
 msgstr ""
 
-#: ../data/geany.glade.h:183
+#: ../data/geany.glade.h:187
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:184
+#: ../data/geany.glade.h:188
 msgid "Curly brackets { }"
 msgstr ""
 
-#: ../data/geany.glade.h:185
+#: ../data/geany.glade.h:189
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:186
+#: ../data/geany.glade.h:190
 msgid "Square brackets [ ]"
 msgstr ""
 
-#: ../data/geany.glade.h:187
+#: ../data/geany.glade.h:191
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:188
+#: ../data/geany.glade.h:192
 msgid "Single quotes ' '"
 msgstr ""
 
-#: ../data/geany.glade.h:189
+#: ../data/geany.glade.h:193
 msgid "Auto-close single quote when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:190
+#: ../data/geany.glade.h:194
 msgid "Double quotes \" \""
 msgstr ""
 
-#: ../data/geany.glade.h:191
+#: ../data/geany.glade.h:195
 msgid "Auto-close double quote when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:192
+#: ../data/geany.glade.h:196
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:193
+#: ../data/geany.glade.h:197
 #, fuzzy
 msgid "Completions"
 msgstr "<b>Завершення</b>"
 
-#: ../data/geany.glade.h:194
+#: ../data/geany.glade.h:198
 msgid "Invert syntax highlighting colors"
 msgstr "Інвертувати кольори підсвічення синтаксису"
 
-#: ../data/geany.glade.h:195
+#: ../data/geany.glade.h:199
 #, fuzzy
 msgid "Invert all colors, by default using white text on a black background"
 msgstr "Встановити білий колір для тексту і чорний для фону."
 
-#: ../data/geany.glade.h:196
+#: ../data/geany.glade.h:200
 #, fuzzy
 msgid "Show indentation guides"
 msgstr "Показати керівників розподілення"
 
-#: ../data/geany.glade.h:197
+#: ../data/geany.glade.h:201
 #, fuzzy
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Показувати невеличку стрічку з точок для допомоги у використанні правого "
 "абзацу."
 
-#: ../data/geany.glade.h:198
+#: ../data/geany.glade.h:202
 msgid "Show white space"
 msgstr "Показувати пробіли"
 
-#: ../data/geany.glade.h:199
+#: ../data/geany.glade.h:203
 #, fuzzy
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Виділити пробіли крапками а відступи стрілками."
 
-#: ../data/geany.glade.h:200
+#: ../data/geany.glade.h:204
 msgid "Show line endings"
 msgstr "Виділяти кінці рядків"
 
-#: ../data/geany.glade.h:201
+#: ../data/geany.glade.h:205
 #, fuzzy
 msgid "Shows the line ending character"
 msgstr "Виділити символи кінця рядку"
 
-#: ../data/geany.glade.h:202
+#: ../data/geany.glade.h:206
 #, fuzzy
 msgid "Show line numbers"
 msgstr "Показувати _номери рядків"
 
-#: ../data/geany.glade.h:203
+#: ../data/geany.glade.h:207
 #, fuzzy
 msgid "Shows or hides the Line Number margin"
 msgstr "Показати чи приховати границю номерів рядків"
 
-#: ../data/geany.glade.h:204
+#: ../data/geany.glade.h:208
 #, fuzzy
 msgid "Show markers margin"
 msgstr "Показати _межу виділення"
 
-#: ../data/geany.glade.h:205
+#: ../data/geany.glade.h:209
 #, fuzzy
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
@@ -1049,38 +1068,38 @@ msgstr ""
 "Показувати або приховувати невелику межу на номерах рядків котра "
 "використовується для виділення рядків."
 
-#: ../data/geany.glade.h:206
+#: ../data/geany.glade.h:210
 #, fuzzy
 msgid "Stop scrolling at last line"
 msgstr "Переміститись до поточного рядку"
 
-#: ../data/geany.glade.h:207
+#: ../data/geany.glade.h:211
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 
-#: ../data/geany.glade.h:208
+#: ../data/geany.glade.h:212
 msgid "<b>Display</b>"
 msgstr "<b>Показати</b>"
 
-#: ../data/geany.glade.h:209
+#: ../data/geany.glade.h:213
 #, fuzzy
 msgid "Column:"
 msgstr "Компанія:"
 
-#: ../data/geany.glade.h:210
+#: ../data/geany.glade.h:214
 #, fuzzy
 msgid "Color:"
 msgstr "Колір"
 
-#: ../data/geany.glade.h:211
+#: ../data/geany.glade.h:215
 msgid "Sets the color of the long line marker"
 msgstr "Оберіть колір межі довгого рядку"
 
-#: ../data/geany.glade.h:212 ../src/toolbar.c:74 ../src/tools.c:825
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
 msgid "Color Chooser"
 msgstr "Палітра кольорів"
 
-#: ../data/geany.glade.h:213
+#: ../data/geany.glade.h:217
 #, fuzzy
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
@@ -1091,11 +1110,11 @@ msgstr ""
 "виявити довгі рядки або нагадує почати з нового рядку. Встановлення сюди "
 "додатної величини створить цю межу на заданому стовпчику."
 
-#: ../data/geany.glade.h:214
+#: ../data/geany.glade.h:218
 msgid "Line"
 msgstr "Рядок"
 
-#: ../data/geany.glade.h:215
+#: ../data/geany.glade.h:219
 #, fuzzy
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
@@ -1104,11 +1123,11 @@ msgstr ""
 "Малювати вертикальну лінію у вікні редактору у позиції вказаній курсором "
 "(дивіться далі)."
 
-#: ../data/geany.glade.h:216
+#: ../data/geany.glade.h:220
 msgid "Background"
 msgstr "Фон"
 
-#: ../data/geany.glade.h:217
+#: ../data/geany.glade.h:221
 #, fuzzy
 msgid ""
 "The background color of characters after the given cursor position (see "
@@ -1119,87 +1138,87 @@ msgstr ""
 "вказаного нижче кольору. (Радимо у випадку, якщо ви користуєтесь "
 "пропорціональними шрифтами)"
 
-#: ../data/geany.glade.h:218
+#: ../data/geany.glade.h:222
 #, fuzzy
 msgid "Enabled"
 msgstr "Дозволити згортку"
 
-#: ../data/geany.glade.h:219
+#: ../data/geany.glade.h:223
 msgid "<b>Long line marker</b>"
 msgstr "<b>Межа довгого рядку</b>"
 
-#: ../data/geany.glade.h:220
+#: ../data/geany.glade.h:224
 msgid "Disabled"
 msgstr "Деактивовано"
 
-#: ../data/geany.glade.h:221
+#: ../data/geany.glade.h:225
 msgid "Do not show virtual spaces"
 msgstr ""
 
-#: ../data/geany.glade.h:222
+#: ../data/geany.glade.h:226
 msgid "Only for rectangular selections"
 msgstr ""
 
-#: ../data/geany.glade.h:223
+#: ../data/geany.glade.h:227
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
 
-#: ../data/geany.glade.h:224
+#: ../data/geany.glade.h:228
 msgid "Always"
 msgstr ""
 
-#: ../data/geany.glade.h:225
+#: ../data/geany.glade.h:229
 #, fuzzy
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr "Прибрати пробіли та відступи після тексту на кожному рядку"
 
-#: ../data/geany.glade.h:226
+#: ../data/geany.glade.h:230
 #, fuzzy
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Теки інструментів</b>"
 
-#: ../data/geany.glade.h:227
+#: ../data/geany.glade.h:231
 msgid "Display"
 msgstr "Показати"
 
-#: ../data/geany.glade.h:228 ../src/keybindings.c:307 ../src/prefs.c:1605
+#: ../data/geany.glade.h:232 ../src/keybindings.c:307 ../src/prefs.c:1604
 msgid "Editor"
 msgstr "Редактор"
 
-#: ../data/geany.glade.h:229
+#: ../data/geany.glade.h:233
 msgid "Open new documents from the command-line"
 msgstr ""
 
-#: ../data/geany.glade.h:230
+#: ../data/geany.glade.h:234
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 
-#: ../data/geany.glade.h:231
+#: ../data/geany.glade.h:235
 #, fuzzy
 msgid "Default end of line characters:"
 msgstr "Кодування за замовчанням (для нових файлів):"
 
-#: ../data/geany.glade.h:232
+#: ../data/geany.glade.h:236
 msgid "<b>New files</b>"
 msgstr "<b>Нові файли</b>"
 
-#: ../data/geany.glade.h:233
+#: ../data/geany.glade.h:237
 msgid "Default encoding (new files):"
 msgstr "Кодування за замовчанням (для нових файлів):"
 
-#: ../data/geany.glade.h:234
+#: ../data/geany.glade.h:238
 #, fuzzy
 msgid "Sets the default encoding for newly created files"
 msgstr "Встановити типове кодування для нових файлів."
 
-#: ../data/geany.glade.h:235
+#: ../data/geany.glade.h:239
 #, fuzzy
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Використовувати заздалегідь обране кодування для відкриття файлів"
 
-#: ../data/geany.glade.h:236
+#: ../data/geany.glade.h:240
 #, fuzzy
 msgid ""
 "This option disables the automatic detection of the file encoding when "
@@ -1210,120 +1229,120 @@ msgstr ""
 "відкриття а відкриває його за заздалегідь визначеним кодуванням (зазвичай не "
 "потрібно)."
 
-#: ../data/geany.glade.h:237
+#: ../data/geany.glade.h:241
 #, fuzzy
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Кодування за замовчанням (для існуючих файлів):"
 
-#: ../data/geany.glade.h:238
+#: ../data/geany.glade.h:242
 #, fuzzy
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr "Оберіть кодування для відкриття існуючих файлів."
 
-#: ../data/geany.glade.h:239
+#: ../data/geany.glade.h:243
 #, fuzzy
 msgid "<b>Encodings</b>"
 msgstr "<b>Кодування:</b>"
 
-#: ../data/geany.glade.h:240
+#: ../data/geany.glade.h:244
 msgid "Ensure new line at file end"
 msgstr "Гарантувати чисту лінію у кінці файлу"
 
-#: ../data/geany.glade.h:241
+#: ../data/geany.glade.h:245
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Гарантувати що у кінці файлу буде чиста лінія"
 
-#: ../data/geany.glade.h:242
+#: ../data/geany.glade.h:246
 #, fuzzy
 msgid "Ensure consistent line endings"
 msgstr "Гарантувати чисту лінію у кінці файлу"
 
-#: ../data/geany.glade.h:243
+#: ../data/geany.glade.h:247
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
 
-#: ../data/geany.glade.h:244
+#: ../data/geany.glade.h:248
 #, fuzzy
 msgid "Strip trailing spaces and tabs"
 msgstr "Видалити пробіли після тексту"
 
-#: ../data/geany.glade.h:245
+#: ../data/geany.glade.h:249
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "Прибрати пробіли та відступи після тексту на кожному рядку"
 
-#: ../data/geany.glade.h:246 ../src/keybindings.c:647
+#: ../data/geany.glade.h:250 ../src/keybindings.c:661
 msgid "Replace tabs with space"
 msgstr "Замінити відступи пробілами"
 
-#: ../data/geany.glade.h:247
+#: ../data/geany.glade.h:251
 #, fuzzy
 msgid "Replaces all tabs in document with spaces"
 msgstr "Замінити усі відступи у документі пробілами."
 
-#: ../data/geany.glade.h:248
+#: ../data/geany.glade.h:252
 msgid "<b>Saving files</b>"
 msgstr "<b>Зберігання файлів</b>"
 
-#: ../data/geany.glade.h:249
+#: ../data/geany.glade.h:253
 msgid "Recent files list length:"
 msgstr "Довжина списку останніх файлів:"
 
-#: ../data/geany.glade.h:250
+#: ../data/geany.glade.h:254
 #, fuzzy
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "Задати кількість збережених посилань у списку останніх файлів."
 
-#: ../data/geany.glade.h:251
+#: ../data/geany.glade.h:255
 msgid "Disk check timeout:"
 msgstr ""
 
-#: ../data/geany.glade.h:252
+#: ../data/geany.glade.h:256
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
 
-#: ../data/geany.glade.h:253 ../src/prefs.c:1607 ../src/symbols.c:628
+#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:542
 #: ../plugins/filebrowser.c:1160
 msgid "Files"
 msgstr "Файли"
 
-#: ../data/geany.glade.h:254
+#: ../data/geany.glade.h:258
 msgid "Terminal:"
 msgstr "Термінал:"
 
-#: ../data/geany.glade.h:255
+#: ../data/geany.glade.h:259
 msgid "Browser:"
 msgstr "Браузер:"
 
-#: ../data/geany.glade.h:257
+#: ../data/geany.glade.h:261
 #, no-c-format
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
 
-#: ../data/geany.glade.h:258
+#: ../data/geany.glade.h:262
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr ""
 "Шлях (а також, по можливості, додаткові аргументи) до вашого улюбленого "
 "браузеру"
 
-#: ../data/geany.glade.h:259
+#: ../data/geany.glade.h:263
 msgid "Grep:"
 msgstr "Виділення:"
 
-#: ../data/geany.glade.h:260
+#: ../data/geany.glade.h:264
 msgid "<b>Tool paths</b>"
 msgstr "<b>Теки інструментів</b>"
 
-#: ../data/geany.glade.h:261
+#: ../data/geany.glade.h:265
 msgid "Context action:"
 msgstr ""
 
-#: ../data/geany.glade.h:263
+#: ../data/geany.glade.h:267
 #, no-c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -1331,69 +1350,69 @@ msgid ""
 "execution."
 msgstr ""
 
-#: ../data/geany.glade.h:264
+#: ../data/geany.glade.h:268
 msgid "<b>Commands</b>"
 msgstr "<b>Команди</b>"
 
-#: ../data/geany.glade.h:265 ../src/keybindings.c:319 ../src/prefs.c:1609
+#: ../data/geany.glade.h:269 ../src/keybindings.c:319 ../src/prefs.c:1608
 msgid "Tools"
 msgstr "Інструменти"
 
-#: ../data/geany.glade.h:266
+#: ../data/geany.glade.h:270
 msgid "email address of the developer"
 msgstr "адреса електронної пошти розробника"
 
-#: ../data/geany.glade.h:267
+#: ../data/geany.glade.h:271
 msgid "Initials of the developer name"
 msgstr "Ініціали ім'я розробника"
 
-#: ../data/geany.glade.h:268
+#: ../data/geany.glade.h:272
 msgid "Initial version:"
 msgstr "Початкова версія:"
 
-#: ../data/geany.glade.h:269
+#: ../data/geany.glade.h:273
 msgid "Version number, which a new file initially has"
 msgstr "Номер версії, що новий файл має з початку"
 
-#: ../data/geany.glade.h:270
+#: ../data/geany.glade.h:274
 msgid "Company name"
 msgstr "Назва компанії"
 
-#: ../data/geany.glade.h:271
+#: ../data/geany.glade.h:275
 msgid "Developer:"
 msgstr "Розробник:"
 
-#: ../data/geany.glade.h:272
+#: ../data/geany.glade.h:276
 msgid "Company:"
 msgstr "Компанія:"
 
-#: ../data/geany.glade.h:273
+#: ../data/geany.glade.h:277
 msgid "Mail address:"
 msgstr "Поштова адреса:"
 
-#: ../data/geany.glade.h:274
+#: ../data/geany.glade.h:278
 msgid "Initials:"
 msgstr "Ініціали:"
 
-#: ../data/geany.glade.h:275
+#: ../data/geany.glade.h:279
 msgid "The name of the developer"
 msgstr "Ім'я розробника"
 
-#: ../data/geany.glade.h:276
+#: ../data/geany.glade.h:280
 #, fuzzy
 msgid "Year:"
 msgstr "Бічна панель:"
 
-#: ../data/geany.glade.h:277
+#: ../data/geany.glade.h:281
 #, fuzzy
 msgid "Date:"
 msgstr "Make:"
 
-#: ../data/geany.glade.h:278
+#: ../data/geany.glade.h:282
 msgid "Date & time:"
 msgstr ""
 
-#: ../data/geany.glade.h:279
+#: ../data/geany.glade.h:283
 #, fuzzy
 msgid ""
 "Specify a format for the {datetime} wildcard. You can use any conversion "
@@ -1403,7 +1422,7 @@ msgstr ""
 "частини кожної сторінки. Ви можете використовувати будь яий формат що "
 "сумісний з ANSI C функцією strftime."
 
-#: ../data/geany.glade.h:280
+#: ../data/geany.glade.h:284
 #, fuzzy
 msgid ""
 "Specify a format for the {year} wildcard. You can use any conversion "
@@ -1413,7 +1432,7 @@ msgstr ""
 "частини кожної сторінки. Ви можете використовувати будь яий формат що "
 "сумісний з ANSI C функцією strftime."
 
-#: ../data/geany.glade.h:281
+#: ../data/geany.glade.h:285
 #, fuzzy
 msgid ""
 "Specify a format for the {date} wildcard. You can use any conversion "
@@ -1423,54 +1442,54 @@ msgstr ""
 "частини кожної сторінки. Ви можете використовувати будь яий формат що "
 "сумісний з ANSI C функцією strftime."
 
-#: ../data/geany.glade.h:282
+#: ../data/geany.glade.h:286
 msgid "<b>Template data</b>"
 msgstr "<b>Шаблонні дані</b>"
 
-#: ../data/geany.glade.h:283 ../src/prefs.c:1611
+#: ../data/geany.glade.h:287 ../src/prefs.c:1610
 msgid "Templates"
 msgstr "Шаблони"
 
-#: ../data/geany.glade.h:284
+#: ../data/geany.glade.h:288
 msgid "C_hange"
 msgstr "_Змінити"
 
-#: ../data/geany.glade.h:285
+#: ../data/geany.glade.h:289
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Гарячі клавіші</b>"
 
-#: ../data/geany.glade.h:286 ../src/plugins.c:1891 ../src/plugins.c:1928
-#: ../src/prefs.c:1613
+#: ../data/geany.glade.h:290 ../src/plugins.c:1898 ../src/plugins.c:1935
+#: ../src/prefs.c:1612
 msgid "Keybindings"
 msgstr "Закріплення клавіш"
 
-#: ../data/geany.glade.h:287
+#: ../data/geany.glade.h:291
 msgid "Command:"
 msgstr "Команда:"
 
-#: ../data/geany.glade.h:289
+#: ../data/geany.glade.h:293
 #, fuzzy, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Команда для друку файлів (користуйтесь %f як назвою файлу)"
 
-#: ../data/geany.glade.h:290
+#: ../data/geany.glade.h:294
 msgid "Use an external command for printing"
 msgstr ""
 
-#: ../data/geany.glade.h:291 ../src/printing.c:239
+#: ../data/geany.glade.h:295 ../src/printing.c:239
 msgid "Print line numbers"
 msgstr "Друкувати номера рядків"
 
-#: ../data/geany.glade.h:292 ../src/printing.c:241
+#: ../data/geany.glade.h:296 ../src/printing.c:241
 #, fuzzy
 msgid "Add line numbers to the printed page"
 msgstr "Додати номера рядків до друкуємої сторінки."
 
-#: ../data/geany.glade.h:293 ../src/printing.c:244
+#: ../data/geany.glade.h:297 ../src/printing.c:244
 msgid "Print page numbers"
 msgstr "Друкувати номера рядків"
 
-#: ../data/geany.glade.h:294 ../src/printing.c:246
+#: ../data/geany.glade.h:298 ../src/printing.c:246
 #, fuzzy
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
@@ -1478,11 +1497,11 @@ msgstr ""
 "Додати номера сторінок зверху кожної сторінки. Це буде забирати 2 рядка "
 "сторінки"
 
-#: ../data/geany.glade.h:295 ../src/printing.c:249
+#: ../data/geany.glade.h:299 ../src/printing.c:249
 msgid "Print page header"
 msgstr "Роздрукувати титульну частину сторінки"
 
-#: ../data/geany.glade.h:296 ../src/printing.c:251
+#: ../data/geany.glade.h:300 ../src/printing.c:251
 #, fuzzy
 msgid ""
 "Add a little header to every page containing the page number, the filename "
@@ -1492,20 +1511,20 @@ msgstr ""
 "сторінки, назву файла та поточну дату(дивіться нижче). Це буде займати 3 "
 "рядки сторінки."
 
-#: ../data/geany.glade.h:297 ../src/printing.c:267
+#: ../data/geany.glade.h:301 ../src/printing.c:267
 msgid "Use the basename of the printed file"
 msgstr "Використовувати базове ім'я друкованого файлу"
 
-#: ../data/geany.glade.h:298
+#: ../data/geany.glade.h:302
 #, fuzzy
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Друкувати лише назву (без шляху) друкуємого файлу."
 
-#: ../data/geany.glade.h:299 ../src/printing.c:275
+#: ../data/geany.glade.h:303 ../src/printing.c:275
 msgid "Date format:"
 msgstr "Формат дати:"
 
-#: ../data/geany.glade.h:300 ../src/printing.c:281
+#: ../data/geany.glade.h:304 ../src/printing.c:281
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -1515,125 +1534,125 @@ msgstr ""
 "частини кожної сторінки. Ви можете використовувати будь яий формат що "
 "сумісний з ANSI C функцією strftime."
 
-#: ../data/geany.glade.h:301
+#: ../data/geany.glade.h:305
 msgid "Use native GTK printing"
 msgstr "Використовувати типове друкування GTK"
 
-#: ../data/geany.glade.h:302
+#: ../data/geany.glade.h:306
 #, fuzzy
 msgid "<b>Printing</b>"
 msgstr "<b>Кодування:</b>"
 
-#: ../data/geany.glade.h:303 ../src/prefs.c:1615
+#: ../data/geany.glade.h:307 ../src/prefs.c:1614
 msgid "Printing"
 msgstr "Друкування"
 
-#: ../data/geany.glade.h:304
+#: ../data/geany.glade.h:308
 msgid "Font:"
 msgstr ""
 
-#: ../data/geany.glade.h:305
+#: ../data/geany.glade.h:309
 #, fuzzy
 msgid "Sets the font for the terminal widget"
 msgstr "Вкажіть шрифт для додатку терміналу."
 
-#: ../data/geany.glade.h:306
+#: ../data/geany.glade.h:310
 #, fuzzy
 msgid "Choose Terminal Font"
 msgstr "Шрифт терміналу:"
 
-#: ../data/geany.glade.h:307
+#: ../data/geany.glade.h:311
 msgid "Foreground color:"
 msgstr "Колір переднього фону:"
 
-#: ../data/geany.glade.h:308
+#: ../data/geany.glade.h:312
 msgid "Background color:"
 msgstr "Колір заднього фону:"
 
-#: ../data/geany.glade.h:309
+#: ../data/geany.glade.h:313
 #, fuzzy
 msgid "Background image:"
 msgstr "Фон"
 
-#: ../data/geany.glade.h:310
+#: ../data/geany.glade.h:314
 msgid "Scrollback lines:"
 msgstr "Прокручувати назад:"
 
-#: ../data/geany.glade.h:311
+#: ../data/geany.glade.h:315
 #, fuzzy
 msgid "Shell:"
 msgstr "Оболонка:"
 
-#: ../data/geany.glade.h:312
+#: ../data/geany.glade.h:316
 #, fuzzy
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Вкажіть колір переднього плану тексту у додатку терміналу."
 
-#: ../data/geany.glade.h:313
+#: ../data/geany.glade.h:317
 #, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Вкажіть колір заднього плану тексту у додатку терміналу."
 
-#: ../data/geany.glade.h:314
+#: ../data/geany.glade.h:318
 #, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
 msgstr "Вкажіть колір заднього плану тексту у додатку терміналу."
 
-#: ../data/geany.glade.h:315
+#: ../data/geany.glade.h:319
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr ""
 
-#: ../data/geany.glade.h:316
+#: ../data/geany.glade.h:320
 #, fuzzy
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "Вказати шлях до оболонки що буде стартувати у емуляції терміналу."
 
-#: ../data/geany.glade.h:317
+#: ../data/geany.glade.h:321
 msgid "Scroll on keystroke"
 msgstr "Переміщуватися при натисненні клавіші"
 
-#: ../data/geany.glade.h:318
+#: ../data/geany.glade.h:322
 #, fuzzy
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Переміщуватися до низовини, якщо клавіша натиснута."
 
-#: ../data/geany.glade.h:319
+#: ../data/geany.glade.h:323
 msgid "Scroll on output"
 msgstr "Переміститися до результату"
 
-#: ../data/geany.glade.h:320
+#: ../data/geany.glade.h:324
 #, fuzzy
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Переміщуватися до низовини коли результат згенеровано."
 
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:325
 msgid "Cursor blinks"
 msgstr ""
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:326
 #, fuzzy
 msgid "Whether to blink the cursor"
 msgstr "Дозволити згортку коду"
 
-#: ../data/geany.glade.h:323
+#: ../data/geany.glade.h:327
 msgid "Override Geany keybindings"
 msgstr "Незважаючи на закріплення клавіш у Geany"
 
-#: ../data/geany.glade.h:324
+#: ../data/geany.glade.h:328
 #, fuzzy
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "Дозволити VTE отримувати комбінації клавіш (окрім команд фокусу)."
 
-#: ../data/geany.glade.h:325
+#: ../data/geany.glade.h:329
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Заборонити гарячу клавішу виклику меню (за замовчанням F10)"
 
-#: ../data/geany.glade.h:326
+#: ../data/geany.glade.h:330
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1643,23 +1662,23 @@ msgstr ""
 "F10). Її заборона корисна якщо ви користуєтесь, наприклад, Midnight "
 "Commander замість VTE."
 
-#: ../data/geany.glade.h:327
+#: ../data/geany.glade.h:331
 #, fuzzy
 msgid "Follow path of the current file"
 msgstr "Слідувати шляху до поточного файлу"
 
-#: ../data/geany.glade.h:328
+#: ../data/geany.glade.h:332
 #, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Виконувати \"cd $path\" коли ви перемикаєтесь поміж відкритими файлами."
 
-#: ../data/geany.glade.h:329
+#: ../data/geany.glade.h:333
 #, fuzzy
 msgid "Execute programs in the VTE"
 msgstr "Виконати програму у VTE"
 
-#: ../data/geany.glade.h:330
+#: ../data/geany.glade.h:334
 #, fuzzy
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
@@ -1668,11 +1687,11 @@ msgstr ""
 "Виконати програму у VTE замість відкриття у консольному вікні емуляції. Будь-"
 "ласка врахуйте, що програма котра виконується у VTE не може бути зупинена."
 
-#: ../data/geany.glade.h:331
+#: ../data/geany.glade.h:335
 msgid "Don't use run script"
 msgstr "Не використовувати скрипт виконання"
 
-#: ../data/geany.glade.h:332
+#: ../data/geany.glade.h:336
 #, fuzzy
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
@@ -1681,677 +1700,677 @@ msgstr ""
 "Не використовувати простий скрипт виконання що зазвичай використовується для "
 "відображення статусу закінчення виконуємої програми."
 
-#: ../data/geany.glade.h:333
+#: ../data/geany.glade.h:337
 #, fuzzy
 msgid "<b>Terminal</b>"
 msgstr "<b>Дозволи:</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:320
+#: ../data/geany.glade.h:338 ../src/prefs.c:1618 ../src/vte.c:320
 msgid "Terminal"
 msgstr "Термінал"
 
-#: ../data/geany.glade.h:335
+#: ../data/geany.glade.h:339
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr ""
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:340
 #, fuzzy
 msgid "<b>Various preferences</b>"
 msgstr "<b>Теки інструментів</b>"
 
-#: ../data/geany.glade.h:337 ../src/prefs.c:1617
+#: ../data/geany.glade.h:341 ../src/prefs.c:1616
 #, fuzzy
 msgid "Various"
 msgstr "_Попередній"
 
-#: ../data/geany.glade.h:339
+#: ../data/geany.glade.h:343
 msgid "_File"
 msgstr "_Файл"
 
-#: ../data/geany.glade.h:340
+#: ../data/geany.glade.h:344
 msgid "New (with _Template)"
 msgstr "Нове (з _шаблону)"
 
-#: ../data/geany.glade.h:341
+#: ../data/geany.glade.h:345
 #, fuzzy
 msgid "_Open..."
 msgstr "_Відкрити"
 
-#: ../data/geany.glade.h:342
+#: ../data/geany.glade.h:346
 msgid "Recent _Files"
 msgstr "Оста_нні файли"
 
-#: ../data/geany.glade.h:343
+#: ../data/geany.glade.h:347
 #, fuzzy
 msgid "Save _As..."
 msgstr "Зберегти усе"
 
-#: ../data/geany.glade.h:344
+#: ../data/geany.glade.h:348
 msgid "Sa_ve All"
 msgstr "Зберегти _усі"
 
-#: ../data/geany.glade.h:345 ../src/document.c:1661 ../src/document.c:3588
+#: ../data/geany.glade.h:349 ../src/document.c:1666 ../src/document.c:3596
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Перезавантажити"
 
-#: ../data/geany.glade.h:346
+#: ../data/geany.glade.h:350
 msgid "R_eload As"
 msgstr "_Перезавантажити як"
 
-#: ../data/geany.glade.h:347
+#: ../data/geany.glade.h:351
 #, fuzzy
 msgid "Page Set_up"
 msgstr "Налаштування _сторінки"
 
-#: ../data/geany.glade.h:348
+#: ../data/geany.glade.h:352
 #, fuzzy
 msgid "_Print..."
 msgstr "Друкувати"
 
-#: ../data/geany.glade.h:349 ../src/notebook.c:470
+#: ../data/geany.glade.h:353 ../src/notebook.c:470
 #, fuzzy
 msgid "Close Ot_her Documents"
 msgstr "Закрити поточний файл"
 
-#: ../data/geany.glade.h:350 ../src/notebook.c:476
+#: ../data/geany.glade.h:354 ../src/notebook.c:476
 msgid "C_lose All"
 msgstr "_Закрити усе"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:355
 #, fuzzy
 msgid "Co_mmands"
 msgstr "Команда"
 
-#: ../data/geany.glade.h:352 ../src/keybindings.c:427
+#: ../data/geany.glade.h:356 ../src/keybindings.c:429
 #, fuzzy
 msgid "Cu_t Current Line(s)"
 msgstr "Вирізати поточний рядок(-ки)"
 
-#: ../data/geany.glade.h:353 ../src/keybindings.c:424
+#: ../data/geany.glade.h:357 ../src/keybindings.c:426
 #, fuzzy
 msgid "_Copy Current Line(s)"
 msgstr "Копіювати поточний рядок(-ки)"
 
-#: ../data/geany.glade.h:354 ../src/keybindings.c:380
+#: ../data/geany.glade.h:358 ../src/keybindings.c:382
 #, fuzzy
 msgid "_Delete Current Line(s)"
 msgstr "Знищити поточний рядок(-ки)"
 
-#: ../data/geany.glade.h:355 ../src/keybindings.c:377
+#: ../data/geany.glade.h:359 ../src/keybindings.c:379
 #, fuzzy
 msgid "D_uplicate Line or Selection"
 msgstr "_Подвоїти рядок або виділене"
 
-#: ../data/geany.glade.h:356 ../src/keybindings.c:437
+#: ../data/geany.glade.h:360 ../src/keybindings.c:439
 #, fuzzy
 msgid "S_elect Current Line(s)"
 msgstr "Виділити поточний рядок(-ки)"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:440
+#: ../data/geany.glade.h:361 ../src/keybindings.c:442
 #, fuzzy
 msgid "Se_lect Current Paragraph"
 msgstr "Виділити поточний параграф"
 
-#: ../data/geany.glade.h:358
+#: ../data/geany.glade.h:362
 #, fuzzy
 msgid "_Move Line(s) Up"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../data/geany.glade.h:359
+#: ../data/geany.glade.h:363
 #, fuzzy
 msgid "M_ove Line(s) Down"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:479
+#: ../data/geany.glade.h:364 ../src/keybindings.c:493
 #, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "_Надіслати виділене до"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:481
+#: ../data/geany.glade.h:365 ../src/keybindings.c:495
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:451
+#: ../data/geany.glade.h:366 ../src/keybindings.c:453
 msgid "T_oggle Case of Selection"
 msgstr "Перемикач вмісту _виділення"
 
-#: ../data/geany.glade.h:363
+#: ../data/geany.glade.h:367
 msgid "_Comment Line(s)"
 msgstr "_Коментувати рядок(-ки)"
 
-#: ../data/geany.glade.h:364
+#: ../data/geany.glade.h:368
 msgid "U_ncomment Line(s)"
 msgstr "З_няти коментар з рядку(-ів)"
 
-#: ../data/geany.glade.h:365
+#: ../data/geany.glade.h:369
 msgid "_Toggle Line Commentation"
 msgstr "_Перемикач закоментованості рядку"
 
-#: ../data/geany.glade.h:366
+#: ../data/geany.glade.h:370
 msgid "_Increase Indent"
 msgstr "З_більшити відступ"
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:371
 msgid "_Decrease Indent"
 msgstr "З_меншити відступ"
 
-#: ../data/geany.glade.h:368 ../src/keybindings.c:470
+#: ../data/geany.glade.h:372 ../src/keybindings.c:472
 #, fuzzy
 msgid "S_mart Line Indent"
 msgstr "Встановити тип кін_ця файлу"
 
-#: ../data/geany.glade.h:369
+#: ../data/geany.glade.h:373
 msgid "_Send Selection to"
 msgstr "_Надіслати виділене до"
 
-#: ../data/geany.glade.h:370
+#: ../data/geany.glade.h:374
 msgid "I_nsert Comments"
 msgstr "_Вставити коментарі"
 
-#: ../data/geany.glade.h:371
+#: ../data/geany.glade.h:375
 #, fuzzy
 msgid "Preference_s"
 msgstr "Налаштування"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:505
+#: ../data/geany.glade.h:376 ../src/keybindings.c:519
 #, fuzzy
 msgid "P_lugin Preferences"
 msgstr "Налаштування"
 
-#: ../data/geany.glade.h:373
+#: ../data/geany.glade.h:377
 #, fuzzy
 msgid "_Find..."
 msgstr "Знайти"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:378
 msgid "Find _Next"
 msgstr "Знайти _наступне"
 
-#: ../data/geany.glade.h:375
+#: ../data/geany.glade.h:379
 msgid "Find _Previous"
 msgstr "Знайти _попереднє"
 
-#: ../data/geany.glade.h:376 ../src/symbols.c:2378
+#: ../data/geany.glade.h:380 ../src/symbols.c:2567
 #, fuzzy
 msgid "Find in F_iles..."
 msgstr "Шукати у _файлі"
 
-#: ../data/geany.glade.h:377
+#: ../data/geany.glade.h:381
 #, fuzzy
 msgid "_Replace..."
 msgstr "_Замінити"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:382
 msgid "Next Me_ssage"
 msgstr "Наступне по_відомлення"
 
-#: ../data/geany.glade.h:379
+#: ../data/geany.glade.h:383
 #, fuzzy
 msgid "Pr_evious Message"
 msgstr "Наступне повідомлення"
 
-#: ../data/geany.glade.h:380 ../src/keybindings.c:554
+#: ../data/geany.glade.h:384 ../src/keybindings.c:568
 #, fuzzy
 msgid "Go to Ne_xt Marker"
 msgstr "Перейти до наступної мітки"
 
-#: ../data/geany.glade.h:381 ../src/keybindings.c:557
+#: ../data/geany.glade.h:385 ../src/keybindings.c:571
 #, fuzzy
 msgid "Go to Pre_vious Marker"
 msgstr "Перейти до попередньої мітки"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:386
 #, fuzzy
 msgid "_Go to Line..."
 msgstr "_Йти до рядку"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:517
+#: ../data/geany.glade.h:387 ../src/keybindings.c:531
 #, fuzzy
 msgid "Find Next _Selection"
 msgstr "Знайти наступне виділення"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:519
+#: ../data/geany.glade.h:388 ../src/keybindings.c:533
 #, fuzzy
 msgid "Find Pre_vious Selection"
 msgstr "Знайти попереднє виділення"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:536
+#: ../data/geany.glade.h:389 ../src/keybindings.c:550
 #, fuzzy
 msgid "_Mark All"
 msgstr "Виконати make для _усіх"
 
-#: ../data/geany.glade.h:386
+#: ../data/geany.glade.h:390
 #, fuzzy
-msgid "Go to T_ag Declaration"
+msgid "Go to Symbol Decl_aration"
 msgstr "Перейти до об'яви ярлику"
 
-#: ../data/geany.glade.h:387
+#: ../data/geany.glade.h:391
 msgid "_View"
 msgstr "_Показати"
 
-#: ../data/geany.glade.h:388
+#: ../data/geany.glade.h:392
 #, fuzzy
 msgid "Change _Font..."
 msgstr "Змінити _шрифт"
 
-#: ../data/geany.glade.h:389
+#: ../data/geany.glade.h:393
 #, fuzzy
 msgid "Change _Color Scheme..."
 msgstr "Палітра _кольорів"
 
-#: ../data/geany.glade.h:390
+#: ../data/geany.glade.h:394
 msgid "Show _Markers Margin"
 msgstr "Показати _межу виділення"
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:395
 msgid "Show _Line Numbers"
 msgstr "Показувати _номери рядків"
 
-#: ../data/geany.glade.h:392
+#: ../data/geany.glade.h:396
 #, fuzzy
 msgid "Show White S_pace"
 msgstr "Показувати пробіли"
 
-#: ../data/geany.glade.h:393
+#: ../data/geany.glade.h:397
 #, fuzzy
 msgid "Show Line _Endings"
 msgstr "Виділяти кінці рядків"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:398
 #, fuzzy
 msgid "Show Indentation _Guides"
 msgstr "Показати керівників розподілення"
 
-#: ../data/geany.glade.h:395
+#: ../data/geany.glade.h:399
 msgid "Full_screen"
 msgstr "На у_весь екран"
 
-#: ../data/geany.glade.h:396
+#: ../data/geany.glade.h:400
 #, fuzzy
 msgid "Toggle All _Additional Widgets"
 msgstr "Перемикач усіх додаткових віджетів"
 
-#: ../data/geany.glade.h:397
+#: ../data/geany.glade.h:401
 msgid "Show Message _Window"
 msgstr "Показувати вікно _повідомлень"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:402
 msgid "Show _Toolbar"
 msgstr "Показувати панель _інструментів"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:403
 msgid "Show Side_bar"
 msgstr "Показати _бічну панель"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:404
 msgid "_Document"
 msgstr "_Документ"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:405
 msgid "_Line Wrapping"
 msgstr "_Перенесення рядку"
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:406
 #, fuzzy
 msgid "Line _Breaking"
 msgstr "Переніс рядку"
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:407
 msgid "_Auto-indentation"
 msgstr "_Авто розпізнання"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:408
 msgid "In_dent Type"
 msgstr "_Розподілений документ"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:409
 #, fuzzy
 msgid "_Detect from Content"
 msgstr "Визначити з файлу"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:410
 #, fuzzy
 msgid "T_abs and Spaces"
 msgstr "_Заміняти відступи пробілами"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:411
 msgid "Indent Widt_h"
 msgstr ""
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:412
 msgid "_1"
 msgstr ""
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:413
 msgid "_2"
 msgstr ""
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:414
 msgid "_3"
 msgstr ""
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:415
 msgid "_4"
 msgstr ""
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:416
 msgid "_5"
 msgstr ""
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:417
 msgid "_6"
 msgstr ""
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:418
 msgid "_7"
 msgstr ""
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:419
 msgid "_8"
 msgstr ""
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:420
 msgid "Read _Only"
 msgstr "Тільки _читання"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:421
 msgid "_Write Unicode BOM"
 msgstr "_Записати Unicode BOM"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:422
 msgid "Set File_type"
 msgstr "Встановити  _тип файлу"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:423
 msgid "Set _Encoding"
 msgstr "Встановити _кодування"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:424
 msgid "Set Line E_ndings"
 msgstr "Встановити тип кін_ця файлу"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:425
 #, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Конвертувати та встановити у _CR/LF (Win)"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Конвертувати та встановити у LF (_Unix)"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:427
 #, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Конвертувати та встановити у CR (_Mac)"
 
-#: ../data/geany.glade.h:424 ../src/keybindings.c:645
+#: ../data/geany.glade.h:428 ../src/keybindings.c:659
 #, fuzzy
 msgid "_Clone"
 msgstr "_Зачинити"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:429
 msgid "_Strip Trailing Spaces"
 msgstr "Видалити _пробіли після тексту"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:430
 msgid "Replace Tabs with S_paces"
 msgstr "_Заміняти відступи пробілами"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:431
 #, fuzzy
 msgid "_Replace Spaces with Tabs..."
 msgstr "_Заміняти відступи пробілами"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:432
 msgid "_Fold All"
 msgstr "З_горнути усе"
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:433
 msgid "_Unfold All"
 msgstr "_Розгорнути усе"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:434
 msgid "Remove _Markers"
 msgstr "Прибрати _маркери"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:435
 msgid "Remove Error _Indicators"
 msgstr "Прибрати індикатори _помилок"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:436
 msgid "_Project"
 msgstr "_Проект"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:437
 #, fuzzy
 msgid "_New..."
 msgstr "_Нове"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:438
 #, fuzzy
 msgid "_Recent Projects"
 msgstr "Відкрити проект"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:439
 msgid "_Close"
 msgstr "_Зачинити"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:440
 msgid "Apply the default indentation settings to all documents"
 msgstr ""
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:441
 #, fuzzy
 msgid "_Apply Default Indentation"
 msgstr "_Авто розпізнання"
 
 #. build the code
-#: ../data/geany.glade.h:438 ../src/build.c:2389 ../src/build.c:2666
+#: ../data/geany.glade.h:442 ../src/build.c:2390 ../src/build.c:2667
 msgid "_Build"
 msgstr "_Побудова"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:443
 msgid "_Tools"
 msgstr "_Інструменти"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:444
 msgid "_Reload Configuration"
 msgstr ""
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:445
 #, fuzzy
 msgid "C_onfiguration Files"
 msgstr "Помилка під час компіляції."
 
-#: ../data/geany.glade.h:442
+#: ../data/geany.glade.h:446
 msgid "_Color Chooser"
 msgstr "Палітра _кольорів"
 
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:447
 msgid "_Word Count"
 msgstr "_Кількість слів"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:448
 #, fuzzy
-msgid "Load Ta_gs..."
+msgid "Load Ta_gs File..."
 msgstr "Завантажити _теґи"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:449
 msgid "_Help"
 msgstr "_Допомога"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:450
 msgid "Keyboard _Shortcuts"
 msgstr "_Гарячі клавіші"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:451
 #, fuzzy
 msgid "Debug _Messages"
 msgstr "Повідомлення"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:452
 msgid "_Website"
 msgstr "Інтернет _сторінка"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:453
 msgid "Wi_ki"
 msgstr ""
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:454
 msgid "Report a _Bug..."
 msgstr ""
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:455
 #, fuzzy
 msgid "_Donate..."
 msgstr "_Не зберігати."
 
-#: ../data/geany.glade.h:452 ../src/sidebar.c:126
+#: ../data/geany.glade.h:456 ../src/sidebar.c:126
 msgid "Symbols"
 msgstr "Символи"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:457
 msgid "Documents"
 msgstr "Документи"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:458
 msgid "Status"
 msgstr "Статус"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:459
 msgid "Compiler"
 msgstr "Компілятор"
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:460
 msgid "Messages"
 msgstr "Повідомлення"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:461
 msgid "Scribble"
 msgstr "Друк"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:462
 msgid "Project Properties"
 msgstr "Властивості проекту"
 
-#: ../data/geany.glade.h:459 ../src/project.c:180
+#: ../data/geany.glade.h:463 ../src/project.c:180
 msgid "Filename:"
 msgstr "Назва файлу:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../data/geany.glade.h:464 ../src/project.c:169 ../plugins/classbuilder.c:467
 #: ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Назва:"
 
-#: ../data/geany.glade.h:461
+#: ../data/geany.glade.h:465
 msgid "Description:"
 msgstr "Опис:"
 
-#: ../data/geany.glade.h:462 ../src/project.c:202
+#: ../data/geany.glade.h:466 ../src/project.c:202
 msgid "Base path:"
 msgstr "Базова тека:"
 
-#: ../data/geany.glade.h:463
+#: ../data/geany.glade.h:467
 msgid "File patterns:"
 msgstr "Зразки файлу:"
 
-#: ../data/geany.glade.h:464
+#: ../data/geany.glade.h:468
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
 
-#: ../data/geany.glade.h:465 ../src/project.c:209
+#: ../data/geany.glade.h:469 ../src/project.c:209
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
 
-#: ../data/geany.glade.h:466 ../src/keybindings.c:317
+#: ../data/geany.glade.h:470 ../src/keybindings.c:317
 #, fuzzy
 msgid "Project"
 msgstr "_Проект"
 
-#: ../data/geany.glade.h:467
+#: ../data/geany.glade.h:471
 #, fuzzy
 msgid "Display:"
 msgstr "Показати"
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:472
 #, fuzzy
 msgid "Custom"
 msgstr "Вирізати"
 
-#: ../data/geany.glade.h:469
+#: ../data/geany.glade.h:473
 msgid "Use global settings"
 msgstr ""
 
-#: ../data/geany.glade.h:470
+#: ../data/geany.glade.h:474
 msgid "Size:"
 msgstr ""
 
-#: ../data/geany.glade.h:471
+#: ../data/geany.glade.h:475
 #, fuzzy
 msgid "Location:"
 msgstr "<b>Розташування:</b>"
 
-#: ../data/geany.glade.h:472
+#: ../data/geany.glade.h:476
 #, fuzzy
 msgid "Read-only:"
 msgstr ", тільки читання"
 
-#: ../data/geany.glade.h:473
+#: ../data/geany.glade.h:477
 #, fuzzy
 msgid "Encoding:"
 msgstr "Встановити кодовування:"
 
-#: ../data/geany.glade.h:474
+#: ../data/geany.glade.h:478
 #, fuzzy
 msgid "Modified:"
 msgstr "<b>Модифікований:</b>"
 
-#: ../data/geany.glade.h:475
+#: ../data/geany.glade.h:479
 #, fuzzy
 msgid "Changed:"
 msgstr "_Змінити"
 
-#: ../data/geany.glade.h:476
+#: ../data/geany.glade.h:480
 #, fuzzy
 msgid "Accessed:"
 msgstr "<b>Використаний:</b>"
 
-#: ../data/geany.glade.h:477
+#: ../data/geany.glade.h:481
 msgid "(only inside Geany)"
 msgstr "(тільки у Geany)"
 
-#: ../data/geany.glade.h:478
+#: ../data/geany.glade.h:482
 #, fuzzy
 msgid "Permissions:"
 msgstr "<b>Дозволи:</b>"
 
-#: ../data/geany.glade.h:479
+#: ../data/geany.glade.h:483
 msgid "Read:"
 msgstr "Читає:"
 
-#: ../data/geany.glade.h:480
+#: ../data/geany.glade.h:484
 msgid "Write:"
 msgstr "Пише:"
 
-#: ../data/geany.glade.h:481
+#: ../data/geany.glade.h:485
 msgid "Execute:"
 msgstr "Виконання:"
 
-#: ../data/geany.glade.h:482
+#: ../data/geany.glade.h:486
 msgid "Owner:"
 msgstr "Власник:"
 
-#: ../data/geany.glade.h:483
+#: ../data/geany.glade.h:487
 msgid "Group:"
 msgstr "Група:"
 
-#: ../data/geany.glade.h:484
+#: ../data/geany.glade.h:488
 msgid "Other:"
 msgstr "Інше:"
 
@@ -2489,158 +2508,158 @@ msgstr "Помилка під час компіляції."
 msgid "Compilation finished successfully."
 msgstr "Компіляція була успішною."
 
-#: ../src/build.c:1202
+#: ../src/build.c:1203
 #, fuzzy
 msgid "Custom Text"
 msgstr "Нетипові налаштування make"
 
-#: ../src/build.c:1203
+#: ../src/build.c:1204
 #, fuzzy
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Тут введіть власні опції, увесь введений текст буде переданий команді make."
 
-#: ../src/build.c:1281
+#: ../src/build.c:1282
 msgid "_Next Error"
 msgstr "_Наступна помилка"
 
-#: ../src/build.c:1283
+#: ../src/build.c:1284
 #, fuzzy
 msgid "_Previous Error"
 msgstr "_Попередній"
 
 #. arguments
-#: ../src/build.c:1293 ../src/build.c:2706
+#: ../src/build.c:1294 ../src/build.c:2707
 #, fuzzy
 msgid "_Set Build Commands"
 msgstr "Встановити власні команди"
 
-#: ../src/build.c:1579 ../src/toolbar.c:376
+#: ../src/build.c:1580 ../src/toolbar.c:376
 #, fuzzy
 msgid "Build the current file"
 msgstr "Компілювати поточний файл"
 
-#: ../src/build.c:1590
+#: ../src/build.c:1591
 #, fuzzy
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Побудова поточного файлу з інструментом make та кінцевою точкою за "
 "замовчанням"
 
-#: ../src/build.c:1592
+#: ../src/build.c:1593
 #, fuzzy
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Побудова поточного файлу з інструментом make та вказаною кінцевою точкою"
 
-#: ../src/build.c:1594
+#: ../src/build.c:1595
 #, fuzzy
 msgid "Compile the current file with Make"
 msgstr "Компілювати поточний файл"
 
-#: ../src/build.c:1613
+#: ../src/build.c:1614
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Не має змоги зупинити процес (%s)."
 
-#: ../src/build.c:1627 ../src/build.c:1639
+#: ../src/build.c:1628 ../src/build.c:1640
 msgid "No more build errors."
 msgstr "Більше не має помилок побудови."
 
-#: ../src/build.c:1752 ../src/build.c:1754
+#: ../src/build.c:1753 ../src/build.c:1755
 msgid "Set menu item label"
 msgstr ""
 
-#: ../src/build.c:1779 ../src/symbols.c:683 ../src/tools.c:397
+#: ../src/build.c:1780 ../src/symbols.c:597 ../src/tools.c:397
 msgid "Label"
 msgstr "Мітка"
 
 #. command column, holding status and command display
-#: ../src/build.c:1780 ../src/symbols.c:678 ../src/tools.c:382
+#: ../src/build.c:1781 ../src/symbols.c:592 ../src/tools.c:382
 msgid "Command"
 msgstr "Команда"
 
-#: ../src/build.c:1781
+#: ../src/build.c:1782
 #, fuzzy
 msgid "Working directory"
 msgstr "%s (у теці: %s)"
 
-#: ../src/build.c:1782
+#: ../src/build.c:1783
 #, fuzzy
 msgid "Reset"
 msgstr "Віддалити"
 
-#: ../src/build.c:1833
+#: ../src/build.c:1834
 msgid "Click to set menu item label"
 msgstr ""
 
-#: ../src/build.c:1917 ../src/build.c:1919
+#: ../src/build.c:1918 ../src/build.c:1920
 #, fuzzy, c-format
 msgid "%s commands"
 msgstr "%s команди"
 
-#: ../src/build.c:1919
+#: ../src/build.c:1920
 #, fuzzy
 msgid "No filetype"
 msgstr "Встановити  _тип файлу"
 
-#: ../src/build.c:1928 ../src/build.c:1963
+#: ../src/build.c:1929 ../src/build.c:1964
 #, fuzzy
 msgid "Error regular expression:"
 msgstr "Проявити _регулярний вираз"
 
-#: ../src/build.c:1956
+#: ../src/build.c:1957
 #, fuzzy
 msgid "Independent commands"
 msgstr "Вставити коментар"
 
-#: ../src/build.c:1988
+#: ../src/build.c:1989
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1997
+#: ../src/build.c:1998
 #, fuzzy
 msgid "Execute commands"
 msgstr "Встановити власні команди"
 
-#: ../src/build.c:2009
+#: ../src/build.c:2010
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
 
-#: ../src/build.c:2167
+#: ../src/build.c:2168
 #, fuzzy
 msgid "Set Build Commands"
 msgstr "Встановити власні команди"
 
-#: ../src/build.c:2382
+#: ../src/build.c:2383
 msgid "_Compile"
 msgstr "_Компіляція"
 
-#: ../src/build.c:2396 ../src/build.c:2426 ../src/build.c:2634
+#: ../src/build.c:2397 ../src/build.c:2427 ../src/build.c:2635
 #, fuzzy
 msgid "_Execute"
 msgstr "Виконання:"
 
 #. build the code with make custom
-#: ../src/build.c:2441 ../src/build.c:2632 ../src/build.c:2686
+#: ../src/build.c:2442 ../src/build.c:2633 ../src/build.c:2687
 #, fuzzy
 msgid "Make Custom _Target..."
 msgstr "Виконати make для вказаного _файлу"
 
 #. build the code with make object
-#: ../src/build.c:2443 ../src/build.c:2633 ../src/build.c:2694
+#: ../src/build.c:2444 ../src/build.c:2634 ../src/build.c:2695
 msgid "Make _Object"
 msgstr "Виконати make над _об'єктом"
 
-#: ../src/build.c:2445 ../src/build.c:2631
+#: ../src/build.c:2446 ../src/build.c:2632
 #, fuzzy
 msgid "_Make"
 msgstr "Make:"
 
 #. build the code with make all
-#: ../src/build.c:2678
+#: ../src/build.c:2679
 msgid "_Make All"
 msgstr "Виконати make для _усіх"
 
@@ -2651,86 +2670,86 @@ msgid_plural "%d files saved."
 msgstr[0] "Файл %s збережено."
 msgstr[1] "Файл %s збережено."
 
-#: ../src/callbacks.c:895 ../src/keybindings.c:545
+#: ../src/callbacks.c:885 ../src/keybindings.c:559
 msgid "Go to Line"
 msgstr "До рядку"
 
-#: ../src/callbacks.c:896
+#: ../src/callbacks.c:886
 msgid "Enter the line you want to go to:"
 msgstr "Введіть рядок до якого ви хочете переміститись:"
 
-#: ../src/callbacks.c:997 ../src/callbacks.c:1023
+#: ../src/callbacks.c:987 ../src/callbacks.c:1013
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Будь-ласка оберіть тип для поточного файлу перед використанням цієї функції."
 
-#: ../src/callbacks.c:1313 ../src/callbacks.c:1321
+#: ../src/callbacks.c:1303 ../src/callbacks.c:1311
 msgid "No more message items."
 msgstr "Більше не залишилося повідомлень."
 
-#: ../src/callbacks.c:1424
+#: ../src/callbacks.c:1414
 #, fuzzy, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Файл %s (%s) відкрити неможливо"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1463
 msgid "Check the path setting in Filetype configuration."
 msgstr ""
 
-#: ../src/callbacks.c:1478
+#: ../src/callbacks.c:1468
 #, fuzzy
 msgid "Check the path setting in Preferences."
 msgstr ""
 "Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1491
+#: ../src/callbacks.c:1481
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr ""
 
-#: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
-#: ../src/document.c:2381
+#: ../src/dialogs.c:161 ../src/document.c:2313 ../src/document.c:2378
+#: ../src/document.c:2386
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" не знайдено."
 
 #. auto-detect
-#: ../src/dialogs.c:222 ../src/encodings.c:551
+#: ../src/dialogs.c:223 ../src/encodings.c:532
 msgid "Detect from file"
 msgstr "Визначити з файлу"
 
-#: ../src/dialogs.c:225
+#: ../src/dialogs.c:226
 #, fuzzy
 msgid "Programming Languages"
 msgstr "Мови _програмування"
 
-#: ../src/dialogs.c:227
+#: ../src/dialogs.c:228
 #, fuzzy
 msgid "Scripting Languages"
 msgstr "Мови _скриптів"
 
-#: ../src/dialogs.c:229
+#: ../src/dialogs.c:230
 #, fuzzy
 msgid "Markup Languages"
 msgstr "Мови _розмітки"
 
-#: ../src/dialogs.c:307
+#: ../src/dialogs.c:308
 #, fuzzy
 msgid "_More Options"
 msgstr "Опції"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:314
+#: ../src/dialogs.c:315
 msgid "Show _hidden files"
 msgstr "Показати _приховані файли"
 
-#: ../src/dialogs.c:325
+#: ../src/dialogs.c:326
 msgid "Set encoding:"
 msgstr "Встановити кодовування:"
 
-#: ../src/dialogs.c:334
+#: ../src/dialogs.c:335
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -2744,11 +2763,11 @@ msgstr ""
 "вказаним кодуванням."
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:341
+#: ../src/dialogs.c:342
 msgid "Set filetype:"
 msgstr "Встановити тип файлу:"
 
-#: ../src/dialogs.c:350
+#: ../src/dialogs.c:351
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -2760,17 +2779,17 @@ msgstr ""
 "Врахуйте, що якщо ви вказуєте декілька файлів, то вони усі будуть відкрити "
 "як файли вказаного розширення."
 
-#: ../src/dialogs.c:376 ../src/dialogs.c:466
+#: ../src/dialogs.c:377 ../src/dialogs.c:467
 msgid "Open File"
 msgstr "Відкрити файл"
 
-#: ../src/dialogs.c:380
+#: ../src/dialogs.c:381
 #, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "_Показати"
 
-#: ../src/dialogs.c:382
+#: ../src/dialogs.c:383
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
@@ -2778,63 +2797,63 @@ msgstr ""
 "Відкрити файл тільки для читання. Якщо ви оберете більше одного файлу усі "
 "будуть відкриті тільки для читання."
 
-#: ../src/dialogs.c:534 ../src/document.c:2059
+#: ../src/dialogs.c:535 ../src/document.c:2064
 #, fuzzy
 msgid "Overwrite?"
 msgstr "_Обминути"
 
-#: ../src/dialogs.c:535
+#: ../src/dialogs.c:536
 msgid "Filename already exists!"
 msgstr ""
 
-#: ../src/dialogs.c:564 ../src/dialogs.c:678
+#: ../src/dialogs.c:565 ../src/dialogs.c:679
 msgid "Save File"
 msgstr "Зберегти файл"
 
-#: ../src/dialogs.c:573
+#: ../src/dialogs.c:574
 msgid "R_ename"
 msgstr "Змінити _назву"
 
-#: ../src/dialogs.c:574
+#: ../src/dialogs.c:575
 #, fuzzy
 msgid "Save the file and rename it"
 msgstr "Зберегти файл та змінити його назву."
 
-#: ../src/dialogs.c:696 ../src/win32.c:730
+#: ../src/dialogs.c:697 ../src/win32.c:730
 msgid "Error"
 msgstr "Помилка"
 
-#: ../src/dialogs.c:699 ../src/dialogs.c:778 ../src/dialogs.c:1336
+#: ../src/dialogs.c:700 ../src/dialogs.c:779 ../src/dialogs.c:1337
 #: ../src/win32.c:736
 msgid "Question"
 msgstr "Запитання"
 
-#: ../src/dialogs.c:702 ../src/win32.c:742
+#: ../src/dialogs.c:703 ../src/win32.c:742
 msgid "Warning"
 msgstr "Попередження"
 
-#: ../src/dialogs.c:705 ../src/win32.c:748
+#: ../src/dialogs.c:706 ../src/win32.c:748
 msgid "Information"
 msgstr "Інформація"
 
-#: ../src/dialogs.c:782
+#: ../src/dialogs.c:783
 msgid "_Don't save"
 msgstr "_Не зберігати."
 
-#: ../src/dialogs.c:811
+#: ../src/dialogs.c:812
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "Файл '%s' не збережено."
 
-#: ../src/dialogs.c:812
+#: ../src/dialogs.c:813
 msgid "Do you want to save it before closing?"
 msgstr "Чи бажаєте зберегти файл до того як вийти?"
 
-#: ../src/dialogs.c:890
+#: ../src/dialogs.c:891
 msgid "Choose font"
 msgstr "Оберіть шрифт"
 
-#: ../src/dialogs.c:1184
+#: ../src/dialogs.c:1185
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
@@ -2842,46 +2861,46 @@ msgstr ""
 "Виникла помилка або інформація про файл не була знайдена (наприклад з нового "
 "файлу)."
 
-#: ../src/dialogs.c:1203 ../src/dialogs.c:1204 ../src/dialogs.c:1205
-#: ../src/dialogs.c:1211 ../src/dialogs.c:1212 ../src/dialogs.c:1213
-#: ../src/symbols.c:2182 ../src/symbols.c:2198 ../src/ui_utils.c:289
+#: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
+#: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
+#: ../src/symbols.c:2371 ../src/symbols.c:2387 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "невідоме"
 
-#: ../src/dialogs.c:1218
+#: ../src/dialogs.c:1219
 #, fuzzy, c-format
 msgid "%s Properties"
 msgstr "Налаштування"
 
-#: ../src/dialogs.c:1250 ../src/ui_utils.c:293
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:293
 msgid "(with BOM)"
 msgstr "(з BOM)"
 
-#: ../src/dialogs.c:1250
+#: ../src/dialogs.c:1251
 msgid "(without BOM)"
 msgstr "(без BOM)"
 
-#: ../src/document.c:744
+#: ../src/document.c:749
 #, c-format
 msgid "File %s closed."
 msgstr "Файл %s зачинено."
 
-#: ../src/document.c:900
+#: ../src/document.c:905
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Новий файл \"%s\" відкрито."
 
-#: ../src/document.c:974
+#: ../src/document.c:979
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Файл %s (%s) відкрити неможливо"
 
-#: ../src/document.c:1023
+#: ../src/document.c:1028
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Файл \"%s\" помилковий %s."
 
-#: ../src/document.c:1029
+#: ../src/document.c:1034
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2889,7 +2908,7 @@ msgid ""
 msgstr ""
 "Файл \"%s\" має вигляд не текстового або кодування файлу не підтримується."
 
-#: ../src/document.c:1039
+#: ../src/document.c:1044
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2902,32 +2921,32 @@ msgstr ""
 "може привести до втрати інформації.\n"
 "Дозволено тільки читати файл."
 
-#: ../src/document.c:1251
+#: ../src/document.c:1256
 msgid "Spaces"
 msgstr "Пробіли"
 
-#: ../src/document.c:1254
+#: ../src/document.c:1259
 msgid "Tabs"
 msgstr "відступи"
 
-#: ../src/document.c:1257
+#: ../src/document.c:1262
 #, fuzzy
 msgid "Tabs and Spaces"
 msgstr "_Заміняти відступи пробілами"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1262
+#: ../src/document.c:1267
 #, fuzzy, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Встановлення %s розподіленого режиму."
 
-#: ../src/document.c:1273
+#: ../src/document.c:1278
 #, fuzzy, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "Встановлення %s розподіленого режиму."
 
-#: ../src/document.c:1497
+#: ../src/document.c:1502
 #, c-format
 msgid "File %s reloaded."
 msgstr "Файл %s перезавантажено."
@@ -2935,20 +2954,20 @@ msgstr "Файл %s перезавантажено."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1505
+#: ../src/document.c:1510
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Файл %s відкрито(%d%s)."
 
-#: ../src/document.c:1507
+#: ../src/document.c:1512
 msgid ", read-only"
 msgstr ", тільки читання"
 
-#: ../src/document.c:1627
+#: ../src/document.c:1632
 msgid "Discard history"
 msgstr ""
 
-#: ../src/document.c:1628
+#: ../src/document.c:1633
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2956,31 +2975,31 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: ../src/document.c:1632
+#: ../src/document.c:1637
 #, fuzzy
 msgid "The file has been reloaded."
 msgstr "Файл %s перезавантажено."
 
-#: ../src/document.c:1662
+#: ../src/document.c:1667
 msgid "Any unsaved changes will be lost."
 msgstr "Будь-які не збережені зміни будуть втрачені."
 
-#: ../src/document.c:1663
+#: ../src/document.c:1668
 #, fuzzy
 msgid "Undo history will be lost."
 msgstr "Будь-які не збережені зміни будуть втрачені."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1669
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ви впевнені, що бажаєте перезавантажити '%s'?"
 
-#: ../src/document.c:1770
+#: ../src/document.c:1775
 #, fuzzy
 msgid "Error renaming file."
 msgstr "Помилка зберігання файлу."
 
-#: ../src/document.c:1891
+#: ../src/document.c:1896
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2989,7 +3008,7 @@ msgstr ""
 "Помилка під час конвертації файлу з UTF-8 у \"%s\". Файл залишено не "
 "збереженим."
 
-#: ../src/document.c:1912
+#: ../src/document.c:1917
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2998,58 +3017,58 @@ msgstr ""
 "Повідомлення про помилку: %s\n"
 "Помилка виникла у \"%s\" (рядок: %d, стовпчик: %d)."
 
-#: ../src/document.c:1916
+#: ../src/document.c:1921
 #, c-format
 msgid "Error message: %s."
 msgstr "Повідомлення про помилку: %s."
 
-#: ../src/document.c:1976
+#: ../src/document.c:1981
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1994
+#: ../src/document.c:1999
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 
-#: ../src/document.c:2008
+#: ../src/document.c:2013
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 
-#: ../src/document.c:2058 ../src/document.c:3589
+#: ../src/document.c:2063 ../src/document.c:3597
 #, fuzzy
 msgid "_Overwrite"
 msgstr "_Обминути"
 
-#: ../src/document.c:2060 ../src/document.c:3592
+#: ../src/document.c:2065 ../src/document.c:3600
 #, fuzzy, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 "Файл '%s' на жорсткому диску новіший за\n"
 "поточний буфер."
 
-#: ../src/document.c:2068 ../src/document.c:3641
+#: ../src/document.c:2073 ../src/document.c:3649
 msgid "Try to resave the file?"
 msgstr ""
 
-#: ../src/document.c:2069 ../src/document.c:3642
+#: ../src/document.c:2074 ../src/document.c:3650
 #, fuzzy, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "\"%s\" не знайдено."
 
-#: ../src/document.c:2132
+#: ../src/document.c:2137
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr ""
 
-#: ../src/document.c:2200
+#: ../src/document.c:2205
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Помилка при збереженні файлу (%s)."
 
-#: ../src/document.c:2205
+#: ../src/document.c:2210
 #, c-format
 msgid ""
 "%s\n"
@@ -3057,205 +3076,205 @@ msgid ""
 "The file on disk may now be truncated!"
 msgstr ""
 
-#: ../src/document.c:2207
+#: ../src/document.c:2212
 msgid "Error saving file."
 msgstr "Помилка зберігання файлу."
 
-#: ../src/document.c:2231
+#: ../src/document.c:2236
 #, c-format
 msgid "File %s saved."
 msgstr "Файл %s збережено."
 
-#: ../src/document.c:2381
+#: ../src/document.c:2386
 msgid "Wrap search and find again?"
 msgstr "Повернутися до початку і шукати знову?"
 
-#: ../src/document.c:2470 ../src/search.c:1365 ../src/search.c:1418
-#: ../src/search.c:2221 ../src/search.c:2222
+#: ../src/document.c:2475 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" не зустрічається у файлі."
 
-#: ../src/document.c:2476
+#: ../src/document.c:2481
 #, fuzzy, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: замінено %d випадок(-ів) \"%s\" до \"%s\"."
 msgstr[1] "%s: замінено %d випадок(-ів) \"%s\" до \"%s\"."
 
-#: ../src/document.c:3591
+#: ../src/document.c:3599
 msgid "Do you want to reload it?"
 msgstr "Ви дійсно бажаєте перезавантажити його?"
 
-#: ../src/editor.c:4388
+#: ../src/editor.c:4490
 #, fuzzy
 msgid "Enter Tab Width"
 msgstr "Ширина абзацу:"
 
-#: ../src/editor.c:4389
+#: ../src/editor.c:4491
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 
-#: ../src/editor.c:4587
+#: ../src/editor.c:4696
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
 
-#: ../src/encodings.c:71
+#: ../src/encodings.c:72
 msgid "Celtic"
 msgstr "Кельтські"
 
-#: ../src/encodings.c:72 ../src/encodings.c:73
+#: ../src/encodings.c:73 ../src/encodings.c:74
 msgid "Greek"
 msgstr "Грецькі"
 
-#: ../src/encodings.c:74
+#: ../src/encodings.c:75
 msgid "Nordic"
 msgstr "Скандинавські"
 
-#: ../src/encodings.c:75
+#: ../src/encodings.c:76
 msgid "South European"
 msgstr "Південної Європи"
 
-#: ../src/encodings.c:76 ../src/encodings.c:77 ../src/encodings.c:78
-#: ../src/encodings.c:79
+#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:80
 msgid "Western"
 msgstr "Західні"
 
-#: ../src/encodings.c:81 ../src/encodings.c:82 ../src/encodings.c:83
+#: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
 msgid "Baltic"
 msgstr "Балтійські"
 
-#: ../src/encodings.c:84 ../src/encodings.c:85 ../src/encodings.c:86
+#: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
 msgid "Central European"
 msgstr "Центральної Європи"
 
 #. ISO-IR-111 not available on Windows
-#: ../src/encodings.c:87 ../src/encodings.c:88 ../src/encodings.c:90
-#: ../src/encodings.c:91 ../src/encodings.c:92
+#: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:91
+#: ../src/encodings.c:92 ../src/encodings.c:93
 msgid "Cyrillic"
 msgstr "Кирилиця"
 
-#: ../src/encodings.c:93
+#: ../src/encodings.c:94
 msgid "Cyrillic/Russian"
 msgstr "Кирилиця/Російські"
 
-#: ../src/encodings.c:94
+#: ../src/encodings.c:95
 msgid "Cyrillic/Ukrainian"
 msgstr "Кирилиця/Українські"
 
-#: ../src/encodings.c:95
+#: ../src/encodings.c:96
 msgid "Romanian"
 msgstr "Румунські"
 
-#: ../src/encodings.c:97 ../src/encodings.c:98 ../src/encodings.c:99
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
 msgid "Arabic"
 msgstr "Арабські"
 
 #. not available at all, ?
-#: ../src/encodings.c:100 ../src/encodings.c:102 ../src/encodings.c:103
+#: ../src/encodings.c:101 ../src/encodings.c:103 ../src/encodings.c:104
 msgid "Hebrew"
 msgstr "Єврейські"
 
-#: ../src/encodings.c:104
+#: ../src/encodings.c:105
 msgid "Hebrew Visual"
 msgstr "Єврейські графічні"
 
-#: ../src/encodings.c:106
+#: ../src/encodings.c:107
 msgid "Armenian"
 msgstr "Вірменські"
 
-#: ../src/encodings.c:107
+#: ../src/encodings.c:108
 msgid "Georgian"
 msgstr "Грузинські"
 
-#: ../src/encodings.c:108
+#: ../src/encodings.c:109
 msgid "Thai"
 msgstr "Тайландські"
 
-#: ../src/encodings.c:109 ../src/encodings.c:110 ../src/encodings.c:111
+#: ../src/encodings.c:110 ../src/encodings.c:111 ../src/encodings.c:112
 msgid "Turkish"
 msgstr "Турецькі"
 
-#: ../src/encodings.c:112 ../src/encodings.c:113 ../src/encodings.c:114
+#: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
 msgid "Vietnamese"
 msgstr "В'єтнамські"
 
-#: ../src/encodings.c:116 ../src/encodings.c:117 ../src/encodings.c:118
-#: ../src/encodings.c:119 ../src/encodings.c:120 ../src/encodings.c:121
-#: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:565
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:546
 msgid "Unicode"
 msgstr "Юнікод"
 
 #. maybe not available on Linux
-#: ../src/encodings.c:125 ../src/encodings.c:126 ../src/encodings.c:127
-#: ../src/encodings.c:129
+#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:130
 msgid "Chinese Simplified"
 msgstr "Китайські спрощені"
 
-#: ../src/encodings.c:130 ../src/encodings.c:131 ../src/encodings.c:132
+#: ../src/encodings.c:131 ../src/encodings.c:132 ../src/encodings.c:133
 msgid "Chinese Traditional"
 msgstr "Китайські традиційні"
 
-#: ../src/encodings.c:133 ../src/encodings.c:134 ../src/encodings.c:135
-#: ../src/encodings.c:136
+#: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
+#: ../src/encodings.c:137
 msgid "Japanese"
 msgstr "Японські"
 
-#: ../src/encodings.c:137 ../src/encodings.c:138 ../src/encodings.c:139
-#: ../src/encodings.c:140
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
 msgid "Korean"
 msgstr "Корейські"
 
-#: ../src/encodings.c:142
+#: ../src/encodings.c:143
 msgid "Without encoding"
 msgstr "Без кодування"
 
-#: ../src/encodings.c:434
+#: ../src/encodings.c:414
 msgid "_West European"
 msgstr "_Західні Європейські"
 
-#: ../src/encodings.c:440
+#: ../src/encodings.c:415
 msgid "_East European"
 msgstr "_Східні Європейські"
 
-#: ../src/encodings.c:446
+#: ../src/encodings.c:416
 msgid "East _Asian"
 msgstr "Східні _Азіатські"
 
-#: ../src/encodings.c:452
+#: ../src/encodings.c:417
 msgid "_SE & SW Asian"
 msgstr "_SE & SW Азіатські"
 
-#: ../src/encodings.c:458
+#: ../src/encodings.c:418
 msgid "_Middle Eastern"
 msgstr "_Центрального сходу"
 
-#: ../src/encodings.c:464
+#: ../src/encodings.c:419
 msgid "_Unicode"
 msgstr "_Юнікод"
 
-#: ../src/encodings.c:555
+#: ../src/encodings.c:536
 #, fuzzy
 msgid "West European"
 msgstr "_Західні Європейські"
 
-#: ../src/encodings.c:557
+#: ../src/encodings.c:538
 #, fuzzy
 msgid "East European"
 msgstr "_Східні Європейські"
 
-#: ../src/encodings.c:559
+#: ../src/encodings.c:540
 #, fuzzy
 msgid "East Asian"
 msgstr "Східні _Азіатські"
 
-#: ../src/encodings.c:561
+#: ../src/encodings.c:542
 #, fuzzy
 msgid "SE & SW Asian"
 msgstr "_SE & SW Азіатські"
 
-#: ../src/encodings.c:563
+#: ../src/encodings.c:544
 #, fuzzy
 msgid "Middle Eastern"
 msgstr "_Центрального сходу"
@@ -3340,7 +3359,7 @@ msgstr ""
 msgid "untitled"
 msgstr "безіменний"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:841 ../src/socket.c:171
+#: ../src/highlighting.c:1226 ../src/libmain.c:851 ../src/socket.c:171
 #: ../src/templates.c:234
 #, c-format
 msgid "Could not find file '%s'."
@@ -3367,7 +3386,7 @@ msgid "Color Schemes"
 msgstr "Палітра _кольорів"
 
 #. visual group order
-#: ../src/keybindings.c:306 ../src/symbols.c:655
+#: ../src/keybindings.c:306 ../src/symbols.c:569
 msgid "File"
 msgstr "Файл"
 
@@ -3410,17 +3429,17 @@ msgstr "До рядку"
 msgid "View"
 msgstr "_Показати"
 
-#: ../src/keybindings.c:316 ../src/symbols.c:804
+#: ../src/keybindings.c:316 ../src/symbols.c:718
 #, fuzzy
 msgid "Document"
 msgstr "_Документ"
 
-#: ../src/keybindings.c:318 ../src/keybindings.c:670 ../src/project.c:511
+#: ../src/keybindings.c:318 ../src/keybindings.c:684 ../src/project.c:511
 #: ../src/ui_utils.c:2191
 msgid "Build"
 msgstr "Побудувати"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:695
+#: ../src/keybindings.c:320 ../src/keybindings.c:709
 msgid "Help"
 msgstr "Допомога"
 
@@ -3433,11 +3452,11 @@ msgstr ""
 msgid "Notebook tab"
 msgstr "Команди вкладки блокноту"
 
-#: ../src/keybindings.c:331 ../src/keybindings.c:361
+#: ../src/keybindings.c:331 ../src/keybindings.c:363
 msgid "New"
 msgstr "Нове"
 
-#: ../src/keybindings.c:333 ../src/keybindings.c:363
+#: ../src/keybindings.c:333 ../src/keybindings.c:365
 msgid "Open"
 msgstr "Відкрити"
 
@@ -3457,482 +3476,518 @@ msgstr "Зберегти усе"
 msgid "Save all"
 msgstr "Зберегти усе"
 
-#: ../src/keybindings.c:345
+#: ../src/keybindings.c:345 ../src/symbols.c:802
+msgid "Properties"
+msgstr "Налаштування"
+
+#: ../src/keybindings.c:347
 msgid "Print"
 msgstr "Друкувати"
 
-#: ../src/keybindings.c:347 ../src/keybindings.c:368
+#: ../src/keybindings.c:349 ../src/keybindings.c:370
 msgid "Close"
 msgstr "Зачинити"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:351
 msgid "Close all"
 msgstr "Зачинити усе"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:354
 msgid "Reload file"
 msgstr "Перезавантажити усе"
 
-#: ../src/keybindings.c:354
+#: ../src/keybindings.c:356
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:358
 msgid "Quit"
 msgstr ""
 
-#: ../src/keybindings.c:373
+#: ../src/keybindings.c:375
 msgid "Undo"
 msgstr "Крок вперед"
 
-#: ../src/keybindings.c:375
+#: ../src/keybindings.c:377
 msgid "Redo"
 msgstr "Крок назад"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:386
 #, fuzzy
 msgid "Delete to line end"
 msgstr "Знищити поточний рядок(-ки)"
 
-#: ../src/keybindings.c:387
+#: ../src/keybindings.c:389
 #, fuzzy
 msgid "_Transpose Current Line"
 msgstr "Перемістити поточний рядок"
 
-#: ../src/keybindings.c:389
+#: ../src/keybindings.c:391
 msgid "Scroll to current line"
 msgstr "Переміститись до поточного рядку"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:393
 msgid "Scroll up the view by one line"
 msgstr "Перемістити огляд на 1 рядок вгору"
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:395
 msgid "Scroll down the view by one line"
 msgstr "Перемістити огляд на 1 рядок вниз"
 
-#: ../src/keybindings.c:395
+#: ../src/keybindings.c:397
 msgid "Complete snippet"
 msgstr "Довершений шматок"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:399
 msgid "Move cursor in snippet"
 msgstr ""
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:401
 msgid "Suppress snippet completion"
 msgstr ""
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:403
 msgid "Context Action"
 msgstr "Пов'язані дії"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:405
 msgid "Complete word"
 msgstr "Завершити слово"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:407
 msgid "Show calltip"
 msgstr ""
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:409
 #, fuzzy
 msgid "Word part completion"
 msgstr "Авто-завершення теґів XML"
 
-#: ../src/keybindings.c:410
+#: ../src/keybindings.c:412
 #, fuzzy
 msgid "Move line(s) up"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:415
 #, fuzzy
 msgid "Move line(s) down"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../src/keybindings.c:418
+#: ../src/keybindings.c:420
 msgid "Cut"
 msgstr "Вирізати"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:422
 msgid "Copy"
 msgstr "Копіювати"
 
-#: ../src/keybindings.c:422
+#: ../src/keybindings.c:424
 msgid "Paste"
 msgstr "Вставити"
 
-#: ../src/keybindings.c:433
+#: ../src/keybindings.c:435
 msgid "Select All"
 msgstr "Виділити усе"
 
-#: ../src/keybindings.c:435
+#: ../src/keybindings.c:437
 msgid "Select current word"
 msgstr "Виділити поточне слово"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:445
 #, fuzzy
 msgid "Select to previous word part"
 msgstr "Перейти до попередньої мітки"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:447
 #, fuzzy
 msgid "Select to next word part"
 msgstr "Перейти до наступної мітки"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:455
 msgid "Toggle line commentation"
 msgstr ""
 
-#: ../src/keybindings.c:456
+#: ../src/keybindings.c:458
 msgid "Comment line(s)"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:460
 msgid "Uncomment line(s)"
 msgstr "Розкоментувати рядок(-ки)"
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:462
 msgid "Increase indent"
 msgstr "Збільшити відступ"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:465
 msgid "Decrease indent"
 msgstr "Зменшити відступ"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:468
 msgid "Increase indent by one space"
 msgstr "Збільшити відступ на 1 символ"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:470
 msgid "Decrease indent by one space"
 msgstr "Зменшити відступ на 1 рядок"
 
-#: ../src/keybindings.c:472
+#: ../src/keybindings.c:474
 msgid "Send to Custom Command 1"
 msgstr "Надіслати до власної команди 1"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:476
 msgid "Send to Custom Command 2"
 msgstr "Надіслати до власної команди 2"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:478
 msgid "Send to Custom Command 3"
 msgstr "Надіслати до власної команди 3"
 
+#: ../src/keybindings.c:480
+#, fuzzy
+msgid "Send to Custom Command 4"
+msgstr "Надіслати до власної команди 1"
+
+#: ../src/keybindings.c:482
+#, fuzzy
+msgid "Send to Custom Command 5"
+msgstr "Надіслати до власної команди 1"
+
 #: ../src/keybindings.c:484
+#, fuzzy
+msgid "Send to Custom Command 6"
+msgstr "Надіслати до власної команди 1"
+
+#: ../src/keybindings.c:486
+#, fuzzy
+msgid "Send to Custom Command 7"
+msgstr "Надіслати до власної команди 1"
+
+#: ../src/keybindings.c:488
+#, fuzzy
+msgid "Send to Custom Command 8"
+msgstr "Надіслати до власної команди 1"
+
+#: ../src/keybindings.c:490
+#, fuzzy
+msgid "Send to Custom Command 9"
+msgstr "Надіслати до власної команди 1"
+
+#: ../src/keybindings.c:498
 #, fuzzy
 msgid "Join lines"
 msgstr "Закоментувати рядок(-ки)"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:503
 msgid "Insert date"
 msgstr "Вставити дату"
 
-#: ../src/keybindings.c:495
+#: ../src/keybindings.c:509
 msgid "Insert New Line Before Current"
 msgstr ""
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:511
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:510 ../src/search.c:463
+#: ../src/keybindings.c:524 ../src/search.c:464
 msgid "Find"
 msgstr "Знайти"
 
-#: ../src/keybindings.c:512
+#: ../src/keybindings.c:526
 msgid "Find Next"
 msgstr "Знайти наступне"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:528
 msgid "Find Previous"
 msgstr "Знайти попереднє"
 
-#: ../src/keybindings.c:521 ../src/search.c:616
+#: ../src/keybindings.c:535 ../src/search.c:617
 msgid "Replace"
 msgstr "Замінити"
 
-#: ../src/keybindings.c:523 ../src/search.c:866
+#: ../src/keybindings.c:537 ../src/search.c:867
 msgid "Find in Files"
 msgstr "Знайти у файлах"
 
-#: ../src/keybindings.c:526
+#: ../src/keybindings.c:540
 msgid "Next Message"
 msgstr "Наступне повідомлення"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:542
 #, fuzzy
 msgid "Previous Message"
 msgstr "Наступне повідомлення"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:545
 msgid "Find Usage"
 msgstr "Користування пошуком"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:548
 #, fuzzy
 msgid "Find Document Usage"
 msgstr "Користування пошуком"
 
-#: ../src/keybindings.c:541 ../src/toolbar.c:70
+#: ../src/keybindings.c:555 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Перейти до попередньої локації"
 
-#: ../src/keybindings.c:543 ../src/toolbar.c:71
+#: ../src/keybindings.c:557 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Перейти до наступної локації"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:562
 msgid "Go to matching brace"
 msgstr "Перейти до парної скоби"
 
-#: ../src/keybindings.c:551
+#: ../src/keybindings.c:565
 msgid "Toggle marker"
 msgstr ""
 
-#: ../src/keybindings.c:560
-msgid "Go to Tag Definition"
+#: ../src/keybindings.c:574
+#, fuzzy
+msgid "Go to Symbol Definition"
 msgstr "Перейти до визначення ярлика"
 
-#: ../src/keybindings.c:563
-msgid "Go to Tag Declaration"
+#: ../src/keybindings.c:577
+#, fuzzy
+msgid "Go to Symbol Declaration"
 msgstr "Перейти до об'яви ярлику"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:579
 #, fuzzy
 msgid "Go to Start of Line"
 msgstr "До рядку"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:581
 #, fuzzy
 msgid "Go to End of Line"
 msgstr "До рядку"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:583
 #, fuzzy
 msgid "Go to Start of Display Line"
 msgstr "До рядку"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:585
 #, fuzzy
 msgid "Go to End of Display Line"
 msgstr "До рядку"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:587
 #, fuzzy
 msgid "Go to Previous Word Part"
 msgstr "Перейти до попередньої мітки"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:589
 #, fuzzy
 msgid "Go to Next Word Part"
 msgstr "Перейти до наступної мітки"
 
-#: ../src/keybindings.c:580
+#: ../src/keybindings.c:594
 msgid "Toggle All Additional Widgets"
 msgstr "Перемикач усіх додаткових віджетів"
 
-#: ../src/keybindings.c:583
+#: ../src/keybindings.c:597
 msgid "Fullscreen"
 msgstr "На весь екран"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:599
 msgid "Toggle Messages Window"
 msgstr ""
 
-#: ../src/keybindings.c:588
+#: ../src/keybindings.c:602
 msgid "Toggle Sidebar"
 msgstr "Перемкнути бічну панель"
 
-#: ../src/keybindings.c:590
+#: ../src/keybindings.c:604
 msgid "Zoom In"
 msgstr "Наблизити"
 
-#: ../src/keybindings.c:592
+#: ../src/keybindings.c:606
 msgid "Zoom Out"
 msgstr "Віддалити"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:608
 #, fuzzy
 msgid "Zoom Reset"
 msgstr "Віддалити"
 
-#: ../src/keybindings.c:599
+#: ../src/keybindings.c:613
 msgid "Switch to Editor"
 msgstr "Перемнутися до редактору"
 
-#: ../src/keybindings.c:601
-msgid "Switch to Search Bar"
-msgstr "Перемкнутися до панелі пошуку"
-
-#: ../src/keybindings.c:603
-#, fuzzy
-msgid "Switch to Message Window"
-msgstr "Показувати вікно _повідомлень"
-
-#: ../src/keybindings.c:605
-#, fuzzy
-msgid "Switch to Compiler"
-msgstr "Перемкнутися до панелі пошуку"
-
-#: ../src/keybindings.c:607
-#, fuzzy
-msgid "Switch to Messages"
-msgstr "Перемкнутися до панелі пошуку"
-
-#: ../src/keybindings.c:609
-msgid "Switch to Scribble"
-msgstr "Перемкнутися до друку"
-
-#: ../src/keybindings.c:611
-msgid "Switch to VTE"
-msgstr "Перемкнутися до VTE"
-
-#: ../src/keybindings.c:613
-#, fuzzy
-msgid "Switch to Sidebar"
-msgstr "Перемкнутися до панелі пошуку"
-
 #: ../src/keybindings.c:615
-#, fuzzy
-msgid "Switch to Sidebar Symbol List"
+msgid "Switch to Search Bar"
 msgstr "Перемкнутися до панелі пошуку"
 
 #: ../src/keybindings.c:617
 #, fuzzy
+msgid "Switch to Message Window"
+msgstr "Показувати вікно _повідомлень"
+
+#: ../src/keybindings.c:619
+#, fuzzy
+msgid "Switch to Compiler"
+msgstr "Перемкнутися до панелі пошуку"
+
+#: ../src/keybindings.c:621
+#, fuzzy
+msgid "Switch to Messages"
+msgstr "Перемкнутися до панелі пошуку"
+
+#: ../src/keybindings.c:623
+msgid "Switch to Scribble"
+msgstr "Перемкнутися до друку"
+
+#: ../src/keybindings.c:625
+msgid "Switch to VTE"
+msgstr "Перемкнутися до VTE"
+
+#: ../src/keybindings.c:627
+#, fuzzy
+msgid "Switch to Sidebar"
+msgstr "Перемкнутися до панелі пошуку"
+
+#: ../src/keybindings.c:629
+#, fuzzy
+msgid "Switch to Sidebar Symbol List"
+msgstr "Перемкнутися до панелі пошуку"
+
+#: ../src/keybindings.c:631
+#, fuzzy
 msgid "Switch to Sidebar Document List"
 msgstr "Перемкнутися до документу зліва"
 
-#: ../src/keybindings.c:622
+#: ../src/keybindings.c:636
 msgid "Switch to left document"
 msgstr "Перемкнутися до документу зліва"
 
-#: ../src/keybindings.c:624
+#: ../src/keybindings.c:638
 msgid "Switch to right document"
 msgstr "Перемкнутися до документу зправа"
 
-#: ../src/keybindings.c:626
+#: ../src/keybindings.c:640
 msgid "Switch to last used document"
 msgstr "Перемкнутися до останнього використаного документу"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:643
 msgid "Move document left"
 msgstr "Перемістити документ уліво"
 
-#: ../src/keybindings.c:632
+#: ../src/keybindings.c:646
 msgid "Move document right"
 msgstr "Перемістити документ направо"
 
-#: ../src/keybindings.c:634
+#: ../src/keybindings.c:648
 #, fuzzy
 msgid "Move document first"
 msgstr "Переміститися до початку документу"
 
-#: ../src/keybindings.c:636
+#: ../src/keybindings.c:650
 #, fuzzy
 msgid "Move document last"
 msgstr "Переміститися до кінця документу"
 
-#: ../src/keybindings.c:641
+#: ../src/keybindings.c:655
 #, fuzzy
 msgid "Toggle Line wrapping"
 msgstr "Переніс рядку"
 
-#: ../src/keybindings.c:643
+#: ../src/keybindings.c:657
 #, fuzzy
 msgid "Toggle Line breaking"
 msgstr "_Перемикач закоментованості рядку"
 
-#: ../src/keybindings.c:649
+#: ../src/keybindings.c:663
 #, fuzzy
 msgid "Replace spaces with tabs"
 msgstr "_Заміняти відступи пробілами"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:665
 #, fuzzy
 msgid "Toggle current fold"
 msgstr "Виділити поточне слово"
 
-#: ../src/keybindings.c:653
+#: ../src/keybindings.c:667
 msgid "Fold all"
 msgstr "Згорнути усе"
 
-#: ../src/keybindings.c:655
+#: ../src/keybindings.c:669
 msgid "Unfold all"
 msgstr "Розгорнути усе"
 
-#: ../src/keybindings.c:657
+#: ../src/keybindings.c:671
 msgid "Reload symbol list"
 msgstr "Перезавантажити список сипмволів"
 
-#: ../src/keybindings.c:659
+#: ../src/keybindings.c:673
 #, fuzzy
 msgid "Remove Markers"
 msgstr "Прибрати _маркери"
 
-#: ../src/keybindings.c:661
+#: ../src/keybindings.c:675
 #, fuzzy
 msgid "Remove Error Indicators"
 msgstr "Прибрати індикатори _помилок"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:677
 #, fuzzy
 msgid "Remove Markers and Error Indicators"
 msgstr "Прибрати індикатори _помилок"
 
-#: ../src/keybindings.c:668 ../src/toolbar.c:72
+#: ../src/keybindings.c:682 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Компілювати"
 
-#: ../src/keybindings.c:672
+#: ../src/keybindings.c:686
 msgid "Make all"
 msgstr "Виконати make над усим"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:689
 msgid "Make custom target"
 msgstr "Виконати make над вказаним файлом"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:691
 msgid "Make object"
 msgstr "Виконати make над об'єктом"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:693
 msgid "Next error"
 msgstr "Наступна помилка"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:695
 #, fuzzy
 msgid "Previous error"
 msgstr "Попередні перекладачі"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:697
 msgid "Run"
 msgstr "Виконати"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:699
 msgid "Build options"
 msgstr "Опції побудови"
 
-#: ../src/keybindings.c:690
+#: ../src/keybindings.c:704
 msgid "Show Color Chooser"
 msgstr "Показати палітру кольорів"
 
-#: ../src/keybindings.c:960
+#: ../src/keybindings.c:974
 msgid "Keyboard Shortcuts"
 msgstr "Гарячі клавіші"
 
-#: ../src/keybindings.c:972
+#: ../src/keybindings.c:986
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Наступні гарячі клавіші були налаштовані:"
 
-#: ../src/keyfile.c:1020
+#: ../src/keyfile.c:1027
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Друкуйте тут усе що забажаєте і використовуйте це вікно для приміток або як "
 "чернетку"
 
-#: ../src/keyfile.c:1247
+#: ../src/keyfile.c:1254
 msgid "Failed to load one or more session files."
 msgstr "Помилка завантаження одного або більше файлів сесії."
 
@@ -3955,7 +4010,7 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Згенерувати глобальний файл теґів (дивіться документацію)"
 
 #: ../src/libmain.c:122
-msgid "Don't preprocess C/C++ files when generating tags"
+msgid "Don't preprocess C/C++ files when generating tags file"
 msgstr ""
 
 #: ../src/libmain.c:124
@@ -4017,25 +4072,25 @@ msgstr ""
 msgid "Show version and exit"
 msgstr "Показати версію та вийти"
 
-#: ../src/libmain.c:515
+#: ../src/libmain.c:525
 msgid "[FILES...]"
 msgstr "[Файли...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:549
+#: ../src/libmain.c:559
 #, fuzzy, c-format
 msgid "built on %s with "
 msgstr "(побудова під час, або після %s)"
 
-#: ../src/libmain.c:642
+#: ../src/libmain.c:652
 msgid "Move it now?"
 msgstr ""
 
-#: ../src/libmain.c:644
+#: ../src/libmain.c:654
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 
-#: ../src/libmain.c:653
+#: ../src/libmain.c:663
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -4044,14 +4099,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:663
+#: ../src/libmain.c:673
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/libmain.c:745
+#: ../src/libmain.c:755
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -4062,21 +4117,21 @@ msgstr ""
 "Можуть бути проблеми під час використання Geany без теки конфігурацій.\n"
 "Всеодно викликати Geany?"
 
-#: ../src/libmain.c:1144
+#: ../src/libmain.c:1154
 #, c-format
 msgid "This is Geany %s."
 msgstr "Це Geany %s."
 
-#: ../src/libmain.c:1146
+#: ../src/libmain.c:1156
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Тека конфігурацій не може бути створена (%s)."
 
-#: ../src/libmain.c:1370
+#: ../src/libmain.c:1380
 msgid "Do you really want to quit?"
 msgstr "Ви дійсно бажаєте вийти?"
 
-#: ../src/libmain.c:1408
+#: ../src/libmain.c:1418
 #, fuzzy
 msgid "Configuration files reloaded."
 msgstr "Помилка під час компіляції."
@@ -4135,12 +4190,12 @@ msgid ""
 "please recompile it."
 msgstr ""
 
-#: ../src/plugins.c:1224
+#: ../src/plugins.c:1228
 #, fuzzy
 msgid "_Plugin Manager"
 msgstr "Менеджер додатків"
 
-#: ../src/plugins.c:1600
+#: ../src/plugins.c:1607
 msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
@@ -4148,7 +4203,7 @@ msgid ""
 msgstr ""
 
 #. Four allocations is less than ideal but meh
-#: ../src/plugins.c:1602
+#: ../src/plugins.c:1609
 #, c-format
 msgid ""
 "Version:\t%s\n"
@@ -4156,23 +4211,23 @@ msgid ""
 "Filename:\t%s"
 msgstr ""
 
-#: ../src/plugins.c:1630
+#: ../src/plugins.c:1637
 msgid "No plugins available."
 msgstr "Не доступно жодного додатку."
 
-#: ../src/plugins.c:1762
+#: ../src/plugins.c:1769
 msgid "Active"
 msgstr "Активно"
 
-#: ../src/plugins.c:1769
+#: ../src/plugins.c:1776
 msgid "Plugin"
 msgstr "Додаток"
 
-#: ../src/plugins.c:1876
+#: ../src/plugins.c:1883
 msgid "Plugins"
 msgstr "Додатки"
 
-#: ../src/plugins.c:1917
+#: ../src/plugins.c:1924
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
@@ -4189,12 +4244,12 @@ msgstr "Захопити комбінацію"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Задайте комбінацію клавіш, котру ви бажаєте використовувати для \"%s\""
 
-#: ../src/prefs.c:225 ../src/symbols.c:2336 ../src/sidebar.c:752
+#: ../src/prefs.c:225 ../src/symbols.c:2525 ../src/sidebar.c:752
 #, fuzzy
 msgid "_Expand All"
 msgstr "_Знайти усе"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2341 ../src/sidebar.c:758
+#: ../src/prefs.c:230 ../src/symbols.c:2530 ../src/sidebar.c:758
 #, fuzzy
 msgid "_Collapse All"
 msgstr "_Закрити усе"
@@ -4226,14 +4281,14 @@ msgstr "Комбінація '%s' вже використовується для
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1694
+#: ../src/prefs.c:1693
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Вкажіть теки для інструменту нижче. Для інструментів, котрих ви не "
 "потребуєте залишіть пустим."
 
 #. page Templates
-#: ../src/prefs.c:1699
+#: ../src/prefs.c:1698
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -4242,7 +4297,7 @@ msgstr ""
 "деталей."
 
 #. page Keybindings
-#: ../src/prefs.c:1704
+#: ../src/prefs.c:1703
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -4254,7 +4309,7 @@ msgstr ""
 "закріплення."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1709
+#: ../src/prefs.c:1708
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4437,7 +4492,7 @@ msgstr "Тека конфігурацій не може бути створен�
 msgid "Project file could not be written (%s)."
 msgstr "Неможливо записати файл проекту (%s)."
 
-#: ../src/project.c:777 ../src/search.c:626
+#: ../src/project.c:777 ../src/search.c:627
 msgid "_Replace"
 msgstr "_Замінити"
 
@@ -4456,21 +4511,21 @@ msgstr "Вкажіть назву проекту"
 msgid "Project \"%s\" opened."
 msgstr "Проект \"%s\" відкрито."
 
-#: ../src/search.c:307 ../src/search.c:959
+#: ../src/search.c:308 ../src/search.c:960
 msgid "_Use regular expressions"
 msgstr "Використовувати _регулярні вирази"
 
-#: ../src/search.c:310
+#: ../src/search.c:311
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
 msgstr ""
 
-#: ../src/search.c:315
+#: ../src/search.c:316
 msgid "Use _escape sequences"
 msgstr "Користуватися escape-_послідовністю"
 
-#: ../src/search.c:319
+#: ../src/search.c:320
 #, fuzzy
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
@@ -4479,11 +4534,11 @@ msgstr ""
 "Заміняти \\\\, \\t, \\n, \\r і \\uXXXX (символи Юнікоду) з відповідними "
 "керівними символами."
 
-#: ../src/search.c:322
+#: ../src/search.c:323
 msgid "Use multi-line matchin_g"
 msgstr ""
 
-#: ../src/search.c:327
+#: ../src/search.c:328
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4491,208 +4546,208 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 
-#: ../src/search.c:340
+#: ../src/search.c:341
 msgid "Search _backwards"
 msgstr "_Зворотній пошук"
 
-#: ../src/search.c:346 ../src/search.c:968
+#: ../src/search.c:347 ../src/search.c:969
 msgid "C_ase sensitive"
 msgstr "_Чутливе до регістру"
 
-#: ../src/search.c:350 ../src/search.c:973
+#: ../src/search.c:351 ../src/search.c:974
 msgid "Match only a _whole word"
 msgstr "Співпадіння тільки _усього слова"
 
-#: ../src/search.c:354
+#: ../src/search.c:355
 msgid "Match from s_tart of word"
 msgstr "Співпадіння у _початку слова"
 
-#: ../src/search.c:470
+#: ../src/search.c:471
 msgid "_Previous"
 msgstr "_Попередній"
 
-#: ../src/search.c:475
+#: ../src/search.c:476
 msgid "_Next"
 msgstr "_Наступний"
 
-#: ../src/search.c:479 ../src/search.c:637 ../src/search.c:876
+#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
 msgid "_Search for:"
 msgstr "_Шукати на:"
 
 #. Now add the multiple match options
-#: ../src/search.c:507
+#: ../src/search.c:508
 msgid "_Find All"
 msgstr "_Знайти усе"
 
-#: ../src/search.c:514
+#: ../src/search.c:515
 msgid "_Mark"
 msgstr "_Виділити"
 
-#: ../src/search.c:516
+#: ../src/search.c:517
 #, fuzzy
 msgid "Mark all matches in the current document"
 msgstr "Виділити усі співпадіння у поточному документі."
 
-#: ../src/search.c:521 ../src/search.c:696
+#: ../src/search.c:522 ../src/search.c:697
 msgid "In Sessi_on"
 msgstr "У _сесії"
 
-#: ../src/search.c:526 ../src/search.c:701
+#: ../src/search.c:527 ../src/search.c:702
 msgid "_In Document"
 msgstr "У _документі"
 
 #. close window checkbox
-#: ../src/search.c:532 ../src/search.c:714
+#: ../src/search.c:533 ../src/search.c:715
 msgid "Close _dialog"
 msgstr "Зачинити _діалог"
 
-#: ../src/search.c:536 ../src/search.c:718
+#: ../src/search.c:537 ../src/search.c:719
 #, fuzzy
 msgid "Disable this option to keep the dialog open"
 msgstr "Вимкнути цю опцію щоб залишити діалог відкритим."
 
-#: ../src/search.c:631
+#: ../src/search.c:632
 msgid "Replace & Fi_nd"
 msgstr "Знайти та за_мінити"
 
-#: ../src/search.c:640
+#: ../src/search.c:641
 msgid "Replace wit_h:"
 msgstr "_Змінити на:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:689
+#: ../src/search.c:690
 msgid "Re_place All"
 msgstr "За_мінити усе"
 
-#: ../src/search.c:706
+#: ../src/search.c:707
 msgid "In Se_lection"
 msgstr "У _виділеному"
 
-#: ../src/search.c:708
+#: ../src/search.c:709
 msgid "Replace all matches found in the currently selected text"
 msgstr "Замінити усі співпадіння у виділеному тексті"
 
-#: ../src/search.c:825
+#: ../src/search.c:826
 msgid "all"
 msgstr ""
 
-#: ../src/search.c:827
+#: ../src/search.c:828
 #, fuzzy
 msgid "project"
 msgstr "проекти"
 
-#: ../src/search.c:829
+#: ../src/search.c:830
 #, fuzzy
 msgid "custom"
 msgstr "Вирізати"
 
-#: ../src/search.c:833
+#: ../src/search.c:834
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
 
-#: ../src/search.c:895
+#: ../src/search.c:896
 msgid "Fi_les:"
 msgstr ""
 
-#: ../src/search.c:907
+#: ../src/search.c:908
 #, fuzzy
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Зразки файлу:"
 
-#: ../src/search.c:919
+#: ../src/search.c:920
 msgid "_Directory:"
 msgstr "_Тека:"
 
-#: ../src/search.c:938
+#: ../src/search.c:939
 #, fuzzy
 msgid "E_ncoding:"
 msgstr "Встановити кодовування:"
 
-#: ../src/search.c:962
+#: ../src/search.c:963
 msgid "See grep's manual page for more information"
 msgstr ""
 
-#: ../src/search.c:964
+#: ../src/search.c:965
 msgid "_Recurse in subfolders"
 msgstr "_Рекурсія у внутрішніх теках"
 
-#: ../src/search.c:977
+#: ../src/search.c:978
 msgid "_Invert search results"
 msgstr "_Інвертувати результати пошуку"
 
-#: ../src/search.c:981
+#: ../src/search.c:982
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 
-#: ../src/search.c:998
+#: ../src/search.c:999
 msgid "E_xtra options:"
 msgstr "_Екстра опції:"
 
-#: ../src/search.c:1006
+#: ../src/search.c:1007
 msgid "Other options to pass to Grep"
 msgstr ""
 
-#: ../src/search.c:1368 ../src/search.c:2227 ../src/search.c:2230
+#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
 #, fuzzy, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Знайдено %d співпадінь для \"%s\"."
 msgstr[1] "Знайдено %d співпадінь для \"%s\"."
 
-#: ../src/search.c:1424
+#: ../src/search.c:1425
 #, fuzzy, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Виділити усі співпадіння у поточному документі."
 
-#: ../src/search.c:1615
+#: ../src/search.c:1616
 msgid "Invalid directory for find in files."
 msgstr "Помилкова тека для пошуку файлів."
 
-#: ../src/search.c:1632
+#: ../src/search.c:1633
 msgid "No text to find."
 msgstr "Немає тексту для пошуку."
 
-#: ../src/search.c:1708
+#: ../src/search.c:1709
 #, fuzzy
 msgid "Searching..."
 msgstr "_Пошук"
 
-#: ../src/search.c:1710
+#: ../src/search.c:1711
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (у теці: %s)"
 
-#: ../src/search.c:1718
+#: ../src/search.c:1719
 #, fuzzy, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
 "Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
-#: ../src/search.c:1758
+#: ../src/search.c:1759
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Не можу відкрити теку (%s)"
 
-#: ../src/search.c:1848
+#: ../src/search.c:1849
 msgid "Search failed."
 msgstr "Помилка пошуку."
 
-#: ../src/search.c:1872
+#: ../src/search.c:1873
 #, fuzzy, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Пошук закінчено з %d співпадіннями."
 msgstr[1] "Пошук закінчено з %d співпадіннями."
 
-#: ../src/search.c:1880
+#: ../src/search.c:1881
 msgid "No matches found."
 msgstr "Жодних співпадінь."
 
-#: ../src/search.c:1909
+#: ../src/search.c:1910
 #, c-format
 msgid "Bad regex: %s"
 msgstr ""
@@ -4705,394 +4760,385 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
-#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
 msgid "Text ended before matching quote was found"
 msgstr ""
 
 #. TL note: from glib
-#: ../src/spawn.c:126
+#: ../src/spawn.c:130
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#: ../src/spawn.c:147 ../src/spawn.c:161
+#: ../src/spawn.c:151 ../src/spawn.c:165
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#: ../src/spawn.c:254
+#: ../src/spawn.c:258
 #, fuzzy
 msgid "Program not found"
 msgstr "\"%s\" не знайдено."
 
-#: ../src/spawn.c:668
+#: ../src/spawn.c:672
 #, fuzzy
 msgid "Failed to change to the working directory"
 msgstr "Помилка при спробі змінити робочу директорію на \"%s\""
 
-#: ../src/spawn.c:673
+#: ../src/spawn.c:677
 msgid "Unknown error executing child process"
 msgstr ""
 
-#: ../src/stash.c:1150
-#, fuzzy
-msgid "Name"
-msgstr "Назва:"
-
-#: ../src/stash.c:1157
+#: ../src/stash.c:1177
 msgid "Value"
 msgstr ""
 
-#: ../src/symbols.c:634 ../src/symbols.c:684 ../src/symbols.c:794
+#: ../src/symbols.c:548 ../src/symbols.c:598 ../src/symbols.c:708
 msgid "Chapter"
 msgstr "Частина"
 
-#: ../src/symbols.c:635 ../src/symbols.c:680 ../src/symbols.c:795
+#: ../src/symbols.c:549 ../src/symbols.c:594 ../src/symbols.c:709
 msgid "Section"
 msgstr "Секція"
 
-#: ../src/symbols.c:636
+#: ../src/symbols.c:550
 msgid "Sect1"
 msgstr "Секц1"
 
-#: ../src/symbols.c:637
+#: ../src/symbols.c:551
 msgid "Sect2"
 msgstr "Секц2"
 
-#: ../src/symbols.c:638
+#: ../src/symbols.c:552
 msgid "Sect3"
 msgstr "Секц3"
 
-#: ../src/symbols.c:639
+#: ../src/symbols.c:553
 msgid "Appendix"
 msgstr "Додаток"
 
-#: ../src/symbols.c:640 ../src/symbols.c:685 ../src/symbols.c:710
-#: ../src/symbols.c:726 ../src/symbols.c:741 ../src/symbols.c:752
-#: ../src/symbols.c:853 ../src/symbols.c:864 ../src/symbols.c:877
-#: ../src/symbols.c:891 ../src/symbols.c:903 ../src/symbols.c:915
-#: ../src/symbols.c:932 ../src/symbols.c:961 ../src/symbols.c:993
+#: ../src/symbols.c:554 ../src/symbols.c:599 ../src/symbols.c:624
+#: ../src/symbols.c:640 ../src/symbols.c:655 ../src/symbols.c:666
+#: ../src/symbols.c:767 ../src/symbols.c:778 ../src/symbols.c:791
+#: ../src/symbols.c:805 ../src/symbols.c:817 ../src/symbols.c:829
+#: ../src/symbols.c:846 ../src/symbols.c:875 ../src/symbols.c:907
 msgid "Other"
 msgstr "Інше"
 
-#: ../src/symbols.c:646 ../src/symbols.c:923 ../src/symbols.c:971
+#: ../src/symbols.c:560 ../src/symbols.c:837 ../src/symbols.c:885
 msgid "Module"
 msgstr "Модуль"
 
-#: ../src/symbols.c:647 ../src/symbols.c:737 ../src/symbols.c:849
-#: ../src/symbols.c:901 ../src/symbols.c:913 ../src/symbols.c:928
-#: ../src/symbols.c:942
+#: ../src/symbols.c:561 ../src/symbols.c:651 ../src/symbols.c:763
+#: ../src/symbols.c:815 ../src/symbols.c:827 ../src/symbols.c:842
+#: ../src/symbols.c:856
 msgid "Types"
 msgstr "Типи"
 
-#: ../src/symbols.c:648
+#: ../src/symbols.c:562
 msgid "Type constructors"
 msgstr "Конструктори типів"
 
-#: ../src/symbols.c:649 ../src/symbols.c:671 ../src/symbols.c:692
-#: ../src/symbols.c:709 ../src/symbols.c:721 ../src/symbols.c:734
-#: ../src/symbols.c:749 ../src/symbols.c:763 ../src/symbols.c:773
-#: ../src/symbols.c:837 ../src/symbols.c:887 ../src/symbols.c:910
-#: ../src/symbols.c:955 ../src/symbols.c:979
+#: ../src/symbols.c:563 ../src/symbols.c:585 ../src/symbols.c:606
+#: ../src/symbols.c:623 ../src/symbols.c:635 ../src/symbols.c:648
+#: ../src/symbols.c:663 ../src/symbols.c:677 ../src/symbols.c:687
+#: ../src/symbols.c:751 ../src/symbols.c:801 ../src/symbols.c:824
+#: ../src/symbols.c:869 ../src/symbols.c:893
 msgid "Functions"
 msgstr "Функції"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:568
 msgid "Program"
 msgstr ""
 
-#: ../src/symbols.c:656 ../src/symbols.c:664 ../src/symbols.c:670
+#: ../src/symbols.c:570 ../src/symbols.c:578 ../src/symbols.c:584
 msgid "Sections"
 msgstr "Секції"
 
-#: ../src/symbols.c:657
+#: ../src/symbols.c:571
 msgid "Paragraph"
 msgstr ""
 
-#: ../src/symbols.c:658
+#: ../src/symbols.c:572
 #, fuzzy
 msgid "Group"
 msgstr "Група:"
 
-#: ../src/symbols.c:659
+#: ../src/symbols.c:573
 msgid "Data"
 msgstr ""
 
-#: ../src/symbols.c:665
+#: ../src/symbols.c:579
 msgid "Keys"
 msgstr "Клавіші"
 
-#: ../src/symbols.c:672 ../src/symbols.c:723 ../src/symbols.c:739
-#: ../src/symbols.c:765 ../src/symbols.c:838 ../src/symbols.c:863
-#: ../src/symbols.c:889 ../src/symbols.c:902 ../src/symbols.c:911
-#: ../src/symbols.c:927 ../src/symbols.c:962 ../src/symbols.c:991
+#: ../src/symbols.c:586 ../src/symbols.c:637 ../src/symbols.c:653
+#: ../src/symbols.c:679 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:803 ../src/symbols.c:816 ../src/symbols.c:825
+#: ../src/symbols.c:841 ../src/symbols.c:876 ../src/symbols.c:905
 msgid "Variables"
 msgstr "Змінні"
 
-#: ../src/symbols.c:679
+#: ../src/symbols.c:593
 msgid "Environment"
 msgstr "Середовище розробки"
 
-#: ../src/symbols.c:681 ../src/symbols.c:796
+#: ../src/symbols.c:595 ../src/symbols.c:710
 msgid "Subsection"
 msgstr "Підрозділ"
 
-#: ../src/symbols.c:682 ../src/symbols.c:797
+#: ../src/symbols.c:596 ../src/symbols.c:711
 msgid "Subsubsection"
 msgstr "Під-підрозділ"
 
-#: ../src/symbols.c:693 ../src/symbols.c:718
+#: ../src/symbols.c:607 ../src/symbols.c:632
 #, fuzzy
 msgid "Structures"
 msgstr "Статус"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:614
 msgid "Parts"
 msgstr ""
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:615
 msgid "Assembly"
 msgstr ""
 
-#: ../src/symbols.c:702
+#: ../src/symbols.c:616
 msgid "Steps"
 msgstr ""
 
-#: ../src/symbols.c:717 ../src/symbols.c:815 ../src/symbols.c:861
+#: ../src/symbols.c:631 ../src/symbols.c:729 ../src/symbols.c:775
 msgid "Modules"
 msgstr "Модулі"
 
-#: ../src/symbols.c:719 ../src/symbols.c:766
+#: ../src/symbols.c:633 ../src/symbols.c:680
 msgid "Traits"
 msgstr ""
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:634
 #, fuzzy
 msgid "Implementations"
 msgstr "<b>Абзац</b>"
 
-#: ../src/symbols.c:722 ../src/symbols.c:982
+#: ../src/symbols.c:636 ../src/symbols.c:896
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:724 ../src/symbols.c:940 ../src/symbols.c:949
-#: ../src/symbols.c:988
+#: ../src/symbols.c:638 ../src/symbols.c:854 ../src/symbols.c:863
+#: ../src/symbols.c:902
 msgid "Macros"
 msgstr "Макроси"
 
-#: ../src/symbols.c:725 ../src/symbols.c:818 ../src/symbols.c:827
-#: ../src/symbols.c:836 ../src/symbols.c:874 ../src/symbols.c:900
+#: ../src/symbols.c:639 ../src/symbols.c:732 ../src/symbols.c:741
+#: ../src/symbols.c:750 ../src/symbols.c:788 ../src/symbols.c:814
 msgid "Methods"
 msgstr "Методи"
 
-#: ../src/symbols.c:733 ../src/symbols.c:748 ../src/symbols.c:846
-#: ../src/symbols.c:871 ../src/symbols.c:884
+#: ../src/symbols.c:647 ../src/symbols.c:662 ../src/symbols.c:760
+#: ../src/symbols.c:785 ../src/symbols.c:798
 msgid "Package"
 msgstr "Пакунок"
 
-#: ../src/symbols.c:735 ../src/symbols.c:761 ../src/symbols.c:872
-#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:925
-#: ../src/symbols.c:978
+#: ../src/symbols.c:649 ../src/symbols.c:675 ../src/symbols.c:786
+#: ../src/symbols.c:799 ../src/symbols.c:812 ../src/symbols.c:839
+#: ../src/symbols.c:892
 msgid "Interfaces"
 msgstr "Інтерфейси"
 
-#: ../src/symbols.c:736 ../src/symbols.c:981
+#: ../src/symbols.c:650 ../src/symbols.c:895
 #, fuzzy
 msgid "Structs"
 msgstr "Статус"
 
-#: ../src/symbols.c:738 ../src/symbols.c:751 ../src/symbols.c:764
-#: ../src/symbols.c:890 ../src/symbols.c:912
+#: ../src/symbols.c:652 ../src/symbols.c:665 ../src/symbols.c:678
+#: ../src/symbols.c:804 ../src/symbols.c:826
 msgid "Constants"
 msgstr "Константи"
 
-#: ../src/symbols.c:740 ../src/symbols.c:875 ../src/symbols.c:980
+#: ../src/symbols.c:654 ../src/symbols.c:789 ../src/symbols.c:894
 msgid "Members"
 msgstr "Члени"
 
-#: ../src/symbols.c:750 ../src/symbols.c:914 ../src/symbols.c:939
+#: ../src/symbols.c:664 ../src/symbols.c:828 ../src/symbols.c:853
 msgid "Labels"
 msgstr "Мітки"
 
-#: ../src/symbols.c:760 ../src/symbols.c:825 ../src/symbols.c:974
+#: ../src/symbols.c:674 ../src/symbols.c:739 ../src/symbols.c:888
 msgid "Namespaces"
 msgstr "Поля імен"
 
-#: ../src/symbols.c:762 ../src/symbols.c:784 ../src/symbols.c:816
-#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:977
+#: ../src/symbols.c:676 ../src/symbols.c:698 ../src/symbols.c:730
+#: ../src/symbols.c:740 ../src/symbols.c:749 ../src/symbols.c:787
+#: ../src/symbols.c:800 ../src/symbols.c:813 ../src/symbols.c:891
 msgid "Classes"
 msgstr "Класи"
 
-#: ../src/symbols.c:774
+#: ../src/symbols.c:688
 msgid "Anchors"
 msgstr ""
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:689
 msgid "H1 Headings"
 msgstr ""
 
-#: ../src/symbols.c:776
+#: ../src/symbols.c:690
 msgid "H2 Headings"
 msgstr ""
 
-#: ../src/symbols.c:777
+#: ../src/symbols.c:691
 msgid "H3 Headings"
 msgstr ""
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:699
 #, fuzzy
 msgid "ID Selectors"
 msgstr "У _виділеному"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:700
 #, fuzzy
 msgid "Type Selectors"
 msgstr "Конструктори типів"
 
-#: ../src/symbols.c:805
+#: ../src/symbols.c:719
 #, fuzzy
 msgid "Section Level 1"
 msgstr "Секція"
 
-#: ../src/symbols.c:806
+#: ../src/symbols.c:720
 #, fuzzy
 msgid "Section Level 2"
 msgstr "Секція"
 
-#: ../src/symbols.c:807
+#: ../src/symbols.c:721
 #, fuzzy
 msgid "Section Level 3"
 msgstr "Секція"
 
-#: ../src/symbols.c:808
+#: ../src/symbols.c:722
 #, fuzzy
 msgid "Section Level 4"
 msgstr "Секція"
 
-#: ../src/symbols.c:817
+#: ../src/symbols.c:731
 msgid "Singletons"
 msgstr "Одинаки"
 
-#: ../src/symbols.c:828 ../src/symbols.c:956
+#: ../src/symbols.c:742 ../src/symbols.c:870
 #, fuzzy
 msgid "Procedures"
 msgstr "Налаштування"
 
-#: ../src/symbols.c:839
+#: ../src/symbols.c:753
 #, fuzzy
 msgid "Imports"
 msgstr "Експортувати"
 
-#: ../src/symbols.c:847
+#: ../src/symbols.c:761
 #, fuzzy
 msgid "Entities"
 msgstr "безіменний"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:762
 #, fuzzy
 msgid "Architectures"
 msgstr "Статус"
 
-#: ../src/symbols.c:850
+#: ../src/symbols.c:764
 #, fuzzy
 msgid "Functions / Procedures"
 msgstr "Налаштування"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:765
 #, fuzzy
 msgid "Variables / Signals"
 msgstr "Змінні"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:766
 msgid "Processes / Blocks / Components"
 msgstr ""
 
-#: ../src/symbols.c:860
+#: ../src/symbols.c:774
 msgid "Events"
 msgstr ""
 
-#: ../src/symbols.c:862
+#: ../src/symbols.c:776
 #, fuzzy
 msgid "Functions / Tasks"
 msgstr "Функції"
 
-#: ../src/symbols.c:876 ../src/symbols.c:931
+#: ../src/symbols.c:790 ../src/symbols.c:845
 msgid "Enums"
 msgstr ""
 
-#: ../src/symbols.c:888
-msgid "Properties"
-msgstr "Налаштування"
-
-#: ../src/symbols.c:924
+#: ../src/symbols.c:838
 msgid "Programs"
 msgstr ""
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:840
 #, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Налаштування"
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:843
 #, fuzzy
 msgid "Components"
 msgstr "<b>Завершення</b>"
 
-#: ../src/symbols.c:930
+#: ../src/symbols.c:844
 msgid "Blocks"
 msgstr ""
 
-#: ../src/symbols.c:941
+#: ../src/symbols.c:855
 #, fuzzy
 msgid "Defines"
 msgstr "Рядків:"
 
-#: ../src/symbols.c:948
+#: ../src/symbols.c:862
 msgid "Targets"
 msgstr ""
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:871
 msgid "Indexes"
 msgstr ""
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:872
 #, fuzzy
 msgid "Tables"
 msgstr "Змінні"
 
-#: ../src/symbols.c:959
+#: ../src/symbols.c:873
 msgid "Triggers"
 msgstr ""
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:874
 #, fuzzy
 msgid "Views"
 msgstr "_Показати"
 
-#: ../src/symbols.c:992
+#: ../src/symbols.c:906
 #, fuzzy
 msgid "Extern Variables"
 msgstr "Змінні"
 
-#: ../src/symbols.c:1756
+#: ../src/symbols.c:1670
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Незнайоме розширення файлу \"%s\".\n"
 
-#: ../src/symbols.c:1782
-#, c-format
-msgid "Failed to create tags file, perhaps because no tags were found.\n"
+#: ../src/symbols.c:1696
+#, fuzzy, c-format
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "Помилка створення файлу теґів.\n"
 
-#: ../src/symbols.c:1789
-#, c-format
+#: ../src/symbols.c:1703
+#, fuzzy, c-format
 msgid ""
-"Usage: %s -g <Tag File> <File list>\n"
+"Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
 "Використання: %s -g <Файл ярликів> <Файл списку>\n"
 "\n"
 
-#: ../src/symbols.c:1790
+#: ../src/symbols.c:1704
 #, c-format
 msgid ""
 "Example:\n"
@@ -5103,41 +5149,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1804
-msgid "Load Tags"
+#: ../src/symbols.c:1718
+#, fuzzy
+msgid "Load Tags File"
 msgstr "Завантажити ярлики"
 
-#: ../src/symbols.c:1811
+#: ../src/symbols.c:1725
 #, fuzzy
-msgid "Geany tag files (*.*.tags)"
+msgid "Geany tags file (*.*.tags)"
 msgstr "Файл ярликів Geany (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1831
+#: ../src/symbols.c:1745
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Завантажено %s файл теґів '%s'."
 
-#: ../src/symbols.c:1834
+#: ../src/symbols.c:1748
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Неможливо завантажити файл ярликів '%s'."
 
-#: ../src/symbols.c:1972
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1983
+#, fuzzy, c-format
+msgid "<b>%s: %lu</b>"
+msgstr "<b>Показати</b>"
+
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1986
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Передовий опис \"%s\" не знайдено."
 
-#: ../src/symbols.c:1974
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Визначення \"%s\" не знайдено."
 
-#: ../src/symbols.c:2351
+#: ../src/symbols.c:2540
 msgid "Sort by _Name"
 msgstr "Сортувати за _ім'ям"
 
-#: ../src/symbols.c:2358
+#: ../src/symbols.c:2547
 msgid "Sort by _Appearance"
 msgstr "Сортувати за _створенням"
 
@@ -5343,7 +5402,7 @@ msgid ""
 msgstr ""
 "Неможливо виконати інструмент виділення '%s'; перевірте шлях у налаштуваннях."
 
-#: ../src/tools.c:357 ../src/tools.c:620
+#: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
 msgstr "Встановити власні команди"
 
@@ -5359,40 +5418,41 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: ../src/tools.c:591
+#: ../src/tools.c:597
 msgid "No custom commands defined."
 msgstr "Не встановлено жодної власної команди."
 
-#: ../src/tools.c:689
+#: ../src/tools.c:695
 msgid "Word Count"
 msgstr "Лічильник слів"
 
-#: ../src/tools.c:698
+#: ../src/tools.c:704
 msgid "selection"
 msgstr "виділене"
 
-#: ../src/tools.c:703
+#: ../src/tools.c:709
 msgid "whole document"
 msgstr "увесь документ"
 
-#: ../src/tools.c:712
+#: ../src/tools.c:718
 msgid "Range:"
 msgstr "Відрізок:"
 
-#: ../src/tools.c:724
+#: ../src/tools.c:730
 msgid "Lines:"
 msgstr "Рядків:"
 
-#: ../src/tools.c:738
+#: ../src/tools.c:744
 msgid "Words:"
 msgstr "Слів:"
 
-#: ../src/tools.c:752
+#: ../src/tools.c:758
 msgid "Characters:"
 msgstr "Символів:"
 
 #: ../src/sidebar.c:178
-msgid "No tags found"
+#, fuzzy
+msgid "No symbols found"
 msgstr "Не знайдено жодної вкладки"
 
 #: ../src/sidebar.c:602
@@ -6174,6 +6234,14 @@ msgstr "Прибрати _бокову панель"
 msgid "Top and Bottom"
 msgstr "Низовина"
 
+#, fuzzy
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "Перейти до визначення ярлика"
+
+#, fuzzy
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "Перейти до об'яви ярлику"
+
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "Друкування \"%s\" завершилося помилкою (повернутий код: %s)."
 
@@ -6468,9 +6536,6 @@ msgstr "Низовина"
 
 #~ msgid "Icon size:"
 #~ msgstr "Розмір кнопки:"
-
-#~ msgid "<b>Appearance</b>"
-#~ msgstr "<b>Вигляд</b>"
 
 #, fuzzy
 #~ msgid "Hard tab width:"

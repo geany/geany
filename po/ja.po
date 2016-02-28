@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.25\n"
+"Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-28 19:45+0100\n"
+"POT-Creation-Date: 2016-02-28 14:14+0100\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
 "Last-Translator: Chikahiro Masami <masami@linux-lhx4.site>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -93,7 +93,7 @@ msgstr "非表示"
 msgid "_Insert \"include <...>\""
 msgstr "\"include <...>\" 文を挿入(_I)"
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:494
+#: ../data/geany.glade.h:16 ../src/keybindings.c:506
 msgid "Insert Alternative _White Space"
 msgstr "複数の空白を挿入(_I)"
 
@@ -105,17 +105,18 @@ msgstr "検索(_S)"
 msgid "Open Selected F_ile"
 msgstr "選択されたファイルを開く(_I)"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2368
+#: ../data/geany.glade.h:19 ../src/symbols.c:2557
 msgid "Find _Usage"
 msgstr "使用箇所を検索(_U)"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2373
+#: ../data/geany.glade.h:20 ../src/symbols.c:2562
 msgid "Find _Document Usage"
 msgstr "文書内で使用箇所を検索(_D)"
 
 #: ../data/geany.glade.h:21
-msgid "Go to _Tag Definition"
-msgstr "タグ定義に移動(_T)"
+#, fuzzy
+msgid "Go to Symbol Defini_tion"
+msgstr "タグ定義へ移動"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -162,7 +163,7 @@ msgstr "上"
 msgid "Bottom"
 msgstr "下"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:504
+#: ../data/geany.glade.h:31 ../src/keybindings.c:516
 msgid "Preferences"
 msgstr "設定"
 
@@ -1028,7 +1029,7 @@ msgstr "色:"
 msgid "Sets the color of the long line marker"
 msgstr "長い行のマーカーの色を設定します"
 
-#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:825
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
 msgid "Color Chooser"
 msgstr "色の選択"
 
@@ -1190,7 +1191,7 @@ msgstr "行末の空白とタブを除去"
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr "行末の空白やタブを除去します"
 
-#: ../data/geany.glade.h:250 ../src/keybindings.c:649
+#: ../data/geany.glade.h:250 ../src/keybindings.c:661
 msgid "Replace tabs with space"
 msgstr "タブを空白に置換"
 
@@ -1222,7 +1223,7 @@ msgstr ""
 "ディスク上の文書ファイルが変更されているかどうかを確認する頻度を秒単位で指定"
 "します。0は確認しません。"
 
-#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:628
+#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:542
 #: ../plugins/filebrowser.c:1160
 msgid "Files"
 msgstr "ファイル"
@@ -1630,7 +1631,7 @@ msgstr "別名で保存...(_A)"
 msgid "Sa_ve All"
 msgstr "すべて保存(_L)"
 
-#: ../data/geany.glade.h:349 ../src/document.c:1662 ../src/document.c:3592
+#: ../data/geany.glade.h:349 ../src/document.c:1666 ../src/document.c:3596
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "再読み込み(_R)"
@@ -1691,11 +1692,11 @@ msgstr "行を上に移動(_M)"
 msgid "M_ove Line(s) Down"
 msgstr "行を下に移動(_O)"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:481
+#: ../data/geany.glade.h:364 ../src/keybindings.c:493
 msgid "_Send Selection to Terminal"
 msgstr "選択範囲を端末に送る(_S)"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:483
+#: ../data/geany.glade.h:365 ../src/keybindings.c:495
 msgid "_Reflow Lines/Block"
 msgstr "複数行/ブロックを整形(_R)"
 
@@ -1739,7 +1740,7 @@ msgstr "コメントを挿入(_N)"
 msgid "Preference_s"
 msgstr "設定(_S)"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:507
+#: ../data/geany.glade.h:376 ../src/keybindings.c:519
 msgid "P_lugin Preferences"
 msgstr "プラグインの設定(_L)"
 
@@ -1755,7 +1756,7 @@ msgstr "次を検索(_N)"
 msgid "Find _Previous"
 msgstr "前を検索(_P)"
 
-#: ../data/geany.glade.h:380 ../src/symbols.c:2378
+#: ../data/geany.glade.h:380 ../src/symbols.c:2567
 msgid "Find in F_iles..."
 msgstr "複数のファイルから検索(_I)..."
 
@@ -1771,11 +1772,11 @@ msgstr "次のメッセージ(_M)"
 msgid "Pr_evious Message"
 msgstr "前のメッセージ(_E)"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:556
+#: ../data/geany.glade.h:384 ../src/keybindings.c:568
 msgid "Go to Ne_xt Marker"
 msgstr "次のマーカーへ移動(_G)"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:559
+#: ../data/geany.glade.h:385 ../src/keybindings.c:571
 msgid "Go to Pre_vious Marker"
 msgstr "前のマーカーへ移動(_G)"
 
@@ -1783,21 +1784,22 @@ msgstr "前のマーカーへ移動(_G)"
 msgid "_Go to Line..."
 msgstr "指定行へ移動(_G)..."
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:519
+#: ../data/geany.glade.h:387 ../src/keybindings.c:531
 msgid "Find Next _Selection"
 msgstr "選択文字列を後方検索(_S)"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:521
+#: ../data/geany.glade.h:388 ../src/keybindings.c:533
 msgid "Find Pre_vious Selection"
 msgstr "選択文字列を前方に検索(_V)"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:538
+#: ../data/geany.glade.h:389 ../src/keybindings.c:550
 msgid "_Mark All"
 msgstr "すべてメイク(_M)"
 
 #: ../data/geany.glade.h:390
-msgid "Go to T_ag Declaration"
-msgstr "タグ宣言に移動(_A)"
+#, fuzzy
+msgid "Go to Symbol Decl_aration"
+msgstr "タグ宣言へ移動"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -1947,7 +1949,7 @@ msgstr "_LF (Unix)に変換"
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "CR (Classic _Mac)に変換"
 
-#: ../data/geany.glade.h:428 ../src/keybindings.c:647
+#: ../data/geany.glade.h:428 ../src/keybindings.c:659
 msgid "_Clone"
 msgstr "複製(_C)"
 
@@ -2029,7 +2031,8 @@ msgid "_Word Count"
 msgstr "ワードカウント(_W)"
 
 #: ../data/geany.glade.h:448
-msgid "Load Ta_gs..."
+#, fuzzy
+msgid "Load Ta_gs File..."
 msgstr "タグを読み込む(_G)..."
 
 #: ../data/geany.glade.h:449
@@ -2393,12 +2396,12 @@ msgstr "これ以上ビルドエラーはありません"
 msgid "Set menu item label"
 msgstr "メニュー項目ラベルを設定"
 
-#: ../src/build.c:1780 ../src/symbols.c:683 ../src/tools.c:397
+#: ../src/build.c:1780 ../src/symbols.c:597 ../src/tools.c:397
 msgid "Label"
 msgstr "ラベル"
 
 #. command column, holding status and command display
-#: ../src/build.c:1781 ../src/symbols.c:678 ../src/tools.c:382
+#: ../src/build.c:1781 ../src/symbols.c:592 ../src/tools.c:382
 msgid "Command"
 msgstr "コマンド"
 
@@ -2484,7 +2487,7 @@ msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d 個のファイルを保存しました"
 
-#: ../src/callbacks.c:885 ../src/keybindings.c:547
+#: ../src/callbacks.c:885 ../src/keybindings.c:559
 msgid "Go to Line"
 msgstr "指定行へ移動"
 
@@ -2520,8 +2523,8 @@ msgstr "パス設定を確認してください。"
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "コンテキスト アクション コマンド \"%s\" を実行できません: %s. %s"
 
-#: ../src/dialogs.c:161 ../src/document.c:2309 ../src/document.c:2374
-#: ../src/document.c:2382
+#: ../src/dialogs.c:161 ../src/document.c:2313 ../src/document.c:2378
+#: ../src/document.c:2386
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" が見つかりません"
@@ -2604,7 +2607,7 @@ msgstr ""
 "ファイルを読み取り専用モードで開きます。複数のファイルを選択して開いた場合、"
 "すべてのファイルが読み取り専用になります。"
 
-#: ../src/dialogs.c:535 ../src/document.c:2060
+#: ../src/dialogs.c:535 ../src/document.c:2064
 msgid "Overwrite?"
 msgstr "上書きしますか?"
 
@@ -2666,7 +2669,7 @@ msgstr "エラーが発生したかファイル情報が取得できません（
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2182 ../src/symbols.c:2198 ../src/ui_utils.c:289
+#: ../src/symbols.c:2371 ../src/symbols.c:2387 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "不明"
 
@@ -2683,27 +2686,27 @@ msgstr "(BOM あり)"
 msgid "(without BOM)"
 msgstr "(BOM なし)"
 
-#: ../src/document.c:745
+#: ../src/document.c:749
 #, c-format
 msgid "File %s closed."
 msgstr "ファイル %s を閉じました"
 
-#: ../src/document.c:901
+#: ../src/document.c:905
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "新しいファイル \"%s\" を開きました"
 
-#: ../src/document.c:975
+#: ../src/document.c:979
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "ファイル %s を開けません（%s）"
 
-#: ../src/document.c:1024
+#: ../src/document.c:1028
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "ファイル \"%s\" は有効な %s ではありません"
 
-#: ../src/document.c:1030
+#: ../src/document.c:1034
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2712,7 +2715,7 @@ msgstr ""
 "ファイル \"%s\" はテキストファイルでないかエンコーディングがサポートされてい"
 "ません"
 
-#: ../src/document.c:1040
+#: ../src/document.c:1044
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2725,31 +2728,31 @@ msgstr ""
 "生します。\n"
 "ファイルを読み込み専用に設定しました。"
 
-#: ../src/document.c:1252
+#: ../src/document.c:1256
 msgid "Spaces"
 msgstr "空白"
 
-#: ../src/document.c:1255
+#: ../src/document.c:1259
 msgid "Tabs"
 msgstr "タブ"
 
-#: ../src/document.c:1258
+#: ../src/document.c:1262
 msgid "Tabs and Spaces"
 msgstr "タブと空白"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1263
+#: ../src/document.c:1267
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "%s インデント形式に設定(ファイル %s )"
 
-#: ../src/document.c:1274
+#: ../src/document.c:1278
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "インデント幅を %d に設定(ファイル %s )"
 
-#: ../src/document.c:1498
+#: ../src/document.c:1502
 #, c-format
 msgid "File %s reloaded."
 msgstr "ファイル %s を再読み込みしました"
@@ -2757,20 +2760,20 @@ msgstr "ファイル %s を再読み込みしました"
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1506
+#: ../src/document.c:1510
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "ファイル %s を開きました（%d%s）"
 
-#: ../src/document.c:1508
+#: ../src/document.c:1512
 msgid ", read-only"
 msgstr ", 読み取り専用"
 
-#: ../src/document.c:1628
+#: ../src/document.c:1632
 msgid "Discard history"
 msgstr ""
 
-#: ../src/document.c:1629
+#: ../src/document.c:1633
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2781,28 +2784,28 @@ msgstr ""
 "み込みにより履歴を破棄すれば、アンドウで復元できなくなります。このメッセージ"
 "は再表示されませんが、設定により変更可能です。"
 
-#: ../src/document.c:1633
+#: ../src/document.c:1637
 msgid "The file has been reloaded."
 msgstr "ファイルを再読み込みしました。"
 
-#: ../src/document.c:1663
+#: ../src/document.c:1667
 msgid "Any unsaved changes will be lost."
 msgstr "保存されていない変更は失われます。"
 
-#: ../src/document.c:1664
+#: ../src/document.c:1668
 msgid "Undo history will be lost."
 msgstr "アンドウ履歴は失われます。"
 
-#: ../src/document.c:1665
+#: ../src/document.c:1669
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "'%s' を再読み込みしてもよろしいですか?"
 
-#: ../src/document.c:1771
+#: ../src/document.c:1775
 msgid "Error renaming file."
 msgstr "ファイル名変更中にエラー"
 
-#: ../src/document.c:1892
+#: ../src/document.c:1896
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2811,7 +2814,7 @@ msgstr ""
 "ファイルを UTF-8 から \"%s\" に変換するときにエラーがありました。ファイルは保"
 "存されていません。"
 
-#: ../src/document.c:1913
+#: ../src/document.c:1917
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2820,55 +2823,55 @@ msgstr ""
 "エラーメッセージ: %s\n"
 "\"%s\" (行: %d, 桁: %d)でエラー"
 
-#: ../src/document.c:1917
+#: ../src/document.c:1921
 #, c-format
 msgid "Error message: %s."
 msgstr "エラーメッセージ: %s"
 
-#: ../src/document.c:1977
+#: ../src/document.c:1981
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "ファイル '%s' 書き込みオープンに失敗: fopen() エラー: %s"
 
-#: ../src/document.c:1995
+#: ../src/document.c:1999
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "ファイル '%s' 書き込みに失敗: fwrite() エラー: %s"
 
-#: ../src/document.c:2009
+#: ../src/document.c:2013
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "ファイル '%s' クローズに失敗: fclose() エラー: %s"
 
-#: ../src/document.c:2059 ../src/document.c:3593
+#: ../src/document.c:2063 ../src/document.c:3597
 msgid "_Overwrite"
 msgstr "上書き(_O)"
 
-#: ../src/document.c:2061 ../src/document.c:3596
+#: ../src/document.c:2065 ../src/document.c:3600
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "ディスク上のファイル '%s' は現在のバッファの内容より新しいです。"
 
-#: ../src/document.c:2069 ../src/document.c:3645
+#: ../src/document.c:2073 ../src/document.c:3649
 msgid "Try to resave the file?"
 msgstr "ファイルを保存し直しますか?"
 
-#: ../src/document.c:2070 ../src/document.c:3646
+#: ../src/document.c:2074 ../src/document.c:3650
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "ファイル \"%s\" はディスク上にありません!"
 
-#: ../src/document.c:2133
+#: ../src/document.c:2137
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "読み込み専用文書 '%s' は保存できません!"
 
-#: ../src/document.c:2201
+#: ../src/document.c:2205
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "ファイル保存エラー（%s）"
 
-#: ../src/document.c:2206
+#: ../src/document.c:2210
 #, c-format
 msgid ""
 "%s\n"
@@ -2879,44 +2882,44 @@ msgstr ""
 "\n"
 "ディスク上のファイルは破損しているかもしれません!"
 
-#: ../src/document.c:2208
+#: ../src/document.c:2212
 msgid "Error saving file."
 msgstr "ファイル保存中にエラー"
 
-#: ../src/document.c:2232
+#: ../src/document.c:2236
 #, c-format
 msgid "File %s saved."
 msgstr "ファイル %s を保存しました"
 
-#: ../src/document.c:2382
+#: ../src/document.c:2386
 msgid "Wrap search and find again?"
 msgstr "もう一度折り返して検索しますか?"
 
-#: ../src/document.c:2471 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2475 ../src/search.c:1366 ../src/search.c:1419
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" に一致するものが見つかりません"
 
-#: ../src/document.c:2477
+#: ../src/document.c:2481
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d 個の \"%s\" を \"%s\" と置換しました"
 
-#: ../src/document.c:3595
+#: ../src/document.c:3599
 msgid "Do you want to reload it?"
 msgstr "再読み込みしますか?"
 
-#: ../src/editor.c:4388
+#: ../src/editor.c:4490
 msgid "Enter Tab Width"
 msgstr "タブの幅を指定"
 
-#: ../src/editor.c:4389
+#: ../src/editor.c:4491
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "タブ文字に置き換えられる空白の数を指定"
 
-#: ../src/editor.c:4587
+#: ../src/editor.c:4696
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "警告: 非標準のタブ幅: %d != 8!"
@@ -3173,7 +3176,7 @@ msgid "Color Schemes"
 msgstr "色の設定"
 
 #. visual group order
-#: ../src/keybindings.c:306 ../src/symbols.c:655
+#: ../src/keybindings.c:306 ../src/symbols.c:569
 msgid "File"
 msgstr "ファイル"
 
@@ -3209,16 +3212,16 @@ msgstr "指定行へ移動"
 msgid "View"
 msgstr "表示"
 
-#: ../src/keybindings.c:316 ../src/symbols.c:804
+#: ../src/keybindings.c:316 ../src/symbols.c:718
 msgid "Document"
 msgstr "文書"
 
-#: ../src/keybindings.c:318 ../src/keybindings.c:672 ../src/project.c:511
+#: ../src/keybindings.c:318 ../src/keybindings.c:684 ../src/project.c:511
 #: ../src/ui_utils.c:2191
 msgid "Build"
 msgstr "ビルド"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:697
+#: ../src/keybindings.c:320 ../src/keybindings.c:709
 msgid "Help"
 msgstr "ヘルプ"
 
@@ -3254,7 +3257,7 @@ msgstr "別名で保存"
 msgid "Save all"
 msgstr "すべて保存"
 
-#: ../src/keybindings.c:345 ../src/symbols.c:888
+#: ../src/keybindings.c:345 ../src/symbols.c:802
 msgid "Properties"
 msgstr "プロパティ"
 
@@ -3414,283 +3417,315 @@ msgstr "カスタムコマンド 2"
 msgid "Send to Custom Command 3"
 msgstr "カスタムコマンド 3"
 
+#: ../src/keybindings.c:480
+#, fuzzy
+msgid "Send to Custom Command 4"
+msgstr "カスタムコマンド 1"
+
+#: ../src/keybindings.c:482
+#, fuzzy
+msgid "Send to Custom Command 5"
+msgstr "カスタムコマンド 1"
+
+#: ../src/keybindings.c:484
+#, fuzzy
+msgid "Send to Custom Command 6"
+msgstr "カスタムコマンド 1"
+
 #: ../src/keybindings.c:486
+#, fuzzy
+msgid "Send to Custom Command 7"
+msgstr "カスタムコマンド 1"
+
+#: ../src/keybindings.c:488
+#, fuzzy
+msgid "Send to Custom Command 8"
+msgstr "カスタムコマンド 1"
+
+#: ../src/keybindings.c:490
+#, fuzzy
+msgid "Send to Custom Command 9"
+msgstr "カスタムコマンド 1"
+
+#: ../src/keybindings.c:498
 msgid "Join lines"
 msgstr "行を結合"
 
-#: ../src/keybindings.c:491
+#: ../src/keybindings.c:503
 msgid "Insert date"
 msgstr "日付を挿入"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:509
 msgid "Insert New Line Before Current"
 msgstr "現在の行の前に空行を挿入"
 
-#: ../src/keybindings.c:499
+#: ../src/keybindings.c:511
 msgid "Insert New Line After Current"
 msgstr "現在の行の後に空行を挿入"
 
-#: ../src/keybindings.c:512 ../src/search.c:464
+#: ../src/keybindings.c:524 ../src/search.c:464
 msgid "Find"
 msgstr "検索"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:526
 msgid "Find Next"
 msgstr "次を検索"
 
-#: ../src/keybindings.c:516
+#: ../src/keybindings.c:528
 msgid "Find Previous"
 msgstr "前を検索"
 
-#: ../src/keybindings.c:523 ../src/search.c:617
+#: ../src/keybindings.c:535 ../src/search.c:617
 msgid "Replace"
 msgstr "置換"
 
-#: ../src/keybindings.c:525 ../src/search.c:867
+#: ../src/keybindings.c:537 ../src/search.c:867
 msgid "Find in Files"
 msgstr "複数のファイルから検索"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:540
 msgid "Next Message"
 msgstr "次のメッセージ"
 
-#: ../src/keybindings.c:530
+#: ../src/keybindings.c:542
 msgid "Previous Message"
 msgstr "前のメッセージ"
 
-#: ../src/keybindings.c:533
+#: ../src/keybindings.c:545
 msgid "Find Usage"
 msgstr "使い方を検索"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:548
 msgid "Find Document Usage"
 msgstr "文書の使い方を検索"
 
-#: ../src/keybindings.c:543 ../src/toolbar.c:70
+#: ../src/keybindings.c:555 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "元の位置に戻る"
 
-#: ../src/keybindings.c:545 ../src/toolbar.c:71
+#: ../src/keybindings.c:557 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "次の位置に進む"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:562
 msgid "Go to matching brace"
 msgstr "対応する括弧へ移動"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:565
 msgid "Toggle marker"
 msgstr "マーカーを切り替える"
 
-#: ../src/keybindings.c:562
-msgid "Go to Tag Definition"
+#: ../src/keybindings.c:574
+#, fuzzy
+msgid "Go to Symbol Definition"
 msgstr "タグ定義へ移動"
 
-#: ../src/keybindings.c:565
-msgid "Go to Tag Declaration"
+#: ../src/keybindings.c:577
+#, fuzzy
+msgid "Go to Symbol Declaration"
 msgstr "タグ宣言へ移動"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:579
 msgid "Go to Start of Line"
 msgstr "行頭に移動"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:581
 msgid "Go to End of Line"
 msgstr "行末に移動"
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:583
 msgid "Go to Start of Display Line"
 msgstr "表示行の先頭に移動"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:585
 msgid "Go to End of Display Line"
 msgstr "表示行の末端に移動"
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:587
 msgid "Go to Previous Word Part"
 msgstr "前の単語へ移動"
 
-#: ../src/keybindings.c:577
+#: ../src/keybindings.c:589
 msgid "Go to Next Word Part"
 msgstr "次の単語に移動"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:594
 msgid "Toggle All Additional Widgets"
 msgstr "すべての追加ウィジェットを反転"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:597
 msgid "Fullscreen"
 msgstr "全画面表示"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:599
 msgid "Toggle Messages Window"
 msgstr "メッセージウィンドウを表示"
 
-#: ../src/keybindings.c:590
+#: ../src/keybindings.c:602
 msgid "Toggle Sidebar"
 msgstr "サイドバーを表示"
 
-#: ../src/keybindings.c:592
+#: ../src/keybindings.c:604
 msgid "Zoom In"
 msgstr "拡大"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:606
 msgid "Zoom Out"
 msgstr "縮小"
 
-#: ../src/keybindings.c:596
+#: ../src/keybindings.c:608
 msgid "Zoom Reset"
 msgstr "標準サイズ"
 
-#: ../src/keybindings.c:601
+#: ../src/keybindings.c:613
 msgid "Switch to Editor"
 msgstr "エディタに切り替える"
 
-#: ../src/keybindings.c:603
+#: ../src/keybindings.c:615
 msgid "Switch to Search Bar"
 msgstr "検索バーに切り替える"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:617
 msgid "Switch to Message Window"
 msgstr "メッセージウィンドウに切り替える"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:619
 msgid "Switch to Compiler"
 msgstr "サイドバーに切り替える"
 
-#: ../src/keybindings.c:609
+#: ../src/keybindings.c:621
 msgid "Switch to Messages"
 msgstr "メッセージに切り替える"
 
-#: ../src/keybindings.c:611
+#: ../src/keybindings.c:623
 msgid "Switch to Scribble"
 msgstr "メモに切り替える"
 
-#: ../src/keybindings.c:613
+#: ../src/keybindings.c:625
 msgid "Switch to VTE"
 msgstr "VTE に切り替える"
 
-#: ../src/keybindings.c:615
+#: ../src/keybindings.c:627
 msgid "Switch to Sidebar"
 msgstr "サイドバーに切り替える"
 
-#: ../src/keybindings.c:617
+#: ../src/keybindings.c:629
 msgid "Switch to Sidebar Symbol List"
 msgstr "シンボルリストサイドバーに切り替える"
 
-#: ../src/keybindings.c:619
+#: ../src/keybindings.c:631
 msgid "Switch to Sidebar Document List"
 msgstr "文書リストサイドバーに切り替える"
 
-#: ../src/keybindings.c:624
+#: ../src/keybindings.c:636
 msgid "Switch to left document"
 msgstr "左の文書に切り替える"
 
-#: ../src/keybindings.c:626
+#: ../src/keybindings.c:638
 msgid "Switch to right document"
 msgstr "右の文書に切り替える"
 
-#: ../src/keybindings.c:628
+#: ../src/keybindings.c:640
 msgid "Switch to last used document"
 msgstr "最後に使用した文書に切り替える"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:643
 msgid "Move document left"
 msgstr "文書を左に移動"
 
-#: ../src/keybindings.c:634
+#: ../src/keybindings.c:646
 msgid "Move document right"
 msgstr "文書を右に移動"
 
-#: ../src/keybindings.c:636
+#: ../src/keybindings.c:648
 msgid "Move document first"
 msgstr "文書を先頭に移動"
 
-#: ../src/keybindings.c:638
+#: ../src/keybindings.c:650
 msgid "Move document last"
 msgstr "文書を末尾に移動"
 
-#: ../src/keybindings.c:643
+#: ../src/keybindings.c:655
 msgid "Toggle Line wrapping"
 msgstr "行の折り返し"
 
-#: ../src/keybindings.c:645
+#: ../src/keybindings.c:657
 msgid "Toggle Line breaking"
 msgstr "自動改行"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:663
 msgid "Replace spaces with tabs"
 msgstr "タブを空白で置換"
 
-#: ../src/keybindings.c:653
+#: ../src/keybindings.c:665
 msgid "Toggle current fold"
 msgstr "行の折りたたみ"
 
-#: ../src/keybindings.c:655
+#: ../src/keybindings.c:667
 msgid "Fold all"
 msgstr "すべて折りたたみ"
 
-#: ../src/keybindings.c:657
+#: ../src/keybindings.c:669
 msgid "Unfold all"
 msgstr "すべて広げる"
 
-#: ../src/keybindings.c:659
+#: ../src/keybindings.c:671
 msgid "Reload symbol list"
 msgstr "シンボルリストを再読み込み"
 
-#: ../src/keybindings.c:661
+#: ../src/keybindings.c:673
 msgid "Remove Markers"
 msgstr "マーカーを消去"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:675
 msgid "Remove Error Indicators"
 msgstr "エラーインジケータを消去"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:677
 msgid "Remove Markers and Error Indicators"
 msgstr "マーカーとエラーインジケータを消去"
 
-#: ../src/keybindings.c:670 ../src/toolbar.c:72
+#: ../src/keybindings.c:682 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "コンパイル"
 
-#: ../src/keybindings.c:674
+#: ../src/keybindings.c:686
 msgid "Make all"
 msgstr "すべてメイク"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:689
 msgid "Make custom target"
 msgstr "カスタムターゲットをメイク"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:691
 msgid "Make object"
 msgstr "オブジェクトをメイク"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:693
 msgid "Next error"
 msgstr "次のエラー"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:695
 msgid "Previous error"
 msgstr "前のエラー"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:697
 msgid "Run"
 msgstr "実行"
 
-#: ../src/keybindings.c:687
+#: ../src/keybindings.c:699
 msgid "Build options"
 msgstr "ビルドオプション"
 
-#: ../src/keybindings.c:692
+#: ../src/keybindings.c:704
 msgid "Show Color Chooser"
 msgstr "色の選択"
 
-#: ../src/keybindings.c:962
+#: ../src/keybindings.c:974
 msgid "Keyboard Shortcuts"
 msgstr "ショートカットキー"
 
-#: ../src/keybindings.c:974
+#: ../src/keybindings.c:986
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "以下のショートカットキーが設定できます:"
 
@@ -3722,7 +3757,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "グローバルタグファイルを生成(ドキュメントを参照)"
 
 #: ../src/libmain.c:122
-msgid "Don't preprocess C/C++ files when generating tags"
+#, fuzzy
+msgid "Don't preprocess C/C++ files when generating tags file"
 msgstr "タグを生成するときに、C/C++ファイルのプリプロセッサを使用しない"
 
 #: ../src/libmain.c:124
@@ -3958,11 +3994,11 @@ msgstr "キーの読み取り"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "\"%s\"を使用するためのキーの組み合わせをタイプします"
 
-#: ../src/prefs.c:225 ../src/symbols.c:2336 ../src/sidebar.c:752
+#: ../src/prefs.c:225 ../src/symbols.c:2525 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "すべて展開(_E)"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2341 ../src/sidebar.c:758
+#: ../src/prefs.c:230 ../src/symbols.c:2530 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "すべて閉じる(_C)"
 
@@ -4496,331 +4532,331 @@ msgstr "子プロセスを起動時に原因不明のエラーが発生"
 msgid "Value"
 msgstr "値"
 
-#: ../src/symbols.c:634 ../src/symbols.c:684 ../src/symbols.c:794
+#: ../src/symbols.c:548 ../src/symbols.c:598 ../src/symbols.c:708
 msgid "Chapter"
 msgstr "章"
 
-#: ../src/symbols.c:635 ../src/symbols.c:680 ../src/symbols.c:795
+#: ../src/symbols.c:549 ../src/symbols.c:594 ../src/symbols.c:709
 msgid "Section"
 msgstr "節"
 
-#: ../src/symbols.c:636
+#: ../src/symbols.c:550
 msgid "Sect1"
 msgstr "節1"
 
-#: ../src/symbols.c:637
+#: ../src/symbols.c:551
 msgid "Sect2"
 msgstr "節2"
 
-#: ../src/symbols.c:638
+#: ../src/symbols.c:552
 msgid "Sect3"
 msgstr "節3"
 
-#: ../src/symbols.c:639
+#: ../src/symbols.c:553
 msgid "Appendix"
 msgstr "付録"
 
-#: ../src/symbols.c:640 ../src/symbols.c:685 ../src/symbols.c:710
-#: ../src/symbols.c:726 ../src/symbols.c:741 ../src/symbols.c:752
-#: ../src/symbols.c:853 ../src/symbols.c:864 ../src/symbols.c:877
-#: ../src/symbols.c:891 ../src/symbols.c:903 ../src/symbols.c:915
-#: ../src/symbols.c:932 ../src/symbols.c:961 ../src/symbols.c:993
+#: ../src/symbols.c:554 ../src/symbols.c:599 ../src/symbols.c:624
+#: ../src/symbols.c:640 ../src/symbols.c:655 ../src/symbols.c:666
+#: ../src/symbols.c:767 ../src/symbols.c:778 ../src/symbols.c:791
+#: ../src/symbols.c:805 ../src/symbols.c:817 ../src/symbols.c:829
+#: ../src/symbols.c:846 ../src/symbols.c:875 ../src/symbols.c:907
 msgid "Other"
 msgstr "その他"
 
-#: ../src/symbols.c:646 ../src/symbols.c:923 ../src/symbols.c:971
+#: ../src/symbols.c:560 ../src/symbols.c:837 ../src/symbols.c:885
 msgid "Module"
 msgstr "モジュール"
 
-#: ../src/symbols.c:647 ../src/symbols.c:737 ../src/symbols.c:849
-#: ../src/symbols.c:901 ../src/symbols.c:913 ../src/symbols.c:928
-#: ../src/symbols.c:942
+#: ../src/symbols.c:561 ../src/symbols.c:651 ../src/symbols.c:763
+#: ../src/symbols.c:815 ../src/symbols.c:827 ../src/symbols.c:842
+#: ../src/symbols.c:856
 msgid "Types"
 msgstr "型"
 
-#: ../src/symbols.c:648
+#: ../src/symbols.c:562
 msgid "Type constructors"
 msgstr "型コンストラクタ"
 
-#: ../src/symbols.c:649 ../src/symbols.c:671 ../src/symbols.c:692
-#: ../src/symbols.c:709 ../src/symbols.c:721 ../src/symbols.c:734
-#: ../src/symbols.c:749 ../src/symbols.c:763 ../src/symbols.c:773
-#: ../src/symbols.c:837 ../src/symbols.c:887 ../src/symbols.c:910
-#: ../src/symbols.c:955 ../src/symbols.c:979
+#: ../src/symbols.c:563 ../src/symbols.c:585 ../src/symbols.c:606
+#: ../src/symbols.c:623 ../src/symbols.c:635 ../src/symbols.c:648
+#: ../src/symbols.c:663 ../src/symbols.c:677 ../src/symbols.c:687
+#: ../src/symbols.c:751 ../src/symbols.c:801 ../src/symbols.c:824
+#: ../src/symbols.c:869 ../src/symbols.c:893
 msgid "Functions"
 msgstr "関数"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:568
 msgid "Program"
 msgstr "プログラム"
 
-#: ../src/symbols.c:656 ../src/symbols.c:664 ../src/symbols.c:670
+#: ../src/symbols.c:570 ../src/symbols.c:578 ../src/symbols.c:584
 msgid "Sections"
 msgstr "セクション"
 
-#: ../src/symbols.c:657
+#: ../src/symbols.c:571
 msgid "Paragraph"
 msgstr "段落"
 
-#: ../src/symbols.c:658
+#: ../src/symbols.c:572
 msgid "Group"
 msgstr "グループ"
 
-#: ../src/symbols.c:659
+#: ../src/symbols.c:573
 msgid "Data"
 msgstr "データ"
 
-#: ../src/symbols.c:665
+#: ../src/symbols.c:579
 msgid "Keys"
 msgstr "キー"
 
-#: ../src/symbols.c:672 ../src/symbols.c:723 ../src/symbols.c:739
-#: ../src/symbols.c:765 ../src/symbols.c:838 ../src/symbols.c:863
-#: ../src/symbols.c:889 ../src/symbols.c:902 ../src/symbols.c:911
-#: ../src/symbols.c:927 ../src/symbols.c:962 ../src/symbols.c:991
+#: ../src/symbols.c:586 ../src/symbols.c:637 ../src/symbols.c:653
+#: ../src/symbols.c:679 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:803 ../src/symbols.c:816 ../src/symbols.c:825
+#: ../src/symbols.c:841 ../src/symbols.c:876 ../src/symbols.c:905
 msgid "Variables"
 msgstr "変数"
 
-#: ../src/symbols.c:679
+#: ../src/symbols.c:593
 msgid "Environment"
 msgstr "環境"
 
-#: ../src/symbols.c:681 ../src/symbols.c:796
+#: ../src/symbols.c:595 ../src/symbols.c:710
 msgid "Subsection"
 msgstr "サブセクション"
 
-#: ../src/symbols.c:682 ../src/symbols.c:797
+#: ../src/symbols.c:596 ../src/symbols.c:711
 msgid "Subsubsection"
 msgstr "サブサブセクション"
 
-#: ../src/symbols.c:693 ../src/symbols.c:718
+#: ../src/symbols.c:607 ../src/symbols.c:632
 msgid "Structures"
 msgstr "構造体"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:614
 msgid "Parts"
 msgstr "パーツ"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:615
 msgid "Assembly"
 msgstr "アセンブリ"
 
-#: ../src/symbols.c:702
+#: ../src/symbols.c:616
 msgid "Steps"
 msgstr "ステップ"
 
-#: ../src/symbols.c:717 ../src/symbols.c:815 ../src/symbols.c:861
+#: ../src/symbols.c:631 ../src/symbols.c:729 ../src/symbols.c:775
 msgid "Modules"
 msgstr "モジュール"
 
-#: ../src/symbols.c:719 ../src/symbols.c:766
+#: ../src/symbols.c:633 ../src/symbols.c:680
 msgid "Traits"
 msgstr "Traits"
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:634
 msgid "Implementations"
 msgstr "実装"
 
-#: ../src/symbols.c:722 ../src/symbols.c:982
+#: ../src/symbols.c:636 ../src/symbols.c:896
 msgid "Typedefs / Enums"
 msgstr "Typedef / Enum"
 
-#: ../src/symbols.c:724 ../src/symbols.c:940 ../src/symbols.c:949
-#: ../src/symbols.c:988
+#: ../src/symbols.c:638 ../src/symbols.c:854 ../src/symbols.c:863
+#: ../src/symbols.c:902
 msgid "Macros"
 msgstr "マクロ"
 
-#: ../src/symbols.c:725 ../src/symbols.c:818 ../src/symbols.c:827
-#: ../src/symbols.c:836 ../src/symbols.c:874 ../src/symbols.c:900
+#: ../src/symbols.c:639 ../src/symbols.c:732 ../src/symbols.c:741
+#: ../src/symbols.c:750 ../src/symbols.c:788 ../src/symbols.c:814
 msgid "Methods"
 msgstr "メソッド"
 
-#: ../src/symbols.c:733 ../src/symbols.c:748 ../src/symbols.c:846
-#: ../src/symbols.c:871 ../src/symbols.c:884
+#: ../src/symbols.c:647 ../src/symbols.c:662 ../src/symbols.c:760
+#: ../src/symbols.c:785 ../src/symbols.c:798
 msgid "Package"
 msgstr "パッケージ"
 
-#: ../src/symbols.c:735 ../src/symbols.c:761 ../src/symbols.c:872
-#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:925
-#: ../src/symbols.c:978
+#: ../src/symbols.c:649 ../src/symbols.c:675 ../src/symbols.c:786
+#: ../src/symbols.c:799 ../src/symbols.c:812 ../src/symbols.c:839
+#: ../src/symbols.c:892
 msgid "Interfaces"
 msgstr "インターフェース"
 
-#: ../src/symbols.c:736 ../src/symbols.c:981
+#: ../src/symbols.c:650 ../src/symbols.c:895
 msgid "Structs"
 msgstr "構造体"
 
-#: ../src/symbols.c:738 ../src/symbols.c:751 ../src/symbols.c:764
-#: ../src/symbols.c:890 ../src/symbols.c:912
+#: ../src/symbols.c:652 ../src/symbols.c:665 ../src/symbols.c:678
+#: ../src/symbols.c:804 ../src/symbols.c:826
 msgid "Constants"
 msgstr "定数"
 
-#: ../src/symbols.c:740 ../src/symbols.c:875 ../src/symbols.c:980
+#: ../src/symbols.c:654 ../src/symbols.c:789 ../src/symbols.c:894
 msgid "Members"
 msgstr "メンバ"
 
-#: ../src/symbols.c:750 ../src/symbols.c:914 ../src/symbols.c:939
+#: ../src/symbols.c:664 ../src/symbols.c:828 ../src/symbols.c:853
 msgid "Labels"
 msgstr "ラベル"
 
-#: ../src/symbols.c:760 ../src/symbols.c:825 ../src/symbols.c:974
+#: ../src/symbols.c:674 ../src/symbols.c:739 ../src/symbols.c:888
 msgid "Namespaces"
 msgstr "名前空間"
 
-#: ../src/symbols.c:762 ../src/symbols.c:784 ../src/symbols.c:816
-#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:977
+#: ../src/symbols.c:676 ../src/symbols.c:698 ../src/symbols.c:730
+#: ../src/symbols.c:740 ../src/symbols.c:749 ../src/symbols.c:787
+#: ../src/symbols.c:800 ../src/symbols.c:813 ../src/symbols.c:891
 msgid "Classes"
 msgstr "クラス"
 
-#: ../src/symbols.c:774
+#: ../src/symbols.c:688
 msgid "Anchors"
 msgstr "アンカー"
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:689
 msgid "H1 Headings"
 msgstr "見出し (H1)"
 
-#: ../src/symbols.c:776
+#: ../src/symbols.c:690
 msgid "H2 Headings"
 msgstr "見出し (H2)"
 
-#: ../src/symbols.c:777
+#: ../src/symbols.c:691
 msgid "H3 Headings"
 msgstr "見出し (H3)"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:699
 msgid "ID Selectors"
 msgstr "ID 選択"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:700
 msgid "Type Selectors"
 msgstr "Type 選択"
 
-#: ../src/symbols.c:805
+#: ../src/symbols.c:719
 msgid "Section Level 1"
 msgstr "節 1"
 
-#: ../src/symbols.c:806
+#: ../src/symbols.c:720
 msgid "Section Level 2"
 msgstr "節 2"
 
-#: ../src/symbols.c:807
+#: ../src/symbols.c:721
 msgid "Section Level 3"
 msgstr "節 3"
 
-#: ../src/symbols.c:808
+#: ../src/symbols.c:722
 msgid "Section Level 4"
 msgstr "節 4"
 
-#: ../src/symbols.c:817
+#: ../src/symbols.c:731
 msgid "Singletons"
 msgstr "シングルトン"
 
-#: ../src/symbols.c:828 ../src/symbols.c:956
+#: ../src/symbols.c:742 ../src/symbols.c:870
 msgid "Procedures"
 msgstr "手続き"
 
-#: ../src/symbols.c:839
+#: ../src/symbols.c:753
 msgid "Imports"
 msgstr "インポート"
 
-#: ../src/symbols.c:847
+#: ../src/symbols.c:761
 msgid "Entities"
 msgstr "エンティティ"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:762
 msgid "Architectures"
 msgstr "アーキテクチャ"
 
-#: ../src/symbols.c:850
+#: ../src/symbols.c:764
 msgid "Functions / Procedures"
 msgstr "関数/手続き"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:765
 msgid "Variables / Signals"
 msgstr "変数/シグナル"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:766
 msgid "Processes / Blocks / Components"
 msgstr "プロセス/ブロック/コンポーネント"
 
-#: ../src/symbols.c:860
+#: ../src/symbols.c:774
 msgid "Events"
 msgstr "イベント"
 
-#: ../src/symbols.c:862
+#: ../src/symbols.c:776
 msgid "Functions / Tasks"
 msgstr "機能/タスク"
 
-#: ../src/symbols.c:876 ../src/symbols.c:931
+#: ../src/symbols.c:790 ../src/symbols.c:845
 msgid "Enums"
 msgstr "列挙型"
 
-#: ../src/symbols.c:924
+#: ../src/symbols.c:838
 msgid "Programs"
 msgstr "プログラム"
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:840
 msgid "Functions / Subroutines"
 msgstr "関数/手続き"
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:843
 msgid "Components"
 msgstr "コンポーネント"
 
-#: ../src/symbols.c:930
+#: ../src/symbols.c:844
 msgid "Blocks"
 msgstr "ブロック"
 
-#: ../src/symbols.c:941
+#: ../src/symbols.c:855
 msgid "Defines"
 msgstr "定義"
 
-#: ../src/symbols.c:948
+#: ../src/symbols.c:862
 msgid "Targets"
 msgstr "ターゲット"
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:871
 msgid "Indexes"
 msgstr "インデックス"
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:872
 msgid "Tables"
 msgstr "テーブル"
 
-#: ../src/symbols.c:959
+#: ../src/symbols.c:873
 msgid "Triggers"
 msgstr "トリガ"
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:874
 msgid "Views"
 msgstr "ビュー"
 
-#: ../src/symbols.c:992
+#: ../src/symbols.c:906
 msgid "Extern Variables"
 msgstr "外部変数"
 
-#: ../src/symbols.c:1756
+#: ../src/symbols.c:1670
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "\"%s\" は不明なファイル形式の拡張子です\n"
 
-#: ../src/symbols.c:1782
-#, c-format
-msgid "Failed to create tags file, perhaps because no tags were found.\n"
+#: ../src/symbols.c:1696
+#, fuzzy, c-format
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "タグが見つからないため、タグファイルの作成に失敗しました\n"
 
-#: ../src/symbols.c:1789
-#, c-format
+#: ../src/symbols.c:1703
+#, fuzzy, c-format
 msgid ""
-"Usage: %s -g <Tag File> <File list>\n"
+"Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
 "使用法: %s -g <タグファイル> <ファイルリスト>\n"
 "\n"
 
-#: ../src/symbols.c:1790
+#: ../src/symbols.c:1704
 #, c-format
 msgid ""
 "Example:\n"
@@ -4831,40 +4867,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1804
-msgid "Load Tags"
+#: ../src/symbols.c:1718
+#, fuzzy
+msgid "Load Tags File"
 msgstr "タグを読み込む"
 
-#: ../src/symbols.c:1811
-msgid "Geany tag files (*.*.tags)"
+#: ../src/symbols.c:1725
+#, fuzzy
+msgid "Geany tags file (*.*.tags)"
 msgstr "Geany タグファイル (*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1831
+#: ../src/symbols.c:1745
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "%s タグファイル '%s' を読み込みました"
 
-#: ../src/symbols.c:1834
+#: ../src/symbols.c:1748
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "タグファイル '%s' を読み込めませんでした"
 
-#: ../src/symbols.c:1972
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1983
+#, fuzzy, c-format
+msgid "<b>%s: %lu</b>"
+msgstr "<b>表示</b>"
+
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1986
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "前方宣言 \"%s\" が見つかりません"
 
-#: ../src/symbols.c:1974
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" の定義が見つかりません"
 
-#: ../src/symbols.c:2351
+#: ../src/symbols.c:2540
 msgid "Sort by _Name"
 msgstr "名前順に並び替え(_N)"
 
-#: ../src/symbols.c:2358
+#: ../src/symbols.c:2547
 msgid "Sort by _Appearance"
 msgstr "出現順に並び替え(_A)"
 
@@ -5063,7 +5113,7 @@ msgid ""
 msgstr ""
 "カスタム ツール \"%s\" が実行できません: %s. パス設定を確認してください。"
 
-#: ../src/tools.c:357 ../src/tools.c:620
+#: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
 msgstr "カスタムコマンドを設定"
 
@@ -5079,40 +5129,41 @@ msgstr ""
 msgid "ID"
 msgstr "ID"
 
-#: ../src/tools.c:591
+#: ../src/tools.c:597
 msgid "No custom commands defined."
 msgstr "カスタムコマンドが定義されていません。"
 
-#: ../src/tools.c:689
+#: ../src/tools.c:695
 msgid "Word Count"
 msgstr "ワードカウント"
 
-#: ../src/tools.c:698
+#: ../src/tools.c:704
 msgid "selection"
 msgstr "選択範囲"
 
-#: ../src/tools.c:703
+#: ../src/tools.c:709
 msgid "whole document"
 msgstr "文書全体"
 
-#: ../src/tools.c:712
+#: ../src/tools.c:718
 msgid "Range:"
 msgstr "範囲:"
 
-#: ../src/tools.c:724
+#: ../src/tools.c:730
 msgid "Lines:"
 msgstr "行数:"
 
-#: ../src/tools.c:738
+#: ../src/tools.c:744
 msgid "Words:"
 msgstr "語数:"
 
-#: ../src/tools.c:752
+#: ../src/tools.c:758
 msgid "Characters:"
 msgstr "文字数:"
 
 #: ../src/sidebar.c:178
-msgid "No tags found"
+#, fuzzy
+msgid "No symbols found"
 msgstr "タグが見つかりません"
 
 #: ../src/sidebar.c:602
@@ -5851,6 +5902,12 @@ msgstr "左右に並べる"
 #: ../plugins/splitwindow.c:435
 msgid "Top and Bottom"
 msgstr "上下に並べる"
+
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "タグ定義に移動(_T)"
+
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "タグ宣言に移動(_A)"
 
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "\"%s\" の印刷に失敗(リターンコード: %s)"

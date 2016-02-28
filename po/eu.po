@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: geany1.25\n"
+"Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-01 19:03+0100\n"
+"POT-Creation-Date: 2016-02-28 14:14+0100\n"
 "PO-Revision-Date: 2013-07-06 15:07+0200\n"
 "Last-Translator: Asier Iturralde Sarasola <asier.iturralde@gmail.com>\n"
 "Language-Team: Euskara <librezale@librezale.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:338
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
 msgstr "Geany"
 
@@ -89,7 +89,7 @@ msgstr "ikusezina"
 msgid "_Insert \"include <...>\""
 msgstr "_Txertatu \"include <...>\""
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:492
+#: ../data/geany.glade.h:16 ../src/keybindings.c:506
 msgid "Insert Alternative _White Space"
 msgstr ""
 
@@ -101,17 +101,18 @@ msgstr "_Bilatu"
 msgid "Open Selected F_ile"
 msgstr "Ireki hautatutako _fitxategia"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2368
+#: ../data/geany.glade.h:19 ../src/symbols.c:2557
 msgid "Find _Usage"
 msgstr "Bilatu _erabilera"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2373
+#: ../data/geany.glade.h:20 ../src/symbols.c:2562
 msgid "Find _Document Usage"
 msgstr "Bilatu _dokumentuaren erabilera"
 
 #: ../data/geany.glade.h:21
-msgid "Go to _Tag Definition"
-msgstr "Joan etiketaren _definiziora"
+#, fuzzy
+msgid "Go to Symbol Defini_tion"
+msgstr "Joan etiketaren definiziora"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -158,7 +159,7 @@ msgstr "Goia"
 msgid "Bottom"
 msgstr "Behea"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:502
+#: ../data/geany.glade.h:31 ../src/keybindings.c:516
 msgid "Preferences"
 msgstr "Hobespenak"
 
@@ -366,7 +367,7 @@ msgstr ""
 msgid "<b>Projects</b>"
 msgstr "<b>Proiektuak</b>"
 
-#: ../data/geany.glade.h:75 ../src/dialogs.c:231
+#: ../data/geany.glade.h:75 ../src/dialogs.c:232
 msgid "Miscellaneous"
 msgstr "Askotarikoak"
 
@@ -374,7 +375,7 @@ msgstr "Askotarikoak"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1599
+#: ../data/geany.glade.h:76 ../src/prefs.c:1598
 msgid "General"
 msgstr "Orokorra"
 
@@ -387,79 +388,97 @@ msgid "Toggle the symbol list on and off"
 msgstr ""
 
 #: ../data/geany.glade.h:79
+msgid "Default symbol sorting mode"
+msgstr ""
+
+#: ../data/geany.glade.h:80
+#, fuzzy
+msgid "Default sorting mode:"
+msgstr "Kodeketa lehenetsia (fitxategi berriak):"
+
+#: ../data/geany.glade.h:81 ../src/stash.c:1170
+msgid "Name"
+msgstr "Izena"
+
+#: ../data/geany.glade.h:82
+#, fuzzy
+msgid "Appearance"
+msgstr "Antolatu _itxuraren arabera"
+
+#: ../data/geany.glade.h:83
 msgid "Show documents list"
 msgstr "Erakutsi dokumentuen zerrenda"
 
-#: ../data/geany.glade.h:80
+#: ../data/geany.glade.h:84
 msgid "Toggle the documents list on and off"
 msgstr ""
 
-#: ../data/geany.glade.h:81
+#: ../data/geany.glade.h:85
 msgid "Show sidebar"
 msgstr "Erakutsi albo-barra"
 
-#: ../data/geany.glade.h:82
+#: ../data/geany.glade.h:86
 msgid "Position:"
 msgstr "Posizioa:"
 
-#: ../data/geany.glade.h:83
+#: ../data/geany.glade.h:87
 msgid "<b>Sidebar</b>"
 msgstr "<b>Albo-barra</b>"
 
-#: ../data/geany.glade.h:84
+#: ../data/geany.glade.h:88
 #, fuzzy
 msgid "<b>Message window</b>"
 msgstr "Mezu-leihoa:"
 
-#: ../data/geany.glade.h:85
+#: ../data/geany.glade.h:89
 msgid "Symbol list:"
 msgstr "Ikur-zerrenda:"
 
-#: ../data/geany.glade.h:86
+#: ../data/geany.glade.h:90
 msgid "Message window:"
 msgstr "Mezu-leihoa:"
 
-#: ../data/geany.glade.h:87
+#: ../data/geany.glade.h:91
 msgid "Editor:"
 msgstr "Editorea:"
 
-#: ../data/geany.glade.h:88
+#: ../data/geany.glade.h:92
 msgid "Sets the font for the message window"
 msgstr "Mezu-leihoaren letra-tipoa ezartzen du"
 
-#: ../data/geany.glade.h:89
+#: ../data/geany.glade.h:93
 msgid "Sets the font for the symbol list"
 msgstr "Ikur-zerrendaren letra-tipoa ezartzen du"
 
-#: ../data/geany.glade.h:90
+#: ../data/geany.glade.h:94
 msgid "Sets the editor font"
 msgstr "Editorearen letra-tipoa ezartzen du"
 
-#: ../data/geany.glade.h:91
+#: ../data/geany.glade.h:95
 msgid "<b>Fonts</b>"
 msgstr "<b>Letra-tipoak</b>"
 
-#: ../data/geany.glade.h:92
+#: ../data/geany.glade.h:96
 msgid "Show status bar"
 msgstr "Erakutsi egoera-barra"
 
-#: ../data/geany.glade.h:93
+#: ../data/geany.glade.h:97
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Leiho nagusiaren behealdean egoera-barra erakutsi behar den ala ez"
 
-#: ../data/geany.glade.h:94 ../src/prefs.c:1601
+#: ../data/geany.glade.h:98 ../src/prefs.c:1600
 msgid "Interface"
 msgstr "Interfazea"
 
-#: ../data/geany.glade.h:95
+#: ../data/geany.glade.h:99
 msgid "Show editor tabs"
 msgstr "Erakutsi editore-fitxak"
 
-#: ../data/geany.glade.h:96
+#: ../data/geany.glade.h:100
 msgid "Show close buttons"
 msgstr "Erakutsi ixteko botoiak"
 
-#: ../data/geany.glade.h:97
+#: ../data/geany.glade.h:101
 msgid ""
 "Shows a small cross button in the file tabs to easily close files when "
 "clicking on it (requires restart of Geany)"
@@ -467,136 +486,136 @@ msgstr ""
 "Gurutze itxurako botoi bat erakusten du fitxategien fitxetan fitxategiak "
 "modu errazean ixteko (Geany berrabiaraztea eskatzen du)"
 
-#: ../data/geany.glade.h:98
+#: ../data/geany.glade.h:102
 msgid "Placement of new file tabs:"
 msgstr "Fitxategi-fitxa berrien kokapena:"
 
-#: ../data/geany.glade.h:99
+#: ../data/geany.glade.h:103
 msgid "File tabs will be placed on the left of the notebook"
 msgstr "Fitxategien fitxak ohar-blokaren ezkerraldean kokatuko dira"
 
-#: ../data/geany.glade.h:100
+#: ../data/geany.glade.h:104
 msgid "File tabs will be placed on the right of the notebook"
 msgstr "Fitxategien fitxak ohar-blokaren eskuinaldean kokatuko dira"
 
-#: ../data/geany.glade.h:101
+#: ../data/geany.glade.h:105
 msgid "Next to current"
 msgstr "Unekoaren hurrengoa"
 
-#: ../data/geany.glade.h:102
+#: ../data/geany.glade.h:106
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
 msgstr ""
 
-#: ../data/geany.glade.h:103
+#: ../data/geany.glade.h:107
 msgid "Double-clicking hides all additional widgets"
 msgstr "Klik bikoitzak trepeta gehigarri guztiak ezkutatzen ditu"
 
-#: ../data/geany.glade.h:104
+#: ../data/geany.glade.h:108
 msgid "Calls the View->Toggle All Additional Widgets command"
 msgstr ""
 
-#: ../data/geany.glade.h:105
+#: ../data/geany.glade.h:109
 msgid "Switch to last used document after closing a tab"
 msgstr "Aldatu erabilitako azken dokumentura fitxa bat ixtean"
 
-#: ../data/geany.glade.h:106
+#: ../data/geany.glade.h:110
 msgid "<b>Editor tabs</b>"
 msgstr "<b>Editore-fitxak</b>"
 
-#: ../data/geany.glade.h:107
+#: ../data/geany.glade.h:111
 msgid "Sidebar:"
 msgstr "Albo-barra"
 
-#: ../data/geany.glade.h:108
+#: ../data/geany.glade.h:112
 msgid "<b>Tab positions</b>"
 msgstr "<b>Fitxen posizioak</b>"
 
-#: ../data/geany.glade.h:109
+#: ../data/geany.glade.h:113
 msgid "Notebook tabs"
 msgstr "Ohar-blokaren fitxak"
 
-#: ../data/geany.glade.h:110
+#: ../data/geany.glade.h:114
 msgid "Show t_oolbar"
 msgstr "Erakutsi _tresna-barra"
 
-#: ../data/geany.glade.h:111
+#: ../data/geany.glade.h:115
 msgid "_Append toolbar to the menu"
 msgstr "_Gehitu tresna-barra menura"
 
-#: ../data/geany.glade.h:112
+#: ../data/geany.glade.h:116
 msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 
-#: ../data/geany.glade.h:113 ../src/toolbar.c:943
+#: ../data/geany.glade.h:117 ../src/toolbar.c:943
 msgid "Customize Toolbar"
 msgstr "Pertsonalizatu tresna-barra"
 
-#: ../data/geany.glade.h:114
+#: ../data/geany.glade.h:118
 msgid "System _default"
 msgstr "Sistemako _lehenetsia"
 
-#: ../data/geany.glade.h:115
+#: ../data/geany.glade.h:119
 msgid "Images _and text"
 msgstr "Irudiak _eta testua"
 
-#: ../data/geany.glade.h:116
+#: ../data/geany.glade.h:120
 msgid "_Images only"
 msgstr "_Irudiak soilik"
 
-#: ../data/geany.glade.h:117
+#: ../data/geany.glade.h:121
 msgid "_Text only"
 msgstr "_Testua soilik"
 
-#: ../data/geany.glade.h:118
+#: ../data/geany.glade.h:122
 msgid "<b>Icon style</b>"
 msgstr "<b>Ikono-estiloa</b>"
 
-#: ../data/geany.glade.h:119
+#: ../data/geany.glade.h:123
 msgid "S_ystem default"
 msgstr "_Sistemako lehenetsia"
 
-#: ../data/geany.glade.h:120
+#: ../data/geany.glade.h:124
 msgid "_Small icons"
 msgstr "Ikono _txikiak"
 
-#: ../data/geany.glade.h:121
+#: ../data/geany.glade.h:125
 msgid "_Very small icons"
 msgstr "Ikono _oso txikiak"
 
-#: ../data/geany.glade.h:122
+#: ../data/geany.glade.h:126
 msgid "_Large icons"
 msgstr "Ikono _handiak"
 
-#: ../data/geany.glade.h:123
+#: ../data/geany.glade.h:127
 msgid "<b>Icon size</b>"
 msgstr "<b>Ikono-tamaina</b>"
 
-#: ../data/geany.glade.h:124
+#: ../data/geany.glade.h:128
 msgid "<b>Toolbar</b>"
 msgstr "<b>Tresna-barra</b>"
 
-#: ../data/geany.glade.h:125 ../src/prefs.c:1603
+#: ../data/geany.glade.h:129 ../src/prefs.c:1602
 msgid "Toolbar"
 msgstr "Tresna-barra"
 
-#: ../data/geany.glade.h:126
+#: ../data/geany.glade.h:130
 msgid "Line wrapping"
 msgstr ""
 
-#: ../data/geany.glade.h:127
+#: ../data/geany.glade.h:131
 msgid ""
 "Wrap the line at the window border and continue it on the next line. Note: "
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
 
-#: ../data/geany.glade.h:128
+#: ../data/geany.glade.h:132
 msgid "\"Smart\" home key"
 msgstr "Etxea tekla \"azkarra\""
 
-#: ../data/geany.glade.h:129
+#: ../data/geany.glade.h:133
 msgid ""
 "When \"smart\" home is enabled, the HOME key will move the caret to the "
 "first non-blank character of the line, unless it is already there, it moves "
@@ -605,71 +624,71 @@ msgid ""
 "its current position."
 msgstr ""
 
-#: ../data/geany.glade.h:130
+#: ../data/geany.glade.h:134
 msgid "Disable Drag and Drop"
 msgstr "Desgaitu arrastatu eta jaregitea"
 
-#: ../data/geany.glade.h:131
+#: ../data/geany.glade.h:135
 msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
 msgstr ""
 
-#: ../data/geany.glade.h:132
+#: ../data/geany.glade.h:136
 msgid "Code folding"
 msgstr ""
 
-#: ../data/geany.glade.h:133
+#: ../data/geany.glade.h:137
 msgid "Fold/unfold all children of a fold point"
 msgstr ""
 
-#: ../data/geany.glade.h:134
+#: ../data/geany.glade.h:138
 msgid ""
 "Fold or unfold all children of a fold point. By pressing the Shift key while "
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
 
-#: ../data/geany.glade.h:135
+#: ../data/geany.glade.h:139
 msgid "Use indicators to show compile errors"
 msgstr "Erabili adierazleak konpilazio-erroreak erakusteko"
 
-#: ../data/geany.glade.h:136
+#: ../data/geany.glade.h:140
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
 msgstr ""
 
-#: ../data/geany.glade.h:137
+#: ../data/geany.glade.h:141
 msgid "Newline strips trailing spaces"
 msgstr ""
 
-#: ../data/geany.glade.h:138
+#: ../data/geany.glade.h:142
 msgid "Enable newline to strip the trailing spaces on the previous line"
 msgstr ""
 
-#: ../data/geany.glade.h:139
+#: ../data/geany.glade.h:143
 msgid "Line breaking column:"
 msgstr ""
 
-#: ../data/geany.glade.h:140
+#: ../data/geany.glade.h:144
 msgid "Comment toggle marker:"
 msgstr ""
 
-#: ../data/geany.glade.h:141
+#: ../data/geany.glade.h:145
 msgid ""
 "A string which is added when toggling a line comment in a source file, it is "
 "used to mark the comment as toggled."
 msgstr ""
 
-#: ../data/geany.glade.h:142
+#: ../data/geany.glade.h:146
 msgid "<b>Features</b>"
 msgstr "<b>Ezaugarriak</b>"
 
-#: ../data/geany.glade.h:143
+#: ../data/geany.glade.h:147
 msgid "Features"
 msgstr "Ezaugarriak"
 
-#: ../data/geany.glade.h:144
+#: ../data/geany.glade.h:148
 msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
@@ -677,109 +696,109 @@ msgstr ""
 "Oharra: Ezarpen hauek unean irekitako dokumentu guztiei aplikatzeko erabili "
 "<i>Proiektua->Aplikatu koska lehenetsia</i>"
 
-#: ../data/geany.glade.h:145
+#: ../data/geany.glade.h:149
 msgid "Width:"
 msgstr "Zabalera:"
 
-#: ../data/geany.glade.h:146
+#: ../data/geany.glade.h:150
 msgid "The width in chars of a single indent"
 msgstr ""
 
-#: ../data/geany.glade.h:147
+#: ../data/geany.glade.h:151
 msgid "Auto-indent mode:"
 msgstr "Koska automatikoaren modua:"
 
-#: ../data/geany.glade.h:148
+#: ../data/geany.glade.h:152
 msgid "Detect type from file"
 msgstr "Detektatu mota fitxategitik"
 
-#: ../data/geany.glade.h:149
+#: ../data/geany.glade.h:153
 msgid ""
 "Whether to detect the indentation type from file contents when a file is "
 "opened"
 msgstr ""
 
-#: ../data/geany.glade.h:150
+#: ../data/geany.glade.h:154
 msgid "T_abs and spaces"
 msgstr "T_abulazioak eta zuriuneak"
 
-#: ../data/geany.glade.h:151
+#: ../data/geany.glade.h:155
 msgid ""
 "Use spaces if the total indent is less than the tab width, otherwise use both"
 msgstr ""
 "Erabili zuriuneak guztizko koska tabulazioaren zabalera baino txikiagoa "
 "bada, bestela erabili biak"
 
-#: ../data/geany.glade.h:152
+#: ../data/geany.glade.h:156
 msgid "_Spaces"
 msgstr "_Zuriuneak"
 
-#: ../data/geany.glade.h:153
+#: ../data/geany.glade.h:157
 msgid "Use spaces when inserting indentation"
 msgstr "Erabili zuriuneak koska txertatzean"
 
-#: ../data/geany.glade.h:154
+#: ../data/geany.glade.h:158
 msgid "_Tabs"
 msgstr "_Tabulazioak"
 
-#: ../data/geany.glade.h:155
+#: ../data/geany.glade.h:159
 msgid "Use one tab per indent"
 msgstr "Erabili tabulazio bat koska bakoitzeko"
 
-#: ../data/geany.glade.h:156
+#: ../data/geany.glade.h:160
 msgid "Detect width from file"
 msgstr "Detektatu zabalera fitxategitik"
 
-#: ../data/geany.glade.h:157
+#: ../data/geany.glade.h:161
 msgid ""
 "Whether to detect the indentation width from file contents when a file is "
 "opened"
 msgstr ""
 
-#: ../data/geany.glade.h:158
+#: ../data/geany.glade.h:162
 msgid "Type:"
 msgstr "Mota:"
 
-#: ../data/geany.glade.h:159
+#: ../data/geany.glade.h:163
 msgid "Tab key indents"
 msgstr ""
 
-#: ../data/geany.glade.h:160
+#: ../data/geany.glade.h:164
 msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 
-#: ../data/geany.glade.h:161
+#: ../data/geany.glade.h:165
 msgid "<b>Indentation</b>"
 msgstr "<b>Koska</b>"
 
-#: ../data/geany.glade.h:162
+#: ../data/geany.glade.h:166
 msgid "Indentation"
 msgstr "Koska"
 
-#: ../data/geany.glade.h:163
+#: ../data/geany.glade.h:167
 msgid "Snippet completion"
 msgstr ""
 
-#: ../data/geany.glade.h:164
+#: ../data/geany.glade.h:168
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
 
-#: ../data/geany.glade.h:165
+#: ../data/geany.glade.h:169
 msgid "XML/HTML tag auto-closing"
 msgstr "XML/HTML etiketak automatikoki ixtea"
 
-#: ../data/geany.glade.h:166
+#: ../data/geany.glade.h:170
 msgid "Insert matching closing tag for XML/HTML"
 msgstr ""
 
-#: ../data/geany.glade.h:167
+#: ../data/geany.glade.h:171
 msgid "Automatic continuation of multi-line comments"
 msgstr ""
 
-#: ../data/geany.glade.h:168
+#: ../data/geany.glade.h:172
 msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
@@ -787,203 +806,203 @@ msgstr ""
 "Jarraitu lerro anitzeko iruzkinak C, C++ eta Java bezala lengoaietan "
 "iruzkinean lerro berri bat gehitzean"
 
-#: ../data/geany.glade.h:169
+#: ../data/geany.glade.h:173
 msgid "Autocomplete symbols"
 msgstr "Osatu automatikoki ikurrak"
 
-#: ../data/geany.glade.h:170
+#: ../data/geany.glade.h:174
 msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
 msgstr ""
 
-#: ../data/geany.glade.h:171
+#: ../data/geany.glade.h:175
 msgid "Autocomplete all words in document"
 msgstr "Osatu automatikoki dokumentuko hitz guztiak"
 
-#: ../data/geany.glade.h:172
+#: ../data/geany.glade.h:176
 msgid "Drop rest of word on completion"
 msgstr ""
 
-#: ../data/geany.glade.h:173
+#: ../data/geany.glade.h:177
 msgid "Max. symbol name suggestions:"
 msgstr ""
 
-#: ../data/geany.glade.h:174
+#: ../data/geany.glade.h:178
 msgid "Completion list height:"
 msgstr ""
 
-#: ../data/geany.glade.h:175
+#: ../data/geany.glade.h:179
 msgid "Characters to type for autocompletion:"
 msgstr ""
 
-#: ../data/geany.glade.h:176
+#: ../data/geany.glade.h:180
 msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
 
-#: ../data/geany.glade.h:177
+#: ../data/geany.glade.h:181
 msgid "Display height in rows for the autocompletion list"
 msgstr ""
 
-#: ../data/geany.glade.h:178
+#: ../data/geany.glade.h:182
 msgid "Maximum number of entries to display in the autocompletion list"
 msgstr ""
 
-#: ../data/geany.glade.h:179
+#: ../data/geany.glade.h:183
 msgid "Symbol list update frequency:"
 msgstr "Ikur-zerrendaren eguneraketen maiztasuna:"
 
-#: ../data/geany.glade.h:180
+#: ../data/geany.glade.h:184
 msgid ""
 "Minimal delay (in milliseconds) between two automatic updates of the symbol "
 "list. Note that a too short delay may have performance impact, especially "
 "with large files. A delay of 0 disables real-time updates."
 msgstr ""
 
-#: ../data/geany.glade.h:181
+#: ../data/geany.glade.h:185
 msgid "<b>Completions</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:182
+#: ../data/geany.glade.h:186
 msgid "Parenthesis ( )"
 msgstr "Parentesiak ( )"
 
-#: ../data/geany.glade.h:183
+#: ../data/geany.glade.h:187
 msgid "Auto-close parenthesis when typing an opening one"
 msgstr "Itxi parentesiak automatikoki hasierakoa idaztean"
 
-#: ../data/geany.glade.h:184
+#: ../data/geany.glade.h:188
 msgid "Curly brackets { }"
 msgstr ""
 
-#: ../data/geany.glade.h:185
+#: ../data/geany.glade.h:189
 msgid "Auto-close curly bracket when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:186
+#: ../data/geany.glade.h:190
 msgid "Square brackets [ ]"
 msgstr ""
 
-#: ../data/geany.glade.h:187
+#: ../data/geany.glade.h:191
 msgid "Auto-close square-bracket when typing an opening one"
 msgstr ""
 
-#: ../data/geany.glade.h:188
+#: ../data/geany.glade.h:192
 msgid "Single quotes ' '"
 msgstr "Komatxo bakunak ' '"
 
-#: ../data/geany.glade.h:189
+#: ../data/geany.glade.h:193
 msgid "Auto-close single quote when typing an opening one"
 msgstr "Itxi komatxo bakunak automatikoki hasierakoa idaztean"
 
-#: ../data/geany.glade.h:190
+#: ../data/geany.glade.h:194
 msgid "Double quotes \" \""
 msgstr "Komatxo bikoitzak"
 
-#: ../data/geany.glade.h:191
+#: ../data/geany.glade.h:195
 msgid "Auto-close double quote when typing an opening one"
 msgstr "Itxi komatxo bikoitzak automatikoki hasierakoa idaztean"
 
-#: ../data/geany.glade.h:192
+#: ../data/geany.glade.h:196
 msgid "<b>Auto-close quotes and brackets</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:193
+#: ../data/geany.glade.h:197
 msgid "Completions"
 msgstr ""
 
-#: ../data/geany.glade.h:194
+#: ../data/geany.glade.h:198
 msgid "Invert syntax highlighting colors"
 msgstr ""
 
-#: ../data/geany.glade.h:195
+#: ../data/geany.glade.h:199
 msgid "Invert all colors, by default using white text on a black background"
 msgstr ""
 
-#: ../data/geany.glade.h:196
+#: ../data/geany.glade.h:200
 msgid "Show indentation guides"
 msgstr "Erakutsi koska-gidak"
 
-#: ../data/geany.glade.h:197
+#: ../data/geany.glade.h:201
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 
-#: ../data/geany.glade.h:198
+#: ../data/geany.glade.h:202
 msgid "Show white space"
 msgstr "Erakutsi zuriuneak"
 
-#: ../data/geany.glade.h:199
+#: ../data/geany.glade.h:203
 msgid "Marks spaces with dots and tabs with arrows"
 msgstr "Markatu zuriuneak puntuekin eta tabulazioak geziekin"
 
-#: ../data/geany.glade.h:200
+#: ../data/geany.glade.h:204
 msgid "Show line endings"
 msgstr "Erakutsi lerro-amaierak"
 
-#: ../data/geany.glade.h:201
+#: ../data/geany.glade.h:205
 msgid "Shows the line ending character"
 msgstr "Lerro-amaierako karakterea erakusten du"
 
-#: ../data/geany.glade.h:202
+#: ../data/geany.glade.h:206
 msgid "Show line numbers"
 msgstr "Erakutsi lerro-zenbakiak"
 
-#: ../data/geany.glade.h:203
+#: ../data/geany.glade.h:207
 msgid "Shows or hides the Line Number margin"
 msgstr ""
 
-#: ../data/geany.glade.h:204
+#: ../data/geany.glade.h:208
 msgid "Show markers margin"
 msgstr ""
 
-#: ../data/geany.glade.h:205
+#: ../data/geany.glade.h:209
 msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
 msgstr ""
 
-#: ../data/geany.glade.h:206
+#: ../data/geany.glade.h:210
 msgid "Stop scrolling at last line"
 msgstr "Gelditu korritzea azken lerroan"
 
-#: ../data/geany.glade.h:207
+#: ../data/geany.glade.h:211
 msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr ""
 
-#: ../data/geany.glade.h:208
+#: ../data/geany.glade.h:212
 msgid "<b>Display</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:209
+#: ../data/geany.glade.h:213
 msgid "Column:"
 msgstr "Zutabea:"
 
-#: ../data/geany.glade.h:210
+#: ../data/geany.glade.h:214
 msgid "Color:"
 msgstr "Kolorea:"
 
-#: ../data/geany.glade.h:211
+#: ../data/geany.glade.h:215
 msgid "Sets the color of the long line marker"
 msgstr "Markatzaile lerro luzearen kolorea ezartzen du"
 
-#: ../data/geany.glade.h:212 ../src/toolbar.c:74 ../src/tools.c:825
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
 msgid "Color Chooser"
 msgstr "Kolore hautatzailea"
 
-#: ../data/geany.glade.h:213
+#: ../data/geany.glade.h:217
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
 "greater than 0 to specify the column where it should appear."
 msgstr ""
 
-#: ../data/geany.glade.h:214
+#: ../data/geany.glade.h:218
 msgid "Line"
 msgstr "Lerroa"
 
-#: ../data/geany.glade.h:215
+#: ../data/geany.glade.h:219
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
@@ -991,206 +1010,206 @@ msgstr ""
 "Lerro bertikal bat inprimatzen du editore-leihoan, emandako kurtsorearen "
 "posizioan (ikusi behean)"
 
-#: ../data/geany.glade.h:216
+#: ../data/geany.glade.h:220
 msgid "Background"
 msgstr "Atzeko planoa"
 
-#: ../data/geany.glade.h:217
+#: ../data/geany.glade.h:221
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
 "proportional fonts)"
 msgstr ""
 
-#: ../data/geany.glade.h:218
+#: ../data/geany.glade.h:222
 msgid "Enabled"
 msgstr "Gaituta"
 
-#: ../data/geany.glade.h:219
+#: ../data/geany.glade.h:223
 msgid "<b>Long line marker</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:220
+#: ../data/geany.glade.h:224
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: ../data/geany.glade.h:221
+#: ../data/geany.glade.h:225
 msgid "Do not show virtual spaces"
 msgstr ""
 
-#: ../data/geany.glade.h:222
+#: ../data/geany.glade.h:226
 msgid "Only for rectangular selections"
 msgstr "Hautapen angeluzuzenentzat soilik"
 
-#: ../data/geany.glade.h:223
+#: ../data/geany.glade.h:227
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
 msgstr ""
 
-#: ../data/geany.glade.h:224
+#: ../data/geany.glade.h:228
 msgid "Always"
 msgstr "Beti"
 
-#: ../data/geany.glade.h:225
+#: ../data/geany.glade.h:229
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr ""
 
-#: ../data/geany.glade.h:226
+#: ../data/geany.glade.h:230
 msgid "<b>Virtual spaces</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:227
+#: ../data/geany.glade.h:231
 msgid "Display"
 msgstr ""
 
-#: ../data/geany.glade.h:228 ../src/keybindings.c:307 ../src/prefs.c:1605
+#: ../data/geany.glade.h:232 ../src/keybindings.c:307 ../src/prefs.c:1604
 msgid "Editor"
 msgstr "Editorea"
 
-#: ../data/geany.glade.h:229
+#: ../data/geany.glade.h:233
 msgid "Open new documents from the command-line"
 msgstr "Ireki dokumentu berriak komando-lerrotik"
 
-#: ../data/geany.glade.h:230
+#: ../data/geany.glade.h:234
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 
-#: ../data/geany.glade.h:231
+#: ../data/geany.glade.h:235
 msgid "Default end of line characters:"
 msgstr "Lerro amaierako karaktere lehenetsiak:"
 
-#: ../data/geany.glade.h:232
+#: ../data/geany.glade.h:236
 msgid "<b>New files</b>"
 msgstr "<b>Fitxategi berriak</b>"
 
-#: ../data/geany.glade.h:233
+#: ../data/geany.glade.h:237
 msgid "Default encoding (new files):"
 msgstr "Kodeketa lehenetsia (fitxategi berriak):"
 
-#: ../data/geany.glade.h:234
+#: ../data/geany.glade.h:238
 msgid "Sets the default encoding for newly created files"
 msgstr "Fitxategi sortu berrientzako kodeketa lehenetsia ezartzen du"
 
-#: ../data/geany.glade.h:235
+#: ../data/geany.glade.h:239
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr "Erabili kodeketa finkoa Unicode ez diren fitxategiak irekitzean"
 
-#: ../data/geany.glade.h:236
+#: ../data/geany.glade.h:240
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
 
-#: ../data/geany.glade.h:237
+#: ../data/geany.glade.h:241
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Kodeketa lehenetsia (existitzen diren ez-Unicode fitxategiak):"
 
-#: ../data/geany.glade.h:238
+#: ../data/geany.glade.h:242
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
 "Unicode ez diren fitxategiak irekitzean erabili beharreko kodeketa "
 "lehenetsia ezartzen du"
 
-#: ../data/geany.glade.h:239
+#: ../data/geany.glade.h:243
 msgid "<b>Encodings</b>"
 msgstr "<b>Kodeketak</b>"
 
-#: ../data/geany.glade.h:240
+#: ../data/geany.glade.h:244
 msgid "Ensure new line at file end"
 msgstr ""
 
-#: ../data/geany.glade.h:241
+#: ../data/geany.glade.h:245
 msgid "Ensures that at the end of the file is a new line"
 msgstr ""
 
-#: ../data/geany.glade.h:242
+#: ../data/geany.glade.h:246
 msgid "Ensure consistent line endings"
 msgstr ""
 
-#: ../data/geany.glade.h:243
+#: ../data/geany.glade.h:247
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
 
-#: ../data/geany.glade.h:244
+#: ../data/geany.glade.h:248
 msgid "Strip trailing spaces and tabs"
 msgstr ""
 
-#: ../data/geany.glade.h:245
+#: ../data/geany.glade.h:249
 msgid "Removes trailing spaces and tabs and the end of lines"
 msgstr ""
 
-#: ../data/geany.glade.h:246 ../src/keybindings.c:647
+#: ../data/geany.glade.h:250 ../src/keybindings.c:661
 msgid "Replace tabs with space"
 msgstr "Ordezkatu tabulazioak zuriuneekin"
 
-#: ../data/geany.glade.h:247
+#: ../data/geany.glade.h:251
 msgid "Replaces all tabs in document with spaces"
 msgstr "Dokumentuko tabulazio guztiak zuriuneekin ordezkatzen ditu"
 
-#: ../data/geany.glade.h:248
+#: ../data/geany.glade.h:252
 msgid "<b>Saving files</b>"
 msgstr "<b>Fitxategiak gordetzen</b>"
 
-#: ../data/geany.glade.h:249
+#: ../data/geany.glade.h:253
 msgid "Recent files list length:"
 msgstr "Azken fitxategien zerrendaren luzera:"
 
-#: ../data/geany.glade.h:250
+#: ../data/geany.glade.h:254
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr ""
 
-#: ../data/geany.glade.h:251
+#: ../data/geany.glade.h:255
 msgid "Disk check timeout:"
 msgstr ""
 
-#: ../data/geany.glade.h:252
+#: ../data/geany.glade.h:256
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
 msgstr ""
 
-#: ../data/geany.glade.h:253 ../src/prefs.c:1607 ../src/symbols.c:628
+#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:542
 #: ../plugins/filebrowser.c:1160
 msgid "Files"
 msgstr "Fitxategiak"
 
-#: ../data/geany.glade.h:254
+#: ../data/geany.glade.h:258
 msgid "Terminal:"
 msgstr "Terminala:"
 
-#: ../data/geany.glade.h:255
+#: ../data/geany.glade.h:259
 msgid "Browser:"
 msgstr "Arakatzailea:"
 
-#: ../data/geany.glade.h:257
+#: ../data/geany.glade.h:261
 #, no-c-format
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
 
-#: ../data/geany.glade.h:258
+#: ../data/geany.glade.h:262
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr ""
 "Zure gogoko arakatzailearen bidea (eta behar bada argumentu gehigarriak)"
 
-#: ../data/geany.glade.h:259
+#: ../data/geany.glade.h:263
 msgid "Grep:"
 msgstr ""
 
-#: ../data/geany.glade.h:260
+#: ../data/geany.glade.h:264
 msgid "<b>Tool paths</b>"
 msgstr "<b>Tresnen bideak</b>"
 
-#: ../data/geany.glade.h:261
+#: ../data/geany.glade.h:265
 msgid "Context action:"
 msgstr ""
 
-#: ../data/geany.glade.h:263
+#: ../data/geany.glade.h:267
 #, no-c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -1198,939 +1217,940 @@ msgid ""
 "execution."
 msgstr ""
 
-#: ../data/geany.glade.h:264
+#: ../data/geany.glade.h:268
 msgid "<b>Commands</b>"
 msgstr "<b>Komandoak</b>"
 
-#: ../data/geany.glade.h:265 ../src/keybindings.c:319 ../src/prefs.c:1609
+#: ../data/geany.glade.h:269 ../src/keybindings.c:319 ../src/prefs.c:1608
 msgid "Tools"
 msgstr "Tresnak"
 
-#: ../data/geany.glade.h:266
+#: ../data/geany.glade.h:270
 msgid "email address of the developer"
 msgstr "garatzailearen e-posta helbidea"
 
-#: ../data/geany.glade.h:267
+#: ../data/geany.glade.h:271
 msgid "Initials of the developer name"
 msgstr "Garatzailearen inizialak"
 
-#: ../data/geany.glade.h:268
+#: ../data/geany.glade.h:272
 msgid "Initial version:"
 msgstr "Hasierako bertsioa:"
 
-#: ../data/geany.glade.h:269
+#: ../data/geany.glade.h:273
 msgid "Version number, which a new file initially has"
 msgstr ""
 
-#: ../data/geany.glade.h:270
+#: ../data/geany.glade.h:274
 msgid "Company name"
 msgstr "Enpresaren izena"
 
-#: ../data/geany.glade.h:271
+#: ../data/geany.glade.h:275
 msgid "Developer:"
 msgstr "Garatzailea:"
 
-#: ../data/geany.glade.h:272
+#: ../data/geany.glade.h:276
 msgid "Company:"
 msgstr "Enpresa:"
 
-#: ../data/geany.glade.h:273
+#: ../data/geany.glade.h:277
 msgid "Mail address:"
 msgstr "Posta-helbidea:"
 
-#: ../data/geany.glade.h:274
+#: ../data/geany.glade.h:278
 msgid "Initials:"
 msgstr "Inizialak:"
 
-#: ../data/geany.glade.h:275
+#: ../data/geany.glade.h:279
 msgid "The name of the developer"
 msgstr "Garatzailearen izena"
 
-#: ../data/geany.glade.h:276
+#: ../data/geany.glade.h:280
 msgid "Year:"
 msgstr "Urtea:"
 
-#: ../data/geany.glade.h:277
+#: ../data/geany.glade.h:281
 msgid "Date:"
 msgstr "Data:"
 
-#: ../data/geany.glade.h:278
+#: ../data/geany.glade.h:282
 msgid "Date & time:"
 msgstr "Data eta ordua:"
 
-#: ../data/geany.glade.h:279
+#: ../data/geany.glade.h:283
 msgid ""
 "Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 
-#: ../data/geany.glade.h:280
+#: ../data/geany.glade.h:284
 msgid ""
 "Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 
-#: ../data/geany.glade.h:281
+#: ../data/geany.glade.h:285
 msgid ""
 "Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 
-#: ../data/geany.glade.h:282
+#: ../data/geany.glade.h:286
 msgid "<b>Template data</b>"
 msgstr ""
 
-#: ../data/geany.glade.h:283 ../src/prefs.c:1611
+#: ../data/geany.glade.h:287 ../src/prefs.c:1610
 msgid "Templates"
 msgstr "Txantiloiak"
 
-#: ../data/geany.glade.h:284
+#: ../data/geany.glade.h:288
 msgid "C_hange"
 msgstr "_Aldatu"
 
-#: ../data/geany.glade.h:285
+#: ../data/geany.glade.h:289
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Teklatuko lasterbideak</b>"
 
-#: ../data/geany.glade.h:286 ../src/plugins.c:1891 ../src/plugins.c:1928
-#: ../src/prefs.c:1613
+#: ../data/geany.glade.h:290 ../src/plugins.c:1898 ../src/plugins.c:1935
+#: ../src/prefs.c:1612
 msgid "Keybindings"
 msgstr ""
 
-#: ../data/geany.glade.h:287
+#: ../data/geany.glade.h:291
 msgid "Command:"
 msgstr "Komandoa:"
 
-#: ../data/geany.glade.h:289
+#: ../data/geany.glade.h:293
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr ""
 
-#: ../data/geany.glade.h:290
+#: ../data/geany.glade.h:294
 msgid "Use an external command for printing"
 msgstr "Erabili kanpoko komando bat inprimatzeko"
 
-#: ../data/geany.glade.h:291 ../src/printing.c:239
+#: ../data/geany.glade.h:295 ../src/printing.c:239
 msgid "Print line numbers"
 msgstr "Inprimatu lerro-zenbakiak"
 
-#: ../data/geany.glade.h:292 ../src/printing.c:241
+#: ../data/geany.glade.h:296 ../src/printing.c:241
 msgid "Add line numbers to the printed page"
 msgstr "Gehitu lerro-zenbakiak inprimatutako orriari"
 
-#: ../data/geany.glade.h:293 ../src/printing.c:244
+#: ../data/geany.glade.h:297 ../src/printing.c:244
 msgid "Print page numbers"
 msgstr "Inprimatu orri-zenbakiak"
 
-#: ../data/geany.glade.h:294 ../src/printing.c:246
+#: ../data/geany.glade.h:298 ../src/printing.c:246
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Gehitu orri-zenbakiak orri bakoitzaren oinean. Orriko bi lerro behar ditu."
 
-#: ../data/geany.glade.h:295 ../src/printing.c:249
+#: ../data/geany.glade.h:299 ../src/printing.c:249
 msgid "Print page header"
 msgstr "Inprimatu orriaren goiburua"
 
-#: ../data/geany.glade.h:296 ../src/printing.c:251
+#: ../data/geany.glade.h:300 ../src/printing.c:251
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
 
-#: ../data/geany.glade.h:297 ../src/printing.c:267
+#: ../data/geany.glade.h:301 ../src/printing.c:267
 msgid "Use the basename of the printed file"
 msgstr ""
 
-#: ../data/geany.glade.h:298
+#: ../data/geany.glade.h:302
 msgid "Print only the basename (without the path) of the printed file"
 msgstr ""
 
-#: ../data/geany.glade.h:299 ../src/printing.c:275
+#: ../data/geany.glade.h:303 ../src/printing.c:275
 msgid "Date format:"
 msgstr "Dataren formatua:"
 
-#: ../data/geany.glade.h:300 ../src/printing.c:281
+#: ../data/geany.glade.h:304 ../src/printing.c:281
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
 "with the ANSI C strftime function."
 msgstr ""
 
-#: ../data/geany.glade.h:301
+#: ../data/geany.glade.h:305
 msgid "Use native GTK printing"
 msgstr "Erabili GTK inprimaketa natiboa"
 
-#: ../data/geany.glade.h:302
+#: ../data/geany.glade.h:306
 msgid "<b>Printing</b>"
 msgstr "<b>Inprimatzea</b>"
 
-#: ../data/geany.glade.h:303 ../src/prefs.c:1615
+#: ../data/geany.glade.h:307 ../src/prefs.c:1614
 msgid "Printing"
 msgstr "Inprimaketa"
 
-#: ../data/geany.glade.h:304
+#: ../data/geany.glade.h:308
 msgid "Font:"
 msgstr "Letra-tipoa:"
 
-#: ../data/geany.glade.h:305
+#: ../data/geany.glade.h:309
 msgid "Sets the font for the terminal widget"
 msgstr "Terminal trepetaren letra-tipoa ezartzen du"
 
-#: ../data/geany.glade.h:306
+#: ../data/geany.glade.h:310
 msgid "Choose Terminal Font"
 msgstr "Aukeratu terminalaren letra-tipoa"
 
-#: ../data/geany.glade.h:307
+#: ../data/geany.glade.h:311
 msgid "Foreground color:"
 msgstr "Aurreko planoko kolorea:"
 
-#: ../data/geany.glade.h:308
+#: ../data/geany.glade.h:312
 msgid "Background color:"
 msgstr "Atzeko planoaren kolorea:"
 
-#: ../data/geany.glade.h:309
+#: ../data/geany.glade.h:313
 #, fuzzy
 msgid "Background image:"
 msgstr "Atzeko planoa"
 
-#: ../data/geany.glade.h:310
+#: ../data/geany.glade.h:314
 msgid "Scrollback lines:"
 msgstr ""
 
-#: ../data/geany.glade.h:311
+#: ../data/geany.glade.h:315
 msgid "Shell:"
 msgstr ""
 
-#: ../data/geany.glade.h:312
+#: ../data/geany.glade.h:316
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "Terminal trepeteko testuaren aurreko planoko kolorea ezartzen du"
 
-#: ../data/geany.glade.h:313
+#: ../data/geany.glade.h:317
 #, fuzzy
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "Terminal trepeteko testuaren atzeko planoko kolorea ezartzen du"
 
-#: ../data/geany.glade.h:314
+#: ../data/geany.glade.h:318
 #, fuzzy
 msgid "Sets the path to the background image in the terminal widget"
 msgstr "Terminal trepeteko testuaren atzeko planoko kolorea ezartzen du"
 
-#: ../data/geany.glade.h:315
+#: ../data/geany.glade.h:319
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr ""
 
-#: ../data/geany.glade.h:316
+#: ../data/geany.glade.h:320
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr ""
 
-#: ../data/geany.glade.h:317
+#: ../data/geany.glade.h:321
 msgid "Scroll on keystroke"
 msgstr ""
 
-#: ../data/geany.glade.h:318
+#: ../data/geany.glade.h:322
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr ""
 
-#: ../data/geany.glade.h:319
+#: ../data/geany.glade.h:323
 msgid "Scroll on output"
 msgstr ""
 
-#: ../data/geany.glade.h:320
+#: ../data/geany.glade.h:324
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr ""
 
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:325
 msgid "Cursor blinks"
 msgstr "Kurtsorearen keinuak"
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:326
 msgid "Whether to blink the cursor"
 msgstr "Kurtsoreak keinurik egin behar duen ala ez"
 
-#: ../data/geany.glade.h:323
+#: ../data/geany.glade.h:327
 msgid "Override Geany keybindings"
 msgstr ""
 
-#: ../data/geany.glade.h:324
+#: ../data/geany.glade.h:328
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 
-#: ../data/geany.glade.h:325
+#: ../data/geany.glade.h:329
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Desgaitu menuaren laster-tekla (F10 da lehenetsia)"
 
-#: ../data/geany.glade.h:326
+#: ../data/geany.glade.h:330
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
 "within the VTE."
 msgstr ""
 
-#: ../data/geany.glade.h:327
+#: ../data/geany.glade.h:331
 msgid "Follow path of the current file"
 msgstr "Jarraitu uneko fitxategiaren bidea"
 
-#: ../data/geany.glade.h:328
+#: ../data/geany.glade.h:332
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 
-#: ../data/geany.glade.h:329
+#: ../data/geany.glade.h:333
 msgid "Execute programs in the VTE"
 msgstr "Exekutatu programak terminal-emuladore birtualean"
 
-#: ../data/geany.glade.h:330
+#: ../data/geany.glade.h:334
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
 
-#: ../data/geany.glade.h:331
+#: ../data/geany.glade.h:335
 msgid "Don't use run script"
 msgstr ""
 
-#: ../data/geany.glade.h:332
+#: ../data/geany.glade.h:336
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr ""
 
-#: ../data/geany.glade.h:333
+#: ../data/geany.glade.h:337
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminala</b>"
 
-#: ../data/geany.glade.h:334 ../src/prefs.c:1619 ../src/vte.c:320
+#: ../data/geany.glade.h:338 ../src/prefs.c:1618 ../src/vte.c:320
 msgid "Terminal"
 msgstr "Terminala"
 
-#: ../data/geany.glade.h:335
+#: ../data/geany.glade.h:339
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>Abisua: irakurri eskuliburua hobespen hauek aldatu aurretik.</i>"
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:340
 msgid "<b>Various preferences</b>"
 msgstr "<b>Zenbait hobespen</b>"
 
-#: ../data/geany.glade.h:337 ../src/prefs.c:1617
+#: ../data/geany.glade.h:341 ../src/prefs.c:1616
 msgid "Various"
 msgstr ""
 
-#: ../data/geany.glade.h:339
+#: ../data/geany.glade.h:343
 msgid "_File"
 msgstr "_Fitxategia"
 
-#: ../data/geany.glade.h:340
+#: ../data/geany.glade.h:344
 msgid "New (with _Template)"
 msgstr "Berria (_txantiloiarekin)"
 
-#: ../data/geany.glade.h:341
+#: ../data/geany.glade.h:345
 #, fuzzy
 msgid "_Open..."
 msgstr "_Ireki"
 
-#: ../data/geany.glade.h:342
+#: ../data/geany.glade.h:346
 msgid "Recent _Files"
 msgstr "Azken _fitxategiak:"
 
-#: ../data/geany.glade.h:343
+#: ../data/geany.glade.h:347
 #, fuzzy
 msgid "Save _As..."
 msgstr "Gorde honela"
 
-#: ../data/geany.glade.h:344
+#: ../data/geany.glade.h:348
 msgid "Sa_ve All"
 msgstr "Gorde denak"
 
-#: ../data/geany.glade.h:345 ../src/document.c:1661 ../src/document.c:3588
+#: ../data/geany.glade.h:349 ../src/document.c:1666 ../src/document.c:3596
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Birkargatu"
 
-#: ../data/geany.glade.h:346
+#: ../data/geany.glade.h:350
 msgid "R_eload As"
 msgstr "_Birkargatu honela"
 
-#: ../data/geany.glade.h:347
+#: ../data/geany.glade.h:351
 msgid "Page Set_up"
 msgstr "Orriaren _konfigurazioa"
 
-#: ../data/geany.glade.h:348
+#: ../data/geany.glade.h:352
 #, fuzzy
 msgid "_Print..."
 msgstr "Inprimatu"
 
-#: ../data/geany.glade.h:349 ../src/notebook.c:470
+#: ../data/geany.glade.h:353 ../src/notebook.c:470
 msgid "Close Ot_her Documents"
 msgstr "Itxi _beste dokumentuak"
 
-#: ../data/geany.glade.h:350 ../src/notebook.c:476
+#: ../data/geany.glade.h:354 ../src/notebook.c:476
 msgid "C_lose All"
 msgstr "_Itxi denak"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:355
 msgid "Co_mmands"
 msgstr "_Komandoak"
 
-#: ../data/geany.glade.h:352 ../src/keybindings.c:427
+#: ../data/geany.glade.h:356 ../src/keybindings.c:429
 msgid "Cu_t Current Line(s)"
 msgstr "_Ebaki uneko lerroa(k)"
 
-#: ../data/geany.glade.h:353 ../src/keybindings.c:424
+#: ../data/geany.glade.h:357 ../src/keybindings.c:426
 msgid "_Copy Current Line(s)"
 msgstr "_Kopiatu uneko lerroa(k)"
 
-#: ../data/geany.glade.h:354 ../src/keybindings.c:380
+#: ../data/geany.glade.h:358 ../src/keybindings.c:382
 msgid "_Delete Current Line(s)"
 msgstr "_Ezabatu uneko lerroa(k)"
 
-#: ../data/geany.glade.h:355 ../src/keybindings.c:377
+#: ../data/geany.glade.h:359 ../src/keybindings.c:379
 msgid "D_uplicate Line or Selection"
 msgstr "_Bikoiztu lerroa edo hautapena"
 
-#: ../data/geany.glade.h:356 ../src/keybindings.c:437
+#: ../data/geany.glade.h:360 ../src/keybindings.c:439
 msgid "S_elect Current Line(s)"
 msgstr "_Hautatu uneko lerroa(k)"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:440
+#: ../data/geany.glade.h:361 ../src/keybindings.c:442
 msgid "Se_lect Current Paragraph"
 msgstr "_Hautatu uneko paragrafoa"
 
-#: ../data/geany.glade.h:358
+#: ../data/geany.glade.h:362
 msgid "_Move Line(s) Up"
 msgstr "_Mugitu lerroa(k) gora"
 
-#: ../data/geany.glade.h:359
+#: ../data/geany.glade.h:363
 msgid "M_ove Line(s) Down"
 msgstr "_Mugitu lerroa(k) behera"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:479
+#: ../data/geany.glade.h:364 ../src/keybindings.c:493
 msgid "_Send Selection to Terminal"
 msgstr "_Bidali hautapena terminalera"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:481
+#: ../data/geany.glade.h:365 ../src/keybindings.c:495
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:451
+#: ../data/geany.glade.h:366 ../src/keybindings.c:453
 msgid "T_oggle Case of Selection"
 msgstr ""
 
-#: ../data/geany.glade.h:363
+#: ../data/geany.glade.h:367
 msgid "_Comment Line(s)"
 msgstr ""
 
-#: ../data/geany.glade.h:364
+#: ../data/geany.glade.h:368
 msgid "U_ncomment Line(s)"
 msgstr ""
 
-#: ../data/geany.glade.h:365
+#: ../data/geany.glade.h:369
 msgid "_Toggle Line Commentation"
 msgstr ""
 
-#: ../data/geany.glade.h:366
+#: ../data/geany.glade.h:370
 msgid "_Increase Indent"
 msgstr "_Handitu koska"
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:371
 msgid "_Decrease Indent"
 msgstr "_Txikitu koska"
 
-#: ../data/geany.glade.h:368 ../src/keybindings.c:470
+#: ../data/geany.glade.h:372 ../src/keybindings.c:472
 msgid "S_mart Line Indent"
 msgstr ""
 
-#: ../data/geany.glade.h:369
+#: ../data/geany.glade.h:373
 msgid "_Send Selection to"
 msgstr "_Bidali hautapena hona"
 
-#: ../data/geany.glade.h:370
+#: ../data/geany.glade.h:374
 msgid "I_nsert Comments"
 msgstr "_Txertatu iruzkinak"
 
-#: ../data/geany.glade.h:371
+#: ../data/geany.glade.h:375
 msgid "Preference_s"
 msgstr "_Hobespenak"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:505
+#: ../data/geany.glade.h:376 ../src/keybindings.c:519
 msgid "P_lugin Preferences"
 msgstr "Pluginen hobespenak"
 
-#: ../data/geany.glade.h:373
+#: ../data/geany.glade.h:377
 #, fuzzy
 msgid "_Find..."
 msgstr "Bilatu"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:378
 msgid "Find _Next"
 msgstr "Bilatu _hurrengoa"
 
-#: ../data/geany.glade.h:375
+#: ../data/geany.glade.h:379
 msgid "Find _Previous"
 msgstr "Bilatu _aurrekoa"
 
-#: ../data/geany.glade.h:376 ../src/symbols.c:2378
+#: ../data/geany.glade.h:380 ../src/symbols.c:2567
 #, fuzzy
 msgid "Find in F_iles..."
 msgstr "Bilatu _fitxategietan"
 
-#: ../data/geany.glade.h:377
+#: ../data/geany.glade.h:381
 #, fuzzy
 msgid "_Replace..."
 msgstr "_Ordezkatu"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:382
 msgid "Next Me_ssage"
 msgstr "Hurrengo _mezua"
 
-#: ../data/geany.glade.h:379
+#: ../data/geany.glade.h:383
 msgid "Pr_evious Message"
 msgstr "_Aurreko mezua"
 
-#: ../data/geany.glade.h:380 ../src/keybindings.c:554
+#: ../data/geany.glade.h:384 ../src/keybindings.c:568
 msgid "Go to Ne_xt Marker"
 msgstr "_Joan hurrengo markatzailera"
 
-#: ../data/geany.glade.h:381 ../src/keybindings.c:557
+#: ../data/geany.glade.h:385 ../src/keybindings.c:571
 msgid "Go to Pre_vious Marker"
 msgstr "_Joan aurreko markatzailera"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:386
 #, fuzzy
 msgid "_Go to Line..."
 msgstr "_Joan lerrora"
 
-#: ../data/geany.glade.h:383 ../src/keybindings.c:517
+#: ../data/geany.glade.h:387 ../src/keybindings.c:531
 msgid "Find Next _Selection"
 msgstr "Bilatu _hurrengo hautapena"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:519
+#: ../data/geany.glade.h:388 ../src/keybindings.c:533
 msgid "Find Pre_vious Selection"
 msgstr "Bilatu _aurreko hautapena"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:536
+#: ../data/geany.glade.h:389 ../src/keybindings.c:550
 msgid "_Mark All"
 msgstr "_Markatu dena"
 
-#: ../data/geany.glade.h:386
-msgid "Go to T_ag Declaration"
-msgstr "Joan e_tiketaren deklaraziora"
+#: ../data/geany.glade.h:390
+#, fuzzy
+msgid "Go to Symbol Decl_aration"
+msgstr "Joan etiketaren deklaraziora"
 
-#: ../data/geany.glade.h:387
+#: ../data/geany.glade.h:391
 msgid "_View"
 msgstr "_Ikusi"
 
-#: ../data/geany.glade.h:388
+#: ../data/geany.glade.h:392
 #, fuzzy
 msgid "Change _Font..."
 msgstr "Aldatu _letra-tipoa"
 
-#: ../data/geany.glade.h:389
+#: ../data/geany.glade.h:393
 #, fuzzy
 msgid "Change _Color Scheme..."
 msgstr "_Kolore-eskemak"
 
-#: ../data/geany.glade.h:390
+#: ../data/geany.glade.h:394
 msgid "Show _Markers Margin"
 msgstr ""
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:395
 msgid "Show _Line Numbers"
 msgstr "Erakutsi _lerro-zenbakiak"
 
-#: ../data/geany.glade.h:392
+#: ../data/geany.glade.h:396
 msgid "Show White S_pace"
 msgstr "Erakutsi zuriuneak"
 
-#: ../data/geany.glade.h:393
+#: ../data/geany.glade.h:397
 msgid "Show Line _Endings"
 msgstr "Erakutsi lerro _amaierak"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:398
 msgid "Show Indentation _Guides"
 msgstr "Erakutsi _koska-gidak"
 
-#: ../data/geany.glade.h:395
+#: ../data/geany.glade.h:399
 msgid "Full_screen"
 msgstr "Pantaila osoa"
 
-#: ../data/geany.glade.h:396
+#: ../data/geany.glade.h:400
 msgid "Toggle All _Additional Widgets"
 msgstr "_Txandakatu trepeta gehigarri guztiak"
 
-#: ../data/geany.glade.h:397
+#: ../data/geany.glade.h:401
 msgid "Show Message _Window"
 msgstr "Erakutsi mezu-leihoa"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:402
 msgid "Show _Toolbar"
 msgstr "Erakutsi tresna-barra"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:403
 msgid "Show Side_bar"
 msgstr "Erakutsi albo-barra"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:404
 msgid "_Document"
 msgstr "_Dokumentua"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:405
 msgid "_Line Wrapping"
 msgstr ""
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:406
 msgid "Line _Breaking"
 msgstr ""
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:407
 msgid "_Auto-indentation"
 msgstr "_Koska-automatikoa"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:408
 msgid "In_dent Type"
 msgstr "_Koska mota"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:409
 msgid "_Detect from Content"
 msgstr "_Detektatu edukitik"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:410
 msgid "T_abs and Spaces"
 msgstr "T_abulazioak eta zuriuneak"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:411
 msgid "Indent Widt_h"
 msgstr "Koskaren _zabalera"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:412
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:413
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:414
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:415
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:416
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:417
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:418
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:419
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:420
 msgid "Read _Only"
 msgstr "_Irakurtzeko soilik"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:421
 msgid "_Write Unicode BOM"
 msgstr "_Idatzi Unicode BOM"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:422
 msgid "Set File_type"
 msgstr "Ezarri _fitxategi-mota"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:423
 msgid "Set _Encoding"
 msgstr "Ezarri _kodeketa"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:424
 msgid "Set Line E_ndings"
 msgstr "Ezarri _lerro-amaierak"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:425
 #, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Bihurtu eta ezarri _CR/LF (Win)"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Bihurtu eta ezarri _LF (Unix)"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:427
 #, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Bihurtu eta ezarri CR (_Mac)"
 
-#: ../data/geany.glade.h:424 ../src/keybindings.c:645
+#: ../data/geany.glade.h:428 ../src/keybindings.c:659
 #, fuzzy
 msgid "_Clone"
 msgstr "_Itxi"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:429
 msgid "_Strip Trailing Spaces"
 msgstr ""
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:430
 msgid "Replace Tabs with S_paces"
 msgstr "_Ordezkatu tabulazioak zuriuneekin"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:431
 #, fuzzy
 msgid "_Replace Spaces with Tabs..."
 msgstr "Ordezkatu zuriuneak tabulazioekin"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:432
 msgid "_Fold All"
 msgstr ""
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:433
 msgid "_Unfold All"
 msgstr ""
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:434
 msgid "Remove _Markers"
 msgstr "Kendu _markatzaileak"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:435
 msgid "Remove Error _Indicators"
 msgstr "Kendu errore-_adierazleak"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:436
 msgid "_Project"
 msgstr "_Proiektua"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:437
 #, fuzzy
 msgid "_New..."
 msgstr "_Berria"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:438
 msgid "_Recent Projects"
 msgstr "_Azken proiektuak"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:439
 msgid "_Close"
 msgstr "_Itxi"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:440
 msgid "Apply the default indentation settings to all documents"
 msgstr "Aplikatu koskaren ezarpen lehenetsiak dokumentu guztiei"
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:441
 msgid "_Apply Default Indentation"
 msgstr "_Aplikatu koska lehenetsia"
 
 #. build the code
-#: ../data/geany.glade.h:438 ../src/build.c:2389 ../src/build.c:2666
+#: ../data/geany.glade.h:442 ../src/build.c:2390 ../src/build.c:2667
 msgid "_Build"
 msgstr "_Eraiki"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:443
 msgid "_Tools"
 msgstr "_Tresnak"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:444
 msgid "_Reload Configuration"
 msgstr "_Birkargatu konfigurazioa"
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:445
 msgid "C_onfiguration Files"
 msgstr "_Konfigurazio-fitxategiak"
 
-#: ../data/geany.glade.h:442
+#: ../data/geany.glade.h:446
 msgid "_Color Chooser"
 msgstr "_Kolore hautatzailea"
 
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:447
 msgid "_Word Count"
 msgstr "_Hitz kopurua"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:448
 #, fuzzy
-msgid "Load Ta_gs..."
+msgid "Load Ta_gs File..."
 msgstr "Kargatu _etiketak"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:449
 msgid "_Help"
 msgstr "_Laguntza"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:450
 msgid "Keyboard _Shortcuts"
 msgstr "_Teklatuko lasterbideak"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:451
 msgid "Debug _Messages"
 msgstr "Arazketa-_mezuak"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:452
 msgid "_Website"
 msgstr "_Webgunea"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:453
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:454
 #, fuzzy
 msgid "Report a _Bug..."
 msgstr "Jakinarazi _errore bat"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:455
 #, fuzzy
 msgid "_Donate..."
 msgstr "_Egin dohaintza"
 
-#: ../data/geany.glade.h:452 ../src/sidebar.c:126
+#: ../data/geany.glade.h:456 ../src/sidebar.c:126
 msgid "Symbols"
 msgstr "Ikurrak"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:457
 msgid "Documents"
 msgstr "Dokumentuak"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:458
 msgid "Status"
 msgstr "Egoera"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:459
 msgid "Compiler"
 msgstr "Konpiladorea"
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:460
 msgid "Messages"
 msgstr "Mezuak"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:461
 msgid "Scribble"
 msgstr ""
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:462
 msgid "Project Properties"
 msgstr "Proiektuaren propietateak"
 
-#: ../data/geany.glade.h:459 ../src/project.c:180
+#: ../data/geany.glade.h:463 ../src/project.c:180
 msgid "Filename:"
 msgstr "Fitxategi-izena:"
 
-#: ../data/geany.glade.h:460 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../data/geany.glade.h:464 ../src/project.c:169 ../plugins/classbuilder.c:467
 #: ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Izena:"
 
-#: ../data/geany.glade.h:461
+#: ../data/geany.glade.h:465
 msgid "Description:"
 msgstr "Deskribapena:"
 
-#: ../data/geany.glade.h:462 ../src/project.c:202
+#: ../data/geany.glade.h:466 ../src/project.c:202
 msgid "Base path:"
 msgstr ""
 
-#: ../data/geany.glade.h:463
+#: ../data/geany.glade.h:467
 msgid "File patterns:"
 msgstr ""
 
-#: ../data/geany.glade.h:464
+#: ../data/geany.glade.h:468
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
 
-#: ../data/geany.glade.h:465 ../src/project.c:209
+#: ../data/geany.glade.h:469 ../src/project.c:209
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
 "project filename."
 msgstr ""
 
-#: ../data/geany.glade.h:466 ../src/keybindings.c:317
+#: ../data/geany.glade.h:470 ../src/keybindings.c:317
 msgid "Project"
 msgstr "Proiektua"
 
-#: ../data/geany.glade.h:467
+#: ../data/geany.glade.h:471
 msgid "Display:"
 msgstr ""
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:472
 msgid "Custom"
 msgstr "Pertsonalizatu"
 
-#: ../data/geany.glade.h:469
+#: ../data/geany.glade.h:473
 msgid "Use global settings"
 msgstr "Erabili ezarpen orokorrak"
 
-#: ../data/geany.glade.h:470
-msgid "Size:"
-msgstr ""
-
-#: ../data/geany.glade.h:471
-#, fuzzy
-msgid "Location:"
-msgstr "<b>Kokapena:</b>"
-
-#: ../data/geany.glade.h:472
-#, fuzzy
-msgid "Read-only:"
-msgstr ", irakurtzeko soilik"
-
-#: ../data/geany.glade.h:473
-#, fuzzy
-msgid "Encoding:"
-msgstr "_Kodeketa:"
-
 #: ../data/geany.glade.h:474
-msgid "Modified:"
+msgid "Size:"
 msgstr ""
 
 #: ../data/geany.glade.h:475
 #, fuzzy
+msgid "Location:"
+msgstr "<b>Kokapena:</b>"
+
+#: ../data/geany.glade.h:476
+#, fuzzy
+msgid "Read-only:"
+msgstr ", irakurtzeko soilik"
+
+#: ../data/geany.glade.h:477
+#, fuzzy
+msgid "Encoding:"
+msgstr "_Kodeketa:"
+
+#: ../data/geany.glade.h:478
+msgid "Modified:"
+msgstr ""
+
+#: ../data/geany.glade.h:479
+#, fuzzy
 msgid "Changed:"
 msgstr "_Aldatu"
 
-#: ../data/geany.glade.h:476
+#: ../data/geany.glade.h:480
 msgid "Accessed:"
 msgstr ""
 
-#: ../data/geany.glade.h:477
+#: ../data/geany.glade.h:481
 msgid "(only inside Geany)"
 msgstr "(soilik Geany barruan)"
 
-#: ../data/geany.glade.h:478
+#: ../data/geany.glade.h:482
 #, fuzzy
 msgid "Permissions:"
 msgstr "<b>Baimenak:</b>"
 
-#: ../data/geany.glade.h:479
+#: ../data/geany.glade.h:483
 msgid "Read:"
 msgstr "Irakurri:"
 
-#: ../data/geany.glade.h:480
+#: ../data/geany.glade.h:484
 msgid "Write:"
 msgstr "Idatzi:"
 
-#: ../data/geany.glade.h:481
+#: ../data/geany.glade.h:485
 msgid "Execute:"
 msgstr "Exekutatu:"
 
-#: ../data/geany.glade.h:482
+#: ../data/geany.glade.h:486
 msgid "Owner:"
 msgstr "Jabea:"
 
-#: ../data/geany.glade.h:483
+#: ../data/geany.glade.h:487
 msgid "Group:"
 msgstr "Taldea:"
 
-#: ../data/geany.glade.h:484
+#: ../data/geany.glade.h:488
 msgid "Other:"
 msgstr "Besteak:"
 
@@ -2272,139 +2292,139 @@ msgstr "Konpilazioak huts egin du."
 msgid "Compilation finished successfully."
 msgstr "Konpilazioa behar burutu da."
 
-#: ../src/build.c:1202
+#: ../src/build.c:1203
 msgid "Custom Text"
 msgstr "Testu pertsonalizatua"
 
-#: ../src/build.c:1203
+#: ../src/build.c:1204
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Sartu testu pertsonalizatua hemen, sartutako testu guztia gehitzen zaio "
 "komandoari."
 
-#: ../src/build.c:1281
+#: ../src/build.c:1282
 msgid "_Next Error"
 msgstr "_Hurrengo errorea"
 
-#: ../src/build.c:1283
+#: ../src/build.c:1284
 msgid "_Previous Error"
 msgstr "_Aurreko errorea"
 
 #. arguments
-#: ../src/build.c:1293 ../src/build.c:2706
+#: ../src/build.c:1294 ../src/build.c:2707
 msgid "_Set Build Commands"
 msgstr ""
 
-#: ../src/build.c:1579 ../src/toolbar.c:376
+#: ../src/build.c:1580 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "Eraiki uneko fitxategia"
 
-#: ../src/build.c:1590
+#: ../src/build.c:1591
 msgid "Build the current file with Make and the default target"
 msgstr "Eraiki uneko fitxategia Make eta helburu lehenetsiarekin"
 
-#: ../src/build.c:1592
+#: ../src/build.c:1593
 msgid "Build the current file with Make and the specified target"
 msgstr "Eraiki uneko fitxategia Make eta zehazturiko helburuarekin"
 
-#: ../src/build.c:1594
+#: ../src/build.c:1595
 msgid "Compile the current file with Make"
 msgstr "Konpilatu uneko fitxategia Make erabiliz"
 
-#: ../src/build.c:1613
+#: ../src/build.c:1614
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Ezin izan da prozesua gelditu (%s)."
 
-#: ../src/build.c:1627 ../src/build.c:1639
+#: ../src/build.c:1628 ../src/build.c:1640
 msgid "No more build errors."
 msgstr ""
 
-#: ../src/build.c:1752 ../src/build.c:1754
+#: ../src/build.c:1753 ../src/build.c:1755
 msgid "Set menu item label"
 msgstr "Ezarri menuko elementuaren etiketa"
 
-#: ../src/build.c:1779 ../src/symbols.c:683 ../src/tools.c:397
+#: ../src/build.c:1780 ../src/symbols.c:597 ../src/tools.c:397
 msgid "Label"
 msgstr "Etiketa"
 
 #. command column, holding status and command display
-#: ../src/build.c:1780 ../src/symbols.c:678 ../src/tools.c:382
+#: ../src/build.c:1781 ../src/symbols.c:592 ../src/tools.c:382
 msgid "Command"
 msgstr "Komandoa"
 
-#: ../src/build.c:1781
+#: ../src/build.c:1782
 msgid "Working directory"
 msgstr "Laneko direktorioa"
 
-#: ../src/build.c:1782
+#: ../src/build.c:1783
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: ../src/build.c:1833
+#: ../src/build.c:1834
 msgid "Click to set menu item label"
 msgstr "Klikatu menu-elementuaren etiketa ezartzeko"
 
-#: ../src/build.c:1917 ../src/build.c:1919
+#: ../src/build.c:1918 ../src/build.c:1920
 #, c-format
 msgid "%s commands"
 msgstr "%s komando"
 
-#: ../src/build.c:1919
+#: ../src/build.c:1920
 msgid "No filetype"
 msgstr "Fitxategi-motarik ez"
 
-#: ../src/build.c:1928 ../src/build.c:1963
+#: ../src/build.c:1929 ../src/build.c:1964
 msgid "Error regular expression:"
 msgstr ""
 
-#: ../src/build.c:1956
+#: ../src/build.c:1957
 msgid "Independent commands"
 msgstr "Komando independenteak"
 
-#: ../src/build.c:1988
+#: ../src/build.c:1989
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 
-#: ../src/build.c:1997
+#: ../src/build.c:1998
 msgid "Execute commands"
 msgstr "Exekutatu komandoak"
 
-#: ../src/build.c:2009
+#: ../src/build.c:2010
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
 
-#: ../src/build.c:2167
+#: ../src/build.c:2168
 msgid "Set Build Commands"
 msgstr ""
 
-#: ../src/build.c:2382
+#: ../src/build.c:2383
 msgid "_Compile"
 msgstr "_Konpilatu"
 
-#: ../src/build.c:2396 ../src/build.c:2426 ../src/build.c:2634
+#: ../src/build.c:2397 ../src/build.c:2427 ../src/build.c:2635
 msgid "_Execute"
 msgstr "_Exekutatu"
 
 #. build the code with make custom
-#: ../src/build.c:2441 ../src/build.c:2632 ../src/build.c:2686
+#: ../src/build.c:2442 ../src/build.c:2633 ../src/build.c:2687
 #, fuzzy
 msgid "Make Custom _Target..."
 msgstr "Testu pertsonalizatua"
 
 #. build the code with make object
-#: ../src/build.c:2443 ../src/build.c:2633 ../src/build.c:2694
+#: ../src/build.c:2444 ../src/build.c:2634 ../src/build.c:2695
 msgid "Make _Object"
 msgstr ""
 
-#: ../src/build.c:2445 ../src/build.c:2631
+#: ../src/build.c:2446 ../src/build.c:2632
 msgid "_Make"
 msgstr ""
 
 #. build the code with make all
-#: ../src/build.c:2678
+#: ../src/build.c:2679
 msgid "_Make All"
 msgstr ""
 
@@ -2415,84 +2435,84 @@ msgid_plural "%d files saved."
 msgstr[0] "Fitxategi %d gordeta."
 msgstr[1] "%d fitxategi gordeta."
 
-#: ../src/callbacks.c:895 ../src/keybindings.c:545
+#: ../src/callbacks.c:885 ../src/keybindings.c:559
 msgid "Go to Line"
 msgstr "Joan lerrora"
 
-#: ../src/callbacks.c:896
+#: ../src/callbacks.c:886
 msgid "Enter the line you want to go to:"
 msgstr "Sartu joan nahi duzun lerroa:"
 
-#: ../src/callbacks.c:997 ../src/callbacks.c:1023
+#: ../src/callbacks.c:987 ../src/callbacks.c:1013
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Mesedez ezarri uneko fitxategiaren fitxategi-mota funtzio hau erabili "
 "aurretik."
 
-#: ../src/callbacks.c:1313 ../src/callbacks.c:1321
+#: ../src/callbacks.c:1303 ../src/callbacks.c:1311
 msgid "No more message items."
 msgstr "Ez daude mezu-elementu gehiago."
 
-#: ../src/callbacks.c:1424
+#: ../src/callbacks.c:1414
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Ezin izan da %s fitxategia ireki (Ez da fitxategia aurkitu)"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1463
 msgid "Check the path setting in Filetype configuration."
 msgstr ""
 
-#: ../src/callbacks.c:1478
+#: ../src/callbacks.c:1468
 msgid "Check the path setting in Preferences."
 msgstr ""
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1491
+#: ../src/callbacks.c:1481
 #, fuzzy, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Ezin izan da exekutatu konfiguratutako kanpoko komandoa '%s' (%s)."
 
-#: ../src/dialogs.c:160 ../src/document.c:2308 ../src/document.c:2373
-#: ../src/document.c:2381
+#: ../src/dialogs.c:161 ../src/document.c:2313 ../src/document.c:2378
+#: ../src/document.c:2386
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "Ez da \"%s\" aurkitu."
 
 #. auto-detect
-#: ../src/dialogs.c:222 ../src/encodings.c:551
+#: ../src/dialogs.c:223 ../src/encodings.c:532
 msgid "Detect from file"
 msgstr "Detektatu fitxategitik"
 
-#: ../src/dialogs.c:225
+#: ../src/dialogs.c:226
 #, fuzzy
 msgid "Programming Languages"
 msgstr "_Programazio-lengoaiak"
 
-#: ../src/dialogs.c:227
+#: ../src/dialogs.c:228
 #, fuzzy
 msgid "Scripting Languages"
 msgstr "_Script-lengoaiak"
 
-#: ../src/dialogs.c:229
+#: ../src/dialogs.c:230
 #, fuzzy
 msgid "Markup Languages"
 msgstr "_Markatzeko lengoaia"
 
-#: ../src/dialogs.c:307
+#: ../src/dialogs.c:308
 msgid "_More Options"
 msgstr "Aukera _gehiago"
 
 #. line 1 with checkbox and encoding combo
-#: ../src/dialogs.c:314
+#: ../src/dialogs.c:315
 msgid "Show _hidden files"
 msgstr "Erakutsi _ezkutuko fitxategiak"
 
-#: ../src/dialogs.c:325
+#: ../src/dialogs.c:326
 msgid "Set encoding:"
 msgstr "Ezarri kodeketa:"
 
-#: ../src/dialogs.c:334
+#: ../src/dialogs.c:335
 msgid ""
 "Explicitly defines an encoding for the file, if it would not be detected. "
 "This is useful when you know that the encoding of a file cannot be detected "
@@ -2502,11 +2522,11 @@ msgid ""
 msgstr ""
 
 #. line 2 with filetype combo
-#: ../src/dialogs.c:341
+#: ../src/dialogs.c:342
 msgid "Set filetype:"
 msgstr "Ezarri fitxategi-mota:"
 
-#: ../src/dialogs.c:350
+#: ../src/dialogs.c:351
 msgid ""
 "Explicitly defines a filetype for the file, if it would not be detected by "
 "filename extension.\n"
@@ -2514,129 +2534,129 @@ msgid ""
 "filetype."
 msgstr ""
 
-#: ../src/dialogs.c:376 ../src/dialogs.c:466
+#: ../src/dialogs.c:377 ../src/dialogs.c:467
 msgid "Open File"
 msgstr "Ireki fitxategia"
 
-#: ../src/dialogs.c:380
+#: ../src/dialogs.c:381
 #, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "_Ikusi"
 
-#: ../src/dialogs.c:382
+#: ../src/dialogs.c:383
 msgid ""
 "Opens the file in read-only mode. If you choose more than one file to open, "
 "all files will be opened read-only."
 msgstr ""
 
-#: ../src/dialogs.c:534 ../src/document.c:2059
+#: ../src/dialogs.c:535 ../src/document.c:2064
 msgid "Overwrite?"
 msgstr "Gainidatzi?"
 
-#: ../src/dialogs.c:535
+#: ../src/dialogs.c:536
 msgid "Filename already exists!"
 msgstr "Fitxategi-izena dagoeneko existitzen da!"
 
-#: ../src/dialogs.c:564 ../src/dialogs.c:678
+#: ../src/dialogs.c:565 ../src/dialogs.c:679
 msgid "Save File"
 msgstr "Gorde fitxategia"
 
-#: ../src/dialogs.c:573
+#: ../src/dialogs.c:574
 msgid "R_ename"
 msgstr "_Berrizendatu"
 
-#: ../src/dialogs.c:574
+#: ../src/dialogs.c:575
 msgid "Save the file and rename it"
 msgstr "Gorde fitxategia eta berrizendatu"
 
-#: ../src/dialogs.c:696 ../src/win32.c:730
+#: ../src/dialogs.c:697 ../src/win32.c:730
 msgid "Error"
 msgstr "Errorea"
 
-#: ../src/dialogs.c:699 ../src/dialogs.c:778 ../src/dialogs.c:1336
+#: ../src/dialogs.c:700 ../src/dialogs.c:779 ../src/dialogs.c:1337
 #: ../src/win32.c:736
 msgid "Question"
 msgstr "Galdera"
 
-#: ../src/dialogs.c:702 ../src/win32.c:742
+#: ../src/dialogs.c:703 ../src/win32.c:742
 msgid "Warning"
 msgstr "Abisua"
 
-#: ../src/dialogs.c:705 ../src/win32.c:748
+#: ../src/dialogs.c:706 ../src/win32.c:748
 msgid "Information"
 msgstr "Informazioa"
 
-#: ../src/dialogs.c:782
+#: ../src/dialogs.c:783
 msgid "_Don't save"
 msgstr "_Ez gorde"
 
-#: ../src/dialogs.c:811
+#: ../src/dialogs.c:812
 #, c-format
 msgid "The file '%s' is not saved."
 msgstr "'%s' fitxategia gorde gabe dago."
 
-#: ../src/dialogs.c:812
+#: ../src/dialogs.c:813
 msgid "Do you want to save it before closing?"
 msgstr "Itxi aurretik gorde nahi duzu?"
 
-#: ../src/dialogs.c:890
+#: ../src/dialogs.c:891
 msgid "Choose font"
 msgstr "Aukeratu letra-tipoa"
 
-#: ../src/dialogs.c:1184
+#: ../src/dialogs.c:1185
 msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr ""
 
-#: ../src/dialogs.c:1203 ../src/dialogs.c:1204 ../src/dialogs.c:1205
-#: ../src/dialogs.c:1211 ../src/dialogs.c:1212 ../src/dialogs.c:1213
-#: ../src/symbols.c:2182 ../src/symbols.c:2198 ../src/ui_utils.c:289
+#: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
+#: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
+#: ../src/symbols.c:2371 ../src/symbols.c:2387 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "ezezaguna"
 
-#: ../src/dialogs.c:1218
+#: ../src/dialogs.c:1219
 #, fuzzy, c-format
 msgid "%s Properties"
 msgstr "Propietateak"
 
-#: ../src/dialogs.c:1250 ../src/ui_utils.c:293
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:293
 msgid "(with BOM)"
 msgstr "(BOMekin)"
 
-#: ../src/dialogs.c:1250
+#: ../src/dialogs.c:1251
 msgid "(without BOM)"
 msgstr "(BOM gabe)"
 
-#: ../src/document.c:744
+#: ../src/document.c:749
 #, c-format
 msgid "File %s closed."
 msgstr "%s fitxategia itxita."
 
-#: ../src/document.c:900
+#: ../src/document.c:905
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr ""
 
-#: ../src/document.c:974
+#: ../src/document.c:979
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Ezin izan da %s fitxategia ireki (%s)"
 
-#: ../src/document.c:1023
+#: ../src/document.c:1028
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "\"%s\" fitxategia ez da baliozko %s bat."
 
-#: ../src/document.c:1029
+#: ../src/document.c:1034
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
 
-#: ../src/document.c:1039
+#: ../src/document.c:1044
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2645,31 +2665,31 @@ msgid ""
 "The file was set to read-only."
 msgstr ""
 
-#: ../src/document.c:1251
+#: ../src/document.c:1256
 msgid "Spaces"
 msgstr "Zuriuneak"
 
-#: ../src/document.c:1254
+#: ../src/document.c:1259
 msgid "Tabs"
 msgstr "Tabulazioak"
 
-#: ../src/document.c:1257
+#: ../src/document.c:1262
 msgid "Tabs and Spaces"
 msgstr "Tabulazioak eta zuriuneak"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1262
+#: ../src/document.c:1267
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr ""
 
-#: ../src/document.c:1273
+#: ../src/document.c:1278
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr ""
 
-#: ../src/document.c:1497
+#: ../src/document.c:1502
 #, c-format
 msgid "File %s reloaded."
 msgstr "%s fitxategia birkargatuta."
@@ -2677,20 +2697,20 @@ msgstr "%s fitxategia birkargatuta."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1505
+#: ../src/document.c:1510
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "%s fitxategia irekita (%d%s)."
 
-#: ../src/document.c:1507
+#: ../src/document.c:1512
 msgid ", read-only"
 msgstr ", irakurtzeko soilik"
 
-#: ../src/document.c:1627
+#: ../src/document.c:1632
 msgid "Discard history"
 msgstr ""
 
-#: ../src/document.c:1628
+#: ../src/document.c:1633
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2698,37 +2718,37 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: ../src/document.c:1632
+#: ../src/document.c:1637
 #, fuzzy
 msgid "The file has been reloaded."
 msgstr "%s fitxategia birkargatuta."
 
-#: ../src/document.c:1662
+#: ../src/document.c:1667
 msgid "Any unsaved changes will be lost."
 msgstr "Gorde gabeko aldaketak galduko dira."
 
-#: ../src/document.c:1663
+#: ../src/document.c:1668
 #, fuzzy
 msgid "Undo history will be lost."
 msgstr "Gorde gabeko aldaketak galduko dira."
 
-#: ../src/document.c:1664
+#: ../src/document.c:1669
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ziur zaude '%s' birkargatu nahi duzula?"
 
-#: ../src/document.c:1770
+#: ../src/document.c:1775
 msgid "Error renaming file."
 msgstr "Errorea fitxategia berrizendatzean."
 
-#: ../src/document.c:1891
+#: ../src/document.c:1896
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr ""
 
-#: ../src/document.c:1912
+#: ../src/document.c:1917
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2737,56 +2757,56 @@ msgstr ""
 "Errore-mezua: %s\n"
 "Errore bat gertatu da hemen: \"%s\" (lerroa: %d, zutabea: %d)."
 
-#: ../src/document.c:1916
+#: ../src/document.c:1921
 #, c-format
 msgid "Error message: %s."
 msgstr "Errore-mezua: %s."
 
-#: ../src/document.c:1976
+#: ../src/document.c:1981
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr ""
 
-#: ../src/document.c:1994
+#: ../src/document.c:1999
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr ""
 
-#: ../src/document.c:2008
+#: ../src/document.c:2013
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr ""
 
-#: ../src/document.c:2058 ../src/document.c:3589
+#: ../src/document.c:2063 ../src/document.c:3597
 #, fuzzy
 msgid "_Overwrite"
 msgstr "Gainidatzi?"
 
-#: ../src/document.c:2060 ../src/document.c:3592
+#: ../src/document.c:2065 ../src/document.c:3600
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr ""
 
-#: ../src/document.c:2068 ../src/document.c:3641
+#: ../src/document.c:2073 ../src/document.c:3649
 msgid "Try to resave the file?"
 msgstr "Fitxategia berriz gordetzen saiatu?"
 
-#: ../src/document.c:2069 ../src/document.c:3642
+#: ../src/document.c:2074 ../src/document.c:3650
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "\"%s\" fitxategia ez da diskoan aurkitu!"
 
-#: ../src/document.c:2132
+#: ../src/document.c:2137
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr ""
 
-#: ../src/document.c:2200
+#: ../src/document.c:2205
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Errorea (%s) fitxategia gordetzean."
 
-#: ../src/document.c:2205
+#: ../src/document.c:2210
 #, c-format
 msgid ""
 "%s\n"
@@ -2794,200 +2814,200 @@ msgid ""
 "The file on disk may now be truncated!"
 msgstr ""
 
-#: ../src/document.c:2207
+#: ../src/document.c:2212
 msgid "Error saving file."
 msgstr "Errorea fitxategia gordetzean."
 
-#: ../src/document.c:2231
+#: ../src/document.c:2236
 #, c-format
 msgid "File %s saved."
 msgstr "%s fitxategia gordeta."
 
-#: ../src/document.c:2381
+#: ../src/document.c:2386
 msgid "Wrap search and find again?"
 msgstr ""
 
-#: ../src/document.c:2470 ../src/search.c:1365 ../src/search.c:1418
-#: ../src/search.c:2221 ../src/search.c:2222
+#: ../src/document.c:2475 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr ""
 
-#: ../src/document.c:2476
+#: ../src/document.c:2481
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/document.c:3591
+#: ../src/document.c:3599
 msgid "Do you want to reload it?"
 msgstr "Birkargatu nahi duzu?"
 
-#: ../src/editor.c:4388
+#: ../src/editor.c:4490
 msgid "Enter Tab Width"
 msgstr "Sartu tabulazioaren zabalera"
 
-#: ../src/editor.c:4389
+#: ../src/editor.c:4491
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Sartu tabulazio karaktere batekin ordezkatu beharreko zuriune kopurua."
 
-#: ../src/editor.c:4587
+#: ../src/editor.c:4696
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
 
-#: ../src/encodings.c:71
+#: ../src/encodings.c:72
 msgid "Celtic"
 msgstr "Zelta"
 
-#: ../src/encodings.c:72 ../src/encodings.c:73
+#: ../src/encodings.c:73 ../src/encodings.c:74
 msgid "Greek"
 msgstr "Greziarra"
 
-#: ../src/encodings.c:74
+#: ../src/encodings.c:75
 msgid "Nordic"
 msgstr "Nordikoa"
 
-#: ../src/encodings.c:75
+#: ../src/encodings.c:76
 msgid "South European"
 msgstr "Hegoaldeko Europa"
 
-#: ../src/encodings.c:76 ../src/encodings.c:77 ../src/encodings.c:78
-#: ../src/encodings.c:79
+#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:80
 msgid "Western"
 msgstr "Mendebaldea"
 
-#: ../src/encodings.c:81 ../src/encodings.c:82 ../src/encodings.c:83
+#: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
 msgid "Baltic"
 msgstr "Baltikoa"
 
-#: ../src/encodings.c:84 ../src/encodings.c:85 ../src/encodings.c:86
+#: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
 msgid "Central European"
 msgstr "Erdialdeko Europa"
 
 #. ISO-IR-111 not available on Windows
-#: ../src/encodings.c:87 ../src/encodings.c:88 ../src/encodings.c:90
-#: ../src/encodings.c:91 ../src/encodings.c:92
+#: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:91
+#: ../src/encodings.c:92 ../src/encodings.c:93
 msgid "Cyrillic"
 msgstr "Zirilikoa"
 
-#: ../src/encodings.c:93
+#: ../src/encodings.c:94
 msgid "Cyrillic/Russian"
 msgstr "Zirilikoa/Errusiarra"
 
-#: ../src/encodings.c:94
+#: ../src/encodings.c:95
 msgid "Cyrillic/Ukrainian"
 msgstr "Zirilikoa/Ukrainarra"
 
-#: ../src/encodings.c:95
+#: ../src/encodings.c:96
 msgid "Romanian"
 msgstr "Errumaniarra"
 
-#: ../src/encodings.c:97 ../src/encodings.c:98 ../src/encodings.c:99
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
 msgid "Arabic"
 msgstr "Arabiarra"
 
 #. not available at all, ?
-#: ../src/encodings.c:100 ../src/encodings.c:102 ../src/encodings.c:103
+#: ../src/encodings.c:101 ../src/encodings.c:103 ../src/encodings.c:104
 msgid "Hebrew"
 msgstr "Hebrearra"
 
-#: ../src/encodings.c:104
+#: ../src/encodings.c:105
 msgid "Hebrew Visual"
 msgstr "Hebrear bisuala"
 
-#: ../src/encodings.c:106
+#: ../src/encodings.c:107
 msgid "Armenian"
 msgstr "Armeniarra"
 
-#: ../src/encodings.c:107
+#: ../src/encodings.c:108
 msgid "Georgian"
 msgstr "Georgiarra"
 
-#: ../src/encodings.c:108
+#: ../src/encodings.c:109
 msgid "Thai"
 msgstr "Thailandiarra"
 
-#: ../src/encodings.c:109 ../src/encodings.c:110 ../src/encodings.c:111
+#: ../src/encodings.c:110 ../src/encodings.c:111 ../src/encodings.c:112
 msgid "Turkish"
 msgstr "Turkiarra"
 
-#: ../src/encodings.c:112 ../src/encodings.c:113 ../src/encodings.c:114
+#: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
 msgid "Vietnamese"
 msgstr "Vietnamdarra"
 
-#: ../src/encodings.c:116 ../src/encodings.c:117 ../src/encodings.c:118
-#: ../src/encodings.c:119 ../src/encodings.c:120 ../src/encodings.c:121
-#: ../src/encodings.c:122 ../src/encodings.c:123 ../src/encodings.c:565
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:546
 msgid "Unicode"
 msgstr "Unicode"
 
 #. maybe not available on Linux
-#: ../src/encodings.c:125 ../src/encodings.c:126 ../src/encodings.c:127
-#: ../src/encodings.c:129
+#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:130
 msgid "Chinese Simplified"
 msgstr "Txinatar sinplifikatua"
 
-#: ../src/encodings.c:130 ../src/encodings.c:131 ../src/encodings.c:132
+#: ../src/encodings.c:131 ../src/encodings.c:132 ../src/encodings.c:133
 msgid "Chinese Traditional"
 msgstr "Txinatar tradizionala"
 
-#: ../src/encodings.c:133 ../src/encodings.c:134 ../src/encodings.c:135
-#: ../src/encodings.c:136
+#: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
+#: ../src/encodings.c:137
 msgid "Japanese"
 msgstr "Japoniarra"
 
-#: ../src/encodings.c:137 ../src/encodings.c:138 ../src/encodings.c:139
-#: ../src/encodings.c:140
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
 msgid "Korean"
 msgstr "Korearra"
 
-#: ../src/encodings.c:142
+#: ../src/encodings.c:143
 msgid "Without encoding"
 msgstr "Kodeketarik gabe"
 
-#: ../src/encodings.c:434
+#: ../src/encodings.c:414
 msgid "_West European"
 msgstr "_Mendebaldeko Europa"
 
-#: ../src/encodings.c:440
+#: ../src/encodings.c:415
 msgid "_East European"
 msgstr "_Ekialdeko Europa"
 
-#: ../src/encodings.c:446
+#: ../src/encodings.c:416
 msgid "East _Asian"
 msgstr "Ekialdeko _Asia"
 
-#: ../src/encodings.c:452
+#: ../src/encodings.c:417
 msgid "_SE & SW Asian"
 msgstr "Asia _HE eta HM"
 
-#: ../src/encodings.c:458
+#: ../src/encodings.c:418
 msgid "_Middle Eastern"
 msgstr "_Ekialde hurbila"
 
-#: ../src/encodings.c:464
+#: ../src/encodings.c:419
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/encodings.c:555
+#: ../src/encodings.c:536
 msgid "West European"
 msgstr "Mendebaldeko Europa"
 
-#: ../src/encodings.c:557
+#: ../src/encodings.c:538
 msgid "East European"
 msgstr "Ekialdeko Europa"
 
-#: ../src/encodings.c:559
+#: ../src/encodings.c:540
 msgid "East Asian"
 msgstr "Ekialdeko Asia"
 
-#: ../src/encodings.c:561
+#: ../src/encodings.c:542
 msgid "SE & SW Asian"
 msgstr "Asia HE eta HM"
 
-#: ../src/encodings.c:563
+#: ../src/encodings.c:544
 msgid "Middle Eastern"
 msgstr "Ekialde Hurbila"
 
@@ -3069,7 +3089,7 @@ msgstr "Adierazpen erregular okerra %s fitxategi-motarentzat: %s"
 msgid "untitled"
 msgstr "izengabea"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:841 ../src/socket.c:171
+#: ../src/highlighting.c:1226 ../src/libmain.c:851 ../src/socket.c:171
 #: ../src/templates.c:234
 #, c-format
 msgid "Could not find file '%s'."
@@ -3092,7 +3112,7 @@ msgid "Color Schemes"
 msgstr "Kolore-eskemak"
 
 #. visual group order
-#: ../src/keybindings.c:306 ../src/symbols.c:655
+#: ../src/keybindings.c:306 ../src/symbols.c:569
 msgid "File"
 msgstr "Fitxategia"
 
@@ -3128,16 +3148,16 @@ msgstr "Joan hona"
 msgid "View"
 msgstr "Ikusi"
 
-#: ../src/keybindings.c:316 ../src/symbols.c:804
+#: ../src/keybindings.c:316 ../src/symbols.c:718
 msgid "Document"
 msgstr "Dokumentua"
 
-#: ../src/keybindings.c:318 ../src/keybindings.c:670 ../src/project.c:511
+#: ../src/keybindings.c:318 ../src/keybindings.c:684 ../src/project.c:511
 #: ../src/ui_utils.c:2191
 msgid "Build"
 msgstr "Eraiki"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:695
+#: ../src/keybindings.c:320 ../src/keybindings.c:709
 msgid "Help"
 msgstr "Laguntza"
 
@@ -3149,11 +3169,11 @@ msgstr "Fokua"
 msgid "Notebook tab"
 msgstr "Ohar-bloka fitxa"
 
-#: ../src/keybindings.c:331 ../src/keybindings.c:361
+#: ../src/keybindings.c:331 ../src/keybindings.c:363
 msgid "New"
 msgstr "Berria"
 
-#: ../src/keybindings.c:333 ../src/keybindings.c:363
+#: ../src/keybindings.c:333 ../src/keybindings.c:365
 msgid "Open"
 msgstr "Ireki"
 
@@ -3173,447 +3193,483 @@ msgstr "Gorde honela"
 msgid "Save all"
 msgstr "Gorde dena"
 
-#: ../src/keybindings.c:345
+#: ../src/keybindings.c:345 ../src/symbols.c:802
+msgid "Properties"
+msgstr "Propietateak"
+
+#: ../src/keybindings.c:347
 msgid "Print"
 msgstr "Inprimatu"
 
-#: ../src/keybindings.c:347 ../src/keybindings.c:368
+#: ../src/keybindings.c:349 ../src/keybindings.c:370
 msgid "Close"
 msgstr "Itxi"
 
-#: ../src/keybindings.c:349
+#: ../src/keybindings.c:351
 msgid "Close all"
 msgstr "Itxi dena"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:354
 msgid "Reload file"
 msgstr "Birkargatu fitxategia"
 
-#: ../src/keybindings.c:354
+#: ../src/keybindings.c:356
 msgid "Re-open last closed tab"
 msgstr "Berrireki azkena itxitako fitxa"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:358
 msgid "Quit"
 msgstr "Irten"
 
-#: ../src/keybindings.c:373
+#: ../src/keybindings.c:375
 msgid "Undo"
 msgstr "Desegin"
 
-#: ../src/keybindings.c:375
+#: ../src/keybindings.c:377
 msgid "Redo"
 msgstr "Berregin"
 
-#: ../src/keybindings.c:384
+#: ../src/keybindings.c:386
 msgid "Delete to line end"
 msgstr "Ezabatu lerro-amaiera arte"
 
-#: ../src/keybindings.c:387
+#: ../src/keybindings.c:389
 msgid "_Transpose Current Line"
 msgstr ""
 
-#: ../src/keybindings.c:389
+#: ../src/keybindings.c:391
 msgid "Scroll to current line"
 msgstr "Korritu uneko lerrora"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:393
 msgid "Scroll up the view by one line"
 msgstr ""
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:395
 msgid "Scroll down the view by one line"
 msgstr ""
 
-#: ../src/keybindings.c:395
+#: ../src/keybindings.c:397
 msgid "Complete snippet"
 msgstr ""
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:399
 msgid "Move cursor in snippet"
 msgstr ""
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:401
 msgid "Suppress snippet completion"
 msgstr ""
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:403
 msgid "Context Action"
 msgstr ""
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:405
 msgid "Complete word"
 msgstr ""
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:407
 msgid "Show calltip"
 msgstr ""
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:409
 msgid "Word part completion"
 msgstr ""
 
-#: ../src/keybindings.c:410
+#: ../src/keybindings.c:412
 msgid "Move line(s) up"
 msgstr "Mugitu lerroa(k) gora"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:415
 msgid "Move line(s) down"
 msgstr "Mugitu lerroa(k) behera"
 
-#: ../src/keybindings.c:418
+#: ../src/keybindings.c:420
 msgid "Cut"
 msgstr "Ebaki"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:422
 msgid "Copy"
 msgstr "Kopiatu"
 
-#: ../src/keybindings.c:422
+#: ../src/keybindings.c:424
 msgid "Paste"
 msgstr "Itsatsi"
 
-#: ../src/keybindings.c:433
+#: ../src/keybindings.c:435
 msgid "Select All"
 msgstr "Hautatu dena"
 
-#: ../src/keybindings.c:435
+#: ../src/keybindings.c:437
 msgid "Select current word"
 msgstr "Hautatu uneko hitza"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:445
 msgid "Select to previous word part"
 msgstr ""
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:447
 msgid "Select to next word part"
 msgstr ""
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:455
 msgid "Toggle line commentation"
 msgstr ""
 
-#: ../src/keybindings.c:456
+#: ../src/keybindings.c:458
 msgid "Comment line(s)"
 msgstr ""
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:460
 msgid "Uncomment line(s)"
 msgstr ""
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:462
 msgid "Increase indent"
 msgstr "Handitu koska"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:465
 msgid "Decrease indent"
 msgstr "Txikitu koska"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:468
 msgid "Increase indent by one space"
 msgstr "Handitu koska zuriune batekin"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:470
 msgid "Decrease indent by one space"
 msgstr "Txikitu koska zuriune batekin"
 
-#: ../src/keybindings.c:472
+#: ../src/keybindings.c:474
 msgid "Send to Custom Command 1"
 msgstr "Bidali komando pertsonalizatura 1"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:476
 msgid "Send to Custom Command 2"
 msgstr "Bidali komando pertsonalizatura 2"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:478
 msgid "Send to Custom Command 3"
 msgstr "Bidali komando pertsonalizatura 3"
 
+#: ../src/keybindings.c:480
+#, fuzzy
+msgid "Send to Custom Command 4"
+msgstr "Bidali komando pertsonalizatura 1"
+
+#: ../src/keybindings.c:482
+#, fuzzy
+msgid "Send to Custom Command 5"
+msgstr "Bidali komando pertsonalizatura 1"
+
 #: ../src/keybindings.c:484
+#, fuzzy
+msgid "Send to Custom Command 6"
+msgstr "Bidali komando pertsonalizatura 1"
+
+#: ../src/keybindings.c:486
+#, fuzzy
+msgid "Send to Custom Command 7"
+msgstr "Bidali komando pertsonalizatura 1"
+
+#: ../src/keybindings.c:488
+#, fuzzy
+msgid "Send to Custom Command 8"
+msgstr "Bidali komando pertsonalizatura 1"
+
+#: ../src/keybindings.c:490
+#, fuzzy
+msgid "Send to Custom Command 9"
+msgstr "Bidali komando pertsonalizatura 1"
+
+#: ../src/keybindings.c:498
 msgid "Join lines"
 msgstr "Batu lerroak"
 
-#: ../src/keybindings.c:489
+#: ../src/keybindings.c:503
 msgid "Insert date"
 msgstr "Txertatu data"
 
-#: ../src/keybindings.c:495
+#: ../src/keybindings.c:509
 msgid "Insert New Line Before Current"
 msgstr "Txertatu lerro berria unekoaren aurretik"
 
-#: ../src/keybindings.c:497
+#: ../src/keybindings.c:511
 msgid "Insert New Line After Current"
 msgstr "Txertatu lerro berria unekoaren ondoren"
 
-#: ../src/keybindings.c:510 ../src/search.c:463
+#: ../src/keybindings.c:524 ../src/search.c:464
 msgid "Find"
 msgstr "Bilatu"
 
-#: ../src/keybindings.c:512
+#: ../src/keybindings.c:526
 msgid "Find Next"
 msgstr "Bilatu hurrengoa"
 
-#: ../src/keybindings.c:514
+#: ../src/keybindings.c:528
 msgid "Find Previous"
 msgstr "Bilatu aurrekoa"
 
-#: ../src/keybindings.c:521 ../src/search.c:616
+#: ../src/keybindings.c:535 ../src/search.c:617
 msgid "Replace"
 msgstr "Ordezkatu"
 
-#: ../src/keybindings.c:523 ../src/search.c:866
+#: ../src/keybindings.c:537 ../src/search.c:867
 msgid "Find in Files"
 msgstr "Bilatu fitxategietan"
 
-#: ../src/keybindings.c:526
+#: ../src/keybindings.c:540
 msgid "Next Message"
 msgstr "Hurrengo mezua"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:542
 msgid "Previous Message"
 msgstr "Aurreko mezua"
 
-#: ../src/keybindings.c:531
+#: ../src/keybindings.c:545
 msgid "Find Usage"
 msgstr "Bilatu erabilera"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:548
 msgid "Find Document Usage"
 msgstr "Aurkitu dokumentuaren erabilera"
 
-#: ../src/keybindings.c:541 ../src/toolbar.c:70
+#: ../src/keybindings.c:555 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr ""
 
-#: ../src/keybindings.c:543 ../src/toolbar.c:71
+#: ../src/keybindings.c:557 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr ""
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:562
 msgid "Go to matching brace"
 msgstr ""
 
-#: ../src/keybindings.c:551
+#: ../src/keybindings.c:565
 msgid "Toggle marker"
 msgstr "Txandakatu markatzailea"
 
-#: ../src/keybindings.c:560
-msgid "Go to Tag Definition"
+#: ../src/keybindings.c:574
+#, fuzzy
+msgid "Go to Symbol Definition"
 msgstr "Joan etiketaren definiziora"
 
-#: ../src/keybindings.c:563
-msgid "Go to Tag Declaration"
+#: ../src/keybindings.c:577
+#, fuzzy
+msgid "Go to Symbol Declaration"
 msgstr "Joan etiketaren deklaraziora"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:579
 msgid "Go to Start of Line"
 msgstr "Joan lerroaren hasierara"
 
-#: ../src/keybindings.c:567
+#: ../src/keybindings.c:581
 msgid "Go to End of Line"
 msgstr "Joan lerroaren amaierara"
 
-#: ../src/keybindings.c:569
+#: ../src/keybindings.c:583
 msgid "Go to Start of Display Line"
 msgstr ""
 
-#: ../src/keybindings.c:571
+#: ../src/keybindings.c:585
 msgid "Go to End of Display Line"
 msgstr ""
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:587
 msgid "Go to Previous Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:575
+#: ../src/keybindings.c:589
 msgid "Go to Next Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:580
+#: ../src/keybindings.c:594
 msgid "Toggle All Additional Widgets"
 msgstr "Txandakatu trepeta gehigarri guztiak"
 
-#: ../src/keybindings.c:583
+#: ../src/keybindings.c:597
 msgid "Fullscreen"
 msgstr "Pantaila osoa"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:599
 msgid "Toggle Messages Window"
 msgstr "Txandakatu mezuen leihoa"
 
-#: ../src/keybindings.c:588
+#: ../src/keybindings.c:602
 msgid "Toggle Sidebar"
 msgstr "Txandakatu albo-barra"
 
-#: ../src/keybindings.c:590
+#: ../src/keybindings.c:604
 msgid "Zoom In"
 msgstr "Handitu zooma"
 
-#: ../src/keybindings.c:592
+#: ../src/keybindings.c:606
 msgid "Zoom Out"
 msgstr "Txikitu zooma"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:608
 msgid "Zoom Reset"
 msgstr "Berrezarri zooma"
 
-#: ../src/keybindings.c:599
+#: ../src/keybindings.c:613
 msgid "Switch to Editor"
 msgstr "Aldatu editorera"
 
-#: ../src/keybindings.c:601
+#: ../src/keybindings.c:615
 msgid "Switch to Search Bar"
 msgstr "Aldatu bilaketa-barrara"
 
-#: ../src/keybindings.c:603
+#: ../src/keybindings.c:617
 msgid "Switch to Message Window"
 msgstr "Aldatu mezu-leihora"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:619
 msgid "Switch to Compiler"
 msgstr "Aldatu konpiladorera"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:621
 msgid "Switch to Messages"
 msgstr "Aldatu mezuetara"
 
-#: ../src/keybindings.c:609
+#: ../src/keybindings.c:623
 msgid "Switch to Scribble"
 msgstr ""
 
-#: ../src/keybindings.c:611
+#: ../src/keybindings.c:625
 msgid "Switch to VTE"
 msgstr "Aldatu VTEra"
 
-#: ../src/keybindings.c:613
+#: ../src/keybindings.c:627
 msgid "Switch to Sidebar"
 msgstr "Aldatu albo-barrara"
 
-#: ../src/keybindings.c:615
+#: ../src/keybindings.c:629
 msgid "Switch to Sidebar Symbol List"
 msgstr "Aldatu albo-barrako ikur-zerrendara"
 
-#: ../src/keybindings.c:617
+#: ../src/keybindings.c:631
 msgid "Switch to Sidebar Document List"
 msgstr "Aldatu albo-barrako dokumentu-zerrendara"
 
-#: ../src/keybindings.c:622
+#: ../src/keybindings.c:636
 msgid "Switch to left document"
 msgstr "Aldatu ezkerreko dokumentura"
 
-#: ../src/keybindings.c:624
+#: ../src/keybindings.c:638
 msgid "Switch to right document"
 msgstr "Aldatu eskuineko dokumentura"
 
-#: ../src/keybindings.c:626
+#: ../src/keybindings.c:640
 msgid "Switch to last used document"
 msgstr "Aldatu erabilitako azken dokumentura"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:643
 msgid "Move document left"
 msgstr "Mugitu dokumentua ezkerretara"
 
-#: ../src/keybindings.c:632
+#: ../src/keybindings.c:646
 msgid "Move document right"
 msgstr "Mugitu dokumentua eskuinetara"
 
-#: ../src/keybindings.c:634
+#: ../src/keybindings.c:648
 msgid "Move document first"
 msgstr "Mugitu dokumentua hasierara"
 
-#: ../src/keybindings.c:636
+#: ../src/keybindings.c:650
 msgid "Move document last"
 msgstr "Mugitu dokumentua amaierara"
 
-#: ../src/keybindings.c:641
+#: ../src/keybindings.c:655
 msgid "Toggle Line wrapping"
 msgstr ""
 
-#: ../src/keybindings.c:643
+#: ../src/keybindings.c:657
 msgid "Toggle Line breaking"
 msgstr ""
 
-#: ../src/keybindings.c:649
+#: ../src/keybindings.c:663
 msgid "Replace spaces with tabs"
 msgstr "Ordezkatu zuriuneak tabulazioekin"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:665
 msgid "Toggle current fold"
 msgstr ""
 
-#: ../src/keybindings.c:653
+#: ../src/keybindings.c:667
 msgid "Fold all"
 msgstr ""
 
-#: ../src/keybindings.c:655
+#: ../src/keybindings.c:669
 msgid "Unfold all"
 msgstr ""
 
-#: ../src/keybindings.c:657
+#: ../src/keybindings.c:671
 msgid "Reload symbol list"
 msgstr "Birkargatu ikur-zerrenda"
 
-#: ../src/keybindings.c:659
+#: ../src/keybindings.c:673
 msgid "Remove Markers"
 msgstr "Kendu markatzaileak"
 
-#: ../src/keybindings.c:661
+#: ../src/keybindings.c:675
 msgid "Remove Error Indicators"
 msgstr "Kendu errore-adierazleak"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:677
 msgid "Remove Markers and Error Indicators"
 msgstr "Kendu markatzaileak eta errore-adierazleak"
 
-#: ../src/keybindings.c:668 ../src/toolbar.c:72
+#: ../src/keybindings.c:682 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Konpilatu"
 
-#: ../src/keybindings.c:672
+#: ../src/keybindings.c:686
 msgid "Make all"
 msgstr ""
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:689
 msgid "Make custom target"
 msgstr ""
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:691
 msgid "Make object"
 msgstr ""
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:693
 msgid "Next error"
 msgstr "Hurrengo errorea"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:695
 msgid "Previous error"
 msgstr "Aurreko errorea"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:697
 msgid "Run"
 msgstr "Exekutatu"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:699
 msgid "Build options"
 msgstr "Eraikitzeko aukerak"
 
-#: ../src/keybindings.c:690
+#: ../src/keybindings.c:704
 msgid "Show Color Chooser"
 msgstr "Erakutsi kolore hautatzailea"
 
-#: ../src/keybindings.c:960
+#: ../src/keybindings.c:974
 msgid "Keyboard Shortcuts"
 msgstr "Teklatuko lasterbideak"
 
-#: ../src/keybindings.c:972
+#: ../src/keybindings.c:986
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Teklatuko lasterbide hauek konfiguragarriak dira:"
 
-#: ../src/keyfile.c:1020
+#: ../src/keyfile.c:1027
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 
-#: ../src/keyfile.c:1247
+#: ../src/keyfile.c:1254
 msgid "Failed to load one or more session files."
 msgstr "Huts egin du saio-fitxategi bat edo gehiago kargatzean."
 
@@ -3636,7 +3692,7 @@ msgid "Generate global tags file (see documentation)"
 msgstr ""
 
 #: ../src/libmain.c:122
-msgid "Don't preprocess C/C++ files when generating tags"
+msgid "Don't preprocess C/C++ files when generating tags file"
 msgstr ""
 
 #: ../src/libmain.c:124
@@ -3697,26 +3753,26 @@ msgstr "Izan berritsua"
 msgid "Show version and exit"
 msgstr "Erakutsi bertsioa eta irten"
 
-#: ../src/libmain.c:515
+#: ../src/libmain.c:525
 msgid "[FILES...]"
 msgstr "[FITXATEGIAK...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:549
+#: ../src/libmain.c:559
 #, c-format
 msgid "built on %s with "
 msgstr "%s(e)an eraikia honekin:"
 
-#: ../src/libmain.c:642
+#: ../src/libmain.c:652
 msgid "Move it now?"
 msgstr "Orain mugitu?"
 
-#: ../src/libmain.c:644
+#: ../src/libmain.c:654
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr ""
 "Geany-k zure konfigurazio-direktorio zaharra mugitu behar du hasi aurretik."
 
-#: ../src/libmain.c:653
+#: ../src/libmain.c:663
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3727,14 +3783,14 @@ msgstr ""
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:663
+#: ../src/libmain.c:673
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
 "Please move manually the directory to the new location."
 msgstr ""
 
-#: ../src/libmain.c:745
+#: ../src/libmain.c:755
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3742,21 +3798,21 @@ msgid ""
 "Start Geany anyway?"
 msgstr ""
 
-#: ../src/libmain.c:1144
+#: ../src/libmain.c:1154
 #, c-format
 msgid "This is Geany %s."
 msgstr "Hau Geany %s da."
 
-#: ../src/libmain.c:1146
+#: ../src/libmain.c:1156
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Ezin izan da konfigurazio-direktorioa sortu (%s)."
 
-#: ../src/libmain.c:1370
+#: ../src/libmain.c:1380
 msgid "Do you really want to quit?"
 msgstr "Ziur zaude irten nahi duzula?"
 
-#: ../src/libmain.c:1408
+#: ../src/libmain.c:1418
 msgid "Configuration files reloaded."
 msgstr "Konfigurazio-fitxategiak birkargatuta."
 
@@ -3810,11 +3866,11 @@ msgid ""
 "please recompile it."
 msgstr ""
 
-#: ../src/plugins.c:1224
+#: ../src/plugins.c:1228
 msgid "_Plugin Manager"
 msgstr "_Plugin-kudeatzailea"
 
-#: ../src/plugins.c:1600
+#: ../src/plugins.c:1607
 msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
@@ -3822,7 +3878,7 @@ msgid ""
 msgstr ""
 
 #. Four allocations is less than ideal but meh
-#: ../src/plugins.c:1602
+#: ../src/plugins.c:1609
 #, c-format
 msgid ""
 "Version:\t%s\n"
@@ -3830,23 +3886,23 @@ msgid ""
 "Filename:\t%s"
 msgstr ""
 
-#: ../src/plugins.c:1630
+#: ../src/plugins.c:1637
 msgid "No plugins available."
 msgstr "Ez dago pluginik eskuragarri."
 
-#: ../src/plugins.c:1762
+#: ../src/plugins.c:1769
 msgid "Active"
 msgstr "Aktiboa"
 
-#: ../src/plugins.c:1769
+#: ../src/plugins.c:1776
 msgid "Plugin"
 msgstr "Plugina"
 
-#: ../src/plugins.c:1876
+#: ../src/plugins.c:1883
 msgid "Plugins"
 msgstr "Pluginak"
 
-#: ../src/plugins.c:1917
+#: ../src/plugins.c:1924
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Aukeratu abioan kargatu beharreko pluginak:"
 
@@ -3863,11 +3919,11 @@ msgstr ""
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 
-#: ../src/prefs.c:225 ../src/symbols.c:2336 ../src/sidebar.c:752
+#: ../src/prefs.c:225 ../src/symbols.c:2525 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "_Zabaldu dena"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2341 ../src/sidebar.c:758
+#: ../src/prefs.c:230 ../src/symbols.c:2530 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_Tolestu dena"
 
@@ -3898,19 +3954,19 @@ msgstr ""
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1694
+#: ../src/prefs.c:1693
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 
 #. page Templates
-#: ../src/prefs.c:1699
+#: ../src/prefs.c:1698
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
 
 #. page Keybindings
-#: ../src/prefs.c:1704
+#: ../src/prefs.c:1703
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3918,7 +3974,7 @@ msgid ""
 msgstr ""
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1709
+#: ../src/prefs.c:1708
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4096,7 +4152,7 @@ msgstr "Ezin izan da proiektuaren oinarrizko direktorioa sortu (%s)."
 msgid "Project file could not be written (%s)."
 msgstr "Ezin izan da proiektu-fitxategia idatzi (%s)."
 
-#: ../src/project.c:777 ../src/search.c:626
+#: ../src/project.c:777 ../src/search.c:627
 msgid "_Replace"
 msgstr "_Ordezkatu"
 
@@ -4115,11 +4171,11 @@ msgstr "Aukeratu proiektuaren fitxategi-izena"
 msgid "Project \"%s\" opened."
 msgstr "\"%s\" proiektua irekita."
 
-#: ../src/search.c:307 ../src/search.c:959
+#: ../src/search.c:308 ../src/search.c:960
 msgid "_Use regular expressions"
 msgstr "_Erabili adierazpen erregularrak"
 
-#: ../src/search.c:310
+#: ../src/search.c:311
 msgid ""
 "Use POSIX-like regular expressions. For detailed information about using "
 "regular expressions, please read the documentation."
@@ -4127,11 +4183,11 @@ msgstr ""
 "Erabili POSIX motako adierazpen erregularrak. Adierazpen erregularrei "
 "buruzko informazioa nahi izanez gero irakurri dokumentazioa."
 
-#: ../src/search.c:315
+#: ../src/search.c:316
 msgid "Use _escape sequences"
 msgstr "Erabili _ihes-sekuentziak"
 
-#: ../src/search.c:319
+#: ../src/search.c:320
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
@@ -4139,11 +4195,11 @@ msgstr ""
 "Ordezkatu \\\\, \\t, \\n, \\r eta \\uXXXX (Unicode kararaktereak) dagozkien "
 "kontrol-karaktereekin"
 
-#: ../src/search.c:322
+#: ../src/search.c:323
 msgid "Use multi-line matchin_g"
 msgstr ""
 
-#: ../src/search.c:327
+#: ../src/search.c:328
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4151,200 +4207,200 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 
-#: ../src/search.c:340
+#: ../src/search.c:341
 msgid "Search _backwards"
 msgstr "Bilatu _atzerantz"
 
-#: ../src/search.c:346 ../src/search.c:968
+#: ../src/search.c:347 ../src/search.c:969
 msgid "C_ase sensitive"
 msgstr ""
 
-#: ../src/search.c:350 ../src/search.c:973
+#: ../src/search.c:351 ../src/search.c:974
 msgid "Match only a _whole word"
 msgstr ""
 
-#: ../src/search.c:354
+#: ../src/search.c:355
 msgid "Match from s_tart of word"
 msgstr ""
 
-#: ../src/search.c:470
+#: ../src/search.c:471
 msgid "_Previous"
 msgstr "_Aurrekoa"
 
-#: ../src/search.c:475
+#: ../src/search.c:476
 msgid "_Next"
 msgstr "_Hurrengoa"
 
-#: ../src/search.c:479 ../src/search.c:637 ../src/search.c:876
+#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
 msgid "_Search for:"
 msgstr "_Bilatu hau:"
 
 #. Now add the multiple match options
-#: ../src/search.c:507
+#: ../src/search.c:508
 msgid "_Find All"
 msgstr ""
 
-#: ../src/search.c:514
+#: ../src/search.c:515
 msgid "_Mark"
 msgstr "_Markatu"
 
-#: ../src/search.c:516
+#: ../src/search.c:517
 msgid "Mark all matches in the current document"
 msgstr ""
 
-#: ../src/search.c:521 ../src/search.c:696
+#: ../src/search.c:522 ../src/search.c:697
 msgid "In Sessi_on"
 msgstr "_Saioan"
 
-#: ../src/search.c:526 ../src/search.c:701
+#: ../src/search.c:527 ../src/search.c:702
 msgid "_In Document"
 msgstr "_Dokumentuan"
 
 #. close window checkbox
-#: ../src/search.c:532 ../src/search.c:714
+#: ../src/search.c:533 ../src/search.c:715
 msgid "Close _dialog"
 msgstr "Itxi _elkarrizketa"
 
-#: ../src/search.c:536 ../src/search.c:718
+#: ../src/search.c:537 ../src/search.c:719
 msgid "Disable this option to keep the dialog open"
 msgstr "Desgaitu aukera hau elkarrizketa irekita mantentzeko"
 
-#: ../src/search.c:631
+#: ../src/search.c:632
 msgid "Replace & Fi_nd"
 msgstr "Ordezkatu eta _bilatu"
 
-#: ../src/search.c:640
+#: ../src/search.c:641
 msgid "Replace wit_h:"
 msgstr "Ordezkatu _honekin:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:689
+#: ../src/search.c:690
 msgid "Re_place All"
 msgstr "Ordezkatu _guztiak"
 
-#: ../src/search.c:706
+#: ../src/search.c:707
 msgid "In Se_lection"
 msgstr "_Hautapenean"
 
-#: ../src/search.c:708
+#: ../src/search.c:709
 msgid "Replace all matches found in the currently selected text"
 msgstr ""
 
-#: ../src/search.c:825
+#: ../src/search.c:826
 msgid "all"
 msgstr "guztiak"
 
-#: ../src/search.c:827
+#: ../src/search.c:828
 msgid "project"
 msgstr "proiektua"
 
-#: ../src/search.c:829
+#: ../src/search.c:830
 msgid "custom"
 msgstr "pertsonalizatua"
 
-#: ../src/search.c:833
+#: ../src/search.c:834
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
 
-#: ../src/search.c:895
+#: ../src/search.c:896
 msgid "Fi_les:"
 msgstr "_Fitxategiak:"
 
-#: ../src/search.c:907
+#: ../src/search.c:908
 msgid "File patterns, e.g. *.c *.h"
 msgstr ""
 
-#: ../src/search.c:919
+#: ../src/search.c:920
 msgid "_Directory:"
 msgstr "_Direktorioa:"
 
-#: ../src/search.c:938
+#: ../src/search.c:939
 msgid "E_ncoding:"
 msgstr "_Kodeketa:"
 
-#: ../src/search.c:962
+#: ../src/search.c:963
 msgid "See grep's manual page for more information"
 msgstr ""
 
-#: ../src/search.c:964
+#: ../src/search.c:965
 msgid "_Recurse in subfolders"
 msgstr ""
 
-#: ../src/search.c:977
+#: ../src/search.c:978
 msgid "_Invert search results"
 msgstr "_Alderantzikatu bilaketaren emaitzak"
 
-#: ../src/search.c:981
+#: ../src/search.c:982
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 
-#: ../src/search.c:998
+#: ../src/search.c:999
 msgid "E_xtra options:"
 msgstr "_Aukera gehigarriak:"
 
-#: ../src/search.c:1006
+#: ../src/search.c:1007
 msgid "Other options to pass to Grep"
 msgstr ""
 
-#: ../src/search.c:1368 ../src/search.c:2227 ../src/search.c:2230
+#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/search.c:1424
+#: ../src/search.c:1425
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr ""
 
-#: ../src/search.c:1615
+#: ../src/search.c:1616
 msgid "Invalid directory for find in files."
 msgstr ""
 
-#: ../src/search.c:1632
+#: ../src/search.c:1633
 msgid "No text to find."
 msgstr ""
 
-#: ../src/search.c:1708
+#: ../src/search.c:1709
 msgid "Searching..."
 msgstr "Bilatzen..."
 
-#: ../src/search.c:1710
+#: ../src/search.c:1711
 #, c-format
 msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (%s direktorioan)"
 
-#: ../src/search.c:1718
+#: ../src/search.c:1719
 #, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
 
-#: ../src/search.c:1758
+#: ../src/search.c:1759
 #, c-format
 msgid "Could not open directory (%s)"
 msgstr "Ezin izan da direktorioa ireki (%s)"
 
-#: ../src/search.c:1848
+#: ../src/search.c:1849
 msgid "Search failed."
 msgstr "Bilaketak huts egin du."
 
-#: ../src/search.c:1872
+#: ../src/search.c:1873
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../src/search.c:1880
+#: ../src/search.c:1881
 msgid "No matches found."
 msgstr ""
 
-#: ../src/search.c:1909
+#: ../src/search.c:1910
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Adierazpen erregular okerra: %s"
@@ -4357,375 +4413,367 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
-#: ../src/spawn.c:90 ../src/spawn.c:140 ../src/spawn.c:184
+#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
 msgid "Text ended before matching quote was found"
 msgstr ""
 
 #. TL note: from glib
-#: ../src/spawn.c:126
+#: ../src/spawn.c:130
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#: ../src/spawn.c:147 ../src/spawn.c:161
+#: ../src/spawn.c:151 ../src/spawn.c:165
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#: ../src/spawn.c:254
+#: ../src/spawn.c:258
 #, fuzzy
 msgid "Program not found"
 msgstr "Ez da komandoa aurkitu"
 
-#: ../src/spawn.c:668
+#: ../src/spawn.c:672
 #, fuzzy
 msgid "Failed to change to the working directory"
 msgstr "Prozesuak huts egin du, laneko direktoriorik ez"
 
-#: ../src/spawn.c:673
+#: ../src/spawn.c:677
 msgid "Unknown error executing child process"
 msgstr ""
 
-#: ../src/stash.c:1150
-msgid "Name"
-msgstr "Izena"
-
-#: ../src/stash.c:1157
+#: ../src/stash.c:1177
 msgid "Value"
 msgstr "Balioa"
 
-#: ../src/symbols.c:634 ../src/symbols.c:684 ../src/symbols.c:794
+#: ../src/symbols.c:548 ../src/symbols.c:598 ../src/symbols.c:708
 msgid "Chapter"
 msgstr "Kapitulua"
 
-#: ../src/symbols.c:635 ../src/symbols.c:680 ../src/symbols.c:795
+#: ../src/symbols.c:549 ../src/symbols.c:594 ../src/symbols.c:709
 msgid "Section"
 msgstr "Atala"
 
-#: ../src/symbols.c:636
+#: ../src/symbols.c:550
 msgid "Sect1"
 msgstr "Atal1"
 
-#: ../src/symbols.c:637
+#: ../src/symbols.c:551
 msgid "Sect2"
 msgstr "Atal2"
 
-#: ../src/symbols.c:638
+#: ../src/symbols.c:552
 msgid "Sect3"
 msgstr "Atal3"
 
-#: ../src/symbols.c:639
+#: ../src/symbols.c:553
 msgid "Appendix"
 msgstr "Eranskina"
 
-#: ../src/symbols.c:640 ../src/symbols.c:685 ../src/symbols.c:710
-#: ../src/symbols.c:726 ../src/symbols.c:741 ../src/symbols.c:752
-#: ../src/symbols.c:853 ../src/symbols.c:864 ../src/symbols.c:877
-#: ../src/symbols.c:891 ../src/symbols.c:903 ../src/symbols.c:915
-#: ../src/symbols.c:932 ../src/symbols.c:961 ../src/symbols.c:993
+#: ../src/symbols.c:554 ../src/symbols.c:599 ../src/symbols.c:624
+#: ../src/symbols.c:640 ../src/symbols.c:655 ../src/symbols.c:666
+#: ../src/symbols.c:767 ../src/symbols.c:778 ../src/symbols.c:791
+#: ../src/symbols.c:805 ../src/symbols.c:817 ../src/symbols.c:829
+#: ../src/symbols.c:846 ../src/symbols.c:875 ../src/symbols.c:907
 msgid "Other"
 msgstr "Bestelakoa"
 
-#: ../src/symbols.c:646 ../src/symbols.c:923 ../src/symbols.c:971
+#: ../src/symbols.c:560 ../src/symbols.c:837 ../src/symbols.c:885
 msgid "Module"
 msgstr "Modulua"
 
-#: ../src/symbols.c:647 ../src/symbols.c:737 ../src/symbols.c:849
-#: ../src/symbols.c:901 ../src/symbols.c:913 ../src/symbols.c:928
-#: ../src/symbols.c:942
+#: ../src/symbols.c:561 ../src/symbols.c:651 ../src/symbols.c:763
+#: ../src/symbols.c:815 ../src/symbols.c:827 ../src/symbols.c:842
+#: ../src/symbols.c:856
 msgid "Types"
 msgstr "Motak"
 
-#: ../src/symbols.c:648
+#: ../src/symbols.c:562
 msgid "Type constructors"
 msgstr "Mota eraikitzaileak"
 
-#: ../src/symbols.c:649 ../src/symbols.c:671 ../src/symbols.c:692
-#: ../src/symbols.c:709 ../src/symbols.c:721 ../src/symbols.c:734
-#: ../src/symbols.c:749 ../src/symbols.c:763 ../src/symbols.c:773
-#: ../src/symbols.c:837 ../src/symbols.c:887 ../src/symbols.c:910
-#: ../src/symbols.c:955 ../src/symbols.c:979
+#: ../src/symbols.c:563 ../src/symbols.c:585 ../src/symbols.c:606
+#: ../src/symbols.c:623 ../src/symbols.c:635 ../src/symbols.c:648
+#: ../src/symbols.c:663 ../src/symbols.c:677 ../src/symbols.c:687
+#: ../src/symbols.c:751 ../src/symbols.c:801 ../src/symbols.c:824
+#: ../src/symbols.c:869 ../src/symbols.c:893
 msgid "Functions"
 msgstr "Funtzioak"
 
-#: ../src/symbols.c:654
+#: ../src/symbols.c:568
 msgid "Program"
 msgstr "Programa"
 
-#: ../src/symbols.c:656 ../src/symbols.c:664 ../src/symbols.c:670
+#: ../src/symbols.c:570 ../src/symbols.c:578 ../src/symbols.c:584
 msgid "Sections"
 msgstr "Atalak"
 
-#: ../src/symbols.c:657
+#: ../src/symbols.c:571
 msgid "Paragraph"
 msgstr "Paragrafoa"
 
-#: ../src/symbols.c:658
+#: ../src/symbols.c:572
 msgid "Group"
 msgstr "Taldea"
 
-#: ../src/symbols.c:659
+#: ../src/symbols.c:573
 msgid "Data"
 msgstr "Datuak"
 
-#: ../src/symbols.c:665
+#: ../src/symbols.c:579
 msgid "Keys"
 msgstr "Gakoak"
 
-#: ../src/symbols.c:672 ../src/symbols.c:723 ../src/symbols.c:739
-#: ../src/symbols.c:765 ../src/symbols.c:838 ../src/symbols.c:863
-#: ../src/symbols.c:889 ../src/symbols.c:902 ../src/symbols.c:911
-#: ../src/symbols.c:927 ../src/symbols.c:962 ../src/symbols.c:991
+#: ../src/symbols.c:586 ../src/symbols.c:637 ../src/symbols.c:653
+#: ../src/symbols.c:679 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:803 ../src/symbols.c:816 ../src/symbols.c:825
+#: ../src/symbols.c:841 ../src/symbols.c:876 ../src/symbols.c:905
 msgid "Variables"
 msgstr "Aldagaiak"
 
-#: ../src/symbols.c:679
+#: ../src/symbols.c:593
 msgid "Environment"
 msgstr "Ingurunea"
 
-#: ../src/symbols.c:681 ../src/symbols.c:796
+#: ../src/symbols.c:595 ../src/symbols.c:710
 msgid "Subsection"
 msgstr "Azpiatala"
 
-#: ../src/symbols.c:682 ../src/symbols.c:797
+#: ../src/symbols.c:596 ../src/symbols.c:711
 msgid "Subsubsection"
 msgstr "Azpiazpiatala"
 
-#: ../src/symbols.c:693 ../src/symbols.c:718
+#: ../src/symbols.c:607 ../src/symbols.c:632
 msgid "Structures"
 msgstr "Egiturak"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:614
 msgid "Parts"
 msgstr "Zatiak"
 
-#: ../src/symbols.c:701
+#: ../src/symbols.c:615
 msgid "Assembly"
 msgstr ""
 
-#: ../src/symbols.c:702
+#: ../src/symbols.c:616
 msgid "Steps"
 msgstr "Pausoak"
 
-#: ../src/symbols.c:717 ../src/symbols.c:815 ../src/symbols.c:861
+#: ../src/symbols.c:631 ../src/symbols.c:729 ../src/symbols.c:775
 msgid "Modules"
 msgstr "Moduluak"
 
-#: ../src/symbols.c:719 ../src/symbols.c:766
+#: ../src/symbols.c:633 ../src/symbols.c:680
 msgid "Traits"
 msgstr ""
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:634
 #, fuzzy
 msgid "Implementations"
 msgstr "Koska"
 
-#: ../src/symbols.c:722 ../src/symbols.c:982
+#: ../src/symbols.c:636 ../src/symbols.c:896
 msgid "Typedefs / Enums"
 msgstr ""
 
-#: ../src/symbols.c:724 ../src/symbols.c:940 ../src/symbols.c:949
-#: ../src/symbols.c:988
+#: ../src/symbols.c:638 ../src/symbols.c:854 ../src/symbols.c:863
+#: ../src/symbols.c:902
 msgid "Macros"
 msgstr "Makroak"
 
-#: ../src/symbols.c:725 ../src/symbols.c:818 ../src/symbols.c:827
-#: ../src/symbols.c:836 ../src/symbols.c:874 ../src/symbols.c:900
+#: ../src/symbols.c:639 ../src/symbols.c:732 ../src/symbols.c:741
+#: ../src/symbols.c:750 ../src/symbols.c:788 ../src/symbols.c:814
 msgid "Methods"
 msgstr "Metodoak"
 
-#: ../src/symbols.c:733 ../src/symbols.c:748 ../src/symbols.c:846
-#: ../src/symbols.c:871 ../src/symbols.c:884
+#: ../src/symbols.c:647 ../src/symbols.c:662 ../src/symbols.c:760
+#: ../src/symbols.c:785 ../src/symbols.c:798
 msgid "Package"
 msgstr "Paketea"
 
-#: ../src/symbols.c:735 ../src/symbols.c:761 ../src/symbols.c:872
-#: ../src/symbols.c:885 ../src/symbols.c:898 ../src/symbols.c:925
-#: ../src/symbols.c:978
+#: ../src/symbols.c:649 ../src/symbols.c:675 ../src/symbols.c:786
+#: ../src/symbols.c:799 ../src/symbols.c:812 ../src/symbols.c:839
+#: ../src/symbols.c:892
 msgid "Interfaces"
 msgstr "Interfazeak"
 
-#: ../src/symbols.c:736 ../src/symbols.c:981
+#: ../src/symbols.c:650 ../src/symbols.c:895
 msgid "Structs"
 msgstr ""
 
-#: ../src/symbols.c:738 ../src/symbols.c:751 ../src/symbols.c:764
-#: ../src/symbols.c:890 ../src/symbols.c:912
+#: ../src/symbols.c:652 ../src/symbols.c:665 ../src/symbols.c:678
+#: ../src/symbols.c:804 ../src/symbols.c:826
 msgid "Constants"
 msgstr "Konstanteak"
 
-#: ../src/symbols.c:740 ../src/symbols.c:875 ../src/symbols.c:980
+#: ../src/symbols.c:654 ../src/symbols.c:789 ../src/symbols.c:894
 msgid "Members"
 msgstr "Kideak"
 
-#: ../src/symbols.c:750 ../src/symbols.c:914 ../src/symbols.c:939
+#: ../src/symbols.c:664 ../src/symbols.c:828 ../src/symbols.c:853
 msgid "Labels"
 msgstr "Etiketak"
 
-#: ../src/symbols.c:760 ../src/symbols.c:825 ../src/symbols.c:974
+#: ../src/symbols.c:674 ../src/symbols.c:739 ../src/symbols.c:888
 msgid "Namespaces"
 msgstr ""
 
-#: ../src/symbols.c:762 ../src/symbols.c:784 ../src/symbols.c:816
-#: ../src/symbols.c:826 ../src/symbols.c:835 ../src/symbols.c:873
-#: ../src/symbols.c:886 ../src/symbols.c:899 ../src/symbols.c:977
+#: ../src/symbols.c:676 ../src/symbols.c:698 ../src/symbols.c:730
+#: ../src/symbols.c:740 ../src/symbols.c:749 ../src/symbols.c:787
+#: ../src/symbols.c:800 ../src/symbols.c:813 ../src/symbols.c:891
 msgid "Classes"
 msgstr "Klaseak"
 
-#: ../src/symbols.c:774
+#: ../src/symbols.c:688
 msgid "Anchors"
 msgstr "Aingurak"
 
-#: ../src/symbols.c:775
+#: ../src/symbols.c:689
 msgid "H1 Headings"
 msgstr "H1 goiburuak"
 
-#: ../src/symbols.c:776
+#: ../src/symbols.c:690
 msgid "H2 Headings"
 msgstr "H2 goiburuak"
 
-#: ../src/symbols.c:777
+#: ../src/symbols.c:691
 msgid "H3 Headings"
 msgstr "H3 goiburuak"
 
-#: ../src/symbols.c:785
+#: ../src/symbols.c:699
 msgid "ID Selectors"
 msgstr "ID hautatzaileak"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:700
 msgid "Type Selectors"
 msgstr "Mota hautatzaileak"
 
-#: ../src/symbols.c:805
+#: ../src/symbols.c:719
 msgid "Section Level 1"
 msgstr "Atal maila 1"
 
-#: ../src/symbols.c:806
+#: ../src/symbols.c:720
 msgid "Section Level 2"
 msgstr "Atal maila 2"
 
-#: ../src/symbols.c:807
+#: ../src/symbols.c:721
 msgid "Section Level 3"
 msgstr "Atal maila 3"
 
-#: ../src/symbols.c:808
+#: ../src/symbols.c:722
 msgid "Section Level 4"
 msgstr "Atal maila 4"
 
-#: ../src/symbols.c:817
+#: ../src/symbols.c:731
 msgid "Singletons"
 msgstr ""
 
-#: ../src/symbols.c:828 ../src/symbols.c:956
+#: ../src/symbols.c:742 ../src/symbols.c:870
 msgid "Procedures"
 msgstr "Prozedurak"
 
-#: ../src/symbols.c:839
+#: ../src/symbols.c:753
 msgid "Imports"
 msgstr "Inportazioak"
 
-#: ../src/symbols.c:847
+#: ../src/symbols.c:761
 msgid "Entities"
 msgstr "Entitateak"
 
-#: ../src/symbols.c:848
+#: ../src/symbols.c:762
 msgid "Architectures"
 msgstr "Arkitekturak"
 
-#: ../src/symbols.c:850
+#: ../src/symbols.c:764
 msgid "Functions / Procedures"
 msgstr "Funtzioak / Prozedurak"
 
-#: ../src/symbols.c:851
+#: ../src/symbols.c:765
 msgid "Variables / Signals"
 msgstr "Aldagaiak / Seinaleak"
 
-#: ../src/symbols.c:852
+#: ../src/symbols.c:766
 msgid "Processes / Blocks / Components"
 msgstr "Prozesuak / Blokeak / Osagaiak"
 
-#: ../src/symbols.c:860
+#: ../src/symbols.c:774
 msgid "Events"
 msgstr "Gertaerak"
 
-#: ../src/symbols.c:862
+#: ../src/symbols.c:776
 msgid "Functions / Tasks"
 msgstr "Funtzioak / Atazak"
 
-#: ../src/symbols.c:876 ../src/symbols.c:931
+#: ../src/symbols.c:790 ../src/symbols.c:845
 msgid "Enums"
 msgstr ""
 
-#: ../src/symbols.c:888
-msgid "Properties"
-msgstr "Propietateak"
-
-#: ../src/symbols.c:924
+#: ../src/symbols.c:838
 #, fuzzy
 msgid "Programs"
 msgstr "Programa"
 
-#: ../src/symbols.c:926
+#: ../src/symbols.c:840
 #, fuzzy
 msgid "Functions / Subroutines"
 msgstr "Funtzioak / Prozedurak"
 
-#: ../src/symbols.c:929
+#: ../src/symbols.c:843
 #, fuzzy
 msgid "Components"
 msgstr "Dokumentuak"
 
-#: ../src/symbols.c:930
+#: ../src/symbols.c:844
 msgid "Blocks"
 msgstr "Blokeak"
 
-#: ../src/symbols.c:941
+#: ../src/symbols.c:855
 msgid "Defines"
 msgstr ""
 
-#: ../src/symbols.c:948
+#: ../src/symbols.c:862
 msgid "Targets"
 msgstr "Helburuak"
 
-#: ../src/symbols.c:957
+#: ../src/symbols.c:871
 msgid "Indexes"
 msgstr "Indizeak"
 
-#: ../src/symbols.c:958
+#: ../src/symbols.c:872
 msgid "Tables"
 msgstr "Taulak"
 
-#: ../src/symbols.c:959
+#: ../src/symbols.c:873
 msgid "Triggers"
 msgstr "Disparadoreak"
 
-#: ../src/symbols.c:960
+#: ../src/symbols.c:874
 msgid "Views"
 msgstr "Ikuspegiak"
 
-#: ../src/symbols.c:992
+#: ../src/symbols.c:906
 #, fuzzy
 msgid "Extern Variables"
 msgstr "Aldagaiak"
 
-#: ../src/symbols.c:1756
+#: ../src/symbols.c:1670
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr ""
 
-#: ../src/symbols.c:1782
+#: ../src/symbols.c:1696
 #, c-format
-msgid "Failed to create tags file, perhaps because no tags were found.\n"
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 
-#: ../src/symbols.c:1789
-#, c-format
+#: ../src/symbols.c:1703
+#, fuzzy, c-format
 msgid ""
-"Usage: %s -g <Tag File> <File list>\n"
+"Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
 "Erabilera: %s -g <etiketa-fitxategia> <fitxategi-zerrenda>\n"
 "\n"
 
-#: ../src/symbols.c:1790
+#: ../src/symbols.c:1704
 #, c-format
 msgid ""
 "Example:\n"
@@ -4736,40 +4784,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1804
-msgid "Load Tags"
+#: ../src/symbols.c:1718
+#, fuzzy
+msgid "Load Tags File"
 msgstr "Kargatu etiketak"
 
-#: ../src/symbols.c:1811
-msgid "Geany tag files (*.*.tags)"
+#: ../src/symbols.c:1725
+#, fuzzy
+msgid "Geany tags file (*.*.tags)"
 msgstr "Geany etiketa-fitxategiak (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1831
+#: ../src/symbols.c:1745
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr ""
 
-#: ../src/symbols.c:1834
+#: ../src/symbols.c:1748
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Ezin izan da '%s' etiketa-fitxategia kargatu."
 
-#: ../src/symbols.c:1972
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1983
+#, fuzzy, c-format
+msgid "<b>%s: %lu</b>"
+msgstr "<b>Bideak</b>"
+
+#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
+#: ../src/symbols.c:1986
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr ""
 
-#: ../src/symbols.c:1974
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Ez da \"%s\"(r)en definiziorik aurkitu."
 
-#: ../src/symbols.c:2351
+#: ../src/symbols.c:2540
 msgid "Sort by _Name"
 msgstr "Ordenatu _izenaren arabera"
 
-#: ../src/symbols.c:2358
+#: ../src/symbols.c:2547
 msgid "Sort by _Appearance"
 msgstr "Antolatu _itxuraren arabera"
 
@@ -4967,7 +5029,7 @@ msgid ""
 "Commands."
 msgstr ""
 
-#: ../src/tools.c:357 ../src/tools.c:620
+#: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
 msgstr "Ezarri komando pertsonalizatuak"
 
@@ -4981,40 +5043,41 @@ msgstr ""
 msgid "ID"
 msgstr "IDa"
 
-#: ../src/tools.c:591
+#: ../src/tools.c:597
 msgid "No custom commands defined."
 msgstr "Ez da komando pertsonalizaturik definitu."
 
-#: ../src/tools.c:689
+#: ../src/tools.c:695
 msgid "Word Count"
 msgstr "Hitz kopurua"
 
-#: ../src/tools.c:698
+#: ../src/tools.c:704
 msgid "selection"
 msgstr "hautapena"
 
-#: ../src/tools.c:703
+#: ../src/tools.c:709
 msgid "whole document"
 msgstr "dokumentu osoa"
 
-#: ../src/tools.c:712
+#: ../src/tools.c:718
 msgid "Range:"
 msgstr "Bitartea:"
 
-#: ../src/tools.c:724
+#: ../src/tools.c:730
 msgid "Lines:"
 msgstr "Lerroak:"
 
-#: ../src/tools.c:738
+#: ../src/tools.c:744
 msgid "Words:"
 msgstr "Hitzak:"
 
-#: ../src/tools.c:752
+#: ../src/tools.c:758
 msgid "Characters:"
 msgstr "Karaktereak:"
 
 #: ../src/sidebar.c:178
-msgid "No tags found"
+#, fuzzy
+msgid "No symbols found"
 msgstr "Ez da etiketarik aurkitu"
 
 #: ../src/sidebar.c:602
@@ -5765,6 +5828,12 @@ msgstr "_Alboz albo"
 #, fuzzy
 msgid "Top and Bottom"
 msgstr "_Goian eta behean"
+
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "Joan etiketaren _definiziora"
+
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "Joan e_tiketaren deklaraziora"
 
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "\"%s\" inprimatzeak huts egin du (itzulitako kodea: %s)."
