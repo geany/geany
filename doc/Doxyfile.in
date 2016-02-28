@@ -252,12 +252,12 @@ ALIASES                = "signal=- @ref  " \
 
 # Apparently Doxygen doesn't seem to like \<type>only without a previous command, so create a no-op
 ALIASES               += "noop=\if FALSE \endif"
-ALIASES               += "transfer{1}=\noop \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly <em>(transfer: \1)</em> \endhtmlonly"
-ALIASES               += "elementtype{1}=\noop \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly <em>(element-type: \1)</em> \endhtmlonly"
+ALIASES               += "transfer{1}=\noop \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly <em title=\"Ownership transfer to the caller: \1\">(transfer: \1)</em> \endhtmlonly"
+ALIASES               += "elementtype{1}=\noop \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly <em title=\"Type of the elements in the container: \1\">(element-type: \1)</em> \endhtmlonly"
 ALIASES               += "scope{1}=\noop \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly <em>(scope: \1)</em> \endhtmlonly"
 ALIASES               += "girskip=\noop \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
 ALIASES               += "nullable=\noop \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
-ALIASES               += "out=\noop \xmlonly <simplesect kind=\"geany:out\"></simplesect>\endxmlonly \htmlonly <em>(output parameter)</em> \endhtmlonly"
+ALIASES               += "out=\noop \xmlonly <simplesect kind=\"geany:out\"></simplesect>\endxmlonly \htmlonly <em title=\"Output parameter\">(out)</em> \endhtmlonly"
 ALIASES               += "optional=\noop \xmlonly <simplesect kind=\"geany:optional\"></simplesect>\endxmlonly"
 ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
 ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
