@@ -70,11 +70,11 @@ class AtDoc(object):
             self.annot.append("%s %s" % (type, str))
         elif (type ==  "see"):
             return "See " + str
+        elif type in ("a", "c") and str in ("NULL", "TRUE", "FALSE"):
+            # FIXME: some of Geany does @a NULL instead of @c NULL
+            return "%" + str
         elif (type ==  "a"):
-            if (str != "NULL"): # FIXME: some of geany does @a NULL
-                return "@" + str
-            else:
-                return str
+            return "@" + str
         else:
             return str
 
