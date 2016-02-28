@@ -709,7 +709,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
  *  @param command_line child program and arguments, or @c NULL.
  *  @param argv child's argument vector, or @c NULL.
  *  @param envp child's environment, or @c NULL.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -993,7 +993,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *  @param stderr_max_length maximum data length to pass to stderr_cb, @c 0 = default.
  *  @param exit_cb callback to invoke when the child exits, or @c NULL.
  *  @param exit_data data to pass to @a exit_cb.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -1190,7 +1190,7 @@ static void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpoint
  *  @param stdin_data data to send to childs's stdin, or @c NULL.
  *  @param stdout_data GString location to receive the child's stdout, or NULL.
  *  @param stderr_data GString location to receive the child's stderr, or NULL.
- *  @param exit_status return location for the child exit code, or NULL.
+ *  @param exit_status @out @optional return location for the child exit code, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.

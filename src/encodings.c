@@ -775,7 +775,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
  *
  *  @param buffer the input string to convert.
  *  @param size the length of the string, or -1 if the string is nul-terminated.
- *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
+ *  @param used_encoding @out @optional return location of the detected encoding of the input string, or @c NULL.
  *
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.

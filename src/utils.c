@@ -1653,9 +1653,9 @@ const gchar *utils_get_default_dir_utf8(void)
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data @girskip Ignored.
- *  @param std_out The return location for child output, or @c NULL.
- *  @param std_err The return location for child error messages, or @c NULL.
- *  @param exit_status The child exit status, as returned by waitpid(), or @c NULL.
+ *  @param std_out @out @optional The return location for child output, or @c NULL.
+ *  @param std_err @out @optional The return location for child error messages, or @c NULL.
+ *  @param exit_status @out @optional The child exit status, as returned by waitpid(), or @c NULL.
  *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
