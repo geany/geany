@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-28 14:14+0100\n"
-"PO-Revision-Date: 2016-02-25 02:05+0100\n"
+"PO-Revision-Date: 2016-02-28 19:48+0100\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -5024,15 +5024,15 @@ msgstr "Impossible de charger le fichier de tags « %s »."
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1983
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Affichage</b>"
+msgstr "<b>%s : %lu</b>"
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1986
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s : %lu"
 
 # Prochaine déclaration (recherche vers l'avant)
 #: ../src/symbols.c:2161
