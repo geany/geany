@@ -326,66 +326,6 @@ const gchar *symbols_get_context_separator(gint ft_id)
 }
 
 
-/* Note: if tags is sorted, we can use bsearch or tm_tags_find() to speed this up. */
-static TMTag *
-symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
-{
-	guint i;
-	g_return_val_if_fail(tags != NULL, NULL);
-
-	for (i = 0; i < tags->len; ++i)
-	{
-		if (utils_str_equal(TM_TAG(tags->pdata[i])->name, tag_name))
-			return TM_TAG(tags->pdata[i]);
-	}
-	return NULL;
-}
-
-
-static TMTag *find_source_file_tag(GPtrArray *tags_array,
-		const gchar *tag_name, guint type)
-{
-	GPtrArray *tags;
-	TMTag *tmtag;
-
-	tags = tm_tags_extract(tags_array, type);
-	if (tags != NULL)
-	{
-		tmtag = symbols_find_tm_tag(tags, tag_name);
-
-		g_ptr_array_free(tags, TRUE);
-
-		if (tmtag != NULL)
-			return tmtag;
-	}
-	return NULL;	/* not found */
-}
-
-
-static TMTag *find_workspace_tag(const gchar *tag_name, guint type)
-{
-	guint j;
-	const GPtrArray *source_files = NULL;
-
-	if (app->tm_workspace != NULL)
-		source_files = app->tm_workspace->source_files;
-
-	if (source_files != NULL)
-	{
-		for (j = 0; j < source_files->len; j++)
-		{
-			TMSourceFile *srcfile = source_files->pdata[j];
-			TMTag *tmtag;
-
-			tmtag = find_source_file_tag(srcfile->tags_array, tag_name, type);
-			if (tmtag != NULL)
-				return tmtag;
-		}
-	}
-	return NULL;	/* not found */
-}
-
-
 const gchar **symbols_get_html_entities(void)
 {
 	if (html_entities == NULL)
@@ -1888,27 +1828,278 @@ static void load_user_tags(filetype_id ft_id)
 }
 
 
+static void on_goto_popup_item_activate(GtkMenuItem *item, TMTag *tag)
+{
+	GeanyDocument *new_doc, *old_doc;
+
+	g_return_if_fail(tag);
+
+	old_doc = document_get_current();
+	new_doc = document_open_file(tag->file->file_name, FALSE, NULL, NULL);
+
+	if (new_doc)
+		navqueue_goto_line(old_doc, new_doc, tag->line);
+}
+
+
+/* FIXME: use the same icons as in the symbols tree defined in add_top_level_items() */
+static guint get_tag_class(const TMTag *tag)
+{
+	switch (tag->type)
+	{
+		case tm_tag_prototype_t:
+		case tm_tag_method_t:
+		case tm_tag_function_t:
+			return ICON_METHOD;
+		case tm_tag_variable_t:
+		case tm_tag_externvar_t:
+			return ICON_VAR;
+		case tm_tag_macro_t:
+		case tm_tag_macro_with_arg_t:
+			return ICON_MACRO;
+		case tm_tag_class_t:
+			return ICON_CLASS;
+		case tm_tag_member_t:
+		case tm_tag_field_t:
+			return ICON_MEMBER;
+		case tm_tag_typedef_t:
+		case tm_tag_enum_t:
+		case tm_tag_union_t:
+		case tm_tag_struct_t:
+			return ICON_STRUCT;
+		case tm_tag_namespace_t:
+		case tm_tag_package_t:
+			return ICON_NAMESPACE;
+		default:
+			break;
+	}
+	return ICON_STRUCT;
+}
+
+
+/* positions a popup at the caret from the ScintillaObject in @p data */
+static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
+{
+	gint line_height;
+	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
+	gint monitor_num;
+	GdkRectangle monitor;
+	GtkRequisition req;
+	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
+
+	if (event_button)
+	{
+		/* if we got a mouse click, popup at that position */
+		*x = (gint) event_button->x_root;
+		*y = (gint) event_button->y_root;
+		line_height = 0; /* we don't want to offset below the line or anything */
+	}
+	else /* keyboard positioning */
+	{
+		ScintillaObject *sci = data;
+		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+		gint pos = sci_get_current_position(sci);
+		gint line = sci_get_line_from_position(sci, pos);
+		gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
+		gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+
+		line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
+
+		gdk_window_get_origin(window, x, y);
+		*x += pos_x;
+		*y += pos_y;
+	}
+
+	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
+#else
+	gtk_widget_size_request(GTK_WIDGET(menu), &req);
+#endif
+
+#if GTK_CHECK_VERSION(3, 4, 0)
+	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
+#else
+	gdk_screen_get_monitor_geometry(screen, monitor_num, &monitor);
+#endif
+
+	/* put on one size of the X position, but within the monitor */
+	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
+	{
+		if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
+		else if (*x + req.width > monitor.x + monitor.width)
+			*x = monitor.x;
+		else
+			*x += 1;
+	}
+	else
+	{
+		if (*x + req.width + 1 <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x + 1);
+		else if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
+		else
+			*x = monitor.x + MAX(0, monitor.width - req.width);
+	}
+
+	/* try to put, in order:
+	 * 1. below the Y position, under the line
+	 * 2. above the Y position
+	 * 3. within the monitor */
+	if (*y + line_height + req.height <= monitor.y + monitor.height)
+		*y = MAX(monitor.y, *y + line_height);
+	else if (*y - req.height >= monitor.y)
+		*y = *y - req.height;
+	else
+		*y = monitor.y + MAX(0, monitor.height - req.height);
+
+	*push_in = FALSE;
+}
+
+
+static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_best)
+{
+	GtkWidget *first = NULL;
+	GtkWidget *menu;
+	GdkEvent *event;
+	GdkEventButton *button_event = NULL;
+	TMTag *tmtag;
+	guint i;
+
+	menu = gtk_menu_new();
+
+	foreach_ptr_array(tmtag, i, tags)
+	{
+		GtkWidget *item;
+		GtkWidget *label;
+		GtkWidget *image;
+		gchar *fname = g_path_get_basename(tmtag->file->file_name);
+		gchar *text;
+
+		if (! first && have_best)
+			/* For translators: it's the filename and line number of a tag in the goto-tag popup menu */
+			text = g_markup_printf_escaped(_("<b>%s: %lu</b>"), fname, tmtag->line);
+		else
+			/* For translators: it's the filename and line number of a tag in the goto-tag popup menu */
+			text = g_markup_printf_escaped(_("%s: %lu"), fname, tmtag->line);
+
+		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
+		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, NULL);
+		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
+		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		if (! first)
+			first = item;
+
+		g_free(text);
+		g_free(fname);
+	}
+
+	gtk_widget_show_all(menu);
+
+	if (first) /* always select the first item for better keyboard navigation */
+		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
+
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+		button_event = (GdkEventButton *) event;
+	else
+		gdk_event_free(event);
+
+	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
+	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
+				   button_event ? button_event->button : 0, gtk_get_current_event_time ());
+}
+
+
+static gint compare_tags_by_name_line(gconstpointer ptr1, gconstpointer ptr2)
+{
+	gint res;
+	TMTag *t1 = *((TMTag **) ptr1);
+	TMTag *t2 = *((TMTag **) ptr2);
+
+	res = g_strcmp0(t1->file->short_name, t2->file->short_name);
+	if (res != 0)
+		return res;
+	return t1->line - t2->line;
+}
+
+
+static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
+{
+	TMTag *tag;
+	guint i;
+
+	/* first check if we have a tag in the current file */
+	foreach_ptr_array(tag, i, tags)
+	{
+		if (g_strcmp0(doc->real_path, tag->file->file_name) == 0)
+			return tag;
+	}
+
+	/* next check if we have a tag for some of the open documents */
+	foreach_ptr_array(tag, i, tags)
+	{
+		guint j;
+
+		foreach_document(j)
+		{
+			if (g_strcmp0(documents[j]->real_path, tag->file->file_name) == 0)
+				return tag;
+		}
+	}
+
+	/* next check if we have a tag for a file inside the current document's directory */
+	foreach_ptr_array(tag, i, tags)
+	{
+		gchar *dir = g_path_get_dirname(doc->real_path);
+
+		if (g_str_has_prefix(tag->file->file_name, dir))
+		{
+			g_free(dir);
+			return tag;
+		}
+		g_free(dir);
+	}
+
+	return NULL;
+}
+
+
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	TMTagType type;
 	TMTag *tmtag = NULL;
 	GeanyDocument *old_doc = document_get_current();
+	gboolean found = FALSE;
+	const GPtrArray *all_tags;
+	GPtrArray *workspace_tags;
+	guint i;
 
 	/* goto tag definition: all except prototypes / forward declarations / externs */
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
+	all_tags = tm_workspace_find(name, NULL, type, NULL, old_doc->file_type->lang);
 
-	/* first look in the current document */
-	if (old_doc != NULL && old_doc->tm_file)
-		tmtag = find_source_file_tag(old_doc->tm_file->tags_array, name, type);
-
-	/* if not found, look in the workspace */
-	if (tmtag == NULL)
-		tmtag = find_workspace_tag(name, type);
-
-	if (tmtag != NULL)
+	/* get rid of global tags */
+	workspace_tags = g_ptr_array_new();
+	foreach_ptr_array(tmtag, i, all_tags)
 	{
-		GeanyDocument *new_doc = document_find_by_real_path(
+		if (tmtag->file)
+			g_ptr_array_add(workspace_tags, tmtag);
+	}
+
+	if (workspace_tags->len == 1)
+	{
+		GeanyDocument *new_doc;
+
+		tmtag = workspace_tags->pdata[0];
+		new_doc = document_find_by_real_path(
 			tmtag->file->file_name);
 
 		if (new_doc)
@@ -1918,7 +2109,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 				tmtag->line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
 			{
 				if (goto_tag(name, !definition))
-					return TRUE;
+					found = TRUE;
 			}
 		}
 		else
@@ -1927,10 +2118,34 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
 		}
 
-		if (navqueue_goto_line(old_doc, new_doc, tmtag->line))
-			return TRUE;
+		if (!found && navqueue_goto_line(old_doc, new_doc, tmtag->line))
+			found = TRUE;
 	}
-	return FALSE;
+	else if (workspace_tags->len > 1)
+	{
+		GPtrArray *tags;
+		TMTag *tag, *best_tag;
+
+		g_ptr_array_sort(workspace_tags, compare_tags_by_name_line);
+		best_tag = find_best_goto_tag(old_doc, workspace_tags);
+
+		tags = g_ptr_array_new();
+		if (best_tag)
+			g_ptr_array_add(tags, best_tag);
+		foreach_ptr_array(tag, i, workspace_tags)
+		{
+			if (tag != best_tag)
+				g_ptr_array_add(tags, tag);
+		}
+		show_goto_popup(old_doc, tags, best_tag != NULL);
+
+		g_ptr_array_free(tags, TRUE);
+		found = TRUE;
+	}
+
+	g_ptr_array_free(workspace_tags, TRUE);
+
+	return found;
 }
 
 
