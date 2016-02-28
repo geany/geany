@@ -6,6 +6,7 @@ import re
 from lxml import etree
 from optparse import OptionParser
 
+
 def normalize_text(s):
     r"""
     Normalizes whitespace in text.
@@ -16,6 +17,7 @@ def normalize_text(s):
     'asd xxx'
     """
     return s.replace("\n", " ").strip()
+
 
 CXX_NAMESPACE_RE = re.compile(r'[_a-zA-Z][_0-9a-zA-Z]*::')
 def fix_definition(s):
@@ -32,10 +34,10 @@ def fix_definition(s):
     'void(* project_open) (GKeyFile *keyfile)'
 
     """
-    return CXX_NAMESPACE_RE.sub(r"", s);
+    return CXX_NAMESPACE_RE.sub(r"", s)
+
 
 class AtAt(object):
-
     def __init__(self):
         self.retval = None
         self.since = ""
@@ -43,6 +45,7 @@ class AtAt(object):
 
     def cb(type, str):
         return "@%s %s" % (type, str)
+
 
 class AtDoc(object):
     def __init__(self):
@@ -52,7 +55,7 @@ class AtDoc(object):
 
     def cb(self, type, str):
         if (type == "param"):
-            words = str.split(" ", 2);
+            words = str.split(" ", 2)
             self.annot = []
         elif (type == "return"):
             self.annot = []
@@ -70,21 +73,23 @@ class AtDoc(object):
                       "geany:scope"):
             type = type.split(":")[1]
             self.annot.append("%s %s" % (type, str))
-        elif (type ==  "see"):
+        elif (type == "see"):
             return "See " + str
         elif type in ("a", "c") and str in ("NULL", "TRUE", "FALSE"):
             # FIXME: some of Geany does @a NULL instead of @c NULL
             return "%" + str
-        elif (type ==  "a"):
+        elif (type == "a"):
             return "@" + str
         else:
             return str
 
         return ""
 
+
 class At(object):
     def __init__(self, cb):
         self.cb = cb
+
 
 class DoxygenProcess(object):
     def __init__(self):
@@ -96,8 +101,8 @@ class DoxygenProcess(object):
         from lxml.etree import tostring
         from itertools import chain
         parts = ([node.text] +
-                list(chain(*([c.text, tostring(c).decode("utf-8"), c.tail] for c in node.getchildren()))) +
-                [node.tail])
+                 list(chain(*([c.text, tostring(c).decode("utf-8"), c.tail] for c in node.getchildren()))) +
+                 [node.tail])
         # filter removes possible Nones in texts and tails
         return "".join(filter(None, parts))
 
@@ -176,11 +181,12 @@ class DoxygenProcess(object):
             if n.tail:
                 s += n.tail
             if n.tag.startswith("param"):
-                pass # parameters are handled separately in DoxyFunction::from_memberdef()
+                pass  # parameters are handled separately in DoxyFunction::from_memberdef()
         return s
 
+
 class DoxyMember(object):
-    def __init__(self, name, brief, extra = ""):
+    def __init__(self, name, brief, extra=""):
         self.name       = name
         self.brief      = brief
         self.extra      = extra
@@ -234,7 +240,7 @@ class DoxyElement(object):
         self.retval = DoxyMember("ret", normalize_text(brief), proc.get_extra())
 
     def to_gtkdoc(self):
-        s  = []
+        s = []
         s.append("/**")
         s.append(" * %s: %s" % (self.name, self.extra))
         for p in self.members:
@@ -253,8 +259,8 @@ class DoxyElement(object):
         s.append("")
         return "\n".join(s)
 
-class DoxyTypedef(DoxyElement):
 
+class DoxyTypedef(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
         name = xml.find("name").text
@@ -262,15 +268,15 @@ class DoxyTypedef(DoxyElement):
         d += ";"
         return DoxyTypedef(name, d)
 
-class DoxyEnum(DoxyElement):
 
+class DoxyEnum(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
         name = xml.find("name").text
         d = "typedef enum {\n"
         for member in xml.findall("enumvalue"):
             v = member.find("initializer")
-            d += "\t%s%s,\n" % ( member.find("name").text, " "+v.text if v is not None else "")
+            d += "\t%s%s,\n" % (member.find("name").text, " "+v.text if v is not None else "")
         d += "} %s;\n" % name
 
         e = DoxyEnum(name, d)
@@ -279,13 +285,13 @@ class DoxyEnum(DoxyElement):
             e.add_member(p)
         return e
 
-class DoxyStruct(DoxyElement):
 
+class DoxyStruct(DoxyElement):
     @staticmethod
-    def from_compounddef(xml, typedefs = []):
+    def from_compounddef(xml, typedefs=[]):
         name = xml.find("compoundname").text
         section = xml.find("sectiondef")
-        d = "struct %s {\n" % name;
+        d = "struct %s {\n" % name
         for p in section.findall("memberdef"):
             # workaround for struct members. g-ir-scanner can't properly map struct members
             # (beginning with struct GeanyFoo) to the typedef and assigns a generic type for them
@@ -310,8 +316,8 @@ class DoxyStruct(DoxyElement):
             e.add_member(p)
         return e
 
-class DoxyFunction(DoxyElement):
 
+class DoxyFunction(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
         name = xml.find("name").text
@@ -329,18 +335,18 @@ class DoxyFunction(DoxyElement):
             e.add_return(x[0])
         return e
 
-def main(args):
 
+def main(args):
     xml_dir = None
     outfile = None
 
     parser = OptionParser(usage="usage: %prog [options] XML_DIR")
     parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
-        action="store", dest="xml_dir")
+                      action="store", dest="xml_dir")
     parser.add_option("-d", "--outdir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
-        action="store", dest="outdir", default=".")
+                      action="store", dest="outdir", default=".")
     parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
-        action="store", dest="outfile")
+                      action="store", dest="outfile")
     opts, args = parser.parse_args(args[1:])
 
     xml_dir = args[0]
