@@ -667,10 +667,8 @@ static void clear_all_errors(void)
 static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
 {
 	GString *stack;
-	gchar *filename = NULL;
 	gchar *replacement;
 	gchar *executable = NULL;
-	gchar *ret_str; /* to be freed when not in use anymore */
 	gint line_num;
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
@@ -678,20 +676,18 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 	stack = g_string_new(src);
 	if (doc != NULL && doc->file_name != NULL)
 	{
-		filename = utils_get_utf8_from_locale(doc->file_name);
-
 		/* replace %f with the filename (including extension) */
-		replacement = g_path_get_basename(filename);
+		replacement = g_path_get_basename(doc->file_name);
 		utils_string_replace_all(stack, "%f", replacement);
 		g_free(replacement);
 
 		/* replace %d with the absolute path of the dir of the current file */
-		replacement = g_path_get_dirname(filename);
+		replacement = g_path_get_dirname(doc->file_name);
 		utils_string_replace_all(stack, "%d", replacement);
 		g_free(replacement);
 
 		/* replace %e with the filename (excluding extension) */
-		executable = utils_remove_ext_from_filename(filename);
+		executable = utils_remove_ext_from_filename(doc->file_name);
 		replacement = g_path_get_basename(executable);
 		utils_string_replace_all(stack, "%e", replacement);
 		g_free(replacement);
@@ -712,19 +708,15 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 	else if (strstr(stack->str, "%p"))
 	{   /* fall back to %d */
 		ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
-		if (doc != NULL && filename != NULL)
-			replacement = g_path_get_dirname(filename);
+		if (doc != NULL && doc->file_name != NULL)
+			replacement = g_path_get_dirname(doc->file_name);
 	}
 
 	utils_string_replace_all(stack, "%p", replacement);
 	g_free(replacement);
-
-	ret_str = utils_get_utf8_from_locale(stack->str);
 	g_free(executable);
-	g_free(filename);
-	g_string_free(stack, TRUE);
 
-	return ret_str; /* don't forget to free src also if needed */
+	return g_string_free(stack, FALSE); /* don't forget to free src also if needed */
 }
 
 
@@ -733,10 +725,10 @@ static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *s
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir)
 {
 	GError *error = NULL;
-	gchar *argv[] = { "/bin/sh", "-c", (gchar *) cmd, NULL };
+	gchar *argv[] = { "/bin/sh", "-c", NULL, NULL };
 	gchar *working_dir;
 	gchar *utf8_working_dir;
-	gchar *utf8_cmd_string;
+	gchar *cmd_string;
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
@@ -750,15 +742,16 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	clear_all_errors();
 	SETPTR(current_dir_entered, NULL);
 
-	utf8_cmd_string = utils_get_utf8_from_locale(cmd);
 	utf8_working_dir = !EMPTY(dir) ? g_strdup(dir) : g_path_get_dirname(doc->file_name);
 	working_dir = utils_get_locale_from_utf8(utf8_working_dir);
 
 	gtk_list_store_clear(msgwindow.store_compiler);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), utf8_cmd_string, utf8_working_dir);
+	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
-	g_free(utf8_cmd_string);
+
+	cmd_string = utils_get_locale_from_utf8(cmd);
+	argv[2] = cmd_string;
 
 #ifdef G_OS_UNIX
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
@@ -782,6 +775,7 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	}
 
 	g_free(working_dir);
+	g_free(cmd_string);
 }
 
 
