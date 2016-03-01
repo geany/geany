@@ -54,16 +54,6 @@ def fix_definition(s):
     return CXX_NAMESPACE_RE.sub(r"", s)
 
 
-class AtAt(object):
-    def __init__(self):
-        self.retval = None
-        self.since = ""
-        self.annot = []
-
-    def cb(type, str):
-        return "@%s %s" % (type, str)
-
-
 class AtDoc(object):
     def __init__(self):
         self.retval = None
@@ -101,11 +91,6 @@ class AtDoc(object):
             return str
 
         return ""
-
-
-class At(object):
-    def __init__(self, cb):
-        self.cb = cb
 
 
 class DoxygenProcess(object):
