@@ -281,7 +281,7 @@ class DoxyTypedef(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
         name = xml.find("name").text
-        d = normalize_text(xml.find("definition").text).replace("G_BEGIN_DECLS", "")
+        d = normalize_text(xml.find("definition").text)
         d += ";"
         return DoxyTypedef(name, d)
 
@@ -338,9 +338,9 @@ class DoxyFunction(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
         name = xml.find("name").text
-        d = normalize_text(xml.find("definition").text.replace("G_BEGIN_DECLS", ""))
+        d = normalize_text(xml.find("definition").text)
         d += " " + xml.find("argsstring").text + ";"
-        d = normalize_text(d.replace("GEANY_API_SYMBOL", ""))
+        d = normalize_text(d)
 
         e = DoxyFunction(name, d)
         e.add_brief(xml.find("briefdescription"))
@@ -385,7 +385,7 @@ def main(args):
     for f in h_files:
         if not (f.find("compoundname").text.endswith("private.h")):
             for n0 in f.xpath(".//*/memberdef[@kind='typedef' and @prot='public']"):
-                if not (n0.find("type").text.replace("G_BEGIN_DECLS", "").lstrip().startswith("enum")):
+                if not (n0.find("type").text.startswith("enum")):
                     e = DoxyTypedef.from_memberdef(n0)
                     typedefs.append(e)
 
