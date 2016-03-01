@@ -1979,10 +1979,10 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		gchar *text;
 
 		if (! first && have_best)
-			/* For translators: it's the filename and line number of a tag in the goto-tag popup menu */
+			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
 			text = g_markup_printf_escaped(_("<b>%s: %lu</b>"), fname, tmtag->line);
 		else
-			/* For translators: it's the filename and line number of a tag in the goto-tag popup menu */
+			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
 			text = g_markup_printf_escaped(_("%s: %lu"), fname, tmtag->line);
 
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
