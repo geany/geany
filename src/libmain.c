@@ -81,6 +81,13 @@
 #endif
 
 
+typedef struct
+{
+	gint argc;
+	gchar **argv;
+} CommandLineArgs;
+
+
 GeanyApp	*app;
 gboolean	ignore_callback;	/* hack workaround for GTK+ toggle button callback problem */
 
@@ -951,9 +958,39 @@ static void load_startup_files(gint argc, gchar **argv)
 }
 
 
-static gboolean send_startup_complete(gpointer data)
+static gboolean on_startup_complete(gpointer data)
 {
+	CommandLineArgs *args = data;
+	GeanyDocument *doc;
+
+	/* delay setting main_window_realized = TRUE until here so for plugins it is
+	 * set at the same time as geany-startup-complete is fired */
+	main_status.main_window_realized = TRUE;
+
+	/* load any command line files or session files */
+	main_status.opening_session_files = TRUE;
+	load_startup_files(args->argc, args->argv);
+	main_status.opening_session_files = FALSE;
+
+	/* open a new file if no other file was opened */
+	document_new_file_if_non_open();
+
+	/* clear the "loading session files" message */
+	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
+
+	ui_document_buttons_update();
+	ui_save_buttons_toggle(FALSE);
+
+	doc = document_get_current();
+	sidebar_select_openfiles_item(doc);
+	build_menu_update(doc);
+	sidebar_update_tag_list(doc, FALSE);
+
+	document_grab_focus(doc);
+
+	/* when everything is done, emit the geany-startup-complete signal */
 	g_signal_emit_by_name(geany_object, "geany-startup-complete");
+
 	return FALSE;
 }
 
@@ -1017,7 +1054,6 @@ static void setup_gtk2_styles(void)
 GEANY_EXPORT_SYMBOL
 gint main_lib(gint argc, gchar **argv)
 {
-	GeanyDocument *doc;
 	gint config_dir_result;
 	const gchar *locale;
 	gchar *utf8_configdir;
@@ -1151,7 +1187,6 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 	ui_create_recent_menus();
 
-	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
 		ui_set_statusbar(TRUE, _("Configuration directory could not be created (%s)."),
 			g_strerror(config_dir_result));
@@ -1177,22 +1212,6 @@ gint main_lib(gint argc, gchar **argv)
 	 * accelerator shown for the menu items */
 	tools_create_insert_custom_command_menu_items();
 
-	/* load any command line files or session files */
-	main_status.opening_session_files = TRUE;
-	load_startup_files(argc, argv);
-	main_status.opening_session_files = FALSE;
-
-	/* open a new file if no other file was opened */
-	document_new_file_if_non_open();
-
-	ui_document_buttons_update();
-	ui_save_buttons_toggle(FALSE);
-
-	doc = document_get_current();
-	sidebar_select_openfiles_item(doc);
-	build_menu_update(doc);
-	sidebar_update_tag_list(doc, FALSE);
-
 #ifdef G_OS_WIN32
 	/* Manually realise the main window to be able to set the position but don't show it.
 	 * We don't set the position after showing the window to avoid flickering. */
@@ -1201,9 +1220,7 @@ gint main_lib(gint argc, gchar **argv)
 	setup_window_position();
 
 	/* finally show the window */
-	document_grab_focus(doc);
 	gtk_widget_show(main_widgets.window);
-	main_status.main_window_realized = TRUE;
 
 	configuration_apply_settings();
 
@@ -1218,8 +1235,10 @@ gint main_lib(gint argc, gchar **argv)
 #endif
 
 	/* when we are really done with setting everything up and the main event loop is running,
-	 * tell other components, mainly plugins, that startup is complete */
-	g_idle_add_full(G_PRIORITY_LOW, send_startup_complete, NULL, NULL);
+	 * open session files and tell other components, mainly plugins, that startup is complete */
+	CommandLineArgs args = {argc, argv};
+	g_idle_add_full(G_PRIORITY_LOW, on_startup_complete, &args, NULL);
+	ui_set_statusbar(TRUE, _("Loading session files..."));
 
 #ifdef MAC_INTEGRATION
 	/* OS X application ready - has to be called before entering main loop */
