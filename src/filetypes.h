@@ -113,6 +113,10 @@ GeanyFiletypeID;
 
 #define filetype_id GeanyFiletypeID /* compat define - should be removed in the future */
 
+/** @gironly
+ * Filetype categories
+ *
+ * These are used to provide submenus for each category in the GUI */
 typedef enum
 {
 	GEANY_FILETYPE_GROUP_NONE,

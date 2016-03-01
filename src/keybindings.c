@@ -133,7 +133,7 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 /** Looks up a keybinding item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @return The keybinding.
+ * @return @transfer{none} The keybinding.
  * @since 0.19. */
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
@@ -150,20 +150,21 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
-/** Fills a GeanyKeyBinding struct item.
+/** @girskip
+ * Fills a GeanyKeyBinding struct item.
  * @note Always set @a key and @a mod to 0, otherwise you will likely
  * cause conflicts with the user's custom, other plugin's keybindings or
  * future default keybindings.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @param callback Function to call when activated, or @c NULL to use the group callback.
+ * @param callback @nullable Function to call when activated, or @c NULL to use the group callback.
  * Usually it's better to use the group callback instead - see plugin_set_key_group().
  * @param key Default key, e.g. @c GDK_j (must be lower case), but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL.
+ * @param menu_item @nullable Optional widget to set an accelerator for, or @c NULL.
  * @return The keybinding - normally this is ignored. */
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
@@ -216,11 +217,11 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
  * @param kf_name Key name for the configuration file, such as @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL.
- * @param cb New-style callback to be called when activated, or @c NULL to use the group callback.
- * @param pdata Plugin-specific data passed back to the callback.
+ * @param menu_item @nullable Optional widget to set an accelerator for, or @c NULL.
+ * @param cb @nullable New-style callback to be called when activated, or @c NULL to use the group callback.
+ * @param pdata Plugin-specific data passed back to the callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
- * @return The keybinding - normally this is ignored.
+ * @return @transfer{none} The keybinding - normally this is ignored.
  *
  * @since 1.26 (API 226)
  * @see See plugin_set_key_group_full

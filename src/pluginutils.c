@@ -102,9 +102,10 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
 }
 
 
-/** Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
+/** @girskip
+ * Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
  * @param plugin Must be @ref geany_plugin.
- * @param object Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
+ * @param object @nullable Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
  * @param signal_name The name of the signal. For a list of available
  * signals, please see the @link pluginsignals.c Signal documentation @endlink.
  * @param after Set to @c TRUE to call your handler after the main signal handlers have been called
@@ -128,7 +129,8 @@ void plugin_module_make_resident(GeanyPlugin *plugin)
  *          object has been destroyed), and disconnect yourself or not as appropriate.
  * @note Since version 1.25 (API >= 218), the object lifetime is watched and so the above
  *       restriction does not apply.  However, for objects destroyed by the plugin,
- *       @c g_signal_connect() is safe and has lower overhead. */
+ *       @c g_signal_connect() is safe and has lower overhead.
+ **/
 GEANY_API_SYMBOL
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
@@ -229,8 +231,9 @@ static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc
 }
 
 
-/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
- *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ * preventing it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param interval The time between calls to the function, in milliseconds.
@@ -249,8 +252,9 @@ guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc functi
 }
 
 
-/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
- *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ * preventing it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param interval The time between calls to the function, in seconds.
@@ -270,8 +274,9 @@ guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFun
 }
 
 
-/** Adds a GLib main loop IDLE callback that will be removed when unloading the plugin, preventing
- *  it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop IDLE callback that will be removed when unloading the plugin, preventing
+ * it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param function The function to call in IDLE time.
@@ -289,14 +294,16 @@ guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
 }
 
 
-/** Sets up or resizes a keybinding group for the plugin.
+/** @girskip
+ * Sets up or resizes a keybinding group for the plugin.
  * You should then call keybindings_set_item() for each keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
  * @param section_name Name used in the configuration file, such as @c "html_chars".
  * @param count Number of keybindings for the group.
- * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
+ * @param callback @nullable Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
- * @since 0.19. */
+ * @since 0.19.
+ **/
 GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
@@ -315,10 +322,10 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
  * @param plugin Must be @ref geany_plugin.
  * @param section_name Name used in the configuration file, such as @c "html_chars".
  * @param count Number of keybindings for the group.
- * @param cb New-style group callback, or @c NULL if you only want individual keybinding callbacks.
- * @param pdata Plugin specific data, passed to the group callback.
+ * @param cb @nullable New-style group callback, or @c NULL if you only want individual keybinding callbacks.
+ * @param pdata Plugin specific data, passed to the group callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
- * @return The plugin's keybinding group.
+ * @return @transfer{none} The plugin's keybinding group.
  *
  * @since 1.26 (API 226)
  * @see See keybindings_set_item

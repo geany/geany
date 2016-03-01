@@ -705,11 +705,11 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
  *
  *  If a @a child_pid is passed, it's your responsibility to invoke @c g_spawn_close_pid().
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -950,7 +950,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 }
 
 
-/**
+/** @girskip
  *  Executes a child program and setups callbacks.
  *
  *  A command line or an argument vector must be passed. If both are present, the argument
@@ -978,22 +978,22 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  The @a child_pid will be closed automatically, after @a exit_cb is invoked.
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
  *  @param spawn_flags flags from SpawnFlags.
- *  @param stdin_cb callback to send data to childs's stdin, or @c NULL.
+ *  @param stdin_cb @nullable callback to send data to childs's stdin, or @c NULL.
  *  @param stdin_data data to pass to @a stdin_cb.
- *  @param stdout_cb callback to receive child's stdout, or @c NULL.
+ *  @param stdout_cb @nullable callback to receive child's stdout, or @c NULL.
  *  @param stdout_data data to pass to @a stdout_cb.
  *  @param stdout_max_length maximum data length to pass to stdout_cb, @c 0 = default.
- *  @param stderr_cb callback to receive child's stderr, or @c NULL.
+ *  @param stderr_cb @nullable callback to receive child's stderr, or @c NULL.
  *  @param stderr_data data to pass to @a stderr_cb.
  *  @param stderr_max_length maximum data length to pass to stderr_cb, @c 0 = default.
- *  @param exit_cb callback to invoke when the child exits, or @c NULL.
+ *  @param exit_cb @nullable callback to invoke when the child exits, or @c NULL.
  *  @param exit_data data to pass to @a exit_cb.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -1183,14 +1183,14 @@ static void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpoint
  *  All output from the child, including the nul characters, is stored in @a stdout_data and
  *  @a stderr_data (if non-NULL). Any existing data in these strings will be erased.
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
- *  @param stdin_data data to send to childs's stdin, or @c NULL.
- *  @param stdout_data GString location to receive the child's stdout, or NULL.
- *  @param stderr_data GString location to receive the child's stderr, or NULL.
- *  @param exit_status return location for the child exit code, or NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
+ *  @param stdin_data @nullable data to send to childs's stdin, or @c NULL.
+ *  @param stdout_data @nullable GString location to receive the child's stdout, or @c NULL.
+ *  @param stderr_data @nullable GString location to receive the child's stderr, or @c NULL.
+ *  @param exit_status @out @optional return location for the child exit code, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.

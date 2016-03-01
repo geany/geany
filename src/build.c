@@ -553,7 +553,7 @@ GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp
  * @param cmd the index of the command within the group.
  * @param fld the field to return
  *
- * @return a pointer to the constant string or @c NULL if it doesn't exist.
+ * @return @nullable a pointer to the constant string or @c NULL if it doesn't exist.
  *         This is a pointer to an internal structure and must not be freed.
  *
  **/

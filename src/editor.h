@@ -50,6 +50,8 @@ typedef enum
 }
 GeanyIndentType;
 
+/** @gironly
+ * Auto indentation modes */
 typedef enum
 {
 	GEANY_AUTOINDENT_NONE = 0,

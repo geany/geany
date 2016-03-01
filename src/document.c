@@ -146,7 +146,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
  * @param realname The filename to search, which should be identical to the
  * string returned by @c tm_get_real_path().
  *
- * @return The matching document, or @c NULL.
+ * @return @transfer{none} @nullable The matching document, or @c NULL.
  * @note This is only really useful when passing a @c TMSourceFile::file_name.
  * @see GeanyDocument::real_path.
  * @see document_find_by_filename().
@@ -196,7 +196,7 @@ static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
  *
  *  @param utf8_filename The filename to search (in UTF-8 encoding).
  *
- *  @return The matching document, or @c NULL.
+ *  @return @transfer{none} @nullable The matching document, or @c NULL.
  *  @see document_find_by_real_path().
  **/
 GEANY_API_SYMBOL
@@ -250,7 +250,7 @@ GeanyDocument *document_find_by_sci(ScintillaObject *sci)
  * Useful when the corresponding document may have been closed since the
  * ID was retrieved.
  * @param id The ID of the document to find
- * @return @c NULL if the document is no longer open.
+ * @return @transfer{none} @c NULL if the document is no longer open.
  *
  * Example:
  * @code
@@ -366,7 +366,7 @@ GeanyDocument *document_get_from_notebook_child(GtkWidget *page)
  *
  *  @param page_num The notebook page number to search.
  *
- *  @return The corresponding document for the given notebook page, or @c NULL.
+ *  @return @transfer{none} @nullable The corresponding document for the given notebook page, or @c NULL.
  **/
 GEANY_API_SYMBOL
 GeanyDocument *document_get_from_page(guint page_num)
@@ -385,7 +385,7 @@ GeanyDocument *document_get_from_page(guint page_num)
 /**
  *  Finds the current document.
  *
- *  @return A pointer to the current document or @c NULL if there are no opened documents.
+ *  @return @transfer{none} @nullable A pointer to the current document or @c NULL if there are no opened documents.
  **/
 GEANY_API_SYMBOL
 GeanyDocument *document_get_current(void)
@@ -830,11 +830,11 @@ GeanyDocument *document_new_file_if_non_open(void)
  *  Line endings in @a text will be converted to the default setting.
  *  Afterwards, the @c "document-new" signal is emitted for plugins.
  *
- *  @param utf8_filename The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
- *  @param ft The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
- *  @param text The initial content of the file (in UTF-8 encoding), or @c NULL.
+ *  @param utf8_filename @nullable The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
+ *  @param ft @nullable The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
+ *  @param text @nullable The initial content of the file (in UTF-8 encoding), or @c NULL.
  *
- *  @return The new document.
+ *  @return @transfer{none} The new document.
  **/
 GEANY_API_SYMBOL
 GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
@@ -915,10 +915,10 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
  *
  *  @param locale_filename The filename of the document to load, in locale encoding.
  *  @param readonly Whether to open the document in read-only mode.
- *  @param ft The filetype for the document or @c NULL to auto-detect the filetype.
- *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *  @param ft @nullable The filetype for the document or @c NULL to auto-detect the filetype.
+ *  @param forced_enc @nullable The file encoding to use or @c NULL to auto-detect the file encoding.
  *
- *  @return The document opened or @c NULL.
+ *  @return @transfer{none} @nullable The document opened or @c NULL.
  **/
 GEANY_API_SYMBOL
 GeanyDocument *document_open_file(const gchar *locale_filename, gboolean readonly,
@@ -1562,10 +1562,10 @@ void document_open_file_list(const gchar *data, gsize length)
  *  Opens each file in the list @a filenames.
  *  Internally, document_open_file() is called for every list item.
  *
- *  @param filenames A list of filenames to load, in locale encoding.
+ *  @param filenames @elementtype{filename} A list of filenames to load, in locale encoding.
  *  @param readonly Whether to open the document in read-only mode.
- *  @param ft The filetype for the document or @c NULL to auto-detect the filetype.
- *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *  @param ft @nullable The filetype for the document or @c NULL to auto-detect the filetype.
+ *  @param forced_enc @nullable The file encoding to use or @c NULL to auto-detect the file encoding.
  **/
 GEANY_API_SYMBOL
 void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
@@ -1603,7 +1603,7 @@ static void on_keep_edit_history_on_reload_response(GtkWidget *bar, gint respons
  *  @a forced_enc or @c NULL to auto-detect the file encoding.
  *
  *  @param doc The document to reload.
- *  @param forced_enc The file encoding to use or @c NULL to auto-detect the file encoding.
+ *  @param forced_enc @nullable The file encoding to use or @c NULL to auto-detect the file encoding.
  *
  *  @return @c TRUE if the document was actually reloaded or @c FALSE otherwise.
  **/
@@ -1816,7 +1816,7 @@ gboolean document_need_save_as(GeanyDocument *doc)
  * Saves the document, detecting the filetype.
  *
  * @param doc The document for the file to save.
- * @param utf8_fname The new name for the document, in UTF-8, or NULL.
+ * @param utf8_fname @nullable The new name for the document, in UTF-8, or @c NULL.
  * @return @c TRUE if the file was saved or @c FALSE if the file could not be saved.
  *
  * @see document_save_file().
@@ -3241,8 +3241,8 @@ const gchar *document_get_status_widget_class(GeanyDocument *doc)
  *
  *  @param doc The document to use.
  *
- *  @return The color for the document or @c NULL if the default color should be used. The color
- *          object is owned by Geany and should not be modified or freed.
+ *  @return @nullable The color for the document or @c NULL if the default color should be used.
+ *          The color object is owned by Geany and should not be modified or freed.
  *
  *  @since 0.16
  */
@@ -3294,7 +3294,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 /** Accessor function for @ref documents_array items.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  * @param idx @c documents_array index.
- * @return The document, or @c NULL if @a idx is out of range.
+ * @return @transfer{none} @nullable The document, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
  */

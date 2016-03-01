@@ -247,7 +247,22 @@ ALIASES                = "signal=- @ref  " \
                          "endsignalproto=@endcode  " \
                          "signaldesc=" \
                          "signals=@b Signals:  " \
-                         "endsignals=  "
+                         "endsignals=  " \
+                         "gironly=@internal"
+
+# Apparently Doxygen doesn't seem to like \<type>only without a previous command, so create a no-op
+ALIASES               += "noop=\if FALSE \endif"
+ALIASES               += "transfer{1}=\noop \xmlonly <simplesect kind=\"geany:transfer\">\1</simplesect>\endxmlonly \htmlonly <em title=\"Ownership transfer to the caller: \1\">(transfer: \1)</em> \endhtmlonly"
+ALIASES               += "elementtype{1}=\noop \xmlonly <simplesect kind=\"geany:element-type\">\1</simplesect>\endxmlonly \htmlonly <em title=\"Type of the elements in the container: \1\">(element-type: \1)</em> \endhtmlonly"
+ALIASES               += "scope{1}=\noop \xmlonly <simplesect kind=\"geany:scope\">\1</simplesect>\endxmlonly \htmlonly <em>(scope: \1)</em> \endhtmlonly"
+ALIASES               += "girskip=\noop \xmlonly <simplesect kind=\"geany:skip\"></simplesect>\endxmlonly"
+ALIASES               += "nullable=\noop \xmlonly <simplesect kind=\"geany:nullable\"></simplesect>\endxmlonly"
+ALIASES               += "out=\noop \xmlonly <simplesect kind=\"geany:out\"></simplesect>\endxmlonly \htmlonly <em title=\"Output parameter\">(out)</em> \endhtmlonly"
+ALIASES               += "optional=\noop \xmlonly <simplesect kind=\"geany:optional\"></simplesect>\endxmlonly"
+ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
+ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
+ALIASES               += "cbfree=\noop \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
+
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
@@ -834,7 +849,7 @@ RECURSIVE              = NO
 # Note that relative paths are relative to the directory from which doxygen is
 # run.
 
-EXCLUDE                =
+EXCLUDE                = @top_srcdir@/doc/geany-gtkdoc.h
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -2020,7 +2035,10 @@ INCLUDE_FILE_PATTERNS  =
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
 PREDEFINED             = "G_GNUC_PRINTF(x,y)=" \
+                         G_BEGIN_DECLS= \
+                         G_END_DECLS= \
                          HAVE_PLUGINS \
+                         GEANY_API_SYMBOL= \
                          GEANY_FUNCTIONS_H
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this

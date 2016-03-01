@@ -102,11 +102,48 @@ doxygen_sources = \
 Doxyfile.stamp: Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
-all-local: Doxyfile.stamp
+ALL_LOCAL_TARGETS = Doxyfile.stamp
+CLEAN_LOCAL_TARGETS = clean-api-docs-local
 
-clean-local: clean-api-docs-local
 clean-api-docs-local:
 	-rm -rf reference/ Doxyfile.stamp doxygen_*
+
+if ENABLE_GTKDOC_HEADER
+
+# set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
+# in headers (even though it's correctly documented in the corresponding .c file) only
+# for xml output
+Doxyfile-gi: Doxyfile
+	$(AM_V_GEN)$(SED) \
+		-e 's,gironly=@internal,gironly=,' \
+		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
+		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
+		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
+		-e 's,^\(SORT_MEMBER_DOCS.*\)YES,\1NO,' \
+		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
+		$< > $@ || { $(RM) $@ && exit 1; }
+
+# we depend on Doxyfile.stamp not have this run in parallel with it to avoid
+# concurrent Doxygen runs, which might overwrite each other's files
+Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_sources)
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
+
+geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@
+
+geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
+nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
+
+ALL_LOCAL_TARGETS += geany-gtkdoc.h
+CLEAN_LOCAL_TARGETS += clean-gtkdoc-header-local
+
+clean-gtkdoc-header-local:
+	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h
+
+endif
+
+all-local: $(ALL_LOCAL_TARGETS)
+clean-local: $(CLEAN_LOCAL_TARGETS)
 
 endif
 
