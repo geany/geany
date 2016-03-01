@@ -32,6 +32,7 @@
 #ifndef GEANY_PLUGIN_DATA_H
 #define GEANY_PLUGIN_DATA_H 1
 
+#include "geany.h"  /* for GEANY_DEPRECATED */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
 #include "document.h" /* GeanyDocument */
 #include "editor.h"	/* GeanyEditor, GeanyIndentType */
@@ -146,35 +147,6 @@ PluginInfo;
 	}
 
 
-/** @deprecated - use plugin_set_key_group() instead.
- * @see PLUGIN_KEY_GROUP() macro. */
-typedef struct GeanyKeyGroupInfo
-{
-	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
-	gsize count;			/**< The number of keybindings the group will hold */
-}
-GeanyKeyGroupInfo;
-
-/** @deprecated - use plugin_set_key_group() instead.
- * Declare and initialise a keybinding group.
- * @code GeanyKeyGroup *plugin_key_group; @endcode
- * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
- * normally using keybindings_set_item().
- * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
- * is called, to the name of the plugin.
- * @param group_name A unique group name (without quotes) to be used in the
- * configuration file, such as @c html_chars.
- * @param key_count	The number of keybindings the group will hold. */
-#define PLUGIN_KEY_GROUP(group_name, key_count) \
-	/* We have to declare this as a single element array.
-	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
-	GeanyKeyGroupInfo plugin_key_group_info[1] = \
-	{ \
-		{G_STRINGIFY(group_name), key_count} \
-	};\
-	GeanyKeyGroup *plugin_key_group = NULL;
-
-
 /** Callback array entry type used with the @ref plugin_callbacks symbol. */
 typedef struct PluginCallback
 {
@@ -191,29 +163,6 @@ typedef struct PluginCallback
 	gpointer	user_data;
 }
 PluginCallback;
-
-
-/** @deprecated Use @ref ui_add_document_sensitive() instead.
- * Flags to be set by plugins in PluginFields struct. */
-typedef enum
-{
-	/** Whether a plugin's menu item should be disabled when there are no open documents */
-	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0
-}
-PluginFlags;
-
-/** @deprecated Use @ref ui_add_document_sensitive() instead.
- * Fields set and owned by the plugin. */
-typedef struct PluginFields
-{
-	/** Bitmask of @c PluginFlags. */
-	PluginFlags	flags;
-	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
-	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
-	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
-	GtkWidget	*menu_item;
-}
-PluginFields;
 
 
 /** This contains pointers to global variables owned by Geany for plugins to use.
@@ -406,7 +355,57 @@ gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 /* This remains so that older plugins that contain a `GeanyFunctions *geany_functions;`
  * variable in their plugin - as was previously required - will still compile
  * without changes.  */
-typedef struct GeanyFunctionsUndefined GeanyFunctions;
+typedef struct GeanyFunctionsUndefined GeanyFunctions GEANY_DEPRECATED;
+
+/** @deprecated - use plugin_set_key_group() instead.
+ * @see PLUGIN_KEY_GROUP() macro. */
+typedef struct GeanyKeyGroupInfo
+{
+	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
+	gsize count;			/**< The number of keybindings the group will hold */
+}
+GeanyKeyGroupInfo GEANY_DEPRECATED_FOR(plugin_set_key_group);
+
+/** @deprecated - use plugin_set_key_group() instead.
+ * Declare and initialise a keybinding group.
+ * @code GeanyKeyGroup *plugin_key_group; @endcode
+ * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
+ * normally using keybindings_set_item().
+ * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
+ * is called, to the name of the plugin.
+ * @param group_name A unique group name (without quotes) to be used in the
+ * configuration file, such as @c html_chars.
+ * @param key_count	The number of keybindings the group will hold. */
+#define PLUGIN_KEY_GROUP(group_name, key_count) \
+	/* We have to declare this as a single element array.
+	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
+	GeanyKeyGroupInfo plugin_key_group_info[1] = \
+	{ \
+		{G_STRINGIFY(group_name), key_count} \
+	};\
+	GeanyKeyGroup *plugin_key_group = NULL;
+
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Flags to be set by plugins in PluginFields struct. */
+typedef enum
+{
+	/** Whether a plugin's menu item should be disabled when there are no open documents */
+	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0
+}
+PluginFlags;
+
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Fields set and owned by the plugin. */
+typedef struct PluginFields
+{
+	/** Bitmask of @c PluginFlags. */
+	PluginFlags	flags;
+	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
+	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
+	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
+	GtkWidget	*menu_item;
+}
+PluginFields GEANY_DEPRECATED_FOR(ui_add_document_sensitive);
 
 #define document_reload_file document_reload_force
 

@@ -2037,6 +2037,8 @@ INCLUDE_FILE_PATTERNS  =
 PREDEFINED             = "G_GNUC_PRINTF(x,y)=" \
                          G_BEGIN_DECLS= \
                          G_END_DECLS= \
+                         GEANY_DEPRECATED= \
+                         GEANY_DEPRECATED_FOR(x)= \
                          HAVE_PLUGINS \
                          GEANY_API_SYMBOL= \
                          GEANY_FUNCTIONS_H

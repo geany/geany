@@ -31,6 +31,7 @@
 #include "SciLexer.h"
 
 
+GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
 
 
@@ -48,8 +49,6 @@ enum
 	KB_HTMLTOGGLE_ACTIVE,
 	KB_COUNT
 };
-
-PLUGIN_KEY_GROUP(html_chars, KB_COUNT)
 
 
 enum
@@ -734,6 +733,7 @@ static void init_configuration(void)
 /* Called by Geany to initialise the plugin */
 void plugin_init(GeanyData *data)
 {
+	GeanyKeyGroup *key_group;
 	GtkWidget *menu_item;
 	const gchar *menu_text = _("_Insert Special HTML Characters...");
 
@@ -779,13 +779,14 @@ void plugin_init(GeanyData *data)
 	main_menu_item = menu_item;
 
 	/* setup keybindings */
-	keybindings_set_item(plugin_key_group, KB_INSERT_HTML_CHARS,
+	key_group = plugin_set_key_group(geany_plugin, "html_chars", KB_COUNT, NULL);
+	keybindings_set_item(key_group, KB_INSERT_HTML_CHARS,
 		kb_activate, 0, 0, "insert_html_chars",
 		_("Insert Special HTML Characters"), menu_item);
-	keybindings_set_item(plugin_key_group, KB_REPLACE_HTML_ENTITIES,
+	keybindings_set_item(key_group, KB_REPLACE_HTML_ENTITIES,
 		kb_special_chars_replacement, 0, 0, "replace_special_characters",
 		_("Replace special characters"), NULL);
-	keybindings_set_item(plugin_key_group, KB_HTMLTOGGLE_ACTIVE,
+	keybindings_set_item(key_group, KB_HTMLTOGGLE_ACTIVE,
 		kbhtmltoggle_toggle, 0, 0, "htmltoogle_toggle_plugin_status",
 		_("Toggle plugin status"), menu_htmltoggle);
 }

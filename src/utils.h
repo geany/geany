@@ -49,8 +49,13 @@ G_BEGIN_DECLS
  * E.g. @code SETPTR(str, g_strndup(str, 5)); @endcode
  **/
 #define SETPTR(ptr, result) \
-	do setptr(ptr, result) while (0)
+	do {\
+		gpointer setptr_tmp = ptr;\
+		ptr = result;\
+		g_free(setptr_tmp);\
+	} while (0)
 
+#ifndef GEANY_DISABLE_DEPRECATED
 /** @deprecated 2011/11/15 - use SETPTR() instead. */
 #define setptr(ptr, result) \
 	{\
@@ -58,6 +63,7 @@ G_BEGIN_DECLS
 		ptr = result;\
 		g_free(setptr_tmp);\
 	}
+#endif
 
 /** Duplicates a string on the stack using @c g_alloca().
  * Like glibc's @c strdupa(), but portable.

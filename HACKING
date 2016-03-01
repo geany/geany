@@ -176,6 +176,20 @@ libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you 
 don't have to take care about whether you can use them or not.
 
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_28`` C
+preprocessor flag to get warnings about newer symbols from the GLib.
+
+On the contrary, you might also want to get deprecation warnings for symbols
+deprecated in newer versions, typically when preparing a dependency bump or
+trying to improve forward compatibility.
+To do so, use the ``-UGLIB_VERSION_MIN_REQUIRED`` flag for GLib deprecations,
+and ``-UGDK_DISABLE_DEPRECATION_WARNINGS`` for GTK and GDK ones.
+To change the lower deprecation bound for GLib (and then get warnings about
+symbols deprecated more recently) instead of simply removing it entirely, use
+``-UGLIB_VERSION_MIN_REQUIRED -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_X_YY``.
+
+See `Compiler options & warnings`_ for how to set such flags.
+
 Coding
 ------
 * Don't write long functions with a lot of variables and/or scopes - break

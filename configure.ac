@@ -78,6 +78,13 @@ gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.28"
 gtk_modules_private="gio-2.0 >= 2.28 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
+dnl Define minimum requirements to avoid warnings about symbols deprecated afterward.
+dnl Although GLIB_VERSION_2_28 is new in 2.32, older versions won't evaluate
+dnl GLIB_VERSION_MIN_REQUIRED so it won't be a problem.
+AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_28"])
+dnl Disable all GTK deprecations on 3.x so long as we want to keep 2.x support and only require 3.0.
+dnl No need on 2.x as we target the latest version.
+AM_COND_IF([GTK3], [AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
