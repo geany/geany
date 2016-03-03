@@ -26,7 +26,7 @@ AC_DEFUN([GEANY_CHECK_GTKDOC_HEADER],
 		AS_IF([test "x$have_python" = xyes],
 		      [have_python_and_lxml=yes
 		       AC_MSG_CHECKING([for python lxml package])
-		       AS_IF([$PYTHON -c 'import lxml' 2>&1 >/dev/null],
+		       AS_IF([$PYTHON -c 'import lxml' >/dev/null 2>&1],
 		             [have_python_and_lxml=yes],
 		             [have_python_and_lxml=no])
 		       AC_MSG_RESULT([$have_python_and_lxml])],
@@ -34,7 +34,7 @@ AC_DEFUN([GEANY_CHECK_GTKDOC_HEADER],
 		dnl final result
 		AS_IF([test "x$geany_enable_gtkdoc_header$have_python_and_lxml" = "xyesno"],
 		      [_GEANY_CHECK_GTKDOC_HEADER_ERROR([python or its lxml module not found])],
-		      [geany_enable_gtkdoc_header=yes])
+		      [geany_enable_gtkdoc_header=$have_python_and_lxml])
 	])
 
 	AM_CONDITIONAL([ENABLE_GTKDOC_HEADER], [test "x$geany_enable_gtkdoc_header" = "xyes"])
