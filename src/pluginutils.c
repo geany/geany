@@ -298,7 +298,7 @@ guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
  * Sets up or resizes a keybinding group for the plugin.
  * You should then call keybindings_set_item() for each keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
- * @param section_name Name used in the configuration file, such as @c "html_chars".
+ * @param section_name Name of the section used for this group in the keybindings configuration file, i.e. @c "html_chars".
  * @param count Number of keybindings for the group.
  * @param callback @nullable Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
@@ -320,7 +320,7 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
  * You should then call keybindings_set_item() or keybindings_set_item_full() for each
  * keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
- * @param section_name Name used in the configuration file, such as @c "html_chars".
+ * @param section_name Name of the section used for this group in the keybindings configuration file, i.e. @c "html_chars".
  * @param count Number of keybindings for the group.
  * @param cb @nullable New-style group callback, or @c NULL if you only want individual keybinding callbacks.
  * @param pdata Plugin specific data, passed to the group callback @a cb.
