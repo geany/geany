@@ -173,3 +173,27 @@ entity=default
 line_added=0x34b034;0xffffff;false;false
 line_removed=0xff2727;0xffffff;false;false
 line_changed=0x7f007f;0xffffff;false;false
+
+# Structured markup languages
+# foreground;background;bold;italic
+markup_strong=0x445675;false;true;false
+markup_emphasis=0x653A39;false;false;true
+markup_underlined=0x386742;false;false;false
+markup_strikeout=0x644A9B;false;false;false
+markup_header_1=0xE20700;false;true;false
+markup_header_2=0xE20700;false;true;false
+markup_header_3=0xA81D05;false;true;false
+markup_header_4=0x871704;false;true;false
+markup_header_5=0x871704;false;true;false
+markup_header_6=0x871704;false;true;false
+markup_ulist_item=0xE300EE;false;false;false
+markup_olist_item=0xE300EE;false;false;false
+markup_hrule=0xff901e;false;false;false
+markup_link=0x0930DE;false;false;true
+markup_blockquote=0x015F52;false;false;false
+markup_code=0x009f00;false;false;false
+markup_code_block=0x005f00;false;false;false
+markup_comment=0x777777;false;false;true
+markup_option=0xC0036E;false;false;true
+markup_preproc=0x848B00;false;false;true
+markup_postproc=0xC05600;false;false;true
