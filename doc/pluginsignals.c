@@ -132,6 +132,15 @@ signal void (*document_activate)(GObject *obj, GeanyDocument *doc, gpointer user
  */
 signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_data);
 
+/** Sent after a project have been created.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param config an exising GKeyFile object which can be used to read and write data.
+ *        It must not be closed or freed.
+ * @param user_data user data.
+ */
+signal void (*project_new)(GObject *obj, GKeyFile *config, gpointer user_data);
+
 /** Sent after a project is opened but before session files are loaded.
  *
  * @param obj a GeanyObject instance, should be ignored.
