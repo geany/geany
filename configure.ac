@@ -120,6 +120,10 @@ GEANY_CHECK_THE_FORCE dnl hehe
 # i18n
 GEANY_I18N
 
+AM_COND_IF([MINGW],
+  [docdir='${prefix}/doc'],
+  [docdir='${docdir}'])
+AC_SUBST([docdir])
 # double eval since datarootdir is usually defined as ${prefix}/share
 AM_COND_IF([MINGW],
   [pkgdatadir='${prefix}/data'],

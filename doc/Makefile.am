@@ -1,7 +1,16 @@
+if MINGW
+html_dir =
+html_filename = Manual.html
+else
+html_dir = html/
+html_filename = index.html
+endif
+
+
 man_MANS=geany.1
 
 if INSTALL_HTML_DOCS
-htmldocimagesdir = $(docdir)/html/images
+htmldocimagesdir = $(docdir)/$(html_dir)images
 dist_htmldocimages_DATA = \
 	images/build_menu_commands_dialog.png \
 	images/find_dialog.png \
@@ -148,18 +157,18 @@ clean-local: $(CLEAN_LOCAL_TARGETS)
 endif
 
 uninstall-local:
-	rm -f $(DOCDIR)/html/index.html
+	rm -f $(DOCDIR)/$(html_dir)$(html_filename)
 	rm -f $(DOCDIR)/manual.txt
 	rm -f $(DOCDIR)/ScintillaLicense.txt
 
 # manually install some files under another name
 install-data-local:
 if INSTALL_HTML_DOCS
-	$(mkinstalldirs) $(DOCDIR)/html
+	$(mkinstalldirs) $(DOCDIR)/$(html_dir)
 #	as we don't install with the automated mechanism so we can rename the file,
 #	we need to find the source file in the right location (either builddir or srcdir)
 	dir=$(builddir); test -f "$$dir/geany.html" || dir=$(srcdir); \
-	$(INSTALL_DATA) "$$dir/geany.html" $(DOCDIR)/html/index.html
+	$(INSTALL_DATA) "$$dir/geany.html" $(DOCDIR)/$(html_dir)$(html_filename)
 endif
 	$(mkinstalldirs) $(DOCDIR)
 	$(INSTALL_DATA) $(srcdir)/geany.txt $(DOCDIR)/manual.txt
