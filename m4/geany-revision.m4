@@ -10,7 +10,7 @@ AC_DEFUN([GEANY_CHECK_REVISION],
 	# try Git first
 	GIT=`which git 2>/dev/null`
 	if test -d "$srcdir/.git" -a "x${GIT}" != "x" -a -x "${GIT}"; then
-		REVISION=`cd "$srcdir"; "${GIT}" rev-parse --short --revs-only HEAD 2>/dev/null || echo 0`
+		REVISION=`cd "$srcdir"; "${GIT}" describe --always --long --tags --dirty 2>/dev/null || echo 0`
 	fi
 
 	if test "x${REVISION}" != "x0"; then
