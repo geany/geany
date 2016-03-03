@@ -674,7 +674,7 @@ def build(bld):
         tagmanager/src/tm_workspace.h
         tagmanager/src/tm_parser.h ''')
     # Docs
-    base_dir = '${PREFIX}' if is_win32 else '${DOCDIR}'
+    base_dir = '${DOCDIR}'
     ext = '.txt' if is_win32 else ''
     for filename in 'AUTHORS ChangeLog COPYING README NEWS THANKS TODO'.split():
         basename = _uc_first(filename, bld)
@@ -686,11 +686,9 @@ def build(bld):
     # local_html_doc_filename supports installing HTML doc from in-tree geany.html if it exists
     local_html_doc_filename = os.path.join(bld.path.abspath(), 'doc', 'geany.html')
     if os.path.exists(html_doc_filename) or os.path.exists(local_html_doc_filename):
-        html_dir = '' if is_win32 else 'html/'
-        html_name = 'Manual.html' if is_win32 else 'index.html'
         start_dir = bld.path.find_dir('doc/images')
-        bld.install_files('${DOCDIR}/%simages' % html_dir, start_dir.ant_glob('*.png'), cwd=start_dir)
-        bld.install_as('${DOCDIR}/%s%s' % (html_dir, html_name), 'doc/geany.html')
+        bld.install_files('${DOCDIR}/html/images', start_dir.ant_glob('*.png'), cwd=start_dir)
+        bld.install_as('${DOCDIR}/html/index.html', 'doc/geany.html')
 
     bld.install_as('${DOCDIR}/%s' % _uc_first('manual.txt', bld), 'doc/geany.txt')
     bld.install_as('${DOCDIR}/ScintillaLicense.txt', 'scintilla/License.txt')

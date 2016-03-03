@@ -1912,7 +1912,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 
 #ifdef G_OS_WIN32
 	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
+	uri = g_strconcat("file:///", app->docdir, "/index.html", NULL);
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
 #else
 	skip = 7;
@@ -2119,7 +2119,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
-		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
+		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
 		g_free(prefix);

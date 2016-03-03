@@ -189,9 +189,9 @@ SectionEnd
 Section "Documentation" SEC04
 	SectionIn 1
 	SetOverwrite ifnewer
-	SetOutPath "$INSTDIR"
-	File /r "${RESOURCEDIR}\doc"
-	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\doc\Manual.html"
+	SetOutPath "$INSTDIR\share\doc\geany\html"
+	File /r "${RESOURCEDIR}\doc\*"
+	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\share\doc\geany\html\index.html"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN ${PRODUCT_NAME}
 	CreateShortCut "$SMPROGRAMS\$StartmenuFolder\Documentation.lnk" "$INSTDIR\Documentation.url"
 	!insertmacro MUI_STARTMENU_WRITE_END
@@ -302,7 +302,6 @@ Section Uninstall
 	Delete "$DESKTOP\Geany.lnk"
 
 	RMDir /r "$INSTDIR\bin"
-	RMDir /r "$INSTDIR\doc"
 	RMDir /r "$INSTDIR\data"
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\include"
