@@ -24,7 +24,7 @@
  * Filetype detection, file extensions and filetype menu items.
  */
 
-/* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
+/* Note: we use GeanyFiletypeID for some function arguments, but GeanyFiletype is better; we should
  * only use GeanyFiletype for API functions. */
 
 #ifdef HAVE_CONFIG_H
@@ -110,7 +110,7 @@ static gchar *filetype_make_title(const char *name, enum TitleType type)
 
 /* name argument (ie filetype name) must not be translated as it is used for
  * filetype lookup. Use filetypes_get_display_name() instead.*/
-static void ft_init(filetype_id ft_id, TMParserType lang, const char *name,
+static void ft_init(GeanyFiletypeID ft_id, TMParserType lang, const char *name,
 	const char *title_name, enum TitleType title_type,
 	GeanyFiletypeGroupID group_id)
 {
@@ -325,7 +325,7 @@ static void init_custom_filetypes(const gchar *path)
  * Warning: GTK isn't necessarily initialized yet. */
 void filetypes_init_types(void)
 {
-	filetype_id ft_id;
+	GeanyFiletypeID ft_id;
 	gchar *f;
 
 	g_return_if_fail(filetypes_array == NULL);
@@ -616,7 +616,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 	{
 		static const struct {
 			const gchar *name;
-			filetype_id filetype;
+			GeanyFiletypeID filetype;
 		} intepreter_map[] = {
 			{ "sh",		GEANY_FILETYPES_SH },
 			{ "bash",	GEANY_FILETYPES_SH },
