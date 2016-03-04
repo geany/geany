@@ -111,7 +111,9 @@ typedef enum
 }
 GeanyFiletypeID;
 
+#ifndef GEANY_DISABLE_DEPRECATED
 #define filetype_id GeanyFiletypeID /* compat define - should be removed in the future */
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 /** @gironly
  * Filetype categories
