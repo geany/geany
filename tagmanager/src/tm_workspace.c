@@ -193,8 +193,7 @@ void tm_workspace_add_source_file_noupdate(TMSourceFile *source_file)
  you're editing. It's useful for a "real-time" updating of the tags.
  The tags array and the tags themselves are destroyed and re-created, hence any
  other tag arrays pointing to these tags should be rebuilt as well. All sorting
- information is also lost. The language parameter is automatically detected 
- the first time the file is parsed if it is set to LANG_AUTO.
+ information is also lost.
  @param source_file The source file to update with a buffer.
  @param text_buf A text buffer. The user should take care of allocate and free it after
  the use here.
@@ -338,7 +337,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
  @return TRUE on success, FALSE on failure.
  @see tm_workspace_create_global_tags()
 */
-gboolean tm_workspace_load_global_tags(const char *tags_file, gint mode)
+gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 {
 	guchar buf[BUFSIZ];
 	FILE *fp;
@@ -503,7 +502,7 @@ static gchar *create_temp_file(const gchar *tpl)
  @return TRUE on success, FALSE on failure.
 */
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
-	int includes_count, const char *tags_file, int lang)
+	int includes_count, const char *tags_file, TMParserType lang)
 {
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
@@ -686,22 +685,8 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 }
 
 
-static gboolean langs_compatible(langType lang, langType other)
-{
-	if (lang == other || lang == -1 || other == -1)
-		return TRUE;
-	/* Accept CPP tags for C lang and vice versa */
-	else if (lang == TM_PARSER_C && other == TM_PARSER_CPP)
-		return TRUE;
-	else if (lang == TM_PARSER_CPP && other == TM_PARSER_C)
-		return TRUE;
-
-	return FALSE;
-}
-
-
 static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
-	const char *name, const char *scope, TMTagType type, langType lang)
+	const char *name, const char *scope, TMTagType type, TMParserType lang)
 {
 	TMTag **tag;
 	guint i, num;
@@ -713,7 +698,7 @@ static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	for (i = 0; i < num; ++i)
 	{
 		if ((type & (*tag)->type) &&
-			langs_compatible(lang, (*tag)->lang) &&
+			tm_tag_langs_compatible(lang, (*tag)->lang) &&
 			(!scope || g_strcmp0((*tag)->scope, scope) == 0))
 		{
 			g_ptr_array_add(dst, *tag);
@@ -733,7 +718,7 @@ static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
  @return Array of matching tags.
 */
 GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type,
-	TMTagAttrType *attrs, langType lang)
+	TMTagAttrType *attrs, TMParserType lang)
 {
 	GPtrArray *tags = g_ptr_array_new();
 
@@ -748,7 +733,7 @@ GPtrArray *tm_workspace_find(const char *name, const char *scope, TMTagType type
 
 
 static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
-	const char *name, langType lang, guint max_num)
+	const char *name, TMParserType lang, guint max_num)
 {
 	TMTag **tag, *last = NULL;
 	guint i, count, num;
@@ -760,7 +745,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 	tag = tm_tags_find(src, name, TRUE, &count);
 	for (i = 0; i < count && num < max_num; ++i)
 	{
-		if (langs_compatible(lang, (*tag)->lang) &&
+		if (tm_tag_langs_compatible(lang, (*tag)->lang) &&
 			!tm_tag_is_anon(*tag) &&
 			(!last || g_strcmp0(last->name, (*tag)->name) != 0))
 		{
@@ -781,7 +766,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
  @param max_num The maximum number of tags to return.
  @return Array of matching tags sorted by their name.
 */
-GPtrArray *tm_workspace_find_prefix(const char *prefix, langType lang, guint max_num)
+GPtrArray *tm_workspace_find_prefix(const char *prefix, TMParserType lang, guint max_num)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
@@ -826,7 +811,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 
 		if (tag && (tag->type & member_types) &&
 			tag->scope && tag->scope[0] != '\0' &&
-			langs_compatible(tag->lang, type_tag->lang) &&
+			tm_tag_langs_compatible(tag->lang, type_tag->lang) &&
 			strcmp(scope, tag->scope) == 0 &&
 			(!namespace || !tm_tag_is_anon(tag)))
 		{
@@ -846,7 +831,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 }
 
 
-static gchar *strip_type(const gchar *scoped_name, langType lang)
+static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
 {
 	if (scoped_name != NULL)
 	{
@@ -868,7 +853,7 @@ static gchar *strip_type(const gchar *scoped_name, langType lang)
 /* Gets all members of the type with the given name; search them inside tags_array */
 static GPtrArray *
 find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile *file,
-	langType lang, gboolean namespace)
+	TMParserType lang, gboolean namespace)
 {
 	GPtrArray *res = NULL;
 	gchar *type_name;
@@ -945,7 +930,7 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 
 /* Checks whether a member tag is directly accessible from method with method_scope */
 static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *method_scope, TMTag *member_tag,
-	langType lang)
+	TMParserType lang)
 {
 	const gchar *sep = tm_tag_context_separator(lang);
 	gboolean ret = FALSE;
@@ -995,7 +980,7 @@ static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *metho
 
 /* For an array of variable/type tags, find members inside the types */
 static GPtrArray *
-find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, langType lang,
+find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, TMParserType lang,
 	gboolean member, const gchar *current_scope)
 {
 	GPtrArray *member_tags = NULL;
@@ -1039,19 +1024,36 @@ find_scope_members_all(const GPtrArray *tags, const GPtrArray *searched_array, l
 }
 
 
+static GPtrArray *find_namespace_members_all(const GPtrArray *tags, const GPtrArray *searched_array, TMParserType lang)
+{
+	GPtrArray *member_tags = NULL;
+	guint i;
+
+	for (i = 0; i < tags->len && !member_tags; i++)
+	{
+		TMTag *tag = TM_TAG(tags->pdata[i]);
+
+		member_tags = find_scope_members_tags(searched_array, tag, TRUE);
+	}
+
+	return member_tags;
+}
+
+
 /* Returns all member tags of a struct/union/class if the provided name is a variable
  of such a type or the name of the type.
- @param source_file TMSourceFile of the edited source file or NULL if not available
+ @param source_file TMSourceFile of the edited source file
  @param name Name of the variable/type whose members are searched
  @param function TRUE if the name is a name of a function
  @param member TRUE if invoked on class/struct member (e.g. after the last dot in foo.bar.)
  @param current_scope The current scope in the editor
+ @param search_namespace Whether to search the contents of namespace (e.g. after MyNamespace::)
  @return A GPtrArray of TMTag pointers to struct/union/class members or NULL when not found */
 GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
-	gboolean function, gboolean member, const gchar *current_scope)
+	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
 {
-	langType lang = source_file ? source_file->lang : -1;
+	TMParserType lang = source_file->lang;
 	GPtrArray *tags, *member_tags = NULL;
 	TMTagType function_types = tm_tag_function_t | tm_tag_method_t |
 		tm_tag_macro_with_arg_t | tm_tag_prototype_t;
@@ -1059,26 +1061,40 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 		~(function_types | tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t);
 	TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, 0};
 
-	if (function)
-		tag_type = function_types;
+	if (search_namespace)
+	{
+		tags = tm_workspace_find(name, NULL, tm_tag_namespace_t, NULL, lang);
 
-	/* tags corresponding to the variable/type name */
-	tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+		member_tags = find_namespace_members_all(tags, theWorkspace->tags_array, lang);
+		if (!member_tags)
+			member_tags = find_namespace_members_all(tags, theWorkspace->global_tags, lang);
 
-	/* Start searching inside the source file, continue with workspace tags and
-	 * end with global tags. This way we find the "closest" tag to the current
-	 * file in case there are more of them. */
-	if (source_file)
-		member_tags = find_scope_members_all(tags, source_file->tags_array,
-											 lang, member, current_scope);
+		g_ptr_array_free(tags, TRUE);
+	}
+
 	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang,
-											 member, current_scope);
-	if (!member_tags)
-		member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang,
-											 member, current_scope);
+	{
+		if (function)
+			tag_type = function_types;
 
-	g_ptr_array_free(tags, TRUE);
+		/* tags corresponding to the variable/type name */
+		tags = tm_workspace_find(name, NULL, tag_type, NULL, lang);
+
+		/* Start searching inside the source file, continue with workspace tags and
+		 * end with global tags. This way we find the "closest" tag to the current
+		 * file in case there are more of them. */
+		if (source_file)
+			member_tags = find_scope_members_all(tags, source_file->tags_array,
+												 lang, member, current_scope);
+		if (!member_tags)
+			member_tags = find_scope_members_all(tags, theWorkspace->tags_array, lang,
+												 member, current_scope);
+		if (!member_tags)
+			member_tags = find_scope_members_all(tags, theWorkspace->global_tags, lang,
+												 member, current_scope);
+
+		g_ptr_array_free(tags, TRUE);
+	}
 
 	tm_tags_dedup(member_tags, sort_attr, FALSE);
 

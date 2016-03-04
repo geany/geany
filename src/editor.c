@@ -711,6 +711,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	GPtrArray *tags;
 	gboolean function = FALSE;
 	gboolean member;
+	gboolean scope_sep_typed = FALSE;
 	gboolean ret = FALSE;
 	const gchar *current_scope;
 	const gchar *context_sep = tm_tag_context_separator(ft->lang);
@@ -729,10 +730,13 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	}
 
 	/* make sure to keep in sync with similar checks below */
-	if (typed == '.')
-		pos -= 1;
-	else if (match_last_chars(sci, pos, context_sep))
+	if (match_last_chars(sci, pos, context_sep))
+	{
 		pos -= strlen(context_sep);
+		scope_sep_typed = TRUE;
+	}
+	else if (typed == '.')
+		pos -= 1;
 	else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
 			match_last_chars(sci, pos, "->"))
 		pos -= 2;
@@ -777,7 +781,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
 		current_scope = "";
 	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
-				member, current_scope);
+				member, current_scope, scope_sep_typed);
 	if (tags)
 	{
 		GPtrArray *filtered = g_ptr_array_new();

@@ -14,12 +14,10 @@
 #include <glib.h>
 #include <glib-object.h>
 
-#ifndef LIBCTAGS_DEFINED
-typedef int langType;
-typedef void tagEntryInfo;
-#endif
+#include "tm_parser.h"
 
-#if !defined(tagEntryInfo)
+#ifndef LIBCTAGS_DEFINED
+typedef void tagEntryInfo;
 #endif
 
 #ifdef __cplusplus
@@ -39,7 +37,7 @@ extern "C"
 */
 typedef struct
 {
-	langType lang; /**< Programming language used */
+	TMParserType lang; /* Programming language used */
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object */
@@ -56,9 +54,9 @@ gchar *tm_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
 
-const gchar *tm_source_file_get_lang_name(gint lang);
+const gchar *tm_source_file_get_lang_name(TMParserType lang);
 
-gint tm_source_file_get_named_lang(const gchar *name);
+TMParserType tm_source_file_get_named_lang(const gchar *name);
 
 gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize buf_size,
 	gboolean use_buffer);
