@@ -370,7 +370,7 @@ def main(args):
     for f in h_files:
         if not (f.find("compoundname").text.endswith("private.h")):
             for n0 in f.xpath(".//*/memberdef[@kind='typedef' and @prot='public']"):
-                if not (n0.find("type").text.startswith("enum")):
+                if not (DoxygenProcess.stringify_children(n0.find("type")).startswith("enum")):
                     e = DoxyTypedef.from_memberdef(n0)
                     typedefs.append(e)
 
