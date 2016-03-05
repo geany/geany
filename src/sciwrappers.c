@@ -35,12 +35,34 @@
 # include "config.h"
 #endif
 
+#ifndef PYCPARSER
 #include "sciwrappers.h"
 
 #include "utils.h"
 
 #include <string.h>
+#else
 
+typedef struct ScintillaObject ScintillaObject;
+typedef unsigned long uptr_t;
+typedef long sptr_t;
+
+typedef char   gchar;
+typedef short  gshort;
+typedef long   glong;
+typedef int    gint;
+typedef gint   gboolean;
+
+typedef unsigned char   guchar;
+typedef unsigned short  gushort;
+typedef unsigned long   gulong;
+typedef unsigned int    guint;
+
+typedef float   gfloat;
+typedef double  gdouble;
+
+#define GEANY_API_SYMBOL extern
+#endif
 
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
