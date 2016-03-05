@@ -103,7 +103,7 @@
 #endif
 #define BUFFER_LENGTH 4096
 
-struct socket_info_struct socket_info;
+struct SocketInfo socket_info;
 
 
 #ifdef G_OS_WIN32
