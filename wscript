@@ -182,6 +182,11 @@ geany_icons_indexes = {
     'Tango':    ['tango/index.theme']
 }
 
+# in plugins/bindings/*
+geany_bindings_files = {
+	'vala/vapi':         ['vapi/geany.deps',
+                          'vapi/geany.vapi']
+}
 
 def configure(conf):
 
@@ -723,6 +728,9 @@ def build(bld):
     if is_win32:
         for dest, srcs in geany_icons_indexes.items():
             bld.install_files(os.path.join('${PREFIX}/share/icons', dest), srcs, cwd=bld.path.find_dir('icons'))
+    for dest, srcs in geany_bindings_files.items():
+        dest_dir = os.path.join('${PREFIX}/share', dest)
+        bld.install_files(dest_dir, srcs, cwd=bld.path.find_dir('plugins/bindings'))
 
 
 def distclean(ctx):

@@ -32,6 +32,11 @@ EXTRA_DIST = \
 	intltool-update.in \
 	$(WIN32_BUILD_FILES)
 
+vapidir = $(datadir)/vala/vapi
+dist_vapi_DATA = \
+	plugins/bindings/vapi/geany.deps \
+	plugins/bindings/vapi/geany.vapi
+
 DISTCLEANFILES = \
 	geany.desktop \
 	intltool-extract \
