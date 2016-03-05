@@ -112,6 +112,7 @@ Makefile.in
 /doc/*.toc
 /doc/reference
 /doc/geany-gtkdoc.h
+/doc/geany-sciwrappers-gtkdoc.h
 /doc/xml/
 
 #-----------------------------------------------------------------------

@@ -341,6 +341,7 @@ class DoxyFunction(DoxyElement):
 def main(args):
     xml_dir = None
     outfile = None
+    scioutfile = None
 
     parser = OptionParser(usage="usage: %prog [options] XML_DIR")
     parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
@@ -349,6 +350,8 @@ def main(args):
                       action="store", dest="outdir", default=".")
     parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
                       action="store", dest="outfile")
+    parser.add_option("--sci-output", metavar="FILE", help="Write output to FILE (only sciwrappers)",
+                      action="store", dest="scioutfile")
     opts, args = parser.parse_args(args[1:])
 
     xml_dir = args[0]
@@ -397,11 +400,25 @@ def main(args):
     else:
         outfile = sys.stdout
 
+    if (opts.scioutfile):
+        try:
+            scioutfile = open(opts.scioutfile, "w+")
+        except OSError as err:
+            sys.stderr.write("failed to open \"%s\" for writing (%s)\n" % (opts.scioutfile, err.strerror))
+            return 1
+    else:
+        scioutfile = outfile
+
     try:
         outfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
         outfile.write("#include \"gtkcompat.h\"\n")
         outfile.write("#include \"Scintilla.h\"\n")
         outfile.write("#include \"ScintillaWidget.h\"\n")
+        if (scioutfile != outfile):
+            scioutfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
+            scioutfile.write("#include \"gtkcompat.h\"\n")
+            scioutfile.write("#include \"Scintilla.h\"\n")
+            scioutfile.write("#include \"ScintillaWidget.h\"\n")
 
         # write enums first, so typedefs to them are valid (as forward enum declaration
         # is invalid).  It's fine as an enum can't contain reference to other types.
@@ -423,6 +440,13 @@ def main(args):
             outfile.write(e.to_gtkdoc())
             outfile.write(e.definition)
             outfile.write("\n\n")
+            if (e.name.startswith("sci_")):
+                if (scioutfile != outfile):
+                    scioutfile.write("\n\n")
+                    scioutfile.write(e.to_gtkdoc())
+                    scioutfile.write(e.definition)
+                    scioutfile.write("\n\n")
+
     except BrokenPipeError:
         # probably piped to head or tail
         return 0
