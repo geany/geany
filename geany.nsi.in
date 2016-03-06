@@ -195,8 +195,8 @@ SectionEnd
 Section "Documentation" SEC04
 	SectionIn 1
 	SetOverwrite ifnewer
-	SetOutPath "$INSTDIR\share\doc\geany\html"
-	File /r "${RESOURCEDIR}\doc\*"
+	SetOutPath "$INSTDIR\share\doc"
+	File /r "${RESOURCEDIR}\share\doc\*"
 	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\share\doc\geany\html\index.html"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN ${PRODUCT_NAME}
 	CreateShortCut "$SMPROGRAMS\$StartmenuFolder\Documentation.lnk" "$INSTDIR\Documentation.url"
