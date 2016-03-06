@@ -97,6 +97,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
+	GCS_CURRENT_WORD,
 	GCS_MAX
 };
 
@@ -560,6 +561,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
+	get_keyfile_style(config, config_home, "current_word", &common_style_set.styling[GCS_CURRENT_WORD]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -656,6 +658,13 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
 		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
 	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
+
+	/* Highlight current word indicator */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_HIGHLIGHT_WORD, INDIC_ROUNDBOX);
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_HIGHLIGHT_WORD,
+		invert(common_style_set.styling[GCS_CURRENT_WORD].foreground));
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 30);
+	SSM(sci, SCI_INDICSETOUTLINEALPHA, GEANY_INDICATOR_HIGHLIGHT_WORD, 50);
 
 	/* define marker symbols
 	 * 0 -> line marker */

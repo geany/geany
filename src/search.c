@@ -1190,10 +1190,12 @@ void geany_match_info_free(GeanyMatchInfo *info)
  * 	foreach_slist(node, matches)
  * 		geany_match_info_free(node->data);
  * 	g_slist_free(matches); */
-static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci_TextToFind *ttf)
+static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags,
+	struct Sci_TextToFind *ttf, gint *num_matches)
 {
 	GSList *matches = NULL;
 	GeanyMatchInfo *info;
+	gint n_matches = 0;
 
 	g_return_val_if_fail(sci != NULL && ttf->lpstrText != NULL, NULL);
 	if (! *ttf->lpstrText)
@@ -1209,6 +1211,7 @@ static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci
 		}
 
 		matches = g_slist_prepend(matches, info);
+		n_matches++;
 		ttf->chrg.cpMin = ttf->chrgText.cpMax;
 
 		/* avoid rematching with empty matches like "(?=[a-z])" or "^$".
@@ -1218,13 +1221,15 @@ static GSList *find_range(ScintillaObject *sci, GeanyFindFlags flags, struct Sci
 			ttf->chrg.cpMin ++;
 	}
 
+	if (num_matches != NULL)
+		*num_matches = n_matches;
+
 	return g_slist_reverse(matches);
 }
 
 
-/* Clears markers if text is null/empty.
- * @return Number of matches marked. */
-gint search_mark_all(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
+static gint search_mark_all_internal(GeanyDocument *doc, const gchar *search_text,
+	GeanyFindFlags flags, GeanyIndicator indic, gint min_occur)
 {
 	gint count = 0;
 	struct Sci_TextToFind ttf;
@@ -1233,7 +1238,7 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, GeanyFindFlag
 	g_return_val_if_fail(DOC_VALID(doc), 0);
 
 	/* clear previous search indicators */
-	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
+	editor_indicator_clear(doc->editor, indic);
 
 	if (G_UNLIKELY(EMPTY(search_text)))
 		return 0;
@@ -1242,20 +1247,69 @@ gint search_mark_all(GeanyDocument *doc, const gchar *search_text, GeanyFindFlag
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
 
-	matches = find_range(doc->editor->sci, flags, &ttf);
-	foreach_slist (match, matches)
+	matches = find_range(doc->editor->sci, flags, &ttf, &count);
+	if (count > min_occur)
 	{
-		GeanyMatchInfo *info = match->data;
-
-		if (info->end != info->start)
-			editor_indicator_set_on_range(doc->editor, GEANY_INDICATOR_SEARCH, info->start, info->end);
-		count++;
-
-		geany_match_info_free(info);
+		foreach_slist (match, matches)
+		{
+			GeanyMatchInfo *info = match->data;
+			if (info->end != info->start)
+				editor_indicator_set_on_range(doc->editor, indic, info->start, info->end);
+		}
 	}
-	g_slist_free(matches);
+	g_slist_free_full(matches, (GDestroyNotify) geany_match_info_free);
 
 	return count;
+}
+
+
+/* Clears markers if text is null/empty.
+ * @return Number of matches marked. */
+gint search_mark_all(GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags)
+{
+	return search_mark_all_internal(doc, search_text, flags, GEANY_INDICATOR_SEARCH, 0);
+}
+
+
+gint search_mark_current_word(GeanyDocument *doc)
+{
+	gint count = 0;
+	gchar *word = editor_get_word_at_pos(doc->editor,
+		sci_get_current_position(doc->editor->sci), NULL);
+	if (word != NULL)
+	{
+		count = search_mark_all_internal(doc, word,
+			GEANY_FIND_MATCHCASE | GEANY_FIND_WHOLEWORD,
+			GEANY_INDICATOR_HIGHLIGHT_WORD,
+			editor_prefs.highlight_single_word ? 0 : 1);
+		g_free(word);
+	}
+	return count;
+}
+
+
+void search_unmark_current_word(GeanyDocument *doc)
+{
+	if (DOC_VALID(doc))
+		editor_indicator_clear(doc->editor, GEANY_INDICATOR_HIGHLIGHT_WORD);
+}
+
+
+gint search_mark_all_current_words(void)
+{
+	gint count = 0;
+	guint i = 0;
+	foreach_document(i)
+		count += search_mark_current_word(documents[i]);
+	return count;
+}
+
+
+void search_unmark_all_current_words(void)
+{
+	guint i = 0;
+	foreach_document(i)
+		search_unmark_current_word(documents[i]);
 }
 
 
@@ -2159,7 +2213,7 @@ static gint find_document_usage(GeanyDocument *doc, const gchar *search_text, Ge
 	ttf.chrg.cpMax = sci_get_length(doc->editor->sci);
 	ttf.lpstrText = (gchar *)search_text;
 
-	matches = find_range(doc->editor->sci, flags, &ttf);
+	matches = find_range(doc->editor->sci, flags, &ttf, NULL);
 	foreach_slist (match, matches)
 	{
 		GeanyMatchInfo *info = match->data;
@@ -2248,7 +2302,7 @@ guint search_replace_range(ScintillaObject *sci, struct Sci_TextToFind *ttf,
 	if (! *ttf->lpstrText)
 		return 0;
 
-	matches = find_range(sci, flags, ttf);
+	matches = find_range(sci, flags, ttf, NULL);
 	foreach_slist (match, matches)
 	{
 		GeanyMatchInfo *info = match->data;

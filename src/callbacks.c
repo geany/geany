@@ -1428,6 +1428,7 @@ void on_remove_markers1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	sci_marker_delete_all(doc->editor->sci, 0);	/* delete the yellow tag marker */
 	sci_marker_delete_all(doc->editor->sci, 1);	/* delete user markers */
 	editor_indicator_clear(doc->editor, GEANY_INDICATOR_SEARCH);
+	search_unmark_current_word(doc);
 }
 
 
@@ -1919,6 +1920,13 @@ static void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer u
 		editor_set_indent_width(doc->editor, width);
 		ui_document_show_hide(doc);
 	}
+}
+
+
+static void check_highlight_current_word_toggled_cb(GtkToggleButton *button, gpointer user_data)
+{
+	GtkWidget *hbox = ui_lookup_widget(ui_widgets.prefs_dialog, "hbox_highlight_current_word");
+	gtk_widget_set_sensitive(hbox, gtk_toggle_button_get_active(button));
 }
 
 

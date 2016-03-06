@@ -135,6 +135,14 @@ void search_find_selection(struct GeanyDocument *doc, gboolean search_backwards)
 
 gint search_mark_all(struct GeanyDocument *doc, const gchar *search_text, GeanyFindFlags flags);
 
+gint search_mark_current_word(struct GeanyDocument *doc);
+
+void search_unmark_current_word(struct GeanyDocument *doc);
+
+gint search_mark_all_current_words(void);
+
+void search_unmark_all_current_words(void);
+
 gint search_replace_match(struct _ScintillaObject *sci, const GeanyMatchInfo *match, const gchar *replace_text);
 
 guint search_replace_range(struct _ScintillaObject *sci, struct Sci_TextToFind *ttf,

@@ -481,6 +481,9 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "hbox_highlight_current_word");
+	gtk_widget_set_sensitive(widget, editor_prefs.highlight_current_word);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
 	/* disable following setting if notebook tabs are hidden */
@@ -950,6 +953,17 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		if (editor_prefs.long_line_column == 0)
 			editor_prefs.long_line_enabled = FALSE;
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_highlight_current_word");
+		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)) &&
+			! editor_prefs.highlight_double_click)
+		{
+				search_mark_all_current_words();
+		}
+		else
+		{
+			search_unmark_all_current_words();
+		}
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 		interface_prefs.show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

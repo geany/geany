@@ -527,6 +527,13 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 
 	ui_update_statusbar(editor->document, pos);
 
+	if (editor_prefs.highlight_current_word &&
+		! editor_prefs.highlight_double_click &&
+		search_mark_current_word(editor->document) == 0)
+	{
+		search_unmark_current_word(editor->document);
+	}
+
 #if 0
 	/** experimental code for inverting selections */
 	{
@@ -1197,6 +1204,16 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 		case SCN_ZOOM:
 			/* recalculate line margin width */
 			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+			break;
+
+		case SCN_DOUBLECLICK:
+			/* highlight word when it's double-clicked */
+			if (editor_prefs.highlight_current_word &&
+				editor_prefs.highlight_double_click &&
+				search_mark_current_word(doc) == 0)
+			{
+				search_unmark_current_word(doc);
+			}
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */

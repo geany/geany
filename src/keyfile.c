@@ -215,6 +215,10 @@ static void init_pref_groups(void)
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.highlight_current_word,
+		"highlight_current_word", FALSE, "check_highlight_current_word");
+	stash_group_add_toggle_button(group, &editor_prefs.highlight_double_click,
+		"highlight_word_double_click", FALSE, "radio_highlight_word_double_click");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
@@ -253,6 +257,8 @@ static void init_pref_groups(void)
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+	stash_group_add_boolean(group, &editor_prefs.highlight_single_word,
+		"highlight_single_word", FALSE);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
