@@ -77,6 +77,12 @@ Var UNINSTDIR
 ;;;;;;;;;;;;;;;;
 !include "MUI2.nsh"
 
+;Reserve files used in .onInit, for faster start-up
+ReserveFile "${NSISDIR}\Plugins\System.dll"
+ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
+ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
+ReserveFile "${NSISDIR}\Plugins\LangDLL.dll"
+
 !define MUI_ABORTWARNING
 !define MUI_ICON "icons\geany.ico"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall-full.ico"
