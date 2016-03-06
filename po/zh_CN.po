@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-28 14:14+0100\n"
-"PO-Revision-Date: 2015-11-02 12:16-0800\n"
+"PO-Revision-Date: 2016-03-06 12:22-0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.7\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
@@ -114,9 +114,8 @@ msgid "Find _Document Usage"
 msgstr "查找文档用法(_D)"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "跳转到标记定义"
+msgstr "跳转到标记定义(_T)"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -393,21 +392,19 @@ msgstr "开关标记列表"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "默认的符号排序模式"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "缺省编码 (新文件)："
+msgstr "默认排序模式："
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "名称"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>外观</b>"
+msgstr "外观"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1738,9 +1735,8 @@ msgid "_Mark All"
 msgstr "标记全部(_M)"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "跳转到标记说明"
+msgstr "跳转到符号声明(_A)"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -1972,9 +1968,8 @@ msgid "_Word Count"
 msgstr "字数统计(_W)"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "载入标记文件...(_G)"
+msgstr "载入标记文件…(_G)"
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -3337,34 +3332,28 @@ msgid "Send to Custom Command 3"
 msgstr "发送自定义命令 3"
 
 #: ../src/keybindings.c:480
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 4"
 
 #: ../src/keybindings.c:482
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 5"
 
 #: ../src/keybindings.c:484
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 6"
 
 #: ../src/keybindings.c:486
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 7"
 
 #: ../src/keybindings.c:488
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 8"
 
 #: ../src/keybindings.c:490
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "发送自定义命令 1"
+msgstr "发送自定义命令 9"
 
 #: ../src/keybindings.c:498
 msgid "Join lines"
@@ -3435,14 +3424,12 @@ msgid "Toggle marker"
 msgstr "开关标记"
 
 #: ../src/keybindings.c:574
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "跳转到标记定义"
+msgstr "跳转到符号定义"
 
 #: ../src/keybindings.c:577
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "跳转到标记说明"
+msgstr "跳转到符号声明"
 
 #: ../src/keybindings.c:579
 msgid "Go to Start of Line"
@@ -3675,9 +3662,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "生成全局标记文件 (参见文档)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "当生成标记时不要预处理 C/C++ 文件"
+msgstr "生成标记时不要预处理 C/C++ 文件"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4740,12 +4726,12 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "“%s”是未知的文件类型。\n"
 
 #: ../src/symbols.c:1696
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "创建标记文件失败，可能因为未找到标记。\n"
+msgstr "创建标记文件失败，可能因为未找到符号。\n"
 
 #: ../src/symbols.c:1703
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
@@ -4765,12 +4751,10 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1718
-#, fuzzy
 msgid "Load Tags File"
-msgstr "载入标记"
+msgstr "载入标记文件"
 
 #: ../src/symbols.c:1725
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany 标记文件 (*.*.tags)"
 
@@ -4787,15 +4771,15 @@ msgstr "无法载入标记文件“%s”。"
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1983
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>显示</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1986
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2161
 #, c-format
@@ -5050,9 +5034,8 @@ msgid "Characters:"
 msgstr "字符："
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "未找到标记"
+msgstr "未找到符号"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
