@@ -403,6 +403,7 @@ def main(args):
         outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
         outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
         outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
+        outfile.write("typedef gint TMParserType;\n")
 
         # write typedefs first, they are possibly undocumented but still required (even
         # if they are documented, they must be written out without gtkdoc)
