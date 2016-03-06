@@ -785,6 +785,7 @@ gint win32_check_write_permission(const gchar *dir)
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
 {
+	gint ret;
 	if (strncmp(uri, "file://", 7) == 0)
 	{
 		uri += 7;
@@ -794,7 +795,14 @@ void win32_open_browser(const gchar *uri)
 				uri++;
 		}
 	}
-	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	ret = (gint) ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	if (ret <= 32)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		/* TODO add a GUI warning that opening an URI failed */
+		g_warning("ShellExecute failed opening \"%s\" (code %d): %s", uri, ret, err);
+		g_free(err);
+	}
 }
 
 
