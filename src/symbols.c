@@ -139,7 +139,7 @@ static struct
 symbol_menu;
 
 static void html_tags_loaded(void);
-static void load_user_tags(filetype_id ft_id);
+static void load_user_tags(GeanyFiletypeID ft_id);
 
 /* get the tags_ignore list, exported by tagmanager's options.c */
 extern gchar **c_tags_ignore;
@@ -524,7 +524,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 static void add_top_level_items(GeanyDocument *doc)
 {
-	filetype_id ft_id = doc->file_type->id;
+	GeanyFiletypeID ft_id = doc->file_type->id;
 	GtkTreeStore *tag_store = doc->priv->tag_store;
 
 	if (top_level_iter_names == NULL)
@@ -998,7 +998,7 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 
 
 /* find the last word in "foo::bar::blah", e.g. "blah" */
-static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
+static const gchar *get_parent_name(const TMTag *tag, GeanyFiletypeID ft_id)
 {
 	const gchar *scope = tag->scope;
 	const gchar *separator = symbols_get_context_separator(ft_id);
@@ -1798,7 +1798,7 @@ static void init_user_tags(void)
 }
 
 
-static void load_user_tags(filetype_id ft_id)
+static void load_user_tags(GeanyFiletypeID ft_id)
 {
 	static guchar *tags_loaded = NULL;
 	static gboolean init_tags = FALSE;
