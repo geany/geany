@@ -51,7 +51,7 @@ typedef enum {
 static kindOption ObjcKinds[] = {
 	{TRUE, 'i', "interface", "class interface"},
 	{TRUE, 'I', "implementation", "class implementation"},
-	{TRUE, 'p', "protocol", "Protocol"},
+	{TRUE, 'P', "protocol", "Protocol"},
 	{TRUE, 'm', "method", "Object's method"},
 	{TRUE, 'c', "class", "Class' method"},
 	{TRUE, 'v', "var", "Global variable"},
@@ -482,6 +482,10 @@ static void popEnclosingContext (void)
 static void addTag (vString * const ident, int kind)
 {
 	tagEntryInfo toCreate;
+
+	if (! ObjcKinds[kind].enabled)
+		return;
+
 	prepareTag (&toCreate, ident, kind);
 	makeTagEntry (&toCreate);
 }
@@ -565,7 +569,7 @@ static void parseFields (vString * const ident, objcToken what)
 	}
 }
 
-objcKind methodKind;
+static objcKind methodKind;
 
 
 static vString *fullMethodName;
@@ -702,6 +706,7 @@ static void parseProperty (vString * const ident, objcToken what)
 	case Tok_semi:
 		addTag (tempName, K_PROPERTY);
 		vStringClear (tempName);
+		toDoNext = &parseMethods;
 		break;
 
 	default:
@@ -1117,6 +1122,7 @@ static void findObjcTags (void)
 		(*toDoNext) (st.name, tok);
 		tok = lex (&st);
 	}
+	vStringDelete(st.name);
 
 	vStringDelete (name);
 	vStringDelete (parentName);
