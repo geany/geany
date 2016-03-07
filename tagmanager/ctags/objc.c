@@ -702,6 +702,7 @@ static void parseProperty (vString * const ident, objcToken what)
 	case Tok_semi:
 		addTag (tempName, K_PROPERTY);
 		vStringClear (tempName);
+		toDoNext = &parseMethods;
 		break;
 
 	default:
