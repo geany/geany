@@ -1053,7 +1053,7 @@ GPtrArray *
 tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 	gboolean function, gboolean member, const gchar *current_scope, gboolean search_namespace)
 {
-	TMParserType lang = source_file->lang;
+	TMParserType lang = source_file ? source_file->lang : TM_PARSER_NONE;
 	GPtrArray *tags, *member_tags = NULL;
 	TMTagType function_types = tm_tag_function_t | tm_tag_method_t |
 		tm_tag_macro_with_arg_t | tm_tag_prototype_t;
