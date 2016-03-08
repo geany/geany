@@ -107,6 +107,14 @@ libgeany_la_SOURCES = \
 	ui_utils.c ui_utils.h \
 	utils.c utils.h
 
+# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
+nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
+
+if ENABLE_GTKDOC_HEADER
+# generated, see below
+nodist_EXTRA_libgeany_la_SOURCES += scimethods.c
+endif
+
 if ENABLE_BINRELOC
 libgeany_la_SOURCES += prefix.c prefix.h
 endif
@@ -127,9 +135,6 @@ libgeany_la_LIBADD = \
 	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \
 	$(INTLLIBS)
-
-# tell automake we have a C++ file so it uses the C++ linker we need for Scintilla
-nodist_EXTRA_libgeany_la_SOURCES = dummy1.cxx
 
 CLEANFILES =
 
@@ -181,6 +186,16 @@ signallist.i: $(glade_file) Makefile
 		$(SED) -n 's/^.*handler="\([^"]\{1,\}\)".*$$/ITEM(\1)/p' "$(glade_file)" \
 			| $(SORT) | $(UNIQ) \
 	) > $@ || { $(RM) $@ && exit 1; }
+
+BUILT_SOURCES =
+
+if ENABLE_GTKDOC_HEADER
+scimethods.c: sciwrappers.c $(top_srcdir)/scripts/gen-sci-methods.py
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-sci-methods.py -o $@ $<
+
+BUILT_SOURCES += scimethods.c
+
+endif
 
 CLEANFILES += signallist.i
 

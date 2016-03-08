@@ -129,16 +129,17 @@ Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
 
 geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
-	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@ \
+			--sci-output geany-scintilla-gtkdoc.h
 
 geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
-nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h
+nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h geany-scintilla-gtkdoc.h
 
-ALL_LOCAL_TARGETS += geany-gtkdoc.h
+ALL_LOCAL_TARGETS += geany-gtkdoc.h geany-scintilla-gtkdoc.h
 CLEAN_LOCAL_TARGETS += clean-gtkdoc-header-local
 
 clean-gtkdoc-header-local:
-	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h
+	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h geany-scintilla-gtkdoc.h
 
 endif
 

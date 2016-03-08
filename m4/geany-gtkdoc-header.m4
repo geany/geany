@@ -22,19 +22,24 @@ AC_DEFUN([GEANY_CHECK_GTKDOC_HEADER],
 	[
 		dnl python
 		AM_PATH_PYTHON([2.7], [have_python=yes], [have_python=no])
-		dnl lxml module
+		dnl additional modules
 		AS_IF([test "x$have_python" = xyes],
-		      [have_python_and_lxml=yes
+		      [have_python_and_modules=yes
 		       AC_MSG_CHECKING([for python lxml package])
 		       AS_IF([$PYTHON -c 'import lxml' >/dev/null 2>&1],
-		             [have_python_and_lxml=yes],
-		             [have_python_and_lxml=no])
-		       AC_MSG_RESULT([$have_python_and_lxml])],
-		      [have_python_and_lxml=no])
+		             [have_python_and_modules=yes],
+		             [have_python_and_modules=no])
+		       AC_MSG_RESULT([$have_python_and_modules])
+		       AC_MSG_CHECKING([for python pycparser package])
+		       AS_IF([$PYTHON -c 'import pycparser' >/dev/null 2>&1],
+		             [have_python_and_modules=yes],
+		             [have_python_and_modules=no])
+		       AC_MSG_RESULT([$have_python_and_modules])
+		       ],[have_python_and_modules=no])
 		dnl final result
-		AS_IF([test "x$geany_enable_gtkdoc_header$have_python_and_lxml" = "xyesno"],
+		AS_IF([test "x$geany_enable_gtkdoc_header$have_python_and_modules" = "xyesno"],
 		      [_GEANY_CHECK_GTKDOC_HEADER_ERROR([python or its lxml module not found])],
-		      [geany_enable_gtkdoc_header=$have_python_and_lxml])
+		      [geany_enable_gtkdoc_header=$have_python_and_modules])
 	])
 
 	AM_CONDITIONAL([ENABLE_GTKDOC_HEADER], [test "x$geany_enable_gtkdoc_header" = "xyes"])

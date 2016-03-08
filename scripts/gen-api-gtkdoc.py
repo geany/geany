@@ -341,6 +341,7 @@ class DoxyFunction(DoxyElement):
 def main(args):
     xml_dir = None
     outfile = None
+    scioutfile = None
 
     parser = OptionParser(usage="usage: %prog [options] XML_DIR")
     parser.add_option("--xmldir", metavar="DIRECTORY", help="Path to Doxygen-generated XML files",
@@ -349,6 +350,8 @@ def main(args):
                       action="store", dest="outdir", default=".")
     parser.add_option("-o", "--output", metavar="FILE", help="Write output to FILE",
                       action="store", dest="outfile")
+    parser.add_option("--sci-output", metavar="FILE", help="Write output to FILE",
+                      action="store", dest="scioutfile")
     opts, args = parser.parse_args(args[1:])
 
     xml_dir = args[0]
@@ -396,6 +399,15 @@ def main(args):
     else:
         outfile = sys.stdout
 
+    if (opts.scioutfile):
+        try:
+            scioutfile = open(opts.scioutfile, "w+")
+        except OSError as err:
+            sys.stderr.write("failed to open \"%s\" for writing (%s)\n" % (opts.scioutfile, err.strerror))
+            return 1
+    else:
+        scioutfile = outfile
+
     try:
         outfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
         outfile.write("#include <glib.h>\n")
@@ -403,6 +415,11 @@ def main(args):
         outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
         outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
         outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
+        if (scioutfile != outfile):
+            scioutfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
+            scioutfile.write("#include <glib.h>\n")
+            scioutfile.write("#include <gtk/gtk.h>\n\n")
+            scioutfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
 
         # write typedefs first, they are possibly undocumented but still required (even
         # if they are documented, they must be written out without gtkdoc)
@@ -415,6 +432,12 @@ def main(args):
             outfile.write(e.to_gtkdoc())
             outfile.write(e.definition)
             outfile.write("\n\n")
+            if (e.name.startswith("sci_")):
+                scioutfile.write("\n\n")
+                scioutfile.write(e.to_gtkdoc().replace("sci_", "scintilla_object_"))
+                scioutfile.write(e.definition.replace("sci_", "scintilla_object_"))
+                scioutfile.write("\n\n")
+
     except BrokenPipeError:
         # probably piped to head or tail
         return 0
