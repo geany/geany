@@ -2,14 +2,14 @@
 # Copyright (C) 2014 Enrico Tröger, Matthew Brush, Colomban Wendling, Frank Lanitz, Nick Treleaven and Dominic Hopf
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-28 14:14+0100\n"
-"PO-Revision-Date: 2015-11-09 13:00+0100\n"
+"PO-Revision-Date: 2016-03-07 20:58+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -111,9 +111,8 @@ msgid "Find _Document Usage"
 msgstr "Nájsť použitie v _dokumente"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "Prejsť na definíciu"
+msgstr "_Prejsť na definíciu symbolu"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -405,21 +404,19 @@ msgstr "Prepnúť zobrazovanie zoznamu symbolov"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Predvolený režim zoraďovania symbolov"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Predvolené kódovanie (pre nové súbory):"
+msgstr "Predvolený režim zoraďovania:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "Názov"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "Zoradiť podľa _výskytu"
+msgstr "Výskyt"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1821,9 +1818,8 @@ msgid "_Mark All"
 msgstr "Označiť _všetky výskyty"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Prejsť na deklaráciu"
+msgstr "Prejsť na de_klaráciu symbolu"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -2055,9 +2051,8 @@ msgid "_Word Count"
 msgstr "Počet _slov"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "Načítať t_agy…"
+msgstr "N_ačítať súbor symbolov…"
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -3452,34 +3447,28 @@ msgid "Send to Custom Command 3"
 msgstr "Použiť 3. vlastný príkaz"
 
 #: ../src/keybindings.c:480
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 4. vlastný príkaz"
 
 #: ../src/keybindings.c:482
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 5. vlastný príkaz"
 
 #: ../src/keybindings.c:484
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 6. vlastný príkaz"
 
 #: ../src/keybindings.c:486
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 7. vlastný príkaz"
 
 #: ../src/keybindings.c:488
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 8. vlastný príkaz"
 
 #: ../src/keybindings.c:490
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Použiť 1. vlastný príkaz"
+msgstr "Použiť 9. vlastný príkaz"
 
 #: ../src/keybindings.c:498
 msgid "Join lines"
@@ -3550,14 +3539,12 @@ msgid "Toggle marker"
 msgstr "Prepnúť značku"
 
 #: ../src/keybindings.c:574
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Prejsť na definíciu"
+msgstr "Prejsť na definíciu symbolu"
 
 #: ../src/keybindings.c:577
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Prejsť na deklaráciu"
+msgstr "Prejsť na deklaráciu symbolu"
 
 #: ../src/keybindings.c:579
 msgid "Go to Start of Line"
@@ -3792,9 +3779,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Vygenerovať globálny súbor tagov (viď dokumentácia)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "Nepoužívať C/C++ preprocesor pri generovaní tagov"
+msgstr "Nepoužívať C/C++ preprocesor pri generovaní súboru symbolov"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4883,19 +4869,19 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Neznámy typ súboru pre príponu „%s“.\n"
 
 #: ../src/symbols.c:1696
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
-"Nie je možné vytvoriť súbor tagov, pravdepodobne neboli nájdené žiadne "
-"tagy.\n"
+"Nie je možné vytvoriť súbor symbolov, pravdepodobne preto, lebo neboli "
+"nájdené žiadne symboly.\n"
 
 #: ../src/symbols.c:1703
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
-"Použitie %s -g <súbor tagov> <zoznam súborov>\n"
+"Použitie: %s -g <súbor symbolov> <zoznam súborov>\n"
 "\n"
 
 #: ../src/symbols.c:1704
@@ -4910,14 +4896,12 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1718
-#, fuzzy
 msgid "Load Tags File"
-msgstr "Načítať tagy"
+msgstr "Načítať súbor symbolov"
 
 #: ../src/symbols.c:1725
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
-msgstr "Súbor tagov (*.*.tags)"
+msgstr "Súbor symbolov (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1745
@@ -4932,15 +4916,15 @@ msgstr "Nie je možné načítať súbor tagov „%s“."
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1983
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Zobrazenie</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1986
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2161
 #, c-format
@@ -5204,9 +5188,8 @@ msgid "Characters:"
 msgstr "Znaky:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "Neboli nájdené žiadne tagy"
+msgstr "Neboli nájdené žiadne symboly"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
@@ -5950,9 +5933,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:435
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Go to _Tag Definition"
-#~ msgstr "_Prejsť na definíciu"
-
-#~ msgid "Go to T_ag Declaration"
-#~ msgstr "Prejsť na de_klaráciu"
