@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.27\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-02-28 14:14+0100\n"
-"PO-Revision-Date: 2015-11-08 01:01+0300\n"
+"PO-Revision-Date: 2016-03-09 20:22+0300\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -115,9 +115,8 @@ msgid "Find _Document Usage"
 msgstr "Найти использования _документа"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "Перейти к определению тега"
+msgstr "Перейти к определению символа"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -412,21 +411,19 @@ msgstr "Переключить отображение списка символ�
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Режим сортировки символов по умолчанию"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Кодировка по умолчанию (для новых файлов):"
+msgstr "Сортировка по умолчанию:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "Имя"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Внешний вид</b>"
+msgstr "Внешний вид"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1832,9 +1829,8 @@ msgid "_Mark All"
 msgstr "_Пометить все"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Перейти к объявлению тега"
+msgstr "Перейти к объявлению символа"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -2066,9 +2062,8 @@ msgid "_Word Count"
 msgstr "_Количество слов"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "_Загрузить теги..."
+msgstr "Загрузить файл с те_гами..."
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -3466,34 +3461,28 @@ msgid "Send to Custom Command 3"
 msgstr "Передать пользовательской команде 3"
 
 #: ../src/keybindings.c:480
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 4"
 
 #: ../src/keybindings.c:482
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 5"
 
 #: ../src/keybindings.c:484
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 6"
 
 #: ../src/keybindings.c:486
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 7"
 
 #: ../src/keybindings.c:488
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 8"
 
 #: ../src/keybindings.c:490
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Передать пользовательской команде 1"
+msgstr "Передать пользовательской команде 9"
 
 #: ../src/keybindings.c:498
 msgid "Join lines"
@@ -3564,14 +3553,12 @@ msgid "Toggle marker"
 msgstr "Переключить маркер"
 
 #: ../src/keybindings.c:574
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Перейти к определению тега"
+msgstr "Перейти к определению символа"
 
 #: ../src/keybindings.c:577
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Перейти к объявлению тега"
+msgstr "Перейти к объявлению символа"
 
 #: ../src/keybindings.c:579
 msgid "Go to Start of Line"
@@ -3808,9 +3795,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Создать глобальный файл тегов (смотрите документацию)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "Не использовать препроцессор для файлов C/C++ при создании тэгов "
+msgstr "Не использовать препроцессор для файлов C/C++ при создании файла тэгов"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4910,12 +4896,12 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Неизвестное расширение имени файла для \"%s\".\n"
 
 #: ../src/symbols.c:1696
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "Не удалось создать файл тегов, возможно, тегов найдено не было.\n"
+msgstr "Не удалось создать файл тегов, возможно, не было найдено ни одного символа.\n"
 
 #: ../src/symbols.c:1703
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
@@ -4935,12 +4921,10 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1718
-#, fuzzy
 msgid "Load Tags File"
-msgstr "Загрузить теги"
+msgstr "Загрузить файл тегов"
 
 #: ../src/symbols.c:1725
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Файлы тегов Geany (*.*.tags)"
 
@@ -4957,9 +4941,9 @@ msgstr "Не удалось загрузить файл тегов '%s'."
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1983
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Отображение</b>"
+msgstr ""
 
 #. For translators: it's the filename and line number of a tag in the goto-tag popup menu
 #: ../src/symbols.c:1986
@@ -5230,9 +5214,8 @@ msgid "Characters:"
 msgstr "Символов:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "Тэгов нет."
+msgstr "Символы не найдены"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
