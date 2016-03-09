@@ -362,6 +362,7 @@ def main(args):
     root = transform(doc)
 
     other = []
+    enums = []
     typedefs = []
 
     c_files = root.xpath(".//compounddef[@kind='file']/compoundname[substring(.,string-length(.)-1)='.c']/..")
@@ -376,7 +377,7 @@ def main(args):
 
         for n0 in f.xpath(".//*/memberdef[@kind='enum' and @prot='public']"):
             e = DoxyEnum.from_memberdef(n0)
-            other.append(e)
+            enums.append(e)
 
     for n0 in root.xpath(".//compounddef[@kind='struct' and @prot='public']"):
         e = DoxyStruct.from_compounddef(n0)
@@ -404,12 +405,21 @@ def main(args):
         outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
         outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
 
-        # write typedefs first, they are possibly undocumented but still required (even
+        # write enums first, so typedefs to them are valid (as forward enum declaration
+        # is invalid).  It's fine as an enum can't contain reference to other types.
+        for e in filter(lambda x: x.is_documented(), enums):
+            outfile.write("\n\n")
+            outfile.write(e.to_gtkdoc())
+            outfile.write(e.definition)
+            outfile.write("\n\n")
+
+        # write typedefs second, they are possibly undocumented but still required (even
         # if they are documented, they must be written out without gtkdoc)
         for e in typedefs:
             outfile.write(e.definition)
             outfile.write("\n\n")
 
+        # write the rest (structures, functions, ...)
         for e in filter(lambda x: x.is_documented(), other):
             outfile.write("\n\n")
             outfile.write(e.to_gtkdoc())
