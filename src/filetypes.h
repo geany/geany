@@ -42,7 +42,7 @@ struct GeanyDocument;
  *
  * @ref filetypes will contain an item for each. Use GeanyData::filetypes_array to
  * determine the known filetypes at runtime */
-typedef enum
+typedef enum _GeanyFiletypeID
 {
 	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
 
@@ -113,7 +113,7 @@ GeanyFiletypeID;
 
 #ifndef GEANY_DISABLE_DEPRECATED
 /* compat define - should be removed in the future */
-typedef GeanyFiletypeID filetype_id GEANY_DEPRECATED_FOR(GeanyFiletypeID);
+typedef enum _GeanyFiletypeID filetype_id GEANY_DEPRECATED_FOR(GeanyFiletypeID);
 #endif /* GEANY_DISABLE_DEPRECATED */
 
 /** @gironly
