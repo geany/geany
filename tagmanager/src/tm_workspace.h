@@ -22,11 +22,11 @@ extern "C"
 
 
 /** The Tag Manager Workspace. This is a singleton object containing a list
- of individual source files. There is also a global tag list 
- which can be loaded or created. This contains global tags gleaned from 
- /usr/include, etc. and should be used for autocompletion, calltips, etc.
-*/
-typedef struct
+ * of individual source files. There is also a global tag list
+ * which can be loaded or created. This contains global tags gleaned from
+ * /usr/include, etc. and should be used for autocompletion, calltips, etc.
+ **/
+typedef struct TMWorkspace
 {
 	GPtrArray *global_tags; /**< Global tags loaded at startup */
 	GPtrArray *source_files; /**< An array of TMSourceFile pointers */
