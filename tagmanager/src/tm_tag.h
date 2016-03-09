@@ -32,10 +32,7 @@
 #include "tm_source_file.h"
 #include <glib-object.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+G_BEGIN_DECLS
 
 /** Use the TM_TAG() macro to cast a pointer to (TMTag *) */
 #define TM_TAG(tag) ((TMTag *) tag)
@@ -213,8 +210,6 @@ gint tm_tag_scope_depth(const TMTag *t);
 
 #endif /* GEANY_PRIVATE */
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif /* TM_TAG_H */

@@ -20,10 +20,7 @@
 typedef void tagEntryInfo;
 #endif
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+G_BEGIN_DECLS
 
 /* Casts a pointer to a pointer to a TMSourceFile structure */
 #define TM_SOURCE_FILE(source_file) ((TMSourceFile *) source_file)
@@ -65,8 +62,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 
 #endif /* GEANY_PRIVATE */
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif /* TM_SOURCE_FILE_H */
