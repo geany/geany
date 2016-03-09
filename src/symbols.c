@@ -2075,12 +2075,13 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
 	TMTagType type;
-	TMTag *tmtag = NULL;
+	TMTag *tmtag, *last_tag;
 	GeanyDocument *old_doc = document_get_current();
 	gboolean found = FALSE;
 	const GPtrArray *all_tags;
-	GPtrArray *workspace_tags;
+	GPtrArray *workspace_tags, *filtered_tags;
 	guint i;
+	guint current_line = sci_get_current_line(old_doc->editor->sci) + 1;
 
 	/* goto tag definition: all except prototypes / forward declarations / externs */
 	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
@@ -2094,6 +2095,29 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 			g_ptr_array_add(workspace_tags, tmtag);
 	}
 
+	/* If there are typedefs of e.g. a struct such as "typedef struct Foo {} Foo;",
+	 * keep just one of the names in the list - when the cursor is on the struct
+	 * name, keep the typename, otherwise keep the struct name. */
+	last_tag = NULL;
+	filtered_tags = g_ptr_array_new();
+	foreach_ptr_array(tmtag, i, workspace_tags)
+	{
+		if (last_tag != NULL && last_tag->file == tmtag->file &&
+			last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
+		{
+			if (last_tag->line == current_line && filtered_tags->len > 0)
+				/* if cursor on struct, replace struct with the typedef */
+				filtered_tags->pdata[filtered_tags->len-1] = tmtag;
+			/* if cursor anywhere else, use struct (already added) and discard typedef */
+		}
+		else
+			g_ptr_array_add(filtered_tags, tmtag);
+
+		last_tag = tmtag;
+	}
+	g_ptr_array_free(workspace_tags, TRUE);
+	workspace_tags = filtered_tags;
+
 	if (workspace_tags->len == 1)
 	{
 		GeanyDocument *new_doc;
@@ -2105,8 +2129,7 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 		if (new_doc)
 		{
 			/* If we are already on the tag line, swap definition/declaration */
-			if (new_doc == old_doc &&
-				tmtag->line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
+			if (new_doc == old_doc && tmtag->line == current_line)
 			{
 				if (goto_tag(name, !definition))
 					found = TRUE;
