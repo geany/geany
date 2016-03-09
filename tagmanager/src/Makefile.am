@@ -28,4 +28,6 @@ libtagmanager_la_SOURCES =\
 	tm_tag.h \
 	tm_tag.c \
 	tm_workspace.h \
-	tm_workspace.c
+	tm_workspace.c \
+	tm_ctags_wrappers.h \
+	tm_ctags_wrappers.c

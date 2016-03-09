@@ -18,6 +18,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <sys/stat.h>
 #include <glib/gstdio.h>
 #ifdef G_OS_WIN32
@@ -26,14 +27,10 @@
 # include <windows.h> /* for GetFullPathName */
 #endif
 
-#include "general.h"
-#include "entry.h"
-#include "parse.h"
-#include "read.h"
-
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
+#include "tm_ctags_wrappers.h"
 
 typedef struct
 {
@@ -725,10 +722,19 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
  it finds a new tag. You should not have to use this function.
  @see tm_source_file_parse()
 */
-static int tm_source_file_tags(const tagEntryInfo *tag, void *user_data)
+static gboolean tm_source_file_tags(const tagEntryInfo *const tag,
+	gboolean invalidate, void *user_data)
 {
 	TMSourceFile *current_source_file = user_data;
-	TMTag *tm_tag = tm_tag_new();
+	TMTag *tm_tag;
+
+	if (invalidate)
+	{
+		tm_tags_array_free(current_source_file->tags_array, FALSE);
+		return TRUE;
+	}
+
+	tm_tag = tm_tag_new();
 
 	init_tag(tm_tag, current_source_file, tag);
 
@@ -742,8 +748,7 @@ static int tm_source_file_tags(const tagEntryInfo *tag, void *user_data)
 
 void tm_source_file_ctags_init()
 {
-	initializeParsing();
-	installLanguageMapDefaults();
+	tm_ctags_init();
 }
 
 /* Initializes a TMSourceFile structure from a file name. */
@@ -783,7 +788,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	if (name == NULL)
 		source_file->lang = TM_PARSER_NONE;
 	else
-		source_file->lang = getNamedLanguage(name);
+		source_file->lang = tm_ctags_get_named_lang(name);
 
 	return TRUE;
 }
@@ -920,54 +925,11 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		return TRUE;
 	}
 
-	if (! LanguageTable [source_file->lang]->enabled)
-	{
-#ifdef TM_DEBUG
-		g_warning("ignoring %s (language disabled)\n", file_name);
-#endif
-	}
-	else
-	{
-		setTagEntryFunction(tm_source_file_tags, source_file);
-		guint passCount = 0;
-		while (retry && passCount < 3)
-		{
-			tm_tags_array_free(source_file->tags_array, FALSE);
-			if (parse_file && fileOpen (file_name, source_file->lang))
-			{
-				if (LanguageTable [source_file->lang]->parser != NULL)
-				{
-					LanguageTable [source_file->lang]->parser ();
-					fileClose ();
-					retry = FALSE;
-					break;
-				}
-				else if (LanguageTable [source_file->lang]->parser2 != NULL)
-					retry = LanguageTable [source_file->lang]->parser2 (passCount);
-				fileClose ();
-			}
-			else if (!parse_file && bufferOpen (text_buf, buf_size, file_name, source_file->lang))
-			{
-				if (LanguageTable [source_file->lang]->parser != NULL)
-				{
-					LanguageTable [source_file->lang]->parser ();
-					bufferClose ();
-					retry = FALSE;
-					break;
-				}
-				else if (LanguageTable [source_file->lang]->parser2 != NULL)
-					retry = LanguageTable [source_file->lang]->parser2 (passCount);
-				bufferClose ();
-			}
-			else
-			{
-				g_warning("Unable to open %s", file_name);
-				return FALSE;
-			}
-			++ passCount;
-		}
-	}
-	
+	tm_tags_array_free(source_file->tags_array, FALSE);
+
+	tm_ctags_parse(parse_file ? NULL : text_buf, buf_size, file_name,
+		source_file->lang, tm_source_file_tags, source_file);
+
 	if (free_buf)
 		g_free(text_buf);
 	return !retry;
@@ -979,7 +941,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 */
 const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
-	return getLanguageName(lang);
+	return tm_ctags_get_lang_name(lang);
 }
 
 /* Gets the language index for \a name.
@@ -988,5 +950,5 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 */
 TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
-	return getNamedLanguage(name);
+	return tm_ctags_get_named_lang(name);
 }
