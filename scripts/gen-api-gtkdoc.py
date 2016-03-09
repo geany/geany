@@ -399,11 +399,9 @@ def main(args):
 
     try:
         outfile.write("/*\n * Automatically generated file - do not edit\n */\n\n")
-        outfile.write("#include <glib.h>\n")
-        outfile.write("#include <gtk/gtk.h>\n\n")
-        outfile.write("typedef struct _ScintillaObject ScintillaObject;\n")
-        outfile.write("typedef struct TMSourceFile TMSourceFile;\n")
-        outfile.write("typedef struct TMWorkspace TMWorkspace;\n")
+        outfile.write("#include \"gtkcompat.h\"\n")
+        outfile.write("#include \"Scintilla.h\"\n")
+        outfile.write("#include \"ScintillaWidget.h\"\n")
 
         # write enums first, so typedefs to them are valid (as forward enum declaration
         # is invalid).  It's fine as an enum can't contain reference to other types.

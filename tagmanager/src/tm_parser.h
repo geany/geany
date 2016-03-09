@@ -10,6 +10,9 @@
 #ifndef TM_PARSER_H
 #define TM_PARSER_H
 
+/** @gironly
+ * A integral type which can hold known parser type IDs
+ **/
 typedef gint TMParserType;
 
 

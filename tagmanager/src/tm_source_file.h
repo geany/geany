@@ -33,9 +33,9 @@ extern "C"
 
 
 /**
- The TMSourceFile structure represents the source file and its tags in the tag manager.
-*/
-typedef struct
+ * The TMSourceFile structure represents the source file and its tags in the tag manager.
+ **/
+typedef struct TMSourceFile
 {
 	TMParserType lang; /* Programming language used */
 	char *file_name; /**< Full file name (inc. path) */
