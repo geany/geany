@@ -1,8 +1,58 @@
 Geany 1.27 (unreleased)
 
+    Bug fixes
+    * Fix build with GLib < 2.32 (Issue#764).
+    * Fix missing progress bar during build runs (Issue#765).
+    * Fix infinite loop when performing reflow on some input with many
+      consecutive spaces (Issue#848, PR#852).
+    * Fix some locale encoding conversion issues (Jiří Techet, PR#547).
+
+    Interface
+    * Allow to set a keybinding for File->Properties (Issue#622, PR#952).
+    * Make it possible to define default symbol_list_sort_mode (Jiří Techet,
+      Issue#313, PR#581).
+    * Add keybindings for custom commands 4 through 9 (Thomas Sahlin, PR#858).
+    * Use "Symbol" in place of "Tag" everywhere it does not refer to markup
+      tags (Jiří Techet, Issue#579, PR#582).
+
+    Editor
+    * Update Scintilla to version 3.6.3 (including improved support for Lua
+      5.3 and Perl 5.22).
+    * Greatly improve scope completion (Jiří Techet, PR#488, PR#505, PR#862,
+      PR#906).
+    * Performance improvement highlighting types (Jiří Techet, PR#575).
+    * Show calltips after a C++ explicit specialization (PR#496).
+    * Show a popup to select the symbol when going to a symbol has several
+      options (Jiří Techet, PR#406, PR#923).
+
+    Filetypes
+    * Added some extra Markdown extensions (Andrea Stacchiotti, PR#820).
+    * Add `.asm51` and `.a51` extensions for 8051 assembly (Devyn Collier
+      Johnson, PR#739).
+    * Fix C++ namespaces scope (Issue#871).
+    * Fix parsing of C++ global scope qualifiers in base class lists.
+    * Use the C++ parser for CUDA filetype (Issue#830, PR#831).
+    * Add Clojure file extensions (Daniel Șuteu, PR#842).
+    * Improve return type and var type recognition in C, C++, C# and D
+      (Issue#845, PR#889).
+    * Fix parsing of C++11 raw string literals (PR#879).
+    * Update built-in PHP symbols (Issue#584, PR#603).
+    * Fix parsing some Objective-C properties (PR#940, PR#941).
+
     Internationalization
     * Updated translations: de, es, fr, it, ja, kk, lt, nl, pt, ru, sk,
                             zh_CN
+
+    API
+    * Add `editor_set_indent_width()` (Thomas Martitz, PR#903).
+    * Add `GeanyFiletypeID` and deprecate `filetype_id` (PR#932).
+    * Remove non-API type `langType` (Jiří Techet, part of PR#906).
+    * Mark deprecated API so GCC-like compilers can warn about it, and add
+      `GEANY_DISABLE_DEPRECATION_WARNINGS` to silence those (PR#911).
+    * Add `scintilla_object_send_message()`, `scintilla_object_get_type()`
+      and `scintilla_object_new()` alias to the API as synonyms for their
+      legacy counterparts `scintilla_send_message()`, `scintilla_get_type()`
+      and `scintilla_new()` (Thomas Martitz, PR#874).
 
 
 Geany 1.26 (November 15, 2015)
