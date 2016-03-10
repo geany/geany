@@ -60,6 +60,10 @@ static TMTagType TM_TYPE_WITH_MEMBERS =
 	tm_tag_class_t | tm_tag_struct_t | tm_tag_union_t |
 	tm_tag_enum_t | tm_tag_interface_t;
 
+static TMTagType TM_GLOBAL_TYPE_MASK =
+	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
+
 static TMWorkspace *theWorkspace = NULL;
 
 
@@ -342,54 +346,12 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 */
 gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 {
-	guchar buf[BUFSIZ];
-	FILE *fp;
 	GPtrArray *file_tags, *new_tags;
-	TMTag *tag;
-	TMFileFormat format = TM_FILE_FORMAT_TAGMANAGER;
 
-	if (NULL == (fp = g_fopen(tags_file, "r")))
+	file_tags = tm_source_file_read_tags_file(tags_file, mode);
+	if (!file_tags)
 		return FALSE;
-	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
-	{
-		fclose(fp);
-		return FALSE; /* early out on error */
-	}
-	else
-	{	/* We read the first line for the format specification. */
-		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
-			format = TM_FILE_FORMAT_PIPE;
-		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
-			format = TM_FILE_FORMAT_TAGMANAGER;
-		else if (buf[0] == '#' && strstr((gchar*) buf, "format=ctags") != NULL)
-			format = TM_FILE_FORMAT_CTAGS;
-		else if (strncmp((gchar*) buf, "!_TAG_", 6) == 0)
-			format = TM_FILE_FORMAT_CTAGS;
-		else
-		{	/* We didn't find a valid format specification, so we try to auto-detect the format
-			 * by counting the pipe characters on the first line and asumme pipe format when
-			 * we find more than one pipe on the line. */
-			guint i, pipe_cnt = 0, tab_cnt = 0;
-			for (i = 0; i < BUFSIZ && buf[i] != '\0' && pipe_cnt < 2; i++)
-			{
-				if (buf[i] == '|')
-					pipe_cnt++;
-				else if (buf[i] == '\t')
-					tab_cnt++;
-			}
-			if (pipe_cnt > 1)
-				format = TM_FILE_FORMAT_PIPE;
-			else if (tab_cnt > 1)
-				format = TM_FILE_FORMAT_CTAGS;
-		}
-		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
-	}
-	
-	file_tags = g_ptr_array_new();
-	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode, format)))
-		g_ptr_array_add(file_tags, tag);
-	fclose(fp);
-	
+
 	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
@@ -521,6 +483,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	GList *includes_files = NULL;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
 	gchar *temp_file2 = create_temp_file("tmp_XXXXXX.cpp");
+	gboolean ret;
 
 	if (NULL == temp_file || NULL == temp_file2 ||
 		NULL == (fp = g_fopen(temp_file, "w")))
@@ -669,22 +632,10 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 		tm_source_file_free(source_file);
 		return FALSE;
 	}
-	if (NULL == (fp = g_fopen(tags_file, "w")))
-	{
-		tm_source_file_free(source_file);
-		return FALSE;
-	}
-	fprintf(fp, "# format=tagmanager\n");
-	for (i = 0; i < tags_array->len; ++i)
-	{
-		tm_tag_write(TM_TAG(tags_array->pdata[i]), fp, tm_tag_attr_type_t
-		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
-		  | tm_tag_attr_pointer_t);
-	}
-	fclose(fp);
+	ret = tm_source_file_write_tags_file(tags_file, tags_array);
 	tm_source_file_free(source_file);
 	g_ptr_array_free(tags_array, TRUE);
-	return TRUE;
+	return ret;
 }
 
 

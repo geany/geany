@@ -110,13 +110,6 @@ typedef enum
 #define TAG_IMPL_VIRTUAL 'v' /**< Virtual implementation */
 #define TAG_IMPL_UNKNOWN 'x' /**< Unknown implementation */
 
-/**
- This structure holds all information about a tag, including the file
- pseudo tag. It should always be created indirectly with one of the tag
- creation functions such as tm_source_file_parse() or tm_tag_new_from_file().
- Once created, they can be sorted, deduped, etc. using functions such as
- tm_tags_sort() or tm_tags_dedup()
-*/
 typedef struct _TMTag
 {
 	char *name; /**< Name of tag */
@@ -140,26 +133,12 @@ typedef struct _TMTag
 
 #ifdef GEANY_PRIVATE
 
-extern const TMTagType TM_GLOBAL_TYPE_MASK;
-
-
-typedef enum {
-	TM_FILE_FORMAT_TAGMANAGER,
-	TM_FILE_FORMAT_PIPE,
-	TM_FILE_FORMAT_CTAGS
-} TMFileFormat;
-
-
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
 GType tm_tag_get_type(void) G_GNUC_CONST;
 
-TMTag *tm_tag_new(TMSourceFile *file, const tagEntryInfo *tag_entry);
-
-TMTag *tm_tag_new_from_file(TMSourceFile *file, FILE *fp, TMParserType mode, TMFileFormat format);
-
-gboolean tm_tag_write(TMTag *tag, FILE *file, guint attrs);
+TMTag *tm_tag_new(void);
 
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 

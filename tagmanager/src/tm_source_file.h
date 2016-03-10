@@ -16,10 +16,6 @@
 
 #include "tm_parser.h"
 
-#ifndef LIBCTAGS_DEFINED
-typedef void tagEntryInfo;
-#endif
-
 G_BEGIN_DECLS
 
 /* Casts a pointer to a pointer to a TMSourceFile structure */
@@ -50,7 +46,6 @@ void tm_source_file_free(TMSourceFile *source_file);
 
 gchar *tm_get_real_path(const gchar *file_name);
 
-
 #ifdef GEANY_PRIVATE
 
 const gchar *tm_source_file_get_lang_name(TMParserType lang);
@@ -59,6 +54,10 @@ TMParserType tm_source_file_get_named_lang(const gchar *name);
 
 gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize buf_size,
 	gboolean use_buffer);
+
+GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mode);
+
+gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_array);
 
 #endif /* GEANY_PRIVATE */
 
