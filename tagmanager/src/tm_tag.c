@@ -236,18 +236,19 @@ gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
  Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since 
  this function substitutes duplicate entries with NULL
  @param tags_array Array of tags to dedup
- @return TRUE on success, FALSE on failure
 */
-gboolean tm_tags_prune(GPtrArray *tags_array)
+void tm_tags_prune(GPtrArray *tags_array)
 {
 	guint i, count;
+
+	g_return_if_fail(tags_array);
+
 	for (i=0, count = 0; i < tags_array->len; ++i)
 	{
 		if (NULL != tags_array->pdata[i])
 			tags_array->pdata[count++] = tags_array->pdata[i];
 	}
 	tags_array->len = count;
-	return TRUE;
 }
 
 /*
@@ -256,15 +257,16 @@ gboolean tm_tags_prune(GPtrArray *tags_array)
  @param tags_array Array of tags to dedup.
  @param sort_attributes Attributes the array is sorted on. They will be deduped
  on the same criteria.
- @return TRUE on success, FALSE on failure
 */
-gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates)
+void tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
 	TMSortOptions sort_options;
 	guint i;
 
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
+	g_return_if_fail(tags_array);
+	if (tags_array->len < 2)
+		return;
+
 	sort_options.sort_attrs = sort_attributes;
 	sort_options.partial = FALSE;
 	for (i = 1; i < tags_array->len; ++i)
@@ -277,7 +279,6 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gb
 		}
 	}
 	tm_tags_prune(tags_array);
-	return TRUE;
 }
 
 /*
@@ -286,21 +287,19 @@ gboolean tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gb
  @param tags_array The array of tags to be sorted
  @param sort_attributes Attributes to be sorted on (int array terminated by 0)
  @param dedup Whether to deduplicate the sorted array
- @return TRUE on success, FALSE on failure
 */
-gboolean tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes, 
+void tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 	gboolean dedup, gboolean unref_duplicates)
 {
 	TMSortOptions sort_options;
-	
-	if ((!tags_array) || (!tags_array->len))
-		return TRUE;
+
+	g_return_if_fail(tags_array);
+
 	sort_options.sort_attrs = sort_attributes;
 	sort_options.partial = FALSE;
 	g_ptr_array_sort_with_data(tags_array, tm_tag_compare, &sort_options);
 	if (dedup)
 		tm_tags_dedup(tags_array, sort_attributes, unref_duplicates);
-	return TRUE;
 }
 
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
@@ -501,8 +500,9 @@ GPtrArray *tm_tags_extract(GPtrArray *tags_array, TMTagType tag_types)
 {
 	GPtrArray *new_tags;
 	guint i;
-	if (NULL == tags_array)
-		return NULL;
+
+	g_return_val_if_fail(tags_array, NULL);
+
 	new_tags = g_ptr_array_new();
 	for (i=0; i < tags_array->len; ++i)
 	{
