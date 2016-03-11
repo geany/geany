@@ -239,14 +239,17 @@ static char get_tag_access(const char *access)
 */
 static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
 {
-	if (NULL == tag_entry)
+	TMTagType type;
+
+	if (!tag_entry)
 		return FALSE;
 
-	/* This is a normal tag entry */
-	if (NULL == tag_entry->name)
+	type = get_tag_type(tag_entry->kindName);
+	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
+
 	tag->name = g_strdup(tag_entry->name);
-	tag->type = get_tag_type(tag_entry->kindName);
+	tag->type = type;
 	tag->local = tag_entry->isFileScope;
 	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
 	tag->line = tag_entry->lineNumber;
@@ -736,7 +739,11 @@ static gboolean tm_source_file_tags(const tagEntryInfo *const tag,
 
 	tm_tag = tm_tag_new();
 
-	init_tag(tm_tag, current_source_file, tag);
+	if (!init_tag(tm_tag, current_source_file, tag))
+	{
+		tm_tag_unref(tm_tag);
+		return TRUE;
+	}
 
 	if (tm_tag->lang == TM_PARSER_PYTHON)
 		update_python_arglist(tm_tag, current_source_file);
