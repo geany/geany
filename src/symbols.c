@@ -2071,102 +2071,114 @@ static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
 }
 
 
+static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
+{
+	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	TMTag *tmtag, *last_tag = NULL;
+	GPtrArray *filtered_tags = g_ptr_array_new();
+	guint i;
+
+	foreach_ptr_array(tmtag, i, tags)
+	{
+		if (definition && !(tmtag->type & forward_types) ||
+			!definition && (tmtag->type & forward_types))
+		{
+			/* If there are typedefs of e.g. a struct such as
+			 * "typedef struct Foo {} Foo;", filter out the typedef unless
+			 * cursor is at the struct name. */
+			if (last_tag != NULL && last_tag->file == tmtag->file &&
+				last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
+			{
+				if (last_tag == current_tag)
+					g_ptr_array_add(filtered_tags, tmtag);
+			}
+			else if (tmtag != current_tag)
+				g_ptr_array_add(filtered_tags, tmtag);
+
+			last_tag = tmtag;
+		}
+	}
+
+	return filtered_tags;
+}
+
+
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	TMTagType type;
-	TMTag *tmtag, *last_tag;
+	TMTag *tmtag, *current_tag = NULL;
 	GeanyDocument *old_doc = document_get_current();
 	gboolean found = FALSE;
 	const GPtrArray *all_tags;
-	GPtrArray *workspace_tags, *filtered_tags;
+	GPtrArray *tags, *filtered_tags;
 	guint i;
 	guint current_line = sci_get_current_line(old_doc->editor->sci) + 1;
 
-	/* goto tag definition: all except prototypes / forward declarations / externs */
-	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
-	all_tags = tm_workspace_find(name, NULL, type, NULL, old_doc->file_type->lang);
+	all_tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, old_doc->file_type->lang);
 
-	/* get rid of global tags */
-	workspace_tags = g_ptr_array_new();
+	/* get rid of global tags and find tag at current line */
+	tags = g_ptr_array_new();
 	foreach_ptr_array(tmtag, i, all_tags)
 	{
 		if (tmtag->file)
-			g_ptr_array_add(workspace_tags, tmtag);
-	}
-
-	/* If there are typedefs of e.g. a struct such as "typedef struct Foo {} Foo;",
-	 * keep just one of the names in the list - when the cursor is on the struct
-	 * name, keep the typename, otherwise keep the struct name. */
-	last_tag = NULL;
-	filtered_tags = g_ptr_array_new();
-	foreach_ptr_array(tmtag, i, workspace_tags)
-	{
-		if (last_tag != NULL && last_tag->file == tmtag->file &&
-			last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
 		{
-			if (last_tag->line == current_line && filtered_tags->len > 0)
-				/* if cursor on struct, replace struct with the typedef */
-				filtered_tags->pdata[filtered_tags->len-1] = tmtag;
-			/* if cursor anywhere else, use struct (already added) and discard typedef */
+			g_ptr_array_add(tags, tmtag);
+			if (tmtag->file == old_doc->tm_file && tmtag->line == current_line)
+				current_tag = tmtag;
 		}
-		else
-			g_ptr_array_add(filtered_tags, tmtag);
-
-		last_tag = tmtag;
 	}
-	g_ptr_array_free(workspace_tags, TRUE);
-	workspace_tags = filtered_tags;
 
-	if (workspace_tags->len == 1)
+	if (current_tag)
+		/* swap definition/declaration search */
+		definition = current_tag->type & forward_types;
+
+	filtered_tags = filter_tags(tags, current_tag, definition);
+	if (current_tag && filtered_tags->len == 0)
+	{
+		/* if we previously swapped definition/declaration search and didn't
+		 * find anything, try again with the opposite type */
+		g_ptr_array_free(filtered_tags, TRUE);
+		filtered_tags = filter_tags(tags, current_tag, !definition);
+	}
+	g_ptr_array_free(tags, TRUE);
+	tags = filtered_tags;
+
+	if (tags->len == 1)
 	{
 		GeanyDocument *new_doc;
 
-		tmtag = workspace_tags->pdata[0];
-		new_doc = document_find_by_real_path(
-			tmtag->file->file_name);
+		tmtag = tags->pdata[0];
+		new_doc = document_find_by_real_path(tmtag->file->file_name);
 
-		if (new_doc)
-		{
-			/* If we are already on the tag line, swap definition/declaration */
-			if (new_doc == old_doc && tmtag->line == current_line)
-			{
-				if (goto_tag(name, !definition))
-					found = TRUE;
-			}
-		}
-		else
-		{
+		if (!new_doc)
 			/* not found in opened document, should open */
 			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
-		}
 
-		if (!found && navqueue_goto_line(old_doc, new_doc, tmtag->line))
-			found = TRUE;
+		navqueue_goto_line(old_doc, new_doc, tmtag->line);
 	}
-	else if (workspace_tags->len > 1)
+	else if (tags->len > 1)
 	{
-		GPtrArray *tags;
+		GPtrArray *tag_list;
 		TMTag *tag, *best_tag;
 
-		g_ptr_array_sort(workspace_tags, compare_tags_by_name_line);
-		best_tag = find_best_goto_tag(old_doc, workspace_tags);
+		g_ptr_array_sort(tags, compare_tags_by_name_line);
+		best_tag = find_best_goto_tag(old_doc, tags);
 
-		tags = g_ptr_array_new();
+		tag_list = g_ptr_array_new();
 		if (best_tag)
-			g_ptr_array_add(tags, best_tag);
-		foreach_ptr_array(tag, i, workspace_tags)
+			g_ptr_array_add(tag_list, best_tag);
+		foreach_ptr_array(tag, i, tags)
 		{
 			if (tag != best_tag)
-				g_ptr_array_add(tags, tag);
+				g_ptr_array_add(tag_list, tag);
 		}
-		show_goto_popup(old_doc, tags, best_tag != NULL);
+		show_goto_popup(old_doc, tag_list, best_tag != NULL);
 
-		g_ptr_array_free(tags, TRUE);
-		found = TRUE;
+		g_ptr_array_free(tag_list, TRUE);
 	}
 
-	g_ptr_array_free(workspace_tags, TRUE);
+	found = tags->len > 0;
+	g_ptr_array_free(tags, TRUE);
 
 	return found;
 }
