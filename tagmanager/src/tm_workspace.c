@@ -72,6 +72,9 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
+
+	tm_source_file_ctags_init();
+
 	return TRUE;
 }
 

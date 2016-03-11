@@ -251,7 +251,6 @@ static void main_init(void)
 	file_prefs.tab_order_beside		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
-	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
@@ -1047,6 +1046,8 @@ gint main_lib(gint argc, gchar **argv)
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
+	/* initialize TM before parsing command-line - needed for tag file generation */
+	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)

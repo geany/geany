@@ -45,6 +45,8 @@ typedef struct TMSourceFile
 
 GType tm_source_file_get_type(void);
 
+void tm_source_file_ctags_init();
+
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
 
 void tm_source_file_free(TMSourceFile *source_file);

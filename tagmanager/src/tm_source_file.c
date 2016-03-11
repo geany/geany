@@ -159,6 +159,13 @@ static int tm_source_file_tags(const tagEntryInfo *tag)
 	return TRUE;
 }
 
+void tm_source_file_ctags_init()
+{
+	initializeParsing();
+	installLanguageMapDefaults();
+	TagEntryFunction = tm_source_file_tags;
+}
+
 /* Initializes a TMSourceFile structure from a file name. */
 static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
 	const char* name)
@@ -192,14 +199,6 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	}
 
 	source_file->tags_array = g_ptr_array_new();
-
-	if (NULL == LanguageTable)
-	{
-		initializeParsing();
-		installLanguageMapDefaults();
-		if (NULL == TagEntryFunction)
-			TagEntryFunction = tm_source_file_tags;
-	}
 
 	if (name == NULL)
 		source_file->lang = TM_PARSER_NONE;
@@ -341,13 +340,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		return TRUE;
 	}
 
-	if (NULL == LanguageTable)
-	{
-		initializeParsing();
-		installLanguageMapDefaults();
-		if (NULL == TagEntryFunction)
-			TagEntryFunction = tm_source_file_tags;
-	}
 	current_source_file = source_file;
 	if (! LanguageTable [source_file->lang]->enabled)
 	{
@@ -407,13 +399,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 */
 const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
-	if (NULL == LanguageTable)
-	{
-		initializeParsing();
-		installLanguageMapDefaults();
-		if (NULL == TagEntryFunction)
-			TagEntryFunction = tm_source_file_tags;
-	}
 	return getLanguageName(lang);
 }
 
@@ -423,13 +408,6 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 */
 TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
-	if (NULL == LanguageTable)
-	{
-		initializeParsing();
-		installLanguageMapDefaults();
-		if (NULL == TagEntryFunction)
-			TagEntryFunction = tm_source_file_tags;
-	}
 	return getNamedLanguage(name);
 }
 
