@@ -1764,17 +1764,40 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
 	gint result;
+	gchar *msg;
 
 	/* stop file monitoring to avoid getting events for deleting/creating files,
 	 * it's re-setup in document_save_file_as() */
 	document_stop_file_monitoring(doc);
 
-	result = g_rename(old_locale_filename, new_locale_filename);
-	if (result != 0)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
-		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
-			_("Error renaming file."), g_strerror(errno));
+		GError *error = NULL;
+		GFile *old_file = utils_gfile_create(old_locale_filename);
+		GFile *new_file = utils_gfile_create(new_locale_filename);
+
+		g_file_move(old_file, new_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error);
+		if (error)
+		{
+			msg = g_strdup(error->message);
+			g_error_free(error);
+		}
+
+		g_object_unref(old_file);
+		g_object_unref(new_file);
 	}
+	else
+	{
+		gint result = g_rename(old_locale_filename, new_locale_filename);
+		if (result != 0)
+			msg = g_strdup(g_strerror(errno));
+	}
+
+	if (msg)
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Error renaming file."), msg);
+
+	g_free(msg);
 	g_free(old_locale_filename);
 	g_free(new_locale_filename);
 }
