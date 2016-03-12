@@ -1705,7 +1705,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
- * - NULL if the URI is non-local and gvfs-fuse is not installed
+ * - NULL if the URI is non-local and when not using GIO and gvfs-fuse is not installed
  * - a new copy of 'uri' if it is not an URI. */
 gchar *utils_get_path_from_uri(const gchar *uri)
 {
@@ -1716,19 +1716,24 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 	if (! utils_is_uri(uri))
 		return g_strdup(uri);
 
-	/* this will work only for 'file://' URIs */
-	locale_filename = g_filename_from_uri(uri, NULL, NULL);
-	/* g_filename_from_uri() failed, so we probably have a non-local URI */
-	if (locale_filename == NULL)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
 		GFile *file = g_file_new_for_uri(uri);
 		locale_filename = g_file_get_path(file);
 		g_object_unref(file);
-		if (locale_filename == NULL)
-		{
-			geany_debug("The URI '%s' could not be resolved to a local path. This means "
-				"that the URI is invalid or that you don't have gvfs-fuse installed.", uri);
-		}
+
+		if (!locale_filename)
+			return g_strdup(uri);
+
+		return locale_filename;
+	}
+
+	locale_filename = g_filename_from_uri(uri, NULL, NULL);
+	if (locale_filename == NULL)
+	{
+		geany_debug("The URI '%s' could not be resolved to a local path. This means "
+			"that the URI is invalid or that you disabled GIO file operations "
+			"and don't have gvfs-fuse installed.", uri);
 	}
 
 	return locale_filename;
