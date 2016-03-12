@@ -281,7 +281,6 @@ gboolean project_load_file_with_session(const gchar *locale_file_name)
 }
 
 
-#ifndef G_OS_WIN32
 static void run_open_dialog(GtkDialog *dialog)
 {
 	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
@@ -303,71 +302,72 @@ static void run_open_dialog(GtkDialog *dialog)
 		break;
 	}
 }
-#endif
 
 
 void project_open(void)
 {
 	const gchar *dir = local_prefs.project_file_path;
-#ifdef G_OS_WIN32
-	gchar *file;
-#else
-	GtkWidget *dialog;
-	GtkFileFilter *filter;
-	gchar *locale_path;
-#endif
+
 	if (! project_ask_close()) return;
 
 #ifdef G_OS_WIN32
-	file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
-	if (file != NULL)
+	if (interface_prefs.use_native_windows_dialogs)
 	{
-		/* try to load the config */
-		if (! project_load_file_with_session(file))
+		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
+		if (file != NULL)
 		{
-			SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
+			/* try to load the config */
+			if (! project_load_file_with_session(file))
+			{
+				SHOW_ERR1(_("Project file \"%s\" could not be loaded."), file);
+			}
+			g_free(file);
 		}
-		g_free(file);
 	}
-#else
-
-	dialog = gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(main_widgets.window),
-			GTK_FILE_CHOOSER_ACTION_OPEN,
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
-	gtk_widget_set_name(dialog, "GeanyDialogProject");
-
-	/* set default Open, so pressing enter can open multiple files */
-	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
-	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
-	gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
-	gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
-
-	/* add FileFilters */
-	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("All files"));
-	gtk_file_filter_add_pattern(filter, "*");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
-	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("Project files"));
-	gtk_file_filter_add_pattern(filter, "*." GEANY_PROJECT_EXT);
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
-	gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
-
-	locale_path = utils_get_locale_from_utf8(dir);
-	if (g_file_test(locale_path, G_FILE_TEST_EXISTS) &&
-		g_file_test(locale_path, G_FILE_TEST_IS_DIR))
-	{
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
-	}
-	g_free(locale_path);
-
-	gtk_widget_show_all(dialog);
-	run_open_dialog(GTK_DIALOG(dialog));
-	gtk_widget_destroy(GTK_WIDGET(dialog));
+	else
 #endif
+	{
+		GtkWidget *dialog;
+		GtkFileFilter *filter;
+		gchar *locale_path;
+
+		dialog = gtk_file_chooser_dialog_new(_("Open Project"), GTK_WINDOW(main_widgets.window),
+				GTK_FILE_CHOOSER_ACTION_OPEN,
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		gtk_widget_set_name(dialog, "GeanyDialogProject");
+
+		/* set default Open, so pressing enter can open multiple files */
+		gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
+		gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
+		gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+		gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
+		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+
+		/* add FileFilters */
+		filter = gtk_file_filter_new();
+		gtk_file_filter_set_name(filter, _("All files"));
+		gtk_file_filter_add_pattern(filter, "*");
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+		filter = gtk_file_filter_new();
+		gtk_file_filter_set_name(filter, _("Project files"));
+		gtk_file_filter_add_pattern(filter, "*." GEANY_PROJECT_EXT);
+		gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
+		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
+
+		locale_path = utils_get_locale_from_utf8(dir);
+		if (g_file_test(locale_path, G_FILE_TEST_EXISTS) &&
+			g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		{
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
+		}
+		g_free(locale_path);
+
+		gtk_widget_show_all(dialog);
+		run_open_dialog(GTK_DIALOG(dialog));
+		gtk_widget_destroy(GTK_WIDGET(dialog));
+	}
 }
 
 
