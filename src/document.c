@@ -593,7 +593,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 		if (locale_filename != NULL && utils_file_exists(locale_filename))
 		{
 			/* get a file monitor and connect to the 'changed' signal */
-			GFile *file = g_file_new_for_path(locale_filename);
+			GFile *file = utils_gfile_create(locale_filename);
 			doc->priv->monitor = g_file_monitor_file(file, G_FILE_MONITOR_NONE, NULL, NULL);
 			g_signal_connect(doc->priv->monitor, "changed",
 				G_CALLBACK(monitor_file_changed_cb), doc);
@@ -943,7 +943,7 @@ static gboolean get_mtime(const gchar *locale_filename, time_t *time)
 
 	if (USE_GIO_FILE_OPERATIONS)
 	{
-		GFile *file = g_file_new_for_path(locale_filename);
+		GFile *file = utils_gfile_create(locale_filename);
 		GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED, G_FILE_QUERY_INFO_NONE, NULL, &error);
 
 		if (info)
@@ -1002,7 +1002,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (USE_GIO_FILE_OPERATIONS)
 	{
-		GFile *file = g_file_new_for_path(locale_filename);
+		GFile *file = utils_gfile_create(locale_filename);
 
 		g_file_load_contents(file, NULL, &filedata->data, &filedata->len, NULL, &err);
 		g_object_unref(file);
@@ -1953,7 +1953,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		/* Use GIO API to save file (GVFS-safe)
 		 * It is best in most GVFS setups but don't seem to work correctly on some more complex
 		 * setups (saving from some VM to their host, over some SMB shares, etc.) */
-		fp = g_file_new_for_path(locale_filename);
+		fp = utils_gfile_create(locale_filename);
 		g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);

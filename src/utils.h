@@ -334,6 +334,8 @@ const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
 
+GFile *utils_gfile_create(const gchar *fname);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

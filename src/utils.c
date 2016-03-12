@@ -2198,7 +2198,7 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 }
 
 
-static GFile *utils_gfile_create(const gchar *fname)
+GFile *utils_gfile_create(const gchar *fname)
 {
 	if (utils_is_uri(fname))
 		return g_file_new_for_uri(fname);
