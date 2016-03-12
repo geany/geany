@@ -150,7 +150,7 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
-		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		filelist = gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
 			const gchar *first = filelist->data;
@@ -519,7 +519,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	gchar *new_filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
 	switch (response)
 	{
