@@ -1788,6 +1788,9 @@ void utils_tidy_path(gchar *filename)
 	const gchar *needle;
 	gboolean preserve_double_backslash = FALSE;
 
+	if (utils_is_uri(filename))
+		return;
+
 	g_return_if_fail(g_path_is_absolute(filename));
 
 	str = g_string_new(filename);
