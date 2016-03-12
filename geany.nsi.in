@@ -219,6 +219,8 @@ SectionEnd
 Section "GTK ${GTK_VERSION} Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
+	SetOutPath "$INSTDIR"
+	File "gtk\ReadMe.Dependencies.Geany.txt"
 	SetOutPath "$INSTDIR\bin"
 	File /r "gtk\bin\*"
 	SetOutPath "$INSTDIR\etc"
@@ -293,6 +295,7 @@ Section Uninstall
 	Delete "$INSTDIR\uninst.exe"
 	Delete "$INSTDIR\News.txt"
 	Delete "$INSTDIR\ReadMe.txt"
+	Delete "$INSTDIR\ReadMe.Dependencies.Geany.txt"
 	Delete "$INSTDIR\Thanks.txt"
 	Delete "$INSTDIR\ToDo.txt"
 	Delete "$INSTDIR\Authors.txt"
