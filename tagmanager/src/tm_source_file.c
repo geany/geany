@@ -87,6 +87,15 @@ static char *realpath (const char *pathname, char *resolved_path)
 }
 #endif
 
+static gboolean is_uri(const gchar *uri)
+{
+	g_return_val_if_fail(uri != NULL, FALSE);
+
+	return (strstr(uri, "://") != NULL);
+}
+
+/* FIXME: move the whole implementation of tm_get_real_path() to utils.c and
+ * use the utility functions from there. */
 /**
  Given a file name, returns a newly allocated string containing the realpath()
  of the file.
@@ -101,11 +110,18 @@ gchar *tm_get_real_path(const gchar *file_name)
 		gsize len = get_path_max(file_name) + 1;
 		gchar *path = g_malloc0(len);
 
+		/* FIXME: what's the realpath() equivalent in GIO? We should use it when
+		 * using GIO. */
 		if (realpath(file_name, path))
 			return path;
 		else
 			g_free(path);
 	}
+
+	/* FIXME: add USE_GIO_FILE_OPERATIONS check once in utils.c */
+	if (is_uri(file_name))
+		return g_strdup(file_name);
+
 	return NULL;
 }
 
