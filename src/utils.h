@@ -336,6 +336,9 @@ void utils_start_new_geany_instance(const gchar *doc_path);
 
 GFile *utils_gfile_create(const gchar *fname);
 
+gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
+		gsize len, GError **error);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
