@@ -190,6 +190,25 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
+gboolean utils_read_file(const gchar *locale_filename, char **contents,
+		gsize *length, GError **error)
+{
+	gboolean ret;
+
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = utils_gfile_create(locale_filename);
+
+		ret = g_file_load_contents(file, NULL, contents, length, NULL, error);
+		g_object_unref(file);
+	}
+	else
+		ret = g_file_get_contents(locale_filename, contents, length, error);
+
+	return ret;
+}
+
+
 gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
 		gsize len, GError **error)
 {

@@ -1000,15 +1000,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	if (!get_mtime(locale_filename, &filedata->mtime))
 		return FALSE;
 
-	if (USE_GIO_FILE_OPERATIONS)
-	{
-		GFile *file = utils_gfile_create(locale_filename);
-
-		g_file_load_contents(file, NULL, &filedata->data, &filedata->len, NULL, &err);
-		g_object_unref(file);
-	}
-	else
-		g_file_get_contents(locale_filename, &filedata->data, &filedata->len, &err);
+	utils_read_file(locale_filename, &filedata->data, &filedata->len, &err);
 
 	if (err)
 	{
