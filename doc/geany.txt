@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.27
+.. |(version)| replace:: 1.28
 .. -*- reStructuredText -*-
 
 =======
