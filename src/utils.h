@@ -211,8 +211,16 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
+gboolean utils_file_exists(const gchar *fname);
+
+gboolean utils_file_is_dir(const gchar *fname);
+
+gboolean utils_file_is_regular(const gchar *fname);
+
 
 #ifdef GEANY_PRIVATE
+
+#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
 
 typedef enum
 {

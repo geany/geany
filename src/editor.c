@@ -276,7 +276,7 @@ void editor_snippets_init(void)
 	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
-	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
+	if (! utils_file_is_regular(userconfigfile))
 		SETPTR(userconfigfile, g_build_filename(app->configdir, "autocomplete.conf", NULL));
 
 	/* load the actual config files */

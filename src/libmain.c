@@ -344,7 +344,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 		return;
 
 	/* allow to open files like "test:0" */
-	if (g_file_test(filename, G_FILE_TEST_EXISTS))
+	if (utils_file_exists(filename))
 		return;
 
 	len = strlen(filename);
@@ -637,7 +637,7 @@ static gint create_config_dir(void)
 	gchar *filedefs_dir = NULL;
 	gchar *templates_dir = NULL;
 
-	if (! g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+	if (! utils_file_exists(app->configdir))
 	{
 #ifndef G_OS_WIN32
 		/* if we are *not* using an alternate config directory, we check whether the old one
@@ -646,7 +646,7 @@ static gint create_config_dir(void)
 		{
 			gchar *old_dir = g_build_filename(g_get_home_dir(), ".geany", NULL);
 			/* move the old config dir if it exists */
-			if (g_file_test(old_dir, G_FILE_TEST_EXISTS))
+			if (utils_file_exists(old_dir))
 			{
 				if (! dialogs_show_question_full(main_widgets.window,
 					GTK_STOCK_YES, GTK_STOCK_QUIT, _("Move it now?"),
@@ -654,7 +654,7 @@ static gint create_config_dir(void)
 					_("Geany needs to move your old configuration directory before starting.")))
 					exit(0);
 
-				if (! g_file_test(app->configdir, G_FILE_TEST_IS_DIR))
+				if (! utils_file_is_dir(app->configdir))
 					utils_mkdir(app->configdir, TRUE);
 
 				if (g_rename(old_dir, app->configdir) == 0)
@@ -686,7 +686,7 @@ static gint create_config_dir(void)
 	filedefs_dir = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	templates_dir = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 
-	if (saved_errno == 0 && ! g_file_test(conf_file, G_FILE_TEST_EXISTS))
+	if (saved_errno == 0 && ! utils_file_exists(conf_file))
 	{	/* check whether geany.conf can be written */
 		saved_errno = utils_is_file_writable(app->configdir);
 	}
@@ -697,11 +697,11 @@ static gint create_config_dir(void)
 		gchar *filedefs_readme = g_build_filename(app->configdir,
 					GEANY_FILEDEFS_SUBDIR, "filetypes.README", NULL);
 
-		if (! g_file_test(filedefs_dir, G_FILE_TEST_EXISTS))
+		if (! utils_file_exists(filedefs_dir))
 		{
 			saved_errno = utils_mkdir(filedefs_dir, FALSE);
 		}
-		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
+		if (saved_errno == 0 && ! utils_file_exists(filedefs_readme))
 		{
 			gchar *text = g_strconcat(
 "Copy files from ", app->datadir, " to this directory to overwrite "
@@ -719,11 +719,11 @@ static gint create_config_dir(void)
 		gchar *templates_readme = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR,
 						"templates.README", NULL);
 
-		if (! g_file_test(templates_dir, G_FILE_TEST_EXISTS))
+		if (! utils_file_exists(templates_dir))
 		{
 			saved_errno = utils_mkdir(templates_dir, FALSE);
 		}
-		if (saved_errno == 0 && ! g_file_test(templates_readme, G_FILE_TEST_EXISTS))
+		if (saved_errno == 0 && ! utils_file_exists(templates_readme))
 		{
 			gchar *text = g_strconcat(
 "There are several template files in this directory. For these templates you can use wildcards.\n\
@@ -760,7 +760,7 @@ static gint setup_config_dir(void)
 		}
 	}
 	/* make configdir a real path */
-	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
+	if (utils_file_exists(app->configdir))
 		SETPTR(app->configdir, tm_get_real_path(app->configdir));
 
 	return mkdir_result;
@@ -798,7 +798,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	if (column >= 0)
 		cl_options.goto_column = column;
 
-	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+	if (utils_file_is_regular(filename))
 	{
 		doc = document_open_file(filename, cl_options.readonly, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
@@ -836,7 +836,7 @@ static void open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
 
-		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		if (utils_file_is_dir(filename))
 		{
 			g_free(filename);
 			continue;

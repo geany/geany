@@ -82,9 +82,6 @@
 #include <gdk/gdkkeysyms.h>
 
 
-#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
-
-
 GeanyFilePrefs file_prefs;
 
 
@@ -593,7 +590,7 @@ static void monitor_file_setup(GeanyDocument *doc)
 		document_stop_file_monitoring(doc);
 
 		locale_filename = utils_get_locale_from_utf8(doc->file_name);
-		if (locale_filename != NULL && g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+		if (locale_filename != NULL && utils_file_exists(locale_filename))
 		{
 			/* get a file monitor and connect to the 'changed' signal */
 			GFile *file = g_file_new_for_path(locale_filename);

@@ -230,7 +230,7 @@ static void add_item(const gchar *name)
 	/* root directory doesn't need separator */
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
-	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
+	dir = utils_file_is_dir(fname);
 	utf8_fullname = utils_get_utf8_from_locale(fname);
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
@@ -319,7 +319,7 @@ static void refresh(void)
 	GSList *list, *node;
 
 	/* don't clear when the new path doesn't exist */
-	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
+	if (! utils_file_exists(current_dir))
 		return;
 
 	clear();
@@ -1188,7 +1188,7 @@ static void save_settings(void)
 	g_key_file_set_boolean(config, "filebrowser", "fb_set_project_base_path",
 		fb_set_project_base_path);
 
-	if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
+	if (! utils_file_is_dir(config_dir) && utils_mkdir(config_dir, TRUE) != 0)
 	{
 		dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 			_("Plugin configuration directory could not be created."));

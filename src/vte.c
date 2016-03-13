@@ -743,7 +743,7 @@ void vte_cwd(const gchar *filename, gboolean force)
 	{
 		gchar *path;
 
-		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		if (utils_file_is_dir(filename))
 			path = g_strdup(filename);
 		else
 			path = g_path_get_dirname(filename);

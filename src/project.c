@@ -357,8 +357,8 @@ void project_open(void)
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
 		locale_path = utils_get_locale_from_utf8(dir);
-		if (g_file_test(locale_path, G_FILE_TEST_EXISTS) &&
-			g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		if (utils_file_exists(locale_path) &&
+			utils_file_is_dir(locale_path))
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
 		}
@@ -740,7 +740,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 			g_free(dir);
 		}
 
-		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		if (! utils_file_is_dir(locale_path))
 		{
 			gboolean create_dir;
 
@@ -766,14 +766,14 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	}
 	/* finally test whether the given project file can be written */
 	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
-		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
+		(err_code = utils_file_is_dir(locale_filename) ? EISDIR : 0) != 0)
 	{
 		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
 		gtk_widget_grab_focus(e->file_name);
 		g_free(locale_filename);
 		return FALSE;
 	}
-	else if (new_project && g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
+	else if (new_project && utils_file_exists(locale_filename) &&
 			 ! dialogs_show_question_full(NULL, _("_Replace"), GTK_STOCK_CANCEL,
 				NULL,
 				_("The file '%s' already exists. Do you want to overwrite it?"),
@@ -874,12 +874,12 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 
 	if (g_path_is_absolute(locale_filename))
 	{
-		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+		if (utils_file_exists(locale_filename))
 		{
 			/* if the current filename is a directory, we must use
 			 * gtk_file_chooser_set_current_folder(which expects a locale filename) otherwise
 			 * we end up in the parent directory */
-			if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+			if (utils_file_is_dir(locale_filename))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_filename);
 			else
 				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
@@ -889,7 +889,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 			gchar *locale_dir = g_path_get_dirname(locale_filename);
 			gchar *name = g_path_get_basename(utf8_filename);
 
-			if (g_file_test(locale_dir, G_FILE_TEST_EXISTS))
+			if (utils_file_exists(locale_dir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dir);
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), name);
 

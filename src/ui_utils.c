@@ -1971,7 +1971,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
-		if (g_path_is_absolute(locale_path) && g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		if (g_path_is_absolute(locale_path) && utils_file_is_dir(locale_path))
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
@@ -2085,7 +2085,7 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 	if (strstr(file_name, G_DIR_SEPARATOR_S "filetypes."))
 		ft = filetypes[GEANY_FILETYPES_CONF];
 
-	if (g_file_test(file_name, G_FILE_TEST_EXISTS))
+	if (utils_file_exists(file_name))
 		document_open_file(file_name, FALSE, ft, NULL);
 	else
 	{
@@ -2096,7 +2096,7 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 
 		/* if the requested file doesn't exist in the user's config dir, try loading the file
 		 * from the global data directory and use its contents for the newly created file */
-		if (g_file_test(global_file, G_FILE_TEST_EXISTS))
+		if (utils_file_exists(global_file))
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
 		document_new_file(utf8_filename, ft, global_content);

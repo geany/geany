@@ -664,7 +664,7 @@ static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean 
 	/* If the path doesn't exist, try the current document.
 	 * This happens when we receive build messages in the wrong order - after the
 	 * 'Leaving directory' messages */
-	if (!g_file_test(filename, G_FILE_TEST_EXISTS))
+	if (!utils_file_exists(filename))
 	{
 		gchar *cur_dir = utils_get_current_file_dir_utf8();
 		gchar *name;
@@ -677,7 +677,7 @@ static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean 
 			SETPTR(name, g_build_path(G_DIR_SEPARATOR_S, cur_dir, name, NULL));
 			g_free(cur_dir);
 
-			if (g_file_test(name, G_FILE_TEST_EXISTS))
+			if (utils_file_exists(name))
 			{
 				ui_set_statusbar(FALSE, _("Could not find file '%s' - trying the current document path."),
 					fname);
@@ -1081,7 +1081,7 @@ static void msgwin_parse_generic_line(const gchar *string, gchar **filename, gin
 		}
 
 		/* if we aren't sure we got a supposedly correct filename, check it */
-		if (incertain && ! g_file_test(*filename, G_FILE_TEST_EXISTS))
+		if (incertain && ! utils_file_exists(*filename))
 		{
 			SETPTR(*filename, NULL);
 			*line = -1;

@@ -1764,7 +1764,7 @@ static void init_user_tags(void)
 
 	dir = g_build_filename(app->configdir, "tags", NULL);
 	/* create the user tags dir for next time if it doesn't exist */
-	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
+	if (! utils_file_is_dir(dir))
 		utils_mkdir(dir, FALSE);
 	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 

@@ -325,7 +325,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 		utf8_filename = utils_get_utf8_from_locale(new_filename);
 
 		/* check if file exists and ask whether to overwrite or not */
-		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
+		if (utils_file_exists(new_filename))
 		{
 			if (dialogs_show_question(
 				_("The file '%s' already exists. Do you want to overwrite it?"),

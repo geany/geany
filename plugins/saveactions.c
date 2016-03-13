@@ -103,8 +103,8 @@ static gboolean backupcopy_set_backup_dir(const gchar *utf8_dir)
 	tmp = utils_get_locale_from_utf8(utf8_dir);
 
 	if (! g_path_is_absolute(tmp) ||
-		! g_file_test(tmp, G_FILE_TEST_EXISTS) ||
-		! g_file_test(tmp, G_FILE_TEST_IS_DIR))
+		! utils_file_exists(tmp) ||
+		! utils_file_is_dir(tmp))
 	{
 		g_free(tmp);
 		return FALSE;
@@ -532,7 +532,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		}
 
 
-		if (! g_file_test(config_dir, G_FILE_TEST_IS_DIR) && utils_mkdir(config_dir, TRUE) != 0)
+		if (! utils_file_is_dir(config_dir) && utils_mkdir(config_dir, TRUE) != 0)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
 				_("Plugin configuration directory could not be created."));

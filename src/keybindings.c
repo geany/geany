@@ -781,7 +781,7 @@ static void load_user_kb(void)
 	GKeyFile *config = g_key_file_new();
 
 	/* backwards compatibility with Geany 0.21 defaults */
-	if (!g_file_test(configfile, G_FILE_TEST_EXISTS))
+	if (!utils_file_exists(configfile))
 	{
 		gchar *geanyconf = g_build_filename(app->configdir, "geany.conf", NULL);
 		const gchar data[] = "[Bindings]\n"
@@ -792,7 +792,7 @@ static void load_user_kb(void)
 			"move_tableft=<Alt>Page_Up\n"
 			"move_tabright=<Alt>Page_Down\n";
 
-		utils_write_file(configfile, g_file_test(geanyconf, G_FILE_TEST_EXISTS) ?
+		utils_write_file(configfile, utils_file_exists(geanyconf) ?
 			data : "");
 		g_free(geanyconf);
 	}

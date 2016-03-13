@@ -101,7 +101,7 @@ static void read_template(const gchar *name, gint id)
 		GEANY_TEMPLATES_SUBDIR, name, NULL);
 
 	/* try system if user template doesn't exist */
-	if (!g_file_test(fname, G_FILE_TEST_EXISTS))
+	if (!utils_file_exists(fname))
 		SETPTR(fname, g_build_path(G_DIR_SEPARATOR_S, app->datadir,
 			GEANY_TEMPLATES_SUBDIR, name, NULL));
 
