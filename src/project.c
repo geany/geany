@@ -285,7 +285,7 @@ static void run_open_dialog(GtkDialog *dialog)
 {
 	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
 		/* try to load the config */
 		if (! project_load_file_with_session(filename))
@@ -343,7 +343,8 @@ void project_open(void)
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
-		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), FALSE);
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 		/* add FileFilters */
 		filter = gtk_file_filter_new();
@@ -489,8 +490,17 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
-			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
+
+		SETPTR(filename, utils_get_path_from_uri(filename));
+		if (filename)
+		{
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+			gtk_entry_set_text(GTK_ENTRY(base_path_entry), utf8_filename);
+
+			g_free(utf8_filename);
+			g_free(filename);
+		}
 	}
 
 	gtk_widget_destroy(dialog);
@@ -906,13 +916,17 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	/* run it */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gchar *tmp_utf8_filename = utils_get_utf8_from_locale(filename);
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
-		gtk_entry_set_text(GTK_ENTRY(entry), tmp_utf8_filename);
+		SETPTR(filename, utils_get_path_from_uri(filename));
+		if (filename)
+		{
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+			gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
 
-		g_free(tmp_utf8_filename);
-		g_free(filename);
+			g_free(utf8_filename);
+			g_free(filename);
+		}
 	}
 	gtk_widget_destroy(dialog);
 }
