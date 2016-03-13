@@ -2485,7 +2485,9 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 		MoveImeCarets( - (imeCharPos[preeditStr.uniStrLen]) + imeCharPos[preeditStr.cursor_pos]);
 
 		if (KoreanIME()) {
+#if !PLAT_GTK_WIN32
 			MoveImeCarets( - imeCharPos[1]); // always 2 bytes for DBCS or 3 bytes for UTF8.
+#endif
 			view.imeCaretBlockOverride = true;
 		}
 
@@ -3053,7 +3055,7 @@ sptr_t scintilla_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_
 }
 
 GEANY_API_SYMBOL
-sptr_t scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+gintptr scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
 	return scintilla_send_message(sci, iMessage, wParam, lParam);
 }
 

@@ -15,7 +15,7 @@ index 0871ca2..49dc278 100644
  }
  
 +GEANY_API_SYMBOL
- sptr_t scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
+ gintptr scintilla_object_send_message(ScintillaObject *sci, unsigned int iMessage, uptr_t wParam, sptr_t lParam) {
  	return scintilla_send_message(sci, iMessage, wParam, lParam);
  }
 @@ -3062,6 +3064,7 @@ extern void Platform_Initialise();
