@@ -1,5 +1,8 @@
 Geany 1.27 (unreleased)
 
+    General
+    * Remove Waf build system (PR#769).
+
     Bug fixes
     * Fix build with GLib < 2.32 (Issue#764).
     * Fix missing progress bar during build runs (Issue#765).
