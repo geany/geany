@@ -1453,23 +1453,52 @@ GEANY_API_SYMBOL
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error)
 {
 	GSList *list = NULL;
-	GDir *dir;
 	const gchar *filename;
 
 	if (error)
 		*error = NULL;
 	g_return_val_if_fail(path != NULL, NULL);
 
-	dir = g_dir_open(path, 0, error);
-	if (dir == NULL)
-		return NULL;
-
-	foreach_dir(filename, dir)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
-		list = g_slist_prepend(list, full_path ?
-			g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+		GFile *gpath = utils_gfile_create(path);
+		GFileEnumerator *enumerator = g_file_enumerate_children(gpath,
+			G_FILE_ATTRIBUTE_STANDARD_NAME, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+			NULL, error);
+
+		if (enumerator)
+		{
+			GFileInfo *info;
+
+			while (info = g_file_enumerator_next_file(enumerator, NULL, NULL))
+			{
+				filename = g_file_info_get_name(info);
+
+				list = g_slist_prepend(list, full_path ?
+					g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+
+				g_object_unref(info);
+			}
+
+			g_object_unref(enumerator);
+		}
+
+		g_object_unref(gpath);
 	}
-	g_dir_close(dir);
+	else
+	{
+		GDir *dir = g_dir_open(path, 0, error);
+		if (dir == NULL)
+			return NULL;
+
+		foreach_dir(filename, dir)
+		{
+			list = g_slist_prepend(list, full_path ?
+				g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+		}
+		g_dir_close(dir);
+	}
+
 	/* sorting last is quicker than on insertion */
 	if (sort)
 		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
