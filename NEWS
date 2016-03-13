@@ -61,7 +61,7 @@ Geany 1.27 (March 13, 2016)
       and `scintilla_new()` (Thomas Martitz, PR#874).
 
     Windows
-    * Project->Open Font now respects the native dialog setting (PR#961).
+    * Project->Open now respects the native dialog setting (PR#961).
 
 
 Geany 1.26 (November 15, 2015)
