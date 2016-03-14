@@ -188,7 +188,14 @@ typedef struct GeanyData
 	 *
 	 * @see documents. */
 	GPtrArray					*documents_array;
-	GPtrArray					*filetypes_array;	/**< Dynamic array of GeanyFiletype pointers. @elementtype{GeanyFiletype} */
+	/** Dynamic array of filetype pointers
+	 *
+	 * List the list is dynamically expanded for custom filetypes filetypes so don't expect
+	 * the list of known filetypes to be a constant.
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
+	GPtrArray					*filetypes_array;
 	struct GeanyPrefs			*prefs;				/**< General settings */
 	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */
 	struct GeanyToolbarPrefs	*toolbar_prefs;		/**< Toolbar settings */
@@ -198,7 +205,12 @@ typedef struct GeanyData
 	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
 	gpointer					*_compat;			/* Remove field on next ABI break (abi-todo) */
-	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
+	/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
+	 * first, as this is usually treated specially.
+	 * The list does not change (after filetypes have been initialized), so you can use
+	 * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
+	 * @see filetypes_get_sorted_by_name(). */
+	GSList						*filetypes_by_title;
 }
 GeanyData;
 
