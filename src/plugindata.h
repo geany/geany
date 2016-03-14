@@ -171,7 +171,23 @@ typedef struct GeanyData
 {
 	struct GeanyApp				*app;				/**< Geany application data fields */
 	struct GeanyMainWidgets		*main_widgets;		/**< Important widgets in the main window */
-	GPtrArray					*documents_array;	/**< See document.h#documents_array. @elementtype{GeanyDocument} */
+	/** Dynamic array of GeanyDocument pointers.
+	 * Once a pointer is added to this, it is never freed. This means the same document pointer
+	 * can represent a different document later on, or it may have been closed and become invalid.
+	 * For this reason, you should use document_find_by_id() instead of storing
+	 * document pointers over time if there is a chance the user can close the
+	 * document.
+	 *
+	 * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
+	 * This is done automatically if you use the foreach_document() macro.
+	 *
+	 * @note
+	 * Never assume that the order of document pointers is the same as the order of notebook tabs.
+	 * One reason is that notebook tabs can be reordered.
+	 * Use @c document_get_from_page() to lookup a document from a notebook tab number.
+	 *
+	 * @see documents. */
+	GPtrArray					*documents_array;
 	GPtrArray					*filetypes_array;	/**< Dynamic array of GeanyFiletype pointers. @elementtype{GeanyFiletype} */
 	struct GeanyPrefs			*prefs;				/**< General settings */
 	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */

@@ -118,8 +118,6 @@ typedef struct GeanyDocument
 }
 GeanyDocument;
 
-extern GPtrArray *documents_array;
-
 /** Wraps @ref documents_array so it can be used with C array syntax.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  *
@@ -231,6 +229,7 @@ GeanyDocument *document_find_by_id(guint id);
 #endif
 
 extern GeanyFilePrefs file_prefs;
+extern GPtrArray *documents_array;
 
 
 /* These functions will replace the older functions. For now they have a documents_ prefix. */
