@@ -292,9 +292,9 @@ class DoxyStruct(DoxyElement):
     @staticmethod
     def from_compounddef(xml, typedefs=[]):
         name = xml.find("compoundname").text
-        section = xml.find("sectiondef")
         d = "struct %s {\n" % name
-        for p in section.findall("memberdef"):
+        memberdefs = xml.xpath(".//sectiondef[@kind='public-attrib']/memberdef")
+        for p in memberdefs:
             # workaround for struct members. g-ir-scanner can't properly map struct members
             # (beginning with struct GeanyFoo) to the typedef and assigns a generic type for them
             # thus we fix that up here and enforce usage of the typedef. These are written
@@ -314,7 +314,7 @@ class DoxyStruct(DoxyElement):
         d += "};\n"
         e = DoxyStruct(name, d)
         e.add_brief(xml.find("briefdescription"))
-        for p in section.findall("memberdef"):
+        for p in memberdefs:
             e.add_member(p)
         return e
 
