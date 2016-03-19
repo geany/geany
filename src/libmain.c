@@ -704,7 +704,7 @@ static gint create_config_dir(void)
 		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 		{
 			gchar *text = g_strconcat(
-"Copy files from ", app->datadir, " to this directory to overwrite "
+"Copy files from ", app->datadir, "/filedefs to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
 "the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);

@@ -15,7 +15,7 @@ trap 'rm -rf "$TMPDIR"' EXIT
 mkdir -p "$CONFDIR" || exit 99
 mkdir -p "$CONFDIR/filedefs/" || exit 99
 cp "${srcdir:-.}"/../../data/filetype_extensions.conf "$CONFDIR" || exit 99
-cp "${srcdir:-.}"/../../data/filetypes.* "$CONFDIR/filedefs/" || exit 99
+cp "${srcdir:-.}"/../../data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
 result="$1"
 source="${result%.*}"
