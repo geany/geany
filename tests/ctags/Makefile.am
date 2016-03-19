@@ -255,6 +255,11 @@ test_sources = \
 	regexp.js						\
 	return-hint.zep					\
 	return-types.go					\
+	ruby-block-call.rb				\
+	ruby-doc.rb						\
+	ruby-namespaced-class.rb		\
+	ruby-scope-after-anonymous-class.rb	\
+	ruby-sf-bug-364.rb				\
 	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\

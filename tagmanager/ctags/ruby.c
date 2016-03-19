@@ -4,7 +4,7 @@
 *   Copyright (c) 2004 Elliott Hughes <enh@acm.org>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Ruby language
 *   files.
@@ -19,6 +19,7 @@
 
 #include "entry.h"
 #include "parse.h"
+#include "nestlevel.h"
 #include "read.h"
 #include "vstring.h"
 
@@ -26,7 +27,7 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-	K_UNDEFINED = -1, K_CLASS, K_METHOD, K_MODULE, K_SINGLETON
+	K_UNDEFINED = -1, K_CLASS, K_METHOD, K_MODULE, K_SINGLETON,
 } rubyKind;
 
 /*
@@ -36,35 +37,44 @@ static kindOption RubyKinds [] = {
 	{ TRUE, 'c', "class",  "classes" },
 	{ TRUE, 'f', "method", "methods" },
 	{ TRUE, 'm', "namespace", "modules" },
-	{ TRUE, 'F', "member", "singleton methods" }
+	{ TRUE, 'F', "member", "singleton methods" },
+#if 0
+	/* Following two kinds are reserved. */
+	{ TRUE, 'd', "describe", "describes and contexts for Rspec" },
+	{ TRUE, 'C', "constant", "constants" },
+#endif
 };
 
-static stringList* nesting = 0;
+static NestingLevels* nesting = NULL;
+
+#define SCOPE_SEPARATOR '.'
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
+static void enterUnnamedScope (void);
+
 /*
-* Returns a string describing the scope in 'list'.
+* Returns a string describing the scope in 'nls'.
 * We record the current scope as a list of entered scopes.
 * Scopes corresponding to 'if' statements and the like are
 * represented by empty strings. Scopes corresponding to
 * modules and classes are represented by the name of the
 * module or class.
 */
-static vString* stringListToScope (const stringList* list)
+static vString* nestingLevelsToScope (const NestingLevels* nls)
 {
-	unsigned int i;
+	int i;
 	unsigned int chunks_output = 0;
 	vString* result = vStringNew ();
-	const unsigned int max = stringListCount (list);
-	for (i = 0; i < max; ++i)
+	for (i = 0; i < nls->n; ++i)
 	{
-	    vString* chunk = stringListItem (list, i);
+	    const vString* chunk = nls->levels[i].name;
 	    if (vStringLength (chunk) > 0)
 	    {
-	        vStringCatS (result, (chunks_output++ > 0) ? "." : "");
+	        if (chunks_output++ > 0)
+	            vStringPut (result, SCOPE_SEPARATOR);
 	        vStringCatS (result, vStringValue (chunk));
 	    }
 	}
@@ -76,21 +86,57 @@ static vString* stringListToScope (const stringList* list)
 * Returns TRUE if it did, FALSE (and leaves 's' where
 * it was) otherwise.
 */
-static boolean canMatch (const unsigned char** s, const char* literal)
+static boolean canMatch (const unsigned char** s, const char* literal,
+                         boolean (*end_check) (int))
 {
 	const int literal_length = strlen (literal);
+	const int s_length = strlen ((const char *)*s);
+
+	if (s_length < literal_length)
+		return FALSE;
+
 	const unsigned char next_char = *(*s + literal_length);
 	if (strncmp ((const char*) *s, literal, literal_length) != 0)
 	{
 	    return FALSE;
 	}
 	/* Additionally check that we're at the end of a token. */
-	if ( ! (next_char == 0 || isspace (next_char) || next_char == '(' || next_char == ';'))
+	if (! end_check (next_char))
 	{
 	    return FALSE;
 	}
 	*s += literal_length;
 	return TRUE;
+}
+
+static boolean isIdentChar (int c)
+{
+	return (isalnum (c) || c == '_');
+}
+
+static boolean notIdentChar (int c)
+{
+	return ! isIdentChar (c);
+}
+
+static boolean notOperatorChar (int c)
+{
+	return ! (c == '[' || c == ']' ||
+	          c == '=' || c == '!' || c == '~' ||
+	          c == '+' || c == '-' ||
+	          c == '@' || c == '*' || c == '/' || c == '%' ||
+	          c == '<' || c == '>' ||
+	          c == '&' || c == '^' || c == '|');
+}
+
+static boolean isWhitespace (int c)
+{
+	return c == 0 || isspace (c);
+}
+
+static boolean canMatchKeyword (const unsigned char** s, const char* literal)
+{
+	return canMatch (s, literal, notIdentChar);
 }
 
 /*
@@ -111,12 +157,12 @@ static boolean parseRubyOperator (vString* name, const unsigned char** cp)
 	    "<=", "<", ">", ">=",
 	    "<=>", "==", "===", "!=", "=~", "!~",
 	    "`",
-	    0
+	    NULL
 	};
 	int i;
-	for (i = 0; RUBY_OPERATORS[i] != 0; ++i)
+	for (i = 0; RUBY_OPERATORS[i] != NULL; ++i)
 	{
-	    if (canMatch (cp, RUBY_OPERATORS[i]))
+	    if (canMatch (cp, RUBY_OPERATORS[i], notOperatorChar))
 	    {
 	        vStringCatS (name, RUBY_OPERATORS[i]);
 	        return TRUE;
@@ -132,20 +178,52 @@ static void emitRubyTag (vString* name, rubyKind kind)
 {
 	tagEntryInfo tag;
 	vString* scope;
+	rubyKind parent_kind = K_UNDEFINED;
+	NestingLevel *lvl;
+	const char *unqualified_name;
+	const char *qualified_name;
+
+	if (!RubyKinds[kind].enabled) {
+		return;
+	}
 
 	vStringTerminate (name);
-	scope = stringListToScope (nesting);
+	scope = nestingLevelsToScope (nesting);
+	lvl = nestingLevelsGetCurrent (nesting);
+	if (lvl)
+		parent_kind = lvl->type;
 
-	initTagEntry (&tag, vStringValue (name));
+	qualified_name = vStringValue (name);
+	unqualified_name = strrchr (qualified_name, SCOPE_SEPARATOR);
+	if (unqualified_name && unqualified_name[1])
+	{
+		if (unqualified_name > qualified_name)
+		{
+			if (vStringLength (scope) > 0)
+				vStringPut (scope, SCOPE_SEPARATOR);
+			vStringNCatS (scope, qualified_name,
+			              unqualified_name - qualified_name);
+			/* assume module parent type for a lack of a better option */
+			parent_kind = K_MODULE;
+		}
+		unqualified_name++;
+	}
+	else
+		unqualified_name = qualified_name;
+
+	initTagEntry (&tag, unqualified_name);
 	if (vStringLength (scope) > 0) {
-	    tag.extensionFields.scope [0] = "class";
+		Assert (0 <= parent_kind &&
+		        (size_t) parent_kind < (sizeof RubyKinds / sizeof RubyKinds[0]));
+
+	    tag.extensionFields.scope [0] = RubyKinds [parent_kind].name;
 	    tag.extensionFields.scope [1] = vStringValue (scope);
 	}
 	tag.kindName = RubyKinds [kind].name;
 	tag.kind = RubyKinds [kind].letter;
 	makeTagEntry (&tag);
 
-	stringListAdd (nesting, vStringNewCopy (name));
+	nestingLevelsPush (nesting, name, kind);
 
 	vStringClear (name);
 	vStringDelete (scope);
@@ -154,7 +232,7 @@ static void emitRubyTag (vString* name, rubyKind kind)
 /* Tests whether 'ch' is a character in 'list'. */
 static boolean charIsIn (char ch, const char* list)
 {
-	return (strchr (list, ch) != 0);
+	return (strchr (list, ch) != NULL);
 }
 
 /* Advances 'cp' over leading whitespace. */
@@ -178,7 +256,20 @@ static rubyKind parseIdentifier (
 	 * point or equals sign. These are all part of the name.
 	 * A method name may also contain a period if it's a singleton method.
 	 */
-	const char* also_ok = (kind == K_METHOD) ? "_.?!=" : "_";
+	boolean had_sep = FALSE;
+	const char* also_ok;
+	if (kind == K_METHOD)
+	{
+		also_ok = ".?!=";
+	}
+	else if (kind == K_SINGLETON)
+	{
+		also_ok = "?!=";
+	}
+	else
+	{
+		also_ok = "";
+	}
 
 	skipWhitespace (cp);
 
@@ -198,11 +289,21 @@ static rubyKind parseIdentifier (
 	}
 
 	/* Copy the identifier into 'name'. */
-	while (**cp != 0 && (isalnum (**cp) || charIsIn (**cp, also_ok)))
+	while (**cp != 0 && (**cp == ':' || isIdentChar (**cp) || charIsIn (**cp, also_ok)))
 	{
 		char last_char = **cp;
 
-		vStringPut (name, last_char);
+		if (last_char == ':')
+			had_sep = TRUE;
+		else
+		{
+			if (had_sep)
+			{
+				vStringPut (name, SCOPE_SEPARATOR);
+				had_sep = FALSE;
+			}
+			vStringPut (name, last_char);
+		}
 		++*cp;
 
 		if (kind == K_METHOD)
@@ -214,7 +315,10 @@ static rubyKind parseIdentifier (
 				vStringClear (name);
 				return parseIdentifier (cp, name, K_SINGLETON);
 			}
+		}
 
+		if (kind == K_METHOD || kind == K_SINGLETON)
+		{
 			/* Recognize characters which mark the end of a method name. */
 			if (charIsIn (last_char, "?!="))
 			{
@@ -253,6 +357,7 @@ static void readAndEmitTag (const unsigned char** cp, rubyKind expected_kind)
 			*
 			* For now, we don't create any.
 			*/
+			enterUnnamedScope ();
 		}
 		else
 		{
@@ -264,7 +369,10 @@ static void readAndEmitTag (const unsigned char** cp, rubyKind expected_kind)
 
 static void enterUnnamedScope (void)
 {
-	stringListAdd (nesting, vStringNewInit (""));
+	vString *name = vStringNewInit ("");
+	NestingLevel *parent = nestingLevelsGetCurrent (nesting);
+	nestingLevelsPush (nesting, name, parent ? parent->type : K_UNDEFINED);
+	vStringDelete (name);
 }
 
 static void findRubyTags (void)
@@ -272,7 +380,7 @@ static void findRubyTags (void)
 	const unsigned char *line;
 	boolean inMultiLineComment = FALSE;
 
-	nesting = stringListNew ();
+	nesting = nestingLevelsNew ();
 
 	/* FIXME: this whole scheme is wrong, because Ruby isn't line-based.
 	* You could perfectly well write:
@@ -291,16 +399,18 @@ static void findRubyTags (void)
 		 * separators are "do", ";" or newline */
 		boolean expect_separator = FALSE;
 
-		if (canMatch (&cp, "=begin"))
+		if (canMatch (&cp, "=begin", isWhitespace))
 		{
 			inMultiLineComment = TRUE;
 			continue;
 		}
-		if (canMatch (&cp, "=end"))
+		if (canMatch (&cp, "=end", isWhitespace))
 		{
 			inMultiLineComment = FALSE;
 			continue;
 		}
+		if (inMultiLineComment)
+			continue;
 
 		skipWhitespace (&cp);
 
@@ -321,14 +431,16 @@ static void findRubyTags (void)
 		*   puts("hello") \
 		*       unless <exp>
 		*/
-		if (canMatch (&cp, "for") || canMatch (&cp, "until") ||
-			canMatch (&cp, "while"))
+		if (canMatchKeyword (&cp, "for") ||
+		    canMatchKeyword (&cp, "until") ||
+		    canMatchKeyword (&cp, "while"))
 		{
 			expect_separator = TRUE;
 			enterUnnamedScope ();
 		}
-		else if (canMatch (&cp, "case") || canMatch (&cp, "if") ||
-				 canMatch (&cp, "unless"))
+		else if (canMatchKeyword (&cp, "case") ||
+		         canMatchKeyword (&cp, "if") ||
+		         canMatchKeyword (&cp, "unless"))
 		{
 			enterUnnamedScope ();
 		}
@@ -337,17 +449,34 @@ static void findRubyTags (void)
 		* "module M", "class C" and "def m" should only be at the beginning
 		* of a line.
 		*/
-		if (canMatch (&cp, "module"))
+		if (canMatchKeyword (&cp, "module"))
 		{
 			readAndEmitTag (&cp, K_MODULE);
 		}
-		else if (canMatch (&cp, "class"))
+		else if (canMatchKeyword (&cp, "class"))
 		{
 			readAndEmitTag (&cp, K_CLASS);
 		}
-		else if (canMatch (&cp, "def"))
+		else if (canMatchKeyword (&cp, "def"))
 		{
-			readAndEmitTag (&cp, K_METHOD);
+			rubyKind kind = K_METHOD;
+			NestingLevel *nl = nestingLevelsGetCurrent (nesting);
+
+			/* if the def is inside an unnamed scope at the class level, assume
+			 * it's from a singleton from a construct like this:
+			 *
+			 * class C
+			 *   class << self
+			 *     def singleton
+			 *       ...
+			 *     end
+			 *   end
+			 * end
+			 */
+			if (nl && nl->type == K_CLASS && vStringLength (nl->name) == 0)
+				kind = K_SINGLETON;
+
+			readAndEmitTag (&cp, kind);
 		}
 
 		while (*cp != '\0')
@@ -370,22 +499,21 @@ static void findRubyTags (void)
 				*/
 				break;
 			}
-			else if (canMatch (&cp, "begin"))
+			else if (canMatchKeyword (&cp, "begin"))
 			{
 				enterUnnamedScope ();
 			}
-			else if (canMatch (&cp, "do"))
+			else if (canMatchKeyword (&cp, "do"))
 			{
 				if (! expect_separator)
 					enterUnnamedScope ();
 				else
 					expect_separator = FALSE;
 			}
-			else if (canMatch (&cp, "end") && stringListCount (nesting) > 0)
+			else if (canMatchKeyword (&cp, "end") && nesting->n > 0)
 			{
 				/* Leave the most recent scope. */
-				vStringDelete (stringListLast (nesting));
-				stringListRemoveLast (nesting);
+				nestingLevelsPop (nesting);
 			}
 			else if (*cp == '"')
 			{
@@ -407,11 +535,11 @@ static void findRubyTags (void)
 			{
 				do
 					++cp;
-				while (isalnum (*cp) || *cp == '_');
+				while (isIdentChar (*cp));
 			}
 		}
 	}
-	stringListDelete (nesting);
+	nestingLevelsFree (nesting);
 }
 
 extern parserDefinition* RubyParser (void)
