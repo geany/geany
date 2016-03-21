@@ -135,7 +135,7 @@ Section "!Program Files" SEC01
 
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
-	File "${RESOURCEDIR}\data\file*"
+	File "${RESOURCEDIR}\data\filetype_extensions.conf"
 	File "${RESOURCEDIR}\data\geany.glade"
 !if ${GTK_VERSION} >= 3
 	File "${RESOURCEDIR}\data\geany.css"
@@ -144,6 +144,9 @@ Section "!Program Files" SEC01
 !endif
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
+
+	SetOutPath "$INSTDIR\data\filedefs"
+	File /r "${RESOURCEDIR}\data\filedefs\*"
 
 	SetOutPath "$INSTDIR\data\templates"
 	File /r "${RESOURCEDIR}\data\templates\*"
@@ -205,13 +208,9 @@ SectionEnd
 
 Section "Autocompletion Tags" SEC05
 	SectionIn 1
-	SetOutPath "$INSTDIR\data"
 	SetOverwrite ifnewer
-	File "${RESOURCEDIR}\data\php.tags"
-	File "${RESOURCEDIR}\data\pascal.tags"
-	File "${RESOURCEDIR}\data\python.tags"
-	File "${RESOURCEDIR}\data\html_entities.tags"
-	File "${RESOURCEDIR}\data\c99.tags"
+	SetOutPath "$INSTDIR\data\filedefs"
+	File /r "${RESOURCEDIR}\data\filedefs\*"
 SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
@@ -227,16 +226,8 @@ Section "GTK ${GTK_VERSION} Runtime Environment" SEC06
 	File /r "gtk\etc\*"
 	SetOutPath "$INSTDIR\lib"
 	File /r "gtk\lib\*"
-	SetOutPath "$INSTDIR\share\themes"
-	File /r "gtk\share\themes\*"
-!if ${GTK_VERSION} >= 3
-	SetOutPath "$INSTDIR\share\icons"
-	File /r "gtk\share\icons\*"
-	SetOutPath "$INSTDIR\share\glib-2.0"
-	File /r "gtk\share\glib-2.0\*"
-	SetOutPath "$INSTDIR\share\gtk-3.0"
-	File /r "gtk\share\gtk-3.0\*"
-!endif
+	SetOutPath "$INSTDIR\share"
+	File /r "gtk\share\*"
 SectionEnd
 !endif
 
