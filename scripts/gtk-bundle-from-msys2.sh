@@ -188,7 +188,9 @@ cleanup_unnecessary_files() {
 	rm -rf share/gdb
 	rm -rf share/gettext
 	rm -rf share/gir-1.0
-	rm -rf share/glib-2.0
+	rm -rf share/glib-2.0/codegen
+	rm -rf share/glib-2.0/gdb
+	rm -rf share/glib-2.0/gettext
 	rm -rf share/gtk-2.0
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
