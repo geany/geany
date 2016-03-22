@@ -209,8 +209,8 @@ SectionEnd
 Section "Autocompletion Tags" SEC05
 	SectionIn 1
 	SetOverwrite ifnewer
-	SetOutPath "$INSTDIR\data\filedefs"
-	File /r "${RESOURCEDIR}\data\filedefs\*"
+	SetOutPath "$INSTDIR\data\tags"
+	File /r "${RESOURCEDIR}\data\tags\*"
 SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
