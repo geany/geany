@@ -36,8 +36,8 @@ typedef enum {
 static kindOption RubyKinds [] = {
 	{ TRUE, 'c', "class",  "classes" },
 	{ TRUE, 'f', "method", "methods" },
-	{ TRUE, 'm', "namespace", "modules" },
-	{ TRUE, 'F', "member", "singleton methods" },
+	{ TRUE, 'm', "module", "modules" },
+	{ TRUE, 'F', "singletonMethod", "singleton methods" },
 #if 0
 	/* Following two kinds are reserved. */
 	{ TRUE, 'd', "describe", "describes and contexts for Rspec" },

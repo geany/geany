@@ -66,48 +66,6 @@ enum
 	TA_POINTER
 };
 
-static const char *s_tag_type_names[] = {
-	"class", /* classes */
-	"enum", /* enumeration names */
-	"enumerator", /* enumerators (values inside an enumeration) */
-	"externvar", /* external variable declarations */
-	"field", /* fields */
-	"function", /*  function definitions */
-	"interface", /* interfaces */
-	"macro", /* macro definitions */
-	"member", /* class, struct, and union members */
-	"method", /* methods */
-	"namespace", /* namespaces */
-	"package", /* packages */
-	"prototype", /* function prototypes */
-	"struct", /* structure names */
-	"typedef", /* typedefs */
-	"union", /* union names */
-	"variable", /* variable definitions */
-	"other" /* Other tag type (non C/C++/Java) */
-};
-
-static TMTagType s_tag_types[] = {
-	tm_tag_class_t,
-	tm_tag_enum_t,
-	tm_tag_enumerator_t,
-	tm_tag_externvar_t,
-	tm_tag_field_t,
-	tm_tag_function_t,
-	tm_tag_interface_t,
-	tm_tag_macro_t,
-	tm_tag_member_t,
-	tm_tag_method_t,
-	tm_tag_namespace_t,
-	tm_tag_package_t,
-	tm_tag_prototype_t,
-	tm_tag_struct_t,
-	tm_tag_typedef_t,
-	tm_tag_union_t,
-	tm_tag_variable_t,
-	tm_tag_other_t
-};
-
 
 #define SOURCE_FILE_NEW(S) ((S) = g_slice_new(TMSourceFilePriv))
 #define SOURCE_FILE_FREE(S) g_slice_free(TMSourceFilePriv, (TMSourceFilePriv *) S)
@@ -174,28 +132,6 @@ gchar *tm_get_real_path(const gchar *file_name)
 	return NULL;
 }
 
-static TMTagType get_tag_type(const char *tag_name)
-{
-	unsigned int i;
-	int cmp;
-	g_return_val_if_fail(tag_name, 0);
-	for (i=0; i < sizeof(s_tag_type_names)/sizeof(char *); ++i)
-	{
-		cmp = strcmp(tag_name, s_tag_type_names[i]);
-		if (0 == cmp)
-			return s_tag_types[i];
-		else if (cmp < 0)
-			break;
-	}
-	/* other is not checked above as it is last, not sorted alphabetically */
-	if (strcmp(tag_name, "other") == 0)
-		return tm_tag_other_t;
-#ifdef TM_DEBUG
-	fprintf(stderr, "Unknown tag type %s\n", tag_name);
-#endif
-	return tm_tag_undef_t;
-}
-
 static char get_tag_impl(const char *impl)
 {
 	if ((0 == strcmp("virtual", impl))
@@ -244,7 +180,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	if (!tag_entry)
 		return FALSE;
 
-	type = get_tag_type(tag_entry->kindName);
+	type = tm_parser_get_tag_type(tag_entry->kind, file->lang);
 	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
 
@@ -408,7 +344,7 @@ static gboolean init_tag_from_file_alt(TMTag *tag, TMSourceFile *file, FILE *fp)
 /*
  CTags tag file format (http://ctags.sourceforge.net/FORMAT)
 */
-static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp)
+static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *fp, TMParserType lang)
 {
 	gchar buf[BUFSIZ];
 	gchar *p, *tab;
@@ -482,37 +418,9 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = get_tag_type(kind);
+					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
 				else
-				{
-					switch (*kind)
-					{
-						case 'c': tag->type = tm_tag_class_t; break;
-						case 'd': tag->type = tm_tag_macro_t; break;
-						case 'e': tag->type = tm_tag_enumerator_t; break;
-						case 'F': tag->type = tm_tag_other_t; break;  /* Obsolete */
-						case 'f': tag->type = tm_tag_function_t; break;
-						case 'g': tag->type = tm_tag_enum_t; break;
-						case 'I': tag->type = tm_tag_class_t; break;
-						case 'i': tag->type = tm_tag_interface_t; break;
-						case 'l': tag->type = tm_tag_variable_t; break;
-						case 'M': tag->type = tm_tag_macro_t; break;
-						case 'm': tag->type = tm_tag_member_t; break;
-						case 'n': tag->type = tm_tag_namespace_t; break;
-						case 'P': tag->type = tm_tag_package_t; break;
-						case 'p': tag->type = tm_tag_prototype_t; break;
-						case 's': tag->type = tm_tag_struct_t; break;
-						case 't': tag->type = tm_tag_typedef_t; break;
-						case 'u': tag->type = tm_tag_union_t; break;
-						case 'v': tag->type = tm_tag_variable_t; break;
-						case 'x': tag->type = tm_tag_externvar_t; break;
-						default:
-#ifdef TM_DEBUG
-							g_warning("Unknown tag kind %c", *kind);
-#endif
-							tag->type = tm_tag_other_t; break;
-					}
-				}
+					tag->type = tm_parser_get_tag_type(*kind, lang);
 			}
 			else if (0 == strcmp(key, "inherits")) /* comma-separated list of classes this class inherits from */
 			{
@@ -562,7 +470,7 @@ static TMTag *new_tag_from_tags_file(TMSourceFile *file, FILE *fp, TMParserType 
 			result = init_tag_from_file_alt(tag, file, fp);
 			break;
 		case TM_FILE_FORMAT_CTAGS:
-			result = init_tag_from_file_ctags(tag, file, fp);
+			result = init_tag_from_file_ctags(tag, file, fp, mode);
 			break;
 	}
 
@@ -756,6 +664,7 @@ static gboolean tm_source_file_tags(const tagEntryInfo *const tag,
 void tm_source_file_ctags_init()
 {
 	tm_ctags_init();
+	tm_parser_verify_type_mappings();
 }
 
 /* Initializes a TMSourceFile structure from a file name. */

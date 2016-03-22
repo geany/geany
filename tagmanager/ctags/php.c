@@ -114,12 +114,12 @@ typedef enum {
 
 static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'c', "class",		"classes" },
-	{ TRUE, 'm', "macro",		"constant definitions" },
+	{ TRUE, 'd', "define",		"constant definitions" },
 	{ TRUE, 'f', "function",	"functions" },
 	{ TRUE, 'i', "interface",	"interfaces" },
 	{ FALSE, 'l', "local",		"local variables" },
 	{ TRUE, 'n', "namespace",	"namespaces" },
-	{ TRUE, 's', "struct",		"traits" },
+	{ TRUE, 't', "trait",		"traits" },
 	{ TRUE, 'v', "variable",	"variables" }
 };
 

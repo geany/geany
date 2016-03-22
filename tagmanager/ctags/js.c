@@ -138,8 +138,8 @@ static kindOption JsKinds [] = {
 	{ TRUE,  'f', "function",	  "functions"		   },
 	{ TRUE,  'c', "class",		  "classes"			   },
 	{ TRUE,  'm', "method",		  "methods"			   },
-	{ TRUE,  'p', "member",		  "properties"		   },
-	{ TRUE,  'C', "macro",		  "constants"		   },
+	{ TRUE,  'p', "property",	  "properties"		   },
+	{ TRUE,  'C', "constant",	  "constants"		   },
 	{ TRUE,  'v', "variable",	  "global variables"   }
 };
 

@@ -332,13 +332,13 @@ typedef enum
 } javaKind;
 
 static kindOption JavaKinds [] = {
-	{ TRUE,  'c', "class", "classes"},
-	{ TRUE,  'f', "field", "fields"},
-	{ TRUE,  'i', "interface", "interfaces"},
-	{ TRUE,  'm', "method", "methods"},
-	{ TRUE,  'p', "package", "packages"},
-	{ TRUE,  'e', "enumerator", "enumerators (values inside an enumeration)"},
-	{ TRUE,  'g', "enum",       "enumeration names"},
+	{ TRUE,  'c', "class",         "classes"},
+	{ TRUE,  'f', "field",         "fields"},
+	{ TRUE,  'i', "interface",     "interfaces"},
+	{ TRUE,  'm', "method",        "methods"},
+	{ TRUE,  'p', "package",       "packages"},
+	{ TRUE,  'e', "enumConstant",  "enum constants"},
+	{ TRUE,  'g', "enum",          "enum types"},
 };
 
 typedef enum

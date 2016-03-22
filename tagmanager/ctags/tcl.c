@@ -27,9 +27,9 @@ typedef enum {
 
 static kindOption TclKinds [] = {
 	{ TRUE, 'c', "class",     "classes" },
-	{ TRUE, 'f', "member",    "methods" },
-	{ TRUE, 'p', "function",  "procedures" },
-	{ TRUE, 'm', "namespace", "modules" }
+	{ TRUE, 'm', "method",    "methods" },
+	{ TRUE, 'p', "procedure", "procedures" },
+	{ TRUE, 'n', "module",    "modules" }
 };
 
 /*

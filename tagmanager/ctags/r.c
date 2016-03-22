@@ -36,8 +36,8 @@ typedef enum {
 
 static kindOption RKinds [KIND_COUNT] = {
   { TRUE, 'f', "function",  "functions" },
-  { TRUE, 's', "other",  "libraries" },
-  { TRUE, 's', "other",  "sources" },
+  { TRUE, 'l', "library",  "libraries" },
+  { TRUE, 's', "source",  "sources" },
 };
 #endif
 
@@ -190,7 +190,7 @@ extern parserDefinition* RParser (void)
   parserDefinition* const def = parserNew ("R");
 #ifndef R_REGEX
   def->kinds      = RKinds;
-  def->kindCount  = 4;
+  def->kindCount  = KIND_COUNT (RKinds);
 #endif
   def->extensions = extensions;
 #ifndef R_REGEX

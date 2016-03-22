@@ -83,6 +83,7 @@ typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsi
  */
 extern parserDefinitionFunc PARSER_LIST;
 extern parserDefinition** LanguageTable;
+extern unsigned int LanguageCount;
 /* Legacy interface */
 extern boolean includingDefineTags (void);
 extern void processLegacyKindOption (const char *const parameter);

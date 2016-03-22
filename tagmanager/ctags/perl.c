@@ -38,12 +38,12 @@ typedef enum {
 } perlKind;
 
 static kindOption PerlKinds [] = {
-	{ TRUE,  'e', "enum",       "constants" },
-	{ TRUE,  'o', "other",      "formats" },
-	{ TRUE,  'm', "macro",      "labels" },
-	{ TRUE,  'p', "package",    "packages" },
-	{ TRUE,  'f', "function",   "subroutines" },
-	{ FALSE, 'p', "prototype",  "subroutine declarations" },
+	{ TRUE,  'c', "constant",               "constants" },
+	{ TRUE,  'f', "format",                 "formats" },
+	{ TRUE,  'l', "label",                  "labels" },
+	{ TRUE,  'p', "package",                "packages" },
+	{ TRUE,  's', "subroutine",             "subroutines" },
+	{ FALSE, 'd', "subroutineDeclaration",  "subroutine declarations" },
 };
 
 /*

@@ -79,7 +79,7 @@ static kindOption VhdlKinds [] = {
  { TRUE, 'o', "struct",       "architecture" },
  { TRUE, 'u', "port",         "ports" },
  { TRUE, 'b', "member",       "blocks" },
- { TRUE, 'v', "typedef",      "alias" }
+ { TRUE, 'A', "typedef",      "alias" }
  };
 
 static keywordAssoc VhdlKeywordTable [] = {

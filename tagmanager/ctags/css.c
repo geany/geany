@@ -19,8 +19,8 @@ typedef enum eCssKinds {
 
 static kindOption CssKinds [] = {
 	{ TRUE, 'c', "class",		"classes" },
-	{ TRUE, 's', "struct",		"selectors" },
-	{ TRUE, 'v', "variable",	"identities" }
+	{ TRUE, 's', "selector",	"selectors" },
+	{ TRUE, 'i', "id",			"identities" }
 };
 
 typedef enum {

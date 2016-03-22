@@ -93,11 +93,11 @@ typedef enum {
 } goKind;
 
 static kindOption GoKinds[] = {
-	{TRUE, 'p', "namespace", "packages"},
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'c', "macro", "constants"},
-	{TRUE, 't', "typedef", "types"},
-	{TRUE, 'v', "variable", "variables"},
+	{TRUE, 'p', "package", "packages"},
+	{TRUE, 'f', "func", "functions"},
+	{TRUE, 'c', "const", "constants"},
+	{TRUE, 't', "type", "types"},
+	{TRUE, 'v', "var", "variables"},
 	{TRUE, 's', "struct", "structs"},
 	{TRUE, 'i', "interface", "interfaces"},
 	{TRUE, 'm', "member", "struct members"}

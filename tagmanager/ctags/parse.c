@@ -31,7 +31,7 @@
 */
 static parserDefinitionFunc* BuiltInParsers[] = { PARSER_LIST };
 parserDefinition** LanguageTable = NULL;
-static unsigned int LanguageCount = 0;
+unsigned int LanguageCount = 0;
 tagEntryFunction TagEntryFunction = NULL;
 void *TagEntryUserData = NULL;
 

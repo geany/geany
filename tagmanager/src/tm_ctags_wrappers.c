@@ -117,3 +117,55 @@ TMParserType tm_ctags_get_named_lang(const gchar *name)
 }
 
 
+const gchar *tm_ctags_get_lang_kinds(TMParserType lang)
+{
+	guint i;
+	parserDefinition *def = LanguageTable[lang];
+	static gchar kinds[257];
+
+	for (i = 0; i < def->kindCount; i++)
+		kinds[i] = def->kinds[i].letter;
+	kinds[i] = '\0';
+
+	return kinds;
+}
+
+
+const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang)
+{
+	guint i;
+	parserDefinition *def = LanguageTable[lang];
+
+	for (i = 0; i < def->kindCount; i++)
+	{
+		if (def->kinds[i].letter == kind)
+			return def->kinds[i].name;
+	}
+	return "unknown";
+}
+
+
+gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
+{
+	guint i;
+	parserDefinition *def = LanguageTable[lang];
+
+	for (i = 0; i < def->kindCount; i++)
+	{
+		if (g_strcmp0(def->kinds[i].name, name) == 0)
+			return def->kinds[i].letter;
+	}
+	return '-';
+}
+
+
+gboolean tm_ctags_is_using_regex_parser(TMParserType lang)
+{
+	return LanguageTable[lang]->regex;
+}
+
+
+guint tm_ctags_get_lang_count()
+{
+	return LanguageCount;
+}

@@ -58,14 +58,14 @@ static int Lang_verilog;
 static jmp_buf Exception;
 
 static kindOption VerilogKinds [] = {
- { TRUE, 'c', "variable",  "constants (define, parameter, specparam)" },
- { TRUE, 'e', "typedef",     "events" },
+ { TRUE, 'c', "constant",  "constants (define, parameter, specparam)" },
+ { TRUE, 'e', "event",     "events" },
  { TRUE, 'f', "function",  "functions" },
- { TRUE, 'm', "class",    "modules" },
- { TRUE, 'n', "variable",  "net data types" },
- { TRUE, 'p', "variable",  "ports" },
- { TRUE, 'r', "variable",  "register data types" },
- { TRUE, 't', "function",  "tasks" }
+ { TRUE, 'm', "module",    "modules" },
+ { TRUE, 'n', "net",       "net data types" },
+ { TRUE, 'p', "port",      "ports" },
+ { TRUE, 'r', "register",  "register data types" },
+ { TRUE, 't', "task",      "tasks" }
 };
 
 static keywordAssoc VerilogKeywordTable [] = {

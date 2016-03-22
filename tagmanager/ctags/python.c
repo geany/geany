@@ -31,11 +31,9 @@ typedef enum {
 static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "method",   "class methods"},
+	{TRUE, 'm', "member",   "class members"},
     {TRUE, 'v', "variable", "variables"},
-    /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
-     * so we can jump to the real implementation (if known) instead of to the import statement */
-    {TRUE, 'x', "externvar", "imports"}
+    {TRUE, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
 };
 
 typedef enum {

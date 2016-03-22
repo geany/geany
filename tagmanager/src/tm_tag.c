@@ -12,6 +12,7 @@
 #include <glib-object.h>
 
 #include "tm_tag.h"
+#include "tm_ctags_wrappers.h"
 
 
 #define TAG_NEW(T)	((T) = g_slice_new0(TMTag))
@@ -728,58 +729,19 @@ gboolean tm_tag_langs_compatible(TMParserType lang, TMParserType other)
 const char *tm_tag_type_name(const TMTag *tag)
 {
 	g_return_val_if_fail(tag, NULL);
-	switch(tag->type)
-	{
-		case tm_tag_class_t: return "class";
-		case tm_tag_enum_t: return "enum";
-		case tm_tag_enumerator_t: return "enumval";
-		case tm_tag_field_t: return "field";
-		case tm_tag_function_t: return "function";
-		case tm_tag_interface_t: return "interface";
-		case tm_tag_member_t: return "member";
-		case tm_tag_method_t: return "method";
-		case tm_tag_namespace_t: return "namespace";
-		case tm_tag_package_t: return "package";
-		case tm_tag_prototype_t: return "prototype";
-		case tm_tag_struct_t: return "struct";
-		case tm_tag_typedef_t: return "typedef";
-		case tm_tag_union_t: return "union";
-		case tm_tag_variable_t: return "variable";
-		case tm_tag_externvar_t: return "extern";
-		case tm_tag_macro_t: return "define";
-		case tm_tag_macro_with_arg_t: return "macro";
-		default: return NULL;
-	}
-	return NULL;
+
+	return tm_ctags_get_kind_name(tm_parser_get_tag_kind(tag->type, tag->lang), tag->lang);
 }
 
 /*
  Returns the TMTagType given the name of the type. Reverse of tm_tag_type_name.
  @param tag_name Name of the tag type
 */
-TMTagType tm_tag_name_type(const char* tag_name)
+TMTagType tm_tag_name_type(const char* tag_name, TMParserType lang)
 {
 	g_return_val_if_fail(tag_name, tm_tag_undef_t);
 
-	if (strcmp(tag_name, "class") == 0) return tm_tag_class_t;
-	else if (strcmp(tag_name, "enum") == 0) return tm_tag_enum_t;
-	else if (strcmp(tag_name, "enumval") == 0) return tm_tag_enumerator_t;
-	else if (strcmp(tag_name, "field") == 0) return tm_tag_field_t;
-	else if (strcmp(tag_name, "function") == 0) return tm_tag_function_t;
-	else if (strcmp(tag_name, "interface") == 0) return tm_tag_interface_t;
-	else if (strcmp(tag_name, "member") == 0) return tm_tag_member_t;
-	else if (strcmp(tag_name, "method") == 0) return tm_tag_method_t;
-	else if (strcmp(tag_name, "namespace") == 0) return tm_tag_namespace_t;
-	else if (strcmp(tag_name, "package") == 0) return tm_tag_package_t;
-	else if (strcmp(tag_name, "prototype") == 0) return tm_tag_prototype_t;
-	else if (strcmp(tag_name, "struct") == 0) return tm_tag_struct_t;
-	else if (strcmp(tag_name, "typedef") == 0) return tm_tag_typedef_t;
-	else if (strcmp(tag_name, "union") == 0) return tm_tag_union_t;
-	else if (strcmp(tag_name, "variable") == 0) return tm_tag_variable_t;
-	else if (strcmp(tag_name, "extern") == 0) return tm_tag_externvar_t;
-	else if (strcmp(tag_name, "define") == 0) return tm_tag_macro_t;
-	else if (strcmp(tag_name, "macro") == 0) return tm_tag_macro_with_arg_t;
-	else return tm_tag_undef_t;
+	return tm_parser_get_tag_type(tm_ctags_get_kind_from_name(tag_name, lang), lang);
 }
 
 static const char *tm_tag_impl_name(TMTag *tag)

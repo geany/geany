@@ -44,6 +44,16 @@ const gchar *tm_ctags_get_lang_name(TMParserType lang);
 
 TMParserType tm_ctags_get_named_lang(const gchar *name);
 
+const gchar *tm_ctags_get_lang_kinds(TMParserType lang);
+
+const gchar *tm_ctags_get_kind_name(gchar kind, TMParserType lang);
+
+gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang);
+
+gboolean tm_ctags_is_using_regex_parser(TMParserType lang);
+
+guint tm_ctags_get_lang_count();
+
 G_END_DECLS
 
 #endif /* TM_CTAGS_WRAPPERS */
