@@ -70,7 +70,8 @@ filetypes = \
 	filedefs/filetypes.vhdl \
 	filedefs/filetypes.xml \
 	filedefs/filetypes.yaml \
-	filedefs/filetypes.zephir
+	filedefs/filetypes.zephir \
+	filedefs/filetypes.autoit
 
 tagfiles = \
 	tags/c99.tags \
