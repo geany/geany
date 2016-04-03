@@ -45,7 +45,7 @@ sent={!} {#} {^} {{} {}} {+} {alt} {altdown} {altup} {appskey} {asc} {backspace}
 preprocessor=#ce #comments-end #comments-start #cs #include #include-once #notrayicon #onautoitstartregister #requireadmin
 special=#endregion #forcedef #forceref #ignorefunc #pragma #region
 expand=
-udf=_arrayadd _arraybinarysearch _arraydelete _arraydisplay
+udf=
 
 [lexer_properties]
 #settings for folding comment blocks and preprocessor lines
