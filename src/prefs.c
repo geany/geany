@@ -932,6 +932,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
 		ui_prefs.sidebar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
+		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -1272,7 +1275,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 #endif
 
 		/* apply the changes made */
-		ui_statusbar_showhide(interface_prefs.statusbar_visible);
+		ui_statusbar_showhide(interface_prefs.statusbar_visible, TRUE);
 		sidebar_openfiles_update_all(); /* to update if full path setting has changed */
 		toolbar_apply_settings();
 		toolbar_update_ui();

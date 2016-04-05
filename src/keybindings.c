@@ -601,6 +601,8 @@ static void init_default_kb(void)
 		"menu_show_messages_window1");
 	add_kb(group, GEANY_KEYS_VIEW_SIDEBAR, NULL,
 		0, 0, "toggle_sidebar", _("Toggle Sidebar"), "menu_show_sidebar1");
+	add_kb(group, GEANY_KEYS_VIEW_STATUSBAR, NULL,
+		0, 0, "toggle_statusbar", _("Toggle Statusbar"), "menu_show_statusbar1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMIN, NULL,
 		GDK_plus, GEANY_PRIMARY_MOD_MASK, "menu_zoomin", _("Zoom In"), "menu_zoom_in1");
 	add_kb(group, GEANY_KEYS_VIEW_ZOOMOUT, NULL,
@@ -1587,6 +1589,9 @@ static gboolean cb_func_view_action(guint key_id)
 			break;
 		case GEANY_KEYS_VIEW_SIDEBAR:
 			on_menu_show_sidebar1_toggled(NULL, NULL);
+			break;
+		case GEANY_KEYS_VIEW_STATUSBAR:
+			ui_statusbar_toggle(TRUE);
 			break;
 		case GEANY_KEYS_VIEW_ZOOMIN:
 			on_zoom_in1_activate(NULL, NULL);

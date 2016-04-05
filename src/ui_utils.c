@@ -885,6 +885,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_show_white_space1");
 	add_doc_widget("menu_show_line_endings1");
 	add_doc_widget("menu_show_indentation_guides1");
+	add_doc_widget("menu_show_statusbar1");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
 	add_doc_widget("normal_size1");
@@ -1454,6 +1455,7 @@ void ui_update_view_editor_menu_items(void)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_statusbar1")), interface_prefs.statusbar_visible);
 	ignore_callback = FALSE;
 }
 
@@ -2038,9 +2040,9 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 	}
 }
 
-
-void ui_statusbar_showhide(gboolean state)
+void ui_statusbar_showhide(gboolean state, gboolean update_menu)
 {
+	GtkWidget *widget;
 	/* handle statusbar visibility */
 	if (state)
 	{
@@ -2049,8 +2051,23 @@ void ui_statusbar_showhide(gboolean state)
 	}
 	else
 		gtk_widget_hide(ui_widgets.statusbar);
+
+    if (update_menu) {
+	    widget = ui_lookup_widget(main_widgets.window, "menu_show_statusbar1");
+	    if (state != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+	    {
+		    ignore_callback = TRUE;
+		    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), state);
+		    ignore_callback = FALSE;
+	    }
+    }
 }
 
+void ui_statusbar_toggle(gboolean update_menu)
+{
+	interface_prefs.statusbar_visible = ! interface_prefs.statusbar_visible;
+	ui_statusbar_showhide(interface_prefs.statusbar_visible, update_menu);
+}
 
 /** Packs all @c GtkWidgets passed after the row argument into a table, using
  * one widget per cell. The first widget is not expanded as the table grows,

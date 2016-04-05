@@ -1228,6 +1228,13 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 	ui_sidebar_show_hide();
 }
 
+void on_menu_show_statusbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+{
+	if (ignore_callback)
+		return;
+
+	ui_statusbar_toggle(FALSE);
+}
 
 static void on_menu_write_unicode_bom1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
@@ -1521,7 +1528,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		interface_prefs.show_notebook_tabs = FALSE;
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		ui_statusbar_showhide(FALSE);
+		ui_statusbar_showhide(FALSE, TRUE);
 
 		if (gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1535,7 +1542,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		interface_prefs.show_notebook_tabs = TRUE;
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		ui_statusbar_showhide(TRUE);
+		ui_statusbar_showhide(TRUE, TRUE);
 
 		if (! gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
