@@ -885,6 +885,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_show_white_space1");
 	add_doc_widget("menu_show_line_endings1");
 	add_doc_widget("menu_show_indentation_guides1");
+	add_doc_widget("menu_show_statusbar");
 	add_doc_widget("menu_zoom_in1");
 	add_doc_widget("menu_zoom_out1");
 	add_doc_widget("normal_size1");
@@ -1454,6 +1455,7 @@ void ui_update_view_editor_menu_items(void)
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_statusbar1")), interface_prefs.statusbar_visible);
 	ignore_callback = FALSE;
 }
 

@@ -7444,6 +7444,16 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkCheckMenuItem" id="menu_show_statusbar1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Show Statusbar</property>
+                            <property name="use_underline">True</property>
+                            <property name="active">True</property>
+                            <signal name="toggled" handler="on_menu_show_statusbar1_toggled" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkSeparatorMenuItem" id="menu_separator5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>

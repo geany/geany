@@ -1228,6 +1228,15 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 	ui_sidebar_show_hide();
 }
 
+void on_menu_show_statusbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+{
+	if (ignore_callback)
+		return;
+
+	interface_prefs.statusbar_visible = ! interface_prefs.statusbar_visible;
+
+	ui_statusbar_showhide(interface_prefs.statusbar_visible);
+}
 
 static void on_menu_write_unicode_bom1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
