@@ -95,10 +95,10 @@ All information about this project you can find at http://plugins.geany.org/
 To add a new plugin to this project, get in touch with the people on the
 geany-devel-mailing list and create a fork of the geany-plugins project
 at https://github.com/geany/geany-plugins.
-Beside of adding a new plugin, geany-devel-mailing list is also the place where
+Beside of adding a new plugin, geany-devel-mailing list is also the place
 to discuss development related questions.
 However, once you have done your fork of geany-plugins you can develop
-your plugin until you think its the right time to publish it. At this point,
+your plugin until you think it is the right time to publish it. At this point,
 create a pull request for adding your patch set into the master branch of the main
 geany-plugins repository.
 
@@ -170,7 +170,7 @@ distributions, the package names and commands to use may differ.
 Basically, you are done at this point and could continue with writing the plugin code.
 
 [1] For Windows, it is basically the same but you might have some more work on setting up
-the general build environment(compiler, GTK development files, ...). This is described on
+the general build environment (compiler, GTK development files, ...). This is described on
 Geany's website at http://www.geany.org/Support/BuildingOnWin32.
 
 @section helloworld "Hello World"
@@ -207,7 +207,7 @@ that helps supporting GTK+2 and GTK+3 in the same source.
 
 Now you can go on and write your first lines for your new plugin. As mentioned before, you will
 need to implement a couple of functions. The first mandatory one is @a geany_load_module(). Geany
-uses the presence fo this function to identify a library as a plugin. When Geany scans the
+uses the presence of this function to identify a library as a plugin. When Geany scans the
 pre-defined and user-configured plugin directories, it will take a look at each shared library (or
 DLL on Windows) to see if it exports a @a geany_load_module() symbol. Files lacking these will be
 ignored. The second mandatory one is an initialization function that is only called when the plugin
@@ -577,7 +577,7 @@ static gboolean hello_init(GeanyPlugin *plugin, gpointer pdata)
 This page briefly describes the deprecated, legacy plugin entry points. These have been in place
 prior to Geany 1.26 and are still loadable and working for the time being. However, do not create
 new plugins against these. For this reason, the actual description here is rather minimalistic and
-concentrates on porting legacy plugins to the new interface. Basically it's main purpose
+concentrates on porting legacy plugins to the new interface. Basically its main purpose
 is to give newcomers an idea of what they are looking at if they come across a legacy plugin.
 
 @section overview Overview
@@ -595,10 +595,10 @@ plugin_configure_single(GtkWidget *) are optional, however Geany prints a warnin
 plugin_cleanup() is missing and only one of plugin_configure(GtkDialog *) and
 plugin_configure_single(GtkWidget *) is used for any single plugin.
 
-By convention, plugin_version_check() is implicitely defined through the use of PLUGIN_VERSION_CHECK(),
+By convention, plugin_version_check() is implicitly defined through the use of PLUGIN_VERSION_CHECK(),
 and similarly plugin_info is defined through PLUGIN_SET_INFO() or PLUGIN_SET_TRANSLATABLE_INFO().
 
-The functions should generally perform the same tasks as their eqivalents in GeanyPlugin::funcs.
+The functions should generally perform the same tasks as their equivalents in GeanyPlugin::funcs.
 
 Geany also recognized numerous variable fields if the plugin exported them globally, and actually
 set a few of them inside the plugins data section.
@@ -759,7 +759,7 @@ sub-plugin plugins in an abstract manner:
  - Unloading simply reverses the effect of loading.
 
 For providing these methods, GeanyPlugin has a field GeanyProxyFuncs which contains three function
-pointers which must be initialized proir to calling geany_plugin_register_proxy(). This should be
+pointers which must be initialized prior to calling geany_plugin_register_proxy(). This should be
 done in the GeanyPluginFuncs::init function of the proxy plugin.
 
  - In the call to geany_plugin_register_proxy() the proxy plugin passes a list of file extensions.
@@ -769,7 +769,7 @@ done in the GeanyPluginFuncs::init function of the proxy plugin.
    provided file extensions) is actually a plugin. This may depend on the plugin file itself in
    case of ambiguity or availability of runtime dependencies or even configuration.
    @ref PROXY_IGNORED or @ref PROXY_MATCHED should be returned, possibly in combination
-   with the @ref PROXY_NOLOAD flag. Not implementing GeanyProxyFuncs::probe at all is eqivalent to
+   with the @ref PROXY_NOLOAD flag. Not implementing GeanyProxyFuncs::probe at all is equivalent to
    always returning @ref PROXY_MATCHED.
  - GeanyProxyFuncs::load must be implemented to actually load the plugin. It is called by Geany
    when the user enables the sub-plugin. What "loading" means is entirely up to the proxy plugin and
@@ -843,7 +843,7 @@ syntactic problems or other errors.
 There are two basic classes:
 
 1) Runtime errors that can be determined at load time. For example, the shebang of a script
-indicates a specific interpeter version but that version is not installed on the system. Your proxy
+indicates a specific interpreter version but that version is not installed on the system. Your proxy
 should respond the same way as for version-incompatible plugins: don't register the plugin at
 all, but leave a message the user suggesting what has to be installed in order to work. Handle
 syntax errors in the scripts of sub-plugins the same way if possible.
@@ -973,7 +973,7 @@ static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer 
 
 GeanyProxyFuncs::load is a bit more complex. It reads the file, fills the sub-plugin's PluginInfo
 fields and calls GEANY_PLUGIN_REGISTER_FULL(). Additionally, it creates a per-plugin context that
-holds GKeyFile instance (a poor man's interpeter context). You can also see that it does not call
+holds GKeyFile instance (a poor man's interpreter context). You can also see that it does not call
 GEANY_PLUGIN_REGISTER_FULL() if g_key_file_load_from_file() found an error (probably a syntax
 problem) which means the sub-plugin cannot be enabled.
 
