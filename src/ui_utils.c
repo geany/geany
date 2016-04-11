@@ -2477,10 +2477,28 @@ void ui_init_builder(void)
 static void init_custom_style(void)
 {
 #if GTK_CHECK_VERSION(3, 0, 0)
-	gchar *css_file = g_build_filename(app->datadir, "geany.css", NULL);
+	const struct {
+		guint version;
+		const gchar *file;
+	} css_files[] = {
+		/*
+		 * Keep these from newest to oldest,
+		 * and make sure 0 remains last
+		 */
+		{ 20, "geany-3.20.css" },
+		{ 0, "geany-3.0.css" },
+	};
+	guint gtk_version = gtk_get_minor_version();
+	gsize i = 0;
+	gchar *css_file;
 	GtkCssProvider *css = gtk_css_provider_new();
 	GError *error = NULL;
 
+	/* gtk_version will never be smaller than 0 */
+	while (css_files[i].version > gtk_version)
+		++i;
+
+	css_file = g_build_filename(app->datadir, css_files[i].file, NULL);
 	if (! gtk_css_provider_load_from_path(css, css_file, &error))
 	{
 		g_warning("Failed to load custom CSS: %s", error->message);
