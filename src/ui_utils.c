@@ -1910,21 +1910,19 @@ void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 GEANY_API_SYMBOL
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry)
 {
-	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
+	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry, *parent, *next_parent;
 
 	hbox = gtk_hbox_new(FALSE, 6);
 	path_entry = GTK_WIDGET(entry);
 
 	/* prevent path_entry being vertically stretched to the height of dirbtn */
 	vbox = gtk_vbox_new(FALSE, 0);
-	if (gtk_widget_get_parent(path_entry))	/* entry->parent may be a GtkComboBoxEntry */
-	{
-		GtkWidget *parent = gtk_widget_get_parent(path_entry);
 
-		gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
-	}
-	else
-		gtk_box_pack_start(GTK_BOX(vbox), path_entry, TRUE, FALSE, 0);
+	parent = path_entry;
+	while ((next_parent = gtk_widget_get_parent(parent)) != NULL)
+		parent = next_parent;
+
+	gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
 
 	dirbtn = gtk_button_new();
 	openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
