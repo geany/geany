@@ -2052,15 +2052,16 @@ void ui_statusbar_showhide(gboolean state, gboolean update_menu)
 	else
 		gtk_widget_hide(ui_widgets.statusbar);
 
-    if (update_menu) {
-	    widget = ui_lookup_widget(main_widgets.window, "menu_show_statusbar1");
-	    if (state != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	    {
-		    ignore_callback = TRUE;
-		    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), state);
-		    ignore_callback = FALSE;
-	    }
-    }
+	if (update_menu)
+	{
+		widget = ui_lookup_widget(main_widgets.window, "menu_show_statusbar1");
+		if (state != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
+		{
+			ignore_callback = TRUE;
+			gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), state);
+			ignore_callback = FALSE;
+		}
+	}
 }
 
 void ui_statusbar_toggle(gboolean update_menu)
