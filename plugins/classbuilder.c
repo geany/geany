@@ -630,7 +630,7 @@ static void cc_dlg_update_file_names(CreateClassDialog *cc_dlg)
 	{
 		case GEANY_CLASS_TYPE_CPP:
 		{
-			class_header = g_strconcat(class_name_down, ".h", NULL);
+			class_header = g_strconcat(class_name_down, ".hpp", NULL);
 			class_source = g_strconcat(class_name_down, ".cpp", NULL);
 			break;
 		}
