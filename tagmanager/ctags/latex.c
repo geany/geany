@@ -1,7 +1,6 @@
 /*
  *   Copyright (c) 2000-2001, Jérôme Plût
  *   Copyright (c) 2006, Enrico Tröger
- *   Copyright (c) 2016, Marcelo Garlet Millani
  *
  *   This source code is released for free distribution under the terms of the
  *   GNU General Public License.
