@@ -10,6 +10,9 @@ Special symbolsÌ65536Ö0
 TablesÌ64Ö0
 \color{redÌ64Ö0
 \label{morefigÌ64Ö0
+\lbÌ16Ö0
+\rbÌ16Ö0
+\rvÌ16Ö0
 alignÌ1Ö0
 casesÌ1Ö0
 centerÌ1Ö0
@@ -25,11 +28,8 @@ fig:qm/complexfunctionsÌ2048Ö0
 fig:typicalÌ2048Ö0
 figureÌ1Ö0
 itemizeÌ1Ö0
-lbÌ16Ö0
 morefigÌ2048Ö0
 pmatrixÌ1Ö0
-rbÌ16Ö0
-rvÌ16Ö0
 subequationsÌ1Ö0
 tab:5/tcÌ2048Ö0
 tableÌ1Ö0
