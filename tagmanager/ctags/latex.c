@@ -175,6 +175,7 @@ static void findTeXTags(void)
 
 				/* \newenvironment{name} */
 				else if ( getWord("newenvironment", &cp)
+					|| getWord("renewenvironment", &cp)
 					|| getWord("newtheorem", &cp)
 					|| getWord("begin", &cp)
 					)
