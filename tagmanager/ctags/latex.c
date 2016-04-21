@@ -166,7 +166,8 @@ static void findTeXTags(void)
 				}
 
 				/* \def\command */
-				else if (getWord("def", &cp))
+				else if (getWord("def", &cp)
+					|| getWord("let", &cp))
 				{
 					createTag(0, K_COMMAND, cp);
 					continue;
