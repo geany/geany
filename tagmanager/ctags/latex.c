@@ -108,13 +108,13 @@ static void createTag(int flags, TeXKind kind, const char * l)
  	if (name->buffer[0] != '}')
  		makeSimpleTag(name, TeXKinds, kind);
      }
-     else if (isalpha((int) *l) || *l == '@')
+     else if (isalpha((int) *l) || *l == '@' || *l == '\\')
      {
  	do
  	{
  	    vStringPut (name, (int) *l);
  	    ++l;
- 	} while (isalpha((int) *l) || *l == '@');
+ 	} while (isalpha((int) *l) || *l == '@' || *l == '\\');
  	vStringTerminate(name);
  	makeSimpleTag(name, TeXKinds, kind);
      }
@@ -152,7 +152,7 @@ static void findTeXTags(void)
  		    || getWord("renewcommand", &cp)
  		    )
  		{
- 		    createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+ 		    createTag (TEX_BRACES, K_COMMAND, cp);
  		    continue;
  		}
 
@@ -161,14 +161,14 @@ static void findTeXTags(void)
  		{
  		    if (*cp == '*')
  			cp++;
- 		    createTag(TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+ 		    createTag(TEX_BRACES, K_COMMAND, cp);
  		    continue;
  		}
 
  		/* \def\command */
  		else if (getWord("def", &cp))
  		{
- 		    createTag(TEX_BSLASH, K_COMMAND, cp);
+ 		    createTag(0, K_COMMAND, cp);
  		    continue;
  		}
 
