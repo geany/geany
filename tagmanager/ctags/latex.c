@@ -60,7 +60,6 @@ static int getWord(const char * ref, const char **ptr)
 	while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
 		ref++, p++;
 
-
 	if (*ref)
 		return FALSE;
 
@@ -76,7 +75,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 	vString *name = vStringNew ();
 
 	while ((*l == ' '))
-	l++;
+		l++;
 	if (flags & (TEX_BRACES | TEX_LABEL))
 	{
 		if (*l == '[')
@@ -87,16 +86,16 @@ static void createTag(int flags, TeXKind kind, const char * l)
 					goto no_tag;
 				l++;
 			}
-		l++; /* skip the closing square bracket */
-	}
-	if (*l != '{')
-		goto no_tag;
-	l++;
+			l++; /* skip the closing square bracket */
+		}
+		if (*l != '{')
+			goto no_tag;
+		l++;
 	}
 	if (flags & TEX_BSLASH)
 	{
-	if ((*(l++)) != '\\')
-		goto no_tag;
+		if ((*(l)) != '\\')
+			goto no_tag;
 	}
 	if (flags & TEX_LABEL)
 	{
@@ -115,7 +114,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 		{
 			vStringPut (name, (int) *l);
 			++l;
-		} while (isalpha((int) *l) || *l == '@' || *l == '\\');
+		} while (isalpha((int) *l) || *l == '@');
 		vStringTerminate(name);
 		makeSimpleTag(name, TeXKinds, kind);
 	}
@@ -153,7 +152,7 @@ static void findTeXTags(void)
 					|| getWord("renewcommand", &cp)
 					)
 				{
-					createTag (TEX_BRACES, K_COMMAND, cp);
+					createTag (TEX_BSLASH | TEX_BRACES, K_COMMAND, cp);
 					continue;
 				}
 
