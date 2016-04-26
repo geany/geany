@@ -4,12 +4,14 @@
 #geany-close-tab-button {
 	padding: 0;
 }
-#geany-close-tab-button GtkImage {
+#geany-close-tab-button GtkImage /* GTK < 3.20 */,
+#geany-close-tab-button image /* GTK >= 3.20 */ {
 	padding: 0;
 }
 
 /* use monospaced font in search entries for easier reading of regexp (#1907117) */
-#GeanyDialogSearch GtkEntry {
+#GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
+#GeanyDialogSearch entry /* GTK >= 3.20 */ {
 	font-family: monospace;
 }
 
