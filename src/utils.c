@@ -464,7 +464,7 @@ gdouble utils_scale_round(gdouble val, gdouble factor)
 
 /* like g_utf8_strdown() but if @str is not valid UTF8, convert it from locale first.
  * returns NULL on charset conversion failure */
-static gchar *utf8_strdown(const gchar *str)
+gchar *utf8_strdown(const gchar *str)
 {
 	gchar *down;
 
