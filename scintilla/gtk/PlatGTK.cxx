@@ -1534,12 +1534,34 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
-		GtkBorder padding, border;
+		GtkBorder padding, border, border_border = { 0, 0, 0, 0 };
 		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
 		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
+
+#	if GTK_CHECK_VERSION(3,20,0)
+		// on GTK 3.20 the frame border is in a sub-node "border".
+		// Unfortunately we need to be built against 3.20 to be able to support this, as it requires
+		// new API.
+		GtkStyleContext *styleContextFrameBorder = gtk_style_context_new();
+		GtkWidgetPath *widget_path = gtk_widget_path_copy(gtk_style_context_get_path(styleContextFrame));
+		gtk_widget_path_append_type(widget_path, GTK_TYPE_BORDER); // dummy type
+		gtk_widget_path_iter_set_object_name(widget_path, -1, "border");
+		gtk_style_context_set_path(styleContextFrameBorder, widget_path);
+		gtk_widget_path_free(widget_path);
+		gtk_style_context_get_border(styleContextFrameBorder, GTK_STATE_FLAG_NORMAL, &border_border);
+		g_object_unref(styleContextFrameBorder);
+#	else // < 3.20
+		if (gtk_check_version(3, 20, 0) == NULL) {
+			// default to 1px all around as it's likely what it is, and so we don't miss 2px height
+			// on GTK 3.20 when built against an earlier version.
+			border_border.top = border_border.bottom = border_border.left = border_border.right = 1;
+		}
+#	endif
+
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + border.top + border.bottom
+		          + border_border.top + border_border.bottom
 		          + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		height = (rows * row_height
@@ -1560,6 +1582,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 #if GTK_CHECK_VERSION(3,0,0)
 		rc.right += (padding.left + padding.right
 		             + border.left + border.right
+		             + border_border.left + border_border.right
 		             + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		rc.right += 2 * (PWidget(frame)->style->xthickness
