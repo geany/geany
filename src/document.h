@@ -70,6 +70,9 @@ typedef struct GeanyFilePrefs
 GeanyFilePrefs;
 
 
+#define GEANY_TYPE_DOCUMENT (document_get_type())
+GType document_get_type (void);
+
 /**
  *  Structure for representing an open tab with all its properties.
  **/
