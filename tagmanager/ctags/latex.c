@@ -149,6 +149,7 @@ static void findTeXTags(void)
 				if (getWord("newcommand", &cp)
 					|| getWord("providecommand", &cp)
 					|| getWord("renewcommand", &cp)
+					|| getWord("newlength", &cp)
 					)
 				{
 					createTag (TEX_BSLASH | TEX_BRACES, K_COMMAND, cp);
