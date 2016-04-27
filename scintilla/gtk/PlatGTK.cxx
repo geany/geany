@@ -1456,7 +1456,7 @@ void ListBoxX::SetFont(Font &scint_font) {
 		if (cssProvider) {
 			PangoFontDescription *pfd = PFont(scint_font)->pfd;
 			std::ostringstream ssFontSetting;
-			ssFontSetting << "GtkTreeView { ";
+			ssFontSetting << "GtkTreeView, treeview { ";
 			ssFontSetting << "font-family: " << pango_font_description_get_family(pfd) <<  "; ";
 			ssFontSetting << "font-size:";
 			ssFontSetting << static_cast<double>(pango_font_description_get_size(pfd)) / PANGO_SCALE;
