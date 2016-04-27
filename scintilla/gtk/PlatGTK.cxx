@@ -1550,9 +1550,10 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
+		GtkStateFlags stateFlagsFrame = gtk_style_context_get_state(styleContextFrame);
 		GtkBorder padding, border, border_border = { 0, 0, 0, 0 };
-		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
-		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
+		gtk_style_context_get_padding(styleContextFrame, stateFlagsFrame, &padding);
+		gtk_style_context_get_border(styleContextFrame, stateFlagsFrame, &border);
 
 #	if GTK_CHECK_VERSION(3,20,0)
 		// on GTK 3.20 the frame border is in a sub-node "border".
@@ -1564,7 +1565,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 		gtk_widget_path_iter_set_object_name(widget_path, -1, "border");
 		gtk_style_context_set_path(styleContextFrameBorder, widget_path);
 		gtk_widget_path_free(widget_path);
-		gtk_style_context_get_border(styleContextFrameBorder, GTK_STATE_FLAG_NORMAL, &border_border);
+		gtk_style_context_get_border(styleContextFrameBorder, stateFlagsFrame, &border_border);
 		g_object_unref(styleContextFrameBorder);
 #	else // < 3.20
 		if (gtk_check_version(3, 20, 0) == NULL) {
