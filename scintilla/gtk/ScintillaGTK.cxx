@@ -1769,8 +1769,17 @@ void ScintillaGTK::Resize(int width, int height) {
 
 	alloc.x = 0;
 	alloc.y = 0;
-	alloc.width = Platform::Maximum(1, width - verticalScrollBarWidth);
-	alloc.height = Platform::Maximum(1, height - horizontalScrollBarHeight);
+	alloc.width = 1;
+	alloc.height = 1;
+#if GTK_CHECK_VERSION(3, 0, 0)
+	// please GTK 3.20 and ask wText what size it wants, although we know it doesn't really need
+	// anything special as it's ours.
+	gtk_widget_get_preferred_size(PWidget(wText), &requisition, NULL);
+	alloc.width = requisition.width;
+	alloc.height = requisition.height;
+#endif
+	alloc.width = Platform::Maximum(alloc.width, width - verticalScrollBarWidth);
+	alloc.height = Platform::Maximum(alloc.height, height - horizontalScrollBarHeight);
 	gtk_widget_size_allocate(GTK_WIDGET(PWidget(wText)), &alloc);
 }
 
