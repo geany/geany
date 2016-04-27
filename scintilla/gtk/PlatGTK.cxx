@@ -1494,6 +1494,7 @@ int ListBoxX::GetRowHeight()
 	GdkRectangle rect;
 	GtkTreePath *path = gtk_tree_path_new_first();
 	gtk_tree_view_get_background_area(GTK_TREE_VIEW(list), path, NULL, &rect);
+	gtk_tree_path_free(path);
 	return rect.height;
 #else
 	int row_height=0;
