@@ -1060,25 +1060,6 @@ GIOChannel *utils_set_up_io_channel(
 }
 
 
-gchar **utils_read_file_in_array(const gchar *filename)
-{
-	gchar **result = NULL;
-	gchar *data;
-
-	g_return_val_if_fail(filename != NULL, NULL);
-
-	g_file_get_contents(filename, &data, NULL, NULL);
-
-	if (data != NULL)
-	{
-		result = g_strsplit_set(data, "\r\n", -1);
-		g_free(data);
-	}
-
-	return result;
-}
-
-
 /* Contributed by Stefan Oltmanns, thanks.
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts.
  * keep_backslash is used for regex strings to leave '\\' and '\?' in place */

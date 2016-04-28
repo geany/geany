@@ -64,8 +64,6 @@
 #include <stdlib.h>
 
 
-static gchar **html_entities = NULL;
-
 typedef struct
 {
 	gboolean	tags_loaded;
@@ -138,7 +136,6 @@ static struct
 }
 symbol_menu;
 
-static void html_tags_loaded(void);
 static void load_user_tags(GeanyFiletypeID ft_id);
 
 /* get the tags_ignore list, exported by tagmanager's options.c */
@@ -221,21 +218,19 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	switch (file_type_idx)
 	{
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_HTML:
-			html_tags_loaded();
-	}
-	switch (file_type_idx)
-	{
 		case GEANY_FILETYPES_CPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
 			/* no C++ tagfile yet */
 			return;
 		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
 		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
-		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
 		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
 		case GEANY_FILETYPES_PYTHON:tag_type = GTF_PYTHON; break;
+		case GEANY_FILETYPES_HTML:	tag_type = GTF_HTML_ENTITIES; break;
+		case GEANY_FILETYPES_PHP:
+			symbols_global_tags_loaded(GEANY_FILETYPES_HTML);	/* load HTML global tags */
+			tag_type = GTF_PHP;
+			break;
 		default:
 			return;
 	}
@@ -248,26 +243,6 @@ void symbols_global_tags_loaded(guint file_type_idx)
 		symbols_load_global_tags(fname, filetypes[file_type_idx]);
 		tfi->tags_loaded = TRUE;
 		g_free(fname);
-	}
-}
-
-
-/* HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;') */
-static void html_tags_loaded(void)
-{
-	TagFileInfo *tfi;
-
-	if (cl_options.ignore_global_tags)
-		return;
-
-	tfi = &tag_file_info[GTF_HTML_ENTITIES];
-	if (! tfi->tags_loaded)
-	{
-		gchar *file = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
-
-		html_entities = utils_read_file_in_array(file);
-		tfi->tags_loaded = TRUE;
-		g_free(file);
 	}
 }
 
@@ -323,15 +298,6 @@ GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
 	return tm_tag_context_separator(filetypes[ft_id]->lang);
-}
-
-
-const gchar **symbols_get_html_entities(void)
-{
-	if (html_entities == NULL)
-		html_tags_loaded(); /* if not yet created, force creation of the array but shouldn't occur */
-
-	return (const gchar **) html_entities;
 }
 
 
@@ -2634,7 +2600,6 @@ void symbols_finalize(void)
 {
 	guint i;
 
-	g_strfreev(html_entities);
 	g_strfreev(c_tags_ignore);
 
 	for (i = 0; i < G_N_ELEMENTS(symbols_icons); i++)

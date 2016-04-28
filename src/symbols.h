@@ -52,8 +52,6 @@ void symbols_global_tags_loaded(guint file_type_idx);
 
 GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global);
 
-const gchar **symbols_get_html_entities(void);
-
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode);
 
 gint symbols_generate_global_tags(gint argc, gchar **argv, gboolean want_preprocess);
