@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
- 
+
 #include "highlighting.h"
 #include "highlightingmappings.h"
 
@@ -1403,6 +1403,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_TRIPLEVERBATIM ||
 				style == SCE_C_HASHQUOTEDSTRING ||
 				style == SCE_C_ESCAPESEQUENCE);
+		case SCLEX_LATEX:
+			return (style == SCE_L_DEFAULT ||
+				style == SCE_L_MATH ||
+				style == SCE_L_MATH2 ||
+				style == SCE_L_VERBATIM);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
