@@ -93,7 +93,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 	}
 	if (flags & TEX_BSLASH)
 	{
-		if ((*(l)) != '\\')
+		if ((*(l++)) != '\\')
 			goto no_tag;
 	}
 	if (flags & TEX_LABEL)
@@ -107,7 +107,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 		if (name->buffer[0] != '}')
 			makeSimpleTag(name, TeXKinds, kind);
 	}
-	else if (isalpha((int) *l) || *l == '@' || *l == '\\')
+	else if (isalpha((int) *l) || *l == '@')
 	{
 		do
 		{

@@ -2294,38 +2294,15 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	ret = autocomplete_check_html(editor, style, pos);
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
-		wordchars = GEANY_WORDCHARS"@\\:"; /* add @\ for macros and : for labels */
+		wordchars = GEANY_WORDCHARS"@:"; /* add @ for macros and : for labels */
 	else if (ft->id == GEANY_FILETYPES_CSS)
 		wordchars = GEANY_WORDCHARS"-"; /* add - because they are part of property names */
 	else
 		wordchars = GEANY_WORDCHARS;
 
 	read_current_word(editor, pos, cword, sizeof(cword), wordchars, TRUE);
-	/* in latex files, cut the word on the last \ found, if any exist
-	 * this is to treat cases like \def\macro or \\word */
-	if(ft->id == GEANY_FILETYPES_LATEX)
-	{
-		gint lastbl = 0;
-		gint i;
-		for(i=0 ; cword[i] != '\0';  i++)
-		{
-			/* only counts \ that are not escaping another \ like in \\  */
-			if(cword[i] == '\\' && cword[i+1] == '\\')
-			{
-				i++;
-				lastbl = i+1; /* next character after the \\ */
-			}
-			else if(cword[i] == '\\')
-				lastbl = i;
-		}
-		root = cword+lastbl;
-		rootlen = i-lastbl;
-	}
-	else
-	{
-		root = cword;
-		rootlen = strlen(root);
-	}
+	root = cword;
+	rootlen = strlen(root);
 
 	if (ret || force)
 	{
