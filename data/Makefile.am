@@ -73,11 +73,11 @@ filetypes = \
 	filedefs/filetypes.zephir
 
 tagfiles = \
-	tags/c99.tags \
-	tags/php.tags \
-	tags/python.tags \
-	tags/pascal.tags \
-	tags/html_entities.tags
+	tags/std99.c.tags \
+	tags/std.php.tags \
+	tags/std.py.tags \
+	tags/std.pas.tags \
+	tags/entities.html.tags
 
 template_files = \
 	templates/files/file.html \

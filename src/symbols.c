@@ -64,34 +64,6 @@
 #include <stdlib.h>
 
 
-typedef struct
-{
-	gboolean	tags_loaded;
-	const gchar	*tag_file;
-} TagFileInfo;
-
-/* Check before adding any more tags files, usually they should be downloaded separately. */
-enum	/* Geany tag files */
-{
-	GTF_C,
-	GTF_PASCAL,
-	GTF_PHP,
-	GTF_HTML_ENTITIES,
-	GTF_LATEX,
-	GTF_PYTHON,
-	GTF_MAX
-};
-
-static TagFileInfo tag_file_info[GTF_MAX] =
-{
-	{FALSE, "c99.tags"},
-	{FALSE, "pascal.tags"},
-	{FALSE, "php.tags"},
-	{FALSE, "html_entities.tags"},
-	{FALSE, "latex.tags"},
-	{FALSE, "python.tags"}
-};
-
 static GPtrArray *top_level_iter_names = NULL;
 
 enum
@@ -198,9 +170,6 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
  * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(guint file_type_idx)
 {
-	TagFileInfo *tfi;
-	gint tag_type;
-
 	/* load ignore list for C/C++ parser */
 	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
 		c_tags_ignore == NULL)
@@ -220,29 +189,10 @@ void symbols_global_tags_loaded(guint file_type_idx)
 	{
 		case GEANY_FILETYPES_CPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
-			/* no C++ tagfile yet */
-			return;
-		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
-		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
-		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
-		case GEANY_FILETYPES_PYTHON:tag_type = GTF_PYTHON; break;
-		case GEANY_FILETYPES_HTML:	tag_type = GTF_HTML_ENTITIES; break;
+			break;
 		case GEANY_FILETYPES_PHP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_HTML);	/* load HTML global tags */
-			tag_type = GTF_PHP;
 			break;
-		default:
-			return;
-	}
-	tfi = &tag_file_info[tag_type];
-
-	if (! tfi->tags_loaded)
-	{
-		gchar *fname = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
-
-		symbols_load_global_tags(fname, filetypes[file_type_idx]);
-		tfi->tags_loaded = TRUE;
-		g_free(fname);
 	}
 }
 
