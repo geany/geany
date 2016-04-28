@@ -3,10 +3,10 @@
 // Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <math.h>
 
 #include <string>
@@ -32,13 +32,6 @@
 // Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
 #pragma GCC diagnostic ignored "-Wsentinel"
 #endif
-
-/* GLIB must be compiled with thread support, otherwise we
-   will bail on trying to use locks, and that could lead to
-   problems for someone.  `glib-config --libs gthread` needs
-   to be used to get the glib libraries for linking, otherwise
-   g_thread_init will fail */
-#define USE_LOCK defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE)
 
 #include "Converter.h"
 
@@ -88,117 +81,38 @@ using namespace Scintilla;
 
 enum encodingType { singleByte, UTF8, dbcs};
 
-struct LOGFONT {
-	int size;
-	int weight;
-	bool italic;
-	int characterSet;
-	char faceName[300];
-};
-
-#if USE_LOCK
-static GMutex *fontMutex = NULL;
-
-static void InitializeGLIBThreads() {
-#if !GLIB_CHECK_VERSION(2,31,0)
-	if (!g_thread_supported()) {
-		g_thread_init(NULL);
-	}
-#endif
-}
-#endif
-
-static void FontMutexAllocate() {
-#if USE_LOCK
-	if (!fontMutex) {
-		InitializeGLIBThreads();
-#if GLIB_CHECK_VERSION(2,31,0)
-		fontMutex = g_new(GMutex, 1);
-		g_mutex_init(fontMutex);
-#else
-		fontMutex = g_mutex_new();
-#endif
-	}
-#endif
-}
-
-static void FontMutexFree() {
-#if USE_LOCK
-	if (fontMutex) {
-#if GLIB_CHECK_VERSION(2,31,0)
-		g_mutex_clear(fontMutex);
-		g_free(fontMutex);
-#else
-		g_mutex_free(fontMutex);
-#endif
-		fontMutex = NULL;
-	}
-#endif
-}
-
-static void FontMutexLock() {
-#if USE_LOCK
-	g_mutex_lock(fontMutex);
-#endif
-}
-
-static void FontMutexUnlock() {
-#if USE_LOCK
-	if (fontMutex) {
-		g_mutex_unlock(fontMutex);
-	}
-#endif
-}
-
 // Holds a PangoFontDescription*.
 class FontHandle {
-	XYPOSITION width[128];
-	encodingType et;
 public:
-	int ascent;
 	PangoFontDescription *pfd;
 	int characterSet;
-	FontHandle() : et(singleByte), ascent(0), pfd(0), characterSet(-1) {
-		ResetWidths(et);
+	FontHandle() : pfd(0), characterSet(-1) {
 	}
 	FontHandle(PangoFontDescription *pfd_, int characterSet_) {
-		et = singleByte;
-		ascent = 0;
 		pfd = pfd_;
 		characterSet = characterSet_;
-		ResetWidths(et);
 	}
 	~FontHandle() {
 		if (pfd)
 			pango_font_description_free(pfd);
 		pfd = 0;
 	}
-	void ResetWidths(encodingType et_) {
-		et = et_;
-		for (int i=0; i<=127; i++) {
-			width[i] = 0;
-		}
-	}
-	XYPOSITION CharWidth(unsigned char ch, encodingType et_) const {
-		XYPOSITION w = 0;
-		FontMutexLock();
-		if ((ch <= 127) && (et == et_)) {
-			w = width[ch];
-		}
-		FontMutexUnlock();
-		return w;
-	}
-	void SetCharWidth(unsigned char ch, XYPOSITION w, encodingType et_) {
-		if (ch <= 127) {
-			FontMutexLock();
-			if (et != et_) {
-				ResetWidths(et_);
-			}
-			width[ch] = w;
-			FontMutexUnlock();
-		}
-	}
+	static FontHandle *CreateNewFont(const FontParameters &fp);
 };
+
+FontHandle *FontHandle::CreateNewFont(const FontParameters &fp) {
+	PangoFontDescription *pfd = pango_font_description_new();
+	if (pfd) {
+		pango_font_description_set_family(pfd,
+			(fp.faceName[0] == '!') ? fp.faceName+1 : fp.faceName);
+		pango_font_description_set_size(pfd, pangoUnitsFromDouble(fp.size));
+		pango_font_description_set_weight(pfd, static_cast<PangoWeight>(fp.weight));
+		pango_font_description_set_style(pfd, fp.italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
+		return new FontHandle(pfd,fp.characterSet);
+	}
+
+	return NULL;
+}
 
 // X has a 16 bit coordinate space, so stop drawing here to avoid wrapping
 static const int maxCoordinate = 32000;
@@ -217,143 +131,18 @@ Point Point::FromLong(long lpoint) {
 	           Platform::HighShortFromLong(lpoint));
 }
 
-static void SetLogFont(LOGFONT &lf, const char *faceName, int characterSet, float size, int weight, bool italic) {
-	lf = LOGFONT();
-	lf.size = size;
-	lf.weight = weight;
-	lf.italic = italic;
-	lf.characterSet = characterSet;
-	StringCopy(lf.faceName, faceName);
-}
-
-/**
- * Create a hash from the parameters for a font to allow easy checking for identity.
- * If one font is the same as another, its hash will be the same, but if the hash is the
- * same then they may still be different.
- */
-static int HashFont(const FontParameters &fp) {
-	return
-	    static_cast<int>(fp.size+0.5) ^
-	    (fp.characterSet << 10) ^
-	    ((fp.weight / 100) << 12) ^
-	    (fp.italic ? 0x20000000 : 0) ^
-	    fp.faceName[0];
-}
-
-class FontCached : Font {
-	FontCached *next;
-	int usage;
-	LOGFONT lf;
-	int hash;
-	explicit FontCached(const FontParameters &fp);
-	~FontCached() {}
-	bool SameAs(const FontParameters &fp);
-	virtual void Release();
-	static FontID CreateNewFont(const FontParameters &fp);
-	static FontCached *first;
-public:
-	static FontID FindOrCreate(const FontParameters &fp);
-	static void ReleaseId(FontID fid_);
-	static void ReleaseAll();
-};
-
-FontCached *FontCached::first = 0;
-
-FontCached::FontCached(const FontParameters &fp) :
-next(0), usage(0), hash(0) {
-	::SetLogFont(lf, fp.faceName, fp.characterSet, fp.size, fp.weight, fp.italic);
-	hash = HashFont(fp);
-	fid = CreateNewFont(fp);
-	usage = 1;
-}
-
-bool FontCached::SameAs(const FontParameters &fp) {
-	return
-	    lf.size == fp.size &&
-	    lf.weight == fp.weight &&
-	    lf.italic == fp.italic &&
-	    lf.characterSet == fp.characterSet &&
-	    0 == strcmp(lf.faceName, fp.faceName);
-}
-
-void FontCached::Release() {
-	if (fid)
-		delete PFont(*this);
-	fid = 0;
-}
-
-FontID FontCached::FindOrCreate(const FontParameters &fp) {
-	FontID ret = 0;
-	FontMutexLock();
-	int hashFind = HashFont(fp);
-	for (FontCached *cur = first; cur; cur = cur->next) {
-		if ((cur->hash == hashFind) &&
-		        cur->SameAs(fp)) {
-			cur->usage++;
-			ret = cur->fid;
-		}
-	}
-	if (ret == 0) {
-		FontCached *fc = new FontCached(fp);
-		fc->next = first;
-		first = fc;
-		ret = fc->fid;
-	}
-	FontMutexUnlock();
-	return ret;
-}
-
-void FontCached::ReleaseId(FontID fid_) {
-	FontMutexLock();
-	FontCached **pcur = &first;
-	for (FontCached *cur = first; cur; cur = cur->next) {
-		if (cur->fid == fid_) {
-			cur->usage--;
-			if (cur->usage == 0) {
-				*pcur = cur->next;
-				cur->Release();
-				cur->next = 0;
-				delete cur;
-			}
-			break;
-		}
-		pcur = &cur->next;
-	}
-	FontMutexUnlock();
-}
-
-void FontCached::ReleaseAll() {
-	while (first) {
-		ReleaseId(first->GetID());
-	}
-}
-
-FontID FontCached::CreateNewFont(const FontParameters &fp) {
-	PangoFontDescription *pfd = pango_font_description_new();
-	if (pfd) {
-		pango_font_description_set_family(pfd,
-			(fp.faceName[0] == '!') ? fp.faceName+1 : fp.faceName);
-		pango_font_description_set_size(pfd, pangoUnitsFromDouble(fp.size));
-		pango_font_description_set_weight(pfd, static_cast<PangoWeight>(fp.weight));
-		pango_font_description_set_style(pfd, fp.italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
-		return new FontHandle(pfd, fp.characterSet);
-	}
-
-	return new FontHandle();
-}
-
 Font::Font() : fid(0) {}
 
 Font::~Font() {}
 
 void Font::Create(const FontParameters &fp) {
 	Release();
-	fid = FontCached::FindOrCreate(fp);
+	fid = FontHandle::CreateNewFont(fp);
 }
 
 void Font::Release() {
 	if (fid)
-		FontCached::ReleaseId(fid);
+		delete static_cast<FontHandle *>(fid);
 	fid = 0;
 }
 
@@ -989,13 +778,6 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 	if (font_.GetID()) {
 		const int lenPositions = len;
 		if (PFont(font_)->pfd) {
-			if (len == 1) {
-				int width = PFont(font_)->CharWidth(*s, et);
-				if (width) {
-					positions[0] = width;
-					return;
-				}
-			}
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
 			if (et == UTF8) {
 				// Simple and direct as UTF-8 is native Pango encoding
@@ -1089,10 +871,6 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 					PLATFORM_ASSERT(i == lenPositions);
 				}
 			}
-			if (len == 1) {
-				PFont(font_)->SetCharWidth(*s, positions[0], et);
-			}
-			return;
 		}
 	} else {
 		// No font so return an ascending range of values
@@ -1148,20 +926,17 @@ XYPOSITION SurfaceImpl::WidthChar(Font &font_, char ch) {
 XYPOSITION SurfaceImpl::Ascent(Font &font_) {
 	if (!(font_.GetID()))
 		return 1;
-	FontMutexLock();
-	int ascent = PFont(font_)->ascent;
-	if ((ascent == 0) && (PFont(font_)->pfd)) {
+	int ascent = 0;
+	if (PFont(font_)->pfd) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 			PFont(font_)->pfd, pango_context_get_language(pcontext));
-		PFont(font_)->ascent =
+		ascent =
 			doubleFromPangoUnits(pango_font_metrics_get_ascent(metrics));
 		pango_font_metrics_unref(metrics);
-		ascent = PFont(font_)->ascent;
 	}
 	if (ascent == 0) {
 		ascent = 1;
 	}
-	FontMutexUnlock();
 	return ascent;
 }
 
@@ -2298,10 +2073,7 @@ int Platform::Clamp(int val, int minVal, int maxVal) {
 }
 
 void Platform_Initialise() {
-	FontMutexAllocate();
 }
 
 void Platform_Finalise() {
-	FontCached::ReleaseAll();
-	FontMutexFree();
 }
