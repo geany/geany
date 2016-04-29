@@ -9,6 +9,7 @@ LEXER_SRCS= \
 lexers/LexAbaqus.cxx \
 lexers/LexAda.cxx \
 lexers/LexAsm.cxx \
+lexers/LexAU3.cxx \
 lexers/LexBash.cxx \
 lexers/LexBasic.cxx \
 lexers/LexBatch.cxx \

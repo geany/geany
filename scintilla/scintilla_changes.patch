@@ -94,7 +94,7 @@ index ed47aa8..e58f1ab 100644
  	LINK_LEXER(lmAsm);
 -	LINK_LEXER(lmAsn1);
 -	LINK_LEXER(lmASY);
--	LINK_LEXER(lmAU3);
+ 	LINK_LEXER(lmAU3);
 -	LINK_LEXER(lmAVE);
 -	LINK_LEXER(lmAVS);
 -	LINK_LEXER(lmBaan);
