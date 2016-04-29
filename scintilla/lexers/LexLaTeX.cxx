@@ -99,7 +99,7 @@ static bool latexIsBlankAndNL(int ch) {
 }
 
 static bool latexIsLetter(int ch) {
-	return IsASCII(ch) && isalpha(ch);
+	return IsASCII(ch) && (isalpha(ch) || ch=='@');
 }
 
 static bool latexIsTagValid(Sci_Position &i, Sci_Position l, Accessor &styler) {
