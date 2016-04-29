@@ -136,8 +136,6 @@ Why does snort report ``Packet loss statistics are unavailable under Linux?''Ì65
 Why does the `error deleting alert' message occur when attempting to delete an alert with BASE?  Ì65536Ö0
 Why does the portscan plugin log ``stealth'' packets even though the host is in the portscan-ignorehosts list? Ì65536Ö0
 Why does the program generate alerts on packets that have pass rules?  Ì65536Ö0
-\myquoteÌ16Ö0
-\myrefÌ16Ö0
 barnyardÌ2048Ö0
 centerÌ1Ö0
 chrootÌ2048Ö0
@@ -146,6 +144,8 @@ documentÌ1Ö0
 enumerateÌ1Ö0
 itemizeÌ1Ö0
 latexonlyÌ1Ö0
+myquoteÌ16Ö0
+myrefÌ16Ö0
 quoteÌ1Ö0
 spoolersÌ2048Ö0
 stealthÌ2048Ö0
