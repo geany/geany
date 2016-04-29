@@ -19,6 +19,7 @@
 
 #include <glib.h>
 #include <gmodule.h>
+#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -423,7 +424,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 }
 
 ScintillaGTK::~ScintillaGTK() {
-	g_idle_remove_by_data(this);
+	g_source_remove_by_user_data(this);
 	if (evbtn) {
 		gdk_event_free(reinterpret_cast<GdkEvent *>(evbtn));
 		evbtn = 0;
@@ -1077,7 +1078,7 @@ bool ScintillaGTK::FineTickerRunning(TickReason reason) {
 
 void ScintillaGTK::FineTickerStart(TickReason reason, int millis, int /* tolerance */) {
 	FineTickerCancel(reason);
-	timers[reason].timer = g_timeout_add(millis, TimeOut, &timers[reason]);
+	timers[reason].timer = gdk_threads_add_timeout(millis, TimeOut, &timers[reason]);
 }
 
 void ScintillaGTK::FineTickerCancel(TickReason reason) {
@@ -1093,7 +1094,7 @@ bool ScintillaGTK::SetIdle(bool on) {
 		if (!idler.state) {
 			idler.state = true;
 			idler.idlerID = reinterpret_cast<IdlerID>(
-				g_idle_add_full(G_PRIORITY_DEFAULT_IDLE, IdleCallback, this, NULL));
+				gdk_threads_add_idle_full(G_PRIORITY_DEFAULT_IDLE, IdleCallback, this, NULL));
 		}
 	} else {
 		// Stop idler, if it's running
@@ -2192,6 +2193,7 @@ gboolean ScintillaGTK::KeyThis(GdkEventKey *event) {
 		bool shift = (event->state & GDK_SHIFT_MASK) != 0;
 		bool ctrl = (event->state & GDK_CONTROL_MASK) != 0;
 		bool alt = (event->state & GDK_MOD1_MASK) != 0;
+		bool super = (event->state & GDK_MOD4_MASK) != 0;
 		guint key = event->keyval;
 		if ((ctrl || alt) && (key < 128))
 			key = toupper(key);
@@ -2208,15 +2210,12 @@ gboolean ScintillaGTK::KeyThis(GdkEventKey *event) {
 
 		bool consumed = false;
 #if !(PLAT_GTK_MACOSX)
-		bool added = KeyDown(key, shift, ctrl, alt, &consumed) != 0;
+		bool meta = false;
 #else
 		bool meta = ctrl;
 		ctrl = (event->state & GDK_META_MASK) != 0;
-		bool added = KeyDownWithModifiers(key, (shift ? SCI_SHIFT : 0) |
-		                                       (ctrl ? SCI_CTRL : 0) |
-		                                       (alt ? SCI_ALT : 0) |
-		                                       (meta ? SCI_META : 0), &consumed) != 0;
 #endif
+		bool added = KeyDownWithModifiers(key, ModifierFlags(shift, ctrl, alt, meta, super), &consumed) != 0;
 		if (!consumed)
 			consumed = added;
 		//fprintf(stderr, "SK-key: %d %x %x\n",event->keyval, event->state, consumed);
@@ -2454,12 +2453,7 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 
 		pdoc->TentativeStart(); // TentativeActive() from now on
 
-		// Get preedit string attribues
 		std::vector<int> indicator = MapImeIndicators(preeditStr.attrs, preeditStr.str);
-
-		// Display preedit characters, one by one
-		glong imeCharPos[maxLenInputIME+1] = { 0 };
-		glong charWidth = 0;
 
 		bool tmpRecordingMacro = recordingMacro;
 		recordingMacro = false;
@@ -2472,21 +2466,22 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 
 			AddCharUTF(docChar.c_str(), docChar.size());
 
-			// Draw an indicator on the character,
 			DrawImeIndicator(indicator[i], docChar.size());
-
-			// Record character positions in UTF-8 or DBCS bytes
-			charWidth += docChar.size();
-			imeCharPos[i+1] = charWidth;
 		}
 		recordingMacro = tmpRecordingMacro;
 
 		// Move caret to ime cursor position.
-		MoveImeCarets( - (imeCharPos[preeditStr.uniStrLen]) + imeCharPos[preeditStr.cursor_pos]);
+		int imeEndToImeCaretU32 = preeditStr.cursor_pos - preeditStr.uniStrLen;
+		int imeCaretPosDoc = pdoc->GetRelativePosition(CurrentPosition(), imeEndToImeCaretU32);
+
+		MoveImeCarets(- CurrentPosition() + imeCaretPosDoc);
 
 		if (KoreanIME()) {
 #if !PLAT_GTK_WIN32
-			MoveImeCarets( - imeCharPos[1]); // always 2 bytes for DBCS or 3 bytes for UTF8.
+			if (preeditStr.cursor_pos > 0) {
+				int oneCharBefore = pdoc->GetRelativePosition(CurrentPosition(), -1);
+				MoveImeCarets(- CurrentPosition() + oneCharBefore);
+			}
 #endif
 			view.imeCaretBlockOverride = true;
 		}
@@ -2939,9 +2934,6 @@ gboolean ScintillaGTK::IdleCallback(gpointer pSci) {
 	ScintillaGTK *sciThis = static_cast<ScintillaGTK *>(pSci);
 	// Idler will be automatically stopped, if there is nothing
 	// to do while idle.
-#ifndef GDK_VERSION_3_6
-	gdk_threads_enter();
-#endif
 	bool ret = sciThis->Idle();
 	if (ret == false) {
 		// FIXME: This will remove the idler from GTK, we don't want to
@@ -2949,21 +2941,12 @@ gboolean ScintillaGTK::IdleCallback(gpointer pSci) {
 		// returns false (although, it should be harmless).
 		sciThis->SetIdle(false);
 	}
-#ifndef GDK_VERSION_3_6
-	gdk_threads_leave();
-#endif
 	return ret;
 }
 
 gboolean ScintillaGTK::StyleIdle(gpointer pSci) {
-#ifndef GDK_VERSION_3_6
-	gdk_threads_enter();
-#endif
 	ScintillaGTK *sciThis = static_cast<ScintillaGTK *>(pSci);
 	sciThis->IdleWork();
-#ifndef GDK_VERSION_3_6
-	gdk_threads_leave();
-#endif
 	// Idler will be automatically stopped
 	return FALSE;
 }
@@ -2973,7 +2956,7 @@ void ScintillaGTK::QueueIdleWork(WorkNeeded::workItems items, int upTo) {
 	if (!workNeeded.active) {
 		// Only allow one style needed to be queued
 		workNeeded.active = true;
-		g_idle_add_full(G_PRIORITY_HIGH_IDLE, StyleIdle, this, NULL);
+		gdk_threads_add_idle_full(G_PRIORITY_HIGH_IDLE, StyleIdle, this, NULL);
 	}
 }
 
