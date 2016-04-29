@@ -56,6 +56,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "vte.h"
+#include "osx.h"
 
 #include "gtkcompat.h"
 
@@ -1197,6 +1198,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			kb_update(&global_kb_data);
 			tools_create_insert_custom_command_menu_items();
 			keybindings_write_to_file();
+#ifdef MAC_INTEGRATION
+			/* Force re-syncing the menubar to update displayed keybindings. */
+			gtkosx_application_sync_menubar(gtkosx_application_get());
+#endif
 		}
 
 		/* Printing */
