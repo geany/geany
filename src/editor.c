@@ -2294,7 +2294,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 	ret = autocomplete_check_html(editor, style, pos);
 
 	if (ft->id == GEANY_FILETYPES_LATEX)
-		wordchars = GEANY_WORDCHARS"@:"; /* add @ for macros and : for labels */
+		wordchars = GEANY_WORDCHARS"@:;,.-"; /* add @ for macros and :,.- for labels */
 	else if (ft->id == GEANY_FILETYPES_CSS)
 		wordchars = GEANY_WORDCHARS"-"; /* add - because they are part of property names */
 	else
