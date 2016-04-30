@@ -472,8 +472,10 @@ void ScintillaGTK::RealizeThis(GtkWidget *widget) {
 #else
 	gdk_window_set_user_data(gtk_widget_get_window(widget), widget);
 #endif
+#if !GTK_CHECK_VERSION(3,18,0)
 	gtk_style_context_set_background(gtk_widget_get_style_context(widget),
 		gtk_widget_get_window(widget));
+#endif
 	gdk_window_show(gtk_widget_get_window(widget));
 	UnRefCursor(cursor);
 #else
@@ -1223,7 +1225,9 @@ bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
 		gtk_adjustment_set_upper(adjustmentv, nMax + 1);
 	        gtk_adjustment_set_page_size(adjustmentv, nPage);
 	        gtk_adjustment_set_page_increment(adjustmentv, pageScroll);
+#if !GTK_CHECK_VERSION(3,18,0)
 		gtk_adjustment_changed(GTK_ADJUSTMENT(adjustmentv));
+#endif
 		modified = true;
 	}
 
@@ -1242,7 +1246,9 @@ bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
 	        gtk_adjustment_set_page_size(adjustmenth, pageWidth);
 	        gtk_adjustment_set_page_increment(adjustmenth, pageIncrement);
 	        gtk_adjustment_set_step_increment(adjustmenth, charWidth);
+#if !GTK_CHECK_VERSION(3,18,0)
 		gtk_adjustment_changed(GTK_ADJUSTMENT(adjustmenth));
+#endif
 		modified = true;
 	}
 	if (modified && (paintState == painting)) {
