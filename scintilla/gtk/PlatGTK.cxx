@@ -1263,8 +1263,7 @@ ListBox *ListBox::Allocate() {
 	return lb;
 }
 
-static int treeViewGetRowHeight(GtkTreeView *view)
-{
+static int treeViewGetRowHeight(GtkTreeView *view) {
 #if GTK_CHECK_VERSION(3,0,0)
 	// This version sometimes reports erroneous results on GTK2, but the GTK2
 	// version is inaccurate for GTK 3.14.
@@ -1521,8 +1520,7 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
-int ListBoxX::GetRowHeight()
-{
+int ListBoxX::GetRowHeight() {
 	return treeViewGetRowHeight(GTK_TREE_VIEW(list));
 }
 
