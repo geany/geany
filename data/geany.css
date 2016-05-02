@@ -2,19 +2,16 @@
 
 /* make close button on the editor's tabs smaller */
 #geany-close-tab-button {
-	-GtkWidget-focus-padding: 0;
-	-GtkWidget-focus-line-width: 0;
-	-GtkButton-default-border: 0;
-	-GtkButton-default-outside-border: 0;
-	-GtkButton-inner-border: 0;
 	padding: 0;
 }
-#geany-close-tab-button GtkImage {
+#geany-close-tab-button GtkImage /* GTK < 3.20 */,
+#geany-close-tab-button image /* GTK >= 3.20 */ {
 	padding: 0;
 }
 
 /* use monospaced font in search entries for easier reading of regexp (#1907117) */
-#GeanyDialogSearch GtkEntry {
+#GeanyDialogSearch GtkEntry /* GTK < 3.20 */,
+#GeanyDialogSearch entry /* GTK >= 3.20 */ {
 	font-family: monospace;
 }
 

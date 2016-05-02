@@ -1805,7 +1805,13 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	label = gtk_label_new(text);
 	g_free(text);
 #if GTK_CHECK_VERSION(3,0,0)
-	gtk_style_context_get_color(gtk_widget_get_style_context(label), GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
+{
+	GtkStyleContext *ctx = gtk_widget_get_style_context(label);
+
+	gtk_style_context_save(ctx);
+	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
+	gtk_style_context_restore(ctx);
+}
 #else
 	insensitive_color = gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE];
 #endif
