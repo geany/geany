@@ -1263,6 +1263,30 @@ ListBox *ListBox::Allocate() {
 	return lb;
 }
 
+static int treeViewGetRowHeight(GtkTreeView *view) {
+#if GTK_CHECK_VERSION(3,0,0)
+	// This version sometimes reports erroneous results on GTK2, but the GTK2
+	// version is inaccurate for GTK 3.14.
+	GdkRectangle rect;
+	GtkTreePath *path = gtk_tree_path_new_first();
+	gtk_tree_view_get_background_area(view, path, NULL, &rect);
+	gtk_tree_path_free(path);
+	return rect.height;
+#else
+	int row_height=0;
+	int vertical_separator=0;
+	int expander_size=0;
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(view, 0);
+	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
+	gtk_widget_style_get(GTK_WIDGET(view),
+		"vertical-separator", &vertical_separator,
+		"expander-size", &expander_size, NULL);
+	row_height += vertical_separator;
+	row_height = Platform::Maximum(row_height, expander_size);
+	return row_height;
+#endif
+}
+
 // SmallScroller, a GtkScrolledWindow that can shrink very small, as
 // gtk_widget_set_size_request() cannot shrink widgets on GTK3
 typedef struct {
@@ -1287,9 +1311,19 @@ G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
 
 #if GTK_CHECK_VERSION(3,0,0)
 static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
-	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
-	if (*min > 1)
-		*min = 1;
+	GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+	if (GTK_IS_TREE_VIEW(child)) {
+		GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(child));
+		int n_rows = gtk_tree_model_iter_n_children(model, NULL);
+		int row_height = treeViewGetRowHeight(GTK_TREE_VIEW(child));
+
+		*min = MAX(1, row_height);
+		*nat = MAX(*min, n_rows * row_height);
+	} else {
+		GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
+		if (*min > 1)
+			*min = 1;
+	}
 }
 #else
 static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
@@ -1456,7 +1490,7 @@ void ListBoxX::SetFont(Font &scint_font) {
 		if (cssProvider) {
 			PangoFontDescription *pfd = PFont(scint_font)->pfd;
 			std::ostringstream ssFontSetting;
-			ssFontSetting << "GtkTreeView { ";
+			ssFontSetting << "GtkTreeView, treeview { ";
 			ssFontSetting << "font-family: " << pango_font_description_get_family(pfd) <<  "; ";
 			ssFontSetting << "font-size:";
 			ssFontSetting << static_cast<double>(pango_font_description_get_size(pfd)) / PANGO_SCALE;
@@ -1486,28 +1520,8 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
-int ListBoxX::GetRowHeight()
-{
-#if GTK_CHECK_VERSION(3,0,0)
-	// This version sometimes reports erroneous results on GTK2, but the GTK2
-	// version is inaccurate for GTK 3.14.
-	GdkRectangle rect;
-	GtkTreePath *path = gtk_tree_path_new_first();
-	gtk_tree_view_get_background_area(GTK_TREE_VIEW(list), path, NULL, &rect);
-	return rect.height;
-#else
-	int row_height=0;
-	int vertical_separator=0;
-	int expander_size=0;
-	GtkTreeViewColumn *column = gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
-	gtk_widget_style_get(PWidget(list),
-		"vertical-separator", &vertical_separator,
-		"expander-size", &expander_size, NULL);
-	row_height += vertical_separator;
-	row_height = Platform::Maximum(row_height, expander_size);
-	return row_height;
-#endif
+int ListBoxX::GetRowHeight() {
+	return treeViewGetRowHeight(GTK_TREE_VIEW(list));
 }
 
 PRectangle ListBoxX::GetDesiredRect() {
@@ -1534,12 +1548,35 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
-		GtkBorder padding, border;
-		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
-		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
+		GtkStateFlags stateFlagsFrame = gtk_style_context_get_state(styleContextFrame);
+		GtkBorder padding, border, border_border = { 0, 0, 0, 0 };
+		gtk_style_context_get_padding(styleContextFrame, stateFlagsFrame, &padding);
+		gtk_style_context_get_border(styleContextFrame, stateFlagsFrame, &border);
+
+#	if GTK_CHECK_VERSION(3,20,0)
+		// on GTK 3.20 the frame border is in a sub-node "border".
+		// Unfortunately we need to be built against 3.20 to be able to support this, as it requires
+		// new API.
+		GtkStyleContext *styleContextFrameBorder = gtk_style_context_new();
+		GtkWidgetPath *widget_path = gtk_widget_path_copy(gtk_style_context_get_path(styleContextFrame));
+		gtk_widget_path_append_type(widget_path, GTK_TYPE_BORDER); // dummy type
+		gtk_widget_path_iter_set_object_name(widget_path, -1, "border");
+		gtk_style_context_set_path(styleContextFrameBorder, widget_path);
+		gtk_widget_path_free(widget_path);
+		gtk_style_context_get_border(styleContextFrameBorder, stateFlagsFrame, &border_border);
+		g_object_unref(styleContextFrameBorder);
+#	else // < 3.20
+		if (gtk_check_version(3, 20, 0) == NULL) {
+			// default to 1px all around as it's likely what it is, and so we don't miss 2px height
+			// on GTK 3.20 when built against an earlier version.
+			border_border.top = border_border.bottom = border_border.left = border_border.right = 1;
+		}
+#	endif
+
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + border.top + border.bottom
+		          + border_border.top + border_border.bottom
 		          + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		height = (rows * row_height
@@ -1560,6 +1597,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 #if GTK_CHECK_VERSION(3,0,0)
 		rc.right += (padding.left + padding.right
 		             + border.left + border.right
+		             + border_border.left + border_border.right
 		             + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		rc.right += 2 * (PWidget(frame)->style->xthickness
