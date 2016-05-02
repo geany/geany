@@ -3269,7 +3269,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
 		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
 		gtk_style_context_set_path(ctx, path);
-		gtk_style_context_get_color(ctx, GTK_STATE_FLAG_NORMAL, &color);
+		gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &color);
 		document_status_styles[status].color.red   = 0xffff * color.red;
 		document_status_styles[status].color.green = 0xffff * color.green;
 		document_status_styles[status].color.blue  = 0xffff * color.blue;
