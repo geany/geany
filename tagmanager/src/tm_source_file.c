@@ -524,7 +524,7 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 {
 	guchar buf[BUFSIZ];
 	FILE *fp;
-	GPtrArray *file_tags, *new_tags;
+	GPtrArray *file_tags;
 	TMTag *tag;
 	TMFileFormat format = TM_FILE_FORMAT_TAGMANAGER;
 
