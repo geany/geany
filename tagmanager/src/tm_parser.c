@@ -539,6 +539,8 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(php_map),	/* Zephir - same as PHP */
 	MAP_ENTRY(powershell_map),
 };
+/* make sure the parser map is consistent and complete */
+G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
 
 
 TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang)
@@ -575,18 +577,11 @@ gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang)
 
 void tm_parser_verify_type_mappings(void)
 {
-	gsize parser_map_size = sizeof(parser_map) / sizeof(TMParserMap);
 	TMParserType lang;
 
 	if (TM_PARSER_COUNT > tm_ctags_get_lang_count())
 	{
 		g_warning("More parsers defined in Geany than in ctags");
-		return;
-	}
-
-	if (parser_map_size != TM_PARSER_COUNT)
-	{
-		g_warning("Different number of parsers and tag type mappings");
 		return;
 	}
 
