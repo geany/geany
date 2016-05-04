@@ -32,7 +32,7 @@ typedef struct {
 } CallbackUserData;
 
 
-void tm_ctags_init()
+void tm_ctags_init(void)
 {
 	initializeParsing();
 	installLanguageMapDefaults();
@@ -165,7 +165,7 @@ gboolean tm_ctags_is_using_regex_parser(TMParserType lang)
 }
 
 
-guint tm_ctags_get_lang_count()
+guint tm_ctags_get_lang_count(void)
 {
 	return LanguageCount;
 }

@@ -661,7 +661,7 @@ static gboolean tm_source_file_tags(const tagEntryInfo *const tag,
 	return TRUE;
 }
 
-void tm_source_file_ctags_init()
+void tm_source_file_ctags_init(void)
 {
 	tm_ctags_init();
 	tm_parser_verify_type_mappings();

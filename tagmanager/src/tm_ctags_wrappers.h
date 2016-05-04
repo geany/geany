@@ -34,7 +34,7 @@ typedef gboolean (*tm_ctags_callback) (const tagEntryInfo *const tag,
 	gboolean invalidate, void *user_data);
 
 
-void tm_ctags_init();
+void tm_ctags_init(void);
 
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	const gchar *file_name, TMParserType lang, tm_ctags_callback callback,
@@ -52,7 +52,7 @@ gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang);
 
 gboolean tm_ctags_is_using_regex_parser(TMParserType lang);
 
-guint tm_ctags_get_lang_count();
+guint tm_ctags_get_lang_count(void);
 
 G_END_DECLS
 
