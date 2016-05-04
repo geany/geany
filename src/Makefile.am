@@ -120,8 +120,6 @@ libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
 	$(top_builddir)/scintilla/libscintilla.la \
-	$(top_builddir)/tagmanager/ctags/libctags.la \
-	$(top_builddir)/tagmanager/mio/libmio.la \
 	$(top_builddir)/tagmanager/src/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
