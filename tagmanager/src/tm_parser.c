@@ -634,7 +634,7 @@ void tm_parser_verify_type_mappings(void)
 				g_warning("Tag type '%c' found in ctags but not in TM for %s",
 					kinds[i], tm_ctags_get_lang_name(lang));
 
-			presence_map[map->entries[i].kind]++;
+			presence_map[(unsigned char) map->entries[i].kind]++;
 		}
 
 		for (i = 0; i < sizeof(presence_map); i++)
