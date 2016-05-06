@@ -166,8 +166,7 @@ static char get_tag_access(const char *access)
 /*
  Initializes a TMTag structure with information from a tagEntryInfo struct
  used by the ctags parsers. Note that the TMTag structure must be malloc()ed
- before calling this function. This function is called by tm_tag_new() - you
- should not need to call this directly.
+ before calling this function.
  @param tag The TMTag structure to initialize
  @param file Pointer to a TMSourceFile struct (it is assigned to the file member)
  @param tag_entry Tag information gathered by the ctags parser
