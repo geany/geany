@@ -490,7 +490,12 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 		for (i = 0; i < includes_count; i++)
 		{
 			size_t dirty_len = strlen(includes[i]);
-			gchar *clean_path = g_malloc(dirty_len - 1);
+			gchar *clean_path;
+
+			if (dirty_len < 2)
+				continue;
+
+			clean_path = g_malloc(dirty_len - 1);
 
 			strncpy(clean_path, includes[i] + 1, dirty_len - 1);
 			clean_path[dirty_len - 2] = 0;
