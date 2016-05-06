@@ -516,7 +516,7 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 #endif
 				if (!g_hash_table_lookup(table, globbuf.gl_pathv[idx_glob]))
 				{
-					gchar *file_name_copy = strdup(globbuf.gl_pathv[idx_glob]);
+					gchar *file_name_copy = g_strdup(globbuf.gl_pathv[idx_glob]);
 
 					g_hash_table_insert(table, file_name_copy, file_name_copy);
 #ifdef TM_DEBUG
@@ -536,7 +536,7 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 		{
 			if (!g_hash_table_lookup(table, includes[i]))
 			{
-				gchar* file_name_copy = strdup(includes[i]);
+				gchar* file_name_copy = g_strdup(includes[i]);
 
 				g_hash_table_insert(table, file_name_copy, file_name_copy);
 			}
