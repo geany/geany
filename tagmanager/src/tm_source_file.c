@@ -576,6 +576,7 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 {
 	guint i;
 	FILE *fp;
+	gboolean ret = TRUE;
 
 	g_return_val_if_fail(tags_array && tags_file, FALSE);
 
@@ -588,13 +589,16 @@ gboolean tm_source_file_write_tags_file(const gchar *tags_file, GPtrArray *tags_
 	{
 		TMTag *tag = TM_TAG(tags_array->pdata[i]);
 
-		write_tag(tag, fp, tm_tag_attr_type_t
+		ret = write_tag(tag, fp, tm_tag_attr_type_t
 		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
 		  | tm_tag_attr_pointer_t);
+
+		if (!ret)
+			break;
 	}
 	fclose(fp);
 
-	return TRUE;
+	return ret;
 }
 
 /* add argument list of __init__() Python methods to the class tag */
