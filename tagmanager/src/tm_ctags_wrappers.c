@@ -27,7 +27,7 @@
 
 
 typedef struct {
-	tm_ctags_callback callback;
+	TMCtagsNewTagCallback tag_callback;
 	gpointer user_data;
 } CallbackUserData;
 
@@ -43,15 +43,15 @@ static gboolean parse_callback(const tagEntryInfo *tag, gpointer user_data)
 {
 	CallbackUserData *callback_data = user_data;
 
-	return callback_data->callback(tag, FALSE, callback_data->user_data);
+	return callback_data->tag_callback(tag, callback_data->user_data);
 }
 
 
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
-	const gchar *file_name, TMParserType lang, tm_ctags_callback callback,
-	gpointer user_data)
+	const gchar *file_name, TMParserType lang, TMCtagsNewTagCallback tag_callback,
+	TMCtagsPassStartCallback pass_callback, gpointer user_data)
 {
-	CallbackUserData callback_data = {callback, user_data};
+	CallbackUserData callback_data = {tag_callback, user_data};
 	gboolean retry = TRUE;
 	guint passCount = 0;
 
@@ -68,7 +68,7 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	setTagEntryFunction(parse_callback, &callback_data);
 	while (retry && passCount < 3)
 	{
-		callback(NULL, TRUE, user_data);
+		pass_callback(user_data);
 		if (!buffer && fileOpen (file_name, lang))
 		{
 			if (LanguageTable [lang]->parser != NULL)

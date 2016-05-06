@@ -30,15 +30,21 @@
 
 G_BEGIN_DECLS
 
-typedef gboolean (*tm_ctags_callback) (const tagEntryInfo *const tag,
-	gboolean invalidate, void *user_data);
+/* Callback invoked for every tag found by the parser. The return value is
+ * currently unused. */
+typedef gboolean (*TMCtagsNewTagCallback) (const tagEntryInfo *const tag,
+	void *user_data);
+
+/* Callback invoked at the beginning of every parsing pass. The return value is
+ * currently unused */
+typedef gboolean (*TMCtagsPassStartCallback) (void *user_data);
 
 
 void tm_ctags_init(void);
 
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
-	const gchar *file_name, TMParserType lang, tm_ctags_callback callback,
-	gpointer user_data);
+	const gchar *file_name, TMParserType lang, TMCtagsNewTagCallback tag_callback,
+	TMCtagsPassStartCallback pass_callback, gpointer user_data);
 
 const gchar *tm_ctags_get_lang_name(TMParserType lang);
 

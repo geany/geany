@@ -627,25 +627,21 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 	}
 }
 
-/*
- This function is registered into the ctags parser when a file is parsed for
- the first time. The function is then called by the ctags parser each time
- it finds a new tag. You should not have to use this function.
- @see tm_source_file_parse()
-*/
-static gboolean tm_source_file_tags(const tagEntryInfo *const tag,
-	gboolean invalidate, void *user_data)
+/* new parsing pass ctags callback function */
+static gboolean ctags_pass_start(void *user_data)
 {
 	TMSourceFile *current_source_file = user_data;
-	TMTag *tm_tag;
 
-	if (invalidate)
-	{
-		tm_tags_array_free(current_source_file->tags_array, FALSE);
-		return TRUE;
-	}
+	tm_tags_array_free(current_source_file->tags_array, FALSE);
+	return TRUE;
+}
 
-	tm_tag = tm_tag_new();
+/* new tag ctags callback function */
+static gboolean ctags_new_tag(const tagEntryInfo *const tag,
+	void *user_data)
+{
+	TMSourceFile *current_source_file = user_data;
+	TMTag *tm_tag = tm_tag_new();
 
 	if (!init_tag(tm_tag, current_source_file, tag))
 	{
@@ -838,7 +834,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
 	tm_ctags_parse(parse_file ? NULL : text_buf, buf_size, file_name,
-		source_file->lang, tm_source_file_tags, source_file);
+		source_file->lang, ctags_new_tag, ctags_pass_start, source_file);
 
 	if (free_buf)
 		g_free(text_buf);
