@@ -415,9 +415,7 @@ static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 		node = g_list_next(node);
 	}
 
-	fclose(fp);
-
-	return TRUE;
+	return fclose(fp) == 0;
 }
 
 
@@ -450,9 +448,7 @@ static gboolean combine_include_files(const gchar *outf, GList *file_list)
 		node = g_list_next (node);
 	}
 
-	fclose(fp);
-
-	return TRUE;
+	return fclose(fp) == 0;
 }
 
 
