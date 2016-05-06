@@ -553,12 +553,14 @@ static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
 {
 	gint ret;
 	gchar *outf = create_temp_file("tmp_XXXXXX.cpp");
-	gchar *tmp_errfile = create_temp_file("tmp_XXXXXX");
+	gchar *tmp_errfile;
 	gchar *errors = NULL;
 	gchar *command;
 
 	if (!outf)
 		return NULL;
+
+	tmp_errfile = create_temp_file("tmp_XXXXXX");
 	if (!tmp_errfile)
 	{
 		g_unlink(outf);
