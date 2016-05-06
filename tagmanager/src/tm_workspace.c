@@ -421,7 +421,7 @@ static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 }
 
 
-static gboolean append_to_temp_file(const gchar *outf, GList *file_list)
+static gboolean combine_include_files(const gchar *outf, GList *file_list)
 {
 	FILE *fp = g_fopen(outf, "w");
 	GList *node = file_list;
@@ -623,7 +623,7 @@ gboolean tm_workspace_create_global_tags(const char *pre_process, const char **i
 	if (pre_process)
 		ret = write_includes_file(temp_file, includes_files);
 	else
-		ret = append_to_temp_file(temp_file, includes_files);
+		ret = combine_include_files(temp_file, includes_files);
 
 	g_list_free_full(includes_files, g_free);
 	if (!ret)
