@@ -592,10 +592,7 @@ void tm_parser_verify_type_mappings(void)
 	TMParserType lang;
 
 	if (TM_PARSER_COUNT > tm_ctags_get_lang_count())
-	{
-		g_warning("More parsers defined in Geany than in ctags");
-		return;
-	}
+		g_error("More parsers defined in Geany than in ctags");
 
 	for (lang = 0; lang < TM_PARSER_COUNT; lang++)
 	{
@@ -605,11 +602,8 @@ void tm_parser_verify_type_mappings(void)
 		guint i;
 
 		if (! map->entries || map->size < 1)
-		{
-			g_warning("No tag types in TM for %s, is the language listed in parser_map?",
+			g_error("No tag types in TM for %s, is the language listed in parser_map?",
 					tm_ctags_get_lang_name(lang));
-			continue;
-		}
 
 		/* TODO: check also regex parser mappings. At the moment there's no way
 		 * to access regex parser definitions in ctags */
@@ -617,11 +611,8 @@ void tm_parser_verify_type_mappings(void)
 			continue;
 
 		if (map->size != strlen(kinds))
-		{
-			g_warning("Different number of tag types in TM (%d) and ctags (%d) for %s",
+			g_error("Different number of tag types in TM (%d) and ctags (%d) for %s",
 				map->size, (int)strlen(kinds), tm_ctags_get_lang_name(lang));
-			continue;
-		}
 
 		memset(presence_map, 0, sizeof(presence_map));
 		for (i = 0; i < map->size; i++)
@@ -642,10 +633,10 @@ void tm_parser_verify_type_mappings(void)
 					break;
 			}
 			if (!ctags_found)
-				g_warning("Tag type '%c' found in TM but not in ctags for %s",
+				g_error("Tag type '%c' found in TM but not in ctags for %s",
 					map->entries[i].kind, tm_ctags_get_lang_name(lang));
 			if (!tm_found)
-				g_warning("Tag type '%c' found in ctags but not in TM for %s",
+				g_error("Tag type '%c' found in ctags but not in TM for %s",
 					kinds[i], tm_ctags_get_lang_name(lang));
 
 			presence_map[(unsigned char) map->entries[i].kind]++;
@@ -654,7 +645,7 @@ void tm_parser_verify_type_mappings(void)
 		for (i = 0; i < sizeof(presence_map); i++)
 		{
 			if (presence_map[i] > 1)
-				g_warning("Duplicate tag type '%c' found for %s",
+				g_error("Duplicate tag type '%c' found for %s",
 					(gchar)i, tm_ctags_get_lang_name(lang));
 		}
 	}
