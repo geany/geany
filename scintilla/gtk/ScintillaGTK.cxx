@@ -167,6 +167,8 @@ class ScintillaGTK : public ScintillaBase {
 #endif
 	bool repaintFullWindow;
 
+	guint styleIdleID;
+
 	// Private so ScintillaGTK objects can not be copied
 	ScintillaGTK(const ScintillaGTK &);
 	ScintillaGTK &operator=(const ScintillaGTK &);
@@ -325,6 +327,7 @@ private:
 	static gboolean TimeOut(gpointer ptt);
 	static gboolean IdleCallback(gpointer pSci);
 	static gboolean StyleIdle(gpointer pSci);
+	virtual void IdleWork();
 	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo);
 	static void PopUpCB(GtkMenuItem *menuItem, ScintillaGTK *sciThis);
 
@@ -392,7 +395,8 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		lastWheelMouseDirection(0),
 		wheelMouseIntensity(0),
 		rgnUpdate(0),
-		repaintFullWindow(false) {
+		repaintFullWindow(false),
+		styleIdleID(0) {
 	sci = sci_;
 	wMain = GTK_WIDGET(sci);
 
@@ -424,7 +428,10 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 }
 
 ScintillaGTK::~ScintillaGTK() {
-	g_source_remove_by_user_data(this);
+	if (styleIdleID) {
+		g_source_remove(styleIdleID);
+		styleIdleID = 0;
+	}
 	if (evbtn) {
 		gdk_event_free(reinterpret_cast<GdkEvent *>(evbtn));
 		evbtn = 0;
@@ -2966,12 +2973,16 @@ gboolean ScintillaGTK::StyleIdle(gpointer pSci) {
 	return FALSE;
 }
 
+void ScintillaGTK::IdleWork() {
+	Editor::IdleWork();
+	styleIdleID = 0;
+}
+
 void ScintillaGTK::QueueIdleWork(WorkNeeded::workItems items, int upTo) {
 	Editor::QueueIdleWork(items, upTo);
-	if (!workNeeded.active) {
+	if (!styleIdleID) {
 		// Only allow one style needed to be queued
-		workNeeded.active = true;
-		gdk_threads_add_idle_full(G_PRIORITY_HIGH_IDLE, StyleIdle, this, NULL);
+		styleIdleID = gdk_threads_add_idle_full(G_PRIORITY_HIGH_IDLE, StyleIdle, this, NULL);
 	}
 }
 

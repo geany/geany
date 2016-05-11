@@ -46,13 +46,11 @@ public:
 		workStyle=1,
 		workUpdateUI=2
 	};
-	bool active;
 	enum workItems items;
 	Position upTo;
 
-	WorkNeeded() : active(false), items(workNone), upTo(0) {}
+	WorkNeeded() : items(workNone), upTo(0) {}
 	void Reset() {
-		active = false;
 		items = workNone;
 		upTo = 0;
 	}
