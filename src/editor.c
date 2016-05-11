@@ -4823,6 +4823,8 @@ static gboolean editor_check_colourise(GeanyEditor *editor)
 		sci_colourise(editor->sci, start, end);
 	}
 
+	doc->priv->full_colourise = FALSE;
+
 	return TRUE;
 }
 

@@ -510,11 +510,22 @@ static gint document_get_new_idx(void)
 }
 
 
-static void queue_colourise(GeanyDocument *doc, gboolean full_colourise)
+/* sets colourise type used the next time the scintilla widget is drawn */
+static void update_colourise_type(GeanyDocument *doc, gboolean full_colourise)
 {
 	/* make sure we don't override previously set full_colourise=TRUE by FALSE */
-	if (!doc->priv->colourise_needed || !doc->priv->full_colourise)
+	if (!doc->priv->full_colourise)
 		doc->priv->full_colourise = full_colourise;
+}
+
+
+static void queue_colourise(GeanyDocument *doc, gboolean full_colourise)
+{
+	/* Already queued */
+	if (doc->priv->colourise_needed)
+		return;
+
+	update_colourise_type(doc, full_colourise);
 
 	/* Colourise the editor before it is next drawn */
 	doc->priv->colourise_needed = TRUE;
@@ -2455,6 +2466,7 @@ gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gch
 		sci_set_selection_start(doc->editor->sci, search_pos);
 		sci_set_selection_end(doc->editor->sci, search_pos + replace_len);
 		geany_match_info_free(match);
+		update_colourise_type(doc, TRUE);
 	}
 	else
 	{
@@ -2524,6 +2536,8 @@ document_replace_range(GeanyDocument *doc, const gchar *find_text, const gchar *
 
 		if (new_range_end != NULL)
 			*new_range_end = ttf.chrg.cpMax;
+
+		update_colourise_type(doc, TRUE);
 	}
 	return count;
 }
