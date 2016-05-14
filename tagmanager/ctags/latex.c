@@ -169,7 +169,7 @@ static void findTeXTags(void)
 				else if (getWord("def", &cp)
 					|| getWord("let", &cp))
 				{
-					createTag(0, K_COMMAND, cp);
+					createTag(TEX_BSLASH, K_COMMAND, cp);
 					continue;
 				}
 
