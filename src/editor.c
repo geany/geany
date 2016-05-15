@@ -2076,56 +2076,16 @@ gchar *editor_get_calltip_text(GeanyEditor *editor, const TMTag *tag)
 }
 
 
-/* HTML entities auto completion from html_entities.tags text file */
-static gboolean
-autocomplete_html(ScintillaObject *sci, const gchar *root, gsize rootlen)
-{
-	guint i;
-	gboolean found = FALSE;
-	GString *words;
-	const gchar **entities = symbols_get_html_entities();
-
-	if (*root != '&' || entities == NULL)
-		return FALSE;
-
-	words = g_string_sized_new(500);
-	for (i = 0; ; i++)
-	{
-		if (entities[i] == NULL)
-			break;
-		else if (entities[i][0] == '#')
-			continue;
-
-		if (! strncmp(entities[i], root, rootlen))
-		{
-			if (words->len)
-				g_string_append_c(words, '\n');
-
-			g_string_append(words, entities[i]);
-			found = TRUE;
-		}
-	}
-	if (found)
-		show_autocomplete(sci, rootlen, words);
-
-	g_string_free(words, TRUE);
-	return found;
-}
-
-
 /* Current document & global tags autocompletion */
 static gboolean
-autocomplete_tags(GeanyEditor *editor, const gchar *root, gsize rootlen)
+autocomplete_tags(GeanyEditor *editor, GeanyFiletype *ft, const gchar *root, gsize rootlen)
 {
 	GPtrArray *tags;
-	GeanyDocument *doc;
 	gboolean found;
 
 	g_return_val_if_fail(editor, FALSE);
 
-	doc = editor->document;
-
-	tags = tm_workspace_find_prefix(root, doc->file_type->lang, editor_prefs.autocompletion_max_entries);
+	tags = tm_workspace_find_prefix(root, ft->lang, editor_prefs.autocompletion_max_entries);
 	found = tags->len > 0;
 	if (found)
 		show_tags_list(editor, tags, rootlen);
@@ -2164,7 +2124,7 @@ static gboolean autocomplete_check_html(GeanyEditor *editor, gint style, gint po
 		tmp = strchr(root, '&');
 		if (tmp != NULL)
 		{
-			return autocomplete_html(editor->sci, tmp, strlen(tmp));
+			return autocomplete_tags(editor, filetypes_index(GEANY_FILETYPES_HTML), tmp, strlen(tmp));
 		}
 	}
 	return FALSE;
@@ -2338,7 +2298,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 			{
 				/* complete tags, except if forcing when completion is already visible */
 				if (!(force && SSM(sci, SCI_AUTOCACTIVE, 0, 0)))
-					ret = autocomplete_tags(editor, root, rootlen);
+					ret = autocomplete_tags(editor, editor->document->file_type, root, rootlen);
 
 				/* If forcing and there's nothing else to show, complete from words in document */
 				if (!ret && (force || editor_prefs.autocomplete_doc_words))
