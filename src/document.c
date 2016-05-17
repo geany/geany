@@ -512,6 +512,9 @@ static gint document_get_new_idx(void)
 
 static void queue_colourise(GeanyDocument *doc)
 {
+	if (doc->priv->colourise_needed)
+		return;
+
 	/* Colourise the editor before it is next drawn */
 	doc->priv->colourise_needed = TRUE;
 
