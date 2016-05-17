@@ -1291,7 +1291,7 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 /* extra_text can be NULL; otherwise it is displayed below main_text.
  * if parent is NULL, main_widgets.window will be used
  * btn_1, btn_2, btn_3 can be NULL.
- * returns response_1, response_2 or response_3 */
+ * returns response_1, response_2, response_3, or GTK_RESPONSE_DELETE_EVENT if the dialog was discarded */
 static gint show_prompt(GtkWidget *parent,
 		const gchar *btn_1, GtkResponseType response_1,
 		const gchar *btn_2, GtkResponseType response_2,
@@ -1345,9 +1345,7 @@ static gint show_prompt(GtkWidget *parent,
 	if (btn_1 != NULL)
 		gtk_dialog_add_button(GTK_DIALOG(dialog), btn_1, response_1);
 
-	/* For a cancel button, use cancel response so user can press escape to cancel */
-	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_2,
-		utils_str_equal(btn_2, GTK_STOCK_CANCEL) ? GTK_RESPONSE_CANCEL : response_2);
+	btn = gtk_dialog_add_button(GTK_DIALOG(dialog), btn_2, response_2);
 	/* we don't want a default, but we need to override the apply button as default */
 	gtk_widget_grab_default(btn);
 	gtk_dialog_add_button(GTK_DIALOG(dialog), btn_3, response_3);
@@ -1355,8 +1353,6 @@ static gint show_prompt(GtkWidget *parent,
 	ret = gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_widget_destroy(dialog);
 
-	if (ret == GTK_RESPONSE_CANCEL)
-		ret = response_2;
 	return ret;
 }
 

@@ -1497,7 +1497,7 @@ static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTre
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
-				return ret == GTK_RESPONSE_NO;
+				return ret != GTK_RESPONSE_APPLY;
 			}
 		}
 		while (gtk_tree_model_iter_next(model, &iter));
