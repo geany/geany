@@ -52,6 +52,12 @@ struct _GeanyObjectPrivate
 	gchar dummy;
 };
 
+/** @gironly
+ * Get the GObject-derived GType for GeanyObject
+ *
+ * @return GeanyObject type */
+GEANY_API_SYMBOL
+GType geany_object_get_type(void);
 
 G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT)
 

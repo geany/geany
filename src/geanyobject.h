@@ -74,6 +74,8 @@ GeanyCallbackId;
 typedef struct _GeanyObject				GeanyObject;
 typedef struct _GeanyObjectClass			GeanyObjectClass;
 
+/** @gironly
+ * Instance structure for GeanyObject */
 struct _GeanyObject
 {
 	GObject parent;
@@ -82,30 +84,11 @@ struct _GeanyObject
 
 extern GObject *geany_object;
 
+/** @gironly
+ * Class structure for @a GeanyObject */
 struct _GeanyObjectClass
 {
 	GObjectClass parent_class;
-
-	void (*document_new)(GeanyDocument *doc);
-	void (*document_open)(GeanyDocument *doc);
-	void (*document_reload)(GeanyDocument *doc);
-	void (*document_before_save)(GeanyDocument *doc);
-	void (*document_save)(GeanyDocument *doc);
-	void (*document_filetype_set)(GeanyDocument *doc, GeanyFiletype *filetype_old);
-	void (*document_activate)(GeanyDocument *doc);
-	void (*document_close)(GeanyDocument *doc);
-	void (*project_open)(GKeyFile *keyfile);
-	void (*project_save)(GKeyFile *keyfile);
-	void (*project_close)(void);
-	void (*project_dialog_open)(GtkWidget *notebook);
-	void (*project_dialog_confirmed)(GtkWidget *notebook);
-	void (*project_dialog_close)(GtkWidget *notebook);
-	void (*update_editor_menu)(const gchar *word, gint click_pos, GeanyDocument *doc);
-	gboolean (*editor_notify)(GeanyEditor *editor, gpointer scnt);
-	void (*geany_startup_complete)(void);
-	void (*build_start)(void);
-	void (*save_settings)(GKeyFile *keyfile);
-	void (*load_settings)(GKeyFile *keyfile);
 };
 
 GType		geany_object_get_type	(void);

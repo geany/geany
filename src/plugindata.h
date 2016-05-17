@@ -183,6 +183,12 @@ typedef struct GeanyData
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
 	gpointer					*_compat;			/* Remove field on next ABI break (abi-todo) */
 	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
+	/** @gironly
+	 * Global object signalling events via signals
+	 *
+	 * This is mostly for language bindings. Otherwise prefer to use
+	 * plugin_signal_connect() instead this which adds automatic cleanup. */
+	GObject						*object;
 }
 GeanyData;
 
