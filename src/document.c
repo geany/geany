@@ -2750,10 +2750,17 @@ void document_highlight_tags(GeanyDocument *doc)
 	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
 	if (keywords_str)
 	{
+		guint hash;
+
 		keywords = g_string_free(keywords_str, FALSE);
-		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+		hash = g_str_hash(keywords);
+		if (hash != doc->priv->keyword_hash)
+		{
+			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+			queue_colourise(doc); /* force re-highlighting the entire document */
+			doc->priv->keyword_hash = hash;
+		}
 		g_free(keywords);
-		queue_colourise(doc); /* force re-highlighting the entire document */
 	}
 }
 
