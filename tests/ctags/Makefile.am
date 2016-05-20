@@ -211,6 +211,7 @@ test_sources = \
 	make-comment-in-rule.mak		\
 	make-gnumake-pattern-rules.mak	\
 	make-multi-target.mak			\
+	make-parentheses.mak			\
 	make-target-with-parentheses.mak	\
 	make-variable-on-cmdline.mak	\
 	masm.asm						\
