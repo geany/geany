@@ -3635,6 +3635,8 @@ Toggle Messages Window                                    Toggles the message wi
 
 Toggle Sidebar                                            Shows or hides the sidebar.
 
+Toggle Statusbar                                          Shows or hides the statusbar.
+
 Toggle all additional widgets                             Hide and show all additional widgets like the
                                                           notebook tabs, the toolbar, the messages window
                                                           and the status bar.
