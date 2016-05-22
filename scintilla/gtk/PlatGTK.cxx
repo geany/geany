@@ -655,12 +655,12 @@ static std::string UTF8FromIconv(const Converter &conv, const char *s, int len) 
 	if (conv) {
 		std::string utfForm(len*3+1, '\0');
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = len;
+		gsize inLeft = len;
 		char *putf = &utfForm[0];
 		char *pout = putf;
-		size_t outLeft = len*3+1;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = len*3+1;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			*pout = '\0';
 			utfForm.resize(pout - putf);
 			return utfForm;
@@ -675,11 +675,11 @@ static size_t MultiByteLenFromIconv(const Converter &conv, const char *s, size_t
 	for (size_t lenMB=1; (lenMB<4) && (lenMB <= len); lenMB++) {
 		char wcForm[2];
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = lenMB;
+		gsize inLeft = lenMB;
 		char *pout = wcForm;
-		size_t outLeft = 2;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = 2;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			return lenMB;
 		}
 	}

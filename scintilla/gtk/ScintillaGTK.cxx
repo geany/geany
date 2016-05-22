@@ -933,15 +933,15 @@ static std::string ConvertText(const char *s, size_t len, const char *charSetDes
 	std::string destForm;
 	Converter conv(charSetDest, charSetSource, transliterations);
 	if (conv) {
-		size_t outLeft = len*3+1;
+		gsize outLeft = len*3+1;
 		destForm = std::string(outLeft, '\0');
 		// g_iconv does not actually write to its input argument so safe to cast away const
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = len;
+		gsize inLeft = len;
 		char *putf = &destForm[0];
 		char *pout = putf;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions == ((size_t)(-1))) {
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions == sizeFailure) {
 			if (!silent) {
 				if (len == 1)
 					fprintf(stderr, "iconv %s->%s failed for %0x '%s'\n",
@@ -1181,7 +1181,7 @@ void ScintillaGTK::FullPaint() {
 }
 
 PRectangle ScintillaGTK::GetClientRectangle() const {
-	Window &win = const_cast<Window &>(wMain);
+	Window win = wMain;
 	PRectangle rc = win.GetClientPosition();
 	if (verticalScrollBarVisible)
 		rc.right -= verticalScrollBarWidth;
@@ -1736,14 +1736,21 @@ void ScintillaGTK::Resize(int width, int height) {
 	//Platform::DebugPrintf("Resize %d %d\n", width, height);
 	//printf("Resize %d %d\n", width, height);
 
+	// GTK+ 3 warns when we allocate smaller than the minimum allocation,
+	// so we use these variables to store the minimum scrollbar lengths.
+	int minVScrollBarHeight, minHScrollBarWidth;
+
 	// Not always needed, but some themes can have different sizes of scrollbars
 #if GTK_CHECK_VERSION(3,0,0)
-	GtkRequisition requisition;
-	gtk_widget_get_preferred_size(PWidget(scrollbarv), NULL, &requisition);
+	GtkRequisition minimum, requisition;
+	gtk_widget_get_preferred_size(PWidget(scrollbarv), &minimum, &requisition);
+	minVScrollBarHeight = minimum.height;
 	verticalScrollBarWidth = requisition.width;
-	gtk_widget_get_preferred_size(PWidget(scrollbarh), NULL, &requisition);
+	gtk_widget_get_preferred_size(PWidget(scrollbarh), &minimum, &requisition);
+	minHScrollBarWidth = minimum.height;
 	horizontalScrollBarHeight = requisition.height;
 #else
+	minVScrollBarHeight = minHScrollBarWidth = 1;
 	verticalScrollBarWidth = GTK_WIDGET(PWidget(scrollbarv))->requisition.width;
 	horizontalScrollBarHeight = GTK_WIDGET(PWidget(scrollbarh))->requisition.height;
 #endif
@@ -1757,7 +1764,7 @@ void ScintillaGTK::Resize(int width, int height) {
 		gtk_widget_show(GTK_WIDGET(PWidget(scrollbarh)));
 		alloc.x = 0;
 		alloc.y = height - horizontalScrollBarHeight;
-		alloc.width = Platform::Maximum(1, width - verticalScrollBarWidth);
+		alloc.width = Platform::Maximum(minHScrollBarWidth, width - verticalScrollBarWidth);
 		alloc.height = horizontalScrollBarHeight;
 		gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarh)), &alloc);
 	} else {
@@ -1770,7 +1777,7 @@ void ScintillaGTK::Resize(int width, int height) {
 		alloc.x = width - verticalScrollBarWidth;
 		alloc.y = 0;
 		alloc.width = verticalScrollBarWidth;
-		alloc.height = Platform::Maximum(1, height - horizontalScrollBarHeight);
+		alloc.height = Platform::Maximum(minVScrollBarHeight, height - horizontalScrollBarHeight);
 		gtk_widget_size_allocate(GTK_WIDGET(PWidget(scrollbarv)), &alloc);
 	} else {
 		gtk_widget_hide(GTK_WIDGET(PWidget(scrollbarv)));
@@ -3166,9 +3173,6 @@ void ScintillaGTK::ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_
 	container_class->forall = MainForAll;
 }
 
-#define SIG_MARSHAL scintilla_marshal_NONE__INT_POINTER
-#define MARSHAL_ARGUMENTS G_TYPE_INT, G_TYPE_POINTER
-
 static void scintilla_class_init(ScintillaClass *klass) {
 	try {
 		OBJECT_CLASS *object_class = (OBJECT_CLASS*) klass;
@@ -3183,20 +3187,20 @@ static void scintilla_class_init(ScintillaClass *klass) {
 		            G_STRUCT_OFFSET(ScintillaClass, command),
 		            NULL, //(GSignalAccumulator)
 		            NULL, //(gpointer)
-		            SIG_MARSHAL,
+		            scintilla_marshal_VOID__INT_OBJECT,
 		            G_TYPE_NONE,
-		            2, MARSHAL_ARGUMENTS);
+		            2, G_TYPE_INT, GTK_TYPE_WIDGET);
 
 		scintilla_signals[NOTIFY_SIGNAL] = g_signal_new(
 		            SCINTILLA_NOTIFY,
 		            G_TYPE_FROM_CLASS(object_class),
 		            sigflags,
 		            G_STRUCT_OFFSET(ScintillaClass, notify),
-		            NULL,
-		            NULL,
-		            SIG_MARSHAL,
+		            NULL, //(GSignalAccumulator)
+		            NULL, //(gpointer)
+		            scintilla_marshal_VOID__INT_BOXED,
 		            G_TYPE_NONE,
-		            2, MARSHAL_ARGUMENTS);
+		            2, G_TYPE_INT, SCINTILLA_TYPE_NOTIFICATION);
 
 		klass->command = NULL;
 		klass->notify = NULL;
@@ -3238,4 +3242,22 @@ void scintilla_release_resources(void) {
 		Platform_Finalise();
 	} catch (...) {
 	}
+}
+
+/* Define a dummy boxed type because g-ir-scanner is unable to
+ * recognize gpointer-derived types. Note that SCNotificaiton
+ * is always allocated on stack so copying is not appropriate. */
+static void *copy_(void *src) { return src; }
+static void free_(void *doc) { }
+
+GType scnotification_get_type(void) {
+	static gsize type_id = 0;
+	if (g_once_init_enter(&type_id)) {
+		gsize id = (gsize) g_boxed_type_register_static(
+		                            g_intern_static_string("SCNotification"),
+		                            (GBoxedCopyFunc) copy_,
+		                            (GBoxedFreeFunc) free_);
+		g_once_init_leave(&type_id, id);
+	}
+	return (GType) type_id;
 }
