@@ -3,7 +3,7 @@ SUBDIRS = include
 
 noinst_LTLIBRARIES=libscintilla.la
 
-AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER
+AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DNO_CXX11_REGEX
 
 LEXER_SRCS= \
 lexers/LexAbaqus.cxx \
