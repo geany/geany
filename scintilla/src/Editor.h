@@ -365,6 +365,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void DropCaret();
 	void CaretSetPeriod(int period);
 	void InvalidateCaret();
+	virtual void NotifyCaretMove();
 	virtual void UpdateSystemCaret();
 
 	bool Wrapping() const;

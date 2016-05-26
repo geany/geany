@@ -303,7 +303,7 @@ int Editor::TopLineOfMain() const {
 }
 
 PRectangle Editor::GetClientRectangle() const {
-	Window &win = const_cast<Window &>(wMain);
+	Window win = wMain;
 	return win.GetClientPosition();
 }
 
@@ -828,6 +828,7 @@ void Editor::MovedCaret(SelectionPosition newPos, SelectionPosition previousPos,
 	}
 
 	ShowCaretAtCurrentPosition();
+	NotifyCaretMove();
 
 	ClaimSelection();
 	SetHoverIndicatorPosition(sel.MainCaret());
@@ -1435,6 +1436,9 @@ void Editor::InvalidateCaret() {
 		}
 	}
 	UpdateSystemCaret();
+}
+
+void Editor::NotifyCaretMove() {
 }
 
 void Editor::UpdateSystemCaret() {
