@@ -5,37 +5,19 @@
 default=default
 comment=comment
 commentblock=comment
-number=number,bold,italic
-function=function,bold,italic
+number=number
+function=function
 keyword=type
-macro=preprocessor,bold
+macro=preprocessor
 string=string
-operator=operator,bold
+operator=operator
 variable=keyword_2
-sent=0xd77100;;true;false
-preprocessor=preprocessor,italic
+sent=other
+preprocessor=preprocessor
 special=type
 expand=default
-comobj=keyword_1,italic
-udf=class,italic
-
-# SciTE-like with Default "built-in" color scheme
-#default=0x000000;0xffffff;false;false
-#comment=0x009933;0xffffff;false;true
-#commentblock=0x669900;0xffffff;false;true
-#number=0xac00a9;0xffffff;true;true
-#function=0x000090;0xffffff;true;true
-#keyword=0x0000ff;0xffffff;true;false
-#macro=0xff33ff;0xffffff;true;false
-#string=0x9999cc;0xffffff;true;false
-#operator=0xff0000;0xffffff;true;false
-#variable=0xaa0000;0xffffff;true;false
-#sent=0xff8800;0xffffff;true;false
-#preprocessor=0xf000ff;0xffffff;false;true
-#special=0xa00ff0;0xffffff;false;true
-#expand=0xff0000;0xffffff;true;false
-#comobj=0x0000ff;0xffffff;true;true
-#udf=0xdd9900;0xffffff;false;false
+comobj=keyword_1
+udf=class
 
 [keywords]
 keywords=and byref case const continuecase continueloop default dim do else elseif endfunc endif endselect endswitch endwith enum exit exitloop false for func global if in local next not null or redim return select static step switch then to true until volatile wend while with
@@ -61,7 +43,7 @@ extension=au3
 
 # which characters should be skipped when moving (or included when deleting) to word boundaries
 # should always include space and tab (\s\t)
-whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
+#whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
 # the following characters are these which a "word" can contains, see documentation
 wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
@@ -94,5 +76,5 @@ context_action_cmd=
 # %f will be replaced by the complete filename
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
-compiler=C:\program files\autoit3\aut2exe\aut2exe.exe /in "%f"
-run_cmd=C:\program files\autoit3\autoit3.exe "%f"
+compiler=Aut2exe.exe /in "%f"
+run_cmd=AutoIt3.exe "%f"
