@@ -510,11 +510,10 @@ static gint document_get_new_idx(void)
 }
 
 
-static void queue_colourise(GeanyDocument *doc, gboolean full_colourise)
+static void queue_colourise(GeanyDocument *doc)
 {
-	/* make sure we don't override previously set full_colourise=TRUE by FALSE */
-	if (!doc->priv->colourise_needed || !doc->priv->full_colourise)
-		doc->priv->full_colourise = full_colourise;
+	if (doc->priv->colourise_needed)
+		return;
 
 	/* Colourise the editor before it is next drawn */
 	doc->priv->colourise_needed = TRUE;
@@ -1398,7 +1397,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		/* add the text to the ScintillaObject */
 		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
 		sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
-		queue_colourise(doc, TRUE);	/* Ensure the document gets colourised. */
+		queue_colourise(doc);	/* Ensure the document gets colourised. */
 
 		/* detect & set line endings */
 		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
@@ -2751,10 +2750,17 @@ void document_highlight_tags(GeanyDocument *doc)
 	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
 	if (keywords_str)
 	{
+		guint hash;
+
 		keywords = g_string_free(keywords_str, FALSE);
-		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+		hash = g_str_hash(keywords);
+		if (hash != doc->priv->keyword_hash)
+		{
+			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+			queue_colourise(doc); /* force re-highlighting the entire document */
+			doc->priv->keyword_hash = hash;
+		}
 		g_free(keywords);
-		queue_colourise(doc, FALSE); /* re-highlight the visible area */
 	}
 }
 
@@ -2815,7 +2821,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		highlighting_set_styles(doc->editor->sci, type);
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
-		queue_colourise(doc, TRUE);
+		queue_colourise(doc);
 		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
 		else
