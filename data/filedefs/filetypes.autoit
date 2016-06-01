@@ -31,21 +31,13 @@ udf=
 
 [lexer_properties]
 #settings for folding comment blocks and preprocessor lines
-#lexer.au3.fold.comment=1
-#lexer.au3.fold.compact=1
-#lexer.au3.fold.preprocessor=0
+fold.comment=1
+fold.compact=0
+fold.preprocessor=1
 
 [settings]
 # default extension used when saving files
 extension=au3
-
-# MIME type
-
-# which characters should be skipped when moving (or included when deleting) to word boundaries
-# should always include space and tab (\s\t)
-#whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
-# the following characters are these which a "word" can contains, see documentation
-wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comments, like # in this file
 comment_single=;
