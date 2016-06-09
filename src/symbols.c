@@ -2080,8 +2080,8 @@ static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean defi
 
 	foreach_ptr_array(tmtag, i, tags)
 	{
-		if (definition && !(tmtag->type & forward_types) ||
-			!definition && (tmtag->type & forward_types))
+		if ((definition && !(tmtag->type & forward_types)) ||
+			(!definition && (tmtag->type & forward_types)))
 		{
 			/* If there are typedefs of e.g. a struct such as
 			 * "typedef struct Foo {} Foo;", filter out the typedef unless
