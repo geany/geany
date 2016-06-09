@@ -208,6 +208,8 @@ static void init_pref_groups(void)
 		"autocomplete_doc_words", FALSE, "check_autocomplete_doc_words");
 	stash_group_add_toggle_button(group, &editor_prefs.completion_drops_rest_of_word,
 		"completion_drops_rest_of_word", FALSE, "check_completion_drops_rest_of_word");
+	stash_group_add_toggle_button(group, &editor_prefs.always_auto_close_brackets,
+		"always_auto_close_brackets", FALSE, "check_always_auto_close_brackets");
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_max_entries,
 		"autocompletion_max_entries", GEANY_MAX_AUTOCOMPLETE_WORDS,
 		"spin_autocompletion_max_entries");

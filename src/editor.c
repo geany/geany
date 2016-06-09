@@ -1532,7 +1532,7 @@ static void auto_close_chars(ScintillaObject *sci, gint pos, gchar c)
 	const gchar *closing_char = NULL;
 	gint end_pos = -1;
 
-	if (utils_isbrace(c, 0))
+	if (!editor_prefs.always_auto_close_brackets && utils_isbrace(c, 0))
 		end_pos = sci_find_matching_brace(sci, pos - 1);
 
 	switch (c)
