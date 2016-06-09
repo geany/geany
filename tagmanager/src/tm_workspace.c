@@ -542,7 +542,7 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 	g_hash_table_foreach(table, tm_move_entries_to_g_list, &includes_files);
 	g_hash_table_destroy(table);
 
-	return g_list_reverse(includes_files);
+	return includes_files;
 }
 
 static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
