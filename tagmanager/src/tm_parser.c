@@ -583,7 +583,7 @@ gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang)
 		if (entry->type == type)
 			return entry->kind;
 	}
-	return '-';
+	return '\0';
 }
 
 
