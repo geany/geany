@@ -2133,10 +2133,9 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 		definition = current_tag->type & forward_types;
 
 	filtered_tags = filter_tags(tags, current_tag, definition);
-	if (current_tag && filtered_tags->len == 0)
+	if (filtered_tags->len == 0)
 	{
-		/* if we previously swapped definition/declaration search and didn't
-		 * find anything, try again with the opposite type */
+		/* if we didn't find anything, try again with the opposite type */
 		g_ptr_array_free(filtered_tags, TRUE);
 		filtered_tags = filter_tags(tags, current_tag, !definition);
 	}
