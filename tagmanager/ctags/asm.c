@@ -65,10 +65,10 @@ typedef struct {
 static langType Lang_asm;
 
 static kindOption AsmKinds [] = {
-	{ TRUE, 'd', "macro", "defines" },
-	{ TRUE, 'l', "namespace",  "labels"  },
-	{ TRUE, 'm', "function",  "macros"  },
-	{ TRUE, 't', "struct",   "types (structs and records)"   }
+	{ TRUE, 'd', "define", "defines" },
+	{ TRUE, 'l', "label",  "labels"  },
+	{ TRUE, 'm', "macro",  "macros"  },
+	{ TRUE, 't', "type",   "types (structs and records)"   }
 };
 
 static const asmKeyword AsmKeywords [] = {

@@ -95,7 +95,6 @@ extern void closeTagFile (const boolean resize);
 extern void beginEtagsFile (void);
 extern void endEtagsFile (const char *const name);
 extern void makeTagEntry (const tagEntryInfo *const tag);
-extern void setTagArglistByName (const char *tag_name, const char *arglist);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name);
 
 #endif	/* _ENTRY_H */

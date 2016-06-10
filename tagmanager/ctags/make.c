@@ -30,7 +30,7 @@ typedef enum {
 
 static kindOption MakeKinds [] = {
 	{ TRUE, 'm', "macro",  "macros"},
-	{ TRUE, 't', "function", "targets"}
+	{ TRUE, 't', "target", "targets"}
 };
 
 /*

@@ -50,7 +50,7 @@ static void installActionScriptRegex (const langType language)
 
 	/* Getters and setters */
 	addTagRegex (language, "^[ \t]*[(public|static|internal|final|override)( \t)]*function[ \t]+(set|get)[ \t]+([A-Za-z0-9_]+)[ \t]*\\(",
-		"\\2 \\1", "f,field,fields", NULL);
+		"\\2 \\1", "l,field,fields", NULL);
 
 	/* Variables */
 	addTagRegex (language, "^[ \t]*[(private|public|static|protected|internal)( \t)]*var[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
@@ -82,7 +82,7 @@ static void installActionScriptRegex (const langType language)
 
 	/* Prototypes (Put this in for AS1 compatibility...) */
     addTagRegex (language, ".*\\.prototype\\.([A-Za-z0-9 ]+)[ \t]*\\=([ \t]*)function( [ \t]?)*\\(",
-	    "\\1", "p,prototype", NULL);
+	    "\\1", "r,prototype", NULL);
 }
 
 /* Create parser definition structure */

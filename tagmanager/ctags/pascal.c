@@ -30,7 +30,7 @@ typedef enum {
 
 static kindOption PascalKinds [] = {
     { TRUE, 'f', "function", "functions"},
-    { TRUE, 'f', "function", "procedures"}
+    { TRUE, 'p', "procedure", "procedures"}
 };
 
 /*

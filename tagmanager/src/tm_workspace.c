@@ -31,6 +31,7 @@
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
+#include "tm_ctags_wrappers.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
 
@@ -60,6 +61,10 @@ static TMTagType TM_TYPE_WITH_MEMBERS =
 	tm_tag_class_t | tm_tag_struct_t | tm_tag_union_t |
 	tm_tag_enum_t | tm_tag_interface_t;
 
+static TMTagType TM_GLOBAL_TYPE_MASK =
+	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
+	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
+
 static TMWorkspace *theWorkspace = NULL;
 
 
@@ -72,6 +77,9 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->source_files = g_ptr_array_new();
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
+
+	tm_ctags_init();
+
 	return TRUE;
 }
 
@@ -339,54 +347,12 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 */
 gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 {
-	guchar buf[BUFSIZ];
-	FILE *fp;
 	GPtrArray *file_tags, *new_tags;
-	TMTag *tag;
-	TMFileFormat format = TM_FILE_FORMAT_TAGMANAGER;
 
-	if (NULL == (fp = g_fopen(tags_file, "r")))
+	file_tags = tm_source_file_read_tags_file(tags_file, mode);
+	if (!file_tags)
 		return FALSE;
-	if ((NULL == fgets((gchar*) buf, BUFSIZ, fp)) || ('\0' == *buf))
-	{
-		fclose(fp);
-		return FALSE; /* early out on error */
-	}
-	else
-	{	/* We read the first line for the format specification. */
-		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
-			format = TM_FILE_FORMAT_PIPE;
-		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
-			format = TM_FILE_FORMAT_TAGMANAGER;
-		else if (buf[0] == '#' && strstr((gchar*) buf, "format=ctags") != NULL)
-			format = TM_FILE_FORMAT_CTAGS;
-		else if (strncmp((gchar*) buf, "!_TAG_", 6) == 0)
-			format = TM_FILE_FORMAT_CTAGS;
-		else
-		{	/* We didn't find a valid format specification, so we try to auto-detect the format
-			 * by counting the pipe characters on the first line and asumme pipe format when
-			 * we find more than one pipe on the line. */
-			guint i, pipe_cnt = 0, tab_cnt = 0;
-			for (i = 0; i < BUFSIZ && buf[i] != '\0' && pipe_cnt < 2; i++)
-			{
-				if (buf[i] == '|')
-					pipe_cnt++;
-				else if (buf[i] == '\t')
-					tab_cnt++;
-			}
-			if (pipe_cnt > 1)
-				format = TM_FILE_FORMAT_PIPE;
-			else if (tab_cnt > 1)
-				format = TM_FILE_FORMAT_CTAGS;
-		}
-		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
-	}
-	
-	file_tags = g_ptr_array_new();
-	while (NULL != (tag = tm_tag_new_from_file(NULL, fp, mode, format)))
-		g_ptr_array_add(file_tags, tag);
-	fclose(fp);
-	
+
 	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
@@ -407,15 +373,16 @@ static guint tm_file_inode_hash(gconstpointer key)
 {
 	GStatBuf file_stat;
 	const char *filename = (const char*)key;
+
 	if (g_stat(filename, &file_stat) == 0)
 	{
 #ifdef TM_DEBUG
 		g_message ("Hash for '%s' is '%d'\n", filename, file_stat.st_ino);
 #endif
 		return g_direct_hash ((gpointer)(intptr_t)file_stat.st_ino);
-	} else {
-		return 0;
 	}
+
+	return 0;
 }
 
 
@@ -426,15 +393,18 @@ static void tm_move_entries_to_g_list(gpointer key, gpointer value, gpointer use
 	if (user_data == NULL)
 		return;
 
-	*pp_list = g_list_prepend(*pp_list, value);
+	*pp_list = g_list_prepend(*pp_list, g_strdup(value));
 }
 
 
-static void write_includes_file(FILE *fp, GList *includes_files)
+static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 {
-	GList *node;
+	FILE *fp = g_fopen(outf, "w");
+	GList *node = includes_files;
 
-	node = includes_files;
+	if (!fp)
+		return FALSE;
+
 	while (node)
 	{
 		char *str = g_strdup_printf("#include \"%s\"\n", (char*)node->data);
@@ -444,14 +414,19 @@ static void write_includes_file(FILE *fp, GList *includes_files)
 		g_free(str);
 		node = g_list_next(node);
 	}
+
+	return fclose(fp) == 0;
 }
 
 
-static void append_to_temp_file(FILE *fp, GList *file_list)
+static gboolean combine_include_files(const gchar *outf, GList *file_list)
 {
-	GList *node;
+	FILE *fp = g_fopen(outf, "w");
+	GList *node = file_list;
 
-	node = file_list;
+	if (!fp)
+		return FALSE;
+
 	while (node)
 	{
 		const char *fname = node->data;
@@ -472,6 +447,8 @@ static void append_to_temp_file(FILE *fp, GList *file_list)
 		}
 		node = g_list_next (node);
 	}
+
+	return fclose(fp) == 0;
 }
 
 
@@ -489,6 +466,128 @@ static gchar *create_temp_file(const gchar *tpl)
 	return name;
 }
 
+static GList *lookup_includes(const gchar **includes, gint includes_count)
+{
+	GList *includes_files = NULL;
+	GHashTable *table;
+	gint i;
+#ifdef HAVE_GLOB_H
+	glob_t globbuf;
+	size_t idx_glob;
+#endif
+
+	table = g_hash_table_new_full(tm_file_inode_hash, g_direct_equal, NULL, g_free);
+
+#ifdef HAVE_GLOB_H
+	globbuf.gl_offs = 0;
+
+	if (includes[0][0] == '"')	/* leading \" char for glob matching */
+	{
+		for (i = 0; i < includes_count; i++)
+		{
+			size_t dirty_len = strlen(includes[i]);
+			gchar *clean_path;
+
+			if (dirty_len < 2)
+				continue;
+
+			clean_path = g_malloc(dirty_len - 1);
+
+			strncpy(clean_path, includes[i] + 1, dirty_len - 1);
+			clean_path[dirty_len - 2] = 0;
+
+#ifdef TM_DEBUG
+			g_message ("[o][%s]\n", clean_path);
+#endif
+			glob(clean_path, 0, NULL, &globbuf);
+
+#ifdef TM_DEBUG
+			g_message ("matches: %d\n", globbuf.gl_pathc);
+#endif
+
+			for (idx_glob = 0; idx_glob < globbuf.gl_pathc; idx_glob++)
+			{
+#ifdef TM_DEBUG
+				g_message (">>> %s\n", globbuf.gl_pathv[idx_glob]);
+#endif
+				if (!g_hash_table_lookup(table, globbuf.gl_pathv[idx_glob]))
+				{
+					gchar *file_name_copy = g_strdup(globbuf.gl_pathv[idx_glob]);
+
+					g_hash_table_insert(table, file_name_copy, file_name_copy);
+#ifdef TM_DEBUG
+					g_message ("Added ...\n");
+#endif
+				}
+			}
+			globfree(&globbuf);
+			g_free(clean_path);
+		}
+	}
+	else
+#endif /* HAVE_GLOB_H */
+	{
+		/* no glob support or globbing not wanted */
+		for (i = 0; i < includes_count; i++)
+		{
+			if (!g_hash_table_lookup(table, includes[i]))
+			{
+				gchar* file_name_copy = g_strdup(includes[i]);
+
+				g_hash_table_insert(table, file_name_copy, file_name_copy);
+			}
+		}
+	}
+
+	g_hash_table_foreach(table, tm_move_entries_to_g_list, &includes_files);
+	g_hash_table_destroy(table);
+
+	return includes_files;
+}
+
+static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
+{
+	gint ret;
+	gchar *outf = create_temp_file("tmp_XXXXXX.cpp");
+	gchar *tmp_errfile;
+	gchar *errors = NULL;
+	gchar *command;
+
+	if (!outf)
+		return NULL;
+
+	tmp_errfile = create_temp_file("tmp_XXXXXX");
+	if (!tmp_errfile)
+	{
+		g_unlink(outf);
+		g_free(outf);
+		return NULL;
+	}
+
+	command = g_strdup_printf("%s %s >%s 2>%s",
+		cmd, inf, outf, tmp_errfile);
+#ifdef TM_DEBUG
+	g_message("Executing: %s", command);
+#endif
+	ret = system(command);
+	g_free(command);
+
+	g_file_get_contents(tmp_errfile, &errors, NULL, NULL);
+	if (errors && *errors)
+		g_printerr("%s", errors);
+	g_free(errors);
+	g_unlink(tmp_errfile);
+	g_free(tmp_errfile);
+
+	if (ret == -1)
+	{
+		g_unlink(outf);
+		g_free(outf);
+		return NULL;
+	}
+
+	return outf;
+}
 
 /* Creates a list of global tags. Ideally, this should be created once during
  installations so that all users can use the same file. This is because a full
@@ -504,184 +603,61 @@ static gchar *create_temp_file(const gchar *tpl)
 gboolean tm_workspace_create_global_tags(const char *pre_process, const char **includes,
 	int includes_count, const char *tags_file, TMParserType lang)
 {
-#ifdef HAVE_GLOB_H
-	glob_t globbuf;
-	size_t idx_glob;
-#endif
-	int idx_inc;
-	char *command;
-	guint i;
-	FILE *fp;
+	gboolean ret = FALSE;
 	TMSourceFile *source_file;
-	GPtrArray *tags_array;
-	GHashTable *includes_files_hash;
-	GList *includes_files = NULL;
+	GList *includes_files;
 	gchar *temp_file = create_temp_file("tmp_XXXXXX.cpp");
-	gchar *temp_file2 = create_temp_file("tmp_XXXXXX.cpp");
 
-	if (NULL == temp_file || NULL == temp_file2 ||
-		NULL == (fp = g_fopen(temp_file, "w")))
-	{
-		g_free(temp_file);
-		g_free(temp_file2);
+	if (!temp_file)
 		return FALSE;
-	}
 
-	includes_files_hash = g_hash_table_new_full (tm_file_inode_hash,
-												 g_direct_equal,
-												 NULL, g_free);
-
-#ifdef HAVE_GLOB_H
-	globbuf.gl_offs = 0;
-
-	if (includes[0][0] == '"')	/* leading \" char for glob matching */
-	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
-	{
-		size_t dirty_len = strlen(includes[idx_inc]);
-		char *clean_path = g_malloc(dirty_len - 1);
-
-		strncpy(clean_path, includes[idx_inc] + 1, dirty_len - 1);
-		clean_path[dirty_len - 2] = 0;
-
-#ifdef TM_DEBUG
-		g_message ("[o][%s]\n", clean_path);
-#endif
-		glob(clean_path, 0, NULL, &globbuf);
-
-#ifdef TM_DEBUG
-		g_message ("matches: %d\n", globbuf.gl_pathc);
-#endif
-
-		for(idx_glob = 0; idx_glob < globbuf.gl_pathc; idx_glob++)
-		{
-#ifdef TM_DEBUG
-			g_message (">>> %s\n", globbuf.gl_pathv[idx_glob]);
-#endif
-			if (!g_hash_table_lookup(includes_files_hash,
-									globbuf.gl_pathv[idx_glob]))
-			{
-				char* file_name_copy = strdup(globbuf.gl_pathv[idx_glob]);
-				g_hash_table_insert(includes_files_hash, file_name_copy,
-									file_name_copy);
-#ifdef TM_DEBUG
-				g_message ("Added ...\n");
-#endif
-			}
-		}
-		globfree(&globbuf);
-		g_free(clean_path);
-  	}
-  	else
-#endif
-	/* no glob support or globbing not wanted */
-	for(idx_inc = 0; idx_inc < includes_count; idx_inc++)
-	{
-		if (!g_hash_table_lookup(includes_files_hash,
-									includes[idx_inc]))
-		{
-			char* file_name_copy = strdup(includes[idx_inc]);
-			g_hash_table_insert(includes_files_hash, file_name_copy,
-								file_name_copy);
-		}
-  	}
-
-	/* Checks for duplicate file entries which would case trouble */
-	g_hash_table_foreach(includes_files_hash, tm_move_entries_to_g_list,
-						 &includes_files);
-
-	includes_files = g_list_reverse (includes_files);
+	includes_files = lookup_includes(includes, includes_count);
 
 #ifdef TM_DEBUG
 	g_message ("writing out files to %s\n", temp_file);
 #endif
-	if (pre_process != NULL)
-		write_includes_file(fp, includes_files);
+	if (pre_process)
+		ret = write_includes_file(temp_file, includes_files);
 	else
-		append_to_temp_file(fp, includes_files);
+		ret = combine_include_files(temp_file, includes_files);
 
-	g_list_free (includes_files);
-	g_hash_table_destroy(includes_files_hash);
-	includes_files_hash = NULL;
-	includes_files = NULL;
-	fclose(fp);
+	g_list_free_full(includes_files, g_free);
+	if (!ret)
+		goto cleanup;
+	ret = FALSE;
 
-	if (pre_process != NULL)
+	if (pre_process)
 	{
-		gint ret;
-		gchar *tmp_errfile = create_temp_file("tmp_XXXXXX");
-		gchar *errors = NULL;
-		command = g_strdup_printf("%s %s >%s 2>%s",
-								pre_process, temp_file, temp_file2, tmp_errfile);
-#ifdef TM_DEBUG
-		g_message("Executing: %s", command);
-#endif
-		ret = system(command);
-		g_free(command);
-		g_unlink(temp_file);
-		g_free(temp_file);
-		g_file_get_contents(tmp_errfile, &errors, NULL, NULL);
-		if (errors && *errors)
-			g_printerr("%s", errors);
-		g_free(errors);
-		g_unlink(tmp_errfile);
-		g_free(tmp_errfile);
-		if (ret == -1)
+		gchar *temp_file2 = pre_process_file(pre_process, temp_file);
+
+		if (temp_file2)
 		{
-			g_unlink(temp_file2);
-			return FALSE;
+			g_unlink(temp_file);
+			g_free(temp_file);
+			temp_file = temp_file2;
 		}
+		else
+			goto cleanup;
 	}
-	else
-	{
-		/* no pre-processing needed, so temp_file2 = temp_file */
-		g_unlink(temp_file2);
-		g_free(temp_file2);
-		temp_file2 = temp_file;
-		temp_file = NULL;
-	}
-	source_file = tm_source_file_new(temp_file2, tm_source_file_get_lang_name(lang));
+
+	source_file = tm_source_file_new(temp_file, tm_source_file_get_lang_name(lang));
+	if (!source_file)
+		goto cleanup;
 	update_source_file(source_file, NULL, 0, FALSE, FALSE);
-	if (NULL == source_file)
-	{
-		g_unlink(temp_file2);
-		return FALSE;
-	}
-	g_unlink(temp_file2);
-	g_free(temp_file2);
-	if (0 == source_file->tags_array->len)
+	if (source_file->tags_array->len == 0)
 	{
 		tm_source_file_free(source_file);
-		return FALSE;
+		goto cleanup;
 	}
-	tags_array = tm_tags_extract(source_file->tags_array, tm_tag_max_t);
-	if ((NULL == tags_array) || (0 == tags_array->len))
-	{
-		if (tags_array)
-			g_ptr_array_free(tags_array, TRUE);
-		tm_source_file_free(source_file);
-		return FALSE;
-	}
-	if (FALSE == tm_tags_sort(tags_array, global_tags_sort_attrs, TRUE, FALSE))
-	{
-		tm_source_file_free(source_file);
-		return FALSE;
-	}
-	if (NULL == (fp = g_fopen(tags_file, "w")))
-	{
-		tm_source_file_free(source_file);
-		return FALSE;
-	}
-	fprintf(fp, "# format=tagmanager\n");
-	for (i = 0; i < tags_array->len; ++i)
-	{
-		tm_tag_write(TM_TAG(tags_array->pdata[i]), fp, tm_tag_attr_type_t
-		  | tm_tag_attr_scope_t | tm_tag_attr_arglist_t | tm_tag_attr_vartype_t
-		  | tm_tag_attr_pointer_t);
-	}
-	fclose(fp);
+
+	tm_tags_sort(source_file->tags_array, global_tags_sort_attrs, TRUE, FALSE);
+	ret = tm_source_file_write_tags_file(tags_file, source_file->tags_array);
 	tm_source_file_free(source_file);
-	g_ptr_array_free(tags_array, TRUE);
-	return TRUE;
+
+cleanup:
+	g_unlink(temp_file);
+	g_free(temp_file);
+	return ret;
 }
 
 

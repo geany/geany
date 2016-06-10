@@ -28,7 +28,7 @@ static void installHtmlRegex (const langType language)
 		"[ \t]+name=\"?([^>\"]+)\"?"
 		POSSIBLE_ATTRIBUTES
 		"[ \t]*>",
-		"\\2", "m,member,named anchors", "i");
+		"\\2", "a,anchor,named anchors", "i");
 
 	addTagRegex (language, "^[ \t]*function[ \t]*([A-Za-z0-9_]+)[ \t]*\\(",
 		"\\1", "f,function,JavaScript functions", NULL);

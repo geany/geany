@@ -15,10 +15,7 @@
 
 #include "tm_tag.h"
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+G_BEGIN_DECLS
 
 
 /** The Tag Manager Workspace. This is a singleton object containing a list
@@ -79,8 +76,6 @@ void tm_workspace_dump(void);
 
 #endif /* GEANY_PRIVATE */
 
-#ifdef __cplusplus
-}
-#endif
+G_END_DECLS
 
 #endif /* TM_WORKSPACE_H */

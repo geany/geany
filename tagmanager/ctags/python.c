@@ -31,11 +31,9 @@ typedef enum {
 static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "method",   "class methods"},
+	{TRUE, 'm', "member",   "class members"},
     {TRUE, 'v', "variable", "variables"},
-    /* defined as externvar to get those excluded as forward type in symbols.c:goto_tag()
-     * so we can jump to the real implementation (if known) instead of to the import statement */
-    {TRUE, 'x', "externvar", "imports"}
+    {TRUE, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
 };
 
 typedef enum {
@@ -61,29 +59,6 @@ static boolean isIdentifierFirstCharacter (int c)
 static boolean isIdentifierCharacter (int c)
 {
 	return (boolean) (isalnum (c) || c == '_');
-}
-
-static const char *get_class_name_from_parent (const char *parent)
-{
-	const char *result;
-
-	if (parent == NULL)
-		return NULL;
-
-	result = strrchr (parent, '.');
-	if (result != NULL)
-	{
-		result++;
-		parent = result;
-	}
-
-	result = strrchr (parent, '/');
-	if (result != NULL)
-		result++;
-	else
-		result = parent;
-
-	return result;
 }
 
 /* follows PEP-8, and always reports single-underscores as protected
@@ -140,13 +115,6 @@ static void makeFunctionTag (vString *const function,
 	tag.kindName = PythonKinds[K_FUNCTION].name;
 	tag.kind = PythonKinds[K_FUNCTION].letter;
 	tag.extensionFields.arglist = arglist;
-	/* add argument list of __init__() methods to the class tag */
-	if (strcmp (vStringValue (function), "__init__") == 0 && parent != NULL)
-	{
-		const char *parent_tag_name = get_class_name_from_parent (vStringValue (parent));
-		if (parent_tag_name != NULL)
-			setTagArglistByName (parent_tag_name, arglist);
-	}
 
 	if (vStringLength (parent) > 0)
 	{

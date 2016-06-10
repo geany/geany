@@ -11,6 +11,8 @@ EXTRA_DIST = \
 
 noinst_LTLIBRARIES = libctags.la
 
+libctags_la_LIBADD = ../mio/libmio.la
+
 parsers = \
 	abaqus.c \
 	abc.c \

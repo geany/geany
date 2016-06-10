@@ -39,12 +39,12 @@ typedef struct {
 } KeyWord;
 
 static kindOption BasicKinds[] = {
-	{TRUE, 'c', "macro", "constants"},
+	{TRUE, 'c', "constant", "constants"},
 	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'l', "namespace", "labels"},
-	{TRUE, 't', "struct", "types"},
+	{TRUE, 'l', "label", "labels"},
+	{TRUE, 't', "type", "types"},
 	{TRUE, 'v', "variable", "variables"},
-	{TRUE, 'g', "externvar", "enumerations"}
+	{TRUE, 'g', "enum", "enumerations"}
 };
 
 static KeyWord freebasic_keywords[] = {

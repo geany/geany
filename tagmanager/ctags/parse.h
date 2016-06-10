@@ -36,8 +36,7 @@ typedef void (*createRegexTag) (const vString* const name);
 typedef void (*simpleParser) (void);
 typedef boolean (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
-typedef int (*tagEntryFunction) (const tagEntryInfo *const tag);
-typedef void (*tagEntrySetArglistFunction) (const char *tag_name, const char *arglist);
+typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
 typedef struct sKindOption {
     boolean enabled;			/* are tags for kind enabled? */
@@ -84,6 +83,7 @@ typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsi
  */
 extern parserDefinitionFunc PARSER_LIST;
 extern parserDefinition** LanguageTable;
+extern unsigned int LanguageCount;
 /* Legacy interface */
 extern boolean includingDefineTags (void);
 extern void processLegacyKindOption (const char *const parameter);
@@ -129,8 +129,8 @@ extern void checkRegex (void);
 
 /* Extra stuff for Tag Manager */
 extern tagEntryFunction TagEntryFunction;
-extern tagEntrySetArglistFunction TagEntrySetArglistFunction;
-extern void setTagEntryFunction(tagEntryFunction entry_function);
+extern void *TagEntryUserData;
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 
 #endif	/* _PARSE_H */
 

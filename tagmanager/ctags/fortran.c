@@ -215,22 +215,22 @@ static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
 static kindOption FortranKinds [TAG_COUNT] = {
-	{ TRUE,  'b', "block data",	"block data"},
-	{ TRUE,  'c', "macro",		"common blocks"},
+	{ TRUE,  'b', "blockData",	"block data"},
+	{ TRUE,  'c', "common",		"common blocks"},
 	{ TRUE,  'e', "entry",		"entry points"},
 	{ TRUE,  'f', "function",	"functions"},
 	{ TRUE,  'i', "interface",	"interface contents, generic names, and operators"},
-	{ TRUE,  'k', "member",	"type and structure components"},
+	{ TRUE,  'k', "component",	"type and structure components"},
 	{ TRUE,  'l', "label",		"labels"},
 	{ FALSE, 'L', "local",		"local, common block, and namelist variables"},
-	{ TRUE,  'm', "namespace",	"modules"},
+	{ TRUE,  'm', "module",	"modules"},
 	{ TRUE,  'n', "namelist",	"namelists"},
-	{ TRUE,  'p', "struct",	"programs"},
-	{ TRUE,  's', "method",	"subroutines"},
-	{ TRUE,  't', "class",	"derived types and structures"},
+	{ TRUE,  'p', "program",	"programs"},
+	{ TRUE,  's', "subroutine",	"subroutines"},
+	{ TRUE,  't', "type",	"derived types and structures"},
 	{ TRUE,  'v', "variable",	"program (global) and module variables"},
 	{ TRUE,  'E', "enum",	"enumerations"},
-	{ TRUE,  'F', "enumerator",	"enumeration values"},
+	{ TRUE,  'N', "enumerator",	"enumeration values"},
 };
 
 /* For efinitions of Fortran 77 with extensions:
