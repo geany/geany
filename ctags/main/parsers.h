@@ -14,7 +14,7 @@
 #define _PARSERS_H
 
 /* Add the name of any new parser definition function here */
-/* keep tagmanager/src/tm_parser.h in sync */
+/* keep src/tagmanager/tm_parser.h in sync */
 #define PARSER_LIST \
     CParser, \
     CppParser, \

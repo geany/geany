@@ -650,7 +650,7 @@ Method
 * Add foo.c to SRCS in Makefile.am.
 * Add foo.o to OBJS in makefile.win32.
 * Add Foo to parsers.h
-* Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
+* Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
 In tagmanager/src/tm_parsers.c:
