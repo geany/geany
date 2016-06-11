@@ -30,7 +30,7 @@ parsers = \
 	parsers/haskell.c \
 	parsers/haxe.c \
 	parsers/html.c \
-	parsers/js.c \
+	parsers/jscript.c \
 	parsers/json.c \
 	parsers/latex.c \
 	parsers/lua.c \
