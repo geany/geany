@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = tagmanager
 
 EXTRA_DIST = \
 	gb.c \
@@ -15,7 +16,7 @@ EXTRA_DIST = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
-	-I$(top_srcdir)/tagmanager/src \
+	-I$(srcdir)/tagmanager \
 	-DGTK \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\""Geany"\" \
@@ -120,7 +121,7 @@ libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
 	$(top_builddir)/scintilla/libscintilla.la \
-	$(top_builddir)/tagmanager/src/libtagmanager.la \
+	$(builddir)/tagmanager/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \

@@ -1,7 +1,7 @@
 AM_CPPFLAGS = \
 	-I$(srcdir) \
-	-I$(srcdir)/.. \
-	-I$(srcdir)/../ctags \
+	-I$(top_srcdir)/ctags \
+	-I$(top_srcdir)/ctags/main \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
 AM_CFLAGS = \
@@ -33,4 +33,4 @@ libtagmanager_la_SOURCES =\
 	tm_ctags_wrappers.h \
 	tm_ctags_wrappers.c
 
-libtagmanager_la_LIBADD = ../ctags/libctags.la $(GTK_LIBS)
+libtagmanager_la_LIBADD = $(top_builddir)/ctags/main/libctags.la $(GTK_LIBS)
