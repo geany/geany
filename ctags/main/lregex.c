@@ -18,7 +18,6 @@
 
 #include <string.h>
 #include <glib.h>
-#include <mio/mio.h>
 
 #ifdef HAVE_REGCOMP
 # include <ctype.h>
@@ -28,6 +27,7 @@
 # endif
 #endif
 
+#include "mio.h"
 #include "main.h"
 #include "entry.h"
 #include "parse.h"

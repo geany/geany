@@ -11,8 +11,6 @@ EXTRA_DIST = \
 
 noinst_LTLIBRARIES = libctags.la
 
-libctags_la_LIBADD = ../mio/libmio.la
-
 parsers = \
 	abaqus.c \
 	abc.c \
@@ -71,6 +69,8 @@ libctags_la_SOURCES = \
 	keyword.c \
 	keyword.h \
 	main.h \
+	mio.c \
+	mio.h \
 	nestlevel.c \
 	nestlevel.h \
 	options.c \

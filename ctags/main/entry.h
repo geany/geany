@@ -15,8 +15,7 @@
 */
 #include "general.h"	/* must always come first */
 
-#include <mio/mio.h>
-
+#include "mio.h"
 #include "vstring.h"
 
 /*

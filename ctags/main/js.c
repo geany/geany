@@ -19,11 +19,11 @@
 #include "general.h"	/* must always come first */
 #include <ctype.h>	/* to define isalpha () */
 #include <string.h>
-#include <mio/mio.h>
 #ifdef DEBUG
 #include <stdio.h>
 #endif
 
+#include "mio.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"

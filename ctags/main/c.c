@@ -16,8 +16,8 @@
 
 #include <string.h>
 #include <setjmp.h>
-#include <mio/mio.h>
 
+#include "mio.h"
 #include "entry.h"
 #include "get.h"
 #include "keyword.h"

@@ -149,7 +149,6 @@ AC_CONFIG_FILES([
 		icons/tango/scalable/Makefile
 		ctags/Makefile
 		ctags/main/Makefile
-		ctags/mio/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile
