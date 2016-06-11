@@ -99,10 +99,10 @@ doxygen_dependencies = \
 	$(doxygen_sources) \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
-	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
-	$(top_srcdir)/tagmanager/src/tm_workspace.[ch] \
-	$(top_srcdir)/tagmanager/src/tm_tag.h \
-	$(top_srcdir)/tagmanager/src/tm_parser.h
+	$(top_srcdir)/src/tagmanager/tm_source_file.[ch] \
+	$(top_srcdir)/src/tagmanager/tm_workspace.[ch] \
+	$(top_srcdir)/src/tagmanager/tm_tag.h \
+	$(top_srcdir)/src/tagmanager/tm_parser.h
 
 Doxyfile.stamp: Doxyfile $(doxygen_dependencies)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
