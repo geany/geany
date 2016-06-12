@@ -10,8 +10,7 @@ EXTRA_DIST = \
 	filetypesprivate.h \
 	keybindingsprivate.h \
 	pluginprivate.h \
-	projectprivate.h \
-	makefile.win32
+	projectprivate.h
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \

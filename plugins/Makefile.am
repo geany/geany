@@ -1,7 +1,6 @@
 # Adapted from Pidgin's plugins/Makefile.am, thanks
 
 EXTRA_DIST = \
-	makefile.win32 \
 	demoproxytest.px
 
 plugindir = $(libdir)/geany

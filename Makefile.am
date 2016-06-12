@@ -10,9 +10,7 @@ AM_DISTCHECK_CONFIGURE_FLAGS = --enable-api-docs --enable-html-docs --enable-pdf
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
-	geany.exe.manifest \
-	win32-config.h \
-	makefile.win32
+	geany.exe.manifest
 
 EXTRA_DIST = \
 	autogen.sh \
