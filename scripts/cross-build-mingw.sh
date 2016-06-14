@@ -88,6 +88,8 @@ mkdir _deps
 fetch_and_unzip "$BUNDLE_ZIP" _deps
 # fixup the prefix= in the pkg-config files
 sed -i "s%^\(prefix=\).*$%\1$PWD/_deps%" _deps/lib/pkgconfig/*.pc
+# mingw-w64 doesn't know -pthread
+sed -i -e 's%-pthread%%g' _deps/lib/pkgconfig/*.pc
 
 export PKG_CONFIG_PATH="$PWD/_deps/lib/pkgconfig/"
 export CPPFLAGS="-I$PWD/_deps/include"
