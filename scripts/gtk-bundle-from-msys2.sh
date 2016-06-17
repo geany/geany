@@ -35,6 +35,7 @@ libffi
 libpng
 gettext
 glib2
+graphite2
 libwinpthread-git
 harfbuzz
 fontconfig
@@ -191,6 +192,7 @@ cleanup_unnecessary_files() {
 	rm -rf share/glib-2.0/codegen
 	rm -rf share/glib-2.0/gdb
 	rm -rf share/glib-2.0/gettext
+	rm -rf share/graphite2
 	rm -rf share/gtk-2.0
 	rm -rf share/gtk-3.0
 	rm -rf share/gtk-doc
