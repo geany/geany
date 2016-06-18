@@ -54,7 +54,7 @@ fetch_and_unzip()
 {
   local basename=${1##*/}
   curl -L -# "$1" > "$basename"
-  unzip -q "$basename" -d "$2"
+  unzip -qn "$basename" -d "$2"
   rm -f "$basename"
 }
 
@@ -87,7 +87,8 @@ mkdir "$BUILDDIR"
 cd "$BUILDDIR"
 
 mkdir _deps
-fetch_and_unzip "$BUNDLE_ZIP" _deps
+fetch_and_unzip "$GTK3_BUNDLE_ZIP" _deps
+[ "$GTK3" = yes ] || fetch_and_unzip "$BUNDLE_ZIP" _deps
 # fixup the prefix= in the pkg-config files
 sed -i "s%^\(prefix=\).*$%\1$PWD/_deps%" _deps/lib/pkgconfig/*.pc
 
