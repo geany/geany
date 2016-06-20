@@ -903,8 +903,10 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		else
 		{
-			ui_set_statusbar(TRUE, _("Cannot execute terminal command \"%s\": %s. "
-				"Check the path setting in Preferences."), tool_prefs.term_cmd, error->message);
+			gchar *utf8_term_cmd = utils_get_utf8_from_locale(locale_term_cmd);
+			ui_set_statusbar(TRUE, _("Cannot execute build command \"%s\": %s. "
+				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
+			g_free(utf8_term_cmd);
 			g_error_free(error);
 			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
