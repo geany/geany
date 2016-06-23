@@ -497,8 +497,15 @@ static void convert_eol(gint mode)
 
 	g_return_if_fail(doc != NULL);
 
+	/* sci_convert_eols() adds UNDO_SCINTILLA action in on_editor_notify().
+	 * It is added to the undo stack before sci_convert_eols() finishes
+	 * so after adding UNDO_EOL, UNDO_EOL will be at the top of the stack
+	 * and UNDO_SCINTILLA below it. */
 	sci_convert_eols(doc->editor->sci, mode);
+	document_undo_add(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
 	sci_set_eol_mode(doc->editor->sci, mode);
+
 	ui_update_statusbar(doc, -1);
 }
 

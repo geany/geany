@@ -2953,6 +2953,25 @@ void document_undo(GeanyDocument *doc)
 				g_free(action->data);
 				break;
 			}
+			case UNDO_EOL:
+			{
+				undo_action *next_action;
+
+				document_redo_add(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
+				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+
+				/* When undoing, UNDO_EOL is always followed by UNDO_SCINTILLA
+				 * which undos the line endings in the editor and should be
+				 * performed together with UNDO_EOL. */
+				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				if (next_action && next_action->type == UNDO_SCINTILLA)
+					document_undo(doc);
+				break;
+			}
 			case UNDO_RELOAD:
 			{
 				UndoReloadData *data = (UndoReloadData*)action->data;
@@ -3017,9 +3036,18 @@ void document_redo(GeanyDocument *doc)
 		{
 			case UNDO_SCINTILLA:
 			{
+				undo_action *next_action;
+
 				document_undo_add_internal(doc, UNDO_SCINTILLA, NULL);
 
 				sci_redo(doc->editor->sci);
+
+				/* When redoing an EOL change, the UNDO_SCINTILLA which changes
+				 * the line ends in the editor is followed by UNDO_EOL
+				 * which should be performed together with UNDO_SCINTILLA. */
+				next_action = g_trash_stack_peek(&doc->priv->redo_actions);
+				if (next_action != NULL && next_action->type == UNDO_EOL)
+					document_redo(doc);
 				break;
 			}
 			case UNDO_BOM:
@@ -3042,6 +3070,16 @@ void document_redo(GeanyDocument *doc)
 				ignore_callback = FALSE;
 
 				g_free(action->data);
+				break;
+			}
+			case UNDO_EOL:
+			{
+				document_undo_add_internal(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
+				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
 				break;
 			}
 			case UNDO_RELOAD:
