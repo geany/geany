@@ -55,22 +55,8 @@
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
-/** Dynamic array of filetype pointers
- *
- * List the list is dynamically expanded for custom filetypes filetypes so don't expect
- * the list of known filetypes to be a constant.
- *
- * @elementtype{GeanyFiletype}
- * */
 GPtrArray *filetypes_array = NULL;
-
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
-
-/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
- * first, as this is usually treated specially.
- * The list does not change (after filetypes have been initialized), so you can use
- * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
- * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
 
 
