@@ -1073,7 +1073,8 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 		g_ptr_array_free(tags, TRUE);
 	}
 
-	tm_tags_dedup(member_tags, sort_attr, FALSE);
+	if (member_tags)
+		tm_tags_dedup(member_tags, sort_attr, FALSE);
 
 	return member_tags;
 }
