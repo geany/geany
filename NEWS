@@ -1,7 +1,42 @@
 Geany 1.28 (unreleased)
 
+    General
+    * Improve support for GTK 3.20.
+    * System filetype files and system tags files are now in sub-directories
+      *filedefs/* and *tags/* respectively (Jiří Techet, PR#485).
+
+    Bug fixes
+    * Fix canceling keybinding overriding by discarding the dialog (Issue#714).
+    * Fix type name coloring when types change (Jiří Techet, PR#1039,
+      Issue#1020, Issue#1022).
+    * Fix undo of line end type change (Jiří Techet, PR#527, Issue#409).
+
+    Editor
+    * Update Scintilla to version 3.6.6.
+    * Improve Goto Symbol popup contents (Jiří Techet, PR#958).
+
+    Filetypes
+    * Treat `.h` headers as C++ by default (Jiří Techet, PR#857).
+    * Various improvements to the Ruby parser (Issue#587).
+    * Fix Haskell single line comments (Alexander, PR#1029).
+    * Update Java keywords (Yan Pashkovsky, #1024).
+    * Fix handling of curly brackets in Make (Masatake YAMATO).
+    * Add ECMAScript 6 keywords (Chris Mayo, PR#980).
+    * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
+
     Internationalization
-    * Updated translations: el
+    * Updated translations: de, el, fr
+
+    Plugins
+    * Class builder: use `.hpp` extension for C++ headers by default
+      (Yan Pashkovsky, PR#999).
+
+    Windows
+    * Show an error if an URI cannot be opened (PR#1079).
+
+    OSX
+    * Fix refreshing the keybindings displayed in the menus (Jiří Techet,
+      PR#973).
 
 
 Geany 1.27 (March 13, 2016)
