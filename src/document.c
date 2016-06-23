@@ -3273,9 +3273,9 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 }
 
 
-/** Accessor function for @ref documents_array items.
+/** Accessor function for @ref GeanyData::documents_array items.
  * @warning Always check the returned document is valid (@c doc->is_valid).
- * @param idx @c documents_array index.
+ * @param idx @c GeanyData::documents_array index.
  * @return @transfer{none} @nullable The document, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16

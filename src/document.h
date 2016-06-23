@@ -75,7 +75,7 @@ GeanyFilePrefs;
  **/
 typedef struct GeanyDocument
 {
-	/** Flag used to check if this document is valid when iterating @ref documents_array. */
+	/** Flag used to check if this document is valid when iterating @ref GeanyData::documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -118,7 +118,7 @@ typedef struct GeanyDocument
 }
 GeanyDocument;
 
-/** Wraps @ref documents_array so it can be used with C array syntax.
+/** Wraps @ref GeanyData::documents_array so it can be used with C array syntax.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  *
  * Example: @code GeanyDocument *doc = documents[i]; @endcode
@@ -135,7 +135,7 @@ GeanyDocument;
 
 /** Iterates all valid document indexes.
  * Use like a @c for statement.
- * @param i @c guint index for @ref documents_array.
+ * @param i @c guint index for @ref GeanyData::documents_array.
  *
  * Example:
  * @code
