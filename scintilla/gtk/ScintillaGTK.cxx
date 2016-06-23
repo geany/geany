@@ -3250,6 +3250,7 @@ void scintilla_release_resources(void) {
 static void *copy_(void *src) { return src; }
 static void free_(void *doc) { }
 
+GEANY_API_SYMBOL
 GType scnotification_get_type(void) {
 	static gsize type_id = 0;
 	if (g_once_init_enter(&type_id)) {

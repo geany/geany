@@ -5309,3 +5309,15 @@ void editor_insert_snippet(GeanyEditor *editor, gint pos, const gchar *snippet)
 	editor_insert_text_block(editor, pattern->str, pos, -1, -1, TRUE);
 	g_string_free(pattern, TRUE);
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyEditor
+ *
+ * @return the GeanyEditor type */
+GEANY_API_SYMBOL
+GType editor_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyEditor, editor, copy_, free_);

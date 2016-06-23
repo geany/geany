@@ -1585,3 +1585,15 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 
 	return !EMPTY(*co);
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyFiletype
+ *
+ * @return the GeanyFiletype type */
+GEANY_API_SYMBOL
+GType filetype_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyFiletype, filetype, copy_, free_);

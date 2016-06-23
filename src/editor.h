@@ -139,6 +139,10 @@ typedef struct GeanyEditorPrefs
 }
 GeanyEditorPrefs;
 
+
+#define GEANY_TYPE_EDITOR (editor_get_type())
+GType editor_get_type (void);
+
 /** Editor-owned fields for each document. */
 typedef struct GeanyEditor
 {

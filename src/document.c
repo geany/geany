@@ -3847,3 +3847,15 @@ void document_grab_focus(GeanyDocument *doc)
 
 	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyDocument
+ *
+ * @return the GeanyDocument type */
+GEANY_API_SYMBOL
+GType document_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyDocument, document, copy_, free_);
