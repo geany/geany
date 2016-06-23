@@ -47,7 +47,8 @@ $ make
 % make install
 
 If you are building from a Git clone rather than a source tarball, you need
-to run ./autogen.sh first.
+to run ./autogen.sh first, after having installed GLib's development files.
+You will also need rst2html from Docutils to build the documentation.
 
 For more configuration details run
 $ ./configure --help
