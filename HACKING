@@ -628,7 +628,7 @@ Adding a TagManager parser
 This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Check this fork:
-https://github.com/fishman/ctags
+https://github.com/universal-ctags/ctags
 
 There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
