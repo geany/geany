@@ -2945,12 +2945,10 @@ void document_undo(GeanyDocument *doc)
 				document_redo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
-
-				ignore_callback = TRUE;
-				encodings_select_radio_item((const gchar*)action->data);
-				ignore_callback = FALSE;
-
 				g_free(action->data);
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
 				break;
 			}
 			case UNDO_EOL:
@@ -3064,12 +3062,10 @@ void document_redo(GeanyDocument *doc)
 				document_undo_add_internal(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
-
-				ignore_callback = TRUE;
-				encodings_select_radio_item((const gchar*)action->data);
-				ignore_callback = FALSE;
-
 				g_free(action->data);
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
 				break;
 			}
 			case UNDO_EOL:
