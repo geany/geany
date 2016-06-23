@@ -653,8 +653,10 @@ Method
 * Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In foo.c:
-Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+In tagmanager/src/tm_parsers.c:
+Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
+FooKinds to the appropriate TMTagType, and add the corresponding
+MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():
