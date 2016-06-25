@@ -304,7 +304,6 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
-	GtkTreePath *path;
 	const GdkColor *color = get_color(msg_color);
 	gchar *utf8_msg;
 
@@ -319,8 +318,9 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
-		path = gtk_tree_model_get_path(
+		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
+
 		gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(msgwindow.tree_compiler), path, NULL, TRUE, 0.5, 0.5);
 		gtk_tree_path_free(path);
 	}

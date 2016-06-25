@@ -127,13 +127,14 @@ void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc, *cur_doc = document_get_current();
+	GeanyDocument *cur_doc = document_get_current();
 	guint count = 0;
 
 	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (! doc->changed)
 			continue;
 
@@ -552,7 +553,6 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	ScintillaObject *sci;
-	gchar *text;
 	gboolean keep_sel = TRUE;
 
 	g_return_if_fail(doc != NULL);
@@ -570,8 +570,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
 		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
-
-		text = sci_get_selection_contents(sci);
+		gchar *text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
 		{
@@ -599,7 +598,6 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 			sci_send_command(sci, cmd);
 
 		g_free(text);
-
 	}
 }
 

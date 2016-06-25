@@ -302,7 +302,7 @@ static void on_widget_toggled_set_insensitive(
 
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
-	GtkWidget *checkbox1, *checkbox2, *check_regexp, *check_back, *checkbox5,
+	GtkWidget *checkbox1, *checkbox2, *check_regexp, *checkbox5,
 			  *checkbox7, *check_multiline, *hbox, *fbox, *mbox;
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
@@ -338,7 +338,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 
 	if (dialog != GTK_DIALOG(find_dlg.dialog))
 	{
-		check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
+		GtkWidget *check_back = gtk_check_button_new_with_mnemonic(_("Search _backwards"));
 		ui_hookup_widget(dialog, check_back, "check_back");
 		gtk_button_set_focus_on_click(GTK_BUTTON(check_back), FALSE);
 		gtk_container_add(GTK_CONTAINER(fbox), check_back);

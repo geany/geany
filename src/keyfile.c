@@ -370,7 +370,6 @@ void configuration_save_session_files(GKeyFile *config)
 	gint npage;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
-	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
@@ -382,7 +381,8 @@ void configuration_save_session_files(GKeyFile *config)
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;

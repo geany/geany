@@ -608,8 +608,6 @@ static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user
 static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
-	GtkWidget *tmp_menu;
-	GtkWidget *tmp_popup;
 	GtkWidget *edit_menu, *edit_menu_item;
 	GtkWidget *popup_menu, *popup_menu_item;
 
@@ -622,8 +620,9 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 	while (includes[i] != NULL)
 	{
-		tmp_menu = gtk_menu_item_new_with_label(includes[i]);
-		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_menu = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+
 		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
 		g_signal_connect(tmp_menu, "activate",
@@ -1106,16 +1105,15 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 
 static void recent_create_menu(GeanyRecentFiles *grf)
 {
-	GtkWidget *tmp;
 	guint i, len;
-	gchar *filename;
 
 	len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
 	for (i = 0; i < len; i++)
 	{
-		filename = g_queue_peek_nth(grf->recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
-		tmp = gtk_menu_item_new_with_label(filename);
+		const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
+		GtkWidget *tmp = gtk_menu_item_new_with_label(filename);
+
 		gtk_widget_show(tmp);
 		gtk_container_add(GTK_CONTAINER(grf->menubar), tmp);
 		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);

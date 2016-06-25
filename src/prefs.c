@@ -214,13 +214,14 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 
 static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton *event)
 {
-	GtkWidget *item;
 	static GtkWidget *menu = NULL;
 	guint button;
 	guint32 event_time;
 
 	if (menu == NULL)
 	{
+		GtkWidget *item;
+
 		menu = gtk_menu_new();
 
 		item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));

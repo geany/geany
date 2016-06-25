@@ -301,7 +301,6 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
-	TMTag *tag;
 	guint i;
 
 	g_return_val_if_fail(doc, NULL);
@@ -311,7 +310,8 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
-		tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+
 		if (G_UNLIKELY(tag == NULL))
 			return NULL;
 

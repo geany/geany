@@ -195,7 +195,6 @@ static void on_snippet_keybinding_activate(gchar *key)
 {
 	GeanyDocument *doc = document_get_current();
 	const gchar *s;
-	GHashTable *specials;
 
 	if (!doc || !gtk_widget_has_focus(GTK_WIDGET(doc->editor->sci)))
 		return;
@@ -203,7 +202,8 @@ static void on_snippet_keybinding_activate(gchar *key)
 	s = snippets_find_completion_by_name(doc->file_type->name, key);
 	if (!s) /* allow user to specify keybindings for "special" snippets */
 	{
-		specials = g_hash_table_lookup(snippet_hash, "Special");
+		GHashTable *specials = g_hash_table_lookup(snippet_hash, "Special");
+
 		if (G_LIKELY(specials != NULL))
 			s = g_hash_table_lookup(specials, key);
 	}
@@ -1616,7 +1616,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 	const GeanyIndentPrefs *iprefs = editor_get_indent_prefs(editor);
 	gint x = 0, cnt = 0;
 	gint line, line_len;
-	gchar *text, *line_buf;
+	gchar *line_buf;
 	ScintillaObject *sci;
 	gint line_indent, last_indent;
 
@@ -1656,8 +1656,8 @@ static void close_block(GeanyEditor *editor, gint pos)
 			gint brace_line = sci_get_line_from_position(sci, start_brace);
 			gint size = sci_get_line_indentation(sci, brace_line);
 			gchar *ind = get_whitespace(iprefs, size);
+			gchar *text = g_strconcat(ind, "}", NULL);
 
-			text = g_strconcat(ind, "}", NULL);
 			line_start = sci_get_position_from_line(sci, line);
 			sci_set_anchor(sci, line_start);
 			sci_replace_sel(sci, text);
@@ -4382,16 +4382,12 @@ void editor_fold_all(GeanyEditor *editor)
 
 void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 {
-	gint search_pos, pos_in_line, current_tab_true_length;
 	gint anchor_pos, caret_pos;
-	gint tab_len;
-	gchar *tab_str;
 	struct Sci_TextToFind ttf;
 
 	g_return_if_fail(editor != NULL);
 
 	sci_start_undo_action(editor->sci);
-	tab_len = sci_get_tab_width(editor->sci);
 	if (sci_has_selection(editor->sci) && !ignore_selection)
 	{
 		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
@@ -4408,10 +4404,15 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 	caret_pos = sci_get_current_position(editor->sci);
 	while (TRUE)
 	{
+		gint search_pos, pos_in_line, current_tab_true_length;
+		gint tab_len;
+		gchar *tab_str;
+
 		search_pos = sci_find_text(editor->sci, SCFIND_MATCHCASE, &ttf);
 		if (search_pos == -1)
 			break;
 
+		tab_len = sci_get_tab_width(editor->sci);
 		pos_in_line = sci_get_col_from_position(editor->sci, search_pos);
 		current_tab_true_length = tab_len - (pos_in_line % tab_len);
 		tab_str = g_strnfill(current_tab_true_length, ' ');

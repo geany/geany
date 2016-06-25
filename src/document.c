@@ -1518,7 +1518,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 void document_open_file_list(const gchar *data, gsize length)
 {
 	guint i;
-	gchar *filename;
 	gchar **list;
 
 	g_return_if_fail(data != NULL);
@@ -1528,7 +1527,8 @@ void document_open_file_list(const gchar *data, gsize length)
 	/* stop at the end or first empty item, because last item is empty but not null */
 	for (i = 0; list[i] != NULL && list[i][0] != '\0'; i++)
 	{
-		filename = utils_get_path_from_uri(list[i]);
+		gchar *filename = utils_get_path_from_uri(list[i]);
+
 		if (filename == NULL)
 			continue;
 		document_open_file(filename, FALSE, NULL, NULL);
@@ -2695,7 +2695,6 @@ void document_update_tags(GeanyDocument *doc)
 void document_highlight_tags(GeanyDocument *doc)
 {
 	GString *keywords_str;
-	gchar *keywords;
 	gint keyword_idx;
 
 	/* some filetypes support type keywords (such as struct names), but not
@@ -2732,10 +2731,9 @@ void document_highlight_tags(GeanyDocument *doc)
 	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
 	if (keywords_str)
 	{
-		guint hash;
+		gchar *keywords = g_string_free(keywords_str, FALSE);
+		guint hash = g_str_hash(keywords);
 
-		keywords = g_string_free(keywords_str, FALSE);
-		hash = g_str_hash(keywords);
 		if (hash != doc->priv->keyword_hash)
 		{
 			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
@@ -2893,11 +2891,10 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 /* Clears an Undo or Redo buffer. */
 void document_undo_clear_stack(GTrashStack **stack)
 {
-	undo_action *a;
-
 	while (g_trash_stack_height(stack) > 0)
 	{
-		a = g_trash_stack_pop(stack);
+		undo_action *a = g_trash_stack_pop(stack);
+
 		if (G_LIKELY(a != NULL))
 		{
 			switch (a->type)
@@ -3459,7 +3456,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 {
 	va_list args;
 	gchar *text, *markup;
-	GtkWidget *hbox, *vbox, *icon, *label, *extra_label, *content_area;
+	GtkWidget *hbox, *icon, *label, *content_area;
 	GtkWidget *info_widget, *parent;
 	parent = document_get_notebook_child(doc);
 
@@ -3518,8 +3515,9 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	if (extra_text)
 	{
-		vbox = gtk_vbox_new(FALSE, 6);
-		extra_label = geany_wrap_label_new(extra_text);
+		GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+		GtkWidget *extra_label = geany_wrap_label_new(extra_text);
+
 		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), extra_label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
@@ -3689,7 +3687,6 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
-	time_t cur_time = 0;
 	time_t mtime;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
@@ -3710,7 +3707,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	else
 	{
-		cur_time = time(NULL);
+		time_t cur_time = time(NULL);
+
 		if (! force && doc->priv->last_check > (cur_time - file_prefs.disk_check_timeout))
 			return FALSE;
 
