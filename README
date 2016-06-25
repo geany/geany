@@ -25,6 +25,7 @@ The basic features of Geany are:
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
 - embedded terminal emulation
+- extensibility through plugins
 
 
 Requirements
