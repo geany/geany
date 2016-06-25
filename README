@@ -15,6 +15,7 @@ GTK+ runtime libraries to run Geany.
 Features
 --------
 The basic features of Geany are:
+
 - syntax highlighting
 - code completion
 - auto completion of often used constructs like if, for and while
@@ -80,13 +81,17 @@ See the manual for details (geany.txt/geany.html).
 
 Usage
 -----
-To run Geany just type
-$ geany
+To run Geany just type::
+
+    $ geany
+
 on a console or use the applications menu from your desktop environment.
-There a few command line options. See the manual page of Geany or run
-$ geany --help
-for details. Or look into the documentation in the doc/ directory.
-The most important option probably is -c or --config, where you can
+There a few command line options. See the manual page of Geany or run::
+
+    $ geany --help
+
+for details. Or look into the documentation in the *doc/* directory.
+The most important option probably is ``-c`` or ``--config``, where you can
 specify an alternate configuration directory.
 
 
@@ -95,10 +100,11 @@ Windows
 Geany runs also under Windows. To download the binary with all necessary
 files, visit Geany's homepage. But you should know, that the Windows
 version is not yet well tested and there are some features missing:
+
 - build support (implemented but might be still buggy)
 - embedded terminal emulation (VTE)
 - Windows 9x users: in order to run Geany on Windows 95, 98 or ME you
-  need to install the file SHFolder.dll either in the Geany installation
+  need to install the file *SHFolder.dll* either in the Geany installation
   directory or in your Windows directory. For more information please
   visit http://support.microsoft.com/kb/241733.
 
@@ -118,7 +124,7 @@ included with the source code of this program.
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://www.geany.org/
-If you add something, or fix a bug, please send a patch (in 'diff -u'
+If you add something, or fix a bug, please send a patch (in ``diff -u``
 format) to the mailing list or one of the authors. Also see the HACKING
 file.
 
