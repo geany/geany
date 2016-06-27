@@ -28,8 +28,27 @@ The basic features of Geany are:
 - extensibility through plugins
 
 
+Installation from distribution packages
+---------------------------------------
+Using distribution packages on Linux, BSD and similar distributions
+is the easiest and recommended way. This way you will also benefit
+from automatic Geany updates by the package manager of the distribution.
+
+Packages are available for most distributions including Debian, Fedora, Ubuntu
+and many more.
+
+
+Installation on Mac OSX and Windows
+-----------------------------------
+Prebuilt binary packages for Mac OSX and Windows can be found on
+http://www.geany.org
+
+
+Installation from sources
+-------------------------
+
 Requirements
-------------
+++++++++++++
 For compiling Geany yourself, you will need the GTK2 (>= 2.24) or
 GTK3 libraries and header files. You will also need its dependency libraries
 and header files, such as Pango, Glib and ATK. All these files are
@@ -40,9 +59,6 @@ compiler is also needed for the required Scintilla library included. The
 GNU versions of these tools are recommended.
 
 
-Installation
-------------
-
 To build the user manual you need *rst2html* from Docutils. A pre-built
 version of the manual is available in distribution tarballs and will be used as
 fallback if *rst2html* is missing. When building from Git however, that
@@ -51,6 +67,13 @@ You can explicitly disable building the user manual using the
 ``--disable-html-docs`` *configure* flag, but this will result in not
 installing a local version of the user manual, and Geany will then try
 and open the online version instead when requested.
+
+
+.. note::
+    Building Geany from source on Mac OSX and Windows is more complicated
+    and is out of scope of this document. For more information on
+    building instructions for these platforms, please check the wiki
+    at http://wiki.geany.org/howtos/.
 
 Installing from a Git clone
 +++++++++++++++++++++++++++
@@ -94,16 +117,6 @@ There a few command line options. See the manual page of Geany or run::
 for details. Or look into the documentation in the *doc/* directory.
 The most important option probably is ``-c`` or ``--config``, where you can
 specify an alternate configuration directory.
-
-
-Windows
--------
-Geany runs also under Windows. To download the binary with all necessary
-files, visit Geany's homepage. However, the Windows version has a few
-limitations:
-
-- embedded terminal emulation (VTE) is missing
-- Windows Vista or newer is required
 
 
 License
