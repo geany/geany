@@ -9,9 +9,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.27\n"
+"Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 23:47+0200\n"
+"POT-Creation-Date: 2016-06-27 18:56+0200\n"
 "PO-Revision-Date: 2016-06-23 23:54+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
@@ -409,7 +409,7 @@ msgstr "Divers"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1603
+#: ../data/geany.glade.h:76 ../src/prefs.c:1604
 msgid "General"
 msgstr "Général"
 
@@ -497,7 +497,7 @@ msgstr "Afficher la barre d'état"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "Montrer ou cacher la barre d'état au bas de la fenêtre principale"
 
-#: ../data/geany.glade.h:98 ../src/prefs.c:1605
+#: ../data/geany.glade.h:98 ../src/prefs.c:1606
 msgid "Interface"
 msgstr "Interface"
 
@@ -590,7 +590,7 @@ msgstr ""
 "Regroupe la barre d'outils avec le menu principal pour gagner de l'espace en "
 "hauteur"
 
-#: ../data/geany.glade.h:117 ../src/toolbar.c:943
+#: ../data/geany.glade.h:117 ../src/toolbar.c:944
 msgid "Customize Toolbar"
 msgstr "Personnaliser la barre d'outils"
 
@@ -638,7 +638,7 @@ msgstr "<b>Taille des icônes</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Barre d'outils</b>"
 
-#: ../data/geany.glade.h:129 ../src/prefs.c:1607
+#: ../data/geany.glade.h:129 ../src/prefs.c:1608
 msgid "Toolbar"
 msgstr "Barre d'outils"
 
@@ -1169,7 +1169,7 @@ msgstr "<b>Espaces virtuels</b>"
 msgid "Display"
 msgstr "Affichage"
 
-#: ../data/geany.glade.h:232 ../src/keybindings.c:308 ../src/prefs.c:1609
+#: ../data/geany.glade.h:232 ../src/keybindings.c:308 ../src/prefs.c:1610
 msgid "Editor"
 msgstr "Éditeur"
 
@@ -1291,7 +1291,7 @@ msgstr ""
 "disque, en secondes. Zéro signifie qu'aucune vérification péridoque n'est "
 "faite."
 
-#: ../data/geany.glade.h:257 ../src/prefs.c:1611 ../src/symbols.c:458
+#: ../data/geany.glade.h:257 ../src/prefs.c:1612 ../src/symbols.c:458
 #: ../plugins/filebrowser.c:1159
 msgid "Files"
 msgstr "Fichiers"
@@ -1346,7 +1346,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Commandes</b>"
 
-#: ../data/geany.glade.h:269 ../src/keybindings.c:320 ../src/prefs.c:1613
+#: ../data/geany.glade.h:269 ../src/keybindings.c:320 ../src/prefs.c:1614
 msgid "Tools"
 msgstr "Outils"
 
@@ -1433,7 +1433,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>Données des modèles</b>"
 
-#: ../data/geany.glade.h:287 ../src/prefs.c:1615
+#: ../data/geany.glade.h:287 ../src/prefs.c:1616
 msgid "Templates"
 msgstr "Modèles"
 
@@ -1446,7 +1446,7 @@ msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Raccourcis clavier</b>"
 
 #: ../data/geany.glade.h:290 ../src/plugins.c:1899 ../src/plugins.c:1936
-#: ../src/prefs.c:1617
+#: ../src/prefs.c:1618
 msgid "Keybindings"
 msgstr "Raccourcis"
 
@@ -1526,7 +1526,7 @@ msgstr "Utiliser l'impression GTK native"
 msgid "<b>Printing</b>"
 msgstr "<b>Impression</b>"
 
-#: ../data/geany.glade.h:307 ../src/prefs.c:1619
+#: ../data/geany.glade.h:307 ../src/prefs.c:1620
 msgid "Printing"
 msgstr "Imprimer"
 
@@ -1677,7 +1677,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:338 ../src/prefs.c:1623 ../src/vte.c:320
+#: ../data/geany.glade.h:338 ../src/prefs.c:1624 ../src/vte.c:320
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -1690,7 +1690,7 @@ msgstr ""
 msgid "<b>Various preferences</b>"
 msgstr "<b>Préférences diverses</b>"
 
-#: ../data/geany.glade.h:341 ../src/prefs.c:1621
+#: ../data/geany.glade.h:341 ../src/prefs.c:1622
 msgid "Various"
 msgstr "Divers"
 
@@ -1718,7 +1718,7 @@ msgstr "Enregistrer _sous…"
 msgid "Sa_ve All"
 msgstr "Tout enre_gistrer"
 
-#: ../data/geany.glade.h:349 ../src/document.c:1647 ../src/document.c:3618
+#: ../data/geany.glade.h:349 ../src/document.c:1647 ../src/document.c:3616
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Recharger"
@@ -2575,46 +2575,46 @@ msgstr "_Make"
 msgid "_Make All"
 msgstr "_Make All"
 
-#: ../src/callbacks.c:146
+#: ../src/callbacks.c:147
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d fichier enregistré."
 msgstr[1] "%d fichiers enregistrés."
 
-#: ../src/callbacks.c:892 ../src/keybindings.c:560
+#: ../src/callbacks.c:890 ../src/keybindings.c:560
 msgid "Go to Line"
 msgstr "Se rendre à une ligne"
 
-#: ../src/callbacks.c:893
+#: ../src/callbacks.c:891
 msgid "Enter the line you want to go to:"
 msgstr "Entrez le numéro de la ligne à laquelle vous voulez vous rendre :"
 
-#: ../src/callbacks.c:994 ../src/callbacks.c:1020
+#: ../src/callbacks.c:992 ../src/callbacks.c:1018
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr ""
 "Veuillez définir le type du fichier courant avant d'utiliser cette fonction."
 
-#: ../src/callbacks.c:1310 ../src/callbacks.c:1318
+#: ../src/callbacks.c:1308 ../src/callbacks.c:1316
 msgid "No more message items."
 msgstr "Plus d'éléments de messages."
 
-#: ../src/callbacks.c:1421
+#: ../src/callbacks.c:1419
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Impossible d'ouvrir le fichier %s (fichier non trouvé)"
 
-#: ../src/callbacks.c:1470
+#: ../src/callbacks.c:1468
 msgid "Check the path setting in Filetype configuration."
 msgstr "Vérifiez le chemin dans la configuration du type de fichier."
 
-#: ../src/callbacks.c:1475
+#: ../src/callbacks.c:1473
 msgid "Check the path setting in Preferences."
 msgstr "Vérifiez le chemin dans les préférences."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1488
+#: ../src/callbacks.c:1486
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr ""
@@ -2627,7 +2627,7 @@ msgid "\"%s\" was not found."
 msgstr "« %s » n'a pu être trouvé."
 
 #. auto-detect
-#: ../src/dialogs.c:223 ../src/encodings.c:532
+#: ../src/dialogs.c:223 ../src/encodings.c:531
 msgid "Detect from file"
 msgstr "Détecter depuis le fichier"
 
@@ -2944,20 +2944,20 @@ msgstr "Échec de l'écriture du fichier « %s » : fwrite() a échoué : %s"
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Échec de la fermeture du fichier « %s » : fclose() a échoué : %s"
 
-#: ../src/document.c:2044 ../src/document.c:3619
+#: ../src/document.c:2044 ../src/document.c:3617
 msgid "_Overwrite"
 msgstr "Écras_er"
 
-#: ../src/document.c:2046 ../src/document.c:3622
+#: ../src/document.c:2046 ../src/document.c:3620
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "Le fichier « %s » sur le disque est plus récent que le tampon actuel."
 
-#: ../src/document.c:2054 ../src/document.c:3671
+#: ../src/document.c:2054 ../src/document.c:3669
 msgid "Try to resave the file?"
 msgstr "Essayer de sauvegarder à nouveau le fichier ?"
 
-#: ../src/document.c:2055 ../src/document.c:3672
+#: ../src/document.c:2055 ../src/document.c:3670
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Le fichier « %s » n'a pu être trouvé sur le disque !"
@@ -3009,19 +3009,19 @@ msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s : Remplacement de %d occurrence de « %s » par « %s »."
 msgstr[1] "%s : Remplacement de %d occurrences de « %s » par « %s »."
 
-#: ../src/document.c:3621
+#: ../src/document.c:3619
 msgid "Do you want to reload it?"
 msgstr "Voulez-vous le recharger ?"
 
-#: ../src/editor.c:4454
+#: ../src/editor.c:4455
 msgid "Enter Tab Width"
 msgstr "Largeur des tabulations"
 
-#: ../src/editor.c:4455
+#: ../src/editor.c:4456
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Entrer le nombre d'espaces à remplacer par une tabulation."
 
-#: ../src/editor.c:4660
+#: ../src/editor.c:4661
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Avertissement : largeur de tabulation non standard : %d != 8 !"
@@ -3108,7 +3108,7 @@ msgstr "Vietnamien"
 
 #: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
 #: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
-#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:546
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:545
 msgid "Unicode"
 msgstr "Unicode"
 
@@ -3160,23 +3160,23 @@ msgstr "_Moyen-Oriental"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/encodings.c:536
+#: ../src/encodings.c:535
 msgid "West European"
 msgstr "Européen de l'ouest"
 
-#: ../src/encodings.c:538
+#: ../src/encodings.c:537
 msgid "East European"
 msgstr "Européen de l'est"
 
-#: ../src/encodings.c:540
+#: ../src/encodings.c:539
 msgid "East Asian"
 msgstr "Asiatique de l'est"
 
-#: ../src/encodings.c:542
+#: ../src/encodings.c:541
 msgid "SE & SW Asian"
 msgstr "Asiatique du SE & SO"
 
-#: ../src/encodings.c:544
+#: ../src/encodings.c:543
 msgid "Middle Eastern"
 msgstr "Moyen-Oriental"
 
@@ -3255,8 +3255,8 @@ msgstr "Mauvaise expression régulière pour le type de fichier %s : %s"
 msgid "untitled"
 msgstr "sans titre"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:171
-#: ../src/templates.c:234
+#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Impossible de trouver le fichier « %s »."
@@ -3319,7 +3319,7 @@ msgid "Document"
 msgstr "Document"
 
 #: ../src/keybindings.c:319 ../src/keybindings.c:685 ../src/project.c:511
-#: ../src/ui_utils.c:2195
+#: ../src/ui_utils.c:2193
 msgid "Build"
 msgstr "Construire"
 
@@ -4107,49 +4107,49 @@ msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr ""
 "Tapez la combinaison de touches que vous souhaitez utiliser pour « %s »"
 
-#: ../src/prefs.c:226 ../src/symbols.c:2475 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2475 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "Tout dépli_er"
 
-#: ../src/prefs.c:231 ../src/symbols.c:2480 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2480 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "Tout _replier"
 
-#: ../src/prefs.c:291
+#: ../src/prefs.c:292
 msgid "Action"
 msgstr "Action"
 
-#: ../src/prefs.c:296
+#: ../src/prefs.c:297
 msgid "Shortcut"
 msgstr "Raccourci"
 
-#: ../src/prefs.c:1485
+#: ../src/prefs.c:1486
 msgid "_Allow"
 msgstr "_Autoriser les deux"
 
-#: ../src/prefs.c:1487
+#: ../src/prefs.c:1488
 msgid "_Override"
 msgstr "Écras_er"
 
-#: ../src/prefs.c:1488
+#: ../src/prefs.c:1489
 msgid "Override that keybinding?"
 msgstr "Écraser ce raccourci ?"
 
-#: ../src/prefs.c:1489
+#: ../src/prefs.c:1490
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "La combinaison « %s » est déjà utilisée pour « %s »."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1698
+#: ../src/prefs.c:1699
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Entrer les chemins vers les outils ici. Les chemins vers les outils dont "
 "vous n'avez pas besoin peuvent être laissés vides."
 
 #. page Templates
-#: ../src/prefs.c:1703
+#: ../src/prefs.c:1704
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -4158,7 +4158,7 @@ msgstr ""
 "documentation pour plus de détails."
 
 #. page Keybindings
-#: ../src/prefs.c:1708
+#: ../src/prefs.c:1709
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -4170,7 +4170,7 @@ msgstr ""
 "caractères représentant le raccourci."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1713
+#: ../src/prefs.c:1714
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4624,7 +4624,7 @@ msgid "Bad regex: %s"
 msgstr "Mauvaise expression régulière : %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:237
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -5062,7 +5062,7 @@ msgstr "Trier par ordre d'_apparition"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Impossible de convertir le fichier de modèle « %s » en UTF-8"
 
-#: ../src/templates.c:620
+#: ../src/templates.c:618
 #, c-format
 msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
@@ -5199,15 +5199,15 @@ msgstr "Champ de recherche"
 msgid "Goto Field"
 msgstr "Se rendre à une ligne"
 
-#: ../src/toolbar.c:586
+#: ../src/toolbar.c:587
 msgid "Separator"
 msgstr "Séparateur"
 
-#: ../src/toolbar.c:587
+#: ../src/toolbar.c:588
 msgid "--- Separator ---"
 msgstr "--- Séparateur ---"
 
-#: ../src/toolbar.c:959
+#: ../src/toolbar.c:960
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
@@ -5215,11 +5215,11 @@ msgstr ""
 "Sélectionnez les éléments à afficher sur la barre d'outils. Les éléments "
 "peuvent être réordonnés par glisser-déposer."
 
-#: ../src/toolbar.c:975
+#: ../src/toolbar.c:976
 msgid "Available Items"
 msgstr "Outils disponibles"
 
-#: ../src/toolbar.c:996
+#: ../src/toolbar.c:997
 msgid "Displayed Items"
 msgstr "Outils affichés"
 
@@ -5384,59 +5384,59 @@ msgstr " (nouvelle instance)"
 msgid "Font updated (%s)."
 msgstr "Police mise à jour (%s)."
 
-#: ../src/ui_utils.c:683
+#: ../src/ui_utils.c:682
 msgid "C Standard Library"
 msgstr "Bibliothèque C standard"
 
-#: ../src/ui_utils.c:684
+#: ../src/ui_utils.c:683
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:685
+#: ../src/ui_utils.c:684
 msgid "C++ (C Standard Library)"
 msgstr "C++ (Bibliothèque C standard)"
 
-#: ../src/ui_utils.c:686
+#: ../src/ui_utils.c:685
 msgid "C++ Standard Library"
 msgstr "Bibliothèque C++ standard"
 
-#: ../src/ui_utils.c:687
+#: ../src/ui_utils.c:686
 msgid "C++ STL"
 msgstr "STL C++"
 
-#: ../src/ui_utils.c:709 ../src/ui_utils.c:787
+#: ../src/ui_utils.c:708 ../src/ui_utils.c:786
 msgid "dd.mm.yyyy"
 msgstr "jj.mm.aaaa"
 
-#: ../src/ui_utils.c:711 ../src/ui_utils.c:788
+#: ../src/ui_utils.c:710 ../src/ui_utils.c:787
 msgid "mm.dd.yyyy"
 msgstr "mm.jj.aaaa"
 
-#: ../src/ui_utils.c:713 ../src/ui_utils.c:789
+#: ../src/ui_utils.c:712 ../src/ui_utils.c:788
 msgid "yyyy/mm/dd"
 msgstr "aaaa/mm/jj"
 
-#: ../src/ui_utils.c:715 ../src/ui_utils.c:798
+#: ../src/ui_utils.c:714 ../src/ui_utils.c:797
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "jj.mm.aaaa hh:mm:ss"
 
-#: ../src/ui_utils.c:717 ../src/ui_utils.c:799
+#: ../src/ui_utils.c:716 ../src/ui_utils.c:798
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.jj.aaaa hh:mm:ss"
 
-#: ../src/ui_utils.c:719 ../src/ui_utils.c:800
+#: ../src/ui_utils.c:718 ../src/ui_utils.c:799
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "aaaa/mm/jj hh:mm:ss"
 
-#: ../src/ui_utils.c:721 ../src/ui_utils.c:809
+#: ../src/ui_utils.c:720 ../src/ui_utils.c:808
 msgid "_Use Custom Date Format"
 msgstr "_Utiliser le format de date personnalisé"
 
-#: ../src/ui_utils.c:725
+#: ../src/ui_utils.c:724
 msgid "Custom Date Format"
 msgstr "Format de date personnalisé"
 
-#: ../src/ui_utils.c:726
+#: ../src/ui_utils.c:725
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -5445,35 +5445,35 @@ msgstr ""
 "tous les spécificateurs de conversion qui peuvent être utilisés avec la "
 "fonction C ANSI strftime."
 
-#: ../src/ui_utils.c:747
+#: ../src/ui_utils.c:746
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "Le format de date n'a pas pu être converti (peut-être trop long)."
 
-#: ../src/ui_utils.c:822
+#: ../src/ui_utils.c:821
 msgid "_Set Custom Date Format"
 msgstr "Définir le format de date per_sonnalisé"
 
-#: ../src/ui_utils.c:2009
+#: ../src/ui_utils.c:2007
 msgid "Select Folder"
 msgstr "Choisir un dossier"
 
-#: ../src/ui_utils.c:2009
+#: ../src/ui_utils.c:2007
 msgid "Select File"
 msgstr "Choisir un fichier"
 
-#: ../src/ui_utils.c:2156
+#: ../src/ui_utils.c:2154
 msgid "_Filetype Configuration"
 msgstr "Configuration des types de _fichier"
 
-#: ../src/ui_utils.c:2193
+#: ../src/ui_utils.c:2191
 msgid "Save All"
 msgstr "Tout enregistrer"
 
-#: ../src/ui_utils.c:2194
+#: ../src/ui_utils.c:2192
 msgid "Close All"
 msgstr "Tout fermer"
 
-#: ../src/ui_utils.c:2428
+#: ../src/ui_utils.c:2426
 msgid "Geany cannot start!"
 msgstr "Geany n'a pas pu démarrer !"
 
@@ -5513,24 +5513,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:489
+#: ../src/vte.c:487
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "bibliothèque VTE invalide « %s » : symbole manquant « %s »"
 
-#: ../src/vte.c:638
+#: ../src/vte.c:636
 msgid "_Set Path From Document"
 msgstr "Définir le chemin depui_s le document"
 
-#: ../src/vte.c:643
+#: ../src/vte.c:641
 msgid "_Restart Terminal"
 msgstr "_Relancer le terminal"
 
-#: ../src/vte.c:666
+#: ../src/vte.c:664
 msgid "_Input Methods"
 msgstr "_Méthodes de saisie"
 
-#: ../src/vte.c:759
+#: ../src/vte.c:754
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
