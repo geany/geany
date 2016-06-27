@@ -1070,6 +1070,7 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	gboolean success = TRUE;
 #ifdef G_OS_WIN32
 	gchar *expanded_cmd;
+	guint codepage;
 #else
 	gchar *escaped_dir;
 #endif
@@ -1079,9 +1080,15 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	close(fd);
 
 #ifdef G_OS_WIN32
+	/* We set the console codepage to UTF-8 (65001) before changing the working directory 
+	 * because the working directory is in UTF-8 encoding.
+	 * Then we reset it again to the default value before executing the command. */
+	codepage = win32_get_console_codepage();
 	/* Expand environment variables like %blah%. */
 	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
+	str = g_strdup_printf(
+		"chcp 65001 > nul\ncd \"%s\"\nchcp %u > nul\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", 
+		working_dir, codepage, expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
 #else
 	escaped_dir = g_shell_quote(working_dir);

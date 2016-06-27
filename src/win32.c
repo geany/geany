@@ -1032,4 +1032,16 @@ gchar *win32_get_user_config_dir(void)
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
 }
 
+
+/* Retrieve the console codepage
+ * In case GetConsoleOutputCP() returns 0 (i.e. the application doesn't have an own console window
+ * fallback to GetOEMCP(). */
+guint win32_get_console_codepage(void)
+{
+	guint codepage = GetConsoleOutputCP(); 
+	if (codepage == 0)
+		codepage = GetOEMCP();
+	return codepage;
+}
+
 #endif
