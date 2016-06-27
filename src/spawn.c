@@ -522,6 +522,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 #ifdef G_OS_WIN32
 	GString *command;
 	GArray *environment;
+	GError *gerror = NULL;
+	gchar *locale_working_directory;
+	gchar *locale_command;
 	gchar *failure;
 
 	if (command_line)
@@ -568,11 +571,52 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		envp++;
 	}
 
-	failure = spawn_create_process_with_pipes(command->str, working_directory,
+	// convert working directory into locale encoding
+	if (g_utf8_validate(working_directory, -1, NULL))
+	{
+		locale_working_directory = g_locale_from_utf8(working_directory, -1, NULL, NULL, &gerror);
+		if (gerror) {
+			/* TODO use the code below post-1.28 as it introduces a new string
+			gchar *msg = g_strdup_printf(
+				_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+			g_set_error_literal(error, gerror->domain, gerror->code, msg);
+			*/
+			g_set_error_literal(error, gerror->domain, gerror->code, gerror->message);
+			g_error_free(gerror);
+			g_string_free(command, TRUE);
+			g_array_free(environment, TRUE);
+			g_free(locale_working_directory);
+			/*g_free(msg);*/
+			return FALSE;
+		}
+	}
+	// convert command into locale encoding
+	if (g_utf8_validate(command->str, -1, NULL))
+	{
+		locale_command = g_locale_from_utf8(command->str, -1, NULL, NULL, &gerror);
+		if (gerror) {
+			/* TODO use the code below post-1.28 as it introduces a new string
+			gchar *msg = g_strdup_printf(
+				_("Failed to convert command into locale encoding: %s"), gerror->message);
+			g_set_error_literal(error, gerror->domain, gerror->code, msg);
+			*/
+			g_set_error_literal(error, gerror->domain, gerror->code, gerror->message);
+			g_error_free(gerror);
+			g_string_free(command, TRUE);
+			g_array_free(environment, TRUE);
+			g_free(locale_working_directory);
+			g_free(locale_command);
+			/*g_free(msg);*/
+			return FALSE;
+		}
+	}
+	failure = spawn_create_process_with_pipes(locale_command, locale_working_directory,
 		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
 
 	g_string_free(command, TRUE);
 	g_array_free(environment, TRUE);
+	g_free(locale_working_directory);
+	g_free(locale_command);
 
 	if (failure)
 	{
@@ -655,7 +699,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		#ifdef ENFILE
 			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
 		#endif
-		#ifdef EMFILE 
+		#ifdef EMFILE
 			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
 		#endif
 		#ifdef EINVAL
