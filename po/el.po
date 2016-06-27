@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-03-25 14:25+0200\n"
+"PO-Revision-Date: 2016-06-26 10:07+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
@@ -33,9 +33,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Γρήγορο και ελαφρύ GTK+ IDE"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Επεξεργαστής"
+msgstr "Κείμενο.Επεξεργαστής."
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2025,7 +2024,7 @@ msgstr "Μετατροπή και Καθορισμός σε _LF (Unix)"
 
 #: ../data/geany.glade.h:427
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Μετατροπή και Καθορισμός σε CR (Τυπικό Mac)"
+msgstr "Μετατροπή και Καθορισμός σε CR (Τυπικό _Mac)"
 
 #: ../data/geany.glade.h:428 ../src/keybindings.c:660
 msgid "_Clone"
@@ -2412,13 +2411,13 @@ msgstr ""
 "είσοδο (πατήστε τα πλήκτρα Ctrl+C ή Enter για να το καθαρίσετε)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Αδυναμία εκτέλεσης εντολής εκτύπωσης \"%s\": %s. Ελέγξτε τη ρύθμιση "
-"διαδρομής στις Ιδιότητες."
+"Αδυναμία εκτέλεσης εντολής κατασκευής \"%s\": %s. Ελέγξτε τη ρύθμιση "
+"Τερματικού στις Ιδιότητες."
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5530,7 +5529,7 @@ msgstr "Εκτελέσιμα"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Αποτυχία ανοίγματος URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
