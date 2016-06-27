@@ -97,7 +97,9 @@ doxygen_sources = \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
-	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
+	$(top_srcdir)/tagmanager/src/tm_workspace.[ch] \
+	$(top_srcdir)/tagmanager/src/tm_tag.h \
+	$(top_srcdir)/tagmanager/src/tm_parser.h
 
 Doxyfile.stamp: Doxyfile $(doxygen_sources)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
