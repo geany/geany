@@ -818,7 +818,7 @@ GeanyDocument *document_new_file_if_non_open(void)
  *  @return @transfer{none} The new document.
  **/
 GEANY_API_SYMBOL
-GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
+GeanyDocument *document_file_new(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
 {
 	GeanyDocument *doc;
 
@@ -887,6 +887,25 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 		DOC_FILENAME(doc));
 
 	return doc;
+}
+
+/** @girskip
+ *  @deprecated Renamed to document_file_new, use that instead.
+ *
+ *  Creates a new document.
+ *  Line endings in @a text will be converted to the default setting.
+ *  Afterwards, the @c "document-new" signal is emitted for plugins.
+ *
+ *  @param utf8_filename @nullable The file name in UTF-8 encoding, or @c NULL to open a file as "untitled".
+ *  @param ft @nullable The filetype to set or @c NULL to detect it from @a filename if not @c NULL.
+ *  @param text @nullable The initial content of the file (in UTF-8 encoding), or @c NULL.
+ *
+ *  @return @transfer{none} The new document.
+ **/
+GEANY_API_SYMBOL
+GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, const gchar *text)
+{
+	return document_file_new(utf8_filename, ft, text);
 }
 
 
