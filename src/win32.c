@@ -1038,10 +1038,29 @@ gchar *win32_get_user_config_dir(void)
  * fallback to GetOEMCP(). */
 guint win32_get_console_codepage(void)
 {
-	guint codepage = GetConsoleOutputCP(); 
+	guint codepage = GetConsoleOutputCP();
 	if (codepage == 0)
 		codepage = GetOEMCP();
 	return codepage;
+}
+
+
+/* Convert a string into the system's default codepage, this is different from the
+ * locale (e.g. default codepage is 850 but locale is CP1252).
+ * This assumes the input string is encoded as UTF-8, otherwise a copy of
+ * the input string is returned. */
+#define CODEPAGE_LEN 8
+gchar *win32_convert_to_system_codepage(const gchar *str, GError **error)
+{
+	if (g_utf8_validate(str, -1, NULL))
+	{
+		guint codepage_code = win32_get_console_codepage();
+		gchar codepage[CODEPAGE_LEN] = { 0 };
+		g_snprintf(codepage, CODEPAGE_LEN, "%u", codepage_code);
+		return g_convert(str, -1, codepage, "utf-8", NULL, NULL, error);
+	}
+	else
+		return g_strdup(str);
 }
 
 #endif

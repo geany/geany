@@ -70,6 +70,8 @@ gchar *win32_get_user_config_dir(void);
 
 guint win32_get_console_codepage(void);
 
+gchar *win32_convert_to_system_codepage(const gchar *str, GError **error);
+
 G_END_DECLS
 
 #endif /* G_OS_WIN32 */
