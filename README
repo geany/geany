@@ -15,6 +15,7 @@ GTK+ runtime libraries to run Geany.
 Features
 --------
 The basic features of Geany are:
+
 - syntax highlighting
 - code completion
 - auto completion of often used constructs like if, for and while
@@ -24,10 +25,30 @@ The basic features of Geany are:
 - many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal
 - symbol lists
 - embedded terminal emulation
+- extensibility through plugins
 
+
+Installation from distribution packages
+---------------------------------------
+Using distribution packages on Linux, BSD and similar distributions
+is the easiest and recommended way. This way you will also benefit
+from automatic Geany updates by the package manager of the distribution.
+
+Packages are available for most distributions including Debian, Fedora, Ubuntu
+and many more.
+
+
+Installation on Mac OSX and Windows
+-----------------------------------
+Prebuilt binary packages for Mac OSX and Windows can be found on
+http://www.geany.org
+
+
+Installation from sources
+-------------------------
 
 Requirements
-------------
+++++++++++++
 For compiling Geany yourself, you will need the GTK2 (>= 2.24) or
 GTK3 libraries and header files. You will also need its dependency libraries
 and header files, such as Pango, Glib and ATK. All these files are
@@ -38,19 +59,42 @@ compiler is also needed for the required Scintilla library included. The
 GNU versions of these tools are recommended.
 
 
-Installation
-------------
-Installing Geany is done by the following three commands:
-$ ./configure
-$ make
-(as root)
-% make install
+To build the user manual you need *rst2html* from Docutils. A pre-built
+version of the manual is available in distribution tarballs and will be used as
+fallback if *rst2html* is missing. When building from Git however, that
+pre-built version is not included and *rst2html* is required by default.
+You can explicitly disable building the user manual using the
+``--disable-html-docs`` *configure* flag, but this will result in not
+installing a local version of the user manual, and Geany will then try
+and open the online version instead when requested.
 
-If you are building from a Git clone rather than a source tarball, you need
-to run ./autogen.sh first.
 
-For more configuration details run
-$ ./configure --help
+.. note::
+    Building Geany from source on Mac OSX and Windows is more complicated
+    and is out of scope of this document. For more information on
+    building instructions for these platforms, please check the wiki
+    at http://wiki.geany.org/howtos/.
+
+Installing from a Git clone
++++++++++++++++++++++++++++
+
+Install Autotools (*automake*, *autoconf* and *libtool*), *intltool*,
+and the GLib development files **before** running any of the following
+commands, as well as *rst2html* from Docutils (see above for details).
+Then, run ``./autogen.sh`` and then follow the instructions for
+`installing from a release tarball`_.
+
+Installing from a release tarball
++++++++++++++++++++++++++++++++++
+
+Run the the following three commands::
+
+    $ ./configure
+    $ make
+    (as root, or using sudo)
+    % make install
+
+For more configuration details run ``./configure --help``
 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact the mailing list or one of
@@ -61,27 +105,18 @@ See the manual for details (geany.txt/geany.html).
 
 Usage
 -----
-To run Geany just type
-$ geany
+To run Geany just type::
+
+    $ geany
+
 on a console or use the applications menu from your desktop environment.
-There a few command line options. See the manual page of Geany or run
-$ geany --help
-for details. Or look into the documentation in the doc/ directory.
-The most important option probably is -c or --config, where you can
+There a few command line options. See the manual page of Geany or run::
+
+    $ geany --help
+
+for details. Or look into the documentation in the *doc/* directory.
+The most important option probably is ``-c`` or ``--config``, where you can
 specify an alternate configuration directory.
-
-
-Windows
--------
-Geany runs also under Windows. To download the binary with all necessary
-files, visit Geany's homepage. But you should know, that the Windows
-version is not yet well tested and there are some features missing:
-- build support (implemented but might be still buggy)
-- embedded terminal emulation (VTE)
-- Windows 9x users: in order to run Geany on Windows 95, 98 or ME you
-  need to install the file SHFolder.dll either in the Geany installation
-  directory or in your Windows directory. For more information please
-  visit http://support.microsoft.com/kb/241733.
 
 
 License
@@ -99,13 +134,13 @@ included with the source code of this program.
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://www.geany.org/
-If you add something, or fix a bug, please send a patch (in 'diff -u'
-format) to the mailing list or one of the authors. Also see the HACKING
-file.
+If you add something, or fix a bug, please send a patch (in Git or
+``diff -u`` format) to the mailing list or one of the authors. Also see
+the HACKING file.
 
 
 --
-2005-2015 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
+2005-2016 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
 enrico(dot)troeger(at)uvena(dot)de
 nick(dot)treleaven(at)btinternet(dot)com
 lists(dot)ban(at)herbesfolles(dot)org
