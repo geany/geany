@@ -212,7 +212,10 @@ typedef struct GeanyData
 	 * first, as this is usually treated specially.
 	 * The list does not change (after filetypes have been initialized), so you can use
 	 * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
-	 * @see filetypes_get_sorted_by_name(). */
+	 * @see filetypes_get_sorted_by_name().
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
 	GSList						*filetypes_by_title;
 	/** @gironly
 	 * Global object signalling events via signals
