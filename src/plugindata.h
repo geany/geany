@@ -186,7 +186,10 @@ typedef struct GeanyData
 	 * One reason is that notebook tabs can be reordered.
 	 * Use @c document_get_from_page() to lookup a document from a notebook tab number.
 	 *
-	 * @see documents. */
+	 * @see documents.
+	 *
+	 * @elementtype{GeanyDocument}
+	 */
 	GPtrArray					*documents_array;
 	/** Dynamic array of filetype pointers
 	 *
