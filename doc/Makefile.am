@@ -92,8 +92,11 @@ endif
 if WITH_DOXYGEN
 
 doxygen_sources = \
-	$(srcdir)/*.[ch] \
-	$(srcdir)/*.dox \
+	$(srcdir)/plugins.dox \
+	$(srcdir)/pluginsignals.c \
+	$(srcdir)/pluginsymbols.c \
+	$(srcdir)/stash-example.c \
+	$(srcdir)/stash-gui-example.c \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \

@@ -788,7 +788,11 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = @top_srcdir@/src/ \
-                         @top_srcdir@/doc/ \
+                         @top_srcdir@/doc/plugins.dox \
+                         @top_srcdir@/doc/pluginsignals.c \
+                         @top_srcdir@/doc/pluginsymbols.c \
+                         @top_srcdir@/doc/stash-example.c \
+                         @top_srcdir@/doc/stash-gui-example.c \
                          @top_srcdir@/plugins/geanyplugin.h \
                          @top_srcdir@/tagmanager/src/tm_source_file.c \
                          @top_srcdir@/tagmanager/src/tm_source_file.h \
