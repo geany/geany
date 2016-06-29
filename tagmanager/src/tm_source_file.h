@@ -33,7 +33,7 @@ typedef struct TMSourceFile
 	TMParserType lang; /* Programming language used */
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
-	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object */
+	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object. @elementtype{TMTag} */
 } TMSourceFile;
 
 GType tm_source_file_get_type(void);
