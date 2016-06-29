@@ -42,11 +42,6 @@ EXTRA_DIST = \
 	geany.css \
 	geany.txt \
 	geany.1 \
-	plugins.dox \
-	pluginsymbols.c \
-	pluginsignals.c \
-	stash-example.c \
-	stash-gui-example.c \
 	makefile.win32
 
 # HTML user manual and hacking file
@@ -96,13 +91,18 @@ doxygen_sources = \
 	$(srcdir)/pluginsignals.c \
 	$(srcdir)/pluginsymbols.c \
 	$(srcdir)/stash-example.c \
-	$(srcdir)/stash-gui-example.c \
+	$(srcdir)/stash-gui-example.c
+
+EXTRA_DIST += $(doxygen_sources)
+
+doxygen_dependencies = \
+	$(doxygen_sources) \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
 	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
 	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
 
-Doxyfile.stamp: Doxyfile $(doxygen_sources)
+Doxyfile.stamp: Doxyfile $(doxygen_dependencies)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
 ALL_LOCAL_TARGETS = Doxyfile.stamp
@@ -128,7 +128,7 @@ Doxyfile-gi: Doxyfile
 
 # we depend on Doxyfile.stamp not have this run in parallel with it to avoid
 # concurrent Doxygen runs, which might overwrite each other's files
-Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_sources)
+Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_dependencies)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
 
 geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
