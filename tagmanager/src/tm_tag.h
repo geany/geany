@@ -80,7 +80,10 @@ typedef enum
 #define TAG_IMPL_VIRTUAL 'v' /**< Virtual implementation */
 #define TAG_IMPL_UNKNOWN 'x' /**< Unknown implementation */
 
-typedef struct _TMTag
+/**
+ * The TMTag structure represents a single tag in the tag manager.
+ **/
+typedef struct TMTag
 {
 	char *name; /**< Name of tag */
 	TMTagType type; /**< Tag Type */

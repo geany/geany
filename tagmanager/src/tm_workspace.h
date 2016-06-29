@@ -25,10 +25,10 @@ G_BEGIN_DECLS
  **/
 typedef struct TMWorkspace
 {
-	GPtrArray *global_tags; /**< Global tags loaded at startup */
-	GPtrArray *source_files; /**< An array of TMSourceFile pointers */
-	GPtrArray *tags_array; /**< Sorted tags from all source files 
-		(just pointers to source file tags, the tag objects are owned by the source files) */
+	GPtrArray *global_tags; /**< Global tags loaded at startup. @elementtype{TMTag} */
+	GPtrArray *source_files; /**< An array of TMSourceFile pointers. @elementtype{TMSourceFile} */
+	GPtrArray *tags_array; /**< Sorted tags from all source files
+		(just pointers to source file tags, the tag objects are owned by the source files). @elementtype{TMTag} */
 	GPtrArray *typename_array; /* Typename tags for syntax highlighting (pointers owned by source files) */
 	GPtrArray *global_typename_array; /* Like above for global tags */
 } TMWorkspace;
