@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-02-29 21:39+0100\n"
+"PO-Revision-Date: 2016-06-30 19:05+0100\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
-"Language-Team:  <geany-i18n@uvena.de>\n"
+"Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
@@ -35,9 +35,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Un IDE veloce e leggero che usa GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Testo;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2295,7 +2294,6 @@ msgid "Other:"
 msgstr "Altri:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2305,7 +2303,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2422,13 +2420,13 @@ msgstr ""
 "Ctrl+C o Enter per pulirlo)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Impossibile eseguire il comando di stampa \"%s\": %s. Verificarne il "
-"percorso nelle Preferenze."
+"Impossibile eseguire il comando di compilazione \"%s\": %s. Verificare le "
+"impostazioni del Terminale nelle Preferenze"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5562,7 +5560,7 @@ msgstr "Eseguibili"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Fallita apertura URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
