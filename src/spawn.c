@@ -577,14 +577,15 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		else
 		{
 			locale_entry_len = strlen(*envp);
-			locale_entry = g_memdup(*envp, locale_entry_len);
+			locale_entry = g_memdup(*envp, locale_entry_len + 1);
 		}
 
 		if (! locale_entry)
 			success = FALSE;
 		else
 		{
-			g_array_append_vals(environment, locale_entry, locale_entry_len);
+			/* copy the entry, including NUL terminator */
+			g_array_append_vals(environment, locale_entry, locale_entry_len + 1);
 			g_free(locale_entry);
 		}
 
