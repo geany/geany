@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-03-06 12:22-0800\n"
+"PO-Revision-Date: 2016-07-01 00:52-0700\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.8.8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
@@ -34,9 +34,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "GTK+ 编写的轻快的 IDE"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "编辑器"
+msgstr "文本;编辑器;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2145,7 +2144,6 @@ msgid "Other:"
 msgstr "其他："
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2155,13 +2153,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"版权所有 (c)  2005-2015\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"All rights reserved."
+"保留所有权利。"
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2267,11 +2265,11 @@ msgid ""
 msgstr "因为终端中可能含有一些输入，没有执行文件（按 Ctrl+C 或回车键清除）。"
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
-msgstr "无法执行打印命令“%s”：%s。请检查首选项中的路径设置。"
+msgstr "无法执行生成命令“%s”：%s。请检查首选项中的终端设置。"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5278,7 +5276,7 @@ msgstr "可执行"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "无法打开 URI “%s”：%s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
