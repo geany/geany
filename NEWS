@@ -25,7 +25,7 @@ Geany 1.28 (unreleased)
     * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
 
     Internationalization
-    * Updated translations: de, el, fr, tr
+    * Updated translations: de, el, fr, it, tr, zh_CN
 
     Plugins
     * Class builder: use `.hpp` extension for C++ headers by default
@@ -35,7 +35,7 @@ Geany 1.28 (unreleased)
     * Show an error if an URI cannot be opened (PR#1079).
 
     OSX
-    * Fix refreshing the keybindings displayed in the menus (Jiří Techet,
+    * Fix refreshing the keybindings displayed in the menus (Jiří Techet,
       PR#973).
 
 
