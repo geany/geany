@@ -37,9 +37,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Eine kleine und schnelle Entwicklungsumgebung für GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Text;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2406,13 +2405,13 @@ msgstr ""
 "scheint. Es könnte helfen Strg+C oder Enter im Terminal zu drücken."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Konnte das Kommando zum Drucken »%s« nicht ausführen. Sind die "
-"Pfadeinstellungen korrekt? Die Fehlermeldung lautete: %s"
+"Konnte das Kommando zum Erstellen »%s« nicht ausführen. Sind die Terminal-"
+"Einstellungen korrekt? Die Fehlermeldung lautete: %s"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5526,7 +5525,7 @@ msgstr "Ausführbare Dateien"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Konnte URI \"%s\" nicht öffnen: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
