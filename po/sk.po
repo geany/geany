@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-03-07 20:58+0100\n"
+"PO-Revision-Date: 2016-07-02 16:01+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -31,9 +31,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Rýchle a nenáročné IDE pre GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Text;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2231,7 +2230,6 @@ msgid "Other:"
 msgstr "Ostatný:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2241,13 +2239,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"All rights reserved."
+"Všetky práva vyhradené."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2356,13 +2354,13 @@ msgstr ""
 "Ctrl+C alebo Enter na jeho vyčistenie)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Nie je možné spustiť príkaz na tlač „%s“: %s. Skontrolujte cestu uvedenú v "
-"Nastaveniach."
+"Nie je možné spustiť príkaz pre zostavenie „%s“: %s. Skontrolujte nastavenia "
+"terminálu v Nastavenia->Nástroje."
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5438,7 +5436,7 @@ msgstr "Spustiteľné súbory"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Nepodarilo sa otvoriť URI „%s“: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
