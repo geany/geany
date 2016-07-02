@@ -132,6 +132,10 @@ Section "!Program Files" SEC01
 	SetOutPath "$INSTDIR\bin"
 	File "${RESOURCEDIR}\bin\Geany.exe"
 	File "${RESOURCEDIR}\bin\*Geany*.dll"
+	# non-GTK dependencies
+	File "gtk\bin\libgcc_s_dw*.dll"
+	File "gtk\bin\libstdc++-*.dll"
+	File "gtk\bin\libwinpthread*.dll"
 
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
