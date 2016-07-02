@@ -34,9 +34,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "GTK+ を用いた高速で軽量な IDE"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "エディタ"
+msgstr "Text;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -119,9 +118,8 @@ msgid "Find _Document Usage"
 msgstr "文書内で使用箇所を検索(_D)"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "タグ定義へ移動"
+msgstr "タグ定義に移動(_T)"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -411,21 +409,19 @@ msgstr "シンボルリストのオン／オフを切り替える"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "デフォルトのシンボル ソート モード"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "デフォルトのエンコーディング（新規ファイル）:"
+msgstr "デフォルトのソート モード:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "名前"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>外観</b>"
+msgstr "外観"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1802,9 +1798,8 @@ msgid "_Mark All"
 msgstr "すべてメイク(_M)"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "タグ宣言へ移動"
+msgstr "シンボル宣言へ移動(_A)"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -2036,9 +2031,8 @@ msgid "_Word Count"
 msgstr "ワードカウント(_W)"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "タグを読み込む(_G)..."
+msgstr "タグファイルを読み込む(_G)..."
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -2212,7 +2206,6 @@ msgid "Other:"
 msgstr "その他:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2222,7 +2215,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2333,13 +2326,15 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"端末に何か入力(Ctrl+C または クリアのために Enter を入力)"
+"したために、ファイルを実行しませんでした。"
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
-msgstr "印刷コマンド \"%s\" が実行できません: %s パス設定を確認してください。"
+msgstr "ビルドコマンド \"%s\" が実行できません: %s 設定の端末設定を確認してください。"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -2516,7 +2511,7 @@ msgstr "ファイル %s を開けません（ファイルなし）"
 
 #: ../src/callbacks.c:1468
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "ファイル種類設定のパスの設定を確認してください。"
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Preferences."
@@ -2776,7 +2771,7 @@ msgstr ", 読み取り専用"
 
 #: ../src/document.c:1613
 msgid "Discard history"
-msgstr ""
+msgstr "履歴を廃棄"
 
 #: ../src/document.c:1614
 msgid ""
@@ -2786,7 +2781,7 @@ msgid ""
 "preferences."
 msgstr ""
 "バッファの以前の状態は履歴に保存され、アンドウで復元することができます。再読"
-"み込みにより履歴を破棄すれば、アンドウで復元できなくなります。このメッセージ"
+"み込みにより履歴を廃棄すれば、アンドウで復元できなくなります。このメッセージ"
 "は再表示されませんが、設定により変更可能です。"
 
 #: ../src/document.c:1618
@@ -3423,34 +3418,28 @@ msgid "Send to Custom Command 3"
 msgstr "カスタムコマンド 3"
 
 #: ../src/keybindings.c:481
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 4"
 
 #: ../src/keybindings.c:483
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 5"
 
 #: ../src/keybindings.c:485
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 6"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 7"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 8"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "カスタムコマンド 1"
+msgstr "カスタムコマンド 9"
 
 #: ../src/keybindings.c:499
 msgid "Join lines"
@@ -3514,21 +3503,19 @@ msgstr "次の位置に進む"
 
 #: ../src/keybindings.c:563
 msgid "Go to matching brace"
-msgstr "対応する括弧へ移動"
+msgstr "対応する括弧に移動"
 
 #: ../src/keybindings.c:566
 msgid "Toggle marker"
 msgstr "マーカーを切り替える"
 
 #: ../src/keybindings.c:575
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "タグ定義へ移動"
+msgstr "シンボル定義に移動"
 
 #: ../src/keybindings.c:578
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "タグ宣言へ移動"
+msgstr "タグ宣言に移動"
 
 #: ../src/keybindings.c:580
 msgid "Go to Start of Line"
@@ -3762,9 +3749,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "グローバルタグファイルを生成(ドキュメントを参照)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "タグを生成するときに、C/C++ファイルのプリプロセッサを使用しない"
+msgstr "タグファイルを生成するときに、C/C++ファイルのプリプロセッサを使用しない"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4848,12 +4834,11 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "\"%s\" は不明なファイル形式の拡張子です\n"
 
 #: ../src/symbols.c:1612
-#, fuzzy, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "タグが見つからないため、タグファイルの作成に失敗しました\n"
+msgstr "シンボルが見つからないため、タグファイルを作成できません。\n"
 
 #: ../src/symbols.c:1619
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
@@ -4873,14 +4858,12 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1634
-#, fuzzy
 msgid "Load Tags File"
-msgstr "タグを読み込む"
+msgstr "タグファイルを読み込む"
 
 #: ../src/symbols.c:1641
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
-msgstr "Geany タグファイル (*.tags)"
+msgstr "Geany タグファイル (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1661
@@ -4895,15 +4878,15 @@ msgstr "タグファイル '%s' を読み込めませんでした"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1899
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>表示</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1902
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2111
 #, c-format
@@ -5167,9 +5150,8 @@ msgid "Characters:"
 msgstr "文字数:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "タグが見つかりません"
+msgstr "シンボルが見つかりません"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
@@ -5410,7 +5392,7 @@ msgstr "実行ファイル"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "URI \"%s\" のオープンに失敗しました: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
