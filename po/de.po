@@ -3968,7 +3968,7 @@ msgstr ""
 #: ../src/libmain.c:1155
 #, c-format
 msgid "This is Geany %s."
-msgstr "Willkommen zu Geany %s."
+msgstr "Willkommen bei Geany %s."
 
 #: ../src/libmain.c:1157
 #, c-format
