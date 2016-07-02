@@ -593,7 +593,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	}
 
 	/* convert working directory into locale encoding */
-	if (success && g_utf8_validate(working_directory, -1, NULL))
+	if (success && working_directory && g_utf8_validate(working_directory, -1, NULL))
 	{
 		GError *gerror = NULL;
 
