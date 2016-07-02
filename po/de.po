@@ -5047,7 +5047,7 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
-"Konnte das Kommando »%s« aus dem Template »%s« nicht ausführen. Prüfen Sie "
+"Konnte das Kommando »%s« aus dem Template nicht ausführen: »%s« . Prüfen Sie "
 "den Pfad in der Vorlage."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
