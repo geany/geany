@@ -95,6 +95,7 @@ Makefile.in
 /doc/Doxyfile-gi
 /doc/Doxyfile.stamp
 /doc/Doxyfile-gi.stamp
+/doc/doxygen_*
 /doc/geany.1
 /doc/geany.html
 /doc/hacking.html
