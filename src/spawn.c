@@ -593,36 +593,46 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	}
 
 	/* convert working directory into locale encoding */
-	if (success && working_directory && g_utf8_validate(working_directory, -1, NULL))
+	if (success && working_directory)
 	{
-		GError *gerror = NULL;
-
-		locale_working_directory = g_locale_from_utf8(working_directory, -1, NULL, NULL, &gerror);
-		if (! locale_working_directory)
+		if (g_utf8_validate(working_directory, -1, NULL))
 		{
-			/* TODO use the code below post-1.28 as it introduces a new string
-			g_set_error(error, gerror->domain, gerror->code,
-				_("Failed to convert working directory into locale encoding: %s"), gerror->message);
-			*/
-			g_propagate_error(error, gerror);
-			success = FALSE;
+			GError *gerror = NULL;
+
+			locale_working_directory = g_locale_from_utf8(working_directory, -1, NULL, NULL, &gerror);
+			if (! locale_working_directory)
+			{
+				/* TODO use the code below post-1.28 as it introduces a new string
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+				*/
+				g_propagate_error(error, gerror);
+				success = FALSE;
+			}
 		}
+		else
+			locale_working_directory = g_strdup(working_directory);
 	}
 	/* convert command into locale encoding */
-	if (success && g_utf8_validate(command->str, -1, NULL))
+	if (success)
 	{
-		GError *gerror = NULL;
-
-		locale_command = g_locale_from_utf8(command->str, -1, NULL, NULL, &gerror);
-		if (! locale_command)
+		if (g_utf8_validate(command->str, -1, NULL))
 		{
-			/* TODO use the code below post-1.28 as it introduces a new string
-			g_set_error(error, gerror->domain, gerror->code,
-				_("Failed to convert command into locale encoding: %s"), gerror->message);
-			*/
-			g_propagate_error(error, gerror);
-			success = FALSE;
+			GError *gerror = NULL;
+
+			locale_command = g_locale_from_utf8(command->str, -1, NULL, NULL, &gerror);
+			if (! locale_command)
+			{
+				/* TODO use the code below post-1.28 as it introduces a new string
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert command into locale encoding: %s"), gerror->message);
+				*/
+				g_propagate_error(error, gerror);
+				success = FALSE;
+			}
 		}
+		else
+			locale_command = g_strdup(command->str);
 	}
 
 	if (success)
