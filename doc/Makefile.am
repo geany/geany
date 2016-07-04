@@ -178,8 +178,8 @@ GeanyScintilla_1_0_tmp_gir_INCLUDES     = $(GTK_GIR) GLib-2.0 GObject-2.0
 GeanyScintilla_1_0_tmp_gir_CFLAGS       = $(gir_common_cflags) \
                                           -include gtk/gtk.h
 GeanyScintilla_1_0_tmp_gir_LIBS         = ../src/libgeany.la
-GeanyScintilla_1_0_tmp_gir_FILES        = $(top_srcdir)/scintilla/include/ScintillaWidget.h \
-                                          $(top_srcdir)/scintilla/include/Scintilla.h \
+GeanyScintilla_1_0_tmp_gir_FILES        = $(top_srcdir)/scintilla/include/Scintilla.h \
+                                          $(top_srcdir)/scintilla/include/ScintillaWidget.h \
                                           $(top_srcdir)/scintilla/include/SciLexer.h \
                                           geany-sciwrappers-gtkdoc-tmp.h
 GeanyScintilla_1_0_tmp_gir_SCANNERFLAGS = $(SCANNERFLAGS)
