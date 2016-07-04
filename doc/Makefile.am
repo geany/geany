@@ -150,7 +150,7 @@ clean-gtkdoc-header-local:
 
 if HAVE_INTROSPECTION
 
-INTROSPECTION_GIRS  = Geany-1.0-pre.gir GeanyScintilla-1.0-pre.gir
+INTROSPECTION_GIRS  = Geany-1.0-tmp.gir GeanyScintilla-1.0-tmp.gir
 SCANNERFLAGS        = --accept-unprefixed --c-include=geanyplugin.h
 
 if GTK3
@@ -159,32 +159,32 @@ else
 GTK_GIR = Gtk-2.0
 endif
 
-Geany_1_0_pre_gir_NAMESPACE     = Geany
-Geany_1_0_pre_gir_VERSION       = 1.0
-Geany_1_0_pre_gir_INCLUDES      = $(GTK_GIR) GLib-2.0 GObject-2.0
-Geany_1_0_pre_gir_CFLAGS        = $(GTK_CFLAGS) -DG_IR_SCANNING \
+Geany_1_0_tmp_gir_NAMESPACE     = Geany
+Geany_1_0_tmp_gir_VERSION       = 1.0
+Geany_1_0_tmp_gir_INCLUDES      = $(GTK_GIR) GLib-2.0 GObject-2.0
+Geany_1_0_tmp_gir_CFLAGS        = $(GTK_CFLAGS) -DG_IR_SCANNING \
                                   -DGTK \
                                   -I $(top_srcdir)/src/ \
                                   -I $(top_srcdir)/scintilla/include/ \
                                   -DScintillaObject=GeanyScintillaScintillaObject
-Geany_1_0_pre_gir_LIBS          = ../src/libgeany.la
-Geany_1_0_pre_gir_FILES         = geany-gtkdoc.h
-Geany_1_0_pre_gir_SCANNERFLAGS  = $(SCANNERFLAGS) --include-uninstalled=GeanyScintilla-1.0.gir
+Geany_1_0_tmp_gir_LIBS          = ../src/libgeany.la
+Geany_1_0_tmp_gir_FILES         = geany-gtkdoc.h
+Geany_1_0_tmp_gir_SCANNERFLAGS  = $(SCANNERFLAGS) --include-uninstalled=GeanyScintilla-1.0.gir
 
-GeanyScintilla_1_0_pre_gir_NAMESPACE    = GeanyScintilla
-GeanyScintilla_1_0_pre_gir_VERSION      = 1.0
-GeanyScintilla_1_0_pre_gir_INCLUDES     = $(GTK_GIR) GLib-2.0 GObject-2.0
-GeanyScintilla_1_0_pre_gir_CFLAGS       = $(GTK_CFLAGS) -DG_IR_SCANNING \
+GeanyScintilla_1_0_tmp_gir_NAMESPACE    = GeanyScintilla
+GeanyScintilla_1_0_tmp_gir_VERSION      = 1.0
+GeanyScintilla_1_0_tmp_gir_INCLUDES     = $(GTK_GIR) GLib-2.0 GObject-2.0
+GeanyScintilla_1_0_tmp_gir_CFLAGS       = $(GTK_CFLAGS) -DG_IR_SCANNING \
                                           -DGTK \
                                           -I $(top_srcdir)/src/ \
                                           -I $(top_srcdir)/scintilla/include/ \
                                           -include gtk/gtk.h
-GeanyScintilla_1_0_pre_gir_LIBS         = ../src/libgeany.la
-GeanyScintilla_1_0_pre_gir_FILES        = $(top_srcdir)/scintilla/include/ScintillaWidget.h \
+GeanyScintilla_1_0_tmp_gir_LIBS         = ../src/libgeany.la
+GeanyScintilla_1_0_tmp_gir_FILES        = $(top_srcdir)/scintilla/include/ScintillaWidget.h \
                                           $(top_srcdir)/scintilla/include/Scintilla.h \
                                           $(top_srcdir)/scintilla/include/SciLexer.h \
                                           geany-sciwrappers-gtkdoc-tmp.h
-GeanyScintilla_1_0_pre_gir_SCANNERFLAGS = $(SCANNERFLAGS)
+GeanyScintilla_1_0_tmp_gir_SCANNERFLAGS = $(SCANNERFLAGS)
 
 girdir          = $(datadir)/gir-1.0
 gir_DATA        = Geany-1.0.gir GeanyScintilla-1.0.gir
@@ -196,12 +196,12 @@ geany-sciwrappers-gtkdoc-tmp.h: geany-sciwrappers-gtkdoc.h
 		-e 's,sci_,scintilla_object__GI__MARK_,g' \
 		$< > $@
 
-GeanyScintilla-1.0.gir: GeanyScintilla-1.0-pre.gir
+GeanyScintilla-1.0.gir: GeanyScintilla-1.0-tmp.gir
 	$(AM_V_GEN) cat $< \
 		| $(SED) -e 's,scintilla_object__GI__MARK_,sci_,g' \
 		| $(SED) -e 's,_GI__MARK_,,g' > $@
 
-Geany-1.0.gir: Geany-1.0-pre.gir
+Geany-1.0.gir: Geany-1.0-tmp.gir
 	$(AM_V_GEN) $(SED) \
 		-e 's,GeanyScintillaScintillaObject,ScintillaObject,g' \
 		$< > $@
@@ -210,12 +210,12 @@ ALL_LOCAL_TARGETS += $(gir_DATA) $(typelib_DATA)
 
 CLEANFILES = \
 	$(gir_DATA) $(typelib_DATA) \
-	Geany-1.0-pre.gir GeanyScintilla-1.0-pre.gir \
+	Geany-1.0-tmp.gir GeanyScintilla-1.0-tmp.gir \
 	geany-sciwrappers-gtkdoc-tmp.h
 
 include $(INTROSPECTION_MAKEFILE)
 
-Geany-1.0-pre.gir: GeanyScintilla-1.0.gir
+Geany-1.0-tmp.gir: GeanyScintilla-1.0.gir
 
 endif HAVE_INTROSPECTION
 
