@@ -163,6 +163,7 @@ Geany_1_0_pre_gir_NAMESPACE     = Geany
 Geany_1_0_pre_gir_VERSION       = 1.0
 Geany_1_0_pre_gir_INCLUDES      = $(GTK_GIR) GLib-2.0 GObject-2.0
 Geany_1_0_pre_gir_CFLAGS        = $(GTK_CFLAGS) -DG_IR_SCANNING \
+                                  -DGTK \
                                   -I $(top_srcdir)/src/ \
                                   -I $(top_srcdir)/scintilla/include/ \
                                   -DScintillaObject=GeanyScintillaScintillaObject
@@ -174,6 +175,7 @@ GeanyScintilla_1_0_pre_gir_NAMESPACE    = GeanyScintilla
 GeanyScintilla_1_0_pre_gir_VERSION      = 1.0
 GeanyScintilla_1_0_pre_gir_INCLUDES     = $(GTK_GIR) GLib-2.0 GObject-2.0
 GeanyScintilla_1_0_pre_gir_CFLAGS       = $(GTK_CFLAGS) -DG_IR_SCANNING \
+                                          -DGTK \
                                           -I $(top_srcdir)/src/ \
                                           -I $(top_srcdir)/scintilla/include/ \
                                           -include gtk/gtk.h
