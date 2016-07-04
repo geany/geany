@@ -1669,7 +1669,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
- *  @param child_pid @nullable The return location for child process ID, or @c NULL.
+ *  @param child_pid @out @nullable The return location for child process ID, or @c NULL.
  *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
