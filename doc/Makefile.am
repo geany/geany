@@ -152,6 +152,10 @@ if HAVE_INTROSPECTION
 
 INTROSPECTION_GIRS  = Geany-1.0-tmp.gir GeanyScintilla-1.0-tmp.gir
 SCANNERFLAGS        = --accept-unprefixed --c-include=geanyplugin.h
+gir_common_cflags   = $(GTK_CFLAGS) $(GTHREAD_CFLAGS) -DG_IR_SCANNING -DGTK \
+                      -I $(top_srcdir)/src/ \
+                      -I $(top_srcdir)/tagmanager/src/ \
+                      -I $(top_srcdir)/scintilla/include/
 
 if GTK3
 GTK_GIR = Gtk-3.0
@@ -162,10 +166,7 @@ endif
 Geany_1_0_tmp_gir_NAMESPACE     = Geany
 Geany_1_0_tmp_gir_VERSION       = 1.0
 Geany_1_0_tmp_gir_INCLUDES      = $(GTK_GIR) GLib-2.0 GObject-2.0
-Geany_1_0_tmp_gir_CFLAGS        = $(GTK_CFLAGS) -DG_IR_SCANNING \
-                                  -DGTK \
-                                  -I $(top_srcdir)/src/ \
-                                  -I $(top_srcdir)/scintilla/include/ \
+Geany_1_0_tmp_gir_CFLAGS        = $(gir_common_cflags) \
                                   -DScintillaObject=GeanyScintillaScintillaObject
 Geany_1_0_tmp_gir_LIBS          = ../src/libgeany.la
 Geany_1_0_tmp_gir_FILES         = geany-gtkdoc.h
@@ -174,10 +175,7 @@ Geany_1_0_tmp_gir_SCANNERFLAGS  = $(SCANNERFLAGS) --include-uninstalled=GeanySci
 GeanyScintilla_1_0_tmp_gir_NAMESPACE    = GeanyScintilla
 GeanyScintilla_1_0_tmp_gir_VERSION      = 1.0
 GeanyScintilla_1_0_tmp_gir_INCLUDES     = $(GTK_GIR) GLib-2.0 GObject-2.0
-GeanyScintilla_1_0_tmp_gir_CFLAGS       = $(GTK_CFLAGS) -DG_IR_SCANNING \
-                                          -DGTK \
-                                          -I $(top_srcdir)/src/ \
-                                          -I $(top_srcdir)/scintilla/include/ \
+GeanyScintilla_1_0_tmp_gir_CFLAGS       = $(gir_common_cflags) \
                                           -include gtk/gtk.h
 GeanyScintilla_1_0_tmp_gir_LIBS         = ../src/libgeany.la
 GeanyScintilla_1_0_tmp_gir_FILES        = $(top_srcdir)/scintilla/include/ScintillaWidget.h \
