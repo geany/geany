@@ -200,9 +200,10 @@ geany-gtkdoc-tmp.h: geany-gtkdoc.h
 		$< > $@
 
 GeanyScintilla-1.0.gir: GeanyScintilla-1.0-tmp.gir
-	$(AM_V_GEN) cat $< \
-		| $(SED) -e 's,scintilla_object__GI__MARK_,sci_,g' \
-		| $(SED) -e 's,_GI__MARK_,,g' > $@
+	$(AM_V_GEN) $(SED) \
+		-e 's,scintilla_object__GI__MARK_,sci_,g' \
+		-e 's,_GI__MARK_,,g' \
+		$< > $@
 
 Geany-1.0.gir: Geany-1.0-tmp.gir
 	$(AM_V_GEN) $(SED) \
