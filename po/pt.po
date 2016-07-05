@@ -6,12 +6,13 @@
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016.
 #
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-03-09 15:55+0000\n"
+"POT-Creation-Date: 2016-07-04 02:36+0000\n"
+"PO-Revision-Date: 2016-07-04 06:39+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Gtranslator 2.91.7\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
@@ -35,9 +36,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Um IDE rápido e leve, usando GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Texto;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2257,7 +2257,6 @@ msgid "Other:"
 msgstr "Outros:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2267,13 +2266,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"Todos os direitos reservados."
+"All rights reserved."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2385,13 +2384,13 @@ msgstr ""
 "Ctrl+C ou Enter para o limpar)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Erro ao executar o comando de impressao \"%s\": %s. Verifique a definição do "
-"caminho nas Preferências."
+"Impossível executar o comando de compilação \"%s\": %s. Verifique a "
+"definição do terminal nas Preferências"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -5475,7 +5474,7 @@ msgstr "Executáveis"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Falha ao abrir o URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
