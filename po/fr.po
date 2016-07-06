@@ -1288,7 +1288,7 @@ msgid ""
 "disables checking."
 msgstr ""
 "Intervalle de vérification périodique des modifications des fichiers sur le "
-"disque, en secondes. Zéro signifie qu'aucune vérification péridoque n'est "
+"disque, en secondes. Zéro signifie qu'aucune vérification périodique n'est "
 "faite."
 
 #: ../data/geany.glade.h:257 ../src/prefs.c:1612 ../src/symbols.c:458
@@ -3469,7 +3469,7 @@ msgstr "Tout sélectionner"
 
 #: ../src/keybindings.c:438
 msgid "Select current word"
-msgstr "Selectionner le mot courant"
+msgstr "Sélectionner le mot courant"
 
 #: ../src/keybindings.c:446
 msgid "Select to previous word part"
@@ -4275,7 +4275,7 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
-"Chemin du fichier qui représente le project et contient ses préférences. Il "
+"Chemin du fichier qui représente le projet et contient ses préférences. Il "
 "devrait normalement avoir l'extension « %s »."
 
 #: ../src/project.c:212 ../src/project.c:484
@@ -4921,7 +4921,7 @@ msgstr "Processus / Blocs / Composants"
 
 #: ../src/symbols.c:690
 msgid "Events"
-msgstr "Évènements"
+msgstr "Événements"
 
 #: ../src/symbols.c:692
 msgid "Functions / Tasks"
@@ -5961,7 +5961,7 @@ msgstr[1] "Sauvegarde automatique : %d fichiers sauvegardés automatiquement."
 #. initialize the dialog
 #: ../plugins/saveactions.c:442
 msgid "Select Directory"
-msgstr "Selectionner le dossier"
+msgstr "Sélectionner le dossier"
 
 #: ../plugins/saveactions.c:530
 msgid "Backup directory does not exist or is not writable."
