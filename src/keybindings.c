@@ -262,8 +262,9 @@ static void add_kb_group(GeanyKeyGroup *group,
 {
 	g_ptr_array_add(keybinding_groups, group);
 
-	group->name = name;
-	group->label = label;
+	/* as for items, we only require duplicated name and label for plugins */
+	group->name = plugin ? g_strdup(name) : name;
+	group->label = plugin ? g_strdup(label) : label;
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
@@ -722,6 +723,9 @@ static void free_key_group(gpointer item)
 		if (group->cb_data_destroy)
 			group->cb_data_destroy(group->cb_data);
 		g_free(group->plugin_keys);
+		/* we allocated those in add_kb_group() as it's a plugin group */
+		g_free((gchar *) group->name);
+		g_free((gchar *) group->label);
 		g_free(group);
 	}
 }
