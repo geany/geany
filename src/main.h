@@ -38,7 +38,7 @@ gboolean main_is_realized(void);
 
 typedef struct
 {
-	gboolean	new_instance;
+	gint		new_instance;
 	gchar	   *socket_filename;
 	gboolean	load_session;
 	gint		goto_line;

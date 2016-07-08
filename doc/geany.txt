@@ -283,6 +283,9 @@ Short option  Long option              Function
                                        a new instance. Only available if Geany was compiled
                                        with support for Sockets.
 
+-I            --no-new-instance        Force not opening a new instance even if no file argument
+                                       is passed.
+
 -l            --line                   Set initial line number for the first opened file.
 
 *none*        --list-documents         Return a list of open documents in a running Geany

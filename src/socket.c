@@ -129,25 +129,28 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
 
-	g_return_if_fail(argc > 1);
+	g_return_if_fail(argc > 1 || cl_options.new_instance == -1);
 	geany_debug("using running instance of Geany");
 
-	if (cl_options.goto_line >= 0)
+	if (argc > 1)
 	{
-		gchar *line = g_strdup_printf("%d\n", cl_options.goto_line);
-		socket_fd_write_all(sock, "line\n", 5);
-		socket_fd_write_all(sock, line, strlen(line));
-		socket_fd_write_all(sock, ".\n", 2);
-		g_free(line);
-	}
+		if (cl_options.goto_line >= 0)
+		{
+			gchar *line = g_strdup_printf("%d\n", cl_options.goto_line);
+			socket_fd_write_all(sock, "line\n", 5);
+			socket_fd_write_all(sock, line, strlen(line));
+			socket_fd_write_all(sock, ".\n", 2);
+			g_free(line);
+		}
 
-	if (cl_options.goto_column >= 0)
-	{
-		gchar *col = g_strdup_printf("%d\n", cl_options.goto_column);
-		socket_fd_write_all(sock, "column\n", 7);
-		socket_fd_write_all(sock, col, strlen(col));
-		socket_fd_write_all(sock, ".\n", 2);
-		g_free(col);
+		if (cl_options.goto_column >= 0)
+		{
+			gchar *col = g_strdup_printf("%d\n", cl_options.goto_column);
+			socket_fd_write_all(sock, "column\n", 7);
+			socket_fd_write_all(sock, col, strlen(col));
+			socket_fd_write_all(sock, ".\n", 2);
+			g_free(col);
+		}
 	}
 
 	if (cl_options.readonly) /* append "ro" to denote readonly status for new docs */
@@ -325,7 +328,7 @@ gint socket_init(gint argc, gchar **argv)
 		SetForegroundWindow(hwnd);
 #endif
 	/* now we send the command line args */
-	if (argc > 1)
+	if (argc > 1 || cl_options.new_instance == -1)
 	{
 		send_open_command(sock, argc, argv);
 	}

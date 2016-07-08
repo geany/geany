@@ -40,6 +40,8 @@ Don't preprocess C/C++ files when generating tags.
 .IP "\fB-i\fP, \fB\-\-new-instance\fP         " 10
 Don't open files in a running instance, force opening a new instance.
 Only available if Geany was compiled with support for Sockets.
+.IP "\fB-I\fP, \fB\-\-no-new-instance\fP         " 10
+Force not opening a new instance even if no file argument is passed.
 .IP "\fB-l\fP, \fB\-\-line\fP         " 10
 Set initial line number for the first opened file.
 .IP "\fB\fP    \fB\-\-list\-documents\fP         " 10
