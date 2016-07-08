@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-02-08 08:29+0200\n"
+"PO-Revision-Date: 2016-07-08 23:25+0300\n"
 "Last-Translator: Zygimantus <zygimantus@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
@@ -32,7 +32,6 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Greita ir supaprastinta kūrimo aplinka naudojanti GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
 msgstr "Redaktorius"
 
@@ -117,9 +116,8 @@ msgid "Find _Document Usage"
 msgstr "Kiek kartų _panaudota dokumente"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "Eiti į žymės aprašymą"
+msgstr "Eiti į simbolio aprašymą"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -408,7 +406,7 @@ msgstr "Įjungti/Išjungti simbolių sąrašą"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Numatytasis simbolių rūšiavimo rėžimas"
 
 #: ../data/geany.glade.h:80
 #, fuzzy
@@ -420,9 +418,8 @@ msgid "Name"
 msgstr "Pavadinimas"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "Rikiuoti pagal _išvaizdą"
+msgstr "Išvaizda"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1818,9 +1815,8 @@ msgid "_Mark All"
 msgstr "_Pažymėti visus"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Eiti į žymės deklaravimą"
+msgstr "Eiti į simbolio deklaravimą"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -1959,18 +1955,16 @@ msgid "Set Line E_ndings"
 msgstr "Nustatyti eilučių _pabaigas"
 
 #: ../data/geany.glade.h:425
-#, fuzzy
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Konvertuoti ir nustatyti į _CR/LF (Win)"
+msgstr "Konvertuoti ir nustatyti į _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:426
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konvertuoti ir nustatyti į _LF (Unix)"
 
 #: ../data/geany.glade.h:427
-#, fuzzy
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Konvertuoti ir nustatyti į CR (_Mac)"
+msgstr "Konvertuoti ir nustatyti į CR (Klasikinis _Mac)"
 
 #: ../data/geany.glade.h:428 ../src/keybindings.c:660
 msgid "_Clone"
@@ -2054,9 +2048,8 @@ msgid "_Word Count"
 msgstr "Žodžių _skaičius"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "Įkelti ž_ymes..."
+msgstr "Įkelti ž_ymų failą..."
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -2352,6 +2345,8 @@ msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Failas neįvykdytas, kadangi terminale gali būti įvestis (spausti Vald+C arba "
+"Enter jai išvalyti)."
 
 #: ../src/build.c:907
 #, fuzzy, c-format
@@ -2468,13 +2463,12 @@ msgid "Execute commands"
 msgstr "Vykdyti komandas"
 
 #: ../src/build.c:2012
-#, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p yra pakeičiami komandų ir aplankų laukeliuose, plačiau galite "
-"paskaityti žinyne."
+"%d, %e, %f, %p, %l yra pakeičiami komandų ir aplankų laukeliuose, plačiau "
+"galite paskaityti žinyne."
 
 #: ../src/build.c:2170
 msgid "Set Build Commands"
@@ -2540,7 +2534,7 @@ msgstr "Atverti %s nepavyko (failas nerastas)"
 
 #: ../src/callbacks.c:1468
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Tikrinti kelio nustatymą failo tipo konfigūracijoje."
 
 #: ../src/callbacks.c:1473
 #, fuzzy
@@ -2569,9 +2563,8 @@ msgid "Programming Languages"
 msgstr "Programavimo kalbos"
 
 #: ../src/dialogs.c:228
-#, fuzzy
 msgid "Scripting Languages"
-msgstr "_Scenarijų kalbos"
+msgstr "Scenarijų kalbos"
 
 #: ../src/dialogs.c:230
 msgid "Markup Languages"
@@ -2811,9 +2804,8 @@ msgid ""
 msgstr ""
 
 #: ../src/document.c:1618
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "Failas %s įkrautas iš naujo."
+msgstr "Failas buvo įkrautas iš naujo."
 
 #: ../src/document.c:1648
 msgid "Any unsaved changes will be lost."
@@ -2892,7 +2884,7 @@ msgstr "Failas „%s“ diske nerastas!"
 #: ../src/document.c:2118
 #, c-format
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Negalima išsaugoti tik skaitymui skirto dokumento '%s'!"
 
 #: ../src/document.c:2186
 #, c-format
@@ -3551,14 +3543,12 @@ msgid "Toggle marker"
 msgstr "Perjungti žymeklį"
 
 #: ../src/keybindings.c:575
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Eiti į žymės aprašymą"
+msgstr "Eiti į simbolio aprašymą"
 
 #: ../src/keybindings.c:578
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Eiti į žymės deklaravimą"
+msgstr "Eiti į simbolio deklaravimą"
 
 #: ../src/keybindings.c:580
 msgid "Go to Start of Line"
@@ -4086,7 +4076,7 @@ msgid ""
 msgstr ""
 "Čia galite nustatyti klaviatūros susiejimus įvairiems veiksmas. Pasirinkite "
 "kurį nors ir paspauskite mygtuką „Keisti“, tada įveskite naują trumpinį. "
-"Taipogi galite dukart spustelėti ant veiksmo ir pakeisti eilutę."
+"Taip pat galite dukart spustelėti ant veiksmo ir pakeisti eilutę."
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1714
@@ -4180,9 +4170,8 @@ msgid "C_reate"
 msgstr "Su_kurti"
 
 #: ../src/project.c:176
-#, fuzzy
 msgid "Project name"
-msgstr "Projektas"
+msgstr "Projekto pavadinimas"
 
 #: ../src/project.c:188
 #, c-format
@@ -4544,16 +4533,15 @@ msgstr ""
 #. TL note: from glib
 #: ../src/spawn.c:130
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Tekstas buvo tuščias (arba turėjo tik tarpus)"
 
 #: ../src/spawn.c:151 ../src/spawn.c:165
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
+msgstr "Windows programos pavadinimas turi pilnai būti kabutėse"
 
 #: ../src/spawn.c:258
-#, fuzzy
 msgid "Program not found"
-msgstr "Komanda nerasta"
+msgstr "Programa nerasta"
 
 #: ../src/spawn.c:672
 #, fuzzy
@@ -4562,7 +4550,7 @@ msgstr "Procesas nepavyko, nėra darbinio aplanko"
 
 #: ../src/spawn.c:677
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Nežinoma klaida vykdant dukterinį procesą"
 
 #: ../src/stash.c:1177
 msgid "Value"
@@ -4904,14 +4892,12 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1634
-#, fuzzy
 msgid "Load Tags File"
-msgstr "Įkelti žymes"
+msgstr "Įkelti žymų failą"
 
 #: ../src/symbols.c:1641
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
-msgstr "Geany žymių failai (*.*.tags)"
+msgstr "Geany žymių failas (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1661
@@ -5195,9 +5181,8 @@ msgid "Characters:"
 msgstr "Simboliai:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "Žymių nerasta"
+msgstr "Simbolių nerasta"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
@@ -5352,9 +5337,8 @@ msgid "Select File"
 msgstr "Pasirinkite failą"
 
 #: ../src/ui_utils.c:2154
-#, fuzzy
 msgid "_Filetype Configuration"
-msgstr "_Įkrauti konfigūraciją iš naujo"
+msgstr "_Failo tipo konfigūracija"
 
 #: ../src/ui_utils.c:2191
 msgid "Save All"
@@ -5381,14 +5365,12 @@ msgstr ""
 "kitą."
 
 #: ../src/utils.c:375
-#, fuzzy
 msgid "Windows (CRLF)"
-msgstr "Win (CRLF)"
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:376
-#, fuzzy
 msgid "Classic Mac (CR)"
-msgstr "Mac (CR)"
+msgstr "Klasikinis Mac (CR)"
 
 #: ../src/utils.c:377
 msgid "Unix (LF)"
@@ -5440,7 +5422,7 @@ msgstr "Vykdomieji failai"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Nepavyko atidaryti URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
