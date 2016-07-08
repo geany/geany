@@ -129,7 +129,7 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
 
-	g_return_if_fail(argc > 1 || cl_options.new_instance == -1);
+	g_return_if_fail(argc > 1 || cl_options.new_instance_mode == NEW_INSTANCE_EXPLICITLY_DISABLED);
 	geany_debug("using running instance of Geany");
 
 	if (argc > 1)
@@ -328,7 +328,7 @@ gint socket_init(gint argc, gchar **argv)
 		SetForegroundWindow(hwnd);
 #endif
 	/* now we send the command line args */
-	if (argc > 1 || cl_options.new_instance == -1)
+	if (argc > 1 || cl_options.new_instance_mode == NEW_INSTANCE_EXPLICITLY_DISABLED)
 	{
 		send_open_command(sock, argc, argv);
 	}

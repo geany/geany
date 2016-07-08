@@ -113,14 +113,14 @@ static gboolean no_plugins = FALSE;
 static gboolean dummy = FALSE;
 
 
-gboolean new_instance_arg_callback(const gchar *option_name, const gchar *value, gpointer data, GError **error)
+gboolean new_instance_mode_arg_callback(const gchar *option_name, const gchar *value, gpointer data, GError **error)
 {
 	gint len = strlen(option_name);
 
 	if (strncmp(option_name, "-i", len) == 0 || strncmp(option_name, "--new-instance", len) == 0 )
-		cl_options.new_instance = 1;
+		cl_options.new_instance_mode = NEW_INSTANCE_ENABLED;
 	else if (strncmp(option_name, "-I", len) == 0 || strncmp(option_name, "--no-new-instance", len) == 0 )
-		cl_options.new_instance = -1;
+		cl_options.new_instance_mode = NEW_INSTANCE_EXPLICITLY_DISABLED;
 	else
 	{
 		g_set_error(error, G_OPTION_ERROR, 64, "Fatal error: Unexpected mismatch in any of the options in callback function for '--new-instance' and '--no-new-instance'");
@@ -140,8 +140,8 @@ static GOptionEntry entries[] =
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags file"), NULL },
 #ifdef HAVE_SOCKET
-	{ "new-instance", 'i', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, new_instance_arg_callback, N_("Don't open files in a running instance, force opening a new instance"), NULL },
-	{ "no-new-instance", 'I', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, new_instance_arg_callback, N_("Force not opening a new instance even if no file argument is passed"), NULL },
+	{ "new-instance", 'i', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, new_instance_mode_arg_callback, N_("Don't open files in a running instance, force opening a new instance"), NULL },
+	{ "no-new-instance", 'I', G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, new_instance_mode_arg_callback, N_("Force not opening a new instance even if no file argument is passed"), NULL },
 	{ "socket-file", 0, 0, G_OPTION_ARG_FILENAME, &cl_options.socket_filename, N_("Use this socket filename for communication with a running Geany instance"), NULL },
 	{ "list-documents", 0, 0, G_OPTION_ARG_NONE, &cl_options.list_documents, N_("Return a list of open documents in a running Geany instance"), NULL },
 #endif
@@ -525,7 +525,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
-	CommandLineOptions def_clo = {0, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE};
+	CommandLineOptions def_clo = {NEW_INSTANCE_DISABLED, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE};
 
 	/* first initialise cl_options fields with default values */
 	cl_options = def_clo;
@@ -624,7 +624,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	}
 
 #ifdef HAVE_SOCKET
-	socket_info.ignore_socket = cl_options.new_instance == 1 ? TRUE : FALSE;
+	socket_info.ignore_socket = cl_options.new_instance_mode == NEW_INSTANCE_ENABLED ? TRUE : FALSE;
 	if (cl_options.socket_filename)
 	{
 		socket_info.file_name = cl_options.socket_filename;
@@ -950,7 +950,7 @@ static void load_startup_files(gint argc, gchar **argv)
 	 * 2. --no-session is not specified.
 	 * 3. We are a primary instance.
 	 * Has no effect if a CL project is loaded and using project-based session files. */
-	if (prefs.load_session && cl_options.load_session && cl_options.new_instance != 1)
+	if (prefs.load_session && cl_options.load_session && cl_options.new_instance_mode != NEW_INSTANCE_ENABLED)
 	{
 		if (app->project == NULL)
 			load_session_project_file();
@@ -1098,7 +1098,7 @@ gint main_lib(gint argc, gchar **argv)
 		socket_info.lock_socket = socket_init(argc, argv);
 		/* Quit if filenames were sent to first instance or the list of open
 		 * documents has been printed */
-		if ((socket_info.lock_socket == -2 /* socket exists */ && (argc > 1 || cl_options.new_instance == -1)) ||
+		if ((socket_info.lock_socket == -2 /* socket exists */ && (argc > 1 || cl_options.new_instance_mode == NEW_INSTANCE_EXPLICITLY_DISABLED)) ||
 			cl_options.list_documents)
 		{
 			socket_finalize();
@@ -1114,7 +1114,7 @@ gint main_lib(gint argc, gchar **argv)
 		else if (socket_info.lock_socket == -2 /* socket already exists */)
 		{
 			socket_info.ignore_socket = TRUE;
-			cl_options.new_instance = 1;
+			cl_options.new_instance_mode = NEW_INSTANCE_ENABLED;
 		}
 	}
 #endif

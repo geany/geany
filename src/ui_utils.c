@@ -403,7 +403,7 @@ void ui_set_window_title(GeanyDocument *doc)
 		g_string_append(str, "] - ");
 	}
 	g_string_append(str, "Geany");
-	if (cl_options.new_instance == 1)
+	if (cl_options.new_instance_mode == NEW_INSTANCE_ENABLED)
 	{
 		g_string_append(str, _(" (new instance)"));
 	}
