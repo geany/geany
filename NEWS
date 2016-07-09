@@ -20,12 +20,17 @@ Geany 1.28 (unreleased)
     * Various improvements to the Ruby parser (Issue#587).
     * Fix Haskell single line comments (Alexander, PR#1029).
     * Update Java keywords (Yan Pashkovsky, #1024).
-    * Fix handling of curly brackets in Make (Masatake YAMATO).
+    * Fix handling of curly brackets in Make (Masatake Yamato).
     * Add ECMAScript 6 keywords (Chris Mayo, PR#980).
     * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
+    * Add missing `last-child` CSS pseudo-class (Issue#1102).
 
     Internationalization
     * Updated translations: ca, de, el, es, fr, it, ja, lt, pt, ru, sk, tr, zh_CN
+
+    API
+    * Don't require static strings for key group name and label (PR#1126).
+    * Formally add TMTag to the API (Thomas Martitz, PR#1093).
 
     Plugins
     * Class builder: use `.hpp` extension for C++ headers by default
