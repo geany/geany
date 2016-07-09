@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2016-03-09 20:22+0300\n"
+"PO-Revision-Date: 2016-07-09 11:20+0300\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -35,9 +35,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Быстрая и легковесная среда разработки, использующая GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Редактор"
+msgstr "Текст;Редактор;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -2242,7 +2241,6 @@ msgid "Other:"
 msgstr "Прочие:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2252,7 +2250,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2368,12 +2366,12 @@ msgstr ""
 "(нажмите Ctrl+C или Enter, чтобы очистить терминал)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Не могу запустить команду печати \"%s\": %s. Проверьте правильность пути в "
+"Не могу запустить команду сборки \"%s\": %s. Проверьте параметры терминала в "
 "настройках."
 
 #: ../src/build.c:1016
@@ -5465,7 +5463,7 @@ msgstr "Исполняемые"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Не удалось открыть URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
