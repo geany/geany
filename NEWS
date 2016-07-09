@@ -25,7 +25,7 @@ Geany 1.28 (unreleased)
     * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
 
     Internationalization
-    * Updated translations: ca, de, el, es, fr, it, ja, lt, pt, sk, tr, zh_CN
+    * Updated translations: ca, de, el, es, fr, it, ja, lt, pt, ru, sk, tr, zh_CN
 
     Plugins
     * Class builder: use `.hpp` extension for C++ headers by default
