@@ -43,7 +43,7 @@ Announce on geany, devel, i18n mailing lists (check you're subscribed).
 Put a news item on SourceForge (https://sourceforge.net/p/geany/news/)
 and a new release on GitHub (https://github.com/geany/geany/releases).
 
-Update the topic on the IRC channel.
+Update the topic on the IRC channel (/msg chanserv op #geany).
 
 For non-master releases, merge NEWS into master and any branch-only
 commits that need to merged.
