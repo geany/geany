@@ -1,8 +1,8 @@
 
 #include <windows.h> // include for version info constants
 
-#define VER_FILEVERSION             1,28,0,0
-#define VER_FILEVERSION_STR         "1.28"
+#define VER_FILEVERSION             1,29,0,0
+#define VER_FILEVERSION_STR         "1.29"
 #define APP_MANIFEST                1
 
 A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "icons/geany.ico"
