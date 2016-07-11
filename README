@@ -134,9 +134,8 @@ included with the source code of this program.
 Ideas, questions, patches and bug reports
 -----------------------------------------
 See http://www.geany.org/.
-If you add something, or fix a bug, please send a patch (in Git or
-``diff -u`` format) to the mailing list or one of the authors. Also see
-the HACKING file.
+If you add something, or fix a bug, please create a pull request at
+https://github.com/geany/geany/. Also see the HACKING file.
 
 
 ----
