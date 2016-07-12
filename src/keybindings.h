@@ -185,6 +185,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_GOTO_TAGDEFINITION,				/**< Keybinding. */
 	GEANY_KEYS_SEARCH_NEXTMESSAGE,				/**< Keybinding. */
 	GEANY_KEYS_EDITOR_DELETELINETOEND,			/**< Keybinding. */
+	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,			/**< Keybinding. */
 	GEANY_KEYS_FORMAT_AUTOINDENT,				/**< Keybinding. */
 	GEANY_KEYS_FILE_OPENSELECTED,				/**< Keybinding. */
 	GEANY_KEYS_GOTO_BACK,						/**< Keybinding. */

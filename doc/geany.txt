@@ -3347,6 +3347,9 @@ Delete current line(s)          Ctrl-K                    Deletes the current li
 Delete to line end              Ctrl-Shift-Delete         Deletes from the current caret position to the
                                                           end of the current line.
 
+Delete to line start            Ctrl-Shift-BackSpace      Deletes from the beginning of the line to the 
+                                                          current caret position.
+
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 
 Transpose current line                                    Transposes the current line with the previous one.
