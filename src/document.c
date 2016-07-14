@@ -1273,7 +1273,6 @@ void document_show_tab(GeanyDocument *doc)
 		document_get_notebook_page(doc));
 }
 
-
 /* To open a new file, set doc to NULL; filename should be locale encoded.
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -1655,6 +1654,12 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 	}
 	g_free(base_name);
 	return result;
+}
+/* also used for reloading when forced_enc is NULL */
+gboolean document_rename_prompt(GeanyDocument *doc) {
+	document_show_tab(doc);
+	dialogs_show_save_as();
+	return FALSE;
 }
 
 

@@ -74,7 +74,8 @@ enum
 {
 	OPENFILES_ACTION_REMOVE = 0,
 	OPENFILES_ACTION_SAVE,
-	OPENFILES_ACTION_RELOAD
+	OPENFILES_ACTION_RELOAD,
+	OPENFILES_ACTION_RENAME
 };
 
 /* documents tree model columns */
@@ -724,6 +725,16 @@ static void create_openfiles_popup_menu(void)
 			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RELOAD));
 	doc_items.reload = item;
 
+	item = gtk_image_menu_item_new_with_mnemonic(_("R_ename or Save As..."));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+		gtk_image_new_from_stock(GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU));
+	gtk_widget_show(item);
+	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
+	g_signal_connect(item, "activate",
+			G_CALLBACK(on_openfiles_document_action), GINT_TO_POINTER(OPENFILES_ACTION_RENAME));
+	doc_items.reload = item;
+
+
 	item = gtk_separator_menu_item_new();
 	gtk_widget_show(item);
 	gtk_container_add(GTK_CONTAINER(openfiles_popup_menu), item);
@@ -828,6 +839,11 @@ static void document_action(GeanyDocument *doc, gint action)
 		case OPENFILES_ACTION_RELOAD:
 		{
 			document_reload_prompt(doc, NULL);
+			break;
+		}
+		case OPENFILES_ACTION_RENAME:
+		{
+			document_rename_prompt(doc);
 			break;
 		}
 	}
