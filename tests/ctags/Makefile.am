@@ -306,6 +306,7 @@ test_sources = \
 	traffic_signal.v				\
 	traits.php						\
 	ui5.controller.js				\
+	unicode-identifiers.java		\
 	union.f							\
 	value.f							\
 	var-and-return-type.cpp			\

@@ -22,14 +22,14 @@
 /*  Is the character valid as a character of a C identifier?
  *  VMS allows '$' in identifiers.
  */
-#define isident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
+#define isident(c)  (isalnum(c) || (c) == '_' || (c) == '$' || ((int) (c)) >= 0x80)
 
 /*  Is the character valid as the first character of a C identifier?
  *  C++ allows '~' in destructors.
  *  VMS allows '$' in identifiers.
  *  Vala allows '@' in identifiers.
  */
-#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
+#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@' || ((int) (c)) >= 0x80)
 
 /*
 *   FUNCTION PROTOTYPES
