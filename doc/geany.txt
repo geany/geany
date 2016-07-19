@@ -3371,6 +3371,14 @@ Complete word                   Ctrl-Space                Shows the autocompleti
 Show calltip                    Ctrl-Shift-Space          Shows a calltip for the current function or
                                                           method.
 
+Show previous calltip                                     If there are multiple matching tags, shows
+                                                          the calltip for the previous one (same as clicking
+                                                          on the up arrow in the calltip).
+
+Show next calltip                                         If there are multiple matching tags, shows
+                                                          the calltip for the next one (same as clicking on
+                                                          the down arrow in the calltip).
+
 Complete snippet                Tab                       If you type a construct like if or for and press
                                                           this key, it will be completed with a matching
                                                           template.

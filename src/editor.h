@@ -242,6 +242,10 @@ gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
 gboolean editor_show_calltip(GeanyEditor *editor, gint pos);
 
+void editor_prev_calltip(void);
+
+void editor_next_calltip(void);
+
 void editor_do_comment_toggle(GeanyEditor *editor);
 
 gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_lines, gboolean toggle,
