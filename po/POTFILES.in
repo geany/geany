@@ -1,5 +1,6 @@
 # List of source files containing translatable strings.
 
+geany.appdata.xml.in
 geany.desktop.in
 data/geany.glade
 src/about.c
