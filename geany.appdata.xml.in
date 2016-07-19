@@ -2,7 +2,6 @@
 <component>
   <id type="desktop">geany.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
-  <pkgname>geany</pkgname>
   <_name>Geany IDE</_name>
   <project_license>GPL-2.0+</project_license>
   <_summary>A fast and lightweight IDE using GTK+</_summary>
