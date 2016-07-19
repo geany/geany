@@ -46,6 +46,9 @@ void notebook_switch_tablastused(void);
  * document yet). */
 gboolean notebook_switch_in_progress(void);
 
+void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data);
+void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 G_END_DECLS
 
 #endif /* GEANY_NOTEBOOK_H */

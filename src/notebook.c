@@ -448,6 +448,20 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
+	menu_item = ui_image_menu_item_new(NULL, _("Sort Tabs Based on _Filename"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_filename_activate), NULL);
+
+	menu_item = ui_image_menu_item_new(NULL, _("_Sort Tabs Based on Pathname"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_pathname_activate), NULL);
+
+	menu_item = gtk_separator_menu_item_new();
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+
 	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
@@ -751,6 +765,97 @@ void notebook_remove_page(gint page_num)
 	gtk_notebook_remove_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
 	tab_count_changed();
+}
+
+
+gint compare_based_on_filename(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a, *doc_b;
+	gchar *basename_a, *basename_b;
+	gchar *key_a, *key_b;
+	gint cmp;
+
+	doc_a = *(GeanyDocument**) a;
+	doc_b = *(GeanyDocument**) b;
+	basename_a = g_path_get_basename(DOC_FILENAME(doc_a));
+	basename_b = g_path_get_basename(DOC_FILENAME(doc_b));
+	key_a = g_utf8_collate_key_for_filename(basename_a, -1);
+	key_b = g_utf8_collate_key_for_filename(basename_b, -1);
+	cmp = strcmp(key_a, key_b);
+	g_free(key_b);
+	g_free(key_a);
+	g_free(basename_b);
+	g_free(basename_a);
+
+	return cmp;
+}
+
+
+gint compare_based_on_filepath(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a, *doc_b;
+	gchar *key_a, *key_b;
+	gint cmp;
+
+	doc_a = *(GeanyDocument**) a;
+	doc_b = *(GeanyDocument**) b;
+
+	key_a = g_utf8_collate_key_for_filename(DOC_FILENAME(doc_a), -1);
+	key_b = g_utf8_collate_key_for_filename(DOC_FILENAME(doc_b), -1);
+	cmp = strcmp(key_a, key_b);
+	g_free(key_b);
+	g_free(key_a);
+
+	return cmp;
+}
+
+
+typedef enum NotebookTabSortMethod
+{
+	NOTEBOOK_TAB_SORT_FILENAME,
+	NOTEBOOK_TAB_SORT_PATHNAME
+} NotebookTabSortMethod;
+
+
+void notebook_sort_tabs(NotebookTabSortMethod method)
+{
+	GArray *docs;
+	GeanyDocument* doc;
+	GtkWidget *child;
+	guint i, size = 0;
+
+	docs = g_array_new(FALSE, TRUE, sizeof(GeanyDocument*));
+
+	foreach_document(i)
+	{
+		g_array_append_val(docs, documents[i]);
+		++size;
+	}
+
+	g_array_sort(docs, method == NOTEBOOK_TAB_SORT_FILENAME ?
+		compare_based_on_filename : compare_based_on_filepath);
+
+	for (i = 0; i < size; ++i)
+	{
+		doc = g_array_index(docs, GeanyDocument*, i);
+		child = document_get_notebook_child(doc);
+		g_assert(child != NULL);
+		gtk_notebook_reorder_child(GTK_NOTEBOOK(main_widgets.notebook), child, i);
+	}
+
+	g_array_free(docs, TRUE);
+}
+
+
+void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+}
+
+
+void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
 }
 
 
