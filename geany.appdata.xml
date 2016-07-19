@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<component>
+  <id type="desktop">geany.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <pkgname>geany</pkgname>
+  <name>Geany Integrated Development Environment</name>
+  <project_license>GPL-2.0+</project_license>
+  <summary>A fast and lightweight IDE using GTK+</summary>
+  <url type="homepage">http://geany.org/</url>
+  <description>
+    <p>Geany is a small and lightweight integrated development environment.
+It was developed to provide a small and fast IDE, which has only a
+few dependencies from other packages. Another goal was to be as
+independent as possible from a special Desktop Environment like KDE
+or GNOME. So it is using only the GTK2 toolkit and therefore you need
+only the GTK2 runtime libraries to run Geany.</p>
+  </description>
+  <screenshots>
+<!-- Screenshots need to be 16:9 ratio but the ones here from the main website are not. Please
+     change the links to point to appropriate 16:9 sized screenshots. -->
+    <screenshot type="default">
+      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_main.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_build.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_vte.png</image>
+    </screenshot>
+  </screenshots>
+<!--  Add update contact email here
+  <update_contact>developer_AT_example.com</update_contact>
+-->
+</component>

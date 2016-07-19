@@ -85,3 +85,6 @@ desktopdir = $(datadir)/applications
 desktop_in_files = geany.desktop
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
+
+appdatadir = $(datadir)/appdata
+nodist_appdata_DATA = geany.appdata.xml
