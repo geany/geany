@@ -222,6 +222,8 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 GeanyDocument *document_find_by_id(guint id);
 
+GtkWidget *document_get_notebook_child(GeanyDocument *doc);
+
 
 #ifdef GEANY_PRIVATE
 
