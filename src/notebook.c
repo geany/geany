@@ -810,13 +810,6 @@ gint compare_based_on_filepath(gconstpointer a, gconstpointer b)
 }
 
 
-typedef enum NotebookTabSortMethod
-{
-	NOTEBOOK_TAB_SORT_FILENAME,
-	NOTEBOOK_TAB_SORT_PATHNAME
-} NotebookTabSortMethod;
-
-
 void notebook_sort_tabs(NotebookTabSortMethod method)
 {
 	GArray *docs;

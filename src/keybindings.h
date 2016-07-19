@@ -273,6 +273,8 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FORMAT_SENDTOCMD7,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOCMD8,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOCMD9,				/**< Keybinding. */
+	GEANY_KEYS_NOTEBOOK_SORTTABS_FILENAME,		/**< Keybinding. */
+	GEANY_KEYS_NOTEBOOK_SORTTABS_PATHNAME,		/**< Keybinding. */
 	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };

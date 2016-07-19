@@ -46,7 +46,16 @@ void notebook_switch_tablastused(void);
  * document yet). */
 gboolean notebook_switch_in_progress(void);
 
+typedef enum NotebookTabSortMethod
+{
+	NOTEBOOK_TAB_SORT_FILENAME,
+	NOTEBOOK_TAB_SORT_PATHNAME
+} NotebookTabSortMethod;
+
+void notebook_sort_tabs(NotebookTabSortMethod method);
+
 void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 G_END_DECLS

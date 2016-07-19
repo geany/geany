@@ -106,6 +106,7 @@ static void cb_func_switch_tableft(guint key_id);
 static void cb_func_switch_tabright(guint key_id);
 static void cb_func_switch_tablastused(guint key_id);
 static void cb_func_move_tab(guint key_id);
+static void cb_func_sort_tabs(guint key_id);
 
 static void add_popup_menu_accels(void);
 
@@ -653,6 +654,10 @@ static void init_default_kb(void)
 		0, 0, "move_tabfirst", _("Move document first"), NULL);
 	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
 		0, 0, "move_tablast", _("Move document last"), NULL);
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABS_FILENAME, cb_func_sort_tabs,
+		0, 0, "sort_tabs_filename", _("Sort tabs based on filename"), NULL);
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABS_PATHNAME, cb_func_sort_tabs,
+		0, 0, "sort_tabs_filepath", _("Sort tabs based on pathname"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_DOCUMENT);
 
@@ -1911,6 +1916,20 @@ static void cb_func_move_tab(guint key_id)
 			break;
 	}
 	return;
+}
+
+
+static void cb_func_sort_tabs(guint key_id)
+{
+	switch (key_id)
+	{
+		case GEANY_KEYS_NOTEBOOK_SORTTABS_FILENAME:
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+			break;
+		case GEANY_KEYS_NOTEBOOK_SORTTABS_PATHNAME:
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
+			break;
+	}
 }
 
 
