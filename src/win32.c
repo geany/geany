@@ -461,7 +461,7 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 
 				/* convert the resulting filename into UTF-8 */
 				if (document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL) != NULL)
-					has_opened = TRUE
+					has_opened = TRUE;
 			}
 			x++;
 		}
