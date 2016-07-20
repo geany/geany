@@ -4,39 +4,38 @@
   <metadata_license>CC0-1.0</metadata_license>
   <_name>Geany IDE</_name>
   <project_license>GPL-2.0+</project_license>
-  <_summary>A fast and lightweight IDE using GTK+</_summary>
+  <_summary>A fast and lightweight IDE</_summary>
   <url type="homepage">http://geany.org/</url>
   <description>
-    <_p>Geany is a small and lightweight integrated development environment.
-It was developed to provide a small and fast IDE, which has only a
-few dependencies from other packages. Another goal was to be as independent
-as possible from a special Desktop Environment like KDE or GNOME. So it
-is using only the GTK+ toolkit and therefore you need only the
-GTK+ runtime libraries to run Geany.</_p>
+    <_p>Geany was developed to provide a small and fast IDE, which has only a
+few dependencies on other packages. Another goal was to be as independent
+as possible from a specific Desktop Environment like KDE or GNOME.</_p>
+
+    <_p>Geany includes the following features:</_p>
     <ul>
-      <_li>syntax highlighting</_li>
-      <_li>code completion</_li>
-      <_li>auto completion of often used constructs like if, for and while</_li>
-      <_li>auto completion of XML and HTML tags</_li>
-      <_li>call tips</_li>
-      <_li>folding</_li>
-      <_li>many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</_li>
-      <_li>symbol lists</_li>
-      <_li>embedded terminal emulation</_li>
-      <_li>extensibility through plugins</_li>
+      <_li>Syntax highlighting</_li>
+      <_li>Code completion</_li>
+      <_li>Auto completion of often used constructs like if, for and while</_li>
+      <_li>Auto completion of XML and HTML tags</_li>
+      <_li>Call tips</_li>
+      <_li>Code folding</_li>
+      <_li>Many supported filetypes like C, Java, PHP, HTML, Python, Perl, Pascal</_li>
+      <_li>Symbol lists</_li>
+      <_li>Embedded terminal emulation</_li>
+      <_li>Extensibility through plugins.</_li>
     </ul>
   </description>
   <screenshots>
-<!-- Screenshots need to be 16:9 ratio but the ones here from the main website are not. Please
+<!-- Screenshots are recommended to be 16:9 ratio but the ones here from the main website are not. Please
      change the links to point to appropriate 16:9 sized screenshots. -->
     <screenshot type="default">
-      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_main.png</image>
+      <image height="808" width="942">http://www.geany.org/uploads/Gallery/geany_main.png</image>
     </screenshot>
-    <screenshot type="default">
-      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_build.png</image>
+    <screenshot>
+      <image height="808" width="942">http://www.geany.org/uploads/Gallery/geany_build.png</image>
     </screenshot>
-    <screenshot type="default">
-      <image height="600" width="800">http://www.geany.org/uploads/Gallery/geany_vte.png</image>
+    <screenshot>
+      <image height="808" width="942">http://www.geany.org/uploads/Gallery/geany_vte.png</image>
     </screenshot>
   </screenshots>
   <update_contact>https://github.com/geany/geany</update_contact>
