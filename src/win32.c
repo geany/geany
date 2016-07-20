@@ -40,6 +40,7 @@
 #include "document.h"
 #include "editor.h"
 #include "filetypes.h"
+#include "notebook.h"
 #include "project.h"
 #include "support.h"
 #include "ui_utils.h"
@@ -393,6 +394,7 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	wchar_t fname[MAX_PATH];
 	wchar_t w_dir[MAX_PATH];
 	wchar_t w_title[512];
+	gboolean has_opened = FALSE;
 
 	fname[0] = '\0';
 
@@ -436,7 +438,8 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	if (x != wcslen(fname))
 	{	/* open a single file */
 		WideCharToMultiByte(CP_UTF8, 0, fname, -1, tmp, sizeof(tmp), NULL, NULL);
-		document_open_file(tmp, of.Flags & OFN_READONLY, NULL, NULL);
+		if (document_open_file(tmp, of.Flags & OFN_READONLY, NULL, NULL) != NULL)
+			has_opened = TRUE;
 	}
 	else
 	{	/* open multiple files */
@@ -457,11 +460,14 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 				g_snprintf(file_name, 511, "%s\\%s", dir_name, tmp);
 
 				/* convert the resulting filename into UTF-8 */
-				document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL);
+				if (document_open_file(file_name, of.Flags & OFN_READONLY, NULL, NULL) != NULL)
+					has_opened = TRUE
 			}
 			x++;
 		}
 	}
+	if (has_opened)
+		notebook_auto_sort_tabs();
 	return (retval != 0);
 }
 

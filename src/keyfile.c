@@ -43,6 +43,7 @@
 #include "geanyobject.h"
 #include "main.h"
 #include "msgwindow.h"
+#include "notebook.h"
 #include "prefs.h"
 #include "printing.h"
 #include "project.h"
@@ -430,6 +431,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
+	g_key_file_set_boolean(config, PACKAGE, "auto_sort_tabs_filename", interface_prefs.auto_sort_tabs_filename);
+	g_key_file_set_boolean(config, PACKAGE, "auto_sort_tabs_pathname", interface_prefs.auto_sort_tabs_pathname);
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
@@ -777,6 +780,10 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
+	interface_prefs.auto_sort_tabs_filename = utils_get_setting_boolean(config, PACKAGE, "auto_sort_tabs_filename", FALSE);
+	interface_prefs.auto_sort_tabs_pathname = utils_get_setting_boolean(config, PACKAGE, "auto_sort_tabs_pathname", FALSE);
+	if (interface_prefs.auto_sort_tabs_filename && interface_prefs.auto_sort_tabs_pathname)
+		interface_prefs.auto_sort_tabs_filename = FALSE;
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
@@ -1216,6 +1223,7 @@ void configuration_open_files(void)
 {
 	gint i;
 	gboolean failure = FALSE;
+	gboolean has_opened = FALSE;
 
 	/* necessary to set it to TRUE for project session support */
 	main_status.opening_session_files = TRUE;
@@ -1228,7 +1236,9 @@ void configuration_open_files(void)
 
 		if (tmp != NULL && (len = g_strv_length(tmp)) >= 8)
 		{
-			if (! open_session_file(tmp, len))
+			if (open_session_file(tmp, len))
+				has_opened = TRUE;
+			else
 				failure = TRUE;
 		}
 		g_strfreev(tmp);
@@ -1268,6 +1278,9 @@ void configuration_open_files(void)
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
 	}
 	main_status.opening_session_files = FALSE;
+
+	if (has_opened)
+		notebook_auto_sort_tabs();
 }
 
 

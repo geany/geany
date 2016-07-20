@@ -1441,7 +1441,8 @@ static gboolean cb_func_file_action(guint key_id)
 		{
 			gchar *utf8_filename = g_queue_peek_head(ui_prefs.recent_queue);
 			gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
-			document_open_file(locale_filename, FALSE, NULL, NULL);
+			if (document_open_file(locale_filename, FALSE, NULL, NULL) != NULL)
+				notebook_auto_sort_tabs();
 			g_free(locale_filename);
 			break;
 		}

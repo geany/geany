@@ -1519,6 +1519,7 @@ void document_open_file_list(const gchar *data, gsize length)
 {
 	guint i;
 	gchar **list;
+	gboolean has_opened = FALSE;
 
 	g_return_if_fail(data != NULL);
 
@@ -1531,9 +1532,13 @@ void document_open_file_list(const gchar *data, gsize length)
 
 		if (filename == NULL)
 			continue;
-		document_open_file(filename, FALSE, NULL, NULL);
+		if (document_open_file(filename, FALSE, NULL, NULL) != NULL)
+			has_opened = TRUE;
 		g_free(filename);
 	}
+
+	if (has_opened == TRUE)
+		notebook_auto_sort_tabs();
 
 	g_strfreev(list);
 }
@@ -1553,11 +1558,16 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 		const gchar *forced_enc)
 {
 	const GSList *item;
+	gboolean has_opened = FALSE;
 
 	for (item = filenames; item != NULL; item = g_slist_next(item))
 	{
-		document_open_file(item->data, readonly, ft, forced_enc);
+		if (document_open_file(item->data, readonly, ft, forced_enc) != NULL)
+			has_opened = TRUE;
 	}
+
+	if (has_opened)
+		notebook_auto_sort_tabs();
 }
 
 
