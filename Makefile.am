@@ -90,5 +90,5 @@ desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 appdata_in_files = geany.appdata.xml.in
 
 appdatadir = $(datadir)/appdata
-nodist_appdata_DATA = $(appdata_in_files:.appdata.xml.in=.appdata.xml)
+nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
