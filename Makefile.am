@@ -17,7 +17,7 @@ WIN32_BUILD_FILES = \
 EXTRA_DIST = \
 	autogen.sh \
 	scripts/gen-api-gtkdoc.py \
-        geany.appdata.xml.in \
+	geany.appdata.xml.in \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
@@ -87,8 +87,7 @@ desktop_in_files = geany.desktop
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-appdata_in_files = geany.appdata.xml.in
-
 appdatadir = $(datadir)/appdata
+appdata_in_files = geany.appdata.xml.in
 nodist_appdata_DATA = $(appdata_in_files:.xml.in=.xml)
 @INTLTOOL_XML_RULE@
