@@ -34,6 +34,7 @@
 #include "geanyobject.h"
 #include "keybindings.h"
 #include "main.h"
+#include "project.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -768,45 +769,156 @@ void notebook_remove_page(gint page_num)
 }
 
 
-gint compare_based_on_filename(gconstpointer a, gconstpointer b)
+static gint compare_docs_based_on_filename(gconstpointer a, gconstpointer b)
 {
-	GeanyDocument *doc_a, *doc_b;
-	gchar *basename_a, *basename_b;
-	gchar *key_a, *key_b;
-	gint cmp;
-
-	doc_a = *(GeanyDocument**) a;
-	doc_b = *(GeanyDocument**) b;
-	basename_a = g_path_get_basename(DOC_FILENAME(doc_a));
-	basename_b = g_path_get_basename(DOC_FILENAME(doc_b));
-	key_a = g_utf8_collate_key_for_filename(basename_a, -1);
-	key_b = g_utf8_collate_key_for_filename(basename_b, -1);
-	cmp = strcmp(key_a, key_b);
+	GeanyDocument *doc_a = *(GeanyDocument**) a;
+	GeanyDocument *doc_b = *(GeanyDocument**) b;
+	gchar *basename_a = g_path_get_basename(DOC_FILENAME(doc_a));
+	gchar *basename_b = g_path_get_basename(DOC_FILENAME(doc_b));
+	gchar *key_a = g_utf8_collate_key_for_filename(basename_a, -1);
+	gchar *key_b = g_utf8_collate_key_for_filename(basename_b, -1);
+	gint cmp = strcmp(key_a, key_b);
 	g_free(key_b);
 	g_free(key_a);
 	g_free(basename_b);
 	g_free(basename_a);
-
 	return cmp;
 }
 
 
-gint compare_based_on_filepath(gconstpointer a, gconstpointer b)
+/* Copied from sidebar.c.  We can place this in one place like utils.c. */
+static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 {
-	GeanyDocument *doc_a, *doc_b;
-	gchar *key_a, *key_b;
-	gint cmp;
+	gchar *head = g_strndup(str, strlen(prefix));
+	gboolean ret = utils_filenamecmp(head, prefix) == 0;
 
-	doc_a = *(GeanyDocument**) a;
-	doc_b = *(GeanyDocument**) b;
+	g_free(head);
+	return ret;
+}
 
-	key_a = g_utf8_collate_key_for_filename(DOC_FILENAME(doc_a), -1);
-	key_b = g_utf8_collate_key_for_filename(DOC_FILENAME(doc_b), -1);
-	cmp = strcmp(key_a, key_b);
+
+/* Copied from sidebar.c.  We can place this in one place like utils.c,
+ * with a more formal naming convention. */
+static gchar *get_doc_folder(const gchar *path)
+{
+	gchar *tmp_dirname = g_strdup(path);
+	gchar *project_base_path;
+	gchar *dirname = NULL;
+	const gchar *home_dir = g_get_home_dir();
+	const gchar *rest;
+
+	/* replace the project base path with the project name */
+	project_base_path = project_get_base_path();
+
+	if (project_base_path != NULL)
+	{
+		gsize len = strlen(project_base_path);
+
+		/* remove trailing separator so we can match base path exactly */
+		if (project_base_path[len-1] == G_DIR_SEPARATOR)
+			project_base_path[--len] = '\0';
+
+		/* check whether the dir name matches or uses the project base path */
+		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
+		{
+			rest = tmp_dirname + len;
+			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
+			{
+				dirname = g_strdup_printf("%s%s", app->project->name, rest);
+			}
+		}
+		g_free(project_base_path);
+	}
+	if (dirname == NULL)
+	{
+		dirname = tmp_dirname;
+
+		/* If matches home dir, replace with tilde */
+		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
+		{
+			rest = dirname + strlen(home_dir);
+			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
+			{
+				dirname = g_strdup_printf("~%s", rest);
+				g_free(tmp_dirname);
+			}
+		}
+	}
+	else
+		g_free(tmp_dirname);
+
+	return dirname;
+}
+
+
+static gint compare_path_strings(gconstpointer a, gconstpointer b)
+{
+	gchar *path_a = *(gchar**) a;
+	gchar *path_b = *(gchar**) b;
+	gchar *key_a = g_utf8_collate_key_for_filename(path_a, -1);
+	gchar *key_b = g_utf8_collate_key_for_filename(path_b, -1);
+	gint cmp = strcmp(key_a, key_b);;
 	g_free(key_b);
 	g_free(key_a);
-
 	return cmp;
+}
+
+
+static void sort_docs_based_on_pathname(GArray *docs)
+{
+	GArray *tmp_docs, *dir_names;
+	GHashTable *table;
+	GeanyDocument *doc;
+	guint i, j, docs_len, save_index = 0;
+	gchar *dirname, *tmp_dirname;
+
+	table = g_hash_table_new(g_str_hash, g_str_equal);
+	dir_names = g_array_new(FALSE, FALSE, sizeof(gchar*));
+	docs_len = docs->len;
+
+	for (i = 0; i < docs_len; ++i)
+	{
+		doc = g_array_index(docs, GeanyDocument*, i);
+		tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
+		dirname = get_doc_folder(tmp_dirname);
+		g_free(tmp_dirname);
+		tmp_docs = g_hash_table_lookup(table, dirname);
+
+		if (tmp_docs == NULL)
+		{
+			tmp_docs = g_array_new(TRUE, TRUE, sizeof(GeanyDocument*));
+			g_hash_table_insert(table, dirname, tmp_docs);
+			g_array_append_val(dir_names, dirname);
+		}
+		else
+			g_free(dirname);
+
+		g_array_append_val(tmp_docs, doc);
+	}
+
+	g_array_sort(dir_names, compare_path_strings);
+
+	for (i = 0; i < dir_names->len; ++i)
+	{
+		dirname = g_array_index(dir_names, gchar*, i);
+		g_assert(dirname != NULL);
+		tmp_docs = g_hash_table_lookup(table, dirname);
+		g_array_sort(tmp_docs, compare_docs_based_on_filename);
+
+		for (j = 0; j < tmp_docs->len; ++j)
+		{
+			g_assert(save_index < docs_len);
+			doc = g_array_index(tmp_docs, GeanyDocument*, j);
+			g_array_index(docs, GeanyDocument*, save_index++) = doc;
+		}
+
+		g_array_free(tmp_docs, TRUE);
+		g_free(dirname);
+	}
+
+	g_assert(save_index == docs_len);
+	g_array_free(dir_names, TRUE);
+	g_hash_table_destroy(table);
 }
 
 
@@ -815,20 +927,19 @@ void notebook_sort_tabs(NotebookTabSortMethod method)
 	GArray *docs;
 	GeanyDocument* doc;
 	GtkWidget *child;
-	guint i, size = 0;
+	guint i;
 
 	docs = g_array_new(FALSE, TRUE, sizeof(GeanyDocument*));
 
 	foreach_document(i)
-	{
 		g_array_append_val(docs, documents[i]);
-		++size;
-	}
 
-	g_array_sort(docs, method == NOTEBOOK_TAB_SORT_FILENAME ?
-		compare_based_on_filename : compare_based_on_filepath);
+	if (method == NOTEBOOK_TAB_SORT_FILENAME)
+		g_array_sort(docs, compare_docs_based_on_filename);
+	else
+		sort_docs_based_on_pathname(docs);
 
-	for (i = 0; i < size; ++i)
+	for (i = 0; i < docs->len; ++i)
 	{
 		doc = g_array_index(docs, GeanyDocument*, i);
 		child = document_get_notebook_child(doc);
