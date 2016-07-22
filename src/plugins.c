@@ -1085,7 +1085,7 @@ load_active_plugins(void)
 				*p = G_DIR_SEPARATOR;
 #endif
 
-			if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+			if (!EMPTY(fname) && utils_file_exists(fname))
 			{
 				PluginProxy *proxy = NULL;
 				if (check_plugin_path(fname))

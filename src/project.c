@@ -285,7 +285,7 @@ static void run_open_dialog(GtkDialog *dialog)
 {
 	while (gtk_dialog_run(dialog) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
 		/* try to load the config */
 		if (! project_load_file_with_session(filename))
@@ -343,7 +343,8 @@ void project_open(void)
 		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
 		gtk_window_set_type_hint(GTK_WINDOW(dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
 		gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
-		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), TRUE);
+		gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(dialog), FALSE);
+		gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 
 		/* add FileFilters */
 		filter = gtk_file_filter_new();
@@ -357,8 +358,8 @@ void project_open(void)
 		gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog), filter);
 
 		locale_path = utils_get_locale_from_utf8(dir);
-		if (g_file_test(locale_path, G_FILE_TEST_EXISTS) &&
-			g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		if (utils_file_exists(locale_path) &&
+			utils_file_is_dir(locale_path))
 		{
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
 		}
@@ -489,8 +490,17 @@ static void on_project_properties_base_path_button_clicked(GtkWidget *button,
 
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gtk_entry_set_text(GTK_ENTRY(base_path_entry),
-			gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog)));
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
+
+		SETPTR(filename, utils_get_path_from_uri(filename));
+		if (filename)
+		{
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+			gtk_entry_set_text(GTK_ENTRY(base_path_entry), utf8_filename);
+
+			g_free(utf8_filename);
+			g_free(filename);
+		}
 	}
 
 	gtk_widget_destroy(dialog);
@@ -740,7 +750,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 			g_free(dir);
 		}
 
-		if (! g_file_test(locale_path, G_FILE_TEST_IS_DIR))
+		if (! utils_file_is_dir(locale_path))
 		{
 			gboolean create_dir;
 
@@ -766,14 +776,14 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	}
 	/* finally test whether the given project file can be written */
 	if ((err_code = utils_is_file_writable(locale_filename)) != 0 ||
-		(err_code = g_file_test(locale_filename, G_FILE_TEST_IS_DIR) ? EISDIR : 0) != 0)
+		(err_code = utils_file_is_dir(locale_filename) ? EISDIR : 0) != 0)
 	{
 		SHOW_ERR1(_("Project file could not be written (%s)."), g_strerror(err_code));
 		gtk_widget_grab_focus(e->file_name);
 		g_free(locale_filename);
 		return FALSE;
 	}
-	else if (new_project && g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
+	else if (new_project && utils_file_exists(locale_filename) &&
 			 ! dialogs_show_question_full(NULL, _("_Replace"), GTK_STOCK_CANCEL,
 				NULL,
 				_("The file '%s' already exists. Do you want to overwrite it?"),
@@ -874,12 +884,12 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 
 	if (g_path_is_absolute(locale_filename))
 	{
-		if (g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+		if (utils_file_exists(locale_filename))
 		{
 			/* if the current filename is a directory, we must use
 			 * gtk_file_chooser_set_current_folder(which expects a locale filename) otherwise
 			 * we end up in the parent directory */
-			if (g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+			if (utils_file_is_dir(locale_filename))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_filename);
 			else
 				gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), utf8_filename);
@@ -889,7 +899,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 			gchar *locale_dir = g_path_get_dirname(locale_filename);
 			gchar *name = g_path_get_basename(utf8_filename);
 
-			if (g_file_test(locale_dir, G_FILE_TEST_EXISTS))
+			if (utils_file_exists(locale_dir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_dir);
 			gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), name);
 
@@ -906,13 +916,17 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	/* run it */
 	if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT)
 	{
-		gchar *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-		gchar *tmp_utf8_filename = utils_get_utf8_from_locale(filename);
+		gchar *filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
-		gtk_entry_set_text(GTK_ENTRY(entry), tmp_utf8_filename);
+		SETPTR(filename, utils_get_path_from_uri(filename));
+		if (filename)
+		{
+			gchar *utf8_filename = utils_get_utf8_from_locale(filename);
+			gtk_entry_set_text(GTK_ENTRY(entry), utf8_filename);
 
-		g_free(tmp_utf8_filename);
-		g_free(filename);
+			g_free(utf8_filename);
+			g_free(filename);
+		}
 	}
 	gtk_widget_destroy(dialog);
 }
@@ -1034,12 +1048,15 @@ static gboolean load_config(const gchar *filename)
 	GKeyFile *config;
 	GeanyProject *p;
 	GSList *node;
+	gchar *data;
+	gsize len;
 
 	/* there should not be an open project */
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
 	config = g_key_file_new();
-	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL))
+	if (! utils_read_file(filename, &data, &len, NULL) ||
+		! g_key_file_load_from_data(config, data, len, G_KEY_FILE_NONE, NULL))
 	{
 		g_key_file_free(config);
 		return FALSE;
@@ -1100,6 +1117,7 @@ static gboolean write_config(gboolean emit_signal)
 	GKeyFile *config;
 	gchar *filename;
 	gchar *data;
+	gsize len;
 	gboolean ret = FALSE;
 	GSList *node;
 
@@ -1110,7 +1128,8 @@ static gboolean write_config(gboolean emit_signal)
 	config = g_key_file_new();
 	/* try to load an existing config to keep manually added comments */
 	filename = utils_get_locale_from_utf8(p->file_name);
-	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
+	if (utils_read_file(filename, &data, &len, NULL))
+		g_key_file_load_from_data(config, data, len, G_KEY_FILE_NONE, NULL);
 
 	foreach_slist(node, stash_groups)
 		stash_group_save_to_key_file(node->data, config);

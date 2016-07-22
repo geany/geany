@@ -513,7 +513,7 @@ static void load_named_styles(GKeyFile *config, GKeyFile *config_home)
 		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL);
 		path_home = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, scheme, NULL);
 
-		if (g_file_test(path, G_FILE_TEST_EXISTS) || g_file_test(path_home, G_FILE_TEST_EXISTS))
+		if (utils_file_exists(path) || utils_file_exists(path_home))
 		{
 			config = utils_key_file_new(path);
 			config_home = utils_key_file_new(path_home);
@@ -1208,13 +1208,13 @@ static void on_color_scheme_changed(GtkTreeSelection *treesel, gpointer dummy)
 
 	/* fname is just the basename from the menu item, so prepend the custom files path */
 	path = g_build_path(G_DIR_SEPARATOR_S, app->configdir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
-	if (!g_file_test(path, G_FILE_TEST_EXISTS))
+	if (!utils_file_exists(path))
 	{
 		/* try the system path */
 		g_free(path);
 		path = g_build_path(G_DIR_SEPARATOR_S, app->datadir, GEANY_COLORSCHEMES_SUBDIR, fname, NULL);
 	}
-	if (g_file_test(path, G_FILE_TEST_EXISTS))
+	if (utils_file_exists(path))
 	{
 		SETPTR(editor_prefs.color_scheme, fname);
 		fname = NULL;

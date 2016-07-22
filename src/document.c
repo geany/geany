@@ -82,9 +82,6 @@
 #include <gdk/gdkkeysyms.h>
 
 
-#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
-
-
 GeanyFilePrefs file_prefs;
 GPtrArray *documents_array = NULL;
 
@@ -574,10 +571,10 @@ static void monitor_file_setup(GeanyDocument *doc)
 		document_stop_file_monitoring(doc);
 
 		locale_filename = utils_get_locale_from_utf8(doc->file_name);
-		if (locale_filename != NULL && g_file_test(locale_filename, G_FILE_TEST_EXISTS))
+		if (locale_filename != NULL && utils_file_exists(locale_filename))
 		{
 			/* get a file monitor and connect to the 'changed' signal */
-			GFile *file = g_file_new_for_path(locale_filename);
+			GFile *file = utils_gfile_create(locale_filename);
 			doc->priv->monitor = g_file_monitor_file(file, G_FILE_MONITOR_NONE, NULL, NULL);
 			g_signal_connect(doc->priv->monitor, "changed",
 				G_CALLBACK(monitor_file_changed_cb), doc);
@@ -927,7 +924,7 @@ static gboolean get_mtime(const gchar *locale_filename, time_t *time)
 
 	if (USE_GIO_FILE_OPERATIONS)
 	{
-		GFile *file = g_file_new_for_path(locale_filename);
+		GFile *file = utils_gfile_create(locale_filename);
 		GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED, G_FILE_QUERY_INFO_NONE, NULL, &error);
 
 		if (info)
@@ -984,15 +981,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	if (!get_mtime(locale_filename, &filedata->mtime))
 		return FALSE;
 
-	if (USE_GIO_FILE_OPERATIONS)
-	{
-		GFile *file = g_file_new_for_path(locale_filename);
-
-		g_file_load_contents(file, NULL, &filedata->data, &filedata->len, NULL, &err);
-		g_object_unref(file);
-	}
-	else
-		g_file_get_contents(locale_filename, &filedata->data, &filedata->len, &err);
+	utils_read_file(locale_filename, &filedata->data, &filedata->len, &err);
 
 	if (err)
 	{
@@ -1310,6 +1299,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 #else
 		locale_filename = g_strdup(filename);
 #endif
+		SETPTR(locale_filename, utils_get_path_from_uri(locale_filename));
+		if (!locale_filename)
+			return NULL;
+
 		/* remove relative junk */
 		utils_tidy_path(locale_filename);
 
@@ -1744,17 +1737,40 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
 	gint result;
+	gchar *msg;
 
 	/* stop file monitoring to avoid getting events for deleting/creating files,
 	 * it's re-setup in document_save_file_as() */
 	document_stop_file_monitoring(doc);
 
-	result = g_rename(old_locale_filename, new_locale_filename);
-	if (result != 0)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
-		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
-			_("Error renaming file."), g_strerror(errno));
+		GError *error = NULL;
+		GFile *old_file = utils_gfile_create(old_locale_filename);
+		GFile *new_file = utils_gfile_create(new_locale_filename);
+
+		g_file_move(old_file, new_file, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error);
+		if (error)
+		{
+			msg = g_strdup(error->message);
+			g_error_free(error);
+		}
+
+		g_object_unref(old_file);
+		g_object_unref(new_file);
 	}
+	else
+	{
+		gint result = g_rename(old_locale_filename, new_locale_filename);
+		if (result != 0)
+			msg = g_strdup(g_strerror(errno));
+	}
+
+	if (msg)
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+			_("Error renaming file."), msg);
+
+	g_free(msg);
 	g_free(old_locale_filename);
 	g_free(new_locale_filename);
 }
@@ -1923,82 +1939,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 {
 	GError *error = NULL;
 
-	if (file_prefs.use_safe_file_saving)
-	{
-		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
-		 * This is the only option that handles disk space exhaustion. */
-		if (g_file_set_contents(locale_filename, data, len, &error))
-			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
-	}
-	else if (USE_GIO_FILE_OPERATIONS)
-	{
-		GFile *fp;
-
-		/* Use GIO API to save file (GVFS-safe)
-		 * It is best in most GVFS setups but don't seem to work correctly on some more complex
-		 * setups (saving from some VM to their host, over some SMB shares, etc.) */
-		fp = g_file_new_for_path(locale_filename);
-		g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
-			G_FILE_CREATE_NONE, NULL, NULL, &error);
-		g_object_unref(fp);
-	}
-	else
-	{
-		FILE *fp;
-		int save_errno;
-		gchar *display_name = g_filename_display_name(locale_filename);
-
-		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
-		/* The error handling is taken from glib-2.26.0 gfileutils.c */
-		errno = 0;
-		fp = g_fopen(locale_filename, "wb");
-		if (fp == NULL)
-		{
-			save_errno = errno;
-
-			g_set_error(&error,
-				G_FILE_ERROR,
-				g_file_error_from_errno(save_errno),
-				_("Failed to open file '%s' for writing: fopen() failed: %s"),
-				display_name,
-				g_strerror(save_errno));
-		}
-		else
-		{
-			gsize bytes_written;
-
-			errno = 0;
-			bytes_written = fwrite(data, sizeof(gchar), len, fp);
-
-			if (len != bytes_written)
-			{
-				save_errno = errno;
-
-				g_set_error(&error,
-					G_FILE_ERROR,
-					g_file_error_from_errno(save_errno),
-					_("Failed to write file '%s': fwrite() failed: %s"),
-					display_name,
-					g_strerror(save_errno));
-			}
-
-			errno = 0;
-			/* preserve the fwrite() error if any */
-			if (fclose(fp) != 0 && error == NULL)
-			{
-				save_errno = errno;
-
-				g_set_error(&error,
-					G_FILE_ERROR,
-					g_file_error_from_errno(save_errno),
-					_("Failed to close file '%s': fclose() failed: %s"),
-					display_name,
-					g_strerror(save_errno));
-			}
-		}
-
-		g_free(display_name);
-	}
+	utils_write_file_full(locale_filename, data, len, &error);
 	if (error != NULL)
 	{
 		gchar *msg = g_strdup(error->message);

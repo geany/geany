@@ -801,8 +801,8 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir);
 	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
-	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
-		! g_file_test(*working_dir, G_FILE_TEST_IS_DIR))
+	if (EMPTY(*working_dir) || ! utils_file_exists(*working_dir) ||
+		! utils_file_is_dir(*working_dir))
 	{
 		ui_set_statusbar(TRUE, _("Invalid working directory \"%s\""),
 				!EMPTY(working_dir_utf8) ? working_dir_utf8 : "<NULL>" );

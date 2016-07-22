@@ -190,6 +190,113 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
+gboolean utils_read_file(const gchar *locale_filename, char **contents,
+		gsize *length, GError **error)
+{
+	gboolean ret;
+
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = utils_gfile_create(locale_filename);
+
+		ret = g_file_load_contents(file, NULL, contents, length, NULL, error);
+		g_object_unref(file);
+	}
+	else
+		ret = g_file_get_contents(locale_filename, contents, length, error);
+
+	return ret;
+}
+
+
+gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
+		gsize len, GError **error)
+{
+	gint save_errno = 0;
+
+	g_return_val_if_fail(locale_filename != NULL, ENOENT);
+	g_return_val_if_fail(data != NULL, EINVAL);
+
+	if (file_prefs.use_safe_file_saving)
+	{
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
+		 * This is the only option that handles disk space exhaustion. */
+		if (! g_file_set_contents(locale_filename, data, len, error))
+			save_errno = EIO;
+	}
+	else if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *fp;
+
+		/* Use GIO API to save file (GVFS-safe)
+		 * It is best in most GVFS setups but don't seem to work correctly on some more complex
+		 * setups (saving from some VM to their host, over some SMB shares, etc.) */
+		fp = utils_gfile_create(locale_filename);
+		if (! g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
+				G_FILE_CREATE_NONE, NULL, NULL, error))
+			save_errno = EIO;
+		g_object_unref(fp);
+	}
+	else
+	{
+		FILE *fp;
+		gchar *display_name = g_filename_display_name(locale_filename);
+
+		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
+		/* The error handling is taken from glib-2.26.0 gfileutils.c */
+		errno = 0;
+		fp = g_fopen(locale_filename, "wb");
+		if (fp == NULL)
+		{
+			save_errno = errno;
+
+			g_set_error(error,
+				G_FILE_ERROR,
+				g_file_error_from_errno(save_errno),
+				_("Failed to open file '%s' for writing: fopen() failed: %s"),
+				display_name,
+				g_strerror(save_errno));
+		}
+		else
+		{
+			gsize bytes_written;
+
+			errno = 0;
+			bytes_written = fwrite(data, sizeof(gchar), len, fp);
+
+			if (len != bytes_written)
+			{
+				save_errno = errno;
+
+				g_set_error(error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to write file '%s': fwrite() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
+
+			errno = 0;
+			/* preserve the fwrite() error if any */
+			if (fclose(fp) != 0 && save_errno == 0)
+			{
+				save_errno = errno;
+
+				g_set_error(error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to close file '%s': fclose() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
+		}
+
+		g_free(display_name);
+	}
+	return save_errno;
+}
+
+
 /**
  * Writes @a text into a file named @a filename.
  * If the file doesn't exist, it will be created.
@@ -208,55 +315,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
-	g_return_val_if_fail(filename != NULL, ENOENT);
-	g_return_val_if_fail(text != NULL, EINVAL);
-
-	if (file_prefs.use_safe_file_saving)
-	{
-		GError *error = NULL;
-		if (! g_file_set_contents(filename, text, -1, &error))
-		{
-			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
-			g_error_free(error);
-			return EIO;
-		}
-	}
-	else
-	{
-		FILE *fp;
-		gsize bytes_written, len;
-		gboolean fail = FALSE;
-
-		if (filename == NULL)
-			return ENOENT;
-
-		len = strlen(text);
-		errno = 0;
-		fp = g_fopen(filename, "w");
-		if (fp == NULL)
-			fail = TRUE;
-		else
-		{
-			bytes_written = fwrite(text, sizeof(gchar), len, fp);
-
-			if (len != bytes_written)
-			{
-				fail = TRUE;
-				geany_debug(
-					"utils_write_file(): written only %"G_GSIZE_FORMAT" bytes, had to write %"G_GSIZE_FORMAT" bytes to %s",
-					bytes_written, len, filename);
-			}
-			if (fclose(fp) != 0)
-				fail = TRUE;
-		}
-		if (fail)
-		{
-			geany_debug("utils_write_file(): could not write to file %s (%s)",
-				filename, g_strerror(errno));
-			return FALLBACK(errno, EIO);
-		}
-	}
-	return 0;
+	return utils_write_file_full(filename, text, strlen(text), NULL);
 }
 
 
@@ -655,8 +714,8 @@ gint utils_is_file_writable(const gchar *locale_filename)
 	gchar *file;
 	gint ret;
 
-	if (! g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
-		! g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+	if (! utils_file_exists(locale_filename) &&
+		! utils_file_is_dir(locale_filename))
 		/* get the file's directory to check for write permission if it doesn't yet exist */
 		file = g_path_get_dirname(locale_filename);
 	else
@@ -1394,23 +1453,52 @@ GEANY_API_SYMBOL
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error)
 {
 	GSList *list = NULL;
-	GDir *dir;
 	const gchar *filename;
 
 	if (error)
 		*error = NULL;
 	g_return_val_if_fail(path != NULL, NULL);
 
-	dir = g_dir_open(path, 0, error);
-	if (dir == NULL)
-		return NULL;
-
-	foreach_dir(filename, dir)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
-		list = g_slist_prepend(list, full_path ?
-			g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+		GFile *gpath = utils_gfile_create(path);
+		GFileEnumerator *enumerator = g_file_enumerate_children(gpath,
+			G_FILE_ATTRIBUTE_STANDARD_NAME, G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+			NULL, error);
+
+		if (enumerator)
+		{
+			GFileInfo *info;
+
+			while (info = g_file_enumerator_next_file(enumerator, NULL, NULL))
+			{
+				filename = g_file_info_get_name(info);
+
+				list = g_slist_prepend(list, full_path ?
+					g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+
+				g_object_unref(info);
+			}
+
+			g_object_unref(enumerator);
+		}
+
+		g_object_unref(gpath);
 	}
-	g_dir_close(dir);
+	else
+	{
+		GDir *dir = g_dir_open(path, 0, error);
+		if (dir == NULL)
+			return NULL;
+
+		foreach_dir(filename, dir)
+		{
+			list = g_slist_prepend(list, full_path ?
+				g_build_path(G_DIR_SEPARATOR_S, path, filename, NULL) : g_strdup(filename));
+		}
+		g_dir_close(dir);
+	}
+
 	/* sorting last is quicker than on insertion */
 	if (sort)
 		list = g_slist_sort(list, (GCompareFunc) utils_str_casecmp);
@@ -1686,7 +1774,7 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
- * - NULL if the URI is non-local and gvfs-fuse is not installed
+ * - NULL if the URI is non-local and when not using GIO and gvfs-fuse is not installed
  * - a new copy of 'uri' if it is not an URI. */
 gchar *utils_get_path_from_uri(const gchar *uri)
 {
@@ -1697,19 +1785,24 @@ gchar *utils_get_path_from_uri(const gchar *uri)
 	if (! utils_is_uri(uri))
 		return g_strdup(uri);
 
-	/* this will work only for 'file://' URIs */
-	locale_filename = g_filename_from_uri(uri, NULL, NULL);
-	/* g_filename_from_uri() failed, so we probably have a non-local URI */
-	if (locale_filename == NULL)
+	if (USE_GIO_FILE_OPERATIONS)
 	{
 		GFile *file = g_file_new_for_uri(uri);
 		locale_filename = g_file_get_path(file);
 		g_object_unref(file);
-		if (locale_filename == NULL)
-		{
-			geany_debug("The URI '%s' could not be resolved to a local path. This means "
-				"that the URI is invalid or that you don't have gvfs-fuse installed.", uri);
-		}
+
+		if (!locale_filename)
+			return g_strdup(uri);
+
+		return locale_filename;
+	}
+
+	locale_filename = g_filename_from_uri(uri, NULL, NULL);
+	if (locale_filename == NULL)
+	{
+		geany_debug("The URI '%s' could not be resolved to a local path. This means "
+			"that the URI is invalid or that you disabled GIO file operations "
+			"and don't have gvfs-fuse installed.", uri);
 	}
 
 	return locale_filename;
@@ -1763,6 +1856,9 @@ void utils_tidy_path(gchar *filename)
 	GString *str;
 	const gchar *needle;
 	gboolean preserve_double_backslash = FALSE;
+
+	if (utils_is_uri(filename))
+		return;
 
 	g_return_if_fail(g_path_is_absolute(filename));
 
@@ -1900,7 +1996,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 	uri = g_strconcat("file://", app->docdir, "/index.html", NULL);
 #endif
 
-	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
+	if (! utils_file_is_regular(uri + skip))
 	{	/* fall back to online documentation if it is not found on the hard disk */
 		g_free(uri);
 		uri = g_strconcat(GEANY_HOMEPAGE, "manual/", VERSION, "/index.html", NULL);
@@ -2168,4 +2264,92 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	}
 	else
 		g_printerr("Unable to find 'geany'");
+}
+
+
+GFile *utils_gfile_create(const gchar *fname)
+{
+	if (utils_is_uri(fname))
+		return g_file_new_for_uri(fname);
+	return g_file_new_for_path(fname);
+}
+
+
+/**
+ *  Tests file existence using the configured IO method in Geany.
+ *
+ *  @param fname File name.
+ *
+ *  @return TRUE if file exists, FALSE otherwise.
+ *
+ *  @since 1.28
+ **/
+GEANY_API_SYMBOL
+gboolean utils_file_exists(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = utils_gfile_create(fname);
+		gboolean exists = g_file_query_exists(file, NULL);
+		g_object_unref(file);
+		return exists;
+	}
+	return g_file_test(fname, G_FILE_TEST_EXISTS);
+}
+
+
+static gboolean gio_filetype_test(const gchar *fname, GFileType filetype)
+{
+	gboolean res = FALSE;
+	GFile *file = utils_gfile_create(fname);
+	GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+	if (info)
+	{
+		res = g_file_info_get_file_type(info) == filetype;
+		g_object_unref(info);
+	}
+	g_object_unref(file);
+
+	return res;
+}
+
+
+/**
+ *  Tests if the provided file name is a directory using the configured IO method
+ *  in Geany.
+ *
+ *  @param fname File name.
+ *
+ *  @return TRUE if it is a directory, FALSE otherwise.
+ *
+ *  @since 1.28
+ **/
+GEANY_API_SYMBOL
+gboolean utils_file_is_dir(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+		return gio_filetype_test(fname, G_FILE_TYPE_DIRECTORY);
+
+	return g_file_test(fname, G_FILE_TEST_IS_DIR);
+}
+
+
+/**
+ *  Tests if the provided file is a regular file using the configured IO method
+ *  in Geany.
+ *
+ *  @param fname File name.
+ *
+ *  @return TRUE if it is a regular file, FALSE otherwise.
+ *
+ *  @since 1.28
+ **/
+GEANY_API_SYMBOL
+gboolean utils_file_is_regular(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+		return gio_filetype_test(fname, G_FILE_TYPE_REGULAR);
+
+	return g_file_test(fname, G_FILE_TEST_IS_REGULAR);
 }

@@ -360,7 +360,7 @@ static void set_status(gboolean new_status)
 		g_key_file_set_boolean(config, "general", "replacement_on_typing_active",
 			plugin_active);
 
-		if (!g_file_test(config_dir, G_FILE_TEST_IS_DIR)
+		if (!utils_file_is_dir(config_dir)
 			&& utils_mkdir(config_dir, TRUE) != 0)
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,

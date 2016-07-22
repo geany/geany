@@ -150,13 +150,13 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
-		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		filelist = gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
 			const gchar *first = filelist->data;
 
 			// When there's only one filename it may have been typed manually
-			if (!filelist->next && !g_file_test(first, G_FILE_TEST_EXISTS))
+			if (!filelist->next && !utils_file_exists(first))
 			{
 				dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("\"%s\" was not found."), first);
 				ret = FALSE;
@@ -519,7 +519,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	gchar *new_filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
 	switch (response)
 	{
@@ -530,7 +530,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 				utils_beep();
 				break;
 			}
-			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
+			if (utils_file_exists(new_filename) &&
 				!dialogs_show_question_full(NULL, NULL, NULL,
 					_("Overwrite?"),
 					_("Filename already exists!")))
