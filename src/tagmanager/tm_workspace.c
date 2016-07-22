@@ -738,18 +738,20 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 /* Returns tags with the specified prefix sorted by name. If there are several
  tags with the same name, only one of them appears in the resulting array.
  @param prefix The prefix of the tag to find.
+ @param additional_tags Additional sorted tag array whose elements are also searched.
  @param lang Specifies the language(see the table in parsers.h) of the tags to be found,
              -1 for all.
  @param max_num The maximum number of tags to return.
  @return Array of matching tags sorted by their name.
 */
-GPtrArray *tm_workspace_find_prefix(const char *prefix, TMParserType lang, guint max_num)
+GPtrArray *tm_workspace_find_prefix(const char *prefix, GPtrArray *additional_tags, TMParserType lang, guint max_num)
 {
 	TMTagAttrType attrs[] = { tm_tag_attr_name_t, 0 };
 	GPtrArray *tags = g_ptr_array_new();
 
 	fill_find_tags_array_prefix(tags, theWorkspace->tags_array, prefix, lang, max_num);
 	fill_find_tags_array_prefix(tags, theWorkspace->global_tags, prefix, lang, max_num);
+	fill_find_tags_array_prefix(tags, additional_tags, prefix, lang, max_num);
 
 	tm_tags_sort(tags, attrs, TRUE, FALSE);
 	if (tags->len > max_num)
