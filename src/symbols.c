@@ -47,7 +47,6 @@
 #include "geanyobject.h"
 #include "main.h"
 #include "navqueue.h"
-#include "notebook.h"
 #include "sciwrappers.h"
 #include "sidebar.h"
 #include "support.h"
@@ -1755,10 +1754,7 @@ static void on_goto_popup_item_activate(GtkMenuItem *item, TMTag *tag)
 	new_doc = document_open_file(tag->file->file_name, FALSE, NULL, NULL);
 
 	if (new_doc)
-	{
-		notebook_auto_sort_tabs();
 		navqueue_goto_line(old_doc, new_doc, tag->line);
-	}
 }
 
 
@@ -2070,12 +2066,8 @@ static gboolean goto_tag(const gchar *name, gboolean definition)
 		new_doc = document_find_by_real_path(tmtag->file->file_name);
 
 		if (!new_doc)
-		{
 			/* not found in opened document, should open */
 			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
-			if (new_doc)
-				notebook_auto_sort_tabs();
-		}
 
 		navqueue_goto_line(old_doc, new_doc, tmtag->line);
 	}

@@ -88,8 +88,6 @@ static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTre
 		guint key, GdkModifierType mods, const gchar *shortcut);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_auto_sort_tabs_filename_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_auto_sort_tabs_pathname_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
@@ -490,16 +488,6 @@ static void prefs_init_dialog(void)
 	/* disable following setting if notebook tabs are hidden */
 	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.auto_sort_tabs_filename);
-	on_auto_sort_tabs_filename_toggled(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename")), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.auto_sort_tabs_pathname);
-	on_auto_sort_tabs_pathname_toggled(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname")), NULL);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.show_tab_cross);
@@ -967,12 +955,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
 		interface_prefs.show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename");
-		interface_prefs.auto_sort_tabs_filename = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname");
-		interface_prefs.auto_sort_tabs_pathname = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 		file_prefs.show_tab_cross = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1549,24 +1531,6 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 	/* tab placement only enabled when tabs are visible */
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename"), sens);
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname"), sens);
-}
-
-
-static void on_auto_sort_tabs_filename_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	if (gtk_toggle_button_get_active(togglebutton))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.prefs_dialog,
-			"check_auto_sort_tabs_pathname")), FALSE);
-}
-
-
-static void on_auto_sort_tabs_pathname_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	if (gtk_toggle_button_get_active(togglebutton))
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ui_lookup_widget(ui_widgets.prefs_dialog,
-			"check_auto_sort_tabs_filename")), FALSE);
 }
 
 
@@ -1849,10 +1813,6 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
 				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename"),
-				"toggled", G_CALLBACK(on_auto_sort_tabs_filename_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname"),
-				"toggled", G_CALLBACK(on_auto_sort_tabs_pathname_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),

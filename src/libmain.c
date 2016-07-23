@@ -803,8 +803,6 @@ gboolean main_handle_filename(const gchar *locale_filename)
 		/* add recent file manually if opening_session_files is set */
 		if (doc != NULL && main_status.opening_session_files)
 			ui_add_recent_document(doc);
-		if (doc != NULL)
-			notebook_auto_sort_tabs();
 		g_free(filename);
 		return TRUE;
 	}

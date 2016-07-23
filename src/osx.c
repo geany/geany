@@ -25,7 +25,6 @@
 #include "utils.h"
 #include "ui_utils.h"
 #include "main.h"
-#include "notebook.h"
 
 
 static gboolean app_block_termination_cb(GtkosxApplication *app, gpointer data)
@@ -74,8 +73,6 @@ static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpoint
 	else
 	{
 		opened = document_open_file(locale_path, FALSE, NULL, NULL) != NULL;
-		if (opened)
-			notebook_auto_sort_tabs();
 		g_free(locale_path);
 	}
 

@@ -40,7 +40,6 @@
 #include "keyfile.h"
 #include "main.h"
 #include "msgwindow.h"
-#include "notebook.h"
 #include "prefs.h"
 #include "project.h"
 #include "sciwrappers.h"
@@ -1174,10 +1173,7 @@ static void recent_file_activate_cb(GtkMenuItem *menuitem, G_GNUC_UNUSED gpointe
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
 	if (document_open_file(locale_filename, FALSE, NULL, NULL) != NULL)
-	{
 		recent_file_loaded(utf8_filename, recent_get_recent_files());
-		notebook_auto_sort_tabs();
-	}
 
 	g_free(locale_filename);
 	g_free(utf8_filename);
@@ -2086,8 +2082,7 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 		ft = filetypes[GEANY_FILETYPES_CONF];
 
 	if (g_file_test(file_name, G_FILE_TEST_EXISTS))
-		if (document_open_file(file_name, FALSE, ft, NULL) != NULL)
-			notebook_auto_sort_tabs();
+		document_open_file(file_name, FALSE, ft, NULL);
 	else
 	{
 		gchar *utf8_filename = utils_get_utf8_from_locale(file_name);

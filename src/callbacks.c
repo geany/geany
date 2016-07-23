@@ -45,7 +45,6 @@
 #include "main.h"
 #include "msgwindow.h"
 #include "navqueue.h"
-#include "notebook.h"
 #include "plugins.h"
 #include "pluginutils.h"
 #include "prefs.h"
@@ -1413,8 +1412,7 @@ void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_d
 		}
 
 		if (g_file_test(filename, G_FILE_TEST_EXISTS))
-			if (document_open_file(filename, FALSE, NULL, NULL) != NULL)
-				notebook_auto_sort_tabs();
+			document_open_file(filename, FALSE, NULL, NULL);
 		else
 		{
 			SETPTR(sel, utils_get_utf8_from_locale(sel));

@@ -963,18 +963,6 @@ void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-void notebook_auto_sort_tabs(void)
-{
-	if (interface_prefs.show_notebook_tabs)
-	{
-		if (interface_prefs.auto_sort_tabs_filename)
-			notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
-		else if (interface_prefs.auto_sort_tabs_pathname)
-			notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
-	}
-}
-
-
 static void
 on_window_drag_data_received(GtkWidget *widget, GdkDragContext *drag_context,
 		gint x, gint y, GtkSelectionData *data, guint target_type,

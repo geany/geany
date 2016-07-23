@@ -40,7 +40,6 @@
 #include "keybindings.h"
 #include "main.h"
 #include "navqueue.h"
-#include "notebook.h"
 #include "prefs.h"
 #include "support.h"
 #include "ui_utils.h"
@@ -697,12 +696,7 @@ static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean 
 		g_free(utf8_filename);
 
 		if (doc == NULL)	/* file not already open */
-		{
 			doc = document_open_file(filename, FALSE, NULL, NULL);
-
-			if (doc != NULL)
-				notebook_auto_sort_tabs();
-		}
 
 		if (doc != NULL)
 		{

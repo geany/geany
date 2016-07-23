@@ -58,8 +58,6 @@ void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data);
 
-void notebook_auto_sort_tabs(void);
-
 G_END_DECLS
 
 #endif /* GEANY_NOTEBOOK_H */
