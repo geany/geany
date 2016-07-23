@@ -875,8 +875,8 @@ static void sort_docs_based_on_pathname(GArray *docs)
 	GArray *tmp_docs, *dir_names;
 	GHashTable *table;
 	GeanyDocument *doc;
-	guint i, j, docs_len, save_index = 0;
 	gchar *dirname, *tmp_dirname;
+	guint i, j, docs_len, save_index = 0;
 
 	table = g_hash_table_new(g_str_hash, g_str_equal);
 	dir_names = g_array_new(FALSE, FALSE, sizeof(gchar*));
@@ -885,19 +885,30 @@ static void sort_docs_based_on_pathname(GArray *docs)
 	for (i = 0; i < docs_len; ++i)
 	{
 		doc = g_array_index(docs, GeanyDocument*, i);
-		tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
-		dirname = get_doc_folder(tmp_dirname);
-		g_free(tmp_dirname);
+
+		if (doc->file_name == NULL)
+			dirname = GEANY_STRING_UNTITLED;
+		else
+		{
+			tmp_dirname = g_path_get_dirname(DOC_FILENAME(doc));
+			dirname = get_doc_folder(tmp_dirname);
+			g_free(tmp_dirname);
+		}
+
 		tmp_docs = g_hash_table_lookup(table, dirname);
 
 		if (tmp_docs == NULL)
 		{
+			if (doc->file_name == NULL)
+				dirname = g_strdup(dirname);
+
 			tmp_docs = g_array_new(TRUE, TRUE, sizeof(GeanyDocument*));
 			g_hash_table_insert(table, dirname, tmp_docs);
 			g_array_append_val(dir_names, dirname);
 		}
 		else
-			g_free(dirname);
+			if (doc->file_name != NULL)
+				g_free(dirname);
 
 		g_array_append_val(tmp_docs, doc);
 	}
