@@ -51,6 +51,8 @@ typedef struct GeanyInterfacePrefs
 	gchar			*tagbar_font;				/**< symbol sidebar font */
 	gchar			*msgwin_font;				/**< message window font */
 	gboolean		show_notebook_tabs;			/**< whether editor tabs are visible */
+	gboolean		auto_sort_tabs_filename;	/**< whether to automatically sort tabs based on filename */
+	gboolean		auto_sort_tabs_pathname;	/**< whether to automatically sort tabs based on pathname */
 	gint			tab_pos_editor;				/**< positions of editor's tabs */
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */

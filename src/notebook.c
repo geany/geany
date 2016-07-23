@@ -66,6 +66,8 @@ static gboolean switch_in_progress = FALSE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
 
+static gboolean on_idle_auto_sort_hooked = FALSE;
+
 
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
@@ -80,6 +82,8 @@ static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
 static void setup_tab_dnd(void);
+
+static gboolean on_document_open(GeanyDocument* doc);
 
 
 static void update_mru_docs_head(GeanyDocument *doc)
@@ -546,6 +550,8 @@ void notebook_init(void)
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
 
+	g_signal_connect(geany_object, "document-open", G_CALLBACK(on_document_open), NULL);
+
 	setup_tab_dnd();
 }
 
@@ -960,6 +966,32 @@ void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
+}
+
+
+static gboolean on_idle_auto_sort_tabs(gpointer user_data)
+{
+	if (interface_prefs.show_notebook_tabs)
+	{
+		if (interface_prefs.auto_sort_tabs_filename)
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+		else if (interface_prefs.auto_sort_tabs_pathname)
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
+	}
+
+	on_idle_auto_sort_hooked = FALSE;
+	return FALSE;
+}
+
+
+static gboolean on_document_open(GeanyDocument* doc)
+{
+	if (!on_idle_auto_sort_hooked && interface_prefs.show_notebook_tabs &&
+		(interface_prefs.auto_sort_tabs_filename || interface_prefs.auto_sort_tabs_pathname))
+	{
+		if (g_idle_add(on_idle_auto_sort_tabs, NULL) > 0)
+			on_idle_auto_sort_hooked = TRUE;
+	}
 }
 
 
