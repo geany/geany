@@ -530,8 +530,9 @@ Sorting tabs automatically
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Tabs can also be automatically sorted everytime a file or a group of
-files are opened.  This can be enabled in
-Preferences->Interface->Notebook tabs.  See `Editor tabs`_ section.
+files are opened, or when a document is saved to a new file.  This can
+be enabled in Preferences->Interface->Notebook tabs.  See `Editor tabs`_
+section.
 
 Cloning documents
 ^^^^^^^^^^^^^^^^^
@@ -1993,7 +1994,8 @@ Double-clicking hides all additional widgets
 
 Automatically sort tabs based on filename
     Whether to automatically sort editor tabs based on their filenames
-    everytime files are opened.
+    everytime files are opened, or when documents are saved to a new
+    file.
 
 Automatically sort tabs based on pathname
     Same as the one above but sort tabs based on pathname.  The result

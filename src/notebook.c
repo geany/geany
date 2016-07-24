@@ -67,6 +67,7 @@ static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
 
 static gboolean on_idle_auto_sort_hooked = FALSE;
+static gboolean doc_saves_to_new_file = FALSE;
 
 
 static void
@@ -84,6 +85,8 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 static void setup_tab_dnd(void);
 
 static void on_document_open(GObject *obj, GeanyDocument *doc);
+static void on_document_before_save(GObject *obj, GeanyDocument *doc);
+static void on_document_save(GObject *obj, GeanyDocument *doc);
 
 
 static void update_mru_docs_head(GeanyDocument *doc)
@@ -551,6 +554,8 @@ void notebook_init(void)
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
 
 	g_signal_connect(geany_object, "document-open", G_CALLBACK(on_document_open), NULL);
+	g_signal_connect(geany_object, "document-before-save", G_CALLBACK(on_document_before_save), NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 
 	setup_tab_dnd();
 }
@@ -1002,6 +1007,24 @@ static void on_document_open(GObject *obj, GeanyDocument *doc)
 	{
 		if (g_idle_add(on_idle_auto_sort_tabs, NULL) > 0)
 			on_idle_auto_sort_hooked = TRUE;
+	}
+}
+
+
+static void on_document_before_save(GObject *obj, GeanyDocument *doc)
+{
+	doc_saves_to_new_file = doc->real_path == NULL;
+}
+
+
+static void on_document_save(GObject *obj, GeanyDocument *doc)
+{
+	if (doc_saves_to_new_file && interface_prefs.show_notebook_tabs)
+	{
+		if (interface_prefs.auto_sort_tabs_filename)
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+		else if (interface_prefs.auto_sort_tabs_pathname)
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
 	}
 }
 
