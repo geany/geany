@@ -492,14 +492,10 @@ static void prefs_init_dialog(void)
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.auto_sort_tabs_filename);
-	on_auto_sort_tabs_filename_toggled(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_filename")), NULL);
+	on_auto_sort_tabs_pathname_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.auto_sort_tabs_pathname);
-	on_auto_sort_tabs_pathname_toggled(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_sort_tabs_pathname")), NULL);
+	on_auto_sort_tabs_pathname_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.show_tab_cross);
