@@ -222,8 +222,6 @@ gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
 
 GeanyDocument *document_find_by_id(guint id);
 
-GtkWidget *document_get_notebook_child(GeanyDocument *doc);
-
 
 #ifdef GEANY_PRIVATE
 
@@ -317,6 +315,8 @@ void document_apply_indent_settings(GeanyDocument *doc);
 void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
+
+GtkWidget *document_get_notebook_child(GeanyDocument *doc);
 
 #endif /* GEANY_PRIVATE */
 
