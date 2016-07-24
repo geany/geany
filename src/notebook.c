@@ -83,7 +83,7 @@ notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
 static void setup_tab_dnd(void);
 
-static gboolean on_document_open(GeanyDocument* doc);
+static void on_document_open(GObject *obj, GeanyDocument *doc);
 
 
 static void update_mru_docs_head(GeanyDocument *doc)
@@ -995,7 +995,7 @@ static gboolean on_idle_auto_sort_tabs(gpointer user_data)
 }
 
 
-static gboolean on_document_open(GeanyDocument* doc)
+static void on_document_open(GObject *obj, GeanyDocument *doc)
 {
 	if (!on_idle_auto_sort_hooked && interface_prefs.show_notebook_tabs &&
 		(interface_prefs.auto_sort_tabs_filename || interface_prefs.auto_sort_tabs_pathname))
