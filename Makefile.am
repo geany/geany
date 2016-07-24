@@ -50,7 +50,6 @@ if MINGW
 	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(prefix)/Readme.txt
 	$(INSTALL_DATA) $(srcdir)/NEWS $(DESTDIR)$(prefix)/News.txt
 	$(INSTALL_DATA) $(srcdir)/THANKS $(DESTDIR)$(prefix)/Thanks.txt
-	$(INSTALL_DATA) $(srcdir)/TODO $(DESTDIR)$(prefix)/Todo.txt
 endif
 
 dist-hook:

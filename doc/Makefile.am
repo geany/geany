@@ -32,8 +32,7 @@ doc_DATA = \
 	$(top_srcdir)/COPYING \
 	$(top_srcdir)/NEWS \
 	$(top_srcdir)/README \
-	$(top_srcdir)/THANKS \
-	$(top_srcdir)/TODO
+	$(top_srcdir)/THANKS
 
 DOCDIR = $(DESTDIR)$(docdir)
 
