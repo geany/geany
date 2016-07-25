@@ -15,9 +15,9 @@
 #include "general.h"	/* must always come first */
 
 #include <string.h>
-#include <mio/mio.h>
 
 
+#include "mio.h"
 #include "entry.h"
 #include "main.h"
 #define OPTION_WRITE

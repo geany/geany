@@ -17,8 +17,8 @@
 #include <limits.h>
 #include <ctype.h>	/* to define tolower () */
 #include <setjmp.h>
-#include <mio/mio.h>
 
+#include "mio.h"
 #include "entry.h"
 #include "keyword.h"
 #include "main.h"

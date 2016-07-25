@@ -18,13 +18,13 @@ import re
 UPSTREAM_TAG_DEFINITION = 'http://doc.php.net/downloads/json/php_manual_en.json'
 PROTOTYPE_RE = r'^(?P<return_type>.*) {tag_name}(?P<arg_list>\(.*\))$'
 
-# (from tagmanager/src/tm_tag.c:90)
+# (from src/tagmanager/tm_tag.c:90)
 TA_NAME = 200
 TA_TYPE = 204
 TA_ARGLIST = 205
 TA_SCOPE = 206
 TA_VARTYPE = 207
-# TMTagType (tagmanager/src/tm_tag.h:49)
+# TMTagType (src/tagmanager/tm_tag.h:49)
 TYPE_CLASS = 1
 TYPE_FUNCTION = 16
 TYPE_MEMBER = 64

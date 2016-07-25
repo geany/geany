@@ -17,8 +17,8 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#include <mio/mio.h>
 
+#include "mio.h"
 #include "parse.h"
 #include "vstring.h"
 

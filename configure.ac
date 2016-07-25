@@ -147,13 +147,11 @@ AC_CONFIG_FILES([
 		icons/tango/32x32/Makefile
 		icons/tango/48x48/Makefile
 		icons/tango/scalable/Makefile
-		tagmanager/Makefile
-		tagmanager/ctags/Makefile
-		tagmanager/mio/Makefile
-		tagmanager/src/Makefile
+		ctags/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile
+		src/tagmanager/Makefile
 		plugins/Makefile
 		po/Makefile.in
 		data/Makefile

@@ -1,15 +1,11 @@
 AM_CPPFLAGS = \
 	-I$(srcdir) \
-	-I$(srcdir)/.. \
-	-I$(srcdir)/../ctags \
+	-I$(top_srcdir)/ctags/main \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
 	@LIBGEANY_CFLAGS@
-
-EXTRA_DIST = \
-	makefile.win32
 
 noinst_LTLIBRARIES = libtagmanager.la
 
@@ -33,4 +29,4 @@ libtagmanager_la_SOURCES =\
 	tm_ctags_wrappers.h \
 	tm_ctags_wrappers.c
 
-libtagmanager_la_LIBADD = ../ctags/libctags.la $(GTK_LIBS)
+libtagmanager_la_LIBADD = $(top_builddir)/ctags/libctags.la $(GTK_LIBS)
