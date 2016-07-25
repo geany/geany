@@ -38,10 +38,10 @@ Packages are available for most distributions including Debian, Fedora, Ubuntu
 and many more.
 
 
-Installation on Mac OSX and Windows
------------------------------------
-Prebuilt binary packages for Mac OSX and Windows can be found on
-http://www.geany.org
+Installation on Mac OS and Windows
+----------------------------------
+Prebuilt binary packages for Mac OS and Windows can be found on
+http://www.geany.org.
 
 
 Installation from sources
@@ -70,7 +70,7 @@ and open the online version instead when requested.
 
 
 .. note::
-    Building Geany from source on Mac OSX and Windows is more complicated
+    Building Geany from source on Mac OS and Windows is more complicated
     and is out of scope of this document. For more information on
     building instructions for these platforms, please check the wiki
     at http://wiki.geany.org/howtos/.
@@ -94,7 +94,7 @@ Run the the following three commands::
     (as root, or using sudo)
     % make install
 
-For more configuration details run ``./configure --help``
+For more configuration details run ``./configure --help``.
 
 If there are any errors during compilation, check your build environment
 and try to find the error, otherwise contact the mailing list or one of
@@ -133,16 +133,16 @@ included with the source code of this program.
 
 Ideas, questions, patches and bug reports
 -----------------------------------------
-See http://www.geany.org/
-If you add something, or fix a bug, please send a patch (in Git or
-``diff -u`` format) to the mailing list or one of the authors. Also see
-the HACKING file.
+See http://www.geany.org/.
+If you add something, or fix a bug, please create a pull request at
+https://github.com/geany/geany/. Also see the HACKING file.
 
 
---
-2005-2016 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
-enrico(dot)troeger(at)uvena(dot)de
-nick(dot)treleaven(at)btinternet(dot)com
-lists(dot)ban(at)herbesfolles(dot)org
-mbrush(at)codebrainz(dot)ca
-frank(at)frank(dot)uvena(dot)de
+----
+
+| 2005-2016 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
+| enrico(dot)troeger(at)uvena(dot)de
+| nick(dot)treleaven(at)btinternet(dot)com
+| ban(at)herbesfolles(dot)org
+| mbrush(at)codebrainz(dot)ca
+| frank(at)frank(dot)uvena(dot)de
