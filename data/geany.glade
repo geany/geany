@@ -3382,7 +3382,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="check_symbol_auto_completion">
-                                    <property name="label" translatable="yes">Autocomplete symbols</property>
+                                    <property name="label" translatable="yes">Autocomplete symbols and keywords</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>

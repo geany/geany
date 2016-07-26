@@ -916,9 +916,10 @@ Autocompletion
 ^^^^^^^^^^^^^^
 
 Geany can offer a list of possible completions for symbols defined in the
-tags files and for all words in open documents.
+tags files, keywords of the document's language and for all words in open
+documents.
 
-The autocompletion list for symbols is presented when the first few
+The autocompletion list for symbols and keywords is presented when the first few
 characters of the symbol are typed (configurable, see `Editor Completions
 preferences`_, default 4) or when the *Complete word*
 keybinding is pressed (configurable, see `Editor keybindings`_,
@@ -2155,12 +2156,12 @@ Automatic continuation multi-line comments
     on the next line with the correct indentation based on the previous line,
     as long as the multi-line is not closed by ``*/``.
 
-Autocomplete symbols
-    When you start to type a symbol name, look for the full string to
-    allow it to be completed for you.
+Autocomplete symbols and keywords
+    When you start typing a word, Geany shows a popup with all symbols and
+    keywords starting with the typed part.
 
 Autocomplete all words in document
-    When you start to type a word, Geany will search the whole document for
+    When you start typing a word, Geany will search the whole document for
     words starting with the typed part to complete it, assuming there
     are no symbol names to show.
 
