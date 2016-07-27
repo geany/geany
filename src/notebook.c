@@ -965,14 +965,14 @@ static void gradually_sort_doc_based_on_filename(GeanyDocument *doc)
 {
 	GeanyDocument *doc_b;
 	gchar *base_a, *base_b;
-	gint pos, i, npages;
+	gint pos, i, n_pages;
 	GtkWidget *page;
 
 	base_a = get_doc_basename(doc);
 	pos = 0;
-	npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
-	for (i = 0; i < npages; ++i)
+	for (i = 0; i < n_pages; ++i)
 	{
 		page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), i);
 		doc_b = document_get_from_notebook_child(page);
@@ -1004,14 +1004,14 @@ static void gradually_sort_doc_based_on_pathname(GeanyDocument *doc)
 	GeanyDocument *doc_b;
 	GtkWidget *page;
 	gchar *base_a, *base_b, *dirname_a, *dirname_b, *path_a, *path_b;
-	gint pos, i, npages, cmp;
+	gint pos, i, n_pages, cmp;
 
 	dirname_a = get_doc_dirname(doc);
 	base_a = get_doc_basename(doc);
 	pos = 0;
-	npages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+	n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
-	for (i = 0; i < npages; ++i)
+	for (i = 0; i < n_pages; ++i)
 	{
 		page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), i);
 		doc_b = document_get_from_notebook_child(page);
