@@ -39,5 +39,5 @@ as possible from a specific Desktop Environment like KDE or GNOME.</_p>
     </screenshot>
   </screenshots>
   <update_contact>https://github.com/geany/geany</update_contact>
-  <translation type="gettext">@GETTEXT_PACKAGE@</translation>
+  <translation type="gettext">Geany</translation>
 </component>
