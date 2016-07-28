@@ -27,6 +27,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 
 /*
@@ -337,7 +338,7 @@ extern parserDefinition* HaskellParser (void)
     parserDefinition* def  = parserNew ("Haskell");
 
     def->kinds      = HaskellKinds;
-    def->kindCount  = KIND_COUNT(HaskellKinds);
+    def->kindCount  = ARRAY_SIZE(HaskellKinds);
     def->extensions = extensions;
     def->parser     = findNormalHaskellTags;
     return def;
@@ -348,7 +349,7 @@ extern parserDefinition* LiterateHaskellParser (void)
     static const char *const extensions [] = { "lhs", NULL };
     parserDefinition* def = parserNew ("Literate Haskell");
     def->kinds      = HaskellKinds;
-    def->kindCount  = KIND_COUNT(HaskellKinds);
+    def->kindCount  = ARRAY_SIZE(HaskellKinds);
     def->extensions = extensions;
     def->parser     = findLiterateHaskellTags;
     return def;

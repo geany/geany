@@ -1920,7 +1920,7 @@ extern parserDefinition* JavaScriptParser (void)
 	 * New definitions for parsing instead of regex
 	 */
 	def->kinds		= JsKinds;
-	def->kindCount	= KIND_COUNT (JsKinds);
+	def->kindCount	= ARRAY_SIZE (JsKinds);
 	def->parser		= findJsTags;
 	def->initialize = initialize;
 

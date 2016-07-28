@@ -1142,7 +1142,7 @@ extern parserDefinition *ObjcParser (void)
 	static const char *const extensions[] = { "m", "h", NULL };
 	parserDefinition *def = parserNew ("ObjectiveC");
 	def->kinds = ObjcKinds;
-	def->kindCount = KIND_COUNT (ObjcKinds);
+	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;
 	def->parser = findObjcTags;
 	def->initialize = objcInitialize;

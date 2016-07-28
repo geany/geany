@@ -19,6 +19,7 @@
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -138,7 +139,7 @@ extern parserDefinition* NsisParser (void)
 	};
 	parserDefinition* def = parserNew ("NSIS");
 	def->kinds      = NsisKinds;
-	def->kindCount  = KIND_COUNT (NsisKinds);
+	def->kindCount  = ARRAY_SIZE (NsisKinds);
 	def->extensions = extensions;
 	def->parser     = findNsisTags;
 	return def;

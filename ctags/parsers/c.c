@@ -3282,7 +3282,7 @@ extern parserDefinition* CParser (void)
 	static const char *const extensions [] = { "c", "pc", "sc", NULL };
 	parserDefinition* def = parserNew ("C");
 	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeCParser;
@@ -3301,7 +3301,7 @@ extern parserDefinition* CppParser (void)
 	};
 	parserDefinition* def = parserNew ("C++");
 	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeCppParser;
@@ -3313,7 +3313,7 @@ extern parserDefinition* JavaParser (void)
 	static const char *const extensions [] = { "java", NULL };
 	parserDefinition* def = parserNew ("Java");
 	def->kinds      = JavaKinds;
-	def->kindCount  = KIND_COUNT (JavaKinds);
+	def->kindCount  = ARRAY_SIZE (JavaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeJavaParser;
@@ -3325,7 +3325,7 @@ extern parserDefinition* DParser (void)
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
 	def->kinds      = DKinds;
-	def->kindCount  = KIND_COUNT (DKinds);
+	def->kindCount  = ARRAY_SIZE (DKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeDParser;
@@ -3337,7 +3337,7 @@ extern parserDefinition* GLSLParser (void)
 	static const char *const extensions [] = { "glsl", "frag", "vert", NULL };
 	parserDefinition* def = parserNew ("GLSL");
 	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeGLSLParser;
@@ -3349,7 +3349,7 @@ extern parserDefinition* FeriteParser (void)
 	static const char *const extensions [] = { "fe", NULL };
 	parserDefinition* def = parserNew ("Ferite");
 	def->kinds      = CKinds;
-	def->kindCount  = KIND_COUNT (CKinds);
+	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeFeriteParser;
@@ -3361,7 +3361,7 @@ extern parserDefinition* CsharpParser (void)
 	static const char *const extensions [] = { "cs", NULL };
 	parserDefinition* def = parserNew ("C#");
 	def->kinds      = CsharpKinds;
-	def->kindCount  = KIND_COUNT (CsharpKinds);
+	def->kindCount  = ARRAY_SIZE (CsharpKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeCsharpParser;
@@ -3373,7 +3373,7 @@ extern parserDefinition* ValaParser (void)
 	static const char *const extensions [] = { "vala", NULL };
 	parserDefinition* def = parserNew ("Vala");
 	def->kinds      = ValaKinds;
-	def->kindCount  = KIND_COUNT (ValaKinds);
+	def->kindCount  = ARRAY_SIZE (ValaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
 	def->initialize = initializeValaParser;

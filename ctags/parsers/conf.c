@@ -18,6 +18,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -117,7 +118,7 @@ extern parserDefinition* ConfParser (void)
     static const char *const extensions [] = { "conf", NULL };
     parserDefinition* const def = parserNew ("Conf");
     def->kinds      = ConfKinds;
-    def->kindCount  = KIND_COUNT (ConfKinds);
+    def->kindCount  = ARRAY_SIZE (ConfKinds);
     def->patterns   = patterns;
     def->extensions = extensions;
     def->parser     = findConfTags;

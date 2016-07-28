@@ -21,6 +21,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "nestlevel.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -224,7 +225,7 @@ extern parserDefinition* AsciidocParser (void)
 	parserDefinition* const def = parserNew ("Asciidoc");
 
 	def->kinds = AsciidocKinds;
-	def->kindCount = KIND_COUNT (AsciidocKinds);
+	def->kindCount = ARRAY_SIZE (AsciidocKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findAsciidocTags;

@@ -127,7 +127,7 @@ extern parserDefinition* DiffParser (void)
 	static const char *const extensions [] = { "diff", NULL };
 	parserDefinition* const def = parserNew ("Diff");
 	def->kinds      = DiffKinds;
-	def->kindCount  = KIND_COUNT (DiffKinds);
+	def->kindCount  = ARRAY_SIZE (DiffKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;
 	def->parser     = findDiffTags;

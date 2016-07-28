@@ -20,6 +20,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "nestlevel.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -200,7 +201,7 @@ extern parserDefinition* RestParser (void)
 	parserDefinition* const def = parserNew ("reStructuredText");
 
 	def->kinds = RestKinds;
-	def->kindCount = KIND_COUNT (RestKinds);
+	def->kindCount = ARRAY_SIZE (RestKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findRestTags;

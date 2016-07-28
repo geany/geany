@@ -22,6 +22,7 @@
 #include "read.h"
 #include "nestlevel.h"
 #include "vstring.h"
+#include "routines.h"
 
 
 /* as any character may happen in an input, use something highly unlikely */
@@ -188,7 +189,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	parserDefinition* const def = parserNew ("Txt2tags");
 
 	def->kinds = Txt2tagsKinds;
-	def->kindCount = KIND_COUNT (Txt2tagsKinds);
+	def->kindCount = ARRAY_SIZE (Txt2tagsKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findTxt2tagsTags;

@@ -21,6 +21,7 @@
 #include "entry.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*#define R_REGEX*/
 
@@ -191,7 +192,7 @@ extern parserDefinition* RParser (void)
   parserDefinition* const def = parserNew ("R");
 #ifndef R_REGEX
   def->kinds      = RKinds;
-  def->kindCount  = KIND_COUNT (RKinds);
+  def->kindCount  = ARRAY_SIZE (RKinds);
 #endif
   def->extensions = extensions;
 #ifndef R_REGEX

@@ -350,7 +350,7 @@ extern parserDefinition* PascalParser (void)
     parserDefinition* def = parserNew ("Pascal");
     def->extensions = extensions;
     def->kinds      = PascalKinds;
-    def->kindCount  = KIND_COUNT (PascalKinds);
+    def->kindCount  = ARRAY_SIZE (PascalKinds);
     def->parser     = findPascalTags;
     return def;
 }

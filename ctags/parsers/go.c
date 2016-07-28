@@ -833,7 +833,7 @@ extern parserDefinition *GoParser (void)
 	static const char *const extensions[] = { "go", NULL };
 	parserDefinition *def = parserNew ("Go");
 	def->kinds = GoKinds;
-	def->kindCount = KIND_COUNT (GoKinds);
+	def->kindCount = ARRAY_SIZE (GoKinds);
 	def->extensions = extensions;
 	def->parser = findGoTags;
 	def->initialize = initialize;

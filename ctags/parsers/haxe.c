@@ -23,6 +23,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
  *	 MACROS
@@ -223,7 +224,7 @@ extern parserDefinition* HaxeParser (void)
 	 * New definitions for parsing instead of regex
 	 */
 	def->kinds		= HxKinds;
-	def->kindCount	= KIND_COUNT (HxKinds);
+	def->kindCount	= ARRAY_SIZE (HxKinds);
 	def->parser		= findHxTags;
 	/*def->initialize = initialize;*/
 	return def;

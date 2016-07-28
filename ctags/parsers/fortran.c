@@ -2351,7 +2351,7 @@ extern parserDefinition* FortranParser (void)
     };
     parserDefinition* def = parserNew ("Fortran");
     def->kinds      = FortranKinds;
-    def->kindCount  = KIND_COUNT (FortranKinds);
+    def->kindCount  = ARRAY_SIZE (FortranKinds);
     def->extensions = extensions;
     def->parser2    = findFortranTags;
     def->initialize = initializeFortran;
@@ -2369,7 +2369,7 @@ extern parserDefinition* F77Parser (void)
     };
     parserDefinition* def = parserNew ("F77");
     def->kinds      = FortranKinds;
-    def->kindCount  = KIND_COUNT (FortranKinds);
+    def->kindCount  = ARRAY_SIZE (FortranKinds);
     def->extensions = extensions;
     def->parser2    = findFortranTags;
     def->initialize = initializeF77;

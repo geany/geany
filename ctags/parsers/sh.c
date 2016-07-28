@@ -105,7 +105,7 @@ extern parserDefinition* ShParser (void)
     };
     parserDefinition* def = parserNew ("Sh");
     def->kinds      = ShKinds;
-    def->kindCount  = KIND_COUNT (ShKinds);
+    def->kindCount  = ARRAY_SIZE (ShKinds);
     def->extensions = extensions;
     def->parser     = findShTags;
     return def;

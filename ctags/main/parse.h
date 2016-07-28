@@ -22,8 +22,6 @@
 /*
 *   MACROS
 */
-#define KIND_COUNT(kindTable) (sizeof(kindTable)/sizeof(kindOption))
-
 #define LANG_AUTO   (-1)
 #define LANG_IGNORE (-2)
 

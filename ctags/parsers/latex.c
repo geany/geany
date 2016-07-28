@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -237,7 +238,7 @@ extern parserDefinition* LaTeXParser (void)
 	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
 	parserDefinition * def = parserNew ("LaTeX");
 	def->kinds      = TeXKinds;
-	def->kindCount  = KIND_COUNT (TeXKinds);
+	def->kindCount  = ARRAY_SIZE (TeXKinds);
 	def->extensions = extensions;
 	def->parser     = findTeXTags;
 	return def;

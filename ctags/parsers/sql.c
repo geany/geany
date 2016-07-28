@@ -2356,7 +2356,7 @@ extern parserDefinition* SqlParser (void)
 	static const char *const extensions [] = { "sql", NULL };
 	parserDefinition* def = parserNew ("SQL");
 	def->kinds		= SqlKinds;
-	def->kindCount	= KIND_COUNT (SqlKinds);
+	def->kindCount	= ARRAY_SIZE (SqlKinds);
 	def->extensions = extensions;
 	def->parser		= findSqlTags;
 	def->initialize = initialize;

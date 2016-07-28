@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -141,7 +142,7 @@ extern parserDefinition* MatlabParser (void)
     static const char *const extensions [] = { "m", NULL };
     parserDefinition* def = parserNew ("Matlab");
     def->kinds      = MatlabKinds;
-    def->kindCount  = KIND_COUNT (MatlabKinds);
+    def->kindCount  = ARRAY_SIZE (MatlabKinds);
     def->extensions = extensions;
     def->parser     = findMatlabTags;
     return def;

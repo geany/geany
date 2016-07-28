@@ -228,7 +228,7 @@ extern parserDefinition* MakefileParser (void)
 	static const char *const extensions [] = { "mak", "mk", NULL };
 	parserDefinition* const def = parserNew ("Make");
 	def->kinds      = MakeKinds;
-	def->kindCount  = KIND_COUNT (MakeKinds);
+	def->kindCount  = ARRAY_SIZE (MakeKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;
 	def->parser     = findMakeTags;

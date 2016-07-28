@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -118,7 +119,7 @@ extern parserDefinition* AbcParser (void)
 	parserDefinition* const def = parserNew ("Abc");
 
 	def->kinds = AbcKinds;
-	def->kindCount = KIND_COUNT (AbcKinds);
+	def->kindCount = ARRAY_SIZE (AbcKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findAbcTags;

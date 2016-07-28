@@ -833,7 +833,7 @@ extern parserDefinition *PythonParser (void)
     static const char *const extensions[] = { "py", "pyx", "pxd", "pxi" ,"scons", NULL };
 	parserDefinition *def = parserNew ("Python");
 	def->kinds = PythonKinds;
-	def->kindCount = KIND_COUNT (PythonKinds);
+	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;
 	return def;

@@ -19,6 +19,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -96,7 +97,7 @@ extern parserDefinition* MarkdownParser (void)
 	parserDefinition* const def = parserNew ("Markdown");
 
 	def->kinds = MarkdownKinds;
-	def->kindCount = KIND_COUNT (MarkdownKinds);
+	def->kindCount = ARRAY_SIZE (MarkdownKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findMarkdownTags;

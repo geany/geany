@@ -249,7 +249,7 @@ parserDefinition *FreeBasicParser (void)
 	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");
 	def->kinds = BasicKinds;
-	def->kindCount = KIND_COUNT (BasicKinds);
+	def->kindCount = ARRAY_SIZE (BasicKinds);
 	def->extensions = extensions;
 	def->parser = findBasicTags;
 	return def;
