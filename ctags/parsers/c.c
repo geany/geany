@@ -1248,10 +1248,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 		}
 	}
 
-	if ((TAG_FIELD == tag->type) || (TAG_MEMBER == tag->type) ||
-		(TAG_EXTERN_VAR == tag->type) || (TAG_TYPEDEF == tag->type) ||
-		(TAG_VARIABLE == tag->type) || (TAG_METHOD == tag->type) ||
-		(TAG_PROTOTYPE == tag->type) || (TAG_FUNCTION == tag->type))
+	if ((TAG_FIELD == type) || (TAG_MEMBER == type) ||
+		(TAG_EXTERN_VAR == type) || (TAG_TYPEDEF == type) ||
+		(TAG_VARIABLE == type) || (TAG_METHOD == type) ||
+		(TAG_PROTOTYPE == type) || (TAG_FUNCTION == type))
 	{
 		if (((TOKEN_NAME == st->firstToken->type) || isDataTypeKeyword(st->firstToken))
 			&& (0 != strcmp(vStringValue(st->firstToken->name), tag->name)))
@@ -1475,7 +1475,6 @@ static void makeTag (const tokenInfo *const token,
 		e.isFileScope = isFileScope;
 		e.kindName	= tagName (type);
 		e.kind		= tagLetter (type);
-		e.type = type;
 
 		findScopeHierarchy (scope, st);
 		addOtherFields (&e, type, token, st, scope);

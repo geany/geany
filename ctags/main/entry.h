@@ -72,7 +72,6 @@ typedef struct sTagEntryInfo {
 	const char *arglist; /* Argument list for functions and macros with arguments */
 	const char *varType;
     } extensionFields;		/* list of extension fields*/
-	int type;
 } tagEntryInfo;
 
 /*
