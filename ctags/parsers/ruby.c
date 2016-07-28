@@ -17,10 +17,12 @@
 
 #include <string.h>
 
+#include "debug.h"
 #include "entry.h"
 #include "parse.h"
 #include "nestlevel.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*

@@ -2,10 +2,12 @@
  *	 Copyright (c) 2003, Darren Hiebert
  *
  *	 This source code is released for free distribution under the terms of the
- *	 GNU General Public License.
+ *	 GNU General Public License version 2 or (at your option) any later version.
  *
  *	 This module contains functions for generating tags for JavaScript language
  *	 files.
+ *
+ *	 Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
  *
  *	 This is a good reference for different forms of the function statement:
  *		 http://www.permadi.com/tutorial/jsFunc/
@@ -23,11 +25,13 @@
 #include <stdio.h>
 #endif
 
+#include "debug.h"
 #include "mio.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
 #include "main.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*

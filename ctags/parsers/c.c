@@ -1,11 +1,10 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains functions for parsing and scanning C, C++, D and Java
+*   This module contains functions for parsing and scanning C, C++, C#, D and Java
 *   source files.
 */
 
@@ -17,6 +16,7 @@
 #include <string.h>
 #include <setjmp.h>
 
+#include "debug.h"
 #include "mio.h"
 #include "entry.h"
 #include "get.h"
@@ -25,6 +25,8 @@
 #include "options.h"
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
+#include "xtag.h"
 
 /*
 *   MACROS

@@ -3,7 +3,7 @@
 *   Copyright (c) 2010, Vincent Berthoux
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Objective C
 *   language files.
@@ -19,6 +19,7 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /* To get rid of unused parameter warning in

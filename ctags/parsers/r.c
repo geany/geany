@@ -2,7 +2,7 @@
 *   Copyright (c) 2003-2004, Ascher Stefan <stievie@utanet.at>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for R language files.
 *   R is a programming language for statistical computing.
@@ -12,11 +12,12 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"  /* must always come first */
+#include "general.h"	/* must always come first */
 
 #include <string.h>
-#include <ctype.h>  /* to define isalpha(), isalnum(), isspace() */
+#include <ctype.h>	/* to define isalpha(), isalnum(), isspace() */
 
+#include "debug.h"
 #include "entry.h"
 #include "read.h"
 #include "vstring.h"

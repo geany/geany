@@ -2,7 +2,7 @@
  * Copyright (c) 2014, Colomban Wendling <colomban@geany.org>
  *
  * This source code is released for free distribution under the terms of the
- * GNU General Public License.
+ * GNU General Public License version 2 or (at your option) any later version.
  */
 /*
  * This module contains functions for generating tags for JSON files.
@@ -17,11 +17,13 @@
 #include "general.h"
 
 #include <string.h>
+#include "debug.h"
 #include "main.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 typedef enum {

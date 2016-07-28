@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for PERL language
 *   files.
@@ -12,6 +12,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "debug.h"
 
 #include <string.h>
 
@@ -19,7 +20,9 @@
 #include "options.h"
 #include "read.h"
 #include "main.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 #define TRACE_PERL_C 0
 #define TRACE if (TRACE_PERL_C) printf("perl.c:%d: ", __LINE__), printf

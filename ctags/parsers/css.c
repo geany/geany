@@ -2,6 +2,7 @@
  * css.c
  * Token-based parser for CSS definitions
  * Author - Colomban Wendling <colomban@geany.org>
+ * License GPL-2
  **************************************************************************/
 #include "general.h"
 
@@ -11,7 +12,7 @@
 #include "entry.h"
 #include "parse.h" 
 #include "read.h" 
-
+#include "routines.h"
 
 typedef enum eCssKinds {
 	K_CLASS, K_SELECTOR, K_ID

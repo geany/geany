@@ -57,6 +57,7 @@ libctags_la_SOURCES = \
 	main/args.h \
 	main/ctags.c \
 	main/ctags.h \
+	main/debug.h \
 	main/entry.c \
 	main/entry.h \
 	main/general.h \
@@ -77,10 +78,12 @@ libctags_la_SOURCES = \
 	main/parsers.h \
 	main/read.c \
 	main/read.h \
+	main/routines.h \
 	main/sort.c \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
 	main/vstring.c \
 	main/vstring.h \
+	main/xtag.h \
 	$(parsers)

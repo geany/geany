@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Python language
 *   files.
@@ -15,11 +15,14 @@
 #include <string.h>
 
 #include "entry.h"
+#include "nestlevel.h"
 #include "options.h"
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
-#include "nestlevel.h"
+#include "routines.h"
+#include "debug.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS

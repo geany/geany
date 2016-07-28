@@ -1,10 +1,8 @@
 /*
- *	$Id$
- *
  *	Copyright (c) 2002-2003, Darren Hiebert
  *
  *	This source code is released for free distribution under the terms of the
- *	GNU General Public License.
+ *	GNU General Public License version 2 or (at your option) any later version.
  *
  *	This module contains functions for generating tags for PL/SQL language
  *	files.
@@ -21,11 +19,13 @@
 #include <stdio.h>
 #endif
 
+#include "debug.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"
 #include "main.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*

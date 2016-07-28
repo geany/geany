@@ -1,12 +1,12 @@
 /*
 *   Copyright (c) 2003, Darren Hiebert
-*
+* 
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
-*
+*   GNU General Public License version 2 or (at your option) any later version.
+* 
 *   This module contains functions for generating tags for the Verilog HDL
 *   (Hardware Description Language).
-*
+* 
 *   Language definition documents:
 *       http://www.eg.bucknell.edu/~cs320/verilog/verilog-manual.html
 *       http://www.sutherland-hdl.com/on-line_ref_guide/vlog_ref_top.html
@@ -22,11 +22,14 @@
 #include <string.h>
 #include <setjmp.h>
 
+#include "debug.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
 #include "get.h"
+#include "routines.h"
+#include "xtag.h"
 
 /*
  *   DATA DECLARATIONS

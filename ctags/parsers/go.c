@@ -1,14 +1,20 @@
 /*
+*   This source code is released for free distribution under the terms of the
+*   GNU General Public License version 2 or (at your option) any later version.
+*
 *   INCLUDE FILES
 */
 #include "general.h"        /* must always come first */
 
+#include "debug.h"
 #include "entry.h"
 #include "keyword.h"
 #include "read.h"
 #include "main.h"
+#include "routines.h"
 #include "vstring.h"
 #include "options.h"
+#include "xtag.h"
 
 /*
  *	 MACROS
