@@ -17,7 +17,7 @@ WIN32_BUILD_FILES = \
 EXTRA_DIST = \
 	autogen.sh \
 	scripts/gen-api-gtkdoc.py \
-	geany.appdata.xml.in.in \
+	geany.appdata.xml.in \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
