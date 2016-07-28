@@ -317,12 +317,12 @@ static void makeDefineTag (const char *const name, boolean parameterized)
 		e.kind         = 'd';
 		if (parameterized)
 		{
-			e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
+			e.extensionFields.signature = getArglistFromFilePos(getInputFilePosition()
 					, e.name);
 		}
 		makeTagEntry (&e);
 		if (parameterized)
-			free((char *) e.extensionFields.arglist);
+			free((char *) e.extensionFields.signature);
 	}
 }
 

@@ -381,7 +381,7 @@ static void makeFunctionTag (const tokenInfo *const token,
 		if (impl != IMPL_UNDEFINED)
 			e.extensionFields.implementation = implToString (impl);
 		if (arglist)
-			e.extensionFields.arglist = vStringValue (arglist);
+			e.extensionFields.signature = vStringValue (arglist);
 
 		makeTagEntry (&e);
 	}

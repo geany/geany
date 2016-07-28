@@ -139,7 +139,7 @@ static void makeFunctionTag (const tokenInfo *const token, const vString *const 
 		initPowerShellEntry (&e, token, K_FUNCTION, access);
 
 		if (arglist)
-			e.extensionFields.arglist = vStringValue (arglist);
+			e.extensionFields.signature = vStringValue (arglist);
 
 		makeTagEntry (&e);
 	}

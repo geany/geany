@@ -47,7 +47,7 @@ static void createPascalTag (tagEntryInfo* const tag,
 
         tag->kindName = PascalKinds [kind].name;
         tag->kind     = PascalKinds [kind].letter;
-        tag->extensionFields.arglist = arglist;
+        tag->extensionFields.signature = arglist;
         tag->extensionFields.varType = vartype;
     }
     else

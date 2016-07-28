@@ -114,7 +114,7 @@ static void makeFunctionTag (vString *const function,
 
 	tag.kindName = PythonKinds[K_FUNCTION].name;
 	tag.kind = PythonKinds[K_FUNCTION].letter;
-	tag.extensionFields.arglist = arglist;
+	tag.extensionFields.signature = arglist;
 
 	if (vStringLength (parent) > 0)
 	{

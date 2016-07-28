@@ -1241,7 +1241,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
             if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				tag->extensionFields.arglist = getArglistFromFilePos(
+				tag->extensionFields.signature = getArglistFromFilePos(
 						tag->filePosition, tag->name);
 			}
 			break;
@@ -1486,8 +1486,8 @@ static void makeTag (const tokenInfo *const token,
 		if (NULL != TagEntryFunction)
 			makeExtraTagEntry (type, &e, scope);
 		vStringDelete (scope);
-		if (NULL != e.extensionFields.arglist)
-			free((char *) e.extensionFields.arglist);
+		if (NULL != e.extensionFields.signature)
+			free((char *) e.extensionFields.signature);
 	}
 }
 

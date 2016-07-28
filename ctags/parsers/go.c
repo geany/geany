@@ -543,7 +543,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	e.kindName = GoKinds [kind].name;
 	e.kind = GoKinds [kind].letter;
 	if (argList)
-		e.extensionFields.arglist = argList;
+		e.extensionFields.signature = argList;
 	if (varType)
 		e.extensionFields.varType = varType;
 

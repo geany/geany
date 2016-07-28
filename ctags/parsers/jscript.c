@@ -274,7 +274,7 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 				if (c < 0x20 /* below space */ || c == 0x7F /* DEL */)
 					signature->buffer[i] = ' ';
 			}
-			e.extensionFields.arglist = vStringValue(signature);
+			e.extensionFields.signature = vStringValue(signature);
 		}
 
 		makeTagEntry (&e);

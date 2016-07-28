@@ -447,7 +447,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	tag.kindName = rustKinds[kind].name;
 	tag.kind = rustKinds[kind].letter;
 
-	tag.extensionFields.arglist = arg_list;
+	tag.extensionFields.signature = arg_list;
 	tag.extensionFields.varType = type;
 	if (parent_kind != K_NONE)
 	{
