@@ -162,6 +162,7 @@ AC_CONFIG_FILES([
 		geany.spec
 		geany.pc
 		geany.nsi
+		geany.appdata.xml.in
 		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile
