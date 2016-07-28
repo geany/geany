@@ -46,6 +46,11 @@ typedef struct sKindOption {
 } kindOption;
 
 typedef struct {
+	const char *name;
+	const int id;
+} keywordTable;
+
+typedef struct {
     /* defined by parser */
     char* name;				/* name of language */
     kindOption* kinds;			/* tag kinds handled by parser */

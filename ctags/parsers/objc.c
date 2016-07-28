@@ -111,13 +111,7 @@ typedef enum {
 
 typedef objcKeyword objcToken;
 
-typedef struct sOBjcKeywordDesc {
-	const char *name;
-	objcKeyword id;
-} objcKeywordDesc;
-
-
-static const objcKeywordDesc objcKeywordTable[] = {
+static const keywordTable objcKeywordTable[] = {
 	{"typedef", ObjcTYPEDEF},
 	{"struct", ObjcSTRUCT},
 	{"enum", ObjcENUM},
@@ -152,7 +146,7 @@ typedef struct _lexingState {
 
 static void initKeywordHash (void)
 {
-	const size_t count = sizeof (objcKeywordTable) / sizeof (objcKeywordDesc);
+	const size_t count = sizeof (objcKeywordTable) / sizeof (keywordTable);
 	size_t i;
 
 	for (i = 0; i < count; ++i)

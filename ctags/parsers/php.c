@@ -125,12 +125,7 @@ static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'v', "variable",	"variables" }
 };
 
-typedef struct {
-	const char *name;
-	keywordId id;
-} keywordDesc;
-
-static const keywordDesc PhpKeywordTable[] = {
+static const keywordTable PhpKeywordTable[] = {
 	/* keyword			keyword ID */
 	{ "abstract",		KEYWORD_abstract		},
 	{ "and",			KEYWORD_and				},
@@ -249,7 +244,7 @@ static void buildPhpKeywordHash (const langType language)
 	size_t i;
 	for (i = 0; i < count ; i++)
 	{
-		const keywordDesc* const p = &PhpKeywordTable[i];
+		const keywordTable* const p = &PhpKeywordTable[i];
 		addKeyword (p->name, language, (int) p->id);
 	}
 }

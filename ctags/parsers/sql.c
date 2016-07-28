@@ -130,15 +130,6 @@ typedef enum eKeywordId {
 	KEYWORD_go
 } keywordId;
 
-/*
- * Used to determine whether keyword is valid for the token language and
- *	what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
-
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
 	TOKEN_BLOCK_LABEL_BEGIN,
@@ -236,7 +227,7 @@ static kindOption SqlKinds [] = {
 	{ TRUE,  'z', "mlprop",		  "MobiLink Properties "   }
 };
 
-static const keywordDesc SqlKeywordTable [] = {
+static const keywordTable SqlKeywordTable [] = {
 	/* keyword		keyword ID */
 	{ "as",								KEYWORD_is				      },
 	{ "is",								KEYWORD_is				      },
@@ -412,7 +403,7 @@ static void buildSqlKeywordHash (void)
 	size_t i;
 	for (i = 0	;  i < count  ;  ++i)
 	{
-		const keywordDesc* const p = &SqlKeywordTable [i];
+		const keywordTable* const p = &SqlKeywordTable [i];
 		addKeyword (p->name, Lang_sql, (int) p->id);
 	}
 }

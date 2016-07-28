@@ -76,14 +76,6 @@ typedef enum eKeywordId {
 	KEYWORD_return
 } keywordId;
 
-/*	Used to determine whether keyword is valid for the token language and
- *	what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
-
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
 	TOKEN_EOF,
@@ -147,7 +139,7 @@ static kindOption JsKinds [] = {
 	{ TRUE,  'v', "variable",	  "global variables"   }
 };
 
-static const keywordDesc JsKeywordTable [] = {
+static const keywordTable JsKeywordTable [] = {
 	/* keyword		keyword ID */
 	{ "function",	KEYWORD_function			},
 	{ "Function",	KEYWORD_capital_function	},
@@ -195,7 +187,7 @@ static void buildJsKeywordHash (void)
 	size_t i;
 	for (i = 0	;  i < count  ;  ++i)
 	{
-		const keywordDesc* const p = &JsKeywordTable [i];
+		const keywordTable* const p = &JsKeywordTable [i];
 		addKeyword (p->name, Lang_js, (int) p->id);
 	}
 }

@@ -144,14 +144,6 @@ typedef enum eKeywordId {
 	KEYWORD_while
 } keywordId;
 
-/*  Used to determine whether keyword is valid for the token language and
- *  what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
-
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
 	TOKEN_COMMA,
@@ -244,7 +236,7 @@ static kindOption FortranKinds [TAG_COUNT] = {
  * http://h18009.www1.hp.com/fortran/docs/lrm/dflrm.htm
  */
 
-static const keywordDesc FortranKeywordTable [] = {
+static const keywordTable FortranKeywordTable [] = {
 	/* keyword          keyword ID */
 	{ "allocatable",    KEYWORD_allocatable  },
 	{ "assignment",     KEYWORD_assignment   },
@@ -431,7 +423,7 @@ static void buildFortranKeywordHash (const langType language)
 	size_t i;
 	for (i = 0  ;  i < count  ;  ++i)
 	{
-		const keywordDesc* const p = &FortranKeywordTable [i];
+		const keywordTable* const p = &FortranKeywordTable [i];
 		addKeyword (p->name, language, (int) p->id);
 	}
 }

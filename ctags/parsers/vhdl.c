@@ -50,11 +50,6 @@ typedef enum {
     K_ALIAS
 } vhdlKind;
 
-typedef struct {
-    const char *keyword;
-    vhdlKind kind;
-} keywordAssoc;
-
 /*
  *   DATA DEFINITIONS
  */
@@ -84,7 +79,7 @@ static kindOption VhdlKinds [] = {
  { TRUE, 'A', "typedef",      "alias" }
  };
 
-static keywordAssoc VhdlKeywordTable [] = {
+static keywordTable VhdlKeywordTable [] = {
     { "constant",     K_CONSTANT },
     { "variable",     K_VARIABLE },
     { "type",         K_TYPE },
@@ -117,8 +112,8 @@ static void initialize (const langType language)
     Lang_vhdl = language;
     for (i = 0  ;  i < count  ;  ++i)
     {
-		const keywordAssoc* const p = &VhdlKeywordTable [i];
-		addKeyword (p->keyword, language, (int) p->kind);
+		const keywordTable* const p = &VhdlKeywordTable [i];
+		addKeyword (p->name, language, (int) p->id);
     }
 }
 

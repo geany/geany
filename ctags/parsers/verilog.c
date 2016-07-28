@@ -48,11 +48,6 @@ typedef enum {
 	K_TASK
 } verilogKind;
 
-typedef struct {
-	const char *keyword;
-	verilogKind kind;
-} keywordAssoc;
-
 /*
  *   DATA DEFINITIONS
  */
@@ -71,7 +66,7 @@ static kindOption VerilogKinds [] = {
  { TRUE, 't', "task",      "tasks" }
 };
 
-static keywordAssoc VerilogKeywordTable [] = {
+static keywordTable VerilogKeywordTable [] = {
 	{ "`define",   K_CONSTANT },
 	{ "event",     K_EVENT },
 	{ "function",  K_FUNCTION },
@@ -112,8 +107,8 @@ static void initialize (const langType language)
 	Lang_verilog = language;
 	for (i = 0  ;  i < count  ;  ++i)
 	{
-		const keywordAssoc* const p = &VerilogKeywordTable [i];
-		addKeyword (p->keyword, language, (int) p->kind);
+		const keywordTable* const p = &VerilogKeywordTable [i];
+		addKeyword (p->name, language, (int) p->id);
 	}
 }
 

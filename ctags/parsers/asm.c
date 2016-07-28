@@ -52,11 +52,6 @@ typedef enum {
 } opKeyword;
 
 typedef struct {
-	const char *operator;
-	opKeyword keyword;
-} asmKeyword;
-
-typedef struct {
 	opKeyword keyword;
 	AsmKind kind;
 } opKind;
@@ -73,7 +68,7 @@ static kindOption AsmKinds [] = {
 	{ TRUE, 't', "type",   "types (structs and records)"   }
 };
 
-static const asmKeyword AsmKeywords [] = {
+static const keywordTable AsmKeywords [] = {
 	{ "align",    OP_ALIGN       },
 	{ "endmacro", OP_ENDMACRO    },
 	{ "endm",     OP_ENDM        },
@@ -121,8 +116,8 @@ static void buildAsmKeywordHash (void)
 	size_t i;
 	for (i = 0  ;  i < count  ;  ++i)
 	{
-		const asmKeyword* const p = AsmKeywords + i;
-		addKeyword (p->operator, Lang_asm, (int) p->keyword);
+		const keywordTable* const p = AsmKeywords + i;
+		addKeyword (p->name, Lang_asm, (int) p->id);
 	}
 }
 
