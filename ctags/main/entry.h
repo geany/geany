@@ -55,7 +55,6 @@ typedef struct sTagEntryInfo {
     boolean	lineNumberEntry;/* pattern or line number entry */
     unsigned long lineNumber;	/* line number of tag */
     MIOPos	filePosition;	/* file position of line containing tag */
-    int bufferPosition;		/* buffer position of line containing tag */
     const char*	language;	/* language of source file */
     boolean	isFileScope;	/* is tag visible only within source file? */
     boolean	isFileEntry;	/* is this just an entry for a file name? */
@@ -74,7 +73,6 @@ typedef struct sTagEntryInfo {
 	const char *varType;
     } extensionFields;		/* list of extension fields*/
 	int type;
-	unsigned long seekPosition;
 } tagEntryInfo;
 
 /*
