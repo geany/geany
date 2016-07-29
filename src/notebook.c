@@ -961,7 +961,7 @@ void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void gradually_sort_doc_based_on_filename(GeanyDocument *doc)
+static void gradually_sort_tab_based_on_filename(GeanyDocument *doc)
 {
 	GeanyDocument *doc_b;
 	gchar *base_a, *base_b;
@@ -999,7 +999,7 @@ static void gradually_sort_doc_based_on_filename(GeanyDocument *doc)
 }
 
 
-static void gradually_sort_doc_based_on_pathname(GeanyDocument *doc)
+static void gradually_sort_tab_based_on_pathname(GeanyDocument *doc)
 {
 	GeanyDocument *doc_b;
 	GtkWidget *page;
@@ -1062,9 +1062,9 @@ static void on_document_open(GObject *obj, GeanyDocument *doc)
 	if (interface_prefs.show_notebook_tabs)
 	{
 		if (interface_prefs.auto_sort_tabs_filename)
-			gradually_sort_doc_based_on_filename(doc);
+			gradually_sort_tab_based_on_filename(doc);
 		else if (interface_prefs.auto_sort_tabs_pathname)
-			gradually_sort_doc_based_on_pathname(doc);
+			gradually_sort_tab_based_on_pathname(doc);
 	}
 }
 
@@ -1080,9 +1080,9 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 	if (doc_saves_to_new_file && interface_prefs.show_notebook_tabs)
 	{
 		if (interface_prefs.auto_sort_tabs_filename)
-			gradually_sort_doc_based_on_filename(doc);
+			gradually_sort_tab_based_on_filename(doc);
 		else if (interface_prefs.auto_sort_tabs_pathname)
-			gradually_sort_doc_based_on_pathname(doc);
+			gradually_sort_tab_based_on_pathname(doc);
 	}
 }
 
