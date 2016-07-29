@@ -31,17 +31,6 @@ inputFile File;                 /* globally read through macros */
 static MIOPos StartOfLine;      /* holds deferred position of start of line */
 
 
-
-/* Read a character choosing automatically between file or buffer, depending
- * on which mode we are.
- */
-#define readNextChar() (mio_getc (File.fp))
-
-/* Replaces ungetc() for file. In case of buffer we'll perform the same action:
- * fpBufferPosition-- and write of the param char into the buf.
- */
-#define pushBackChar(c) (mio_ungetc (File.fp, c))
-
 /*
 *   FUNCTION DEFINITIONS
 */
@@ -127,7 +116,7 @@ static int skipWhite (void)
 {
 	int c;
 	do
-		c = readNextChar ();
+		c = mio_getc (File.fp);
 	while (c == ' '  ||  c == '\t');
 	return c;
 }
@@ -139,9 +128,9 @@ static unsigned long readLineNumber (void)
 	while (c != EOF  &&  isdigit (c))
 	{
 		lNum = (lNum * 10) + (c - '0');
-		c = readNextChar ();
+		c = mio_getc (File.fp);
 	}
-	pushBackChar (c);
+	mio_ungetc (File.fp, c);
 	if (c != ' '  &&  c != '\t')
 		lNum = 0;
 
@@ -164,17 +153,17 @@ static vString *readFileName (void)
 
 	if (c == '"')
 	{
-		c = readNextChar ();            /* skip double-quote */
+		c = mio_getc (File.fp);            /* skip double-quote */
 		quoteDelimited = TRUE;
 	}
 	while (c != EOF  &&  c != '\n'  &&
 			(quoteDelimited ? (c != '"') : (c != ' '  &&  c != '\t')))
 	{
 		vStringPut (fileName, c);
-		c = readNextChar ();
+		c = mio_getc (File.fp);
 	}
 	if (c == '\n')
-		pushBackChar (c);
+		mio_ungetc (File.fp, c);
 	vStringPut (fileName, '\0');
 
 	return fileName;
@@ -188,13 +177,13 @@ static boolean parseLineDirective (void)
 
 	if (isdigit (c))
 	{
-		pushBackChar (c);
+		mio_ungetc (File.fp, c);
 		result = TRUE;
 	}
-	else if (c == 'l'  &&  readNextChar () == 'i'  &&
-			 readNextChar () == 'n'  &&  readNextChar () == 'e')
+	else if (c == 'l'  &&  mio_getc (File.fp) == 'i'  &&
+			 mio_getc (File.fp) == 'n'  &&  mio_getc (File.fp) == 'e')
 	{
-		c = readNextChar ();
+		c = mio_getc (File.fp);
 		if (c == ' '  ||  c == '\t')
 		{
 			DebugStatement ( lineStr = "line"; )
@@ -380,7 +369,7 @@ static int iFileGetc (void)
 {
 	int c;
 readnext:
-	c = readNextChar ();
+	c = mio_getc (File.fp);
 
 	/*  If previous character was a newline, then we're starting a line.
 	 */
@@ -395,7 +384,7 @@ readnext:
 			{
 				mio_setpos (File.fp, &StartOfLine);
 
-				c = readNextChar ();
+				c = mio_getc (File.fp);
 			}
 		}
 	}
@@ -413,10 +402,10 @@ readnext:
 		 *  used forms if line breaks: LF (UNIX), CR (MacIntosh), and
 		 *  CR-LF (MS-DOS) are converted into a generic newline.
 		 */
-		const int next = readNextChar ();       /* is CR followed by LF? */
+		const int next = mio_getc (File.fp);       /* is CR followed by LF? */
 
 		if (next != NEWLINE)
-			pushBackChar (next);
+			mio_ungetc (File.fp, next);
 
 		c = NEWLINE;                            /* convert CR into newline */
 		File.newLine = TRUE;
