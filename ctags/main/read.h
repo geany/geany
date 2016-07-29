@@ -67,7 +67,7 @@ typedef struct sInputFile {
 	vString *path;      /* path of input file (if any) */
 	vString *line;      /* last line read from file */
 	const unsigned char* currentLine;   /* current line being worked on */
-	MIO     *mio;       /* stream used for reading the file */
+	MIO     *fp;        /* stream used for reading the file */
 	unsigned long lineNumber;   /* line number in the input file */
 	MIOPos  filePosition;   /* file position of current line */
 	unsigned int ungetchIdx;

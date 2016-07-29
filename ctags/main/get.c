@@ -843,25 +843,25 @@ extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
 	char *arglist = NULL;
 	long pos1, pos2;
 
-	pos2 = mio_tell(File.mio);
+	pos2 = mio_tell(File.fp);
 
-	mio_getpos(File.mio, &originalPosition);
-	mio_setpos(File.mio, &startPosition);
-	pos1 = mio_tell(File.mio);
+	mio_getpos(File.fp, &originalPosition);
+	mio_setpos(File.fp, &startPosition);
+	pos1 = mio_tell(File.fp);
 
 	if (pos2 > pos1)
 	{
 		size_t len = pos2 - pos1;
 
 		result = (char *) g_malloc(len + 1);
-		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
+		if (result != NULL && (len = mio_read(File.fp, result, 1, len)) > 0)
 		{
 			result[len] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 		}
 		g_free(result);
 	}
-	mio_setpos(File.mio, &originalPosition);
+	mio_setpos(File.fp, &originalPosition);
 	return arglist;
 }
 
