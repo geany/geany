@@ -416,18 +416,6 @@ static boolean insideInterface (void)
 	return result;
 }
 
-static void buildFortranKeywordHash (const langType language)
-{
-	const size_t count =
-			sizeof (FortranKeywordTable) / sizeof (FortranKeywordTable [0]);
-	size_t i;
-	for (i = 0  ;  i < count  ;  ++i)
-	{
-		const keywordTable* const p = &FortranKeywordTable [i];
-		addKeyword (p->name, language, (int) p->id);
-	}
-}
-
 /*
 *   Tag generation functions
 */
@@ -2331,13 +2319,11 @@ static boolean findFortranTags (const unsigned int passCount)
 static void initializeFortran (const langType language)
 {
 	Lang_fortran = language;
-	buildFortranKeywordHash (language);
 }
 
 static void initializeF77 (const langType language)
 {
 	Lang_f77 = language;
-	buildFortranKeywordHash (language);
 }
 
 extern parserDefinition* FortranParser (void)
@@ -2355,6 +2341,8 @@ extern parserDefinition* FortranParser (void)
 	def->extensions = extensions;
 	def->parser2    = findFortranTags;
 	def->initialize = initializeFortran;
+	def->keywordTable = FortranKeywordTable;
+	def->keywordCount = ARRAY_SIZE (FortranKeywordTable);
 	return def;
 }
 
@@ -2373,6 +2361,8 @@ extern parserDefinition* F77Parser (void)
 	def->extensions = extensions;
 	def->parser2    = findFortranTags;
 	def->initialize = initializeF77;
+	def->keywordTable = FortranKeywordTable;
+	def->keywordCount = ARRAY_SIZE (FortranKeywordTable);
 	return def;
 }
 /* vi:set tabstop=4 shiftwidth=4: */

@@ -238,17 +238,6 @@ static struct {
 static vString *CurrentNamespace;
 
 
-static void buildPhpKeywordHash (const langType language)
-{
-	const size_t count = sizeof (PhpKeywordTable) / sizeof (PhpKeywordTable[0]);
-	size_t i;
-	for (i = 0; i < count ; i++)
-	{
-		const keywordTable* const p = &PhpKeywordTable[i];
-		addKeyword (p->name, language, (int) p->id);
-	}
-}
-
 static const char *accessToString (const accessType access)
 {
 	static const char *const names[COUNT_ACCESS] = {
@@ -1477,13 +1466,11 @@ static void findZephirTags (void)
 static void initializePhpParser (const langType language)
 {
 	Lang_php = language;
-	buildPhpKeywordHash (language);
 }
 
 static void initializeZephirParser (const langType language)
 {
 	Lang_zephir = language;
-	buildPhpKeywordHash (language);
 }
 
 extern parserDefinition* PhpParser (void)
@@ -1495,6 +1482,8 @@ extern parserDefinition* PhpParser (void)
 	def->extensions = extensions;
 	def->parser     = findPhpTags;
 	def->initialize = initializePhpParser;
+	def->keywordTable = PhpKeywordTable;
+	def->keywordCount = ARRAY_SIZE (PhpKeywordTable);
 	return def;
 }
 
@@ -1507,6 +1496,8 @@ extern parserDefinition* ZephirParser (void)
 	def->extensions = extensions;
 	def->parser     = findZephirTags;
 	def->initialize = initializeZephirParser;
+	def->keywordTable = PhpKeywordTable;
+	def->keywordCount = ARRAY_SIZE (PhpKeywordTable);
 	return def;
 }
 

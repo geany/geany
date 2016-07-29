@@ -396,18 +396,6 @@ static boolean isMatchedEnd(tokenInfo *const token, int nest_lvl)
 	return terminated;
 }
 
-static void buildSqlKeywordHash (void)
-{
-	const size_t count = sizeof (SqlKeywordTable) /
-		sizeof (SqlKeywordTable [0]);
-	size_t i;
-	for (i = 0	;  i < count  ;  ++i)
-	{
-		const keywordTable* const p = &SqlKeywordTable [i];
-		addKeyword (p->name, Lang_sql, (int) p->id);
-	}
-}
-
 static tokenInfo *newToken (void)
 {
 	tokenInfo *const token = xMalloc (1, tokenInfo);
@@ -2335,9 +2323,8 @@ static void parseSqlFile (tokenInfo *const token)
 
 static void initialize (const langType language)
 {
-	Assert (sizeof (SqlKinds) / sizeof (SqlKinds [0]) == SQLTAG_COUNT);
+	Assert (ARRAY_SIZE (SqlKinds) == SQLTAG_COUNT);
 	Lang_sql = language;
-	buildSqlKeywordHash ();
 }
 
 static void findSqlTags (void)
@@ -2360,6 +2347,8 @@ extern parserDefinition* SqlParser (void)
 	def->extensions = extensions;
 	def->parser		= findSqlTags;
 	def->initialize = initialize;
+	def->keywordTable = SqlKeywordTable;
+	def->keywordCount = ARRAY_SIZE (SqlKeywordTable);
 	return def;
 }
 

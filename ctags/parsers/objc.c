@@ -144,18 +144,6 @@ typedef struct _lexingState {
 	const unsigned char *cp;	/* position in stream */
 } lexingState;
 
-static void initKeywordHash (void)
-{
-	const size_t count = sizeof (objcKeywordTable) / sizeof (keywordTable);
-	size_t i;
-
-	for (i = 0; i < count; ++i)
-	{
-		addKeyword (objcKeywordTable[i].name, Lang_ObjectiveC,
-			(int) objcKeywordTable[i].id);
-	}
-}
-
 /*//////////////////////////////////////////////////////////////////////
 //// Lexing                                     */
 static boolean isNum (char c)
@@ -1133,8 +1121,6 @@ static void findObjcTags (void)
 static void objcInitialize (const langType language)
 {
 	Lang_ObjectiveC = language;
-
-	initKeywordHash ();
 }
 
 extern parserDefinition *ObjcParser (void)
@@ -1146,6 +1132,7 @@ extern parserDefinition *ObjcParser (void)
 	def->extensions = extensions;
 	def->parser = findObjcTags;
 	def->initialize = objcInitialize;
-
+	def->keywordTable = objcKeywordTable;
+	def->keywordCount = ARRAY_SIZE (objcKeywordTable);
 	return def;
 }

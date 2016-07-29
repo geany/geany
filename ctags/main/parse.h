@@ -65,6 +65,11 @@ typedef struct {
 	boolean enabled;            /* currently enabled? */
 	stringList* currentPatterns;    /* current list of file name patterns */
 	stringList* currentExtensions;  /* current list of extensions */
+	const keywordTable *keywordTable;
+	unsigned int keywordCount;
+
+	unsigned int initialized:1;    /* initialize() is called or not */
+	unsigned int keywordInstalled:1;  /* keywordTable is installed or not. */
 } parserDefinition;
 
 typedef parserDefinition* (parserDefinitionFunc) (void);
@@ -113,6 +118,8 @@ extern void processLanguageDefineOption (const char *const option, const char *c
 extern boolean processKindOption (const char *const option, const char *const parameter);
 extern void printKindOptions (void);
 extern boolean parseFile (const char *const fileName);
+
+extern void installKeywordTable (const langType language);
 
 /* Regex interface */
 #ifdef HAVE_REGEX

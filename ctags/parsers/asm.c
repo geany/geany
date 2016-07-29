@@ -110,17 +110,6 @@ static const opKind OpKinds [] = {
 /*
 *   FUNCTION DEFINITIONS
 */
-static void buildAsmKeywordHash (void)
-{
-	const size_t count = sizeof (AsmKeywords) / sizeof (AsmKeywords [0]);
-	size_t i;
-	for (i = 0  ;  i < count  ;  ++i)
-	{
-		const keywordTable* const p = AsmKeywords + i;
-		addKeyword (p->name, Lang_asm, (int) p->id);
-	}
-}
-
 static opKeyword analyzeOperator (const vString *const op)
 {
 	vString *keyword = vStringNew ();
@@ -353,7 +342,6 @@ static void findAsmTags (void)
 static void initialize (const langType language)
 {
 	Lang_asm = language;
-	buildAsmKeywordHash ();
 }
 
 extern parserDefinition* AsmParser (void)
@@ -375,6 +363,8 @@ extern parserDefinition* AsmParser (void)
 	def->patterns   = patterns;
 	def->parser     = findAsmTags;
 	def->initialize = initialize;
+	def->keywordTable = AsmKeywords;
+	def->keywordCount = ARRAY_SIZE (AsmKeywords);
 	return def;
 }
 

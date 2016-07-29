@@ -180,18 +180,6 @@ static boolean isIdentChar (const int c)
 		 c == '@' || c == '_' || c == '#');
 }
 
-static void buildJsKeywordHash (void)
-{
-	const size_t count = sizeof (JsKeywordTable) /
-		sizeof (JsKeywordTable [0]);
-	size_t i;
-	for (i = 0	;  i < count  ;  ++i)
-	{
-		const keywordTable* const p = &JsKeywordTable [i];
-		addKeyword (p->name, Lang_js, (int) p->id);
-	}
-}
-
 static tokenInfo *newToken (void)
 {
 	tokenInfo *const token = xMalloc (1, tokenInfo);
@@ -1888,9 +1876,8 @@ static void parseJsFile (tokenInfo *const token)
 
 static void initialize (const langType language)
 {
-	Assert (sizeof (JsKinds) / sizeof (JsKinds [0]) == JSTAG_COUNT);
+	Assert (ARRAY_SIZE (JsKinds) == JSTAG_COUNT);
 	Lang_js = language;
-	buildJsKeywordHash ();
 }
 
 static void findJsTags (void)
@@ -1923,6 +1910,8 @@ extern parserDefinition* JavaScriptParser (void)
 	def->kindCount	= ARRAY_SIZE (JsKinds);
 	def->parser		= findJsTags;
 	def->initialize = initialize;
+	def->keywordTable = JsKeywordTable;
+	def->keywordCount = ARRAY_SIZE (JsKeywordTable);
 
 	return def;
 }

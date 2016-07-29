@@ -106,15 +106,7 @@ static keywordTable VhdlKeywordTable [] = {
 
 static void initialize (const langType language)
 {
-	size_t i;
-	const size_t count = sizeof (VhdlKeywordTable) /
-						 sizeof (VhdlKeywordTable [0]);
 	Lang_vhdl = language;
-	for (i = 0  ;  i < count  ;  ++i)
-	{
-		const keywordTable* const p = &VhdlKeywordTable [i];
-		addKeyword (p->name, language, (int) p->id);
-	}
 }
 
 static void vUngetc (int c)
@@ -292,6 +284,8 @@ extern parserDefinition* VhdlParser (void)
 	def->extensions = extensions;
 	def->parser     = findVhdlTags;
 	def->initialize = initialize;
+	def->keywordTable = VhdlKeywordTable;
+	def->keywordCount = ARRAY_SIZE (VhdlKeywordTable);
 	return def;
 }
 

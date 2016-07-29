@@ -19,6 +19,7 @@
 
 #include "mio.h"
 #include "entry.h"
+#include "keyword.h"
 #include "main.h"
 #define OPTION_WRITE
 #include "options.h"
@@ -293,12 +294,24 @@ extern void enableLanguage (const langType language, const boolean state)
 	LanguageTable [language]->enabled = state;
 }
 
+static void initializeParserOne (langType lang)
+{
+	parserDefinition *const parser = LanguageTable [lang];
+
+	installKeywordTable (lang);
+
+	if ((parser->initialize != NULL) && (parser->initialized == FALSE))
+	{
+		parser->initialize (lang);
+		parser->initialized = TRUE;
+	}
+}
+
 static void initializeParsers (void)
 {
-	unsigned int i;
-	for (i = 0  ;  i < LanguageCount  ;  ++i)
-		if (LanguageTable [i]->initialize != NULL)
-			(LanguageTable [i]->initialize) ((langType) i);
+	int i;
+	for (i = 0; i < LanguageCount;  i++)
+		initializeParserOne(i);
 }
 
 extern void initializeParsing (void)
@@ -652,6 +665,24 @@ extern boolean parseFile (const char *const fileName)
 	addTotals (1, 0L, 0L);
 
 	return tagFileResized;
+}
+
+extern void installKeywordTable (const langType language)
+{
+	parserDefinition* lang;
+	unsigned int i;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	lang = LanguageTable [language];
+
+	if ((lang->keywordTable != NULL) && (lang->keywordInstalled == FALSE))
+	{
+		for (i = 0; i < lang->keywordCount; ++i)
+			addKeyword (lang->keywordTable [i].name,
+				    language,
+				    lang->keywordTable [i].id);
+		lang->keywordInstalled = TRUE;
+	}
 }
 
 /* vi:set tabstop=4 shiftwidth=4 nowrap: */
