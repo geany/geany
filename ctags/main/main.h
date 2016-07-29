@@ -79,4 +79,4 @@ extern char* strstr (const char *str, const char *substr);
 
 #endif	/* _MAIN_H */
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

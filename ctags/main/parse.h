@@ -13,9 +13,9 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"    /* must always come first */
 
-#include "parsers.h"	/* contains list of parsers */
+#include "parsers.h"    /* contains list of parsers */
 #include "strlist.h"
 #include "entry.h"
 
@@ -37,10 +37,10 @@ typedef void (*parserInitialize) (langType language);
 typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
 typedef struct sKindOption {
-    boolean enabled;			/* are tags for kind enabled? */
-    const int letter;			/* kind letter */
-    const char* name;			/* kind name */
-    const char* const description;	/* displayed in --help output */
+	boolean enabled;            /* are tags for kind enabled? */
+	const int letter;           /* kind letter */
+	const char* name;           /* kind name */
+	const char* const description;  /* displayed in --help output */
 } kindOption;
 
 typedef struct {
@@ -49,29 +49,29 @@ typedef struct {
 } keywordTable;
 
 typedef struct {
-    /* defined by parser */
-    char* name;				/* name of language */
-    kindOption* kinds;			/* tag kinds handled by parser */
-    unsigned int kindCount;		/* size of `kinds' list */
-    const char* const* extensions;	/* list of default extensions */
-    const char* const* patterns;	/* list of default file name patterns */
-    parserInitialize initialize;	/* initialization routine, if needed */
-    simpleParser parser;		/* simple parser (common case) */
-    rescanParser parser2;		/* rescanning parser (unusual case) */
-    boolean regex;			/* is this a regex parser? */
+	/* defined by parser */
+	char* name;             /* name of language */
+	kindOption* kinds;          /* tag kinds handled by parser */
+	unsigned int kindCount;     /* size of `kinds' list */
+	const char* const* extensions;  /* list of default extensions */
+	const char* const* patterns;    /* list of default file name patterns */
+	parserInitialize initialize;    /* initialization routine, if needed */
+	simpleParser parser;        /* simple parser (common case) */
+	rescanParser parser2;       /* rescanning parser (unusual case) */
+	boolean regex;          /* is this a regex parser? */
 
-    /* used internally */
-    unsigned int id;			/* id assigned to language */
-    boolean enabled;			/* currently enabled? */
-    stringList* currentPatterns;	/* current list of file name patterns */
-    stringList* currentExtensions;	/* current list of extensions */
+	/* used internally */
+	unsigned int id;            /* id assigned to language */
+	boolean enabled;            /* currently enabled? */
+	stringList* currentPatterns;    /* current list of file name patterns */
+	stringList* currentExtensions;  /* current list of extensions */
 } parserDefinition;
 
 typedef parserDefinition* (parserDefinitionFunc) (void);
 
 typedef struct {
-    int start;		/* character index in line where match starts */
-    size_t length;	/* length of match */
+	int start;      /* character index in line where match starts */
+	size_t length;  /* length of match */
 } regexMatch;
 
 typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsigned int count);
@@ -135,6 +135,6 @@ extern tagEntryFunction TagEntryFunction;
 extern void *TagEntryUserData;
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 
-#endif	/* _PARSE_H */
+#endif  /* _PARSE_H */
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

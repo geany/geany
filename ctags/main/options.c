@@ -11,12 +11,12 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"    /* must always come first */
 
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>	/* to declare isspace () */
+#include <ctype.h>      /* to declare isspace () */
 
 #include "ctags.h"
 #include "main.h"
@@ -26,9 +26,9 @@
 
 #include <glib.h>
 
-#define CTAGS_ENVIRONMENT	"CTAGS"
+#define CTAGS_ENVIRONMENT       "CTAGS"
 
-#define CTAGS_FILE	"tags"
+#define CTAGS_FILE      "tags"
 
 
 /*  The following separators are permitted for list options.
@@ -39,14 +39,14 @@
 #define IGNORE_SEPARATORS   ", \t\n"
 
 #ifndef DEFAULT_FILE_FORMAT
-# define DEFAULT_FILE_FORMAT	2
+# define DEFAULT_FILE_FORMAT    2
 #endif
 
 #if defined (MSDOS) || defined (WIN32) || defined (OS2) || defined (AMIGA) || defined (HAVE_OPENDIR)
 # define RECURSE_SUPPORTED
 #endif
 
-#define isCompoundOption(c)	(boolean) (strchr ("fohiILpDb", (c)) != NULL)
+#define isCompoundOption(c)     (boolean) (strchr ("fohiILpDb", (c)) != NULL)
 
 
 
@@ -55,53 +55,53 @@
 */
 
 optionValues Option = {
-    {
-	FALSE,		/* --extra=f */
-	FALSE,		/* --extra=q */
-	TRUE,		/* --file-scope */
-    },
-    {
-	TRUE,		/* -fields=a */
-	TRUE,		/* -fields=f */
-	FALSE,		/* -fields=m */
-	TRUE,		/* -fields=i */
-	FALSE,		/* -fields=k */
-	TRUE,		/* -fields=z */
-	TRUE,		/* -fields=K */
-	FALSE,		/* -fields=l */
-	TRUE,		/* -fields=n */
-	TRUE,		/* -fields=s */
-	TRUE,		/* -fields=P */
-	TRUE		/* -fields=A */
-    },
-    NULL,		/* -I */
-    FALSE,		/* -a */
-    FALSE,		/* -B */
+	{
+		FALSE,          /* --extra=f */
+		FALSE,          /* --extra=q */
+		TRUE,           /* --file-scope */
+	},
+	{
+		TRUE,           /* -fields=a */
+		TRUE,           /* -fields=f */
+		FALSE,          /* -fields=m */
+		TRUE,           /* -fields=i */
+		FALSE,          /* -fields=k */
+		TRUE,           /* -fields=z */
+		TRUE,           /* -fields=K */
+		FALSE,          /* -fields=l */
+		TRUE,           /* -fields=n */
+		TRUE,           /* -fields=s */
+		TRUE,           /* -fields=P */
+		TRUE            /* -fields=A */
+	},
+	NULL,               /* -I */
+	FALSE,              /* -a */
+	FALSE,              /* -B */
 #ifdef MACROS_USE_PATTERNS
-    EX_PATTERN,		/* -n, --excmd */
+	EX_PATTERN,         /* -n, --excmd */
 #else
-    EX_MIX,		/* -n, --excmd */
+	EX_MIX,             /* -n, --excmd */
 #endif
-    FALSE,		/* -R */
-    TRUE,		/* -u, --sort */
-    FALSE,		/* -V */
-    FALSE,		/* -x */
-    NULL,		/* -L */
-    NULL,		/* -o */
-    NULL,		/* -h */
-    NULL, 		/* --etags-include */
-    DEFAULT_FILE_FORMAT,/* --format */
-    FALSE,		/* --if0 */
-    FALSE,		/* --kind-long */
-    LANG_AUTO,		/* --lang */
-    TRUE,		/* --links */
-    FALSE,		/* --filter */
-    NULL,		/* --filter-terminator */
-    FALSE,		/* --qualified-tags */
-    FALSE,		/* --tag-relative */
-    FALSE,		/* --totals */
-    FALSE,		/* --line-directives */
-    FALSE,		/* --nest */
+	FALSE,              /* -R */
+	TRUE,               /* -u, --sort */
+	FALSE,              /* -V */
+	FALSE,              /* -x */
+	NULL,               /* -L */
+	NULL,               /* -o */
+	NULL,               /* -h */
+	NULL,               /* --etags-include */
+	DEFAULT_FILE_FORMAT,/* --format */
+	FALSE,              /* --if0 */
+	FALSE,              /* --kind-long */
+	LANG_AUTO,          /* --lang */
+	TRUE,               /* --links */
+	FALSE,              /* --filter */
+	NULL,               /* --filter-terminator */
+	FALSE,              /* --qualified-tags */
+	FALSE,              /* --tag-relative */
+	FALSE,              /* --totals */
+	FALSE,              /* --line-directives */
+	FALSE,              /* --nest */
 };
 
 
@@ -111,11 +111,11 @@ extern void verbose (const char *const format, ...)
 
 extern void freeList (stringList** const pList)
 {
-    if (*pList != NULL)
-    {
-	stringListDelete (*pList);
-	*pList = NULL;
-    }
+	if (*pList != NULL)
+	{
+		stringListDelete (*pList);
+		*pList = NULL;
+	}
 }
 
 extern void setDefaultTagFileName (void)
@@ -128,17 +128,17 @@ extern void setDefaultTagFileName (void)
  */
 extern const char *fileExtension (const char *const fileName)
 {
-    const char *extension;
-    const char *pDelimiter = NULL;
+	const char *extension;
+	const char *pDelimiter = NULL;
 
-    pDelimiter = strrchr (fileName, '.');
+	pDelimiter = strrchr (fileName, '.');
 
-    if (pDelimiter == NULL)
-	extension = "";
-    else
-	extension = pDelimiter + 1;	/* skip to first char of extension */
+	if (pDelimiter == NULL)
+		extension = "";
+	else
+		extension = pDelimiter + 1;     /* skip to first char of extension */
 
-    return extension;
+	return extension;
 }
 
 /*  Determines whether the specified file name is considered to be a header
@@ -147,7 +147,7 @@ extern const char *fileExtension (const char *const fileName)
  */
 extern boolean isIncludeFile (const char *const fileName)
 {
-    return FALSE;
+	return FALSE;
 }
 
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
@@ -158,8 +158,8 @@ gchar **c_tags_ignore = NULL;
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
 extern boolean isIgnoreToken (const char *const name,
-			      boolean *const pIgnoreParens,
-			      const char **const replacement)
+							  boolean *const pIgnoreParens,
+							  const char **const replacement)
 {
 	boolean result = FALSE;
 
@@ -217,11 +217,11 @@ extern boolean isIgnoreToken (const char *const name,
 
 void addIgnoreListFromFile (const char *const fileName)
 {
-    stringList* tokens = stringListNewFromFile (fileName);
-    if (Option.ignore == NULL)
-	Option.ignore = tokens;
-    else
-	stringListCombine (Option.ignore, tokens);
+	stringList* tokens = stringListNewFromFile (fileName);
+	if (Option.ignore == NULL)
+		Option.ignore = tokens;
+	else
+		stringListCombine (Option.ignore, tokens);
 }
 
 
@@ -233,4 +233,4 @@ void addIgnoreListFromFile (const char *const fileName)
 #define initOptions
 #define freeOptionResources
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

@@ -19,24 +19,24 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"    /* must always come first */
 #include <glib.h>
 #include <glib/gstdio.h>
 
 #ifdef HAVE_STDLIB_H
-# include <stdlib.h>		/* to declare malloc (), realloc () */
+# include <stdlib.h>            /* to declare malloc (), realloc () */
 #endif
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
 
-#include <stdio.h>		/* to declare SEEK_SET (hopefully) */
-# include <fcntl.h>		/* to declar O_RDWR, O_CREAT, O_EXCL */
-# include <unistd.h>		/* to declare mkstemp () */
+#include <stdio.h>              /* to declare SEEK_SET (hopefully) */
+# include <fcntl.h>             /* to declar O_RDWR, O_CREAT, O_EXCL */
+# include <unistd.h>            /* to declare mkstemp () */
 
 #ifdef AMIGA
-# include <dos/dosasl.h>	/* for struct AnchorPath */
-# include <clib/dos_protos.h>	/* function prototypes */
+# include <dos/dosasl.h>        /* for struct AnchorPath */
+# include <clib/dos_protos.h>   /* function prototypes */
 # define ANCHOR_BUF_SIZE 512
 # define ANCHOR_SIZE (sizeof (struct AnchorPath) + ANCHOR_BUF_SIZE)
 # ifdef __SASC
@@ -76,16 +76,16 @@
 # undef boolean
 #endif
 #ifdef HAVE_DIRECT_H
-# include <direct.h>	/* to _getcwd */
+# include <direct.h>    /* to _getcwd */
 #endif
 #ifdef HAVE_DOS_H
-# include <dos.h>	/* to declare FA_DIREC */
+# include <dos.h>       /* to declare FA_DIREC */
 #endif
 #ifdef HAVE_DIR_H
-# include <dir.h>	/* to declare findfirst () and findnext () */
+# include <dir.h>       /* to declare findfirst () and findnext () */
 #endif
 #ifdef HAVE_IO_H
-# include <io.h>	/* to declare _finddata_t in MSVC++ 4.x */
+# include <io.h>        /* to declare _finddata_t in MSVC++ 4.x */
 #endif
 
 /*  To provide timings features if available.
@@ -121,8 +121,8 @@
 /*
  *  Miscellaneous macros
  */
-#define selected(var,feature)	(((int)(var) & (int)(feature)) == (int)feature)
-#define plural(value)		(((unsigned long)(value) == 1L) ? "" : "s")
+#define selected(var,feature)   (((int)(var) & (int)(feature)) == (int)feature)
+#define plural(value)           (((unsigned long)(value) == 1L) ? "" : "s")
 
 /*
  *  Portability macros
@@ -138,34 +138,34 @@
 #endif
 
 #if defined (MSDOS_STYLE_PATH) && defined (UNIX_PATH_SEPARATOR)
-# define OUTPUT_PATH_SEPARATOR	'/'
+# define OUTPUT_PATH_SEPARATOR  '/'
 #else
-# define OUTPUT_PATH_SEPARATOR	PATH_SEPARATOR
+# define OUTPUT_PATH_SEPARATOR  PATH_SEPARATOR
 #endif
 
 /*  File type tests.
  */
 #ifndef S_ISREG
 # if defined (S_IFREG) && ! defined (AMIGA)
-#  define S_ISREG(mode)	    ((mode) & S_IFREG)
+#  define S_ISREG(mode)     ((mode) & S_IFREG)
 # else
-#  define S_ISREG(mode)	    TRUE	/* assume regular file */
+#  define S_ISREG(mode)     TRUE        /* assume regular file */
 # endif
 #endif
 
 #ifndef S_ISLNK
 # ifdef S_IFLNK
-#  define S_ISLNK(mode)	    (((mode) & S_IFMT) == S_IFLNK)
+#  define S_ISLNK(mode)     (((mode) & S_IFMT) == S_IFLNK)
 # else
-#  define S_ISLNK(mode)	    FALSE	/* assume no soft links */
+#  define S_ISLNK(mode)     FALSE       /* assume no soft links */
 # endif
 #endif
 
 #ifndef S_ISDIR
 # ifdef S_IFDIR
-#  define S_ISDIR(mode)	    (((mode) & S_IFMT) == S_IFDIR)
+#  define S_ISDIR(mode)     (((mode) & S_IFMT) == S_IFDIR)
 # else
-#  define S_ISDIR(mode)	    FALSE	/* assume no soft links */
+#  define S_ISDIR(mode)     FALSE       /* assume no soft links */
 # endif
 #endif
 
@@ -255,230 +255,230 @@ static boolean createTagsForEntry (const char *const entryName);
 
 extern const char *getExecutableName (void)
 {
-    return ExecutableName;
+	return ExecutableName;
 }
 
 #if 0
 static void setCurrentDirectory (void)
 {
 #ifdef AMIGA
-    char* const cwd = eStrdup (".");
+	char* const cwd = eStrdup (".");
 #else
-    char* const cwd = getcwd (NULL, PATH_MAX);
+	char* const cwd = getcwd (NULL, PATH_MAX);
 #endif
-    CurrentDirectory = xMalloc (strlen (cwd) + 2, char);
-    if (cwd [strlen (cwd) - (size_t) 1] == PATH_SEPARATOR)
-	strcpy (CurrentDirectory, cwd);
-    else
-	sprintf (CurrentDirectory, "%s%c", cwd, OUTPUT_PATH_SEPARATOR);
-    free (cwd);
+	CurrentDirectory = xMalloc (strlen (cwd) + 2, char);
+	if (cwd [strlen (cwd) - (size_t) 1] == PATH_SEPARATOR)
+		strcpy (CurrentDirectory, cwd);
+	else
+		sprintf (CurrentDirectory, "%s%c", cwd, OUTPUT_PATH_SEPARATOR);
+	free (cwd);
 }
 #endif
 
 extern void error (const errorSelection selection,
-		   const char *const format, ...)
+				   const char *const format, ...)
 {
-    va_list ap;
+	va_list ap;
 
-    va_start (ap, format);
-    fprintf (errout, "%s: %s", getExecutableName (),
-	    selected (selection, WARNING) ? "Warning: " : "");
-    vfprintf (errout, format, ap);
-    if (selected (selection, PERROR))
-	fprintf (errout, " : %s", g_strerror (errno));
-    fputs ("\n", errout);
-    va_end (ap);
-    if (selected (selection, FATAL))
-	exit (1);
+	va_start (ap, format);
+	fprintf (errout, "%s: %s", getExecutableName (),
+			selected (selection, WARNING) ? "Warning: " : "");
+	vfprintf (errout, format, ap);
+	if (selected (selection, PERROR))
+		fprintf (errout, " : %s", g_strerror (errno));
+	fputs ("\n", errout);
+	va_end (ap);
+	if (selected (selection, FATAL))
+		exit (1);
 }
 
 #ifndef HAVE_STRICMP
 extern int stricmp (const char *s1, const char *s2)
 {
-    int result;
-    do
-    {
-	result = toupper ((int) *s1) - toupper ((int) *s2);
-    } while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
-    return result;
+	int result;
+	do
+	{
+		result = toupper ((int) *s1) - toupper ((int) *s2);
+	} while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+	return result;
 }
 #endif
 
 #ifndef HAVE_STRNICMP
 extern int strnicmp (const char *s1, const char *s2, size_t n)
 {
-    int result;
-    do
-    {
-	result = toupper ((int) *s1) - toupper ((int) *s2);
-    } while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
-    return result;
+	int result;
+	do
+	{
+		result = toupper ((int) *s1) - toupper ((int) *s2);
+	} while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+	return result;
 }
 #endif
 
 #ifndef HAVE_STRSTR
 extern char* strstr (const char *str, const char *substr)
 {
-    const size_t length = strlen (substr);
-    const char *match = NULL;
-    const char *p;
+	const size_t length = strlen (substr);
+	const char *match = NULL;
+	const char *p;
 
-    for (p = str  ;  *p != '\0'  &&  match == NULL  ;  ++p)
-	if (strncmp (p, substr, length) == 0)
-	    match = p;
-    return (char*) match;
+	for (p = str  ;  *p != '\0'  &&  match == NULL  ;  ++p)
+		if (strncmp (p, substr, length) == 0)
+			match = p;
+	return (char*) match;
 }
 #endif
 
 extern char* eStrdup (const char* str)
 {
-    char* result = xMalloc (strlen (str) + 1, char);
-    strcpy (result, str);
-    return result;
+	char* result = xMalloc (strlen (str) + 1, char);
+	strcpy (result, str);
+	return result;
 }
 
 extern void *eMalloc (const size_t size)
 {
-    void *buffer = g_malloc (size);
+	void *buffer = g_malloc (size);
 
-    if (buffer == NULL)
-	error (FATAL, "out of memory");
+	if (buffer == NULL)
+		error (FATAL, "out of memory");
 
-    return buffer;
+	return buffer;
 }
 
 extern void *eCalloc (const size_t count, const size_t size)
 {
-    void *buffer = calloc (count, size);
+	void *buffer = calloc (count, size);
 
-    if (buffer == NULL)
-	error (FATAL, "out of memory");
+	if (buffer == NULL)
+		error (FATAL, "out of memory");
 
-    return buffer;
+	return buffer;
 }
 
 extern void *eRealloc (void *const ptr, const size_t size)
 {
-    void *buffer;
-    if (ptr == NULL)
-	buffer = eMalloc (size);
-    else
-    {
-	buffer = g_realloc (ptr, size);
-	if (buffer == NULL)
-	    error (FATAL, "out of memory");
-    }
-    return buffer;
+	void *buffer;
+	if (ptr == NULL)
+		buffer = eMalloc (size);
+	else
+	{
+		buffer = g_realloc (ptr, size);
+		if (buffer == NULL)
+			error (FATAL, "out of memory");
+	}
+	return buffer;
 }
 
 extern void eFree (void *const ptr)
 {
-    if (ptr != NULL)
-	free (ptr);
+	if (ptr != NULL)
+		free (ptr);
 }
 
 extern void toLowerString (char* str)
 {
-    while (*str != '\0')
-    {
-	*str = tolower ((int) *str);
-	++str;
-    }
+	while (*str != '\0')
+	{
+		*str = tolower ((int) *str);
+		++str;
+	}
 }
 
 extern void toUpperString (char* str)
 {
-    while (*str != '\0')
-    {
-	*str = toupper ((int) *str);
-	++str;
-    }
+	while (*str != '\0')
+	{
+		*str = toupper ((int) *str);
+		++str;
+	}
 }
 
 /*  Newly allocated string containing lower case conversion of a string.
  */
 extern char* newLowerString (const char* str)
 {
-    char* const result = xMalloc (strlen (str) + 1, char);
-    int i = 0;
-    do
-	result [i] = tolower ((int) str [i]);
-    while (str [i++] != '\0');
-    return result;
+	char* const result = xMalloc (strlen (str) + 1, char);
+	int i = 0;
+	do
+		result [i] = tolower ((int) str [i]);
+	while (str [i++] != '\0');
+	return result;
 }
 
 /*  Newly allocated string containing upper case conversion of a string.
  */
 extern char* newUpperString (const char* str)
 {
-    char* const result = xMalloc (strlen (str) + 1, char);
-    int i = 0;
-    do
-	result [i] = toupper ((int) str [i]);
-    while (str [i++] != '\0');
-    return result;
+	char* const result = xMalloc (strlen (str) + 1, char);
+	int i = 0;
+	do
+		result [i] = toupper ((int) str [i]);
+	while (str [i++] != '\0');
+	return result;
 }
 
 extern long unsigned int getFileSize (const char *const name)
 {
-    GStatBuf fileStatus;
-    unsigned long size = 0;
+	GStatBuf fileStatus;
+	unsigned long size = 0;
 
-    if (g_stat (name, &fileStatus) == 0)
-	size = fileStatus.st_size;
+	if (g_stat (name, &fileStatus) == 0)
+		size = fileStatus.st_size;
 
-    return size;
+	return size;
 }
 
 #if 0
 static boolean isSymbolicLink (const char *const name)
 {
 #if defined (MSDOS) || defined (WIN32) || defined (VMS) || defined (__EMX__) || defined (AMIGA)
-    return FALSE;
+	return FALSE;
 #else
-    GStatBuf fileStatus;
-    boolean result = FALSE;
+	GStatBuf fileStatus;
+	boolean result = FALSE;
 
-    if (g_lstat (name, &fileStatus) == 0)
-	result = (boolean) (S_ISLNK (fileStatus.st_mode));
+	if (g_lstat (name, &fileStatus) == 0)
+		result = (boolean) (S_ISLNK (fileStatus.st_mode));
 
-    return result;
+	return result;
 #endif
 }
 
 static boolean isNormalFile (const char *const name)
 {
-    GStatBuf fileStatus;
-    boolean result = FALSE;
+	GStatBuf fileStatus;
+	boolean result = FALSE;
 
-    if (g_stat (name, &fileStatus) == 0)
-	result = (boolean) (S_ISREG (fileStatus.st_mode));
+	if (g_stat (name, &fileStatus) == 0)
+		result = (boolean) (S_ISREG (fileStatus.st_mode));
 
-    return result;
+	return result;
 }
 #endif
 
 extern boolean isExecutable (const char *const name)
 {
-    GStatBuf fileStatus;
-    boolean result = FALSE;
+	GStatBuf fileStatus;
+	boolean result = FALSE;
 
-    if (g_stat (name, &fileStatus) == 0)
-	result = (boolean) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
+	if (g_stat (name, &fileStatus) == 0)
+		result = (boolean) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
 
-    return result;
+	return result;
 }
 
 extern boolean isSameFile (const char *const name1, const char *const name2)
 {
-    boolean result = FALSE;
+	boolean result = FALSE;
 #ifdef HAVE_STAT_ST_INO
-    GStatBuf stat1, stat2;
+	GStatBuf stat1, stat2;
 
-    if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
-	result = (boolean) (stat1.st_ino == stat2.st_ino);
+	if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
+		result = (boolean) (stat1.st_ino == stat2.st_ino);
 #endif
-    return result;
+	return result;
 }
 
 #ifdef HAVE_MKSTEMP
@@ -486,15 +486,15 @@ extern boolean isSameFile (const char *const name1, const char *const name2)
 static boolean isSetUID (const char *const name)
 {
 #if defined (VMS) || defined (MSDOS) || defined (WIN32) || defined (__EMX__) || defined (AMIGA)
-    return FALSE;
+	return FALSE;
 #else
-    GStatBuf fileStatus;
-    boolean result = FALSE;
+	GStatBuf fileStatus;
+	boolean result = FALSE;
 
-    if (g_stat (name, &fileStatus) == 0)
-	result = (boolean) ((fileStatus.st_mode & S_ISUID) != 0);
+	if (g_stat (name, &fileStatus) == 0)
+		result = (boolean) ((fileStatus.st_mode & S_ISUID) != 0);
 
-    return result;
+	return result;
 #endif
 }
 
@@ -503,119 +503,119 @@ static boolean isSetUID (const char *const name)
 #if 0
 static boolean isDirectory (const char *const name)
 {
-    boolean result = FALSE;
+	boolean result = FALSE;
 #ifdef AMIGA
-    struct FileInfoBlock *const fib = xMalloc (1, struct FileInfoBlock);
+	struct FileInfoBlock *const fib = xMalloc (1, struct FileInfoBlock);
 
-    if (fib != NULL)
-    {
-	const BPTR flock = Lock ((UBYTE *) name, (long) ACCESS_READ);
-
-	if (flock != (BPTR) NULL)
+	if (fib != NULL)
 	{
-	    if (Examine (flock, fib))
-		result = ((fib->fib_DirEntryType >= 0) ? TRUE : FALSE);
-	    UnLock (flock);
-	}
-	eFree (fib);
-    }
-#else
-    GStatBuf fileStatus;
+		const BPTR flock = Lock ((UBYTE *) name, (long) ACCESS_READ);
 
-    if (g_stat (name, &fileStatus) == 0)
-	result = (boolean) S_ISDIR (fileStatus.st_mode);
+		if (flock != (BPTR) NULL)
+		{
+			if (Examine (flock, fib))
+				result = ((fib->fib_DirEntryType >= 0) ? TRUE : FALSE);
+			UnLock (flock);
+		}
+		eFree (fib);
+	}
+#else
+	GStatBuf fileStatus;
+
+	if (g_stat (name, &fileStatus) == 0)
+		result = (boolean) S_ISDIR (fileStatus.st_mode);
 #endif
-    return result;
+	return result;
 }
 #endif
 
 extern boolean doesFileExist (const char *const fileName)
 {
-    GStatBuf fileStatus;
+	GStatBuf fileStatus;
 
-    return (boolean) (g_stat (fileName, &fileStatus) == 0);
+	return (boolean) (g_stat (fileName, &fileStatus) == 0);
 }
 
 /*#ifndef HAVE_FGETPOS*/
 /*
 extern int fgetpos ( stream, pos )
-    FILE *const stream;
-    fpos_t *const pos;
+	FILE *const stream;
+	fpos_t *const pos;
 {
-    int result = 0;
+	int result = 0;
 
-    *pos = ftell (stream);
-    if (*pos == -1L)
-	result = -1;
+	*pos = ftell (stream);
+	if (*pos == -1L)
+		result = -1;
 
-    return result;
+	return result;
 }
 
 extern int fsetpos ( stream, pos )
-    FILE *const stream;
-    fpos_t *const pos;
+	FILE *const stream;
+	fpos_t *const pos;
 {
-    return fseek (stream, *pos, SEEK_SET);
+	return fseek (stream, *pos, SEEK_SET);
 }
 */
 /*#endif*/
 
 extern void addTotals (const unsigned int files,
-		       const long unsigned int lines,
-		       const long unsigned int bytes)
+					   const long unsigned int lines,
+					   const long unsigned int bytes)
 {
-    Totals.files += files;
-    Totals.lines += lines;
-    Totals.bytes += bytes;
+	Totals.files += files;
+	Totals.lines += lines;
+	Totals.bytes += bytes;
 }
 
 extern boolean isDestinationStdout (void)
 {
-    boolean toStdout = FALSE;
+	boolean toStdout = FALSE;
 
-    if (Option.xref  ||  Option.filter  ||
-	(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
+	if (Option.xref  ||  Option.filter  ||
+		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
 #if defined (VMS)
-    || strcmp (Option.tagFileName, "sys$output") == 0
+	|| strcmp (Option.tagFileName, "sys$output") == 0
 #else
-    || strcmp (Option.tagFileName, "/dev/stdout") == 0
+	|| strcmp (Option.tagFileName, "/dev/stdout") == 0
 #endif
-	)))
-	toStdout = TRUE;
-    return toStdout;
+		)))
+		toStdout = TRUE;
+	return toStdout;
 }
 
 extern FILE *tempFile (const char *const mode, char **const pName)
 {
-    char *name;
-    FILE *fp;
-    int fd;
+	char *name;
+	FILE *fp;
+	int fd;
 #ifdef HAVE_MKSTEMP
-    const char *const template = "tags.XXXXXX";
-    const char *tmpdir = NULL;
-    if (! isSetUID (ExecutableProgram))
-	tmpdir = getenv ("TMPDIR");
-    if (tmpdir == NULL)
-	tmpdir = TMPDIR;
-    name = xMalloc (strlen (tmpdir) + 1 + strlen (template) + 1, char);
-    sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, template);
-    fd = mkstemp(name);
+	const char *const template = "tags.XXXXXX";
+	const char *tmpdir = NULL;
+	if (! isSetUID (ExecutableProgram))
+		tmpdir = getenv ("TMPDIR");
+	if (tmpdir == NULL)
+		tmpdir = TMPDIR;
+	name = xMalloc (strlen (tmpdir) + 1 + strlen (template) + 1, char);
+	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, template);
+	fd = mkstemp(name);
 #else
-    name = xMalloc (L_tmpnam, char);
-    if (tmpnam (name) != name)
-	error (FATAL | PERROR, "cannot assign temporary file name");
-    fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+	name = xMalloc (L_tmpnam, char);
+	if (tmpnam (name) != name)
+		error (FATAL | PERROR, "cannot assign temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 #endif
-    if (fd == -1)
-	error (FATAL | PERROR, "cannot open temporary file");
-    fp = fdopen (fd, mode);
-    if (fp == NULL)
-	error (FATAL | PERROR, "cannot open temporary file");
-    DebugStatement (
-	debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
-    Assert (*pName == NULL);
-    *pName = name;
-    return fp;
+	if (fd == -1)
+		error (FATAL | PERROR, "cannot open temporary file");
+	fp = fdopen (fd, mode);
+	if (fp == NULL)
+		error (FATAL | PERROR, "cannot open temporary file");
+	DebugStatement (
+		debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
+	Assert (*pName == NULL);
+	*pName = name;
+	return fp;
 }
 
 /*
@@ -625,61 +625,61 @@ extern FILE *tempFile (const char *const mode, char **const pName)
 extern const char *baseFilename (const char *const filePath)
 {
 #if defined (MSDOS_STYLE_PATH) || defined (VMS)
-    const char *tail = NULL;
-    unsigned int i;
+	const char *tail = NULL;
+	unsigned int i;
 
-    /*  Find whichever of the path delimiters is last.
-     */
-    for (i = 0  ;  i < strlen (PathDelimiters)  ;  ++i)
-    {
-	const char *sep = strrchr (filePath, PathDelimiters [i]);
+	/*  Find whichever of the path delimiters is last.
+	 */
+	for (i = 0  ;  i < strlen (PathDelimiters)  ;  ++i)
+	{
+		const char *sep = strrchr (filePath, PathDelimiters [i]);
 
-	if (sep > tail)
-	    tail = sep;
-    }
+		if (sep > tail)
+			tail = sep;
+	}
 #else
-    const char *tail = strrchr (filePath, PATH_SEPARATOR);
+	const char *tail = strrchr (filePath, PATH_SEPARATOR);
 #endif
-    if (tail == NULL)
-	tail = filePath;
-    else
-	++tail;			/* step past last delimiter */
+	if (tail == NULL)
+		tail = filePath;
+	else
+		++tail;                 /* step past last delimiter */
 #ifdef VAXC
-    {
-	/* remove version number from filename */
-	char *p = strrchr ((char *) tail, ';');
-	if (p != NULL)
-	    *p = '\0';
-    }
+	{
+		/* remove version number from filename */
+		char *p = strrchr ((char *) tail, ';');
+		if (p != NULL)
+			*p = '\0';
+	}
 #endif
 
-    return tail;
+	return tail;
 }
 
 extern boolean isAbsolutePath (const char *const path)
 {
-    boolean result = FALSE;
+	boolean result = FALSE;
 #if defined (MSDOS_STYLE_PATH)
-    if (strchr (PathDelimiters, path [0]) != NULL)
-	result = TRUE;
-    else if (isalpha (path [0])  &&  path [1] == ':')
-    {
-	if (strchr (PathDelimiters, path [2]) != NULL)
-	    result = TRUE;
-	else
-	    /*  We don't support non-absolute file names with a drive
-	     *  letter, like `d:NAME' (it's too much hassle).
-	     */
-	    error (FATAL,
-		"%s: relative file names with drive letters not supported",
-		path);
-    }
+	if (strchr (PathDelimiters, path [0]) != NULL)
+		result = TRUE;
+	else if (isalpha (path [0])  &&  path [1] == ':')
+	{
+		if (strchr (PathDelimiters, path [2]) != NULL)
+			result = TRUE;
+		else
+			/*  We don't support non-absolute file names with a drive
+			 *  letter, like `d:NAME' (it's too much hassle).
+			 */
+			error (FATAL,
+				"%s: relative file names with drive letters not supported",
+				path);
+	}
 #elif defined (VMS)
-    result = (boolean) (strchr (path, ':') != NULL);
+	result = (boolean) (strchr (path, ':') != NULL);
 #else
-    result = (boolean) (path [0] == PATH_SEPARATOR);
+	result = (boolean) (path [0] == PATH_SEPARATOR);
 #endif
-    return result;
+	return result;
 }
 
 /* Return a newly-allocated string whose contents concatenate those of
@@ -688,15 +688,15 @@ extern boolean isAbsolutePath (const char *const path)
  */
 static char* concat (const char *s1, const char *s2, const char *s3)
 {
-  int len1 = strlen (s1), len2 = strlen (s2), len3 = strlen (s3);
-  char *result = xMalloc (len1 + len2 + len3 + 1, char);
+	int len1 = strlen (s1), len2 = strlen (s2), len3 = strlen (s3);
+	char *result = xMalloc (len1 + len2 + len3 + 1, char);
 
-  strcpy (result, s1);
-  strcpy (result + len1, s2);
-  strcpy (result + len1 + len2, s3);
-  result [len1 + len2 + len3] = '\0';
+	strcpy (result, s1);
+	strcpy (result + len1, s2);
+	strcpy (result + len1 + len2, s3);
+	result [len1 + len2 + len3] = '\0';
 
-  return result;
+	return result;
 }
 
 /* Return a newly allocated string containing the absolute file name of FILE
@@ -705,61 +705,61 @@ static char* concat (const char *s1, const char *s2, const char *s3)
  */
 static char* absoluteFilename (const char *file)
 {
-    char *slashp, *cp;
-    char *res = NULL;
+	char *slashp, *cp;
+	char *res = NULL;
 
-    if (isAbsolutePath (file))
-	res = eStrdup (file);
-    else
-	res = concat (CurrentDirectory, file, "");
+	if (isAbsolutePath (file))
+		res = eStrdup (file);
+	else
+		res = concat (CurrentDirectory, file, "");
 
-    /* Delete the "/dirname/.." and "/." substrings. */
-    slashp = strchr (res, '/');
-    while (slashp != NULL  &&  slashp [0] != '\0')
-    {
-	if (slashp[1] == '.')
+	/* Delete the "/dirname/.." and "/." substrings. */
+	slashp = strchr (res, '/');
+	while (slashp != NULL  &&  slashp [0] != '\0')
 	{
-	    if (slashp [2] == '.' && (slashp [3] == '/' || slashp [3] == '\0'))
-	    {
-		cp = slashp;
-		do
-		    cp--;
-		while (cp >= res  &&  ! isAbsolutePath (cp));
-		if (cp < res)
-		    cp = slashp;/* the absolute name begins with "/.." */
+		if (slashp[1] == '.')
+		{
+			if (slashp [2] == '.' && (slashp [3] == '/' || slashp [3] == '\0'))
+			{
+				cp = slashp;
+				do
+					cp--;
+				while (cp >= res  &&  ! isAbsolutePath (cp));
+				if (cp < res)
+					cp = slashp;/* the absolute name begins with "/.." */
 #ifdef MSDOS_STYLE_PATH
-		/* Under MSDOS and NT we get `d:/NAME' as absolute file name,
-		 * so the luser could say `d:/../NAME'. We silently treat this
-		 * as `d:/NAME'.
-		 */
-		else if (cp [0] != '/')
-		    cp = slashp;
+				/* Under MSDOS and NT we get `d:/NAME' as absolute file name,
+				 * so the luser could say `d:/../NAME'. We silently treat this
+				 * as `d:/NAME'.
+				 */
+				else if (cp [0] != '/')
+					cp = slashp;
 #endif
-		memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
-		slashp = cp;
-		continue;
-	    }
-	    else if (slashp [2] == '/'  ||  slashp [2] == '\0')
-	    {
-		memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
-		continue;
-	    }
+				memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
+				slashp = cp;
+				continue;
+			}
+			else if (slashp [2] == '/'  ||  slashp [2] == '\0')
+			{
+				memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
+				continue;
+			}
+		}
+		slashp = strchr (slashp + 1, '/');
 	}
-	slashp = strchr (slashp + 1, '/');
-    }
 
-    if (res [0] == '\0')
-	return eStrdup ("/");
-    else
-    {
+	if (res [0] == '\0')
+		return eStrdup ("/");
+	else
+	{
 #ifdef MSDOS_STYLE_PATH
-	/* Canonicalize drive letter case.  */
-	if (res [1] == ':'  &&  islower (res [0]))
-	    res [0] = toupper (res [0]);
+		/* Canonicalize drive letter case.  */
+		if (res [1] == ':'  &&  islower (res [0]))
+			res [0] = toupper (res [0]);
 #endif
 
-	return res;
-    }
+		return res;
+	}
 }
 
 /* Return a newly allocated string containing the absolute file name of dir
@@ -768,25 +768,25 @@ static char* absoluteFilename (const char *file)
  */
 extern char* absoluteDirname (char *file)
 {
-    char *slashp, *res;
-    char save;
+	char *slashp, *res;
+	char save;
 #ifdef MSDOS_STYLE_PATH
-    char *p;
-    for (p = file  ;  *p != '\0'  ;  p++)
-	if (*p == '\\')
-	    *p = '/';
+	char *p;
+	for (p = file  ;  *p != '\0'  ;  p++)
+		if (*p == '\\')
+			*p = '/';
 #endif
-    slashp = strrchr (file, '/');
-    if (slashp == NULL)
-	res = eStrdup (CurrentDirectory);
-    else
-    {
-	save = slashp [1];
-	slashp [1] = '\0';
-	res = absoluteFilename (file);
-	slashp [1] = save;
-    }
-    return res;
+	slashp = strrchr (file, '/');
+	if (slashp == NULL)
+		res = eStrdup (CurrentDirectory);
+	else
+	{
+		save = slashp [1];
+		slashp [1] = '\0';
+		res = absoluteFilename (file);
+		slashp [1] = save;
+	}
+	return res;
 }
 
 /* Return a newly allocated string containing the file name of FILE relative
@@ -795,421 +795,421 @@ extern char* absoluteDirname (char *file)
  */
 extern char* relativeFilename (const char *file, const char *dir)
 {
-    const char *fp, *dp;
-    char *absdir, *res;
-    int i;
+	const char *fp, *dp;
+	char *absdir, *res;
+	int i;
 
-    /* Find the common root of file and dir (with a trailing slash). */
-    absdir = absoluteFilename (file);
-    fp = absdir;
-    dp = dir;
-    while (*fp++ == *dp++)
-	continue;
-    fp--;
-    dp--;			/* back to the first differing char */
-    do
-    {				/* look at the equal chars until '/' */
-	if (fp == absdir)
-	    return absdir;	/* first char differs, give up */
+	/* Find the common root of file and dir (with a trailing slash). */
+	absdir = absoluteFilename (file);
+	fp = absdir;
+	dp = dir;
+	while (*fp++ == *dp++)
+		continue;
 	fp--;
-	dp--;
-    } while (*fp != '/');
+	dp--;                       /* back to the first differing char */
+	do
+	{                           /* look at the equal chars until '/' */
+		if (fp == absdir)
+			return absdir;      /* first char differs, give up */
+		fp--;
+		dp--;
+	} while (*fp != '/');
 
-    /* Build a sequence of "../" strings for the resulting relative file name.
-     */
-    i = 0;
-    while ((dp = strchr (dp + 1, '/')) != NULL)
-	i += 1;
-    res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
-    res [0] = '\0';
-    while (i-- > 0)
-	strcat (res, "../");
+	/* Build a sequence of "../" strings for the resulting relative file name.
+	 */
+	i = 0;
+	while ((dp = strchr (dp + 1, '/')) != NULL)
+		i += 1;
+	res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
+	res [0] = '\0';
+	while (i-- > 0)
+		strcat (res, "../");
 
-    /* Add the file name relative to the common root of file and dir. */
-    strcat (res, fp + 1);
-    free (absdir);
+	/* Add the file name relative to the common root of file and dir. */
+	strcat (res, fp + 1);
+	free (absdir);
 
-    return res;
+	return res;
 }
 
 extern vString *combinePathAndFile (const char *const path,
-				    const char *const file)
+									const char *const file)
 {
-    vString *const filePath = vStringNew ();
+	vString *const filePath = vStringNew ();
 #ifdef VMS
-    const char *const directoryId = strstr (file, ".DIR;1");
+	const char *const directoryId = strstr (file, ".DIR;1");
 
-    if (directoryId == NULL)
-    {
-	const char *const versionId = strchr (file, ';');
+	if (directoryId == NULL)
+	{
+		const char *const versionId = strchr (file, ';');
 
-	vStringCopyS (filePath, path);
-	if (versionId == NULL)
-	    vStringCatS (filePath, file);
+		vStringCopyS (filePath, path);
+		if (versionId == NULL)
+			vStringCatS (filePath, file);
+		else
+			vStringNCatS (filePath, file, versionId - file);
+		vStringCopyToLower (filePath, filePath);
+	}
 	else
-	    vStringNCatS (filePath, file, versionId - file);
-	vStringCopyToLower (filePath, filePath);
-    }
-    else
-    {
-	/*  File really is a directory; append it to the path.
-	 *  Gotcha: doesn't work with logical names.
-	 */
-	vStringNCopyS (filePath, path, strlen (path) - 1);
-	vStringPut (filePath, '.');
-	vStringNCatS (filePath, file, directoryId - file);
-	if (strchr (path, '[') != NULL)
-	    vStringPut (filePath, ']');
-	else
-	    vStringPut (filePath, '>');
-	vStringTerminate (filePath);
-    }
+	{
+		/*  File really is a directory; append it to the path.
+		 *  Gotcha: doesn't work with logical names.
+		 */
+		vStringNCopyS (filePath, path, strlen (path) - 1);
+		vStringPut (filePath, '.');
+		vStringNCatS (filePath, file, directoryId - file);
+		if (strchr (path, '[') != NULL)
+			vStringPut (filePath, ']');
+		else
+			vStringPut (filePath, '>');
+		vStringTerminate (filePath);
+	}
 #else
-    const int lastChar = path [strlen (path) - 1];
+	const int lastChar = path [strlen (path) - 1];
 # ifdef MSDOS_STYLE_PATH
-    boolean terminated = (boolean) (strchr (PathDelimiters, lastChar) != NULL);
+	boolean terminated = (boolean) (strchr (PathDelimiters, lastChar) != NULL);
 # else
-    boolean terminated = (boolean) (lastChar == PATH_SEPARATOR);
+	boolean terminated = (boolean) (lastChar == PATH_SEPARATOR);
 # endif
 
-    vStringCopyS (filePath, path);
-    if (! terminated)
-    {
-	vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
-	vStringTerminate (filePath);
-    }
-    vStringCatS (filePath, file);
+	vStringCopyS (filePath, path);
+	if (! terminated)
+	{
+		vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
+		vStringTerminate (filePath);
+	}
+	vStringCatS (filePath, file);
 #endif
 
-    return filePath;
+	return filePath;
 }
 
 /*
- *	Create tags
+ *      Create tags
  */
 
 extern void processExcludeOption (const char *const UNUSED option,
-				  const char *const parameter)
+								  const char *const parameter)
 {
-    if (parameter [0] == '\0')
-	freeList (&Excluded);
-    else if (parameter [0] == '@')
-    {
-	stringList* const new = stringListNewFromFile (parameter + 1);
-	if (Excluded == NULL)
-	    Excluded = new;
+	if (parameter [0] == '\0')
+		freeList (&Excluded);
+	else if (parameter [0] == '@')
+	{
+		stringList* const new = stringListNewFromFile (parameter + 1);
+		if (Excluded == NULL)
+			Excluded = new;
+		else
+			stringListCombine (Excluded, new);
+	}
 	else
-	    stringListCombine (Excluded, new);
-    }
-    else
-    {
-	vString *const item = vStringNewInit (parameter);
-	if (Excluded == NULL)
-	    Excluded = stringListNew ();
-	stringListAdd (Excluded, item);
-    }
+	{
+		vString *const item = vStringNewInit (parameter);
+		if (Excluded == NULL)
+			Excluded = stringListNew ();
+		stringListAdd (Excluded, item);
+	}
 }
 
 #if 0
 static boolean excludedFile (const char* const name)
 {
-    const char* base = baseFilename (name);
-    boolean result = FALSE;
-    if (Excluded != NULL)
-    {
-	result = stringListFileMatched (Excluded, base);
-	if (! result  &&  name != base)
-	    result = stringListFileMatched (Excluded, name);
-    }
+	const char* base = baseFilename (name);
+	boolean result = FALSE;
+	if (Excluded != NULL)
+	{
+		result = stringListFileMatched (Excluded, base);
+		if (! result  &&  name != base)
+			result = stringListFileMatched (Excluded, name);
+	}
 #ifdef AMIGA
-    /* not a good solution, but the only one which works often */
-    if (! result)
-	result = (boolean) (strcmp (name, TagFile.name) == 0);
+	/* not a good solution, but the only one which works often */
+	if (! result)
+		result = (boolean) (strcmp (name, TagFile.name) == 0);
 #endif
-    return result;
+	return result;
 }
 
 # if defined (MSDOS) || defined (WIN32)
 
 static boolean createTagsForMatchingEntries (char *const pattern)
 {
-    boolean resize = FALSE;
-    const size_t dirLength = baseFilename (pattern) - (char *) pattern;
-    vString *const filePath = vStringNew ();
+	boolean resize = FALSE;
+	const size_t dirLength = baseFilename (pattern) - (char *) pattern;
+	vString *const filePath = vStringNew ();
 #if defined (HAVE_FINDFIRST)
-    struct ffblk fileInfo;
-    int result = findfirst (pattern, &fileInfo, FA_DIREC);
+	struct ffblk fileInfo;
+	int result = findfirst (pattern, &fileInfo, FA_DIREC);
 
-    while (result == 0)
-    {
-	const char *const entryName = fileInfo.ff_name;
-
-	/*  We must not recurse into the directories "." or "..".
-	 */
-	if (strcmp (entryName, ".") != 0  &&  strcmp (entryName, "..") != 0)
+	while (result == 0)
 	{
-	    vStringNCopyS (filePath, pattern, dirLength);
-	    vStringCatS (filePath, entryName);
-	    resize |= createTagsForEntry (vStringValue (filePath));
+		const char *const entryName = fileInfo.ff_name;
+
+		/*  We must not recurse into the directories "." or "..".
+		 */
+		if (strcmp (entryName, ".") != 0  &&  strcmp (entryName, "..") != 0)
+		{
+			vStringNCopyS (filePath, pattern, dirLength);
+			vStringCatS (filePath, entryName);
+			resize |= createTagsForEntry (vStringValue (filePath));
+		}
+		result = findnext (&fileInfo);
 	}
-	result = findnext (&fileInfo);
-    }
 #elif defined (HAVE__FINDFIRST)
-    struct _finddata_t fileInfo;
-    long hFile = _findfirst (pattern, &fileInfo);
+	struct _finddata_t fileInfo;
+	long hFile = _findfirst (pattern, &fileInfo);
 
-    if (hFile != -1L)
-    {
-	do
+	if (hFile != -1L)
 	{
-	    const char *const entryName = fileInfo.name;
+		do
+		{
+			const char *const entryName = fileInfo.name;
 
-	    /*  We must not recurse into the directories "." or "..".
-	     */
-	    if (strcmp (entryName, ".") != 0  &&  strcmp (entryName, "..") != 0)
-	    {
-		vStringNCopyS (filePath, pattern, dirLength);
-		vStringCatS (filePath, entryName);
-		resize |= createTagsForEntry (vStringValue (filePath));
-	    }
-	} while (_findnext (hFile, &fileInfo) == 0);
-	_findclose (hFile);
-    }
+			/*  We must not recurse into the directories "." or "..".
+			 */
+			if (strcmp (entryName, ".") != 0  &&  strcmp (entryName, "..") != 0)
+			{
+				vStringNCopyS (filePath, pattern, dirLength);
+				vStringCatS (filePath, entryName);
+				resize |= createTagsForEntry (vStringValue (filePath));
+			}
+		} while (_findnext (hFile, &fileInfo) == 0);
+		_findclose (hFile);
+	}
 #endif
 
-    vStringDelete (filePath);
-    return resize;
+	vStringDelete (filePath);
+	return resize;
 }
 
 #elif defined (AMIGA)
 
 static boolean createTagsForMatchingEntries (char *const pattern)
 {
-    boolean resize = FALSE;
-    struct AnchorPath *const anchor =
-			(struct AnchorPath *) eMalloc ((size_t) ANCHOR_SIZE);
+	boolean resize = FALSE;
+	struct AnchorPath *const anchor =
+						(struct AnchorPath *) eMalloc ((size_t) ANCHOR_SIZE);
 
-    if (anchor != NULL)
-    {
-	LONG result;
+	if (anchor != NULL)
+	{
+		LONG result;
 
-	memset (anchor, 0, (size_t) ANCHOR_SIZE);
-	anchor->ap_Strlen = ANCHOR_BUF_SIZE; /* ap_Length no longer supported */
+		memset (anchor, 0, (size_t) ANCHOR_SIZE);
+		anchor->ap_Strlen = ANCHOR_BUF_SIZE; /* ap_Length no longer supported */
 
-	/*  Allow '.' for current directory.
-	 */
+		/*  Allow '.' for current directory.
+		 */
 #ifdef APF_DODOT
-	anchor->ap_Flags = APF_DODOT | APF_DOWILD;
+		anchor->ap_Flags = APF_DODOT | APF_DOWILD;
 #else
-	anchor->ap_Flags = APF_DoDot | APF_DoWild;
+		anchor->ap_Flags = APF_DoDot | APF_DoWild;
 #endif
 
-	result = MatchFirst ((UBYTE *) pattern, anchor);
-	while (result == 0)
-	{
-	    resize |= createTagsForEntry ((char *) anchor->ap_Buf);
-	    result = MatchNext (anchor);
+		result = MatchFirst ((UBYTE *) pattern, anchor);
+		while (result == 0)
+		{
+			resize |= createTagsForEntry ((char *) anchor->ap_Buf);
+			result = MatchNext (anchor);
+		}
+		MatchEnd (anchor);
+		eFree (anchor);
 	}
-	MatchEnd (anchor);
-	eFree (anchor);
-    }
-    return resize;
+	return resize;
 }
 
 #endif
 
 static boolean isRecursiveLink (const char* const dirName)
 {
-    boolean result = FALSE;
-    char* const path = absoluteFilename (dirName);
-    while (path [strlen (path) - 1] == PATH_SEPARATOR)
-	path [strlen (path) - 1] = '\0';
-    while (! result  &&  strlen (path) > (size_t) 1)
-    {
-	char *const separator = strrchr (path, PATH_SEPARATOR);
-	if (separator == NULL)
-	    break;
-	else if (separator == path)	/* backed up to root directory */
-	    *(separator + 1) = '\0';
-	else
-	    *separator = '\0';
-	result = isSameFile (path, dirName);
-    }
-    eFree (path);
-    return result;
+	boolean result = FALSE;
+	char* const path = absoluteFilename (dirName);
+	while (path [strlen (path) - 1] == PATH_SEPARATOR)
+		path [strlen (path) - 1] = '\0';
+	while (! result  &&  strlen (path) > (size_t) 1)
+	{
+		char *const separator = strrchr (path, PATH_SEPARATOR);
+		if (separator == NULL)
+			break;
+		else if (separator == path)     /* backed up to root directory */
+			*(separator + 1) = '\0';
+		else
+			*separator = '\0';
+		result = isSameFile (path, dirName);
+	}
+	eFree (path);
+	return result;
 }
 
 static boolean recurseIntoDirectory (const char *const dirName)
 {
-    boolean resize = FALSE;
-    if (isRecursiveLink (dirName))
-	verbose ("ignoring \"%s\" (recursive link)\n", dirName);
-    else if (! Option.recurse)
-	verbose ("ignoring \"%s\" (directory)\n", dirName);
-    else
-    {
-#if defined (HAVE_OPENDIR)
-	DIR *const dir = opendir (dirName);
-	if (dir == NULL)
-	    error (WARNING | PERROR, "cannot recurse into directory \"%s\"",
-		   dirName);
+	boolean resize = FALSE;
+	if (isRecursiveLink (dirName))
+		verbose ("ignoring \"%s\" (recursive link)\n", dirName);
+	else if (! Option.recurse)
+		verbose ("ignoring \"%s\" (directory)\n", dirName);
 	else
 	{
-	    struct dirent *entry;
-	    verbose ("RECURSING into directory \"%s\"\n", dirName);
-	    while ((entry = readdir (dir)) != NULL)
-	    {
-		if (strcmp (entry->d_name, ".") != 0  &&
-		    strcmp (entry->d_name, "..") != 0)
+#if defined (HAVE_OPENDIR)
+		DIR *const dir = opendir (dirName);
+		if (dir == NULL)
+			error (WARNING | PERROR, "cannot recurse into directory \"%s\"",
+				   dirName);
+		else
 		{
-		    vString *filePath;
-		    if (strcmp (dirName, ".") == 0)
-			filePath = vStringNewInit (entry->d_name);
-		    else
-			filePath = combinePathAndFile (dirName, entry->d_name);
-		    resize |= createTagsForEntry (vStringValue (filePath));
-		    vStringDelete (filePath);
+			struct dirent *entry;
+			verbose ("RECURSING into directory \"%s\"\n", dirName);
+			while ((entry = readdir (dir)) != NULL)
+			{
+				if (strcmp (entry->d_name, ".") != 0  &&
+					strcmp (entry->d_name, "..") != 0)
+				{
+					vString *filePath;
+					if (strcmp (dirName, ".") == 0)
+						filePath = vStringNewInit (entry->d_name);
+					else
+						filePath = combinePathAndFile (dirName, entry->d_name);
+					resize |= createTagsForEntry (vStringValue (filePath));
+					vStringDelete (filePath);
+				}
+			}
+			closedir (dir);
 		}
-	    }
-	    closedir (dir);
-	}
 #elif defined (AMIGA) || defined (MSDOS) || defined (WIN32)
-	vString *const pattern = vStringNew ();
-	verbose ("RECURSING into directory \"%s\"\n", dirName);
+		vString *const pattern = vStringNew ();
+		verbose ("RECURSING into directory \"%s\"\n", dirName);
 # ifdef AMIGA
-	if (*dirName != '\0'  &&  strcmp (dirName, ".") != 0)
-	{
-	    vStringCopyS (pattern, dirName);
-	    if (dirName [strlen (dirName) - 1] != '/')
-		vStringPut (pattern, '/');
-	}
-	vStringCatS (pattern, "#?");
+		if (*dirName != '\0'  &&  strcmp (dirName, ".") != 0)
+		{
+			vStringCopyS (pattern, dirName);
+			if (dirName [strlen (dirName) - 1] != '/')
+				vStringPut (pattern, '/');
+		}
+		vStringCatS (pattern, "#?");
 # else
-	vStringCopyS (pattern, dirName);
-	vStringPut (pattern, OUTPUT_PATH_SEPARATOR);
-	vStringCatS (pattern, "*.*");
+		vStringCopyS (pattern, dirName);
+		vStringPut (pattern, OUTPUT_PATH_SEPARATOR);
+		vStringCatS (pattern, "*.*");
 # endif
-	resize = createTagsForMatchingEntries (vStringValue (pattern));
-	vStringDelete (pattern);
-#endif	/* HAVE_OPENDIR */
-    }
-    return resize;
+		resize = createTagsForMatchingEntries (vStringValue (pattern));
+		vStringDelete (pattern);
+#endif  /* HAVE_OPENDIR */
+	}
+	return resize;
 }
 
 static boolean createTagsForEntry (const char *const entryName)
 {
-    boolean resize = FALSE;
+	boolean resize = FALSE;
 
-    Assert (entryName != NULL);
-    if (excludedFile (entryName))
-	verbose ("excluding \"%s\"\n", entryName);
-    else if (isSymbolicLink (entryName)  &&  ! Option.followLinks)
-	verbose ("ignoring \"%s\" (symbolic link)\n", entryName);
-    else if (! doesFileExist (entryName))
-	error (WARNING | PERROR, "cannot open source file \"%s\"", entryName);
-    else if (isDirectory (entryName))
-	resize = recurseIntoDirectory (entryName);
-    else if (! isNormalFile (entryName))
-	verbose ("ignoring \"%s\" (special file)\n", entryName);
-    else
-	resize = parseFile (entryName);
+	Assert (entryName != NULL);
+	if (excludedFile (entryName))
+		verbose ("excluding \"%s\"\n", entryName);
+	else if (isSymbolicLink (entryName)  &&  ! Option.followLinks)
+		verbose ("ignoring \"%s\" (symbolic link)\n", entryName);
+	else if (! doesFileExist (entryName))
+		error (WARNING | PERROR, "cannot open source file \"%s\"", entryName);
+	else if (isDirectory (entryName))
+		resize = recurseIntoDirectory (entryName);
+	else if (! isNormalFile (entryName))
+		verbose ("ignoring \"%s\" (special file)\n", entryName);
+	else
+		resize = parseFile (entryName);
 
-    return resize;
+	return resize;
 }
 
 static boolean createTagsForArgs (cookedArgs* const args)
 {
-    boolean resize = FALSE;
+	boolean resize = FALSE;
 
-    /*  Generate tags for each argument on the command line.
-     */
-    while (! cArgOff (args))
-    {
-	const char *arg = cArgItem (args);
+	/*  Generate tags for each argument on the command line.
+	 */
+	while (! cArgOff (args))
+	{
+		const char *arg = cArgItem (args);
 
 #if defined (MSDOS) || defined (WIN32)
-	vString *const pattern = vStringNewInit (arg);
-	char *patternS = vStringValue (pattern);
+		vString *const pattern = vStringNewInit (arg);
+		char *patternS = vStringValue (pattern);
 
-	/*  We must transform the "." and ".." forms into something that can
-	 *  be expanded by the MSDOS/Windows functions.
-	 */
-	if (Option.recurse  &&
-	    (strcmp (patternS, ".") == 0  ||  strcmp (patternS, "..") == 0))
-	{
-	    vStringPut (pattern, OUTPUT_PATH_SEPARATOR);
-	    vStringCatS (pattern, "*.*");
-	}
-	resize |= createTagsForMatchingEntries (patternS);
-	vStringDelete (pattern);
+		/*  We must transform the "." and ".." forms into something that can
+		 *  be expanded by the MSDOS/Windows functions.
+		 */
+		if (Option.recurse  &&
+			(strcmp (patternS, ".") == 0  ||  strcmp (patternS, "..") == 0))
+		{
+			vStringPut (pattern, OUTPUT_PATH_SEPARATOR);
+			vStringCatS (pattern, "*.*");
+		}
+		resize |= createTagsForMatchingEntries (patternS);
+		vStringDelete (pattern);
 #else
-	resize |= createTagsForEntry (arg);
+		resize |= createTagsForEntry (arg);
 #endif
-	cArgForth (args);
-	parseOptions (args);
-    }
-    return resize;
+		cArgForth (args);
+		parseOptions (args);
+	}
+	return resize;
 }
 
 /*  Read from an opened file a list of file names for which to generate tags.
  */
 static boolean createTagsFromFileInput (FILE* const fp, const boolean filter)
 {
-    boolean resize = FALSE;
-    if (fp != NULL)
-    {
-	cookedArgs* args = cArgNewFromLineFile (fp);
-	parseOptions (args);
-	while (! cArgOff (args))
+	boolean resize = FALSE;
+	if (fp != NULL)
 	{
-	    resize |= createTagsForEntry (cArgItem (args));
-	    if (filter)
-	    {
-		if (Option.filterTerminator != NULL)
-		    fputs (Option.filterTerminator, stdout);
-		fflush (stdout);
-	    }
-	    cArgForth (args);
-	    parseOptions (args);
+		cookedArgs* args = cArgNewFromLineFile (fp);
+		parseOptions (args);
+		while (! cArgOff (args))
+		{
+			resize |= createTagsForEntry (cArgItem (args));
+			if (filter)
+			{
+				if (Option.filterTerminator != NULL)
+					fputs (Option.filterTerminator, stdout);
+				fflush (stdout);
+			}
+			cArgForth (args);
+			parseOptions (args);
+		}
+		cArgDelete (args);
 	}
-	cArgDelete (args);
-    }
-    return resize;
+	return resize;
 }
 
 /*  Read from a named file a list of file names for which to generate tags.
  */
 static boolean createTagsFromListFile (const char* const fileName)
 {
-    boolean resize;
-    Assert (fileName != NULL);
-    if (strcmp (fileName, "-") == 0)
-	resize = createTagsFromFileInput (stdin, FALSE);
-    else
-    {
-	FILE* const fp = g_fopen (fileName, "r");
-	if (fp == NULL)
-	    error (FATAL | PERROR, "cannot open list file \"%s\"", fileName);
-	resize = createTagsFromFileInput (fp, FALSE);
-	fclose (fp);
-    }
-    return resize;
+	boolean resize;
+	Assert (fileName != NULL);
+	if (strcmp (fileName, "-") == 0)
+		resize = createTagsFromFileInput (stdin, FALSE);
+	else
+	{
+		FILE* const fp = g_fopen (fileName, "r");
+		if (fp == NULL)
+			error (FATAL | PERROR, "cannot open list file \"%s\"", fileName);
+		resize = createTagsFromFileInput (fp, FALSE);
+		fclose (fp);
+	}
+	return resize;
 }
 
 #if defined (HAVE_CLOCK)
 # define CLOCK_AVAILABLE
 # ifndef CLOCKS_PER_SEC
-#  define CLOCKS_PER_SEC	1000000
+#  define CLOCKS_PER_SEC        1000000
 # endif
 #elif defined (HAVE_TIMES)
 # define CLOCK_AVAILABLE
-# define CLOCKS_PER_SEC	60
+# define CLOCKS_PER_SEC 60
 static clock_t clock (void)
 {
-    struct tms buf;
+	struct tms buf;
 
-    times (&buf);
-    return (buf.tms_utime + buf.tms_stime);
+	times (&buf);
+	return (buf.tms_utime + buf.tms_stime);
 }
 #else
 # define clock()  (clock_t)0
@@ -1217,181 +1217,181 @@ static clock_t clock (void)
 
 static void printTotals (const clock_t *const timeStamps)
 {
-    const unsigned long totalTags = TagFile.numTags.added +
-				    TagFile.numTags.prev;
+	const unsigned long totalTags = TagFile.numTags.added +
+									TagFile.numTags.prev;
 
-    fprintf (errout, "%ld file%s, %ld line%s (%ld kB) scanned",
-	    Totals.files, plural (Totals.files),
-	    Totals.lines, plural (Totals.lines),
-	    Totals.bytes/1024L);
+	fprintf (errout, "%ld file%s, %ld line%s (%ld kB) scanned",
+			Totals.files, plural (Totals.files),
+			Totals.lines, plural (Totals.lines),
+			Totals.bytes/1024L);
 #ifdef CLOCK_AVAILABLE
-    {
-	const double interval = ((double) (timeStamps [1] - timeStamps [0])) /
-				CLOCKS_PER_SEC;
+	{
+		const double interval = ((double) (timeStamps [1] - timeStamps [0])) /
+								CLOCKS_PER_SEC;
 
-	fprintf (errout, " in %.01f seconds", interval);
-	if (interval != (double) 0.0)
-	    fprintf (errout, " (%lu kB/s)",
-		    (unsigned long) (Totals.bytes / interval) / 1024L);
-    }
-#endif
-    fputc ('\n', errout);
-
-    fprintf (errout, "%lu tag%s added to tag file",
-	    TagFile.numTags.added, plural (TagFile.numTags.added));
-    if (Option.append)
-	fprintf (errout, " (now %lu tags)", totalTags);
-    fputc ('\n', errout);
-
-    if (totalTags > 0  &&  Option.sorted)
-    {
-	fprintf (errout, "%lu tag%s sorted", totalTags, plural (totalTags));
-#ifdef CLOCK_AVAILABLE
-	fprintf (errout, " in %.02f seconds",
-		((double) (timeStamps [2] - timeStamps [1])) / CLOCKS_PER_SEC);
+		fprintf (errout, " in %.01f seconds", interval);
+		if (interval != (double) 0.0)
+			fprintf (errout, " (%lu kB/s)",
+					(unsigned long) (Totals.bytes / interval) / 1024L);
+	}
 #endif
 	fputc ('\n', errout);
-    }
+
+	fprintf (errout, "%lu tag%s added to tag file",
+			TagFile.numTags.added, plural (TagFile.numTags.added));
+	if (Option.append)
+		fprintf (errout, " (now %lu tags)", totalTags);
+	fputc ('\n', errout);
+
+	if (totalTags > 0  &&  Option.sorted)
+	{
+		fprintf (errout, "%lu tag%s sorted", totalTags, plural (totalTags));
+#ifdef CLOCK_AVAILABLE
+		fprintf (errout, " in %.02f seconds",
+				((double) (timeStamps [2] - timeStamps [1])) / CLOCKS_PER_SEC);
+#endif
+		fputc ('\n', errout);
+	}
 
 #ifdef TM_DEBUG
-    fprintf (errout, "longest tag line = %lu\n",
-	    (unsigned long) TagFile.max.line);
+	fprintf (errout, "longest tag line = %lu\n",
+			(unsigned long) TagFile.max.line);
 #endif
 }
 
 static void makeTags (cookedArgs* args)
 {
-    clock_t timeStamps [3];
-    boolean resize = FALSE;
-    boolean files = (boolean)(! cArgOff (args) || Option.fileList != NULL
-			      || Option.filter);
+	clock_t timeStamps [3];
+	boolean resize = FALSE;
+	boolean files = (boolean)(! cArgOff (args) || Option.fileList != NULL
+							  || Option.filter);
 
-    if (! files  &&  ! Option.recurse)
-	error (FATAL, "No files specified. Try \"%s --help\".",
-	       getExecutableName ());
+	if (! files  &&  ! Option.recurse)
+		error (FATAL, "No files specified. Try \"%s --help\".",
+			   getExecutableName ());
 
 #define timeStamp(n) timeStamps[(n)]=(Option.printTotals ? clock():(clock_t)0)
-    if (! Option.filter)
-	openTagFile ();
+	if (! Option.filter)
+		openTagFile ();
 
-    timeStamp (0);
+	timeStamp (0);
 
-    if (! cArgOff (args))
-    {
-	verbose ("Reading command line arguments\n");
-	resize = createTagsForArgs (args);
-    }
-    if (Option.fileList != NULL)
-    {
-	verbose ("Reading list file\n");
-	resize = (boolean) (createTagsFromListFile (Option.fileList) || resize);
-    }
-    if (Option.filter)
-    {
-	verbose ("Reading filter input\n");
-	resize = (boolean) (createTagsFromFileInput (stdin, TRUE) || resize);
-    }
-    if (! files  &&  Option.recurse)
-	resize = recurseIntoDirectory (".");
+	if (! cArgOff (args))
+	{
+		verbose ("Reading command line arguments\n");
+		resize = createTagsForArgs (args);
+	}
+	if (Option.fileList != NULL)
+	{
+		verbose ("Reading list file\n");
+		resize = (boolean) (createTagsFromListFile (Option.fileList) || resize);
+	}
+	if (Option.filter)
+	{
+		verbose ("Reading filter input\n");
+		resize = (boolean) (createTagsFromFileInput (stdin, TRUE) || resize);
+	}
+	if (! files  &&  Option.recurse)
+		resize = recurseIntoDirectory (".");
 
-    timeStamp (1);
+	timeStamp (1);
 
-    if (! Option.filter)
-	closeTagFile (resize);
+	if (! Option.filter)
+		closeTagFile (resize);
 
-    timeStamp (2);
+	timeStamp (2);
 
-    if (Option.printTotals)
-	printTotals (timeStamps);
+	if (Option.printTotals)
+		printTotals (timeStamps);
 #undef timeStamp
 }
 
 /*
- *	Start up code
+ *      Start up code
  */
 
 static void setExecutableName (const char *const path)
 {
-    ExecutableProgram = path;
-    ExecutableName = baseFilename (path);
+	ExecutableProgram = path;
+	ExecutableName = baseFilename (path);
 #ifdef VAXC
 {
-    /* remove filetype from executable name */
-    char *p = strrchr (ExecutableName, '.');
-    if (p != NULL)
-	*p = '\0';
+	/* remove filetype from executable name */
+	char *p = strrchr (ExecutableName, '.');
+	if (p != NULL)
+		*p = '\0';
 }
 #endif
 }
 
 extern int ctags_main (int UNUSED argc, char **argv)
 {
-    cookedArgs *args;
+	cookedArgs *args;
 #ifdef VMS
-    extern int getredirection (int *ac, char ***av);
+	extern int getredirection (int *ac, char ***av);
 
-    /* do wildcard expansion and I/O redirection */
-    getredirection (&argc, &argv);
+	/* do wildcard expansion and I/O redirection */
+	getredirection (&argc, &argv);
 #endif
 
 #ifdef AMIGA
-    /* This program doesn't work when started from the Workbench */
-    if (argc == 0)
-	exit (1);
+	/* This program doesn't work when started from the Workbench */
+	if (argc == 0)
+		exit (1);
 #endif
 
 #ifdef __EMX__
-    _wildcard (&argc, &argv);	/* expand wildcards in argument list */
+	_wildcard (&argc, &argv);   /* expand wildcards in argument list */
 #endif
 
 #if defined (macintosh) && BUILD_MPW_TOOL == 0
-    argc = ccommand (&argv);
+	argc = ccommand (&argv);
 #endif
 
-    setCurrentDirectory ();
-    setExecutableName (*argv++);
+	setCurrentDirectory ();
+	setExecutableName (*argv++);
 #ifdef HAVE_REGEX
-    checkRegex ();
+	checkRegex ();
 #endif
 
-    /* always excluded by default */
-    processExcludeOption (NULL, "EIFGEN");
-    processExcludeOption (NULL, "SCCS");
+	/* always excluded by default */
+	processExcludeOption (NULL, "EIFGEN");
+	processExcludeOption (NULL, "SCCS");
 
-    args = cArgNewFromArgv (argv);
-    previewFirstOption (args);
-    testEtagsInvocation ();
-    initializeParsing ();
-    initOptions ();
-    readOptionConfiguration ();
-    verbose ("Reading initial options from command line\n");
-    parseOptions (args);
-    checkOptions ();
-    makeTags (args);
+	args = cArgNewFromArgv (argv);
+	previewFirstOption (args);
+	testEtagsInvocation ();
+	initializeParsing ();
+	initOptions ();
+	readOptionConfiguration ();
+	verbose ("Reading initial options from command line\n");
+	parseOptions (args);
+	checkOptions ();
+	makeTags (args);
 
-    /*  Clean up.
-     */
-    eFree (CurrentDirectory);
-    freeList (&Excluded);
-    cArgDelete (args);
-    freeKeywordTable ();
-    freeSourceFileResources ();
-    freeTagFileResources ();
-    freeOptionResources ();
-    freeParserResources ();
+	/*  Clean up.
+	 */
+	eFree (CurrentDirectory);
+	freeList (&Excluded);
+	cArgDelete (args);
+	freeKeywordTable ();
+	freeSourceFileResources ();
+	freeTagFileResources ();
+	freeOptionResources ();
+	freeParserResources ();
 #ifdef HAVE_REGEX
-    freeRegexResources ();
+	freeRegexResources ();
 #endif
 
-    exit (0);
-    return 0;
+	exit (0);
+	return 0;
 }
 #endif
 
 /* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
 void utils_warn(const char *msg)
 {
-    g_warning("%s", msg);
+	g_warning("%s", msg);
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

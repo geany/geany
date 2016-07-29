@@ -2330,49 +2330,49 @@ static boolean findFortranTags (const unsigned int passCount)
 
 static void initializeFortran (const langType language)
 {
-    Lang_fortran = language;
-    buildFortranKeywordHash (language);
+	Lang_fortran = language;
+	buildFortranKeywordHash (language);
 }
 
 static void initializeF77 (const langType language)
 {
-    Lang_f77 = language;
-    buildFortranKeywordHash (language);
+	Lang_f77 = language;
+	buildFortranKeywordHash (language);
 }
 
 extern parserDefinition* FortranParser (void)
 {
-    static const char *const extensions [] = {
+	static const char *const extensions [] = {
 	"f90", "f95", "f03",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"F90", "F95", "F03",
 #endif
 	NULL
-    };
-    parserDefinition* def = parserNew ("Fortran");
-    def->kinds      = FortranKinds;
-    def->kindCount  = ARRAY_SIZE (FortranKinds);
-    def->extensions = extensions;
-    def->parser2    = findFortranTags;
-    def->initialize = initializeFortran;
-    return def;
+	};
+	parserDefinition* def = parserNew ("Fortran");
+	def->kinds      = FortranKinds;
+	def->kindCount  = ARRAY_SIZE (FortranKinds);
+	def->extensions = extensions;
+	def->parser2    = findFortranTags;
+	def->initialize = initializeFortran;
+	return def;
 }
 
 extern parserDefinition* F77Parser (void)
 {
-    static const char *const extensions [] = {
+	static const char *const extensions [] = {
 	"f", "for", "ftn", "f77",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"F", "FOR", "FTN", "F77",
 #endif
 	NULL
-    };
-    parserDefinition* def = parserNew ("F77");
-    def->kinds      = FortranKinds;
-    def->kindCount  = ARRAY_SIZE (FortranKinds);
-    def->extensions = extensions;
-    def->parser2    = findFortranTags;
-    def->initialize = initializeF77;
-    return def;
+	};
+	parserDefinition* def = parserNew ("F77");
+	def->kinds      = FortranKinds;
+	def->kindCount  = ARRAY_SIZE (FortranKinds);
+	def->extensions = extensions;
+	def->parser2    = findFortranTags;
+	def->initialize = initializeF77;
+	return def;
 }
 /* vi:set tabstop=4 shiftwidth=4: */

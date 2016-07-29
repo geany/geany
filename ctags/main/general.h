@@ -31,7 +31,7 @@
  *  to prevent warnings about unused variables.
  */
 #if (__GNUC__ > 2  ||  (__GNUC__ == 2  &&  __GNUC_MINOR__ >= 7)) && !(defined (__APPLE_CC__) || defined (__GNUG__))
-# define UNUSED	__attribute__((unused))
+# define UNUSED __attribute__((unused))
 # define PRINTF(s,f)  __attribute__((format (printf, s, f)))
 #else
 # define UNUSED
@@ -43,9 +43,9 @@
  *  stdout instead.
  */
 #if defined (MSDOS) || defined (WIN32)
-# define errout	stdout
+# define errout stdout
 #else
-# define errout	stderr
+# define errout stderr
 #endif
 
 #if defined (__CYGWIN__)
@@ -204,7 +204,7 @@ int fnmatch(const char *pattern, const char *string, int flags);
 
 /* fake debug statement macro */
 #define DebugStatement(x)      ;
-#define PrintStatus(x)	       ;
+#define PrintStatus(x)         ;
 /* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
 void utils_warn(const char *msg);
 #define Assert(x) if (!(x)) utils_warn("Assert(" #x ") failed!")
@@ -252,6 +252,6 @@ extern void *unlink (const char *);
 extern char *getenv (const char *);
 #endif
 
-#endif	/* _GENERAL_H */
+#endif  /* _GENERAL_H */
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

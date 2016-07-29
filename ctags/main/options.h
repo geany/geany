@@ -19,7 +19,7 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"    /* must always come first */
 
 #include <stdarg.h>
 
@@ -36,59 +36,59 @@
 /*  This stores the command line options.
  */
 typedef struct sOptionValues {
-    struct sInclude {
-	boolean fileNames;	/* include tags for source file names */
-	boolean qualifiedTags;	/* include tags for qualified class members */
-	boolean	fileScope;	/* include tags of file scope only */
-    } include;
-    struct sExtFields {		/* extension field content control */
-	boolean access;
-	boolean fileScope;
-	boolean implementation;
-	boolean inheritance;
-	boolean kind;
-	boolean kindKey;
-	boolean kindLong;
-	boolean language;
-	boolean lineNumber;
-	boolean scope;
-	boolean filePosition; /* Write file position */
-	boolean argList; /* Write function and macro argumentlist */
-    } extensionFields;
-    stringList* ignore;	    /* -I  name of file containing tokens to ignore */
-    boolean append;	    /* -a  append to "tags" file */
-    boolean backward;	    /* -B  regexp patterns search backwards */
-    enum eLocate {
-	EX_MIX,		    /* line numbers for defines, patterns otherwise */
-	EX_LINENUM,	    /* -n  only line numbers in tag file */
-	EX_PATTERN	    /* -N  only patterns in tag file */
-    } locate;		    /* --excmd  EX command used to locate tag */
-    boolean recurse;	    /* -R  recurse into directories */
-    boolean sorted;	    /* -u,--sort  sort tags */
-    boolean verbose;	    /* -V  verbose */
-    boolean xref;	    /* -x  generate xref output instead */
-    char *fileList;	    /* -L  name of file containing names of files */
-    char *tagFileName;	    /* -o  name of tags file */
-    stringList* headerExt;  /* -h  header extensions */
-    stringList* etagsInclude;/* --etags-include  list of TAGS files to include*/
-    unsigned int tagFileFormat;/* --format  tag file format (level) */
-    boolean if0;	    /* --if0  examine code within "#if 0" branch */
-    boolean kindLong;	    /* --kind-long */
-    langType language;	    /* --lang specified language override */
-    boolean followLinks;    /* --link  follow symbolic links? */
-    boolean filter;	    /* --filter  behave as filter: files in, tags out */
-    char* filterTerminator; /* --filter-terminator  string to output */
-    boolean qualifiedTags;  /* --qualified-tags include class-qualified tag */
-    boolean tagRelative;    /* --tag-relative file paths relative to tag file */
-    boolean printTotals;    /* --totals  print cumulative statistics */
-    boolean lineDirectives; /* --linedirectives  process #line directives */
+	struct sInclude {
+		boolean fileNames;      /* include tags for source file names */
+		boolean qualifiedTags;  /* include tags for qualified class members */
+		boolean fileScope;      /* include tags of file scope only */
+	} include;
+	struct sExtFields {         /* extension field content control */
+		boolean access;
+		boolean fileScope;
+		boolean implementation;
+		boolean inheritance;
+		boolean kind;
+		boolean kindKey;
+		boolean kindLong;
+		boolean language;
+		boolean lineNumber;
+		boolean scope;
+		boolean filePosition; /* Write file position */
+		boolean argList; /* Write function and macro argumentlist */
+	} extensionFields;
+	stringList* ignore;     /* -I  name of file containing tokens to ignore */
+	boolean append;         /* -a  append to "tags" file */
+	boolean backward;       /* -B  regexp patterns search backwards */
+	enum eLocate {
+		EX_MIX,             /* line numbers for defines, patterns otherwise */
+		EX_LINENUM,         /* -n  only line numbers in tag file */
+		EX_PATTERN          /* -N  only patterns in tag file */
+	} locate;               /* --excmd  EX command used to locate tag */
+	boolean recurse;        /* -R  recurse into directories */
+	boolean sorted;         /* -u,--sort  sort tags */
+	boolean verbose;        /* -V  verbose */
+	boolean xref;           /* -x  generate xref output instead */
+	char *fileList;         /* -L  name of file containing names of files */
+	char *tagFileName;      /* -o  name of tags file */
+	stringList* headerExt;  /* -h  header extensions */
+	stringList* etagsInclude;/* --etags-include  list of TAGS files to include*/
+	unsigned int tagFileFormat;/* --format  tag file format (level) */
+	boolean if0;            /* --if0  examine code within "#if 0" branch */
+	boolean kindLong;       /* --kind-long */
+	langType language;      /* --lang specified language override */
+	boolean followLinks;    /* --link  follow symbolic links? */
+	boolean filter;         /* --filter  behave as filter: files in, tags out */
+	char* filterTerminator; /* --filter-terminator  string to output */
+	boolean qualifiedTags;  /* --qualified-tags include class-qualified tag */
+	boolean tagRelative;    /* --tag-relative file paths relative to tag file */
+	boolean printTotals;    /* --totals  print cumulative statistics */
+	boolean lineDirectives; /* --linedirectives  process #line directives */
 	boolean nestFunction; /* --nest Nest inside function blocks for tags */
 } optionValues;
 
 /*
 *   GLOBAL VARIABLES
 */
-extern CONST_OPTION optionValues	Option;
+extern CONST_OPTION optionValues        Option;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -106,6 +106,6 @@ extern void freeOptionResources (void);
 
 void addIgnoreListFromFile (const char *const fileName);
 
-#endif	/* _OPTIONS_H */
+#endif  /* _OPTIONS_H */
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

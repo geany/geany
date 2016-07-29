@@ -15,11 +15,11 @@
 #ifndef PROGRAM_VERSION
 # define PROGRAM_VERSION "5.0.1"
 #endif
-#define PROGRAM_NAME	"Exuberant Ctags"
-#define PROGRAM_URL	"http://ctags.sourceforge.net"
-#define AUTHOR_NAME	"Darren Hiebert"
-#define AUTHOR_EMAIL	"darren@hiebert.com"
+#define PROGRAM_NAME    "Exuberant Ctags"
+#define PROGRAM_URL     "http://ctags.sourceforge.net"
+#define AUTHOR_NAME     "Darren Hiebert"
+#define AUTHOR_EMAIL    "darren@hiebert.com"
 
-#endif	/* _CTAGS_H */
+#endif  /* _CTAGS_H */
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

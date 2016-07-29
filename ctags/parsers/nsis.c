@@ -145,4 +145,4 @@ extern parserDefinition* NsisParser (void)
 	return def;
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */

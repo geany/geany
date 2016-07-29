@@ -24,13 +24,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_SECTION,
-    K_KEY
+	K_SECTION,
+	K_KEY
 } confKind;
 
 static kindOption ConfKinds [] = {
-    { TRUE, 'n', "namespace",  "sections"},
-    { TRUE, 'm', "macro", "keys"}
+	{ TRUE, 'n', "namespace",  "sections"},
+	{ TRUE, 'm', "macro", "keys"}
 };
 
 /*
@@ -39,18 +39,18 @@ static kindOption ConfKinds [] = {
 
 static boolean isIdentifier (int c)
 {
-    /* allow whitespace within keys and sections */
-    return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
+	/* allow whitespace within keys and sections */
+	return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
 }
 
 static void findConfTags (void)
 {
-    vString *name = vStringNew ();
-    vString *scope = vStringNew ();
-    const unsigned char *line;
+	vString *name = vStringNew ();
+	vString *scope = vStringNew ();
+	const unsigned char *line;
 
-    while ((line = fileReadLine ()) != NULL)
-    {
+	while ((line = fileReadLine ()) != NULL)
+	{
 		const unsigned char* cp = line;
 		boolean possible = TRUE;
 
@@ -107,22 +107,22 @@ static void findConfTags (void)
 			if (*cp != '\0')
 				++cp;
 		}
-    }
-    vStringDelete (name);
-    vStringDelete (scope);
+	}
+	vStringDelete (name);
+	vStringDelete (scope);
 }
 
 extern parserDefinition* ConfParser (void)
 {
-    static const char *const patterns [] = { "*.ini", "*.conf", NULL };
-    static const char *const extensions [] = { "conf", NULL };
-    parserDefinition* const def = parserNew ("Conf");
-    def->kinds      = ConfKinds;
-    def->kindCount  = ARRAY_SIZE (ConfKinds);
-    def->patterns   = patterns;
-    def->extensions = extensions;
-    def->parser     = findConfTags;
-    return def;
+	static const char *const patterns [] = { "*.ini", "*.conf", NULL };
+	static const char *const extensions [] = { "conf", NULL };
+	parserDefinition* const def = parserNew ("Conf");
+	def->kinds      = ConfKinds;
+	def->kindCount  = ARRAY_SIZE (ConfKinds);
+	def->patterns   = patterns;
+	def->extensions = extensions;
+	def->parser     = findConfTags;
+	return def;
 }
 
-/* vi:set tabstop=8 shiftwidth=4: */
+/* vi:set tabstop=4 shiftwidth=4: */
