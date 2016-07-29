@@ -136,6 +136,7 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
+	gint		scroll_lines_around_cursor;
 }
 GeanyEditorPrefs;
 
