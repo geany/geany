@@ -1,18 +1,17 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains low level source and tag file read functions (newline
-*   conversion for source files are performed at this level).
+*   This module contains low level input and tag file read functions (newline
+*   conversion for input files are performed at this level).
 */
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <string.h>
 #include <ctype.h>
@@ -20,8 +19,10 @@
 
 #define FILE_WRITE
 #include "read.h"
+#include "debug.h"
 #include "entry.h"
 #include "main.h"
+#include "routines.h"
 #include "options.h"
 
 /*
@@ -44,7 +45,7 @@ extern void freeSourceFileResources (void)
 }
 
 /*
- *   Source file access functions
+ *   Input file access functions
  */
 
 static void setInputFileName (const char *const fileName)
@@ -94,8 +95,9 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 
 static boolean setSourceFileName (vString *const fileName)
 {
+	const langType language = getFileLanguage (vStringValue (fileName));
 	boolean result = FALSE;
-	if (getFileLanguage (vStringValue (fileName)) != LANG_IGNORE)
+	if (language != LANG_IGNORE)
 	{
 		vString *pathName;
 		if (isAbsolutePath (vStringValue (fileName)) || File.path == NULL)
@@ -154,7 +156,7 @@ static vString *readFileName (void)
 
 	if (c == '"')
 	{
-		c = mio_getc (File.fp);            /* skip double-quote */
+		c = mio_getc (File.fp);  /* skip double-quote */
 		quoteDelimited = TRUE;
 	}
 	while (c != EOF  &&  c != '\n'  &&
@@ -233,26 +235,22 @@ static boolean parseLineDirective (void)
 }
 
 /*
- *   Source file I/O operations
+ *   Input file I/O operations
  */
 
-/*  This function opens a source file, and resets the line counter.  If it
+/*  This function opens an input file, and resets the line counter.  If it
  *  fails, it will display an error message and leave the File.fp set to NULL.
  */
 extern boolean fileOpen (const char *const fileName, const langType language)
 {
-#ifdef VMS
-	const char *const openMode = "r";
-#else
 	const char *const openMode = "rb";
-#endif
 	boolean opened = FALSE;
 
-	/*  If another file was already open, then close it.
+	/*	If another file was already open, then close it.
 	 */
 	if (File.fp != NULL)
 	{
-		mio_free (File.fp);            /* close any open source file */
+		mio_free (File.fp);  /* close any open input file */
 		File.fp = NULL;
 	}
 
@@ -351,7 +349,7 @@ extern boolean fileEOF (void)
 	return File.eof;
 }
 
-/*  Action to take for each encountered source newline.
+/*  Action to take for each encountered input newline.
  */
 static void fileNewline (void)
 {
@@ -368,11 +366,11 @@ static void fileNewline (void)
  */
 static int iFileGetc (void)
 {
-	int c;
+	int	c;
 readnext:
 	c = mio_getc (File.fp);
 
-	/*  If previous character was a newline, then we're starting a line.
+	/*	If previous character was a newline, then we're starting a line.
 	 */
 	if (File.newLine  &&  c != EOF)
 	{
@@ -384,7 +382,6 @@ readnext:
 			else
 			{
 				mio_setpos (File.fp, &StartOfLine);
-
 				c = mio_getc (File.fp);
 			}
 		}
@@ -399,12 +396,11 @@ readnext:
 	}
 	else if (c == CRETURN)
 	{
-		/*  Turn line breaks into a canonical form. The three commonly
-		 *  used forms if line breaks: LF (UNIX), CR (MacIntosh), and
-		 *  CR-LF (MS-DOS) are converted into a generic newline.
+		/* Turn line breaks into a canonical form. The three commonly
+		 * used forms if line breaks: LF (UNIX/Mac OS X), CR (Mac OS 9),
+		 * and CR-LF (MS-DOS) are converted into a generic newline.
 		 */
-		const int next = mio_getc (File.fp);       /* is CR followed by LF? */
-
+		const int next = mio_getc (File.fp);  /* is CR followed by LF? */
 		if (next != NEWLINE)
 			mio_ungetc (File.fp, next);
 
@@ -418,7 +414,7 @@ readnext:
 
 extern void ungetcToInputFile (int c)
 {
-	const size_t len = sizeof File.ungetchBuf / sizeof File.ungetchBuf[0];
+	const size_t len = ARRAY_SIZE (File.ungetchBuf);
 
 	Assert (File.ungetchIdx < len);
 	/* we cannot rely on the assertion that might be disabled in non-debug mode */
@@ -466,7 +462,7 @@ extern int getcFromInputFile (void)
 	if (File.ungetchIdx > 0)
 	{
 		c = File.ungetchBuf[--File.ungetchIdx];
-		return c;           /* return here to avoid re-calling debugPutc () */
+		return c;  /* return here to avoid re-calling debugPutc () */
 	}
 	do
 	{
@@ -583,7 +579,7 @@ extern char *readLineRaw (vString *const vLine, MIO *const fp)
 				eol = vStringValue (vLine) + vStringLength (vLine) - 1;
 				if (*eol == '\r')
 					*eol = '\n';
-				else if (*(eol - 1) == '\r'  &&  *eol == '\n')
+				else if (vStringLength (vLine) != 1 && *(eol - 1) == '\r'  &&  *eol == '\n')
 				{
 					*(eol - 1) = '\n';
 					*eol = '\0';
@@ -598,8 +594,8 @@ extern char *readLineRaw (vString *const vLine, MIO *const fp)
 /*  Places into the line buffer the contents of the line referenced by
  *  "location".
  */
-extern char *readSourceLine (vString *const vLine, MIOPos location,
-							 long *const pSeekValue)
+extern char *readLineFromBypass (
+		vString *const vLine, MIOPos location, long *const pSeekValue)
 {
 	MIOPos orignalPosition;
 	char *result;
@@ -609,10 +605,10 @@ extern char *readSourceLine (vString *const vLine, MIOPos location,
 	if (pSeekValue != NULL)
 		*pSeekValue = mio_tell (File.fp);
 	result = readLineRaw (vLine, File.fp);
-	if (result == NULL)
-		error (FATAL, "Unexpected end of file: %s", getInputFileName ());
 	mio_setpos (File.fp, &orignalPosition);
-
+	/* If the file is empty, we can't get the line
+	   for location 0. readLineFromBypass doesn't know
+	   what itself should do; just report it to the caller. */
 	return result;
 }
 
