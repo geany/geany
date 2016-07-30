@@ -504,7 +504,7 @@ extern int fileGetNthPrevC (unsigned int nth, int def)
 		return def;
 }
 
-extern int fileSkipToCharacter (int c)
+extern int skipToCharacterInInputFile (int c)
 {
 	int d;
 	do
