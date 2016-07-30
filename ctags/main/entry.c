@@ -212,7 +212,7 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 	Assert (classLength < maxClassLength);
 
 	mio_getpos (mio, &startOfLine);
-	line = readLine (TagFile.vLine, mio);
+	line = readLineRaw (TagFile.vLine, mio);
 	while (line != NULL  &&  line [0] == class [0])
 	{
 		++linesRead;
@@ -228,12 +228,12 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 			}
 			mio_getpos (mio, &startOfLine);
 		}
-		line = readLine (TagFile.vLine, mio);
+		line = readLineRaw (TagFile.vLine, mio);
 	}
 	while (line != NULL)                        /* skip to end of file */
 	{
 		++linesRead;
-		line = readLine (TagFile.vLine, mio);
+		line = readLineRaw (TagFile.vLine, mio);
 	}
 	return linesRead;
 }
@@ -253,7 +253,7 @@ static boolean isTagFile (const char *const filename)
 		ok = TRUE;
 	else if (mio != NULL)
 	{
-		const char *line = readLine (TagFile.vLine, mio);
+		const char *line = readLineRaw (TagFile.vLine, mio);
 
 		if (line == NULL)
 			ok = TRUE;

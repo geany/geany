@@ -532,17 +532,16 @@ extern const unsigned char *readLineFromInputFile (void)
 	return result;
 }
 
-
 /*
- *   Source file line reading with automatic buffer sizing
+ *   Raw file line reading with automatic buffer sizing
  */
-extern char *readLine (vString *const vLine, MIO *const mio)
+extern char *readLineRaw (vString *const vLine, MIO *const fp)
 {
 	char *result = NULL;
 
 	vStringClear (vLine);
-	if (mio == NULL)            /* to free memory allocated to buffer */
-		error (FATAL, "NULL MIO pointer");
+	if (fp == NULL)  /* to free memory allocated to buffer */
+		error (FATAL, "NULL file pointer");
 	else
 	{
 		boolean reReadLine;
@@ -555,15 +554,15 @@ extern char *readLine (vString *const vLine, MIO *const mio)
 		do
 		{
 			char *const pLastChar = vStringValue (vLine) + vStringSize (vLine) -2;
-			MIOPos startOfLine;
+			long startOfLine;
 
-			mio_getpos (mio, &startOfLine);
+			startOfLine = mio_tell(fp);
 			reReadLine = FALSE;
 			*pLastChar = '\0';
-			result = mio_gets (mio, vStringValue (vLine), (int) vStringSize (vLine));
+			result = mio_gets (fp, vStringValue (vLine), (int) vStringSize (vLine));
 			if (result == NULL)
 			{
-				if (! mio_eof (mio))
+				if (! mio_eof (fp))
 					error (FATAL | PERROR, "Failure on attempt to read file");
 			}
 			else if (*pLastChar != '\0'  &&
@@ -572,7 +571,7 @@ extern char *readLine (vString *const vLine, MIO *const mio)
 				/*  buffer overflow */
 				reReadLine = vStringAutoResize (vLine);
 				if (reReadLine)
-					mio_setpos (mio, &startOfLine);
+					mio_seek (fp, startOfLine, SEEK_SET);
 				else
 					error (FATAL | PERROR, "input line too big; out of memory");
 			}
@@ -609,7 +608,7 @@ extern char *readSourceLine (vString *const vLine, MIOPos location,
 	mio_setpos (File.fp, &location);
 	if (pSeekValue != NULL)
 		*pSeekValue = mio_tell (File.fp);
-	result = readLine (vLine, File.fp);
+	result = readLineRaw (vLine, File.fp);
 	if (result == NULL)
 		error (FATAL, "Unexpected end of file: %s", getInputFileName ());
 	mio_setpos (File.fp, &orignalPosition);

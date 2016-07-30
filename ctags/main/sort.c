@@ -178,7 +178,7 @@ extern void internalSortTags (const boolean toStdout)
 		failedSort (mio, NULL);
 	for (i = 0  ;  i < numTags  &&  ! mio_eof (mio)  ;  )
 	{
-		line = readLine (vLine, mio);
+		line = readLineRaw (vLine, mio);
 		if (line == NULL)
 		{
 			if (! mio_eof (mio))

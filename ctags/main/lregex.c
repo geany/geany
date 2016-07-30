@@ -402,7 +402,7 @@ static void processLanguageRegex (const langType language,
 		else
 		{
 			vString* const regex = vStringNew ();
-			while (readLine (regex, mio))
+			while (readLineRaw (regex, mio))
 				addLanguageRegex (language, vStringValue (regex));
 			mio_free (mio);
 			vStringDelete (regex);

@@ -170,7 +170,7 @@ static langType getInterpreterLanguage (const char *const fileName)
 	if (fp != NULL)
 	{
 		vString* const vLine = vStringNew ();
-		const char* const line = readLine (vLine, fp);
+		const char* const line = readLineRaw (vLine, fp);
 		if (line != NULL  &&  line [0] == '#'  &&  line [1] == '!')
 		{
 			const char* const lastSlash = strrchr (line, '/');

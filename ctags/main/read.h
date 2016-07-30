@@ -111,7 +111,7 @@ extern int getNthPrevCFromInputFile (unsigned int nth, int def);
 extern int skipToCharacterInInputFile (int c);
 extern void ungetcToInputFile (int c);
 extern const unsigned char *readLineFromInputFile (void);
-extern char *readLine (vString *const vLine, MIO *const mio);
+extern char *readLineRaw (vString *const vLine, MIO *const fp);
 extern char *readSourceLine (vString *const vLine, MIOPos location, long *const pSeekValue);
 extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
                            const char *const fileName, const langType language );
