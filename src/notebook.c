@@ -455,15 +455,15 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
-	menu_item = ui_image_menu_item_new(NULL, _("Sort Tabs Based on _Filename"));
+	menu_item = ui_image_menu_item_new(NULL, _("Sort Tabs By _Filename"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_filename_activate), NULL);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_by_filename_activate), NULL);
 
-	menu_item = ui_image_menu_item_new(NULL, _("_Sort Tabs Based on Pathname"));
+	menu_item = ui_image_menu_item_new(NULL, _("_Sort Tabs By Pathname"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
-	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_pathname_activate), NULL);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_by_pathname_activate), NULL);
 
 	menu_item = gtk_separator_menu_item_new();
 	gtk_widget_show(menu_item);
@@ -879,7 +879,7 @@ static gint compare_filenames(const gchar *a, const gchar *b)
 }
 
 
-static gint compare_docs_based_on_filename(gconstpointer a, gconstpointer b)
+static gint compare_docs_by_filename(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *(GeanyDocument**) a;
 	GeanyDocument *doc_b = *(GeanyDocument**) b;
@@ -892,7 +892,7 @@ static gint compare_docs_based_on_filename(gconstpointer a, gconstpointer b)
 }
 
 
-static gint compare_docs_based_on_pathname(gconstpointer a, gconstpointer b)
+static gint compare_docs_by_pathname(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *(GeanyDocument**) a;
 	GeanyDocument *doc_b = *(GeanyDocument**) b;
@@ -934,10 +934,10 @@ void notebook_sort_tabs(NotebookTabSortMethod method)
 	foreach_document(i)
 		g_array_append_val(docs, documents[i]);
 
-	if (method == NOTEBOOK_TAB_SORT_FILENAME)
-		g_array_sort(docs, compare_docs_based_on_filename);
+	if (method == NOTEBOOK_TAB_SORT_BY_FILENAME)
+		g_array_sort(docs, compare_docs_by_filename);
 	else
-		g_array_sort(docs, compare_docs_based_on_pathname);
+		g_array_sort(docs, compare_docs_by_pathname);
 
 	for (i = 0; i < docs->len; ++i)
 	{
@@ -949,19 +949,19 @@ void notebook_sort_tabs(NotebookTabSortMethod method)
 }
 
 
-void on_sort_tabs_filename_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_sort_tabs_by_filename_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_FILENAME);
 }
 
 
-void on_sort_tabs_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
+void on_sort_tabs_by_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_PATHNAME);
 }
 
 
-static void gradually_sort_tab_based_on_filename(GeanyDocument *doc)
+static void gradually_sort_tab_by_filename(GeanyDocument *doc)
 {
 	GeanyDocument *doc_b;
 	gchar *base_a, *base_b;
@@ -999,7 +999,7 @@ static void gradually_sort_tab_based_on_filename(GeanyDocument *doc)
 }
 
 
-static void gradually_sort_tab_based_on_pathname(GeanyDocument *doc)
+static void gradually_sort_tab_by_pathname(GeanyDocument *doc)
 {
 	GeanyDocument *doc_b;
 	GtkWidget *page;
@@ -1061,10 +1061,10 @@ static void on_document_open(GObject *obj, GeanyDocument *doc)
 {
 	if (interface_prefs.show_notebook_tabs)
 	{
-		if (interface_prefs.auto_sort_tabs_filename)
-			gradually_sort_tab_based_on_filename(doc);
-		else if (interface_prefs.auto_sort_tabs_pathname)
-			gradually_sort_tab_based_on_pathname(doc);
+		if (interface_prefs.auto_sort_tabs_by_filename)
+			gradually_sort_tab_by_filename(doc);
+		else if (interface_prefs.auto_sort_tabs_by_pathname)
+			gradually_sort_tab_by_pathname(doc);
 	}
 }
 
@@ -1079,10 +1079,10 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 {
 	if (doc_saves_to_new_file && interface_prefs.show_notebook_tabs)
 	{
-		if (interface_prefs.auto_sort_tabs_filename)
-			gradually_sort_tab_based_on_filename(doc);
-		else if (interface_prefs.auto_sort_tabs_pathname)
-			gradually_sort_tab_based_on_pathname(doc);
+		if (interface_prefs.auto_sort_tabs_by_filename)
+			gradually_sort_tab_by_filename(doc);
+		else if (interface_prefs.auto_sort_tabs_by_pathname)
+			gradually_sort_tab_by_pathname(doc);
 	}
 }
 

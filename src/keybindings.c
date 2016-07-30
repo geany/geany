@@ -654,10 +654,10 @@ static void init_default_kb(void)
 		0, 0, "move_tabfirst", _("Move document first"), NULL);
 	add_kb(group, GEANY_KEYS_NOTEBOOK_MOVETABLAST, cb_func_move_tab,
 		0, 0, "move_tablast", _("Move document last"), NULL);
-	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABS_FILENAME, cb_func_sort_tabs,
-		0, 0, "sort_tabs_filename", _("Sort tabs based on filename"), NULL);
-	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABS_PATHNAME, cb_func_sort_tabs,
-		0, 0, "sort_tabs_filepath", _("Sort tabs based on pathname"), NULL);
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABSBYFILENAME, cb_func_sort_tabs,
+		0, 0, "sort_tabs_by_filename", _("Sort tabs by filename"), NULL);
+	add_kb(group, GEANY_KEYS_NOTEBOOK_SORTTABSBYPATHNAME, cb_func_sort_tabs,
+		0, 0, "sort_tabs_by_filepath", _("Sort tabs by pathname"), NULL);
 
 	group = keybindings_get_core_group(GEANY_KEY_GROUP_DOCUMENT);
 
@@ -1923,11 +1923,11 @@ static void cb_func_sort_tabs(guint key_id)
 {
 	switch (key_id)
 	{
-		case GEANY_KEYS_NOTEBOOK_SORTTABS_FILENAME:
-			notebook_sort_tabs(NOTEBOOK_TAB_SORT_FILENAME);
+		case GEANY_KEYS_NOTEBOOK_SORTTABSBYFILENAME:
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_FILENAME);
 			break;
-		case GEANY_KEYS_NOTEBOOK_SORTTABS_PATHNAME:
-			notebook_sort_tabs(NOTEBOOK_TAB_SORT_PATHNAME);
+		case GEANY_KEYS_NOTEBOOK_SORTTABSBYPATHNAME:
+			notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_PATHNAME);
 			break;
 	}
 }

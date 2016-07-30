@@ -173,10 +173,10 @@ static void init_pref_groups(void)
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
-	stash_group_add_toggle_button(group, &interface_prefs.auto_sort_tabs_filename,
-		"auto_sort_tabs_filename", FALSE, "check_auto_sort_tabs_filename");
-	stash_group_add_toggle_button(group, &interface_prefs.auto_sort_tabs_pathname,
-		"auto_sort_tabs_pathname", FALSE, "check_auto_sort_tabs_pathname");
+	stash_group_add_toggle_button(group, &interface_prefs.auto_sort_tabs_by_filename,
+		"auto_sort_tabs_by_filename", FALSE, "check_auto_sort_tabs_by_filename");
+	stash_group_add_toggle_button(group, &interface_prefs.auto_sort_tabs_by_pathname,
+		"auto_sort_tabs_by_pathname", FALSE, "check_auto_sort_tabs_by_pathname");
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
@@ -781,8 +781,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
-	if (interface_prefs.auto_sort_tabs_filename && interface_prefs.auto_sort_tabs_pathname)
-		interface_prefs.auto_sort_tabs_filename = FALSE;
+	if (interface_prefs.auto_sort_tabs_by_filename && interface_prefs.auto_sort_tabs_by_pathname)
+		interface_prefs.auto_sort_tabs_by_filename = FALSE;
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);

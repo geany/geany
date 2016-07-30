@@ -2180,8 +2180,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="check_auto_sort_tabs_filename">
-                                    <property name="label" translatable="yes">Automatically sort tabs based on filename</property>
+                                  <object class="GtkCheckButton" id="check_auto_sort_tabs_by_filename">
+                                    <property name="label" translatable="yes">Automatically sort tabs by filename</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
@@ -2195,8 +2195,8 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkCheckButton" id="check_auto_sort_tabs_pathname">
-                                    <property name="label" translatable="yes">Automatically sort tabs based on pathname</property>
+                                  <object class="GtkCheckButton" id="check_auto_sort_tabs_by_pathname">
+                                    <property name="label" translatable="yes">Automatically sort tabs by pathname</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
