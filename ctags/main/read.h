@@ -107,7 +107,7 @@ extern boolean fileOpen (const char *const fileName, const langType language);
 extern boolean fileEOF (void);
 extern void fileClose (void);
 extern int getcFromInputFile (void);
-extern int fileGetNthPrevC (unsigned int nth, int def);
+extern int getNthPrevCFromInputFile (unsigned int nth, int def);
 extern int skipToCharacterInInputFile (int c);
 extern void ungetcToInputFile (int c);
 extern const unsigned char *fileReadLine (void);
