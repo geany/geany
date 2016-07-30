@@ -81,7 +81,7 @@ static int get_next_char(void)
 	nxt = getcFromInputFile();
 	if (nxt == EOF)
 		return c;
-	fileUngetc(nxt);
+	ungetcToInputFile(nxt);
 
 	if (c == '-' && nxt == '-') {
 		skip_rest_of_line();
@@ -127,7 +127,7 @@ static int get_token(char *token, int n)
 	if (c == EOF)
 		return 0;
 	if (i != n) {
-		fileUngetc(c);
+		ungetcToInputFile(c);
 		return 1;
 	} else {
 		return 0;

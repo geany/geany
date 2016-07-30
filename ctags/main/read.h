@@ -109,7 +109,7 @@ extern void fileClose (void);
 extern int getcFromInputFile (void);
 extern int fileGetNthPrevC (unsigned int nth, int def);
 extern int fileSkipToCharacter (int c);
-extern void fileUngetc (int c);
+extern void ungetcToInputFile (int c);
 extern const unsigned char *fileReadLine (void);
 extern char *readLine (vString *const vLine, MIO *const mio);
 extern char *readSourceLine (vString *const vLine, MIOPos location, long *const pSeekValue);

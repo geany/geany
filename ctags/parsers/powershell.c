@@ -226,7 +226,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		vStringPut (string, (char) c);
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (string);
 }
 
@@ -259,7 +259,7 @@ static int skipSingleComment (void)
 		{
 			int next = getcFromInputFile ();
 			if (next != '\n')
-				fileUngetc (next);
+				ungetcToInputFile (next);
 			else
 				c = next;
 		}
@@ -320,14 +320,14 @@ getNextChar:
 						if (c == '>')
 							break;
 						else
-							fileUngetc (c);
+							ungetcToInputFile (c);
 					}
 				} while (c != EOF);
 				goto getNextChar;
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;
@@ -346,7 +346,7 @@ getNextChar:
 		{
 			int d = getcFromInputFile ();
 			if (d != '=')
-				fileUngetc (d);
+				ungetcToInputFile (d);
 			token->type = TOKEN_OPERATOR;
 			break;
 		}
@@ -356,7 +356,7 @@ getNextChar:
 			int d = getcFromInputFile ();
 			if (! isIdentChar (d))
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			else

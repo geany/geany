@@ -497,7 +497,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	} while (isIdentChar (c));
 	vStringTerminate (string);
 	if (!isspace (c))
-		fileUngetc (c);		/* unget non-identifier character */
+		ungetcToInputFile (c);		/* unget non-identifier character */
 }
 
 static void readToken (tokenInfo *const token)
@@ -560,7 +560,7 @@ getNextChar:
 				  else
 				  {
 					  if (!isspace (c))
-						  fileUngetc (c);
+						  ungetcToInputFile (c);
 					  token->type = TOKEN_OPERATOR;
 				  }
 				  break;
@@ -579,7 +579,7 @@ getNextChar:
 					  }
 					  else
 					  {
-						  fileUngetc (d);
+						  ungetcToInputFile (d);
 						  token->type = TOKEN_UNDEFINED;
 					  }
 					  break;
@@ -588,7 +588,7 @@ getNextChar:
 		case '\\':
 				  c = getcFromInputFile ();
 				  if (c != '\\'  && c != '"'  && c != '\''  &&  !isspace (c))
-					  fileUngetc (c);
+					  ungetcToInputFile (c);
 				  token->type = TOKEN_CHARACTER;
 				  token->lineNumber = getSourceLineNumber ();
 				  token->filePosition = getInputFilePosition ();
@@ -601,7 +601,7 @@ getNextChar:
 							  (d != '/') )			/* is a one line comment? */
 					  {
 						  token->type = TOKEN_FORWARD_SLASH;
-						  fileUngetc (d);
+						  ungetcToInputFile (d);
 					  }
 					  else
 					  {
@@ -614,7 +614,7 @@ getNextChar:
 								  if (c == '/')
 									  break;
 								  else
-									  fileUngetc (c);
+									  ungetcToInputFile (c);
 							  } while (c != EOF && c != '\0');
 							  goto getNextChar;
 						  }

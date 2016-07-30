@@ -590,14 +590,14 @@ static void parseHeredoc (vString *const string)
 				c = getcFromInputFile ();
 
 			if (delimiter[len] != 0)
-				fileUngetc (c);
+				ungetcToInputFile (c);
 			else
 			{
 				/* line start matched the delimiter, now check whether there
 				 * is anything after it */
 				if (c == '\r' || c == '\n')
 				{
-					fileUngetc (c);
+					ungetcToInputFile (c);
 					break;
 				}
 				else if (c == ';')
@@ -608,14 +608,14 @@ static void parseHeredoc (vString *const string)
 						/* put back the semicolon since it's not part of the
 						 * string.  we can't put back the newline, but it's a
 						 * whitespace character nobody cares about it anyway */
-						fileUngetc (';');
+						ungetcToInputFile (';');
 						break;
 					}
 					else
 					{
 						/* put semicolon in the string and continue */
 						extra = ';';
-						fileUngetc (d);
+						ungetcToInputFile (d);
 					}
 				}
 			}
@@ -634,7 +634,7 @@ static void parseHeredoc (vString *const string)
 	return;
 
 error:
-	fileUngetc (c);
+	ungetcToInputFile (c);
 }
 
 static void parseIdentifier (vString *const string, const int firstChar)
@@ -645,7 +645,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		vStringPut (string, (char) c);
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (string);
 }
 
@@ -739,7 +739,7 @@ static int findPhpStart (void)
 			/* <script language="php"> */
 			else
 			{
-				fileUngetc (c);
+				ungetcToInputFile (c);
 				if (isOpenScriptLanguagePhp ('<'))
 					break;
 			}
@@ -760,7 +760,7 @@ static int skipSingleComment (void)
 		{
 			int next = getcFromInputFile ();
 			if (next != '\n')
-				fileUngetc (next);
+				ungetcToInputFile (next);
 			else
 				c = next;
 		}
@@ -771,7 +771,7 @@ static int skipSingleComment (void)
 			if (next == '>')
 				InPhp = FALSE;
 			else
-				fileUngetc (next);
+				ungetcToInputFile (next);
 		}
 	} while (InPhp && c != EOF && c != '\n' && c != '\r');
 	return c;
@@ -823,7 +823,7 @@ getNextChar:
 				token->type = TOKEN_OPERATOR;
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_EQUAL_SIGN;
 			}
 			break;
@@ -856,7 +856,7 @@ getNextChar:
 				}
 				else
 				{
-					fileUngetc (d);
+					ungetcToInputFile (d);
 					token->type = TOKEN_UNDEFINED;
 				}
 			}
@@ -867,7 +867,7 @@ getNextChar:
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;
@@ -885,7 +885,7 @@ getNextChar:
 		{
 			int d = getcFromInputFile ();
 			if (d != '=')
-				fileUngetc (d);
+				ungetcToInputFile (d);
 			token->type = TOKEN_OPERATOR;
 			break;
 		}
@@ -909,7 +909,7 @@ getNextChar:
 						if (c == '/')
 							break;
 						else
-							fileUngetc (c);
+							ungetcToInputFile (c);
 					}
 				} while (c != EOF && c != '\0');
 				goto getNextChar;
@@ -917,7 +917,7 @@ getNextChar:
 			else
 			{
 				if (d != '=')
-					fileUngetc (d);
+					ungetcToInputFile (d);
 				token->type = TOKEN_OPERATOR;
 			}
 			break;
@@ -928,7 +928,7 @@ getNextChar:
 			int d = getcFromInputFile ();
 			if (! isIdentChar (d))
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			else
@@ -949,7 +949,7 @@ getNextChar:
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;

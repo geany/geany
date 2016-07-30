@@ -183,7 +183,7 @@ static boolean readDirective (int c, char *const name, unsigned int maxLength)
 			c = getcFromInputFile ();
 			if (c == EOF  ||  ! isalpha (c))
 			{
-				fileUngetc (c);
+				ungetcToInputFile (c);
 				break;
 			}
 		}
@@ -205,7 +205,7 @@ static void readIdentifier (int c, vString *const name)
 		vStringPut (name, c);
 		c = getcFromInputFile ();
 	} while (c != EOF && isident (c));
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (name);
 }
 
@@ -335,7 +335,7 @@ static void directiveDefine (const int c)
 	{
 		readIdentifier (c, Cpp.directive.name);
 		nc = getcFromInputFile ();
-		fileUngetc (nc);
+		ungetcToInputFile (nc);
 		parameterized = (boolean) (nc == '(');
 		if (! isIgnore ())
 			makeDefineTag (vStringValue (Cpp.directive.name), parameterized);
@@ -445,7 +445,7 @@ static Comment isComment (void)
 		comment = COMMENT_D;
 	else
 	{
-		fileUngetc (next);
+		ungetcToInputFile (next);
 		comment = COMMENT_NONE;
 	}
 	return comment;
@@ -550,7 +550,7 @@ static int skipToEndOfCxxRawLiteralString (void)
 
 	if (c != '(' && ! isCxxRawLiteralDelimiterChar (c))
 	{
-		fileUngetc (c);
+		ungetcToInputFile (c);
 		c = skipToEndOfString (FALSE);
 	}
 	else
@@ -578,7 +578,7 @@ static int skipToEndOfCxxRawLiteralString (void)
 				if (i == delimLen && c == DOUBLE_QUOTE)
 					break;
 				else
-					fileUngetc (c);
+					ungetcToInputFile (c);
 			}
 		}
 		while ((c = getcFromInputFile ()) != EOF);
@@ -605,14 +605,14 @@ static int skipToEndOfChar (void)
 			break;
 		else if (c == NEWLINE)
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 		else if (count == 1  &&  strchr ("DHOB", toupper (c)) != NULL)
 			veraBase = c;
 		else if (veraBase != '\0'  &&  ! isalnum (c))
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 	}
@@ -687,7 +687,7 @@ process:
 				{
 					c = skipOverCplusComment ();
 					if (c == NEWLINE)
-						fileUngetc (c);
+						ungetcToInputFile (c);
 				}
 				else if (comment == COMMENT_D)
 					c = skipOverDComment ();
@@ -703,7 +703,7 @@ process:
 				if (next == NEWLINE)
 					continue;
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				break;
 			}
 
@@ -711,7 +711,7 @@ process:
 			{
 				int next = getcFromInputFile ();
 				if (next != '?')
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				else
 				{
 					next = getcFromInputFile ();
@@ -727,8 +727,8 @@ process:
 						case '-':          c = '~';       break;
 						case '=':          c = '#';       goto process;
 						default:
-							fileUngetc ('?');
-							fileUngetc (next);
+							ungetcToInputFile ('?');
+							ungetcToInputFile (next);
 							break;
 					}
 				}
@@ -745,7 +745,7 @@ process:
 				{
 					case ':':	c = '['; break;
 					case '%':	c = '{'; break;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
@@ -755,7 +755,7 @@ process:
 				if (next == '>')
 					c = ']';
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				goto enter;
 			}
 			case '%':
@@ -765,7 +765,7 @@ process:
 				{
 					case '>':	c = '}'; break;
 					case ':':	c = '#'; goto process;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
@@ -781,7 +781,7 @@ process:
 						break;
 					}
 					else
-						fileUngetc (next);
+						ungetcToInputFile (next);
 				}
 				else if (c == 'R' && Cpp.hasCxxRawLiteralStrings)
 				{
@@ -812,7 +812,7 @@ process:
 					{
 						int next = getcFromInputFile ();
 						if (next != DOUBLE_QUOTE)
-							fileUngetc (next);
+							ungetcToInputFile (next);
 						else
 						{
 							Cpp.directive.accept = FALSE;

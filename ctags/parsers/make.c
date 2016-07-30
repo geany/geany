@@ -58,7 +58,7 @@ static void skipLine (void)
 		c = nextChar ();
 	while (c != EOF  &&  c != '\n');
 	if (c == '\n')
-		fileUngetc (c);
+		ungetcToInputFile (c);
 }
 
 static int skipToNonWhite (int c)
@@ -119,7 +119,7 @@ static void readIdentifier (const int first, vString *const id)
 		vStringPut (id, c);
 		c = nextChar ();
 	}
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (id);
 }
 
@@ -159,14 +159,14 @@ static void findMakeTags (void)
 		else if (variable_possible && c == '?')
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			variable_possible = (c == '=');
 		}
 		else if (variable_possible && c == ':' &&
 				 stringListCount (identifiers) > 0)
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			if (c != '=')
 			{
 				unsigned int i;
@@ -207,7 +207,7 @@ static void findMakeTags (void)
 						c = nextChar ();
 					}
 					if (c == '\n')
-						fileUngetc (c);
+						ungetcToInputFile (c);
 					vStringTerminate (name);
 					vStringStripTrailing (name);
 					newMacro (name);

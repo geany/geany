@@ -648,7 +648,7 @@ static int getFixedFormChar (void)
 			if (c2 == '\n')
 				longjmp (Exception, (int) ExceptionFixedFormat);
 			else
-				fileUngetc (c2);
+				ungetcToInputFile (c2);
 		}
 	}
 	while (Column == 0)
@@ -691,7 +691,7 @@ static int getFixedFormChar (void)
 					Column = 0;
 				else if (Column > 6)
 				{
-					fileUngetc (c);
+					ungetcToInputFile (c);
 					c = ' ';
 				}
 				break;
@@ -734,7 +734,7 @@ static int getFreeFormChar (boolean inComment)
 			advanceLine = TRUE;
 		else
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			c = '&';
 		}
 	}
