@@ -43,7 +43,7 @@ static kindOption ShKinds [] = {
  */
 static boolean hackReject (const vString* const tagName)
 {
-	const char *const scriptName = baseFilename (vStringValue (File.name));
+	const char *const scriptName = baseFilename (getInputFileName ());
 	boolean result = (boolean) (strcmp (scriptName, "configure") == 0  &&
 							   strcmp (vStringValue (tagName), "main") == 0);
 	return result;

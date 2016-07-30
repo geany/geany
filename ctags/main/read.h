@@ -25,11 +25,11 @@
 /*
 *   MACROS
 */
-#define getInputLineNumber()    File.lineNumber
+#define getInputLineNumber()    File.input.lineNumber
 #define getInputFileName()  vStringValue (File.source.name)
 #define getInputFilePosition()  File.filePosition
 #define getSourceFileName() vStringValue (File.source.name)
-#define getSourceFileTagPath()  File.source.tagPath
+#define getSourceFileTagPath()  vStringValue (File.source.tagPath)
 #define getSourceLanguage() File.source.language
 #define getSourceLanguageName() getLanguageName (File.source.language)
 #define getSourceLineNumber()   File.source.lineNumber
@@ -60,15 +60,25 @@ enum eCharacters {
 	CHAR_SYMBOL   = ('C' + 0x80)
 };
 
-/*  Maintains the state of the current source file.
+/*  Maintains the state of the current input file.
  */
+typedef struct sInputFileInfo {
+	vString *name;           /* name to report for input file */
+	vString *tagPath;        /* path of input file relative to tag file */
+	unsigned long lineNumber;/* line number in the input file */
+	unsigned long lineNumberOrigin; /* The value set to `lineNumber'
+					   when `resetInputFile' is called
+					   on the input stream.
+					   This is needed for nested stream. */
+	boolean  isHeader;       /* is input file a header file? */
+	langType language;       /* language of input file */
+} inputFileInfo;
+
 typedef struct sInputFile {
-	vString *name;      /* name of input file */
 	vString *path;      /* path of input file (if any) */
 	vString *line;      /* last line read from file */
 	const unsigned char* currentLine;   /* current line being worked on */
 	MIO     *fp;        /* stream used for reading the file */
-	unsigned long lineNumber;   /* line number in the input file */
 	MIOPos  filePosition;   /* file position of current line */
 	unsigned int ungetchIdx;
 	int     ungetchBuf[3];  /* characters that were ungotten */
@@ -79,13 +89,8 @@ typedef struct sInputFile {
 	 *  was defined. This may be different from the input file when #line
 	 *  directives are processed (i.e. the input file is preprocessor output).
 	 */
-	struct sSource {
-	vString *name;      /* name to report for source file */
-	char    *tagPath;   /* path of source file relative to tag file */
-	unsigned long lineNumber;/* line number in the source file */
-	boolean  isHeader;  /* is source file a header file? */
-	langType language;  /* language of source file */
-	} source;
+	inputFileInfo input; /* name, lineNumber */
+	inputFileInfo source;
 } inputFile;
 
 /*

@@ -37,7 +37,7 @@ static MIOPos StartOfLine;      /* holds deferred position of start of line */
 
 extern void freeSourceFileResources (void)
 {
-	vStringDelete (File.name);
+	vStringDelete (File.input.name);
 	vStringDelete (File.path);
 	vStringDelete (File.source.name);
 	vStringDelete (File.line);
@@ -52,9 +52,9 @@ static void setInputFileName (const char *const fileName)
 	const char *const head = fileName;
 	const char *const tail = baseFilename (head);
 
-	if (File.name != NULL)
-		vStringDelete (File.name);
-	File.name = vStringNewInit (fileName);
+	if (File.input.name != NULL)
+		vStringDelete (File.input.name);
+	File.input.name = vStringNewInit (fileName);
 
 	if (File.path != NULL)
 		vStringDelete (File.path);
@@ -76,10 +76,11 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 	if (File.source.tagPath != NULL)
 		eFree (File.source.tagPath);
 	if (! Option.tagRelative || isAbsolutePath (vStringValue (fileName)))
-		File.source.tagPath = eStrdup (vStringValue (fileName));
+		File.source.tagPath = vStringNewCopy (fileName);
 	else
 		File.source.tagPath =
-				relativeFilename (vStringValue (fileName), TagFile.directory);
+				vStringNewOwn (relativeFilename (vStringValue (fileName),
+								TagFile.directory));
 
 	if (vStringLength (fileName) > TagFile.max.file)
 		TagFile.max.file = vStringLength (fileName);
@@ -266,7 +267,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 		mio_getpos (File.fp, &StartOfLine);
 		mio_getpos (File.fp, &File.filePosition);
 		File.currentLine  = NULL;
-		File.lineNumber   = 0L;
+		File.input.lineNumber   = 0L;
 		File.eof          = FALSE;
 		File.newLine      = TRUE;
 
@@ -312,7 +313,7 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 	mio_getpos (File.fp, &StartOfLine);
 	mio_getpos (File.fp, &File.filePosition);
 	File.currentLine  = NULL;
-	File.lineNumber   = 0L;
+	File.input.lineNumber   = 0L;
 	File.eof          = FALSE;
 	File.newLine      = TRUE;
 
@@ -337,8 +338,8 @@ extern void fileClose (void)
 		 *  and is incremented upon each newline.
 		 */
 		if (Option.printTotals)
-			addTotals (0, File.lineNumber - 1L,
-					  getFileSize (vStringValue (File.name)));
+			addTotals (0, File.input.lineNumber - 1L,
+					  getFileSize (vStringValue (File.input.name)));
 
 		mio_free (File.fp);
 		File.fp = NULL;
@@ -356,7 +357,7 @@ static void fileNewline (void)
 {
 	File.filePosition = StartOfLine;
 	File.newLine = FALSE;
-	File.lineNumber++;
+	File.input.lineNumber++;
 	File.source.lineNumber++;
 	DebugStatement ( if (Option.breakLine == File.lineNumber) lineBreak (); )
 	DebugStatement ( debugPrintf (DEBUG_RAW, "%6ld: ", File.lineNumber); )
@@ -610,7 +611,7 @@ extern char *readSourceLine (vString *const vLine, MIOPos location,
 		*pSeekValue = mio_tell (File.fp);
 	result = readLine (vLine, File.fp);
 	if (result == NULL)
-		error (FATAL, "Unexpected end of file: %s", vStringValue (File.name));
+		error (FATAL, "Unexpected end of file: %s", getInputFileName ());
 	mio_setpos (File.fp, &orignalPosition);
 
 	return result;

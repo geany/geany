@@ -79,6 +79,8 @@ extern void vStringCopyToLower (vString *const dest, const vString *const src);
 extern void vStringSetLength (vString *const string);
 extern void vStringTruncate (vString *const string, const size_t length);
 
+extern vString *vStringNewOwn (char *s);
+
 #endif  /* _VSTRING_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */
