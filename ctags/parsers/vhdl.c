@@ -119,7 +119,7 @@ static int vGetc (void)
 {
 	int c;
 	if (Ungetc == '\0')
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	else
 	{
 		c = Ungetc;
@@ -127,13 +127,13 @@ static int vGetc (void)
 	}
 	if (c == '-')
 	{
-		int c2 = fileGetc ();
+		int c2 = getcFromInputFile ();
 		if (c2 == EOF)
 			longjmp (Exception, (int) ExceptionEOF);
 		else if (c2 == '-')   /* strip comment until end-of-line */
 		{
 			do
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			while (c != '\n'  &&  c != EOF);
 		}
 		else

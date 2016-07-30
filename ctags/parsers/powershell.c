@@ -197,7 +197,7 @@ static int skipToCharacter (const int c)
 	int d;
 	do
 	{
-		d = fileGetc ();
+		d = getcFromInputFile ();
 	} while (d != EOF  &&  d != c);
 	return d;
 }
@@ -206,9 +206,9 @@ static void parseString (vString *const string, const int delimiter)
 {
 	while (TRUE)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 
-		if (c == '\\' && (c = fileGetc ()) != EOF)
+		if (c == '\\' && (c = getcFromInputFile ()) != EOF)
 			vStringPut (string, (char) c);
 		else if (c == EOF || c == delimiter)
 			break;
@@ -224,7 +224,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, (char) c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	fileUngetc (c);
 	vStringTerminate (string);
@@ -245,7 +245,7 @@ static boolean isSpace (int c)
 static int skipWhitespaces (int c)
 {
 	while (isSpace (c))
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	return c;
 }
 
@@ -254,10 +254,10 @@ static int skipSingleComment (void)
 	int c;
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (c == '\r')
 		{
-			int next = fileGetc ();
+			int next = getcFromInputFile ();
 			if (next != '\n')
 				fileUngetc (next);
 			else
@@ -276,7 +276,7 @@ static void readToken (tokenInfo *const token)
 
 getNextChar:
 
-	c = fileGetc ();
+	c = getcFromInputFile ();
 	c = skipWhitespaces (c);
 
 	token->lineNumber   = getSourceLineNumber ();
@@ -307,7 +307,7 @@ getNextChar:
 
 		case '<':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '#')
 			{
 				/* <# ... #> multiline comment */
@@ -316,7 +316,7 @@ getNextChar:
 					c = skipToCharacter ('#');
 					if (c != EOF)
 					{
-						c = fileGetc ();
+						c = getcFromInputFile ();
 						if (c == '>')
 							break;
 						else
@@ -344,7 +344,7 @@ getNextChar:
 		case '/':
 		case '%':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d != '=')
 				fileUngetc (d);
 			token->type = TOKEN_OPERATOR;
@@ -353,7 +353,7 @@ getNextChar:
 
 		case '$': /* variable start */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (! isIdentChar (d))
 			{
 				fileUngetc (d);

@@ -56,7 +56,7 @@ static void skip_rest_of_line(void)
 {
 	int c;
 	do {
-		c = fileGetc();
+		c = getcFromInputFile();
 	} while (c != EOF && c != '\n');
 }
 
@@ -65,7 +65,7 @@ static int get_line(char *buf)
 	int i = 0;
 	int c;
 	do {
-		c = fileGetc();
+		c = getcFromInputFile();
 		buf[i++] = c;
 	} while (c != EOF && c != '\n' && i < 1000);
 	buf[i] = '\0';
@@ -75,10 +75,10 @@ static int get_line(char *buf)
 static int get_next_char(void)
 {
 	int c, nxt;
-	c = fileGetc();
+	c = getcFromInputFile();
 	if (c == EOF)
 		return c;
-	nxt = fileGetc();
+	nxt = getcFromInputFile();
 	if (nxt == EOF)
 		return c;
 	fileUngetc(nxt);
@@ -116,12 +116,12 @@ static int isident(char c)
 
 static int get_token(char *token, int n)
 {
-	int c = fileGetc();
+	int c = getcFromInputFile();
 	int i = n;
 	while (c != EOF && isident(c) && i < 1000) {
 		token[i] = c;
 		i++;
-		c = fileGetc();
+		c = getcFromInputFile();
 	}
 	token[i] = '\0';
 	if (c == EOF)
@@ -244,7 +244,7 @@ static void findHaskellTags (int is_literate)
 		}
 		if (is_literate && !in_tex_lit_code) {
 			if (c == '>') {
-				c = fileGetc();
+				c = getcFromInputFile();
 				if (c == ' ') {
 					c = get_next_char();
 					if (!isident(c)) {
@@ -294,7 +294,7 @@ static void findHaskellTags (int is_literate)
 			continue;
 		}
 		do {
-			if ((c = fileGetc()) == EOF)
+			if ((c = getcFromInputFile()) == EOF)
 				return;
 		} while (c == ' ' || c == '\t');
 		arg[0] = c;

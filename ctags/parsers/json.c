@@ -149,7 +149,7 @@ static void readTokenFull (tokenInfo *const token,
 	vStringClear (token->string);
 
 	do
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	while (c == '\t' || c == ' ' || c == '\r' || c == '\n');
 
 	token->lineNumber   = getSourceLineNumber ();
@@ -171,7 +171,7 @@ static void readTokenFull (tokenInfo *const token,
 			token->type = TOKEN_STRING;
 			while (TRUE)
 			{
-				c = fileGetc ();
+				c = getcFromInputFile ();
 				/* we don't handle unicode escapes but they are safe */
 				if (escaped)
 					escaped = FALSE;
@@ -196,7 +196,7 @@ static void readTokenFull (tokenInfo *const token,
 				do
 				{
 					vStringPut (token->string, c);
-					c = fileGetc ();
+					c = getcFromInputFile ();
 				}
 				while (c != EOF && isIdentChar (c));
 				vStringTerminate (token->string);

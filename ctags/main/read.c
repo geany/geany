@@ -455,7 +455,7 @@ static vString *iFileGetLine (void)
 
 /*  Do not mix use of fileReadLine () and fileGetc () for the same file.
  */
-extern int fileGetc (void)
+extern int getcFromInputFile (void)
 {
 	int c;
 
@@ -509,7 +509,7 @@ extern int fileSkipToCharacter (int c)
 	int d;
 	do
 	{
-		d = fileGetc ();
+		d = getcFromInputFile ();
 	} while (d != EOF && d != c);
 	return d;
 }

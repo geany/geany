@@ -329,7 +329,7 @@ static int skipToCharacter (const int c)
 	int d;
 	do
 	{
-		d = fileGetc ();
+		d = getcFromInputFile ();
 	} while (d != EOF  &&  d != c);
 	return d;
 }
@@ -339,7 +339,7 @@ static void parseString (vString *const string, const int delimiter)
 	boolean end = FALSE;
 	while (! end)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 		if (c == EOF)
 			end = TRUE;
 		else if (c == '\\')
@@ -350,12 +350,12 @@ static void parseString (vString *const string, const int delimiter)
 			 * Also, handle the fact that <LineContinuation> produces an empty
 			 * sequence.
 			 * See ECMA-262 7.8.4 */
-			c = fileGetc();
+			c = getcFromInputFile();
 			if (c != '\r' && c != '\n')
 				vStringPut(string, c);
 			else if (c == '\r')
 			{
-				c = fileGetc();
+				c = getcFromInputFile();
 				if (c != '\n')
 					fileUngetc (c);
 			}
@@ -383,18 +383,18 @@ static void parseRegExp (void)
 
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (! in_range && c == '/')
 		{
 			do /* skip flags */
 			{
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			} while (isalpha (c));
 			fileUngetc (c);
 			break;
 		}
 		else if (c == '\\')
-			c = fileGetc (); /* skip next character */
+			c = getcFromInputFile (); /* skip next character */
 		else if (c == '[')
 			in_range = TRUE;
 		else if (c == ']')
@@ -412,7 +412,7 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	vStringTerminate (string);
 	fileUngetc (c);		/* unget non-identifier character */
@@ -441,7 +441,7 @@ getNextChar:
 	i = 0;
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		i++;
 	}
 	while (c == '\t'  ||  c == ' ' ||
@@ -475,7 +475,7 @@ getNextChar:
 		case '+':
 		case '-':
 			{
-				int d = fileGetc ();
+				int d = getcFromInputFile ();
 				if (d == c) /* ++ or -- */
 					token->type = TOKEN_POSTFIX_OPERATOR;
 				else
@@ -545,7 +545,7 @@ getNextChar:
 				  break;
 
 		case '\\':
-				  c = fileGetc ();
+				  c = getcFromInputFile ();
 				  if (c != '\\'  && c != '"'  &&  !isspace (c))
 					  fileUngetc (c);
 				  token->type = TOKEN_CHARACTER;
@@ -555,7 +555,7 @@ getNextChar:
 
 		case '/':
 				  {
-					  int d = fileGetc ();
+					  int d = getcFromInputFile ();
 					  if ( (d != '*') &&		/* is this the start of a comment? */
 							  (d != '/') )		/* is a one line comment? */
 					  {
@@ -588,7 +588,7 @@ getNextChar:
 							  do
 							  {
 								  skipToCharacter ('*');
-								  c = fileGetc ();
+								  c = getcFromInputFile ();
 								  if (c == '/')
 									  break;
 								  else
@@ -612,7 +612,7 @@ getNextChar:
 				  /* skip shebang in case of e.g. Node.js scripts */
 				  if (token->lineNumber > 1)
 					  token->type = TOKEN_UNDEFINED;
-				  else if ((c = fileGetc ()) != '!')
+				  else if ((c = getcFromInputFile ()) != '!')
 				  {
 					  fileUngetc (c);
 					  token->type = TOKEN_UNDEFINED;
