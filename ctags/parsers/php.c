@@ -302,8 +302,8 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 		Assert (parentKind >= 0);
 
 		vStringTerminate (fullScope);
-		e->extensionFields.scope[0] = PhpKinds[parentKind].name;
-		e->extensionFields.scope[1] = vStringValue (fullScope);
+		e->extensionFields.scopeKind = &(PhpKinds[parentKind]);
+		e->extensionFields.scopeName = vStringValue (fullScope);
 	}
 }
 

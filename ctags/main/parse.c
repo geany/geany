@@ -65,7 +65,7 @@ extern void makeSimpleTag (const vString* const name,
 
 extern void makeSimpleScopedTag (const vString* const name,
 								 kindOption* const kinds, const int kind,
-								 const char* scope, const char *scope2,
+								 const char* scopeKind, const char *scopeName,
 								 const char *laccess)
 {
 	if (name != NULL  &&  vStringLength (name) > 0)
@@ -75,8 +75,8 @@ extern void makeSimpleScopedTag (const vString* const name,
 
 		e.kindName = kinds [kind].name;
 		e.kind     = kinds [kind].letter;
-		e.extensionFields.scope[0] = scope;
-		e.extensionFields.scope[1] = scope2;
+		e.extensionFields.scopeKind = &(kinds [kind]);
+		e.extensionFields.scopeName = scopeName;
 		e.extensionFields.access = laccess;
 
 		makeTagEntry (&e);

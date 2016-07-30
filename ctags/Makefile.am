@@ -65,6 +65,7 @@ libctags_la_SOURCES = \
 	main/get.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/kind.h \
 	main/lregex.c \
 	main/main.h \
 	main/mio.c \

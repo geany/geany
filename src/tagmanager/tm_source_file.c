@@ -190,9 +190,9 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->line = tag_entry->lineNumber;
 	if (NULL != tag_entry->extensionFields.signature)
 		tag->arglist = g_strdup(tag_entry->extensionFields.signature);
-	if ((NULL != tag_entry->extensionFields.scope[1]) &&
-		(0 != tag_entry->extensionFields.scope[1][0]))
-		tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
+	if ((NULL != tag_entry->extensionFields.scopeName) &&
+		(0 != tag_entry->extensionFields.scopeName[0]))
+		tag->scope = g_strdup(tag_entry->extensionFields.scopeName);
 	if (tag_entry->extensionFields.inheritance != NULL)
 		tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
 	if (tag_entry->extensionFields.varType != NULL)

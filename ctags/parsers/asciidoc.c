@@ -81,8 +81,8 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 
 		if (nl && nl->type < kind)
 		{
-			e.extensionFields.scope [0] = AsciidocKinds [nl->type].name;
-			e.extensionFields.scope [1] = vStringValue (nl->name);
+			e.extensionFields.scopeKind = &(AsciidocKinds [nl->type]);
+			e.extensionFields.scopeName = vStringValue (nl->name);
 		}
 		makeTagEntry (&e);
 	}

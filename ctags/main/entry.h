@@ -17,6 +17,7 @@
 
 #include "mio.h"
 #include "vstring.h"
+#include "kind.h"
 
 /*
 *   MACROS
@@ -68,7 +69,10 @@ typedef struct sTagEntryInfo {
 		const char* fileScope;
 		const char* implementation;
 		const char* inheritance;
-		const char* scope [2];  /* value and key */
+
+		const kindOption* scopeKind;
+		const char* scopeName;
+
 		const char *signature; /* Argument list for functions and macros with arguments */
 		const char *varType;
 	} extensionFields;          /* list of extension fields*/

@@ -1110,35 +1110,19 @@ static javaKind javaTagKind (const tagType type)
 	return result;
 }
 
-static const char *tagName (const tagType type)
+static const kindOption *tagKind (const tagType type)
 {
-	const char* result;
+	const kindOption* result;
 	if (isLanguage (Lang_java))
-		result = JavaKinds [javaTagKind (type)].name;
+		result = &JavaKinds [javaTagKind (type)];
 	else if (isLanguage (Lang_csharp))
-		result = CsharpKinds [csharpTagKind (type)].name;
+		result = &CsharpKinds [csharpTagKind (type)];
 	else if (isLanguage (Lang_d))
-		result = DKinds [dTagKind (type)].name;
+		result = &DKinds [dTagKind (type)];
 	else if (isLanguage (Lang_vala))
-		result = ValaKinds [valaTagKind (type)].name;
+		result = &ValaKinds [valaTagKind (type)];
 	else
-		result = CKinds [cTagKind (type)].name;
-	return result;
-}
-
-static int tagLetter (const tagType type)
-{
-	int result;
-	if (isLanguage (Lang_csharp))
-		result = CsharpKinds [csharpTagKind (type)].letter;
-	else if (isLanguage (Lang_d))
-		result = DKinds [dTagKind (type)].letter;
-	else if (isLanguage (Lang_java))
-		result = JavaKinds [javaTagKind (type)].letter;
-	else if (isLanguage (Lang_vala))
-		result = ValaKinds [valaTagKind (type)].letter;
-	else
-		result = CKinds [cTagKind (type)].letter;
+		result = &CKinds [cTagKind (type)];
 	return result;
 }
 
@@ -1217,11 +1201,11 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 				(isMember (st) || st->parent->declaration == DECL_NAMESPACE))
 			{
 				if (isType (st->context, TOKEN_NAME))
-					tag->extensionFields.scope [0] = tagName (TAG_CLASS);
+					tag->extensionFields.scopeKind = tagKind (TAG_CLASS);
 				else
-					tag->extensionFields.scope [0] =
-						tagName (declToTagType (parentDecl (st)));
-				tag->extensionFields.scope [1] = vStringValue (scope);
+					tag->extensionFields.scopeKind =
+						tagKind (declToTagType (parentDecl (st)));
+				tag->extensionFields.scopeName = vStringValue (scope);
 			}
 			if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
 				 type == TAG_STRUCT) && vStringLength (st->parentClasses) > 0)
@@ -1475,8 +1459,8 @@ static void makeTag (const tokenInfo *const token,
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope = isFileScope;
-		e.kindName	= tagName (type);
-		e.kind		= tagLetter (type);
+		e.kindName	= tagKind (type)->name;
+		e.kind		= tagKind (type)->letter;
 
 		findScopeHierarchy (scope, st);
 		addOtherFields (&e, type, token, st, scope);

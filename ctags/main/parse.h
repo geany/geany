@@ -36,13 +36,6 @@ typedef boolean (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
 typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
-typedef struct sKindOption {
-	boolean enabled;            /* are tags for kind enabled? */
-	const int letter;           /* kind letter */
-	const char* name;           /* kind name */
-	const char* const description;  /* displayed in --help output */
-} kindOption;
-
 typedef struct {
 	const char *name;
 	const int id;

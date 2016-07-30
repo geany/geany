@@ -68,8 +68,8 @@ static void makeTxt2tagsTag (const vString* const name,
 		}
 		parentKind = &Txt2tagsKinds[nls->levels[nls->n - 1].type];
 
-		e.extensionFields.scope[0] = parentKind->name;
-		e.extensionFields.scope[1] = vStringValue(scope);
+		e.extensionFields.scopeKind = parentKind;
+		e.extensionFields.scopeName = vStringValue(scope);
 	}
 
 	makeTagEntry(&e);

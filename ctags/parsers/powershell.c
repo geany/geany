@@ -113,8 +113,8 @@ static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const t
 		int parentKind = token->parentKind;
 		Assert (parentKind >= 0);
 
-		e->extensionFields.scope[0] = PowerShellKinds[parentKind].name;
-		e->extensionFields.scope[1] = vStringValue (token->scope);
+		e->extensionFields.scopeKind = &(PowerShellKinds[parentKind]);
+		e->extensionFields.scopeName = vStringValue (token->scope);
 	}
 }
 

@@ -452,8 +452,8 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	tag.extensionFields.varType = type;
 	if (parent_kind != K_NONE)
 	{
-		tag.extensionFields.scope[0] = rustKinds[parent_kind].name;
-		tag.extensionFields.scope[1] = scope->buffer;
+		tag.extensionFields.scopeKind = &(rustKinds[parent_kind]);
+		tag.extensionFields.scopeName = scope->buffer;
 	}
 	makeTagEntry(&tag);
 }
