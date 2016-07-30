@@ -453,7 +453,7 @@ static vString *iFileGetLine (void)
 	return result;
 }
 
-/*  Do not mix use of readLineFromInputFile () and fileGetc () for the same file.
+/*  Do not mix use of readLineFromInputFile () and getcFromInputFile () for the same file.
  */
 extern int getcFromInputFile (void)
 {
@@ -461,7 +461,7 @@ extern int getcFromInputFile (void)
 
 	/*  If there is an ungotten character, then return it.  Don't do any
 	 *  other processing on it, though, because we already did that the
-	 *  first time it was read through fileGetc ().
+	 *  first time it was read through getcFromInputFile ().
 	 */
 	if (File.ungetchIdx > 0)
 	{
@@ -514,8 +514,8 @@ extern int skipToCharacterInInputFile (int c)
 	return d;
 }
 
-/*  An alternative interface to fileGetc (). Do not mix use of readLineFromInputFile()
- *  and fileGetc() for the same file. The returned string does not contain
+/*  An alternative interface to getcFromInputFile (). Do not mix use of readLineFromInputFile()
+ *  and getcFromInputFile() for the same file. The returned string does not contain
  *  the terminating newline. A NULL return value means that all lines in the
  *  file have been read and we are at the end of file.
  */
