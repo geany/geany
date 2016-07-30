@@ -49,7 +49,7 @@ static void findConfTags (void)
 	vString *scope = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 		boolean possible = TRUE;

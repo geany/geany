@@ -160,7 +160,7 @@ SUB_DECL_SWITCH:
 					}
 			}
 		}
-	} while (NULL != (cp = fileReadLine ()));
+	} while (NULL != (cp = readLineFromInputFile ()));
 
 	return FALSE;
 }
@@ -176,7 +176,7 @@ static void findPerlTags (void)
 	boolean skipPodDoc = FALSE;
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		boolean spaceRequired = FALSE;
 		boolean qualified = FALSE;
@@ -283,7 +283,7 @@ static void findPerlTags (void)
 
 			while (!*cp || '#' == *cp) { /* Gobble up empty lines
 				                            and comments */
-				cp = fileReadLine ();
+				cp = readLineFromInputFile ();
 				if (!cp)
 					goto END_MAIN_WHILE;
 				while (isspace (*cp))

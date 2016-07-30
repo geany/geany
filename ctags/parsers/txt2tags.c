@@ -157,7 +157,7 @@ static void findTxt2tagsTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int depth;
 

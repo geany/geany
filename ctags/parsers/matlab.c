@@ -45,7 +45,7 @@ static void findMatlabTags (void)
 	const unsigned char *line;
 	const unsigned char *p;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		int i, ic;
 

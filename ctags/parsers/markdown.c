@@ -65,7 +65,7 @@ static void findMarkdownTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int name_len = vStringLength(name);
 

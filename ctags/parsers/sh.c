@@ -54,7 +54,7 @@ static void findShTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 		boolean functionFound = FALSE;

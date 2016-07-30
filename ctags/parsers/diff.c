@@ -82,7 +82,7 @@ static void findDiffTags (void)
 	const unsigned char *line, *tmp;
 	int delim = DIFF_DELIM_MINUS;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 

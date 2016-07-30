@@ -141,7 +141,7 @@ static void findAsciidocTags(void)
 
 	nestingLevels = nestingLevelsNew();
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
 		int name_len_bytes = vStringLength(name);

@@ -531,7 +531,7 @@ extern boolean matchRegex (const vString* const line, const langType language)
 extern void findRegexTags (void)
 {
 	/* merely read all lines of the file */
-	while (fileReadLine () != NULL)
+	while (readLineFromInputFile () != NULL)
 		;
 }
 

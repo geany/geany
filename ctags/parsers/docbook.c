@@ -86,7 +86,7 @@ static void findDocBookTags(void)
 {
 	const char *line;
 
-	while ((line = (const char*)fileReadLine()) != NULL)
+	while ((line = (const char*)readLineFromInputFile()) != NULL)
 	{
 		const char *cp = line;
 
