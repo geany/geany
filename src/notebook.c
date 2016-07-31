@@ -796,13 +796,6 @@ static gchar *get_doc_dirname(const GeanyDocument* doc)
 }
 
 
-static gchar *get_doc_basename(const GeanyDocument* doc)
-{
-	return doc->file_name == NULL ?
-		g_strdup(GEANY_STRING_UNTITLED) : g_path_get_basename(doc->file_name);
-}
-
-
 static gint compare_filenames(const gchar *a, const gchar *b)
 {
 	gchar *key_a = g_utf8_collate_key_for_filename(a, -1);
@@ -818,8 +811,8 @@ static gint compare_docs_by_filename(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *(GeanyDocument**) a;
 	GeanyDocument *doc_b = *(GeanyDocument**) b;
-	gchar *base_a = get_doc_basename(doc_a);
-	gchar *base_b = get_doc_basename(doc_b);
+	gchar *base_a = g_path_get_basename(DOC_FILENAME(doc_a));
+	gchar *base_b = g_path_get_basename(DOC_FILENAME(doc_b));
 	gint cmp = compare_filenames(base_a, base_b);
 	g_free(base_b);
 	g_free(base_a);
@@ -831,21 +824,15 @@ static gint compare_docs_by_pathname(gconstpointer a, gconstpointer b)
 {
 	GeanyDocument *doc_a = *(GeanyDocument**) a;
 	GeanyDocument *doc_b = *(GeanyDocument**) b;
-	gchar *dirname_a = get_doc_dirname(doc_a);
-	gchar *dirname_b = get_doc_dirname(doc_b);
-	gint cmp = compare_filenames(dirname_a, dirname_b);
+	gchar *dir_a = get_doc_dirname(doc_a);
+	gchar *dir_b = get_doc_dirname(doc_b);
+	gint cmp = compare_filenames(dir_a, dir_b);
 
 	if (cmp == 0)
-	{
-		gchar *base_a = get_doc_basename(doc_a);
-		gchar *base_b = get_doc_basename(doc_b);
-		cmp = compare_filenames(base_a, base_b);
-		g_free(base_b);
-		g_free(base_a);
-	}
+		cmp = compare_docs_by_filename(&doc_a, &doc_b);
 
-	g_free(dirname_b);
-	g_free(dirname_a);
+	g_free(dir_b);
+	g_free(dir_a);
 	return cmp;
 }
 
@@ -895,99 +882,29 @@ void on_sort_tabs_by_pathname_activate(GtkMenuItem *menuitem, gpointer user_data
 }
 
 
-static void gradually_sort_tab_by_filename(GeanyDocument *doc)
+static void gradually_sort_tab(GeanyDocument *doc, NotebookTabSortMethod method)
 {
-	GeanyDocument *doc_b;
-	gchar *base_a, *base_b;
-	gint pos, i, n_pages;
-	GtkWidget *page;
+	gint i, pos, n_pages;
 
-	base_a = get_doc_basename(doc);
-	pos = 0;
+	GCompareFunc func = (method == NOTEBOOK_TAB_SORT_BY_FILENAME) ?
+			compare_docs_by_filename : compare_docs_by_pathname;
+
 	n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 
-	for (i = 0; i < n_pages; ++i)
+	for (pos = 0, i = 0; i < n_pages; ++i)
 	{
-		page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), i);
-		doc_b = document_get_from_notebook_child(page);
+		GeanyDocument *doc_b = document_get_from_page(i);
 
-		if (doc_b == doc)
-			continue;
-
-		base_b = get_doc_basename(doc_b);
-
-		if (compare_filenames(base_a, base_b) < 0)
+		if (doc_b != doc)
 		{
-			move_tab(doc, pos);
-			g_free(base_b);
-			g_free(base_a);
-			return;
-		}
+			if (func(&doc, &doc_b) < 0)
+				break;
 
-		g_free(base_b);
-		++pos;
+			++pos;
+		}
 	}
 
-	g_free(base_a);
-	move_tab(doc, -1);
-}
-
-
-static void gradually_sort_tab_by_pathname(GeanyDocument *doc)
-{
-	GeanyDocument *doc_b;
-	GtkWidget *page;
-	gchar *base_a, *base_b, *dirname_a, *dirname_b, *path_a, *path_b;
-	gint pos, i, n_pages, cmp;
-
-	dirname_a = get_doc_dirname(doc);
-	base_a = get_doc_basename(doc);
-	pos = 0;
-	n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-
-	for (i = 0; i < n_pages; ++i)
-	{
-		page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.notebook), i);
-		doc_b = document_get_from_notebook_child(page);
-
-		if (doc_b == doc)
-			continue;
-
-		dirname_b = get_doc_dirname(doc_b);
-		cmp = compare_filenames(dirname_a, dirname_b);
-
-		if (cmp < 0)
-		{
-			g_free(dirname_b);
-			g_free(dirname_a);
-			g_free(base_a);
-			move_tab(doc, pos);
-			return;
-		}
-		else if (cmp == 0)
-		{
-			base_b = get_doc_basename(doc_b);
-
-			if (compare_filenames(base_a, base_b) < 0)
-			{
-				g_free(base_b);
-				g_free(dirname_b);
-				g_free(base_a);
-				g_free(dirname_a);
-				move_tab(doc, pos);
-				return;
-			}
-
-			g_free(base_b);
-		}
-
-		g_free(dirname_b);
-		++pos;
-	}
-
-	g_free(base_a);
-	g_free(dirname_a);
-	move_tab(doc, -1);
+	move_tab(doc, pos);
 }
 
 
@@ -996,9 +913,9 @@ static void on_document_open(GObject *obj, GeanyDocument *doc)
 	if (interface_prefs.show_notebook_tabs)
 	{
 		if (interface_prefs.auto_sort_tabs_by_filename)
-			gradually_sort_tab_by_filename(doc);
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
 		else if (interface_prefs.auto_sort_tabs_by_pathname)
-			gradually_sort_tab_by_pathname(doc);
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
 	}
 }
 
@@ -1014,9 +931,9 @@ static void on_document_save(GObject *obj, GeanyDocument *doc)
 	if (doc_saves_to_new_file && interface_prefs.show_notebook_tabs)
 	{
 		if (interface_prefs.auto_sort_tabs_by_filename)
-			gradually_sort_tab_by_filename(doc);
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
 		else if (interface_prefs.auto_sort_tabs_by_pathname)
-			gradually_sort_tab_by_pathname(doc);
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
 	}
 }
 
