@@ -61,11 +61,11 @@ libctags_la_SOURCES = \
 	main/entry.c \
 	main/entry.h \
 	main/general.h \
-	main/get.c \
-	main/get.h \
 	main/keyword.c \
 	main/keyword.h \
 	main/kind.h \
+	main/lcpp.c \
+	main/lcpp.h \
 	main/lregex.c \
 	main/main.h \
 	main/mio.c \

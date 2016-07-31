@@ -2,12 +2,12 @@
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   External interface to get.c
 */
-#ifndef _GET_H
-#define _GET_H
+#ifndef CTAGS_MAIN_GET_H
+#define CTAGS_MAIN_GET_H
 
 /*
 *   INCLUDE FILES
@@ -47,6 +47,6 @@ extern int skipOverCComment (void);
 extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName);
 extern char *getArglistFromStr(char *buf, const char *name);
 
-#endif  /* _GET_H */
+#endif  /* CTAGS_MAIN_GET_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

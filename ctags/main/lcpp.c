@@ -2,9 +2,9 @@
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains the high level source read functions (preprocessor
+*   This module contains the high level input read functions (preprocessor
 *   directives are handled within this level).
 */
 
@@ -16,8 +16,10 @@
 #include <string.h>
 #include <glib.h>
 
+#include "debug.h"
 #include "entry.h"
-#include "get.h"
+#include "lcpp.h"
+#include "kind.h"
 #include "options.h"
 #include "read.h"
 #include "vstring.h"
