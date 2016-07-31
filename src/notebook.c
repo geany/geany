@@ -34,7 +34,7 @@
 #include "geanyobject.h"
 #include "keybindings.h"
 #include "main.h"
-#include "project.h"
+#include "sidebar.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -779,71 +779,6 @@ void notebook_remove_page(gint page_num)
 }
 
 
-/* Copied from sidebar.c.  We can place this in one place like utils.c. */
-static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
-{
-	gchar *head = g_strndup(str, strlen(prefix));
-	gboolean ret = utils_filenamecmp(head, prefix) == 0;
-
-	g_free(head);
-	return ret;
-}
-
-
-/* Copied from sidebar.c.  We can place this in one place like utils.c,
- * with a more formal naming convention. */
-static gchar *get_doc_folder(const gchar *path)
-{
-	gchar *tmp_dirname = g_strdup(path);
-	gchar *project_base_path;
-	gchar *dirname = NULL;
-	const gchar *home_dir = g_get_home_dir();
-	const gchar *rest;
-
-	/* replace the project base path with the project name */
-	project_base_path = project_get_base_path();
-
-	if (project_base_path != NULL)
-	{
-		gsize len = strlen(project_base_path);
-
-		/* remove trailing separator so we can match base path exactly */
-		if (project_base_path[len-1] == G_DIR_SEPARATOR)
-			project_base_path[--len] = '\0';
-
-		/* check whether the dir name matches or uses the project base path */
-		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
-		{
-			rest = tmp_dirname + len;
-			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
-			{
-				dirname = g_strdup_printf("%s%s", app->project->name, rest);
-			}
-		}
-		g_free(project_base_path);
-	}
-	if (dirname == NULL)
-	{
-		dirname = tmp_dirname;
-
-		/* If matches home dir, replace with tilde */
-		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
-		{
-			rest = dirname + strlen(home_dir);
-			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
-			{
-				dirname = g_strdup_printf("~%s", rest);
-				g_free(tmp_dirname);
-			}
-		}
-	}
-	else
-		g_free(tmp_dirname);
-
-	return dirname;
-}
-
-
 static gchar *get_doc_dirname(const GeanyDocument* doc)
 {
 	gchar *dirname, *tmp_dirname;
@@ -853,7 +788,7 @@ static gchar *get_doc_dirname(const GeanyDocument* doc)
 	else
 	{
 		tmp_dirname = g_path_get_dirname(doc->file_name);
-		dirname = get_doc_folder(tmp_dirname);
+		dirname = sidebar_get_doc_folder(tmp_dirname);
 		g_free(tmp_dirname);
 	}
 
