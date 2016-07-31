@@ -102,6 +102,10 @@ extern inputFile File;
 /*
 *   FUNCTION PROTOTYPES
 */
+
+/* InputFile: reading from fp in inputFile with updating fields in input fields */
+extern kindOption *getInputLanguageFileKind (void);
+
 extern void freeSourceFileResources (void);
 extern boolean fileOpen (const char *const fileName, const langType language);
 extern boolean fileEOF (void);

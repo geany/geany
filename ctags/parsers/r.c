@@ -61,12 +61,9 @@ static void installRRegex (const langType language)
 static void makeRTag(const vString* const name, rKind kind)
 {
 	tagEntryInfo e;
-	initTagEntry(&e, vStringValue(name));
+	initTagEntry(&e, vStringValue(name), &(RKinds[kind]));
 
 	Assert(kind < KIND_COUNT);
-
-	e.kindName = RKinds[kind].name;
-	e.kind     = RKinds[kind].letter;
 
 	makeTagEntry(&e);
 }

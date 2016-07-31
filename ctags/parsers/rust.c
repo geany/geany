@@ -439,14 +439,11 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	if (kind == K_NONE)
 		return;
 	tagEntryInfo tag;
-	initTagEntry(&tag, ident->buffer);
+	initTagEntry(&tag, ident->buffer, &(rustKinds[kind]));
 
 	tag.lineNumber = line;
 	tag.filePosition = pos;
 	tag.sourceFileName = getSourceFileName();
-
-	tag.kindName = rustKinds[kind].name;
-	tag.kind = rustKinds[kind].letter;
 
 	tag.extensionFields.signature = arg_list;
 	tag.extensionFields.varType = type;

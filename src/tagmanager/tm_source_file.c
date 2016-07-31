@@ -179,7 +179,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	if (!tag_entry)
 		return FALSE;
 
-	type = tm_parser_get_tag_type(tag_entry->kind, file->lang);
+	type = tm_parser_get_tag_type(tag_entry->kind->letter, file->lang);
 	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
 

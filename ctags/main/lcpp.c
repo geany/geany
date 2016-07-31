@@ -65,6 +65,7 @@ typedef struct sCppState {
 	boolean resolveRequired;     /* must resolve if/else/elif/endif branch */
 	boolean hasAtLiteralStrings; /* supports @"c:\" strings */
 	boolean hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
+	const kindOption  *defineMacroKind;
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
 		boolean	accept;          /* is a directive syntactically permitted? */
@@ -87,6 +88,7 @@ static cppState Cpp = {
 	FALSE,       /* resolveRequired */
 	FALSE,       /* hasAtLiteralStrings */
 	FALSE,       /* hasCxxRawLiteralStrings */
+	NULL,        /* defineMacroKind */
 	{
 		DRCTV_NONE,  /* state */
 		FALSE,       /* accept */
@@ -111,7 +113,8 @@ extern unsigned int getDirectiveNestLevel (void)
 }
 
 extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
-                     const boolean hasCxxRawLiteralStrings)
+                     const boolean hasCxxRawLiteralStrings,
+                     const kindOption *defineMacroKind)
 {
 	BraceFormat = state;
 
@@ -120,6 +123,7 @@ extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
 	Cpp.resolveRequired = FALSE;
 	Cpp.hasAtLiteralStrings = hasAtLiteralStrings;
 	Cpp.hasCxxRawLiteralStrings = hasCxxRawLiteralStrings;
+	Cpp.defineMacroKind = defineMacroKind;
 
 	Cpp.directive.state     = DRCTV_NONE;
 	Cpp.directive.accept    = TRUE;
@@ -310,13 +314,11 @@ static void makeDefineTag (const char *const name, boolean parameterized)
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, Cpp.defineMacroKind);
 
 		e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
 		e.isFileScope  = isFileScope;
 		e.truncateLine = TRUE;
-		e.kindName     = "macro";
-		e.kind         = 'd';
 		if (parameterized)
 		{
 			e.extensionFields.signature = getArglistFromFilePos(getInputFilePosition()

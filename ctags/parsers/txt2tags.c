@@ -51,10 +51,7 @@ static void makeTxt2tagsTag (const vString* const name,
 	tagEntryInfo e;
 	vString *scope = NULL;
 	kindOption *kind = &Txt2tagsKinds[type];
-	initTagEntry (&e, vStringValue(name));
-
-	e.kindName = kind->name;
-	e.kind = kind->letter;
+	initTagEntry (&e, vStringValue(name), kind);
 
 	if (nls->n > 0) {
 		int i;

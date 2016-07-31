@@ -62,8 +62,7 @@ typedef struct sTagEntryInfo {
 	boolean     truncateLine;   /* truncate tag line at end of tag name? */
 	const char *sourceFileName; /* name of source file */
 	const char *name;           /* name of the tag */
-	const char *kindName;       /* kind of tag */
-	char        kind;           /* single character representation of kind */
+	const kindOption *kind;     /* kind descriptor */
 	struct {
 		const char* access;
 		const char* fileScope;
@@ -95,7 +94,7 @@ extern void closeTagFile (const boolean resize);
 extern void beginEtagsFile (void);
 extern void endEtagsFile (const char *const name);
 extern void makeTagEntry (const tagEntryInfo *const tag);
-extern void initTagEntry (tagEntryInfo *const e, const char *const name);
+extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
 
 #endif  /* _ENTRY_H */
 

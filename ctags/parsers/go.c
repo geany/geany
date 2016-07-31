@@ -523,15 +523,13 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	const char *const name = vStringValue (token->string);
 
 	tagEntryInfo e;
-	initTagEntry (&e, name);
+	initTagEntry (&e, name, &(GoKinds [kind]));
 
 	if (!GoKinds [kind].enabled)
 		return;
 
 	e.lineNumber = token->lineNumber;
 	e.filePosition = token->filePosition;
-	e.kindName = GoKinds [kind].name;
-	e.kind = GoKinds [kind].letter;
 	if (argList)
 		e.extensionFields.signature = argList;
 	if (varType)

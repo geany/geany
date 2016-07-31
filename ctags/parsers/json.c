@@ -117,12 +117,10 @@ static void makeJsonTag (tokenInfo *const token, const jsonKind kind)
 	if (! JsonKinds[kind].enabled)
 		return;
 
-	initTagEntry (&e, vStringValue (token->string));
+	initTagEntry (&e, vStringValue (token->string), &(JsonKinds[kind]));
 
 	e.lineNumber	= token->lineNumber;
 	e.filePosition	= token->filePosition;
-	e.kindName		= JsonKinds[kind].name;
-	e.kind			= JsonKinds[kind].letter;
 
 	if (vStringLength (token->scope) > 0)
 	{

@@ -1454,13 +1454,11 @@ static void makeTag (const tokenInfo *const token,
 			return;
 		}
 
-		initTagEntry (&e, vStringValue (token->name));
+		initTagEntry (&e, vStringValue (token->name), tagKind (type));
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope = isFileScope;
-		e.kindName	= tagKind (type)->name;
-		e.kind		= tagKind (type)->letter;
 
 		findScopeHierarchy (scope, st);
 		addOtherFields (&e, type, token, st, scope);
@@ -3157,7 +3155,7 @@ static boolean findCTags (const unsigned int passCount)
 	contextual_fake_count = 0;
 
 	Assert (passCount < 3);
-	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp), isLanguage (Lang_cpp));
+	cppInit ((boolean) (passCount > 1), isLanguage (Lang_csharp), isLanguage (Lang_cpp), &(CKinds [CK_DEFINE]));
 
 	exception = (exception_t) setjmp (Exception);
 	retry = FALSE;

@@ -46,6 +46,7 @@ typedef struct {
 	char* name;             /* name of language */
 	kindOption* kinds;          /* tag kinds handled by parser */
 	unsigned int kindCount;     /* size of `kinds' list */
+	kindOption* fileKind;           /* kind for overriding the default fileKind */
 	const char* const* extensions;  /* list of default extensions */
 	const char* const* patterns;    /* list of default file name patterns */
 	parserInitialize initialize;    /* initialization routine, if needed */
@@ -95,6 +96,7 @@ extern void makeSimpleScopedTag (const vString* const name, kindOption* const ki
 
 extern parserDefinition* parserNew (const char* name);
 extern const char *getLanguageName (const langType language);
+extern kindOption* getLanguageFileKind (const langType language);
 extern langType getNamedLanguage (const char *const name);
 extern langType getFileLanguage (const char *const fileName);
 extern void installLanguageMapDefault (const langType language);

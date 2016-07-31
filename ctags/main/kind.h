@@ -10,6 +10,11 @@
 
 #include "general.h"
 
+#define KIND_NULL    '\0'
+
+#define KIND_FILE_DEFAULT 'F'
+#define KIND_FILE_DEFAULT_LONG "file"
+
 typedef struct sKindOption {
 	boolean enabled;          /* are tags for kind enabled? */
 	char  letter;               /* kind letter */

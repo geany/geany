@@ -439,12 +439,10 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 	{
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, &(SqlKinds [kind]));
 
 		e.lineNumber   = token->lineNumber;
 		e.filePosition = token->filePosition;
-		e.kindName	   = SqlKinds [kind].name;
-		e.kind		   = SqlKinds [kind].letter;
 
 		if (vStringLength (token->scope) > 0)
 		{

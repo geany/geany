@@ -32,6 +32,7 @@
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
+#include "kind.h"
 
 #ifdef HAVE_REGEX
 
@@ -53,13 +54,6 @@
 */
 #if defined (POSIX_REGEX)
 
-struct sKind {
-	boolean enabled;
-	char letter;
-	char* name;
-	char* description;
-};
-
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
 typedef struct {
@@ -68,7 +62,7 @@ typedef struct {
 	union {
 		struct {
 			char *name_pattern;
-			struct sKind kind;
+			kindOption kind;
 		} tag;
 		struct {
 			regexCallback function;
@@ -113,11 +107,11 @@ static void clearPatternSet (const langType language)
 			{
 				eFree (p->u.tag.name_pattern);
 				p->u.tag.name_pattern = NULL;
-				eFree (p->u.tag.kind.name);
+				eFree ((char *)p->u.tag.kind.name);
 				p->u.tag.kind.name = NULL;
 				if (p->u.tag.kind.description != NULL)
 				{
-					eFree (p->u.tag.kind.description);
+					eFree ((char *)p->u.tag.kind.description);
 					p->u.tag.kind.description = NULL;
 				}
 			}
@@ -134,16 +128,14 @@ static void clearPatternSet (const langType language)
 */
 
 static void makeRegexTag (
-		const vString* const name, const struct sKind* const kind)
+		const vString* const name, const kindOption* const kind)
 {
 	Assert (kind != NULL);
 	if (kind->enabled)
 	{
 		tagEntryInfo e;
 		Assert (name != NULL  &&  vStringLength (name) > 0);
-		initTagEntry (&e, vStringValue (name));
-		e.kind     = kind->letter;
-		e.kindName = kind->name;
+		initTagEntry (&e, vStringValue (name), kind);
 		makeTagEntry (&e);
 	}
 }
@@ -375,7 +367,7 @@ static void parseKinds (
 
 static void printRegexKind (const regexPattern *pat, unsigned int i, boolean indent)
 {
-	const struct sKind *const kind = &pat [i].u.tag.kind;
+	const kindOption *const kind = &pat [i].u.tag.kind;
 	const char *const indentation = indent ? "    " : "";
 	Assert (pat [i].type == PTRN_TAG);
 	printf ("%s%c  %s %s\n", indentation,

@@ -73,11 +73,9 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 	if (vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name));
+		initTagEntry (&e, vStringValue (name), &(AsciidocKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
-		e.kindName = AsciidocKinds [kind].name;
-		e.kind = AsciidocKinds [kind].letter;
 
 		if (nl && nl->type < kind)
 		{

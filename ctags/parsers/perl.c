@@ -319,7 +319,7 @@ static void findPerlTags (void)
 				 * isSubroutineDeclaration() may consume several lines.  So
 				 * we record line positions.
 				 */
-				initTagEntry(&e, vStringValue(name));
+				initTagEntry(&e, vStringValue(name), &(PerlKinds[kind]));
 
 				if (TRUE == isSubroutineDeclaration(cp)) {
 					if (TRUE == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
@@ -329,9 +329,6 @@ static void findPerlTags (void)
 						continue;
 					}
 				}
-
-				e.kind     = PerlKinds[kind].letter;
-				e.kindName = PerlKinds[kind].name;
 
 				makeTagEntry(&e);
 

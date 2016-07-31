@@ -49,12 +49,10 @@ static boolean issame(const char *str)
 static void makeMarkdownTag (const vString* const name, boolean name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name));
+	initTagEntry (&e, vStringValue(name), &(MarkdownKinds [0]));
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */
-	e.kindName = "variable";
-	e.kind = 'v';
 
 	makeTagEntry(&e);
 }

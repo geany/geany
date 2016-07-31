@@ -99,12 +99,10 @@ static const char *findValidAccessType (const char *const access)
 static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const token,
 								 const powerShellKind kind, const char *const access)
 {
-	initTagEntry (e, vStringValue (token->string));
+	initTagEntry (e, vStringValue (token->string), &(PowerShellKinds[kind]));
 
 	e->lineNumber	= token->lineNumber;
 	e->filePosition	= token->filePosition;
-	e->kindName		= PowerShellKinds[kind].name;
-	e->kind			= (char) PowerShellKinds[kind].letter;
 
 	if (access != NULL)
 		e->extensionFields.access = access;

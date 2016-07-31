@@ -33,6 +33,13 @@
 static parserDefinitionFunc* BuiltInParsers[] = { PARSER_LIST };
 parserDefinition** LanguageTable = NULL;
 unsigned int LanguageCount = 0;
+static kindOption defaultFileKind = {
+	.enabled     = FALSE,
+	.letter      = KIND_FILE_DEFAULT,
+	.name        = KIND_FILE_DEFAULT_LONG,
+	.description = KIND_FILE_DEFAULT_LONG,
+};
+
 tagEntryFunction TagEntryFunction = NULL;
 void *TagEntryUserData = NULL;
 
@@ -53,10 +60,7 @@ extern void makeSimpleTag (const vString* const name,
 	if (name != NULL  &&  vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name));
-
-		e.kindName = kinds [kind].name;
-		e.kind     = kinds [kind].letter;
+		initTagEntry (&e, vStringValue (name), &(kinds [kind]));
 
 		makeTagEntry (&e);
 	}
@@ -71,10 +75,8 @@ extern void makeSimpleScopedTag (const vString* const name,
 	if (name != NULL  &&  vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name));
+		initTagEntry (&e, vStringValue (name), &(kinds [kind]));
 
-		e.kindName = kinds [kind].name;
-		e.kind     = kinds [kind].letter;
 		e.extensionFields.scopeKind = &(kinds [kind]);
 		e.extensionFields.scopeName = scopeName;
 		e.extensionFields.access = laccess;
@@ -91,6 +93,7 @@ extern parserDefinition* parserNew (const char* name)
 {
 	parserDefinition* result = xCalloc (1, parserDefinition);
 	result->name = eStrdup (name);
+	result->fileKind = &defaultFileKind;
 	return result;
 }
 
@@ -99,6 +102,19 @@ extern const char *getLanguageName (const langType language)
 	/*Assert (0 <= language  &&  language < (int) LanguageCount);*/
 	if (language < 0) return NULL;
 		return LanguageTable [language]->name;
+}
+
+extern kindOption* getLanguageFileKind (const langType language)
+{
+	kindOption* kind;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+
+	kind = LanguageTable [language]->fileKind;
+
+	Assert (kind != KIND_NULL);
+
+	return kind;
 }
 
 extern langType getNamedLanguage (const char *const name)
@@ -595,13 +611,11 @@ static void makeFileTag (const char *const fileName)
 	if (Option.include.fileNames)
 	{
 		tagEntryInfo tag;
-		initTagEntry (&tag, baseFilename (fileName));
+		initTagEntry (&tag, baseFilename (fileName), getInputLanguageFileKind ());
 
 		tag.isFileEntry     = TRUE;
 		tag.lineNumberEntry = TRUE;
 		tag.lineNumber      = 1;
-		tag.kindName        = "file";
-		tag.kind            = 'F';
 
 		makeTagEntry (&tag);
 	}

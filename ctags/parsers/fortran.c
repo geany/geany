@@ -488,7 +488,7 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, &(FortranKinds [token->tag]));
 
 		if (token->tag == TAG_COMMON_BLOCK)
 			e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
@@ -496,8 +496,6 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope	= isFileScope (token->tag);
-		e.kindName		= FortranKinds [token->tag].name;
-		e.kind			= FortranKinds [token->tag].letter;
 		e.truncateLine	= (boolean) (token->tag != TAG_LABEL);
 
 		if (ancestorCount () > 0)

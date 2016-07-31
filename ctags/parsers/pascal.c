@@ -44,15 +44,11 @@ static void createPascalTag (tagEntryInfo* const tag,
 {
 	if (PascalKinds [kind].enabled  &&  name != NULL  &&  vStringLength (name) > 0)
 	{
-		initTagEntry (tag, vStringValue (name));
+		initTagEntry (tag, vStringValue (name), &(PascalKinds [kind]));
 
-		tag->kindName = PascalKinds [kind].name;
-		tag->kind     = PascalKinds [kind].letter;
 		tag->extensionFields.signature = arglist;
 		tag->extensionFields.varType = vartype;
 	}
-	else
-		initTagEntry (tag, NULL);
 }
 
 static void makePascalTag (const tagEntryInfo* const tag)

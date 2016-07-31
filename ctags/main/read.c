@@ -36,6 +36,11 @@ static MIOPos StartOfLine;      /* holds deferred position of start of line */
 *   FUNCTION DEFINITIONS
 */
 
+extern kindOption *getInputLanguageFileKind (void)
+{
+	return getLanguageFileKind (File.input.language);
+}
+
 extern void freeSourceFileResources (void)
 {
 	vStringDelete (File.input.name);
@@ -217,13 +222,11 @@ static boolean parseLineDirective (void)
 				lNum == 1)
 			{
 				tagEntryInfo tag;
-				initTagEntry (&tag, baseFilename (vStringValue (fileName)));
+				initTagEntry (&tag, baseFilename (vStringValue (fileName)), getInputLanguageFileKind ());
 
 				tag.isFileEntry     = TRUE;
 				tag.lineNumberEntry = TRUE;
 				tag.lineNumber      = 1;
-				tag.kindName        = "file";
-				tag.kind            = 'F';
 
 				makeTagEntry (&tag);
 			}

@@ -113,27 +113,25 @@ static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (function));
-
-	tag.kindName = PythonKinds[K_FUNCTION].name;
-	tag.kind = PythonKinds[K_FUNCTION].letter;
-	tag.extensionFields.signature = arglist;
 
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.kindName = PythonKinds[K_METHOD].name;
-			tag.kind = PythonKinds[K_METHOD].letter;
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_METHOD]));
 			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
-			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 		else
 		{
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
 			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
-			tag.extensionFields.scopeName = vStringValue (parent);
 		}
+		tag.extensionFields.scopeName = vStringValue (parent);
 	}
+	else
+		initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+
+	tag.extensionFields.signature = arglist;
 
 	addAccessFields (&tag, function, is_class_parent ? K_METHOD : K_FUNCTION,
 		vStringLength (parent) > 0, is_class_parent);
@@ -148,9 +146,7 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 	vString *const parent, int is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (class));
-	tag.kindName = PythonKinds[K_CLASS].name;
-	tag.kind = PythonKinds[K_CLASS].letter;
+	initTagEntry (&tag, vStringValue (class), &(PythonKinds[K_CLASS]));
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
@@ -174,9 +170,7 @@ static void makeVariableTag (vString *const var, vString *const parent,
 	boolean is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (var));
-	tag.kindName = PythonKinds[K_VARIABLE].name;
-	tag.kind = PythonKinds[K_VARIABLE].letter;
+	initTagEntry (&tag, vStringValue (var), &(PythonKinds[K_VARIABLE]));
 	if (vStringLength (parent) > 0)
 	{
 		tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);

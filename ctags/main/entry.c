@@ -400,7 +400,7 @@ extern void makeTagEntry (const tagEntryInfo *const tag)
 	}
 }
 
-extern void initTagEntry (tagEntryInfo *const e, const char *const name)
+extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind)
 {
 	Assert (File.source.name != NULL);
 	memset (e, 0, sizeof (tagEntryInfo));
@@ -410,6 +410,7 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name)
 	e->filePosition     = getInputFilePosition ();
 	e->sourceFileName   = getSourceFileTagPath ();
 	e->name             = name;
+	e->kind             = kind;
 }
 
 /* vi:set tabstop=4 shiftwidth=4: */
