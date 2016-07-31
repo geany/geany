@@ -289,8 +289,6 @@ gchar *utils_get_current_time_string(void);
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);
 
-gchar **utils_read_file_in_array(const gchar *filename);
-
 gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash);
 
 gboolean utils_wrap_string(gchar *string, gint wrapstart);

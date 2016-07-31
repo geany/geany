@@ -3,10 +3,10 @@
 // Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <stddef.h>
 #include <math.h>
 
 #include <string>
@@ -32,13 +32,6 @@
 // Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
 #pragma GCC diagnostic ignored "-Wsentinel"
 #endif
-
-/* GLIB must be compiled with thread support, otherwise we
-   will bail on trying to use locks, and that could lead to
-   problems for someone.  `glib-config --libs gthread` needs
-   to be used to get the glib libraries for linking, otherwise
-   g_thread_init will fail */
-#define USE_LOCK defined(G_THREADS_ENABLED) && !defined(G_THREADS_IMPL_NONE)
 
 #include "Converter.h"
 
@@ -88,117 +81,38 @@ using namespace Scintilla;
 
 enum encodingType { singleByte, UTF8, dbcs};
 
-struct LOGFONT {
-	int size;
-	int weight;
-	bool italic;
-	int characterSet;
-	char faceName[300];
-};
-
-#if USE_LOCK
-static GMutex *fontMutex = NULL;
-
-static void InitializeGLIBThreads() {
-#if !GLIB_CHECK_VERSION(2,31,0)
-	if (!g_thread_supported()) {
-		g_thread_init(NULL);
-	}
-#endif
-}
-#endif
-
-static void FontMutexAllocate() {
-#if USE_LOCK
-	if (!fontMutex) {
-		InitializeGLIBThreads();
-#if GLIB_CHECK_VERSION(2,31,0)
-		fontMutex = g_new(GMutex, 1);
-		g_mutex_init(fontMutex);
-#else
-		fontMutex = g_mutex_new();
-#endif
-	}
-#endif
-}
-
-static void FontMutexFree() {
-#if USE_LOCK
-	if (fontMutex) {
-#if GLIB_CHECK_VERSION(2,31,0)
-		g_mutex_clear(fontMutex);
-		g_free(fontMutex);
-#else
-		g_mutex_free(fontMutex);
-#endif
-		fontMutex = NULL;
-	}
-#endif
-}
-
-static void FontMutexLock() {
-#if USE_LOCK
-	g_mutex_lock(fontMutex);
-#endif
-}
-
-static void FontMutexUnlock() {
-#if USE_LOCK
-	if (fontMutex) {
-		g_mutex_unlock(fontMutex);
-	}
-#endif
-}
-
 // Holds a PangoFontDescription*.
 class FontHandle {
-	XYPOSITION width[128];
-	encodingType et;
 public:
-	int ascent;
 	PangoFontDescription *pfd;
 	int characterSet;
-	FontHandle() : et(singleByte), ascent(0), pfd(0), characterSet(-1) {
-		ResetWidths(et);
+	FontHandle() : pfd(0), characterSet(-1) {
 	}
 	FontHandle(PangoFontDescription *pfd_, int characterSet_) {
-		et = singleByte;
-		ascent = 0;
 		pfd = pfd_;
 		characterSet = characterSet_;
-		ResetWidths(et);
 	}
 	~FontHandle() {
 		if (pfd)
 			pango_font_description_free(pfd);
 		pfd = 0;
 	}
-	void ResetWidths(encodingType et_) {
-		et = et_;
-		for (int i=0; i<=127; i++) {
-			width[i] = 0;
-		}
-	}
-	XYPOSITION CharWidth(unsigned char ch, encodingType et_) const {
-		XYPOSITION w = 0;
-		FontMutexLock();
-		if ((ch <= 127) && (et == et_)) {
-			w = width[ch];
-		}
-		FontMutexUnlock();
-		return w;
-	}
-	void SetCharWidth(unsigned char ch, XYPOSITION w, encodingType et_) {
-		if (ch <= 127) {
-			FontMutexLock();
-			if (et != et_) {
-				ResetWidths(et_);
-			}
-			width[ch] = w;
-			FontMutexUnlock();
-		}
-	}
+	static FontHandle *CreateNewFont(const FontParameters &fp);
 };
+
+FontHandle *FontHandle::CreateNewFont(const FontParameters &fp) {
+	PangoFontDescription *pfd = pango_font_description_new();
+	if (pfd) {
+		pango_font_description_set_family(pfd,
+			(fp.faceName[0] == '!') ? fp.faceName+1 : fp.faceName);
+		pango_font_description_set_size(pfd, pangoUnitsFromDouble(fp.size));
+		pango_font_description_set_weight(pfd, static_cast<PangoWeight>(fp.weight));
+		pango_font_description_set_style(pfd, fp.italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
+		return new FontHandle(pfd,fp.characterSet);
+	}
+
+	return NULL;
+}
 
 // X has a 16 bit coordinate space, so stop drawing here to avoid wrapping
 static const int maxCoordinate = 32000;
@@ -217,143 +131,18 @@ Point Point::FromLong(long lpoint) {
 	           Platform::HighShortFromLong(lpoint));
 }
 
-static void SetLogFont(LOGFONT &lf, const char *faceName, int characterSet, float size, int weight, bool italic) {
-	lf = LOGFONT();
-	lf.size = size;
-	lf.weight = weight;
-	lf.italic = italic;
-	lf.characterSet = characterSet;
-	StringCopy(lf.faceName, faceName);
-}
-
-/**
- * Create a hash from the parameters for a font to allow easy checking for identity.
- * If one font is the same as another, its hash will be the same, but if the hash is the
- * same then they may still be different.
- */
-static int HashFont(const FontParameters &fp) {
-	return
-	    static_cast<int>(fp.size+0.5) ^
-	    (fp.characterSet << 10) ^
-	    ((fp.weight / 100) << 12) ^
-	    (fp.italic ? 0x20000000 : 0) ^
-	    fp.faceName[0];
-}
-
-class FontCached : Font {
-	FontCached *next;
-	int usage;
-	LOGFONT lf;
-	int hash;
-	explicit FontCached(const FontParameters &fp);
-	~FontCached() {}
-	bool SameAs(const FontParameters &fp);
-	virtual void Release();
-	static FontID CreateNewFont(const FontParameters &fp);
-	static FontCached *first;
-public:
-	static FontID FindOrCreate(const FontParameters &fp);
-	static void ReleaseId(FontID fid_);
-	static void ReleaseAll();
-};
-
-FontCached *FontCached::first = 0;
-
-FontCached::FontCached(const FontParameters &fp) :
-next(0), usage(0), hash(0) {
-	::SetLogFont(lf, fp.faceName, fp.characterSet, fp.size, fp.weight, fp.italic);
-	hash = HashFont(fp);
-	fid = CreateNewFont(fp);
-	usage = 1;
-}
-
-bool FontCached::SameAs(const FontParameters &fp) {
-	return
-	    lf.size == fp.size &&
-	    lf.weight == fp.weight &&
-	    lf.italic == fp.italic &&
-	    lf.characterSet == fp.characterSet &&
-	    0 == strcmp(lf.faceName, fp.faceName);
-}
-
-void FontCached::Release() {
-	if (fid)
-		delete PFont(*this);
-	fid = 0;
-}
-
-FontID FontCached::FindOrCreate(const FontParameters &fp) {
-	FontID ret = 0;
-	FontMutexLock();
-	int hashFind = HashFont(fp);
-	for (FontCached *cur = first; cur; cur = cur->next) {
-		if ((cur->hash == hashFind) &&
-		        cur->SameAs(fp)) {
-			cur->usage++;
-			ret = cur->fid;
-		}
-	}
-	if (ret == 0) {
-		FontCached *fc = new FontCached(fp);
-		fc->next = first;
-		first = fc;
-		ret = fc->fid;
-	}
-	FontMutexUnlock();
-	return ret;
-}
-
-void FontCached::ReleaseId(FontID fid_) {
-	FontMutexLock();
-	FontCached **pcur = &first;
-	for (FontCached *cur = first; cur; cur = cur->next) {
-		if (cur->fid == fid_) {
-			cur->usage--;
-			if (cur->usage == 0) {
-				*pcur = cur->next;
-				cur->Release();
-				cur->next = 0;
-				delete cur;
-			}
-			break;
-		}
-		pcur = &cur->next;
-	}
-	FontMutexUnlock();
-}
-
-void FontCached::ReleaseAll() {
-	while (first) {
-		ReleaseId(first->GetID());
-	}
-}
-
-FontID FontCached::CreateNewFont(const FontParameters &fp) {
-	PangoFontDescription *pfd = pango_font_description_new();
-	if (pfd) {
-		pango_font_description_set_family(pfd,
-			(fp.faceName[0] == '!') ? fp.faceName+1 : fp.faceName);
-		pango_font_description_set_size(pfd, pangoUnitsFromDouble(fp.size));
-		pango_font_description_set_weight(pfd, static_cast<PangoWeight>(fp.weight));
-		pango_font_description_set_style(pfd, fp.italic ? PANGO_STYLE_ITALIC : PANGO_STYLE_NORMAL);
-		return new FontHandle(pfd, fp.characterSet);
-	}
-
-	return new FontHandle();
-}
-
 Font::Font() : fid(0) {}
 
 Font::~Font() {}
 
 void Font::Create(const FontParameters &fp) {
 	Release();
-	fid = FontCached::FindOrCreate(fp);
+	fid = FontHandle::CreateNewFont(fp);
 }
 
 void Font::Release() {
 	if (fid)
-		FontCached::ReleaseId(fid);
+		delete static_cast<FontHandle *>(fid);
 	fid = 0;
 }
 
@@ -866,12 +655,12 @@ static std::string UTF8FromIconv(const Converter &conv, const char *s, int len) 
 	if (conv) {
 		std::string utfForm(len*3+1, '\0');
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = len;
+		gsize inLeft = len;
 		char *putf = &utfForm[0];
 		char *pout = putf;
-		size_t outLeft = len*3+1;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = len*3+1;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			*pout = '\0';
 			utfForm.resize(pout - putf);
 			return utfForm;
@@ -886,11 +675,11 @@ static size_t MultiByteLenFromIconv(const Converter &conv, const char *s, size_t
 	for (size_t lenMB=1; (lenMB<4) && (lenMB <= len); lenMB++) {
 		char wcForm[2];
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = lenMB;
+		gsize inLeft = lenMB;
 		char *pout = wcForm;
-		size_t outLeft = 2;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = 2;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			return lenMB;
 		}
 	}
@@ -989,13 +778,6 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 	if (font_.GetID()) {
 		const int lenPositions = len;
 		if (PFont(font_)->pfd) {
-			if (len == 1) {
-				int width = PFont(font_)->CharWidth(*s, et);
-				if (width) {
-					positions[0] = width;
-					return;
-				}
-			}
 			pango_layout_set_font_description(layout, PFont(font_)->pfd);
 			if (et == UTF8) {
 				// Simple and direct as UTF-8 is native Pango encoding
@@ -1089,10 +871,6 @@ void SurfaceImpl::MeasureWidths(Font &font_, const char *s, int len, XYPOSITION 
 					PLATFORM_ASSERT(i == lenPositions);
 				}
 			}
-			if (len == 1) {
-				PFont(font_)->SetCharWidth(*s, positions[0], et);
-			}
-			return;
 		}
 	} else {
 		// No font so return an ascending range of values
@@ -1148,20 +926,17 @@ XYPOSITION SurfaceImpl::WidthChar(Font &font_, char ch) {
 XYPOSITION SurfaceImpl::Ascent(Font &font_) {
 	if (!(font_.GetID()))
 		return 1;
-	FontMutexLock();
-	int ascent = PFont(font_)->ascent;
-	if ((ascent == 0) && (PFont(font_)->pfd)) {
+	int ascent = 0;
+	if (PFont(font_)->pfd) {
 		PangoFontMetrics *metrics = pango_context_get_metrics(pcontext,
 			PFont(font_)->pfd, pango_context_get_language(pcontext));
-		PFont(font_)->ascent =
+		ascent =
 			doubleFromPangoUnits(pango_font_metrics_get_ascent(metrics));
 		pango_font_metrics_unref(metrics);
-		ascent = PFont(font_)->ascent;
 	}
 	if (ascent == 0) {
 		ascent = 1;
 	}
-	FontMutexUnlock();
 	return ascent;
 }
 
@@ -1488,6 +1263,30 @@ ListBox *ListBox::Allocate() {
 	return lb;
 }
 
+static int treeViewGetRowHeight(GtkTreeView *view) {
+#if GTK_CHECK_VERSION(3,0,0)
+	// This version sometimes reports erroneous results on GTK2, but the GTK2
+	// version is inaccurate for GTK 3.14.
+	GdkRectangle rect;
+	GtkTreePath *path = gtk_tree_path_new_first();
+	gtk_tree_view_get_background_area(view, path, NULL, &rect);
+	gtk_tree_path_free(path);
+	return rect.height;
+#else
+	int row_height=0;
+	int vertical_separator=0;
+	int expander_size=0;
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(view, 0);
+	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
+	gtk_widget_style_get(GTK_WIDGET(view),
+		"vertical-separator", &vertical_separator,
+		"expander-size", &expander_size, NULL);
+	row_height += vertical_separator;
+	row_height = Platform::Maximum(row_height, expander_size);
+	return row_height;
+#endif
+}
+
 // SmallScroller, a GtkScrolledWindow that can shrink very small, as
 // gtk_widget_set_size_request() cannot shrink widgets on GTK3
 typedef struct {
@@ -1512,9 +1311,19 @@ G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
 
 #if GTK_CHECK_VERSION(3,0,0)
 static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
-	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
-	if (*min > 1)
-		*min = 1;
+	GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+	if (GTK_IS_TREE_VIEW(child)) {
+		GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(child));
+		int n_rows = gtk_tree_model_iter_n_children(model, NULL);
+		int row_height = treeViewGetRowHeight(GTK_TREE_VIEW(child));
+
+		*min = MAX(1, row_height);
+		*nat = MAX(*min, n_rows * row_height);
+	} else {
+		GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
+		if (*min > 1)
+			*min = 1;
+	}
 }
 #else
 static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
@@ -1681,7 +1490,7 @@ void ListBoxX::SetFont(Font &scint_font) {
 		if (cssProvider) {
 			PangoFontDescription *pfd = PFont(scint_font)->pfd;
 			std::ostringstream ssFontSetting;
-			ssFontSetting << "GtkTreeView { ";
+			ssFontSetting << "GtkTreeView, treeview { ";
 			ssFontSetting << "font-family: " << pango_font_description_get_family(pfd) <<  "; ";
 			ssFontSetting << "font-size:";
 			ssFontSetting << static_cast<double>(pango_font_description_get_size(pfd)) / PANGO_SCALE;
@@ -1711,28 +1520,8 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
-int ListBoxX::GetRowHeight()
-{
-#if GTK_CHECK_VERSION(3,0,0)
-	// This version sometimes reports erroneous results on GTK2, but the GTK2
-	// version is inaccurate for GTK 3.14.
-	GdkRectangle rect;
-	GtkTreePath *path = gtk_tree_path_new_first();
-	gtk_tree_view_get_background_area(GTK_TREE_VIEW(list), path, NULL, &rect);
-	return rect.height;
-#else
-	int row_height=0;
-	int vertical_separator=0;
-	int expander_size=0;
-	GtkTreeViewColumn *column = gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
-	gtk_widget_style_get(PWidget(list),
-		"vertical-separator", &vertical_separator,
-		"expander-size", &expander_size, NULL);
-	row_height += vertical_separator;
-	row_height = Platform::Maximum(row_height, expander_size);
-	return row_height;
-#endif
+int ListBoxX::GetRowHeight() {
+	return treeViewGetRowHeight(GTK_TREE_VIEW(list));
 }
 
 PRectangle ListBoxX::GetDesiredRect() {
@@ -1759,12 +1548,35 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
-		GtkBorder padding, border;
-		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
-		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
+		GtkStateFlags stateFlagsFrame = gtk_style_context_get_state(styleContextFrame);
+		GtkBorder padding, border, border_border = { 0, 0, 0, 0 };
+		gtk_style_context_get_padding(styleContextFrame, stateFlagsFrame, &padding);
+		gtk_style_context_get_border(styleContextFrame, stateFlagsFrame, &border);
+
+#	if GTK_CHECK_VERSION(3,20,0)
+		// on GTK 3.20 the frame border is in a sub-node "border".
+		// Unfortunately we need to be built against 3.20 to be able to support this, as it requires
+		// new API.
+		GtkStyleContext *styleContextFrameBorder = gtk_style_context_new();
+		GtkWidgetPath *widget_path = gtk_widget_path_copy(gtk_style_context_get_path(styleContextFrame));
+		gtk_widget_path_append_type(widget_path, GTK_TYPE_BORDER); // dummy type
+		gtk_widget_path_iter_set_object_name(widget_path, -1, "border");
+		gtk_style_context_set_path(styleContextFrameBorder, widget_path);
+		gtk_widget_path_free(widget_path);
+		gtk_style_context_get_border(styleContextFrameBorder, stateFlagsFrame, &border_border);
+		g_object_unref(styleContextFrameBorder);
+#	else // < 3.20
+		if (gtk_check_version(3, 20, 0) == NULL) {
+			// default to 1px all around as it's likely what it is, and so we don't miss 2px height
+			// on GTK 3.20 when built against an earlier version.
+			border_border.top = border_border.bottom = border_border.left = border_border.right = 1;
+		}
+#	endif
+
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + border.top + border.bottom
+		          + border_border.top + border_border.bottom
 		          + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		height = (rows * row_height
@@ -1785,6 +1597,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 #if GTK_CHECK_VERSION(3,0,0)
 		rc.right += (padding.left + padding.right
 		             + border.left + border.right
+		             + border_border.left + border_border.right
 		             + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		rc.right += 2 * (PWidget(frame)->style->xthickness
@@ -2298,10 +2111,7 @@ int Platform::Clamp(int val, int minVal, int maxVal) {
 }
 
 void Platform_Initialise() {
-	FontMutexAllocate();
 }
 
 void Platform_Finalise() {
-	FontCached::ReleaseAll();
-	FontMutexFree();
 }

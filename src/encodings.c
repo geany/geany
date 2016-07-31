@@ -521,7 +521,6 @@ GtkTreeStore *encodings_encoding_store_new(gboolean has_detect)
 	GtkTreeIter iter_current, iter_westeuro, iter_easteuro, iter_eastasian,
 				iter_asian, iter_utf8, iter_middleeast;
 	GtkTreeIter *iter_parent;
-	gchar *encoding_string;
 	gint i;
 
 	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
@@ -547,6 +546,8 @@ GtkTreeStore *encodings_encoding_store_new(gboolean has_detect)
 
 	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
 	{
+		gchar *encoding_string;
+
 		switch (encodings[i].group)
 		{
 			case WESTEUROPEAN: iter_parent = &iter_westeuro; break;

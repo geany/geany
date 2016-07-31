@@ -171,8 +171,34 @@ typedef struct GeanyData
 {
 	struct GeanyApp				*app;				/**< Geany application data fields */
 	struct GeanyMainWidgets		*main_widgets;		/**< Important widgets in the main window */
-	GPtrArray					*documents_array;	/**< See document.h#documents_array. @elementtype{GeanyDocument} */
-	GPtrArray					*filetypes_array;	/**< Dynamic array of GeanyFiletype pointers. @elementtype{GeanyFiletype} */
+	/** Dynamic array of GeanyDocument pointers.
+	 * Once a pointer is added to this, it is never freed. This means the same document pointer
+	 * can represent a different document later on, or it may have been closed and become invalid.
+	 * For this reason, you should use document_find_by_id() instead of storing
+	 * document pointers over time if there is a chance the user can close the
+	 * document.
+	 *
+	 * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
+	 * This is done automatically if you use the foreach_document() macro.
+	 *
+	 * @note
+	 * Never assume that the order of document pointers is the same as the order of notebook tabs.
+	 * One reason is that notebook tabs can be reordered.
+	 * Use @c document_get_from_page() to lookup a document from a notebook tab number.
+	 *
+	 * @see documents.
+	 *
+	 * @elementtype{GeanyDocument}
+	 */
+	GPtrArray					*documents_array;
+	/** Dynamic array of filetype pointers
+	 *
+	 * List the list is dynamically expanded for custom filetypes filetypes so don't expect
+	 * the list of known filetypes to be a constant.
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
+	GPtrArray					*filetypes_array;
 	struct GeanyPrefs			*prefs;				/**< General settings */
 	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */
 	struct GeanyToolbarPrefs	*toolbar_prefs;		/**< Toolbar settings */
@@ -182,7 +208,21 @@ typedef struct GeanyData
 	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
 	gpointer					*_compat;			/* Remove field on next ABI break (abi-todo) */
-	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
+	/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
+	 * first, as this is usually treated specially.
+	 * The list does not change (after filetypes have been initialized), so you can use
+	 * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
+	 * @see filetypes_get_sorted_by_name().
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
+	GSList						*filetypes_by_title;
+	/** @gironly
+	 * Global object signalling events via signals
+	 *
+	 * This is mostly for language bindings. Otherwise prefer to use
+	 * plugin_signal_connect() instead this which adds automatic cleanup. */
+	GObject						*object;
 }
 GeanyData;
 

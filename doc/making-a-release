@@ -8,8 +8,7 @@ and summarize the interesting ones.  Use `git log --author='name'`
 to filter commits by a particular developer name.
 
 Ensure version numbers are all updated in:
-	configure.ac geany_private.rc geany.exe.manifest
-	win32-config.h doc/geany.txt
+	configure.ac geany_private.rc geany.exe.manifest doc/geany.txt
 Ensure release date is updated in:
 	NEWS doc/geany.txt doc/geany.1.in
 Check GEANY_CODENAME is set in src/geany.h.
@@ -34,13 +33,16 @@ Windows builds (enrico?).
 Create a signed tag for the release in Git with 'git tag -s <version>'.
 
 Website: update Releases, Documentation links, Release Notes, ChangeLog
-and add a News item.  Update the manual data and links in the filesystem
-in /srv/www/www.geany.org/manual.  Remember to update
-current/hacking.html too.
+and add a News item.
+Use the /home/geany/update-manual script to update the manual data and links
+in the filesystem at /srv/www/www.geany.org/manual, and to update
+current/hacking.html.
 
 Announce on geany, devel, i18n mailing lists (check you're subscribed).
-Put a news item on SourceForge (https://sourceforge.net/news/?group_id=153444)
+Put a news item on SourceForge (https://sourceforge.net/p/geany/news/)
 and a new release on GitHub (https://github.com/geany/geany/releases).
+
+Update the topic on the IRC channel (/msg chanserv op #geany).
 
 For non-master releases, merge NEWS into master and any branch-only
 commits that need to merged.

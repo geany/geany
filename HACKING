@@ -497,7 +497,6 @@ printf("Prefix: %s", GEANY_PREFIX);
 Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
 * Add foo.c, foo.h to SRCS in path/Makefile.am.
-* Add foo.o to OBJS in path/makefile.win32.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -560,7 +559,6 @@ LexFoo.cxx. Try the official Scintilla project first.
 When adding a lexer, update:
 
 * scintilla/Makefile.am
-* scintilla/makefile.win32
 * scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and
@@ -628,7 +626,7 @@ Adding a TagManager parser
 This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Check this fork:
-https://github.com/fishman/ctags
+https://github.com/universal-ctags/ctags
 
 There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
@@ -648,13 +646,14 @@ http://sf.net/projects/ctags - see the tracker.
 Method
 ``````
 * Add foo.c to SRCS in Makefile.am.
-* Add foo.o to OBJS in makefile.win32.
 * Add Foo to parsers.h
-* Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
+* Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In foo.c:
-Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+In tagmanager/src/tm_parsers.c:
+Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
+FooKinds to the appropriate TMTagType, and add the corresponding
+MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():

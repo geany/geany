@@ -799,7 +799,7 @@ void win32_open_browser(const gchar *uri)
 	if (ret <= 32)
 	{
 		gchar *err = g_win32_error_message(GetLastError());
-		/* TODO add a GUI warning that opening an URI failed */
+		ui_set_statusbar(TRUE, _("Failed to open URI \"%s\": %s"), uri, err);
 		g_warning("ShellExecute failed opening \"%s\" (code %d): %s", uri, ret, err);
 		g_free(err);
 	}

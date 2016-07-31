@@ -262,8 +262,9 @@ static void add_kb_group(GeanyKeyGroup *group,
 {
 	g_ptr_array_add(keybinding_groups, group);
 
-	group->name = name;
-	group->label = label;
+	/* as for items, we only require duplicated name and label for plugins */
+	group->name = plugin ? g_strdup(name) : name;
+	group->label = plugin ? g_strdup(label) : label;
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
@@ -385,6 +386,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOBEGINNING, NULL,
+		GDK_BackSpace, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetobegin",
+		_("Delete to beginning of line"), NULL);
 	/* Note: transpose may fit better in format group, but that would break the API */
 	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
 		0, 0, "edit_transposeline", _("_Transpose Current Line"), NULL);
@@ -722,6 +726,9 @@ static void free_key_group(gpointer item)
 		if (group->cb_data_destroy)
 			group->cb_data_destroy(group->cb_data);
 		g_free(group->plugin_keys);
+		/* we allocated those in add_kb_group() as it's a plugin group */
+		g_free((gchar *) group->name);
+		g_free((gchar *) group->label);
 		g_free(group);
 	}
 }
@@ -2129,6 +2136,9 @@ static gboolean cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINETOEND:
 			sci_send_command(doc->editor->sci, SCI_DELLINERIGHT);
+			break;
+		case GEANY_KEYS_EDITOR_DELETELINETOBEGINNING:
+			sci_send_command(doc->editor->sci, SCI_DELLINELEFT);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);

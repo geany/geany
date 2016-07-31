@@ -86,24 +86,6 @@
 
 
 GeanyFilePrefs file_prefs;
-
-
-/** Dynamic array of GeanyDocument pointers.
- * Once a pointer is added to this, it is never freed. This means the same document pointer
- * can represent a different document later on, or it may have been closed and become invalid.
- * For this reason, you should use document_find_by_id() instead of storing
- * document pointers over time if there is a chance the user can close the
- * document.
- *
- * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
- * This is done automatically if you use the foreach_document() macro.
- *
- * @note
- * Never assume that the order of document pointers is the same as the order of notebook tabs.
- * One reason is that notebook tabs can be reordered.
- * Use @c document_get_from_page() to lookup a document from a notebook tab number.
- *
- * @see documents. */
 GPtrArray *documents_array = NULL;
 
 
@@ -510,11 +492,10 @@ static gint document_get_new_idx(void)
 }
 
 
-static void queue_colourise(GeanyDocument *doc, gboolean full_colourise)
+static void queue_colourise(GeanyDocument *doc)
 {
-	/* make sure we don't override previously set full_colourise=TRUE by FALSE */
-	if (!doc->priv->colourise_needed || !doc->priv->full_colourise)
-		doc->priv->full_colourise = full_colourise;
+	if (doc->priv->colourise_needed)
+		return;
 
 	/* Colourise the editor before it is next drawn */
 	doc->priv->colourise_needed = TRUE;
@@ -1398,7 +1379,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		/* add the text to the ScintillaObject */
 		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
 		sci_set_text(doc->editor->sci, filedata.data);	/* NULL terminated data */
-		queue_colourise(doc, TRUE);	/* Ensure the document gets colourised. */
+		queue_colourise(doc);	/* Ensure the document gets colourised. */
 
 		/* detect & set line endings */
 		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
@@ -1537,7 +1518,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 void document_open_file_list(const gchar *data, gsize length)
 {
 	guint i;
-	gchar *filename;
 	gchar **list;
 
 	g_return_if_fail(data != NULL);
@@ -1547,7 +1527,8 @@ void document_open_file_list(const gchar *data, gsize length)
 	/* stop at the end or first empty item, because last item is empty but not null */
 	for (i = 0; list[i] != NULL && list[i][0] != '\0'; i++)
 	{
-		filename = utils_get_path_from_uri(list[i]);
+		gchar *filename = utils_get_path_from_uri(list[i]);
+
 		if (filename == NULL)
 			continue;
 		document_open_file(filename, FALSE, NULL, NULL);
@@ -2714,7 +2695,6 @@ void document_update_tags(GeanyDocument *doc)
 void document_highlight_tags(GeanyDocument *doc)
 {
 	GString *keywords_str;
-	gchar *keywords;
 	gint keyword_idx;
 
 	/* some filetypes support type keywords (such as struct names), but not
@@ -2751,10 +2731,16 @@ void document_highlight_tags(GeanyDocument *doc)
 	keywords_str = symbols_find_typenames_as_string(doc->file_type->lang, FALSE);
 	if (keywords_str)
 	{
-		keywords = g_string_free(keywords_str, FALSE);
-		sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+		gchar *keywords = g_string_free(keywords_str, FALSE);
+		guint hash = g_str_hash(keywords);
+
+		if (hash != doc->priv->keyword_hash)
+		{
+			sci_set_keywords(doc->editor->sci, keyword_idx, keywords);
+			queue_colourise(doc); /* force re-highlighting the entire document */
+			doc->priv->keyword_hash = hash;
+		}
 		g_free(keywords);
-		queue_colourise(doc, FALSE); /* re-highlight the visible area */
 	}
 }
 
@@ -2815,7 +2801,7 @@ static void document_load_config(GeanyDocument *doc, GeanyFiletype *type,
 		highlighting_set_styles(doc->editor->sci, type);
 		editor_set_indentation_guides(doc->editor);
 		build_menu_update(doc);
-		queue_colourise(doc, TRUE);
+		queue_colourise(doc);
 		if (type->priv->symbol_list_sort_mode == SYMBOLS_SORT_USE_PREVIOUS)
 			doc->priv->symbol_list_sort_mode = interface_prefs.symbols_sort_mode;
 		else
@@ -2905,11 +2891,10 @@ void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding)
 /* Clears an Undo or Redo buffer. */
 void document_undo_clear_stack(GTrashStack **stack)
 {
-	undo_action *a;
-
 	while (g_trash_stack_height(stack) > 0)
 	{
-		a = g_trash_stack_pop(stack);
+		undo_action *a = g_trash_stack_pop(stack);
+
 		if (G_LIKELY(a != NULL))
 		{
 			switch (a->type)
@@ -3030,12 +3015,29 @@ void document_undo(GeanyDocument *doc)
 				document_redo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
-
-				ignore_callback = TRUE;
-				encodings_select_radio_item((const gchar*)action->data);
-				ignore_callback = FALSE;
-
 				g_free(action->data);
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+				break;
+			}
+			case UNDO_EOL:
+			{
+				undo_action *next_action;
+
+				document_redo_add(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
+				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+
+				/* When undoing, UNDO_EOL is always followed by UNDO_SCINTILLA
+				 * which undos the line endings in the editor and should be
+				 * performed together with UNDO_EOL. */
+				next_action = g_trash_stack_peek(&doc->priv->undo_actions);
+				if (next_action && next_action->type == UNDO_SCINTILLA)
+					document_undo(doc);
 				break;
 			}
 			case UNDO_RELOAD:
@@ -3102,9 +3104,18 @@ void document_redo(GeanyDocument *doc)
 		{
 			case UNDO_SCINTILLA:
 			{
+				undo_action *next_action;
+
 				document_undo_add_internal(doc, UNDO_SCINTILLA, NULL);
 
 				sci_redo(doc->editor->sci);
+
+				/* When redoing an EOL change, the UNDO_SCINTILLA which changes
+				 * the line ends in the editor is followed by UNDO_EOL
+				 * which should be performed together with UNDO_SCINTILLA. */
+				next_action = g_trash_stack_peek(&doc->priv->redo_actions);
+				if (next_action != NULL && next_action->type == UNDO_EOL)
+					document_redo(doc);
 				break;
 			}
 			case UNDO_BOM:
@@ -3121,12 +3132,20 @@ void document_redo(GeanyDocument *doc)
 				document_undo_add_internal(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
 				document_set_encoding(doc, (const gchar*)action->data);
-
-				ignore_callback = TRUE;
-				encodings_select_radio_item((const gchar*)action->data);
-				ignore_callback = FALSE;
-
 				g_free(action->data);
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
+				break;
+			}
+			case UNDO_EOL:
+			{
+				document_undo_add_internal(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
+				sci_set_eol_mode(doc->editor->sci, GPOINTER_TO_INT(action->data));
+
+				ui_update_statusbar(doc, -1);
+				ui_document_show_hide(doc);
 				break;
 			}
 			case UNDO_RELOAD:
@@ -3269,7 +3288,7 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 		gtk_widget_path_iter_set_name(path, -1, document_status_styles[status].name);
 		gtk_style_context_set_screen(ctx, gtk_widget_get_screen(GTK_WIDGET(doc->editor->sci)));
 		gtk_style_context_set_path(ctx, path);
-		gtk_style_context_get_color(ctx, GTK_STATE_FLAG_NORMAL, &color);
+		gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &color);
 		document_status_styles[status].color.red   = 0xffff * color.red;
 		document_status_styles[status].color.green = 0xffff * color.green;
 		document_status_styles[status].color.blue  = 0xffff * color.blue;
@@ -3291,9 +3310,9 @@ const GdkColor *document_get_status_color(GeanyDocument *doc)
 }
 
 
-/** Accessor function for @ref documents_array items.
+/** Accessor function for @ref GeanyData::documents_array items.
  * @warning Always check the returned document is valid (@c doc->is_valid).
- * @param idx @c documents_array index.
+ * @param idx @c GeanyData::documents_array index.
  * @return @transfer{none} @nullable The document, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
@@ -3437,7 +3456,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 {
 	va_list args;
 	gchar *text, *markup;
-	GtkWidget *hbox, *vbox, *icon, *label, *extra_label, *content_area;
+	GtkWidget *hbox, *icon, *label, *content_area;
 	GtkWidget *info_widget, *parent;
 	parent = document_get_notebook_child(doc);
 
@@ -3496,8 +3515,9 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	if (extra_text)
 	{
-		vbox = gtk_vbox_new(FALSE, 6);
-		extra_label = geany_wrap_label_new(extra_text);
+		GtkWidget *vbox = gtk_vbox_new(FALSE, 6);
+		GtkWidget *extra_label = geany_wrap_label_new(extra_text);
+
 		gtk_box_pack_start(GTK_BOX(vbox), label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(vbox), extra_label, TRUE, TRUE, 0);
 		gtk_box_pack_start(GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
@@ -3667,7 +3687,6 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
-	time_t cur_time = 0;
 	time_t mtime;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
@@ -3688,7 +3707,8 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 	else
 	{
-		cur_time = time(NULL);
+		time_t cur_time = time(NULL);
+
 		if (! force && doc->priv->last_check > (cur_time - file_prefs.disk_check_timeout))
 			return FALSE;
 
@@ -3807,3 +3827,15 @@ void document_grab_focus(GeanyDocument *doc)
 
 	gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyDocument
+ *
+ * @return the GeanyDocument type */
+GEANY_API_SYMBOL
+GType document_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyDocument, document, copy_, free_);

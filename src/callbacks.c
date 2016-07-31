@@ -127,13 +127,14 @@ void on_save_as1_activate(GtkMenuItem *menuitem, gpointer user_data)
 void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	guint i, max = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
-	GeanyDocument *doc, *cur_doc = document_get_current();
+	GeanyDocument *cur_doc = document_get_current();
 	guint count = 0;
 
 	/* iterate over documents in tabs order */
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (! doc->changed)
 			continue;
 
@@ -487,8 +488,15 @@ static void convert_eol(gint mode)
 
 	g_return_if_fail(doc != NULL);
 
+	/* sci_convert_eols() adds UNDO_SCINTILLA action in on_editor_notify().
+	 * It is added to the undo stack before sci_convert_eols() finishes
+	 * so after adding UNDO_EOL, UNDO_EOL will be at the top of the stack
+	 * and UNDO_SCINTILLA below it. */
 	sci_convert_eols(doc->editor->sci, mode);
+	document_undo_add(doc, UNDO_EOL, GINT_TO_POINTER(sci_get_eol_mode(doc->editor->sci)));
+
 	sci_set_eol_mode(doc->editor->sci, mode);
+
 	ui_update_statusbar(doc, -1);
 }
 
@@ -545,7 +553,6 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
 	ScintillaObject *sci;
-	gchar *text;
 	gboolean keep_sel = TRUE;
 
 	g_return_if_fail(doc != NULL);
@@ -563,8 +570,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
 		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
-
-		text = sci_get_selection_contents(sci);
+		gchar *text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
 		{
@@ -592,7 +598,6 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 			sci_send_command(sci, cmd);
 
 		g_free(text);
-
 	}
 }
 

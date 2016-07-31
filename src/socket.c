@@ -128,7 +128,6 @@ static gint socket_fd_close			(gint sock);
 static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
-	gchar *filename;
 
 	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
@@ -158,7 +157,7 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 
 	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
-		filename = main_get_argv_filename(argv[i]);
+		gchar *filename = main_get_argv_filename(argv[i]);
 
 		/* if the filename is valid or if a new file should be opened is check on the other side */
 		if (filename != NULL)

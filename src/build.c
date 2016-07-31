@@ -903,8 +903,10 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		else
 		{
-			ui_set_statusbar(TRUE, _("Cannot execute terminal command \"%s\": %s. "
-				"Check the path setting in Preferences."), tool_prefs.term_cmd, error->message);
+			gchar *utf8_term_cmd = utils_get_utf8_from_locale(locale_term_cmd);
+			ui_set_statusbar(TRUE, _("Cannot execute build command \"%s\": %s. "
+				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
+			g_free(utf8_term_cmd);
 			g_error_free(error);
 			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
@@ -1805,7 +1807,13 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	label = gtk_label_new(text);
 	g_free(text);
 #if GTK_CHECK_VERSION(3,0,0)
-	gtk_style_context_get_color(gtk_widget_get_style_context(label), GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
+{
+	GtkStyleContext *ctx = gtk_widget_get_style_context(label);
+
+	gtk_style_context_save(ctx);
+	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_INSENSITIVE, &insensitive_color);
+	gtk_style_context_restore(ctx);
+}
 #else
 	insensitive_color = gtk_widget_get_style(label)->text[GTK_STATE_INSENSITIVE];
 #endif

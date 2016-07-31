@@ -417,15 +417,13 @@ static void vte_commit_cb(VteTerminal *vte, gchar *arg1, guint arg2, gpointer us
 
 static void vte_start(GtkWidget *widget)
 {
-	gchar **env;
-	gchar **argv;
-
 	/* split the shell command line, so arguments will work too */
-	argv = g_strsplit(vc->shell, " ", -1);
+	gchar **argv = g_strsplit(vc->shell, " ", -1);
 
 	if (argv != NULL)
 	{
-		env = vte_get_child_environment();
+		gchar **env = vte_get_child_environment();
+
 		pid = vf->vte_terminal_fork_command(VTE_TERMINAL(widget), argv[0], argv, env,
 											vte_info.dir, TRUE, TRUE, TRUE);
 		g_strfreev(env);
@@ -693,15 +691,11 @@ gboolean vte_send_cmd(const gchar *cmd)
  * directory in vte_info.dir. Note: vte_info.dir contains the real path. */
 const gchar *vte_get_working_directory(void)
 {
-	gchar  buffer[4096 + 1];
-	gchar *file;
-	gchar *cwd;
-	gint   length;
-
 	if (pid > 0)
 	{
-		file = g_strdup_printf("/proc/%d/cwd", pid);
-		length = readlink(file, buffer, sizeof(buffer));
+		gchar  buffer[4096 + 1];
+		gchar *file = g_strdup_printf("/proc/%d/cwd", pid);
+		gint   length = readlink(file, buffer, sizeof(buffer));
 
 		if (length > 0 && *buffer == '/')
 		{
@@ -711,7 +705,8 @@ const gchar *vte_get_working_directory(void)
 		}
 		else if (length == 0)
 		{
-			cwd = g_get_current_dir();
+			gchar *cwd = g_get_current_dir();
+
 			if (cwd != NULL)
 			{
 				if (chdir(file) == 0)

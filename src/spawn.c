@@ -558,8 +558,8 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	while (argv && *argv)
 		spawn_append_argument(command, *argv++);
 
-#ifdef SPAWN_TEST
-	g_message("full spawn command line: %s\n", command->str);
+#if defined(SPAWN_TEST) || defined(GEANY_DEBUG)
+	g_message("full spawn command line: %s", command->str);
 #endif
 
 	while (envp && *envp)

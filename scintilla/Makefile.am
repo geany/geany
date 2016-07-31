@@ -3,7 +3,7 @@ SUBDIRS = include
 
 noinst_LTLIBRARIES=libscintilla.la
 
-AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DG_THREADS_IMPL_NONE
+AM_CXXFLAGS = -DNDEBUG -DGTK -DSCI_LEXER -DNO_CXX11_REGEX
 
 LEXER_SRCS= \
 lexers/LexAbaqus.cxx \
@@ -153,5 +153,4 @@ marshallers: gtk/scintilla-marshal.list
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --header > gtk/scintilla-marshal.h
 	glib-genmarshal --prefix scintilla_marshal gtk/scintilla-marshal.list --body > gtk/scintilla-marshal.c
 
-EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt \
-	gtk/makefile.win32
+EXTRA_DIST=gtk/scintilla-marshal.list License.txt README version.txt

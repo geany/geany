@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.28
+.. |(version)| replace:: 1.29
 .. -*- reStructuredText -*-
 
 =======
@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2016-03-13
+:Date: 2016-07-10
 :Version: |(version)|
 
 Copyright © 2005-2016
@@ -3346,6 +3346,9 @@ Delete current line(s)          Ctrl-K                    Deletes the current li
 
 Delete to line end              Ctrl-Shift-Delete         Deletes from the current caret position to the
                                                           end of the current line.
+
+Delete to line start            Ctrl-Shift-BackSpace      Deletes from the beginning of the line to the
+                                                          current caret position.
 
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
 

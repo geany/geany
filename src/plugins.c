@@ -120,7 +120,8 @@ geany_data_init(void)
 		&tool_prefs,
 		&template_prefs,
 		NULL, /* Remove field on next ABI break (abi-todo) */
-		filetypes_by_title
+		filetypes_by_title,
+		geany_object,
 	};
 
 	geany_data = gd;

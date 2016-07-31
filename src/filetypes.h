@@ -142,7 +142,7 @@ typedef struct GeanyFiletype
 {
 	GeanyFiletypeID	  id;				/**< Index in @ref filetypes. */
 	/* Represents the TMParserType of tagmanager (see the table
-	 * in tagmanager/src/tm_parser.h). */
+	 * in src/tagmanager/tm_parser.h). */
 	TMParserType	  lang;
 	/** Untranslated short name, such as "C", "None".
 	 * Must not be translated as it's used for hash table lookups - use
@@ -186,6 +186,9 @@ const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
 const GSList *filetypes_get_sorted_by_name(void);
 
+#define GEANY_TYPE_FILETYPE (filetype_get_type())
+
+GType filetype_get_type (void);
 
 #ifdef GEANY_PRIVATE
 

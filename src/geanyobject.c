@@ -52,70 +52,14 @@ struct _GeanyObjectPrivate
 	gchar dummy;
 };
 
+/** @gironly
+ * Get the GObject-derived GType for GeanyObject
+ *
+ * @return GeanyObject type */
+GEANY_API_SYMBOL
+GType geany_object_get_type(void);
 
 G_DEFINE_TYPE(GeanyObject, geany_object, G_TYPE_OBJECT)
-
-
-
-static void geany_cclosure_marshal_VOID__STRING_INT_POINTER(GClosure *closure, GValue *ret_val,
-				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
-{
-	typedef gboolean (*GeanyMarshalFunc_VOID__STRING_INT_POINTER)
-		(gpointer data1, gconstpointer arg_1, gint arg_2, gpointer arg_3, gpointer data2);
-
-	register GeanyMarshalFunc_VOID__STRING_INT_POINTER callback;
-	register GCClosure* cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-
-	g_return_if_fail(n_param_vals == 4);
-
-	if (G_CCLOSURE_SWAP_DATA(closure))
-	{
-		data1 = closure->data;
-		data2 = g_value_peek_pointer(param_values + 0);
-	}
-	else
-	{
-		data1 = g_value_peek_pointer(param_values + 0);
-		data2 = closure->data;
-	}
-	callback = (GeanyMarshalFunc_VOID__STRING_INT_POINTER) (mdata ? mdata : cc->callback);
-	callback(data1,
-			  g_value_get_string(param_values + 1),
-			  g_value_get_int(param_values + 2),
-			  g_value_get_pointer(param_values + 3),
-			  data2);
-}
-
-
-static void geany_cclosure_marshal_VOID__POINTER_POINTER(GClosure *closure, GValue *ret_val,
-				guint n_param_vals, const GValue *param_values, gpointer hint, gpointer mdata)
-{
-	typedef gboolean (*GeanyMarshalFunc_VOID__POINTER_POINTER)
-		(gpointer data1, gconstpointer arg_1, gconstpointer arg_2, gpointer data2);
-
-	register GeanyMarshalFunc_VOID__POINTER_POINTER callback;
-	register GCClosure* cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-
-	g_return_if_fail(n_param_vals == 3);
-
-	if (G_CCLOSURE_SWAP_DATA(closure))
-	{
-		data1 = closure->data;
-		data2 = g_value_peek_pointer(param_values + 0);
-	}
-	else
-	{
-		data1 = g_value_peek_pointer(param_values + 0);
-		data2 = closure->data;
-	}
-	callback = (GeanyMarshalFunc_VOID__POINTER_POINTER) (mdata ? mdata : cc->callback);
-	callback(data1,
-			  g_value_get_pointer(param_values + 1),
-			  g_value_get_pointer(param_values + 2),
-			  data2);
-}
 
 
 static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue *return_accu,
@@ -131,43 +75,6 @@ static gboolean boolean_handled_accumulator(GSignalInvocationHint *ihint, GValue
 }
 
 
-static void geany_cclosure_marshal_BOOL__POINTER_POINTER(GClosure *closure, GValue *return_value,
-								guint n_param_values, const GValue *param_values,
-								gpointer invocation_hint G_GNUC_UNUSED, gpointer marshal_data)
-{
-	typedef gboolean (*GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
-		(gpointer data1, gpointer arg_1, gpointer arg_2, gpointer data2);
-
-	register GeanyMarshalFunc_BOOLEAN__POINTER_POINTER callback;
-	register GCClosure *cc = (GCClosure*) closure;
-	register gpointer data1, data2;
-	gboolean v_return;
-
-	g_return_if_fail(return_value != NULL);
-	g_return_if_fail(n_param_values == 3);
-
-	if (G_CCLOSURE_SWAP_DATA(closure))
-	{
-		data1 = closure->data;
-		data2 = g_value_peek_pointer(param_values + 0);
-	}
-	else
-	{
-		data1 = g_value_peek_pointer(param_values + 0);
-		data2 = closure->data;
-	}
-	callback = (GeanyMarshalFunc_BOOLEAN__POINTER_POINTER)
-		(marshal_data ? marshal_data : cc->callback);
-
-	v_return = callback(data1,
-					   g_value_get_pointer(param_values + 1),
-					   g_value_get_pointer(param_values + 2),
-					   data2);
-
-	g_value_set_boolean(return_value, v_return);
-}
-
-
 static void create_signals(GObjectClass *g_object_class)
 {
 	/* Document signals */
@@ -175,166 +82,130 @@ static void create_signals(GObjectClass *g_object_class)
 		"document-new",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_new),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_OPEN] = g_signal_new (
 		"document-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_open),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_RELOAD] = g_signal_new (
 		"document-reload",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_reload),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_BEFORE_SAVE] = g_signal_new (
 		"document-before-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_before_save),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_SAVE] = g_signal_new (
 		"document-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_save),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_FILETYPE_SET] = g_signal_new (
 		"document-filetype-set",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_filetype_set),
-		NULL, NULL,
-		geany_cclosure_marshal_VOID__POINTER_POINTER,
+		0, NULL, NULL, NULL,
 		G_TYPE_NONE, 2,
-		G_TYPE_POINTER, G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT, GEANY_TYPE_FILETYPE);
 	geany_object_signals[GCB_DOCUMENT_ACTIVATE] = g_signal_new (
 		"document-activate",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_activate),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_DOCUMENT_CLOSE] = g_signal_new (
 		"document-close",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, document_close),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GEANY_TYPE_DOCUMENT);
 
 	/* Project signals */
 	geany_object_signals[GCB_PROJECT_OPEN] = g_signal_new (
 		"project-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_open),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		G_TYPE_KEY_FILE);
 	geany_object_signals[GCB_PROJECT_SAVE] = g_signal_new (
 		"project-save",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_save),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		G_TYPE_KEY_FILE);
 	geany_object_signals[GCB_PROJECT_CLOSE] = g_signal_new (
 		"project-close",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_close),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 	geany_object_signals[GCB_PROJECT_DIALOG_OPEN] = g_signal_new (
 		"project-dialog-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_open),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GTK_TYPE_NOTEBOOK);
 	geany_object_signals[GCB_PROJECT_DIALOG_CONFIRMED] = g_signal_new (
 		"project-dialog-confirmed",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_confirmed),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GTK_TYPE_NOTEBOOK);
 	geany_object_signals[GCB_PROJECT_DIALOG_CLOSE] = g_signal_new (
 		"project-dialog-close",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, project_dialog_close),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		GTK_TYPE_NOTEBOOK);
 
 	/* Editor signals */
 	geany_object_signals[GCB_UPDATE_EDITOR_MENU] = g_signal_new (
 		"update-editor-menu",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
-		NULL, NULL,
-		geany_cclosure_marshal_VOID__STRING_INT_POINTER,
+		0, NULL, NULL, NULL,
 		G_TYPE_NONE, 3,
-		G_TYPE_STRING, G_TYPE_INT, G_TYPE_POINTER);
+		G_TYPE_STRING, G_TYPE_INT, GEANY_TYPE_DOCUMENT);
 	geany_object_signals[GCB_EDITOR_NOTIFY] = g_signal_new (
 		"editor-notify",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_LAST,
-		G_STRUCT_OFFSET (GeanyObjectClass, update_editor_menu),
-		boolean_handled_accumulator, NULL,
-		geany_cclosure_marshal_BOOL__POINTER_POINTER,
+		0, boolean_handled_accumulator, NULL, NULL,
 		G_TYPE_BOOLEAN, 2,
-		G_TYPE_POINTER, G_TYPE_POINTER);
+		GEANY_TYPE_EDITOR, SCINTILLA_TYPE_NOTIFICATION);
 
 	/* General signals */
 	geany_object_signals[GCB_GEANY_STARTUP_COMPLETE] = g_signal_new (
 		"geany-startup-complete",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, geany_startup_complete),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 	geany_object_signals[GCB_BUILD_START] = g_signal_new (
 		"build-start",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, build_start),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
 
 	/* Core-only signals */
@@ -342,20 +213,16 @@ static void create_signals(GObjectClass *g_object_class)
 		"save-settings",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, save_settings),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		G_TYPE_KEY_FILE);
 	geany_object_signals[GCB_LOAD_SETTINGS] = g_signal_new (
 		"load-settings",
 		G_OBJECT_CLASS_TYPE (g_object_class),
 		G_SIGNAL_RUN_FIRST,
-		G_STRUCT_OFFSET (GeanyObjectClass, load_settings),
-		NULL, NULL,
-		g_cclosure_marshal_VOID__POINTER,
+		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
-		G_TYPE_POINTER);
+		G_TYPE_KEY_FILE);
 }
 
 

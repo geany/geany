@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.28],
+AC_INIT([Geany], [1.29],
 		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -74,14 +74,11 @@ AS_IF([test "x$enable_gtk3" = xyes],
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
 
 # GTK/GLib/GIO checks
-gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.28"
-gtk_modules_private="gio-2.0 >= 2.28 gmodule-no-export-2.0"
+gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.32"
+gtk_modules_private="gio-2.0 >= 2.32 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
-dnl Define minimum requirements to avoid warnings about symbols deprecated afterward.
-dnl Although GLIB_VERSION_2_28 is new in 2.32, older versions won't evaluate
-dnl GLIB_VERSION_MIN_REQUIRED so it won't be a problem.
-AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_28"])
+AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"])
 dnl Disable all GTK deprecations on 3.x so long as we want to keep 2.x support and only require 3.0.
 dnl No need on 2.x as we target the latest version.
 AM_COND_IF([GTK3], [AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])])
@@ -150,13 +147,11 @@ AC_CONFIG_FILES([
 		icons/tango/32x32/Makefile
 		icons/tango/48x48/Makefile
 		icons/tango/scalable/Makefile
-		tagmanager/Makefile
-		tagmanager/ctags/Makefile
-		tagmanager/mio/Makefile
-		tagmanager/src/Makefile
+		ctags/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile
+		src/tagmanager/Makefile
 		plugins/Makefile
 		po/Makefile.in
 		data/Makefile
