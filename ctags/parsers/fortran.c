@@ -429,7 +429,7 @@ static tokenInfo *newToken (void)
 	token->tag          = TAG_UNDEFINED;
 	token->string       = vStringNew ();
 	token->secondary    = NULL;
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	return token;
@@ -966,7 +966,7 @@ static void readToken (tokenInfo *const token)
 getNextChar:
 	c = getChar ();
 
-	token->lineNumber	= getSourceLineNumber ();
+	token->lineNumber	= getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	switch (c)

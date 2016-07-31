@@ -190,7 +190,7 @@ static tokenInfo *newToken (void)
 	token->scope		= vStringNew ();
 	token->nestLevel	= 0;
 	token->ignoreTag	= FALSE;
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	return token;
@@ -445,7 +445,7 @@ getNextChar:
 	while (c == '\t'  ||  c == ' ' ||
 		   ((c == '\r' || c == '\n') && ! include_newlines));
 
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	if (repr)
@@ -533,7 +533,7 @@ getNextChar:
 		case '"':
 				  token->type = TOKEN_STRING;
 				  parseString (token->string, c);
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  if (repr)
 				  {
@@ -547,7 +547,7 @@ getNextChar:
 				  if (c != '\\'  && c != '"'  &&  !isspace (c))
 					  ungetcToInputFile (c);
 				  token->type = TOKEN_CHARACTER;
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  break;
 
@@ -572,7 +572,7 @@ getNextChar:
 							  default:
 								  token->type = TOKEN_REGEXP;
 								  parseRegExp ();
-								  token->lineNumber = getSourceLineNumber ();
+								  token->lineNumber = getInputLineNumber ();
 								  token->filePosition = getInputFilePosition ();
 								  break;
 						  }
@@ -628,7 +628,7 @@ getNextChar:
 				  else
 				  {
 					  parseIdentifier (token->string, c);
-					  token->lineNumber = getSourceLineNumber ();
+					  token->lineNumber = getInputLineNumber ();
 					  token->filePosition = getInputFilePosition ();
 					  token->keyword = analyzeToken (token->string);
 					  if (isKeyword (token, KEYWORD_NONE))
