@@ -910,13 +910,10 @@ static void gradually_sort_tab(GeanyDocument *doc, NotebookTabSortMethod method)
 
 static void on_document_open(GObject *obj, GeanyDocument *doc)
 {
-	if (interface_prefs.show_notebook_tabs)
-	{
-		if (interface_prefs.auto_sort_tabs_by_filename)
-			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
-		else if (interface_prefs.auto_sort_tabs_by_pathname)
-			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
-	}
+	if (interface_prefs.auto_sort_tabs_by_filename)
+		gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
+	else if (interface_prefs.auto_sort_tabs_by_pathname)
+		gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
 }
 
 
@@ -928,7 +925,7 @@ static void on_document_before_save(GObject *obj, GeanyDocument *doc)
 
 static void on_document_save(GObject *obj, GeanyDocument *doc)
 {
-	if (doc_saves_to_new_file && interface_prefs.show_notebook_tabs)
+	if (doc_saves_to_new_file)
 	{
 		if (interface_prefs.auto_sort_tabs_by_filename)
 			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
