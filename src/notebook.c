@@ -860,27 +860,26 @@ static void move_tab(GeanyDocument *doc, gint pos)
 
 void notebook_sort_tabs(NotebookTabSortMethod method)
 {
-	GArray *docs;
-	GeanyDocument* doc;
+	GPtrArray *docs;
 	guint i;
 
-	docs = g_array_new(FALSE, TRUE, sizeof(GeanyDocument*));
+	docs = g_ptr_array_new();
 
 	foreach_document(i)
-		g_array_append_val(docs, documents[i]);
+		g_ptr_array_add(docs, documents[i]);
 
 	if (method == NOTEBOOK_TAB_SORT_BY_FILENAME)
-		g_array_sort(docs, compare_docs_by_filename);
+		g_ptr_array_sort(docs, compare_docs_by_filename);
 	else
-		g_array_sort(docs, compare_docs_by_pathname);
+		g_ptr_array_sort(docs, compare_docs_by_pathname);
 
 	for (i = 0; i < docs->len; ++i)
 	{
-		doc = g_array_index(docs, GeanyDocument*, i);
+		GeanyDocument* doc = g_ptr_array_index(docs, i);
 		move_tab(doc, i);
 	}
 
-	g_array_free(docs, TRUE);
+	g_ptr_array_free(docs, TRUE);
 }
 
 
