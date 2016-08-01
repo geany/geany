@@ -87,4 +87,5 @@ libctags_la_SOURCES = \
 	main/vstring.c \
 	main/vstring.h \
 	main/xtag.h \
+	main/xtag.c \
 	$(parsers)

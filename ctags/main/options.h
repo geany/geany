@@ -1,14 +1,13 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Defines external interface to option processing.
 */
-#ifndef _OPTIONS_H
-#define _OPTIONS_H
+#ifndef CTAGS_MAIN_OPTIONS_H
+#define CTAGS_MAIN_OPTIONS_H
 
 #if defined(OPTION_WRITE) || defined(VAXC)
 # define CONST_OPTION
@@ -38,7 +37,6 @@
 typedef struct sOptionValues {
 	struct sInclude {
 		boolean fileNames;      /* include tags for source file names */
-		boolean qualifiedTags;  /* include tags for qualified class members */
 		boolean fileScope;      /* include tags of file scope only */
 	} include;
 	struct sExtFields {         /* extension field content control */
@@ -83,6 +81,8 @@ typedef struct sOptionValues {
 	boolean printTotals;    /* --totals  print cumulative statistics */
 	boolean lineDirectives; /* --linedirectives  process #line directives */
 	boolean nestFunction; /* --nest Nest inside function blocks for tags */
+	boolean machinable;		/* --machinable */
+	boolean withListHeader;		/* --with-list-header */
 } optionValues;
 
 /*

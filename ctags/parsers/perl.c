@@ -332,7 +332,7 @@ static void findPerlTags (void)
 
 				makeTagEntry(&e);
 
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					package != NULL  && vStringLength (package) > 0)
 				{
 					vString *const qualifiedName = vStringNew ();
@@ -345,7 +345,7 @@ static void findPerlTags (void)
 			} else if (vStringLength (name) > 0)
 			{
 				makeSimpleTag (name, PerlKinds, kind);
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					K_PACKAGE != kind &&
 					package != NULL  && vStringLength (package) > 0)
 				{

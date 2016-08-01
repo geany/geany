@@ -1398,7 +1398,7 @@ static void findScopeHierarchy (vString *const string,
 static void makeExtraTagEntry (const tagType type, tagEntryInfo *const e,
 							   vString *const scope)
 {
-	if (Option.include.qualifiedTags  &&
+	if (isXtagEnabled(XTAG_QUALIFIED_TAGS)  &&
 		scope != NULL  &&  vStringLength (scope) > 0)
 	{
 		vString *const scopedName = vStringNew ();

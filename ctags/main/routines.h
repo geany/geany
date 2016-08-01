@@ -23,6 +23,9 @@
 */
 #define ARRAY_SIZE(X)      (sizeof (X) / sizeof (X[0]))
 
+#define STRINGIFY(X) STRINGIFY_(X)
+#define STRINGIFY_(X) #X
+
 #endif  /* CTAGS_MAIN_ROUTINES_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

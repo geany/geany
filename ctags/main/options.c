@@ -57,7 +57,6 @@
 optionValues Option = {
 	{
 		FALSE,          /* --extra=f */
-		FALSE,          /* --extra=q */
 		TRUE,           /* --file-scope */
 	},
 	{
@@ -102,6 +101,8 @@ optionValues Option = {
 	FALSE,              /* --totals */
 	FALSE,              /* --line-directives */
 	FALSE,              /* --nest */
+	.machinable = FALSE,
+	.withListHeader = TRUE,
 };
 
 
