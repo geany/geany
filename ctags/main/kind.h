@@ -12,6 +12,8 @@
 
 #define KIND_NULL    '\0'
 
+#define KIND_FILE_ALT '!'
+
 #define KIND_FILE_DEFAULT 'F'
 #define KIND_FILE_DEFAULT_LONG "file"
 

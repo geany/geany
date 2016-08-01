@@ -1124,7 +1124,7 @@ static void objcInitialize (const langType language)
 extern parserDefinition *ObjcParser (void)
 {
 	static const char *const extensions[] = { "m", "h", NULL };
-	parserDefinition *def = parserNew ("ObjectiveC");
+	parserDefinition *def = parserNewFull ("ObjectiveC", KIND_FILE_ALT);
 	def->kinds = ObjcKinds;
 	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;

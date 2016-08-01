@@ -2339,7 +2339,7 @@ static void findSqlTags (void)
 extern parserDefinition* SqlParser (void)
 {
 	static const char *const extensions [] = { "sql", NULL };
-	parserDefinition* def = parserNew ("SQL");
+	parserDefinition* def = parserNewFull ("SQL", KIND_FILE_ALT);
 	def->kinds		= SqlKinds;
 	def->kindCount	= ARRAY_SIZE (SqlKinds);
 	def->extensions = extensions;

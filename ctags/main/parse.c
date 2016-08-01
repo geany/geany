@@ -91,9 +91,18 @@ extern void makeSimpleScopedTag (const vString* const name,
 
 extern parserDefinition* parserNew (const char* name)
 {
+	return parserNewFull (name, 0);
+}
+
+extern parserDefinition* parserNewFull (const char* name, char fileKind)
+{
 	parserDefinition* result = xCalloc (1, parserDefinition);
 	result->name = eStrdup (name);
+
+	/* TODO: implement custom file kind */
 	result->fileKind = &defaultFileKind;
+
+	result->enabled = TRUE;
 	return result;
 }
 
