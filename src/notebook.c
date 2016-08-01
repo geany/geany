@@ -855,10 +855,8 @@ void notebook_sort_tabs(NotebookTabSortMethod method)
 	foreach_document(i)
 		g_ptr_array_add(docs, documents[i]);
 
-	if (method == NOTEBOOK_TAB_SORT_BY_FILENAME)
-		g_ptr_array_sort(docs, compare_docs_by_filename);
-	else
-		g_ptr_array_sort(docs, compare_docs_by_pathname);
+	g_ptr_array_sort(docs, method == NOTEBOOK_TAB_SORT_BY_FILENAME ?
+			compare_docs_by_filename : compare_docs_by_pathname);
 
 	for (i = 0; i < docs->len; ++i)
 	{
