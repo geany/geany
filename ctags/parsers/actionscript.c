@@ -36,64 +36,64 @@
 */
 #include "general.h"	/* must always come first */
 #include "parse.h"
+#include "routines.h"
+
+static tagRegexTable actionscriptTagRegexTable[] = {
+	/* Functions */
+    {"^[ \t]*[(private|public|static|protected|internal|final|override)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\\(([^\\{]*)",
+	    "\\1 (\\2", "f,function,functions,methods", NULL},
+
+	/* Getters and setters */
+	{"^[ \t]*[(public|static|internal|final|override)( \t)]*function[ \t]+(set|get)[ \t]+([A-Za-z0-9_]+)[ \t]*\\(",
+		"\\2 \\1", "l,field,fields", NULL},
+
+	/* Variables */
+	{"^[ \t]*[(private|public|static|protected|internal)( \t)]*var[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
+		"\\1 \\: \\3", "v,variable,variables", NULL},
+
+	/* Constants */
+	{"^[ \t]*[(private|public|static|protected|internal)( \t)]*const[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
+		"\\1 : \\3", "m,macro,macros", NULL},
+
+	/* Classes */
+	{"^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
+		"\\1 (\\2)", "c,class,classes", NULL},
+
+	/* Interfaces */
+	{"^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*interface[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
+		"\\1 (\\2)", "i,interface,interfaces", NULL},
+
+	/* Packages */
+	{"^[ \t]*[(private|public|static)( \t)]*package[ \t]+([A-Za-z0-9_.]+)[ \t]*",
+		"\\1", "p,package", NULL},
+
+	/* Notes */
+	{"\\/\\/[ \t]*(NOTE|note|Note)[ \t]*\\:*(.*)",
+		"\\2", "o,other"},
+
+	/* Todos */
+	{"\\/\\/[ \t]*(TODO|todo|ToDo|Todo)[ \t]*\\:*(.*)",
+		"\\2", "o,other"},
+
+	/* Prototypes (Put this in for AS1 compatibility...) */
+    {".*\\.prototype\\.([A-Za-z0-9 ]+)[ \t]*\\=([ \t]*)function( [ \t]?)*\\(",
+	    "\\1", "r,prototype"}
+};
 
 /*
 *   FUNCTION DEFINITIONS
 *
 */
 
-static void installActionScriptRegex (const langType language)
-{
-	/* Functions */
-    addTagRegex (language, "^[ \t]*[(private|public|static|protected|internal|final|override)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\\(([^\\{]*)",
-	    "\\1 (\\2", "f,function,functions,methods", NULL);
-
-	/* Getters and setters */
-	addTagRegex (language, "^[ \t]*[(public|static|internal|final|override)( \t)]*function[ \t]+(set|get)[ \t]+([A-Za-z0-9_]+)[ \t]*\\(",
-		"\\2 \\1", "l,field,fields", NULL);
-
-	/* Variables */
-	addTagRegex (language, "^[ \t]*[(private|public|static|protected|internal)( \t)]*var[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
-		"\\1 \\: \\3", "v,variable,variables", NULL);
-
-	/* Constants */
-	addTagRegex (language, "^[ \t]*[(private|public|static|protected|internal)( \t)]*const[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
-		"\\1 : \\3", "m,macro,macros", NULL);
-
-	/* Classes */
-	addTagRegex (language, "^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
-		"\\1 (\\2)", "c,class,classes", NULL);
-
-	/* Interfaces */
-	addTagRegex (language, "^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*interface[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
-		"\\1 (\\2)", "i,interface,interfaces", NULL);
-
-	/* Packages */
-	addTagRegex (language, "^[ \t]*[(private|public|static)( \t)]*package[ \t]+([A-Za-z0-9_.]+)[ \t]*",
-		"\\1", "p,package", NULL);
-
-	/* Notes */
-	addTagRegex (language, "\\/\\/[ \t]*(NOTE|note|Note)[ \t]*\\:*(.*)",
-		"\\2", "o,other", NULL);
-
-	/* Todos */
-	addTagRegex (language, "\\/\\/[ \t]*(TODO|todo|ToDo|Todo)[ \t]*\\:*(.*)",
-		"\\2", "o,other", NULL);
-
-	/* Prototypes (Put this in for AS1 compatibility...) */
-    addTagRegex (language, ".*\\.prototype\\.([A-Za-z0-9 ]+)[ \t]*\\=([ \t]*)function( [ \t]?)*\\(",
-	    "\\1", "r,prototype", NULL);
-}
-
 /* Create parser definition structure */
 extern parserDefinition* ActionScriptParser (void)
-
 {
 	static const char *const extensions [] = { "as", NULL };
 	parserDefinition *const def = parserNew ("ActionScript");
 	def->extensions = extensions;
-	def->initialize = installActionScriptRegex;
-	def->regex      = TRUE;
+	def->tagRegexTable = actionscriptTagRegexTable;
+	def->tagRegexCount = ARRAY_SIZE (actionscriptTagRegexTable);
+	def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
 	return def;
 }
 

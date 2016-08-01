@@ -36,6 +36,22 @@ typedef boolean (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
 typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
+typedef enum {
+	METHOD_NOT_CRAFTED    = 1 << 0,
+	METHOD_REGEX          = 1 << 1,
+	METHOD_XCMD           = 1 << 2,
+	METHOD_XCMD_AVAILABLE = 1 << 3,
+	METHOD_XPATH          = 1 << 4,
+} parsingMethod;
+
+typedef struct {
+	const char *const regex;
+	const char* const name;
+	const char* const kinds;
+	const char *const flags;
+	boolean    *disabled;
+} tagRegexTable;
+
 typedef struct {
 	const char *name;
 	const int id;
@@ -52,17 +68,20 @@ typedef struct {
 	parserInitialize initialize;    /* initialization routine, if needed */
 	simpleParser parser;        /* simple parser (common case) */
 	rescanParser parser2;       /* rescanning parser (unusual case) */
-	boolean regex;          /* is this a regex parser? */
+	unsigned int method;           /* See PARSE__... definitions above */
 
 	/* used internally */
 	unsigned int id;            /* id assigned to language */
 	boolean enabled;            /* currently enabled? */
 	stringList* currentPatterns;    /* current list of file name patterns */
 	stringList* currentExtensions;  /* current list of extensions */
+	tagRegexTable *tagRegexTable;
+	unsigned int tagRegexCount;
 	const keywordTable *keywordTable;
 	unsigned int keywordCount;
 
 	unsigned int initialized:1;    /* initialize() is called or not */
+	unsigned int tagRegexInstalled:1; /* tagRegexTable is installed or not. */
 	unsigned int keywordInstalled:1;  /* keywordTable is installed or not. */
 } parserDefinition;
 
@@ -124,6 +143,7 @@ extern boolean matchRegex (const vString* const line, const langType language);
 #endif
 extern boolean processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
+extern void installTagRegexTable (const langType language);
 extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);
 extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
 extern void disableRegexKinds (const langType UNUSED language);

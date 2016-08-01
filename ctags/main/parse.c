@@ -324,6 +324,7 @@ static void initializeParserOne (langType lang)
 	parserDefinition *const parser = LanguageTable [lang];
 
 	installKeywordTable (lang);
+	installTagRegexTable (lang);
 
 	if ((parser->initialize != NULL) && (parser->initialized == FALSE))
 	{
@@ -355,7 +356,7 @@ extern void initializeParsing (void)
 			boolean accepted = FALSE;
 			if (def->name == NULL  ||  def->name[0] == '\0')
 				error (FATAL, "parser definition must contain name\n");
-			else if (def->regex)
+			else if (def->method & METHOD_REGEX)
 			{
 #ifdef HAVE_REGEX
 				def->parser = findRegexTags;
@@ -414,7 +415,7 @@ extern void processLanguageDefineOption (const char *const option,
 		def->parser            = findRegexTags;
 		def->currentPatterns   = stringListNew ();
 		def->currentExtensions = stringListNew ();
-		def->regex             = TRUE;
+		def->method            = METHOD_NOT_CRAFTED;
 		def->enabled           = TRUE;
 		def->id                = i;
 		LanguageTable = xRealloc (LanguageTable, i + 1, parserDefinition*);
@@ -482,7 +483,7 @@ extern void processLegacyKindOption (const char *const parameter)
 
 static void disableLanguageKinds (const langType language)
 {
-	if (LanguageTable [language]->regex)
+	if (LanguageTable [language]->method & METHOD_REGEX)
 #ifdef HAVE_REGEX
 		disableRegexKinds (language);
 #else
@@ -500,7 +501,7 @@ static boolean enableLanguageKind (const langType language,
 								   const int kind, const boolean mode)
 {
 	boolean result = FALSE;
-	if (LanguageTable [language]->regex)
+	if (LanguageTable [language]->method & METHOD_REGEX)
 #ifdef HAVE_REGEX
 		result = enableRegexKind (language, kind, mode);
 #else
@@ -578,7 +579,7 @@ static void printLangugageKindOptions (const langType language)
 	const parserDefinition* lang;
 	Assert (0 <= language  &&  language < (int) LanguageCount);
 	lang = LanguageTable [language];
-	if (lang->kinds != NULL  ||  lang->regex)
+	if (lang->kinds != NULL  ||  lang->method & METHOD_NOT_CRAFTED)
 	{
 		unsigned int i;
 		char* const name = newLowerString (lang->name);
@@ -688,6 +689,27 @@ extern boolean parseFile (const char *const fileName)
 	addTotals (1, 0L, 0L);
 
 	return tagFileResized;
+}
+
+extern void installTagRegexTable (const langType language)
+{
+	parserDefinition* lang;
+	unsigned int i;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	lang = LanguageTable [language];
+
+
+	if ((lang->tagRegexTable != NULL) && (lang->tagRegexInstalled == FALSE))
+	{
+	    for (i = 0; i < lang->tagRegexCount; ++i)
+		    addTagRegex (language,
+				 lang->tagRegexTable [i].regex,
+				 lang->tagRegexTable [i].name,
+				 lang->tagRegexTable [i].kinds,
+				 lang->tagRegexTable [i].flags);
+	    lang->tagRegexInstalled = TRUE;
+	}
 }
 
 extern void installKeywordTable (const langType language)
