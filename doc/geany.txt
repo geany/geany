@@ -1992,15 +1992,15 @@ Double-clicking hides all additional widgets
     Whether to call the View->Toggle All Additional Widgets command
     when double-clicking on a notebook tab.
 
-Automatically sort tabs by filename
-    Whether to automatically sort editor tabs based on their filenames
-    everytime files are opened, or when documents are saved to a new
-    file.
+Automatically sort tabs
+    Whether to automatically sort editor tabs everytime files are
+    opened, or when documents are saved to a new file.
 
-Automatically sort tabs by pathname
-    Same as the one above but sort tabs based on pathname.  The
-    resulting arrangement would be the same as the one in the documents
-    list when Show Paths is enabled.
+    Sorting by filename means sorting it based on the basic name of the
+    file and it excludes the directory parts, while sorting by pathname
+    means sorting it based on the full path, in which the resulting
+    arrangement would be the same as the one in the documents list when
+    Show Paths is enabled.
 
 Tab positions
 `````````````

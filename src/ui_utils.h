@@ -51,8 +51,6 @@ typedef struct GeanyInterfacePrefs
 	gchar			*tagbar_font;				/**< symbol sidebar font */
 	gchar			*msgwin_font;				/**< message window font */
 	gboolean		show_notebook_tabs;			/**< whether editor tabs are visible */
-	gboolean		auto_sort_tabs_by_filename;	/**< whether to automatically sort tabs by filename */
-	gboolean		auto_sort_tabs_by_pathname;	/**< whether to automatically sort tabs by pathname */
 	gint			tab_pos_editor;				/**< positions of editor's tabs */
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
@@ -72,6 +70,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
+	gint			notebook_auto_sort_tabs;	/* automatic sorting mode of notebook tabs */
 }
 GeanyInterfacePrefs;
 

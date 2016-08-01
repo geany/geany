@@ -58,6 +58,13 @@ void on_sort_tabs_by_filename_activate(GtkMenuItem *menuitem, gpointer user_data
 
 void on_sort_tabs_by_pathname_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+typedef enum NotebookTabAutoSortMode
+{
+	NOTEBOOK_TAB_AUTO_SORT_DISABLED,
+	NOTEBOOK_TAB_AUTO_SORT_BY_FILENAME,
+	NOTEBOOK_TAB_AUTO_SORT_BY_PATHNAME
+} NotebookTabAutoSortMode;
+
 G_END_DECLS
 
 #endif /* GEANY_NOTEBOOK_H */
