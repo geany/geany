@@ -18,7 +18,7 @@
 #include <ctype.h>
 
 #include "args.h"
-#include "main.h"
+#include "routines.h"
 
 /*
 *   FUNCTION DEFINITIONS

@@ -17,7 +17,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "main.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*

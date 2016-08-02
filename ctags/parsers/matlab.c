@@ -18,9 +18,9 @@
 #include <string.h>
 
 #include "parse.h"
+#include "routines.h"
 #include "read.h"
 #include "vstring.h"
-#include "routines.h"
 
 /*
 *   DATA DEFINITIONS

@@ -22,7 +22,7 @@
 #include <glib/gstdio.h>
 
 #include "entry.h"
-#include "main.h"
+#include "routines.h"
 #include "options.h"
 #include "read.h"
 #include "sort.h"

@@ -28,11 +28,11 @@
 #endif
 
 #include "mio.h"
-#include "main.h"
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
 #include "kind.h"
+#include "routines.h"
 
 #ifdef HAVE_REGEX
 

@@ -19,7 +19,6 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
-#include "main.h"
 #include "routines.h"
 #include "vstring.h"
 #include "xtag.h"

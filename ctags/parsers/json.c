@@ -18,7 +18,6 @@
 
 #include <string.h>
 #include "debug.h"
-#include "main.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"

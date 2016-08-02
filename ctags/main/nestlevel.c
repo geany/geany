@@ -14,6 +14,8 @@
 #include "general.h"  /* must always come first */
 
 #include "main.h"
+#include "debug.h"
+#include "routines.h"
 #include "nestlevel.h"
 
 /*

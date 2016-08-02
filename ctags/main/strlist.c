@@ -18,7 +18,7 @@
 #endif
 #include <glib/gstdio.h>
 
-#include "main.h"
+#include "routines.h"
 #include "read.h"
 #include "strlist.h"
 

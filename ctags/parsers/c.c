@@ -21,7 +21,6 @@
 #include "entry.h"
 #include "lcpp.h"
 #include "keyword.h"
-#include "main.h"
 #include "options.h"
 #include "parse.h"
 #include "read.h"

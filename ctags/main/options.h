@@ -9,7 +9,7 @@
 #ifndef CTAGS_MAIN_OPTIONS_H
 #define CTAGS_MAIN_OPTIONS_H
 
-#if defined(OPTION_WRITE) || defined(VAXC)
+#if defined(OPTION_WRITE)
 # define CONST_OPTION
 #else
 # define CONST_OPTION const
@@ -97,8 +97,8 @@ extern void verbose (const char *const format, ...) PRINTF (1, 2);
 extern void freeList (stringList** const pString);
 extern void setDefaultTagFileName (void);
 
-extern const char *fileExtension (const char *const fileName);
 extern boolean isIncludeFile (const char *const fileName);
+extern boolean isExcludedFile (const char* const name);
 extern boolean isIgnoreToken (const char *const name, boolean *const pIgnoreParens, const char **const replacement);
 extern void readOptionConfiguration (void);
 extern void initOptions (void);

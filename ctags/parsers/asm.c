@@ -20,7 +20,6 @@
 #include "parse.h"
 #include "read.h"
 #include "routines.h"
-#include "main.h"
 #include "vstring.h"
 
 /*

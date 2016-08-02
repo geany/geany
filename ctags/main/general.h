@@ -42,7 +42,7 @@
 /*  MS-DOS doesn't allow manipulation of standard error, so we send it to
  *  stdout instead.
  */
-#if defined (MSDOS) || defined (WIN32)
+#if defined (WIN32)
 # define errout stdout
 #else
 # define errout stderr
@@ -53,7 +53,7 @@
 # define MSDOS_STYLE_PATH
 #endif
 
-#if defined (MSDOS) || defined (WIN32)
+#if defined (WIN32)
 # define CASE_INSENSITIVE_FILENAMES
 # define MSDOS_STYLE_PATH
 # define HAVE_DOS_H 1
@@ -71,11 +71,7 @@
 # define HAVE_STRSTR 1
 # define HAVE_STRERROR 1
 # define HAVE_FINDNEXT 1
-# ifdef __BORLANDC__
-#  define HAVE_DIR_H 1
-#  define HAVE_DIRENT_H 1
-#  define HAVE_FINDFIRST 1
-# elif defined (_MSC_VER)
+# ifdef _MSC_VER
 #   define HAVE__FINDFIRST 1
 #   define HAVE_DIRECT_H 1
 # elif defined (__MINGW32__)
@@ -95,102 +91,10 @@ char *lrealpath(const char *filename);
 int fnmatch(const char *pattern, const char *string, int flags);
 #endif
 
-#ifdef DJGPP
-# define CASE_INSENSITIVE_FILENAMES
-# define MSDOS_STYLE_PATH
-# define HAVE_DIR_H 1
-# define HAVE_SYS_STAT_H 1
-# define HAVE_SYS_TYPES_H 1
-# define HAVE_UNISTD_H 1
-# define HAVE_FGETPOS 1
-# define HAVE_FINDFIRST 1
-# define HAVE_TRUNCATE 1
-#endif
-
-#ifdef OS2
-# define UNIX_PATH_SEPARATOR 1
-# define CASE_INSENSITIVE_FILENAMES
-# define HAVE_DIRENT_H 1
-# define HAVE_FCNTL_H 1
-# define HAVE_IO_H 1
-# define HAVE_STDLIB_H 1
-# define HAVE_SYS_STAT_H 1
-# define HAVE_SYS_TYPES_H 1
-# define HAVE_TIME_H 1
-# define HAVE_UNISTD_H 1
-# define HAVE_CLOCK 1
-# define HAVE_CHSIZE 1
-# define HAVE_FGETPOS 1
-# define HAVE_FTRUNCATE 1
-# define HAVE_OPENDIR 1
-# define HAVE_REGCOMP 1
-# define HAVE_REMOVE 1
-# define HAVE_STRERROR 1
-# define HAVE_STRICMP 1
-# define HAVE_STRNICMP 1
-# define HAVE_STRSTR 1
-# define HAVE_TRUNCATE 1
-#endif
-
-#ifdef AMIGA
-# define HAVE_STDLIB_H 1
-# define HAVE_SYS_STAT_H 1
-# define HAVE_SYS_TYPES_H 1
-# define HAVE_TIME_H 1
-# define HAVE_CLOCK 1
-# define HAVE_FGETPOS 1
-# define HAVE_STRERROR 1
-# define HAVE_STRICMP 1
-# define HAVE_STRNICMP 1
-#endif
-
 #if defined (__MWERKS__) && defined (__MACINTOSH__)
 # define HAVE_STAT_H 1
 #endif
 
-#ifdef QDOS
-# define HAVE_DIRENT_H 1
-# define HAVE_STDLIB_H 1
-# define HAVE_SYS_STAT_H 1
-# define HAVE_SYS_TIMES_H 1
-# define HAVE_SYS_TYPES_H 1
-# define HAVE_TIME_H 1
-# define HAVE_UNISTD_H 1
-# define STDC_HEADERS 1
-# define HAVE_CLOCK 1
-# define HAVE_FGETPOS 1
-# define HAVE_FTRUNCATE 1
-# define HAVE_OPENDIR 1
-# define HAVE_PUTENV 1
-# define HAVE_REMOVE 1
-# define HAVE_STRERROR 1
-# define HAVE_STRSTR 1
-# define HAVE_TIMES 1
-# define HAVE_TRUNCATE 1
-# define NON_CONST_PUTENV_PROTOTYPE 1
-#endif
-
-#if defined (__vms) && ! defined (VMS)
-# define VMS
-#endif
-#ifdef VMS
-# define CASE_INSENSITIVE_FILENAMES 1
-# define HAVE_STDLIB_H 1
-# define HAVE_TIME_H 1
-# ifdef VAXC
-#  define HAVE_STAT_H 1
-#  define HAVE_TYPES_H 1
-# else
-#  define HAVE_FCNTL_H 1
-#  define HAVE_SYS_STAT_H 1
-#  define HAVE_SYS_TYPES_H 1
-# endif
-# define HAVE_CLOCK 1
-# define HAVE_FGETPOS 1
-# define HAVE_STRERROR 1
-# define HAVE_STRSTR 1
-# define HAVE_UNISTD_H 1
-#endif
 
 #ifdef __FreeBSD__
 #include <sys/types.h>
@@ -214,17 +118,12 @@ void utils_warn(const char *msg);
 
 #undef FALSE
 #undef TRUE
-#ifdef VAXC
-typedef enum { FALSE, TRUE } booleanType;
-typedef int boolean;
-#else
-# ifdef __cplusplus
+#ifdef __cplusplus
 typedef bool boolean;
 #define FALSE false
 #define TRUE true
-# else
+#else
 typedef enum { FALSE, TRUE } boolean;
-# endif
 #endif
 
 #if ! defined (HAVE_FGETPOS) && ! defined (fpos_t)

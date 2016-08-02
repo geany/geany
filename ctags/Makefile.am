@@ -55,7 +55,6 @@ parsers = \
 libctags_la_SOURCES = \
 	main/args.c \
 	main/args.h \
-	main/ctags.c \
 	main/ctags.h \
 	main/debug.h \
 	main/entry.c \
@@ -67,6 +66,7 @@ libctags_la_SOURCES = \
 	main/lcpp.c \
 	main/lcpp.h \
 	main/lregex.c \
+	main/main.c \
 	main/main.h \
 	main/mio.c \
 	main/mio.h \
@@ -79,6 +79,7 @@ libctags_la_SOURCES = \
 	main/parsers.h \
 	main/read.c \
 	main/read.h \
+	main/routines.c \
 	main/routines.h \
 	main/sort.c \
 	main/sort.h \

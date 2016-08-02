@@ -19,7 +19,7 @@
 #include <ctype.h>      /* to declare isspace () */
 
 #include "ctags.h"
-#include "main.h"
+#include "routines.h"
 #define OPTION_WRITE
 #include "options.h"
 #include "parse.h"
@@ -42,7 +42,7 @@
 # define DEFAULT_FILE_FORMAT    2
 #endif
 
-#if defined (MSDOS) || defined (WIN32) || defined (OS2) || defined (AMIGA) || defined (HAVE_OPENDIR)
+#if defined (WIN32) || defined (HAVE_OPENDIR)
 # define RECURSE_SUPPORTED
 #endif
 
@@ -53,6 +53,8 @@
 /*
 *   DATA DEFINITIONS
 */
+
+static stringList* Excluded = NULL;
 
 optionValues Option = {
 	{
@@ -122,24 +124,6 @@ extern void freeList (stringList** const pList)
 extern void setDefaultTagFileName (void)
 {
 	Option.tagFileName = eStrdup (CTAGS_FILE);
-}
-
-/*
- *  File extension and language mapping
- */
-extern const char *fileExtension (const char *const fileName)
-{
-	const char *extension;
-	const char *pDelimiter = NULL;
-
-	pDelimiter = strrchr (fileName, '.');
-
-	if (pDelimiter == NULL)
-		extension = "";
-	else
-		extension = pDelimiter + 1;     /* skip to first char of extension */
-
-	return extension;
 }
 
 /*  Determines whether the specified file name is considered to be a header
@@ -223,6 +207,41 @@ void addIgnoreListFromFile (const char *const fileName)
 		Option.ignore = tokens;
 	else
 		stringListCombine (Option.ignore, tokens);
+}
+
+extern void processExcludeOption (const char *const UNUSED option,
+								  const char *const parameter)
+{
+	if (parameter [0] == '\0')
+		freeList (&Excluded);
+	else if (parameter [0] == '@')
+	{
+		stringList* const new = stringListNewFromFile (parameter + 1);
+		if (Excluded == NULL)
+			Excluded = new;
+		else
+			stringListCombine (Excluded, new);
+	}
+	else
+	{
+		vString *const item = vStringNewInit (parameter);
+		if (Excluded == NULL)
+			Excluded = stringListNew ();
+		stringListAdd (Excluded, item);
+	}
+}
+
+extern boolean isExcludedFile (const char* const name)
+{
+	const char* base = baseFilename (name);
+	boolean result = FALSE;
+	if (Excluded != NULL)
+	{
+		result = stringListFileMatched (Excluded, base);
+		if (! result  &&  name != base)
+			result = stringListFileMatched (Excluded, name);
+	}
+	return result;
 }
 
 

@@ -12,7 +12,6 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-#include "main.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
