@@ -4384,19 +4384,21 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 {
 	gint anchor_pos, caret_pos;
 	struct Sci_TextToFind ttf;
+	gboolean full_replace;
 
 	g_return_if_fail(editor != NULL);
 
 	sci_start_undo_action(editor->sci);
-	if (sci_has_selection(editor->sci) && !ignore_selection)
-	{
-		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
-		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
-	}
-	else
+	full_replace = !sci_has_selection(editor->sci) || ignore_selection;
+	if (full_replace)
 	{
 		ttf.chrg.cpMin = 0;
 		ttf.chrg.cpMax = sci_get_length(editor->sci);
+	}
+	else
+	{
+		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
+		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
 	}
 	ttf.lpstrText = (gchar*) "\t";
 
@@ -4432,6 +4434,12 @@ void editor_replace_tabs(GeanyEditor *editor, gboolean ignore_selection)
 	}
 	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
+	if (full_replace)
+	{
+		document_undo_add(editor->document, UNDO_INDENT, GINT_TO_POINTER(editor->indent_type));
+		editor_set_indent(editor, GEANY_INDENT_TYPE_SPACES, editor->indent_width);
+		ui_document_show_hide(editor->document);
+	}
 }
 
 
@@ -4445,6 +4453,7 @@ void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 	gint tab_len;
 	gchar *text;
 	struct Sci_TextToFind ttf;
+	gboolean full_replace;
 
 	g_return_if_fail(editor != NULL);
 
@@ -4462,15 +4471,16 @@ void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 	text = g_strnfill(tab_len, ' ');
 
 	sci_start_undo_action(editor->sci);
-	if (sci_has_selection(editor->sci) && !ignore_selection)
-	{
-		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
-		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
-	}
-	else
+	full_replace = !sci_has_selection(editor->sci) || ignore_selection;
+	if (full_replace)
 	{
 		ttf.chrg.cpMin = 0;
 		ttf.chrg.cpMax = sci_get_length(editor->sci);
+	}
+	else
+	{
+		ttf.chrg.cpMin = sci_get_selection_start(editor->sci);
+		ttf.chrg.cpMax = sci_get_selection_end(editor->sci);
 	}
 	ttf.lpstrText = text;
 
@@ -4503,6 +4513,12 @@ void editor_replace_spaces(GeanyEditor *editor, gboolean ignore_selection)
 	sci_set_selection(editor->sci, anchor_pos, caret_pos);
 	sci_end_undo_action(editor->sci);
 	g_free(text);
+	if (full_replace)
+	{
+		document_undo_add(editor->document, UNDO_INDENT, GINT_TO_POINTER(editor->indent_type));
+		editor_set_indent(editor, GEANY_INDENT_TYPE_TABS, editor->indent_width);
+		ui_document_show_hide(editor->document);
+	}
 }
 
 
