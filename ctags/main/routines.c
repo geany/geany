@@ -165,10 +165,7 @@ const char *const PathDelimiters = ":/\\";
 
 char *CurrentDirectory;
 
-#ifdef HAVE_MKSTEMP
 static const char *ExecutableProgram = NULL;
-#endif
-
 static const char *ExecutableName = "geany";
 
 /*
