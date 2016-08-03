@@ -160,7 +160,7 @@
 *   DATA DEFINITIONS
 */
 #if defined (MSDOS_STYLE_PATH)
-static const char PathDelimiters [] = ":/\\";
+const char *const PathDelimiters = ":/\\";
 #endif
 
 char *CurrentDirectory;
