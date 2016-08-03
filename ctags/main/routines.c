@@ -181,10 +181,6 @@ extern int stat (const char *, struct stat *);
 extern int lstat (const char *, struct stat *);
 #endif
 
-#if 0
-static boolean createTagsForEntry (const char *const entryName);
-#endif
-
 
 /*
 *   FUNCTION DEFINITIONS
