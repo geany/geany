@@ -333,6 +333,8 @@ static void init_default_kb(void)
 		GDK_n, GEANY_PRIMARY_MOD_MASK, "menu_new", _("New"), "menu_new1");
 	add_kb(group, GEANY_KEYS_FILE_OPEN, NULL,
 		GDK_o, GEANY_PRIMARY_MOD_MASK, "menu_open", _("Open"), "menu_open1");
+	add_kb(group, GEANY_KEYS_FILE_OPENRECURSIVE, NULL,
+		0, 0, "menu_open_files_recursively", _("Open files recursively"), "menu_open_files_recursively1");
 	add_kb(group, GEANY_KEYS_FILE_OPENSELECTED, NULL,
 		GDK_o, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "menu_open_selected",
 		_("Open selected file"), "menu_open_selected_file1");
@@ -1428,6 +1430,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_OPEN:
 			on_open1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_OPENRECURSIVE:
+			on_open_files_recursively1_activate(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_OPENSELECTED:
 			on_menu_open_selected_file1_activate(NULL, NULL);

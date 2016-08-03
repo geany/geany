@@ -3313,6 +3313,8 @@ New                             Ctrl-N  (C)               Creates a new file.
 
 Open                            Ctrl-O  (C)               Opens a file.
 
+Open files recursively                                    Opens files recursively.
+
 Open selected file              Ctrl-Shift-O              Opens the selected filename.
 
 Re-open last closed tab                                   Re-opens the last closed document tab.

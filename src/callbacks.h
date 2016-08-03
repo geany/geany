@@ -41,6 +41,8 @@ void on_quit1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_open_files_recursively1_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_save_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_close1_activate(GtkMenuItem *menuitem, gpointer user_data);

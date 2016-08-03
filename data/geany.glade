@@ -6369,6 +6369,15 @@
                           </object>
                         </child>
                         <child>
+                          <object class="GtkImageMenuItem" id="menu_open_files_recursively1">
+                            <property name="label" translatable="yes">Open Files Recursivel_y</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <signal name="activate" handler="on_open_files_recursively1_activate" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
                           <object class="GtkMenuItem" id="menu_open_selected_file1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>

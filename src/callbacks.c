@@ -313,7 +313,14 @@ static void on_info1_activate(GtkMenuItem *menuitem, gpointer user_data)
 /* open file */
 void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	dialogs_show_open_file();
+	dialogs_show_open_file(FALSE);
+}
+
+
+/* open files recursively */
+void on_open_files_recursively1_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	dialogs_show_open_file(TRUE);
 }
 
 

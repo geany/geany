@@ -323,6 +323,9 @@ void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
 void document_set_data_full(GeanyDocument *doc, const gchar *key,
 	gpointer data, GDestroyNotify free_func);
 
+void document_open_files_recursively(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+		const gchar *forced_enc, GtkFileFilter *filter, GError **error);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

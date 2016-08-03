@@ -1565,6 +1565,119 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 }
 
 
+void document_open_files_recursively(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+		const gchar *forced_enc, GtkFileFilter *filter, GError **error)
+{
+	const GSList *item;
+	gchar *filename;
+	GFile *file;
+	GFileEnumerator *file_enum;
+	GFileInfo *file_info;
+	GFileType file_type;
+	GError *my_error = NULL;
+
+	enum { ENUM_STACK_LIMIT = 100 };
+	GFileEnumerator *enum_stack[ENUM_STACK_LIMIT];
+	guint enum_stack_index = 0;
+
+	const gchar* attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
+			G_FILE_ATTRIBUTE_STANDARD_TARGET_URI "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
+			G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+
+	GtkFileFilterInfo filter_info;
+
+	filter_info.contains = GTK_FILE_FILTER_FILENAME|GTK_FILE_FILTER_URI
+			|GTK_FILE_FILTER_DISPLAY_NAME|GTK_FILE_FILTER_MIME_TYPE;
+
+	for (item = filenames; item != NULL; item = g_slist_next(item))
+	{
+		filename = item->data;
+
+		if (g_file_test(filename, G_FILE_TEST_IS_SYMLINK))
+			continue;
+
+		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		{
+			file = g_file_new_for_path(filename);
+
+			file_enum = g_file_enumerate_children(file, attributes,
+					G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &my_error);
+
+			g_object_unref(file);
+
+			while (TRUE)
+			{
+				while (my_error == NULL
+					&& g_file_enumerator_iterate(file_enum, &file_info, &file, NULL, &my_error)
+					&& file_info != NULL)
+				{
+					file_type = g_file_info_get_file_type(file_info);
+
+					if (file_type == G_FILE_TYPE_SYMBOLIC_LINK)
+						continue;
+
+					if (file_type == G_FILE_TYPE_DIRECTORY)
+					{
+						if (enum_stack_index == ENUM_STACK_LIMIT)
+						{
+							my_error = g_error_new(0, 0, "Recursion depth limit reached");
+							break;
+						}
+
+						enum_stack[enum_stack_index++] = file_enum;
+
+						file_enum = g_file_enumerate_children(file, attributes,
+								G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &my_error);
+					}
+					else
+					{
+						filename = g_file_get_path(file);
+
+						if (filename)
+						{
+							filter_info.filename = g_file_info_get_attribute_byte_string(file_info,
+									G_FILE_ATTRIBUTE_STANDARD_NAME);
+							filter_info.uri = g_file_info_get_attribute_string(file_info,
+									G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
+							filter_info.display_name = g_file_info_get_attribute_string(file_info,
+									G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+							filter_info.mime_type = g_file_info_get_attribute_string(file_info,
+									G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+
+							if (gtk_file_filter_filter(filter, &filter_info))
+								document_open_file(filename, readonly, ft, forced_enc);
+
+							g_free(filename);
+						}
+					}
+				}
+
+				g_object_unref(file_enum);
+
+				if (enum_stack_index == 0)
+					break;
+
+				file_enum = enum_stack[--enum_stack_index];
+			}
+		}
+		else
+			document_open_file(filename, readonly, ft, forced_enc);
+	}
+
+	if (my_error)
+	{
+		if (error)
+			*error = g_error_new(my_error->domain, my_error->code,
+					"Failed to open files recursively: %s", my_error->message);
+
+		g_error_free(my_error);
+	}
+	else
+		if (error)
+			*error = NULL;
+}
+
+
 static void on_keep_edit_history_on_reload_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
 	if (response_id == GTK_RESPONSE_NO)

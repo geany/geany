@@ -62,7 +62,8 @@
 enum
 {
 	GEANY_RESPONSE_RENAME,
-	GEANY_RESPONSE_VIEW
+	GEANY_RESPONSE_VIEW,
+	GEANY_RESPONSE_OPEN_RECURSIVELY
 };
 
 
@@ -124,11 +125,11 @@ static void file_chooser_set_filter_idx(GtkFileChooser *chooser, guint idx)
 }
 
 
-static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint response)
+static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint response, gboolean recursive)
 {
 	gboolean ret = TRUE;
 
-	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW)
+	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW || GEANY_RESPONSE_OPEN_RECURSIVELY)
 	{
 		GSList *filelist;
 		GeanyFiletype *ft = NULL;
@@ -163,7 +164,21 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			}
 			else
 			{
-				document_open_files(filelist, ro, ft, charset);
+				if (recursive)
+				{
+					GtkFileFilter *filter = gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(dialog));
+					GError *error;
+
+					document_open_files_recursively(filelist, ro, ft, charset, filter, &error);
+
+					if (error)
+					{
+						dialogs_show_msgbox(GTK_MESSAGE_ERROR, "%s", error->message);
+						g_error_free(error);
+					}
+				}
+				else
+					document_open_files(filelist, ro, ft, charset);
 			}
 			g_slist_foreach(filelist, (GFunc) g_free, NULL);	/* free filenames */
 		}
@@ -368,23 +383,40 @@ static GtkWidget *add_file_open_extra_widget(GtkWidget *dialog)
 }
 
 
-static GtkWidget *create_open_file_dialog(void)
+static GtkWidget *create_open_file_dialog(gboolean recursive)
 {
 	GtkWidget *dialog;
 	GtkWidget *viewbtn;
 	GSList *node;
+	const gchar *title, *open_button_text, *view_button_text;
+	gint open_response_id;
 
-	dialog = gtk_file_chooser_dialog_new(_("Open File"), GTK_WINDOW(main_widgets.window),
+	if (recursive)
+	{
+		title = _("Open Files Recursively");
+		open_button_text = _("_Open Recursively");
+		open_response_id = GEANY_RESPONSE_OPEN_RECURSIVELY;
+		view_button_text = _("_View Recursively");
+	}
+	else
+	{
+		title = _("Open File");
+		open_button_text = GTK_STOCK_OPEN;
+		open_response_id = GTK_RESPONSE_ACCEPT;
+		view_button_text = C_("Open dialog action", "_View");
+	}
+
+	dialog = gtk_file_chooser_dialog_new(title, GTK_WINDOW(main_widgets.window),
 			GTK_FILE_CHOOSER_ACTION_OPEN, NULL, NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), C_("Open dialog action", "_View"), GEANY_RESPONSE_VIEW);
+	viewbtn = gtk_dialog_add_button(GTK_DIALOG(dialog), view_button_text, GEANY_RESPONSE_VIEW);
 	gtk_widget_set_tooltip_text(viewbtn,
 		_("Opens the file in read-only mode. If you choose more than one file to open, all files will be opened read-only."));
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-		GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT, NULL);
+		open_button_text, open_response_id, NULL);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_ACCEPT);
 
 	gtk_widget_set_size_request(dialog, -1, 460);
@@ -448,9 +480,9 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 
 
 /* This shows the file selection dialog to open a file. */
-void dialogs_show_open_file(void)
+void dialogs_show_open_file(gboolean recursive)
 {
-	gchar *initdir;
+	gchar *initdir, *title;
 
 	/* set dialog directory to the current file's directory, if present */
 	initdir = utils_get_current_file_dir_utf8();
@@ -463,12 +495,12 @@ void dialogs_show_open_file(void)
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
-		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
+	if (interface_prefs.use_native_windows_dialogs && !recursive)
+		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), title, initdir);
 	else
 #endif
 	{
-		GtkWidget *dialog = create_open_file_dialog();
+		GtkWidget *dialog = create_open_file_dialog(recursive);
 
 		open_file_dialog_apply_settings(dialog);
 
@@ -480,7 +512,7 @@ void dialogs_show_open_file(void)
 					app->project->base_path, NULL);
 
 		while (!open_file_dialog_handle_response(dialog,
-			gtk_dialog_run(GTK_DIALOG(dialog))));
+			gtk_dialog_run(GTK_DIALOG(dialog)), recursive));
 		gtk_widget_destroy(dialog);
 	}
 	g_free(initdir);
