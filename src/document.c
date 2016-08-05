@@ -1631,12 +1631,9 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 
 						if (filename)
 						{
-							filter_info.filename = g_file_info_get_attribute_byte_string(file_info,
-									G_FILE_ATTRIBUTE_STANDARD_NAME);
-							filter_info.display_name = g_file_info_get_attribute_string(file_info,
-									G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
-							filter_info.mime_type = g_file_info_get_attribute_string(file_info,
-									G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+							filter_info.filename = g_file_info_get_name(file_info);
+							filter_info.display_name = g_file_info_get_display_name(file_info);
+							filter_info.mime_type = g_file_info_get_content_type(file_info);
 
 							if (gtk_file_filter_filter(filter, &filter_info))
 								document_open_file(filename, readonly, ft, forced_enc);
