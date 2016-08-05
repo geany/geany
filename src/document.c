@@ -1582,13 +1582,11 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 	guint enum_stack_index = 0;
 
 	const gchar* attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
-			G_FILE_ATTRIBUTE_STANDARD_TARGET_URI "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
-			G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
 	GtkFileFilterInfo filter_info;
-
-	filter_info.contains = GTK_FILE_FILTER_FILENAME|GTK_FILE_FILTER_URI
-			|GTK_FILE_FILTER_DISPLAY_NAME|GTK_FILE_FILTER_MIME_TYPE;
+	filter_info.contains = GTK_FILE_FILTER_FILENAME|GTK_FILE_FILTER_DISPLAY_NAME|GTK_FILE_FILTER_MIME_TYPE;
+	filter_info.uri = NULL;
 
 	for (item = filenames; item != NULL; item = g_slist_next(item))
 	{
@@ -1635,8 +1633,6 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 						{
 							filter_info.filename = g_file_info_get_attribute_byte_string(file_info,
 									G_FILE_ATTRIBUTE_STANDARD_NAME);
-							filter_info.uri = g_file_info_get_attribute_string(file_info,
-									G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
 							filter_info.display_name = g_file_info_get_attribute_string(file_info,
 									G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
 							filter_info.mime_type = g_file_info_get_attribute_string(file_info,
