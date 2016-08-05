@@ -129,7 +129,7 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 {
 	gboolean ret = TRUE;
 
-	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW || GEANY_RESPONSE_OPEN_RECURSIVELY)
+	if (response == GTK_RESPONSE_ACCEPT || response == GEANY_RESPONSE_VIEW || response == GEANY_RESPONSE_OPEN_RECURSIVELY)
 	{
 		GSList *filelist;
 		GeanyFiletype *ft = NULL;
@@ -395,6 +395,8 @@ static GtkWidget *create_open_file_dialog(gboolean recursive)
 	{
 		title = _("Open Files Recursively");
 		open_button_text = _("_Open Recursively");
+		g_assert(GEANY_RESPONSE_OPEN_RECURSIVELY != GTK_RESPONSE_ACCEPT);
+		g_assert(GEANY_RESPONSE_OPEN_RECURSIVELY != GTK_RESPONSE_CANCEL);
 		open_response_id = GEANY_RESPONSE_OPEN_RECURSIVELY;
 		view_button_text = _("_View Recursively");
 	}
