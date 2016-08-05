@@ -1593,9 +1593,6 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 	{
 		filename = item->data;
 
-		if (g_file_test(filename, G_FILE_TEST_IS_SYMLINK))
-			continue;
-
 		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
 		{
 			file = g_file_new_for_path(filename);
