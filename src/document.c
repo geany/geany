@@ -1576,8 +1576,9 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 	GFileType file_type;
 	GError *my_error = NULL;
 
-	enum { ENUM_STACK_LIMIT = 100 };
-	GFileEnumerator *enum_stack[ENUM_STACK_LIMIT];
+	const guint RECURSION_LIMIT = 100;
+	const guint ENUM_STACK_SIZE = RECURSION_LIMIT - 1;
+	GFileEnumerator *enum_stack[ENUM_STACK_SIZE];
 	guint enum_stack_index = 0;
 
 	const gchar* attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
@@ -1615,7 +1616,7 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 
 					if (file_type == G_FILE_TYPE_DIRECTORY)
 					{
-						if (enum_stack_index == ENUM_STACK_LIMIT)
+						if (enum_stack_index == ENUM_STACK_SIZE)
 						{
 							my_error = g_error_new(0, 0, "Recursion depth limit reached");
 							break;
