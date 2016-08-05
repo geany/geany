@@ -1565,24 +1565,42 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 }
 
 
+static GFileEnumerator *enumerate_children(const char *dir_path, GError **error)
+{
+	GFile *file = g_file_new_for_path(dir_path);
+
+	const gchar *attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
+			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+
+	GFileEnumerator *enumerator = g_file_enumerate_children(file, attributes,
+			G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, error);
+
+	g_object_unref(file);
+	return enumerator;
+}
+
+
 void document_open_files_recursively(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
 		const gchar *forced_enc, GtkFileFilter *filter, GError **error)
 {
 	const GSList *item;
-	gchar *filename;
-	GFile *file;
-	GFileEnumerator *file_enum;
+	gchar *file_path, *dir_path;
+	const gchar *filename;
+	GFileEnumerator *enumerator;
 	GFileInfo *file_info;
 	GFileType file_type;
 	GError *my_error = NULL;
 
+	typedef struct EnumeratorData
+	{
+		GFileEnumerator *enumerator;
+		gchar *dir_path;
+	} EnumeratorData;
+
 	const guint RECURSION_LIMIT = 100;
 	const guint ENUM_STACK_SIZE = RECURSION_LIMIT - 1;
-	GFileEnumerator *enum_stack[ENUM_STACK_SIZE];
+	EnumeratorData enum_stack[ENUM_STACK_SIZE];
 	guint enum_stack_index = 0;
-
-	const gchar* attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
-			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
 
 	GtkFileFilterInfo filter_info;
 	filter_info.contains = GTK_FILE_FILTER_FILENAME|GTK_FILE_FILTER_DISPLAY_NAME|GTK_FILE_FILTER_MIME_TYPE;
@@ -1590,69 +1608,79 @@ void document_open_files_recursively(const GSList *filenames, gboolean readonly,
 
 	for (item = filenames; item != NULL; item = g_slist_next(item))
 	{
-		filename = item->data;
+		file_path = item->data;
 
-		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		if (g_file_test(file_path, G_FILE_TEST_IS_DIR))
 		{
-			file = g_file_new_for_path(filename);
-
-			file_enum = g_file_enumerate_children(file, attributes,
-					G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &my_error);
-
-			g_object_unref(file);
+			dir_path = file_path;
+			enumerator = enumerate_children(dir_path, &my_error);
 
 			while (TRUE)
 			{
-				while (my_error == NULL
-					&& g_file_enumerator_iterate(file_enum, &file_info, &file, NULL, &my_error)
-					&& file_info != NULL)
+				while (my_error == NULL)
 				{
+					file_info = g_file_enumerator_next_file(enumerator, NULL, &my_error);
+
+					if (file_info == NULL)
+						break;
+
 					file_type = g_file_info_get_file_type(file_info);
 
-					if (file_type == G_FILE_TYPE_SYMBOLIC_LINK)
-						continue;
-
-					if (file_type == G_FILE_TYPE_DIRECTORY)
+					if (file_type != G_FILE_TYPE_SYMBOLIC_LINK)
 					{
-						if (enum_stack_index == ENUM_STACK_SIZE)
+						filename = g_file_info_get_name(file_info);
+
+						if (filename == NULL)
+							my_error = g_error_new(0, 0, "Failed to get filename of a file");
+						else
 						{
-							my_error = g_error_new(0, 0, "Recursion depth limit reached");
-							break;
+							if (file_type == G_FILE_TYPE_DIRECTORY)
+							{
+								if (enum_stack_index == ENUM_STACK_SIZE)
+									my_error = g_error_new(0, 0, "Recursion depth limit reached");
+								else
+								{
+									enum_stack[enum_stack_index].enumerator = enumerator;
+									enum_stack[enum_stack_index++].dir_path = dir_path;
+
+									dir_path = g_build_filename(dir_path, filename, NULL);
+									enumerator = enumerate_children(dir_path, &my_error);
+								}
+							}
+							else
+							{
+								file_path = g_build_filename(dir_path, filename, NULL);
+
+								if (file_path)
+								{
+									filter_info.filename = filename;
+									filter_info.display_name = g_file_info_get_display_name(file_info);
+									filter_info.mime_type = g_file_info_get_content_type(file_info);
+
+									if (gtk_file_filter_filter(filter, &filter_info))
+										document_open_file(file_path, readonly, ft, forced_enc);
+
+									g_free(file_path);
+								}
+							}
 						}
-
-						enum_stack[enum_stack_index++] = file_enum;
-
-						file_enum = g_file_enumerate_children(file, attributes,
-								G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, &my_error);
 					}
-					else
-					{
-						filename = g_file_get_path(file);
 
-						if (filename)
-						{
-							filter_info.filename = g_file_info_get_name(file_info);
-							filter_info.display_name = g_file_info_get_display_name(file_info);
-							filter_info.mime_type = g_file_info_get_content_type(file_info);
-
-							if (gtk_file_filter_filter(filter, &filter_info))
-								document_open_file(filename, readonly, ft, forced_enc);
-
-							g_free(filename);
-						}
-					}
+					g_object_unref(file_info);
 				}
 
-				g_object_unref(file_enum);
+				g_object_unref(enumerator);
 
 				if (enum_stack_index == 0)
 					break;
 
-				file_enum = enum_stack[--enum_stack_index];
+				g_free(dir_path);
+				enumerator = enum_stack[--enum_stack_index].enumerator;
+				dir_path = enum_stack[enum_stack_index].dir_path;
 			}
 		}
 		else
-			document_open_file(filename, readonly, ft, forced_enc);
+			document_open_file(file_path, readonly, ft, forced_enc);
 	}
 
 	if (my_error)
