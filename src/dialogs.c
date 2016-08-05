@@ -152,6 +152,15 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		
+		if (filelist == NULL && recursive)
+		{
+			gchar *path = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
+
+			if (path)
+				filelist = g_slist_append(filelist, path);
+		}
+
 		if (filelist != NULL)
 		{
 			const gchar *first = filelist->data;
@@ -395,8 +404,6 @@ static GtkWidget *create_open_file_dialog(gboolean recursive)
 	{
 		title = _("Open Files Recursively");
 		open_button_text = _("_Open Recursively");
-		g_assert(GEANY_RESPONSE_OPEN_RECURSIVELY != GTK_RESPONSE_ACCEPT);
-		g_assert(GEANY_RESPONSE_OPEN_RECURSIVELY != GTK_RESPONSE_CANCEL);
 		open_response_id = GEANY_RESPONSE_OPEN_RECURSIVELY;
 		view_button_text = _("_View Recursively");
 	}
