@@ -107,7 +107,7 @@ extern boolean cppIsBraceFormat (void)
 	return BraceFormat;
 }
 
-extern unsigned int getDirectiveNestLevel (void)
+extern unsigned int cppGetDirectiveNestLevel (void)
 {
 	return Cpp.directive.nestLevel;
 }

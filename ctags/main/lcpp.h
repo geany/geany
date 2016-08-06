@@ -35,7 +35,8 @@
 *   FUNCTION PROTOTYPES
 */
 extern boolean cppIsBraceFormat (void);
-extern unsigned int getDirectiveNestLevel (void);
+extern unsigned int cppGetDirectiveNestLevel (void);
+
 extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
                      const boolean hasCxxRawLiteralStrings,
                      const kindOption *defineMacroKind);

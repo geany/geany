@@ -1653,7 +1653,7 @@ static void skipToMatch (const char *const pair)
 {
 	const boolean braceMatching = (boolean) (strcmp ("{}", pair) == 0);
 	const boolean braceFormatting = (boolean) (cppIsBraceFormat () && braceMatching);
-	const unsigned int initialLevel = getDirectiveNestLevel ();
+	const unsigned int initialLevel = cppGetDirectiveNestLevel ();
 	const int begin = pair [0], end = pair [1];
 	const unsigned long inputLineNumber = getInputLineNumber ();
 	int matchLevel = 1;
@@ -1665,7 +1665,7 @@ static void skipToMatch (const char *const pair)
 		if (c == begin)
 		{
 			++matchLevel;
-			if (braceFormatting  &&  getDirectiveNestLevel () != initialLevel)
+			if (braceFormatting  &&  cppGetDirectiveNestLevel () != initialLevel)
 			{
 				skipToFormattedBraceMatch ();
 				break;
@@ -1674,7 +1674,7 @@ static void skipToMatch (const char *const pair)
 		else if (c == end)
 		{
 			--matchLevel;
-			if (braceFormatting  &&  getDirectiveNestLevel () != initialLevel)
+			if (braceFormatting  &&  cppGetDirectiveNestLevel () != initialLevel)
 			{
 				skipToFormattedBraceMatch ();
 				break;
