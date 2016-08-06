@@ -92,6 +92,7 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 		TagFile.max.file = vStringLength (fileName);
 
 	File.source.isHeader = isIncludeFile (vStringValue (fileName));
+	File.input.isHeader = File.source.isHeader;
 	if (language != -1)
 		File.source.language = language;
 	else

@@ -307,7 +307,7 @@ static boolean popConditional (void)
 
 static void makeDefineTag (const char *const name, boolean parameterized)
 {
-	const boolean isFileScope = (boolean) (! isHeaderFile ());
+	const boolean isFileScope = (boolean) (! isInputHeaderFile ());
 
 	if (includingDefineTags () &&
 		(! isFileScope  ||  Option.include.fileScope))
