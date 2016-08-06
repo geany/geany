@@ -23,12 +23,10 @@
 #include "vstring.h"
 #include "routines.h"
 
-/*#define R_REGEX*/
 
 #define SKIPSPACE(ch) while (isspace((int)*ch)) \
   ch++
 
-#ifndef R_REGEX
 typedef enum {
 	K_FUNCTION,
 	K_LIBRARY,
@@ -41,23 +39,7 @@ static kindOption RKinds [KIND_COUNT] = {
 	{TRUE, 'l', "library", "libraries"},
 	{TRUE, 's', "source", "sources"},
 };
-#endif
 
-#ifdef R_REGEX
-static void installRRegex (const langType language)
-{
-	/* This is a function, looks as follows:
-	 * itent <- function(arg1, arg2) {
-	 *   do_something;
-	 * }
-	 */
-	addTagRegex (language,
-		"^[ \t]*([.a-zA-Z0-9_]+)([ \t]*)<-([ \t]*)function", "\\1", "f,function", NULL);
-	/* This loads someting, e.g. a library, simply: library(libname) */
-	addTagRegex (language,
-		"^[ \t]*(library|source|load|data)[\\(]([a-zA-Z0-9_]+)[\\)]", "\\2", "s,other", NULL);
-}
-#else
 static void makeRTag (const vString * const name, rKind kind)
 {
 	tagEntryInfo e;
@@ -179,7 +161,6 @@ static void createRTags (void)
 	vStringDelete (name);
 	vStringDelete (vLine);
 }
-#endif
 
 extern parserDefinition *RParser (void)
 {
@@ -188,17 +169,10 @@ extern parserDefinition *RParser (void)
 	 */
 	static const char *const extensions [] = { "r", "s", "q", NULL };
 	parserDefinition *const def = parserNew ("R");
-#ifndef R_REGEX
 	def->kinds      = RKinds;
 	def->kindCount  = ARRAY_SIZE (RKinds);
-#endif
 	def->extensions = extensions;
-#ifndef R_REGEX
 	def->parser     = createRTags;
-#else
-	def->initialize = installRRegex;
-	def->regex      = TRUE;
-#endif
 	return def;
 }
 
