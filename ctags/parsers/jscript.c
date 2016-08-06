@@ -323,16 +323,6 @@ static void makeFunctionTag (tokenInfo *const token, vString *const signature)
  *	 Parsing functions
  */
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = getcFromInputFile ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	boolean end = FALSE;
@@ -586,7 +576,7 @@ getNextChar:
 						  {
 							  do
 							  {
-								  skipToCharacter ('*');
+								  skipToCharacterInInputFile ('*');
 								  c = getcFromInputFile ();
 								  if (c == '/')
 									  break;
@@ -597,7 +587,7 @@ getNextChar:
 						  }
 						  else if (d == '/')	/* is this the start of a comment?  */
 						  {
-							  skipToCharacter ('\n');
+							  skipToCharacterInInputFile ('\n');
 							  /* if we care about newlines, put it back so it is seen */
 							  if (include_newlines)
 								  ungetcToInputFile ('\n');
@@ -618,7 +608,7 @@ getNextChar:
 				  }
 				  else
 				  {
-					  skipToCharacter ('\n');
+					  skipToCharacterInInputFile ('\n');
 					  goto getNextChar;
 				  }
 				  break;

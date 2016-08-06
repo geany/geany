@@ -188,16 +188,6 @@ static boolean isIdentChar (const int c)
 	return (isalnum (c) || c == ':' || c == '_' || c == '-' || c >= 0x80);
 }
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = getcFromInputFile ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	while (TRUE)
@@ -309,7 +299,7 @@ getNextChar:
 				/* <# ... #> multiline comment */
 				do
 				{
-					c = skipToCharacter ('#');
+					c = skipToCharacterInInputFile ('#');
 					if (c != EOF)
 					{
 						c = getcFromInputFile ();
