@@ -140,7 +140,7 @@ static int vGetc (void)
 		}
 		else if (c2 == '*')  /* strip block comment */
 		{
-			c = skipOverCComment();
+			c = cppSkipOverCComment();
 		}
 		else
 		{

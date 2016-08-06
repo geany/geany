@@ -458,7 +458,7 @@ static Comment isComment (void)
 /*  Skips over a C style comment. According to ANSI specification a comment
  *  is treated as white space, so we perform this substitution.
  */
-int skipOverCComment (void)
+int cppSkipOverCComment (void)
 {
 	int c = getcFromInputFile ();
 
@@ -686,7 +686,7 @@ process:
 				const Comment comment = isComment ();
 
 				if (comment == COMMENT_C)
-					c = skipOverCComment ();
+					c = cppSkipOverCComment ();
 				else if (comment == COMMENT_CPLUS)
 				{
 					c = skipOverCplusComment ();
