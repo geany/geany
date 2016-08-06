@@ -520,8 +520,9 @@ void dialogs_show_open_file(gboolean recursive)
 			gtk_file_chooser_add_shortcut_folder(GTK_FILE_CHOOSER(dialog),
 					app->project->base_path, NULL);
 
-		while (!open_file_dialog_handle_response(dialog,
-			gtk_dialog_run(GTK_DIALOG(dialog)), recursive));
+		while (!open_file_dialog_handle_response(dialog, gtk_dialog_run(GTK_DIALOG(dialog)),
+				recursive))
+			;
 		gtk_widget_destroy(dialog);
 	}
 	g_free(initdir);
