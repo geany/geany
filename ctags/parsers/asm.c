@@ -180,7 +180,7 @@ static AsmKind operatorKind (
 static boolean isDefineOperator (const vString *const operator)
 {
 	const unsigned char *const op =
-		(unsigned char*) vStringValue (operator);
+		(unsigned char*) vStringValue (operator); 
 	const size_t length = vStringLength (operator);
 	const boolean result = (boolean) (length > 0  &&
 		toupper ((int) *op) == 'D'  &&

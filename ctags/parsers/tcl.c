@@ -76,9 +76,9 @@ static void findTclTags (void)
 	{
 		const unsigned char *cp;
 
-		while (isspace (line [0]))
+		while (isspace (line [0])) 
 			++line;
-
+		
 		if (line [0] == '\0'  ||  line [0] == '#')
 			continue;
 

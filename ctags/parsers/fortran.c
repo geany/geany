@@ -209,22 +209,22 @@ static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
 static kindOption FortranKinds [TAG_COUNT] = {
-	{ TRUE,  'b', "blockData",	"block data"},
-	{ TRUE,  'c', "common",		"common blocks"},
-	{ TRUE,  'e', "entry",		"entry points"},
-	{ TRUE,  'f', "function",	"functions"},
-	{ TRUE,  'i', "interface",	"interface contents, generic names, and operators"},
-	{ TRUE,  'k', "component",	"type and structure components"},
-	{ TRUE,  'l', "label",		"labels"},
-	{ FALSE, 'L', "local",		"local, common block, and namelist variables"},
-	{ TRUE,  'm', "module",	"modules"},
-	{ TRUE,  'n', "namelist",	"namelists"},
-	{ TRUE,  'p', "program",	"programs"},
-	{ TRUE,  's', "subroutine",	"subroutines"},
-	{ TRUE,  't', "type",	"derived types and structures"},
-	{ TRUE,  'v', "variable",	"program (global) and module variables"},
-	{ TRUE,  'E', "enum",	"enumerations"},
-	{ TRUE,  'N', "enumerator",	"enumeration values"},
+	{ TRUE,  'b', "blockData",  "block data"},
+	{ TRUE,  'c', "common",     "common blocks"},
+	{ TRUE,  'e', "entry",      "entry points"},
+	{ TRUE,  'f', "function",   "functions"},
+	{ TRUE,  'i', "interface",  "interface contents, generic names, and operators"},
+	{ TRUE,  'k', "component",  "type and structure components"},
+	{ TRUE,  'l', "label",      "labels"},
+	{ FALSE, 'L', "local",      "local, common block, and namelist variables"},
+	{ TRUE,  'm', "module",     "modules"},
+	{ TRUE,  'n', "namelist",   "namelists"},
+	{ TRUE,  'p', "program",    "programs"},
+	{ TRUE,  's', "subroutine", "subroutines"},
+	{ TRUE,  't', "type",       "derived types and structures"},
+	{ TRUE,  'v', "variable",   "program (global) and module variables"},
+	{ TRUE,  'E', "enum",       "enumerations"},
+	{ TRUE,  'N', "enumerator", "enumeration values"},
 };
 
 /* For efinitions of Fortran 77 with extensions:
@@ -551,7 +551,7 @@ static lineType getLineType (void)
 		 * an asterisk in column 1 may contain any character capable  of
 		 * representation in the processor in columns 2 through 72.
 		 */
-		/*  EXCEPTION! Some compilers permit '!' as a commment character here.
+		/*  EXCEPTION! Some compilers permit '!' as a comment character here.
 		 *
 		 *  Treat # and $ in column 1 as comment to permit preprocessor directives.
 		 *  Treat D and d in column 1 as comment for HP debug statements.
@@ -966,19 +966,19 @@ getNextChar:
 	c = getChar ();
 
 	token->lineNumber	= getInputLineNumber ();
-	token->filePosition = getInputFilePosition ();
+	token->filePosition	= getInputFilePosition ();
 
 	switch (c)
 	{
 		case EOF:  longjmp (Exception, (int) ExceptionEOF);  break;
 		case ' ':  goto getNextChar;
 		case '\t': goto getNextChar;
-		case ',':  token->type = TOKEN_COMMA;        break;
-		case '(':  token->type = TOKEN_PAREN_OPEN;   break;
-		case ')':  token->type = TOKEN_PAREN_CLOSE;  break;
-		case '[':  token->type = TOKEN_SQUARE_OPEN;  break;
+		case ',':  token->type = TOKEN_COMMA;       break;
+		case '(':  token->type = TOKEN_PAREN_OPEN;  break;
+		case ')':  token->type = TOKEN_PAREN_CLOSE; break;
+		case '[':  token->type = TOKEN_SQUARE_OPEN; break;
 		case ']':  token->type = TOKEN_SQUARE_CLOSE; break;
-		case '%':  token->type = TOKEN_PERCENT;      break;
+		case '%':  token->type = TOKEN_PERCENT;     break;
 
 		case '*':
 		case '/':
@@ -1353,12 +1353,12 @@ static tagType variableTagType (void)
 		const tokenInfo* const parent = ancestorTop ();
 		switch (parent->tag)
 		{
-			case TAG_MODULE:       result = TAG_VARIABLE;   break;
-			case TAG_DERIVED_TYPE: result = TAG_COMPONENT;  break;
-			case TAG_FUNCTION:     result = TAG_LOCAL;      break;
-			case TAG_SUBROUTINE:   result = TAG_LOCAL;      break;
+			case TAG_MODULE:       result = TAG_VARIABLE;  break;
+			case TAG_DERIVED_TYPE: result = TAG_COMPONENT; break;
+			case TAG_FUNCTION:     result = TAG_LOCAL;     break;
+			case TAG_SUBROUTINE:   result = TAG_LOCAL;     break;
 			case TAG_ENUM:         result = TAG_ENUMERATOR; break;
-			default:               result = TAG_VARIABLE;   break;
+			default:               result = TAG_VARIABLE;  break;
 		}
 	}
 	return result;
@@ -1419,7 +1419,7 @@ static void parseEntityDeclList (tokenInfo *const token)
 				 !isKeyword (token, KEYWORD_function) &&
 				 !isKeyword (token, KEYWORD_subroutine)))
 	{
-		/* compilers accept keywoeds as identifiers */
+		/* compilers accept keywords as identifiers */
 		if (isType (token, TOKEN_KEYWORD))
 			token->type = TOKEN_IDENTIFIER;
 		parseEntityDecl (token);
@@ -1520,16 +1520,16 @@ static void parseMap (tokenInfo *const token)
 
 /* UNION
  *      MAP
- *          [field-definition] [field-definition] ...
+ *          [field-definition] [field-definition] ... 
  *      END MAP
  *      MAP
- *          [field-definition] [field-definition] ...
+ *          [field-definition] [field-definition] ... 
  *      END MAP
  *      [MAP
  *          [field-definition]
- *          [field-definition] ...
+ *          [field-definition] ... 
  *      END MAP] ...
- *  END UNION
+ *  END UNION 
  *      *
  *
  *  Typed data declarations (variables or arrays) in structure declarations
@@ -1544,7 +1544,7 @@ static void parseMap (tokenInfo *const token)
  *  share a common location within the containing structure. When initializing
  *  the fields within a UNION, the final initialization value assigned
  *  overlays any value previously assigned to a field definition that shares
- *  that field.
+ *  that field. 
  */
 static void parseUnionStmt (tokenInfo *const token)
 {
@@ -1566,11 +1566,11 @@ static void parseUnionStmt (tokenInfo *const token)
  *  structure-name
  *		identifies the structure in a subsequent RECORD statement.
  *		Substructures can be established within a structure by means of either
- *		a nested STRUCTURE declaration or a RECORD statement.
+ *		a nested STRUCTURE declaration or a RECORD statement. 
  *
  *   field-names
  *		(for substructure declarations only) one or more names having the
- *		structure of the substructure being defined.
+ *		structure of the substructure being defined. 
  *
  *   field-definition
  *		can be one or more of the following:
@@ -1585,7 +1585,7 @@ static void parseUnionStmt (tokenInfo *const token)
  *			statements. The syntax of a UNION declaration is described below.
  *
  *			PARAMETER statements, which do not affect the form of the
- *			structure.
+ *			structure. 
  */
 static void parseStructureStmt (tokenInfo *const token)
 {
@@ -1637,7 +1637,7 @@ static void parseStructureStmt (tokenInfo *const token)
  *      or equivalence-stmt (is EQUIVALENCE equivalence-set-list)
  *      or external-stmt    (is EXTERNAL etc.)
  *      or intent-stmt      (is INTENT ( intent-spec ) [::] etc.)
- *      or instrinsic-stmt  (is INTRINSIC etc.)
+ *      or intrinsic-stmt   (is INTRINSIC etc.)
  *      or namelist-stmt    (is NAMELIST / namelist-group-name / etc.)
  *      or optional-stmt    (is OPTIONAL [::] etc.)
  *      or pointer-stmt     (is POINTER [::] object-name etc.)
@@ -1944,9 +1944,9 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
 	boolean result = TRUE;
 	switch (token->keyword)
 	{
-		case KEYWORD_entry:		parseEntryStmt (token);      break;
-		case KEYWORD_interface:	parseInterfaceBlock (token); break;
-		case KEYWORD_enum:		parseEnumBlock (token);      break;
+		case KEYWORD_entry:     parseEntryStmt (token);      break;
+		case KEYWORD_interface: parseInterfaceBlock (token); break;
+		case KEYWORD_enum:      parseEnumBlock (token);      break;
 		case KEYWORD_stdcall:   readToken (token);           break;
 		/* derived type handled by parseTypeDeclarationStmt(); */
 
@@ -2118,7 +2118,7 @@ static void parseModule (tokenInfo *const token)
 /*  execution-part
  *      executable-construct
  *
- *  executable-contstruct is
+ *  executable-construct is
  *      execution-part-construct [execution-part-construct]
  *
  *  execution-part-construct

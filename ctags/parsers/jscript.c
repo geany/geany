@@ -106,7 +106,7 @@ typedef struct sTokenInfo {
 	vString *		string;
 	vString *		scope;
 	unsigned long 	lineNumber;
-	MIOPos			filePosition;
+	MIOPos 			filePosition;
 	int				nestLevel;
 	boolean			ignoreTag;
 } tokenInfo;
@@ -232,8 +232,10 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 		{
 			jsKind parent_kind = JSTAG_CLASS;
 
-			/* if we're creating a function (and not a method),
-			 * guess we're inside another function */
+			/*
+			 * If we're creating a function (and not a method),
+			 * guess we're inside another function
+			 */
 			if (kind == JSTAG_FUNCTION)
 				parent_kind = JSTAG_FUNCTION;
 
@@ -347,7 +349,7 @@ static void parseString (vString *const string, const int delimiter)
 			 * Also, handle the fact that <LineContinuation> produces an empty
 			 * sequence.
 			 * See ECMA-262 7.8.4 */
-			c = getcFromInputFile();
+			c = getcFromInputFile ();
 			if (c != '\r' && c != '\n')
 				vStringPut(string, c);
 			else if (c == '\r')
@@ -1131,13 +1133,13 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 	 *	   validProperty  : 2,
 	 *	   validMethod    : function(a,b) {}
 	 *	   'validMethod2' : function(a,b) {}
-     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
+     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}
 	 */
 
 	do
 	{
 		readToken (token);
-		if (isType (token, TOKEN_CLOSE_CURLY)) 
+		if (isType (token, TOKEN_CLOSE_CURLY))
 		{
 			/*
 			 * This was most likely a variable declaration of a hash table.
@@ -1193,6 +1195,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 						{
 							if (isType (token, TOKEN_OPEN_CURLY))
 							{
+								/* Recurse to find child properties/methods */
 								vStringCopy (saveScope, token->scope);
 								addToScope (token, class->string);
 								has_child_methods = parseMethods (token, name);
@@ -1580,11 +1583,11 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 			{
 				/*
 				 * Only create variables for global scope
-			 */
+				 */
 				if ( token->nestLevel == 0 && is_global )
 				{
 					/*
-					 * A pointer can be created to the function.  
+					 * A pointer can be created to the function.
 					 * If we recognize the function/class name ignore the variable.
 					 * This format looks identical to a variable definition.
 					 * A variable defined outside of a block is considered
@@ -1616,10 +1619,10 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					vStringDelete (fulltag);
 				}
 			}
-			if (isType (token, TOKEN_CLOSE_CURLY)) 
+			if (isType (token, TOKEN_CLOSE_CURLY))
 			{
 				/*
-				 * Assume the closing parantheses terminates
+				 * Assume the closing parentheses terminates
 				 * this statements.
 				 */
 				is_terminated = TRUE;

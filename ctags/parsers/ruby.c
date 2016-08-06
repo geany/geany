@@ -218,8 +218,8 @@ static void emitRubyTag (vString* name, rubyKind kind)
 		Assert (0 <= parent_kind &&
 		        (size_t) parent_kind < (sizeof RubyKinds / sizeof RubyKinds[0]));
 
-	    tag.extensionFields.scopeKind = &(RubyKinds [parent_kind]);
-	    tag.extensionFields.scopeName = vStringValue (scope);
+		tag.extensionFields.scopeKind = &(RubyKinds [parent_kind]);
+		tag.extensionFields.scopeName = vStringValue (scope);
 	}
 	makeTagEntry (&tag);
 
@@ -475,10 +475,8 @@ static void findRubyTags (void)
 			 */
 			if (nl && nl->type == K_CLASS && vStringLength (nl->name) == 0)
 				kind = K_SINGLETON;
-
 			readAndEmitTag (&cp, kind);
 		}
-
 		while (*cp != '\0')
 		{
 			/* FIXME: we don't cope with here documents,
@@ -524,7 +522,7 @@ static void findRubyTags (void)
 					++cp;
 				} while (*cp != 0 && *cp != '"');
 				if (*cp == '"')
-				    cp++; /* skip the last found '"' */
+					cp++; /* skip the last found '"' */
 			}
 			else if (*cp == ';')
 			{

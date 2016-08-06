@@ -194,10 +194,9 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	for (j = 0; j < 1; j++)
 	{
 		p = extract_name (p, name);
-	}
+	}	
 	makeSimpleTag (name, BasicKinds, kw->kind);
 	vStringDelete (name);
-
 	return 1;
 }
 

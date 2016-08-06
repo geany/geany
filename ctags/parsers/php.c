@@ -668,7 +668,7 @@ static int skipWhitespaces (int c)
 }
 
 /* <script[:white:]+language[:white:]*=[:white:]*(php|'php'|"php")[:white:]*>
- *
+ * 
  * This is ugly, but the whole "<script language=php>" tag is and we can't
  * really do better without adding a lot of code only for this */
 static boolean isOpenScriptLanguagePhp (int c)

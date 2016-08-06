@@ -26,7 +26,7 @@
 /*#define R_REGEX*/
 
 #define SKIPSPACE(ch) while (isspace((int)*ch)) \
-	ch++
+  ch++
 
 #ifndef R_REGEX
 typedef enum {
@@ -37,9 +37,9 @@ typedef enum {
 } rKind;
 
 static kindOption RKinds [KIND_COUNT] = {
-	{ TRUE, 'f', "function",  "functions" },
-	{ TRUE, 'l', "library",  "libraries" },
-	{ TRUE, 's', "source",  "sources" },
+	{TRUE, 'f', "function", "functions"},
+	{TRUE, 'l', "library", "libraries"},
+	{TRUE, 's', "source", "sources"},
 };
 #endif
 
@@ -58,29 +58,30 @@ static void installRRegex (const langType language)
 		"^[ \t]*(library|source|load|data)[\\(]([a-zA-Z0-9_]+)[\\)]", "\\2", "s,other", NULL);
 }
 #else
-static void makeRTag(const vString* const name, rKind kind)
+static void makeRTag (const vString * const name, rKind kind)
 {
 	tagEntryInfo e;
 	initTagEntry(&e, vStringValue(name), &(RKinds[kind]));
 
-	Assert(kind < KIND_COUNT);
+	Assert (kind < KIND_COUNT);
 
-	makeTagEntry(&e);
+	makeTagEntry (&e);
 }
 
-static void createRTags(void)
+static void createRTags (void)
 {
-	vString *vLine = vStringNew();
-	vString *name = vStringNew();
+	vString *vLine = vStringNew ();
+	vString *name = vStringNew ();
 	int ikind;
 	const unsigned char *line;
 
-	while ((line = readLineFromInputFile()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
-		const unsigned char *cp = (const unsigned char*)line;
+		const unsigned char *cp = (const unsigned char *) line;
 
-		vStringClear(name);
-		while ((*cp != '\0') && (*cp != '#')) {
+		vStringClear (name);
+		while ((*cp != '\0') && (*cp != '#'))
+		{
 			/* iterate to the end of line or to a comment */
 			ikind = -1;
 			switch (*cp) {
@@ -175,18 +176,18 @@ static void createRTags(void)
 		}
 	}
 
-	vStringDelete(name);
-	vStringDelete(vLine);
+	vStringDelete (name);
+	vStringDelete (vLine);
 }
 #endif
 
-extern parserDefinition* RParser (void)
+extern parserDefinition *RParser (void)
 {
 	/* *.r: R files
 	 * *.s;*.q: S files
 	 */
 	static const char *const extensions [] = { "r", "s", "q", NULL };
-	parserDefinition* const def = parserNew ("R");
+	parserDefinition *const def = parserNew ("R");
 #ifndef R_REGEX
 	def->kinds      = RKinds;
 	def->kindCount  = ARRAY_SIZE (RKinds);

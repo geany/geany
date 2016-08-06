@@ -29,7 +29,7 @@ typedef enum {
 } pascalKind;
 
 static kindOption PascalKinds [] = {
-	{ TRUE, 'f', "function", "functions"},
+	{ TRUE, 'f', "function",  "functions"},
 	{ TRUE, 'p', "procedure", "procedures"}
 };
 
@@ -156,33 +156,35 @@ static void findPascalTags (void)
 	char *arglist = NULL;
 	char *vartype = NULL;
 	pascalKind kind = K_FUNCTION;
-								/* each of these flags is TRUE iff: */
+		/* each of these flags is TRUE iff: */
 	boolean incomment = FALSE;  /* point is inside a comment */
 	int comment_char = '\0';    /* type of current comment */
 	boolean inquote = FALSE;    /* point is inside '..' string */
 	boolean get_tagname = FALSE;/* point is after PROCEDURE/FUNCTION
-									keyword, so next item = potential tag */
+		keyword, so next item = potential tag */
 	boolean found_tag = FALSE;  /* point is after a potential tag */
 	boolean inparms = FALSE;    /* point is within parameter-list */
-	boolean verify_tag = FALSE; /* point has passed the parm-list, so the
-								   next token will determine whether this
-								   is a FORWARD/EXTERN to be ignored, or
-								   whether it is a real tag */
+	boolean verify_tag = FALSE;
+		/* point has passed the parm-list, so the next token will determine
+		 * whether this is a FORWARD/EXTERN to be ignored, or whether it is a
+		 * real tag
+		 */
 
 	dbp = readLineFromInputFile ();
 	while (dbp != NULL)
 	{
 		int c = *dbp++;
 
-		if (c == '\0')          /* if end of line */
+		if (c == '\0')  /* if end of line */
 		{
 			dbp = readLineFromInputFile ();
 			if (dbp == NULL  ||  *dbp == '\0')
 				continue;
 			if (!((found_tag && verify_tag) || get_tagname))
-				c = *dbp++;			/* only if don't need *dbp pointing
-									to the beginning of the name of
-									the procedure or function */
+				c = *dbp++;
+					/* only if don't need *dbp pointing to the beginning of
+					 * the name of the procedure or function
+					 */
 		}
 		if (incomment)
 		{
@@ -204,14 +206,14 @@ static void findPascalTags (void)
 		else switch (c)
 		{
 			case '\'':
-				inquote = TRUE; /* found first quote */
+				inquote = TRUE;  /* found first quote */
 				continue;
-			case '{':           /* found open { comment */
+			case '{':  /* found open { comment */
 				incomment = TRUE;
 				comment_char = c;
 				continue;
 			case '(':
-				if (*dbp == '*')        /* found open (* comment */
+				if (*dbp == '*')  /* found open (* comment */
 				{
 					incomment = TRUE;
 					comment_char = c;
@@ -220,12 +222,12 @@ static void findPascalTags (void)
 				else if (found_tag)  /* found '(' after tag, i.e., parm-list */
 					inparms = TRUE;
 				continue;
-			case ')':           /* end of parms list */
+			case ')':  /* end of parms list */
 				if (inparms)
 					inparms = FALSE;
 				continue;
 			case ';':
-				if (found_tag && !inparms) /* end of proc or fn stmt */
+				if (found_tag && !inparms)  /* end of proc or fn stmt */
 				{
 					verify_tag = TRUE;
 					break;
@@ -239,7 +241,7 @@ static void findPascalTags (void)
 				continue;
 			if (tolower ((int) *dbp == 'e'))
 			{
-				if (tail ("extern"))    /* superfluous, really! */
+				if (tail ("extern"))  /* superfluous, really! */
 				{
 					found_tag = FALSE;
 					verify_tag = FALSE;
@@ -247,7 +249,7 @@ static void findPascalTags (void)
 			}
 			else if (tolower ((int) *dbp) == 'f')
 			{
-				if (tail ("forward"))   /*  check for forward reference */
+				if (tail ("forward"))  /*  check for forward reference */
 				{
 					found_tag = FALSE;
 					verify_tag = FALSE;
@@ -261,7 +263,7 @@ static void findPascalTags (void)
 					verify_tag = FALSE;
 				}
 			}
-			if (found_tag && verify_tag) /* not external proc, so make tag */
+			if (found_tag && verify_tag)  /* not external proc, so make tag */
 			{
 				found_tag = FALSE;
 				verify_tag = FALSE;
@@ -269,7 +271,7 @@ static void findPascalTags (void)
 				continue;
 			}
 		}
-		if (get_tagname)                /* grab name of proc or fn */
+		if (get_tagname)  /* grab name of proc or fn */
 		{
 			const unsigned char *cp;
 
@@ -288,7 +290,7 @@ static void findPascalTags (void)
 				eFree(vartype);
 			parseArglist((const char*) cp, &arglist, (kind == K_FUNCTION) ? &vartype : NULL);
 			createPascalTag (&tag, name, kind, arglist, (kind == K_FUNCTION) ? vartype : NULL);
-			dbp = cp;           /* set dbp to e-o-token */
+			dbp = cp;  /* set dbp to e-o-token */
 			get_tagname = FALSE;
 			found_tag = TRUE;
 			/* and proceed to check for "extern" */
@@ -339,7 +341,7 @@ static void findPascalTags (void)
 		eFree(arglist);
 	if (vartype != NULL)
 		eFree(vartype);
-	vStringDelete(name);
+	vStringDelete (name);
 }
 
 extern parserDefinition* PascalParser (void)

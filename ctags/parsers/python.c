@@ -492,7 +492,6 @@ static char const *find_triple_start(char const *string, char const **which)
 	{
 		if (*cp == '#')
 			break;
-
 		if (*cp == '"' || *cp == '\'')
 		{
 			if (strncmp(cp, doubletriple, 3) == 0)
@@ -602,7 +601,7 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 		}
 		if (!*ptr || *ptr == '=') return NULL;
 		if (*ptr == '(') {
-		    return lastStart; /* if we stopped on a '(' we are done */
+			return lastStart; /* if we stopped on a '(' we are done */
 		}
 		ptr = skipSpace(ptr);
 		lastStart = ptr;
@@ -778,24 +777,24 @@ static void findPythonTags (void)
 				is_class = TRUE;
 			}
 			else if (matchKeyword ("cdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = TRUE;
+					cp = candidate;
+				}
 
-		    }
-    		else if (matchKeyword ("cpdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
-		    }
+			}
+			else if (matchKeyword ("cpdef", keyword, &cp))
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = TRUE;
+					cp = candidate;
+				}
+			}
 
 			if (found)
 			{
