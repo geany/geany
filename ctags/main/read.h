@@ -33,7 +33,7 @@
 #define getSourceLanguage() File.source.language
 #define getSourceLanguageName() getLanguageName (File.source.language)
 #define getSourceLineNumber()   File.source.lineNumber
-#define isLanguage(lang)    (boolean)((lang) == File.source.language)
+#define isInputLanguage(lang)    (boolean)((lang) == File.input.language)
 #define isHeaderFile()      File.source.isHeader
 
 /*

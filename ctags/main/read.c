@@ -96,6 +96,7 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 		File.source.language = language;
 	else
 		File.source.language = getFileLanguage (vStringValue (fileName));
+	File.input.language = File.source.language;
 }
 
 static boolean setSourceFileName (vString *const fileName)
