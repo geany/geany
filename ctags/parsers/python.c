@@ -362,7 +362,7 @@ static void parseImports (const char *cp)
 	vStringDelete (name_next);
 }
 
-/* modified from get.c getArglistFromStr().
+/* modified from lcpp.c getArglistFromStr().
  * warning: terminates rest of string past arglist!
  * note: does not ignore brackets inside strings! */
 static char *parseArglist(const char *buf)
