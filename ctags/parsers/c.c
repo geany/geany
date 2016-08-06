@@ -2567,7 +2567,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 		--depth;
 	}
 	if (st->argEndPosition == 0)
-		st->argEndPosition = mio_tell (File.fp);
+		st->argEndPosition = mio_tell (File.mio);
 
 	if (! info->isNameCandidate)
 		initToken (token);
