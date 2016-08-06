@@ -29,7 +29,7 @@
  *  VMS allows '$' in identifiers.
  *  Vala allows '@' in identifiers.
  */
-#define isident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
+#define cppIsident1(c)  (isalpha(c) || (c) == '_' || (c) == '~' || (c) == '$' || (c) == '@')
 
 /*
 *   FUNCTION PROTOTYPES

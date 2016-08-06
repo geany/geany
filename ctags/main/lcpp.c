@@ -335,7 +335,7 @@ static void directiveDefine (const int c)
 	boolean parameterized;
 	int nc;
 
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
 		nc = getcFromInputFile ();
@@ -349,7 +349,7 @@ static void directiveDefine (const int c)
 
 static void directivePragma (int c)
 {
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
 		if (stringMatch (vStringValue (Cpp.directive.name), "weak"))
@@ -359,7 +359,7 @@ static void directivePragma (int c)
 			{
 				c = getcFromInputFile ();
 			} while (c == SPACE);
-			if (isident1 (c))
+			if (cppIsident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
 				makeDefineTag (vStringValue (Cpp.directive.name), FALSE);

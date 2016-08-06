@@ -1893,7 +1893,7 @@ static void readOperator (statementInfo *const st)
 			c = cppGetc ();
 		}
 	}
-	else if (isident1 (c))
+	else if (cppIsident1 (c))
 	{
 		/*  Handle "new" and "delete" operators, and conversion functions
 		 *  (per 13.3.1.1.2 [2] of the C++ spec).
@@ -1965,7 +1965,7 @@ static void setAccess (statementInfo *const st, const accessType laccess)
 static void discardTypeList (tokenInfo *const token)
 {
 	int c = skipToNonWhite ();
-	while (isident1 (c))
+	while (cppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		c = skipToNonWhite ();
@@ -1994,7 +1994,7 @@ static void readParents (statementInfo *const st, const int qualifier)
 	do
 	{
 		c = skipToNonWhite ();
-		if (isident1 (c))
+		if (cppIsident1 (c))
 		{
 			readIdentifier (token, c);
 			if (isType (token, TOKEN_NAME))
@@ -2151,7 +2151,7 @@ static void skipMemIntializerList (tokenInfo *const token)
 	do
 	{
 		c = skipToNonWhite ();
-		while (isident1 (c)  ||  c == ':')
+		while (cppIsident1 (c)  ||  c == ':')
 		{
 			if (c != ':')
 				readIdentifier (token, c);
@@ -2261,7 +2261,7 @@ static boolean skipPostArgumentStuff (
 
 			default:
 			{
-				if (isident1 (c))
+				if (cppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					if (isInputLanguage(Lang_d) && isDPostArgumentToken(token))
@@ -2340,7 +2340,7 @@ static void skipJavaThrows (statementInfo *const st)
 	tokenInfo *const token = activeToken (st);
 	int c = skipToNonWhite ();
 
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		if (token->keyword == KEYWORD_THROWS)
@@ -2348,7 +2348,7 @@ static void skipJavaThrows (statementInfo *const st)
 			do
 			{
 				c = skipToNonWhite ();
-				if (isident1 (c))
+				if (cppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					c = skipToNonWhite ();
@@ -2365,7 +2365,7 @@ static void skipValaPostParens (statementInfo *const st)
 	tokenInfo *const token = activeToken (st);
 	int c = skipToNonWhite ();
 
-	while (isident1 (c))
+	while (cppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		if (token->keyword == KEYWORD_ATTRIBUTE)
@@ -2379,7 +2379,7 @@ static void skipValaPostParens (statementInfo *const st)
 			do
 			{
 				c = skipToNonWhite ();
-				if (isident1 (c))
+				if (cppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					c = skipToNonWhite ();
@@ -2528,7 +2528,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 
 			default:
 			{
-				if (isident1 (c))
+				if (cppIsident1 (c))
 				{
 					if (++identifierCount > 1)
 						info->isKnrParamList = FALSE;
@@ -2783,7 +2783,7 @@ static void parseGeneralToken (statementInfo *const st, const int c)
 {
 	const tokenInfo *const prev = prevToken (st, 1);
 
-	if (isident1(c))
+	if (cppIsident1(c))
 	{
 		parseIdentifier (st, c);
 		if (isType (st->context, TOKEN_NAME) &&
