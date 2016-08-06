@@ -48,6 +48,9 @@ static void createPascalTag (tagEntryInfo* const tag,
 		tag->extensionFields.signature = arglist;
 		tag->extensionFields.varType = vartype;
 	}
+	else
+		/* TODO: Passing NULL as name makes an assertion behind initTagEntry failure */
+		initTagEntry (tag, NULL, NULL);
 }
 
 static void makePascalTag (const tagEntryInfo* const tag)
