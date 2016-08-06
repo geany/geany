@@ -102,7 +102,7 @@ static cppState Cpp = {
 *   FUNCTION DEFINITIONS
 */
 
-extern boolean isBraceFormat (void)
+extern boolean cppIsBraceFormat (void)
 {
 	return BraceFormat;
 }

@@ -1652,7 +1652,7 @@ static void skipToFormattedBraceMatch (void)
 static void skipToMatch (const char *const pair)
 {
 	const boolean braceMatching = (boolean) (strcmp ("{}", pair) == 0);
-	const boolean braceFormatting = (boolean) (isBraceFormat () && braceMatching);
+	const boolean braceFormatting = (boolean) (cppIsBraceFormat () && braceMatching);
 	const unsigned int initialLevel = getDirectiveNestLevel ();
 	const int begin = pair [0], end = pair [1];
 	const unsigned long inputLineNumber = getInputLineNumber ();
@@ -2738,7 +2738,7 @@ static int skipInitializer (statementInfo *const st)
 			case '}':
 				if (insideEnumBody (st))
 					done = TRUE;
-				else if (! isBraceFormat ())
+				else if (! cppIsBraceFormat ())
 				{
 					verbose ("%s: unexpected closing brace at line %lu\n",
 							getInputFileName (), getInputLineNumber ());
