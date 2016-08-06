@@ -149,11 +149,11 @@
 # define PATH_MAX 256
 #endif
 
-#define selected(var,feature)   (((int)(var) & (int)(feature)) == (int)feature)
-
 /*
  *  Miscellaneous macros
  */
+
+#define selected(var,feature)   (((int)(var) & (int)(feature)) == (int)feature)
 
 
 /*
