@@ -1236,6 +1236,17 @@ static gboolean check_vte(GdkModifierType state, guint keyval)
 		if (state == kb->mods && keyval == kb->key)
 			return FALSE;
 	}
+	group = keybindings_get_core_group(GEANY_KEY_GROUP_NOTEBOOK);
+	foreach_ptr_array(kb, i, group->key_items)
+	{
+		if (state == kb->mods && keyval == kb->key)
+			return FALSE;
+	}
+	kb = keybindings_lookup_item(GEANY_KEY_GROUP_VIEW, GEANY_KEYS_VIEW_MESSAGEWINDOW);
+	if (kb != NULL && state == kb->mods && keyval == kb->key)
+	{
+		return FALSE;
+	}
 
 	/* Temporarily disable the menus to prevent conflicting menu accelerators
 	 * from overriding the VTE bash shortcuts.
@@ -1744,8 +1755,7 @@ static void focus_msgwindow(void)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
 		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
-
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		msgwin_switch_tab(page_num, TRUE);
 	}
 }
 
