@@ -668,7 +668,7 @@ static const char *accessString (const accessType laccess)
 	static const char *const names [] = {
 		"?", "private", "protected", "public", "default"
 	};
-	Assert (sizeof (names) / sizeof (names [0]) == ACCESS_COUNT);
+	Assert (ARRAY_SIZE (names) == ACCESS_COUNT);
 	Assert ((int) laccess < ACCESS_COUNT);
 	return names[(int) laccess];
 }
@@ -678,7 +678,7 @@ static const char *implementationString (const impType imp)
 	static const char *const names [] = {
 		"?", "abstract", "virtual", "pure virtual"
 	};
-	Assert (sizeof (names) / sizeof (names [0]) == IMP_COUNT);
+	Assert (ARRAY_SIZE (names) == IMP_COUNT);
 	Assert ((int) imp < IMP_COUNT);
 	return names [(int) imp];
 }
@@ -697,7 +697,7 @@ static const char *tokenString (const tokenType type)
 		"none", "args", "}", "{", "comma", "double colon", "keyword", "name",
 		"package", "paren-name", "semicolon", "specifier", "*", "[]"
 	};
-	Assert (sizeof (names) / sizeof (names [0]) == TOKEN_COUNT);
+	Assert (ARRAY_SIZE (names) == TOKEN_COUNT);
 	Assert ((int) type < TOKEN_COUNT);
 	return names [(int) type];
 }
@@ -707,7 +707,7 @@ static const char *scopeString (const tagScope scope)
 	static const char *const names [] = {
 		"global", "static", "extern", "friend", "typedef"
 	};
-	Assert (sizeof (names) / sizeof (names [0]) == SCOPE_COUNT);
+	Assert (ARRAY_SIZE (names) == SCOPE_COUNT);
 	Assert ((int) scope < SCOPE_COUNT);
 	return names [(int) scope];
 }
@@ -719,14 +719,14 @@ static const char *declString (const declType declaration)
 		"function template", "ignore", "interface", "module", "namespace",
 		"no mangle", "package", "struct", "union",
 	};
-	Assert (sizeof (names) / sizeof (names [0]) == DECL_COUNT);
+	Assert (ARRAY_SIZE (names) == DECL_COUNT);
 	Assert ((int) declaration < DECL_COUNT);
 	return names [(int) declaration];
 }
 
 static const char *keywordString (const keywordId keyword)
 {
-	const size_t count = sizeof (KeywordTable) / sizeof (KeywordTable [0]);
+	const size_t count = ARRAY_SIZE (KeywordTable);
 	const char *name = "none";
 	size_t i;
 	for (i = 0  ;  i < count  ;  ++i)
@@ -3172,7 +3172,7 @@ static boolean findCTags (const unsigned int passCount)
 
 static void buildKeywordHash (const langType language, unsigned int idx)
 {
-	const size_t count = sizeof (KeywordTable) / sizeof (KeywordTable [0]);
+	const size_t count = ARRAY_SIZE (KeywordTable);
 	size_t i;
 	for (i = 0  ;  i < count  ;  ++i)
 	{

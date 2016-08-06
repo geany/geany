@@ -102,8 +102,7 @@ static keywordTable VerilogKeywordTable [] = {
 static void initialize (const langType language)
 {
 	size_t i;
-	const size_t count =
-			sizeof (VerilogKeywordTable) / sizeof (VerilogKeywordTable [0]);
+	const size_t count = ARRAY_SIZE (VerilogKeywordTable);
 	Lang_verilog = language;
 	for (i = 0  ;  i < count  ;  ++i)
 	{

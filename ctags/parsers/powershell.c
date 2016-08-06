@@ -26,8 +26,6 @@
 #define SCOPE_SEPARATOR "::"
 
 
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
-
 #define ACCESS_UNDEFINED NULL
 static const char *const accessTypes[] = {
 	ACCESS_UNDEFINED,
@@ -85,7 +83,7 @@ static const char *findValidAccessType (const char *const access)
 	unsigned int i;
 	if (access == ACCESS_UNDEFINED)
 		return ACCESS_UNDEFINED; /* early out to save the for-loop if possible */
-	for (i = 0; i < ARRAY_LENGTH(accessTypes); i++)
+	for (i = 0; i < ARRAY_SIZE(accessTypes); i++)
 	{
 		if (accessTypes[i] == ACCESS_UNDEFINED)
 			continue;

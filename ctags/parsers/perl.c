@@ -71,7 +71,7 @@ static boolean isPodWord (const char *word)
 			"head1", "head2", "head3", "head4", "over", "item", "back",
 			"pod", "begin", "end", "for"
 		};
-		const size_t count = sizeof (pods) / sizeof (pods [0]);
+		const size_t count = ARRAY_SIZE (pods);
 		const char *white = strpbrk (word, " \t");
 		const size_t len = (white!=NULL) ? (size_t)(white-word) : strlen (word);
 		char *const id = (char*) eMalloc (len + 1);
