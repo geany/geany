@@ -443,7 +443,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 
 	tag.lineNumber = line;
 	tag.filePosition = pos;
-	tag.sourceFileName = getSourceFileName();
+	tag.sourceFileName = getInputFileName();
 
 	tag.extensionFields.signature = arg_list;
 	tag.extensionFields.varType = type;

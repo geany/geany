@@ -77,7 +77,10 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 {
 	if (File.source.name != NULL)
 		vStringDelete (File.source.name);
+	if (File.input.name != NULL)
+		vStringDelete (File.input.name);
 	File.source.name = fileName;
+	File.input.name = vStringNewCopy(fileName);
 
 	if (File.source.tagPath != NULL)
 		eFree (File.source.tagPath);

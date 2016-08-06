@@ -26,9 +26,8 @@
 *   MACROS
 */
 #define getInputLineNumber()    File.input.lineNumber
-#define getInputFileName()  vStringValue (File.source.name)
+#define getInputFileName()  vStringValue (File.input.name)
 #define getInputFilePosition()  File.filePosition
-#define getSourceFileName() vStringValue (File.source.name)
 #define getSourceFileTagPath()  vStringValue (File.source.tagPath)
 #define getSourceLanguage() File.source.language
 #define getSourceLanguageName() getLanguageName (File.source.language)
