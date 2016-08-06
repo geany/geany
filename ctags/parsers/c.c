@@ -1224,7 +1224,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
             if ((TRUE == st->gotArgs) && (TRUE == Option.extensionFields.argList) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				tag->extensionFields.signature = getArglistFromFilePos(
+				tag->extensionFields.signature = cppGetArglistFromFilePos(
 						tag->filePosition, tag->name);
 			}
 			break;

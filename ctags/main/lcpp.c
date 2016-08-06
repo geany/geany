@@ -321,7 +321,7 @@ static void makeDefineTag (const char *const name, boolean parameterized)
 		e.truncateLine = TRUE;
 		if (parameterized)
 		{
-			e.extensionFields.signature = getArglistFromFilePos(getInputFilePosition()
+			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition()
 					, e.name);
 		}
 		makeTagEntry (&e);
@@ -952,7 +952,7 @@ static char *getArglistFromStr(char *buf, const char *name)
 	return strdup(start);
 }
 
-extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
+extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName)
 {
 	MIOPos originalPosition;
 	char *result = NULL;

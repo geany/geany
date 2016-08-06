@@ -46,7 +46,7 @@ extern void cppEndStatement (void);
 extern void cppUngetc (const int c);
 extern int cppGetc (void);
 extern int cppSkipOverCComment (void);
-extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName);
+extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName);
 
 #endif  /* CTAGS_MAIN_GET_H */
 
