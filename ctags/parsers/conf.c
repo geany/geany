@@ -91,11 +91,15 @@ static void findConfTags (void)
 					++cp;
 				if (*cp == '=')
 				{
+					tagEntryInfo e;
+					initTagEntry (&e, vStringValue (name), &(ConfKinds [K_KEY]));
+
 					if (vStringLength (scope) > 0)
-						makeSimpleScopedTag (name, ConfKinds, K_KEY,
-							"section", vStringValue(scope), NULL);
-					else
-						makeSimpleTag (name, ConfKinds, K_KEY);
+					{
+						e.extensionFields.scopeKind = &(ConfKinds [K_SECTION]);
+						e.extensionFields.scopeName = vStringValue(scope);
+					}
+					makeTagEntry (&e);
 				}
 				vStringClear (name);
 			}

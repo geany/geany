@@ -92,11 +92,6 @@ another:
 			}
 			vStringTerminate (name);
 			makeSimpleTag (name, HxKinds, HXTAG_VARIABLE);
-			/*
-			 makeSimpleScopedTag(name, HxKinds,
-						HXTAG_VARIABLE,vStringValue(clsName),
-						strdup(vStringValue(scope2)),strdup(vStringValue(laccess)));
-			 */
 
 			vStringClear (name);
 		}
@@ -116,11 +111,6 @@ another:
 			}
 			vStringTerminate (name);
 			makeSimpleTag (name, HxKinds, HXTAG_METHODS);
-			/*
-			makeSimpleScopedTag(name, HxKinds, HXTAG_METHODS,
-				strdup(vStringValue(clsName)),strdup(vStringValue(scope2)),strdup(vStringValue(laccess)));
-
-			*/
 
 			vStringClear (name);
 		}
