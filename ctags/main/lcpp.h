@@ -22,7 +22,7 @@
 /*  Is the character valid as a character of a C identifier?
  *  VMS allows '$' in identifiers.
  */
-#define isident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
+#define cppIsident(c)  (isalnum(c) || (c) == '_' || (c) == '$')
 
 /*  Is the character valid as the first character of a C identifier?
  *  C++ allows '~' in destructors.

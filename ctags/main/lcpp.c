@@ -210,7 +210,7 @@ static void readIdentifier (int c, vString *const name)
 	{
 		vStringPut (name, c);
 		c = getcFromInputFile ();
-	} while (c != EOF && isident (c));
+	} while (c != EOF && cppIsident (c));
 	ungetcToInputFile (c);
 	vStringTerminate (name);
 }
@@ -810,9 +810,9 @@ process:
 					int prev2 = getNthPrevCFromInputFile (2, '\0');
 					int prev3 = getNthPrevCFromInputFile (3, '\0');
 
-					if (! isident (prev) ||
-					    (! isident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
-					    (! isident (prev3) && (prev2 == 'u' && prev == '8')))
+					if (! cppIsident (prev) ||
+					    (! cppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
+					    (! cppIsident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
 						int next = getcFromInputFile ();
 						if (next != DOUBLE_QUOTE)

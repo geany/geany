@@ -1786,7 +1786,7 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 	{
 		vStringPut (name, c);
 		c = cppGetc ();
-	} while (isident (c) || (isInputLanguage (Lang_vala) && '.' == c));
+	} while (cppIsident (c) || (isInputLanguage (Lang_vala) && '.' == c));
 	vStringTerminate (name);
 	cppUngetc (c);        /* unget non-identifier character */
 
@@ -1810,7 +1810,7 @@ static void readPackageName (tokenInfo *const token, const int firstChar)
 
 	initToken (token);
 
-	while (isident (c)  ||  c == '.')
+	while (cppIsident (c)  ||  c == '.')
 	{
 		vStringPut (name, c);
 		c = cppGetc ();
