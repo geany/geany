@@ -175,7 +175,7 @@ extern void freeKeywordTable (void)
 	}
 }
 
-#ifdef TM_DEBUG
+#ifdef DEBUG
 
 static void printEntry (const hashEntry *const entry)
 {

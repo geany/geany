@@ -160,7 +160,7 @@ static void printTotals (const clock_t *const timeStamps)
 		fputc ('\n', errout);
 	}
 
-#ifdef TM_DEBUG
+#ifdef DEBUG
 	fprintf (errout, "longest tag line = %lu\n",
 			(unsigned long) TagFile.max.line);
 #endif
