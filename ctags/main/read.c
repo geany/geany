@@ -247,7 +247,7 @@ static boolean parseLineDirective (void)
  */
 
 /*  This function opens an input file, and resets the line counter.  If it
- *  fails, it will display an error message and leave the File.fp set to NULL.
+ *  fails, it will display an error message and leave the File.mio set to NULL.
  */
 extern boolean fileOpen (const char *const fileName, const langType language)
 {
@@ -539,12 +539,12 @@ extern const unsigned char *readLineFromInputFile (void)
 /*
  *   Raw file line reading with automatic buffer sizing
  */
-extern char *readLineRaw (vString *const vLine, MIO *const fp)
+extern char *readLineRaw (vString *const vLine, MIO *const mio)
 {
 	char *result = NULL;
 
 	vStringClear (vLine);
-	if (fp == NULL)  /* to free memory allocated to buffer */
+	if (mio == NULL)  /* to free memory allocated to buffer */
 		error (FATAL, "NULL file pointer");
 	else
 	{
@@ -560,13 +560,13 @@ extern char *readLineRaw (vString *const vLine, MIO *const fp)
 			char *const pLastChar = vStringValue (vLine) + vStringSize (vLine) -2;
 			long startOfLine;
 
-			startOfLine = mio_tell(fp);
+			startOfLine = mio_tell(mio);
 			reReadLine = FALSE;
 			*pLastChar = '\0';
-			result = mio_gets (fp, vStringValue (vLine), (int) vStringSize (vLine));
+			result = mio_gets (mio, vStringValue (vLine), (int) vStringSize (vLine));
 			if (result == NULL)
 			{
-				if (! mio_eof (fp))
+				if (! mio_eof (mio))
 					error (FATAL | PERROR, "Failure on attempt to read file");
 			}
 			else if (*pLastChar != '\0'  &&
@@ -575,7 +575,7 @@ extern char *readLineRaw (vString *const vLine, MIO *const fp)
 				/*  buffer overflow */
 				reReadLine = vStringAutoResize (vLine);
 				if (reReadLine)
-					mio_seek (fp, startOfLine, SEEK_SET);
+					mio_seek (mio, startOfLine, SEEK_SET);
 				else
 					error (FATAL | PERROR, "input line too big; out of memory");
 			}
