@@ -1,18 +1,17 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains functions for managing source languages and
+*   This module contains functions for managing input languages and
 *   dispatching files to the appropriate language parser.
 */
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <string.h>
 
@@ -163,7 +162,7 @@ static vString* determineInterpreter (const char* const cmd)
 	{
 		vStringClear (interpreter);
 		for ( ;  isspace (*p)  ;  ++p)
-			; /* no-op */
+			;  /* no-op */
 		for ( ;  *p != '\0'  &&  ! isspace (*p)  ;  ++p)
 			vStringPut (interpreter, (int) *p);
 		vStringTerminate (interpreter);

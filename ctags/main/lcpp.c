@@ -166,7 +166,7 @@ extern void cppEndStatement (void)
 *   directives and may emit a tag for #define directives.
 */
 
-/*  This puts a character back into the input queue for the source File.
+/*  This puts a character back into the input queue for the input File.
  *  Up to two characters may be ungotten.
  */
 extern void cppUngetc (const int c)

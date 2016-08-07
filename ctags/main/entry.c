@@ -1,9 +1,8 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for creating tag entries.
 */
@@ -11,19 +10,19 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <string.h>
-#include <ctype.h>      /* to define isspace () */
+#include <ctype.h>        /* to define isspace () */
 #include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 
 #if defined (HAVE_SYS_TYPES_H)
-# include <sys/types.h>     /* to declare off_t on some hosts */
+# include <sys/types.h>	  /* to declare off_t on some hosts */
 #endif
 #if defined (HAVE_TYPES_H)
-# include <types.h>         /* to declare off_t on some hosts */
+# include <types.h>       /* to declare off_t on some hosts */
 #endif
 
 
@@ -159,14 +158,14 @@ static void addPseudoTags (void)
 	}
 }
 
-static void updateSortedFlag (const char *const line,
-							  MIO *const mio, MIOPos startOfLine)
+static void updateSortedFlag (
+		const char *const line, MIO *const mio, MIOPos startOfLine)
 {
 	const char *const tab = strchr (line, '\t');
 
 	if (tab != NULL)
 	{
-		const long boolOffset = tab - line + 1;         /* where it should be */
+		const long boolOffset = tab - line + 1;  /* where it should be */
 
 		if (line [boolOffset] == '0'  ||  line [boolOffset] == '1')
 		{
@@ -231,7 +230,7 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 		}
 		line = readLineRaw (TagFile.vLine, mio);
 	}
-	while (line != NULL)                        /* skip to end of file */
+	while (line != NULL)  /* skip to end of file */
 	{
 		++linesRead;
 		line = readLineRaw (TagFile.vLine, mio);

@@ -1,19 +1,18 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   External interface to entry.c
 */
-#ifndef _ENTRY_H
-#define _ENTRY_H
+#ifndef CTAGS_MAIN_ENTRY_H
+#define CTAGS_MAIN_ENTRY_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include "mio.h"
 #include "vstring.h"
@@ -96,6 +95,6 @@ extern void endEtagsFile (const char *const name);
 extern void makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
 
-#endif  /* _ENTRY_H */
+#endif  /* CTAGS_MAIN_ENTRY_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

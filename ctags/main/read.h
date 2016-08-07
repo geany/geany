@@ -1,19 +1,18 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   External interface to read.c
 */
-#ifndef _READ_H
-#define _READ_H
+#ifndef CTAGS_MAIN_READ_H
+#define CTAGS_MAIN_READ_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <stdio.h>
 #include <ctype.h>
@@ -40,17 +39,15 @@
 */
 
 enum eCharacters {
-	/*  White space characters.
-	 */
-	SPACE   = ' ',
-	NEWLINE = '\n',
-	CRETURN = '\r',
-	FORMFEED    = '\f',
-	TAB     = '\t',
-	VTAB    = '\v',
+	/* white space characters */
+	SPACE         = ' ',
+	NEWLINE       = '\n',
+	CRETURN       = '\r',
+	FORMFEED      = '\f',
+	TAB           = '\t',
+	VTAB          = '\v',
 
-	/*  Some hard to read characters.
-	 */
+	/* some hard to read characters */
 	DOUBLE_QUOTE  = '"',
 	SINGLE_QUOTE  = '\'',
 	BACKSLASH     = '\\',
@@ -120,6 +117,6 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
                            const char *const fileName, const langType language );
 #define bufferClose fileClose
 
-#endif  /* _READ_H */
+#endif  /* CTAGS_MAIN_READ_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

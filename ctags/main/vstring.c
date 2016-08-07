@@ -1,9 +1,8 @@
 /*
-*
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions supporting resizeable strings.
 */
@@ -11,12 +10,13 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
-#include <limits.h>     /* to define INT_MAX */
+#include <limits.h>  /* to define INT_MAX */
 #include <string.h>
 #include <ctype.h>
 
+#include "debug.h"
 #include "routines.h"
 #include "vstring.h"
 
@@ -60,7 +60,7 @@ extern void vStringTruncate (vString *const string, const size_t length)
 	string->length = length;
 	vStringTerminate (string);
 	DebugStatement ( memset (string->buffer + string->length, 0,
-							 string->size - string->length); )
+	                         string->size - string->length); )
 }
 
 extern void vStringClear (vString *const string)
@@ -134,7 +134,7 @@ extern vString *vStringNewInit (const char *const s)
 }
 
 extern void vStringNCatS (
-				vString *const string, const char *const s, const size_t length)
+		vString *const string, const char *const s, const size_t length)
 {
 	const char *p = s;
 	size_t remain = length;
@@ -204,7 +204,7 @@ extern void vStringCopyS (vString *const string, const char *const s)
 }
 
 extern void vStringNCopyS (
-				vString *const string, const char *const s, const size_t length)
+		vString *const string, const char *const s, const size_t length)
 {
 	vStringClear (string);
 	vStringNCatS (string, s, length);

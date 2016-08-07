@@ -1,9 +1,8 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions to sort the tag entries.
 */
@@ -11,10 +10,10 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #if defined (HAVE_STDLIB_H)
-# include <stdlib.h>    /* to declare malloc () */
+# include <stdlib.h>  /* to declare malloc () */
 #endif
 #include <string.h>
 #include <stdio.h>
@@ -124,8 +123,8 @@ static int compareTags (const void *const one, const void *const two)
 	return strcmp (line1, line2);
 }
 
-static void writeSortedTags (char **const table, const size_t numTags,
-							 const boolean toStdout)
+static void writeSortedTags (
+		char **const table, const size_t numTags, const boolean toStdout)
 {
 	MIO *mio;
 	size_t i;
@@ -186,7 +185,7 @@ extern void internalSortTags (const boolean toStdout)
 			break;
 		}
 		else if (*line == '\0'  ||  strcmp (line, "\n") == 0)
-			;           /* ignore blank lines */
+			;  /* ignore blank lines */
 		else
 		{
 			const size_t stringSize = strlen (line) + 1;

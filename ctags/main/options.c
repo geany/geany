@@ -1,9 +1,8 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions to process command line options.
 */
@@ -11,12 +10,12 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>      /* to declare isspace () */
+#include <ctype.h>  /* to declare isspace () */
 
 #include "ctags.h"
 #include "routines.h"
@@ -28,7 +27,7 @@
 
 #define CTAGS_ENVIRONMENT       "CTAGS"
 
-#define CTAGS_FILE      "tags"
+#define CTAGS_FILE  "tags"
 
 
 /*  The following separators are permitted for list options.
@@ -39,14 +38,14 @@
 #define IGNORE_SEPARATORS   ", \t\n"
 
 #ifndef DEFAULT_FILE_FORMAT
-# define DEFAULT_FILE_FORMAT    2
+# define DEFAULT_FILE_FORMAT  2
 #endif
 
 #if defined (WIN32) || defined (HAVE_OPENDIR)
 # define RECURSE_SUPPORTED
 #endif
 
-#define isCompoundOption(c)     (boolean) (strchr ("fohiILpDb", (c)) != NULL)
+#define isCompoundOption(c)  (boolean) (strchr ("fohiILpDb", (c)) != NULL)
 
 
 

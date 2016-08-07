@@ -1,19 +1,18 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Provides the general (non-ctags-specific) environment assumed by all.
 */
-#ifndef _GENERAL_H
-#define _GENERAL_H
+#ifndef CTAGS_MAIN_GENERAL_H
+#define CTAGS_MAIN_GENERAL_H
 
 /*
 *   INCLUDE FILES
 */
-#ifdef HAVE_CONFIG_H
+#if defined (HAVE_CONFIG_H)
 # include <config.h>
 #endif
 #ifdef macintosh
@@ -151,6 +150,6 @@ extern void *unlink (const char *);
 extern char *getenv (const char *);
 #endif
 
-#endif  /* _GENERAL_H */
+#endif  /* CTAGS_MAIN_GENERAL_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

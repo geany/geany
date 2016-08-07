@@ -332,7 +332,7 @@ extern boolean isRecursiveLink (const char* const dirName)
 		char *const separator = strrchr (path, PATH_SEPARATOR);
 		if (separator == NULL)
 			break;
-		else if (separator == path)     /* backed up to root directory */
+		else if (separator == path)  /* backed up to root directory */
 			*(separator + 1) = '\0';
 		else
 			*separator = '\0';
@@ -379,7 +379,7 @@ extern const char *baseFilename (const char *const filePath)
 	if (tail == NULL)
 		tail = filePath;
 	else
-		++tail;                 /* step past last delimiter */
+		++tail;  /* step past last delimiter */
 
 	return tail;
 }
@@ -473,7 +473,6 @@ extern char* absoluteFilename (const char *file)
 {
 	char *slashp, *cp;
 	char *res = NULL;
-
 	if (isAbsolutePath (file))
 		res = eStrdup (file);
 	else
@@ -519,7 +518,7 @@ extern char* absoluteFilename (const char *file)
 	else
 	{
 #ifdef MSDOS_STYLE_PATH
-		/* Canonicalize drive letter case.  */
+		/* Canonicalize drive letter case. */
 		if (res [1] == ':'  &&  islower (res [0]))
 			res [0] = toupper (res [0]);
 #endif
@@ -572,11 +571,11 @@ extern char* relativeFilename (const char *file, const char *dir)
 	while (*fp++ == *dp++)
 		continue;
 	fp--;
-	dp--;                       /* back to the first differing char */
+	dp--;  /* back to the first differing char */
 	do
 	{                           /* look at the equal chars until '/' */
 		if (fp == absdir)
-			return absdir;      /* first char differs, give up */
+			return absdir;  /* first char differs, give up */
 		fp--;
 		dp--;
 	} while (*fp != '/');

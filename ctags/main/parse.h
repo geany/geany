@@ -1,21 +1,20 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Private definitions for parsing support.
 */
-#ifndef _PARSE_H
-#define _PARSE_H
+#ifndef CTAGS_MAIN_PARSE_H
+#define CTAGS_MAIN_PARSE_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
-#include "parsers.h"    /* contains list of parsers */
+#include "parsers.h"  /* contains list of parsers */
 #include "strlist.h"
 #include "entry.h"
 
@@ -59,15 +58,15 @@ typedef struct {
 
 typedef struct {
 	/* defined by parser */
-	char* name;             /* name of language */
-	kindOption* kinds;          /* tag kinds handled by parser */
-	unsigned int kindCount;     /* size of `kinds' list */
-	kindOption* fileKind;           /* kind for overriding the default fileKind */
-	const char* const* extensions;  /* list of default extensions */
-	const char* const* patterns;    /* list of default file name patterns */
-	parserInitialize initialize;    /* initialization routine, if needed */
-	simpleParser parser;        /* simple parser (common case) */
-	rescanParser parser2;       /* rescanning parser (unusual case) */
+	char* name;                    /* name of language */
+	kindOption* kinds;             /* tag kinds handled by parser */
+	unsigned int kindCount;        /* size of `kinds' list */
+	kindOption* fileKind;          /* kind for overriding the default fileKind */
+	const char *const *extensions; /* list of default extensions */
+	const char *const *patterns;   /* list of default file name patterns */
+	parserInitialize initialize;   /* initialization routine, if needed */
+	simpleParser parser;           /* simple parser (common case) */
+	rescanParser parser2;          /* rescanning parser (unusual case) */
 	unsigned int method;           /* See PARSE__... definitions above */
 
 	/* used internally */
@@ -157,6 +156,6 @@ extern tagEntryFunction TagEntryFunction;
 extern void *TagEntryUserData;
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 
-#endif  /* _PARSE_H */
+#endif  /* CTAGS_MAIN_PARSE_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

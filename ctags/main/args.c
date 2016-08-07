@@ -1,9 +1,8 @@
 /*
-*
-*   Copyright (c) 1999-2001, Darren Hiebert
+*   Copyright (c) 1999-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for reading command line arguments.
 */
@@ -11,13 +10,14 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
 #include "args.h"
+#include "debug.h"
 #include "routines.h"
 
 /*

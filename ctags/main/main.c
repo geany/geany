@@ -71,7 +71,7 @@
 /*
 *   MACROS
 */
-#define plural(value)           (((unsigned long)(value) == 1L) ? "" : "s")
+#define plural(value)  (((unsigned long)(value) == 1L) ? "" : "s")
 
 /*
 *   DATA DEFINITIONS

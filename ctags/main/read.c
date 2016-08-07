@@ -258,7 +258,7 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 	 */
 	if (File.mio != NULL)
 	{
-		mio_free (File.mio);  /* close any open source file */
+		mio_free (File.mio);  /* close any open input file */
 		File.mio = NULL;
 	}
 
@@ -365,8 +365,8 @@ static void fileNewline (void)
 	File.newLine = FALSE;
 	File.input.lineNumber++;
 	File.source.lineNumber++;
-	DebugStatement ( if (Option.breakLine == File.lineNumber) lineBreak (); )
-	DebugStatement ( debugPrintf (DEBUG_RAW, "%6ld: ", File.lineNumber); )
+	DebugStatement ( if (Option.breakLine == File.input.lineNumber) lineBreak (); )
+	DebugStatement ( debugPrintf (DEBUG_RAW, "%6ld: ", File.input.lineNumber); )
 }
 
 /*  This function reads a single character from the stream, performing newline
@@ -412,7 +412,7 @@ readnext:
 		if (next != NEWLINE)
 			mio_ungetc (File.mio, next);
 
-		c = NEWLINE;                            /* convert CR into newline */
+		c = NEWLINE;  /* convert CR into newline */
 		File.newLine = TRUE;
 		mio_getpos (File.mio, &StartOfLine);
 	}

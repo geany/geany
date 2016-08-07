@@ -1,17 +1,16 @@
 /*
-*
-*   Copyright (c) 2000-2001, Darren Hiebert
+*   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   External interface to all language parsing modules.
 *
-*   To add a new language parser, you need only modify this single source
+*   To add a new language parser, you need only modify this single input
 *   file to add the name of the parser definition function.
 */
-#ifndef _PARSERS_H
-#define _PARSERS_H
+#ifndef CTAGS_MAIN_PARSERS_H
+#define CTAGS_MAIN_PARSERS_H
 
 /* Add the name of any new parser definition function here */
 /* keep src/tagmanager/tm_parser.h in sync */
@@ -68,6 +67,6 @@
 	ZephirParser, \
 	PowerShellParser
 
-#endif  /* _PARSERS_H */
+#endif  /* CTAGS_MAIN_PARSERS_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */

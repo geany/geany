@@ -18,7 +18,7 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"    /* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <stdarg.h>
 
@@ -88,7 +88,7 @@ typedef struct sOptionValues {
 /*
 *   GLOBAL VARIABLES
 */
-extern CONST_OPTION optionValues        Option;
+extern CONST_OPTION optionValues		Option;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -106,6 +106,6 @@ extern void freeOptionResources (void);
 
 void addIgnoreListFromFile (const char *const fileName);
 
-#endif  /* _OPTIONS_H */
+#endif  /* CTAGS_MAIN_OPTIONS_H */
 
 /* vi:set tabstop=4 shiftwidth=4: */
