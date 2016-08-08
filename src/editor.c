@@ -1612,6 +1612,26 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 }
 
 
+static gboolean enable_parentheses_alignment(GeanyEditor *editor, const GeanyIndentPrefs *iprefs)
+{
+	GeanyFiletype *ft = editor->document->file_type;
+
+	if (! iprefs->paren_align || iprefs->auto_indent_mode < GEANY_AUTOINDENT_CURRENTCHARS)
+		return FALSE;
+
+	/* ignore NONE filetype */
+	if (ft->id == GEANY_FILETYPES_NONE)
+		return FALSE;
+
+	/* ignore markup languages.  We could selectively enable it in code portions (if any), but we
+	 * don't have enough information (comment/string styles) on those portions to do it right */
+	if (ft->group == GEANY_FILETYPE_GROUP_MARKUP)
+		return FALSE;
+
+	return TRUE;
+}
+
+
 /* returns whether the indentation *level* changed.
  * new sizes and alignment are returned in @p size_ and @p align */
 static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
@@ -1647,7 +1667,7 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
 			additional_indent = iprefs->width * get_xml_indent(sci, line);
 		}
 
-		if (iprefs->paren_align)
+		if (enable_parentheses_alignment(editor, iprefs))
 		{
 			gint parenthesis_witdh = get_parenthesis_indent(sci, line, iprefs, line_matched);
 
@@ -1880,7 +1900,7 @@ static void close_block(GeanyEditor *editor, gint pos)
 			gchar *ind;
 			gchar *text;
 
-			if (iprefs->paren_align && line_unmatched_parentheses(sci, brace_line) < 0)
+			if (enable_parentheses_alignment(editor, iprefs) && line_unmatched_parentheses(sci, brace_line) < 0)
 				size = get_matching_parenthesis_indent(sci, brace_line, NULL);
 			if (size < 0)
 				size = sci_get_line_indentation(sci, brace_line);
