@@ -867,6 +867,7 @@ static void create_fif_dialog(void)
 
 	fif_dlg.dialog = gtk_dialog_new_with_buttons(
 		_("Find in Files"), GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(fif_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -1641,6 +1642,8 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 		else
 			ui_set_statusbar(FALSE, _("No text to find."));
 	}
+	else if (response == GTK_RESPONSE_HELP)
+		utils_open_help("#find-in-files");
 	else
 		gtk_widget_hide(fif_dlg.dialog);
 }
