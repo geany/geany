@@ -463,6 +463,7 @@ static void create_find_dialog(void)
 
 	find_dlg.dialog = gtk_dialog_new_with_buttons(_("Find"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(find_dlg.dialog));
 	gtk_widget_set_name(find_dlg.dialog, "GeanyDialogSearch");
@@ -1298,6 +1299,8 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(find_dlg.dialog);
+	else if (response == GTK_RESPONSE_HELP)
+		utils_open_help("#find");
 	else
 	{
 		GeanyDocument *doc = document_get_current();
