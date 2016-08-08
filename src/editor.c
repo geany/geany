@@ -1479,9 +1479,13 @@ static gint get_last_occurrence_on_code_line(ScintillaObject *sci, gint line, gc
 	start = sci_get_position_from_line(sci, line);
 	end = sci_get_line_end_position(sci, line);
 	for (; start < end; start = sci_get_position_after(sci, start))
+	{
 		if (highlighting_is_code_style (lexer, sci_get_style_at (sci, start)) &&
 			sci_get_char_at(sci, start) == ch)
+		{
 			pos = start;
+		}
+	}
 
 	return pos;
 }
@@ -1611,7 +1615,7 @@ static gint get_xml_indent(ScintillaObject *sci, gint line)
 /* returns whether the indentation *level* changed.
  * new sizes and alignment are returned in @p size_ and @p align */
 static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
-		gint *size_, gint *align, gint *line_matched)
+		gint *indent_size, gint *align, gint *line_matched)
 {
 	ScintillaObject *sci = editor->sci;
 	gint size;
@@ -1696,7 +1700,7 @@ static gboolean get_indent_size_after_line(GeanyEditor *editor, gint line,
 		}
 	}
 
-	*size_ = size;
+	*indent_size = size;
 
 	return lvl_changed;
 }
