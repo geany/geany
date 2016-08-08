@@ -617,6 +617,7 @@ static void create_replace_dialog(void)
 
 	replace_dlg.dialog = gtk_dialog_new_with_buttons(_("Replace"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(replace_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
@@ -1451,6 +1452,11 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 	{
 		gtk_widget_hide(replace_dlg.dialog);
+		return;
+	}
+	else if (response == GTK_RESPONSE_HELP)
+	{
+		utils_open_help("#replace");
 		return;
 	}
 
