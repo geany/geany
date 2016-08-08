@@ -365,8 +365,8 @@ extern void copyFile (const char *const from, const char *const to, const long s
 static int replacementTruncate (const char *const name, const long size)
 {
 	char *tempName = NULL;
-	MIO *mio = tempFile ("w", &tempName);
-	fclose (mio);
+	FILE *fp = tempFile ("w", &tempName);
+	fclose (fp);
 	copyFile (name, tempName, size);
 	copyFile (tempName, name, WHOLE_FILE);
 	remove (tempName);
