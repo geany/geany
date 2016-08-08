@@ -1588,7 +1588,6 @@ static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gp
 
 static void open_preferences_help(void)
 {
-	gchar *uri;
 	const gchar *label, *suffix = NULL;
 	GtkNotebook *notebook = GTK_NOTEBOOK(
 		ui_lookup_widget(ui_widgets.prefs_dialog, "notebook2"));
@@ -1624,9 +1623,7 @@ static void open_preferences_help(void)
 	else if (utils_str_equal(label, _("Terminal")))
 		suffix = "#terminal-vte-preferences";
 
-	uri = utils_get_help_url(suffix);
-	utils_open_browser(uri);
-	g_free(uri);
+	utils_open_help(suffix);
 }
 
 

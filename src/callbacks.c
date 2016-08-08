@@ -941,11 +941,7 @@ void on_toolbutton_goto_clicked(GtkAction *action, gpointer user_data)
 
 void on_help1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gchar *uri;
-
-	uri = utils_get_help_url(NULL);
-	utils_open_browser(uri);
-	g_free(uri);
+	utils_open_help(NULL);
 }
 
 
