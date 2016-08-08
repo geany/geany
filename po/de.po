@@ -2010,7 +2010,7 @@ msgstr "Zeilenen_den festlegen"
 
 #: ../data/geany.glade.h:425
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Auf _CR/LF setzen und umwandeln (Winows)"
+msgstr "Auf _CR/LF setzen und umwandeln (Windows)"
 
 #: ../data/geany.glade.h:426
 msgid "Convert and Set to _LF (Unix)"
