@@ -262,44 +262,6 @@ static boolean isTagFile (const char *const filename)
 	return ok;
 }
 
-extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
-{
-	enum { BufferSize = 1000 };
-	long toRead, numRead;
-	char* buffer = xMalloc (BufferSize, char);
-	long remaining = size;
-	do
-	{
-		toRead = (0 < remaining && remaining < BufferSize) ?
-					remaining : BufferSize;
-		numRead = mio_read (fromMio, buffer, (size_t) 1, (size_t) toRead);
-		if (mio_write (toMio, buffer, (size_t)1, (size_t)numRead) < (size_t)numRead)
-			error (FATAL | PERROR, "cannot complete write");
-		if (remaining > 0)
-			remaining -= numRead;
-	} while (numRead == toRead  &&  remaining != 0);
-	eFree (buffer);
-}
-
-extern void copyFile (const char *const from, const char *const to, const long size)
-{
-	MIO* const fromMio = mio_new_file_full (from, "rb", g_fopen, fclose);
-	if (fromMio == NULL)
-		error (FATAL | PERROR, "cannot open file to copy");
-	else
-	{
-		MIO* const toMio = mio_new_file_full (to, "wb", g_fopen, fclose);
-		if (toMio == NULL)
-			error (FATAL | PERROR, "cannot open copy destination");
-		else
-		{
-			copyBytes (fromMio, toMio, size);
-			mio_free (toMio);
-		}
-		mio_free (fromMio);
-	}
-}
-
 extern void openTagFile (void)
 {
 	setDefaultTagFileName ();
@@ -359,6 +321,44 @@ extern void openTagFile (void)
 }
 
 #ifdef USE_REPLACEMENT_TRUNCATE
+
+extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
+{
+	enum { BufferSize = 1000 };
+	long toRead, numRead;
+	char* buffer = xMalloc (BufferSize, char);
+	long remaining = size;
+	do
+	{
+		toRead = (0 < remaining && remaining < BufferSize) ?
+					remaining : BufferSize;
+		numRead = mio_read (fromMio, buffer, (size_t) 1, (size_t) toRead);
+		if (mio_write (toMio, buffer, (size_t)1, (size_t)numRead) < (size_t)numRead)
+			error (FATAL | PERROR, "cannot complete write");
+		if (remaining > 0)
+			remaining -= numRead;
+	} while (numRead == toRead  &&  remaining != 0);
+	eFree (buffer);
+}
+
+extern void copyFile (const char *const from, const char *const to, const long size)
+{
+	MIO* const fromMio = mio_new_file_full (from, "rb", g_fopen, fclose);
+	if (fromMio == NULL)
+		error (FATAL | PERROR, "cannot open file to copy");
+	else
+	{
+		MIO* const toMio = mio_new_file_full (to, "wb", g_fopen, fclose);
+		if (toMio == NULL)
+			error (FATAL | PERROR, "cannot open copy destination");
+		else
+		{
+			copyBytes (fromMio, toMio, size);
+			mio_free (toMio);
+		}
+		mio_free (fromMio);
+	}
+}
 
 /*  Replacement for missing library function.
  */
