@@ -309,7 +309,7 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	ui_hookup_widget(dialog, check_regexp, "check_regexp");
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_regexp), FALSE);
 	gtk_widget_set_tooltip_text(check_regexp, _("Use POSIX-like regular expressions. "
-		"For detailed information about using regular expressions, please read the documentation."));
+		"For tips about using regular expressions, please read the Geany manual."));
 	g_signal_connect(check_regexp, "toggled",
 		G_CALLBACK(on_find_replace_checkbutton_toggled), dialog);
 
