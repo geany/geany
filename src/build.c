@@ -2009,7 +2009,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		entry_x_padding, sep_padding);
 	++row;
 	label = gtk_label_new(NULL);
-	help_uri = utils_get_help_url("#substitutions-in-commands-and-working-directories");
+	help_uri = utils_get_help_url("#build-command-substitutions");
 	txt = g_strdup_printf(_("%%d, %%e, %%f, %%p, %%l are substituted in command and directory fields, "
 		"see <a href=\"%s\">the manual</a> for details."), help_uri);
 	SETPTR(txt, g_strconcat("<i>", txt, "</i>", NULL));
@@ -2196,7 +2196,7 @@ static void show_build_commands_dialog(void)
 		response = gtk_dialog_run(GTK_DIALOG(dialog));
 
 		if (response == GTK_RESPONSE_HELP)
-			utils_open_help("#build-menu-commands-dialog");
+			utils_open_help("#set-build-commands-dialog");
 	}
 	while (response == GTK_RESPONSE_HELP);
 

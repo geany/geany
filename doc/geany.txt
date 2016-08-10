@@ -1149,6 +1149,8 @@ the toolbar. This performs a case-insensitive search in the current
 document whilst you type. Pressing Enter will search again, and pressing
 Shift-Enter will search backwards.
 
+.. _find-dialog:
+
 Find
 ^^^^
 
@@ -1252,6 +1254,8 @@ shown in the Messages tab of the Message Window.
     menu.
 
 
+.. _find-in-files-dialog:
+
 Find in files
 ^^^^^^^^^^^^^
 
@@ -1318,6 +1322,8 @@ SVN Example: ``--exclude=*.svn-base``
 
 The --exclude argument only matches the file name part, not the path.
 
+
+.. _replace-dialog:
 
 Replace
 ^^^^^^^
@@ -3084,6 +3090,8 @@ The following notes on the table reference cells by coordinate as (group,source)
   editing the appropriate file, see `Preferences file format`_ and `Project file
   format`_.
 
+.. _set-build-commands-dialog:
+
 Build menu commands dialog
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3125,6 +3133,8 @@ The clear buttons remove the definition from the configuration source you are ed
 When you do this the command from the next lower priority source will be shown.
 To hide lower priority menu items without having anything show in the menu
 configure with a nothing in the label but at least one character in the command.
+
+.. _build-command-substitutions:
 
 Substitutions in commands and working directories
 `````````````````````````````````````````````````

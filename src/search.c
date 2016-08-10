@@ -1302,7 +1302,7 @@ on_find_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	if (response == GTK_RESPONSE_CANCEL || response == GTK_RESPONSE_DELETE_EVENT)
 		gtk_widget_hide(find_dlg.dialog);
 	else if (response == GTK_RESPONSE_HELP)
-		utils_open_help("#find");
+		utils_open_help("#find-dialog");
 	else
 	{
 		GeanyDocument *doc = document_get_current();
@@ -1457,7 +1457,7 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	else if (response == GTK_RESPONSE_HELP)
 	{
-		utils_open_help("#replace");
+		utils_open_help("#replace-dialog");
 		return;
 	}
 
@@ -1643,7 +1643,7 @@ on_find_in_files_dialog_response(GtkDialog *dialog, gint response,
 			ui_set_statusbar(FALSE, _("No text to find."));
 	}
 	else if (response == GTK_RESPONSE_HELP)
-		utils_open_help("#find-in-files");
+		utils_open_help("#find-in-files-dialog");
 	else
 		gtk_widget_hide(fif_dlg.dialog);
 }
