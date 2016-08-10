@@ -1898,6 +1898,7 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 	GtkTable *table;
 	const gchar **ch;
 	gchar *txt;
+	gchar *help_uri;
 	guint col, row, cmdindex;
 	guint cmd;
 	guint src;
@@ -2008,8 +2009,14 @@ GtkWidget *build_commands_table(GeanyDocument *doc, GeanyBuildSource dst, BuildT
 		entry_x_padding, sep_padding);
 	++row;
 	label = gtk_label_new(NULL);
-	ui_label_set_markup(GTK_LABEL(label), "<i>%s</i>",
-		_("%d, %e, %f, %p, %l are substituted in command and directory fields, see manual for details."));
+	help_uri = utils_get_help_url("#substitutions-in-commands-and-working-directories");
+	txt = g_strdup_printf(_("%%d, %%e, %%f, %%p, %%l are substituted in command and directory fields, "
+		"see <a href=\"%s\">the manual</a> for details."), help_uri);
+	SETPTR(txt, g_strconcat("<i>", txt, "</i>", NULL));
+	gtk_label_set_text(GTK_LABEL(label), txt);
+	gtk_label_set_use_markup(GTK_LABEL(label), TRUE);
+	g_free(help_uri);
+	g_free(txt);
 	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
 	gtk_table_attach(table, label, 0, DC_N_COL, row, row + 1, GTK_FILL, GTK_FILL | GTK_EXPAND,
 		entry_x_padding, entry_y_padding);
@@ -2176,6 +2183,7 @@ static void show_build_commands_dialog(void)
 		ft = doc->file_type;
 	dialog = gtk_dialog_new_with_buttons(title, GTK_WINDOW(main_widgets.window),
 										GTK_DIALOG_DESTROY_WITH_PARENT,
+										GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 										GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 										GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL);
 	table = build_commands_table(doc, GEANY_BCS_PREF, &table_data, ft);
@@ -2183,7 +2191,14 @@ static void show_build_commands_dialog(void)
 	gtk_box_pack_start(GTK_BOX(vbox), table, TRUE, TRUE, 0);
 	gtk_widget_show_all(dialog);
 	/* run modally to prevent user changing idx filetype */
-	response = gtk_dialog_run(GTK_DIALOG(dialog));
+	do
+	{
+		response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+		if (response == GTK_RESPONSE_HELP)
+			utils_open_help("#build-menu-commands-dialog");
+	}
+	while (response == GTK_RESPONSE_HELP);
 
 	prefdsts.dst[GEANY_GBG_NON_FT] = &non_ft_pref;
 	if (ft != NULL)
