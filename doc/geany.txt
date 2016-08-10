@@ -2022,6 +2022,8 @@ Icon size
     The choice System default uses whatever icon size is set by GTK.
 
 
+.. _project-dialog-editor:
+
 Editor Features preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2070,6 +2072,8 @@ Comment toggle marker
     A string which is added when toggling a line comment in a source file.
     It is used to mark the comment as toggled.
 
+
+.. _project-dialog-indentation:
 
 Editor Indentation preferences
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2331,6 +2335,8 @@ Default end of line characters
     On Windows systems, you generally want to use CR/LF which are the common
     characters to mark line breaks.
     On Unix-like systems, LF is default and CR is used on MAC systems.
+
+.. _project-dialog-files:
 
 Saving files
 ````````````
@@ -2759,6 +2765,8 @@ The Base path text field is setup to use ``~/projects/name``. This
 can safely be set to any existing path -- it will not touch the file
 structure contained in it.
 
+
+.. _project-dialog-project:
 
 Project properties
 ^^^^^^^^^^^^^^^^^^

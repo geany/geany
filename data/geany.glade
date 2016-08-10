@@ -8473,6 +8473,21 @@
                 <property name="position">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="button6">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">2</property>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -8487,7 +8502,7 @@
             <property name="can_focus">True</property>
             <property name="border_width">6</property>
             <child>
-              <object class="GtkTable" id="table_project_dialog_project">
+              <object class="GtkTable" id="project_dialog_page_project">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
@@ -8709,7 +8724,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkTable" id="table17">
+              <object class="GtkTable" id="project_dialog_page_indentation">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">6</property>
@@ -8925,7 +8940,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox_project_dialog_editor">
+              <object class="GtkVBox" id="project_dialog_page_editor">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">5</property>
@@ -9227,7 +9242,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkVBox" id="vbox3">
+              <object class="GtkVBox" id="project_dialog_page_files">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="border_width">5</property>
@@ -9354,6 +9369,7 @@
     <action-widgets>
       <action-widget response="-6">cancelbutton1</action-widget>
       <action-widget response="-5">okbutton1</action-widget>
+      <action-widget response="-11">button6</action-widget>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="properties_dialog">
