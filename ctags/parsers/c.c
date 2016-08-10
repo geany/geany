@@ -1464,8 +1464,7 @@ static void makeTag (const tokenInfo *const token,
 		printTagEntry(&e);
 #endif
 		makeTagEntry (&e);
-		if (NULL != TagEntryFunction)
-			makeExtraTagEntry (type, &e, scope);
+		makeExtraTagEntry (type, &e, scope);
 		vStringDelete (scope);
 		if (NULL != e.extensionFields.signature)
 			free((char *) e.extensionFields.signature);
