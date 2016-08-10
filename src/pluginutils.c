@@ -392,6 +392,15 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 }
 
 
+static void on_plugin_configure_switch_page(GtkNotebook *notebook, GtkWidget *page,
+		guint page_num, GtkDialog *dialog)
+{
+	Plugin *p = g_object_get_data(G_OBJECT(page), "geany-plugin");
+
+	gtk_dialog_set_response_sensitive(dialog, GTK_RESPONSE_HELP, p && p->cbs.help);
+}
+
+
 /* multiple plugin configure dialog
  * current_plugin can be NULL */
 static void configure_plugins(Plugin *current_plugin)
@@ -402,6 +411,7 @@ static void configure_plugins(Plugin *current_plugin)
 
 	dialog = gtk_dialog_new_with_buttons(_("Configure Plugins"),
 		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
+		GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 		GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
@@ -411,6 +421,8 @@ static void configure_plugins(Plugin *current_plugin)
 	nb = gtk_notebook_new();
 	gtk_notebook_set_scrollable(GTK_NOTEBOOK(nb), TRUE);
 	gtk_box_pack_start(GTK_BOX(vbox), nb, TRUE, TRUE, 0);
+
+	g_signal_connect(nb, "switch-page", G_CALLBACK(on_plugin_configure_switch_page), dialog);
 
 	foreach_list(node, active_plugin_list)
 	{
@@ -422,18 +434,42 @@ static void configure_plugins(Plugin *current_plugin)
 			GtkWidget *label = gtk_label_new(p->info.name);
 			gint n = gtk_notebook_append_page(GTK_NOTEBOOK(nb), page, label);
 
+			g_object_set_data(G_OBJECT(page), "geany-plugin", p);
+
 			if (p == current_plugin)
 				cur_page = n;
 		}
 	}
 	if (gtk_notebook_get_n_pages(GTK_NOTEBOOK(nb)))
 	{
+		gint response;
+
 		gtk_widget_show_all(vbox);
 		if (cur_page >= 0)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), cur_page);
 
 		/* run the dialog */
-		while (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY);
+		do
+		{
+			response = gtk_dialog_run(GTK_DIALOG(dialog));
+
+			if (response == GTK_RESPONSE_HELP)
+			{
+				GtkWidget *page;
+
+				cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(nb));
+				page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(nb), cur_page);
+
+				if (page)
+				{
+					Plugin *p = g_object_get_data(G_OBJECT(page), "geany-plugin");
+
+					if (p && p->cbs.help)
+						p->cbs.help(&p->public, p->cb_data);
+				}
+			}
+		}
+		while (response == GTK_RESPONSE_APPLY || response == GTK_RESPONSE_HELP);
 	}
 	else
 		utils_beep();
