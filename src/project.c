@@ -152,6 +152,7 @@ void project_new(void)
 
 	e.dialog = gtk_dialog_new_with_buttons(_("New Project"), GTK_WINDOW(main_widgets.window),
 										 GTK_DIALOG_DESTROY_WITH_PARENT,
+										 GTK_STOCK_HELP, GTK_RESPONSE_HELP,
 										 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL, NULL);
 
 	gtk_widget_set_name(e.dialog, "GeanyDialogProject");
@@ -228,7 +229,11 @@ void project_new(void)
 
 	while (1)
 	{
-		if (gtk_dialog_run(GTK_DIALOG(e.dialog)) != GTK_RESPONSE_OK)
+		gint response = gtk_dialog_run(GTK_DIALOG(e.dialog));
+
+		if (response == GTK_RESPONSE_HELP)
+			utils_open_help("#new-project-dialog");
+		else if (response != GTK_RESPONSE_OK)
 		{
 			// any open docs were meant to be moved into the project
 			// rewrite default session because it was cleared
@@ -243,7 +248,7 @@ void project_new(void)
 			break;
 		}
 		// dialog confirmed
-		if (update_config(&e, TRUE))
+		else if (update_config(&e, TRUE))
 		{
 			// app->project is now set
 			if (!write_config(TRUE))

@@ -2753,6 +2753,8 @@ file that was in use at the end of the last session will be reopened.
 The project menu items are detailed below.
 
 
+.. _new-project-dialog:
+
 New project
 ^^^^^^^^^^^
 
