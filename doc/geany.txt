@@ -843,6 +843,8 @@ location". This makes it easier to navigate in e.g.  foreign code
 and between different files.
 
 
+.. _custom-commands-dialog:
+
 Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
