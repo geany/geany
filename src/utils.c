@@ -1886,7 +1886,7 @@ GSList *utils_get_config_files(const gchar *subdir)
 
 /* Suffix can be NULL or a string which should be appended to the Help URL like
  * an anchor link, e.g. "#some_anchor". */
-static gchar *utils_get_help_url(const gchar *suffix)
+gchar *utils_get_help_url(const gchar *suffix)
 {
 	gint skip;
 	gchar *uri;
