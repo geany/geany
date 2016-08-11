@@ -876,6 +876,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 	monitor_file_setup(doc);
 #else
 	doc->priv->mtime = 0;
+	doc->priv->file_size = 0;
 #endif
 
 	/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
@@ -916,25 +917,30 @@ typedef struct
 	gchar		*enc;
 	gboolean	 bom;
 	time_t		 mtime;	/* modification time, read by stat::st_mtime */
+	guint64		 file_size;
 	gboolean	 readonly;
 } FileData;
 
 
-static gboolean get_mtime(const gchar *locale_filename, time_t *time)
+static gboolean get_mtime_file_size(const gchar *locale_filename, time_t *time, guint64 *file_size)
 {
 	GError *error = NULL;
 	const gchar *err_msg = NULL;
 
+	*file_size = 0;
+
 	if (USE_GIO_FILE_OPERATIONS)
 	{
 		GFile *file = g_file_new_for_path(locale_filename);
-		GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED, G_FILE_QUERY_INFO_NONE, NULL, &error);
+		GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_TIME_MODIFIED "," G_FILE_ATTRIBUTE_STANDARD_SIZE, G_FILE_QUERY_INFO_NONE, NULL, &error);
 
 		if (info)
 		{
 			GTimeVal timeval;
-
-			g_file_info_get_modification_time(info, &timeval);
+			if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_TIME_MODIFIED))
+				g_file_info_get_modification_time(info, &timeval);
+			if (g_file_info_has_attribute(info, G_FILE_ATTRIBUTE_STANDARD_SIZE))
+				*file_size = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_STANDARD_SIZE);
 			g_object_unref(info);
 			*time = timeval.tv_sec;
 		}
@@ -948,7 +954,10 @@ static gboolean get_mtime(const gchar *locale_filename, time_t *time)
 		GStatBuf st;
 
 		if (g_stat(locale_filename, &st) == 0)
+		{
 			*time = st.st_mtime;
+			*file_size = st.st_size;
+		}
 		else
 			err_msg = g_strerror(errno);
 	}
@@ -981,7 +990,7 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	filedata->bom = FALSE;
 	filedata->readonly = FALSE;
 
-	if (!get_mtime(locale_filename, &filedata->mtime))
+	if (!get_mtime_file_size(locale_filename, &filedata->mtime, &filedata->file_size))
 		return FALSE;
 
 	if (USE_GIO_FILE_OPERATIONS)
@@ -1406,6 +1415,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		}
 
 		doc->priv->mtime = filedata.mtime; /* get the modification time from file and keep it */
+		doc->priv->file_size = filedata.file_size; /* get the file size from file and keep it */
 		g_free(doc->encoding);	/* if reloading, free old encoding */
 		doc->encoding = filedata.enc;
 		doc->has_bom = filedata.bom;
@@ -1658,12 +1668,13 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 }
 
 
-static void document_update_timestamp(GeanyDocument *doc, const gchar *locale_filename)
+static void document_update_mtime_file_size(GeanyDocument *doc, const gchar *locale_filename)
 {
 #ifndef USE_GIO_FILEMON
 	g_return_if_fail(doc != NULL);
 
-	get_mtime(locale_filename, &doc->priv->mtime); /* get the modification time from file and keep it */
+	/* get the modification time and file size from file and keep it */
+	get_mtime_file_size(locale_filename, &doc->priv->mtime, &doc->priv->file_size);
 #endif
 }
 
@@ -2207,7 +2218,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		sci_set_savepoint(doc->editor->sci);
 
 		if (file_prefs.disk_check_timeout > 0)
-			document_update_timestamp(doc, locale_filename);
+			document_update_mtime_file_size(doc, locale_filename);
 
 		/* update filetype-related things */
 		document_set_filetype(doc, doc->file_type);
@@ -3688,6 +3699,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
 	time_t mtime;
+	guint64 file_size;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
 
@@ -3716,16 +3728,17 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 	}
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
-	if (!get_mtime(locale_filename, &mtime))
+	if (!get_mtime_file_size(locale_filename, &mtime, &file_size))
 	{
 		monitor_resave_missing_file(doc);
 		/* doc may be closed now */
 		ret = TRUE;
 	}
-	else if (doc->priv->mtime < mtime)
+	else if (doc->priv->mtime < mtime || doc->priv->file_size != file_size)
 	{
 		/* make sure the user is not prompted again after he cancelled the "reload file?" message */
 		doc->priv->mtime = mtime;
+		doc->priv->file_size = file_size;
 		monitor_reload_file(doc);
 		/* doc may be closed now */
 		ret = TRUE;
