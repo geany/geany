@@ -2116,9 +2116,6 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 		return FALSE;
 	
 	scope[0] = '\0';
-	//const gchar *sname;
-	//symbols_get_current_scope(editor->document, &sname);
-	//printf("Current scope: %s\n", sname);
 	read_scope_prefix(editor, pos - 1, scope, sizeof scope, NULL);
 	str = find_calltip(word, scope, editor->document->file_type);
 	if (str)
