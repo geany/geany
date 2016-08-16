@@ -62,7 +62,6 @@ typedef enum eFortranLineType {
 /*  Used to specify type of keyword.
  */
 typedef enum eKeywordId {
-	KEYWORD_NONE = -1,
 	KEYWORD_allocatable,
 	KEYWORD_assignment,
 	KEYWORD_associate,

@@ -16,6 +16,8 @@
 
 #include "parse.h"
 
+#define KEYWORD_NONE -1
+
 /*
 *   FUNCTION PROTOTYPES
 */
