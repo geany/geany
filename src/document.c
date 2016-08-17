@@ -1736,10 +1736,11 @@ static void replace_header_filename(GeanyDocument *doc)
  *  @param doc The current document which should be renamed.
  *  @param new_filename The new filename in UTF-8 encoding.
  *
+ *  @return @c TRUE if file was renamed or @c FALSE otherwise.
  *  @since 0.16
  **/
 GEANY_API_SYMBOL
-void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
+gboolean document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 {
 	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
 	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
@@ -1757,6 +1758,7 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 	}
 	g_free(old_locale_filename);
 	g_free(new_locale_filename);
+	return (result == 0);
 }
 
 
