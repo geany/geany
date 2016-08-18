@@ -277,6 +277,7 @@ void vte_init(void)
 		gint i;
 		const gchar *sonames[] = {
 #if GTK_CHECK_VERSION(3, 0, 0)
+			"libvte-2.91.so", "libvte-2.91.so.0", "libvte-2.91.dylib",
 			"libvte2_90.so", "libvte2_90.so.9", "libvte2_90.dylib",
 #else
 			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9", "libvte.dylib",
