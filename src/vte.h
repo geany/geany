@@ -57,7 +57,6 @@ typedef struct
 	gboolean send_selection_unsafe;
 	gint scrollback_lines;
 	gchar *shell;
-	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
 	GdkColor colour_fore;
