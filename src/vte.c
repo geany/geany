@@ -69,6 +69,7 @@ static guint terminal_label_update_source = 0;
 
 /* use vte wordchars to select paths */
 static const gchar VTE_WORDCHARS[] = "-A-Za-z0-9,./?%&#:_";
+static const gchar VTE_ADDITIONAL_WORDCHARS[] = "-,./?%&#:_";
 
 
 /* Incomplete VteTerminal struct from vte/vte.h. */
@@ -108,6 +109,7 @@ struct VteFunctions
 										 GCancellable *cancellable, GError **error);
 	void (*vte_terminal_set_size) (VteTerminal *terminal, glong columns, glong rows);
 	void (*vte_terminal_set_word_chars) (VteTerminal *terminal, const char *spec);
+	void (*vte_terminal_set_word_char_exceptions) (VteTerminal *terminal, const char *exceptions);
 	void (*vte_terminal_set_mouse_autohide) (VteTerminal *terminal, gboolean setting);
 	void (*vte_terminal_reset) (VteTerminal *terminal, gboolean full, gboolean clear_history);
 	GType (*vte_terminal_get_type) (void);
@@ -323,7 +325,10 @@ static void create_vte(void)
 	vf->vte_terminal_set_size(VTE_TERMINAL(vte), 30, 1);
 
 	vf->vte_terminal_set_mouse_autohide(VTE_TERMINAL(vte), TRUE);
-	vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
+	if (vf->vte_terminal_set_word_chars)
+		vf->vte_terminal_set_word_chars(VTE_TERMINAL(vte), VTE_WORDCHARS);
+	else if (vf->vte_terminal_set_word_char_exceptions)
+		vf->vte_terminal_set_word_char_exceptions(VTE_TERMINAL(vte), VTE_ADDITIONAL_WORDCHARS);
 
 	gtk_drag_dest_set(vte, GTK_DEST_DEFAULT_ALL,
 		dnd_targets, G_N_ELEMENTS(dnd_targets), GDK_ACTION_COPY);
@@ -529,7 +534,10 @@ static gboolean vte_register_symbols(GModule *mod)
 	if (! BIND_SYMBOL(vte_terminal_spawn_sync))
 		/* vte_terminal_spawn_sync() is available only in 0.38 */
 		BIND_REQUIRED_SYMBOL(vte_terminal_fork_command);
-	BIND_REQUIRED_SYMBOL(vte_terminal_set_word_chars);
+	/* 0.38 removed vte_terminal_set_word_chars() */
+	BIND_SYMBOL(vte_terminal_set_word_chars);
+	/* 0.40 introduced it under a different API */
+	BIND_SYMBOL(vte_terminal_set_word_char_exceptions);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_mouse_autohide);
 	BIND_REQUIRED_SYMBOL(vte_terminal_reset);
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_type);
