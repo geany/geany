@@ -98,6 +98,8 @@ typedef enum {
 /* Holds function pointers we need to access the VTE API. */
 struct VteFunctions
 {
+	guint (*vte_get_major_version) (void);
+	guint (*vte_get_minor_version) (void);
 	GtkWidget* (*vte_terminal_new) (void);
 	pid_t (*vte_terminal_fork_command) (VteTerminal *terminal, const char *command, char **argv,
 										char **envv, const char *directory, gboolean lastlog,
@@ -132,6 +134,12 @@ struct VteFunctions
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
 	void (*vte_terminal_set_background_image_file) (VteTerminal *terminal, const char *path);
 	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	/* hack for the VTE 2.91 API using GdkRGBA: we wrap the API to keep using GdkColor on our side */
+	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
+	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
+	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
+#endif
 };
 
 
@@ -184,6 +192,33 @@ static GtkAdjustment *default_vte_terminal_get_adjustment(VteTerminal *vte)
 	/* this is only valid in < 0.38, 0.38 broke ABI */
 	return vte->adjustment;
 }
+
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+/* Wrap VTE 2.91 API using GdkRGBA with GdkColor so we use a single API on our side */
+
+static void rgba_from_color(GdkRGBA *rgba, const GdkColor *color)
+{
+	rgba->red = color->red / 65535.0;
+	rgba->green = color->green / 65535.0;
+	rgba->blue = color->blue / 65535.0;
+	rgba->alpha = 1.0;
+}
+
+#	define WRAP_RGBA_SETTER(name) \
+	static void wrap_##name(VteTerminal *terminal, const GdkColor *color) \
+	{ \
+		GdkRGBA rgba; \
+		rgba_from_color(&rgba, color); \
+		vf->name##_rgba(terminal, &rgba); \
+	}
+
+WRAP_RGBA_SETTER(vte_terminal_set_color_background)
+WRAP_RGBA_SETTER(vte_terminal_set_color_bold)
+WRAP_RGBA_SETTER(vte_terminal_set_color_foreground)
+
+#	undef WRAP_RGBA_SETTER
+#endif
 
 
 static gchar **vte_get_child_environment(void)
@@ -515,20 +550,45 @@ static void vte_set_cursor_blink_mode(void)
 }
 
 
+#if GTK_CHECK_VERSION(3, 0, 0)
+static gboolean vte_is_2_91(void)
+{
+	guint major = vf->vte_get_major_version ? vf->vte_get_major_version() : 0;
+	guint minor = vf->vte_get_minor_version ? vf->vte_get_minor_version() : 0;
+
+	/* 2.91 API started at 0.38 */
+	return ((major > 0 || (major == 0 && minor >= 38)) ||
+	        /* 0.38 doesn't have runtime version checks, so check a symbol that didn't exist before */
+	        vf->vte_terminal_spawn_sync != NULL);
+}
+#endif
+
+
 static gboolean vte_register_symbols(GModule *mod)
 {
+	#define BIND_SYMBOL_FULL(name, dest) \
+		g_module_symbol(mod, name, (void*)(dest))
 	#define BIND_SYMBOL(field) \
-		g_module_symbol(mod, #field, (void*)&vf->field)
-	#define BIND_REQUIRED_SYMBOL(field) \
+		BIND_SYMBOL_FULL(#field, &vf->field)
+	#define BIND_REQUIRED_SYMBOL_FULL(name, dest) \
 		G_STMT_START { \
-			if (! BIND_SYMBOL(field)) \
+			if (! BIND_SYMBOL_FULL(name, dest)) \
 			{ \
 				g_critical(_("invalid VTE library \"%s\": missing symbol \"%s\""), \
-						g_module_name(mod), #field); \
+						g_module_name(mod), name); \
 				return FALSE; \
 			} \
 		} G_STMT_END
+	#define BIND_REQUIRED_SYMBOL(field) \
+		BIND_REQUIRED_SYMBOL_FULL(#field, &vf->field)
+	#define BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(field) \
+		G_STMT_START { \
+			BIND_REQUIRED_SYMBOL_FULL(#field, &vf->field##_rgba); \
+			vf->field = wrap_##field; \
+		} G_STMT_END
 
+	BIND_SYMBOL(vte_get_major_version);
+	BIND_SYMBOL(vte_get_minor_version);
 	BIND_REQUIRED_SYMBOL(vte_terminal_new);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_size);
 	if (! BIND_SYMBOL(vte_terminal_spawn_sync))
@@ -548,9 +608,20 @@ static gboolean vte_register_symbols(GModule *mod)
 	BIND_REQUIRED_SYMBOL(vte_terminal_get_has_selection);
 	BIND_REQUIRED_SYMBOL(vte_terminal_copy_clipboard);
 	BIND_REQUIRED_SYMBOL(vte_terminal_paste_clipboard);
-	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
-	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
-	BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+#if GTK_CHECK_VERSION(3, 0, 0)
+	if (vte_is_2_91())
+	{
+		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_foreground);
+		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_bold);
+		BIND_REQUIRED_SYMBOL_RGBA_WRAPPED(vte_terminal_set_color_background);
+	}
+	else
+#endif
+	{
+		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_foreground);
+		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_bold);
+		BIND_REQUIRED_SYMBOL(vte_terminal_set_color_background);
+	}
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_background_image_file);
 	BIND_REQUIRED_SYMBOL(vte_terminal_feed_child);
 	BIND_REQUIRED_SYMBOL(vte_terminal_im_append_menuitems);
@@ -564,8 +635,11 @@ static gboolean vte_register_symbols(GModule *mod)
 		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
 		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;
 
+	#undef BIND_REQUIRED_SYMBOL_RGBA_WRAPPED
 	#undef BIND_REQUIRED_SYMBOL
+	#undef BIND_REQUIRED_SYMBOL_FULL
 	#undef BIND_SYMBOL
+	#undef BIND_SYMBOL_FULL
 
 	return TRUE;
 }
