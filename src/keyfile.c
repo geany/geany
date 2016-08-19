@@ -200,6 +200,14 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
 		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
 
+	/* fonts */
+	stash_group_add_string(group, &interface_prefs.tagbar_font,
+		"tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
+	stash_group_add_string(group, &interface_prefs.msgwin_font,
+		"msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+	stash_group_add_string(group, &interface_prefs.editor_font,
+		"editor_font", GEANY_DEFAULT_FONT_EDITOR);
+
 	/* tools (in legacy section PACKAGE rather than "tools") */
 	stash_group_add_entry(group, &tool_prefs.context_action_cmd,
 			"context_action_cmd", "", "entry_contextaction");
@@ -445,9 +453,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	/* interface */
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
-	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
-	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
@@ -776,9 +781,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
-	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
-	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 
 	/* display, editor */
 	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
