@@ -1764,6 +1764,65 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 }
 
 
+/**
+ *  Renames the file in @a doc to @a new_filename then saves data to it.
+ *
+ *  @param doc The current document which should be renamed.
+ *  @param new_filename The new filename in UTF-8 encoding.
+ *
+ *  @return @c TRUE if file was renamed or @c FALSE otherwise.
+ *  @since ?
+ **/
+GEANY_API_SYMBOL
+gboolean document_rename_file_and_save(GeanyDocument *doc, const gchar *new_filename)
+{
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
+	g_return_val_if_fail(doc->file_name != NULL, FALSE);
+	g_return_val_if_fail(doc->real_path != NULL, FALSE);
+	g_return_val_if_fail(new_filename != NULL, FALSE);
+
+	gchar *old_locale_filename = utils_get_locale_from_utf8(doc->file_name);
+	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
+
+	FileDiskStatus orig_file_disk_status = doc->priv->file_disk_status;
+	document_stop_file_monitoring(doc);
+
+	gboolean success = g_rename(old_locale_filename, new_locale_filename) == 0;
+
+	if (success)
+	{
+		doc->priv->file_disk_status = FILE_CHANGED;
+
+		/* Perhaps this is better placed in document_save_file_as(). */
+		if (doc->tm_file)
+		{
+			/* Create a new tm_source_file object otherwise tagmanager won't work correctly. */
+			tm_workspace_remove_source_file(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
+			doc->tm_file = NULL;
+		}
+
+		success = document_save_file_as(doc, new_filename);
+
+		/* Not sure if we should call this by default whether document_save_file_as() succeeds
+		 * or not.  Also, this might be better placed in document_save_file_as(). */
+		build_menu_update(doc);
+	}
+	else
+	{
+		dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+				_("Error renaming file."), g_strerror(errno));
+		monitor_file_setup(doc);
+		doc->priv->file_disk_status = orig_file_disk_status;
+	}
+
+	g_free(new_locale_filename);
+	g_free(old_locale_filename);
+
+	return success;
+}
+
+
 static void protect_document(GeanyDocument *doc)
 {
 	/* do not call queue_colourise because to we want to keep the text-changed indication! */
