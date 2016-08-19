@@ -1462,6 +1462,8 @@ void ui_update_view_editor_menu_items(void)
  *
  * @return @transfer{floating} The frame widget, setting the alignment container for
  * packing child widgets.
+ * 
+ * @deprecated 1.29: Use GTK API directly
  **/
 GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)

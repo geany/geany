@@ -101,8 +101,6 @@ GeanyMainWidgets;
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
-
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
@@ -143,6 +141,8 @@ void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
 
 
 #ifndef GEANY_DISABLE_DEPRECATED
+GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment) GEANY_DEPRECATED;
+
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
 #endif	/* GEANY_DISABLE_DEPRECATED */
 
