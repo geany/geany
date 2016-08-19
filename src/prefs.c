@@ -486,27 +486,7 @@ static void prefs_init_dialog(void)
 	else
 		ui_encodings_combo_box_set_active_encoding(GTK_COMBO_BOX(widget), GEANY_ENCODING_UTF_8);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
-	if (file_prefs.default_eol_character >= 0 && file_prefs.default_eol_character < 3)
-	{
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), file_prefs.default_eol_character);
-	}
-	else
-		gtk_combo_box_set_active(GTK_COMBO_BOX(widget), GEANY_DEFAULT_EOL_CHARACTER);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.strip_trailing_spaces);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ensure_convert_new_lines");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.ensure_convert_new_lines);
-
 	/* Editor settings */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
-
 	on_use_folding_toggled(GTK_TOGGLE_BUTTON(
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding")), NULL);
 
@@ -811,21 +791,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		}
 		else
 			file_prefs.default_open_encoding = -1;
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_eol");
-		file_prefs.default_eol_character = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_trailing_spaces");
-		file_prefs.strip_trailing_spaces = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
-		file_prefs.final_new_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ensure_convert_new_lines");
-		file_prefs.ensure_convert_new_lines = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
-		file_prefs.replace_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		/* Editor settings */

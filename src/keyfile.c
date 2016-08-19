@@ -343,6 +343,17 @@ static void init_pref_groups(void)
 	stash_group_add_spin_button_integer(group, &file_prefs.disk_check_timeout,
 		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT, "spin_disk_check");
 
+	stash_group_add_combo_box(group, &file_prefs.default_eol_character,
+		"default_eol_character", GEANY_DEFAULT_EOL_CHARACTER, "combo_eol");
+	stash_group_add_toggle_button(group, &file_prefs.replace_tabs,
+		"pref_editor_replace_tabs", FALSE, "check_replace_tabs");
+	stash_group_add_toggle_button(group, &file_prefs.ensure_convert_new_lines,
+		"pref_editor_ensure_convert_line_endings", FALSE, "check_ensure_convert_new_lines");
+	stash_group_add_toggle_button(group, &file_prefs.final_new_line,
+		"pref_editor_new_line", TRUE, "check_new_line");
+	stash_group_add_toggle_button(group, &file_prefs.strip_trailing_spaces,
+		"pref_editor_trail_space", FALSE, "check_trailing_spaces");
+
 	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group);
@@ -539,11 +550,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
 	else
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[file_prefs.default_open_encoding].charset);
-	g_key_file_set_integer(config, PACKAGE, "default_eol_character", file_prefs.default_eol_character);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", file_prefs.ensure_convert_new_lines);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
 
 	/* toolbar */
 	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
@@ -838,11 +844,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 		g_free(tmp_string);
 	}
-	file_prefs.default_eol_character = utils_get_setting_integer(config, PACKAGE, "default_eol_character", GEANY_DEFAULT_EOL_CHARACTER);
-	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
-	file_prefs.ensure_convert_new_lines = utils_get_setting_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", FALSE);
-	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
 
 	/* toolbar */
 	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
