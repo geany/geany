@@ -431,19 +431,6 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.editor_font);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.long_line_column);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.long_line_enabled);
-
-	switch (editor_prefs.long_line_type)
-	{
-		case 0: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line"); break;
-		case 1: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_background"); break;
-	}
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
 	utils_parse_color(editor_prefs.long_line_color, &color);
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
@@ -869,16 +856,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
 		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
-		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_long_line_line");
-		if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-			editor_prefs.long_line_type = 0;
-		else
-			/* now only the "background" radio remains */
-			editor_prefs.long_line_type = 1;
-
 		if (editor_prefs.long_line_column == 0)
 			editor_prefs.long_line_enabled = FALSE;
 
@@ -982,11 +959,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		SETPTR(editor_prefs.comment_toggle_mark,
 			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
-		/* note: use stash for new code - it updates spin buttons itself */
-		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
-		editor_prefs.long_line_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
 		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
@@ -1040,6 +1012,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
+		/* note: use stash for new code - it updates spin buttons itself */
 		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 		editor_prefs.symbolcompletion_min_chars = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 

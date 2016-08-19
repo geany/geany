@@ -200,6 +200,17 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
 		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
 
+	stash_group_add_toggle_button(group, &editor_prefs.long_line_enabled,
+		"long_line_enabled", TRUE, "check_long_line");
+	stash_group_add_radio_buttons(group, &editor_prefs.long_line_type,
+		"long_line_type", 0,
+		"radio_long_line_line", 0,
+		"radio_long_line_background", 1,
+		NULL);
+	stash_group_add_spin_button_integer(group, &editor_prefs.long_line_column,
+		"long_line_column", 72, "spin_long_line");
+	stash_group_add_string(group, &editor_prefs.long_line_color, "long_line_color", "#C2EBC2");
+
 	/* fonts */
 	stash_group_add_string(group, &interface_prefs.tagbar_font,
 		"tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
@@ -466,10 +477,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
 	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
 	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_enabled);
-	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
-	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
-	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
 
 	/* editor */
 	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
@@ -783,15 +790,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 
 	/* display, editor */
-	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
-	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
-	if (editor_prefs.long_line_type == 2) /* backward compatibility */
-	{
-		editor_prefs.long_line_type = 0;
-		editor_prefs.long_line_enabled = FALSE;
-	}
-	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
-	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
@@ -982,6 +980,13 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	/* read stash prefs */
 	settings_action(config, SETTING_READ);
+
+	/* display, editor backward compatibility */
+	if (editor_prefs.long_line_type == 2)
+	{
+		editor_prefs.long_line_type = 0;
+		editor_prefs.long_line_enabled = FALSE;
+	}
 
 	/* build menu
 	 * after stash prefs as it uses some of them */
