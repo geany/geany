@@ -282,6 +282,8 @@ static void init_pref_groups(void)
 		"radio_virtualspace_selection", GEANY_VIRTUAL_SPACE_SELECTION,
 		"radio_virtualspace_always", GEANY_VIRTUAL_SPACE_ALWAYS,
 		NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.auto_complete_symbols,
+		"auto_complete_symbols", TRUE, "check_symbol_auto_completion");
 	stash_group_add_toggle_button(group, &editor_prefs.autocomplete_doc_words,
 		"autocomplete_doc_words", FALSE, "check_autocomplete_doc_words");
 	stash_group_add_toggle_button(group, &editor_prefs.completion_drops_rest_of_word,
@@ -291,8 +293,49 @@ static void init_pref_groups(void)
 		"spin_autocompletion_max_entries");
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_update_freq,
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
+	stash_group_add_spin_button_integer(group, &editor_prefs.symbolcompletion_min_chars,
+		"symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS, "spin_symbol_complete_chars");
+	stash_group_add_spin_button_integer(group, &editor_prefs.symbolcompletion_max_height,
+		"symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT, "spin_symbollistheight");
+	stash_group_add_toggle_button(group, &editor_prefs.auto_close_xml_tags,
+		"auto_close_xml_tags", TRUE, "check_xmltag");
+	stash_group_add_toggle_button(group, &editor_prefs.complete_snippets,
+		"complete_snippets", TRUE, "check_complete_snippets");
+	stash_group_add_toggle_button(group, &editor_prefs.auto_continue_multiline,
+		"auto_continue_multiline", TRUE, "check_auto_multiline");
+	stash_group_add_integer(group, (gint*)&editor_prefs.autoclose_chars, "autoclose_chars", 0);
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.line_wrapping,
+		"line_wrapping", FALSE, "check_line_wrapping"); /* default is off for better performance */
+	stash_group_add_toggle_button(group, &editor_prefs.use_indicators,
+		"use_indicators", TRUE, "check_indicators");
+	stash_group_add_toggle_button(group, &editor_prefs.show_indent_guide,
+		"show_indent_guide", FALSE, "check_indent");
+	stash_group_add_toggle_button(group, &editor_prefs.show_white_space,
+		"show_white_space", FALSE, "check_white_space");
+	stash_group_add_toggle_button(group, &editor_prefs.show_line_endings,
+		"show_line_endings", FALSE, "check_line_end");
+	stash_group_add_toggle_button(group, &editor_prefs.show_markers_margin,
+		"show_markers_margin", TRUE, "check_markers_margin");
+	stash_group_add_toggle_button(group, &editor_prefs.show_linenumber_margin,
+		"show_linenumber_margin", TRUE, "check_line_numbers");
+	stash_group_add_toggle_button(group, &editor_prefs.scroll_stop_at_last_line,
+		"scroll_stop_at_last_line", TRUE, "check_scroll_stop_at_last_line");
+	stash_group_add_toggle_button(group, &editor_prefs.folding,
+		"use_folding", TRUE, "check_folding");
+	stash_group_add_toggle_button(group, &editor_prefs.unfold_all_children,
+		"unfold_all_children", FALSE, "check_unfold_children");
+	stash_group_add_toggle_button(group, &editor_prefs.disable_dnd,
+		"pref_editor_disable_dnd", FALSE, "check_disable_dnd");
+	stash_group_add_toggle_button(group, &editor_prefs.smart_home_key,
+		"pref_editor_smart_home_key", TRUE, "check_smart_home");
+	stash_group_add_toggle_button(group, &editor_prefs.newline_strip,
+		"pref_editor_newline_strip", FALSE, "check_newline_strip");
+	stash_group_add_spin_button_integer(group, &editor_prefs.line_break_column,
+		"line_break_column", 72, "spin_line_break");
+	stash_group_add_entry(group, &editor_prefs.comment_toggle_mark,
+		"comment_toggle_mark", GEANY_TOGGLE_MARK, "entry_toggle_mark");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
@@ -489,32 +532,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
-
-	/* display */
-	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
-	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
-	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
-	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
-	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-
-	/* editor */
-	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
-	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_min_chars", editor_prefs.symbolcompletion_min_chars);
-	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
-	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
-	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
-	g_key_file_set_boolean(config, PACKAGE, "line_wrapping", editor_prefs.line_wrapping);
-	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
-	g_key_file_set_boolean(config, PACKAGE, "complete_snippets", editor_prefs.complete_snippets);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_newline_strip", editor_prefs.newline_strip);
-	g_key_file_set_integer(config, PACKAGE, "line_break_column", editor_prefs.line_break_column);
-	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline", editor_prefs.auto_continue_multiline);
-	g_key_file_set_string(config, PACKAGE, "comment_toggle_mark", editor_prefs.comment_toggle_mark);
-	g_key_file_set_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
-	g_key_file_set_integer(config, PACKAGE, "autoclose_chars", editor_prefs.autoclose_chars);
 
 	/* files */
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[file_prefs.default_new_encoding].charset);
@@ -793,30 +810,6 @@ static void load_dialog_prefs(GKeyFile *config)
 		if (!g_key_file_has_key(config, "search", "pref_search_hide_find_dialog", NULL))
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
-
-	/* display, editor */
-	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
-	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
-	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
-	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
-	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
-	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
-	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", TRUE);
-	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
-	editor_prefs.complete_snippets = utils_get_setting_boolean(config, PACKAGE, "complete_snippets", TRUE);
-	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
-	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
-	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
-	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
-	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
-	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
-	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
-	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
-	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
-	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
-	editor_prefs.autoclose_chars = utils_get_setting_integer(config, PACKAGE, "autoclose_chars", 0);
 
 	/* Files
 	 * use current locale encoding as default for new files (should be UTF-8 in most cases) */

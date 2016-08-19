@@ -504,73 +504,11 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.ensure_convert_new_lines);
 
 	/* Editor settings */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
-	gtk_entry_set_text(GTK_ENTRY(widget), editor_prefs.comment_toggle_mark);
-
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_white_space);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_linenumber_margin);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_markers_margin);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.scroll_stop_at_last_line);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.line_wrapping);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.complete_snippets);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_close_xml_tags);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.folding);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.unfold_all_children);
 	on_use_folding_toggled(GTK_TOGGLE_BUTTON(
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding")), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.disable_dnd);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.smart_home_key);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.newline_strip);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.use_indicators);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_continue_multiline);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_max_height);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.symbolcompletion_min_chars);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.line_break_column);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
@@ -891,74 +829,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Editor settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_toggle_mark");
-		SETPTR(editor_prefs.comment_toggle_mark,
-			gtk_editable_get_chars(GTK_EDITABLE(widget), 0, -1));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding");
-		editor_prefs.folding = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 		ui_update_fold_items();
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
-		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
-		editor_prefs.show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
-		editor_prefs.show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
-		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
-		editor_prefs.show_linenumber_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
-		editor_prefs.show_markers_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
-		editor_prefs.scroll_stop_at_last_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_wrapping");
-		editor_prefs.line_wrapping = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_complete_snippets");
-		editor_prefs.complete_snippets = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_xmltag");
-		editor_prefs.auto_close_xml_tags = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indicators");
-		editor_prefs.use_indicators = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_disable_dnd");
-		editor_prefs.disable_dnd = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_smart_home");
-		editor_prefs.smart_home_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_newline_strip");
-		editor_prefs.newline_strip = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
-		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
-		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbol_complete_chars");
-		/* note: use stash for new code - it updates spin buttons itself */
-		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
-		editor_prefs.symbolcompletion_min_chars = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_symbollistheight");
-		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
-		editor_prefs.symbolcompletion_max_height = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_line_break");
-		gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
-		editor_prefs.line_break_column = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_autoclose_parenthesis");
 		autoclose_brackets[0] = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1076,6 +947,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (vte_info.have_vte)
 		{
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
+			/* note: use stash for new code - it updates spin buttons itself */
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
 
