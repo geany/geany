@@ -876,6 +876,11 @@ static void load_session_project_file(void)
 
 static void load_settings(void)
 {
+#ifdef HAVE_VTE
+	/* initially assume we'll have VTE unless it's disabled by cmdline, to allow configuration
+	 * loading to be notified about disabled VTE on the cmdline */
+	vte_info.have_vte = !no_vte;
+#endif
 	configuration_load();
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
