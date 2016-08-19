@@ -711,5 +711,3 @@ extern void installKeywordTable (const langType language)
 		lang->keywordInstalled = TRUE;
 	}
 }
-
-/* vi:set tabstop=4 shiftwidth=4 nowrap: */

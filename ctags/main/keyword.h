@@ -29,5 +29,3 @@ extern void printKeywordTable (void);
 #endif
 
 #endif  /* CTAGS_MAIN_KEYWORD_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

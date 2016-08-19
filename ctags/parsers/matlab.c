@@ -147,5 +147,3 @@ extern parserDefinition* MatlabParser (void)
 	def->parser     = findMatlabTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

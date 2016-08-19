@@ -775,6 +775,3 @@ extern int strnicmp (const char *s1, const char *s2, size_t n)
 	return result;
 }
 #endif
-
-
-/* vi:set tabstop=4 shiftwidth=4: */

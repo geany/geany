@@ -157,5 +157,3 @@ extern void *TagEntryUserData;
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 
 #endif  /* CTAGS_MAIN_PARSE_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

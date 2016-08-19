@@ -251,5 +251,3 @@ extern boolean isExcludedFile (const char* const name)
 #define readOptionConfiguration
 #define initOptions
 #define freeOptionResources
-
-/* vi:set tabstop=4 shiftwidth=4: */

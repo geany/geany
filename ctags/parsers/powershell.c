@@ -611,5 +611,3 @@ extern parserDefinition* PowerShellParser (void)
 	def->parser     = findPowerShellTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

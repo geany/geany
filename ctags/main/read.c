@@ -619,5 +619,3 @@ extern char *readLineFromBypass (
 	   what itself should do; just report it to the caller. */
 	return result;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

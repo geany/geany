@@ -685,5 +685,3 @@ extern void checkRegex (void)
 {
 	/* not needed now we have GRegex */
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

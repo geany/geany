@@ -144,5 +144,3 @@ extern parserDefinition* NsisParser (void)
 	def->parser     = findNsisTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

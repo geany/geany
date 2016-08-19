@@ -831,5 +831,3 @@ extern parserDefinition *PythonParser (void)
 	def->parser = findPythonTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

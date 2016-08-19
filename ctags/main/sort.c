@@ -215,5 +215,3 @@ extern void internalSortTags (const boolean toStdout)
 }
 
 #endif
-
-/* vi:set tabstop=4 shiftwidth=4: */

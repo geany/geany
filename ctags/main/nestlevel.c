@@ -74,5 +74,3 @@ extern NestingLevel *nestingLevelsGetCurrent(NestingLevels *nls)
 
 	return &nls->levels[nls->n - 1];
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

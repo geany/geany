@@ -26,5 +26,3 @@ extern void internalSortTags (const boolean toStdout);
 #endif
 
 #endif  /* CTAGS_MAIN_SORT_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

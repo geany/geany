@@ -118,5 +118,3 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 #define bufferClose fileClose
 
 #endif  /* CTAGS_MAIN_READ_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

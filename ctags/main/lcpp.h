@@ -49,5 +49,3 @@ extern int cppSkipOverCComment (void);
 extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName);
 
 #endif  /* CTAGS_MAIN_GET_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

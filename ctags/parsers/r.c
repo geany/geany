@@ -175,5 +175,3 @@ extern parserDefinition *RParser (void)
 	def->parser     = createRTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

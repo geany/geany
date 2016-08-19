@@ -205,5 +205,3 @@ extern parserDefinition* RestParser (void)
 	def->parser = findRestTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

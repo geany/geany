@@ -980,5 +980,3 @@ extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenNam
 	mio_setpos(File.mio, &originalPosition);
 	return arglist;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

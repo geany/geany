@@ -133,5 +133,3 @@ extern parserDefinition* DiffParser (void)
 	def->parser     = findDiffTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

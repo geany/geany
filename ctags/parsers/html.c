@@ -58,5 +58,3 @@ extern parserDefinition* HtmlParser (void)
 	def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

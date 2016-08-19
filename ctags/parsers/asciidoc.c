@@ -229,5 +229,3 @@ extern parserDefinition* AsciidocParser (void)
 	def->parser = findAsciidocTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

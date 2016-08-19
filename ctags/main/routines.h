@@ -107,5 +107,3 @@ extern char* strstr (const char *str, const char *substr);
 #endif
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

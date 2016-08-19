@@ -144,5 +144,3 @@ extern parserDefinition* TclParser (void)
 	def->parser     = findTclTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

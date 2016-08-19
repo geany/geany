@@ -412,5 +412,3 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name, const k
 	e->name             = name;
 	e->kind             = kind;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

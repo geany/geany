@@ -82,5 +82,3 @@ extern void vStringTruncate (vString *const string, const size_t length);
 extern vString *vStringNewOwn (char *s);
 
 #endif  /* CTAGS_MAIN_VSTRING_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

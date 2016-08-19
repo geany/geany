@@ -276,5 +276,3 @@ extern void stringListPrint (const stringList *const current)
 	for (i = 0  ;  i < current->count  ;  ++i)
 		printf ("%s%s", (i > 0) ? ", " : "", vStringValue (current->list [i]));
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -96,5 +96,3 @@ extern void makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
 
 #endif  /* CTAGS_MAIN_ENTRY_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

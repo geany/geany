@@ -128,5 +128,3 @@ extern parserDefinition* ConfParser (void)
 	def->parser     = findConfTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -375,5 +375,3 @@ extern parserDefinition* PerlParser (void)
 	def->parser     = findPerlTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 noexpandtab: */

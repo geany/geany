@@ -253,5 +253,3 @@ parserDefinition *FreeBasicParser (void)
 	def->parser = findBasicTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

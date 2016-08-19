@@ -107,5 +107,3 @@ extern void freeOptionResources (void);
 void addIgnoreListFromFile (const char *const fileName);
 
 #endif  /* CTAGS_MAIN_OPTIONS_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

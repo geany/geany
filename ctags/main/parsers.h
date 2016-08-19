@@ -68,5 +68,3 @@
 	PowerShellParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

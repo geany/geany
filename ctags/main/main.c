@@ -171,5 +171,3 @@ void utils_warn(const char *msg)
 {
 	g_warning("%s", msg);
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

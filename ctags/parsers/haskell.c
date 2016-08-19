@@ -354,5 +354,3 @@ extern parserDefinition* LiterateHaskellParser (void)
 	def->parser     = findLiterateHaskellTags;
 	return def;
 }
-
-/* vi:set expandtab tabstop=4 shiftwidth=4: */

@@ -243,5 +243,3 @@ extern vString *vStringNewOwn (char *s)
 
 	return r;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

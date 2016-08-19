@@ -23,5 +23,3 @@
 #define AUTHOR_EMAIL    "darren@hiebert.com"
 
 #endif	/* CTAGS_MAIN_CTAGS_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

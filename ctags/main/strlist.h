@@ -48,5 +48,3 @@ extern boolean stringListFileMatched (const stringList* const list, const char* 
 extern void stringListPrint (const stringList *const current);
 
 #endif  /* CTAGS_MAIN_STRLIST_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -354,5 +354,3 @@ extern parserDefinition* PascalParser (void)
 	def->parser     = findPascalTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -3351,4 +3351,3 @@ extern parserDefinition* ValaParser (void)
 	def->initialize = initializeValaParser;
 	return def;
 }
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -252,5 +252,3 @@ extern void argDelete (Arguments* const current)
 	memset (current, 0, sizeof (Arguments));
 	eFree (current);
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

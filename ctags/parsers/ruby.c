@@ -550,5 +550,3 @@ extern parserDefinition* RubyParser (void)
 	def->parser     = findRubyTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */
