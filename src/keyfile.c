@@ -174,6 +174,36 @@ static void init_pref_groups(void)
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
 
+	/* startup */
+	stash_group_add_toggle_button(group, &prefs.load_session,
+		"pref_main_load_session", TRUE, "check_load_session");
+	stash_group_add_toggle_button(group, &project_prefs.project_session,
+		"pref_main_project_session", TRUE, "check_project_session");
+	stash_group_add_toggle_button(group, &project_prefs.project_file_in_basedir,
+		"pref_main_project_file_in_basedir", FALSE, "check_project_file_in_basedir");
+	stash_group_add_toggle_button(group, &prefs.save_winpos,
+		"pref_main_save_winpos", TRUE, "check_save_win_pos");
+
+	/* behaviour */
+	stash_group_add_toggle_button(group, &prefs.confirm_exit,
+		"pref_main_confirm_exit", FALSE, "check_ask_for_quit");
+	stash_group_add_toggle_button(group, &prefs.suppress_status_messages,
+		"pref_main_suppress_status_messages", FALSE, "check_suppress_status_msgs");
+	stash_group_add_toggle_button(group, &prefs.switch_to_status,
+		"switch_msgwin_pages", FALSE, "check_switch_pages");
+	stash_group_add_toggle_button(group, &prefs.beep_on_errors,
+		"beep_on_errors", TRUE, "check_beep");
+	stash_group_add_toggle_button(group, &prefs.auto_focus,
+		"auto_focus", FALSE, "check_auto_focus");
+
+	/* interface */
+	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
+		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
+
+	/* tools (in legacy section PACKAGE rather than "tools") */
+	stash_group_add_entry(group, &tool_prefs.context_action_cmd,
+			"context_action_cmd", "", "entry_contextaction");
+
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
 		"highlighting_invert_all", FALSE, "check_highlighting_invert");
@@ -412,17 +442,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
-	/* general */
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
-	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
-	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
-	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
-
 	/* interface */
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
@@ -435,7 +454,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
 	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
-	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -501,7 +519,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
-	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
 
 	/* build menu */
 	build_save_menu(config, NULL, GEANY_BCS_PREF);
@@ -749,17 +766,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* general */
-	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
-	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
-	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
-	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
-	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
-	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
-	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
-	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
-	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
-
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
@@ -773,7 +779,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 
 	/* display, editor */
 	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
@@ -945,8 +950,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.term_cmd = cmd;
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
-
-	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);

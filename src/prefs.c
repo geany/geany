@@ -407,41 +407,6 @@ static void prefs_init_dialog(void)
 	ui_widget_show_hide(widget, app->project != NULL);
 
 	/* General settings */
-	/* startup */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.load_session);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_session);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_file_in_basedir);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_winpos);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.confirm_exit);
-
-	/* behaviour */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_beep");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.beep_on_errors);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.switch_to_status);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.suppress_status_messages);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.auto_focus);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		interface_prefs.use_native_windows_dialogs);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
-	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
 	project_setup_prefs();	/* project files path */
 
@@ -890,42 +855,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
 
 		/* General settings */
-		/* startup */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_load_session");
-		prefs.load_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_session");
-		project_prefs.project_session = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
-		project_prefs.project_file_in_basedir = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
-		prefs.save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
-		prefs.confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		/* behaviour */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_beep");
-		prefs.beep_on_errors = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_switch_pages");
-		prefs.switch_to_status = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_suppress_status_msgs");
-		prefs.suppress_status_messages = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
-		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
-		interface_prefs.use_native_windows_dialogs =
-			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
-		g_free(tool_prefs.context_action_cmd);
-		tool_prefs.context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 		project_apply_prefs();	/* project file path */
 
