@@ -196,6 +196,18 @@ static void init_pref_groups(void)
 		"auto_focus", FALSE, "check_auto_focus");
 
 	/* interface */
+	stash_group_add_radio_buttons(group, &file_prefs.tab_order_ltr,
+		"tab_order_ltr", TRUE,
+		"radio_tab_right", TRUE,
+		"radio_tab_left", FALSE,
+		NULL);
+	stash_group_add_toggle_button(group, &file_prefs.tab_order_beside,
+		"tab_order_beside", FALSE, "check_tab_beside");
+	stash_group_add_toggle_button(group, &interface_prefs.show_notebook_tabs,
+		"show_notebook_tabs", TRUE, "check_show_notebook_tabs");
+	stash_group_add_toggle_button(group, &file_prefs.show_tab_cross,
+		"show_tab_cross", TRUE, "check_show_tab_cross");
+
 	stash_group_add_combo_box(group, &interface_prefs.tab_pos_editor,
 		"tab_pos_editor", GTK_POS_TOP, "combo_tab_editor");
 	stash_group_add_combo_box(group, &interface_prefs.tab_pos_msgwin,
@@ -477,12 +489,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	settings_action(config, SETTING_WRITE);
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
-
-	/* interface */
-	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -787,12 +793,6 @@ static void load_dialog_prefs(GKeyFile *config)
 		if (!g_key_file_has_key(config, "search", "pref_search_hide_find_dialog", NULL))
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
-
-	/* interface */
-	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
-	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
-	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
-	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
 
 	/* display, editor */
 	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
