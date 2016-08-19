@@ -157,7 +157,6 @@ static void init_pref_groups(void)
 		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
-	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
 	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
 		"sidebar_pos", GTK_POS_LEFT,
 		"radio_sidebar_left", GTK_POS_LEFT,
@@ -197,6 +196,13 @@ static void init_pref_groups(void)
 		"auto_focus", FALSE, "check_auto_focus");
 
 	/* interface */
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_editor,
+		"tab_pos_editor", GTK_POS_TOP, "combo_tab_editor");
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_msgwin,
+		"tab_pos_msgwin", GTK_POS_LEFT, "combo_tab_msgwin");
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_sidebar,
+		"tab_pos_sidebar", GTK_POS_TOP, "combo_tab_sidebar");
+
 	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
 		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
 
@@ -477,8 +483,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
 
 	/* display */
 	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
@@ -785,8 +789,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	}
 
 	/* interface */
-	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
-	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
