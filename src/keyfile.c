@@ -200,6 +200,17 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
 		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
 
+	stash_group_add_toggle_button(group, &ui_prefs.sidebar_visible,
+		"sidebar_visible", TRUE, "check_sidebar_visible");
+	stash_group_add_toggle_button(group, &interface_prefs.sidebar_symbol_visible,
+		"sidebar_symbol_visible", TRUE, "check_list_symbol");
+	stash_group_add_toggle_button(group, &interface_prefs.sidebar_openfiles_visible,
+		"sidebar_openfiles_visible", TRUE, "check_list_openfiles");
+	stash_group_add_toggle_button(group, &interface_prefs.statusbar_visible,
+		"statusbar_visible", TRUE, "check_statusbar_visible");
+	stash_group_add_boolean(group, &ui_prefs.msgwindow_visible,
+		"msgwindow_visible", TRUE);
+
 	stash_group_add_toggle_button(group, &editor_prefs.long_line_enabled,
 		"long_line_enabled", TRUE, "check_long_line");
 	stash_group_add_radio_buttons(group, &editor_prefs.long_line_type,
@@ -462,8 +473,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
 	/* interface */
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
@@ -579,9 +588,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 
 	/* get the text from the scribble textview */
@@ -781,9 +787,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* interface */
 	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
 	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
-	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
-	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
@@ -1002,8 +1005,6 @@ static void load_ui_prefs(GKeyFile *config)
 	gint *geo;
 	gsize geo_len;
 
-	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
-	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);

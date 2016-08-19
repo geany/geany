@@ -412,15 +412,10 @@ static void prefs_init_dialog(void)
 
 
 	/* Interface settings */
+
+	/* update the initial state */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ui_prefs.sidebar_visible);
 	on_sidebar_visible_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_symbol_visible);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_visible);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
@@ -452,9 +447,6 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.statusbar_visible);
 
 
 	/* Toolbar settings */
@@ -847,15 +839,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Interface settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-		ui_prefs.sidebar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		if (editor_prefs.long_line_column == 0)
 			editor_prefs.long_line_enabled = FALSE;
 
@@ -873,9 +856,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		/* Toolbar settings */
