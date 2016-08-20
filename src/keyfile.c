@@ -157,7 +157,6 @@ static void init_pref_groups(void)
 		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
-	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
 	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
 		"sidebar_pos", GTK_POS_LEFT,
 		"radio_sidebar_left", GTK_POS_LEFT,
@@ -173,6 +172,85 @@ static void init_pref_groups(void)
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
 		NULL);
+
+	/* startup */
+	stash_group_add_toggle_button(group, &prefs.load_session,
+		"pref_main_load_session", TRUE, "check_load_session");
+	stash_group_add_toggle_button(group, &project_prefs.project_session,
+		"pref_main_project_session", TRUE, "check_project_session");
+	stash_group_add_toggle_button(group, &project_prefs.project_file_in_basedir,
+		"pref_main_project_file_in_basedir", FALSE, "check_project_file_in_basedir");
+	stash_group_add_toggle_button(group, &prefs.save_winpos,
+		"pref_main_save_winpos", TRUE, "check_save_win_pos");
+
+	/* behaviour */
+	stash_group_add_toggle_button(group, &prefs.confirm_exit,
+		"pref_main_confirm_exit", FALSE, "check_ask_for_quit");
+	stash_group_add_toggle_button(group, &prefs.suppress_status_messages,
+		"pref_main_suppress_status_messages", FALSE, "check_suppress_status_msgs");
+	stash_group_add_toggle_button(group, &prefs.switch_to_status,
+		"switch_msgwin_pages", FALSE, "check_switch_pages");
+	stash_group_add_toggle_button(group, &prefs.beep_on_errors,
+		"beep_on_errors", TRUE, "check_beep");
+	stash_group_add_toggle_button(group, &prefs.auto_focus,
+		"auto_focus", FALSE, "check_auto_focus");
+
+	/* interface */
+	stash_group_add_radio_buttons(group, &file_prefs.tab_order_ltr,
+		"tab_order_ltr", TRUE,
+		"radio_tab_right", TRUE,
+		"radio_tab_left", FALSE,
+		NULL);
+	stash_group_add_toggle_button(group, &file_prefs.tab_order_beside,
+		"tab_order_beside", FALSE, "check_tab_beside");
+	stash_group_add_toggle_button(group, &interface_prefs.show_notebook_tabs,
+		"show_notebook_tabs", TRUE, "check_show_notebook_tabs");
+	stash_group_add_toggle_button(group, &file_prefs.show_tab_cross,
+		"show_tab_cross", TRUE, "check_show_tab_cross");
+
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_editor,
+		"tab_pos_editor", GTK_POS_TOP, "combo_tab_editor");
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_msgwin,
+		"tab_pos_msgwin", GTK_POS_LEFT, "combo_tab_msgwin");
+	stash_group_add_combo_box(group, &interface_prefs.tab_pos_sidebar,
+		"tab_pos_sidebar", GTK_POS_TOP, "combo_tab_sidebar");
+
+	stash_group_add_toggle_button(group, &interface_prefs.use_native_windows_dialogs,
+		"use_native_windows_dialogs", FALSE, "check_native_windows_dialogs");
+
+	stash_group_add_toggle_button(group, &ui_prefs.sidebar_visible,
+		"sidebar_visible", TRUE, "check_sidebar_visible");
+	stash_group_add_toggle_button(group, &interface_prefs.sidebar_symbol_visible,
+		"sidebar_symbol_visible", TRUE, "check_list_symbol");
+	stash_group_add_toggle_button(group, &interface_prefs.sidebar_openfiles_visible,
+		"sidebar_openfiles_visible", TRUE, "check_list_openfiles");
+	stash_group_add_toggle_button(group, &interface_prefs.statusbar_visible,
+		"statusbar_visible", TRUE, "check_statusbar_visible");
+	stash_group_add_boolean(group, &ui_prefs.msgwindow_visible,
+		"msgwindow_visible", TRUE);
+
+	stash_group_add_toggle_button(group, &editor_prefs.long_line_enabled,
+		"long_line_enabled", TRUE, "check_long_line");
+	stash_group_add_radio_buttons(group, &editor_prefs.long_line_type,
+		"long_line_type", 0,
+		"radio_long_line_line", 0,
+		"radio_long_line_background", 1,
+		NULL);
+	stash_group_add_spin_button_integer(group, &editor_prefs.long_line_column,
+		"long_line_column", 72, "spin_long_line");
+	stash_group_add_string(group, &editor_prefs.long_line_color, "long_line_color", "#C2EBC2");
+
+	/* fonts */
+	stash_group_add_string(group, &interface_prefs.tagbar_font,
+		"tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
+	stash_group_add_string(group, &interface_prefs.msgwin_font,
+		"msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
+	stash_group_add_string(group, &interface_prefs.editor_font,
+		"editor_font", GEANY_DEFAULT_FONT_EDITOR);
+
+	/* tools (in legacy section PACKAGE rather than "tools") */
+	stash_group_add_entry(group, &tool_prefs.context_action_cmd,
+			"context_action_cmd", "", "entry_contextaction");
 
 	/* editor display */
 	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
@@ -204,6 +282,8 @@ static void init_pref_groups(void)
 		"radio_virtualspace_selection", GEANY_VIRTUAL_SPACE_SELECTION,
 		"radio_virtualspace_always", GEANY_VIRTUAL_SPACE_ALWAYS,
 		NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.auto_complete_symbols,
+		"auto_complete_symbols", TRUE, "check_symbol_auto_completion");
 	stash_group_add_toggle_button(group, &editor_prefs.autocomplete_doc_words,
 		"autocomplete_doc_words", FALSE, "check_autocomplete_doc_words");
 	stash_group_add_toggle_button(group, &editor_prefs.completion_drops_rest_of_word,
@@ -213,14 +293,93 @@ static void init_pref_groups(void)
 		"spin_autocompletion_max_entries");
 	stash_group_add_spin_button_integer(group, (gint*)&editor_prefs.autocompletion_update_freq,
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
+	stash_group_add_spin_button_integer(group, &editor_prefs.symbolcompletion_min_chars,
+		"symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS, "spin_symbol_complete_chars");
+	stash_group_add_spin_button_integer(group, &editor_prefs.symbolcompletion_max_height,
+		"symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT, "spin_symbollistheight");
+	stash_group_add_toggle_button(group, &editor_prefs.auto_close_xml_tags,
+		"auto_close_xml_tags", TRUE, "check_xmltag");
+	stash_group_add_toggle_button(group, &editor_prefs.complete_snippets,
+		"complete_snippets", TRUE, "check_complete_snippets");
+	stash_group_add_toggle_button(group, &editor_prefs.auto_continue_multiline,
+		"auto_continue_multiline", TRUE, "check_auto_multiline");
+	stash_group_add_integer(group, (gint*)&editor_prefs.autoclose_chars, "autoclose_chars", 0);
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_toggle_button(group, &editor_prefs.line_wrapping,
+		"line_wrapping", FALSE, "check_line_wrapping"); /* default is off for better performance */
+	stash_group_add_toggle_button(group, &editor_prefs.use_indicators,
+		"use_indicators", TRUE, "check_indicators");
+	stash_group_add_toggle_button(group, &editor_prefs.show_indent_guide,
+		"show_indent_guide", FALSE, "check_indent");
+	stash_group_add_toggle_button(group, &editor_prefs.show_white_space,
+		"show_white_space", FALSE, "check_white_space");
+	stash_group_add_toggle_button(group, &editor_prefs.show_line_endings,
+		"show_line_endings", FALSE, "check_line_end");
+	stash_group_add_toggle_button(group, &editor_prefs.show_markers_margin,
+		"show_markers_margin", TRUE, "check_markers_margin");
+	stash_group_add_toggle_button(group, &editor_prefs.show_linenumber_margin,
+		"show_linenumber_margin", TRUE, "check_line_numbers");
+	stash_group_add_toggle_button(group, &editor_prefs.scroll_stop_at_last_line,
+		"scroll_stop_at_last_line", TRUE, "check_scroll_stop_at_last_line");
+	stash_group_add_toggle_button(group, &editor_prefs.folding,
+		"use_folding", TRUE, "check_folding");
+	stash_group_add_toggle_button(group, &editor_prefs.unfold_all_children,
+		"unfold_all_children", FALSE, "check_unfold_children");
+	stash_group_add_toggle_button(group, &editor_prefs.disable_dnd,
+		"pref_editor_disable_dnd", FALSE, "check_disable_dnd");
+	stash_group_add_toggle_button(group, &editor_prefs.smart_home_key,
+		"pref_editor_smart_home_key", TRUE, "check_smart_home");
+	stash_group_add_toggle_button(group, &editor_prefs.newline_strip,
+		"pref_editor_newline_strip", FALSE, "check_newline_strip");
+	stash_group_add_spin_button_integer(group, &editor_prefs.line_break_column,
+		"line_break_column", 72, "spin_line_break");
+	stash_group_add_entry(group, &editor_prefs.comment_toggle_mark,
+		"comment_toggle_mark", GEANY_TOGGLE_MARK, "entry_toggle_mark");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
 		"mru_length", GEANY_DEFAULT_MRU_LENGTH, "spin_mru");
 	stash_group_add_spin_button_integer(group, &file_prefs.disk_check_timeout,
 		"disk_check_timeout", GEANY_DISK_CHECK_TIMEOUT, "spin_disk_check");
+
+	stash_group_add_combo_box(group, &file_prefs.default_eol_character,
+		"default_eol_character", GEANY_DEFAULT_EOL_CHARACTER, "combo_eol");
+	stash_group_add_toggle_button(group, &file_prefs.replace_tabs,
+		"pref_editor_replace_tabs", FALSE, "check_replace_tabs");
+	stash_group_add_toggle_button(group, &file_prefs.ensure_convert_new_lines,
+		"pref_editor_ensure_convert_line_endings", FALSE, "check_ensure_convert_new_lines");
+	stash_group_add_toggle_button(group, &file_prefs.final_new_line,
+		"pref_editor_new_line", TRUE, "check_new_line");
+	stash_group_add_toggle_button(group, &file_prefs.strip_trailing_spaces,
+		"pref_editor_trail_space", FALSE, "check_trailing_spaces");
+
+	/* toolbar */
+	stash_group_add_toggle_button(group, &toolbar_prefs.visible,
+		"pref_toolbar_show", TRUE, "check_toolbar_show");
+	stash_group_add_toggle_button(group, &toolbar_prefs.append_to_menu,
+		"pref_toolbar_append_to_menu", FALSE, "check_toolbar_in_menu");
+	/* the UI settings for this is tricky: they are radio buttons spread between 2 settings.
+	 * We put the default last, so if checked it has precedence over the radio items */
+	stash_group_add_radio_buttons(group, (gint*)&toolbar_prefs.icon_style,
+		"pref_toolbar_icon_style", GTK_TOOLBAR_ICONS,
+		"radio_toolbar_style_default", GTK_TOOLBAR_ICONS /* whatever, overridden below -- last one wins */,
+		"radio_toolbar_image", GTK_TOOLBAR_ICONS,
+		"radio_toolbar_text", GTK_TOOLBAR_TEXT,
+		"radio_toolbar_imagetext", GTK_TOOLBAR_BOTH,
+		NULL);
+	stash_group_add_toggle_button(group, &toolbar_prefs.use_gtk_default_style,
+		"pref_toolbar_use_gtk_default_style", TRUE, "radio_toolbar_style_default");
+	/* same as above */
+	stash_group_add_radio_buttons(group, (gint*)&toolbar_prefs.icon_size,
+		"pref_toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR,
+		"radio_toolbar_icon_default", GTK_ICON_SIZE_LARGE_TOOLBAR /* whatever, overridden below -- last one wins */,
+		"radio_toolbar_large", GTK_ICON_SIZE_LARGE_TOOLBAR,
+		"radio_toolbar_small", GTK_ICON_SIZE_SMALL_TOOLBAR,
+		"radio_toolbar_verysmall", GTK_ICON_SIZE_MENU,
+		NULL);
+	stash_group_add_toggle_button(group, &toolbar_prefs.use_gtk_default_icon,
+		"pref_toolbar_use_gtk_default_icon", TRUE, "radio_toolbar_icon_default");
 
 	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
@@ -412,80 +571,12 @@ static void save_dialog_prefs(GKeyFile *config)
 
 	/* Some of the key names are not consistent, but this is for backwards compatibility */
 
-	/* general */
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
-	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
-	g_key_file_set_boolean(config, PACKAGE, "beep_on_errors", prefs.beep_on_errors);
-	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
-
-	/* interface */
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
-	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
-	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
-	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
-	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
-	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
-
-	/* display */
-	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
-	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
-	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
-	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
-	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
-	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_enabled);
-	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
-	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
-	g_key_file_set_string(config, PACKAGE, "long_line_color", editor_prefs.long_line_color);
-
-	/* editor */
-	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_max_height", editor_prefs.symbolcompletion_max_height);
-	g_key_file_set_integer(config, PACKAGE, "symbolcompletion_min_chars", editor_prefs.symbolcompletion_min_chars);
-	g_key_file_set_boolean(config, PACKAGE, "use_folding", editor_prefs.folding);
-	g_key_file_set_boolean(config, PACKAGE, "unfold_all_children", editor_prefs.unfold_all_children);
-	g_key_file_set_boolean(config, PACKAGE, "use_indicators", editor_prefs.use_indicators);
-	g_key_file_set_boolean(config, PACKAGE, "line_wrapping", editor_prefs.line_wrapping);
-	g_key_file_set_boolean(config, PACKAGE, "auto_close_xml_tags", editor_prefs.auto_close_xml_tags);
-	g_key_file_set_boolean(config, PACKAGE, "complete_snippets", editor_prefs.complete_snippets);
-	g_key_file_set_boolean(config, PACKAGE, "auto_complete_symbols", editor_prefs.auto_complete_symbols);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_disable_dnd", editor_prefs.disable_dnd);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_smart_home_key", editor_prefs.smart_home_key);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_newline_strip", editor_prefs.newline_strip);
-	g_key_file_set_integer(config, PACKAGE, "line_break_column", editor_prefs.line_break_column);
-	g_key_file_set_boolean(config, PACKAGE, "auto_continue_multiline", editor_prefs.auto_continue_multiline);
-	g_key_file_set_string(config, PACKAGE, "comment_toggle_mark", editor_prefs.comment_toggle_mark);
-	g_key_file_set_boolean(config, PACKAGE, "scroll_stop_at_last_line", editor_prefs.scroll_stop_at_last_line);
-	g_key_file_set_integer(config, PACKAGE, "autoclose_chars", editor_prefs.autoclose_chars);
-
 	/* files */
 	g_key_file_set_string(config, PACKAGE, "pref_editor_default_new_encoding", encodings[file_prefs.default_new_encoding].charset);
 	if (file_prefs.default_open_encoding == -1)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
 	else
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[file_prefs.default_open_encoding].charset);
-	g_key_file_set_integer(config, PACKAGE, "default_eol_character", file_prefs.default_eol_character);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_new_line", file_prefs.final_new_line);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", file_prefs.ensure_convert_new_lines);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_replace_tabs", file_prefs.replace_tabs);
-	g_key_file_set_boolean(config, PACKAGE, "pref_editor_trail_space", file_prefs.strip_trailing_spaces);
-
-	/* toolbar */
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", toolbar_prefs.append_to_menu);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_style", toolbar_prefs.use_gtk_default_style);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_icon", toolbar_prefs.use_gtk_default_icon);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
 	/* templates */
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", template_prefs.developer);
@@ -501,7 +592,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_string(config, "tools", "terminal_cmd", tool_prefs.term_cmd ? tool_prefs.term_cmd : "");
 	g_key_file_set_string(config, "tools", "browser_cmd", tool_prefs.browser_cmd ? tool_prefs.browser_cmd : "");
 	g_key_file_set_string(config, "tools", "grep_cmd", tool_prefs.grep_cmd ? tool_prefs.grep_cmd : "");
-	g_key_file_set_string(config, PACKAGE, "context_action_cmd", tool_prefs.context_action_cmd);
 
 	/* build menu */
 	build_save_menu(config, NULL, GEANY_BCS_PREF);
@@ -524,19 +614,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
 			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
-		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
-		g_key_file_set_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
-		g_key_file_set_boolean(config, "VTE", "ignore_menu_bar_accel", vc->ignore_menu_bar_accel);
-		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
-		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
-		g_key_file_set_boolean(config, "VTE", "skip_run_script", vc->skip_run_script);
-		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
-		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
-		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_string(config, "VTE", "image", vc->image);
-		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
 		g_free(tmp_string);
@@ -550,9 +627,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
 	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 
 	/* get the text from the scribble textview */
@@ -749,65 +823,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* general */
-	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
-	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
-	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
-	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
-	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
-	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
-	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
-	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
-	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
-
-	/* interface */
-	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
-	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
-	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
-	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
-	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
-	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
-	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
-	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
-	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
-	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
-
-	/* display, editor */
-	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
-	editor_prefs.long_line_type = utils_get_setting_integer(config, PACKAGE, "long_line_type", 0);
-	if (editor_prefs.long_line_type == 2) /* backward compatibility */
-	{
-		editor_prefs.long_line_type = 0;
-		editor_prefs.long_line_enabled = FALSE;
-	}
-	editor_prefs.long_line_color = utils_get_setting_string(config, PACKAGE, "long_line_color", "#C2EBC2");
-	editor_prefs.long_line_column = utils_get_setting_integer(config, PACKAGE, "long_line_column", 72);
-	editor_prefs.symbolcompletion_min_chars = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_min_chars", GEANY_MIN_SYMBOLLIST_CHARS);
-	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
-	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
-	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
-	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
-	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
-	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", TRUE);
-	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
-	editor_prefs.complete_snippets = utils_get_setting_boolean(config, PACKAGE, "complete_snippets", TRUE);
-	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
-	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
-	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
-	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
-	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
-	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
-	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
-	editor_prefs.line_break_column = utils_get_setting_integer(config, PACKAGE, "line_break_column", 72);
-	editor_prefs.auto_continue_multiline = utils_get_setting_boolean(config, PACKAGE, "auto_continue_multiline", TRUE);
-	editor_prefs.comment_toggle_mark = utils_get_setting_string(config, PACKAGE, "comment_toggle_mark", GEANY_TOGGLE_MARK);
-	editor_prefs.autoclose_chars = utils_get_setting_integer(config, PACKAGE, "autoclose_chars", 0);
-
 	/* Files
 	 * use current locale encoding as default for new files (should be UTF-8 in most cases) */
 	g_get_charset(&default_charset);
@@ -835,24 +850,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 		g_free(tmp_string);
 	}
-	file_prefs.default_eol_character = utils_get_setting_integer(config, PACKAGE, "default_eol_character", GEANY_DEFAULT_EOL_CHARACTER);
-	file_prefs.replace_tabs = utils_get_setting_boolean(config, PACKAGE, "pref_editor_replace_tabs", FALSE);
-	file_prefs.ensure_convert_new_lines = utils_get_setting_boolean(config, PACKAGE, "pref_editor_ensure_convert_line_endings", FALSE);
-	file_prefs.final_new_line = utils_get_setting_boolean(config, PACKAGE, "pref_editor_new_line", TRUE);
-	file_prefs.strip_trailing_spaces = utils_get_setting_boolean(config, PACKAGE, "pref_editor_trail_space", FALSE);
-
-	/* toolbar */
-	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
-	{
-		toolbar_prefs.use_gtk_default_style = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_style", TRUE);
-		if (! toolbar_prefs.use_gtk_default_style)
-			toolbar_prefs.icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", GTK_TOOLBAR_ICONS);
-
-		toolbar_prefs.use_gtk_default_icon = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_icon", TRUE);
-		if (! toolbar_prefs.use_gtk_default_icon)
-			toolbar_prefs.icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR);
-	}
 
 	/* VTE */
 #ifdef HAVE_VTE
@@ -871,6 +868,36 @@ static void load_dialog_prefs(GKeyFile *config)
 #endif
 
 		vc = g_new0(VteConfig, 1);
+
+		group = stash_group_new("VTE");
+		configuration_add_pref_group(group, TRUE);
+
+		stash_group_add_entry(group, &vc->image,
+			"image", "", "entry_image");
+		stash_group_add_entry(group, &vc->shell,
+			"shell", shell, "entry_shell");
+		stash_group_add_string(group, &vc->font,
+			"font", GEANY_DEFAULT_FONT_EDITOR);
+		stash_group_add_toggle_button(group, &vc->scroll_on_key,
+			"scroll_on_key", TRUE, "check_scroll_key");
+		stash_group_add_toggle_button(group, &vc->scroll_on_out,
+			"scroll_on_out", TRUE, "check_scroll_out");
+		stash_group_add_toggle_button(group, &vc->enable_bash_keys,
+			"enable_bash_keys", TRUE, "check_enable_bash_keys");
+		stash_group_add_toggle_button(group, &vc->ignore_menu_bar_accel,
+			"ignore_menu_bar_accel", FALSE, "check_ignore_menu_key");
+		stash_group_add_toggle_button(group, &vc->follow_path,
+			"follow_path", FALSE, "check_follow_path");
+		stash_group_add_toggle_button(group, &vc->run_in_vte,
+			"run_in_vte", FALSE, "check_run_in_vte");
+		stash_group_add_toggle_button(group, &vc->skip_run_script,
+			"skip_run_script", FALSE, "check_skip_script");
+		stash_group_add_toggle_button(group, &vc->cursor_blinks,
+			"cursor_blinks", FALSE, "check_cursor_blinks");
+		stash_group_add_spin_button_integer(group, &vc->scrollback_lines,
+			"scrollback_lines", 500, "spin_scrollback");
+
+		/* specially handled settings */
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
 			/* last dir is not set, fallback to user's home directory */
@@ -880,18 +907,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			vte_info.dir = g_strdup("/");
 
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->image = utils_get_setting_string(config, "VTE", "image", "");
-		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
-		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
-		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
-		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
-		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
-		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
-		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
-		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
-		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
 
@@ -946,8 +961,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	tool_prefs.browser_cmd = utils_get_setting_string(config, "tools", "browser_cmd", GEANY_DEFAULT_TOOLS_BROWSER);
 	tool_prefs.grep_cmd = utils_get_setting_string(config, "tools", "grep_cmd", GEANY_DEFAULT_TOOLS_GREP);
 
-	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
-
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 
@@ -978,6 +991,13 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* read stash prefs */
 	settings_action(config, SETTING_READ);
 
+	/* display, editor backward compatibility */
+	if (editor_prefs.long_line_type == 2)
+	{
+		editor_prefs.long_line_type = 0;
+		editor_prefs.long_line_enabled = FALSE;
+	}
+
 	/* build menu
 	 * after stash prefs as it uses some of them */
 	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
@@ -992,8 +1012,6 @@ static void load_ui_prefs(GKeyFile *config)
 	gint *geo;
 	gsize geo_len;
 
-	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
-	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
 	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
