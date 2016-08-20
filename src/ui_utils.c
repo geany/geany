@@ -1462,6 +1462,8 @@ void ui_update_view_editor_menu_items(void)
  *
  * @return @transfer{floating} The frame widget, setting the alignment container for
  * packing child widgets.
+ * 
+ * @deprecated 1.29: Use GTK API directly
  **/
 GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
@@ -2835,7 +2837,7 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 	gchar *text;
 
 	va_start(a, format);
-	text = g_strdup_vprintf(format, a);
+	text = g_markup_vprintf_escaped(format, a);
 	va_end(a);
 
 	gtk_label_set_text(label, text);
@@ -2896,7 +2898,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GtkWidget *menu_item, *menu_item_label, *image;
 	GeanyDocument *doc;
 	guint i, len;
-	gchar *base_name, *label;
+	gchar *base_name;
 	GPtrArray *sorted_documents;
 
 	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -2930,11 +2932,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		gtk_widget_set_name(menu_item_label, document_get_status_widget_class(doc));
 
 		if (doc == active)
-		{
-			label = g_markup_escape_text(base_name, -1);
-			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", label);
-			g_free(label);
-		}
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
 
 		g_free(base_name);
 	}
