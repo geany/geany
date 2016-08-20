@@ -436,33 +436,6 @@ static void prefs_init_dialog(void)
 
 
 	/* Toolbar settings */
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.visible);
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_in_menu");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), toolbar_prefs.append_to_menu);
-
-	switch (toolbar_prefs.icon_style)
-	{
-		case 0: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image"); break;
-		case 1: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_text"); break;
-		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext"); break;
-	}
-	if (toolbar_prefs.use_gtk_default_style)
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_style_default");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
-	switch (toolbar_prefs.icon_size)
-	{
-		case GTK_ICON_SIZE_LARGE_TOOLBAR:
-				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large"); break;
-		case GTK_ICON_SIZE_SMALL_TOOLBAR:
-				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small"); break;
-		default: widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_verysmall"); break;
-	}
-	if (toolbar_prefs.use_gtk_default_icon)
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_icon_default");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), TRUE);
-
 	/* disable elements if toolbar is hidden */
 	on_toolbar_show_toggled(GTK_TOGGLE_BUTTON(
 					ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show")), NULL);
@@ -737,47 +710,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* Interface settings */
 		if (editor_prefs.long_line_column == 0)
 			editor_prefs.long_line_enabled = FALSE;
-
-		/* Toolbar settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
-		toolbar_prefs.visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_in_menu");
-		toolbar_prefs.append_to_menu = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_style_default");
-		toolbar_prefs.use_gtk_default_style = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		if (! toolbar_prefs.use_gtk_default_style)
-		{
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_imagetext");
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-				toolbar_prefs.icon_style = 2;
-			else
-			{
-				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_image");
-				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-					toolbar_prefs.icon_style = 0;
-				else
-					/* now only the text only radio remains, so set text only */
-					toolbar_prefs.icon_style = 1;
-			}
-		}
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_icon_default");
-		toolbar_prefs.use_gtk_default_icon = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		if (! toolbar_prefs.use_gtk_default_icon)
-		{	toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_large");
-			if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-				toolbar_prefs.icon_size = GTK_ICON_SIZE_LARGE_TOOLBAR;
-			else
-			{
-				widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_toolbar_small");
-				if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)))
-					toolbar_prefs.icon_size = GTK_ICON_SIZE_SMALL_TOOLBAR;
-				else
-					toolbar_prefs.icon_size = GTK_ICON_SIZE_MENU;
-			}
-		}
 
 		/* Files settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_new_encoding");

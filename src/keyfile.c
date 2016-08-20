@@ -354,6 +354,33 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.strip_trailing_spaces,
 		"pref_editor_trail_space", FALSE, "check_trailing_spaces");
 
+	/* toolbar */
+	stash_group_add_toggle_button(group, &toolbar_prefs.visible,
+		"pref_toolbar_show", TRUE, "check_toolbar_show");
+	stash_group_add_toggle_button(group, &toolbar_prefs.append_to_menu,
+		"pref_toolbar_append_to_menu", FALSE, "check_toolbar_in_menu");
+	/* the UI settings for this is tricky: they are radio buttons spread between 2 settings.
+	 * We put the default last, so if checked it has precedence over the radio items */
+	stash_group_add_radio_buttons(group, (gint*)&toolbar_prefs.icon_style,
+		"pref_toolbar_icon_style", GTK_TOOLBAR_ICONS,
+		"radio_toolbar_style_default", GTK_TOOLBAR_ICONS /* whatever, overridden below -- last one wins */,
+		"radio_toolbar_image", GTK_TOOLBAR_ICONS,
+		"radio_toolbar_text", GTK_TOOLBAR_TEXT,
+		"radio_toolbar_imagetext", GTK_TOOLBAR_BOTH,
+		NULL);
+	stash_group_add_toggle_button(group, &toolbar_prefs.use_gtk_default_style,
+		"pref_toolbar_use_gtk_default_style", TRUE, "radio_toolbar_style_default");
+	/* same as above */
+	stash_group_add_radio_buttons(group, (gint*)&toolbar_prefs.icon_size,
+		"pref_toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR,
+		"radio_toolbar_icon_default", GTK_ICON_SIZE_LARGE_TOOLBAR /* whatever, overridden below -- last one wins */,
+		"radio_toolbar_large", GTK_ICON_SIZE_LARGE_TOOLBAR,
+		"radio_toolbar_small", GTK_ICON_SIZE_SMALL_TOOLBAR,
+		"radio_toolbar_verysmall", GTK_ICON_SIZE_MENU,
+		NULL);
+	stash_group_add_toggle_button(group, &toolbar_prefs.use_gtk_default_icon,
+		"pref_toolbar_use_gtk_default_icon", TRUE, "radio_toolbar_icon_default");
+
 	/* various geany prefs */
 	group = stash_group_new(PACKAGE);
 	configuration_add_various_pref_group(group);
@@ -550,14 +577,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", "none");
 	else
 		g_key_file_set_string(config, PACKAGE, "pref_editor_default_open_encoding", encodings[file_prefs.default_open_encoding].charset);
-
-	/* toolbar */
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_show", toolbar_prefs.visible);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", toolbar_prefs.append_to_menu);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_style", toolbar_prefs.use_gtk_default_style);
-	g_key_file_set_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_icon", toolbar_prefs.use_gtk_default_icon);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_style", toolbar_prefs.icon_style);
-	g_key_file_set_integer(config, PACKAGE, "pref_toolbar_icon_size", toolbar_prefs.icon_size);
 
 	/* templates */
 	g_key_file_set_string(config, PACKAGE, "pref_template_developer", template_prefs.developer);
@@ -843,19 +862,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			file_prefs.default_open_encoding = -1;
 
 		g_free(tmp_string);
-	}
-
-	/* toolbar */
-	toolbar_prefs.visible = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_show", TRUE);
-	toolbar_prefs.append_to_menu = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_append_to_menu", FALSE);
-	{
-		toolbar_prefs.use_gtk_default_style = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_style", TRUE);
-		if (! toolbar_prefs.use_gtk_default_style)
-			toolbar_prefs.icon_style = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_style", GTK_TOOLBAR_ICONS);
-
-		toolbar_prefs.use_gtk_default_icon = utils_get_setting_boolean(config, PACKAGE, "pref_toolbar_use_gtk_default_icon", TRUE);
-		if (! toolbar_prefs.use_gtk_default_icon)
-			toolbar_prefs.icon_size = utils_get_setting_integer(config, PACKAGE, "pref_toolbar_icon_size", GTK_ICON_SIZE_LARGE_TOOLBAR);
 	}
 
 	/* VTE */
