@@ -571,7 +571,7 @@ static void prefs_init_dialog(void)
 	gtk_widget_show(widget);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vte_info.load_vte);
 
-	/* VTE settings */
+	/* VTE settings not handled by Stash */
 	if (vte_info.have_vte)
 	{
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "font_term");
@@ -582,39 +582,6 @@ static void prefs_init_dialog(void)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
 		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
-		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
-		gtk_entry_set_text(GTK_ENTRY(widget), vc->shell);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_key);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->scroll_on_out);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->enable_bash_keys);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->ignore_menu_bar_accel);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->follow_path);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->run_in_vte);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->skip_run_script);
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), vc->cursor_blinks);
 	}
 #endif
 }
@@ -843,43 +810,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		/* VTE settings */
 		if (vte_info.have_vte)
 		{
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
-			/* note: use stash for new code - it updates spin buttons itself */
-			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
-			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
-			g_free(vc->image);
-			vc->image = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
-			g_free(vc->shell);
-			vc->shell = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_key");
-			vc->scroll_on_key = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_out");
-			vc->scroll_on_out = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_enable_bash_keys");
-			vc->enable_bash_keys = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ignore_menu_key");
-			vc->ignore_menu_bar_accel = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_follow_path");
-			vc->follow_path = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_run_in_vte");
-			vc->run_in_vte = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_skip_script");
-			vc->skip_run_script = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_cursor_blinks");
-			vc->cursor_blinks = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 			vte_apply_user_settings();
 		}
 #endif

@@ -614,19 +614,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
 			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
-		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
-		g_key_file_set_boolean(config, "VTE", "enable_bash_keys", vc->enable_bash_keys);
-		g_key_file_set_boolean(config, "VTE", "ignore_menu_bar_accel", vc->ignore_menu_bar_accel);
-		g_key_file_set_boolean(config, "VTE", "follow_path", vc->follow_path);
-		g_key_file_set_boolean(config, "VTE", "run_in_vte", vc->run_in_vte);
-		g_key_file_set_boolean(config, "VTE", "skip_run_script", vc->skip_run_script);
-		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
-		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
-		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_string(config, "VTE", "image", vc->image);
-		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
 		g_free(tmp_string);
@@ -881,6 +868,36 @@ static void load_dialog_prefs(GKeyFile *config)
 #endif
 
 		vc = g_new0(VteConfig, 1);
+
+		group = stash_group_new("VTE");
+		configuration_add_pref_group(group, TRUE);
+
+		stash_group_add_entry(group, &vc->image,
+			"image", "", "entry_image");
+		stash_group_add_entry(group, &vc->shell,
+			"shell", shell, "entry_shell");
+		stash_group_add_string(group, &vc->font,
+			"font", GEANY_DEFAULT_FONT_EDITOR);
+		stash_group_add_toggle_button(group, &vc->scroll_on_key,
+			"scroll_on_key", TRUE, "check_scroll_key");
+		stash_group_add_toggle_button(group, &vc->scroll_on_out,
+			"scroll_on_out", TRUE, "check_scroll_out");
+		stash_group_add_toggle_button(group, &vc->enable_bash_keys,
+			"enable_bash_keys", TRUE, "check_enable_bash_keys");
+		stash_group_add_toggle_button(group, &vc->ignore_menu_bar_accel,
+			"ignore_menu_bar_accel", FALSE, "check_ignore_menu_key");
+		stash_group_add_toggle_button(group, &vc->follow_path,
+			"follow_path", FALSE, "check_follow_path");
+		stash_group_add_toggle_button(group, &vc->run_in_vte,
+			"run_in_vte", FALSE, "check_run_in_vte");
+		stash_group_add_toggle_button(group, &vc->skip_run_script,
+			"skip_run_script", FALSE, "check_skip_script");
+		stash_group_add_toggle_button(group, &vc->cursor_blinks,
+			"cursor_blinks", FALSE, "check_cursor_blinks");
+		stash_group_add_spin_button_integer(group, &vc->scrollback_lines,
+			"scrollback_lines", 500, "spin_scrollback");
+
+		/* specially handled settings */
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
 		if ((vte_info.dir == NULL || utils_str_equal(vte_info.dir, "")) && pw != NULL)
 			/* last dir is not set, fallback to user's home directory */
@@ -890,18 +907,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			vte_info.dir = g_strdup("/");
 
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->image = utils_get_setting_string(config, "VTE", "image", "");
-		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
-		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
-		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
-		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
-		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
-		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
-		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
-		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
-		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
 
