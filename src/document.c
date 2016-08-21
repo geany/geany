@@ -3326,7 +3326,7 @@ GeanyDocument *document_index(gint idx)
 
 GeanyDocument *document_clone(GeanyDocument *old_doc)
 {
-	gchar *text;
+	gchar *text, *new_filename = NULL;
 	GeanyDocument *doc;
 	ScintillaObject *old_sci;
 
@@ -3337,7 +3337,35 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	else
 		text = sci_get_contents(old_sci, -1);
 
-	doc = document_new_file(NULL, old_doc->file_type, text);
+	/* create a new filename based on the old filename */
+	if (old_doc->file_name)
+	{
+		guint i, j;
+		gboolean unused;
+
+		for (i = 0; i <= 99; ++i)
+		{
+			new_filename = g_strdup_printf("%s.copy-%02u", old_doc->file_name, i);
+			unused = TRUE;
+
+			foreach_document(j)
+			{
+				if (documents[j]->file_name && strcmp(documents[j]->file_name, new_filename) == 0)
+				{
+					unused = FALSE;
+					break;
+				}
+			}
+
+			if (unused && !g_file_test(new_filename, G_FILE_TEST_EXISTS))
+				break;
+
+			g_free(new_filename);
+			new_filename = NULL;
+		}
+	}
+
+	doc = document_new_file(new_filename, old_doc->file_type, text);
 	g_free(text);
 	document_set_text_changed(doc, TRUE);
 
@@ -3347,7 +3375,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	doc->editor->auto_indent = old_doc->editor->auto_indent;
 	editor_set_indent(doc->editor, old_doc->editor->indent_type,
 		old_doc->editor->indent_width);
-	doc->readonly = old_doc->readonly;
+	doc->readonly = FALSE;
 	doc->has_bom = old_doc->has_bom;
 	doc->priv->protected = 0;
 	document_set_encoding(doc, old_doc->encoding);
