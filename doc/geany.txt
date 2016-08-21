@@ -4593,6 +4593,13 @@ calltips
 
     *Example:* ``calltips=0xc0c0c0;0xffffff;false;false``
 
+indicator_error
+    The color of the error indicator.
+
+    Only the first argument (foreground color) is used.
+
+    *Example:* ``indicator_error=0xff0000``
+
 
 [settings] section
 ``````````````````
