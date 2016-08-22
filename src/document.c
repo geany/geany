@@ -1764,16 +1764,6 @@ void document_rename_file(GeanyDocument *doc, const gchar *new_filename)
 }
 
 
-/**
- *  Renames the file in @a doc to @a new_filename then saves data to it.
- *
- *  @param doc The current document which should be renamed.
- *  @param new_filename The new filename in UTF-8 encoding.
- *
- *  @return @c TRUE if file was renamed or @c FALSE otherwise.
- *  @since ?
- **/
-GEANY_API_SYMBOL
 gboolean document_rename_file_and_save(GeanyDocument *doc, const gchar *new_filename)
 {
 	g_return_val_if_fail(DOC_VALID(doc), FALSE);
