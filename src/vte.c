@@ -327,7 +327,7 @@ static void on_vte_realize(void)
 	/* the vte widget has to be realised before color changes take effect */
 	vte_apply_user_settings();
 
-	if (vf->vte_terminal_im_append_menuitems)
+	if (vf->vte_terminal_im_append_menuitems && vc->im_submenu)
 		vf->vte_terminal_im_append_menuitems(VTE_TERMINAL(vc->vte), GTK_MENU_SHELL(vc->im_submenu));
 }
 
@@ -721,6 +721,7 @@ static GtkWidget *vte_create_popup_menu(void)
 {
 	GtkWidget *menu, *item;
 	GtkAccelGroup *accel_group;
+	gboolean show_im_menu = TRUE;
 
 	menu = gtk_menu_new();
 
@@ -775,8 +776,15 @@ static GtkWidget *vte_create_popup_menu(void)
 
 	msgwin_menu_add_common_items(GTK_MENU(menu));
 
-	/* VTE 2.91 doesn't have IM context items -- but neither does newer GTK3 apparently */
-	if (vf->vte_terminal_im_append_menuitems)
+	/* VTE 2.91 doesn't have IM context items, and GTK >= 3.10 doesn't show them anyway */
+	if (! vf->vte_terminal_im_append_menuitems || gtk_check_version(3, 10, 0) == NULL)
+		show_im_menu = FALSE;
+	else /* otherwise, query the setting */
+		g_object_get(gtk_settings_get_default(), "gtk-show-input-method-menu", &show_im_menu, NULL);
+
+	if (! show_im_menu)
+		vc->im_submenu = NULL;
+	else
 	{
 		item = gtk_separator_menu_item_new();
 		gtk_widget_show(item);
@@ -790,9 +798,9 @@ static GtkWidget *vte_create_popup_menu(void)
 		gtk_container_add(GTK_CONTAINER(menu), item);
 
 		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), vc->im_submenu);
+		/* submenu populated after vte realized */
 	}
 
-	/* submenu populated after vte realized */
 	return menu;
 }
 
