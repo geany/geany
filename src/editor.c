@@ -700,11 +700,10 @@ static void request_reshowing_calltip(SCNotification *nt)
 }
 
 
-static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize rootlen)
+static GPtrArray *get_scoped_tags(GeanyEditor *editor, gint pos)
 {
 	ScintillaObject *sci = editor->sci;
-	gint pos = sci_get_current_position(editor->sci);
-	gchar typed = sci_get_char_at(sci, pos - 1);
+	gchar typed = pos > 0 ? sci_get_char_at(sci, pos - 1) : 0;
 	gchar brace_char;
 	gchar *name;
 	GeanyFiletype *ft = editor->document->file_type;
@@ -712,22 +711,8 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	gboolean function = FALSE;
 	gboolean member;
 	gboolean scope_sep_typed = FALSE;
-	gboolean ret = FALSE;
 	const gchar *current_scope;
 	const gchar *context_sep = tm_tag_context_separator(ft->lang);
-
-	if (autocomplete_scope_shown)
-	{
-		/* move at the operator position */
-		pos -= rootlen;
-
-		/* allow for a space between word and operator */
-		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
-			pos--;
-
-		if (pos > 0)
-			typed = sci_get_char_at(sci, pos - 1);
-	}
 
 	/* make sure to keep in sync with similar checks below */
 	if (match_last_chars(sci, pos, context_sep))
@@ -743,7 +728,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
 		pos -= 3;
 	else
-		return FALSE;
+		return NULL;
 
 	/* allow for a space between word and operator */
 	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
@@ -768,7 +753,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 
 	name = editor_get_word_at_pos(editor, pos, NULL);
 	if (!name)
-		return FALSE;
+		return NULL;
 
 	/* check if invoked on member */
 	pos -= strlen(name);
@@ -782,6 +767,30 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 		current_scope = "";
 	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
 				member, current_scope, scope_sep_typed);
+
+	g_free(name);
+	return tags;
+}
+
+
+static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize rootlen)
+{
+	ScintillaObject *sci = editor->sci;
+	gint pos = sci_get_current_position(editor->sci);
+	GPtrArray *tags;
+	gboolean ret = FALSE;
+
+	if (autocomplete_scope_shown)
+	{
+		/* move at the operator position */
+		pos -= rootlen;
+
+		/* allow for a space between word and operator */
+		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+			pos--;
+	}
+
+	tags = get_scoped_tags(editor, pos);
 	if (tags)
 	{
 		GPtrArray *filtered = g_ptr_array_new();
@@ -804,7 +813,6 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 		g_ptr_array_free(filtered, TRUE);
 	}
 
-	g_free(name);
 	return ret;
 }
 
@@ -1895,8 +1903,9 @@ static gboolean append_calltip(GString *str, const TMTag *tag, GeanyFiletypeID f
 }
 
 
-static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
+static gchar *find_calltip(gint pos, const gchar *word, GeanyEditor *editor)
 {
+	GeanyFiletype *ft = editor->document->file_type;
 	GPtrArray *tags;
 	const TMTagType arg_types = tm_tag_function_t | tm_tag_prototype_t |
 		tm_tag_method_t | tm_tag_macro_with_arg_t;
@@ -1906,8 +1915,25 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 
 	g_return_val_if_fail(ft && word && *word, NULL);
 
-	/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
-	tags = tm_workspace_find(word, NULL, tm_tag_max_t, NULL, ft->lang);
+	tags = get_scoped_tags(editor, pos - strlen(word));
+	if (tags)
+	{
+		GPtrArray *filtered = g_ptr_array_new();
+
+		foreach_ptr_array(tag, i, tags)
+		{
+			if (strcmp(tag->name, word) == 0)
+				g_ptr_array_add(filtered, tag);
+		}
+
+		g_ptr_array_free(tags, TRUE);
+		tags = filtered;
+	}
+	else
+	{
+		/* use all types in case language uses wrong tag type e.g. python "members" instead of "methods" */
+		tags = tm_workspace_find(word, NULL, tm_tag_max_t, NULL, ft->lang);
+	}
 	if (tags->len == 0)
 	{
 		g_ptr_array_free(tags, TRUE);
@@ -2046,7 +2072,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	if (word[0] == '\0')
 		return FALSE;
 
-	str = find_calltip(word, editor->document->file_type);
+	str = find_calltip(pos, word, editor);
 	if (str)
 	{
 		g_free(calltip.text);	/* free the old calltip */
