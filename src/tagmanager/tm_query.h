@@ -14,10 +14,10 @@
 #include "tm_parser.h"
 #include "tm_tag.h"
 
-/* Opaque data type representing a tagmanager query */
+/** Opaque data type representing a tagmanager query */
 typedef struct TMQuery TMQuery;
 
-/* Possible data sources for a tagmanager query */
+/** Possible data sources for a tagmanager query */
 typedef enum {
 	TM_QUERY_SOURCE_GLOBAL_TAGS,
 	TM_QUERY_SOURCE_SESSION_TAGS,

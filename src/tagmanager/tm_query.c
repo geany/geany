@@ -8,6 +8,11 @@
 */
 
 
+/**
+ * @file tm_query.h
+ * The TMQuery structure and methods to query tags from the global workspace.
+ */
+
 #include <glib.h>
 #include <glib-object.h>
 
@@ -41,9 +46,10 @@ static TMQuery *tm_query_dup(TMQuery *q)
 }
 
 
-/* Gets the GBoxed-derived GType for TMQuery
+/** Gets the GBoxed-derived GType for TMQuery
  *
  * @return TMQuery type. */
+GEANY_API_SYMBOL
 GType tm_query_get_type(void);
 
 G_DEFINE_BOXED_TYPE(TMQuery, tm_query, tm_query_dup, tm_query_free);
@@ -54,7 +60,7 @@ static void free_g_string(gpointer data)
 }
 
 
-/* Create a tag query
+/** Create a tag query
  *
  * The query can be used to retrieve tags from the tagmanager. You can
  * optionally add filters and execute the query with tm_query_exec().
@@ -65,6 +71,7 @@ static void free_g_string(gpointer data)
  *
  * @return The opaque query pointer.
  */
+GEANY_API_SYMBOL
 TMQuery *tm_query_new(const TMWorkspace *workspace, gint data_sources)
 {
 	TMQuery *q = g_slice_new(TMQuery);
@@ -84,12 +91,13 @@ TMQuery *tm_query_new(const TMWorkspace *workspace, gint data_sources)
 }
 
 
-/* Decrements the reference count of @a q
+/** Decrements the reference count of @a q
  *
  * If the reference point drops to 0, then @a q is freed.
  *
  * @param q the query to free.
  */
+GEANY_API_SYMBOL
 void tm_query_free(TMQuery *q)
 {
 	if (NULL != q && g_atomic_int_dec_and_test(&q->refcount))
@@ -102,7 +110,7 @@ void tm_query_free(TMQuery *q)
 }
 
 
-/* Add name filter to a query
+/** Add name filter to a query
  *
  * The query results will be restricted to tags matching the name. The
  * matching is a simple prefix matching. The length to match can be
@@ -114,6 +122,7 @@ void tm_query_free(TMQuery *q)
  *
  * @return 0 on succcess, < 0 on error.
  */
+GEANY_API_SYMBOL
 gint tm_query_add_name(TMQuery *q, const gchar *name, gssize name_len)
 {
 	GString *s;
@@ -129,7 +138,7 @@ gint tm_query_add_name(TMQuery *q, const gchar *name, gssize name_len)
 }
 
 
-/* Add scope filter to a query
+/** Add scope filter to a query
  *
  * The query results will be restricted to tags that are subordenates of
  * a container scope matching @a scope, for example a C++ class.
@@ -139,6 +148,7 @@ gint tm_query_add_name(TMQuery *q, const gchar *name, gssize name_len)
  *
  * @return 0 on succcess, < 0 on error.
  */
+GEANY_API_SYMBOL
 gint tm_query_add_scope(TMQuery *q, const gchar *scope)
 {
 	g_ptr_array_add(q->scopes, g_strdup(scope));
@@ -147,7 +157,7 @@ gint tm_query_add_scope(TMQuery *q, const gchar *scope)
 }
 
 
-/* Add language filter to a query
+/** Add language filter to a query
  *
  * The query results will be restricted to tags whose corresponding
  * @ref TMSourceFile is written in a specific programming language.
@@ -157,6 +167,7 @@ gint tm_query_add_scope(TMQuery *q, const gchar *scope)
  *
  * @return 0 on succcess, < 0 on error.
  */
+GEANY_API_SYMBOL
 gint tm_query_add_lang(TMQuery *q, TMParserType lang)
 {
 	g_array_append_val(q->langs, lang);
@@ -165,7 +176,7 @@ gint tm_query_add_lang(TMQuery *q, TMParserType lang)
 }
 
 
-/* Set the tag type filter of a query.
+/** Set the tag type filter of a query.
  *
  * The query results will be restricted to tags match any of the given types.
  * You can only set this filter because the @a type is a bitmask containing
@@ -176,6 +187,7 @@ gint tm_query_add_lang(TMQuery *q, TMParserType lang)
  *
  * @return 0 on succcess, < 0 on error.
  */
+GEANY_API_SYMBOL
 gint tm_query_set_tag_type(TMQuery *q, TMTagType type)
 {
 	if (type > tm_tag_max_t)
@@ -196,7 +208,7 @@ static gint tag_compare_ptr(gconstpointer a, gconstpointer b, gpointer data)
 }
 
 
-/* Execute a query
+/** Execute a query
  *
  * The query will be executed according to the applied filters. Filters
  * of the same type are combined using logical OR. Then, filters of different
@@ -218,11 +230,13 @@ static gint tag_compare_ptr(gconstpointer a, gconstpointer b, gpointer data)
  * g_ptr_array_free().
  *
  * @param q The query to execute
- * @param sort_attr Tag attribute to use as sort key, or @c NULL to not sort.
- * @param dedup_attr Tag attribute to use as deduplicaiton key, or @c NULL to
- *                    not perform deduplicaiton.
- * @return Resulting tag array.
+ * @param sort_attr @nullable @array{zero-terminated=1} Tag attribute to use
+ *                   as sort key, or @c NULL to not sort.
+ * @param dedup_attr @nullable @array{zero-terminated=1} Tag attribute to use
+ *                    as deduplicaiton key, or @c NULL to not perform deduplicaiton.
+ * @return @transfer{container} @elementtype{TMTag} Resulting tag array.
  */
+GEANY_API_SYMBOL
 GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *dedup_attr)
 {
 	TMTag **tags, *tag;
