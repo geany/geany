@@ -671,7 +671,7 @@ static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	if (!src || !dst || !name || !*name)
 		return;
 
-	tag = tm_tags_find(src, name, FALSE, &num);
+	tag = tm_tags_find(src, name, -1, &num);
 	for (i = 0; i < num; ++i)
 	{
 		if ((type & (*tag)->type) &&
@@ -719,7 +719,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 		return;
 
 	num = 0;
-	tag = tm_tags_find(src, name, TRUE, &count);
+	tag = tm_tags_find(src, name, strlen(name), &count);
 	for (i = 0; i < count && num < max_num; ++i)
 	{
 		if (tm_tag_langs_compatible(lang, (*tag)->lang) &&

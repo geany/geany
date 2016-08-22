@@ -74,14 +74,6 @@ static void log_tag_free(TMTag *tag)
 #endif /* DEBUG_TAG_REFS */
 
 
-typedef struct
-{
-	guint *sort_attrs;
-	gboolean partial;
-	const GPtrArray *tags_array;
-	gboolean first;
-} TMSortOptions;
-
 /* Gets the GType for a TMTag */
 GType tm_tag_get_type(void)
 {
@@ -151,9 +143,9 @@ TMTag *tm_tag_ref(TMTag *tag)
 }
 
 /*
- Inbuilt tag comparison function.
+ Inbuilt tag comparison function, usable for qsort() or g_ptr_array_sort().
 */
-static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
+gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data)
 {
 	unsigned int *sort_attr;
 	int returnval = 0;
@@ -168,8 +160,8 @@ static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user
 	}
 	if (NULL == sort_options->sort_attrs)
 	{
-		if (sort_options->partial)
-			return strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
+		if (sort_options->cmp_len >= 0)
+			return strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), sort_options->cmp_len);
 		else
 			return strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 	}
@@ -179,8 +171,8 @@ static gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user
 		switch (*sort_attr)
 		{
 			case tm_tag_attr_name_t:
-				if (sort_options->partial)
-					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), strlen(FALLBACK(t1->name, "")));
+				if (sort_options->cmp_len >= 0)
+					returnval = strncmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""), sort_options->cmp_len);
 				else
 					returnval = strcmp(FALLBACK(t1->name, ""), FALLBACK(t2->name, ""));
 				break;
@@ -269,7 +261,7 @@ void tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboole
 		return;
 
 	sort_options.sort_attrs = sort_attributes;
-	sort_options.partial = FALSE;
+	sort_options.cmp_len = -1;
 	for (i = 1; i < tags_array->len; ++i)
 	{
 		if (0 == tm_tag_compare(&(tags_array->pdata[i - 1]), &(tags_array->pdata[i]), &sort_options))
@@ -297,7 +289,7 @@ void tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 	g_return_if_fail(tags_array);
 
 	sort_options.sort_attrs = sort_attributes;
-	sort_options.partial = FALSE;
+	sort_options.cmp_len = -1;
 	g_ptr_array_sort_with_data(tags_array, tm_tag_compare, &sort_options);
 	if (dedup)
 		tm_tags_dedup(tags_array, sort_attributes, unref_duplicates);
@@ -340,7 +332,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
 			TMTag **found;
 			TMTag *tag = source_file->tags_array->pdata[i];
 
-			found = tm_tags_find(tags_array, tag->name, FALSE, &tag_count);
+			found = tm_tags_find(tags_array, tag->name, -1, &tag_count);
 
 			for (j = 0; j < tag_count; j++)
 			{
@@ -481,7 +473,7 @@ GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array,
 	TMSortOptions sort_options;
 	
 	sort_options.sort_attrs = sort_attributes;
-	sort_options.partial = FALSE;
+	sort_options.cmp_len = -1;
 	res_array = merge(big_array, small_array, &sort_options, unref_duplicates);
 	return res_array;
 }
@@ -592,11 +584,12 @@ static gint tag_search_cmp(gconstpointer ptr1, gconstpointer ptr2, gpointer user
  The passed array of tags must be already sorted by name (searched with binary search).
  @param tags_array Tag array (sorted on name)
  @param name Name of the tag to locate.
- @param partial If TRUE, matches the first part of the name instead of doing exact match.
+ @param name_len Length of name to compare. Exclude NUL byte to perform prefix
+ *      matching. Pass -1 to not limit the length.
  @param tagCount Return location of the matched tags.
 */
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, guint *tagCount)
+		gssize name_len, guint *tagCount)
 {
 	TMTag *tag, **first;
 	TMSortOptions sort_options;
@@ -609,7 +602,7 @@ TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
 	tag->name = (char *) name;
 
 	sort_options.sort_attrs = NULL;
-	sort_options.partial = partial;
+	sort_options.cmp_len = name_len;
 	sort_options.tags_array = tags_array;
 	sort_options.first = TRUE;
 	first = (TMTag **)binary_search(&tag, tags_array->pdata, tags_array->len,
