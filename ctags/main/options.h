@@ -93,7 +93,7 @@ extern CONST_OPTION optionValues		Option;
 /*
 *   FUNCTION PROTOTYPES
 */
-extern void verbose (const char *const format, ...) PRINTF (1, 2);
+extern void verbose (const char *const format, ...) CTAGS_ATTR_PRINTF (1, 2);
 extern void freeList (stringList** const pString);
 extern void setDefaultTagFileName (void);
 

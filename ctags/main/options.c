@@ -208,7 +208,7 @@ void addIgnoreListFromFile (const char *const fileName)
 		stringListCombine (Option.ignore, tokens);
 }
 
-extern void processExcludeOption (const char *const UNUSED option,
+extern void processExcludeOption (const char *const option CTAGS_ATTR_UNUSED,
 								  const char *const parameter)
 {
 	if (parameter [0] == '\0')

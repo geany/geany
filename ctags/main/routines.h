@@ -63,7 +63,7 @@ enum eErrorTypes { FATAL = 1, WARNING = 2, PERROR = 4 };
 */
 extern void setExecutableName (const char *const path);
 extern const char *getExecutableName (void);
-extern void error (const errorSelection selection, const char *const format, ...) PRINTF (2, 3);
+extern void error (const errorSelection selection, const char *const format, ...) CTAGS_ATTR_PRINTF (2, 3);
 
 /* Memory allocation functions */
 #ifdef NEED_PROTO_MALLOC

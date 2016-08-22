@@ -465,13 +465,13 @@ static objcToken waitedToken, fallBackToken;
 /* Ignore everything till waitedToken and jump to comeAfter.
  * If the "end" keyword is encountered break, doesn't remember
  * why though. */
-static void tillToken (vString * const UNUSED (ident), objcToken what)
+static void tillToken (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	if (what == waitedToken)
 		toDoNext = comeAfter;
 }
 
-static void tillTokenOrFallBack (vString * const UNUSED (ident), objcToken what)
+static void tillTokenOrFallBack (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	if (what == waitedToken)
 		toDoNext = comeAfter;
@@ -482,7 +482,7 @@ static void tillTokenOrFallBack (vString * const UNUSED (ident), objcToken what)
 }
 
 static int ignoreBalanced_count = 0;
-static void ignoreBalanced (vString * const UNUSED (ident), objcToken what)
+static void ignoreBalanced (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 
 	switch (what)
@@ -684,7 +684,7 @@ static void parseProperty (vString * const ident, objcToken what)
 	}
 }
 
-static void parseMethods (vString * const UNUSED (ident), objcToken what)
+static void parseMethods (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
 	{
@@ -943,7 +943,7 @@ static void parseTypedef (vString * const ident, objcToken what)
 }
 
 static boolean ignorePreprocStuff_escaped = FALSE;
-static void ignorePreprocStuff (vString * const UNUSED (ident), objcToken what)
+static void ignorePreprocStuff (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
 	{

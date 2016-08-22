@@ -144,7 +144,7 @@ extern void addLanguageRegex (const langType language, const char* const regex);
 extern void installTagRegexTable (const langType language);
 extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);
 extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
-extern void disableRegexKinds (const langType UNUSED language);
+extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED);
 extern boolean enableRegexKind (const langType language, const int kind, const boolean mode);
 extern void printRegexKindOptions (const langType language);
 extern void freeRegexResources (void);
