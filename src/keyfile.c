@@ -859,7 +859,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
-	if (vte_info.load_vte && vte_info.have_vte /* not disabled on the cmdline */)
+	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
 		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());

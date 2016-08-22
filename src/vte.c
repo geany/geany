@@ -56,7 +56,7 @@
 #include <errno.h>
 
 
-VteInfo vte_info;
+VteInfo vte_info = { FALSE, FALSE, FALSE, NULL, NULL };
 VteConfig *vc;
 
 static pid_t pid = 0;

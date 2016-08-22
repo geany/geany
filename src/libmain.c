@@ -877,14 +877,12 @@ static void load_session_project_file(void)
 static void load_settings(void)
 {
 #ifdef HAVE_VTE
-	/* initially assume we'll have VTE unless it's disabled by cmdline, to allow configuration
-	 * loading to be notified about disabled VTE on the cmdline */
-	vte_info.have_vte = !no_vte;
+	vte_info.load_vte_cmdline = !no_vte;
 #endif
 	configuration_load();
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
-	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
+	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
 		ui_prefs.msgwindow_visible = FALSE;
