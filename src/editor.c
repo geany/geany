@@ -871,6 +871,7 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	}
 	if (tags)
 	{
+		TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, 0};
 		GPtrArray *filtered = g_ptr_array_new();
 		TMTag *tag;
 		guint i;
@@ -880,6 +881,8 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 			if (g_str_has_prefix(tag->name, root))
 				g_ptr_array_add(filtered, tag);
 		}
+
+		tm_tags_dedup(filtered, sort_attr, FALSE);
 
 		if (filtered->len > 0)
 		{

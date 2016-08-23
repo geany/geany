@@ -1036,7 +1036,6 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 		tm_tag_macro_with_arg_t | tm_tag_prototype_t;
 	TMTagType tag_type = tm_tag_max_t &
 		~(function_types | tm_tag_enumerator_t | tm_tag_namespace_t | tm_tag_package_t);
-	TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, 0};
 
 	if (search_namespace)
 	{
@@ -1072,9 +1071,6 @@ tm_workspace_find_scope_members (TMSourceFile *source_file, const char *name,
 
 		g_ptr_array_free(tags, TRUE);
 	}
-
-	if (member_tags)
-		tm_tags_dedup(member_tags, sort_attr, FALSE);
 
 	return member_tags;
 }
