@@ -22,6 +22,7 @@
 #include "tm_query.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
+#include "tm_source_file.h"
 
 
 struct TMQuery
@@ -80,7 +81,7 @@ TMQuery *tm_query_new(const TMWorkspace *workspace, gint data_sources)
 	q->data_sources = data_sources;
 	q->names = g_ptr_array_new_with_free_func(free_g_string);
 	q->langs = g_array_new(FALSE, FALSE, sizeof(TMParserType));
-	q->scopes = g_ptr_array_new_with_free_func(g_free);
+	q->scopes = g_ptr_array_new_with_free_func(free_g_string);
 	q->type = -1;
 	q->refcount = 1;
 
@@ -146,9 +147,16 @@ gint tm_query_add_name(TMQuery *q, const gchar *name, gssize name_len)
  * @return 0 on succcess, < 0 on error.
  */
 GEANY_API_SYMBOL
-gint tm_query_add_scope(TMQuery *q, const gchar *scope)
+gint tm_query_add_scope(TMQuery *q, const gchar *scope, gssize scope_len)
 {
-	g_ptr_array_add(q->scopes, g_strdup(scope));
+	GString *s;
+
+	if (scope_len < 0)
+		s = g_string_new(scope);
+	else
+		s = g_string_new_len(scope, scope_len);
+
+	g_ptr_array_add(q->scopes, s);
 
 	return 0;
 }
@@ -230,7 +238,6 @@ GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *de
 	TMTag *tag;
 	guint i, ntags;
 	GString *s;
-	gchar *scope;
 	TMParserType *lang;
 	GPtrArray *ret;
 	TMTagAttrType def_sort_attr[] = { tm_tag_attr_name_t, 0 };
@@ -265,8 +272,8 @@ GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *de
 	{
 		gboolean match = TRUE;
 
-		foreach_ptr_array(scope, i, q->scopes)
-			match = match && (g_strcmp0(tag->scope, scope) == 0);
+		foreach_ptr_array(s, i, q->scopes)
+			match = match && (strncmp(FALLBACK(tag->scope, ""), s->str, s->len) == 0);
 
 		foreach_array(gint, lang, q->langs)
 			match = match && tm_tag_langs_compatible(*lang, tag->lang);
