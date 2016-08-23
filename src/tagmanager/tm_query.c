@@ -78,14 +78,11 @@ TMQuery *tm_query_new(const TMWorkspace *workspace, gint data_sources)
 
 	q->workspace = workspace;
 	q->data_sources = data_sources;
-	q->names = g_ptr_array_new();
+	q->names = g_ptr_array_new_with_free_func(free_g_string);
 	q->langs = g_array_new(FALSE, FALSE, sizeof(TMParserType));
-	q->scopes = g_ptr_array_new();
+	q->scopes = g_ptr_array_new_with_free_func(g_free);
 	q->type = -1;
 	q->refcount = 1;
-
-	g_ptr_array_set_free_func(q->names, free_g_string);
-	g_ptr_array_set_free_func(q->scopes, g_free);
 
 	return q;
 }
@@ -183,7 +180,7 @@ gint tm_query_add_lang(TMQuery *q, TMParserType lang)
  * multiple values.
  *
  * @param q The query to operate on.
- * @param type Bitmasp of the tag time to filter, see @a TMTagType.
+ * @param type Bitmask of the tag type to filter, see @a TMTagType.
  *
  * @return 0 on succcess, < 0 on error.
  */
@@ -196,15 +193,6 @@ gint tm_query_set_tag_type(TMQuery *q, TMTagType type)
 	q->type = type;
 
 	return 0;
-}
-
-
-/* tm_tag_compare() expects pointer to pointers to tags, because it's
- * used for GPtrArrays (therefore it's qsort-like). GQueue passes pointer
- * to tags. */
-static gint tag_compare_ptr(gconstpointer a, gconstpointer b, gpointer data)
-{
-	return tm_tag_compare(&a, &b, data);
 }
 
 
@@ -239,47 +227,44 @@ static gint tag_compare_ptr(gconstpointer a, gconstpointer b, gpointer data)
 GEANY_API_SYMBOL
 GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *dedup_attr)
 {
-	TMTag **tags, *tag;
-	gint ntags;
-	guint i;
+	TMTag *tag;
+	guint i, ntags;
 	GString *s;
-	GQueue res = G_QUEUE_INIT;
-	TMSortOptions sort_options;
-	GList *node, *next;
 	gchar *scope;
 	TMParserType *lang;
 	GPtrArray *ret;
+	TMTagAttrType def_sort_attr[] = { tm_tag_attr_name_t, 0 };
 
-	sort_options.sort_attrs = NULL;
-	/* tags_array isn not needed by tm_tag_compare(), but for tm_search_cmp() */
-	sort_options.tags_array = NULL;
-	sort_options.first = TRUE;
+	ret = g_ptr_array_new();
 
 	foreach_ptr_array(s, i, q->names)
 	{
-		TMTag **ptag;
-		sort_options.cmp_len = s->len;
+		TMTag **tags;
 		if (q->data_sources & TM_QUERY_SOURCE_GLOBAL_TAGS)
 		{
 			tags = tm_tags_find(q->workspace->global_tags, s->str, s->len, &ntags);
-			foreach_c_array(ptag, tags, ntags)
-				g_queue_insert_sorted(&res, *ptag, tag_compare_ptr, &sort_options);
+			if (ntags)
+			{
+				g_ptr_array_set_size(ret, ret->len + ntags);
+				memcpy(&ret->pdata[ret->len], *tags, ntags * sizeof(gpointer));
+			}
 		}
 		if (q->data_sources & TM_QUERY_SOURCE_SESSION_TAGS)
 		{
-			tags = tm_tags_find(q->workspace->tags_array, s->str, s->len, &ntags);
-			foreach_c_array(ptag, tags, ntags)
-				g_queue_insert_sorted(&res, *ptag, tag_compare_ptr, &sort_options);
+			tags = tm_tags_find(q->workspace->global_tags, s->str, s->len, &ntags);
+			if (ntags)
+			{
+				g_ptr_array_set_size(ret, ret->len + ntags);
+				memcpy(&ret->pdata[ret->len], *tags, ntags * sizeof(gpointer));
+			}
 		}
 	}
 
 	/* Filter tags according to scope, type and lang. */
-	for (node = res.head; node; node = next)
+	foreach_ptr_array(tag, i, ret)
 	{
 		gboolean match = TRUE;
 
-		next = node->next;
-		tag = node->data;
 		foreach_ptr_array(scope, i, q->scopes)
 			match = match && (g_strcmp0(tag->scope, scope) == 0);
 
@@ -289,23 +274,16 @@ GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *de
 		if (match && q->type >= 0)
 			match = tag->type & q->type;
 
-		/* Remove tag from the results. tags are unowned so removing is easy */
+		/* Remove tag from the results. Can use the fast variant since order
+		 * doesn't matter until after this loop. */
 		if (!match)
-			g_queue_unlink(&res, node);
+			g_ptr_array_remove_index_fast(ret, i);
 	}
 
-	/* Convert GQueue to GPtrArray for sort, dedup and return */
-	i = 0;
-	ret = g_ptr_array_sized_new(g_queue_get_length(&res));
-	foreach_list(node, res.head)
-	{
-		tag = (TMTag *) node->data;
-		g_ptr_array_insert(ret, i++, tag);
-	}
-	g_list_free(res.head);
-
-	if (sort_attr)
-		tm_tags_sort(ret, sort_attr, FALSE, FALSE);
+	/* Always sort by name, unless wanted otherwise by the caller */
+	if (!sort_attr)
+		sort_attr = def_sort_attr;
+	tm_tags_sort(ret, sort_attr, FALSE, FALSE);
 
 	if (dedup_attr)
 		tm_tags_dedup(ret, dedup_attr, FALSE);
