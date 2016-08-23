@@ -1813,6 +1813,56 @@ gboolean document_rename_file_and_save(GeanyDocument *doc, const gchar *new_file
 }
 
 
+gboolean document_rename_and_save(GeanyDocument *doc, const gchar *new_filename, gboolean ask_overwrite)
+{
+	g_return_val_if_fail(DOC_VALID(doc), FALSE);
+	g_return_val_if_fail(new_filename != NULL, FALSE);
+
+	gchar *new_locale_filename = utils_get_locale_from_utf8(new_filename);
+	gboolean ret = FALSE;
+
+	if (g_file_test(new_locale_filename, G_FILE_TEST_EXISTS))
+	{
+		if (g_file_test(new_locale_filename, G_FILE_TEST_IS_DIR))
+		{
+			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
+					_("A directory with the same name already exists."));
+			goto cleanup;
+		}
+
+		if (ask_overwrite)
+			if (!dialogs_show_question_full(main_widgets.window, NULL, NULL, _("Overwrite?"),
+							_("Filename already exists!")))
+				goto cleanup;
+	}
+
+	if (doc->file_name && doc->real_path)
+		ret = document_rename_file_and_save(doc, new_filename);
+	else
+	{
+		/* Perhaps this is better placed in document_save_file_as(). */
+		if (doc->tm_file)
+		{
+			/* Create a new tm_source_file object otherwise tagmanager won't work correctly. */
+			tm_workspace_remove_source_file(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
+			doc->tm_file = NULL;
+		}
+
+		ret = document_save_file_as(doc, new_filename);
+
+		/* Not sure if we should call this by default whether document_save_file_as() succeeds
+		 * or not.  Also, this might be better placed in document_save_file_as(). */
+		build_menu_update(doc);
+	}
+
+cleanup:
+	g_free(new_locale_filename);
+
+	return ret;
+}
+
+
 static void protect_document(GeanyDocument *doc)
 {
 	/* do not call queue_colourise because to we want to keep the text-changed indication! */
