@@ -840,6 +840,12 @@ static GPtrArray *get_tags_for_current_scope(GeanyEditor *editor, const gchar *n
 			g_ptr_array_free(found_tags, TRUE);
 			found_tags = NULL;
 		}
+		else if (prefix)
+		{
+			TMTagAttrType sort_attr[] = {tm_tag_attr_name_t, 0};
+
+			tm_tags_sort(found_tags, sort_attr, FALSE, FALSE);
+		}
 	}
 
 	return found_tags;
