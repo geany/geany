@@ -1782,21 +1782,7 @@ gboolean document_rename_file_and_save(GeanyDocument *doc, const gchar *new_file
 	if (success)
 	{
 		doc->priv->file_disk_status = FILE_CHANGED;
-
-		/* Perhaps this is better placed in document_save_file_as(). */
-		if (doc->tm_file)
-		{
-			/* Create a new tm_source_file object otherwise tagmanager won't work correctly. */
-			tm_workspace_remove_source_file(doc->tm_file);
-			tm_source_file_free(doc->tm_file);
-			doc->tm_file = NULL;
-		}
-
 		success = document_save_file_as(doc, new_filename);
-
-		/* Not sure if we should call this by default whether document_save_file_as() succeeds
-		 * or not.  Also, this might be better placed in document_save_file_as(). */
-		build_menu_update(doc);
 	}
 	else
 	{
@@ -1839,22 +1825,7 @@ gboolean document_rename_and_save(GeanyDocument *doc, const gchar *new_filename,
 	if (doc->file_name && doc->real_path)
 		ret = document_rename_file_and_save(doc, new_filename);
 	else
-	{
-		/* Perhaps this is better placed in document_save_file_as(). */
-		if (doc->tm_file)
-		{
-			/* Create a new tm_source_file object otherwise tagmanager won't work correctly. */
-			tm_workspace_remove_source_file(doc->tm_file);
-			tm_source_file_free(doc->tm_file);
-			doc->tm_file = NULL;
-		}
-
 		ret = document_save_file_as(doc, new_filename);
-
-		/* Not sure if we should call this by default whether document_save_file_as() succeeds
-		 * or not.  Also, this might be better placed in document_save_file_as(). */
-		build_menu_update(doc);
-	}
 
 cleanup:
 	g_free(new_locale_filename);
@@ -1943,6 +1914,14 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 		doc->readonly = FALSE;
 		if (doc->priv->protected > 0)
 			unprotect_document(doc);
+
+		if (doc->tm_file)
+		{
+			/* create a new tm_source_file object otherwise tagmanager won't work correctly. */
+			tm_workspace_remove_source_file(doc->tm_file);
+			tm_source_file_free(doc->tm_file);
+			doc->tm_file = NULL;
+		}
 	}
 
 	replace_header_filename(doc);
@@ -1956,6 +1935,9 @@ gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname)
 
 	if (ret)
 		ui_add_recent_document(doc);
+
+	build_menu_update(doc);
+
 	return ret;
 }
 
