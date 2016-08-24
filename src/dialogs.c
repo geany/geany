@@ -487,72 +487,29 @@ void dialogs_show_open_file(void)
 }
 
 
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
-{
-	GeanyDocument *doc = document_get_current();
-	gboolean success = FALSE;
-
-	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
-
-	if (doc->file_name != NULL)
-	{
-		if (rename_file)
-		{
-			document_rename_file(doc, utf8_filename);
-		}
-		if (doc->tm_file)
-		{
-			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
-			tm_workspace_remove_source_file(doc->tm_file);
-			tm_source_file_free(doc->tm_file);
-			doc->tm_file = NULL;
-		}
-	}
-	success = document_save_file_as(doc, utf8_filename);
-
-	build_menu_update(doc);
-	return success;
-}
-
-
 static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
-	gboolean rename_file = FALSE;
-	gboolean success = FALSE;
+	if (response == GTK_RESPONSE_DELETE_EVENT || response == GTK_RESPONSE_CANCEL)
+		return TRUE;
+
 	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	gboolean success = FALSE;
 
-	switch (response)
+	if (G_UNLIKELY(EMPTY(new_filename)))
+		utils_beep();
+	else
 	{
-		case GEANY_RESPONSE_RENAME:
-			/* rename doesn't check for empty filename or overwriting */
-			if (G_UNLIKELY(EMPTY(new_filename)))
-			{
-				utils_beep();
-				break;
-			}
-			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
-				!dialogs_show_question_full(NULL, NULL, NULL,
-					_("Overwrite?"),
-					_("Filename already exists!")))
-				break;
-			rename_file = TRUE;
-			/* fall through */
-		case GTK_RESPONSE_ACCEPT:
-		{
-			gchar *utf8_filename;
+		gchar *utf8_filename = utils_get_utf8_from_locale(new_filename);
 
-			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			success = handle_save_as(utf8_filename, rename_file);
-			g_free(utf8_filename);
-			break;
-		}
-		case GTK_RESPONSE_DELETE_EVENT:
-		case GTK_RESPONSE_CANCEL:
-			success = TRUE;
-			break;
+		if (response == GEANY_RESPONSE_RENAME)
+			success = document_rename_and_save(document_get_current(), utf8_filename, TRUE);
+		else if (response == GTK_RESPONSE_ACCEPT)
+			success = document_save_file_as(document_get_current(), utf8_filename);
+
+		g_free(utf8_filename);
 	}
-	g_free(new_filename);
 
+	g_free(new_filename);
 	return success;
 }
 
@@ -679,7 +636,7 @@ gboolean dialogs_show_save_as(void)
 						_("Save File"), doc);
 		if (utf8_name != NULL)
 		{
-			result = handle_save_as(utf8_name, FALSE);
+			result = document_save_file_as(doc, utf8_name);
 			g_free(utf8_name);
 		}
 	}
