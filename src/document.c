@@ -3341,27 +3341,28 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	if (old_doc->file_name)
 	{
 		guint i, j;
-		gboolean unused;
 
 		for (i = 0; i <= 99; ++i)
 		{
-			new_filename = g_strdup_printf("%s.copy-%02u", old_doc->file_name, i);
-			unused = TRUE;
+			gchar *candidate = g_strdup_printf("%s.copy-%02u", old_doc->file_name, i);
+			gboolean unused = TRUE;
 
 			foreach_document(j)
 			{
-				if (documents[j]->file_name && strcmp(documents[j]->file_name, new_filename) == 0)
+				if (documents[j]->file_name && strcmp(documents[j]->file_name, candidate) == 0)
 				{
 					unused = FALSE;
 					break;
 				}
 			}
 
-			if (unused && !g_file_test(new_filename, G_FILE_TEST_EXISTS))
+			if (unused && !g_file_test(candidate, G_FILE_TEST_EXISTS))
+			{
+				new_filename = candidate;
 				break;
+			}
 
-			g_free(new_filename);
-			new_filename = NULL;
+			g_free(candidate);
 		}
 	}
 
