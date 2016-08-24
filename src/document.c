@@ -3377,13 +3377,11 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	doc->editor->auto_indent = old_doc->editor->auto_indent;
 	editor_set_indent(doc->editor, old_doc->editor->indent_type,
 		old_doc->editor->indent_width);
+	doc->readonly = FALSE;
 	doc->has_bom = old_doc->has_bom;
 	doc->priv->protected = 0;
 	document_set_encoding(doc, old_doc->encoding);
 	sci_set_lines_wrapped(doc->editor->sci, doc->editor->line_wrapping);
-
-	/* do not set cloned documents as readonly */
-	doc->readonly = FALSE;
 	sci_set_readonly(doc->editor->sci, doc->readonly);
 
 	/* update ui */
