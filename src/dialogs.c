@@ -678,7 +678,10 @@ gboolean dialogs_show_save_as(void)
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), doc);
 		if (utf8_name != NULL)
+		{
 			result = handle_save_as(utf8_name, FALSE);
+			g_free(utf8_name);
+		}
 	}
 	else
 #endif
