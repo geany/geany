@@ -3377,7 +3377,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	doc->editor->auto_indent = old_doc->editor->auto_indent;
 	editor_set_indent(doc->editor, old_doc->editor->indent_type,
 		old_doc->editor->indent_width);
-	doc->readonly = FALSE;
+	doc->readonly = old_doc->readonly;
 	doc->has_bom = old_doc->has_bom;
 	doc->priv->protected = 0;
 	document_set_encoding(doc, old_doc->encoding);
