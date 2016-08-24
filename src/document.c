@@ -3366,6 +3366,7 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	}
 
 	doc = document_new_file(new_filename, old_doc->file_type, text);
+	g_free(new_filename);
 	g_free(text);
 	document_set_text_changed(doc, TRUE);
 
