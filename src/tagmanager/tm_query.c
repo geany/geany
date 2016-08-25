@@ -139,10 +139,16 @@ gint tm_query_add_name(TMQuery *q, const gchar *name, gssize name_len)
 /** Add scope filter to a query
  *
  * The query results will be restricted to tags that are subordenates of
- * a container scope matching @a scope, for example a C++ class.
+ * a container scope matching @a scope, for example a C++ class.  The length
+ * to match can be limited to allow multiple tags to match a prefix. As a special
+ * case, if @a scope is NULL and @a scope_len is zero, then the query results
+ * will be restricted to tags that are not subordinates of any container scope.
  *
  * @param q The query to operate on.
- * @param scope The name of the container or parent scope.
+ * @param scope @nullable The name of the container or parent scope.
+ * @param scope_len The number of characters to use (from the beginning).from
+ *                   scope. Include NUL byte to perform exact maching.
+ *                   Passing -1 is equivalent to strlen(scope)+1.
  *
  * @return 0 on succcess, < 0 on error.
  */
@@ -153,8 +159,10 @@ gint tm_query_add_scope(TMQuery *q, const gchar *scope, gssize scope_len)
 
 	if (scope_len < 0)
 		s = g_string_new(scope);
-	else
+	else if (scope)
 		s = g_string_new_len(scope, scope_len);
+	else if (scope_len == 0)
+		s = NULL;
 
 	g_ptr_array_add(q->scopes, s);
 
@@ -272,8 +280,12 @@ GPtrArray *tm_query_exec(TMQuery *q, TMTagAttrType *sort_attr, TMTagAttrType *de
 	{
 		gboolean match = TRUE;
 
-		foreach_ptr_array(s, i, q->scopes)
-			match = match && (strncmp(FALLBACK(tag->scope, ""), s->str, s->len) == 0);
+		foreach_ptr_array(s, i, q->scopes) {
+			if (s == NULL)
+				match = match && !EMPTY(tag->scope);
+			else
+				match = match && (strncmp(FALLBACK(tag->scope, ""), s->str, s->len) == 0);
+		}
 
 		foreach_array(gint, lang, q->langs)
 			match = match && tm_tag_langs_compatible(*lang, tag->lang);
