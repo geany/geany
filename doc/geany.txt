@@ -511,11 +511,17 @@ shortcuts including for Most-Recently-Used document switching.
 
 Cloning documents
 ^^^^^^^^^^^^^^^^^
+
 The `Document->Clone` menu item copies the current document's text,
 cursor position and properties into a new untitled document. If
 there is a selection, only the selected text is copied. This can be
 useful when making temporary copies of text or for creating
 documents with similar or identical contents.
+
+The new document gets a filename based on the original document, and is 
+in the form of '<original_name>.cloneX' where X is a number ranging 
+from 0 to 99, but is not set if it is 0.  The name that doesn't point to
+an existing file and is not used by any document gets used.
 
 
 Character sets and Unicode Byte-Order-Mark (BOM)
