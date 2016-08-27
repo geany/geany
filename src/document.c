@@ -3365,10 +3365,17 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 				}
 			}
 
-			if (unused && !g_file_test(candidate, G_FILE_TEST_EXISTS))
+			if (unused)
 			{
-				new_filename = candidate;
-				break;
+				gchar *locale_candidate = utils_get_locale_from_utf8(candidate);
+				gboolean file_exists = g_file_test(locale_candidate, G_FILE_TEST_EXISTS);
+				g_free(locale_candidate);
+
+				if (!file_exists)
+				{
+					new_filename = candidate;
+					break;
+				}
 			}
 
 			g_free(candidate);
