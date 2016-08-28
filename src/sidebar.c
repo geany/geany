@@ -334,28 +334,6 @@ static void prepare_openfiles(void)
 }
 
 
-/* iter should be toplevel */
-static gboolean find_tree_iter_dir(GtkTreeIter *iter, const gchar *dir)
-{
-	GeanyDocument *doc;
-	gchar *name;
-	gboolean result;
-
-	if (utils_str_equal(dir, "."))
-		dir = GEANY_STRING_UNTITLED;
-
-	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_DOCUMENT, &doc, -1);
-	g_return_val_if_fail(!doc, FALSE);
-
-	gtk_tree_model_get(GTK_TREE_MODEL(store_openfiles), iter, DOCUMENTS_SHORTNAME, &name, -1);
-
-	result = utils_filenamecmp(name, dir) == 0;
-	g_free(name);
-
-	return result;
-}
-
-
 static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 {
 	gchar *head = g_strndup(str, strlen(prefix));
@@ -366,16 +344,26 @@ static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 }
 
 
-static gchar *get_doc_folder(const gchar *path)
+static gchar *get_doc_folder(GeanyDocument *doc, gchar **out_path)
 {
-	gchar *tmp_dirname = g_strdup(path);
-	gchar *project_base_path;
-	gchar *dirname = NULL;
-	const gchar *home_dir = g_get_home_dir();
-	const gchar *rest;
+	if (out_path)
+		*out_path = NULL;
+
+	g_return_val_if_fail(doc != NULL, NULL);
+
+	gchar *folder = NULL;
+	gchar *path = g_path_get_dirname(DOC_FILENAME(doc));
+
+	g_return_val_if_fail(path != NULL, NULL);
+
+	if (!doc->file_name || strcmp(path, ".") == 0)
+	{
+		folder = g_strdup(GEANY_STRING_UNTITLED);
+		goto exit;
+	}
 
 	/* replace the project base path with the project name */
-	project_base_path = project_get_base_path();
+	gchar *project_base_path = project_get_base_path();
 
 	if (project_base_path != NULL)
 	{
@@ -386,75 +374,88 @@ static gchar *get_doc_folder(const gchar *path)
 			project_base_path[--len] = '\0';
 
 		/* check whether the dir name matches or uses the project base path */
-		if (utils_filename_has_prefix(tmp_dirname, project_base_path))
+		if (utils_filename_has_prefix(path, project_base_path))
 		{
-			rest = tmp_dirname + len;
+			const gchar *rest = path + len;
+
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
-			{
-				dirname = g_strdup_printf("%s%s", app->project->name, rest);
-			}
+				folder = g_strdup_printf("%s%s", app->project->name, rest);
 		}
+
 		g_free(project_base_path);
 	}
-	if (dirname == NULL)
+
+	if (folder == NULL)
 	{
-		dirname = tmp_dirname;
+		const gchar *home_dir = g_get_home_dir();
 
 		/* If matches home dir, replace with tilde */
-		if (!EMPTY(home_dir) && utils_filename_has_prefix(dirname, home_dir))
+		if (!EMPTY(home_dir) && utils_filename_has_prefix(path, home_dir))
 		{
-			rest = dirname + strlen(home_dir);
+			const gchar *rest = path + strlen(home_dir);
+
 			if (*rest == G_DIR_SEPARATOR || *rest == '\0')
 			{
-				dirname = g_strdup_printf("~%s", rest);
-				g_free(tmp_dirname);
+				folder = g_strdup_printf("~%s", rest);
+				goto exit;
 			}
 		}
-	}
-	else
-		g_free(tmp_dirname);
 
-	return dirname;
+		folder = g_strdup(path);
+	}
+
+exit:
+	if (out_path)
+		*out_path = path;
+	else
+		g_free(path);
+
+	return folder;
 }
 
 
 static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 {
-	gchar *path;
-	gchar *dirname = NULL;
-	static GtkTreeIter parent;
-	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
-	static GIcon *dir_icon = NULL;
-
 	if (!documents_show_paths)
 		return NULL;
 
-	path = g_path_get_dirname(DOC_FILENAME(doc));
-	dirname = get_doc_folder(path);
+	static GtkTreeIter parent;
+	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
+	gboolean parent_found = FALSE;
+	gchar *path, *folder, *stored_path, *stored_folder;
+
+	folder = get_doc_folder(doc, &path);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
 		do
 		{
-			if (find_tree_iter_dir(&parent, dirname))
-			{
-				g_free(dirname);
-				g_free(path);
-				return &parent;
-			}
+			gtk_tree_model_get(model, &parent, DOCUMENTS_FILENAME, &stored_path,
+					DOCUMENTS_SHORTNAME, &stored_folder, -1);
+			parent_found = utils_filenamecmp(stored_path, path) == 0 &&
+					utils_filenamecmp(stored_folder, folder) == 0;
+			g_free(stored_folder);
+			g_free(stored_path);
+
+			if (parent_found)
+				break;
 		}
 		while (gtk_tree_model_iter_next(model, &parent));
 	}
-	/* no match, add dir parent */
-	if (!dir_icon)
-		dir_icon = ui_get_mime_icon("inode/directory");
 
-	gtk_tree_store_append(store_openfiles, &parent, NULL);
-	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
-		DOCUMENTS_FILENAME, path,
-		DOCUMENTS_SHORTNAME, doc->file_name ? dirname : GEANY_STRING_UNTITLED, -1);
+	if (!parent_found)
+	{
+		static GIcon *dir_icon = NULL;
 
-	g_free(dirname);
+		if (!dir_icon)
+			dir_icon = ui_get_mime_icon("inode/directory");
+
+		gtk_tree_store_append(store_openfiles, &parent, NULL);
+		gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
+				DOCUMENTS_FILENAME, path, DOCUMENTS_SHORTNAME, folder, -1);
+	}
+
+	g_free(folder);
 	g_free(path);
 	return &parent;
 }
