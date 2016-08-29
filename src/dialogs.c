@@ -491,7 +491,7 @@ static void open_file_dialog_apply_settings(GtkWidget *dialog)
 /* This shows the file selection dialog to open a file. */
 void dialogs_show_open_file(gboolean recursive)
 {
-	gchar *initdir, *title;
+	gchar *initdir;
 
 	/* set dialog directory to the current file's directory, if present */
 	initdir = utils_get_current_file_dir_utf8();
@@ -505,7 +505,7 @@ void dialogs_show_open_file(gboolean recursive)
 
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs && !recursive)
-		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), title, initdir);
+		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
 	else
 #endif
 	{
