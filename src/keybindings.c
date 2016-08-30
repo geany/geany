@@ -1738,14 +1738,43 @@ static void focus_sidebar(void)
 }
 
 
+static GtkWidget *find_focus_widget(GtkWidget *widget)
+{
+	GtkWidget *focus = NULL;
+
+	if (GTK_IS_BIN(widget)) /* optimized simple case */
+		focus = find_focus_widget(gtk_bin_get_child(GTK_BIN(widget)));
+	else if (GTK_IS_CONTAINER(widget))
+	{
+		GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+		GList *node;
+
+		for (node = children; node && ! focus; node = node->next)
+			focus = find_focus_widget(node->data);
+		g_list_free(children);
+	}
+
+	/* Some containers handled above might not have children and be what we want to focus
+	 * (e.g. GtkTreeView), so focus that if possible and we don't have anything better */
+	if (! focus && gtk_widget_get_can_focus(widget))
+		focus = widget;
+
+	return focus;
+}
+
+
 static void focus_msgwindow(void)
 {
 	if (ui_prefs.msgwindow_visible)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
-		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+		GtkWidget *widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
 
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		widget = find_focus_widget(widget);
+		if (widget)
+			gtk_widget_grab_focus(widget);
+		else
+			utils_beep();
 	}
 }
 
