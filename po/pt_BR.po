@@ -812,7 +812,7 @@ msgstr "Tipo:"
 
 #: ../data/geany.glade.h:163
 msgid "Tab key indents"
-msgstr "Endentações da tecla Tab"
+msgstr "Indentações da tecla Tab"
 
 #: ../data/geany.glade.h:164
 msgid ""
