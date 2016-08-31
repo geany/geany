@@ -1,0 +1,6 @@
+# format=tagmanager
+checkForUpdateÌ16Í()Ö0
+checkForUpdate2Ì16Í()Ö0
+getParentÌ16Í(el, pTagName)Ö0
+ts_resortTableÌ16Í(lnk)Ö0
+ts_sort_currencyÌ16Í(a,b)Ö0

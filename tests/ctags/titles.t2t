@@ -1,0 +1,40 @@
+
+% from rules.t2t, with unique title content as our output removed
+% duplicate tags (even with different scopes)
+
+
+%%% Syntax: Balanced equal signs (from 1 to 5)
+= First Title Level 1 =
+== First Title Level 2 ==
+=== First Title Level 3 ===
+==== First Title Level 4 ====
+===== First Title Level 5 =====
+%%% Label: Between brackets, alphanumeric [A-Za-z0-9_-]
+= Second Title Level 1 =[lab_el-1]
+== Second Title Level 2 ==[lab_el-2]
+=== Second Title Level 3 ===[lab_el-3]
+==== Second Title Level 4 ====[lab_el-4]
+===== Second Title Level 5 =====[lab_el-5]
+%%% Syntax: Spaces around and/or inside are allowed (and ignored)
+     ===Third Title Level 3===    
+    === Fourth Title Level 3 ===    
+   ===  Fifth Title Level 3  ===   
+===     Sixth Title Level 3      ===
+===          Seventh Title Level 3 ===
+   ===  Eighth Title Level 3  ===[lab_el-9]   
+%%% Invalid: Unbalanced equal signs
+      =First Not Title
+
+     ==Second Not Title=
+
+    ===Third Not Title====
+%%% Invalid: Level deeper than 5
+ ======First Not Title 6======
+
+=======First Not Title 7=======
+%%% Invalid: Space between title and label
+=Fourth Not Title= [label1]
+%%% Invalid: Space inside label
+=Fifth Not Title=[ label ]
+%%% Invalid: Strange chars inside label
+=Sixth Not Title=[la/bel]

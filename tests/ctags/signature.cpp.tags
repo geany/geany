@@ -1,0 +1,5 @@
+# format=tagmanager
+barÌ16Í(a, b)Ö0Ïint
+barÌ16Í(char *c, double d[])ÎBARÖ0Ïchar *
+fooÌ16Í(int a, char b)Ö0Ïvoid
+foobarÌ1024Í((int a, char b))Ö0Ïvoid

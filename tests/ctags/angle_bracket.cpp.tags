@@ -1,0 +1,4 @@
+# format=tagmanager
+barÌ16Í(int value)Ö0Ïvoid
+bar2Ì16Í(void)Ö0
+fooÌ16Í(int nelem)Ö0Ïvoid

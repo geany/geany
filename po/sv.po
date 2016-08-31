@@ -1,0 +1,6857 @@
+# Swedish translations for geany package.
+# Copyright (C) 2007 - 2015 THE geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the geany package.
+#
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: Geany 1.28\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-06-27 18:56+0200\n"
+"PO-Revision-Date: 2015-08-05 09:27+0100\n"
+"Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
+"Language-Team: Swedish <geany-i18n@uvena.de>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.5\n"
+
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
+msgid "Geany"
+msgstr "Geany"
+
+#: ../geany.desktop.in.h:2
+msgid "Integrated Development Environment"
+msgstr "Integrerad utvecklingsmiljö"
+
+#: ../geany.desktop.in.h:3
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Ett snabbt och lättviktigt IDE som använder GTK+"
+
+#: ../geany.desktop.in.h:4
+#, fuzzy
+msgid "Text;Editor;"
+msgstr "Editor"
+
+#: ../data/geany.glade.h:1
+msgid "_Toolbar Preferences"
+msgstr "Inställningar för verktygsfält"
+
+#: ../data/geany.glade.h:2
+msgid "_Hide Toolbar"
+msgstr "Göm verktygsfältet"
+
+#: ../data/geany.glade.h:3
+msgid "_Edit"
+msgstr "Redigera"
+
+#: ../data/geany.glade.h:4
+msgid "_Format"
+msgstr "Format"
+
+#: ../data/geany.glade.h:5
+msgid "I_nsert"
+msgstr "Infoga"
+
+#: ../data/geany.glade.h:6
+msgid "Insert _ChangeLog Entry"
+msgstr "Infoga ChangeLog"
+
+#: ../data/geany.glade.h:7
+msgid "Insert _Function Description"
+msgstr "Infoga funktionsbeskrivning"
+
+#: ../data/geany.glade.h:8
+msgid "Insert Mu_ltiline Comment"
+msgstr "Infoga flerradskommentar"
+
+#: ../data/geany.glade.h:9
+msgid "_More"
+msgstr "_Mer"
+
+#: ../data/geany.glade.h:10
+msgid "Insert File _Header"
+msgstr "Infoga filhuvud"
+
+#: ../data/geany.glade.h:11
+msgid "Insert _GPL Notice"
+msgstr "Infoga en GPL-beskrivning"
+
+#: ../data/geany.glade.h:12
+msgid "Insert _BSD License Notice"
+msgstr "Infoga en BSD-beskrivning"
+
+#: ../data/geany.glade.h:13
+msgid "Insert Dat_e"
+msgstr "Infoga datum"
+
+#: ../data/geany.glade.h:14
+msgid "invisible"
+msgstr "osynlig"
+
+#: ../data/geany.glade.h:15
+msgid "_Insert \"include <...>\""
+msgstr "Infoga \"include <...>\""
+
+#: ../data/geany.glade.h:16 ../src/keybindings.c:507
+msgid "Insert Alternative _White Space"
+msgstr "Infoga alternativt tomt tecken"
+
+#: ../data/geany.glade.h:17
+msgid "_Search"
+msgstr "Sök"
+
+#: ../data/geany.glade.h:18
+msgid "Open Selected F_ile"
+msgstr "Öppna vald fil"
+
+#: ../data/geany.glade.h:19 ../src/symbols.c:2507
+msgid "Find _Usage"
+msgstr "Visa användning"
+
+#: ../data/geany.glade.h:20 ../src/symbols.c:2512
+msgid "Find _Document Usage"
+msgstr "Visa dokumentets användning"
+
+#: ../data/geany.glade.h:21
+#, fuzzy
+msgid "Go to Symbol Defini_tion"
+msgstr "Gå till Tagg-definition"
+
+#: ../data/geany.glade.h:22
+msgid "Conte_xt Action"
+msgstr "Snabbmenyhändelse"
+
+#. Column legend:
+#. *   [0] = Filetype constant (GEANY_FILETYPES_*)
+#. *   [1] = CTags parser (TM_PARSER_*)
+#. *   [2] = Non-translated filetype name (*not* label for display)
+#. *   [3] = Translatable human filetype title prefix or NULL to use [2]
+#. *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
+#. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+#. * --------------------------------------------------------------------------------------------------------------------------
+#. *       [0]         [1]           [2]                 [3]                        [4]          [5]
+#: ../data/geany.glade.h:23 ../src/filetypes.c:128 ../src/filetypes.c:1535
+msgid "None"
+msgstr "Inget"
+
+#: ../data/geany.glade.h:24
+msgid "Basic"
+msgstr "Grundläggande"
+
+#: ../data/geany.glade.h:25
+msgid "Current chars"
+msgstr "Nuvarande tecken"
+
+#: ../data/geany.glade.h:26
+msgid "Match braces"
+msgstr "Matcha klamrar"
+
+#: ../data/geany.glade.h:27
+msgid "Left"
+msgstr "Vänster"
+
+#: ../data/geany.glade.h:28
+msgid "Right"
+msgstr "Höger"
+
+#: ../data/geany.glade.h:29
+msgid "Top"
+msgstr "Topp"
+
+#: ../data/geany.glade.h:30
+msgid "Bottom"
+msgstr "Botten"
+
+#: ../data/geany.glade.h:31 ../src/keybindings.c:517
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:32
+msgid "Load files from the last session"
+msgstr "Ladda filerna från förra sessionen"
+
+#: ../data/geany.glade.h:33
+msgid "Opens at startup the files from the last session"
+msgstr "Öppnar filerna från förra sessionen vid start"
+
+#: ../data/geany.glade.h:34
+msgid "Load virtual terminal support"
+msgstr "Ladda stöd för virtuell terminal"
+
+#: ../data/geany.glade.h:35
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
+msgstr ""
+"Huruvida den virtuella terminalemuleringen (VTE) skall laddas vid start. "
+"Välj bort om du ej behöver den."
+
+#: ../data/geany.glade.h:36
+msgid "Enable plugin support"
+msgstr "Aktivera stöd för tillägg"
+
+#: ../data/geany.glade.h:37
+msgid "<b>Startup</b>"
+msgstr "<b>Vid start</b>"
+
+#: ../data/geany.glade.h:38
+msgid "Save window position and geometry"
+msgstr "Spara fönsterplacering och storlek"
+
+#: ../data/geany.glade.h:39
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Sparar fönstrets position och storlek, och återställer det vid start"
+
+#: ../data/geany.glade.h:40
+msgid "Confirm exit"
+msgstr "Bekräfta avslut"
+
+#: ../data/geany.glade.h:41
+msgid "Shows a confirmation dialog on exit"
+msgstr "Begär bekräftelse vid avslut"
+
+#: ../data/geany.glade.h:42
+msgid "<b>Shutdown</b>"
+msgstr "<b>Vid avslut</b>"
+
+#: ../data/geany.glade.h:43
+msgid "Startup path:"
+msgstr "Sökväg vid start:"
+
+#: ../data/geany.glade.h:44
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path."
+msgstr ""
+"Sökväg att starta i vid öppning eller sparning av filer. Detta måste vara en "
+"absolut sökväg."
+
+#: ../data/geany.glade.h:45
+msgid "Project files:"
+msgstr "Projektfiler:"
+
+#: ../data/geany.glade.h:46
+msgid "Path to start in when opening project files"
+msgstr "Sökväg att starta i när projektfiler öppnas"
+
+#: ../data/geany.glade.h:47
+msgid "Extra plugin path:"
+msgstr "Extra sökväg för insticksmoduler:"
+
+#: ../data/geany.glade.h:48
+msgid ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally "
+"for plugins. Leave blank to disable."
+msgstr ""
+"Geany söker normalt efter insticksmoduler i den globala "
+"installationssökvägen och i konfigurationssökvägen. Om du vill att Geany "
+"skall söka i ytterligare en sökväg, kan du specificera en här. Om du lämnar "
+"rutan tom, söker inte Geany i någon ytterligare sökväg."
+
+#: ../data/geany.glade.h:49
+msgid "<b>Paths</b>"
+msgstr "<b>Sökvägar</b>"
+
+#: ../data/geany.glade.h:50
+msgid "Startup"
+msgstr "Programstart"
+
+#: ../data/geany.glade.h:51
+msgid "Beep on errors or when compilation has finished"
+msgstr "Pip vid fel och när kompilering har avslutats"
+
+#: ../data/geany.glade.h:52
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr ""
+"Om datorn skall avge en ljudsignal när när kompileringen har avslutats."
+
+#: ../data/geany.glade.h:53
+msgid "Switch to status message list at new message"
+msgstr "Byt till statusmeddelandelistan när ett nytt meddelande visas"
+
+#: ../data/geany.glade.h:54
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives"
+msgstr ""
+"Huruvida Geany skall byta till statusmeddelandefönstret (vid botten) om ett "
+"nytt statusmeddelande kommer."
+
+#: ../data/geany.glade.h:55
+msgid "Suppress status messages in the status bar"
+msgstr "Ignorera statusmeddelanden i statusfältet"
+
+#: ../data/geany.glade.h:56
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+"Tar bort alla meddelanden från statusfältet. Meddelanden visas fortförande i "
+"fönstret för statusmeddelanden."
+
+#: ../data/geany.glade.h:57
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr "Autofokusera gränssnittskomponenter (fokus följer musen)"
+
+#: ../data/geany.glade.h:58
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr "Ger automatiskt fokus till gränssnittskomponenter under muspekaren."
+
+#: ../data/geany.glade.h:59
+msgid "Use Windows native dialogs"
+msgstr "Använd Windows gränssnitt"
+
+#: ../data/geany.glade.h:60
+msgid ""
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
+msgstr "Specificerar om Windows eller GTK skall användas"
+
+#: ../data/geany.glade.h:61
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Övrigt</b>"
+
+#: ../data/geany.glade.h:62
+msgid "Always wrap search"
+msgstr "Sök alltid i hela dokumentet"
+
+#: ../data/geany.glade.h:63
+msgid "Always wrap search around the document"
+msgstr "Sök alltid i hela dokumentet"
+
+#: ../data/geany.glade.h:64
+msgid "Hide the Find dialog"
+msgstr "Göm Sök-dialogrutan"
+
+#: ../data/geany.glade.h:65
+msgid "Hide the Find dialog after clicking Find Next/Previous"
+msgstr "Göm Sök-dialogrutan efter du klickat på Sök Nästa/Föregående"
+
+#: ../data/geany.glade.h:66
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr "Använd ordet under muspekaren vid Sök"
+
+#: ../data/geany.glade.h:67
+msgid ""
+"Use current word under the cursor when opening the Find, Find in Files or "
+"Replace dialog and there is no selection"
+msgstr ""
+"Använd ordet under muspekaren när Sök, Sök i filer eller Ersätt väljs och "
+"det inte finns något markerat tidigare"
+
+#: ../data/geany.glade.h:68
+msgid "Use the current file's directory for Find in Files"
+msgstr "Använd nuvarande fils sökväg för funktionen Sök i Filer"
+
+#: ../data/geany.glade.h:69
+msgid "<b>Search</b>"
+msgstr "<b>Sök</b>"
+
+#: ../data/geany.glade.h:70
+msgid "Use project-based session files"
+msgstr "Använd projektbaserade sessionsfiler"
+
+#: ../data/geany.glade.h:71
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project"
+msgstr ""
+"Huruvida projektets sessionsfiler skall sparas för att senare öppna den när "
+"projektet åter öppnas"
+
+#: ../data/geany.glade.h:72
+msgid "Store project file inside the project base directory"
+msgstr "Lagra projektfiler i projektets basmapp"
+
+#: ../data/geany.glade.h:73
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base "
+"directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+"När tillvalet är aktiverat, lagras projektfilen innuti bassökvägen för "
+"projektet istället för ett steg ovanför bassökvägen. Du kan fortförande "
+"ändra sölvägen till projektfilen i \"Nytt projekt\"-menyn."
+
+#: ../data/geany.glade.h:74
+msgid "<b>Projects</b>"
+msgstr "<b>Projekt</b>"
+
+#: ../data/geany.glade.h:75 ../src/dialogs.c:232
+msgid "Miscellaneous"
+msgstr "Övrigt"
+
+#. TODO Find a better way to map the current notebook page to the
+#. * corresponding chapter in the documentation, comparing translatable
+#. * strings is easy to break. Maybe attach an identifying string to the
+#. * tab label object.
+#: ../data/geany.glade.h:76 ../src/prefs.c:1604
+msgid "General"
+msgstr "Generellt"
+
+#: ../data/geany.glade.h:77
+msgid "Show symbol list"
+msgstr "Visa symbollista"
+
+#: ../data/geany.glade.h:78
+msgid "Toggle the symbol list on and off"
+msgstr "Stäng av / på symbollistan"
+
+#: ../data/geany.glade.h:79
+msgid "Default symbol sorting mode"
+msgstr ""
+
+#: ../data/geany.glade.h:80
+#, fuzzy
+msgid "Default sorting mode:"
+msgstr "Förvald kodning (nya filer):"
+
+#: ../data/geany.glade.h:81 ../src/stash.c:1170
+msgid "Name"
+msgstr "Namn"
+
+#: ../data/geany.glade.h:82
+#, fuzzy
+msgid "Appearance"
+msgstr "<b>Utseende</b>"
+
+#: ../data/geany.glade.h:83
+msgid "Show documents list"
+msgstr "Visa listan för öppna filer"
+
+#: ../data/geany.glade.h:84
+msgid "Toggle the documents list on and off"
+msgstr "Stäng av / på listan med öppna filer"
+
+#: ../data/geany.glade.h:85
+msgid "Show sidebar"
+msgstr "Visa sidofält"
+
+#: ../data/geany.glade.h:86
+msgid "Position:"
+msgstr "Position:"
+
+#: ../data/geany.glade.h:87
+msgid "<b>Sidebar</b>"
+msgstr "<b>Sidofält</b>"
+
+#: ../data/geany.glade.h:88
+msgid "<b>Message window</b>"
+msgstr "Meddelandefönster:"
+
+#: ../data/geany.glade.h:89
+msgid "Symbol list:"
+msgstr "Symbollista:"
+
+#: ../data/geany.glade.h:90
+msgid "Message window:"
+msgstr "Meddelandefönster:"
+
+#: ../data/geany.glade.h:91
+msgid "Editor:"
+msgstr "Editor:"
+
+#: ../data/geany.glade.h:92
+msgid "Sets the font for the message window"
+msgstr "Justerar teckensnittet för meddelandefönstret"
+
+#: ../data/geany.glade.h:93
+msgid "Sets the font for the symbol list"
+msgstr "Justerar teckensnittet för symbollistan"
+
+#: ../data/geany.glade.h:94
+msgid "Sets the editor font"
+msgstr "Anger texteditorns teckensnitt"
+
+#: ../data/geany.glade.h:95
+msgid "<b>Fonts</b>"
+msgstr "<b>Teckensnitt</b>"
+
+#: ../data/geany.glade.h:96
+msgid "Show status bar"
+msgstr "Visa statusfält"
+
+#: ../data/geany.glade.h:97
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr "Huruvida statusfältet skall visas längst ner i huvudfönstret."
+
+#: ../data/geany.glade.h:98 ../src/prefs.c:1606
+msgid "Interface"
+msgstr "Gränssnitt"
+
+#: ../data/geany.glade.h:99
+msgid "Show editor tabs"
+msgstr "Visa editorns flikar"
+
+#: ../data/geany.glade.h:100
+msgid "Show close buttons"
+msgstr "Visa knappar för stängning"
+
+#: ../data/geany.glade.h:101
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+"Visar ett litet kors i filflikarna, som kan användas att enkelt stänga filer "
+"om du klickar på det (kräver att du startar om Geany)."
+
+#: ../data/geany.glade.h:102
+msgid "Placement of new file tabs:"
+msgstr "Placering av nya filflikar:"
+
+#: ../data/geany.glade.h:103
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "Fil-tabbar kommer att placeras till vänster om anteckningsboken"
+
+#: ../data/geany.glade.h:104
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "Fil-tabbar kommer att placeras till höger om anteckningsboken"
+
+#: ../data/geany.glade.h:105
+msgid "Next to current"
+msgstr "Nästa till aktuell"
+
+#: ../data/geany.glade.h:106
+msgid ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
+msgstr ""
+"Huruvida nya fil-flikar skall placeras bredvid aktuell flik eller vid kanten "
+"av anteckningarna"
+
+#: ../data/geany.glade.h:107
+msgid "Double-clicking hides all additional widgets"
+msgstr "Dubbelklick gömmer alla övriga gränssnittskomponenter"
+
+#: ../data/geany.glade.h:108
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr "Kör Visa -> <b>Visa / göm verktygsfält</b>-kommandot"
+
+#: ../data/geany.glade.h:109
+msgid "Switch to last used document after closing a tab"
+msgstr "Byt till det sist använda dokumentet efter en flik stängts"
+
+#: ../data/geany.glade.h:110
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Editorns flikar</b>"
+
+#: ../data/geany.glade.h:111
+msgid "Sidebar:"
+msgstr "Sidofält:"
+
+#: ../data/geany.glade.h:112
+msgid "<b>Tab positions</b>"
+msgstr "<b>Tab positioner</b>"
+
+#: ../data/geany.glade.h:113
+msgid "Notebook tabs"
+msgstr "Anteckningsblockets tabbar"
+
+#: ../data/geany.glade.h:114
+msgid "Show t_oolbar"
+msgstr "Visa verktygsfält"
+
+#: ../data/geany.glade.h:115
+msgid "_Append toolbar to the menu"
+msgstr "Lägg till verktygsfältet till menyn"
+
+#: ../data/geany.glade.h:116
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr ""
+"Lägg ihop verktygsfältet med huvudmenyn för att spara vertikalt utrymme"
+
+#: ../data/geany.glade.h:117 ../src/toolbar.c:944
+msgid "Customize Toolbar"
+msgstr "Anpassa verktygsfält"
+
+#: ../data/geany.glade.h:118
+msgid "System _default"
+msgstr "Grundinställningar"
+
+#: ../data/geany.glade.h:119
+msgid "Images _and text"
+msgstr "Bilder och text"
+
+#: ../data/geany.glade.h:120
+msgid "_Images only"
+msgstr "Endast bilder"
+
+#: ../data/geany.glade.h:121
+msgid "_Text only"
+msgstr "Endast text"
+
+#: ../data/geany.glade.h:122
+msgid "<b>Icon style</b>"
+msgstr "<b>Ikonstil</b>"
+
+#: ../data/geany.glade.h:123
+msgid "S_ystem default"
+msgstr "Systeminställningar"
+
+#: ../data/geany.glade.h:124
+msgid "_Small icons"
+msgstr "Små ikoner"
+
+#: ../data/geany.glade.h:125
+msgid "_Very small icons"
+msgstr "Mycket små ikoner"
+
+#: ../data/geany.glade.h:126
+msgid "_Large icons"
+msgstr "Stora ikoner"
+
+#: ../data/geany.glade.h:127
+msgid "<b>Icon size</b>"
+msgstr "<b>Ikonstorlek</b>"
+
+#: ../data/geany.glade.h:128
+msgid "<b>Toolbar</b>"
+msgstr "<b>Verktygsfält</b>"
+
+#: ../data/geany.glade.h:129 ../src/prefs.c:1608
+msgid "Toolbar"
+msgstr "Verktygsfält"
+
+#: ../data/geany.glade.h:130
+msgid "Line wrapping"
+msgstr "Radbrytning"
+
+#: ../data/geany.glade.h:131
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Radbryt rader vid fönsterkant och fortsätt på nästa rad. Observera att "
+"radbrytning tar mycket systemresurser vid redigering av stora dokument, och "
+"bör därför vara avslagen på långsamma datorer."
+
+#: ../data/geany.glade.h:132
+msgid "\"Smart\" home key"
+msgstr "Aktivera \"smart\" home-tangent"
+
+#: ../data/geany.glade.h:133
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+"När \"smart\" home-tangent är aktiverad kommer HOME tangenten flytta tecken "
+"teckenmarkören till det första icke-blanka tecknet på raden, om den inte "
+"redan är där. När denna funktion är avaktiverad kommer HOME tangenten alltid "
+"flytta teckenmarkören till början av raden, oavsett dess nuvarande position."
+
+#: ../data/geany.glade.h:134
+msgid "Disable Drag and Drop"
+msgstr "Avaktivera drag-och-släpp"
+
+#: ../data/geany.glade.h:135
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr "Avaktivera drag-och-släpp i editor-fönstret"
+
+#: ../data/geany.glade.h:136
+msgid "Code folding"
+msgstr "Aktivera ihopvikning"
+
+#: ../data/geany.glade.h:137
+msgid "Fold/unfold all children of a fold point"
+msgstr "Vik upp alla vid uppvikningspunkten"
+
+#: ../data/geany.glade.h:138
+msgid ""
+"Fold or unfold all children of a fold point. By pressing the Shift key while "
+"clicking on a fold symbol the contrary behavior is used."
+msgstr ""
+"Vik eller vik upp allt vid vikningspunkten. Genom att hålla in shift-"
+"tangenten medan du klickar på vikningspunkten kan motsatt effekt uppnås."
+
+#: ../data/geany.glade.h:139
+msgid "Use indicators to show compile errors"
+msgstr "Använd indikatorer för att visa kompileringsfel"
+
+#: ../data/geany.glade.h:140
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error"
+msgstr ""
+"Huruvida indikatorer skall användas (taggiga understrykningar) skall "
+"användas för att markera rader där kompilatorn hittat fel eller varningar."
+
+#: ../data/geany.glade.h:141
+msgid "Newline strips trailing spaces"
+msgstr "Ta bort överflödiga mellanslag efter nyradstecken"
+
+#: ../data/geany.glade.h:142
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr ""
+"Gör så att nyradstecken tar bort överflödiga mellanslag från föregående rad."
+
+#: ../data/geany.glade.h:143
+msgid "Line breaking column:"
+msgstr "Kolumn för radbrytning:"
+
+#: ../data/geany.glade.h:144
+msgid "Comment toggle marker:"
+msgstr "Stäng av / sätt på kommentarmarkör:"
+
+#: ../data/geany.glade.h:145
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is "
+"used to mark the comment as toggled."
+msgstr ""
+"En sträng som läggs till när man justerar en kommentar i en källkodsfil. Den "
+"används för att markera den justerade kommentaren."
+
+#: ../data/geany.glade.h:146
+msgid "<b>Features</b>"
+msgstr "<b>Inställningar</b>"
+
+#: ../data/geany.glade.h:147
+msgid "Features"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:148
+msgid ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
+msgstr ""
+"Info: För att använda dessa inställningar för alla öppna dokument, använd "
+"<i>Projekt->Använd förinställt indrag</i>."
+
+#: ../data/geany.glade.h:149
+msgid "Width:"
+msgstr "Bredd:"
+
+#: ../data/geany.glade.h:150
+msgid "The width in chars of a single indent"
+msgstr "Bredd, i antal tecken, på ett indrag"
+
+#: ../data/geany.glade.h:151
+msgid "Auto-indent mode:"
+msgstr "Automatiskt indrag:"
+
+#: ../data/geany.glade.h:152
+msgid "Detect type from file"
+msgstr "Upptäck filtyp automatiskt"
+
+#: ../data/geany.glade.h:153
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr ""
+"Huruvida indragstyp skall hittas automatiskt via filens innehåll när den "
+"öppnats."
+
+#: ../data/geany.glade.h:154
+msgid "T_abs and spaces"
+msgstr "Tab och mellanslag"
+
+#: ../data/geany.glade.h:155
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+"Använd mellanslag om det totala indraget är mindre än tab-bredden -- i annat "
+"fall, använd båda"
+
+#: ../data/geany.glade.h:156
+msgid "_Spaces"
+msgstr "Mellanslag"
+
+#: ../data/geany.glade.h:157
+msgid "Use spaces when inserting indentation"
+msgstr "Använd mellanslag vid infogande av indrag"
+
+#: ../data/geany.glade.h:158
+msgid "_Tabs"
+msgstr "Tabulatorer"
+
+#: ../data/geany.glade.h:159
+msgid "Use one tab per indent"
+msgstr "Använd en tab per indrag"
+
+#: ../data/geany.glade.h:160
+msgid "Detect width from file"
+msgstr "Upptäck bredd från fil"
+
+#: ../data/geany.glade.h:161
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+"Huruvida indragsbredd skall hittas automatiskt via filens innehåll när den "
+"öppnas"
+
+#: ../data/geany.glade.h:162
+msgid "Type:"
+msgstr "Typ:"
+
+#: ../data/geany.glade.h:163
+msgid "Tab key indents"
+msgstr "Tab-tangentens indrag"
+
+#: ../data/geany.glade.h:164
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr ""
+"Att trycka på tab / skift-tab, ökar / minskar indrag istället för att mata "
+"in ett tab-tecken"
+
+#: ../data/geany.glade.h:165
+msgid "<b>Indentation</b>"
+msgstr "<b>Indrag</b>"
+
+#: ../data/geany.glade.h:166
+msgid "Indentation"
+msgstr "Indrag"
+
+#: ../data/geany.glade.h:167
+msgid "Snippet completion"
+msgstr "Komplettera textfragment"
+
+#: ../data/geany.glade.h:168
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+"Geany kan gissa vad du vill skriva, och visar förslag på fullständiga "
+"strängar som du kan välja mellan med ett enkelt tryck på returtangenten."
+
+#: ../data/geany.glade.h:169
+msgid "XML/HTML tag auto-closing"
+msgstr "Stäng XML/HTML-taggar automatiskt"
+
+#: ../data/geany.glade.h:170
+msgid "Insert matching closing tag for XML/HTML"
+msgstr "Infoga avslutande tag för XML/HTML"
+
+#: ../data/geany.glade.h:171
+msgid "Automatic continuation of multi-line comments"
+msgstr "Automatisk fortsättning på multiradskommentarer."
+
+#: ../data/geany.glade.h:172
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java "
+"when a new line is entered inside such a comment"
+msgstr ""
+"Automatiskt fortsätta multirads-kommentarer i språk som C, C++ och Java när "
+"en ny rad matas in i kommentaren."
+
+#: ../data/geany.glade.h:173
+msgid "Autocomplete symbols"
+msgstr "Autokomplettera symboler"
+
+#: ../data/geany.glade.h:174
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"Autokomplettera kända symboler i öppna filer (funktionsnamn, globala "
+"variabler etc.)"
+
+#: ../data/geany.glade.h:175
+msgid "Autocomplete all words in document"
+msgstr "Autokomplettera alla ord i dokumentet"
+
+#: ../data/geany.glade.h:176
+msgid "Drop rest of word on completion"
+msgstr "Ta bort resten av orden för komplettering"
+
+#: ../data/geany.glade.h:177
+msgid "Max. symbol name suggestions:"
+msgstr "Max antal symbolnamnsförslag:"
+
+#: ../data/geany.glade.h:178
+msgid "Completion list height:"
+msgstr "Komplettering listhöjd:"
+
+#: ../data/geany.glade.h:179
+msgid "Characters to type for autocompletion:"
+msgstr "Tecken att skriva för autokomplettering:"
+
+#: ../data/geany.glade.h:180
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr "Mängden tecken som behövs för att visa symbolautokompletteringslistan"
+
+#: ../data/geany.glade.h:181
+msgid "Display height in rows for the autocompletion list"
+msgstr "Visa höjd, i rader, för autokompletteringslistan"
+
+#: ../data/geany.glade.h:182
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "Maximalt antal element att visa i autokompletteringslistan"
+
+#: ../data/geany.glade.h:183
+msgid "Symbol list update frequency:"
+msgstr "Frekvens för sybollistans uppdatering:"
+
+#: ../data/geany.glade.h:184
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+"Den minsta tidsskillnaden (i millisekunder) mellan två automatiska "
+"uppdateringar för symbollistan. Notera att en allt för liten tidsskillnad "
+"kan påverka prestandan negativt, speciellt vid stora filtyper. Ett värde på "
+"0 slår av realtidsuppdateringar."
+
+#: ../data/geany.glade.h:185
+msgid "<b>Completions</b>"
+msgstr "<b>Komplettering</b>"
+
+#: ../data/geany.glade.h:186
+msgid "Parenthesis ( )"
+msgstr "Parantes ()"
+
+#: ../data/geany.glade.h:187
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr "Stäng paranteser automatiskt"
+
+#: ../data/geany.glade.h:188
+msgid "Curly brackets { }"
+msgstr "Klammerparanteser { }"
+
+#: ../data/geany.glade.h:189
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr "Stäng automatiskt hakparantes när du skrivit in ett hakparantestecken"
+
+#: ../data/geany.glade.h:190
+msgid "Square brackets [ ]"
+msgstr "Fyrkantig parantes [ ]"
+
+#: ../data/geany.glade.h:191
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr ""
+"Stäng automatiskt fyrkantig parantes när du skrivit in ett fyrkantigt "
+"parantestecken"
+
+#: ../data/geany.glade.h:192
+msgid "Single quotes ' '"
+msgstr "Enkla citeringstecken ' '"
+
+#: ../data/geany.glade.h:193
+msgid "Auto-close single quote when typing an opening one"
+msgstr ""
+"Stäng automatiskt enkel citering när du skrivit in ett enkelt citeringstecken"
+
+#: ../data/geany.glade.h:194
+msgid "Double quotes \" \""
+msgstr "Dubbla citationstecken \" \""
+
+#: ../data/geany.glade.h:195
+msgid "Auto-close double quote when typing an opening one"
+msgstr ""
+"Stäng automatiskt dubbel citering när du skrivit in ett dubbelt "
+"citeringstecken"
+
+#: ../data/geany.glade.h:196
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr "<b>Stäng citeringar och hakparanteser automatiskt</b>"
+
+#: ../data/geany.glade.h:197
+msgid "Completions"
+msgstr "Komplettering"
+
+#: ../data/geany.glade.h:198
+msgid "Invert syntax highlighting colors"
+msgstr "Invertera syntaxfärgningen"
+
+#: ../data/geany.glade.h:199
+msgid "Invert all colors, by default using white text on a black background"
+msgstr "Intervera alla färger"
+
+#: ../data/geany.glade.h:200
+msgid "Show indentation guides"
+msgstr "Visa indragsmarkörer"
+
+#: ../data/geany.glade.h:201
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr "Visar små prickade linjer för att hjälpa dig se rätt indrag."
+
+#: ../data/geany.glade.h:202
+msgid "Show white space"
+msgstr "Visa tomrum"
+
+#: ../data/geany.glade.h:203
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "Markera mellanslag med prickar och tabbar med pilar."
+
+#: ../data/geany.glade.h:204
+msgid "Show line endings"
+msgstr "Visa radslut"
+
+#: ../data/geany.glade.h:205
+msgid "Shows the line ending character"
+msgstr "Visa radslutstecknet"
+
+#: ../data/geany.glade.h:206
+msgid "Show line numbers"
+msgstr "Visa radnummer"
+
+#: ../data/geany.glade.h:207
+msgid "Shows or hides the Line Number margin"
+msgstr "Visar eller gömmer radnummer-marginalen"
+
+#: ../data/geany.glade.h:208
+msgid "Show markers margin"
+msgstr "Visa marginalmarkörer"
+
+#: ../data/geany.glade.h:209
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr ""
+"Visar eller gömmer den lilla marginalen till höger om radnummren som används "
+"för att markera rader."
+
+#: ../data/geany.glade.h:210
+msgid "Stop scrolling at last line"
+msgstr "Sluta rulla vid sista raden"
+
+#: ../data/geany.glade.h:211
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr ""
+"Huruvida programmet skall sluta rulla en sida efter den sista raden i ett "
+"dokument."
+
+#: ../data/geany.glade.h:212
+msgid "<b>Display</b>"
+msgstr "<b>Visa</b>"
+
+#: ../data/geany.glade.h:213
+msgid "Column:"
+msgstr "Kolumn:"
+
+#: ../data/geany.glade.h:214
+msgid "Color:"
+msgstr "Färg:"
+
+#: ../data/geany.glade.h:215
+msgid "Sets the color of the long line marker"
+msgstr "Väljer färgen på markören för långa rader"
+
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
+msgid "Color Chooser"
+msgstr "Färgväljare"
+
+#: ../data/geany.glade.h:217
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"Markören för långa rader är en tunn vertikal linje som visas i editorn. Den "
+"hjälper till att visa var det är läge att bryta rader. Värdet anger i vilken "
+"kolumn markören visas."
+
+#: ../data/geany.glade.h:218
+msgid "Line"
+msgstr "Rad"
+
+#: ../data/geany.glade.h:219
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr ""
+"Visar en vertikal linje i editor-fönstret vid en given position (se nedan)."
+
+#: ../data/geany.glade.h:220
+msgid "Background"
+msgstr "Bakgrund"
+
+#: ../data/geany.glade.h:221
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Bakgrundsfärgen ändras vid en given kolumn för att indikera var radbrytning "
+"bör ske. Detta är lämpligt for proportionella teckensnitt."
+
+#: ../data/geany.glade.h:222
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: ../data/geany.glade.h:223
+msgid "<b>Long line marker</b>"
+msgstr "<b>Markör för lång rad</b>"
+
+#: ../data/geany.glade.h:224
+msgid "Disabled"
+msgstr "Avaktiverad"
+
+#: ../data/geany.glade.h:225
+msgid "Do not show virtual spaces"
+msgstr "Visa inte virtuella ytor"
+
+#: ../data/geany.glade.h:226
+msgid "Only for rectangular selections"
+msgstr "Endast för rektangulära markeringar"
+
+#: ../data/geany.glade.h:227
+msgid ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
+msgstr "Visa endast virtuella ytor efter radslut vid rektangulär markering"
+
+#: ../data/geany.glade.h:228
+msgid "Always"
+msgstr "Alltid"
+
+#: ../data/geany.glade.h:229
+msgid "Always show virtual spaces beyond the end of lines"
+msgstr "Visa alltid virtuella mellanslag och tab-tecken i slutet av rader"
+
+#: ../data/geany.glade.h:230
+msgid "<b>Virtual spaces</b>"
+msgstr "<b>Virtuella ytor</b>"
+
+#: ../data/geany.glade.h:231
+msgid "Display"
+msgstr "Visa"
+
+#: ../data/geany.glade.h:232 ../src/keybindings.c:308 ../src/prefs.c:1610
+msgid "Editor"
+msgstr "Editor"
+
+#: ../data/geany.glade.h:233
+msgid "Open new documents from the command-line"
+msgstr "Öppna nya dokument från kommandotolken"
+
+#: ../data/geany.glade.h:234
+msgid "Create a new file for each command-line filename that doesn't exist"
+msgstr "Skapa en ny fil för varje filnamn i kommandotolken som inte existerar."
+
+#: ../data/geany.glade.h:235
+msgid "Default end of line characters:"
+msgstr "Förvalt radslutstecken:"
+
+#: ../data/geany.glade.h:236
+msgid "<b>New files</b>"
+msgstr "<b>Nya filer</b>"
+
+#: ../data/geany.glade.h:237
+msgid "Default encoding (new files):"
+msgstr "Förvald kodning (nya filer):"
+
+#: ../data/geany.glade.h:238
+msgid "Sets the default encoding for newly created files"
+msgstr "Anger förvald kodning för nyskapade filer."
+
+#: ../data/geany.glade.h:239
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr "Använd fast kodning när icke-unicode filer öppnas"
+
+#: ../data/geany.glade.h:240
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+"Detta tillval väljer bort automatisk igenkänning av kodning när nya icke-"
+"unicode filer öppnas, och använder i stället en specificerad kodning (behövs "
+"vanligen inte)"
+
+#: ../data/geany.glade.h:241
+msgid "Default encoding (existing non-Unicode files):"
+msgstr "Förvald teckenkodning (existerande icke-unicode filer):"
+
+#: ../data/geany.glade.h:242
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Anger förvald teckenkodning vid öppning av icke-Unicode filer"
+
+#: ../data/geany.glade.h:243
+msgid "<b>Encodings</b>"
+msgstr "<b>Teckenkod</b>"
+
+#: ../data/geany.glade.h:244
+msgid "Ensure new line at file end"
+msgstr "Skriv alltid nyradstecken i slutet av filen"
+
+#: ../data/geany.glade.h:245
+msgid "Ensures that at the end of the file is a new line"
+msgstr ""
+"Lägger till ett nyradstecken vid slutet av filen om det inte redan finns "
+"något"
+
+#: ../data/geany.glade.h:246
+msgid "Ensure consistent line endings"
+msgstr "Skriv alltid nyradstecken"
+
+#: ../data/geany.glade.h:247
+msgid ""
+"Ensures that newline characters always get converted before saving, avoiding "
+"mixed line endings in the same file"
+msgstr ""
+"Nyradstecken konverteras alltid innan filen sparas, för att radslutstecken "
+"inte skall blandas om i samma fil"
+
+#: ../data/geany.glade.h:248
+msgid "Strip trailing spaces and tabs"
+msgstr "Ta bort överflödiga mellanslag och tab-tecken"
+
+#: ../data/geany.glade.h:249
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Tar bort överflödiga mellanslag och tab-tecken i slutet av filen"
+
+#: ../data/geany.glade.h:250 ../src/keybindings.c:662
+msgid "Replace tabs with space"
+msgstr "Ersätt tab-tecken med mellanslag"
+
+#: ../data/geany.glade.h:251
+msgid "Replaces all tabs in document with spaces"
+msgstr ""
+"Ersätter alla tab-tecken i dokumentet med mellanslag (indraget blir lika "
+"stort)."
+
+#: ../data/geany.glade.h:252
+msgid "<b>Saving files</b>"
+msgstr "<b>Spara</b>"
+
+#: ../data/geany.glade.h:253
+msgid "Recent files list length:"
+msgstr "Längd på Senaste-filer listan:"
+
+#: ../data/geany.glade.h:254
+msgid "Specifies the number of files which are stored in the Recent files list"
+msgstr "Anger antalet filer som lagras i Senaste-filer listan."
+
+#: ../data/geany.glade.h:255
+msgid "Disk check timeout:"
+msgstr "Intervall för ändringskontroll:"
+
+#: ../data/geany.glade.h:256
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+"Hur ofta kontroller utförs för att se om dokumentet ändrats, i antalet "
+"sekunder. Noll stänger av kontroller."
+
+#: ../data/geany.glade.h:257 ../src/prefs.c:1612 ../src/symbols.c:458
+#: ../plugins/filebrowser.c:1159
+msgid "Files"
+msgstr "Filer"
+
+#: ../data/geany.glade.h:258
+msgid "Terminal:"
+msgstr "Terminal:"
+
+#: ../data/geany.glade.h:259
+msgid "Browser:"
+msgstr "Webbläsare:"
+
+#: ../data/geany.glade.h:261
+#, no-c-format
+msgid ""
+"A terminal emulator command (%c is substituted with the Geany run script "
+"filename)"
+msgstr "Ett terminalkommando (%c ersätts med Geanys skripts filnamn)"
+
+#: ../data/geany.glade.h:262
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Sökväg (och eventuella argument) till din favoritwebbläsare."
+
+#: ../data/geany.glade.h:263
+msgid "Grep:"
+msgstr "Grep:"
+
+#: ../data/geany.glade.h:264
+msgid "<b>Tool paths</b>"
+msgstr "<b>Sökvägar till verktyg</b>"
+
+#: ../data/geany.glade.h:265
+msgid "Context action:"
+msgstr "Snabbmenyhändelse:"
+
+#: ../data/geany.glade.h:267
+#, no-c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+"Snabbmenykommando. Det markerade ordet kan användas med %s. Det kan infogas "
+"var som helst i kommandot och kommer att ersättas innan exekvering."
+
+#: ../data/geany.glade.h:268
+msgid "<b>Commands</b>"
+msgstr "<b>Kommandon</b>"
+
+#: ../data/geany.glade.h:269 ../src/keybindings.c:320 ../src/prefs.c:1614
+msgid "Tools"
+msgstr "Verktyg"
+
+#: ../data/geany.glade.h:270
+msgid "email address of the developer"
+msgstr "emailadressen till utvecklaren"
+
+#: ../data/geany.glade.h:271
+msgid "Initials of the developer name"
+msgstr "Utvecklarens initialer"
+
+#: ../data/geany.glade.h:272
+msgid "Initial version:"
+msgstr "Inledande version:"
+
+#: ../data/geany.glade.h:273
+msgid "Version number, which a new file initially has"
+msgstr "Versionnummret som filen börjar med"
+
+#: ../data/geany.glade.h:274
+msgid "Company name"
+msgstr "Företagets namn"
+
+#: ../data/geany.glade.h:275
+msgid "Developer:"
+msgstr "Utvecklare:"
+
+#: ../data/geany.glade.h:276
+msgid "Company:"
+msgstr "Företag:"
+
+#: ../data/geany.glade.h:277
+msgid "Mail address:"
+msgstr "E-post:"
+
+#: ../data/geany.glade.h:278
+msgid "Initials:"
+msgstr "Initialer:"
+
+#: ../data/geany.glade.h:279
+msgid "The name of the developer"
+msgstr "Utvecklarens namn"
+
+#: ../data/geany.glade.h:280
+msgid "Year:"
+msgstr "År:"
+
+#: ../data/geany.glade.h:281
+msgid "Date:"
+msgstr "Datum:"
+
+#: ../data/geany.glade.h:282
+msgid "Date & time:"
+msgstr "Datum och tid:"
+
+#: ../data/geany.glade.h:283
+msgid ""
+"Specify a format for the {datetime} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för {datetime}. Du kan använda de "
+"konverteringskonventioner som används i ANSI C strftime-funktionen."
+
+#: ../data/geany.glade.h:284
+msgid ""
+"Specify a format for the {year} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för att använda för {year}. Du kan använda den syntax "
+"som specificeras av ANSI C:s strftime funktion."
+
+#: ../data/geany.glade.h:285
+msgid ""
+"Specify a format for the {date} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in ett format för att använda till fältet {date}. Du kan använda den "
+"syntax som specificeras av ANSI C:s strftime funktion."
+
+#: ../data/geany.glade.h:286
+msgid "<b>Template data</b>"
+msgstr "<b>Mall-data</b>"
+
+#: ../data/geany.glade.h:287 ../src/prefs.c:1616
+msgid "Templates"
+msgstr "Mallar"
+
+#: ../data/geany.glade.h:288
+msgid "C_hange"
+msgstr "Ändra"
+
+#: ../data/geany.glade.h:289
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "<b>Tangentbordsgenvägar</b>"
+
+#: ../data/geany.glade.h:290 ../src/plugins.c:1899 ../src/plugins.c:1936
+#: ../src/prefs.c:1618
+msgid "Keybindings"
+msgstr "Genvägar"
+
+#: ../data/geany.glade.h:291
+msgid "Command:"
+msgstr "Kommando:"
+
+#: ../data/geany.glade.h:293
+#, no-c-format
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr ""
+"Sökvägen till kommandot för att skriva ut filer (%f ersätts med filnamnet)."
+
+#: ../data/geany.glade.h:294
+msgid "Use an external command for printing"
+msgstr "Använd ett externt kommando för att skriva ut"
+
+#: ../data/geany.glade.h:295 ../src/printing.c:239
+msgid "Print line numbers"
+msgstr "Visa radnummer"
+
+#: ../data/geany.glade.h:296 ../src/printing.c:241
+msgid "Add line numbers to the printed page"
+msgstr "Lägg till radnummer vid utskrift"
+
+#: ../data/geany.glade.h:297 ../src/printing.c:244
+msgid "Print page numbers"
+msgstr "Skriv ut sidnummer"
+
+#: ../data/geany.glade.h:298 ../src/printing.c:246
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr "Lägg till sidnummer i sidfoten. Detta upptar två rader på sidan."
+
+#: ../data/geany.glade.h:299 ../src/printing.c:249
+msgid "Print page header"
+msgstr "Skriv ut filhuvud"
+
+#: ../data/geany.glade.h:300 ../src/printing.c:251
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+"Lägger till tre rader i sidhuvudet som visar sidnummer, filnamn och datum. "
+"Detta upptar tre rader på sidan."
+
+#: ../data/geany.glade.h:301 ../src/printing.c:267
+msgid "Use the basename of the printed file"
+msgstr "Använd den utskrivna filens basnamn"
+
+#: ../data/geany.glade.h:302
+msgid "Print only the basename (without the path) of the printed file"
+msgstr "Skriv bara ut filnamnet, ej sökvägen."
+
+#: ../data/geany.glade.h:303 ../src/printing.c:275
+msgid "Date format:"
+msgstr "Datumformat:"
+
+#: ../data/geany.glade.h:304 ../src/printing.c:281
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. You can use any conversion specifiers which can be used "
+"with the ANSI C strftime function."
+msgstr ""
+"Skriv in användardefinierat datum- och tidsformat, som kommer att visas i "
+"sidhuvudet. Du kan använda den syntax som specificeras av ANSI C:s strftime "
+"funktion."
+
+#: ../data/geany.glade.h:305
+msgid "Use native GTK printing"
+msgstr "Använd GTKs utskriftshantering"
+
+#: ../data/geany.glade.h:306
+msgid "<b>Printing</b>"
+msgstr "<b>Utskrift</b>"
+
+#: ../data/geany.glade.h:307 ../src/prefs.c:1620
+msgid "Printing"
+msgstr "Utskrift"
+
+#: ../data/geany.glade.h:308
+msgid "Font:"
+msgstr "Typsnitt:"
+
+#: ../data/geany.glade.h:309
+msgid "Sets the font for the terminal widget"
+msgstr "Justerar teckensnittet för terminalen."
+
+#: ../data/geany.glade.h:310
+msgid "Choose Terminal Font"
+msgstr "Välj teckensnitt i terminalen"
+
+#: ../data/geany.glade.h:311
+msgid "Foreground color:"
+msgstr "Förgrundsfärg"
+
+#: ../data/geany.glade.h:312
+msgid "Background color:"
+msgstr "Bakgrundsfärg"
+
+#: ../data/geany.glade.h:313
+msgid "Background image:"
+msgstr "Bakgrundsbild:"
+
+#: ../data/geany.glade.h:314
+msgid "Scrollback lines:"
+msgstr "Radbuffer:"
+
+#: ../data/geany.glade.h:315
+msgid "Shell:"
+msgstr "Skal:"
+
+#: ../data/geany.glade.h:316
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "Justerar förgrundsfärgen för texten i terminalen."
+
+#: ../data/geany.glade.h:317
+msgid "Sets the background color of the text in the terminal widget"
+msgstr "Justerar bakgrundsfärgen för texten i terminalen"
+
+#: ../data/geany.glade.h:318
+msgid "Sets the path to the background image in the terminal widget"
+msgstr "Ställer in sökvägen för bakgrundsbilden bakom texten i terminalen"
+
+#: ../data/geany.glade.h:319
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr "Anger hur många rader som du kan rulla tillbaka i terminalen"
+
+#: ../data/geany.glade.h:320
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr "Justerar sökvägen till skalet som skall startas i terminalemulatorn."
+
+#: ../data/geany.glade.h:321
+msgid "Scroll on keystroke"
+msgstr "Rulla ner"
+
+#: ../data/geany.glade.h:322
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr "Om texten rullas ner till botten om en tangent trycks ned"
+
+#: ../data/geany.glade.h:323
+msgid "Scroll on output"
+msgstr "Rulla utmatning"
+
+#: ../data/geany.glade.h:324
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr "Huruvida texten i fönstret längst ner skall rullas när utmatning sker."
+
+#: ../data/geany.glade.h:325
+msgid "Cursor blinks"
+msgstr "Markör blinkar"
+
+#: ../data/geany.glade.h:326
+msgid "Whether to blink the cursor"
+msgstr "Huruvida textmarkören skall blinka"
+
+#: ../data/geany.glade.h:327
+msgid "Override Geany keybindings"
+msgstr "Vill du bryta Geanys tangentbindning?"
+
+#: ../data/geany.glade.h:328
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr "Tillåter VTE att motta tangentbordskommandon (förutom fokuskommandon)."
+
+#: ../data/geany.glade.h:329
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr "Avaktivera genvägstangenten (F10-tangenten)"
+
+#: ../data/geany.glade.h:330
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+"Detta tillval gör så att menyn inte visas när du trycker på F10. Detta kan "
+"vara användbart, exempelvis om du kör Midnight Commander i VTE."
+
+#: ../data/geany.glade.h:331
+msgid "Follow path of the current file"
+msgstr "Följ den aktiva filens sökväg"
+
+#: ../data/geany.glade.h:332
+#, fuzzy
+msgid "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr ""
+"Huruvida \\\"cd $path\\\" skall exekveras när du växlar mellan öppna filer"
+
+#: ../data/geany.glade.h:333
+msgid "Execute programs in the VTE"
+msgstr "Exekvera program i VTE"
+
+#: ../data/geany.glade.h:334
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+"Kör ett program i VTE i stället för att öppna ett terminalemuleringsfönster. "
+"Var god att notera att program som exekveras i VTE inte kan stoppas."
+
+#: ../data/geany.glade.h:335
+msgid "Don't use run script"
+msgstr "Använd inte körbara skript"
+
+#: ../data/geany.glade.h:336
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+"Använd inte det enkla körskriptet som vanligtvis används för att visa "
+"felmeddelanden för exekverat program."
+
+#: ../data/geany.glade.h:337
+msgid "<b>Terminal</b>"
+msgstr "<b>Terminal</b>"
+
+#: ../data/geany.glade.h:338 ../src/prefs.c:1624 ../src/vte.c:320
+msgid "Terminal"
+msgstr "Terminal"
+
+#: ../data/geany.glade.h:339
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+"<i>Varning: läs instruktionsboken innan du ändrar dessa inställningar.</i>"
+
+#: ../data/geany.glade.h:340
+msgid "<b>Various preferences</b>"
+msgstr "<b>Övriga inställningar</b>"
+
+#: ../data/geany.glade.h:341 ../src/prefs.c:1622
+msgid "Various"
+msgstr "Övriga"
+
+#: ../data/geany.glade.h:343
+msgid "_File"
+msgstr "Arkiv"
+
+#: ../data/geany.glade.h:344
+msgid "New (with _Template)"
+msgstr "Ny (med mall)"
+
+#: ../data/geany.glade.h:345
+msgid "_Open..."
+msgstr "Öppna..."
+
+#: ../data/geany.glade.h:346
+msgid "Recent _Files"
+msgstr "Senaste filer"
+
+#: ../data/geany.glade.h:347
+msgid "Save _As..."
+msgstr "Spara som..."
+
+#: ../data/geany.glade.h:348
+msgid "Sa_ve All"
+msgstr "Spara alla"
+
+#: ../data/geany.glade.h:349 ../src/document.c:1647 ../src/document.c:3616
+#: ../src/sidebar.c:718
+msgid "_Reload"
+msgstr "Ladda om"
+
+#: ../data/geany.glade.h:350
+msgid "R_eload As"
+msgstr "Ladda om som"
+
+#: ../data/geany.glade.h:351
+msgid "Page Set_up"
+msgstr "Sidinställningar"
+
+#: ../data/geany.glade.h:352
+msgid "_Print..."
+msgstr "Skriv ut..."
+
+#: ../data/geany.glade.h:353 ../src/notebook.c:470
+msgid "Close Ot_her Documents"
+msgstr "Stäng andra dokument"
+
+#: ../data/geany.glade.h:354 ../src/notebook.c:476
+msgid "C_lose All"
+msgstr "Stäng alla"
+
+#: ../data/geany.glade.h:355
+msgid "Co_mmands"
+msgstr "Kommandon"
+
+#: ../data/geany.glade.h:356 ../src/keybindings.c:430
+msgid "Cu_t Current Line(s)"
+msgstr "Klipp ut rad(er)"
+
+#: ../data/geany.glade.h:357 ../src/keybindings.c:427
+msgid "_Copy Current Line(s)"
+msgstr "Kopiera rad(er)"
+
+#: ../data/geany.glade.h:358 ../src/keybindings.c:383
+msgid "_Delete Current Line(s)"
+msgstr "Radera rad(er)"
+
+#: ../data/geany.glade.h:359 ../src/keybindings.c:380
+msgid "D_uplicate Line or Selection"
+msgstr "Gör en kopia av raden eller markeringen"
+
+#: ../data/geany.glade.h:360 ../src/keybindings.c:440
+msgid "S_elect Current Line(s)"
+msgstr "Välj rad(er)"
+
+#: ../data/geany.glade.h:361 ../src/keybindings.c:443
+msgid "Se_lect Current Paragraph"
+msgstr "Välj paragraf"
+
+#: ../data/geany.glade.h:362
+msgid "_Move Line(s) Up"
+msgstr "Flytta rad(er) uppåt"
+
+#: ../data/geany.glade.h:363
+msgid "M_ove Line(s) Down"
+msgstr "Flytta  rad(er) nedåt"
+
+#: ../data/geany.glade.h:364 ../src/keybindings.c:494
+msgid "_Send Selection to Terminal"
+msgstr "Skicka markeringen till terminalen"
+
+#: ../data/geany.glade.h:365 ../src/keybindings.c:496
+msgid "_Reflow Lines/Block"
+msgstr "Gör om flöde för rader/block"
+
+#: ../data/geany.glade.h:366 ../src/keybindings.c:454
+msgid "T_oggle Case of Selection"
+msgstr "Växla mellan gemener och versaler"
+
+#: ../data/geany.glade.h:367
+msgid "_Comment Line(s)"
+msgstr "Kommentera rader"
+
+#: ../data/geany.glade.h:368
+msgid "U_ncomment Line(s)"
+msgstr "Avkommentera rader"
+
+#: ../data/geany.glade.h:369
+msgid "_Toggle Line Commentation"
+msgstr "Aktivera / avaktivera radkommentarer"
+
+#: ../data/geany.glade.h:370
+msgid "_Increase Indent"
+msgstr "Öka indrag"
+
+#: ../data/geany.glade.h:371
+msgid "_Decrease Indent"
+msgstr "Minska indrag"
+
+#: ../data/geany.glade.h:372 ../src/keybindings.c:473
+msgid "S_mart Line Indent"
+msgstr "Smart radindrag"
+
+#: ../data/geany.glade.h:373
+msgid "_Send Selection to"
+msgstr "Skicka markering till"
+
+#: ../data/geany.glade.h:374
+msgid "I_nsert Comments"
+msgstr "Infoga kommentarer"
+
+#: ../data/geany.glade.h:375
+msgid "Preference_s"
+msgstr "Inställningar"
+
+#: ../data/geany.glade.h:376 ../src/keybindings.c:520
+msgid "P_lugin Preferences"
+msgstr "Inställningar för insticksmoduler"
+
+#: ../data/geany.glade.h:377
+msgid "_Find..."
+msgstr "Sök"
+
+#: ../data/geany.glade.h:378
+msgid "Find _Next"
+msgstr "Sök nästa"
+
+#: ../data/geany.glade.h:379
+msgid "Find _Previous"
+msgstr "Sök föregående"
+
+#: ../data/geany.glade.h:380 ../src/symbols.c:2517
+msgid "Find in F_iles..."
+msgstr "Sök i filer"
+
+#: ../data/geany.glade.h:381
+msgid "_Replace..."
+msgstr "Ersätt"
+
+#: ../data/geany.glade.h:382
+msgid "Next Me_ssage"
+msgstr "Nästa meddelande"
+
+#: ../data/geany.glade.h:383
+msgid "Pr_evious Message"
+msgstr "Föregående meddelande"
+
+#: ../data/geany.glade.h:384 ../src/keybindings.c:569
+msgid "Go to Ne_xt Marker"
+msgstr "Gå till nästa markör"
+
+#: ../data/geany.glade.h:385 ../src/keybindings.c:572
+msgid "Go to Pre_vious Marker"
+msgstr "Gå till föregående markör"
+
+#: ../data/geany.glade.h:386
+msgid "_Go to Line..."
+msgstr "Gå till rad"
+
+#: ../data/geany.glade.h:387 ../src/keybindings.c:532
+msgid "Find Next _Selection"
+msgstr "Sök nästa markering"
+
+#: ../data/geany.glade.h:388 ../src/keybindings.c:534
+msgid "Find Pre_vious Selection"
+msgstr "Sök föregående markering"
+
+#: ../data/geany.glade.h:389 ../src/keybindings.c:551
+msgid "_Mark All"
+msgstr "Markera allt"
+
+#: ../data/geany.glade.h:390
+#, fuzzy
+msgid "Go to Symbol Decl_aration"
+msgstr "Gå till Tagg-deklaration"
+
+#: ../data/geany.glade.h:391
+msgid "_View"
+msgstr "Visa"
+
+#: ../data/geany.glade.h:392
+msgid "Change _Font..."
+msgstr "Byt teckensnitt"
+
+#: ../data/geany.glade.h:393
+msgid "Change _Color Scheme..."
+msgstr "Ändra färgschema"
+
+#: ../data/geany.glade.h:394
+msgid "Show _Markers Margin"
+msgstr "Visa marginalmarkörer"
+
+#: ../data/geany.glade.h:395
+msgid "Show _Line Numbers"
+msgstr "Visa radnummer"
+
+#: ../data/geany.glade.h:396
+msgid "Show White S_pace"
+msgstr "Visa tomrum"
+
+#: ../data/geany.glade.h:397
+msgid "Show Line _Endings"
+msgstr "Visa radslut"
+
+#: ../data/geany.glade.h:398
+msgid "Show Indentation _Guides"
+msgstr "Visa indragsmarkörer"
+
+#: ../data/geany.glade.h:399
+msgid "Full_screen"
+msgstr "Helskärm"
+
+#: ../data/geany.glade.h:400
+msgid "Toggle All _Additional Widgets"
+msgstr "Visa / göm verktygsfält"
+
+#: ../data/geany.glade.h:401
+msgid "Show Message _Window"
+msgstr "Visa meddelandefönster"
+
+#: ../data/geany.glade.h:402
+msgid "Show _Toolbar"
+msgstr "Visa verktygsfält"
+
+#: ../data/geany.glade.h:403
+msgid "Show Side_bar"
+msgstr "Visa sidofält"
+
+#: ../data/geany.glade.h:404
+msgid "_Document"
+msgstr "Dokument"
+
+#: ../data/geany.glade.h:405
+msgid "_Line Wrapping"
+msgstr "Radbrytning"
+
+#: ../data/geany.glade.h:406
+msgid "Line _Breaking"
+msgstr "Radbrytning (unicode break)"
+
+#: ../data/geany.glade.h:407
+msgid "_Auto-indentation"
+msgstr "Använd automatiskt indrag"
+
+#: ../data/geany.glade.h:408
+msgid "In_dent Type"
+msgstr "Indragstyp"
+
+#: ../data/geany.glade.h:409
+msgid "_Detect from Content"
+msgstr "Upptäck automatiskt från innehållet"
+
+#: ../data/geany.glade.h:410
+msgid "T_abs and Spaces"
+msgstr "Tab och mellanslag"
+
+#: ../data/geany.glade.h:411
+msgid "Indent Widt_h"
+msgstr "Indrag bredd"
+
+#: ../data/geany.glade.h:412
+msgid "_1"
+msgstr "_1"
+
+#: ../data/geany.glade.h:413
+msgid "_2"
+msgstr "_2"
+
+#: ../data/geany.glade.h:414
+msgid "_3"
+msgstr "_3"
+
+#: ../data/geany.glade.h:415
+msgid "_4"
+msgstr "_4"
+
+#: ../data/geany.glade.h:416
+msgid "_5"
+msgstr "_5"
+
+#: ../data/geany.glade.h:417
+msgid "_6"
+msgstr "_6"
+
+#: ../data/geany.glade.h:418
+msgid "_7"
+msgstr "_7"
+
+#: ../data/geany.glade.h:419
+msgid "_8"
+msgstr "_8"
+
+#: ../data/geany.glade.h:420
+msgid "Read _Only"
+msgstr "Skrivskyddad"
+
+#: ../data/geany.glade.h:421
+msgid "_Write Unicode BOM"
+msgstr "Skriv Unicode BOM"
+
+#: ../data/geany.glade.h:422
+msgid "Set File_type"
+msgstr "Ange filtyp"
+
+#: ../data/geany.glade.h:423
+msgid "Set _Encoding"
+msgstr "Ange kodning"
+
+#: ../data/geany.glade.h:424
+msgid "Set Line E_ndings"
+msgstr "Ange radslut"
+
+#: ../data/geany.glade.h:425
+msgid "Convert and Set to _CR/LF (Windows)"
+msgstr "Konvertera till CR/LF (Windows)"
+
+#: ../data/geany.glade.h:426
+msgid "Convert and Set to _LF (Unix)"
+msgstr "Konvertera till LF (Unix)"
+
+#: ../data/geany.glade.h:427
+msgid "Convert and Set to CR (Classic _Mac)"
+msgstr "Konvertera till CR (Klassisk Mac)"
+
+#: ../data/geany.glade.h:428 ../src/keybindings.c:660
+msgid "_Clone"
+msgstr "Klona"
+
+#: ../data/geany.glade.h:429
+msgid "_Strip Trailing Spaces"
+msgstr "Ta bort _överflödiga mellanslag"
+
+#: ../data/geany.glade.h:430
+msgid "Replace Tabs with S_paces"
+msgstr "Ersätt tab med mellanslag"
+
+#: ../data/geany.glade.h:431
+msgid "_Replace Spaces with Tabs..."
+msgstr "Ersätt mellanslag med tab..."
+
+#: ../data/geany.glade.h:432
+msgid "_Fold All"
+msgstr "Vik ihop alla"
+
+#: ../data/geany.glade.h:433
+msgid "_Unfold All"
+msgstr "Vik upp alla"
+
+#: ../data/geany.glade.h:434
+msgid "Remove _Markers"
+msgstr "Ta bort markeringar"
+
+#: ../data/geany.glade.h:435
+msgid "Remove Error _Indicators"
+msgstr "Ta bort felindikatorer"
+
+#: ../data/geany.glade.h:436
+msgid "_Project"
+msgstr "Projekt"
+
+#: ../data/geany.glade.h:437
+msgid "_New..."
+msgstr "Nytt"
+
+#: ../data/geany.glade.h:438
+msgid "_Recent Projects"
+msgstr "Senaste projekt"
+
+#: ../data/geany.glade.h:439
+msgid "_Close"
+msgstr "Stäng"
+
+#: ../data/geany.glade.h:440
+msgid "Apply the default indentation settings to all documents"
+msgstr "Använd det förinställda indraget för alla dokument"
+
+#: ../data/geany.glade.h:441
+msgid "_Apply Default Indentation"
+msgstr "Använd förinställt indrag"
+
+#. build the code
+#: ../data/geany.glade.h:442 ../src/build.c:2392 ../src/build.c:2669
+msgid "_Build"
+msgstr "Bygg"
+
+#: ../data/geany.glade.h:443
+msgid "_Tools"
+msgstr "Verktyg"
+
+#: ../data/geany.glade.h:444
+msgid "_Reload Configuration"
+msgstr "Ladda om konfigurationen"
+
+#: ../data/geany.glade.h:445
+msgid "C_onfiguration Files"
+msgstr "Konfigurationsfiler"
+
+#: ../data/geany.glade.h:446
+msgid "_Color Chooser"
+msgstr "Färgväljare"
+
+#: ../data/geany.glade.h:447
+msgid "_Word Count"
+msgstr "Räkna ord"
+
+#: ../data/geany.glade.h:448
+#, fuzzy
+msgid "Load Ta_gs File..."
+msgstr "Ladda taggar..."
+
+#: ../data/geany.glade.h:449
+msgid "_Help"
+msgstr "Hjälp"
+
+#: ../data/geany.glade.h:450
+msgid "Keyboard _Shortcuts"
+msgstr "Tangentbordsgenvägar"
+
+#: ../data/geany.glade.h:451
+msgid "Debug _Messages"
+msgstr "Debugmeddelanden"
+
+#: ../data/geany.glade.h:452
+msgid "_Website"
+msgstr "Webbsida"
+
+#: ../data/geany.glade.h:453
+msgid "Wi_ki"
+msgstr "Wiki"
+
+#: ../data/geany.glade.h:454
+msgid "Report a _Bug..."
+msgstr "Rapportera fel..."
+
+#: ../data/geany.glade.h:455
+msgid "_Donate..."
+msgstr "Donera..."
+
+#: ../data/geany.glade.h:456 ../src/sidebar.c:126
+msgid "Symbols"
+msgstr "Symboler"
+
+#: ../data/geany.glade.h:457
+msgid "Documents"
+msgstr "Dokument"
+
+#: ../data/geany.glade.h:458
+msgid "Status"
+msgstr "Status"
+
+#: ../data/geany.glade.h:459
+msgid "Compiler"
+msgstr "Kompilator"
+
+#: ../data/geany.glade.h:460
+msgid "Messages"
+msgstr "Meddelanden"
+
+#: ../data/geany.glade.h:461
+msgid "Scribble"
+msgstr "Klotterplank"
+
+#: ../data/geany.glade.h:462
+msgid "Project Properties"
+msgstr "Projektegenskaper"
+
+#: ../data/geany.glade.h:463 ../src/project.c:180
+msgid "Filename:"
+msgstr "Filnamn:"
+
+#: ../data/geany.glade.h:464 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Namn:"
+
+#: ../data/geany.glade.h:465
+msgid "Description:"
+msgstr "Beskrivning:"
+
+#: ../data/geany.glade.h:466 ../src/project.c:202
+msgid "Base path:"
+msgstr "Bassökväg:"
+
+#: ../data/geany.glade.h:467
+msgid "File patterns:"
+msgstr "Fil-mönster:"
+
+#: ../data/geany.glade.h:468
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+"Mellanslagsseparerad lista med filmönster som används för att hitta filer "
+"(exempelvis *.c *.h)"
+
+#: ../data/geany.glade.h:469 ../src/project.c:209
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+"Grundläggande sökväg för alla filer i projektet. Detta kan vara en ny sökväg "
+"eller ett existerande mappträd."
+
+#: ../data/geany.glade.h:470 ../src/keybindings.c:318
+msgid "Project"
+msgstr "Projekt"
+
+#: ../data/geany.glade.h:471
+msgid "Display:"
+msgstr "Visa:"
+
+#: ../data/geany.glade.h:472
+msgid "Custom"
+msgstr "Användardefinierad"
+
+#: ../data/geany.glade.h:473
+msgid "Use global settings"
+msgstr "Använd globala inställningar"
+
+#: ../data/geany.glade.h:474
+msgid "Size:"
+msgstr "Storlek:"
+
+#: ../data/geany.glade.h:475
+msgid "Location:"
+msgstr "Plats:"
+
+#: ../data/geany.glade.h:476
+msgid "Read-only:"
+msgstr "Skrivskyddad:"
+
+#: ../data/geany.glade.h:477
+msgid "Encoding:"
+msgstr "Teckenkodning:"
+
+#: ../data/geany.glade.h:478
+msgid "Modified:"
+msgstr "Modifierad:"
+
+#: ../data/geany.glade.h:479
+msgid "Changed:"
+msgstr "Ändrad:"
+
+#: ../data/geany.glade.h:480
+msgid "Accessed:"
+msgstr "Senaste åtkomst:"
+
+#: ../data/geany.glade.h:481
+msgid "(only inside Geany)"
+msgstr "(endast inom Geany)"
+
+#: ../data/geany.glade.h:482
+msgid "Permissions:"
+msgstr "Behörighet:"
+
+#: ../data/geany.glade.h:483
+msgid "Read:"
+msgstr "Läs:"
+
+#: ../data/geany.glade.h:484
+msgid "Write:"
+msgstr "Skriv:"
+
+#: ../data/geany.glade.h:485
+msgid "Execute:"
+msgstr "Exekvera:"
+
+#: ../data/geany.glade.h:486
+msgid "Owner:"
+msgstr "Ägare:"
+
+#: ../data/geany.glade.h:487
+msgid "Group:"
+msgstr "Grupp:"
+
+#: ../data/geany.glade.h:488
+msgid "Other:"
+msgstr "Annat:"
+
+#: ../src/about.c:48
+#, fuzzy
+msgid ""
+"Copyright (c)  2005-2016\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+"Copyright (c)  2005-2014\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"Med ensamrätt."
+
+#: ../src/about.c:168
+msgid "About Geany"
+msgstr "Om Geany"
+
+#: ../src/about.c:212
+msgid "A fast and lightweight IDE"
+msgstr "Ett snabbt och lättviktigt IDE"
+
+#: ../src/about.c:234
+#, c-format
+msgid "(built on or after %s)"
+msgstr "(byggd på eller efter %s)"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: ../src/about.c:266
+msgid "Info"
+msgstr "Info"
+
+#: ../src/about.c:282
+msgid "Developers"
+msgstr "Utvecklare"
+
+#: ../src/about.c:289
+msgid "maintainer"
+msgstr "ansvarig"
+
+#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+msgid "developer"
+msgstr "utvecklare"
+
+#: ../src/about.c:321
+msgid "translation maintainer"
+msgstr "ansvarig för översättningar"
+
+#: ../src/about.c:330
+msgid "Translators"
+msgstr "Översättare"
+
+#: ../src/about.c:350
+msgid "Previous Translators"
+msgstr "Tidigare översättare"
+
+#: ../src/about.c:371
+msgid "Contributors"
+msgstr "Medarbetare "
+
+#: ../src/about.c:381
+#, c-format
+msgid ""
+"Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr ""
+"Några av de många bidragsgivarna (för en komplett lista, läs filen %s):"
+
+#: ../src/about.c:407
+msgid "Credits"
+msgstr "Tack till ..."
+
+#: ../src/about.c:424
+msgid "License"
+msgstr "Licens"
+
+#: ../src/about.c:433
+msgid ""
+"License text could not be found, please visit http://www.gnu.org/licenses/"
+"gpl-2.0.txt to view it online."
+msgstr ""
+"Licenstexten kunde inte hittas. Var god besök http://www.gnu.org/licenses/"
+"gpl-2.0.txt för att se den online."
+
+#. fall back to %d
+#: ../src/build.c:710
+#, c-format
+msgid "failed to substitute %%p, no project active"
+msgstr "misslyckades ersätta %%p, inget projekt är aktivt"
+
+#: ../src/build.c:738
+msgid "Process failed, no working directory"
+msgstr "Processen misslyckades, ingen arbetsmapp är angiven"
+
+#: ../src/build.c:750
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (i sökväg: %s)"
+
+#: ../src/build.c:773
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Processen misslyckades (%s)"
+
+#: ../src/build.c:807
+#, c-format
+msgid "Invalid working directory \"%s\""
+msgstr "Ogiltig mapp \"%s\""
+
+#: ../src/build.c:832
+#, c-format
+msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
+msgstr "Misslyckades exekvera \"%s\" (start-skriptet kunde inte skapas: %s)"
+
+#: ../src/build.c:874
+msgid ""
+"File not executed because the terminal may contain some input (press Ctrl+C "
+"or Enter to clear it)."
+msgstr ""
+"Filen exekverades in därför terminalen kanske innehåller inmatad information "
+"(tryck Ctrl+C eller RETUR-tangenten för att rensa)."
+
+#: ../src/build.c:907
+#, fuzzy, c-format
+msgid ""
+"Cannot execute build command \"%s\": %s. Check the Terminal setting in "
+"Preferences"
+msgstr ""
+"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+
+#: ../src/build.c:1016
+msgid "Compilation failed."
+msgstr "Kompileringen misslyckades."
+
+#: ../src/build.c:1030
+msgid "Compilation finished successfully."
+msgstr "Kompileringen lyckades."
+
+#: ../src/build.c:1199
+msgid "Custom Text"
+msgstr "Användardefinierad text"
+
+#: ../src/build.c:1200
+msgid "Enter custom text here, all entered text is appended to the command."
+msgstr "Skriv in användardefinierad text här, allt text läggs till kommandot"
+
+#: ../src/build.c:1278
+msgid "_Next Error"
+msgstr "Nästa fel"
+
+#: ../src/build.c:1280
+msgid "_Previous Error"
+msgstr "Föregående fel"
+
+#. arguments
+#: ../src/build.c:1290 ../src/build.c:2709
+msgid "_Set Build Commands"
+msgstr "Ange _kommandon för att bygga"
+
+#: ../src/build.c:1576 ../src/toolbar.c:376
+msgid "Build the current file"
+msgstr "Kompilera aktuell fil"
+
+#: ../src/build.c:1587
+msgid "Build the current file with Make and the default target"
+msgstr "Bygger filen med Make-verktyget och förinställt mål"
+
+#: ../src/build.c:1589
+msgid "Build the current file with Make and the specified target"
+msgstr "Bygger filen med Make-verktyget och ett specificerat mål"
+
+#: ../src/build.c:1591
+msgid "Compile the current file with Make"
+msgstr "Kompilera aktuell fil med Make"
+
+#: ../src/build.c:1610
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Processen kunde inte stoppas (%s)"
+
+#: ../src/build.c:1624 ../src/build.c:1636
+msgid "No more build errors."
+msgstr "Inga fler byggfel."
+
+#: ../src/build.c:1749 ../src/build.c:1751
+msgid "Set menu item label"
+msgstr "Ange rubrik för meny"
+
+#: ../src/build.c:1776 ../src/symbols.c:513 ../src/tools.c:397
+msgid "Label"
+msgstr "Etikett"
+
+#. command column, holding status and command display
+#: ../src/build.c:1777 ../src/symbols.c:508 ../src/tools.c:382
+msgid "Command"
+msgstr "Kommando"
+
+#: ../src/build.c:1778
+msgid "Working directory"
+msgstr "Arbetsmapp"
+
+#: ../src/build.c:1779
+msgid "Reset"
+msgstr "Återställning"
+
+#: ../src/build.c:1836
+msgid "Click to set menu item label"
+msgstr "Klicka för att ange menyrubrik"
+
+#: ../src/build.c:1920 ../src/build.c:1922
+#, c-format
+msgid "%s commands"
+msgstr "%s kommandon"
+
+#: ../src/build.c:1922
+msgid "No filetype"
+msgstr "Ingen filtyp"
+
+#: ../src/build.c:1931 ../src/build.c:1966
+msgid "Error regular expression:"
+msgstr "Fel på reguljärt uttryck:"
+
+#: ../src/build.c:1959
+msgid "Independent commands"
+msgstr "Fristående kommandon"
+
+#: ../src/build.c:1991
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
+msgstr ""
+"Not: Element 2 öppnar ett fönster och lägger till svaret till kommandot"
+
+#: ../src/build.c:2000
+msgid "Execute commands"
+msgstr "Exekvera kommandon"
+
+#: ../src/build.c:2012
+msgid ""
+"%d, %e, %f, %p, %l are substituted in command and directory fields, see "
+"manual for details."
+msgstr ""
+"%d, %e, %f, %p, %l byts ut i kommando- och sökvägsfält, se i "
+"instruktionsboken för ytterligare information."
+
+#: ../src/build.c:2170
+msgid "Set Build Commands"
+msgstr "Ange kommandon för att bygga"
+
+#: ../src/build.c:2385
+msgid "_Compile"
+msgstr "Kompilera"
+
+#: ../src/build.c:2399 ../src/build.c:2429 ../src/build.c:2637
+msgid "_Execute"
+msgstr "_Exekvera"
+
+#. build the code with make custom
+#: ../src/build.c:2444 ../src/build.c:2635 ../src/build.c:2689
+msgid "Make Custom _Target..."
+msgstr "Kör Make med valbara parametrar..."
+
+#. build the code with make object
+#: ../src/build.c:2446 ../src/build.c:2636 ../src/build.c:2697
+msgid "Make _Object"
+msgstr "Kör Make Object"
+
+#: ../src/build.c:2448 ../src/build.c:2634
+msgid "_Make"
+msgstr "_Make"
+
+#. build the code with make all
+#: ../src/build.c:2681
+msgid "_Make All"
+msgstr "Kör Make all"
+
+#: ../src/callbacks.c:147
+#, c-format
+msgid "%d file saved."
+msgid_plural "%d files saved."
+msgstr[0] "%d fil sparad."
+msgstr[1] "%d filer sparade."
+
+#: ../src/callbacks.c:890 ../src/keybindings.c:560
+msgid "Go to Line"
+msgstr "Gå till rad"
+
+#: ../src/callbacks.c:891
+msgid "Enter the line you want to go to:"
+msgstr "Skriv in radnumret till den rad du vill gå till"
+
+#: ../src/callbacks.c:992 ../src/callbacks.c:1018
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr ""
+"Var god och ange filtyp för filen innan du använder den här funktionen."
+
+#: ../src/callbacks.c:1308 ../src/callbacks.c:1316
+msgid "No more message items."
+msgstr "Inga fler meddelanden."
+
+#: ../src/callbacks.c:1419
+#, c-format
+msgid "Could not open file %s (File not found)"
+msgstr "Kunde inte öppna filen %s (filen kunde ej hittas)"
+
+#: ../src/callbacks.c:1468
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1473
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1486
+#, fuzzy, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
+
+#: ../src/dialogs.c:161 ../src/document.c:2294 ../src/document.c:2359
+#: ../src/document.c:2367
+#, c-format
+msgid "\"%s\" was not found."
+msgstr "\"%s\" kunde ej hittas."
+
+#. auto-detect
+#: ../src/dialogs.c:223 ../src/encodings.c:531
+msgid "Detect from file"
+msgstr "Upptäck från fil"
+
+#: ../src/dialogs.c:226
+msgid "Programming Languages"
+msgstr "Programmeringsspråk"
+
+#: ../src/dialogs.c:228
+msgid "Scripting Languages"
+msgstr "Skriptspråk"
+
+#: ../src/dialogs.c:230
+msgid "Markup Languages"
+msgstr "Märkningsspråk"
+
+#: ../src/dialogs.c:308
+msgid "_More Options"
+msgstr "Mer inställningar"
+
+#. line 1 with checkbox and encoding combo
+#: ../src/dialogs.c:315
+msgid "Show _hidden files"
+msgstr "Visa gömda filer"
+
+#: ../src/dialogs.c:326
+msgid "Set encoding:"
+msgstr "Välj teckenkodning:"
+
+#: ../src/dialogs.c:335
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Definierar teckenkodning för filen, om den inte kan kännas av automatiskt. "
+"Detta är användbart när du vet att Geany inte känner av korrekt "
+"teckenkodning.\n"
+"Notera att om du öppnar många filer, kommer alla öppnas med vald "
+"teckenkodning."
+
+#. line 2 with filetype combo
+#: ../src/dialogs.c:342
+msgid "Set filetype:"
+msgstr "Ange filtyp:"
+
+#: ../src/dialogs.c:351
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Definierar filtyp, om Geany inte kan känna av filtyp automatiskt.\n"
+"Notera att om flera filer öppnas, kommer alla att öppnas som vald filtyp."
+
+#: ../src/dialogs.c:377 ../src/dialogs.c:467
+msgid "Open File"
+msgstr "Öppna fil"
+
+#: ../src/dialogs.c:381
+msgctxt "Open dialog action"
+msgid "_View"
+msgstr "Visa"
+
+#: ../src/dialogs.c:383
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Öppnar filen i skrivskyddat läge. Om du väljer fler filer, kommer alla "
+"öppnas i skrivskyddat läge."
+
+#: ../src/dialogs.c:535 ../src/document.c:2045
+msgid "Overwrite?"
+msgstr "Skriv över?"
+
+#: ../src/dialogs.c:536
+msgid "Filename already exists!"
+msgstr "Filnamnet finns redan!"
+
+#: ../src/dialogs.c:565 ../src/dialogs.c:679
+msgid "Save File"
+msgstr "Spara fil"
+
+#: ../src/dialogs.c:574
+msgid "R_ename"
+msgstr "Byt namn"
+
+#: ../src/dialogs.c:575
+msgid "Save the file and rename it"
+msgstr "Spara och byt namn på filen."
+
+#: ../src/dialogs.c:697 ../src/win32.c:730
+msgid "Error"
+msgstr "Fel"
+
+#: ../src/dialogs.c:700 ../src/dialogs.c:779 ../src/dialogs.c:1337
+#: ../src/win32.c:736
+msgid "Question"
+msgstr "Fråga"
+
+#: ../src/dialogs.c:703 ../src/win32.c:742
+msgid "Warning"
+msgstr "Varning"
+
+#: ../src/dialogs.c:706 ../src/win32.c:748
+msgid "Information"
+msgstr "Information"
+
+#: ../src/dialogs.c:783
+msgid "_Don't save"
+msgstr "Spara _inte"
+
+#: ../src/dialogs.c:812
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr "Filen '%s' är inte sparad."
+
+#: ../src/dialogs.c:813
+msgid "Do you want to save it before closing?"
+msgstr "Vill du spara innan du stänger?"
+
+#: ../src/dialogs.c:891
+msgid "Choose font"
+msgstr "Välj teckensnitt"
+
+#: ../src/dialogs.c:1185
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"Ett fel inträffade, eller så kunde inte fil-informationen hämtas (exempelvis "
+"från en ny fil)."
+
+#: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
+#: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
+#: ../src/symbols.c:2321 ../src/symbols.c:2337 ../src/ui_utils.c:289
+msgid "unknown"
+msgstr "okänd"
+
+#: ../src/dialogs.c:1219
+#, c-format
+msgid "%s Properties"
+msgstr "%s Egenskaper"
+
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:293
+msgid "(with BOM)"
+msgstr "(med BOM)"
+
+#: ../src/dialogs.c:1251
+msgid "(without BOM)"
+msgstr "(utan BOM)"
+
+#: ../src/document.c:730
+#, c-format
+msgid "File %s closed."
+msgstr "Filen %s är stängd."
+
+#: ../src/document.c:886
+#, c-format
+msgid "New file \"%s\" opened."
+msgstr "Den nya filen \"%s\" är öppnad."
+
+#: ../src/document.c:960
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "Kunde inte öppna fil %s (%s)"
+
+#: ../src/document.c:1009
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "Filen \"%s\" är ogiltig %s."
+
+#: ../src/document.c:1015
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr ""
+"Filen \"%s\" verkar inte vara en textfil, eller stöds inte textkodningen."
+
+#: ../src/document.c:1025
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"Filen \"%s\" kunde inte öppnas på ett korrekt sätt, och har kortats av. "
+"Detta kan inträffa om filen innehåller en NULL byte. Observera att om du "
+"sparar den, kan data förloras.\n"
+"Filen sattes automatiskt i skrivskyddat läge."
+
+#: ../src/document.c:1237
+msgid "Spaces"
+msgstr "Mellanslag"
+
+#: ../src/document.c:1240
+msgid "Tabs"
+msgstr "Tabulatorer"
+
+#: ../src/document.c:1243
+msgid "Tabs and Spaces"
+msgstr "Tab och mellanslag"
+
+#. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+#. * and Spaces), the second one is the filename
+#: ../src/document.c:1248
+#, c-format
+msgid "Setting %s indentation mode for %s."
+msgstr "Inställning %s indragsinställning för %s"
+
+#: ../src/document.c:1259
+#, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr "Ställ in indragsbredd till %d för %s."
+
+#: ../src/document.c:1483
+#, c-format
+msgid "File %s reloaded."
+msgstr "Filen %s laddades om"
+
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1491
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr "Filen %s är öppnad (%d%s)."
+
+#: ../src/document.c:1493
+msgid ", read-only"
+msgstr ", skrivskyddad"
+
+#: ../src/document.c:1613
+msgid "Discard history"
+msgstr ""
+
+#: ../src/document.c:1614
+msgid ""
+"The buffer's previous state is stored in the history and undoing restores "
+"it. You can disable this by discarding the history upon reload. This message "
+"will not be displayed again but Your choice can be changed in the various "
+"preferences."
+msgstr ""
+
+#: ../src/document.c:1618
+#, fuzzy
+msgid "The file has been reloaded."
+msgstr "Dokumentet har stängts."
+
+#: ../src/document.c:1648
+msgid "Any unsaved changes will be lost."
+msgstr "Alla osparade ändringar kommer att förloras."
+
+#: ../src/document.c:1649
+msgid "Undo history will be lost."
+msgstr "Redigeringshistoria för ångra-funktionen kommer att förloras."
+
+#: ../src/document.c:1650
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr "Är du säker på att du vill ladda om '%s'?"
+
+#: ../src/document.c:1756
+msgid "Error renaming file."
+msgstr "Filen kunde ej döpas om."
+
+#: ../src/document.c:1877
+#, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved."
+msgstr ""
+"Ett fel inträffade medan filen konverterades från UTF-8 vid \"%s\". Filen "
+"sparades inte."
+
+#: ../src/document.c:1898
+#, c-format
+msgid ""
+"Error message: %s\n"
+"The error occurred at \"%s\" (line: %d, column: %d)."
+msgstr ""
+"Felmeddelande: %s\n"
+"Felet inträffade vid \"%s\" (rad: %d, kolumn: %d)."
+
+#: ../src/document.c:1902
+#, c-format
+msgid "Error message: %s."
+msgstr "Felmeddelande: %s"
+
+#: ../src/document.c:1962
+#, c-format
+msgid "Failed to open file '%s' for writing: fopen() failed: %s"
+msgstr "Kunde inte öppna filen '%s' för skrivning: fopen() fel: %s"
+
+#: ../src/document.c:1980
+#, c-format
+msgid "Failed to write file '%s': fwrite() failed: %s"
+msgstr "Misslyckades skriva filen '%s': fwrite() fel: %s"
+
+#: ../src/document.c:1994
+#, c-format
+msgid "Failed to close file '%s': fclose() failed: %s"
+msgstr "Misslyckades stänga filen '%s': fclose() fel: %s"
+
+#: ../src/document.c:2044 ../src/document.c:3617
+msgid "_Overwrite"
+msgstr "Skriv över"
+
+#: ../src/document.c:2046 ../src/document.c:3620
+#, c-format
+msgid "The file '%s' on the disk is more recent than the current buffer."
+msgstr "Filen '%s' på disken är nyare än den som är laddad i editorn."
+
+#: ../src/document.c:2054 ../src/document.c:3669
+msgid "Try to resave the file?"
+msgstr "Vill du försöka spara om filen?"
+
+#: ../src/document.c:2055 ../src/document.c:3670
+#, c-format
+msgid "File \"%s\" was not found on disk!"
+msgstr "Filen \"%s\" kunde ej hittas! Spara igen?"
+
+#: ../src/document.c:2118
+#, c-format
+msgid "Cannot save read-only document '%s'!"
+msgstr "Kan inte spara det skrivskyddade dokumentet '%s'!"
+
+#: ../src/document.c:2186
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "(%s) kunde ej sparas"
+
+#: ../src/document.c:2191
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"The file on disk may now be truncated!"
+msgstr ""
+"%s\n"
+"\n"
+"Den skrivna filen kan nu vara trunkerad!"
+
+#: ../src/document.c:2193
+msgid "Error saving file."
+msgstr "Filen kunde ej sparas."
+
+#: ../src/document.c:2217
+#, c-format
+msgid "File %s saved."
+msgstr "Fil %s sparad."
+
+#: ../src/document.c:2367
+msgid "Wrap search and find again?"
+msgstr "Vill du fortsätta sökningen från början av dokumentet?"
+
+#: ../src/document.c:2456 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/search.c:2222 ../src/search.c:2223
+#, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Inga träffar hittades för \"%s\"."
+
+#: ../src/document.c:2462
+#, c-format
+msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
+msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: ersatt %d förekomst av \"%s\" med \"%s\"."
+msgstr[1] "%s: ersatt %d förekomster av \"%s\" med \"%s\"."
+
+#: ../src/document.c:3619
+msgid "Do you want to reload it?"
+msgstr "Vill du ladda om det?"
+
+#: ../src/editor.c:4455
+msgid "Enter Tab Width"
+msgstr "Ange Tab-bredd:"
+
+#: ../src/editor.c:4456
+msgid "Enter the amount of spaces which should be replaced by a tab character."
+msgstr "Ange antalet mellanslag som skall ersätta en tab."
+
+#: ../src/editor.c:4661
+#, c-format
+msgid "Warning: non-standard hard tab width: %d != 8!"
+msgstr "Varning: icke-standard hård-tabb bredd: %d !=8!"
+
+#: ../src/encodings.c:72
+msgid "Celtic"
+msgstr "Keltisk"
+
+#: ../src/encodings.c:73 ../src/encodings.c:74
+msgid "Greek"
+msgstr "Grekisk"
+
+#: ../src/encodings.c:75
+msgid "Nordic"
+msgstr "Nordisk"
+
+#: ../src/encodings.c:76
+msgid "South European"
+msgstr "Sydeuropeisk"
+
+#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:80
+msgid "Western"
+msgstr "Västeuropeisk"
+
+#: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
+msgid "Baltic"
+msgstr "Baltisk"
+
+#: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
+msgid "Central European"
+msgstr "Centraleuropeisk"
+
+#. ISO-IR-111 not available on Windows
+#: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:91
+#: ../src/encodings.c:92 ../src/encodings.c:93
+msgid "Cyrillic"
+msgstr "Kyrillisk"
+
+#: ../src/encodings.c:94
+msgid "Cyrillic/Russian"
+msgstr "Kyrillisk/Rysk"
+
+#: ../src/encodings.c:95
+msgid "Cyrillic/Ukrainian"
+msgstr "Kyrillisk/Ukrainsk"
+
+#: ../src/encodings.c:96
+msgid "Romanian"
+msgstr "Rumänsk"
+
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
+msgid "Arabic"
+msgstr "Arabisk"
+
+#. not available at all, ?
+#: ../src/encodings.c:101 ../src/encodings.c:103 ../src/encodings.c:104
+msgid "Hebrew"
+msgstr "Hebreisk"
+
+#: ../src/encodings.c:105
+msgid "Hebrew Visual"
+msgstr "Hebreisk visuell"
+
+#: ../src/encodings.c:107
+msgid "Armenian"
+msgstr "Armensk"
+
+#: ../src/encodings.c:108
+msgid "Georgian"
+msgstr "Georgisk"
+
+#: ../src/encodings.c:109
+msgid "Thai"
+msgstr "Thailänsk"
+
+#: ../src/encodings.c:110 ../src/encodings.c:111 ../src/encodings.c:112
+msgid "Turkish"
+msgstr "Turkisk"
+
+#: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
+msgid "Vietnamese"
+msgstr "Vietnamesisk"
+
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:545
+msgid "Unicode"
+msgstr "Unicode"
+
+#. maybe not available on Linux
+#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:130
+msgid "Chinese Simplified"
+msgstr "Kinesisk förenklad"
+
+#: ../src/encodings.c:131 ../src/encodings.c:132 ../src/encodings.c:133
+msgid "Chinese Traditional"
+msgstr "Kinesisk traditionell"
+
+#: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
+#: ../src/encodings.c:137
+msgid "Japanese"
+msgstr "Japansk"
+
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
+msgid "Korean"
+msgstr "Koreansk"
+
+#: ../src/encodings.c:143
+msgid "Without encoding"
+msgstr "Utan kodning"
+
+#: ../src/encodings.c:414
+msgid "_West European"
+msgstr "Västeuropeisk"
+
+#: ../src/encodings.c:415
+msgid "_East European"
+msgstr "Östeuropeisk"
+
+#: ../src/encodings.c:416
+msgid "East _Asian"
+msgstr "Östasiatisk"
+
+#: ../src/encodings.c:417
+msgid "_SE & SW Asian"
+msgstr "SV & SÖ Asiatisk"
+
+#: ../src/encodings.c:418
+msgid "_Middle Eastern"
+msgstr "Mellanösternsk"
+
+#: ../src/encodings.c:419
+msgid "_Unicode"
+msgstr "Unicode"
+
+#: ../src/encodings.c:535
+msgid "West European"
+msgstr "Västeuropeisk"
+
+#: ../src/encodings.c:537
+msgid "East European"
+msgstr "Östeuropeisk"
+
+#: ../src/encodings.c:539
+msgid "East Asian"
+msgstr "Östasiatisk"
+
+#: ../src/encodings.c:541
+msgid "SE & SW Asian"
+msgstr "SV & SÖ Asiatisk"
+
+#: ../src/encodings.c:543
+msgid "Middle Eastern"
+msgstr "Mellanösternsk"
+
+#: ../src/filetypes.c:87
+#, c-format
+msgid "%s source file"
+msgstr "%s källfil"
+
+#: ../src/filetypes.c:88
+#, c-format
+msgid "%s file"
+msgstr "%s fil"
+
+#: ../src/filetypes.c:89
+#, c-format
+msgid "%s script"
+msgstr "%s skriptfil"
+
+#: ../src/filetypes.c:90
+#, c-format
+msgid "%s document"
+msgstr "%s dokument"
+
+#: ../src/filetypes.c:155
+msgid "Shell"
+msgstr "Skal"
+
+#: ../src/filetypes.c:156
+msgid "Makefile"
+msgstr "Makefile"
+
+#: ../src/filetypes.c:160
+msgid "Cascading Stylesheet"
+msgstr "Cascading StyleSheet"
+
+#: ../src/filetypes.c:169
+msgid "Config"
+msgstr "Konfiguration"
+
+#: ../src/filetypes.c:170
+msgid "Gettext translation"
+msgstr "Gettext översättnings"
+
+#: ../src/filetypes.c:431
+msgid "_Programming Languages"
+msgstr "Programmeringsspråk"
+
+#: ../src/filetypes.c:432
+msgid "_Scripting Languages"
+msgstr "Skriptspråk"
+
+#: ../src/filetypes.c:433
+msgid "_Markup Languages"
+msgstr "Märkningsspråk"
+
+#: ../src/filetypes.c:434
+msgid "M_iscellaneous"
+msgstr "Övrigt"
+
+#: ../src/filetypes.c:1195 ../src/win32.c:156
+msgid "All Source"
+msgstr "All källkod"
+
+#. create meta file filter "All files"
+#: ../src/filetypes.c:1220 ../src/project.c:350 ../src/win32.c:146
+#: ../src/win32.c:191 ../src/win32.c:212 ../src/win32.c:217
+msgid "All files"
+msgstr "Alla filer"
+
+#: ../src/filetypes.c:1269
+#, c-format
+msgid "Bad regex for filetype %s: %s"
+msgstr "Felaktig rexex för filtypen %s: %s"
+
+#: ../src/geany.h:50
+msgid "untitled"
+msgstr "namnlös"
+
+#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/templates.c:232
+#, c-format
+msgid "Could not find file '%s'."
+msgstr "Kunde inte hitta fil '%s'."
+
+#: ../src/highlighting.c:1296
+msgid "Default"
+msgstr "Förvald"
+
+#: ../src/highlighting.c:1337
+msgid "The current filetype overrides the default style."
+msgstr "Vald filtyp gäller istället för standardfiltypen"
+
+#: ../src/highlighting.c:1338
+msgid "This may cause color schemes to display incorrectly."
+msgstr "Detta kan göra så att färgscheman inte visas korrekt."
+
+#: ../src/highlighting.c:1363
+msgid "Color Schemes"
+msgstr "Färgscheman"
+
+#. visual group order
+#: ../src/keybindings.c:307 ../src/symbols.c:485
+msgid "File"
+msgstr "Arkiv"
+
+#: ../src/keybindings.c:309
+msgid "Clipboard"
+msgstr "Klippbord"
+
+#: ../src/keybindings.c:310
+msgid "Select"
+msgstr "Markera"
+
+#: ../src/keybindings.c:311
+msgid "Format"
+msgstr "Format"
+
+#: ../src/keybindings.c:312
+msgid "Insert"
+msgstr "Infoga"
+
+#: ../src/keybindings.c:313
+msgid "Settings"
+msgstr "Inställningar"
+
+#: ../src/keybindings.c:314
+msgid "Search"
+msgstr "Sök"
+
+#: ../src/keybindings.c:315
+msgid "Go to"
+msgstr "Gå till rad"
+
+#: ../src/keybindings.c:316
+msgid "View"
+msgstr "Visa"
+
+#: ../src/keybindings.c:317 ../src/symbols.c:634
+msgid "Document"
+msgstr "Dokument"
+
+#: ../src/keybindings.c:319 ../src/keybindings.c:685 ../src/project.c:511
+#: ../src/ui_utils.c:2193
+msgid "Build"
+msgstr "Bygg"
+
+#: ../src/keybindings.c:321 ../src/keybindings.c:710
+msgid "Help"
+msgstr "Hjälp"
+
+#: ../src/keybindings.c:322
+msgid "Focus"
+msgstr "Fokusera"
+
+#: ../src/keybindings.c:323
+msgid "Notebook tab"
+msgstr "Anteckningsblockets tab-kommandon"
+
+#: ../src/keybindings.c:332 ../src/keybindings.c:364
+msgid "New"
+msgstr "Ny"
+
+#: ../src/keybindings.c:334 ../src/keybindings.c:366
+msgid "Open"
+msgstr "Öppna"
+
+#: ../src/keybindings.c:337
+msgid "Open selected file"
+msgstr "Öppna vald fil"
+
+#: ../src/keybindings.c:339
+msgid "Save"
+msgstr "Spara"
+
+#: ../src/keybindings.c:341 ../src/toolbar.c:59
+msgid "Save as"
+msgstr "Spara som"
+
+#: ../src/keybindings.c:343
+msgid "Save all"
+msgstr "Spara allt"
+
+#: ../src/keybindings.c:346 ../src/symbols.c:718
+msgid "Properties"
+msgstr "Egenskaper"
+
+#: ../src/keybindings.c:348
+msgid "Print"
+msgstr "Skriv ut"
+
+#: ../src/keybindings.c:350 ../src/keybindings.c:371
+msgid "Close"
+msgstr "Stäng"
+
+#: ../src/keybindings.c:352
+msgid "Close all"
+msgstr "Stäng allt"
+
+#: ../src/keybindings.c:355
+msgid "Reload file"
+msgstr "Ladda om fil"
+
+#: ../src/keybindings.c:357
+msgid "Re-open last closed tab"
+msgstr "Öppna senast stängta tab igen"
+
+#: ../src/keybindings.c:359
+msgid "Quit"
+msgstr "Avsluta"
+
+#: ../src/keybindings.c:376
+msgid "Undo"
+msgstr "Ångra"
+
+#: ../src/keybindings.c:378
+msgid "Redo"
+msgstr "Gör om"
+
+#: ../src/keybindings.c:387
+msgid "Delete to line end"
+msgstr "Radera till radslut"
+
+#: ../src/keybindings.c:390
+msgid "_Transpose Current Line"
+msgstr "Förflytta raden"
+
+#: ../src/keybindings.c:392
+msgid "Scroll to current line"
+msgstr "Flytta till vald rad"
+
+#: ../src/keybindings.c:394
+msgid "Scroll up the view by one line"
+msgstr "Flytta upp en rad"
+
+#: ../src/keybindings.c:396
+msgid "Scroll down the view by one line"
+msgstr "Flytta ned en rad"
+
+#: ../src/keybindings.c:398
+msgid "Complete snippet"
+msgstr "Färdigställ textfragment"
+
+#: ../src/keybindings.c:400
+msgid "Move cursor in snippet"
+msgstr "Flytta markör i textfragmentet"
+
+#: ../src/keybindings.c:402
+msgid "Suppress snippet completion"
+msgstr "Undertryck komplettering av textfragment"
+
+#: ../src/keybindings.c:404
+msgid "Context Action"
+msgstr "Snabbmenyhändelse"
+
+#: ../src/keybindings.c:406
+msgid "Complete word"
+msgstr "Komplettera ord"
+
+#: ../src/keybindings.c:408
+msgid "Show calltip"
+msgstr "Visa calltip"
+
+#: ../src/keybindings.c:410
+msgid "Word part completion"
+msgstr "Komplettera ordfragment"
+
+#: ../src/keybindings.c:413
+msgid "Move line(s) up"
+msgstr "Flytta rad(er) uppåt"
+
+#: ../src/keybindings.c:416
+msgid "Move line(s) down"
+msgstr "Flytta  rad(er) nedåt"
+
+#: ../src/keybindings.c:421
+msgid "Cut"
+msgstr "Klipp ut"
+
+#: ../src/keybindings.c:423
+msgid "Copy"
+msgstr "Kopiera"
+
+#: ../src/keybindings.c:425
+msgid "Paste"
+msgstr "Klistra in"
+
+#: ../src/keybindings.c:436
+msgid "Select All"
+msgstr "Markera allt"
+
+#: ../src/keybindings.c:438
+msgid "Select current word"
+msgstr "Välj ord"
+
+#: ../src/keybindings.c:446
+msgid "Select to previous word part"
+msgstr "Välj till föregående orddel"
+
+#: ../src/keybindings.c:448
+msgid "Select to next word part"
+msgstr "Välj till nästa orddel"
+
+#: ../src/keybindings.c:456
+msgid "Toggle line commentation"
+msgstr "Stäng av / på radkommentarer"
+
+#: ../src/keybindings.c:459
+msgid "Comment line(s)"
+msgstr "Kommentera rad(er)"
+
+#: ../src/keybindings.c:461
+msgid "Uncomment line(s)"
+msgstr "Ta bort kommentarer från rad(er)"
+
+#: ../src/keybindings.c:463
+msgid "Increase indent"
+msgstr "Öka indrag"
+
+#: ../src/keybindings.c:466
+msgid "Decrease indent"
+msgstr "Minska indrag"
+
+#: ../src/keybindings.c:469
+msgid "Increase indent by one space"
+msgstr "Öka indrag med ett blanksteg"
+
+#: ../src/keybindings.c:471
+msgid "Decrease indent by one space"
+msgstr "Minska indrag med ett blanksteg"
+
+#: ../src/keybindings.c:475
+msgid "Send to Custom Command 1"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:477
+msgid "Send to Custom Command 2"
+msgstr "Definiera användarkommando 2"
+
+#: ../src/keybindings.c:479
+msgid "Send to Custom Command 3"
+msgstr "Definiera användarkommando 3"
+
+#: ../src/keybindings.c:481
+#, fuzzy
+msgid "Send to Custom Command 4"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:483
+#, fuzzy
+msgid "Send to Custom Command 5"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:485
+#, fuzzy
+msgid "Send to Custom Command 6"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:487
+#, fuzzy
+msgid "Send to Custom Command 7"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:489
+#, fuzzy
+msgid "Send to Custom Command 8"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:491
+#, fuzzy
+msgid "Send to Custom Command 9"
+msgstr "Definiera användarkommando 1"
+
+#: ../src/keybindings.c:499
+msgid "Join lines"
+msgstr "Sammanfoga rad(er)"
+
+#: ../src/keybindings.c:504
+msgid "Insert date"
+msgstr "Klistra in datum"
+
+#: ../src/keybindings.c:510
+msgid "Insert New Line Before Current"
+msgstr "Infoga ny rad före nuvarande"
+
+#: ../src/keybindings.c:512
+msgid "Insert New Line After Current"
+msgstr "Infoga ny rad efter nuvarande"
+
+#: ../src/keybindings.c:525 ../src/search.c:464
+msgid "Find"
+msgstr "Sök"
+
+#: ../src/keybindings.c:527
+msgid "Find Next"
+msgstr "Sök nästa"
+
+#: ../src/keybindings.c:529
+msgid "Find Previous"
+msgstr "Sök föregående"
+
+#: ../src/keybindings.c:536 ../src/search.c:617
+msgid "Replace"
+msgstr "Ersätt"
+
+#: ../src/keybindings.c:538 ../src/search.c:867
+msgid "Find in Files"
+msgstr "Sök i filer"
+
+#: ../src/keybindings.c:541
+msgid "Next Message"
+msgstr "Nästa meddelande"
+
+#: ../src/keybindings.c:543
+msgid "Previous Message"
+msgstr "Föregående meddelande"
+
+#: ../src/keybindings.c:546
+msgid "Find Usage"
+msgstr "Visa användning"
+
+#: ../src/keybindings.c:549
+msgid "Find Document Usage"
+msgstr "Visa användning"
+
+#: ../src/keybindings.c:556 ../src/toolbar.c:70
+msgid "Navigate back a location"
+msgstr "Bläddra bakåt"
+
+#: ../src/keybindings.c:558 ../src/toolbar.c:71
+msgid "Navigate forward a location"
+msgstr "Bläddra frammåt"
+
+#: ../src/keybindings.c:563
+msgid "Go to matching brace"
+msgstr "Gå till matchande klammer"
+
+#: ../src/keybindings.c:566
+msgid "Toggle marker"
+msgstr "Stäng av / på markör"
+
+#: ../src/keybindings.c:575
+#, fuzzy
+msgid "Go to Symbol Definition"
+msgstr "Gå till Tagg-definition"
+
+#: ../src/keybindings.c:578
+#, fuzzy
+msgid "Go to Symbol Declaration"
+msgstr "Gå till Tagg-deklaration"
+
+#: ../src/keybindings.c:580
+msgid "Go to Start of Line"
+msgstr "Gå till början av raden"
+
+#: ../src/keybindings.c:582
+msgid "Go to End of Line"
+msgstr "Gå till radslut"
+
+#: ../src/keybindings.c:584
+msgid "Go to Start of Display Line"
+msgstr "Gå till början av raden"
+
+#: ../src/keybindings.c:586
+msgid "Go to End of Display Line"
+msgstr "Gå till radslut"
+
+#: ../src/keybindings.c:588
+msgid "Go to Previous Word Part"
+msgstr "Gå till föregående orddel"
+
+#: ../src/keybindings.c:590
+msgid "Go to Next Word Part"
+msgstr "Gå till nästa orddel"
+
+#: ../src/keybindings.c:595
+msgid "Toggle All Additional Widgets"
+msgstr "Visa / göm verktygsfält"
+
+#: ../src/keybindings.c:598
+msgid "Fullscreen"
+msgstr "Helskärm"
+
+#: ../src/keybindings.c:600
+msgid "Toggle Messages Window"
+msgstr "Stäng av / på meddelandefönstret"
+
+#: ../src/keybindings.c:603
+msgid "Toggle Sidebar"
+msgstr "Stäng av / på sidofältet"
+
+#: ../src/keybindings.c:605
+msgid "Zoom In"
+msgstr "Förstora"
+
+#: ../src/keybindings.c:607
+msgid "Zoom Out"
+msgstr "Förminska"
+
+#: ../src/keybindings.c:609
+msgid "Zoom Reset"
+msgstr "Återställ förstoring"
+
+#: ../src/keybindings.c:614
+msgid "Switch to Editor"
+msgstr "Byt till editor"
+
+#: ../src/keybindings.c:616
+msgid "Switch to Search Bar"
+msgstr "Växla till sökfältet"
+
+#: ../src/keybindings.c:618
+msgid "Switch to Message Window"
+msgstr "Växla till  meddelandefönster"
+
+#: ../src/keybindings.c:620
+msgid "Switch to Compiler"
+msgstr "Växla till kompilatorn"
+
+#: ../src/keybindings.c:622
+msgid "Switch to Messages"
+msgstr "Växla till Meddelanden"
+
+#: ../src/keybindings.c:624
+msgid "Switch to Scribble"
+msgstr "Byt till Scribble"
+
+#: ../src/keybindings.c:626
+msgid "Switch to VTE"
+msgstr "Byt till VTE"
+
+#: ../src/keybindings.c:628
+msgid "Switch to Sidebar"
+msgstr "Växla till sidofältet"
+
+#: ../src/keybindings.c:630
+msgid "Switch to Sidebar Symbol List"
+msgstr "Växla till symbollistan i sidofältet"
+
+#: ../src/keybindings.c:632
+msgid "Switch to Sidebar Document List"
+msgstr "Växla till dokumentlistan i sidofältet"
+
+#: ../src/keybindings.c:637
+msgid "Switch to left document"
+msgstr "Byt till det vänstra dokumentet"
+
+#: ../src/keybindings.c:639
+msgid "Switch to right document"
+msgstr "Byt till det högra dokumentet"
+
+#: ../src/keybindings.c:641
+msgid "Switch to last used document"
+msgstr "Byt till det sist använda dokumentet"
+
+#: ../src/keybindings.c:644
+msgid "Move document left"
+msgstr "Flytta dokumentet till vänster"
+
+#: ../src/keybindings.c:647
+msgid "Move document right"
+msgstr "Flytta dokumentet till höger"
+
+#: ../src/keybindings.c:649
+msgid "Move document first"
+msgstr "Flytta dokumentet först"
+
+#: ../src/keybindings.c:651
+msgid "Move document last"
+msgstr "Flytta dokumentet sist"
+
+#: ../src/keybindings.c:656
+msgid "Toggle Line wrapping"
+msgstr "Justera radbrytning (line-wrap)"
+
+#: ../src/keybindings.c:658
+msgid "Toggle Line breaking"
+msgstr "Justera radbrytning (line-break)"
+
+#: ../src/keybindings.c:664
+msgid "Replace spaces with tabs"
+msgstr "Ersätt mellanslag med tab-tecken"
+
+#: ../src/keybindings.c:666
+msgid "Toggle current fold"
+msgstr "Justera nuvarande mapp"
+
+#: ../src/keybindings.c:668
+msgid "Fold all"
+msgstr "Vik ihop alla"
+
+#: ../src/keybindings.c:670
+msgid "Unfold all"
+msgstr "Vik upp alla"
+
+#: ../src/keybindings.c:672
+msgid "Reload symbol list"
+msgstr "Ladda om symbollistan"
+
+#: ../src/keybindings.c:674
+msgid "Remove Markers"
+msgstr "Ta bort markeringar"
+
+#: ../src/keybindings.c:676
+msgid "Remove Error Indicators"
+msgstr "Ta bort felindikatorer"
+
+#: ../src/keybindings.c:678
+msgid "Remove Markers and Error Indicators"
+msgstr "Ta bort markeringar och felindikatorer"
+
+#: ../src/keybindings.c:683 ../src/toolbar.c:72
+msgid "Compile"
+msgstr "Kompilera"
+
+#: ../src/keybindings.c:687
+msgid "Make all"
+msgstr "Kör Make all"
+
+#: ../src/keybindings.c:690
+msgid "Make custom target"
+msgstr "Kör Make på valbart mål"
+
+#: ../src/keybindings.c:692
+msgid "Make object"
+msgstr "Kör Make på objekt"
+
+#: ../src/keybindings.c:694
+msgid "Next error"
+msgstr "Nästa fel"
+
+#: ../src/keybindings.c:696
+msgid "Previous error"
+msgstr "Föregående fel"
+
+#: ../src/keybindings.c:698
+msgid "Run"
+msgstr "Kör"
+
+#: ../src/keybindings.c:700
+msgid "Build options"
+msgstr "Bygg-inställningar"
+
+#: ../src/keybindings.c:705
+msgid "Show Color Chooser"
+msgstr "Visa färgväljaren"
+
+#: ../src/keybindings.c:975
+msgid "Keyboard Shortcuts"
+msgstr "Tangentgenvägar"
+
+#: ../src/keybindings.c:987
+msgid "The following keyboard shortcuts are configurable:"
+msgstr "Följande tangentbordsgenvägar kan konfigureras:"
+
+#: ../src/keyfile.c:1027
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr "Skriv vad du vill här, använd den som ett klotterplank"
+
+#: ../src/keyfile.c:1254
+msgid "Failed to load one or more session files."
+msgstr "Kunde ej ladda en eller fler av sessionens filer"
+
+#: ../src/libmain.c:118
+msgid ""
+"Set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr "Sätt kolumn för markören vid öppnande av fil"
+
+#: ../src/libmain.c:119
+msgid "Use an alternate configuration directory"
+msgstr "Använd en alternativ sökväg till konfigurationsfiler"
+
+#: ../src/libmain.c:120
+msgid "Print internal filetype names"
+msgstr "Skriv interna filtypsnamn"
+
+#: ../src/libmain.c:121
+msgid "Generate global tags file (see documentation)"
+msgstr "Generera globala tagg-filer (se dokumentationen)"
+
+#: ../src/libmain.c:122
+#, fuzzy
+msgid "Don't preprocess C/C++ files when generating tags file"
+msgstr "Förbehandla inte C/C++ filer vid tag-generering"
+
+#: ../src/libmain.c:124
+msgid "Don't open files in a running instance, force opening a new instance"
+msgstr ""
+"Öppna inte filer i en existerande session, tvinga istället filen att öppnas "
+"i en ny session"
+
+#: ../src/libmain.c:125
+msgid ""
+"Use this socket filename for communication with a running Geany instance"
+msgstr "Använd detta socket-filnamn vid kommunikation med en Geany instans"
+
+#: ../src/libmain.c:126
+msgid "Return a list of open documents in a running Geany instance"
+msgstr "Returnera en lista med öppna dokument i en Geany-instans"
+
+#: ../src/libmain.c:128
+msgid "Set initial line number for the first opened file"
+msgstr "Ange inledande radnummer för den först öppnade filen"
+
+#: ../src/libmain.c:129
+msgid "Don't show message window at startup"
+msgstr "Visa inte meddelandefönster vid start"
+
+#: ../src/libmain.c:130
+msgid "Don't load auto completion data (see documentation)"
+msgstr "Ladda inte autokompletteringsdata (se dokumentationen)"
+
+#: ../src/libmain.c:132
+msgid "Don't load plugins"
+msgstr "Ladda inte tillägg"
+
+#: ../src/libmain.c:134
+msgid "Print Geany's installation prefix"
+msgstr "Visa Geany's installationsprefix"
+
+#: ../src/libmain.c:135
+msgid "Open all FILES in read-only mode (see documentation)"
+msgstr "Öppna alla filer som skrivskyddade (se dokumentation)"
+
+#: ../src/libmain.c:136
+msgid "Don't load the previous session's files"
+msgstr "Ladda inte förra sessionens filer"
+
+#: ../src/libmain.c:138
+msgid "Don't load terminal support"
+msgstr "Ladda inte terminal-stöd"
+
+#: ../src/libmain.c:139
+msgid "Filename of libvte.so"
+msgstr "Filnamn för libvte.so"
+
+#: ../src/libmain.c:141
+msgid "Be verbose"
+msgstr "Visa mycket information"
+
+#: ../src/libmain.c:142
+msgid "Show version and exit"
+msgstr "Visa version och avsluta"
+
+#: ../src/libmain.c:524
+msgid "[FILES...]"
+msgstr "[FILER...]"
+
+#. note for translators: library versions are printed after this
+#: ../src/libmain.c:558
+#, c-format
+msgid "built on %s with "
+msgstr "byggd %s med"
+
+#: ../src/libmain.c:651
+msgid "Move it now?"
+msgstr "Flytta nu?"
+
+#: ../src/libmain.c:653
+msgid "Geany needs to move your old configuration directory before starting."
+msgstr "Geany måste flytta mappen där inställningar lagras innan start."
+
+#: ../src/libmain.c:662
+#, c-format
+msgid ""
+"Your configuration directory has been successfully moved from \"%s\" to \"%s"
+"\"."
+msgstr "Mappen där inställningar lagras har flyttats från \"%s\" till \"%s\"."
+
+#. for translators: the third %s in brackets is the error message which
+#. * describes why moving the dir didn't work
+#: ../src/libmain.c:672
+#, c-format
+msgid ""
+"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+"Please move manually the directory to the new location."
+msgstr ""
+"Mappen där inställningar lagras \"%s\" kunde inte flyttas till \"%s\" (%s). "
+"Du måste själv flytta mappen."
+
+#: ../src/libmain.c:754
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+"Konfigureringsmappen kunde inte skapas (%s).\n"
+"Det kan uppstå problem om du försöker använda Geany utan "
+"konfigureringsmapp.\n"
+"Starta Geany ändå?"
+
+#: ../src/libmain.c:1155
+#, c-format
+msgid "This is Geany %s."
+msgstr "Detta är Geany %s."
+
+#: ../src/libmain.c:1157
+#, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "Konfigureringsmappen kunde inte skapas (%s)"
+
+#: ../src/libmain.c:1381
+msgid "Do you really want to quit?"
+msgstr "Vill du verkligen avsluta?"
+
+#: ../src/libmain.c:1419
+msgid "Configuration files reloaded."
+msgstr "Konfigurationsfilerna laddades om."
+
+#: ../src/log.c:186
+msgid "Debug Messages"
+msgstr "Debugmeddelanden"
+
+#: ../src/log.c:188
+msgid "Cl_ear"
+msgstr "Rensa"
+
+#: ../src/msgwindow.c:177
+msgid "Status messages"
+msgstr "Statusmeddelanden"
+
+#: ../src/msgwindow.c:582
+msgid "C_opy"
+msgstr "Kopiera"
+
+#: ../src/msgwindow.c:591
+msgid "Copy _All"
+msgstr "Kopiera alla"
+
+#: ../src/msgwindow.c:621
+msgid "_Hide Message Window"
+msgstr "Dölj meddelandefönster"
+
+#: ../src/msgwindow.c:682
+#, c-format
+msgid "Could not find file '%s' - trying the current document path."
+msgstr "Kunde inte hitta filen '%s' - försöker med sökvägen för dokument."
+
+#: ../src/msgwindow.c:1118
+msgid "The document has been closed."
+msgstr "Dokumentet har stängts."
+
+#: ../src/notebook.c:199
+msgid "Switch to Document"
+msgstr "Växla till dokumentet"
+
+#: ../src/notebook.c:451
+#, fuzzy
+msgid "Open in New _Window"
+msgstr "Öppna i Geany"
+
+#: ../src/plugins.c:224
+#, c-format
+msgid ""
+"The plugin \"%s\" is not binary compatible with this release of Geany - "
+"please recompile it."
+msgstr ""
+"Tillägget \"%s\" är inte binärt kompatibel med denna version av Geany. Var "
+"god, kompilera om modulen."
+
+#: ../src/plugins.c:1229
+msgid "_Plugin Manager"
+msgstr "Tilläggshanteraren"
+
+#: ../src/plugins.c:1608
+msgid ""
+"\n"
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</"
+"i>\n"
+msgstr ""
+
+#. Four allocations is less than ideal but meh
+#: ../src/plugins.c:1610
+#, c-format
+msgid ""
+"Version:\t%s\n"
+"Author(s):\t%s\n"
+"Filename:\t%s"
+msgstr ""
+"Version:\t%s\n"
+"Författare:\t%s\n"
+"Filnamn:\t%s"
+
+#: ../src/plugins.c:1638
+msgid "No plugins available."
+msgstr "Inga tillägg är tillgängliga"
+
+#: ../src/plugins.c:1770
+msgid "Active"
+msgstr "Aktiv"
+
+#: ../src/plugins.c:1777
+msgid "Plugin"
+msgstr "Tillägg"
+
+#: ../src/plugins.c:1884
+msgid "Plugins"
+msgstr "Tillägg"
+
+#: ../src/plugins.c:1925
+msgid "Choose which plugins should be loaded at startup:"
+msgstr "Ange vilka insticksmoduler som skall laddas vid start:"
+
+#: ../src/pluginutils.c:403
+msgid "Configure Plugins"
+msgstr "Inställningar för insticksmoduler"
+
+#: ../src/prefs.c:181
+msgid "Grab Key"
+msgstr "Läs av tangent"
+
+#: ../src/prefs.c:187
+#, c-format
+msgid "Press the combination of the keys you want to use for \"%s\"."
+msgstr "Skriv in den tangentbordskombination du vill använda för  \"%s\""
+
+#: ../src/prefs.c:227 ../src/symbols.c:2475 ../src/sidebar.c:752
+msgid "_Expand All"
+msgstr "Expandera alla"
+
+#: ../src/prefs.c:232 ../src/symbols.c:2480 ../src/sidebar.c:758
+msgid "_Collapse All"
+msgstr "Stäng alla"
+
+#: ../src/prefs.c:292
+msgid "Action"
+msgstr "Händelse"
+
+#: ../src/prefs.c:297
+msgid "Shortcut"
+msgstr "Genväg"
+
+#: ../src/prefs.c:1486
+msgid "_Allow"
+msgstr "Tillåt"
+
+#: ../src/prefs.c:1488
+msgid "_Override"
+msgstr "Bryt"
+
+#: ../src/prefs.c:1489
+msgid "Override that keybinding?"
+msgstr "Bryt Geanys tangentbindning"
+
+#: ../src/prefs.c:1490
+#, c-format
+msgid "The combination '%s' is already used for \"%s\"."
+msgstr ""
+"Kombinationen '%s' används redan för \"%s\".Var god och använd en annan "
+"kombination."
+
+#. add manually GeanyWrapLabels because they can't be added with Glade
+#. page Tools
+#: ../src/prefs.c:1699
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr ""
+"Skriv in sökvägarna till verktygen nedan. Sökvägarna till verktyg som du "
+"inte behöver kan lämnas tomma."
+
+#. page Templates
+#: ../src/prefs.c:1704
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr "Anger vilken information som skall användas i mallar."
+
+#. page Keybindings
+#: ../src/prefs.c:1709
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+"Här kan du ändra tangentbordsgenvägar. Välj en och tryck på Ändra-knappen "
+"för att ange en ny tangentbordsgenväg. Dubbelklicka för att skriva in värdet "
+"manuellt."
+
+#. page Editor->Indentation
+#: ../src/prefs.c:1714
+msgid ""
+"<i>Warning: these settings are overridden by the current project. See "
+"<b>Project->Properties</b>.</i>"
+msgstr ""
+"<i>Varning: inställningarna för det aktuella projektet används. Se "
+"<b>Projekt->Egenskaper</b>.</i>"
+
+#: ../src/printing.c:164
+#, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>Sida %d av %d</b>"
+
+#: ../src/printing.c:234
+msgid "Document Setup"
+msgstr "Dokumentinställningar"
+
+#: ../src/printing.c:269
+msgid "Print only the basename(without the path) of the printed file"
+msgstr "Skriv bara ut filnamnet, ej sökvägen."
+
+#: ../src/printing.c:421
+msgid "Paginating"
+msgstr "Paginerar"
+
+#: ../src/printing.c:445
+#, c-format
+msgid "Page %d of %d"
+msgstr "Sida %d av %d"
+
+#: ../src/printing.c:501
+#, c-format
+msgid "Did not send document %s to the printing subsystem."
+msgstr "Kunde inte skicka dokumentet %s till skrivaren."
+
+#: ../src/printing.c:503
+#, c-format
+msgid "Document %s was sent to the printing subsystem."
+msgstr "Dokumentet %s skickades till utskriftssystemet."
+
+#: ../src/printing.c:554
+#, c-format
+msgid "Printing of %s failed (%s)."
+msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
+
+#: ../src/printing.c:592
+msgid "Please set a print command in the preferences dialog first."
+msgstr "Ställ in ett utskriftskommando i inställningarna först"
+
+#: ../src/printing.c:600
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+"Filen \"%s\" kommer att skrivas ut med följande kommando:\n"
+"\n"
+"%s"
+
+#: ../src/printing.c:615
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+
+#: ../src/printing.c:622
+#, c-format
+msgid "File %s printed."
+msgstr "Fil %s utskriven."
+
+#. "projects" is part of the default project base path so be careful when translating
+#. * please avoid special characters and spaces, look at the source for details or ask Frank
+#: ../src/project.c:100
+msgid "projects"
+msgstr "projekt"
+
+#: ../src/project.c:135
+msgid "Move the current documents into the new project's session?"
+msgstr "Vill du flytta aktuellt dokument till det nya projektets session?"
+
+#: ../src/project.c:153
+msgid "New Project"
+msgstr "Nytt projekt"
+
+#: ../src/project.c:158
+msgid "C_reate"
+msgstr "Skapa"
+
+#: ../src/project.c:176
+msgid "Project name"
+msgstr "Projektnamn"
+
+#: ../src/project.c:188
+#, c-format
+msgid ""
+"Path of the file representing the project and storing its settings. It "
+"should normally have the \"%s\" extension."
+msgstr ""
+"Sökvägen till filen där projektets inställningar lagras. Den borde ha "
+"filnamnstillägget \"%s\"."
+
+#: ../src/project.c:212 ../src/project.c:484
+msgid "Choose Project Base Path"
+msgstr "Välj projektets sökväg"
+
+#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
+msgid "Project file could not be written"
+msgstr "Projektfilen kunde inte skrivas"
+
+#: ../src/project.c:256
+#, c-format
+msgid "Project \"%s\" created."
+msgstr "Projekt \"%s\" skapad."
+
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1021
+#, c-format
+msgid "Project file \"%s\" could not be loaded."
+msgstr "Projektfilen \"%s\" kunde inte laddas."
+
+#: ../src/project.c:316 ../src/project.c:334
+msgid "Open Project"
+msgstr "Öppna projekt"
+
+#: ../src/project.c:354
+msgid "Project files"
+msgstr "Projektfiler"
+
+#: ../src/project.c:416
+#, c-format
+msgid "Project \"%s\" closed."
+msgstr "Projekt \"%s\" stängt."
+
+#: ../src/project.c:624
+#, c-format
+msgid "Project \"%s\" saved."
+msgstr "Projekt \"%s\" sparad."
+
+#: ../src/project.c:657
+msgid "Do you want to close it before proceeding?"
+msgstr "Vill du stänga innan du fortsätter?"
+
+#: ../src/project.c:658
+#, c-format
+msgid "The '%s' project is open."
+msgstr "Projektet '%s' är öppnat."
+
+#: ../src/project.c:707
+msgid "The specified project name is too short."
+msgstr "Projektnamnet är för kort."
+
+#: ../src/project.c:713
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr "Projektnamnet är för långt (max. %d tecken)."
+
+#: ../src/project.c:725
+msgid "You have specified an invalid project filename."
+msgstr "Du har valt ett ogiltigt filnamn."
+
+#: ../src/project.c:748
+msgid "Create the project's base path directory?"
+msgstr "Vill du skapa projektets basmapp?"
+
+#: ../src/project.c:749
+#, c-format
+msgid "The path \"%s\" does not exist."
+msgstr "Sökvägen \"%s\" existerar inte."
+
+#: ../src/project.c:758
+#, c-format
+msgid "Project base directory could not be created (%s)."
+msgstr "Projektets basmapp kunde inte skapas (%s)"
+
+#: ../src/project.c:771
+#, c-format
+msgid "Project file could not be written (%s)."
+msgstr "Projektfilen kunde inte skrivas (%s)."
+
+#: ../src/project.c:777 ../src/search.c:627
+msgid "_Replace"
+msgstr "Ersätt"
+
+#: ../src/project.c:779 ../plugins/export.c:331
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "Filen '%s' finns redan. Vill du skriva över den?"
+
+#. initialise the dialog
+#: ../src/project.c:925 ../src/project.c:936
+msgid "Choose Project Filename"
+msgstr "Välj projektets filnamn"
+
+#: ../src/project.c:1011
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr "Projekt \"%s\" öppnad."
+
+#: ../src/search.c:308 ../src/search.c:960
+msgid "_Use regular expressions"
+msgstr "Använd reguljära uttryck"
+
+#: ../src/search.c:311
+msgid ""
+"Use POSIX-like regular expressions. For detailed information about using "
+"regular expressions, please read the documentation."
+msgstr ""
+"Använd POSIX Reguljära uttryck. För mer information, se dokumentationen."
+
+#: ../src/search.c:316
+msgid "Use _escape sequences"
+msgstr "Använd escape-sekvenser"
+
+#: ../src/search.c:320
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+"corresponding control characters"
+msgstr ""
+"Ersätt \\\\, \\t, \\n, \\r and \\uXXXX (Unicode tecken) med korresponderande "
+"specialtecken."
+
+#: ../src/search.c:323
+msgid "Use multi-line matchin_g"
+msgstr "Använd flerraders matchning"
+
+#: ../src/search.c:328
+msgid ""
+"Perform regular expression matching on the whole buffer at once rather than "
+"line by line, allowing matches to span multiple lines.  In this mode, "
+"newline characters are part of the input and can be captured as normal "
+"characters by the pattern."
+msgstr ""
+"Utför en matchning för reguljärt uttryck på hela buffern samtidigt i stället "
+"för rad-för-rad, så att träffar kan hittas som löper över flera rader. I "
+"detta läge uppfattas radslutstecken som en del av matchningen och uppfattas "
+"som vanliga tecken."
+
+#: ../src/search.c:341
+msgid "Search _backwards"
+msgstr "Sök bakåt"
+
+#: ../src/search.c:347 ../src/search.c:969
+msgid "C_ase sensitive"
+msgstr "Gör skillnad mellan versaler och gemener"
+
+#: ../src/search.c:351 ../src/search.c:974
+msgid "Match only a _whole word"
+msgstr "Sök endast hela ord"
+
+#: ../src/search.c:355
+msgid "Match from s_tart of word"
+msgstr "Sök i början av ord"
+
+#: ../src/search.c:471
+msgid "_Previous"
+msgstr "Föregående"
+
+#: ../src/search.c:476
+msgid "_Next"
+msgstr "Nästa"
+
+#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+msgid "_Search for:"
+msgstr "Sök efter:"
+
+#. Now add the multiple match options
+#: ../src/search.c:508
+msgid "_Find All"
+msgstr "Hitta alla"
+
+#: ../src/search.c:515
+msgid "_Mark"
+msgstr "Markera"
+
+#: ../src/search.c:517
+msgid "Mark all matches in the current document"
+msgstr "Markera alla träffar i detta dokument."
+
+#: ../src/search.c:522 ../src/search.c:697
+msgid "In Sessi_on"
+msgstr "I öppna dokument"
+
+#: ../src/search.c:527 ../src/search.c:702
+msgid "_In Document"
+msgstr "I dokumentet"
+
+#. close window checkbox
+#: ../src/search.c:533 ../src/search.c:715
+msgid "Close _dialog"
+msgstr "Stäng dialogruta"
+
+#: ../src/search.c:537 ../src/search.c:719
+msgid "Disable this option to keep the dialog open"
+msgstr "Avaktivera detta tillval för att hålla dialogrutan öppen."
+
+#: ../src/search.c:632
+msgid "Replace & Fi_nd"
+msgstr "Sök & ersätt"
+
+#: ../src/search.c:641
+msgid "Replace wit_h:"
+msgstr "Ersätt med:"
+
+#. Now add the multiple replace options
+#: ../src/search.c:690
+msgid "Re_place All"
+msgstr "Ersätt alla"
+
+#: ../src/search.c:707
+msgid "In Se_lection"
+msgstr "I markering"
+
+#: ../src/search.c:709
+msgid "Replace all matches found in the currently selected text"
+msgstr "Ersätt alla träffar i markerad text"
+
+#: ../src/search.c:826
+msgid "all"
+msgstr "alla"
+
+#: ../src/search.c:828
+msgid "project"
+msgstr "projekt"
+
+#: ../src/search.c:830
+msgid "custom"
+msgstr "användardefinierad"
+
+#: ../src/search.c:834
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+"Alla: sök i alla filer i mappen\n"
+"Projekt: använd filmönstren definierade i projektinställningarna\n"
+"Användaranpassad: ange filmönster manuellt"
+
+#: ../src/search.c:896
+msgid "Fi_les:"
+msgstr "Filer"
+
+#: ../src/search.c:908
+msgid "File patterns, e.g. *.c *.h"
+msgstr "Filmönster, exepelvis *.c *.h"
+
+#: ../src/search.c:920
+msgid "_Directory:"
+msgstr "Sökväg:"
+
+#: ../src/search.c:939
+msgid "E_ncoding:"
+msgstr "Teckenkodning:"
+
+#: ../src/search.c:963
+msgid "See grep's manual page for more information"
+msgstr "Läs Grep's manualsida för mer information."
+
+#: ../src/search.c:965
+msgid "_Recurse in subfolders"
+msgstr "Gå igenom undermappar"
+
+#: ../src/search.c:978
+msgid "_Invert search results"
+msgstr "Invertera sökresultat"
+
+#: ../src/search.c:982
+msgid "Invert the sense of matching, to select non-matching lines"
+msgstr "Invertera träffar, välj de rader som inte har några träffar."
+
+#: ../src/search.c:999
+msgid "E_xtra options:"
+msgstr "Extra inställningar:"
+
+#: ../src/search.c:1007
+msgid "Other options to pass to Grep"
+msgstr "Andra tillval att skicka till Grep"
+
+#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#, c-format
+msgid "Found %d match for \"%s\"."
+msgid_plural "Found %d matches for \"%s\"."
+msgstr[0] "Hittat %d träff för \"%s\"."
+msgstr[1] "Hittat %d träffar för \"%s\""
+
+#: ../src/search.c:1425
+#, c-format
+msgid "Replaced %u matches in %u documents."
+msgstr "Ersatt %u träffar i %u dokument."
+
+#: ../src/search.c:1616
+msgid "Invalid directory for find in files."
+msgstr "Ogiltig mapp för att söka i filer."
+
+#: ../src/search.c:1633
+msgid "No text to find."
+msgstr "Ingen text att söka efter."
+
+#: ../src/search.c:1709
+msgid "Searching..."
+msgstr "Söker..."
+
+#: ../src/search.c:1711
+#, c-format
+msgid "%s %s -- %s (in directory: %s)"
+msgstr "%s %s -- %s (i sökväg: %s)"
+
+#: ../src/search.c:1719
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+
+#: ../src/search.c:1759
+#, c-format
+msgid "Could not open directory (%s)"
+msgstr "Kan inte öppna sökväg (%s)"
+
+#: ../src/search.c:1849
+msgid "Search failed."
+msgstr "Sökningen misslyckades."
+
+#: ../src/search.c:1873
+#, c-format
+msgid "Search completed with %d match."
+msgid_plural "Search completed with %d matches."
+msgstr[0] "Sökning avslutad med %d träff."
+msgstr[1] "Sökning avslutad med %d träffar."
+
+#: ../src/search.c:1881
+msgid "No matches found."
+msgstr "Inga träffar hittade."
+
+#: ../src/search.c:1910
+#, c-format
+msgid "Bad regex: %s"
+msgstr "Felaktig rexex: %s"
+
+#. TODO maybe this message needs a rewording
+#: ../src/socket.c:236
+msgid ""
+"Geany tried to access the Unix Domain socket of another instance running as "
+"another user.\n"
+"This is a fatal error and Geany will now quit."
+msgstr ""
+"Geany försökte koppla till en Unix domain socket för en annan instans som "
+"körs av en annan användare.\n"
+"Detta är ett allvarligt fel, och Geany kommer nu att avslutas."
+
+#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#, fuzzy
+msgid "Text ended before matching quote was found"
+msgstr "Texten tog slut innan matchning kunde hittas för %c. (Texten var '%s')"
+
+#. TL note: from glib
+#: ../src/spawn.c:130
+msgid "Text was empty (or contained only whitespace)"
+msgstr "Texten var tom (eller innehöll bara tomt utrymme)"
+
+#: ../src/spawn.c:151 ../src/spawn.c:165
+msgid "A quoted Windows program name must be entirely inside the quotes"
+msgstr ""
+"Ett Windows-program inom citattecken måste hålla sig helt inom citat-tecknen."
+
+#: ../src/spawn.c:258
+#, fuzzy
+msgid "Program not found"
+msgstr "Programet '%s' kunde ej hittas"
+
+#: ../src/spawn.c:672
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "Processen misslyckades, ingen arbetsmapp är angiven"
+
+#: ../src/spawn.c:677
+#, fuzzy
+msgid "Unknown error executing child process"
+msgstr "okänt fel vid startandet av en process för %s"
+
+#: ../src/stash.c:1177
+msgid "Value"
+msgstr "Värde"
+
+#: ../src/symbols.c:464 ../src/symbols.c:514 ../src/symbols.c:624
+msgid "Chapter"
+msgstr "Kapitel"
+
+#: ../src/symbols.c:465 ../src/symbols.c:510 ../src/symbols.c:625
+msgid "Section"
+msgstr "Sektion"
+
+#: ../src/symbols.c:466
+msgid "Sect1"
+msgstr "Sekt1"
+
+#: ../src/symbols.c:467
+msgid "Sect2"
+msgstr "Sekt2"
+
+#: ../src/symbols.c:468
+msgid "Sect3"
+msgstr "Sekt3"
+
+#: ../src/symbols.c:469
+msgid "Appendix"
+msgstr "Appendix"
+
+#: ../src/symbols.c:470 ../src/symbols.c:515 ../src/symbols.c:540
+#: ../src/symbols.c:556 ../src/symbols.c:571 ../src/symbols.c:582
+#: ../src/symbols.c:683 ../src/symbols.c:694 ../src/symbols.c:707
+#: ../src/symbols.c:721 ../src/symbols.c:733 ../src/symbols.c:745
+#: ../src/symbols.c:762 ../src/symbols.c:791 ../src/symbols.c:823
+msgid "Other"
+msgstr "Annat"
+
+#: ../src/symbols.c:476 ../src/symbols.c:753 ../src/symbols.c:801
+msgid "Module"
+msgstr "Modul"
+
+#: ../src/symbols.c:477 ../src/symbols.c:567 ../src/symbols.c:679
+#: ../src/symbols.c:731 ../src/symbols.c:743 ../src/symbols.c:758
+#: ../src/symbols.c:772
+msgid "Types"
+msgstr "Typ"
+
+#: ../src/symbols.c:478
+msgid "Type constructors"
+msgstr "Typ-konstruktörer"
+
+#: ../src/symbols.c:479 ../src/symbols.c:501 ../src/symbols.c:522
+#: ../src/symbols.c:539 ../src/symbols.c:551 ../src/symbols.c:564
+#: ../src/symbols.c:579 ../src/symbols.c:593 ../src/symbols.c:603
+#: ../src/symbols.c:667 ../src/symbols.c:717 ../src/symbols.c:740
+#: ../src/symbols.c:785 ../src/symbols.c:809
+msgid "Functions"
+msgstr "Funktioner"
+
+#: ../src/symbols.c:484
+msgid "Program"
+msgstr "Program"
+
+#: ../src/symbols.c:486 ../src/symbols.c:494 ../src/symbols.c:500
+msgid "Sections"
+msgstr "Markeringar"
+
+#: ../src/symbols.c:487
+msgid "Paragraph"
+msgstr "Paragraf"
+
+#: ../src/symbols.c:488
+msgid "Group"
+msgstr "Grupp"
+
+#: ../src/symbols.c:489
+msgid "Data"
+msgstr "Data"
+
+#: ../src/symbols.c:495
+msgid "Keys"
+msgstr "Tangenter"
+
+#: ../src/symbols.c:502 ../src/symbols.c:553 ../src/symbols.c:569
+#: ../src/symbols.c:595 ../src/symbols.c:668 ../src/symbols.c:693
+#: ../src/symbols.c:719 ../src/symbols.c:732 ../src/symbols.c:741
+#: ../src/symbols.c:757 ../src/symbols.c:792 ../src/symbols.c:821
+msgid "Variables"
+msgstr "Variabler"
+
+#: ../src/symbols.c:509
+msgid "Environment"
+msgstr "Miljö"
+
+#: ../src/symbols.c:511 ../src/symbols.c:626
+msgid "Subsection"
+msgstr "Subsektion"
+
+#: ../src/symbols.c:512 ../src/symbols.c:627
+msgid "Subsubsection"
+msgstr "Subsubsektion"
+
+#: ../src/symbols.c:523 ../src/symbols.c:548
+msgid "Structures"
+msgstr "Strukturer"
+
+#: ../src/symbols.c:530
+msgid "Parts"
+msgstr "Delar"
+
+#: ../src/symbols.c:531
+msgid "Assembly"
+msgstr "Bygg"
+
+#: ../src/symbols.c:532
+msgid "Steps"
+msgstr "Steg"
+
+#: ../src/symbols.c:547 ../src/symbols.c:645 ../src/symbols.c:691
+msgid "Modules"
+msgstr "Moduler"
+
+#: ../src/symbols.c:549 ../src/symbols.c:596
+msgid "Traits"
+msgstr "Egenskaper"
+
+#: ../src/symbols.c:550
+msgid "Implementations"
+msgstr "Implementeringar"
+
+#: ../src/symbols.c:552 ../src/symbols.c:812
+msgid "Typedefs / Enums"
+msgstr "Typedefs / Enums"
+
+#: ../src/symbols.c:554 ../src/symbols.c:770 ../src/symbols.c:779
+#: ../src/symbols.c:818
+msgid "Macros"
+msgstr "Makron"
+
+#: ../src/symbols.c:555 ../src/symbols.c:648 ../src/symbols.c:657
+#: ../src/symbols.c:666 ../src/symbols.c:704 ../src/symbols.c:730
+msgid "Methods"
+msgstr "Metoder"
+
+#: ../src/symbols.c:563 ../src/symbols.c:578 ../src/symbols.c:676
+#: ../src/symbols.c:701 ../src/symbols.c:714
+msgid "Package"
+msgstr "Paket"
+
+#: ../src/symbols.c:565 ../src/symbols.c:591 ../src/symbols.c:702
+#: ../src/symbols.c:715 ../src/symbols.c:728 ../src/symbols.c:755
+#: ../src/symbols.c:808
+msgid "Interfaces"
+msgstr "Gränssnitt"
+
+#: ../src/symbols.c:566 ../src/symbols.c:811
+msgid "Structs"
+msgstr "Strukturer"
+
+#: ../src/symbols.c:568 ../src/symbols.c:581 ../src/symbols.c:594
+#: ../src/symbols.c:720 ../src/symbols.c:742
+msgid "Constants"
+msgstr "Konstanter"
+
+#: ../src/symbols.c:570 ../src/symbols.c:705 ../src/symbols.c:810
+msgid "Members"
+msgstr "Medlemmar"
+
+#: ../src/symbols.c:580 ../src/symbols.c:744 ../src/symbols.c:769
+msgid "Labels"
+msgstr "Etiketter"
+
+#: ../src/symbols.c:590 ../src/symbols.c:655 ../src/symbols.c:804
+msgid "Namespaces"
+msgstr "Namespaces"
+
+#: ../src/symbols.c:592 ../src/symbols.c:614 ../src/symbols.c:646
+#: ../src/symbols.c:656 ../src/symbols.c:665 ../src/symbols.c:703
+#: ../src/symbols.c:716 ../src/symbols.c:729 ../src/symbols.c:807
+msgid "Classes"
+msgstr "Klasser"
+
+#: ../src/symbols.c:604
+msgid "Anchors"
+msgstr "Ankare"
+
+#: ../src/symbols.c:605
+msgid "H1 Headings"
+msgstr "Rubrik (H1)"
+
+#: ../src/symbols.c:606
+msgid "H2 Headings"
+msgstr "Rubrik (H1)"
+
+#: ../src/symbols.c:607
+msgid "H3 Headings"
+msgstr "Rubrik (H1)"
+
+#: ../src/symbols.c:615
+msgid "ID Selectors"
+msgstr "ID-markering"
+
+#: ../src/symbols.c:616
+msgid "Type Selectors"
+msgstr "Typ-konstruktörer"
+
+#: ../src/symbols.c:635
+msgid "Section Level 1"
+msgstr "Sektionsnivå 1"
+
+#: ../src/symbols.c:636
+msgid "Section Level 2"
+msgstr "Sektionsnivå 2"
+
+#: ../src/symbols.c:637
+msgid "Section Level 3"
+msgstr "Sektionsnivå 3"
+
+#: ../src/symbols.c:638
+msgid "Section Level 4"
+msgstr "Sektionsnivå 4"
+
+#: ../src/symbols.c:647
+msgid "Singletons"
+msgstr "Singletons"
+
+#: ../src/symbols.c:658 ../src/symbols.c:786
+msgid "Procedures"
+msgstr "Procedurer"
+
+#: ../src/symbols.c:669
+msgid "Imports"
+msgstr "Inporterade"
+
+#: ../src/symbols.c:677
+msgid "Entities"
+msgstr "Enhet"
+
+#: ../src/symbols.c:678
+msgid "Architectures"
+msgstr "Arkitekturer"
+
+#: ../src/symbols.c:680
+msgid "Functions / Procedures"
+msgstr "Funktioner / Procedurer"
+
+#: ../src/symbols.c:681
+msgid "Variables / Signals"
+msgstr "Variabler / Signaler"
+
+#: ../src/symbols.c:682
+msgid "Processes / Blocks / Components"
+msgstr "Processer / Block / Komponenter"
+
+#: ../src/symbols.c:690
+msgid "Events"
+msgstr "Händelser"
+
+#: ../src/symbols.c:692
+msgid "Functions / Tasks"
+msgstr "Funktioner / Uppgifter"
+
+#: ../src/symbols.c:706 ../src/symbols.c:761
+msgid "Enums"
+msgstr "Enums"
+
+#: ../src/symbols.c:754
+msgid "Programs"
+msgstr "Program"
+
+#: ../src/symbols.c:756
+msgid "Functions / Subroutines"
+msgstr "Funktioner / Subrutiner"
+
+#: ../src/symbols.c:759
+msgid "Components"
+msgstr "Komponenter"
+
+#: ../src/symbols.c:760
+msgid "Blocks"
+msgstr "Block"
+
+#: ../src/symbols.c:771
+msgid "Defines"
+msgstr "Definitioner"
+
+#: ../src/symbols.c:778
+msgid "Targets"
+msgstr "Mål"
+
+#: ../src/symbols.c:787
+msgid "Indexes"
+msgstr "Index"
+
+#: ../src/symbols.c:788
+msgid "Tables"
+msgstr "Tabeller"
+
+#: ../src/symbols.c:789
+msgid "Triggers"
+msgstr "Utlösare"
+
+#: ../src/symbols.c:790
+msgid "Views"
+msgstr "Visa"
+
+#: ../src/symbols.c:822
+msgid "Extern Variables"
+msgstr "Externa variabler"
+
+#: ../src/symbols.c:1586
+#, c-format
+msgid "Unknown filetype extension for \"%s\".\n"
+msgstr "Okänd filändelse för filen \"%s\".\n"
+
+#: ../src/symbols.c:1612
+#, fuzzy, c-format
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
+msgstr "Misslyckades med att skapa tagg-fil.\n"
+
+#: ../src/symbols.c:1619
+#, fuzzy, c-format
+msgid ""
+"Usage: %s -g <Tags File> <File list>\n"
+"\n"
+msgstr ""
+"Användning: %s -g <Tagg Fil> <Fillista>\n"
+"\n"
+
+#: ../src/symbols.c:1620
+#, c-format
+msgid ""
+"Example:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+msgstr ""
+"Exempelvis:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+
+#: ../src/symbols.c:1634
+#, fuzzy
+msgid "Load Tags File"
+msgstr "Ladda taggar"
+
+#: ../src/symbols.c:1641
+#, fuzzy
+msgid "Geany tags file (*.*.tags)"
+msgstr "Geany tagg-filer (*.tags)"
+
+#. For translators: the first wildcard is the filetype, the second the filename
+#: ../src/symbols.c:1661
+#, c-format
+msgid "Loaded %s tags file '%s'."
+msgstr "Laddade %s tagg-filen '%s'."
+
+#: ../src/symbols.c:1664
+#, c-format
+msgid "Could not load tags file '%s'."
+msgstr "Kunde inte ladda tagg-filen '%s'."
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1899
+#, fuzzy, c-format
+msgid "<b>%s: %lu</b>"
+msgstr "<b>Visa</b>"
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1902
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2111
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "Deklarationen \"%s\" kunde inte hittas."
+
+#: ../src/symbols.c:2113
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr "Definitionen av  \"%s\" kan inte hittas."
+
+#: ../src/symbols.c:2490
+msgid "Sort by _Name"
+msgstr "Sortera efter namn"
+
+#: ../src/symbols.c:2497
+msgid "Sort by _Appearance"
+msgstr "Sortera efter egenskaper"
+
+#: ../src/templates.c:83
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
+msgstr "Misslyckades konvertera mallen \"%s\" till UTF-8"
+
+#: ../src/templates.c:618
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
+#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
+#: ../src/toolbar.c:58
+msgid "Save the current file"
+msgstr "Spara fil"
+
+#: ../src/toolbar.c:60
+msgid "Save all open files"
+msgstr "Spara alla öppna filer"
+
+#: ../src/toolbar.c:61
+msgid "Reload the current file from disk"
+msgstr "Ladda om filen från disk"
+
+#: ../src/toolbar.c:62
+msgid "Close the current file"
+msgstr "Stäng fil"
+
+#: ../src/toolbar.c:63
+msgid "Close all open files"
+msgstr "Stäng alla öppna filer"
+
+#: ../src/toolbar.c:64
+msgid "Cut the current selection"
+msgstr "Klipp ut markering"
+
+#: ../src/toolbar.c:65
+msgid "Copy the current selection"
+msgstr "Kopiera markering"
+
+#: ../src/toolbar.c:66
+msgid "Paste the contents of the clipboard"
+msgstr "Klistra in innehållet från klippbordet"
+
+#: ../src/toolbar.c:67
+msgid "Delete the current selection"
+msgstr "Radera markering"
+
+#: ../src/toolbar.c:68
+msgid "Undo the last modification"
+msgstr "Ångra senaste ändring"
+
+#: ../src/toolbar.c:69
+msgid "Redo the last modification"
+msgstr "Gör om senaste ändring"
+
+#: ../src/toolbar.c:72
+msgid "Compile the current file"
+msgstr "Kompilera aktuell fil"
+
+#: ../src/toolbar.c:73
+msgid "Run or view the current file"
+msgstr "Kör eller visa filen"
+
+#: ../src/toolbar.c:74
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr "Öppnar färgväljaren, så du kan välja färger från en palett"
+
+#: ../src/toolbar.c:75
+msgid "Zoom in the text"
+msgstr "Förstora texten"
+
+#: ../src/toolbar.c:76
+msgid "Zoom out the text"
+msgstr "Förminska texten"
+
+#: ../src/toolbar.c:77
+msgid "Decrease indentation"
+msgstr "Minska indrag"
+
+#: ../src/toolbar.c:78
+msgid "Increase indentation"
+msgstr "Öka indrag"
+
+#: ../src/toolbar.c:79 ../src/toolbar.c:384
+msgid "Find the entered text in the current file"
+msgstr "Sök angiven text i aktuell fil"
+
+#: ../src/toolbar.c:80 ../src/toolbar.c:394
+msgid "Jump to the entered line number"
+msgstr "Gå till inskrivet radnummer."
+
+#: ../src/toolbar.c:81
+msgid "Show the preferences dialog"
+msgstr "Visa inställningar"
+
+#: ../src/toolbar.c:82
+msgid "Quit Geany"
+msgstr "Avsluta Geany"
+
+#: ../src/toolbar.c:83
+msgid "Print document"
+msgstr "Skriv ut dokumentet"
+
+#: ../src/toolbar.c:84
+msgid "Replace text in the current document"
+msgstr "Ersätt text i detta dokument"
+
+#: ../src/toolbar.c:360
+msgid "Create a new file"
+msgstr "Skapa ny fil"
+
+#: ../src/toolbar.c:361
+msgid "Create a new file from a template"
+msgstr "Skapa ny fil från mall"
+
+#: ../src/toolbar.c:368
+msgid "Open an existing file"
+msgstr "Öppna existerande fil"
+
+#: ../src/toolbar.c:369
+msgid "Open a recent file"
+msgstr "Öppna nyligen öppnade filer"
+
+#: ../src/toolbar.c:377
+msgid "Choose more build actions"
+msgstr "Visa fler val för bygg"
+
+#: ../src/toolbar.c:384
+msgid "Search Field"
+msgstr "Sökfält"
+
+#: ../src/toolbar.c:394
+msgid "Goto Field"
+msgstr "Gå till fält"
+
+#: ../src/toolbar.c:587
+msgid "Separator"
+msgstr "Separator"
+
+#: ../src/toolbar.c:588
+msgid "--- Separator ---"
+msgstr "--- Separator ---"
+
+#: ../src/toolbar.c:960
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
+msgstr ""
+"Välj ikoner som skall visas i verktygsraden. Ikoner kan flyttas genom drag-"
+"och-släpp."
+
+#: ../src/toolbar.c:976
+msgid "Available Items"
+msgstr "Tillgängliga element"
+
+#: ../src/toolbar.c:997
+msgid "Displayed Items"
+msgstr "Visade element"
+
+#: ../src/tools.c:86
+#, c-format
+msgid "Invalid command: %s"
+msgstr "Felaktigt kommando: %s"
+
+#: ../src/tools.c:217
+#, c-format
+msgid "Passing data and executing custom command: %s"
+msgstr "Skickar data och exekverar användarkommando: %s"
+
+#: ../src/tools.c:225
+#, c-format
+msgid ""
+"The executed custom command returned an error. Your selection was not "
+"changed. Error message: %s"
+msgstr ""
+"Det exekverade kommandot returnerade ett fel. Din markering ändrades inte. "
+"Felmeddelande: %s"
+
+#: ../src/tools.c:233
+msgid "The executed custom command exited with an unsuccessful exit code."
+msgstr "Det exekverade kommandot returnerade en felkod."
+
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+
+#: ../src/tools.c:357 ../src/tools.c:626
+msgid "Set Custom Commands"
+msgstr "Ange användardefinierat kommando"
+
+#: ../src/tools.c:365
+msgid ""
+"You can send the current selection to any of these commands and the output "
+"of the command replaces the current selection."
+msgstr "Du kan skicka markeringen till vilket av dessa kommandon som helst."
+
+#: ../src/tools.c:379
+msgid "ID"
+msgstr "ID"
+
+#: ../src/tools.c:597
+msgid "No custom commands defined."
+msgstr "Inga användarkommandon har definierats."
+
+#: ../src/tools.c:695
+msgid "Word Count"
+msgstr "Ordräkning"
+
+#: ../src/tools.c:704
+msgid "selection"
+msgstr "markering"
+
+#: ../src/tools.c:709
+msgid "whole document"
+msgstr "hela dokumentet"
+
+#: ../src/tools.c:718
+msgid "Range:"
+msgstr "Område:"
+
+#: ../src/tools.c:730
+msgid "Lines:"
+msgstr "Rader:"
+
+#: ../src/tools.c:744
+msgid "Words:"
+msgstr "Ord:"
+
+#: ../src/tools.c:758
+msgid "Characters:"
+msgstr "Tecken:"
+
+#: ../src/sidebar.c:178
+#, fuzzy
+msgid "No symbols found"
+msgstr "Inga taggar hittade"
+
+#: ../src/sidebar.c:602
+msgid "Show S_ymbol List"
+msgstr "Visa symbollistan"
+
+#: ../src/sidebar.c:614
+msgid "Show _Document List"
+msgstr "Visa dokumentlistan"
+
+#: ../src/sidebar.c:626 ../plugins/filebrowser.c:699
+msgid "H_ide Sidebar"
+msgstr "Göm sidolist"
+
+#: ../src/sidebar.c:731 ../plugins/filebrowser.c:670
+msgid "_Find in Files..."
+msgstr "Sök i filer"
+
+#: ../src/sidebar.c:741
+msgid "Show _Paths"
+msgstr "Visa sökvägar"
+
+#: ../src/ui_utils.c:64
+msgid ""
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"encoding: %e      filetype: %f      scope: %S"
+msgstr ""
+"rad: %l / %L\t kol: %c\t vald: %s\t %w      %t      %mläge: %M      kodning: "
+"%e      filtyp: %f      omfång: %S"
+
+#. L = lines
+#: ../src/ui_utils.c:240
+#, c-format
+msgid "%dL"
+msgstr "%dL"
+
+#. RO = read-only
+#: ../src/ui_utils.c:250 ../src/ui_utils.c:257
+msgid "RO "
+msgstr "RO"
+
+#. OVR = overwrite/overtype, INS = insert
+#: ../src/ui_utils.c:252
+msgid "OVR"
+msgstr "OVR"
+
+#: ../src/ui_utils.c:252
+msgid "INS"
+msgstr "INS"
+
+#: ../src/ui_utils.c:266
+msgid "TAB"
+msgstr "TAB"
+
+#. SP = space
+#: ../src/ui_utils.c:269
+msgid "SP"
+msgstr "SP"
+
+#. T/S = tabs and spaces
+#: ../src/ui_utils.c:272
+msgid "T/S"
+msgstr "T/S"
+
+#: ../src/ui_utils.c:280
+msgid "MOD"
+msgstr "MOD"
+
+#: ../src/ui_utils.c:408
+msgid " (new instance)"
+msgstr " (new instans)"
+
+#: ../src/ui_utils.c:438
+#, c-format
+msgid "Font updated (%s)."
+msgstr "Font uppdaterad (%s)."
+
+#: ../src/ui_utils.c:682
+msgid "C Standard Library"
+msgstr "C Standard Library"
+
+#: ../src/ui_utils.c:683
+msgid "ISO C99"
+msgstr "ISO C99"
+
+#: ../src/ui_utils.c:684
+msgid "C++ (C Standard Library)"
+msgstr "C++ (C Standard Library)"
+
+#: ../src/ui_utils.c:685
+msgid "C++ Standard Library"
+msgstr "C++ Standard Library"
+
+#: ../src/ui_utils.c:686
+msgid "C++ STL"
+msgstr "C++ STL"
+
+#: ../src/ui_utils.c:708 ../src/ui_utils.c:786
+msgid "dd.mm.yyyy"
+msgstr "dd.mm.yyyy"
+
+#: ../src/ui_utils.c:710 ../src/ui_utils.c:787
+msgid "mm.dd.yyyy"
+msgstr "mm.dd.yyyy"
+
+#: ../src/ui_utils.c:712 ../src/ui_utils.c:788
+msgid "yyyy/mm/dd"
+msgstr "yyyy/mm/dd"
+
+#: ../src/ui_utils.c:714 ../src/ui_utils.c:797
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr "dd.mm.yyyy hh:mm:ss"
+
+#: ../src/ui_utils.c:716 ../src/ui_utils.c:798
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr "mm.dd.yyyy hh:mm:ss"
+
+#: ../src/ui_utils.c:718 ../src/ui_utils.c:799
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr "yyyy/mm/dd hh:mm:ss"
+
+#: ../src/ui_utils.c:720 ../src/ui_utils.c:808
+msgid "_Use Custom Date Format"
+msgstr "Använd användardefinierat datumformat"
+
+#: ../src/ui_utils.c:724
+msgid "Custom Date Format"
+msgstr "Användardefinierat datumformat"
+
+#: ../src/ui_utils.c:725
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Skriv in användardefinierat datum- och tidsformat. Du kan använda den syntax "
+"som specificeras av ANSI C:s strftime funktion."
+
+#: ../src/ui_utils.c:746
+msgid "Date format string could not be converted (possibly too long)."
+msgstr "Strängen för datumformat kunde inte konverteras (möjligtvis för lång)."
+
+#: ../src/ui_utils.c:821
+msgid "_Set Custom Date Format"
+msgstr "Ställ in användardefinierat datumformat"
+
+#: ../src/ui_utils.c:2007
+msgid "Select Folder"
+msgstr "Välj mapp"
+
+#: ../src/ui_utils.c:2007
+msgid "Select File"
+msgstr "Välj fil"
+
+#: ../src/ui_utils.c:2154
+msgid "_Filetype Configuration"
+msgstr "Konfigurationen av filtyper"
+
+#: ../src/ui_utils.c:2191
+msgid "Save All"
+msgstr "Spara alla"
+
+#: ../src/ui_utils.c:2192
+msgid "Close All"
+msgstr "Stäng alla"
+
+#: ../src/ui_utils.c:2426
+msgid "Geany cannot start!"
+msgstr "Geany kan ej starta!"
+
+#: ../src/utils.c:87
+msgid "Select Browser"
+msgstr "Välj läsare"
+
+#: ../src/utils.c:88
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
+"Kunde  inte utföra kommandot för webbläsaren. Var god kontrollera det och "
+"skriv in ett annat."
+
+#: ../src/utils.c:375
+msgid "Windows (CRLF)"
+msgstr "Windows (CRLF)"
+
+#: ../src/utils.c:376
+msgid "Classic Mac (CR)"
+msgstr "Klassisk Mac (CR)"
+
+#: ../src/utils.c:377
+msgid "Unix (LF)"
+msgstr "Unix (LF)"
+
+#: ../src/utils.c:386
+msgid "CRLF"
+msgstr "CRLF"
+
+#: ../src/utils.c:387
+msgid "CR"
+msgstr "CR"
+
+#: ../src/utils.c:388
+msgid "LF"
+msgstr "LF"
+
+#: ../src/vte.c:487
+#, c-format
+msgid "invalid VTE library \"%s\": missing symbol \"%s\""
+msgstr "ogiltigt VTE bibliotek \"%s\": symbol saknas \"%s\""
+
+#: ../src/vte.c:636
+msgid "_Set Path From Document"
+msgstr "Ange sökväg från dokumentet"
+
+#: ../src/vte.c:641
+msgid "_Restart Terminal"
+msgstr "Starta om terminalen"
+
+#: ../src/vte.c:664
+msgid "_Input Methods"
+msgstr "Inmatningsmetoder"
+
+#: ../src/vte.c:754
+msgid ""
+"Directory not changed because the terminal may contain some input (press Ctrl"
+"+C or Enter to clear it)."
+msgstr ""
+"Mappen ändrades inte därför komanndotolen kan innehålla inmatad information "
+"(tryck Ctrl+C eller RETUR-tangenten för att rensa)."
+
+#: ../src/win32.c:211
+msgid "Geany project files"
+msgstr "Geany projektfiler"
+
+#: ../src/win32.c:216
+msgid "Executables"
+msgstr "Exekverbara filer"
+
+#: ../src/win32.c:802
+#, c-format
+msgid "Failed to open URI \"%s\": %s"
+msgstr ""
+
+#: ../plugins/classbuilder.c:36
+msgid "Class Builder"
+msgstr "Klassbyggare"
+
+#: ../plugins/classbuilder.c:36
+msgid "Creates source files for new class types."
+msgstr "Skapar källfiler för nya klasstyper."
+
+#: ../plugins/classbuilder.c:433
+msgid "Create Class"
+msgstr "Skapa klass"
+
+#: ../plugins/classbuilder.c:443
+msgid "Create C++ Class"
+msgstr "Skapa C++ klass"
+
+#: ../plugins/classbuilder.c:446
+msgid "Create GTK+ Class"
+msgstr "Skapa GTK+ klass"
+
+#: ../plugins/classbuilder.c:449
+msgid "Create PHP Class"
+msgstr "Skapa PHP klass"
+
+#: ../plugins/classbuilder.c:466
+msgid "Namespace"
+msgstr "Namnrymd"
+
+#: ../plugins/classbuilder.c:473 ../plugins/classbuilder.c:475
+msgid "Class"
+msgstr "Klass"
+
+#: ../plugins/classbuilder.c:482
+msgid "Header file:"
+msgstr "Header-fil:"
+
+#: ../plugins/classbuilder.c:484
+msgid "Source file:"
+msgstr "Källfil:"
+
+#: ../plugins/classbuilder.c:486
+msgid "Inheritance"
+msgstr "Arv:"
+
+#: ../plugins/classbuilder.c:488
+msgid "Base class:"
+msgstr "Basklass:"
+
+#: ../plugins/classbuilder.c:496
+msgid "Base source:"
+msgstr "Base källkodsfil"
+
+#: ../plugins/classbuilder.c:501
+msgid "Base header:"
+msgstr "Bas-header:"
+
+#: ../plugins/classbuilder.c:509
+msgid "Global"
+msgstr "Global"
+
+#: ../plugins/classbuilder.c:528
+msgid "Base GType:"
+msgstr "Bas GType:"
+
+#: ../plugins/classbuilder.c:533
+msgid "Implements:"
+msgstr "Implementering:"
+
+#: ../plugins/classbuilder.c:535
+msgid "Options"
+msgstr "Inställningar"
+
+#: ../plugins/classbuilder.c:552
+msgid "Create constructor"
+msgstr "Skapa konstruktor"
+
+#: ../plugins/classbuilder.c:557
+msgid "Create destructor"
+msgstr "Skapa destruktor"
+
+#: ../plugins/classbuilder.c:564
+msgid "Is abstract"
+msgstr "Är abstract"
+
+#: ../plugins/classbuilder.c:567
+msgid "Is singleton"
+msgstr "Är singleton"
+
+#: ../plugins/classbuilder.c:577
+msgid "Constructor type:"
+msgstr "Konstruktortyp:"
+
+#: ../plugins/classbuilder.c:1089
+msgid "Create Cla_ss"
+msgstr "Skapa klass"
+
+#: ../plugins/classbuilder.c:1095
+msgid "_C++ Class..."
+msgstr "C++ klass..."
+
+#: ../plugins/classbuilder.c:1098
+msgid "_GTK+ Class..."
+msgstr "GTK+ klass..."
+
+#: ../plugins/classbuilder.c:1101
+msgid "_PHP Class..."
+msgstr "PHP klass..."
+
+#: ../plugins/htmlchars.c:40
+msgid "HTML Characters"
+msgstr "HTML-tecken"
+
+#: ../plugins/htmlchars.c:40
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr "Infogar HTML-tecken, som '&amp;'."
+
+#: ../plugins/htmlchars.c:41 ../plugins/export.c:38 ../plugins/filebrowser.c:51
+#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+msgid "The Geany developer team"
+msgstr "Geanys utvecklare"
+
+#: ../plugins/htmlchars.c:75
+msgid "HTML characters"
+msgstr "HTML tecken"
+
+#: ../plugins/htmlchars.c:81
+msgid "ISO 8859-1 characters"
+msgstr "ISO 8859-1 tecken"
+
+#: ../plugins/htmlchars.c:179
+msgid "Greek characters"
+msgstr "Grekiska tecken"
+
+#: ../plugins/htmlchars.c:234
+msgid "Mathematical characters"
+msgstr "Matematiska symboler"
+
+#: ../plugins/htmlchars.c:275
+msgid "Technical characters"
+msgstr "Tekniska symboler"
+
+#: ../plugins/htmlchars.c:283
+msgid "Arrow characters"
+msgstr "Piltecken"
+
+#: ../plugins/htmlchars.c:296
+msgid "Punctuation characters"
+msgstr "Punktueringstecken"
+
+#: ../plugins/htmlchars.c:312
+msgid "Miscellaneous characters"
+msgstr "Övriga tecken"
+
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1194
+#: ../plugins/saveactions.c:538
+msgid "Plugin configuration directory could not be created."
+msgstr "Konfigureringsmappen för insticksmoduler kunde inte skapas."
+
+#: ../plugins/htmlchars.c:488
+msgid "Special Characters"
+msgstr "Specialtecken"
+
+#: ../plugins/htmlchars.c:490
+msgid "_Insert"
+msgstr "Infoga"
+
+#: ../plugins/htmlchars.c:499
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+"Välj ett specialtecken från listan under och dubbelklicka på den eller "
+"använd knappen för att infoga den på specificerad position"
+
+#: ../plugins/htmlchars.c:513
+msgid "Character"
+msgstr "Tecken"
+
+#: ../plugins/htmlchars.c:519
+msgid "HTML (name)"
+msgstr "HTML (namn)"
+
+#: ../plugins/htmlchars.c:738
+msgid "_Insert Special HTML Characters..."
+msgstr "Infoga speciella HTML-tecken..."
+
+#. Add menuitem for html replacement functions
+#: ../plugins/htmlchars.c:753
+msgid "_HTML Replacement"
+msgstr "HTML Ersättning"
+
+#: ../plugins/htmlchars.c:760
+msgid "_Auto-replace Special Characters"
+msgstr "Ersätt specialtecken automatiskt"
+
+#: ../plugins/htmlchars.c:769
+msgid "_Replace Characters in Selection"
+msgstr "Byt ut tecken i markeringen"
+
+#: ../plugins/htmlchars.c:785
+msgid "Insert Special HTML Characters"
+msgstr "Klistra in speciella HTML-tecken"
+
+#: ../plugins/htmlchars.c:788
+msgid "Replace special characters"
+msgstr "Ersätt specialtecken"
+
+#: ../plugins/htmlchars.c:791
+msgid "Toggle plugin status"
+msgstr "Stäng av / på instickmodulens status"
+
+#: ../plugins/export.c:37
+msgid "Export"
+msgstr "Exportera"
+
+#: ../plugins/export.c:37
+msgid "Exports the current file into different formats."
+msgstr "Exportera filen till olika format."
+
+#: ../plugins/export.c:169
+msgid "Export File"
+msgstr "Exportera fil"
+
+#: ../plugins/export.c:187
+msgid "_Insert line numbers"
+msgstr "Infoga radnummer"
+
+#: ../plugins/export.c:189
+msgid "Insert line numbers before each line in the exported document"
+msgstr "Infoga radnummer före varje rad i det exporterade dokumentet"
+
+#: ../plugins/export.c:199
+msgid "_Use current zoom level"
+msgstr "Använd nuvarande zoom-nivå"
+
+#: ../plugins/export.c:201
+msgid ""
+"Renders the font size of the document together with the current zoom level"
+msgstr ""
+"Visar dokumentets teckenstorlek tillsammans med nuvarande förstoringsnivå"
+
+#: ../plugins/export.c:279
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr "Dokumentet exporterades som '%s'."
+
+#: ../plugins/export.c:281
+#, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "Filen '%s' kunde inte skrivas (%s)."
+
+#: ../plugins/export.c:749
+msgid "_Export"
+msgstr "Exportera"
+
+#. HTML
+#: ../plugins/export.c:756
+msgid "As _HTML..."
+msgstr "Som HTML..."
+
+#. LaTeX
+#: ../plugins/export.c:762
+msgid "As _LaTeX..."
+msgstr "Som LATEX..."
+
+#: ../plugins/filebrowser.c:50
+msgid "File Browser"
+msgstr "Filhanterare"
+
+#: ../plugins/filebrowser.c:50
+msgid "Adds a file browser tab to the sidebar."
+msgstr "Lägger till en filbläddrarflik i sidofältet."
+
+#: ../plugins/filebrowser.c:415
+msgid "Too many items selected!"
+msgstr "För många element markerade!"
+
+#: ../plugins/filebrowser.c:485
+#, c-format
+msgid "Could not execute configured external command '%s' (%s)."
+msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
+
+#: ../plugins/filebrowser.c:649
+msgid "Open in _Geany"
+msgstr "Öppna i Geany"
+
+#: ../plugins/filebrowser.c:655
+msgid "Open _Externally"
+msgstr "Öppna externt"
+
+#: ../plugins/filebrowser.c:680
+msgid "Show _Hidden Files"
+msgstr "Visa gömda filer"
+
+#: ../plugins/filebrowser.c:910
+msgid "Up"
+msgstr "Upp"
+
+#: ../plugins/filebrowser.c:915
+msgid "Refresh"
+msgstr "Uppdatera"
+
+#: ../plugins/filebrowser.c:920
+msgid "Home"
+msgstr "Hem"
+
+#: ../plugins/filebrowser.c:925
+msgid "Set path from document"
+msgstr "Ange sökväg"
+
+#: ../plugins/filebrowser.c:939
+msgid "Filter:"
+msgstr "Filter:"
+
+#: ../plugins/filebrowser.c:948
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
+msgstr ""
+"Filtrera dina filer med de vanliga jokertecknen. Separera olika matchningar "
+"med mellanslag."
+
+#: ../plugins/filebrowser.c:1164
+msgid "Focus File List"
+msgstr "Fokusera fillistan"
+
+#: ../plugins/filebrowser.c:1166
+msgid "Focus Path Entry"
+msgstr "Fokusera sökvägen"
+
+#: ../plugins/filebrowser.c:1259
+msgid "External open command:"
+msgstr "Öppna via externt kommando:"
+
+#: ../plugins/filebrowser.c:1267
+#, c-format
+msgid ""
+"The command to execute when using \"Open with\". You can use %f and %d "
+"wildcards.\n"
+"%f will be replaced with the filename including full path\n"
+"%d will be replaced with the path name of the selected file without the "
+"filename"
+msgstr ""
+"Kommandot att exekvera med \"Öppna med\". Du kan använda %f och %d "
+"wildcards.\n"
+"%f kommer att ersättas med filnamnet och fullständig sökväg\n"
+"%d kommer att ersättas med sökvägen till vald fil (utan filnamnet)"
+
+#: ../plugins/filebrowser.c:1275
+msgid "Show hidden files"
+msgstr "Visa gömda filer"
+
+#: ../plugins/filebrowser.c:1283
+msgid "Hide file extensions:"
+msgstr "Göm filändelser"
+
+#: ../plugins/filebrowser.c:1302
+msgid "Follow the path of the current file"
+msgstr "Följ filens sökväg"
+
+#: ../plugins/filebrowser.c:1308
+msgid "Use the project's base directory"
+msgstr "Använd projektets basmapp"
+
+#: ../plugins/filebrowser.c:1312
+msgid ""
+"Change the directory to the base directory of the currently opened project"
+msgstr "Skapa en DIFF från sökvägen där den aktiva filen finns"
+
+#: ../plugins/saveactions.c:43
+msgid "Save Actions"
+msgstr "Spara \"Actions\""
+
+#: ../plugins/saveactions.c:43
+msgid "This plugin provides different actions related to saving of files."
+msgstr ""
+"Denna plugin ger möjlighet till olika valmöjligheter vid sparande av filer."
+
+#: ../plugins/saveactions.c:175
+#, c-format
+msgid "Backup Copy: Directory could not be created (%s)."
+msgstr "Backupkopia: Filen kunde inte skapas (%s)."
+
+#. it's unlikely that this happens
+#: ../plugins/saveactions.c:209
+#, c-format
+msgid "Backup Copy: File could not be read (%s)."
+msgstr "Backupkopia: Filen kunde inte läsas (%s)."
+
+#: ../plugins/saveactions.c:234
+#, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "Backupkopia: Filen kunde inte sparas (%s)."
+
+#: ../plugins/saveactions.c:371
+#, c-format
+msgid "Autosave: Saved %d file automatically."
+msgid_plural "Autosave: Saved %d files automatically."
+msgstr[0] "Autospara: Sparade %d fil automatiskt."
+msgstr[1] "Autospara: Sparade %d filer automatiskt."
+
+#. initialize the dialog
+#: ../plugins/saveactions.c:442
+msgid "Select Directory"
+msgstr "Välj mapp"
+
+#: ../plugins/saveactions.c:530
+msgid "Backup directory does not exist or is not writable."
+msgstr "Backup-mappen existerar inte, eller är inte skrivbar."
+
+#: ../plugins/saveactions.c:611
+msgid "Auto Save"
+msgstr "Spara automatiskt"
+
+#: ../plugins/saveactions.c:613
+msgid "Enable save when losing _focus"
+msgstr "Spara när fokus förloras"
+
+#: ../plugins/saveactions.c:619 ../plugins/saveactions.c:681
+#: ../plugins/saveactions.c:722
+msgid "_Enable"
+msgstr "Sätt på"
+
+#: ../plugins/saveactions.c:627
+msgid "Auto save _interval:"
+msgstr "Intervall för autosparande:"
+
+#: ../plugins/saveactions.c:635
+msgid "seconds"
+msgstr "sekunder"
+
+#: ../plugins/saveactions.c:644
+msgid "_Print status message if files have been automatically saved"
+msgstr "Skriv statusmeddelande om filer sparats automatiskt"
+
+#: ../plugins/saveactions.c:652
+msgid "Save only current open _file"
+msgstr "Spara endast den nu öppna filen"
+
+#: ../plugins/saveactions.c:659
+msgid "Sa_ve all open files"
+msgstr "Spara alla öppna filer"
+
+#: ../plugins/saveactions.c:679
+msgid "Instant Save"
+msgstr "Spara omedelbart"
+
+#: ../plugins/saveactions.c:689
+msgid "_Filetype to use for newly opened files:"
+msgstr "Filtyp att använda för nyöppnade filer:"
+
+#: ../plugins/saveactions.c:720
+msgid "Backup Copy"
+msgstr "Backup-kopia"
+
+#: ../plugins/saveactions.c:730
+msgid "_Directory to save backup files in:"
+msgstr "Sökväg att spara backupfilerna i:"
+
+#: ../plugins/saveactions.c:753
+msgid "Date/_Time format for backup files (\"man strftime\" for details):"
+msgstr ""
+"Datum- och tidsformat för backupfilerna (\"man strftime\" fär mer info):"
+
+#: ../plugins/saveactions.c:766
+msgid "Directory _levels to include in the backup destination:"
+msgstr "Sökvägsnivåer att inkludera i backupmålet:"
+
+#: ../plugins/splitwindow.c:34
+msgid "Split Window"
+msgstr "Dela fönster"
+
+#: ../plugins/splitwindow.c:34
+msgid "Splits the editor view into two windows."
+msgstr "Delar editor-fönstret i två delar"
+
+#: ../plugins/splitwindow.c:272
+msgid "Show the current document"
+msgstr "Visa dokument"
+
+#: ../plugins/splitwindow.c:289 ../plugins/splitwindow.c:422
+#: ../plugins/splitwindow.c:437
+msgid "_Unsplit"
+msgstr "Sätt ihop"
+
+#: ../plugins/splitwindow.c:404
+msgid "_Split Window"
+msgstr "Dela fönster"
+
+#: ../plugins/splitwindow.c:412
+msgid "_Side by Side"
+msgstr "Sida vid sida"
+
+#: ../plugins/splitwindow.c:417
+msgid "_Top and Bottom"
+msgstr "Topp och botten"
+
+#: ../plugins/splitwindow.c:433
+msgid "Side by Side"
+msgstr "Sida vid sida"
+
+#: ../plugins/splitwindow.c:435
+msgid "Top and Bottom"
+msgstr "Topp och botten"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot execute terminal command \"%s\": %s. Check the path setting in "
+#~ "Preferences."
+#~ msgstr ""
+#~ "Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i "
+#~ "Inställningar."
+
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "Gå till Tagg-definition"
+
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "Gå till Tagg-deklaration"
+
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "Utskriften \"%s\" misslyckades (felkod: %s)."
+
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "TerminateProcess() misslyckades: %s"
+
+#~ msgid "Custom command failed: %s"
+#~ msgstr "Det egendefinierade kommandot misslyckades: %s"
+
+#~ msgid ""
+#~ "Could not execute the file in the VTE because it probably contains a "
+#~ "command."
+#~ msgstr ""
+#~ "Kunde inte exekvera filen i VTE därför att det troligvis innehåller ett "
+#~ "kommando."
+
+#~ msgid ""
+#~ "Could not parse terminal command \"%s\" (check Terminal tool setting in "
+#~ "Preferences)"
+#~ msgstr ""
+#~ "Kunde ej hitta terminalen \"%s\" (kontrollera sökvägen till terminalen i "
+#~ "Inställningar)"
+
+#~ msgid ""
+#~ "Could not find terminal \"%s\" (check path for Terminal tool setting in "
+#~ "Preferences)"
+#~ msgstr ""
+#~ "Kunde ej hitta terminalen \"%s\" (kontrollera sökvägen till terminalen i "
+#~ "Inställningar)"
+
+#~ msgid "Detect by file extension"
+#~ msgstr "Upptäck från filändelse"
+
+#~ msgid "Close _without saving"
+#~ msgstr "Stäng utan att spara"
+
+#~ msgid "Show macro list"
+#~ msgstr "Visa macrolistan"
+
+#~ msgid "%s %s"
+#~ msgstr "%s %s"
+
+#~ msgid "Description"
+#~ msgstr "Beskrivning"
+
+#~ msgid "<b>Plugin details:</b>"
+#~ msgstr "<b>Plugin egenskaper:</b>"
+
+#~ msgid "Plugin:"
+#~ msgstr "Tillägg:"
+
+#~ msgid "Author(s):"
+#~ msgstr "Skapare:"
+
+#~ msgid "Cannot parse extra options: %s"
+#~ msgstr "Kan inte tolka tillval: %s"
+
+#~ msgid ""
+#~ "Could not change the directory in the VTE because it probably contains a "
+#~ "command."
+#~ msgstr ""
+#~ "Kunde ej ändra sökväg i VTE därför att det troligvis innehåller ett "
+#~ "kommando."
+
+#~ msgid "Process timed out after %.02f s!"
+#~ msgstr "Processen avslutades efter %.02f s!"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Typ:</b>"
+
+#~ msgid "<b>Size:</b>"
+#~ msgstr "<b>Storlek:</b>"
+
+#~ msgid "<b>Read-only:</b>"
+#~ msgstr "<b>Endast läsbar:</b>"
+
+#~ msgid "<b>Encoding:</b>"
+#~ msgstr "<b>Kodning:</b>"
+
+#~ msgid "<b>Changed:</b>"
+#~ msgstr "<b>Ändrad:</b>"
+
+#~ msgid "Shell script"
+#~ msgstr "Terminalskript"
+
+#~ msgid "Subroutines"
+#~ msgstr "Subrutiner"
+
+#~ msgid "pos: %d"
+#~ msgstr "pos: %d"
+
+#~ msgid "style: %d"
+#~ msgstr "stil: %d"
+
+#~ msgid "Split Horizontally"
+#~ msgstr "Dela vågrätt"
+
+#~ msgid "Split Vertically"
+#~ msgstr "Dela vertikalt"
+
+#~ msgid ""
+#~ "A terminal emulator like xterm, gnome-terminal or konsole (should accept "
+#~ "the -e argument)"
+#~ msgstr ""
+#~ "En terminal som Xterm, Gnome-terminal eller Konsole (måste acceptera -e "
+#~ "argumentet)"
+
+#~ msgid "_Open file in a new tab"
+#~ msgstr "Öppna filen i en ny flik"
+
+#~ msgid ""
+#~ "Keep the current unsaved document open and open the newly saved file in a "
+#~ "new tab"
+#~ msgstr ""
+#~ "Vill du behålla nuvarande dokument och öppna det nya dokumentet i en ny "
+#~ "flik?"
+
+#~ msgid "The editor font is not a monospaced font!"
+#~ msgstr "Valt teckensnitt i editorn har inte fast bredd!"
+
+#~ msgid "Text will be wrongly spaced."
+#~ msgstr "Texten kommer att få felaktigt mellanrum mellan orden."
+
+#~ msgid "_Debug Messages"
+#~ msgstr "Debugmeddelanden"
+
+#~ msgid "Project properties"
+#~ msgstr "Projektets egenskaper"
+
+#~ msgid "Invalid filename"
+#~ msgstr "Ogiltigt filnamn"
+
+#~ msgid "Goto"
+#~ msgstr "Gå till"
+
+#~ msgid "Clear the filter"
+#~ msgstr "Rensa filtret"
+
+#~ msgid "Item"
+#~ msgstr "Element"
+
+#~ msgid "Clear"
+#~ msgstr "Rensa"
+
+#~ msgid "Non-Filetype Commands"
+#~ msgstr "Icke-filtypskommandon"
+
+#~ msgid "_Set Build Menu Commands"
+#~ msgstr "Ange kommandon för byggmenyn"
+
+#~ msgid "SQL Dump file"
+#~ msgstr "SQL dumpfil"
+
+#~ msgid "M_iscellaneous Languages"
+#~ msgstr "Diverse språk"
+
+#~ msgid "_Custom Filetypes"
+#~ msgstr "Anpassade filtyper"
+
+#~ msgid "Whether to enable folding the code"
+#~ msgstr ""
+#~ "Specificerar om koden skall vikas ihop för att spara utrymme och "
+#~ "underlätta läsning"
+
+#~ msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
+#~ msgstr "(byggd %s med GTK %d.%d.%d, GLib %d.%d.%d)"
+
+#~ msgid ""
+#~ "Plugin: %s %s\n"
+#~ "Description: %s\n"
+#~ "Author(s): %s"
+#~ msgstr ""
+#~ "Tillägg: %s %s\n"
+#~ "Beskrivning: %s\n"
+#~ "Utvecklare: %s"
+
+#~ msgid ""
+#~ "<i>Notice: For all changes you make here to take effect, you need to "
+#~ "restart Geany or force the reload of the settings using Tools->Reload "
+#~ "Configuration.</i>"
+#~ msgstr ""
+#~ "<i>Observera: För att dina ändringar skall verkställas, måste du starta "
+#~ "om Geany.</i>"
+
+#~ msgid ""
+#~ "<i>Notice: Native GTK printing is only available if Geany was built "
+#~ "against GTK 2.10 (or above) <b>and</b> Geany is running with GTK 2.10 (or "
+#~ "above).</i>"
+#~ msgstr ""
+#~ "<i>Notera att GTKs utskriftshantering bara är tillgänglig om Geany "
+#~ "kompilerats med GTK 2.10 eller högre <b>och</b> Geany körs med GTK 2.10 "
+#~ "eller högre.</i>"
+
+#~ msgid "Old"
+#~ msgstr "Gammal"
+
+#~ msgid "Namespace:"
+#~ msgstr "Namnrymd:"
+
+#~ msgid "Class name:"
+#~ msgstr "Klassnamn:"
+
+#~ msgid "_HTMLToggle"
+#~ msgstr "Växla HTML"
+
+#~ msgid "Bulk replacement of special chars"
+#~ msgstr "Ersätt specialtecken"
+
+#~ msgid "Hide object files"
+#~ msgstr "Göm objektfiler"
+
+#~ msgid ""
+#~ "Don't show generated object files in the file browser, this includes *.o, "
+#~ "*.obj. *.so, *.dll, *.a, *.lib"
+#~ msgstr ""
+#~ "Visa inte genererade objektfiler i filläsaren, detta inkluderar *.o, *."
+#~ "obj. *.so, *.dll, *.a, *.lib"
+
+#~ msgid "_Horizontally"
+#~ msgstr "Vågrätt"
+
+#~ msgid "_Vertically"
+#~ msgstr "Vertikalt"
+
+#~ msgid "Find _Selected"
+#~ msgstr "Sök i markering"
+
+#~ msgid "Find Pre_vious Selected"
+#~ msgstr "Sök föregående markerade"
+
+#~ msgid "Automatic completion and closing of XML tags (includes HTML tags)"
+#~ msgstr "Autokomplettera XML- och HTMK-taggar"
+
+#~ msgid "Toggle Case of Selection"
+#~ msgstr "Växla mellan versaler och gemener"
+
+#~ msgid "Set the Build non-filetype working directories to use base path:"
+#~ msgstr "Ange arbetsmappar för icke-filtyper:"
+
+#~ msgid "Set"
+#~ msgstr "Ange"
+
+#~ msgid ""
+#~ "Set the working directories (on the Build tab) for the non-filetype build "
+#~ "commands to use the base path"
+#~ msgstr ""
+#~ "Ange arbetsmappar (i  bygg-fliken) för icke-filtypers byggkommandon att "
+#~ "använda basmappen"
+
+#~ msgid "Fixed s_trings"
+#~ msgstr "Fixerade strängar"
+
+#~ msgid "_Grep regular expressions"
+#~ msgstr "Grep Regular Expressions"
+
+#~ msgid "_Extended regular expressions"
+#~ msgstr "Utöka Regular Expressions"
+
+#~ msgid "line: %d / %d\t col: %d\t sel: %d\t "
+#~ msgstr "rad: %d / kolumn: %d\t märkning: %d\t "
+
+#~ msgid "mode: %s"
+#~ msgstr "läge: %s"
+
+#~ msgid "encoding: %s %s"
+#~ msgstr "Teckenkodning: %s %s"
+
+#~ msgid "filetype: %s"
+#~ msgstr "filtyp: %s"
+
+#~ msgid "scope: %s"
+#~ msgstr "omfång: %s"
+
+#~ msgid "_Customize Toolbar"
+#~ msgstr "Anpassa verktygsfältet"
+
+#~ msgid "Icon size:"
+#~ msgstr "Ikonstorlek"
+
+#~ msgid "Hard tab width:"
+#~ msgstr "Hårdtab-bredd:"
+
+#~ msgid "The width of a tab when Tabs & Spaces is set for a document"
+#~ msgstr "Bredden på tab när Tab och Mellanslag är påslaget för dokumentet"
+
+#~ msgid "Terminal plugin"
+#~ msgstr "Terminalens insticksmodul"
+
+#~ msgid ""
+#~ "Notes:\n"
+#~ "   %d, %e, %f, %p are substituted in Commands and Working dir, see manual "
+#~ "for details\n"
+#~ "   Non-filetype menu Item 2 opens a dialog and appends the reponse to the "
+#~ "command"
+#~ msgstr ""
+#~ "Anteckningar:\n"
+#~ "   %d, %e, %f, %p är ytbytta i kommandon och arbetsmapp, se manualen för "
+#~ "ytterligare information\n"
+#~ "  Icke-filtypsmeny 2 öppnar ett fönster där du kan ange en text som läggs "
+#~ "till kommandot"
+
+#~ msgid ""
+#~ "Use white text on a black background and invert all colors, this option "
+#~ "requires a restart of Geany"
+#~ msgstr ""
+#~ "Använd vit text på svart bakgrund och invertera alla färger. För att "
+#~ "detta skall få effekt, måste du starta om Geany."
+
+#~ msgid "Long line marker:"
+#~ msgstr "Markör för lång rad"
+
+#~ msgid "Long line marker color:"
+#~ msgstr "Färg på markören för lång rad"
+
+#~ msgid "Duplicate line or selection"
+#~ msgstr "Duplicera raden eller markeringen"
+
+#~ msgid "Send Selection to Terminal"
+#~ msgstr "Skicka markeringen till terminalen"
+
+#~ msgid "Printing of file %s was cancelled."
+#~ msgstr "Utskriften av filen %s avbröts"
+
+#~ msgid "Replaced text in %u file."
+#~ msgid_plural "Replaced text in %u files."
+#~ msgstr[0] "Ersatt text i %u fil."
+#~ msgstr[1] "Ersatt text i %u filer."
+
+#~ msgid "Search failed (see Help->Debug Messages for details)."
+#~ msgstr ""
+#~ "Sökningen misslyckades (se Hjälp -> Debugmeddelanden för mer information)."
+
+#~ msgid "My"
+#~ msgstr "Min"
+
+#~ msgid "Local"
+#~ msgstr "Lokal"
+
+#~ msgid "Our"
+#~ msgstr "Our"
+
+#~ msgid ""
+#~ "These settings for the virtual terminal emulator widget (VTE) only apply "
+#~ "if the VTE library could be loaded."
+#~ msgstr ""
+#~ "Dessa inställningar för den virtuella terminalemulatorn (VTE) gäller bara "
+#~ "om VTE-biblioteket kan laddas."
+
+#~ msgid "Unsplit"
+#~ msgstr "Sätt ihop"
+
+#~ msgid "_Set Includes and Arguments"
+#~ msgstr "Justera inkluderingar och argument"
+
+#~ msgid "LaTeX -> _DVI"
+#~ msgstr "LaTeX -> DVI"
+
+#~ msgid "LaTeX -> _PDF"
+#~ msgstr "LaTeX -> PDF"
+
+#~ msgid "_View DVI File"
+#~ msgstr "Visa DVI-fil"
+
+#~ msgid "V_iew PDF File"
+#~ msgstr "Visa PDF-fil"
+
+#~ msgid "_Set Arguments"
+#~ msgstr "Ange argument"
+
+#~ msgid "Set Arguments"
+#~ msgstr "Ange argument"
+
+#~ msgid "Set programs and options for compiling and viewing (La)TeX files."
+#~ msgstr ""
+#~ "Anger program och parametrar för att kompilera och visa (La)TeX filer."
+
+#~ msgid "DVI creation:"
+#~ msgstr "Skapa DVI:"
+
+#~ msgid "PDF creation:"
+#~ msgstr "Skapa PDF:"
+
+#~ msgid "DVI preview:"
+#~ msgstr "Förhandsvisa DVI:"
+
+#~ msgid "PDF preview:"
+#~ msgstr "Förhandsvisa PDF:"
+
+#~ msgid ""
+#~ "%f will be replaced by the current filename, e.g. test_file.c\n"
+#~ "%e will be replaced by the filename without extension, e.g. test_file"
+#~ msgstr ""
+#~ "%f kommer att ersättas med nuvarande filnamn, exempelvis test_fil.c\n"
+#~ "%e kommer att ersättas med namn utan filändelse, exempelvis test_fil"
+
+#~ msgid "Set Includes and Arguments"
+#~ msgstr "Ange inkluderingar och argument"
+
+#~ msgid "Set the commands for building and running programs."
+#~ msgstr "Anger kommandon för att bygga och köra program."
+
+#~ msgid "Compile:"
+#~ msgstr "Kompilera:"
+
+#~ msgid "Build:"
+#~ msgstr "Bygg:"
+
+#~ msgid "Failed to execute the view program"
+#~ msgstr "Misslyckades exekvera visningsprogrammet"
+
+#~ msgid "Path and options for the make tool"
+#~ msgstr "Sökväg och tillval för Make-verktyget"
+
+#~ msgid "Run (alternative command)"
+#~ msgstr "Kör (alternativt kommando)"
+
+#~ msgid ""
+#~ "Below is a list of available plugins. Select the plugins which should be "
+#~ "loaded when Geany is started."
+#~ msgstr ""
+#~ "Nedan ser du en lista med insticksmoduler. Välj vilka insticksmoduler som "
+#~ "skall laddas när Geany startas."
+
+#~ msgid "Make in base path"
+#~ msgstr "Kör Make i bassökvägen"
+
+#~ msgid ""
+#~ "Command-line to run in the project base directory. Options can be "
+#~ "appended to the command. Leave blank to use the default run command."
+#~ msgstr "Kommandorad att köra i projektets grundläggande sökväg."
+
+#~ msgid "Choose Project Run Command"
+#~ msgstr "Välj projektets körkommando"
+
+#~ msgid "Diff file"
+#~ msgstr "Diff-fil"
+
+#~ msgid "reStructuredText file"
+#~ msgstr "reStructuredText fil"
+
+#~ msgid "Select _All"
+#~ msgstr "Markera allt"
+
+#~ msgid "Automatic symbol completion"
+#~ msgstr "Komplettera symboler automatiskt"
+
+#~ msgid ""
+#~ "<i>Notice: To customize the toolbar elements, edit the file 'ui_toolbar."
+#~ "xml'. Please see the documentation for details.</i>"
+#~ msgstr ""
+#~ "<i>För att ända innehållet i verktygsfältet, måste du redigera filen "
+#~ "'ui_toolbar.xml'. Du kan läsa instruktionerna för hur du kan redigera "
+#~ "verktygsfältet i dokumentationen för Geany.</i>"
+
+#~ msgid ""
+#~ "For all changes you make in this file to take effect, you need to restart "
+#~ "Geany."
+#~ msgstr "Inställningar börjar gälla efter du startat om Geany"
+
+#~ msgid "Failed to view %s (make sure it is already compiled)"
+#~ msgstr "Kunde inte visa %s (försäkra dig om att den redan är kompilerad)"
+
+#~ msgid ""
+#~ "Add page numbers at the bottom of each page, it takes 2 lines of the page"
+#~ msgstr "Lägg till sidnummer i sidfoten"
+
+#~ msgid "Jump to the entered line number."
+#~ msgstr "Gå till inskrivet radnummer."
+
+#~ msgid "Version Diff"
+#~ msgstr "Version Diff"
+
+#~ msgid "Creates a patch of a file against version control."
+#~ msgstr "Skapar en <i>patch</i> mot en versionskontrollfil."
+
+#~ msgid "Input conversion of the diff output failed."
+#~ msgstr "Inmatningskonverteringen av diff-utmatningen misslyckades."
+
+#~ msgid ""
+#~ "%s exited with an error: \n"
+#~ "%s."
+#~ msgstr ""
+#~ "%s skapade ett fel: \n"
+#~ "%s"
+
+#~ msgid "No changes were made."
+#~ msgstr "Inga ändringar gjordes."
+
+#~ msgid "An error occurred (%s)."
+#~ msgstr "Ett fel inträffade (%s)"
+
+#~ msgid "_Version Diff"
+#~ msgstr "_Version Diff"
+
+#~ msgid "From Current _File"
+#~ msgstr "Från aktiv fil"
+
+#~ msgid "Make a diff from the current active file"
+#~ msgstr "Skapa en DIFF från aktiv fil"
+
+#~ msgid "From Current _Directory"
+#~ msgstr "Från nuvarande sökväg"
+
+#~ msgid "Make a diff from the directory of the current active file"
+#~ msgstr "Skapa en DIFF från sökvägen där den aktiva filen finns"
+
+#~ msgid "From Current _Project"
+#~ msgstr "Från nuvarande projekt"
+
+#~ msgid "Make a diff from the current project's base path"
+#~ msgstr "Skapa en DIFF från projektets grundläggande sökväg"
+
+#~ msgid "Command stopped because the current file has no extension."
+#~ msgstr "Kommando stoppat därför att vald fil inte har någon filnamnsändelse"
+
+#~ msgid "Failed to execute \"%s\" (make sure it is already built)"
+#~ msgstr "Misslyckades exekvera \"%s\" (försäkra dig om att den byggts)"
+
+#~ msgid "Compiles the current file"
+#~ msgstr "Kompilera aktuell fil"
+
+#~ msgid "Builds the current file (generate an executable file)"
+#~ msgstr "Bygg och generera en exekverbar fil"
+
+#~ msgid "Compiles the current file using the make tool"
+#~ msgstr "Kompilerar filen med Make-verktyget"
+
+#~ msgid ""
+#~ "Sets the includes and library paths for the compiler and the program "
+#~ "arguments for execution"
+#~ msgstr ""
+#~ "Anger inkluderingar och biblioteks sökvägar (includes, libraries) och "
+#~ "programargument vid exekvering"
+
+#~ msgid "Compiles the current file into a DVI file"
+#~ msgstr "Kompilerar filen till en DVI-fil"
+
+#~ msgid "Compiles the current file into a PDF file"
+#~ msgstr "Kompilerar filen till en PDF-fil"
+
+#~ msgid "Compile and view the current file"
+#~ msgstr "Kompilera och visa aktuell fil"
+
+#~ msgid "Sets the program paths and arguments"
+#~ msgstr "Ange sökvägar och argument till program"
+
+#~ msgid "Saves all open files"
+#~ msgstr "Spara alla öppna filer"
+
+#~ msgid "Prints the current file"
+#~ msgstr "Skriv ut"
+
+#~ msgid "Convert the case of the current selection"
+#~ msgstr "Konvertera mellan versaler och gemener"
+
+#~ msgid "Inserts a typical ChangeLog entry in the current file"
+#~ msgstr "Infoga en typisk ChangeLog"
+
+#~ msgid "Inserts a file header at the beginning of the file"
+#~ msgstr "Infoga filhuvud i början av filen"
+
+#~ msgid "Inserts a description before the current function"
+#~ msgstr "Infoga en beskrivning innan funktionen"
+
+#~ msgid "Inserts a multiline comment"
+#~ msgstr "Infoga multipla kommentarer"
+
+#~ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+#~ msgstr "Infoga en GPL-beskrivning (bör göras i början av filen)"
+
+#~ msgid ""
+#~ "Inserts a BSD license notice (should be done at the beginning of the file)"
+#~ msgstr "Infogar en BSD-licensbeskrivning (bör göras i början av filen)"
+
+#~ msgid "Change the default font"
+#~ msgstr "Byt förvalt teckensnitt"
+
+#~ msgid "Toggle the window with status and compiler messages on and off"
+#~ msgstr "Visa status- och kompilatormeddelanden i fönster"
+
+#~ msgid "Toggle the toolbar on and off"
+#~ msgstr "Stäng av / på verktygsfältet"
+
+#~ msgid "Treat this file as read-only. No changes can be made."
+#~ msgstr "Behandla denna fil som skrivskyddad. Inga ändringar kan sparas."
+
+#~ msgid "Replaces all spaces in the document by tab characters."
+#~ msgstr ""
+#~ "Ersätter alla mellanslag i dokumentet med tab-tecken (indraget blir lika "
+#~ "stort)."
+
+#~ msgid "Folds all contractible code blocks"
+#~ msgstr "Viker ihop alla kodblock som hör ihop"
+
+#~ msgid "Unfolds all contracted code blocks"
+#~ msgstr "Viker upp alla kodblock som hör ihop"
+
+#~ msgid ""
+#~ "Counts the words and characters in the current selection or the whole "
+#~ "document"
+#~ msgstr "Räknar ord och tecken i markering eller hela dokumentet"
+
+#~ msgid "Load global tags file"
+#~ msgstr "Ladda global tagg-fil"
+
+#~ msgid ""
+#~ "Reload configuration data like snippets, templates and filetype "
+#~ "extensions."
+#~ msgstr ""
+#~ "Ladda om konfigurationen som snippet, mallar och filtypsidentifierare."
+
+#~ msgid "Shows a list of all keyboard shortcuts for Geany."
+#~ msgstr "Visar en lista med alla tangentbordsgenvägar för Geany."
+
+#~ msgid "Enter a line number and jump to it."
+#~ msgstr "Skriv in ett radnummer och gå till det."
+
+#~ msgid "Go to the entered line"
+#~ msgstr "Gå till rad"
+
+#~ msgid "Show full path name in documents list"
+#~ msgstr "Visa sökvägen i dokumentlistan"
+
+#, fuzzy
+#~ msgid "Show File Operation buttons"
+#~ msgstr "Visa filhanteringsknappar"
+
+#~ msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+#~ msgstr ""
+#~ "Visa Ny, Öppna, Stäng, Spara och Ladda Om-knapparna i verktygsfältet"
+
+#, fuzzy
+#~ msgid "Show Cut and Delete buttons"
+#~ msgstr "Visa Kompilera och Kör-knappar"
+
+#, fuzzy
+#~ msgid "Display the Cut and Delete buttons in the toolbar"
+#~ msgstr "Visa kompilera- och körknapparna i verktygsfältet"
+
+#, fuzzy
+#~ msgid "Show Copy and Paste buttons"
+#~ msgstr "Visa Kompilera och Kör-knappar"
+
+#, fuzzy
+#~ msgid "Display the Copy and Paste buttons in the toolbar"
+#~ msgstr "Visa kompilera- och körknapparna i verktygsfältet"
+
+#~ msgid "Show Redo and Undo buttons"
+#~ msgstr "Visa Gör Om- och Ångra-knapparna"
+
+#~ msgid "Display the Redo and Undo buttons in the toolbar"
+#~ msgstr "Visa Gör Om- och Ångra-knapparna i verktygsfältet"
+
+#~ msgid "Show Back and Forward buttons"
+#~ msgstr "Visa bakåt- och framåtknappar"
+
+#~ msgid ""
+#~ "Display the Back and Forward buttons in the toolbar used for code "
+#~ "navigation"
+#~ msgstr ""
+#~ "Visa bakåt- och framåtknapparna i verktygsfältet som används för "
+#~ "kodnavigering"
+
+#~ msgid "Show Compile and Run buttons"
+#~ msgstr "Visa Kompilera och Kör-knappar"
+
+#~ msgid "Display the Compile and Run buttons in the toolbar"
+#~ msgstr "Visa kompilera- och körknapparna i verktygsfältet"
+
+#~ msgid "Show Color Chooser button"
+#~ msgstr "Visa knapp för färgväljaren"
+
+#~ msgid "Display the Color Chooser button in the toolbar"
+#~ msgstr "Visa knappen för färgväljaren i verktygsfältet"
+
+#~ msgid "Show Zoom In and Zoom Out buttons"
+#~ msgstr "Visa förstorings- och förminskningsknappar"
+
+#~ msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+#~ msgstr "Visa förstoringsknapparna i verktygsfältet"
+
+#~ msgid "Show Increase and Decrease Indentation buttons"
+#~ msgstr "Visa knapparna för att öka/minska indrag"
+
+#~ msgid "Display the Increase and Decrease Indentation buttons in the toolbar"
+#~ msgstr "Visa öka / minska indragsknapparna verktygsfältet"
+
+#~ msgid "Show Search field"
+#~ msgstr "Visa sökfältet"
+
+#~ msgid "Display the search field and button in the toolbar"
+#~ msgstr "Visa sökfält och sökknapp i verktygsfältet"
+
+#~ msgid "Show Go to Line field"
+#~ msgstr "Visa Gå till rad-fältet"
+
+#~ msgid "Display the line number field and button in the toolbar"
+#~ msgstr "Visa radnummer och knapp i verktygsfältet"
+
+#~ msgid "Show Quit button"
+#~ msgstr "Visa Avsluta-knappen"
+
+#~ msgid "Display the quit button in the toolbar"
+#~ msgstr "Visa Avsluta-knappen i verktygsfältet"
+
+#~ msgid "<b>Items</b>"
+#~ msgstr "<b>Tillval</b>"
+
+#~ msgid "Runs in debug mode (means being verbose)"
+#~ msgstr "Kör i felsökningsläge (skriv ut extra information)"
+
+#~ msgid "Couldn't find pixmap file: %s"
+#~ msgstr "Kan inte hitta pixmap-fil: %s"
+
+#~ msgid "JavaScript functions"
+#~ msgstr "Javascript funktioner"
+
+#~ msgid "Heading (H2)"
+#~ msgstr "Rubrik (H2)"
+
+#~ msgid "Heading (H3)"
+#~ msgstr "Rubrik (H3)"
+
+#~ msgid "Structs / Typedefs"
+#~ msgstr "Strukturer och typdefinitioner"
+
+#~ msgid "Terminal emulation:"
+#~ msgstr "Terminal emulering:"
+
+#~ msgid ""
+#~ "Controls how the terminal emulator should behave. Do not change this "
+#~ "value unless you know exactly what you are doing."
+#~ msgstr ""
+#~ "Kontrollerar hur terminalemulatorn skall fungera. Ändra inte detta värde "
+#~ "om du inte vet precis vad du håller på med."
+
+#~ msgid "Failed to execute the terminal program"
+#~ msgstr "Misslyckades exekvera terminalprogrammet"
+
+#~ msgid "Save automatically all open files in a given time interval."
+#~ msgstr "Spara automatiskt alla öppna filer inom en given tidsintervall."
+
+#~ msgid "Whether to use tabs or spaces when indentation is inserted."
+#~ msgstr "Huruvida tab-tecken eller mellanslag skall användas vid indrag."
+
+#~ msgid "Rows of symbol completion list:"
+#~ msgstr "Rader i symbolkompletteringslistan:"
+
+#~ msgid "Could not parse the output of the diff"
+#~ msgstr "Kunde inge känna igen resultatet av DIFF-operationen"
+
+#~ msgid "Something very strange is occurred, could not stat %s (%s)."
+#~ msgstr "Något underligt hände, kunde inte starta %s (%s)"
+
+#~ msgid "Insert Comments"
+#~ msgstr "Infoga kommentarer"
+
+#~ msgid "Insert \"include <...>\""
+#~ msgstr "Infoga \"include <...>\""
+
+#~ msgid "File menu"
+#~ msgstr "Filmeny"
+
+#~ msgid "Edit menu"
+#~ msgstr "Redigeringsmeny"
+
+#~ msgid "Search menu"
+#~ msgstr "Sökmeny"
+
+#~ msgid "View menu"
+#~ msgstr "Visningsmeny"
+
+#~ msgid "Document menu"
+#~ msgstr "Dokumentmeny"
+
+#~ msgid "Build menu"
+#~ msgstr "Byggmeny"
+
+#~ msgid "Tools menu"
+#~ msgstr "Verktygsmeny"
+
+#~ msgid "Help menu"
+#~ msgstr "Hjälpmeny"
+
+#~ msgid "Focus commands"
+#~ msgstr "Fokuskommandon"
+
+#~ msgid "Tag commands"
+#~ msgstr "Märkningskommandon"
+
+#~ msgid "Something went really wrong."
+#~ msgstr "Någonting gick fel."
+
+#~ msgid "_VCdiff"
+#~ msgstr "VCdiff"
+
+#~ msgid "Unfold all children of a fold point when unfolding it."
+#~ msgstr "Vik ihop alla vid uppvikningspunkten"
+
+#~ msgid "Mixins"
+#~ msgstr "Mixins"
+
+#~ msgid "C++ source file"
+#~ msgstr "C++ källkodsfil"
+
+#~ msgid "C# source file"
+#~ msgstr "C# källkodsfil"
+
+#~ msgid "D source file"
+#~ msgstr "D källkodsfil"
+
+#~ msgid "Java source file"
+#~ msgstr "Java källkodsfil"
+
+#~ msgid "Pascal source file"
+#~ msgstr "Pascal källkodsfil"
+
+#~ msgid "Assembler source file"
+#~ msgstr "Assembler källkodsfil"
+
+#~ msgid "FreeBasic source file"
+#~ msgstr "FreeBasic"
+
+#~ msgid "Fortran source file (F77)"
+#~ msgstr "Fortran källkodsfil (F77)"
+
+#~ msgid "(O)Caml source file"
+#~ msgstr "(O)Caml källkodsfil"
+
+#~ msgid "Perl source file"
+#~ msgstr "Perl källkodsfil"
+
+#~ msgid "PHP source file"
+#~ msgstr "PHP källkodsfil"
+
+#~ msgid "Python source file"
+#~ msgstr "Python källkodsfil"
+
+#~ msgid "Ruby source file"
+#~ msgstr "Ruby källkodsfil"
+
+#~ msgid "Tcl source file"
+#~ msgstr "Tcl källkodsfil"
+
+#~ msgid "Lua source file"
+#~ msgstr "Lua källkodsfil"
+
+#~ msgid "Ferite source file"
+#~ msgstr "Ferite källkodsfil"
+
+#~ msgid "Docbook source file"
+#~ msgstr "Docbook källkodsfil"
+
+#~ msgid "HTML source file"
+#~ msgstr "HTML källkodsfil"
+
+#~ msgid "LaTeX source file"
+#~ msgstr "LaTeX källkodsfil"
+
+#~ msgid "O-Matrix source file"
+#~ msgstr "O-Matrix källkodsfil"
+
+#~ msgid "VHDL source file"
+#~ msgstr "VHDL källkodsfil"
+
+#~ msgid "Haxe source file"
+#~ msgstr "Haxe källkodsfil"
+
+#~ msgid "Open files"
+#~ msgstr "Öppna filer"
+
+#~ msgid ""
+#~ "Whenever some whitespace is inserted by Geany it will use tabs when "
+#~ "enabled otherwise Geany will use just spaces."
+#~ msgstr ""
+#~ "När tomrumstecken infogas av Geany kommer tab-tecken att användas, om "
+#~ "tillvalet är påslaget, annars används mellanslag att användas. "
+
+#~ msgid "Construct autocompletion"
+#~ msgstr "Autokomplettera konstruktioner"
+
+#~ msgid "Automatic completion of often used constructs like if and for"
+#~ msgstr ""
+#~ "Automatisk komplettering av ofta använda konstruktioner som <i>if</i> "
+#~ "eller <i>for</i>"
+
+#~ msgid "Print:"
+#~ msgstr "Skriv ut:"
+
+#~ msgid ""
+#~ "Directory to run Make All from. Leave blank to use the default command."
+#~ msgstr ""
+#~ "Sökväg att köra Make All från. Lämna tom om du vill köra förvalt kommando."
+
+#~ msgid "Hide"
+#~ msgstr "Göm"
+
+#~ msgid "Reload"
+#~ msgstr "Uppdatera"

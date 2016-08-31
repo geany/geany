@@ -1,0 +1,10 @@
+# format=tagmanager
+ClsÌ1Í(name)Ö0
+f1Ì16Í()Ö0
+f2Ì16Í(arg1, arg2)Ö0
+f3Ì16Í( arg1,  arg2,  arg3 )Ö0
+f4Ì16Í(a, b, c)Ö0
+get_nameÌ128Í()ÎClsÖ0
+helloÌ128Í(tpl)ÎClsÖ0
+mainÌ16Í()Ö0
+set_nameÌ128Í(name)ÎClsÖ0

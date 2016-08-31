@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+localedir=@localedir@
+
+Name: Geany
+Description: A fast and lightweight IDE using GTK+
+Requires: @DEPENDENCIES@
+Version: @VERSION@
+Libs: -L${libdir} -lgeany
+Cflags: -DGTK -I${includedir}/geany -I${includedir}/geany/tagmanager -I${includedir}/geany/scintilla

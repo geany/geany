@@ -1,0 +1,5 @@
+# format=tagmanager
+RPCÌ1ÎTestÖ0
+asyncMethodÌ128Í(  uri,  method,  params,  callback)ÎTest.RPCÖ0
+asyncRequestÌ128Í(  uri,  data,  callback)ÎTest.RPCÖ0
+request_idÌ64ÎTest.RPCÖ0

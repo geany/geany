@@ -1,0 +1,69 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment_line
+stringdq=string_1
+stringlq=string_2
+stringrq=string_2
+function=keyword_1
+variable=type
+label=label
+userdefined=keyword_2
+sectiondef=keyword_1
+subsectiondef=keyword_1
+ifdefinedef=keyword_1
+macrodef=keyword_1
+stringvar=string_1
+number=number_1
+sectiongroup=keyword_1
+pageex=keyword_1
+functiondef=keyword_1
+commentbox=comment
+
+[keywords]
+# all items must be in one line and in lowercase
+functions=abort addbrandingimage !addincludedir !addincludedirdir !addplugindir addsize addsizesize_to_add_to_section_in_kb allowrootdirinstall allowskipfiles !appendfile autoclosewindow bgfont bggradient brandingtext bringtofront call callinstdll caption captioninstaller_caption !cd changeui checkbitmap clearerrors completedtext componenttext contributors: copyfiles crccheck createdirectory createdirectorydirectory_name createfont createshortcut !define delete deleteinisec deleteinistr deleteregkey deleteregvalue !delfilefile detailprint detailprintmessage detailsbuttontext dirshow dirtext dirvar dirverify dirverifyauto !echo !echomessage !else enablewindow !endif enumregkey enumregvalue !error exch exec execshell !execute execwait expandenvstrings file filebufsize fileclose fileerrortext fileopen fileread filereadbyte fileseek filewrite filewritebyte findclose findfirst findnext findwindow flushini function functionend function_name getcurinsttype getcurrentaddress getcurrentaddressoutput getdlgitem getdllversion getdllversionlocal geterrorlevel getfiletime getfiletimelocal getfullpathname getfunctionaddress getinstdirerror getlabeladdress gettempfilename goto gotolabel hidewindow icon !if ifabort !ifdef iferrors iffileexists !ifmacrodef !ifmacrondef !ifndef ifrebootflag ifsilent !include initpluginsdir !insertmacro installbuttontext installcolors installdir installdirregkey instprogressflags insttype insttypegettext insttypesettext intcmp intcmpu intfmt intop iswindow langstring langstringup licensebkcolor licensedata licenseforceselection licenselangstring licensetext loadlanguagefile lockwindow logset logtext !macro !macroend makensis messagebox miscbuttontext name none nop outfile !packhdr page pagecallbacks pageex pageexend pop portions push pushstring quit readenvstr readinistr readregdword readregstr reboot regdll rename requestexecutionlevel reservefile return rmdir !searchparse searchpath !searchreplace section sectionend sectiongetflags sectiongetinsttypes sectiongetsize sectiongettext sectiongroup sectiongroupend sectionin sectionsetflags sectionsetinsttypes sectionsetsize sectionsettext sendmessage setautoclose setbrandingimage setcompress setcompressionlevel setcompressor setcompressordictsize setctlcolors setcurinsttype setdatablockoptimize setdatesave setdetailsprint setdetailsview seterrorlevel seterrors setfileattributes setfont setoutpath setoverwrite setpluginunload setrebootflag setregview setshellvarcontext setsilent showinstdetails showuninstdetails showwindow silentinstall silentuninstall sleep spacetexts strcmp strcmps strcpy strlen subcaption subsection subsectionend !system !tempfilesymbol !undef uninstallbuttontext uninstallcaption uninstallexename uninstallicon uninstallsubcaption uninstalltext uninstpage unregdll var !verbose viaddversionkey viproductversion !warning windowicon writeinistr writeregbin writeregdword writeregexpandstr writeregstr writeuninstaller xpstyle
+variables=$$ $` $' $" $0 $0, $1 $2 $3 $4 $5 $6 $7 $8 $9 $admintools $appdata $cdburn_area $cmdline $commonfiles $cookies $desktop $documents $exedir $favorites $fonts $history $hwndparent $instdir $internet_cache $language $music $nethood ${nsisdir} $outdir $pictures $pluginsdir $printhood $profile $programfiles $quicklaunch $\r $r0 $r1 $r2 $r3 $r4 $r5 $r6 $r7 $r8 $r9 $recent $resources $resources_localized $sendto $smprograms $smstartup $startmenu $sysdir $temp $templates $varname $videos $windir
+lables=all alt alwaysoff archive auto both bottom bzip2 center colored components control current custom directory dlg_id ext false file_attribute_archive file_attribute_hidden file_attribute_normal file_attribute_offline file_attribute_readonly file_attribute_system file_attribute_temporary filesonly force hidden hide hkcc hkcr hkcu hkdd hkey_classes_root hkey_current_config hkey_current_user hkey_dyn_data hkey_local_machine hkey_performance_data hkey_users hklm hkpd hku idabort idcancel idignore idno idok idretry idyes ifdiff ifnewer instfiles italic  lastused leave left license listonly lzma manual mb_abortretryignore mb_defbutton1 mb_defbutton2 mb_defbutton3 mb_defbutton4 mb_iconexclamation mb_iconinformation mb_iconquestion mb_iconstop mb_ok mb_okcancel mb_retrycancel mb_right mb_setforeground mb_topmost mb_yesno mb_yesnocancel nevershow none nonfatal normal of off offline on open print readonly rebootok right shctx shift show silent silentlog smooth strike sw_hide  sw_showmaximized sw_showmaximized  sw_showminimized sw_showminimized  sw_showminnoactive  sw_showna  sw_shownoactivate  sw_shownormal sw_shownormal  system temporary textonly top trim true try underline  uninstconfirm zlib
+userdefined=
+
+[lexer_properties]
+nsis.uservars=1
+nsis.ignorecase=1
+
+[settings]
+# default extension used when saving files
+extension=nsi
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# single comments, like # in this file
+comment_single=;
+# multiline comments
+#comment_open=
+#comment_close=
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=makensis "%f"
+run_cmd="./%e"

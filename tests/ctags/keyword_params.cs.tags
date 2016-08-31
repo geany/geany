@@ -1,0 +1,5 @@
+# format=tagmanager
+MainÌ128Í()ÎMyClassÖ0Ïpublic void
+MyClassÌ1Ö0
+UseParamsÌ128Í(params int[] list)ÎMyClassÖ0Ïpublic void
+UseParams2Ì128Í(params object[] list)ÎMyClassÖ0Ïpublic void

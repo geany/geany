@@ -1,0 +1,6548 @@
+# Mongolian translations for Geany package.
+# Copyright (C) 2011 THE Geany'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Geany package.
+# tsetsee <tsetsee.yugi@gmail.com>, 2011.
+# Цэцэнцэнгэл <tsetsee.yugi@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Geany 1.28\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-06-27 18:56+0200\n"
+"PO-Revision-Date: 2011-11-09 01:15+0530\n"
+"Last-Translator: Цэцэнцэнгэл <tsetsee.yugi@gmail.com>\n"
+"Language-Team: Монгол <tsetsee.yugi@gmail.com>\n"
+"Language: mn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bits\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
+msgid "Geany"
+msgstr "Жиени"
+
+#: ../geany.desktop.in.h:2
+msgid "Integrated Development Environment"
+msgstr ""
+
+#: ../geany.desktop.in.h:3
+#, fuzzy
+msgid "A fast and lightweight IDE using GTK+"
+msgstr "Хурдан авсаархан IDE"
+
+#: ../geany.desktop.in.h:4
+#, fuzzy
+msgid "Text;Editor;"
+msgstr "Засварлагч"
+
+#: ../data/geany.glade.h:1
+#, fuzzy
+msgid "_Toolbar Preferences"
+msgstr "Тохиргоо"
+
+#: ../data/geany.glade.h:2
+#, fuzzy
+msgid "_Hide Toolbar"
+msgstr "Багаж самбарыг нуу"
+
+#: ../data/geany.glade.h:3
+msgid "_Edit"
+msgstr "_Засах"
+
+#: ../data/geany.glade.h:4
+msgid "_Format"
+msgstr "_Хэлбэржилт"
+
+#: ../data/geany.glade.h:5
+#, fuzzy
+msgid "I_nsert"
+msgstr "Огн_оо Оруулах"
+
+#: ../data/geany.glade.h:6
+#, fuzzy
+msgid "Insert _ChangeLog Entry"
+msgstr "ChangeLog-ийг оруулах"
+
+#: ../data/geany.glade.h:7
+#, fuzzy
+msgid "Insert _Function Description"
+msgstr "Функцын Тайлбар Оруулах"
+
+#: ../data/geany.glade.h:8
+#, fuzzy
+msgid "Insert Mu_ltiline Comment"
+msgstr "Олон мөрийн Тайлбар Оруулах"
+
+#: ../data/geany.glade.h:9
+msgid "_More"
+msgstr ""
+
+#: ../data/geany.glade.h:10
+#, fuzzy
+msgid "Insert File _Header"
+msgstr "Толгой Файл Оруулах"
+
+#: ../data/geany.glade.h:11
+#, fuzzy
+msgid "Insert _GPL Notice"
+msgstr "GPL-ийг оруулах"
+
+#: ../data/geany.glade.h:12
+#, fuzzy
+msgid "Insert _BSD License Notice"
+msgstr "BSD Лиценз оруулах"
+
+#: ../data/geany.glade.h:13
+msgid "Insert Dat_e"
+msgstr "Огн_оо Оруулах"
+
+#: ../data/geany.glade.h:14
+msgid "invisible"
+msgstr "үл үзэгдэх"
+
+#: ../data/geany.glade.h:15
+msgid "_Insert \"include <...>\""
+msgstr "\"include <...>\"-ийг _оруулах"
+
+#: ../data/geany.glade.h:16 ../src/keybindings.c:507
+msgid "Insert Alternative _White Space"
+msgstr ""
+
+#: ../data/geany.glade.h:17
+msgid "_Search"
+msgstr "_Хайх"
+
+#: ../data/geany.glade.h:18
+msgid "Open Selected F_ile"
+msgstr "Сонгосон Ф_айлыг нээх"
+
+#: ../data/geany.glade.h:19 ../src/symbols.c:2507
+#, fuzzy
+msgid "Find _Usage"
+msgstr "Хэрэглээг хай"
+
+#: ../data/geany.glade.h:20 ../src/symbols.c:2512
+#, fuzzy
+msgid "Find _Document Usage"
+msgstr "Хэрэглээг хай"
+
+#: ../data/geany.glade.h:21
+#, fuzzy
+msgid "Go to Symbol Defini_tion"
+msgstr "Go to Tag Definition"
+
+#: ../data/geany.glade.h:22
+msgid "Conte_xt Action"
+msgstr ""
+
+#. Column legend:
+#. *   [0] = Filetype constant (GEANY_FILETYPES_*)
+#. *   [1] = CTags parser (TM_PARSER_*)
+#. *   [2] = Non-translated filetype name (*not* label for display)
+#. *   [3] = Translatable human filetype title prefix or NULL to use [2]
+#. *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
+#. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+#. * --------------------------------------------------------------------------------------------------------------------------
+#. *       [0]         [1]           [2]                 [3]                        [4]          [5]
+#: ../data/geany.glade.h:23 ../src/filetypes.c:128 ../src/filetypes.c:1535
+msgid "None"
+msgstr "Юу ч биш"
+
+#: ../data/geany.glade.h:24
+msgid "Basic"
+msgstr ""
+
+#: ../data/geany.glade.h:25
+msgid "Current chars"
+msgstr ""
+
+#: ../data/geany.glade.h:26
+msgid "Match braces"
+msgstr ""
+
+#: ../data/geany.glade.h:27
+msgid "Left"
+msgstr "Зүүн"
+
+#: ../data/geany.glade.h:28
+msgid "Right"
+msgstr "Баруун"
+
+#: ../data/geany.glade.h:29
+msgid "Top"
+msgstr "Дээш"
+
+#: ../data/geany.glade.h:30
+msgid "Bottom"
+msgstr "Доош"
+
+#: ../data/geany.glade.h:31 ../src/keybindings.c:517
+msgid "Preferences"
+msgstr "Тохиргоо"
+
+#: ../data/geany.glade.h:32
+msgid "Load files from the last session"
+msgstr "Сүүлд ажиллаж байсан файлуудыг ачаалал"
+
+#: ../data/geany.glade.h:33
+msgid "Opens at startup the files from the last session"
+msgstr "Сүүлд ажиллаж байснаас эхлэх файлыг нээ"
+
+#: ../data/geany.glade.h:34
+#, fuzzy
+msgid "Load virtual terminal support"
+msgstr "Load virtual terminal emulation at startup"
+
+#: ../data/geany.glade.h:35
+#, fuzzy
+msgid ""
+"Whether the virtual terminal emulation (VTE) should be loaded at startup, "
+"disable it if you do not need it"
+msgstr ""
+"Whether the virtual terminal emulation(VTE) should be loaded at startup. "
+"Disable it if you do not need it."
+
+#: ../data/geany.glade.h:36
+msgid "Enable plugin support"
+msgstr ""
+
+#: ../data/geany.glade.h:37
+#, fuzzy
+msgid "<b>Startup</b>"
+msgstr "<b>Хажуу самбар</b>"
+
+#: ../data/geany.glade.h:38
+msgid "Save window position and geometry"
+msgstr "Цонхны байрлал хэлбэрийг хадгал"
+
+#: ../data/geany.glade.h:39
+msgid "Saves the window position and geometry and restores it at the start"
+msgstr "Цонхны байрлал хэлбэрийг хадгалаад эхлэлд буцааж сэргээ"
+
+#: ../data/geany.glade.h:40
+msgid "Confirm exit"
+msgstr "Гарахыг баталгаажуул"
+
+#: ../data/geany.glade.h:41
+#, fuzzy
+msgid "Shows a confirmation dialog on exit"
+msgstr "Гарахад баталгаажуулах асуултыг харуул."
+
+#: ../data/geany.glade.h:42
+#, fuzzy
+msgid "<b>Shutdown</b>"
+msgstr "<b>Эхлүүлэх унтраах</b>"
+
+#: ../data/geany.glade.h:43
+msgid "Startup path:"
+msgstr ""
+
+#: ../data/geany.glade.h:44
+msgid ""
+"Path to start in when opening or saving files. Must be an absolute path."
+msgstr ""
+
+#: ../data/geany.glade.h:45
+#, fuzzy
+msgid "Project files:"
+msgstr "_Төсөл"
+
+#: ../data/geany.glade.h:46
+msgid "Path to start in when opening project files"
+msgstr ""
+
+#: ../data/geany.glade.h:47
+msgid "Extra plugin path:"
+msgstr ""
+
+#: ../data/geany.glade.h:48
+msgid ""
+"Geany looks by default in the global installation path and in the "
+"configuration directory. The path entered here will be searched additionally "
+"for plugins. Leave blank to disable."
+msgstr ""
+
+#: ../data/geany.glade.h:49
+#, fuzzy
+msgid "<b>Paths</b>"
+msgstr "<b>Багажийн зам</b>"
+
+#: ../data/geany.glade.h:50
+msgid "Startup"
+msgstr ""
+
+#: ../data/geany.glade.h:51
+msgid "Beep on errors or when compilation has finished"
+msgstr "Алдаа гарахад эсвэл хөрвүүлэлт дуусахад дуугарах"
+
+#: ../data/geany.glade.h:52
+#, fuzzy
+msgid ""
+"Whether to beep if an error occurred or when the compilation process has "
+"finished"
+msgstr "Алдаа гарах эсвэл хөрвүүлэлт дуусахад дуу гарах эсэх"
+
+#: ../data/geany.glade.h:53
+msgid "Switch to status message list at new message"
+msgstr "Шинэ мэдээд төлвийн мэдээний жагсаалтруу шилжих"
+
+#: ../data/geany.glade.h:54
+#, fuzzy
+msgid ""
+"Switch to the status message tab (in the notebook window at the bottom) if a "
+"new status message arrives"
+msgstr "Шинэ төлвийн мэдээ гарвал төлвийн мэдээрүү (Цонхны доод хэсэгт) шилж."
+
+#: ../data/geany.glade.h:55
+msgid "Suppress status messages in the status bar"
+msgstr ""
+
+#: ../data/geany.glade.h:56
+msgid ""
+"Removes all messages from the status bar. The messages are still displayed "
+"in the status messages window."
+msgstr ""
+
+#: ../data/geany.glade.h:57
+msgid "Auto-focus widgets (focus follows mouse)"
+msgstr ""
+
+#: ../data/geany.glade.h:58
+msgid ""
+"Gives the focus automatically to widgets below the mouse cursor. Works for "
+"the main editor widget, the scribble, the toolbar search and goto line "
+"fields and the VTE."
+msgstr ""
+
+#: ../data/geany.glade.h:59
+msgid "Use Windows native dialogs"
+msgstr ""
+
+#: ../data/geany.glade.h:60
+msgid ""
+"Defines whether to use the Windows native dialogs or whether to use the GTK "
+"default dialogs"
+msgstr ""
+
+#: ../data/geany.glade.h:61
+#, fuzzy
+msgid "<b>Miscellaneous</b>"
+msgstr "<b>Misc.</b>"
+
+#: ../data/geany.glade.h:62
+msgid "Always wrap search"
+msgstr ""
+
+#: ../data/geany.glade.h:63
+#, fuzzy
+msgid "Always wrap search around the document"
+msgstr "Always wrap search and hide the Find dialog"
+
+#: ../data/geany.glade.h:64
+#, fuzzy
+msgid "Hide the Find dialog"
+msgstr "Always wrap search and hide the Find dialog"
+
+#: ../data/geany.glade.h:65
+#, fuzzy
+msgid "Hide the Find dialog after clicking Find Next/Previous"
+msgstr ""
+"Always wrap search around the document and hide the Find dialog after "
+"clicking Find Next/Previous"
+
+#: ../data/geany.glade.h:66
+msgid "Use the current word under the cursor for Find dialogs"
+msgstr ""
+
+#: ../data/geany.glade.h:67
+msgid ""
+"Use current word under the cursor when opening the Find, Find in Files or "
+"Replace dialog and there is no selection"
+msgstr ""
+
+#: ../data/geany.glade.h:68
+#, fuzzy
+msgid "Use the current file's directory for Find in Files"
+msgstr "Файлыг PDF файл-руу хөрвүүлэх"
+
+#: ../data/geany.glade.h:69
+#, fuzzy
+msgid "<b>Search</b>"
+msgstr "<b>Хажуу самбар</b>"
+
+#: ../data/geany.glade.h:70
+msgid "Use project-based session files"
+msgstr ""
+
+#: ../data/geany.glade.h:71
+msgid ""
+"Whether to store a project's session files and open them when re-opening the "
+"project"
+msgstr ""
+
+#: ../data/geany.glade.h:72
+msgid "Store project file inside the project base directory"
+msgstr ""
+
+#: ../data/geany.glade.h:73
+msgid ""
+"When enabled, a project file is stored by default inside the project base "
+"directory when creating new projects instead of one directory above the base "
+"directory. You can still change the path of the project file in the New "
+"Project dialog."
+msgstr ""
+
+#: ../data/geany.glade.h:74
+#, fuzzy
+msgid "<b>Projects</b>"
+msgstr "<b>Фонт</b>"
+
+#: ../data/geany.glade.h:75 ../src/dialogs.c:232
+msgid "Miscellaneous"
+msgstr ""
+
+#. TODO Find a better way to map the current notebook page to the
+#. * corresponding chapter in the documentation, comparing translatable
+#. * strings is easy to break. Maybe attach an identifying string to the
+#. * tab label object.
+#: ../data/geany.glade.h:76 ../src/prefs.c:1604
+msgid "General"
+msgstr "Ерөнхий"
+
+#: ../data/geany.glade.h:77
+msgid "Show symbol list"
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
+
+#: ../data/geany.glade.h:78
+msgid "Toggle the symbol list on and off"
+msgstr "Тэмдэгтийн жагсаалтыг нээх хаахыг заа"
+
+#: ../data/geany.glade.h:79
+msgid "Default symbol sorting mode"
+msgstr ""
+
+#: ../data/geany.glade.h:80
+#, fuzzy
+msgid "Default sorting mode:"
+msgstr "Энкодчлол:"
+
+#: ../data/geany.glade.h:81 ../src/stash.c:1170
+msgid "Name"
+msgstr ""
+
+#: ../data/geany.glade.h:82
+#, fuzzy
+msgid "Appearance"
+msgstr "<b>Харагдац</b>"
+
+#: ../data/geany.glade.h:83
+#, fuzzy
+msgid "Show documents list"
+msgstr "Нээлттэй файлыг жагсаалтыг харуул"
+
+#: ../data/geany.glade.h:84
+#, fuzzy
+msgid "Toggle the documents list on and off"
+msgstr "Тэмдэгтийн жагсаалтыг нээх хаахыг заа"
+
+#: ../data/geany.glade.h:85
+#, fuzzy
+msgid "Show sidebar"
+msgstr "Ха_жуу самбарыг Харуул"
+
+#: ../data/geany.glade.h:86
+msgid "Position:"
+msgstr ""
+
+#: ../data/geany.glade.h:87
+msgid "<b>Sidebar</b>"
+msgstr "<b>Хажуу самбар</b>"
+
+#: ../data/geany.glade.h:88
+#, fuzzy
+msgid "<b>Message window</b>"
+msgstr "Мэдээний цонх:"
+
+#: ../data/geany.glade.h:89
+msgid "Symbol list:"
+msgstr "Тэмдэгтийн жагсаалт:"
+
+#: ../data/geany.glade.h:90
+msgid "Message window:"
+msgstr "Мэдээний цонх:"
+
+#: ../data/geany.glade.h:91
+msgid "Editor:"
+msgstr "Засварлагч:"
+
+#: ../data/geany.glade.h:92
+msgid "Sets the font for the message window"
+msgstr "Мэдээний цонхны фонтыг заа"
+
+#: ../data/geany.glade.h:93
+msgid "Sets the font for the symbol list"
+msgstr "Тэмдэгтийн жагсаалтын фонтыг заа"
+
+#: ../data/geany.glade.h:94
+msgid "Sets the editor font"
+msgstr "Засварлагчийн фонтыг заа"
+
+#: ../data/geany.glade.h:95
+msgid "<b>Fonts</b>"
+msgstr "<b>Фонт</b>"
+
+#: ../data/geany.glade.h:96
+msgid "Show status bar"
+msgstr ""
+
+#: ../data/geany.glade.h:97
+msgid "Whether to show the status bar at the bottom of the main window"
+msgstr ""
+
+#: ../data/geany.glade.h:98 ../src/prefs.c:1606
+msgid "Interface"
+msgstr "Интерфейс"
+
+#: ../data/geany.glade.h:99
+msgid "Show editor tabs"
+msgstr "Засварлагчийн хэсгийг харуул"
+
+#: ../data/geany.glade.h:100
+#, fuzzy
+msgid "Show close buttons"
+msgstr "Өнгө сонгох товчийг харуул"
+
+#: ../data/geany.glade.h:101
+msgid ""
+"Shows a small cross button in the file tabs to easily close files when "
+"clicking on it (requires restart of Geany)"
+msgstr ""
+
+#: ../data/geany.glade.h:102
+msgid "Placement of new file tabs:"
+msgstr "Placement of new file tabs:"
+
+#: ../data/geany.glade.h:103
+msgid "File tabs will be placed on the left of the notebook"
+msgstr "File tabs will be placed on the left of the notebook"
+
+#: ../data/geany.glade.h:104
+msgid "File tabs will be placed on the right of the notebook"
+msgstr "File tabs will be placed on the right of the notebook"
+
+#: ../data/geany.glade.h:105
+#, fuzzy
+msgid "Next to current"
+msgstr "Файлыг хадгал"
+
+#: ../data/geany.glade.h:106
+msgid ""
+"Whether to place file tabs next to the current tab rather than at the edges "
+"of the notebook"
+msgstr ""
+
+#: ../data/geany.glade.h:107
+msgid "Double-clicking hides all additional widgets"
+msgstr ""
+
+#: ../data/geany.glade.h:108
+msgid "Calls the View->Toggle All Additional Widgets command"
+msgstr ""
+
+#: ../data/geany.glade.h:109
+msgid "Switch to last used document after closing a tab"
+msgstr ""
+
+#: ../data/geany.glade.h:110
+#, fuzzy
+msgid "<b>Editor tabs</b>"
+msgstr "<b>Фонт</b>"
+
+#: ../data/geany.glade.h:111
+msgid "Sidebar:"
+msgstr "Хажуу самбар:"
+
+#: ../data/geany.glade.h:112
+#, fuzzy
+msgid "<b>Tab positions</b>"
+msgstr "<b>Байршил:</b>"
+
+#: ../data/geany.glade.h:113
+msgid "Notebook tabs"
+msgstr ""
+
+#: ../data/geany.glade.h:114
+#, fuzzy
+msgid "Show t_oolbar"
+msgstr "Багаж _Самбарыг Харуул"
+
+#: ../data/geany.glade.h:115
+msgid "_Append toolbar to the menu"
+msgstr ""
+
+#: ../data/geany.glade.h:116
+msgid "Pack the toolbar to the main menu to save vertical space"
+msgstr ""
+
+#: ../data/geany.glade.h:117 ../src/toolbar.c:944
+#, fuzzy
+msgid "Customize Toolbar"
+msgstr "Багаж самбарыг харуул"
+
+#: ../data/geany.glade.h:118
+msgid "System _default"
+msgstr ""
+
+#: ../data/geany.glade.h:119
+#, fuzzy
+msgid "Images _and text"
+msgstr "Зураг болон текст"
+
+#: ../data/geany.glade.h:120
+#, fuzzy
+msgid "_Images only"
+msgstr "Зөвхөн зураг"
+
+#: ../data/geany.glade.h:121
+#, fuzzy
+msgid "_Text only"
+msgstr "Зөвхөн текст"
+
+#: ../data/geany.glade.h:122
+#, fuzzy
+msgid "<b>Icon style</b>"
+msgstr "Icon style:"
+
+#: ../data/geany.glade.h:123
+msgid "S_ystem default"
+msgstr ""
+
+#: ../data/geany.glade.h:124
+#, fuzzy
+msgid "_Small icons"
+msgstr "Жижиг icon"
+
+#: ../data/geany.glade.h:125
+#, fuzzy
+msgid "_Very small icons"
+msgstr "Жижиг icon"
+
+#: ../data/geany.glade.h:126
+#, fuzzy
+msgid "_Large icons"
+msgstr "Том icon"
+
+#: ../data/geany.glade.h:127
+#, fuzzy
+msgid "<b>Icon size</b>"
+msgstr "<b>Хэмжээ:</b>"
+
+#: ../data/geany.glade.h:128
+#, fuzzy
+msgid "<b>Toolbar</b>"
+msgstr "<b>Багажийн зам</b>"
+
+#: ../data/geany.glade.h:129 ../src/prefs.c:1608
+msgid "Toolbar"
+msgstr "Багаж самбар"
+
+#: ../data/geany.glade.h:130
+msgid "Line wrapping"
+msgstr "Line wrapping"
+
+#: ../data/geany.glade.h:131
+msgid ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+msgstr ""
+"Wrap the line at the window border and continue it on the next line. Note: "
+"line wrapping has a high performance cost for large documents so should be "
+"disabled on slow machines."
+
+#: ../data/geany.glade.h:132
+msgid "\"Smart\" home key"
+msgstr ""
+
+#: ../data/geany.glade.h:133
+msgid ""
+"When \"smart\" home is enabled, the HOME key will move the caret to the "
+"first non-blank character of the line, unless it is already there, it moves "
+"to the very beginning of the line. When this feature is disabled, the HOME "
+"key always moves the caret to the start of the current line, regardless of "
+"its current position."
+msgstr ""
+
+#: ../data/geany.glade.h:134
+msgid "Disable Drag and Drop"
+msgstr "Чирэх үйлдлийг идэвхгүй болгох"
+
+#: ../data/geany.glade.h:135
+#, fuzzy
+msgid ""
+"Disable drag and drop completely in the editor window so you can't drag and "
+"drop any selections within or outside of the editor window"
+msgstr "Чирэх үйлдлийг идэвхгүй болгосон болохоор чирэх үйлдэл хийх боломжгүй."
+
+#: ../data/geany.glade.h:136
+#, fuzzy
+msgid "Code folding"
+msgstr "Enable folding"
+
+#: ../data/geany.glade.h:137
+#, fuzzy
+msgid "Fold/unfold all children of a fold point"
+msgstr "Unfold all children of a fold point"
+
+#: ../data/geany.glade.h:138
+msgid ""
+"Fold or unfold all children of a fold point. By pressing the Shift key while "
+"clicking on a fold symbol the contrary behavior is used."
+msgstr ""
+
+#: ../data/geany.glade.h:139
+msgid "Use indicators to show compile errors"
+msgstr "Хөрвүүлэлтийн алдааг харуулахад заагчийг ашигла"
+
+#: ../data/geany.glade.h:140
+#, fuzzy
+msgid ""
+"Whether to use indicators (a squiggly underline) to highlight the lines "
+"where the compiler found a warning or an error"
+msgstr "Хөрвүүлэгч анхааруулга эсвэл алдааг олоход заагч тэр мөрийг тодруулна."
+
+#: ../data/geany.glade.h:141
+#, fuzzy
+msgid "Newline strips trailing spaces"
+msgstr "Strip trailing spaces"
+
+#: ../data/geany.glade.h:142
+msgid "Enable newline to strip the trailing spaces on the previous line"
+msgstr ""
+
+#: ../data/geany.glade.h:143
+msgid "Line breaking column:"
+msgstr ""
+
+#: ../data/geany.glade.h:144
+#, fuzzy
+msgid "Comment toggle marker:"
+msgstr "Long line marker:"
+
+#: ../data/geany.glade.h:145
+msgid ""
+"A string which is added when toggling a line comment in a source file, it is "
+"used to mark the comment as toggled."
+msgstr ""
+
+#: ../data/geany.glade.h:146
+msgid "<b>Features</b>"
+msgstr "<b>Үзүүлэлт</b>"
+
+#: ../data/geany.glade.h:147
+#, fuzzy
+msgid "Features"
+msgstr "<b>Үзүүлэлт</b>"
+
+#: ../data/geany.glade.h:148
+msgid ""
+"Note: To apply these settings to all currently open documents, use "
+"<i>Project->Apply Default Indentation</i>."
+msgstr ""
+
+#: ../data/geany.glade.h:149
+#, fuzzy
+msgid "Width:"
+msgstr "Хэсгийн өргөх:"
+
+#: ../data/geany.glade.h:150
+#, fuzzy
+msgid "The width in chars of a single indent"
+msgstr "The width in chars, which one tab character will take"
+
+#: ../data/geany.glade.h:151
+#, fuzzy
+msgid "Auto-indent mode:"
+msgstr "Автомат тодорхойологч"
+
+#: ../data/geany.glade.h:152
+#, fuzzy
+msgid "Detect type from file"
+msgstr "Файлаас тогтоо"
+
+#: ../data/geany.glade.h:153
+msgid ""
+"Whether to detect the indentation type from file contents when a file is "
+"opened"
+msgstr ""
+
+#: ../data/geany.glade.h:154
+msgid "T_abs and spaces"
+msgstr ""
+
+#: ../data/geany.glade.h:155
+msgid ""
+"Use spaces if the total indent is less than the tab width, otherwise use both"
+msgstr ""
+
+#: ../data/geany.glade.h:156
+msgid "_Spaces"
+msgstr ""
+
+#: ../data/geany.glade.h:157
+#, fuzzy
+msgid "Use spaces when inserting indentation"
+msgstr "Хоосон зай оруулахад tabulator-ыг хэрэглэ"
+
+#: ../data/geany.glade.h:158
+msgid "_Tabs"
+msgstr ""
+
+#: ../data/geany.glade.h:159
+msgid "Use one tab per indent"
+msgstr ""
+
+#: ../data/geany.glade.h:160
+#, fuzzy
+msgid "Detect width from file"
+msgstr "Файлаас тогтоо"
+
+#: ../data/geany.glade.h:161
+msgid ""
+"Whether to detect the indentation width from file contents when a file is "
+"opened"
+msgstr ""
+
+#: ../data/geany.glade.h:162
+msgid "Type:"
+msgstr "Төрөл:"
+
+#: ../data/geany.glade.h:163
+msgid "Tab key indents"
+msgstr ""
+
+#: ../data/geany.glade.h:164
+msgid ""
+"Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
+msgstr ""
+
+#: ../data/geany.glade.h:165
+#, fuzzy
+msgid "<b>Indentation</b>"
+msgstr "<b>Байршил:</b>"
+
+#: ../data/geany.glade.h:166
+#, fuzzy
+msgid "Indentation"
+msgstr "Автомат тодорхойологч"
+
+#: ../data/geany.glade.h:167
+#, fuzzy
+msgid "Snippet completion"
+msgstr "Гүйцээлтийг байгуул"
+
+#: ../data/geany.glade.h:168
+msgid ""
+"Type a defined short character sequence and complete it to a more complex "
+"string using a single keypress"
+msgstr ""
+
+#: ../data/geany.glade.h:169
+#, fuzzy
+msgid "XML/HTML tag auto-closing"
+msgstr "XML тагийн гүйцээлт"
+
+#: ../data/geany.glade.h:170
+msgid "Insert matching closing tag for XML/HTML"
+msgstr ""
+
+#: ../data/geany.glade.h:171
+msgid "Automatic continuation of multi-line comments"
+msgstr ""
+
+#: ../data/geany.glade.h:172
+msgid ""
+"Continue automatically multi-line comments in languages like C, C++ and Java "
+"when a new line is entered inside such a comment"
+msgstr ""
+
+#: ../data/geany.glade.h:173
+msgid "Autocomplete symbols"
+msgstr ""
+
+#: ../data/geany.glade.h:174
+#, fuzzy
+msgid ""
+"Automatic completion of known symbols in open files (function names, global "
+"variables, ...)"
+msgstr ""
+"Нээлттэй код дахь мэдэгдэж буй үгүүдийг (функц, гадаад хувьсагч,...) гүйцээлт"
+
+#: ../data/geany.glade.h:175
+msgid "Autocomplete all words in document"
+msgstr ""
+
+#: ../data/geany.glade.h:176
+msgid "Drop rest of word on completion"
+msgstr ""
+
+#: ../data/geany.glade.h:177
+msgid "Max. symbol name suggestions:"
+msgstr ""
+
+#: ../data/geany.glade.h:178
+msgid "Completion list height:"
+msgstr ""
+
+#: ../data/geany.glade.h:179
+#, fuzzy
+msgid "Characters to type for autocompletion:"
+msgstr "Гүйцээлтийг байгуул"
+
+#: ../data/geany.glade.h:180
+msgid ""
+"The amount of characters which are necessary to show the symbol "
+"autocompletion list"
+msgstr ""
+
+#: ../data/geany.glade.h:181
+#, fuzzy
+msgid "Display height in rows for the autocompletion list"
+msgstr "Гүйцээлтийн жагсаалтийн мөр:"
+
+#: ../data/geany.glade.h:182
+#, fuzzy
+msgid "Maximum number of entries to display in the autocompletion list"
+msgstr "Гүйцээлтийн жагсаалтийн мөрийн тоог харуул."
+
+#: ../data/geany.glade.h:183
+msgid "Symbol list update frequency:"
+msgstr ""
+
+#: ../data/geany.glade.h:184
+msgid ""
+"Minimal delay (in milliseconds) between two automatic updates of the symbol "
+"list. Note that a too short delay may have performance impact, especially "
+"with large files. A delay of 0 disables real-time updates."
+msgstr ""
+
+#: ../data/geany.glade.h:185
+#, fuzzy
+msgid "<b>Completions</b>"
+msgstr "<b>Гүйцээлт</b>"
+
+#: ../data/geany.glade.h:186
+msgid "Parenthesis ( )"
+msgstr ""
+
+#: ../data/geany.glade.h:187
+msgid "Auto-close parenthesis when typing an opening one"
+msgstr ""
+
+#: ../data/geany.glade.h:188
+msgid "Curly brackets { }"
+msgstr ""
+
+#: ../data/geany.glade.h:189
+msgid "Auto-close curly bracket when typing an opening one"
+msgstr ""
+
+#: ../data/geany.glade.h:190
+msgid "Square brackets [ ]"
+msgstr ""
+
+#: ../data/geany.glade.h:191
+msgid "Auto-close square-bracket when typing an opening one"
+msgstr ""
+
+#: ../data/geany.glade.h:192
+msgid "Single quotes ' '"
+msgstr ""
+
+#: ../data/geany.glade.h:193
+msgid "Auto-close single quote when typing an opening one"
+msgstr ""
+
+#: ../data/geany.glade.h:194
+msgid "Double quotes \" \""
+msgstr ""
+
+#: ../data/geany.glade.h:195
+msgid "Auto-close double quote when typing an opening one"
+msgstr ""
+
+#: ../data/geany.glade.h:196
+msgid "<b>Auto-close quotes and brackets</b>"
+msgstr ""
+
+#: ../data/geany.glade.h:197
+#, fuzzy
+msgid "Completions"
+msgstr "Хөрвүүлэх"
+
+#: ../data/geany.glade.h:198
+#, fuzzy
+msgid "Invert syntax highlighting colors"
+msgstr "Кодуудыг тодруулалтын өнгийг урвуулах"
+
+#: ../data/geany.glade.h:199
+#, fuzzy
+msgid "Invert all colors, by default using white text on a black background"
+msgstr "Хар дэвсгэр дээр цагаан үсгээр бичих."
+
+#: ../data/geany.glade.h:200
+msgid "Show indentation guides"
+msgstr "Show indentation guides"
+
+#: ../data/geany.glade.h:201
+#, fuzzy
+msgid "Shows small dotted lines to help you to use the right indentation"
+msgstr "Shows small dotted lines to help you to use the right indentation."
+
+#: ../data/geany.glade.h:202
+msgid "Show white space"
+msgstr "Хоосон зайг харуул"
+
+#: ../data/geany.glade.h:203
+#, fuzzy
+msgid "Marks spaces with dots and tabs with arrows"
+msgstr "Зайг цэгээр, догол мөрийг сумаар тэмдэглэ."
+
+#: ../data/geany.glade.h:204
+msgid "Show line endings"
+msgstr "Мөрийн төгсгөлийг харуул"
+
+#: ../data/geany.glade.h:205
+#, fuzzy
+msgid "Shows the line ending character"
+msgstr "Мөрийн төгсгөлийн тэмдэгтийг харуул"
+
+#: ../data/geany.glade.h:206
+#, fuzzy
+msgid "Show line numbers"
+msgstr "_Мөрийн Дугаарыг Харуул"
+
+#: ../data/geany.glade.h:207
+#, fuzzy
+msgid "Shows or hides the Line Number margin"
+msgstr "Мөрийн Дугаарын ирмэгийг харуул эсвэл нуу"
+
+#: ../data/geany.glade.h:208
+#, fuzzy
+msgid "Show markers margin"
+msgstr "_Тэмдэгийн Захыг Харуул"
+
+#: ../data/geany.glade.h:209
+#, fuzzy
+msgid ""
+"Shows or hides the small margin right of the line numbers, which is used to "
+"mark lines"
+msgstr "Тэмдэглэсэн мөрийн дугаарын баруун ирмэгийг харуул эсвэл нуу."
+
+#: ../data/geany.glade.h:210
+msgid "Stop scrolling at last line"
+msgstr ""
+
+#: ../data/geany.glade.h:211
+msgid "Whether to stop scrolling one page past the last line of a document"
+msgstr ""
+
+#: ../data/geany.glade.h:212
+msgid "<b>Display</b>"
+msgstr "<b>Дэлгэц</b>"
+
+#: ../data/geany.glade.h:213
+msgid "Column:"
+msgstr ""
+
+#: ../data/geany.glade.h:214
+#, fuzzy
+msgid "Color:"
+msgstr "Өнгө"
+
+#: ../data/geany.glade.h:215
+msgid "Sets the color of the long line marker"
+msgstr "Sets the color of the long line marker"
+
+#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
+msgid "Color Chooser"
+msgstr "Өнгө Сонгогч"
+
+#: ../data/geany.glade.h:217
+#, fuzzy
+msgid ""
+"The long line marker is a thin vertical line in the editor, it helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+msgstr ""
+"The long line marker is a thin vertical line in the editor. It helps to mark "
+"long lines, or as a hint to break the line. Set this value to a value "
+"greater than 0 to specify the column where it should appear."
+
+#: ../data/geany.glade.h:218
+msgid "Line"
+msgstr "Шулуун"
+
+#: ../data/geany.glade.h:219
+#, fuzzy
+msgid ""
+"Prints a vertical line in the editor window at the given cursor position "
+"(see below)"
+msgstr "Заагчийн байрлалд босоо шулуун хэвлэх (доодохыг хар)"
+
+#: ../data/geany.glade.h:220
+msgid "Background"
+msgstr "Дэвсгэр"
+
+#: ../data/geany.glade.h:221
+#, fuzzy
+msgid ""
+"The background color of characters after the given cursor position (see "
+"below) changed to the color set below, (this is recommended if you use "
+"proportional fonts)"
+msgstr ""
+"Заагчийн байрлалаас хойшхи тэмдэгтийн дэвсгэр өнгийг доор заасан өнгөөр "
+"солигдсон. (Ялгаатай фонт хэрэглэж байгаа үед санал болгоно)"
+
+#: ../data/geany.glade.h:222
+#, fuzzy
+msgid "Enabled"
+msgstr "Enable folding"
+
+#: ../data/geany.glade.h:223
+msgid "<b>Long line marker</b>"
+msgstr "<b>Long line marker</b>"
+
+#: ../data/geany.glade.h:224
+msgid "Disabled"
+msgstr "Идэвхгүй"
+
+#: ../data/geany.glade.h:225
+msgid "Do not show virtual spaces"
+msgstr ""
+
+#: ../data/geany.glade.h:226
+msgid "Only for rectangular selections"
+msgstr ""
+
+#: ../data/geany.glade.h:227
+msgid ""
+"Only show virtual spaces beyond the end of lines when drawing a rectangular "
+"selection"
+msgstr ""
+
+#: ../data/geany.glade.h:228
+msgid "Always"
+msgstr ""
+
+#: ../data/geany.glade.h:229
+#, fuzzy
+msgid "Always show virtual spaces beyond the end of lines"
+msgstr "Мөрийн эцэс дэх зай, догол мөрийг устгах"
+
+#: ../data/geany.glade.h:230
+#, fuzzy
+msgid "<b>Virtual spaces</b>"
+msgstr "<b>Хэсгүүдийн байршуулалт</b>"
+
+#: ../data/geany.glade.h:231
+#, fuzzy
+msgid "Display"
+msgstr "<b>Дэлгэц</b>"
+
+#: ../data/geany.glade.h:232 ../src/keybindings.c:308 ../src/prefs.c:1610
+msgid "Editor"
+msgstr "Засварлагч"
+
+#: ../data/geany.glade.h:233
+msgid "Open new documents from the command-line"
+msgstr ""
+
+#: ../data/geany.glade.h:234
+msgid "Create a new file for each command-line filename that doesn't exist"
+msgstr ""
+
+#: ../data/geany.glade.h:235
+msgid "Default end of line characters:"
+msgstr ""
+
+#: ../data/geany.glade.h:236
+msgid "<b>New files</b>"
+msgstr "<b>Шинэ файлууд</b>"
+
+#: ../data/geany.glade.h:237
+#, fuzzy
+msgid "Default encoding (new files):"
+msgstr "Энкодчлол:"
+
+#: ../data/geany.glade.h:238
+#, fuzzy
+msgid "Sets the default encoding for newly created files"
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
+
+#: ../data/geany.glade.h:239
+msgid "Use fixed encoding when opening non-Unicode files"
+msgstr ""
+
+#: ../data/geany.glade.h:240
+msgid ""
+"This option disables the automatic detection of the file encoding when "
+"opening non-Unicode files and opens the file with the specified encoding "
+"(usually not needed)"
+msgstr ""
+
+#: ../data/geany.glade.h:241
+msgid "Default encoding (existing non-Unicode files):"
+msgstr ""
+
+#: ../data/geany.glade.h:242
+#, fuzzy
+msgid "Sets the default encoding for opening existing non-Unicode files"
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
+
+#: ../data/geany.glade.h:243
+#, fuzzy
+msgid "<b>Encodings</b>"
+msgstr "<b>Энкодчлол:</b>"
+
+#: ../data/geany.glade.h:244
+msgid "Ensure new line at file end"
+msgstr "Мөрийн эцэст шинэ файлыг тодорхойл"
+
+#: ../data/geany.glade.h:245
+msgid "Ensures that at the end of the file is a new line"
+msgstr "Мөрийн эцэст шинэ мөр байгааг тодорхойл"
+
+#: ../data/geany.glade.h:246
+#, fuzzy
+msgid "Ensure consistent line endings"
+msgstr "Мөрийн эцэст шинэ файлыг тодорхойл"
+
+#: ../data/geany.glade.h:247
+msgid ""
+"Ensures that newline characters always get converted before saving, avoiding "
+"mixed line endings in the same file"
+msgstr ""
+
+#: ../data/geany.glade.h:248
+#, fuzzy
+msgid "Strip trailing spaces and tabs"
+msgstr "Strip trailing spaces"
+
+#: ../data/geany.glade.h:249
+msgid "Removes trailing spaces and tabs and the end of lines"
+msgstr "Мөрийн эцэс дэх зай, догол мөрийг устгах"
+
+#: ../data/geany.glade.h:250 ../src/keybindings.c:662
+msgid "Replace tabs with space"
+msgstr "Догол мөрийг зайгаа орлуулах"
+
+#: ../data/geany.glade.h:251
+#, fuzzy
+msgid "Replaces all tabs in document with spaces"
+msgstr "Баримтын бүх догол мөрийг зайгаар орлуулах"
+
+#: ../data/geany.glade.h:252
+msgid "<b>Saving files</b>"
+msgstr "<b>Файлуудыг хадгал</b>"
+
+#: ../data/geany.glade.h:253
+msgid "Recent files list length:"
+msgstr "Сая хэрэглэсэн файлуудын жагсаалтын урт:"
+
+#: ../data/geany.glade.h:254
+#, fuzzy
+msgid "Specifies the number of files which are stored in the Recent files list"
+msgstr "Саяхан хэрэглэсэн файлуудын жагсаалтын хэмжээг заах"
+
+#: ../data/geany.glade.h:255
+msgid "Disk check timeout:"
+msgstr ""
+
+#: ../data/geany.glade.h:256
+msgid ""
+"How often to check for changes to document files on disk, in seconds. Zero "
+"disables checking."
+msgstr ""
+
+#: ../data/geany.glade.h:257 ../src/prefs.c:1612 ../src/symbols.c:458
+#: ../plugins/filebrowser.c:1159
+msgid "Files"
+msgstr "Файлууд"
+
+#: ../data/geany.glade.h:258
+msgid "Terminal:"
+msgstr "Терминал:"
+
+#: ../data/geany.glade.h:259
+msgid "Browser:"
+msgstr "Хөтөч:"
+
+#: ../data/geany.glade.h:261
+#, no-c-format
+msgid ""
+"A terminal emulator command (%c is substituted with the Geany run script "
+"filename)"
+msgstr ""
+
+#: ../data/geany.glade.h:262
+msgid "Path (and possibly additional arguments) to your favorite browser"
+msgstr "Дуртай хөтөчийнхөө зам (нэмэлт аргумент зөвшөөрнө)"
+
+#: ../data/geany.glade.h:263
+msgid "Grep:"
+msgstr "Grep:"
+
+#: ../data/geany.glade.h:264
+msgid "<b>Tool paths</b>"
+msgstr "<b>Багажийн зам</b>"
+
+#: ../data/geany.glade.h:265
+#, fuzzy
+msgid "Context action:"
+msgstr "Гүйцээлтийг байгуул"
+
+#: ../data/geany.glade.h:267
+#, no-c-format
+msgid ""
+"Context action command. The currently selected word can be used with %s. It "
+"can appear anywhere in the given command and will be replaced before "
+"execution."
+msgstr ""
+
+#: ../data/geany.glade.h:268
+#, fuzzy
+msgid "<b>Commands</b>"
+msgstr "<b>Фонт</b>"
+
+#: ../data/geany.glade.h:269 ../src/keybindings.c:320 ../src/prefs.c:1614
+msgid "Tools"
+msgstr "Багаж"
+
+#: ../data/geany.glade.h:270
+msgid "email address of the developer"
+msgstr "хөгжүүлэгчийн цахим хаяг"
+
+#: ../data/geany.glade.h:271
+msgid "Initials of the developer name"
+msgstr "Анхны хөгжүүлэгчийн нэр"
+
+#: ../data/geany.glade.h:272
+#, fuzzy
+msgid "Initial version:"
+msgstr "Эхний Хувилбар:"
+
+#: ../data/geany.glade.h:273
+msgid "Version number, which a new file initially has"
+msgstr "Шинээр үүссэн файлын хувилбар нь"
+
+#: ../data/geany.glade.h:274
+msgid "Company name"
+msgstr "Компаний нэр"
+
+#: ../data/geany.glade.h:275
+#, fuzzy
+msgid "Developer:"
+msgstr "Хөгжүүлэгчид"
+
+#: ../data/geany.glade.h:276
+#, fuzzy
+msgid "Company:"
+msgstr "Компаний нэр"
+
+#: ../data/geany.glade.h:277
+msgid "Mail address:"
+msgstr ""
+
+#: ../data/geany.glade.h:278
+#, fuzzy
+msgid "Initials:"
+msgstr "Эхний Хувилбар:"
+
+#: ../data/geany.glade.h:279
+#, fuzzy
+msgid "The name of the developer"
+msgstr "хөгжүүлэгчийн цахим хаяг"
+
+#: ../data/geany.glade.h:280
+msgid "Year:"
+msgstr ""
+
+#: ../data/geany.glade.h:281
+msgid "Date:"
+msgstr ""
+
+#: ../data/geany.glade.h:282
+msgid "Date & time:"
+msgstr ""
+
+#: ../data/geany.glade.h:283
+#, fuzzy
+msgid ""
+"Specify a format for the {datetime} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
+"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
+"уу."
+
+#: ../data/geany.glade.h:284
+#, fuzzy
+msgid ""
+"Specify a format for the {year} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
+"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
+"уу."
+
+#: ../data/geany.glade.h:285
+#, fuzzy
+msgid ""
+"Specify a format for the {date} wildcard. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
+"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
+"уу."
+
+#: ../data/geany.glade.h:286
+#, fuzzy
+msgid "<b>Template data</b>"
+msgstr "<b>Хэсгүүдийн байршуулалт</b>"
+
+#: ../data/geany.glade.h:287 ../src/prefs.c:1616
+msgid "Templates"
+msgstr ""
+
+#: ../data/geany.glade.h:288
+#, fuzzy
+msgid "C_hange"
+msgstr "_Фонт Өөрчлөх"
+
+#: ../data/geany.glade.h:289
+#, fuzzy
+msgid "<b>Keyboard shortcuts</b>"
+msgstr "Товчлуурын хослолууд"
+
+#: ../data/geany.glade.h:290 ../src/plugins.c:1899 ../src/plugins.c:1936
+#: ../src/prefs.c:1618
+msgid "Keybindings"
+msgstr ""
+
+#: ../data/geany.glade.h:291
+#, fuzzy
+msgid "Command:"
+msgstr " командууд"
+
+#: ../data/geany.glade.h:293
+#, fuzzy, no-c-format
+msgid "Path to the command for printing files (use %f for the filename)"
+msgstr "Хэвлэх файлын команд зам (Файлын нэрийг %f гэж ашигла)"
+
+#: ../data/geany.glade.h:294
+msgid "Use an external command for printing"
+msgstr ""
+
+#: ../data/geany.glade.h:295 ../src/printing.c:239
+#, fuzzy
+msgid "Print line numbers"
+msgstr "_Мөрийн Дугаарыг Харуул"
+
+#: ../data/geany.glade.h:296 ../src/printing.c:241
+msgid "Add line numbers to the printed page"
+msgstr ""
+
+#: ../data/geany.glade.h:297 ../src/printing.c:244
+msgid "Print page numbers"
+msgstr ""
+
+#: ../data/geany.glade.h:298 ../src/printing.c:246
+msgid ""
+"Add page numbers at the bottom of each page. It takes 2 lines of the page."
+msgstr ""
+
+#: ../data/geany.glade.h:299 ../src/printing.c:249
+msgid "Print page header"
+msgstr ""
+
+#: ../data/geany.glade.h:300 ../src/printing.c:251
+msgid ""
+"Add a little header to every page containing the page number, the filename "
+"and the current date (see below). It takes 3 lines of the page."
+msgstr ""
+
+#: ../data/geany.glade.h:301 ../src/printing.c:267
+msgid "Use the basename of the printed file"
+msgstr ""
+
+#: ../data/geany.glade.h:302
+msgid "Print only the basename (without the path) of the printed file"
+msgstr ""
+
+#: ../data/geany.glade.h:303 ../src/printing.c:275
+#, fuzzy
+msgid "Date format:"
+msgstr "Огнооны Хэлбэр"
+
+#: ../data/geany.glade.h:304 ../src/printing.c:281
+#, fuzzy
+msgid ""
+"Specify a format for the date and time stamp which is added to the page "
+"header on each page. You can use any conversion specifiers which can be used "
+"with the ANSI C strftime function."
+msgstr ""
+"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
+"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
+"уу."
+
+#: ../data/geany.glade.h:305
+msgid "Use native GTK printing"
+msgstr ""
+
+#: ../data/geany.glade.h:306
+#, fuzzy
+msgid "<b>Printing</b>"
+msgstr "<b>Энкодчлол:</b>"
+
+#: ../data/geany.glade.h:307 ../src/prefs.c:1620
+msgid "Printing"
+msgstr ""
+
+#: ../data/geany.glade.h:308
+msgid "Font:"
+msgstr ""
+
+#: ../data/geany.glade.h:309
+#, fuzzy
+msgid "Sets the font for the terminal widget"
+msgstr "Тэмдэгтийн жагсаалтын фонтыг заа"
+
+#: ../data/geany.glade.h:310
+#, fuzzy
+msgid "Choose Terminal Font"
+msgstr "Фонтыг сонго"
+
+#: ../data/geany.glade.h:311
+msgid "Foreground color:"
+msgstr ""
+
+#: ../data/geany.glade.h:312
+#, fuzzy
+msgid "Background color:"
+msgstr "Дэвсгэр"
+
+#: ../data/geany.glade.h:313
+#, fuzzy
+msgid "Background image:"
+msgstr "Дэвсгэр"
+
+#: ../data/geany.glade.h:314
+msgid "Scrollback lines:"
+msgstr ""
+
+#: ../data/geany.glade.h:315
+msgid "Shell:"
+msgstr ""
+
+#: ../data/geany.glade.h:316
+#, fuzzy
+msgid "Sets the foreground color of the text in the terminal widget"
+msgstr "Sets the color of the long line marker"
+
+#: ../data/geany.glade.h:317
+#, fuzzy
+msgid "Sets the background color of the text in the terminal widget"
+msgstr "Sets the color of the long line marker"
+
+#: ../data/geany.glade.h:318
+#, fuzzy
+msgid "Sets the path to the background image in the terminal widget"
+msgstr "Sets the color of the long line marker"
+
+#: ../data/geany.glade.h:319
+msgid ""
+"Specifies the history in lines, which you can scroll back in the terminal "
+"widget"
+msgstr ""
+
+#: ../data/geany.glade.h:320
+msgid ""
+"Sets the path to the shell which should be started inside the terminal "
+"emulation"
+msgstr ""
+
+#: ../data/geany.glade.h:321
+msgid "Scroll on keystroke"
+msgstr ""
+
+#: ../data/geany.glade.h:322
+msgid "Whether to scroll to the bottom if a key was pressed"
+msgstr ""
+
+#: ../data/geany.glade.h:323
+msgid "Scroll on output"
+msgstr ""
+
+#: ../data/geany.glade.h:324
+msgid "Whether to scroll to the bottom when output is generated"
+msgstr ""
+
+#: ../data/geany.glade.h:325
+msgid "Cursor blinks"
+msgstr ""
+
+#: ../data/geany.glade.h:326
+#, fuzzy
+msgid "Whether to blink the cursor"
+msgstr "Whether to enable folding the code"
+
+#: ../data/geany.glade.h:327
+msgid "Override Geany keybindings"
+msgstr ""
+
+#: ../data/geany.glade.h:328
+msgid ""
+"Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
+msgstr ""
+
+#: ../data/geany.glade.h:329
+msgid "Disable menu shortcut key (F10 by default)"
+msgstr ""
+
+#: ../data/geany.glade.h:330
+msgid ""
+"This option disables the keybinding to popup the menu bar (default is F10). "
+"Disabling it can be useful if you use, for example, Midnight Commander "
+"within the VTE."
+msgstr ""
+
+#: ../data/geany.glade.h:331
+#, fuzzy
+msgid "Follow path of the current file"
+msgstr "Файлыг хаа"
+
+#: ../data/geany.glade.h:332
+msgid "Whether to execute \"cd $path\" when you switch between opened files"
+msgstr ""
+
+#: ../data/geany.glade.h:333
+msgid "Execute programs in the VTE"
+msgstr ""
+
+#: ../data/geany.glade.h:334
+msgid ""
+"Run programs in VTE instead of opening a terminal emulation window. Please "
+"note, programs executed in VTE cannot be stopped"
+msgstr ""
+
+#: ../data/geany.glade.h:335
+msgid "Don't use run script"
+msgstr ""
+
+#: ../data/geany.glade.h:336
+msgid ""
+"Don't use the simple run script which is usually used to display the exit "
+"status of the executed program"
+msgstr ""
+
+#: ../data/geany.glade.h:337
+#, fuzzy
+msgid "<b>Terminal</b>"
+msgstr "<b>Хандах эрх:</b>"
+
+#: ../data/geany.glade.h:338 ../src/prefs.c:1624 ../src/vte.c:320
+#, fuzzy
+msgid "Terminal"
+msgstr "Терминал:"
+
+#: ../data/geany.glade.h:339
+msgid "<i>Warning: read the manual before changing these preferences.</i>"
+msgstr ""
+
+#: ../data/geany.glade.h:340
+#, fuzzy
+msgid "<b>Various preferences</b>"
+msgstr "<b>Харагдац</b>"
+
+#: ../data/geany.glade.h:341 ../src/prefs.c:1622
+msgid "Various"
+msgstr ""
+
+#: ../data/geany.glade.h:343
+msgid "_File"
+msgstr "_Файл"
+
+#: ../data/geany.glade.h:344
+msgid "New (with _Template)"
+msgstr "Шинэ (_Template-тэй)"
+
+#: ../data/geany.glade.h:345
+#, fuzzy
+msgid "_Open..."
+msgstr "_Нээх"
+
+#: ../data/geany.glade.h:346
+msgid "Recent _Files"
+msgstr "Сая Хэрэглэсэн _Файл"
+
+#: ../data/geany.glade.h:347
+#, fuzzy
+msgid "Save _As..."
+msgstr "Бүгдийг хадгал"
+
+#: ../data/geany.glade.h:348
+msgid "Sa_ve All"
+msgstr "Б_үх Файлыг Хадгал"
+
+#: ../data/geany.glade.h:349 ../src/document.c:1647 ../src/document.c:3616
+#: ../src/sidebar.c:718
+msgid "_Reload"
+msgstr "_Дахин ачаал"
+
+#: ../data/geany.glade.h:350
+msgid "R_eload As"
+msgstr "Д_ахин ачаалал"
+
+#: ../data/geany.glade.h:351
+msgid "Page Set_up"
+msgstr ""
+
+#: ../data/geany.glade.h:352
+msgid "_Print..."
+msgstr ""
+
+#: ../data/geany.glade.h:353 ../src/notebook.c:470
+#, fuzzy
+msgid "Close Ot_her Documents"
+msgstr "Файлыг хаа"
+
+#: ../data/geany.glade.h:354 ../src/notebook.c:476
+msgid "C_lose All"
+msgstr "Бүх Файлыг Х_аа"
+
+#: ../data/geany.glade.h:355
+#, fuzzy
+msgid "Co_mmands"
+msgstr " командууд"
+
+#: ../data/geany.glade.h:356 ../src/keybindings.c:430
+#, fuzzy
+msgid "Cu_t Current Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:357 ../src/keybindings.c:427
+#, fuzzy
+msgid "_Copy Current Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:358 ../src/keybindings.c:383
+#, fuzzy
+msgid "_Delete Current Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:359 ../src/keybindings.c:380
+#, fuzzy
+msgid "D_uplicate Line or Selection"
+msgstr "Дав_хардсан Мөр эсвэл Идэвхжилт"
+
+#: ../data/geany.glade.h:360 ../src/keybindings.c:440
+#, fuzzy
+msgid "S_elect Current Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:361 ../src/keybindings.c:443
+msgid "Se_lect Current Paragraph"
+msgstr ""
+
+#: ../data/geany.glade.h:362
+#, fuzzy
+msgid "_Move Line(s) Up"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:363
+#, fuzzy
+msgid "M_ove Line(s) Down"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:364 ../src/keybindings.c:494
+#, fuzzy
+msgid "_Send Selection to Terminal"
+msgstr "Идэвхжсэнийг _жижиг үсэг болгох"
+
+#: ../data/geany.glade.h:365 ../src/keybindings.c:496
+msgid "_Reflow Lines/Block"
+msgstr ""
+
+#: ../data/geany.glade.h:366 ../src/keybindings.c:454
+#, fuzzy
+msgid "T_oggle Case of Selection"
+msgstr "Дав_хардсан Мөр эсвэл Идэвхжилт"
+
+#: ../data/geany.glade.h:367
+msgid "_Comment Line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../data/geany.glade.h:368
+msgid "U_ncomment Line(s)"
+msgstr "Тайлбар _биш Мөр(үүд)"
+
+#: ../data/geany.glade.h:369
+msgid "_Toggle Line Commentation"
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
+
+#: ../data/geany.glade.h:370
+msgid "_Increase Indent"
+msgstr "Догол мөрийг _Өсгөх"
+
+#: ../data/geany.glade.h:371
+msgid "_Decrease Indent"
+msgstr "Догол мөрийг _Багасгах"
+
+#: ../data/geany.glade.h:372 ../src/keybindings.c:473
+#, fuzzy
+msgid "S_mart Line Indent"
+msgstr "Мөрийн _төгсгөлийг заа"
+
+#: ../data/geany.glade.h:373
+msgid "_Send Selection to"
+msgstr ""
+
+#: ../data/geany.glade.h:374
+msgid "I_nsert Comments"
+msgstr "Тайлбар О_руулах"
+
+#: ../data/geany.glade.h:375
+#, fuzzy
+msgid "Preference_s"
+msgstr "Тохиргоо"
+
+#: ../data/geany.glade.h:376 ../src/keybindings.c:520
+#, fuzzy
+msgid "P_lugin Preferences"
+msgstr "Тохиргоо"
+
+#: ../data/geany.glade.h:377
+msgid "_Find..."
+msgstr ""
+
+#: ../data/geany.glade.h:378
+msgid "Find _Next"
+msgstr "Ур_агшаа Хай"
+
+#: ../data/geany.glade.h:379
+msgid "Find _Previous"
+msgstr "_Хойшоо Хай"
+
+#: ../data/geany.glade.h:380 ../src/symbols.c:2517
+#, fuzzy
+msgid "Find in F_iles..."
+msgstr "Ф_айлуудаас Хай"
+
+#: ../data/geany.glade.h:381
+#, fuzzy
+msgid "_Replace..."
+msgstr "_Орлуулах"
+
+#: ../data/geany.glade.h:382
+msgid "Next Me_ssage"
+msgstr "Даргаагийн _Мэдээ"
+
+#: ../data/geany.glade.h:383
+#, fuzzy
+msgid "Pr_evious Message"
+msgstr "Даргаагийн _Мэдээ"
+
+#: ../data/geany.glade.h:384 ../src/keybindings.c:569
+msgid "Go to Ne_xt Marker"
+msgstr ""
+
+#: ../data/geany.glade.h:385 ../src/keybindings.c:572
+msgid "Go to Pre_vious Marker"
+msgstr ""
+
+#: ../data/geany.glade.h:386
+#, fuzzy
+msgid "_Go to Line..."
+msgstr "_Мөр-лүү Оч"
+
+#: ../data/geany.glade.h:387 ../src/keybindings.c:532
+#, fuzzy
+msgid "Find Next _Selection"
+msgstr "_Сонгосныг Хай"
+
+#: ../data/geany.glade.h:388 ../src/keybindings.c:534
+#, fuzzy
+msgid "Find Pre_vious Selection"
+msgstr "_Урьд Сонгосныг Хай"
+
+#: ../data/geany.glade.h:389 ../src/keybindings.c:551
+#, fuzzy
+msgid "_Mark All"
+msgstr "_Бүгдийг Үүсгэх"
+
+#: ../data/geany.glade.h:390
+#, fuzzy
+msgid "Go to Symbol Decl_aration"
+msgstr "Go to Tag Declaration"
+
+#: ../data/geany.glade.h:391
+msgid "_View"
+msgstr "_Харагдац"
+
+#: ../data/geany.glade.h:392
+#, fuzzy
+msgid "Change _Font..."
+msgstr "_Фонт Өөрчлөх"
+
+#: ../data/geany.glade.h:393
+#, fuzzy
+msgid "Change _Color Scheme..."
+msgstr "_Өнгө Сонгогч"
+
+#: ../data/geany.glade.h:394
+msgid "Show _Markers Margin"
+msgstr "_Тэмдэгийн Захыг Харуул"
+
+#: ../data/geany.glade.h:395
+msgid "Show _Line Numbers"
+msgstr "_Мөрийн Дугаарыг Харуул"
+
+#: ../data/geany.glade.h:396
+#, fuzzy
+msgid "Show White S_pace"
+msgstr "Хоосон зайг харуул"
+
+#: ../data/geany.glade.h:397
+#, fuzzy
+msgid "Show Line _Endings"
+msgstr "Мөрийн төгсгөлийг харуул"
+
+#: ../data/geany.glade.h:398
+#, fuzzy
+msgid "Show Indentation _Guides"
+msgstr "Show indentation guides"
+
+#: ../data/geany.glade.h:399
+msgid "Full_screen"
+msgstr "Бүтэн _дэлгэц"
+
+#: ../data/geany.glade.h:400
+msgid "Toggle All _Additional Widgets"
+msgstr ""
+
+#: ../data/geany.glade.h:401
+msgid "Show Message _Window"
+msgstr "Мэдээний _Цонхыг Харуул"
+
+#: ../data/geany.glade.h:402
+msgid "Show _Toolbar"
+msgstr "Багаж _Самбарыг Харуул"
+
+#: ../data/geany.glade.h:403
+msgid "Show Side_bar"
+msgstr "Ха_жуу самбарыг Харуул"
+
+#: ../data/geany.glade.h:404
+msgid "_Document"
+msgstr "_Баримт"
+
+#: ../data/geany.glade.h:405
+msgid "_Line Wrapping"
+msgstr "_Line Wrapping"
+
+#: ../data/geany.glade.h:406
+#, fuzzy
+msgid "Line _Breaking"
+msgstr "Line wrapping"
+
+#: ../data/geany.glade.h:407
+#, fuzzy
+msgid "_Auto-indentation"
+msgstr "Автомат тодорхойологч"
+
+#: ../data/geany.glade.h:408
+msgid "In_dent Type"
+msgstr ""
+
+#: ../data/geany.glade.h:409
+#, fuzzy
+msgid "_Detect from Content"
+msgstr "Файлаас тогтоо"
+
+#: ../data/geany.glade.h:410
+#, fuzzy
+msgid "T_abs and Spaces"
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#: ../data/geany.glade.h:411
+msgid "Indent Widt_h"
+msgstr ""
+
+#: ../data/geany.glade.h:412
+msgid "_1"
+msgstr ""
+
+#: ../data/geany.glade.h:413
+msgid "_2"
+msgstr ""
+
+#: ../data/geany.glade.h:414
+msgid "_3"
+msgstr ""
+
+#: ../data/geany.glade.h:415
+msgid "_4"
+msgstr ""
+
+#: ../data/geany.glade.h:416
+msgid "_5"
+msgstr ""
+
+#: ../data/geany.glade.h:417
+msgid "_6"
+msgstr ""
+
+#: ../data/geany.glade.h:418
+msgid "_7"
+msgstr ""
+
+#: ../data/geany.glade.h:419
+msgid "_8"
+msgstr ""
+
+#: ../data/geany.glade.h:420
+msgid "Read _Only"
+msgstr "_Зөвхөн Харах"
+
+#: ../data/geany.glade.h:421
+msgid "_Write Unicode BOM"
+msgstr "_Юникод BOM бичих"
+
+#: ../data/geany.glade.h:422
+msgid "Set File_type"
+msgstr "Файлын _төрлийг заа"
+
+#: ../data/geany.glade.h:423
+msgid "Set _Encoding"
+msgstr "_Энкодчлолыг заа"
+
+#: ../data/geany.glade.h:424
+msgid "Set Line E_ndings"
+msgstr "Мөрийн _төгсгөлийг заа"
+
+#: ../data/geany.glade.h:425
+#, fuzzy
+msgid "Convert and Set to _CR/LF (Windows)"
+msgstr "_CR/LF (Виндөвс)-д Хувирга эсвэл Зааж өгөх"
+
+#: ../data/geany.glade.h:426
+msgid "Convert and Set to _LF (Unix)"
+msgstr "_LF (Юникс)-д Хувирга эсвэл Зааж өгөх"
+
+#: ../data/geany.glade.h:427
+#, fuzzy
+msgid "Convert and Set to CR (Classic _Mac)"
+msgstr "CR (_Мак)-д Хувирга эсвэл Зааж өгөх"
+
+#: ../data/geany.glade.h:428 ../src/keybindings.c:660
+#, fuzzy
+msgid "_Clone"
+msgstr "_Хаах"
+
+#: ../data/geany.glade.h:429
+#, fuzzy
+msgid "_Strip Trailing Spaces"
+msgstr "Strip trailing spaces"
+
+#: ../data/geany.glade.h:430
+msgid "Replace Tabs with S_paces"
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#: ../data/geany.glade.h:431
+#, fuzzy
+msgid "_Replace Spaces with Tabs..."
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#: ../data/geany.glade.h:432
+msgid "_Fold All"
+msgstr "_Fold All"
+
+#: ../data/geany.glade.h:433
+msgid "_Unfold All"
+msgstr "_Unfold All"
+
+#: ../data/geany.glade.h:434
+msgid "Remove _Markers"
+msgstr ""
+
+#: ../data/geany.glade.h:435
+msgid "Remove Error _Indicators"
+msgstr "Алдаа _Заагчдыг Арилгах"
+
+#: ../data/geany.glade.h:436
+msgid "_Project"
+msgstr "_Төсөл"
+
+#: ../data/geany.glade.h:437
+#, fuzzy
+msgid "_New..."
+msgstr "_Шинээр"
+
+#: ../data/geany.glade.h:438
+#, fuzzy
+msgid "_Recent Projects"
+msgstr "_Төсөл"
+
+#: ../data/geany.glade.h:439
+msgid "_Close"
+msgstr "_Хаах"
+
+#: ../data/geany.glade.h:440
+msgid "Apply the default indentation settings to all documents"
+msgstr ""
+
+#: ../data/geany.glade.h:441
+#, fuzzy
+msgid "_Apply Default Indentation"
+msgstr "Автомат тодорхойологч"
+
+#. build the code
+#: ../data/geany.glade.h:442 ../src/build.c:2392 ../src/build.c:2669
+msgid "_Build"
+msgstr "_Боловсруул"
+
+#: ../data/geany.glade.h:443
+msgid "_Tools"
+msgstr "_Хэрэгсэл"
+
+#: ../data/geany.glade.h:444
+msgid "_Reload Configuration"
+msgstr ""
+
+#: ../data/geany.glade.h:445
+#, fuzzy
+msgid "C_onfiguration Files"
+msgstr "Config файл"
+
+#: ../data/geany.glade.h:446
+#, fuzzy
+msgid "_Color Chooser"
+msgstr "_Өнгө Сонгогч"
+
+#: ../data/geany.glade.h:447
+msgid "_Word Count"
+msgstr "_Үг Тоол"
+
+#: ../data/geany.glade.h:448
+msgid "Load Ta_gs File..."
+msgstr ""
+
+#: ../data/geany.glade.h:449
+msgid "_Help"
+msgstr "_Тусламж"
+
+#: ../data/geany.glade.h:450
+msgid "Keyboard _Shortcuts"
+msgstr "_Товчлуурын Хослол"
+
+#: ../data/geany.glade.h:451
+#, fuzzy
+msgid "Debug _Messages"
+msgstr "Даргаагийн _Мэдээ"
+
+#: ../data/geany.glade.h:452
+msgid "_Website"
+msgstr "_Веб хуудас"
+
+#: ../data/geany.glade.h:453
+msgid "Wi_ki"
+msgstr ""
+
+#: ../data/geany.glade.h:454
+msgid "Report a _Bug..."
+msgstr ""
+
+#: ../data/geany.glade.h:455
+#, fuzzy
+msgid "_Donate..."
+msgstr "_Хадгалахгүй"
+
+#: ../data/geany.glade.h:456 ../src/sidebar.c:126
+msgid "Symbols"
+msgstr "Тэмдэгт"
+
+#: ../data/geany.glade.h:457
+#, fuzzy
+msgid "Documents"
+msgstr "_Баримт"
+
+#: ../data/geany.glade.h:458
+msgid "Status"
+msgstr "Төлөв"
+
+#: ../data/geany.glade.h:459
+msgid "Compiler"
+msgstr "Хөрвүүлэгч"
+
+#: ../data/geany.glade.h:460
+msgid "Messages"
+msgstr "Мэдээ"
+
+#: ../data/geany.glade.h:461
+msgid "Scribble"
+msgstr "Scribble"
+
+#: ../data/geany.glade.h:462
+#, fuzzy
+msgid "Project Properties"
+msgstr "Шинж чанар"
+
+#: ../data/geany.glade.h:463 ../src/project.c:180
+#, fuzzy
+msgid "Filename:"
+msgstr "Вьетнам"
+
+#: ../data/geany.glade.h:464 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr ""
+
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "Description:"
+msgstr "DVI үүсэлт:"
+
+#: ../data/geany.glade.h:466 ../src/project.c:202
+msgid "Base path:"
+msgstr ""
+
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "File patterns:"
+msgstr "_Ойрх Дорнод "
+
+#: ../data/geany.glade.h:468
+msgid ""
+"Space separated list of file patterns used for the find in files dialog (e."
+"g. *.c *.h)"
+msgstr ""
+
+#: ../data/geany.glade.h:469 ../src/project.c:209
+msgid ""
+"Base directory of all files that make up the project. This can be a new "
+"path, or an existing directory tree. You can use paths relative to the "
+"project filename."
+msgstr ""
+
+#: ../data/geany.glade.h:470 ../src/keybindings.c:318
+#, fuzzy
+msgid "Project"
+msgstr "_Төсөл"
+
+#: ../data/geany.glade.h:471
+#, fuzzy
+msgid "Display:"
+msgstr "<b>Дэлгэц</b>"
+
+#: ../data/geany.glade.h:472
+msgid "Custom"
+msgstr ""
+
+#: ../data/geany.glade.h:473
+msgid "Use global settings"
+msgstr ""
+
+#: ../data/geany.glade.h:474
+msgid "Size:"
+msgstr ""
+
+#: ../data/geany.glade.h:475
+#, fuzzy
+msgid "Location:"
+msgstr "<b>Байршил:</b>"
+
+#: ../data/geany.glade.h:476
+#, fuzzy
+msgid "Read-only:"
+msgstr ", зөвхөн-харах"
+
+#: ../data/geany.glade.h:477
+#, fuzzy
+msgid "Encoding:"
+msgstr "Энкодчиллыг заа:"
+
+#: ../data/geany.glade.h:478
+#, fuzzy
+msgid "Modified:"
+msgstr "<b>Сайжруулсан:</b>"
+
+#: ../data/geany.glade.h:479
+#, fuzzy
+msgid "Changed:"
+msgstr "_Фонт Өөрчлөх"
+
+#: ../data/geany.glade.h:480
+#, fuzzy
+msgid "Accessed:"
+msgstr "<b>Хандсан:</b>"
+
+#: ../data/geany.glade.h:481
+msgid "(only inside Geany)"
+msgstr "(зөвхөн Жиени-д)"
+
+#: ../data/geany.glade.h:482
+#, fuzzy
+msgid "Permissions:"
+msgstr "<b>Хандах эрх:</b>"
+
+#: ../data/geany.glade.h:483
+msgid "Read:"
+msgstr "Харах:"
+
+#: ../data/geany.glade.h:484
+msgid "Write:"
+msgstr "Бичих:"
+
+#: ../data/geany.glade.h:485
+msgid "Execute:"
+msgstr "Ажиллуул:"
+
+#: ../data/geany.glade.h:486
+msgid "Owner:"
+msgstr "Эзэмшигч:"
+
+#: ../data/geany.glade.h:487
+msgid "Group:"
+msgstr "Бүлэг:"
+
+#: ../data/geany.glade.h:488
+msgid "Other:"
+msgstr "Бусад:"
+
+#: ../src/about.c:48
+msgid ""
+"Copyright (c)  2005-2016\n"
+"Colomban Wendling\n"
+"Nick Treleaven\n"
+"Matthew Brush\n"
+"Enrico Tröger\n"
+"Frank Lanitz\n"
+"All rights reserved."
+msgstr ""
+
+#: ../src/about.c:168
+msgid "About Geany"
+msgstr "Жиенигийн тухай"
+
+#: ../src/about.c:212
+msgid "A fast and lightweight IDE"
+msgstr "Хурдан авсаархан IDE"
+
+#: ../src/about.c:234
+#, fuzzy, c-format
+msgid "(built on or after %s)"
+msgstr "(%s-ийг боловсруулах)"
+
+#. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
+#: ../src/about.c:266
+msgid "Info"
+msgstr "Мэдээлэл"
+
+#: ../src/about.c:282
+msgid "Developers"
+msgstr "Хөгжүүлэгчид"
+
+#: ../src/about.c:289
+#, fuzzy
+msgid "maintainer"
+msgstr "Засварлагчид"
+
+#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+msgid "developer"
+msgstr "хөгжүүлэгч"
+
+#: ../src/about.c:321
+msgid "translation maintainer"
+msgstr "Орчуулга засварлагчид"
+
+#: ../src/about.c:330
+msgid "Translators"
+msgstr "Орчуулагчид"
+
+#: ../src/about.c:350
+#, fuzzy
+msgid "Previous Translators"
+msgstr "Орчуулагчид"
+
+#: ../src/about.c:371
+msgid "Contributors"
+msgstr ""
+
+#: ../src/about.c:381
+#, c-format
+msgid ""
+"Some of the many contributors (for a more detailed list, see the file %s):"
+msgstr ""
+
+#: ../src/about.c:407
+msgid "Credits"
+msgstr "Талархал"
+
+#: ../src/about.c:424
+msgid "License"
+msgstr "Лиценз"
+
+#: ../src/about.c:433
+msgid ""
+"License text could not be found, please visit http://www.gnu.org/licenses/"
+"gpl-2.0.txt to view it online."
+msgstr ""
+
+#. fall back to %d
+#: ../src/build.c:710
+#, c-format
+msgid "failed to substitute %%p, no project active"
+msgstr ""
+
+#: ../src/build.c:738
+#, fuzzy
+msgid "Process failed, no working directory"
+msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
+
+#: ../src/build.c:750
+#, c-format
+msgid "%s (in directory: %s)"
+msgstr "%s (%s хавтасд)"
+
+#: ../src/build.c:773
+#, c-format
+msgid "Process failed (%s)"
+msgstr "Процесс-д алдаа гарлаа (%s)"
+
+#: ../src/build.c:807
+#, fuzzy, c-format
+msgid "Invalid working directory \"%s\""
+msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
+
+#: ../src/build.c:832
+#, fuzzy, c-format
+msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
+msgstr "%s-ийг ажиллуулахад алдаа гарлаа (start-script үүссэнгүй)"
+
+#: ../src/build.c:874
+msgid ""
+"File not executed because the terminal may contain some input (press Ctrl+C "
+"or Enter to clear it)."
+msgstr ""
+
+#: ../src/build.c:907
+#, fuzzy, c-format
+msgid ""
+"Cannot execute build command \"%s\": %s. Check the Terminal setting in "
+"Preferences"
+msgstr ""
+"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
+
+#: ../src/build.c:1016
+msgid "Compilation failed."
+msgstr "Хөрвүүлэлтийн алдаа гарлаа."
+
+#: ../src/build.c:1030
+msgid "Compilation finished successfully."
+msgstr "Амжилттай хөрвүүлэгдлээ."
+
+#: ../src/build.c:1199
+#, fuzzy
+msgid "Custom Text"
+msgstr "Аргументтэйгээр Үүсгэх"
+
+#: ../src/build.c:1200
+#, fuzzy
+msgid "Enter custom text here, all entered text is appended to the command."
+msgstr "Тохиргоогоо энд бич. Бичсэн текст үүсгэх командад орно."
+
+#: ../src/build.c:1278
+msgid "_Next Error"
+msgstr "_Дараачийн Алдаа"
+
+#: ../src/build.c:1280
+#, fuzzy
+msgid "_Previous Error"
+msgstr "_Хойшоо Хай"
+
+#. arguments
+#: ../src/build.c:1290 ../src/build.c:2709
+msgid "_Set Build Commands"
+msgstr ""
+
+#: ../src/build.c:1576 ../src/toolbar.c:376
+#, fuzzy
+msgid "Build the current file"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/build.c:1587
+#, fuzzy
+msgid "Build the current file with Make and the default target"
+msgstr "Файлыг үүсгэх хэрэгсэл болон аргументтэйгээр боловсруул"
+
+#: ../src/build.c:1589
+#, fuzzy
+msgid "Build the current file with Make and the specified target"
+msgstr "Файлыг үүсгэх хэрэгсэл болон заагдсан аргументтэйгээр боловсруул"
+
+#: ../src/build.c:1591
+#, fuzzy
+msgid "Compile the current file with Make"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/build.c:1610
+#, c-format
+msgid "Process could not be stopped (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/build.c:1624 ../src/build.c:1636
+msgid "No more build errors."
+msgstr "Боловсруулахад алдаа гараагүй"
+
+#: ../src/build.c:1749 ../src/build.c:1751
+msgid "Set menu item label"
+msgstr ""
+
+#: ../src/build.c:1776 ../src/symbols.c:513 ../src/tools.c:397
+msgid "Label"
+msgstr ""
+
+#. command column, holding status and command display
+#: ../src/build.c:1777 ../src/symbols.c:508 ../src/tools.c:382
+#, fuzzy
+msgid "Command"
+msgstr " командууд"
+
+#: ../src/build.c:1778
+#, fuzzy
+msgid "Working directory"
+msgstr "%s (%s хавтасд)"
+
+#: ../src/build.c:1779
+msgid "Reset"
+msgstr ""
+
+#: ../src/build.c:1836
+msgid "Click to set menu item label"
+msgstr ""
+
+#: ../src/build.c:1920 ../src/build.c:1922
+#, fuzzy, c-format
+msgid "%s commands"
+msgstr " командууд"
+
+#: ../src/build.c:1922
+#, fuzzy
+msgid "No filetype"
+msgstr "Файлын төрлийг заа:"
+
+#: ../src/build.c:1931 ../src/build.c:1966
+msgid "Error regular expression:"
+msgstr ""
+
+#: ../src/build.c:1959
+#, fuzzy
+msgid "Independent commands"
+msgstr " командууд"
+
+#: ../src/build.c:1991
+msgid "Note: Item 2 opens a dialog and appends the response to the command."
+msgstr ""
+
+#: ../src/build.c:2000
+#, fuzzy
+msgid "Execute commands"
+msgstr " командууд"
+
+#: ../src/build.c:2012
+msgid ""
+"%d, %e, %f, %p, %l are substituted in command and directory fields, see "
+"manual for details."
+msgstr ""
+
+#: ../src/build.c:2170
+msgid "Set Build Commands"
+msgstr ""
+
+#: ../src/build.c:2385
+msgid "_Compile"
+msgstr "_Хөрвүүл"
+
+#: ../src/build.c:2399 ../src/build.c:2429 ../src/build.c:2637
+#, fuzzy
+msgid "_Execute"
+msgstr "Ажиллуул:"
+
+#. build the code with make custom
+#: ../src/build.c:2444 ../src/build.c:2635 ../src/build.c:2689
+#, fuzzy
+msgid "Make Custom _Target..."
+msgstr "_Аргументтэйгээр Үүсгэх"
+
+#. build the code with make object
+#: ../src/build.c:2446 ../src/build.c:2636 ../src/build.c:2697
+msgid "Make _Object"
+msgstr "_Объектыг боловсруул"
+
+#: ../src/build.c:2448 ../src/build.c:2634
+#, fuzzy
+msgid "_Make"
+msgstr "Үүсгэх:"
+
+#. build the code with make all
+#: ../src/build.c:2681
+msgid "_Make All"
+msgstr "_Бүгдийг Үүсгэх"
+
+#: ../src/callbacks.c:147
+#, fuzzy, c-format
+msgid "%d file saved."
+msgid_plural "%d files saved."
+msgstr[0] "%s файл хадгалагдлаа."
+msgstr[1] "%s файл хадгалагдлаа."
+
+#: ../src/callbacks.c:890 ../src/keybindings.c:560
+msgid "Go to Line"
+msgstr "Мөрлүү оч"
+
+#: ../src/callbacks.c:891
+msgid "Enter the line you want to go to:"
+msgstr "Очих мөрөө оруул:"
+
+#: ../src/callbacks.c:992 ../src/callbacks.c:1018
+msgid ""
+"Please set the filetype for the current file before using this function."
+msgstr "Энэ функцыг хэрэглэхийн өмнө файлынхаа төрлийг зааж өгнө үү."
+
+#: ../src/callbacks.c:1308 ../src/callbacks.c:1316
+msgid "No more message items."
+msgstr "Мэдээ дууссан."
+
+#: ../src/callbacks.c:1419
+#, fuzzy, c-format
+msgid "Could not open file %s (File not found)"
+msgstr "%s файлыг нээж чадахгүй байна (%s)"
+
+#: ../src/callbacks.c:1468
+msgid "Check the path setting in Filetype configuration."
+msgstr ""
+
+#: ../src/callbacks.c:1473
+#, fuzzy
+msgid "Check the path setting in Preferences."
+msgstr ""
+"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
+
+#. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
+#: ../src/callbacks.c:1486
+#, c-format
+msgid "Cannot execute context action command \"%s\": %s. %s"
+msgstr ""
+
+#: ../src/dialogs.c:161 ../src/document.c:2294 ../src/document.c:2359
+#: ../src/document.c:2367
+#, c-format
+msgid "\"%s\" was not found."
+msgstr "\"%s\" олдсонгүй."
+
+#. auto-detect
+#: ../src/dialogs.c:223 ../src/encodings.c:531
+msgid "Detect from file"
+msgstr "Файлаас тогтоо"
+
+#: ../src/dialogs.c:226
+msgid "Programming Languages"
+msgstr ""
+
+#: ../src/dialogs.c:228
+msgid "Scripting Languages"
+msgstr ""
+
+#: ../src/dialogs.c:230
+msgid "Markup Languages"
+msgstr ""
+
+#: ../src/dialogs.c:308
+msgid "_More Options"
+msgstr ""
+
+#. line 1 with checkbox and encoding combo
+#: ../src/dialogs.c:315
+msgid "Show _hidden files"
+msgstr "_Нууц файлуудыг харуул"
+
+#: ../src/dialogs.c:326
+msgid "Set encoding:"
+msgstr "Энкодчиллыг заа:"
+
+#: ../src/dialogs.c:335
+msgid ""
+"Explicitly defines an encoding for the file, if it would not be detected. "
+"This is useful when you know that the encoding of a file cannot be detected "
+"correctly by Geany.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"encoding."
+msgstr ""
+"Жиени-гээр файлын энкод танигдахгүй тохиолдолд файлын энкодчиллыг цаанаас нь "
+"зааж өгсөн байна.\n"
+"Жич: Олон файлыг сонгосон бол бүгд сонгогдсон энкодчиллоор нээгдэнэ."
+
+#. line 2 with filetype combo
+#: ../src/dialogs.c:342
+msgid "Set filetype:"
+msgstr "Файлын төрлийг заа:"
+
+#: ../src/dialogs.c:351
+msgid ""
+"Explicitly defines a filetype for the file, if it would not be detected by "
+"filename extension.\n"
+"Note if you choose multiple files, they will all be opened with the chosen "
+"filetype."
+msgstr ""
+"Файлын өртгөтгөлөөр файлын төрлийг тодорхойлж чадахгүй бол файлын төрлийг "
+"цаанаас нь зааж өгсөн.\n"
+"Жич: Олон файл сонгосон бол бүгд сонгогдсон файлын төрлөөр нээгдэнэ."
+
+#: ../src/dialogs.c:377 ../src/dialogs.c:467
+msgid "Open File"
+msgstr "Файл Нээх"
+
+#: ../src/dialogs.c:381
+#, fuzzy
+msgctxt "Open dialog action"
+msgid "_View"
+msgstr "_Харагдац"
+
+#: ../src/dialogs.c:383
+msgid ""
+"Opens the file in read-only mode. If you choose more than one file to open, "
+"all files will be opened read-only."
+msgstr ""
+"Файлыг зөвхөн харахаар нээх. Нэгээс олон файл нээх бол бүх файл харахаар л "
+"нээгдэнэ."
+
+#: ../src/dialogs.c:535 ../src/document.c:2045
+msgid "Overwrite?"
+msgstr ""
+
+#: ../src/dialogs.c:536
+msgid "Filename already exists!"
+msgstr ""
+
+#: ../src/dialogs.c:565 ../src/dialogs.c:679
+msgid "Save File"
+msgstr "Файлыг Хадгал"
+
+#: ../src/dialogs.c:574
+msgid "R_ename"
+msgstr ""
+
+#: ../src/dialogs.c:575
+msgid "Save the file and rename it"
+msgstr ""
+
+#: ../src/dialogs.c:697 ../src/win32.c:730
+#, fuzzy
+msgid "Error"
+msgstr "_Дараачийн Алдаа"
+
+#: ../src/dialogs.c:700 ../src/dialogs.c:779 ../src/dialogs.c:1337
+#: ../src/win32.c:736
+msgid "Question"
+msgstr ""
+
+#: ../src/dialogs.c:703 ../src/win32.c:742
+msgid "Warning"
+msgstr ""
+
+#: ../src/dialogs.c:706 ../src/win32.c:748
+msgid "Information"
+msgstr ""
+
+#: ../src/dialogs.c:783
+msgid "_Don't save"
+msgstr "_Хадгалахгүй"
+
+#: ../src/dialogs.c:812
+#, c-format
+msgid "The file '%s' is not saved."
+msgstr "'%s' файл хадгалагдсангүй."
+
+#: ../src/dialogs.c:813
+msgid "Do you want to save it before closing?"
+msgstr "Хаахын өмнө хадгалах уу?"
+
+#: ../src/dialogs.c:891
+msgid "Choose font"
+msgstr "Фонтыг сонго"
+
+#: ../src/dialogs.c:1185
+msgid ""
+"An error occurred or file information could not be retrieved (e.g. from a "
+"new file)."
+msgstr ""
+"Алдаа гарсан эсвэл файлын мэдээллийг татаж чадахгүй байна (жишээ: шинэ "
+"файлаас)."
+
+#: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
+#: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
+#: ../src/symbols.c:2321 ../src/symbols.c:2337 ../src/ui_utils.c:289
+msgid "unknown"
+msgstr "үл танигдах"
+
+#: ../src/dialogs.c:1219
+#, fuzzy, c-format
+msgid "%s Properties"
+msgstr "Шинж чанар"
+
+#: ../src/dialogs.c:1251 ../src/ui_utils.c:293
+msgid "(with BOM)"
+msgstr "(BOM-ээр)"
+
+#: ../src/dialogs.c:1251
+msgid "(without BOM)"
+msgstr "(BOM-гүй)"
+
+#: ../src/document.c:730
+#, c-format
+msgid "File %s closed."
+msgstr "%s файл хаагдлаа."
+
+#: ../src/document.c:886
+#, fuzzy, c-format
+msgid "New file \"%s\" opened."
+msgstr "Шинэ файл нээгдлээ."
+
+#: ../src/document.c:960
+#, c-format
+msgid "Could not open file %s (%s)"
+msgstr "%s файлыг нээж чадахгүй байна (%s)"
+
+#: ../src/document.c:1009
+#, c-format
+msgid "The file \"%s\" is not valid %s."
+msgstr "\"%s\" файл %s-д зөв биш."
+
+#: ../src/document.c:1015
+#, c-format
+msgid ""
+"The file \"%s\" does not look like a text file or the file encoding is not "
+"supported."
+msgstr "\"%s\" файл текст файл биш эсвэл файлын энкодчлолыг дэмжихгүй байна."
+
+#: ../src/document.c:1025
+#, c-format
+msgid ""
+"The file \"%s\" could not be opened properly and has been truncated. This "
+"can occur if the file contains a NULL byte. Be aware that saving it can "
+"cause data loss.\n"
+"The file was set to read-only."
+msgstr ""
+"\"%s\" файлыг таслагдаж нээгдлээ. Файлд NULL байт байвал ийм зүйл "
+"тохиолдоно. Файлыг хадгалахад өгөгдөл алдагдана.\n"
+"Файл зөвхөн-харах-аар заагдсан."
+
+#: ../src/document.c:1237
+msgid "Spaces"
+msgstr ""
+
+#: ../src/document.c:1240
+msgid "Tabs"
+msgstr ""
+
+#: ../src/document.c:1243
+#, fuzzy
+msgid "Tabs and Spaces"
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
+#. * and Spaces), the second one is the filename
+#: ../src/document.c:1248
+#, c-format
+msgid "Setting %s indentation mode for %s."
+msgstr ""
+
+#: ../src/document.c:1259
+#, c-format
+msgid "Setting indentation width to %d for %s."
+msgstr ""
+
+#: ../src/document.c:1483
+#, c-format
+msgid "File %s reloaded."
+msgstr "%s файл дахин ачааллагдлаа."
+
+#. For translators: this is the status window message for opening a file. %d is the number
+#. * of the newly opened file, %s indicates whether the file is opened read-only
+#. * (it is replaced with the string ", read-only").
+#: ../src/document.c:1491
+#, c-format
+msgid "File %s opened(%d%s)."
+msgstr "%s файл нээгдлээ(%d%s)."
+
+#: ../src/document.c:1493
+msgid ", read-only"
+msgstr ", зөвхөн-харах"
+
+#: ../src/document.c:1613
+msgid "Discard history"
+msgstr ""
+
+#: ../src/document.c:1614
+msgid ""
+"The buffer's previous state is stored in the history and undoing restores "
+"it. You can disable this by discarding the history upon reload. This message "
+"will not be displayed again but Your choice can be changed in the various "
+"preferences."
+msgstr ""
+
+#: ../src/document.c:1618
+#, fuzzy
+msgid "The file has been reloaded."
+msgstr "%s файл дахин ачааллагдлаа."
+
+#: ../src/document.c:1648
+msgid "Any unsaved changes will be lost."
+msgstr "Хадгалаагүй өөрчлөлтүүд алга болно."
+
+#: ../src/document.c:1649
+#, fuzzy
+msgid "Undo history will be lost."
+msgstr "Хадгалаагүй өөрчлөлтүүд алга болно."
+
+#: ../src/document.c:1650
+#, c-format
+msgid "Are you sure you want to reload '%s'?"
+msgstr "'%s'-ийг дахин ачааллуулах уу?"
+
+#: ../src/document.c:1756
+#, fuzzy
+msgid "Error renaming file."
+msgstr "Файлыг хадгалахад гарсан алдаа"
+
+#: ../src/document.c:1877
+#, fuzzy, c-format
+msgid ""
+"An error occurred while converting the file from UTF-8 in \"%s\". The file "
+"remains unsaved."
+msgstr ""
+"\"%s\"-д UTF-8-ээс файлыг хөрвүүлэхэд алдаа гарлаа. Файл хадгалагдсангүй.\n"
+"Алдааны мэдээ: %s\n"
+
+#: ../src/document.c:1898
+#, c-format
+msgid ""
+"Error message: %s\n"
+"The error occurred at \"%s\" (line: %d, column: %d)."
+msgstr ""
+
+#: ../src/document.c:1902
+#, fuzzy, c-format
+msgid "Error message: %s."
+msgstr "Файл хадгалахад гарсан алдаа (%s)."
+
+#: ../src/document.c:1962
+#, c-format
+msgid "Failed to open file '%s' for writing: fopen() failed: %s"
+msgstr ""
+
+#: ../src/document.c:1980
+#, c-format
+msgid "Failed to write file '%s': fwrite() failed: %s"
+msgstr ""
+
+#: ../src/document.c:1994
+#, c-format
+msgid "Failed to close file '%s': fclose() failed: %s"
+msgstr ""
+
+#: ../src/document.c:2044 ../src/document.c:3617
+msgid "_Overwrite"
+msgstr ""
+
+#: ../src/document.c:2046 ../src/document.c:3620
+#, c-format
+msgid "The file '%s' on the disk is more recent than the current buffer."
+msgstr ""
+
+#: ../src/document.c:2054 ../src/document.c:3669
+msgid "Try to resave the file?"
+msgstr ""
+
+#: ../src/document.c:2055 ../src/document.c:3670
+#, fuzzy, c-format
+msgid "File \"%s\" was not found on disk!"
+msgstr "\"%s\" олдсонгүй."
+
+#: ../src/document.c:2118
+#, c-format
+msgid "Cannot save read-only document '%s'!"
+msgstr ""
+
+#: ../src/document.c:2186
+#, c-format
+msgid "Error saving file (%s)."
+msgstr "Файл хадгалахад гарсан алдаа (%s)."
+
+#: ../src/document.c:2191
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"The file on disk may now be truncated!"
+msgstr ""
+
+#: ../src/document.c:2193
+msgid "Error saving file."
+msgstr "Файлыг хадгалахад гарсан алдаа"
+
+#: ../src/document.c:2217
+#, c-format
+msgid "File %s saved."
+msgstr "%s файл хадгалагдлаа."
+
+#: ../src/document.c:2367
+msgid "Wrap search and find again?"
+msgstr "Wrap search and find again?"
+
+#: ../src/document.c:2456 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/search.c:2222 ../src/search.c:2223
+#, fuzzy, c-format
+msgid "No matches found for \"%s\"."
+msgstr "Олдсонгүй."
+
+#: ../src/document.c:2462
+#, fuzzy, c-format
+msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
+msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[0] "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+msgstr[1] "%s: replaced %d occurrences of \"%s\" with \"%s\"."
+
+#: ../src/document.c:3619
+#, fuzzy
+msgid "Do you want to reload it?"
+msgstr "'%s'-ийг дахин ачааллуулах уу?"
+
+#: ../src/editor.c:4455
+#, fuzzy
+msgid "Enter Tab Width"
+msgstr "Хэсгийн өргөх:"
+
+#: ../src/editor.c:4456
+msgid "Enter the amount of spaces which should be replaced by a tab character."
+msgstr ""
+
+#: ../src/editor.c:4661
+#, c-format
+msgid "Warning: non-standard hard tab width: %d != 8!"
+msgstr ""
+
+#: ../src/encodings.c:72
+msgid "Celtic"
+msgstr "Кельт"
+
+#: ../src/encodings.c:73 ../src/encodings.c:74
+msgid "Greek"
+msgstr "Грек"
+
+#: ../src/encodings.c:75
+msgid "Nordic"
+msgstr "Скандинов"
+
+#: ../src/encodings.c:76
+msgid "South European"
+msgstr "Өмнөд Европ"
+
+#: ../src/encodings.c:77 ../src/encodings.c:78 ../src/encodings.c:79
+#: ../src/encodings.c:80
+msgid "Western"
+msgstr "Баруун"
+
+#: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
+msgid "Baltic"
+msgstr "Балт"
+
+#: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
+msgid "Central European"
+msgstr "Төв Европ"
+
+#. ISO-IR-111 not available on Windows
+#: ../src/encodings.c:88 ../src/encodings.c:89 ../src/encodings.c:91
+#: ../src/encodings.c:92 ../src/encodings.c:93
+msgid "Cyrillic"
+msgstr "Крилл"
+
+#: ../src/encodings.c:94
+msgid "Cyrillic/Russian"
+msgstr "Крилл/Орос"
+
+#: ../src/encodings.c:95
+msgid "Cyrillic/Ukrainian"
+msgstr "Крилл/Украйн"
+
+#: ../src/encodings.c:96
+msgid "Romanian"
+msgstr "Румин"
+
+#: ../src/encodings.c:98 ../src/encodings.c:99 ../src/encodings.c:100
+msgid "Arabic"
+msgstr "Араб"
+
+#. not available at all, ?
+#: ../src/encodings.c:101 ../src/encodings.c:103 ../src/encodings.c:104
+msgid "Hebrew"
+msgstr "Еврей"
+
+#: ../src/encodings.c:105
+msgid "Hebrew Visual"
+msgstr "Еврей Visual"
+
+#: ../src/encodings.c:107
+msgid "Armenian"
+msgstr "Армен"
+
+#: ../src/encodings.c:108
+msgid "Georgian"
+msgstr "Гүрж"
+
+#: ../src/encodings.c:109
+msgid "Thai"
+msgstr "Таи"
+
+#: ../src/encodings.c:110 ../src/encodings.c:111 ../src/encodings.c:112
+msgid "Turkish"
+msgstr "Турк"
+
+#: ../src/encodings.c:113 ../src/encodings.c:114 ../src/encodings.c:115
+msgid "Vietnamese"
+msgstr "Вьетнам"
+
+#: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
+#: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:545
+msgid "Unicode"
+msgstr "Юникод"
+
+#. maybe not available on Linux
+#: ../src/encodings.c:126 ../src/encodings.c:127 ../src/encodings.c:128
+#: ../src/encodings.c:130
+msgid "Chinese Simplified"
+msgstr "Хятад"
+
+#: ../src/encodings.c:131 ../src/encodings.c:132 ../src/encodings.c:133
+msgid "Chinese Traditional"
+msgstr "Хуучин Хятад"
+
+#: ../src/encodings.c:134 ../src/encodings.c:135 ../src/encodings.c:136
+#: ../src/encodings.c:137
+msgid "Japanese"
+msgstr "Япон"
+
+#: ../src/encodings.c:138 ../src/encodings.c:139 ../src/encodings.c:140
+#: ../src/encodings.c:141
+msgid "Korean"
+msgstr "Солонгос"
+
+#: ../src/encodings.c:143
+msgid "Without encoding"
+msgstr "Энкодчлолгүй"
+
+#: ../src/encodings.c:414
+msgid "_West European"
+msgstr "_Баруун Европ"
+
+#: ../src/encodings.c:415
+msgid "_East European"
+msgstr "_Зүүн Европ"
+
+#: ../src/encodings.c:416
+msgid "East _Asian"
+msgstr "_Зүүн Ази"
+
+#: ../src/encodings.c:417
+msgid "_SE & SW Asian"
+msgstr "_ЗӨ болон БӨ Ази"
+
+#: ../src/encodings.c:418
+msgid "_Middle Eastern"
+msgstr "_Ойрх Дорнод "
+
+#: ../src/encodings.c:419
+msgid "_Unicode"
+msgstr "_Юникод"
+
+#: ../src/encodings.c:535
+#, fuzzy
+msgid "West European"
+msgstr "_Баруун Европ"
+
+#: ../src/encodings.c:537
+#, fuzzy
+msgid "East European"
+msgstr "_Зүүн Европ"
+
+#: ../src/encodings.c:539
+#, fuzzy
+msgid "East Asian"
+msgstr "_Зүүн Ази"
+
+#: ../src/encodings.c:541
+#, fuzzy
+msgid "SE & SW Asian"
+msgstr "_ЗӨ болон БӨ Ази"
+
+#: ../src/encodings.c:543
+#, fuzzy
+msgid "Middle Eastern"
+msgstr "_Ойрх Дорнод "
+
+#: ../src/filetypes.c:87
+#, fuzzy, c-format
+msgid "%s source file"
+msgstr "Си код"
+
+#: ../src/filetypes.c:88
+#, fuzzy, c-format
+msgid "%s file"
+msgstr "Diff файл"
+
+#: ../src/filetypes.c:89
+#, fuzzy, c-format
+msgid "%s script"
+msgstr "Шэлл код"
+
+#: ../src/filetypes.c:90
+#, fuzzy, c-format
+msgid "%s document"
+msgstr "бүх барим"
+
+#: ../src/filetypes.c:155
+msgid "Shell"
+msgstr ""
+
+#: ../src/filetypes.c:156
+msgid "Makefile"
+msgstr "Үүсгэхфайл"
+
+#: ../src/filetypes.c:160
+#, fuzzy
+msgid "Cascading Stylesheet"
+msgstr "Cascading StyleSheet"
+
+#: ../src/filetypes.c:169
+#, fuzzy
+msgid "Config"
+msgstr "Config файл"
+
+#: ../src/filetypes.c:170
+#, fuzzy
+msgid "Gettext translation"
+msgstr "Орчуулга засварлагчид"
+
+#: ../src/filetypes.c:431
+msgid "_Programming Languages"
+msgstr ""
+
+#: ../src/filetypes.c:432
+msgid "_Scripting Languages"
+msgstr ""
+
+#: ../src/filetypes.c:433
+msgid "_Markup Languages"
+msgstr ""
+
+#: ../src/filetypes.c:434
+msgid "M_iscellaneous"
+msgstr ""
+
+#: ../src/filetypes.c:1195 ../src/win32.c:156
+msgid "All Source"
+msgstr ""
+
+#. create meta file filter "All files"
+#: ../src/filetypes.c:1220 ../src/project.c:350 ../src/win32.c:146
+#: ../src/win32.c:191 ../src/win32.c:212 ../src/win32.c:217
+msgid "All files"
+msgstr "Бүх файл"
+
+#: ../src/filetypes.c:1269
+#, c-format
+msgid "Bad regex for filetype %s: %s"
+msgstr ""
+
+#: ../src/geany.h:50
+msgid "untitled"
+msgstr "нэргүй"
+
+#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/templates.c:232
+#, fuzzy, c-format
+msgid "Could not find file '%s'."
+msgstr "%s файлыг нээж чадахгүй байна (%s)"
+
+#: ../src/highlighting.c:1296
+msgid "Default"
+msgstr ""
+
+#: ../src/highlighting.c:1337
+#, fuzzy
+msgid "The current filetype overrides the default style."
+msgstr "Файлыг үүсгэх хэрэгсэл болон аргументтэйгээр боловсруул"
+
+#: ../src/highlighting.c:1338
+msgid "This may cause color schemes to display incorrectly."
+msgstr ""
+
+#: ../src/highlighting.c:1363
+#, fuzzy
+msgid "Color Schemes"
+msgstr "Өнгө Сонгогч"
+
+#. visual group order
+#: ../src/keybindings.c:307 ../src/symbols.c:485
+#, fuzzy
+msgid "File"
+msgstr "_Файл"
+
+#: ../src/keybindings.c:309
+msgid "Clipboard"
+msgstr ""
+
+#: ../src/keybindings.c:310
+#, fuzzy
+msgid "Select"
+msgstr "_Бүгдийг Сонгох"
+
+#: ../src/keybindings.c:311
+#, fuzzy
+msgid "Format"
+msgstr "_Хэлбэржилт"
+
+#: ../src/keybindings.c:312
+#, fuzzy
+msgid "Insert"
+msgstr "Огн_оо Оруулах"
+
+#: ../src/keybindings.c:313
+msgid "Settings"
+msgstr ""
+
+#: ../src/keybindings.c:314
+#, fuzzy
+msgid "Search"
+msgstr "_Хайх"
+
+#: ../src/keybindings.c:315
+#, fuzzy
+msgid "Go to"
+msgstr "Мөр-лүү оч"
+
+#: ../src/keybindings.c:316
+#, fuzzy
+msgid "View"
+msgstr "_Харагдац"
+
+#: ../src/keybindings.c:317 ../src/symbols.c:634
+#, fuzzy
+msgid "Document"
+msgstr "_Баримт"
+
+#: ../src/keybindings.c:319 ../src/keybindings.c:685 ../src/project.c:511
+#: ../src/ui_utils.c:2193
+#, fuzzy
+msgid "Build"
+msgstr "_Боловсруул"
+
+#: ../src/keybindings.c:321 ../src/keybindings.c:710
+#, fuzzy
+msgid "Help"
+msgstr "_Тусламж"
+
+#: ../src/keybindings.c:322
+msgid "Focus"
+msgstr ""
+
+#: ../src/keybindings.c:323
+msgid "Notebook tab"
+msgstr ""
+
+#: ../src/keybindings.c:332 ../src/keybindings.c:364
+#, fuzzy
+msgid "New"
+msgstr "_Шинээр"
+
+#: ../src/keybindings.c:334 ../src/keybindings.c:366
+#, fuzzy
+msgid "Open"
+msgstr "_Нээх"
+
+#: ../src/keybindings.c:337
+#, fuzzy
+msgid "Open selected file"
+msgstr "Сонгосон Ф_айлыг нээх"
+
+#: ../src/keybindings.c:339
+#, fuzzy
+msgid "Save"
+msgstr "Бүгдийг хадгал"
+
+#: ../src/keybindings.c:341 ../src/toolbar.c:59
+#, fuzzy
+msgid "Save as"
+msgstr "Бүгдийг хадгал"
+
+#: ../src/keybindings.c:343
+msgid "Save all"
+msgstr "Бүгдийг хадгал"
+
+#: ../src/keybindings.c:346 ../src/symbols.c:718
+msgid "Properties"
+msgstr "Шинж чанар"
+
+#: ../src/keybindings.c:348
+msgid "Print"
+msgstr ""
+
+#: ../src/keybindings.c:350 ../src/keybindings.c:371
+#, fuzzy
+msgid "Close"
+msgstr "_Хаах"
+
+#: ../src/keybindings.c:352
+#, fuzzy
+msgid "Close all"
+msgstr "Бүх Файлыг Х_аа"
+
+#: ../src/keybindings.c:355
+#, fuzzy
+msgid "Reload file"
+msgstr "_Дахин ачаал"
+
+#: ../src/keybindings.c:357
+msgid "Re-open last closed tab"
+msgstr ""
+
+#: ../src/keybindings.c:359
+msgid "Quit"
+msgstr ""
+
+#: ../src/keybindings.c:376
+msgid "Undo"
+msgstr ""
+
+#: ../src/keybindings.c:378
+msgid "Redo"
+msgstr ""
+
+#: ../src/keybindings.c:387
+msgid "Delete to line end"
+msgstr ""
+
+#: ../src/keybindings.c:390
+#, fuzzy
+msgid "_Transpose Current Line"
+msgstr "Файлыг хэвлэ"
+
+#: ../src/keybindings.c:392
+#, fuzzy
+msgid "Scroll to current line"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/keybindings.c:394
+msgid "Scroll up the view by one line"
+msgstr ""
+
+#: ../src/keybindings.c:396
+msgid "Scroll down the view by one line"
+msgstr ""
+
+#: ../src/keybindings.c:398
+#, fuzzy
+msgid "Complete snippet"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/keybindings.c:400
+msgid "Move cursor in snippet"
+msgstr ""
+
+#: ../src/keybindings.c:402
+msgid "Suppress snippet completion"
+msgstr ""
+
+#: ../src/keybindings.c:404
+msgid "Context Action"
+msgstr ""
+
+#: ../src/keybindings.c:406
+#, fuzzy
+msgid "Complete word"
+msgstr "Хөрвүүлэгч"
+
+#: ../src/keybindings.c:408
+msgid "Show calltip"
+msgstr ""
+
+#: ../src/keybindings.c:410
+#, fuzzy
+msgid "Word part completion"
+msgstr "Үгийн гүйцээлт"
+
+#: ../src/keybindings.c:413
+msgid "Move line(s) up"
+msgstr ""
+
+#: ../src/keybindings.c:416
+msgid "Move line(s) down"
+msgstr ""
+
+#: ../src/keybindings.c:421
+msgid "Cut"
+msgstr ""
+
+#: ../src/keybindings.c:423
+msgid "Copy"
+msgstr ""
+
+#: ../src/keybindings.c:425
+msgid "Paste"
+msgstr ""
+
+#: ../src/keybindings.c:436
+#, fuzzy
+msgid "Select All"
+msgstr "_Бүгдийг Сонгох"
+
+#: ../src/keybindings.c:438
+#, fuzzy
+msgid "Select current word"
+msgstr "Файлыг хадгал"
+
+#: ../src/keybindings.c:446
+msgid "Select to previous word part"
+msgstr ""
+
+#: ../src/keybindings.c:448
+msgid "Select to next word part"
+msgstr ""
+
+#: ../src/keybindings.c:456
+#, fuzzy
+msgid "Toggle line commentation"
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
+
+#: ../src/keybindings.c:459
+#, fuzzy
+msgid "Comment line(s)"
+msgstr "_Тайлбарын мөр(үүд)"
+
+#: ../src/keybindings.c:461
+#, fuzzy
+msgid "Uncomment line(s)"
+msgstr "Тайлбар _биш Мөр(үүд)"
+
+#: ../src/keybindings.c:463
+#, fuzzy
+msgid "Increase indent"
+msgstr "Догол мөрийг _Өсгөх"
+
+#: ../src/keybindings.c:466
+#, fuzzy
+msgid "Decrease indent"
+msgstr "Догол мөрийг _Багасгах"
+
+#: ../src/keybindings.c:469
+#, fuzzy
+msgid "Increase indent by one space"
+msgstr "Догол мөрийг _Өсгөх"
+
+#: ../src/keybindings.c:471
+#, fuzzy
+msgid "Decrease indent by one space"
+msgstr "Догол мөрийг _Багасгах"
+
+#: ../src/keybindings.c:475
+msgid "Send to Custom Command 1"
+msgstr ""
+
+#: ../src/keybindings.c:477
+msgid "Send to Custom Command 2"
+msgstr ""
+
+#: ../src/keybindings.c:479
+msgid "Send to Custom Command 3"
+msgstr ""
+
+#: ../src/keybindings.c:481
+msgid "Send to Custom Command 4"
+msgstr ""
+
+#: ../src/keybindings.c:483
+msgid "Send to Custom Command 5"
+msgstr ""
+
+#: ../src/keybindings.c:485
+msgid "Send to Custom Command 6"
+msgstr ""
+
+#: ../src/keybindings.c:487
+msgid "Send to Custom Command 7"
+msgstr ""
+
+#: ../src/keybindings.c:489
+msgid "Send to Custom Command 8"
+msgstr ""
+
+#: ../src/keybindings.c:491
+msgid "Send to Custom Command 9"
+msgstr ""
+
+#: ../src/keybindings.c:499
+#, fuzzy
+msgid "Join lines"
+msgstr "Мөр-лүү оч"
+
+#: ../src/keybindings.c:504
+#, fuzzy
+msgid "Insert date"
+msgstr "Огн_оо Оруулах"
+
+#: ../src/keybindings.c:510
+msgid "Insert New Line Before Current"
+msgstr ""
+
+#: ../src/keybindings.c:512
+msgid "Insert New Line After Current"
+msgstr ""
+
+#: ../src/keybindings.c:525 ../src/search.c:464
+msgid "Find"
+msgstr ""
+
+#: ../src/keybindings.c:527
+#, fuzzy
+msgid "Find Next"
+msgstr "Ур_агшаа Хай"
+
+#: ../src/keybindings.c:529
+#, fuzzy
+msgid "Find Previous"
+msgstr "_Хойшоо Хай"
+
+#: ../src/keybindings.c:536 ../src/search.c:617
+#, fuzzy
+msgid "Replace"
+msgstr "_Орлуулах"
+
+#: ../src/keybindings.c:538 ../src/search.c:867
+#, fuzzy
+msgid "Find in Files"
+msgstr "Ф_айлуудаас Хай"
+
+#: ../src/keybindings.c:541
+#, fuzzy
+msgid "Next Message"
+msgstr "Даргаагийн _Мэдээ"
+
+#: ../src/keybindings.c:543
+#, fuzzy
+msgid "Previous Message"
+msgstr "Даргаагийн _Мэдээ"
+
+#: ../src/keybindings.c:546
+msgid "Find Usage"
+msgstr "Хэрэглээг хай"
+
+#: ../src/keybindings.c:549
+#, fuzzy
+msgid "Find Document Usage"
+msgstr "Хэрэглээг хай"
+
+#: ../src/keybindings.c:556 ../src/toolbar.c:70
+msgid "Navigate back a location"
+msgstr ""
+
+#: ../src/keybindings.c:558 ../src/toolbar.c:71
+msgid "Navigate forward a location"
+msgstr ""
+
+#: ../src/keybindings.c:563
+#, fuzzy
+msgid "Go to matching brace"
+msgstr "Мөр-лүү оч"
+
+#: ../src/keybindings.c:566
+#, fuzzy
+msgid "Toggle marker"
+msgstr "Long line marker:"
+
+#: ../src/keybindings.c:575
+#, fuzzy
+msgid "Go to Symbol Definition"
+msgstr "Go to Tag Definition"
+
+#: ../src/keybindings.c:578
+#, fuzzy
+msgid "Go to Symbol Declaration"
+msgstr "Go to Tag Declaration"
+
+#: ../src/keybindings.c:580
+#, fuzzy
+msgid "Go to Start of Line"
+msgstr "Мөрлүү оч"
+
+#: ../src/keybindings.c:582
+#, fuzzy
+msgid "Go to End of Line"
+msgstr "Мөрлүү оч"
+
+#: ../src/keybindings.c:584
+#, fuzzy
+msgid "Go to Start of Display Line"
+msgstr "Мөрлүү оч"
+
+#: ../src/keybindings.c:586
+msgid "Go to End of Display Line"
+msgstr ""
+
+#: ../src/keybindings.c:588
+msgid "Go to Previous Word Part"
+msgstr ""
+
+#: ../src/keybindings.c:590
+msgid "Go to Next Word Part"
+msgstr ""
+
+#: ../src/keybindings.c:595
+msgid "Toggle All Additional Widgets"
+msgstr ""
+
+#: ../src/keybindings.c:598
+#, fuzzy
+msgid "Fullscreen"
+msgstr "Бүтэн _дэлгэц"
+
+#: ../src/keybindings.c:600
+#, fuzzy
+msgid "Toggle Messages Window"
+msgstr "Мэдээний _Цонхыг Харуул"
+
+#: ../src/keybindings.c:603
+#, fuzzy
+msgid "Toggle Sidebar"
+msgstr "Ха_жуу самбарыг Харуул"
+
+#: ../src/keybindings.c:605
+msgid "Zoom In"
+msgstr ""
+
+#: ../src/keybindings.c:607
+msgid "Zoom Out"
+msgstr ""
+
+#: ../src/keybindings.c:609
+#, fuzzy
+msgid "Zoom Reset"
+msgstr "Текст-рүү ойртох"
+
+#: ../src/keybindings.c:614
+msgid "Switch to Editor"
+msgstr ""
+
+#: ../src/keybindings.c:616
+msgid "Switch to Search Bar"
+msgstr ""
+
+#: ../src/keybindings.c:618
+#, fuzzy
+msgid "Switch to Message Window"
+msgstr "Мэдээний _Цонхыг Харуул"
+
+#: ../src/keybindings.c:620
+#, fuzzy
+msgid "Switch to Compiler"
+msgstr "Хөрвүүлэгч"
+
+#: ../src/keybindings.c:622
+#, fuzzy
+msgid "Switch to Messages"
+msgstr "Мэдээ"
+
+#: ../src/keybindings.c:624
+#, fuzzy
+msgid "Switch to Scribble"
+msgstr "Scribble"
+
+#: ../src/keybindings.c:626
+msgid "Switch to VTE"
+msgstr ""
+
+#: ../src/keybindings.c:628
+#, fuzzy
+msgid "Switch to Sidebar"
+msgstr "Ха_жуу самбарыг Харуул"
+
+#: ../src/keybindings.c:630
+msgid "Switch to Sidebar Symbol List"
+msgstr ""
+
+#: ../src/keybindings.c:632
+msgid "Switch to Sidebar Document List"
+msgstr ""
+
+#: ../src/keybindings.c:637
+#, fuzzy
+msgid "Switch to left document"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:639
+#, fuzzy
+msgid "Switch to right document"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:641
+#, fuzzy
+msgid "Switch to last used document"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:644
+#, fuzzy
+msgid "Move document left"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:647
+#, fuzzy
+msgid "Move document right"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:649
+#, fuzzy
+msgid "Move document first"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:651
+#, fuzzy
+msgid "Move document last"
+msgstr "бүх барим"
+
+#: ../src/keybindings.c:656
+#, fuzzy
+msgid "Toggle Line wrapping"
+msgstr "Line wrapping"
+
+#: ../src/keybindings.c:658
+#, fuzzy
+msgid "Toggle Line breaking"
+msgstr "_Идэвхжсэн Мөрийн Тайлбар"
+
+#: ../src/keybindings.c:664
+#, fuzzy
+msgid "Replace spaces with tabs"
+msgstr "Догол мөрийг Зайгаар _орлуулах"
+
+#: ../src/keybindings.c:666
+#, fuzzy
+msgid "Toggle current fold"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/keybindings.c:668
+#, fuzzy
+msgid "Fold all"
+msgstr "_Fold All"
+
+#: ../src/keybindings.c:670
+#, fuzzy
+msgid "Unfold all"
+msgstr "_Unfold All"
+
+#: ../src/keybindings.c:672
+#, fuzzy
+msgid "Reload symbol list"
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
+
+#: ../src/keybindings.c:674
+msgid "Remove Markers"
+msgstr ""
+
+#: ../src/keybindings.c:676
+#, fuzzy
+msgid "Remove Error Indicators"
+msgstr "Алдаа _Заагчдыг Арилгах"
+
+#: ../src/keybindings.c:678
+#, fuzzy
+msgid "Remove Markers and Error Indicators"
+msgstr "Алдаа _Заагчдыг Арилгах"
+
+#: ../src/keybindings.c:683 ../src/toolbar.c:72
+msgid "Compile"
+msgstr "Хөрвүүлэх"
+
+#: ../src/keybindings.c:687
+#, fuzzy
+msgid "Make all"
+msgstr "_Бүгдийг Үүсгэх"
+
+#: ../src/keybindings.c:690
+#, fuzzy
+msgid "Make custom target"
+msgstr "Аргументтэйгээр Үүсгэх"
+
+#: ../src/keybindings.c:692
+#, fuzzy
+msgid "Make object"
+msgstr "_Объектыг боловсруул"
+
+#: ../src/keybindings.c:694
+#, fuzzy
+msgid "Next error"
+msgstr "_Дараачийн Алдаа"
+
+#: ../src/keybindings.c:696
+msgid "Previous error"
+msgstr ""
+
+#: ../src/keybindings.c:698
+msgid "Run"
+msgstr ""
+
+#: ../src/keybindings.c:700
+msgid "Build options"
+msgstr ""
+
+#: ../src/keybindings.c:705
+#, fuzzy
+msgid "Show Color Chooser"
+msgstr "Өнгө Сонгогч"
+
+#: ../src/keybindings.c:975
+#, fuzzy
+msgid "Keyboard Shortcuts"
+msgstr "_Товчлуурын Хослол"
+
+#: ../src/keybindings.c:987
+#, fuzzy
+msgid "The following keyboard shortcuts are configurable:"
+msgstr "Дараах хослолууд тодорхойлогдсон:"
+
+#: ../src/keyfile.c:1027
+msgid "Type here what you want, use it as a notice/scratch board"
+msgstr ""
+
+#: ../src/keyfile.c:1254
+msgid "Failed to load one or more session files."
+msgstr ""
+
+#: ../src/libmain.c:118
+msgid ""
+"Set initial column number for the first opened file (useful in conjunction "
+"with --line)"
+msgstr ""
+
+#: ../src/libmain.c:119
+msgid "Use an alternate configuration directory"
+msgstr ""
+
+#: ../src/libmain.c:120
+msgid "Print internal filetype names"
+msgstr ""
+
+#: ../src/libmain.c:121
+msgid "Generate global tags file (see documentation)"
+msgstr ""
+
+#: ../src/libmain.c:122
+msgid "Don't preprocess C/C++ files when generating tags file"
+msgstr ""
+
+#: ../src/libmain.c:124
+msgid "Don't open files in a running instance, force opening a new instance"
+msgstr ""
+
+#: ../src/libmain.c:125
+msgid ""
+"Use this socket filename for communication with a running Geany instance"
+msgstr ""
+
+#: ../src/libmain.c:126
+msgid "Return a list of open documents in a running Geany instance"
+msgstr ""
+
+#: ../src/libmain.c:128
+msgid "Set initial line number for the first opened file"
+msgstr ""
+
+#: ../src/libmain.c:129
+msgid "Don't show message window at startup"
+msgstr ""
+
+#: ../src/libmain.c:130
+msgid "Don't load auto completion data (see documentation)"
+msgstr ""
+
+#: ../src/libmain.c:132
+msgid "Don't load plugins"
+msgstr ""
+
+#: ../src/libmain.c:134
+msgid "Print Geany's installation prefix"
+msgstr ""
+
+#: ../src/libmain.c:135
+msgid "Open all FILES in read-only mode (see documentation)"
+msgstr ""
+
+#: ../src/libmain.c:136
+msgid "Don't load the previous session's files"
+msgstr ""
+
+#: ../src/libmain.c:138
+msgid "Don't load terminal support"
+msgstr ""
+
+#: ../src/libmain.c:139
+msgid "Filename of libvte.so"
+msgstr ""
+
+#: ../src/libmain.c:141
+msgid "Be verbose"
+msgstr ""
+
+#: ../src/libmain.c:142
+msgid "Show version and exit"
+msgstr ""
+
+#: ../src/libmain.c:524
+msgid "[FILES...]"
+msgstr ""
+
+#. note for translators: library versions are printed after this
+#: ../src/libmain.c:558
+#, fuzzy, c-format
+msgid "built on %s with "
+msgstr "(%s-ийг боловсруулах)"
+
+#: ../src/libmain.c:651
+msgid "Move it now?"
+msgstr ""
+
+#: ../src/libmain.c:653
+msgid "Geany needs to move your old configuration directory before starting."
+msgstr ""
+
+#: ../src/libmain.c:662
+#, c-format
+msgid ""
+"Your configuration directory has been successfully moved from \"%s\" to \"%s"
+"\"."
+msgstr ""
+
+#. for translators: the third %s in brackets is the error message which
+#. * describes why moving the dir didn't work
+#: ../src/libmain.c:672
+#, c-format
+msgid ""
+"Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
+"Please move manually the directory to the new location."
+msgstr ""
+
+#: ../src/libmain.c:754
+#, c-format
+msgid ""
+"Configuration directory could not be created (%s).\n"
+"There could be some problems using Geany without a configuration directory.\n"
+"Start Geany anyway?"
+msgstr ""
+
+#: ../src/libmain.c:1155
+#, c-format
+msgid "This is Geany %s."
+msgstr ""
+
+#: ../src/libmain.c:1157
+#, fuzzy, c-format
+msgid "Configuration directory could not be created (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/libmain.c:1381
+msgid "Do you really want to quit?"
+msgstr "Гармаар байна уу?"
+
+#: ../src/libmain.c:1419
+#, fuzzy
+msgid "Configuration files reloaded."
+msgstr "Хөрвүүлэлтийн алдаа гарлаа."
+
+#: ../src/log.c:186
+#, fuzzy
+msgid "Debug Messages"
+msgstr "Мэдээ"
+
+#: ../src/log.c:188
+msgid "Cl_ear"
+msgstr ""
+
+#: ../src/msgwindow.c:177
+#, fuzzy
+msgid "Status messages"
+msgstr "Мэдээ"
+
+#: ../src/msgwindow.c:582
+msgid "C_opy"
+msgstr ""
+
+#: ../src/msgwindow.c:591
+msgid "Copy _All"
+msgstr ""
+
+#: ../src/msgwindow.c:621
+#, fuzzy
+msgid "_Hide Message Window"
+msgstr "Мэдээний _Цонхыг Харуул"
+
+#: ../src/msgwindow.c:682
+#, fuzzy, c-format
+msgid "Could not find file '%s' - trying the current document path."
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
+
+#: ../src/msgwindow.c:1118
+msgid "The document has been closed."
+msgstr ""
+
+#: ../src/notebook.c:199
+#, fuzzy
+msgid "Switch to Document"
+msgstr "бүх барим"
+
+#: ../src/notebook.c:451
+#, fuzzy
+msgid "Open in New _Window"
+msgstr "Файл Нээх"
+
+#: ../src/plugins.c:224
+#, c-format
+msgid ""
+"The plugin \"%s\" is not binary compatible with this release of Geany - "
+"please recompile it."
+msgstr ""
+
+#: ../src/plugins.c:1229
+msgid "_Plugin Manager"
+msgstr ""
+
+#: ../src/plugins.c:1608
+msgid ""
+"\n"
+"<i>Other plugins depend on this. Disable them first to allow deactivation.</"
+"i>\n"
+msgstr ""
+
+#. Four allocations is less than ideal but meh
+#: ../src/plugins.c:1610
+#, c-format
+msgid ""
+"Version:\t%s\n"
+"Author(s):\t%s\n"
+"Filename:\t%s"
+msgstr ""
+
+#: ../src/plugins.c:1638
+msgid "No plugins available."
+msgstr ""
+
+#: ../src/plugins.c:1770
+msgid "Active"
+msgstr ""
+
+#: ../src/plugins.c:1777
+msgid "Plugin"
+msgstr ""
+
+#: ../src/plugins.c:1884
+msgid "Plugins"
+msgstr ""
+
+#: ../src/plugins.c:1925
+msgid "Choose which plugins should be loaded at startup:"
+msgstr ""
+
+#: ../src/pluginutils.c:403
+msgid "Configure Plugins"
+msgstr ""
+
+#: ../src/prefs.c:181
+msgid "Grab Key"
+msgstr ""
+
+#: ../src/prefs.c:187
+#, c-format
+msgid "Press the combination of the keys you want to use for \"%s\"."
+msgstr ""
+
+#: ../src/prefs.c:227 ../src/symbols.c:2475 ../src/sidebar.c:752
+#, fuzzy
+msgid "_Expand All"
+msgstr "_Unfold All"
+
+#: ../src/prefs.c:232 ../src/symbols.c:2480 ../src/sidebar.c:758
+#, fuzzy
+msgid "_Collapse All"
+msgstr "Бүх Файлыг Х_аа"
+
+#: ../src/prefs.c:292
+#, fuzzy
+msgid "Action"
+msgstr "сонголт"
+
+#: ../src/prefs.c:297
+msgid "Shortcut"
+msgstr ""
+
+#: ../src/prefs.c:1486
+msgid "_Allow"
+msgstr ""
+
+#: ../src/prefs.c:1488
+msgid "_Override"
+msgstr ""
+
+#: ../src/prefs.c:1489
+msgid "Override that keybinding?"
+msgstr ""
+
+#: ../src/prefs.c:1490
+#, c-format
+msgid "The combination '%s' is already used for \"%s\"."
+msgstr ""
+
+#. add manually GeanyWrapLabels because they can't be added with Glade
+#. page Tools
+#: ../src/prefs.c:1699
+msgid "Enter tool paths below. Tools you do not need can be left blank."
+msgstr "Багажийн замыг доор оруул. Багаж хоосон үлдээх хэрэггүй."
+
+#. page Templates
+#: ../src/prefs.c:1704
+msgid ""
+"Set the information to be used in templates. See the documentation for "
+"details."
+msgstr "Темплэйтүүдэд мэдээллийг заа. Дэлгэрэнгүйг бичиг баримтаас үзнэ үү."
+
+#. page Keybindings
+#: ../src/prefs.c:1709
+msgid ""
+"Here you can change keyboard shortcuts for various actions. Select one and "
+"press the Change button to enter a new shortcut, or double click on an "
+"action to edit the string representation of the shortcut directly."
+msgstr ""
+
+#. page Editor->Indentation
+#: ../src/prefs.c:1714
+msgid ""
+"<i>Warning: these settings are overridden by the current project. See "
+"<b>Project->Properties</b>.</i>"
+msgstr ""
+
+#: ../src/printing.c:164
+#, fuzzy, c-format
+msgid "<b>Page %d of %d</b>"
+msgstr "<b>Өөрчилсөн:</b>"
+
+#: ../src/printing.c:234
+#, fuzzy
+msgid "Document Setup"
+msgstr "_Баримт"
+
+#: ../src/printing.c:269
+msgid "Print only the basename(without the path) of the printed file"
+msgstr ""
+
+#: ../src/printing.c:421
+msgid "Paginating"
+msgstr ""
+
+#: ../src/printing.c:445
+#, c-format
+msgid "Page %d of %d"
+msgstr ""
+
+#: ../src/printing.c:501
+#, c-format
+msgid "Did not send document %s to the printing subsystem."
+msgstr ""
+
+#: ../src/printing.c:503
+#, c-format
+msgid "Document %s was sent to the printing subsystem."
+msgstr ""
+
+#: ../src/printing.c:554
+#, fuzzy, c-format
+msgid "Printing of %s failed (%s)."
+msgstr "\"%s\"-ийг хэвлэхэд алдаа гарлаа (буцаасан код: %d)."
+
+#: ../src/printing.c:592
+msgid "Please set a print command in the preferences dialog first."
+msgstr ""
+
+#: ../src/printing.c:600
+#, c-format
+msgid ""
+"The file \"%s\" will be printed with the following command:\n"
+"\n"
+"%s"
+msgstr ""
+"\"%s\" файл дараах командаар хэвлэгдэнэ:\n"
+"\n"
+"%s"
+
+#: ../src/printing.c:615
+#, fuzzy, c-format
+msgid ""
+"Cannot execute print command \"%s\": %s. Check the path setting in "
+"Preferences."
+msgstr ""
+"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
+
+#: ../src/printing.c:622
+#, c-format
+msgid "File %s printed."
+msgstr "%s файл хэвлэгдлээ."
+
+#. "projects" is part of the default project base path so be careful when translating
+#. * please avoid special characters and spaces, look at the source for details or ask Frank
+#: ../src/project.c:100
+#, fuzzy
+msgid "projects"
+msgstr "_Төсөл"
+
+#: ../src/project.c:135
+msgid "Move the current documents into the new project's session?"
+msgstr ""
+
+#: ../src/project.c:153
+#, fuzzy
+msgid "New Project"
+msgstr "_Төсөл"
+
+#: ../src/project.c:158
+msgid "C_reate"
+msgstr ""
+
+#: ../src/project.c:176
+#, fuzzy
+msgid "Project name"
+msgstr "_Төсөл"
+
+#: ../src/project.c:188
+#, c-format
+msgid ""
+"Path of the file representing the project and storing its settings. It "
+"should normally have the \"%s\" extension."
+msgstr ""
+
+#: ../src/project.c:212 ../src/project.c:484
+msgid "Choose Project Base Path"
+msgstr ""
+
+#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
+#, fuzzy
+msgid "Project file could not be written"
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/project.c:256
+#, c-format
+msgid "Project \"%s\" created."
+msgstr ""
+
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1021
+#, fuzzy, c-format
+msgid "Project file \"%s\" could not be loaded."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/project.c:316 ../src/project.c:334
+#, fuzzy
+msgid "Open Project"
+msgstr "_Төсөл"
+
+#: ../src/project.c:354
+#, fuzzy
+msgid "Project files"
+msgstr "_Төсөл"
+
+#: ../src/project.c:416
+#, fuzzy, c-format
+msgid "Project \"%s\" closed."
+msgstr "%s файл хаагдлаа."
+
+#: ../src/project.c:624
+#, fuzzy, c-format
+msgid "Project \"%s\" saved."
+msgstr "%s файл хадгалагдлаа."
+
+#: ../src/project.c:657
+#, fuzzy
+msgid "Do you want to close it before proceeding?"
+msgstr "Хаахын өмнө хадгалах уу?"
+
+#: ../src/project.c:658
+#, c-format
+msgid "The '%s' project is open."
+msgstr ""
+
+#: ../src/project.c:707
+msgid "The specified project name is too short."
+msgstr ""
+
+#: ../src/project.c:713
+#, c-format
+msgid "The specified project name is too long (max. %d characters)."
+msgstr ""
+
+#: ../src/project.c:725
+msgid "You have specified an invalid project filename."
+msgstr ""
+
+#: ../src/project.c:748
+msgid "Create the project's base path directory?"
+msgstr ""
+
+#: ../src/project.c:749
+#, fuzzy, c-format
+msgid "The path \"%s\" does not exist."
+msgstr "\"%s\" файл %s-д зөв биш."
+
+#: ../src/project.c:758
+#, fuzzy, c-format
+msgid "Project base directory could not be created (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/project.c:771
+#, fuzzy, c-format
+msgid "Project file could not be written (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../src/project.c:777 ../src/search.c:627
+msgid "_Replace"
+msgstr "_Орлуулах"
+
+#: ../src/project.c:779 ../plugins/export.c:331
+#, c-format
+msgid "The file '%s' already exists. Do you want to overwrite it?"
+msgstr "'%s' файл үүсчихсэн байна. Дарж бичих үү?"
+
+#. initialise the dialog
+#: ../src/project.c:925 ../src/project.c:936
+msgid "Choose Project Filename"
+msgstr ""
+
+#: ../src/project.c:1011
+#, c-format
+msgid "Project \"%s\" opened."
+msgstr ""
+
+#: ../src/search.c:308 ../src/search.c:960
+msgid "_Use regular expressions"
+msgstr ""
+
+#: ../src/search.c:311
+msgid ""
+"Use POSIX-like regular expressions. For detailed information about using "
+"regular expressions, please read the documentation."
+msgstr ""
+
+#: ../src/search.c:316
+msgid "Use _escape sequences"
+msgstr ""
+
+#: ../src/search.c:320
+msgid ""
+"Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
+"corresponding control characters"
+msgstr ""
+
+#: ../src/search.c:323
+#, fuzzy
+msgid "Use multi-line matchin_g"
+msgstr "Автомат догол мөрийг _хэрэглэ"
+
+#: ../src/search.c:328
+msgid ""
+"Perform regular expression matching on the whole buffer at once rather than "
+"line by line, allowing matches to span multiple lines.  In this mode, "
+"newline characters are part of the input and can be captured as normal "
+"characters by the pattern."
+msgstr ""
+
+#: ../src/search.c:341
+msgid "Search _backwards"
+msgstr ""
+
+#: ../src/search.c:347 ../src/search.c:969
+msgid "C_ase sensitive"
+msgstr ""
+
+#: ../src/search.c:351 ../src/search.c:974
+msgid "Match only a _whole word"
+msgstr ""
+
+#: ../src/search.c:355
+msgid "Match from s_tart of word"
+msgstr ""
+
+#: ../src/search.c:471
+#, fuzzy
+msgid "_Previous"
+msgstr "_Хойшоо Хай"
+
+#: ../src/search.c:476
+#, fuzzy
+msgid "_Next"
+msgstr "Ур_агшаа Хай"
+
+#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#, fuzzy
+msgid "_Search for:"
+msgstr "_Хайх"
+
+#. Now add the multiple match options
+#: ../src/search.c:508
+#, fuzzy
+msgid "_Find All"
+msgstr "_Fold All"
+
+#: ../src/search.c:515
+msgid "_Mark"
+msgstr ""
+
+#: ../src/search.c:517
+#, fuzzy
+msgid "Mark all matches in the current document"
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
+
+#: ../src/search.c:522 ../src/search.c:697
+msgid "In Sessi_on"
+msgstr ""
+
+#: ../src/search.c:527 ../src/search.c:702
+#, fuzzy
+msgid "_In Document"
+msgstr "_Баримт"
+
+#. close window checkbox
+#: ../src/search.c:533 ../src/search.c:715
+#, fuzzy
+msgid "Close _dialog"
+msgstr "Бүх Файлыг Х_аа"
+
+#: ../src/search.c:537 ../src/search.c:719
+msgid "Disable this option to keep the dialog open"
+msgstr ""
+
+#: ../src/search.c:632
+#, fuzzy
+msgid "Replace & Fi_nd"
+msgstr "_Орлуулах"
+
+#: ../src/search.c:641
+#, fuzzy
+msgid "Replace wit_h:"
+msgstr "_Орлуулах"
+
+#. Now add the multiple replace options
+#: ../src/search.c:690
+#, fuzzy
+msgid "Re_place All"
+msgstr "_Орлуулах"
+
+#: ../src/search.c:707
+#, fuzzy
+msgid "In Se_lection"
+msgstr "сонголт"
+
+#: ../src/search.c:709
+msgid "Replace all matches found in the currently selected text"
+msgstr ""
+
+#: ../src/search.c:826
+msgid "all"
+msgstr ""
+
+#: ../src/search.c:828
+#, fuzzy
+msgid "project"
+msgstr "_Төсөл"
+
+#: ../src/search.c:830
+msgid "custom"
+msgstr ""
+
+#: ../src/search.c:834
+msgid ""
+"All: search all files in the directory\n"
+"Project: use file patterns defined in the project settings\n"
+"Custom: specify file patterns manually"
+msgstr ""
+
+#: ../src/search.c:896
+msgid "Fi_les:"
+msgstr ""
+
+#: ../src/search.c:908
+msgid "File patterns, e.g. *.c *.h"
+msgstr ""
+
+#: ../src/search.c:920
+msgid "_Directory:"
+msgstr ""
+
+#: ../src/search.c:939
+#, fuzzy
+msgid "E_ncoding:"
+msgstr "Энкодчиллыг заа:"
+
+#: ../src/search.c:963
+msgid "See grep's manual page for more information"
+msgstr ""
+
+#: ../src/search.c:965
+msgid "_Recurse in subfolders"
+msgstr ""
+
+#: ../src/search.c:978
+msgid "_Invert search results"
+msgstr ""
+
+#: ../src/search.c:982
+msgid "Invert the sense of matching, to select non-matching lines"
+msgstr ""
+
+#: ../src/search.c:999
+msgid "E_xtra options:"
+msgstr ""
+
+#: ../src/search.c:1007
+msgid "Other options to pass to Grep"
+msgstr ""
+
+#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#, c-format
+msgid "Found %d match for \"%s\"."
+msgid_plural "Found %d matches for \"%s\"."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/search.c:1425
+#, fuzzy, c-format
+msgid "Replaced %u matches in %u documents."
+msgstr "Баримтын бүх догол мөрийг зайгаар орлуулах"
+
+#: ../src/search.c:1616
+msgid "Invalid directory for find in files."
+msgstr ""
+
+#: ../src/search.c:1633
+msgid "No text to find."
+msgstr ""
+
+#: ../src/search.c:1709
+#, fuzzy
+msgid "Searching..."
+msgstr "_Хайх"
+
+#: ../src/search.c:1711
+#, fuzzy, c-format
+msgid "%s %s -- %s (in directory: %s)"
+msgstr "%s (%s хавтасд)"
+
+#: ../src/search.c:1719
+#, fuzzy, c-format
+msgid ""
+"Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
+msgstr ""
+"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
+
+#: ../src/search.c:1759
+#, fuzzy, c-format
+msgid "Could not open directory (%s)"
+msgstr "%s файлыг нээж чадахгүй байна (%s)"
+
+#: ../src/search.c:1849
+#, fuzzy
+msgid "Search failed."
+msgstr "Хайлтын талбарыг харуул"
+
+#: ../src/search.c:1873
+#, c-format
+msgid "Search completed with %d match."
+msgid_plural "Search completed with %d matches."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/search.c:1881
+msgid "No matches found."
+msgstr "Олдсонгүй."
+
+#: ../src/search.c:1910
+#, c-format
+msgid "Bad regex: %s"
+msgstr ""
+
+#. TODO maybe this message needs a rewording
+#: ../src/socket.c:236
+msgid ""
+"Geany tried to access the Unix Domain socket of another instance running as "
+"another user.\n"
+"This is a fatal error and Geany will now quit."
+msgstr ""
+
+#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+msgid "Text ended before matching quote was found"
+msgstr ""
+
+#. TL note: from glib
+#: ../src/spawn.c:130
+msgid "Text was empty (or contained only whitespace)"
+msgstr ""
+
+#: ../src/spawn.c:151 ../src/spawn.c:165
+msgid "A quoted Windows program name must be entirely inside the quotes"
+msgstr ""
+
+#: ../src/spawn.c:258
+#, fuzzy
+msgid "Program not found"
+msgstr "\"%s\" олдсонгүй."
+
+#: ../src/spawn.c:672
+#, fuzzy
+msgid "Failed to change to the working directory"
+msgstr "%s-ийн хавтасыг солиход алдаа гарлаа"
+
+#: ../src/spawn.c:677
+msgid "Unknown error executing child process"
+msgstr ""
+
+#: ../src/stash.c:1177
+msgid "Value"
+msgstr ""
+
+#: ../src/symbols.c:464 ../src/symbols.c:514 ../src/symbols.c:624
+msgid "Chapter"
+msgstr ""
+
+#: ../src/symbols.c:465 ../src/symbols.c:510 ../src/symbols.c:625
+#, fuzzy
+msgid "Section"
+msgstr "сонголт"
+
+#: ../src/symbols.c:466
+msgid "Sect1"
+msgstr ""
+
+#: ../src/symbols.c:467
+msgid "Sect2"
+msgstr ""
+
+#: ../src/symbols.c:468
+msgid "Sect3"
+msgstr ""
+
+#: ../src/symbols.c:469
+msgid "Appendix"
+msgstr ""
+
+#: ../src/symbols.c:470 ../src/symbols.c:515 ../src/symbols.c:540
+#: ../src/symbols.c:556 ../src/symbols.c:571 ../src/symbols.c:582
+#: ../src/symbols.c:683 ../src/symbols.c:694 ../src/symbols.c:707
+#: ../src/symbols.c:721 ../src/symbols.c:733 ../src/symbols.c:745
+#: ../src/symbols.c:762 ../src/symbols.c:791 ../src/symbols.c:823
+#, fuzzy
+msgid "Other"
+msgstr "Бусад:"
+
+#: ../src/symbols.c:476 ../src/symbols.c:753 ../src/symbols.c:801
+msgid "Module"
+msgstr ""
+
+#: ../src/symbols.c:477 ../src/symbols.c:567 ../src/symbols.c:679
+#: ../src/symbols.c:731 ../src/symbols.c:743 ../src/symbols.c:758
+#: ../src/symbols.c:772
+#, fuzzy
+msgid "Types"
+msgstr "Төрөл:"
+
+#: ../src/symbols.c:478
+msgid "Type constructors"
+msgstr ""
+
+#: ../src/symbols.c:479 ../src/symbols.c:501 ../src/symbols.c:522
+#: ../src/symbols.c:539 ../src/symbols.c:551 ../src/symbols.c:564
+#: ../src/symbols.c:579 ../src/symbols.c:593 ../src/symbols.c:603
+#: ../src/symbols.c:667 ../src/symbols.c:717 ../src/symbols.c:740
+#: ../src/symbols.c:785 ../src/symbols.c:809
+msgid "Functions"
+msgstr ""
+
+#: ../src/symbols.c:484
+msgid "Program"
+msgstr ""
+
+#: ../src/symbols.c:486 ../src/symbols.c:494 ../src/symbols.c:500
+#, fuzzy
+msgid "Sections"
+msgstr "сонголт"
+
+#: ../src/symbols.c:487
+msgid "Paragraph"
+msgstr ""
+
+#: ../src/symbols.c:488
+#, fuzzy
+msgid "Group"
+msgstr "Бүлэг:"
+
+#: ../src/symbols.c:489
+msgid "Data"
+msgstr ""
+
+#: ../src/symbols.c:495
+msgid "Keys"
+msgstr ""
+
+#: ../src/symbols.c:502 ../src/symbols.c:553 ../src/symbols.c:569
+#: ../src/symbols.c:595 ../src/symbols.c:668 ../src/symbols.c:693
+#: ../src/symbols.c:719 ../src/symbols.c:732 ../src/symbols.c:741
+#: ../src/symbols.c:757 ../src/symbols.c:792 ../src/symbols.c:821
+msgid "Variables"
+msgstr ""
+
+#: ../src/symbols.c:509
+msgid "Environment"
+msgstr ""
+
+#: ../src/symbols.c:511 ../src/symbols.c:626
+#, fuzzy
+msgid "Subsection"
+msgstr "сонголт"
+
+#: ../src/symbols.c:512 ../src/symbols.c:627
+#, fuzzy
+msgid "Subsubsection"
+msgstr "сонголт"
+
+#: ../src/symbols.c:523 ../src/symbols.c:548
+msgid "Structures"
+msgstr ""
+
+#: ../src/symbols.c:530
+msgid "Parts"
+msgstr ""
+
+#: ../src/symbols.c:531
+msgid "Assembly"
+msgstr ""
+
+#: ../src/symbols.c:532
+msgid "Steps"
+msgstr ""
+
+#: ../src/symbols.c:547 ../src/symbols.c:645 ../src/symbols.c:691
+msgid "Modules"
+msgstr ""
+
+#: ../src/symbols.c:549 ../src/symbols.c:596
+msgid "Traits"
+msgstr ""
+
+#: ../src/symbols.c:550
+#, fuzzy
+msgid "Implementations"
+msgstr "Автомат тодорхойологч"
+
+#: ../src/symbols.c:552 ../src/symbols.c:812
+msgid "Typedefs / Enums"
+msgstr ""
+
+#: ../src/symbols.c:554 ../src/symbols.c:770 ../src/symbols.c:779
+#: ../src/symbols.c:818
+msgid "Macros"
+msgstr ""
+
+#: ../src/symbols.c:555 ../src/symbols.c:648 ../src/symbols.c:657
+#: ../src/symbols.c:666 ../src/symbols.c:704 ../src/symbols.c:730
+msgid "Methods"
+msgstr ""
+
+#: ../src/symbols.c:563 ../src/symbols.c:578 ../src/symbols.c:676
+#: ../src/symbols.c:701 ../src/symbols.c:714
+msgid "Package"
+msgstr ""
+
+#: ../src/symbols.c:565 ../src/symbols.c:591 ../src/symbols.c:702
+#: ../src/symbols.c:715 ../src/symbols.c:728 ../src/symbols.c:755
+#: ../src/symbols.c:808
+#, fuzzy
+msgid "Interfaces"
+msgstr "Интерфейс"
+
+#: ../src/symbols.c:566 ../src/symbols.c:811
+msgid "Structs"
+msgstr ""
+
+#: ../src/symbols.c:568 ../src/symbols.c:581 ../src/symbols.c:594
+#: ../src/symbols.c:720 ../src/symbols.c:742
+msgid "Constants"
+msgstr ""
+
+#: ../src/symbols.c:570 ../src/symbols.c:705 ../src/symbols.c:810
+msgid "Members"
+msgstr ""
+
+#: ../src/symbols.c:580 ../src/symbols.c:744 ../src/symbols.c:769
+msgid "Labels"
+msgstr ""
+
+#: ../src/symbols.c:590 ../src/symbols.c:655 ../src/symbols.c:804
+msgid "Namespaces"
+msgstr ""
+
+#: ../src/symbols.c:592 ../src/symbols.c:614 ../src/symbols.c:646
+#: ../src/symbols.c:656 ../src/symbols.c:665 ../src/symbols.c:703
+#: ../src/symbols.c:716 ../src/symbols.c:729 ../src/symbols.c:807
+msgid "Classes"
+msgstr ""
+
+#: ../src/symbols.c:604
+msgid "Anchors"
+msgstr ""
+
+#: ../src/symbols.c:605
+msgid "H1 Headings"
+msgstr ""
+
+#: ../src/symbols.c:606
+msgid "H2 Headings"
+msgstr ""
+
+#: ../src/symbols.c:607
+msgid "H3 Headings"
+msgstr ""
+
+#: ../src/symbols.c:615
+msgid "ID Selectors"
+msgstr ""
+
+#: ../src/symbols.c:616
+msgid "Type Selectors"
+msgstr ""
+
+#: ../src/symbols.c:635
+#, fuzzy
+msgid "Section Level 1"
+msgstr "сонголт"
+
+#: ../src/symbols.c:636
+#, fuzzy
+msgid "Section Level 2"
+msgstr "сонголт"
+
+#: ../src/symbols.c:637
+#, fuzzy
+msgid "Section Level 3"
+msgstr "сонголт"
+
+#: ../src/symbols.c:638
+#, fuzzy
+msgid "Section Level 4"
+msgstr "сонголт"
+
+#: ../src/symbols.c:647
+msgid "Singletons"
+msgstr ""
+
+#: ../src/symbols.c:658 ../src/symbols.c:786
+msgid "Procedures"
+msgstr ""
+
+#: ../src/symbols.c:669
+msgid "Imports"
+msgstr ""
+
+#: ../src/symbols.c:677
+#, fuzzy
+msgid "Entities"
+msgstr "нэргүй"
+
+#: ../src/symbols.c:678
+msgid "Architectures"
+msgstr ""
+
+#: ../src/symbols.c:680
+msgid "Functions / Procedures"
+msgstr ""
+
+#: ../src/symbols.c:681
+msgid "Variables / Signals"
+msgstr ""
+
+#: ../src/symbols.c:682
+msgid "Processes / Blocks / Components"
+msgstr ""
+
+#: ../src/symbols.c:690
+msgid "Events"
+msgstr ""
+
+#: ../src/symbols.c:692
+msgid "Functions / Tasks"
+msgstr ""
+
+#: ../src/symbols.c:706 ../src/symbols.c:761
+msgid "Enums"
+msgstr ""
+
+#: ../src/symbols.c:754
+msgid "Programs"
+msgstr ""
+
+#: ../src/symbols.c:756
+msgid "Functions / Subroutines"
+msgstr ""
+
+#: ../src/symbols.c:759
+#, fuzzy
+msgid "Components"
+msgstr "Хөрвүүлэх"
+
+#: ../src/symbols.c:760
+msgid "Blocks"
+msgstr ""
+
+#: ../src/symbols.c:771
+#, fuzzy
+msgid "Defines"
+msgstr "Мөр:"
+
+#: ../src/symbols.c:778
+msgid "Targets"
+msgstr ""
+
+#: ../src/symbols.c:787
+msgid "Indexes"
+msgstr ""
+
+#: ../src/symbols.c:788
+msgid "Tables"
+msgstr ""
+
+#: ../src/symbols.c:789
+msgid "Triggers"
+msgstr ""
+
+#: ../src/symbols.c:790
+#, fuzzy
+msgid "Views"
+msgstr "_Харагдац"
+
+#: ../src/symbols.c:822
+msgid "Extern Variables"
+msgstr ""
+
+#: ../src/symbols.c:1586
+#, c-format
+msgid "Unknown filetype extension for \"%s\".\n"
+msgstr ""
+
+#: ../src/symbols.c:1612
+#, c-format
+msgid "Failed to create tags file, perhaps because no symbols were found.\n"
+msgstr ""
+
+#: ../src/symbols.c:1619
+#, c-format
+msgid ""
+"Usage: %s -g <Tags File> <File list>\n"
+"\n"
+msgstr ""
+
+#: ../src/symbols.c:1620
+#, c-format
+msgid ""
+"Example:\n"
+"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
+"gtk/gtk.h\n"
+msgstr ""
+
+#: ../src/symbols.c:1634
+msgid "Load Tags File"
+msgstr ""
+
+#: ../src/symbols.c:1641
+msgid "Geany tags file (*.*.tags)"
+msgstr ""
+
+#. For translators: the first wildcard is the filetype, the second the filename
+#: ../src/symbols.c:1661
+#, c-format
+msgid "Loaded %s tags file '%s'."
+msgstr ""
+
+#: ../src/symbols.c:1664
+#, fuzzy, c-format
+msgid "Could not load tags file '%s'."
+msgstr "%s файлыг нээж чадахгүй байна (%s)"
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1899
+#, fuzzy, c-format
+msgid "<b>%s: %lu</b>"
+msgstr "<b>Дэлгэц</b>"
+
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1902
+#, c-format
+msgid "%s: %lu"
+msgstr ""
+
+#: ../src/symbols.c:2111
+#, c-format
+msgid "Forward declaration \"%s\" not found."
+msgstr "\"%s\" Forward declaration олдсонгүй."
+
+#: ../src/symbols.c:2113
+#, c-format
+msgid "Definition of \"%s\" not found."
+msgstr "\"%s\"-ийн тодорхойлолт олдсонгүй."
+
+#: ../src/symbols.c:2490
+msgid "Sort by _Name"
+msgstr ""
+
+#: ../src/symbols.c:2497
+#, fuzzy
+msgid "Sort by _Appearance"
+msgstr "<b>Харагдац</b>"
+
+#: ../src/templates.c:83
+#, c-format
+msgid "Failed to convert template file \"%s\" to UTF-8"
+msgstr ""
+
+#: ../src/templates.c:618
+#, c-format
+msgid ""
+"Cannot execute command \"%s\" from the template: %s. Check the path in the "
+"template."
+msgstr ""
+
+#. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
+#: ../src/toolbar.c:58
+msgid "Save the current file"
+msgstr "Файлыг хадгал"
+
+#: ../src/toolbar.c:60
+msgid "Save all open files"
+msgstr "Бүх нээлттэй файлыг хадгал"
+
+#: ../src/toolbar.c:61
+msgid "Reload the current file from disk"
+msgstr "Дискээс файлыг дахин ачаалал"
+
+#: ../src/toolbar.c:62
+msgid "Close the current file"
+msgstr "Файлыг хаа"
+
+#: ../src/toolbar.c:63
+#, fuzzy
+msgid "Close all open files"
+msgstr "Бүх нээлттэй файлыг хаа"
+
+#: ../src/toolbar.c:64
+#, fuzzy
+msgid "Cut the current selection"
+msgstr "Идэвхжсэнийг Хөрвүүл"
+
+#: ../src/toolbar.c:65
+#, fuzzy
+msgid "Copy the current selection"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/toolbar.c:66
+msgid "Paste the contents of the clipboard"
+msgstr ""
+
+#: ../src/toolbar.c:67
+#, fuzzy
+msgid "Delete the current selection"
+msgstr "Идэвхжсэнийг Хөрвүүл"
+
+#: ../src/toolbar.c:68
+msgid "Undo the last modification"
+msgstr "Сүүлийн засварыг буцаа"
+
+#: ../src/toolbar.c:69
+msgid "Redo the last modification"
+msgstr "Сүүлийн засварыг сэргээх"
+
+#: ../src/toolbar.c:72
+msgid "Compile the current file"
+msgstr "Файлыг хөрвүүл"
+
+#: ../src/toolbar.c:73
+msgid "Run or view the current file"
+msgstr "Файлыг харах эсвэл ажиллуулах"
+
+#: ../src/toolbar.c:74
+#, fuzzy
+msgid ""
+"Open a color chooser dialog, to interactively pick colors from a palette"
+msgstr "Өнгө санал болгох өнгө сонгогчийн асуултыг нээ."
+
+#: ../src/toolbar.c:75
+msgid "Zoom in the text"
+msgstr "Текст-рүү ойртох"
+
+#: ../src/toolbar.c:76
+msgid "Zoom out the text"
+msgstr "Текстээс холдох"
+
+#: ../src/toolbar.c:77
+#, fuzzy
+msgid "Decrease indentation"
+msgstr "Догол мөрийг _Багасгах"
+
+#: ../src/toolbar.c:78
+#, fuzzy
+msgid "Increase indentation"
+msgstr "Догол мөрийг _Өсгөх"
+
+#: ../src/toolbar.c:79 ../src/toolbar.c:384
+msgid "Find the entered text in the current file"
+msgstr "Файлаас өгөгдсөн текстийг хай"
+
+#: ../src/toolbar.c:80 ../src/toolbar.c:394
+#, fuzzy
+msgid "Jump to the entered line number"
+msgstr "Оруулсан мөрлүү оч."
+
+#: ../src/toolbar.c:81
+msgid "Show the preferences dialog"
+msgstr ""
+
+#: ../src/toolbar.c:82
+msgid "Quit Geany"
+msgstr "Жиени-г Гаргах"
+
+#: ../src/toolbar.c:83
+#, fuzzy
+msgid "Print document"
+msgstr "бүх барим"
+
+#: ../src/toolbar.c:84
+#, fuzzy
+msgid "Replace text in the current document"
+msgstr "Баримтын бүх алдаа заагчийг арилгах"
+
+#: ../src/toolbar.c:360
+msgid "Create a new file"
+msgstr "Шинээр файл үүсгэх"
+
+#: ../src/toolbar.c:361
+#, fuzzy
+msgid "Create a new file from a template"
+msgstr "Шинээр файл үүсгэх"
+
+#: ../src/toolbar.c:368
+msgid "Open an existing file"
+msgstr "Үүссэн файлыг нээх"
+
+#: ../src/toolbar.c:369
+#, fuzzy
+msgid "Open a recent file"
+msgstr "Үүссэн файлыг нээх"
+
+#: ../src/toolbar.c:377
+#, fuzzy
+msgid "Choose more build actions"
+msgstr "Боловсруулахад алдаа гараагүй"
+
+#: ../src/toolbar.c:384
+#, fuzzy
+msgid "Search Field"
+msgstr "Хайлтын талбарыг харуул"
+
+#: ../src/toolbar.c:394
+#, fuzzy
+msgid "Goto Field"
+msgstr "Мөрлүү үсрэх талбарыг харуул"
+
+#: ../src/toolbar.c:587
+msgid "Separator"
+msgstr ""
+
+#: ../src/toolbar.c:588
+msgid "--- Separator ---"
+msgstr ""
+
+#: ../src/toolbar.c:960
+msgid ""
+"Select items to be displayed on the toolbar. Items can be reordered by drag "
+"and drop."
+msgstr ""
+
+#: ../src/toolbar.c:976
+msgid "Available Items"
+msgstr ""
+
+#: ../src/toolbar.c:997
+msgid "Displayed Items"
+msgstr ""
+
+#: ../src/tools.c:86
+#, fuzzy, c-format
+msgid "Invalid command: %s"
+msgstr " командууд"
+
+#: ../src/tools.c:217
+#, c-format
+msgid "Passing data and executing custom command: %s"
+msgstr ""
+
+#: ../src/tools.c:225
+#, c-format
+msgid ""
+"The executed custom command returned an error. Your selection was not "
+"changed. Error message: %s"
+msgstr ""
+
+#: ../src/tools.c:233
+msgid "The executed custom command exited with an unsuccessful exit code."
+msgstr ""
+
+#: ../src/tools.c:242
+#, fuzzy, c-format
+msgid ""
+"Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
+"Commands."
+msgstr ""
+"'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана уу)"
+
+#: ../src/tools.c:357 ../src/tools.c:626
+msgid "Set Custom Commands"
+msgstr ""
+
+#: ../src/tools.c:365
+msgid ""
+"You can send the current selection to any of these commands and the output "
+"of the command replaces the current selection."
+msgstr ""
+
+#: ../src/tools.c:379
+msgid "ID"
+msgstr ""
+
+#: ../src/tools.c:597
+msgid "No custom commands defined."
+msgstr ""
+
+#: ../src/tools.c:695
+msgid "Word Count"
+msgstr "Үгийг Тоол"
+
+#: ../src/tools.c:704
+msgid "selection"
+msgstr "сонголт"
+
+#: ../src/tools.c:709
+msgid "whole document"
+msgstr "бүх барим"
+
+#: ../src/tools.c:718
+msgid "Range:"
+msgstr "Зай:"
+
+#: ../src/tools.c:730
+msgid "Lines:"
+msgstr "Мөр:"
+
+#: ../src/tools.c:744
+msgid "Words:"
+msgstr "Үг:"
+
+#: ../src/tools.c:758
+msgid "Characters:"
+msgstr "Тэмдэгт:"
+
+#: ../src/sidebar.c:178
+#, fuzzy
+msgid "No symbols found"
+msgstr "Олдсонгүй."
+
+#: ../src/sidebar.c:602
+#, fuzzy
+msgid "Show S_ymbol List"
+msgstr "Тэмдэгтийн жагсаалтыг харуул"
+
+#: ../src/sidebar.c:614
+#, fuzzy
+msgid "Show _Document List"
+msgstr "_Баримт"
+
+#: ../src/sidebar.c:626 ../plugins/filebrowser.c:699
+#, fuzzy
+msgid "H_ide Sidebar"
+msgstr "Хажуу самбар:"
+
+#: ../src/sidebar.c:731 ../plugins/filebrowser.c:670
+#, fuzzy
+msgid "_Find in Files..."
+msgstr "Ф_айлуудаас Хай"
+
+#: ../src/sidebar.c:741
+msgid "Show _Paths"
+msgstr ""
+
+#: ../src/ui_utils.c:64
+msgid ""
+"line: %l / %L\t col: %c\t sel: %s\t %w      %t      %mmode: %M      "
+"encoding: %e      filetype: %f      scope: %S"
+msgstr ""
+
+#. L = lines
+#: ../src/ui_utils.c:240
+#, c-format
+msgid "%dL"
+msgstr ""
+
+#. RO = read-only
+#: ../src/ui_utils.c:250 ../src/ui_utils.c:257
+msgid "RO "
+msgstr ""
+
+#. OVR = overwrite/overtype, INS = insert
+#: ../src/ui_utils.c:252
+msgid "OVR"
+msgstr ""
+
+#: ../src/ui_utils.c:252
+msgid "INS"
+msgstr ""
+
+#: ../src/ui_utils.c:266
+msgid "TAB"
+msgstr ""
+
+#. SP = space
+#: ../src/ui_utils.c:269
+msgid "SP"
+msgstr ""
+
+#. T/S = tabs and spaces
+#: ../src/ui_utils.c:272
+msgid "T/S"
+msgstr ""
+
+#: ../src/ui_utils.c:280
+msgid "MOD"
+msgstr ""
+
+#: ../src/ui_utils.c:408
+msgid " (new instance)"
+msgstr ""
+
+#: ../src/ui_utils.c:438
+#, c-format
+msgid "Font updated (%s)."
+msgstr ""
+
+#: ../src/ui_utils.c:682
+msgid "C Standard Library"
+msgstr ""
+
+#: ../src/ui_utils.c:683
+msgid "ISO C99"
+msgstr ""
+
+#: ../src/ui_utils.c:684
+msgid "C++ (C Standard Library)"
+msgstr ""
+
+#: ../src/ui_utils.c:685
+msgid "C++ Standard Library"
+msgstr ""
+
+#: ../src/ui_utils.c:686
+msgid "C++ STL"
+msgstr ""
+
+#: ../src/ui_utils.c:708 ../src/ui_utils.c:786
+msgid "dd.mm.yyyy"
+msgstr "өдөр.сар.жил"
+
+#: ../src/ui_utils.c:710 ../src/ui_utils.c:787
+msgid "mm.dd.yyyy"
+msgstr "сар.өдөр.жил"
+
+#: ../src/ui_utils.c:712 ../src/ui_utils.c:788
+msgid "yyyy/mm/dd"
+msgstr "жил/сар/өдөр"
+
+#: ../src/ui_utils.c:714 ../src/ui_utils.c:797
+msgid "dd.mm.yyyy hh:mm:ss"
+msgstr "өдөр.сар.жил цаг:мин:сек"
+
+#: ../src/ui_utils.c:716 ../src/ui_utils.c:798
+msgid "mm.dd.yyyy hh:mm:ss"
+msgstr "сар.өдөр.жил цаг:мин:сек"
+
+#: ../src/ui_utils.c:718 ../src/ui_utils.c:799
+msgid "yyyy/mm/dd hh:mm:ss"
+msgstr "жил/сар/өдөр цаг:мин:сек"
+
+#: ../src/ui_utils.c:720 ../src/ui_utils.c:808
+#, fuzzy
+msgid "_Use Custom Date Format"
+msgstr "Огнооны Хэлбэрүүдийг Хэрэглэх"
+
+#: ../src/ui_utils.c:724
+msgid "Custom Date Format"
+msgstr "Огнооны Хэлбэр"
+
+#: ../src/ui_utils.c:725
+#, fuzzy
+msgid ""
+"Enter here a custom date and time format. You can use any conversion "
+"specifiers which can be used with the ANSI C strftime function."
+msgstr ""
+"Огноо болон цагны хэлбэрийг оруул. Хувиргалт хийхдээ ANSI Cи хэлний strftime "
+"функцийг хэрэглэж болно. Дэлгэрэнгүй мэдээллийг \"man strftime\" гэж харна "
+"уу."
+
+#: ../src/ui_utils.c:746
+msgid "Date format string could not be converted (possibly too long)."
+msgstr "Огнооны хэлбэр тэмдэгт мөр-лүү хөрвөгдсөнгүй (Хэт урт байна)."
+
+#: ../src/ui_utils.c:821
+#, fuzzy
+msgid "_Set Custom Date Format"
+msgstr "Огнооны Хэлбэрүүдийг Хэрэглэх"
+
+#: ../src/ui_utils.c:2007
+#, fuzzy
+msgid "Select Folder"
+msgstr "_Бүгдийг Сонгох"
+
+#: ../src/ui_utils.c:2007
+#, fuzzy
+msgid "Select File"
+msgstr "Сонгосон Ф_айлыг нээх"
+
+#: ../src/ui_utils.c:2154
+#, fuzzy
+msgid "_Filetype Configuration"
+msgstr "Config файл"
+
+#: ../src/ui_utils.c:2191
+#, fuzzy
+msgid "Save All"
+msgstr "Б_үх Файлыг Хадгал"
+
+#: ../src/ui_utils.c:2192
+#, fuzzy
+msgid "Close All"
+msgstr "Бүх Файлыг Х_аа"
+
+#: ../src/ui_utils.c:2426
+msgid "Geany cannot start!"
+msgstr ""
+
+#: ../src/utils.c:87
+#, fuzzy
+msgid "Select Browser"
+msgstr "Хөтөч:"
+
+#: ../src/utils.c:88
+msgid ""
+"Failed to spawn the configured browser command. Please correct it or enter "
+"another one."
+msgstr ""
+
+#: ../src/utils.c:375
+#, fuzzy
+msgid "Windows (CRLF)"
+msgstr "Виндөвс (CRLF)"
+
+#: ../src/utils.c:376
+#, fuzzy
+msgid "Classic Mac (CR)"
+msgstr "Мак (CR)"
+
+#: ../src/utils.c:377
+msgid "Unix (LF)"
+msgstr "Юникс (LF)"
+
+#: ../src/utils.c:386
+msgid "CRLF"
+msgstr ""
+
+#: ../src/utils.c:387
+msgid "CR"
+msgstr ""
+
+#: ../src/utils.c:388
+msgid "LF"
+msgstr ""
+
+#: ../src/vte.c:487
+#, c-format
+msgid "invalid VTE library \"%s\": missing symbol \"%s\""
+msgstr ""
+
+#: ../src/vte.c:636
+msgid "_Set Path From Document"
+msgstr ""
+
+#: ../src/vte.c:641
+#, fuzzy
+msgid "_Restart Terminal"
+msgstr "Терминал:"
+
+#: ../src/vte.c:664
+msgid "_Input Methods"
+msgstr ""
+
+#: ../src/vte.c:754
+msgid ""
+"Directory not changed because the terminal may contain some input (press Ctrl"
+"+C or Enter to clear it)."
+msgstr ""
+
+#: ../src/win32.c:211
+msgid "Geany project files"
+msgstr ""
+
+#: ../src/win32.c:216
+#, fuzzy
+msgid "Executables"
+msgstr "Ажиллуул:"
+
+#: ../src/win32.c:802
+#, c-format
+msgid "Failed to open URI \"%s\": %s"
+msgstr ""
+
+#: ../plugins/classbuilder.c:36
+msgid "Class Builder"
+msgstr ""
+
+#: ../plugins/classbuilder.c:36
+msgid "Creates source files for new class types."
+msgstr ""
+
+#: ../plugins/classbuilder.c:433
+msgid "Create Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:443
+msgid "Create C++ Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:446
+msgid "Create GTK+ Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:449
+msgid "Create PHP Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:466
+msgid "Namespace"
+msgstr ""
+
+#: ../plugins/classbuilder.c:473 ../plugins/classbuilder.c:475
+msgid "Class"
+msgstr ""
+
+#: ../plugins/classbuilder.c:482
+#, fuzzy
+msgid "Header file:"
+msgstr "Үүсгэхфайл"
+
+#: ../plugins/classbuilder.c:484
+#, fuzzy
+msgid "Source file:"
+msgstr "Си код"
+
+#: ../plugins/classbuilder.c:486
+msgid "Inheritance"
+msgstr ""
+
+#: ../plugins/classbuilder.c:488
+msgid "Base class:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:496
+#, fuzzy
+msgid "Base source:"
+msgstr "LaTeX код"
+
+#: ../plugins/classbuilder.c:501
+msgid "Base header:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:509
+msgid "Global"
+msgstr ""
+
+#: ../plugins/classbuilder.c:528
+#, fuzzy
+msgid "Base GType:"
+msgstr "Төрөл:"
+
+#: ../plugins/classbuilder.c:533
+msgid "Implements:"
+msgstr ""
+
+#: ../plugins/classbuilder.c:535
+msgid "Options"
+msgstr ""
+
+#: ../plugins/classbuilder.c:552
+msgid "Create constructor"
+msgstr ""
+
+#: ../plugins/classbuilder.c:557
+msgid "Create destructor"
+msgstr ""
+
+#: ../plugins/classbuilder.c:564
+msgid "Is abstract"
+msgstr ""
+
+#: ../plugins/classbuilder.c:567
+msgid "Is singleton"
+msgstr ""
+
+#: ../plugins/classbuilder.c:577
+#, fuzzy
+msgid "Constructor type:"
+msgstr "Гүйцээлтийг байгуул"
+
+#: ../plugins/classbuilder.c:1089
+msgid "Create Cla_ss"
+msgstr ""
+
+#: ../plugins/classbuilder.c:1095
+msgid "_C++ Class..."
+msgstr ""
+
+#: ../plugins/classbuilder.c:1098
+msgid "_GTK+ Class..."
+msgstr ""
+
+#: ../plugins/classbuilder.c:1101
+msgid "_PHP Class..."
+msgstr ""
+
+#: ../plugins/htmlchars.c:40
+#, fuzzy
+msgid "HTML Characters"
+msgstr "Тэмдэгт:"
+
+#: ../plugins/htmlchars.c:40
+msgid "Inserts HTML character entities like '&amp;'."
+msgstr ""
+
+#: ../plugins/htmlchars.c:41 ../plugins/export.c:38 ../plugins/filebrowser.c:51
+#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+msgid "The Geany developer team"
+msgstr ""
+
+#: ../plugins/htmlchars.c:75
+#, fuzzy
+msgid "HTML characters"
+msgstr "Тэмдэгт:"
+
+#: ../plugins/htmlchars.c:81
+msgid "ISO 8859-1 characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:179
+#, fuzzy
+msgid "Greek characters"
+msgstr "Тэмдэгт:"
+
+#: ../plugins/htmlchars.c:234
+msgid "Mathematical characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:275
+msgid "Technical characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:283
+#, fuzzy
+msgid "Arrow characters"
+msgstr "Тэмдэгт:"
+
+#: ../plugins/htmlchars.c:296
+msgid "Punctuation characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:312
+msgid "Miscellaneous characters"
+msgstr ""
+
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1194
+#: ../plugins/saveactions.c:538
+msgid "Plugin configuration directory could not be created."
+msgstr ""
+
+#: ../plugins/htmlchars.c:488
+#, fuzzy
+msgid "Special Characters"
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#: ../plugins/htmlchars.c:490
+#, fuzzy
+msgid "_Insert"
+msgstr "Огн_оо Оруулах"
+
+#: ../plugins/htmlchars.c:499
+msgid ""
+"Choose a special character from the list below and double click on it or use "
+"the button to insert it at the current cursor position."
+msgstr ""
+
+#: ../plugins/htmlchars.c:513
+#, fuzzy
+msgid "Character"
+msgstr "Тэмдэгт:"
+
+#: ../plugins/htmlchars.c:519
+msgid "HTML (name)"
+msgstr ""
+
+#: ../plugins/htmlchars.c:738
+#, fuzzy
+msgid "_Insert Special HTML Characters..."
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#. Add menuitem for html replacement functions
+#: ../plugins/htmlchars.c:753
+#, fuzzy
+msgid "_HTML Replacement"
+msgstr "_Орлуулах"
+
+#: ../plugins/htmlchars.c:760
+#, fuzzy
+msgid "_Auto-replace Special Characters"
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#: ../plugins/htmlchars.c:769
+#, fuzzy
+msgid "_Replace Characters in Selection"
+msgstr "Дав_хардсан Мөр эсвэл Идэвхжилт"
+
+#: ../plugins/htmlchars.c:785
+#, fuzzy
+msgid "Insert Special HTML Characters"
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#: ../plugins/htmlchars.c:788
+#, fuzzy
+msgid "Replace special characters"
+msgstr "_Тусгай HTML Тэмдэгт Оруул"
+
+#: ../plugins/htmlchars.c:791
+msgid "Toggle plugin status"
+msgstr ""
+
+#: ../plugins/export.c:37
+msgid "Export"
+msgstr ""
+
+#: ../plugins/export.c:37
+#, fuzzy
+msgid "Exports the current file into different formats."
+msgstr "Файлыг DVI файл-руу хөрвүүл"
+
+#: ../plugins/export.c:169
+#, fuzzy
+msgid "Export File"
+msgstr "Файл Нээх"
+
+#: ../plugins/export.c:187
+#, fuzzy
+msgid "_Insert line numbers"
+msgstr "Олон мөрийн Тайлбар Оруулах"
+
+#: ../plugins/export.c:189
+msgid "Insert line numbers before each line in the exported document"
+msgstr ""
+
+#: ../plugins/export.c:199
+msgid "_Use current zoom level"
+msgstr ""
+
+#: ../plugins/export.c:201
+msgid ""
+"Renders the font size of the document together with the current zoom level"
+msgstr ""
+
+#: ../plugins/export.c:279
+#, c-format
+msgid "Document successfully exported as '%s'."
+msgstr ""
+
+#: ../plugins/export.c:281
+#, fuzzy, c-format
+msgid "File '%s' could not be written (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../plugins/export.c:749
+msgid "_Export"
+msgstr ""
+
+#. HTML
+#: ../plugins/export.c:756
+msgid "As _HTML..."
+msgstr ""
+
+#. LaTeX
+#: ../plugins/export.c:762
+msgid "As _LaTeX..."
+msgstr ""
+
+#: ../plugins/filebrowser.c:50
+#, fuzzy
+msgid "File Browser"
+msgstr "Хөтөч:"
+
+#: ../plugins/filebrowser.c:50
+msgid "Adds a file browser tab to the sidebar."
+msgstr ""
+
+#: ../plugins/filebrowser.c:415
+msgid "Too many items selected!"
+msgstr ""
+
+#: ../plugins/filebrowser.c:485
+#, c-format
+msgid "Could not execute configured external command '%s' (%s)."
+msgstr ""
+
+#: ../plugins/filebrowser.c:649
+#, fuzzy
+msgid "Open in _Geany"
+msgstr "Файл Нээх"
+
+#: ../plugins/filebrowser.c:655
+msgid "Open _Externally"
+msgstr ""
+
+#: ../plugins/filebrowser.c:680
+#, fuzzy
+msgid "Show _Hidden Files"
+msgstr "_Нууц файлуудыг харуул"
+
+#: ../plugins/filebrowser.c:910
+msgid "Up"
+msgstr ""
+
+#: ../plugins/filebrowser.c:915
+msgid "Refresh"
+msgstr ""
+
+#: ../plugins/filebrowser.c:920
+msgid "Home"
+msgstr ""
+
+#: ../plugins/filebrowser.c:925
+#, fuzzy
+msgid "Set path from document"
+msgstr "бүх барим"
+
+#: ../plugins/filebrowser.c:939
+msgid "Filter:"
+msgstr ""
+
+#: ../plugins/filebrowser.c:948
+msgid ""
+"Filter your files with the usual wildcards. Separate multiple patterns with "
+"a space."
+msgstr ""
+
+#: ../plugins/filebrowser.c:1164
+msgid "Focus File List"
+msgstr ""
+
+#: ../plugins/filebrowser.c:1166
+msgid "Focus Path Entry"
+msgstr ""
+
+#: ../plugins/filebrowser.c:1259
+#, fuzzy
+msgid "External open command:"
+msgstr "Хэвлэх команд:"
+
+#: ../plugins/filebrowser.c:1267
+#, c-format
+msgid ""
+"The command to execute when using \"Open with\". You can use %f and %d "
+"wildcards.\n"
+"%f will be replaced with the filename including full path\n"
+"%d will be replaced with the path name of the selected file without the "
+"filename"
+msgstr ""
+
+#: ../plugins/filebrowser.c:1275
+#, fuzzy
+msgid "Show hidden files"
+msgstr "_Нууц файлуудыг харуул"
+
+#: ../plugins/filebrowser.c:1283
+#, fuzzy
+msgid "Hide file extensions:"
+msgstr "Файлыг өргөтгөлийг тогтоо"
+
+#: ../plugins/filebrowser.c:1302
+#, fuzzy
+msgid "Follow the path of the current file"
+msgstr "Файлыг хаа"
+
+#: ../plugins/filebrowser.c:1308
+msgid "Use the project's base directory"
+msgstr ""
+
+#: ../plugins/filebrowser.c:1312
+msgid ""
+"Change the directory to the base directory of the currently opened project"
+msgstr ""
+
+#: ../plugins/saveactions.c:43
+msgid "Save Actions"
+msgstr ""
+
+#: ../plugins/saveactions.c:43
+msgid "This plugin provides different actions related to saving of files."
+msgstr ""
+
+#: ../plugins/saveactions.c:175
+#, fuzzy, c-format
+msgid "Backup Copy: Directory could not be created (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#. it's unlikely that this happens
+#: ../plugins/saveactions.c:209
+#, fuzzy, c-format
+msgid "Backup Copy: File could not be read (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../plugins/saveactions.c:234
+#, fuzzy, c-format
+msgid "Backup Copy: File could not be saved (%s)."
+msgstr "Процесс зогсож чадахгүй байсан (%s)."
+
+#: ../plugins/saveactions.c:371
+#, c-format
+msgid "Autosave: Saved %d file automatically."
+msgid_plural "Autosave: Saved %d files automatically."
+msgstr[0] ""
+msgstr[1] ""
+
+#. initialize the dialog
+#: ../plugins/saveactions.c:442
+msgid "Select Directory"
+msgstr ""
+
+#: ../plugins/saveactions.c:530
+msgid "Backup directory does not exist or is not writable."
+msgstr ""
+
+#: ../plugins/saveactions.c:611
+msgid "Auto Save"
+msgstr ""
+
+#: ../plugins/saveactions.c:613
+msgid "Enable save when losing _focus"
+msgstr ""
+
+#: ../plugins/saveactions.c:619 ../plugins/saveactions.c:681
+#: ../plugins/saveactions.c:722
+msgid "_Enable"
+msgstr ""
+
+#: ../plugins/saveactions.c:627
+msgid "Auto save _interval:"
+msgstr ""
+
+#: ../plugins/saveactions.c:635
+msgid "seconds"
+msgstr ""
+
+#: ../plugins/saveactions.c:644
+msgid "_Print status message if files have been automatically saved"
+msgstr ""
+
+#: ../plugins/saveactions.c:652
+#, fuzzy
+msgid "Save only current open _file"
+msgstr "Файлыг хадгал"
+
+#: ../plugins/saveactions.c:659
+#, fuzzy
+msgid "Sa_ve all open files"
+msgstr "Бүх нээлттэй файлыг хадгал"
+
+#: ../plugins/saveactions.c:679
+msgid "Instant Save"
+msgstr ""
+
+#: ../plugins/saveactions.c:689
+#, fuzzy
+msgid "_Filetype to use for newly opened files:"
+msgstr "Шинээр үүссэн файлын энкодчлолыг заах."
+
+#: ../plugins/saveactions.c:720
+msgid "Backup Copy"
+msgstr ""
+
+#: ../plugins/saveactions.c:730
+msgid "_Directory to save backup files in:"
+msgstr ""
+
+#: ../plugins/saveactions.c:753
+msgid "Date/_Time format for backup files (\"man strftime\" for details):"
+msgstr ""
+
+#: ../plugins/saveactions.c:766
+msgid "Directory _levels to include in the backup destination:"
+msgstr ""
+
+#: ../plugins/splitwindow.c:34
+msgid "Split Window"
+msgstr ""
+
+#: ../plugins/splitwindow.c:34
+msgid "Splits the editor view into two windows."
+msgstr ""
+
+#: ../plugins/splitwindow.c:272
+#, fuzzy
+msgid "Show the current document"
+msgstr "Файлыг хадгал"
+
+#: ../plugins/splitwindow.c:289 ../plugins/splitwindow.c:422
+#: ../plugins/splitwindow.c:437
+msgid "_Unsplit"
+msgstr ""
+
+#: ../plugins/splitwindow.c:404
+msgid "_Split Window"
+msgstr ""
+
+#: ../plugins/splitwindow.c:412
+msgid "_Side by Side"
+msgstr ""
+
+#: ../plugins/splitwindow.c:417
+msgid "_Top and Bottom"
+msgstr ""
+
+#: ../plugins/splitwindow.c:433
+#, fuzzy
+msgid "Side by Side"
+msgstr "Хажуу самбар:"
+
+#: ../plugins/splitwindow.c:435
+#, fuzzy
+msgid "Top and Bottom"
+msgstr "Доош"
+
+#, fuzzy
+#~ msgid ""
+#~ "Cannot execute terminal command \"%s\": %s. Check the path setting in "
+#~ "Preferences."
+#~ msgstr ""
+#~ "'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана "
+#~ "уу)"
+
+#, fuzzy
+#~ msgid "Go to _Tag Definition"
+#~ msgstr "Go to Tag Definition"
+
+#, fuzzy
+#~ msgid "Go to T_ag Declaration"
+#~ msgstr "Go to Tag Declaration"
+
+#, fuzzy
+#~ msgid "Printing of \"%s\" failed (return code: %s)."
+#~ msgstr "\"%s\"-ийг хэвлэхэд алдаа гарлаа (буцаасан код: %d)."
+
+#, fuzzy
+#~ msgid "TerminateProcess() failed: %s"
+#~ msgstr "Процесс-д алдаа гарлаа (%s)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not parse terminal command \"%s\" (check Terminal tool setting in "
+#~ "Preferences)"
+#~ msgstr ""
+#~ "'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана "
+#~ "уу)"
+
+#, fuzzy
+#~ msgid ""
+#~ "Could not find terminal \"%s\" (check path for Terminal tool setting in "
+#~ "Preferences)"
+#~ msgstr ""
+#~ "'%s'-ээс терминалыг олсонгүй (Тохиргоо цэснээс Терминалын замыг шалгана "
+#~ "уу)"
+
+#~ msgid "Detect by file extension"
+#~ msgstr "Файлыг өргөтгөлийг тогтоо"
+
+#, fuzzy
+#~ msgid "Show macro list"
+#~ msgstr "Тэмдэгтийн жагсаалтыг харуул"
+
+#, fuzzy
+#~ msgid "Description"
+#~ msgstr "сонголт"
+
+#, fuzzy
+#~ msgid "<b>Plugin details:</b>"
+#~ msgstr "<b>Файлуудыг хадгал</b>"
+
+#~ msgid "<b>Type:</b>"
+#~ msgstr "<b>Төрөл:</b>"
+
+#~ msgid "<b>Size:</b>"
+#~ msgstr "<b>Хэмжээ:</b>"
+
+#~ msgid "<b>Read-only:</b>"
+#~ msgstr "<b>Зөвхөн-нээхээр:</b>"
+
+#~ msgid "<b>Encoding:</b>"
+#~ msgstr "<b>Энкодчлол:</b>"
+
+#~ msgid "<b>Changed:</b>"
+#~ msgstr "<b>Өөрчилсөн:</b>"
+
+#~ msgid ""
+#~ "A terminal emulator like xterm, gnome-terminal or konsole (should accept "
+#~ "the -e argument)"
+#~ msgstr ""
+#~ "Терминал нь xterm, gnome-terminal эсвэл konsole шиг (-e аргумент "
+#~ "дамжуулдаг)"
+
+#~ msgid "language"
+#~ msgstr "хэл"
+
+#~ msgid "Failed to view %s (make sure it is already compiled)"
+#~ msgstr "%s-ийг харахад алдаа гарлаа (Хөрвүүлэгдсэн эсэхийг шалгана уу)"
+
+#~ msgid "Command stopped because the current file has no extension."
+#~ msgstr "Файлд өргөтгөл байхгүй учраас комманд зогслоо."
+
+# stat гэж юу вэ???
+#~ msgid "Something very strange is occurred, could not stat %s (%s)."
+#~ msgstr "Тодорхойгүй шалтгаанаар %s-ийг эхлүүлж чадсангүй (%s)."
+
+#~ msgid "Failed to execute %s (make sure it is already built)"
+#~ msgstr ""
+#~ "%s-ийг ажиллуулахад алдаа гарлаа (боловсруулагдсан эсэхийг шалгана уу)"
+
+#~ msgid "Compiles the current file"
+#~ msgstr "Файлыг хөрвүүл"
+
+#~ msgid "Builds the current file (generate an executable file)"
+#~ msgstr "Файлыг боловсруул (ажиллуулах файлыг үүсгэ)"
+
+#~ msgid "Compiles the current file using the make tool"
+#~ msgstr "Үүсгэх хэрэгслээр файлыг хөрвүүл"
+
+#~ msgid "_Set Includes and Arguments"
+#~ msgstr "_Оруулалт болон Аргументийг зааж өгөх"
+
+#~ msgid ""
+#~ "Sets the includes and library paths for the compiler and the program "
+#~ "arguments for execution"
+#~ msgstr ""
+#~ "Хөрвүүлэгчийн оруулалт болон сангийн зам, програмын аргументийг зааж өгөх"
+
+#~ msgid "LaTeX -> DVI"
+#~ msgstr "LaTex -> DVI"
+
+#~ msgid "LaTeX -> PDF"
+#~ msgstr "LaTeX -> PDF"
+
+#~ msgid "View DVI File"
+#~ msgstr "DVI файлыг харах"
+
+#~ msgid "Compiles and view the current file"
+#~ msgstr "Файлыг хөрвүүлээд харах"
+
+#~ msgid "View PDF File"
+#~ msgstr "PDF файлыг харах"
+
+#~ msgid "Set Arguments"
+#~ msgstr "Аргументийг зааж өгөх"
+
+#~ msgid "Sets the program paths and arguments"
+#~ msgstr "Програмын зам болон аргументийг зааж өгөх"
+
+#~ msgid "Failed to execute the view program"
+#~ msgstr "View програмыг ажиллуулахад алдаа гарлаа"
+
+#~ msgid "Failed to execute the terminal program"
+#~ msgstr "Terminal програмыг ажиллуулахад алдаа гарлаа"
+
+#~ msgid "Set programs and options for compiling and viewing (La)TeX files."
+#~ msgstr "(La)Tex файлыг хөрвүүлэх болон харах програм болон тохиргоог оруул."
+
+#~ msgid "PDF creation:"
+#~ msgstr "PDF үүсэлт:"
+
+#~ msgid "DVI preview:"
+#~ msgstr "DVI харагдац:"
+
+#~ msgid "PDF preview:"
+#~ msgstr "PDF харагдац:"
+
+#~ msgid ""
+#~ "%f will be replaced by the current filename, e.g. test_file.c\n"
+#~ "%e will be replaced by the filename without extension, e.g. test_file"
+#~ msgstr ""
+#~ "%f файлын нэрээр солигдоно: test_file.c\n"
+#~ "%e өртгөтгөлгүй файлын нэрээр солигдоно: test_file"
+
+#~ msgid "Set Includes and Arguments"
+#~ msgstr "Оруулалт болон Аргументийг заа"
+
+#~ msgid "Set the commands for building and running programs."
+#~ msgstr "Програмыг боловсруулах болон ажиллуулах командуудыг заа."
+
+#~ msgid "Compile:"
+#~ msgstr "Хөрвүүл:"
+
+#~ msgid "Build:"
+#~ msgstr "Боловсруул:"
+
+#~ msgid "Invalid filename"
+#~ msgstr "Буруу файлын нэр"
+
+#~ msgid "C++ source file"
+#~ msgstr "С++ код"
+
+#~ msgid "D source file"
+#~ msgstr "Дэ код"
+
+#~ msgid "Java source file"
+#~ msgstr "Жава код"
+
+#~ msgid "Pascal source file"
+#~ msgstr "Паскал код"
+
+#~ msgid "Assembler source file"
+#~ msgstr "Ассемблер код"
+
+#~ msgid "Fortran source file (F77)"
+#~ msgstr "Фортран код (F77)"
+
+#~ msgid "(O)Caml source file"
+#~ msgstr "(O)Camal код"
+
+#~ msgid "Perl source file"
+#~ msgstr "Перл код"
+
+#~ msgid "PHP source file"
+#~ msgstr "PHP код"
+
+#~ msgid "Javascript source file"
+#~ msgstr "Жаваскрипт код"
+
+#~ msgid "Python source file"
+#~ msgstr "Пайтон код"
+
+#~ msgid "Ruby source file"
+#~ msgstr "Руби код"
+
+#~ msgid "Tcl source file"
+#~ msgstr "Tcl код"
+
+#~ msgid "Lua source file"
+#~ msgstr "Луа код"
+
+#~ msgid "Ferite source file"
+#~ msgstr "Ferite код"
+
+#~ msgid "XML source file"
+#~ msgstr "XML код"
+
+#~ msgid "Docbook source file"
+#~ msgstr "Докбүүк код"
+
+#~ msgid "HTML source file"
+#~ msgstr "HTML код"
+
+#~ msgid "SQL Dump file"
+#~ msgstr "SQL файл"
+
+#~ msgid "O-Matrix source file"
+#~ msgstr "О-Матрикс код"
+
+#~ msgid "VHDL source file"
+#~ msgstr "VHDL код"
+
+#~ msgid "Saves all open files"
+#~ msgstr "Бүх нээлттэй файлыг хадгал"
+
+#~ msgid "Convert Selection to _Upper-case"
+#~ msgstr "Идэвхжсэнийг _том үсэг болгох"
+
+#~ msgid "Inserts a typical ChangeLog entry in the current file"
+#~ msgstr "Файлд ChangeLog оруулах"
+
+#~ msgid "Inserts a file header at the beginning of the file"
+#~ msgstr "Файлын эхэнд толгой файл оруулах"
+
+#~ msgid "Inserts a description before the current function"
+#~ msgstr "Файлын өмнө тайлбар оруулах"
+
+#~ msgid "Inserts a multiline comment"
+#~ msgstr "Олон мөрийн тайлбар оруулах"
+
+#~ msgid "Inserts a GPL notice (should be done at the beginning of the file)"
+#~ msgstr "GPL-ийг оруулах (файлын эхэнд байна)"
+
+#~ msgid ""
+#~ "Inserts a BSD licence notice (should be done at the beginning of the file)"
+#~ msgstr "BSD лиценз оруулах (файлын эхэнд байна)"
+
+#~ msgid "Change the default font"
+#~ msgstr "Заагдсан фонтыг өөрчлөх"
+
+#~ msgid "Toggle the window with status and compiler messages on and off"
+#~ msgstr "Хөрвүүлэгчийн мэдээ(тэй/гүй) цонхыг төлөвийг заах"
+
+#~ msgid "Toggle the toolbar on and off"
+#~ msgstr "Багаж самбар(тай/үгүй)-г заа"
+
+#~ msgid "Treat this file as read-only. No changes can be made."
+#~ msgstr "Файлд зөвхөн-харахаар хандсан. Өөрчлөлт орохгүй."
+
+#~ msgid "Folds all contractible code blocks"
+#~ msgstr "Folds all contractible code blocks"
+
+#~ msgid "Unfolds all contracted code blocks"
+#~ msgstr "Unfolds all contracted code blocks"
+
+#~ msgid ""
+#~ "Counts the words and characters in the current selection or the whole "
+#~ "document"
+#~ msgstr "Идэвжүүлснээс эсвэл баримтаас үг болон тэмдэгтийг тоол"
+
+#~ msgid "Shows a list of all keyboard shortcuts for Geany."
+#~ msgstr "Жиенигийн бүх товчлуурын хослолыг харуул."
+
+#~ msgid "Enter a line number and jump to it."
+#~ msgstr "Мөрийн дугаарыг оруулад оч."
+
+#~ msgid "Open files"
+#~ msgstr "Файлууд нээх"
+
+#~ msgid "Insert \"include <...>\""
+#~ msgstr "\"include <...>\" оруул"
+
+#~ msgid "Insert Comments"
+#~ msgstr "Тайбар оруул"
+
+#~ msgid "Insert BSD license Notice"
+#~ msgstr "BSD лиценз оруул"
+
+#~ msgid "Goto to the entered line"
+#~ msgstr "Оруулсан мөрлүү оч"
+
+#~ msgid "<b>Behaviour</b>"
+#~ msgstr "<b>Төлөв</b>"
+
+#~ msgid "Show file operation buttons"
+#~ msgstr "Файл дээр үйлдэл хийх товчуудыг харуул"
+
+#~ msgid "Display the New, Open, Close, Save and Reload buttons in the toolbar"
+#~ msgstr ""
+#~ "Багаж самбар дээр Шинээр, Нээх, Хаах, Хадгал, Дахин ачааллах товчийг "
+#~ "гаргах"
+
+#~ msgid "Show Compile and Run"
+#~ msgstr "Хөрвүүлэх, Ажиллуулах-ыг харуулах"
+
+#~ msgid "Display the Compile and Run buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Хөрвүүл, Ажиллуулах товчийг гаргах"
+
+#~ msgid "Display the Colour Chooser button in the toolbar"
+#~ msgstr "Багаж самбар дээр Өнгө сонгох товчийг гаргах"
+
+#~ msgid "Show Zoom In and Zoom Out"
+#~ msgstr "Ойртуулалт, Холтгол харуул"
+
+#~ msgid "Display the Zoom In and Zoom Out buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Ортуулалт Холтголыг гаргах"
+
+#~ msgid "Show Redo and Undo buttons"
+#~ msgstr "Буцаах, Сэргээх товчийг харуул"
+
+#~ msgid "Display the Redo and Undo buttons in the toolbar"
+#~ msgstr "Багаж самбар дээр Буцаах, Сэргээх товчийг гаргах"
+
+#~ msgid "Display the search field and button in the toolbar"
+#~ msgstr "Багаж самбар дээр хайлтын талбарыг гаргах"
+
+#~ msgid "Display the line number field and button in the toolbar"
+#~ msgstr "Багаж самбар дээр мөр дугаарын талбар болон товчийг гаргах"
+
+#~ msgid "Show Quit button"
+#~ msgstr "Гарах товчийг харуулах"
+
+#~ msgid "Display the quit button in the toolbar"
+#~ msgstr "Багаж самбар дээр гарах товчийг гаргах"
+
+#~ msgid "<b>Items</b>"
+#~ msgstr "<b>Items</b>"
+
+#~ msgid "Icon size:"
+#~ msgstr "Icon size:"
+
+#~ msgid "Long line marker color:"
+#~ msgstr "Long line marker color:"
+
+#~ msgid "Add the same indentation as the previous line after pressing enter"
+#~ msgstr "Enter дарсны дараа өмнөх мөр дээр ижил тодорхойлогч нэм"
+
+#~ msgid "Unfold all children of a fold point when unfolding it."
+#~ msgstr "Unfold all children of a fold point when unfolding it."
+
+#~ msgid ""
+#~ "Whenever some whitespace is inserted by Geany it will use tabulators when "
+#~ "enabled otherwise Geany will use just spaces."
+#~ msgstr ""
+#~ "Whenever some whitespace is inserted by Geany it will use tabulators when "
+#~ "enabled otherwise Geany will use just spaces."
+
+#~ msgid "Automatic completion of often used constructs like if and for"
+#~ msgstr "if, for мэтийн бүтцүүд дээр гүйцээлтийг хийдэг"
+
+#~ msgid "Automatic completion of open XML tags (includes HTML tags)"
+#~ msgstr "XML таг (HTML-ын таг орсон)-ийг нээх гүйцээлт"
+
+#~ msgid "Path and options for the make tool"
+#~ msgstr "Үүсгэх хэрэгслийн зам болон тохиргоо"

@@ -1,0 +1,12 @@
+# format=tagmanager
+addChild:Ã128ŒFolderTree÷0
+createFileList:atPlace:Ã1ŒFolderTree÷0
+createLayoutTreeÃ128ŒFileTree÷0
+createLayoutTreeÃ128ŒFolderTree÷0
+deallocÃ128ŒFileTree÷0
+deallocÃ128ŒFolderTree÷0
+getDiskSizeÃ128ŒFileTree÷0
+initWithName:andSize:atPlace:Ã128ŒFileTree÷0
+initWithName:atPlace:Ã128ŒFileTree÷0
+initWithName:atPlace:Ã128ŒFolderTree÷0
+populateChildList:Ã128ŒFolderTree÷0

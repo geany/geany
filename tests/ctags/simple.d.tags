@@ -1,0 +1,24 @@
+# format=tagmanager
+AliasIntÌ4096Ö0
+ClassÌ1Ö0
+EnumÌ2Ö0
+InterfaceÌ32Ö0
+StructÌ2048Ö0
+TemplateÌ256Ö0
+TemplateAliasÌ4096ÎTemplateÖ0
+UnionÌ8192ÎStructÖ0
+_barÌ64ÎClassÖ0ÏAliasInt
+barÌ4ÎEnumÖ0
+barÌ16Í()ÎClassÖ0Ïpublic AliasInt
+barÌ1024Í()ÎInterfaceÖ0Ïpublic AliasInt
+conditionalÌ16384Ö0ÏT
+fooÌ4ÎEnumÖ0
+globalVarÌ16384Ö0Ï__gshared int
+iÌ16384Ö0Ïint
+mainÌ16Í(string[] args)Ö0Ïvoid
+objÌ16384Ö0ÏObject
+qarÌ64ÎStruct.UnionÖ0Ïint
+quxxÌ64ÎStruct.UnionÖ0Ïbool
+test.simpleÌ256Ö0
+tfunÌ16Í(T)ÎClassÖ0Ïauto
+thisÌ16Í(AliasInt x)ÎClassÖ0

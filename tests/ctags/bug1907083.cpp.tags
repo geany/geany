@@ -1,0 +1,5 @@
+# format=tagmanager
+m1Ì16Í()ÎC::CÖ0ÏC::T *
+m2Ì16Í()ÎC::CÖ0ÏC::T *const
+m3Ì16Í()ÎC::CÖ0ÏC::T const *
+m4Ì16Í()ÎC::CÖ0ÏC::T const *const

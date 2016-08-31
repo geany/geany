@@ -1,0 +1,15 @@
+# format=tagmanager
+C1Ì1ÎN1Ö0
+C2Ì1ÎN1.C1Ö0
+C2Ì1ÎN1.N2Ö0
+IMyInterfaceÌ32ÎMyNamespace1Ö0
+MainÌ128Í(string[] args)ÎMyNamespace1.MyClass2Ö0Ïpublic void
+MyClass1Ì1ÎMyNamespace1Ö0
+MyClass2Ì1ÎMyNamespace1Ö0
+MyDelegateÌ128Í()ÎMyNamespace1Ö0Ïdelegate int
+MyEnumÌ2ÎMyNamespace1Ö0
+MyNamespace1Ì256Ö0
+MyNamespace2Ì256ÎMyNamespace1Ö0
+MyStructÌ2048ÎMyNamespace1Ö0
+N1Ì256Ö0
+N2Ì256ÎN1Ö0

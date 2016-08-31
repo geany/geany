@@ -1,0 +1,9 @@
+# format=tagmanager
+KidÌ1Ö0
+KidÌ128Í()ÎKidÖ0
+KidÌ128Í(string name, int age)ÎKidÖ0
+MainÌ128Í()ÎMainClassÖ0Ïpublic void
+MainClassÌ1Ö0
+PrintKidÌ128Í()ÎKidÖ0Ïpublic void
+ageÌ8ÎKidÖ0Ïint
+nameÌ8ÎKidÖ0

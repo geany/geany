@@ -1,0 +1,90 @@
+Quick Guide for new translations
+--------------------------------
+
+If you would like to translate Geany into another language, have a look at the
+language statistics page at [1] first to see if your desired language already
+exists. If it already exists, please read the "Notes for updating translations"
+section. Otherwise, get the Git version of Geany, change to the po directory and
+start the new translation with:
+
+$ msginit -l ll_CC -o ll.po -i geany.pot
+
+Fill in ll with the language code and CC with the country code. For example, to
+translate Geany into Italian you would type:
+
+$ msginit -l it_IT -o it.po -i geany.pot
+
+This will create a file it.po. This file can be opened with a text editor
+(e.g. Geany ;-)) or a graphical program like PoEdit [2]. There are also several
+other GUI programs for working on translations.
+
+You don't need to modify the file po/LINGUAS, it is regenerated automatically on
+the next build.
+
+When you have finished editing the file, check the file with:
+
+$ msgfmt -c --check-accelerators=_ it.po
+
+Please ensure you also translate the mnemonic letters (strings containing a
+"_" before a letter, also called "accelerators" on some platforms/toolkits).
+When the user wishes to activate a menu item using their keyboard, they will
+use this letter to pick an item from the menu.
+
+Here are a few notes on picking which letter to use:
+
+* Always follow platform/toolkit conventions (for example "t" for "Cut") even
+if they don't necessarily seem obvious.
+* Try to choose the first letter of the command name, where this is the most
+appropriate letter (for example "S" for "Save"), assuming it's not already
+used in the same menu.
+* Try not to use the same character more than once in the same menu as this
+will cause the user to have to press the mnemonic's key multiple times to
+select the correct menu item.
+* If there is no letter in the text that can easily be entered from a keyboard
+then choose another character that can be, and put it in parenthesis after the
+translated text.
+* Try not to change which letter is used whenever possible as it is not
+user-configurable and users may have become accustomed to using the existing
+mnemonic key.
+
+You can also use intl_stats.sh, e.g. by running the following command in the top
+source directory of Geany:
+
+$ po/intl_stats.sh -a it
+
+This will print some information about the Italian translation and checks for
+menu accelerators.
+
+When you have finished your work - which doesn't mean you finished the
+translation, you will not have to work alone - send the file to the translation
+mailing list [3] or directly to Frank Lanitz [4] and he will add the translation
+to Geany then.
+
+It is a good idea to let any translator and Frank know before you start or while
+translating, because they can give you hints on translating and Frank can ensure
+that a translation is not already in progress.
+
+
+Notes for updating translations
+-------------------------------
+
+If you want to update an existing translation, please contact the translation
+mailing list [3] and/or Frank Lanitz [4] directly. He is supervising all
+translation issues and will contact the maintainer of the translation you want
+to update to avoid any conflicts.
+
+Some translation statistics can be found at:
+http://i18n.geany.org/
+
+
+I18n mailing list
+-----------------
+
+There is also a mailing list dedicated to translation issues. Please visit
+http://www.geany.org/Support/MailingList#geany-i18 for more information.
+
+
+[1] http://i18n.geany.org/
+[2] http://www.poedit.net/
+[3] http://www.geany.org/Support/MailingList#geany-i18
+[4] Frank Lanitz <frank(at)frank(dot)uvena(dot)de>

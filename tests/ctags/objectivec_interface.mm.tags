@@ -1,0 +1,24 @@
+# format=tagmanager
+ANOTHER_MACROÌ65536Ö0
+A_MACRO_TESTÌ65536Ö0
+FileTreeÌ32ÎaStructÖ0
+FolderTreeÌ32Ö0
+SampleTypedefObjCÌ4096Ö0
+aStructÌ2048Ö0
+aStructMemberÌ8ÎaStructÖ0
+addChild:Ì128ÎFolderTreeÖ0
+anotherStructMemberÌ8ÎaStructÖ0
+childrenÌ8ÎFolderTreeÖ0
+createLayoutTreeÌ128ÎFileTreeÖ0
+createLayoutTreeÌ128ÎFolderTreeÖ0
+deallocÌ128ÎFileTreeÖ0
+deallocÌ128ÎFolderTreeÖ0
+diskSizeÌ8ÎFileTreeÖ0
+getDiskSizeÌ128ÎFileTreeÖ0
+initWithName:andSize:atPlace:Ì128ÎFileTreeÖ0
+initWithName:atPlace:Ì128ÎFileTreeÖ0
+initWithName:atPlace:Ì128ÎFolderTreeÖ0
+nameÌ8ÎFileTreeÖ0
+parentÌ8ÎFileTreeÖ0
+populateChildList:Ì128ÎFolderTreeÖ0
+representationÌ8ÎFileTreeÖ0

@@ -1,0 +1,140 @@
+# format=pipe
+arc||(X: SmallInt, Y: SmallInt, StAngle: Word, EndAngle: Word, Radius: Word)|
+assigncrt||(File: Text)|
+bar||(x1: SmallInt; y1: SmallInt; x2: SmallInt; y2: SmallInt)|
+bar3d||(x1: SmallInt; y1: SmallInt; x2: SmallInt; y2: SmallInt; depth: Word; top: Boolean)|
+begin|||
+black|||
+blink|||
+blue|||
+brown|||
+cleardevice|||
+closegraph|||
+clreol|||
+clrscr|||
+const|||
+cursorbig|||
+cursoroff|||
+cursoron|||
+cyan|||
+darkgray|||
+delay||(MS: Word)|
+delline|||(X: Byte, Y: Byte)|
+detectgraph||(GraphDriver: SmallInt; var GraphMode: SmallInt)|
+drawpoly||(NumPoints: Word; var polypoints)|
+ellipse||(X: SmallInt; Y: SmallInt; stAngle: Word; EndAngle: Word; XRadius: Word; YRadius: Word)|
+fillellipse||(X: SmallInt; Y: SmallInt; XRadius: Word; YRadius: Word)|
+fillpoly||(NumPoints: Word; var PolyPoints)|
+floodfill||(x: SmallInt; y: SmallInt; Border: Word)|
+fpioperm|cInt|(From: Cardinal; Num: Cardinal; Value: cInt)|
+fpiopl|cInt|(Level: cInt|)
+getarccoords||(var ArcCoords: ArcCoordsType)|
+getaspectratio||(Xasp: Word; Yasp: Word)|
+getbkcolor|word||
+getcolor|word||
+getdefaultpalette||(var Palette: PaletteType)|
+getdirectvideo|bool||
+getdrivername|String||
+getfillpattern||(var FillPattern: FillPatternType)|
+getfillsettings||(var Fillinfo: FillSettingsType)|
+getgraphmode|Smallint||
+getlinesettings||(var ActiveLineInfo: LineSettingsType)|
+getmaxcolor|Word||
+getmaxmode|Smallint||
+getmaxx|Smallint||
+getmaxy|Smallint||
+getmodename|String|(ModeNumber: SmallInt)|
+getmoderange||(GraphDriver: SmallInt; var LoMode: SmallInt; var HiMode: SmallInt)|
+getpalette||(var Palette: PaletteType)|
+getpalettesize|Smallint||
+gettextsettings||(var TextInfo: TextSettingsType)|
+getviewsettings||(var viewport: ViewPortType)|
+getx|Smallint||
+gety|Smallint||
+gotoxy||(x: Smallint, y: Smallint)|
+graphdefaults|||
+grapherrormsg|String|(ErrorCode: SmallInt)|
+graphresult|Smallint||
+green|||
+highvideo|||
+initgraph||(var GraphDriver: SmallInt; var GraphMode: SmallInt; const PathToDriver: String)
+insline|||
+installuserdriver|Smallint|(Name: String; AutoDetectPtr: Pointer)|
+installuserfont|Smallint|(const FontFileName: String)|
+keypressed|bool||
+lightblue|||
+lightcyan|||
+lightgray|||
+lightgreen|||
+lightmagenta|||
+lightred|||
+linerel||(Dx: SmallInt; Dy: SmallInt)|
+lineto||(X: SmallInt; Y: SmallInt)|
+lowvideo|||
+magenta|||
+moverel||(Dx: SmallInt; Dy: SmallInt)|
+moveto||(X: Smallint, Y: Smallint)|
+normvideo|||
+nosound|||
+operator||(**(float, float): float)|
+operator||(**(int64, int64): int64)|
+outtext||(const TextString: String)|
+pieslice||(X: SmallInt; Y: SmallInt; stangle: SmallInt; endAngle: SmallInt; Radius: Word)|
+procedure|||
+program||(Title)|
+queryadapterinfo|PModeInfo||
+read||(Identifier)|
+readln||(Identifier)|
+readkey|char||
+readport||(Port: LongInt; var Value: Byte)|
+readport||(Port: LongInt; var Value: LongInt)|
+readport||(Port: LongInt; var Value: Word)|
+readportb|Byte|(Port: LongInt)|
+readportb||(Port: LongInt; var Buf; Count: LongInt)|
+readportl|LongInt|(Port: LongInt)|
+readportl||(Port: LongInt; var Buf; Count: LongInt)|
+readportw|Word|(Port: LongInt)|
+readportw||(Port: LongInt; var Buf; Count: LongInt)|
+rectangle||(x1: SmallInt; y1: SmallInt; x2: SmallInt; y2: SmallInt)|
+red|||
+registerbgidriver|Smallint|(driver: pointer)|
+registerbgifont|Smallint|(font: pointer)|
+restorecrtmode|||
+sector||(x: SmallInt; y: SmallInt; StAngle: Word; EndAngle: Word; XRadius: Word; YRadius: Word)| setaspectratio||(Xasp: Word; Yasp: Word)|
+setbkcolor||(Color: Word)|
+setcolor||(Color: Word)|
+setdirectvideo||(DirectAccess: Boolean)|
+setfillpattern||(Pattern: FillPatternType; Color: Word)|
+setfillstyle||(Pattern: Word; Color: Word)|
+setgraphmode||(Mode: SmallInt)|
+setlinestyle||(LineStyle: Word; Pattern: Word; Thickness: Word)|
+setpalette||(ColorNum: Word; Color: ShortInt)|
+settextjustify||(horiz: Word; vert: Word)|
+settextstyle||(font: Word; direction: Word; charsize: Word)|
+setusercharsize||(Multx: Word; Divx: Word; Multy: Word; Divy: Word)|
+setviewport||(X1: SmallInt; Y1: SmallInt; X2: SmallInt; Y2: SmallInt; Clip: Boolean)|
+setwritemode||(WriteMode: SmallInt)|
+sound||(Hz: Word)|
+textbackground||(Color: Byte)|
+textcolor||(Color: Byte)|
+textheight|Word|(const TextString: String)|
+textmode||(Mode: Integer)|
+textwidth|Word|(const TextString: String)|
+uses||(Unitlist)|
+var|||
+wherex|Byte||
+wherey|Byte||
+white|||
+window||(X1: Byte, Y1: Byte, X2: Byte, Y2: Byte)|
+write||(Output)|
+writeln||(Output)|
+writeport||(Port: LongInt; Value: Byte)|
+writeport||(Port: LongInt; Value: LongInt)|
+writeport||(Port: LongInt; Value: Word)|
+writeportb||(Port: LongInt; Value: Byte)|
+wrtieportb||(Port: LongInt; var Buf; Count: LongInt)|
+writeportl||(Port: LongInt; Value: LongInt)|
+wrtieportl||(Port: LongInt; var Buf; Count: LongInt)|
+writeportw||(Port: LongInt; Value: Word)|
+wrtieportw||(Port: LongInt; var Buf; Count: LongInt)|
+yellow|||

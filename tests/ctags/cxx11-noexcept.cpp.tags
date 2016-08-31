@@ -1,0 +1,5 @@
+# format=tagmanager
+BaseÌ1Ö0
+barÌ1024Í()ÎBaseÖ0Ïvirtual void
+bazÌ16Í()ÎBaseÖ0Ïint
+fooÌ1024Í()ÎBaseÖ0Ïvirtual void

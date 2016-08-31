@@ -1,0 +1,7 @@
+# format=tagmanager
+DigitÌ128Í(byte value)ÎDigitÖ0
+DigitÌ2048Ö0
+MainÌ128Í()ÎTestÖ0Ïpublic void
+TestÌ1Ö0
+operator byteÌ128Í(Digit d)ÎDigitÖ0Ïpublic implicit
+valueÌ8ÎDigitÖ0Ïbyte

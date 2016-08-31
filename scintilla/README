@@ -1,0 +1,16 @@
+These files are from the Scintilla project, http://www.scintilla.org.
+
+See License.txt for the Scintilla license.
+
+We try to keep these files in sync with the official project; any
+changes should be sent there first. Otherwise changes could cause
+conflicts when we next update Scintilla.
+
+
+Public header constants (include/*.h)
+-------------------------------------
+You should not add constants in header files - instead use
+Scintilla.iface and HFacer.py.
+
+Do not change the value of constants in header files as this will
+break Scintilla's ABI.

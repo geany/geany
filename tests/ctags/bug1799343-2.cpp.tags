@@ -1,0 +1,15 @@
+# format=tagmanager
+AÌ256Ö0
+BÌ256Ö0
+CÌ256ÎAÖ0
+PÌ1Ö0
+PÌ1ÎAÖ0
+QÌ1ÎAÖ0
+RÌ1ÎA::CÖ0
+SÌ1ÎBÖ0
+fÌ16Í(int v)ÎA::C::RÖ0Ïint
+tÌ64ÎB::SÖ0Ïint
+xÌ64ÎA::PÖ0Ïint
+xÌ64ÎPÖ0Ïint
+yÌ64ÎA::QÖ0Ïint
+zÌ64ÎA::C::RÖ0Ïint

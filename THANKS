@@ -1,0 +1,171 @@
+What's this file about?
+-----------------------
+This file lists all external people that have contributed to this project.
+If any contributors are missing, please email the developers - see the AUTHORS file.
+
+
+Testers and contributors:
+-------------------------
+These people have contributed to Geany by testing the software,
+reporting problems, sending patches and making useful suggestions:
+
+Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - heavy testing
+Christoph Berg <Christoph(dot)Berg(at)kpm-sport(dot)de> - testing and patch for filetype D
+Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com> - many patches
+Saleem Abdulrasool <compnerd(at)gentoo(dot)org> - vte autoconf patch
+Marko Peric <cragwolf(at)gmail(dot)com>
+S Jagannathan <poojyum(at)gmail(dot)com>
+Giuseppe Torelli <colossus73(at)gmail(dot)com>
+Kristoffer A. Tjernås <kt(at)nupi(dot)no>
+Tamim <amitamim(at)gmail(dot)com>
+Kevin Ellwood <kellwood(at)ameritech(dot)net>
+Stefan Oltmanns <stefan(dot)oltmanns(at)abi2006(dot)gymnasium-achim(dot)de> - escape sequences patch
+Bob Doan <bdoan(at)sicom(dot)com> - some patches
+Rob van der Linde <robvdl(at)paradise(dot)net(dot)nz> - fixed wrong vte height on some systems
+Josef Whiter <josef(at)toxicpanda(dot)com> - parse 'Entering directory' build messages
+Jeff Pohlmeyer <yetanothergeek(at)gmail(dot)com> - "Allow DnD", "Use tabs" and other great patches
+Tomás Vírseda <kaskaras(at)gmail(dot)com> - sort open files patch
+Dirk Weber <dietrich-weber(at)web(dot)de>
+Slava Semushin <slava(dot)semushin(at)gmail(dot)com> - patch to improve SVN checks in configure script
+John Gabriele <jmg3000(at)gmail(dot)com> - documentation patches
+Anh Phạm <cs(dot)phamtuananh(at)gmail(dot)com> - various patches
+Guillaume Hoffmann <guillaumh(at)gmail(dot)com> - Haskell filetype patch
+Peter Strand <peter(at)zarquon(dot)se> - Haskell CTags patch
+Dave Moore <wrex006(at)gmail(dot)com> - code navigation patch
+François Cami <francois(dot)cami(at)free(dot)fr>, Guillaume Duviol - tab replacement patch
+Alexander Rodin <rodin(dot)alexander(at)gmail(dot)com> - class builder patch
+Shiv <shivakumar(dot)gn(at)gmail(dot)com> - Sun Studio compiler compatibility patch
+Jean-François Wauthy <pollux(at)xfce(dot)org> - Symbol list icons patch
+blackdog <blackdog(at)ipowerhouse(dot)com> - Haxe filetype patch
+Sebastian Kraft <kraft(dot)sebastian(at)googlemail(dot)com> - new Geany icon
+Catalin Marinas <catalin(dot)marinas(at)gmail(dot)com> - newline strips trailing spaces patch
+Bo Lorentsen <bl(at)lue(dot)dk> - project session patch
+Yura Siamashka <yurand2(at)gmail(dot)com> - many patches
+Daniel Richard G. <skunk(at)iskunk(dot)org> - some patches
+Pierre Joye <pierre(dot)php(at)gmail(dot)com> - Win32 process spawning patch
+Matti Mårds <mamaar(at)gmail(dot)com> - create PHP tags script
+Robert McGinley <mcginleyr1(at)gmail(dot)com> - Documentation improvements
+Felipe Pena <felipensp(at)gmail(dot)com> - Missing PHP keywords
+Colomban Wendling <colombanw(at)users(dot)sourceforge(dot)net> - various patches
+Timothy Boronczyk <tboronczyk(at)gmail(dot)com> - scroll_stop_at_last_line GUI pref patch
+Jason Oster <parasytic(at)users(dot)sourceforge(dot)net> - various patches
+Andrew Rowland <weibullguy(at)charter(dot)net> - R filetype patch
+Bronisław Białek <after89(at)gmail(dot)com> - CSS parser update
+Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - Matlab filetype patch
+Conrad Steenberg <gnocci-man(at)users(dot)sourceforge(dot)net> - symbol tree patch
+Herbert Voss <voss(at)perce(dot)de> - LaTeX file template
+Moritz Barsnick <barsnick(at)users(dot)sourceforge(dot)net> - Split Vertically command
+Tyler D'Agosta - Add missing HTML entities
+Walery Studennikov <despairr(at)gmail(dot)com> - YAML filetype patch
+Guillaume de Rorthais <ioguix(at)free(dot)fr> - Auto-close brackets/braces/quotes patch
+Tyler Mulligan <tyler(at)doknowevil(dot)net> - Close All toolbar icon
+Philipp Gildein <philipp(at)gildein(dot)com> - Ada filetype patch
+Thomas Martitz <thomas47(at)arcor(dot)de> - Multiple %cursor% in Snippets, typeahead sidebar patch
+David Gleich <dgleich(at)stanford(dot)edu> - Send Selection to Terminal patch
+Chris Macksey <cmacksey(at)users(dot)sourceforge(dot)net> - ActionScript filetype patch
+Simon Treny <simon(dot)treny(at)free(dot)fr> - Documents sidebar stock icons patch
+Elias Pschernig <elias(at)users(dot)sourceforge(dot)net> - Recent Projects menu patch
+Jesse Mayes <plasmasheep(at)gmail(dot)com> - Tango'ish Save All icon
+Eugene Arshinov <earshinov(at)gmail(dot)com> - Reload color schemes, split lines KB patches, and more
+Jon Strait <jstrait(at)moonloop(dot)net> - Markdown filetype patch
+Forgeot Eric <eforgeot(at)yahoo(dot)fr> - Txt2Tags filetype patch
+Lex Trotman <elextr<at>gmail<dot>com> - Build commands configuration improvements, and more
+Ross McKay <rosko<at>zeta<dot>org<dot>au> - ASP preferred language option
+Alexey Antipov <1a_antipov(at)mail(dot)ru> - Apply file open encoding only to non-Unicode files
+Jörn Reder <joern(at)zyn(dot)de> - --socket-file command line option patch
+Kelvin Gardiner <kelvin(at)mbmn(dot)net> - VHDL symbol list patch, Verilog filetype
+Jon Senior <jon(at)restlesslemon(dot)co(dot)uk> - R tagmanager parser patch
+Can Koy <cankoy(at)ymail(dot)com> - Multiple changes/improvements
+Yoann Le Montagner <yoann(dot)le-montagner(at)m4x(dot)org> - set VTE bold color
+Dimitar Zhekov <hamster(at)mbox(dot)contact(dot)bg> - various patches
+Ondrej Donek <ondrejd(at)gmail(dot)com> - Support for creating PHP classes with the classbuilder plugin
+Daniel Marjamaki <danielm77(at)spray(dot)se> - Small improvements
+Jiří Techet <techet(at)gmail(dot)com> - Various patches
+Erik de Castro Lopo <mle+tools(at)mega-nerd(dot)com> - Various patches
+Thomas Huth <th(dot)huth(at)googlemail(dot)com> - Forth filetype
+Adam Ples <adamples(at)users(dot)sourceforge(dot)net> - Group encodings in open dialog
+Mário Silva <sharelider(at)gmail(dot)com> - Lisp filetype
+Taylor Venable <taylor(at)metasyntax(dot)net> - Erlang filetype
+Manuel Bua <manuel(dot)bua(at)gmail(dot)com> - Ensure consistent line endings pref.
+Matthew Brush <codebrainz(at)users(dot)sourceforge(dot)net> - Various patches.
+Nicolas Sierro <nicolas@sierro.net> - store VTE path with session patch
+
+Translators:
+------------
+These people have translated Geany to foreign languages:
+
+Fayssal Chamekh <chamfay(at)gmail(dot)com> - ar
+Marcos Costales <marcoscostales(at)gmail(dot)com> - ast
+Yura Siamashka <yurand2(at)gmail(dot)com> - be_BY
+Dilyan Rusev <dilyanrusev(at)gmail(dot)com> - bg
+Toni Garcia-Navarro <topi(at)elpiset(dot)net> - ca_ES
+Petr Messner <messa(at)messa(dot)cz> - cs_CZ
+Anna Talianova <anickat1(at)gmail(dot)com> - cs_CZ
+Karel Kolman <kolmis(at)gmail(dot)com> - cs_CZ
+Frank Lanitz <frank(at)frank(dot)uvena(dot)de> - de_DE
+Dominic Hopf <dmaphy(at)googlemail(dot)com> - de_DE
+Stavros Temertzidis <bullgr(at)gmail(dot)com> - el
+Jeff Bailes <thepizzaking(at)gmail(dot)com> - en_GB
+Damián Viano <debian(at)damianv(dot)com(dot)ar> - es
+Antonio Jiménez González <tonificante(at)hotmail(dot)com> - es
+Nacho Cabanes <ncabanes(at)gmail(dot)com> - es
+Lucas Vieites <lucasvieites(at)gmail(dot)com> - es
+Asier Iturralde Sarasola <asier(dt)iturralde(at)gmail(dot)com>
+Moein Owhadi Kareshk <moein.owhadi(at)gmail.com> - fa
+Harri Koskinen <harri(at)fastmonkey(dot)org> - fi
+Jari Rahkonen <jari(dot)rahkonen(at)pp1(dot)inet(dot)fi> - fi
+Jean-Philippe Moal <skateinmars(at)skateinmars(dot)net> - fr
+Roland Baudin <roland(dot)baudin(at)thalesaleniaspace(dot)com> - fr
+Lionel Fuentes <funto66(at)gmail(dot)com> - fr
+Benjamin Ballet <benjamin(dot)ballet(at)gmail(dot)com> -fr
+José Manuel Castroagudín Silva <chavescesures(at)mail(dot)com> - gl
+Asheesh Ranjan <asheeshranjan1(at)gmail(dot)com> - hi
+Yosef Or Boczko <yoseforb(at)gmail(dot)com> - he
+Gabor Kmetyko aka kilo <kg_kilo(at)freemail(dot)hu> - hu
+M.Baldinelli <m(dot)baldinelli(at)agora(dot)it> - it
+Dario Santomarco <dariello(at)yahoo(dot)it> - it
+Giuliano Manzitti <gmanzitti(at)yahoo.it> - it
+Tarot Osuji <tarot(at)sdf(dot)lonestar(dot)org> - ja
+Chikahiro Masami <cmasa(dot)z321(at)gmail(dot)com> - ja
+Park Jang-heon <dotkabi(at)gmail(dot)com> - ko
+Baurzhan Muftakhidinov <baurthefirst(at)gmail(dot)com> - kk
+Laurent Hoeltgen <hoeltgman(at)gmail(dot)com> - lb
+Algimantas Margevičius <margevicius(dot)algimantas(at)gmail(dot)com> - lt
+tsetsee <tsetsee(dot)yugi(at)gmail(dot)com> - mn
+Kurt De Bree <kdebree(at)telenet(dot)be> - nl
+Peter Scholtens <peter(dot)scholtens(at)xs4all(dot)nl> - nl
+Ayke van Laethem <aykevanlaethem(at)gmail(dot)com> - nl
+Jacek Wolszczak <shutdownrunner(at)o2(dot)pl> - pl_PL
+Jarosław Foksa <jfoksa(at)gmail(dot)com> - pl_PL
+Krzysztof Troska <elleander86(at)gmail(dot)com> - pl_PL
+Wojciech Świderski <woj.swiderski@gmail.com> - pl_PL
+Alexandre Moreira <alexandream(at)gmail(dot)com> - pt_BR
+Adrovane Marques Kade <adrovane(at)gmail(dot)com> - pt_BR
+Rafael Peregrino da Silva <rperegrino(at)linuxnewmedia(dot)com(dot)br> - pt_BR
+Alex Eftimie <alex(at)rosedu(dot)org> - ro
+brahmann_ <brahmann(at)lifec0re(dot)net> - ru
+Nikita E. Shalaev <nshalaev(at)eu(dot)spb(dot)ru> - ru
+stat.c <Static-Const(at)yandex(dot)ru> - ru
+Andrew Drynov <adryno(at)gmail(dot)com> - ru
+John Wehin <john(dot)wehin(at)gmail(dot)com> - ru
+Maxim Musatov <m1kc(at)yandex(dot)ru> - ru
+Tomáš Vadina <kyberdev(at)gmail(dot)com> - sk
+Jože Klepec <joze(dot)klepec(at)siol(dot)net> - sl
+Nikola Radovanovic <cobisimo(at)gmail(dot)com> - sr
+Tony Mattsson <superxorn(at)gmail(dot)com> - sv
+Gürkan Gür <seqizz(at)gmail(dot)com> - tr
+Boris Dibrov <dibrov(dot)bor(at)gmail(dot)com> - uk
+Clytie Siddall <clytie(at)riverland(dot)net(dot)au> - vi_VN
+Dormouse Young <mouselinux(at)163(dot)com> - zh_CN
+Xhacker Liu <liu.dongyuan(at)gmail(dot)com> - zh_CN
+KoViCH <kovich(dot)ian(at)gmail(dot)com> - zh_TW
+Wei-Lun Chao <chaoweilun(at)gmail(dot)com> - zh_TW
+
+Projects:
+---------
+GTK/GLib
+Scintilla
+Tagmanager
+CTags
+Anjuta (tagmanager)
+KDevelop (symbol list icons)

@@ -1,0 +1,7 @@
+# format=tagmanager
+ContainerÌ16Í()Ö0
+MyClassÌ1Ö0
+insertÌ128Í(element, insertions)ÎMyClassÖ0
+wrapÌ128Í(element, wrapper, attributes)ÎMyClassÖ0
+xÌ16Í()ÎContainerÖ0
+yÌ16Í()ÎContainerÖ0

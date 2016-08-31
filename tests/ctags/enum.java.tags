@@ -1,0 +1,13 @@
+# format=tagmanager
+AÌ4ÎeÖ0
+BÌ4ÎeÖ0
+CÌ4ÎeÖ0
+DÌ4ÎeÖ0
+EÌ4ÎeÖ0
+FÌ4ÎeÖ0
+eÌ2Ö0
+getShapeÌ128Í()ÎeÖ0Ïpublic final Shape
+getStringÌ128Í()ÎeÖ0Ïpublic String
+shapeÌ8ÎeÖ0ÏShape
+stringÌ8ÎeÖ0ÏString
+twoKeywordsInARowÌ8ÎeÖ0Ïboolean

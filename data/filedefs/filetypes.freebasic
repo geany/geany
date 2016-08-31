@@ -1,0 +1,71 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment_line
+commentblock=comment
+docline=comment_line_doc
+docblock=comment_doc
+dockeyword=comment_doc_keyword
+number=number_1
+word=keyword_1
+string=string_1
+preprocessor=preprocessor
+operator=operator
+identifier=identifier_1
+date=number_2
+stringeol=string_eol
+word2=keyword_2
+word3=keyword_3
+word4=keyword_4
+constant=identifier_2
+asm=type
+label=label
+error=error
+hexnumber=number_1
+binnumber=number_1
+
+[keywords]
+# all items must be in one line
+keywords=abs access acos alias allocate alpha and andalso any append as asc asin asm assert assertwarn atan2 atn base beep bin binary bit bitreset bitset bload bsave byref byte byval call callocate case cast cbyte cdbl cdecl chain chdir chr cint circle class clear clng clngint close cls color com command common condbroadcast condcreate conddestroy condsignal condwait cons const constructor continue cos cptr cshort csign csng csrlin cubyte cuint culng culngint cunsg curdir cushort custom cvd cvi cvl cvlongint cvs cvshort data date dateadd datediff datepart dateserial datevalue day deallocate declare defbyte defdbl defint deflng deflngint defshort defsng defstr defubyte defuint defulngint defushort delete destructor dim dir do double draw dylibfree dylibload dylibsymbol dynamic else elseif encoding end endif enum environ eof eqv erase erfn erl ermn err error escape exec exepath exit exp explicit export extends extern false fboolean field fileattr filecopy filedatetime fileexists filelen fix flip for format frac fre freefile function get getjoystick getkey getmouse gosub goto hex hibyte hiword hour if iif imageconvertrow imagecreate imagedestroy imp import inkey inp input input$ instr instrrev int integer interface is isdate kill lbound lcase left len let lib line lobyte loc local locate lock lof log long longint loop loword lpos lprint lpt lset ltrim mid minute mkd mkdir mki mkl mklongint mks mkshort mod month monthname multikey mutexcreate mutexdestroy mutexlock mutexunlock name namespace new next nokeyword not now object oct offsetof on once open operator option or orelse out output overload paint palette pascal pcopy peek pipe pmap point pointer poke pos preserve preset print private procptr property protected pset ptr public put random randomize read reallocate redim rem reset restore resume return rgb rgba right rmdir rnd rset rtrim run sadd scope screen screencontrol screencopy screenevent screenglproc screeninfo screenlist screenlock screenptr screenres screenset screensync screenunlock scrn second seek select setdate setenviron setmouse settime sgn shared shell shl short shr sin single sizeof sleep space spc sqr static stdcall step stop str string strptr sub swap system tab tan then this threadcreate threadwait time timer timeserial timevalue to trans trim true type ubound ubyte ucase uinteger ulong ulongint union unlock unsigned until ushort using va_arg va_first val valint vallng valuint valulng va_next var varptr view virtual wait wbin wchr weekday weekdayname wend whex while width window windowtitle winput with woct write wspace wstr wstring xor year zstring
+preprocessor=#assert #define defined #else #elseif #endif #endmacro #error #if #ifdef #ifndef #inclib #include #lang #libpath #line #macro once #pragma #print typeof #undef
+# user definable keywords
+user1=
+user2=
+
+[settings]
+# default extension used when saving files
+extension=bas
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# single comments, like # in this file
+comment_single='
+# multiline comments
+comment_open=/'
+comment_close='/
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=fbc -w all "%f"
+run_cmd="./%e"
+

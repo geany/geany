@@ -1,0 +1,20 @@
+# format=tagmanager
+Structure#0Ì1ÎnestedÖ0
+aÌ64ÎStructure#0Ö0
+cloudsÌ64ÎweatherÖ0
+dayÌ64ÎweatherÖ0
+initialized_structureÌ2048Ö0
+latestÌ16384Îinitialized_structureÖ0
+latestÌ16384Îuninitialized_structureÖ0
+level2Ì64ÎtopÖ0
+level3aÌ64ÎnestedÖ0
+level3bÌ64ÎnestedÖ0
+monthÌ64ÎweatherÖ0
+nestedÌ1ÎtopÖ0
+nested_structureÌ2048Ö0
+rainfallÌ64ÎweatherÖ0
+topÌ1Înested_structureÖ0
+uninitialized_structureÌ2048Ö0
+weatherÌ1Îinitialized_structureÖ0
+weatherÌ1Îuninitialized_structureÖ0
+yearÌ64ÎweatherÖ0

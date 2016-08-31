@@ -1,0 +1,40 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+strong=tag
+emphasis=tag
+underlined=tag
+header1=tag
+header2=tag
+header3=tag
+header4=tag
+header5=tag
+header6=tag
+ulist_item=tag
+olist_item=tag
+blockquote=tag
+strikeout=tag
+hrule=tag
+link=function
+code=identifier_1
+codebk=identifier_2
+comment=comment
+option=operator
+preproc=preprocessor
+postproc=preprocessor
+
+[settings]
+# default extension used when saving files
+extension=txt2tags
+
+# MIME type
+mime_type=text/x-txt2tags
+
+# sort tags by appearance
+symbol_list_sort_mode=1
+
+[keywords]
+primary=includeconf options toc
+
+

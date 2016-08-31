@@ -1,0 +1,35 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+command=function
+header=preprocessor
+position=number
+deleted=line_removed
+added=line_added
+changed=line_changed
+
+
+[settings]
+# default extension used when saving files
+extension=diff
+
+# MIME type
+mime_type=text/x-patch
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# only the text before the first --- is a comment
+#comment_single=
+#comment_open=
+#comment_close=
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1

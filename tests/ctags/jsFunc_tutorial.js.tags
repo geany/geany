@@ -1,0 +1,71 @@
+# format=tagmanager
+Ball1Ã16Õ()÷0
+Ball3Ã16Õ()÷0
+D1Ã16Õ(a, b)÷0
+D2Ã16Õ(a, b)÷0
+D2AÃ16Õ(a, b)÷0
+D3Ã16÷0
+D4Ã16÷0
+D5Ã16Õ(myOperator)÷0
+DT1Ã16Õ()÷0
+DT2Ã16Õ(message)÷0
+DT2AÃ16Õ(message)÷0
+DT3Ã16Õ()÷0
+DT4Ã1Õ(message, specifiedName)÷0
+DT5Ã1Õ(color, specifiedName, owner, weight)÷0
+DT6Ã1Õ(name, salary, mySupervisor)÷0
+DT7Ã1Õ(name, salary)÷0
+DT7AÃ1Õ(name, salary)÷0
+DT8Ã1Õ(name, salary)÷0
+DT9Ã1Õ(name, salary)÷0
+PT1Ã16Õ()÷0
+PT2Ã1Õ(name, color)÷0
+PT3Ã1Õ(name, salary)÷0
+addÃ16Õ(a,b)ŒmyObject÷0
+addSalaryÃ128Õ(addition)ŒPT3÷0
+addSalaryFunctionÃ1Õ(addition)÷0
+addSalaryFunctionDT9Ã1Õ(addition)÷0
+ball0Ã16384÷0
+ball1Ã16384÷0
+ball2Ã16384÷0
+ball3Ã16384÷0
+ball4Ã16384÷0
+ball5Ã16384÷0
+ball6Ã16384÷0
+ball7Ã16384÷0
+ball8Ã16384÷0
+ball9Ã16384÷0
+balloonÃ16384÷0
+bossÃ16384÷0
+boss1Ã16384÷0
+boss2Ã16384÷0
+boss3Ã16384÷0
+calculateÃ16Õ(number)ŒgetHalfOf7÷0
+calculateÃ16Õ(number)ŒgetHalfOf8÷0
+calculate8Ã16Õ(number)÷0
+getHalfOf7Ã16Õ(num1, num2, num3)÷0
+getHalfOf8Ã16Õ(num1, num2, num3)÷0
+getSalaryÃ128Õ()ŒDT7÷0
+getSalaryÃ128Õ()ŒDT7A÷0
+getSalaryÃ128Õ()ŒDT8÷0
+getSalaryÃ128Õ()ŒPT3÷0
+getSalaryFunctionDT9Ã16Õ()÷0
+livesInÃ128ŒPT2÷0
+managerÃ16384÷0
+myFunction4Ã16Õ(message)÷0
+myFunction5Ã16Õ()÷0
+myFunction6Ã16Õ()÷0
+myFunction6AÃ16Õ()÷0
+myFunction6AEÃ16Õ()÷0
+myFunction6BÃ16Õ()÷0
+myFunction6EÃ16Õ()÷0
+myObjectÃ16384÷0
+my_global_var1Ã16384÷0
+object1Ã16384÷0
+object2Ã16384÷0
+object3Ã16384÷0
+priceÃ128ŒPT2÷0
+savedFunc6BÃ16Õ()÷0
+sayName4AÃ16Õ(name)÷0
+teamLeaderÃ16384÷0
+theAddÃ16Õ(a, b)÷0

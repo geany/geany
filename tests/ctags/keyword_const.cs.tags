@@ -1,0 +1,9 @@
+# format=tagmanager
+ConstTestÌ1Ö0
+MainÌ128Í()ÎConstTestÖ0Ïpublic void
+MyClassÌ1ÎConstTestÖ0
+MyClassÌ128Í(int p1, int p2)ÎConstTest.MyClassÖ0
+c1Ì8ÎConstTest.MyClassÖ0Ïconst int
+c2Ì8ÎConstTest.MyClassÖ0Ïconst int
+xÌ8ÎConstTest.MyClassÖ0Ïint
+yÌ8ÎConstTest.MyClassÖ0Ïint

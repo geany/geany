@@ -1,0 +1,21 @@
+# format=tagmanager
+SomeLongStructNameÌ1Ö0
+SomeLongStructNameÌ2048Ö0
+SomeStructÌ2048ÎfruitÖ0
+another_functionÌ16Í(a:isize,b:isize,c:isize)->isizeÎvegÖ0
+baazÌ128Í()ÎSomeLongStructNameÖ0
+blue_valueÌ8Îfruit::SomeStructÖ0
+chalkÌ16Í()ÎmineralÖ0
+foo_bar_test_funcÌ16Í(apples:fruit::SomeStruct,(oranges,lemon):(isize,isize))->isizeÖ0
+foooÌ128Í()ÎSomeLongStructNameÖ0
+free_funcÌ16Í()Ö0
+fruitÌ256Ö0
+graniteÌ16Í()ÎmineralÖ0
+green_valueÌ8Îfruit::SomeStructÖ0
+limestoneÌ16Í()ÎmineralÖ0
+mainÌ16Í()Ö0
+mineralÌ256Ö0
+not_hashbangÌ16Í()Ö0
+red_valueÌ8Îfruit::SomeStructÖ0
+vÌ8ÎSomeLongStructNameÖ0
+vegÌ256Ö0

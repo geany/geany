@@ -1,0 +1,61 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment
+comment_line=comment_line
+comment_line_bang=comment_line
+number=number_1
+word=keyword_1
+word2=keyword_2
+word3=keyword_3
+string=string_1
+preprocessor=preprocessor
+operator=operator
+identifier=identifier_1
+stringeol=string_eol
+userword=type
+comment_word=comment_doc_keyword
+input=keyword_4
+output=keyword_4
+inout=keyword_4
+port_connect=keyword_4
+
+[keywords]
+# all items must be in one line
+word=always and assign attribute begin buf bufif0 bufif1 case casex casez cmos deassign default defparam disable edge else end endattribute endcase endfunction endmodule endprimitive endspecify endtable endtask event for force forever fork function highz0 highz1 if ifnone initial join medium module large macromodule nand negedge nmos nor not notif0 notif1 or parameter pmos posedge primitive pull0 pull1 pulldown pullup rcmos realtime release repeat rnmos rpmos rtran rtranif0 rtranif1 scalared signed small specify specparam strength strong0 strong1 supply0 supply1 table task tran tranif0 tranif1 tri tri0 tri1 triand trior trireg unsigned vectored wait wand weak0 weak1 while wor xnor xor @
+word2=$display $write $fdisplay $fwrite $strobe $fstrobe $monitor $fmonitor $time $realtime $finish $stop $setup $hold $width $setuphold $readmemb $readmemh $sreadmemb $sreadmemh $getpattern $history $save $restart $incsave $shm_open $shm_probe $shm_close $scale $showscopes $showvars
+word3=real integer time reg wire input output inout
+docComment=
+
+[settings]
+# default extension used when saving files
+extension=v
+
+# MIME type
+mime_type=text/x-verilog
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# single comments, like # in this file
+comment_single=//
+# multiline comments
+comment_open=/*
+comment_close=*/
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1

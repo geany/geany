@@ -1,0 +1,45 @@
+TODO List:
+----------
+Note: features included in brackets have lower priority.
+
+	Fix bugs:
+	o tagmanager fails on UTF-16/32
+
+
+	Next version or later:
+	o better file template {filename} wildcard replacement +{BASENAME}
+	o improve line breaking mode
+	o print text size/zoom option
+	o documentation: list and explain filetype modes
+	o common default highlighting styles configurable for all
+	  programming languages (done for C-like filetypes using
+	  filetypes.common named styles)
+	o asynchronous build commands on Windows
+	o (filetype-independent run command in build dialog & keybinding)
+	o (better custom filetype support)
+	o (custom template insertion - so user can add licenses, etc)
+	o (selectable menu of arguments to use for Make, from Make Custom)
+	o (DBUS)
+	o (sci macro support - as a plugin?)
+	o (tango-like icons for the symbol list)
+	o (per-workspace instances with socket support - see
+	   workspace-sockets branch)
+
+
+	Someday:
+	o stable plugin ABI? (Split up geany_data, prefs, GeanyKeyCommand
+	  enum into groups)
+	o review documentation
+
+
+Wishlist
+--------
+Note: these items might not get worked on.
+
+	o (calltip support for more non-C-like languages that use
+	   function_name(arguments) syntax - see python.c:parseArglist())
+	o (better tags support for popular languages? - this is a moving
+	   target...)
+	o (support for adding syntax highlighting dynamically?)
+	o Some kind of support for CTags tags files
+	o Python plugin interface (different concept from Lua scripting)

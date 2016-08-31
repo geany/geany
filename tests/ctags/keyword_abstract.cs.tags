@@ -1,0 +1,8 @@
+# format=tagmanager
+MainÌ128Í()ÎMyDerivedCÖ0Ïpublic void
+MyBaseCÌ1Ö0
+MyDerivedCÌ1Ö0
+MyMethodÌ128Í()ÎMyBaseCÖ0Ïpublic abstract void
+MyMethodÌ128Í()ÎMyDerivedCÖ0Ïpublic override void
+xÌ8ÎMyBaseCÖ0Ïint
+yÌ8ÎMyBaseCÖ0Ïint

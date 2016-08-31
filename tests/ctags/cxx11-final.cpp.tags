@@ -1,0 +1,9 @@
+# format=tagmanager
+BaseÌ1Ö0
+DerivedÌ1Ö0
+finalÌ16Í()ÎDerivedÖ0Ïvoid
+finalÌ1024Í()ÎDerivedÖ0Ïvirtual void
+fooÌ16Í()ÎBaseÖ0Ïvoid
+fooÌ16Í()ÎDerivedÖ0Ïvoid
+fooÌ1024Í()ÎBaseÖ0Ïvirtual void
+fooÌ1024Í()ÎDerivedÖ0Ïvirtual void

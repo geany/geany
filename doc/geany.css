@@ -1,0 +1,114 @@
+/*
+:Author: Enrico Troeger
+:Contact: enrico(dot)troeger(at)uvena(dot)de
+:Copyright: This stylesheet has been placed in the public domain.
+
+Stylesheet for Geany's documentation based on a version of John Gabriele.
+*/
+
+@media screen {
+
+	body {
+		background-color: #f2f2f2;
+		color: #404040;
+		margin-left: 0.4em;
+		max-width: 60em;
+		font-size: 90%;
+	}
+
+	a {
+		color: #990000;
+	}
+
+	a:visited {
+		color: #7E558E;
+	}
+
+	a:hover {
+		text-decoration: none;
+	}
+
+	h1 {
+		border-top: 1px dotted;
+		margin-top: 2em;
+	}
+
+	h1, h2, h3 {
+		font-family: sans-serif;
+		color: #5D0606;
+	}
+
+	h1.title {
+	  text-align: left }
+
+	h2 {
+		margin-top: 30px;
+	}
+
+	h2.subtitle {
+	  text-align: left }
+
+	h3 {
+		padding-left: 3px;
+	}
+
+	blockquote, pre {
+		border: 1px solid;
+		padding: 0.4em;
+	}
+
+	blockquote {
+		font-family: sans-serif;
+		background-color: #DBEDD5;
+		border: 1px dotted;
+		border-left: 4px solid;
+		border-color: #9FD98C;
+	}
+
+	pre {
+		background-color: #ECDFCE;
+		border: 1px dotted;
+		border-left: 4px solid;
+		border-color: #D9BE9A;
+	}
+
+	tt, pre, code {
+		color: #6D4212;
+	}
+
+	table {
+		border: 1px solid #D9BE9A;
+	}
+
+	th {
+		background-color: #ECDFCE;
+		border: 1px dotted #D9BE9A;
+	}
+
+	td {
+		border: 1px dotted #D9BE9A;
+	}
+
+	.docinfo-name {
+		color: #5D0606;
+	}
+
+	p.admonition-title {
+		color: #990000;
+		font-weight: bold;
+	}
+
+	div.note {
+		margin: 1em 3em;
+		padding: 0em;
+	}
+
+	dt {
+		font-style: italic;
+	}
+
+}
+
+@media print {
+
+}

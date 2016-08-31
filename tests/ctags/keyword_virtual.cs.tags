@@ -1,0 +1,19 @@
+# format=tagmanager
+AreaÌ128Í()ÎTestClass.CircleÖ0Ïpublic override double
+AreaÌ128Í()ÎTestClass.CylinderÖ0Ïpublic override double
+AreaÌ128Í()ÎTestClass.DimensionsÖ0Ïpublic virtual double
+AreaÌ128Í()ÎTestClass.SphereÖ0Ïpublic override double
+CircleÌ1ÎTestClassÖ0
+CircleÌ128Í(double r)ÎTestClass.CircleÖ0
+CylinderÌ1ÎTestClassÖ0
+CylinderÌ128Í(double r, double h)ÎTestClass.CylinderÖ0
+DimensionsÌ1ÎTestClassÖ0
+DimensionsÌ128Í()ÎTestClass.DimensionsÖ0
+DimensionsÌ128Í(double x, double y)ÎTestClass.DimensionsÖ0
+MainÌ128Í()ÎTestClassÖ0Ïpublic void
+SphereÌ1ÎTestClassÖ0
+SphereÌ128Í(double r)ÎTestClass.SphereÖ0
+TestClassÌ1Ö0
+piÌ8ÎTestClass.DimensionsÖ0Ïconst double
+xÌ8ÎTestClass.DimensionsÖ0Ïdouble
+yÌ8ÎTestClass.DimensionsÖ0Ïdouble

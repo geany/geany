@@ -1,0 +1,93 @@
+Notes for package maintainers
+-----------------------------
+
+
+About this file
+---------------
+The following notes are intended for package maintainers. These are not
+meant as strict rules but only as hints and ideas to make a package
+maintainer's life a little bit easier.
+So it doesn't make much sense to include this file in any created
+packages for general distribution.
+
+
+Packaging hints
+---------------
+If the final file size of the created packaged is a problem, you might
+ignore some files and don't package them or put them into a separate
+package. This can be easily done (without any further complications)
+with the translations files(files in %prefix/share/locale/).
+Another possibility is to skip the tags files in the data/ subdirectory.
+These are only for auto completion of global symbols. If the files are
+missing Geany just doesn't provide these global symbol auto completion
+but all other things will work anyways.
+You can also skip packaging the full HTML documentation including
+images. But if you do so, please include at least the text form of the
+manual.
+What you shouldn't skip in your package: the filetype.* files in the
+data/ subdirectory, these files are important. If they are missing,
+Geany still has a fallback mechanism for syntax highlighting (if
+filetypes.common is installed) but several other features for certain
+filetypes will fail (mainly build support).
+
+For 32 bit builds targeting systems which support large filesystems
+(eg XFS) it may be necessary to build with -D_FILE_OFFSET_BITS=64.
+
+
+Testing your package
+--------------------
+There are a few things to take care of when you create a package:
+- Please check whether you include the following files:
+  ScintillaLicense.txt, README, manual.txt, COPYING.
+  ScintillaLicense.txt is the name of the installed file in the doc/
+  directory. In the source distribution, this file can be found in
+  scintilla/License.txt.
+  The file COPYING is the GPLv2 license text and should(have to?) be
+  included in your package.
+- Start Geany after it was installed out of your package. Pass the
+  command line argument "-v" to see whether Geany complains about
+  missing files.
+- Check whether the help menu item (Help->Help or F1) works and opens
+  the local installed HTML documentation in your browser (if it opens
+  the manual on the website you didn't install the HTML manual correctly
+  and Geany falls back to the online manual).
+- Check the About dialog (Help->About) whether it displays the full
+  GPLv2 license text on the last tab("License").
+
+
+Feedback
+--------
+If you have to modify anything to package the Geany sources for your
+distribution/target and these changes might be generally useful, please
+report your changes to us(the Geany developers) so we can apply them.
+Such changes could be removing/adding any files, modifying the autotools
+configuration, any modifications to some "meta" files (like
+geany.desktop, geany.spec, images/icons, ...) or even if you have to
+modify the source code to fix broken compilation or something like this.
+Please inform us about changes you made, so maybe you don't have to
+change it again with the next release and we can fix it in Geany itself
+so others could also benefit from these changes.
+
+
+Announce your packages
+---------------------
+After finishing your package creation, feel free to drop a note on
+Geany's mailing list or directly to us (the Geany developers) to
+inform us about it. If you wish, we can also add a link on Geany's
+website to your package.
+
+
+Geany announcements
+-------------------
+Package maintainers are encouraged to subscribe to the Geany mailing
+list to stay informed about major changes and of course, new releases.
+
+
+
+--
+2008-2012 by Enrico Tröger, Nick Treleaven, Colomban Wendling, Matthew Brush and Frank Lanitz
+enrico(dot)troeger(at)uvena(dot)de
+nick(dot)treleaven(at)btinternet(dot)com
+lists(dot)ban(at)herbesfolles(dot)org
+mbrush(at)codebrainz(dot)ca
+frank(at)frank(dot)uvena(dot)de
