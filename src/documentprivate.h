@@ -111,6 +111,8 @@ typedef struct GeanyDocumentPrivate
 	gint			 protected;
 	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
 	GtkWidget		*info_bars[NUM_MSG_TYPES];
+	/* Keyed Data List to attach arbitrary data to the document */
+	GData			*data;
 }
 GeanyDocumentPrivate;
 
