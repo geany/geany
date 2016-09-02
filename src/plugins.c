@@ -31,6 +31,7 @@
 
 #include "app.h"
 #include "dialogs.h"
+#include "documentprivate.h"
 #include "encodings.h"
 #include "geanyobject.h"
 #include "geanywraplabel.h"
@@ -57,6 +58,14 @@
 #include "gtkcompat.h"
 
 #include <string.h>
+
+
+typedef struct
+{
+	gchar *prefix;
+	GeanyDocument *document;
+}
+ForEachDocData;
 
 
 GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
@@ -850,6 +859,35 @@ static gboolean is_active_plugin(Plugin *plugin)
 }
 
 
+static void remove_each_doc_data(GQuark key_id, gpointer data, gpointer user_data)
+{
+	const ForEachDocData *doc_data = user_data;
+	const gchar *key = g_quark_to_string(key_id);
+	if (g_str_has_prefix(key, doc_data->prefix))
+		g_datalist_remove_data(&doc_data->document->priv->data, key);
+}
+
+
+static void remove_doc_data(Plugin *plugin)
+{
+	ForEachDocData data;
+
+	data.prefix = g_strdup_printf("geany/plugins/%s/", plugin->public.info->name);
+
+	for (guint i = 0; i < documents_array->len; i++)
+	{
+		GeanyDocument *doc = documents_array->pdata[i];
+		if (DOC_VALID(doc))
+		{
+			data.document = doc;
+			g_datalist_foreach(&doc->priv->data, remove_each_doc_data, &data);
+		}
+	}
+
+	g_free(data.prefix);
+}
+
+
 /* Clean up anything used by an active plugin  */
 static void
 plugin_cleanup(Plugin *plugin)
@@ -859,6 +897,7 @@ plugin_cleanup(Plugin *plugin)
 	/* With geany_register_plugin cleanup is mandatory */
 	plugin->cbs.cleanup(&plugin->public, plugin->cb_data);
 
+	remove_doc_data(plugin);
 	remove_callbacks(plugin);
 	remove_sources(plugin);
 
