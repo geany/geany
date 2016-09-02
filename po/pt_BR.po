@@ -30,7 +30,7 @@ msgstr "Ambiente de Desenvolvimento Integrado"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
-msgstr "Um IDE rápido e leve usando GTK+"
+msgstr "Uma IDE rápido e leve usando GTK+"
 
 #: ../geany.desktop.in.h:4
 #, fuzzy
@@ -812,7 +812,7 @@ msgstr "Tipo:"
 
 #: ../data/geany.glade.h:163
 msgid "Tab key indents"
-msgstr "Endentações da tecla Tab"
+msgstr "Indentações da tecla Tab"
 
 #: ../data/geany.glade.h:164
 msgid ""
@@ -2279,7 +2279,7 @@ msgstr "Sobre o Geany"
 
 #: ../src/about.c:212
 msgid "A fast and lightweight IDE"
-msgstr "Um IDE rápido e leve"
+msgstr "Uma IDE rápido e leve"
 
 #: ../src/about.c:234
 #, c-format
@@ -7016,7 +7016,7 @@ msgstr "Topo e Base"
 #~ msgstr "Atalhos de teclado"
 
 #~ msgid " - A fast and lightweight IDE"
-#~ msgstr "- Um IDE rápido e leve"
+#~ msgstr "- Uma IDE rápido e leve"
 
 #~ msgid "Function"
 #~ msgstr "Função"
