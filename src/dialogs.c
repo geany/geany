@@ -152,7 +152,7 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
 		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
-		
+
 		if (filelist == NULL && recursive)
 		{
 			gchar *path = gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(dialog));
@@ -173,18 +173,47 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			}
 			else
 			{
-				if (recursive)
+				const gchar *only_dir = NULL;
+				gboolean opens_many = FALSE;
+
+				if (filelist->next)
+					opens_many = TRUE;
+				else if (g_file_test(filelist->data, G_FILE_TEST_IS_DIR))
+				{
+					opens_many = TRUE;
+					only_dir = filelist->data;
+				}
+
+				if (recursive && opens_many)
 				{
 					GtkFileFilter *filter = gtk_file_chooser_get_filter(GTK_FILE_CHOOSER(dialog));
+					const gchar *filter_name = gtk_file_filter_get_name(filter);
 					GError *error;
+					gchar *message;
 
-					document_open_files_recursively(filelist, ro, ft, charset, filter, &error);
+					if (only_dir)
+						message = g_strdup_printf(_("Open files in \"%s\" using filter \"%s\"?"),
+								only_dir, filter_name);
+					else
+						message = g_strdup_printf(_("Open files using filter \"%s\"?"),
+								filter_name);
 
-					if (error)
+					if (dialogs_show_question_full(dialog, GTK_STOCK_YES, GTK_STOCK_NO,
+							_("This may take a while depending on the files and the filter."),
+							"%s", message))
 					{
-						dialogs_show_msgbox(GTK_MESSAGE_ERROR, "%s", error->message);
-						g_error_free(error);
+						document_open_files_recursively(filelist, ro, ft, charset, filter, &error);
+
+						if (error)
+						{
+							dialogs_show_msgbox(GTK_MESSAGE_ERROR, "%s", error->message);
+							g_error_free(error);
+						}
 					}
+					else
+						ret = FALSE;
+
+					g_free(message);
 				}
 				else
 					document_open_files(filelist, ro, ft, charset);
