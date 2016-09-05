@@ -1747,7 +1747,7 @@ void ScintillaGTK::Resize(int width, int height) {
 	minVScrollBarHeight = minimum.height;
 	verticalScrollBarWidth = requisition.width;
 	gtk_widget_get_preferred_size(PWidget(scrollbarh), &minimum, &requisition);
-	minHScrollBarWidth = minimum.height;
+	minHScrollBarWidth = minimum.width;
 	horizontalScrollBarHeight = requisition.height;
 #else
 	minVScrollBarHeight = minHScrollBarWidth = 1;
