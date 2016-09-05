@@ -1,14 +1,14 @@
 # Swedish translations for geany package.
-# Copyright (C) 2007 - 2015 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2007 - 2016 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Tony Mattsson <superxorn@gmail.com>, 2007 - 2015
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-06-27 18:56+0200\n"
-"PO-Revision-Date: 2015-08-05 09:27+0100\n"
+"PO-Revision-Date: 2016-09-02 14:13+0200\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.8.8\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
 msgid "Geany"
@@ -32,9 +32,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Ett snabbt och lättviktigt IDE som använder GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Text;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -117,9 +116,8 @@ msgid "Find _Document Usage"
 msgstr "Visa dokumentets användning"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "Gå till Tagg-definition"
+msgstr "Gå till symboldefinition"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -409,21 +407,19 @@ msgstr "Stäng av / på symbollistan"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Grundläggande symbolsorteringsläge"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Förvald kodning (nya filer):"
+msgstr "Förvalt sorteringsläge:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "Namn"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Utseende</b>"
+msgstr "Utseende"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1579,7 +1575,6 @@ msgid "Follow path of the current file"
 msgstr "Följ den aktiva filens sökväg"
 
 #: ../data/geany.glade.h:332
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr ""
 "Huruvida \\\"cd $path\\\" skall exekveras när du växlar mellan öppna filer"
@@ -1819,9 +1814,8 @@ msgid "_Mark All"
 msgstr "Markera allt"
 
 #: ../data/geany.glade.h:390
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Gå till Tagg-deklaration"
+msgstr "Gå till symboldeklaration"
 
 #: ../data/geany.glade.h:391
 msgid "_View"
@@ -2053,9 +2047,8 @@ msgid "_Word Count"
 msgstr "Räkna ord"
 
 #: ../data/geany.glade.h:448
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "Ladda taggar..."
+msgstr "Ladda taggfil..."
 
 #: ../data/geany.glade.h:449
 msgid "_Help"
@@ -2228,7 +2221,6 @@ msgid "Other:"
 msgstr "Annat:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2238,7 +2230,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2014\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2354,12 +2346,13 @@ msgstr ""
 "(tryck Ctrl+C eller RETUR-tangenten för att rensa)."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+"Kan inte exekvera bygg-komandot \"%s\": %s. Kontrollera inställningarna för "
+"kommandotolken."
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -2537,19 +2530,17 @@ msgstr "Kunde inte öppna filen %s (filen kunde ej hittas)"
 
 #: ../src/callbacks.c:1468
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Kontrollera inställningarna för sökvägar i filtypskonfigurationen."
 
 #: ../src/callbacks.c:1473
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr ""
-"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+msgstr "Kontrollera inställningarna för sökvägar i inställningarna."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1486
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Kunde inte exekvera konfigurerat externt kommando '%s' (%s)."
+msgstr "Kunde inte exekvera kontextmeny kommando \"%s\": %s. %s"
 
 #: ../src/dialogs.c:161 ../src/document.c:2294 ../src/document.c:2359
 #: ../src/document.c:2367
@@ -2798,7 +2789,7 @@ msgstr ", skrivskyddad"
 
 #: ../src/document.c:1613
 msgid "Discard history"
-msgstr ""
+msgstr "Töm historia"
 
 #: ../src/document.c:1614
 msgid ""
@@ -2807,11 +2798,14 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Bufferns föregående status har lagrats, och om du ångrar tar du fram "
+"statusen igen. Du kan avaktivera detta genom att tömma histora vid "
+"omladdning. Detta meddelande komer inte att visas igen, men dit val kan "
+"sparas i inställningarna."
 
 #: ../src/document.c:1618
-#, fuzzy
 msgid "The file has been reloaded."
-msgstr "Dokumentet har stängts."
+msgstr "Filen har laddats om."
 
 #: ../src/document.c:1648
 msgid "Any unsaved changes will be lost."
@@ -3433,45 +3427,39 @@ msgstr "Minska indrag med ett blanksteg"
 
 #: ../src/keybindings.c:475
 msgid "Send to Custom Command 1"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 1"
 
 #: ../src/keybindings.c:477
 msgid "Send to Custom Command 2"
-msgstr "Definiera användarkommando 2"
+msgstr "Skicka till användarkommando 2"
 
 #: ../src/keybindings.c:479
 msgid "Send to Custom Command 3"
-msgstr "Definiera användarkommando 3"
+msgstr "Skicka till användarkommando 3"
 
 #: ../src/keybindings.c:481
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 4"
 
 #: ../src/keybindings.c:483
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 5"
 
 #: ../src/keybindings.c:485
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 6"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 7"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 8"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Definiera användarkommando 1"
+msgstr "Skicka till användarkommando 9"
 
 #: ../src/keybindings.c:499
 msgid "Join lines"
@@ -3542,14 +3530,12 @@ msgid "Toggle marker"
 msgstr "Stäng av / på markör"
 
 #: ../src/keybindings.c:575
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Gå till Tagg-definition"
+msgstr "Gå till symboldefinition"
 
 #: ../src/keybindings.c:578
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Gå till Tagg-deklaration"
+msgstr "Gå till symboldeklaration"
 
 #: ../src/keybindings.c:580
 msgid "Go to Start of Line"
@@ -3782,9 +3768,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Generera globala tagg-filer (se dokumentationen)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "Förbehandla inte C/C++ filer vid tag-generering"
+msgstr "Förbehandla inte C/C++ filer vid generering av tagg-filen"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -3949,9 +3934,8 @@ msgid "Switch to Document"
 msgstr "Växla till dokumentet"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Öppna i Geany"
+msgstr "Öppna i nytt fönster"
 
 #: ../src/plugins.c:224
 #, c-format
@@ -3972,6 +3956,8 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Andra insticksmoduler är beroende av det här. Avaktivera dem först.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1610
@@ -4141,12 +4127,13 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
 msgstr ""
-"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+"Kan inte exekvera utskriftskommando\"%s\": %s. Kontrollera sökvägen i "
+"Inställningar."
 
 #: ../src/printing.c:622
 #, c-format
@@ -4490,11 +4477,12 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (i sökväg: %s)"
 
 #: ../src/search.c:1719
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
 msgstr ""
-"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+"Kan inte exekvera grep-verktyget \"%s\": %s. Kontrollera sökvägen i "
+"Inställningar."
 
 #: ../src/search.c:1759
 #, c-format
@@ -4533,9 +4521,8 @@ msgstr ""
 "Detta är ett allvarligt fel, och Geany kommer nu att avslutas."
 
 #: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
-#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr "Texten tog slut innan matchning kunde hittas för %c. (Texten var '%s')"
+msgstr "Texten tog slut innan matchande citeringstecken hittades"
 
 #. TL note: from glib
 #: ../src/spawn.c:130
@@ -4548,19 +4535,16 @@ msgstr ""
 "Ett Windows-program inom citattecken måste hålla sig helt inom citat-tecknen."
 
 #: ../src/spawn.c:258
-#, fuzzy
 msgid "Program not found"
-msgstr "Programet '%s' kunde ej hittas"
+msgstr "Programet kunde ej hittas"
 
 #: ../src/spawn.c:672
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Processen misslyckades, ingen arbetsmapp är angiven"
+msgstr "Byte av arbetsmapp misslyckades"
 
 #: ../src/spawn.c:677
-#, fuzzy
 msgid "Unknown error executing child process"
-msgstr "okänt fel vid startandet av en process för %s"
+msgstr "Okänt fel vid exekvering av underprocess"
 
 #: ../src/stash.c:1177
 msgid "Value"
@@ -4877,17 +4861,17 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Okänd filändelse för filen \"%s\".\n"
 
 #: ../src/symbols.c:1612
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "Misslyckades med att skapa tagg-fil.\n"
+msgstr "Kunde inte skapa en taggfil, kanske därför inga symboler hittades.\n"
 
 #: ../src/symbols.c:1619
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
-"Användning: %s -g <Tagg Fil> <Fillista>\n"
+"Användning: %s -g <Taggfil> <Fillista>\n"
 "\n"
 
 #: ../src/symbols.c:1620
@@ -4902,14 +4886,12 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1634
-#, fuzzy
 msgid "Load Tags File"
-msgstr "Ladda taggar"
+msgstr "Ladda taggfil"
 
 #: ../src/symbols.c:1641
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
-msgstr "Geany tagg-filer (*.tags)"
+msgstr "Geany taggfiler (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
 #: ../src/symbols.c:1661
@@ -4924,15 +4906,15 @@ msgstr "Kunde inte ladda tagg-filen '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1899
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Visa</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1902
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2111
 #, c-format
@@ -4963,6 +4945,8 @@ msgid ""
 "Cannot execute command \"%s\" from the template: %s. Check the path in the "
 "template."
 msgstr ""
+"Kan inte köra kommandot \"%s\" från mallen: %s. Kontrollera sökvägen i "
+"mallen."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5138,12 +5122,13 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Det exekverade kommandot returnerade en felkod."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
 msgstr ""
-"Kan inte exekvera grep-verktyget '%s'; kontrollera sökvägen i Inställningar."
+"Kan inte köra användarkommandot \"%s\": %s. Kontrollera inställningen för "
+"sökvägar under användarkommandon."
 
 #: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
@@ -5192,9 +5177,8 @@ msgid "Characters:"
 msgstr "Tecken:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "Inga taggar hittade"
+msgstr "Inga symboler hittade"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
@@ -5435,7 +5419,7 @@ msgstr "Exekverbara filer"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Kunde inte öppna URI \"%s\": %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
