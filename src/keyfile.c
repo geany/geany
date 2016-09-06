@@ -43,6 +43,7 @@
 #include "geanyobject.h"
 #include "main.h"
 #include "msgwindow.h"
+#include "notebook.h"
 #include "prefs.h"
 #include "printing.h"
 #include "project.h"
@@ -172,6 +173,12 @@ static void init_pref_groups(void)
 		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_horizontal", GTK_ORIENTATION_HORIZONTAL,
+		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.notebook_auto_sort_tabs,
+		"notebook_auto_sort_tabs", NOTEBOOK_TAB_AUTO_SORT_DISABLED,
+		"radio_notebook_auto_sort_tabs_disabled", NOTEBOOK_TAB_AUTO_SORT_DISABLED,
+		"radio_notebook_auto_sort_tabs_by_filename", NOTEBOOK_TAB_AUTO_SORT_BY_FILENAME,
+		"radio_notebook_auto_sort_tabs_by_pathname", NOTEBOOK_TAB_AUTO_SORT_BY_PATHNAME,
 		NULL);
 
 	/* editor display */

@@ -316,6 +316,8 @@ void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
 
+GtkWidget *document_get_notebook_child(GeanyDocument *doc);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

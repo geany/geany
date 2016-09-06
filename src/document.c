@@ -263,7 +263,7 @@ GeanyDocument *document_find_by_id(guint id)
 
 
 /* gets the widget the main_widgets.notebook consider is its child for this document */
-static GtkWidget *document_get_notebook_child(GeanyDocument *doc)
+GtkWidget *document_get_notebook_child(GeanyDocument *doc)
 {
 	GtkWidget *parent;
 	GtkWidget *child;

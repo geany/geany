@@ -70,6 +70,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
+	gint			notebook_auto_sort_tabs;	/* automatic sorting mode of notebook tabs */
 }
 GeanyInterfacePrefs;
 

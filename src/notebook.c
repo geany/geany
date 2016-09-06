@@ -34,6 +34,7 @@
 #include "geanyobject.h"
 #include "keybindings.h"
 #include "main.h"
+#include "sidebar.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -65,6 +66,8 @@ static gboolean switch_in_progress = FALSE;
 static GtkWidget *switch_dialog = NULL;
 static GtkWidget *switch_dialog_label = NULL;
 
+static gboolean doc_saves_to_new_file = FALSE;
+
 
 static void
 notebook_page_reordered_cb(GtkNotebook *notebook, GtkWidget *child, guint page_num,
@@ -79,6 +82,10 @@ static void
 notebook_tab_close_clicked_cb(GtkButton *button, gpointer user_data);
 
 static void setup_tab_dnd(void);
+
+static void on_document_open(GObject *obj, GeanyDocument *doc);
+static void on_document_before_save(GObject *obj, GeanyDocument *doc);
+static void on_document_save(GObject *obj, GeanyDocument *doc);
 
 
 static void update_mru_docs_head(GeanyDocument *doc)
@@ -448,6 +455,20 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 
+	menu_item = ui_image_menu_item_new(NULL, _("Sort Tabs By _Filename"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_by_filename_activate), NULL);
+
+	menu_item = ui_image_menu_item_new(NULL, _("_Sort Tabs By Pathname"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_sort_tabs_by_pathname_activate), NULL);
+
+	menu_item = gtk_separator_menu_item_new();
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+
 	menu_item = ui_image_menu_item_new(GTK_STOCK_OPEN, _("Open in New _Window"));
 	gtk_widget_show(menu_item);
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
@@ -530,6 +551,10 @@ void notebook_init(void)
 
 	/* in case the switch dialog misses an event while drawing the dialog */
 	g_signal_connect(main_widgets.window, "key-release-event", G_CALLBACK(on_key_release_event), NULL);
+
+	g_signal_connect(geany_object, "document-open", G_CALLBACK(on_document_open), NULL);
+	g_signal_connect(geany_object, "document-before-save", G_CALLBACK(on_document_before_save), NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 
 	setup_tab_dnd();
 }
@@ -751,6 +776,160 @@ void notebook_remove_page(gint page_num)
 	gtk_notebook_remove_page(GTK_NOTEBOOK(main_widgets.notebook), page_num);
 
 	tab_count_changed();
+}
+
+
+static gchar *get_doc_dirname(const GeanyDocument* doc)
+{
+	gchar *dirname, *tmp_dirname;
+
+	if (doc->file_name == NULL)
+		dirname = g_strdup(GEANY_STRING_UNTITLED);
+	else
+	{
+		tmp_dirname = g_path_get_dirname(doc->file_name);
+		dirname = sidebar_get_doc_folder(tmp_dirname);
+		g_free(tmp_dirname);
+	}
+
+	return dirname;
+}
+
+
+static gint compare_filenames(const gchar *a, const gchar *b)
+{
+	gchar *key_a = g_utf8_collate_key_for_filename(a, -1);
+	gchar *key_b = g_utf8_collate_key_for_filename(b, -1);
+	gint cmp = strcmp(key_a, key_b);
+	g_free(key_b);
+	g_free(key_a);
+	return cmp;
+}
+
+
+static gint compare_docs_by_filename(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a = *(GeanyDocument**) a;
+	GeanyDocument *doc_b = *(GeanyDocument**) b;
+	gchar *base_a = g_path_get_basename(DOC_FILENAME(doc_a));
+	gchar *base_b = g_path_get_basename(DOC_FILENAME(doc_b));
+	gint cmp = compare_filenames(base_a, base_b);
+	g_free(base_b);
+	g_free(base_a);
+	return cmp;
+}
+
+
+static gint compare_docs_by_pathname(gconstpointer a, gconstpointer b)
+{
+	GeanyDocument *doc_a = *(GeanyDocument**) a;
+	GeanyDocument *doc_b = *(GeanyDocument**) b;
+	gchar *dir_a = get_doc_dirname(doc_a);
+	gchar *dir_b = get_doc_dirname(doc_b);
+	gint cmp = compare_filenames(dir_a, dir_b);
+
+	if (cmp == 0)
+		cmp = compare_docs_by_filename(&doc_a, &doc_b);
+
+	g_free(dir_b);
+	g_free(dir_a);
+	return cmp;
+}
+
+
+static void move_tab(GeanyDocument *doc, gint pos)
+{
+	GtkWidget *child = document_get_notebook_child(doc);
+	g_assert(child != NULL);
+	gtk_notebook_reorder_child(GTK_NOTEBOOK(main_widgets.notebook), child, pos);
+}
+
+
+void notebook_sort_tabs(NotebookTabSortMethod method)
+{
+	GPtrArray *docs;
+	guint i;
+
+	docs = g_ptr_array_new();
+
+	foreach_document(i)
+		g_ptr_array_add(docs, documents[i]);
+
+	g_ptr_array_sort(docs, method == NOTEBOOK_TAB_SORT_BY_FILENAME ?
+			compare_docs_by_filename : compare_docs_by_pathname);
+
+	for (i = 0; i < docs->len; ++i)
+	{
+		GeanyDocument* doc = g_ptr_array_index(docs, i);
+		move_tab(doc, i);
+	}
+
+	g_ptr_array_free(docs, TRUE);
+}
+
+
+void on_sort_tabs_by_filename_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_FILENAME);
+}
+
+
+void on_sort_tabs_by_pathname_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	notebook_sort_tabs(NOTEBOOK_TAB_SORT_BY_PATHNAME);
+}
+
+
+static void gradually_sort_tab(GeanyDocument *doc, NotebookTabSortMethod method)
+{
+	gint i, pos, n_pages;
+
+	GCompareFunc func = (method == NOTEBOOK_TAB_SORT_BY_FILENAME) ?
+			compare_docs_by_filename : compare_docs_by_pathname;
+
+	n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+
+	for (pos = 0, i = 0; i < n_pages; ++i)
+	{
+		GeanyDocument *doc_b = document_get_from_page(i);
+
+		if (doc_b != doc)
+		{
+			if (func(&doc, &doc_b) < 0)
+				break;
+
+			++pos;
+		}
+	}
+
+	move_tab(doc, pos);
+}
+
+
+static void on_document_open(GObject *obj, GeanyDocument *doc)
+{
+	if (interface_prefs.notebook_auto_sort_tabs == NOTEBOOK_TAB_AUTO_SORT_BY_FILENAME)
+		gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
+	else if (interface_prefs.notebook_auto_sort_tabs == NOTEBOOK_TAB_AUTO_SORT_BY_PATHNAME)
+		gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
+}
+
+
+static void on_document_before_save(GObject *obj, GeanyDocument *doc)
+{
+	doc_saves_to_new_file = doc->real_path == NULL;
+}
+
+
+static void on_document_save(GObject *obj, GeanyDocument *doc)
+{
+	if (doc_saves_to_new_file)
+	{
+		if (interface_prefs.notebook_auto_sort_tabs == NOTEBOOK_TAB_AUTO_SORT_BY_FILENAME)
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_FILENAME);
+		else if (interface_prefs.notebook_auto_sort_tabs == NOTEBOOK_TAB_AUTO_SORT_BY_PATHNAME)
+			gradually_sort_tab(doc, NOTEBOOK_TAB_SORT_BY_PATHNAME);
+	}
 }
 
 

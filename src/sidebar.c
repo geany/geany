@@ -366,7 +366,7 @@ static gboolean utils_filename_has_prefix(const gchar *str, const gchar *prefix)
 }
 
 
-static gchar *get_doc_folder(const gchar *path)
+gchar *sidebar_get_doc_folder(const gchar *path)
 {
 	gchar *tmp_dirname = g_strdup(path);
 	gchar *project_base_path;
@@ -430,7 +430,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 		return NULL;
 
 	path = g_path_get_dirname(DOC_FILENAME(doc));
-	dirname = get_doc_folder(path);
+	dirname = sidebar_get_doc_folder(path);
 
 	if (gtk_tree_model_get_iter_first(model, &parent))
 	{
