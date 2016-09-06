@@ -1963,6 +1963,18 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static const gchar *fix_extension(const gchar *ext)
+{
+	if (*ext == '.')
+	{
+		g_warning(_("Proxy plugin extension '%s' starts with a dot, "
+			"stripping. Please fix your proxy plugin."), ext);
+		ext++;
+	}
+	return ext;
+}
+
+
 /** Register the plugin as a proxy for other plugins
  *
  * Proxy plugins register a list of file extensions and a set of callbacks that are called
@@ -2014,7 +2026,7 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 	foreach_strv(ext, extensions)
 	{
 		proxy = g_new(PluginProxy, 1);
-		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
+		g_strlcpy(proxy->extension, fix_extension(*ext), sizeof(proxy->extension));
 		proxy->plugin = p;
 		/* prepend, so that plugins automatically override core providers for a given extension */
 		g_queue_push_head(&active_proxies, proxy);
