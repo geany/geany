@@ -6,6 +6,8 @@
 primary=break case catch class const continue default delete do each else extends false finally for function get if in Infinity instanceof let NaN new null return set static super switch this throw true try typeof undefined var void while with yield prototype
 secondary=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError constructor prototype decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt
 
+[lexer_properties=C]
+
 [settings]
 # default extension used when saving files
 extension=js

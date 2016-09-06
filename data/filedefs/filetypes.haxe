@@ -7,7 +7,7 @@ primary=abstract break case catch class const continue trace do else enum extend
 secondary=Bool Dynamic Float Int null Void Enum String
 classes=Array ArrayAccess Class Date DateTools EReg Hash IntHash IntIter Iterable Iterator Lambda List Math Null Protected Reflect Std StringBuf StringTools Type UInt ValueType Xml XmlType
 
-[lexer_properties]
+[lexer_properties=C]
 # Haxe preprocessor has different directive than C, which the C lexer doesn't understand, so
 # we explicitly need not track the preprocessor at all.
 lexer.cpp.track.preprocessor=0
