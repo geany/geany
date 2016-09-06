@@ -116,7 +116,7 @@ static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer 
 			match = utils_str_equal(linebuf, "#!!PROXY_MAGIC!!\n");
 		fclose(f);
 	}
-	return match ? PROXY_MATCHED : PROXY_IGNORED;
+	return match ? GEANY_PROXY_MATCH : GEANY_PROXY_IGNORE;
 }
 
 

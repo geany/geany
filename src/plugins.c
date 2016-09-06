@@ -1038,19 +1038,22 @@ static PluginProxy* is_plugin(const gchar *file)
 		if (utils_str_casecmp(ext, proxy->extension) == 0)
 		{
 			Plugin *p = proxy->plugin;
-			gint ret = PROXY_MATCHED;
+			gint ret = GEANY_PROXY_MATCH;
 
 			if (p->proxy_cbs.probe)
 				ret = p->proxy_cbs.probe(&p->public, file, p->cb_data);
 			switch (ret)
 			{
-				case PROXY_MATCHED:
+				case GEANY_PROXY_MATCH:
 					return proxy;
-				case PROXY_MATCHED|PROXY_NOLOAD:
+				case GEANY_PROXY_RELATED:
 					return NULL;
+				case GEANY_PROXY_IGNORE:
+					continue;
 				default:
-					if (ret != PROXY_IGNORED)
-						g_warning("Ignoring bogus return from proxy probe!\n");
+					g_warning("Ignoring bogus return value '%d' from "
+						"proxy plugin '%s' probe() function!", ret,
+						proxy->plugin->info.name);
 					continue;
 			}
 		}
