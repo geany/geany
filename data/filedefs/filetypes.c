@@ -41,10 +41,6 @@ docComment=a addindex addtogroup anchor arg attention author authors b brief bug
 [lexer_properties]
 styling.within.preprocessor=1
 lexer.cpp.track.preprocessor=0
-preprocessor.symbol.$(file.patterns.cpp)=#
-preprocessor.start.$(file.patterns.cpp)=if ifdef ifndef
-preprocessor.middle.$(file.patterns.cpp)=else elif
-preprocessor.end.$(file.patterns.cpp)=endif
 
 [settings]
 # default extension used when saving files
