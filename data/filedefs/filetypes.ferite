@@ -7,6 +7,8 @@ primary=false null self super true abstract alias and arguments attribute_missin
 types=boolean string number array object void XML Unix Sys String Stream Serialize RMI Posix Number Network Math FileSystem Console Array Regexp XSLT
 docComment=brief class declaration description end example extends function group implements modifies module namespace param protocol return return static type variable warning
 
+[lexer_properties=C]
+
 [settings]
 # default extension used when saving files
 extension=fe

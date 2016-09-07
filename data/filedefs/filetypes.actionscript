@@ -7,6 +7,8 @@ primary=arguments break case catch class const continue default do dynamic each 
 secondary=decodeURI decodeURIcomponent encodeURI encodeURIcomponent escape isFinite isNaN isXMLName parseFloat parseInt trace unescape
 classes=ArgumentError Array Boolean Class Date DefinitionError Error EvalError Function int Math NameSpace Null Number Object QName RangeError ReferenceError RegExp SecurityError String SyntaxError TypeError uint URIError Vector VerifyError void XML XMLList
 
+[lexer_properties=C]
+
 [settings]
 # default extension used when saving files
 extension=as

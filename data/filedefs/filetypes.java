@@ -8,6 +8,7 @@ secondary=boolean byte char double float int long short void
 doccomment=author deprecated exception param return see serial serialData serialField since throws todo version
 typedefs=
 
+[lexer_properties=C]
 
 [settings]
 # default extension used when saving files
