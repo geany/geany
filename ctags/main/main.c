@@ -103,6 +103,8 @@ extern boolean isDestinationStdout (void)
 	return toStdout;
 }
 
+#if 0 /* Unused in Geany */
+
 #if defined (HAVE_CLOCK)
 # define CLOCK_AVAILABLE
 # ifndef CLOCKS_PER_SEC
@@ -165,6 +167,8 @@ static void printTotals (const clock_t *const timeStamps)
 			(unsigned long) TagFile.max.line);
 #endif
 }
+
+#endif /* Unused in Geany */
 
 /* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
 void utils_warn(const char *msg)
