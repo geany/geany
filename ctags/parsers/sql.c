@@ -53,7 +53,7 @@ typedef enum eException { ExceptionNone, ExceptionEOF } exception_t;
 /*
  * Used to specify type of keyword.
  */
-typedef enum eKeywordId {
+enum eKeywordId {
 	KEYWORD_is,
 	KEYWORD_begin,
 	KEYWORD_body,
@@ -126,7 +126,8 @@ typedef enum eKeywordId {
 	KEYWORD_comment,
 	KEYWORD_create,
 	KEYWORD_go
-} keywordId;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,

@@ -24,7 +24,7 @@
 #define SCOPE_SEPARATOR "::"
 
 
-typedef enum {
+enum {
 	KEYWORD_abstract,
 	KEYWORD_and,
 	KEYWORD_as,
@@ -84,7 +84,8 @@ typedef enum {
 	KEYWORD_while,
 	KEYWORD_xor,
 	KEYWORD_yield
-} keywordId;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum {
 	ACCESS_UNDEFINED,
