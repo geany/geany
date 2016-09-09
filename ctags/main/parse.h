@@ -147,6 +147,7 @@ extern void addCallbackRegex (const langType language, const char* const regex, 
 extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED);
 extern boolean enableRegexKind (const langType language, const int kind, const boolean mode);
 extern void printRegexKindOptions (const langType language);
+extern void printRegexKinds (const langType language, boolean indent);
 extern void freeRegexResources (void);
 extern void checkRegex (void);
 

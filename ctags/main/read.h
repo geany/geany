@@ -117,4 +117,7 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
                            const char *const fileName, const langType language );
 #define bufferClose fileClose
 
+/* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
+extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
+
 #endif  /* CTAGS_MAIN_READ_H */
