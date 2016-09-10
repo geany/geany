@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for assembly language
 *   files.
@@ -15,10 +15,11 @@
 
 #include <string.h>
 
+#include "debug.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
-#include "main.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -50,11 +51,6 @@ typedef enum {
 } opKeyword;
 
 typedef struct {
-	const char *operator;
-	opKeyword keyword;
-} asmKeyword;
-
-typedef struct {
 	opKeyword keyword;
 	AsmKind kind;
 } opKind;
@@ -71,7 +67,7 @@ static kindOption AsmKinds [] = {
 	{ TRUE, 't', "type",   "types (structs and records)"   }
 };
 
-static const asmKeyword AsmKeywords [] = {
+static const keywordTable AsmKeywords [] = {
 	{ "align",    OP_ALIGN       },
 	{ "endmacro", OP_ENDMACRO    },
 	{ "endm",     OP_ENDM        },
@@ -113,17 +109,6 @@ static const opKind OpKinds [] = {
 /*
 *   FUNCTION DEFINITIONS
 */
-static void buildAsmKeywordHash (void)
-{
-	const size_t count = sizeof (AsmKeywords) / sizeof (AsmKeywords [0]);
-	size_t i;
-	for (i = 0  ;  i < count  ;  ++i)
-	{
-		const asmKeyword* const p = AsmKeywords + i;
-		addKeyword (p->operator, Lang_asm, (int) p->keyword);
-	}
-}
-
 static opKeyword analyzeOperator (const vString *const op)
 {
 	vString *keyword = vStringNew ();
@@ -195,7 +180,7 @@ static AsmKind operatorKind (
 static boolean isDefineOperator (const vString *const operator)
 {
 	const unsigned char *const op =
-		(unsigned char*) vStringValue (operator);
+		(unsigned char*) vStringValue (operator); 
 	const size_t length = vStringLength (operator);
 	const boolean result = (boolean) (length > 0  &&
 		toupper ((int) *op) == 'D'  &&
@@ -274,7 +259,7 @@ static void findAsmTags (void)
 	const unsigned char *line;
 	boolean inCComment = FALSE;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp = line;
 		boolean labelCandidate = (boolean) (! isspace ((int) *cp));
@@ -356,7 +341,6 @@ static void findAsmTags (void)
 static void initialize (const langType language)
 {
 	Lang_asm = language;
-	buildAsmKeywordHash ();
 }
 
 extern parserDefinition* AsmParser (void)
@@ -373,12 +357,12 @@ extern parserDefinition* AsmParser (void)
 	};
 	parserDefinition* def = parserNew ("Asm");
 	def->kinds      = AsmKinds;
-	def->kindCount  = KIND_COUNT (AsmKinds);
+	def->kindCount  = ARRAY_SIZE (AsmKinds);
 	def->extensions = extensions;
 	def->patterns   = patterns;
 	def->parser     = findAsmTags;
 	def->initialize = initialize;
+	def->keywordTable = AsmKeywords;
+	def->keywordCount = ARRAY_SIZE (AsmKeywords);
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

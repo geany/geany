@@ -19,6 +19,7 @@
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -44,7 +45,7 @@ static void findNsisTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 
@@ -138,10 +139,8 @@ extern parserDefinition* NsisParser (void)
 	};
 	parserDefinition* def = parserNew ("NSIS");
 	def->kinds      = NsisKinds;
-	def->kindCount  = KIND_COUNT (NsisKinds);
+	def->kindCount  = ARRAY_SIZE (NsisKinds);
 	def->extensions = extensions;
 	def->parser     = findNsisTags;
 	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

@@ -20,12 +20,11 @@
 #include "vstring.h"
 #include "keyword.h"
 #include "entry.h"
+#include "routines.h"
 #include <string.h>
 
 #define SCOPE_SEPARATOR "::"
 
-
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 #define ACCESS_UNDEFINED NULL
 static const char *const accessTypes[] = {
@@ -84,7 +83,7 @@ static const char *findValidAccessType (const char *const access)
 	unsigned int i;
 	if (access == ACCESS_UNDEFINED)
 		return ACCESS_UNDEFINED; /* early out to save the for-loop if possible */
-	for (i = 0; i < ARRAY_LENGTH(accessTypes); i++)
+	for (i = 0; i < ARRAY_SIZE(accessTypes); i++)
 	{
 		if (accessTypes[i] == ACCESS_UNDEFINED)
 			continue;
@@ -98,12 +97,10 @@ static const char *findValidAccessType (const char *const access)
 static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const token,
 								 const powerShellKind kind, const char *const access)
 {
-	initTagEntry (e, vStringValue (token->string));
+	initTagEntry (e, vStringValue (token->string), &(PowerShellKinds[kind]));
 
 	e->lineNumber	= token->lineNumber;
 	e->filePosition	= token->filePosition;
-	e->kindName		= PowerShellKinds[kind].name;
-	e->kind			= (char) PowerShellKinds[kind].letter;
 
 	if (access != NULL)
 		e->extensionFields.access = access;
@@ -112,8 +109,8 @@ static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const t
 		int parentKind = token->parentKind;
 		Assert (parentKind >= 0);
 
-		e->extensionFields.scope[0] = PowerShellKinds[parentKind].name;
-		e->extensionFields.scope[1] = vStringValue (token->scope);
+		e->extensionFields.scopeKind = &(PowerShellKinds[parentKind]);
+		e->extensionFields.scopeName = vStringValue (token->scope);
 	}
 }
 
@@ -139,7 +136,7 @@ static void makeFunctionTag (const tokenInfo *const token, const vString *const 
 		initPowerShellEntry (&e, token, K_FUNCTION, access);
 
 		if (arglist)
-			e.extensionFields.arglist = vStringValue (arglist);
+			e.extensionFields.signature = vStringValue (arglist);
 
 		makeTagEntry (&e);
 	}
@@ -152,7 +149,7 @@ static tokenInfo *newToken (void)
 	token->type			= TOKEN_UNDEFINED;
 	token->string		= vStringNew ();
 	token->scope		= vStringNew ();
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 	token->parentKind	= -1;
 
@@ -191,23 +188,13 @@ static boolean isIdentChar (const int c)
 	return (isalnum (c) || c == ':' || c == '_' || c == '-' || c >= 0x80);
 }
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = fileGetc ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	while (TRUE)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 
-		if (c == '\\' && (c = fileGetc ()) != EOF)
+		if (c == '\\' && (c = getcFromInputFile ()) != EOF)
 			vStringPut (string, (char) c);
 		else if (c == EOF || c == delimiter)
 			break;
@@ -223,9 +210,9 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, (char) c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (string);
 }
 
@@ -244,7 +231,7 @@ static boolean isSpace (int c)
 static int skipWhitespaces (int c)
 {
 	while (isSpace (c))
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	return c;
 }
 
@@ -253,12 +240,12 @@ static int skipSingleComment (void)
 	int c;
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (c == '\r')
 		{
-			int next = fileGetc ();
+			int next = getcFromInputFile ();
 			if (next != '\n')
-				fileUngetc (next);
+				ungetcToInputFile (next);
 			else
 				c = next;
 		}
@@ -275,10 +262,10 @@ static void readToken (tokenInfo *const token)
 
 getNextChar:
 
-	c = fileGetc ();
+	c = getcFromInputFile ();
 	c = skipWhitespaces (c);
 
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	switch (c)
@@ -300,33 +287,33 @@ getNextChar:
 		case '"':
 			token->type = TOKEN_STRING;
 			parseString (token->string, c);
-			token->lineNumber = getSourceLineNumber ();
+			token->lineNumber = getInputLineNumber ();
 			token->filePosition = getInputFilePosition ();
 			break;
 
 		case '<':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '#')
 			{
 				/* <# ... #> multiline comment */
 				do
 				{
-					c = skipToCharacter ('#');
+					c = skipToCharacterInInputFile ('#');
 					if (c != EOF)
 					{
-						c = fileGetc ();
+						c = getcFromInputFile ();
 						if (c == '>')
 							break;
 						else
-							fileUngetc (c);
+							ungetcToInputFile (c);
 					}
 				} while (c != EOF);
 				goto getNextChar;
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;
@@ -343,19 +330,19 @@ getNextChar:
 		case '/':
 		case '%':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d != '=')
-				fileUngetc (d);
+				ungetcToInputFile (d);
 			token->type = TOKEN_OPERATOR;
 			break;
 		}
 
 		case '$': /* variable start */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (! isIdentChar (d))
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			else
@@ -619,10 +606,8 @@ extern parserDefinition* PowerShellParser (void)
 	static const char *const extensions [] = { "ps1", "psm1", NULL };
 	parserDefinition* def = parserNew ("PowerShell");
 	def->kinds      = PowerShellKinds;
-	def->kindCount  = KIND_COUNT (PowerShellKinds);
+	def->kindCount  = ARRAY_SIZE (PowerShellKinds);
 	def->extensions = extensions;
 	def->parser     = findPowerShellTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

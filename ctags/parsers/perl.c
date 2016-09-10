@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for PERL language
 *   files.
@@ -12,14 +12,16 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "debug.h"
 
 #include <string.h>
 
 #include "entry.h"
 #include "options.h"
 #include "read.h"
-#include "main.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 #define TRACE_PERL_C 0
 #define TRACE if (TRACE_PERL_C) printf("perl.c:%d: ", __LINE__), printf
@@ -69,7 +71,7 @@ static boolean isPodWord (const char *word)
 			"head1", "head2", "head3", "head4", "over", "item", "back",
 			"pod", "begin", "end", "for"
 		};
-		const size_t count = sizeof (pods) / sizeof (pods [0]);
+		const size_t count = ARRAY_SIZE (pods);
 		const char *white = strpbrk (word, " \t");
 		const size_t len = (white!=NULL) ? (size_t)(white-word) : strlen (word);
 		char *const id = (char*) eMalloc (len + 1);
@@ -157,7 +159,7 @@ SUB_DECL_SWITCH:
 					}
 			}
 		}
-	} while (NULL != (cp = fileReadLine ()));
+	} while (NULL != (cp = readLineFromInputFile ()));
 
 	return FALSE;
 }
@@ -173,7 +175,7 @@ static void findPerlTags (void)
 	boolean skipPodDoc = FALSE;
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		boolean spaceRequired = FALSE;
 		boolean qualified = FALSE;
@@ -280,7 +282,7 @@ static void findPerlTags (void)
 
 			while (!*cp || '#' == *cp) { /* Gobble up empty lines
 				                            and comments */
-				cp = fileReadLine ();
+				cp = readLineFromInputFile ();
 				if (!cp)
 					goto END_MAIN_WHILE;
 				while (isspace (*cp))
@@ -316,7 +318,7 @@ static void findPerlTags (void)
 				 * isSubroutineDeclaration() may consume several lines.  So
 				 * we record line positions.
 				 */
-				initTagEntry(&e, vStringValue(name));
+				initTagEntry(&e, vStringValue(name), &(PerlKinds[kind]));
 
 				if (TRUE == isSubroutineDeclaration(cp)) {
 					if (TRUE == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
@@ -327,12 +329,9 @@ static void findPerlTags (void)
 					}
 				}
 
-				e.kind     = PerlKinds[kind].letter;
-				e.kindName = PerlKinds[kind].name;
-
 				makeTagEntry(&e);
 
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					package != NULL  && vStringLength (package) > 0)
 				{
 					vString *const qualifiedName = vStringNew ();
@@ -345,7 +344,7 @@ static void findPerlTags (void)
 			} else if (vStringLength (name) > 0)
 			{
 				makeSimpleTag (name, PerlKinds, kind);
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					K_PACKAGE != kind &&
 					package != NULL  && vStringLength (package) > 0)
 				{
@@ -371,10 +370,8 @@ extern parserDefinition* PerlParser (void)
 	static const char *const extensions [] = { "pl", "pm", "plx", "perl", NULL };
 	parserDefinition* def = parserNew ("Perl");
 	def->kinds      = PerlKinds;
-	def->kindCount  = KIND_COUNT (PerlKinds);
+	def->kindCount  = ARRAY_SIZE (PerlKinds);
 	def->extensions = extensions;
 	def->parser     = findPerlTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 noexpandtab: */

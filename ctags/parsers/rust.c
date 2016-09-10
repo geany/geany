@@ -1,7 +1,7 @@
 /*
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Rust files.
 */
@@ -19,6 +19,7 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -140,7 +141,7 @@ static void writeCurTokenToStr (lexerState *lexer, vString *out_str)
 static void advanceChar (lexerState *lexer)
 {
 	lexer->cur_c = lexer->next_c;
-	lexer->next_c = fileGetc();
+	lexer->next_c = getcFromInputFile();
 }
 
 /* Reads N characters from the file */
@@ -345,7 +346,7 @@ static void scanCharacterOrLifetime (lexerState *lexer)
 static int advanceToken (lexerState *lexer, boolean skip_whitspace)
 {
 	boolean have_whitespace = FALSE;
-	lexer->line = getSourceLineNumber();
+	lexer->line = getInputLineNumber();
 	lexer->pos = getInputFilePosition();
 	while (lexer->cur_c != EOF)
 	{
@@ -366,7 +367,7 @@ static int advanceToken (lexerState *lexer, boolean skip_whitspace)
 			break;
 		}
 	}
-	lexer->line = getSourceLineNumber();
+	lexer->line = getInputLineNumber();
 	lexer->pos = getInputFilePosition();
 	while (lexer->cur_c != EOF)
 	{
@@ -438,21 +439,18 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	if (kind == K_NONE)
 		return;
 	tagEntryInfo tag;
-	initTagEntry(&tag, ident->buffer);
+	initTagEntry(&tag, ident->buffer, &(rustKinds[kind]));
 
 	tag.lineNumber = line;
 	tag.filePosition = pos;
-	tag.sourceFileName = getSourceFileName();
+	tag.sourceFileName = getInputFileName();
 
-	tag.kindName = rustKinds[kind].name;
-	tag.kind = rustKinds[kind].letter;
-
-	tag.extensionFields.arglist = arg_list;
+	tag.extensionFields.signature = arg_list;
 	tag.extensionFields.varType = type;
 	if (parent_kind != K_NONE)
 	{
-		tag.extensionFields.scope[0] = rustKinds[parent_kind].name;
-		tag.extensionFields.scope[1] = scope->buffer;
+		tag.extensionFields.scopeKind = &(rustKinds[parent_kind]);
+		tag.extensionFields.scopeName = scope->buffer;
 	}
 	makeTagEntry(&tag);
 }
@@ -975,9 +973,9 @@ static void findRustTags (void)
 extern parserDefinition *RustParser (void)
 {
 	static const char *const extensions[] = { "rs", NULL };
-	parserDefinition *def = parserNew ("Rust");
+	parserDefinition *def = parserNewFull ("Rust", KIND_FILE_ALT);
 	def->kinds = rustKinds;
-	def->kindCount = KIND_COUNT (rustKinds);
+	def->kindCount = ARRAY_SIZE (rustKinds);
 	def->extensions = extensions;
 	def->parser = findRustTags;
 

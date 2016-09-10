@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Python language
 *   files.
@@ -15,11 +15,14 @@
 #include <string.h>
 
 #include "entry.h"
+#include "nestlevel.h"
 #include "options.h"
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
-#include "nestlevel.h"
+#include "routines.h"
+#include "debug.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS
@@ -32,8 +35,8 @@ static kindOption PythonKinds[] = {
 	{TRUE, 'c', "class",    "classes"},
 	{TRUE, 'f', "function", "functions"},
 	{TRUE, 'm', "member",   "class members"},
-    {TRUE, 'v', "variable", "variables"},
-    {TRUE, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
+	{TRUE, 'v', "variable", "variables"},
+	{TRUE, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
 };
 
 typedef enum {
@@ -110,27 +113,25 @@ static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (function));
-
-	tag.kindName = PythonKinds[K_FUNCTION].name;
-	tag.kind = PythonKinds[K_FUNCTION].letter;
-	tag.extensionFields.arglist = arglist;
 
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.kindName = PythonKinds[K_METHOD].name;
-			tag.kind = PythonKinds[K_METHOD].letter;
-			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_METHOD]));
+			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
 		}
+		tag.extensionFields.scopeName = vStringValue (parent);
 	}
+	else
+		initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+
+	tag.extensionFields.signature = arglist;
 
 	addAccessFields (&tag, function, is_class_parent ? K_METHOD : K_FUNCTION,
 		vStringLength (parent) > 0, is_class_parent);
@@ -145,20 +146,18 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 	vString *const parent, int is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (class));
-	tag.kindName = PythonKinds[K_CLASS].name;
-	tag.kind = PythonKinds[K_CLASS].letter;
+	initTagEntry (&tag, vStringValue (class), &(PythonKinds[K_CLASS]));
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
+			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 	}
 	tag.extensionFields.inheritance = vStringValue (inheritance);
@@ -171,13 +170,11 @@ static void makeVariableTag (vString *const var, vString *const parent,
 	boolean is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (var));
-	tag.kindName = PythonKinds[K_VARIABLE].name;
-	tag.kind = PythonKinds[K_VARIABLE].letter;
+	initTagEntry (&tag, vStringValue (var), &(PythonKinds[K_VARIABLE]));
 	if (vStringLength (parent) > 0)
 	{
-		tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-		tag.extensionFields.scope [1] = vStringValue (parent);
+		tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+		tag.extensionFields.scopeName = vStringValue (parent);
 	}
 	addAccessFields (&tag, var, K_VARIABLE, vStringLength (parent) > 0,
 		is_class_parent);
@@ -308,7 +305,7 @@ static void parseClass (const char *cp, vString *const class,
 			if (*cp == '\0')
 			{
 				/* Closing parenthesis can be in follow up line. */
-				cp = (const char *) fileReadLine ();
+				cp = (const char *) readLineFromInputFile ();
 				if (!cp) break;
 				vStringPut (inheritance, ' ');
 				continue;
@@ -365,7 +362,7 @@ static void parseImports (const char *cp)
 	vStringDelete (name_next);
 }
 
-/* modified from get.c getArglistFromStr().
+/* modified from lcpp.c getArglistFromStr().
  * warning: terminates rest of string past arglist!
  * note: does not ignore brackets inside strings! */
 static char *parseArglist(const char *buf)
@@ -495,7 +492,6 @@ static char const *find_triple_start(char const *string, char const **which)
 	{
 		if (*cp == '#')
 			break;
-
 		if (*cp == '"' || *cp == '\'')
 		{
 			if (strncmp(cp, doubletriple, 3) == 0)
@@ -605,7 +601,7 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 		}
 		if (!*ptr || *ptr == '=') return NULL;
 		if (*ptr == '(') {
-		    return lastStart; /* if we stopped on a '(' we are done */
+			return lastStart; /* if we stopped on a '(' we are done */
 		}
 		ptr = skipSpace(ptr);
 		lastStart = ptr;
@@ -682,7 +678,7 @@ static void findPythonTags (void)
 	int line_skip = 0;
 	char const *longStringLiteral = NULL;
 
-	while ((line = (const char *) fileReadLine ()) != NULL)
+	while ((line = (const char *) readLineFromInputFile ()) != NULL)
 	{
 		const char *cp = line, *candidate;
 		char const *longstring;
@@ -781,24 +777,24 @@ static void findPythonTags (void)
 				is_class = TRUE;
 			}
 			else if (matchKeyword ("cdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = TRUE;
+					cp = candidate;
+				}
 
-		    }
-    		else if (matchKeyword ("cpdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
-		    }
+			}
+			else if (matchKeyword ("cpdef", keyword, &cp))
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = TRUE;
+					cp = candidate;
+				}
+			}
 
 			if (found)
 			{
@@ -830,10 +826,8 @@ extern parserDefinition *PythonParser (void)
     static const char *const extensions[] = { "py", "pyx", "pxd", "pxi" ,"scons", NULL };
 	parserDefinition *def = parserNew ("Python");
 	def->kinds = PythonKinds;
-	def->kindCount = KIND_COUNT (PythonKinds);
+	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

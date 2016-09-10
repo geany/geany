@@ -2,7 +2,7 @@
 *   Copyright (c) 1999-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions managing resizable string lists.
 */
@@ -18,7 +18,7 @@
 #endif
 #include <glib/gstdio.h>
 
-#include "main.h"
+#include "routines.h"
 #include "read.h"
 #include "strlist.h"
 
@@ -97,7 +97,7 @@ extern stringList* stringListNewFromFile (const char* const fileName)
 		while (! mio_eof (mio))
 		{
 			vString* const str = vStringNew ();
-			readLine (str, mio);
+			readLineRaw (str, mio);
 			vStringStripTrailing (str);
 			if (vStringLength (str) > 0)
 				stringListAdd (result, str);
@@ -276,5 +276,3 @@ extern void stringListPrint (const stringList *const current)
 	for (i = 0  ;  i < current->count  ;  ++i)
 		printf ("%s%s", (i > 0) ? ", " : "", vStringValue (current->list [i]));
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

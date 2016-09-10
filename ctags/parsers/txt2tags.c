@@ -22,6 +22,7 @@
 #include "read.h"
 #include "nestlevel.h"
 #include "vstring.h"
+#include "routines.h"
 
 
 /* as any character may happen in an input, use something highly unlikely */
@@ -50,10 +51,7 @@ static void makeTxt2tagsTag (const vString* const name,
 	tagEntryInfo e;
 	vString *scope = NULL;
 	kindOption *kind = &Txt2tagsKinds[type];
-	initTagEntry (&e, vStringValue(name));
-
-	e.kindName = kind->name;
-	e.kind = kind->letter;
+	initTagEntry (&e, vStringValue(name), kind);
 
 	if (nls->n > 0) {
 		int i;
@@ -67,8 +65,8 @@ static void makeTxt2tagsTag (const vString* const name,
 		}
 		parentKind = &Txt2tagsKinds[nls->levels[nls->n - 1].type];
 
-		e.extensionFields.scope[0] = parentKind->name;
-		e.extensionFields.scope[1] = vStringValue(scope);
+		e.extensionFields.scopeKind = parentKind;
+		e.extensionFields.scopeName = vStringValue(scope);
 	}
 
 	makeTagEntry(&e);
@@ -156,7 +154,7 @@ static void findTxt2tagsTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int depth;
 
@@ -188,7 +186,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	parserDefinition* const def = parserNew ("Txt2tags");
 
 	def->kinds = Txt2tagsKinds;
-	def->kindCount = KIND_COUNT (Txt2tagsKinds);
+	def->kindCount = ARRAY_SIZE (Txt2tagsKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findTxt2tagsTags;

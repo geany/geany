@@ -21,6 +21,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "nestlevel.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -72,16 +73,14 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 	if (vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name));
+		initTagEntry (&e, vStringValue (name), &(AsciidocKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
-		e.kindName = AsciidocKinds [kind].name;
-		e.kind = AsciidocKinds [kind].letter;
 
 		if (nl && nl->type < kind)
 		{
-			e.extensionFields.scope [0] = AsciidocKinds [nl->type].name;
-			e.extensionFields.scope [1] = vStringValue (nl->name);
+			e.extensionFields.scopeKind = &(AsciidocKinds [nl->type]);
+			e.extensionFields.scopeName = vStringValue (nl->name);
 		}
 		makeTagEntry (&e);
 	}
@@ -140,7 +139,7 @@ static void findAsciidocTags(void)
 
 	nestingLevels = nestingLevelsNew();
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
 		int name_len_bytes = vStringLength(name);
@@ -224,11 +223,9 @@ extern parserDefinition* AsciidocParser (void)
 	parserDefinition* const def = parserNew ("Asciidoc");
 
 	def->kinds = AsciidocKinds;
-	def->kindCount = KIND_COUNT (AsciidocKinds);
+	def->kindCount = ARRAY_SIZE (AsciidocKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findAsciidocTags;
 	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

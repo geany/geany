@@ -19,6 +19,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -48,12 +49,10 @@ static boolean issame(const char *str)
 static void makeMarkdownTag (const vString* const name, boolean name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name));
+	initTagEntry (&e, vStringValue(name), &(MarkdownKinds [0]));
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */
-	e.kindName = "variable";
-	e.kind = 'v';
 
 	makeTagEntry(&e);
 }
@@ -64,7 +63,7 @@ static void findMarkdownTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int name_len = vStringLength(name);
 
@@ -96,7 +95,7 @@ extern parserDefinition* MarkdownParser (void)
 	parserDefinition* const def = parserNew ("Markdown");
 
 	def->kinds = MarkdownKinds;
-	def->kindCount = KIND_COUNT (MarkdownKinds);
+	def->kindCount = ARRAY_SIZE (MarkdownKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findMarkdownTags;

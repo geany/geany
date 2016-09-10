@@ -3,7 +3,7 @@
 *   Copyright (c) 2000-2001, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for diff files (based on Sh parser).
 */
@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "parse.h"
+#include "routines.h"
 #include "read.h"
 #include "vstring.h"
 
@@ -81,7 +82,7 @@ static void findDiffTags (void)
 	const unsigned char *line, *tmp;
 	int delim = DIFF_DELIM_MINUS;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 
@@ -126,11 +127,9 @@ extern parserDefinition* DiffParser (void)
 	static const char *const extensions [] = { "diff", NULL };
 	parserDefinition* const def = parserNew ("Diff");
 	def->kinds      = DiffKinds;
-	def->kindCount  = KIND_COUNT (DiffKinds);
+	def->kindCount  = ARRAY_SIZE (DiffKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;
 	def->parser     = findDiffTags;
 	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

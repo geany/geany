@@ -179,7 +179,7 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	if (!tag_entry)
 		return FALSE;
 
-	type = tm_parser_get_tag_type(tag_entry->kind, file->lang);
+	type = tm_parser_get_tag_type(tag_entry->kind->letter, file->lang);
 	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
 
@@ -188,11 +188,11 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->local = tag_entry->isFileScope;
 	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
 	tag->line = tag_entry->lineNumber;
-	if (NULL != tag_entry->extensionFields.arglist)
-		tag->arglist = g_strdup(tag_entry->extensionFields.arglist);
-	if ((NULL != tag_entry->extensionFields.scope[1]) &&
-		(0 != tag_entry->extensionFields.scope[1][0]))
-		tag->scope = g_strdup(tag_entry->extensionFields.scope[1]);
+	if (NULL != tag_entry->extensionFields.signature)
+		tag->arglist = g_strdup(tag_entry->extensionFields.signature);
+	if ((NULL != tag_entry->extensionFields.scopeName) &&
+		(0 != tag_entry->extensionFields.scopeName[0]))
+		tag->scope = g_strdup(tag_entry->extensionFields.scopeName);
 	if (tag_entry->extensionFields.inheritance != NULL)
 		tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
 	if (tag_entry->extensionFields.varType != NULL)

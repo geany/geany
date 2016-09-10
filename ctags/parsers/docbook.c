@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -85,7 +86,7 @@ static void findDocBookTags(void)
 {
 	const char *line;
 
-	while ((line = (const char*)fileReadLine()) != NULL)
+	while ((line = (const char*)readLineFromInputFile()) != NULL)
 	{
 		const char *cp = line;
 
@@ -144,7 +145,7 @@ extern parserDefinition* DocBookParser (void)
 	parserDefinition* def = parserNew ("Docbook");
 	def->extensions = extensions;
 	def->kinds      = DocBookKinds;
-	def->kindCount  = KIND_COUNT (DocBookKinds);
+	def->kindCount  = ARRAY_SIZE (DocBookKinds);
 	def->parser     = findDocBookTags;
 	return def;
 }

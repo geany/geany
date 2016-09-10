@@ -2,7 +2,7 @@
  *   Copyright (c) 2000-2006, Darren Hiebert, Elias Pschernig
  *
  *   This source code is released for free distribution under the terms of the
- *   GNU General Public License.
+ *   GNU General Public License version 2 or (at your option) any later version.
  *
  *   This module contains functions for generating tags for BlitzBasic
  *   (BlitzMax), PureBasic and FreeBasic language files. For now, this is kept
@@ -19,6 +19,7 @@
 
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -193,10 +194,9 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	for (j = 0; j < 1; j++)
 	{
 		p = extract_name (p, name);
-	}
+	}	
 	makeSimpleTag (name, BasicKinds, kw->kind);
 	vStringDelete (name);
-
 	return 1;
 }
 
@@ -222,7 +222,7 @@ static void findBasicTags (void)
 
 	keywords = freebasic_keywords;
 
-	while ((line = (const char *) fileReadLine ()) != NULL)
+	while ((line = (const char *) readLineFromInputFile ()) != NULL)
 	{
 		const char *p = line;
 		KeyWord const *kw;
@@ -248,10 +248,8 @@ parserDefinition *FreeBasicParser (void)
 	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");
 	def->kinds = BasicKinds;
-	def->kindCount = KIND_COUNT (BasicKinds);
+	def->kindCount = ARRAY_SIZE (BasicKinds);
 	def->extensions = extensions;
 	def->parser = findBasicTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

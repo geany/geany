@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2005, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for makefiles.
 */
@@ -19,7 +19,9 @@
 #include "options.h"
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS
@@ -39,10 +41,10 @@ static kindOption MakeKinds [] = {
 
 static int nextChar (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 	if (c == '\\')
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (c == '\n')
 			c = nextChar ();
 	}
@@ -56,7 +58,7 @@ static void skipLine (void)
 		c = nextChar ();
 	while (c != EOF  &&  c != '\n');
 	if (c == '\n')
-		fileUngetc (c);
+		ungetcToInputFile (c);
 }
 
 static int skipToNonWhite (int c)
@@ -117,7 +119,7 @@ static void readIdentifier (const int first, vString *const id)
 		vStringPut (id, c);
 		c = nextChar ();
 	}
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (id);
 }
 
@@ -157,14 +159,14 @@ static void findMakeTags (void)
 		else if (variable_possible && c == '?')
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			variable_possible = (c == '=');
 		}
 		else if (variable_possible && c == ':' &&
 				 stringListCount (identifiers) > 0)
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			if (c != '=')
 			{
 				unsigned int i;
@@ -205,7 +207,7 @@ static void findMakeTags (void)
 						c = nextChar ();
 					}
 					if (c == '\n')
-						fileUngetc (c);
+						ungetcToInputFile (c);
 					vStringTerminate (name);
 					vStringStripTrailing (name);
 					newMacro (name);
@@ -226,11 +228,9 @@ extern parserDefinition* MakefileParser (void)
 	static const char *const extensions [] = { "mak", "mk", NULL };
 	parserDefinition* const def = parserNew ("Make");
 	def->kinds      = MakeKinds;
-	def->kindCount  = KIND_COUNT (MakeKinds);
+	def->kindCount  = ARRAY_SIZE (MakeKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;
 	def->parser     = findMakeTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

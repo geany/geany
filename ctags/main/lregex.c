@@ -2,11 +2,11 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for applying regular expression matching.
 *
-*   The code for utlizing the Gnu regex package with regards to processing the
+*   The code for utilizing the Gnu regex package with regards to processing the
 *   regex option and checking for regex matches was adapted from routines in
 *   Gnu etags.
 */
@@ -28,10 +28,11 @@
 #endif
 
 #include "mio.h"
-#include "main.h"
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
+#include "kind.h"
+#include "routines.h"
 
 #ifdef HAVE_REGEX
 
@@ -53,13 +54,6 @@
 */
 #if defined (POSIX_REGEX)
 
-struct sKind {
-	boolean enabled;
-	char letter;
-	char* name;
-	char* description;
-};
-
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
 typedef struct {
@@ -68,7 +62,7 @@ typedef struct {
 	union {
 		struct {
 			char *name_pattern;
-			struct sKind kind;
+			kindOption kind;
 		} tag;
 		struct {
 			regexCallback function;
@@ -97,6 +91,7 @@ static int SetUpper = -1;  /* upper language index in list */
 *   FUNCTION DEFINITIONS
 */
 
+
 static void clearPatternSet (const langType language)
 {
 	if (language <= SetUpper)
@@ -113,11 +108,11 @@ static void clearPatternSet (const langType language)
 			{
 				eFree (p->u.tag.name_pattern);
 				p->u.tag.name_pattern = NULL;
-				eFree (p->u.tag.kind.name);
+				eFree ((char *)p->u.tag.kind.name);
 				p->u.tag.kind.name = NULL;
 				if (p->u.tag.kind.description != NULL)
 				{
-					eFree (p->u.tag.kind.description);
+					eFree ((char *)p->u.tag.kind.description);
 					p->u.tag.kind.description = NULL;
 				}
 			}
@@ -134,16 +129,14 @@ static void clearPatternSet (const langType language)
 */
 
 static void makeRegexTag (
-		const vString* const name, const struct sKind* const kind)
+		const vString* const name, const kindOption* const kind)
 {
 	Assert (kind != NULL);
 	if (kind->enabled)
 	{
 		tagEntryInfo e;
 		Assert (name != NULL  &&  vStringLength (name) > 0);
-		initTagEntry (&e, vStringValue (name));
-		e.kind     = kind->letter;
-		e.kindName = kind->name;
+		initTagEntry (&e, vStringValue (name), kind);
 		makeTagEntry (&e);
 	}
 }
@@ -375,7 +368,7 @@ static void parseKinds (
 
 static void printRegexKind (const regexPattern *pat, unsigned int i, boolean indent)
 {
-	const struct sKind *const kind = &pat [i].u.tag.kind;
+	const kindOption *const kind = &pat [i].u.tag.kind;
 	const char *const indentation = indent ? "    " : "";
 	Assert (pat [i].type == PTRN_TAG);
 	printf ("%s%c  %s %s\n", indentation,
@@ -402,7 +395,7 @@ static void processLanguageRegex (const langType language,
 		else
 		{
 			vString* const regex = vStringNew ();
-			while (readLine (regex, mio))
+			while (readLineRaw (regex, mio))
 				addLanguageRegex (language, vStringValue (regex));
 			mio_free (mio);
 			vStringDelete (regex);
@@ -531,18 +524,18 @@ extern boolean matchRegex (const vString* const line, const langType language)
 extern void findRegexTags (void)
 {
 	/* merely read all lines of the file */
-	while (fileReadLine () != NULL)
+	while (readLineFromInputFile () != NULL)
 		;
 }
 
 #endif  /* HAVE_REGEX */
 
 extern void addTagRegex (
-		const langType language UNUSED,
-		const char* const regex UNUSED,
-		const char* const name UNUSED,
-		const char* const kinds UNUSED,
-		const char* const flags UNUSED)
+		const langType language CTAGS_ATTR_UNUSED,
+		const char* const regex CTAGS_ATTR_UNUSED,
+		const char* const name CTAGS_ATTR_UNUSED,
+		const char* const kinds CTAGS_ATTR_UNUSED,
+		const char* const flags CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	Assert (regex != NULL);
@@ -564,10 +557,10 @@ extern void addTagRegex (
 }
 
 extern void addCallbackRegex (
-		const langType language UNUSED,
-		const char* const regex UNUSED,
-		const char* const flags UNUSED,
-		const regexCallback callback UNUSED)
+		const langType language CTAGS_ATTR_UNUSED,
+		const char* const regex CTAGS_ATTR_UNUSED,
+		const char* const flags CTAGS_ATTR_UNUSED,
+		const regexCallback callback CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	Assert (regex != NULL);
@@ -581,7 +574,7 @@ extern void addCallbackRegex (
 }
 
 extern void addLanguageRegex (
-		const langType language UNUSED, const char* const regex UNUSED)
+		const langType language CTAGS_ATTR_UNUSED, const char* const regex CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (! regexBroken)
@@ -602,7 +595,7 @@ extern void addLanguageRegex (
 */
 
 extern boolean processRegexOption (const char *const option,
-								   const char *const parameter UNUSED)
+								   const char *const parameter CTAGS_ATTR_UNUSED)
 {
 	boolean handled = FALSE;
 	const char* const dash = strchr (option, '-');
@@ -624,7 +617,7 @@ extern boolean processRegexOption (const char *const option,
 	return handled;
 }
 
-extern void disableRegexKinds (const langType language UNUSED)
+extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
@@ -639,8 +632,8 @@ extern void disableRegexKinds (const langType language UNUSED)
 }
 
 extern boolean enableRegexKind (
-		const langType language UNUSED,
-		const int kind UNUSED, const boolean mode UNUSED)
+		const langType language CTAGS_ATTR_UNUSED,
+		const int kind CTAGS_ATTR_UNUSED, const boolean mode CTAGS_ATTR_UNUSED)
 {
 	boolean result = FALSE;
 #ifdef HAVE_REGEX
@@ -660,7 +653,7 @@ extern boolean enableRegexKind (
 	return result;
 }
 
-extern void printRegexKinds (const langType language UNUSED, boolean indent UNUSED)
+extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, boolean indent CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
@@ -692,5 +685,3 @@ extern void checkRegex (void)
 {
 	/* not needed now we have GRegex */
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

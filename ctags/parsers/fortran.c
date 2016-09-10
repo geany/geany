@@ -2,7 +2,7 @@
 *   Copyright (c) 1998-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Fortran language
 *   files.
@@ -11,21 +11,23 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <string.h>
 #include <limits.h>
-#include <ctype.h>	/* to define tolower () */
+#include <ctype.h>  /* to define tolower () */
 #include <setjmp.h>
 
+#include "debug.h"
 #include "mio.h"
 #include "entry.h"
 #include "keyword.h"
-#include "main.h"
 #include "options.h"
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 /*
 *   MACROS
@@ -59,8 +61,7 @@ typedef enum eFortranLineType {
 
 /*  Used to specify type of keyword.
  */
-typedef enum eKeywordId {
-	KEYWORD_NONE = -1,
+enum eKeywordId {
 	KEYWORD_allocatable,
 	KEYWORD_assignment,
 	KEYWORD_associate,
@@ -139,15 +140,8 @@ typedef enum eKeywordId {
 	KEYWORD_volatile,
 	KEYWORD_where,
 	KEYWORD_while
-} keywordId;
-
-/*  Used to determine whether keyword is valid for the token language and
- *  what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
@@ -215,22 +209,22 @@ static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
 static kindOption FortranKinds [TAG_COUNT] = {
-	{ TRUE,  'b', "blockData",	"block data"},
-	{ TRUE,  'c', "common",		"common blocks"},
-	{ TRUE,  'e', "entry",		"entry points"},
-	{ TRUE,  'f', "function",	"functions"},
-	{ TRUE,  'i', "interface",	"interface contents, generic names, and operators"},
-	{ TRUE,  'k', "component",	"type and structure components"},
-	{ TRUE,  'l', "label",		"labels"},
-	{ FALSE, 'L', "local",		"local, common block, and namelist variables"},
-	{ TRUE,  'm', "module",	"modules"},
-	{ TRUE,  'n', "namelist",	"namelists"},
-	{ TRUE,  'p', "program",	"programs"},
-	{ TRUE,  's', "subroutine",	"subroutines"},
-	{ TRUE,  't', "type",	"derived types and structures"},
-	{ TRUE,  'v', "variable",	"program (global) and module variables"},
-	{ TRUE,  'E', "enum",	"enumerations"},
-	{ TRUE,  'N', "enumerator",	"enumeration values"},
+	{ TRUE,  'b', "blockData",  "block data"},
+	{ TRUE,  'c', "common",     "common blocks"},
+	{ TRUE,  'e', "entry",      "entry points"},
+	{ TRUE,  'f', "function",   "functions"},
+	{ TRUE,  'i', "interface",  "interface contents, generic names, and operators"},
+	{ TRUE,  'k', "component",  "type and structure components"},
+	{ TRUE,  'l', "label",      "labels"},
+	{ FALSE, 'L', "local",      "local, common block, and namelist variables"},
+	{ TRUE,  'm', "module",     "modules"},
+	{ TRUE,  'n', "namelist",   "namelists"},
+	{ TRUE,  'p', "program",    "programs"},
+	{ TRUE,  's', "subroutine", "subroutines"},
+	{ TRUE,  't', "type",       "derived types and structures"},
+	{ TRUE,  'v', "variable",   "program (global) and module variables"},
+	{ TRUE,  'E', "enum",       "enumerations"},
+	{ TRUE,  'N', "enumerator", "enumeration values"},
 };
 
 /* For efinitions of Fortran 77 with extensions:
@@ -241,7 +235,7 @@ static kindOption FortranKinds [TAG_COUNT] = {
  * http://h18009.www1.hp.com/fortran/docs/lrm/dflrm.htm
  */
 
-static const keywordDesc FortranKeywordTable [] = {
+static const keywordTable FortranKeywordTable [] = {
 	/* keyword          keyword ID */
 	{ "allocatable",    KEYWORD_allocatable  },
 	{ "assignment",     KEYWORD_assignment   },
@@ -421,18 +415,6 @@ static boolean insideInterface (void)
 	return result;
 }
 
-static void buildFortranKeywordHash (const langType language)
-{
-	const size_t count =
-			sizeof (FortranKeywordTable) / sizeof (FortranKeywordTable [0]);
-	size_t i;
-	for (i = 0  ;  i < count  ;  ++i)
-	{
-		const keywordDesc* const p = &FortranKeywordTable [i];
-		addKeyword (p->name, language, (int) p->id);
-	}
-}
-
 /*
 *   Tag generation functions
 */
@@ -446,7 +428,7 @@ static tokenInfo *newToken (void)
 	token->tag          = TAG_UNDEFINED;
 	token->string       = vStringNew ();
 	token->secondary    = NULL;
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	return token;
@@ -505,7 +487,7 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, &(FortranKinds [token->tag]));
 
 		if (token->tag == TAG_COMMON_BLOCK)
 			e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
@@ -513,8 +495,6 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope	= isFileScope (token->tag);
-		e.kindName		= FortranKinds [token->tag].name;
-		e.kind			= FortranKinds [token->tag].letter;
 		e.truncateLine	= (boolean) (token->tag != TAG_LABEL);
 
 		if (ancestorCount () > 0)
@@ -522,8 +502,8 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 			const tokenInfo* const scope = ancestorScope ();
 			if (scope != NULL)
 			{
-				e.extensionFields.scope [0] = FortranKinds [scope->tag].name;
-				e.extensionFields.scope [1] = vStringValue (scope->string);
+				e.extensionFields.scopeKind = &(FortranKinds [scope->tag]);
+				e.extensionFields.scopeName = vStringValue (scope->string);
 			}
 		}
 		if (! insideInterface () /*|| includeTag (TAG_INTERFACE)*/)
@@ -540,7 +520,7 @@ static int skipLine (void)
 	int c;
 
 	do
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	while (c != EOF  &&  c != '\n');
 
 	return c;
@@ -563,7 +543,7 @@ static lineType getLineType (void)
 
 	do  /* read in first 6 "margin" characters */
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 
 		/* 3.2.1  Comment_Line.  A comment line is any line that contains
 		 * a C or an asterisk in column 1, or contains only blank characters
@@ -571,7 +551,7 @@ static lineType getLineType (void)
 		 * an asterisk in column 1 may contain any character capable  of
 		 * representation in the processor in columns 2 through 72.
 		 */
-		/*  EXCEPTION! Some compilers permit '!' as a commment character here.
+		/*  EXCEPTION! Some compilers permit '!' as a comment character here.
 		 *
 		 *  Treat # and $ in column 1 as comment to permit preprocessor directives.
 		 *  Treat D and d in column 1 as comment for HP debug statements.
@@ -645,7 +625,7 @@ static int getFixedFormChar (void)
 		else
 #endif
 		{
-			c = fileGetc ();
+			c = getcFromInputFile ();
 			++Column;
 		}
 		if (c == '\n')
@@ -661,11 +641,11 @@ static int getFixedFormChar (void)
 		}
 		else if (c == '&')  /* check for free source form */
 		{
-			const int c2 = fileGetc ();
+			const int c2 = getcFromInputFile ();
 			if (c2 == '\n')
 				longjmp (Exception, (int) ExceptionFixedFormat);
 			else
-				fileUngetc (c2);
+				ungetcToInputFile (c2);
 		}
 	}
 	while (Column == 0)
@@ -701,14 +681,14 @@ static int getFixedFormChar (void)
 				Column = 5;
 				do
 				{
-					c = fileGetc ();
+					c = getcFromInputFile ();
 					++Column;
 				} while (isBlank (c));
 				if (c == '\n')
 					Column = 0;
 				else if (Column > 6)
 				{
-					fileUngetc (c);
+					ungetcToInputFile (c);
 					c = ' ';
 				}
 				break;
@@ -724,14 +704,14 @@ static int skipToNextLine (void)
 {
 	int c = skipLine ();
 	if (c != EOF)
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	return c;
 }
 
 static int getFreeFormChar (boolean inComment)
 {
 	boolean advanceLine = FALSE;
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	/* If the last nonblank, non-comment character of a FORTRAN 90
 	 * free-format text line is an ampersand then the next non-comment
@@ -740,7 +720,7 @@ static int getFreeFormChar (boolean inComment)
 	if (! inComment && c == '&')
 	{
 		do
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		while (isspace (c)  &&  c != '\n');
 		if (c == '\n')
 		{
@@ -751,7 +731,7 @@ static int getFreeFormChar (boolean inComment)
 			advanceLine = TRUE;
 		else
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			c = '&';
 		}
 	}
@@ -760,7 +740,7 @@ static int getFreeFormChar (boolean inComment)
 	while (advanceLine)
 	{
 		while (isspace (c))
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		if (c == '!' || (NewLine && c == '#'))
 		{
 			c = skipToNextLine ();
@@ -768,7 +748,7 @@ static int getFreeFormChar (boolean inComment)
 			continue;
 		}
 		if (c == '&')
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		else
 			advanceLine = FALSE;
 	}
@@ -985,20 +965,20 @@ static void readToken (tokenInfo *const token)
 getNextChar:
 	c = getChar ();
 
-	token->lineNumber	= getSourceLineNumber ();
-	token->filePosition = getInputFilePosition ();
+	token->lineNumber	= getInputLineNumber ();
+	token->filePosition	= getInputFilePosition ();
 
 	switch (c)
 	{
 		case EOF:  longjmp (Exception, (int) ExceptionEOF);  break;
 		case ' ':  goto getNextChar;
 		case '\t': goto getNextChar;
-		case ',':  token->type = TOKEN_COMMA;        break;
-		case '(':  token->type = TOKEN_PAREN_OPEN;   break;
-		case ')':  token->type = TOKEN_PAREN_CLOSE;  break;
-		case '[':  token->type = TOKEN_SQUARE_OPEN;  break;
+		case ',':  token->type = TOKEN_COMMA;       break;
+		case '(':  token->type = TOKEN_PAREN_OPEN;  break;
+		case ')':  token->type = TOKEN_PAREN_CLOSE; break;
+		case '[':  token->type = TOKEN_SQUARE_OPEN; break;
 		case ']':  token->type = TOKEN_SQUARE_CLOSE; break;
-		case '%':  token->type = TOKEN_PERCENT;      break;
+		case '%':  token->type = TOKEN_PERCENT;     break;
 
 		case '*':
 		case '/':
@@ -1373,12 +1353,12 @@ static tagType variableTagType (void)
 		const tokenInfo* const parent = ancestorTop ();
 		switch (parent->tag)
 		{
-			case TAG_MODULE:       result = TAG_VARIABLE;   break;
-			case TAG_DERIVED_TYPE: result = TAG_COMPONENT;  break;
-			case TAG_FUNCTION:     result = TAG_LOCAL;      break;
-			case TAG_SUBROUTINE:   result = TAG_LOCAL;      break;
+			case TAG_MODULE:       result = TAG_VARIABLE;  break;
+			case TAG_DERIVED_TYPE: result = TAG_COMPONENT; break;
+			case TAG_FUNCTION:     result = TAG_LOCAL;     break;
+			case TAG_SUBROUTINE:   result = TAG_LOCAL;     break;
 			case TAG_ENUM:         result = TAG_ENUMERATOR; break;
-			default:               result = TAG_VARIABLE;   break;
+			default:               result = TAG_VARIABLE;  break;
 		}
 	}
 	return result;
@@ -1439,7 +1419,7 @@ static void parseEntityDeclList (tokenInfo *const token)
 				 !isKeyword (token, KEYWORD_function) &&
 				 !isKeyword (token, KEYWORD_subroutine)))
 	{
-		/* compilers accept keywoeds as identifiers */
+		/* compilers accept keywords as identifiers */
 		if (isType (token, TOKEN_KEYWORD))
 			token->type = TOKEN_IDENTIFIER;
 		parseEntityDecl (token);
@@ -1540,16 +1520,16 @@ static void parseMap (tokenInfo *const token)
 
 /* UNION
  *      MAP
- *          [field-definition] [field-definition] ...
+ *          [field-definition] [field-definition] ... 
  *      END MAP
  *      MAP
- *          [field-definition] [field-definition] ...
+ *          [field-definition] [field-definition] ... 
  *      END MAP
  *      [MAP
  *          [field-definition]
- *          [field-definition] ...
+ *          [field-definition] ... 
  *      END MAP] ...
- *  END UNION
+ *  END UNION 
  *      *
  *
  *  Typed data declarations (variables or arrays) in structure declarations
@@ -1564,7 +1544,7 @@ static void parseMap (tokenInfo *const token)
  *  share a common location within the containing structure. When initializing
  *  the fields within a UNION, the final initialization value assigned
  *  overlays any value previously assigned to a field definition that shares
- *  that field.
+ *  that field. 
  */
 static void parseUnionStmt (tokenInfo *const token)
 {
@@ -1586,11 +1566,11 @@ static void parseUnionStmt (tokenInfo *const token)
  *  structure-name
  *		identifies the structure in a subsequent RECORD statement.
  *		Substructures can be established within a structure by means of either
- *		a nested STRUCTURE declaration or a RECORD statement.
+ *		a nested STRUCTURE declaration or a RECORD statement. 
  *
  *   field-names
  *		(for substructure declarations only) one or more names having the
- *		structure of the substructure being defined.
+ *		structure of the substructure being defined. 
  *
  *   field-definition
  *		can be one or more of the following:
@@ -1605,7 +1585,7 @@ static void parseUnionStmt (tokenInfo *const token)
  *			statements. The syntax of a UNION declaration is described below.
  *
  *			PARAMETER statements, which do not affect the form of the
- *			structure.
+ *			structure. 
  */
 static void parseStructureStmt (tokenInfo *const token)
 {
@@ -1657,7 +1637,7 @@ static void parseStructureStmt (tokenInfo *const token)
  *      or equivalence-stmt (is EQUIVALENCE equivalence-set-list)
  *      or external-stmt    (is EXTERNAL etc.)
  *      or intent-stmt      (is INTENT ( intent-spec ) [::] etc.)
- *      or instrinsic-stmt  (is INTRINSIC etc.)
+ *      or intrinsic-stmt   (is INTRINSIC etc.)
  *      or namelist-stmt    (is NAMELIST / namelist-group-name / etc.)
  *      or optional-stmt    (is OPTIONAL [::] etc.)
  *      or pointer-stmt     (is POINTER [::] object-name etc.)
@@ -1964,9 +1944,9 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
 	boolean result = TRUE;
 	switch (token->keyword)
 	{
-		case KEYWORD_entry:		parseEntryStmt (token);      break;
-		case KEYWORD_interface:	parseInterfaceBlock (token); break;
-		case KEYWORD_enum:		parseEnumBlock (token);      break;
+		case KEYWORD_entry:     parseEntryStmt (token);      break;
+		case KEYWORD_interface: parseInterfaceBlock (token); break;
+		case KEYWORD_enum:      parseEnumBlock (token);      break;
 		case KEYWORD_stdcall:   readToken (token);           break;
 		/* derived type handled by parseTypeDeclarationStmt(); */
 
@@ -2138,7 +2118,7 @@ static void parseModule (tokenInfo *const token)
 /*  execution-part
  *      executable-construct
  *
- *  executable-contstruct is
+ *  executable-construct is
  *      execution-part-construct [execution-part-construct]
  *
  *  execution-part-construct
@@ -2335,49 +2315,50 @@ static boolean findFortranTags (const unsigned int passCount)
 
 static void initializeFortran (const langType language)
 {
-    Lang_fortran = language;
-    buildFortranKeywordHash (language);
+	Lang_fortran = language;
 }
 
 static void initializeF77 (const langType language)
 {
-    Lang_f77 = language;
-    buildFortranKeywordHash (language);
+	Lang_f77 = language;
 }
 
 extern parserDefinition* FortranParser (void)
 {
-    static const char *const extensions [] = {
+	static const char *const extensions [] = {
 	"f90", "f95", "f03",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"F90", "F95", "F03",
 #endif
 	NULL
-    };
-    parserDefinition* def = parserNew ("Fortran");
-    def->kinds      = FortranKinds;
-    def->kindCount  = KIND_COUNT (FortranKinds);
-    def->extensions = extensions;
-    def->parser2    = findFortranTags;
-    def->initialize = initializeFortran;
-    return def;
+	};
+	parserDefinition* def = parserNew ("Fortran");
+	def->kinds      = FortranKinds;
+	def->kindCount  = ARRAY_SIZE (FortranKinds);
+	def->extensions = extensions;
+	def->parser2    = findFortranTags;
+	def->initialize = initializeFortran;
+	def->keywordTable = FortranKeywordTable;
+	def->keywordCount = ARRAY_SIZE (FortranKeywordTable);
+	return def;
 }
 
 extern parserDefinition* F77Parser (void)
 {
-    static const char *const extensions [] = {
+	static const char *const extensions [] = {
 	"f", "for", "ftn", "f77",
 #ifndef CASE_INSENSITIVE_FILENAMES
 	"F", "FOR", "FTN", "F77",
 #endif
 	NULL
-    };
-    parserDefinition* def = parserNew ("F77");
-    def->kinds      = FortranKinds;
-    def->kindCount  = KIND_COUNT (FortranKinds);
-    def->extensions = extensions;
-    def->parser2    = findFortranTags;
-    def->initialize = initializeF77;
-    return def;
+	};
+	parserDefinition* def = parserNew ("F77");
+	def->kinds      = FortranKinds;
+	def->kindCount  = ARRAY_SIZE (FortranKinds);
+	def->extensions = extensions;
+	def->parser2    = findFortranTags;
+	def->initialize = initializeF77;
+	def->keywordTable = FortranKeywordTable;
+	def->keywordCount = ARRAY_SIZE (FortranKeywordTable);
+	return def;
 }
-/* vi:set tabstop=4 shiftwidth=4: */

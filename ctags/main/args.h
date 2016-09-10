@@ -1,42 +1,43 @@
 /*
-*
-*   Copyright (c) 1999-2001, Darren Hiebert
+*   Copyright (c) 1999-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Defines external interface to command line argument reading.
 */
-#ifndef _ARGS_H
-#define _ARGS_H
+#ifndef CTAGS_MAIN_ARGS_H
+#define CTAGS_MAIN_ARGS_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
+
+#include <stdio.h>
 
 /*
 *   DATA DECLARATIONS
 */
 
 typedef struct sArgs {
-    enum { ARG_NONE, ARG_STRING, ARG_ARGV, ARG_FILE } type;
-    union {
-	struct sStringArgs {
-	    const char* string;
-	    const char* next;
-	    const char* item;
-	} stringArgs;
-	struct sArgvArgs {
-	    char* const* argv;
-	    char* const* item;
-	} argvArgs;
-	struct sFileArgs {
-	    FILE* fp;
-	} fileArgs;
-    } u;
-    char* item;
-    boolean lineMode;
+	enum { ARG_NONE, ARG_STRING, ARG_ARGV, ARG_FILE } type;
+	union {
+		struct sStringArgs {
+			const char* string;
+			const char* next;
+			const char* item;
+		} stringArgs;
+		struct sArgvArgs {
+			char* const* argv;
+			char* const* item;
+		} argvArgs;
+		struct sFileArgs {
+			FILE* fp;
+		} fileArgs;
+	} u;
+	char* item;
+	boolean lineMode;
 } Arguments;
 
 /*
@@ -53,6 +54,4 @@ extern void argSetLineMode (Arguments* const current);
 extern void argForth (Arguments* const current);
 extern void argDelete (Arguments* const current);
 
-#endif	/* _ARGS_H */
-
-/* vi:set tabstop=8 shiftwidth=4: */
+#endif  /* CTAGS_MAIN_ARGS_H */

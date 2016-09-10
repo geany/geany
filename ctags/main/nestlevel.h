@@ -3,12 +3,12 @@
 *   Copyright 2009-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Defines external interface to scope nesting levels for tags.
 */
-#ifndef _NESTLEVEL_H
-#define _NESTLEVEL_H
+#ifndef CTAGS_MAIN_NESTLEVEL_H
+#define CTAGS_MAIN_NESTLEVEL_H
 
 /*
 *   INCLUDE FILES
@@ -47,6 +47,4 @@ extern void nestingLevelsPush(NestingLevels *nls,
 extern void nestingLevelsPop(NestingLevels *nls);
 extern NestingLevel *nestingLevelsGetCurrent(NestingLevels *nls);
 
-#endif  /* _NESTLEVEL_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */
+#endif  /* CTAGS_MAIN_NESTLEVEL_H */

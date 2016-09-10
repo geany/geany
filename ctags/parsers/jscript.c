@@ -2,10 +2,12 @@
  *	 Copyright (c) 2003, Darren Hiebert
  *
  *	 This source code is released for free distribution under the terms of the
- *	 GNU General Public License.
+ *	 GNU General Public License version 2 or (at your option) any later version.
  *
  *	 This module contains functions for generating tags for JavaScript language
  *	 files.
+ *
+ *	 Reference: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
  *
  *	 This is a good reference for different forms of the function statement:
  *		 http://www.permadi.com/tutorial/jsFunc/
@@ -23,11 +25,12 @@
 #include <stdio.h>
 #endif
 
+#include "debug.h"
 #include "mio.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
-#include "main.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -48,8 +51,7 @@ static stringList *FunctionNames;
 
 /*	Used to specify type of keyword.
 */
-typedef enum eKeywordId {
-	KEYWORD_NONE = -1,
+enum eKeywordId {
 	KEYWORD_function,
 	KEYWORD_capital_function,
 	KEYWORD_capital_object,
@@ -70,15 +72,8 @@ typedef enum eKeywordId {
 	KEYWORD_finally,
 	KEYWORD_sap,
 	KEYWORD_return
-} keywordId;
-
-/*	Used to determine whether keyword is valid for the token language and
- *	what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
@@ -111,7 +106,7 @@ typedef struct sTokenInfo {
 	vString *		string;
 	vString *		scope;
 	unsigned long 	lineNumber;
-	MIOPos			filePosition;
+	MIOPos 			filePosition;
 	int				nestLevel;
 	boolean			ignoreTag;
 } tokenInfo;
@@ -143,7 +138,7 @@ static kindOption JsKinds [] = {
 	{ TRUE,  'v', "variable",	  "global variables"   }
 };
 
-static const keywordDesc JsKeywordTable [] = {
+static const keywordTable JsKeywordTable [] = {
 	/* keyword		keyword ID */
 	{ "function",	KEYWORD_function			},
 	{ "Function",	KEYWORD_capital_function	},
@@ -184,18 +179,6 @@ static boolean isIdentChar (const int c)
 		 c == '@' || c == '_' || c == '#');
 }
 
-static void buildJsKeywordHash (void)
-{
-	const size_t count = sizeof (JsKeywordTable) /
-		sizeof (JsKeywordTable [0]);
-	size_t i;
-	for (i = 0	;  i < count  ;  ++i)
-	{
-		const keywordDesc* const p = &JsKeywordTable [i];
-		addKeyword (p->name, Lang_js, (int) p->id);
-	}
-}
-
 static tokenInfo *newToken (void)
 {
 	tokenInfo *const token = xMalloc (1, tokenInfo);
@@ -206,7 +189,7 @@ static tokenInfo *newToken (void)
 	token->scope		= vStringNew ();
 	token->nestLevel	= 0;
 	token->ignoreTag	= FALSE;
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	return token;
@@ -240,24 +223,24 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 			name = p + 1;
 		}
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, &(JsKinds [kind]));
 
 		e.lineNumber   = token->lineNumber;
 		e.filePosition = token->filePosition;
-		e.kindName	   = JsKinds [kind].name;
-		e.kind		   = JsKinds [kind].letter;
 
 		if ( vStringLength(fullscope) > 0 )
 		{
 			jsKind parent_kind = JSTAG_CLASS;
 
-			/* if we're creating a function (and not a method),
-			 * guess we're inside another function */
+			/*
+			 * If we're creating a function (and not a method),
+			 * guess we're inside another function
+			 */
 			if (kind == JSTAG_FUNCTION)
 				parent_kind = JSTAG_FUNCTION;
 
-			e.extensionFields.scope[0] = JsKinds [parent_kind].name;
-			e.extensionFields.scope[1] = vStringValue (fullscope);
+			e.extensionFields.scopeKind = &(JsKinds [parent_kind]);
+			e.extensionFields.scopeName = vStringValue (fullscope);
 		}
 
 		if (signature && vStringLength(signature))
@@ -274,7 +257,7 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 				if (c < 0x20 /* below space */ || c == 0x7F /* DEL */)
 					signature->buffer[i] = ' ';
 			}
-			e.extensionFields.arglist = vStringValue(signature);
+			e.extensionFields.signature = vStringValue(signature);
 		}
 
 		makeTagEntry (&e);
@@ -340,22 +323,12 @@ static void makeFunctionTag (tokenInfo *const token, vString *const signature)
  *	 Parsing functions
  */
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = fileGetc ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	boolean end = FALSE;
 	while (! end)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 		if (c == EOF)
 			end = TRUE;
 		else if (c == '\\')
@@ -366,14 +339,14 @@ static void parseString (vString *const string, const int delimiter)
 			 * Also, handle the fact that <LineContinuation> produces an empty
 			 * sequence.
 			 * See ECMA-262 7.8.4 */
-			c = fileGetc();
+			c = getcFromInputFile ();
 			if (c != '\r' && c != '\n')
 				vStringPut(string, c);
 			else if (c == '\r')
 			{
-				c = fileGetc();
+				c = getcFromInputFile();
 				if (c != '\n')
-					fileUngetc (c);
+					ungetcToInputFile (c);
 			}
 		}
 		else if (c == delimiter)
@@ -384,7 +357,7 @@ static void parseString (vString *const string, const int delimiter)
 			end = TRUE;
 			/* we don't want to eat the newline itself to let the automatic
 			 * semicolon insertion code kick in */
-			fileUngetc (c);
+			ungetcToInputFile (c);
 		}
 		else
 			vStringPut (string, c);
@@ -399,18 +372,18 @@ static void parseRegExp (void)
 
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (! in_range && c == '/')
 		{
 			do /* skip flags */
 			{
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			} while (isalpha (c));
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 		else if (c == '\\')
-			c = fileGetc (); /* skip next character */
+			c = getcFromInputFile (); /* skip next character */
 		else if (c == '[')
 			in_range = TRUE;
 		else if (c == ']')
@@ -428,10 +401,10 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	vStringTerminate (string);
-	fileUngetc (c);		/* unget non-identifier character */
+	ungetcToInputFile (c);		/* unget non-identifier character */
 }
 
 static keywordId analyzeToken (vString *const name)
@@ -457,13 +430,13 @@ getNextChar:
 	i = 0;
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		i++;
 	}
 	while (c == '\t'  ||  c == ' ' ||
 		   ((c == '\r' || c == '\n') && ! include_newlines));
 
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	if (repr)
@@ -491,12 +464,12 @@ getNextChar:
 		case '+':
 		case '-':
 			{
-				int d = fileGetc ();
+				int d = getcFromInputFile ();
 				if (d == c) /* ++ or -- */
 					token->type = TOKEN_POSTFIX_OPERATOR;
 				else
 				{
-					fileUngetc (d);
+					ungetcToInputFile (d);
 					token->type = TOKEN_BINARY_OPERATOR;
 				}
 				break;
@@ -551,7 +524,7 @@ getNextChar:
 		case '"':
 				  token->type = TOKEN_STRING;
 				  parseString (token->string, c);
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  if (repr)
 				  {
@@ -561,21 +534,21 @@ getNextChar:
 				  break;
 
 		case '\\':
-				  c = fileGetc ();
+				  c = getcFromInputFile ();
 				  if (c != '\\'  && c != '"'  &&  !isspace (c))
-					  fileUngetc (c);
+					  ungetcToInputFile (c);
 				  token->type = TOKEN_CHARACTER;
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  break;
 
 		case '/':
 				  {
-					  int d = fileGetc ();
+					  int d = getcFromInputFile ();
 					  if ( (d != '*') &&		/* is this the start of a comment? */
 							  (d != '/') )		/* is a one line comment? */
 					  {
-						  fileUngetc (d);
+						  ungetcToInputFile (d);
 						  switch (LastTokenType)
 						  {
 							  case TOKEN_CHARACTER:
@@ -590,7 +563,7 @@ getNextChar:
 							  default:
 								  token->type = TOKEN_REGEXP;
 								  parseRegExp ();
-								  token->lineNumber = getSourceLineNumber ();
+								  token->lineNumber = getInputLineNumber ();
 								  token->filePosition = getInputFilePosition ();
 								  break;
 						  }
@@ -603,21 +576,21 @@ getNextChar:
 						  {
 							  do
 							  {
-								  skipToCharacter ('*');
-								  c = fileGetc ();
+								  skipToCharacterInInputFile ('*');
+								  c = getcFromInputFile ();
 								  if (c == '/')
 									  break;
 								  else
-									  fileUngetc (c);
+									  ungetcToInputFile (c);
 							  } while (c != EOF && c != '\0');
 							  goto getNextChar;
 						  }
 						  else if (d == '/')	/* is this the start of a comment?  */
 						  {
-							  skipToCharacter ('\n');
+							  skipToCharacterInInputFile ('\n');
 							  /* if we care about newlines, put it back so it is seen */
 							  if (include_newlines)
-								  fileUngetc ('\n');
+								  ungetcToInputFile ('\n');
 							  goto getNextChar;
 						  }
 					  }
@@ -628,14 +601,14 @@ getNextChar:
 				  /* skip shebang in case of e.g. Node.js scripts */
 				  if (token->lineNumber > 1)
 					  token->type = TOKEN_UNDEFINED;
-				  else if ((c = fileGetc ()) != '!')
+				  else if ((c = getcFromInputFile ()) != '!')
 				  {
-					  fileUngetc (c);
+					  ungetcToInputFile (c);
 					  token->type = TOKEN_UNDEFINED;
 				  }
 				  else
 				  {
-					  skipToCharacter ('\n');
+					  skipToCharacterInInputFile ('\n');
 					  goto getNextChar;
 				  }
 				  break;
@@ -646,7 +619,7 @@ getNextChar:
 				  else
 				  {
 					  parseIdentifier (token->string, c);
-					  token->lineNumber = getSourceLineNumber ();
+					  token->lineNumber = getInputLineNumber ();
 					  token->filePosition = getInputFilePosition ();
 					  token->keyword = analyzeToken (token->string);
 					  if (isKeyword (token, KEYWORD_NONE))
@@ -1150,13 +1123,13 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 	 *	   validProperty  : 2,
 	 *	   validMethod    : function(a,b) {}
 	 *	   'validMethod2' : function(a,b) {}
-     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
+     *     container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}
 	 */
 
 	do
 	{
 		readToken (token);
-		if (isType (token, TOKEN_CLOSE_CURLY)) 
+		if (isType (token, TOKEN_CLOSE_CURLY))
 		{
 			/*
 			 * This was most likely a variable declaration of a hash table.
@@ -1212,6 +1185,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 						{
 							if (isType (token, TOKEN_OPEN_CURLY))
 							{
+								/* Recurse to find child properties/methods */
 								vStringCopy (saveScope, token->scope);
 								addToScope (token, class->string);
 								has_child_methods = parseMethods (token, name);
@@ -1599,11 +1573,11 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 			{
 				/*
 				 * Only create variables for global scope
-			 */
+				 */
 				if ( token->nestLevel == 0 && is_global )
 				{
 					/*
-					 * A pointer can be created to the function.  
+					 * A pointer can be created to the function.
 					 * If we recognize the function/class name ignore the variable.
 					 * This format looks identical to a variable definition.
 					 * A variable defined outside of a block is considered
@@ -1635,10 +1609,10 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					vStringDelete (fulltag);
 				}
 			}
-			if (isType (token, TOKEN_CLOSE_CURLY)) 
+			if (isType (token, TOKEN_CLOSE_CURLY))
 			{
 				/*
-				 * Assume the closing parantheses terminates
+				 * Assume the closing parentheses terminates
 				 * this statements.
 				 */
 				is_terminated = TRUE;
@@ -1892,9 +1866,8 @@ static void parseJsFile (tokenInfo *const token)
 
 static void initialize (const langType language)
 {
-	Assert (sizeof (JsKinds) / sizeof (JsKinds [0]) == JSTAG_COUNT);
+	Assert (ARRAY_SIZE (JsKinds) == JSTAG_COUNT);
 	Lang_js = language;
-	buildJsKeywordHash ();
 }
 
 static void findJsTags (void)
@@ -1924,10 +1897,11 @@ extern parserDefinition* JavaScriptParser (void)
 	 * New definitions for parsing instead of regex
 	 */
 	def->kinds		= JsKinds;
-	def->kindCount	= KIND_COUNT (JsKinds);
+	def->kindCount	= ARRAY_SIZE (JsKinds);
 	def->parser		= findJsTags;
 	def->initialize = initialize;
+	def->keywordTable = JsKeywordTable;
+	def->keywordCount = ARRAY_SIZE (JsKeywordTable);
 
 	return def;
 }
-/* vi:set tabstop=4 shiftwidth=4 noexpandtab: */

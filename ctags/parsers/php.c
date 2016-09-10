@@ -2,7 +2,7 @@
 *   Copyright (c) 2013, Colomban Wendling <ban@herbesfolles.org>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains code for generating tags for the PHP scripting
 *   language.
@@ -12,19 +12,19 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-#include "main.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
 #include "keyword.h"
 #include "entry.h"
+#include "routines.h"
+#include "debug.h"
 
 
 #define SCOPE_SEPARATOR "::"
 
 
-typedef enum {
-	KEYWORD_NONE = -1,
+enum {
 	KEYWORD_abstract,
 	KEYWORD_and,
 	KEYWORD_as,
@@ -84,7 +84,8 @@ typedef enum {
 	KEYWORD_while,
 	KEYWORD_xor,
 	KEYWORD_yield
-} keywordId;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum {
 	ACCESS_UNDEFINED,
@@ -123,12 +124,7 @@ static kindOption PhpKinds[COUNT_KIND] = {
 	{ TRUE, 'v', "variable",	"variables" }
 };
 
-typedef struct {
-	const char *name;
-	keywordId id;
-} keywordDesc;
-
-static const keywordDesc PhpKeywordTable[] = {
+static const keywordTable PhpKeywordTable[] = {
 	/* keyword			keyword ID */
 	{ "abstract",		KEYWORD_abstract		},
 	{ "and",			KEYWORD_and				},
@@ -241,17 +237,6 @@ static struct {
 static vString *CurrentNamespace;
 
 
-static void buildPhpKeywordHash (const langType language)
-{
-	const size_t count = sizeof (PhpKeywordTable) / sizeof (PhpKeywordTable[0]);
-	size_t i;
-	for (i = 0; i < count ; i++)
-	{
-		const keywordDesc* const p = &PhpKeywordTable[i];
-		addKeyword (p->name, language, (int) p->id);
-	}
-}
-
 static const char *accessToString (const accessType access)
 {
 	static const char *const names[COUNT_ACCESS] = {
@@ -295,12 +280,10 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 		parentKind = K_NAMESPACE;
 	}
 
-	initTagEntry (e, vStringValue (token->string));
+	initTagEntry (e, vStringValue (token->string), &(PhpKinds[kind]));
 
 	e->lineNumber	= token->lineNumber;
 	e->filePosition	= token->filePosition;
-	e->kindName		= PhpKinds[kind].name;
-	e->kind			= (char) PhpKinds[kind].letter;
 
 	if (access != ACCESS_UNDEFINED)
 		e->extensionFields.access = accessToString (access);
@@ -316,8 +299,8 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 		Assert (parentKind >= 0);
 
 		vStringTerminate (fullScope);
-		e->extensionFields.scope[0] = PhpKinds[parentKind].name;
-		e->extensionFields.scope[1] = vStringValue (fullScope);
+		e->extensionFields.scopeKind = &(PhpKinds[parentKind]);
+		e->extensionFields.scopeName = vStringValue (fullScope);
 	}
 }
 
@@ -339,12 +322,10 @@ static void makeNamespacePhpTag (const tokenInfo *const token, const vString *co
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, vStringValue (name));
+		initTagEntry (&e, vStringValue (name), &(PhpKinds[K_NAMESPACE]));
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
-		e.kindName		= PhpKinds[K_NAMESPACE].name;
-		e.kind			= (char) PhpKinds[K_NAMESPACE].letter;
 
 		makeTagEntry (&e);
 	}
@@ -381,7 +362,7 @@ static void makeFunctionTag (const tokenInfo *const token,
 		if (impl != IMPL_UNDEFINED)
 			e.extensionFields.implementation = implToString (impl);
 		if (arglist)
-			e.extensionFields.arglist = vStringValue (arglist);
+			e.extensionFields.signature = vStringValue (arglist);
 
 		makeTagEntry (&e);
 	}
@@ -395,7 +376,7 @@ static tokenInfo *newToken (void)
 	token->keyword		= KEYWORD_NONE;
 	token->string		= vStringNew ();
 	token->scope		= vStringNew ();
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 	token->parentKind	= -1;
 
@@ -468,7 +449,7 @@ static void printToken (const tokenInfo *const token)
 
 		case TOKEN_KEYWORD:
 		{
-			size_t n = sizeof PhpKeywordTable / sizeof PhpKeywordTable[0];
+			size_t n = ARRAY_SIZE (PhpKeywordTable);
 			size_t i;
 
 			fprintf (stderr, "\tkeyword:\t");
@@ -502,23 +483,13 @@ static boolean isIdentChar (const int c)
 	return (isalnum (c) || c == '_' || c >= 0x80);
 }
 
-static int skipToCharacter (const int c)
-{
-	int d;
-	do
-	{
-		d = fileGetc ();
-	} while (d != EOF  &&  d != c);
-	return d;
-}
-
 static void parseString (vString *const string, const int delimiter)
 {
 	while (TRUE)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 
-		if (c == '\\' && (c = fileGetc ()) != EOF)
+		if (c == '\\' && (c = getcFromInputFile ()) != EOF)
 			vStringPut (string, (char) c);
 		else if (c == EOF || c == delimiter)
 			break;
@@ -558,21 +529,21 @@ static void parseHeredoc (vString *const string)
 
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	}
 	while (c == ' ' || c == '\t');
 
 	if (c == '\'' || c == '"')
 	{
 		quote = c;
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	}
-	for (len = 0; len < (sizeof delimiter / sizeof delimiter[0]) - 1; len++)
+	for (len = 0; len < ARRAY_SIZE (delimiter) - 1; len++)
 	{
 		if (! isIdentChar (c))
 			break;
 		delimiter[len] = (char) c;
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	}
 	delimiter[len] = 0;
 
@@ -582,14 +553,14 @@ static void parseHeredoc (vString *const string)
 	{
 		if (c != quote) /* no closing quote for quoted identifier, give up */
 			goto error;
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	}
 	if (c != '\r' && c != '\n') /* missing newline, give up */
 		goto error;
 
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 
 		if (c != '\r' && c != '\n')
 			vStringPut (string, (char) c);
@@ -599,37 +570,37 @@ static void parseHeredoc (vString *const string)
 			int nl = c;
 			int extra = EOF;
 
-			c = fileGetc ();
+			c = getcFromInputFile ();
 			for (len = 0; c != 0 && (c - delimiter[len]) == 0; len++)
-				c = fileGetc ();
+				c = getcFromInputFile ();
 
 			if (delimiter[len] != 0)
-				fileUngetc (c);
+				ungetcToInputFile (c);
 			else
 			{
 				/* line start matched the delimiter, now check whether there
 				 * is anything after it */
 				if (c == '\r' || c == '\n')
 				{
-					fileUngetc (c);
+					ungetcToInputFile (c);
 					break;
 				}
 				else if (c == ';')
 				{
-					int d = fileGetc ();
+					int d = getcFromInputFile ();
 					if (d == '\r' || d == '\n')
 					{
 						/* put back the semicolon since it's not part of the
 						 * string.  we can't put back the newline, but it's a
 						 * whitespace character nobody cares about it anyway */
-						fileUngetc (';');
+						ungetcToInputFile (';');
 						break;
 					}
 					else
 					{
 						/* put semicolon in the string and continue */
 						extra = ';';
-						fileUngetc (d);
+						ungetcToInputFile (d);
 					}
 				}
 			}
@@ -648,7 +619,7 @@ static void parseHeredoc (vString *const string)
 	return;
 
 error:
-	fileUngetc (c);
+	ungetcToInputFile (c);
 }
 
 static void parseIdentifier (vString *const string, const int firstChar)
@@ -657,9 +628,9 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, (char) c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	fileUngetc (c);
+	ungetcToInputFile (c);
 	vStringTerminate (string);
 }
 
@@ -682,12 +653,12 @@ static boolean isSpace (int c)
 static int skipWhitespaces (int c)
 {
 	while (isSpace (c))
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	return c;
 }
 
 /* <script[:white:]+language[:white:]*=[:white:]*(php|'php'|"php")[:white:]*>
- *
+ * 
  * This is ugly, but the whole "<script language=php>" tag is and we can't
  * really do better without adding a lot of code only for this */
 static boolean isOpenScriptLanguagePhp (int c)
@@ -696,36 +667,36 @@ static boolean isOpenScriptLanguagePhp (int c)
 
 	/* <script[:white:]+language[:white:]*= */
 	if (c                                   != '<' ||
-		tolower ((c = fileGetc ()))         != 's' ||
-		tolower ((c = fileGetc ()))         != 'c' ||
-		tolower ((c = fileGetc ()))         != 'r' ||
-		tolower ((c = fileGetc ()))         != 'i' ||
-		tolower ((c = fileGetc ()))         != 'p' ||
-		tolower ((c = fileGetc ()))         != 't' ||
-		! isSpace ((c = fileGetc ()))              ||
+		tolower ((c = getcFromInputFile ()))         != 's' ||
+		tolower ((c = getcFromInputFile ()))         != 'c' ||
+		tolower ((c = getcFromInputFile ()))         != 'r' ||
+		tolower ((c = getcFromInputFile ()))         != 'i' ||
+		tolower ((c = getcFromInputFile ()))         != 'p' ||
+		tolower ((c = getcFromInputFile ()))         != 't' ||
+		! isSpace ((c = getcFromInputFile ()))              ||
 		tolower ((c = skipWhitespaces (c))) != 'l' ||
-		tolower ((c = fileGetc ()))         != 'a' ||
-		tolower ((c = fileGetc ()))         != 'n' ||
-		tolower ((c = fileGetc ()))         != 'g' ||
-		tolower ((c = fileGetc ()))         != 'u' ||
-		tolower ((c = fileGetc ()))         != 'a' ||
-		tolower ((c = fileGetc ()))         != 'g' ||
-		tolower ((c = fileGetc ()))         != 'e' ||
-		(c = skipWhitespaces (fileGetc ())) != '=')
+		tolower ((c = getcFromInputFile ()))         != 'a' ||
+		tolower ((c = getcFromInputFile ()))         != 'n' ||
+		tolower ((c = getcFromInputFile ()))         != 'g' ||
+		tolower ((c = getcFromInputFile ()))         != 'u' ||
+		tolower ((c = getcFromInputFile ()))         != 'a' ||
+		tolower ((c = getcFromInputFile ()))         != 'g' ||
+		tolower ((c = getcFromInputFile ()))         != 'e' ||
+		(c = skipWhitespaces (getcFromInputFile ())) != '=')
 		return FALSE;
 
 	/* (php|'php'|"php")> */
-	c = skipWhitespaces (fileGetc ());
+	c = skipWhitespaces (getcFromInputFile ());
 	if (c == '"' || c == '\'')
 	{
 		quote = c;
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	}
 	if (tolower (c)                         != 'p' ||
-		tolower ((c = fileGetc ()))         != 'h' ||
-		tolower ((c = fileGetc ()))         != 'p' ||
-		(quote != 0 && (c = fileGetc ()) != quote) ||
-		(c = skipWhitespaces (fileGetc ())) != '>')
+		tolower ((c = getcFromInputFile ()))         != 'h' ||
+		tolower ((c = getcFromInputFile ()))         != 'p' ||
+		(quote != 0 && (c = getcFromInputFile ()) != quote) ||
+		(c = skipWhitespaces (getcFromInputFile ())) != '>')
 		return FALSE;
 
 	return TRUE;
@@ -736,16 +707,16 @@ static int findPhpStart (void)
 	int c;
 	do
 	{
-		if ((c = fileGetc ()) == '<')
+		if ((c = getcFromInputFile ()) == '<')
 		{
-			c = fileGetc ();
+			c = getcFromInputFile ();
 			/* <? and <?php, but not <?xml */
 			if (c == '?')
 			{
 				/* don't enter PHP mode on "<?xml", yet still support short open tags (<?) */
-				if (tolower ((c = fileGetc ())) != 'x' ||
-					tolower ((c = fileGetc ())) != 'm' ||
-					tolower ((c = fileGetc ())) != 'l')
+				if (tolower ((c = getcFromInputFile ())) != 'x' ||
+					tolower ((c = getcFromInputFile ())) != 'm' ||
+					tolower ((c = getcFromInputFile ())) != 'l')
 				{
 					break;
 				}
@@ -753,7 +724,7 @@ static int findPhpStart (void)
 			/* <script language="php"> */
 			else
 			{
-				fileUngetc (c);
+				ungetcToInputFile (c);
 				if (isOpenScriptLanguagePhp ('<'))
 					break;
 			}
@@ -769,23 +740,23 @@ static int skipSingleComment (void)
 	int c;
 	do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (c == '\r')
 		{
-			int next = fileGetc ();
+			int next = getcFromInputFile ();
 			if (next != '\n')
-				fileUngetc (next);
+				ungetcToInputFile (next);
 			else
 				c = next;
 		}
 		/* ?> in single-line comments leaves PHP mode */
 		else if (c == '?')
 		{
-			int next = fileGetc ();
+			int next = getcFromInputFile ();
 			if (next == '>')
 				InPhp = FALSE;
 			else
-				fileUngetc (next);
+				ungetcToInputFile (next);
 		}
 	} while (InPhp && c != EOF && c != '\n' && c != '\r');
 	return c;
@@ -808,11 +779,11 @@ getNextChar:
 			InPhp = TRUE;
 	}
 	else
-		c = fileGetc ();
+		c = getcFromInputFile ();
 
 	c = skipWhitespaces (c);
 
-	token->lineNumber   = getSourceLineNumber ();
+	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
 	switch (c)
@@ -832,12 +803,12 @@ getNextChar:
 
 		case '=':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '=' || d == '>')
 				token->type = TOKEN_OPERATOR;
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_EQUAL_SIGN;
 			}
 			break;
@@ -847,41 +818,41 @@ getNextChar:
 		case '"':
 			token->type = TOKEN_STRING;
 			parseString (token->string, c);
-			token->lineNumber = getSourceLineNumber ();
+			token->lineNumber = getInputLineNumber ();
 			token->filePosition = getInputFilePosition ();
 			break;
 
 		case '<':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '/')
 			{
 				/* </script[:white:]*> */
-				if (tolower ((d = fileGetc ())) == 's' &&
-					tolower ((d = fileGetc ())) == 'c' &&
-					tolower ((d = fileGetc ())) == 'r' &&
-					tolower ((d = fileGetc ())) == 'i' &&
-					tolower ((d = fileGetc ())) == 'p' &&
-					tolower ((d = fileGetc ())) == 't' &&
-					(d = skipWhitespaces (fileGetc ())) == '>')
+				if (tolower ((d = getcFromInputFile ())) == 's' &&
+					tolower ((d = getcFromInputFile ())) == 'c' &&
+					tolower ((d = getcFromInputFile ())) == 'r' &&
+					tolower ((d = getcFromInputFile ())) == 'i' &&
+					tolower ((d = getcFromInputFile ())) == 'p' &&
+					tolower ((d = getcFromInputFile ())) == 't' &&
+					(d = skipWhitespaces (getcFromInputFile ())) == '>')
 				{
 					InPhp = FALSE;
 					goto getNextChar;
 				}
 				else
 				{
-					fileUngetc (d);
+					ungetcToInputFile (d);
 					token->type = TOKEN_UNDEFINED;
 				}
 			}
-			else if (d == '<' && (d = fileGetc ()) == '<')
+			else if (d == '<' && (d = getcFromInputFile ()) == '<')
 			{
 				token->type = TOKEN_STRING;
 				parseHeredoc (token->string);
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;
@@ -897,16 +868,16 @@ getNextChar:
 		case '*':
 		case '%':
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d != '=')
-				fileUngetc (d);
+				ungetcToInputFile (d);
 			token->type = TOKEN_OPERATOR;
 			break;
 		}
 
 		case '/': /* division or comment start */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '/') /* single-line comment */
 			{
 				skipSingleComment ();
@@ -916,14 +887,14 @@ getNextChar:
 			{
 				do
 				{
-					c = skipToCharacter ('*');
+					c = skipToCharacterInInputFile ('*');
 					if (c != EOF)
 					{
-						c = fileGetc ();
+						c = getcFromInputFile ();
 						if (c == '/')
 							break;
 						else
-							fileUngetc (c);
+							ungetcToInputFile (c);
 					}
 				} while (c != EOF && c != '\0');
 				goto getNextChar;
@@ -931,7 +902,7 @@ getNextChar:
 			else
 			{
 				if (d != '=')
-					fileUngetc (d);
+					ungetcToInputFile (d);
 				token->type = TOKEN_OPERATOR;
 			}
 			break;
@@ -939,10 +910,10 @@ getNextChar:
 
 		case '$': /* variable start */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (! isIdentChar (d))
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			else
@@ -955,7 +926,7 @@ getNextChar:
 
 		case '?': /* maybe the end of the PHP chunk */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d == '>')
 			{
 				InPhp = FALSE;
@@ -963,7 +934,7 @@ getNextChar:
 			}
 			else
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				token->type = TOKEN_UNDEFINED;
 			}
 			break;
@@ -1480,13 +1451,11 @@ static void findZephirTags (void)
 static void initializePhpParser (const langType language)
 {
 	Lang_php = language;
-	buildPhpKeywordHash (language);
 }
 
 static void initializeZephirParser (const langType language)
 {
 	Lang_zephir = language;
-	buildPhpKeywordHash (language);
 }
 
 extern parserDefinition* PhpParser (void)
@@ -1494,10 +1463,12 @@ extern parserDefinition* PhpParser (void)
 	static const char *const extensions [] = { "php", "php3", "php4", "php5", "phtml", NULL };
 	parserDefinition* def = parserNew ("PHP");
 	def->kinds      = PhpKinds;
-	def->kindCount  = KIND_COUNT (PhpKinds);
+	def->kindCount  = ARRAY_SIZE (PhpKinds);
 	def->extensions = extensions;
 	def->parser     = findPhpTags;
 	def->initialize = initializePhpParser;
+	def->keywordTable = PhpKeywordTable;
+	def->keywordCount = ARRAY_SIZE (PhpKeywordTable);
 	return def;
 }
 
@@ -1506,11 +1477,11 @@ extern parserDefinition* ZephirParser (void)
 	static const char *const extensions [] = { "zep", NULL };
 	parserDefinition* def = parserNew ("Zephir");
 	def->kinds      = PhpKinds;
-	def->kindCount  = KIND_COUNT (PhpKinds);
+	def->kindCount  = ARRAY_SIZE (PhpKinds);
 	def->extensions = extensions;
 	def->parser     = findZephirTags;
 	def->initialize = initializeZephirParser;
+	def->keywordTable = PhpKeywordTable;
+	def->keywordCount = ARRAY_SIZE (PhpKeywordTable);
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

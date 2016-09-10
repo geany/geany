@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -51,12 +52,10 @@ static kindOption AbcKinds[] = {
 static void makeAbcTag (const vString* const name, boolean name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name));
+	initTagEntry (&e, vStringValue(name), &(AbcKinds[0]));
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */
-	e.kindName = AbcKinds[0].name;
-	e.kind = AbcKinds[0].letter;
 
 	makeTagEntry(&e);
 }
@@ -79,7 +78,7 @@ static void findAbcTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		/*int name_len = vStringLength(name);*/
 
@@ -118,7 +117,7 @@ extern parserDefinition* AbcParser (void)
 	parserDefinition* const def = parserNew ("Abc");
 
 	def->kinds = AbcKinds;
-	def->kindCount = KIND_COUNT (AbcKinds);
+	def->kindCount = ARRAY_SIZE (AbcKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findAbcTags;

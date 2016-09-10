@@ -3,7 +3,7 @@
 *   Copyright (c) 2010, Vincent Berthoux
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Objective C
 *   language files.
@@ -19,18 +19,8 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
-
-/* To get rid of unused parameter warning in
- * -Wextra */
-#ifdef UNUSED
-#elif defined(__GNUC__)
-# define UNUSED(x) UNUSED_ ## x __attribute__((unused))
-#elif defined(__LCLINT__)
-# define UNUSED(x) /*@unused@*/ x
-#else
-# define UNUSED(x) x
-#endif
 
 typedef enum {
 	K_INTERFACE,
@@ -110,13 +100,7 @@ typedef enum {
 
 typedef objcKeyword objcToken;
 
-typedef struct sOBjcKeywordDesc {
-	const char *name;
-	objcKeyword id;
-} objcKeywordDesc;
-
-
-static const objcKeywordDesc objcKeywordTable[] = {
+static const keywordTable objcKeywordTable[] = {
 	{"typedef", ObjcTYPEDEF},
 	{"struct", ObjcSTRUCT},
 	{"enum", ObjcENUM},
@@ -148,18 +132,6 @@ typedef struct _lexingState {
 	vString *name;	/* current parsed identifier/operator */
 	const unsigned char *cp;	/* position in stream */
 } lexingState;
-
-static void initKeywordHash (void)
-{
-	const size_t count = sizeof (objcKeywordTable) / sizeof (objcKeywordDesc);
-	size_t i;
-
-	for (i = 0; i < count; ++i)
-	{
-		addKeyword (objcKeywordTable[i].name, Lang_ObjectiveC,
-			(int) objcKeywordTable[i].id);
-	}
-}
 
 /*//////////////////////////////////////////////////////////////////////
 //// Lexing                                     */
@@ -238,7 +210,7 @@ static void eatComment (lexingState * st)
 		 * so we have to reload a line... */
 		if (c == NULL || *c == '\0')
 		{
-			st->cp = fileReadLine ();
+			st->cp = readLineFromInputFile ();
 			/* WOOPS... no more input...
 			 * we return, next lexing read
 			 * will be null and ok */
@@ -306,7 +278,7 @@ static objcKeyword lex (lexingState * st)
 	/* handling data input here */
 	while (st->cp == NULL || st->cp[0] == '\0')
 	{
-		st->cp = fileReadLine ();
+		st->cp = readLineFromInputFile ();
 		if (st->cp == NULL)
 			return Tok_EOF;
 
@@ -455,14 +427,12 @@ static objcKind parentType = K_INTERFACE;
  * add additional information to the tag. */
 static void prepareTag (tagEntryInfo * tag, vString const *name, objcKind kind)
 {
-	initTagEntry (tag, vStringValue (name));
-	tag->kindName = ObjcKinds[kind].name;
-	tag->kind = ObjcKinds[kind].letter;
+	initTagEntry (tag, vStringValue (name), &(ObjcKinds[kind]));
 
 	if (parentName != NULL)
 	{
-		tag->extensionFields.scope[0] = ObjcKinds[parentType].name;
-		tag->extensionFields.scope[1] = vStringValue (parentName);
+		tag->extensionFields.scopeKind = &(ObjcKinds[parentType]);
+		tag->extensionFields.scopeName = vStringValue (parentName);
 	}
 }
 
@@ -495,13 +465,13 @@ static objcToken waitedToken, fallBackToken;
 /* Ignore everything till waitedToken and jump to comeAfter.
  * If the "end" keyword is encountered break, doesn't remember
  * why though. */
-static void tillToken (vString * const UNUSED (ident), objcToken what)
+static void tillToken (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	if (what == waitedToken)
 		toDoNext = comeAfter;
 }
 
-static void tillTokenOrFallBack (vString * const UNUSED (ident), objcToken what)
+static void tillTokenOrFallBack (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	if (what == waitedToken)
 		toDoNext = comeAfter;
@@ -512,7 +482,7 @@ static void tillTokenOrFallBack (vString * const UNUSED (ident), objcToken what)
 }
 
 static int ignoreBalanced_count = 0;
-static void ignoreBalanced (vString * const UNUSED (ident), objcToken what)
+static void ignoreBalanced (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 
 	switch (what)
@@ -714,7 +684,7 @@ static void parseProperty (vString * const ident, objcToken what)
 	}
 }
 
-static void parseMethods (vString * const UNUSED (ident), objcToken what)
+static void parseMethods (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
 	{
@@ -973,7 +943,7 @@ static void parseTypedef (vString * const ident, objcToken what)
 }
 
 static boolean ignorePreprocStuff_escaped = FALSE;
-static void ignorePreprocStuff (vString * const UNUSED (ident), objcToken what)
+static void ignorePreprocStuff (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
 	{
@@ -1114,7 +1084,7 @@ static void findObjcTags (void)
 	ignorePreprocStuff_escaped = FALSE;
 
 	st.name = vStringNew ();
-	st.cp = fileReadLine ();
+	st.cp = readLineFromInputFile ();
 	toDoNext = &globalScope;
 	tok = lex (&st);
 	while (tok != Tok_EOF)
@@ -1138,19 +1108,18 @@ static void findObjcTags (void)
 static void objcInitialize (const langType language)
 {
 	Lang_ObjectiveC = language;
-
-	initKeywordHash ();
 }
 
 extern parserDefinition *ObjcParser (void)
 {
 	static const char *const extensions[] = { "m", "h", NULL };
-	parserDefinition *def = parserNew ("ObjectiveC");
+	parserDefinition *def = parserNewFull ("ObjectiveC", KIND_FILE_ALT);
 	def->kinds = ObjcKinds;
-	def->kindCount = KIND_COUNT (ObjcKinds);
+	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;
 	def->parser = findObjcTags;
 	def->initialize = objcInitialize;
-
+	def->keywordTable = objcKeywordTable;
+	def->keywordCount = ARRAY_SIZE (objcKeywordTable);
 	return def;
 }

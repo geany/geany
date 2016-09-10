@@ -2,9 +2,9 @@
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains the high level source read functions (preprocessor
+*   This module contains the high level input read functions (preprocessor
 *   directives are handled within this level).
 */
 
@@ -16,8 +16,10 @@
 #include <string.h>
 #include <glib.h>
 
+#include "debug.h"
 #include "entry.h"
-#include "get.h"
+#include "lcpp.h"
+#include "kind.h"
 #include "options.h"
 #include "read.h"
 #include "vstring.h"
@@ -63,6 +65,7 @@ typedef struct sCppState {
 	boolean resolveRequired;     /* must resolve if/else/elif/endif branch */
 	boolean hasAtLiteralStrings; /* supports @"c:\" strings */
 	boolean hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
+	const kindOption  *defineMacroKind;
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
 		boolean	accept;          /* is a directive syntactically permitted? */
@@ -85,6 +88,7 @@ static cppState Cpp = {
 	FALSE,       /* resolveRequired */
 	FALSE,       /* hasAtLiteralStrings */
 	FALSE,       /* hasCxxRawLiteralStrings */
+	NULL,        /* defineMacroKind */
 	{
 		DRCTV_NONE,  /* state */
 		FALSE,       /* accept */
@@ -98,18 +102,19 @@ static cppState Cpp = {
 *   FUNCTION DEFINITIONS
 */
 
-extern boolean isBraceFormat (void)
+extern boolean cppIsBraceFormat (void)
 {
 	return BraceFormat;
 }
 
-extern unsigned int getDirectiveNestLevel (void)
+extern unsigned int cppGetDirectiveNestLevel (void)
 {
 	return Cpp.directive.nestLevel;
 }
 
 extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
-                     const boolean hasCxxRawLiteralStrings)
+                     const boolean hasCxxRawLiteralStrings,
+                     const kindOption *defineMacroKind)
 {
 	BraceFormat = state;
 
@@ -118,6 +123,7 @@ extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
 	Cpp.resolveRequired = FALSE;
 	Cpp.hasAtLiteralStrings = hasAtLiteralStrings;
 	Cpp.hasCxxRawLiteralStrings = hasCxxRawLiteralStrings;
+	Cpp.defineMacroKind = defineMacroKind;
 
 	Cpp.directive.state     = DRCTV_NONE;
 	Cpp.directive.accept    = TRUE;
@@ -160,7 +166,7 @@ extern void cppEndStatement (void)
 *   directives and may emit a tag for #define directives.
 */
 
-/*  This puts a character back into the input queue for the source File.
+/*  This puts a character back into the input queue for the input File.
  *  Up to two characters may be ungotten.
  */
 extern void cppUngetc (const int c)
@@ -180,10 +186,10 @@ static boolean readDirective (int c, char *const name, unsigned int maxLength)
 	{
 		if (i > 0)
 		{
-			c = fileGetc ();
+			c = getcFromInputFile ();
 			if (c == EOF  ||  ! isalpha (c))
 			{
-				fileUngetc (c);
+				ungetcToInputFile (c);
 				break;
 			}
 		}
@@ -203,9 +209,9 @@ static void readIdentifier (int c, vString *const name)
 	do
 	{
 		vStringPut (name, c);
-		c = fileGetc ();
-	} while (c != EOF && isident (c));
-	fileUngetc (c);
+		c = getcFromInputFile ();
+	} while (c != EOF && cppIsident (c));
+	ungetcToInputFile (c);
 	vStringTerminate (name);
 }
 
@@ -301,28 +307,26 @@ static boolean popConditional (void)
 
 static void makeDefineTag (const char *const name, boolean parameterized)
 {
-	const boolean isFileScope = (boolean) (! isHeaderFile ());
+	const boolean isFileScope = (boolean) (! isInputHeaderFile ());
 
 	if (includingDefineTags () &&
 		(! isFileScope  ||  Option.include.fileScope))
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, Cpp.defineMacroKind);
 
 		e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
 		e.isFileScope  = isFileScope;
 		e.truncateLine = TRUE;
-		e.kindName     = "macro";
-		e.kind         = 'd';
 		if (parameterized)
 		{
-			e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
+			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition()
 					, e.name);
 		}
 		makeTagEntry (&e);
 		if (parameterized)
-			free((char *) e.extensionFields.arglist);
+			free((char *) e.extensionFields.signature);
 	}
 }
 
@@ -331,11 +335,11 @@ static void directiveDefine (const int c)
 	boolean parameterized;
 	int nc;
 
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
-		nc = fileGetc ();
-		fileUngetc (nc);
+		nc = getcFromInputFile ();
+		ungetcToInputFile (nc);
 		parameterized = (boolean) (nc == '(');
 		if (! isIgnore ())
 			makeDefineTag (vStringValue (Cpp.directive.name), parameterized);
@@ -345,7 +349,7 @@ static void directiveDefine (const int c)
 
 static void directivePragma (int c)
 {
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
 		if (stringMatch (vStringValue (Cpp.directive.name), "weak"))
@@ -353,9 +357,9 @@ static void directivePragma (int c)
 			/* generate macro tag for weak name */
 			do
 			{
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			} while (c == SPACE);
-			if (isident1 (c))
+			if (cppIsident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
 				makeDefineTag (vStringValue (Cpp.directive.name), FALSE);
@@ -435,7 +439,7 @@ static boolean handleDirective (const int c)
 static Comment isComment (void)
 {
 	Comment comment;
-	const int next = fileGetc ();
+	const int next = getcFromInputFile ();
 
 	if (next == '*')
 		comment = COMMENT_C;
@@ -445,7 +449,7 @@ static Comment isComment (void)
 		comment = COMMENT_D;
 	else
 	{
-		fileUngetc (next);
+		ungetcToInputFile (next);
 		comment = COMMENT_NONE;
 	}
 	return comment;
@@ -454,17 +458,17 @@ static Comment isComment (void)
 /*  Skips over a C style comment. According to ANSI specification a comment
  *  is treated as white space, so we perform this substitution.
  */
-int skipOverCComment (void)
+int cppSkipOverCComment (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	while (c != EOF)
 	{
 		if (c != '*')
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		else
 		{
-			const int next = fileGetc ();
+			const int next = getcFromInputFile ();
 
 			if (next != '/')
 				c = next;
@@ -484,10 +488,10 @@ static int skipOverCplusComment (void)
 {
 	int c;
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 		if (c == BACKSLASH)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == NEWLINE)
 			break;
 	}
@@ -499,15 +503,15 @@ static int skipOverCplusComment (void)
  */
 static int skipOverDComment (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	while (c != EOF)
 	{
 		if (c != '+')
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		else
 		{
-			const int next = fileGetc ();
+			const int next = getcFromInputFile ();
 
 			if (next != '/')
 				c = next;
@@ -528,10 +532,10 @@ static int skipToEndOfString (boolean ignoreBackslash)
 {
 	int c;
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 		if (c == BACKSLASH && ! ignoreBackslash)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == DOUBLE_QUOTE)
 			break;
 	}
@@ -546,11 +550,11 @@ static int isCxxRawLiteralDelimiterChar (int c)
 
 static int skipToEndOfCxxRawLiteralString (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	if (c != '(' && ! isCxxRawLiteralDelimiterChar (c))
 	{
-		fileUngetc (c);
+		ungetcToInputFile (c);
 		c = skipToEndOfString (FALSE);
 	}
 	else
@@ -573,15 +577,15 @@ static int skipToEndOfCxxRawLiteralString (void)
 			{
 				unsigned int i = 0;
 
-				while ((c = fileGetc ()) != EOF && i < delimLen && delim[i] == c)
+				while ((c = getcFromInputFile ()) != EOF && i < delimLen && delim[i] == c)
 					i++;
 				if (i == delimLen && c == DOUBLE_QUOTE)
 					break;
 				else
-					fileUngetc (c);
+					ungetcToInputFile (c);
 			}
 		}
-		while ((c = fileGetc ()) != EOF);
+		while ((c = getcFromInputFile ()) != EOF);
 		c = STRING_SYMBOL;
 	}
 	return c;
@@ -596,23 +600,23 @@ static int skipToEndOfChar (void)
 	int c;
 	int count = 0, veraBase = '\0';
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 	    ++count;
 		if (c == BACKSLASH)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == SINGLE_QUOTE)
 			break;
 		else if (c == NEWLINE)
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 		else if (count == 1  &&  strchr ("DHOB", toupper (c)) != NULL)
 			veraBase = c;
 		else if (veraBase != '\0'  &&  ! isalnum (c))
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 	}
@@ -639,7 +643,7 @@ extern int cppGetc (void)
 	}
 	else do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 process:
 		switch (c)
 		{
@@ -682,12 +686,12 @@ process:
 				const Comment comment = isComment ();
 
 				if (comment == COMMENT_C)
-					c = skipOverCComment ();
+					c = cppSkipOverCComment ();
 				else if (comment == COMMENT_CPLUS)
 				{
 					c = skipOverCplusComment ();
 					if (c == NEWLINE)
-						fileUngetc (c);
+						ungetcToInputFile (c);
 				}
 				else if (comment == COMMENT_D)
 					c = skipOverDComment ();
@@ -698,23 +702,23 @@ process:
 
 			case BACKSLASH:
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 
 				if (next == NEWLINE)
 					continue;
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				break;
 			}
 
 			case '?':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				if (next != '?')
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				else
 				{
-					next = fileGetc ();
+					next = getcFromInputFile ();
 					switch (next)
 					{
 						case '(':          c = '[';       break;
@@ -727,8 +731,8 @@ process:
 						case '-':          c = '~';       break;
 						case '=':          c = '#';       goto process;
 						default:
-							fileUngetc ('?');
-							fileUngetc (next);
+							ungetcToInputFile ('?');
+							ungetcToInputFile (next);
 							break;
 					}
 				}
@@ -740,32 +744,32 @@ process:
 			 */
 			case '<':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				switch (next)
 				{
 					case ':':	c = '['; break;
 					case '%':	c = '{'; break;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
 			case ':':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				if (next == '>')
 					c = ']';
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				goto enter;
 			}
 			case '%':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				switch (next)
 				{
 					case '>':	c = '}'; break;
 					case ':':	c = '#'; goto process;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
@@ -773,7 +777,7 @@ process:
 			default:
 				if (c == '@' && Cpp.hasAtLiteralStrings)
 				{
-					int next = fileGetc ();
+					int next = getcFromInputFile ();
 					if (next == DOUBLE_QUOTE)
 					{
 						Cpp.directive.accept = FALSE;
@@ -781,7 +785,7 @@ process:
 						break;
 					}
 					else
-						fileUngetc (next);
+						ungetcToInputFile (next);
 				}
 				else if (c == 'R' && Cpp.hasCxxRawLiteralStrings)
 				{
@@ -802,17 +806,17 @@ process:
 					 * 	"xxx(raw)xxx";
 					 *
 					 * which is perfectly valid (yet probably very unlikely). */
-					int prev = fileGetNthPrevC (1, '\0');
-					int prev2 = fileGetNthPrevC (2, '\0');
-					int prev3 = fileGetNthPrevC (3, '\0');
+					int prev = getNthPrevCFromInputFile (1, '\0');
+					int prev2 = getNthPrevCFromInputFile (2, '\0');
+					int prev3 = getNthPrevCFromInputFile (3, '\0');
 
-					if (! isident (prev) ||
-					    (! isident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
-					    (! isident (prev3) && (prev2 == 'u' && prev == '8')))
+					if (! cppIsident (prev) ||
+					    (! cppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
+					    (! cppIsident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
-						int next = fileGetc ();
+						int next = getcFromInputFile ();
 						if (next != DOUBLE_QUOTE)
-							fileUngetc (next);
+							ungetcToInputFile (next);
 						else
 						{
 							Cpp.directive.accept = FALSE;
@@ -834,35 +838,6 @@ process:
 				debugPrintf (DEBUG_CPP, "%6ld: ", getInputLineNumber () + 1); )
 
 	return c;
-}
-
-extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
-{
-	MIOPos originalPosition;
-	char *result = NULL;
-	char *arglist = NULL;
-	long pos1, pos2;
-
-	pos2 = mio_tell(File.mio);
-
-	mio_getpos(File.mio, &originalPosition);
-	mio_setpos(File.mio, &startPosition);
-	pos1 = mio_tell(File.mio);
-
-	if (pos2 > pos1)
-	{
-		size_t len = pos2 - pos1;
-
-		result = (char *) g_malloc(len + 1);
-		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
-		{
-			result[len] = '\0';
-			arglist = getArglistFromStr(result, tokenName);
-		}
-		g_free(result);
-	}
-	mio_setpos(File.mio, &originalPosition);
-	return arglist;
 }
 
 typedef enum
@@ -953,7 +928,7 @@ static void stripCodeBuffer(char *buf)
 	return;
 }
 
-extern char *getArglistFromStr(char *buf, const char *name)
+static char *getArglistFromStr(char *buf, const char *name)
 {
 	char *start, *end;
 	int level;
@@ -977,4 +952,31 @@ extern char *getArglistFromStr(char *buf, const char *name)
 	return strdup(start);
 }
 
-/* vi:set tabstop=4 shiftwidth=4: */
+extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName)
+{
+	MIOPos originalPosition;
+	char *result = NULL;
+	char *arglist = NULL;
+	long pos1, pos2;
+
+	pos2 = mio_tell(File.mio);
+
+	mio_getpos(File.mio, &originalPosition);
+	mio_setpos(File.mio, &startPosition);
+	pos1 = mio_tell(File.mio);
+
+	if (pos2 > pos1)
+	{
+		size_t len = pos2 - pos1;
+
+		result = (char *) g_malloc(len + 1);
+		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
+		{
+			result[len] = '\0';
+			arglist = getArglistFromStr(result, tokenName);
+		}
+		g_free(result);
+	}
+	mio_setpos(File.mio, &originalPosition);
+	return arglist;
+}

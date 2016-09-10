@@ -17,10 +17,12 @@
 
 #include <string.h>
 
+#include "debug.h"
 #include "entry.h"
 #include "parse.h"
 #include "nestlevel.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -211,16 +213,14 @@ static void emitRubyTag (vString* name, rubyKind kind)
 	else
 		unqualified_name = qualified_name;
 
-	initTagEntry (&tag, unqualified_name);
+	initTagEntry (&tag, unqualified_name, &(RubyKinds [kind]));
 	if (vStringLength (scope) > 0) {
 		Assert (0 <= parent_kind &&
-		        (size_t) parent_kind < (sizeof RubyKinds / sizeof RubyKinds[0]));
+		        (size_t) parent_kind < (ARRAY_SIZE (RubyKinds)));
 
-	    tag.extensionFields.scope [0] = RubyKinds [parent_kind].name;
-	    tag.extensionFields.scope [1] = vStringValue (scope);
+		tag.extensionFields.scopeKind = &(RubyKinds [parent_kind]);
+		tag.extensionFields.scopeName = vStringValue (scope);
 	}
-	tag.kindName = RubyKinds [kind].name;
-	tag.kind = RubyKinds [kind].letter;
 	makeTagEntry (&tag);
 
 	nestingLevelsPush (nesting, name, kind);
@@ -392,7 +392,7 @@ static void findRubyTags (void)
 	*
 	* if you wished, and this function would fail to recognize anything.
 	*/
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp = line;
 		/* if we expect a separator after a while, for, or until statement
@@ -475,10 +475,8 @@ static void findRubyTags (void)
 			 */
 			if (nl && nl->type == K_CLASS && vStringLength (nl->name) == 0)
 				kind = K_SINGLETON;
-
 			readAndEmitTag (&cp, kind);
 		}
-
 		while (*cp != '\0')
 		{
 			/* FIXME: we don't cope with here documents,
@@ -524,7 +522,7 @@ static void findRubyTags (void)
 					++cp;
 				} while (*cp != 0 && *cp != '"');
 				if (*cp == '"')
-				    cp++; /* skip the last found '"' */
+					cp++; /* skip the last found '"' */
 			}
 			else if (*cp == ';')
 			{
@@ -545,12 +543,10 @@ static void findRubyTags (void)
 extern parserDefinition* RubyParser (void)
 {
 	static const char *const extensions [] = { "rb", "ruby", NULL };
-	parserDefinition* def = parserNew ("Ruby");
+	parserDefinition* def = parserNewFull ("Ruby", KIND_FILE_ALT);
 	def->kinds      = RubyKinds;
-	def->kindCount  = KIND_COUNT (RubyKinds);
+	def->kindCount  = ARRAY_SIZE (RubyKinds);
 	def->extensions = extensions;
 	def->parser     = findRubyTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

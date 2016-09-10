@@ -17,6 +17,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -80,7 +81,7 @@ static void findAbaqusTags(void)
 {
 	const char *line;
 
-	while ((line = (const char*)fileReadLine()) != NULL)
+	while ((line = (const char*)readLineFromInputFile()) != NULL)
 	{
 		const char *cp = line;
 
@@ -119,7 +120,7 @@ extern parserDefinition* AbaqusParser (void)
 	static const char *const extensions [] = { "inp", NULL };
 	parserDefinition * def = parserNew ("Abaqus");
 	def->kinds      = AbaqusKinds;
-	def->kindCount  = KIND_COUNT (AbaqusKinds);
+	def->kindCount  = ARRAY_SIZE (AbaqusKinds);
 	def->extensions = extensions;
 	def->parser     = findAbaqusTags;
 	return def;
