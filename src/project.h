@@ -50,6 +50,8 @@ GeanyProject;
 
 void project_write_config(void);
 
+gboolean project_open_file(const gchar *project_locale_fn);
+
 
 #ifdef GEANY_PRIVATE
 

@@ -1346,3 +1346,25 @@ void project_init(void)
 void project_finalize(void)
 {
 }
+
+
+/**
+ * Open the given project file.
+ *
+ * This is done as if the user had done it using the `Project->Open`
+ * menu item (ie. it will confirm closing the current project). Any
+ * files in the project's session will be re-opened.
+ *
+ * @param project_locale_fn The filename of the project file in locale
+ * filename encoding.
+ *
+ * @return @c TRUE if the project was opened, @c FALSE otherwise.
+ *
+ * @since 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gboolean project_open_file(const gchar *project_locale_fn)
+{
+	return (project_ask_close() &&
+		project_load_file_with_session(project_locale_fn));
+}
