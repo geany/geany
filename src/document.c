@@ -126,7 +126,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
  * Finds a document whose @c real_path field matches the given filename.
  *
  * @param realname The filename to search, which should be identical to the
- * string returned by @c tm_get_real_path().
+ * string returned by @c utils_get_real_path().
  *
  * @return @transfer{none} @nullable The matching document, or @c NULL.
  * @note This is only really useful when passing a @c TMSourceFile::file_name.
@@ -163,7 +163,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 {
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
-	gchar *realname = tm_get_real_path(locale_name);
+	gchar *realname = utils_get_real_path(locale_name);
 
 	g_free(locale_name);
 	return realname;
@@ -1348,7 +1348,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
 
 			/* file exists on disk, set real_path */
-			SETPTR(doc->real_path, tm_get_real_path(locale_filename));
+			SETPTR(doc->real_path, utils_get_real_path(locale_filename));
 
 			doc->priv->is_remote = utils_is_remote_path(locale_filename);
 			monitor_file_setup(doc);
@@ -2029,7 +2029,7 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 	/* now the file is on disk, set real_path */
 	if (doc->real_path == NULL)
 	{
-		doc->real_path = tm_get_real_path(locale_filename);
+		doc->real_path = utils_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 		monitor_file_setup(doc);
 	}

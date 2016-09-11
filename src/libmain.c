@@ -772,7 +772,7 @@ static gint setup_config_dir(void)
 	}
 	/* make configdir a real path */
 	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
-		SETPTR(app->configdir, tm_get_real_path(app->configdir));
+		SETPTR(app->configdir, utils_get_real_path(app->configdir));
 
 	return mkdir_result;
 }
