@@ -66,7 +66,13 @@ void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
                                          const GeanyBuildCmdEntries field);
 
+void build_set_current_menu_item(GeanyBuildGroup grp, guint cmd,
+	GeanyBuildCmdEntries field, const gchar *value);
+
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
+
+const gchar *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp,
+	guint cmd, GeanyBuildCmdEntries field);
 
 void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
                          const guint cmd, const GeanyBuildCmdEntries field, const gchar *value);
@@ -198,8 +204,6 @@ gboolean build_parse_make_dir(const gchar *string, gchar **prefix);
 void build_menu_update(GeanyDocument *doc);
 
 void build_toolbutton_build_clicked(GtkAction *action, gpointer user_data);
-
-GeanyBuildCommand *build_get_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const guint cmd);
 
 BuildMenuItems *build_get_menu_items(gint filetype_idx);
 
