@@ -42,7 +42,11 @@ TMSourceFile *tm_source_file_new(const char *file_name, const char *name);
 
 void tm_source_file_free(TMSourceFile *source_file);
 
-gchar *tm_get_real_path(const gchar *file_name);
+gchar *tm_get_real_path(const gchar *file_name)
+#ifndef GEANY_PRIVATE
+G_DEPRECATED_FOR(utils_get_real_path)
+#endif
+;
 
 #ifdef GEANY_PRIVATE
 

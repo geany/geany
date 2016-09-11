@@ -2196,7 +2196,7 @@ void utils_start_new_geany_instance(const gchar *doc_path)
  * should be freed with `g_free()` when no longer needed, or @c NULL
  * if the real path cannot be obtained.
  *
- * @since 1.29 (API 230)
+ * @since 1.32 (API 235)
  */
 GEANY_API_SYMBOL
 gchar *utils_get_real_path(const gchar *file_name)

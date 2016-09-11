@@ -115,7 +115,7 @@ static char *realpath (const char *pathname, char *resolved_path)
  of the file.
  @param file_name The original file_name
  @return A newly allocated string containing the real path to the file. NULL if none is available.
- @deprecated since 1.29 (ABI 230)
+ @deprecated since 1.32 (ABI 235)
  @see utils_get_real_path()
 */
 GEANY_API_SYMBOL
