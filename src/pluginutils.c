@@ -44,6 +44,14 @@
 #include "utils.h"
 
 
+typedef struct
+{
+	gpointer data;
+	GDestroyNotify free_func;
+}
+PluginDocDataProxy;
+
+
 /** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.
  * A separator is added on the first call to this function, and will be shown when @a item is
  * shown; hidden when @a item is hidden.
@@ -596,6 +604,151 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify f
 
 	p->cb_data = pdata;
 	p->cb_data_destroy = free_func;
+}
+
+
+static void plugin_doc_data_proxy_free(gpointer pdata)
+{
+	PluginDocDataProxy *prox = pdata;
+	if (prox != NULL)
+	{
+		if (prox->free_func)
+			prox->free_func(prox->data);
+		g_slice_free(PluginDocDataProxy, prox);
+	}
+}
+
+
+/**
+ * Retrieve plugin-specific data attached to a document.
+ *
+ * @param plugin The plugin who attached the data.
+ * @param doc The document which the data was attached to.
+ * @param key The key name of the attached data.
+ *
+ * @return The attached data pointer or `NULL` if the key is not found
+ * for the given plugin.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_set_document_data plugin_set_document_data_full
+ */
+GEANY_API_SYMBOL
+gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key)
+{
+	gchar *real_key;
+	PluginDocDataProxy *data;
+
+	g_return_val_if_fail(plugin != NULL, NULL);
+	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(key != NULL && *key != '\0', NULL);
+
+	real_key = g_strdup_printf("geany/plugins/%s/%s", plugin->info->name, key);
+	data = document_get_data(doc, real_key);
+	g_free(real_key);
+
+	return (data != NULL) ? data->data : NULL;
+}
+
+
+/**
+ * Attach plugin-specific data to a document.
+ *
+ * @param plugin The plugin attaching data to the document.
+ * @param doc The document to attach the data to.
+ * @param key The key name for the data.
+ * @param data The pointer to attach to the document.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_get_document_data plugin_set_document_data_full
+ */
+GEANY_API_SYMBOL
+void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
+	const gchar *key, gpointer data)
+{
+	plugin_set_document_data_full(plugin, doc, key, data, NULL);
+}
+
+
+/**
+ * Attach plugin-specific data and a free function to a document.
+ *
+ * This is useful for plugins who want to keep some additional data with
+ * the document and even have it auto-released appropriately (see below).
+ *
+ * This is a simple example showing how a plugin might use this to
+ * attach a string to each document and print it when the document is
+ * saved:
+ *
+ * @code
+ * void on_document_open(GObject *unused, GeanyDocument *doc, GeanyPlugin *plugin)
+ * {
+ *     plugin_set_document_data_full(plugin, doc, "my-data",
+ *         g_strdup("some-data"), g_free);
+ * }
+ *
+ * void on_document_save(GObject *unused, GeanyDocument *doc, GeanyPlugin *plugin)
+ * {
+ *     const gchar *some_data = plugin_get_document_data(plugin, doc, "my-data");
+ *     g_print("my-data: %s", some_data);
+ * }
+ *
+ * gboolean plugin_init(GeanyPlugin *plugin, gpointer unused)
+ * {
+ *     plugin_signal_connect(plugin, NULL, "document-open", TRUE,
+ *         G_CALLBACK(on_document_open), plugin);
+ *     plugin_signal_connect(plugin, NULL, "document-new", TRUE,
+ *         G_CALLBACK(on_document_open), plugin);
+ *     plugin_signal_connect(plugin, NULL, "document-save", TRUE,
+ *         G_CALLBACK(on_document_save), plugin);
+ *     return TRUE;
+ * }
+ *
+ * void geany_load_module(GeanyPlugin *plugin)
+ * {
+ *   // ...
+ *   plugin->funcs->init = plugin_init;
+ *   // ...
+ * }
+ * @endcode
+ *
+ * The @a free_func can be used to tie the lifetime of the data to that
+ * of the @a doc and/or the @a plugin. The @a free_func will be called
+ * in any of the following cases:
+ *
+ *   - When a document is closed.
+ *   - When the plugin is unloaded.
+ *   - When the document data is set again using the same key.
+ *
+ * @param plugin The plugin attaching data to the document.
+ * @param doc The document to attach the data to.
+ * @param key The key name for the data.
+ * @param data The pointer to attach to the document.
+ * @param free_func The function to call with data when removed.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_get_document_data plugin_set_document_data
+ */
+GEANY_API_SYMBOL
+void plugin_set_document_data_full(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key, gpointer data,
+	GDestroyNotify free_func)
+{
+	PluginDocDataProxy *prox;
+
+	g_return_if_fail(plugin != NULL);
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(key != NULL);
+
+	prox = g_slice_new(PluginDocDataProxy);
+	if (prox != NULL)
+	{
+		gchar *real_key = g_strdup_printf("geany/plugins/%s/%s", plugin->info->name, key);
+		prox->data = data;
+		prox->free_func = free_func;
+		document_set_data_full(doc, real_key, prox, plugin_doc_data_proxy_free);
+		g_free(real_key);
+	}
 }
 
 
