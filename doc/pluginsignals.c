@@ -159,6 +159,15 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
 
+/** Sent before a project is closed.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param user_data user data.
+ *
+ * @since 1.29 (API 230)
+ */
+signal void (*project_before_close)(GObject *obj, gpointer user_data);
+
 /** Sent after a project dialog is opened but before it is displayed. Plugins
  *  can append their own project settings tabs by using this signal.
  *
