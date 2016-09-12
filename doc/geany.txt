@@ -3357,13 +3357,14 @@ Delete to line start            Ctrl-Shift-BackSpace      Deletes from the begin
                                                           current caret position.
 
 Duplicate line or selection     Ctrl-D                    Duplicates the current line or selection.
-							  If the selection spans more than one line,
-							  this duplicates the lines containing selections.
-							  If the selection spans only a single line, then
-							  only the selection is duplicated.
-							  If nothing is selected, then the current line
-							  is duplicated.
-
+							  If nothing is selected, this duplicates the
+							  current line.
+							  If the selection spans more than one line, this
+							  duplicates the whole block of lines on which the
+							  selection spans.
+							  If the selection is a portion of a single line,
+							  this duplicates the selected portion.
+							  
 Transpose current line                                    Transposes the current line with the previous one.
 
 Scroll to current line          Ctrl-Shift-L              Scrolls the current line into the centre of the
