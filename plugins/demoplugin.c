@@ -90,16 +90,6 @@ static gboolean on_editor_notify(GObject *object, GeanyEditor *editor,
 }
 
 
-static PluginCallback demo_callbacks[] =
-{
-	/* Set 'after' (third field) to TRUE to run the callback @a after the default handler.
-	 * If 'after' is FALSE, the callback is run @a before the default handler, so the plugin
-	 * can prevent Geany from processing the notification. Use this with care. */
-	{ "editor-notify", (GCallback) &on_editor_notify, FALSE, NULL },
-	{ NULL, NULL, FALSE, NULL }
-};
-
-
 /* Callback when the menu item is clicked. */
 static void
 item_activate(GtkMenuItem *menuitem, gpointer gdata)
@@ -127,6 +117,9 @@ static gboolean demo_init(GeanyPlugin *plugin, gpointer data)
 {
 	GtkWidget *demo_item;
 	GeanyData *geany_data = plugin->geany_data;
+
+	plugin_signal_connect(plugin, NULL, "editor-notify", TRUE,
+		G_CALLBACK(on_editor_notify), NULL);
 
 	/* Add an item to the Tools menu */
 	demo_item = gtk_menu_item_new_with_mnemonic(_("_Demo Plugin"));
@@ -214,20 +207,6 @@ static void demo_cleanup(GeanyPlugin *plugin, gpointer data)
 	g_free(welcome_text);
 }
 
-void geany_load_module(GeanyPlugin *plugin)
-{
-	/* main_locale_init() must be called for your package before any localization can be done */
-	main_locale_init(LOCALEDIR, GETTEXT_PACKAGE);
-	plugin->info->name = _("Demo");
-	plugin->info->description = _("Example plugin.");
-	plugin->info->version = "0.4";
-	plugin->info->author =  _("The Geany developer team");
 
-	plugin->funcs->init = demo_init;
-	plugin->funcs->configure = demo_configure;
-	plugin->funcs->help = NULL; /* This demo has no help but it is an option */
-	plugin->funcs->cleanup = demo_cleanup;
-	plugin->funcs->callbacks = demo_callbacks;
-
-	GEANY_PLUGIN_REGISTER(plugin, 225);
-}
+GEANY_REGISTER_PLUGIN(225, "Demo", "Example plugin.", "0.4", _("The Geany developer team"),
+	demo_init, demo_cleanup, demo_configure, NULL)
