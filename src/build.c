@@ -518,6 +518,33 @@ void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup gr
 }
 
 
+/**
+ * Get the current source for the given group and command.
+ *
+ * @param grp The group containing the command.
+ * @param cmd The index of the command in the group.
+ * @param src A pointer pointing to a location to store the current source
+ * in, or @c NULL if no result is needed.
+ *
+ * @return @c TRUE if the current source could be found, @c FALSE otherwise.
+ */
+gboolean build_get_current_source(GeanyBuildGroup grp, guint cmd, GeanyBuildSource *src)
+{
+	GeanyBuildSource source;
+
+	g_return_val_if_fail(grp < GEANY_GBG_COUNT, FALSE);
+	g_return_val_if_fail(cmd < build_groups_count[grp], FALSE);
+
+	if (get_build_cmd(NULL, grp, cmd, NULL, &source) == NULL)
+		return FALSE;
+
+	if (src != NULL)
+		*src = source;
+
+	return TRUE;
+}
+
+
 /** Get the string for the menu item field.
  *
  * Get the current highest priority command specified by @a grp and @a cmd.  This is the one

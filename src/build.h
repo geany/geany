@@ -63,6 +63,8 @@ typedef enum GeanyBuildCmdEntries
 
 void build_activate_menu_item(const GeanyBuildGroup grp, const guint cmd);
 
+gboolean build_get_current_source(GeanyBuildGroup grp, guint cmd, GeanyBuildSource *src);
+
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
                                          const GeanyBuildCmdEntries field);
 
