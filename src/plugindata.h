@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 229
+#define GEANY_API_VERSION 230
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -338,6 +338,68 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 #define GEANY_PLUGIN_REGISTER_FULL(plugin, min_api_version, pdata, free_func) \
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
+
+
+#ifndef GEANY_PRIVATE
+
+#if defined(LOCALEDIR) && defined(GETTEXT_PACKAGE)
+# define GEANY_PLUGIN_LOCALE_INIT() main_locale_init(LOCALEDIR, GETTEXT_PACKAGE)
+#else
+# define GEANY_PLUGIN_LOCALE_INIT() do {} while (0)
+#endif
+
+/**
+ * Convenience macro to minimize plugin boilerplate.
+ *
+ * This is an example of a minimal plugin using this macro:
+ *
+ * @code
+ * #include <geanyplugin.h>
+ *
+ * static gboolean init(GeanyPlugin *plugin, gpointer pdata)
+ * {
+ *   g_debug(_("plugin activated"));
+ *   return TRUE;
+ * }
+ *
+ * static void cleanup(GeanyPlugin *plugin, gpointer pdata)
+ * {
+ *   g_debug(_("plugin de-activated"));
+ * }
+ *
+ * GEANY_REGISTER_PLUGIN(230, "The Plugin", "A plugin", "0.1", "Someone",
+ *   init, cleanup, NULL, NULL)
+ * @endcode
+ *
+ * @param min_api Minimum API version required.
+ * @param name_ The plugin's name.
+ * @param description_ A description of the plugin.
+ * @param version_ The plugin version.
+ * @param author_ The plugin's author(s).
+ * @param init_func The plugin's initialization function pointer (required).
+ * @param cleanup_func The plugin's cleanup function pointer (required).
+ * @param config_func The plugin's configure function pointer or @c NULL.
+ * @param help_func The plugin's help function pointer or @c NULL.
+ *
+ * @since 1.29 (API 230)
+ */
+#define GEANY_REGISTER_PLUGIN(min_api, name_, description_, version_, author_, \
+	init_func, cleanup_func, config_func, help_func) \
+	G_MODULE_EXPORT \
+	void geany_load_module(GeanyPlugin *plugin) \
+	{ \
+		GEANY_PLUGIN_LOCALE_INIT(); \
+		plugin->info->name = _(name_); \
+		plugin->info->description = _(description_); \
+		plugin->info->version = version_; \
+		plugin->info->author = author_; \
+		plugin->funcs->init = init_func; \
+		plugin->funcs->cleanup = cleanup_func; \
+		plugin->funcs->configure = config_func; \
+		plugin->funcs->help = help_func; \
+		GEANY_PLUGIN_REGISTER(plugin, min_api); \
+	}
+#endif // !GEANY_PRIVATE
 
 /** Return values for GeanyProxyHooks::probe()
  *
