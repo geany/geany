@@ -171,13 +171,7 @@ static void demoproxy_unload(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer l
 /* Called by Geany to initialize the plugin. */
 static gboolean demoproxy_init(GeanyPlugin *plugin, gpointer pdata)
 {
-	const gchar *extensions[] = { "ini", "px", NULL };
-
-	plugin->proxy_funcs->probe  = demoproxy_probe;
-	plugin->proxy_funcs->load   = demoproxy_load;
-	plugin->proxy_funcs->unload = demoproxy_unload;
-
-	return geany_plugin_register_proxy(plugin, extensions);
+	return TRUE;
 }
 
 
@@ -187,16 +181,7 @@ static void demoproxy_cleanup(GeanyPlugin *plugin, gpointer data)
 }
 
 
-G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
-{
-	plugin->info->name = _("Demo Proxy");
-	plugin->info->description = _("Example Proxy.");
-	plugin->info->version = "0.1";
-	plugin->info->author = _("The Geany developer team");
-
-	plugin->funcs->init = demoproxy_init;
-	plugin->funcs->cleanup = demoproxy_cleanup;
-
-	GEANY_PLUGIN_REGISTER(plugin, 225);
-}
+GEANY_REGISTER_PROXY_PLUGIN(225,
+	"Demo Proxy", "Example Proxy.", "0.1", _("The Geany developer team"),
+	demoproxy_init, demoproxy_cleanup, NULL, NULL,
+	{ "ini", "px", NULL }, demoproxy_probe, demoproxy_load, demoproxy_unload)
