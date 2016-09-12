@@ -68,9 +68,6 @@ gboolean build_get_current_source(GeanyBuildGroup grp, guint cmd, GeanyBuildSour
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd, 
                                          const GeanyBuildCmdEntries field);
 
-void build_set_current_menu_item(GeanyBuildGroup grp, guint cmd,
-	GeanyBuildCmdEntries field, const gchar *value);
-
 void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp, const gint cmd);
 
 const gchar *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp,

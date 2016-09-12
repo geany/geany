@@ -576,35 +576,6 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
 
 
 /**
- * Set the string for the build command field.
- *
- * Set the current highest priority command specified by @a grp and @a cmd.
- * This is the command that will be used if activated.
- *
- * @param grp The group of the specified menu item.
- * @param cmd The index of the command within the group.
- * @param field  The field to set.
- *
- * @since 1.29 (API 230)
- */
-void build_set_current_menu_item(GeanyBuildGroup grp, guint cmd,
-	GeanyBuildCmdEntries field, const gchar *value)
-{
-	GeanyBuildSource src;
-
-	g_return_if_fail(grp < GEANY_GBG_COUNT);
-	g_return_if_fail(field < GEANY_BC_CMDENTRIES_COUNT);
-	g_return_if_fail(cmd < build_groups_count[grp]);
-	g_return_if_fail(value != NULL);
-
-	if (get_build_cmd(NULL, grp, cmd, NULL, &src) == NULL)
-		return;
-
-	build_set_menu_item(src, grp, cmd, field, value);
-}
-
-
-/**
  * Get the string for the build command field.
  *
  * Get the specified field of the command speicifed by @a src, @a grp and @a cmd.
