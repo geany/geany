@@ -422,11 +422,10 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 	extensions, probe_func, load_func, unload_func) \
 	static gboolean geany_plugin_real_init_(GeanyPlugin *plugin, gpointer pdata) \
 	{ \
-		static const gchar *extensions_[] = extensions; \
 		plugin->proxy_funcs->probe = probe_func; \
 		plugin->proxy_funcs->load = load_func; \
 		plugin->proxy_funcs->unload = unload_func; \
-		if (geany_plugin_register_proxy(plugin, extensions_)) \
+		if (geany_plugin_register_proxy(plugin, extensions)) \
 			return init_func(plugin, pdata); \
 		return FALSE; \
 	} \

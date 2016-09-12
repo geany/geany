@@ -181,7 +181,10 @@ static void demoproxy_cleanup(GeanyPlugin *plugin, gpointer data)
 }
 
 
+static const gchar *extensions[] = { "ini", "px", NULL};
+
+
 GEANY_REGISTER_PROXY_PLUGIN(225,
 	"Demo Proxy", "Example Proxy.", "0.1", _("The Geany developer team"),
 	demoproxy_init, demoproxy_cleanup, NULL, NULL,
-	{ "ini", "px", NULL }, demoproxy_probe, demoproxy_load, demoproxy_unload)
+	extensions, demoproxy_probe, demoproxy_load, demoproxy_unload)
