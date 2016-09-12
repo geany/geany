@@ -568,10 +568,10 @@ const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint 
 	g_return_val_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT, NULL);
 	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
 
-	if (get_build_cmd(NULL, grp, cmd, NULL, &src) == NULL)
-		return NULL;
+	if (build_get_current_source(grp, cmd, &src))
+		return build_get_menu_item(src, grp, cmd, fld);
 
-	return build_get_menu_item(src, grp, cmd, fld);
+	return NULL;
 }
 
 
