@@ -527,6 +527,8 @@ void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup gr
  * in, or @c NULL if no result is needed.
  *
  * @return @c TRUE if the current source could be found, @c FALSE otherwise.
+ *
+ * @since 1.29 (API 230)
  */
 gboolean build_get_current_source(GeanyBuildGroup grp, guint cmd, GeanyBuildSource *src)
 {
