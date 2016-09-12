@@ -399,6 +399,40 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 		plugin->funcs->help = help_func; \
 		GEANY_PLUGIN_REGISTER(plugin, min_api); \
 	}
+
+/**
+ * Convenience macro to minimize proxy plugin boilerplate.
+ *
+ * @param min_api Minimum API version required.
+ * @param name_ The plugin's name.
+ * @param description_ A description of the plugin.
+ * @param version_ The plugin version.
+ * @param author_ the plugin's author(s).
+ * @param init_func The plugin's initialization function pointer (required).
+ * @param cleanup_func The plugin's cleanup function pointer (required).
+ * @param config_func The plugin's configure function pointer or @c NULL.
+ * @param help_func The plugin's help function pointer or @c NULL.
+ * @param extensions A null-terminated initializer of supported file extensions.
+ * @param probe_func The proxy plugin's probe function or @c NULL.
+ * @param load_func The proxy plugin's load function pointer (required).
+ * @param unload_func The proxy plugin's unload function pointer (required).
+ */
+#define GEANY_REGISTER_PROXY_PLUGIN(min_api, name_, description_, version_, author_, \
+	init_func, cleanup_func, config_func, help_func, \
+	extensions, probe_func, load_func, unload_func) \
+	static gboolean geany_plugin_real_init_(GeanyPlugin *plugin, gpointer pdata) \
+	{ \
+		static const gchar *extensions_[] = extensions; \
+		plugin->proxy_funcs->probe = probe_func; \
+		plugin->proxy_funcs->load = load_func; \
+		plugin->proxy_funcs->unload = unload_func; \
+		if (geany_plugin_register_proxy(plugin, extensions_)) \
+			return init_func(plugin, pdata); \
+		return FALSE; \
+	} \
+	GEANY_REGISTER_PLUGIN(min_api, name_, description_, version_, author_, \
+		geany_plugin_real_init_, cleanup_func, config_func, help_func)
+
 #endif // !GEANY_PRIVATE
 
 /** Return values for GeanyProxyHooks::probe()
