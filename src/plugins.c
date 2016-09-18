@@ -2037,11 +2037,16 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
  * for more flexibility. Plugins using the previous semantics should update their array of
  * extensions to use patterns such as `*.plugin` instead of just `plugin` to get the same results.
  *
+ * @note Since Geany 1.29 (API 230) the @a patterns parameter can be @c NULL. If it is, then
+ * the proxy plugin's probe function will be called for every file in the plugin search dirs.
+ * Proxy plugins passing @c NULL should be sure not to spend too much time probing since they
+ * will get called against a potentially large number of files.
+ *
  * @param plugin The pointer to the plugin's GeanyPlugin instance
- * @param patterns A @c NULL-terminated string array of glob-style patterns.
+ * @param patterns A @c NULL-terminated string array of glob-style patterns or @c NULL for all files.
  * @return @c TRUE if the proxy was successfully registered, otherwise @c FALSE
  *
- * @since 1.26 (API 226)
+ * @since 1.26 (API 226) (see notes)
  *
  * @see proxy for detailed documentation and an example.
  * @see Glib's <a href="https://developer.gnome.org/glib/stable/glib-Glob-style-pattern-matching.html">Glob-style
@@ -2054,10 +2059,10 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **patterns
 	const gchar **pattern;
 	PluginProxy *proxy;
 	GList *node;
+	static const gchar *all_patterns[] = { "*", NULL };
 
 	g_return_val_if_fail(plugin != NULL, FALSE);
-	g_return_val_if_fail(patterns != NULL, FALSE);
-	g_return_val_if_fail(*patterns != NULL, FALSE);
+	g_return_val_if_fail(patterns == NULL || *patterns != NULL, FALSE);
 	g_return_val_if_fail(plugin->proxy_funcs->load != NULL, FALSE);
 	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
 
@@ -2069,6 +2074,9 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **patterns
 		proxy = node->data;
 		g_return_val_if_fail(p != proxy->plugin, FALSE);
 	}
+
+	if (patterns == NULL)
+		patterns = all_patterns;
 
 	foreach_strv(pattern, patterns)
 	{
