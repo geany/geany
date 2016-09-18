@@ -13,7 +13,8 @@ gtkv="3"
 run_pi="y"
 
 UNX_UTILS_URL="http://unxutils.sourceforge.net/UnxUpdates.zip"
-GREP_URL="https://download.geany.org/contrib/grep-2.23.tar.xz"
+GREP_URL="https://download.geany.org/contrib/grep-2.25.tar.xz"
+GREP_PATCH_WINDOWS_RECURSE_URL="https://download.geany.org/contrib/grep-2.25-windows_recurse.patch"
 
 package_urls=""
 gtk2_dependency_pkgs=""
@@ -207,13 +208,19 @@ cleanup_unnecessary_files() {
 
 download_and_compile_grep() {
 	grep_archive="grep_source.tar.xz"
+	windows_recurse_patch="windows_recurse.patch"
 	grep_build_dir="grep_build"
 	grep_build_log="grep_build.log"
 	echo "Download and compile 'grep' (see ${grep_build_dir}/${grep_build_log} for details)"
 	mkdir ${grep_build_dir}
 	cd ${grep_build_dir}
 	wget --no-verbose -O ${grep_archive} ${GREP_URL}
+	wget --no-verbose -O ${windows_recurse_patch} ${GREP_PATCH_WINDOWS_RECURSE_URL}
 	tar xf ${grep_archive}
+	# patch grep sources to fix "recursive directory loop warnings" and recusrive search
+	# see https://github.com/geany/geany/issues/1229
+	(cd grep-2* && patch --strip=1 < ../${windows_recurse_patch})
+	# build grep
 	grep-2*/configure > ${grep_build_log} 2>&1 || exit 1
 	make >> ${grep_build_log} 2>&1 || exit 1
 	strip src/grep.exe
@@ -244,7 +251,9 @@ sort.exe is extracted from the ZIP archive at
 ${UNX_UTILS_URL}.
 
 grep.exe is self-compiled from the sources available at
-${GREP_URL}.
+${GREP_URL} with the patch available at
+${GREP_PATCH_WINDOWS_RECURSE_URL}
+to fix recursive searching.
 Used command to compile: ./configure && make
 
 Other dependencies are provided by the MSYS2 project
