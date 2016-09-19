@@ -188,7 +188,7 @@ msgid ""
 "disable it if you do not need it"
 msgstr ""
 "Charger ou non l'émulateur virtuel de terminal (VTE) au lancement, "
-"désactivez le si vous n'en avez pas besoin"
+"désactivez-le si vous n'en avez pas besoin"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -715,7 +715,7 @@ msgid ""
 "where the compiler found a warning or an error"
 msgstr ""
 "Utilise ou non les indicateurs (un soulignage) pour mettre en avant les "
-"lignes ou le compilateur a trouvé un avertissement ou une erreur"
+"lignes où le compilateur a trouvé un avertissement ou une erreur"
 
 #: ../data/geany.glade.h:141
 msgid "Newline strips trailing spaces"
@@ -854,7 +854,7 @@ msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
-"Entrez une courte séquence de caractères prédéfinie et complétez la pour "
+"Entrez une courte séquence de caractères prédéfinie et complétez-la pour "
 "obtenir une chaîne plus complexe en utilisant une seule touche"
 
 #: ../data/geany.glade.h:169
@@ -939,7 +939,7 @@ msgid ""
 msgstr ""
 "Délai minimum (en millisecondes) entre deux mises à jour automatiques de la "
 "liste de symboles. Un délai trop court peut avoir un impact sur les "
-"performances, en particulier avec de gros fichiers. Un délai de 0 désactives "
+"performances, en particulier avec de gros fichiers. Un délai de 0 désactive "
 "les mises à jour automatiques."
 
 #: ../data/geany.glade.h:185
@@ -1198,7 +1198,7 @@ msgstr "Encodage par défaut (nouveaux fichiers) :"
 #: ../data/geany.glade.h:238
 msgid "Sets the default encoding for newly created files"
 msgstr ""
-"Définit le jeu de caractères utilisés par défaut lors de la création de "
+"Définit le jeu de caractères utilisé par défaut lors de la création de "
 "nouveaux fichiers"
 
 #: ../data/geany.glade.h:239
@@ -1247,7 +1247,7 @@ msgid ""
 "mixed line endings in the same file"
 msgstr ""
 "S'assurer de toujours convertir les fins de lignes avant un enregistrement "
-"pour éviter les fins de lignes mixtes dans un même fichier"
+"pour éviter les fins de ligne mixtes dans un même fichier"
 
 #: ../data/geany.glade.h:248
 msgid "Strip trailing spaces and tabs"
@@ -1471,7 +1471,7 @@ msgstr "Afficher les numéros de ligne"
 
 #: ../data/geany.glade.h:296 ../src/printing.c:241
 msgid "Add line numbers to the printed page"
-msgstr "Ajouter les numéros de lignes à la page imprimée"
+msgstr "Ajouter les numéros de ligne à la page imprimée"
 
 #: ../data/geany.glade.h:297 ../src/printing.c:244
 msgid "Print page numbers"
@@ -1913,7 +1913,7 @@ msgstr "Afficher les e_spaces"
 
 #: ../data/geany.glade.h:397
 msgid "Show Line _Endings"
-msgstr "Afficher les fins d_e lignes"
+msgstr "Afficher les fins d_e ligne"
 
 #: ../data/geany.glade.h:398
 msgid "Show Indentation _Guides"
@@ -2021,7 +2021,7 @@ msgstr "Définir l'_encodage"
 
 #: ../data/geany.glade.h:424
 msgid "Set Line E_ndings"
-msgstr "Définir les fi_ns de lignes"
+msgstr "Définir les fi_ns de ligne"
 
 #: ../data/geany.glade.h:425
 msgid "Convert and Set to _CR/LF (Windows)"
@@ -2202,7 +2202,7 @@ msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr ""
-"Liste de motifs de fichier, séparés par une espace, à utiliser dans le "
+"Liste de motifs de fichier, séparés par un espace, à utiliser dans le "
 "dialogue de recherche dans les fichiers (par ex. *.c *.h)"
 
 #: ../data/geany.glade.h:469 ../src/project.c:209
@@ -2360,7 +2360,7 @@ msgstr "Contributeurs"
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
-"Quelques uns des principaux contributeurs (pour une liste plus détaillé, "
+"Quelques uns des principaux contributeurs (pour une liste plus détaillée, "
 "voir le fichier %s) :"
 
 #: ../src/about.c:407
@@ -2664,7 +2664,7 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"Définit explicitement un encodage pour le fichier, si celui-ci ne serait pas "
+"Définit explicitement un encodage pour le fichier, si celui-ci n'était pas "
 "détecté. Cela est utile lorsque vous savez que l'encodage d'un fichier ne "
 "peut pas être détecté correctement par Geany.\n"
 "Notez que si vous choisissez plusieurs fichiers, ils seront tous ouverts "
@@ -2684,7 +2684,7 @@ msgid ""
 msgstr ""
 "Définit explicitement un type de fichier pour ce fichier, s'il n'est pas "
 "détecté par l'extension du nom de fichier.\n"
-"Notez que si vous choisissez plusieurs fichier, ils seront tous ouverts avec "
+"Notez que si vous choisissez plusieurs fichiers, ils seront tous ouverts avec "
 "le type de fichier choisi."
 
 #: ../src/dialogs.c:377 ../src/dialogs.c:467
@@ -3501,11 +3501,11 @@ msgstr "Diminuer l'indentation"
 
 #: ../src/keybindings.c:469
 msgid "Increase indent by one space"
-msgstr "Augmenter l'indentation d'une espace"
+msgstr "Augmenter l'indentation d'un espace"
 
 #: ../src/keybindings.c:471
 msgid "Decrease indent by one space"
-msgstr "Diminuer l'indentation d'une espace"
+msgstr "Diminuer l'indentation d'un espace"
 
 #: ../src/keybindings.c:475
 msgid "Send to Custom Command 1"
@@ -3828,7 +3828,7 @@ msgstr "Les raccourcis clavier suivants peuvent être configurés :"
 #: ../src/keyfile.c:1027
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
-"Écrivez ici ce que vous souhaitez, utilisez cela comme comme un tableau de "
+"Écrivez ici ce que vous souhaitez, utilisez cela comme un tableau de "
 "notes"
 
 #: ../src/keyfile.c:1254
@@ -4412,7 +4412,7 @@ msgid ""
 msgstr ""
 "Tester la correspondance des expressions régulières sur tout le tampon d'un "
 "coup plutôt que ligne à ligne, ce qui permet aux correspondances de "
-"recouvrir plusieurs lignes.  Dans ce mode les caractères de fin de ligne "
+"recouvrir plusieurs lignes.  Dans ce mode, les caractères de fin de ligne "
 "peuvent être capturés comme n'importe quel caractère."
 
 #: ../src/search.c:341
@@ -4517,7 +4517,7 @@ msgstr ""
 "Tous : recherche dans tous les fichiers\n"
 "Projet : utilise les motifs de fichier définis dans les propriétés du "
 "projet\n"
-"Personnalisé : utilise les motifs de fichiers spécifiés manuellement"
+"Personnalisé : utilise les motifs de fichier spécifiés manuellement"
 
 #: ../src/search.c:896
 msgid "Fi_les:"
@@ -4565,8 +4565,8 @@ msgstr "Autres options à passer à grep"
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "%d correspondances trouvées pour « %s »."
-msgstr[1] "%d correspondance trouvée pour « %s »."
+msgstr[0] "%d correspondance trouvée pour « %s »."
+msgstr[1] "%d correspondances trouvées pour « %s »."
 
 #: ../src/search.c:1425
 #, c-format
@@ -4632,7 +4632,7 @@ msgid ""
 msgstr ""
 "Geany a essayé d'accéder au socket de domaine Unix d'une autre instance d'un "
 "autre utilisateur.\n"
-"Ceci est une erreur fatale et Geany va maintenant fermer."
+"Ceci est une erreur fatale et Geany va maintenant se fermer."
 
 #: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
 msgid "Text ended before matching quote was found"
@@ -4984,7 +4984,7 @@ msgstr "Extension de fichier inconnue pour « %s ».\n"
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
-"Échec à la création du fichier de tags, probablement par ce qu'aucun symbole "
+"Échec à la création du fichier de tags, probablement parce qu'aucun symbole "
 "n'a été trouvé.\n"
 
 #: ../src/symbols.c:1619
@@ -5239,7 +5239,7 @@ msgid ""
 "The executed custom command returned an error. Your selection was not "
 "changed. Error message: %s"
 msgstr ""
-"La commande personnalisée a retournée une erreur. Votre sélection n'a pas "
+"La commande personnalisée a retourné une erreur. Votre sélection n'a pas "
 "été modifiée. Message d'erreur : %s"
 
 #: ../src/tools.c:233
@@ -5487,7 +5487,7 @@ msgid ""
 "another one."
 msgstr ""
 "Impossible d'appeler la commande configurée pour le navigateur. Corrigez-la "
-"ou entrez en une différente."
+"ou entrez-en une différente."
 
 #: ../src/utils.c:375
 msgid "Windows (CRLF)"
@@ -5875,7 +5875,7 @@ msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
 msgstr ""
-"Filtre vos fichiers avec vos jokers habituels. Séparez chaque motif par une "
+"Filtre vos fichiers avec vos jokers habituels. Séparez chaque motif par un "
 "espace."
 
 #: ../plugins/filebrowser.c:1164
@@ -6363,7 +6363,7 @@ msgstr "En haut et en bas"
 
 #~ msgid "Set programs and options for compiling and viewing (La)TeX files."
 #~ msgstr ""
-#~ "Définir les programmes et options utilisées pour compiler et visionner "
+#~ "Définir les programmes et options utilisés pour compiler et visionner "
 #~ "les fichiers (La)Tex."
 
 #~ msgid "DVI creation:"
