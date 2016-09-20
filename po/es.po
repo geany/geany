@@ -3571,7 +3571,7 @@ msgstr "Encontrar uso"
 
 #: ../src/keybindings.c:549
 msgid "Find Document Usage"
-msgstr "Encontrar uso del documento"
+msgstr "Encontrar uso en el documento"
 
 #: ../src/keybindings.c:556 ../src/toolbar.c:70
 msgid "Navigate back a location"
