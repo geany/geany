@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 230
+#define GEANY_API_VERSION 231
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -284,6 +284,85 @@ void geany_load_module(GeanyPlugin *plugin);
 
 #endif
 
+/**
+ * Type of function called when the plugin is activated.
+ *
+ * This happens either when the user activates it from the Plugin Manager
+ * dialog or when Geany starts, if the plugin was activated at last run.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @returns `TRUE` if the plugin loaded successfully, `FALSE` otherwise.
+ *
+ * @since Geany 1.29 (API 231)
+ * @see GeanyPluginCleanupFunc
+ */
+typedef gboolean (*GeanyPluginInitFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Type of function called when the plugin should create a configuration GUI.
+ *
+ * This happens when the user activates Geany's "Plugin Preferences" dialog
+ * in order to configure plugins. The plugin should create its preferences
+ * GUI (if not already created) and return the top-most GtkWidget. Usually
+ * this will be some kind of GtkBox or GtkNotebook or other container, and
+ * at present it will be added to a GtkNotebook as a page along with other
+ * plugins. If you intend to recycle to same GUI each call, remember to
+ * hold a GObject reference on the widget so it is not destroyed when
+ * the "Plugin Preferences" dialog is.
+ *
+ * The @a dialog parameter is provided so plugins can connect to its
+ * "response" signal. Typically a plugin will handle `GTK_RESPONSE_OK`
+ * (the dialog was accepted and dismissed), `GTK_RESPONSE_ACCEPT` (the
+ * "Apply" button was clicked but the dialog was not dismissed), or any
+ * other response meaning the dialog was cancelled without accepting any
+ * changes.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param dialog The top-level window/dialog beneath which the provided
+ * GUI will be packed into.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @returns A GtkWidget providing the GUI needed to configure the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef GtkWidget* (*GeanyPluginConfigureFunc) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
+
+/**
+ * Type of function called when the plugin should show its help documentation.
+ *
+ * Commonly, a plugin will ship with some kind of documentation viewable
+ * in a web browser. To enable this, the utils_open_browser function is
+ * provided to plugins. Alternatively, a plugin could load its README or
+ * other documentation file(s) directly into Geany using document_open_file.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef void (*GeanyPluginHelpFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Type of function called when the plugin is de-activated.
+ *
+ * This either occurs when the user de-activates the plugin using the
+ * Plugin Manager dialog or when Geany itself is closing. Plugins should
+ * perform any required cleanup or restoration at this point.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef void (*GeanyPluginCleanupFunc) (GeanyPlugin *plugin, gpointer pdata);
+
 /** Callback functions that need to be implemented for every plugin.
  *
  * These callbacks should be registered by the plugin within Geany's call to
@@ -301,13 +380,13 @@ struct GeanyPluginFuncs
 	/** Array of plugin-provided signal handlers @see PluginCallback */
 	PluginCallback *callbacks;
 	/** Called to initialize the plugin, when the user activates it (must not be @c NULL) */
-	gboolean    (*init)      (GeanyPlugin *plugin, gpointer pdata);
-	/** plugins configure dialog, optional (can be @c NULL) */
-	GtkWidget*  (*configure) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
+	GeanyPluginInitFunc init;
+	/** Plugin's configure dialog, optional (can be @c NULL) */
+	GeanyPluginConfigureFunc configure;
 	/** Called when the plugin should show some help, optional (can be @c NULL) */
-	void        (*help)      (GeanyPlugin *plugin, gpointer pdata);
+	GeanyPluginHelpFunc help;
 	/** Called when the plugin is disabled or when Geany exits (must not be @c NULL) */
-	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
+	GeanyPluginCleanupFunc cleanup;
 };
 
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
