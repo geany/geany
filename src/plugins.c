@@ -369,19 +369,20 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_a
 		return FALSE;
 
 	/* Only init and cleanup callbacks are truly mandatory. */
-	if (! cbs->init || ! cbs->cleanup)
-	{
-		gchar *name = g_path_get_basename(p->filename);
-		geany_debug("Plugin '%s' has no %s function - ignoring plugin!", name,
-		            cbs->init ? "cleanup" : "init");
-		g_free(name);
-	}
-	else
+	if ((cbs->init && cbs->cleanup) ||
+	    (cbs->init_swapped && cbs->cleanup_swapped))
 	{
 		/* Yes, name is checked again later on, however we want return FALSE here
 		 * to signal the error back to the plugin (but we don't print the message twice) */
 		if (! EMPTY(p->info.name))
 			p->flags = LOADED_OK;
+	}
+	else
+	{
+		gchar *name = g_path_get_basename(p->filename);
+		geany_debug("Plugin '%s' has no %s function - ignoring plugin!", name,
+		            (cbs->init || cbs->init_swapped) ? "cleanup" : "init");
+		g_free(name);
 	}
 
 	/* If it ever becomes necessary we can save the api version in Plugin
@@ -579,7 +580,10 @@ plugin_load(Plugin *plugin)
 	}
 	else
 	{
-		init_ok = plugin->cbs.init(&plugin->public, plugin->cb_data);
+		if (plugin->cbs.init_swapped)
+			init_ok = plugin->cbs.init_swapped(plugin->cb_data, &plugin->public);
+		else
+			init_ok = plugin->cbs.init(&plugin->public, plugin->cb_data);
 	}
 
 	if (! init_ok)
@@ -895,7 +899,10 @@ plugin_cleanup(Plugin *plugin)
 	GtkWidget *widget;
 
 	/* With geany_register_plugin cleanup is mandatory */
-	plugin->cbs.cleanup(&plugin->public, plugin->cb_data);
+	if (plugin->cbs.cleanup_swapped)
+		plugin->cbs.cleanup_swapped(plugin->cb_data, &plugin->public);
+	else
+		plugin->cbs.cleanup(&plugin->public, plugin->cb_data);
 
 	remove_doc_data(plugin);
 	remove_callbacks(plugin);
@@ -1374,6 +1381,14 @@ void plugins_finalize(void)
 }
 
 
+static gboolean plugin_has_configure(Plugin *plugin)
+{
+	return (plugin->configure_single != NULL ||
+			plugin->cbs.configure != NULL ||
+			plugin->cbs.configure_swapped != NULL);
+}
+
+
 /* Check whether there are any plugins loaded which provide a configure symbol */
 gboolean plugins_have_preferences(void)
 {
@@ -1385,7 +1400,7 @@ gboolean plugins_have_preferences(void)
 	foreach_list(item, active_plugin_list)
 	{
 		Plugin *plugin = item->data;
-		if (plugin->configure_single != NULL || plugin->cbs.configure != NULL)
+		if (plugin_has_configure(plugin))
 			return TRUE;
 	}
 
@@ -1433,8 +1448,8 @@ static void pm_update_buttons(Plugin *p)
 
 	if (p != NULL && is_active_plugin(p))
 	{
-		has_configure = p->cbs.configure || p->configure_single;
-		has_help = p->cbs.help != NULL;
+		has_configure = plugin_has_configure(p);
+		has_help = p->cbs.help != NULL || p->cbs.help_swapped != NULL;
 		has_keybindings = p->key_group && p->key_group->plugin_key_count;
 	}
 
@@ -1865,7 +1880,12 @@ static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointe
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP)
-				p->cbs.help(&p->public, p->cb_data);
+			{
+				if (p->cbs.help_swapped)
+					p->cbs.help_swapped(p->cb_data, &p->public);
+				else
+					p->cbs.help(&p->public, p->cb_data);
+			}
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
 				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}

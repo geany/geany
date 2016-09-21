@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 231
+#define GEANY_API_VERSION 232
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -302,6 +302,15 @@ void geany_load_module(GeanyPlugin *plugin);
 typedef gboolean (*GeanyPluginInitFunc) (GeanyPlugin *plugin, gpointer pdata);
 
 /**
+ * Like @ref GeanyPluginInitFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginInitFunc
+ * @see GeanyPluginSwappedCleanup
+ */
+typedef gboolean (*GeanyPluginSwappedInitFunc) (gpointer pdata, GeanyPlugin *plugin);
+
+/**
  * Type of function called when the plugin should create a configuration GUI.
  *
  * This happens when the user activates Geany's "Plugin Preferences" dialog
@@ -333,6 +342,14 @@ typedef gboolean (*GeanyPluginInitFunc) (GeanyPlugin *plugin, gpointer pdata);
 typedef GtkWidget* (*GeanyPluginConfigureFunc) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
 
 /**
+ * Like @ref GeanyPluginConfigureFunc but with argument 1 and 3 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginConfigureFunc
+ */
+typedef GtkWidget* (*GeanyPluginSwappedConfigureFunc) (gpointer pdata, GtkDialog *dialog, GeanyPlugin *plugin);
+
+/**
  * Type of function called when the plugin should show its help documentation.
  *
  * Commonly, a plugin will ship with some kind of documentation viewable
@@ -349,6 +366,14 @@ typedef GtkWidget* (*GeanyPluginConfigureFunc) (GeanyPlugin *plugin, GtkDialog *
 typedef void (*GeanyPluginHelpFunc) (GeanyPlugin *plugin, gpointer pdata);
 
 /**
+ * Like @ref GeanyPluginHelpFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginHelpFunc
+ */
+typedef void (*GeanyPluginSwappedHelpFunc) (gpointer pdata, GeanyPlugin *plugin);
+
+/**
  * Type of function called when the plugin is de-activated.
  *
  * This either occurs when the user de-activates the plugin using the
@@ -362,6 +387,14 @@ typedef void (*GeanyPluginHelpFunc) (GeanyPlugin *plugin, gpointer pdata);
  * @since Geany 1.29 (API 231)
  */
 typedef void (*GeanyPluginCleanupFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Like @ref GeanyPluginCleanupFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginCleanupFunc
+ */
+typedef void (*GeanyPluginSwappedCleanupFunc) (gpointer pdata, GeanyPlugin *plugin);
 
 /** Callback functions that need to be implemented for every plugin.
  *
@@ -387,6 +420,34 @@ struct GeanyPluginFuncs
 	GeanyPluginHelpFunc help;
 	/** Called when the plugin is disabled or when Geany exits (must not be @c NULL) */
 	GeanyPluginCleanupFunc cleanup;
+	/**
+	 * Like GeanyPluginFuncs::init but with parameter 1 and 2 swapped. If `NULL`
+	 * then GeanyPluginFuncs::init will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedInitFunc init_swapped;
+	/**
+	 * Like GeanyPluginFuncs::configure but with parameter 1 and 3 swapped.
+	 * If `NULL` then GeanyPluginFuncs::configure will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedConfigureFunc configure_swapped;
+	/**
+	 * Like GeanyPluginFuncs::help but with parameter 1 and 2 swapped. If `NULL`
+	 * then GeanyPluginFuncs::help will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedHelpFunc help_swapped;
+	/**
+	 * Like GeanyPluginFuncs::cleanup but with parameter 1 and 2 swapped. If
+	 * `NULL` then GeanyPluginFuncs::cleanup will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedCleanupFunc cleanup_swapped;
 };
 
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,

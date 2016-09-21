@@ -365,12 +365,15 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 {
 	GtkWidget *page = NULL;	/* some plugins don't have prefs */
 
-	if (p->cbs.configure)
+	if (p->cbs.configure || p->cbs.configure_swapped)
 	{
-		page = p->cbs.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
+		if (p->cbs.configure_swapped)
+			page = p->cbs.configure_swapped(p->cb_data, GTK_DIALOG(dialog), &p->public);
+		else
+			page = p->cbs.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
 		if (! GTK_IS_WIDGET(page))
 		{
-			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
+			geany_debug("Invalid widget returned from \"%s\" plugin's configure function!",
 				p->info.name);
 			return NULL;
 		}
@@ -467,7 +470,7 @@ void plugin_show_configure(GeanyPlugin *plugin)
 	}
 	p = plugin->priv;
 
-	if (p->cbs.configure)
+	if (p->cbs.configure || p->cbs.configure_swapped)
 		configure_plugins(p);
 	else
 	{
