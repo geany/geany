@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 229
+#define GEANY_API_VERSION 230
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -338,6 +338,39 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 #define GEANY_PLUGIN_REGISTER_FULL(plugin, min_api_version, pdata, free_func) \
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
+
+/**
+ * Convenience macro to register a GObject instance.
+ *
+ * The instance is scoped to the module's lifetime, which is distinct
+ * from the activation lifetime of the plugin. Typically the GObject
+ * will have member functions to handle the `init()`, `cleanup()` and
+ * other GeanyPluginFuncs.
+ *
+ * @warning Forgetting to pass `NULL` as the last argument is likely
+ * to lead strange and confusing (undefined) behaviour. The compiler
+ * should offer useful warnings if not ignored.
+ *
+ * @warning Never call geany_plugin_set_data() if you have used this
+ * macro. The data has already been bound to the instance of the
+ * given GType.
+ *
+ * @param plugin  The GeanyPlugin instance.
+ * @param min_api The minimum GEANY_API_VERSION required.
+ * @param gtype   The GType of the GObject class.
+ * @param ...     A `NULL`-terminated list of construction properties
+ *                as passed to `g_object_new()`.
+ *
+ * @since Geany 1.29 (API 230)
+ *
+ * @see GEANY_PLUGIN_REGISTER_FULL()
+ */
+#define GEANY_PLUGIN_REGISTER_OBJECT(plugin, min_api, gtype, ...) \
+	plugin_module_make_resident(plugin);                          \
+	GEANY_PLUGIN_REGISTER_FULL(plugin,                            \
+	                           min_api,                           \
+	                           g_object_new(gtype, __VA_ARGS__),  \
+	                           g_object_unref)
 
 /** Return values for GeanyProxyHooks::probe()
  *
