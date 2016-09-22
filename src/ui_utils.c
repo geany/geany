@@ -2849,12 +2849,9 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 GtkWidget *ui_label_new_bold(const gchar *text)
 {
 	GtkWidget *label;
-	gchar *label_text;
 
-	label_text = g_markup_escape_text(text, -1);
 	label = gtk_label_new(NULL);
-	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", label_text);
-	g_free(label_text);
+	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", text);
 	return label;
 }
 
