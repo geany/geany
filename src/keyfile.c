@@ -246,6 +246,8 @@ static void init_pref_groups(void)
 		"keep_edit_history_on_reload", TRUE);
 	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
 		"show_keep_edit_history_on_reload_msg", TRUE);
+	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
+		"reload_clean_doc_on_file_change", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
