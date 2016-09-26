@@ -2602,7 +2602,8 @@ keep_edit_history_on_reload       Whether to maintain the edit history when    t
                                   reloading a file, and allow the operation
                                   to be reverted.
 reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
-                                  which have changed on disk.
+                                  that have no changes but which have changed
+                                  on disk.
                                   If unsaved changes exist then the user is
                                   prompted to reload manually.
 **Filetype related**
