@@ -3609,12 +3609,6 @@ static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
-	if( ! doc->changed )
-	{
-		document_reload_force(doc, doc->encoding);
-		return;
-	}
-
 	gchar *base_name = g_path_get_basename(doc->file_name);
 
 	/* show this message only once */
