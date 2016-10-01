@@ -212,7 +212,6 @@ static void readIdentifier (int c, vString *const name)
 		c = getcFromInputFile ();
 	} while (c != EOF && cppIsident (c));
 	ungetcToInputFile (c);
-	vStringTerminate (name);
 }
 
 static conditionalInfo *currentConditional (void)

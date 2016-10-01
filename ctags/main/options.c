@@ -162,7 +162,6 @@ extern bool isIgnoreToken (const char *const name,
 			size_t tokenLen;
 
 			vStringCopyS (token, c_tags_ignore[i]);
-			vStringTerminate (token);
 			tokenLen = vStringLength (token);
 
 			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&

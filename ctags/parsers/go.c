@@ -191,7 +191,6 @@ static void parseString (vString *const string, const int delimiter)
 		else
 			vStringPut (string, c);
 	}
-	vStringTerminate (string);
 }
 
 static void parseIdentifier (vString *const string, const int firstChar)
@@ -202,7 +201,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		vStringPut (string, c);
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	vStringTerminate (string);
 	ungetcToInputFile (c);		/* always unget, LF might add a semicolon */
 }
 

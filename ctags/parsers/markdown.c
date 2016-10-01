@@ -75,14 +75,12 @@ static void findMarkdownTags (void)
 		else if (line[0] == '#') {
 			vStringClear(name);
 			vStringCatS(name, (const char *) line);
-			vStringTerminate(name);
 			makeMarkdownTag(name, false);
 		}
 		else {
 			vStringClear (name);
 			if (! isspace(*line))
 				vStringCatS(name, (const char*) line);
-			vStringTerminate(name);
 		}
 	}
 	vStringDelete (name);

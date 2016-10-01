@@ -79,7 +79,6 @@ static void extract_name (const char *begin, const char *end, vString *name)
 		{
 			for (cp = begin ; cp != end; cp++)
 				vStringPut (name, (int) *cp);
-			vStringTerminate (name);
 
 			makeSimpleTag (name, LuaKinds, K_FUNCTION);
 			vStringClear (name);

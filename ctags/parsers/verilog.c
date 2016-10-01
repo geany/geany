@@ -200,7 +200,6 @@ static bool readIdentifier (vString *const name, int c)
 			c = vGetc ();
 		}
 		vUngetc (c);
-		vStringTerminate (name);
 	}
 	return (bool)(name->length > 0);
 }

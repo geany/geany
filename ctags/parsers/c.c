@@ -1330,7 +1330,6 @@ static const char *getVarType (const statementInfo *const st,
 				vStringPut(vt, ' ');
 		vStringCat(vt, t->name);
 	}
-	vStringTerminate(vt);
 	return vStringValue(vt);
 }
 
@@ -1786,7 +1785,6 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 		vStringPut (name, c);
 		c = cppGetc ();
 	} while (cppIsident (c) || (isInputLanguage (Lang_vala) && '.' == c));
-	vStringTerminate (name);
 	cppUngetc (c);        /* unget non-identifier character */
 
 	/* Vala supports '?' at end of a type (with or without whitespace before) for nullable types */
@@ -1814,7 +1812,6 @@ static void readPackageName (tokenInfo *const token, const int firstChar)
 		vStringPut (name, c);
 		c = cppGetc ();
 	}
-	vStringTerminate (name);
 	cppUngetc (c);        /* unget non-package character */
 }
 
@@ -1913,7 +1910,6 @@ static void readOperator (statementInfo *const st)
 			}
 			c = cppGetc ();
 		} while (! isOneOf (c, "(;")  &&  c != EOF);
-		vStringTerminate (name);
 	}
 	else if (isOneOf (c, acceptable))
 	{
@@ -1923,7 +1919,6 @@ static void readOperator (statementInfo *const st)
 			vStringPut (name, c);
 			c = cppGetc ();
 		} while (isOneOf (c, acceptable));
-		vStringTerminate (name);
 	}
 
 	cppUngetc (c);

@@ -102,7 +102,6 @@ static char* nextFileArg (FILE* const fp)
 				vStringPut (vs, c);
 				c = fgetc (fp);
 			} while (c != EOF  &&  ! isspace (c));
-			vStringTerminate (vs);
 			Assert (vStringLength (vs) > 0);
 			result = xMalloc (vStringLength (vs) + 1, char);
 			strcpy (result, vStringValue (vs));
@@ -127,7 +126,6 @@ static char* nextFileLine (FILE* const fp)
 			vStringPut (vs, c);
 			c = fgetc (fp);
 		}
-		vStringTerminate (vs);
 		if (vStringLength (vs) > 0)
 		{
 			result = xMalloc (vStringLength (vs) + 1, char);

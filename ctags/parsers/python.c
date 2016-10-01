@@ -286,7 +286,6 @@ static const char *parseIdentifier (const char *cp, vString *const identifier)
 		vStringPut (identifier, (int) *cp);
 		++cp;
 	}
-	vStringTerminate (identifier);
 	return cp;
 }
 
@@ -313,7 +312,6 @@ static void parseClass (const char *cp, vString *const class,
 			vStringPut (inheritance, *cp);
 			++cp;
 		}
-		vStringTerminate (inheritance);
 	}
 	makeClassTag (class, inheritance, parent, is_class_parent);
 	vStringDelete (inheritance);
@@ -642,7 +640,6 @@ static bool varIsLambda (const char *cp, char **arglist)
 				for (; *cp != 0 && *cp != ':'; cp++)
 					vStringPut (args, *cp);
 				vStringPut (args, ')');
-				vStringTerminate (args);
 				if (arglist)
 					*arglist = strdup (vStringValue (args));
 				vStringDelete (args);
@@ -733,7 +730,6 @@ static void findPythonTags (void)
 				vStringPut (name, (int) *start);
 				++start;
 			}
-			vStringTerminate (name);
 
 			parent_is_class = constructParentString(nesting_levels, indent, parent);
 			if (varIsLambda (variable, &arglist))

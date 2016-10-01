@@ -119,7 +119,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	makeSimpleTag (name, BasicKinds, kind);
 
 	/* if the line contains a ',', we have multiple declarations */
@@ -141,7 +140,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
-		vStringTerminate (name);
 		makeSimpleTag (name, BasicKinds, kind);
 	}
 
@@ -157,7 +155,6 @@ static char const *extract_name (char const *pos, vString * name)
 	vStringClear (name);
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	return pos;
 }
 

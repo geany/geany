@@ -71,7 +71,6 @@ static void createTag(AbaqusKind kind, const char *buf)
 		vStringPut(name, (int) *buf);
 		++buf;
 	} while ((*buf != '\0') && (*buf != ','));
-	vStringTerminate(name);
 	makeSimpleTag(name, AbaqusKinds, kind);
 	vStringDelete(name);
 }

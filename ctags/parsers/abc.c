@@ -90,21 +90,18 @@ static void findAbcTags (void)
 /*		if (line[1] == '%') {
 			vStringClear(name);
 			vStringCatS(name, (const char *) line);
-			vStringTerminate(name);
 			makeAbcTag(name, false);
 		}*/
 		if (line[0] == 'T') {
 			/*vStringClear(name);*/
 			vStringCatS(name, " / ");
 			vStringCatS(name, (const char *) line);
-			vStringTerminate(name);
 			makeAbcTag(name, false);
 		}
 		else {
 			vStringClear (name);
 			if (! isspace(*line))
 				vStringCatS(name, (const char*) line);
-			vStringTerminate(name);
 		}
 	}
 	vStringDelete (name);

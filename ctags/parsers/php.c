@@ -298,7 +298,6 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 	{
 		Assert (parentKind >= 0);
 
-		vStringTerminate (fullScope);
 		e->extensionFields.scopeKind = &(PhpKinds[parentKind]);
 		e->extensionFields.scopeName = vStringValue (fullScope);
 	}
@@ -475,7 +474,6 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 	if (vStringLength (token->scope) > 0)
 		vStringCatS (token->scope, SCOPE_SEPARATOR);
 	vStringCatS (token->scope, vStringValue (extra));
-	vStringTerminate(token->scope);
 }
 
 static bool isIdentChar (const int c)
@@ -496,7 +494,6 @@ static void parseString (vString *const string, const int delimiter)
 		else
 			vStringPut (string, (char) c);
 	}
-	vStringTerminate (string);
 }
 
 /* reads an HereDoc or a NowDoc (the part after the <<<).
@@ -614,8 +611,6 @@ static void parseHeredoc (vString *const string)
 	}
 	while (c != EOF);
 
-	vStringTerminate (string);
-
 	return;
 
 error:
@@ -631,7 +626,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	ungetcToInputFile (c);
-	vStringTerminate (string);
 }
 
 static keywordId analyzeToken (vString *const name, langType language)
@@ -1144,8 +1138,6 @@ static bool parseFunction (tokenInfo *const token, const tokenInfo *name)
 		}
 		while (token->type != TOKEN_EOF && depth > 0);
 
-		vStringTerminate (arglist);
-
 		makeFunctionTag (name, arglist, access, impl);
 		vStringDelete (arglist);
 
@@ -1340,7 +1332,6 @@ static bool parseNamespace (tokenInfo *const token)
 		   token->type != TOKEN_SEMICOLON &&
 		   token->type != TOKEN_OPEN_CURLY);
 
-	vStringTerminate (CurrentNamespace);
 	if (vStringLength (CurrentNamespace) > 0)
 		makeNamespacePhpTag (nsToken, CurrentNamespace);
 

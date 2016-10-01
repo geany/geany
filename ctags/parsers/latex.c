@@ -105,7 +105,6 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut(name, (int) *l);
 			++l;
 		} while ((*l != '\0') && (*l != '}'));
-		vStringTerminate(name);
 		if (name->buffer[0] != '}')
 			makeSimpleTag(name, TeXKinds, kind);
 	}
@@ -116,13 +115,11 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut (name, (int) *l);
 			++l;
 		} while (isalpha((int) *l) || *l == '@');
-		vStringTerminate(name);
 		makeSimpleTag(name, TeXKinds, kind);
 	}
 	else
 	{
 		vStringPut(name, (int) *l);
-		vStringTerminate(name);
 		makeSimpleTag(name, TeXKinds, kind);
 	}
 

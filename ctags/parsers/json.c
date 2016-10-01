@@ -181,7 +181,6 @@ static void readTokenFull (tokenInfo *const token,
 				if (includeStringRepr)
 					vStringPut (token->string, c);
 			}
-			vStringTerminate (token->string);
 			break;
 		}
 
@@ -196,7 +195,6 @@ static void readTokenFull (tokenInfo *const token,
 					c = getcFromInputFile ();
 				}
 				while (c != EOF && isIdentChar (c));
-				vStringTerminate (token->string);
 				ungetcToInputFile (c);
 				switch (lookupKeyword (vStringValue (token->string), Lang_json))
 				{
@@ -219,7 +217,6 @@ static void pushScope (tokenInfo *const token,
 	if (vStringLength (token->scope) > 0)
 		vStringPut (token->scope, '.');
 	vStringCat (token->scope, parent->string);
-	vStringTerminate (token->scope);
 	token->scopeKind = parentKind;
 }
 

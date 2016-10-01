@@ -120,7 +120,6 @@ static void readIdentifier (const int first, vString *const id)
 		c = nextChar ();
 	}
 	ungetcToInputFile (c);
-	vStringTerminate (id);
 }
 
 static void findMakeTags (void)
@@ -208,7 +207,6 @@ static void findMakeTags (void)
 					}
 					if (c == '\n')
 						ungetcToInputFile (c);
-					vStringTerminate (name);
 					vStringStripTrailing (name);
 					newMacro (name);
 				}

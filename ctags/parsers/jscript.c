@@ -282,7 +282,6 @@ static void makeClassTag (tokenInfo *const token, vString *const signature)
 		{
 			vStringCopy(fulltag, token->string);
 		}
-		vStringTerminate(fulltag);
 		if ( ! stringListHas(ClassNames, vStringValue (fulltag)) )
 		{
 			stringListAdd (ClassNames, vStringNewCopy (fulltag));
@@ -309,7 +308,6 @@ static void makeFunctionTag (tokenInfo *const token, vString *const signature)
 		{
 			vStringCopy(fulltag, token->string);
 		}
-		vStringTerminate(fulltag);
 		if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) )
 		{
 			stringListAdd (FunctionNames, vStringNewCopy (fulltag));
@@ -362,7 +360,6 @@ static void parseString (vString *const string, const int delimiter)
 		else
 			vStringPut (string, c);
 	}
-	vStringTerminate (string);
 }
 
 static void parseRegExp (void)
@@ -403,7 +400,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		vStringPut (string, c);
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	vStringTerminate (string);
 	ungetcToInputFile (c);		/* unget non-identifier character */
 }
 
@@ -708,7 +704,6 @@ static void addContext (tokenInfo* const parent, const tokenInfo* const child)
 		vStringCatS (parent->string, ".");
 	}
 	vStringCatS (parent->string, vStringValue(child->string));
-	vStringTerminate(parent->string);
 }
 
 static void addToScope (tokenInfo* const token, vString* const extra)
@@ -718,7 +713,6 @@ static void addToScope (tokenInfo* const token, vString* const extra)
 		vStringCatS (token->scope, ".");
 	}
 	vStringCatS (token->scope, vStringValue(extra));
-	vStringTerminate(token->scope);
 }
 
 /*
@@ -1600,7 +1594,6 @@ static bool parseStatement (tokenInfo *const token, tokenInfo *const parent, boo
 					{
 						vStringCopy(fulltag, token->string);
 					}
-					vStringTerminate(fulltag);
 					if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) &&
 							! stringListHas(ClassNames, vStringValue (fulltag)) )
 					{
@@ -1691,7 +1684,6 @@ static bool parseStatement (tokenInfo *const token, tokenInfo *const parent, boo
 				{
 					vStringCopy(fulltag, token->string);
 				}
-				vStringTerminate(fulltag);
 				if ( ! stringListHas(FunctionNames, vStringValue (fulltag)) &&
 						! stringListHas(ClassNames, vStringValue (fulltag)) )
 				{

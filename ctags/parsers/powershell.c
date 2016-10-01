@@ -180,7 +180,6 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 	if (vStringLength (token->scope) > 0)
 		vStringCatS (token->scope, SCOPE_SEPARATOR);
 	vStringCatS (token->scope, vStringValue (extra));
-	vStringTerminate (token->scope);
 }
 
 static bool isIdentChar (const int c)
@@ -201,7 +200,6 @@ static void parseString (vString *const string, const int delimiter)
 		else
 			vStringPut (string, (char) c);
 	}
-	vStringTerminate (string);
 }
 
 static void parseIdentifier (vString *const string, const int firstChar)
@@ -213,7 +211,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	ungetcToInputFile (c);
-	vStringTerminate (string);
 }
 
 static bool isTokenFunction (vString *const name)
@@ -388,7 +385,6 @@ static const char *parsePowerShellScope (tokenInfo *const token)
 		powershellScopeLen = (size_t)(powershellScopeEnd - tokenName);
 		/* extract the scope */
 		vStringNCopyS (powershellScope, tokenName, powershellScopeLen);
-		vStringTerminate (powershellScope);
 		/* cut the resulting scope string from the identifier */
 		memmove (token->string->buffer,
 				 /* +1 to skip the leading colon */
@@ -487,8 +483,6 @@ static bool parseFunction (tokenInfo *const token)
 			}
 		}
 		while (token->type != TOKEN_EOF && depth > 0);
-
-		vStringTerminate (arglist);
 
 		makeFunctionTag (nameFree, arglist, access);
 		vStringDelete (arglist);

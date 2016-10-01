@@ -202,7 +202,6 @@ static void findAsciidocTags(void)
 				while (isspace(line[end]))--end;
 				vStringClear(name);
 				vStringNCatS(name, (const char*)(&(line[start])), end - start + 1);
-				vStringTerminate(name);
 				makeAsciidocTag(name, kind);
 				continue;
 			}
@@ -210,7 +209,6 @@ static void findAsciidocTags(void)
 		vStringClear(name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
-		vStringTerminate(name);
 	}
 	vStringDelete(name);
 	nestingLevelsFree(nestingLevels);

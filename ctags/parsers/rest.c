@@ -186,7 +186,6 @@ static void findRestTags (void)
 		vStringClear (name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
-		vStringTerminate(name);
 	}
 	vStringDelete (name);
 	nestingLevelsFree(nestingLevels);

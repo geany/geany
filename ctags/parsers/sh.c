@@ -80,7 +80,6 @@ static void findShTags (void)
 			vStringPut (name, (int) *cp);
 			++cp;
 		}
-		vStringTerminate (name);
 		while (isspace ((int) *cp))
 			++cp;
 		if (*cp++ == '(')

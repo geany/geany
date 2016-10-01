@@ -169,7 +169,6 @@ static void findTxt2tagsTags (void)
 				nl = nestingLevelsGetCurrent(nls);
 			}
 
-			vStringTerminate(name);
 			makeTxt2tagsTag(name, nls, K_SECTION);
 			nestingLevelsPush(nls, name, K_SECTION);
 			nestingLevelsGetCurrent(nls)->indentation = depth;

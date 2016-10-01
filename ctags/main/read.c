@@ -444,7 +444,6 @@ static vString *iFileGetLine (void)
 			vStringPut (File.line, c);
 		if (c == '\n'  ||  (c == EOF  &&  vStringLength (File.line) > 0))
 		{
-			vStringTerminate (File.line);
 #ifdef HAVE_REGEX
 			if (vStringLength (File.line) > 0)
 				matchRegex (File.line, File.source.language);

@@ -109,7 +109,6 @@ static void findDiffTags (void)
 					tmp++;
 				}
 
-				vStringTerminate(filename);
 				makeSimpleTag (filename, DiffKinds, K_FUNCTION);
 				vStringClear (filename);
 			}

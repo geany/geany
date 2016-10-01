@@ -66,11 +66,9 @@ static void findConfTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, ConfKinds, K_SECTION);
 			/* remember section name */
 			vStringCopy (scope, name);
-			vStringTerminate (scope);
 			vStringClear (name);
 			continue;
 		}
@@ -85,7 +83,6 @@ static void findConfTags (void)
 					vStringPut (name, (int) *cp);
 					++cp;
 				}
-				vStringTerminate (name);
 				vStringStripTrailing (name);
 				while (isspace ((int) *cp))
 					++cp;

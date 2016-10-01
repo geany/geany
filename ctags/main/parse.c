@@ -165,7 +165,6 @@ static vString* determineInterpreter (const char* const cmd)
 			;  /* no-op */
 		for ( ;  *p != '\0'  &&  ! isspace (*p)  ;  ++p)
 			vStringPut (interpreter, (int) *p);
-		vStringTerminate (interpreter);
 	} while (strcmp (vStringValue (interpreter), "env") == 0);
 	return interpreter;
 }
