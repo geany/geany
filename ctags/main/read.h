@@ -31,7 +31,7 @@
 #define getSourceLanguage() File.source.language
 #define getSourceLanguageName() getLanguageName (File.source.language)
 #define getSourceLineNumber()   File.source.lineNumber
-#define isInputLanguage(lang)    (boolean)((lang) == File.input.language)
+#define isInputLanguage(lang)    (bool)((lang) == File.input.language)
 #define isInputHeaderFile()      File.input.isHeader
 
 /*
@@ -66,7 +66,7 @@ typedef struct sInputFileInfo {
 					   when `resetInputFile' is called
 					   on the input stream.
 					   This is needed for nested stream. */
-	boolean  isHeader;       /* is input file a header file? */
+	bool isHeader;           /* is input file a header file? */
 	langType language;       /* language of input file */
 } inputFileInfo;
 
@@ -78,8 +78,8 @@ typedef struct sInputFile {
 	MIOPos  filePosition;   /* file position of current line */
 	unsigned int ungetchIdx;
 	int     ungetchBuf[3];  /* characters that were ungotten */
-	boolean eof;        /* have we reached the end of file? */
-	boolean newLine;    /* will the next character begin a new line? */
+	bool eof;           /* have we reached the end of file? */
+	bool newLine;       /* will the next character begin a new line? */
 
 	/*  Contains data pertaining to the original source file in which the tag
 	 *  was defined. This may be different from the input file when #line
@@ -103,8 +103,8 @@ extern inputFile File;
 extern kindOption *getInputLanguageFileKind (void);
 
 extern void freeSourceFileResources (void);
-extern boolean fileOpen (const char *const fileName, const langType language);
-extern boolean fileEOF (void);
+extern bool fileOpen (const char *const fileName, const langType language);
+extern bool fileEOF (void);
 extern void fileClose (void);
 extern int getcFromInputFile (void);
 extern int getNthPrevCFromInputFile (unsigned int nth, int def);
@@ -113,8 +113,8 @@ extern void ungetcToInputFile (int c);
 extern const unsigned char *readLineFromInputFile (void);
 extern char *readLineRaw (vString *const vLine, MIO *const mio);
 extern char *readSourceLine (vString *const vLine, MIOPos location, long *const pSeekValue);
-extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
-                           const char *const fileName, const langType language );
+extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
+                        const char *const fileName, const langType language );
 #define bufferClose fileClose
 
 /* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */

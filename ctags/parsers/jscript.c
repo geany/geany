@@ -36,8 +36,8 @@
 /*
  *	 MACROS
  */
-#define isType(token,t)		(boolean) ((token)->type == (t))
-#define isKeyword(token,k)	(boolean) ((token)->keyword == (k))
+#define isType(token,t)		(bool) ((token)->type == (t))
+#define isKeyword(token,k)	(bool) ((token)->keyword == (k))
 
 /*
  *	 DATA DECLARATIONS
@@ -108,7 +108,7 @@ typedef struct sTokenInfo {
 	unsigned long 	lineNumber;
 	MIOPos 			filePosition;
 	int				nestLevel;
-	boolean			ignoreTag;
+	bool			ignoreTag;
 } tokenInfo;
 
 /*
@@ -130,12 +130,12 @@ typedef enum {
 } jsKind;
 
 static kindOption JsKinds [] = {
-	{ TRUE,  'f', "function",	  "functions"		   },
-	{ TRUE,  'c', "class",		  "classes"			   },
-	{ TRUE,  'm', "method",		  "methods"			   },
-	{ TRUE,  'p', "property",	  "properties"		   },
-	{ TRUE,  'C', "constant",	  "constants"		   },
-	{ TRUE,  'v', "variable",	  "global variables"   }
+	{ true,  'f', "function",	  "functions"		   },
+	{ true,  'c', "class",		  "classes"			   },
+	{ true,  'm', "method",		  "methods"			   },
+	{ true,  'p', "property",	  "properties"		   },
+	{ true,  'C', "constant",	  "constants"		   },
+	{ true,  'v', "variable",	  "global variables"   }
 };
 
 static const keywordTable JsKeywordTable [] = {
@@ -168,13 +168,13 @@ static const keywordTable JsKeywordTable [] = {
 
 /* Recursive functions */
 static void parseFunction (tokenInfo *const token);
-static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent);
-static boolean parseLine (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class);
+static bool parseBlock (tokenInfo *const token, tokenInfo *const orig_parent);
+static bool parseLine (tokenInfo *const token, tokenInfo *const parent, bool is_inside_class);
 static void parseUI5 (tokenInfo *const token);
 
-static boolean isIdentChar (const int c)
+static bool isIdentChar (const int c)
 {
-	return (boolean)
+	return (bool)
 		(isalpha (c) || isdigit (c) || c == '$' ||
 		 c == '@' || c == '_' || c == '#');
 }
@@ -188,7 +188,7 @@ static tokenInfo *newToken (void)
 	token->string		= vStringNew ();
 	token->scope		= vStringNew ();
 	token->nestLevel	= 0;
-	token->ignoreTag	= FALSE;
+	token->ignoreTag	= false;
 	token->lineNumber   = getInputLineNumber ();
 	token->filePosition = getInputFilePosition ();
 
@@ -325,12 +325,12 @@ static void makeFunctionTag (tokenInfo *const token, vString *const signature)
 
 static void parseString (vString *const string, const int delimiter)
 {
-	boolean end = FALSE;
+	bool end = false;
 	while (! end)
 	{
 		int c = getcFromInputFile ();
 		if (c == EOF)
-			end = TRUE;
+			end = true;
 		else if (c == '\\')
 		{
 			/* Eat the escape sequence (\", \', etc).  We properly handle
@@ -350,11 +350,11 @@ static void parseString (vString *const string, const int delimiter)
 			}
 		}
 		else if (c == delimiter)
-			end = TRUE;
+			end = true;
 		else if (c == '\r' || c == '\n')
 		{
 			/* those are invalid when not escaped */
-			end = TRUE;
+			end = true;
 			/* we don't want to eat the newline itself to let the automatic
 			 * semicolon insertion code kick in */
 			ungetcToInputFile (c);
@@ -368,7 +368,7 @@ static void parseString (vString *const string, const int delimiter)
 static void parseRegExp (void)
 {
 	int c;
-	boolean in_range = FALSE;
+	bool in_range = false;
 
 	do
 	{
@@ -385,9 +385,9 @@ static void parseRegExp (void)
 		else if (c == '\\')
 			c = getcFromInputFile (); /* skip next character */
 		else if (c == '[')
-			in_range = TRUE;
+			in_range = true;
 		else if (c == ']')
-			in_range = FALSE;
+			in_range = false;
 	} while (c != EOF);
 }
 
@@ -417,7 +417,7 @@ static keywordId analyzeToken (vString *const name)
 	return result;
 }
 
-static void readTokenFull (tokenInfo *const token, boolean include_newlines, vString *const repr)
+static void readTokenFull (tokenInfo *const token, bool include_newlines, vString *const repr)
 {
 	int c;
 	int i;
@@ -512,7 +512,7 @@ getNextChar:
 				case TOKEN_COMMA:
 				case TOKEN_CLOSE_CURLY:
 				case TOKEN_OPEN_CURLY:
-					include_newlines = FALSE; /* no need to recheck */
+					include_newlines = false; /* no need to recheck */
 					goto getNextChar;
 					break;
 				default:
@@ -637,7 +637,7 @@ getNextChar:
 
 static void readToken (tokenInfo *const token)
 {
-	readTokenFull (token, FALSE, NULL);
+	readTokenFull (token, false, NULL);
 }
 
 static void copyToken (tokenInfo *const dest, tokenInfo *const src)
@@ -655,7 +655,7 @@ static void copyToken (tokenInfo *const dest, tokenInfo *const src)
  *	 Token parsing functions
  */
 
-static void skipArgumentList (tokenInfo *const token, boolean include_newlines, vString *const repr)
+static void skipArgumentList (tokenInfo *const token, bool include_newlines, vString *const repr)
 {
 	int nest_level = 0;
 
@@ -666,7 +666,7 @@ static void skipArgumentList (tokenInfo *const token, boolean include_newlines, 
 			vStringPut (repr, '(');
 		while (nest_level > 0 && ! isType (token, TOKEN_EOF))
 		{
-			readTokenFull (token, FALSE, repr);
+			readTokenFull (token, false, repr);
 			if (isType (token, TOKEN_OPEN_PAREN))
 				nest_level++;
 			else if (isType (token, TOKEN_CLOSE_PAREN))
@@ -676,7 +676,7 @@ static void skipArgumentList (tokenInfo *const token, boolean include_newlines, 
 	}
 }
 
-static void skipArrayList (tokenInfo *const token, boolean include_newlines)
+static void skipArrayList (tokenInfo *const token, bool include_newlines)
 {
 	int nest_level = 0;
 
@@ -725,7 +725,7 @@ static void addToScope (tokenInfo* const token, vString* const extra)
  *	 Scanning functions
  */
 
-static boolean findCmdTerm (tokenInfo *const token, boolean include_newlines)
+static bool findCmdTerm (tokenInfo *const token, bool include_newlines)
 {
 	/*
 	 * Read until we find either a semicolon or closing brace.
@@ -780,7 +780,7 @@ static void parseSwitch (tokenInfo *const token)
 		 * Handle nameless functions, these will only
 		 * be considered methods.
 		 */
-		skipArgumentList(token, FALSE, NULL);
+		skipArgumentList(token, false, NULL);
 	}
 
 	if (isType (token, TOKEN_OPEN_CURLY))
@@ -789,7 +789,7 @@ static void parseSwitch (tokenInfo *const token)
 	}
 }
 
-static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
+static bool parseLoop (tokenInfo *const token, tokenInfo *const parent)
 {
 	/*
 	 * Handles these statements
@@ -812,7 +812,7 @@ static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 	 *	   }
 	 *	   while (number<5);
 	 */
-	boolean is_terminated = TRUE;
+	bool is_terminated = true;
 
 	if (isKeyword (token, KEYWORD_for) || isKeyword (token, KEYWORD_while))
 	{
@@ -824,7 +824,7 @@ static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 			 * Handle nameless functions, these will only
 			 * be considered methods.
 			 */
-			skipArgumentList(token, FALSE, NULL);
+			skipArgumentList(token, false, NULL);
 		}
 
 		if (isType (token, TOKEN_OPEN_CURLY))
@@ -839,7 +839,7 @@ static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 		}
 		else
 		{
-			is_terminated = parseLine(token, parent, FALSE);
+			is_terminated = parseLine(token, parent, false);
 		}
 	}
 	else if (isKeyword (token, KEYWORD_do))
@@ -858,7 +858,7 @@ static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 		}
 		else
 		{
-			is_terminated = parseLine(token, parent, FALSE);
+			is_terminated = parseLine(token, parent, false);
 		}
 
 		if (is_terminated)
@@ -874,19 +874,19 @@ static boolean parseLoop (tokenInfo *const token, tokenInfo *const parent)
 				 * Handle nameless functions, these will only
 				 * be considered methods.
 				 */
-				skipArgumentList(token, TRUE, NULL);
+				skipArgumentList(token, true, NULL);
 			}
 			if (! isType (token, TOKEN_SEMICOLON))
-				is_terminated = FALSE;
+				is_terminated = false;
 		}
 	}
 
 	return is_terminated;
 }
 
-static boolean parseIf (tokenInfo *const token, tokenInfo *const parent)
+static bool parseIf (tokenInfo *const token, tokenInfo *const parent)
 {
-	boolean read_next_token = TRUE;
+	bool read_next_token = true;
 	/*
 	 * If statements have two forms
 	 *	   if ( ... )
@@ -943,7 +943,7 @@ static boolean parseIf (tokenInfo *const token, tokenInfo *const parent)
 		 * Handle nameless functions, these will only
 		 * be considered methods.
 		 */
-		skipArgumentList(token, FALSE, NULL);
+		skipArgumentList(token, false, NULL);
 	}
 
 	if (isType (token, TOKEN_OPEN_CURLY))
@@ -960,7 +960,7 @@ static boolean parseIf (tokenInfo *const token, tokenInfo *const parent)
 	{
 		/* The next token should only be read if this statement had its own
 		 * terminator */
-		read_next_token = findCmdTerm (token, TRUE);
+		read_next_token = findCmdTerm (token, true);
 	}
 	return read_next_token;
 }
@@ -969,7 +969,7 @@ static void parseFunction (tokenInfo *const token)
 {
 	tokenInfo *const name = newToken ();
 	vString *const signature = vStringNew ();
-	boolean is_class = FALSE;
+	bool is_class = false;
 
 	/*
 	 * This deals with these formats
@@ -992,7 +992,7 @@ static void parseFunction (tokenInfo *const token)
 	}
 
 	if ( isType (token, TOKEN_OPEN_PAREN) )
-		skipArgumentList(token, FALSE, signature);
+		skipArgumentList(token, false, signature);
 
 	if ( isType (token, TOKEN_OPEN_CURLY) )
 	{
@@ -1003,16 +1003,16 @@ static void parseFunction (tokenInfo *const token)
 			makeFunctionTag (name, signature);
 	}
 
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 
 	vStringDelete (signature);
 	deleteToken (name);
 }
 
-static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
+static bool parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 {
-	boolean is_class = FALSE;
-	boolean read_next_token = TRUE;
+	bool is_class = false;
+	bool read_next_token = true;
 	vString * saveScope = vStringNew ();
 	tokenInfo *const parent = newToken ();
 
@@ -1036,14 +1036,14 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 		 */
 		do
 		{
-			read_next_token = TRUE;
+			read_next_token = true;
 			if (isKeyword (token, KEYWORD_this))
 			{
 				/*
 				 * Means we are inside a class and have found
 				 * a class, not a function
 				 */
-				is_class = TRUE;
+				is_class = true;
 				vStringCopy(saveScope, token->scope);
 				addToScope (token, parent->string);
 
@@ -1113,10 +1113,10 @@ static boolean parseBlock (tokenInfo *const token, tokenInfo *const orig_parent)
 	return is_class;
 }
 
-static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
+static bool parseMethods (tokenInfo *const token, tokenInfo *const class)
 {
 	tokenInfo *const name = newToken ();
-	boolean has_methods = FALSE;
+	bool has_methods = false;
 
 	/*
 	 * This deals with these formats
@@ -1135,7 +1135,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 			 * This was most likely a variable declaration of a hash table.
 			 * indicate there were no methods and return.
 			 */
-			has_methods = FALSE;
+			has_methods = false;
 			goto cleanUp;
 		}
 
@@ -1154,12 +1154,12 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 					readToken (token);
 					if ( isType (token, TOKEN_OPEN_PAREN) )
 					{
-						skipArgumentList(token, FALSE, signature);
+						skipArgumentList(token, false, signature);
 					}
 
 					if (isType (token, TOKEN_OPEN_CURLY))
 					{
-						has_methods = TRUE;
+						has_methods = true;
 						addToScope (name, class->string);
 						makeJsTag (name, JSTAG_METHOD, signature);
 						parseBlock (token, name);
@@ -1176,7 +1176,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 				else
 				{
 						vString * saveScope = vStringNew ();
-						boolean has_child_methods = FALSE;
+						bool has_child_methods = false;
 
 						/* skip whatever is the value */
 						while (! isType (token, TOKEN_COMMA) &&
@@ -1194,11 +1194,11 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 							}
 							else if (isType (token, TOKEN_OPEN_PAREN))
 							{
-								skipArgumentList (token, FALSE, NULL);
+								skipArgumentList (token, false, NULL);
 							}
 							else if (isType (token, TOKEN_OPEN_SQUARE))
 							{
-								skipArrayList (token, FALSE);
+								skipArrayList (token, false);
 							}
 							else
 							{
@@ -1207,7 +1207,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 						}
 						vStringDelete (saveScope);
 
-						has_methods = TRUE;
+						has_methods = true;
 						addToScope (name, class->string);
 						if (has_child_methods)
 							makeJsTag (name, JSTAG_CLASS, NULL);
@@ -1218,7 +1218,7 @@ static boolean parseMethods (tokenInfo *const token, tokenInfo *const class)
 		}
 	} while ( isType(token, TOKEN_COMMA) );
 
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 
 cleanUp:
 	deleteToken (name);
@@ -1226,18 +1226,18 @@ cleanUp:
 	return has_methods;
 }
 
-static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class)
+static bool parseStatement (tokenInfo *const token, tokenInfo *const parent, bool is_inside_class)
 {
 	tokenInfo *const name = newToken ();
 	tokenInfo *const secondary_name = newToken ();
 	tokenInfo *const method_body_token = newToken ();
 	vString * saveScope = vStringNew ();
-	boolean is_class = FALSE;
-	boolean is_var = FALSE;
-	boolean is_const = FALSE;
-	boolean is_terminated = TRUE;
-	boolean is_global = FALSE;
-	boolean has_methods = FALSE;
+	bool is_class = false;
+	bool is_var = false;
+	bool is_const = false;
+	bool is_terminated = true;
+	bool is_global = false;
+	bool has_methods = false;
 	vString *	fulltag;
 
 	vStringClear(saveScope);
@@ -1270,7 +1270,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 	 */
 
 	if ( is_inside_class )
-		is_class = TRUE;
+		is_class = true;
 	/*
 	 * var can precede an inner function
 	 */
@@ -1284,7 +1284,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 		 */
 		if ( token->nestLevel == 0 )
 		{
-			is_global = TRUE;
+			is_global = true;
 		}
 		readToken(token);
 	}
@@ -1315,7 +1315,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 			/*
 			 * Cannot be a global variable is it has dot references in the name
 			 */
-			is_global = FALSE;
+			is_global = false;
 			do
 			{
 				readToken (token);
@@ -1355,7 +1355,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					 *
 					 */
 					makeClassTag (name, NULL);
-					is_class = TRUE;
+					is_class = true;
 
 					/*
 					 * There should a ".function_name" next.
@@ -1383,7 +1383,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 							       ! isType (method_body_token, TOKEN_EOF))
 							{
 								if ( isType (method_body_token, TOKEN_OPEN_PAREN) )
-									skipArgumentList(method_body_token, FALSE,
+									skipArgumentList(method_body_token, false,
 													 vStringLength (signature) == 0 ? signature : NULL);
 								else
 									readToken (method_body_token);
@@ -1395,7 +1395,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 							if ( isType (method_body_token, TOKEN_OPEN_CURLY))
 							{
 								parseBlock (method_body_token, token);
-								is_terminated = TRUE;
+								is_terminated = true;
 							}
 							else
 								is_terminated = isType (method_body_token, TOKEN_SEMICOLON);
@@ -1420,9 +1420,9 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 							/*
 							 * Find to the end of the statement
 							 */
-							findCmdTerm (token, FALSE);
-							token->ignoreTag = FALSE;
-							is_terminated = TRUE;
+							findCmdTerm (token, false);
+							token->ignoreTag = false;
+							is_terminated = true;
 							goto cleanUp;
 						}
 					}
@@ -1433,10 +1433,10 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 		}
 
 		if ( isType (token, TOKEN_OPEN_PAREN) )
-			skipArgumentList(token, FALSE, NULL);
+			skipArgumentList(token, false, NULL);
 
 		if ( isType (token, TOKEN_OPEN_SQUARE) )
-			skipArrayList(token, FALSE);
+			skipArrayList(token, false);
 
 		/*
 		if ( isType (token, TOKEN_OPEN_CURLY) )
@@ -1453,7 +1453,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 		 * processed an open curly brace indicates
 		 * the statement is most likely not terminated.
 		 */
-		is_terminated = FALSE;
+		is_terminated = false;
 		goto cleanUp;
 	}
 
@@ -1523,7 +1523,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 			}
 
 			if ( isType (token, TOKEN_OPEN_PAREN) )
-				skipArgumentList(token, FALSE, signature);
+				skipArgumentList(token, false, signature);
 
 			if (isType (token, TOKEN_OPEN_CURLY))
 			{
@@ -1615,7 +1615,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 				 * Assume the closing parentheses terminates
 				 * this statements.
 				 */
-				is_terminated = TRUE;
+				is_terminated = true;
 			}
 		}
 		else if (isKeyword (token, KEYWORD_new))
@@ -1628,11 +1628,11 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					is_var )
 			{
 				if ( isKeyword (token, KEYWORD_capital_object) )
-					is_class = TRUE;
+					is_class = true;
 
 				readToken (token);
 				if ( isType (token, TOKEN_OPEN_PAREN) )
-					skipArgumentList(token, TRUE, NULL);
+					skipArgumentList(token, true, NULL);
 
 				if (isType (token, TOKEN_SEMICOLON))
 				{
@@ -1657,7 +1657,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					}
 				}
 				else if (isType (token, TOKEN_CLOSE_CURLY))
-					is_terminated = FALSE;
+					is_terminated = false;
 			}
 		}
 		else if (isKeyword (token, KEYWORD_NONE))
@@ -1709,10 +1709,10 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 					parenDepth++;
 				else if (isType (token, TOKEN_CLOSE_PAREN))
 					parenDepth--;
-				readTokenFull (token, TRUE, NULL);
+				readTokenFull (token, true, NULL);
 			}
 			if (isType (token, TOKEN_CLOSE_CURLY))
-				is_terminated = FALSE;
+				is_terminated = false;
 		}
 	}
 
@@ -1733,7 +1733,7 @@ static boolean parseStatement (tokenInfo *const token, tokenInfo *const parent, 
 		 *	   return 1;
 		 * }
 		 */
-		is_terminated = findCmdTerm (token, TRUE);
+		is_terminated = findCmdTerm (token, true);
 	}
 
 cleanUp:
@@ -1796,9 +1796,9 @@ static void parseUI5 (tokenInfo *const token)
 	deleteToken (name);
 }
 
-static boolean parseLine (tokenInfo *const token, tokenInfo *const parent, boolean is_inside_class)
+static bool parseLine (tokenInfo *const token, tokenInfo *const parent, bool is_inside_class)
 {
-	boolean is_terminated = TRUE;
+	bool is_terminated = true;
 	/*
 	 * Detect the common statements, if, while, for, do, ...
 	 * This is necessary since the last statement within a block "{}"
@@ -1830,7 +1830,7 @@ static boolean parseLine (tokenInfo *const token, tokenInfo *const parent, boole
 				parseSwitch (token);
 				break;
 			case KEYWORD_return:
-				is_terminated = findCmdTerm (token, TRUE);
+				is_terminated = findCmdTerm (token, true);
 				break;
 			default:
 				is_terminated = parseStatement (token, parent, is_inside_class);
@@ -1860,7 +1860,7 @@ static void parseJsFile (tokenInfo *const token)
 		else if (isType (token, TOKEN_KEYWORD) && token->keyword == KEYWORD_sap)
 			parseUI5 (token);
 		else
-			parseLine (token, token, FALSE);
+			parseLine (token, token, false);
 	} while (! isType (token, TOKEN_EOF));
 }
 

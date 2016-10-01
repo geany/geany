@@ -36,13 +36,13 @@ typedef enum {
 } TeXKind;
 
 static kindOption TeXKinds[] = {
-	{ TRUE, 'f', "function",      "command definitions" },
-	{ TRUE, 'c', "class",         "environment definitions" },
-	{ TRUE, 'm', "member",        "labels, sections and bibliography" },
-	{ TRUE, 'd', "macro",         "subsections" },
-	{ TRUE, 'v', "variable",      "subsubsections" },
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 's', "struct",        "labels and bibliography" }
+	{ true, 'f', "function",      "command definitions" },
+	{ true, 'c', "class",         "environment definitions" },
+	{ true, 'm', "member",        "labels, sections and bibliography" },
+	{ true, 'd', "macro",         "subsections" },
+	{ true, 'v', "variable",      "subsubsections" },
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 's', "struct",        "labels and bibliography" }
 };
 
 #define TEX_BRACES (1<<0)
@@ -62,13 +62,13 @@ static int getWord(const char * ref, const char **ptr)
 
 
 	if (*ref)
-		return FALSE;
+		return false;
 
 	if (*p == '*') /* to allow something like \section*{foobar} */
 		p++;
 
 	*ptr = p;
-	return TRUE;
+	return true;
 }
 
 static void createTag(int flags, TeXKind kind, const char * l)

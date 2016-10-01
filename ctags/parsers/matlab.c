@@ -31,8 +31,8 @@ typedef enum {
 } MatlabKind;
 
 static kindOption MatlabKinds [] = {
-	{ TRUE, 'f', "function", "Functions" },
-	{ TRUE, 's', "struct", "Structures" },
+	{ true, 'f', "function", "Functions" },
+	{ true, 's', "struct", "Structures" },
 };
 
 /*
@@ -66,7 +66,7 @@ static void findMatlabTags (void)
 		{
 			const unsigned char *cp = line + i;
 			const unsigned char *ptr = cp;
-			boolean eq=FALSE;
+			bool eq=false;
 
 			while (isspace ((int) *cp))
 				++cp;
@@ -76,7 +76,7 @@ static void findMatlabTags (void)
 			{
 				if (*ptr == '=')
 				{
-					eq=TRUE;
+					eq=true;
 					break;
 				}
 				ptr++;

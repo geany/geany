@@ -62,21 +62,21 @@ static vString* Keyword=NULL;
 static vString* TagName=NULL;
 
 static kindOption VhdlKinds [] = {
-	{ TRUE, 'c', "variable",     "constants" },
-	{ TRUE, 't', "typedef",      "types" },
-	{ TRUE, 'v', "variable",     "variables" },
-	{ TRUE, 'a', "attribute",    "attributes" },
-	{ TRUE, 's', "variable",     "signals" },
-	{ TRUE, 'f', "function",     "functions" },
-	{ TRUE, 'p', "function",     "procedure" },
-	{ TRUE, 'k', "member",       "components" },
-	{ TRUE, 'l', "namespace",    "packages" },
-	{ TRUE, 'm', "member",       "process" },
-	{ TRUE, 'n', "class",        "entity" },
-	{ TRUE, 'o', "struct",       "architecture" },
-	{ TRUE, 'u', "port",         "ports" },
-	{ TRUE, 'b', "member",       "blocks" },
-	{ TRUE, 'A', "typedef",      "alias" }
+	{ true, 'c', "variable",     "constants" },
+	{ true, 't', "typedef",      "types" },
+	{ true, 'v', "variable",     "variables" },
+	{ true, 'a', "attribute",    "attributes" },
+	{ true, 's', "variable",     "signals" },
+	{ true, 'f', "function",     "functions" },
+	{ true, 'p', "function",     "procedure" },
+	{ true, 'k', "member",       "components" },
+	{ true, 'l', "namespace",    "packages" },
+	{ true, 'm', "member",       "process" },
+	{ true, 'n', "class",        "entity" },
+	{ true, 'o', "struct",       "architecture" },
+	{ true, 'u', "port",         "ports" },
+	{ true, 'b', "member",       "blocks" },
+	{ true, 'A', "typedef",      "alias" }
 };
 
 static keywordTable VhdlKeywordTable [] = {
@@ -144,9 +144,9 @@ static int vGetc (void)
 	return c;
 }
 
-static boolean isIdentifierCharacter (const int c)
+static bool isIdentifierCharacter (const int c)
 {
-	return (boolean)(isalnum (c)  ||  c == '_'  ||  c == '`');
+	return (bool)(isalnum (c)  ||  c == '_'  ||  c == '`');
 }
 
 static int skipWhite (int c)
@@ -156,7 +156,7 @@ static int skipWhite (int c)
 	return c;
 }
 
-static boolean readIdentifier (vString *const name, int c)
+static bool readIdentifier (vString *const name, int c)
 {
 	vStringClear (name);
 	if (isIdentifierCharacter (c))
@@ -169,7 +169,7 @@ static boolean readIdentifier (vString *const name, int c)
 		vUngetc (c);
 		vStringTerminate (name);
 	}
-	return (boolean)(name->length > 0);
+	return (bool)(name->length > 0);
 }
 
 static void tagNameList (const vhdlKind kind, int c)
@@ -239,7 +239,7 @@ static void findTag (vString *const name)
 
 static void findVhdlTags (void)
 {
-	volatile boolean newStatement = TRUE;
+	volatile bool newStatement = true;
 	volatile int c = '\0';
 	exception_t exception = (exception_t) setjmp (Exception);
 	Name = vStringNew ();
@@ -254,7 +254,7 @@ static void findVhdlTags (void)
 		{
 			case ';':
 			case '\n':
-				newStatement = TRUE;
+				newStatement = true;
 				break;
 
 			case ' ':
@@ -265,7 +265,7 @@ static void findVhdlTags (void)
 				if (newStatement && readIdentifier (Name, c)) {
 					findTag (Name);
 				}
-				newStatement = FALSE;
+				newStatement = false;
 				break;
 		}
 	}

@@ -31,9 +31,9 @@ typedef enum {
 } NsisKind;
 
 static kindOption NsisKinds [] = {
-	{ TRUE, 'n', "namespace", "sections"},
-	{ TRUE, 'f', "function", "functions"},
-	{ TRUE, 'v', "variable", "variables"}
+	{ true, 'n', "namespace", "sections"},
+	{ true, 'f', "function", "functions"},
+	{ true, 'v', "variable", "variables"}
 };
 
 /*
@@ -102,7 +102,7 @@ static void findNsisTags (void)
 		else if (strncasecmp ((const char*) cp, "section", (size_t) 7) == 0  &&
 				 isspace ((int) cp [7]))
 		{
-			boolean in_quotes = FALSE;
+			bool in_quotes = false;
 			cp += 7;
 			/* skip all whitespace */
 			while (isspace ((int) *cp))
@@ -116,7 +116,7 @@ static void findNsisTags (void)
 						break;
 					else
 					{
-						in_quotes = TRUE;
+						in_quotes = true;
 						++cp;
 						continue;
 					}

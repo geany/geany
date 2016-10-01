@@ -27,10 +27,10 @@ typedef enum {
 } tclKind;
 
 static kindOption TclKinds [] = {
-	{ TRUE, 'c', "class",     "classes" },
-	{ TRUE, 'm', "method",    "methods" },
-	{ TRUE, 'p', "procedure", "procedures" },
-	{ TRUE, 'n', "module",    "modules" }
+	{ true, 'c', "class",     "classes" },
+	{ true, 'm', "method",    "methods" },
+	{ true, 'p', "procedure", "procedures" },
+	{ true, 'n', "module",    "modules" }
 };
 
 /*
@@ -53,10 +53,10 @@ static const unsigned char *makeTclTag (
 	return cp;
 }
 
-static boolean match (const unsigned char *line, const char *word)
+static bool match (const unsigned char *line, const char *word)
 {
 	size_t len = strlen (word);
-	boolean matched = (strncmp ((const char*) line, word, len) == 0);
+	bool matched = (strncmp ((const char*) line, word, len) == 0);
 
 	if (matched)
 	{

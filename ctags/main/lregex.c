@@ -81,7 +81,7 @@ typedef struct {
 *   DATA DEFINITIONS
 */
 
-static boolean regexBroken = FALSE;
+static bool regexBroken = false;
 
 /* Array of pattern sets, indexed by language */
 static patternSet* Sets = NULL;
@@ -156,7 +156,7 @@ static char* scanSeparators (char* name)
 {
 	char sep = name [0];
 	char *copyto = name;
-	boolean quoted = FALSE;
+	bool quoted = false;
 
 	for (++name ; *name != '\0' ; ++name)
 	{
@@ -172,10 +172,10 @@ static char* scanSeparators (char* name)
 				*copyto++ = '\\';
 				*copyto++ = *name;
 			}
-			quoted = FALSE;
+			quoted = false;
 		}
 		else if (*name == '\\')
-			quoted = TRUE;
+			quoted = true;
 		else if (*name == sep)
 		{
 			break;
@@ -196,11 +196,11 @@ static char* scanSeparators (char* name)
  * to the trailing flags is written to `flags'. If the pattern is not in the
  * correct format, a false value is returned.
  */
-static boolean parseTagRegex (
+static bool parseTagRegex (
 		char* const regexp, char** const name,
 		char** const kinds, char** const flags)
 {
-	boolean result = FALSE;
+	bool result = false;
 	const int separator = (unsigned char) regexp [0];
 
 	*name = scanSeparators (regexp);
@@ -231,7 +231,7 @@ static boolean parseTagRegex (
 				*flags = third;
 				*kinds = NULL;
 			}
-			result = TRUE;
+			result = true;
 		}
 	}
 	return result;
@@ -263,7 +263,7 @@ static void addCompiledTagPattern (
 	ptrn->pattern = pattern;
 	ptrn->type    = PTRN_TAG;
 	ptrn->u.tag.name_pattern = name;
-	ptrn->u.tag.kind.enabled = TRUE;
+	ptrn->u.tag.kind.enabled = true;
 	ptrn->u.tag.kind.letter  = kind;
 	ptrn->u.tag.kind.name    = kindName;
 	ptrn->u.tag.kind.description = description;
@@ -366,7 +366,7 @@ static void parseKinds (
 	}
 }
 
-static void printRegexKind (const regexPattern *pat, unsigned int i, boolean indent)
+static void printRegexKind (const regexPattern *pat, unsigned int i, bool indent)
 {
 	const kindOption *const kind = &pat [i].u.tag.kind;
 	const char *const indentation = indent ? "    " : "";
@@ -477,14 +477,14 @@ static void matchCallbackPattern (
 	patbuf->u.callback.function (vStringValue (line), matches, count);
 }
 
-static boolean matchRegexPattern (const vString* const line,
+static bool matchRegexPattern (const vString* const line,
 		const regexPattern* const patbuf)
 {
-	boolean result = FALSE;
+	bool result = false;
 	GMatchInfo *minfo;
 	if (g_regex_match(patbuf->pattern, vStringValue(line), 0, &minfo))
 	{
-		result = TRUE;
+		result = true;
 		if (patbuf->type == PTRN_TAG)
 			matchTagPattern (line, patbuf, minfo);
 		else if (patbuf->type == PTRN_CALLBACK)
@@ -492,7 +492,7 @@ static boolean matchRegexPattern (const vString* const line,
 		else
 		{
 			Assert ("invalid pattern type" == NULL);
-			result = FALSE;
+			result = false;
 		}
 	}
 	g_match_info_free(minfo);
@@ -506,9 +506,9 @@ static boolean matchRegexPattern (const vString* const line,
 /* Match against all patterns for specified language. Returns true if at least
  * on pattern matched.
  */
-extern boolean matchRegex (const vString* const line, const langType language)
+extern bool matchRegex (const vString* const line, const langType language)
 {
-	boolean result = FALSE;
+	bool result = false;
 	if (language != LANG_IGNORE  &&  language <= SetUpper  &&
 		Sets [language].count > 0)
 	{
@@ -516,7 +516,7 @@ extern boolean matchRegex (const vString* const line, const langType language)
 		unsigned int i;
 		for (i = 0  ;  i < set->count  ;  ++i)
 			if (matchRegexPattern (line, set->patterns + i))
-				result = TRUE;
+				result = true;
 	}
 	return result;
 }
@@ -594,10 +594,10 @@ extern void addLanguageRegex (
 *   Regex option parsing
 */
 
-extern boolean processRegexOption (const char *const option,
+extern bool processRegexOption (const char *const option,
 								   const char *const parameter CTAGS_ATTR_UNUSED)
 {
-	boolean handled = FALSE;
+	bool handled = false;
 	const char* const dash = strchr (option, '-');
 	if (dash != NULL  &&  strncmp (option, "regex", dash - option) == 0)
 	{
@@ -612,7 +612,7 @@ extern boolean processRegexOption (const char *const option,
 		printf ("regex: regex support not available; required for --%s option\n",
 		   option);
 #endif
-		handled = TRUE;
+		handled = true;
 	}
 	return handled;
 }
@@ -626,16 +626,16 @@ extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED)
 		unsigned int i;
 		for (i = 0  ;  i < set->count  ;  ++i)
 			if (set->patterns [i].type == PTRN_TAG)
-				set->patterns [i].u.tag.kind.enabled = FALSE;
+				set->patterns [i].u.tag.kind.enabled = false;
 	}
 #endif
 }
 
-extern boolean enableRegexKind (
+extern bool enableRegexKind (
 		const langType language CTAGS_ATTR_UNUSED,
-		const int kind CTAGS_ATTR_UNUSED, const boolean mode CTAGS_ATTR_UNUSED)
+		const int kind CTAGS_ATTR_UNUSED, const bool mode CTAGS_ATTR_UNUSED)
 {
-	boolean result = FALSE;
+	bool result = false;
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
 	{
@@ -646,14 +646,14 @@ extern boolean enableRegexKind (
 				set->patterns [i].u.tag.kind.letter == kind)
 			{
 				set->patterns [i].u.tag.kind.enabled = mode;
-				result = TRUE;
+				result = true;
 			}
 	}
 #endif
 	return result;
 }
 
-extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, boolean indent CTAGS_ATTR_UNUSED)
+extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, bool indent CTAGS_ATTR_UNUSED)
 {
 #ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)

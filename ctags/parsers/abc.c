@@ -27,8 +27,8 @@
 */
 
 static kindOption AbcKinds[] = {
-	{ TRUE, 'm', "member", "sections" },
-	{ TRUE, 's', "struct",  "header1"}
+	{ true, 'm', "member", "sections" },
+	{ true, 's', "struct",  "header1"}
 };
 
 /*
@@ -36,20 +36,20 @@ static kindOption AbcKinds[] = {
 */
 
 /* checks if str is all the same character */
-/*static boolean issame(const char *str)
+/*static bool issame(const char *str)
 {
 	char first = *str;
 
 	while (*(++str))
 	{
 		if (*str && *str != first)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }*/
 
 
-static void makeAbcTag (const vString* const name, boolean name_before)
+static void makeAbcTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
 	initTagEntry (&e, vStringValue(name), &(AbcKinds[0]));
@@ -60,7 +60,7 @@ static void makeAbcTag (const vString* const name, boolean name_before)
 	makeTagEntry(&e);
 }
 
-/*static void makeAbcTag2 (const vString* const name, boolean name_before)
+/*static void makeAbcTag2 (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
 	initTagEntry (&e, vStringValue(name));
@@ -85,20 +85,20 @@ static void findAbcTags (void)
 		/* underlines must be the same length or more */
 		/*if (name_len > 0 &&	(line[0] == '=' || line[0] == '-') && issame((const char*) line))
 		{
-			makeAbcTag(name, TRUE);
+			makeAbcTag(name, true);
 		}*/
 /*		if (line[1] == '%') {
 			vStringClear(name);
 			vStringCatS(name, (const char *) line);
 			vStringTerminate(name);
-			makeAbcTag(name, FALSE);
+			makeAbcTag(name, false);
 		}*/
 		if (line[0] == 'T') {
 			/*vStringClear(name);*/
 			vStringCatS(name, " / ");
 			vStringCatS(name, (const char *) line);
 			vStringTerminate(name);
-			makeAbcTag(name, FALSE);
+			makeAbcTag(name, false);
 		}
 		else {
 			vStringClear (name);

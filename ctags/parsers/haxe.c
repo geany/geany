@@ -28,8 +28,8 @@
 /*
  *       MACROS
  */
-#define isType(token,t)         (boolean) ((token)->type == (t))
-#define isKeyword(token,k)      (boolean) ((token)->keyword == (k))
+#define isType(token,t)         (bool) ((token)->type == (t))
+#define isKeyword(token,k)      (bool) ((token)->keyword == (k))
 
 /*
  *      DATA DEFINITIONS
@@ -48,12 +48,12 @@ typedef enum {
 } hxKind;
 
 static kindOption HxKinds [] = {
-	{ TRUE,  'm', "method",         "methods" },
-	{ TRUE,  'c', "class",          "classes" },
-	{ TRUE,  'e', "enum",           "enumerations" },
-	{ TRUE,  'v', "variable",       "variables" },
-	{ TRUE,  'i', "interface",      "interfaces" },
-	{ TRUE,  't', "typedef",        "typedefs" },
+	{ true,  'm', "method",         "methods" },
+	{ true,  'c', "class",          "classes" },
+	{ true,  'e', "enum",           "enumerations" },
+	{ true,  'v', "variable",       "variables" },
+	{ true,  'i', "interface",      "interfaces" },
+	{ true,  't', "typedef",        "typedefs" },
 };
 
 static void findHxTags (void)

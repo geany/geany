@@ -36,11 +36,11 @@ typedef enum {
 } asciidocKind;
 
 static kindOption AsciidocKinds[] = {
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 'm', "member",        "sections" },
-	{ TRUE, 'd', "macro",         "level2sections" },
-	{ TRUE, 'v', "variable",      "level3sections" },
-	{ TRUE, 's', "struct",        "level4sections" }
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 'm', "member",        "sections" },
+	{ true, 'd', "macro",         "level2sections" },
+	{ true, 'v', "variable",      "level3sections" },
+	{ true, 's', "struct",        "level4sections" }
 };
 
 static char kindchars[SECTION_COUNT]={ '=', '-', '~', '^', '+' };

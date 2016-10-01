@@ -39,19 +39,19 @@ typedef enum {
 } objcKind;
 
 static kindOption ObjcKinds[] = {
-	{TRUE, 'i', "interface", "class interface"},
-	{TRUE, 'I', "implementation", "class implementation"},
-	{TRUE, 'P', "protocol", "Protocol"},
-	{TRUE, 'm', "method", "Object's method"},
-	{TRUE, 'c', "class", "Class' method"},
-	{TRUE, 'v', "var", "Global variable"},
-	{TRUE, 'F', "field", "Object field"},
-	{TRUE, 'f', "function", "A function"},
-	{TRUE, 'p', "property", "A property"},
-	{TRUE, 't', "typedef", "A type alias"},
-	{TRUE, 's', "struct", "A type structure"},
-	{TRUE, 'e', "enum", "An enumeration"},
-	{TRUE, 'M', "macro", "A preprocessor macro"},
+	{true, 'i', "interface", "class interface"},
+	{true, 'I', "implementation", "class implementation"},
+	{true, 'P', "protocol", "Protocol"},
+	{true, 'm', "method", "Object's method"},
+	{true, 'c', "class", "Class' method"},
+	{true, 'v', "var", "Global variable"},
+	{true, 'F', "field", "Object field"},
+	{true, 'f', "function", "A function"},
+	{true, 'p', "property", "A property"},
+	{true, 't', "typedef", "A type alias"},
+	{true, 's', "struct", "A type structure"},
+	{true, 'e', "enum", "An enumeration"},
+	{true, 'M', "macro", "A preprocessor macro"},
 };
 
 typedef enum {
@@ -135,32 +135,32 @@ typedef struct _lexingState {
 
 /*//////////////////////////////////////////////////////////////////////
 //// Lexing                                     */
-static boolean isNum (char c)
+static bool isNum (char c)
 {
 	return c >= '0' && c <= '9';
 }
 
-static boolean isLowerAlpha (char c)
+static bool isLowerAlpha (char c)
 {
 	return c >= 'a' && c <= 'z';
 }
 
-static boolean isUpperAlpha (char c)
+static bool isUpperAlpha (char c)
 {
 	return c >= 'A' && c <= 'Z';
 }
 
-static boolean isAlpha (char c)
+static bool isAlpha (char c)
 {
 	return isLowerAlpha (c) || isUpperAlpha (c);
 }
 
-static boolean isIdent (char c)
+static bool isIdent (char c)
 {
 	return isNum (c) || isAlpha (c) || c == '_';
 }
 
-static boolean isSpace (char c)
+static bool isSpace (char c)
 {
 	return c == ' ' || c == '\t';
 }
@@ -177,8 +177,8 @@ static void eatWhiteSpace (lexingState * st)
 
 static void eatString (lexingState * st)
 {
-	boolean lastIsBackSlash = FALSE;
-	boolean unfinished = TRUE;
+	bool lastIsBackSlash = false;
+	bool unfinished = true;
 	const unsigned char *c = st->cp + 1;
 
 	while (unfinished)
@@ -188,7 +188,7 @@ static void eatString (lexingState * st)
 		if (c == NULL || c[0] == '\0')
 			break;
 		else if (*c == '"' && !lastIsBackSlash)
-			unfinished = FALSE;
+			unfinished = false;
 		else
 			lastIsBackSlash = *c == '\\';
 
@@ -200,8 +200,8 @@ static void eatString (lexingState * st)
 
 static void eatComment (lexingState * st)
 {
-	boolean unfinished = TRUE;
-	boolean lastIsStar = FALSE;
+	bool unfinished = true;
+	bool lastIsStar = false;
 	const unsigned char *c = st->cp + 2;
 
 	while (unfinished)
@@ -220,7 +220,7 @@ static void eatComment (lexingState * st)
 		}
 		/* we've reached the end of the comment */
 		else if (*c == '/' && lastIsStar)
-			unfinished = FALSE;
+			unfinished = false;
 		else
 		{
 			lastIsStar = '*' == *c;
@@ -792,7 +792,7 @@ static void parseStructMembers (vString * const ident, objcToken what)
 }
 
 /* Called just after the struct keyword */
-static boolean parseStruct_gotName = FALSE;
+static bool parseStruct_gotName = false;
 static void parseStruct (vString * const ident, objcToken what)
 {
 	switch (what)
@@ -802,11 +802,11 @@ static void parseStruct (vString * const ident, objcToken what)
 		{
 			addTag (ident, K_STRUCT);
 			pushEnclosingContext (ident, K_STRUCT);
-			parseStruct_gotName = TRUE;
+			parseStruct_gotName = true;
 		}
 		else
 		{
-			parseStruct_gotName = FALSE;
+			parseStruct_gotName = false;
 			popEnclosingContext ();
 			toDoNext = comeAfter;
 			comeAfter (ident, what);
@@ -868,7 +868,7 @@ static void parseEnumFields (vString * const ident, objcToken what)
 }
 
 /* parse enum ... { ... */
-static boolean parseEnum_named = FALSE;
+static bool parseEnum_named = false;
 static void parseEnum (vString * const ident, objcToken what)
 {
 	switch (what)
@@ -878,11 +878,11 @@ static void parseEnum (vString * const ident, objcToken what)
 		{
 			addTag (ident, K_ENUM);
 			pushEnclosingContext (ident, K_ENUM);
-			parseEnum_named = TRUE;
+			parseEnum_named = true;
 		}
 		else
 		{
-			parseEnum_named = FALSE;
+			parseEnum_named = false;
 			popEnclosingContext ();
 			toDoNext = comeAfter;
 			comeAfter (ident, what);
@@ -891,7 +891,7 @@ static void parseEnum (vString * const ident, objcToken what)
 
 	case Tok_CurlL:	/* '{' */
 		toDoNext = &parseEnumFields;
-		parseEnum_named = FALSE;
+		parseEnum_named = false;
 		break;
 
 	case Tok_semi:	/* ';' */
@@ -942,19 +942,19 @@ static void parseTypedef (vString * const ident, objcToken what)
 	}
 }
 
-static boolean ignorePreprocStuff_escaped = FALSE;
+static bool ignorePreprocStuff_escaped = false;
 static void ignorePreprocStuff (vString * const ident CTAGS_ATTR_UNUSED, objcToken what)
 {
 	switch (what)
 	{
 	case Tok_Backslash:
-		ignorePreprocStuff_escaped = TRUE;
+		ignorePreprocStuff_escaped = true;
 		break;
 
 	case Tok_EOL:
 		if (ignorePreprocStuff_escaped)
 		{
-			ignorePreprocStuff_escaped = FALSE;
+			ignorePreprocStuff_escaped = false;
 		}
 		else
 		{
@@ -963,7 +963,7 @@ static void ignorePreprocStuff (vString * const ident CTAGS_ATTR_UNUSED, objcTok
 		break;
 
 	default:
-		ignorePreprocStuff_escaped = FALSE;
+		ignorePreprocStuff_escaped = false;
 		break;
 	}
 }
@@ -1078,10 +1078,10 @@ static void findObjcTags (void)
 	parentType = K_INTERFACE;
 	ignoreBalanced_count = 0;
 	methodKind = 0;
-	parseStruct_gotName = FALSE;
+	parseStruct_gotName = false;
 	parseEnumFields_prev = NULL;
-	parseEnum_named = FALSE;
-	ignorePreprocStuff_escaped = FALSE;
+	parseEnum_named = false;
+	ignorePreprocStuff_escaped = false;
 
 	st.name = vStringNew ();
 	st.cp = readLineFromInputFile ();

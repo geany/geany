@@ -41,8 +41,8 @@
 /*
  *	 MACROS
  */
-#define isType(token,t)		(boolean) ((token)->type == (t))
-#define isKeyword(token,k)	(boolean) ((token)->keyword == (k))
+#define isType(token,t)		(bool) ((token)->type == (t))
+#define isKeyword(token,k)	(bool) ((token)->keyword == (k))
 
 /*
  *	 DATA DECLARATIONS
@@ -201,29 +201,29 @@ typedef enum {
 } sqlKind;
 
 static kindOption SqlKinds [] = {
-	{ TRUE,  'c', "cursor",		  "cursors"				   },
-	{ FALSE, 'd', "prototype",	  "prototypes"			   },
-	{ TRUE,  'f', "function",	  "functions"			   },
-	{ TRUE,  'F', "field",		  "record fields"		   },
-	{ FALSE, 'l', "local",		  "local variables"		   },
-	{ TRUE,  'L', "label",		  "block label"			   },
-	{ TRUE,  'P', "package",	  "packages"			   },
-	{ TRUE,  'p', "procedure",	  "procedures"			   },
-	{ FALSE, 'r', "record",		  "records"				   },
-	{ TRUE,  's', "subtype",	  "subtypes"			   },
-	{ TRUE,  't', "table",		  "tables"				   },
-	{ TRUE,  'T', "trigger",	  "triggers"			   },
-	{ TRUE,  'v', "variable",	  "variables"			   },
-	{ TRUE,  'i', "index",		  "indexes"				   },
-	{ TRUE,  'e', "event",		  "events"				   },
-	{ TRUE,  'U', "publication",  "publications"		   },
-	{ TRUE,  'R', "service",	  "services"			   },
-	{ TRUE,  'D', "domain",		  "domains"				   },
-	{ TRUE,  'V', "view",		  "views"				   },
-	{ TRUE,  'n', "synonym",	  "synonyms"			   },
-	{ TRUE,  'x', "mltable",	  "MobiLink Table Scripts" },
-	{ TRUE,  'y', "mlconn",		  "MobiLink Conn Scripts"  },
-	{ TRUE,  'z', "mlprop",		  "MobiLink Properties "   }
+	{ true,  'c', "cursor",		  "cursors"				   },
+	{ false, 'd', "prototype",	  "prototypes"			   },
+	{ true,  'f', "function",	  "functions"			   },
+	{ true,  'F', "field",		  "record fields"		   },
+	{ false, 'l', "local",		  "local variables"		   },
+	{ true,  'L', "label",		  "block label"			   },
+	{ true,  'P', "package",	  "packages"			   },
+	{ true,  'p', "procedure",	  "procedures"			   },
+	{ false, 'r', "record",		  "records"				   },
+	{ true,  's', "subtype",	  "subtypes"			   },
+	{ true,  't', "table",		  "tables"				   },
+	{ true,  'T', "trigger",	  "triggers"			   },
+	{ true,  'v', "variable",	  "variables"			   },
+	{ true,  'i', "index",		  "indexes"				   },
+	{ true,  'e', "event",		  "events"				   },
+	{ true,  'U', "publication",  "publications"		   },
+	{ true,  'R', "service",	  "services"			   },
+	{ true,  'D', "domain",		  "domains"				   },
+	{ true,  'V', "view",		  "views"				   },
+	{ true,  'n', "synonym",	  "synonyms"			   },
+	{ true,  'x', "mltable",	  "MobiLink Table Scripts" },
+	{ true,  'y', "mlconn",		  "MobiLink Conn Scripts"  },
+	{ true,  'z', "mlprop",		  "MobiLink Properties "   }
 };
 
 static const keywordTable SqlKeywordTable [] = {
@@ -308,8 +308,8 @@ static const keywordTable SqlKeywordTable [] = {
  */
 
 /* Recursive calls */
-static void parseBlock (tokenInfo *const token, const boolean local);
-static void parseDeclare (tokenInfo *const token, const boolean local);
+static void parseBlock (tokenInfo *const token, const bool local);
+static void parseDeclare (tokenInfo *const token, const bool local);
 static void parseKeywords (tokenInfo *const token);
 static void parseSqlFile (tokenInfo *const token);
 
@@ -317,7 +317,7 @@ static void parseSqlFile (tokenInfo *const token);
  *	 FUNCTION DEFINITIONS
  */
 
-static boolean isIdentChar1 (const int c)
+static bool isIdentChar1 (const int c)
 {
 	/*
 	 * Other databases are less restrictive on the first character of
@@ -325,18 +325,18 @@ static boolean isIdentChar1 (const int c)
 	 * isIdentChar1 is used to identify the first character of an 
 	 * identifier, so we are removing some restrictions.
 	 */
-	return (boolean)
+	return (bool)
 		(isalpha (c) || c == '@' || c == '_' );
 }
 
-static boolean isIdentChar (const int c)
+static bool isIdentChar (const int c)
 {
-	return (boolean)
+	return (bool)
 		(isalpha (c) || isdigit (c) || c == '$' || 
 		 c == '@' || c == '_' || c == '#');
 }
 
-static boolean isCmdTerm (tokenInfo *const token)
+static bool isCmdTerm (tokenInfo *const token)
 {
 	DebugStatement ( 
 			debugPrintf (DEBUG_PARSE
@@ -365,9 +365,9 @@ static boolean isCmdTerm (tokenInfo *const token)
 			isKeyword (token, KEYWORD_go));
 }
 
-static boolean isMatchedEnd(tokenInfo *const token, int nest_lvl)
+static bool isMatchedEnd(tokenInfo *const token, int nest_lvl)
 {
-	boolean terminated = FALSE;
+	bool terminated = false;
 	/*
 	 * Since different forms of SQL allow the use of 
 	 * BEGIN 
@@ -388,7 +388,7 @@ static boolean isMatchedEnd(tokenInfo *const token, int nest_lvl)
 	if ( nest_lvl > 0 && isKeyword (token, KEYWORD_end) )
 	{
 		if ( token->begin_end_nest_lvl == nest_lvl )
-			terminated = TRUE;
+			terminated = true;
 	}
 
 	return terminated;
@@ -459,12 +459,12 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 
 static void parseString (vString *const string, const int delimiter)
 {
-	boolean end = FALSE;
+	bool end = false;
 	while (! end)
 	{
 		int c = getcFromInputFile ();
 		if (c == EOF)
-			end = TRUE;
+			end = true;
 		/*
 		else if (c == '\\')
 		{
@@ -473,7 +473,7 @@ static void parseString (vString *const string, const int delimiter)
 		}
 		*/
 		else if (c == delimiter)
-			end = TRUE;
+			end = true;
 		else
 			vStringPut (string, c);
 	}
@@ -706,7 +706,7 @@ static void findToken (tokenInfo *const token, const tokenType type)
 	}
 }
 
-static void findCmdTerm (tokenInfo *const token, const boolean check_first)
+static void findCmdTerm (tokenInfo *const token, const bool check_first)
 {
 	int begin_end_nest_lvl = token->begin_end_nest_lvl;
 
@@ -958,7 +958,7 @@ static void parseSubProgram (tokenInfo *const token)
 			readToken (token);
 
 		if (isKeyword (token, KEYWORD_declare))
-			parseDeclare (token, FALSE);
+			parseDeclare (token, false);
 
 		if (isKeyword (token, KEYWORD_is) || 
 			isKeyword (token, KEYWORD_begin))
@@ -970,7 +970,7 @@ static void parseSubProgram (tokenInfo *const token)
 			   )
 				makeSqlTag (name, kind);
 
-			parseBlock (token, TRUE);
+			parseBlock (token, true);
 			vStringClear (token->scope);
 			token->scopeKind = SQLTAG_COUNT;
 		} 
@@ -1109,7 +1109,7 @@ static void parseSimple (tokenInfo *const token, const sqlKind kind)
 		makeSqlTag (token, kind);
 }
 
-static void parseDeclare (tokenInfo *const token, const boolean local)
+static void parseDeclare (tokenInfo *const token, const bool local)
 {
 	/*
 	 * PL/SQL declares are of this format:
@@ -1154,7 +1154,7 @@ static void parseDeclare (tokenInfo *const token, const boolean local)
 	}
 }
 
-static void parseDeclareANSI (tokenInfo *const token, const boolean local)
+static void parseDeclareANSI (tokenInfo *const token, const bool local)
 {
 	tokenInfo *const type = newToken ();
 	/*
@@ -1234,10 +1234,10 @@ static void parseLabel (tokenInfo *const token)
 	}
 }
 
-static void parseStatements (tokenInfo *const token, const boolean exit_on_endif )
+static void parseStatements (tokenInfo *const token, const bool exit_on_endif )
 {
-	/* boolean isAnsi   = TRUE; */
-	boolean stmtTerm = FALSE;
+	/* bool isAnsi   = true; */
+	bool stmtTerm = false;
 	do
 	{
 
@@ -1314,8 +1314,8 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 
 					if (isKeyword (token, KEYWORD_begin))
 					{
-						/* isAnsi = FALSE; */
-						parseBlock(token, FALSE);
+						/* isAnsi = false; */
+						parseBlock(token, false);
 
 						/*
 						 * Handle the non-Ansi IF blocks.
@@ -1324,7 +1324,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						 * we know we are done with this statement.
 						 */
 						if (isCmdTerm (token))
-							stmtTerm = TRUE;
+							stmtTerm = true;
 					}
 					else
 					{
@@ -1338,7 +1338,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 									isKeyword (token, KEYWORD_elseif)    )
 								readToken (token);
 
-							parseStatements (token, TRUE);
+							parseStatements (token, true);
 
 							if (isCmdTerm(token))
 								readToken (token);
@@ -1358,7 +1358,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						{
 							readToken (token);
 							if (isCmdTerm(token))
-								stmtTerm = TRUE;
+								stmtTerm = true;
 						} 
 						else 
 						{
@@ -1420,7 +1420,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 							readToken (token);
 							*/
 
-						parseStatements (token, FALSE);
+						parseStatements (token, false);
 
 						if (isCmdTerm(token))
 							readToken (token);
@@ -1442,7 +1442,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						readToken (token);
 
 					if (isCmdTerm(token))
-						stmtTerm = TRUE;
+						stmtTerm = true;
 
 					break;
 
@@ -1453,7 +1453,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 
 				case KEYWORD_declare:
 				case KEYWORD_begin:
-					parseBlock (token, TRUE);
+					parseBlock (token, true);
 					break;
 
 				case KEYWORD_end:
@@ -1523,9 +1523,9 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 					isKeyword (token, KEYWORD_case) ||
 					isKeyword (token, KEYWORD_for) ||
 					isKeyword (token, KEYWORD_begin))
-						parseStatements (token, FALSE);
+						parseStatements (token, false);
 				else if (isKeyword (token, KEYWORD_if))
-					parseStatements (token, TRUE);
+					parseStatements (token, true);
 
 			}
 		}
@@ -1535,14 +1535,14 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 		 * is not a command terminator.
 		 */
 		if (isCmdTerm(token) && ! stmtTerm)
-			stmtTerm = TRUE;
+			stmtTerm = true;
 				
 	} while (! isKeyword (token, KEYWORD_end) && 
 			 ! (exit_on_endif && isKeyword (token, KEYWORD_endif) ) && 
 			 ! stmtTerm );
 }
 
-static void parseBlock (tokenInfo *const token, const boolean local)
+static void parseBlock (tokenInfo *const token, const bool local)
 {
 	if (isType (token, TOKEN_BLOCK_LABEL_BEGIN))
 	{
@@ -1570,7 +1570,7 @@ static void parseBlock (tokenInfo *const token, const boolean local)
 		token->begin_end_nest_lvl++;
 		while (! isKeyword (token, KEYWORD_end))
 		{
-			parseStatements (token, FALSE);
+			parseStatements (token, false);
 
 			if (isCmdTerm(token))
 				readToken (token);
@@ -1595,7 +1595,7 @@ static void parseBlock (tokenInfo *const token, const boolean local)
 			 * been read since it is possible this 
 			 * token is not a command delimiter.
 			 */
-			/* findCmdTerm (token, FALSE); */
+			/* findCmdTerm (token, false); */
 		}
 	}
 }
@@ -1636,11 +1636,11 @@ static void parsePackage (tokenInfo *const token)
 				isType (name, TOKEN_STRING))
 			makeSqlTag (name, SQLTAG_PACKAGE);
 		addToScope (token, name->string, SQLTAG_PACKAGE);
-		parseBlock (token, FALSE);
+		parseBlock (token, false);
 		vStringClear (token->scope);
 		token->scopeKind = SQLTAG_COUNT;
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1714,7 +1714,7 @@ static void parseTable (tokenInfo *const token)
 			makeSqlTag (name, SQLTAG_TABLE);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1753,7 +1753,7 @@ static void parseIndex (tokenInfo *const token)
 		addToScope(name, owner->string, SQLTAG_TABLE /* FIXME? */);
 		makeSqlTag (name, SQLTAG_INDEX);
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 	deleteToken (owner);
 }
@@ -1793,9 +1793,9 @@ static void parseEvent (tokenInfo *const token)
 		readToken (token);
 		if (isKeyword (token, KEYWORD_begin))
 		{
-			parseBlock (token, TRUE);
+			parseBlock (token, true);
 		}
-		findCmdTerm (token, TRUE);
+		findCmdTerm (token, true);
 	}
 	deleteToken (name);
 }
@@ -1848,7 +1848,7 @@ static void parseTrigger (tokenInfo *const token)
 			if (isKeyword (token, KEYWORD_declare))
 			{
 				addToScope(token, name->string, SQLTAG_TRIGGER);
-				parseDeclare(token, TRUE);
+				parseDeclare(token, true);
 				vStringClear(token->scope);
 				token->scopeKind = SQLTAG_COUNT;
 			}
@@ -1864,14 +1864,14 @@ static void parseTrigger (tokenInfo *const token)
 			addToScope(token, table->string, SQLTAG_TABLE);
 			if (isKeyword (token, KEYWORD_begin))
 			{
-				parseBlock (token, TRUE);
+				parseBlock (token, true);
 			}
 			vStringClear(token->scope);
 			token->scopeKind = SQLTAG_COUNT;
 		}
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 	deleteToken (name);
 	deleteToken (table);
 }
@@ -1903,7 +1903,7 @@ static void parsePublication (tokenInfo *const token)
 			makeSqlTag (name, SQLTAG_PUBLICATION);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1932,7 +1932,7 @@ static void parseService (tokenInfo *const token)
 			makeSqlTag (name, SQLTAG_SERVICE);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1956,7 +1956,7 @@ static void parseDomain (tokenInfo *const token)
 	{
 		makeSqlTag (name, SQLTAG_DOMAIN);
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1972,7 +1972,7 @@ static void parseDrop (tokenInfo *const token)
 	 * the issue for all types.
 	 */
 
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 }
 
 static void parseVariable (tokenInfo *const token)
@@ -1994,7 +1994,7 @@ static void parseVariable (tokenInfo *const token)
 	{
 		makeSqlTag (name, SQLTAG_VARIABLE);
 	}
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2018,7 +2018,7 @@ static void parseSynonym (tokenInfo *const token)
 	{
 		makeSqlTag (name, SQLTAG_SYNONYM);
 	}
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2060,7 +2060,7 @@ static void parseView (tokenInfo *const token)
 		makeSqlTag (name, SQLTAG_VIEW);
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2119,7 +2119,7 @@ static void parseMLTable (tokenInfo *const token)
 		} 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (version);
 	deleteToken (table);
@@ -2166,7 +2166,7 @@ static void parseMLConn (tokenInfo *const token)
 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (version);
 	deleteToken (event);
@@ -2229,7 +2229,7 @@ static void parseMLProp (tokenInfo *const token)
 		} 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (component);
 	deleteToken (prop_set_name);
@@ -2264,7 +2264,7 @@ static void parseComment (tokenInfo *const token)
 		findToken (token, TOKEN_CLOSE_CURLY);
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 }
 
 
@@ -2272,16 +2272,16 @@ static void parseKeywords (tokenInfo *const token)
 {
 		switch (token->keyword)
 		{
-			case KEYWORD_begin:			parseBlock (token, FALSE); break;
+			case KEYWORD_begin:			parseBlock (token, false); break;
 			case KEYWORD_comment:		parseComment (token); break;
 			case KEYWORD_cursor:		parseSimple (token, SQLTAG_CURSOR); break;
 			case KEYWORD_datatype:		parseDomain (token); break;
-			case KEYWORD_declare:		parseBlock (token, FALSE); break;
+			case KEYWORD_declare:		parseBlock (token, false); break;
 			case KEYWORD_domain:		parseDomain (token); break;
 			case KEYWORD_drop:			parseDrop (token); break;
 			case KEYWORD_event:			parseEvent (token); break;
 			case KEYWORD_function:		parseSubProgram (token); break;
-			case KEYWORD_if:			parseStatements (token, FALSE); break;
+			case KEYWORD_if:			parseStatements (token, false); break;
 			case KEYWORD_index:			parseIndex (token); break;
 			case KEYWORD_ml_table:		parseMLTable (token); break;
 			case KEYWORD_ml_table_lang: parseMLTable (token); break;

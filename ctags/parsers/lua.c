@@ -27,7 +27,7 @@ typedef enum {
 } luaKind;
 
 static kindOption LuaKinds [] = {
-	{ TRUE, 'f', "function", "functions" }
+	{ true, 'f', "function", "functions" }
 };
 
 /*
@@ -50,18 +50,18 @@ static void CTAGS_ATTR_UNUSED print_string (char *p, char *q)
  * (Lua treat first line as a comment if it starts with #!)
  *
  */
-static boolean is_a_code_line (const unsigned char *line)
+static bool is_a_code_line (const unsigned char *line)
 {
-	boolean result;
+	bool result;
 	const unsigned char *p = line;
 	while (isspace ((int) *p))
 		p++;
 	if (p [0] == '\0')
-		result = FALSE;
+		result = false;
 	else if (p [0] == '-' && p [1] == '-')
-		result = FALSE;
+		result = false;
 	else
-		result = TRUE;
+		result = true;
 	return result;
 }
 

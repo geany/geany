@@ -52,13 +52,13 @@ typedef struct sTagFields {
 /*  Information about the current tag candidate.
  */
 typedef struct sTagEntryInfo {
-	boolean     lineNumberEntry;/* pattern or line number entry */
+	bool     lineNumberEntry;   /* pattern or line number entry */
 	unsigned long lineNumber;   /* line number of tag */
 	MIOPos      filePosition;   /* file position of line containing tag */
 	const char* language;       /* language of source file */
-	boolean     isFileScope;    /* is tag visible only within source file? */
-	boolean     isFileEntry;    /* is this just an entry for a file name? */
-	boolean     truncateLine;   /* truncate tag line at end of tag name? */
+	bool     isFileScope;       /* is tag visible only within source file? */
+	bool     isFileEntry;       /* is this just an entry for a file name? */
+	bool     truncateLine;      /* truncate tag line at end of tag name? */
 	const char *sourceFileName; /* name of source file */
 	const char *name;           /* name of the tag */
 	const kindOption *kind;     /* kind descriptor */
@@ -89,7 +89,7 @@ extern const char *tagFileName (void);
 extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size);
 extern void copyFile (const char *const from, const char *const to, const long size);
 extern void openTagFile (void);
-extern void closeTagFile (const boolean resize);
+extern void closeTagFile (const bool resize);
 extern void beginEtagsFile (void);
 extern void endEtagsFile (const char *const name);
 extern void makeTagEntry (const tagEntryInfo *const tag);

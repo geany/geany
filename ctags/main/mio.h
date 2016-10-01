@@ -128,8 +128,8 @@ struct _MIO {
 			size_t allocated_size;
 			MIOReallocFunc realloc_func;
 			MIODestroyNotify free_func;
-			boolean error;
-			boolean eof;
+			bool error;
+			bool eof;
 		} mem;
 	} impl;
 };

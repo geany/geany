@@ -42,8 +42,8 @@ typedef enum {
 } powerShellKind;
 
 static kindOption PowerShellKinds[COUNT_KIND] = {
-	{ TRUE, 'f', "function",	"functions" },
-	{ TRUE, 'v', "variable",	"variables" }
+	{ true, 'f', "function",	"functions" },
+	{ true, 'v', "variable",	"variables" }
 };
 
 
@@ -164,7 +164,7 @@ static void deleteToken (tokenInfo *const token)
 }
 
 static void copyToken (tokenInfo *const dest, const tokenInfo *const src,
-					   boolean scope)
+					   bool scope)
 {
 	dest->lineNumber = src->lineNumber;
 	dest->filePosition = src->filePosition;
@@ -183,14 +183,14 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 	vStringTerminate (token->scope);
 }
 
-static boolean isIdentChar (const int c)
+static bool isIdentChar (const int c)
 {
 	return (isalnum (c) || c == ':' || c == '_' || c == '-' || c >= 0x80);
 }
 
 static void parseString (vString *const string, const int delimiter)
 {
-	while (TRUE)
+	while (true)
 	{
 		int c = getcFromInputFile ();
 
@@ -216,13 +216,13 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	vStringTerminate (string);
 }
 
-static boolean isTokenFunction (vString *const name)
+static bool isTokenFunction (vString *const name)
 {
 	return (strcasecmp (vStringValue (name), "function") == 0 ||
 			strcasecmp (vStringValue (name), "filter") == 0);
 }
 
-static boolean isSpace (int c)
+static bool isSpace (int c)
 {
 	return (c == '\t' || c == ' ' || c == '\v' ||
 			c == '\n' || c == '\r' || c == '\f');
@@ -409,21 +409,21 @@ static const char *parsePowerShellScope (tokenInfo *const token)
  *
  * 	function myfunc($foo, $bar) {}
  */
-static boolean parseFunction (tokenInfo *const token)
+static bool parseFunction (tokenInfo *const token)
 {
-	boolean readNext = TRUE;
+	bool readNext = true;
 	tokenInfo *nameFree = NULL;
 	const char *access;
 
 	readToken (token);
 
 	if (token->type != TOKEN_IDENTIFIER)
-		return FALSE;
+		return false;
 
 	access = parsePowerShellScope (token);
 
 	nameFree = newToken ();
-	copyToken (nameFree, token, TRUE);
+	copyToken (nameFree, token, true);
 	readToken (token);
 
 	if (token->type == TOKEN_OPEN_PAREN)
@@ -503,7 +503,7 @@ static boolean parseFunction (tokenInfo *const token)
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, nameFree->string, K_FUNCTION);
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	if (nameFree)
 		deleteToken (nameFree);
@@ -514,14 +514,14 @@ static boolean parseFunction (tokenInfo *const token)
 /* parses declarations of the form
  * 	$var = VALUE
  */
-static boolean parseVariable (tokenInfo *const token)
+static bool parseVariable (tokenInfo *const token)
 {
 	tokenInfo *name;
-	boolean readNext = TRUE;
+	bool readNext = true;
 	const char *access;
 
 	name = newToken ();
-	copyToken (name, token, TRUE);
+	copyToken (name, token, true);
 
 	readToken (token);
 	if (token->type == TOKEN_EQUAL_SIGN)
@@ -530,11 +530,11 @@ static boolean parseVariable (tokenInfo *const token)
 		{	/* ignore local variables (i.e. within a function) */
 			access = parsePowerShellScope (name);
 			makeSimplePowerShellTag (name, K_VARIABLE, access);
-			readNext = TRUE;
+			readNext = true;
 		}
 	}
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	deleteToken (name);
 
@@ -548,7 +548,7 @@ static void enterScope (tokenInfo *const parentToken,
 	tokenInfo *token = newToken ();
 	int origParentKind = parentToken->parentKind;
 
-	copyToken (token, parentToken, TRUE);
+	copyToken (token, parentToken, true);
 
 	if (extraScope)
 	{
@@ -560,7 +560,7 @@ static void enterScope (tokenInfo *const parentToken,
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_CLOSE_CURLY)
 	{
-		boolean readNext = TRUE;
+		bool readNext = true;
 
 		switch (token->type)
 		{
@@ -583,7 +583,7 @@ static void enterScope (tokenInfo *const parentToken,
 			readToken (token);
 	}
 
-	copyToken (parentToken, token, FALSE);
+	copyToken (parentToken, token, false);
 	parentToken->parentKind = origParentKind;
 	deleteToken (token);
 }

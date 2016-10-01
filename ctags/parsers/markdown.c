@@ -26,7 +26,7 @@
 */
 
 static kindOption MarkdownKinds[] = {
-	{ TRUE, 'v', "variable", "sections" }
+	{ true, 'v', "variable", "sections" }
 };
 
 /*
@@ -34,19 +34,19 @@ static kindOption MarkdownKinds[] = {
 */
 
 /* checks if str is all the same character */
-static boolean issame(const char *str)
+static bool issame(const char *str)
 {
 	char first = *str;
 
 	while (*(++str))
 	{
 		if (*str && *str != first)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 
-static void makeMarkdownTag (const vString* const name, boolean name_before)
+static void makeMarkdownTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
 	initTagEntry (&e, vStringValue(name), &(MarkdownKinds [0]));
@@ -70,13 +70,13 @@ static void findMarkdownTags (void)
 		/* underlines must be the same length or more */
 		if (name_len > 0 &&	(line[0] == '=' || line[0] == '-') && issame((const char*) line))
 		{
-			makeMarkdownTag(name, TRUE);
+			makeMarkdownTag(name, true);
 		}
 		else if (line[0] == '#') {
 			vStringClear(name);
 			vStringCatS(name, (const char *) line);
 			vStringTerminate(name);
-			makeMarkdownTag(name, FALSE);
+			makeMarkdownTag(name, false);
 		}
 		else {
 			vStringClear (name);
