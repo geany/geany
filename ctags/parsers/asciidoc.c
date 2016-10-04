@@ -36,11 +36,11 @@ typedef enum {
 } asciidocKind;
 
 static kindOption AsciidocKinds[] = {
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 'm', "member",        "sections" },
-	{ TRUE, 'd', "macro",         "level2sections" },
-	{ TRUE, 'v', "variable",      "level3sections" },
-	{ TRUE, 's', "struct",        "level4sections" }
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 'm', "member",        "sections" },
+	{ true, 'd', "macro",         "level2sections" },
+	{ true, 'v', "variable",      "level3sections" },
+	{ true, 's', "struct",        "level4sections" }
 };
 
 static char kindchars[SECTION_COUNT]={ '=', '-', '~', '^', '+' };
@@ -202,7 +202,6 @@ static void findAsciidocTags(void)
 				while (isspace(line[end]))--end;
 				vStringClear(name);
 				vStringNCatS(name, (const char*)(&(line[start])), end - start + 1);
-				vStringTerminate(name);
 				makeAsciidocTag(name, kind);
 				continue;
 			}
@@ -210,7 +209,6 @@ static void findAsciidocTags(void)
 		vStringClear(name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
-		vStringTerminate(name);
 	}
 	vStringDelete(name);
 	nestingLevelsFree(nestingLevels);

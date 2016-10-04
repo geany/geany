@@ -114,14 +114,14 @@ typedef enum {
 } phpKind;
 
 static kindOption PhpKinds[COUNT_KIND] = {
-	{ TRUE, 'c', "class",		"classes" },
-	{ TRUE, 'd', "define",		"constant definitions" },
-	{ TRUE, 'f', "function",	"functions" },
-	{ TRUE, 'i', "interface",	"interfaces" },
-	{ FALSE, 'l', "local",		"local variables" },
-	{ TRUE, 'n', "namespace",	"namespaces" },
-	{ TRUE, 't', "trait",		"traits" },
-	{ TRUE, 'v', "variable",	"variables" }
+	{ true, 'c', "class",		"classes" },
+	{ true, 'd', "define",		"constant definitions" },
+	{ true, 'f', "function",	"functions" },
+	{ true, 'i', "interface",	"interfaces" },
+	{ false, 'l', "local",		"local variables" },
+	{ true, 'n', "namespace",	"namespaces" },
+	{ true, 't', "trait",		"traits" },
+	{ true, 'v', "variable",	"variables" }
 };
 
 static const keywordTable PhpKeywordTable[] = {
@@ -225,7 +225,7 @@ typedef struct {
 static langType Lang_php;
 static langType Lang_zephir;
 
-static boolean InPhp = FALSE; /* whether we are between <? ?> */
+static bool InPhp = false; /* whether we are between <? ?> */
 
 /* current statement details */
 static struct {
@@ -298,7 +298,6 @@ static void initPhpEntry (tagEntryInfo *const e, const tokenInfo *const token,
 	{
 		Assert (parentKind >= 0);
 
-		vStringTerminate (fullScope);
 		e->extensionFields.scopeKind = &(PhpKinds[parentKind]);
 		e->extensionFields.scopeName = vStringValue (fullScope);
 	}
@@ -391,7 +390,7 @@ static void deleteToken (tokenInfo *const token)
 }
 
 static void copyToken (tokenInfo *const dest, const tokenInfo *const src,
-					   boolean scope)
+					   bool scope)
 {
 	dest->lineNumber = src->lineNumber;
 	dest->filePosition = src->filePosition;
@@ -475,17 +474,16 @@ static void addToScope (tokenInfo *const token, const vString *const extra)
 	if (vStringLength (token->scope) > 0)
 		vStringCatS (token->scope, SCOPE_SEPARATOR);
 	vStringCatS (token->scope, vStringValue (extra));
-	vStringTerminate(token->scope);
 }
 
-static boolean isIdentChar (const int c)
+static bool isIdentChar (const int c)
 {
 	return (isalnum (c) || c == '_' || c >= 0x80);
 }
 
 static void parseString (vString *const string, const int delimiter)
 {
-	while (TRUE)
+	while (true)
 	{
 		int c = getcFromInputFile ();
 
@@ -496,7 +494,6 @@ static void parseString (vString *const string, const int delimiter)
 		else
 			vStringPut (string, (char) c);
 	}
-	vStringTerminate (string);
 }
 
 /* reads an HereDoc or a NowDoc (the part after the <<<).
@@ -614,8 +611,6 @@ static void parseHeredoc (vString *const string)
 	}
 	while (c != EOF);
 
-	vStringTerminate (string);
-
 	return;
 
 error:
@@ -631,7 +626,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		c = getcFromInputFile ();
 	} while (isIdentChar (c));
 	ungetcToInputFile (c);
-	vStringTerminate (string);
 }
 
 static keywordId analyzeToken (vString *const name, langType language)
@@ -644,7 +638,7 @@ static keywordId analyzeToken (vString *const name, langType language)
 	return result;
 }
 
-static boolean isSpace (int c)
+static bool isSpace (int c)
 {
 	return (c == '\t' || c == ' ' || c == '\v' ||
 			c == '\n' || c == '\r' || c == '\f');
@@ -661,7 +655,7 @@ static int skipWhitespaces (int c)
  * 
  * This is ugly, but the whole "<script language=php>" tag is and we can't
  * really do better without adding a lot of code only for this */
-static boolean isOpenScriptLanguagePhp (int c)
+static bool isOpenScriptLanguagePhp (int c)
 {
 	int quote = 0;
 
@@ -683,7 +677,7 @@ static boolean isOpenScriptLanguagePhp (int c)
 		tolower ((c = getcFromInputFile ()))         != 'g' ||
 		tolower ((c = getcFromInputFile ()))         != 'e' ||
 		(c = skipWhitespaces (getcFromInputFile ())) != '=')
-		return FALSE;
+		return false;
 
 	/* (php|'php'|"php")> */
 	c = skipWhitespaces (getcFromInputFile ());
@@ -697,9 +691,9 @@ static boolean isOpenScriptLanguagePhp (int c)
 		tolower ((c = getcFromInputFile ()))         != 'p' ||
 		(quote != 0 && (c = getcFromInputFile ()) != quote) ||
 		(c = skipWhitespaces (getcFromInputFile ())) != '>')
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
 static int findPhpStart (void)
@@ -754,7 +748,7 @@ static int skipSingleComment (void)
 		{
 			int next = getcFromInputFile ();
 			if (next == '>')
-				InPhp = FALSE;
+				InPhp = false;
 			else
 				ungetcToInputFile (next);
 		}
@@ -776,7 +770,7 @@ getNextChar:
 	{
 		c = findPhpStart ();
 		if (c != EOF)
-			InPhp = TRUE;
+			InPhp = true;
 	}
 	else
 		c = getcFromInputFile ();
@@ -836,7 +830,7 @@ getNextChar:
 					tolower ((d = getcFromInputFile ())) == 't' &&
 					(d = skipWhitespaces (getcFromInputFile ())) == '>')
 				{
-					InPhp = FALSE;
+					InPhp = false;
 					goto getNextChar;
 				}
 				else
@@ -929,7 +923,7 @@ getNextChar:
 			int d = getcFromInputFile ();
 			if (d == '>')
 			{
-				InPhp = FALSE;
+				InPhp = false;
 				goto getNextChar;
 			}
 			else
@@ -978,19 +972,19 @@ static void enterScope (tokenInfo *const parentToken,
  * 	class Foo extends Bar implements iFoo, iBar {}
  * 	interface iFoo {}
  * 	interface iBar extends iFoo {} */
-static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
+static bool parseClassOrIface (tokenInfo *const token, const phpKind kind)
 {
-	boolean readNext = TRUE;
+	bool readNext = true;
 	implType impl = CurrentStatement.impl;
 	tokenInfo *name;
 	vString *inheritance = NULL;
 
 	readToken (token);
 	if (token->type != TOKEN_IDENTIFIER)
-		return FALSE;
+		return false;
 
 	name = newToken ();
-	copyToken (name, token, TRUE);
+	copyToken (name, token, true);
 
 	inheritance = vStringNew ();
 	/* skip until the open bracket and assume every identifier (not keyword)
@@ -1014,7 +1008,7 @@ static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_CLASS);
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	deleteToken (name);
 	vStringDelete (inheritance);
@@ -1024,17 +1018,17 @@ static boolean parseClassOrIface (tokenInfo *const token, const phpKind kind)
 
 /* parses a trait:
  * 	trait Foo {} */
-static boolean parseTrait (tokenInfo *const token)
+static bool parseTrait (tokenInfo *const token)
 {
-	boolean readNext = TRUE;
+	bool readNext = true;
 	tokenInfo *name;
 
 	readToken (token);
 	if (token->type != TOKEN_IDENTIFIER)
-		return FALSE;
+		return false;
 
 	name = newToken ();
-	copyToken (name, token, TRUE);
+	copyToken (name, token, true);
 
 	makeSimplePhpTag (name, K_TRAIT, ACCESS_UNDEFINED);
 
@@ -1042,7 +1036,7 @@ static boolean parseTrait (tokenInfo *const token)
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_TRAIT);
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	deleteToken (name);
 
@@ -1059,9 +1053,9 @@ static boolean parseTrait (tokenInfo *const token)
  * 	$foo = function($foo, $bar) {}
  * 	$foo = function&($foo, $bar) {}
  * 	$foo = function($foo, $bar) use ($x, &$y) {} */
-static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
+static bool parseFunction (tokenInfo *const token, const tokenInfo *name)
 {
-	boolean readNext = TRUE;
+	bool readNext = true;
 	accessType access = CurrentStatement.access;
 	implType impl = CurrentStatement.impl;
 	tokenInfo *nameFree = NULL;
@@ -1074,10 +1068,10 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 	if (! name)
 	{
 		if (token->type != TOKEN_IDENTIFIER)
-			return FALSE;
+			return false;
 
 		name = nameFree = newToken ();
-		copyToken (nameFree, token, TRUE);
+		copyToken (nameFree, token, true);
 		readToken (token);
 	}
 
@@ -1144,8 +1138,6 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 		}
 		while (token->type != TOKEN_EOF && depth > 0);
 
-		vStringTerminate (arglist);
-
 		makeFunctionTag (name, arglist, access, impl);
 		vStringDelete (arglist);
 
@@ -1190,7 +1182,7 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 	if (token->type == TOKEN_OPEN_CURLY)
 		enterScope (token, name->string, K_FUNCTION);
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	if (nameFree)
 		deleteToken (nameFree);
@@ -1200,16 +1192,16 @@ static boolean parseFunction (tokenInfo *const token, const tokenInfo *name)
 
 /* parses declarations of the form
  * 	const NAME = VALUE */
-static boolean parseConstant (tokenInfo *const token)
+static bool parseConstant (tokenInfo *const token)
 {
 	tokenInfo *name;
 
 	readToken (token); /* skip const keyword */
 	if (token->type != TOKEN_IDENTIFIER)
-		return FALSE;
+		return false;
 
 	name = newToken ();
-	copyToken (name, token, TRUE);
+	copyToken (name, token, true);
 
 	readToken (token);
 	if (token->type == TOKEN_EQUAL_SIGN)
@@ -1223,13 +1215,13 @@ static boolean parseConstant (tokenInfo *const token)
 /* parses declarations of the form
  * 	define('NAME', 'VALUE')
  * 	define(NAME, 'VALUE) */
-static boolean parseDefine (tokenInfo *const token)
+static bool parseDefine (tokenInfo *const token)
 {
 	int depth = 1;
 
 	readToken (token); /* skip "define" identifier */
 	if (token->type != TOKEN_OPEN_PAREN)
-		return FALSE;
+		return false;
 
 	readToken (token);
 	if (token->type == TOKEN_STRING ||
@@ -1256,20 +1248,20 @@ static boolean parseDefine (tokenInfo *const token)
 		readToken (token);
 	}
 
-	return FALSE;
+	return false;
 }
 
 /* parses declarations of the form
  * 	$var = VALUE
  * 	$var; */
-static boolean parseVariable (tokenInfo *const token)
+static bool parseVariable (tokenInfo *const token)
 {
 	tokenInfo *name;
-	boolean readNext = TRUE;
+	bool readNext = true;
 	accessType access = CurrentStatement.access;
 
 	name = newToken ();
-	copyToken (name, token, TRUE);
+	copyToken (name, token, true);
 
 	readToken (token);
 	if (token->type == TOKEN_EQUAL_SIGN)
@@ -1286,12 +1278,12 @@ static boolean parseVariable (tokenInfo *const token)
 		{
 			if (parseFunction (token, name))
 				readToken (token);
-			readNext = (boolean) (token->type == TOKEN_SEMICOLON);
+			readNext = (bool) (token->type == TOKEN_SEMICOLON);
 		}
 		else
 		{
 			makeSimplePhpTag (name, kind, access);
-			readNext = FALSE;
+			readNext = false;
 		}
 	}
 	else if (token->type == TOKEN_SEMICOLON)
@@ -1305,7 +1297,7 @@ static boolean parseVariable (tokenInfo *const token)
 			makeSimplePhpTag (name, K_VARIABLE, access);
 	}
 	else
-		readNext = FALSE;
+		readNext = false;
 
 	deleteToken (name);
 
@@ -1319,12 +1311,12 @@ static boolean parseVariable (tokenInfo *const token)
  * 	namespace Foo\Bar;
  * 	namespace;
  * 	napespace {} */
-static boolean parseNamespace (tokenInfo *const token)
+static bool parseNamespace (tokenInfo *const token)
 {
 	tokenInfo *nsToken = newToken ();
 
 	vStringClear (CurrentNamespace);
-	copyToken (nsToken, token, FALSE);
+	copyToken (nsToken, token, false);
 
 	do
 	{
@@ -1340,7 +1332,6 @@ static boolean parseNamespace (tokenInfo *const token)
 		   token->type != TOKEN_SEMICOLON &&
 		   token->type != TOKEN_OPEN_CURLY);
 
-	vStringTerminate (CurrentNamespace);
 	if (vStringLength (CurrentNamespace) > 0)
 		makeNamespacePhpTag (nsToken, CurrentNamespace);
 
@@ -1349,7 +1340,7 @@ static boolean parseNamespace (tokenInfo *const token)
 
 	deleteToken (nsToken);
 
-	return TRUE;
+	return true;
 }
 
 static void enterScope (tokenInfo *const parentToken,
@@ -1359,7 +1350,7 @@ static void enterScope (tokenInfo *const parentToken,
 	tokenInfo *token = newToken ();
 	int origParentKind = parentToken->parentKind;
 
-	copyToken (token, parentToken, TRUE);
+	copyToken (token, parentToken, true);
 
 	if (extraScope)
 	{
@@ -1371,7 +1362,7 @@ static void enterScope (tokenInfo *const parentToken,
 	while (token->type != TOKEN_EOF &&
 		   token->type != TOKEN_CLOSE_CURLY)
 	{
-		boolean readNext = TRUE;
+		bool readNext = true;
 
 		switch (token->type)
 		{
@@ -1413,7 +1404,7 @@ static void enterScope (tokenInfo *const parentToken,
 			readToken (token);
 	}
 
-	copyToken (parentToken, token, FALSE);
+	copyToken (parentToken, token, false);
 	parentToken->parentKind = origParentKind;
 	deleteToken (token);
 }
@@ -1438,13 +1429,13 @@ static void findTags (void)
 
 static void findPhpTags (void)
 {
-	InPhp = FALSE;
+	InPhp = false;
 	findTags ();
 }
 
 static void findZephirTags (void)
 {
-	InPhp = TRUE;
+	InPhp = true;
 	findTags ();
 }
 

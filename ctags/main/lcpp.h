@@ -34,11 +34,11 @@
 /*
 *   FUNCTION PROTOTYPES
 */
-extern boolean cppIsBraceFormat (void);
+extern bool cppIsBraceFormat (void);
 extern unsigned int cppGetDirectiveNestLevel (void);
 
-extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
-                     const boolean hasCxxRawLiteralStrings,
+extern void cppInit (const bool state, const bool hasAtLiteralStrings,
+                     const bool hasCxxRawLiteralStrings,
                      const kindOption *defineMacroKind);
 extern void cppTerminate (void);
 extern void cppBeginStatement (void);

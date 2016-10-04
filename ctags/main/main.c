@@ -46,7 +46,6 @@
 #  include <sys/types.h>  /* required by dirent.h */
 # endif
 # include <dirent.h>  /* to declare opendir() */
-# undef boolean
 #endif
 #ifdef HAVE_DIRECT_H
 # include <direct.h>  /* to _getcwd() */
@@ -91,15 +90,15 @@ extern void addTotals (
 	Totals.bytes += bytes;
 }
 
-extern boolean isDestinationStdout (void)
+extern bool isDestinationStdout (void)
 {
-	boolean toStdout = FALSE;
+	bool toStdout = false;
 
 	if (Option.xref  ||  Option.filter  ||
 		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
 						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
 		)))
-		toStdout = TRUE;
+		toStdout = true;
 	return toStdout;
 }
 

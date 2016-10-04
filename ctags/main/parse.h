@@ -31,7 +31,7 @@ typedef int langType;
 
 typedef void (*createRegexTag) (const vString* const name);
 typedef void (*simpleParser) (void);
-typedef boolean (*rescanParser) (const unsigned int passCount);
+typedef bool (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
 typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
@@ -45,10 +45,10 @@ typedef enum {
 
 typedef struct {
 	const char *const regex;
-	const char* const name;
-	const char* const kinds;
+	const char *const name;
+	const char *const kinds;
 	const char *const flags;
-	boolean    *disabled;
+	bool *disabled;
 } tagRegexTable;
 
 typedef struct {
@@ -70,8 +70,8 @@ typedef struct {
 	unsigned int method;           /* See PARSE__... definitions above */
 
 	/* used internally */
-	unsigned int id;            /* id assigned to language */
-	boolean enabled;            /* currently enabled? */
+	unsigned int id;                /* id assigned to language */
+	bool enabled;                   /* currently enabled? */
 	stringList* currentPatterns;    /* current list of file name patterns */
 	stringList* currentExtensions;  /* current list of extensions */
 	tagRegexTable *tagRegexTable;
@@ -105,7 +105,7 @@ extern parserDefinitionFunc PARSER_LIST;
 extern parserDefinition** LanguageTable;
 extern unsigned int LanguageCount;
 /* Legacy interface */
-extern boolean includingDefineTags (void);
+extern bool includingDefineTags (void);
 extern void processLegacyKindOption (const char *const parameter);
 
 /* Language processing and parsing */
@@ -123,31 +123,31 @@ extern void clearLanguageMap (const langType language);
 extern void addLanguageExtensionMap (const langType language, const char* extension);
 extern void addLanguagePatternMap (const langType language, const char* ptrn);
 extern void printLanguageMap (const langType language);
-extern void enableLanguages (const boolean state);
-extern void enableLanguage (const langType language, const boolean state);
+extern void enableLanguages (const bool state);
+extern void enableLanguage (const langType language, const bool state);
 extern void initializeParsing (void);
 extern void freeParserResources (void);
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
-extern boolean processKindOption (const char *const option, const char *const parameter);
+extern bool processKindOption (const char *const option, const char *const parameter);
 extern void printKindOptions (void);
-extern boolean parseFile (const char *const fileName);
+extern bool parseFile (const char *const fileName);
 
 extern void installKeywordTable (const langType language);
 
 /* Regex interface */
 #ifdef HAVE_REGEX
 extern void findRegexTags (void);
-extern boolean matchRegex (const vString* const line, const langType language);
+extern bool matchRegex (const vString* const line, const langType language);
 #endif
-extern boolean processRegexOption (const char *const option, const char *const parameter);
+extern bool processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
 extern void installTagRegexTable (const langType language);
 extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);
 extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
 extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED);
-extern boolean enableRegexKind (const langType language, const int kind, const boolean mode);
+extern bool enableRegexKind (const langType language, const int kind, const bool mode);
 extern void printRegexKindOptions (const langType language);
-extern void printRegexKinds (const langType language, boolean indent);
+extern void printRegexKinds (const langType language, bool indent);
 extern void freeRegexResources (void);
 extern void checkRegex (void);
 

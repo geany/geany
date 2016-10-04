@@ -29,9 +29,9 @@ typedef enum {
 } AbaqusKind;
 
 static kindOption AbaqusKinds[] = {
-     { TRUE, 'c', "class",      "Parts" },
-     { TRUE, 'm', "member",      "Assembly" },
-     { TRUE, 'n', "namespace",      "Steps" }
+     { true, 'c', "class",      "Parts" },
+     { true, 'm', "member",      "Assembly" },
+     { true, 'n', "namespace",      "Steps" }
 };
 
 /*
@@ -44,10 +44,10 @@ static int getWord(const char *ref, const char **ptr)
 
 	while ((*ref != '\0') && (*p != '\0') && (tolower(*ref) == tolower(*p))) ref++, p++;
 
-	if (*ref) return FALSE;
+	if (*ref) return false;
 
 	*ptr = p;
-	return TRUE;
+	return true;
 }
 
 
@@ -71,7 +71,6 @@ static void createTag(AbaqusKind kind, const char *buf)
 		vStringPut(name, (int) *buf);
 		++buf;
 	} while ((*buf != '\0') && (*buf != ','));
-	vStringTerminate(name);
 	makeSimpleTag(name, AbaqusKinds, kind);
 	vStringDelete(name);
 }

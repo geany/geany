@@ -56,14 +56,14 @@ static int Lang_verilog;
 static jmp_buf Exception;
 
 static kindOption VerilogKinds [] = {
- { TRUE, 'c', "constant",  "constants (define, parameter, specparam)" },
- { TRUE, 'e', "event",     "events" },
- { TRUE, 'f', "function",  "functions" },
- { TRUE, 'm', "module",    "modules" },
- { TRUE, 'n', "net",       "net data types" },
- { TRUE, 'p', "port",      "ports" },
- { TRUE, 'r', "register",  "register data types" },
- { TRUE, 't', "task",      "tasks" }
+ { true, 'c', "constant",  "constants (define, parameter, specparam)" },
+ { true, 'e', "event",     "events" },
+ { true, 'f', "function",  "functions" },
+ { true, 'm', "module",    "modules" },
+ { true, 'n', "net",       "net data types" },
+ { true, 'p', "port",      "ports" },
+ { true, 'r', "register",  "register data types" },
+ { true, 't', "task",      "tasks" }
 };
 
 static keywordTable VerilogKeywordTable [] = {
@@ -160,9 +160,9 @@ static int vGetc (void)
 	return c;
 }
 
-static boolean isIdentifierCharacter (const int c)
+static bool isIdentifierCharacter (const int c)
 {
-	return (boolean)(isalnum (c)  ||  c == '_'  ||  c == '`');
+	return (bool)(isalnum (c)  ||  c == '_'  ||  c == '`');
 }
 
 static int skipWhite (int c)
@@ -189,7 +189,7 @@ static int skipPastMatch (const char *const pair)
 	return vGetc ();
 }
 
-static boolean readIdentifier (vString *const name, int c)
+static bool readIdentifier (vString *const name, int c)
 {
 	vStringClear (name);
 	if (isIdentifierCharacter (c))
@@ -200,19 +200,18 @@ static boolean readIdentifier (vString *const name, int c)
 			c = vGetc ();
 		}
 		vUngetc (c);
-		vStringTerminate (name);
 	}
-	return (boolean)(name->length > 0);
+	return (bool)(name->length > 0);
 }
 
 static void tagNameList (const verilogKind kind, int c)
 {
 	vString *name = vStringNew ();
-	boolean repeat;
+	bool repeat;
 	Assert (isIdentifierCharacter (c));
 	do
 	{
-		repeat = FALSE;
+		repeat = false;
 		if (isIdentifierCharacter (c))
 		{
 			readIdentifier (name, c);
@@ -239,10 +238,10 @@ static void tagNameList (const verilogKind kind, int c)
 		if (c == ',')
 		{
 			c = skipWhite (vGetc ());
-			repeat = TRUE;
+			repeat = true;
 		}
 		else
-			repeat = FALSE;
+			repeat = false;
 	} while (repeat);
 	vStringDelete (name);
 	vUngetc (c);
@@ -292,7 +291,7 @@ static void findTag (vString *const name)
 static void findVerilogTags (void)
 {
 	vString *const name = vStringNew ();
-	volatile boolean newStatement = TRUE;
+	volatile bool newStatement = true;
 	volatile int c = '\0';
 	exception_t exception = (exception_t) setjmp (Exception);
 
@@ -303,7 +302,7 @@ static void findVerilogTags (void)
 		{
 			case ';':
 			case '\n':
-				newStatement = TRUE;
+				newStatement = true;
 				break;
 
 			case ' ':
@@ -313,7 +312,7 @@ static void findVerilogTags (void)
 			default:
 				if (newStatement && readIdentifier (name, c))
 					findTag (name);
-				newStatement = FALSE;
+				newStatement = false;
 				break;
 		}
 	}

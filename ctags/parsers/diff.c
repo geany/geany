@@ -29,7 +29,7 @@ typedef enum {
 } diffKind;
 
 static kindOption DiffKinds [] = {
-	{ TRUE, 'f', "function", "functions"}
+	{ true, 'f', "function", "functions"}
 };
 
 enum {
@@ -53,7 +53,7 @@ static const unsigned char *stripAbsolute (const unsigned char *filename)
 	/* strip any absolute path */
 	if (*filename == '/' || *filename == '\\')
 	{
-		boolean skipSlash = TRUE;
+		bool skipSlash = true;
 
 		tmp = (const unsigned char*) strrchr ((const char*) filename,  '/');
 		if (tmp == NULL)
@@ -62,7 +62,7 @@ static const unsigned char *stripAbsolute (const unsigned char *filename)
 			if (tmp == NULL)
 			{	/* last fallback, probably the filename doesn't contain a path, so take it */
 				tmp = filename;
-				skipSlash = FALSE;
+				skipSlash = false;
 			}
 		}
 
@@ -109,7 +109,6 @@ static void findDiffTags (void)
 					tmp++;
 				}
 
-				vStringTerminate(filename);
 				makeSimpleTag (filename, DiffKinds, K_FUNCTION);
 				vStringClear (filename);
 			}

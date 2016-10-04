@@ -29,18 +29,18 @@ typedef enum {
 } confKind;
 
 static kindOption ConfKinds [] = {
-	{ TRUE, 'n', "namespace",  "sections"},
-	{ TRUE, 'm', "macro", "keys"}
+	{ true, 'n', "namespace",  "sections"},
+	{ true, 'm', "macro", "keys"}
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifier (int c)
+static bool isIdentifier (int c)
 {
 	/* allow whitespace within keys and sections */
-	return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
+	return (bool)(isalnum (c) || isspace (c) ||  c == '_');
 }
 
 static void findConfTags (void)
@@ -52,7 +52,7 @@ static void findConfTags (void)
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
-		boolean possible = TRUE;
+		bool possible = true;
 
 		if (isspace ((int) *cp) || *cp == '#' || (*cp != '\0' && *cp == '/' && *(cp+1) == '/'))
 			continue;
@@ -66,11 +66,9 @@ static void findConfTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, ConfKinds, K_SECTION);
 			/* remember section name */
 			vStringCopy (scope, name);
-			vStringTerminate (scope);
 			vStringClear (name);
 			continue;
 		}
@@ -85,7 +83,6 @@ static void findConfTags (void)
 					vStringPut (name, (int) *cp);
 					++cp;
 				}
-				vStringTerminate (name);
 				vStringStripTrailing (name);
 				while (isspace ((int) *cp))
 					++cp;
@@ -104,9 +101,9 @@ static void findConfTags (void)
 				vStringClear (name);
 			}
 			else if (isspace ((int) *cp))
-				possible = TRUE;
+				possible = true;
 			else
-				possible = FALSE;
+				possible = false;
 
 			if (*cp != '\0')
 				++cp;

@@ -38,10 +38,10 @@ typedef enum {
 } haskellKind;
 
 static kindOption HaskellKinds [] = {
-	{ TRUE, 't', "typedef", "types" },
-	{ TRUE, 'c', "macro", "type constructors" },
-	{ TRUE, 'f', "function", "functions" },
-	{ TRUE, 'm', "namespace", "modules"}
+	{ true, 't', "typedef", "types" },
+	{ true, 'c', "macro", "type constructors" },
+	{ true, 'f', "function", "functions" },
+	{ true, 'm', "namespace", "modules"}
 };
 
 
@@ -104,7 +104,6 @@ static void add_tag(const char *token, haskellKind kind, vString *name)
 	for (i = 0; token[i] != '\0'; ++i)
 		vStringPut(name, token[i]);
 
-	vStringTerminate(name);
 	makeSimpleTag(name, HaskellKinds, kind);
 	vStringClear(name);
 }

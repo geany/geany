@@ -225,8 +225,8 @@ MIO *mio_new_memory (unsigned char *data,
 		mio->impl.mem.allocated_size = size;
 		mio->impl.mem.realloc_func = realloc_func;
 		mio->impl.mem.free_func = free_func;
-		mio->impl.mem.eof = FALSE;
-		mio->impl.mem.error = FALSE;
+		mio->impl.mem.eof = false;
+		mio->impl.mem.error = false;
 	}
 
 	return mio;
@@ -315,8 +315,8 @@ int mio_free (MIO *mio)
 			mio->impl.mem.allocated_size = 0;
 			mio->impl.mem.realloc_func = NULL;
 			mio->impl.mem.free_func = NULL;
-			mio->impl.mem.eof = FALSE;
-			mio->impl.mem.error = FALSE;
+			mio->impl.mem.eof = false;
+			mio->impl.mem.error = false;
 		}
 
 		free (mio);
@@ -377,7 +377,7 @@ size_t mio_read (MIO *mio,
 				mio->impl.mem.pos += copy_bytes;
 			}
 			if (mio->impl.mem.pos >= mio->impl.mem.size)
-				mio->impl.mem.eof = TRUE;
+				mio->impl.mem.eof = true;
 		}
 
 		return n_read;
@@ -392,11 +392,11 @@ size_t mio_read (MIO *mio,
  * Tries to resize the underlying buffer of an in-memory #MIO object.
  * This supports both growing and shrinking.
  *
- * Returns: %TRUE on success, %FALSE otherwise.
+ * Returns: %true on success, %false otherwise.
  */
 static int mem_try_resize (MIO *mio, size_t new_size)
 {
-	int success = FALSE;
+	int success = false;
 
 	if (mio->impl.mem.realloc_func)
 	{
@@ -413,7 +413,7 @@ static int mem_try_resize (MIO *mio, size_t new_size)
 				if (new_size <= mio->impl.mem.allocated_size)
 				{
 					mio->impl.mem.size = new_size;
-					success = TRUE;
+					success = true;
 				}
 				else
 				{
@@ -428,7 +428,7 @@ static int mem_try_resize (MIO *mio, size_t new_size)
 						mio->impl.mem.buf = newbuf;
 						mio->impl.mem.allocated_size = newsize;
 						mio->impl.mem.size = new_size;
-						success = TRUE;
+						success = true;
 					}
 				}
 			}
@@ -442,7 +442,7 @@ static int mem_try_resize (MIO *mio, size_t new_size)
 					mio->impl.mem.buf = newbuf;
 					mio->impl.mem.allocated_size = new_size;
 					mio->impl.mem.size = new_size;
-					success = TRUE;
+					success = true;
 				}
 			}
 		}
@@ -459,11 +459,11 @@ static int mem_try_resize (MIO *mio, size_t new_size)
  * Tries to ensure there is enough space for @n bytes to be written from the
  * current cursor position.
  *
- * Returns: %TRUE if there is enough space, %FALSE otherwise.
+ * Returns: %true if there is enough space, %false otherwise.
  */
 static int mem_try_ensure_space (MIO *mio, size_t n)
 {
-	int success = TRUE;
+	int success = true;
 
 	if (mio->impl.mem.pos + n > mio->impl.mem.size)
 		success = mem_try_resize (mio, mio->impl.mem.pos + n);
@@ -678,7 +678,7 @@ int mio_getc (MIO *mio)
 			mio->impl.mem.pos++;
 		}
 		else
-			mio->impl.mem.eof = TRUE;
+			mio->impl.mem.eof = true;
 
 		return rv;
 	}
@@ -712,7 +712,7 @@ int mio_ungetc (MIO *mio, int ch)
 		{
 			rv = mio->impl.mem.ungetch = ch;
 			mio->impl.mem.pos--;
-			mio->impl.mem.eof = FALSE;
+			mio->impl.mem.eof = false;
 		}
 
 		return rv;
@@ -766,7 +766,7 @@ char *mio_gets (MIO *mio, char *s, size_t size)
 				rv = s;
 			}
 			if (mio->impl.mem.pos >= mio->impl.mem.size)
-				mio->impl.mem.eof = TRUE;
+				mio->impl.mem.eof = true;
 		}
 
 		return rv;
@@ -786,8 +786,8 @@ void mio_clearerr (MIO *mio)
 		clearerr (mio->impl.file.fp);
 	else
 	{
-		mio->impl.mem.error = FALSE;
-		mio->impl.mem.eof = FALSE;
+		mio->impl.mem.error = false;
+		mio->impl.mem.eof = false;
 	}
 }
 
@@ -805,7 +805,7 @@ int mio_eof (MIO *mio)
 	if (mio->type == MIO_TYPE_FILE)
 		return feof (mio->impl.file.fp);
 	else
-		return mio->impl.mem.eof != FALSE;
+		return mio->impl.mem.eof != false;
 }
 
 /**
@@ -822,7 +822,7 @@ int mio_error (MIO *mio)
 	if (mio->type == MIO_TYPE_FILE)
 		return ferror (mio->impl.file.fp);
 	else
-		return mio->impl.mem.error != FALSE;
+		return mio->impl.mem.error != false;
 }
 
 /**
@@ -888,7 +888,7 @@ int mio_seek (MIO *mio, long offset, int whence)
 		}
 		if (rv == 0)
 		{
-			mio->impl.mem.eof = FALSE;
+			mio->impl.mem.eof = false;
 			mio->impl.mem.ungetch = EOF;
 		}
 
@@ -943,8 +943,8 @@ void mio_rewind (MIO *mio)
 	{
 		mio->impl.mem.pos = 0;
 		mio->impl.mem.ungetch = EOF;
-		mio->impl.mem.eof = FALSE;
-		mio->impl.mem.error = FALSE;
+		mio->impl.mem.eof = false;
+		mio->impl.mem.error = false;
 	}
 }
 

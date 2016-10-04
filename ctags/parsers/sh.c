@@ -29,7 +29,7 @@ typedef enum {
 } shKind;
 
 static kindOption ShKinds [] = {
-	{ TRUE, 'f', "function", "functions"}
+	{ true, 'f', "function", "functions"}
 };
 
 /*
@@ -40,11 +40,11 @@ static kindOption ShKinds [] = {
  *  here-documents in GNU autoconf scripts and will add a haystack to the
  *  needle.
  */
-static boolean hackReject (const vString* const tagName)
+static bool hackReject (const vString* const tagName)
 {
 	const char *const scriptName = baseFilename (getInputFileName ());
-	boolean result = (boolean) (strcmp (scriptName, "configure") == 0  &&
-							   strcmp (vStringValue (tagName), "main") == 0);
+	bool result = (bool) (strcmp (scriptName, "configure") == 0  &&
+						  strcmp (vStringValue (tagName), "main") == 0);
 	return result;
 }
 
@@ -56,7 +56,7 @@ static void findShTags (void)
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
-		boolean functionFound = FALSE;
+		bool functionFound = false;
 
 		if (line [0] == '#')
 			continue;
@@ -66,7 +66,7 @@ static void findShTags (void)
 		if (strncmp ((const char*) cp, "function", (size_t) 8) == 0  &&
 			isspace ((int) cp [8]))
 		{
-			functionFound = TRUE;
+			functionFound = true;
 			cp += 8;
 			if (! isspace ((int) *cp))
 				continue;
@@ -80,7 +80,6 @@ static void findShTags (void)
 			vStringPut (name, (int) *cp);
 			++cp;
 		}
-		vStringTerminate (name);
 		while (isspace ((int) *cp))
 			++cp;
 		if (*cp++ == '(')
@@ -88,7 +87,7 @@ static void findShTags (void)
 			while (isspace ((int) *cp))
 				++cp;
 			if (*cp == ')'  && ! hackReject (name))
-				functionFound = TRUE;
+				functionFound = true;
 		}
 		if (functionFound)
 			makeSimpleTag (name, ShKinds, K_FUNCTION);

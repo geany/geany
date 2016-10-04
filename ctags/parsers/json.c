@@ -70,12 +70,12 @@ typedef enum {
 static langType Lang_json;
 
 static kindOption JsonKinds [] = {
-	{ TRUE,  'o', "object",		"objects"	},
-	{ TRUE,  'a', "array",		"arrays"	},
-	{ TRUE,  'n', "number",		"numbers"	},
-	{ TRUE,  's', "string",		"strings"	},
-	{ TRUE,  'b', "boolean",	"booleans"	},
-	{ TRUE,  'z', "null",		"nulls"		}
+	{ true,  'o', "object",		"objects"	},
+	{ true,  'a', "array",		"arrays"	},
+	{ true,  'n', "number",		"numbers"	},
+	{ true,  's', "string",		"strings"	},
+	{ true,  'b', "boolean",	"booleans"	},
+	{ true,  'z', "null",		"nulls"		}
 };
 
 static tokenInfo *newToken (void)
@@ -132,13 +132,13 @@ static void makeJsonTag (tokenInfo *const token, const jsonKind kind)
 	makeTagEntry (&e);
 }
 
-static boolean isIdentChar (int c)
+static bool isIdentChar (int c)
 {
 	return (isalnum (c) || c == '+' || c == '-' || c == '.');
 }
 
 static void readTokenFull (tokenInfo *const token,
-						   boolean includeStringRepr)
+						   bool includeStringRepr)
 {
 	int c;
 
@@ -164,16 +164,16 @@ static void readTokenFull (tokenInfo *const token,
 
 		case '"':
 		{
-			boolean escaped = FALSE;
+			bool escaped = false;
 			token->type = TOKEN_STRING;
-			while (TRUE)
+			while (true)
 			{
 				c = getcFromInputFile ();
 				/* we don't handle unicode escapes but they are safe */
 				if (escaped)
-					escaped = FALSE;
+					escaped = false;
 				else if (c == '\\')
-					escaped = TRUE;
+					escaped = true;
 				else if (c >= 0x00 && c <= 0x1F)
 					break; /* break on invalid, unescaped, control characters */
 				else if (c == '"' || c == EOF)
@@ -181,7 +181,6 @@ static void readTokenFull (tokenInfo *const token,
 				if (includeStringRepr)
 					vStringPut (token->string, c);
 			}
-			vStringTerminate (token->string);
 			break;
 		}
 
@@ -196,7 +195,6 @@ static void readTokenFull (tokenInfo *const token,
 					c = getcFromInputFile ();
 				}
 				while (c != EOF && isIdentChar (c));
-				vStringTerminate (token->string);
 				ungetcToInputFile (c);
 				switch (lookupKeyword (vStringValue (token->string), Lang_json))
 				{
@@ -210,7 +208,7 @@ static void readTokenFull (tokenInfo *const token,
 	}
 }
 
-#define readToken(t) (readTokenFull ((t), FALSE))
+#define readToken(t) (readTokenFull ((t), false))
 
 static void pushScope (tokenInfo *const token,
 					   const tokenInfo *const parent,
@@ -219,7 +217,6 @@ static void pushScope (tokenInfo *const token,
 	if (vStringLength (token->scope) > 0)
 		vStringPut (token->scope, '.');
 	vStringCat (token->scope, parent->string);
-	vStringTerminate (token->scope);
 	token->scopeKind = parentKind;
 }
 
@@ -282,7 +279,7 @@ static void parseValue (tokenInfo *const token)
 
 		do
 		{
-			readTokenFull (token, TRUE);
+			readTokenFull (token, true);
 			if (token->type == TOKEN_STRING)
 			{
 				jsonKind tagKind = TAG_NULL; /* default in case of invalid value */

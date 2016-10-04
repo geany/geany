@@ -35,9 +35,9 @@ typedef enum {
 } rKind;
 
 static kindOption RKinds [KIND_COUNT] = {
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'l', "library", "libraries"},
-	{TRUE, 's', "source", "sources"},
+	{true, 'f', "function", "functions"},
+	{true, 'l', "library", "libraries"},
+	{true, 's', "source", "sources"},
 };
 
 static void makeRTag (const vString * const name, rKind kind)
@@ -94,7 +94,6 @@ static void createRTags (void)
 							vStringPut(name, (int)*cp);
 							cp++;
 						}
-						vStringTerminate(name);
 
 						/* if the string really exists, make a tag of it */
 						if (vStringLength(name) > 0)
@@ -134,7 +133,6 @@ static void createRTags (void)
 						if (strncasecmp((const char*)cp, "function", (size_t)8) == 0) {
 							/* it's a function: ident <- function(args) */
 							cp += 8;
-							vStringTerminate(name);
 							/* if the string really exists, make a tag of it */
 							if (vStringLength(name) > 0)
 								makeRTag(name, K_FUNCTION);

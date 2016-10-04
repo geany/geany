@@ -40,31 +40,31 @@ typedef enum {
 } perlKind;
 
 static kindOption PerlKinds [] = {
-	{ TRUE,  'c', "constant",               "constants" },
-	{ TRUE,  'f', "format",                 "formats" },
-	{ TRUE,  'l', "label",                  "labels" },
-	{ TRUE,  'p', "package",                "packages" },
-	{ TRUE,  's', "subroutine",             "subroutines" },
-	{ FALSE, 'd', "subroutineDeclaration",  "subroutine declarations" },
+	{ true,  'c', "constant",               "constants" },
+	{ true,  'f', "format",                 "formats" },
+	{ true,  'l', "label",                  "labels" },
+	{ true,  'p', "package",                "packages" },
+	{ true,  's', "subroutine",             "subroutines" },
+	{ false, 'd', "subroutineDeclaration",  "subroutine declarations" },
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifier1 (int c)
+static bool isIdentifier1 (int c)
 {
-	return (boolean) (isalpha (c) || c == '_');
+	return (bool) (isalpha (c) || c == '_');
 }
 
-static boolean isIdentifier (int c)
+static bool isIdentifier (int c)
 {
-	return (boolean) (isalnum (c) || c == '_');
+	return (bool) (isalnum (c) || c == '_');
 }
 
-static boolean isPodWord (const char *word)
+static bool isPodWord (const char *word)
 {
-	boolean result = FALSE;
+	bool result = false;
 	if (isalpha (*word))
 	{
 		const char *const pods [] = {
@@ -81,7 +81,7 @@ static boolean isPodWord (const char *word)
 		for (i = 0  ;  i < count  &&  ! result  ;  ++i)
 		{
 			if (strcmp (id, pods [i]) == 0)
-				result = TRUE;
+				result = true;
 		}
 		eFree (id);
 	}
@@ -107,11 +107,11 @@ static boolean isPodWord (const char *word)
  * parse Perl), so we are only promising best effort here.
  *
  * If we can't determine what this is (due to a file ending, for example),
- * we will return FALSE.
+ * we will return false.
  */
-static boolean isSubroutineDeclaration (const unsigned char *cp)
+static bool isSubroutineDeclaration (const unsigned char *cp)
 {
-	boolean attr = FALSE;
+	bool attr = false;
 	int nparens = 0;
 
 	do {
@@ -121,10 +121,10 @@ SUB_DECL_SWITCH:
 				case ':':
 					if (nparens)
 						break;
-					else if (TRUE == attr)
-						return FALSE;    /* Invalid attribute name */
+					else if (true == attr)
+						return false;    /* Invalid attribute name */
 					else
-						attr = TRUE;
+						attr = true;
 					break;
 				case '(':
 					++nparens;
@@ -137,31 +137,31 @@ SUB_DECL_SWITCH:
 					break;
 				case ';':
 					if (!nparens)
-						return TRUE;
+						return true;
 				case '{':
 					if (!nparens)
-						return FALSE;
+						return false;
 				default:
 					if (attr) {
 						if (isIdentifier1(*cp)) {
 							cp++;
 							while (isIdentifier (*cp))
 								cp++;
-							attr = FALSE;
+							attr = false;
 							goto SUB_DECL_SWITCH; /* Instead of --cp; */
 						} else {
-							return FALSE;
+							return false;
 						}
 					} else if (nparens) {
 						break;
 					} else {
-						return FALSE;
+						return false;
 					}
 			}
 		}
 	} while (NULL != (cp = readLineFromInputFile ()));
 
-	return FALSE;
+	return false;
 }
 
 /* Algorithm adapted from from GNU etags.
@@ -172,13 +172,13 @@ static void findPerlTags (void)
 {
 	vString *name = vStringNew ();
 	vString *package = NULL;
-	boolean skipPodDoc = FALSE;
+	bool skipPodDoc = false;
 	const unsigned char *line;
 
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
-		boolean spaceRequired = FALSE;
-		boolean qualified = FALSE;
+		bool spaceRequired = false;
+		bool qualified = false;
 		const unsigned char *cp = line;
 		perlKind kind = K_NONE;
 		tagEntryInfo e;
@@ -186,7 +186,7 @@ static void findPerlTags (void)
 		if (skipPodDoc)
 		{
 			if (strncmp ((const char*) line, "=cut", (size_t) 4) == 0)
-				skipPodDoc = FALSE;
+				skipPodDoc = false;
 			continue;
 		}
 		else if (line [0] == '=')
@@ -209,8 +209,8 @@ static void findPerlTags (void)
 			TRACE("this looks like a sub\n");
 			cp += 3;
 			kind = K_SUBROUTINE;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "use", (size_t) 3) == 0)
 		{
@@ -223,8 +223,8 @@ static void findPerlTags (void)
 				continue;
 			cp += 8;
 			kind = K_CONSTANT;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "package", (size_t) 7) == 0)
 		{
@@ -247,15 +247,15 @@ static void findPerlTags (void)
 
 			cp = space;	 /* Rewind */
 			kind = K_PACKAGE;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "format", (size_t) 6) == 0)
 		{
 			cp += 6;
 			kind = K_FORMAT;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else
 		{
@@ -304,7 +304,6 @@ static void findPerlTags (void)
 				vStringCatS (name, "STDOUT");
 			}
 
-			vStringTerminate (name);
 			TRACE("name: %s\n", name->buffer);
 
 			if (0 == vStringLength(name)) {
@@ -320,8 +319,8 @@ static void findPerlTags (void)
 				 */
 				initTagEntry(&e, vStringValue(name), &(PerlKinds[kind]));
 
-				if (TRUE == isSubroutineDeclaration(cp)) {
-					if (TRUE == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
+				if (true == isSubroutineDeclaration(cp)) {
+					if (true == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
 						kind = K_SUBROUTINE_DECLARATION;
 					} else {
 						vStringClear (name);

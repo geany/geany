@@ -22,6 +22,8 @@
 /* include unistd.h preventively because at least under MacOSX it is needed for off_t */
 #include <unistd.h>
 
+#include <stdbool.h>
+
 /*
 *   MACROS
 */
@@ -114,16 +116,6 @@ void utils_warn(const char *msg);
 /*
 *   DATA DECLARATIONS
 */
-
-#undef FALSE
-#undef TRUE
-#ifdef __cplusplus
-typedef bool boolean;
-#define FALSE false
-#define TRUE true
-#else
-typedef enum { FALSE, TRUE } boolean;
-#endif
 
 #if ! defined (HAVE_FGETPOS) && ! defined (fpos_t)
 # define fpos_t long

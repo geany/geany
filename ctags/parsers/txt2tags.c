@@ -37,7 +37,7 @@ typedef enum {
 } Txt2tagsKind;
 
 static kindOption Txt2tagsKinds[] = {
-	{ TRUE, 'm', "member", "sections" }
+	{ true, 'm', "member", "sections" }
 };
 
 /*
@@ -75,7 +75,7 @@ static void makeTxt2tagsTag (const vString* const name,
 }
 
 /* matches: ^ *[=_-]{20,} *$ */
-static boolean isTxt2tagsLine (const unsigned char *line)
+static bool isTxt2tagsLine (const unsigned char *line)
 {
 	unsigned int len;
 
@@ -87,9 +87,9 @@ static boolean isTxt2tagsLine (const unsigned char *line)
 	return len >= 20 && *line == 0;
 }
 
-static boolean parseTxt2tagsTitle (const unsigned char *line,
-                                   vString *const title,
-                                   int *const depth_)
+static bool parseTxt2tagsTitle (const unsigned char *line,
+                                vString *const title,
+                                int *const depth_)
 {
 	const int MAX_TITLE_DEPTH = 5; /* maximum length of a title delimiter */
 	unsigned char delim;
@@ -101,7 +101,7 @@ static boolean parseTxt2tagsTitle (const unsigned char *line,
 
 	/* normal/numbered titles */
 	if (*line != '=' && *line != '+')
-		return FALSE;
+		return false;
 
 	delim = *line;
 
@@ -115,7 +115,7 @@ static boolean parseTxt2tagsTitle (const unsigned char *line,
 		line++;
 
 	if (delim_delta > MAX_TITLE_DEPTH) /* invalid */
-		return FALSE;
+		return false;
 
 	*depth_ = delim_delta;
 
@@ -129,7 +129,7 @@ static boolean parseTxt2tagsTitle (const unsigned char *line,
 		while (end > line && (isalnum(*end) || *end == '_' || *end == '-'))
 			end--;
 		if (*end != '[') /* invalid */
-			return FALSE;
+			return false;
 		end--;
 	}
 	while (end > line && *end == delim && delim_delta >= 0)
@@ -142,10 +142,10 @@ static boolean parseTxt2tagsTitle (const unsigned char *line,
 
 	/* if start and end delimiters are not identical, or the the name is empty */
 	if (delim_delta != 0 || (end - line) <= 0)
-		return FALSE;
+		return false;
 
 	vStringNCopyS(title, (const char *) line, end - line);
-	return TRUE;
+	return true;
 }
 
 static void findTxt2tagsTags (void)
@@ -169,7 +169,6 @@ static void findTxt2tagsTags (void)
 				nl = nestingLevelsGetCurrent(nls);
 			}
 
-			vStringTerminate(name);
 			makeTxt2tagsTag(name, nls, K_SECTION);
 			nestingLevelsPush(nls, name, K_SECTION);
 			nestingLevelsGetCurrent(nls)->indentation = depth;

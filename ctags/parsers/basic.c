@@ -40,12 +40,12 @@ typedef struct {
 } KeyWord;
 
 static kindOption BasicKinds[] = {
-	{TRUE, 'c', "constant", "constants"},
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'l', "label", "labels"},
-	{TRUE, 't', "type", "types"},
-	{TRUE, 'v', "variable", "variables"},
-	{TRUE, 'g', "enum", "enumerations"}
+	{true, 'c', "constant", "constants"},
+	{true, 'f', "function", "functions"},
+	{true, 'l', "label", "labels"},
+	{true, 't', "type", "types"},
+	{true, 'v', "variable", "variables"},
+	{true, 'g', "enum", "enumerations"}
 };
 
 static KeyWord freebasic_keywords[] = {
@@ -119,7 +119,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	makeSimpleTag (name, BasicKinds, kind);
 
 	/* if the line contains a ',', we have multiple declarations */
@@ -141,7 +140,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
-		vStringTerminate (name);
 		makeSimpleTag (name, BasicKinds, kind);
 	}
 
@@ -157,7 +155,6 @@ static char const *extract_name (char const *pos, vString * name)
 	vStringClear (name);
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	return pos;
 }
 

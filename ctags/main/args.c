@@ -102,7 +102,6 @@ static char* nextFileArg (FILE* const fp)
 				vStringPut (vs, c);
 				c = fgetc (fp);
 			} while (c != EOF  &&  ! isspace (c));
-			vStringTerminate (vs);
 			Assert (vStringLength (vs) > 0);
 			result = xMalloc (vStringLength (vs) + 1, char);
 			strcpy (result, vStringValue (vs));
@@ -127,7 +126,6 @@ static char* nextFileLine (FILE* const fp)
 			vStringPut (vs, c);
 			c = fgetc (fp);
 		}
-		vStringTerminate (vs);
 		if (vStringLength (vs) > 0)
 		{
 			result = xMalloc (vStringLength (vs) + 1, char);
@@ -186,7 +184,7 @@ extern Arguments* argNewFromLineFile (FILE* const fp)
 	Arguments* result = xMalloc (1, Arguments);
 	memset (result, 0, sizeof (Arguments));
 	result->type = ARG_FILE;
-	result->lineMode = TRUE;
+	result->lineMode = true;
 	result->u.fileArgs.fp = fp;
 	result->item = nextFileString (result, result->u.fileArgs.fp);
 	return result;
@@ -199,22 +197,22 @@ extern char *argItem (const Arguments* const current)
 	return current->item;
 }
 
-extern boolean argOff (const Arguments* const current)
+extern bool argOff (const Arguments* const current)
 {
 	Assert (current != NULL);
-	return (boolean) (current->item == NULL);
+	return (bool) (current->item == NULL);
 }
 
 extern void argSetWordMode (Arguments* const current)
 {
 	Assert (current != NULL);
-	current->lineMode = FALSE;
+	current->lineMode = false;
 }
 
 extern void argSetLineMode (Arguments* const current)
 {
 	Assert (current != NULL);
-	current->lineMode = TRUE;
+	current->lineMode = true;
 }
 
 extern void argForth (Arguments* const current)

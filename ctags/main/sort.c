@@ -57,7 +57,7 @@ extern void catFile (const char *const name)
 # define PE_CONST const
 #endif
 
-extern void externalSortTags (const boolean toStdout)
+extern void externalSortTags (const bool toStdout)
 {
 	const char *const sortCommand = "sort -u -o";
 	PE_CONST char *const sortOrder1 = "LC_COLLATE=C";
@@ -124,7 +124,7 @@ static int compareTags (const void *const one, const void *const two)
 }
 
 static void writeSortedTags (
-		char **const table, const size_t numTags, const boolean toStdout)
+		char **const table, const size_t numTags, const bool toStdout)
 {
 	MIO *mio;
 	size_t i;
@@ -153,7 +153,7 @@ static void writeSortedTags (
 	mio_free (mio);
 }
 
-extern void internalSortTags (const boolean toStdout)
+extern void internalSortTags (const bool toStdout)
 {
 	vString *vLine = vStringNew ();
 	MIO *mio = NULL;

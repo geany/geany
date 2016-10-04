@@ -41,9 +41,9 @@ static void vStringResize (vString *const string, const size_t newSize)
 *   External interface
 */
 
-extern boolean vStringAutoResize (vString *const string)
+extern bool vStringAutoResize (vString *const string)
 {
-	boolean ok = TRUE;
+	bool ok = true;
 
 	if (string->size <= INT_MAX / 2)
 	{
@@ -58,7 +58,7 @@ extern void vStringTruncate (vString *const string, const size_t length)
 {
 	Assert (length <= string->length);
 	string->length = length;
-	vStringTerminate (string);
+	vStringPut(string, '\0');
 	DebugStatement ( memset (string->buffer + string->length, 0,
 	                         string->size - string->length); )
 }
@@ -145,7 +145,6 @@ extern void vStringNCatS (
 		--remain;
 		++p;
 	}
-	vStringTerminate (string);
 }
 
 /*  Strip trailing newline from string.

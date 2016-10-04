@@ -20,9 +20,9 @@
 extern void catFile (const char *const name);
 
 #ifdef EXTERNAL_SORT
-extern void externalSortTags (const boolean toStdout);
+extern void externalSortTags (const bool toStdout);
 #else
-extern void internalSortTags (const boolean toStdout);
+extern void internalSortTags (const bool toStdout);
 #endif
 
 #endif  /* CTAGS_MAIN_SORT_H */

@@ -80,11 +80,11 @@ extern char* newLowerString (const char* str);
 extern char* newUpperString (const char* str);
 
 /* File system functions */
-extern boolean doesFileExist (const char *const fileName);
-extern boolean isRecursiveLink (const char* const dirName);
-extern boolean isSameFile (const char *const name1, const char *const name2);
+extern bool doesFileExist (const char *const fileName);
+extern bool isRecursiveLink (const char* const dirName);
+extern bool isSameFile (const char *const name1, const char *const name2);
 extern const char *baseFilename (const char *const filePath);
-extern boolean isAbsolutePath (const char *const path);
+extern bool isAbsolutePath (const char *const path);
 extern vString *combinePathAndFile (const char *const path, const char *const file);
 extern char* absoluteFilename (const char *file);
 extern char* absoluteDirname (char *file);
@@ -94,7 +94,7 @@ extern void processExcludeOption (const char *const option, const char *const pa
 extern const char *fileExtension (const char *const fileName);
 extern char* eStrdup (const char* str);
 extern long unsigned int getFileSize (const char *const name);
-extern boolean isExecutable (const char *const name);
+extern bool isExecutable (const char *const name);
 
 #ifndef HAVE_STRICMP
 extern int stricmp (const char *s1, const char *s2);

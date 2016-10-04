@@ -103,10 +103,10 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 	File.input.language = File.source.language;
 }
 
-static boolean setSourceFileName (vString *const fileName)
+static bool setSourceFileName (vString *const fileName)
 {
 	const langType language = getFileLanguage (vStringValue (fileName));
-	boolean result = FALSE;
+	bool result = false;
 	if (language != LANG_IGNORE)
 	{
 		vString *pathName;
@@ -116,7 +116,7 @@ static boolean setSourceFileName (vString *const fileName)
 			pathName = combinePathAndFile (vStringValue (File.path),
 										vStringValue (fileName));
 		setSourceFileParameters (pathName, -1);
-		result = TRUE;
+		result = true;
 	}
 	return result;
 }
@@ -161,13 +161,13 @@ static unsigned long readLineNumber (void)
 static vString *readFileName (void)
 {
 	vString *const fileName = vStringNew ();
-	boolean quoteDelimited = FALSE;
+	bool quoteDelimited = false;
 	int c = skipWhite ();
 
 	if (c == '"')
 	{
 		c = mio_getc (File.mio);  /* skip double-quote */
-		quoteDelimited = TRUE;
+		quoteDelimited = true;
 	}
 	while (c != EOF  &&  c != '\n'  &&
 			(quoteDelimited ? (c != '"') : (c != ' '  &&  c != '\t')))
@@ -182,16 +182,16 @@ static vString *readFileName (void)
 	return fileName;
 }
 
-static boolean parseLineDirective (void)
+static bool parseLineDirective (void)
 {
-	boolean result = FALSE;
+	bool result = false;
 	int c = skipWhite ();
 	DebugStatement ( const char* lineStr = ""; )
 
 	if (isdigit (c))
 	{
 		mio_ungetc (File.mio, c);
-		result = TRUE;
+		result = true;
 	}
 	else if (c == 'l'  &&  mio_getc (File.mio) == 'i'  &&
 			 mio_getc (File.mio) == 'n'  &&  mio_getc (File.mio) == 'e')
@@ -200,14 +200,14 @@ static boolean parseLineDirective (void)
 		if (c == ' '  ||  c == '\t')
 		{
 			DebugStatement ( lineStr = "line"; )
-			result = TRUE;
+			result = true;
 		}
 	}
 	if (result)
 	{
 		const unsigned long lNum = readLineNumber ();
 		if (lNum == 0)
-			result = FALSE;
+			result = false;
 		else
 		{
 			vString *const fileName = readFileName ();
@@ -229,14 +229,14 @@ static boolean parseLineDirective (void)
 				tagEntryInfo tag;
 				initTagEntry (&tag, baseFilename (vStringValue (fileName)), getInputLanguageFileKind ());
 
-				tag.isFileEntry     = TRUE;
-				tag.lineNumberEntry = TRUE;
+				tag.isFileEntry     = true;
+				tag.lineNumberEntry = true;
 				tag.lineNumber      = 1;
 
 				makeTagEntry (&tag);
 			}
 			vStringDelete (fileName);
-			result = TRUE;
+			result = true;
 		}
 	}
 	return result;
@@ -249,10 +249,10 @@ static boolean parseLineDirective (void)
 /*  This function opens an input file, and resets the line counter.  If it
  *  fails, it will display an error message and leave the File.mio set to NULL.
  */
-extern boolean fileOpen (const char *const fileName, const langType language)
+extern bool fileOpen (const char *const fileName, const langType language)
 {
 	const char *const openMode = "rb";
-	boolean opened = FALSE;
+	bool opened = false;
 
 	/*	If another file was already open, then close it.
 	 */
@@ -267,15 +267,15 @@ extern boolean fileOpen (const char *const fileName, const langType language)
 		error (WARNING | PERROR, "cannot open \"%s\"", fileName);
 	else
 	{
-		opened = TRUE;
+		opened = true;
 
 		setInputFileName (fileName);
 		mio_getpos (File.mio, &StartOfLine);
 		mio_getpos (File.mio, &File.filePosition);
 		File.currentLine  = NULL;
 		File.input.lineNumber   = 0L;
-		File.eof          = FALSE;
-		File.newLine      = TRUE;
+		File.eof          = false;
+		File.newLine      = true;
 
 		if (File.line != NULL)
 			vStringClear (File.line);
@@ -294,10 +294,10 @@ extern boolean fileOpen (const char *const fileName, const langType language)
  * This func is NOT THREAD SAFE.
  * The user should not tamper with the buffer while this func is executing.
  */
-extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
-						   const char *const fileName, const langType language )
+extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
+						const char *const fileName, const langType language )
 {
-	boolean opened = FALSE;
+	bool opened = false;
 		
 	/* Check whether a file of a buffer were already open, then close them.
 	 */
@@ -308,11 +308,11 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 
 	/* check if we got a good buffer */
 	if (buffer == NULL || buffer_size == 0) {
-		opened = FALSE;
+		opened = false;
 		return opened;
 	}
 		
-	opened = TRUE;
+	opened = true;
 			
 	File.mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
 	setInputFileName (fileName);
@@ -320,8 +320,8 @@ extern boolean bufferOpen (unsigned char *buffer, size_t buffer_size,
 	mio_getpos (File.mio, &File.filePosition);
 	File.currentLine  = NULL;
 	File.input.lineNumber   = 0L;
-	File.eof          = FALSE;
-	File.newLine      = TRUE;
+	File.eof          = false;
+	File.newLine      = true;
 
 	if (File.line != NULL)
 		vStringClear (File.line);
@@ -352,7 +352,7 @@ extern void fileClose (void)
 	}
 }
 
-extern boolean fileEOF (void)
+extern bool fileEOF (void)
 {
 	return File.eof;
 }
@@ -362,7 +362,7 @@ extern boolean fileEOF (void)
 static void fileNewline (void)
 {
 	File.filePosition = StartOfLine;
-	File.newLine = FALSE;
+	File.newLine = false;
 	File.input.lineNumber++;
 	File.source.lineNumber++;
 	DebugStatement ( if (Option.breakLine == File.input.lineNumber) lineBreak (); )
@@ -396,10 +396,10 @@ readnext:
 	}
 
 	if (c == EOF)
-		File.eof = TRUE;
+		File.eof = true;
 	else if (c == NEWLINE)
 	{
-		File.newLine = TRUE;
+		File.newLine = true;
 		mio_getpos (File.mio, &StartOfLine);
 	}
 	else if (c == CRETURN)
@@ -413,7 +413,7 @@ readnext:
 			mio_ungetc (File.mio, next);
 
 		c = NEWLINE;  /* convert CR into newline */
-		File.newLine = TRUE;
+		File.newLine = true;
 		mio_getpos (File.mio, &StartOfLine);
 	}
 	DebugStatement ( debugPutc (DEBUG_RAW, c); )
@@ -444,7 +444,6 @@ static vString *iFileGetLine (void)
 			vStringPut (File.line, c);
 		if (c == '\n'  ||  (c == EOF  &&  vStringLength (File.line) > 0))
 		{
-			vStringTerminate (File.line);
 #ifdef HAVE_REGEX
 			if (vStringLength (File.line) > 0)
 				matchRegex (File.line, File.source.language);
@@ -548,7 +547,7 @@ extern char *readLineRaw (vString *const vLine, MIO *const mio)
 		error (FATAL, "NULL file pointer");
 	else
 	{
-		boolean reReadLine;
+		bool reReadLine;
 
 		/*  If reading the line places any character other than a null or a
 		 *  newline at the last character position in the buffer (one less
@@ -561,7 +560,7 @@ extern char *readLineRaw (vString *const vLine, MIO *const mio)
 			long startOfLine;
 
 			startOfLine = mio_tell(mio);
-			reReadLine = FALSE;
+			reReadLine = false;
 			*pLastChar = '\0';
 			result = mio_gets (mio, vStringValue (vLine), (int) vStringSize (vLine));
 			if (result == NULL)

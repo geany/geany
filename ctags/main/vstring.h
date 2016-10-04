@@ -41,7 +41,6 @@
 #define vStringCopy(vs,s)     vStringCopyS((vs), vStringValue((s)))
 #define vStringNCopy(vs,s,l)  vStringNCopyS((vs), vStringValue((s)), (l))
 #define vStringChar(vs,i)     ((vs)->buffer[i])
-#define vStringTerminate(vs)  vStringPut(vs, '\0')
 #define vStringLower(vs)      toLowerString((vs)->buffer)
 #define vStringUpper(vs)      toUpperString((vs)->buffer)
 
@@ -58,7 +57,7 @@ typedef struct sVString {
 /*
 *   FUNCTION PROTOTYPES
 */
-extern boolean vStringAutoResize (vString *const string);
+extern bool vStringAutoResize (vString *const string);
 extern void vStringClear (vString *const string);
 extern vString *vStringNew (void);
 extern void vStringDelete (vString *const string);

@@ -82,7 +82,7 @@ tagFile TagFile = {
 	NULL                /* vLine */
 };
 
-static boolean TagsToStdout = FALSE;
+static bool TagsToStdout = false;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -244,19 +244,19 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 
 
 
-static boolean isTagFile (const char *const filename)
+static bool isTagFile (const char *const filename)
 {
-	boolean ok = FALSE;                 /* we assume not unless confirmed */
+	bool ok = false;                 /* we assume not unless confirmed */
 	MIO *const mio = mio_new_file_full (filename, "rb", g_fopen, fclose);
 
 	if (mio == NULL  &&  errno == ENOENT)
-		ok = TRUE;
+		ok = true;
 	else if (mio != NULL)
 	{
 		const char *line = readLineRaw (TagFile.vLine, mio);
 
 		if (line == NULL)
-			ok = TRUE;
+			ok = true;
 		mio_free (mio);
 	}
 	return ok;
@@ -281,7 +281,7 @@ extern void openTagFile (void)
 	}
 	else
 	{
-		boolean fileExists;
+		bool fileExists;
 
 		setDefaultTagFileName ();
 		TagFile.name = eStrdup (Option.tagFileName);
@@ -404,7 +404,7 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name, const k
 {
 	Assert (File.source.name != NULL);
 	memset (e, 0, sizeof (tagEntryInfo));
-	e->lineNumberEntry  = (boolean) (Option.locate == EX_LINENUM);
+	e->lineNumberEntry  = (bool) (Option.locate == EX_LINENUM);
 	e->lineNumber       = getSourceLineNumber ();
 	e->language         = getSourceLanguageName ();
 	e->filePosition     = getInputFilePosition ();

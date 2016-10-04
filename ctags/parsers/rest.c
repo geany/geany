@@ -34,10 +34,10 @@ typedef enum {
 } restKind;
 
 static kindOption RestKinds[] = {
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 'm', "member",        "sections" },
-	{ TRUE, 'd', "macro",         "subsections" },
-	{ TRUE, 'v', "variable",      "subsubsections" }
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 'm', "member",        "sections" },
+	{ true, 'd', "macro",         "subsections" },
+	{ true, 'v', "variable",      "subsubsections" }
 };
 
 static char kindchars[SECTION_COUNT];
@@ -86,7 +86,7 @@ static void makeRestTag (const vString* const name, const int kind)
 
 
 /* checks if str is all the same character */
-static boolean issame(const char *str)
+static bool issame(const char *str)
 {
 	char first = *str;
 
@@ -97,9 +97,9 @@ static boolean issame(const char *str)
 		str++;
 		c = *str;
 		if (c && c != first)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -186,7 +186,6 @@ static void findRestTags (void)
 		vStringClear (name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
-		vStringTerminate(name);
 	}
 	vStringDelete (name);
 	nestingLevelsFree(nestingLevels);

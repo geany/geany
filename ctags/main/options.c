@@ -45,7 +45,7 @@
 # define RECURSE_SUPPORTED
 #endif
 
-#define isCompoundOption(c)  (boolean) (strchr ("fohiILpDb", (c)) != NULL)
+#define isCompoundOption(c)  (bool) (strchr ("fohiILpDb", (c)) != NULL)
 
 
 
@@ -57,53 +57,53 @@ static stringList* Excluded = NULL;
 
 optionValues Option = {
 	{
-		FALSE,          /* --extra=f */
-		TRUE,           /* --file-scope */
+		false,          /* --extra=f */
+		true,           /* --file-scope */
 	},
 	{
-		TRUE,           /* -fields=a */
-		TRUE,           /* -fields=f */
-		FALSE,          /* -fields=m */
-		TRUE,           /* -fields=i */
-		FALSE,          /* -fields=k */
-		TRUE,           /* -fields=z */
-		TRUE,           /* -fields=K */
-		FALSE,          /* -fields=l */
-		TRUE,           /* -fields=n */
-		TRUE,           /* -fields=s */
-		TRUE,           /* -fields=P */
-		TRUE            /* -fields=A */
+		true,           /* -fields=a */
+		true,           /* -fields=f */
+		false,          /* -fields=m */
+		true,           /* -fields=i */
+		false,          /* -fields=k */
+		true,           /* -fields=z */
+		true,           /* -fields=K */
+		false,          /* -fields=l */
+		true,           /* -fields=n */
+		true,           /* -fields=s */
+		true,           /* -fields=P */
+		true            /* -fields=A */
 	},
 	NULL,               /* -I */
-	FALSE,              /* -a */
-	FALSE,              /* -B */
+	false,              /* -a */
+	false,              /* -B */
 #ifdef MACROS_USE_PATTERNS
 	EX_PATTERN,         /* -n, --excmd */
 #else
 	EX_MIX,             /* -n, --excmd */
 #endif
-	FALSE,              /* -R */
-	TRUE,               /* -u, --sort */
-	FALSE,              /* -V */
-	FALSE,              /* -x */
+	false,              /* -R */
+	true,               /* -u, --sort */
+	false,              /* -V */
+	false,              /* -x */
 	NULL,               /* -L */
 	NULL,               /* -o */
 	NULL,               /* -h */
 	NULL,               /* --etags-include */
 	DEFAULT_FILE_FORMAT,/* --format */
-	FALSE,              /* --if0 */
-	FALSE,              /* --kind-long */
+	false,              /* --if0 */
+	false,              /* --kind-long */
 	LANG_AUTO,          /* --lang */
-	TRUE,               /* --links */
-	FALSE,              /* --filter */
+	true,               /* --links */
+	false,              /* --filter */
 	NULL,               /* --filter-terminator */
-	FALSE,              /* --qualified-tags */
-	FALSE,              /* --tag-relative */
-	FALSE,              /* --totals */
-	FALSE,              /* --line-directives */
-	FALSE,              /* --nest */
-	.machinable = FALSE,
-	.withListHeader = TRUE,
+	false,              /* --qualified-tags */
+	false,              /* --tag-relative */
+	false,              /* --totals */
+	false,              /* --line-directives */
+	false,              /* --nest */
+	.machinable = false,
+	.withListHeader = true,
 };
 
 
@@ -129,9 +129,9 @@ extern void setDefaultTagFileName (void)
  *  file for the purposes of determining whether enclosed tags are global or
  *  static.
  */
-extern boolean isIncludeFile (const char *const fileName)
+extern bool isIncludeFile (const char *const fileName)
 {
-	return FALSE;
+	return false;
 }
 
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
@@ -141,11 +141,11 @@ gchar **c_tags_ignore = NULL;
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
-extern boolean isIgnoreToken (const char *const name,
-							  boolean *const pIgnoreParens,
+extern bool isIgnoreToken (const char *const name,
+							  bool *const pIgnoreParens,
 							  const char **const replacement)
 {
-	boolean result = FALSE;
+	bool result = false;
 
 	if (c_tags_ignore != NULL)
 	{
@@ -155,35 +155,34 @@ extern boolean isIgnoreToken (const char *const name,
 		vString *token = vStringNew();
 
 		if (pIgnoreParens != NULL)
-			*pIgnoreParens = FALSE;
+			*pIgnoreParens = false;
 
 		for (i = 0  ;  i < len ;  ++i)
 		{
 			size_t tokenLen;
 
 			vStringCopyS (token, c_tags_ignore[i]);
-			vStringTerminate (token);
 			tokenLen = vStringLength (token);
 
 			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&
 				strncmp (vStringValue (token), name, tokenLen - 1) == 0)
 			{
-				result = TRUE;
+				result = true;
 				break;
 			}
 			if (strncmp (vStringValue (token), name, nameLen) == 0)
 			{
 				if (nameLen == tokenLen)
 				{
-					result = TRUE;
+					result = true;
 					break;
 				}
 				else if (tokenLen == nameLen + 1  &&
 						vStringChar (token, tokenLen - 1) == '+')
 				{
-					result = TRUE;
+					result = true;
 					if (pIgnoreParens != NULL)
-						*pIgnoreParens = TRUE;
+						*pIgnoreParens = true;
 					break;
 				}
 				else if (vStringChar (token, nameLen) == '=')
@@ -230,10 +229,10 @@ extern void processExcludeOption (const char *const option CTAGS_ATTR_UNUSED,
 	}
 }
 
-extern boolean isExcludedFile (const char* const name)
+extern bool isExcludedFile (const char* const name)
 {
 	const char* base = baseFilename (name);
-	boolean result = FALSE;
+	bool result = false;
 	if (Excluded != NULL)
 	{
 		result = stringListFileMatched (Excluded, base);

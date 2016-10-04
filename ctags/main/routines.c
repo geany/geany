@@ -94,7 +94,7 @@
 # ifdef S_IFLNK
 #  define S_ISLNK(mode)		(((mode) & S_IFMT) == S_IFLNK)
 # else
-#  define S_ISLNK(mode)		FALSE  /* assume no soft links */
+#  define S_ISLNK(mode)		false  /* assume no soft links */
 # endif
 #endif
 
@@ -102,7 +102,7 @@
 # ifdef S_IFDIR
 #  define S_ISDIR(mode)		(((mode) & S_IFMT) == S_IFDIR)
 # else
-#  define S_ISDIR(mode)		FALSE  /* assume no soft links */
+#  define S_ISDIR(mode)		false  /* assume no soft links */
 # endif
 #endif
 
@@ -314,16 +314,16 @@ static void setCurrentDirectory (void)
 #endif
 
 
-extern boolean doesFileExist (const char *const fileName)
+extern bool doesFileExist (const char *const fileName)
 {
 	GStatBuf fileStatus;
 
-	return (boolean) (g_stat (fileName, &fileStatus) == 0);
+	return (bool) (g_stat (fileName, &fileStatus) == 0);
 }
 
-extern boolean isRecursiveLink (const char* const dirName)
+extern bool isRecursiveLink (const char* const dirName)
 {
-	boolean result = FALSE;
+	bool result = false;
 	char* const path = absoluteFilename (dirName);
 	while (path [strlen (path) - 1] == PATH_SEPARATOR)
 		path [strlen (path) - 1] = '\0';
@@ -342,14 +342,14 @@ extern boolean isRecursiveLink (const char* const dirName)
 	return result;
 }
 
-extern boolean isSameFile (const char *const name1, const char *const name2)
+extern bool isSameFile (const char *const name1, const char *const name2)
 {
-	boolean result = FALSE;
+	bool result = false;
 #ifdef HAVE_STAT_ST_INO
 	GStatBuf stat1, stat2;
 
 	if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
-		result = (boolean) (stat1.st_ino == stat2.st_ino);
+		result = (bool) (stat1.st_ino == stat2.st_ino);
 #endif
 	return result;
 }
@@ -402,16 +402,16 @@ extern const char *fileExtension (const char *const fileName)
 	return extension;
 }
 
-extern boolean isAbsolutePath (const char *const path)
+extern bool isAbsolutePath (const char *const path)
 {
-	boolean result = FALSE;
+	bool result = false;
 #if defined (MSDOS_STYLE_PATH)
 	if (strchr (PathDelimiters, path [0]) != NULL)
-		result = TRUE;
+		result = true;
 	else if (isalpha (path [0])  &&  path [1] == ':')
 	{
 		if (strchr (PathDelimiters, path [2]) != NULL)
-			result = TRUE;
+			result = true;
 		else
 			/*  We don't support non-absolute file names with a drive
 			 *  letter, like `d:NAME' (it's too much hassle).
@@ -421,7 +421,7 @@ extern boolean isAbsolutePath (const char *const path)
 				path);
 	}
 #else
-	result = (boolean) (path [0] == PATH_SEPARATOR);
+	result = (bool) (path [0] == PATH_SEPARATOR);
 #endif
 	return result;
 }
@@ -432,17 +432,14 @@ extern vString *combinePathAndFile (const char *const path,
 	vString *const filePath = vStringNew ();
 	const int lastChar = path [strlen (path) - 1];
 # ifdef MSDOS_STYLE_PATH
-	boolean terminated = (boolean) (strchr (PathDelimiters, lastChar) != NULL);
+	bool terminated = (bool) (strchr (PathDelimiters, lastChar) != NULL);
 # else
-	boolean terminated = (boolean) (lastChar == PATH_SEPARATOR);
+	bool terminated = (bool) (lastChar == PATH_SEPARATOR);
 # endif
 
 	vStringCopyS (filePath, path);
 	if (! terminated)
-	{
 		vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
-		vStringTerminate (filePath);
-	}
 	vStringCatS (filePath, file);
 
 	return filePath;
@@ -609,56 +606,56 @@ extern long unsigned int getFileSize (const char *const name)
 }
 
 #if 0
-static boolean isSymbolicLink (const char *const name)
+static bool isSymbolicLink (const char *const name)
 {
 #if defined (WIN32)
-	return FALSE;
+	return false;
 #else
 	GStatBuf fileStatus;
-	boolean result = FALSE;
+	bool result = false;
 
 	if (g_lstat (name, &fileStatus) == 0)
-		result = (boolean) (S_ISLNK (fileStatus.st_mode));
+		result = (bool) (S_ISLNK (fileStatus.st_mode));
 
 	return result;
 #endif
 }
 
-static boolean isNormalFile (const char *const name)
+static bool isNormalFile (const char *const name)
 {
 	GStatBuf fileStatus;
-	boolean result = FALSE;
+	bool result = false;
 
 	if (g_stat (name, &fileStatus) == 0)
-		result = (boolean) (S_ISREG (fileStatus.st_mode));
+		result = (bool) (S_ISREG (fileStatus.st_mode));
 
 	return result;
 }
 #endif
 
-extern boolean isExecutable (const char *const name)
+extern bool isExecutable (const char *const name)
 {
 	GStatBuf fileStatus;
-	boolean result = FALSE;
+	bool result = false;
 
 	if (g_stat (name, &fileStatus) == 0)
-		result = (boolean) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
+		result = (bool) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
 
 	return result;
 }
 
 #ifdef HAVE_MKSTEMP
 
-static boolean isSetUID (const char *const name)
+static bool isSetUID (const char *const name)
 {
 #if defined (WIN32)
-	return FALSE;
+	return false;
 #else
 	GStatBuf fileStatus;
-	boolean result = FALSE;
+	bool result = false;
 
 	if (g_stat (name, &fileStatus) == 0)
-		result = (boolean) ((fileStatus.st_mode & S_ISUID) != 0);
+		result = (bool) ((fileStatus.st_mode & S_ISUID) != 0);
 
 	return result;
 #endif
@@ -667,13 +664,13 @@ static boolean isSetUID (const char *const name)
 #endif
 
 #if 0
-static boolean isDirectory (const char *const name)
+static bool isDirectory (const char *const name)
 {
-	boolean result = FALSE;
+	bool result = false;
 	GStatBuf fileStatus;
 
 	if (g_stat (name, &fileStatus) == 0)
-		result = (boolean) S_ISDIR (fileStatus.st_mode);
+		result = (bool) S_ISDIR (fileStatus.st_mode);
 	return result;
 }
 #endif

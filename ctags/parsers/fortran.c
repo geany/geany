@@ -33,11 +33,11 @@
 *   MACROS
 */
 #define isident(c)              (isalnum(c) || (c) == '_')
-#define isBlank(c)              (boolean) (c == ' ' || c == '\t')
-#define isType(token,t)         (boolean) ((token)->type == (t))
-#define isKeyword(token,k)      (boolean) ((token)->keyword == (k))
-#define isSecondaryKeyword(token,k)  (boolean) ((token)->secondary == NULL ? \
-	FALSE : (token)->secondary->keyword == (k))
+#define isBlank(c)              (bool) (c == ' ' || c == '\t')
+#define isType(token,t)         (bool) ((token)->type == (t))
+#define isKeyword(token,k)      (bool) ((token)->keyword == (k))
+#define isSecondaryKeyword(token,k)  (bool) ((token)->secondary == NULL ? \
+	false : (token)->secondary->keyword == (k))
 
 /*
 *   DATA DECLARATIONS
@@ -201,30 +201,30 @@ static langType Lang_f77;
 static jmp_buf Exception;
 static int Ungetc = '\0';
 static unsigned int Column = 0;
-static boolean FreeSourceForm = FALSE;
-static boolean ParsingString;
+static bool FreeSourceForm = false;
+static bool ParsingString;
 static tokenInfo *Parent = NULL;
-static boolean NewLine = TRUE;
+static bool NewLine = true;
 static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
 static kindOption FortranKinds [TAG_COUNT] = {
-	{ TRUE,  'b', "blockData",  "block data"},
-	{ TRUE,  'c', "common",     "common blocks"},
-	{ TRUE,  'e', "entry",      "entry points"},
-	{ TRUE,  'f', "function",   "functions"},
-	{ TRUE,  'i', "interface",  "interface contents, generic names, and operators"},
-	{ TRUE,  'k', "component",  "type and structure components"},
-	{ TRUE,  'l', "label",      "labels"},
-	{ FALSE, 'L', "local",      "local, common block, and namelist variables"},
-	{ TRUE,  'm', "module",     "modules"},
-	{ TRUE,  'n', "namelist",   "namelists"},
-	{ TRUE,  'p', "program",    "programs"},
-	{ TRUE,  's', "subroutine", "subroutines"},
-	{ TRUE,  't', "type",       "derived types and structures"},
-	{ TRUE,  'v', "variable",   "program (global) and module variables"},
-	{ TRUE,  'E', "enum",       "enumerations"},
-	{ TRUE,  'N', "enumerator", "enumeration values"},
+	{ true,  'b', "blockData",  "block data"},
+	{ true,  'c', "common",     "common blocks"},
+	{ true,  'e', "entry",      "entry points"},
+	{ true,  'f', "function",   "functions"},
+	{ true,  'i', "interface",  "interface contents, generic names, and operators"},
+	{ true,  'k', "component",  "type and structure components"},
+	{ true,  'l', "label",      "labels"},
+	{ false, 'L', "local",      "local, common block, and namelist variables"},
+	{ true,  'm', "module",     "modules"},
+	{ true,  'n', "namelist",   "namelists"},
+	{ true,  'p', "program",    "programs"},
+	{ true,  's', "subroutine", "subroutines"},
+	{ true,  't', "type",       "derived types and structures"},
+	{ true,  'v', "variable",   "program (global) and module variables"},
+	{ true,  'E', "enum",       "enumerations"},
+	{ true,  'N', "enumerator", "enumeration values"},
 };
 
 /* For efinitions of Fortran 77 with extensions:
@@ -403,14 +403,14 @@ static void ancestorClear (void)
 	Ancestors.max = 0;
 }
 
-static boolean insideInterface (void)
+static bool insideInterface (void)
 {
-	boolean result = FALSE;
+	bool result = false;
 	unsigned int i;
 	for (i = 0  ;  i < Ancestors.count && !result ;  ++i)
 	{
 		if (Ancestors.list [i].tag == TAG_INTERFACE)
-			result = TRUE;
+			result = true;
 	}
 	return result;
 }
@@ -464,14 +464,14 @@ static void deleteToken (tokenInfo *const token)
 	}
 }
 
-static boolean isFileScope (const tagType type)
+static bool isFileScope (const tagType type)
 {
-	return (boolean) (type == TAG_LABEL || type == TAG_LOCAL);
+	return (bool) (type == TAG_LABEL || type == TAG_LOCAL);
 }
 
-static boolean includeTag (const tagType type)
+static bool includeTag (const tagType type)
 {
-	boolean include;
+	bool include;
 	Assert (type > TAG_UNDEFINED && type < TAG_COUNT);
 	include = FortranKinds [(int) type].enabled;
 	if (include && isFileScope (type))
@@ -490,12 +490,12 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		initTagEntry (&e, name, &(FortranKinds [token->tag]));
 
 		if (token->tag == TAG_COMMON_BLOCK)
-			e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
+			e.lineNumberEntry = (bool) (Option.locate != EX_PATTERN);
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope	= isFileScope (token->tag);
-		e.truncateLine	= (boolean) (token->tag != TAG_LABEL);
+		e.truncateLine	= (bool) (token->tag != TAG_LABEL);
 
 		if (ancestorCount () > 0)
 		{
@@ -601,17 +601,14 @@ static lineType getLineType (void)
 	Assert (type != LTYPE_UNDETERMINED);
 
 	if (vStringLength (label) > 0)
-	{
-		vStringTerminate (label);
 		makeLabelTag (label);
-	}
 	vStringDelete (label);
 	return type;
 }
 
 static int getFixedFormChar (void)
 {
-	boolean newline = FALSE;
+	bool newline = false;
 	lineType type;
 	int c = '\0';
 
@@ -630,13 +627,13 @@ static int getFixedFormChar (void)
 		}
 		if (c == '\n')
 		{
-			newline = TRUE;  /* need to check for continuation line */
+			newline = true;  /* need to check for continuation line */
 			Column = 0;
 		}
 		else if (c == '!'  &&  ! ParsingString)
 		{
 			c = skipLine ();
-			newline = TRUE;  /* need to check for continuation line */
+			newline = true;  /* need to check for continuation line */
 			Column = 0;
 		}
 		else if (c == '&')  /* check for free source form */
@@ -708,9 +705,9 @@ static int skipToNextLine (void)
 	return c;
 }
 
-static int getFreeFormChar (boolean inComment)
+static int getFreeFormChar (bool inComment)
 {
-	boolean advanceLine = FALSE;
+	bool advanceLine = false;
 	int c = getcFromInputFile ();
 
 	/* If the last nonblank, non-comment character of a FORTRAN 90
@@ -724,11 +721,11 @@ static int getFreeFormChar (boolean inComment)
 		while (isspace (c)  &&  c != '\n');
 		if (c == '\n')
 		{
-			NewLine = TRUE;
-			advanceLine = TRUE;
+			NewLine = true;
+			advanceLine = true;
 		}
 		else if (c == '!')
-			advanceLine = TRUE;
+			advanceLine = true;
 		else
 		{
 			ungetcToInputFile (c);
@@ -736,7 +733,7 @@ static int getFreeFormChar (boolean inComment)
 		}
 	}
 	else if (NewLine && (c == '!' || c == '#'))
-		advanceLine = TRUE;
+		advanceLine = true;
 	while (advanceLine)
 	{
 		while (isspace (c))
@@ -744,15 +741,15 @@ static int getFreeFormChar (boolean inComment)
 		if (c == '!' || (NewLine && c == '#'))
 		{
 			c = skipToNextLine ();
-			NewLine = TRUE;
+			NewLine = true;
 			continue;
 		}
 		if (c == '&')
 			c = getcFromInputFile ();
 		else
-			advanceLine = FALSE;
+			advanceLine = false;
 	}
-	NewLine = (boolean) (c == '\n');
+	NewLine = (bool) (c == '\n');
 	return c;
 }
 
@@ -766,7 +763,7 @@ static int getChar (void)
 		Ungetc = '\0';
 	}
 	else if (FreeSourceForm)
-		c = getFreeFormChar (FALSE);
+		c = getFreeFormChar (false);
 	else
 		c = getFixedFormChar ();
 	return c;
@@ -796,7 +793,6 @@ static vString *parseInteger (int c)
 		vStringPut (string, c);
 		c = getChar ();
 	}
-	vStringTerminate (string);
 
 	if (c == '_')
 	{
@@ -835,8 +831,6 @@ static vString *parseNumeric (int c)
 	else
 		ungetChar (c);
 
-	vStringTerminate (string);
-
 	return string;
 }
 
@@ -844,7 +838,7 @@ static void parseString (vString *const string, const int delimiter)
 {
 	const unsigned long inputLineNumber = getInputLineNumber ();
 	int c;
-	ParsingString = TRUE;
+	ParsingString = true;
 	c = getChar ();
 	while (c != delimiter  &&  c != '\n'  &&  c != EOF)
 	{
@@ -860,8 +854,7 @@ static void parseString (vString *const string, const int delimiter)
 		else if (! FreeSourceForm)
 			longjmp (Exception, (int) ExceptionFixedFormat);
 	}
-	vStringTerminate (string);
-	ParsingString = FALSE;
+	ParsingString = false;
 }
 
 /*  Read a C identifier beginning with "firstChar" and places it into "name".
@@ -876,7 +869,6 @@ static void parseIdentifier (vString *const string, const int firstChar)
 		c = getChar ();
 	} while (isident (c));
 
-	vStringTerminate (string);
 	ungetChar (c);  /* unget non-identifier character */
 }
 
@@ -902,7 +894,6 @@ static void checkForLabel (void)
 	}
 	if (length > 0  &&  token != NULL)
 	{
-		vStringTerminate (token->string);
 		makeFortranTag (token, TAG_LABEL);
 		deleteToken (token);
 	}
@@ -994,7 +985,6 @@ getNextChar:
 				c = getChar ();
 			} while (strchr (operatorChars, c) != NULL);
 			ungetChar (c);
-			vStringTerminate (token->string);
 			token->type = TOKEN_OPERATOR;
 			break;
 		}
@@ -1003,7 +993,7 @@ getNextChar:
 			if (FreeSourceForm)
 			{
 				do
-					c = getFreeFormChar (TRUE);
+					c = getFreeFormChar (true);
 				while (c != '\n' && c != EOF);
 			}
 			else
@@ -1024,7 +1014,6 @@ getNextChar:
 			if (c == '.')
 			{
 				vStringPut (token->string, c);
-				vStringTerminate (token->string);
 				token->type = TOKEN_OPERATOR;
 			}
 			else
@@ -1134,9 +1123,9 @@ static void skipOverSquares (tokenInfo *const token)
 	skipOverPair (token, TOKEN_SQUARE_OPEN, TOKEN_SQUARE_CLOSE);
 }
 
-static boolean isTypeSpec (tokenInfo *const token)
+static bool isTypeSpec (tokenInfo *const token)
 {
-	boolean result;
+	bool result;
 	switch (token->keyword)
 	{
 		case KEYWORD_byte:
@@ -1150,28 +1139,28 @@ static boolean isTypeSpec (tokenInfo *const token)
 		case KEYWORD_type:
 		case KEYWORD_procedure:
 		case KEYWORD_enumerator:
-			result = TRUE;
+			result = true;
 			break;
 		default:
-			result = FALSE;
+			result = false;
 			break;
 	}
 	return result;
 }
 
-static boolean isSubprogramPrefix (tokenInfo *const token)
+static bool isSubprogramPrefix (tokenInfo *const token)
 {
-	boolean result;
+	bool result;
 	switch (token->keyword)
 	{
 		case KEYWORD_elemental:
 		case KEYWORD_pure:
 		case KEYWORD_recursive:
 		case KEYWORD_stdcall:
-			result = TRUE;
+			result = true;
 			break;
 		default:
-			result = FALSE;
+			result = false;
 			break;
 	}
 	return result;
@@ -1270,12 +1259,12 @@ static void parseTypeSpec (tokenInfo *const token)
 	}
 }
 
-static boolean skipStatementIfKeyword (tokenInfo *const token, keywordId keyword)
+static bool skipStatementIfKeyword (tokenInfo *const token, keywordId keyword)
 {
-	boolean result = FALSE;
+	bool result = false;
 	if (isKeyword (token, keyword))
 	{
-		result = TRUE;
+		result = true;
 		skipToNextStatement (token);
 	}
 	return result;
@@ -1646,9 +1635,9 @@ static void parseStructureStmt (tokenInfo *const token)
  *
  *  access-spec is PUBLIC or PRIVATE
  */
-static boolean parseSpecificationStmt (tokenInfo *const token)
+static bool parseSpecificationStmt (tokenInfo *const token)
 {
-	boolean result = TRUE;
+	bool result = true;
 	switch (token->keyword)
 	{
 		case KEYWORD_common:
@@ -1681,7 +1670,7 @@ static boolean parseSpecificationStmt (tokenInfo *const token)
 			break;
 
 		default:
-			result = FALSE;
+			result = false;
 			break;
 	}
 	return result;
@@ -1880,9 +1869,9 @@ static void parseEntryStmt (tokenInfo *const token)
 /*  stmt-function-stmt is
  *      function-name ([dummy-arg-name-list]) = scalar-expr
  */
-static boolean parseStmtFunctionStmt (tokenInfo *const token)
+static bool parseStmtFunctionStmt (tokenInfo *const token)
 {
-	boolean result = FALSE;
+	bool result = false;
 	Assert (isType (token, TOKEN_IDENTIFIER));
 #if 0  /* cannot reliably parse this yet */
 	makeFortranTag (token, TAG_FUNCTION);
@@ -1891,16 +1880,16 @@ static boolean parseStmtFunctionStmt (tokenInfo *const token)
 	if (isType (token, TOKEN_PAREN_OPEN))
 	{
 		skipOverParens (token);
-		result = (boolean) (isType (token, TOKEN_OPERATOR) &&
+		result = (bool) (isType (token, TOKEN_OPERATOR) &&
 			strcmp (vStringValue (token->string), "=") == 0);
 	}
 	skipToNextStatement (token);
 	return result;
 }
 
-static boolean isIgnoredDeclaration (tokenInfo *const token)
+static bool isIgnoredDeclaration (tokenInfo *const token)
 {
-	boolean result;
+	bool result;
 	switch (token->keyword)
 	{
 		case KEYWORD_cexternal:
@@ -1919,11 +1908,11 @@ static boolean isIgnoredDeclaration (tokenInfo *const token)
 		case KEYWORD_value:
 		case KEYWORD_virtual:
 		case KEYWORD_volatile:
-			result = TRUE;
+			result = true;
 			break;
 
 		default:
-			result = FALSE;
+			result = false;
 			break;
 	}
 	return result;
@@ -1939,9 +1928,9 @@ static boolean isIgnoredDeclaration (tokenInfo *const token)
  *      [entry-stmt]
  *      [stmt-function-stmt]
  */
-static boolean parseDeclarationConstruct (tokenInfo *const token)
+static bool parseDeclarationConstruct (tokenInfo *const token)
 {
-	boolean result = TRUE;
+	bool result = true;
 	switch (token->keyword)
 	{
 		case KEYWORD_entry:     parseEntryStmt (token);      break;
@@ -1956,7 +1945,7 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
 				parseTypeDeclarationStmt (token);
 			else
 				skipToNextStatement (token);
-			result = TRUE;
+			result = true;
 			break;
 
 		default:
@@ -1965,7 +1954,7 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
 			else if (isTypeSpec (token))
 			{
 				parseTypeDeclarationStmt (token);
-				result = TRUE;
+				result = true;
 			}
 			else if (isType (token, TOKEN_IDENTIFIER))
 				result = parseStmtFunctionStmt (token);
@@ -1982,9 +1971,9 @@ static boolean parseDeclarationConstruct (tokenInfo *const token)
  *      or [format-stmt] (is FORMAT etc.)
  *      or [entry-stmt] (is ENTRY entry-name etc.)
  */
-static boolean parseImplicitPartStmt (tokenInfo *const token)
+static bool parseImplicitPartStmt (tokenInfo *const token)
 {
-	boolean result = TRUE;
+	bool result = true;
 	switch (token->keyword)
 	{
 		case KEYWORD_entry: parseEntryStmt (token); break;
@@ -1996,7 +1985,7 @@ static boolean parseImplicitPartStmt (tokenInfo *const token)
 			skipToNextStatement (token);
 			break;
 
-		default: result = FALSE; break;
+		default: result = false; break;
 	}
 	return result;
 }
@@ -2006,15 +1995,15 @@ static boolean parseImplicitPartStmt (tokenInfo *const token)
  *      [implicit-part] (is [implicit-part-stmt] ... [implicit-stmt])
  *      [declaration-construct] ...
  */
-static boolean parseSpecificationPart (tokenInfo *const token)
+static bool parseSpecificationPart (tokenInfo *const token)
 {
-	boolean result = FALSE;
+	bool result = false;
 	while (skipStatementIfKeyword (token, KEYWORD_use))
-		result = TRUE;
+		result = true;
 	while (parseImplicitPartStmt (token))
-		result = TRUE;
+		result = true;
 	while (parseDeclarationConstruct (token))
-		result = TRUE;
+		result = true;
 	return result;
 }
 
@@ -2055,7 +2044,7 @@ static void parseBlockData (tokenInfo *const token)
  */
 static void parseInternalSubprogramPart (tokenInfo *const token)
 {
-	boolean done = FALSE;
+	bool done = false;
 	if (isKeyword (token, KEYWORD_contains))
 		skipToNextStatement (token);
 	do
@@ -2064,7 +2053,7 @@ static void parseInternalSubprogramPart (tokenInfo *const token)
 		{
 			case KEYWORD_function:   parseFunctionSubprogram (token);   break;
 			case KEYWORD_subroutine: parseSubroutineSubprogram (token); break;
-			case KEYWORD_end:        done = TRUE;                       break;
+			case KEYWORD_end:        done = true;                       break;
 
 			default:
 				if (isSubprogramPrefix (token))
@@ -2127,10 +2116,10 @@ static void parseModule (tokenInfo *const token)
  *      or data-stmt
  *      or entry-stmt
  */
-static boolean parseExecutionPart (tokenInfo *const token)
+static bool parseExecutionPart (tokenInfo *const token)
 {
-	boolean result = FALSE;
-	boolean done = FALSE;
+	bool result = false;
+	bool done = false;
 	while (! done)
 	{
 		switch (token->keyword)
@@ -2140,18 +2129,18 @@ static boolean parseExecutionPart (tokenInfo *const token)
 					readToken (token);
 				else
 					skipToNextStatement (token);
-				result = TRUE;
+				result = true;
 				break;
 
 			case KEYWORD_entry:
 				parseEntryStmt (token);
-				result = TRUE;
+				result = true;
 				break;
 
 			case KEYWORD_contains:
 			case KEYWORD_function:
 			case KEYWORD_subroutine:
-				done = TRUE;
+				done = true;
 				break;
 
 			case KEYWORD_end:
@@ -2165,10 +2154,10 @@ static boolean parseExecutionPart (tokenInfo *const token)
 					isSecondaryKeyword (token, KEYWORD_associate))
 				{
 					skipToNextStatement (token);
-					result = TRUE;
+					result = true;
 				}
 				else
-					done = TRUE;
+					done = true;
 				break;
 		}
 	}
@@ -2269,42 +2258,42 @@ static void parseProgramUnit (tokenInfo *const token)
 					readToken (token);
 				else
 				{
-					boolean one = parseSpecificationPart (token);
-					boolean two = parseExecutionPart (token);
+					bool one = parseSpecificationPart (token);
+					bool two = parseExecutionPart (token);
 					if (! (one || two))
 						readToken (token);
 				}
 				break;
 		}
-	} while (TRUE);
+	} while (true);
 }
 
-static boolean findFortranTags (const unsigned int passCount)
+static bool findFortranTags (const unsigned int passCount)
 {
 	tokenInfo *token;
 	exception_t exception;
-	boolean retry;
+	bool retry;
 
 	Assert (passCount < 3);
 	Parent = newToken ();
 	token = newToken ();
-	FreeSourceForm = (boolean) (passCount > 1);
+	FreeSourceForm = (bool) (passCount > 1);
 	contextual_fake_count = 0;
 	Column = 0;
-	NewLine = TRUE;
+	NewLine = true;
 	exception = (exception_t) setjmp (Exception);
 	if (exception == ExceptionEOF)
-		retry = FALSE;
+		retry = false;
 	else if (exception == ExceptionFixedFormat  &&  ! FreeSourceForm)
 	{
 		verbose ("%s: not fixed source form; retry as free source form\n",
 				getInputFileName ());
-		retry = TRUE;
+		retry = true;
 	}
 	else
 	{
 		parseProgramUnit (token);
-		retry = FALSE;
+		retry = false;
 	}
 	ancestorClear ();
 	deleteToken (token);
