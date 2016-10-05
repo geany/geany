@@ -76,6 +76,10 @@
 
 #include <glib/gstdio.h>
 
+#ifdef G_OS_UNIX
+# include <glib-unix.h>
+#endif
+
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
@@ -773,16 +777,20 @@ static gint setup_config_dir(void)
 	return mkdir_result;
 }
 
-/* Signal handling removed since main_quit() uses functions that are
- * illegal in signal handlers
-static void signal_cb(gint sig)
+
+#ifdef G_OS_UNIX
+static gboolean signal_cb(gpointer user_data)
 {
+	gint sig = GPOINTER_TO_INT(user_data);
 	if (sig == SIGTERM)
 	{
+		geany_debug("Received SIGTERM signal");
 		main_quit();
 	}
+	return G_SOURCE_REMOVE;
 }
- */
+#endif
+
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -1068,10 +1076,9 @@ gint main_lib(gint argc, gchar **argv)
 		g_thread_init(NULL);
 #endif
 
-	/* removed as signal handling was wrong, see signal_cb()
-	signal(SIGTERM, signal_cb); */
-
 #ifdef G_OS_UNIX
+	g_unix_signal_add(SIGTERM, signal_cb, GINT_TO_POINTER(SIGTERM));
+
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif
