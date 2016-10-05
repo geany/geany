@@ -7,5 +7,12 @@
 				Which tab page in the sidebar notebook is active.
 			</description>
 		</key>
+		<key name="fullscreen" type="b">
+			<default>false</default>
+			<summary>Fullscreen</summary>
+			<description>
+				Whether or not the main window is fullscreen.
+			</description>
+		</key>
 	</schema>
 </schemalist>

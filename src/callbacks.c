@@ -50,6 +50,7 @@
 #include "prefs.h"
 #include "printing.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "spawn.h"
 #ifdef HAVE_SOCKET
@@ -613,11 +614,10 @@ static void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer u
 
 static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
-
-	ui_prefs.fullscreen = (ui_prefs.fullscreen) ? FALSE : TRUE;
-	ui_set_fullscreen();
+	if (gtk_check_menu_item_get_active(checkmenuitem))
+		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
+	else
+		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
 }
 
 
@@ -1721,20 +1721,11 @@ void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, gpointer user_dat
 
 static gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
 {
-
 	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
 	{
-		static GtkWidget *menuitem = NULL;
-
-		if (menuitem == NULL)
-			menuitem = ui_lookup_widget(widget, "menu_fullscreen1");
-
-		ignore_callback = TRUE;
-
-		ui_prefs.fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? TRUE : FALSE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem), ui_prefs.fullscreen);
-
-		ignore_callback = FALSE;
+		gboolean fullscreen;
+		fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN);
+		g_settings_set_boolean(geany_settings, "fullscreen", fullscreen);
 	}
 	return FALSE;
 }

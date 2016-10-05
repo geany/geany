@@ -439,19 +439,6 @@ void ui_set_editor_font(const gchar *font_name)
 }
 
 
-void ui_set_fullscreen(void)
-{
-	if (ui_prefs.fullscreen)
-	{
-		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
-	}
-	else
-	{
-		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
-	}
-}
-
-
 void ui_update_popup_reundo_items(GeanyDocument *doc)
 {
 	gboolean enable_undo;

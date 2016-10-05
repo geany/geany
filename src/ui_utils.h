@@ -159,7 +159,6 @@ typedef struct UIPrefs
 {
 	/* State of the main window when Geany was closed */
 	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
-	gboolean	fullscreen;
 	gboolean	sidebar_visible;
 	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
@@ -285,8 +284,6 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos);
 void ui_set_window_title(GeanyDocument *doc);
 
 void ui_set_editor_font(const gchar *font_name);
-
-void ui_set_fullscreen(void);
 
 
 void ui_update_popup_reundo_items(GeanyDocument *doc);

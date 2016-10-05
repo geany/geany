@@ -47,6 +47,7 @@
 #include "printing.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "stash.h"
 #include "support.h"
 #include "symbols.h"
@@ -555,7 +556,6 @@ static void save_ui_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
 	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
-	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
 
 	/* get the text from the scribble textview */
 	{
@@ -996,7 +996,6 @@ static void load_ui_prefs(GKeyFile *config)
 
 	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
 	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
-	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
 	ui_prefs.custom_commands_labels = g_key_file_get_string_list(config, PACKAGE, "custom_commands_labels", NULL, NULL);
@@ -1280,6 +1279,9 @@ void configuration_open_files(void)
  * realisation of the main window */
 void configuration_apply_settings(void)
 {
+	gboolean fullscreen;
+	GtkWidget *menu_item;
+
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		GtkTextIter iter;
@@ -1299,14 +1301,10 @@ void configuration_apply_settings(void)
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
 
-	/* set fullscreen after initial draw so that returning to normal view is the right size.
-	 * fullscreen mode is disabled by default, so act only if it is true */
-	if (ui_prefs.fullscreen)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
-		ui_prefs.fullscreen = TRUE;
-		ui_set_fullscreen();
-	}
+	/* set fullscreen after initial draw so that returning to normal view is the right size. */
+	fullscreen = g_settings_get_boolean(geany_settings, "fullscreen");
+	menu_item = ui_lookup_widget(main_widgets.window, "menu_fullscreen1");
+	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item), fullscreen);
 
 	msgwin_show_hide_tabs();
 }
