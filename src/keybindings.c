@@ -45,6 +45,7 @@
 #include "notebook.h"
 #include "prefs.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "support.h"
 #include "symbols.h"
@@ -1727,7 +1728,7 @@ static gchar *get_current_word_or_sel(GeanyDocument *doc, gboolean sci_word)
 
 static void focus_sidebar(void)
 {
-	if (ui_prefs.sidebar_visible)
+	if (g_settings_get_boolean(geany_settings, "sidebar-visible"))
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook));
 		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), page_num);

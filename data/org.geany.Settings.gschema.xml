@@ -7,6 +7,13 @@
 				Which tab page in the sidebar notebook is active.
 			</description>
 		</key>
+		<key name="sidebar-visible" type="b">
+			<default>true</default>
+			<summary>Sidebar visible</summary>
+			<description>
+				Whether or not the sidebar is visible.
+			</description>
+		</key>
 		<key name="fullscreen" type="b">
 			<default>false</default>
 			<summary>Fullscreen</summary>

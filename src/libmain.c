@@ -174,6 +174,7 @@ static void apply_settings(void)
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	toolbar_show_hide();
+
 	if (! ui_prefs.msgwindow_visible)
 	{
 		ignore_callback = TRUE;
@@ -181,12 +182,8 @@ static void apply_settings(void)
 		gtk_widget_hide(main_widgets.message_window_notebook);
 		ignore_callback = FALSE;
 	}
-	if (! ui_prefs.sidebar_visible)
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
-		ignore_callback = FALSE;
-	}
+
+	sidebar_set_visible(g_settings_get_boolean(geany_settings, "sidebar-visible"));
 
 	toolbar_apply_settings();
 	toolbar_update_ui();
@@ -1170,8 +1167,6 @@ gint main_lib(gint argc, gchar **argv)
 	if (want_plugins)
 		plugins_load_active();
 #endif
-
-	ui_sidebar_show_hide();
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();

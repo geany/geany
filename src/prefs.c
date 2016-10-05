@@ -47,6 +47,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "printing.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "stash.h"
 #include "support.h"
@@ -91,7 +92,6 @@ static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointe
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void open_preferences_help(void);
@@ -448,8 +448,11 @@ static void prefs_init_dialog(void)
 
 	/* Interface settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ui_prefs.sidebar_visible);
-	on_sidebar_visible_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		g_settings_get_boolean(geany_settings, "sidebar-visible"));
+	g_object_bind_property(widget, "active",
+		ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"),
+		"sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_symbol_visible);
@@ -932,13 +935,17 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		/* Interface settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-		ui_prefs.sidebar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		sidebar_set_visible(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
 		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
+			interface_prefs.sidebar_symbol_visible);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
 		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
+			interface_prefs.sidebar_openfiles_visible);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
 		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1283,7 +1290,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		toolbar_apply_settings();
 		toolbar_update_ui();
 		toolbar_show_hide();
-		ui_sidebar_show_hide();
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
 		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
@@ -1560,14 +1566,6 @@ static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer use
 }
 
 
-static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gboolean sens = gtk_toggle_button_get_active(togglebutton);
-
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"), sens);
-}
-
-
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1817,8 +1815,6 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible"),
-				"toggled", G_CALLBACK(on_sidebar_visible_toggled), NULL);
 
 		g_signal_connect(ui_widgets.prefs_dialog,
 				"key-press-event", G_CALLBACK(prefs_dialog_key_press_response_cb), NULL);

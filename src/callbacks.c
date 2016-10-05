@@ -1209,28 +1209,30 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
+	gboolean shown;
 
-	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
+	shown = gtk_check_menu_item_get_active(checkmenuitem);
+	gtk_widget_set_visible(main_widgets.sidebar_notebook, shown);
 
 	/* show built-in tabs if no tabs visible */
-	if (ui_prefs.sidebar_visible &&
-		! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
-		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
+	if (shown &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) == 0)
 	{
 		interface_prefs.sidebar_openfiles_visible = TRUE;
 		interface_prefs.sidebar_symbol_visible = TRUE;
 	}
 
-	/* if window has input focus, set it back to the editor before toggling off */
-	if (! ui_prefs.sidebar_visible &&
-		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
-	{
-		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
-	}
+	gtk_widget_set_visible(
+		ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
+		interface_prefs.sidebar_openfiles_visible);
+	gtk_widget_set_visible(
+		ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
+		interface_prefs.sidebar_symbol_visible);
 
-	ui_sidebar_show_hide();
+	if (! shown)
+		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+
+	g_settings_set_boolean(geany_settings, "sidebar-visible", shown);
 }
 
 
