@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
 	-DGTK \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\""Geany"\" \
+	-DGEANY_SETTINGS_SCHEMA_DIR=\""$(datadir)/glib-2.0/schemas"\" \
 	@GTK_CFLAGS@ @GTHREAD_CFLAGS@ \
 	$(MAC_INTEGRATION_CFLAGS)
 
@@ -95,6 +96,7 @@ libgeany_la_SOURCES = \
 	project.c project.h \
 	sciwrappers.c sciwrappers.h \
 	search.c search.h \
+	settings.c settings.h \
 	socket.c socket.h \
 	spawn.c spawn.h \
 	stash.c stash.h \

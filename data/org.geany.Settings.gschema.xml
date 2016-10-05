@@ -1,0 +1,11 @@
+<schemalist>
+	<schema id="org.geany.Settings" path="/" gettext-domain="geany">
+		<key name="sidebar-page" type="i">
+			<default>0</default>
+			<summary>Sidebar page</summary>
+			<description>
+				Which tab page in the sidebar notebook is active.
+			</description>
+		</key>
+	</schema>
+</schemalist>

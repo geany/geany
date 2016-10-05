@@ -49,6 +49,7 @@
 #include "plugins.h"
 #include "prefs.h"
 #include "printing.h"
+#include "settings.h"
 #include "sidebar.h"
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -1128,6 +1129,7 @@ gint main_lib(gint argc, gchar **argv)
 
 	/* init stash groups before loading keyfile */
 	configuration_init();
+	settings_init();
 	ui_init_prefs();
 	search_init();
 	project_init();
@@ -1282,6 +1284,7 @@ static void do_main_quit(void)
 	encodings_finalize();
 	toolbar_finalize();
 	sidebar_finalize();
+	settings_finalize();
 	configuration_finalize();
 	filetypes_free_types();
 	log_finalize();
