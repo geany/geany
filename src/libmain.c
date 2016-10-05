@@ -1173,9 +1173,6 @@ gint main_lib(gint argc, gchar **argv)
 
 	ui_sidebar_show_hide();
 
-	/* set the active sidebar page after plugins have been loaded */
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);
-
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
 

@@ -161,7 +161,6 @@ typedef struct UIPrefs
 	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
 	gboolean	fullscreen;
 	gboolean	sidebar_visible;
-	gint		sidebar_page;
 	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;

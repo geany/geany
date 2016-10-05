@@ -36,6 +36,7 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "navqueue.h"
+#include "settings.h"
 #include "stash.h"
 #include "support.h"
 #include "symbols.h"
@@ -1074,7 +1075,6 @@ static void on_load_settings(void)
 	tag_window = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
-	/* note: ui_prefs.sidebar_page is reapplied after plugins are loaded */
 	stash_group_display(stash_group, NULL);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
@@ -1101,10 +1101,11 @@ void sidebar_init(void)
 
 	group = stash_group_new(PACKAGE);
 	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
-	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
-		main_widgets.sidebar_notebook, "page", 0);
 	configuration_add_pref_group(group, FALSE);
 	stash_group = group;
+
+	g_settings_bind(geany_settings, "sidebar-page", main_widgets.sidebar_notebook,
+		"page", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
 
 	/* delay building documents treeview until sidebar font has been read */
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
