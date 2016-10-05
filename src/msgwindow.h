@@ -91,7 +91,7 @@ void msgwin_init(void);
 
 void msgwin_finalize(void);
 
-void msgwin_show_hide(gboolean show);
+void msgwin_set_visible(gboolean visible);
 
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
 

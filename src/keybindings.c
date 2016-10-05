@@ -1741,7 +1741,7 @@ static void focus_sidebar(void)
 
 static void focus_msgwindow(void)
 {
-	if (ui_prefs.msgwindow_visible)
+	if (g_settings_get_boolean(geany_settings, "msgwin-visible"))
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
 		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);

@@ -159,7 +159,6 @@ typedef struct UIPrefs
 {
 	/* State of the main window when Geany was closed */
 	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
-	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;

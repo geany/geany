@@ -43,6 +43,7 @@
 #include "prefs.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "stash.h"
 #include "support.h"
@@ -1748,7 +1749,7 @@ static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb, gboole
 			return FALSE;	/* no more items */
 	}
 	/* scroll item in view */
-	if (ui_prefs.msgwindow_visible)
+	if (g_settings_get_boolean(geany_settings, "msgwin-visible"))
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(treeview), &iter);

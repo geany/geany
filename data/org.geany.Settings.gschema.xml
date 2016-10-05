@@ -14,6 +14,13 @@
 				Whether or not the sidebar is visible.
 			</description>
 		</key>
+		<key name="msgwin-visible" type="b">
+			<default>true</default>
+			<summary>Message window visible</summary>
+			<description>
+				Whether or not the message window is visible.
+			</description>
+		</key>
 		<key name="fullscreen" type="b">
 			<default>false</default>
 			<summary>Fullscreen</summary>

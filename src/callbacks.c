@@ -623,11 +623,12 @@ static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 
 static void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
-
-	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	msgwin_show_hide(ui_prefs.msgwindow_visible);
+	gboolean shown;
+	shown = gtk_check_menu_item_get_active(checkmenuitem);
+	gtk_widget_set_visible(main_widgets.message_window_notebook, shown);
+	g_settings_set_boolean(geany_settings, "msgwin-visible", shown);
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 
