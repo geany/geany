@@ -77,6 +77,8 @@ libctags_la_SOURCES = \
 	main/parse.c \
 	main/parse.h \
 	main/parsers.h \
+	main/ptrarray.c \
+	main/ptrarray.h \
 	main/read.c \
 	main/read.h \
 	main/routines.c \
