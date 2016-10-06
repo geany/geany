@@ -12,8 +12,6 @@
 */
 #include "general.h"  /* must always come first */
 
-#include <errno.h>
-
 #ifdef HAVE_STDLIB_H
 # include <stdlib.h>  /* to declare malloc (), realloc () */
 #endif
@@ -138,7 +136,10 @@
 # if defined (_MSC_VER)
 #  define stat    _stat
 #  define getcwd  _getcwd
+#  define currentdrive() (_getdrive() + 'A' - 1)
 #  define PATH_MAX  _MAX_PATH
+# else
+#  define currentdrive() 'C'
 # endif
 #endif
 
@@ -149,8 +150,6 @@
 /*
  *  Miscellaneous macros
  */
-
-#define selected(var,feature)   (((int)(var) & (int)(feature)) == (int)feature)
 
 
 /*
@@ -182,6 +181,11 @@ extern int lstat (const char *, struct stat *);
 *   FUNCTION DEFINITIONS
 */
 
+extern void freeRoutineResources (void)
+{
+	if (CurrentDirectory != NULL)
+		eFree (CurrentDirectory);
+}
 
 extern void setExecutableName (const char *const path)
 {
@@ -194,6 +198,14 @@ extern const char *getExecutableName (void)
 	return ExecutableName;
 }
 
+extern const char *getExecutablePath (void)
+{
+	return ExecutableProgram;
+}
+
+/*
+ *  Memory allocation functions
+ */
 
 extern void *eMalloc (const size_t size)
 {
@@ -235,6 +247,37 @@ extern void eFree (void *const ptr)
 		free (ptr);
 }
 
+/*
+ *  String manipulation functions
+ */
+
+/*
+ * Compare two strings, ignoring case.
+ * Return 0 for match, < 0 for smaller, > 0 for bigger
+ * Make sure case is folded to uppercase in comparison (like for 'sort -f')
+ * This makes a difference when one of the chars lies between upper and lower
+ * ie. one of the chars [ \ ] ^ _ ` for ascii. (The '_' in particular !)
+ */
+extern int struppercmp (const char *s1, const char *s2)
+{
+	int result;
+	do
+	{
+		result = toupper ((int) *s1) - toupper ((int) *s2);
+	} while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+	return result;
+}
+
+extern int strnuppercmp (const char *s1, const char *s2, size_t n)
+{
+	int result;
+	do
+	{
+		result = toupper ((int) *s1) - toupper ((int) *s2);
+	} while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+	return result;
+}
+
 #ifndef HAVE_STRSTR
 extern char* strstr (const char *str, const char *substr)
 {
@@ -248,10 +291,29 @@ extern char* strstr (const char *str, const char *substr)
 }
 #endif
 
+extern char* strrstr (const char *str, const char *substr)
+{
+	const size_t length = strlen (substr);
+	const char *p;
+
+	for (p = str + strlen(str) - length  ;  p >= str  ;  --p)
+		if (strncmp (p, substr, length) == 0)
+			return (char*) p;
+	return NULL;
+}
+
 extern char* eStrdup (const char* str)
 {
 	char* result = xMalloc (strlen (str) + 1, char);
 	strcpy (result, str);
+	return result;
+}
+
+extern char* eStrndup (const char* str, size_t len)
+{
+	char* result = xMalloc (len + 1, char);
+	memset(result, 0, len + 1);
+	strncpy (result, str, len);
 	return result;
 }
 
@@ -295,6 +357,76 @@ extern char* newUpperString (const char* str)
 		result [i] = toupper ((int) str [i]);
 	while (str [i++] != '\0');
 	return result;
+}
+
+/* Safe wrapper for strtoul
+ *
+ * The conversion result is placed in value and must only be used if the
+ * function returned true.
+ */
+extern bool strToULong(const char *const str, int base, unsigned long *value)
+{
+	char *endptr;
+
+	errno = 0;
+	*value = strtoul (str, &endptr, base);
+	return *endptr == '\0' && str != endptr && errno == 0;
+}
+
+/* Safe wrapper for strtol/atol
+ *
+ * The conversion result is placed in value and must only be used if the
+ * function returned true.
+ */
+extern bool strToLong(const char *const str, int base, long *value)
+{
+	char *endptr;
+
+	errno = 0;
+	*value = strtol (str, &endptr, base);
+	return *endptr == '\0' && str != endptr && errno == 0;
+}
+
+extern bool strToUInt(const char *const str, int base, unsigned int *value)
+{
+	unsigned long ulong_value;
+
+	if(!strToULong(str, base, &ulong_value) || ulong_value > UINT_MAX)
+		return false;
+
+	*value = (unsigned int) ulong_value;
+	return true;
+}
+
+extern bool strToInt(const char *const str, int base, int *value)
+{
+	long long_value;
+
+	if(!strToLong(str, base, &long_value) || long_value > INT_MAX || long_value < INT_MIN)
+		return false;
+
+	*value = (int) long_value;
+	return true;
+}
+
+/*
+ * File system functions
+ */
+
+extern void setCurrentDirectory (void)
+{
+	char* buf;
+	if (CurrentDirectory == NULL)
+		CurrentDirectory = xMalloc ((size_t) (PATH_MAX + 1), char);
+	buf = getcwd (CurrentDirectory, PATH_MAX);
+	if (buf == NULL)
+		perror ("");
+	if (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1] !=
+			PATH_SEPARATOR)
+	{
+		sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
+				OUTPUT_PATH_SEPARATOR);
+	}
 }
 
 /* For caching of stat() calls */
@@ -342,6 +474,12 @@ extern bool doesFileExist (const char *const fileName)
 {
 	fileStatus *status = eStat (fileName);
 	return status->exists;
+}
+
+extern bool doesExecutableExist (const char *const fileName)
+{
+	fileStatus *status = eStat (fileName);
+	return status->exists && status->isExecutable;
 }
 
 extern bool isRecursiveLink (const char* const dirName)
@@ -434,10 +572,26 @@ extern const char *baseFilename (const char *const filePath)
 	 */
 	for (i = 0  ;  i < strlen (PathDelimiters)  ;  ++i)
 	{
+# ifdef HAVE_MBLEN
+		const char *p;
+		int ml;
+
+		/* Some DBCS has letter contains 0x5C in trailing byte.
+		 * So skip to the trailing byte. */
+		for (p = filePath  ;  *p != '\0'  ;  ++p)
+		{
+			ml = mblen(p, MB_LEN_MAX);
+			if (ml > 1)
+				p += ml - 1;
+			else if (*p == PathDelimiters [i] && p > tail)
+				tail = p;
+		}
+# else
 		const char *sep = strrchr (filePath, PathDelimiters [i]);
 
 		if (sep > tail)
 			tail = sep;
+# endif
 	}
 #else
 	const char *tail = strrchr (filePath, PATH_SEPARATOR);
@@ -464,6 +618,24 @@ extern const char *fileExtension (const char *const fileName)
 		extension = pDelimiter + 1;  /* skip to first char of extension */
 
 	return extension;
+}
+
+extern char* baseFilenameSansExtensionNew (const char *const fileName,
+					   const char *const templateExt)
+{
+	const char *pDelimiter = NULL;
+	const char *const base = baseFilename (fileName);
+	char* shorten_base;
+
+	pDelimiter = strrchr (base, templateExt[0]);
+
+	if (pDelimiter && (strcmp (pDelimiter, templateExt) == 0))
+	{
+		shorten_base = eStrndup (base, pDelimiter - base);
+		return shorten_base;
+	}
+	else
+		return NULL;
 }
 
 extern bool isAbsolutePath (const char *const path)
@@ -531,7 +703,20 @@ extern char* absoluteFilename (const char *file)
 	char *slashp, *cp;
 	char *res = NULL;
 	if (isAbsolutePath (file))
+	{
+#ifdef MSDOS_STYLE_PATH
+		if (file [1] == ':')
+			res = eStrdup (file);
+		else
+		{
+			char drive [3];
+			sprintf (drive, "%c:", currentdrive ());
+			res = concat (drive, file, "");
+		}
+#else
 		res = eStrdup (file);
+#endif
+	}
 	else
 		res = concat (CurrentDirectory, file, "");
 
