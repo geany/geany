@@ -22,8 +22,6 @@
 */
 #include "general.h"  /* must always come first */
 
-#include <glib.h>
-
 /*  To provide timings features if available.
  */
 #ifdef HAVE_CLOCK
@@ -168,9 +166,3 @@ static void printTotals (const clock_t *const timeStamps)
 }
 
 #endif /* Unused in Geany */
-
-/* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
-void utils_warn(const char *msg)
-{
-	g_warning("%s", msg);
-}

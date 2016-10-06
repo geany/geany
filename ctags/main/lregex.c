@@ -27,6 +27,7 @@
 # endif
 #endif
 
+#include "debug.h"
 #include "mio.h"
 #include "entry.h"
 #include "parse.h"

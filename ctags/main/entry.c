@@ -35,6 +35,7 @@
 #endif
 
 #include "ctags.h"
+#include "debug.h"
 #include "entry.h"
 #include "main.h"
 #include "options.h"

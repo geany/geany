@@ -18,6 +18,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "debug.h"
 #include "entry.h"
 #include "routines.h"
 #include "options.h"

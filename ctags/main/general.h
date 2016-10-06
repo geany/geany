@@ -96,12 +96,6 @@ int fnmatch(const char *pattern, const char *string, int flags);
 #endif
 
 
-/* fake debug statement macro */
-#define DebugStatement(x)      ;
-#define PrintStatus(x)         ;
-/* wrap g_warning so we don't include glib.h for all parsers, to keep compat with CTags */
-void utils_warn(const char *msg);
-#define Assert(x) if (!(x)) utils_warn("Assert(" #x ") failed!")
 /*
 *   DATA DECLARATIONS
 */
