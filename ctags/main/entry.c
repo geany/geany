@@ -15,8 +15,6 @@
 #include <string.h>
 #include <ctype.h>        /* to define isspace () */
 #include <errno.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 
 #if defined (HAVE_SYS_TYPES_H)
 # include <sys/types.h>	  /* to declare off_t on some hosts */
@@ -247,7 +245,7 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 static bool isTagFile (const char *const filename)
 {
 	bool ok = false;                 /* we assume not unless confirmed */
-	MIO *const mio = mio_new_file_full (filename, "rb", g_fopen, fclose);
+	MIO *const mio = mio_new_file (filename, "rb");
 
 	if (mio == NULL  &&  errno == ENOENT)
 		ok = true;
@@ -293,17 +291,17 @@ extern void openTagFile (void)
 
 		if (Option.append  &&  fileExists)
 		{
-			TagFile.mio = mio_new_file_full (TagFile.name, "r+", g_fopen, fclose);
+			TagFile.mio = mio_new_file (TagFile.name, "r+");
 			if (TagFile.mio != NULL)
 			{
 				TagFile.numTags.prev = updatePseudoTags (TagFile.mio);
 				mio_free (TagFile.mio);
-				TagFile.mio = mio_new_file_full (TagFile.name, "a+", g_fopen, fclose);
+				TagFile.mio = mio_new_file (TagFile.name, "a+");
 			}
 		}
 		else
 		{
-			TagFile.mio = mio_new_file_full (TagFile.name, "w", g_fopen, fclose);
+			TagFile.mio = mio_new_file (TagFile.name, "w");
 			if (TagFile.mio != NULL)
 				addPseudoTags ();
 		}
@@ -343,12 +341,12 @@ extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
 
 extern void copyFile (const char *const from, const char *const to, const long size)
 {
-	MIO* const fromMio = mio_new_file_full (from, "rb", g_fopen, fclose);
+	MIO* const fromMio = mio_new_file (from, "rb");
 	if (fromMio == NULL)
 		error (FATAL | PERROR, "cannot open file to copy");
 	else
 	{
-		MIO* const toMio = mio_new_file_full (to, "wb", g_fopen, fclose);
+		MIO* const toMio = mio_new_file (to, "wb");
 		if (toMio == NULL)
 			error (FATAL | PERROR, "cannot open copy destination");
 		else

@@ -172,7 +172,7 @@ static vString* determineInterpreter (const char* const cmd)
 static langType getInterpreterLanguage (const char *const fileName)
 {
 	langType result = LANG_IGNORE;
-	FILE* const fp = g_fopen (fileName, "r");
+	FILE* const fp = fopen (fileName, "r");
 	if (fp != NULL)
 	{
 		vString* const vLine = vStringNew ();

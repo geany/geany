@@ -15,7 +15,6 @@
 
 #include <string.h>
 #include <ctype.h>
-#include <glib/gstdio.h>
 
 #define FILE_WRITE
 #include "read.h"
@@ -262,7 +261,7 @@ extern bool fileOpen (const char *const fileName, const langType language)
 		File.mio = NULL;
 	}
 
-	File.mio = mio_new_file_full (fileName, openMode, g_fopen, fclose);
+	File.mio = mio_new_file (fileName, openMode);
 	if (File.mio == NULL)
 		error (WARNING | PERROR, "cannot open \"%s\"", fileName);
 	else

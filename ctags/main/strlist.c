@@ -16,7 +16,6 @@
 #ifdef HAVE_FNMATCH_H
 # include <fnmatch.h>
 #endif
-#include <glib/gstdio.h>
 
 #include "routines.h"
 #include "read.h"
@@ -90,7 +89,7 @@ extern stringList* stringListNewFromArgv (const char* const* const argv)
 extern stringList* stringListNewFromFile (const char* const fileName)
 {
 	stringList* result = NULL;
-	MIO* const mio = mio_new_file_full (fileName, "r", g_fopen, fclose);
+	MIO* const mio = mio_new_file (fileName, "r");
 	if (mio != NULL)
 	{
 		result = stringListNew ();

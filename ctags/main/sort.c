@@ -17,8 +17,6 @@
 #endif
 #include <string.h>
 #include <stdio.h>
-#include <glib.h>
-#include <glib/gstdio.h>
 
 #include "entry.h"
 #include "routines.h"
@@ -36,7 +34,7 @@
 
 extern void catFile (const char *const name)
 {
-	FILE *const fp = g_fopen (name, "r");
+	FILE *const fp = fopen (name, "r");
 
 	if (fp != NULL)
 	{
@@ -64,7 +62,7 @@ extern void externalSortTags (const bool toStdout)
 	PE_CONST char *const sortOrder2 = "LC_ALL=C";
 	const size_t length = 4 + strlen (sortOrder1) + strlen (sortOrder2) +
 			strlen (sortCommand) + (2 * strlen (tagFileName ()));
-	char *const cmd = (char *) g_try_malloc (length + 1);
+	char *const cmd = (char *) malloc (length + 1);
 	int ret = -1;
 
 	if (cmd != NULL)
@@ -87,7 +85,7 @@ extern void externalSortTags (const bool toStdout)
 #endif
 		verbose ("system (\"%s\")\n", cmd);
 		ret = system (cmd);
-		g_free (cmd);
+		free (cmd);
 
 	}
 	if (ret != 0)
@@ -135,7 +133,7 @@ static void writeSortedTags (
 		mio = mio_new_fp (stdout, NULL);
 	else
 	{
-		mio = mio_new_file_full (tagFileName (), "w", g_fopen, fclose);
+		mio = mio_new_file (tagFileName (), "w");
 		if (mio == NULL)
 			failedSort (mio, NULL);
 	}
@@ -164,7 +162,7 @@ extern void internalSortTags (const bool toStdout)
 	 */
 	size_t numTags = TagFile.numTags.added + TagFile.numTags.prev;
 	const size_t tableSize = numTags * sizeof (char *);
-	char **const table = (char **) g_try_malloc (tableSize);    /* line pointers */
+	char **const table = (char **) malloc (tableSize);    /* line pointers */
 	DebugStatement ( size_t mallocSize = tableSize; )   /* cumulative total */
 
 	if (table == NULL)
@@ -172,7 +170,7 @@ extern void internalSortTags (const bool toStdout)
 
 	/*  Open the tag file and place its lines into allocated buffers.
 	 */
-	mio = mio_new_file_full (tagFileName (), "r", g_fopen, fclose);
+	mio = mio_new_file (tagFileName (), "r");
 	if (mio == NULL)
 		failedSort (mio, NULL);
 	for (i = 0  ;  i < numTags  &&  ! mio_eof (mio)  ;  )
@@ -190,7 +188,7 @@ extern void internalSortTags (const bool toStdout)
 		{
 			const size_t stringSize = strlen (line) + 1;
 
-			table [i] = (char *) g_try_malloc (stringSize);
+			table [i] = (char *) malloc (stringSize);
 			if (table [i] == NULL)
 				failedSort (mio, "out of memory");
 			DebugStatement ( mallocSize += stringSize; )
@@ -210,8 +208,8 @@ extern void internalSortTags (const bool toStdout)
 
 	PrintStatus (("sort memory: %ld bytes\n", (long) mallocSize));
 	for (i = 0 ; i < numTags ; ++i)
-		g_free (table [i]);
-	g_free (table);
+		free (table [i]);
+	free (table);
 }
 
 #endif

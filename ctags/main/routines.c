@@ -12,9 +12,6 @@
 */
 #include "general.h"  /* must always come first */
 
-#include <glib.h>
-#include <glib/gstdio.h>
-
 #include <errno.h>
 
 #ifdef HAVE_STDLIB_H
@@ -200,7 +197,7 @@ extern const char *getExecutableName (void)
 
 extern void *eMalloc (const size_t size)
 {
-	void *buffer = g_malloc (size);
+	void *buffer = malloc (size);
 
 	if (buffer == NULL)
 		error (FATAL, "out of memory");
@@ -225,7 +222,7 @@ extern void *eRealloc (void *const ptr, const size_t size)
 		buffer = eMalloc (size);
 	else
 	{
-		buffer = g_realloc (ptr, size);
+		buffer = realloc (ptr, size);
 		if (buffer == NULL)
 			error (FATAL, "out of memory");
 	}

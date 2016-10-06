@@ -14,7 +14,6 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-#include <glib.h>
 
 #include "debug.h"
 #include "entry.h"
@@ -23,6 +22,7 @@
 #include "options.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   MACROS
@@ -325,7 +325,7 @@ static void makeDefineTag (const char *const name, bool parameterized)
 		}
 		makeTagEntry (&e);
 		if (parameterized)
-			free((char *) e.extensionFields.signature);
+			eFree((char *) e.extensionFields.signature);
 	}
 }
 
@@ -968,13 +968,13 @@ extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenNam
 	{
 		size_t len = pos2 - pos1;
 
-		result = (char *) g_malloc(len + 1);
+		result = (char *) eMalloc(len + 1);
 		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
 		{
 			result[len] = '\0';
 			arglist = getArglistFromStr(result, tokenName);
 		}
-		g_free(result);
+		eFree(result);
 	}
 	mio_setpos(File.mio, &originalPosition);
 	return arglist;
