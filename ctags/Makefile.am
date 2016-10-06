@@ -61,6 +61,7 @@ libctags_la_SOURCES = \
 	main/entry.h \
 	main/error.c \
 	main/error.h \
+	main/gcc-attr.h \
 	main/general.h \
 	main/keyword.c \
 	main/keyword.h \
