@@ -239,13 +239,12 @@ extern void eFree (void *const ptr)
 extern char* strstr (const char *str, const char *substr)
 {
 	const size_t length = strlen (substr);
-	const char *match = NULL;
 	const char *p;
 
-	for (p = str  ;  *p != '\0'  &&  match == NULL  ;  ++p)
+	for (p = str  ;  *p != '\0'  ;  ++p)
 		if (strncmp (p, substr, length) == 0)
-			match = p;
-	return (char*) match;
+			return (char*) p;
+	return NULL;
 }
 #endif
 
