@@ -272,10 +272,9 @@ extern void openTagFile (void)
 	 */
 	if (TagsToStdout)
 	{
-		FILE *fp;
-
-		fp = tempFile ("w", &TagFile.name);
-		TagFile.mio = mio_new_fp (fp, fclose);
+		/* Open a tempfile with read and write mode. Read mode is used when
+		 * write the result to stdout. */
+		TagFile.mio = tempFile ("w+", &TagFile.name);
 	}
 	else
 	{
@@ -363,8 +362,8 @@ extern void copyFile (const char *const from, const char *const to, const long s
 static int replacementTruncate (const char *const name, const long size)
 {
 	char *tempName = NULL;
-	FILE *fp = tempFile ("w", &tempName);
-	fclose (fp);
+	MIO *mio = tempFile ("w", &tempName);
+	mio_free (mio);
 	copyFile (name, tempName, size);
 	copyFile (tempName, name, WHOLE_FILE);
 	remove (tempName);

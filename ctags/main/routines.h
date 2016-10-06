@@ -17,6 +17,7 @@
 #include <stdio.h>
 
 #include "vstring.h"
+#include "mio.h"
 
 /*
 *   MACROS
@@ -123,7 +124,7 @@ extern vString *combinePathAndFile (const char *const path, const char *const fi
 extern char* absoluteFilename (const char *file);
 extern char* absoluteDirname (char *file);
 extern char* relativeFilename (const char *file, const char *dir);
-extern FILE *tempFile (const char *const mode, char **const pName);
+extern MIO *tempFile (const char *const mode, char **const pName);
 extern char* eStrdup (const char* str);
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */
