@@ -455,10 +455,12 @@ static void prefs_init_dialog(void)
 		"sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_symbol_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
@@ -939,14 +941,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		sidebar_set_visible(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		g_settings_set_boolean(geany_settings, "sidebar-symbols-visible",
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
-			interface_prefs.sidebar_symbol_visible);
+			g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		g_settings_set_boolean(geany_settings, "sidebar-documents-visible",
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
-			interface_prefs.sidebar_openfiles_visible);
+			g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
 		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));

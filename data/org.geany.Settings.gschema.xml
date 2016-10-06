@@ -14,6 +14,20 @@
 				Whether or not the sidebar is visible.
 			</description>
 		</key>
+		<key name="sidebar-symbols-visible" type="b">
+			<default>true</default>
+			<summary>Symbols visible</summary>
+			<description>
+				Whether or not the Symbols tab is visible in the sidebar.
+			</description>
+		</key>
+		<key name="sidebar-documents-visible" type="b">
+			<default>true</default>
+			<summary>Documents visible</summary>
+			<description>
+				Whether or not the Documents tab is visible in the sidebar.
+			</description>
+		</key>
 		<key name="msgwin-visible" type="b">
 			<default>true</default>
 			<summary>Message window visible</summary>

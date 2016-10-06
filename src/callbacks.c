@@ -1219,16 +1219,16 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 	if (shown &&
 		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) == 0)
 	{
-		interface_prefs.sidebar_openfiles_visible = TRUE;
-		interface_prefs.sidebar_symbol_visible = TRUE;
+		g_settings_set_boolean(geany_settings, "sidebar-documents-visible", TRUE);
+		g_settings_set_boolean(geany_settings, "sidebar-symbols-visible", TRUE);
 	}
 
 	gtk_widget_set_visible(
 		ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
-		interface_prefs.sidebar_openfiles_visible);
+		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
 	gtk_widget_set_visible(
 		ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
-		interface_prefs.sidebar_symbol_visible);
+		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
 
 	if (! shown)
 		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
