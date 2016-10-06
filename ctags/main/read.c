@@ -344,8 +344,10 @@ extern void fileClose (void)
 		 *  and is incremented upon each newline.
 		 */
 		if (Option.printTotals)
-			addTotals (0, File.input.lineNumber - 1L,
-					  getFileSize (vStringValue (File.input.name)));
+		{
+			fileStatus *status = eStat (vStringValue (File.input.name));
+			addTotals (0, File.input.lineNumber - 1L, status->size);
+		}
 
 		mio_free (File.mio);
 		File.mio = NULL;

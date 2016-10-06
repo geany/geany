@@ -57,6 +57,34 @@ extern char *CurrentDirectory;
 typedef int errorSelection;
 enum eErrorTypes { FATAL = 1, WARNING = 2, PERROR = 4 };
 
+typedef struct {
+		/* Name of file for which status is valid */
+	char* name;
+
+		/* Does file exist? If not, members below do not contain valid data. */
+	bool exists;
+
+		/* is file path a symbolic link to another file? */
+	bool isSymbolicLink;
+
+		/* Is file (pointed to) a directory? */
+	bool isDirectory;
+
+		/* Is file (pointed to) a normal file? */
+	bool isNormalFile;
+
+		/* Is file (pointed to) executable? */
+	bool isExecutable;
+
+		/* Is file (pointed to) setuid? */
+	bool isSetuid;
+
+		/* Is file (pointed to) setgid? */
+	bool isSetgid;
+
+		/* Size of file (pointed to) */
+	unsigned long size;
+} fileStatus; 
 
 /*
 *   FUNCTION PROTOTYPES
@@ -80,6 +108,8 @@ extern char* newLowerString (const char* str);
 extern char* newUpperString (const char* str);
 
 /* File system functions */
+extern fileStatus *eStat (const char *const fileName);
+extern void eStatFree (fileStatus *status);
 extern bool doesFileExist (const char *const fileName);
 extern bool isRecursiveLink (const char* const dirName);
 extern bool isSameFile (const char *const name1, const char *const name2);
@@ -93,8 +123,6 @@ extern FILE *tempFile (const char *const mode, char **const pName);
 extern void processExcludeOption (const char *const option, const char *const parameter);
 extern const char *fileExtension (const char *const fileName);
 extern char* eStrdup (const char* str);
-extern long unsigned int getFileSize (const char *const name);
-extern bool isExecutable (const char *const name);
 
 #ifndef HAVE_STRICMP
 extern int stricmp (const char *s1, const char *s2);

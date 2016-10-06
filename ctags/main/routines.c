@@ -177,7 +177,9 @@ extern int stat (const char *, struct stat *);
 #ifdef NEED_PROTO_LSTAT
 extern int lstat (const char *, struct stat *);
 #endif
-
+#if defined (WIN32)
+# define lstat(fn,buf) stat(fn,buf)
+#endif
 
 /*
 *   FUNCTION DEFINITIONS
@@ -299,64 +301,132 @@ extern char* newUpperString (const char* str)
 	return result;
 }
 
-
-#if 0
-static void setCurrentDirectory (void)
+/* For caching of stat() calls */
+extern fileStatus *eStat (const char *const fileName)
 {
-	char* const cwd = getcwd (NULL, PATH_MAX);
-	CurrentDirectory = xMalloc (strlen (cwd) + 2, char);
-	if (cwd [strlen (cwd) - (size_t) 1] == PATH_SEPARATOR)
-		strcpy (CurrentDirectory, cwd);
-	else
-		sprintf (CurrentDirectory, "%s%c", cwd, OUTPUT_PATH_SEPARATOR);
-	free (cwd);
+	struct stat status;
+	static fileStatus file;
+	if (file.name == NULL  ||  strcmp (fileName, file.name) != 0)
+	{
+		eStatFree (&file);
+		file.name = eStrdup (fileName);
+		if (lstat (file.name, &status) != 0)
+			file.exists = false;
+		else
+		{
+			file.isSymbolicLink = (bool) S_ISLNK (status.st_mode);
+			if (file.isSymbolicLink  &&  stat (file.name, &status) != 0)
+				file.exists = false;
+			else
+			{
+				file.exists = true;
+				file.isDirectory = (bool) S_ISDIR (status.st_mode);
+				file.isNormalFile = (bool) (S_ISREG (status.st_mode));
+				file.isExecutable = (bool) ((status.st_mode &
+					(S_IXUSR | S_IXGRP | S_IXOTH)) != 0);
+				file.isSetuid = (bool) ((status.st_mode & S_ISUID) != 0);
+				file.isSetgid = (bool) ((status.st_mode & S_ISGID) != 0);
+				file.size = status.st_size;
+			}
+		}
+	}
+	return &file;
 }
-#endif
 
+extern void eStatFree (fileStatus *status)
+{
+	if (status->name != NULL)
+	{
+		eFree (status->name);
+		status->name = NULL;
+	}
+}
 
 extern bool doesFileExist (const char *const fileName)
 {
-	GStatBuf fileStatus;
-
-	return (bool) (g_stat (fileName, &fileStatus) == 0);
+	fileStatus *status = eStat (fileName);
+	return status->exists;
 }
 
 extern bool isRecursiveLink (const char* const dirName)
 {
 	bool result = false;
-	char* const path = absoluteFilename (dirName);
-	while (path [strlen (path) - 1] == PATH_SEPARATOR)
-		path [strlen (path) - 1] = '\0';
-	while (! result  &&  strlen (path) > (size_t) 1)
+	fileStatus *status = eStat (dirName);
+	if (status->isSymbolicLink)
 	{
-		char *const separator = strrchr (path, PATH_SEPARATOR);
-		if (separator == NULL)
-			break;
-		else if (separator == path)  /* backed up to root directory */
-			*(separator + 1) = '\0';
-		else
-			*separator = '\0';
-		result = isSameFile (path, dirName);
+		char* const path = absoluteFilename (dirName);
+		while (path [strlen (path) - 1] == PATH_SEPARATOR)
+			path [strlen (path) - 1] = '\0';
+		while (! result  &&  strlen (path) > (size_t) 1)
+		{
+			char *const separator = strrchr (path, PATH_SEPARATOR);
+			if (separator == NULL)
+				break;
+			else if (separator == path)  /* backed up to root directory */
+				*(separator + 1) = '\0';
+			else
+				*separator = '\0';
+			result = isSameFile (path, dirName);
+		}
+		eFree (path);
 	}
-	eFree (path);
-	return result;
-}
-
-extern bool isSameFile (const char *const name1, const char *const name2)
-{
-	bool result = false;
-#ifdef HAVE_STAT_ST_INO
-	GStatBuf stat1, stat2;
-
-	if (g_stat (name1, &stat1) == 0  &&  g_stat (name2, &stat2) == 0)
-		result = (bool) (stat1.st_ino == stat2.st_ino);
-#endif
 	return result;
 }
 
 /*
  *  Pathname manipulation (O/S dependent!!!)
  */
+
+static bool isPathSeparator (const int c)
+{
+	bool result;
+#if defined (MSDOS_STYLE_PATH)
+	result = (bool) (strchr (PathDelimiters, c) != NULL);
+#else
+	result = (bool) (c == PATH_SEPARATOR);
+#endif
+	return result;
+}
+
+#if ! defined (HAVE_STAT_ST_INO)
+
+static void canonicalizePath (char *const path CTAGS_ATTR_UNUSED)
+{
+# if defined (MSDOS_STYLE_PATH)
+	char *p;
+	for (p = path  ;  *p != '\0'  ;  ++p)
+		if (isPathSeparator (*p)  &&  *p != ':')
+			*p = PATH_SEPARATOR;
+# endif
+}
+
+#endif
+
+extern bool isSameFile (const char *const name1, const char *const name2)
+{
+	bool result = false;
+#if defined (HAVE_STAT_ST_INO)
+	struct stat stat1, stat2;
+
+	if (stat (name1, &stat1) == 0  &&  stat (name2, &stat2) == 0)
+		result = (bool) (stat1.st_ino == stat2.st_ino);
+#else
+	{
+		char *const n1 = absoluteFilename (name1);
+		char *const n2 = absoluteFilename (name2);
+		canonicalizePath (n1);
+		canonicalizePath (n2);
+# if defined (CASE_INSENSITIVE_FILENAMES)
+		result = (bool) (strcasecmp (n1, n2) == 0);
+# else
+		result = (bool) (strcmp (n1, n2) == 0);
+# endif
+		free (n1);
+		free (n2);
+	}
+#endif
+	return result;
+}
 
 extern const char *baseFilename (const char *const filePath)
 {
@@ -384,9 +454,6 @@ extern const char *baseFilename (const char *const filePath)
 	return tail;
 }
 
-/*
- *  File extension and language mapping
- */
 extern const char *fileExtension (const char *const fileName)
 {
 	const char *extension;
@@ -599,7 +666,7 @@ extern long unsigned int getFileSize (const char *const name)
 	GStatBuf fileStatus;
 	unsigned long size = 0;
 
-	if (g_stat (name, &fileStatus) == 0)
+	if (stat (name, &fileStatus) == 0)
 		size = fileStatus.st_size;
 
 	return size;
@@ -614,7 +681,7 @@ static bool isSymbolicLink (const char *const name)
 	GStatBuf fileStatus;
 	bool result = false;
 
-	if (g_lstat (name, &fileStatus) == 0)
+	if (lstat (name, &fileStatus) == 0)
 		result = (bool) (S_ISLNK (fileStatus.st_mode));
 
 	return result;
@@ -626,7 +693,7 @@ static bool isNormalFile (const char *const name)
 	GStatBuf fileStatus;
 	bool result = false;
 
-	if (g_stat (name, &fileStatus) == 0)
+	if (stat (name, &fileStatus) == 0)
 		result = (bool) (S_ISREG (fileStatus.st_mode));
 
 	return result;
@@ -638,7 +705,7 @@ extern bool isExecutable (const char *const name)
 	GStatBuf fileStatus;
 	bool result = false;
 
-	if (g_stat (name, &fileStatus) == 0)
+	if (stat (name, &fileStatus) == 0)
 		result = (bool) ((fileStatus.st_mode & (S_IXUSR|S_IXGRP|S_IXOTH)) != 0);
 
 	return result;
@@ -654,7 +721,7 @@ static bool isSetUID (const char *const name)
 	GStatBuf fileStatus;
 	bool result = false;
 
-	if (g_stat (name, &fileStatus) == 0)
+	if (stat (name, &fileStatus) == 0)
 		result = (bool) ((fileStatus.st_mode & S_ISUID) != 0);
 
 	return result;
@@ -669,7 +736,7 @@ static bool isDirectory (const char *const name)
 	bool result = false;
 	GStatBuf fileStatus;
 
-	if (g_stat (name, &fileStatus) == 0)
+	if (stat (name, &fileStatus) == 0)
 		result = (bool) S_ISDIR (fileStatus.st_mode);
 	return result;
 }
@@ -704,16 +771,33 @@ extern FILE *tempFile (const char *const mode, char **const pName)
 	char *name;
 	FILE *fp;
 	int fd;
-#ifdef HAVE_MKSTEMP
-	const char *const template = "tags.XXXXXX";
+#if defined(HAVE_MKSTEMP)
+	const char *const pattern = "tags.XXXXXX";
 	const char *tmpdir = NULL;
-	if (! isSetUID (ExecutableProgram))
+	fileStatus *file = eStat (ExecutableProgram);
+# ifdef WIN32
+	tmpdir = getenv ("TMP");
+# else
+	if (! file->isSetuid)
 		tmpdir = getenv ("TMPDIR");
+# endif
 	if (tmpdir == NULL)
 		tmpdir = TMPDIR;
-	name = xMalloc (strlen (tmpdir) + 1 + strlen (template) + 1, char);
-	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, template);
-	fd = mkstemp(name);
+	name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
+	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
+	fd = mkstemp (name);
+	eStatFree (file);
+#elif defined(HAVE_TEMPNAM)
+	const char *tmpdir = NULL;
+# ifdef WIN32
+	tmpdir = getenv ("TMP");
+# endif
+	if (tmpdir == NULL)
+		tmpdir = TMPDIR;
+	name = tempnam (tmpdir, "tags");
+	if (name == NULL)
+		error (FATAL | PERROR, "cannot allocate temporary file name");
+	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 #else
 	name = xMalloc (L_tmpnam, char);
 	if (tmpnam (name) != name)
