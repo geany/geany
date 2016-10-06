@@ -98,12 +98,6 @@ extern void freeList (stringList** const pString);
 extern void setDefaultTagFileName (void);
 
 extern bool isIncludeFile (const char *const fileName);
-extern bool isExcludedFile (const char* const name);
 extern bool isIgnoreToken (const char *const name, bool *const pIgnoreParens, const char **const replacement);
-extern void readOptionConfiguration (void);
-extern void initOptions (void);
-extern void freeOptionResources (void);
-
-void addIgnoreListFromFile (const char *const fileName);
 
 #endif  /* CTAGS_MAIN_OPTIONS_H */
