@@ -78,8 +78,6 @@ typedef struct sInputFile {
 	MIOPos  filePosition;   /* file position of current line */
 	unsigned int ungetchIdx;
 	int     ungetchBuf[3];  /* characters that were ungotten */
-	bool eof;           /* have we reached the end of file? */
-	bool newLine;       /* will the next character begin a new line? */
 
 	/*  Contains data pertaining to the original source file in which the tag
 	 *  was defined. This may be different from the input file when #line
@@ -104,7 +102,6 @@ extern kindOption *getInputLanguageFileKind (void);
 
 extern void freeSourceFileResources (void);
 extern bool fileOpen (const char *const fileName, const langType language);
-extern bool fileEOF (void);
 extern void fileClose (void);
 extern int getcFromInputFile (void);
 extern int getNthPrevCFromInputFile (unsigned int nth, int def);
