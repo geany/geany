@@ -69,6 +69,12 @@ static char* nextStringLine (const char** const next)
 	}
 	if (*end == '\n')
 		++end;
+	else if (*end == '\r')
+	{
+		++end;
+		if (*end == '\n')
+			++end;
+	}
 	*next = end;
 	return result;
 }
@@ -121,14 +127,25 @@ static char* nextFileLine (FILE* const fp)
 		int c;
 
 		c = fgetc (fp);
-		while (c != EOF  &&  c != '\n')
+		while (c != EOF)
 		{
-			vStringPut (vs, c);
+			if (c != '\n'  &&  c != '\r')
+				vStringPut (vs, c);
+			else if (vStringLength (vs) > 0)
+				break;
 			c = fgetc (fp);
 		}
-		if (vStringLength (vs) > 0)
+		if (c != EOF  ||  vStringLength (vs) > 0)
 		{
+			if (c == '\r')
+			{
+				c = fgetc (fp);
+				if (c != '\n')
+					c = ungetc (c, fp);
+			}
+			vStringStripTrailing (vs);
 			result = xMalloc (vStringLength (vs) + 1, char);
+			vStringStripLeading (vs);
 			strcpy (result, vStringValue (vs));
 		}
 		vStringDelete (vs);
@@ -136,11 +153,33 @@ static char* nextFileLine (FILE* const fp)
 	return result;
 }
 
+static bool isCommentLine (char* line)
+{
+	while (isspace(*line))
+		++line;
+	return (*line == '#');
+}
+
+static char* nextFileLineSkippingComments (FILE* const fp)
+{
+	char* result;
+	bool comment;
+
+	do
+	{
+		result = nextFileLine (fp);
+		comment = (result && isCommentLine (result));
+		if (comment)
+			eFree (result);
+	} while (comment);
+	return result;
+}
+
 static char* nextFileString (const Arguments* const current, FILE* const fp)
 {
 	char* result;
 	if (current->lineMode)
-		result = nextFileLine (fp);
+		result = nextFileLineSkippingComments (fp);
 	else
 		result = nextFileArg (fp);
 	return result;
@@ -151,8 +190,6 @@ extern Arguments* argNewFromString (const char* const string)
 	Arguments* result = xMalloc (1, Arguments);
 	memset (result, 0, sizeof (Arguments));
 	result->type = ARG_STRING;
-	result->u.stringArgs.string = string;
-	result->u.stringArgs.item = string;
 	result->u.stringArgs.next = string;
 	result->item = nextString (result, &result->u.stringArgs.next);
 	return result;
@@ -224,7 +261,6 @@ extern void argForth (Arguments* const current)
 		case ARG_STRING:
 			if (current->item != NULL)
 				eFree (current->item);
-			current->u.stringArgs.item = current->u.stringArgs.next;
 			current->item = nextString (current, &current->u.stringArgs.next);
 			break;
 		case ARG_ARGV:
