@@ -15,15 +15,14 @@
 #include "general.h"  /* must always come first */
 
 #include "vstring.h"
+#include "ptrarray.h"
+
+#include <stdio.h>
 
 /*
 *   DATA DECLARATIONS
 */
-typedef struct sStringList {
-	unsigned int max;
-	unsigned int count;
-	vString    **list;
-} stringList;
+typedef ptrArray stringList;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -41,10 +40,15 @@ extern vString* stringListLast (const stringList *const current);
 extern void stringListDelete (stringList *const current);
 extern bool stringListHasInsensitive (const stringList *const current, const char *const string);
 extern bool stringListHas (const stringList *const current, const char *const string);
-extern bool stringListHasTest (const stringList *const current, bool (*test)(const char *s));
-extern bool stringListRemoveExtension (stringList* const current, const char* const extension);
+extern bool stringListHasTest (const stringList *const current,
+				  bool (*test)(const char *s, void *userData),
+				  void *userData);
+extern bool stringListDeleteItemExtension (stringList* const current, const char* const extension);
 extern bool stringListExtensionMatched (const stringList* const list, const char* const extension);
+extern vString* stringListExtensionFinds (const stringList* const list, const char* const extension);
 extern bool stringListFileMatched (const stringList* const list, const char* const str);
-extern void stringListPrint (const stringList *const current);
+extern vString* stringListFileFinds (const stringList* const list, const char* const str);
+extern void stringListPrint (const stringList *const current, FILE *fp);
+extern void stringListReverse (const stringList *const current);
 
 #endif  /* CTAGS_MAIN_STRLIST_H */
