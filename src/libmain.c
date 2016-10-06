@@ -177,17 +177,12 @@ static void apply_settings(void)
 
 	msgwin_set_visible(g_settings_get_boolean(geany_settings, "msgwin-visible"));
 	sidebar_set_visible(g_settings_get_boolean(geany_settings, "sidebar-visible"));
+	ui_statusbar_set_visible(g_settings_get_boolean(geany_settings, "statusbar-visible"));
 
 	toolbar_apply_settings();
 	toolbar_update_ui();
 
 	ui_update_view_editor_menu_items();
-
-	/* hide statusbar if desired */
-	if (! interface_prefs.statusbar_visible)
-	{
-		gtk_widget_hide(ui_widgets.statusbar);
-	}
 
 	/* set the tab placements of the notebooks */
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);

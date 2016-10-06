@@ -141,7 +141,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
-	if (! interface_prefs.statusbar_visible)
+	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (id == 0)
@@ -328,7 +328,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (! interface_prefs.statusbar_visible)
+	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (doc == NULL)
@@ -1996,16 +1996,12 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 }
 
 
-void ui_statusbar_showhide(gboolean state)
+void ui_statusbar_set_visible(gboolean visible)
 {
-	/* handle statusbar visibility */
-	if (state)
-	{
-		gtk_widget_show(ui_widgets.statusbar);
+	gtk_widget_set_visible(ui_widgets.statusbar, visible);
+	g_settings_set_boolean(geany_settings, "statusbar-visible", visible);
+	if (visible)
 		ui_update_statusbar(NULL, -1);
-	}
-	else
-		gtk_widget_hide(ui_widgets.statusbar);
 }
 
 
@@ -2722,7 +2718,7 @@ void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == 0);
 
-	if (! interface_prefs.statusbar_visible)
+	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
 		return;
 
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);

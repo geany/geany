@@ -505,7 +505,8 @@ static void prefs_init_dialog(void)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.statusbar_visible);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		g_settings_get_boolean(geany_settings, "statusbar-visible"));
 
 
 	/* Toolbar settings */
@@ -976,7 +977,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		ui_statusbar_set_visible(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 
 		/* Toolbar settings */
@@ -1285,7 +1286,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 #endif
 
 		/* apply the changes made */
-		ui_statusbar_showhide(interface_prefs.statusbar_visible);
 		sidebar_openfiles_update_all(); /* to update if full path setting has changed */
 		toolbar_apply_settings();
 		toolbar_update_ui();

@@ -54,7 +54,6 @@ typedef struct GeanyInterfacePrefs
 	gint			tab_pos_editor;				/**< positions of editor's tabs */
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
-	gboolean		statusbar_visible;			/**< whether the status bar is visible */
 	gboolean		show_symbol_list_expanders;	/**< whether to show expanders in the symbol list */
 	/** whether a double click on notebook tabs hides all other windows */
 	gboolean		notebook_double_click_hides_widgets;
@@ -333,7 +332,7 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down);
 
-void ui_statusbar_showhide(gboolean state);
+void ui_statusbar_set_visible(gboolean visible);
 
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 

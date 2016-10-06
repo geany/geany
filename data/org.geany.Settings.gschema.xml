@@ -21,6 +21,13 @@
 				Whether or not the message window is visible.
 			</description>
 		</key>
+		<key name="statusbar-visible" type="b">
+			<default>true</default>
+			<summary>Statusbar visible</summary>
+			<description>
+				Whether or not the statusbar is visible.
+			</description>
+		</key>
 		<key name="fullscreen" type="b">
 			<default>false</default>
 			<summary>Fullscreen</summary>
