@@ -83,6 +83,8 @@ libctags_la_SOURCES = \
 	main/ptrarray.h \
 	main/read.c \
 	main/read.h \
+	main/repoinfo.c \
+	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
 	main/sort.c \
