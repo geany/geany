@@ -490,23 +490,19 @@ extern bool isAbsolutePath (const char *const path)
 	return result;
 }
 
-extern vString *combinePathAndFile (const char *const path,
-									const char *const file)
+extern char *combinePathAndFile (
+	const char *const path, const char *const file)
 {
 	vString *const filePath = vStringNew ();
 	const int lastChar = path [strlen (path) - 1];
-# ifdef MSDOS_STYLE_PATH
-	bool terminated = (bool) (strchr (PathDelimiters, lastChar) != NULL);
-# else
-	bool terminated = (bool) (lastChar == PATH_SEPARATOR);
-# endif
+	bool terminated = isPathSeparator (lastChar);
 
 	vStringCopyS (filePath, path);
 	if (! terminated)
 		vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
 	vStringCatS (filePath, file);
 
-	return filePath;
+	return vStringDeleteUnwrap (filePath);
 }
 
 /* Return a newly-allocated string whose contents concatenate those of

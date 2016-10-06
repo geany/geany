@@ -16,7 +16,6 @@
 
 #include <stdio.h>
 
-#include "vstring.h"
 #include "mio.h"
 
 /*
@@ -106,6 +105,7 @@ extern void eFree (void *const ptr);
 #ifndef HAVE_STRSTR
 extern char* strstr (const char *str, const char *substr);
 #endif
+extern char* eStrdup (const char* str);
 extern void toLowerString (char* str);
 extern void toUpperString (char* str);
 extern char* newLowerString (const char* str);
@@ -120,11 +120,10 @@ extern bool isSameFile (const char *const name1, const char *const name2);
 extern const char *baseFilename (const char *const filePath);
 extern const char *fileExtension (const char *const fileName);
 extern bool isAbsolutePath (const char *const path);
-extern vString *combinePathAndFile (const char *const path, const char *const file);
+extern char *combinePathAndFile (const char *const path, const char *const file);
 extern char* absoluteFilename (const char *file);
 extern char* absoluteDirname (char *file);
 extern char* relativeFilename (const char *file, const char *dir);
 extern MIO *tempFile (const char *const mode, char **const pName);
-extern char* eStrdup (const char* str);
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */
