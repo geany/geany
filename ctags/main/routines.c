@@ -461,7 +461,7 @@ extern const char *fileExtension (const char *const fileName)
 	if (pDelimiter == NULL)
 		extension = "";
 	else
-		extension = pDelimiter + 1;     /* skip to first char of extension */
+		extension = pDelimiter + 1;  /* skip to first char of extension */
 
 	return extension;
 }
@@ -470,11 +470,11 @@ extern bool isAbsolutePath (const char *const path)
 {
 	bool result = false;
 #if defined (MSDOS_STYLE_PATH)
-	if (strchr (PathDelimiters, path [0]) != NULL)
+	if (isPathSeparator (path [0]))
 		result = true;
 	else if (isalpha (path [0])  &&  path [1] == ':')
 	{
-		if (strchr (PathDelimiters, path [2]) != NULL)
+		if (isPathSeparator (path [2]))
 			result = true;
 		else
 			/*  We don't support non-absolute file names with a drive
@@ -485,7 +485,7 @@ extern bool isAbsolutePath (const char *const path)
 				path);
 	}
 #else
-	result = (bool) (path [0] == PATH_SEPARATOR);
+	result = isPathSeparator (path [0]);
 #endif
 	return result;
 }
@@ -536,12 +536,13 @@ extern char* absoluteFilename (const char *file)
 		res = concat (CurrentDirectory, file, "");
 
 	/* Delete the "/dirname/.." and "/." substrings. */
-	slashp = strchr (res, '/');
+	slashp = strchr (res, PATH_SEPARATOR);
 	while (slashp != NULL  &&  slashp [0] != '\0')
 	{
 		if (slashp[1] == '.')
 		{
-			if (slashp [2] == '.' && (slashp [3] == '/' || slashp [3] == '\0'))
+			if (slashp [2] == '.' &&
+				(slashp [3] == PATH_SEPARATOR || slashp [3] == '\0'))
 			{
 				cp = slashp;
 				do
@@ -554,20 +555,20 @@ extern char* absoluteFilename (const char *file)
 				 * so the luser could say `d:/../NAME'. We silently treat this
 				 * as `d:/NAME'.
 				 */
-				else if (cp [0] != '/')
+				else if (cp [0] != PATH_SEPARATOR)
 					cp = slashp;
 #endif
 				memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
 				slashp = cp;
 				continue;
 			}
-			else if (slashp [2] == '/'  ||  slashp [2] == '\0')
+			else if (slashp [2] == PATH_SEPARATOR  ||  slashp [2] == '\0')
 			{
 				memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
 				continue;
 			}
 		}
-		slashp = strchr (slashp + 1, '/');
+		slashp = strchr (slashp + 1, PATH_SEPARATOR);
 	}
 
 	if (res [0] == '\0')
@@ -585,20 +586,14 @@ extern char* absoluteFilename (const char *file)
 }
 
 /* Return a newly allocated string containing the absolute file name of dir
- * where FILE resides given CWD (which should end with a slash).
+ * where `file' resides given `CurrentDirectory'.
  * Routine adapted from Gnu etags.
  */
 extern char* absoluteDirname (char *file)
 {
 	char *slashp, *res;
 	char save;
-#ifdef MSDOS_STYLE_PATH
-	char *p;
-	for (p = file  ;  *p != '\0'  ;  p++)
-		if (*p == '\\')
-			*p = '/';
-#endif
-	slashp = strrchr (file, '/');
+	slashp = strrchr (file, PATH_SEPARATOR);
 	if (slashp == NULL)
 		res = eStrdup (CurrentDirectory);
 	else
@@ -630,17 +625,17 @@ extern char* relativeFilename (const char *file, const char *dir)
 	fp--;
 	dp--;  /* back to the first differing char */
 	do
-	{                           /* look at the equal chars until '/' */
+	{  /* look at the equal chars until path sep */
 		if (fp == absdir)
 			return absdir;  /* first char differs, give up */
 		fp--;
 		dp--;
-	} while (*fp != '/');
+	} while (*fp != PATH_SEPARATOR);
 
 	/* Build a sequence of "../" strings for the resulting relative file name.
 	 */
 	i = 0;
-	while ((dp = strchr (dp + 1, '/')) != NULL)
+	while ((dp = strchr (dp + 1, PATH_SEPARATOR)) != NULL)
 		i += 1;
 	res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
 	res [0] = '\0';
