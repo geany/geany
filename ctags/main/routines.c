@@ -162,8 +162,8 @@ const char *const PathDelimiters = ":/\\";
 
 char *CurrentDirectory;
 
-static const char *ExecutableProgram = NULL;
-static const char *ExecutableName = "geany";
+static const char *ExecutableProgram;
+static const char *ExecutableName;
 
 /*
 *   FUNCTION PROTOTYPES
