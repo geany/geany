@@ -17,11 +17,11 @@
 #define KIND_FILE_DEFAULT 'F'
 #define KIND_FILE_DEFAULT_LONG "file"
 
-typedef struct sKindOption {
+struct sKindOption {
 	bool enabled;          /* are tags for kind enabled? */
 	char  letter;               /* kind letter */
 	const char* name;		  /* kind name */
 	const char* description;	  /* displayed in --help output */
-} kindOption;
+};
 
 #endif	/* CTAGS_MAIN_KIND_H */

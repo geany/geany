@@ -27,7 +27,6 @@
 /*
 *   DATA DECLARATIONS
 */
-typedef int langType;
 
 typedef void (*createRegexTag) (const vString* const name);
 typedef void (*simpleParser) (void);

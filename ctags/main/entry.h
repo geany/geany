@@ -13,6 +13,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "types.h"
 
 #include "mio.h"
 #include "vstring.h"
@@ -51,7 +52,7 @@ typedef struct sTagFields {
 
 /*  Information about the current tag candidate.
  */
-typedef struct sTagEntryInfo {
+struct sTagEntryInfo {
 	bool     lineNumberEntry;   /* pattern or line number entry */
 	unsigned long lineNumber;   /* line number of tag */
 	MIOPos      filePosition;   /* file position of line containing tag */
@@ -74,7 +75,7 @@ typedef struct sTagEntryInfo {
 		const char *signature; /* Argument list for functions and macros with arguments */
 		const char *varType;
 	} extensionFields;          /* list of extension fields*/
-} tagEntryInfo;
+};
 
 /*
 *   GLOBAL VARIABLES

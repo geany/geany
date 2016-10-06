@@ -89,6 +89,7 @@ libctags_la_SOURCES = \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/types.h \
 	main/vstring.c \
 	main/vstring.h \
 	main/xtag.h \
