@@ -1148,6 +1148,37 @@ void sidebar_set_visible(gboolean visible)
 }
 
 
+void sidebar_set_position_left(gboolean left)
+{
+	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
+
+	g_object_ref(main_widgets.sidebar_notebook);
+	g_object_ref(main_widgets.notebook);
+
+	gtk_container_remove(GTK_CONTAINER (pane), main_widgets.sidebar_notebook);
+	gtk_container_remove(GTK_CONTAINER (pane), main_widgets.notebook);
+
+	if (left)
+	{
+		gtk_paned_pack1(GTK_PANED(pane), main_widgets.sidebar_notebook, FALSE, TRUE);
+		gtk_paned_pack2(GTK_PANED(pane), main_widgets.notebook, TRUE, TRUE);
+	}
+	else
+	{
+		gtk_paned_pack1(GTK_PANED(pane), main_widgets.notebook, TRUE, TRUE);
+		gtk_paned_pack2(GTK_PANED(pane), main_widgets.sidebar_notebook, FALSE, TRUE);
+	}
+
+	g_object_unref(main_widgets.sidebar_notebook);
+	g_object_unref(main_widgets.notebook);
+
+	gtk_paned_set_position(GTK_PANED(pane),
+		gtk_widget_get_allocated_width(pane) - gtk_paned_get_position(GTK_PANED(pane)));
+
+	g_settings_set_boolean(geany_settings, "sidebar-pos-left", left);
+}
+
+
 void sidebar_focus_openfiles_tab(void)
 {
 	if (g_settings_get_boolean(geany_settings, "sidebar-visible") && 

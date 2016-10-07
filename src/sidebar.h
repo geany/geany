@@ -55,6 +55,8 @@ void sidebar_finalize(void);
 
 void sidebar_set_visible(gboolean visible);
 
+void sidebar_set_position_left(gboolean left);
+
 void sidebar_update_tag_list(GeanyDocument *doc, gboolean update);
 
 void sidebar_openfiles_add(GeanyDocument *doc);

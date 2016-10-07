@@ -2164,27 +2164,6 @@ void ui_init_toolbar_widgets(void)
 }
 
 
-void ui_swap_sidebar_pos(void)
-{
-	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
-	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
-	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
-
-	g_object_ref(left);
-	g_object_ref(right);
-	gtk_container_remove (GTK_CONTAINER (pane), left);
-	gtk_container_remove (GTK_CONTAINER (pane), right);
-	/* only scintilla notebook should expand */
-	gtk_paned_pack1(GTK_PANED(pane), right, right == main_widgets.notebook, TRUE);
-	gtk_paned_pack2(GTK_PANED(pane), left, left == main_widgets.notebook, TRUE);
-	g_object_unref(left);
-	g_object_unref(right);
-
-	gtk_paned_set_position(GTK_PANED(pane), gtk_widget_get_allocated_width(pane)
-		- gtk_paned_get_position(GTK_PANED(pane)));
-}
-
-
 static void init_recent_files(void)
 {
 	GtkWidget *toolbar_recent_files_menu;

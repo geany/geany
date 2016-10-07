@@ -7,6 +7,13 @@
 				Which tab page in the sidebar notebook is active.
 			</description>
 		</key>
+		<key name="sidebar-pos-left" type="b">
+			<default>true</default>
+			<summary>Sidebar on left</summary>
+			<description>
+				Whether the sidebar is on the left or right.
+			</description>
+		</key>
 		<key name="sidebar-visible" type="b">
 			<default>true</default>
 			<summary>Sidebar visible</summary>

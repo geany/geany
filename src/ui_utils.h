@@ -56,7 +56,6 @@ typedef struct GeanyInterfacePrefs
 	/** whether a double click on notebook tabs hides all other windows */
 	gboolean		notebook_double_click_hides_widgets;
 	gboolean		highlighting_invert_all; 	/**< whether highlighting colors are inverted */
-	gint			sidebar_pos; 				/**< position of the sidebar (left or right) */
 	gboolean		msgwin_status_visible; 		/**< whether message window's status tab is visible */
 	gboolean		msgwin_compiler_visible;	/**< whether message window's compiler tab is visible */
 	gboolean		msgwin_messages_visible;	/**< whether message window's messages tab is visible */
@@ -335,8 +334,6 @@ void ui_statusbar_set_visible(gboolean visible);
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 
 void ui_update_view_editor_menu_items(void);
-
-void ui_swap_sidebar_pos(void);
 
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 

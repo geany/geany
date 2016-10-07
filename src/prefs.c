@@ -462,6 +462,10 @@ static void prefs_init_dialog(void)
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
 		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
 
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_sidebar_left");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
+		g_settings_get_boolean(geany_settings, "sidebar-pos-left"));
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
 
@@ -880,7 +884,7 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		guint i;
 		gboolean autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
-		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
+		gboolean new_sidebar_left;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
@@ -888,9 +892,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		if (interface_prefs.highlighting_invert_all != old_invert_all)
 			filetypes_reload();
-
-		if (interface_prefs.sidebar_pos != old_sidebar_pos)
-			ui_swap_sidebar_pos();
 
 		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
@@ -951,6 +952,11 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
 			g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
+
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_sidebar_left");
+		new_sidebar_left = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+		if (g_settings_get_boolean(geany_settings, "sidebar-pos-left") != new_sidebar_left)
+			sidebar_set_position_left(new_sidebar_left);
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
 		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
