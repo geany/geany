@@ -31,6 +31,11 @@
 *   DATA DECLARATIONS
 */
 
+typedef enum sortType {
+	SO_UNSORTED,
+	SO_SORTED,
+	SO_FOLDSORTED
+} sortType;
 
 /*  This stores the command line options.
  */
