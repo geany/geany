@@ -118,7 +118,7 @@ symbol_menu;
 
 static void load_user_tags(GeanyFiletypeID ft_id);
 
-/* get the tags_ignore list, exported by tagmanager's options.c */
+/* get the tags_ignore list, exported by tagmanager's geany.c */
 extern gchar **c_tags_ignore;
 
 /* ignore certain tokens when parsing C-like syntax.

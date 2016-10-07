@@ -26,6 +26,7 @@
 #include "read.h"
 #include "routines.h"
 #include "xtag.h"
+#include "geany.h"
 
 /*
 *   MACROS

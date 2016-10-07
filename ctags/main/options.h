@@ -103,6 +103,5 @@ extern void freeList (stringList** const pString);
 extern void setDefaultTagFileName (void);
 
 extern bool isIncludeFile (const char *const fileName);
-extern bool isIgnoreToken (const char *const name, bool *const pIgnoreParens, const char **const replacement);
 
 #endif  /* CTAGS_MAIN_OPTIONS_H */
