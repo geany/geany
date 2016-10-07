@@ -612,21 +612,39 @@ static void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer u
 }
 
 
-static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+/* Once the window is shown on the screen, then potentially make it
+ * fullscreen. This allows it to return a normal size when it is
+ * unfullscreened. */
+static void on_window1_map_event(GtkWidget *widget, gpointer user_data)
 {
-	if (gtk_check_menu_item_get_active(checkmenuitem))
+	if (g_settings_get_boolean(geany_settings, "fullscreen"))
 		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
 	else
 		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
 }
 
 
-static void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	gboolean shown;
-	shown = gtk_check_menu_item_get_active(checkmenuitem);
-	gtk_widget_set_visible(main_widgets.message_window_notebook, shown);
-	g_settings_set_boolean(geany_settings, "msgwin-visible", shown);
+	if (gtk_widget_get_mapped(main_widgets.window))
+	{
+		if (gtk_check_menu_item_get_active(checkmenuitem))
+			gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
+		else
+			gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
+	}
+}
+
+
+void on_notebook3_hide(GtkWidget *widget, gpointer user_data)
+{
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+}
+
+
+void on_notebook_info_hide(GtkWidget *widget, gpointer user_data)
+{
 	/* set the input focus back to the editor */
 	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
@@ -1210,30 +1228,13 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	gboolean shown;
-
-	shown = gtk_check_menu_item_get_active(checkmenuitem);
-	gtk_widget_set_visible(main_widgets.sidebar_notebook, shown);
-
 	/* show built-in tabs if no tabs visible */
-	if (shown &&
+	if (gtk_check_menu_item_get_active(checkmenuitem) &&
 		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) == 0)
 	{
 		g_settings_set_boolean(geany_settings, "sidebar-documents-visible", TRUE);
 		g_settings_set_boolean(geany_settings, "sidebar-symbols-visible", TRUE);
 	}
-
-	gtk_widget_set_visible(
-		ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
-		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
-	gtk_widget_set_visible(
-		ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
-		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
-
-	if (! shown)
-		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
-
-	g_settings_set_boolean(geany_settings, "sidebar-visible", shown);
 }
 
 
@@ -1529,7 +1530,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		interface_prefs.show_notebook_tabs = FALSE;
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		ui_statusbar_set_visible(FALSE);
+		g_settings_set_boolean(geany_settings, "statusbar-visible", FALSE);
 
 		if (gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1543,7 +1544,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		interface_prefs.show_notebook_tabs = TRUE;
 		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
-		ui_statusbar_set_visible(TRUE);
+		g_settings_set_boolean(geany_settings, "statusbar-visible", TRUE);
 
 		if (! gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1719,18 +1720,6 @@ void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, gpointer user_dat
 	if (vte_info.have_vte)
 		vte_send_selection_to_vte();
 #endif
-}
-
-
-static gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
-{
-	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
-	{
-		gboolean fullscreen;
-		fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN);
-		g_settings_set_boolean(geany_settings, "fullscreen", fullscreen);
-	}
-	return FALSE;
 }
 
 
@@ -1918,6 +1907,12 @@ static void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer u
 		editor_set_indent_width(doc->editor, width);
 		ui_document_show_hide(doc);
 	}
+}
+
+
+static void on_statusbar_show(GtkWidget *widget, gpointer user_data)
+{
+	ui_update_statusbar(NULL, -1);
 }
 
 

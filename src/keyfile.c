@@ -1263,9 +1263,6 @@ void configuration_open_files(void)
  * realisation of the main window */
 void configuration_apply_settings(void)
 {
-	gboolean fullscreen;
-	GtkWidget *menu_item;
-
 	if (scribble_text)
 	{	/* update the scribble widget, because now it's realized */
 		GtkTextIter iter;
@@ -1284,11 +1281,6 @@ void configuration_apply_settings(void)
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
-
-	/* set fullscreen after initial draw so that returning to normal view is the right size. */
-	fullscreen = g_settings_get_boolean(geany_settings, "fullscreen");
-	menu_item = ui_lookup_widget(main_widgets.window, "menu_fullscreen1");
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menu_item), fullscreen);
 
 	msgwin_show_hide_tabs();
 }

@@ -136,6 +136,12 @@ static void prefs_action(PrefCallbackAction action)
 }
 
 
+static inline GSettings *prefs_get_settings(void)
+{
+	return G_SETTINGS(g_object_get_data(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings"));
+}
+
+
 enum
 {
 	KB_TREE_ACTION,
@@ -448,23 +454,9 @@ static void prefs_init_dialog(void)
 
 	/* Interface settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		g_settings_get_boolean(geany_settings, "sidebar-visible"));
 	g_object_bind_property(widget, "active",
 		ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"),
 		"sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_sidebar_left");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		g_settings_get_boolean(geany_settings, "sidebar-pos-left"));
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
@@ -509,10 +501,6 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		g_settings_get_boolean(geany_settings, "statusbar-visible"));
 
 
 	/* Toolbar settings */
@@ -884,7 +872,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		guint i;
 		gboolean autoclose_brackets[5];
 		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
-		gboolean new_sidebar_left;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
@@ -938,26 +925,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Interface settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-		sidebar_set_visible(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-		g_settings_set_boolean(geany_settings, "sidebar-symbols-visible",
-			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow2"),
-			g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-		g_settings_set_boolean(geany_settings, "sidebar-documents-visible",
-			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
-		gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"),
-			g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "radio_sidebar_left");
-		new_sidebar_left = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-		if (g_settings_get_boolean(geany_settings, "sidebar-pos-left") != new_sidebar_left)
-			sidebar_set_position_left(new_sidebar_left);
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
 		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -985,9 +952,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
 		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-		ui_statusbar_set_visible(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
 
 		/* Toolbar settings */
@@ -1296,6 +1260,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 #endif
 
 		/* apply the changes made */
+		g_settings_apply(prefs_get_settings());
+		geany_debug("Applied settings");
 		sidebar_openfiles_update_all(); /* to update if full path setting has changed */
 		toolbar_apply_settings();
 		toolbar_update_ui();
@@ -1334,9 +1300,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	else if (response != GTK_RESPONSE_APPLY)
 	{
+		if (response != GTK_RESPONSE_OK)
+		{
+			g_settings_revert(prefs_get_settings());
+			geany_debug("Reverted settings");
+		}
+		g_object_set_data(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings", NULL);
 		gtk_tree_store_clear(global_kb_data.store);
 		gtk_widget_hide(GTK_WIDGET(dialog));
 	}
+
 }
 
 
@@ -1663,6 +1636,8 @@ static void list_store_append_text(GtkListStore *list, const gchar *text)
 
 void prefs_show_dialog(void)
 {
+	GSettings *settings;
+
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkListStore *eol_list;
@@ -1831,5 +1806,11 @@ void prefs_show_dialog(void)
 	}
 
 	prefs_init_dialog();
+
+	// Create settings just for the prefs and put into delay-apply mode
+	settings = settings_create_for_prefs();
+	g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings", settings, g_object_unref);
+	g_settings_delay(settings);
+
 	gtk_window_present(GTK_WINDOW(ui_widgets.prefs_dialog));
 }

@@ -336,13 +336,6 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 }
 
 
-void msgwin_set_visible(gboolean visible)
-{
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(
-		main_widgets.window, "menu_show_messages_window1")), visible);
-}
-
-
 /**
  *  Adds a new message in the messages tab treeview in the messages window.
  *  If @a line and @a doc are set, clicking on this line jumps into the file which is specified
@@ -380,8 +373,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gsize len;
 	gchar *utf8_msg;
 
-	if (! g_settings_get_boolean(geany_settings, "msgwin-visible"))
-		msgwin_set_visible(TRUE);
+	g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
@@ -558,7 +550,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 static void
 on_hide_message_window(GtkMenuItem *menuitem, gpointer user_data)
 {
-	msgwin_set_visible(FALSE);
+	g_settings_set_boolean(geany_settings, "msgwin-visible", FALSE);
 }
 
 
@@ -1227,7 +1219,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 	/* the msgwin must be visible before we switch to the VTE page so that
 	 * the font settings are applied on realization */
 	if (show)
-		msgwin_set_visible(TRUE);
+		g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), tabnum);
 	if (show && widget)
 		gtk_widget_grab_focus(widget);

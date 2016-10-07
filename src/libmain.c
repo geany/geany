@@ -175,10 +175,6 @@ static void apply_settings(void)
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	toolbar_show_hide();
 
-	msgwin_set_visible(g_settings_get_boolean(geany_settings, "msgwin-visible"));
-	sidebar_set_visible(g_settings_get_boolean(geany_settings, "sidebar-visible"));
-	ui_statusbar_set_visible(g_settings_get_boolean(geany_settings, "statusbar-visible"));
-
 	toolbar_apply_settings();
 	toolbar_update_ui();
 
@@ -870,7 +866,7 @@ static void load_settings(void)
 	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
-		msgwin_set_visible(FALSE);
+		g_settings_set_boolean(geany_settings, "msgwin-visible", FALSE);
 
 #ifdef HAVE_PLUGINS
 	want_plugins = prefs.load_plugins && !no_plugins;

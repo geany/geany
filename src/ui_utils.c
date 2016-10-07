@@ -1996,15 +1996,6 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 }
 
 
-void ui_statusbar_set_visible(gboolean visible)
-{
-	gtk_widget_set_visible(ui_widgets.statusbar, visible);
-	g_settings_set_boolean(geany_settings, "statusbar-visible", visible);
-	if (visible)
-		ui_update_statusbar(NULL, -1);
-}
-
-
 /** Packs all @c GtkWidgets passed after the row argument into a table, using
  * one widget per cell. The first widget is not expanded as the table grows,
  * as this is usually a label.

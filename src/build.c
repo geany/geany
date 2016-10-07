@@ -882,7 +882,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 		gtk_widget_grab_focus(vc->vte);
-		msgwin_set_visible(TRUE);
+		g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
 
 		run_info[cmdindex].pid = 1;
 		g_free(vte_cmd);
@@ -1020,7 +1020,7 @@ static void show_build_result_message(gboolean failure)
 		if (! g_settings_get_boolean(geany_settings, "msgwin-visible"))
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-			msgwin_set_visible(TRUE);
+			g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
 		}
 		else
 		if (gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)

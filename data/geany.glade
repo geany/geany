@@ -6363,7 +6363,7 @@
     <accel-groups>
       <group name="accelgroup1"/>
     </accel-groups>
-    <signal name="window-state-event" handler="on_window_state_event" swapped="no"/>
+    <signal name="map-event" handler="on_window1_map_event" swapped="no"/>
     <signal name="delete-event" handler="on_window_delete_event" swapped="no"/>
     <child>
       <object class="GtkVBox" id="vbox1">
@@ -7468,7 +7468,6 @@
                             <property name="label" translatable="yes">Show Message _Window</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
-                            <signal name="toggled" handler="on_show_messages_window1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -8241,6 +8240,7 @@
                     <signal name="key-press-event" handler="on_escape_key_press_event" swapped="no"/>
                     <signal name="switch-page" handler="on_tv_notebook_switch_page" swapped="no"/>
                     <signal name="switch-page" handler="on_tv_notebook_switch_page_after" after="yes" swapped="no"/>
+                    <signal name="hide" handler="on_notebook3_hide" swapped="no"/>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow2">
                         <property name="visible">True</property>
@@ -8322,6 +8322,7 @@
                 <property name="can_focus">True</property>
                 <property name="tab_pos">left</property>
                 <property name="scrollable">True</property>
+                <signal name="hide" handler="on_notebook_info_hide" swapped="no"/>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow4">
                     <property name="visible">True</property>
@@ -8458,6 +8459,7 @@
               <object class="GtkStatusbar" id="statusbar">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <signal name="show" handler="on_statusbar_show" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>

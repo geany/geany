@@ -571,7 +571,7 @@ void sidebar_remove_document(GeanyDocument *doc)
 
 static void on_hide_sidebar(void)
 {
-	sidebar_set_visible(FALSE);
+	g_settings_set_boolean(geany_settings, "sidebar-visible", FALSE);
 }
 
 
@@ -1105,9 +1105,6 @@ void sidebar_init(void)
 	configuration_add_pref_group(group, FALSE);
 	stash_group = group;
 
-	g_settings_bind(geany_settings, "sidebar-page", main_widgets.sidebar_notebook,
-		"page", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
-
 	/* delay building documents treeview until sidebar font has been read */
 	g_signal_connect(geany_object, "load-settings", on_load_settings, NULL);
 	g_signal_connect(geany_object, "save-settings", on_save_settings, NULL);
@@ -1141,13 +1138,6 @@ void sidebar_finalize(void)
 }
 
 
-void sidebar_set_visible(gboolean visible)
-{
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(
-		ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), visible);
-}
-
-
 void sidebar_set_position_left(gboolean left)
 {
 	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
@@ -1174,8 +1164,6 @@ void sidebar_set_position_left(gboolean left)
 
 	gtk_paned_set_position(GTK_PANED(pane),
 		gtk_widget_get_allocated_width(pane) - gtk_paned_get_position(GTK_PANED(pane)));
-
-	g_settings_set_boolean(geany_settings, "sidebar-pos-left", left);
 }
 
 

@@ -29,6 +29,7 @@ extern GSettings *geany_settings;
 
 void settings_init(void);
 void settings_finalize(void);
+GSettings *settings_create_for_prefs(void);
 
 G_END_DECLS
 
