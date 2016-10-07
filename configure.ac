@@ -38,7 +38,12 @@ AC_PROG_LN_S
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h stdlib.h sys/time.h errno.h limits.h])
+AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
+
+# Checks for dependencies needed by ctags
+AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
+AH_TEMPLATE([USE_STDBOOL_H], [whether or not to use <stdbool.h>.])
+AC_DEFINE([USE_STDBOOL_H])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T

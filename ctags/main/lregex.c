@@ -35,8 +35,6 @@
 #include "kind.h"
 #include "routines.h"
 
-#ifdef HAVE_REGEX
-
 /*
 *   MACROS
 */
@@ -528,8 +526,6 @@ extern void findRegexTags (void)
 		;
 }
 
-#endif  /* HAVE_REGEX */
-
 extern void addTagRegex (
 		const langType language CTAGS_ATTR_UNUSED,
 		const char* const regex CTAGS_ATTR_UNUSED,
@@ -537,7 +533,6 @@ extern void addTagRegex (
 		const char* const kinds CTAGS_ATTR_UNUSED,
 		const char* const flags CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	Assert (regex != NULL);
 	Assert (name != NULL);
 	if (! regexBroken)
@@ -553,7 +548,6 @@ extern void addTagRegex (
 					kind, kindName, description);
 		}
 	}
-#endif
 }
 
 extern void addCallbackRegex (
@@ -562,7 +556,6 @@ extern void addCallbackRegex (
 		const char* const flags CTAGS_ATTR_UNUSED,
 		const regexCallback callback CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	Assert (regex != NULL);
 	if (! regexBroken)
 	{
@@ -570,13 +563,11 @@ extern void addCallbackRegex (
 		if (cp != NULL)
 			addCompiledCallbackPattern (language, cp, callback);
 	}
-#endif
 }
 
 extern void addLanguageRegex (
 		const langType language CTAGS_ATTR_UNUSED, const char* const regex CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	if (! regexBroken)
 	{
 		char *const regex_pat = eStrdup (regex);
@@ -587,7 +578,6 @@ extern void addLanguageRegex (
 			eFree (regex_pat);
 		}
 	}
-#endif
 }
 
 /*
@@ -601,17 +591,12 @@ extern bool processRegexOption (const char *const option,
 	const char* const dash = strchr (option, '-');
 	if (dash != NULL  &&  strncmp (option, "regex", dash - option) == 0)
 	{
-#ifdef HAVE_REGEX
 		langType language;
 		language = getNamedLanguage (dash + 1);
 		if (language == LANG_IGNORE)
 			printf ("regex: unknown language \"%s\" in --%s option\n", (dash + 1), option);
 		else
 			processLanguageRegex (language, parameter);
-#else
-		printf ("regex: regex support not available; required for --%s option\n",
-		   option);
-#endif
 		handled = true;
 	}
 	return handled;
@@ -619,7 +604,6 @@ extern bool processRegexOption (const char *const option,
 
 extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
 	{
 		patternSet* const set = Sets + language;
@@ -628,7 +612,6 @@ extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED)
 			if (set->patterns [i].type == PTRN_TAG)
 				set->patterns [i].u.tag.kind.enabled = false;
 	}
-#endif
 }
 
 extern bool enableRegexKind (
@@ -636,7 +619,6 @@ extern bool enableRegexKind (
 		const int kind CTAGS_ATTR_UNUSED, const bool mode CTAGS_ATTR_UNUSED)
 {
 	bool result = false;
-#ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
 	{
 		patternSet* const set = Sets + language;
@@ -649,13 +631,11 @@ extern bool enableRegexKind (
 				result = true;
 			}
 	}
-#endif
 	return result;
 }
 
 extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, bool indent CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	if (language <= SetUpper  &&  Sets [language].count > 0)
 	{
 		patternSet* const set = Sets + language;
@@ -664,12 +644,10 @@ extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, bool ind
 			if (set->patterns [i].type == PTRN_TAG)
 				printRegexKind (set->patterns, i, indent);
 	}
-#endif
 }
 
 extern void freeRegexResources (void)
 {
-#ifdef HAVE_REGEX
 	int i;
 	for (i = 0  ;  i <= SetUpper  ;  ++i)
 		clearPatternSet (i);
@@ -677,7 +655,6 @@ extern void freeRegexResources (void)
 		eFree (Sets);
 	Sets = NULL;
 	SetUpper = -1;
-#endif
 }
 
 /* Check for broken regcomp() on Cygwin */

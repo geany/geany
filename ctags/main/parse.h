@@ -134,10 +134,8 @@ extern bool parseFile (const char *const fileName);
 extern void installKeywordTable (const langType language);
 
 /* Regex interface */
-#ifdef HAVE_REGEX
 extern void findRegexTags (void);
 extern bool matchRegex (const vString* const line, const langType language);
-#endif
 extern bool processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
 extern void installTagRegexTable (const langType language);

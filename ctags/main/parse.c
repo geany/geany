@@ -339,10 +339,8 @@ extern void initializeParsing (void)
 				error (FATAL, "parser definition must contain name\n");
 			else if (def->method & METHOD_REGEX)
 			{
-#ifdef HAVE_REGEX
 				def->parser = findRegexTags;
 				accepted = true;
-#endif
 			}
 			else if ((def->parser == NULL)  ==  (def->parser2 == NULL))
 				error (FATAL,
@@ -384,7 +382,6 @@ extern void freeParserResources (void)
 extern void processLanguageDefineOption (const char *const option,
 										 const char *const parameter CTAGS_ATTR_UNUSED)
 {
-#ifdef HAVE_REGEX
 	if (parameter [0] == '\0')
 		error (WARNING, "No language specified for \"%s\" option", option);
 	else if (getNamedLanguage (parameter) != LANG_IGNORE)
@@ -402,10 +399,6 @@ extern void processLanguageDefineOption (const char *const option,
 		LanguageTable = xRealloc (LanguageTable, i + 1, parserDefinition*);
 		LanguageTable [i] = def;
 	}
-#else
-	error (WARNING, "regex support not available; required for --%s option",
-		   option);
-#endif
 }
 
 static kindOption *langKindOption (const langType language, const int flag)
@@ -465,11 +458,7 @@ extern void processLegacyKindOption (const char *const parameter)
 static void disableLanguageKinds (const langType language)
 {
 	if (LanguageTable [language]->method & METHOD_REGEX)
-#ifdef HAVE_REGEX
 		disableRegexKinds (language);
-#else
-		;
-#endif
 	else
 	{
 		unsigned int i;
@@ -483,11 +472,7 @@ static bool enableLanguageKind (const langType language,
 {
 	bool result = false;
 	if (LanguageTable [language]->method & METHOD_REGEX)
-#ifdef HAVE_REGEX
 		result = enableRegexKind (language, kind, mode);
-#else
-		;
-#endif
 	else
 	{
 		kindOption* const opt = langKindOption (language, kind);
@@ -569,9 +554,7 @@ static void printLangugageKindOptions (const langType language)
 		if (lang->kinds != NULL)
 			for (i = 0  ;  i < lang->kindCount  ;  ++i)
 				printLangugageKindOption (lang->kinds + i);
-#ifdef HAVE_REGEX
 		/*printRegexKindOptions (language);*/ /* unused */
-#endif
 	}
 }
 

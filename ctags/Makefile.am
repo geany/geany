@@ -58,6 +58,7 @@ libctags_la_SOURCES = \
 	main/ctags.h \
 	main/debug.h \
 	main/debug.c \
+	main/e_msoft.h \
 	main/entry.c \
 	main/entry.h \
 	main/error.c \
