@@ -35,6 +35,14 @@
 #define ui_lookup_main_widget(name) ui_lookup_widget(main_widgets.window, name)
 #define ui_lookup_pref_widget(name) ui_lookup_widget(ui_widgets.prefs_dialog, name)
 
+
+struct LegacyField
+{
+	GType type;
+	gpointer field_ptr;
+};
+
+
 GSettings *geany_settings = NULL;
 
 
@@ -44,35 +52,18 @@ static void on_sidebar_pos_left_changed(GSettings *settings, gchar *key, gpointe
 }
 
 
-static void on_editor_font_changed(GSettings *settings, gchar *key, gpointer user_data)
+static void on_font_changed(GSettings *settings, gchar *key, void(*set_font_func)(const gchar*))
 {
-	g_free(interface_prefs.editor_font);
-	interface_prefs.editor_font = g_settings_get_string(settings, key);
-	ui_set_editor_font(interface_prefs.editor_font);
-}
-
-
-static void on_symbols_font_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	g_free(interface_prefs.tagbar_font);
-	interface_prefs.tagbar_font = g_settings_get_string(settings, key);
-	ui_set_symbols_font(interface_prefs.tagbar_font);
-}
-
-
-static void on_msgwin_font_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	g_free(interface_prefs.msgwin_font);
-	interface_prefs.msgwin_font = g_settings_get_string(settings, key);
-	ui_set_msgwin_font(interface_prefs.msgwin_font);
+	gchar *font_name = g_settings_get_string(settings, key);
+	set_font_func(font_name);
+	g_free(font_name);
 }
 
 
 static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar *key, gpointer user_data)
 {
 	gint indent = 0;
-	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, key);
-	if (interface_prefs.show_symbol_list_expanders)
+	if (g_settings_get_boolean(settings, key))
 		indent = 10;
 	gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(ui_lookup_main_widget("treeview2")), indent);
 }
@@ -80,20 +71,7 @@ static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar
 
 static void on_highlighting_inverted_changed(GSettings *settings, gchar *key, gpointer user_data)
 {
-	interface_prefs.highlighting_invert_all = g_settings_get_boolean(settings, key);
 	filetypes_reload();
-}
-
-
-static void on_simple_boolean_legacy_pref_changed(GSettings *settings, gchar *key, gboolean *pref_field)
-{
-	*pref_field = g_settings_get_boolean(settings, key);
-}
-
-
-static void on_simple_integer_legacy_pref_changed(GSettings *settings, gchar *key, gint *pref_field)
-{
-	*pref_field = g_settings_get_int(settings, key);
 }
 
 
@@ -129,78 +107,169 @@ static GVariant *map_int_to_enum(const GValue *value, const GVariantType *expect
 }
 
 
+G_GNUC_NULL_TERMINATED
+static void settings_bind_many(GSettings *settings, GtkWidget *top, const gchar *name1, ...)
+{
+	const gchar *name;
+	va_list ap;
+	va_start(ap, name1);
+	name = name1;
+	while (name != NULL)
+	{
+		const gchar *widget_name = va_arg(ap, const gchar*);
+		const gchar *prop_name = va_arg(ap, const gchar*);
+		GtkWidget *widget = ui_lookup_widget(top, widget_name);
+		g_settings_bind(settings, name, widget, prop_name, G_SETTINGS_BIND_DEFAULT);
+		name = va_arg(ap, const gchar*);
+	}
+	va_end(ap);
+}
+
+
+static void settings_update_legacy_field(GSettings *settings, GType type, const gchar *key, gpointer field_ptr)
+{
+	if (type == G_TYPE_BOOLEAN)
+	{
+		*((gboolean*)field_ptr) = g_settings_get_boolean(settings, key);
+	}
+	else if (type == G_TYPE_INT)
+	{
+		*((gint*)field_ptr) = g_settings_get_int(settings, key);
+	}
+	else if (type == G_TYPE_STRING)
+	{
+		g_free(*((gchar**)field_ptr));
+		*((gchar**)field_ptr) = g_settings_get_string(settings, key);
+	}
+	else if (type == GTK_TYPE_POSITION_TYPE)
+	{
+		*((gint*)field_ptr) = g_settings_get_enum(settings, key);
+	}
+	else
+	{
+		g_warning("unsupported legacy field binding type");
+	}
+}
+
+
+static void on_legacy_field_changed(GSettings *settings, gchar *key, struct LegacyField *field)
+{
+	settings_update_legacy_field(settings, field->type, key, field->field_ptr);
+}
+
+
+static void settings_free_legacy_field(gpointer data, GClosure *closure)
+{
+	g_slice_free(struct LegacyField, data);
+}
+
+
+static void settings_bind_legacy_field(GSettings *settings, GType type, const gchar *key, gpointer field_ptr)
+{
+	gchar *signal_name;
+	struct LegacyField *field;
+
+	field = g_slice_new(struct LegacyField);
+	field->type = type;
+	field->field_ptr = field_ptr;
+
+	signal_name = g_strdup_printf("changed::%s", key);
+	g_signal_connect_data(settings, signal_name, G_CALLBACK(on_legacy_field_changed), field, settings_free_legacy_field, 0);
+	g_free(signal_name);
+}
+
+
+G_GNUC_NULL_TERMINATED
+static void settings_bind_many_legacy_fields(GSettings *settings, gboolean init, const gchar *name1, ...)
+{
+	va_list ap;
+	const gchar *name = name1;
+	va_start(ap, name1);
+	while (name != NULL)
+	{
+		GType type = va_arg(ap, GType);
+		gpointer field = va_arg(ap, gpointer);
+		settings_bind_legacy_field(settings, type, name, field);
+		if (init)
+			settings_update_legacy_field(settings, type, name, field);
+		name = va_arg(ap, const gchar*);
+	}
+	va_end(ap);
+}
+
+
 static void settings_bind_main(GSettings *settings)
 {
-	g_settings_bind(settings, "sidebar-page", ui_lookup_main_widget("notebook3"), "page", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
-	g_settings_bind(settings, "sidebar-visible", ui_lookup_main_widget("notebook3"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-visible", ui_lookup_main_widget("menu_show_sidebar1"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-documents-visible", ui_lookup_main_widget("scrolledwindow7"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-symbols-visible", ui_lookup_main_widget("scrolledwindow2"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("notebook_info"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("menu_show_messages_window1"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-status-visible", ui_lookup_main_widget("scrolledwindow4"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-compiler-visible", ui_lookup_main_widget("scrolledwindow3"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-messages-visible", ui_lookup_main_widget("scrolledwindow5"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-scribble-visible", ui_lookup_main_widget("scrolledwindow6"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "statusbar-visible", ui_lookup_main_widget("statusbar"), "visible", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "document-tabs-visible", ui_lookup_main_widget("notebook1"), "show-tabs", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "editor-tab-pos", ui_lookup_main_widget("notebook1"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-tab-pos", ui_lookup_main_widget("notebook3"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-tab-pos", ui_lookup_main_widget("notebook_info"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "symbols-tree-expanders-visible", ui_lookup_main_widget("treeview2"), "show-expanders", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings,
+		"sidebar-page", ui_lookup_main_widget("notebook3"), "page",
+		G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
 
-	interface_prefs.editor_font = g_settings_get_string(settings, "editor-font");
-	interface_prefs.tagbar_font = g_settings_get_string(settings, "symbols-font");
-	interface_prefs.msgwin_font = g_settings_get_string(settings, "msgwin-font");
-	interface_prefs.tab_pos_editor = g_settings_get_enum(settings, "editor-tab-pos");
-	interface_prefs.tab_pos_sidebar = g_settings_get_enum(settings, "sidebar-tab-pos");
-	interface_prefs.tab_pos_msgwin = g_settings_get_enum(settings, "msgwin-tab-pos");
-	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, "symbols-tree-expanders-visible");
-	interface_prefs.notebook_double_click_hides_widgets = g_settings_get_boolean(settings, "notebook-double-click-hides-widgets");
-	interface_prefs.highlighting_invert_all = g_settings_get_boolean(settings, "highlighting-inverted");
-	interface_prefs.msgwin_status_visible = g_settings_get_boolean(settings, "msgwin-status-visible");
-	interface_prefs.msgwin_compiler_visible = g_settings_get_boolean(settings, "msgwin-compiler-visible");
-	interface_prefs.msgwin_messages_visible = g_settings_get_boolean(settings, "msgwin-messages-visible");
-	interface_prefs.msgwin_scribble_visible = g_settings_get_boolean(settings, "msgwin-scribble-visible");
-	interface_prefs.use_native_windows_dialogs = g_settings_get_boolean(settings, "use-native-windows-dialogs");
+	settings_bind_many(settings, main_widgets.window,
+		"sidebar-visible",                "notebook3",                  "visible",        // bind to sidebar notebook's visible property
+		"sidebar-visible",                "menu_show_sidebar1",         "active",         // bind to main menu item's active property
+		"sidebar-documents-visible",      "scrolledwindow7",            "visible",        // bind to Documents tab visibility
+		"sidebar-symbols-visible",        "scrolledwindow2",            "visible",        // bind to Symbols tab visibility
+		"msgwin-visible",                 "notebook_info",              "visible",        // bind to msgwin notebook's visibility
+		"msgwin-visible",                 "menu_show_messages_window1", "active",         // bind to main menu item's active property
+		"msgwin-status-visible",          "scrolledwindow4",            "visible",        // bind to Status tab visibility
+		"msgwin-compiler-visible",        "scrolledwindow3",            "visible",        // bind to Compiler tab visibility
+		"msgwin-messages-visible",        "scrolledwindow5",            "visible",        // bind to Messages tab visibility
+		"msgwin-scribble-visible",        "scrolledwindow6",            "visible",        // bind to Scribble tab visibility
+		"statusbar-visible",              "statusbar",                  "visible",        // bind to statusbar's visibility
+		"document-tabs-visible",          "notebook1",                  "show-tabs",      // bind to document notebook's show-tabs property
+		"editor-tab-pos",                 "notebook1",                  "tab-pos",        // bind to document notebook's tab-pos property
+		"sidebar-tab-pos",                "notebook3",                  "tab-pos",        // bind to sidebar notebook's tab-pos property
+		"msgwin-tab-pos",                 "notebook_info",              "tab-pos",        // bind to message window notebook's tab-pos property
+		"symbols-tree-expanders-visible", "treeview2",                  "show-expanders", // bind to Symbols tree view's show-expanders property
+		"fullscreen",                     "menu_fullscreen1",           "active",         // bind to main menu item's active property
+		NULL);
+
+	settings_bind_many_legacy_fields(settings, TRUE,
+		"editor-font",                         G_TYPE_STRING,          &interface_prefs.editor_font,
+		"symbols-font",                        G_TYPE_STRING,          &interface_prefs.tagbar_font,
+		"msgwin-font",                         G_TYPE_STRING,          &interface_prefs.msgwin_font,
+		"editor-tab-pos",                      GTK_TYPE_POSITION_TYPE, &interface_prefs.tab_pos_editor,
+		"sidebar-tab-pos",                     GTK_TYPE_POSITION_TYPE, &interface_prefs.tab_pos_sidebar,
+		"msgwin-tab-pos",                      GTK_TYPE_POSITION_TYPE, &interface_prefs.tab_pos_msgwin,
+		"symbols-tree-expanders-visible",      G_TYPE_BOOLEAN,         &interface_prefs.show_symbol_list_expanders,
+		"notebook-double-click-hides-widgets", G_TYPE_BOOLEAN,         &interface_prefs.notebook_double_click_hides_widgets,
+		"highlighting-inverted",               G_TYPE_BOOLEAN,         &interface_prefs.highlighting_invert_all,
+		"msgwin-status-visible",               G_TYPE_BOOLEAN,         &interface_prefs.msgwin_status_visible,
+		"msgwin-compiler-visible",             G_TYPE_BOOLEAN,         &interface_prefs.msgwin_compiler_visible,
+		"msgwin-messages-visible",             G_TYPE_BOOLEAN,         &interface_prefs.msgwin_messages_visible,
+		"msgwin-scribble-visible",             G_TYPE_BOOLEAN,         &interface_prefs.msgwin_scribble_visible,
+		"use-native-windows-dialogs",          G_TYPE_BOOLEAN,         &interface_prefs.use_native_windows_dialogs,
+		NULL);
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
-	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
-	g_signal_connect(settings, "changed::symbols-font", G_CALLBACK(on_symbols_font_changed), NULL);
-	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_msgwin_font_changed), NULL);
-	g_signal_connect(settings, "changed::document-tabs-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.show_notebook_tabs);
-	g_signal_connect(settings, "changed::editor-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_editor);
-	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_sidebar);
-	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_msgwin);
+	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_font_changed), ui_set_editor_font);
+	g_signal_connect(settings, "changed::symbols-font", G_CALLBACK(on_font_changed), ui_set_symbols_font);
+	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_font_changed), ui_set_msgwin_font);
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
-	g_signal_connect(settings, "changed::notebook-double-click-hides-widgets", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.notebook_double_click_hides_widgets);
 	g_signal_connect(settings, "changed::highlighting-inverted", G_CALLBACK(on_highlighting_inverted_changed), NULL);
-	g_signal_connect(settings, "changed::msgwin-status-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_status_visible);
-	g_signal_connect(settings, "changed::msgwin-compiler-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_compiler_visible);
-	g_signal_connect(settings, "changed::msgwin-messages-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_messages_visible);
-	g_signal_connect(settings, "changed::msgwin-scribble-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_scribble_visible);
-	g_signal_connect(settings, "changed::use-native-windows-dialogs", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.use_native_windows_dialogs);
 }
 
 
 static void settings_bind_prefs(GSettings *settings)
 {
-	g_settings_bind(settings, "sidebar-visible", ui_lookup_pref_widget("check_sidebar_visible"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-documents-visible", ui_lookup_pref_widget("check_list_symbol"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-symbols-visible", ui_lookup_pref_widget("check_list_openfiles"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "sidebar-pos-left", ui_lookup_pref_widget("radio_sidebar_left"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "statusbar-visible", ui_lookup_pref_widget("check_statusbar_visible"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "editor-font", ui_lookup_pref_widget("editor_font"), "font", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "symbols-font", ui_lookup_pref_widget("tagbar_font"), "font", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "msgwin-font", ui_lookup_pref_widget("msgwin_font"), "font", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "document-tabs-visible", ui_lookup_pref_widget("check_show_notebook_tabs"), "active", G_SETTINGS_BIND_DEFAULT);
+	settings_bind_many(settings, ui_widgets.prefs_dialog,
+		"document-tabs-visible",               "check_show_notebook_tabs",         "active",
+		"sidebar-visible",                     "check_sidebar_visible",            "active",
+		"sidebar-documents-visible",           "check_list_symbol",                "active",
+		"sidebar-symbols-visible",             "check_list_openfiles",             "active",
+		"sidebar-pos-left",                    "radio_sidebar_left",               "active",
+		"statusbar-visible",                   "check_statusbar_visible",          "active",
+		"editor-font",                         "editor_font",                      "font",
+		"symbols-font",                        "tagbar_font",                      "font",
+		"msgwin-font",                         "msgwin_font",                      "font",
+		"notebook-double-click-hides-widgets", "check_double_click_hides_widgets", "active",
+		"highlighting-inverted",               "check_highlighting_invert",        "active",
+		"use-native-windows-dialogs",          "check_native_windows_dialogs",     "active",
+		NULL);
+
 	g_settings_bind_with_mapping(settings, "editor-tab-pos", ui_lookup_pref_widget("combo_tab_editor"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 	g_settings_bind_with_mapping(settings, "sidebar-tab-pos", ui_lookup_pref_widget("combo_tab_sidebar"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 	g_settings_bind_with_mapping(settings, "msgwin-tab-pos", ui_lookup_pref_widget("combo_tab_msgwin"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
-	g_settings_bind(settings, "notebook-double-click-hides-widgets", ui_lookup_pref_widget("check_double_click_hides_widgets"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "highlighting-inverted", ui_lookup_pref_widget("check_highlighting_invert"), "active", G_SETTINGS_BIND_DEFAULT);
-	g_settings_bind(settings, "use-native-windows-dialogs", ui_lookup_pref_widget("check_native_windows_dialogs"), "active", G_SETTINGS_BIND_DEFAULT);
 }
 
 
