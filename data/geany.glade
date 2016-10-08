@@ -7433,7 +7433,6 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Show Indentation _Guides</property>
                             <property name="use_underline">True</property>
-                            <signal name="toggled" handler="on_menu_show_indentation_guides1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>

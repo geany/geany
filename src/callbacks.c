@@ -686,16 +686,6 @@ static void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, 
 }
 
 
-static void on_menu_show_indentation_guides1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_indent_guide = ! editor_prefs.show_indent_guide;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_INDENTATION_GUIDES);
-}
-
-
 void on_line_wrapping1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (! ignore_callback)

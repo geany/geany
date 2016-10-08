@@ -81,6 +81,12 @@ static void on_show_white_space_changed(GSettings *settings, gchar *key, gpointe
 }
 
 
+static void on_show_indentation_guides_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_INDENTATION_GUIDES);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -229,6 +235,7 @@ static void settings_bind_main(GSettings *settings)
 		"symbols-tree-expanders-visible", "treeview2",                  "show-expanders", // bind to Symbols tree view's show-expanders property
 		"fullscreen",                     "menu_fullscreen1",           "active",         // bind to main menu item's active property
 		"show-white-space",               "menu_show_white_space1",     "active",         // bind to main menu item's active property
+		"show-indentation-guides",        "menu_show_indentation_guides1", "active",      // bind to main menu item's active property
 		NULL);
 
 	settings_bind_many_legacy_fields(settings, TRUE,
@@ -255,6 +262,7 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
 	g_signal_connect(settings, "changed::highlighting-inverted", G_CALLBACK(on_highlighting_inverted_changed), NULL);
 	g_signal_connect(settings, "changed::show-white-space", G_CALLBACK(on_show_white_space_changed), NULL);
+	g_signal_connect(settings, "changed::show-indentation-guides", G_CALLBACK(on_show_indentation_guides_changed), NULL);
 }
 
 
@@ -274,6 +282,7 @@ static void settings_bind_prefs(GSettings *settings)
 		"highlighting-inverted",               "check_highlighting_invert",        "active",
 		"use-native-windows-dialogs",          "check_native_windows_dialogs",     "active",
 		"show-white-space",                    "check_white_space",                "active",
+		"show-indentation-guides",             "check_indent",                     "active",
 		NULL);
 
 	g_settings_bind_with_mapping(settings, "editor-tab-pos", ui_lookup_pref_widget("combo_tab_editor"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);

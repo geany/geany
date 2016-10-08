@@ -5072,7 +5072,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 
 	g_return_if_fail(editor != NULL);
 
-	if (! editor_prefs.show_indent_guide)
+	if (! g_settings_get_boolean(geany_settings, "show-indentation-guides"))
 	{
 		sci_set_indentation_guides(editor->sci, SC_IV_NONE);
 		return;

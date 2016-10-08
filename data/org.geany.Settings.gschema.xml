@@ -176,5 +176,12 @@
 				Whether or not to visualize white-space.
 			</description>
 		</key>
+		<key name="show-indentation-guides" type="b">
+			<default>false</default>
+			<summary>Show indentation guides</summary>
+			<description>
+				Whether or not to show indentation guides.
+			</description>
+		</key>
 	</schema>
 </schemalist>
