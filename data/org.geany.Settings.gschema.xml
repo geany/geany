@@ -160,5 +160,12 @@
 				Whether or not the syntax highlighting colours are visually inverted.
 			</description>
 		</key>
+		<key name="use-native-windows-dialogs" type="b">
+			<default>false</default>
+			<summary>Use native windows dialog</summary>
+			<description>
+				Whether or not to use native Win32 API dialogs on Windows.
+			</description>
+		</key>
 	</schema>
 </schemalist>

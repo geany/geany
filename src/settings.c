@@ -110,6 +110,12 @@ static void on_message_window_tab_visible_changed(GSettings *settings, gchar *ke
 }
 
 
+static void on_use_native_windows_dialogs_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	interface_prefs.use_native_windows_dialogs = g_settings_get_boolean(settings, key);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -176,6 +182,7 @@ static void settings_bind_main(GSettings *settings)
 	interface_prefs.msgwin_compiler_visible = g_settings_get_boolean(settings, "msgwin-compiler-visible");
 	interface_prefs.msgwin_messages_visible = g_settings_get_boolean(settings, "msgwin-messages-visible");
 	interface_prefs.msgwin_scribble_visible = g_settings_get_boolean(settings, "msgwin-scribble-visible");
+	interface_prefs.use_native_windows_dialogs = g_settings_get_boolean(settings, "use-native-windows-dialogs");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
@@ -192,6 +199,7 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::msgwin-compiler-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_compiler_visible);
 	g_signal_connect(settings, "changed::msgwin-messages-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_messages_visible);
 	g_signal_connect(settings, "changed::msgwin-scribble-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_scribble_visible);
+	g_signal_connect(settings, "changed::use-native-windows-dialogs", G_CALLBACK(on_use_native_windows_dialogs_changed), NULL);
 }
 
 
@@ -211,6 +219,7 @@ static void settings_bind_prefs(GSettings *settings)
 	g_settings_bind_with_mapping(settings, "msgwin-tab-pos", ui_lookup_pref_widget("combo_tab_msgwin"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 	g_settings_bind(settings, "notebook-double-click-hides-widgets", ui_lookup_pref_widget("check_double_click_hides_widgets"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "highlighting-inverted", ui_lookup_pref_widget("check_highlighting_invert"), "active", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "use-native-windows-dialogs", ui_lookup_pref_widget("check_native_windows_dialogs"), "active", G_SETTINGS_BIND_DEFAULT);
 }
 
 

@@ -464,7 +464,7 @@ void dialogs_show_open_file(void)
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
+	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
 		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
 	else
 #endif
@@ -674,7 +674,7 @@ gboolean dialogs_show_save_as(void)
 	g_return_val_if_fail(doc, FALSE);
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
+	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
 	{
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), doc);
@@ -880,7 +880,7 @@ void dialogs_show_open_font(void)
 	gchar *font_name;
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
+	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
 	{
 		win32_show_font_dialog();
 		return;
