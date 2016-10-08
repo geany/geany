@@ -1,4 +1,10 @@
 <schemalist>
+	<enum id="org.geany.Settings.PositionType">
+		<value nick="left" value="0"/>
+		<value nick="right" value="1"/>
+		<value nick="top" value="2"/>
+		<value nick="bottom" value="3"/>
+	</enum>
 	<schema id="org.geany.Settings" path="/" gettext-domain="geany">
 		<key name="sidebar-page" type="i">
 			<default>0</default>
@@ -82,6 +88,27 @@
 			<summary>Document tabs visible</summary>
 			<description>
 				Whether or not the document tabs are visible.
+			</description>
+		</key>
+		<key name="editor-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'top'</default>
+			<summary>Editor tab position</summary>
+			<description>
+				The position of the editor notebook tabs.
+			</description>
+		</key>
+		<key name="sidebar-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'top'</default>
+			<summary>Sidebar tab position</summary>
+			<description>
+				The position of the sidebar notebook tabs.
+			</description>
+		</key>
+		<key name="msgwin-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'left'</default>
+			<summary>Message window tab position</summary>
+			<description>
+				The position of the message window notebook tabs.
 			</description>
 		</key>
 	</schema>

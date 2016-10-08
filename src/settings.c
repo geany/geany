@@ -75,6 +75,44 @@ static void on_document_tabs_visible_changed(GSettings *settings, gchar *key, gp
 }
 
 
+static void on_tab_pos_changed(GSettings *settings, gchar *key, gint *pref_field)
+{
+	*pref_field = g_settings_get_enum(settings, key);
+}
+
+
+static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
+{
+	GType enum_type;
+	GEnumClass *enum_class;
+	GEnumValue *enum_value;
+
+	enum_type = GPOINTER_TO_INT(user_data);
+	enum_class = g_type_class_ref(enum_type);
+	enum_value = g_enum_get_value_by_nick(enum_class, g_variant_get_string(variant, NULL));
+	g_type_class_unref(enum_class);
+
+	g_value_set_int(value, enum_value->value);
+
+	return TRUE;
+}
+
+
+static GVariant *map_int_to_enum(const GValue *value, const GVariantType *expected_type, gpointer user_data)
+{
+	GType enum_type;
+	GEnumClass *enum_class;
+	GEnumValue *enum_value;
+
+	enum_type = GPOINTER_TO_INT(user_data);
+	enum_class = g_type_class_ref(enum_type);
+	enum_value = g_enum_get_value(enum_class, g_value_get_int(value));
+	g_type_class_unref(enum_class);
+
+	return g_variant_new_string(enum_value->value_nick);
+}
+
+
 static void settings_bind_main(GSettings *settings)
 {
 	g_settings_bind(settings, "sidebar-page", ui_lookup_main_widget("notebook3"), "page", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
@@ -86,17 +124,26 @@ static void settings_bind_main(GSettings *settings)
 	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("menu_show_messages_window1"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "statusbar-visible", ui_lookup_main_widget("statusbar"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "document-tabs-visible", ui_lookup_main_widget("notebook1"), "show-tabs", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "editor-tab-pos", ui_lookup_main_widget("notebook1"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "sidebar-tab-pos", ui_lookup_main_widget("notebook3"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-tab-pos", ui_lookup_main_widget("notebook_info"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
 
 	interface_prefs.editor_font = g_settings_get_string(geany_settings, "editor-font");
 	interface_prefs.tagbar_font = g_settings_get_string(geany_settings, "symbols-font");
 	interface_prefs.msgwin_font = g_settings_get_string(geany_settings, "msgwin-font");
+	interface_prefs.tab_pos_editor = g_settings_get_enum(settings, "editor-tab-pos");
+	interface_prefs.tab_pos_sidebar = g_settings_get_enum(settings, "sidebar-tab-pos");
+	interface_prefs.tab_pos_msgwin = g_settings_get_enum(settings, "msgwin-tab-pos");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
 	g_signal_connect(settings, "changed::symbols-font", G_CALLBACK(on_symbols_font_changed), NULL);
 	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_msgwin_font_changed), NULL);
 	g_signal_connect(settings, "changed::document-tabs-visible", G_CALLBACK(on_document_tabs_visible_changed), NULL);
+	g_signal_connect(settings, "changed::editor-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_editor);
+	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_sidebar);
+	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_msgwin);
 }
 
 
@@ -111,6 +158,9 @@ static void settings_bind_prefs(GSettings *settings)
 	g_settings_bind(settings, "symbols-font", ui_lookup_pref_widget("tagbar_font"), "font", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "msgwin-font", ui_lookup_pref_widget("msgwin_font"), "font", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "document-tabs-visible", ui_lookup_pref_widget("check_show_notebook_tabs"), "active", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind_with_mapping(settings, "editor-tab-pos", ui_lookup_pref_widget("combo_tab_editor"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
+	g_settings_bind_with_mapping(settings, "sidebar-tab-pos", ui_lookup_pref_widget("combo_tab_sidebar"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
+	g_settings_bind_with_mapping(settings, "msgwin-tab-pos", ui_lookup_pref_widget("combo_tab_msgwin"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 }
 
 

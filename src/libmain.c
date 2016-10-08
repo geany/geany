@@ -180,11 +180,6 @@ static void apply_settings(void)
 
 	ui_update_view_editor_menu_items();
 
-	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
-
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
 #endif

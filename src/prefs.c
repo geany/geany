@@ -479,12 +479,6 @@ static void prefs_init_dialog(void)
 	g_object_bind_property(widget, "active", ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), "sensitive", G_BINDING_SYNC_CREATE);
 	g_object_bind_property(widget, "active", ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), "sensitive", G_BINDING_SYNC_CREATE);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_msgwin);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
-
 
 	/* Toolbar settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
@@ -924,15 +918,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 		file_prefs.show_tab_cross = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
-		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
-		interface_prefs.tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
-		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
 
 		/* Toolbar settings */
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show");
@@ -1246,10 +1231,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		toolbar_apply_settings();
 		toolbar_update_ui();
 		toolbar_show_hide();
-
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < documents_array->len; i++)
