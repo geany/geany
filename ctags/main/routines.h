@@ -102,6 +102,9 @@ extern void *eMalloc (const size_t size);
 extern void *eCalloc (const size_t count, const size_t size);
 extern void *eRealloc (void *const ptr, const size_t size);
 extern void eFree (void *const ptr);
+#ifndef HAVE_STRSTR
+extern char* strstr (const char *str, const char *substr);
+#endif
 extern void toLowerString (char* str);
 extern void toUpperString (char* str);
 extern char* newLowerString (const char* str);
@@ -114,24 +117,13 @@ extern bool doesFileExist (const char *const fileName);
 extern bool isRecursiveLink (const char* const dirName);
 extern bool isSameFile (const char *const name1, const char *const name2);
 extern const char *baseFilename (const char *const filePath);
+extern const char *fileExtension (const char *const fileName);
 extern bool isAbsolutePath (const char *const path);
 extern vString *combinePathAndFile (const char *const path, const char *const file);
 extern char* absoluteFilename (const char *file);
 extern char* absoluteDirname (char *file);
 extern char* relativeFilename (const char *file, const char *dir);
 extern FILE *tempFile (const char *const mode, char **const pName);
-extern void processExcludeOption (const char *const option, const char *const parameter);
-extern const char *fileExtension (const char *const fileName);
 extern char* eStrdup (const char* str);
-
-#ifndef HAVE_STRICMP
-extern int stricmp (const char *s1, const char *s2);
-#endif
-#ifndef HAVE_STRNICMP
-extern int strnicmp (const char *s1, const char *s2, size_t n);
-#endif
-#ifndef HAVE_STRSTR
-extern char* strstr (const char *str, const char *substr);
-#endif
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */

@@ -59,6 +59,8 @@ libctags_la_SOURCES = \
 	main/debug.h \
 	main/entry.c \
 	main/entry.h \
+	main/error.c \
+	main/error.h \
 	main/general.h \
 	main/keyword.c \
 	main/keyword.h \
