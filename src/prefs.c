@@ -464,9 +464,6 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.msgwin_font);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.editor_font);
-
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.long_line_column);
 
@@ -1359,11 +1356,6 @@ static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 			ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
 			break;
 		}
-		case 3:
-		{
-			ui_set_editor_font(fontbtn);
-			break;
-		}
 	}
 }
 
@@ -1755,8 +1747,6 @@ void prefs_show_dialog(void)
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_color_button_choose_cb), NULL);
 		/* file chooser buttons in the tools tab */

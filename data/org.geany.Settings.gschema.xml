@@ -56,5 +56,12 @@
 				Whether or not the main window is fullscreen.
 			</description>
 		</key>
+		<key name="editor-font" type="s">
+			<default>'Monospace 10'</default>
+			<summary>Editor font</summary>
+			<description>
+				The font used in the code editor widget.
+			</description>
+		</key>
 	</schema>
 </schemalist>

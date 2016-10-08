@@ -86,12 +86,10 @@
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
-#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
 #define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
@@ -422,7 +420,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 
 	/* interface */
-	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
 	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
@@ -758,7 +755,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
 	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
@@ -850,6 +846,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
+		gchar *font_name;
 
 #ifdef __APPLE__
 		/* Geany is started using launchd on OS X and we don't get any environment variables
@@ -870,7 +867,9 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
+		font_name = g_settings_get_string(geany_settings, "editor-font");
+		vc->font = utils_get_setting_string(config, "VTE", "font", font_name);
+		g_free(font_name);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);

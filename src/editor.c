@@ -51,6 +51,7 @@
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "support.h"
 #include "symbols.h"
 #include "templates.h"
@@ -4960,6 +4961,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	ScintillaObject *old, *sci;
 	GeanyIndentType old_indent_type = editor->indent_type;
 	gint old_indent_width = editor->indent_width;
+	gchar *font_name;
 
 	/* temporarily change editor to use the new sci widget */
 	old = editor->sci;
@@ -4967,7 +4969,9 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	editor->sci = sci;
 
 	editor_set_indent(editor, iprefs->type, iprefs->width);
-	editor_set_font(editor, interface_prefs.editor_font);
+	font_name = g_settings_get_string(geany_settings, "editor-font");
+	editor_set_font(editor, font_name);
+	g_free(font_name);
 	editor_apply_update_prefs(editor);
 
 	/* if editor already had a widget, restore it */

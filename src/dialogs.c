@@ -36,6 +36,7 @@
 #include "encodingsprivate.h"
 #include "filetypes.h"
 #include "main.h"
+#include "settings.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
@@ -860,7 +861,7 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			fontname = gtk_font_selection_dialog_get_font_name(
 				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
-			ui_set_editor_font(fontname);
+			g_settings_set_string(geany_settings, "editor-font", fontname);
 			g_free(fontname);
 
 			close = (response == GTK_RESPONSE_OK);
@@ -876,6 +877,8 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 /* This shows the font selection dialog to choose a font. */
 void dialogs_show_open_font(void)
 {
+	gchar *font_name;
+
 #ifdef G_OS_WIN32
 	if (interface_prefs.use_native_windows_dialogs)
 	{
@@ -908,8 +911,10 @@ void dialogs_show_open_font(void)
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
+	font_name = g_settings_get_string(geany_settings, "editor-font");
 	gtk_font_selection_dialog_set_font_name(
-		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), interface_prefs.editor_font);
+		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), font_name);
+	g_free(font_name);
 	/* We make sure the dialog is visible. */
 	gtk_window_present(GTK_WINDOW(ui_widgets.open_fontsel));
 }
