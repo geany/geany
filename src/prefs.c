@@ -848,14 +848,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 		gboolean autoclose_brackets[5];
-		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
-
-		if (interface_prefs.highlighting_invert_all != old_invert_all)
-			filetypes_reload();
 
 		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);

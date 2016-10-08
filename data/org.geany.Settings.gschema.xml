@@ -125,5 +125,12 @@
 				Whether or not double-clicking on the editor notebook's tabs hides all additional widgets.
 			</description>
 		</key>
+		<key name="highlighting-inverted" type="b">
+			<default>false</default>
+			<summary>Highlighting inverted</summary>
+			<description>
+				Whether or not the syntax highlighting colours are visually inverted.
+			</description>
+		</key>
 	</schema>
 </schemalist>

@@ -162,9 +162,6 @@ static void init_pref_groups(void)
 		NULL);
 
 	/* editor display */
-	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
-		"highlighting_invert_all", FALSE, "check_highlighting_invert");
-
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
 		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
 
