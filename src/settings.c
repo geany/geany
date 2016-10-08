@@ -68,19 +68,6 @@ static void on_msgwin_font_changed(GSettings *settings, gchar *key, gpointer use
 }
 
 
-static void on_document_tabs_visible_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	interface_prefs.show_notebook_tabs = g_settings_get_boolean(settings, key);
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
-}
-
-
-static void on_tab_pos_changed(GSettings *settings, gchar *key, gint *pref_field)
-{
-	*pref_field = g_settings_get_enum(settings, key);
-}
-
-
 static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar *key, gpointer user_data)
 {
 	gint indent = 0;
@@ -91,12 +78,6 @@ static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar
 }
 
 
-static void on_notebook_double_click_hides_widgets_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	interface_prefs.notebook_double_click_hides_widgets = g_settings_get_boolean(settings, key);
-}
-
-
 static void on_highlighting_inverted_changed(GSettings *settings, gchar *key, gpointer user_data)
 {
 	interface_prefs.highlighting_invert_all = g_settings_get_boolean(settings, key);
@@ -104,15 +85,15 @@ static void on_highlighting_inverted_changed(GSettings *settings, gchar *key, gp
 }
 
 
-static void on_message_window_tab_visible_changed(GSettings *settings, gchar *key, gboolean *pref_field)
+static void on_simple_boolean_legacy_pref_changed(GSettings *settings, gchar *key, gboolean *pref_field)
 {
 	*pref_field = g_settings_get_boolean(settings, key);
 }
 
 
-static void on_use_native_windows_dialogs_changed(GSettings *settings, gchar *key, gpointer user_data)
+static void on_simple_integer_legacy_pref_changed(GSettings *settings, gchar *key, gint *pref_field)
 {
-	interface_prefs.use_native_windows_dialogs = g_settings_get_boolean(settings, key);
+	*pref_field = g_settings_get_int(settings, key);
 }
 
 
@@ -169,9 +150,9 @@ static void settings_bind_main(GSettings *settings)
 	g_settings_bind(settings, "symbols-tree-expanders-visible", ui_lookup_main_widget("treeview2"), "show-expanders", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
 
-	interface_prefs.editor_font = g_settings_get_string(geany_settings, "editor-font");
-	interface_prefs.tagbar_font = g_settings_get_string(geany_settings, "symbols-font");
-	interface_prefs.msgwin_font = g_settings_get_string(geany_settings, "msgwin-font");
+	interface_prefs.editor_font = g_settings_get_string(settings, "editor-font");
+	interface_prefs.tagbar_font = g_settings_get_string(settings, "symbols-font");
+	interface_prefs.msgwin_font = g_settings_get_string(settings, "msgwin-font");
 	interface_prefs.tab_pos_editor = g_settings_get_enum(settings, "editor-tab-pos");
 	interface_prefs.tab_pos_sidebar = g_settings_get_enum(settings, "sidebar-tab-pos");
 	interface_prefs.tab_pos_msgwin = g_settings_get_enum(settings, "msgwin-tab-pos");
@@ -188,18 +169,18 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
 	g_signal_connect(settings, "changed::symbols-font", G_CALLBACK(on_symbols_font_changed), NULL);
 	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_msgwin_font_changed), NULL);
-	g_signal_connect(settings, "changed::document-tabs-visible", G_CALLBACK(on_document_tabs_visible_changed), NULL);
-	g_signal_connect(settings, "changed::editor-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_editor);
-	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_sidebar);
-	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_msgwin);
+	g_signal_connect(settings, "changed::document-tabs-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.show_notebook_tabs);
+	g_signal_connect(settings, "changed::editor-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_editor);
+	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_sidebar);
+	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_simple_integer_legacy_pref_changed), &interface_prefs.tab_pos_msgwin);
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
-	g_signal_connect(settings, "changed::notebook-double-click-hides-widgets", G_CALLBACK(on_notebook_double_click_hides_widgets_changed), NULL);
+	g_signal_connect(settings, "changed::notebook-double-click-hides-widgets", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.notebook_double_click_hides_widgets);
 	g_signal_connect(settings, "changed::highlighting-inverted", G_CALLBACK(on_highlighting_inverted_changed), NULL);
-	g_signal_connect(settings, "changed::msgwin-status-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_status_visible);
-	g_signal_connect(settings, "changed::msgwin-compiler-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_compiler_visible);
-	g_signal_connect(settings, "changed::msgwin-messages-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_messages_visible);
-	g_signal_connect(settings, "changed::msgwin-scribble-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_scribble_visible);
-	g_signal_connect(settings, "changed::use-native-windows-dialogs", G_CALLBACK(on_use_native_windows_dialogs_changed), NULL);
+	g_signal_connect(settings, "changed::msgwin-status-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_status_visible);
+	g_signal_connect(settings, "changed::msgwin-compiler-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_compiler_visible);
+	g_signal_connect(settings, "changed::msgwin-messages-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_messages_visible);
+	g_signal_connect(settings, "changed::msgwin-scribble-visible", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.msgwin_scribble_visible);
+	g_signal_connect(settings, "changed::use-native-windows-dialogs", G_CALLBACK(on_simple_boolean_legacy_pref_changed), &interface_prefs.use_native_windows_dialogs);
 }
 
 
