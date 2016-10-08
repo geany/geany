@@ -93,6 +93,12 @@ static void on_show_line_endings_changed(GSettings *settings, gchar *key, gpoint
 }
 
 
+static void on_show_markers_margin_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	ui_toggle_editor_features(GEANY_EDITOR_SHOW_MARKERS_MARGIN);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -243,6 +249,7 @@ static void settings_bind_main(GSettings *settings)
 		"show-white-space",               "menu_show_white_space1",     "active",         // bind to main menu item's active property
 		"show-indentation-guides",        "menu_show_indentation_guides1", "active",      // bind to main menu item's active property
 		"show-line-endings",              "menu_show_line_endings1",    "active",         // bind to main menu item's active property
+		"show-markers-margin",            "menu_markers_margin1",       "active",         // bind to main menu item's active property
 		NULL);
 
 	settings_bind_many_legacy_fields(settings, TRUE,
@@ -271,6 +278,7 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::show-white-space", G_CALLBACK(on_show_white_space_changed), NULL);
 	g_signal_connect(settings, "changed::show-indentation-guides", G_CALLBACK(on_show_indentation_guides_changed), NULL);
 	g_signal_connect(settings, "changed::show-line-endings", G_CALLBACK(on_show_line_endings_changed), NULL);
+	g_signal_connect(settings, "changed::show-markers-margin", G_CALLBACK(on_show_markers_margin_changed), NULL);
 }
 
 
@@ -292,6 +300,7 @@ static void settings_bind_prefs(GSettings *settings)
 		"show-white-space",                    "check_white_space",                "active",
 		"show-indentation-guides",             "check_indent",                     "active",
 		"show-line-endings",                   "check_line_end",                   "active",
+		"show-markers-margin",                 "check_markers_margin",             "active",
 		NULL);
 
 	g_settings_bind_with_mapping(settings, "editor-tab-pos", ui_lookup_pref_widget("combo_tab_editor"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);

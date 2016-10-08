@@ -7397,7 +7397,6 @@
                             <property name="label" translatable="yes">Show _Markers Margin</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
-                            <signal name="toggled" handler="on_markers_margin1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>

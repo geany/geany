@@ -4906,7 +4906,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	setup_sci_keys(sci);
 
-	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_symbol_margin(sci, g_settings_get_boolean(geany_settings, "show-markers-margin"));
 	sci_set_lines_wrapped(sci, editor->line_wrapping);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/* Y policy is set in editor_apply_update_prefs() */
@@ -5166,7 +5166,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	sci_set_visible_white_spaces(sci, g_settings_get_boolean(geany_settings, "show-white-space"));
 	sci_set_visible_eols(sci, g_settings_get_boolean(geany_settings, "show-line-endings"));
-	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_symbol_margin(sci, g_settings_get_boolean(geany_settings, "show-markers-margin"));
 	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);

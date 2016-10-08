@@ -190,5 +190,12 @@
 				Whether or not to visualize line ending characters.
 			</description>
 		</key>
+		<key name="show-markers-margin" type="b">
+			<default>true</default>
+			<summary>Show markers margin</summary>
+			<description>
+				Whether or not the markers (symbol) margin is visible.
+			</description>
+		</key>
 	</schema>
 </schemalist>
