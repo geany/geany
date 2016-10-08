@@ -118,5 +118,12 @@
 				Whether or not the expanders are visible in the symbols tree view.
 			</description>
 		</key>
+		<key name="notebook-double-click-hides-widgets" type="b">
+			<default>false</default>
+			<summary>Notebook double-click hides widgets</summary>
+			<description>
+				Whether or not double-clicking on the editor notebook's tabs hides all additional widgets.
+			</description>
+		</key>
 	</schema>
 </schemalist>

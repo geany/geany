@@ -91,6 +91,12 @@ static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar
 }
 
 
+static void on_notebook_double_click_hides_widgets_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	interface_prefs.notebook_double_click_hides_widgets = g_settings_get_boolean(settings, key);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -147,6 +153,7 @@ static void settings_bind_main(GSettings *settings)
 	interface_prefs.tab_pos_sidebar = g_settings_get_enum(settings, "sidebar-tab-pos");
 	interface_prefs.tab_pos_msgwin = g_settings_get_enum(settings, "msgwin-tab-pos");
 	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, "symbols-tree-expanders-visible");
+	interface_prefs.notebook_double_click_hides_widgets = g_settings_get_boolean(settings, "notebook-double-click-hides-widgets");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
@@ -157,6 +164,7 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_sidebar);
 	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_msgwin);
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
+	g_signal_connect(settings, "changed::notebook-double-click-hides-widgets", G_CALLBACK(on_notebook_double_click_hides_widgets_changed), NULL);
 }
 
 
@@ -174,6 +182,7 @@ static void settings_bind_prefs(GSettings *settings)
 	g_settings_bind_with_mapping(settings, "editor-tab-pos", ui_lookup_pref_widget("combo_tab_editor"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 	g_settings_bind_with_mapping(settings, "sidebar-tab-pos", ui_lookup_pref_widget("combo_tab_sidebar"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
 	g_settings_bind_with_mapping(settings, "msgwin-tab-pos", ui_lookup_pref_widget("combo_tab_msgwin"), "active", G_SETTINGS_BIND_DEFAULT, map_enum_to_int, map_int_to_enum, GINT_TO_POINTER(GTK_TYPE_POSITION_TYPE), NULL);
+	g_settings_bind(settings, "notebook-double-click-hides-widgets", ui_lookup_pref_widget("check_double_click_hides_widgets"), "active", G_SETTINGS_BIND_DEFAULT);
 }
 
 

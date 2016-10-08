@@ -148,8 +148,6 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
 		"cmdline_new_files", TRUE, "check_cmdline_new_files");
 
-	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
-		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
 	stash_group_add_radio_buttons(group, &interface_prefs.symbols_sort_mode,
