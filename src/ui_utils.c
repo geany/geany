@@ -2261,14 +2261,6 @@ void ui_init_prefs(void)
 		"statusbar_template", _(DEFAULT_STATUSBAR_TEMPLATE));
 	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
 		"new_document_after_close", FALSE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_status_visible,
-		"msgwin_status_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_compiler_visible,
-		"msgwin_compiler_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_messages_visible,
-		"msgwin_messages_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
-		"msgwin_scribble_visible", TRUE);
 }
 
 

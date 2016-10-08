@@ -93,15 +93,6 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data);
 
 
-void msgwin_show_hide_tabs(void)
-{
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_status), interface_prefs.msgwin_status_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_compiler), interface_prefs.msgwin_compiler_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_msg), interface_prefs.msgwin_messages_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.scribble), interface_prefs.msgwin_scribble_visible);
-}
-
-
 /** Sets the Messages path for opening any parsed filenames without absolute path
  * from message lines.
  * @param messages_dir The directory. **/

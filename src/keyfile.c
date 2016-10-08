@@ -1260,8 +1260,6 @@ void configuration_apply_settings(void)
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
-
-	msgwin_show_hide_tabs();
 }
 
 

@@ -48,6 +48,34 @@
 				Whether or not the message window is visible.
 			</description>
 		</key>
+		<key name="msgwin-status-visible" type="b">
+			<default>true</default>
+			<summary>Status visible</summary>
+			<description>
+				Whether or not the Status tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-compiler-visible" type="b">
+			<default>true</default>
+			<summary>Compiler visible</summary>
+			<description>
+				Whether or not the Compiler tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-messages-visible" type="b">
+			<default>true</default>
+			<summary>Messages visible</summary>
+			<description>
+				Whether or not the Messages tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-scribble-visible" type="b">
+			<default>true</default>
+			<summary>Scribble visible</summary>
+			<description>
+				Whether or not the Scribble tab is visible in the message window.
+			</description>
+		</key>
 		<key name="statusbar-visible" type="b">
 			<default>true</default>
 			<summary>Statusbar visible</summary>

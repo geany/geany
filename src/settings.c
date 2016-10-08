@@ -104,6 +104,12 @@ static void on_highlighting_inverted_changed(GSettings *settings, gchar *key, gp
 }
 
 
+static void on_message_window_tab_visible_changed(GSettings *settings, gchar *key, gboolean *pref_field)
+{
+	*pref_field = g_settings_get_boolean(settings, key);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -145,6 +151,10 @@ static void settings_bind_main(GSettings *settings)
 	g_settings_bind(settings, "sidebar-symbols-visible", ui_lookup_main_widget("scrolledwindow2"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("notebook_info"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("menu_show_messages_window1"), "active", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-status-visible", ui_lookup_main_widget("scrolledwindow4"), "visible", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-compiler-visible", ui_lookup_main_widget("scrolledwindow3"), "visible", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-messages-visible", ui_lookup_main_widget("scrolledwindow5"), "visible", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-scribble-visible", ui_lookup_main_widget("scrolledwindow6"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "statusbar-visible", ui_lookup_main_widget("statusbar"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "document-tabs-visible", ui_lookup_main_widget("notebook1"), "show-tabs", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "editor-tab-pos", ui_lookup_main_widget("notebook1"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
@@ -162,6 +172,10 @@ static void settings_bind_main(GSettings *settings)
 	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, "symbols-tree-expanders-visible");
 	interface_prefs.notebook_double_click_hides_widgets = g_settings_get_boolean(settings, "notebook-double-click-hides-widgets");
 	interface_prefs.highlighting_invert_all = g_settings_get_boolean(settings, "highlighting-inverted");
+	interface_prefs.msgwin_status_visible = g_settings_get_boolean(settings, "msgwin-status-visible");
+	interface_prefs.msgwin_compiler_visible = g_settings_get_boolean(settings, "msgwin-compiler-visible");
+	interface_prefs.msgwin_messages_visible = g_settings_get_boolean(settings, "msgwin-messages-visible");
+	interface_prefs.msgwin_scribble_visible = g_settings_get_boolean(settings, "msgwin-scribble-visible");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
@@ -174,6 +188,10 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
 	g_signal_connect(settings, "changed::notebook-double-click-hides-widgets", G_CALLBACK(on_notebook_double_click_hides_widgets_changed), NULL);
 	g_signal_connect(settings, "changed::highlighting-inverted", G_CALLBACK(on_highlighting_inverted_changed), NULL);
+	g_signal_connect(settings, "changed::msgwin-status-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_status_visible);
+	g_signal_connect(settings, "changed::msgwin-compiler-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_compiler_visible);
+	g_signal_connect(settings, "changed::msgwin-messages-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_messages_visible);
+	g_signal_connect(settings, "changed::msgwin-scribble-visible", G_CALLBACK(on_message_window_tab_visible_changed), &interface_prefs.msgwin_scribble_visible);
 }
 
 
