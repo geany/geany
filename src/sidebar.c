@@ -112,6 +112,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
+	gchar *font_name;
 
 	text_renderer = gtk_cell_renderer_text_new();
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
@@ -129,7 +130,9 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	ui_widget_modify_font_from_string(tree, interface_prefs.tagbar_font);
+	font_name = g_settings_get_string(geany_settings, "symbols-font");
+	ui_widget_modify_font_from_string(tree, font_name);
+	g_free(font_name);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
@@ -282,6 +285,7 @@ static void prepare_openfiles(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 	GtkTreeSortable *sortable;
+	gchar *font_name;
 
 	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
 
@@ -318,7 +322,9 @@ static void prepare_openfiles(void)
 	gtk_tree_sortable_set_sort_func(sortable, DOCUMENTS_SHORTNAME, documents_sort_func, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id(sortable, DOCUMENTS_SHORTNAME, GTK_SORT_ASCENDING);
 
-	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
+	font_name = g_settings_get_string(geany_settings, "symbols-font");
+	ui_widget_modify_font_from_string(tv.tree_openfiles, font_name);
+	g_free(font_name);
 
 	/* tooltips */
 	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);

@@ -84,11 +84,9 @@
 #endif
 #ifdef __APPLE__
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
 #else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
 #define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
@@ -420,7 +418,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 
 	/* interface */
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
 	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
 	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
@@ -755,7 +752,6 @@ static void load_dialog_prefs(GKeyFile *config)
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
 	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
 	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
 	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 

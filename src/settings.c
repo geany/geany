@@ -49,6 +49,14 @@ static void on_editor_font_changed(GSettings *settings, gchar *key, gpointer use
 }
 
 
+static void on_symbols_font_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	g_free(interface_prefs.tagbar_font);
+	interface_prefs.tagbar_font = g_settings_get_string(settings, key);
+	ui_set_symbols_font(interface_prefs.tagbar_font);
+}
+
+
 #define ui_lookup_main_widget(name) ui_lookup_widget(main_widgets.window, name)
 #define ui_lookup_pref_widget(name) ui_lookup_widget(ui_widgets.prefs_dialog, name)
 
@@ -65,7 +73,11 @@ static void settings_bind(void)
 	g_settings_bind(geany_settings, "statusbar-visible", ui_lookup_main_widget("statusbar"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(geany_settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
 
+	interface_prefs.editor_font = g_settings_get_string(geany_settings, "editor-font");
+	interface_prefs.tagbar_font = g_settings_get_string(geany_settings, "symbols-font");
+
 	g_signal_connect(geany_settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
+	g_signal_connect(geany_settings, "changed::symbols-font", G_CALLBACK(on_symbols_font_changed), NULL);
 }
 
 
@@ -77,6 +89,7 @@ static void settings_bind_prefs(GSettings *settings)
 	g_settings_bind(settings, "sidebar-pos-left", ui_lookup_pref_widget("radio_sidebar_left"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "statusbar-visible", ui_lookup_pref_widget("check_statusbar_visible"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "editor-font", ui_lookup_pref_widget("editor_font"), "font", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "symbols-font", ui_lookup_pref_widget("tagbar_font"), "font", G_SETTINGS_BIND_DEFAULT);
 
 	g_signal_connect(geany_settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 }

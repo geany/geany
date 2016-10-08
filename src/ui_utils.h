@@ -279,6 +279,8 @@ void ui_set_window_title(GeanyDocument *doc);
 
 void ui_set_editor_font(const gchar *font_name);
 
+void ui_set_symbols_font(const gchar *font_name);
+
 
 void ui_update_popup_reundo_items(GeanyDocument *doc);
 

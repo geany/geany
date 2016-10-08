@@ -458,9 +458,6 @@ static void prefs_init_dialog(void)
 		ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"),
 		"sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
-
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
 	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.msgwin_font);
 
@@ -1322,29 +1319,9 @@ static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data
 static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
 {
 	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
-	guint i;
 
 	switch (GPOINTER_TO_INT(user_data))
 	{
-		case 1:
-		{
-			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0)
-				break;
-
-			SETPTR(interface_prefs.tagbar_font, g_strdup(fontbtn));
-			for (i = 0; i < documents_array->len; i++)
-			{
-				GeanyDocument *doc = documents[i];
-
-				if (documents[i]->is_valid && GTK_IS_WIDGET(doc->priv->tag_tree))
-					ui_widget_modify_font_from_string(doc->priv->tag_tree,
-						interface_prefs.tagbar_font);
-			}
-			if (GTK_IS_WIDGET(tv.default_tag_tree))
-				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
-			ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
-			break;
-		}
 		case 2:
 		{
 			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
@@ -1743,8 +1720,6 @@ void prefs_show_dialog(void)
 		g_signal_connect(ui_widgets.prefs_dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
 				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),

@@ -432,6 +432,24 @@ void ui_set_editor_font(const gchar *font_name)
 }
 
 
+void ui_set_symbols_font(const gchar *font_name)
+{
+	guint i;
+
+	g_return_if_fail(font_name != NULL);
+
+	foreach_document(i)
+	{
+		GeanyDocument *doc = documents[i];
+		if (GTK_IS_WIDGET(doc->priv->tag_tree))
+			ui_widget_modify_font_from_string(doc->priv->tag_tree, font_name);
+	}
+	if (GTK_IS_WIDGET(tv.default_tag_tree))
+		ui_widget_modify_font_from_string(tv.default_tag_tree, font_name);
+	ui_widget_modify_font_from_string(tv.tree_openfiles, font_name);
+}
+
+
 void ui_update_popup_reundo_items(GeanyDocument *doc)
 {
 	gboolean enable_undo;
@@ -1839,6 +1857,8 @@ GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
+
+	g_return_if_fail(str != NULL);
 
 	pfd = pango_font_description_from_string(str);
 	gtk_widget_modify_font(widget, pfd);

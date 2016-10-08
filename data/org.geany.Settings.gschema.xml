@@ -63,5 +63,12 @@
 				The font used in the code editor widget.
 			</description>
 		</key>
+		<key name="symbols-font" type="s">
+			<default>'Sans 9'</default>
+			<summary>Symbols font</summary>
+			<description>
+				The font used in the sidebar symbols tab.
+			</description>
+		</key>
 	</schema>
 </schemalist>
