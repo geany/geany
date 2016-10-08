@@ -70,5 +70,19 @@
 				The font used in the sidebar symbols tab.
 			</description>
 		</key>
+		<key name="msgwin-font" type="s">
+			<default>'Monospace 9'</default>
+			<summary>Message window font</summary>
+			<description>
+				The font used in the message window tabs.
+			</description>
+		</key>
+		<key name="document-tabs-visible" type="b">
+			<default>true</default>
+			<summary>Document tabs visible</summary>
+			<description>
+				Whether or not the document tabs are visible.
+			</description>
+		</key>
 	</schema>
 </schemalist>

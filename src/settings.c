@@ -60,6 +60,21 @@ static void on_symbols_font_changed(GSettings *settings, gchar *key, gpointer us
 }
 
 
+static void on_msgwin_font_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	g_free(interface_prefs.msgwin_font);
+	interface_prefs.msgwin_font = g_settings_get_string(settings, key);
+	ui_set_msgwin_font(interface_prefs.msgwin_font);
+}
+
+
+static void on_document_tabs_visible_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	interface_prefs.show_notebook_tabs = g_settings_get_boolean(settings, key);
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+}
+
+
 static void settings_bind_main(GSettings *settings)
 {
 	g_settings_bind(settings, "sidebar-page", ui_lookup_main_widget("notebook3"), "page", G_SETTINGS_BIND_DEFAULT | G_SETTINGS_BIND_GET_NO_CHANGES);
@@ -70,14 +85,18 @@ static void settings_bind_main(GSettings *settings)
 	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("notebook_info"), "visible", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "msgwin-visible", ui_lookup_main_widget("menu_show_messages_window1"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "statusbar-visible", ui_lookup_main_widget("statusbar"), "visible", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "document-tabs-visible", ui_lookup_main_widget("notebook1"), "show-tabs", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
 
 	interface_prefs.editor_font = g_settings_get_string(geany_settings, "editor-font");
 	interface_prefs.tagbar_font = g_settings_get_string(geany_settings, "symbols-font");
+	interface_prefs.msgwin_font = g_settings_get_string(geany_settings, "msgwin-font");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
 	g_signal_connect(settings, "changed::symbols-font", G_CALLBACK(on_symbols_font_changed), NULL);
+	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_msgwin_font_changed), NULL);
+	g_signal_connect(settings, "changed::document-tabs-visible", G_CALLBACK(on_document_tabs_visible_changed), NULL);
 }
 
 
@@ -90,6 +109,8 @@ static void settings_bind_prefs(GSettings *settings)
 	g_settings_bind(settings, "statusbar-visible", ui_lookup_pref_widget("check_statusbar_visible"), "active", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "editor-font", ui_lookup_pref_widget("editor_font"), "font", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "symbols-font", ui_lookup_pref_widget("tagbar_font"), "font", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "msgwin-font", ui_lookup_pref_widget("msgwin_font"), "font", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "document-tabs-visible", ui_lookup_pref_widget("check_show_notebook_tabs"), "active", G_SETTINGS_BIND_DEFAULT);
 }
 
 

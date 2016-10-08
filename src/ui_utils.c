@@ -450,6 +450,15 @@ void ui_set_symbols_font(const gchar *font_name)
 }
 
 
+void ui_set_msgwin_font(const gchar *font_name)
+{
+	ui_widget_modify_font_from_string(msgwindow.tree_compiler, font_name);
+	ui_widget_modify_font_from_string(msgwindow.tree_msg, font_name);
+	ui_widget_modify_font_from_string(msgwindow.tree_status, font_name);
+	ui_widget_modify_font_from_string(msgwindow.scribble, font_name);
+}
+
+
 void ui_update_popup_reundo_items(GeanyDocument *doc)
 {
 	gboolean enable_undo;

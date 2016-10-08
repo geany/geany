@@ -1511,7 +1511,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 	if (G_UNLIKELY(hide_all == -1))
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! interface_prefs.show_notebook_tabs &&
+			! g_settings_get_boolean(geany_settings, "document-tabs-visible") &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -1527,8 +1527,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		interface_prefs.show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+		g_settings_set_boolean(geany_settings, "document-tabs-visible", FALSE);
 
 		g_settings_set_boolean(geany_settings, "statusbar-visible", FALSE);
 
@@ -1541,8 +1540,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		interface_prefs.show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
+		g_settings_set_boolean(geany_settings, "document-tabs-visible", TRUE);
 
 		g_settings_set_boolean(geany_settings, "statusbar-visible", TRUE);
 

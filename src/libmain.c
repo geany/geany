@@ -185,9 +185,6 @@ static void apply_settings(void)
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
-	/* whether to show notebook tabs or not */
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
-
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
 #endif
