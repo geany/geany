@@ -7424,7 +7424,6 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Show Line _Endings</property>
                             <property name="use_underline">True</property>
-                            <signal name="toggled" handler="on_menu_show_line_endings1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>

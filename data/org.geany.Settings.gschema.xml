@@ -183,5 +183,12 @@
 				Whether or not to show indentation guides.
 			</description>
 		</key>
+		<key name="show-line-endings" type="b">
+			<default>false</default>
+			<summary>Show line endings</summary>
+			<description>
+				Whether or not to visualize line ending characters.
+			</description>
+		</key>
 	</schema>
 </schemalist>

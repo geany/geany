@@ -1413,7 +1413,8 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 					g_settings_get_boolean(geany_settings, "show-white-space"));
 				break;
 			case GEANY_EDITOR_SHOW_LINE_ENDINGS:
-				sci_set_visible_eols(doc->editor->sci, editor_prefs.show_line_endings);
+				sci_set_visible_eols(doc->editor->sci,
+					g_settings_get_boolean(geany_settings, "show-line-endings"));
 				break;
 			case GEANY_EDITOR_SHOW_INDENTATION_GUIDES:
 				editor_set_indentation_guides(doc->editor);
@@ -1428,7 +1429,6 @@ void ui_update_view_editor_menu_items(void)
 	ignore_callback = TRUE;
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
 	ignore_callback = FALSE;
 }
 

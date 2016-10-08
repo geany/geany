@@ -676,16 +676,6 @@ static void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpoin
 }
 
 
-static void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_line_endings = ! editor_prefs.show_line_endings;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_ENDINGS);
-}
-
-
 void on_line_wrapping1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (! ignore_callback)
