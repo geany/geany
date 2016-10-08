@@ -142,9 +142,6 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(tree, "key-press-event",
 		G_CALLBACK(sidebar_key_press_cb), NULL);
 
-	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), interface_prefs.show_symbol_list_expanders);
-	if (! interface_prefs.show_symbol_list_expanders)
-		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 	/* Tooltips */
 	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
 

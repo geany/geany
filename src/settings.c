@@ -81,6 +81,16 @@ static void on_tab_pos_changed(GSettings *settings, gchar *key, gint *pref_field
 }
 
 
+static void on_symbols_tree_expanders_visible_changed(GSettings *settings, gchar *key, gpointer user_data)
+{
+	gint indent = 0;
+	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, key);
+	if (interface_prefs.show_symbol_list_expanders)
+		indent = 10;
+	gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(ui_lookup_main_widget("treeview2")), indent);
+}
+
+
 static gboolean map_enum_to_int(GValue *value, GVariant *variant, gpointer user_data)
 {
 	GType enum_type;
@@ -127,6 +137,7 @@ static void settings_bind_main(GSettings *settings)
 	g_settings_bind(settings, "editor-tab-pos", ui_lookup_main_widget("notebook1"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "sidebar-tab-pos", ui_lookup_main_widget("notebook3"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "msgwin-tab-pos", ui_lookup_main_widget("notebook_info"), "tab-pos", G_SETTINGS_BIND_DEFAULT);
+	g_settings_bind(settings, "symbols-tree-expanders-visible", ui_lookup_main_widget("treeview2"), "show-expanders", G_SETTINGS_BIND_DEFAULT);
 	g_settings_bind(settings, "fullscreen", ui_lookup_main_widget("menu_fullscreen1"), "active", G_SETTINGS_BIND_DEFAULT);
 
 	interface_prefs.editor_font = g_settings_get_string(geany_settings, "editor-font");
@@ -135,6 +146,7 @@ static void settings_bind_main(GSettings *settings)
 	interface_prefs.tab_pos_editor = g_settings_get_enum(settings, "editor-tab-pos");
 	interface_prefs.tab_pos_sidebar = g_settings_get_enum(settings, "sidebar-tab-pos");
 	interface_prefs.tab_pos_msgwin = g_settings_get_enum(settings, "msgwin-tab-pos");
+	interface_prefs.show_symbol_list_expanders = g_settings_get_boolean(settings, "symbols-tree-expanders-visible");
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
 	g_signal_connect(settings, "changed::editor-font", G_CALLBACK(on_editor_font_changed), NULL);
@@ -144,6 +156,7 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::editor-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_editor);
 	g_signal_connect(settings, "changed::sidebar-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_sidebar);
 	g_signal_connect(settings, "changed::msgwin-tab-pos", G_CALLBACK(on_tab_pos_changed), &interface_prefs.tab_pos_msgwin);
+	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
 }
 
 

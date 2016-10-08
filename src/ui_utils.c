@@ -2253,8 +2253,6 @@ void ui_init_prefs(void)
 	/* various prefs */
 	configuration_add_various_pref_group(group);
 
-	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
-		"show_symbol_list_expanders", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.compiler_tab_autoscroll,
 		"compiler_tab_autoscroll", TRUE);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,

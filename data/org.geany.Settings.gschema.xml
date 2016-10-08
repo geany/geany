@@ -111,5 +111,12 @@
 				The position of the message window notebook tabs.
 			</description>
 		</key>
+		<key name="symbols-tree-expanders-visible" type="b">
+			<default>true</default>
+			<summary>Symbols tree expanders visible</summary>
+			<description>
+				Whether or not the expanders are visible in the symbols tree view.
+			</description>
+		</key>
 	</schema>
 </schemalist>
