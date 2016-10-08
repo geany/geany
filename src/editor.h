@@ -98,7 +98,7 @@ GeanyIndentPrefs;
 typedef struct GeanyEditorPrefs
 {
 	GeanyIndentPrefs *indentation;	/* Default indentation prefs. Use editor_get_indent_prefs(). */
-	gboolean	show_white_space;
+	gboolean	unused_1;
 	gboolean	show_indent_guide;
 	gboolean	show_line_endings;
 	/* 0 - line, 1 - background, 2 - disabled. */

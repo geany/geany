@@ -7416,7 +7416,6 @@
                             <property name="can_focus">False</property>
                             <property name="label" translatable="yes">Show White S_pace</property>
                             <property name="use_underline">True</property>
-                            <signal name="toggled" handler="on_menu_show_white_space1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>

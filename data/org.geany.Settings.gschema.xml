@@ -6,6 +6,7 @@
 		<value nick="bottom" value="3"/>
 	</enum>
 	<schema id="org.geany.Settings" path="/" gettext-domain="geany">
+		<!-- Interface Settings -->
 		<key name="sidebar-page" type="i">
 			<default>0</default>
 			<summary>Sidebar page</summary>
@@ -165,6 +166,14 @@
 			<summary>Use native windows dialog</summary>
 			<description>
 				Whether or not to use native Win32 API dialogs on Windows.
+			</description>
+		</key>
+		<!-- Editor Settngs -->
+		<key name="show-white-space" type="b">
+			<default>false</default>
+			<summary>Show white-space</summary>
+			<description>
+				Whether or not to visualize white-space.
 			</description>
 		</key>
 	</schema>

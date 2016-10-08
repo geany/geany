@@ -676,16 +676,6 @@ static void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpoin
 }
 
 
-static void on_menu_show_white_space1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_white_space = ! editor_prefs.show_white_space;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_WHITE_SPACE);
-}
-
-
 static void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
 	if (ignore_callback)
