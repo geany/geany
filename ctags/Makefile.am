@@ -63,16 +63,25 @@ libctags_la_SOURCES = \
 	main/entry.h \
 	main/error.c \
 	main/error.h \
+	main/field.c \
+	main/field.h \
+	main/flags.c \
+	main/flags.h \
+	main/fmt.c \
+	main/fmt.h \
 	main/gcc-attr.h \
 	main/geany.c \
 	main/geany.h \
 	main/general.h \
+	main/htable.c \
+	main/htable.h \
 	main/keyword.c \
 	main/keyword.h \
 	main/kind.h \
 	main/lcpp.c \
 	main/lcpp.h \
 	main/lregex.c \
+	main/lxcmd.c \
 	main/main.c \
 	main/main.h \
 	main/mio.c \
@@ -81,9 +90,18 @@ libctags_la_SOURCES = \
 	main/nestlevel.h \
 	main/options.c \
 	main/options.h \
+	main/output-ctags.c \
+	main/output-etags.c \
+	main/output-json.c \
+	main/output-xref.c \
+	main/output.h \
 	main/parse.c \
 	main/parse.h \
 	main/parsers.h \
+	main/pcoproc.c \
+	main/pcoproc.h \
+	main/ptag.c \
+	main/ptag.h \
 	main/ptrarray.c \
 	main/ptrarray.h \
 	main/read.c \

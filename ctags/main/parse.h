@@ -55,7 +55,7 @@ typedef struct {
 	const int id;
 } keywordTable;
 
-typedef struct {
+struct sParserDefinition {
 	/* defined by parser */
 	char* name;                    /* name of language */
 	kindOption* kinds;             /* tag kinds handled by parser */
@@ -81,7 +81,7 @@ typedef struct {
 	unsigned int initialized:1;    /* initialize() is called or not */
 	unsigned int tagRegexInstalled:1; /* tagRegexTable is installed or not. */
 	unsigned int keywordInstalled:1;  /* keywordTable is installed or not. */
-} parserDefinition;
+};
 
 typedef parserDefinition* (parserDefinitionFunc) (void);
 
@@ -91,6 +91,12 @@ typedef struct {
 } regexMatch;
 
 typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsigned int count);
+
+typedef enum {
+	LMAP_PATTERN   = 1 << 0,
+	LMAP_EXTENSION = 1 << 1,
+	LMAP_ALL       = LMAP_PATTERN | LMAP_EXTENSION,
+} langmapType;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -105,7 +111,6 @@ extern parserDefinition** LanguageTable;
 extern unsigned int LanguageCount;
 /* Legacy interface */
 extern bool includingDefineTags (void);
-extern void processLegacyKindOption (const char *const parameter);
 
 /* Language processing and parsing */
 extern void makeSimpleTag (const vString* const name, kindOption* const kinds, const int kind);
@@ -114,7 +119,7 @@ extern parserDefinition* parserNew (const char* name);
 extern parserDefinition* parserNewFull (const char* name, char fileKind);
 extern const char *getLanguageName (const langType language);
 extern kindOption* getLanguageFileKind (const langType language);
-extern langType getNamedLanguage (const char *const name);
+extern langType getNamedLanguage (const char *const name, size_t len);
 extern langType getFileLanguage (const char *const fileName);
 extern void installLanguageMapDefault (const langType language);
 extern void installLanguageMapDefaults (void);
@@ -125,6 +130,7 @@ extern void printLanguageMap (const langType language);
 extern void enableLanguages (const bool state);
 extern void enableLanguage (const langType language, const bool state);
 extern void initializeParsing (void);
+extern void initializeParser (langType language);
 extern void freeParserResources (void);
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processKindOption (const char *const option, const char *const parameter);
@@ -146,7 +152,7 @@ extern bool enableRegexKind (const langType language, const int kind, const bool
 extern void printRegexKindOptions (const langType language);
 extern void printRegexKinds (const langType language, bool indent);
 extern void freeRegexResources (void);
-extern void checkRegex (void);
+extern bool checkRegex (void);
 
 
 /* Extra stuff for Tag Manager */

@@ -592,7 +592,7 @@ extern bool processRegexOption (const char *const option,
 	if (dash != NULL  &&  strncmp (option, "regex", dash - option) == 0)
 	{
 		langType language;
-		language = getNamedLanguage (dash + 1);
+		language = getNamedLanguage (dash + 1, 0);
 		if (language == LANG_IGNORE)
 			printf ("regex: unknown language \"%s\" in --%s option\n", (dash + 1), option);
 		else
@@ -658,7 +658,8 @@ extern void freeRegexResources (void)
 }
 
 /* Check for broken regcomp() on Cygwin */
-extern void checkRegex (void)
+extern bool checkRegex (void)
 {
 	/* not needed now we have GRegex */
+	return true;
 }

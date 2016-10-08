@@ -15,6 +15,7 @@
 #include "general.h"  /* must always come first */
 #include "types.h"
 
+#include "field.h"
 #include "mio.h"
 #include "vstring.h"
 #include "kind.h"
@@ -24,9 +25,15 @@
 */
 #define WHOLE_FILE  -1L
 
+#define NO_PARSER_FIELD -1
+
 /*
 *   DATA DECLARATIONS
 */
+typedef struct sTagField {
+	fieldType  ftype;
+	const char* value;
+} tagField;
 
 /*  Maintains the state of the tag file.
  */
@@ -36,11 +43,11 @@ typedef struct eTagFile {
 	MIO *mio;
 	struct sNumTags { unsigned long added, prev; } numTags;
 	struct sMax { size_t line, tag, file; } max;
-	struct sEtags {
+/*	struct sEtags {
 		char *name;
 		MIO *mio;
 		size_t byteCount;
-	} etags;
+	} etags;*/
 	vString *vLine;
 } tagFile;
 
@@ -91,8 +98,6 @@ extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size);
 extern void copyFile (const char *const from, const char *const to, const long size);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
-extern void beginEtagsFile (void);
-extern void endEtagsFile (const char *const name);
 extern void makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
 

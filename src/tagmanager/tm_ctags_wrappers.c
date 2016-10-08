@@ -113,7 +113,7 @@ const gchar *tm_ctags_get_lang_name(TMParserType lang)
 
 TMParserType tm_ctags_get_named_lang(const gchar *name)
 {
-	return getNamedLanguage(name);
+	return getNamedLanguage(name, 0);
 }
 
 

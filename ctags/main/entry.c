@@ -43,6 +43,7 @@
 #include "sort.h"
 #include "strlist.h"
 #include "routines.h"
+#include "output.h"
 
 /*
 *   MACROS
@@ -77,7 +78,7 @@ tagFile TagFile = {
 	NULL,               /* file pointer */
 	{ 0, 0 },           /* numTags */
 	{ 0, 0, 0 },        /* max */
-	{ NULL, NULL, 0 },  /* etags */
+/*	{ NULL, NULL, 0 },*/  /* etags */
 	NULL                /* vLine */
 };
 
@@ -112,6 +113,12 @@ extern const char *tagFileName (void)
 /*
 *   Pseudo tag support
 */
+
+extern void abort_if_ferror(MIO *const mio)
+{
+	if (mio_error (mio))
+		error (FATAL | PERROR, "cannot write tag file");
+}
 
 static void rememberMaxLengths (const size_t nameLength, const size_t lineLength)
 {
@@ -409,4 +416,9 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name, const k
 	e->sourceFileName   = getSourceFileTagPath ();
 	e->name             = name;
 	e->kind             = kind;
+}
+
+extern void setTagWriter (tagWriter *t)
+{
+/*	writer = t; */
 }

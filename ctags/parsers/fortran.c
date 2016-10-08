@@ -475,7 +475,7 @@ static bool includeTag (const tagType type)
 	Assert (type > TAG_UNDEFINED && type < TAG_COUNT);
 	include = FortranKinds [(int) type].enabled;
 	if (include && isFileScope (type))
-		include = Option.include.fileScope;
+		include = isXtagEnabled(XTAG_FILE_SCOPE);
 	return include;
 }
 

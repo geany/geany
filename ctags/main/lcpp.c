@@ -23,6 +23,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "routines.h"
+#include "xtag.h"
 
 /*
 *   MACROS
@@ -309,7 +310,7 @@ static void makeDefineTag (const char *const name, bool parameterized)
 	const bool isFileScope = (bool) (! isInputHeaderFile ());
 
 	if (includingDefineTags () &&
-		(! isFileScope  ||  Option.include.fileScope))
+		(! isFileScope  ||  isXtagEnabled(XTAG_FILE_SCOPE)))
 	{
 		tagEntryInfo e;
 

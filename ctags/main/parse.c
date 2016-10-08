@@ -26,6 +26,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "routines.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS
@@ -108,16 +109,32 @@ extern kindOption* getLanguageFileKind (const langType language)
 	return kind;
 }
 
-extern langType getNamedLanguage (const char *const name)
+extern langType getNamedLanguage (const char *const name, size_t len)
 {
 	langType result = LANG_IGNORE;
 	unsigned int i;
 	Assert (name != NULL);
+
 	for (i = 0  ;  i < LanguageCount  &&  result == LANG_IGNORE  ;  ++i)
 	{
-		if (LanguageTable [i]->name != NULL)
-			if (strcasecmp (name, LanguageTable [i]->name) == 0)
-				result = i;
+		const parserDefinition* const lang = LanguageTable [i];
+		if (lang->name != NULL)
+		{
+			if (len == 0)
+			{
+				if (strcasecmp (name, lang->name) == 0)
+					result = i;
+			}
+			else
+			{
+				vString* vstr = vStringNewInit (name);
+				vStringTruncate (vstr, len);
+
+				if (strcasecmp (vStringValue (vstr), lang->name) == 0)
+					result = i;
+				vStringDelete (vstr);
+			}
+		}
 	}
 	return result;
 }
@@ -314,6 +331,18 @@ static void initializeParserOne (langType lang)
 	}
 }
 
+extern void initializeParser (langType lang)
+{
+	if (lang == LANG_AUTO)
+	{
+		int i;
+		for (i = 0; i < LanguageCount; i++)
+			initializeParserOne (i);
+	}
+	else
+		initializeParserOne (lang);
+}
+
 static void initializeParsers (void)
 {
 	int i;
@@ -384,7 +413,7 @@ extern void processLanguageDefineOption (const char *const option,
 {
 	if (parameter [0] == '\0')
 		error (WARNING, "No language specified for \"%s\" option", option);
-	else if (getNamedLanguage (parameter) != LANG_IGNORE)
+	else if (getNamedLanguage (parameter, 0) != LANG_IGNORE)
 		error (WARNING, "Language \"%s\" already defined", parameter);
 	else
 	{
@@ -412,47 +441,6 @@ static kindOption *langKindOption (const langType language, const int flag)
 		if (lang->kinds [i].letter == flag)
 			result = &lang->kinds [i];
 	return result;
-}
-
-extern void processLegacyKindOption (const char *const parameter)
-{
-	const langType lang = getNamedLanguage ("c");
-	bool clear = false;
-	const char* p = parameter;
-	bool mode = true;
-	int c;
-
-	error (WARNING, "-i option is deprecated; use --c-types option instead");
-	if (*p == '=')
-	{
-		clear = true;
-		++p;
-	}
-	if (clear  &&  *p != '+'  &&  *p != '-')
-	{
-		unsigned int i;
-		for (i = 0  ;  i < LanguageTable [lang]->kindCount  ;  ++i)
-			LanguageTable [lang]->kinds [i].enabled = false;
-		Option.include.fileNames= false;
-		Option.include.fileScope= false;
-	}
-	while ((c = *p++) != '\0') switch (c)
-	{
-		case '+': mode = true;  break;
-		case '-': mode = false; break;
-
-		case 'F': Option.include.fileNames = mode; break;
-		case 'S': Option.include.fileScope = mode; break;
-
-		default:
-		{
-			kindOption* const opt = langKindOption (lang, c);
-			if (opt != NULL)
-				opt->enabled = mode;
-			else
-				error (WARNING, "Unsupported parameter '%c' for -i option", c);
-		} break;
-	}
 }
 
 static void disableLanguageKinds (const langType language)
@@ -521,7 +509,7 @@ extern bool processKindOption (const char *const option,
 		langType language;
 		vString* langName = vStringNew ();
 		vStringNCopyS (langName, option, dash - option);
-		language = getNamedLanguage (vStringValue (langName));
+		language = getNamedLanguage (vStringValue (langName), 0);
 		if (language == LANG_IGNORE)
 			error (WARNING, "Unknown language specified in \"%s\" option", option);
 		else
@@ -582,7 +570,7 @@ extern void printKindOptions (void)
 
 static void makeFileTag (const char *const fileName)
 {
-	if (Option.include.fileNames)
+	if (isXtagEnabled(XTAG_FILE_NAMES))
 	{
 		tagEntryInfo tag;
 		initTagEntry (&tag, baseFilename (fileName), getInputLanguageFileKind ());
@@ -692,4 +680,17 @@ extern void installKeywordTable (const langType language)
 				    lang->keywordTable [i].id);
 		lang->keywordInstalled = true;
 	}
+}
+
+extern bool processAliasOption (
+		const char *const option, const char *const parameter)
+{
+	langType language;
+
+	language = getLanguageComponentInOption (option, "alias-");
+	if (language == LANG_IGNORE)
+		return false;
+
+/*	processLangAliasOption (language, parameter); */
+	return true;
 }
