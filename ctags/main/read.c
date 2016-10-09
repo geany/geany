@@ -23,6 +23,16 @@
 #include "main.h"
 #include "routines.h"
 #include "options.h"
+#ifdef HAVE_ICONV
+# include "mbcs.h"
+#endif
+
+#include <ctype.h>
+#include <stddef.h>
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
+#endif
+#include <regex.h>
 
 /*
 *   DATA DEFINITIONS
@@ -34,6 +44,36 @@ static MIOPos StartOfLine;      /* holds deferred position of start of line */
 /*
 *   FUNCTION DEFINITIONS
 */
+
+extern unsigned long getInputLineNumber (void)
+{
+	return File.input.lineNumber;
+}
+
+extern int getInputLineOffset (void)
+{
+	unsigned char *base = (unsigned char *) vStringValue (File.line);
+	int ret = File.currentLine - base - File.ungetchIdx;
+	return ret >= 0 ? ret : 0;
+}
+
+extern const char *getInputFileName (void)
+{
+	return vStringValue (File.input.name);
+}
+
+extern MIOPos getInputFilePosition (void)
+{
+	return File.filePosition;
+}
+
+extern MIOPos getInputFilePositionForLine (int line)
+{
+	MIOPos pos;
+	return pos;
+/*	return File.lineFposMap.pos[(((File.lineFposMap.count > (line - 1)) \
+				      && (line > 0))? (line - 1): 0)];*/
+}
 
 extern langType getInputLanguage (void)
 {
@@ -50,9 +90,52 @@ extern const char *getInputFileTagPath (void)
 	return vStringValue (File.source.tagPath);
 }
 
+extern bool isInputLanguage (langType lang)
+{
+	return (bool)((lang) == getInputLanguage ());
+}
+
+extern bool isInputHeaderFile (void)
+{
+	return File.input.isHeader;
+}
+
+extern bool isInputLanguageKindEnabled (char c)
+{
+	return false;
+/*	return isLanguageKindEnabled (getInputLanguage (), c); */
+}
+
+extern bool doesInputLanguageAllowNullTag (void)
+{
+	return false;
+/*	return doesLanguageAllowNullTag (getInputLanguage ()); */
+}
+
 extern kindOption *getInputLanguageFileKind (void)
 {
 	return getLanguageFileKind (File.input.language);
+}
+
+extern bool doesInputLanguageRequestAutomaticFQTag (void)
+{
+	return false;
+/*	return doesLanguageRequestAutomaticFQTag (getInputLanguage ()); */
+}
+
+extern const char *getSourceFileTagPath (void)
+{
+	return vStringValue (File.source.tagPath);
+}
+
+extern const char *getSourceLanguageName (void)
+{
+	return getLanguageName (File.source.language);
+}
+
+extern unsigned long getSourceLineNumber (void)
+{
+	return File.source.lineNumber;
 }
 
 extern void freeSourceFileResources (void)

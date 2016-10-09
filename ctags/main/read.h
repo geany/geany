@@ -17,22 +17,13 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "mio.h"
 #include "parse.h"
 #include "vstring.h"
+#include "mio.h"
 
 /*
 *   MACROS
 */
-#define getInputLineNumber()    File.input.lineNumber
-#define getInputFileName()  vStringValue (File.input.name)
-#define getInputFilePosition()  File.filePosition
-#define getSourceFileTagPath()  vStringValue (File.source.tagPath)
-#define getSourceLanguage() File.source.language
-#define getSourceLanguageName() getLanguageName (File.source.language)
-#define getSourceLineNumber()   File.source.lineNumber
-#define isInputLanguage(lang)    (bool)((lang) == File.input.language)
-#define isInputHeaderFile()      File.input.isHeader
 
 /*
 *   DATA DECLARATIONS
@@ -52,8 +43,9 @@ enum eCharacters {
 	SINGLE_QUOTE  = '\'',
 	BACKSLASH     = '\\',
 
-	STRING_SYMBOL = ('S' + 0x80),
-	CHAR_SYMBOL   = ('C' + 0x80)
+	/* symbolic representations, above 0xFF not to conflict with any byte */
+	STRING_SYMBOL = ('S' + 0xff),
+	CHAR_SYMBOL   = ('C' + 0xff)
 };
 
 /*  Maintains the state of the current input file.
@@ -98,10 +90,20 @@ extern inputFile File;
 */
 
 /* InputFile: reading from fp in inputFile with updating fields in input fields */
+extern unsigned long getInputLineNumber (void);
+extern int getInputLineOffset (void);
+extern const char *getInputFileName (void);
+extern MIOPos getInputFilePosition (void);
+extern MIOPos getInputFilePositionForLine (int line);
 extern langType getInputLanguage (void);
 extern const char *getInputLanguageName (void);
 extern const char *getInputFileTagPath (void);
+extern bool isInputLanguage (langType lang);
+extern bool isInputHeaderFile (void);
+extern bool isInputLanguageKindEnabled (char c);
+extern bool doesInputLanguageAllowNullTag (void);
 extern kindOption *getInputLanguageFileKind (void);
+extern bool doesInputLanguageRequestAutomaticFQTag (void);
 
 extern void freeSourceFileResources (void);
 extern bool fileOpen (const char *const fileName, const langType language);
@@ -116,6 +118,10 @@ extern char *readSourceLine (vString *const vLine, MIOPos location, long *const 
 extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
                         const char *const fileName, const langType language );
 #define bufferClose fileClose
+
+extern const char *getSourceFileTagPath (void);
+extern const char *getSourceLanguageName (void);
+extern unsigned long getSourceLineNumber (void);
 
 /* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
 extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);

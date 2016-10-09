@@ -1723,7 +1723,7 @@ static void skipBraces (void)
 
 static keywordId analyzeKeyword (const char *const name)
 {
-	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
+	const keywordId id = (keywordId) lookupKeyword (name, getInputLanguage ());
 
 	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
 	if ((isInputLanguage(Lang_d) || isInputLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
