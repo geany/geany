@@ -30,8 +30,6 @@
 #define WHOLE_FILE  -1L
 #define includeExtensionFlags()         (Option.tagFileFormat > 1)
 
-#define CORK_NIL 0
-
 /*
 *   DATA DECLARATIONS
 */
@@ -113,6 +111,8 @@ extern void freeTagFileResources (void);
 extern const char *tagFileName (void);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
+extern void  setupWriter (void);
+extern void  teardownWriter (const char *inputFilename);
 extern int makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name,
 			  const kindOption *kind);
@@ -128,6 +128,7 @@ extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 			      const char *sourceFileName,
 			      const char* sourceLanguage,
 			      long sourceLineNumberDifference);
+extern int makeQualifiedTagEntry (const tagEntryInfo *const e);
 
 extern unsigned long numTagsAdded(void);
 extern void setNumTagsAdded (unsigned long nadded);
@@ -140,6 +141,34 @@ extern void setTagFilePosition (MIOPos *p);
 extern const char* getTagFileDirectory (void);
 extern void getTagScopeInformation (tagEntryInfo *const tag,
 				    const char **kind, const char **name);
+
+/* Getting line associated with tag */
+extern char *readLineFromBypassAnyway (vString *const vLine, const tagEntryInfo *const tag,
+				   long *const pSeekValue);
+
+/* Generating pattern associated tag, caller must do eFree for the returned value. */
+extern char* makePatternString (const tagEntryInfo *const tag);
+
+
+/* language is optional: can be NULL. */
+extern bool writePseudoTag (const ptagDesc *pdesc,
+			       const char *const fileName,
+			       const char *const pattern,
+			       const char *const parserName);
+
+#define CORK_NIL 0
+void          corkTagFile(void);
+void          uncorkTagFile(void);
+tagEntryInfo *getEntryInCorkQueue   (unsigned int n);
+tagEntryInfo *getEntryOfNestingLevel (const NestingLevel *nl);
+size_t        countEntryInCorkQueue (void);
+
+extern void makeFileTag (const char *const fileName);
+
 extern void    markTagExtraBit     (tagEntryInfo *const tag, xtagType extra);
+extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra);
+
+extern void attachParserField (tagEntryInfo *const tag, fieldType ftype, const char* value);
+extern void attachParserFieldToCorkEntry (int index, fieldType ftype, const char* value);
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

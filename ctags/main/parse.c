@@ -568,21 +568,6 @@ extern void printKindOptions (void)
 *   File parsing
 */
 
-static void makeFileTag (const char *const fileName)
-{
-	if (isXtagEnabled(XTAG_FILE_NAMES))
-	{
-		tagEntryInfo tag;
-		initTagEntry (&tag, baseFilename (fileName), getInputLanguageFileKind ());
-
-		tag.isFileEntry     = true;
-		tag.lineNumberEntry = true;
-		tag.lineNumber      = 1;
-
-		makeTagEntry (&tag);
-	}
-}
-
 static bool createTagsForFile (const char *const fileName,
 							   const langType language,
 							   const unsigned int passCount)

@@ -77,6 +77,7 @@ libctags_la_SOURCES = \
 	main/htable.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/kind.c \
 	main/kind.h \
 	main/lcpp.c \
 	main/lcpp.h \
