@@ -113,7 +113,7 @@ extern void freeTagFileResources (void);
 extern const char *tagFileName (void);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
-extern void makeTagEntry (const tagEntryInfo *const tag);
+extern int makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
 
 extern unsigned long numTagsAdded(void);

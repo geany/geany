@@ -436,27 +436,72 @@ static int replacementTruncate (const char *const name, const long size)
 
 #endif
 
-
 /*
  *  Tag entry management
  */
 
-
-extern void makeTagEntry (const tagEntryInfo *const tag)
+static void writeTagEntry (const tagEntryInfo *const tag)
 {
+	int length = 0;
+
+/*	if (tag->placeholder)
+		return;
+	if (! tag->kind->enabled)
+		return;
+	if (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION
+	    && ! isXtagEnabled (XTAG_REFERENCE_TAGS))
+		return;
+*/
+	DebugStatement ( debugEntry (tag); )
+/*	Assert (writer); */
+/*
+	if (includeExtensionFlags ()
+	    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
+	    && doesInputLanguageRequestAutomaticFQTag ())
+		buildFqTagCache (tag);
+*/
+	/* length = writer->writeEntry (TagFile.mio, tag, writerData); */
+	if (TagEntryFunction != NULL)
+		length = TagEntryFunction(tag, TagEntryUserData);
+
+	++TagFile.numTags.added;
+	rememberMaxLengths (strlen (tag->name), (size_t) length);
+	DebugStatement ( mio_flush (TagFile.mio); )
+
+	/*abort_if_ferror (TagFile.mio);*/
+}
+
+extern int makeTagEntry (const tagEntryInfo *const tag)
+{
+	int r = CORK_NIL;
 	Assert (tag->name != NULL);
-	if (tag->name [0] == '\0')
-		error (WARNING, "ignoring null tag in %s", getInputFileName ());
-	else
+
+/*
+	if (getInputLanguageFileKind() != tag->kind)
 	{
-		int length = 0;
-
-		if (NULL != TagEntryFunction)
-			length = TagEntryFunction(tag, TagEntryUserData);
-
-		++TagFile.numTags.added;
-		rememberMaxLengths (strlen (tag->name), (size_t) length);
+		if (! isInputLanguageKindEnabled (tag->kind->letter) &&
+		    (tag->extensionFields.roleIndex == ROLE_INDEX_DEFINITION))
+			return CORK_NIL;
+		if ((tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION)
+		    && (! tag->kind->roles[tag->extensionFields.roleIndex].enabled))
+			return CORK_NIL;
 	}
+*/
+
+	if (tag->name [0] == '\0' && (!tag->placeholder))
+	{
+/*		if (!doesInputLanguageAllowNullTag()) */
+			error (WARNING, "ignoring null tag in %s(line: %lu)",
+			       getInputFileName (), tag->lineNumber);
+		goto out;
+	}
+
+/*	if (TagFile.cork)
+		r = queueTagEntry (tag);
+	else*/
+		writeTagEntry (tag);
+out:
+	return r;
 }
 
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind)
