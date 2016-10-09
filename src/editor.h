@@ -106,7 +106,7 @@ typedef struct GeanyEditorPrefs
 	gint		long_line_column;
 	gchar		*long_line_color;
 	gboolean	unused_7;		/* view menu */
-	gboolean	show_linenumber_margin;		/* view menu */
+	gboolean	unused_8;		/* view menu */
 	gboolean	show_scrollbars;			/* hidden pref */
 	gboolean	scroll_stop_at_last_line;
 	gboolean	line_wrapping;

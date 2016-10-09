@@ -153,7 +153,7 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 	sci_set_current_position(sci, pos, TRUE);
 
 	/* override some defaults */
-	set_line_numbers(sci, geany->editor_prefs->show_linenumber_margin);
+	set_line_numbers(sci, settings_get_bool("show-line-number-margin"));
 	/* marker margin */
 	scintilla_send_message(sci, SCI_SETMARGINWIDTHN, 1,
 		scintilla_send_message(current, SCI_GETMARGINWIDTHN, 1, 0));

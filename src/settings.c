@@ -250,7 +250,6 @@ static void settings_bind_main(GSettings *settings)
 		"msgwin-messages-visible",             G_TYPE_BOOLEAN,         &interface_prefs.msgwin_messages_visible,
 		"msgwin-scribble-visible",             G_TYPE_BOOLEAN,         &interface_prefs.msgwin_scribble_visible,
 		"use-native-windows-dialogs",          G_TYPE_BOOLEAN,         &interface_prefs.use_native_windows_dialogs,
-		"show-line-number-margin",             G_TYPE_BOOLEAN,         &editor_prefs.show_linenumber_margin,
 		NULL);
 
 	g_signal_connect(settings, "changed::sidebar-pos-left", G_CALLBACK(on_sidebar_pos_left_changed), NULL);
