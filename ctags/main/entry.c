@@ -68,6 +68,23 @@
 # define O_RDWR         _O_RDWR
 #endif
 
+
+/*  Maintains the state of the tag file.
+ */
+typedef struct eTagFile {
+	char *name;
+	char *directory;
+	MIO *mio;
+	struct sNumTags { unsigned long added, prev; } numTags;
+	struct sMax { size_t line, tag, file; } max;
+/*	struct sEtags {
+		char *name;
+		MIO *mio;
+		size_t byteCount;
+	} etags;*/
+	vString *vLine;
+} tagFile;
+
 /*
 *   DATA DEFINITIONS
 */
@@ -421,4 +438,49 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name, const k
 extern void setTagWriter (tagWriter *t)
 {
 /*	writer = t; */
+}
+
+extern unsigned long numTagsAdded(void)
+{
+	return TagFile.numTags.added;
+}
+
+extern void setNumTagsAdded (unsigned long nadded)
+{
+	TagFile.numTags.added = nadded;
+}
+
+extern unsigned long numTagsTotal(void)
+{
+	return TagFile.numTags.added + TagFile.numTags.prev;
+}
+
+extern unsigned long maxTagsLine (void)
+{
+	return (unsigned long)TagFile.max.line;
+}
+
+extern void setMaxTagsLine (unsigned long max)
+{
+	TagFile.max.line = max;
+}
+
+extern void invalidatePatternCache(void)
+{
+/*	TagFile.patternCacheValid = false; */
+}
+
+extern void tagFilePosition (MIOPos *p)
+{
+	mio_getpos (TagFile.mio, p);
+}
+
+extern void setTagFilePosition (MIOPos *p)
+{
+	mio_setpos (TagFile.mio, p);
+}
+
+extern const char* getTagFileDirectory (void)
+{
+	return TagFile.directory;
 }

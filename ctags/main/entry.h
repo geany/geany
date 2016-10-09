@@ -36,28 +36,6 @@ typedef struct sTagField {
 	const char* value;
 } tagField;
 
-/*  Maintains the state of the tag file.
- */
-typedef struct eTagFile {
-	char *name;
-	char *directory;
-	MIO *mio;
-	struct sNumTags { unsigned long added, prev; } numTags;
-	struct sMax { size_t line, tag, file; } max;
-/*	struct sEtags {
-		char *name;
-		MIO *mio;
-		size_t byteCount;
-	} etags;*/
-	vString *vLine;
-} tagFile;
-
-typedef struct sTagFields {
-	unsigned int count;         /* number of additional extension flags */
-	const char *const *label;   /* list of labels for extension flags */
-	const char *const *value;   /* list of values for extension flags */
-} tagFields;
-
 /*  Information about the current tag candidate.
  */
 struct sTagEntryInfo {
@@ -88,7 +66,6 @@ struct sTagEntryInfo {
 /*
 *   GLOBAL VARIABLES
 */
-extern tagFile TagFile;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -101,5 +78,17 @@ extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
 extern void makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
+
+extern unsigned long numTagsAdded(void);
+extern void setNumTagsAdded (unsigned long nadded);
+extern unsigned long numTagsTotal(void);
+extern unsigned long maxTagsLine(void);
+extern void setMaxTagsLine (unsigned long max);
+extern void invalidatePatternCache(void);
+extern void tagFilePosition (MIOPos *p);
+extern void setTagFilePosition (MIOPos *p);
+extern const char* getTagFileDirectory (void);
+extern void getTagScopeInformation (tagEntryInfo *const tag,
+				    const char **kind, const char **name);
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

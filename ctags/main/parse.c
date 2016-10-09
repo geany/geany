@@ -609,18 +609,18 @@ static bool createTagsForFile (const char *const fileName,
 static bool createTagsWithFallback (const char *const fileName,
 									const langType language)
 {
-	const unsigned long numTags = TagFile.numTags.added;
-	MIOPos tagFilePosition;
+	const unsigned long numTags = numTagsAdded ();
+	MIOPos filePosition;
 	unsigned int passCount = 0;
 	bool tagFileResized = false;
 
-	mio_getpos (TagFile.mio, &tagFilePosition);
+	tagFilePosition (&filePosition);
 	while (createTagsForFile (fileName, language, ++passCount))
 	{
 		/*  Restore prior state of tag file.
 		 */
-		mio_setpos (TagFile.mio, &tagFilePosition);
-		TagFile.numTags.added = numTags;
+		setTagFilePosition (&filePosition);
+		setNumTagsAdded (numTags);
 		tagFileResized = true;
 	}
 	return tagFileResized;

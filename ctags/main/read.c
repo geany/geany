@@ -88,10 +88,10 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 	else
 		File.source.tagPath =
 				vStringNewOwn (relativeFilename (vStringValue (fileName),
-								TagFile.directory));
+								getTagFileDirectory ()));
 
-	if (vStringLength (fileName) > TagFile.max.file)
-		TagFile.max.file = vStringLength (fileName);
+	if (vStringLength (fileName) > maxTagsLine ())
+		setMaxTagsLine (vStringLength (fileName));
 
 	File.source.isHeader = isIncludeFile (vStringValue (fileName));
 	File.input.isHeader = File.source.isHeader;
