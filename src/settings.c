@@ -75,33 +75,9 @@ static void on_highlighting_inverted_changed(GSettings *settings, gchar *key, gp
 }
 
 
-static void on_show_white_space_changed(GSettings *settings, gchar *key, gpointer user_data)
+static void on_editor_feature_setting_changed(GSettings *settings, gchar *key, gpointer user_data)
 {
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_WHITE_SPACE);
-}
-
-
-static void on_show_indentation_guides_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_INDENTATION_GUIDES);
-}
-
-
-static void on_show_line_endings_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_ENDINGS);
-}
-
-
-static void on_show_markers_margin_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_MARKERS_MARGIN);
-}
-
-
-static void on_show_line_numbers_margin_changed(GSettings *settings, gchar *key, gpointer user_data)
-{
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_NUMBERS);
+	ui_toggle_editor_features(GPOINTER_TO_INT(user_data));
 }
 
 
@@ -283,11 +259,11 @@ static void settings_bind_main(GSettings *settings)
 	g_signal_connect(settings, "changed::msgwin-font", G_CALLBACK(on_font_changed), ui_set_msgwin_font);
 	g_signal_connect(settings, "changed::symbols-tree-expanders-visible", G_CALLBACK(on_symbols_tree_expanders_visible_changed), NULL);
 	g_signal_connect(settings, "changed::highlighting-inverted", G_CALLBACK(on_highlighting_inverted_changed), NULL);
-	g_signal_connect(settings, "changed::show-white-space", G_CALLBACK(on_show_white_space_changed), NULL);
-	g_signal_connect(settings, "changed::show-indentation-guides", G_CALLBACK(on_show_indentation_guides_changed), NULL);
-	g_signal_connect(settings, "changed::show-line-endings", G_CALLBACK(on_show_line_endings_changed), NULL);
-	g_signal_connect(settings, "changed::show-markers-margin", G_CALLBACK(on_show_markers_margin_changed), NULL);
-	g_signal_connect(settings, "changed::show-line-number-margin", G_CALLBACK(on_show_line_numbers_margin_changed), NULL);
+	g_signal_connect(settings, "changed::show-white-space", G_CALLBACK(on_editor_feature_setting_changed), GINT_TO_POINTER(GEANY_EDITOR_SHOW_WHITE_SPACE));
+	g_signal_connect(settings, "changed::show-indentation-guides", G_CALLBACK(on_editor_feature_setting_changed), GINT_TO_POINTER(GEANY_EDITOR_SHOW_INDENTATION_GUIDES));
+	g_signal_connect(settings, "changed::show-line-endings", G_CALLBACK(on_editor_feature_setting_changed), GINT_TO_POINTER(GEANY_EDITOR_SHOW_LINE_ENDINGS));
+	g_signal_connect(settings, "changed::show-markers-margin", G_CALLBACK(on_editor_feature_setting_changed), GINT_TO_POINTER(GEANY_EDITOR_SHOW_MARKERS_MARGIN));
+	g_signal_connect(settings, "changed::show-line-number-margin", G_CALLBACK(on_editor_feature_setting_changed), GINT_TO_POINTER(GEANY_EDITOR_SHOW_LINE_NUMBERS));
 }
 
 
