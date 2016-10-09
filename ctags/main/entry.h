@@ -15,17 +15,21 @@
 #include "general.h"  /* must always come first */
 #include "types.h"
 
+#include <stdio.h>
+
 #include "field.h"
-#include "mio.h"
-#include "vstring.h"
 #include "kind.h"
+#include "vstring.h"
+#include "xtag.h"
+#include "mio.h"
+#include "nestlevel.h"
 
 /*
 *   MACROS
 */
 #define WHOLE_FILE  -1L
+#define includeExtensionFlags()         (Option.tagFileFormat > 1)
 
-#define NO_PARSER_FIELD -1
 #define CORK_NIL 0
 
 /*
@@ -39,16 +43,25 @@ typedef struct sTagField {
 /*  Information about the current tag candidate.
  */
 struct sTagEntryInfo {
-	bool     lineNumberEntry;   /* pattern or line number entry */
-	unsigned long lineNumber;   /* line number of tag */
-	MIOPos      filePosition;   /* file position of line containing tag */
-	const char* language;       /* language of source file */
-	bool     isFileScope;       /* is tag visible only within source file? */
-	bool     isFileEntry;       /* is this just an entry for a file name? */
-	bool     truncateLine;      /* truncate tag line at end of tag name? */
-	const char *sourceFileName; /* name of source file */
-	const char *name;           /* name of the tag */
-	const kindOption *kind;     /* kind descriptor */
+	unsigned int lineNumberEntry:1;  /* pattern or line number entry */
+	unsigned int isFileScope    :1;  /* is tag visible only within input file? */
+	unsigned int isFileEntry    :1;  /* is this just an entry for a file name? */
+	unsigned int truncateLine   :1;  /* truncate tag line at end of tag name? */
+	unsigned int placeholder    :1;	 /* This is just a part of scope context.
+					    Put this entry to cork queue but
+					    don't print it to tags file. */
+
+	unsigned long lineNumber;     /* line number of tag */
+	const char* pattern;	      /* pattern for locating input line
+				       * (may be NULL if not present) *//*  */
+	unsigned int boundaryInfo;    /* info about nested input stream */
+	MIOPos      filePosition;     /* file position of line containing tag */
+	const char* language;         /* language of input file */
+	const char *inputFileName;   /* name of input file */
+	const char *name;             /* name of the tag */
+	const kindOption *kind;	      /* kind descriptor */
+	unsigned char extra[ ((XTAG_COUNT) / 8) + 1 ];
+
 	struct {
 		const char* access;
 		const char* fileScope;
@@ -57,15 +70,41 @@ struct sTagEntryInfo {
 
 		const kindOption* scopeKind;
 		const char* scopeName;
+		int         scopeIndex;   /* cork queue entry for upper scope tag.
+					     This field is meaningful if the value
+					     is not CORK_NIL and scope[0]  and scope[1] are
+					     NULL. */
 
-		const char *signature; /* Argument list for functions and macros with arguments */
+		const char* signature;
+
 		const char *varType;
-	} extensionFields;          /* list of extension fields*/
+
+#define ROLE_INDEX_DEFINITION -1
+		int roleIndex; /* for role of reference tag */
+
+#ifdef HAVE_LIBXML
+		const char* xpath;
+#endif
+		unsigned long endLine;
+	} extensionFields;  /* list of extension fields*/
+
+#define PRE_ALLOCATED_PARSER_FIELDS 5
+#define NO_PARSER_FIELD -1
+	unsigned int usedParserFields;
+	tagField     parserFields [PRE_ALLOCATED_PARSER_FIELDS];
+
+	/* Following source* fields are used only when #line is found
+	   in input and --line-directive is given in ctags command line. */
+	const char* sourceLanguage;
+	const char *sourceFileName;
+	unsigned long sourceLineNumberDifference;
 };
+
 
 /*
 *   GLOBAL VARIABLES
 */
+
 
 /*
 *   FUNCTION PROTOTYPES

@@ -22,7 +22,9 @@
 #if defined (HAVE_TYPES_H)
 # include <types.h>       /* to declare off_t on some hosts */
 #endif
-
+#if defined (HAVE_UNISTD_H)
+# include <unistd.h>      /* to declare close (), ftruncate (), truncate () */
+#endif
 
 /*  These header files provide for the functions necessary to do file
  *  truncation.
@@ -34,23 +36,25 @@
 # include <io.h>
 #endif
 
-#include "ctags.h"
 #include "debug.h"
 #include "entry.h"
+#include "field.h"
+#include "fmt.h"
+#include "kind.h"
 #include "main.h"
 #include "options.h"
+#include "output.h"
+#include "ptag.h"
 #include "read.h"
+#include "routines.h"
 #include "sort.h"
 #include "strlist.h"
-#include "routines.h"
-#include "output.h"
+#include "xtag.h"
+#include "ctags.h"
 
 /*
 *   MACROS
 */
-#define PSEUDO_TAG_PREFIX       "!_"
-
-#define includeExtensionFlags()         (Option.tagFileFormat > 1)
 
 /*
  *  Portability defines
@@ -76,13 +80,17 @@ typedef struct eTagFile {
 	char *directory;
 	MIO *mio;
 	struct sNumTags { unsigned long added, prev; } numTags;
-	struct sMax { size_t line, tag, file; } max;
-/*	struct sEtags {
-		char *name;
-		MIO *mio;
-		size_t byteCount;
-	} etags;*/
+	struct sMax { size_t line, tag; } max;
 	vString *vLine;
+
+	unsigned int cork;
+	struct sCorkQueue {
+		struct sTagEntryInfo* queue;
+		unsigned int length;
+		unsigned int count;
+	} corkQueue;
+
+	bool patternCacheValid;
 } tagFile;
 
 /*
@@ -90,13 +98,19 @@ typedef struct eTagFile {
 */
 
 tagFile TagFile = {
-	NULL,               /* tag file name */
-	NULL,               /* tag file directory (absolute) */
-	NULL,               /* file pointer */
-	{ 0, 0 },           /* numTags */
-	{ 0, 0, 0 },        /* max */
-/*	{ NULL, NULL, 0 },*/  /* etags */
-	NULL                /* vLine */
+    NULL,               /* tag file name */
+    NULL,               /* tag file directory (absolute) */
+    NULL,               /* file pointer */
+    { 0, 0 },           /* numTags */
+    { 0, 0 },        /* max */
+    NULL,                /* vLine */
+    .cork = false,
+    .corkQueue = {
+	    .queue = NULL,
+	    .length = 0,
+	    .count  = 0
+    },
+    .patternCacheValid = false,
 };
 
 static bool TagsToStdout = false;
@@ -118,7 +132,8 @@ extern int ftruncate (int fd, off_t length);
 
 extern void freeTagFileResources (void)
 {
-	eFree (TagFile.directory);
+	if (TagFile.directory != NULL)
+		eFree (TagFile.directory);
 	vStringDelete (TagFile.vLine);
 }
 
