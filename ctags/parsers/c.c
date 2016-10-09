@@ -1440,7 +1440,7 @@ static void makeTag (const tokenInfo *const token,
 	if (isType (token, TOKEN_NAME)  &&  vStringLength (token->name) > 0  /* &&
 		includeTag (type, isFileScope) */)
 	{
-		vString *scope = vStringNew ();
+		vString *scope;
 		tagEntryInfo e;
 
 		/* take only functions which are introduced by "function ..." */
@@ -1456,6 +1456,7 @@ static void makeTag (const tokenInfo *const token,
 		e.filePosition	= token->filePosition;
 		e.isFileScope = isFileScope;
 
+		scope = vStringNew ();
 		findScopeHierarchy (scope, st);
 		addOtherFields (&e, type, token, st, scope);
 
