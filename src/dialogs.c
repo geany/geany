@@ -464,7 +464,7 @@ void dialogs_show_open_file(void)
 	SETPTR(initdir, utils_get_locale_from_utf8(initdir));
 
 #ifdef G_OS_WIN32
-	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
+	if (settings_get_bool("use-native-windows-dialogs"))
 		win32_show_document_open_dialog(GTK_WINDOW(main_widgets.window), _("Open File"), initdir);
 	else
 #endif
@@ -674,7 +674,7 @@ gboolean dialogs_show_save_as(void)
 	g_return_val_if_fail(doc, FALSE);
 
 #ifdef G_OS_WIN32
-	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
+	if (settings_get_bool("use-native-windows-dialogs"))
 	{
 		gchar *utf8_name = win32_show_document_save_as_dialog(GTK_WINDOW(main_widgets.window),
 						_("Save File"), doc);
@@ -861,7 +861,7 @@ on_font_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 			fontname = gtk_font_selection_dialog_get_font_name(
 				GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel));
-			g_settings_set_string(geany_settings, "editor-font", fontname);
+			settings_set_string("editor-font", fontname);
 			g_free(fontname);
 
 			close = (response == GTK_RESPONSE_OK);
@@ -880,7 +880,7 @@ void dialogs_show_open_font(void)
 	gchar *font_name;
 
 #ifdef G_OS_WIN32
-	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
+	if (settings_get_bool("use-native-windows-dialogs"))
 	{
 		win32_show_font_dialog();
 		return;
@@ -911,7 +911,7 @@ void dialogs_show_open_font(void)
 
 		gtk_window_set_transient_for(GTK_WINDOW(ui_widgets.open_fontsel), GTK_WINDOW(main_widgets.window));
 	}
-	font_name = g_settings_get_string(geany_settings, "editor-font");
+	font_name = settings_get_string("editor-font");
 	gtk_font_selection_dialog_set_font_name(
 		GTK_FONT_SELECTION_DIALOG(ui_widgets.open_fontsel), font_name);
 	g_free(font_name);

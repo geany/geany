@@ -312,7 +312,7 @@ void project_open(void)
 	if (! project_ask_close()) return;
 
 #ifdef G_OS_WIN32
-	if (g_settings_get_boolean(geany_settings, "use-native-windows-dialogs"))
+	if (settings_get_bool("use-native-windows-dialogs"))
 	{
 		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 		if (file != NULL)

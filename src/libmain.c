@@ -186,7 +186,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	sidebar_set_position_left(g_settings_get_boolean(geany_settings, "sidebar-pos-left"));
+	sidebar_set_position_left(settings_get_bool("sidebar-pos-left"));
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
 		interface_prefs.msgwin_orientation);
@@ -856,7 +856,7 @@ static void load_settings(void)
 	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
-		g_settings_set_boolean(geany_settings, "msgwin-visible", FALSE);
+		settings_set_bool("msgwin-visible", FALSE);
 
 #ifdef HAVE_PLUGINS
 	want_plugins = prefs.load_plugins && !no_plugins;

@@ -141,7 +141,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
-	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
+	if (! settings_get_bool("statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (id == 0)
@@ -328,7 +328,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
+	if (! settings_get_bool("statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (doc == NULL)
@@ -1403,20 +1403,16 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 		switch (feature)
 		{
 			case GEANY_EDITOR_SHOW_MARKERS_MARGIN:
-				sci_set_symbol_margin(doc->editor->sci,
-					g_settings_get_boolean(geany_settings, "show-markers-margin"));
+				sci_set_symbol_margin(doc->editor->sci, settings_get_bool("show-markers-margin"));
 				break;
 			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
-				sci_set_line_numbers(doc->editor->sci,
-					g_settings_get_boolean(geany_settings, "show-line-number-margin"));
+				sci_set_line_numbers(doc->editor->sci, settings_get_bool("show-line-number-margin"));
 				break;
 			case GEANY_EDITOR_SHOW_WHITE_SPACE:
-				sci_set_visible_white_spaces(doc->editor->sci,
-					g_settings_get_boolean(geany_settings, "show-white-space"));
+				sci_set_visible_white_spaces(doc->editor->sci, settings_get_bool("show-white-space"));
 				break;
 			case GEANY_EDITOR_SHOW_LINE_ENDINGS:
-				sci_set_visible_eols(doc->editor->sci,
-					g_settings_get_boolean(geany_settings, "show-line-endings"));
+				sci_set_visible_eols(doc->editor->sci, settings_get_bool("show-line-endings"));
 				break;
 			case GEANY_EDITOR_SHOW_INDENTATION_GUIDES:
 				editor_set_indentation_guides(doc->editor);
@@ -1760,7 +1756,7 @@ static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb, gboole
 			return FALSE;	/* no more items */
 	}
 	/* scroll item in view */
-	if (g_settings_get_boolean(geany_settings, "msgwin-visible"))
+	if (settings_get_bool("msgwin-visible"))
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(treeview), &iter);
@@ -2691,7 +2687,7 @@ void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == 0);
 
-	if (! g_settings_get_boolean(geany_settings, "statusbar-visible"))
+	if (! settings_get_bool("statusbar-visible"))
 		return;
 
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);

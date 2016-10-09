@@ -384,7 +384,7 @@ static void get_keyfile_ints(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 static guint invert(guint icolour)
 {
-	if (g_settings_get_boolean(geany_settings, "highlighting-inverted"))
+	if (settings_get_bool("highlighting-inverted"))
 		return 0xffffff - icolour;
 
 	return icolour;

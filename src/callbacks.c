@@ -617,7 +617,7 @@ static void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer u
  * unfullscreened. */
 static void on_window1_map_event(GtkWidget *widget, gpointer user_data)
 {
-	if (g_settings_get_boolean(geany_settings, "fullscreen"))
+	if (settings_get_bool("fullscreen"))
 		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
 	else
 		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
@@ -1182,8 +1182,8 @@ void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer use
 	if (gtk_check_menu_item_get_active(checkmenuitem) &&
 		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) == 0)
 	{
-		g_settings_set_boolean(geany_settings, "sidebar-documents-visible", TRUE);
-		g_settings_set_boolean(geany_settings, "sidebar-symbols-visible", TRUE);
+		settings_set_bool("sidebar-documents-visible", TRUE);
+		settings_set_bool("sidebar-symbols-visible", TRUE);
 	}
 }
 
@@ -1461,7 +1461,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 	if (G_UNLIKELY(hide_all == -1))
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! g_settings_get_boolean(geany_settings, "document-tabs-visible") &&
+			! settings_get_bool("document-tabs-visible") &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -1477,9 +1477,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		g_settings_set_boolean(geany_settings, "document-tabs-visible", FALSE);
-
-		g_settings_set_boolean(geany_settings, "statusbar-visible", FALSE);
+		settings_set_bool("document-tabs-visible", FALSE);
+		settings_set_bool("statusbar-visible", FALSE);
 
 		if (gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1490,9 +1489,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		g_settings_set_boolean(geany_settings, "document-tabs-visible", TRUE);
-
-		g_settings_set_boolean(geany_settings, "statusbar-visible", TRUE);
+		settings_set_bool("document-tabs-visible", TRUE);
+		settings_set_bool("statusbar-visible", TRUE);
 
 		if (! gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));

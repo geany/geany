@@ -1122,7 +1122,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
  		case SCN_MODIFIED:
-			if (g_settings_get_boolean(geany_settings, "show-line-number-margin")
+			if (settings_get_bool("show-line-number-margin")
 				&& (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
 				/* automatically adjust Scintilla's line numbers margin width */
@@ -1198,8 +1198,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 		case SCN_ZOOM:
 			/* recalculate line margin width */
-			sci_set_line_numbers(sci,
-				g_settings_get_boolean(geany_settings, "show-line-number-margin"));
+			sci_set_line_numbers(sci, settings_get_bool("show-line-number-margin"));
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
@@ -4908,7 +4907,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	setup_sci_keys(sci);
 
-	sci_set_symbol_margin(sci, g_settings_get_boolean(geany_settings, "show-markers-margin"));
+	sci_set_symbol_margin(sci, settings_get_bool("show-markers-margin"));
 	sci_set_lines_wrapped(sci, editor->line_wrapping);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/* Y policy is set in editor_apply_update_prefs() */
@@ -4971,7 +4970,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	editor->sci = sci;
 
 	editor_set_indent(editor, iprefs->type, iprefs->width);
-	font_name = g_settings_get_string(geany_settings, "editor-font");
+	font_name = settings_get_string("editor-font");
 	editor_set_font(editor, font_name);
 	g_free(font_name);
 	editor_apply_update_prefs(editor);
@@ -5074,7 +5073,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 
 	g_return_if_fail(editor != NULL);
 
-	if (! g_settings_get_boolean(geany_settings, "show-indentation-guides"))
+	if (! settings_get_bool("show-indentation-guides"))
 	{
 		sci_set_indentation_guides(editor->sci, SC_IV_NONE);
 		return;
@@ -5166,10 +5165,10 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	editor_set_indentation_guides(editor);
 
-	sci_set_visible_white_spaces(sci, g_settings_get_boolean(geany_settings, "show-white-space"));
-	sci_set_visible_eols(sci, g_settings_get_boolean(geany_settings, "show-line-endings"));
-	sci_set_symbol_margin(sci, g_settings_get_boolean(geany_settings, "show-markers-margin"));
-	sci_set_line_numbers(sci, g_settings_get_boolean(geany_settings, "show-line-number-margin"));
+	sci_set_visible_white_spaces(sci, settings_get_bool("show-white-space"));
+	sci_set_visible_eols(sci, settings_get_bool("show-line-endings"));
+	sci_set_symbol_margin(sci, settings_get_bool("show-markers-margin"));
+	sci_set_line_numbers(sci, settings_get_bool("show-line-number-margin"));
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 

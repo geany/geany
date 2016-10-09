@@ -591,7 +591,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		if (g_settings_get_boolean(geany_settings, "notebook-double-click-hides-widgets"))
+		if (settings_get_bool("notebook-double-click-hides-widgets"))
 			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */

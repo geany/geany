@@ -600,7 +600,7 @@ void win32_show_font_dialog(void)
 	if (retval)
 	{
 		gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName, (cf.iPointSize / 10));
-		g_settings_set_string(geany_settings, "editor-font", editorfont);
+		settings_set_string("editor-font", editorfont);
 		g_free(editorfont);
 	}
 }

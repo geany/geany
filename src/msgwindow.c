@@ -308,7 +308,7 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
 		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
 
-	if (g_settings_get_boolean(geany_settings, "msgwin-visible") &&
+	if (settings_get_bool("msgwin-visible") &&
 		interface_prefs.compiler_tab_autoscroll)
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
@@ -364,7 +364,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gsize len;
 	gchar *utf8_msg;
 
-	g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
+	settings_set_bool("msgwin-visible", TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
@@ -541,7 +541,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 static void
 on_hide_message_window(GtkMenuItem *menuitem, gpointer user_data)
 {
-	g_settings_set_boolean(geany_settings, "msgwin-visible", FALSE);
+	settings_set_bool("msgwin-visible", FALSE);
 }
 
 
@@ -1210,7 +1210,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 	/* the msgwin must be visible before we switch to the VTE page so that
 	 * the font settings are applied on realization */
 	if (show)
-		g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
+		settings_set_bool("msgwin-visible", TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), tabnum);
 	if (show && widget)
 		gtk_widget_grab_focus(widget);

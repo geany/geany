@@ -882,7 +882,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		/* show the VTE */
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_VTE);
 		gtk_widget_grab_focus(vc->vte);
-		g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
+		settings_set_bool("msgwin-visible", TRUE);
 
 		run_info[cmdindex].pid = 1;
 		g_free(vte_cmd);
@@ -1017,10 +1017,10 @@ static void show_build_result_message(gboolean failure)
 		msg = _("Compilation failed.");
 		msgwin_compiler_add_string(COLOR_BLUE, msg);
 		/* If msgwindow is hidden, user will want to display it to see the error */
-		if (! g_settings_get_boolean(geany_settings, "msgwin-visible"))
+		if (! settings_get_bool("msgwin-visible"))
 		{
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_COMPILER);
-			g_settings_set_boolean(geany_settings, "msgwin-visible", TRUE);
+			settings_set_bool("msgwin-visible", TRUE);
 		}
 		else
 		if (gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
@@ -1030,7 +1030,7 @@ static void show_build_result_message(gboolean failure)
 	{
 		msg = _("Compilation finished successfully.");
 		msgwin_compiler_add_string(COLOR_BLUE, msg);
-		if (! g_settings_get_boolean(geany_settings, "msgwin-visible") ||
+		if (! settings_get_bool("msgwin-visible") ||
 			gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook)) != MSG_COMPILER)
 		{
 				ui_set_statusbar(FALSE, "%s", msg);

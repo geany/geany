@@ -385,7 +385,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	dinfo->print_time = time(NULL);
 	/* create a PangoLayout to be commonly used in add_page_header() and draw_page() */
-	font_name = g_settings_get_string(geany_settings, "editor-font");
+	font_name = settings_get_string("editor-font");
 	desc = pango_font_description_from_string(font_name);
 	g_free(font_name);
 	dinfo->layout = setup_pango_layout(context, desc);

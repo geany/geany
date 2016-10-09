@@ -835,7 +835,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		font_name = g_settings_get_string(geany_settings, "editor-font");
+		font_name = settings_get_string("editor-font");
 		vc->font = utils_get_setting_string(config, "VTE", "font", font_name);
 		g_free(font_name);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);

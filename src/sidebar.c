@@ -130,7 +130,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	font_name = g_settings_get_string(geany_settings, "symbols-font");
+	font_name = settings_get_string("symbols-font");
 	ui_widget_modify_font_from_string(tree, font_name);
 	g_free(font_name);
 
@@ -319,7 +319,7 @@ static void prepare_openfiles(void)
 	gtk_tree_sortable_set_sort_func(sortable, DOCUMENTS_SHORTNAME, documents_sort_func, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id(sortable, DOCUMENTS_SHORTNAME, GTK_SORT_ASCENDING);
 
-	font_name = g_settings_get_string(geany_settings, "symbols-font");
+	font_name = settings_get_string("symbols-font");
 	ui_widget_modify_font_from_string(tv.tree_openfiles, font_name);
 	g_free(font_name);
 
@@ -574,14 +574,14 @@ void sidebar_remove_document(GeanyDocument *doc)
 
 static void on_hide_sidebar(void)
 {
-	g_settings_set_boolean(geany_settings, "sidebar-visible", FALSE);
+	settings_set_bool("sidebar-visible", FALSE);
 }
 
 
 static gboolean on_sidebar_display_symbol_list_show(GtkWidget *item)
 {
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"));
+		settings_get_bool("sidebar-symbols-visible"));
 	return FALSE;
 }
 
@@ -589,7 +589,7 @@ static gboolean on_sidebar_display_symbol_list_show(GtkWidget *item)
 static gboolean on_sidebar_display_open_files_show(GtkWidget *item)
 {
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"));
+		settings_get_bool("sidebar-documents-visible"));
 	return FALSE;
 }
 
@@ -645,7 +645,7 @@ static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer us
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	gboolean active = gtk_check_menu_item_get_active(item);
-	g_settings_set_boolean(geany_settings, "sidebar-documents-visible", active);
+	settings_set_bool("sidebar-documents-visible", active);
 	gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"), active);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
@@ -654,7 +654,7 @@ static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
 	gboolean active = gtk_check_menu_item_get_active(item);
-	g_settings_set_boolean(geany_settings, "sidebar-symbols-visible", active);
+	settings_set_bool("sidebar-symbols-visible", active);
 	gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow2"), active);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
@@ -1172,8 +1172,8 @@ void sidebar_set_position_left(gboolean left)
 
 void sidebar_focus_openfiles_tab(void)
 {
-	if (g_settings_get_boolean(geany_settings, "sidebar-visible") && 
-		g_settings_get_boolean(geany_settings, "sidebar-documents-visible"))
+	if (settings_get_bool("sidebar-visible") && 
+		settings_get_bool("sidebar-documents-visible"))
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 
@@ -1185,8 +1185,8 @@ void sidebar_focus_openfiles_tab(void)
 
 void sidebar_focus_symbols_tab(void)
 {
-	if (g_settings_get_boolean(geany_settings, "sidebar-visible") && 
-		g_settings_get_boolean(geany_settings, "sidebar-symbols-visible"))
+	if (settings_get_bool("sidebar-visible") && 
+		settings_get_bool("sidebar-symbols-visible"))
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 		GtkWidget *symbol_list_scrollwin = gtk_notebook_get_nth_page(notebook, TREEVIEW_SYMBOL);
