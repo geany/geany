@@ -354,3 +354,116 @@ void settings_finalize(void)
 {
 	g_object_unref(geany_settings);
 }
+
+
+/**
+ * Get a boolean setting.
+ *
+ * @param key The setting's key.
+ * @return The value of the setting.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gboolean settings_get_bool(const gchar *key)
+{
+	return g_settings_get_boolean(geany_settings, key);
+}
+
+
+/**
+ * Get an integer setting.
+ *
+ * @param key The setting's key.
+ * @return The value of the setting.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gint settings_get_int(const gchar *key)
+{
+	return g_settings_get_int(geany_settings, key);
+}
+
+
+/**
+ * Get a string setting.
+ *
+ * @param key The setting's key.
+ * @return The value of the setting. Free the returned string with
+ * g_free() when no longer needed.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gchar *settings_get_string(const gchar *key)
+{
+	return g_settings_get_string(geany_settings, key);
+}
+
+
+/**
+ * Get an enumeration setting.
+ *
+ * @param key The setting's key.
+ * @return The value of the setting.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gint settings_get_enum(const gchar *key)
+{
+	return g_settings_get_enum(geany_settings, key);
+}
+
+
+/**
+ * Set a boolean setting.
+ *
+ * @param key The setting's key.
+ * @param value The new setting value.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+void settings_set_bool(const gchar *key, gboolean value)
+{
+	g_settings_set_boolean(geany_settings, key, value);
+}
+
+
+/**
+ * Set an integer setting.
+ *
+ * @param key The setting's key.
+ * @param value The new setting value.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+void settings_set_int(const gchar *key, gint value)
+{
+	g_settings_set_int(geany_settings, key, value);
+}
+
+
+/**
+ * Set a string setting.
+ *
+ * @param key The setting's key.
+ * @param value The new setting value.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+void settings_set_string(const gchar *key, const gchar *value)
+{
+	g_settings_set_string(geany_settings, key, value);
+}
+
+
+/**
+ * Set an enumeration setting.
+ *
+ * @param key The setting's key.
+ * @param value The new setting value.
+ * @since Geany 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+void settings_set_enum(const gchar *key, gint value)
+{
+	g_settings_set_enum(geany_settings, key, value);
+}

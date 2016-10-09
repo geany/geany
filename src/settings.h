@@ -25,11 +25,25 @@
 
 G_BEGIN_DECLS
 
+#ifdef GEANY_PRIVATE
+
 extern GSettings *geany_settings;
 
 void settings_init(void);
 void settings_finalize(void);
 GSettings *settings_create_for_prefs(void);
+
+#endif
+
+gboolean settings_get_bool(const gchar *key);
+gint settings_get_int(const gchar *key);
+gchar *settings_get_string(const gchar *key);
+gint settings_get_enum(const gchar *key);
+
+void settings_set_bool(const gchar *key, gboolean value);
+void settings_set_int(const gchar *key, gint value);
+void settings_set_string(const gchar *key, const gchar *value);
+void settings_set_enum(const gchar *key, gint value);
 
 G_END_DECLS
 
