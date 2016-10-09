@@ -197,5 +197,12 @@
 				Whether or not the markers (symbol) margin is visible.
 			</description>
 		</key>
+		<key name="show-line-number-margin" type="b">
+			<default>true</default>
+			<summary>Show line numbers margin</summary>
+			<description>
+				Whether or not the line numbers margin is visible.
+			</description>
+		</key>
 	</schema>
 </schemalist>

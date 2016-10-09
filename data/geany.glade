@@ -7406,7 +7406,6 @@
                             <property name="label" translatable="yes">Show _Line Numbers</property>
                             <property name="use_underline">True</property>
                             <property name="active">True</property>
-                            <signal name="toggled" handler="on_show_line_numbers1_toggled" swapped="no"/>
                           </object>
                         </child>
                         <child>

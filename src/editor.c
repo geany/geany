@@ -1122,7 +1122,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
  		case SCN_MODIFIED:
-			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
+			if (g_settings_get_boolean(geany_settings, "show-line-number-margin")
+				&& (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
 				/* automatically adjust Scintilla's line numbers margin width */
 				auto_update_margin_width(editor);
@@ -1197,7 +1198,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 		case SCN_ZOOM:
 			/* recalculate line margin width */
-			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+			sci_set_line_numbers(sci,
+				g_settings_get_boolean(geany_settings, "show-line-number-margin"));
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
@@ -5167,7 +5169,7 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 	sci_set_visible_white_spaces(sci, g_settings_get_boolean(geany_settings, "show-white-space"));
 	sci_set_visible_eols(sci, g_settings_get_boolean(geany_settings, "show-line-endings"));
 	sci_set_symbol_margin(sci, g_settings_get_boolean(geany_settings, "show-markers-margin"));
-	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+	sci_set_line_numbers(sci, g_settings_get_boolean(geany_settings, "show-line-number-margin"));
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 

@@ -335,8 +335,6 @@ gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gbo
 
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
 
-void ui_update_view_editor_menu_items(void);
-
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 
 void ui_focus_current_document(void);

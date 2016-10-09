@@ -178,8 +178,6 @@ static void apply_settings(void)
 	toolbar_apply_settings();
 	toolbar_update_ui();
 
-	ui_update_view_editor_menu_items();
-
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
 #endif
