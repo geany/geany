@@ -129,5 +129,6 @@ extern void setTagFilePosition (MIOPos *p);
 extern const char* getTagFileDirectory (void);
 extern void getTagScopeInformation (tagEntryInfo *const tag,
 				    const char **kind, const char **name);
+extern void    markTagExtraBit     (tagEntryInfo *const tag, xtagType extra);
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

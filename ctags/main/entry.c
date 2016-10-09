@@ -50,7 +50,6 @@
 #include "sort.h"
 #include "strlist.h"
 #include "xtag.h"
-#include "ctags.h"
 
 /*
 *   MACROS
@@ -161,38 +160,53 @@ static void rememberMaxLengths (const size_t nameLength, const size_t lineLength
 		TagFile.max.line = lineLength;
 }
 
-static void writePseudoTag (const char *const tagName,
-							const char *const fileName,
-							const char *const pattern)
+static void addCommonPseudoTags (void)
 {
-	const int length = mio_printf (TagFile.mio, "%s%s\t%s\t/%s/\n",
-								   PSEUDO_TAG_PREFIX, tagName, fileName, pattern);
-	++TagFile.numTags.added;
-	rememberMaxLengths (strlen (tagName), (size_t) length);
+	int i;
+
+	for (i = 0; i < PTAG_COUNT; i++)
+	{
+		if (isPtagCommonInParsers (i))
+			makePtagIfEnabled (i, NULL);
+	}
 }
 
-static void addPseudoTags (void)
+extern void makeFileTag (const char *const fileName)
 {
-	if (! Option.xref)
+	xtagType     xtag = XTAG_UNKNOWN;
+
+	if (isXtagEnabled(XTAG_FILE_NAMES))
+		xtag = XTAG_FILE_NAMES;
+
+	if (xtag != XTAG_UNKNOWN)
 	{
-		char format [11];
-		const char *formatComment = "unknown format";
+		tagEntryInfo tag;
+		kindOption  *kind;
 
-		sprintf (format, "%u", Option.tagFileFormat);
+		kind = getInputLanguageFileKind();
+		Assert (kind);
+		kind->enabled = isXtagEnabled(XTAG_FILE_NAMES);
 
-		if (Option.tagFileFormat == 1)
-			formatComment = "original ctags format";
-		else if (Option.tagFileFormat == 2)
-			formatComment =
-					"extended format; --format=1 will not append ;\" to lines";
+		/* TODO: you can return here if enabled == false. */
 
-		writePseudoTag ("TAG_FILE_FORMAT", format, formatComment);
-		writePseudoTag ("TAG_FILE_SORTED", Option.sorted ? "1":"0",
-					   "0=unsorted, 1=sorted");
-		writePseudoTag ("TAG_PROGRAM_AUTHOR",   AUTHOR_NAME,  "");
-		writePseudoTag ("TAG_PROGRAM_NAME",     PROGRAM_NAME, "");
-		writePseudoTag ("TAG_PROGRAM_URL",      PROGRAM_URL,  "official site");
-		writePseudoTag ("TAG_PROGRAM_VERSION",  PROGRAM_VERSION, "");
+		initTagEntry (&tag, baseFilename (fileName), kind);
+
+		tag.isFileEntry     = true;
+		tag.lineNumberEntry = true;
+		markTagExtraBit (&tag, xtag);
+
+		tag.lineNumber = 1;
+		if (isFieldEnabled (FIELD_END))
+		{
+			/* isFieldEnabled is called again in the rendering
+			   stage. However, it is called here for avoiding
+			   unnecessary read line loop. */
+			while (readLineFromInputFile () != NULL)
+				; /* Do nothing */
+			tag.extensionFields.endLine = getInputLineNumber ();
+		}
+
+		makeTagEntry (&tag);
 	}
 }
 
@@ -315,12 +329,13 @@ extern void openTagFile (void)
 		/* Open a tempfile with read and write mode. Read mode is used when
 		 * write the result to stdout. */
 		TagFile.mio = tempFile ("w+", &TagFile.name);
+		if (isXtagEnabled (XTAG_PSEUDO_TAGS))
+			addCommonPseudoTags ();
 	}
 	else
 	{
 		bool fileExists;
 
-		setDefaultTagFileName ();
 		TagFile.name = eStrdup (Option.tagFileName);
 		fileExists = doesFileExist (TagFile.name);
 		if (fileExists  &&  ! isTagFile (TagFile.name))
@@ -328,28 +343,34 @@ extern void openTagFile (void)
 			  "\"%s\" doesn't look like a tag file; I refuse to overwrite it.",
 				  TagFile.name);
 
-		if (Option.append  &&  fileExists)
+		if (Option.etags)
 		{
-			TagFile.mio = mio_new_file (TagFile.name, "r+");
-			if (TagFile.mio != NULL)
-			{
-				TagFile.numTags.prev = updatePseudoTags (TagFile.mio);
-				mio_free (TagFile.mio);
-				TagFile.mio = mio_new_file (TagFile.name, "a+");
-			}
+			if (Option.append  &&  fileExists)
+				TagFile.mio = mio_new_file (TagFile.name, "a+b");
+			else
+				TagFile.mio = mio_new_file (TagFile.name, "w+b");
 		}
 		else
 		{
-			TagFile.mio = mio_new_file (TagFile.name, "w");
-			if (TagFile.mio != NULL)
-				addPseudoTags ();
+			if (Option.append  &&  fileExists)
+			{
+				TagFile.mio = mio_new_file (TagFile.name, "r+");
+				if (TagFile.mio != NULL)
+				{
+					TagFile.numTags.prev = updatePseudoTags (TagFile.mio);
+					mio_free (TagFile.mio);
+					TagFile.mio = mio_new_file (TagFile.name, "a+");
+				}
+			}
+			else
+			{
+				TagFile.mio = mio_new_file (TagFile.name, "w");
+				if (TagFile.mio != NULL && isXtagEnabled (XTAG_PSEUDO_TAGS))
+					addCommonPseudoTags ();
+			}
 		}
-
 		if (TagFile.mio == NULL)
-		{
 			error (FATAL | PERROR, "cannot open tag file");
-			exit (1);
-		}
 	}
 	if (TagsToStdout)
 		TagFile.directory = eStrdup (CurrentDirectory);
@@ -453,6 +474,19 @@ extern void initTagEntry (tagEntryInfo *const e, const char *const name, const k
 extern void setTagWriter (tagWriter *t)
 {
 /*	writer = t; */
+}
+
+extern void    markTagExtraBit     (tagEntryInfo *const tag, xtagType extra)
+{
+	unsigned int index;
+	unsigned int offset;
+
+	Assert (extra < XTAG_COUNT);
+	Assert (extra != XTAG_UNKNOWN);
+
+	index = (extra / 8);
+	offset = (extra % 8);
+	tag->extra [ index ] |= (1 << offset);
 }
 
 extern unsigned long numTagsAdded(void)
