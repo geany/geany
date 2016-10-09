@@ -239,7 +239,8 @@ static void updateSortedFlag (
 					d != (int) Option.sorted)
 				{
 					mio_setpos (mio, &flagLocation);
-					mio_putc (mio, Option.sorted ? '1' : '0');
+					mio_putc (mio, Option.sorted == SO_FOLDSORTED ? '2' :
+						(Option.sorted == SO_SORTED ? '1' : '0'));
 				}
 				mio_setpos (mio, &nextLine);
 			}
@@ -252,27 +253,27 @@ static void updateSortedFlag (
  */
 static long unsigned int updatePseudoTags (MIO *const mio)
 {
-	enum { maxClassLength = 20 };
-	char class [maxClassLength + 1];
+	enum { maxEntryLength = 20 };
+	char entry [maxEntryLength + 1];
 	unsigned long linesRead = 0;
 	MIOPos startOfLine;
-	size_t classLength;
+	size_t entryLength;
 	const char *line;
 
-	sprintf (class, "%sTAG_FILE", PSEUDO_TAG_PREFIX);
-	classLength = strlen (class);
-	Assert (classLength < maxClassLength);
+	sprintf (entry, "%sTAG_FILE", PSEUDO_TAG_PREFIX);
+	entryLength = strlen (entry);
+	Assert (entryLength < maxEntryLength);
 
 	mio_getpos (mio, &startOfLine);
 	line = readLineRaw (TagFile.vLine, mio);
-	while (line != NULL  &&  line [0] == class [0])
+	while (line != NULL  &&  line [0] == entry [0])
 	{
 		++linesRead;
-		if (strncmp (line, class, classLength) == 0)
+		if (strncmp (line, entry, entryLength) == 0)
 		{
 			char tab, classType [16];
 
-			if (sscanf (line + classLength, "%15s%c", classType, &tab) == 2  &&
+			if (sscanf (line + entryLength, "%15s%c", classType, &tab) == 2  &&
 				tab == '\t')
 			{
 				if (strcmp (classType, "_SORTED") == 0)
@@ -298,7 +299,7 @@ static long unsigned int updatePseudoTags (MIO *const mio)
 
 static bool isTagFile (const char *const filename)
 {
-	bool ok = false;                 /* we assume not unless confirmed */
+	bool ok = false;  /* we assume not unless confirmed */
 	MIO *const mio = mio_new_file (filename, "rb");
 
 	if (mio == NULL  &&  errno == ENOENT)
@@ -380,7 +381,7 @@ extern void openTagFile (void)
 
 #ifdef USE_REPLACEMENT_TRUNCATE
 
-extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
+static void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
 {
 	enum { BufferSize = 1000 };
 	long toRead, numRead;
@@ -389,7 +390,7 @@ extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
 	do
 	{
 		toRead = (0 < remaining && remaining < BufferSize) ?
-					remaining : BufferSize;
+					remaining : (long) BufferSize;
 		numRead = mio_read (fromMio, buffer, (size_t) 1, (size_t) toRead);
 		if (mio_write (toMio, buffer, (size_t)1, (size_t)numRead) < (size_t)numRead)
 			error (FATAL | PERROR, "cannot complete write");
@@ -399,7 +400,7 @@ extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size)
 	eFree (buffer);
 }
 
-extern void copyFile (const char *const from, const char *const to, const long size)
+static void copyFile (const char *const from, const char *const to, const long size)
 {
 	MIO* const fromMio = mio_new_file (from, "rb");
 	if (fromMio == NULL)
@@ -516,7 +517,7 @@ extern void setMaxTagsLine (unsigned long max)
 
 extern void invalidatePatternCache(void)
 {
-/*	TagFile.patternCacheValid = false; */
+	TagFile.patternCacheValid = false;
 }
 
 extern void tagFilePosition (MIOPos *p)

@@ -111,8 +111,6 @@ struct sTagEntryInfo {
 */
 extern void freeTagFileResources (void);
 extern const char *tagFileName (void);
-extern void copyBytes (MIO* const fromMio, MIO* const toMio, const long size);
-extern void copyFile (const char *const from, const char *const to, const long size);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
 extern void makeTagEntry (const tagEntryInfo *const tag);
