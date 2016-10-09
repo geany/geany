@@ -504,17 +504,75 @@ out:
 	return r;
 }
 
-extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind)
+extern void initTagEntry (tagEntryInfo *const e, const char *const name,
+			  const kindOption *kind)
 {
-	Assert (File.source.name != NULL);
+	initTagEntryFull(e, name,
+			 getInputLineNumber (),
+			 getInputLanguageName (),
+			 getInputFilePosition (),
+			 getInputFileTagPath (),
+			 kind,
+			 ROLE_INDEX_DEFINITION,
+			 getSourceFileTagPath(),
+			 getSourceLanguageName(),
+			 getSourceLineNumber() - getInputLineNumber ());
+}
+
+extern void initRefTagEntry (tagEntryInfo *const e, const char *const name,
+			     const kindOption *kind, int roleIndex)
+{
+	initTagEntryFull(e, name,
+			 getInputLineNumber (),
+			 getInputLanguageName (),
+			 getInputFilePosition (),
+			 getInputFileTagPath (),
+			 kind,
+			 roleIndex,
+			 getSourceFileTagPath(),
+			 getSourceLanguageName(),
+			 getSourceLineNumber() - getInputLineNumber ());
+}
+
+extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
+			      unsigned long lineNumber,
+			      const char* language,
+			      MIOPos      filePosition,
+			      const char *inputFileName,
+			      const kindOption *kind,
+			      int roleIndex,
+			      const char *sourceFileName,
+			      const char* sourceLanguage,
+			      long sourceLineNumberDifference)
+{
+	int i;
+	Assert (getInputFileName() != NULL);
+
 	memset (e, 0, sizeof (tagEntryInfo));
-	e->lineNumberEntry  = (bool) (Option.locate == EX_LINENUM);
-	e->lineNumber       = getSourceLineNumber ();
-	e->language         = getSourceLanguageName ();
-	e->filePosition     = getInputFilePosition ();
-	e->sourceFileName   = getSourceFileTagPath ();
-	e->name             = name;
-	e->kind             = kind;
+	e->lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
+	e->lineNumber      = lineNumber;
+/*	e->boundaryInfo    = getNestedInputBoundaryInfo (lineNumber); */
+	e->language        = language;
+	e->filePosition    = filePosition;
+	e->inputFileName   = inputFileName;
+	e->name            = name;
+	e->extensionFields.scopeIndex     = CORK_NIL;
+	e->kind = kind;
+
+	Assert (roleIndex >= ROLE_INDEX_DEFINITION);
+	Assert (kind == NULL || roleIndex < kind->nRoles);
+	e->extensionFields.roleIndex = roleIndex;
+	if (roleIndex > ROLE_INDEX_DEFINITION)
+		markTagExtraBit (e, XTAG_REFERENCE_TAGS);
+
+	e->sourceLanguage = sourceLanguage;
+	e->sourceFileName = sourceFileName;
+	e->sourceLineNumberDifference = sourceLineNumberDifference;
+
+	e->usedParserFields = 0;
+
+	for ( i = 0; i < PRE_ALLOCATED_PARSER_FIELDS; i++ )
+		e->parserFields[i].ftype = FIELD_UNKNOWN;
 }
 
 extern void setTagWriter (tagWriter *t)

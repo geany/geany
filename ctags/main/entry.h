@@ -114,7 +114,20 @@ extern const char *tagFileName (void);
 extern void openTagFile (void);
 extern void closeTagFile (const bool resize);
 extern int makeTagEntry (const tagEntryInfo *const tag);
-extern void initTagEntry (tagEntryInfo *const e, const char *const name, const kindOption *kind);
+extern void initTagEntry (tagEntryInfo *const e, const char *const name,
+			  const kindOption *kind);
+extern void initRefTagEntry (tagEntryInfo *const e, const char *const name,
+			     const kindOption *kind, int roleIndex);
+extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
+			      unsigned long lineNumber,
+			      const char* language,
+			      MIOPos      filePosition,
+			      const char *inputFileName,
+			      const kindOption *kind,
+			      int roleIndex,
+			      const char *sourceFileName,
+			      const char* sourceLanguage,
+			      long sourceLineNumberDifference);
 
 extern unsigned long numTagsAdded(void);
 extern void setNumTagsAdded (unsigned long nadded);

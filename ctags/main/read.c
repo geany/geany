@@ -35,6 +35,21 @@ static MIOPos StartOfLine;      /* holds deferred position of start of line */
 *   FUNCTION DEFINITIONS
 */
 
+extern langType getInputLanguage (void)
+{
+	return File.source.language;
+}
+
+extern const char *getInputLanguageName (void)
+{
+	return getLanguageName (getInputLanguage());
+}
+
+extern const char *getInputFileTagPath (void)
+{
+	return vStringValue (File.source.tagPath);
+}
+
 extern kindOption *getInputLanguageFileKind (void)
 {
 	return getLanguageFileKind (File.input.language);

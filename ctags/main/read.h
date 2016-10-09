@@ -98,6 +98,9 @@ extern inputFile File;
 */
 
 /* InputFile: reading from fp in inputFile with updating fields in input fields */
+extern langType getInputLanguage (void);
+extern const char *getInputLanguageName (void);
+extern const char *getInputFileTagPath (void);
 extern kindOption *getInputLanguageFileKind (void);
 
 extern void freeSourceFileResources (void);
