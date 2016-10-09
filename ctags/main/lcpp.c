@@ -22,7 +22,7 @@
 #include "options.h"
 #include "read.h"
 #include "vstring.h"
-#include "routines.h"
+#include "parse.h"
 #include "xtag.h"
 
 /*
@@ -135,10 +135,7 @@ extern void cppInit (const bool state, const bool hasAtLiteralStrings,
 	Cpp.directive.ifdef [0].branchChosen = false;
 	Cpp.directive.ifdef [0].ignoring     = false;
 
-	if (Cpp.directive.name == NULL)
-		Cpp.directive.name = vStringNew ();
-	else
-		vStringClear (Cpp.directive.name);
+	Cpp.directive.name = vStringNewOrClear (Cpp.directive.name);
 }
 
 extern void cppTerminate (void)
@@ -305,35 +302,40 @@ static bool popConditional (void)
 	return isIgnore ();
 }
 
-static void makeDefineTag (const char *const name, bool parameterized)
+static int makeDefineTag (const char *const name, bool parameterized, bool undef)
 {
 	const bool isFileScope = (bool) (! isInputHeaderFile ());
 
-	if (includingDefineTags () &&
-		(! isFileScope  ||  isXtagEnabled(XTAG_FILE_SCOPE)))
+	if (!Cpp.defineMacroKind)
+		return CORK_NIL;
+	if (isFileScope && !isXtagEnabled(XTAG_FILE_SCOPE))
+		return CORK_NIL;
+
+	if ( /* condition for definition tag */
+		((!undef) && Cpp.defineMacroKind->enabled)
+		|| /* condition for reference tag */
+		(undef && isXtagEnabled(XTAG_REFERENCE_TAGS)))
 	{
 		tagEntryInfo e;
 
 		initTagEntry (&e, name, Cpp.defineMacroKind);
-
-		e.lineNumberEntry = (bool) (Option.locate != EX_PATTERN);
+		e.lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
 		e.isFileScope  = isFileScope;
 		e.truncateLine = true;
 		if (parameterized)
-		{
-			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition()
-					, e.name);
-		}
+			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition(), e.name);
 		makeTagEntry (&e);
 		if (parameterized)
 			eFree((char *) e.extensionFields.signature);
 	}
+	return CORK_NIL;
 }
 
-static void directiveDefine (const int c)
+static int directiveDefine (const int c, bool undef)
 {
 	bool parameterized;
 	int nc;
+	int r = CORK_NIL;
 
 	if (cppIsident1 (c))
 	{
@@ -342,9 +344,22 @@ static void directiveDefine (const int c)
 		ungetcToInputFile (nc);
 		parameterized = (bool) (nc == '(');
 		if (! isIgnore ())
-			makeDefineTag (vStringValue (Cpp.directive.name), parameterized);
+			makeDefineTag (vStringValue (Cpp.directive.name), parameterized, undef);
 	}
 	Cpp.directive.state = DRCTV_NONE;
+	return r;
+}
+
+static void directiveUndef (const int c)
+{
+	if (isXtagEnabled (XTAG_REFERENCE_TAGS))
+	{
+		directiveDefine (c, true);
+	}
+	else
+	{
+		Cpp.directive.state = DRCTV_NONE;
+	}
 }
 
 static void directivePragma (int c)
@@ -362,7 +377,7 @@ static void directivePragma (int c)
 			if (cppIsident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
-				makeDefineTag (vStringValue (Cpp.directive.name), false);
+				makeDefineTag (vStringValue (Cpp.directive.name), NULL, false);
 			}
 		}
 	}
@@ -417,18 +432,20 @@ static bool directiveHash (const int c)
 
 /*  Handles a pre-processor directive whose first character is given by "c".
  */
-static bool handleDirective (const int c)
+static bool handleDirective (const int c, int *macroCorkIndex)
 {
 	bool ignore = isIgnore ();
 
 	switch (Cpp.directive.state)
 	{
 		case DRCTV_NONE:    ignore = isIgnore ();        break;
-		case DRCTV_DEFINE:  directiveDefine (c);         break;
+		case DRCTV_DEFINE:
+			*macroCorkIndex = directiveDefine (c, false);
+			break;
 		case DRCTV_HASH:    ignore = directiveHash (c);  break;
 		case DRCTV_IF:      ignore = directiveIf (c);    break;
 		case DRCTV_PRAGMA:  directivePragma (c);         break;
-		case DRCTV_UNDEF:   directiveDefine (c);         break;
+		case DRCTV_UNDEF:   directiveUndef (c);         break;
 	}
 	return ignore;
 }
@@ -612,13 +629,6 @@ static int skipToEndOfChar (void)
 			ungetcToInputFile (c);
 			break;
 		}
-		else if (count == 1  &&  strchr ("DHOB", toupper (c)) != NULL)
-			veraBase = c;
-		else if (veraBase != '\0'  &&  ! isalnum (c))
-		{
-			ungetcToInputFile (c);
-			break;
-		}
 	}
 	return CHAR_SYMBOL;  /* symbolic representation of character */
 }
@@ -633,6 +643,7 @@ extern int cppGetc (void)
 	bool directive = false;
 	bool ignore = false;
 	int c;
+	int macroCorkIndex = CORK_NIL;
 
 	if (Cpp.ungetch != '\0')
 	{
@@ -643,6 +654,7 @@ extern int cppGetc (void)
 	}
 	else do
 	{
+start_loop:
 		c = getcFromInputFile ();
 process:
 		switch (c)
@@ -650,6 +662,7 @@ process:
 			case EOF:
 				ignore    = false;
 				directive = false;
+				macroCorkIndex = CORK_NIL;
 				break;
 
 			case TAB:
@@ -658,7 +671,10 @@ process:
 
 			case NEWLINE:
 				if (directive  &&  ! ignore)
+				{
+					macroCorkIndex = CORK_NIL;
 					directive = false;
+				}
 				Cpp.directive.accept = true;
 				break;
 
@@ -705,7 +721,7 @@ process:
 				int next = getcFromInputFile ();
 
 				if (next == NEWLINE)
-					continue;
+					goto start_loop;
 				else
 					ungetcToInputFile (next);
 				break;
@@ -828,7 +844,7 @@ process:
 			enter:
 				Cpp.directive.accept = false;
 				if (directive)
-					ignore = handleDirective (c);
+					ignore = handleDirective (c, &macroCorkIndex);
 				break;
 		}
 	} while (directive || ignore);

@@ -26,6 +26,7 @@
 #define WHOLE_FILE  -1L
 
 #define NO_PARSER_FIELD -1
+#define CORK_NIL 0
 
 /*
 *   DATA DECLARATIONS

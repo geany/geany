@@ -3138,11 +3138,16 @@ static bool findCTags (const unsigned int passCount)
 {
 	exception_t exception;
 	bool retry;
+	kindOption *kind_for_define = NULL;
 
 	contextual_fake_count = 0;
 
 	Assert (passCount < 3);
-	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage (Lang_cpp), &(CKinds [CK_DEFINE]));
+
+	kind_for_define = CKinds+CK_DEFINE;
+
+	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
+		kind_for_define);
 
 	exception = (exception_t) setjmp (Exception);
 	retry = false;
