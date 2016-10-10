@@ -80,6 +80,9 @@ typedef struct sCppState {
 *   DATA DEFINITIONS
 */
 
+static vString *signature = NULL;
+static bool collectingSignature = false;
+
 /*  Use brace formatting to detect end of block.
  */
 static bool BraceFormat = false;
@@ -174,6 +177,21 @@ extern void cppUngetc (const int c)
 	Cpp.ungetch = c;
 }
 
+static inline int getcAndCollect ()
+{
+	int c = getcFromInputFile ();
+	if (collectingSignature && c != EOF)
+		vStringPut (signature, c);
+	return c;
+}
+
+static inline void ungetcAndCollect (int c)
+{
+	ungetcToInputFile (c);
+	if (collectingSignature)
+		vStringChop (signature);
+}
+
 /*  Reads a directive, whose first character is given by "c", into "name".
  */
 static bool readDirective (int c, char *const name, unsigned int maxLength)
@@ -184,10 +202,10 @@ static bool readDirective (int c, char *const name, unsigned int maxLength)
 	{
 		if (i > 0)
 		{
-			c = getcFromInputFile ();
+			c = getcAndCollect ();
 			if (c == EOF  ||  ! isalpha (c))
 			{
-				ungetcToInputFile (c);
+				ungetcAndCollect (c);
 				break;
 			}
 		}
@@ -207,9 +225,9 @@ static void readIdentifier (int c, vString *const name)
 	do
 	{
 		vStringPut (name, c);
-		c = getcFromInputFile ();
+		c = getcAndCollect ();
 	} while (c != EOF && cppIsident (c));
-	ungetcToInputFile (c);
+	ungetcAndCollect (c);
 }
 
 static conditionalInfo *currentConditional (void)
@@ -323,7 +341,7 @@ static int makeDefineTag (const char *const name, bool parameterized, bool undef
 		e.isFileScope  = isFileScope;
 		e.truncateLine = true;
 		if (parameterized)
-			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition(), e.name);
+			e.extensionFields.signature = cppGetSignature ();
 		makeTagEntry (&e);
 		if (parameterized)
 			eFree((char *) e.extensionFields.signature);
@@ -333,16 +351,29 @@ static int makeDefineTag (const char *const name, bool parameterized, bool undef
 
 static int directiveDefine (const int c, bool undef)
 {
-	bool parameterized;
-	int nc;
 	int r = CORK_NIL;
 
 	if (cppIsident1 (c))
 	{
+		bool parameterized;
+		int nc;
+
 		readIdentifier (c, Cpp.directive.name);
-		nc = getcFromInputFile ();
-		ungetcToInputFile (nc);
-		parameterized = (bool) (nc == '(');
+		nc = getcAndCollect ();
+		parameterized = (nc == '(');
+		if (parameterized)
+		{
+			cppStartCollectingSignature ();
+			while (nc != EOF)
+			{
+				int lastC = nc;
+				nc = getcAndCollect ();
+				if (nc == '\n' && lastC != '\\')
+					break;
+			}
+			cppStopCollectingSignature ();
+		}
+		ungetcAndCollect (nc);
 		if (! isIgnore ())
 			makeDefineTag (vStringValue (Cpp.directive.name), parameterized, undef);
 	}
@@ -372,7 +403,7 @@ static void directivePragma (int c)
 			/* generate macro tag for weak name */
 			do
 			{
-				c = getcFromInputFile ();
+				c = getcAndCollect ();
 			} while (c == SPACE);
 			if (cppIsident1 (c))
 			{
@@ -456,7 +487,7 @@ static bool handleDirective (const int c, int *macroCorkIndex)
 static Comment isComment (void)
 {
 	Comment comment;
-	const int next = getcFromInputFile ();
+	const int next = getcAndCollect ();
 
 	if (next == '*')
 		comment = COMMENT_C;
@@ -466,7 +497,7 @@ static Comment isComment (void)
 		comment = COMMENT_D;
 	else
 	{
-		ungetcToInputFile (next);
+		ungetcAndCollect (next);
 		comment = COMMENT_NONE;
 	}
 	return comment;
@@ -477,15 +508,15 @@ static Comment isComment (void)
  */
 int cppSkipOverCComment (void)
 {
-	int c = getcFromInputFile ();
+	int c = getcAndCollect ();
 
 	while (c != EOF)
 	{
 		if (c != '*')
-			c = getcFromInputFile ();
+			c = getcAndCollect ();
 		else
 		{
-			const int next = getcFromInputFile ();
+			const int next = getcAndCollect ();
 
 			if (next != '/')
 				c = next;
@@ -505,10 +536,10 @@ static int skipOverCplusComment (void)
 {
 	int c;
 
-	while ((c = getcFromInputFile ()) != EOF)
+	while ((c = getcAndCollect ()) != EOF)
 	{
 		if (c == BACKSLASH)
-			getcFromInputFile ();  /* throw away next character, too */
+			getcAndCollect ();  /* throw away next character, too */
 		else if (c == NEWLINE)
 			break;
 	}
@@ -520,15 +551,15 @@ static int skipOverCplusComment (void)
  */
 static int skipOverDComment (void)
 {
-	int c = getcFromInputFile ();
+	int c = getcAndCollect ();
 
 	while (c != EOF)
 	{
 		if (c != '+')
-			c = getcFromInputFile ();
+			c = getcAndCollect ();
 		else
 		{
-			const int next = getcFromInputFile ();
+			const int next = getcAndCollect ();
 
 			if (next != '/')
 				c = next;
@@ -549,10 +580,10 @@ static int skipToEndOfString (bool ignoreBackslash)
 {
 	int c;
 
-	while ((c = getcFromInputFile ()) != EOF)
+	while ((c = getcAndCollect ()) != EOF)
 	{
 		if (c == BACKSLASH && ! ignoreBackslash)
-			getcFromInputFile ();  /* throw away next character, too */
+			getcAndCollect ();  /* throw away next character, too */
 		else if (c == DOUBLE_QUOTE)
 			break;
 	}
@@ -567,11 +598,11 @@ static int isCxxRawLiteralDelimiterChar (int c)
 
 static int skipToEndOfCxxRawLiteralString (void)
 {
-	int c = getcFromInputFile ();
+	int c = getcAndCollect ();
 
 	if (c != '(' && ! isCxxRawLiteralDelimiterChar (c))
 	{
-		ungetcToInputFile (c);
+		ungetcAndCollect (c);
 		c = skipToEndOfString (false);
 	}
 	else
@@ -594,15 +625,15 @@ static int skipToEndOfCxxRawLiteralString (void)
 			{
 				unsigned int i = 0;
 
-				while ((c = getcFromInputFile ()) != EOF && i < delimLen && delim[i] == c)
+				while ((c = getcAndCollect ()) != EOF && i < delimLen && delim[i] == c)
 					i++;
 				if (i == delimLen && c == DOUBLE_QUOTE)
 					break;
 				else
-					ungetcToInputFile (c);
+					ungetcAndCollect (c);
 			}
 		}
-		while ((c = getcFromInputFile ()) != EOF);
+		while ((c = getcAndCollect ()) != EOF);
 		c = STRING_SYMBOL;
 	}
 	return c;
@@ -617,16 +648,16 @@ static int skipToEndOfChar (void)
 	int c;
 	int count = 0, veraBase = '\0';
 
-	while ((c = getcFromInputFile ()) != EOF)
+	while ((c = getcAndCollect ()) != EOF)
 	{
 	    ++count;
 		if (c == BACKSLASH)
-			getcFromInputFile ();  /* throw away next character, too */
+			getcAndCollect ();  /* throw away next character, too */
 		else if (c == SINGLE_QUOTE)
 			break;
 		else if (c == NEWLINE)
 		{
-			ungetcToInputFile (c);
+			ungetcAndCollect (c);
 			break;
 		}
 	}
@@ -655,7 +686,7 @@ extern int cppGetc (void)
 	else do
 	{
 start_loop:
-		c = getcFromInputFile ();
+		c = getcAndCollect ();
 process:
 		switch (c)
 		{
@@ -707,7 +738,7 @@ process:
 				{
 					c = skipOverCplusComment ();
 					if (c == NEWLINE)
-						ungetcToInputFile (c);
+						ungetcAndCollect (c);
 				}
 				else if (comment == COMMENT_D)
 					c = skipOverDComment ();
@@ -718,23 +749,23 @@ process:
 
 			case BACKSLASH:
 			{
-				int next = getcFromInputFile ();
+				int next = getcAndCollect ();
 
 				if (next == NEWLINE)
 					goto start_loop;
 				else
-					ungetcToInputFile (next);
+					ungetcAndCollect (next);
 				break;
 			}
 
 			case '?':
 			{
-				int next = getcFromInputFile ();
+				int next = getcAndCollect ();
 				if (next != '?')
-					ungetcToInputFile (next);
+					ungetcAndCollect (next);
 				else
 				{
-					next = getcFromInputFile ();
+					next = getcAndCollect ();
 					switch (next)
 					{
 						case '(':          c = '[';       break;
@@ -747,8 +778,8 @@ process:
 						case '-':          c = '~';       break;
 						case '=':          c = '#';       goto process;
 						default:
-							ungetcToInputFile ('?');
-							ungetcToInputFile (next);
+							ungetcAndCollect ('?');
+							ungetcAndCollect (next);
 							break;
 					}
 				}
@@ -760,32 +791,32 @@ process:
 			 */
 			case '<':
 			{
-				int next = getcFromInputFile ();
+				int next = getcAndCollect ();
 				switch (next)
 				{
 					case ':':	c = '['; break;
 					case '%':	c = '{'; break;
-					default: ungetcToInputFile (next);
+					default: ungetcAndCollect (next);
 				}
 				goto enter;
 			}
 			case ':':
 			{
-				int next = getcFromInputFile ();
+				int next = getcAndCollect ();
 				if (next == '>')
 					c = ']';
 				else
-					ungetcToInputFile (next);
+					ungetcAndCollect (next);
 				goto enter;
 			}
 			case '%':
 			{
-				int next = getcFromInputFile ();
+				int next = getcAndCollect ();
 				switch (next)
 				{
 					case '>':	c = '}'; break;
 					case ':':	c = '#'; goto process;
-					default: ungetcToInputFile (next);
+					default: ungetcAndCollect (next);
 				}
 				goto enter;
 			}
@@ -793,7 +824,7 @@ process:
 			default:
 				if (c == '@' && Cpp.hasAtLiteralStrings)
 				{
-					int next = getcFromInputFile ();
+					int next = getcAndCollect ();
 					if (next == DOUBLE_QUOTE)
 					{
 						Cpp.directive.accept = false;
@@ -801,7 +832,7 @@ process:
 						break;
 					}
 					else
-						ungetcToInputFile (next);
+						ungetcAndCollect (next);
 				}
 				else if (c == 'R' && Cpp.hasCxxRawLiteralStrings)
 				{
@@ -830,9 +861,9 @@ process:
 					    (! cppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
 					    (! cppIsident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
-						int next = getcFromInputFile ();
+						int next = getcAndCollect ();
 						if (next != DOUBLE_QUOTE)
-							ungetcToInputFile (next);
+							ungetcAndCollect (next);
 						else
 						{
 							Cpp.directive.accept = false;
@@ -944,17 +975,16 @@ static void stripCodeBuffer(char *buf)
 	return;
 }
 
-static char *getArglistFromStr(char *buf, const char *name)
+extern char *cppGetSignature(void)
 {
 	char *start, *end;
 	int level;
-	if ((NULL == buf) || (NULL == name) || ('\0' == name[0]))
+
+	if (NULL == signature || vStringLength (signature) < 2)
 		return NULL;
-	stripCodeBuffer(buf);
-	if (NULL == (start = strstr(buf, name)))
-		return NULL;
-	if (NULL == (start = strchr(start, '(')))
-		return NULL;
+
+	start = strdup (vStringValue (signature));
+	stripCodeBuffer(start);
 	for (level = 1, end = start + 1; level > 0; ++end)
 	{
 		if ('\0' == *end)
@@ -965,34 +995,17 @@ static char *getArglistFromStr(char *buf, const char *name)
 			-- level;
 	}
 	*end = '\0';
-	return strdup(start);
+	return start;
 }
 
-extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName)
+extern void cppStartCollectingSignature (void)
 {
-	MIOPos originalPosition;
-	char *result = NULL;
-	char *arglist = NULL;
-	long pos1, pos2;
+	signature = vStringNewOrClear (signature);
+	vStringPut (signature, '(');
+	collectingSignature = true;
+}
 
-	pos2 = mio_tell(File.mio);
-
-	mio_getpos(File.mio, &originalPosition);
-	mio_setpos(File.mio, &startPosition);
-	pos1 = mio_tell(File.mio);
-
-	if (pos2 > pos1)
-	{
-		size_t len = pos2 - pos1;
-
-		result = (char *) eMalloc(len + 1);
-		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
-		{
-			result[len] = '\0';
-			arglist = getArglistFromStr(result, tokenName);
-		}
-		eFree(result);
-	}
-	mio_setpos(File.mio, &originalPosition);
-	return arglist;
+extern void cppStopCollectingSignature (void)
+{
+	collectingSignature = false;
 }

@@ -20,5 +20,5 @@ objÌ16384Ö0ÏObject
 qarÌ64ÎStruct.UnionÖ0Ïint
 quxxÌ64ÎStruct.UnionÖ0Ïbool
 test.simpleÌ256Ö0
-tfunÌ16Í(T)ÎClassÖ0Ïauto
+tfunÌ16Í(T v)ÎClassÖ0Ïauto
 thisÌ16Í(AliasInt x)ÎClassÖ0

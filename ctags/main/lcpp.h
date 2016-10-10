@@ -71,6 +71,9 @@ extern void cppEndStatement (void);
 extern void cppUngetc (const int c);
 extern int cppGetc (void);
 extern int cppSkipOverCComment (void);
-extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName);
+
+extern char *cppGetSignature (void);
+extern void cppStartCollectingSignature (void);
+extern void cppStopCollectingSignature (void);
 
 #endif  /* CTAGS_MAIN_GET_H */

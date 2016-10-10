@@ -215,7 +215,6 @@ typedef struct sStatementInfo
 	memberInfo	member;         /* information regarding parent class/struct */
 	vString*	parentClasses;  /* parent classes */
 	struct sStatementInfo *parent;  /* statement we are nested within */
-	long 			argEndPosition; /* Position where argument list ended */
 	tokenInfo* 		firstToken; /* First token in the statement */
 } statementInfo;
 
@@ -947,7 +946,6 @@ static void reinitStatement (statementInfo *const st, const bool partial)
 	st->gotName				= false;
 	st->nSemicolons			= 0;
 	st->haveQualifyingName	= false;
-	st->argEndPosition		= 0;
 
 	st->tokenIndex			= 0;
 	for (i = 0  ;  i < (unsigned int) NumTokens  ;  ++i)
@@ -1225,8 +1223,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
             if ((true == st->gotArgs) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				tag->extensionFields.signature = cppGetArglistFromFilePos(
-						tag->filePosition, tag->name);
+				tag->extensionFields.signature = cppGetSignature ();
 			}
 			break;
 		}
@@ -2420,6 +2417,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	bool firstChar = true;
 	int nextChar = '\0';
 
+	cppStartCollectingSignature ();
+
 	info->parameterCount = 1;
 	do
 	{
@@ -2560,8 +2559,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 		skipToMatch ("()");
 		--depth;
 	}
-	if (st->argEndPosition == 0)
-		st->argEndPosition = mio_tell (File.mio);
+
+	cppStopCollectingSignature ();
 
 	if (! info->isNameCandidate)
 		initToken (token);
