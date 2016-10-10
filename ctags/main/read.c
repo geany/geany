@@ -38,9 +38,19 @@
 *   DATA DECLARATIONS
 */
 
+typedef struct sLangStack {
+	langType *languages;
+	unsigned int count;
+	unsigned int size;
+} langStack;
 
 /*  Maintains the state of the current input file.
  */
+typedef union sInputLangInfo {
+	langStack stack;
+	langType  type;
+} inputLangInfo;
+
 typedef struct sInputFileInfo {
 	vString *name;           /* name to report for input file */
 	vString *tagPath;        /* path of input file relative to tag file */
@@ -52,6 +62,19 @@ typedef struct sInputFileInfo {
 	bool isHeader;           /* is input file a header file? */
 	langType language;       /* language of input file */
 } inputFileInfo;
+
+typedef struct sInputLineFposMap {
+	MIOPos *pos;
+	unsigned int count;
+	unsigned int size;
+} inputLineFposMap;
+
+typedef struct sNestedInputStreamInfo {
+	unsigned long startLine;
+	int startCharOffset;
+	unsigned long endLine;
+	int endCharOffset;
+} nestedInputStreamInfo;
 
 typedef struct sInputFile {
 	vString    *path;          /* path of input file (if any) */
@@ -68,6 +91,17 @@ typedef struct sInputFile {
 	 */
 	inputFileInfo input; /* name, lineNumber */
 	inputFileInfo source;
+
+	nestedInputStreamInfo nestedInputStreamInfo;
+
+	/* sourceTagPathHolder is a kind of trash box.
+	   The buffer pointed by tagPath field of source field can
+	   be referred from tagsEntryInfo instances. sourceTagPathHolder
+	   is used keeping the buffer till all processing about the current
+	   input file is done. After all processing is done, the buffers
+	   in sourceTagPathHolder are destroied. */
+	stringList  * sourceTagPathHolder;
+	inputLineFposMap lineFposMap;
 } inputFile;
 
 /*
