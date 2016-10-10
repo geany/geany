@@ -35,11 +35,46 @@
 #include <regex.h>
 
 /*
+*   DATA DECLARATIONS
+*/
+
+
+/*  Maintains the state of the current input file.
+ */
+typedef struct sInputFileInfo {
+	vString *name;           /* name to report for input file */
+	vString *tagPath;        /* path of input file relative to tag file */
+	unsigned long lineNumber;/* line number in the input file */
+	unsigned long lineNumberOrigin; /* The value set to `lineNumber'
+					   when `resetInputFile' is called
+					   on the input stream.
+					   This is needed for nested stream. */
+	bool isHeader;           /* is input file a header file? */
+	langType language;       /* language of input file */
+} inputFileInfo;
+
+typedef struct sInputFile {
+	vString    *path;          /* path of input file (if any) */
+	vString    *line;          /* last line read from file */
+	const unsigned char* currentLine;  /* current line being worked on */
+	MIO        *mio;           /* MIO stream used for reading the file */
+	MIOPos      filePosition;  /* file position of current line */
+	unsigned int ungetchIdx;
+	int         ungetchBuf[3]; /* characters that were ungotten */
+
+	/*  Contains data pertaining to the original `source' file in which the tag
+	 *  was defined. This may be different from the `input' file when #line
+	 *  directives are processed (i.e. the input file is preprocessor output).
+	 */
+	inputFileInfo input; /* name, lineNumber */
+	inputFileInfo source;
+} inputFile;
+
+/*
 *   DATA DEFINITIONS
 */
-inputFile File;                 /* globally read through macros */
-static MIOPos StartOfLine;      /* holds deferred position of start of line */
-
+static inputFile File;  /* static read through functions */
+static MIOPos StartOfLine;  /* holds deferred position of start of line */
 
 /*
 *   FUNCTION DEFINITIONS
