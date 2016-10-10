@@ -389,16 +389,7 @@ static bool parseLineDirective (char *s)
 
 			if (vStringLength (fileName) > 0 &&
 				lNum == 1)
-			{
-				tagEntryInfo tag;
-				initTagEntry (&tag, baseFilename (vStringValue (fileName)), getInputLanguageFileKind ());
-
-				tag.isFileEntry     = true;
-				tag.lineNumberEntry = true;
-				tag.lineNumber      = 1;
-
-				makeTagEntry (&tag);
-			}
+				makeFileTag (vStringValue (fileName));
 			vStringDelete (fileName);
 			result = true;
 		}
