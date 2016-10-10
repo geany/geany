@@ -574,7 +574,7 @@ static bool createTagsForFile (const char *const fileName,
 {
 	bool retried = false;
 
-	if (fileOpen (fileName, language))
+	if (openInputFile (fileName, language))
 	{
 
 		makeFileTag (fileName);
@@ -585,7 +585,7 @@ static bool createTagsForFile (const char *const fileName,
 			retried = LanguageTable [language]->parser2 (passCount);
 
 
-		fileClose ();
+		closeInputFile ();
 	}
 
 	return retried;

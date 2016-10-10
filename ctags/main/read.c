@@ -207,7 +207,7 @@ extern unsigned long getSourceLineNumber (void)
 	return File.source.lineNumber;
 }
 
-extern void freeSourceFileResources (void)
+extern void freeInputFileResources (void)
 {
 	vStringDelete (File.input.name);
 	vStringDelete (File.path);
@@ -404,7 +404,7 @@ static bool parseLineDirective (char *s)
 /*  This function opens an input file, and resets the line counter.  If it
  *  fails, it will display an error message and leave the File.mio set to NULL.
  */
-extern bool fileOpen (const char *const fileName, const langType language)
+extern bool openInputFile (const char *const fileName, const langType language)
 {
 	const char *const openMode = "rb";
 	bool opened = false;
@@ -487,7 +487,7 @@ extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
 	return opened;
 }
 
-extern void fileClose (void)
+extern void closeInputFile (void)
 {
 	if (File.mio != NULL)
 	{

@@ -69,31 +69,31 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	while (retry && passCount < 3)
 	{
 		pass_callback(user_data);
-		if (!buffer && fileOpen (file_name, lang))
+		if (!buffer && openInputFile (file_name, lang))
 		{
 			if (LanguageTable [lang]->parser != NULL)
 			{
 				LanguageTable [lang]->parser ();
-				fileClose ();
+				closeInputFile ();
 				retry = FALSE;
 				break;
 			}
 			else if (LanguageTable [lang]->parser2 != NULL)
 				retry = LanguageTable [lang]->parser2 (passCount);
-			fileClose ();
+			closeInputFile ();
 		}
 		else if (buffer && bufferOpen (buffer, buffer_size, file_name, lang))
 		{
 			if (LanguageTable [lang]->parser != NULL)
 			{
 				LanguageTable [lang]->parser ();
-				bufferClose ();
+				closeInputFile ();
 				retry = FALSE;
 				break;
 			}
 			else if (LanguageTable [lang]->parser2 != NULL)
 				retry = LanguageTable [lang]->parser2 (passCount);
-			bufferClose ();
+			closeInputFile ();
 		}
 		else
 		{
