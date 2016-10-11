@@ -146,7 +146,7 @@ extern MIOPos getInputFilePositionForLine (int line)
 
 extern langType getInputLanguage (void)
 {
-	return File.source.language;
+	return File.input.language;
 }
 
 extern const char *getInputLanguageName (void)
@@ -156,7 +156,7 @@ extern const char *getInputLanguageName (void)
 
 extern const char *getInputFileTagPath (void)
 {
-	return vStringValue (File.source.tagPath);
+	return vStringValue (File.input.tagPath);
 }
 
 extern bool isInputLanguage (langType lang)
@@ -183,7 +183,7 @@ extern bool doesInputLanguageAllowNullTag (void)
 
 extern kindOption *getInputLanguageFileKind (void)
 {
-	return getLanguageFileKind (File.input.language);
+	return getLanguageFileKind (getInputLanguage ());
 }
 
 extern bool doesInputLanguageRequestAutomaticFQTag (void)
@@ -207,26 +207,38 @@ extern unsigned long getSourceLineNumber (void)
 	return File.source.lineNumber;
 }
 
+static void freeInputFileInfo (inputFileInfo *finfo)
+{
+	if (finfo->name)
+	{
+		vStringDelete (finfo->name);
+		finfo->name = NULL;
+	}
+	if (finfo->tagPath)
+	{
+		vStringDelete (finfo->tagPath);
+		finfo->tagPath = NULL;
+	}
+}
+
 extern void freeInputFileResources (void)
 {
-	vStringDelete (File.input.name);
-	vStringDelete (File.path);
-	vStringDelete (File.source.name);
-	vStringDelete (File.line);
+	if (File.path != NULL)
+		vStringDelete (File.path);
+	if (File.line != NULL)
+		vStringDelete (File.line);
+	freeInputFileInfo (&File.input);
+	freeInputFileInfo (&File.source);
 }
 
 /*
  *   Input file access functions
  */
 
-static void setInputFileName (const char *const fileName)
+static void setOwnerDirectoryOfInputFile (const char *const fileName)
 {
 	const char *const head = fileName;
 	const char *const tail = baseFilename (head);
-
-	if (File.input.name != NULL)
-		vStringDelete (File.input.name);
-	File.input.name = vStringNewInit (fileName);
 
 	if (File.path != NULL)
 		vStringDelete (File.path);
@@ -239,34 +251,49 @@ static void setInputFileName (const char *const fileName)
 		vStringNCopyS (File.path, fileName, length);
 	}
 }
+
+static void setInputFileParametersCommon (inputFileInfo *finfo, vString *const fileName,
+					  const langType language,
+					  stringList *holder)
+{
+	if (finfo->name != NULL)
+		vStringDelete (finfo->name);
+	finfo->name = fileName;
+
+	if (finfo->tagPath != NULL)
+	{
+		if (holder)
+			stringListAdd (holder, finfo->tagPath);
+		else
+			vStringDelete (finfo->tagPath);
+	}
+	if (! Option.tagRelative || isAbsolutePath (vStringValue (fileName)))
+		finfo->tagPath = vStringNewCopy (fileName);
+	else
+		finfo->tagPath =
+				vStringNewOwn (relativeFilename (vStringValue (fileName),
+								 getTagFileDirectory ()));
+
+	finfo->isHeader = isIncludeFile (vStringValue (fileName));
+
+	if (language != -1)
+		finfo->language = language;
+	else
+		finfo->language = getFileLanguage (vStringValue (fileName));
+}
+
+static void setInputFileParameters (vString *const fileName, const langType language)
+{
+	setInputFileParametersCommon (&File.input, fileName,
+				      language,
+				      NULL);
+}
+
 static void setSourceFileParameters (vString *const fileName, const langType language)
 {
-	if (File.source.name != NULL)
-		vStringDelete (File.source.name);
-	if (File.input.name != NULL)
-		vStringDelete (File.input.name);
-	File.source.name = fileName;
-	File.input.name = vStringNewCopy(fileName);
-
-	if (File.source.tagPath != NULL)
-		eFree (File.source.tagPath);
-	if (! Option.tagRelative || isAbsolutePath (vStringValue (fileName)))
-		File.source.tagPath = vStringNewCopy (fileName);
-	else
-		File.source.tagPath =
-				vStringNewOwn (relativeFilename (vStringValue (fileName),
-								getTagFileDirectory ()));
-
-	if (vStringLength (fileName) > maxTagsLine ())
-		setMaxTagsLine (vStringLength (fileName));
-
-	File.source.isHeader = isIncludeFile (vStringValue (fileName));
-	File.input.isHeader = File.source.isHeader;
-	if (language != -1)
-		File.source.language = language;
-	else
-		File.source.language = getFileLanguage (vStringValue (fileName));
-	File.input.language = File.source.language;
+	setInputFileParametersCommon (&File.source, fileName,
+				      language,
+				      File.sourceTagPathHolder);
 }
 
 static bool setSourceFileName (vString *const fileName)
@@ -284,7 +311,7 @@ static bool setSourceFileName (vString *const fileName)
 				vStringValue (File.path), vStringValue (fileName));
 			pathName = vStringNewOwn (tmp);
 		}
-		setSourceFileParameters (pathName, -1);
+		setSourceFileParameters (pathName, language);
 		result = true;
 	}
 	return result;
@@ -461,21 +488,24 @@ extern bool openInputFile (const char *const fileName, const langType language,
 	{
 		opened = true;
 
-		setInputFileName (fileName);
+		setOwnerDirectoryOfInputFile (fileName);
 		mio_getpos (File.mio, &StartOfLine);
 		mio_getpos (File.mio, &File.filePosition);
 		File.currentLine  = NULL;
-		File.input.lineNumber   = 0L;
 
 		if (File.line != NULL)
 			vStringClear (File.line);
 
+		setInputFileParameters  (vStringNewInit (fileName), language);
+		File.input.lineNumberOrigin = 0L;
+		File.input.lineNumber = File.input.lineNumberOrigin;
 		setSourceFileParameters (vStringNewInit (fileName), language);
-		File.source.lineNumber = 0L;
+		File.source.lineNumberOrigin = 0L;
+		File.source.lineNumber = File.source.lineNumberOrigin;
 
 		verbose ("OPENING %s as %s language %sfile\n", fileName,
 				getLanguageName (language),
-				File.source.isHeader ? "include " : "");
+				File.input.isHeader ? "include " : "");
 	}
 	return opened;
 }
@@ -508,7 +538,6 @@ extern void closeInputFile (void)
 			fileStatus *status = eStat (vStringValue (File.input.name));
 			addTotals (0, File.input.lineNumber - 1L, status->size);
 		}
-
 		mio_free (File.mio);
 		File.mio = NULL;
 	}
@@ -584,7 +613,7 @@ static vString *iFileGetLine (void)
 
 		if (Option.lineDirectives && vStringChar (File.line, 0) == '#')
 			parseLineDirective (vStringValue (File.line) + 1);
-		matchRegex (File.line, File.source.language);
+		matchRegex (File.line, getInputLanguage ());
 
 		return File.line;
 	}
