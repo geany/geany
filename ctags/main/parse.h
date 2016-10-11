@@ -134,8 +134,6 @@ extern void initializeParser (langType language);
 extern void freeParserResources (void);
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processKindOption (const char *const option, const char *const parameter);
-extern void printKindOptions (void);
-extern bool parseFile (const char *const fileName);
 
 extern void installKeywordTable (const langType language);
 
