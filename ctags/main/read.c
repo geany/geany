@@ -121,6 +121,7 @@ static void     langStackClear(langStack *langStack);
 *   DATA DEFINITIONS
 */
 static inputFile File;  /* static read through functions */
+static inputFile BackupFile;	/* File is copied here when a nested parser is pushed */
 static MIOPos StartOfLine;  /* holds deferred position of start of line */
 
 /*
@@ -240,6 +241,11 @@ extern void freeInputFileResources (void)
 		vStringDelete (File.line);
 	freeInputFileInfo (&File.input);
 	freeInputFileInfo (&File.source);
+}
+
+extern const unsigned char *getInputFileData (size_t *size)
+{
+	return mio_memory_get_data (File.mio, size);
 }
 
 /*
@@ -542,6 +548,7 @@ extern bool openInputFile (const char *const fileName, const langType language,
 {
 	const char *const openMode = "rb";
 	bool opened = false;
+	bool memStreamRequired;
 
 	/*	If another file was already open, then close it.
 	 */
@@ -551,7 +558,27 @@ extern bool openInputFile (const char *const fileName, const langType language,
 		File.mio = NULL;
 	}
 
-	File.mio = mio? mio_ref (mio): getMio (fileName, openMode, true);
+	/* File position is used as key for checking the availability of
+	   pattern cache in entry.h. If an input file is changed, the
+	   key is meaningless. So notifying the changing here. */
+	invalidatePatternCache();
+
+	if (File.sourceTagPathHolder == NULL)
+		File.sourceTagPathHolder = stringListNew ();
+	stringListClear (File.sourceTagPathHolder);
+
+	memStreamRequired = false; /*doesParserRequireMemoryStream (language);*/
+
+	if (mio)
+	{
+		size_t tmp;
+		if (memStreamRequired && (!mio_memory_get_data (mio, &tmp)))
+			mio = NULL;
+		else
+			mio_rewind (mio);
+	}
+
+	File.mio = mio? mio_ref (mio): getMio (fileName, openMode, memStreamRequired);
 
 	if (File.mio == NULL)
 		error (WARNING | PERROR, "cannot open \"%s\"", fileName);
@@ -598,6 +625,24 @@ extern bool bufferOpen (const char *const fileName, const langType language,
 	return opened;
 }
 
+extern void resetInputFile (const langType language)
+{
+	Assert (File.mio);
+
+	mio_rewind (File.mio);
+	mio_getpos (File.mio, &StartOfLine);
+	mio_getpos (File.mio, &File.filePosition);
+	File.currentLine  = NULL;
+
+	if (File.line != NULL)
+		vStringClear (File.line);
+
+	resetLangOnStack (& (File.input.langInfo), language);
+	File.input.lineNumber = File.input.lineNumberOrigin;
+	setLangToType (& (File.source.langInfo), language);
+	File.source.lineNumber = File.source.lineNumberOrigin;
+}
+
 extern void closeInputFile (void)
 {
 	if (File.mio != NULL)
@@ -618,11 +663,20 @@ extern void closeInputFile (void)
 	}
 }
 
+extern void *getInputFileUserData(void)
+{
+	return mio_get_user_data (File.mio);
+}
+
 /*  Action to take for each encountered input newline.
  */
 static void fileNewline (void)
 {
 	File.filePosition = StartOfLine;
+
+	if (BackupFile.mio == NULL)
+		appendLineFposMap (&File.lineFposMap, File.filePosition);
+
 	File.input.lineNumber++;
 	File.source.lineNumber++;
 	DebugStatement ( if (Option.breakLine == File.input.lineNumber) lineBreak (); )
@@ -832,6 +886,11 @@ extern char *readLineRaw (vString *const vLine, MIO *const mio)
 				}
 			}
 		} while (reReadLine);
+
+#ifdef HAVE_ICONV
+		if (isConverting ())
+			convertString (vLine);
+#endif
 	}
 	return result;
 }
@@ -855,6 +914,224 @@ extern char *readLineFromBypass (
 	   for location 0. readLineFromBypass doesn't know
 	   what itself should do; just report it to the caller. */
 	return result;
+}
+
+/* If a xcmd parser is used, ctags cannot know the location for a tag.
+ * In the other hand, etags output and cross reference output require the
+ * line after the location.
+ *
+ * readLineFromBypassSlow retrieves the line for (lineNumber and pattern of a tag).
+ */
+
+extern char *readLineFromBypassSlow (vString *const vLine,
+				 unsigned long lineNumber,
+				 const char *pattern,
+				 long *const pSeekValue)
+{
+	char *result = NULL;
+
+
+	MIOPos originalPosition;
+	char *line;
+	size_t len;
+	long pos;
+
+	regex_t patbuf;
+	char lastc;
+
+
+	/*
+	 * Compile the pattern
+	 */
+	{
+		char *pat;
+		int errcode;
+		char errmsg[256];
+
+		pat = eStrdup (pattern);
+		pat[strlen(pat) - 1] = '\0';
+		errcode = regcomp (&patbuf, pat + 1, 0);
+		eFree (pat);
+
+		if (errcode != 0)
+		{
+			regerror (errcode, &patbuf, errmsg, 256);
+			error (WARNING, "regcomp %s in readLineFromBypassSlow: %s", pattern, errmsg);
+			regfree (&patbuf);
+			return NULL;
+		}
+	}
+
+	/*
+	 * Get the line for lineNumber
+	 */
+	{
+		unsigned long n;
+
+		mio_getpos (File.mio, &originalPosition);
+		mio_rewind (File.mio);
+		line = NULL;
+		pos = 0;
+		for (n = 0; n < lineNumber; n++)
+		{
+			pos = mio_tell (File.mio);
+			line = readLineRaw (vLine, File.mio);
+			if (line == NULL)
+				break;
+		}
+		if (line == NULL)
+			goto out;
+		else
+			len = strlen(line);
+
+		if (len == 0)
+			goto out;
+
+		lastc = line[len - 1];
+		if (lastc == '\n')
+			line[len - 1] = '\0';
+	}
+
+	/*
+	 * Match
+	 */
+	{
+		regmatch_t pmatch;
+		int after_newline = 0;
+		if (regexec (&patbuf, line, 1, &pmatch, 0) == 0)
+		{
+			line[len - 1] = lastc;
+			result = line + pmatch.rm_so;
+			if (pSeekValue)
+			{
+				after_newline = ((lineNumber == 1)? 0: 1);
+				*pSeekValue = pos + after_newline + pmatch.rm_so;
+			}
+		}
+	}
+
+out:
+	regfree (&patbuf);
+	mio_setpos (File.mio, &originalPosition);
+	return result;
+}
+
+/*
+ *   Similar to readLineRaw but this doesn't use fgetpos/fsetpos.
+ *   Useful for reading from pipe.
+ */
+char* readLineRawWithNoSeek (vString* const vline, FILE *const pp)
+{
+	int c;
+	bool nlcr;
+	char *result = NULL;
+
+	vStringClear (vline);
+	nlcr = false;
+	
+	while (1)
+	{
+		c = fgetc (pp);
+		
+		if (c == EOF)
+		{
+			if (! feof (pp))
+				error (FATAL | PERROR, "Failure on attempt to read file");
+			else
+				break;
+		}
+
+		result = vStringValue (vline);
+		
+		if (c == '\n' || c == '\r')
+			nlcr = true;
+		else if (nlcr)
+		{
+			ungetc (c, pp);
+			break;
+		}
+		else
+			vStringPut (vline, c);
+	}
+
+	return result;
+}
+
+extern void   pushNarrowedInputStream (const langType language,
+				       unsigned long startLine, int startCharOffset,
+				       unsigned long endLine, int endCharOffset,
+				       unsigned long sourceLineOffset)
+{
+	long p, q;
+	MIOPos original;
+	MIOPos tmp;
+	MIO *subio;
+
+	original = getInputFilePosition ();
+
+	tmp = getInputFilePositionForLine (startLine);
+	mio_setpos (File.mio, &tmp);
+	mio_seek (File.mio, startCharOffset, SEEK_CUR);
+	p = mio_tell (File.mio);
+
+	tmp = getInputFilePositionForLine (endLine);
+	mio_setpos (File.mio, &tmp);
+	mio_seek (File.mio, endCharOffset, SEEK_CUR);
+	q = mio_tell (File.mio);
+
+	mio_setpos (File.mio, &original);
+
+	subio = mio_new_mio (File.mio, p, q - p);
+
+
+	BackupFile = File;
+
+	File.mio = subio;
+	File.nestedInputStreamInfo.startLine = startLine;
+	File.nestedInputStreamInfo.startCharOffset = startCharOffset;
+	File.nestedInputStreamInfo.endLine = endLine;
+	File.nestedInputStreamInfo.endCharOffset = endCharOffset;
+
+	File.input.lineNumberOrigin = ((startLine == 0)? 0: startLine - 1);
+	File.source.lineNumberOrigin = ((sourceLineOffset == 0)? 0: sourceLineOffset - 1);
+}
+
+extern unsigned int getNestedInputBoundaryInfo (unsigned long lineNumber)
+{
+	unsigned int info;
+
+	if (File.nestedInputStreamInfo.startLine == 0
+	    && File.nestedInputStreamInfo.startCharOffset == 0
+	    && File.nestedInputStreamInfo.endLine == 0
+	    && File.nestedInputStreamInfo.endCharOffset == 0)
+		/* Not in a nested input stream  */
+		return 0;
+
+	info = 0;
+	if (File.nestedInputStreamInfo.startLine == lineNumber
+	    && File.nestedInputStreamInfo.startCharOffset != 0)
+		info |= BOUNDARY_START;
+	if (File.nestedInputStreamInfo.endLine == lineNumber
+	    && File.nestedInputStreamInfo.endCharOffset != 0)
+		info |= BOUNDARY_END;
+
+	return info;
+}
+extern void   popNarrowedInputStream  (void)
+{
+	mio_free (File.mio);
+	File = BackupFile;
+	memset (&BackupFile, 0, sizeof (BackupFile));
+}
+
+extern void pushLanguage (const langType language)
+{
+	pushLangOnStack (&File.input.langInfo, language);
+}
+
+extern langType popLanguage (void)
+{
+	return popLangOnStack (&File.input.langInfo);
 }
 
 static void langStackInit (langStack *langStack)
