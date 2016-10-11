@@ -151,10 +151,8 @@ extern MIOPos getInputFilePosition (void)
 
 extern MIOPos getInputFilePositionForLine (int line)
 {
-	MIOPos pos;
-	return pos;
-/*	return File.lineFposMap.pos[(((File.lineFposMap.count > (line - 1)) \
-				      && (line > 0))? (line - 1): 0)];*/
+	return File.lineFposMap.pos[(((File.lineFposMap.count > (line - 1)) \
+				      && (line > 0))? (line - 1): 0)];
 }
 
 extern langType getInputLanguage (void)
@@ -242,6 +240,41 @@ extern void freeInputFileResources (void)
 		vStringDelete (File.line);
 	freeInputFileInfo (&File.input);
 	freeInputFileInfo (&File.source);
+}
+
+/*
+ * inputLineFposMap related functions
+ */
+static void freeLineFposMap (inputLineFposMap *lineFposMap)
+{
+	if (lineFposMap->pos)
+	{
+		free (lineFposMap->pos);
+		lineFposMap->pos = NULL;
+		lineFposMap->count = 0;
+		lineFposMap->size = 0;
+	}
+}
+
+static void allocLineFposMap (inputLineFposMap *lineFposMap)
+{
+#define INITIAL_lineFposMap_LEN 256
+	lineFposMap->pos = xCalloc (INITIAL_lineFposMap_LEN, MIOPos);
+	lineFposMap->size = INITIAL_lineFposMap_LEN;
+	lineFposMap->count = 0;
+}
+
+static void appendLineFposMap (inputLineFposMap *lineFposMap, MIOPos pos)
+{
+	if (lineFposMap->size == lineFposMap->count)
+	{
+		lineFposMap->size *= 2;
+		lineFposMap->pos = xRealloc (lineFposMap->pos,
+					     lineFposMap->size,
+					     MIOPos);
+	}
+	lineFposMap->pos [lineFposMap->count] = pos;
+	lineFposMap->count++;
 }
 
 /*
@@ -540,6 +573,7 @@ extern bool openInputFile (const char *const fileName, const langType language,
 		setSourceFileParameters (vStringNewInit (fileName), language);
 		File.source.lineNumberOrigin = 0L;
 		File.source.lineNumber = File.source.lineNumberOrigin;
+		allocLineFposMap (&File.lineFposMap);
 
 		verbose ("OPENING %s as %s language %sfile\n", fileName,
 				getLanguageName (language),
@@ -580,6 +614,7 @@ extern void closeInputFile (void)
 		}
 		mio_free (File.mio);
 		File.mio = NULL;
+		freeLineFposMap (&File.lineFposMap);
 	}
 }
 
