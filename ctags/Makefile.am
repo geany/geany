@@ -58,6 +58,8 @@ libctags_la_SOURCES = \
 	main/ctags.h \
 	main/debug.h \
 	main/debug.c \
+	main/dependency.h \
+	main/dependency.c \
 	main/e_msoft.h \
 	main/entry.c \
 	main/entry.h \
@@ -101,6 +103,8 @@ libctags_la_SOURCES = \
 	main/parsers.h \
 	main/pcoproc.c \
 	main/pcoproc.h \
+	main/promise.c \
+	main/promise.h \
 	main/ptag.c \
 	main/ptag.h \
 	main/ptrarray.c \

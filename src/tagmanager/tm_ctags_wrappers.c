@@ -24,7 +24,7 @@
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
-
+#include "geany.h"
 
 typedef struct {
 	TMCtagsNewTagCallback tag_callback;

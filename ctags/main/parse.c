@@ -16,16 +16,21 @@
 #include <string.h>
 
 #include "debug.h"
-#include "mio.h"
 #include "entry.h"
+#include "flags.h"
 #include "keyword.h"
 #include "main.h"
 #define OPTION_WRITE
 #include "options.h"
 #include "parsers.h"
+#include "promise.h"
+#include "ptag.h"
 #include "read.h"
-#include "vstring.h"
 #include "routines.h"
+#include "vstring.h"
+#ifdef HAVE_ICONV
+# include "mbcs.h"
+#endif
 #include "xtag.h"
 
 /*
@@ -41,19 +46,9 @@ static kindOption defaultFileKind = {
 	.description = KIND_FILE_DEFAULT_LONG,
 };
 
-tagEntryFunction TagEntryFunction = NULL;
-void *TagEntryUserData = NULL;
-
 /*
 *   FUNCTION DEFINITIONS
 */
-
-extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
-{
-	TagEntryFunction = entry_function;
-	TagEntryUserData = user_data;
-}
-
 
 extern void makeSimpleTag (const vString* const name,
 						   kindOption* const kinds, const int kind)
@@ -287,17 +282,17 @@ extern void addLanguageExtensionMap (const langType language,
 	stringListAdd (LanguageTable [language]->currentExtensions, str);
 }
 
+extern void enableLanguage (const langType language, const bool state)
+{
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	LanguageTable [language]->enabled = state;
+}
+
 extern void enableLanguages (const bool state)
 {
 	unsigned int i;
 	for (i = 0  ;  i < LanguageCount  ;  ++i)
 		LanguageTable [i]->enabled = state;
-}
-
-extern void enableLanguage (const langType language, const bool state)
-{
-	Assert (0 <= language  &&  language < (int) LanguageCount);
-	LanguageTable [language]->enabled = state;
 }
 
 static void initializeParserOne (langType lang)
@@ -371,22 +366,6 @@ extern void initializeParsing (void)
 	initializeParsers ();
 }
 
-extern void freeParserResources (void)
-{
-	unsigned int i;
-	for (i = 0  ;  i < LanguageCount  ;  ++i)
-	{
-		freeList (&LanguageTable [i]->currentPatterns);
-		freeList (&LanguageTable [i]->currentExtensions);
-		eFree (LanguageTable [i]->name);
-		LanguageTable [i]->name = NULL;
-		eFree (LanguageTable [i]);
-	}
-	eFree (LanguageTable);
-	LanguageTable = NULL;
-	LanguageCount = 0;
-}
-
 /*
 *   Option parsing
 */
@@ -396,8 +375,14 @@ extern void processLanguageDefineOption (const char *const option,
 {
 }
 
-extern bool processKindOption (const char *const option,
-							   const char *const parameter)
+extern bool processKindOption (
+		const char *const option, const char *const parameter)
+{
+	return false;
+}
+
+extern bool processAliasOption (
+		const char *const option, const char *const parameter)
 {
 	return false;
 }
@@ -439,10 +424,4 @@ extern void installKeywordTable (const langType language)
 				    lang->keywordTable [i].id);
 		lang->keywordInstalled = true;
 	}
-}
-
-extern bool processAliasOption (
-		const char *const option, const char *const parameter)
-{
-	return false;
 }

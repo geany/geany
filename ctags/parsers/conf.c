@@ -19,6 +19,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "routines.h"
+#include "entry.h"
 
 /*
 *   DATA DEFINITIONS

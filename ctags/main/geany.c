@@ -15,6 +15,9 @@
 #include <string.h>
 #include <glib.h>
 
+static tagEntryFunction TagEntryFunction = NULL;
+static void *TagEntryUserData = NULL;
+
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
  * This file contains a space or newline separated list of symbols which should be ignored
  * by the C/C++ parser, see -I command line option of ctags for details. */
@@ -77,4 +80,18 @@ extern bool isIgnoreToken (const char *const name,
 		vStringDelete (token);
 	}
 	return result;
+}
+
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
+{
+	TagEntryFunction = entry_function;
+	TagEntryUserData = user_data;
+}
+
+extern int callTagEntryFunction(const tagEntryInfo *const tag)
+{
+	int length = 0;
+	if (TagEntryFunction != NULL)
+		length = TagEntryFunction(tag, TagEntryUserData);
+	return length;
 }

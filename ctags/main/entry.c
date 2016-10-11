@@ -11,6 +11,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "geany.h"
 
 #include <string.h>
 #include <ctype.h>        /* to define isspace () */
@@ -1092,8 +1093,7 @@ static void writeTagEntry (const tagEntryInfo *const tag)
 		buildFqTagCache (tag);
 */
 	/* length = writer->writeEntry (TagFile.mio, tag, writerData); */
-	if (TagEntryFunction != NULL)
-		length = TagEntryFunction(tag, TagEntryUserData);
+	length = callTagEntryFunction (tag);
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);

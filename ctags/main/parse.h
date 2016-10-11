@@ -13,10 +13,13 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "types.h"
 
+#include "dependency.h"
+#include "field.h"
+#include "kind.h"
 #include "parsers.h"  /* contains list of parsers */
 #include "strlist.h"
-#include "entry.h"
 
 /*
 *   MACROS
@@ -32,7 +35,6 @@ typedef void (*createRegexTag) (const vString* const name);
 typedef void (*simpleParser) (void);
 typedef bool (*rescanParser) (const unsigned int passCount);
 typedef void (*parserInitialize) (langType language);
-typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
 
 typedef enum {
 	METHOD_NOT_CRAFTED    = 1 << 0,
@@ -44,10 +46,10 @@ typedef enum {
 
 typedef struct {
 	const char *const regex;
-	const char *const name;
-	const char *const kinds;
+	const char* const name;
+	const char* const kinds;
 	const char *const flags;
-	bool *disabled;
+	bool    *disabled;
 } tagRegexTable;
 
 typedef struct {
@@ -66,7 +68,7 @@ struct sParserDefinition {
 	parserInitialize initialize;   /* initialization routine, if needed */
 	simpleParser parser;           /* simple parser (common case) */
 	rescanParser parser2;          /* rescanning parser (unusual case) */
-	unsigned int method;           /* See PARSE__... definitions above */
+	unsigned int method;           /* See METHOD_ definitions above */
 
 	/* used internally */
 	unsigned int id;                /* id assigned to language */
@@ -79,6 +81,9 @@ struct sParserDefinition {
 	unsigned int keywordCount;
 
 	unsigned int initialized:1;    /* initialize() is called or not */
+	subparser *subparsers;	/* The parsers on this list must be initialized when
+				   this parser is initialized. */
+
 	unsigned int tagRegexInstalled:1; /* tagRegexTable is installed or not. */
 	unsigned int keywordInstalled:1;  /* keywordTable is installed or not. */
 };
@@ -86,7 +91,7 @@ struct sParserDefinition {
 typedef parserDefinition* (parserDefinitionFunc) (void);
 
 typedef struct {
-	int start;      /* character index in line where match starts */
+	size_t start;   /* character index in line where match starts */
 	size_t length;  /* length of match */
 } regexMatch;
 
@@ -97,6 +102,7 @@ typedef enum {
 	LMAP_EXTENSION = 1 << 1,
 	LMAP_ALL       = LMAP_PATTERN | LMAP_EXTENSION,
 } langmapType;
+
 
 /*
 *   FUNCTION PROTOTYPES
@@ -131,7 +137,6 @@ extern void enableLanguages (const bool state);
 extern void enableLanguage (const langType language, const bool state);
 extern void initializeParsing (void);
 extern void initializeParser (langType language);
-extern void freeParserResources (void);
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processKindOption (const char *const option, const char *const parameter);
 
@@ -147,15 +152,8 @@ extern void addTagRegex (const langType language, const char* const regex, const
 extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
 extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED);
 extern bool enableRegexKind (const langType language, const int kind, const bool mode);
-extern void printRegexKindOptions (const langType language);
 extern void printRegexKinds (const langType language, bool indent);
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
-
-
-/* Extra stuff for Tag Manager */
-extern tagEntryFunction TagEntryFunction;
-extern void *TagEntryUserData;
-extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 
 #endif  /* CTAGS_MAIN_PARSE_H */

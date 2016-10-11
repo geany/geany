@@ -21,6 +21,7 @@
 #include "vstring.h"
 #include "nestlevel.h"
 #include "routines.h"
+#include "entry.h"
 
 /*
 *   DATA DEFINITIONS

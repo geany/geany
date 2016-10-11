@@ -23,6 +23,7 @@
 #include "nestlevel.h"
 #include "vstring.h"
 #include "routines.h"
+#include "entry.h"
 
 
 /* as any character may happen in an input, use something highly unlikely */

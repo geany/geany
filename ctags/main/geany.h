@@ -9,6 +9,14 @@
 #ifndef CTAGS_GEANY_H
 #define CTAGS_GEANY_H
 
+#include "types.h"
+
+typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
+
+
 extern bool isIgnoreToken (const char *const name, bool *const pIgnoreParens, const char **const replacement);
+
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
+extern int callTagEntryFunction(const tagEntryInfo *const tag);
 
 #endif  /* CTAGS_GEANY_H */
