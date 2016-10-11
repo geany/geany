@@ -790,8 +790,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 {
 	const char *file_name;
 	gboolean retry = TRUE;
-	gboolean parse_file = FALSE;
-	gboolean free_buf = FALSE;
 
 	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
@@ -807,40 +805,18 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	
 	file_name = source_file->file_name;
 	
-	if (!use_buffer)
-	{
-		GStatBuf s;
-		
-		/* load file to memory and parse it from memory unless the file is too big */
-		if (g_stat(file_name, &s) != 0 || s.st_size > 10*1024*1024)
-			parse_file = TRUE;
-		else
-		{
-			if (!g_file_get_contents(file_name, (gchar**)&text_buf, (gsize*)&buf_size, NULL))
-			{
-				g_warning("Unable to open %s", file_name);
-				return FALSE;
-			}
-			free_buf = TRUE;
-		}
-	}
-
-	if (!parse_file && (NULL == text_buf || 0 == buf_size))
+	if (use_buffer && (NULL == text_buf || 0 == buf_size))
 	{
 		/* Empty buffer, "parse" by setting empty tag array */
 		tm_tags_array_free(source_file->tags_array, FALSE);
-		if (free_buf)
-			g_free(text_buf);
 		return TRUE;
 	}
 
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
-	tm_ctags_parse(parse_file ? NULL : text_buf, buf_size, file_name,
+	tm_ctags_parse(use_buffer ? text_buf : NULL, buf_size, file_name,
 		source_file->lang, ctags_new_tag, ctags_pass_start, source_file);
 
-	if (free_buf)
-		g_free(text_buf);
 	return !retry;
 }
 

@@ -401,10 +401,46 @@ static bool parseLineDirective (char *s)
  *   Input file I/O operations
  */
 
+#define MAX_IN_MEMORY_FILE_SIZE (1024*1024)
+
+extern MIO *getMio (const char *const fileName, const char *const openMode,
+		    bool memStreamRequired)
+{
+	FILE *src;
+	fileStatus *st;
+	unsigned long size;
+	unsigned char *data;
+
+	st = eStat (fileName);
+	size = st->size;
+	eStatFree (st);
+	if ((!memStreamRequired)
+	    && (size > MAX_IN_MEMORY_FILE_SIZE || size == 0))
+		return mio_new_file (fileName, openMode);
+
+	src = fopen (fileName, openMode);
+	if (!src)
+		return NULL;
+
+	data = eMalloc (size);
+	if (fread (data, 1, size, src) != size)
+	{
+		eFree (data);
+		fclose (src);
+		if (memStreamRequired)
+			return NULL;
+		else
+			return mio_new_file (fileName, openMode);
+	}
+	fclose (src);
+	return mio_new_memory (data, size, eRealloc, eFree);
+}
+
 /*  This function opens an input file, and resets the line counter.  If it
  *  fails, it will display an error message and leave the File.mio set to NULL.
  */
-extern bool openInputFile (const char *const fileName, const langType language)
+extern bool openInputFile (const char *const fileName, const langType language,
+			      MIO *mio)
 {
 	const char *const openMode = "rb";
 	bool opened = false;
@@ -417,7 +453,8 @@ extern bool openInputFile (const char *const fileName, const langType language)
 		File.mio = NULL;
 	}
 
-	File.mio = mio_new_file (fileName, openMode);
+	File.mio = mio? mio_ref (mio): getMio (fileName, openMode, true);
+
 	if (File.mio == NULL)
 		error (WARNING | PERROR, "cannot open \"%s\"", fileName);
 	else
@@ -447,43 +484,15 @@ extern bool openInputFile (const char *const fileName, const langType language)
  * This func is NOT THREAD SAFE.
  * The user should not tamper with the buffer while this func is executing.
  */
-extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
-						const char *const fileName, const langType language )
+extern bool bufferOpen (const char *const fileName, const langType language,
+						unsigned char *buffer, size_t buffer_size)
 {
-	bool opened = false;
-		
-	/* Check whether a file of a buffer were already open, then close them.
-	 */
-	if (File.mio != NULL) {
-		mio_free (File.mio);            /* close any open source file */
-		File.mio = NULL;
-	}
+	MIO *mio;
+	bool opened;
 
-	/* check if we got a good buffer */
-	if (buffer == NULL || buffer_size == 0) {
-		opened = false;
-		return opened;
-	}
-		
-	opened = true;
-			
-	File.mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
-	setInputFileName (fileName);
-	mio_getpos (File.mio, &StartOfLine);
-	mio_getpos (File.mio, &File.filePosition);
-	File.currentLine  = NULL;
-	File.input.lineNumber   = 0L;
-
-	if (File.line != NULL)
-		vStringClear (File.line);
-
-	setSourceFileParameters (vStringNewInit (fileName), language);
-	File.source.lineNumber = 0L;
-
-	verbose ("OPENING %s as %s language %sfile\n", fileName,
-			getLanguageName (language),
-			File.source.isHeader ? "include " : "");
-
+	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
+	opened = openInputFile (fileName, language, mio);
+	mio_free (mio);
 	return opened;
 }
 

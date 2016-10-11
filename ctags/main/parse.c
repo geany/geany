@@ -574,7 +574,7 @@ static bool createTagsForFile (const char *const fileName,
 {
 	bool retried = false;
 
-	if (openInputFile (fileName, language))
+	if (openInputFile (fileName, language, NULL))
 	{
 
 		makeFileTag (fileName);

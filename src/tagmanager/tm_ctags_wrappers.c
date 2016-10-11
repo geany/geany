@@ -69,27 +69,13 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	while (retry && passCount < 3)
 	{
 		pass_callback(user_data);
-		if (!buffer && openInputFile (file_name, lang))
+		if ((!buffer && openInputFile (file_name, lang, NULL)) ||
+			(buffer && bufferOpen (file_name, lang, buffer, buffer_size)))
 		{
 			if (LanguageTable [lang]->parser != NULL)
 			{
 				LanguageTable [lang]->parser ();
-				closeInputFile ();
 				retry = FALSE;
-				break;
-			}
-			else if (LanguageTable [lang]->parser2 != NULL)
-				retry = LanguageTable [lang]->parser2 (passCount);
-			closeInputFile ();
-		}
-		else if (buffer && bufferOpen (buffer, buffer_size, file_name, lang))
-		{
-			if (LanguageTable [lang]->parser != NULL)
-			{
-				LanguageTable [lang]->parser ();
-				closeInputFile ();
-				retry = FALSE;
-				break;
 			}
 			else if (LanguageTable [lang]->parser2 != NULL)
 				retry = LanguageTable [lang]->parser2 (passCount);
@@ -98,7 +84,7 @@ void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 		else
 		{
 			g_warning("Unable to open %s", file_name);
-			return;
+			break;
 		}
 		++ passCount;
 	}

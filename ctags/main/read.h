@@ -70,15 +70,21 @@ extern kindOption *getInputLanguageFileKind (void);
 extern bool doesInputLanguageRequestAutomaticFQTag (void);
 
 extern void freeInputFileResources (void);
-extern bool openInputFile (const char *const fileName, const langType language);
+/* Stream opend by getMio can be passed to openInputFile as the 3rd
+   argument. If the 3rd argument is NULL, openInputFile calls getMio
+   internally. The 3rd argument is introduced for reusing mio object
+   created in parser guessing stage. */
+extern bool openInputFile (const char *const fileName, const langType language, MIO *mio);
+extern bool bufferOpen (const char *const fileName, const langType language,
+						unsigned char *buffer, size_t buffer_size);
+extern MIO *getMio (const char *const fileName, const char *const openMode,
+				    bool memStreamRequired);
 extern void closeInputFile (void);
 extern int getcFromInputFile (void);
 extern int getNthPrevCFromInputFile (unsigned int nth, int def);
 extern int skipToCharacterInInputFile (int c);
 extern void ungetcToInputFile (int c);
 extern const unsigned char *readLineFromInputFile (void);
-extern bool bufferOpen (unsigned char *buffer, size_t buffer_size,
-                        const char *const fileName, const langType language );
 
 extern const char *getSourceFileTagPath (void);
 extern const char *getSourceLanguageName (void);
