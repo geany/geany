@@ -60,7 +60,9 @@ typedef struct sInputFileInfo {
 					   on the input stream.
 					   This is needed for nested stream. */
 	bool isHeader;           /* is input file a header file? */
-	langType language;       /* language of input file */
+
+	/* language of input file */
+	inputLangInfo langInfo;
 } inputFileInfo;
 
 typedef struct sInputLineFposMap {
@@ -104,6 +106,17 @@ typedef struct sInputFile {
 	inputLineFposMap lineFposMap;
 } inputFile;
 
+
+/*
+*   FUNCTION DECLARATIONS
+*/
+static void     langStackInit (langStack *langStack);
+static langType langStackTop  (langStack *langStack);
+static void     langStackPush (langStack *langStack, langType type);
+static langType langStackPop  (langStack *langStack);
+static void     langStackClear(langStack *langStack);
+
+
 /*
 *   DATA DEFINITIONS
 */
@@ -146,7 +159,7 @@ extern MIOPos getInputFilePositionForLine (int line)
 
 extern langType getInputLanguage (void)
 {
-	return File.input.language;
+	return langStackTop (&File.input.langInfo.stack);
 }
 
 extern const char *getInputLanguageName (void)
@@ -199,7 +212,7 @@ extern const char *getSourceFileTagPath (void)
 
 extern const char *getSourceLanguageName (void)
 {
-	return getLanguageName (File.source.language);
+	return getLanguageName (File.source.langInfo.type);
 }
 
 extern unsigned long getSourceLineNumber (void)
@@ -254,6 +267,7 @@ static void setOwnerDirectoryOfInputFile (const char *const fileName)
 
 static void setInputFileParametersCommon (inputFileInfo *finfo, vString *const fileName,
 					  const langType language,
+					  void (* setLang) (inputLangInfo *, langType),
 					  stringList *holder)
 {
 	if (finfo->name != NULL)
@@ -276,23 +290,47 @@ static void setInputFileParametersCommon (inputFileInfo *finfo, vString *const f
 
 	finfo->isHeader = isIncludeFile (vStringValue (fileName));
 
-	if (language != -1)
-		finfo->language = language;
-	else
-		finfo->language = getFileLanguage (vStringValue (fileName));
+	setLang (& (finfo->langInfo), language);
+}
+
+static void resetLangOnStack (inputLangInfo *langInfo, langType lang)
+{
+	Assert (langInfo->stack.count > 0);
+	langStackClear  (& (langInfo->stack));
+	langStackPush (& (langInfo->stack), lang);
+}
+
+static void pushLangOnStack (inputLangInfo *langInfo, langType lang)
+{
+	langStackPush (& langInfo->stack, lang);
+}
+
+static langType popLangOnStack (inputLangInfo *langInfo)
+{
+	return langStackPop (& langInfo->stack);
+}
+
+static void clearLangOnStack (inputLangInfo *langInfo)
+{
+	return langStackClear (& langInfo->stack);
+}
+
+static void setLangToType  (inputLangInfo *langInfo, langType lang)
+{
+	langInfo->type = lang;
 }
 
 static void setInputFileParameters (vString *const fileName, const langType language)
 {
 	setInputFileParametersCommon (&File.input, fileName,
-				      language,
+				      language, pushLangOnStack,
 				      NULL);
 }
 
 static void setSourceFileParameters (vString *const fileName, const langType language)
 {
 	setInputFileParametersCommon (&File.source, fileName,
-				      language,
+				      language, setLangToType,
 				      File.sourceTagPathHolder);
 }
 
@@ -530,6 +568,8 @@ extern void closeInputFile (void)
 {
 	if (File.mio != NULL)
 	{
+		clearLangOnStack (& (File.input.langInfo));
+
 		/*  The line count of the file is 1 too big, since it is one-based
 		 *  and is incremented upon each newline.
 		 */
@@ -780,4 +820,38 @@ extern char *readLineFromBypass (
 	   for location 0. readLineFromBypass doesn't know
 	   what itself should do; just report it to the caller. */
 	return result;
+}
+
+static void langStackInit (langStack *langStack)
+{
+	langStack->count = 0;
+	langStack->size  = 1;
+	langStack->languages = xCalloc (langStack->size, langType);
+}
+
+static langType langStackTop (langStack *langStack)
+{
+	Assert (langStack->count > 0);
+	return langStack->languages [langStack->count - 1];
+}
+
+static void     langStackClear (langStack *langStack)
+{
+	while (langStack->count > 0)
+		langStackPop (langStack);
+}
+
+static void     langStackPush (langStack *langStack, langType type)
+{
+	if (langStack->size == 0)
+		langStackInit (langStack);
+	else if (langStack->count == langStack->size)
+		langStack->languages = xRealloc (langStack->languages,
+						 ++ langStack->size, langType);
+	langStack->languages [ langStack->count ++ ] = type;
+}
+
+static langType langStackPop  (langStack *langStack)
+{
+	return langStack->languages [ -- langStack->count ];
 }
