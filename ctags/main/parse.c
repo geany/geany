@@ -34,11 +34,18 @@
 #include "xtag.h"
 
 /*
+ * FUNCTION PROTOTYPES
+ */
+
+static void installKeywordTable (const langType language);
+static void installTagRegexTable (const langType language);
+
+/*
 *   DATA DEFINITIONS
 */
 static parserDefinitionFunc* BuiltInParsers[] = { PARSER_LIST };
 parserDefinition** LanguageTable = NULL;
-unsigned int LanguageCount = 0;
+static unsigned int LanguageCount = 0;
 static kindOption defaultFileKind = {
 	.enabled     = false,
 	.letter      = KIND_FILE_DEFAULT,
@@ -50,16 +57,24 @@ static kindOption defaultFileKind = {
 *   FUNCTION DEFINITIONS
 */
 
-extern void makeSimpleTag (const vString* const name,
-						   kindOption* const kinds, const int kind)
+extern unsigned int countParsers (void)
 {
+	return LanguageCount;
+}
+
+extern int makeSimpleTag (
+		const vString* const name, kindOption* const kinds, const int kind)
+{
+	int r = CORK_NIL;
+
 	if (name != NULL  &&  vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name), &(kinds [kind]));
+		initTagEntry (&e, vStringValue (name), & kinds [kind]);
 
-		makeTagEntry (&e);
+		r = makeTagEntry (&e);
 	}
+	return r;
 }
 
 
@@ -86,9 +101,15 @@ extern parserDefinition* parserNewFull (const char* name, char fileKind)
 
 extern const char *getLanguageName (const langType language)
 {
-	/*Assert (0 <= language  &&  language < (int) LanguageCount);*/
-	if (language < 0) return NULL;
-		return LanguageTable [language]->name;
+	const char* result;
+	if (language == LANG_IGNORE)
+		result = "unknown";
+	else
+	{
+		Assert (0 <= language  &&  language < (int) LanguageCount);
+		result = LanguageTable [language]->name;
+	}
+	return result;
 }
 
 extern kindOption* getLanguageFileKind (const langType language)
@@ -173,9 +194,9 @@ static vString* determineInterpreter (const char* const cmd)
 	do
 	{
 		vStringClear (interpreter);
-		for ( ;  isspace (*p)  ;  ++p)
+		for ( ;  isspace ((int) *p)  ;  ++p)
 			;  /* no-op */
-		for ( ;  *p != '\0'  &&  ! isspace (*p)  ;  ++p)
+		for ( ;  *p != '\0'  &&  ! isspace ((int) *p)  ;  ++p)
 			vStringPut (interpreter, (int) *p);
 	} while (strcmp (vStringValue (interpreter), "env") == 0);
 	return interpreter;
@@ -227,26 +248,34 @@ extern void printLanguageMap (const langType language)
 
 extern void installLanguageMapDefault (const langType language)
 {
-	Assert (language >= 0);
-	if (LanguageTable [language]->currentPatterns != NULL)
-		stringListDelete (LanguageTable [language]->currentPatterns);
-	if (LanguageTable [language]->currentExtensions != NULL)
-		stringListDelete (LanguageTable [language]->currentExtensions);
+	parserDefinition* lang;
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	lang = LanguageTable [language];
+	if (lang->currentPatterns != NULL)
+		stringListDelete (lang->currentPatterns);
+	if (lang->currentExtensions != NULL)
+		stringListDelete (lang->currentExtensions);
 
-	if (LanguageTable [language]->patterns == NULL)
-		LanguageTable [language]->currentPatterns = stringListNew ();
+	if (lang->patterns == NULL)
+		lang->currentPatterns = stringListNew ();
 	else
 	{
-		LanguageTable [language]->currentPatterns =
-			stringListNewFromArgv (LanguageTable [language]->patterns);
+		lang->currentPatterns =
+			stringListNewFromArgv (lang->patterns);
 	}
-	if (LanguageTable [language]->extensions == NULL)
-		LanguageTable [language]->currentExtensions = stringListNew ();
+	if (lang->extensions == NULL)
+		lang->currentExtensions = stringListNew ();
 	else
 	{
-		LanguageTable [language]->currentExtensions =
-			stringListNewFromArgv (LanguageTable [language]->extensions);
+		lang->currentExtensions =
+			stringListNewFromArgv (lang->extensions);
 	}
+	BEGIN_VERBOSE(vfp);
+	{
+	printLanguageMap (language);
+	putc ('\n', vfp);
+	}
+	END_VERBOSE();
 }
 
 extern void installLanguageMapDefaults (void)
@@ -254,6 +283,7 @@ extern void installLanguageMapDefaults (void)
 	unsigned int i;
 	for (i = 0  ;  i < LanguageCount  ;  ++i)
 	{
+		verbose ("    %s: ", getLanguageName (i));
 		installLanguageMapDefault (i);
 	}
 }
@@ -268,10 +298,12 @@ extern void clearLanguageMap (const langType language)
 extern void addLanguagePatternMap (const langType language, const char* ptrn)
 {
 	vString* const str = vStringNewInit (ptrn);
+	parserDefinition* lang;
 	Assert (0 <= language  &&  language < (int) LanguageCount);
-	if (LanguageTable [language]->currentPatterns == NULL)
-		LanguageTable [language]->currentPatterns = stringListNew ();
-	stringListAdd (LanguageTable [language]->currentPatterns, str);
+	lang = LanguageTable [language];
+	if (lang->currentPatterns == NULL)
+		lang->currentPatterns = stringListNew ();
+	stringListAdd (lang->currentPatterns, str);
 }
 
 extern void addLanguageExtensionMap (const langType language,
@@ -314,7 +346,7 @@ extern void initializeParser (langType lang)
 	if (lang == LANG_AUTO)
 	{
 		int i;
-		for (i = 0; i < LanguageCount; i++)
+		for (i = 0; i < countParsers(); i++)
 			initializeParserOne (i);
 	}
 	else
@@ -333,9 +365,10 @@ extern void initializeParsing (void)
 	unsigned int builtInCount;
 	unsigned int i;
 
-	builtInCount = sizeof (BuiltInParsers) / sizeof (BuiltInParsers [0]);
+	builtInCount = ARRAY_SIZE (BuiltInParsers);
 	LanguageTable = xMalloc (builtInCount, parserDefinition*);
 
+	verbose ("Installing parsers: ");
 	for (i = 0  ;  i < builtInCount  ;  ++i)
 	{
 		parserDefinition* const def = (*BuiltInParsers [i]) ();
@@ -357,6 +390,7 @@ extern void initializeParsing (void)
 				accepted = true;
 			if (accepted)
 			{
+				verbose ("%s%s", i > 0 ? ", " : "", def->name);
 				def->id = LanguageCount++;
 				LanguageTable [def->id] = def;
 			}
@@ -387,7 +421,7 @@ extern bool processAliasOption (
 	return false;
 }
 
-extern void installTagRegexTable (const langType language)
+static void installTagRegexTable (const langType language)
 {
 	parserDefinition* lang;
 	unsigned int i;
@@ -396,7 +430,7 @@ extern void installTagRegexTable (const langType language)
 	lang = LanguageTable [language];
 
 
-	if ((lang->tagRegexTable != NULL) && (lang->tagRegexInstalled == false))
+	if (lang->tagRegexTable != NULL)
 	{
 	    for (i = 0; i < lang->tagRegexCount; ++i)
 		    addTagRegex (language,
@@ -404,11 +438,10 @@ extern void installTagRegexTable (const langType language)
 				 lang->tagRegexTable [i].name,
 				 lang->tagRegexTable [i].kinds,
 				 lang->tagRegexTable [i].flags);
-	    lang->tagRegexInstalled = true;
 	}
 }
 
-extern void installKeywordTable (const langType language)
+static void installKeywordTable (const langType language)
 {
 	parserDefinition* lang;
 	unsigned int i;
@@ -416,12 +449,11 @@ extern void installKeywordTable (const langType language)
 	Assert (0 <= language  &&  language < (int) LanguageCount);
 	lang = LanguageTable [language];
 
-	if ((lang->keywordTable != NULL) && (lang->keywordInstalled == false))
+	if (lang->keywordTable != NULL)
 	{
 		for (i = 0; i < lang->keywordCount; ++i)
 			addKeyword (lang->keywordTable [i].name,
 				    language,
 				    lang->keywordTable [i].id);
-		lang->keywordInstalled = true;
 	}
 }

@@ -153,5 +153,5 @@ gboolean tm_ctags_is_using_regex_parser(TMParserType lang)
 
 guint tm_ctags_get_lang_count(void)
 {
-	return LanguageCount;
+	return countParsers();
 }
