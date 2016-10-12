@@ -58,9 +58,19 @@ union cptr {
 
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
+enum scopeAction {
+	SCOPE_REF     = 1UL << 0,
+	SCOPE_POP     = 1UL << 1,
+	SCOPE_PUSH    = 1UL << 2,
+	SCOPE_CLEAR   = 1UL << 3,
+	SCOPE_PLACEHOLDER = 1UL << 4,
+};
+
 typedef struct {
 	GRegex *pattern;
 	enum pType type;
+	bool exclusive;
+	bool accept_empty_name;
 	union {
 		struct {
 			char *name_pattern;
@@ -68,8 +78,11 @@ typedef struct {
 		} tag;
 		struct {
 			regexCallback function;
+			void *userData;
 		} callback;
 	} u;
+	unsigned int scopeActions;
+	bool *disabled;
 } regexPattern;
 
 
