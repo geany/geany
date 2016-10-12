@@ -145,9 +145,6 @@ extern bool processRegexOption (const char *const option, const char *const para
 extern void addLanguageRegex (const langType language, const char* const regex);
 extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);
 extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
-extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED);
-extern bool enableRegexKind (const langType language, const int kind, const bool mode);
-extern void printRegexKinds (const langType language, bool indent);
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
 

@@ -356,17 +356,6 @@ static void parseKinds (
 	}
 }
 
-static void printRegexKind (const regexPattern *pat, unsigned int i, bool indent)
-{
-	const kindOption *const kind = &pat [i].u.tag.kind;
-	const char *const indentation = indent ? "    " : "";
-	Assert (pat [i].type == PTRN_TAG);
-	printf ("%s%c  %s %s\n", indentation,
-			kind->letter != '\0' ? kind->letter : '?',
-			kind->description != NULL ? kind->description : kind->name,
-			kind->enabled ? "" : " [off]");
-}
-
 static void processLanguageRegex (const langType language,
 		const char* const parameter)
 {
@@ -575,63 +564,7 @@ extern void addLanguageRegex (
 extern bool processRegexOption (const char *const option,
 				   const char *const parameter CTAGS_ATTR_UNUSED)
 {
-	bool handled = false;
-	const char* const dash = strchr (option, '-');
-	if (dash != NULL  &&  strncmp (option, "regex", dash - option) == 0)
-	{
-		langType language;
-		language = getNamedLanguage (dash + 1, 0);
-		if (language == LANG_IGNORE)
-			printf ("regex: unknown language \"%s\" in --%s option\n", (dash + 1), option);
-		else
-			processLanguageRegex (language, parameter);
-		handled = true;
-	}
-	return handled;
-}
-
-extern void disableRegexKinds (const langType language CTAGS_ATTR_UNUSED)
-{
-	if (language <= SetUpper  &&  Sets [language].count > 0)
-	{
-		patternSet* const set = Sets + language;
-		unsigned int i;
-		for (i = 0  ;  i < set->count  ;  ++i)
-			if (set->patterns [i].type == PTRN_TAG)
-				set->patterns [i].u.tag.kind.enabled = false;
-	}
-}
-
-extern bool enableRegexKind (
-		const langType language CTAGS_ATTR_UNUSED,
-		const int kind CTAGS_ATTR_UNUSED, const bool mode CTAGS_ATTR_UNUSED)
-{
-	bool result = false;
-	if (language <= SetUpper  &&  Sets [language].count > 0)
-	{
-		patternSet* const set = Sets + language;
-		unsigned int i;
-		for (i = 0  ;  i < set->count  ;  ++i)
-			if (set->patterns [i].type == PTRN_TAG &&
-				set->patterns [i].u.tag.kind.letter == kind)
-			{
-				set->patterns [i].u.tag.kind.enabled = mode;
-				result = true;
-			}
-	}
-	return result;
-}
-
-extern void printRegexKinds (const langType language CTAGS_ATTR_UNUSED, bool indent CTAGS_ATTR_UNUSED)
-{
-	if (language <= SetUpper  &&  Sets [language].count > 0)
-	{
-		patternSet* const set = Sets + language;
-		unsigned int i;
-		for (i = 0  ;  i < set->count  ;  ++i)
-			if (set->patterns [i].type == PTRN_TAG)
-				printRegexKind (set->patterns, i, indent);
-	}
+	return false;
 }
 
 extern void freeRegexResources (void)
