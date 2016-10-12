@@ -35,6 +35,8 @@
 #include "read.h"
 #include "routines.h"
 
+static bool regexAvailable = true;
+
 /*
 *   MACROS
 */
@@ -74,8 +76,6 @@ typedef struct {
 /*
 *   DATA DEFINITIONS
 */
-
-static bool regexBroken = false;
 
 /* Array of pattern sets, indexed by language */
 static patternSet* Sets = NULL;
@@ -526,7 +526,7 @@ extern void addTagRegex (
 {
 	Assert (regex != NULL);
 	Assert (name != NULL);
-	if (! regexBroken)
+	if (regexAvailable)
 	{
 		GRegex* const cp = compileRegex (regex, flags);
 		if (cp != NULL)
@@ -548,7 +548,7 @@ extern void addCallbackRegex (
 		const regexCallback callback CTAGS_ATTR_UNUSED)
 {
 	Assert (regex != NULL);
-	if (! regexBroken)
+	if (regexAvailable)
 	{
 		GRegex* const cp = compileRegex (regex, flags);
 		if (cp != NULL)
@@ -559,7 +559,7 @@ extern void addCallbackRegex (
 extern void addLanguageRegex (
 		const langType language CTAGS_ATTR_UNUSED, const char* const regex CTAGS_ATTR_UNUSED)
 {
-	if (! regexBroken)
+	if (regexAvailable)
 	{
 		char *const regex_pat = eStrdup (regex);
 		char *name, *kinds, *flags;
