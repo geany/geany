@@ -143,15 +143,24 @@ extern bool processKindOption (const char *const option, const char *const param
 extern void findRegexTags (void);
 extern void findRegexTagsMainloop (int (* driver)(void));
 extern bool matchRegex (const vString* const line, const langType language);
-extern bool processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
 extern void addTagRegex (const langType language, const char* const regex,
 			 const char* const name, const char* const kinds, const char* const flags,
 			 bool *disabled);
 extern void addCallbackRegex (const langType language, const char *const regexo, const char *const flags,
 			      const regexCallback callback, bool *disabled, void *userData);
+extern void resetRegexKinds (const langType language, bool mode);
+extern bool enableRegexKind (const langType language, const int kind, const bool mode);
+extern bool enableRegexKindLong (const langType language, const char *kindLong, const bool mode);
+extern bool isRegexKindEnabled (const langType language, const int kind);
+extern bool hasRegexKind (const langType language, const int kind);
+extern void printRegexKinds (const langType language, bool allKindFields, bool indent,
+			     bool tabSeparated);
+extern void foreachRegexKinds (const langType language, bool (* func) (kindOption*, void*), void *data);
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
 extern void useRegexMethod (const langType language);
+extern void printRegexFlags (void);
+extern bool hasScopeActionInRegex (const langType language);
 
 #endif  /* CTAGS_MAIN_PARSE_H */

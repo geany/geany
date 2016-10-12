@@ -853,7 +853,212 @@ extern void addLanguageRegex (
 extern bool processRegexOption (const char *const option,
 				   const char *const parameter CTAGS_ATTR_UNUSED)
 {
+	langType language;
+
+	language = getLanguageComponentInOption (option, "regex-");
+	if (language == LANG_IGNORE)
+		return false;
+
+	processLanguageRegex (language, parameter);
+
+	return true;
+}
+
+struct kindCbHelperData {
+	bool (*func) (kindOption *, void *);
+	void *func_data;
+	bool result;
+};
+
+static void kindCbHelper (void *key, void *value, void* user_data)
+{
+	kindOption *kind = value;
+	struct kindCbHelperData *helper_data = user_data;
+
+	if (helper_data->result)
+		return;
+
+	helper_data->result = helper_data->func (kind, helper_data->func_data);
+}
+
+extern void foreachRegexKinds (const langType language,
+			       bool (*func) (kindOption *, void *),
+			       void *data)
+{
+	initializeParser (language);
+	if (language <= SetUpper  &&  Sets [language].count > 0)
+	{
+		patternSet* const set = Sets + language;
+		hashTable *kinds = set->kinds;
+		struct kindCbHelperData helper_data = {
+			.func = func,
+			.func_data = data,
+			.result = false,
+		};
+		hashTableForeachItem (kinds, kindCbHelper, &helper_data);
+	}
+}
+
+
+static bool kind_reset_cb (kindOption *kind, void *data)
+{
+	kind->enabled = *(bool *)data;
+	return false;		/* continue */
+}
+
+extern void resetRegexKinds (const langType language, bool mode)
+{
+	foreachRegexKinds (language, kind_reset_cb, &mode);
+}
+
+struct kind_and_mode_and_result
+{
+	int kind;
+	const char *kindLong;
+	bool mode;
+	bool result;
+};
+
+static bool enable_kind_cb (kindOption *kind, void *data)
+{
+	struct kind_and_mode_and_result *kmr = data;
+	if ((kmr->kind != KIND_NULL
+	     && kind->letter == kmr->kind)
+	    || (kmr->kindLong && kind->name
+		&& (strcmp (kmr->kindLong, kind->name) == 0)))
+	{
+		kind->enabled = kmr->mode;
+		kmr->result = true;
+	}
+	/* continue:
+	   There can be more than one patterns which represents this kind. */
 	return false;
+}
+
+extern bool enableRegexKind (const langType language, const int kind, const bool mode)
+{
+	struct kind_and_mode_and_result kmr;
+
+	kmr.kind = kind;
+	kmr.kindLong = NULL;
+	kmr.mode = mode;
+	kmr.result = false;
+
+	foreachRegexKinds (language, enable_kind_cb, &kmr);
+	return kmr.result;
+}
+
+extern bool enableRegexKindLong (const langType language, const char *kindLong, const bool mode)
+{
+	struct kind_and_mode_and_result kmr;
+
+	kmr.kind = KIND_NULL;
+	kmr.kindLong = kindLong;
+	kmr.mode = mode;
+	kmr.result = false;
+
+	foreachRegexKinds (language, enable_kind_cb, &kmr);
+	return kmr.result;
+}
+
+struct kind_and_result
+{
+	int kind;
+	bool result;
+};
+
+static bool is_kind_enabled_cb (kindOption *kind, void *data)
+{
+	bool r = false;
+	struct kind_and_result *kr = data;
+
+	if (kind->letter == kr->kind)
+	{
+		kr->result = kind->enabled;
+		r = true;
+	}
+
+	return r;
+}
+
+static bool does_kind_exist_cb (kindOption *kind, void *data)
+{
+	bool r = false;
+	struct kind_and_result *kr = data;
+
+	if (kind->letter == kr->kind)
+	{
+		kr->result = true;
+		r = true;
+	}
+
+	return r;
+}
+
+extern bool isRegexKindEnabled (const langType language, const int kind)
+{
+	struct kind_and_result d;
+
+	d.kind = kind;
+	d.result = false;
+
+	foreachRegexKinds (language, is_kind_enabled_cb, &d);
+
+	return d.result;
+}
+
+extern bool hasRegexKind (const langType language, const int kind)
+{
+	struct kind_and_result d;
+
+	d.kind = kind;
+	d.result = false;
+
+	foreachRegexKinds (language, does_kind_exist_cb, &d);
+
+	return d.result;
+}
+
+struct printRegexKindCBData{
+	const char* const langName;
+	bool allKindFields;
+	bool indent;
+	bool tabSeparated;
+};
+
+static bool printRegexKind (kindOption *kind, void *user_data)
+{
+	struct printRegexKindCBData *data = user_data;
+	if (kind->letter != KIND_GHOST)
+	{
+		if (data->allKindFields && data->indent)
+			printf (Option.machinable? "%s": PR_KIND_FMT (LANG,s), data->langName);
+		printKind (kind, data->allKindFields, data->indent,
+			   data->tabSeparated);
+	}
+	return false;
+}
+
+extern void printRegexKinds (const langType language,
+			     bool allKindFields,
+			     bool indent,
+			     bool tabSeparated)
+{
+	const char* const langName = getLanguageName (language);
+	struct printRegexKindCBData data = {
+		.langName      = langName,
+		.allKindFields = allKindFields,
+		.indent        = indent,
+		.tabSeparated  = tabSeparated,
+	};
+	foreachRegexKinds (language, printRegexKind, &data);
+}
+
+extern void printRegexFlags (void)
+{
+	flagPrintHelp (regexFlagDefs,  ARRAY_SIZE (regexFlagDefs));
+	flagPrintHelp (prePtrnFlagDef, ARRAY_SIZE (prePtrnFlagDef));
+	flagPrintHelp (scopePtrnFlagDef, ARRAY_SIZE (scopePtrnFlagDef));
 }
 
 extern void freeRegexResources (void)
