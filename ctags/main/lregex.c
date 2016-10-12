@@ -199,18 +199,16 @@ static bool parseTagRegex (
 
 	*name = scanSeparators (regexp);
 	if (*regexp == '\0')
-		printf ("regex: empty regexp\n");
+		error (WARNING, "empty regexp");
 	else if (**name != separator)
-		printf ("regex: %s: incomplete regexp\n", regexp);
+		error (WARNING, "%s: incomplete regexp", regexp);
 	else
 	{
 		char* const third = scanSeparators (*name);
-		if (**name == '\0')
-			printf ("regex: %s: regexp missing name pattern\n", regexp);
-		if ((*name) [strlen (*name) - 1] == '\\')
-			printf ("regex: error in name pattern: \"%s\"\n", *name);
+		if (**name != '\0' && (*name) [strlen (*name) - 1] == '\\')
+			error (WARNING, "error in name pattern: \"%s\"", *name);
 		if (*third != separator)
-			printf ("regex: %s: regexp missing final separator\n", regexp);
+			error (WARNING, "%s: regexp missing final separator", regexp);
 		else
 		{
 			char* const fourth = scanSeparators (third);
@@ -326,8 +324,8 @@ static void parseKinds (
 	*description = NULL;
 	if (kinds == NULL  ||  kinds [0] == '\0')
 	{
-		*kind = 'r';
-		*kindName = eStrdup ("regex");
+		*kind = KIND_REGEX_DEFAULT;
+		*kindName = eStrdup (KIND_REGEX_DEFAULT_LONG);
 	}
 	else if (kinds [0] != '\0')
 	{
@@ -335,11 +333,11 @@ static void parseKinds (
 		if (k [0] != ','  &&  (k [1] == ','  ||  k [1] == '\0'))
 			*kind = *k++;
 		else
-			*kind = 'r';
+			*kind = KIND_REGEX_DEFAULT;
 		if (*k == ',')
 			++k;
 		if (k [0] == '\0')
-			*kindName = eStrdup ("regex");
+			*kindName = eStrdup (KIND_REGEX_DEFAULT_LONG);
 		else
 		{
 			const char *const comma = strchr (k, ',');
@@ -377,13 +375,13 @@ static void processLanguageRegex (const langType language,
 	else if (parameter [0] != '@')
 		addLanguageRegex (language, parameter);
 	else if (! doesFileExist (parameter + 1))
-		printf ("regex: cannot open regex file\n");
+		error (WARNING, "cannot open regex file");
 	else
 	{
 		const char* regexfile = parameter + 1;
 		MIO* const mio = mio_new_file (regexfile, "r");
 		if (mio == NULL)
-			printf ("regex: %s\n", regexfile);
+			error (WARNING | PERROR, "%s", regexfile);
 		else
 		{
 			vString* const regex = vStringNew ();
@@ -468,7 +466,7 @@ static void matchCallbackPattern (
 }
 
 static bool matchRegexPattern (const vString* const line,
-		const regexPattern* const patbuf)
+				  const regexPattern* const patbuf)
 {
 	bool result = false;
 	GMatchInfo *minfo;
@@ -541,11 +539,10 @@ extern void addTagRegex (
 	}
 }
 
-extern void addCallbackRegex (
-		const langType language CTAGS_ATTR_UNUSED,
-		const char* const regex CTAGS_ATTR_UNUSED,
-		const char* const flags CTAGS_ATTR_UNUSED,
-		const regexCallback callback CTAGS_ATTR_UNUSED)
+extern void addCallbackRegex (const langType language CTAGS_ATTR_UNUSED,
+			      const char* const regex CTAGS_ATTR_UNUSED,
+			      const char* const flags CTAGS_ATTR_UNUSED,
+			      const regexCallback callback CTAGS_ATTR_UNUSED)
 {
 	Assert (regex != NULL);
 	if (regexAvailable)
@@ -576,7 +573,7 @@ extern void addLanguageRegex (
 */
 
 extern bool processRegexOption (const char *const option,
-								   const char *const parameter CTAGS_ATTR_UNUSED)
+				   const char *const parameter CTAGS_ATTR_UNUSED)
 {
 	bool handled = false;
 	const char* const dash = strchr (option, '-');
@@ -648,9 +645,23 @@ extern void freeRegexResources (void)
 	SetUpper = -1;
 }
 
-/* Check for broken regcomp() on Cygwin */
+/* Return true if available. */
 extern bool checkRegex (void)
 {
-	/* not needed now we have GRegex */
-	return true;
+/* not needed with GRegex */
+#if 0 /*defined (CHECK_REGCOMP)*/
+	{
+		/* Check for broken regcomp() on Cygwin */
+		regex_t patbuf;
+		int errcode;
+		if (regcomp (&patbuf, "/hello/", 0) != 0)
+			error (WARNING, "Disabling broken regex");
+		else
+			regexAvailable = true;
+	}
+#else
+	/* We are using bundled regex engine. */
+	regexAvailable = true;
+#endif
+	return regexAvailable;
 }
