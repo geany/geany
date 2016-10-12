@@ -17,22 +17,22 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
+
+#include <ctype.h>
+#include <stddef.h>
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
+#endif
 #include <glib.h>
 
-#ifdef HAVE_REGCOMP
-# include <ctype.h>
-# include <stddef.h>
-# ifdef HAVE_SYS_TYPES_H
-#  include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
-# endif
-#endif
-
 #include "debug.h"
-#include "mio.h"
 #include "entry.h"
+#include "flags.h"
+#include "htable.h"
+#include "kind.h"
+#include "options.h"
 #include "parse.h"
 #include "read.h"
-#include "kind.h"
 #include "routines.h"
 
 /*
@@ -42,16 +42,12 @@
 /* Back-references \0 through \9 */
 #define BACK_REFERENCE_COUNT 10
 
-#if defined (HAVE_REGCOMP) && !defined (REGCOMP_BROKEN)
-# define POSIX_REGEX
-#endif
 
 #define REGEX_NAME "Regex"
 
 /*
 *   DATA DECLARATIONS
 */
-#if defined (POSIX_REGEX)
 
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
@@ -69,7 +65,6 @@ typedef struct {
 	} u;
 } regexPattern;
 
-#endif
 
 typedef struct {
 	regexPattern *patterns;
@@ -295,7 +290,6 @@ static void addCompiledCallbackPattern (
 	ptrn->u.callback.function = callback;
 }
 
-#if defined (POSIX_REGEX)
 
 static GRegex* compileRegex (const char* const regexp, const char* const flags)
 {
@@ -322,7 +316,6 @@ static GRegex* compileRegex (const char* const regexp, const char* const flags)
 	return result;
 }
 
-#endif
 
 static void parseKinds (
 		const char* const kinds, char* const kind, char** const kindName,
@@ -406,7 +399,6 @@ static void processLanguageRegex (const langType language,
 *   Regex pattern matching
 */
 
-#if defined (POSIX_REGEX)
 
 static vString* substitute (
 		const char* const in, const char* out,
@@ -497,7 +489,6 @@ static bool matchRegexPattern (const vString* const line,
 	return result;
 }
 
-#endif
 
 /* PUBLIC INTERFACE */
 
