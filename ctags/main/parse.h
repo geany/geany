@@ -92,7 +92,8 @@ typedef struct {
 	size_t length;  /* length of match */
 } regexMatch;
 
-typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsigned int count);
+typedef void (*regexCallback) (const char *line, const regexMatch *matches, unsigned int count,
+			       void *userData);
 
 typedef enum {
 	LMAP_PATTERN   = 1 << 0,
@@ -143,8 +144,11 @@ extern void findRegexTags (void);
 extern bool matchRegex (const vString* const line, const langType language);
 extern bool processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
-extern void addTagRegex (const langType language, const char* const regex, const char* const name, const char* const kinds, const char* const flags);
-extern void addCallbackRegex (const langType language, const char* const regex, const char* flags, const regexCallback callback);
+extern void addTagRegex (const langType language, const char* const regex,
+			 const char* const name, const char* const kinds, const char* const flags,
+			 bool *disabled);
+extern void addCallbackRegex (const langType language, const char *const regexo, const char *const flags,
+			      const regexCallback callback, bool *disabled, void *userData);
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
 

@@ -437,7 +437,8 @@ static void installTagRegexTable (const langType language)
 				 lang->tagRegexTable [i].regex,
 				 lang->tagRegexTable [i].name,
 				 lang->tagRegexTable [i].kinds,
-				 lang->tagRegexTable [i].flags);
+				 lang->tagRegexTable [i].flags,
+				 (lang->tagRegexTable [i].disabled));
 	}
 }
 

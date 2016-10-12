@@ -137,7 +137,7 @@ static void clearPatternSet (const langType language)
 *   Regex pseudo-parser
 */
 
-static void makeRegexTag (
+static int makeRegexTag (
 		const vString* const name, const kindOption* const kind)
 {
 	Assert (kind != NULL);
@@ -146,8 +146,10 @@ static void makeRegexTag (
 		tagEntryInfo e;
 		Assert (name != NULL  &&  vStringLength (name) > 0);
 		initTagEntry (&e, vStringValue (name), kind);
-		makeTagEntry (&e);
+		return makeTagEntry (&e);
 	}
+	else
+		return CORK_NIL;
 }
 
 /*
@@ -325,7 +327,8 @@ static regexPattern* addCompiledTagCommon (const langType language,
 
 static regexPattern *addCompiledTagPattern (const langType language, GRegex* const pattern,
 					    const char* const name, char kind, const char* kindName,
-					    char *const description)
+					    char *const description, const char* flags,
+					    bool *disabled)
 {
 	regexPattern * ptrn;
 	bool exclusive = false;
@@ -360,7 +363,9 @@ static regexPattern *addCompiledTagPattern (const langType language, GRegex* con
 }
 
 static void addCompiledCallbackPattern (const langType language, GRegex* const pattern,
-					const regexCallback callback)
+					const regexCallback callback, const char* flags,
+					bool *disabled,
+					void *userData)
 {
 	regexPattern * ptrn;
 	bool exclusive = false;
@@ -531,7 +536,8 @@ static void matchCallbackPattern (
 		if (so != -1)
 			count = i + 1;
 	}
-	patbuf->u.callback.function (vStringValue (line), matches, count);
+	patbuf->u.callback.function (vStringValue (line), matches, count,
+				     patbuf->u.callback.userData);
 }
 
 static bool matchRegexPattern (const vString* const line,
@@ -588,7 +594,8 @@ static regexPattern *addTagRegexInternal (const langType language,
 					  const char* const regex,
 					  const char* const name,
 					  const char* const kinds,
-					  const char* const flags)
+					  const char* const flags,
+					  bool *disabled)
 {
 	regexPattern *rptr = NULL;
 	Assert (regex != NULL);
@@ -601,6 +608,7 @@ static regexPattern *addTagRegexInternal (const langType language,
 			char kind;
 			char* kindName;
 			char* description;
+
 			parseKinds (kinds, &kind, &kindName, &description);
 			if (kind == getLanguageFileKind (language)->letter)
 				error (FATAL,
@@ -610,7 +618,8 @@ static regexPattern *addTagRegexInternal (const langType language,
 				       getLanguageName (language));
 
 			rptr = addCompiledTagPattern (language, cp, name,
-						      kind, kindName, description);
+						      kind, kindName, description, flags,
+						      disabled);
 			if (kindName)
 				eFree (kindName);
 			if (description)
@@ -620,7 +629,10 @@ static regexPattern *addTagRegexInternal (const langType language,
 
 	if (*name == '\0')
 	{
-		error (WARNING, "%s: regexp missing name pattern", regex);
+		if (rptr->exclusive || rptr->scopeActions & SCOPE_PLACEHOLDER)
+			rptr->accept_empty_name = true;
+		else
+			error (WARNING, "%s: regexp missing name pattern", regex);
 	}
 
 	return rptr;
@@ -630,22 +642,26 @@ extern void addTagRegex (const langType language CTAGS_ATTR_UNUSED,
 			 const char* const regex CTAGS_ATTR_UNUSED,
 			 const char* const name CTAGS_ATTR_UNUSED,
 			 const char* const kinds CTAGS_ATTR_UNUSED,
-			 const char* const flags CTAGS_ATTR_UNUSED)
+			 const char* const flags CTAGS_ATTR_UNUSED,
+			 bool *disabled)
 {
-	addTagRegexInternal (language, regex, name, kinds, flags);
+	addTagRegexInternal (language, regex, name, kinds, flags, disabled);
 }
 
 extern void addCallbackRegex (const langType language CTAGS_ATTR_UNUSED,
 			      const char* const regex CTAGS_ATTR_UNUSED,
 			      const char* const flags CTAGS_ATTR_UNUSED,
-			      const regexCallback callback CTAGS_ATTR_UNUSED)
+			      const regexCallback callback CTAGS_ATTR_UNUSED,
+			      bool *disabled,
+			      void * userData)
 {
 	Assert (regex != NULL);
 	if (regexAvailable)
 	{
 		GRegex* const cp = compileRegex (regex, flags);
 		if (cp != NULL)
-			addCompiledCallbackPattern (language, cp, callback);
+			addCompiledCallbackPattern (language, cp, callback, flags,
+						    disabled, userData);
 	}
 }
 
@@ -658,7 +674,8 @@ extern void addLanguageRegex (
 		char *name, *kinds, *flags;
 		if (parseTagRegex (regex_pat, &name, &kinds, &flags))
 		{
-			addTagRegexInternal (language, regex_pat, name, kinds, flags);
+			addTagRegexInternal (language, regex_pat, name, kinds, flags,
+					     NULL);
 			eFree (regex_pat);
 		}
 	}
