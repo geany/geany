@@ -36,6 +36,7 @@
 #include "routines.h"
 
 static bool regexAvailable = true;
+static unsigned long currentScope = CORK_NIL;
 
 /*
 *   MACROS
@@ -583,11 +584,22 @@ extern bool matchRegex (const vString* const line, const langType language)
 	return result;
 }
 
+extern void findRegexTagsMainloop (int (* driver)(void))
+{
+	currentScope = CORK_NIL;
+	/* merely read all lines of the file */
+	while (driver () != EOF)
+		;
+}
+
+static int fileReadLineDriver(void)
+{
+	return (readLineFromInputFile () == NULL)? EOF: 1;
+}
+
 extern void findRegexTags (void)
 {
-	/* merely read all lines of the file */
-	while (readLineFromInputFile () != NULL)
-		;
+	findRegexTagsMainloop (fileReadLineDriver);
 }
 
 static regexPattern *addTagRegexInternal (const langType language,

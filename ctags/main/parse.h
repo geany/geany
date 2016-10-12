@@ -141,6 +141,7 @@ extern bool processKindOption (const char *const option, const char *const param
 
 /* Regex interface */
 extern void findRegexTags (void);
+extern void findRegexTagsMainloop (int (* driver)(void));
 extern bool matchRegex (const vString* const line, const langType language);
 extern bool processRegexOption (const char *const option, const char *const parameter);
 extern void addLanguageRegex (const langType language, const char* const regex);
