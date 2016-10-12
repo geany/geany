@@ -421,6 +421,15 @@ extern bool processAliasOption (
 	return false;
 }
 
+extern void useRegexMethod (const langType language)
+{
+	parserDefinition* lang;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	lang = LanguageTable [language];
+	lang->method |= METHOD_REGEX;
+}
+
 static void installTagRegexTable (const langType language)
 {
 	parserDefinition* lang;

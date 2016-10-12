@@ -152,5 +152,6 @@ extern void addCallbackRegex (const langType language, const char *const regexo,
 			      const regexCallback callback, bool *disabled, void *userData);
 extern void freeRegexResources (void);
 extern bool checkRegex (void);
+extern void useRegexMethod (const langType language);
 
 #endif  /* CTAGS_MAIN_PARSE_H */

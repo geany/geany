@@ -320,9 +320,12 @@ static regexPattern* addCompiledTagCommon (const langType language,
 	ptrn = &set->patterns [set->count];
 	memset (ptrn, 0, sizeof (*ptrn));
 	ptrn->pattern = pattern;
+	ptrn->exclusive = false;
+	ptrn->accept_empty_name = false;
 	if (kind_letter)
 		ptrn->u.tag.kind = kind;
 	set->count += 1;
+	useRegexMethod(language);
 	return ptrn;
 }
 
@@ -343,6 +346,9 @@ static regexPattern *addCompiledTagPattern (const langType language, GRegex* con
 	ptrn  = addCompiledTagCommon(language, pattern, kind);
 	ptrn->type    = PTRN_TAG;
 	ptrn->u.tag.name_pattern = eStrdup (name);
+	ptrn->exclusive = exclusive;
+	ptrn->scopeActions = scopeActions;
+	ptrn->disabled = disabled;
 	if (ptrn->u.tag.kind->letter == '\0')
 	{
 		/* This is a newly registered kind. */
@@ -373,6 +379,9 @@ static void addCompiledCallbackPattern (const langType language, GRegex* const p
 	ptrn  = addCompiledTagCommon(language, pattern, '\0');
 	ptrn->type    = PTRN_CALLBACK;
 	ptrn->u.callback.function = callback;
+	ptrn->u.callback.userData = userData;
+	ptrn->exclusive = exclusive;
+	ptrn->disabled = disabled;
 }
 
 static GRegex* compileRegex (const char* const regexp, const char* const flags)
@@ -531,7 +540,7 @@ static void matchCallbackPattern (
 		matches [i].start  = so;
 		matches [i].length = eo - so;
 		/* a valid match may have both offsets == -1,
-		 * e.g. (foo)*(bar) matching "bar" - see CTags bug 2970274.
+		 * e.g. (foo)*(bar) matching "bar" - see CTags bug 271.
 		 * As POSIX regex doesn't seem to have a way to count matches,
 		 * we return the count up to the last non-empty match. */
 		if (so != -1)
@@ -578,8 +587,15 @@ extern bool matchRegex (const vString* const line, const langType language)
 		const patternSet* const set = Sets + language;
 		unsigned int i;
 		for (i = 0  ;  i < set->count  ;  ++i)
-			if (matchRegexPattern (line, set->patterns + i))
+		{
+			regexPattern* ptrn = set->patterns + i;
+			if (matchRegexPattern (line, ptrn))
+			{
 				result = true;
+				if (ptrn->exclusive)
+					break;
+			}
+		}
 	}
 	return result;
 }
@@ -600,6 +616,19 @@ static int fileReadLineDriver(void)
 extern void findRegexTags (void)
 {
 	findRegexTagsMainloop (fileReadLineDriver);
+}
+
+extern bool hasScopeActionInRegex (const langType language)
+{
+	bool r = false;
+	unsigned int i;
+
+	if (language <= SetUpper  &&  Sets [language].count > 0)
+		for (i = 0; i < Sets [language].count; i++)
+			if (Sets[language].patterns[i].scopeActions)
+				r= true;
+
+	return r;
 }
 
 static regexPattern *addTagRegexInternal (const langType language,
