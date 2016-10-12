@@ -248,6 +248,55 @@ static bool parseTagRegex (
 }
 
 
+static void pre_ptrn_flag_exclusive_short (char c CTAGS_ATTR_UNUSED, void* data)
+{
+	bool *exclusive = data;
+	*exclusive = true;
+}
+
+static void pre_ptrn_flag_exclusive_long (const char* const s CTAGS_ATTR_UNUSED, const char* const unused CTAGS_ATTR_UNUSED, void* data)
+{
+	pre_ptrn_flag_exclusive_short ('x', data);
+}
+
+static flagDefinition prePtrnFlagDef[] = {
+	{ 'x',  "exclusive", pre_ptrn_flag_exclusive_short, pre_ptrn_flag_exclusive_long ,
+	  NULL, "skip testing the other patterns if a line is matched to this pattern"},
+};
+
+static void scope_ptrn_flag_eval (const char* const f  CTAGS_ATTR_UNUSED,
+				  const char* const v, void* data)
+{
+	unsigned long *bfields = data;
+
+	if (strcmp (v, "ref") == 0)
+		*bfields |= SCOPE_REF;
+	else if (strcmp (v, "push") == 0)
+		*bfields |= (SCOPE_PUSH | SCOPE_REF);
+	else if (strcmp (v, "pop") == 0)
+		*bfields |= SCOPE_POP;
+	else if (strcmp (v, "clear") == 0)
+		*bfields |= SCOPE_CLEAR;
+	else if (strcmp (v, "set") == 0)
+		*bfields |= (SCOPE_CLEAR | SCOPE_PUSH);
+	else
+		error (FATAL, "Unexpected value for scope flag in regex definition: scope=%s", v);
+}
+
+static void placeholder_ptrn_flag_eval (const char* const f  CTAGS_ATTR_UNUSED,
+				     const char* const v  CTAGS_ATTR_UNUSED, void* data)
+{
+	unsigned long *bfields = data;
+	*bfields |= SCOPE_PLACEHOLDER;
+}
+
+static flagDefinition scopePtrnFlagDef[] = {
+	{ '\0', "scope",     NULL, scope_ptrn_flag_eval,
+	  "ACTION", "use scope stack: ACTION = ref|push|pop|clear|set"},
+	{ '\0', "placeholder",  NULL, placeholder_ptrn_flag_eval,
+	  NULL, "don't put this tag to tags file."},
+};
+
 static kindOption *kindNew ()
 {
 	kindOption *kind = xCalloc (1, kindOption);
@@ -338,6 +387,8 @@ static regexPattern *addCompiledTagPattern (const langType language, GRegex* con
 	bool exclusive = false;
 	unsigned long scopeActions = 0UL;
 
+	flagsEval (flags, prePtrnFlagDef, ARRAY_SIZE(prePtrnFlagDef), &exclusive);
+	flagsEval (flags, scopePtrnFlagDef, ARRAY_SIZE(scopePtrnFlagDef), &scopeActions);
 	if (*name == '\0' && exclusive && kind == KIND_REGEX_DEFAULT)
 	{
 		kind = KIND_GHOST;
@@ -376,6 +427,7 @@ static void addCompiledCallbackPattern (const langType language, GRegex* const p
 {
 	regexPattern * ptrn;
 	bool exclusive = false;
+	flagsEval (flags, prePtrnFlagDef, ARRAY_SIZE(prePtrnFlagDef), &exclusive);
 	ptrn  = addCompiledTagCommon(language, pattern, '\0');
 	ptrn->type    = PTRN_CALLBACK;
 	ptrn->u.callback.function = callback;
@@ -384,27 +436,63 @@ static void addCompiledCallbackPattern (const langType language, GRegex* const p
 	ptrn->disabled = disabled;
 }
 
+
+static void regex_flag_basic_short (char c CTAGS_ATTR_UNUSED, void* data)
+{
+	g_warning("CTags 'b' flag not supported by Geany!");
+}
+
+static void regex_flag_basic_long (const char* const s CTAGS_ATTR_UNUSED, const char* const unused CTAGS_ATTR_UNUSED, void* data)
+{
+	regex_flag_basic_short ('b', data);
+}
+
+static void regex_flag_extend_short (char c CTAGS_ATTR_UNUSED, void* data)
+{
+}
+
+static void regex_flag_extend_long (const char* const c CTAGS_ATTR_UNUSED, const char* const unused CTAGS_ATTR_UNUSED, void* data)
+{
+	regex_flag_extend_short('e', data);
+}
+
+static void regex_flag_icase_short (char c CTAGS_ATTR_UNUSED, void* data)
+{
+	int* cflags = data;
+	*cflags |= G_REGEX_CASELESS;
+}
+
+static void regex_flag_icase_long (const char* s CTAGS_ATTR_UNUSED, const char* const unused CTAGS_ATTR_UNUSED, void* data)
+{
+	regex_flag_icase_short ('i', data);
+}
+
+
+static flagDefinition regexFlagDefs[] = {
+	{ 'b', "basic",  regex_flag_basic_short,  regex_flag_basic_long,
+	  NULL, "interpreted as a Posix basic regular expression."},
+	{ 'e', "extend", regex_flag_extend_short, regex_flag_extend_long,
+	  NULL, "interpreted as a Posix extended regular expression (default)"},
+	{ 'i', "icase",  regex_flag_icase_short,  regex_flag_icase_long,
+	  NULL, "applied in a case-insensitive manner"},
+};
+
 static GRegex* compileRegex (const char* const regexp, const char* const flags)
 {
 	int cflags = G_REGEX_MULTILINE;
 	GRegex *result = NULL;
-	GError *error = NULL;
-	int i;
-	for (i = 0  ; flags != NULL  &&  flags [i] != '\0'  ;  ++i)
+	GError *err = NULL;
+
+	flagsEval (flags,
+		   regexFlagDefs,
+		   ARRAY_SIZE(regexFlagDefs),
+		   &cflags);
+
+	result = g_regex_new(regexp, cflags, 0, &err);
+	if (err)
 	{
-		switch ((int) flags [i])
-		{
-			case 'b': g_warning("CTags 'b' flag not supported by Geany!"); break;
-			case 'e': break;
-			case 'i': cflags |= G_REGEX_CASELESS; break;
-			default: printf ("regex: unknown regex flag: '%c'\n", *flags); break;
-		}
-	}
-	result = g_regex_new(regexp, cflags, 0, &error);
-	if (error)
-	{
-		printf ("regex: regcomp %s: %s\n", regexp, error->message);
-		g_error_free(error);
+		error (WARNING, "regcomp %s: %s", regexp, err->message);
+		g_error_free(err);
 	}
 	return result;
 }
