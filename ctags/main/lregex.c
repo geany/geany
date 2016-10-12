@@ -139,14 +139,16 @@ static void clearPatternSet (const langType language)
 */
 
 static int makeRegexTag (
-		const vString* const name, const kindOption* const kind)
+		const vString* const name, const kindOption* const kind, int scopeIndex, int placeholder)
 {
 	Assert (kind != NULL);
 	if (kind->enabled)
 	{
 		tagEntryInfo e;
-		Assert (name != NULL  &&  vStringLength (name) > 0);
+		Assert (name != NULL  &&  ((vStringLength (name) > 0) || placeholder));
 		initTagEntry (&e, vStringValue (name), kind);
+		e.extensionFields.scopeIndex = scopeIndex;
+		e.placeholder = !!placeholder;
 		return makeTagEntry (&e);
 	}
 	else
@@ -601,14 +603,44 @@ static void matchTagPattern (const vString* const line,
 {
 	vString *const name = substitute (vStringValue (line),
 			patbuf->u.tag.name_pattern, BACK_REFERENCE_COUNT, minfo);
+	bool placeholder = !!((patbuf->scopeActions & SCOPE_PLACEHOLDER) == SCOPE_PLACEHOLDER);
+	unsigned long scope = CORK_NIL;
+	int n;
+
 	vStringStripLeading (name);
 	vStringStripTrailing (name);
-	if (vStringLength (name) > 0)
-		makeRegexTag (name, patbuf->u.tag.kind);
+
+	if (patbuf->scopeActions & SCOPE_REF)
+	{
+		tagEntryInfo *entry;
+
+		scope = currentScope;
+		while ((entry = getEntryInCorkQueue (scope)) && entry->placeholder)
+			/* Look at parent */
+			scope = entry->extensionFields.scopeIndex;
+	}
+	if (patbuf->scopeActions & SCOPE_CLEAR)
+		currentScope = CORK_NIL;
+	if (patbuf->scopeActions & SCOPE_POP)
+	{
+		tagEntryInfo *entry = getEntryInCorkQueue (currentScope);
+		currentScope = entry? entry->extensionFields.scopeIndex: CORK_NIL;
+	}
+
+	if (vStringLength (name) == 0 && (placeholder == false))
+	{
+		if (patbuf->accept_empty_name == false)
+			error (WARNING, "%s:%ld: null expansion of name pattern \"%s\"",
+			       getInputFileName (), getInputLineNumber (),
+			       patbuf->u.tag.name_pattern);
+		n = CORK_NIL;
+	}
 	else
-		error (WARNING, "%s:%ld: null expansion of name pattern \"%s\"",
-			getInputFileName (), getInputLineNumber (),
-			patbuf->u.tag.name_pattern);
+		n = makeRegexTag (name, patbuf->u.tag.kind, scope, placeholder);
+
+	if (patbuf->scopeActions & SCOPE_PUSH)
+		currentScope = n;
+
 	vStringDelete (name);
 }
 
@@ -643,7 +675,11 @@ static bool matchRegexPattern (const vString* const line,
 {
 	bool result = false;
 	GMatchInfo *minfo;
-	if (g_regex_match(patbuf->pattern, vStringValue(line), 0, &minfo))
+
+	if (patbuf->disabled && *(patbuf->disabled))
+		return false;
+
+	if (g_regex_match(patbuf->pattern, vStringValue (line), 0, &minfo))
 	{
 		result = true;
 		if (patbuf->type == PTRN_TAG)
