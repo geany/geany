@@ -51,6 +51,11 @@ static bool regexAvailable = true;
 *   DATA DECLARATIONS
 */
 
+union cptr {
+	char c;
+	void *p;
+};
+
 enum pType { PTRN_TAG, PTRN_CALLBACK };
 
 typedef struct {
@@ -59,7 +64,7 @@ typedef struct {
 	union {
 		struct {
 			char *name_pattern;
-			kindOption kind;
+			kindOption *kind;
 		} tag;
 		struct {
 			regexCallback function;
@@ -71,6 +76,7 @@ typedef struct {
 typedef struct {
 	regexPattern *patterns;
 	unsigned int count;
+	hashTable   *kinds;
 } patternSet;
 
 /*
@@ -102,24 +108,20 @@ static void clearPatternSet (const langType language)
 			{
 				eFree (p->u.tag.name_pattern);
 				p->u.tag.name_pattern = NULL;
-				eFree ((char *)p->u.tag.kind.name);
-				p->u.tag.kind.name = NULL;
-				if (p->u.tag.kind.description != NULL)
-				{
-					eFree ((char *)p->u.tag.kind.description);
-					p->u.tag.kind.description = NULL;
-				}
+				p->u.tag.kind = NULL;
 			}
 		}
 		if (set->patterns != NULL)
 			eFree (set->patterns);
 		set->patterns = NULL;
 		set->count = 0;
+		hashTableDelete (set->kinds);
+		set->kinds = NULL;
 	}
 }
 
 /*
-*   Regex psuedo-parser
+*   Regex pseudo-parser
 */
 
 static void makeRegexTag (
@@ -229,44 +231,45 @@ static bool parseTagRegex (
 	return result;
 }
 
-static void addCompiledTagPattern (
-		const langType language, GRegex* const pattern,
-		char* const name, const char kind, char* const kindName,
-		char *const description)
-{
-	patternSet* set;
-	regexPattern *ptrn;
-	if (language > SetUpper)
-	{
-		int i;
-		Sets = xRealloc (Sets, (language + 1), patternSet);
-		for (i = SetUpper + 1  ;  i <= language  ;  ++i)
-		{
-			Sets [i].patterns = NULL;
-			Sets [i].count = 0;
-		}
-		SetUpper = language;
-	}
-	set = Sets + language;
-	set->patterns = xRealloc (set->patterns, (set->count + 1), regexPattern);
-	ptrn = &set->patterns [set->count];
-	set->count += 1;
 
-	ptrn->pattern = pattern;
-	ptrn->type    = PTRN_TAG;
-	ptrn->u.tag.name_pattern = name;
-	ptrn->u.tag.kind.enabled = true;
-	ptrn->u.tag.kind.letter  = kind;
-	ptrn->u.tag.kind.name    = kindName;
-	ptrn->u.tag.kind.description = description;
+static kindOption *kindNew ()
+{
+	kindOption *kind = xCalloc (1, kindOption);
+	kind->letter        = '\0';
+	kind->name = NULL;
+	kind->description = NULL;
+	kind->enabled = false;
+	kind->referenceOnly = false;
+	kind->nRoles = 0;
+	kind->roles = NULL;
+	return kind;
 }
 
-static void addCompiledCallbackPattern (
-		const langType language, GRegex* const pattern,
-		const regexCallback callback)
+static void kindFree (void *data)
+{
+	kindOption *kind = data;
+	kind->letter = '\0';
+	if (kind->name)
+	{
+		eFree ((void *)kind->name);
+		kind->name = NULL;
+	}
+	if (kind->description)
+	{
+		eFree ((void *)kind->description);
+		kind->description = NULL;
+	}
+	eFree (kind);
+}
+
+static regexPattern* addCompiledTagCommon (const langType language,
+					   GRegex* const pattern,
+					   char kind_letter)
 {
 	patternSet* set;
 	regexPattern *ptrn;
+	kindOption *kind = NULL;
+
 	if (language > SetUpper)
 	{
 		int i;
@@ -275,19 +278,83 @@ static void addCompiledCallbackPattern (
 		{
 			Sets [i].patterns = NULL;
 			Sets [i].count = 0;
+			Sets [i].kinds = hashTableNew (11,
+						       hashPtrhash,
+						       hashPtreq,
+						       NULL,
+						       kindFree);
 		}
 		SetUpper = language;
 	}
 	set = Sets + language;
 	set->patterns = xRealloc (set->patterns, (set->count + 1), regexPattern);
-	ptrn = &set->patterns [set->count];
-	set->count += 1;
 
+	if (kind_letter)
+	{
+		union cptr c = { .p = NULL };
+
+		c.c = kind_letter;
+		kind = hashTableGetItem (set->kinds, c.p);
+		if (!kind)
+		{
+			kind = kindNew ();
+			hashTablePutItem (set->kinds, c.p, (void *)kind);
+		}
+	}
+	ptrn = &set->patterns [set->count];
+	memset (ptrn, 0, sizeof (*ptrn));
 	ptrn->pattern = pattern;
+	if (kind_letter)
+		ptrn->u.tag.kind = kind;
+	set->count += 1;
+	return ptrn;
+}
+
+static regexPattern *addCompiledTagPattern (const langType language, GRegex* const pattern,
+					    const char* const name, char kind, const char* kindName,
+					    char *const description)
+{
+	regexPattern * ptrn;
+	bool exclusive = false;
+	unsigned long scopeActions = 0UL;
+
+	if (*name == '\0' && exclusive && kind == KIND_REGEX_DEFAULT)
+	{
+		kind = KIND_GHOST;
+		kindName = KIND_GHOST_LONG;
+	}
+	ptrn  = addCompiledTagCommon(language, pattern, kind);
+	ptrn->type    = PTRN_TAG;
+	ptrn->u.tag.name_pattern = eStrdup (name);
+	if (ptrn->u.tag.kind->letter == '\0')
+	{
+		/* This is a newly registered kind. */
+		ptrn->u.tag.kind->letter  = kind;
+		ptrn->u.tag.kind->enabled = true;
+		ptrn->u.tag.kind->name    = kindName? eStrdup (kindName): NULL;
+		ptrn->u.tag.kind->description = description? eStrdup (description): NULL;
+	}
+	else if (ptrn->u.tag.kind->name && kindName && strcmp(ptrn->u.tag.kind->name, kindName))
+	{
+		/* When using a same kind letter for multiple regex patterns, the name of kind
+		   should be the same. */
+		error  (WARNING, "Don't reuse the kind letter `%c' in a language %s (old: \"%s\", new: \"%s\")",
+			ptrn->u.tag.kind->letter, getLanguageName (language),
+			ptrn->u.tag.kind->name, kindName);
+	}
+
+	return ptrn;
+}
+
+static void addCompiledCallbackPattern (const langType language, GRegex* const pattern,
+					const regexCallback callback)
+{
+	regexPattern * ptrn;
+	bool exclusive = false;
+	ptrn  = addCompiledTagCommon(language, pattern, '\0');
 	ptrn->type    = PTRN_CALLBACK;
 	ptrn->u.callback.function = callback;
 }
-
 
 static GRegex* compileRegex (const char* const regexp, const char* const flags)
 {
@@ -421,7 +488,7 @@ static void matchTagPattern (const vString* const line,
 	vStringStripLeading (name);
 	vStringStripTrailing (name);
 	if (vStringLength (name) > 0)
-		makeRegexTag (name, &patbuf->u.tag.kind);
+		makeRegexTag (name, patbuf->u.tag.kind);
 	else
 		error (WARNING, "%s:%ld: null expansion of name pattern \"%s\"",
 			getInputFileName (), getInputLineNumber (),
@@ -504,13 +571,13 @@ extern void findRegexTags (void)
 		;
 }
 
-extern void addTagRegex (
-		const langType language CTAGS_ATTR_UNUSED,
-		const char* const regex CTAGS_ATTR_UNUSED,
-		const char* const name CTAGS_ATTR_UNUSED,
-		const char* const kinds CTAGS_ATTR_UNUSED,
-		const char* const flags CTAGS_ATTR_UNUSED)
+static regexPattern *addTagRegexInternal (const langType language,
+					  const char* const regex,
+					  const char* const name,
+					  const char* const kinds,
+					  const char* const flags)
 {
+	regexPattern *rptr = NULL;
 	Assert (regex != NULL);
 	Assert (name != NULL);
 	if (regexAvailable)
@@ -522,10 +589,37 @@ extern void addTagRegex (
 			char* kindName;
 			char* description;
 			parseKinds (kinds, &kind, &kindName, &description);
-			addCompiledTagPattern (language, cp, eStrdup (name),
-					kind, kindName, description);
+			if (kind == getLanguageFileKind (language)->letter)
+				error (FATAL,
+				       "Kind letter \'%c\' used in regex definition \"%s\" of %s language is reserved in ctags main",
+				       kind,
+				       regex,
+				       getLanguageName (language));
+
+			rptr = addCompiledTagPattern (language, cp, name,
+						      kind, kindName, description);
+			if (kindName)
+				eFree (kindName);
+			if (description)
+				eFree (description);
 		}
 	}
+
+	if (*name == '\0')
+	{
+		error (WARNING, "%s: regexp missing name pattern", regex);
+	}
+
+	return rptr;
+}
+
+extern void addTagRegex (const langType language CTAGS_ATTR_UNUSED,
+			 const char* const regex CTAGS_ATTR_UNUSED,
+			 const char* const name CTAGS_ATTR_UNUSED,
+			 const char* const kinds CTAGS_ATTR_UNUSED,
+			 const char* const flags CTAGS_ATTR_UNUSED)
+{
+	addTagRegexInternal (language, regex, name, kinds, flags);
 }
 
 extern void addCallbackRegex (const langType language CTAGS_ATTR_UNUSED,
@@ -551,7 +645,7 @@ extern void addLanguageRegex (
 		char *name, *kinds, *flags;
 		if (parseTagRegex (regex_pat, &name, &kinds, &flags))
 		{
-			addTagRegex (language, regex_pat, name, kinds, flags);
+			addTagRegexInternal (language, regex_pat, name, kinds, flags);
 			eFree (regex_pat);
 		}
 	}
