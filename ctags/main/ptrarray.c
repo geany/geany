@@ -15,7 +15,6 @@
 #include <string.h>
 
 #include "debug.h"
-#include "routines.h"
 #include "ptrarray.h"
 
 /*

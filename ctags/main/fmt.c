@@ -63,7 +63,7 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 	else
 	{
 		unsigned int findex;
-/*
+
 		for (findex = 0; findex < tag->usedParserFields; findex++)
 		{
 			if (isParserFieldCompatibleWithFtype (tag->parserFields + findex, ftype))
@@ -75,7 +75,6 @@ static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
 		else if (isFieldEnabled (tag->parserFields [findex].ftype))
 			str = renderFieldEscaped (tag->parserFields [findex].ftype,
 						  tag, findex);
-*/
 	}
 
 	if (str == NULL)

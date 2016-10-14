@@ -81,14 +81,14 @@ bool forcePromises (void)
 	for (i = 0; i < promise_count; ++i)
 	{
 		struct promise *p = promises + i;
-/*		tagFileResized = runParserInNarrowedInputStream (p->lang,
+		tagFileResized = runParserInNarrowedInputStream (p->lang,
 								 p->startLine,
 								 p->startCharOffset,
 								 p->endLine,
 								 p->endCharOffset,
 								 p->sourceLineOffset)
 			? true
-			: tagFileResized;*/
+			: tagFileResized;
 	}
 
 	promise_count = 0;

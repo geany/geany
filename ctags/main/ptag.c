@@ -25,11 +25,8 @@
 static bool writePseudoTagForXcmdData (ptagDesc *desc,
 					  struct ptagXcmdData *pdata)
 {
-/*
 	return writePseudoTag (desc,
 			       pdata->fileName,  pdata->pattern, pdata->language);
-*/
-	return false;
 }
 
 static bool ptagMakeFormat (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
@@ -43,22 +40,16 @@ static bool ptagMakeFormat (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 	else if (Option.tagFileFormat == 2)
 		formatComment =
 			"extended format; --format=1 will not append ;\" to lines";
-/*
 	return writePseudoTag (desc, format, formatComment, NULL);
-*/
-	return false;
 }
 
 static bool ptagMakeHowSorted (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
-/*
 	return writePseudoTag (desc,
 			       Option.sorted == SO_FOLDSORTED ? "2" :
 			       (Option.sorted == SO_SORTED ? "1" : "0"),
 			       "0=unsorted, 1=sorted, 2=foldcase",
 			       NULL);
-*/
-	return false;
 }
 
 static bool ptagMakeAuthor (ptagDesc *desc, void *data)
@@ -68,11 +59,8 @@ static bool ptagMakeAuthor (ptagDesc *desc, void *data)
 	if (pdata)
 		return writePseudoTagForXcmdData (desc, data);
 	else
-		return false;
-/*
 		return writePseudoTag (desc,
 				       AUTHOR_NAME,  "", NULL);
-*/
 }
 
 static bool ptagMakeProgName (ptagDesc *desc, void *data)
@@ -82,11 +70,8 @@ static bool ptagMakeProgName (ptagDesc *desc, void *data)
 	if (pdata)
 		return writePseudoTagForXcmdData (desc, data);
 	else
-		return false;
-/*
 		return writePseudoTag (desc,
 				PROGRAM_NAME,  "Derived from Exuberant Ctags", NULL);
-*/
 }
 
 static bool ptagMakeProgURL (ptagDesc *desc, void *data)
@@ -96,20 +81,14 @@ static bool ptagMakeProgURL (ptagDesc *desc, void *data)
 	if (pdata)
 		return writePseudoTagForXcmdData (desc, data);
 	else
-		return false;
-/*
 		return writePseudoTag (desc,
 				       PROGRAM_URL, "official site", NULL);
-*/
 }
 
 static bool ptagMakeProgVersion (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 {
 	const char* repoinfo = ctags_repoinfo? ctags_repoinfo: "";
-/*
 	return writePseudoTag (desc, PROGRAM_VERSION, repoinfo, NULL);
-*/
-	return false;
 }
 
 #ifdef HAVE_ICONV
@@ -125,19 +104,14 @@ static bool ptagMakeFileEncoding (ptagDesc *desc, void *data CTAGS_ATTR_UNUSED)
 static bool ptagMakeKindSeparators (ptagDesc *desc, void *data)
 {
 	langType *language = data;
-/*
+
 	return makeKindSeparatorsPseudoTags (*language, desc);
-*/
-	return false;
 }
 
 static bool ptagMakeKindDescriptions (ptagDesc *desc, void *data)
 {
 	langType *language = data;
-/*
 	return makeKindDescriptionsPseudoTags (*language, desc);
-*/
-	return false;
 }
 
 static ptagDesc ptagDescs [] = {

@@ -56,7 +56,7 @@ static int addParserFields (MIO * mio, const tagEntryInfo *const tag)
 	unsigned int i;
 	unsigned int ftype;
 	int length = 0;
-/*
+
 	for (i = 0; i < tag->usedParserFields; i++)
 	{
 		ftype = tag->parserFields [i].ftype;
@@ -67,7 +67,6 @@ static int addParserFields (MIO * mio, const tagEntryInfo *const tag)
 				     getFieldName (ftype),
 				     renderFieldEscaped (tag->parserFields [i].ftype, tag, i));
 	}
-*/
 	return length;
 }
 
@@ -190,7 +189,7 @@ static int writeCtagsEntry (MIO * mio, const tagEntryInfo *const tag, void *data
 	int length = mio_printf (mio, "%s\t%s\t",
 			      escapeFieldValue (tag, FIELD_NAME),
 			      escapeFieldValue (tag, FIELD_INPUT_FILE));
-/*
+
 	if (tag->lineNumberEntry)
 		length += writeLineNumberEntry (mio, tag);
 	else if (tag->pattern)
@@ -203,7 +202,7 @@ static int writeCtagsEntry (MIO * mio, const tagEntryInfo *const tag, void *data
 		length += addExtensionFields (mio, tag);
 		length += addParserFields (mio, tag);
 	}
-*/
+
 	length += mio_printf (mio, "\n");
 
 	return length;

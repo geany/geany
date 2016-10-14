@@ -35,7 +35,7 @@
 #include "read.h"
 #include "routines.h"
 
-static bool regexAvailable = true;
+static bool regexAvailable = false;
 static unsigned long currentScope = CORK_NIL;
 
 /*

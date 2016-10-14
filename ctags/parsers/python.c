@@ -27,6 +27,17 @@
 /*
 *   DATA DEFINITIONS
 */
+
+struct corkPair {
+	int index;
+};
+
+struct nestingLevelUserData {
+	int indentation;
+};
+#define PY_NL_INDENTATION(nl) ((struct nestingLevelUserData *)nestingLevelGetUserData(nl))->indentation
+
+
 typedef enum {
 	K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE, K_IMPORT
 } pythonKind;
@@ -109,10 +120,14 @@ static void addAccessFields (tagEntryInfo *const entry,
 /* Given a string with the contents of a line directly after the "def" keyword,
  * extract all relevant information and create a tag.
  */
-static void makeFunctionTag (vString *const function,
+static struct corkPair makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
+	int corkIndex;
+	int fqCorkIndex = CORK_NIL;
+	const struct corkPair nilPair = {CORK_NIL};
+	struct corkPair pair;
 
 	if (vStringLength (parent) > 0)
 	{
@@ -136,13 +151,16 @@ static void makeFunctionTag (vString *const function,
 	addAccessFields (&tag, function, is_class_parent ? K_METHOD : K_FUNCTION,
 		vStringLength (parent) > 0, is_class_parent);
 
-	makeTagEntry (&tag);
+	corkIndex = makeTagEntry (&tag);
+
+	pair.index = corkIndex;
+	return pair;
 }
 
 /* Given a string with the contents of the line directly after the "class"
  * keyword, extract all necessary information and create a tag.
  */
-static void makeClassTag (vString *const class, vString *const inheritance,
+static int makeClassTag (vString *const class, vString *const inheritance,
 	vString *const parent, int is_class_parent)
 {
 	tagEntryInfo tag;
@@ -163,7 +181,7 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 	tag.extensionFields.inheritance = vStringValue (inheritance);
 	addAccessFields (&tag, class, K_CLASS, vStringLength (parent) > 0,
 		is_class_parent);
-	makeTagEntry (&tag);
+	return makeTagEntry (&tag);
 }
 
 static void makeVariableTag (vString *const var, vString *const parent,
@@ -289,9 +307,10 @@ static const char *parseIdentifier (const char *cp, vString *const identifier)
 	return cp;
 }
 
-static void parseClass (const char *cp, vString *const class,
+static int parseClass (const char *cp, vString *const class,
 	vString *const parent, int is_class_parent)
 {
+	int corkIndex;
 	vString *const inheritance = vStringNew ();
 	vStringClear (inheritance);
 	cp = parseIdentifier (cp, class);
@@ -313,8 +332,9 @@ static void parseClass (const char *cp, vString *const class,
 			++cp;
 		}
 	}
-	makeClassTag (class, inheritance, parent, is_class_parent);
+	corkIndex = makeClassTag (class, inheritance, parent, is_class_parent);
 	vStringDelete (inheritance);
+	return corkIndex;
 }
 
 static void parseImports (const char *cp)
@@ -384,16 +404,18 @@ static char *parseArglist(const char *buf)
 	return strdup(start);
 }
 
-static void parseFunction (const char *cp, vString *const def,
+static struct corkPair parseFunction (const char *cp, vString *const def,
 	vString *const parent, int is_class_parent)
 {
 	char *arglist;
+	struct corkPair pair;
 
 	cp = parseIdentifier (cp, def);
 	arglist = parseArglist (cp);
-	makeFunctionTag (def, parent, is_class_parent, arglist);
+	pair = makeFunctionTag (def, parent, is_class_parent, arglist);
 	if (arglist != NULL)
 		eFree (arglist);
+	return pair;
 }
 
 /* Get the combined name of a nested symbol. Classes are separated with ".",
@@ -416,36 +438,46 @@ static bool constructParentString(NestingLevels *nls, int indent,
 	vStringClear (result);
 	for (i = 0; i < nls->n; i++)
 	{
-		NestingLevel *nl = nls->levels + i;
-		if (indent <= nl->indentation)
+		NestingLevel *nl = nestingLevelsGetNth (nls, i);
+		tagEntryInfo *e;
+
+		if (indent <= PY_NL_INDENTATION(nl))
 			break;
 		if (prev)
 		{
 			vStringCatS(result, ".");	/* make Geany symbol list grouping work properly */
 /*
-			if (prev->type == K_CLASS)
+			if (prev->kindIndex == K_CLASS)
 				vStringCatS(result, ".");
 			else
 				vStringCatS(result, "/");
 */
 		}
-		vStringCat(result, nl->name);
-		is_class = (nl->type == K_CLASS);
+
+		e = getEntryOfNestingLevel (nl);
+		if (e)
+		{
+			vStringCatS(result, e->name);
+			is_class = ((e->kind - PythonKinds)  == K_CLASS);
+		}
+		else
+			is_class = K_FUNCTION; /* ??? */
+
 		prev = nl;
 	}
 	return is_class;
 }
 
 /* Check indentation level and truncate nesting levels accordingly */
-static void checkIndent(NestingLevels *nls, int indent)
+static void checkIndent(NestingLevels *nls, int indent, bool eof)
 {
 	int i;
 	NestingLevel *n;
 
 	for (i = 0; i < nls->n; i++)
 	{
-		n = nls->levels + i;
-		if (n && indent <= n->indentation)
+		n = nestingLevelsGetNth (nls, i);
+		if (n && indent <= PY_NL_INDENTATION(n))
 		{
 			/* truncate levels */
 			nls->n = i;
@@ -454,29 +486,23 @@ static void checkIndent(NestingLevels *nls, int indent)
 	}
 }
 
-static void addNestingLevel(NestingLevels *nls, int indentation,
-	const vString *name, bool is_class)
+static void addNestingLevel(NestingLevels *nls, int indentation, struct corkPair *corkPair)
 {
 	int i;
 	NestingLevel *nl = NULL;
 
 	for (i = 0; i < nls->n; i++)
 	{
-		nl = nls->levels + i;
-		if (indentation <= nl->indentation) break;
+		nl = nestingLevelsGetNth(nls, i);
+		if (indentation <= PY_NL_INDENTATION(nl)) break;
 	}
 	if (i == nls->n)
-	{
-		nestingLevelsPush(nls, name, 0);
-		nl = nls->levels + i;
-	}
+		nl = nestingLevelsPush(nls, corkPair->index);
 	else
-	{	/* reuse existing slot */
-		nls->n = i + 1;
-		vStringCopy(nl->name, name);
-	}
-	nl->indentation = indentation;
-	nl->type = is_class ? K_CLASS : !K_CLASS;
+		/* reuse existing slot */
+		nl = nestingLevelsTruncate (nls, i + 1, corkPair->index);
+
+	PY_NL_INDENTATION(nl) = indentation;
 }
 
 /* Return a pointer to the start of the next triple string, or NULL. Store
@@ -669,7 +695,7 @@ static void findPythonTags (void)
 	vString *const name = vStringNew ();
 	vString *const parent = vStringNew();
 
-	NestingLevels *const nesting_levels = nestingLevelsNew();
+	NestingLevels *const nesting_levels = nestingLevelsNew(sizeof (struct nestingLevelUserData));
 
 	const char *line;
 	int line_skip = 0;
@@ -713,8 +739,8 @@ static void findPythonTags (void)
 			find_triple_end(cp, &longStringLiteral);
 			continue;
 		}
-		
-		checkIndent(nesting_levels, indent);
+
+		checkIndent(nesting_levels, indent, false);
 
 		/* Find global and class variables */
 		variable = findVariable(line);
@@ -795,21 +821,29 @@ static void findPythonTags (void)
 			if (found)
 			{
 				bool is_parent_class;
+				struct corkPair corkPair;
 
 				is_parent_class =
 					constructParentString(nesting_levels, indent, parent);
 
 				if (is_class)
-					parseClass (cp, name, parent, is_parent_class);
+				{
+					corkPair.index = parseClass (cp, name, parent, is_parent_class);
+				}
 				else
-					parseFunction(cp, name, parent, is_parent_class);
+					corkPair = parseFunction(cp, name, parent, is_parent_class);
 
-				addNestingLevel(nesting_levels, indent, name, is_class);
+				addNestingLevel(nesting_levels, indent, &corkPair);
 			}
+			continue;
 		}
 		/* Find and parse imports */
 		parseImports(line);
 	}
+
+	/* Force popping all nesting levels. */
+	checkIndent(nesting_levels, 0, true);
+
 	/* Clean up all memory we allocated. */
 	vStringDelete (parent);
 	vStringDelete (name);
@@ -825,5 +859,6 @@ extern parserDefinition *PythonParser (void)
 	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;
+	def->useCork = true;
 	return def;
 }

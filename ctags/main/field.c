@@ -403,7 +403,7 @@ static const char *renderEscapedName (const char* s,
 		{
 			verbose ("Unexpected character (0 < *c && *c < 0x20) included in a tagEntryInfo: %s\n", base);
 			verbose ("File: %s, Line: %lu, Lang: %s, Kind: %c\n",
-				 tag->sourceFileName, tag->lineNumber, tag->language, tag->kind->letter);
+				 tag->inputFileName, tag->lineNumber, tag->language, tag->kind->letter);
 			verbose ("Escape the character\n");
 			break;
 		}
@@ -428,7 +428,7 @@ static const char *renderFieldName (const tagEntryInfo *const tag, const char *v
 
 static const char *renderFieldInput (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	const char *f = tag->sourceFileName;
+	const char *f = tag->inputFileName;
 
 	if (Option.lineDirectives && tag->sourceFileName)
 		f = tag->sourceFileName;
@@ -445,7 +445,7 @@ static const char *renderFieldScope (const tagEntryInfo *const tag, const char *
 {
 	const char* scope;
 
-	/* getTagScopeInformation ((tagEntryInfo *const)tag, NULL, &scope); */
+	getTagScopeInformation ((tagEntryInfo *const)tag, NULL, &scope);
 	return scope? renderEscapedName (scope, tag, b): NULL;
 }
 
@@ -457,8 +457,7 @@ static const char *renderFieldInherits (const tagEntryInfo *const tag, const cha
 
 static const char *renderFieldTyperef (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	/* return renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b); */
-	return NULL;
+	return ""; /*renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b); */
 }
 
 
@@ -476,10 +475,8 @@ extern const char* renderFieldEscaped (fieldType type,
 
 	if (index >= 0)
 	{
-/*
 		Assert ( tag->usedParserFields > index );
 		value = tag->parserFields[ index ].value;
-*/
 	}
 	else
 		value = NULL;
@@ -533,8 +530,7 @@ static const char *renderFieldCompactInputLine (const tagEntryInfo *const tag,
 
 	tmp = vStringNewOrClear (tmp);
 
-	line = NULL;
-/*	return renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b); */
+	line = readLineFromBypassAnyway (tmp, tag, NULL);
 	if (line)
 		renderCompactInputLine (b, line);
 	else
@@ -555,10 +551,9 @@ static const char *renderFieldLineNumber (const tagEntryInfo *const tag,
 {
 	long ln = tag->lineNumber;
 	char buf[32] = {[0] = '\0'};
-/*
+
 	if (Option.lineDirectives && (tag->sourceLineNumberDifference != 0))
 		ln += tag->sourceLineNumberDifference;
-*/
 	snprintf (buf, sizeof(buf), "%ld", ln);
 	vStringCatS (b, buf);
 	return vStringValue (b);
@@ -568,7 +563,6 @@ static const char *renderFieldRole (const tagEntryInfo *const tag,
 				    const char *value CTAGS_ATTR_UNUSED,
 				    vString* b)
 {
-/*
 	int rindex = tag->extensionFields.roleIndex;
 	const roleDesc * role;
 
@@ -582,8 +576,6 @@ static const char *renderFieldRole (const tagEntryInfo *const tag,
 	}
 
 	return vStringValue (b);
-*/
-	return NULL;
 }
 
 static const char *renderFieldLanguage (const tagEntryInfo *const tag,
@@ -591,10 +583,10 @@ static const char *renderFieldLanguage (const tagEntryInfo *const tag,
 					vString* b)
 {
 	const char *l = tag->language;
-/*
+
 	if (Option.lineDirectives && tag->sourceLanguage)
 		l = tag->sourceLanguage;
-*/
+
 	return renderAsIs (b, WITH_DEFUALT_VALUE(l));
 }
 
@@ -634,8 +626,7 @@ static const char *renderFieldPattern (const tagEntryInfo *const tag,
 				       const char *value CTAGS_ATTR_UNUSED,
 				       vString* b)
 {
-/*		char* tmp = makePatternString (tag); */
-	char* tmp = NULL;
+	char* tmp = makePatternString (tag);
 	vStringCatS (b, tmp);
 	eFree (tmp);
 	return vStringValue (b);
@@ -647,7 +638,7 @@ static const char *renderFieldRefMarker (const tagEntryInfo *const tag,
 {
 	static char c[2] = { [1] = '\0' };
 
-/*	c [0] = tag->extensionFields.roleIndex == ROLE_INDEX_DEFINITION? 'D': 'R'; */
+	c [0] = tag->extensionFields.roleIndex == ROLE_INDEX_DEFINITION? 'D': 'R';
 
 	return renderAsIs (b, c);
 }
@@ -658,7 +649,7 @@ static const char *renderFieldExtra (const tagEntryInfo *const tag,
 {
 	int i;
 	bool hasExtra = false;
-/*
+
 	for (i = 0; i < XTAG_COUNT; i++)
 	{
 		const char *name = getXtagName (i);
@@ -675,7 +666,7 @@ static const char *renderFieldExtra (const tagEntryInfo *const tag,
 			hasExtra = true;
 		}
 	}
-*/
+
 	if (hasExtra)
 		return vStringValue (b);
 	else
@@ -700,7 +691,7 @@ static const char *renderFieldScopeKindName(const tagEntryInfo *const tag,
 {
 	const char* kind;
 
-/*	getTagScopeInformation ((tagEntryInfo *const)tag, &kind, NULL); */
+	getTagScopeInformation ((tagEntryInfo *const)tag, &kind, NULL);
 	return kind? renderAsIs (b, kind): NULL;
 }
 
@@ -709,13 +700,13 @@ static const char *renderFieldEnd (const tagEntryInfo *const tag,
 				   vString* b)
 {
 	static char buf[16];
-/*
+
 	if (tag->extensionFields.endLine != 0)
 	{
 		sprintf (buf, "%ld", tag->extensionFields.endLine);
 		return renderAsIs (b, buf);
 	}
-	else */
+	else
 		return NULL;
 }
 
@@ -728,7 +719,8 @@ static bool     isTyperefFieldAvailable  (const tagEntryInfo *const tag)
 {
 /*
 	return (tag->extensionFields.typeRef [0] != NULL
-		&& tag->extensionFields.typeRef [1] != NULL)? true: false; */
+		&& tag->extensionFields.typeRef [1] != NULL)? true: false;
+*/
 	return false;
 }
 
@@ -759,20 +751,18 @@ static bool     isSignatureFieldAvailable (const tagEntryInfo *const tag)
 
 static bool     isRoleFieldAvailable      (const tagEntryInfo *const tag)
 {
-	/* return (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION)? true: false; */
-	return false;
+	return (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION)? true: false;
 }
 
 static bool     isExtraFieldAvailable     (const tagEntryInfo *const tag)
 {
 	int i;
-/*
 	for (i = 0; i < sizeof (tag->extra); i++)
 	{
 		if (tag->extra [i])
 			return true;
 	}
-*/
+
 	return false;
 }
 
@@ -787,8 +777,7 @@ static bool     isXpathFieldAvailable      (const tagEntryInfo *const tag)
 
 static bool     isEndFieldAvailable       (const tagEntryInfo *const tag)
 {
-/*	return (tag->extensionFields.endLine != 0)? true: false; */
-	return false;
+	return (tag->extensionFields.endLine != 0)? true: false;
 }
 
 extern bool isFieldEnabled (fieldType type)

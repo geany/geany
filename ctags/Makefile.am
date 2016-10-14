@@ -85,6 +85,7 @@ libctags_la_SOURCES = \
 	main/lcpp.h \
 	main/lregex.c \
 	main/lxcmd.c \
+	main/lxpath.c \
 	main/main.c \
 	main/main.h \
 	main/mio.c \

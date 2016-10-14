@@ -157,9 +157,7 @@ extern void cArgForth (cookedArgs* const current);
 
 extern bool isExcludedFile (const char* const name);
 extern bool isIncludeFile (const char *const fileName);
-/*
-extern const ignoredTokenInfo * isIgnoreToken (const char *const name);
-*/
+/* extern const ignoredTokenInfo * isIgnoreToken (const char *const name); */
 extern void parseCmdlineOptions (cookedArgs* const cargs);
 extern void previewFirstOption (cookedArgs* const cargs);
 extern void readOptionConfiguration (void);

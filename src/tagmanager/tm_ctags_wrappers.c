@@ -25,69 +25,55 @@
 #include "parse.h"
 #include "read.h"
 #include "geany.h"
+#include "error.h"
+#include "output.h"
+#include "options.h"
 
 typedef struct {
 	TMCtagsNewTagCallback tag_callback;
+	TMCtagsPassStartCallback pass_callback;
 	gpointer user_data;
 } CallbackUserData;
 
 
 void tm_ctags_init(void)
 {
-	initializeParsing();
-	installLanguageMapDefaults();
+	setErrorPrinter (stderrDefaultErrorPrinter, NULL);
+	setTagWriter (&ctagsWriter);
+
+	checkRegex ();
+	initFieldDescs ();
+
+	initializeParsing ();
+	initOptions ();
+	initializeParser (LANG_AUTO);
 }
 
 
-static gboolean parse_callback(const tagEntryInfo *tag, gpointer user_data)
+static bool tag_callback_internal(const tagEntryInfo *tag, gpointer user_data)
 {
 	CallbackUserData *callback_data = user_data;
 
 	return callback_data->tag_callback(tag, callback_data->user_data);
 }
 
+static bool pass_callback_internal(gpointer user_data)
+{
+	CallbackUserData *callback_data = user_data;
+
+	return callback_data->pass_callback(callback_data->user_data);
+}
 
 void tm_ctags_parse(guchar *buffer, gsize buffer_size,
 	const gchar *file_name, TMParserType lang, TMCtagsNewTagCallback tag_callback,
 	TMCtagsPassStartCallback pass_callback, gpointer user_data)
 {
-	CallbackUserData callback_data = {tag_callback, user_data};
-	gboolean retry = TRUE;
-	guint passCount = 0;
+	CallbackUserData callback_data = {tag_callback, pass_callback, user_data};
 
 	g_return_if_fail(buffer || file_name);
 
-	if (! LanguageTable [lang]->enabled)
-	{
-#ifdef TM_DEBUG
-		g_warning("ignoring %s (language disabled)\n", file_name);
-#endif
-		return;
-	}
-
-	setTagEntryFunction(parse_callback, &callback_data);
-	while (retry && passCount < 3)
-	{
-		pass_callback(user_data);
-		if ((!buffer && openInputFile (file_name, lang, NULL)) ||
-			(buffer && bufferOpen (file_name, lang, buffer, buffer_size)))
-		{
-			if (LanguageTable [lang]->parser != NULL)
-			{
-				LanguageTable [lang]->parser ();
-				retry = FALSE;
-			}
-			else if (LanguageTable [lang]->parser2 != NULL)
-				retry = LanguageTable [lang]->parser2 (passCount);
-			closeInputFile ();
-		}
-		else
-		{
-			g_warning("Unable to open %s", file_name);
-			break;
-		}
-		++ passCount;
-	}
+	createTagsWithFallback(buffer, buffer_size, file_name, lang,
+		tag_callback_internal, pass_callback_internal, &callback_data);
 }
 
 

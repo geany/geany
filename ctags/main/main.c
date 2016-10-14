@@ -25,6 +25,7 @@
 #include <string.h>
 
 #include "options.h"
+#include "output.h"
 
 
 extern void addTotals (
@@ -37,7 +38,7 @@ extern bool isDestinationStdout (void)
 {
 	bool toStdout = false;
 
-	if (Option.xref  ||  Option.filter  ||
+	if (outpuFormatUsedStdoutByDefault() ||  Option.filter  ||
 		(Option.tagFileName != NULL  &&  (strcmp (Option.tagFileName, "-") == 0
 						  || strcmp (Option.tagFileName, "/dev/stdout") == 0
 		)))

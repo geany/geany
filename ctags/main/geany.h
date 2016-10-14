@@ -11,7 +11,8 @@
 
 #include "types.h"
 
-typedef int (*tagEntryFunction) (const tagEntryInfo *const tag, void *user_data);
+typedef bool (*tagEntryFunction) (const tagEntryInfo *const tag, void *userData);
+typedef bool (*passStartCallback) (void *userData);
 
 
 extern bool isIgnoreToken (const char *const name, bool *const pIgnoreParens, const char **const replacement);

@@ -137,10 +137,13 @@ optionValues Option = {
 	false,      /* -a */
 	false,      /* -B */
 	false,      /* -e */
+	EX_LINENUM,
+#if 0
 #ifdef MACROS_USE_PATTERNS
 	EX_PATTERN, /* -n, --excmd */
 #else
 	EX_MIX,     /* -n, --excmd */
+#endif
 #endif
 	false,      /* -R */
 	SO_SORTED,  /* -u, --sort */
@@ -1499,9 +1502,9 @@ static char* addLanguageMap (const langType language, char* map_parameter,
 
 	map = extractMapFromParameter (language, map_parameter, &p, &pattern_p, skipPastMap);
 	if (map && pattern_p == false)
-		addLanguageExtensionMap (language, map);
+		addLanguageExtensionMap (language, map, exclusiveInAllLanguages);
 	else if (map && pattern_p == true)
-		addLanguagePatternMap (language, map);
+		addLanguagePatternMap (language, map, exclusiveInAllLanguages);
 	else
 		error (FATAL, "Badly formed language map for %s language",
 				getLanguageName (language));
@@ -1518,7 +1521,6 @@ static char* removeLanguageMap (const langType language, char* map_parameter)
 	char* map;
 
 	map = extractMapFromParameter (language, map_parameter, &p, &pattern_p, skipPastMap);
-/*
 	if (map && pattern_p == false)
 		removeLanguageExtensionMap (language, map);
 	else if (map && pattern_p == true)
@@ -1526,7 +1528,7 @@ static char* removeLanguageMap (const langType language, char* map_parameter)
 	else
 		error (FATAL, "Badly formed language map for %s language",
 		       getLanguageName (language));
-*/
+
 	if (map)
 		eFree (map);
 	return p;
@@ -1722,7 +1724,6 @@ static void processLicenseOption (
 static void processListAliasesOption (
 		const char *const option, const char *const parameter)
 {
-/*
 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
 		printLanguageAliases (LANG_AUTO);
 	else
@@ -1733,7 +1734,6 @@ static void processListAliasesOption (
 		else
 			printLanguageAliases (language);
 	}
-*/
 	exit (0);
 }
 
@@ -1747,7 +1747,6 @@ static void processListExtraOption (
 static void processListFileKindOption (
 		const char *const option, const char *const parameter)
 {
-/*
 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
 		printLanguageFileKind (LANG_AUTO);
 	else
@@ -1758,14 +1757,12 @@ static void processListFileKindOption (
 		else
 			printLanguageFileKind (language);
 	}
-*/
 	exit (0);
 }
 
 static void processListKindsOption (
 		const char *const option, const char *const parameter)
 {
-/*
 	bool print_all = (strcmp (option, "list-kinds-full") == 0)? true: false;
 
 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
@@ -1778,7 +1775,6 @@ static void processListKindsOption (
 		else
 			printLanguageKinds (language, print_all);
 	}
-*/
 	exit (0);
 }
 
@@ -1786,7 +1782,6 @@ static void processListMapsOptionForType (const char *const option CTAGS_ATTR_UN
 					  const char *const  parameter,
 					  langmapType type)
 {
-/*
 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
 		printLanguageMaps (LANG_AUTO, type);
 	else
@@ -1797,7 +1792,6 @@ static void processListMapsOptionForType (const char *const option CTAGS_ATTR_UN
 		else
 			printLanguageMaps (language, type);
 	}
-*/
 	exit (0);
 }
 
@@ -1824,7 +1818,7 @@ static void processListLanguagesOption (
 		const char *const option CTAGS_ATTR_UNUSED,
 		const char *const parameter CTAGS_ATTR_UNUSED)
 {
-/*	printLanguageList (); */
+	printLanguageList ();
 	exit (0);
 }
 
@@ -1842,7 +1836,7 @@ static void processListRegexFlagsOptions (
 		const char *const option CTAGS_ATTR_UNUSED,
 		const char *const parameter CTAGS_ATTR_UNUSED)
 {
-/*	printRegexFlags (); */
+	printRegexFlags ();
 	exit (0);
 }
 
@@ -1856,7 +1850,7 @@ static void processListRolesOptions (const char *const option CTAGS_ATTR_UNUSED,
 
 	if (parameter == NULL || parameter[0] == '\0')
 	{
-/*		printLanguageRoles (LANG_AUTO, "*"); */
+		printLanguageRoles (LANG_AUTO, "*");
 		exit (0);
 	}
 
@@ -1881,7 +1875,7 @@ static void processListRolesOptions (const char *const option CTAGS_ATTR_UNUSED,
 		if (lang == LANG_IGNORE)
 			error (FATAL, "Unknown language \"%s\" in \"%s\"", parameter, option);
 	}
-/*	printLanguageRoles (lang, kindletters); */
+	printLanguageRoles (lang, kindletters);
 	exit (0);
 }
 static void freeSearchPathList (searchPathList** pathList)
@@ -3294,7 +3288,7 @@ extern void initOptions (void)
 	verbose ("  Installing default language mappings:\n");
 	installLanguageMapDefaults ();
 	verbose ("  Installing default language aliases:\n");
-/*	installLanguageAliasesDefaults (); */
+	installLanguageAliasesDefaults ();
 
 	/* always excluded by default */
 	verbose ("  Installing default exclude patterns:\n");

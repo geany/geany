@@ -18,7 +18,6 @@
 #include "output.h"
 #include "read.h"
 #include "vstring.h"
-#include "routines.h"
 
 
 static int writeEtagsEntry (MIO * mio, const tagEntryInfo *const tag, void *data);
@@ -89,9 +88,8 @@ static int writeEtagsEntry (MIO * mio, const tagEntryInfo *const tag, void *data
 	else
 	{
 		long seekValue;
-		char *const line = NULL;
-/*		char *const line =
-				readLineFromBypassAnyway (etags->vLine, tag, &seekValue); */
+		char *const line =
+				readLineFromBypassAnyway (etags->vLine, tag, &seekValue);
 		if (line == NULL)
 			return 0;
 

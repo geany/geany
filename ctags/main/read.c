@@ -183,14 +183,12 @@ extern bool isInputHeaderFile (void)
 
 extern bool isInputLanguageKindEnabled (char c)
 {
-	return false;
-/*	return isLanguageKindEnabled (getInputLanguage (), c); */
+	return isLanguageKindEnabled (getInputLanguage (), c);
 }
 
 extern bool doesInputLanguageAllowNullTag (void)
 {
-	return false;
-/*	return doesLanguageAllowNullTag (getInputLanguage ()); */
+	return doesLanguageAllowNullTag (getInputLanguage ());
 }
 
 extern kindOption *getInputLanguageFileKind (void)
@@ -200,8 +198,7 @@ extern kindOption *getInputLanguageFileKind (void)
 
 extern bool doesInputLanguageRequestAutomaticFQTag (void)
 {
-	return false;
-/*	return doesLanguageRequestAutomaticFQTag (getInputLanguage ()); */
+	return doesLanguageRequestAutomaticFQTag (getInputLanguage ());
 }
 
 extern const char *getSourceFileTagPath (void)
@@ -567,7 +564,7 @@ extern bool openInputFile (const char *const fileName, const langType language,
 		File.sourceTagPathHolder = stringListNew ();
 	stringListClear (File.sourceTagPathHolder);
 
-	memStreamRequired = false; /*doesParserRequireMemoryStream (language);*/
+	memStreamRequired = doesParserRequireMemoryStream (language);
 
 	if (mio)
 	{

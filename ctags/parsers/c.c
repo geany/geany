@@ -290,12 +290,12 @@ static kindOption CKinds [] = {
 	{ true,  'g', "enum",       "enumeration names"},
 	{ true,  'm', "member",     "class, struct, and union members"},
 	{ true,  'n', "namespace",  "namespaces"},
-	{ false, 'p', "prototype",  "function prototypes"},
+	{ true,  'p', "prototype",  "function prototypes"},
 	{ true,  's', "struct",     "structure names"},
 	{ true,  't', "typedef",    "typedefs"},
 	{ true,  'u', "union",      "union names"},
 	{ true,  'v', "variable",   "variable definitions"},
-	{ false, 'x', "externvar",  "external variable declarations"},
+	{ true,  'x', "externvar",  "external variable declarations"},
 };
 
 /* Used to index into the DKinds table. */
@@ -316,12 +316,12 @@ static kindOption DKinds [] = {
 	{ true,  'i', "interface",  "interfaces"},
 	{ true,  'm', "member",     "class, struct, and union members"},
 	{ true,  'n', "namespace",  "namespaces"},
-	{ false, 'p', "prototype",  "function prototypes"},
+	{ true,  'p', "prototype",  "function prototypes"},
 	{ true,  's', "struct",     "structure names"},
 	{ true,  't', "typedef",    "typedefs"},
 	{ true,  'u', "union",      "union names"},
 	{ true,  'v', "variable",   "variable definitions"},
-	{ false, 'x', "externvar",  "external variable declarations"},
+	{ true,  'x', "externvar",  "external variable declarations"},
 };
 
 /* Used to index into the JavaKinds table. */
@@ -3133,10 +3133,10 @@ static void createTags (const unsigned int nestLevel,
 	DebugStatement ( if (nestLevel > 0) debugParseNest (false, nestLevel - 1); )
 }
 
-static bool findCTags (const unsigned int passCount)
+static rescanReason findCTags (const unsigned int passCount)
 {
 	exception_t exception;
-	bool retry;
+	rescanReason rescan = RESCAN_NONE;
 	kindOption *kind_for_define = NULL;
 
 	contextual_fake_count = 0;
@@ -3149,7 +3149,6 @@ static bool findCTags (const unsigned int passCount)
 		kind_for_define);
 
 	exception = (exception_t) setjmp (Exception);
-	retry = false;
 
 	if (exception == ExceptionNone)
 	{
@@ -3160,13 +3159,13 @@ static bool findCTags (const unsigned int passCount)
 		deleteAllStatements ();
 		if (exception == ExceptionBraceFormattingError  &&  passCount == 1)
 		{
-			retry = true;
+			rescan = RESCAN_FAILED;
 			verbose ("%s: retrying file with fallback brace matching algorithm\n",
 					getInputFileName ());
 		}
 	}
 	cppTerminate ();
-	return retry;
+	return rescan;
 }
 
 static void buildKeywordHash (const langType language, unsigned int idx)

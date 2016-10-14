@@ -705,10 +705,8 @@ extern char *readLineFromBypassAnyway (vString *const vLine, const tagEntryInfo 
 	if (isPosSet (tag->filePosition) || (tag->pattern == NULL))
 		line = 	readLineFromBypass (vLine, tag->filePosition, pSeekValue);
 	else
-		line = NULL;
-/*
 		line = readLineFromBypassSlow (vLine, tag->lineNumber, tag->pattern, pSeekValue);
-*/
+
 	return line;
 }
 
@@ -854,8 +852,8 @@ extern int   makePatternStringCommon (const tagEntryInfo *const tag,
 	}
 
 	length += putc_func(searchChar, output);
-/*	if ((tag->boundaryInfo & BOUNDARY_START) == 0)
-		length += putc_func('^', output);*/
+	if ((tag->boundaryInfo & BOUNDARY_START) == 0)
+		length += putc_func('^', output);
 	length += appendInputLine (putc_func, line, output, &omitted);
 	length += puts_func (omitted? "": terminator, output);
 	length += putc_func (searchChar, output);
@@ -1076,28 +1074,30 @@ static void writeTagEntry (const tagEntryInfo *const tag)
 {
 	int length = 0;
 
-/*	if (tag->placeholder)
+	if (tag->placeholder)
 		return;
 	if (! tag->kind->enabled)
 		return;
 	if (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION
 	    && ! isXtagEnabled (XTAG_REFERENCE_TAGS))
 		return;
-*/
+
 	DebugStatement ( debugEntry (tag); )
-/*	Assert (writer); */
-/*
+	Assert (writer);
+
 	if (includeExtensionFlags ()
 	    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
 	    && doesInputLanguageRequestAutomaticFQTag ())
 		buildFqTagCache (tag);
-*/
+
+	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
+
 	/* length = writer->writeEntry (TagFile.mio, tag, writerData); */
 	length = callTagEntryFunction (tag);
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);
-	DebugStatement ( mio_flush (TagFile.mio); )
+	/*DebugStatement ( mio_flush (TagFile.mio); ) */
 
 	/*abort_if_ferror (TagFile.mio);*/
 }
@@ -1147,12 +1147,12 @@ extern void uncorkTagFile(void)
 	{
 		tagEntryInfo *tag = TagFile.corkQueue.queue + i;
 		writeTagEntry (tag);
-/*		if (doesInputLanguageRequestAutomaticFQTag ()
+		if (doesInputLanguageRequestAutomaticFQTag ()
 		    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
 		    && tag->extensionFields.scopeKind
 		    && tag->extensionFields.scopeName
 		    && tag->extensionFields.scopeIndex)
-			makeQualifiedTagEntry (tag);*/
+			makeQualifiedTagEntry (tag);
 	}
 	for (i = 1; i < TagFile.corkQueue.count; i++)
 		clearTagEntryInQueue (TagFile.corkQueue.queue + i);
@@ -1177,7 +1177,7 @@ extern tagEntryInfo *getEntryOfNestingLevel (const NestingLevel *nl)
 {
 	if (nl == NULL)
 		return NULL;
-/*	return getEntryInCorkQueue (nl->corkIndex); */
+	return getEntryInCorkQueue (nl->corkIndex);
 }
 
 extern size_t        countEntryInCorkQueue (void)
@@ -1190,7 +1190,6 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 	int r = CORK_NIL;
 	Assert (tag->name != NULL);
 
-/*
 	if (getInputLanguageFileKind() != tag->kind)
 	{
 		if (! isInputLanguageKindEnabled (tag->kind->letter) &&
@@ -1200,19 +1199,18 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 		    && (! tag->kind->roles[tag->extensionFields.roleIndex].enabled))
 			return CORK_NIL;
 	}
-*/
 
 	if (tag->name [0] == '\0' && (!tag->placeholder))
 	{
-/*		if (!doesInputLanguageAllowNullTag()) */
+		if (!doesInputLanguageAllowNullTag())
 			error (WARNING, "ignoring null tag in %s(line: %lu)",
 			       getInputFileName (), tag->lineNumber);
 		goto out;
 	}
 
-/*	if (TagFile.cork)
+	if (TagFile.cork)
 		r = queueTagEntry (tag);
-	else*/
+	else
 		writeTagEntry (tag);
 out:
 	return r;
@@ -1317,7 +1315,7 @@ extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 	memset (e, 0, sizeof (tagEntryInfo));
 	e->lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
 	e->lineNumber      = lineNumber;
-/*	e->boundaryInfo    = getNestedInputBoundaryInfo (lineNumber); */
+	e->boundaryInfo    = getNestedInputBoundaryInfo (lineNumber);
 	e->language        = language;
 	e->filePosition    = filePosition;
 	e->inputFileName   = inputFileName;
@@ -1383,11 +1381,6 @@ extern unsigned long numTagsTotal(void)
 extern unsigned long maxTagsLine (void)
 {
 	return (unsigned long)TagFile.max.line;
-}
-
-extern void setMaxTagsLine (unsigned long max)
-{
-	TagFile.max.line = max;
 }
 
 extern void invalidatePatternCache(void)
