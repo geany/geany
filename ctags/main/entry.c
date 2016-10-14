@@ -11,7 +11,6 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
-#include "geany.h"
 
 #include <string.h>
 #include <ctype.h>        /* to define isspace () */
@@ -115,6 +114,11 @@ tagFile TagFile = {
 
 static bool TagsToStdout = false;
 
+#ifdef CTAGS_LIB
+static tagEntryFunction TagEntryFunction = NULL;
+static void *TagEntryUserData = NULL;
+#endif
+
 /*
 *   FUNCTION PROTOTYPES
 */
@@ -148,8 +152,10 @@ extern const char *tagFileName (void)
 
 extern void abort_if_ferror(MIO *const mio)
 {
+#ifndef CTAGS_LIB
 	if (mio_error (mio))
 		error (FATAL | PERROR, "cannot write tag file");
+#endif
 }
 
 static void rememberMaxLengths (const size_t nameLength, const size_t lineLength)
@@ -1098,16 +1104,20 @@ static void writeTagEntry (const tagEntryInfo *const tag)
 	    && doesInputLanguageRequestAutomaticFQTag ())
 		buildFqTagCache (tag);
 
+#ifdef CTAGS_LIB
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 
-	/* length = writer->writeEntry (TagFile.mio, tag, writerData); */
-	length = callTagEntryFunction (tag);
+	if (TagEntryFunction != NULL)
+		length = TagEntryFunction(tag, TagEntryUserData);
+#else
+	length = writer->writeEntry (TagFile.mio, tag, writerData);
+#endif
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);
-	/*DebugStatement ( mio_flush (TagFile.mio); ) */
+	DebugStatement ( mio_flush (TagFile.mio); )
 
-	/*abort_if_ferror (TagFile.mio);*/
+	abort_if_ferror (TagFile.mio);
 }
 
 extern bool writePseudoTag (const ptagDesc *desc,
@@ -1410,3 +1420,11 @@ extern const char* getTagFileDirectory (void)
 {
 	return TagFile.directory;
 }
+
+#ifdef CTAGS_LIB
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
+{
+	TagEntryFunction = entry_function;
+	TagEntryUserData = user_data;
+}
+#endif

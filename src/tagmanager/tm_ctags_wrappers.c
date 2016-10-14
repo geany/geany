@@ -24,7 +24,7 @@
 #include "entry.h"
 #include "parse.h"
 #include "read.h"
-#include "geany.h"
+#include "api.h"
 #include "error.h"
 #include "output.h"
 #include "options.h"

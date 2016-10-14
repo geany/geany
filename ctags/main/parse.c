@@ -67,9 +67,11 @@ static void installTagXpathTable (const langType language);
 */
 static parserDefinition *CTagsSelfTestParser (void);
 static parserDefinitionFunc* BuiltInParsers[] = {
-/*	CTagsSelfTestParser, */
+#ifndef CTAGS_LIB
+	CTagsSelfTestParser,
+#endif
 	PARSER_LIST,
-/*
+#ifndef CTAGS_LIB
 	XML_PARSER_LIST
 #ifdef HAVE_LIBXML
 	,
@@ -78,7 +80,7 @@ static parserDefinitionFunc* BuiltInParsers[] = {
 #ifdef HAVE_LIBYAML
 	,
 #endif
-*/
+#endif
 };
 parserDefinition** LanguageTable = NULL;
 static unsigned int LanguageCount = 0;
@@ -2130,6 +2132,59 @@ static rescanReason createTagsForFile (const langType language,
 	return rescan;
 }
 
+#ifndef CTAGS_LIB
+static bool createTagsWithFallback1 (const langType language)
+{
+	bool tagFileResized = false;
+	unsigned long numTags	= numTagsAdded ();
+	MIOPos tagfpos;
+	int lastPromise = getLastPromise ();
+	unsigned int passCount = 0;
+	rescanReason whyRescan;
+
+	initializeParser (language);
+	if (LanguageTable [language]->useCork)
+		corkTagFile();
+
+	addParserPseudoTags (language);
+	tagFilePosition (&tagfpos);
+
+	while ( ( whyRescan =
+		  createTagsForFile (language, ++passCount) )
+		!= RESCAN_NONE)
+	{
+		if (LanguageTable [language]->useCork)
+		{
+			uncorkTagFile();
+			corkTagFile();
+		}
+
+
+		if (whyRescan == RESCAN_FAILED)
+		{
+			/*  Restore prior state of tag file.
+			*/
+			setTagFilePosition (&tagfpos);
+			setNumTagsAdded (numTags);
+			tagFileResized = true;
+			breakPromisesAfter(lastPromise);
+		}
+		else if (whyRescan == RESCAN_APPEND)
+		{
+			tagFilePosition (&tagfpos);
+			numTags = numTagsAdded ();
+			lastPromise = getLastPromise ();
+		}
+	}
+
+	if (LanguageTable [language]->useCork)
+		uncorkTagFile();
+
+	return tagFileResized;
+}
+
+#else
+
 static bool createTagsWithFallback1 (const langType language,
 	passStartCallback passCallback, void *userData)
 {
@@ -2167,6 +2222,7 @@ static bool createTagsWithFallback1 (const langType language,
 
 	return false;
 }
+#endif
 
 extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long startLine, int startCharOffset,
@@ -2178,11 +2234,36 @@ extern bool runParserInNarrowedInputStream (const langType language,
 				 startLine, startCharOffset,
 				 endLine, endCharOffset,
 				 sourceLineOffset);
-/*	tagFileResized = createTagsWithFallback1 (language); */
+#ifndef CTAGS_LIB
+	tagFileResized = createTagsWithFallback1 (language);
+#endif
 	popNarrowedInputStream  ();
 	return tagFileResized;
 
 }
+
+#ifndef CTAGS_LIB
+static bool createTagsWithFallback (
+	const char *const fileName, const langType language,
+	MIO *mio)
+{
+	bool tagFileResized = false;
+
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+
+	if (!openInputFile (fileName, language, mio))
+		return false;
+
+	tagFileResized = createTagsWithFallback1 (language);
+	tagFileResized = forcePromises()? true: tagFileResized;
+
+	makeFileTag (fileName);
+	closeInputFile ();
+
+	return tagFileResized;
+}
+
+#else
 
 void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
@@ -2199,6 +2280,7 @@ void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	else
 		error (WARNING, "Unable to open %s", fileName);
 }
+#endif
 
 #ifdef HAVE_COPROC
 static bool createTagsWithXcmd (
@@ -2356,8 +2438,9 @@ extern bool parseFile (const char *const fileName)
 #endif
 
 		setupWriter ();
-
-/*		tagFileResized = createTagsWithFallback (fileName, language, mio); */
+#ifndef CTAGS_LIB
+		tagFileResized = createTagsWithFallback (fileName, language, mio);
+#endif
 #ifdef HAVE_COPROC
 		if (LanguageTable [language]->method & METHOD_XCMD_AVAILABLE)
 			tagFileResized = createTagsWithXcmd (fileName, language, mio)? true: tagFileResized;

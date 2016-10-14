@@ -23,6 +23,7 @@
 #include "xtag.h"
 #include "mio.h"
 #include "nestlevel.h"
+#include "api.h"
 
 /*
 *   MACROS
@@ -172,5 +173,9 @@ extern bool isTagExtraBitMarked (const tagEntryInfo *const tag, xtagType extra);
 
 extern void attachParserField (tagEntryInfo *const tag, fieldType ftype, const char* value);
 extern void attachParserFieldToCorkEntry (int index, fieldType ftype, const char* value);
+
+#ifdef CTAGS_LIB
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
+#endif
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

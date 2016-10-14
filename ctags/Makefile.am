@@ -53,6 +53,8 @@ parsers = \
 	parsers/vhdl.c
 
 libctags_la_SOURCES = \
+	main/api.c \
+	main/api.h \
 	main/args.c \
 	main/args.h \
 	main/ctags.h \
@@ -72,8 +74,6 @@ libctags_la_SOURCES = \
 	main/fmt.c \
 	main/fmt.h \
 	main/gcc-attr.h \
-	main/geany.c \
-	main/geany.h \
 	main/general.h \
 	main/htable.c \
 	main/htable.h \

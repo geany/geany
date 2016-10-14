@@ -20,7 +20,7 @@
 #include "kind.h"
 #include "parsers.h"  /* contains list of parsers */
 #include "strlist.h"
-#include "geany.h"
+#include "api.h"
 
 #ifdef HAVE_LIBXML
 #include <libxml/xpath.h>
@@ -253,10 +253,12 @@ extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long startLine, int startCharOffset,
 					       unsigned long endLine, int endCharOffset,
 					       unsigned long sourceLineOffset);
+#ifdef CTAGS_LIB
 void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData);
+#endif
 
 #ifdef HAVE_ICONV
 extern void freeEncodingResources (void);

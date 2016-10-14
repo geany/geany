@@ -137,8 +137,9 @@ optionValues Option = {
 	false,      /* -a */
 	false,      /* -B */
 	false,      /* -e */
+#ifdef CTAGS_LIB
 	EX_LINENUM,
-#if 0
+#else
 #ifdef MACROS_USE_PATTERNS
 	EX_PATTERN, /* -n, --excmd */
 #else
@@ -185,6 +186,11 @@ optionValues Option = {
 
 static OptionLoadingStage Stage = OptionLoadingStageNone;
 #define STAGE_ANY ~0UL
+
+/* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
+ * This file contains a space or newline separated list of symbols which should be ignored
+ * by the C/C++ parser, see -I command line option of ctags for details. */
+char **c_tags_ignore = NULL;
 
 /*
 -   Locally used only
@@ -2138,6 +2144,68 @@ extern const ignoredTokenInfo * isIgnoreToken(const char * name)
 	return (const ignoredTokenInfo *)hashTableGetItem(Option.ignore,(char *)name);
 }
 */
+
+/*  Determines whether or not "name" should be ignored, per the ignore list.
+ */
+extern bool isIgnoreToken (const char *const name,
+							  bool *const pIgnoreParens,
+							  const char **const replacement)
+{
+	bool result = false;
+
+	if (c_tags_ignore != NULL)
+	{
+		const size_t nameLen = strlen (name);
+		unsigned int i;
+		unsigned int len = 0;
+		vString *token = vStringNew();
+
+		while (c_tags_ignore[len])
+			len++;
+
+		if (pIgnoreParens != NULL)
+			*pIgnoreParens = false;
+
+		for (i = 0  ;  i < len ;  ++i)
+		{
+			size_t tokenLen;
+
+			vStringCopyS (token, c_tags_ignore[i]);
+			tokenLen = vStringLength (token);
+
+			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&
+				strncmp (vStringValue (token), name, tokenLen - 1) == 0)
+			{
+				result = true;
+				break;
+			}
+			if (strncmp (vStringValue (token), name, nameLen) == 0)
+			{
+				if (nameLen == tokenLen)
+				{
+					result = true;
+					break;
+				}
+				else if (tokenLen == nameLen + 1  &&
+						vStringChar (token, tokenLen - 1) == '+')
+				{
+					result = true;
+					if (pIgnoreParens != NULL)
+						*pIgnoreParens = true;
+					break;
+				}
+				else if (vStringChar (token, nameLen) == '=')
+				{
+					if (replacement != NULL)
+						*replacement = vStringValue (token) + nameLen + 1;
+					break;
+				}
+			}
+		}
+		vStringDelete (token);
+	}
+	return result;
+}
 
 static void freeIgnoredTokenInfo(ignoredTokenInfo * info)
 {
