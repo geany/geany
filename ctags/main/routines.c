@@ -243,8 +243,8 @@ extern void *eRealloc (void *const ptr, const size_t size)
 
 extern void eFree (void *const ptr)
 {
-	if (ptr != NULL)
-		free (ptr);
+	Assert (ptr != NULL);
+	free (ptr);
 }
 
 /*

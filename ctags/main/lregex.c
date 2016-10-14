@@ -441,7 +441,7 @@ static void addCompiledCallbackPattern (const langType language, GRegex* const p
 
 static void regex_flag_basic_short (char c CTAGS_ATTR_UNUSED, void* data)
 {
-	g_warning("CTags 'b' flag not supported by Geany!");
+	error(WARNING, "CTags 'b' flag not supported by Geany!");
 }
 
 static void regex_flag_basic_long (const char* const s CTAGS_ATTR_UNUSED, const char* const unused CTAGS_ATTR_UNUSED, void* data)
