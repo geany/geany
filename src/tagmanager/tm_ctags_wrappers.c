@@ -29,16 +29,35 @@
 #include "output.h"
 #include "options.h"
 
+#include <string.h>
+#include <errno.h>
+
 typedef struct {
 	TMCtagsNewTagCallback tag_callback;
 	TMCtagsPassStartCallback pass_callback;
 	gpointer user_data;
 } CallbackUserData;
 
+extern bool nofatalErrorPrinter (const errorSelection selection,
+					  const char *const format,
+					  va_list ap, void *data CTAGS_ATTR_UNUSED)
+{
+	fprintf (stderr, "%s: ", (selection & WARNING) ? "Warning: " : "Error");
+	vfprintf (stderr, format, ap);
+	if (selection & PERROR)
+#ifdef HAVE_STRERROR
+	fprintf (stderr, " : %s", strerror (errno));
+#else
+	perror (" ");
+#endif
+	fputs ("\n", stderr);
+
+	return false;
+}
 
 void tm_ctags_init(void)
 {
-	setErrorPrinter (stderrDefaultErrorPrinter, NULL);
+	setErrorPrinter (nofatalErrorPrinter, NULL);
 	setTagWriter (&ctagsWriter);
 
 	checkRegex ();

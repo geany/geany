@@ -40,7 +40,7 @@ extern bool stderrDefaultErrorPrinter (const errorSelection selection,
 #endif
 	fputs ("\n", stderr);
 
-	return false;
+	return (selected (selection, FATAL) || Option.fatalWarnings)? true: false;
 }
 
 extern void error (const errorSelection selection,
@@ -50,7 +50,7 @@ extern void error (const errorSelection selection,
 	bool shouldExit;
 
 	va_start (ap, format);
-	shouldExit = false;
+	shouldExit = (* errorPrinter) (selection, format, ap, errorPrinterData);
 	va_end (ap);
 
 	if (shouldExit)
