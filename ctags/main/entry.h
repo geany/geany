@@ -137,7 +137,6 @@ extern unsigned long numTagsAdded(void);
 extern void setNumTagsAdded (unsigned long nadded);
 extern unsigned long numTagsTotal(void);
 extern unsigned long maxTagsLine(void);
-extern void setMaxTagsLine (unsigned long max);
 extern void invalidatePatternCache(void);
 extern void tagFilePosition (MIOPos *p);
 extern void setTagFilePosition (MIOPos *p);

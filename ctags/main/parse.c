@@ -1421,9 +1421,7 @@ static void initializeParserOne (langType lang)
 	initializeSubparsers (parser);
 
 	Assert (parser->fileKind != KIND_NULL);
-/*
 	Assert (!doesParserUseKind (parser, parser->fileKind->letter));
-*/
 }
 
 extern void initializeParser (langType lang)
