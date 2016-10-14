@@ -870,7 +870,7 @@ extern char *readLineRaw (vString *const vLine, MIO *const mio)
 			else
 			{
 				char* eol;
-				vStringSetLength (vLine);
+				vStringLength(vLine) = mio_tell(mio) - startOfLine;
 				/* canonicalize new line */
 				eol = vStringValue (vLine) + vStringLength (vLine) - 1;
 				if (*eol == '\r')
