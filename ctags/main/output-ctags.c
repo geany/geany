@@ -151,12 +151,10 @@ static int addExtensionFields (MIO *mio, const tagEntryInfo *const tag)
 
 	if (isFieldEnabled (FIELD_TYPE_REF) && doesFieldHaveValue (FIELD_TYPE_REF, tag))
 	{
-/*
 		length += mio_printf (mio, "%s\t%s:%s:%s", sep,
 				      getFieldName (FIELD_TYPE_REF),
 				      tag->extensionFields.typeRef [0],
 				      escapeFieldValue (tag, FIELD_TYPE_REF));
-*/
 		sep [0] = '\0';
 	}
 

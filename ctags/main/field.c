@@ -717,11 +717,8 @@ static bool     isLanguageFieldAvailable (const tagEntryInfo *const tag)
 
 static bool     isTyperefFieldAvailable  (const tagEntryInfo *const tag)
 {
-/*
 	return (tag->extensionFields.typeRef [0] != NULL
 		&& tag->extensionFields.typeRef [1] != NULL)? true: false;
-*/
-	return false;
 }
 
 static bool     isFileFieldAvailable  (const tagEntryInfo *const tag)

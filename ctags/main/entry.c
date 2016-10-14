@@ -941,6 +941,10 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 		slot->extensionFields.scopeName = eStrdup (slot->extensionFields.scopeName);
 	if (slot->extensionFields.signature)
 		slot->extensionFields.signature = eStrdup (slot->extensionFields.signature);
+	if (slot->extensionFields.typeRef[0])
+		slot->extensionFields.typeRef[0] = eStrdup (slot->extensionFields.typeRef[0]);
+	if (slot->extensionFields.typeRef[1])
+		slot->extensionFields.typeRef[1] = eStrdup (slot->extensionFields.typeRef[1]);
 	if (slot->extensionFields.varType)
 		slot->extensionFields.varType = eStrdup (slot->extensionFields.varType);
 #ifdef HAVE_LIBXML
@@ -993,6 +997,10 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.scopeName);
 	if (slot->extensionFields.signature)
 		eFree ((char *)slot->extensionFields.signature);
+	if (slot->extensionFields.typeRef[0])
+		eFree ((char *)slot->extensionFields.typeRef[0]);
+	if (slot->extensionFields.typeRef[1])
+		eFree ((char *)slot->extensionFields.typeRef[1]);
 	if (slot->extensionFields.varType)
 		eFree ((char *)slot->extensionFields.varType);
 #ifdef HAVE_LIBXML
