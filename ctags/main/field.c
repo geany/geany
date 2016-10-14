@@ -457,7 +457,7 @@ static const char *renderFieldInherits (const tagEntryInfo *const tag, const cha
 
 static const char *renderFieldTyperef (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	return ""; /*renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b); */
+	return renderEscapedName (WITH_DEFUALT_VALUE (tag->extensionFields.typeRef [1]), tag, b);
 }
 
 
