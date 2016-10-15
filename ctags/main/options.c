@@ -187,10 +187,12 @@ optionValues Option = {
 static OptionLoadingStage Stage = OptionLoadingStageNone;
 #define STAGE_ANY ~0UL
 
+/* GEANY DIFF */
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
  * This file contains a space or newline separated list of symbols which should be ignored
  * by the C/C++ parser, see -I command line option of ctags for details. */
 char **c_tags_ignore = NULL;
+/* GEANY DIFF END */
 
 /*
 -   Locally used only
@@ -2135,6 +2137,7 @@ static void processHeaderListOption (const int option, const char *parameter)
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
+/* GEANY DIFF */
 /*
 extern const ignoredTokenInfo * isIgnoreToken(const char * name)
 {
@@ -2206,6 +2209,7 @@ extern bool isIgnoreToken (const char *const name,
 	}
 	return result;
 }
+/* GEANY DIFF END */
 
 static void freeIgnoredTokenInfo(ignoredTokenInfo * info)
 {

@@ -157,8 +157,10 @@ extern void cArgForth (cookedArgs* const current);
 
 extern bool isExcludedFile (const char* const name);
 extern bool isIncludeFile (const char *const fileName);
+/* GEANY DIFF */
 /* extern const ignoredTokenInfo * isIgnoreToken (const char *const name); */
 extern bool isIgnoreToken (const char *const name, bool *const pIgnoreParens, const char **const replacement);
+/* GEANY DIFF END */
 extern void parseCmdlineOptions (cookedArgs* const cargs);
 extern void previewFirstOption (cookedArgs* const cargs);
 extern void readOptionConfiguration (void);

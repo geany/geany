@@ -951,8 +951,10 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 		slot->extensionFields.typeRef[0] = eStrdup (slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		slot->extensionFields.typeRef[1] = eStrdup (slot->extensionFields.typeRef[1]);
+/* GEANY DIFF */
 	if (slot->extensionFields.varType)
 		slot->extensionFields.varType = eStrdup (slot->extensionFields.varType);
+/* GEANY DIFF END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		slot->extensionFields.xpath = eStrdup (slot->extensionFields.xpath);
@@ -1007,8 +1009,10 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		eFree ((char *)slot->extensionFields.typeRef[1]);
+/* GEANY DIFF */
 	if (slot->extensionFields.varType)
 		eFree ((char *)slot->extensionFields.varType);
+/* GEANY DIFF END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		eFree ((char *)slot->extensionFields.xpath);

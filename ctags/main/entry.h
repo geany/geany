@@ -79,7 +79,9 @@ struct sTagEntryInfo {
 		/* type (union/struct/etc.) and name for a variable or typedef. */
 		const char* typeRef [2];  /* e.g., "struct" and struct name */
 
+/* GEANY DIFF */
 		const char *varType;
+/* GEANY DIFF END */
 
 #define ROLE_INDEX_DEFINITION -1
 		int roleIndex; /* for role of reference tag */
