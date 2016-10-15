@@ -53,11 +53,11 @@ parsers = \
 	parsers/vhdl.c
 
 libctags_la_SOURCES = \
-	main/api.c \
-	main/api.h \
 	main/args.c \
 	main/args.h \
 	main/ctags.h \
+	main/ctags-api.c \
+	main/ctags-api.h \
 	main/debug.h \
 	main/debug.c \
 	main/dependency.h \

@@ -23,7 +23,7 @@
 #include "xtag.h"
 #include "mio.h"
 #include "nestlevel.h"
-#include "api.h"
+#include "ctags-api.h"
 
 /*
 *   MACROS

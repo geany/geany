@@ -31,7 +31,7 @@
 #include <glib/gstdio.h>
 
 #include "tm_workspace.h"
-#include "tm_ctags_wrappers.h"
+#include "ctags-api.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
 
@@ -78,7 +78,7 @@ static gboolean tm_create_workspace(void)
 	theWorkspace->typename_array = g_ptr_array_new();
 	theWorkspace->global_typename_array = g_ptr_array_new();
 
-	tm_ctags_init();
+	ctagsInit();
 	tm_parser_verify_type_mappings();
 
 	return TRUE;

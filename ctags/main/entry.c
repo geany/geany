@@ -1084,6 +1084,22 @@ static void buildFqTagCache (const tagEntryInfo *const tag)
 	renderFieldEscaped (FIELD_SCOPE, tag, NO_PARSER_FIELD);
 }
 
+#ifdef CTAGS_LIB
+static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
+{
+	tag->name = info->name;
+	tag->signature = info->extensionFields.signature;
+	tag->scopeName = info->extensionFields.scopeName;
+	tag->inheritance = info->extensionFields.inheritance;
+	tag->varType = info->extensionFields.varType;
+	tag->access = info->extensionFields.access;
+	tag->implementation = info->extensionFields.implementation;
+	tag->kindLetter = info->kind->letter;
+	tag->isFileScope = info->isFileScope;
+	tag->lineNumber = info->lineNumber;
+}
+#endif
+
 static void writeTagEntry (const tagEntryInfo *const tag)
 {
 	int length = 0;
@@ -1108,7 +1124,12 @@ static void writeTagEntry (const tagEntryInfo *const tag)
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 
 	if (TagEntryFunction != NULL)
-		length = TagEntryFunction(tag, TagEntryUserData);
+	{
+		ctagsTag t;
+
+		initCtagsTag(&t, tag);
+		length = TagEntryFunction(&t, TagEntryUserData);
+	}
 #else
 	length = writer->writeEntry (TagFile.mio, tag, writerData);
 #endif

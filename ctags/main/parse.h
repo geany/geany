@@ -20,7 +20,7 @@
 #include "kind.h"
 #include "parsers.h"  /* contains list of parsers */
 #include "strlist.h"
-#include "api.h"
+#include "ctags-api.h"
 
 #ifdef HAVE_LIBXML
 #include <libxml/xpath.h>
