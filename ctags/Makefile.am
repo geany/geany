@@ -88,10 +88,14 @@ libctags_la_SOURCES = \
 	main/lxpath.c \
 	main/main.c \
 	main/main.h \
+	main/mbcs.c \
+	main/mbcs.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
 	main/nestlevel.h \
+	main/objpool.c \
+	main/objpool.h \
 	main/options.c \
 	main/options.h \
 	main/output-ctags.c \
@@ -116,6 +120,8 @@ libctags_la_SOURCES = \
 	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
+	main/selectors.c \
+	main/selectors.h \
 	main/sort.c \
 	main/sort.h \
 	main/strlist.c \
