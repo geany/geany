@@ -194,7 +194,6 @@ typedef enum {
  * return a structure allocated using parserNew(). This structure must,
  * at minimum, set the `parser' field.
  */
-extern parserDefinition** LanguageTable;
 extern parserDefinitionFunc PARSER_LIST;
 #ifdef HAVE_LIBXML
 extern parserDefinitionFunc XML_PARSER_LIST;
@@ -254,10 +253,11 @@ extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long endLine, int endCharOffset,
 					       unsigned long sourceLineOffset);
 #ifdef CTAGS_LIB
-void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
+extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData);
+extern const parserDefinition *getParserDefinition (langType language);
 #endif
 
 #ifdef HAVE_ICONV

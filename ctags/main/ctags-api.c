@@ -87,8 +87,8 @@ extern int ctagsGetNamedLang(const char *name)
 
 extern const char *ctagsGetLangKinds(int lang)
 {
+	const parserDefinition *def = getParserDefinition(lang);
 	unsigned int i;
-	parserDefinition *def = LanguageTable[lang];
 	static char kinds[257];
 
 	for (i = 0; i < def->kindCount; i++)
@@ -101,8 +101,8 @@ extern const char *ctagsGetLangKinds(int lang)
 
 extern const char *ctagsGetKindName(char kind, int lang)
 {
+	const parserDefinition *def = getParserDefinition(lang);
 	unsigned int i;
-	parserDefinition *def = LanguageTable[lang];
 
 	for (i = 0; i < def->kindCount; i++)
 	{
@@ -115,8 +115,8 @@ extern const char *ctagsGetKindName(char kind, int lang)
 
 extern char ctagsGetKindFromName(const char *name, int lang)
 {
+	const parserDefinition *def = getParserDefinition(lang);
 	unsigned int i;
-	parserDefinition *def = LanguageTable[lang];
 
 	for (i = 0; i < def->kindCount; i++)
 	{
@@ -129,7 +129,7 @@ extern char ctagsGetKindFromName(const char *name, int lang)
 
 extern bool ctagsIsUsingRegexParser(int lang)
 {
-	return LanguageTable[lang]->method & METHOD_REGEX;
+	return getParserDefinition(lang)->method & METHOD_REGEX;
 }
 
 

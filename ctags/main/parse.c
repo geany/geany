@@ -82,7 +82,7 @@ static parserDefinitionFunc* BuiltInParsers[] = {
 #endif
 #endif
 };
-parserDefinition** LanguageTable = NULL;
+static parserDefinition** LanguageTable = NULL;
 static unsigned int LanguageCount = 0;
 static kindOption defaultFileKind = {
 	.enabled     = false,
@@ -2265,7 +2265,7 @@ static bool createTagsWithFallback (
 
 #else
 
-void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
+extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData)
@@ -2280,6 +2280,13 @@ void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	else
 		error (WARNING, "Unable to open %s", fileName);
 }
+
+extern const parserDefinition *getParserDefinition (langType language)
+{
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	return LanguageTable[language];
+}
+
 #endif
 
 #ifdef HAVE_COPROC
