@@ -117,6 +117,8 @@ extern bool isDestinationStdout (void)
 	return toStdout;
 }
 
+#ifndef CTAGS_LIB
+
 #if defined (HAVE_OPENDIR)
 static bool recurseUsingOpendir (const char *const dirName)
 {
@@ -541,7 +543,6 @@ static void sanitizeEnviron (void)
  *		Start up code
  */
 
-#ifndef CTAGS_LIB
 extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 {
 	cookedArgs *args;
