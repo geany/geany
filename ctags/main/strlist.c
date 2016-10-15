@@ -13,7 +13,9 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
+/* GEANY DIFF
 #include <fnmatch.h>
+ * GEANY DIFF END */
 
 #include "debug.h"
 #include "read.h"
@@ -216,7 +218,10 @@ static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
 	const char* const pattern = vStringValue (vpattern);
-	return (bool) (fnmatch (pattern, fileName, 0) == 0);
+/* GEANY DIFF */
+/*	return (bool) (fnmatch (pattern, fileName, 0) == 0); */
+	return false;
+/* GEANY DIFF END */
 }
 
 extern bool stringListFileMatched (
