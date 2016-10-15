@@ -32,7 +32,9 @@
 #ifdef HAVE_SYS_TYPES_H
 # include <sys/types.h>  /* declare off_t (not known to regex.h on FreeBSD) */
 #endif
+/* GEANY DIFF
 #include <regex.h>
+ * GEANY DIFF END */
 
 /*
 *   DATA DECLARATIONS
@@ -930,6 +932,8 @@ extern char *readLineFromBypassSlow (vString *const vLine,
 	char *result = NULL;
 
 
+/* GEANY DIFF */
+#if 0
 	MIOPos originalPosition;
 	char *line;
 	size_t len;
@@ -1012,6 +1016,8 @@ extern char *readLineFromBypassSlow (vString *const vLine,
 out:
 	regfree (&patbuf);
 	mio_setpos (File.mio, &originalPosition);
+#endif
+/* GEANY DIFF END */
 	return result;
 }
 
