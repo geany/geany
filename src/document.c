@@ -1934,7 +1934,12 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
-	else if (USE_GIO_FILE_OPERATIONS)
+	#if defined(_WIN32)
+	#elif defined(_WIN64)
+	#elif defined(__CYGWIN__)
+	#elif defined(__MSYS__)
+	#else
+	else if (USE_GIO_FILE_OPERATIONS)	// skip this bad section on windows, because replaces  symlink by file  on document save
 	{
 		GFile *fp;
 
@@ -1946,6 +1951,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
 	}
+	#endif
 	else
 	{
 		FILE *fp;
@@ -1955,7 +1961,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		/* The error handling is taken from glib-2.26.0 gfileutils.c */
 		errno = 0;
-		fp = g_fopen(locale_filename, "wb");
+		fp = g_fopen(locale_filename, "w+b"); // we can not destroy  symbolic/hard links
 		if (fp == NULL)
 		{
 			save_errno = errno;
@@ -1963,29 +1969,43 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 			g_set_error(&error,
 				G_FILE_ERROR,
 				g_file_error_from_errno(save_errno),
-				_("Failed to open file '%s' for writing: fopen() failed: %s"),
+				_("Failed to open file '%s' for update-content: fopen() failed: %s"),
 				display_name,
 				g_strerror(save_errno));
 		}
 		else
 		{
-			gsize bytes_written;
-
-			errno = 0;
-			bytes_written = fwrite(data, sizeof(gchar), len, fp);
-
-			if (len != bytes_written)
+			if(truncate(locale_filename,sizeof(gchar)*len)) // no can change file size error!
 			{
 				save_errno = errno;
 
 				g_set_error(&error,
 					G_FILE_ERROR,
 					g_file_error_from_errno(save_errno),
-					_("Failed to write file '%s': fwrite() failed: %s"),
+					_("Failed to truncate file '%s' for update-content: truncate() failed: %s"),
 					display_name,
 					g_strerror(save_errno));
 			}
+			else // real data writing
+			{
+				gsize bytes_written;
 
+				errno = 0;
+				bytes_written = fwrite(data, sizeof(gchar), len, fp);
+
+				if (len != bytes_written)
+				{
+					save_errno = errno;
+
+					g_set_error(&error,
+						G_FILE_ERROR,
+						g_file_error_from_errno(save_errno),
+						_("Failed to write file '%s': fwrite() failed: %s"),
+						display_name,
+						g_strerror(save_errno));
+				}
+			}
+			
 			errno = 0;
 			/* preserve the fwrite() error if any */
 			if (fclose(fp) != 0 && error == NULL)
@@ -2176,6 +2196,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 		len = strlen(data);
 	}
 
+	
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
 	/* ignore file changed notification when the file is written */
