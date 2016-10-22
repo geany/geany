@@ -1959,7 +1959,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		errno = 0;
 		fp = fopen(locale_filename, "r+b");	// truncate to  data_length + write_data    instead of   new_file + write_data
 		if(errno==ENOENT)	// if saved document  not exist,  create document
-			file = fopen(locale_filename,"wb");
+			fp = fopen(locale_filename,"wb");
 		if (fp == NULL)
 		{
 			save_errno = errno;
