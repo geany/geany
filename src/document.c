@@ -1934,8 +1934,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
-	#ifndef G_OS_WIN32
-	else if (USE_GIO_FILE_OPERATIONS)	// skip this bad section on windows, because replaces  symlink by file  on document save ?
+	else if (USE_GIO_FILE_OPERATIONS)
 	{
 		GFile *fp;
 
@@ -1947,7 +1946,6 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 			G_FILE_CREATE_NONE, NULL, NULL, &error);
 		g_object_unref(fp);
 	}
-	#endif
 	else
 	{
 		FILE *fp;
@@ -1973,6 +1971,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		}
 		else
 		{
+			// half safe writing
 			if(ftruncate(fileno(fp),sizeof(gchar)*len))
 			{
 				save_errno = errno;
