@@ -1934,12 +1934,8 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		if (g_file_set_contents(locale_filename, data, len, &error))
 			geany_debug("Wrote %s with g_file_set_contents().", locale_filename);
 	}
-	#if defined(_WIN32)
-	#elif defined(_WIN64)
-	#elif defined(__CYGWIN__)
-	#elif defined(__MSYS__)
-	#else
-	else if (USE_GIO_FILE_OPERATIONS)	// skip this bad section on windows, because replaces  symlink by file  on document save
+	#ifndef G_OS_WIN32
+	else if (USE_GIO_FILE_OPERATIONS)	// skip this bad section on windows, because replaces  symlink by file  on document save ?
 	{
 		GFile *fp;
 
@@ -1961,7 +1957,9 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		/* The error handling is taken from glib-2.26.0 gfileutils.c */
 		errno = 0;
-		fp = g_fopen(locale_filename, "w+b"); // we can not destroy  symbolic/hard links
+		fp = fopen(locale_filename, "r+");	// truncate to  data_length + write_data    instead of   new_file + write_data
+		if(errno==ENOENT)	// if saved document  not exist,  create document
+			file = fopen(locale_filename,"w");
 		if (fp == NULL)
 		{
 			save_errno = errno;
@@ -1975,7 +1973,7 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		}
 		else
 		{
-			if(truncate(locale_filename,sizeof(gchar)*len)) // no can change file size error!
+			if(ftruncate(fileno(fp),sizeof(gchar)*len))
 			{
 				save_errno = errno;
 
