@@ -30,6 +30,9 @@
 #include <string.h>
 
 
+#define SSM scintilla_send_message
+
+
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
 PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows."),
 	VERSION, _("The Geany developer team"))
@@ -45,6 +48,7 @@ enum
 	KB_SPLIT_HORIZONTAL,
 	KB_SPLIT_VERTICAL,
 	KB_SPLIT_UNSPLIT,
+	KB_SPLIT_SWITCH,
 	KB_COUNT
 };
 
@@ -72,7 +76,7 @@ typedef struct EditWindow
 {
 	GeanyEditor		*editor;	/* original editor for split view */
 	ScintillaObject	*sci;		/* new editor widget */
-	GtkWidget		*vbox;
+	GtkWidget		*notebook;
 	GtkWidget		*name_label;
 }
 EditWindow;
@@ -81,6 +85,7 @@ static EditWindow edit_window = {NULL, NULL, NULL, NULL};
 
 
 static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data);
+static void set_editor(EditWindow *editwin, GeanyEditor *editor);
 
 
 /* line numbers visibility */
@@ -104,8 +109,15 @@ static void set_line_numbers(ScintillaObject * sci, gboolean set)
 }
 
 
+static void update_tab_label_style(EditWindow *editwin)
+{
+	gtk_widget_set_name(editwin->name_label,
+		SSM(editwin->sci, SCI_GETMODIFY, 0, 0) ? "geany-document-status-changed" : NULL);
+}
+
+
 static void on_sci_notify(ScintillaObject *sci, gint param,
-		SCNotification *nt, gpointer data)
+		SCNotification *nt, EditWindow *editwin)
 {
 	gint line;
 
@@ -132,6 +144,11 @@ static void on_sci_notify(ScintillaObject *sci, gint param,
 				line = sci_get_line_from_position(sci, nt->position);
 				scintilla_send_message(sci, SCI_TOGGLEFOLD, line, 0);
 			}
+			break;
+
+		case SCN_SAVEPOINTREACHED:
+		case SCN_SAVEPOINTLEFT:
+			update_tab_label_style(editwin);
 			break;
 
 		default: break;
@@ -162,8 +179,378 @@ static void sync_to_current(ScintillaObject *sci, ScintillaObject *current)
 }
 
 
+struct SciState
+{
+	struct
+	{
+		gint line, column;
+	} scrolling;
+	struct
+	{
+		GArray *points;
+	} folding;
+	struct
+	{
+		gint mode;
+		/* wish for anonymous unions :) */
+		struct
+		{
+			guint main;
+			GArray *selections;
+		} lines; /* for stream/multiline selections */
+		struct
+		{
+			gint caret, anchor;
+			gint caret_vs, anchor_vs;
+		} rect; /* for rectangular selections */
+	} selection;
+};
+
+
+static void get_sci_scrolling(ScintillaObject *sci, gint *column, gint *line)
+{
+	gint pos;
+	gint x = 0, y = 0;
+	gint i;
+
+	x += (gint) scintilla_send_message(sci, SCI_GETMARGINLEFT, 0, 0);
+	for (i = 0; i < 5 /* scintilla has 5 margins */; i++)
+		x += (gint) scintilla_send_message(sci, SCI_GETMARGINWIDTHN, (uptr_t) i, 0);
+
+	pos = (gint) scintilla_send_message(sci, SCI_POSITIONFROMPOINT, (uptr_t) x, y);
+	*line = sci_get_line_from_position(sci, pos);
+	*column = sci_get_col_from_position(sci, pos);
+}
+
+
+static void set_sci_scrolling(ScintillaObject *sci, gint column, gint line)
+{
+	gint cur_line, cur_col;
+
+	get_sci_scrolling(sci, &cur_col, &cur_line);
+	line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, (uptr_t) line, 0);
+	cur_line = (gint) scintilla_send_message(sci, SCI_VISIBLEFROMDOCLINE, (uptr_t) cur_line, 0);
+	scintilla_send_message(sci, SCI_LINESCROLL, (uptr_t) (column - cur_col), line - cur_line);
+}
+
+
+static GArray *get_sci_folding(ScintillaObject *sci)
+{
+	GArray *array;
+	gint n_lines, i;
+
+	n_lines = sci_get_line_count(sci);
+	array = g_array_sized_new(FALSE, FALSE, 1, (guint) n_lines);
+
+	for (i = 0; i < n_lines; i++)
+	{
+		gchar visible = (gchar) scintilla_send_message(sci, SCI_GETLINEVISIBLE, (uptr_t) i, 0);
+
+		g_array_append_val(array, visible);
+	}
+
+	return array;
+}
+
+
+static void set_sci_folding(ScintillaObject *sci, GArray *folding)
+{
+	guint i;
+
+	for (i = 0; i < folding->len; i++)
+	{
+		gchar visible = (gchar) scintilla_send_message(sci, SCI_GETLINEVISIBLE, i, 0);
+
+		if (visible != g_array_index(folding, gchar, i))
+			scintilla_send_message(sci, SCI_TOGGLEFOLD, i, 0);
+	}
+}
+
+
+static void get_sci_selection(ScintillaObject *sci, struct SciState *state)
+{
+	state->selection.mode = (gint) SSM(sci, SCI_GETSELECTIONMODE, 0, 0);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+		{
+			gint i;
+			gint n_sels = (gint) SSM(sci, SCI_GETSELECTIONS, 0, 0);
+
+			state->selection.lines.selections = g_array_sized_new(FALSE, FALSE, sizeof (guint64), n_sels);
+			state->selection.lines.main = SSM(sci, SCI_GETMAINSELECTION, 0, 0);
+
+			for (i = 0; i < n_sels; i++)
+			{
+				gint caret, anchor;
+				guint64 combined;
+
+				caret = (gint) SSM(sci, SCI_GETSELECTIONNCARET, i, 0);
+				anchor = (gint) SSM(sci, SCI_GETSELECTIONNANCHOR, i, 0);
+
+				combined = ((guint64) caret << 32) | anchor;
+				g_array_append_val(state->selection.lines.selections, combined);
+			}
+			break;
+		}
+
+		case SC_SEL_RECTANGLE:
+		case SC_SEL_THIN:
+			state->selection.rect.caret = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONCARET, 0, 0);
+			state->selection.rect.caret_vs = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONCARETVIRTUALSPACE, 0, 0);
+			state->selection.rect.anchor = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONANCHOR, 0, 0);
+			state->selection.rect.anchor_vs = (gint) SSM(sci, SCI_GETRECTANGULARSELECTIONANCHORVIRTUALSPACE, 0, 0);
+			break;
+	}
+}
+
+
+static void set_sci_selection(ScintillaObject *sci, struct SciState const *state)
+{
+	SSM(sci, SCI_SETSELECTIONMODE, state->selection.mode, 0);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+		{
+			guint i;
+			gint msg = SCI_SETSELECTION;
+
+			g_return_if_fail(state->selection.lines.selections != NULL);
+
+			for (i = 0; i < state->selection.lines.selections->len; i++)
+			{
+				guint64 combined = g_array_index(state->selection.lines.selections, guint64, i);
+				gint caret = (combined >> 32) & 0xffffffff;
+				gint anchor = combined & 0xffffffff;
+
+				SSM(sci, msg, caret, anchor);
+				msg = SCI_ADDSELECTION;
+			}
+			SSM(sci, SCI_SETMAINSELECTION, state->selection.lines.main, 0);
+			break;
+		}
+
+		case SC_SEL_RECTANGLE:
+		case SC_SEL_THIN:
+			SSM(sci, SCI_SETRECTANGULARSELECTIONCARET, state->selection.rect.caret, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONCARETVIRTUALSPACE, state->selection.rect.caret_vs, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONANCHOR, state->selection.rect.anchor, 0);
+			SSM(sci, SCI_SETRECTANGULARSELECTIONANCHORVIRTUALSPACE, state->selection.rect.anchor_vs, 0);
+			break;
+	}
+	SSM(sci, SCI_SETSELECTIONMODE, state->selection.mode, 0);
+}
+
+
+static void sci_state_init(struct SciState *state)
+{
+	state->scrolling.line = 0;
+	state->scrolling.column = 0;
+	state->folding.points = NULL;
+	state->selection.mode = SC_SEL_STREAM;
+	state->selection.lines.main = 0;
+	state->selection.lines.selections = NULL;
+}
+
+
+static void sci_state_unset(struct SciState *state)
+{
+	g_array_free(state->folding.points, TRUE);
+	switch (state->selection.mode)
+	{
+		case SC_SEL_STREAM:
+		case SC_SEL_LINES:
+			if (state->selection.lines.selections)
+				g_array_free(state->selection.lines.selections, TRUE);
+			break;
+
+		default:
+			break;
+	}
+}
+
+
+static void save_sci_state(ScintillaObject *sci, struct SciState *state)
+{
+	/* scrolling */
+	get_sci_scrolling(sci, &state->scrolling.column, &state->scrolling.line);
+
+	/* folding */
+	state->folding.points = get_sci_folding(sci);
+
+	/* selection(s) */
+	get_sci_selection(sci, state);
+}
+
+
+static void apply_sci_state(ScintillaObject *sci, struct SciState *state)
+{
+	/* selection(s) */
+	set_sci_selection(sci, state);
+
+	/* folding */
+	set_sci_folding(sci, state->folding.points);
+
+	/* scrolling */
+	set_sci_scrolling(sci, state->scrolling.column, state->scrolling.line);
+}
+
+
+static void swap_panes(void)
+{
+	GtkWidget *pane = gtk_widget_get_parent(geany_data->main_widgets->notebook);
+	GtkWidget *child1, *child2;
+	GeanyDocument *real_doc = document_get_current();
+
+	g_return_if_fail(edit_window.editor);
+	g_return_if_fail(real_doc != NULL);
+
+	child1 = gtk_paned_get_child1(GTK_PANED(pane));
+	child2 = gtk_paned_get_child2(GTK_PANED(pane));
+
+	g_object_ref(child1);
+	g_object_ref(child2);
+	gtk_container_remove(GTK_CONTAINER(pane), child1);
+	gtk_container_remove(GTK_CONTAINER(pane), child2);
+
+	/* now, swap displayed documents */
+	if (real_doc)
+	{
+		GeanyDocument *view_doc = edit_window.editor->document;
+		struct SciState real_state, view_state;
+
+		sci_state_init(&real_state);
+		sci_state_init(&view_state);
+
+		save_sci_state(edit_window.sci, &view_state);
+		save_sci_state(real_doc->editor->sci, &real_state);
+
+		set_editor(&edit_window, real_doc->editor);
+		apply_sci_state(edit_window.sci, &real_state);
+
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(geany_data->main_widgets->notebook),
+				document_get_notebook_page(view_doc));
+		apply_sci_state(view_doc->editor->sci, &view_state);
+
+		sci_state_unset(&real_state);
+		sci_state_unset(&view_state);
+	}
+
+	gtk_paned_add1(GTK_PANED(pane), child2);
+	gtk_paned_add2(GTK_PANED(pane), child1);
+	g_object_unref(child1);
+	g_object_unref(child2);
+
+	real_doc = document_get_current();
+	if (DOC_VALID(real_doc))
+		gtk_widget_grab_focus(GTK_WIDGET(real_doc->editor->sci));
+}
+
+
+#define FLAG_FORWARD	0x1
+#define FLAG_LOOP		0x2
+
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+/* see lenghty comment in on_event() */
+static gboolean on_target_sci_event(GtkWidget *widget, GdkEvent *event, guint *flags)
+{
+	if (event->type == GDK_MOTION_NOTIFY)
+		*flags &= ~FLAG_LOOP;
+	else if (event->type == GDK_BUTTON_RELEASE)
+		*flags &= ~(FLAG_LOOP | FLAG_FORWARD);
+
+	return FALSE;
+}
+#endif
+
+
+static gboolean on_event(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+{
+	switch (event->type)
+	{
+		case GDK_BUTTON_PRESS:
+		case GDK_2BUTTON_PRESS:
+		case GDK_3BUTTON_PRESS:
+		case GDK_BUTTON_RELEASE:
+		case GDK_KEY_PRESS:
+		case GDK_KEY_RELEASE:
+		{
+			GeanyDocument *doc;
+
+			swap_panes();
+
+			doc = document_get_current();
+			if (DOC_VALID(doc))
+			{
+				/* Swap the event's window with the other sci view */
+				GdkEventAny *any_event = (GdkEventAny*) event;
+				guint flags = FLAG_FORWARD | FLAG_LOOP;
+
+				g_object_unref(any_event->window);
+				any_event->window = gtk_widget_get_window(GTK_WIDGET(doc->editor->sci));
+				g_object_ref(any_event->window);
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+				/* Apparently on GTK3 we have to flush the pending events before
+				 * we can add our own, otherwise it is just ignored [1].
+				 * However, doing so might lead to sending the button-release event
+				 * before the button-press one, starting an unwanted drag.
+				 * As I can't seem to find a way to prevent this, set up a handler
+				 * on the target ScintillaObject to get notified of two events:
+				 *
+				 * button-release:  If we get it, we don't forward the event so
+				 *                  at least it doesn't start the drag.
+				 * motion-notify:   Apparently it is almost always fired before
+				 *                  the button-release, so if we catch it we stop
+				 *                  iterating and try pushing our event (which will
+				 *                  most likely succeed as the target can handle
+				 *                  events)
+				 *
+				 * This is obviously one more hack, and it may lead to dropping the
+				 * event we wanted to forward, but at least we never start unwanted
+				 * drags.
+				 *
+				 * [1] Possibly because the widget is not yet re-mapped after we
+				 *     re-parented it.  But even though the target widget does
+				 *     receive a GDK_MAP event, it is not sufficient. */
+				g_signal_connect(doc->editor->sci, "event", G_CALLBACK(on_target_sci_event), &flags);
+
+				while (flags & FLAG_LOOP && gtk_events_pending())
+					gtk_main_iteration();
+
+				g_signal_handlers_disconnect_by_func(doc->editor->sci, on_target_sci_event, &flags);
+#endif
+
+				if (flags & FLAG_FORWARD)
+					gtk_main_do_event(event);
+			}
+
+			return TRUE;
+		}
+
+		default: break;
+	}
+
+	return FALSE;
+}
+
+
+static void on_tab_close_button_clicked(GtkButton *button, GeanyDocument *doc)
+{
+	g_return_if_fail(doc && doc->is_valid);
+
+	document_close(doc);
+}
+
+
 static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 {
+	GtkWidget *box;
+	gchar *display_name = document_get_basename_for_display(editor->document, -1);
+
 	editwin->editor = editor;
 
 	/* first destroy any widget, otherwise its signals will have an
@@ -173,16 +560,43 @@ static void set_editor(EditWindow *editwin, GeanyEditor *editor)
 
 	editwin->sci = editor_create_widget(editor);
 	gtk_widget_show(GTK_WIDGET(editwin->sci));
-	gtk_box_pack_start(GTK_BOX(editwin->vbox), GTK_WIDGET(editwin->sci), TRUE, TRUE, 0);
+
+	box = gtk_hbox_new(FALSE, 2);
+	edit_window.name_label = gtk_label_new(display_name);
+	gtk_box_pack_start(GTK_BOX(box), edit_window.name_label, FALSE, FALSE, 0);
+
+	if (geany->file_prefs->show_tab_cross)
+	{
+		GtkWidget *image, *btn, *align;
+
+		btn = gtk_button_new();
+		gtk_button_set_relief(GTK_BUTTON(btn), GTK_RELIEF_NONE);
+		gtk_button_set_focus_on_click(GTK_BUTTON(btn), FALSE);
+		gtk_widget_set_name(btn, "geany-close-tab-button");
+
+		image = gtk_image_new_from_stock(GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+		gtk_container_add(GTK_CONTAINER(btn), image);
+
+		align = gtk_alignment_new(1.0, 0.5, 0.0, 0.0);
+		gtk_container_add(GTK_CONTAINER(align), btn);
+		gtk_box_pack_start(GTK_BOX(box), align, TRUE, TRUE, 0);
+
+		g_signal_connect(btn, "clicked", G_CALLBACK(on_tab_close_button_clicked), editor->document);
+	}
+
+	gtk_widget_show_all(box);
+	gtk_notebook_append_page(GTK_NOTEBOOK(editwin->notebook), GTK_WIDGET(editwin->sci), box);
 
 	sync_to_current(editwin->sci, editor->sci);
+	update_tab_label_style(editwin);
 
-	scintilla_send_message(editwin->sci, SCI_USEPOPUP, 1, 0);
 	/* for margin events */
 	g_signal_connect(editwin->sci, "sci-notify",
-			G_CALLBACK(on_sci_notify), NULL);
+			G_CALLBACK(on_sci_notify), editwin);
+	g_signal_connect(editwin->sci, "event",
+			G_CALLBACK(on_event), NULL);
 
-	gtk_label_set_text(GTK_LABEL(editwin->name_label), DOC_FILENAME(editor->document));
+	g_free(display_name);
 }
 
 
@@ -257,14 +671,50 @@ static void on_doc_menu_show(GtkMenu *menu)
 }
 
 
+static gboolean on_notebook_button_press_event(GtkWidget *widget, GdkEventButton *event,
+	gpointer user_data)
+{
+	if (event->button == 3)
+	{
+		GtkWidget *item;
+		GtkWidget *menu = gtk_menu_new();
+
+		ui_menu_add_document_items(GTK_MENU(menu), edit_window.editor->document,
+			G_CALLBACK(on_doc_menu_item_clicked));
+
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = ui_image_menu_item_new(GTK_STOCK_JUMP_TO, _("Show the current document"));
+		g_signal_connect(item, "activate", G_CALLBACK(on_refresh), NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = gtk_separator_menu_item_new();
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("_Unsplit"));
+		g_signal_connect(item, "activate", G_CALLBACK(on_unsplit), NULL);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		gtk_widget_show_all(menu);
+		gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, event->button, event->time);
+
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 static GtkWidget *create_toolbar(void)
 {
 	GtkWidget *toolbar, *item;
 	GtkToolItem *tool_item;
 
 	toolbar = gtk_toolbar_new();
+	gtk_widget_set_name(toolbar, "geany-splitwindow-toolbar");
 	gtk_toolbar_set_icon_size(GTK_TOOLBAR(toolbar), GTK_ICON_SIZE_MENU);
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
+	gtk_toolbar_set_show_arrow(GTK_TOOLBAR(toolbar), FALSE); /* not to shrink */
 
 	tool_item = gtk_menu_tool_button_new(NULL, NULL);
 	gtk_tool_button_set_stock_id(GTK_TOOL_BUTTON(tool_item), GTK_STOCK_JUMP_TO);
@@ -281,11 +731,6 @@ static GtkWidget *create_toolbar(void)
 	gtk_tool_item_set_expand(tool_item, TRUE);
 	gtk_container_add(GTK_CONTAINER(toolbar), GTK_WIDGET(tool_item));
 
-	item = gtk_label_new(NULL);
-	gtk_label_set_ellipsize(GTK_LABEL(item), PANGO_ELLIPSIZE_START);
-	gtk_container_add(GTK_CONTAINER(tool_item), item);
-	edit_window.name_label = item;
-
 	item = ui_tool_button_new(GTK_STOCK_CLOSE, _("_Unsplit"), NULL);
 	gtk_container_add(GTK_CONTAINER(toolbar), item);
 	g_signal_connect(item, "clicked", G_CALLBACK(on_unsplit), NULL);
@@ -298,13 +743,14 @@ static void split_view(gboolean horizontal)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
-	GtkWidget *pane, *toolbar, *box, *splitwin_notebook;
+	GtkWidget *pane, *toolbar;
 	GeanyDocument *doc = document_get_current();
 	gint width = gtk_widget_get_allocated_width(notebook) / 2;
 	gint height = gtk_widget_get_allocated_height(notebook) / 2;
 
 	g_return_if_fail(doc);
 	g_return_if_fail(edit_window.editor == NULL);
+	g_return_if_fail(plugin_state == STATE_UNSPLIT);
 
 	set_state(horizontal ? STATE_SPLIT_HORIZONTAL : STATE_SPLIT_VERTICAL);
 
@@ -317,16 +763,16 @@ static void split_view(gboolean horizontal)
 	gtk_container_add(GTK_CONTAINER(pane), notebook);
 	g_object_unref(notebook);
 
-	box = gtk_vbox_new(FALSE, 0);
-	toolbar = create_toolbar();
-	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
-	edit_window.vbox = box;
+	edit_window.notebook = gtk_notebook_new();
+	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(edit_window.notebook),
+		geany->interface_prefs->tab_pos_editor);
+	g_signal_connect_after(edit_window.notebook, "button-press-event",
+		G_CALLBACK(on_notebook_button_press_event), NULL);
 
-	/* used just to make the split window look the same as the main editor */
-	splitwin_notebook = gtk_notebook_new();
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(splitwin_notebook), FALSE);
-	gtk_notebook_append_page(GTK_NOTEBOOK(splitwin_notebook), box, NULL);
-	gtk_container_add(GTK_CONTAINER(pane), splitwin_notebook);
+	toolbar = create_toolbar();
+	gtk_widget_show_all(toolbar);
+	gtk_notebook_set_action_widget(GTK_NOTEBOOK(edit_window.notebook), toolbar, GTK_PACK_END);
+	gtk_container_add(GTK_CONTAINER(pane), edit_window.notebook);
 
 	set_editor(&edit_window, doc->editor);
 
@@ -360,6 +806,8 @@ static void on_unsplit(GtkMenuItem *menuitem, gpointer user_data)
 	GtkWidget *pane = gtk_widget_get_parent(notebook);
 	GtkWidget *parent = gtk_widget_get_parent(pane);
 
+	g_return_if_fail(plugin_state != STATE_UNSPLIT);
+
 	set_state(STATE_UNSPLIT);
 
 	g_return_if_fail(edit_window.editor);
@@ -392,6 +840,10 @@ static void kb_activate(guint key_id)
 			if (plugin_state != STATE_UNSPLIT)
 				on_unsplit(NULL, NULL);
 			break;
+		case KB_SPLIT_SWITCH:
+			if (plugin_state != STATE_UNSPLIT)
+				swap_panes();
+			break;
 	}
 }
 
@@ -400,6 +852,35 @@ void plugin_init(GeanyData *data)
 {
 	GtkWidget *item, *menu;
 	GeanyKeyGroup *key_group;
+
+	/* Individual style for the toolbar */
+#if GTK_CHECK_VERSION(3, 0, 0)
+	GtkCssProvider *provider = gtk_css_provider_new();
+	gtk_css_provider_load_from_data(provider,
+		"#geany-splitwindow-toolbar {\n"
+		"	-GtkWidget-focus-padding: 0;\n"
+		"	-GtkWidget-focus-line-width: 0;\n"
+		"	-GtkToolbar-internal-padding: 0;\n"
+		"	-GtkToolbar-shadow-type: none;\n"
+		"	padding: 0;\n"
+		"}\n",
+		-1, NULL);
+	gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+		GTK_STYLE_PROVIDER(provider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_object_unref(provider);
+#else
+	gtk_rc_parse_string(
+		"style \"geany-splitwindow-toolbar-style\" {\n"
+		"	GtkWidget::focus-padding = 0\n"
+		"	GtkWidget::focus-line-width = 0\n"
+		"	xthickness = 0\n"
+		"	ythickness = 0\n"
+		"	GtkToolbar::internal-padding = 0\n"
+		"	GtkToolbar::shadow-type = none\n"
+		"}\n"
+		"widget \"*.geany-splitwindow-toolbar\" style \"geany-splitwindow-toolbar-style\""
+	);
+#endif
 
 	menu_items.main = item = gtk_menu_item_new_with_mnemonic(_("_Split Window"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(geany_data->main_widgets->tools_menu), item);
@@ -435,6 +916,8 @@ void plugin_init(GeanyData *data)
 		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
 		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+	keybindings_set_item(key_group, KB_SPLIT_SWITCH, kb_activate,
+		0, 0, "split_switch", _("_Switch Panes Focus"), NULL);
 }
 
 
@@ -470,7 +953,12 @@ static void on_document_save(GObject *obj, GeanyDocument *doc, gpointer user_dat
 {
 	/* update filename */
 	if (doc->editor == edit_window.editor)
-		gtk_label_set_text(GTK_LABEL(edit_window.name_label), DOC_FILENAME(doc));
+	{
+		gchar *filename = document_get_basename_for_display(doc, -1);
+
+		gtk_label_set_text(GTK_LABEL(edit_window.name_label), filename);
+		g_free(filename);
+	}
 }
 
 
