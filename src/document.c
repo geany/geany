@@ -1957,9 +1957,9 @@ static gchar *write_data_to_disk(const gchar *locale_filename,
 		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
 		/* The error handling is taken from glib-2.26.0 gfileutils.c */
 		errno = 0;
-		fp = fopen(locale_filename, "r+");	// truncate to  data_length + write_data    instead of   new_file + write_data
+		fp = fopen(locale_filename, "r+b");	// truncate to  data_length + write_data    instead of   new_file + write_data
 		if(errno==ENOENT)	// if saved document  not exist,  create document
-			file = fopen(locale_filename,"w");
+			file = fopen(locale_filename,"wb");
 		if (fp == NULL)
 		{
 			save_errno = errno;
