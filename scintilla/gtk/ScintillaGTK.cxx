@@ -546,8 +546,10 @@ void ScintillaGTK::UnRealizeThis(GtkWidget *widget) {
 		GTK_WIDGET_UNSET_FLAGS(widget, GTK_REALIZED);
 #endif
 		gtk_widget_unrealize(PWidget(wText));
-		gtk_widget_unrealize(PWidget(scrollbarv));
-		gtk_widget_unrealize(PWidget(scrollbarh));
+		if (PWidget(scrollbarv))
+			gtk_widget_unrealize(PWidget(scrollbarv));
+		if (PWidget(scrollbarh))
+			gtk_widget_unrealize(PWidget(scrollbarh));
 		gtk_widget_unrealize(PWidget(wPreedit));
 		gtk_widget_unrealize(PWidget(wPreeditDraw));
 		g_object_unref(im_context);
@@ -611,8 +613,10 @@ void ScintillaGTK::UnMapThis() {
 		DropGraphics(false);
 		gdk_window_hide(PWindow(wMain));
 		gtk_widget_unmap(PWidget(wText));
-		gtk_widget_unmap(PWidget(scrollbarh));
-		gtk_widget_unmap(PWidget(scrollbarv));
+		if (PWidget(scrollbarh))
+			gtk_widget_unmap(PWidget(scrollbarh));
+		if (PWidget(scrollbarv))
+			gtk_widget_unmap(PWidget(scrollbarv));
 	} catch (...) {
 		errorStatus = SC_STATUS_FAILURE;
 	}
