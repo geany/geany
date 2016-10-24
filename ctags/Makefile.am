@@ -99,9 +99,6 @@ libctags_la_SOURCES = \
 	main/options.c \
 	main/options.h \
 	main/output-ctags.c \
-	main/output-etags.c \
-	main/output-json.c \
-	main/output-xref.c \
 	main/output.h \
 	main/parse.c \
 	main/parse.h \
