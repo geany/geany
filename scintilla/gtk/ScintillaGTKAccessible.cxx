@@ -3,6 +3,28 @@
 /* Copyright 2016 by Colomban Wendling <colomban@geany.org>
  * The License.txt file describes the conditions under which this software may be distributed. */
 
+// REFERENCES BETWEEN THE DIFFERENT OBJECTS
+//
+// ScintillaGTKAccessible is the actual implementation, as a C++ class.
+// ScintillaObjectAccessible is the GObject derived from AtkObject that
+// implements the various ATK interfaces, through ScintillaGTKAccessible.
+// This follows the same pattern as ScintillaGTK and ScintillaObject.
+//
+// ScintillaGTK owns a strong reference to the ScintillaObjectAccessible, and
+// is both responsible for creating and destroying that object.
+//
+// ScintillaObjectAccessible owns a strong reference to ScintillaGTKAccessible,
+// and is responsible for creating and destroying that object.
+//
+// ScintillaGTKAccessible has weak references to both the ScintillaGTK and
+// the ScintillaObjectAccessible objects associated, but does not own any
+// strong references to those objects.
+//
+// The chain of ownership is as follows:
+// ScintillaGTK -> ScintillaObjectAccessible -> ScintillaGTKAccessible
+
+// DETAILS ON THE GOBJECT TYPE IMPLEMENTATION
+//
 // On GTK < 3.2, we need to use the AtkObjectFactory.  We need to query
 // the factory to see what type we should derive from, thus making use of
 // dynamic inheritance.  It's tricky, but it works so long as it's done

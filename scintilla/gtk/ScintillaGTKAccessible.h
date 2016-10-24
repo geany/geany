@@ -16,6 +16,7 @@ namespace Scintilla {
 
 class ScintillaGTKAccessible {
 private:
+	// weak references to related objects
 	GtkAccessible *accessible;
 	ScintillaGTK *sci;
 
