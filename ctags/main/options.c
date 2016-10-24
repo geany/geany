@@ -198,6 +198,7 @@ char **c_tags_ignore = NULL;
 -   Locally used only
 */
 
+#ifndef CTAGS_LIB
 static optionDescription LongOptionDescription [] = {
  {1,"  -a   Append the tags to an existing tag file."},
 #ifdef DEBUG
@@ -635,6 +636,7 @@ static void freeString (char **const pString)
 		*pString = NULL;
 	}
 }
+#endif
 
 extern void freeList (stringList** const pList)
 {
@@ -645,6 +647,7 @@ extern void freeList (stringList** const pList)
 	}
 }
 
+#ifndef CTAGS_LIB
 extern void setDefaultTagFileName (void)
 {
 	if (Option.tagFileName != NULL)
@@ -2137,8 +2140,6 @@ static void processHeaderListOption (const int option, const char *parameter)
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
-/* GEANY DIFF */
-/*
 extern const ignoredTokenInfo * isIgnoreToken(const char * name)
 {
 	if(!Option.ignore)
@@ -2146,8 +2147,9 @@ extern const ignoredTokenInfo * isIgnoreToken(const char * name)
 
 	return (const ignoredTokenInfo *)hashTableGetItem(Option.ignore,(char *)name);
 }
-*/
+#endif
 
+/* GEANY DIFF */
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
 extern bool isIgnoreToken (const char *const name,
@@ -2211,6 +2213,7 @@ extern bool isIgnoreToken (const char *const name,
 }
 /* GEANY DIFF END */
 
+#ifndef CTAGS_LIB
 static void freeIgnoredTokenInfo(ignoredTokenInfo * info)
 {
 	if(!info)
@@ -3446,3 +3449,34 @@ extern void freeOptionResources (void)
 
 	freeList (&OptionFiles);
 }
+#endif
+
+/* GEANY DIFF */
+/* Dummy implementations of unused functions */
+extern void setDefaultTagFileName (void)
+{
+}
+
+extern void initOptions (void)
+{
+}
+
+extern void freeOptionResources (void)
+{
+}
+
+extern langType getLanguageComponentInOption (const char *const option,
+					      const char *const prefix)
+{
+	return LANG_IGNORE;
+}
+
+extern bool isIncludeFile (const char *const fileName)
+{
+	return false;
+}
+
+extern void verbose (const char *const format, ...)
+{
+}
+/* GEANY DIFF END */
