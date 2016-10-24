@@ -88,8 +88,6 @@ libctags_la_SOURCES = \
 	main/lxpath.c \
 	main/main.c \
 	main/main.h \
-	main/mbcs.c \
-	main/mbcs.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
