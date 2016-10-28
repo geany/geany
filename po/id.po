@@ -27,7 +27,7 @@ msgstr "Integrated Development Environment"
 
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
-msgstr "Sebuah IDE yang cepat dan ringan menggunakan GTK+ "
+msgstr "Sebuah IDE yang cepat dan ringan menggunakan GTK+"
 
 #: ../geany.desktop.in.h:4
 #, fuzzy
@@ -555,11 +555,11 @@ msgstr "Berganti ke dokumen terakhir setelah menutup tab"
 
 #: ../data/geany.glade.h:110
 msgid "<b>Editor tabs</b>"
-msgstr "<b>Tab Editor</b>"
+msgstr "<b>Tab editor</b>"
 
 #: ../data/geany.glade.h:111
 msgid "Sidebar:"
-msgstr "Panel Samping:"
+msgstr "Panel samping:"
 
 #: ../data/geany.glade.h:112
 msgid "<b>Tab positions</b>"
@@ -759,7 +759,7 @@ msgstr "Banyaknya karakter yang mengindikasikan lebarnya indent tunggal"
 
 #: ../data/geany.glade.h:151
 msgid "Auto-indent mode:"
-msgstr "Mode Indent-Otomatis:"
+msgstr "Mode indent-otomatis:"
 
 #: ../data/geany.glade.h:152
 msgid "Detect type from file"
