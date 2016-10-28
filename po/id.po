@@ -1103,7 +1103,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:220
 msgid "Background"
-msgstr "Latar Belakang"
+msgstr "Latar belakang"
 
 #: ../data/geany.glade.h:221
 msgid ""
@@ -1312,7 +1312,7 @@ msgstr "Grep:"
 
 #: ../data/geany.glade.h:264
 msgid "<b>Tool paths</b>"
-msgstr "<b>Lokasi Tool</b>"
+msgstr "<b>Lokasi alat</b>"
 
 #: ../data/geany.glade.h:265
 msgid "Context action:"
@@ -1325,7 +1325,7 @@ msgid ""
 "can appear anywhere in the given command and will be replaced before "
 "execution."
 msgstr ""
-"Kata yang diseleksi dapat digunakan dengan %s. Operasi ini bisa muncul "
+"Konteks operasi perintah. Kata yang diseleksi dapat digunakan dengan %s. Operasi ini bisa muncul "
 "dimana saja pada command yang diberikan dan akan diganti sebelum dieksekusi."
 
 #: ../data/geany.glade.h:268
@@ -1386,7 +1386,7 @@ msgstr "Tanggal:"
 
 #: ../data/geany.glade.h:282
 msgid "Date & time:"
-msgstr "Tanggal & Waktu:"
+msgstr "Tanggal & waktu:"
 
 #: ../data/geany.glade.h:283
 msgid ""
@@ -1426,7 +1426,7 @@ msgstr "_Ubah"
 
 #: ../data/geany.glade.h:289
 msgid "<b>Keyboard shortcuts</b>"
-msgstr "<b>Tombol Singkat Keyboard</b>"
+msgstr "<b>Tombol singkat keyboard</b>"
 
 #: ../data/geany.glade.h:290 ../src/plugins.c:1899 ../src/plugins.c:1936
 #: ../src/prefs.c:1618
@@ -1536,7 +1536,7 @@ msgstr "Warna latar belakang:"
 
 #: ../data/geany.glade.h:313
 msgid "Background image:"
-msgstr "Latar Belakang:"
+msgstr "Gambar latar belakang:"
 
 #: ../data/geany.glade.h:314
 msgid "Scrollback lines:"
@@ -1639,7 +1639,7 @@ msgid ""
 "note, programs executed in VTE cannot be stopped"
 msgstr ""
 "Jalankan program di dalam VTE ketimbang membuka terminal emulasi baru. "
-"Perhatikan, program yang dijalankan di dalam VTE tidak dapat dihentikan."
+"Perhatikan, program yang dijalankan di dalam VTE tidak dapat dihentikan"
 
 #: ../data/geany.glade.h:335
 msgid "Don't use run script"
@@ -1667,11 +1667,11 @@ msgstr "<i>Peringatan: baca buku petunjuk sebelum mengubah preferensi ini.</i>"
 
 #: ../data/geany.glade.h:340
 msgid "<b>Various preferences</b>"
-msgstr "<b>Preferensi Lain-Lain</b>"
+msgstr "<b>Preferensi lain-lain</b>"
 
 #: ../data/geany.glade.h:341 ../src/prefs.c:1622
 msgid "Various"
-msgstr "Lain-Lain"
+msgstr "Lain-lain"
 
 #: ../data/geany.glade.h:343
 msgid "_File"
@@ -1901,7 +1901,7 @@ msgstr "Tampilkan Petunjuk _Indentasi"
 
 #: ../data/geany.glade.h:399
 msgid "Full_screen"
-msgstr "Layar _Penuh"
+msgstr "Layar _penuh"
 
 #: ../data/geany.glade.h:400
 msgid "Toggle All _Additional Widgets"
@@ -1933,7 +1933,7 @@ msgstr "Penggal _Baris"
 
 #: ../data/geany.glade.h:407
 msgid "_Auto-indentation"
-msgstr "_Indentasi Otomatis"
+msgstr "_Indentasi otomatis"
 
 #: ../data/geany.glade.h:408
 msgid "In_dent Type"
@@ -2302,7 +2302,7 @@ msgstr "Sebuah IDE yang cepat dan ringan"
 #: ../src/about.c:234
 #, c-format
 msgid "(built on or after %s)"
-msgstr "(Dibangun pada atau setelah %s)"
+msgstr "(dibangun pada atau setelah %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
 #: ../src/about.c:266
@@ -2311,7 +2311,7 @@ msgstr "Info"
 
 #: ../src/about.c:282
 msgid "Developers"
-msgstr "Para Pengembang"
+msgstr "Para pengembang"
 
 #: ../src/about.c:289
 msgid "maintainer"
@@ -2327,7 +2327,7 @@ msgstr "pengelola terjemahan"
 
 #: ../src/about.c:330
 msgid "Translators"
-msgstr "Para Penerjemah"
+msgstr "Para penerjemah"
 
 #: ../src/about.c:350
 msgid "Previous Translators"
@@ -2365,7 +2365,7 @@ msgstr ""
 #: ../src/build.c:710
 #, c-format
 msgid "failed to substitute %%p, no project active"
-msgstr "gagal mengganti  %%p, tidak ada proyek yang aktif"
+msgstr "gagal mengganti %%p, tidak ada proyek yang aktif"
 
 #: ../src/build.c:738
 msgid "Process failed, no working directory"
@@ -2410,11 +2410,11 @@ msgstr ""
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
-msgstr "Kompilasi gagal!"
+msgstr "Kompilasi gagal."
 
 #: ../src/build.c:1030
 msgid "Compilation finished successfully."
-msgstr "Kompilasi sukses!"
+msgstr "Kompilasi sukses."
 
 #: ../src/build.c:1199
 msgid "Custom Text"
@@ -2591,7 +2591,7 @@ msgstr "Tidak bisa membuka berkas %s (Tidak ditemukan)"
 
 #: ../src/callbacks.c:1468
 msgid "Check the path setting in Filetype configuration."
-msgstr "Periksa pengaturan lokasi di konfigurasi Tipeberkas"
+msgstr "Periksa pengaturan lokasi di konfigurasi Tipeberkas."
 
 #: ../src/callbacks.c:1473
 msgid "Check the path setting in Preferences."
@@ -2726,7 +2726,7 @@ msgstr "Informasi"
 
 #: ../src/dialogs.c:783
 msgid "_Don't save"
-msgstr "_Jangan Simpan"
+msgstr "_Jangan simpan"
 
 #: ../src/dialogs.c:812
 #, c-format
@@ -2838,7 +2838,7 @@ msgstr "Mengatur lebar indentasi ke %d untuk %s."
 #: ../src/document.c:1483
 #, c-format
 msgid "File %s reloaded."
-msgstr "Berkas %s dibuka ulang"
+msgstr "Berkas %s dibuka ulang."
 
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
@@ -2864,13 +2864,13 @@ msgid ""
 "preferences."
 msgstr ""
 "Kondisi buffer sebelumnya tersimpan di sejarah dan membatalkan "
-"pengembaliannya.Anda dapat menonaktifkannya dengan membatalkan sejarah saat "
-"memuat ulang. Pesanini tidak akan ditampilkan lagi, tetapi pilihan Anda "
-"tidak dapat diubah dalamberbagai preferensi."
+"pengembaliannya. Anda dapat menonaktifkannya dengan membatalkan sejarah saat "
+"memuat ulang. Pesan ini tidak akan ditampilkan lagi, tetapi pilihan Anda "
+"tidak dapat diubah dalam berbagai preferensi."
 
 #: ../src/document.c:1618
 msgid "The file has been reloaded."
-msgstr "Berkas %s telah dibuka ulang"
+msgstr "Berkas telah dibuka ulang."
 
 #: ../src/document.c:1648
 msgid "Any unsaved changes will be lost."
@@ -2929,7 +2929,7 @@ msgstr "Gagal menutup berkas '%s': fclose() gagal: %s"
 
 #: ../src/document.c:2044 ../src/document.c:3617
 msgid "_Overwrite"
-msgstr "_Timpa?"
+msgstr "_Timpa"
 
 #: ../src/document.c:2046 ../src/document.c:3620
 #, c-format
@@ -3217,7 +3217,7 @@ msgstr "Bahasa _Markup"
 
 #: ../src/filetypes.c:434
 msgid "M_iscellaneous"
-msgstr "Lain-La_in"
+msgstr "Lain-la_in"
 
 #: ../src/filetypes.c:1195 ../src/win32.c:156
 msgid "All Source"
@@ -3316,7 +3316,7 @@ msgstr "Fokus"
 
 #: ../src/keybindings.c:323
 msgid "Notebook tab"
-msgstr "Tab Catatan"
+msgstr "Tab catatan"
 
 #: ../src/keybindings.c:332 ../src/keybindings.c:364
 msgid "New"
@@ -3640,7 +3640,7 @@ msgstr "Toggle All Additional Widgets"
 
 #: ../src/keybindings.c:598
 msgid "Fullscreen"
-msgstr "Layar Penuh"
+msgstr "Layar penuh"
 
 #: ../src/keybindings.c:600
 msgid "Toggle Messages Window"
@@ -3822,7 +3822,7 @@ msgstr ""
 
 #: ../src/keyfile.c:1254
 msgid "Failed to load one or more session files."
-msgstr "Gagal mengangkat satu atau lebih berkas sesi"
+msgstr "Gagal mengangkat satu atau lebih berkas sesi."
 
 #: ../src/libmain.c:118
 msgid ""
@@ -4251,7 +4251,7 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
-"Lokasi berkas merepresentasikan proyek dan menyimpan pengaturannya.Normalnya "
+"Lokasi berkas merepresentasikan proyek dan menyimpan pengaturannya. Normalnya "
 "memiliki ekstensi \"%s\"."
 
 #: ../src/project.c:212 ../src/project.c:484
@@ -4371,7 +4371,7 @@ msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr ""
-"Ganti  \\\\, \\t, \\n, \\r dan  \\uXXXX (Karakter Unicode)dengan karakter "
+"Ganti  \\\\, \\t, \\n, \\r dan \\uXXXX (Karakter Unicode) dengan karakter "
 "kontrol penggantinya"
 
 #: ../src/search.c:323
@@ -4386,9 +4386,9 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 "Lakukan ekspresi reguler yang cocok pada seluruh buffer sekaligus "
-"daripadabaris per baris, mengizinkan yang cocok untuk dibentangkan beberapa "
-"baris.Dalam mode ini, karakter baris baru merupakan bagian dari masukan dan "
-"ditangkapsebagai karakter biasa oleh pola tersebut."
+"daripada baris per baris, mengizinkan yang cocok untuk dibentangkan beberapa "
+"baris. Dalam mode ini, karakter baris baru merupakan bagian dari masukan dan "
+"ditangkap sebagai karakter biasa oleh pola tersebut."
 
 #: ../src/search.c:341
 msgid "Search _backwards"
@@ -4509,7 +4509,7 @@ msgstr "E_ncoding:"
 
 #: ../src/search.c:963
 msgid "See grep's manual page for more information"
-msgstr "Lihatlah panduan Grep untuk informasi lebih lanjut"
+msgstr "Lihatlah panduan grep untuk informasi lebih lanjut"
 
 #: ../src/search.c:965
 msgid "_Recurse in subfolders"
@@ -5010,7 +5010,7 @@ msgstr "Deklarasi maju \"%s\" tidak ditemukan."
 #: ../src/symbols.c:2113
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "Definisi dari  \"%s\" tidak ditemukan."
+msgstr "Definisi dari \"%s\" tidak ditemukan."
 
 #: ../src/symbols.c:2490
 msgid "Sort by _Name"
@@ -5091,8 +5091,7 @@ msgstr "Jalankan atau tampilkan berkas yang sekarang"
 msgid ""
 "Open a color chooser dialog, to interactively pick colors from a palette"
 msgstr ""
-"Buka dialog pelet warna. Membantu mengetahui kode heksadesimal dari warna "
-"yang diinginkan secara interaktif"
+"Buka dialog pemilih warna untuk secara interaktif mengambil warna dari palet"
 
 #: ../src/toolbar.c:75
 msgid "Zoom in the text"
@@ -5287,7 +5286,7 @@ msgstr "Sembunyikan Panel Samp_ing"
 
 #: ../src/sidebar.c:731 ../plugins/filebrowser.c:670
 msgid "_Find in Files..."
-msgstr "_Cari di Berkas"
+msgstr "_Cari di Berkas..."
 
 #: ../src/sidebar.c:741
 msgid "Show _Paths"
@@ -5606,7 +5605,7 @@ msgstr "Is singleton"
 
 #: ../plugins/classbuilder.c:577
 msgid "Constructor type:"
-msgstr "Tipe Constructor:"
+msgstr "Tipe konstruktor:"
 
 #: ../plugins/classbuilder.c:1089
 msgid "Create Cla_ss"
@@ -5651,23 +5650,23 @@ msgstr "Karakter Yunani"
 
 #: ../plugins/htmlchars.c:234
 msgid "Mathematical characters"
-msgstr "Karakter Matematis"
+msgstr "Karakter matematis"
 
 #: ../plugins/htmlchars.c:275
 msgid "Technical characters"
-msgstr "Karakter Teknis"
+msgstr "Karakter teknis"
 
 #: ../plugins/htmlchars.c:283
 msgid "Arrow characters"
-msgstr "Karakter Panah"
+msgstr "Karakter panah"
 
 #: ../plugins/htmlchars.c:296
 msgid "Punctuation characters"
-msgstr "Karakter Tanda Baca"
+msgstr "Karakter tanda baca"
 
 #: ../plugins/htmlchars.c:312
 msgid "Miscellaneous characters"
-msgstr "Karakter Lainnya"
+msgstr "Karakter lainnya"
 
 #: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1194
 #: ../plugins/saveactions.c:538
@@ -5780,7 +5779,7 @@ msgstr "Sebagai _HTML..."
 #. LaTeX
 #: ../plugins/export.c:762
 msgid "As _LaTeX..."
-msgstr "Sebagai _LaTeX"
+msgstr "Sebagai _LaTeX..."
 
 #: ../plugins/filebrowser.c:50
 msgid "File Browser"
