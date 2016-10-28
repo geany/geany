@@ -22,41 +22,7 @@
 
 #include "main.h"
 
-#ifdef G_OS_WIN32
-# include <windows.h>
-#endif
-
 int main(int argc, char **argv)
 {
-#ifdef G_OS_WIN32
-	if (argc > 1)
-	{
-		int num_arg;
-		LPWSTR *szarglist = CommandLineToArgvW(GetCommandLineW(), &num_arg);
-		char** utf8argv = g_new0(char *, num_arg + 1);
-		int i = num_arg;
-		while(i){
-			i--;
-			utf8argv[i] = g_utf16_to_utf8((gunichar2 *)szarglist[i], -1, NULL, NULL, NULL);
-		}
-
-		gint result = main_lib(num_arg, utf8argv);
-
-		i = num_arg;
-		while(i){
-			i--;
-			g_free(utf8argv[i]);
-		}
-		g_free(utf8argv);
-		LocalFree(szarglist);
-
-		return result;
-	}
-	else
-	{
-#endif
-		return main_lib(argc, argv);
-#ifdef G_OS_WIN32
-	}
-#endif
+	return main_lib(argc, argv);
 }

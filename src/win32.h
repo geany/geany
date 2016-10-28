@@ -68,6 +68,10 @@ gchar *win32_expand_environment_variables(const gchar *str);
 
 gchar *win32_get_user_config_dir(void);
 
+void win32_make_argc_and_argv_in_utf8(gint *pargc, gchar ***pargv);
+
+void win32_free_argv_made_in_utf8(gint argc, gchar **argv);
+
 G_END_DECLS
 
 #endif /* G_OS_WIN32 */
