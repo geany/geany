@@ -247,7 +247,7 @@ msgid ""
 "for plugins. Leave blank to disable."
 msgstr ""
 "Secara default, Geany akan memuat berkas pada lokasi instalasi global dan "
-"direktori konfigurasi. Lokasi yang dimasukkan disini akan menjadi path "
+"direktori konfigurasi. Lokasi yang dimasukkan di sini akan menjadi path "
 "plugin tambahan yang akan dicari Geany. Kosongkan saja bila tidak dipakai."
 
 #: ../data/geany.glade.h:49
@@ -644,7 +644,7 @@ msgid ""
 "disabled on slow machines."
 msgstr ""
 "Bungkus baris, jadi jika teks pada suatu baris melewati batas lebar window, "
-"maka teks yang tertutup itu akan di \"bungkus\" ke baris dibawahnya. "
+"maka teks yang tertutup itu akan di \"bungkus\" ke baris di bawahnya. "
 "Catatan: fitur ini lumayan memakan proses untuk dokumen yang baris \"offset"
 "\"-nya banyak, jadi untuk komputer yang lambat, performa-nya terlihat "
 "menurun."
@@ -1030,11 +1030,11 @@ msgstr "Menggunakan suatu simbol untuk menandai akhir baris"
 
 #: ../data/geany.glade.h:206
 msgid "Show line numbers"
-msgstr "Tampilkan nomer baris"
+msgstr "Tampilkan nomor baris"
 
 #: ../data/geany.glade.h:207
 msgid "Shows or hides the Line Number margin"
-msgstr "Opsi ini akan menampilkan nomer urut baris"
+msgstr "Opsi ini akan menampilkan nomor urut baris"
 
 #: ../data/geany.glade.h:208
 msgid "Show markers margin"
@@ -1045,7 +1045,7 @@ msgid ""
 "Shows or hides the small margin right of the line numbers, which is used to "
 "mark lines"
 msgstr ""
-"Opsi ini memberikan margin sedikit di kanannya nomer baris, yang bisa "
+"Opsi ini memberikan margin sedikit di kanannya nomor baris, yang bisa "
 "dipakai untuk membantu menandai baris"
 
 #: ../data/geany.glade.h:210
@@ -1350,7 +1350,7 @@ msgstr "Versi inisial:"
 
 #: ../data/geany.glade.h:273
 msgid "Version number, which a new file initially has"
-msgstr "Nomer versi yang secara inisial dimiliki oleh berkas baru"
+msgstr "Nomor versi yang secara inisial dimiliki oleh berkas baru"
 
 #: ../data/geany.glade.h:274
 msgid "Company name"
@@ -1448,21 +1448,21 @@ msgstr "Pakai command eksternal untuk mencetak"
 
 #: ../data/geany.glade.h:295 ../src/printing.c:239
 msgid "Print line numbers"
-msgstr "Cetak nomer baris"
+msgstr "Cetak nomor baris"
 
 #: ../data/geany.glade.h:296 ../src/printing.c:241
 msgid "Add line numbers to the printed page"
-msgstr "Tambahkan nomer baris ke halaman yang dicetak"
+msgstr "Tambahkan nomor baris ke halaman yang dicetak"
 
 #: ../data/geany.glade.h:297 ../src/printing.c:244
 msgid "Print page numbers"
-msgstr "Cetak nomer halaman"
+msgstr "Cetak nomor halaman"
 
 #: ../data/geany.glade.h:298 ../src/printing.c:246
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
-"Tambahkan nomer halaman di bagian bawah masing-masing halaman. Nomer halaman "
+"Tambahkan nomor halaman di bagian bawah masing-masing halaman. Nomor halaman "
 "memakan tempat 2 baris."
 
 #: ../data/geany.glade.h:299 ../src/printing.c:249
@@ -1474,7 +1474,7 @@ msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
 msgstr ""
-"Tambahkan sedikit header di setiap halaman yang memiliki nomer halaman, nama "
+"Tambahkan sedikit header di setiap halaman yang memiliki nomor halaman, nama "
 "berkas, dan tanggal sekarang (lihat di bawah). Header ini memakan tempat 3 "
 "baris."
 
@@ -1603,7 +1603,7 @@ msgstr "Abaikan keybinding Geany"
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
-"Ijinkan VTE untuk menerima shortcut keyboard (salin dari perintah fokus)"
+"Izinkan VTE untuk menerima shortcut keyboard (salin dari perintah fokus)"
 
 #: ../data/geany.glade.h:329
 msgid "Disable menu shortcut key (F10 by default)"
@@ -2358,7 +2358,7 @@ msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
 msgstr ""
-"Naskah lisensi tidak ditemukan, silahkan kunjungi http://www.gnu.org/"
+"Naskah lisensi tidak ditemukan, silakan kunjungi http://www.gnu.org/"
 "licenses/gpl-2.0.txt untuk membacanya secara online."
 
 #. fall back to %d
@@ -2423,7 +2423,7 @@ msgstr "Teks Bebas"
 #: ../src/build.c:1200
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
-"Masukkan teks disini, semua teks yang dimasukkan akan disisipkan ke command."
+"Masukkan teks di sini, semua teks yang dimasukkan akan disisipkan ke command."
 
 #: ../src/build.c:1278
 msgid "_Next Error"
@@ -2525,7 +2525,7 @@ msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p, %l telah diganti pada field perintah dan directory, detilnya "
+"%d, %e, %f, %p, %l telah diganti pada field perintah dan directory, detailnya "
 "lihat manual."
 
 #: ../src/build.c:2170
@@ -3817,7 +3817,7 @@ msgstr "Shortcut keyboard berikut ini dapat dikonfigurasi:"
 #: ../src/keyfile.c:1027
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
-"Ketik apapun yang Anda mau disini. Gunakan area ini untuk membuat catatan "
+"Ketik apapun yang Anda mau di sini. Gunakan area ini untuk membuat catatan "
 "atau sebagai pengingat sesuatu."
 
 #: ../src/keyfile.c:1254
@@ -3829,7 +3829,7 @@ msgid ""
 "Set initial column number for the first opened file (useful in conjunction "
 "with --line)"
 msgstr ""
-"Atur nomer kolom inisial untuk berkas yang terbuka pertama kali (berguna "
+"Atur nomor kolom inisial untuk berkas yang terbuka pertama kali (berguna "
 "jika dipakai bersamaan dengan --line)"
 
 #: ../src/libmain.c:119
@@ -3867,7 +3867,7 @@ msgstr "Menampilkan daftar dokumen yang dibuka pada instance Geany berjalan"
 
 #: ../src/libmain.c:128
 msgid "Set initial line number for the first opened file"
-msgstr "Atur nomer baris inisial untuk berkas yang pertama kali dibuka"
+msgstr "Atur nomor baris inisial untuk berkas yang pertama kali dibuka"
 
 #: ../src/libmain.c:129
 msgid "Don't show message window at startup"
@@ -4102,7 +4102,7 @@ msgstr "Shortcut"
 
 #: ../src/prefs.c:1486
 msgid "_Allow"
-msgstr "_Ijinkan"
+msgstr "_Izinkan"
 
 #: ../src/prefs.c:1488
 msgid "_Override"
@@ -4141,7 +4141,7 @@ msgid ""
 "press the Change button to enter a new shortcut, or double click on an "
 "action to edit the string representation of the shortcut directly."
 msgstr ""
-"Disini Anda bisa mengubah shortcut keyboard untuk berbagai macam operasi. "
+"Di sini Anda bisa mengubah shortcut keyboard untuk berbagai macam operasi. "
 "Pilihlah satu key lalu tekan tombol Ubah untuk menetapkan shortcut baru, "
 "atau bisa juga dengan mengklik ganda pada operasi yang diinginkan untuk "
 "mengganti shortcut yang telah ada secara langsung."
@@ -4360,7 +4360,7 @@ msgid ""
 "regular expressions, please read the documentation."
 msgstr ""
 "Pakai regex yang berbasiskan POSIX. Untuk informasi lebih lengkap tentang "
-"penggunaan regex, silahkan membaca dokumentasi terkait."
+"penggunaan regex, silakan membaca dokumentasi terkait."
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -5115,7 +5115,7 @@ msgstr "Cari teks yang diketik pada berkas ini"
 
 #: ../src/toolbar.c:80 ../src/toolbar.c:394
 msgid "Jump to the entered line number"
-msgstr "Lompat ke nomer baris yang dimasukkan"
+msgstr "Lompat ke nomor baris yang dimasukkan"
 
 #: ../src/toolbar.c:81
 msgid "Show the preferences dialog"
@@ -5740,12 +5740,12 @@ msgstr "Ekspor Berkas"
 
 #: ../plugins/export.c:187
 msgid "_Insert line numbers"
-msgstr "Sel_ipkan nomer baris"
+msgstr "Sel_ipkan nomor baris"
 
 #: ../plugins/export.c:189
 msgid "Insert line numbers before each line in the exported document"
 msgstr ""
-"Selipkan nomer baris sebelum masing=masing baris pada dokumen yang diekspor"
+"Selipkan nomor baris sebelum masing=masing baris pada dokumen yang diekspor"
 
 #: ../plugins/export.c:199
 msgid "_Use current zoom level"
@@ -5979,7 +5979,7 @@ msgstr "_Direktori untuk menyimpan berkas backup:"
 #: ../plugins/saveactions.c:753
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Format _tanggal/waktu untuk berkas backup (detilnya lihat \"man strftime\"):"
+"Format _tanggal/waktu untuk berkas backup (detailnya lihat \"man strftime\"):"
 
 #: ../plugins/saveactions.c:766
 msgid "Directory _levels to include in the backup destination:"
