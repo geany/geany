@@ -200,8 +200,18 @@ Coding
   moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
-* Variables should be declared before statements. You can use
-  gcc's -Wdeclaration-after-statement to warn about this.
+* Variables should be declared (and initialized) as close as practical
+  to their first use. This reduces the chances of intervening code being
+  inserted between declaration and use, where the variable may be
+  uninitialized.
+* Variables should be defined within the smallest scope that is practical,
+  for example inside a conditional branch which uses them or in the
+  initialization part of a for loop.
+* Local variables that will not be modified should be marked as ``const``
+  to indicate intention. This allows the compiler to give a warning if
+  part of the code accidentally tries to change the value. This does not
+  apply to non-pointer parameters where it needlessly exposes the
+  implementation and it's obvious a copy is made anyway.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
