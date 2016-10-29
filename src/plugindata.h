@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 229
+#define GEANY_API_VERSION 230
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -400,7 +400,7 @@ struct GeanyProxyFuncs
 	void		(*unload)    (GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata);
 };
 
-gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
+gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **patterns);
 
 /* Deprecated aliases */
 #ifndef GEANY_DISABLE_DEPRECATED

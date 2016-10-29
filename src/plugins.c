@@ -85,8 +85,8 @@ static gchar *get_plugin_path(void);
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
 typedef struct {
-	gchar		extension[8];
-	Plugin		*plugin; /* &builtin_so_proxy_plugin for native plugins */
+	GPatternSpec *glob;
+	Plugin       *plugin; /* &builtin_so_proxy_plugin for native plugins */
 } PluginProxy;
 
 
@@ -102,7 +102,7 @@ static Plugin builtin_so_proxy_plugin = {
 };
 
 static PluginProxy builtin_so_proxy = {
-	.extension = G_MODULE_SUFFIX,
+	.glob = NULL,
 	.plugin = &builtin_so_proxy_plugin,
 };
 
@@ -942,6 +942,17 @@ static void free_subplugins(Plugin *proxy)
 }
 
 
+static void free_plugin_proxy(PluginProxy *p)
+{
+	if (p->glob != NULL)
+		g_pattern_spec_free(p->glob);
+	if (p != &builtin_so_proxy)
+		g_slice_free(PluginProxy, p);
+	else
+		p->glob = NULL;
+}
+
+
 /* Returns true if the removal was successful (=> never for non-proxies) */
 static gboolean unregister_proxy(Plugin *proxy)
 {
@@ -949,7 +960,7 @@ static gboolean unregister_proxy(Plugin *proxy)
 	GList *node;
 
 	/* Remove the proxy from the proxy list first. It might appear more than once (once
-	 * for each extension), but if it doesn't appear at all it's not actually a proxy */
+	 * for each pattern), but if it doesn't appear at all it's not actually a proxy */
 	foreach_list_safe(node, active_proxies.head)
 	{
 		PluginProxy *p = node->data;
@@ -957,6 +968,7 @@ static gboolean unregister_proxy(Plugin *proxy)
 		{
 			is_proxy = TRUE;
 			g_queue_delete_link(&active_proxies, node);
+			free_plugin_proxy(p);
 		}
 	}
 	return is_proxy;
@@ -1058,23 +1070,13 @@ static gboolean check_plugin_path(const gchar *fname)
 static PluginProxy* is_plugin(const gchar *file)
 {
 	GList *node;
-	const gchar *ext;
 
-	/* extract file extension to avoid g_str_has_suffix() in the loop */
-	ext = (const gchar *)strrchr(file, '.');
-	if (ext == NULL)
-		return FALSE;
-	/* ensure the dot is really part of the filename */
-	else if (strchr(ext, G_DIR_SEPARATOR) != NULL)
-		return FALSE;
-
-	ext += 1;
-	/* O(n*m), (m being extensions per proxy) doesn't scale very well in theory
+	/* O(n*m), (m being patterns per proxy) doesn't scale very well in theory
 	 * but not a problem in practice yet */
 	foreach_list(node, active_proxies.head)
 	{
 		PluginProxy *proxy = node->data;
-		if (utils_str_casecmp(ext, proxy->extension) == 0)
+		if (g_pattern_match(proxy->glob, strlen(file), file, NULL))
 		{
 			Plugin *p = proxy->plugin;
 			gint ret = GEANY_PROXY_MATCH;
@@ -1328,6 +1330,7 @@ void plugins_init(void)
 {
 	StashGroup *group;
 	gchar *path;
+	gchar *builtin_proxy_glob;
 
 	path = get_plugin_path();
 	geany_debug("System plugin path: %s", path);
@@ -1343,6 +1346,10 @@ void plugins_init(void)
 
 	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
+
+	builtin_proxy_glob = g_strconcat("*.", G_MODULE_SUFFIX, NULL);
+	builtin_so_proxy.glob = g_pattern_spec_new(builtin_proxy_glob);
+	g_free(builtin_proxy_glob);
 
 	g_queue_push_head(&active_proxies, &builtin_so_proxy);
 }
@@ -1371,6 +1378,9 @@ void plugins_finalize(void)
 		g_list_foreach(active_plugin_list, (GFunc) plugin_free_leaf, NULL);
 
 	g_strfreev(active_plugins_pref);
+
+	if (builtin_so_proxy.glob != NULL)
+		g_pattern_spec_free(builtin_so_proxy.glob);
 }
 
 
@@ -2005,24 +2015,12 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static const gchar *fix_extension(const gchar *ext)
-{
-	if (*ext == '.')
-	{
-		g_warning(_("Proxy plugin extension '%s' starts with a dot, "
-			"stripping. Please fix your proxy plugin."), ext);
-		ext++;
-	}
-	return ext;
-}
-
-
 /** Register the plugin as a proxy for other plugins
  *
- * Proxy plugins register a list of file extensions and a set of callbacks that are called
- * appropriately. A plugin can be a proxy for multiple types of sub-plugins by handling
- * separate file extensions, however they must share the same set of hooks, because this
- * function can only be called at most once per plugin.
+ * Proxy plugins register a list of filename glob-style patterns and a set of
+ * callbacks that are called appropriately. A plugin can be a proxy for multiple types of
+ * sub-plugins by handling separate filename patterns, however they must share the same
+ * set of hooks, because this function can only be called at most once per plugin.
  *
  * Each callback receives the plugin-defined data as parameter (see geany_plugin_register()). The
  * callbacks must be set prior to calling this, by assigning to @a plugin->proxy_funcs.
@@ -2034,43 +2032,58 @@ static const gchar *fix_extension(const gchar *ext)
  * can naturally call Geany's API directly, for interpreted languages the proxy has to
  * implement some kind of bindings that the plugin can use.
  *
- * @see proxy for detailed documentation and an example.
+ * @note Prior to Geany 1.29 (API 230) this function only accepted file extensions (excluding
+ * the dot) as the second parameter but has now been changed to accept glob-style patterns
+ * for more flexibility. Plugins using the previous semantics should update their array of
+ * extensions to use patterns such as `*.plugin` instead of just `plugin` to get the same results.
+ *
+ * @note Since Geany 1.29 (API 230) the @a patterns parameter can be @c NULL. If it is, then
+ * the proxy plugin's probe function will be called for every file in the plugin search dirs.
+ * Proxy plugins passing @c NULL should be sure not to spend too much time probing since they
+ * will get called against a potentially large number of files.
  *
  * @param plugin The pointer to the plugin's GeanyPlugin instance
- * @param extensions A @c NULL-terminated string array of file extensions, excluding the dot.
+ * @param patterns A @c NULL-terminated string array of glob-style patterns or @c NULL for all files.
  * @return @c TRUE if the proxy was successfully registered, otherwise @c FALSE
  *
- * @since 1.26 (API 226)
+ * @since 1.26 (API 226) (see notes)
+ *
+ * @see proxy for detailed documentation and an example.
+ * @see Glib's <a href="https://developer.gnome.org/glib/stable/glib-Glob-style-pattern-matching.html">Glob-style
+ * pattern matching</a> reference for more details on the the syntax of the patterns.
  */
 GEANY_API_SYMBOL
-gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions)
+gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **patterns)
 {
 	Plugin *p;
-	const gchar **ext;
+	const gchar **pattern;
 	PluginProxy *proxy;
 	GList *node;
+	static const gchar *all_patterns[] = { "*", NULL };
 
 	g_return_val_if_fail(plugin != NULL, FALSE);
-	g_return_val_if_fail(extensions != NULL, FALSE);
-	g_return_val_if_fail(*extensions != NULL, FALSE);
+	g_return_val_if_fail(patterns == NULL || *patterns != NULL, FALSE);
 	g_return_val_if_fail(plugin->proxy_funcs->load != NULL, FALSE);
 	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
 
 	p = plugin->priv;
 	/* Check if this was called already. We want to reserve for the use case of calling
-	 * this again to set new supported extensions (for example, based on proxy configuration). */
+	 * this again to set new supported patterns (for example, based on proxy configuration). */
 	foreach_list(node, active_proxies.head)
 	{
 		proxy = node->data;
 		g_return_val_if_fail(p != proxy->plugin, FALSE);
 	}
 
-	foreach_strv(ext, extensions)
+	if (patterns == NULL)
+		patterns = all_patterns;
+
+	foreach_strv(pattern, patterns)
 	{
-		proxy = g_new(PluginProxy, 1);
-		g_strlcpy(proxy->extension, fix_extension(*ext), sizeof(proxy->extension));
+		proxy = g_slice_new(PluginProxy);
+		proxy->glob = g_pattern_spec_new(*pattern);
 		proxy->plugin = p;
-		/* prepend, so that plugins automatically override core providers for a given extension */
+		/* prepend, so that plugins automatically override core providers for a given pattern */
 		g_queue_push_head(&active_proxies, proxy);
 	}
 

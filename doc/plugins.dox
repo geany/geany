@@ -750,9 +750,9 @@ To Geany they are first-class citizens.
 The basic idea is that a proxy plugin provides methods to match, load and unload one or more
 sub-plugin plugins in an abstract manner:
 
- - Matching consists of providing a list of supported file extensions for the sub-plugins and
-   a mechanism to resolve file extension uncertainty or ambiguity. The matching makes the plugin
-   visible to the user within the Plugin Manager.
+ - Matching consists of providing a list of supported glob-style filename patterns for the sub-plugins
+   and a mechanism to resolve filename pattern-matching uncertainty or ambiguity. The matching makes
+   the plugin visible to the user within the Plugin Manager.
  - Loading consists of loading the sub-plugin's file, passing the file to some form of interpreter
    and calling GEANY_PLUGIN_REGISTER() or GEANY_PLUGIN_REGISTER_FULL() on behalf of the sub-plugin
    at some point.
@@ -762,11 +762,11 @@ For providing these methods, GeanyPlugin has a field GeanyProxyFuncs which conta
 pointers which must be initialized prior to calling geany_plugin_register_proxy(). This should be
 done in the GeanyPluginFuncs::init function of the proxy plugin.
 
- - In the call to geany_plugin_register_proxy() the proxy plugin passes a list of file extensions.
-   When Geany scans through its plugin directories as usual it will also look for files with
-   that extensions and consider found files as plugin candidate.
- - GeanyProxyFuncs::probe may be implemented to probe if a plugin candidate (that has one of the
-   provided file extensions) is actually a plugin. This may depend on the plugin file itself in
+ - In the call to geany_plugin_register_proxy() the proxy plugin passes a list of glob-style
+   filename patterns. When Geany scans through its plugin directories as usual it will also look
+   for files matching those patterns and consider found files as plugin candidate.
+ - GeanyProxyFuncs::probe may be implemented to probe if a plugin candidate (that matches one of the
+   provided filename patterns) is actually a plugin. This may depend on the plugin file itself in
    case of ambiguity or availability of runtime dependencies or even configuration.
    @ref GeanyProxyProbeResults constants should be returned. Not implementing GeanyProxyFuncs::probe
    at all is equivalent to always returning @ref GEANY_PROXY_MATCH.
@@ -803,15 +803,15 @@ each should be handled differently in order to give the user a consistent feedba
 
 Consider the 5 basic cases:
 
-1) A candidate comes with a suitable file extension but is not a workable plugin file at all. For
-example, your proxy supports plugins written in a shell script (.sh) but the shebang of that script
-points to an incompatible shell (or even lacks a shebang). You should check for this in
-GeanyProxyFuncs::probe() and return @ref GEANY_PROXY_IGNORE which hides that script from the Plugin
-Manager and allows other enabled proxy plugins to pick it up. GeanyProxyFuncs::probe() returning
-@ref GEANY_PROXY_IGNORE is an indication that the candidate is meant for another proxy, or the user
-placed the file by accident in one of Geany's plugin directories. In other words the candidate
-simply doesn't correspond to your proxy. Thus any noise by debug messages for this case is
-undesirable.
+1) A candidate comes with a suitable filename that matches one of the registered patterns but is
+not a workable plugin file at all. For example, your proxy supports plugins written in a shell
+script (`*.sh`) but the shebang of that script points to an incompatible shell (or even lacks a shebang).
+You should check for this in GeanyProxyFuncs::probe() and return @ref GEANY_PROXY_IGNORE which hides
+that script from the Plugin Manager and allows other enabled proxy plugins to pick it up.
+GeanyProxyFuncs::probe() returning @ref GEANY_PROXY_IGNORE is an indication that the candidate is meant
+for another proxy, or the user placed the file by accident in one of Geany's plugin directories. In other
+words the candidate simply doesn't correspond to your proxy. Thus any noise by debug messages for this
+case is undesirable.
 
 2) A proxy plugin provides its own, versioned API to sub-plugin. The API version of the sub-plugin
 is not compatible with the API exposed by the proxy. GeanyProxyFuncs::probe() should never perform
@@ -929,19 +929,19 @@ void geany_load_module(GeanyPlugin *plugin)
 @endcode
 
 The next step is to actually register as a proxy plugin. This is done in demoproxy_init().
-As previously mentioned, it needs a list of accepted file extensions and a set of callback
+As previously mentioned, it needs a list of accepted filename patterns and a set of callback
 functions.
 
 @code{.c}
 static gboolean demoproxy_init(GeanyPlugin *plugin, gpointer pdata)
 {
-	const gchar *extensions[] = { "ini", "px", NULL };
+	const gchar *patterns[] = { "*.ini", "*.px", NULL };
 
 	plugin->proxy_funcs->probe  = demoproxy_probe;
 	plugin->proxy_funcs->load   = demoproxy_load;
 	plugin->proxy_funcs->unload = demoproxy_unload;
 
-	return geany_plugin_register_proxy(plugin, extensions);
+	return geany_plugin_register_proxy(plugin, patterns);
 }
 
 @endcode
@@ -955,8 +955,9 @@ Plugin Manager if not.
 @code{.c}
 static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer pdata)
 {
-	/* We know the extension is right (Geany checks that). For demo purposes we perform an
-	 * additional check. This is not necessary when the extension is unique enough. */
+	/* We know the filename matches one of the registered patterns (Geany checks that).
+	 * For demo purposes we perform an additional check. This is not necessary when 
+	 * the pattern-match is unique-enough (ex. `*.my_proxy.plugin`). */
 	gboolean match = FALSE;
 	gchar linebuf[128];
 	FILE *f = fopen(filename, "r");

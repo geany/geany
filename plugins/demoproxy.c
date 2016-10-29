@@ -105,8 +105,9 @@ static void proxy_cleanup(GeanyPlugin *plugin, gpointer pdata)
 
 static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer pdata)
 {
-	/* We know the extension is right (Geany checks that). For demo purposes we perform an
-	 * additional check. This is not necessary when the extension is unique enough. */
+	/* We know the filename matches one of the registered patterns (Geany checks that).
+	 * For demo purposes we perform an additional check. This is not necessary when 
+	 * the pattern-match is unique-enough (ex. `*.my_proxy.plugin`). */
 	gboolean match = FALSE;
 	gchar linebuf[128];
 	FILE *f = fopen(filename, "r");
@@ -171,13 +172,13 @@ static void demoproxy_unload(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer l
 /* Called by Geany to initialize the plugin. */
 static gboolean demoproxy_init(GeanyPlugin *plugin, gpointer pdata)
 {
-	const gchar *extensions[] = { "ini", "px", NULL };
+	const gchar *patterns[] = { "*.ini", "*.px", NULL };
 
 	plugin->proxy_funcs->probe  = demoproxy_probe;
 	plugin->proxy_funcs->load   = demoproxy_load;
 	plugin->proxy_funcs->unload = demoproxy_unload;
 
-	return geany_plugin_register_proxy(plugin, extensions);
+	return geany_plugin_register_proxy(plugin, patterns);
 }
 
 
