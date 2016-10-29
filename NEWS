@@ -18,6 +18,7 @@ Geany 1.29 (unreleased)
       (Abel Serrano Juste, PR#1134).
     * Performance improvements with many duplicate symbols (Jiří Techet,
       PR#797, Issue#577).
+    * Allow to configure the error indicator color (PR#1185).
 
     Filetypes
     * Fix highlighting of Haxe preprocessor (Issue#936).
@@ -28,10 +29,16 @@ Geany 1.29 (unreleased)
 
     API
     * Update `GeanyProxyProbeResults` API (PR#1213).
-    * Allow a dot at the start of proxy extensions (PR#1212).
+    * Warn if a dot is used at the start of a proxy extension (PR#1212,
+      PR#1233).
     * Add support for custom data attached to documents through
       `plugin_set_document_data()`, `plugin_get_document_data()` and
       `plugin_set_document_data_full()` (PR#1203).
+    * Add "project-before-close" signal (PR#1223).
+
+    Plugins
+    * Split Window: Work around a GTK bug present from 3.15.9 to 3.21.4
+      that breaks the document selection popup (Issue#1149, PR#1272).
 
 
 Geany 1.28 (July 10, 2016)
