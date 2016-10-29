@@ -50,6 +50,7 @@
 #include "prefs.h"
 #include "printing.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "spawn.h"
 #ifdef HAVE_SOCKET
@@ -611,79 +612,47 @@ static void on_show_toolbar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer u
 }
 
 
-static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+/* Once the window is shown on the screen, then potentially make it
+ * fullscreen. This allows it to return a normal size when it is
+ * unfullscreened. */
+static void on_window1_map_event(GtkWidget *widget, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
-
-	ui_prefs.fullscreen = (ui_prefs.fullscreen) ? FALSE : TRUE;
-	ui_set_fullscreen();
+	if (settings_get_bool("fullscreen"))
+		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
+	else
+		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
 }
 
 
-static void on_show_messages_window1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
+static void on_fullscreen1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
+	if (gtk_widget_get_mapped(main_widgets.window))
+	{
+		if (gtk_check_menu_item_get_active(checkmenuitem))
+			gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
+		else
+			gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
+	}
+}
 
-	ui_prefs.msgwindow_visible = (ui_prefs.msgwindow_visible) ? FALSE : TRUE;
-	msgwin_show_hide(ui_prefs.msgwindow_visible);
+
+void on_notebook3_hide(GtkWidget *widget, gpointer user_data)
+{
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
+}
+
+
+void on_notebook_info_hide(GtkWidget *widget, gpointer user_data)
+{
+	/* set the input focus back to the editor */
+	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 
 static void on_menu_color_schemes_activate(GtkImageMenuItem *imagemenuitem, gpointer user_data)
 {
 	highlighting_show_color_scheme_dialog();
-}
-
-
-static void on_markers_margin1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_markers_margin = ! editor_prefs.show_markers_margin;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_MARKERS_MARGIN);
-}
-
-
-static void on_show_line_numbers1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_linenumber_margin = ! editor_prefs.show_linenumber_margin;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_NUMBERS);
-}
-
-
-static void on_menu_show_white_space1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_white_space = ! editor_prefs.show_white_space;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_WHITE_SPACE);
-}
-
-
-static void on_menu_show_line_endings1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_line_endings = ! editor_prefs.show_line_endings;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_LINE_ENDINGS);
-}
-
-
-static void on_menu_show_indentation_guides1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
-{
-	if (ignore_callback)
-		return;
-
-	editor_prefs.show_indent_guide = ! editor_prefs.show_indent_guide;
-	ui_toggle_editor_features(GEANY_EDITOR_SHOW_INDENTATION_GUIDES);
 }
 
 
@@ -1209,28 +1178,13 @@ void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data)
 {
-	if (ignore_callback)
-		return;
-
-	ui_prefs.sidebar_visible = ! ui_prefs.sidebar_visible;
-
 	/* show built-in tabs if no tabs visible */
-	if (ui_prefs.sidebar_visible &&
-		! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
-		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
+	if (gtk_check_menu_item_get_active(checkmenuitem) &&
+		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) == 0)
 	{
-		interface_prefs.sidebar_openfiles_visible = TRUE;
-		interface_prefs.sidebar_symbol_visible = TRUE;
+		settings_set_bool("sidebar-documents-visible", TRUE);
+		settings_set_bool("sidebar-symbols-visible", TRUE);
 	}
-
-	/* if window has input focus, set it back to the editor before toggling off */
-	if (! ui_prefs.sidebar_visible &&
-		gtk_container_get_focus_child(GTK_CONTAINER(main_widgets.sidebar_notebook)) != NULL)
-	{
-		keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
-	}
-
-	ui_sidebar_show_hide();
 }
 
 
@@ -1507,7 +1461,7 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 	if (G_UNLIKELY(hide_all == -1))
 	{
 		if (! gtk_check_menu_item_get_active(msgw) &&
-			! interface_prefs.show_notebook_tabs &&
+			! settings_get_bool("document-tabs-visible") &&
 			! gtk_check_menu_item_get_active(toolbari))
 		{
 			hide_all = TRUE;
@@ -1523,10 +1477,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		interface_prefs.show_notebook_tabs = FALSE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
-
-		ui_statusbar_showhide(FALSE);
+		settings_set_bool("document-tabs-visible", FALSE);
+		settings_set_bool("statusbar-visible", FALSE);
 
 		if (gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1537,10 +1489,8 @@ void on_menu_toggle_all_additional_widgets1_activate(GtkMenuItem *menuitem, gpoi
 		if (! gtk_check_menu_item_get_active(msgw))
 			gtk_check_menu_item_set_active(msgw, ! gtk_check_menu_item_get_active(msgw));
 
-		interface_prefs.show_notebook_tabs = TRUE;
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
-
-		ui_statusbar_showhide(TRUE);
+		settings_set_bool("document-tabs-visible", TRUE);
+		settings_set_bool("statusbar-visible", TRUE);
 
 		if (! gtk_check_menu_item_get_active(toolbari))
 			gtk_check_menu_item_set_active(toolbari, ! gtk_check_menu_item_get_active(toolbari));
@@ -1716,27 +1666,6 @@ void on_send_selection_to_vte1_activate(GtkMenuItem *menuitem, gpointer user_dat
 	if (vte_info.have_vte)
 		vte_send_selection_to_vte();
 #endif
-}
-
-
-static gboolean on_window_state_event(GtkWidget *widget, GdkEventWindowState *event, gpointer user_data)
-{
-
-	if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
-	{
-		static GtkWidget *menuitem = NULL;
-
-		if (menuitem == NULL)
-			menuitem = ui_lookup_widget(widget, "menu_fullscreen1");
-
-		ignore_callback = TRUE;
-
-		ui_prefs.fullscreen = (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? TRUE : FALSE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(menuitem), ui_prefs.fullscreen);
-
-		ignore_callback = FALSE;
-	}
-	return FALSE;
 }
 
 
@@ -1924,6 +1853,12 @@ static void on_detect_width_from_file_activate(GtkMenuItem *menuitem, gpointer u
 		editor_set_indent_width(doc->editor, width);
 		ui_document_show_hide(doc);
 	}
+}
+
+
+static void on_statusbar_show(GtkWidget *widget, gpointer user_data)
+{
+	ui_update_statusbar(NULL, -1);
 }
 
 

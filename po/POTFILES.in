@@ -2,6 +2,7 @@
 
 geany.desktop.in
 data/geany.glade
+data/org.geany.Settings.gschema.xml
 src/about.c
 src/build.c
 src/callbacks.c

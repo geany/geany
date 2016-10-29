@@ -36,6 +36,7 @@
 #include "geanyobject.h"
 #include "keyfile.h"
 #include "navqueue.h"
+#include "settings.h"
 #include "stash.h"
 #include "support.h"
 #include "symbols.h"
@@ -111,6 +112,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	GtkCellRenderer *text_renderer, *icon_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
+	gchar *font_name;
 
 	text_renderer = gtk_cell_renderer_text_new();
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
@@ -128,7 +130,9 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
-	ui_widget_modify_font_from_string(tree, interface_prefs.tagbar_font);
+	font_name = settings_get_string("symbols-font");
+	ui_widget_modify_font_from_string(tree, font_name);
+	g_free(font_name);
 
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
 	g_object_unref(store);
@@ -138,9 +142,6 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(tree, "key-press-event",
 		G_CALLBACK(sidebar_key_press_cb), NULL);
 
-	gtk_tree_view_set_show_expanders(GTK_TREE_VIEW(tree), interface_prefs.show_symbol_list_expanders);
-	if (! interface_prefs.show_symbol_list_expanders)
-		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 	/* Tooltips */
 	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
 
@@ -281,6 +282,7 @@ static void prepare_openfiles(void)
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *selection;
 	GtkTreeSortable *sortable;
+	gchar *font_name;
 
 	tv.tree_openfiles = ui_lookup_widget(main_widgets.window, "treeview6");
 
@@ -317,7 +319,9 @@ static void prepare_openfiles(void)
 	gtk_tree_sortable_set_sort_func(sortable, DOCUMENTS_SHORTNAME, documents_sort_func, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id(sortable, DOCUMENTS_SHORTNAME, GTK_SORT_ASCENDING);
 
-	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
+	font_name = settings_get_string("symbols-font");
+	ui_widget_modify_font_from_string(tv.tree_openfiles, font_name);
+	g_free(font_name);
 
 	/* tooltips */
 	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
@@ -570,15 +574,14 @@ void sidebar_remove_document(GeanyDocument *doc)
 
 static void on_hide_sidebar(void)
 {
-	ui_prefs.sidebar_visible = FALSE;
-	ui_sidebar_show_hide();
+	settings_set_bool("sidebar-visible", FALSE);
 }
 
 
 static gboolean on_sidebar_display_symbol_list_show(GtkWidget *item)
 {
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		interface_prefs.sidebar_symbol_visible);
+		settings_get_bool("sidebar-symbols-visible"));
 	return FALSE;
 }
 
@@ -586,7 +589,7 @@ static gboolean on_sidebar_display_symbol_list_show(GtkWidget *item)
 static gboolean on_sidebar_display_open_files_show(GtkWidget *item)
 {
 	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
-		interface_prefs.sidebar_openfiles_visible);
+		settings_get_bool("sidebar-documents-visible"));
 	return FALSE;
 }
 
@@ -641,16 +644,18 @@ static void on_openfiles_show_paths_activate(GtkCheckMenuItem *item, gpointer us
 
 static void on_list_document_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	interface_prefs.sidebar_openfiles_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	gboolean active = gtk_check_menu_item_get_active(item);
+	settings_set_bool("sidebar-documents-visible", active);
+	gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow7"), active);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
 
 static void on_list_symbol_activate(GtkCheckMenuItem *item, gpointer user_data)
 {
-	interface_prefs.sidebar_symbol_visible = gtk_check_menu_item_get_active(item);
-	ui_sidebar_show_hide();
+	gboolean active = gtk_check_menu_item_get_active(item);
+	settings_set_bool("sidebar-symbols-visible", active);
+	gtk_widget_set_visible(ui_lookup_widget(main_widgets.window, "scrolledwindow2"), active);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
 
@@ -1074,7 +1079,6 @@ static void on_load_settings(void)
 	tag_window = ui_lookup_widget(main_widgets.window, "scrolledwindow2");
 
 	prepare_openfiles();
-	/* note: ui_prefs.sidebar_page is reapplied after plugins are loaded */
 	stash_group_display(stash_group, NULL);
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }
@@ -1101,8 +1105,6 @@ void sidebar_init(void)
 
 	group = stash_group_new(PACKAGE);
 	stash_group_add_boolean(group, &documents_show_paths, "documents_show_paths", TRUE);
-	stash_group_add_widget_property(group, &ui_prefs.sidebar_page, "sidebar_page", GINT_TO_POINTER(0),
-		main_widgets.sidebar_notebook, "page", 0);
 	configuration_add_pref_group(group, FALSE);
 	stash_group = group;
 
@@ -1139,9 +1141,39 @@ void sidebar_finalize(void)
 }
 
 
+void sidebar_set_position_left(gboolean left)
+{
+	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
+
+	g_object_ref(main_widgets.sidebar_notebook);
+	g_object_ref(main_widgets.notebook);
+
+	gtk_container_remove(GTK_CONTAINER (pane), main_widgets.sidebar_notebook);
+	gtk_container_remove(GTK_CONTAINER (pane), main_widgets.notebook);
+
+	if (left)
+	{
+		gtk_paned_pack1(GTK_PANED(pane), main_widgets.sidebar_notebook, FALSE, TRUE);
+		gtk_paned_pack2(GTK_PANED(pane), main_widgets.notebook, TRUE, TRUE);
+	}
+	else
+	{
+		gtk_paned_pack1(GTK_PANED(pane), main_widgets.notebook, TRUE, TRUE);
+		gtk_paned_pack2(GTK_PANED(pane), main_widgets.sidebar_notebook, FALSE, TRUE);
+	}
+
+	g_object_unref(main_widgets.sidebar_notebook);
+	g_object_unref(main_widgets.notebook);
+
+	gtk_paned_set_position(GTK_PANED(pane),
+		gtk_widget_get_allocated_width(pane) - gtk_paned_get_position(GTK_PANED(pane)));
+}
+
+
 void sidebar_focus_openfiles_tab(void)
 {
-	if (ui_prefs.sidebar_visible && interface_prefs.sidebar_openfiles_visible)
+	if (settings_get_bool("sidebar-visible") && 
+		settings_get_bool("sidebar-documents-visible"))
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 
@@ -1153,7 +1185,8 @@ void sidebar_focus_openfiles_tab(void)
 
 void sidebar_focus_symbols_tab(void)
 {
-	if (ui_prefs.sidebar_visible && interface_prefs.sidebar_symbol_visible)
+	if (settings_get_bool("sidebar-visible") && 
+		settings_get_bool("sidebar-symbols-visible"))
 	{
 		GtkNotebook *notebook = GTK_NOTEBOOK(main_widgets.sidebar_notebook);
 		GtkWidget *symbol_list_scrollwin = gtk_notebook_get_nth_page(notebook, TREEVIEW_SYMBOL);
@@ -1167,12 +1200,5 @@ void sidebar_focus_symbols_tab(void)
 static void sidebar_tabs_show_hide(GtkNotebook *notebook, GtkWidget *child,
 								   guint page_num, gpointer data)
 {
-	gint tabs = gtk_notebook_get_n_pages(notebook);
-
-	if (interface_prefs.sidebar_symbol_visible == FALSE)
-		tabs--;
-	if (interface_prefs.sidebar_openfiles_visible == FALSE)
-		tabs--;
-
-	gtk_notebook_set_show_tabs(notebook, (tabs > 1));
+	gtk_notebook_set_show_tabs(notebook, (gtk_notebook_get_n_pages(notebook) > 1));
 }

@@ -41,6 +41,7 @@
 #include "main.h"
 #include "navqueue.h"
 #include "prefs.h"
+#include "settings.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -90,15 +91,6 @@ static GtkWidget *create_message_popup_menu(gint type);
 static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *event,
 																			gpointer user_data);
 static void on_scribble_populate(GtkTextView *textview, GtkMenu *arg1, gpointer user_data);
-
-
-void msgwin_show_hide_tabs(void)
-{
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_status), interface_prefs.msgwin_status_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_compiler), interface_prefs.msgwin_compiler_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.tree_msg), interface_prefs.msgwin_messages_visible);
-	ui_widget_show_hide(gtk_widget_get_parent(msgwindow.scribble), interface_prefs.msgwin_scribble_visible);
-}
 
 
 /** Sets the Messages path for opening any parsed filenames without absolute path
@@ -316,7 +308,8 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
 		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
 
-	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
+	if (settings_get_bool("msgwin-visible") &&
+		interface_prefs.compiler_tab_autoscroll)
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(GTK_TREE_VIEW(msgwindow.tree_compiler)), &iter);
@@ -331,20 +324,6 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 
 	if (utf8_msg != msg)
 		g_free(utf8_msg);
-}
-
-
-void msgwin_show_hide(gboolean show)
-{
-	ui_prefs.msgwindow_visible = show;
-	ignore_callback = TRUE;
-	gtk_check_menu_item_set_active(
-		GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")),
-		show);
-	ignore_callback = FALSE;
-	ui_widget_show_hide(main_widgets.message_window_notebook, show);
-	/* set the input focus back to the editor */
-	keybindings_send_command(GEANY_KEY_GROUP_FOCUS, GEANY_KEYS_FOCUS_EDITOR);
 }
 
 
@@ -385,8 +364,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gsize len;
 	gchar *utf8_msg;
 
-	if (! ui_prefs.msgwindow_visible)
-		msgwin_show_hide(TRUE);
+	settings_set_bool("msgwin-visible", TRUE);
 
 	/* work around a strange problem when adding very long lines(greater than 4000 bytes)
 	 * cut the string to a maximum of 1024 bytes and discard the rest */
@@ -563,7 +541,7 @@ static void on_compiler_treeview_copy_all_activate(GtkMenuItem *menuitem, gpoint
 static void
 on_hide_message_window(GtkMenuItem *menuitem, gpointer user_data)
 {
-	msgwin_show_hide(FALSE);
+	settings_set_bool("msgwin-visible", FALSE);
 }
 
 
@@ -1232,7 +1210,7 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 	/* the msgwin must be visible before we switch to the VTE page so that
 	 * the font settings are applied on realization */
 	if (show)
-		msgwin_show_hide(TRUE);
+		settings_set_bool("msgwin-visible", TRUE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), tabnum);
 	if (show && widget)
 		gtk_widget_grab_focus(widget);

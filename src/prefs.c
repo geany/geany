@@ -47,6 +47,7 @@
 #include "msgwindow.h"
 #include "prefs.h"
 #include "printing.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "stash.h"
 #include "support.h"
@@ -87,11 +88,9 @@ static void kb_change_iter_shortcut(KbData *kbdata, GtkTreeIter *iter, const gch
 static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTreeIter *old_iter,
 		guint key, GdkModifierType mods, const gchar *shortcut);
 static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
-static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void open_preferences_help(void);
@@ -133,6 +132,12 @@ static void prefs_action(PrefCallbackAction action)
 			stash_tree_update(various_treeview);
 			break;
 	}
+}
+
+
+static inline GSettings *prefs_get_settings(void)
+{
+	return G_SETTINGS(g_object_get_data(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings"));
 }
 
 
@@ -436,10 +441,6 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.auto_focus);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget),
-		interface_prefs.use_native_windows_dialogs);
-
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 	gtk_entry_set_text(GTK_ENTRY(widget), tool_prefs.context_action_cmd);
 
@@ -448,23 +449,9 @@ static void prefs_init_dialog(void)
 
 	/* Interface settings */
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), ui_prefs.sidebar_visible);
-	on_sidebar_visible_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_symbol_visible);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.sidebar_openfiles_visible);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.tagbar_font);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.msgwin_font);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font");
-	gtk_font_button_set_font_name(GTK_FONT_BUTTON(widget), interface_prefs.editor_font);
+	g_object_bind_property(widget, "active",
+		ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"),
+		"sensitive", G_BINDING_DEFAULT | G_BINDING_SYNC_CREATE);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_long_line");
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), editor_prefs.long_line_column);
@@ -483,26 +470,10 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &color);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.show_notebook_tabs);
 	/* disable following setting if notebook tabs are hidden */
-	on_show_notebook_tabs_toggled(GTK_TOGGLE_BUTTON(
-					ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs")), NULL);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.show_tab_cross);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_editor);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_msgwin);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(widget), interface_prefs.tab_pos_sidebar);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), interface_prefs.statusbar_visible);
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
+	g_object_bind_property(widget, "active", ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), "sensitive", G_BINDING_SYNC_CREATE);
+	g_object_bind_property(widget, "active", ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), "sensitive", G_BINDING_SYNC_CREATE);
 
 
 	/* Toolbar settings */
@@ -587,21 +558,6 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_replace_tabs");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.replace_tabs);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_indent_guide);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_white_space);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_line_endings);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_linenumber_margin);
-
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.show_markers_margin);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.scroll_stop_at_last_line);
@@ -873,18 +829,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		GtkWidget *widget;
 		guint i;
 		gboolean autoclose_brackets[5];
-		gboolean old_invert_all = interface_prefs.highlighting_invert_all;
-		gboolean old_sidebar_pos = interface_prefs.sidebar_pos;
 		GeanyDocument *doc = document_get_current();
 
 		/* Synchronize Stash settings */
 		prefs_action(PREF_UPDATE);
-
-		if (interface_prefs.highlighting_invert_all != old_invert_all)
-			filetypes_reload();
-
-		if (interface_prefs.sidebar_pos != old_sidebar_pos)
-			ui_swap_sidebar_pos();
 
 		widget = ui_lookup_widget(main_widgets.window, "vpaned1");
 		gtk_orientable_set_orientation(GTK_ORIENTABLE(widget), interface_prefs.msgwin_orientation);
@@ -919,10 +867,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_focus");
 		prefs.auto_focus = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_native_windows_dialogs");
-		interface_prefs.use_native_windows_dialogs =
-			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_contextaction");
 		g_free(tool_prefs.context_action_cmd);
 		tool_prefs.context_action_cmd = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
@@ -931,15 +875,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 
 		/* Interface settings */
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible");
-		ui_prefs.sidebar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_symbol");
-		interface_prefs.sidebar_symbol_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_list_openfiles");
-		interface_prefs.sidebar_openfiles_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_long_line");
 		editor_prefs.long_line_enabled = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -953,23 +888,8 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		if (editor_prefs.long_line_column == 0)
 			editor_prefs.long_line_enabled = FALSE;
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs");
-		interface_prefs.show_notebook_tabs = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross");
 		file_prefs.show_tab_cross = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor");
-		interface_prefs.tab_pos_editor = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_msgwin");
-		interface_prefs.tab_pos_msgwin = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_sidebar");
-		interface_prefs.tab_pos_sidebar = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_statusbar_visible");
-		interface_prefs.statusbar_visible = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 
 		/* Toolbar settings */
@@ -1064,21 +984,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_unfold_children");
 		editor_prefs.unfold_all_children = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_indent");
-		editor_prefs.show_indent_guide = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_white_space");
-		editor_prefs.show_white_space = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_end");
-		editor_prefs.show_line_endings = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_line_numbers");
-		editor_prefs.show_linenumber_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
-
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_markers_margin");
-		editor_prefs.show_markers_margin = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_scroll_stop_at_last_line");
 		editor_prefs.scroll_stop_at_last_line = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1278,17 +1183,12 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 #endif
 
 		/* apply the changes made */
-		ui_statusbar_showhide(interface_prefs.statusbar_visible);
+		g_settings_apply(prefs_get_settings());
+		geany_debug("Applied settings");
 		sidebar_openfiles_update_all(); /* to update if full path setting has changed */
 		toolbar_apply_settings();
 		toolbar_update_ui();
 		toolbar_show_hide();
-		ui_sidebar_show_hide();
-		gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
-
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-		gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
 
 		/* re-colourise all open documents, if tab width or long line settings have changed */
 		for (i = 0; i < documents_array->len; i++)
@@ -1301,11 +1201,9 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			}
 		}
 		ui_document_show_hide(NULL);
-		ui_update_view_editor_menu_items();
 
 		/* various preferences */
 		ui_save_buttons_toggle((doc != NULL) ? doc->changed : FALSE);
-		msgwin_show_hide_tabs();
 		ui_update_statusbar(doc, -1);
 
 		/* store all settings */
@@ -1318,9 +1216,16 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 	}
 	else if (response != GTK_RESPONSE_APPLY)
 	{
+		if (response != GTK_RESPONSE_OK)
+		{
+			g_settings_revert(prefs_get_settings());
+			geany_debug("Reverted settings");
+		}
+		g_object_set_data(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings", NULL);
 		gtk_tree_store_clear(global_kb_data.store);
 		gtk_widget_hide(GTK_WIDGET(dialog));
 	}
+
 }
 
 
@@ -1330,52 +1235,6 @@ static void on_color_button_choose_cb(GtkColorButton *widget, gpointer user_data
 
 	gtk_color_button_get_color(widget, &color);
 	SETPTR(editor_prefs.long_line_color, utils_get_hex_from_color(&color));
-}
-
-
-static void on_prefs_font_choosed(GtkFontButton *widget, gpointer user_data)
-{
-	const gchar *fontbtn = gtk_font_button_get_font_name(widget);
-	guint i;
-
-	switch (GPOINTER_TO_INT(user_data))
-	{
-		case 1:
-		{
-			if (strcmp(fontbtn, interface_prefs.tagbar_font) == 0)
-				break;
-
-			SETPTR(interface_prefs.tagbar_font, g_strdup(fontbtn));
-			for (i = 0; i < documents_array->len; i++)
-			{
-				GeanyDocument *doc = documents[i];
-
-				if (documents[i]->is_valid && GTK_IS_WIDGET(doc->priv->tag_tree))
-					ui_widget_modify_font_from_string(doc->priv->tag_tree,
-						interface_prefs.tagbar_font);
-			}
-			if (GTK_IS_WIDGET(tv.default_tag_tree))
-				ui_widget_modify_font_from_string(tv.default_tag_tree, interface_prefs.tagbar_font);
-			ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
-			break;
-		}
-		case 2:
-		{
-			if (strcmp(fontbtn, interface_prefs.msgwin_font) == 0)
-				break;
-			SETPTR(interface_prefs.msgwin_font, g_strdup(fontbtn));
-			ui_widget_modify_font_from_string(msgwindow.tree_compiler, interface_prefs.msgwin_font);
-			ui_widget_modify_font_from_string(msgwindow.tree_msg, interface_prefs.msgwin_font);
-			ui_widget_modify_font_from_string(msgwindow.tree_status, interface_prefs.msgwin_font);
-			ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
-			break;
-		}
-		case 3:
-		{
-			ui_set_editor_font(fontbtn);
-			break;
-		}
-	}
 }
 
 
@@ -1524,16 +1383,6 @@ static void on_toolbar_show_toggled(GtkToggleButton *togglebutton, gpointer user
 }
 
 
-static void on_show_notebook_tabs_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gboolean sens = gtk_toggle_button_get_active(togglebutton);
-
-	/* tab placement only enabled when tabs are visible */
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "combo_tab_editor"), sens);
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_tab_cross"), sens);
-}
-
-
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1557,14 +1406,6 @@ static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer use
 
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "eventbox3"), sens);
 	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "label_open_encoding"), sens);
-}
-
-
-static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data)
-{
-	gboolean sens = gtk_toggle_button_get_active(togglebutton);
-
-	gtk_widget_set_sensitive(ui_lookup_widget(ui_widgets.prefs_dialog, "box_sidebar_visible_children"), sens);
 }
 
 
@@ -1655,6 +1496,8 @@ static void list_store_append_text(GtkListStore *list, const gchar *text)
 
 void prefs_show_dialog(void)
 {
+	GSettings *settings;
+
 	if (ui_widgets.prefs_dialog == NULL)
 	{
 		GtkListStore *eol_list;
@@ -1768,12 +1611,6 @@ void prefs_show_dialog(void)
 		g_signal_connect(ui_widgets.prefs_dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "tagbar_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(1));
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "msgwin_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(2));
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "editor_font"),
-				"font-set", G_CALLBACK(on_prefs_font_choosed), GINT_TO_POINTER(3));
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "long_line_color"),
 				"color-set", G_CALLBACK(on_color_button_choose_cb), NULL);
 		/* file chooser buttons in the tools tab */
@@ -1811,19 +1648,21 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_enable_plugins_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_toolbar_show"),
 				"toggled", G_CALLBACK(on_toolbar_show_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_show_notebook_tabs"),
-				"toggled", G_CALLBACK(on_show_notebook_tabs_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_folding"),
 				"toggled", G_CALLBACK(on_use_folding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_open_encoding"),
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
-		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible"),
-				"toggled", G_CALLBACK(on_sidebar_visible_toggled), NULL);
 
 		g_signal_connect(ui_widgets.prefs_dialog,
 				"key-press-event", G_CALLBACK(prefs_dialog_key_press_response_cb), NULL);
 	}
 
 	prefs_init_dialog();
+
+	// Create settings just for the prefs and put into delay-apply mode
+	settings = settings_create_for_prefs();
+	g_object_set_data_full(G_OBJECT(ui_widgets.prefs_dialog), "prefs-settings", settings, g_object_unref);
+	g_settings_delay(settings);
+
 	gtk_window_present(GTK_WINDOW(ui_widgets.prefs_dialog));
 }

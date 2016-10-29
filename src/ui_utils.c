@@ -43,6 +43,7 @@
 #include "prefs.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "stash.h"
 #include "support.h"
@@ -140,7 +141,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 	GTimeVal timeval;
 	const gint GEANY_STATUS_TIMEOUT = 1;
 
-	if (! interface_prefs.statusbar_visible)
+	if (! settings_get_bool("statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (id == 0)
@@ -327,7 +328,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 {
 	g_return_if_fail(doc == NULL || doc->is_valid);
 
-	if (! interface_prefs.statusbar_visible)
+	if (! settings_get_bool("statusbar-visible"))
 		return; /* just do nothing if statusbar is not visible */
 
 	if (doc == NULL)
@@ -418,37 +419,43 @@ void ui_set_editor_font(const gchar *font_name)
 
 	g_return_if_fail(font_name != NULL);
 
-	/* do nothing if font has not changed */
-	if (interface_prefs.editor_font != NULL)
-		if (strcmp(font_name, interface_prefs.editor_font) == 0)
-			return;
-
-	g_free(interface_prefs.editor_font);
-	interface_prefs.editor_font = g_strdup(font_name);
-
 	/* We copy the current style, and update the font in all open tabs. */
 	for (i = 0; i < documents_array->len; i++)
 	{
 		if (documents[i]->editor)
 		{
-			editor_set_font(documents[i]->editor, interface_prefs.editor_font);
+			editor_set_font(documents[i]->editor, font_name);
 		}
 	}
 
-	ui_set_statusbar(TRUE, _("Font updated (%s)."), interface_prefs.editor_font);
+	ui_set_statusbar(TRUE, _("Font updated (%s)."), font_name);
 }
 
 
-void ui_set_fullscreen(void)
+void ui_set_symbols_font(const gchar *font_name)
 {
-	if (ui_prefs.fullscreen)
+	guint i;
+
+	g_return_if_fail(font_name != NULL);
+
+	foreach_document(i)
 	{
-		gtk_window_fullscreen(GTK_WINDOW(main_widgets.window));
+		GeanyDocument *doc = documents[i];
+		if (GTK_IS_WIDGET(doc->priv->tag_tree))
+			ui_widget_modify_font_from_string(doc->priv->tag_tree, font_name);
 	}
-	else
-	{
-		gtk_window_unfullscreen(GTK_WINDOW(main_widgets.window));
-	}
+	if (GTK_IS_WIDGET(tv.default_tag_tree))
+		ui_widget_modify_font_from_string(tv.default_tag_tree, font_name);
+	ui_widget_modify_font_from_string(tv.tree_openfiles, font_name);
+}
+
+
+void ui_set_msgwin_font(const gchar *font_name)
+{
+	ui_widget_modify_font_from_string(msgwindow.tree_compiler, font_name);
+	ui_widget_modify_font_from_string(msgwindow.tree_msg, font_name);
+	ui_widget_modify_font_from_string(msgwindow.tree_status, font_name);
+	ui_widget_modify_font_from_string(msgwindow.scribble, font_name);
 }
 
 
@@ -992,35 +999,6 @@ void ui_widget_show_hide(GtkWidget *widget, gboolean show)
 }
 
 
-void ui_sidebar_show_hide(void)
-{
-	GtkWidget *widget;
-
-	/* check that there are no other notebook pages before hiding the sidebar completely
-	 * other pages could be e.g. the file browser plugin */
-	if (! interface_prefs.sidebar_openfiles_visible && ! interface_prefs.sidebar_symbol_visible &&
-		gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) <= 2)
-	{
-		ui_prefs.sidebar_visible = FALSE;
-	}
-
-	widget = ui_lookup_widget(main_widgets.window, "menu_show_sidebar1");
-	if (ui_prefs.sidebar_visible != gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget)))
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), ui_prefs.sidebar_visible);
-		ignore_callback = FALSE;
-	}
-
-	ui_widget_show_hide(main_widgets.sidebar_notebook, ui_prefs.sidebar_visible);
-
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 0), interface_prefs.sidebar_symbol_visible);
-	ui_widget_show_hide(gtk_notebook_get_nth_page(
-		GTK_NOTEBOOK(main_widgets.sidebar_notebook), 1), interface_prefs.sidebar_openfiles_visible);
-}
-
-
 void ui_document_show_hide(GeanyDocument *doc)
 {
 	const gchar *widget_name;
@@ -1425,34 +1403,22 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 		switch (feature)
 		{
 			case GEANY_EDITOR_SHOW_MARKERS_MARGIN:
-				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
+				sci_set_symbol_margin(doc->editor->sci, settings_get_bool("show-markers-margin"));
 				break;
 			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
-				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
+				sci_set_line_numbers(doc->editor->sci, settings_get_bool("show-line-number-margin"));
 				break;
 			case GEANY_EDITOR_SHOW_WHITE_SPACE:
-				sci_set_visible_white_spaces(doc->editor->sci, editor_prefs.show_white_space);
+				sci_set_visible_white_spaces(doc->editor->sci, settings_get_bool("show-white-space"));
 				break;
 			case GEANY_EDITOR_SHOW_LINE_ENDINGS:
-				sci_set_visible_eols(doc->editor->sci, editor_prefs.show_line_endings);
+				sci_set_visible_eols(doc->editor->sci, settings_get_bool("show-line-endings"));
 				break;
 			case GEANY_EDITOR_SHOW_INDENTATION_GUIDES:
 				editor_set_indentation_guides(doc->editor);
 				break;
 		}
 	}
-}
-
-
-void ui_update_view_editor_menu_items(void)
-{
-	ignore_callback = TRUE;
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_markers_margin1")), editor_prefs.show_markers_margin);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_linenumber_margin1")), editor_prefs.show_linenumber_margin);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_white_space1")), editor_prefs.show_white_space);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_line_endings1")), editor_prefs.show_line_endings);
-	gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_indentation_guides1")), editor_prefs.show_indent_guide);
-	ignore_callback = FALSE;
 }
 
 
@@ -1790,7 +1756,7 @@ static gboolean tree_view_find(GtkTreeView *treeview, TVMatchCallback cb, gboole
 			return FALSE;	/* no more items */
 	}
 	/* scroll item in view */
-	if (ui_prefs.msgwindow_visible)
+	if (settings_get_bool("msgwin-visible"))
 	{
 		GtkTreePath *path = gtk_tree_model_get_path(
 			gtk_tree_view_get_model(treeview), &iter);
@@ -1888,6 +1854,8 @@ GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
+
+	g_return_if_fail(str != NULL);
 
 	pfd = pango_font_description_from_string(str);
 	gtk_widget_modify_font(widget, pfd);
@@ -2034,19 +2002,6 @@ static void ui_path_box_open_clicked(GtkButton *button, gpointer user_data)
 		gtk_entry_set_text(GTK_ENTRY(entry), utf8_path);
 		g_free(utf8_path);
 	}
-}
-
-
-void ui_statusbar_showhide(gboolean state)
-{
-	/* handle statusbar visibility */
-	if (state)
-	{
-		gtk_widget_show(ui_widgets.statusbar);
-		ui_update_statusbar(NULL, -1);
-	}
-	else
-		gtk_widget_hide(ui_widgets.statusbar);
 }
 
 
@@ -2209,27 +2164,6 @@ void ui_init_toolbar_widgets(void)
 }
 
 
-void ui_swap_sidebar_pos(void)
-{
-	GtkWidget *pane = ui_lookup_widget(main_widgets.window, "hpaned1");
-	GtkWidget *left = gtk_paned_get_child1(GTK_PANED(pane));
-	GtkWidget *right = gtk_paned_get_child2(GTK_PANED(pane));
-
-	g_object_ref(left);
-	g_object_ref(right);
-	gtk_container_remove (GTK_CONTAINER (pane), left);
-	gtk_container_remove (GTK_CONTAINER (pane), right);
-	/* only scintilla notebook should expand */
-	gtk_paned_pack1(GTK_PANED(pane), right, right == main_widgets.notebook, TRUE);
-	gtk_paned_pack2(GTK_PANED(pane), left, left == main_widgets.notebook, TRUE);
-	g_object_unref(left);
-	g_object_unref(right);
-
-	gtk_paned_set_position(GTK_PANED(pane), gtk_widget_get_allocated_width(pane)
-		- gtk_paned_get_position(GTK_PANED(pane)));
-}
-
-
 static void init_recent_files(void)
 {
 	GtkWidget *toolbar_recent_files_menu;
@@ -2307,8 +2241,6 @@ void ui_init_prefs(void)
 	/* various prefs */
 	configuration_add_various_pref_group(group);
 
-	stash_group_add_boolean(group, &interface_prefs.show_symbol_list_expanders,
-		"show_symbol_list_expanders", TRUE);
 	stash_group_add_boolean(group, &interface_prefs.compiler_tab_autoscroll,
 		"compiler_tab_autoscroll", TRUE);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
@@ -2317,14 +2249,6 @@ void ui_init_prefs(void)
 		"statusbar_template", _(DEFAULT_STATUSBAR_TEMPLATE));
 	stash_group_add_boolean(group, &ui_prefs.new_document_after_close,
 		"new_document_after_close", FALSE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_status_visible,
-		"msgwin_status_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_compiler_visible,
-		"msgwin_compiler_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_messages_visible,
-		"msgwin_messages_visible", TRUE);
-	stash_group_add_boolean(group, &interface_prefs.msgwin_scribble_visible,
-		"msgwin_scribble_visible", TRUE);
 }
 
 
@@ -2763,7 +2687,7 @@ void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == 0);
 
-	if (! interface_prefs.statusbar_visible)
+	if (! settings_get_bool("statusbar-visible"))
 		return;
 
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(main_widgets.progressbar), text);

@@ -1,0 +1,208 @@
+<schemalist>
+	<enum id="org.geany.Settings.PositionType">
+		<value nick="left" value="0"/>
+		<value nick="right" value="1"/>
+		<value nick="top" value="2"/>
+		<value nick="bottom" value="3"/>
+	</enum>
+	<schema id="org.geany.Settings" path="/" gettext-domain="geany">
+		<!-- Interface Settings -->
+		<key name="sidebar-page" type="i">
+			<default>0</default>
+			<summary>Sidebar page</summary>
+			<description>
+				Which tab page in the sidebar notebook is active.
+			</description>
+		</key>
+		<key name="sidebar-pos-left" type="b">
+			<default>true</default>
+			<summary>Sidebar on left</summary>
+			<description>
+				Whether the sidebar is on the left or right.
+			</description>
+		</key>
+		<key name="sidebar-visible" type="b">
+			<default>true</default>
+			<summary>Sidebar visible</summary>
+			<description>
+				Whether or not the sidebar is visible.
+			</description>
+		</key>
+		<key name="sidebar-symbols-visible" type="b">
+			<default>true</default>
+			<summary>Symbols visible</summary>
+			<description>
+				Whether or not the Symbols tab is visible in the sidebar.
+			</description>
+		</key>
+		<key name="sidebar-documents-visible" type="b">
+			<default>true</default>
+			<summary>Documents visible</summary>
+			<description>
+				Whether or not the Documents tab is visible in the sidebar.
+			</description>
+		</key>
+		<key name="msgwin-visible" type="b">
+			<default>true</default>
+			<summary>Message window visible</summary>
+			<description>
+				Whether or not the message window is visible.
+			</description>
+		</key>
+		<key name="msgwin-status-visible" type="b">
+			<default>true</default>
+			<summary>Status visible</summary>
+			<description>
+				Whether or not the Status tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-compiler-visible" type="b">
+			<default>true</default>
+			<summary>Compiler visible</summary>
+			<description>
+				Whether or not the Compiler tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-messages-visible" type="b">
+			<default>true</default>
+			<summary>Messages visible</summary>
+			<description>
+				Whether or not the Messages tab is visible in the message window.
+			</description>
+		</key>
+		<key name="msgwin-scribble-visible" type="b">
+			<default>true</default>
+			<summary>Scribble visible</summary>
+			<description>
+				Whether or not the Scribble tab is visible in the message window.
+			</description>
+		</key>
+		<key name="statusbar-visible" type="b">
+			<default>true</default>
+			<summary>Statusbar visible</summary>
+			<description>
+				Whether or not the statusbar is visible.
+			</description>
+		</key>
+		<key name="fullscreen" type="b">
+			<default>false</default>
+			<summary>Fullscreen</summary>
+			<description>
+				Whether or not the main window is fullscreen.
+			</description>
+		</key>
+		<key name="editor-font" type="s">
+			<default>'Monospace 10'</default>
+			<summary>Editor font</summary>
+			<description>
+				The font used in the code editor widget.
+			</description>
+		</key>
+		<key name="symbols-font" type="s">
+			<default>'Sans 9'</default>
+			<summary>Symbols font</summary>
+			<description>
+				The font used in the sidebar symbols tab.
+			</description>
+		</key>
+		<key name="msgwin-font" type="s">
+			<default>'Monospace 9'</default>
+			<summary>Message window font</summary>
+			<description>
+				The font used in the message window tabs.
+			</description>
+		</key>
+		<key name="document-tabs-visible" type="b">
+			<default>true</default>
+			<summary>Document tabs visible</summary>
+			<description>
+				Whether or not the document tabs are visible.
+			</description>
+		</key>
+		<key name="editor-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'top'</default>
+			<summary>Editor tab position</summary>
+			<description>
+				The position of the editor notebook tabs.
+			</description>
+		</key>
+		<key name="sidebar-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'top'</default>
+			<summary>Sidebar tab position</summary>
+			<description>
+				The position of the sidebar notebook tabs.
+			</description>
+		</key>
+		<key name="msgwin-tab-pos" enum="org.geany.Settings.PositionType">
+			<default>'left'</default>
+			<summary>Message window tab position</summary>
+			<description>
+				The position of the message window notebook tabs.
+			</description>
+		</key>
+		<key name="symbols-tree-expanders-visible" type="b">
+			<default>true</default>
+			<summary>Symbols tree expanders visible</summary>
+			<description>
+				Whether or not the expanders are visible in the symbols tree view.
+			</description>
+		</key>
+		<key name="notebook-double-click-hides-widgets" type="b">
+			<default>false</default>
+			<summary>Notebook double-click hides widgets</summary>
+			<description>
+				Whether or not double-clicking on the editor notebook's tabs hides all additional widgets.
+			</description>
+		</key>
+		<key name="highlighting-inverted" type="b">
+			<default>false</default>
+			<summary>Highlighting inverted</summary>
+			<description>
+				Whether or not the syntax highlighting colours are visually inverted.
+			</description>
+		</key>
+		<key name="use-native-windows-dialogs" type="b">
+			<default>false</default>
+			<summary>Use native windows dialog</summary>
+			<description>
+				Whether or not to use native Win32 API dialogs on Windows.
+			</description>
+		</key>
+		<!-- Editor Settngs -->
+		<key name="show-white-space" type="b">
+			<default>false</default>
+			<summary>Show white-space</summary>
+			<description>
+				Whether or not to visualize white-space.
+			</description>
+		</key>
+		<key name="show-indentation-guides" type="b">
+			<default>false</default>
+			<summary>Show indentation guides</summary>
+			<description>
+				Whether or not to show indentation guides.
+			</description>
+		</key>
+		<key name="show-line-endings" type="b">
+			<default>false</default>
+			<summary>Show line endings</summary>
+			<description>
+				Whether or not to visualize line ending characters.
+			</description>
+		</key>
+		<key name="show-markers-margin" type="b">
+			<default>true</default>
+			<summary>Show markers margin</summary>
+			<description>
+				Whether or not the markers (symbol) margin is visible.
+			</description>
+		</key>
+		<key name="show-line-number-margin" type="b">
+			<default>true</default>
+			<summary>Show line numbers margin</summary>
+			<description>
+				Whether or not the line numbers margin is visible.
+			</description>
+		</key>
+	</schema>
+</schemalist>

@@ -49,6 +49,7 @@
 #include "plugins.h"
 #include "prefs.h"
 #include "printing.h"
+#include "settings.h"
 #include "sidebar.h"
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -173,38 +174,9 @@ static void apply_settings(void)
 
 	/* toolbar, message window and sidebar are by default visible, so don't change it if it is true */
 	toolbar_show_hide();
-	if (! ui_prefs.msgwindow_visible)
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_messages_window1")), FALSE);
-		gtk_widget_hide(main_widgets.message_window_notebook);
-		ignore_callback = FALSE;
-	}
-	if (! ui_prefs.sidebar_visible)
-	{
-		ignore_callback = TRUE;
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_show_sidebar1")), FALSE);
-		ignore_callback = FALSE;
-	}
 
 	toolbar_apply_settings();
 	toolbar_update_ui();
-
-	ui_update_view_editor_menu_items();
-
-	/* hide statusbar if desired */
-	if (! interface_prefs.statusbar_visible)
-	{
-		gtk_widget_hide(ui_widgets.statusbar);
-	}
-
-	/* set the tab placements of the notebooks */
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.tab_pos_editor);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(msgwindow.notebook), interface_prefs.tab_pos_msgwin);
-	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(main_widgets.sidebar_notebook), interface_prefs.tab_pos_sidebar);
-
-	/* whether to show notebook tabs or not */
-	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(main_widgets.notebook), interface_prefs.show_notebook_tabs);
 
 #ifdef HAVE_VTE
 	if (! vte_info.have_vte)
@@ -214,8 +186,7 @@ static void apply_settings(void)
 			ui_lookup_widget(main_widgets.window, "send_selection_to_vte1"), FALSE);
 	}
 
-	if (interface_prefs.sidebar_pos != GTK_POS_LEFT)
-		ui_swap_sidebar_pos();
+	sidebar_set_position_left(settings_get_bool("sidebar-pos-left"));
 
 	gtk_orientable_set_orientation(GTK_ORIENTABLE(ui_lookup_widget(main_widgets.window, "vpaned1")),
 		interface_prefs.msgwin_orientation);
@@ -885,7 +856,7 @@ static void load_settings(void)
 	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
-		ui_prefs.msgwindow_visible = FALSE;
+		settings_set_bool("msgwin-visible", FALSE);
 
 #ifdef HAVE_PLUGINS
 	want_plugins = prefs.load_plugins && !no_plugins;
@@ -1128,6 +1099,7 @@ gint main_lib(gint argc, gchar **argv)
 
 	/* init stash groups before loading keyfile */
 	configuration_init();
+	settings_init();
 	ui_init_prefs();
 	search_init();
 	project_init();
@@ -1168,11 +1140,6 @@ gint main_lib(gint argc, gchar **argv)
 	if (want_plugins)
 		plugins_load_active();
 #endif
-
-	ui_sidebar_show_hide();
-
-	/* set the active sidebar page after plugins have been loaded */
-	gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook), ui_prefs.sidebar_page);
 
 	/* load keybinding settings after plugins have added their groups */
 	keybindings_load_keyfile();
@@ -1282,6 +1249,7 @@ static void do_main_quit(void)
 	encodings_finalize();
 	toolbar_finalize();
 	sidebar_finalize();
+	settings_finalize();
 	configuration_finalize();
 	filetypes_free_types();
 	log_finalize();

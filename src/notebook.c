@@ -34,6 +34,7 @@
 #include "geanyobject.h"
 #include "keybindings.h"
 #include "main.h"
+#include "settings.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -590,7 +591,7 @@ static gboolean notebook_tab_click(GtkWidget *widget, GdkEventButton *event, gpo
 	/* toggle additional widgets on double click */
 	if (event->type == GDK_2BUTTON_PRESS)
 	{
-		if (interface_prefs.notebook_double_click_hides_widgets)
+		if (settings_get_bool("notebook-double-click-hides-widgets"))
 			on_menu_toggle_all_additional_widgets1_activate(NULL, NULL);
 
 		return TRUE; /* stop other handlers like notebook_tab_bar_click_cb() */

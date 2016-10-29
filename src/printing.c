@@ -39,6 +39,7 @@
 #include "highlighting.h"
 #include "msgwindow.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "spawn.h"
 #include "support.h"
 #include "utils.h"
@@ -340,6 +341,7 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	PangoContext *pango_ctx, *widget_pango_ctx;
 	PangoFontDescription *desc;
 	gdouble pango_res, widget_res;
+	gchar *font_name;
 
 	if (dinfo == NULL)
 		return;
@@ -383,7 +385,9 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	dinfo->print_time = time(NULL);
 	/* create a PangoLayout to be commonly used in add_page_header() and draw_page() */
-	desc = pango_font_description_from_string(interface_prefs.editor_font);
+	font_name = settings_get_string("editor-font");
+	desc = pango_font_description_from_string(font_name);
+	g_free(font_name);
 	dinfo->layout = setup_pango_layout(context, desc);
 	pango_font_description_free(desc);
 	get_text_dimensions(dinfo->layout, "|XMfjgq_" /* reasonably representative character set */,

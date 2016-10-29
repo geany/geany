@@ -121,3 +121,7 @@ else
 nobase_dist_pkgdata_DATA += geany.gtkrc
 endif
 
+gsettings_SCHEMAS = org.geany.Settings.gschema.xml
+EXTRA_DIST = $(gsettings_SCHEMAS)
+
+@GSETTINGS_RULES@

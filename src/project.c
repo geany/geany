@@ -39,6 +39,7 @@
 #include "keyfile.h"
 #include "main.h"
 #include "projectprivate.h"
+#include "settings.h"
 #include "sidebar.h"
 #include "stash.h"
 #include "support.h"
@@ -311,7 +312,7 @@ void project_open(void)
 	if (! project_ask_close()) return;
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
+	if (settings_get_bool("use-native-windows-dialogs"))
 	{
 		gchar *file = win32_show_project_open_dialog(main_widgets.window, _("Open Project"), dir, FALSE, TRUE);
 		if (file != NULL)

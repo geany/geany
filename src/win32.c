@@ -41,6 +41,7 @@
 #include "editor.h"
 #include "filetypes.h"
 #include "project.h"
+#include "settings.h"
 #include "support.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -599,7 +600,7 @@ void win32_show_font_dialog(void)
 	if (retval)
 	{
 		gchar *editorfont = g_strdup_printf("%s %d", lf.lfFaceName, (cf.iPointSize / 10));
-		ui_set_editor_font(editorfont);
+		settings_set_string("editor-font", editorfont);
 		g_free(editorfont);
 	}
 }

@@ -51,6 +51,7 @@
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "support.h"
 #include "symbols.h"
 #include "templates.h"
@@ -1121,7 +1122,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
  		case SCN_MODIFIED:
-			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
+			if (settings_get_bool("show-line-number-margin")
+				&& (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
 				/* automatically adjust Scintilla's line numbers margin width */
 				auto_update_margin_width(editor);
@@ -1196,7 +1198,7 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 
 		case SCN_ZOOM:
 			/* recalculate line margin width */
-			sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+			sci_set_line_numbers(sci, settings_get_bool("show-line-number-margin"));
 			break;
 	}
 	/* we always return FALSE here to let plugins handle the event too */
@@ -4905,7 +4907,7 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	setup_sci_keys(sci);
 
-	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
+	sci_set_symbol_margin(sci, settings_get_bool("show-markers-margin"));
 	sci_set_lines_wrapped(sci, editor->line_wrapping);
 	sci_set_caret_policy_x(sci, CARET_JUMPS | CARET_EVEN, 0);
 	/* Y policy is set in editor_apply_update_prefs() */
@@ -4960,6 +4962,7 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	ScintillaObject *old, *sci;
 	GeanyIndentType old_indent_type = editor->indent_type;
 	gint old_indent_width = editor->indent_width;
+	gchar *font_name;
 
 	/* temporarily change editor to use the new sci widget */
 	old = editor->sci;
@@ -4967,7 +4970,9 @@ ScintillaObject *editor_create_widget(GeanyEditor *editor)
 	editor->sci = sci;
 
 	editor_set_indent(editor, iprefs->type, iprefs->width);
-	editor_set_font(editor, interface_prefs.editor_font);
+	font_name = settings_get_string("editor-font");
+	editor_set_font(editor, font_name);
+	g_free(font_name);
 	editor_apply_update_prefs(editor);
 
 	/* if editor already had a widget, restore it */
@@ -5068,7 +5073,7 @@ void editor_set_indentation_guides(GeanyEditor *editor)
 
 	g_return_if_fail(editor != NULL);
 
-	if (! editor_prefs.show_indent_guide)
+	if (! settings_get_bool("show-indentation-guides"))
 	{
 		sci_set_indentation_guides(editor->sci, SC_IV_NONE);
 		return;
@@ -5160,10 +5165,10 @@ void editor_apply_update_prefs(GeanyEditor *editor)
 
 	editor_set_indentation_guides(editor);
 
-	sci_set_visible_white_spaces(sci, editor_prefs.show_white_space);
-	sci_set_visible_eols(sci, editor_prefs.show_line_endings);
-	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
-	sci_set_line_numbers(sci, editor_prefs.show_linenumber_margin);
+	sci_set_visible_white_spaces(sci, settings_get_bool("show-white-space"));
+	sci_set_visible_eols(sci, settings_get_bool("show-line-endings"));
+	sci_set_symbol_margin(sci, settings_get_bool("show-markers-margin"));
+	sci_set_line_numbers(sci, settings_get_bool("show-line-number-margin"));
 
 	sci_set_folding_margin_visible(sci, editor_prefs.folding);
 

@@ -45,8 +45,6 @@ G_BEGIN_DECLS
 /** Interface preferences */
 typedef struct GeanyInterfacePrefs
 {
-	gboolean		sidebar_symbol_visible;		/**< whether the symbol sidebar is visible */
-	gboolean		sidebar_openfiles_visible;	/**< whether the open file list is visible */
 	gchar			*editor_font;				/**< editor font */
 	gchar			*tagbar_font;				/**< symbol sidebar font */
 	gchar			*msgwin_font;				/**< message window font */
@@ -54,12 +52,10 @@ typedef struct GeanyInterfacePrefs
 	gint			tab_pos_editor;				/**< positions of editor's tabs */
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
-	gboolean		statusbar_visible;			/**< whether the status bar is visible */
 	gboolean		show_symbol_list_expanders;	/**< whether to show expanders in the symbol list */
 	/** whether a double click on notebook tabs hides all other windows */
 	gboolean		notebook_double_click_hides_widgets;
 	gboolean		highlighting_invert_all; 	/**< whether highlighting colors are inverted */
-	gint			sidebar_pos; 				/**< position of the sidebar (left or right) */
 	gboolean		msgwin_status_visible; 		/**< whether message window's status tab is visible */
 	gboolean		msgwin_compiler_visible;	/**< whether message window's compiler tab is visible */
 	gboolean		msgwin_messages_visible;	/**< whether message window's messages tab is visible */
@@ -159,10 +155,6 @@ typedef struct UIPrefs
 {
 	/* State of the main window when Geany was closed */
 	gint		geometry[5];	/* 0:x, 1:y, 2:width, 3:height, flag for maximized state */
-	gboolean	fullscreen;
-	gboolean	sidebar_visible;
-	gint		sidebar_page;
-	gboolean	msgwindow_visible;
 	gboolean	allow_always_save; /* if set, files can always be saved, even if unchanged */
 	gchar		*statusbar_template;
 	gboolean	new_document_after_close;
@@ -287,7 +279,9 @@ void ui_set_window_title(GeanyDocument *doc);
 
 void ui_set_editor_font(const gchar *font_name);
 
-void ui_set_fullscreen(void);
+void ui_set_symbols_font(const gchar *font_name);
+
+void ui_set_msgwin_font(const gchar *font_name);
 
 
 void ui_update_popup_reundo_items(GeanyDocument *doc);
@@ -314,8 +308,6 @@ void ui_save_buttons_toggle(gboolean enable);
 void ui_document_buttons_update(void);
 
 
-void ui_sidebar_show_hide(void);
-
 void ui_document_show_hide(GeanyDocument *doc);
 
 void ui_set_search_entry_background(GtkWidget *widget, gboolean success);
@@ -341,13 +333,7 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb);
 
 gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down);
 
-void ui_statusbar_showhide(gboolean state);
-
 void ui_toggle_editor_features(GeanyUIEditorFeatures feature);
-
-void ui_update_view_editor_menu_items(void);
-
-void ui_swap_sidebar_pos(void);
 
 GIcon *ui_get_mime_icon(const gchar *mime_type);
 

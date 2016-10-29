@@ -33,6 +33,7 @@
 #include "document.h"
 #include "keybindings.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "spawn.h"
 #include "support.h"
 #include "ui_utils.h"
@@ -819,7 +820,7 @@ void tools_color_chooser(const gchar *color)
 	GtkWidget *colorsel;
 
 #ifdef G_OS_WIN32
-	if (interface_prefs.use_native_windows_dialogs)
+	if (settings_get_bool("use-native-windows-dialogs"))
 	{
 		win32_show_color_dialog(color);
 		return;

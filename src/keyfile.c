@@ -47,6 +47,7 @@
 #include "printing.h"
 #include "project.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "stash.h"
 #include "support.h"
 #include "symbols.h"
@@ -83,14 +84,8 @@
 #endif
 #ifdef __APPLE__
 #define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
-#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
 #else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
@@ -153,16 +148,8 @@ static void init_pref_groups(void)
 	stash_group_add_toggle_button(group, &file_prefs.cmdline_new_files,
 		"cmdline_new_files", TRUE, "check_cmdline_new_files");
 
-	stash_group_add_toggle_button(group, &interface_prefs.notebook_double_click_hides_widgets,
-		"notebook_double_click_hides_widgets", FALSE, "check_double_click_hides_widgets");
 	stash_group_add_toggle_button(group, &file_prefs.tab_close_switch_to_mru,
 		"tab_close_switch_to_mru", FALSE, "check_tab_close_switch_to_mru");
-	stash_group_add_integer(group, &interface_prefs.tab_pos_sidebar, "tab_pos_sidebar", GTK_POS_TOP);
-	stash_group_add_radio_buttons(group, &interface_prefs.sidebar_pos,
-		"sidebar_pos", GTK_POS_LEFT,
-		"radio_sidebar_left", GTK_POS_LEFT,
-		"radio_sidebar_right", GTK_POS_RIGHT,
-		NULL);
 	stash_group_add_radio_buttons(group, &interface_prefs.symbols_sort_mode,
 		"symbols_sort_mode", SYMBOLS_SORT_BY_NAME,
 		"radio_symbols_sort_by_name", SYMBOLS_SORT_BY_NAME,
@@ -175,9 +162,6 @@ static void init_pref_groups(void)
 		NULL);
 
 	/* editor display */
-	stash_group_add_toggle_button(group, &interface_prefs.highlighting_invert_all,
-		"highlighting_invert_all", FALSE, "check_highlighting_invert");
-
 	stash_group_add_toggle_button(group, &search_prefs.use_current_word,
 		"pref_main_search_use_current_word", TRUE, "check_search_use_current_word");
 
@@ -426,25 +410,11 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "auto_focus", prefs.auto_focus);
 
 	/* interface */
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_symbol_visible", interface_prefs.sidebar_symbol_visible);
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_openfiles_visible", interface_prefs.sidebar_openfiles_visible);
-	g_key_file_set_string(config, PACKAGE, "editor_font", interface_prefs.editor_font);
-	g_key_file_set_string(config, PACKAGE, "tagbar_font", interface_prefs.tagbar_font);
-	g_key_file_set_string(config, PACKAGE, "msgwin_font", interface_prefs.msgwin_font);
-	g_key_file_set_boolean(config, PACKAGE, "show_notebook_tabs", interface_prefs.show_notebook_tabs);
 	g_key_file_set_boolean(config, PACKAGE, "show_tab_cross", file_prefs.show_tab_cross);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_ltr", file_prefs.tab_order_ltr);
 	g_key_file_set_boolean(config, PACKAGE, "tab_order_beside", file_prefs.tab_order_beside);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_editor", interface_prefs.tab_pos_editor);
-	g_key_file_set_integer(config, PACKAGE, "tab_pos_msgwin", interface_prefs.tab_pos_msgwin);
-	g_key_file_set_boolean(config, PACKAGE, "use_native_windows_dialogs", interface_prefs.use_native_windows_dialogs);
 
 	/* display */
-	g_key_file_set_boolean(config, PACKAGE, "show_indent_guide", editor_prefs.show_indent_guide);
-	g_key_file_set_boolean(config, PACKAGE, "show_white_space", editor_prefs.show_white_space);
-	g_key_file_set_boolean(config, PACKAGE, "show_line_endings", editor_prefs.show_line_endings);
-	g_key_file_set_boolean(config, PACKAGE, "show_markers_margin", editor_prefs.show_markers_margin);
-	g_key_file_set_boolean(config, PACKAGE, "show_linenumber_margin", editor_prefs.show_linenumber_margin);
 	g_key_file_set_boolean(config, PACKAGE, "long_line_enabled", editor_prefs.long_line_enabled);
 	g_key_file_set_integer(config, PACKAGE, "long_line_type", editor_prefs.long_line_type);
 	g_key_file_set_integer(config, PACKAGE, "long_line_column", editor_prefs.long_line_column);
@@ -552,11 +522,6 @@ static void save_dialog_prefs(GKeyFile *config)
 
 static void save_ui_prefs(GKeyFile *config)
 {
-	g_key_file_set_boolean(config, PACKAGE, "sidebar_visible", ui_prefs.sidebar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "statusbar_visible", interface_prefs.statusbar_visible);
-	g_key_file_set_boolean(config, PACKAGE, "msgwindow_visible", ui_prefs.msgwindow_visible);
-	g_key_file_set_boolean(config, PACKAGE, "fullscreen", ui_prefs.fullscreen);
-
 	/* get the text from the scribble textview */
 	{
 		GtkTextBuffer *buffer;
@@ -763,19 +728,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
 
 	/* interface */
-	interface_prefs.tab_pos_editor = utils_get_setting_integer(config, PACKAGE, "tab_pos_editor", GTK_POS_TOP);
-	interface_prefs.tab_pos_msgwin = utils_get_setting_integer(config, PACKAGE, "tab_pos_msgwin",GTK_POS_LEFT);
-	interface_prefs.sidebar_symbol_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_symbol_visible", TRUE);
-	interface_prefs.sidebar_openfiles_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_openfiles_visible", TRUE);
-	interface_prefs.statusbar_visible = utils_get_setting_boolean(config, PACKAGE, "statusbar_visible", TRUE);
 	file_prefs.tab_order_ltr = utils_get_setting_boolean(config, PACKAGE, "tab_order_ltr", TRUE);
 	file_prefs.tab_order_beside = utils_get_setting_boolean(config, PACKAGE, "tab_order_beside", FALSE);
-	interface_prefs.show_notebook_tabs = utils_get_setting_boolean(config, PACKAGE, "show_notebook_tabs", TRUE);
 	file_prefs.show_tab_cross = utils_get_setting_boolean(config, PACKAGE, "show_tab_cross", TRUE);
-	interface_prefs.editor_font = utils_get_setting_string(config, PACKAGE, "editor_font", GEANY_DEFAULT_FONT_EDITOR);
-	interface_prefs.tagbar_font = utils_get_setting_string(config, PACKAGE, "tagbar_font", GEANY_DEFAULT_FONT_SYMBOL_LIST);
-	interface_prefs.msgwin_font = utils_get_setting_string(config, PACKAGE, "msgwin_font", GEANY_DEFAULT_FONT_MSG_WINDOW);
-	interface_prefs.use_native_windows_dialogs = utils_get_setting_boolean(config, PACKAGE, "use_native_windows_dialogs", FALSE);
 
 	/* display, editor */
 	editor_prefs.long_line_enabled = utils_get_setting_boolean(config, PACKAGE, "long_line_enabled", TRUE);
@@ -791,17 +746,12 @@ static void load_dialog_prefs(GKeyFile *config)
 	editor_prefs.symbolcompletion_max_height = utils_get_setting_integer(config, PACKAGE, "symbolcompletion_max_height", GEANY_MAX_SYMBOLLIST_HEIGHT);
 	editor_prefs.line_wrapping = utils_get_setting_boolean(config, PACKAGE, "line_wrapping", FALSE); /* default is off for better performance */
 	editor_prefs.use_indicators = utils_get_setting_boolean(config, PACKAGE, "use_indicators", TRUE);
-	editor_prefs.show_indent_guide = utils_get_setting_boolean(config, PACKAGE, "show_indent_guide", FALSE);
-	editor_prefs.show_white_space = utils_get_setting_boolean(config, PACKAGE, "show_white_space", FALSE);
-	editor_prefs.show_line_endings = utils_get_setting_boolean(config, PACKAGE, "show_line_endings", FALSE);
 	editor_prefs.scroll_stop_at_last_line = utils_get_setting_boolean(config, PACKAGE, "scroll_stop_at_last_line", TRUE);
 	editor_prefs.auto_close_xml_tags = utils_get_setting_boolean(config, PACKAGE, "auto_close_xml_tags", TRUE);
 	editor_prefs.complete_snippets = utils_get_setting_boolean(config, PACKAGE, "complete_snippets", TRUE);
 	editor_prefs.auto_complete_symbols = utils_get_setting_boolean(config, PACKAGE, "auto_complete_symbols", TRUE);
 	editor_prefs.folding = utils_get_setting_boolean(config, PACKAGE, "use_folding", TRUE);
 	editor_prefs.unfold_all_children = utils_get_setting_boolean(config, PACKAGE, "unfold_all_children", FALSE);
-	editor_prefs.show_markers_margin = utils_get_setting_boolean(config, PACKAGE, "show_markers_margin", TRUE);
-	editor_prefs.show_linenumber_margin = utils_get_setting_boolean(config, PACKAGE, "show_linenumber_margin", TRUE);
 	editor_prefs.disable_dnd = utils_get_setting_boolean(config, PACKAGE, "pref_editor_disable_dnd", FALSE);
 	editor_prefs.smart_home_key = utils_get_setting_boolean(config, PACKAGE, "pref_editor_smart_home_key", TRUE);
 	editor_prefs.newline_strip = utils_get_setting_boolean(config, PACKAGE, "pref_editor_newline_strip", FALSE);
@@ -864,6 +814,7 @@ static void load_dialog_prefs(GKeyFile *config)
 		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
+		gchar *font_name;
 
 #ifdef __APPLE__
 		/* Geany is started using launchd on OS X and we don't get any environment variables
@@ -884,7 +835,9 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
 		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
+		font_name = settings_get_string("editor-font");
+		vc->font = utils_get_setting_string(config, "VTE", "font", font_name);
+		g_free(font_name);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
@@ -994,9 +947,6 @@ static void load_ui_prefs(GKeyFile *config)
 	gint *geo;
 	gsize geo_len;
 
-	ui_prefs.sidebar_visible = utils_get_setting_boolean(config, PACKAGE, "sidebar_visible", TRUE);
-	ui_prefs.msgwindow_visible = utils_get_setting_boolean(config, PACKAGE, "msgwindow_visible", TRUE);
-	ui_prefs.fullscreen = utils_get_setting_boolean(config, PACKAGE, "fullscreen", FALSE);
 	ui_prefs.custom_date_format = utils_get_setting_string(config, PACKAGE, "custom_date_format", "");
 	ui_prefs.custom_commands = g_key_file_get_string_list(config, PACKAGE, "custom_commands", NULL, NULL);
 	ui_prefs.custom_commands_labels = g_key_file_get_string_list(config, PACKAGE, "custom_commands_labels", NULL, NULL);
@@ -1298,17 +1248,6 @@ void configuration_apply_settings(void)
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "hpaned1")), hpan_position);
 		gtk_paned_set_position(GTK_PANED(ui_lookup_widget(main_widgets.window, "vpaned1")), vpan_position);
 	}
-
-	/* set fullscreen after initial draw so that returning to normal view is the right size.
-	 * fullscreen mode is disabled by default, so act only if it is true */
-	if (ui_prefs.fullscreen)
-	{
-		gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(ui_lookup_widget(main_widgets.window, "menu_fullscreen1")), TRUE);
-		ui_prefs.fullscreen = TRUE;
-		ui_set_fullscreen();
-	}
-
-	msgwin_show_hide_tabs();
 }
 
 

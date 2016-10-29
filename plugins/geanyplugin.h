@@ -53,6 +53,7 @@
 #include "project.h"
 #include "sciwrappers.h"
 #include "search.h"
+#include "settings.h"
 #include "spawn.h"
 #include "stash.h"
 #include "support.h"

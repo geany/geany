@@ -38,6 +38,7 @@
 #include "editor.h"
 #include "filetypesprivate.h"
 #include "sciwrappers.h"
+#include "settings.h"
 #include "support.h"
 #include "symbols.h"
 #include "ui_utils.h"
@@ -384,7 +385,7 @@ static void get_keyfile_ints(GKeyFile *config, GKeyFile *configh, const gchar *s
 
 static guint invert(guint icolour)
 {
-	if (interface_prefs.highlighting_invert_all)
+	if (settings_get_bool("highlighting-inverted"))
 		return 0xffffff - icolour;
 
 	return icolour;
