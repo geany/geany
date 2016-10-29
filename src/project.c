@@ -425,6 +425,9 @@ static void destroy_project(gboolean open_default)
 
 	g_return_if_fail(app->project != NULL);
 
+	/* notify plugins that the project is closing */
+	g_signal_emit_by_name(geany_object, "project-close");
+
 	/* remove project filetypes build entries */
 	if (app->project->priv->build_filetypes_list != NULL)
 	{
@@ -464,7 +467,6 @@ static void destroy_project(gboolean open_default)
 			ui_focus_current_document();
 		}
 	}
-	g_signal_emit_by_name(geany_object, "project-close");
 
 	update_ui();
 }

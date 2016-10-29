@@ -154,6 +154,11 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
 
 /** Sent after a project is closed.
  *
+ * @note Prior to Geany 1.29 (API 230), this signal was emitted after
+ * the project pointer was freed and set to `NULL`. Since v1.29 the
+ * signal is emitted before the project is destroyed so plugins have
+ * an opportunity to access it in their signal handler.
+ *
  * @param obj a GeanyObject instance, should be ignored.
  * @param user_data user data.
  */
