@@ -209,9 +209,9 @@ Coding
   initialization part of a for loop.
 * Local variables that will not be modified should be marked as ``const``
   to indicate intention. This allows the compiler to give a warning if
-  part of the code accidentally tries to change the value. This does not
-  apply to non-pointer parameters where it needlessly exposes the
-  implementation and it's obvious a copy is made anyway.
+  part of the code accidentally tries to change the value.
+* Pointer parameters should be marked ``const`` if the value they point
+  to will not be mutated within the function.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
