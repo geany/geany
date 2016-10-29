@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-24 20:07+0200\n"
+"POT-Creation-Date: 2016-10-29 20:21+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -3246,29 +3246,29 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/highlighting.c:1229 ../src/libmain.c:850 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Konnte die Datei »%s« nicht finden."
 
-#: ../src/highlighting.c:1296
+#: ../src/highlighting.c:1299
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1340
 msgid "The current filetype overrides the default style."
 msgstr ""
 "Der aktuelle Dateityp überschreibt die Standardeinstellungen für die "
 "Darstellung."
 
-#: ../src/highlighting.c:1338
+#: ../src/highlighting.c:1341
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 "Dies kann dazu führen, dass eventuell Farbprofile nicht korrekt angezeigt "
 "werden."
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1366
 msgid "Color Schemes"
 msgstr "Farbschemata"
 
@@ -3313,7 +3313,7 @@ msgstr "Ansicht"
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:511
+#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:513
 #: ../src/ui_utils.c:2195
 msgid "Build"
 msgstr "Erstellen"
@@ -4088,12 +4088,14 @@ msgstr "Plugins"
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Plugins, die beim Starten geladen werden sollen:"
 
-#: ../src/plugins.c:2012
-#, c-format
+#: ../src/plugins.c:2060
+#, fuzzy, c-format
 msgid ""
-"Proxy plugin extension '%s' starts with a dot, stripping. Please fix your "
-"proxy plugin."
-msgstr "Die Proxy-Plugin-Erweiterung »%s« beginnt mit einem Punkt. Bitte korrigiere die Erweiterung."
+"Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
+"plugin."
+msgstr ""
+"Die Proxy-Plugin-Erweiterung »%s« beginnt mit einem Punkt. Bitte korrigiere "
+"die Erweiterung."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4281,11 +4283,11 @@ msgstr ""
 "Der Pfad der Datei repräsentiert das Projekt und beinhaltet dessen "
 "Einstellungen. Gewöhnlich sollte sie die »%s« Dateiendung besitzen."
 
-#: ../src/project.c:212 ../src/project.c:484
+#: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
 msgstr "Auswahl des Projektbasisverzeichnisses"
 
-#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
+#: ../src/project.c:251 ../src/project.c:623 ../src/project.c:1162
 msgid "Project file could not be written"
 msgstr "Projektdatei konnte nicht geschrieben werden."
 
@@ -4294,7 +4296,7 @@ msgstr "Projektdatei konnte nicht geschrieben werden."
 msgid "Project \"%s\" created."
 msgstr "Projekt »%s« erstellt."
 
-#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1021
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1023
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Die Projektdatei »%s« konnte nicht geladen werden."
@@ -4312,67 +4314,67 @@ msgstr "Projektdateien"
 msgid "Project \"%s\" closed."
 msgstr "Projekt »%s« geschlossen."
 
-#: ../src/project.c:624
+#: ../src/project.c:626
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt »%s« gespeichert."
 
-#: ../src/project.c:657
+#: ../src/project.c:659
 msgid "Do you want to close it before proceeding?"
 msgstr "Möchten Sie das Projekt schließen bevor Sie fortfahren?"
 
-#: ../src/project.c:658
+#: ../src/project.c:660
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Das Projekt »%s« ist geöffnet."
 
-#: ../src/project.c:707
+#: ../src/project.c:709
 msgid "The specified project name is too short."
 msgstr "Der eingegebene Projektname ist zu kurz."
 
-#: ../src/project.c:713
+#: ../src/project.c:715
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Der eingegebene Projektname ist zu lang (max. %d Zeichen)."
 
-#: ../src/project.c:725
+#: ../src/project.c:727
 msgid "You have specified an invalid project filename."
 msgstr "Sie haben einen ungültigen Dateinamen angegeben."
 
-#: ../src/project.c:748
+#: ../src/project.c:750
 msgid "Create the project's base path directory?"
 msgstr "Soll das Projektbasisverzeichnis erstellt werden?"
 
-#: ../src/project.c:749
+#: ../src/project.c:751
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Der Pfad »%s« existiert nicht."
 
-#: ../src/project.c:758
+#: ../src/project.c:760
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Projektverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/project.c:771
+#: ../src/project.c:773
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Projektdatei konnte nicht geschrieben werden (%s)."
 
-#: ../src/project.c:777 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:627
 msgid "_Replace"
 msgstr "_Ersetzen"
 
-#: ../src/project.c:779 ../plugins/export.c:331
+#: ../src/project.c:781 ../plugins/export.c:331
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Die Datei »%s« existiert bereits. Soll sie überschrieben werden?"
 
 #. initialise the dialog
-#: ../src/project.c:925 ../src/project.c:936
+#: ../src/project.c:927 ../src/project.c:938
 msgid "Choose Project Filename"
 msgstr "Auswahl des Projektdateinamens"
 
-#: ../src/project.c:1011
+#: ../src/project.c:1013
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt »%s« geöffnet."
@@ -5062,8 +5064,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
-"Kann das Kommando »%s« nicht ausführen. Tipp: Oft sind falsche Pfade "
-"eine mögliche Ursache. Fehler: %s"
+"Kann das Kommando »%s« nicht ausführen. Tipp: Oft sind falsche Pfade eine "
+"mögliche Ursache. Fehler: %s"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
