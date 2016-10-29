@@ -3,7 +3,7 @@
 *   Copyright 2009-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Defines external interface to scope nesting levels for tags.
 */
@@ -14,6 +14,8 @@
 #include "general.h"  /* must always come first */
 
 #include "main.h"
+#include "debug.h"
+#include "routines.h"
 #include "nestlevel.h"
 
 /*
@@ -72,5 +74,3 @@ extern NestingLevel *nestingLevelsGetCurrent(NestingLevels *nls)
 
 	return &nls->levels[nls->n - 1];
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

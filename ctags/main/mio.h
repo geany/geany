@@ -128,8 +128,8 @@ struct _MIO {
 			size_t allocated_size;
 			MIOReallocFunc realloc_func;
 			MIODestroyNotify free_func;
-			boolean error;
-			boolean eof;
+			bool error;
+			bool eof;
 		} mem;
 	} impl;
 };
@@ -162,8 +162,8 @@ int mio_ungetc (MIO *mio, int ch);
 int mio_putc (MIO *mio, int c);
 int mio_puts (MIO *mio, const char *s);
 
-int mio_vprintf (MIO *mio, const char *format, va_list ap) PRINTF (2, 0);
-int mio_printf (MIO *mio, const char *format, ...) PRINTF (2, 3);
+int mio_vprintf (MIO *mio, const char *format, va_list ap) CTAGS_ATTR_PRINTF (2, 0);
+int mio_printf (MIO *mio, const char *format, ...) CTAGS_ATTR_PRINTF (2, 3);
 
 void mio_clearerr (MIO *mio);
 int mio_eof (MIO *mio);

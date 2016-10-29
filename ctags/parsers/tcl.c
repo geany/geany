@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for TCL scripts.
 */
@@ -16,6 +16,7 @@
 
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -26,10 +27,10 @@ typedef enum {
 } tclKind;
 
 static kindOption TclKinds [] = {
-	{ TRUE, 'c', "class",     "classes" },
-	{ TRUE, 'm', "method",    "methods" },
-	{ TRUE, 'p', "procedure", "procedures" },
-	{ TRUE, 'n', "module",    "modules" }
+	{ true, 'c', "class",     "classes" },
+	{ true, 'm', "method",    "methods" },
+	{ true, 'p', "procedure", "procedures" },
+	{ true, 'n', "module",    "modules" }
 };
 
 /*
@@ -47,15 +48,14 @@ static const unsigned char *makeTclTag (
 		vStringPut (name, (int) *cp);
 		++cp;
 	}
-	vStringTerminate (name);
 	makeSimpleTag (name, TclKinds, kind);
 	return cp;
 }
 
-static boolean match (const unsigned char *line, const char *word)
+static bool match (const unsigned char *line, const char *word)
 {
 	size_t len = strlen (word);
-	boolean matched = (strncmp ((const char*) line, word, len) == 0);
+	bool matched = (strncmp ((const char*) line, word, len) == 0);
 
 	if (matched)
 	{
@@ -71,13 +71,13 @@ static void findTclTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp;
 
-		while (isspace (line [0]))
+		while (isspace (line [0])) 
 			++line;
-
+		
 		if (line [0] == '\0'  ||  line [0] == '#')
 			continue;
 
@@ -138,10 +138,8 @@ extern parserDefinition* TclParser (void)
 	static const char *const extensions [] = { "tcl", "tk", "wish", "itcl", NULL };
 	parserDefinition* def = parserNew ("Tcl");
 	def->kinds      = TclKinds;
-	def->kindCount  = KIND_COUNT (TclKinds);
+	def->kindCount  = ARRAY_SIZE (TclKinds);
 	def->extensions = extensions;
 	def->parser     = findTclTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

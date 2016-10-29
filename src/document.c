@@ -657,6 +657,8 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	doc->priv->last_check = time(NULL);
 #endif
 
+	g_datalist_init(&doc->priv->data);
+
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
 	notebook_new_tab(doc);
@@ -711,6 +713,8 @@ static gboolean remove_page(guint page_num)
 	/* Checking real_path makes it likely the file exists on disk */
 	if (! main_status.closing_all && doc->real_path != NULL)
 		ui_add_recent_document(doc);
+
+	g_datalist_clear(&doc->priv->data);
 
 	doc->is_valid = FALSE;
 	doc->id = 0;
@@ -3839,3 +3843,22 @@ GEANY_API_SYMBOL
 GType document_get_type (void);
 
 G_DEFINE_BOXED_TYPE(GeanyDocument, document, copy_, free_);
+
+
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key)
+{
+	return g_datalist_get_data(&doc->priv->data, key);
+}
+
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data)
+{
+	g_datalist_set_data(&doc->priv->data, key, data);
+}
+
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func)
+{
+	g_datalist_set_data_full(&doc->priv->data, key, data, free_func);
+}

@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2005, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for makefiles.
 */
@@ -19,7 +19,9 @@
 #include "options.h"
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS
@@ -29,8 +31,8 @@ typedef enum {
 } shKind;
 
 static kindOption MakeKinds [] = {
-	{ TRUE, 'm', "macro",  "macros"},
-	{ TRUE, 't', "target", "targets"}
+	{ true, 'm', "macro",  "macros"},
+	{ true, 't', "target", "targets"}
 };
 
 /*
@@ -39,10 +41,10 @@ static kindOption MakeKinds [] = {
 
 static int nextChar (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 	if (c == '\\')
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 		if (c == '\n')
 			c = nextChar ();
 	}
@@ -56,7 +58,7 @@ static void skipLine (void)
 		c = nextChar ();
 	while (c != EOF  &&  c != '\n');
 	if (c == '\n')
-		fileUngetc (c);
+		ungetcToInputFile (c);
 }
 
 static int skipToNonWhite (int c)
@@ -66,26 +68,26 @@ static int skipToNonWhite (int c)
 	return c;
 }
 
-static boolean isIdentifier (int c)
+static bool isIdentifier (int c)
 {
-	return (boolean)(c != '\0' && (isalnum (c)  ||  strchr (".-_/$(){}%", c) != NULL));
+	return (bool)(c != '\0' && (isalnum (c)  ||  strchr (".-_/$(){}%", c) != NULL));
 }
 
-static boolean isSpecialTarget (vString *const name)
+static bool isSpecialTarget (vString *const name)
 {
 	size_t i = 0;
 	/* All special targets begin with '.'. */
 	if (vStringLength (name) < 1 || vStringChar (name, i++) != '.') {
-		return FALSE;
+		return false;
 	}
 	while (i < vStringLength (name)) {
 		char ch = vStringChar (name, i++);
 		if (ch != '_' && !isupper (ch))
 		{
-			return FALSE;
+			return false;
 		}
 	}
-	return TRUE;
+	return true;
 }
 
 static void newTarget (vString *const name)
@@ -117,17 +119,16 @@ static void readIdentifier (const int first, vString *const id)
 		vStringPut (id, c);
 		c = nextChar ();
 	}
-	fileUngetc (c);
-	vStringTerminate (id);
+	ungetcToInputFile (c);
 }
 
 static void findMakeTags (void)
 {
 	stringList *identifiers = stringListNew ();
-	boolean newline = TRUE;
-	boolean in_define = FALSE;
-	boolean in_rule = FALSE;
-	boolean variable_possible = TRUE;
+	bool newline = true;
+	bool in_define = false;
+	bool in_rule = false;
+	bool variable_possible = true;
 	int c;
 
 	while ((c = nextChar ()) != EOF)
@@ -142,14 +143,14 @@ static void findMakeTags (void)
 					c = nextChar ();
 				}
 				else if (c != '\n')
-					in_rule = FALSE;
+					in_rule = false;
 			}
 			stringListClear (identifiers);
-			variable_possible = (boolean)(!in_rule);
-			newline = FALSE;
+			variable_possible = (bool)(!in_rule);
+			newline = false;
 		}
 		if (c == '\n')
-			newline = TRUE;
+			newline = true;
 		else if (isspace (c))
 			continue;
 		else if (c == '#')
@@ -157,21 +158,21 @@ static void findMakeTags (void)
 		else if (variable_possible && c == '?')
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			variable_possible = (c == '=');
 		}
 		else if (variable_possible && c == ':' &&
 				 stringListCount (identifiers) > 0)
 		{
 			c = nextChar ();
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			if (c != '=')
 			{
 				unsigned int i;
 				for (i = 0; i < stringListCount (identifiers); i++)
 					newTarget (stringListItem (identifiers, i));
 				stringListClear (identifiers);
-				in_rule = TRUE;
+				in_rule = true;
 			}
 		}
 		else if (variable_possible && c == '=' &&
@@ -179,7 +180,7 @@ static void findMakeTags (void)
 		{
 			newMacro (stringListItem (identifiers, 0));
 			skipLine ();
-			in_rule = FALSE;
+			in_rule = false;
 		}
 		else if (variable_possible && isIdentifier (c))
 		{
@@ -190,12 +191,12 @@ static void findMakeTags (void)
 			if (stringListCount (identifiers) == 1)
 			{
 				if (in_define && ! strcmp (vStringValue (name), "endef"))
-					in_define = FALSE;
+					in_define = false;
 				else if (in_define)
 					skipLine ();
 				else if (! strcmp (vStringValue (name), "define"))
 				{
-					in_define = TRUE;
+					in_define = true;
 					c = skipToNonWhite (nextChar ());
 					vStringClear (name);
 					/* all remaining characters on the line are the name -- even spaces */
@@ -205,8 +206,7 @@ static void findMakeTags (void)
 						c = nextChar ();
 					}
 					if (c == '\n')
-						fileUngetc (c);
-					vStringTerminate (name);
+						ungetcToInputFile (c);
 					vStringStripTrailing (name);
 					newMacro (name);
 				}
@@ -215,7 +215,7 @@ static void findMakeTags (void)
 			}
 		}
 		else
-			variable_possible = FALSE;
+			variable_possible = false;
 	}
 	stringListDelete (identifiers);
 }
@@ -226,11 +226,9 @@ extern parserDefinition* MakefileParser (void)
 	static const char *const extensions [] = { "mak", "mk", NULL };
 	parserDefinition* const def = parserNew ("Make");
 	def->kinds      = MakeKinds;
-	def->kindCount  = KIND_COUNT (MakeKinds);
+	def->kindCount  = ARRAY_SIZE (MakeKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;
 	def->parser     = findMakeTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

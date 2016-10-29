@@ -768,9 +768,8 @@ done in the GeanyPluginFuncs::init function of the proxy plugin.
  - GeanyProxyFuncs::probe may be implemented to probe if a plugin candidate (that has one of the
    provided file extensions) is actually a plugin. This may depend on the plugin file itself in
    case of ambiguity or availability of runtime dependencies or even configuration.
-   @ref PROXY_IGNORED or @ref PROXY_MATCHED should be returned, possibly in combination
-   with the @ref PROXY_NOLOAD flag. Not implementing GeanyProxyFuncs::probe at all is equivalent to
-   always returning @ref PROXY_MATCHED.
+   @ref GeanyProxyProbeResults constants should be returned. Not implementing GeanyProxyFuncs::probe
+   at all is equivalent to always returning @ref GEANY_PROXY_MATCH.
  - GeanyProxyFuncs::load must be implemented to actually load the plugin. It is called by Geany
    when the user enables the sub-plugin. What "loading" means is entirely up to the proxy plugin and
    probably depends on the interpreter of the dynamic language that shall be supported. After
@@ -807,9 +806,9 @@ Consider the 5 basic cases:
 1) A candidate comes with a suitable file extension but is not a workable plugin file at all. For
 example, your proxy supports plugins written in a shell script (.sh) but the shebang of that script
 points to an incompatible shell (or even lacks a shebang). You should check for this in
-GeanyProxyFuncs::probe() and return @ref PROXY_IGNORED which hides that script from the Plugin
+GeanyProxyFuncs::probe() and return @ref GEANY_PROXY_IGNORE which hides that script from the Plugin
 Manager and allows other enabled proxy plugins to pick it up. GeanyProxyFuncs::probe() returning
-@ref PROXY_IGNORED is an indication that the candidate is meant for another proxy, or the user
+@ref GEANY_PROXY_IGNORE is an indication that the candidate is meant for another proxy, or the user
 placed the file by accident in one of Geany's plugin directories. In other words the candidate
 simply doesn't correspond to your proxy. Thus any noise by debug messages for this case is
 undesirable.
@@ -817,7 +816,7 @@ undesirable.
 2) A proxy plugin provides its own, versioned API to sub-plugin. The API version of the sub-plugin
 is not compatible with the API exposed by the proxy. GeanyProxyFuncs::probe() should never perform
 a version check because its sole purpose is to indicate a proxy's correspondence to a given
-candidate. It should return @ref PROXY_MATCHED instead. Later, Geany will invoke the
+candidate. It should return @ref GEANY_PROXY_MATCH instead. Later, Geany will invoke the
 GeanyProxyFuncs::load(), and this function is the right place for a version check. If it fails then
 you simply do not call GEANY_PLUGIN_REGISTER(), but rather print a debug message. The result is
 that the sub-plugin is not shown in the Plugin Manager at all. This is consistent with the
@@ -967,7 +966,7 @@ static gint demoproxy_probe(GeanyPlugin *proxy, const gchar *filename, gpointer 
 			match = utils_str_equal(linebuf, "#!!PROXY_MAGIC!!\n");
 		fclose(f);
 	}
-	return match ? PROXY_MATCHED : PROXY_IGNORED;
+	return match ? GEANY_PROXY_MATCH : GEANY_PROXY_IGNORE;
 }
 @endcode
 

@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -34,12 +35,12 @@ typedef enum {
 } docbookKind;
 
 static kindOption DocBookKinds [] = {
-	{ TRUE,  'f', "function",   "chapters"},
-	{ TRUE,  'c', "class",      "sections"},
-	{ TRUE,  'm', "member",     "sect1"},
-	{ TRUE,  'd', "macro",      "sect2"},
-	{ TRUE,  'v', "variable",   "sect3"},
-	{ TRUE,  's', "struct",     "appendix"}
+	{ true,  'f', "function",   "chapters"},
+	{ true,  'c', "class",      "sections"},
+	{ true,  'm', "member",     "sect1"},
+	{ true,  'd', "macro",      "sect2"},
+	{ true,  'v', "variable",   "sect3"},
+	{ true,  's', "struct",     "appendix"}
 };
 
 /*
@@ -52,10 +53,10 @@ static int getWord(const char *ref, const char **ptr)
 
 	while ((*ref != '\0') && (*p != '\0') && (*ref == *p)) ref++, p++;
 
-	if (*ref) return FALSE;
+	if (*ref) return false;
 
 	*ptr = p;
-	return TRUE;
+	return true;
 }
 
 
@@ -76,7 +77,6 @@ static void createTag(docbookKind kind, const char *buf)
 		vStringPut(name, (int) *buf);
 		++buf;
 	} while ((*buf != '\0') && (*buf != '"'));
-	vStringTerminate(name);
 	makeSimpleTag(name, DocBookKinds, kind);
 }
 
@@ -85,7 +85,7 @@ static void findDocBookTags(void)
 {
 	const char *line;
 
-	while ((line = (const char*)fileReadLine()) != NULL)
+	while ((line = (const char*)readLineFromInputFile()) != NULL)
 	{
 		const char *cp = line;
 
@@ -144,7 +144,7 @@ extern parserDefinition* DocBookParser (void)
 	parserDefinition* def = parserNew ("Docbook");
 	def->extensions = extensions;
 	def->kinds      = DocBookKinds;
-	def->kindCount  = KIND_COUNT (DocBookKinds);
+	def->kindCount  = ARRAY_SIZE (DocBookKinds);
 	def->parser     = findDocBookTags;
 	return def;
 }

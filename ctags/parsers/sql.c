@@ -1,10 +1,8 @@
 /*
- *	$Id$
- *
  *	Copyright (c) 2002-2003, Darren Hiebert
  *
  *	This source code is released for free distribution under the terms of the
- *	GNU General Public License.
+ *	GNU General Public License version 2 or (at your option) any later version.
  *
  *	This module contains functions for generating tags for PL/SQL language
  *	files.
@@ -21,11 +19,12 @@
 #include <stdio.h>
 #endif
 
+#include "debug.h"
 #include "entry.h"
 #include "keyword.h"
 #include "parse.h"
-#include "main.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -42,8 +41,8 @@
 /*
  *	 MACROS
  */
-#define isType(token,t)		(boolean) ((token)->type == (t))
-#define isKeyword(token,k)	(boolean) ((token)->keyword == (k))
+#define isType(token,t)		(bool) ((token)->type == (t))
+#define isKeyword(token,k)	(bool) ((token)->keyword == (k))
 
 /*
  *	 DATA DECLARATIONS
@@ -54,8 +53,7 @@ typedef enum eException { ExceptionNone, ExceptionEOF } exception_t;
 /*
  * Used to specify type of keyword.
  */
-typedef enum eKeywordId {
-	KEYWORD_NONE = -1,
+enum eKeywordId {
 	KEYWORD_is,
 	KEYWORD_begin,
 	KEYWORD_body,
@@ -128,16 +126,8 @@ typedef enum eKeywordId {
 	KEYWORD_comment,
 	KEYWORD_create,
 	KEYWORD_go
-} keywordId;
-
-/*
- * Used to determine whether keyword is valid for the token language and
- *	what its ID is.
- */
-typedef struct sKeywordDesc {
-	const char *name;
-	keywordId id;
-} keywordDesc;
+};
+typedef int keywordId; /* to allow KEYWORD_NONE */
 
 typedef enum eTokenType {
 	TOKEN_UNDEFINED,
@@ -211,32 +201,32 @@ typedef enum {
 } sqlKind;
 
 static kindOption SqlKinds [] = {
-	{ TRUE,  'c', "cursor",		  "cursors"				   },
-	{ FALSE, 'd', "prototype",	  "prototypes"			   },
-	{ TRUE,  'f', "function",	  "functions"			   },
-	{ TRUE,  'F', "field",		  "record fields"		   },
-	{ FALSE, 'l', "local",		  "local variables"		   },
-	{ TRUE,  'L', "label",		  "block label"			   },
-	{ TRUE,  'P', "package",	  "packages"			   },
-	{ TRUE,  'p', "procedure",	  "procedures"			   },
-	{ FALSE, 'r', "record",		  "records"				   },
-	{ TRUE,  's', "subtype",	  "subtypes"			   },
-	{ TRUE,  't', "table",		  "tables"				   },
-	{ TRUE,  'T', "trigger",	  "triggers"			   },
-	{ TRUE,  'v', "variable",	  "variables"			   },
-	{ TRUE,  'i', "index",		  "indexes"				   },
-	{ TRUE,  'e', "event",		  "events"				   },
-	{ TRUE,  'U', "publication",  "publications"		   },
-	{ TRUE,  'R', "service",	  "services"			   },
-	{ TRUE,  'D', "domain",		  "domains"				   },
-	{ TRUE,  'V', "view",		  "views"				   },
-	{ TRUE,  'n', "synonym",	  "synonyms"			   },
-	{ TRUE,  'x', "mltable",	  "MobiLink Table Scripts" },
-	{ TRUE,  'y', "mlconn",		  "MobiLink Conn Scripts"  },
-	{ TRUE,  'z', "mlprop",		  "MobiLink Properties "   }
+	{ true,  'c', "cursor",		  "cursors"				   },
+	{ false, 'd', "prototype",	  "prototypes"			   },
+	{ true,  'f', "function",	  "functions"			   },
+	{ true,  'F', "field",		  "record fields"		   },
+	{ false, 'l', "local",		  "local variables"		   },
+	{ true,  'L', "label",		  "block label"			   },
+	{ true,  'P', "package",	  "packages"			   },
+	{ true,  'p', "procedure",	  "procedures"			   },
+	{ false, 'r', "record",		  "records"				   },
+	{ true,  's', "subtype",	  "subtypes"			   },
+	{ true,  't', "table",		  "tables"				   },
+	{ true,  'T', "trigger",	  "triggers"			   },
+	{ true,  'v', "variable",	  "variables"			   },
+	{ true,  'i', "index",		  "indexes"				   },
+	{ true,  'e', "event",		  "events"				   },
+	{ true,  'U', "publication",  "publications"		   },
+	{ true,  'R', "service",	  "services"			   },
+	{ true,  'D', "domain",		  "domains"				   },
+	{ true,  'V', "view",		  "views"				   },
+	{ true,  'n', "synonym",	  "synonyms"			   },
+	{ true,  'x', "mltable",	  "MobiLink Table Scripts" },
+	{ true,  'y', "mlconn",		  "MobiLink Conn Scripts"  },
+	{ true,  'z', "mlprop",		  "MobiLink Properties "   }
 };
 
-static const keywordDesc SqlKeywordTable [] = {
+static const keywordTable SqlKeywordTable [] = {
 	/* keyword		keyword ID */
 	{ "as",								KEYWORD_is				      },
 	{ "is",								KEYWORD_is				      },
@@ -318,8 +308,8 @@ static const keywordDesc SqlKeywordTable [] = {
  */
 
 /* Recursive calls */
-static void parseBlock (tokenInfo *const token, const boolean local);
-static void parseDeclare (tokenInfo *const token, const boolean local);
+static void parseBlock (tokenInfo *const token, const bool local);
+static void parseDeclare (tokenInfo *const token, const bool local);
 static void parseKeywords (tokenInfo *const token);
 static void parseSqlFile (tokenInfo *const token);
 
@@ -327,7 +317,7 @@ static void parseSqlFile (tokenInfo *const token);
  *	 FUNCTION DEFINITIONS
  */
 
-static boolean isIdentChar1 (const int c)
+static bool isIdentChar1 (const int c)
 {
 	/*
 	 * Other databases are less restrictive on the first character of
@@ -335,18 +325,18 @@ static boolean isIdentChar1 (const int c)
 	 * isIdentChar1 is used to identify the first character of an 
 	 * identifier, so we are removing some restrictions.
 	 */
-	return (boolean)
+	return (bool)
 		(isalpha (c) || c == '@' || c == '_' );
 }
 
-static boolean isIdentChar (const int c)
+static bool isIdentChar (const int c)
 {
-	return (boolean)
+	return (bool)
 		(isalpha (c) || isdigit (c) || c == '$' || 
 		 c == '@' || c == '_' || c == '#');
 }
 
-static boolean isCmdTerm (tokenInfo *const token)
+static bool isCmdTerm (tokenInfo *const token)
 {
 	DebugStatement ( 
 			debugPrintf (DEBUG_PARSE
@@ -369,16 +359,15 @@ static boolean isCmdTerm (tokenInfo *const token)
 	 *	   enum eTokenType
 	 *	   enum eTokenType
 	 */
-	return ( isType (token, TOKEN_SEMICOLON) || 
-			isType (token, TOKEN_TILDE) || 
-			isType (token, TOKEN_FORWARD_SLASH) || 
-			isKeyword (token, KEYWORD_go) 
-			);
+	return (isType (token, TOKEN_SEMICOLON) ||
+			isType (token, TOKEN_TILDE) ||
+			isType (token, TOKEN_FORWARD_SLASH) ||
+			isKeyword (token, KEYWORD_go));
 }
 
-static boolean isMatchedEnd(tokenInfo *const token, int nest_lvl)
+static bool isMatchedEnd(tokenInfo *const token, int nest_lvl)
 {
-	boolean terminated = FALSE;
+	bool terminated = false;
 	/*
 	 * Since different forms of SQL allow the use of 
 	 * BEGIN 
@@ -399,22 +388,10 @@ static boolean isMatchedEnd(tokenInfo *const token, int nest_lvl)
 	if ( nest_lvl > 0 && isKeyword (token, KEYWORD_end) )
 	{
 		if ( token->begin_end_nest_lvl == nest_lvl )
-			terminated = TRUE;
+			terminated = true;
 	}
 
 	return terminated;
-}
-
-static void buildSqlKeywordHash (void)
-{
-	const size_t count = sizeof (SqlKeywordTable) /
-		sizeof (SqlKeywordTable [0]);
-	size_t i;
-	for (i = 0	;  i < count  ;  ++i)
-	{
-		const keywordDesc* const p = &SqlKeywordTable [i];
-		addKeyword (p->name, Lang_sql, (int) p->id);
-	}
 }
 
 static tokenInfo *newToken (void)
@@ -427,7 +404,7 @@ static tokenInfo *newToken (void)
 	token->scope              = vStringNew ();
 	token->scopeKind          = SQLTAG_COUNT;
 	token->begin_end_nest_lvl = 0;
-	token->lineNumber         = getSourceLineNumber ();
+	token->lineNumber         = getInputLineNumber ();
 	token->filePosition       = getInputFilePosition ();
 
 	return token;
@@ -460,18 +437,16 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 	{
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, &(SqlKinds [kind]));
 
 		e.lineNumber   = token->lineNumber;
 		e.filePosition = token->filePosition;
-		e.kindName	   = SqlKinds [kind].name;
-		e.kind		   = SqlKinds [kind].letter;
 
 		if (vStringLength (token->scope) > 0)
 		{
 			Assert (token->scopeKind < SQLTAG_COUNT);
-			e.extensionFields.scope[0] = SqlKinds [token->scopeKind].name;
-			e.extensionFields.scope[1] = vStringValue (token->scope);
+			e.extensionFields.scopeKind = &(SqlKinds [token->scopeKind]);
+			e.extensionFields.scopeName = vStringValue (token->scope);
 		}
 
 		makeTagEntry (&e);
@@ -484,25 +459,24 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 
 static void parseString (vString *const string, const int delimiter)
 {
-	boolean end = FALSE;
+	bool end = false;
 	while (! end)
 	{
-		int c = fileGetc ();
+		int c = getcFromInputFile ();
 		if (c == EOF)
-			end = TRUE;
+			end = true;
 		/*
 		else if (c == '\\')
 		{
-			c = fileGetc(); // This maybe a ' or ". //
+			c = getcFromInputFile(); // This maybe a ' or ". //
 			vStringPut(string, c);
 		}
 		*/
 		else if (c == delimiter)
-			end = TRUE;
+			end = true;
 		else
 			vStringPut (string, c);
 	}
-	vStringTerminate (string);
 }
 
 /*	Read a C identifier beginning with "firstChar" and places it into "name".
@@ -514,11 +488,10 @@ static void parseIdentifier (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isIdentChar (c));
-	vStringTerminate (string);
 	if (!isspace (c))
-		fileUngetc (c);		/* unget non-identifier character */
+		ungetcToInputFile (c);		/* unget non-identifier character */
 }
 
 static void readToken (tokenInfo *const token)
@@ -532,8 +505,8 @@ static void readToken (tokenInfo *const token)
 getNextChar:
 	do
 	{
-		c = fileGetc ();
-		token->lineNumber   = getSourceLineNumber ();
+		c = getcFromInputFile ();
+		token->lineNumber   = getInputLineNumber ();
 		token->filePosition = getInputFilePosition ();
 		/* 
 		 * Added " to the list of ignores, not sure what this 
@@ -567,21 +540,21 @@ getNextChar:
 		case '"':
 				  token->type = TOKEN_STRING;
 				  parseString (token->string, c);
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  break;
 
 		case '-':
-				  c = fileGetc ();
+				  c = getcFromInputFile ();
 				  if (c == '-')		/* -- is this the start of a comment? */
 				  {
-					  fileSkipToCharacter ('\n');
+					  skipToCharacterInInputFile ('\n');
 					  goto getNextChar;
 				  }
 				  else
 				  {
 					  if (!isspace (c))
-						  fileUngetc (c);
+						  ungetcToInputFile (c);
 					  token->type = TOKEN_OPERATOR;
 				  }
 				  break;
@@ -590,7 +563,7 @@ getNextChar:
 		case '>':
 				  {
 					  const int initial = c;
-					  int d = fileGetc ();
+					  int d = getcFromInputFile ();
 					  if (d == initial)
 					  {
 						  if (initial == '<')
@@ -600,29 +573,29 @@ getNextChar:
 					  }
 					  else
 					  {
-						  fileUngetc (d);
+						  ungetcToInputFile (d);
 						  token->type = TOKEN_UNDEFINED;
 					  }
 					  break;
 				  }
 
 		case '\\':
-				  c = fileGetc ();
+				  c = getcFromInputFile ();
 				  if (c != '\\'  && c != '"'  && c != '\''  &&  !isspace (c))
-					  fileUngetc (c);
+					  ungetcToInputFile (c);
 				  token->type = TOKEN_CHARACTER;
-				  token->lineNumber = getSourceLineNumber ();
+				  token->lineNumber = getInputLineNumber ();
 				  token->filePosition = getInputFilePosition ();
 				  break;
 
 		case '/':
 				  {
-					  int d = fileGetc ();
-					  if ( (d != '*') &&		/* is this the start of a comment? */
-							  (d != '/') )			/* is a one line comment? */
+					  int d = getcFromInputFile ();
+					  if ((d != '*') &&		/* is this the start of a comment? */
+						  (d != '/'))		/* is a one line comment? */
 					  {
 						  token->type = TOKEN_FORWARD_SLASH;
-						  fileUngetc (d);
+						  ungetcToInputFile (d);
 					  }
 					  else
 					  {
@@ -630,18 +603,18 @@ getNextChar:
 						  {
 							  do
 							  {
-								  fileSkipToCharacter ('*');
-								  c = fileGetc ();
+								  skipToCharacterInInputFile ('*');
+								  c = getcFromInputFile ();
 								  if (c == '/')
 									  break;
 								  else
-									  fileUngetc (c);
+									  ungetcToInputFile (c);
 							  } while (c != EOF && c != '\0');
 							  goto getNextChar;
 						  }
 						  else if (d == '/')	/* is this the start of a comment?  */
 						  {
-							  fileSkipToCharacter ('\n');
+							  skipToCharacterInInputFile ('\n');
 							  goto getNextChar;
 						  }
 					  }
@@ -654,13 +627,13 @@ getNextChar:
 				  else
 				  {
 					  parseIdentifier (token->string, c);
-					  token->lineNumber = getSourceLineNumber ();
+					  token->lineNumber = getInputLineNumber ();
 					  token->filePosition = getInputFilePosition ();
 					  token->keyword = analyzeToken (token->string, Lang_sql);
 					  if (isKeyword (token, KEYWORD_rem))
 					  {
 						  vStringClear (token->string);
-						  fileSkipToCharacter ('\n');
+						  skipToCharacterInInputFile ('\n');
 						  goto getNextChar;
 					  }
 					  else if (isKeyword (token, KEYWORD_NONE))
@@ -686,7 +659,7 @@ static void readIdentifier (tokenInfo *const token)
 		tokenInfo *const close_square = newToken ();
 
 		readToken (token);
-		/* eat close swuare */
+		/* eat close square */
 		readToken (close_square);
 		deleteToken (close_square);
 	}
@@ -704,7 +677,6 @@ static void readIdentifier (tokenInfo *const token)
  *		   vStringCatS (parent->string, ".");
  *	   }
  *	   vStringCatS (parent->string, vStringValue(child->string));
- *	   vStringTerminate(parent->string);
  * }
  */
 
@@ -715,7 +687,6 @@ static void addToScope (tokenInfo* const token, vString* const extra, sqlKind ki
 		vStringCatS (token->scope, ".");
 	}
 	vStringCatS (token->scope, vStringValue(extra));
-	vStringTerminate(token->scope);
 	token->scopeKind = kind;
 }
 
@@ -731,13 +702,13 @@ static void findToken (tokenInfo *const token, const tokenType type)
 	}
 }
 
-static void findCmdTerm (tokenInfo *const token, const boolean check_first)
+static void findCmdTerm (tokenInfo *const token, const bool check_first)
 {
 	int begin_end_nest_lvl = token->begin_end_nest_lvl;
 
-	if ( check_first ) 
+	if (check_first)
 	{
-		if ( isCmdTerm(token) )
+		if (isCmdTerm(token))
 			return;
 	}
 	do
@@ -815,7 +786,7 @@ static void skipArgumentList (tokenInfo *const token)
 	 * Other databases can have arguments with fully declared
 	 * datatypes:
 	 *	 (	name varchar(30), text binary(10)  )
-	 * So we must check for nested open and closing parantheses
+	 * So we must check for nested open and closing parentheses
 	 */
 
 	if (isType (token, TOKEN_OPEN_PAREN))	/* arguments? */
@@ -901,7 +872,7 @@ static void parseSubProgram (tokenInfo *const token)
 		 * blank and the value just read is the OWNER or CREATOR of the
 		 * function and should not be considered part of the scope.
 		 */
-		if ( vStringLength(saveScope) > 0 )
+		if (vStringLength(saveScope) > 0)
 		{
 			addToScope(token, name->string, kind);
 		}
@@ -917,14 +888,15 @@ static void parseSubProgram (tokenInfo *const token)
 
 	if (kind == SQLTAG_FUNCTION)
 	{
-		if (isKeyword (token, KEYWORD_return) || isKeyword (token, KEYWORD_returns))
+		if (isKeyword (token, KEYWORD_return) ||
+			isKeyword (token, KEYWORD_returns))
 		{
 			/* Read datatype */
 			readToken (token);
 			/*
 			 * Read token after which could be the
 			 * command terminator if a prototype
-			 * or an open parantheses
+			 * or an open parenthesis
 			 */
 			readToken (token);
 			if (isType (token, TOKEN_OPEN_PAREN))
@@ -934,7 +906,7 @@ static void parseSubProgram (tokenInfo *const token)
 			}
 		}
 	}
-	if( isCmdTerm (token) )
+	if (isCmdTerm (token))
 	{
 		makeSqlTag (name, SQLTAG_PROTOTYPE);
 	} 
@@ -951,7 +923,7 @@ static void parseSubProgram (tokenInfo *const token)
 				)
 			  )
 		{
-			if ( isKeyword (token, KEYWORD_result) )
+			if (isKeyword (token, KEYWORD_result))
 			{
 				readToken (token);
 				if (isType (token, TOKEN_OPEN_PAREN))
@@ -964,9 +936,9 @@ static void parseSubProgram (tokenInfo *const token)
 			}
 		}
 		if (isKeyword (token, KEYWORD_at) || 
-				isKeyword (token, KEYWORD_url) ||
-				isKeyword (token, KEYWORD_internal) ||
-				isKeyword (token, KEYWORD_external) )
+			isKeyword (token, KEYWORD_url) ||
+			isKeyword (token, KEYWORD_internal) ||
+			isKeyword (token, KEYWORD_external))
 		{
 			addToScope(token, name->string, kind);
 			if (isType (name, TOKEN_IDENTIFIER) ||
@@ -978,14 +950,14 @@ static void parseSubProgram (tokenInfo *const token)
 			vStringClear (token->scope);
 			token->scopeKind = SQLTAG_COUNT;
 		} 
-		if ( isType (token, TOKEN_EQUAL) )
+		if (isType (token, TOKEN_EQUAL))
 			readToken (token);
 
-		if ( isKeyword (token, KEYWORD_declare) )
-			parseDeclare (token, FALSE);
+		if (isKeyword (token, KEYWORD_declare))
+			parseDeclare (token, false);
 
 		if (isKeyword (token, KEYWORD_is) || 
-				isKeyword (token, KEYWORD_begin) )
+			isKeyword (token, KEYWORD_begin))
 		{
 			addToScope(token, name->string, kind);
 			if (isType (name, TOKEN_IDENTIFIER) ||
@@ -994,7 +966,7 @@ static void parseSubProgram (tokenInfo *const token)
 			   )
 				makeSqlTag (name, kind);
 
-			parseBlock (token, TRUE);
+			parseBlock (token, true);
 			vStringClear (token->scope);
 			token->scopeKind = SQLTAG_COUNT;
 		} 
@@ -1041,6 +1013,8 @@ static void parseRecord (tokenInfo *const token)
 					isKeyword(token, KEYWORD_constraint) ||
 					isKeyword(token, KEYWORD_foreign) ) )
 		{
+			/* keyword test above is redundant as only a TOKEN_KEYWORD could
+			 * match any isKeyword() anyway */
 			if (isType (token, TOKEN_IDENTIFIER) ||
 					isType (token, TOKEN_STRING))
 				makeSqlTag (token, SQLTAG_FIELD);
@@ -1131,7 +1105,7 @@ static void parseSimple (tokenInfo *const token, const sqlKind kind)
 		makeSqlTag (token, kind);
 }
 
-static void parseDeclare (tokenInfo *const token, const boolean local)
+static void parseDeclare (tokenInfo *const token, const bool local)
 {
 	/*
 	 * PL/SQL declares are of this format:
@@ -1176,7 +1150,7 @@ static void parseDeclare (tokenInfo *const token, const boolean local)
 	}
 }
 
-static void parseDeclareANSI (tokenInfo *const token, const boolean local)
+static void parseDeclareANSI (tokenInfo *const token, const bool local)
 {
 	tokenInfo *const type = newToken ();
 	/*
@@ -1197,7 +1171,7 @@ static void parseDeclareANSI (tokenInfo *const token, const boolean local)
 		if (isKeyword (type, KEYWORD_cursor))
 			makeSqlTag (token, SQLTAG_CURSOR);
 		else if (isKeyword (token, KEYWORD_local) &&
-				isKeyword (type, KEYWORD_temporary))
+				 isKeyword (type, KEYWORD_temporary))
 		{
 			/*
 			 * DECLARE LOCAL TEMPORARY TABLE table_name (
@@ -1210,14 +1184,14 @@ static void parseDeclareANSI (tokenInfo *const token, const boolean local)
 			{
 				readToken (token);
 				if (isType(token, TOKEN_IDENTIFIER) || 
-						isType(token, TOKEN_STRING) )
+					isType(token, TOKEN_STRING))
 				{
 					makeSqlTag (token, SQLTAG_TABLE);
 				}
 			}
 		}
 		else if (isType (token, TOKEN_IDENTIFIER) || 
-				isType (token, TOKEN_STRING))
+				 isType (token, TOKEN_STRING))
 		{
 			if (local)
 				makeSqlTag (token, SQLTAG_LOCAL_VARIABLE);
@@ -1256,9 +1230,10 @@ static void parseLabel (tokenInfo *const token)
 	}
 }
 
-static void parseStatements (tokenInfo *const token, const boolean exit_on_endif )
+static void parseStatements (tokenInfo *const token, const bool exit_on_endif )
 {
-	boolean stmtTerm = FALSE;
+	/* bool isAnsi   = true; */
+	bool stmtTerm = false;
 	do
 	{
 
@@ -1333,9 +1308,10 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						readToken (token);
 					}
 
-					if( isKeyword (token, KEYWORD_begin ) )
+					if (isKeyword (token, KEYWORD_begin))
 					{
-						parseBlock(token, FALSE);
+						/* isAnsi = false; */
+						parseBlock(token, false);
 
 						/*
 						 * Handle the non-Ansi IF blocks.
@@ -1343,8 +1319,8 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						 * token in a command terminator (like GO)
 						 * we know we are done with this statement.
 						 */
-						if ( isCmdTerm (token) )
-							stmtTerm = TRUE;
+						if (isCmdTerm (token))
+							stmtTerm = true;
 					}
 					else
 					{
@@ -1358,9 +1334,9 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 									isKeyword (token, KEYWORD_elseif)    )
 								readToken (token);
 
-							parseStatements (token, TRUE);
+							parseStatements (token, true);
 
-							if ( isCmdTerm(token) )
+							if (isCmdTerm(token))
 								readToken (token);
 
 						}
@@ -1371,14 +1347,14 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 						 *	IF...THEN
 						 *	END IF;
 						 */
-						if( isKeyword (token, KEYWORD_end ) )
+						if (isKeyword (token, KEYWORD_end))
 							readToken (token);
 
 						if( isKeyword (token, KEYWORD_if ) || isKeyword (token, KEYWORD_endif ) )
 						{
 							readToken (token);
-							if ( isCmdTerm(token) )
-								stmtTerm = TRUE;
+							if (isCmdTerm(token))
+								stmtTerm = true;
 						} 
 						else 
 						{
@@ -1409,7 +1385,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 					 *	DO
 					 *	END FOR;
 					 */
-					if( isKeyword (token, KEYWORD_for ) )
+					if (isKeyword (token, KEYWORD_for))
 					{
 						/* loop name */
 						readToken (token);
@@ -1440,14 +1416,14 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 							readToken (token);
 							*/
 
-						parseStatements (token, FALSE);
+						parseStatements (token, false);
 
-						if ( isCmdTerm(token) )
+						if (isCmdTerm(token))
 							readToken (token);
 					}
 
 
-					if( isKeyword (token, KEYWORD_end ) )
+					if (isKeyword (token, KEYWORD_end ))
 						readToken (token);
 
 					/*
@@ -1461,8 +1437,8 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 							isKeyword (token, KEYWORD_for)    )
 						readToken (token);
 
-					if ( isCmdTerm(token) )
-						stmtTerm = TRUE;
+					if (isCmdTerm(token))
+						stmtTerm = true;
 
 					break;
 
@@ -1473,7 +1449,7 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 
 				case KEYWORD_declare:
 				case KEYWORD_begin:
-					parseBlock (token, TRUE);
+					parseBlock (token, true);
 					break;
 
 				case KEYWORD_end:
@@ -1538,14 +1514,14 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 				 * if we detect them, parse them to completion
 				 */
 				if (isType (token, TOKEN_BLOCK_LABEL_BEGIN) ||
-						isKeyword (token, KEYWORD_exception) ||
-						isKeyword (token, KEYWORD_loop) ||
-						isKeyword (token, KEYWORD_case) ||
-						isKeyword (token, KEYWORD_for) ||
-						isKeyword (token, KEYWORD_begin)    )
-					parseStatements (token, FALSE);
+					isKeyword (token, KEYWORD_exception) ||
+					isKeyword (token, KEYWORD_loop) ||
+					isKeyword (token, KEYWORD_case) ||
+					isKeyword (token, KEYWORD_for) ||
+					isKeyword (token, KEYWORD_begin))
+						parseStatements (token, false);
 				else if (isKeyword (token, KEYWORD_if))
-					parseStatements (token, TRUE);
+					parseStatements (token, true);
 
 			}
 		}
@@ -1554,15 +1530,15 @@ static void parseStatements (tokenInfo *const token, const boolean exit_on_endif
 		 * See comment above, now, only read if the current token 
 		 * is not a command terminator.
 		 */
-		if ( isCmdTerm(token) && ! stmtTerm )
-			stmtTerm = TRUE;
+		if (isCmdTerm(token) && ! stmtTerm)
+			stmtTerm = true;
 				
 	} while (! isKeyword (token, KEYWORD_end) && 
 			 ! (exit_on_endif && isKeyword (token, KEYWORD_endif) ) && 
 			 ! stmtTerm );
 }
 
-static void parseBlock (tokenInfo *const token, const boolean local)
+static void parseBlock (tokenInfo *const token, const bool local)
 {
 	if (isType (token, TOKEN_BLOCK_LABEL_BEGIN))
 	{
@@ -1590,9 +1566,9 @@ static void parseBlock (tokenInfo *const token, const boolean local)
 		token->begin_end_nest_lvl++;
 		while (! isKeyword (token, KEYWORD_end))
 		{
-			parseStatements (token, FALSE);
+			parseStatements (token, false);
 
-			if ( isCmdTerm(token) )
+			if (isCmdTerm(token))
 				readToken (token);
 		}
 		token->begin_end_nest_lvl--;
@@ -1606,7 +1582,7 @@ static void parseBlock (tokenInfo *const token, const boolean local)
 		/*
 		 * Check if the END block is terminated
 		 */
-		if ( !isCmdTerm (token)	)
+		if (! isCmdTerm (token))
 		{
 			/*
 			 * Not sure what to do here at the moment.
@@ -1615,7 +1591,7 @@ static void parseBlock (tokenInfo *const token, const boolean local)
 			 * been read since it is possible this 
 			 * token is not a command delimiter.
 			 */
-			/* findCmdTerm (token, FALSE); */
+			/* findCmdTerm (token, false); */
 		}
 	}
 }
@@ -1656,11 +1632,11 @@ static void parsePackage (tokenInfo *const token)
 				isType (name, TOKEN_STRING))
 			makeSqlTag (name, SQLTAG_PACKAGE);
 		addToScope (token, name->string, SQLTAG_PACKAGE);
-		parseBlock (token, FALSE);
+		parseBlock (token, false);
 		vStringClear (token->scope);
 		token->scopeKind = SQLTAG_COUNT;
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1671,7 +1647,7 @@ static void parseTable (tokenInfo *const token)
 	/*
 	 * This deals with these formats:
 	 *	   create table t1 (c1 int);
-	 *	   create global tempoary table t2 (c1 int);
+	 *	   create global temporary table t2 (c1 int);
 	 *	   create table "t3" (c1 int);
 	 *	   create table bob.t4 (c1 int);
 	 *	   create table bob."t5" (c1 int);
@@ -1717,7 +1693,7 @@ static void parseTable (tokenInfo *const token)
 	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		if (isType (name, TOKEN_IDENTIFIER) ||
-				isType (name, TOKEN_STRING))
+			isType (name, TOKEN_STRING))
 		{
 			makeSqlTag (name, SQLTAG_TABLE);
 			vStringCopy(token->scope, name->string);
@@ -1734,7 +1710,7 @@ static void parseTable (tokenInfo *const token)
 			makeSqlTag (name, SQLTAG_TABLE);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1759,8 +1735,9 @@ static void parseIndex (tokenInfo *const token)
 		readIdentifier (name);
 		readToken (token);
 	}
-	if ( isKeyword (token, KEYWORD_on) &&
-			(isType (name, TOKEN_IDENTIFIER) || isType (name, TOKEN_STRING) ) )
+	if (isKeyword (token, KEYWORD_on) &&
+		(isType (name, TOKEN_IDENTIFIER) ||
+		 isType (name, TOKEN_STRING)))
 	{
 		readIdentifier (owner);
 		readToken (token);
@@ -1772,7 +1749,7 @@ static void parseIndex (tokenInfo *const token)
 		addToScope(name, owner->string, SQLTAG_TABLE /* FIXME? */);
 		makeSqlTag (name, SQLTAG_INDEX);
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 	deleteToken (owner);
 }
@@ -1801,8 +1778,8 @@ static void parseEvent (tokenInfo *const token)
 		readToken (token);
 	}
 
-	if ( isKeyword (token, KEYWORD_handler) ||
-			isType (token, TOKEN_SEMICOLON)   )
+	if (isKeyword (token, KEYWORD_handler) ||
+		isType (token, TOKEN_SEMICOLON))
 	{
 		makeSqlTag (name, SQLTAG_EVENT);
 	}
@@ -1810,11 +1787,11 @@ static void parseEvent (tokenInfo *const token)
 	if (isKeyword (token, KEYWORD_handler))
 	{
 		readToken (token);
-		if ( isKeyword (token, KEYWORD_begin) )
+		if (isKeyword (token, KEYWORD_begin))
 		{
-			parseBlock (token, TRUE);
+			parseBlock (token, true);
 		}
-		findCmdTerm (token, TRUE);
+		findCmdTerm (token, true);
 	}
 	deleteToken (name);
 }
@@ -1850,7 +1827,7 @@ static void parseTrigger (tokenInfo *const token)
 	}
 
 	/*if (! isType (token, TOKEN_SEMICOLON) ) */
-	if (! isCmdTerm (token) )
+	if (! isCmdTerm (token))
 	{
 		readToken (table);
 		readToken (token);
@@ -1864,10 +1841,10 @@ static void parseTrigger (tokenInfo *const token)
 					(isKeyword (token, KEYWORD_call)) ||
 					(	isCmdTerm (token)))    )
 		{
-			if ( isKeyword (token, KEYWORD_declare) )
+			if (isKeyword (token, KEYWORD_declare))
 			{
 				addToScope(token, name->string, SQLTAG_TRIGGER);
-				parseDeclare(token, TRUE);
+				parseDeclare(token, true);
 				vStringClear(token->scope);
 				token->scopeKind = SQLTAG_COUNT;
 			}
@@ -1875,22 +1852,22 @@ static void parseTrigger (tokenInfo *const token)
 				readToken (token);
 		}
 
-		if ( isKeyword (token, KEYWORD_begin) || 
-				isKeyword (token, KEYWORD_call)   )
+		if (isKeyword (token, KEYWORD_begin) ||
+			isKeyword (token, KEYWORD_call))
 		{
 			addToScope(name, table->string, SQLTAG_TABLE);
 			makeSqlTag (name, SQLTAG_TRIGGER);
 			addToScope(token, table->string, SQLTAG_TABLE);
-			if ( isKeyword (token, KEYWORD_begin) )
+			if (isKeyword (token, KEYWORD_begin))
 			{
-				parseBlock (token, TRUE);
+				parseBlock (token, true);
 			}
 			vStringClear(token->scope);
 			token->scopeKind = SQLTAG_COUNT;
 		}
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 	deleteToken (name);
 	deleteToken (table);
 }
@@ -1917,12 +1894,12 @@ static void parsePublication (tokenInfo *const token)
 	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		if (isType (name, TOKEN_IDENTIFIER) ||
-				isType (name, TOKEN_STRING))
+			isType (name, TOKEN_STRING))
 		{
 			makeSqlTag (name, SQLTAG_PUBLICATION);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1946,12 +1923,12 @@ static void parseService (tokenInfo *const token)
 	if (isKeyword (token, KEYWORD_type))
 	{
 		if (isType (name, TOKEN_IDENTIFIER) ||
-				isType (name, TOKEN_STRING))
+			isType (name, TOKEN_STRING))
 		{
 			makeSqlTag (name, SQLTAG_SERVICE);
 		}
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1971,11 +1948,11 @@ static void parseDomain (tokenInfo *const token)
 	}
 	readToken (token);
 	if (isType (name, TOKEN_IDENTIFIER) ||
-			isType (name, TOKEN_STRING))
+		isType (name, TOKEN_STRING))
 	{
 		makeSqlTag (name, SQLTAG_DOMAIN);
 	}
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 	deleteToken (name);
 }
 
@@ -1991,7 +1968,7 @@ static void parseDrop (tokenInfo *const token)
 	 * the issue for all types.
 	 */
 
-	findCmdTerm (token, FALSE);
+	findCmdTerm (token, false);
 }
 
 static void parseVariable (tokenInfo *const token)
@@ -2013,7 +1990,7 @@ static void parseVariable (tokenInfo *const token)
 	{
 		makeSqlTag (name, SQLTAG_VARIABLE);
 	}
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2037,7 +2014,7 @@ static void parseSynonym (tokenInfo *const token)
 	{
 		makeSqlTag (name, SQLTAG_SYNONYM);
 	}
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2061,10 +2038,9 @@ static void parseView (tokenInfo *const token)
 		readIdentifier (name);
 		readToken (token);
 	}
-	if ( isType (token, TOKEN_OPEN_PAREN) )
+	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		skipArgumentList(token);
-
 	}
 
 	while (!(isKeyword (token, KEYWORD_is) ||
@@ -2080,7 +2056,7 @@ static void parseView (tokenInfo *const token)
 		makeSqlTag (name, SQLTAG_VIEW);
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (name);
 }
@@ -2099,7 +2075,7 @@ static void parseMLTable (tokenInfo *const token)
 	 */
 
 	readToken (token);
-	if ( isType (token, TOKEN_OPEN_PAREN) )
+	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		readToken (version);
 		readToken (token);
@@ -2125,21 +2101,21 @@ static void parseMLTable (tokenInfo *const token)
 			{
 				readToken (event);
 
-				if (isType (version, TOKEN_STRING) && 
-						isType (table, TOKEN_STRING) && 
-						isType (event, TOKEN_STRING) )
+				if (isType (version, TOKEN_STRING) &&
+					isType (table, TOKEN_STRING) &&
+					isType (event, TOKEN_STRING))
 				{
 					addToScope(version, table->string, SQLTAG_TABLE);
 					addToScope(version, event->string, SQLTAG_EVENT);
 					makeSqlTag (version, SQLTAG_MLTABLE);
 				}
 			} 
-			if( !isType (token, TOKEN_CLOSE_PAREN) )
+			if (! isType (token, TOKEN_CLOSE_PAREN))
 				findToken (token, TOKEN_CLOSE_PAREN);
 		} 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (version);
 	deleteToken (table);
@@ -2159,7 +2135,7 @@ static void parseMLConn (tokenInfo *const token)
 	 */
 
 	readToken (token);
-	if ( isType (token, TOKEN_OPEN_PAREN) )
+	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		readToken (version);
 		readToken (token);
@@ -2174,19 +2150,19 @@ static void parseMLConn (tokenInfo *const token)
 		{
 			readToken (event);
 
-			if (isType (version, TOKEN_STRING) && 
-					isType (event, TOKEN_STRING) )
+			if (isType (version, TOKEN_STRING) &&
+				isType (event, TOKEN_STRING))
 			{
 				addToScope(version, event->string, SQLTAG_EVENT);
 				makeSqlTag (version, SQLTAG_MLCONN);
 			}
 		} 
-		if( !isType (token, TOKEN_CLOSE_PAREN) )
+		if (! isType (token, TOKEN_CLOSE_PAREN))
 			findToken (token, TOKEN_CLOSE_PAREN);
 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (version);
 	deleteToken (event);
@@ -2209,7 +2185,7 @@ static void parseMLProp (tokenInfo *const token)
 	 */
 
 	readToken (token);
-	if ( isType (token, TOKEN_OPEN_PAREN) )
+	if (isType (token, TOKEN_OPEN_PAREN))
 	{
 		readToken (component);
 		readToken (token);
@@ -2235,21 +2211,21 @@ static void parseMLProp (tokenInfo *const token)
 			{
 				readToken (prop_name);
 
-				if (isType (component, TOKEN_STRING) && 
-						isType (prop_set_name, TOKEN_STRING) && 
-						isType (prop_name, TOKEN_STRING) )
+				if (isType (component, TOKEN_STRING) &&
+					isType (prop_set_name, TOKEN_STRING) &&
+					isType (prop_name, TOKEN_STRING))
 				{
 					addToScope(component, prop_set_name->string, SQLTAG_MLPROP /* FIXME */);
 					addToScope(component, prop_name->string, SQLTAG_MLPROP /* FIXME */);
 					makeSqlTag (component, SQLTAG_MLPROP);
 				}
 			} 
-			if( !isType (token, TOKEN_CLOSE_PAREN) )
+			if (! isType (token, TOKEN_CLOSE_PAREN))
 				findToken (token, TOKEN_CLOSE_PAREN);
 		} 
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 
 	deleteToken (component);
 	deleteToken (prop_set_name);
@@ -2279,12 +2255,12 @@ static void parseComment (tokenInfo *const token)
 		readToken (token);
 	}
 	readToken (token);
-	if ( isType(token, TOKEN_OPEN_CURLY) )
+	if (isType(token, TOKEN_OPEN_CURLY))
 	{
 		findToken (token, TOKEN_CLOSE_CURLY);
 	}
 
-	findCmdTerm (token, TRUE);
+	findCmdTerm (token, true);
 }
 
 
@@ -2292,16 +2268,16 @@ static void parseKeywords (tokenInfo *const token)
 {
 		switch (token->keyword)
 		{
-			case KEYWORD_begin:			parseBlock (token, FALSE); break;
+			case KEYWORD_begin:			parseBlock (token, false); break;
 			case KEYWORD_comment:		parseComment (token); break;
 			case KEYWORD_cursor:		parseSimple (token, SQLTAG_CURSOR); break;
 			case KEYWORD_datatype:		parseDomain (token); break;
-			case KEYWORD_declare:		parseBlock (token, FALSE); break;
+			case KEYWORD_declare:		parseBlock (token, false); break;
 			case KEYWORD_domain:		parseDomain (token); break;
 			case KEYWORD_drop:			parseDrop (token); break;
 			case KEYWORD_event:			parseEvent (token); break;
 			case KEYWORD_function:		parseSubProgram (token); break;
-			case KEYWORD_if:			parseStatements (token, FALSE); break;
+			case KEYWORD_if:			parseStatements (token, false); break;
 			case KEYWORD_index:			parseIndex (token); break;
 			case KEYWORD_ml_table:		parseMLTable (token); break;
 			case KEYWORD_ml_table_lang: parseMLTable (token); break;
@@ -2344,9 +2320,8 @@ static void parseSqlFile (tokenInfo *const token)
 
 static void initialize (const langType language)
 {
-	Assert (sizeof (SqlKinds) / sizeof (SqlKinds [0]) == SQLTAG_COUNT);
+	Assert (ARRAY_SIZE (SqlKinds) == SQLTAG_COUNT);
 	Lang_sql = language;
-	buildSqlKeywordHash ();
 }
 
 static void findSqlTags (void)
@@ -2363,13 +2338,13 @@ static void findSqlTags (void)
 extern parserDefinition* SqlParser (void)
 {
 	static const char *const extensions [] = { "sql", NULL };
-	parserDefinition* def = parserNew ("SQL");
+	parserDefinition* def = parserNewFull ("SQL", KIND_FILE_ALT);
 	def->kinds		= SqlKinds;
-	def->kindCount	= KIND_COUNT (SqlKinds);
+	def->kindCount	= ARRAY_SIZE (SqlKinds);
 	def->extensions = extensions;
 	def->parser		= findSqlTags;
 	def->initialize = initialize;
+	def->keywordTable = SqlKeywordTable;
+	def->keywordCount = ARRAY_SIZE (SqlKeywordTable);
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 noexpandtab: */

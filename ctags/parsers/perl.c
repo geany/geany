@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for PERL language
 *   files.
@@ -12,14 +12,16 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "debug.h"
 
 #include <string.h>
 
 #include "entry.h"
 #include "options.h"
 #include "read.h"
-#include "main.h"
+#include "routines.h"
 #include "vstring.h"
+#include "xtag.h"
 
 #define TRACE_PERL_C 0
 #define TRACE if (TRACE_PERL_C) printf("perl.c:%d: ", __LINE__), printf
@@ -38,38 +40,38 @@ typedef enum {
 } perlKind;
 
 static kindOption PerlKinds [] = {
-	{ TRUE,  'c', "constant",               "constants" },
-	{ TRUE,  'f', "format",                 "formats" },
-	{ TRUE,  'l', "label",                  "labels" },
-	{ TRUE,  'p', "package",                "packages" },
-	{ TRUE,  's', "subroutine",             "subroutines" },
-	{ FALSE, 'd', "subroutineDeclaration",  "subroutine declarations" },
+	{ true,  'c', "constant",               "constants" },
+	{ true,  'f', "format",                 "formats" },
+	{ true,  'l', "label",                  "labels" },
+	{ true,  'p', "package",                "packages" },
+	{ true,  's', "subroutine",             "subroutines" },
+	{ false, 'd', "subroutineDeclaration",  "subroutine declarations" },
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifier1 (int c)
+static bool isIdentifier1 (int c)
 {
-	return (boolean) (isalpha (c) || c == '_');
+	return (bool) (isalpha (c) || c == '_');
 }
 
-static boolean isIdentifier (int c)
+static bool isIdentifier (int c)
 {
-	return (boolean) (isalnum (c) || c == '_');
+	return (bool) (isalnum (c) || c == '_');
 }
 
-static boolean isPodWord (const char *word)
+static bool isPodWord (const char *word)
 {
-	boolean result = FALSE;
+	bool result = false;
 	if (isalpha (*word))
 	{
 		const char *const pods [] = {
 			"head1", "head2", "head3", "head4", "over", "item", "back",
 			"pod", "begin", "end", "for"
 		};
-		const size_t count = sizeof (pods) / sizeof (pods [0]);
+		const size_t count = ARRAY_SIZE (pods);
 		const char *white = strpbrk (word, " \t");
 		const size_t len = (white!=NULL) ? (size_t)(white-word) : strlen (word);
 		char *const id = (char*) eMalloc (len + 1);
@@ -79,7 +81,7 @@ static boolean isPodWord (const char *word)
 		for (i = 0  ;  i < count  &&  ! result  ;  ++i)
 		{
 			if (strcmp (id, pods [i]) == 0)
-				result = TRUE;
+				result = true;
 		}
 		eFree (id);
 	}
@@ -105,11 +107,11 @@ static boolean isPodWord (const char *word)
  * parse Perl), so we are only promising best effort here.
  *
  * If we can't determine what this is (due to a file ending, for example),
- * we will return FALSE.
+ * we will return false.
  */
-static boolean isSubroutineDeclaration (const unsigned char *cp)
+static bool isSubroutineDeclaration (const unsigned char *cp)
 {
-	boolean attr = FALSE;
+	bool attr = false;
 	int nparens = 0;
 
 	do {
@@ -119,10 +121,10 @@ SUB_DECL_SWITCH:
 				case ':':
 					if (nparens)
 						break;
-					else if (TRUE == attr)
-						return FALSE;    /* Invalid attribute name */
+					else if (true == attr)
+						return false;    /* Invalid attribute name */
 					else
-						attr = TRUE;
+						attr = true;
 					break;
 				case '(':
 					++nparens;
@@ -135,31 +137,31 @@ SUB_DECL_SWITCH:
 					break;
 				case ';':
 					if (!nparens)
-						return TRUE;
+						return true;
 				case '{':
 					if (!nparens)
-						return FALSE;
+						return false;
 				default:
 					if (attr) {
 						if (isIdentifier1(*cp)) {
 							cp++;
 							while (isIdentifier (*cp))
 								cp++;
-							attr = FALSE;
+							attr = false;
 							goto SUB_DECL_SWITCH; /* Instead of --cp; */
 						} else {
-							return FALSE;
+							return false;
 						}
 					} else if (nparens) {
 						break;
 					} else {
-						return FALSE;
+						return false;
 					}
 			}
 		}
-	} while (NULL != (cp = fileReadLine ()));
+	} while (NULL != (cp = readLineFromInputFile ()));
 
-	return FALSE;
+	return false;
 }
 
 /* Algorithm adapted from from GNU etags.
@@ -170,13 +172,13 @@ static void findPerlTags (void)
 {
 	vString *name = vStringNew ();
 	vString *package = NULL;
-	boolean skipPodDoc = FALSE;
+	bool skipPodDoc = false;
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
-		boolean spaceRequired = FALSE;
-		boolean qualified = FALSE;
+		bool spaceRequired = false;
+		bool qualified = false;
 		const unsigned char *cp = line;
 		perlKind kind = K_NONE;
 		tagEntryInfo e;
@@ -184,7 +186,7 @@ static void findPerlTags (void)
 		if (skipPodDoc)
 		{
 			if (strncmp ((const char*) line, "=cut", (size_t) 4) == 0)
-				skipPodDoc = FALSE;
+				skipPodDoc = false;
 			continue;
 		}
 		else if (line [0] == '=')
@@ -207,8 +209,8 @@ static void findPerlTags (void)
 			TRACE("this looks like a sub\n");
 			cp += 3;
 			kind = K_SUBROUTINE;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "use", (size_t) 3) == 0)
 		{
@@ -221,8 +223,8 @@ static void findPerlTags (void)
 				continue;
 			cp += 8;
 			kind = K_CONSTANT;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "package", (size_t) 7) == 0)
 		{
@@ -245,15 +247,15 @@ static void findPerlTags (void)
 
 			cp = space;	 /* Rewind */
 			kind = K_PACKAGE;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else if (strncmp((const char*) cp, "format", (size_t) 6) == 0)
 		{
 			cp += 6;
 			kind = K_FORMAT;
-			spaceRequired = TRUE;
-			qualified = TRUE;
+			spaceRequired = true;
+			qualified = true;
 		}
 		else
 		{
@@ -280,7 +282,7 @@ static void findPerlTags (void)
 
 			while (!*cp || '#' == *cp) { /* Gobble up empty lines
 				                            and comments */
-				cp = fileReadLine ();
+				cp = readLineFromInputFile ();
 				if (!cp)
 					goto END_MAIN_WHILE;
 				while (isspace (*cp))
@@ -302,7 +304,6 @@ static void findPerlTags (void)
 				vStringCatS (name, "STDOUT");
 			}
 
-			vStringTerminate (name);
 			TRACE("name: %s\n", name->buffer);
 
 			if (0 == vStringLength(name)) {
@@ -316,10 +317,10 @@ static void findPerlTags (void)
 				 * isSubroutineDeclaration() may consume several lines.  So
 				 * we record line positions.
 				 */
-				initTagEntry(&e, vStringValue(name));
+				initTagEntry(&e, vStringValue(name), &(PerlKinds[kind]));
 
-				if (TRUE == isSubroutineDeclaration(cp)) {
-					if (TRUE == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
+				if (true == isSubroutineDeclaration(cp)) {
+					if (true == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
 						kind = K_SUBROUTINE_DECLARATION;
 					} else {
 						vStringClear (name);
@@ -327,12 +328,9 @@ static void findPerlTags (void)
 					}
 				}
 
-				e.kind     = PerlKinds[kind].letter;
-				e.kindName = PerlKinds[kind].name;
-
 				makeTagEntry(&e);
 
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					package != NULL  && vStringLength (package) > 0)
 				{
 					vString *const qualifiedName = vStringNew ();
@@ -345,7 +343,7 @@ static void findPerlTags (void)
 			} else if (vStringLength (name) > 0)
 			{
 				makeSimpleTag (name, PerlKinds, kind);
-				if (Option.include.qualifiedTags && qualified &&
+				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					K_PACKAGE != kind &&
 					package != NULL  && vStringLength (package) > 0)
 				{
@@ -371,10 +369,8 @@ extern parserDefinition* PerlParser (void)
 	static const char *const extensions [] = { "pl", "pm", "plx", "perl", NULL };
 	parserDefinition* def = parserNew ("Perl");
 	def->kinds      = PerlKinds;
-	def->kindCount  = KIND_COUNT (PerlKinds);
+	def->kindCount  = ARRAY_SIZE (PerlKinds);
 	def->extensions = extensions;
 	def->parser     = findPerlTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4 noexpandtab: */

@@ -20,6 +20,7 @@
 #include "read.h"
 #include "vstring.h"
 #include "nestlevel.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -33,10 +34,10 @@ typedef enum {
 } restKind;
 
 static kindOption RestKinds[] = {
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 'm', "member",        "sections" },
-	{ TRUE, 'd', "macro",         "subsections" },
-	{ TRUE, 'v', "variable",      "subsubsections" }
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 'm', "member",        "sections" },
+	{ true, 'd', "macro",         "subsections" },
+	{ true, 'v', "variable",      "subsubsections" }
 };
 
 static char kindchars[SECTION_COUNT];
@@ -69,16 +70,14 @@ static void makeRestTag (const vString* const name, const int kind)
 	if (vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name));
+		initTagEntry (&e, vStringValue (name), &(RestKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
-		e.kindName = RestKinds [kind].name;
-		e.kind = RestKinds [kind].letter;
 
 		if (nl && nl->type < kind)
 		{
-			e.extensionFields.scope [0] = RestKinds [nl->type].name;
-			e.extensionFields.scope [1] = vStringValue (nl->name);
+			e.extensionFields.scopeKind = &(RestKinds [nl->type]);
+			e.extensionFields.scopeName = vStringValue (nl->name);
 		}
 		makeTagEntry (&e);
 	}
@@ -87,7 +86,7 @@ static void makeRestTag (const vString* const name, const int kind)
 
 
 /* checks if str is all the same character */
-static boolean issame(const char *str)
+static bool issame(const char *str)
 {
 	char first = *str;
 
@@ -98,9 +97,9 @@ static boolean issame(const char *str)
 		str++;
 		c = *str;
 		if (c && c != first)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 
 
@@ -161,7 +160,7 @@ static void findRestTags (void)
 	memset(kindchars, 0, sizeof kindchars);
 	nestingLevels = nestingLevelsNew();
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		int line_len = strlen((const char*) line);
 		int name_len_bytes = vStringLength(name);
@@ -187,7 +186,6 @@ static void findRestTags (void)
 		vStringClear (name);
 		if (! isspace(*line))
 			vStringCatS(name, (const char*) line);
-		vStringTerminate(name);
 	}
 	vStringDelete (name);
 	nestingLevelsFree(nestingLevels);
@@ -200,11 +198,9 @@ extern parserDefinition* RestParser (void)
 	parserDefinition* const def = parserNew ("reStructuredText");
 
 	def->kinds = RestKinds;
-	def->kindCount = KIND_COUNT (RestKinds);
+	def->kindCount = ARRAY_SIZE (RestKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findRestTags;
 	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

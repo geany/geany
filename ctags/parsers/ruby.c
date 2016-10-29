@@ -17,10 +17,12 @@
 
 #include <string.h>
 
+#include "debug.h"
 #include "entry.h"
 #include "parse.h"
 #include "nestlevel.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -34,14 +36,14 @@ typedef enum {
 *   DATA DEFINITIONS
 */
 static kindOption RubyKinds [] = {
-	{ TRUE, 'c', "class",  "classes" },
-	{ TRUE, 'f', "method", "methods" },
-	{ TRUE, 'm', "module", "modules" },
-	{ TRUE, 'F', "singletonMethod", "singleton methods" },
+	{ true, 'c', "class",  "classes" },
+	{ true, 'f', "method", "methods" },
+	{ true, 'm', "module", "modules" },
+	{ true, 'F', "singletonMethod", "singleton methods" },
 #if 0
 	/* Following two kinds are reserved. */
-	{ TRUE, 'd', "describe", "describes and contexts for Rspec" },
-	{ TRUE, 'C', "constant", "constants" },
+	{ true, 'd', "describe", "describes and contexts for Rspec" },
+	{ true, 'C', "constant", "constants" },
 #endif
 };
 
@@ -83,43 +85,43 @@ static vString* nestingLevelsToScope (const NestingLevels* nls)
 
 /*
 * Attempts to advance 's' past 'literal'.
-* Returns TRUE if it did, FALSE (and leaves 's' where
+* Returns true if it did, false (and leaves 's' where
 * it was) otherwise.
 */
-static boolean canMatch (const unsigned char** s, const char* literal,
-                         boolean (*end_check) (int))
+static bool canMatch (const unsigned char** s, const char* literal,
+                         bool (*end_check) (int))
 {
 	const int literal_length = strlen (literal);
 	const int s_length = strlen ((const char *)*s);
 
 	if (s_length < literal_length)
-		return FALSE;
+		return false;
 
 	const unsigned char next_char = *(*s + literal_length);
 	if (strncmp ((const char*) *s, literal, literal_length) != 0)
 	{
-	    return FALSE;
+	    return false;
 	}
 	/* Additionally check that we're at the end of a token. */
 	if (! end_check (next_char))
 	{
-	    return FALSE;
+	    return false;
 	}
 	*s += literal_length;
-	return TRUE;
+	return true;
 }
 
-static boolean isIdentChar (int c)
+static bool isIdentChar (int c)
 {
 	return (isalnum (c) || c == '_');
 }
 
-static boolean notIdentChar (int c)
+static bool notIdentChar (int c)
 {
 	return ! isIdentChar (c);
 }
 
-static boolean notOperatorChar (int c)
+static bool notOperatorChar (int c)
 {
 	return ! (c == '[' || c == ']' ||
 	          c == '=' || c == '!' || c == '~' ||
@@ -129,21 +131,21 @@ static boolean notOperatorChar (int c)
 	          c == '&' || c == '^' || c == '|');
 }
 
-static boolean isWhitespace (int c)
+static bool isWhitespace (int c)
 {
 	return c == 0 || isspace (c);
 }
 
-static boolean canMatchKeyword (const unsigned char** s, const char* literal)
+static bool canMatchKeyword (const unsigned char** s, const char* literal)
 {
 	return canMatch (s, literal, notIdentChar);
 }
 
 /*
 * Attempts to advance 'cp' past a Ruby operator method name. Returns
-* TRUE if successful (and copies the name into 'name'), FALSE otherwise.
+* true if successful (and copies the name into 'name'), false otherwise.
 */
-static boolean parseRubyOperator (vString* name, const unsigned char** cp)
+static bool parseRubyOperator (vString* name, const unsigned char** cp)
 {
 	static const char* RUBY_OPERATORS[] = {
 	    "[]", "[]=",
@@ -165,10 +167,10 @@ static boolean parseRubyOperator (vString* name, const unsigned char** cp)
 	    if (canMatch (cp, RUBY_OPERATORS[i], notOperatorChar))
 	    {
 	        vStringCatS (name, RUBY_OPERATORS[i]);
-	        return TRUE;
+	        return true;
 	    }
 	}
-	return FALSE;
+	return false;
 }
 
 /*
@@ -187,7 +189,6 @@ static void emitRubyTag (vString* name, rubyKind kind)
 		return;
 	}
 
-	vStringTerminate (name);
 	scope = nestingLevelsToScope (nesting);
 	lvl = nestingLevelsGetCurrent (nesting);
 	if (lvl)
@@ -211,16 +212,14 @@ static void emitRubyTag (vString* name, rubyKind kind)
 	else
 		unqualified_name = qualified_name;
 
-	initTagEntry (&tag, unqualified_name);
+	initTagEntry (&tag, unqualified_name, &(RubyKinds [kind]));
 	if (vStringLength (scope) > 0) {
 		Assert (0 <= parent_kind &&
-		        (size_t) parent_kind < (sizeof RubyKinds / sizeof RubyKinds[0]));
+		        (size_t) parent_kind < (ARRAY_SIZE (RubyKinds)));
 
-	    tag.extensionFields.scope [0] = RubyKinds [parent_kind].name;
-	    tag.extensionFields.scope [1] = vStringValue (scope);
+		tag.extensionFields.scopeKind = &(RubyKinds [parent_kind]);
+		tag.extensionFields.scopeName = vStringValue (scope);
 	}
-	tag.kindName = RubyKinds [kind].name;
-	tag.kind = RubyKinds [kind].letter;
 	makeTagEntry (&tag);
 
 	nestingLevelsPush (nesting, name, kind);
@@ -230,7 +229,7 @@ static void emitRubyTag (vString* name, rubyKind kind)
 }
 
 /* Tests whether 'ch' is a character in 'list'. */
-static boolean charIsIn (char ch, const char* list)
+static bool charIsIn (char ch, const char* list)
 {
 	return (strchr (list, ch) != NULL);
 }
@@ -256,7 +255,7 @@ static rubyKind parseIdentifier (
 	 * point or equals sign. These are all part of the name.
 	 * A method name may also contain a period if it's a singleton method.
 	 */
-	boolean had_sep = FALSE;
+	bool had_sep = false;
 	const char* also_ok;
 	if (kind == K_METHOD)
 	{
@@ -294,13 +293,13 @@ static rubyKind parseIdentifier (
 		char last_char = **cp;
 
 		if (last_char == ':')
-			had_sep = TRUE;
+			had_sep = true;
 		else
 		{
 			if (had_sep)
 			{
 				vStringPut (name, SCOPE_SEPARATOR);
-				had_sep = FALSE;
+				had_sep = false;
 			}
 			vStringPut (name, last_char);
 		}
@@ -311,7 +310,6 @@ static rubyKind parseIdentifier (
 			/* Recognize singleton methods. */
 			if (last_char == '.')
 			{
-				vStringTerminate (name);
 				vStringClear (name);
 				return parseIdentifier (cp, name, K_SINGLETON);
 			}
@@ -378,7 +376,7 @@ static void enterUnnamedScope (void)
 static void findRubyTags (void)
 {
 	const unsigned char *line;
-	boolean inMultiLineComment = FALSE;
+	bool inMultiLineComment = false;
 
 	nesting = nestingLevelsNew ();
 
@@ -392,21 +390,21 @@ static void findRubyTags (void)
 	*
 	* if you wished, and this function would fail to recognize anything.
 	*/
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp = line;
 		/* if we expect a separator after a while, for, or until statement
 		 * separators are "do", ";" or newline */
-		boolean expect_separator = FALSE;
+		bool expect_separator = false;
 
 		if (canMatch (&cp, "=begin", isWhitespace))
 		{
-			inMultiLineComment = TRUE;
+			inMultiLineComment = true;
 			continue;
 		}
 		if (canMatch (&cp, "=end", isWhitespace))
 		{
-			inMultiLineComment = FALSE;
+			inMultiLineComment = false;
 			continue;
 		}
 		if (inMultiLineComment)
@@ -435,7 +433,7 @@ static void findRubyTags (void)
 		    canMatchKeyword (&cp, "until") ||
 		    canMatchKeyword (&cp, "while"))
 		{
-			expect_separator = TRUE;
+			expect_separator = true;
 			enterUnnamedScope ();
 		}
 		else if (canMatchKeyword (&cp, "case") ||
@@ -475,10 +473,8 @@ static void findRubyTags (void)
 			 */
 			if (nl && nl->type == K_CLASS && vStringLength (nl->name) == 0)
 				kind = K_SINGLETON;
-
 			readAndEmitTag (&cp, kind);
 		}
-
 		while (*cp != '\0')
 		{
 			/* FIXME: we don't cope with here documents,
@@ -508,7 +504,7 @@ static void findRubyTags (void)
 				if (! expect_separator)
 					enterUnnamedScope ();
 				else
-					expect_separator = FALSE;
+					expect_separator = false;
 			}
 			else if (canMatchKeyword (&cp, "end") && nesting->n > 0)
 			{
@@ -524,12 +520,12 @@ static void findRubyTags (void)
 					++cp;
 				} while (*cp != 0 && *cp != '"');
 				if (*cp == '"')
-				    cp++; /* skip the last found '"' */
+					cp++; /* skip the last found '"' */
 			}
 			else if (*cp == ';')
 			{
 				++cp;
-				expect_separator = FALSE;
+				expect_separator = false;
 			}
 			else if (*cp != '\0')
 			{
@@ -545,12 +541,10 @@ static void findRubyTags (void)
 extern parserDefinition* RubyParser (void)
 {
 	static const char *const extensions [] = { "rb", "ruby", NULL };
-	parserDefinition* def = parserNew ("Ruby");
+	parserDefinition* def = parserNewFull ("Ruby", KIND_FILE_ALT);
 	def->kinds      = RubyKinds;
-	def->kindCount  = KIND_COUNT (RubyKinds);
+	def->kindCount  = ARRAY_SIZE (RubyKinds);
 	def->extensions = extensions;
 	def->parser     = findRubyTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

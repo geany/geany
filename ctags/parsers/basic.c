@@ -2,7 +2,7 @@
  *   Copyright (c) 2000-2006, Darren Hiebert, Elias Pschernig
  *
  *   This source code is released for free distribution under the terms of the
- *   GNU General Public License.
+ *   GNU General Public License version 2 or (at your option) any later version.
  *
  *   This module contains functions for generating tags for BlitzBasic
  *   (BlitzMax), PureBasic and FreeBasic language files. For now, this is kept
@@ -19,6 +19,7 @@
 
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -39,12 +40,12 @@ typedef struct {
 } KeyWord;
 
 static kindOption BasicKinds[] = {
-	{TRUE, 'c', "constant", "constants"},
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'l', "label", "labels"},
-	{TRUE, 't', "type", "types"},
-	{TRUE, 'v', "variable", "variables"},
-	{TRUE, 'g', "enum", "enumerations"}
+	{true, 'c', "constant", "constants"},
+	{true, 'f', "function", "functions"},
+	{true, 'l', "label", "labels"},
+	{true, 't', "type", "types"},
+	{true, 'v', "variable", "variables"},
+	{true, 'g', "enum", "enumerations"}
 };
 
 static KeyWord freebasic_keywords[] = {
@@ -118,7 +119,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	makeSimpleTag (name, BasicKinds, kind);
 
 	/* if the line contains a ',', we have multiple declarations */
@@ -140,7 +140,6 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
-		vStringTerminate (name);
 		makeSimpleTag (name, BasicKinds, kind);
 	}
 
@@ -156,7 +155,6 @@ static char const *extract_name (char const *pos, vString * name)
 	vStringClear (name);
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	vStringTerminate (name);
 	return pos;
 }
 
@@ -193,10 +191,9 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	for (j = 0; j < 1; j++)
 	{
 		p = extract_name (p, name);
-	}
+	}	
 	makeSimpleTag (name, BasicKinds, kw->kind);
 	vStringDelete (name);
-
 	return 1;
 }
 
@@ -222,7 +219,7 @@ static void findBasicTags (void)
 
 	keywords = freebasic_keywords;
 
-	while ((line = (const char *) fileReadLine ()) != NULL)
+	while ((line = (const char *) readLineFromInputFile ()) != NULL)
 	{
 		const char *p = line;
 		KeyWord const *kw;
@@ -248,10 +245,8 @@ parserDefinition *FreeBasicParser (void)
 	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");
 	def->kinds = BasicKinds;
-	def->kindCount = KIND_COUNT (BasicKinds);
+	def->kindCount = ARRAY_SIZE (BasicKinds);
 	def->extensions = extensions;
 	def->parser = findBasicTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

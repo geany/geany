@@ -2,7 +2,7 @@
 *   Copyright (c) 1999-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions managing resizable string lists.
 */
@@ -18,7 +18,7 @@
 #endif
 #include <glib/gstdio.h>
 
-#include "main.h"
+#include "routines.h"
 #include "read.h"
 #include "strlist.h"
 
@@ -97,7 +97,7 @@ extern stringList* stringListNewFromFile (const char* const fileName)
 		while (! mio_eof (mio))
 		{
 			vString* const str = vStringNew ();
-			readLine (str, mio);
+			readLineRaw (str, mio);
 			vStringStripTrailing (str);
 			if (vStringLength (str) > 0)
 				stringListAdd (result, str);
@@ -157,22 +157,22 @@ extern void stringListDelete (stringList *const current)
 	}
 }
 
-static boolean compareString (
+static bool compareString (
 		const char *const string, vString *const itm)
 {
-	return (boolean) (strcmp (string, vStringValue (itm)) == 0);
+	return (bool) (strcmp (string, vStringValue (itm)) == 0);
 }
 
-static boolean compareStringInsensitive (
+static bool compareStringInsensitive (
 		const char *const string, vString *const itm)
 {
-	return (boolean) (strcasecmp (string, vStringValue (itm)) == 0);
+	return (bool) (strcasecmp (string, vStringValue (itm)) == 0);
 }
 
 static int stringListIndex (
 		const stringList *const current,
 		const char *const string,
-		boolean (*test)(const char *s, vString *const vs))
+		bool (*test)(const char *s, vString *const vs))
 {
 	int result = -1;
 	unsigned int i;
@@ -185,29 +185,29 @@ static int stringListIndex (
 	return result;
 }
 
-extern boolean stringListHas (
+extern bool stringListHas (
 		const stringList *const current, const char *const string)
 {
-	boolean result = FALSE;
+	bool result = false;
 	Assert (current != NULL);
 	result = stringListIndex (current, string, compareString) != -1;
 	return result;
 }
 
-extern boolean stringListHasInsensitive (
+extern bool stringListHasInsensitive (
 		const stringList *const current, const char *const string)
 {
-	boolean result = FALSE;
+	bool result = false;
 	Assert (current != NULL);
 	Assert (string != NULL);
 	result = stringListIndex (current, string, compareStringInsensitive) != -1;
 	return result;
 }
 
-extern boolean stringListHasTest (
-		const stringList *const current, boolean (*test)(const char *s))
+extern bool stringListHasTest (
+		const stringList *const current, bool (*test)(const char *s))
 {
-	boolean result = FALSE;
+	bool result = false;
 	unsigned int i;
 	Assert (current != NULL);
 	for (i = 0  ;  ! result  &&  i < current->count  ;  ++i)
@@ -215,10 +215,10 @@ extern boolean stringListHasTest (
 	return result;
 }
 
-extern boolean stringListRemoveExtension (
+extern bool stringListRemoveExtension (
 		stringList* const current, const char* const extension)
 {
-	boolean result = FALSE;
+	bool result = false;
 	int where;
 #ifdef CASE_INSENSITIVE_FILENAMES
 	where = stringListIndex (current, extension, compareStringInsensitive);
@@ -231,12 +231,12 @@ extern boolean stringListRemoveExtension (
 				(current->count - where) * sizeof (*current->list));
 		current->list [current->count - 1] = NULL;
 		--current->count;
-		result = TRUE;
+		result = true;
 	}
 	return result;
 }
 
-extern boolean stringListExtensionMatched (
+extern bool stringListExtensionMatched (
 		const stringList* const current, const char* const extension)
 {
 #ifdef CASE_INSENSITIVE_FILENAMES
@@ -246,23 +246,23 @@ extern boolean stringListExtensionMatched (
 #endif
 }
 
-static boolean fileNameMatched (
+static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
 	const char* const pattern = vStringValue (vpattern);
 #if defined (HAVE_FNMATCH)
-	return (boolean) (fnmatch (pattern, fileName, 0) == 0);
+	return (bool) (fnmatch (pattern, fileName, 0) == 0);
 #elif defined (CASE_INSENSITIVE_FILENAMES)
-	return (boolean) (strcasecmp (pattern, fileName) == 0);
+	return (bool) (strcasecmp (pattern, fileName) == 0);
 #else
-	return (boolean) (strcmp (pattern, fileName) == 0);
+	return (bool) (strcmp (pattern, fileName) == 0);
 #endif
 }
 
-extern boolean stringListFileMatched (
+extern bool stringListFileMatched (
 		const stringList* const current, const char* const fileName)
 {
-	boolean result = FALSE;
+	bool result = false;
 	unsigned int i;
 	for (i = 0  ;  ! result  &&  i < stringListCount (current)  ;  ++i)
 		result = fileNameMatched (stringListItem (current, i), fileName);
@@ -276,5 +276,3 @@ extern void stringListPrint (const stringList *const current)
 	for (i = 0  ;  i < current->count  ;  ++i)
 		printf ("%s%s", (i > 0) ? ", " : "", vStringValue (current->list [i]));
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

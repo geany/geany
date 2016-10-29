@@ -18,40 +18,41 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_SECTION,
-    K_KEY
+	K_SECTION,
+	K_KEY
 } confKind;
 
 static kindOption ConfKinds [] = {
-    { TRUE, 'n', "namespace",  "sections"},
-    { TRUE, 'm', "macro", "keys"}
+	{ true, 'n', "namespace",  "sections"},
+	{ true, 'm', "macro", "keys"}
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifier (int c)
+static bool isIdentifier (int c)
 {
-    /* allow whitespace within keys and sections */
-    return (boolean)(isalnum (c) || isspace (c) ||  c == '_');
+	/* allow whitespace within keys and sections */
+	return (bool)(isalnum (c) || isspace (c) ||  c == '_');
 }
 
 static void findConfTags (void)
 {
-    vString *name = vStringNew ();
-    vString *scope = vStringNew ();
-    const unsigned char *line;
+	vString *name = vStringNew ();
+	vString *scope = vStringNew ();
+	const unsigned char *line;
 
-    while ((line = fileReadLine ()) != NULL)
-    {
+	while ((line = readLineFromInputFile ()) != NULL)
+	{
 		const unsigned char* cp = line;
-		boolean possible = TRUE;
+		bool possible = true;
 
 		if (isspace ((int) *cp) || *cp == '#' || (*cp != '\0' && *cp == '/' && *(cp+1) == '/'))
 			continue;
@@ -65,11 +66,9 @@ static void findConfTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, ConfKinds, K_SECTION);
 			/* remember section name */
 			vStringCopy (scope, name);
-			vStringTerminate (scope);
 			vStringClear (name);
 			continue;
 		}
@@ -84,44 +83,45 @@ static void findConfTags (void)
 					vStringPut (name, (int) *cp);
 					++cp;
 				}
-				vStringTerminate (name);
 				vStringStripTrailing (name);
 				while (isspace ((int) *cp))
 					++cp;
 				if (*cp == '=')
 				{
+					tagEntryInfo e;
+					initTagEntry (&e, vStringValue (name), &(ConfKinds [K_KEY]));
+
 					if (vStringLength (scope) > 0)
-						makeSimpleScopedTag (name, ConfKinds, K_KEY,
-							"section", vStringValue(scope), NULL);
-					else
-						makeSimpleTag (name, ConfKinds, K_KEY);
+					{
+						e.extensionFields.scopeKind = &(ConfKinds [K_SECTION]);
+						e.extensionFields.scopeName = vStringValue(scope);
+					}
+					makeTagEntry (&e);
 				}
 				vStringClear (name);
 			}
 			else if (isspace ((int) *cp))
-				possible = TRUE;
+				possible = true;
 			else
-				possible = FALSE;
+				possible = false;
 
 			if (*cp != '\0')
 				++cp;
 		}
-    }
-    vStringDelete (name);
-    vStringDelete (scope);
+	}
+	vStringDelete (name);
+	vStringDelete (scope);
 }
 
 extern parserDefinition* ConfParser (void)
 {
-    static const char *const patterns [] = { "*.ini", "*.conf", NULL };
-    static const char *const extensions [] = { "conf", NULL };
-    parserDefinition* const def = parserNew ("Conf");
-    def->kinds      = ConfKinds;
-    def->kindCount  = KIND_COUNT (ConfKinds);
-    def->patterns   = patterns;
-    def->extensions = extensions;
-    def->parser     = findConfTags;
-    return def;
+	static const char *const patterns [] = { "*.ini", "*.conf", NULL };
+	static const char *const extensions [] = { "conf", NULL };
+	parserDefinition* const def = parserNew ("Conf");
+	def->kinds      = ConfKinds;
+	def->kindCount  = ARRAY_SIZE (ConfKinds);
+	def->patterns   = patterns;
+	def->extensions = extensions;
+	def->parser     = findConfTags;
+	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

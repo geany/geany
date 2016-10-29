@@ -33,6 +33,7 @@ G_BEGIN_DECLS
 
 /* avoid including plugindata.h otherwise this redefines the GEANY() macro */
 struct GeanyPlugin;
+struct GeanyDocument;
 
 
 void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
@@ -61,6 +62,16 @@ void plugin_show_configure(struct GeanyPlugin *plugin);
 
 void plugin_builder_connect_signals(struct GeanyPlugin *plugin,
 	GtkBuilder *builder, gpointer user_data);
+
+gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key);
+
+void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
+	const gchar *key, gpointer data);
+
+void plugin_set_document_data_full(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key, gpointer data,
+	GDestroyNotify free_func);
 
 G_END_DECLS
 

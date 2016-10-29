@@ -1,9 +1,8 @@
 /*
-*
-*   Copyright (c) 1996-2001, Darren Hiebert
+*   Copyright (c) 1996-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions to process command line options.
 */
@@ -11,24 +10,24 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
 
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <ctype.h>	/* to declare isspace () */
+#include <ctype.h>  /* to declare isspace () */
 
 #include "ctags.h"
-#include "main.h"
+#include "routines.h"
 #define OPTION_WRITE
 #include "options.h"
 #include "parse.h"
 
 #include <glib.h>
 
-#define CTAGS_ENVIRONMENT	"CTAGS"
+#define CTAGS_ENVIRONMENT       "CTAGS"
 
-#define CTAGS_FILE	"tags"
+#define CTAGS_FILE  "tags"
 
 
 /*  The following separators are permitted for list options.
@@ -39,14 +38,14 @@
 #define IGNORE_SEPARATORS   ", \t\n"
 
 #ifndef DEFAULT_FILE_FORMAT
-# define DEFAULT_FILE_FORMAT	2
+# define DEFAULT_FILE_FORMAT  2
 #endif
 
-#if defined (MSDOS) || defined (WIN32) || defined (OS2) || defined (AMIGA) || defined (HAVE_OPENDIR)
+#if defined (WIN32) || defined (HAVE_OPENDIR)
 # define RECURSE_SUPPORTED
 #endif
 
-#define isCompoundOption(c)	(boolean) (strchr ("fohiILpDb", (c)) != NULL)
+#define isCompoundOption(c)  (bool) (strchr ("fohiILpDb", (c)) != NULL)
 
 
 
@@ -54,54 +53,57 @@
 *   DATA DEFINITIONS
 */
 
+static stringList* Excluded = NULL;
+
 optionValues Option = {
-    {
-	FALSE,		/* --extra=f */
-	FALSE,		/* --extra=q */
-	TRUE,		/* --file-scope */
-    },
-    {
-	TRUE,		/* -fields=a */
-	TRUE,		/* -fields=f */
-	FALSE,		/* -fields=m */
-	TRUE,		/* -fields=i */
-	FALSE,		/* -fields=k */
-	TRUE,		/* -fields=z */
-	TRUE,		/* -fields=K */
-	FALSE,		/* -fields=l */
-	TRUE,		/* -fields=n */
-	TRUE,		/* -fields=s */
-	TRUE,		/* -fields=P */
-	TRUE		/* -fields=A */
-    },
-    NULL,		/* -I */
-    FALSE,		/* -a */
-    FALSE,		/* -B */
+	{
+		false,          /* --extra=f */
+		true,           /* --file-scope */
+	},
+	{
+		true,           /* -fields=a */
+		true,           /* -fields=f */
+		false,          /* -fields=m */
+		true,           /* -fields=i */
+		false,          /* -fields=k */
+		true,           /* -fields=z */
+		true,           /* -fields=K */
+		false,          /* -fields=l */
+		true,           /* -fields=n */
+		true,           /* -fields=s */
+		true,           /* -fields=P */
+		true            /* -fields=A */
+	},
+	NULL,               /* -I */
+	false,              /* -a */
+	false,              /* -B */
 #ifdef MACROS_USE_PATTERNS
-    EX_PATTERN,		/* -n, --excmd */
+	EX_PATTERN,         /* -n, --excmd */
 #else
-    EX_MIX,		/* -n, --excmd */
+	EX_MIX,             /* -n, --excmd */
 #endif
-    FALSE,		/* -R */
-    TRUE,		/* -u, --sort */
-    FALSE,		/* -V */
-    FALSE,		/* -x */
-    NULL,		/* -L */
-    NULL,		/* -o */
-    NULL,		/* -h */
-    NULL, 		/* --etags-include */
-    DEFAULT_FILE_FORMAT,/* --format */
-    FALSE,		/* --if0 */
-    FALSE,		/* --kind-long */
-    LANG_AUTO,		/* --lang */
-    TRUE,		/* --links */
-    FALSE,		/* --filter */
-    NULL,		/* --filter-terminator */
-    FALSE,		/* --qualified-tags */
-    FALSE,		/* --tag-relative */
-    FALSE,		/* --totals */
-    FALSE,		/* --line-directives */
-    FALSE,		/* --nest */
+	false,              /* -R */
+	true,               /* -u, --sort */
+	false,              /* -V */
+	false,              /* -x */
+	NULL,               /* -L */
+	NULL,               /* -o */
+	NULL,               /* -h */
+	NULL,               /* --etags-include */
+	DEFAULT_FILE_FORMAT,/* --format */
+	false,              /* --if0 */
+	false,              /* --kind-long */
+	LANG_AUTO,          /* --lang */
+	true,               /* --links */
+	false,              /* --filter */
+	NULL,               /* --filter-terminator */
+	false,              /* --qualified-tags */
+	false,              /* --tag-relative */
+	false,              /* --totals */
+	false,              /* --line-directives */
+	false,              /* --nest */
+	.machinable = false,
+	.withListHeader = true,
 };
 
 
@@ -111,11 +113,11 @@ extern void verbose (const char *const format, ...)
 
 extern void freeList (stringList** const pList)
 {
-    if (*pList != NULL)
-    {
-	stringListDelete (*pList);
-	*pList = NULL;
-    }
+	if (*pList != NULL)
+	{
+		stringListDelete (*pList);
+		*pList = NULL;
+	}
 }
 
 extern void setDefaultTagFileName (void)
@@ -123,31 +125,13 @@ extern void setDefaultTagFileName (void)
 	Option.tagFileName = eStrdup (CTAGS_FILE);
 }
 
-/*
- *  File extension and language mapping
- */
-extern const char *fileExtension (const char *const fileName)
-{
-    const char *extension;
-    const char *pDelimiter = NULL;
-
-    pDelimiter = strrchr (fileName, '.');
-
-    if (pDelimiter == NULL)
-	extension = "";
-    else
-	extension = pDelimiter + 1;	/* skip to first char of extension */
-
-    return extension;
-}
-
 /*  Determines whether the specified file name is considered to be a header
  *  file for the purposes of determining whether enclosed tags are global or
  *  static.
  */
-extern boolean isIncludeFile (const char *const fileName)
+extern bool isIncludeFile (const char *const fileName)
 {
-    return FALSE;
+	return false;
 }
 
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
@@ -157,11 +141,11 @@ gchar **c_tags_ignore = NULL;
 
 /*  Determines whether or not "name" should be ignored, per the ignore list.
  */
-extern boolean isIgnoreToken (const char *const name,
-			      boolean *const pIgnoreParens,
-			      const char **const replacement)
+extern bool isIgnoreToken (const char *const name,
+							  bool *const pIgnoreParens,
+							  const char **const replacement)
 {
-	boolean result = FALSE;
+	bool result = false;
 
 	if (c_tags_ignore != NULL)
 	{
@@ -171,35 +155,34 @@ extern boolean isIgnoreToken (const char *const name,
 		vString *token = vStringNew();
 
 		if (pIgnoreParens != NULL)
-			*pIgnoreParens = FALSE;
+			*pIgnoreParens = false;
 
 		for (i = 0  ;  i < len ;  ++i)
 		{
 			size_t tokenLen;
 
 			vStringCopyS (token, c_tags_ignore[i]);
-			vStringTerminate (token);
 			tokenLen = vStringLength (token);
 
 			if (tokenLen >= 2 && vStringChar (token, tokenLen - 1) == '*' &&
 				strncmp (vStringValue (token), name, tokenLen - 1) == 0)
 			{
-				result = TRUE;
+				result = true;
 				break;
 			}
 			if (strncmp (vStringValue (token), name, nameLen) == 0)
 			{
 				if (nameLen == tokenLen)
 				{
-					result = TRUE;
+					result = true;
 					break;
 				}
 				else if (tokenLen == nameLen + 1  &&
 						vStringChar (token, tokenLen - 1) == '+')
 				{
-					result = TRUE;
+					result = true;
 					if (pIgnoreParens != NULL)
-						*pIgnoreParens = TRUE;
+						*pIgnoreParens = true;
 					break;
 				}
 				else if (vStringChar (token, nameLen) == '=')
@@ -217,11 +200,46 @@ extern boolean isIgnoreToken (const char *const name,
 
 void addIgnoreListFromFile (const char *const fileName)
 {
-    stringList* tokens = stringListNewFromFile (fileName);
-    if (Option.ignore == NULL)
-	Option.ignore = tokens;
-    else
-	stringListCombine (Option.ignore, tokens);
+	stringList* tokens = stringListNewFromFile (fileName);
+	if (Option.ignore == NULL)
+		Option.ignore = tokens;
+	else
+		stringListCombine (Option.ignore, tokens);
+}
+
+extern void processExcludeOption (const char *const option CTAGS_ATTR_UNUSED,
+								  const char *const parameter)
+{
+	if (parameter [0] == '\0')
+		freeList (&Excluded);
+	else if (parameter [0] == '@')
+	{
+		stringList* const new = stringListNewFromFile (parameter + 1);
+		if (Excluded == NULL)
+			Excluded = new;
+		else
+			stringListCombine (Excluded, new);
+	}
+	else
+	{
+		vString *const item = vStringNewInit (parameter);
+		if (Excluded == NULL)
+			Excluded = stringListNew ();
+		stringListAdd (Excluded, item);
+	}
+}
+
+extern bool isExcludedFile (const char* const name)
+{
+	const char* base = baseFilename (name);
+	bool result = false;
+	if (Excluded != NULL)
+	{
+		result = stringListFileMatched (Excluded, base);
+		if (! result  &&  name != base)
+			result = stringListFileMatched (Excluded, name);
+	}
+	return result;
 }
 
 
@@ -232,5 +250,3 @@ void addIgnoreListFromFile (const char *const fileName)
 #define readOptionConfiguration
 #define initOptions
 #define freeOptionResources
-
-/* vi:set tabstop=8 shiftwidth=4: */

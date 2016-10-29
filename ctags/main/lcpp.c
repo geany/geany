@@ -2,9 +2,9 @@
 *   Copyright (c) 1996-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
-*   This module contains the high level source read functions (preprocessor
+*   This module contains the high level input read functions (preprocessor
 *   directives are handled within this level).
 */
 
@@ -16,8 +16,10 @@
 #include <string.h>
 #include <glib.h>
 
+#include "debug.h"
 #include "entry.h"
-#include "get.h"
+#include "lcpp.h"
+#include "kind.h"
 #include "options.h"
 #include "read.h"
 #include "vstring.h"
@@ -41,10 +43,10 @@ enum eCppLimits {
 /*  Defines the one nesting level of a preprocessor conditional.
  */
 typedef struct sConditionalInfo {
-	boolean ignoreAllBranches;  /* ignoring parent conditional branch */
-	boolean singleBranch;       /* choose only one branch */
-	boolean branchChosen;       /* branch already selected */
-	boolean ignoring;           /* current ignore state */
+	bool ignoreAllBranches;  /* ignoring parent conditional branch */
+	bool singleBranch;       /* choose only one branch */
+	bool branchChosen;       /* branch already selected */
+	bool ignoring;           /* current ignore state */
 } conditionalInfo;
 
 enum eState {
@@ -60,12 +62,13 @@ enum eState {
  */
 typedef struct sCppState {
 	int		ungetch, ungetch2;   /* ungotten characters, if any */
-	boolean resolveRequired;     /* must resolve if/else/elif/endif branch */
-	boolean hasAtLiteralStrings; /* supports @"c:\" strings */
-	boolean hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
+	bool resolveRequired;     /* must resolve if/else/elif/endif branch */
+	bool hasAtLiteralStrings; /* supports @"c:\" strings */
+	bool hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
+	const kindOption  *defineMacroKind;
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
-		boolean	accept;          /* is a directive syntactically permitted? */
+		bool	accept;          /* is a directive syntactically permitted? */
 		vString * name;          /* macro name */
 		unsigned int nestLevel;  /* level 0 is not used */
 		conditionalInfo ifdef [MaxCppNestingLevel];
@@ -78,19 +81,20 @@ typedef struct sCppState {
 
 /*  Use brace formatting to detect end of block.
  */
-static boolean BraceFormat = FALSE;
+static bool BraceFormat = false;
 
 static cppState Cpp = {
 	'\0', '\0',  /* ungetch characters */
-	FALSE,       /* resolveRequired */
-	FALSE,       /* hasAtLiteralStrings */
-	FALSE,       /* hasCxxRawLiteralStrings */
+	false,       /* resolveRequired */
+	false,       /* hasAtLiteralStrings */
+	false,       /* hasCxxRawLiteralStrings */
+	NULL,        /* defineMacroKind */
 	{
 		DRCTV_NONE,  /* state */
-		FALSE,       /* accept */
+		false,       /* accept */
 		NULL,        /* tag name */
 		0,           /* nestLevel */
-		{ {FALSE,FALSE,FALSE,FALSE} }  /* ifdef array */
+		{ {false,false,false,false} }  /* ifdef array */
 	}  /* directive */
 };
 
@@ -98,35 +102,37 @@ static cppState Cpp = {
 *   FUNCTION DEFINITIONS
 */
 
-extern boolean isBraceFormat (void)
+extern bool cppIsBraceFormat (void)
 {
 	return BraceFormat;
 }
 
-extern unsigned int getDirectiveNestLevel (void)
+extern unsigned int cppGetDirectiveNestLevel (void)
 {
 	return Cpp.directive.nestLevel;
 }
 
-extern void cppInit (const boolean state, const boolean hasAtLiteralStrings,
-                     const boolean hasCxxRawLiteralStrings)
+extern void cppInit (const bool state, const bool hasAtLiteralStrings,
+                     const bool hasCxxRawLiteralStrings,
+                     const kindOption *defineMacroKind)
 {
 	BraceFormat = state;
 
 	Cpp.ungetch         = '\0';
 	Cpp.ungetch2        = '\0';
-	Cpp.resolveRequired = FALSE;
+	Cpp.resolveRequired = false;
 	Cpp.hasAtLiteralStrings = hasAtLiteralStrings;
 	Cpp.hasCxxRawLiteralStrings = hasCxxRawLiteralStrings;
+	Cpp.defineMacroKind = defineMacroKind;
 
 	Cpp.directive.state     = DRCTV_NONE;
-	Cpp.directive.accept    = TRUE;
+	Cpp.directive.accept    = true;
 	Cpp.directive.nestLevel = 0;
 
-	Cpp.directive.ifdef [0].ignoreAllBranches = FALSE;
-	Cpp.directive.ifdef [0].singleBranch = FALSE;
-	Cpp.directive.ifdef [0].branchChosen = FALSE;
-	Cpp.directive.ifdef [0].ignoring     = FALSE;
+	Cpp.directive.ifdef [0].ignoreAllBranches = false;
+	Cpp.directive.ifdef [0].singleBranch = false;
+	Cpp.directive.ifdef [0].branchChosen = false;
+	Cpp.directive.ifdef [0].ignoring     = false;
 
 	if (Cpp.directive.name == NULL)
 		Cpp.directive.name = vStringNew ();
@@ -145,12 +151,12 @@ extern void cppTerminate (void)
 
 extern void cppBeginStatement (void)
 {
-	Cpp.resolveRequired = TRUE;
+	Cpp.resolveRequired = true;
 }
 
 extern void cppEndStatement (void)
 {
-	Cpp.resolveRequired = FALSE;
+	Cpp.resolveRequired = false;
 }
 
 /*
@@ -160,7 +166,7 @@ extern void cppEndStatement (void)
 *   directives and may emit a tag for #define directives.
 */
 
-/*  This puts a character back into the input queue for the source File.
+/*  This puts a character back into the input queue for the input File.
  *  Up to two characters may be ungotten.
  */
 extern void cppUngetc (const int c)
@@ -172,7 +178,7 @@ extern void cppUngetc (const int c)
 
 /*  Reads a directive, whose first character is given by "c", into "name".
  */
-static boolean readDirective (int c, char *const name, unsigned int maxLength)
+static bool readDirective (int c, char *const name, unsigned int maxLength)
 {
 	unsigned int i;
 
@@ -180,10 +186,10 @@ static boolean readDirective (int c, char *const name, unsigned int maxLength)
 	{
 		if (i > 0)
 		{
-			c = fileGetc ();
+			c = getcFromInputFile ();
 			if (c == EOF  ||  ! isalpha (c))
 			{
-				fileUngetc (c);
+				ungetcToInputFile (c);
 				break;
 			}
 		}
@@ -191,7 +197,7 @@ static boolean readDirective (int c, char *const name, unsigned int maxLength)
 	}
 	name [i] = '\0';  /* null terminate */
 
-	return (boolean) isspacetab (c);
+	return (bool) isspacetab (c);
 }
 
 /*  Reads an identifier, whose first character is given by "c", into "tag",
@@ -203,10 +209,9 @@ static void readIdentifier (int c, vString *const name)
 	do
 	{
 		vStringPut (name, c);
-		c = fileGetc ();
-	} while (c != EOF && isident (c));
-	fileUngetc (c);
-	vStringTerminate (name);
+		c = getcFromInputFile ();
+	} while (c != EOF && cppIsident (c));
+	ungetcToInputFile (c);
 }
 
 static conditionalInfo *currentConditional (void)
@@ -214,17 +219,17 @@ static conditionalInfo *currentConditional (void)
 	return &Cpp.directive.ifdef [Cpp.directive.nestLevel];
 }
 
-static boolean isIgnore (void)
+static bool isIgnore (void)
 {
 	return Cpp.directive.ifdef [Cpp.directive.nestLevel].ignoring;
 }
 
-static boolean setIgnore (const boolean ignore)
+static bool setIgnore (const bool ignore)
 {
 	return Cpp.directive.ifdef [Cpp.directive.nestLevel].ignoring = ignore;
 }
 
-static boolean isIgnoreBranch (void)
+static bool isIgnoreBranch (void)
 {
 	conditionalInfo *const ifdef = currentConditional ();
 
@@ -233,7 +238,7 @@ static boolean isIgnoreBranch (void)
 	 *  statements to be followed, but we must follow no further branches.
 	 */
 	if (Cpp.resolveRequired  &&  ! BraceFormat)
-		ifdef->singleBranch = TRUE;
+		ifdef->singleBranch = true;
 
 	/*  We will ignore this branch in the following cases:
 	 *
@@ -243,7 +248,7 @@ static boolean isIgnoreBranch (void)
 	 *      a.  A statement was incomplete upon entering the conditional
 	 *      b.  A statement is incomplete upon encountering a branch
 	 */
-	return (boolean) (ifdef->ignoreAllBranches ||
+	return (bool) (ifdef->ignoreAllBranches ||
 					 (ifdef->branchChosen  &&  ifdef->singleBranch));
 }
 
@@ -253,7 +258,7 @@ static void chooseBranch (void)
 	{
 		conditionalInfo *const ifdef = currentConditional ();
 
-		ifdef->branchChosen = (boolean) (ifdef->singleBranch ||
+		ifdef->branchChosen = (bool) (ifdef->singleBranch ||
 										Cpp.resolveRequired);
 	}
 }
@@ -261,10 +266,10 @@ static void chooseBranch (void)
 /*  Pushes one nesting level for an #if directive, indicating whether or not
  *  the branch should be ignored and whether a branch has already been chosen.
  */
-static boolean pushConditional (const boolean firstBranchChosen)
+static bool pushConditional (const bool firstBranchChosen)
 {
-	const boolean ignoreAllBranches = isIgnore ();  /* current ignore */
-	boolean ignoreBranch = FALSE;
+	const bool ignoreAllBranches = isIgnore ();  /* current ignore */
+	bool ignoreBranch = false;
 
 	if (Cpp.directive.nestLevel < (unsigned int) MaxCppNestingLevel - 1)
 	{
@@ -281,7 +286,7 @@ static boolean pushConditional (const boolean firstBranchChosen)
 		ifdef->ignoreAllBranches = ignoreAllBranches;
 		ifdef->singleBranch      = Cpp.resolveRequired;
 		ifdef->branchChosen      = firstBranchChosen;
-		ifdef->ignoring = (boolean) (ignoreAllBranches || (
+		ifdef->ignoring = (bool) (ignoreAllBranches || (
 				! firstBranchChosen  &&  ! BraceFormat  &&
 				(ifdef->singleBranch || !Option.if0)));
 		ignoreBranch = ifdef->ignoring;
@@ -291,7 +296,7 @@ static boolean pushConditional (const boolean firstBranchChosen)
 
 /*  Pops one nesting level for an #endif directive.
  */
-static boolean popConditional (void)
+static bool popConditional (void)
 {
 	if (Cpp.directive.nestLevel > 0)
 		--Cpp.directive.nestLevel;
@@ -299,44 +304,42 @@ static boolean popConditional (void)
 	return isIgnore ();
 }
 
-static void makeDefineTag (const char *const name, boolean parameterized)
+static void makeDefineTag (const char *const name, bool parameterized)
 {
-	const boolean isFileScope = (boolean) (! isHeaderFile ());
+	const bool isFileScope = (bool) (! isInputHeaderFile ());
 
 	if (includingDefineTags () &&
 		(! isFileScope  ||  Option.include.fileScope))
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, name);
+		initTagEntry (&e, name, Cpp.defineMacroKind);
 
-		e.lineNumberEntry = (boolean) (Option.locate != EX_PATTERN);
+		e.lineNumberEntry = (bool) (Option.locate != EX_PATTERN);
 		e.isFileScope  = isFileScope;
-		e.truncateLine = TRUE;
-		e.kindName     = "macro";
-		e.kind         = 'd';
+		e.truncateLine = true;
 		if (parameterized)
 		{
-			e.extensionFields.arglist = getArglistFromFilePos(getInputFilePosition()
+			e.extensionFields.signature = cppGetArglistFromFilePos(getInputFilePosition()
 					, e.name);
 		}
 		makeTagEntry (&e);
 		if (parameterized)
-			free((char *) e.extensionFields.arglist);
+			free((char *) e.extensionFields.signature);
 	}
 }
 
 static void directiveDefine (const int c)
 {
-	boolean parameterized;
+	bool parameterized;
 	int nc;
 
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
-		nc = fileGetc ();
-		fileUngetc (nc);
-		parameterized = (boolean) (nc == '(');
+		nc = getcFromInputFile ();
+		ungetcToInputFile (nc);
+		parameterized = (bool) (nc == '(');
 		if (! isIgnore ())
 			makeDefineTag (vStringValue (Cpp.directive.name), parameterized);
 	}
@@ -345,7 +348,7 @@ static void directiveDefine (const int c)
 
 static void directivePragma (int c)
 {
-	if (isident1 (c))
+	if (cppIsident1 (c))
 	{
 		readIdentifier (c, Cpp.directive.name);
 		if (stringMatch (vStringValue (Cpp.directive.name), "weak"))
@@ -353,32 +356,32 @@ static void directivePragma (int c)
 			/* generate macro tag for weak name */
 			do
 			{
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			} while (c == SPACE);
-			if (isident1 (c))
+			if (cppIsident1 (c))
 			{
 				readIdentifier (c, Cpp.directive.name);
-				makeDefineTag (vStringValue (Cpp.directive.name), FALSE);
+				makeDefineTag (vStringValue (Cpp.directive.name), false);
 			}
 		}
 	}
 	Cpp.directive.state = DRCTV_NONE;
 }
 
-static boolean directiveIf (const int c)
+static bool directiveIf (const int c)
 {
-	const boolean ignore = pushConditional ((boolean) (c != '0'));
+	const bool ignore = pushConditional ((bool) (c != '0'));
 
 	Cpp.directive.state = DRCTV_NONE;
 
 	return ignore;
 }
 
-static boolean directiveHash (const int c)
+static bool directiveHash (const int c)
 {
-	boolean ignore = FALSE;
+	bool ignore = false;
 	char directive [MaxDirectiveName];
-	DebugStatement ( const boolean ignore0 = isIgnore (); )
+	DebugStatement ( const bool ignore0 = isIgnore (); )
 
 	readDirective (c, directive, MaxDirectiveName);
 	if (stringMatch (directive, "define"))
@@ -398,7 +401,7 @@ static boolean directiveHash (const int c)
 	}
 	else if (stringMatch (directive, "endif"))
 	{
-		DebugStatement ( debugCppNest (FALSE, Cpp.directive.nestLevel); )
+		DebugStatement ( debugCppNest (false, Cpp.directive.nestLevel); )
 		ignore = popConditional ();
 		Cpp.directive.state = DRCTV_NONE;
 		DebugStatement ( if (ignore != ignore0) debugCppIgnore (ignore); )
@@ -413,9 +416,9 @@ static boolean directiveHash (const int c)
 
 /*  Handles a pre-processor directive whose first character is given by "c".
  */
-static boolean handleDirective (const int c)
+static bool handleDirective (const int c)
 {
-	boolean ignore = isIgnore ();
+	bool ignore = isIgnore ();
 
 	switch (Cpp.directive.state)
 	{
@@ -435,7 +438,7 @@ static boolean handleDirective (const int c)
 static Comment isComment (void)
 {
 	Comment comment;
-	const int next = fileGetc ();
+	const int next = getcFromInputFile ();
 
 	if (next == '*')
 		comment = COMMENT_C;
@@ -445,7 +448,7 @@ static Comment isComment (void)
 		comment = COMMENT_D;
 	else
 	{
-		fileUngetc (next);
+		ungetcToInputFile (next);
 		comment = COMMENT_NONE;
 	}
 	return comment;
@@ -454,17 +457,17 @@ static Comment isComment (void)
 /*  Skips over a C style comment. According to ANSI specification a comment
  *  is treated as white space, so we perform this substitution.
  */
-int skipOverCComment (void)
+int cppSkipOverCComment (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	while (c != EOF)
 	{
 		if (c != '*')
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		else
 		{
-			const int next = fileGetc ();
+			const int next = getcFromInputFile ();
 
 			if (next != '/')
 				c = next;
@@ -484,10 +487,10 @@ static int skipOverCplusComment (void)
 {
 	int c;
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 		if (c == BACKSLASH)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == NEWLINE)
 			break;
 	}
@@ -499,15 +502,15 @@ static int skipOverCplusComment (void)
  */
 static int skipOverDComment (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	while (c != EOF)
 	{
 		if (c != '+')
-			c = fileGetc ();
+			c = getcFromInputFile ();
 		else
 		{
-			const int next = fileGetc ();
+			const int next = getcFromInputFile ();
 
 			if (next != '/')
 				c = next;
@@ -524,14 +527,14 @@ static int skipOverDComment (void)
 /*  Skips to the end of a string, returning a special character to
  *  symbolically represent a generic string.
  */
-static int skipToEndOfString (boolean ignoreBackslash)
+static int skipToEndOfString (bool ignoreBackslash)
 {
 	int c;
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 		if (c == BACKSLASH && ! ignoreBackslash)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == DOUBLE_QUOTE)
 			break;
 	}
@@ -546,18 +549,18 @@ static int isCxxRawLiteralDelimiterChar (int c)
 
 static int skipToEndOfCxxRawLiteralString (void)
 {
-	int c = fileGetc ();
+	int c = getcFromInputFile ();
 
 	if (c != '(' && ! isCxxRawLiteralDelimiterChar (c))
 	{
-		fileUngetc (c);
-		c = skipToEndOfString (FALSE);
+		ungetcToInputFile (c);
+		c = skipToEndOfString (false);
 	}
 	else
 	{
 		char delim[16];
 		unsigned int delimLen = 0;
-		boolean collectDelim = TRUE;
+		bool collectDelim = true;
 
 		do
 		{
@@ -567,21 +570,21 @@ static int skipToEndOfCxxRawLiteralString (void)
 				    delimLen < (sizeof delim / sizeof *delim))
 					delim[delimLen++] = c;
 				else
-					collectDelim = FALSE;
+					collectDelim = false;
 			}
 			else if (c == ')')
 			{
 				unsigned int i = 0;
 
-				while ((c = fileGetc ()) != EOF && i < delimLen && delim[i] == c)
+				while ((c = getcFromInputFile ()) != EOF && i < delimLen && delim[i] == c)
 					i++;
 				if (i == delimLen && c == DOUBLE_QUOTE)
 					break;
 				else
-					fileUngetc (c);
+					ungetcToInputFile (c);
 			}
 		}
-		while ((c = fileGetc ()) != EOF);
+		while ((c = getcFromInputFile ()) != EOF);
 		c = STRING_SYMBOL;
 	}
 	return c;
@@ -596,23 +599,23 @@ static int skipToEndOfChar (void)
 	int c;
 	int count = 0, veraBase = '\0';
 
-	while ((c = fileGetc ()) != EOF)
+	while ((c = getcFromInputFile ()) != EOF)
 	{
 	    ++count;
 		if (c == BACKSLASH)
-			fileGetc ();  /* throw away next character, too */
+			getcFromInputFile ();  /* throw away next character, too */
 		else if (c == SINGLE_QUOTE)
 			break;
 		else if (c == NEWLINE)
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 		else if (count == 1  &&  strchr ("DHOB", toupper (c)) != NULL)
 			veraBase = c;
 		else if (veraBase != '\0'  &&  ! isalnum (c))
 		{
-			fileUngetc (c);
+			ungetcToInputFile (c);
 			break;
 		}
 	}
@@ -626,8 +629,8 @@ static int skipToEndOfChar (void)
  */
 extern int cppGetc (void)
 {
-	boolean directive = FALSE;
-	boolean ignore = FALSE;
+	bool directive = false;
+	bool ignore = false;
 	int c;
 
 	if (Cpp.ungetch != '\0')
@@ -639,13 +642,13 @@ extern int cppGetc (void)
 	}
 	else do
 	{
-		c = fileGetc ();
+		c = getcFromInputFile ();
 process:
 		switch (c)
 		{
 			case EOF:
-				ignore    = FALSE;
-				directive = FALSE;
+				ignore    = false;
+				directive = false;
 				break;
 
 			case TAB:
@@ -654,26 +657,26 @@ process:
 
 			case NEWLINE:
 				if (directive  &&  ! ignore)
-					directive = FALSE;
-				Cpp.directive.accept = TRUE;
+					directive = false;
+				Cpp.directive.accept = true;
 				break;
 
 			case DOUBLE_QUOTE:
-				Cpp.directive.accept = FALSE;
-				c = skipToEndOfString (FALSE);
+				Cpp.directive.accept = false;
+				c = skipToEndOfString (false);
 				break;
 
 			case '#':
 				if (Cpp.directive.accept)
 				{
-					directive = TRUE;
+					directive = true;
 					Cpp.directive.state  = DRCTV_HASH;
-					Cpp.directive.accept = FALSE;
+					Cpp.directive.accept = false;
 				}
 				break;
 
 			case SINGLE_QUOTE:
-				Cpp.directive.accept = FALSE;
+				Cpp.directive.accept = false;
 				c = skipToEndOfChar ();
 				break;
 
@@ -682,39 +685,39 @@ process:
 				const Comment comment = isComment ();
 
 				if (comment == COMMENT_C)
-					c = skipOverCComment ();
+					c = cppSkipOverCComment ();
 				else if (comment == COMMENT_CPLUS)
 				{
 					c = skipOverCplusComment ();
 					if (c == NEWLINE)
-						fileUngetc (c);
+						ungetcToInputFile (c);
 				}
 				else if (comment == COMMENT_D)
 					c = skipOverDComment ();
 				else
-					Cpp.directive.accept = FALSE;
+					Cpp.directive.accept = false;
 				break;
 			}
 
 			case BACKSLASH:
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 
 				if (next == NEWLINE)
 					continue;
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				break;
 			}
 
 			case '?':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				if (next != '?')
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				else
 				{
-					next = fileGetc ();
+					next = getcFromInputFile ();
 					switch (next)
 					{
 						case '(':          c = '[';       break;
@@ -727,8 +730,8 @@ process:
 						case '-':          c = '~';       break;
 						case '=':          c = '#';       goto process;
 						default:
-							fileUngetc ('?');
-							fileUngetc (next);
+							ungetcToInputFile ('?');
+							ungetcToInputFile (next);
 							break;
 					}
 				}
@@ -740,32 +743,32 @@ process:
 			 */
 			case '<':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				switch (next)
 				{
 					case ':':	c = '['; break;
 					case '%':	c = '{'; break;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
 			case ':':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				if (next == '>')
 					c = ']';
 				else
-					fileUngetc (next);
+					ungetcToInputFile (next);
 				goto enter;
 			}
 			case '%':
 			{
-				int next = fileGetc ();
+				int next = getcFromInputFile ();
 				switch (next)
 				{
 					case '>':	c = '}'; break;
 					case ':':	c = '#'; goto process;
-					default: fileUngetc (next);
+					default: ungetcToInputFile (next);
 				}
 				goto enter;
 			}
@@ -773,15 +776,15 @@ process:
 			default:
 				if (c == '@' && Cpp.hasAtLiteralStrings)
 				{
-					int next = fileGetc ();
+					int next = getcFromInputFile ();
 					if (next == DOUBLE_QUOTE)
 					{
-						Cpp.directive.accept = FALSE;
-						c = skipToEndOfString (TRUE);
+						Cpp.directive.accept = false;
+						c = skipToEndOfString (true);
 						break;
 					}
 					else
-						fileUngetc (next);
+						ungetcToInputFile (next);
 				}
 				else if (c == 'R' && Cpp.hasCxxRawLiteralStrings)
 				{
@@ -802,27 +805,27 @@ process:
 					 * 	"xxx(raw)xxx";
 					 *
 					 * which is perfectly valid (yet probably very unlikely). */
-					int prev = fileGetNthPrevC (1, '\0');
-					int prev2 = fileGetNthPrevC (2, '\0');
-					int prev3 = fileGetNthPrevC (3, '\0');
+					int prev = getNthPrevCFromInputFile (1, '\0');
+					int prev2 = getNthPrevCFromInputFile (2, '\0');
+					int prev3 = getNthPrevCFromInputFile (3, '\0');
 
-					if (! isident (prev) ||
-					    (! isident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
-					    (! isident (prev3) && (prev2 == 'u' && prev == '8')))
+					if (! cppIsident (prev) ||
+					    (! cppIsident (prev2) && (prev == 'L' || prev == 'u' || prev == 'U')) ||
+					    (! cppIsident (prev3) && (prev2 == 'u' && prev == '8')))
 					{
-						int next = fileGetc ();
+						int next = getcFromInputFile ();
 						if (next != DOUBLE_QUOTE)
-							fileUngetc (next);
+							ungetcToInputFile (next);
 						else
 						{
-							Cpp.directive.accept = FALSE;
+							Cpp.directive.accept = false;
 							c = skipToEndOfCxxRawLiteralString ();
 							break;
 						}
 					}
 				}
 			enter:
-				Cpp.directive.accept = FALSE;
+				Cpp.directive.accept = false;
 				if (directive)
 					ignore = handleDirective (c);
 				break;
@@ -834,35 +837,6 @@ process:
 				debugPrintf (DEBUG_CPP, "%6ld: ", getInputLineNumber () + 1); )
 
 	return c;
-}
-
-extern char *getArglistFromFilePos(MIOPos startPosition, const char *tokenName)
-{
-	MIOPos originalPosition;
-	char *result = NULL;
-	char *arglist = NULL;
-	long pos1, pos2;
-
-	pos2 = mio_tell(File.mio);
-
-	mio_getpos(File.mio, &originalPosition);
-	mio_setpos(File.mio, &startPosition);
-	pos1 = mio_tell(File.mio);
-
-	if (pos2 > pos1)
-	{
-		size_t len = pos2 - pos1;
-
-		result = (char *) g_malloc(len + 1);
-		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
-		{
-			result[len] = '\0';
-			arglist = getArglistFromStr(result, tokenName);
-		}
-		g_free(result);
-	}
-	mio_setpos(File.mio, &originalPosition);
-	return arglist;
 }
 
 typedef enum
@@ -953,7 +927,7 @@ static void stripCodeBuffer(char *buf)
 	return;
 }
 
-extern char *getArglistFromStr(char *buf, const char *name)
+static char *getArglistFromStr(char *buf, const char *name)
 {
 	char *start, *end;
 	int level;
@@ -977,4 +951,31 @@ extern char *getArglistFromStr(char *buf, const char *name)
 	return strdup(start);
 }
 
-/* vi:set tabstop=4 shiftwidth=4: */
+extern char *cppGetArglistFromFilePos(MIOPos startPosition, const char *tokenName)
+{
+	MIOPos originalPosition;
+	char *result = NULL;
+	char *arglist = NULL;
+	long pos1, pos2;
+
+	pos2 = mio_tell(File.mio);
+
+	mio_getpos(File.mio, &originalPosition);
+	mio_setpos(File.mio, &startPosition);
+	pos1 = mio_tell(File.mio);
+
+	if (pos2 > pos1)
+	{
+		size_t len = pos2 - pos1;
+
+		result = (char *) g_malloc(len + 1);
+		if (result != NULL && (len = mio_read(File.mio, result, 1, len)) > 0)
+		{
+			result[len] = '\0';
+			arglist = getArglistFromStr(result, tokenName);
+		}
+		g_free(result);
+	}
+	mio_setpos(File.mio, &originalPosition);
+	return arglist;
+}

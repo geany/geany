@@ -2,6 +2,7 @@
  * css.c
  * Token-based parser for CSS definitions
  * Author - Colomban Wendling <colomban@geany.org>
+ * License GPL-2
  **************************************************************************/
 #include "general.h"
 
@@ -11,16 +12,16 @@
 #include "entry.h"
 #include "parse.h" 
 #include "read.h" 
-
+#include "routines.h"
 
 typedef enum eCssKinds {
 	K_CLASS, K_SELECTOR, K_ID
 } cssKind;
 
 static kindOption CssKinds [] = {
-	{ TRUE, 'c', "class",		"classes" },
-	{ TRUE, 's', "selector",	"selectors" },
-	{ TRUE, 'i', "id",			"identities" }
+	{ true, 'c', "class",		"classes" },
+	{ true, 's', "selector",	"selectors" },
+	{ true, 'i', "id",			"identities" }
 };
 
 typedef enum {
@@ -36,7 +37,7 @@ typedef struct {
 } tokenInfo;
 
 
-static boolean isSelectorChar (const int c)
+static bool isSelectorChar (const int c)
 {
 	/* attribute selectors are handled separately */
 	return (isalnum (c) ||
@@ -59,10 +60,9 @@ static void parseSelector (vString *const string, const int firstChar)
 	do
 	{
 		vStringPut (string, (char) c);
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	} while (isSelectorChar (c));
-	fileUngetc (c);
-	vStringTerminate (string);
+	ungetcToInputFile (c);
 }
 
 static void readToken (tokenInfo *const token)
@@ -73,9 +73,9 @@ static void readToken (tokenInfo *const token)
 
 getNextChar:
 
-	c = fileGetc ();
+	c = getcFromInputFile ();
 	while (isspace (c))
-		c = fileGetc ();
+		c = getcFromInputFile ();
 
 	token->type = c;
 	switch (c)
@@ -89,9 +89,9 @@ getNextChar:
 			do
 			{
 				vStringPut (token->string, c);
-				c = fileGetc ();
+				c = getcFromInputFile ();
 				if (c == '\\')
-					c = fileGetc ();
+					c = getcFromInputFile ();
 			}
 			while (c != EOF && c != delimiter);
 			if (c != EOF)
@@ -102,20 +102,20 @@ getNextChar:
 
 		case '/': /* maybe comment start */
 		{
-			int d = fileGetc ();
+			int d = getcFromInputFile ();
 			if (d != '*')
 			{
-				fileUngetc (d);
+				ungetcToInputFile (d);
 				vStringPut (token->string, c);
 				token->type = c;
 			}
 			else
 			{
-				d = fileGetc ();
+				d = getcFromInputFile ();
 				do
 				{
 					c = d;
-					d = fileGetc ();
+					d = getcFromInputFile ();
 				}
 				while (d != EOF && ! (c == '*' && d == '/'));
 				goto getNextChar;
@@ -156,7 +156,7 @@ static cssKind classifySelector (const vString *const selector)
 
 static void findCssTags (void)
 {
-	boolean readNextToken = TRUE;
+	bool readNextToken = true;
 	tokenInfo token;
 
 	token.string = vStringNew ();
@@ -166,11 +166,11 @@ static void findCssTags (void)
 		if (readNextToken)
 			readToken (&token);
 
-		readNextToken = TRUE;
+		readNextToken = true;
 
 		if (token.type == '@')
 		{ /* At-rules, from the "@" to the next block or semicolon */
-			boolean useContents;
+			bool useContents;
 			readToken (&token);
 			useContents = (strcmp (vStringValue (token.string), "media") == 0 ||
 						   strcmp (vStringValue (token.string), "supports") == 0);
@@ -196,7 +196,7 @@ static void findCssTags (void)
 				vStringCat (selector, token.string);
 
 				kind = classifySelector (token.string);
-				lineNumber = getSourceLineNumber ();
+				lineNumber = getInputLineNumber ();
 				filePosition = getInputFilePosition ();
 
 				readToken (&token);
@@ -221,18 +221,15 @@ static void findCssTags (void)
 			}
 			while (token.type == TOKEN_SELECTOR);
 			/* we already consumed the next token, don't read it twice */
-			readNextToken = FALSE;
+			readNextToken = false;
 
-			vStringTerminate (selector);
 			if (CssKinds[kind].enabled)
 			{
 				tagEntryInfo e;
-				initTagEntry (&e, vStringValue (selector));
+				initTagEntry (&e, vStringValue (selector), &(CssKinds[kind]));
 
 				e.lineNumber	= lineNumber;
 				e.filePosition	= filePosition;
-				e.kindName		= CssKinds[kind].name;
-				e.kind			= (char) CssKinds[kind].letter;
 
 				makeTagEntry (&e);
 			}
@@ -259,12 +256,12 @@ static void findCssTags (void)
 /* parser definition */
 extern parserDefinition* CssParser (void)
 {
-    static const char *const extensions [] = { "css", NULL };
-    parserDefinition* def = parserNew ("CSS");
-    def->kinds      = CssKinds;
-    def->kindCount  = KIND_COUNT (CssKinds);
-    def->extensions = extensions;
-    def->parser     = findCssTags;
-    return def;
+	static const char *const extensions [] = { "css", NULL };
+	parserDefinition* def = parserNew ("CSS");
+	def->kinds      = CssKinds;
+	def->kindCount  = ARRAY_SIZE (CssKinds);
+	def->extensions = extensions;
+	def->parser     = findCssTags;
+	return def;
 }
 

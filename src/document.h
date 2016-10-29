@@ -316,6 +316,13 @@ void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
 
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key);
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

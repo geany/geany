@@ -1,7 +1,37 @@
 Geany 1.29 (unreleased)
 
+    General
+    * Fix search entries color with the default GNOME 3.20 GTK2 theme
+      (PR#1137, Issue#1101, Issue#1135, Issue#1267).
+    * Improve support for GTK 3.22.
+
+    Bug fixes
+    * Fix build when the CXX variable contains flags (PR#1155, Issue#829).
+    * Fix focusing the message window when the Terminal tab in active
+      (PR#1200, Issue#1198).
+
+    Editor
+    * Update Scintilla to version 3.7.0 (Issue#1143).
+    * Add support for keeping the cursor a number of lines from the edges to
+      always show some context (PR#1154, Issue#1152).
+    * Allow to configure keybinding for "Delete to beginning of line"
+      (Abel Serrano Juste, PR#1134).
+    * Performance improvements with many duplicate symbols (Jiří Techet,
+      PR#797, Issue#577).
+
+    Filetypes
+    * Fix highlighting of Haxe preprocessor (Issue#936).
+    * Add `.exp` extension to TCL (Simon Marchi, PR#979).
+
     Internationalization
-    * Updated translations: ca, pt_BR, sv
+    * Updated translations: ca, de, fr, pt_BR, sv
+
+    API
+    * Update `GeanyProxyProbeResults` API (PR#1213).
+    * Allow a dot at the start of proxy extensions (PR#1212).
+    * Add support for custom data attached to documents through
+      `plugin_set_document_data()`, `plugin_get_document_data()` and
+      `plugin_set_document_data_full()` (PR#1203).
 
 
 Geany 1.28 (July 10, 2016)
