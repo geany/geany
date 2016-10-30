@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-27 10:19+0200\n"
+"POT-Creation-Date: 2016-10-29 20:21+0200\n"
 "PO-Revision-Date: 2016-10-27 10:27+0200\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
@@ -3259,25 +3259,25 @@ msgstr "Mauvaise expression régulière pour le type de fichier %s : %s"
 msgid "untitled"
 msgstr "sans titre"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/highlighting.c:1229 ../src/libmain.c:850 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Impossible de trouver le fichier « %s »."
 
-#: ../src/highlighting.c:1296
+#: ../src/highlighting.c:1299
 msgid "Default"
 msgstr "Par défaut"
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1340
 msgid "The current filetype overrides the default style."
 msgstr "Le type de fichier actuel remplace le style par défaut."
 
-#: ../src/highlighting.c:1338
+#: ../src/highlighting.c:1341
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Ceci peut entraîner un affichage incorrect des jeux de couleurs."
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1366
 msgid "Color Schemes"
 msgstr "Jeux de couleurs"
 
@@ -3322,7 +3322,7 @@ msgstr "Affichage"
 msgid "Document"
 msgstr "Document"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:511
+#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:513
 #: ../src/ui_utils.c:2195
 msgid "Build"
 msgstr "Construire"
@@ -4100,11 +4100,11 @@ msgstr "Plugins"
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Choisissez les plugins à charger au démarrage :"
 
-#: ../src/plugins.c:2012
+#: ../src/plugins.c:2060
 #, c-format
 msgid ""
-"Proxy plugin extension '%s' starts with a dot, stripping. Please fix your "
-"proxy plugin."
+"Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
+"plugin."
 msgstr ""
 
 #: ../src/pluginutils.c:411
@@ -4292,11 +4292,11 @@ msgstr ""
 "Chemin du fichier qui représente le projet et contient ses préférences. Il "
 "devrait normalement avoir l'extension « %s »."
 
-#: ../src/project.c:212 ../src/project.c:484
+#: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
 msgstr "Choisir le dossier de base du projet"
 
-#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
+#: ../src/project.c:251 ../src/project.c:623 ../src/project.c:1162
 msgid "Project file could not be written"
 msgstr "Le fichier de projet n'a pas pu être écrit"
 
@@ -4305,7 +4305,7 @@ msgstr "Le fichier de projet n'a pas pu être écrit"
 msgid "Project \"%s\" created."
 msgstr "Projet « %s » créé."
 
-#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1021
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1023
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Le fichier de projet « %s » n'a pu être chargé."
@@ -4323,67 +4323,67 @@ msgstr "Fichiers de projet"
 msgid "Project \"%s\" closed."
 msgstr "Projet « %s » fermé."
 
-#: ../src/project.c:624
+#: ../src/project.c:626
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projet « %s » enregistré."
 
-#: ../src/project.c:657
+#: ../src/project.c:659
 msgid "Do you want to close it before proceeding?"
 msgstr "Voulez-vous le fermer avant de continuer ?"
 
-#: ../src/project.c:658
+#: ../src/project.c:660
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Le projet « %s » est ouvert."
 
-#: ../src/project.c:707
+#: ../src/project.c:709
 msgid "The specified project name is too short."
 msgstr "Le nom de projet spécifié est trop court."
 
-#: ../src/project.c:713
+#: ../src/project.c:715
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Le nom de projet spécifié est trop long (maximum %d caractères)."
 
-#: ../src/project.c:725
+#: ../src/project.c:727
 msgid "You have specified an invalid project filename."
 msgstr "Vous avez spécifié un nom de fichier de projet invalide."
 
-#: ../src/project.c:748
+#: ../src/project.c:750
 msgid "Create the project's base path directory?"
 msgstr "Créer le dossier de base du projet ?"
 
-#: ../src/project.c:749
+#: ../src/project.c:751
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Le chemin « %s » est inexistant."
 
-#: ../src/project.c:758
+#: ../src/project.c:760
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Le dossier de base du projet n'a pu être créé (%s)."
 
-#: ../src/project.c:771
+#: ../src/project.c:773
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Le fichier de projet n'a pas pu être écrit (%s)."
 
-#: ../src/project.c:777 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:627
 msgid "_Replace"
 msgstr "R_emplacer"
 
-#: ../src/project.c:779 ../plugins/export.c:331
+#: ../src/project.c:781 ../plugins/export.c:331
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Le fichier « %s » existe déjà. Voulez-vous l'écraser ?"
 
 #. initialise the dialog
-#: ../src/project.c:925 ../src/project.c:936
+#: ../src/project.c:927 ../src/project.c:938
 msgid "Choose Project Filename"
 msgstr "Choix du nom du fichier du projet"
 
-#: ../src/project.c:1011
+#: ../src/project.c:1013
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projet « %s » ouvert."
