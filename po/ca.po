@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-08-29 17:58+0200\n"
+"POT-Creation-Date: 2016-10-30 12:54+0100\n"
+"PO-Revision-Date: 2016-10-22 21:20+0200\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.10\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -278,7 +278,7 @@ msgid ""
 "Switch to the status message tab (in the notebook window at the bottom) if a "
 "new status message arrives"
 msgstr ""
-"Canvia a la pestanya dels missatges d'estat (a la part de baixa de la "
+"Canvia a la pestanya dels missatges d'estat (a la part de baix de la "
 "finestra del bloc de notes) si arriba un nou missatge d'estat"
 
 #: ../data/geany.glade.h:55
@@ -337,8 +337,7 @@ msgstr "Oculta el diàleg troba"
 
 #: ../data/geany.glade.h:65
 msgid "Hide the Find dialog after clicking Find Next/Previous"
-msgstr ""
-"Oculta el diàlegs troba després de fer clic a troba el següent/anterior"
+msgstr "Oculta el diàleg troba després de fer clic a troba el següent/anterior"
 
 #: ../data/geany.glade.h:66
 msgid "Use the current word under the cursor for Find dialogs"
@@ -385,7 +384,7 @@ msgid ""
 "Project dialog."
 msgstr ""
 "Quan s'habilita, el fitxer del projecte s'emmagatzema dins del directori "
-"base del projecte quan es crea un project nou, en comptes d'un directori "
+"base del projecte quan es crea un projecte nou, en comptes d'un directori "
 "sobre el directori base. Encara podreu canviar el camí al fitxer del "
 "projecte al diàleg de projecte nou."
 
@@ -501,7 +500,7 @@ msgstr "Mostra les pestanyes de l'editor"
 
 #: ../data/geany.glade.h:100
 msgid "Show close buttons"
-msgstr "Mostra el botons de tancament"
+msgstr "Mostra els botons de tancament"
 
 #: ../data/geany.glade.h:101
 msgid ""
@@ -841,7 +840,7 @@ msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
 msgstr ""
-"Teclegeu un seqüència breu de caràcters i completeu-la a una cadena de més "
+"Teclegeu una seqüència breu de caràcters i completeu-la a una cadena de més "
 "complexa mitjançant la pulsació d'una tecla"
 
 #: ../data/geany.glade.h:169
@@ -2781,8 +2780,8 @@ msgid ""
 "The file was set to read-only."
 msgstr ""
 "No s'ha pogut obrir de forma apropiada el fitxer «%s» i ha estat truncat. "
-"Això pot ser a causa de què el fitxer contingui un byte NULL. Aneu amb "
-"compte amb el desament, ja que es poden perdre dades.\n"
+"Això pot ser a causa que el fitxer contingui un byte NULL. Aneu amb compte "
+"amb el desament, ja que es poden perdre dades.\n"
 "El fitxer s'ha establert a només lectura."
 
 #: ../src/document.c:1241
@@ -4514,7 +4513,7 @@ msgstr ""
 
 #: ../src/search.c:999
 msgid "E_xtra options:"
-msgstr "Opcions e_xtra:"
+msgstr "Opcions e_xtres:"
 
 #: ../src/search.c:1007
 msgid "Other options to pass to Grep"
@@ -5104,7 +5103,7 @@ msgstr "Vés al número de línia introduït"
 
 #: ../src/toolbar.c:81
 msgid "Show the preferences dialog"
-msgstr "Mostra el diàlegs de les preferències"
+msgstr "Mostra el diàleg de les preferències"
 
 #: ../src/toolbar.c:82
 msgid "Quit Geany"
