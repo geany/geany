@@ -3,11 +3,7 @@
 # This file is distributed under the same license as the geany package.
 # Fajar Wahyu <fajarwahyuabdillah@gmail.com>, 2012.
 # Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015.
-<<<<<<< HEAD
-# Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2015.
-=======
-# Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2016/
->>>>>>> fetch-1
+# Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2016.
 #
 msgid ""
 msgstr ""
