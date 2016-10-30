@@ -2567,7 +2567,6 @@ msgstr "_Make Semua"
 msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d berkas tersimpan."
-msgstr[1] "%d berkas tersimpan."
 
 #: ../src/callbacks.c:890 ../src/keybindings.c:564
 msgid "Go to Line"
@@ -2993,7 +2992,6 @@ msgstr "Kesamaan tidak ditemukan untuk pencarian \"%s\"."
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: menggantikan %d temuan dari \"%s\" menjadi \"%s\"."
-msgstr[1] "%s: menggantikan %d temuan dari \"%s\" menjadi \"%s\"."
 
 #: ../src/document.c:3623
 msgid "Do you want to reload it?"
@@ -4552,7 +4550,6 @@ msgstr "Opsi lain untuk diberikan pada Grep"
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Ditemukan %d untuk \"%s\"."
-msgstr[1] "Ditemukan %d untuk \"%s\"."
 
 #: ../src/search.c:1425
 #, c-format
@@ -4598,7 +4595,6 @@ msgstr "Pencarian gagal."
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
 msgstr[0] "Pencarian selesai, ada %d yang ditemukan."
-msgstr[1] "Pencarian selesai, ada %d yang ditemukan."
 
 #: ../src/search.c:1881
 msgid "No matches found."
@@ -5930,7 +5926,6 @@ msgstr "Copy-an Backup: Berkas tidak bisa disimpan (%s)."
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] "Simpan Otomatis: Menyimpan berkas %d secara otomatis."
-msgstr[1] "Simpan Otomatis: Menyimpan berkas %d secara otomatis."
 
 #. initialize the dialog
 #: ../plugins/saveactions.c:442
@@ -6442,7 +6437,6 @@ msgstr "Atas dan Bawah"
 #~ msgid "Replaced text in %u file."
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Replaced text in %u file."
-#~ msgstr[1] "Replaced text in %u files."
 
 #~ msgid "Search failed (see Help->Debug Messages for details)."
 #~ msgstr "Search failed (see Help->Debug Messages for details)."
@@ -6759,7 +6753,6 @@ msgstr "Atas dan Bawah"
 #~ msgid "Found %d matches for \"%s\"."
 #~ msgid_plural "Found %d matches for \"%s\"."
 #~ msgstr[0] "Found %d match for \"%s\"."
-#~ msgstr[1] "Found %d matches for \"%s\"."
 
 #~ msgid "Failed to execute the terminal program"
 #~ msgstr "Failed to execute the terminal program"
