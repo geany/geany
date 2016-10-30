@@ -644,17 +644,9 @@ msgid ""
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
-<<<<<<< HEAD
-"Bungkus baris, jadi jika teks pada suatu baris melewati batas lebar window, "
-"maka teks yang tertutup itu akan di \"bungkus\" ke baris di bawahnya. "
-"Catatan: fitur ini lumayan memakan proses untuk dokumen yang baris \"offset"
-"\"-nya banyak, jadi untuk komputer yang lambat, performa-nya terlihat "
-"menurun."
-=======
 "Bungkus baris pada batas jendela dan lanjutkan pada baris selanjutnya. "
 "Catatan: fitur ini memerlukan beban kinerja yang besar untuk dokumen yang besar"
 ", jadi untuk komputer yang lambat seharusnya fitur ini dimatikan."
->>>>>>> fetch-1
 
 #: ../data/geany.glade.h:132
 msgid "\"Smart\" home key"
@@ -3832,11 +3824,7 @@ msgstr "Shortcut keyboard berikut ini dapat dikonfigurasi:"
 #: ../src/keyfile.c:1032
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
-<<<<<<< HEAD
-"Ketik apapun yang Anda mau di sini. Gunakan area ini untuk membuat catatan "
-=======
 "Ketik apapun yang Anda mau di sini, gunakan area ini untuk membuat catatan "
->>>>>>> fetch-1
 "atau sebagai pengingat sesuatu."
 
 #: ../src/keyfile.c:1259
