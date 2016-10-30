@@ -6,15 +6,14 @@
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016.
 #
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-07-04 06:39+0100\n"
+"POT-Creation-Date: 2016-10-30 12:54+0100\n"
+"PO-Revision-Date: 2016-10-30 15:41+0000\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
-"Language-Team: Português <palbuquerque73@gmail.com>\n"
+"Language-Team: Português <>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1042,7 +1041,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Linh_as visíveis à volta do cursor:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -3363,9 +3362,8 @@ msgid "Delete to line end"
 msgstr "Eliminar até ao final da linha"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Eliminar até ao final da linha"
+msgstr "Eliminar até ao início da linha"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4052,6 +4050,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Extensão \"%s\" do proxy %s começa com um ponto. Por favor, repare a "
+"extensão do proxy."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4335,13 +4335,12 @@ msgid "_Use regular expressions"
 msgstr "_Usar expressões regulares"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Use expressões regular do tipo POSIX. Para informação detalhada sobre "
-"expressões regulares, por favor, consulte a documentação."
+"Use expressões regular tipo Perl. Para informação detalhada sobre expressões "
+"regulares, por favor consulte a documentação."
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -5012,6 +5011,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Impossível executar o comando modelo \"%s\". Uma causa comum de erros são "
+"caminhos incorrectos no comando. Erro: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
