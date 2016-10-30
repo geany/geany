@@ -3,14 +3,15 @@
 # This file is distributed under the same license as the geany package.
 # Fajar Wahyu <fajarwahyuabdillah@gmail.com>, 2012.
 # Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015.
+# Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2016/
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2015-11-08 22:32+0700\n"
-"Last-Translator: Samsul Ma'arif <mail@samsul.web.id>\n"
+"POT-Creation-Date: 2016-06-27 18:56+0200\n"
+"PO-Revision-Date: 2016-10-29 03:00+0700\n"
+"Last-Translator: Bervianto Leo Pratama <bervianto.leo@gmail.com>\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -219,7 +220,7 @@ msgstr "<b>Mengakhiri Geany</b>"
 
 #: ../data/geany.glade.h:43
 msgid "Startup path:"
-msgstr "Path Aktivasi:"
+msgstr "Path aktivasi:"
 
 #: ../data/geany.glade.h:44
 msgid ""
@@ -230,7 +231,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:45
 msgid "Project files:"
-msgstr "Berkas Proyek:"
+msgstr "Berkas proyek:"
 
 #: ../data/geany.glade.h:46
 msgid "Path to start in when opening project files"
@@ -322,7 +323,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:61
 msgid "<b>Miscellaneous</b>"
-msgstr "<b>Lain-Lain</b>"
+msgstr "<b>Lain-lain</b>"
 
 #: ../data/geany.glade.h:62
 msgid "Always wrap search"
@@ -355,7 +356,7 @@ msgid ""
 msgstr ""
 "Pakai segera kata yang ada di bawah kursor mouse ketika membuka kotak "
 "Pencarian, Pencarian di Berkas, atau Kotak Ganti-Kata, dan tanpa perlu di "
-"seleksi."
+"seleksi"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current file's directory for Find in Files"
@@ -400,7 +401,7 @@ msgstr "<b>Proyek</b>"
 
 #: ../data/geany.glade.h:75 ../src/dialogs.c:232
 msgid "Miscellaneous"
-msgstr "Lain-Lain"
+msgstr "Lain-lain"
 
 #. TODO Find a better way to map the current notebook page to the
 #. * corresponding chapter in the documentation, comparing translatable
@@ -454,19 +455,19 @@ msgstr "Posisi:"
 
 #: ../data/geany.glade.h:87
 msgid "<b>Sidebar</b>"
-msgstr "<b>Panel Pinggir</b>"
+msgstr "<b>Panel pinggir</b>"
 
 #: ../data/geany.glade.h:88
 msgid "<b>Message window</b>"
-msgstr "<b>Jendela Pesan</b>"
+msgstr "<b>Jendela pesan</b>"
 
 #: ../data/geany.glade.h:89
 msgid "Symbol list:"
-msgstr "Daftar Simbol:"
+msgstr "Daftar simbol:"
 
 #: ../data/geany.glade.h:90
 msgid "Message window:"
-msgstr "Kotak Pesan:"
+msgstr "Kotak pesan:"
 
 #: ../data/geany.glade.h:91
 msgid "Editor:"
@@ -563,7 +564,7 @@ msgstr "Panel samping:"
 
 #: ../data/geany.glade.h:112
 msgid "<b>Tab positions</b>"
-msgstr "<b>Posisi Tab</b>"
+msgstr "<b>Posisi tab</b>"
 
 #: ../data/geany.glade.h:113
 msgid "Notebook tabs"
@@ -643,11 +644,9 @@ msgid ""
 "line wrapping has a high performance cost for large documents so should be "
 "disabled on slow machines."
 msgstr ""
-"Bungkus baris, jadi jika teks pada suatu baris melewati batas lebar window, "
-"maka teks yang tertutup itu akan di \"bungkus\" ke baris di bawahnya. "
-"Catatan: fitur ini lumayan memakan proses untuk dokumen yang baris \"offset"
-"\"-nya banyak, jadi untuk komputer yang lambat, performa-nya terlihat "
-"menurun."
+"Bungkus baris pada batas jendela dan lanjutkan pada baris selanjutnya. "
+"Catatan: fitur ini memerlukan beban kinerja yang besar untuk dokumen yang besar"
+", jadi untuk komputer yang lambat seharusnya fitur ini dimatikan."
 
 #: ../data/geany.glade.h:132
 msgid "\"Smart\" home key"
@@ -664,7 +663,7 @@ msgstr ""
 "Ketika \"smart\" home diaktifkan, tombol HOME akan memindahkan tanda sisipan "
 "ke karakter pertama baris tersebut, kecuali kalau sudah ada, berpindah ke "
 "awal baris. Ketika fitur ini dinonaktifkan, tombol HOME selalu memindahkan "
-"tanda sisipan ke permulaan baris saat ini, tergantung posisi saat ini. "
+"tanda sisipan ke permulaan baris saat ini, tergantung posisi saat ini."
 
 #: ../data/geany.glade.h:134
 msgid "Disable Drag and Drop"
@@ -692,7 +691,7 @@ msgid ""
 "clicking on a fold symbol the contrary behavior is used."
 msgstr ""
 "Fold atau unfold semua sub poin yang difold. Dengan menekan tombol Shift "
-"ketika mengklik pada simbol fold digunakan tingkah yang berlawanan.."
+"ketika mengklik pada simbol fold digunakan tingkah yang berlawanan."
 
 #: ../data/geany.glade.h:139
 msgid "Use indicators to show compile errors"
@@ -747,7 +746,7 @@ msgid ""
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
 "Catatan: untuk menerapkan pengaturan ini ke semua dokumen yang sedang "
-"dibuka, gunakan <i>Proyek->Terapkan Indentasi Standar</i>"
+"dibuka, gunakan <i>Proyek->Terapkan Indentasi Standar</i>."
 
 #: ../data/geany.glade.h:149
 msgid "Width:"
@@ -1307,8 +1306,7 @@ msgstr ""
 #: ../data/geany.glade.h:263
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr ""
-"Lokasi (dan bisa juga ditambahkan argumen lain) dimana aplikasi browser Anda "
-"diinstall"
+"Lokasi (dan bisa juga ditambahkan argumen lain) ke aplikasi penjelahah favorit Anda"
 
 #: ../data/geany.glade.h:264
 msgid "Grep:"
@@ -1828,7 +1826,7 @@ msgstr "Cari Se_belumnya"
 
 #: ../data/geany.glade.h:381 ../src/symbols.c:2560
 msgid "Find in F_iles..."
-msgstr "Cari di F_ile"
+msgstr "Cari di F_ile..."
 
 #: ../data/geany.glade.h:382
 msgid "_Replace..."
@@ -1949,7 +1947,7 @@ msgstr "_Deteksi dari Konten"
 
 #: ../data/geany.glade.h:411
 msgid "T_abs and Spaces"
-msgstr "Tab dan Spasi (_A)"
+msgstr "T_ab dan Spasi"
 
 #: ../data/geany.glade.h:412
 msgid "Indent Widt_h"
@@ -2250,7 +2248,7 @@ msgstr "(hanya di dalam Geany)"
 
 #: ../data/geany.glade.h:483
 msgid "Permissions:"
-msgstr "Perijinan:"
+msgstr "Perizinan:"
 
 #: ../data/geany.glade.h:484
 msgid "Read:"
@@ -2670,7 +2668,7 @@ msgid ""
 "filetype."
 msgstr ""
 "Secara eksplisit mendefinisikan tipe-berkas dari suatu berkas, jika tidak "
-"dapat dideteksi melalui ekstensinya. \n"
+"dapat dideteksi melalui ekstensinya.\n"
 "Catatan: jika Anda memilih beberapa berkas sekaligus, Geany akan menganggap "
 "semua berkas itu dibuka dengan tipe-berkas ini."
 
@@ -2705,7 +2703,7 @@ msgstr "Simpan Berkas"
 
 #: ../src/dialogs.c:574
 msgid "R_ename"
-msgstr "Ganti _Nama"
+msgstr "Ganti _nama"
 
 #: ../src/dialogs.c:575
 msgid "Save the file and rename it"
@@ -2811,8 +2809,8 @@ msgid ""
 msgstr ""
 "Berkas \"%s\" tidak bisa dibuka dengan benar dan telah terpotong. Hal ini "
 "terjadi bila berkas tersebut memiliki byte NULL. Berhati-hatilah karena "
-"menyimpannya akan \n"
-"menyebabkan kehilangan data. Oleh karena itu, Geany membukanya secara read-"
+"menyimpannya akan menyebabkan kehilangan data.\n"
+"Oleh karena itu, Geany membukanya secara read-"
 "only."
 
 #: ../src/document.c:1241
@@ -3826,7 +3824,7 @@ msgstr "Shortcut keyboard berikut ini dapat dikonfigurasi:"
 #: ../src/keyfile.c:1032
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
-"Ketik apapun yang Anda mau di sini. Gunakan area ini untuk membuat catatan "
+"Ketik apapun yang Anda mau di sini, gunakan area ini untuk membuat catatan "
 "atau sebagai pengingat sesuatu."
 
 #: ../src/keyfile.c:1259
@@ -4598,8 +4596,8 @@ msgstr "Pencarian gagal."
 #, c-format
 msgid "Search completed with %d match."
 msgid_plural "Search completed with %d matches."
-msgstr[0] "Pencarian selesai dimana ada %d yang ditemukan."
-msgstr[1] "Pencarian selesai dimana ada %d yang ditemukan."
+msgstr[0] "Pencarian selesai, ada %d yang ditemukan."
+msgstr[1] "Pencarian selesai, ada %d yang ditemukan."
 
 #: ../src/search.c:1881
 msgid "No matches found."
@@ -4964,7 +4962,7 @@ msgstr "Ekstensi tipe-berkas tidak diketahui untuk \"%s\".\n"
 #, fuzzy, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
-"Gagal membuat berkas tag, kemungkinan karena tidak ada tag yang ditemukan. \n"
+"Gagal membuat berkas tag, kemungkinan karena tidak ada tag yang ditemukan.\n"
 
 #: ../src/symbols.c:1662
 #, fuzzy, c-format
@@ -5011,13 +5009,13 @@ msgstr "Tidak dapat mengangkat berkas tag '%s'."
 #: ../src/symbols.c:1942
 #, fuzzy, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Tampilan</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1945
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lukata"
 
 #: ../src/symbols.c:2154
 #, c-format
@@ -5420,7 +5418,7 @@ msgid ""
 "specifiers which can be used with the ANSI C strftime function."
 msgstr ""
 "Masukkan format tanggal dan waktu sesuai selera. Anda bisa memakai "
-"conversion specifier apapun dimana specifier tersebut digunakan juga pada "
+"conversion specifier apapun yang dapat digunakan juga pada "
 "fungsi strftime ANSI C."
 
 #: ../src/ui_utils.c:746
@@ -6102,7 +6100,7 @@ msgstr "Atas dan Bawah"
 #~ msgstr "Deskripsi"
 
 #~ msgid "<b>Plugin details:</b>"
-#~ msgstr "<b>Detil Plugin:</b>"
+#~ msgstr "<b>Detial Pengaya:</b>"
 
 #~ msgid "Plugin:"
 #~ msgstr "Plugin:"
