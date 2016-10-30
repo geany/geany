@@ -5012,7 +5012,7 @@ msgstr "<b>%s: %lu</b>"
 #: ../src/symbols.c:1945
 #, c-format
 msgid "%s: %lu"
-msgstr "%s: %lukata"
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2154
 #, c-format
