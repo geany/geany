@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-02-24 15:01+0500\n"
+"POT-Creation-Date: 2016-10-31 02:36+0000\n"
+"PO-Revision-Date: 2016-10-31 09:07+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.10\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -31,9 +31,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "GTK+ негізіндегі жылдам әрі жеңіл өндіру ортасы"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Түзетуші"
+msgstr "Мәтін;Түзеткіш;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -399,7 +398,7 @@ msgstr "Таңбалар тізімін іске қосады не сөндір�
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Үнсіз келісім бойынша таңбаларды сұрыптау режимі"
 
 #: ../data/geany.glade.h:80
 msgid "Default sorting mode:"
@@ -2152,7 +2151,6 @@ msgid "Other:"
 msgstr "Басқа:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2162,13 +2160,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"All rights reserved."
+"Барлық құқықтары қорғалған."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2276,13 +2274,13 @@ msgid ""
 msgstr ""
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"\"%s\" терминал командасын орындау сәтсіз аяқталды: %s. Баптауларда жол "
-"орнатуын тексеріңіз."
+"\"%s\" құрастыру командасын орындау мүмкін емес: %s. Баптауларда терминал "
+"орнатуын тексеріңіз"
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -3229,9 +3227,8 @@ msgid "Delete to line end"
 msgstr "Жол соңына дейін өшіру"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Жол соңына дейін өшіру"
+msgstr "Жол басына дейін өшіру"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4187,12 +4184,11 @@ msgid "_Use regular expressions"
 msgstr "Тұрақ_ты өрнектерді қолдану"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"POSIX-тектес тұрақты өрнектерді қолдану. Тұрақты өрнектерді қолдану жөнінде "
+"Perl-тектес тұрақты өрнектерді қолдану. Тұрақты өрнектерді қолдану жөнінде "
 "көбірек білу үшін, құжаттаманы оқыңыз."
 
 #: ../src/search.c:316
@@ -4811,15 +4807,15 @@ msgstr "'%s' тегтер файлын жүктеу мүмкін емес."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1942
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Көрсету</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1945
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2154
 #, c-format
