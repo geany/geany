@@ -56,9 +56,7 @@ typedef struct
 	gboolean cursor_blinks;
 	gboolean send_selection_unsafe;
 	gint scrollback_lines;
-	gchar *emulation;
 	gchar *shell;
-	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
 	GdkColor colour_fore;

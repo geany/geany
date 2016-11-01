@@ -2554,9 +2554,6 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
 **VTE related**
-emulation                         Terminal emulation mode. Only change this    xterm       immediately
-                                  if you have VTE termcap files other than
-                                  ``vte/termcap/xterm``.
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
                                   selection before sending it to the terminal
