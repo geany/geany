@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-06-30 19:05+0100\n"
+"PO-Revision-Date: 2016-10-31 20:39+0000\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: iso-8859-15\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1061,7 +1061,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Righe visibili _attorno al cursore:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -3413,9 +3413,8 @@ msgid "Delete to line end"
 msgstr "Cancella fino a fine riga"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Cancella fino a fine riga"
+msgstr "Cancella fino a inizio riga"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4110,6 +4109,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Il plugin proxy '%s' estensione '%s' inizia con un punto. Correggere il "
+"plugin proxy."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4403,12 +4404,11 @@ msgid "_Use regular expressions"
 msgstr "_Usa espressioni regolari"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Imposta l'uso di espressioni regolari simil-POSIX. Per informazioni "
+"Imposta l'uso di espressioni regolari simil-Perl. Per informazioni "
 "dettagliate sull'uso delle espressioni regolari, consultare la "
 "documentazione."
 
@@ -5089,6 +5089,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Impossibile eseguire il modello di comando \"%s\". Suggerimento: percorsi "
+"scorretti nei comandi sono causa comune di errori. Errore: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
