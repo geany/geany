@@ -1048,7 +1048,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr "Regels zichtbaar rondom de cursor:"
+msgstr "Regels zichtbaar _rondom de cursor:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
