@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-07-02 16:01+0200\n"
+"PO-Revision-Date: 2016-11-05 21:43+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Počet _riadkov viditeľných okolo kurzora:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -3335,9 +3335,8 @@ msgid "Delete to line end"
 msgstr "Vymazať do konca riadku"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Vymazať do konca riadku"
+msgstr "Vymazať po začiatok riadku"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4299,13 +4298,12 @@ msgid "_Use regular expressions"
 msgstr "Používať re_gulárne výrazy"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Používať POSIX regulárne výrazy. Pre viac detailov o používaní regulárnych "
-"výrazov, si prečítajte dokumentáciu."
+"Používať regulárne výrazy jayzka Perl. Pre viac detailov o používaní "
+"regulárnych výrazov, si prečítajte dokumentáciu."
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -4976,6 +4974,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Nie je možné spustíť príkaz šablóny „%s“. Tip: nesprávne cesty v príkaze sú "
+"častou príčinou chýb. Chyba: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5958,16 +5958,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:468
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid ""
-#~ "Cannot execute command \"%s\" from the template: %s. Check the path in "
-#~ "the template."
-#~ msgstr ""
-#~ "Nemôžem spustiť príkaz „%s“ zo šablóny: %s. Skontrolujte cestu v šablóne."
-
-#~ msgid ""
-#~ "Cannot execute terminal command \"%s\": %s. Check the path setting in "
-#~ "Preferences."
-#~ msgstr ""
-#~ "Nie je možné spustiť príkaz „%s“: %s. Skontrolujte cestu uvedenú v "
-#~ "Nastaveniach."
