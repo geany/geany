@@ -522,7 +522,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 #ifdef G_OS_WIN32
 	GString *command;
 	GArray *environment;
-	gchar *failure;
+	gchar *locale_working_directory = NULL;
+	gchar *locale_command = NULL;
+	gboolean success = TRUE;
 
 	if (command_line)
 	{
@@ -562,26 +564,99 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	g_message("full spawn command line: %s", command->str);
 #endif
 
-	while (envp && *envp)
+	while (envp && *envp && success)
 	{
-		g_array_append_vals(environment, *envp, strlen(*envp) + 1);
+		gsize locale_entry_len;
+		gchar *locale_entry;
+
+		if (g_utf8_validate(*envp, -1, NULL))
+		{
+			/* TODO: better error message */
+			locale_entry = g_locale_from_utf8(*envp, -1, NULL, &locale_entry_len, error);
+		}
+		else
+		{
+			locale_entry_len = strlen(*envp);
+			locale_entry = g_memdup(*envp, locale_entry_len + 1);
+		}
+
+		if (! locale_entry)
+			success = FALSE;
+		else
+		{
+			/* copy the entry, including NUL terminator */
+			g_array_append_vals(environment, locale_entry, locale_entry_len + 1);
+			g_free(locale_entry);
+		}
+
 		envp++;
 	}
 
-	failure = spawn_create_process_with_pipes(command->str, working_directory,
-		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
+	/* convert working directory into locale encoding */
+	if (success && working_directory)
+	{
+		if (g_utf8_validate(working_directory, -1, NULL))
+		{
+			GError *gerror = NULL;
+
+			locale_working_directory = g_locale_from_utf8(working_directory, -1, NULL, NULL, &gerror);
+			if (! locale_working_directory)
+			{
+				/* TODO use the code below post-1.28 as it introduces a new string
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+				*/
+				g_propagate_error(error, gerror);
+				success = FALSE;
+			}
+		}
+		else
+			locale_working_directory = g_strdup(working_directory);
+	}
+	/* convert command into locale encoding */
+	if (success)
+	{
+		if (g_utf8_validate(command->str, -1, NULL))
+		{
+			GError *gerror = NULL;
+
+			locale_command = g_locale_from_utf8(command->str, -1, NULL, NULL, &gerror);
+			if (! locale_command)
+			{
+				/* TODO use the code below post-1.28 as it introduces a new string
+				g_set_error(error, gerror->domain, gerror->code,
+					_("Failed to convert command into locale encoding: %s"), gerror->message);
+				*/
+				g_propagate_error(error, gerror);
+				success = FALSE;
+			}
+		}
+		else
+			locale_command = g_strdup(command->str);
+	}
+
+	if (success)
+	{
+		gchar *failure;
+
+		failure = spawn_create_process_with_pipes(locale_command, locale_working_directory,
+			envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
+
+		if (failure)
+		{
+			g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
+			g_free(failure);
+		}
+
+		success = failure == NULL;
+	}
 
 	g_string_free(command, TRUE);
 	g_array_free(environment, TRUE);
+	g_free(locale_working_directory);
+	g_free(locale_command);
 
-	if (failure)
-	{
-		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
-		g_free(failure);
-		return FALSE;
-	}
-
-	return TRUE;
+	return success;
 #else  /* G_OS_WIN32 */
 	int cl_argc;
 	char **full_argv;
@@ -655,7 +730,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		#ifdef ENFILE
 			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
 		#endif
-		#ifdef EMFILE 
+		#ifdef EMFILE
 			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
 		#endif
 		#ifdef EINVAL

@@ -1070,6 +1070,7 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 	gboolean success = TRUE;
 #ifdef G_OS_WIN32
 	gchar *expanded_cmd;
+	gchar *utf8_script_content;
 #else
 	gchar *escaped_dir;
 #endif
@@ -1081,8 +1082,15 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 #ifdef G_OS_WIN32
 	/* Expand environment variables like %blah%. */
 	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
+	str = g_strdup_printf(
+		"cd \"%s\"\n\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n",
+		working_dir, expanded_cmd, (autoclose) ? "" : "pause");
 	g_free(expanded_cmd);
+	/* Convert script content into system codepage */
+	utf8_script_content = win32_convert_to_system_codepage(str, error);
+	if (utf8_script_content == NULL)
+		return NULL;
+	SETPTR(str, utf8_script_content);
 #else
 	escaped_dir = g_shell_quote(working_dir);
 	str = g_strdup_printf(
