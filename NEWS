@@ -26,7 +26,8 @@ Geany 1.29 (unreleased)
     * Add `.exp` extension to TCL (Simon Marchi, PR#979).
 
     Internationalization
-    * Updated translations: ca, de, es, fr, id, it, kk, pt, pt_BR, sv
+    * Updated translations: ca, de, es, fr, id, it, kk, nl pt, pt_BR,
+      sv, zh_CN,
 
     API
     * Update `GeanyProxyProbeResults` API (PR#1213).
