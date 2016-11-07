@@ -11,15 +11,15 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-03-07 15:29+0100\n"
-"Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
+"PO-Revision-Date: 2016-11-04 19:18+0100\n"
+"Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -34,9 +34,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Een snelle en lichtgewicht IDE, gebaseerd op GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Tekst;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -1049,7 +1048,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Regels zichtbaar _rondom de cursor:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -2268,7 +2267,6 @@ msgid "Other:"
 msgstr "Anderen:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2016\n"
 "Colomban Wendling\n"
@@ -2278,7 +2276,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Auteursrecht (c) 2005-2015\n"
+"Auteursrecht (c) 2005-2016\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2396,13 +2394,13 @@ msgstr ""
 "of Enter om op te schonen."
 
 #: ../src/build.c:907
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Kan afdrukprogramma '%s' niet uitvoeren: %s; controleer de padinstelling in "
-"Voorkeuren."
+"Kan bouwcommando '%s' niet uitvoeren: %s. Controleer de terminalinstelling "
+"in Voorkeuren."
 
 #: ../src/build.c:1016
 msgid "Compilation failed."
@@ -3378,9 +3376,8 @@ msgid "Delete to line end"
 msgstr "Rest van de regel verwijderen"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Rest van de regel verwijderen"
+msgstr "Tot begin van de regel verwijderen"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4064,6 +4061,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Proxy plugin '%s' uitbreiding '%s'  begint met een punt. Gelieve dit te "
+"repareren."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4348,12 +4347,11 @@ msgid "_Use regular expressions"
 msgstr "_Reguliere expressies gebruiken"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Gebruik POSIX-achtige reguliere expressies. Voor gedetailleerde informatie "
+"Gebruik Perl-achtige reguliere expressies. Voor gedetailleerde informatie "
 "over het gebruik van reguliere expressies, gelieve de documentatie te lezen."
 
 #: ../src/search.c:316
@@ -4988,15 +4986,15 @@ msgstr "Kon labelbestand '%s' niet laden."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1942
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Weergave</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1945
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2154
 #, c-format
@@ -5027,6 +5025,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Kan sjablooncommando '%s' niet uitvoeren. Hint: verkeerde paden in het "
+"commando zijn een veelvoorkomende foutoorzaak. Fout: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5509,7 +5509,7 @@ msgstr "Uitvoerbaren"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Kon URI '%s' niet openen: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
