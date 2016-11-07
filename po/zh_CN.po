@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-07-01 00:52-0700\n"
+"PO-Revision-Date: 2016-11-07 23:57+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.8\n"
+"X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -979,7 +979,7 @@ msgstr "当移动到文档的最后一行时停止滚动"
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "光标上下显示的行数 (_A)："
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -3220,9 +3220,8 @@ msgid "Delete to line end"
 msgstr "删除到行尾"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "删除到行尾"
+msgstr "删除到行首"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -3896,7 +3895,7 @@ msgstr "选择哪些插件应该在启动时装载："
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
-msgstr ""
+msgstr "代理插件“%s”的扩展名“%s”由点号开始。请修复您的的代理插件。"
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4168,11 +4167,11 @@ msgid "_Use regular expressions"
 msgstr "使用正则表达式(_U)"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
-msgstr "使用POSIX-like正则表达式，详见帮助文档。"
+msgstr ""
+"使用 Perl-like 正则表达式。要了解关于使用正则表达式的详细信息，请参阅文档。"
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -4831,6 +4830,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"无法执行模板命令“%s”。提示：一个常见的错误原因是命令中的路径不正确。错误："
+"%s。"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
