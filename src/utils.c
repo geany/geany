@@ -2103,6 +2103,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())
@@ -2115,6 +2116,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 			g_free(prefix);
 # endif
 		}
@@ -2125,6 +2127,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(GEANY_LIBEXECDIR, "geany", NULL);
 		}
 #endif
 	}
