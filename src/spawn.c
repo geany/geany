@@ -67,6 +67,7 @@
 #else
 # include "support.h"
 #endif
+#include "utils.h"
 
 #if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
 # define G_SPAWN_ERROR_TOO_BIG G_SPAWN_ERROR_2BIG
@@ -307,11 +308,11 @@ gboolean spawn_kill_process(GPid pid, GError **error)
 
 
 #ifdef G_OS_WIN32
-static gchar *spawn_create_process_with_pipes(char *command_line, const char *working_directory,
-	void *environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
+static gchar *spawn_create_process_with_pipes(wchar_t *w_command_line, const wchar_t *w_working_directory,
+	void *w_environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
 {
 	enum { WRITE_STDIN, READ_STDOUT, READ_STDERR, READ_STDIN, WRITE_STDOUT, WRITE_STDERR };
-	STARTUPINFO startup;
+	STARTUPINFOW startup;
 	PROCESS_INFORMATION process;
 	HANDLE hpipe[6] = { NULL, NULL, NULL, NULL, NULL, NULL };
 	int *fd[3] = { stdin_fd, stdout_fd, stderr_fd };
@@ -372,8 +373,9 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	startup.hStdOutput = hpipe[WRITE_STDOUT];
 	startup.hStdError = hpipe[WRITE_STDERR];
 
-	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
-		environment, working_directory, &startup, &process))
+	if (!CreateProcessW(NULL, w_command_line, NULL, NULL, TRUE,
+		CREATE_UNICODE_ENVIRONMENT | (pipe_io ? CREATE_NO_WINDOW : 0),
+		w_environment, w_working_directory, &startup, &process))
 	{
 		failed = "";  /* report the message only */
 		/* further errors will not be reported */
@@ -521,9 +523,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 #ifdef G_OS_WIN32
 	GString *command;
-	GArray *environment;
-	gchar *locale_working_directory = NULL;
-	gchar *locale_command = NULL;
+	GArray *w_environment;
+	wchar_t *w_working_directory = NULL;
+	wchar_t *w_command = NULL;
 	gboolean success = TRUE;
 
 	if (command_line)
@@ -555,7 +557,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	else
 		command = g_string_new(NULL);
 
-	environment = g_array_new(TRUE, FALSE, sizeof(char));
+	w_environment = g_array_new(TRUE, FALSE, sizeof(wchar_t));
 
 	while (argv && *argv)
 		spawn_append_argument(command, *argv++);
@@ -566,81 +568,88 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 	while (envp && *envp && success)
 	{
-		gsize locale_entry_len;
-		gchar *locale_entry;
+		glong w_entry_len;
+		wchar_t *w_entry;
+		gchar *tmp = NULL;
 
-		if (g_utf8_validate(*envp, -1, NULL))
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(*envp, -1, NULL))
 		{
-			/* TODO: better error message */
-			locale_entry = g_locale_from_utf8(*envp, -1, NULL, &locale_entry_len, error);
+			tmp = utils_get_utf8_from_locale(*envp);
+			*envp = tmp;
 		}
-		else
-		{
-			locale_entry_len = strlen(*envp);
-			locale_entry = g_memdup(*envp, locale_entry_len + 1);
-		}
+		/* TODO: better error message */
+		w_entry = g_utf8_to_utf16(*envp, -1, NULL, &w_entry_len, error);
 
-		if (! locale_entry)
+		if (! w_entry)
 			success = FALSE;
 		else
 		{
 			/* copy the entry, including NUL terminator */
-			g_array_append_vals(environment, locale_entry, locale_entry_len + 1);
-			g_free(locale_entry);
+			g_array_append_vals(w_environment, w_entry, w_entry_len + 1);
+			g_free(w_entry);
 		}
 
+		g_free(tmp);
 		envp++;
 	}
 
 	/* convert working directory into locale encoding */
 	if (success && working_directory)
 	{
-		if (g_utf8_validate(working_directory, -1, NULL))
-		{
-			GError *gerror = NULL;
+		GError *gerror = NULL;
+		const gchar *utf8_working_directory;
+		gchar *tmp = NULL;
 
-			locale_working_directory = g_locale_from_utf8(working_directory, -1, NULL, NULL, &gerror);
-			if (! locale_working_directory)
-			{
-				/* TODO use the code below post-1.28 as it introduces a new string
-				g_set_error(error, gerror->domain, gerror->code,
-					_("Failed to convert working directory into locale encoding: %s"), gerror->message);
-				*/
-				g_propagate_error(error, gerror);
-				success = FALSE;
-			}
-		}
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(working_directory, -1, NULL))
+			utf8_working_directory = tmp = utils_get_utf8_from_locale(working_directory);
 		else
-			locale_working_directory = g_strdup(working_directory);
+			utf8_working_directory = working_directory;
+
+		w_working_directory = g_utf8_to_utf16(utf8_working_directory, -1, NULL, NULL, &gerror);
+		if (! w_working_directory)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
+		g_free(tmp);
 	}
 	/* convert command into locale encoding */
 	if (success)
 	{
-		if (g_utf8_validate(command->str, -1, NULL))
-		{
-			GError *gerror = NULL;
+		GError *gerror = NULL;
+		const gchar *utf8_cmd;
+		gchar *tmp = NULL;
 
-			locale_command = g_locale_from_utf8(command->str, -1, NULL, NULL, &gerror);
-			if (! locale_command)
-			{
-				/* TODO use the code below post-1.28 as it introduces a new string
-				g_set_error(error, gerror->domain, gerror->code,
-					_("Failed to convert command into locale encoding: %s"), gerror->message);
-				*/
-				g_propagate_error(error, gerror);
-				success = FALSE;
-			}
-		}
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(command->str, -1, NULL))
+			utf8_cmd = tmp = utils_get_utf8_from_locale(command->str);
 		else
-			locale_command = g_strdup(command->str);
+			utf8_cmd = command->str;
+
+		w_command = g_utf8_to_utf16(utf8_cmd, -1, NULL, NULL, &gerror);
+		if (! w_command)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert command into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
 	}
 
 	if (success)
 	{
 		gchar *failure;
 
-		failure = spawn_create_process_with_pipes(locale_command, locale_working_directory,
-			envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
+		failure = spawn_create_process_with_pipes(w_command, w_working_directory,
+			envp ? w_environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
 
 		if (failure)
 		{
@@ -652,9 +661,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	}
 
 	g_string_free(command, TRUE);
-	g_array_free(environment, TRUE);
-	g_free(locale_working_directory);
-	g_free(locale_command);
+	g_array_free(w_environment, TRUE);
+	g_free(w_working_directory);
+	g_free(w_command);
 
 	return success;
 #else  /* G_OS_WIN32 */
