@@ -115,7 +115,6 @@ static guint build_items_count = 9;
 
 static void build_exit_cb(GPid pid, gint status, gpointer user_data);
 static void build_iofunc(GString *string, GIOCondition condition, gpointer data);
-static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -826,14 +825,14 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	}
 #endif
 
-	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
-	if (!run_cmd)
-	{
-		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
-			!EMPTY(cmd_string_utf8) ? cmd_string_utf8 : NULL, error->message);
-		g_error_free(error);
-		g_free(*working_dir);
-	}
+	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
+	// FIXME: should we expand environment variables? build_create_shell_script() did
+	///* Expand environment variables like %blah%. */
+	//expanded_cmd = win32_expand_environment_variables(cmd);
+	// FIXME: proper quoting of the helper
+	// TODO: implement autoclose feature
+	SETPTR(run_cmd, g_strdup_printf("\"%s\" %s", helper, cmd_string));
+	g_free(helper);
 
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
 	return run_cmd;
@@ -1058,76 +1057,6 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	/* reset the stop button and menu item to the original meaning */
 	build_menu_update(NULL);
 }
-
-
-/* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
- * working_dir and cmd are both in the locale encoding
- * it returns the full file name (including path) of the created script in the locale encoding */
-static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
-{
-	gint fd;
-	gchar *str, *fname;
-	gboolean success = TRUE;
-#ifdef G_OS_WIN32
-	gchar *expanded_cmd;
-	gchar *utf8_script_content;
-#else
-	gchar *escaped_dir;
-#endif
-	fd = g_file_open_tmp (RUN_SCRIPT_CMD, &fname, error);
-	if (fd < 0)
-		return NULL;
-	close(fd);
-
-#ifdef G_OS_WIN32
-	/* Expand environment variables like %blah%. */
-	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf(
-		"cd \"%s\"\n\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n",
-		working_dir, expanded_cmd, (autoclose) ? "" : "pause");
-	g_free(expanded_cmd);
-	/* Convert script content into system codepage */
-	utf8_script_content = win32_convert_to_system_codepage(str, error);
-	if (utf8_script_content == NULL)
-		return NULL;
-	SETPTR(str, utf8_script_content);
-#else
-	escaped_dir = g_shell_quote(working_dir);
-	str = g_strdup_printf(
-		"#!/bin/sh\n\nrm $0\n\ncd %s\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\n", escaped_dir, cmd, (autoclose) ? "" :
-		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
-			"dash\ndummy_var=\"\"\nread dummy_var");
-	g_free(escaped_dir);
-#endif
-
-	if (!g_file_set_contents(fname, str, -1, error))
-		success = FALSE;
-	g_free(str);
-#ifdef __APPLE__
-	if (success && g_chmod(fname, 0777) != 0)
-	{
-		if (error)
-		{
-			gint errsv = errno;
-
-			g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errsv),
-					"Failed to make file executable: %s", g_strerror(errsv));
-		}
-		success = FALSE;
-	}
-#endif
-
-	if (!success)
-	{
-		g_unlink(fname);
-		g_free(fname);
-		fname = NULL;
-	}
-
-	return fname;
-}
-
 
 typedef void Callback(GtkWidget *w, gpointer u);
 
