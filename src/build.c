@@ -829,7 +829,8 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	// FIXME: should we expand environment variables? build_create_shell_script() did
 	///* Expand environment variables like %blah%. */
 	//expanded_cmd = win32_expand_environment_variables(cmd);
-	// FIXME: proper quoting of the helper
+	// FIXME: proper quoting of the helper (or not, because it ought to be a valid path,
+	// and valid paths can't contain \es or "es, so it's fine.
 	// TODO: implement autoclose feature
 	SETPTR(run_cmd, g_strdup_printf("\"%s\" %s", helper, cmd_string));
 	g_free(helper);
@@ -890,6 +891,21 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	{
 		gchar *locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		GError *error = NULL;
+
+#ifdef G_OS_WIN32
+		if (g_regex_match_simple("^[ \"]*cmd([.]exe)?[\" ]", locale_term_cmd, 0, 0))
+		{
+			/* if passing an argument to cmd.exe, respect its quoting rules */
+			GString *escaped_run_cmd = g_string_new(NULL);
+			for (gchar *p = run_cmd; *p; p++)
+			{
+				if (strchr("()%!^\"<>&|", *p)) // cmd.exe metacharacters
+					g_string_append_c(escaped_run_cmd, '^');
+				g_string_append_c(escaped_run_cmd, *p);
+			}
+			SETPTR(run_cmd, g_string_free(escaped_run_cmd, FALSE));
+		}
+#endif
 
 		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
 
