@@ -831,8 +831,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	//expanded_cmd = win32_expand_environment_variables(cmd);
 	// FIXME: proper quoting of the helper (or not, because it ought to be a valid path,
 	// and valid paths can't contain \es or "es, so it's fine.
-	// TODO: implement autoclose feature
-	SETPTR(run_cmd, g_strdup_printf("\"%s\" %s", helper, cmd_string));
+	SETPTR(run_cmd, g_strdup_printf("\"%s\" %d %s", helper, !!autoclose, cmd_string));
 	g_free(helper);
 
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);

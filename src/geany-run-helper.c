@@ -90,13 +90,18 @@ int main(void)
 	STARTUPINFOW startup;
 	PROCESS_INFORMATION process;
 	LPWSTR command_line = GetCommandLineW();
+	LPWSTR auto_close_arg;
 
 	ZeroMemory(&startup, sizeof startup);
 	startup.cb = sizeof startup;
 
-	command_line = w32_strip_first_arg(command_line); // strip argv[0]
+	auto_close_arg = command_line = w32_strip_first_arg(command_line); // strip argv[0]
+	command_line = w32_strip_first_arg(command_line); // strip argv[1]
 	if (! command_line || ! *command_line)
 		fprintf(stderr, "Invalid or missing command\n");
+	else if ((auto_close_arg[0] != L'0' && auto_close_arg[0] != L'1') ||
+	         ! isspace(auto_close_arg[1]))
+		fprintf(stderr, "USAGE: geany-run-script 0|1 command...\n");
 	else if (! CreateProcessW(NULL, command_line, NULL, NULL, TRUE, 0, NULL, NULL, &startup, &process))
 		w32_perror("CreateProcessW()");
 	else
@@ -117,8 +122,11 @@ int main(void)
 		CloseHandle(process.hProcess);
 	}
 
-	printf("Press return to continue\n");
-	getc(stdin);
+	if (*auto_close_arg != L'1')
+	{
+		printf("Press return to continue\n");
+		getc(stdin);
+	}
 
 	return exit_status;
 }
@@ -134,6 +142,18 @@ int main(void)
 int main(int argc, char **argv)
 {
 	int exit_status = 1;
+	const char *auto_close_arg;
+
+	if (argc < 3 || ((argv[1][0] != '0' && argv[1][0] != '1') || argv[1][1] != 0))
+	{
+		fprintf(stderr, "USAGE: %s 1|0 command...\n", argv[0]);
+		return 1;
+	}
+
+	auto_close_arg = argv[1];
+	/* strip argv[0] and auto-close argument */
+	argv += 2;
+	argc -= 2;
 
 	pid_t pid = fork();
 	if (pid < 0)
@@ -141,7 +161,7 @@ int main(int argc, char **argv)
 	else if (pid == 0)
 	{
 		/* in the child */
-		execvp(argv[1], &argv[1]);
+		execvp(*argv, argv);
 		perror("execvp()");
 		return 127;
 	}
@@ -176,8 +196,11 @@ int main(int argc, char **argv)
 			fprintf(stderr, "something funky happened to the child\n");
 	}
 
-	printf("Press return to continue\n");
-	getc(stdin);
+	if (*auto_close_arg != '1')
+	{
+		printf("Press return to continue\n");
+		getc(stdin);
+	}
 
 	return exit_status;
 }
