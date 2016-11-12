@@ -186,9 +186,9 @@ CLEANFILES += signallist.i
 
 # install the run script
 if MINGW
-pkglibexec_SCRIPTS = geany-run-helper.bat
+dist_pkglibexec_SCRIPTS = geany-run-helper.bat
 else
-pkglibexec_SCRIPTS = geany-run-helper
+dist_pkglibexec_SCRIPTS = geany-run-helper
 endif
 
 # Ubuntu ld has a bug so that libtool sees /usr/local/lib as a system path so
