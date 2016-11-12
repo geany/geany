@@ -1060,11 +1060,10 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	else
 #endif
 	{
-		gchar *locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		GError *error = NULL;
 
 #ifdef G_OS_WIN32
-		if (g_regex_match_simple("^[ \"]*cmd([.]exe)?[\" ]", locale_term_cmd, 0, 0))
+		if (g_regex_match_simple("^[ \"]*cmd([.]exe)?[\" ]", tool_prefs.term_cmd, 0, 0))
 		{
 			/* if passing an argument to cmd.exe, respect its quoting rules */
 			GString *escaped_run_cmd = g_string_new(NULL);
@@ -1078,7 +1077,9 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 #endif
 
-		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
+		Placeholder placeholder = { 'c', run_cmd };
+		gchar *utf8_term_cmd = command_replace_placeholders(tool_prefs.term_cmd, &placeholder, 1);
+		gchar *locale_term_cmd = utils_get_locale_from_utf8(utf8_term_cmd);
 
 		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
 			&error))
@@ -1089,13 +1090,13 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		else
 		{
-			gchar *utf8_term_cmd = utils_get_utf8_from_locale(locale_term_cmd);
 			ui_set_statusbar(TRUE, _("Cannot execute build command \"%s\": %s. "
 				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
-			g_free(utf8_term_cmd);
 			g_error_free(error);
 			run_info[cmdindex].pid = (GPid) 0;
 		}
+
+		g_free(utf8_term_cmd);
 	}
 
 	g_free(working_dir);
