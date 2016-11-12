@@ -79,12 +79,6 @@ typedef struct RunInfo
 
 static RunInfo *run_info;
 
-#ifdef G_OS_WIN32
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.bat";
-#else
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
-#endif
-
 /* pack group (<8) and command (<32) into a user_data pointer */
 #define GRP_CMD_TO_POINTER(grp, cmd) GUINT_TO_POINTER((((grp)&7) << 5) | ((cmd)&0x1f))
 #define GBO_TO_POINTER(gbo) (GRP_CMD_TO_POINTER(GBO_TO_GBG(gbo), GBO_TO_CMD(gbo)))
@@ -749,13 +743,15 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
 
+#ifdef G_OS_UNIX
 	cmd_string = utils_get_locale_from_utf8(cmd);
 	argv[2] = cmd_string;
-
-#ifdef G_OS_UNIX
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
 #else
+	/* Expand environment variables like %blah%. */
+	cmd_string = win32_expand_environment_variables(cmd);
 	argv[0] = NULL;  /* under Windows, run cmd directly */
+	cmd = cmd_string;
 #endif
 
 	/* set the build info for the message window */
@@ -789,7 +785,6 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
-	GError *error = NULL;
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
@@ -825,13 +820,22 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	}
 #endif
 
+#ifdef G_OS_WIN32
+	/* Expand environment variables like %blah%. */
+	SETPTR(cmd_string, win32_expand_environment_variables(cmd_string));
+#endif
+
 	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
-	// FIXME: should we expand environment variables? build_create_shell_script() did
-	///* Expand environment variables like %blah%. */
-	//expanded_cmd = win32_expand_environment_variables(cmd);
-	// FIXME: proper quoting of the helper (or not, because it ought to be a valid path,
-	// and valid paths can't contain \es or "es, so it's fine.
-	SETPTR(run_cmd, g_strdup_printf("\"%s\" %d %s", helper, !!autoclose, cmd_string));
+
+	/* escape helper appropriately */
+#ifdef G_OS_WIN32
+	/* FIXME: check the Windows rules, but it should not matter too much here as \es and "es are not
+	 * allowed in paths anyway */
+	SETPTR(helper, g_strdup_printf("\"%s\"", helper));
+#else
+	SETPTR(helper, g_shell_quote(helper));
+#endif
+	run_cmd = g_strdup_printf("%s %d %s", helper, autoclose ? 1 : 0, cmd_string);
 	g_free(helper);
 
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
@@ -898,7 +902,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			GString *escaped_run_cmd = g_string_new(NULL);
 			for (gchar *p = run_cmd; *p; p++)
 			{
-				if (strchr("()%!^\"<>&|", *p)) // cmd.exe metacharacters
+				if (strchr("()%!^\"<>&| ", *p)) // cmd.exe metacharacters
 					g_string_append_c(escaped_run_cmd, '^');
 				g_string_append_c(escaped_run_cmd, *p);
 			}
@@ -922,7 +926,6 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
 			g_free(utf8_term_cmd);
 			g_error_free(error);
-			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
 		}
 	}

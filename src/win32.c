@@ -891,14 +891,19 @@ void win32_init_debug_code(void)
 }
 
 
+/* expands environment placeholders in @str.  input and output is in UTF-8 */
 gchar *win32_expand_environment_variables(const gchar *str)
 {
-	gchar expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	wchar_t *cmdline = g_utf8_to_utf16(str, -1, NULL, NULL, NULL);
+	wchar_t expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	gchar *expanded = NULL;
 
-	if (ExpandEnvironmentStrings((LPCTSTR) str, (LPTSTR) expCmdline, sizeof(expCmdline)) != 0)
-		return g_strdup(expCmdline);
-	else
-		return g_strdup(str);
+	if (cmdline && ExpandEnvironmentStringsW(cmdline, expCmdline, sizeof(expCmdline)) != 0)
+		expanded = g_utf16_to_utf8(expCmdline, -1, NULL, NULL, NULL);
+
+	g_free(cmdline);
+
+	return expanded ? expanded : g_strdup(str);
 }
 
 
@@ -1030,36 +1035,6 @@ gchar *win32_get_user_config_dir(void)
 	// glib fallback
 	g_warning("Failed to retrieve Windows config dir, falling back to default");
 	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
-}
-
-
-/* Retrieve the console codepage
- * In case GetConsoleCP() returns 0 (i.e. the application doesn't have an own console window
- * fallback to GetOEMCP(). */
-guint win32_get_console_codepage(void)
-{
-	guint codepage = GetConsoleCP();
-	if (codepage == 0)
-		codepage = GetOEMCP();
-	return codepage;
-}
-
-
-/* Convert a string into the system's default codepage, this is different from the
- * locale (e.g. default codepage is 850 but locale is CP1252).
- * This assumes the input string is encoded as UTF-8, otherwise a copy of
- * the input string is returned. */
-gchar *win32_convert_to_system_codepage(const gchar *str, GError **error)
-{
-	if (g_utf8_validate(str, -1, NULL))
-	{
-		guint codepage_code = win32_get_console_codepage();
-		gchar codepage[8] = { 0 };
-		g_snprintf(codepage, G_N_ELEMENTS(codepage), "%u", codepage_code);
-		return g_convert(str, -1, codepage, "utf-8", NULL, NULL, error);
-	}
-	else
-		return g_strdup(str);
 }
 
 #endif

@@ -1,0 +1,25 @@
+#!/bin/sh
+# USAGE: geany-run-helper AUTOCLOSE COMMAND...
+
+# save autoclose option and remove it
+autoclose=$1
+shift
+
+# spawn the child
+"$@"
+
+# show the result
+echo "
+
+------------------
+(program exited with code: $?)
+"
+
+# and if wanted, wait on the user
+if ! [ "$autoclose" = 0 ]
+then
+	echo "Press return to continue"
+	# to be more compatible with shells like dash
+	dummy_var=
+	read dummy_var
+fi
