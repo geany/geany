@@ -898,7 +898,7 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 			GString *escaped_run_cmd = g_string_new(NULL);
 			for (gchar *p = run_cmd; *p; p++)
 			{
-				if (strchr("()%!^\"<>&|", *p)) // cmd.exe metacharacters
+				if (strchr("()%!^\"<>&| ", *p)) // cmd.exe metacharacters
 					g_string_append_c(escaped_run_cmd, '^');
 				g_string_append_c(escaped_run_cmd, *p);
 			}
