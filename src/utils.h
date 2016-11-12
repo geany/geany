@@ -346,6 +346,9 @@ gchar *utils_replace_placeholders(const gchar *str,
 		gboolean (insert_replacement)(GString *buffer, gchar placeholder, gpointer data),
 		gpointer data);
 
+gboolean utils_generate_document_replacements(GString *buffer,
+		const gchar placeholder, gpointer data);
+
 gchar *utils_replace_document_placeholders(const GeanyDocument *doc, const gchar *src);
 
 #endif /* GEANY_PRIVATE */
