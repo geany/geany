@@ -2,17 +2,17 @@
 # Copyright (C) 2016 the developers of Geany (msgids).
 # This file is distributed under the same license as the Geanty package.
 #
-# Peter Scholtens <peter.scholtens@xs4all.nl>, 2009 - 2012, 2014, 2015.
+# Peter Scholtens <peter.scholtens@xs4all.nl>, 2009 - 2012, 2014 - 2016.
 # Ayke van Laëthem <aykevanlaethem@gmail.com>, 2009, 2010.
 # Kurt De Bree <kdebree@telenet.be>, 2006.
 # Benno Schulenberg <benno@vertaalt.nl>, 2016.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.28\n"
+"Project-Id-Version: Geany 1.29\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-11-04 19:18+0100\n"
-"Last-Translator: Peter Scholtens <peter.scholtens@xs4all.nl>\n"
+"PO-Revision-Date: 2016-11-12 12:12+0100\n"
+"Last-Translator: Benno Schulenberg <benno@vertaalt.nl>\n"
 "Language-Team: Dutch <geany-i18n@uvena.de>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -2399,7 +2399,7 @@ msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Kan bouwcommando '%s' niet uitvoeren: %s. Controleer de terminalinstelling "
+"Kan bouwcommando '%s' niet uitvoeren: %s; controleer de terminalinstelling "
 "in Voorkeuren."
 
 #: ../src/build.c:1016
@@ -3260,19 +3260,20 @@ msgstr "Bestand"
 
 #: ../src/keybindings.c:310
 msgid "Clipboard"
-msgstr "Klembord-plugin"
+msgstr "Klembord"
 
 #: ../src/keybindings.c:311
 msgid "Select"
-msgstr "Selecteer"
+msgstr "Selecteren"
 
+# Het gaat hier om inspringingen en dergelijke.
 #: ../src/keybindings.c:312
 msgid "Format"
-msgstr "Indeling"
+msgstr "Opmaak"
 
 #: ../src/keybindings.c:313
 msgid "Insert"
-msgstr "invoegen"
+msgstr "Invoegen"
 
 #: ../src/keybindings.c:314
 msgid "Settings"
@@ -3357,7 +3358,7 @@ msgstr "Bestand herladen"
 
 #: ../src/keybindings.c:358
 msgid "Re-open last closed tab"
-msgstr "Her-open laatst gesloten tabblad"
+msgstr "Laatst gesloten tabblad heropenen"
 
 #: ../src/keybindings.c:360
 msgid "Quit"
@@ -3369,7 +3370,7 @@ msgstr "Ongedaan maken"
 
 #: ../src/keybindings.c:379
 msgid "Redo"
-msgstr "Opnieuw"
+msgstr "Herdoen"
 
 #: ../src/keybindings.c:388
 msgid "Delete to line end"
@@ -3381,27 +3382,27 @@ msgstr "Tot begin van de regel verwijderen"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
-msgstr "_Verwissel huidige met bovenstaande regel"
+msgstr "Huidige met bovenstaande regel _verwisselen"
 
 #: ../src/keybindings.c:396
 msgid "Scroll to current line"
-msgstr "Scroll naar huidige regel"
+msgstr "Naar huidige regel scrollen"
 
 #: ../src/keybindings.c:398
 msgid "Scroll up the view by one line"
-msgstr "Scroll een regel naar boven"
+msgstr "Een regel naar boven scrollen"
 
 #: ../src/keybindings.c:400
 msgid "Scroll down the view by one line"
-msgstr "Scroll een regel naar beneden"
+msgstr "Een regel naar beneden scrollen"
 
 #: ../src/keybindings.c:402
 msgid "Complete snippet"
-msgstr "Fragment voltooiing"
+msgstr "Fragment voltooien"
 
 #: ../src/keybindings.c:404
 msgid "Move cursor in snippet"
-msgstr "Verplaats cursor in fragment"
+msgstr "Cursor verplaatsen in fragment"
 
 #: ../src/keybindings.c:406
 msgid "Suppress snippet completion"
@@ -4021,7 +4022,7 @@ msgid ""
 "i>\n"
 msgstr ""
 "\n"
-"<i>Andere plug-ins zijn hiervan afhankelijk. Schakel die eerst uit.</i>\n"
+"<i>Andere plugins zijn hiervan afhankelijk. Schakel die eerst uit.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1652
@@ -4061,8 +4062,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
-"Proxy plugin '%s' uitbreiding '%s'  begint met een punt. Gelieve dit te "
-"repareren."
+"Uitbreiding '%2$s' van proxy-plugin '%1$s' begint met een punt. Gelieve dit "
+"te repareren."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -5509,7 +5510,7 @@ msgstr "Uitvoerbaren"
 #: ../src/win32.c:802
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr "Kon URI '%s' niet openen: %s"
+msgstr "Kan URI '%s' niet openen: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
@@ -6033,10 +6034,10 @@ msgstr "Boven en Onder"
 #~ "padnaaminstelling in Voorkeuren."
 
 #~ msgid "Go to _Tag Definition"
-#~ msgstr "Ga naar _tag definitie"
+#~ msgstr "Ga naar _tag-definitie"
 
 #~ msgid "Go to T_ag Declaration"
-#~ msgstr "Ga naar t_ag declaratie"
+#~ msgstr "Ga naar t_ag-declaratie"
 
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "Afdrukken van \"%s\" mislukt (foutcode: %s)."
@@ -6087,20 +6088,17 @@ msgstr "Boven en Onder"
 #~ msgid "Close _without saving"
 #~ msgstr "Sluit zonder op te slaan"
 
-#~ msgid "%s %s"
-#~ msgstr "%s %s"
-
 #~ msgid "Description"
 #~ msgstr "Beschrijving:"
 
 #~ msgid "<b>Plugin details:</b>"
-#~ msgstr "<b>Plugin details:</b>"
+#~ msgstr "<b>Plugin-details:</b>"
 
 #~ msgid "Plugin:"
 #~ msgstr "Plugin"
 
 #~ msgid "Author(s):"
-#~ msgstr "Auteurs(s):"
+#~ msgstr "Auteur(s):"
 
 #~ msgid "<b>Type:</b>"
 #~ msgstr "<b>Bestandstype:</b>"
@@ -6150,7 +6148,7 @@ msgstr "Boven en Onder"
 #~ "bestand in een nieuw tabblad"
 
 #~ msgid "The editor font is not a monospaced font!"
-#~ msgstr "Het edit font is niet enkelgespatiëerd!"
+#~ msgstr "Het edit font is niet enkelgespatieerd!"
 
 #~ msgid "Text will be wrongly spaced."
 #~ msgstr "Tekst zal verkeerd gespatieerd worden."
@@ -6159,7 +6157,7 @@ msgstr "Boven en Onder"
 #~ msgstr "Ongeldige bestandsnaam"
 
 #~ msgid "_Debug Messages"
-#~ msgstr "_Debug berichten"
+#~ msgstr "_Debugberichten"
 
 #~ msgid "Project properties"
 #~ msgstr "Eigenschappen"
@@ -6186,10 +6184,10 @@ msgstr "Boven en Onder"
 #~ msgstr "Ruim op"
 
 #~ msgid "_Set Build Menu Commands"
-#~ msgstr "Bouw commando's instellen"
+#~ msgstr "Bouwcommando's instellen"
 
 #~ msgid "SQL Dump file"
-#~ msgstr "SQL Dump bestand"
+#~ msgstr "SQL-dumpbestand"
 
 #~ msgid "M_iscellaneous Languages"
 #~ msgstr "Over_ige talen"
@@ -6229,7 +6227,7 @@ msgstr "Boven en Onder"
 
 #
 #~ msgid "Hide object files"
-#~ msgstr "Verberg object bestanden"
+#~ msgstr "Verberg objectbestanden"
 
 #~ msgid ""
 #~ "Don't show generated object files in the file browser, this includes *.o, "
