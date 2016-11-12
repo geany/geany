@@ -749,13 +749,15 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
 
+#ifdef G_OS_UNIX
 	cmd_string = utils_get_locale_from_utf8(cmd);
 	argv[2] = cmd_string;
-
-#ifdef G_OS_UNIX
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
 #else
+	/* Expand environment variables like %blah%. */
+	cmd_string = win32_expand_environment_variables(cmd);
 	argv[0] = NULL;  /* under Windows, run cmd directly */
+	cmd = cmd_string;
 #endif
 
 	/* set the build info for the message window */
@@ -825,10 +827,12 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	}
 #endif
 
+#ifdef G_OS_WIN32
+	/* Expand environment variables like %blah%. */
+	SETPTR(cmd_string, win32_expand_environment_variables(cmd_string));
+#endif
+
 	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
-	// FIXME: should we expand environment variables? build_create_shell_script() did
-	///* Expand environment variables like %blah%. */
-	//expanded_cmd = win32_expand_environment_variables(cmd);
 	// FIXME: proper quoting of the helper (or not, because it ought to be a valid path,
 	// and valid paths can't contain \es or "es, so it's fine.
 	run_cmd = g_strdup_printf("\"%s\" %d %s", helper, !!autoclose, cmd_string);
