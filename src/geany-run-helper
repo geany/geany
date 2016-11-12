@@ -16,7 +16,7 @@ echo "
 "
 
 # and if wanted, wait on the user
-if ! [ "$autoclose" = 0 ]
+if ! [ "$autoclose" = 1 ]
 then
 	echo "Press return to continue"
 	# to be more compatible with shells like dash
