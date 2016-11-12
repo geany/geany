@@ -926,7 +926,6 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
 			g_free(utf8_term_cmd);
 			g_error_free(error);
-			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
 		}
 	}
