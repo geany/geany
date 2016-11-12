@@ -184,10 +184,12 @@ signallist.i: $(glade_file) Makefile
 
 CLEANFILES += signallist.i
 
-pkglibexec_PROGRAMS = geany-run-helper
-geany_run_helper_SOURCES = geany-run-helper.c
-geany_run_helper_CFLAGS = $(GTK_CFLAGS)
-geany_run_helper_LDADD = $(GTK_LIBS)
+# install the run script
+if MINGW
+pkglibexec_SCRIPTS = geany-run-helper.bat
+else
+pkglibexec_SCRIPTS = geany-run-helper
+endif
 
 # Ubuntu ld has a bug so that libtool sees /usr/local/lib as a system path so
 # doesn't add RPATH, but ld requires explicit ldconfig there, unlike when
