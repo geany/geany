@@ -994,9 +994,16 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 #endif
 
 	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
-	// FIXME: proper quoting of the helper (or not, because it ought to be a valid path,
-	// and valid paths can't contain \es or "es, so it's fine.
-	run_cmd = g_strdup_printf("\"%s\" %d %s", helper, !!autoclose, cmd_string);
+
+	/* escape helper appropriately */
+#ifdef G_OS_WIN32
+	/* FIXME: check the Windows rules, but it should not matter too much here as \es and "es are not
+	 * allowed in paths anyway */
+	SETPTR(helper, g_strdup_printf("\"%s\"", helper));
+#else
+	SETPTR(helper, g_shell_quote(helper));
+#endif
+	run_cmd = g_strdup_printf("%s %d %s", helper, autoclose ? 1 : 0, cmd_string);
 	g_free(helper);
 
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
