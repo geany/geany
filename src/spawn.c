@@ -67,7 +67,6 @@
 #else
 # include "support.h"
 #endif
-#include "utils.h"
 
 #if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
 # define G_SPAWN_ERROR_TOO_BIG G_SPAWN_ERROR_2BIG
@@ -575,8 +574,9 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		// FIXME: remove this and rely on UTF-8 input
 		if (! g_utf8_validate(*envp, -1, NULL))
 		{
-			tmp = utils_get_utf8_from_locale(*envp);
-			*envp = tmp;
+			tmp = g_locale_to_utf8(*envp, -1, NULL, NULL, NULL);
+			if (tmp)
+				*envp = tmp;
 		}
 		/* TODO: better error message */
 		w_entry = g_utf8_to_utf16(*envp, -1, NULL, &w_entry_len, error);
@@ -603,7 +603,11 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 		// FIXME: remove this and rely on UTF-8 input
 		if (! g_utf8_validate(working_directory, -1, NULL))
-			utf8_working_directory = tmp = utils_get_utf8_from_locale(working_directory);
+		{
+			tmp = g_locale_to_utf8(working_directory, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_working_directory = tmp;
+		}
 		else
 			utf8_working_directory = working_directory;
 
@@ -628,7 +632,11 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 		// FIXME: remove this and rely on UTF-8 input
 		if (! g_utf8_validate(command->str, -1, NULL))
-			utf8_cmd = tmp = utils_get_utf8_from_locale(command->str);
+		{
+			tmp = g_locale_to_utf8(command->str, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_cmd = tmp;
+		}
 		else
 			utf8_cmd = command->str;
 
