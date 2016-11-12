@@ -891,14 +891,19 @@ void win32_init_debug_code(void)
 }
 
 
+/* expands environment placeholders in @str.  input and output is in UTF-8 */
 gchar *win32_expand_environment_variables(const gchar *str)
 {
-	gchar expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	wchar_t *cmdline = g_utf8_to_utf16(str, -1, NULL, NULL, NULL);
+	wchar_t expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	gchar *expanded = NULL;
 
-	if (ExpandEnvironmentStrings((LPCTSTR) str, (LPTSTR) expCmdline, sizeof(expCmdline)) != 0)
-		return g_strdup(expCmdline);
-	else
-		return g_strdup(str);
+	if (cmdline && ExpandEnvironmentStringsW(cmdline, expCmdline, sizeof(expCmdline)) != 0)
+		expanded = g_utf16_to_utf8(expCmdline, -1, NULL, NULL, NULL);
+
+	g_free(cmdline);
+
+	return expanded ? expanded : g_strdup(str);
 }
 
 
