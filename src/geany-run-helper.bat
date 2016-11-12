@@ -1,5 +1,8 @@
-REM USAGE: geany-run-helper AUTOCLOSE COMMAND...
+REM USAGE: geany-run-helper DIRECTORY AUTOCLOSE COMMAND...
 
+REM unnecessary, but we get the directory
+cd %1
+shift
 REM save autoclose option and remove it
 set autoclose=%1
 shift
