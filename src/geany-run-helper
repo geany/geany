@@ -1,7 +1,7 @@
 #!/bin/sh
 # USAGE: geany-run-helper DIRECTORY AUTOCLOSE COMMAND...
 
-# OSX resets the current directory, so check it back
+# OSX terminal resets the current directory on startup, so change it back
 cd "$1"
 shift
 # save autoclose option and remove it
