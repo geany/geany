@@ -8,7 +8,7 @@ Geany 1.29 (unreleased)
 
     Bug fixes
     * Fix build when the CXX variable contains flags (PR#1155, Issue#829).
-    * Fix focusing the message window when the Terminal tab in active
+    * Fix focusing the message window when the Terminal tab is active
       (PR#1200, Issue#1198).
 
     Editor
