@@ -42,6 +42,17 @@ Geany 1.29 (unreleased)
     * Split Window: Work around a GTK bug present from 3.15.9 to 3.21.4
       that breaks the document selection popup (Issue#1149, PR#1272).
 
+    Windows
+    * Include 'grep.exe' from MSYS2 which works better than the previously
+      self-compiled version
+      (Issue#783, Issue#784, Issue#1229, Issue#1260, PR#1301).
+    * Fix executing external commands (mainly Build and Run commands)
+      where paths and filenames with non-ASCII characters are involved
+      (Issue#1076, Issue#1259, Issue#1278, PR#1095).
+    * Do not create a batch file on Run commands any longer, instead use
+      a re-usable script and so eliminate the need to delete the script
+      from itself (Issue#1276, PR#1095).
+
 
 Geany 1.28 (July 10, 2016)
 
