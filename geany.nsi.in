@@ -137,6 +137,9 @@ Section "!Program Files" SEC01
 	File "gtk\bin\libstdc++-*.dll"
 	File "gtk\bin\libwinpthread*.dll"
 
+	SetOutPath "$INSTDIR\libexec"
+	File /r "${RESOURCEDIR}\libexec\*"
+
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
 	File "${RESOURCEDIR}\data\filetype_extensions.conf"
@@ -311,6 +314,7 @@ Section Uninstall
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\include"
 	RMDir /r "$INSTDIR\lib"
+	RMDir /r "$INSTDIR\libexec"
 	RMDir /r "$INSTDIR\share"
 	RMDir "$INSTDIR"
 
