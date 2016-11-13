@@ -79,12 +79,6 @@ typedef struct RunInfo
 
 static RunInfo *run_info;
 
-#ifdef G_OS_WIN32
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.bat";
-#else
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
-#endif
-
 /* pack group (<8) and command (<32) into a user_data pointer */
 #define GRP_CMD_TO_POINTER(grp, cmd) GUINT_TO_POINTER((((grp)&7) << 5) | ((cmd)&0x1f))
 #define GBO_TO_POINTER(gbo) (GRP_CMD_TO_POINTER(GBO_TO_GBG(gbo), GBO_TO_CMD(gbo)))
@@ -115,7 +109,6 @@ static guint build_items_count = 9;
 
 static void build_exit_cb(GPid pid, gint status, gpointer user_data);
 static void build_iofunc(GString *string, GIOCondition condition, gpointer data);
-static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -662,61 +655,229 @@ static void clear_all_errors(void)
 }
 
 
-/* Replaces occurrences of %e and %p with the appropriate filenames and
- * %l with current line number. %d and %p replacements should be in UTF8 */
-static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src)
+typedef struct
+{
+	const gchar placeholder;
+	const gchar *replacement;
+} Placeholder;
+
+
+static const gchar *placeholder_replacement(Placeholder *placeholders, size_t n_placeholders, gchar placeholder)
+{
+	for (size_t i = 0; i < n_placeholders; i++)
+	{
+		if (placeholders[i].placeholder == placeholder)
+			return placeholders[i].replacement;
+	}
+
+	return NULL;
+}
+
+
+/* Replaces %s-style placeholders in a string.
+ *
+ * Returns: an UTF-8 string with placeholders replaced. */
+static gchar *string_replace_placeholders(const gchar *src, Placeholder *placeholders, size_t n_placeholders)
+{
+	if (src == NULL)
+		return NULL;
+
+	GString *stack = g_string_new(NULL);
+	for (; *src; src++)
+	{
+		if (*src == '%')
+		{
+			src++;
+			const gchar *replacement = placeholder_replacement(placeholders, n_placeholders, *src);
+			if (replacement)
+				g_string_append(stack, replacement);
+			else
+			{   /* just leave the placeholder */
+				g_string_append_c(stack, '%');
+				g_string_append_c(stack, *src);
+			}
+		}
+		else
+			g_string_append_c(stack, *src);
+	}
+
+	return g_string_free(stack, FALSE);
+}
+
+
+#ifdef G_OS_WIN32
+
+static gchar *command_replace_placeholders(const gchar *src, Placeholder *placeholders, size_t n_placeholders)
+{
+	/* FIXME: check what a Windows implementation needs to do */
+	return string_replace_placeholders(src, placeholders, n_placeholders);
+}
+
+#else /* ! G_OS_WIN32 */
+
+/* Replaces %s-style placeholders in a shell-style string.
+ *
+ * This functions reads @p src as a shell-style input, understanding quoting (with "" and '')
+ * as well as nested sub-commands (with `` and $(), up to 16 levels).  It makes sure the
+ * placeholder replacements are properly quoted.
+ *
+ * If @quote is FALSE, it only replaces placeholders without adding any quoting.  This is
+ * useful if replacing placeholders in a non-shell string, like working directory.
+ *
+ * Returns: an UTF-8 string with placeholders replaced. */
+static gchar *command_replace_placeholders(const gchar *src, Placeholder *placeholders, size_t n_placeholders)
 {
 	GString *stack;
-	gchar *replacement;
-	gchar *executable = NULL;
-	gint line_num;
+	struct {
+		gchar quote;
+		gchar terminator;
+	} nesting[16] = {{ 0, 0 }};
+	guint level = 0;
+
+	if (src == NULL)
+		return NULL;
+
+	stack = g_string_new(NULL);
+	for (; *src; src++)
+	{
+		if (*src == nesting[level].terminator &&
+			! nesting[level].quote)
+		{
+			g_string_append_c(stack, *src);
+			level--;
+			continue;
+		}
+
+		switch (*src)
+		{
+			case '`':
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'' &&
+					level < G_N_ELEMENTS(nesting))
+				{
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = *src;
+				}
+				break;
+
+			case '$':
+				g_string_append_c(stack, *src);
+				if (nesting[level].quote != '\'' &&
+					level < G_N_ELEMENTS(nesting) &&
+					src[1] == '(')
+				{
+					src++;
+					g_string_append_c(stack, *src);
+					level ++;
+					nesting[level].quote = 0;
+					nesting[level].terminator = ')';
+				}
+				break;
+
+			case '"':
+			case '\'':
+				if (! nesting[level].quote)
+					nesting[level].quote = *src;
+				else if (nesting[level].quote == *src)
+					nesting[level].quote = 0;
+				g_string_append_c(stack, *src);
+				break;
+
+			case '%':
+				src++;
+				if (nesting[level].quote) /* close the quote */
+					g_string_append_c(stack, nesting[level].quote);
+				const gchar *replacement = placeholder_replacement(placeholders, n_placeholders, *src);
+				if (replacement)
+				{
+					gchar *quoted = g_shell_quote(replacement);
+					g_string_append(stack, quoted);
+					g_free(quoted);
+				}
+				else
+				{   /* just leave the placeholder */
+					g_string_append_c(stack, '%');
+					g_string_append_c(stack, *src);
+				}
+				if (nesting[level].quote) /* re-open quote */
+					g_string_append_c(stack, nesting[level].quote);
+				break;
+
+			case '\\':
+				g_string_append_c(stack, *src);
+				src++;
+			/* fallthrough */
+			default:
+				g_string_append_c(stack, *src);
+				break;
+		}
+	}
+
+	return g_string_free(stack, FALSE);
+}
+
+#endif /* ! G_OS_WIN32 */
+
+
+/* Replaces %f, %d, %e, %l and %p placeholders in a shell-style string.
+ *
+ * If @p command is true, consider @p str to be an OS-specific command.  Otherwise, consider @p str
+ * to a a simple string.
+ *
+ * Returns: an UTF-8 string with placeholders replaced. */
+static gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src, gboolean command)
+{
+	gchar *str;
+	/* replacements, %<letter> */
+	gchar *f = NULL; /* %f: basename */
+	gchar *d = NULL; /* %d: dirname */
+	gchar *e = NULL; /* %e: basename without extension */
+	gchar *l = NULL; /* %l: current 1-based line number */
+	gchar *p = NULL; /* %p: project (absolute) base directory */
 
 	g_return_val_if_fail(doc == NULL || doc->is_valid, NULL);
 
-	stack = g_string_new(src);
+	if (src == NULL)
+		return NULL;
+
 	if (doc != NULL && doc->file_name != NULL)
 	{
-		/* replace %f with the filename (including extension) */
-		replacement = g_path_get_basename(doc->file_name);
-		utils_string_replace_all(stack, "%f", replacement);
-		g_free(replacement);
-
-		/* replace %d with the absolute path of the dir of the current file */
-		replacement = g_path_get_dirname(doc->file_name);
-		utils_string_replace_all(stack, "%d", replacement);
-		g_free(replacement);
-
-		/* replace %e with the filename (excluding extension) */
-		executable = utils_remove_ext_from_filename(doc->file_name);
-		replacement = g_path_get_basename(executable);
-		utils_string_replace_all(stack, "%e", replacement);
-		g_free(replacement);
-
-		/* replace %l with the current 1-based line number */
-		line_num = sci_get_current_line(doc->editor->sci) + 1;
-		replacement = g_strdup_printf("%i", line_num);
-		utils_string_replace_all(stack, "%l", replacement);
-		g_free(replacement);
+		f = g_path_get_basename(doc->file_name);
+		d = g_path_get_dirname(doc->file_name);
+		e = utils_remove_ext_from_filename(f);
 	}
-
-	/* replace %p with the current project's (absolute) base directory */
-	replacement = NULL; /* prevent double free if no replacement found */
+	if (doc != NULL)
+		l = g_strdup_printf("%d", sci_get_current_line(doc->editor->sci) + 1);
 	if (app->project)
-	{
-		replacement = project_get_base_path();
-	}
-	else if (strstr(stack->str, "%p"))
+		p = project_get_base_path();
+	else
 	{   /* fall back to %d */
-		ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
-		if (doc != NULL && doc->file_name != NULL)
-			replacement = g_path_get_dirname(doc->file_name);
+		if (strstr("%p", src))
+			ui_set_statusbar(FALSE, _("failed to substitute %%p, no project active"));
+		p = g_strdup(d);
 	}
 
-	utils_string_replace_all(stack, "%p", replacement);
-	g_free(replacement);
-	g_free(executable);
+	Placeholder placeholders[] = {
+		{ 'f', f },
+		{ 'd', d },
+		{ 'e', e },
+		{ 'l', l },
+		{ 'p', p },
+	};
 
-	return g_string_free(stack, FALSE); /* don't forget to free src also if needed */
+	if (command)
+		str = command_replace_placeholders(src, placeholders, G_N_ELEMENTS(placeholders));
+	else
+		str = string_replace_placeholders(src, placeholders, G_N_ELEMENTS(placeholders));
+
+	g_free (f);
+	g_free (d);
+	g_free (e);
+	g_free (l);
+	g_free (p);
+
+	return str;
 }
 
 
@@ -750,13 +911,15 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
 
+#ifdef G_OS_UNIX
 	cmd_string = utils_get_locale_from_utf8(cmd);
 	argv[2] = cmd_string;
-
-#ifdef G_OS_UNIX
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
 #else
+	/* Expand environment variables like %blah%. */
+	cmd_string = win32_expand_environment_variables(cmd);
 	argv[0] = NULL;  /* under Windows, run cmd directly */
+	cmd = cmd_string;
 #endif
 
 	/* set the build info for the message window */
@@ -790,15 +953,14 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	const gchar *cmd_working_dir;
 	gboolean autoclose = FALSE;
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
-	GError *error = NULL;
 
 	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
 
-	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command);
+	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command, TRUE);
 	cmd_working_dir =  cmd->working_dir;
 	if (EMPTY(cmd_working_dir))
 		cmd_working_dir = "%d";
-	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir);
+	working_dir_utf8 = build_replace_placeholder(doc, cmd_working_dir, FALSE);
 	*working_dir = utils_get_locale_from_utf8(working_dir_utf8);
 
 	if (EMPTY(*working_dir) || ! g_file_test(*working_dir, G_FILE_TEST_EXISTS) ||
@@ -826,14 +988,27 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	}
 #endif
 
-	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
-	if (!run_cmd)
-	{
-		ui_set_statusbar(TRUE, _("Failed to execute \"%s\" (start-script could not be created: %s)"),
-			!EMPTY(cmd_string_utf8) ? cmd_string_utf8 : NULL, error->message);
-		g_error_free(error);
-		g_free(*working_dir);
-	}
+#ifdef G_OS_WIN32
+	/* Expand environment variables like %blah%. */
+	SETPTR(cmd_string, win32_expand_environment_variables(cmd_string));
+#endif
+
+	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
+	gchar *arg_directory = NULL;
+
+	/* escape helper appropriately */
+#ifdef G_OS_WIN32
+	/* FIXME: check the Windows rules, but it should not matter too much here as \es and "es are not
+	 * allowed in paths anyway */
+	SETPTR(helper, g_strdup_printf("\"%s\"", helper));
+	SETPTR(arg_directory, g_strdup_printf("\"%s\"", *working_dir));
+#else
+	SETPTR(helper, g_shell_quote(helper));
+	SETPTR(arg_directory, g_shell_quote(*working_dir));
+#endif
+	run_cmd = g_strdup_printf("%s %s %d %s", helper, arg_directory, autoclose ? 1 : 0, cmd_string);
+	g_free(arg_directory);
+	g_free(helper);
 
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
 	return run_cmd;
@@ -889,10 +1064,26 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 	else
 #endif
 	{
-		gchar *locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		GError *error = NULL;
 
-		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
+#ifdef G_OS_WIN32
+		if (g_regex_match_simple("^[ \"]*cmd([.]exe)?[\" ]", tool_prefs.term_cmd, 0, 0))
+		{
+			/* if passing an argument to cmd.exe, respect its quoting rules */
+			GString *escaped_run_cmd = g_string_new(NULL);
+			for (gchar *p = run_cmd; *p; p++)
+			{
+				if (strchr("()%!^\"<>&| ", *p)) // cmd.exe metacharacters
+					g_string_append_c(escaped_run_cmd, '^');
+				g_string_append_c(escaped_run_cmd, *p);
+			}
+			SETPTR(run_cmd, g_string_free(escaped_run_cmd, FALSE));
+		}
+#endif
+
+		Placeholder placeholder = { 'c', run_cmd };
+		gchar *utf8_term_cmd = command_replace_placeholders(tool_prefs.term_cmd, &placeholder, 1);
+		gchar *locale_term_cmd = utils_get_locale_from_utf8(utf8_term_cmd);
 
 		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
 			&error))
@@ -903,14 +1094,13 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		}
 		else
 		{
-			gchar *utf8_term_cmd = utils_get_utf8_from_locale(locale_term_cmd);
 			ui_set_statusbar(TRUE, _("Cannot execute build command \"%s\": %s. "
 				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
-			g_free(utf8_term_cmd);
 			g_error_free(error);
-			g_unlink(run_cmd);
 			run_info[cmdindex].pid = (GPid) 0;
 		}
+
+		g_free(utf8_term_cmd);
 	}
 
 	g_free(working_dir);
@@ -1059,68 +1249,6 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 	build_menu_update(NULL);
 }
 
-
-/* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
- * working_dir and cmd are both in the locale encoding
- * it returns the full file name (including path) of the created script in the locale encoding */
-static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
-{
-	gint fd;
-	gchar *str, *fname;
-	gboolean success = TRUE;
-#ifdef G_OS_WIN32
-	gchar *expanded_cmd;
-#else
-	gchar *escaped_dir;
-#endif
-	fd = g_file_open_tmp (RUN_SCRIPT_CMD, &fname, error);
-	if (fd < 0)
-		return NULL;
-	close(fd);
-
-#ifdef G_OS_WIN32
-	/* Expand environment variables like %blah%. */
-	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
-	g_free(expanded_cmd);
-#else
-	escaped_dir = g_shell_quote(working_dir);
-	str = g_strdup_printf(
-		"#!/bin/sh\n\nrm $0\n\ncd %s\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
-		\n\n%s\n", escaped_dir, cmd, (autoclose) ? "" :
-		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
-			"dash\ndummy_var=\"\"\nread dummy_var");
-	g_free(escaped_dir);
-#endif
-
-	if (!g_file_set_contents(fname, str, -1, error))
-		success = FALSE;
-	g_free(str);
-#ifdef __APPLE__
-	if (success && g_chmod(fname, 0777) != 0)
-	{
-		if (error)
-		{
-			gint errsv = errno;
-
-			g_set_error(error, G_FILE_ERROR, g_file_error_from_errno(errsv),
-					"Failed to make file executable: %s", g_strerror(errsv));
-		}
-		success = FALSE;
-	}
-#endif
-
-	if (!success)
-	{
-		g_unlink(fname);
-		g_free(fname);
-		fname = NULL;
-	}
-
-	return fname;
-}
-
-
 typedef void Callback(GtkWidget *w, gpointer u);
 
 /* run the command catenating cmd_cat if present */
@@ -1146,8 +1274,8 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 	else
 		full_command = cmdstr;
 
-	dir = build_replace_placeholder(doc, buildcmd->working_dir);
-	subs_command = build_replace_placeholder(doc, full_command);
+	dir = build_replace_placeholder(doc, buildcmd->working_dir, FALSE);
+	subs_command = build_replace_placeholder(doc, full_command, TRUE);
 	build_info.grp = grp;
 	build_info.cmd = cmd;
 	build_spawn_cmd(doc, subs_command, dir);

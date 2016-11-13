@@ -138,6 +138,7 @@ AM_CPPFLAGS += \
 	-DGEANY_DATADIR=\"data\" \
 	-DGEANY_DOCDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
+	-DGEANY_LIBEXECDIR=\"\" \
 	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_PREFIX=\"\"
 
@@ -162,6 +163,7 @@ AM_CPPFLAGS += \
 	-DGEANY_DATADIR=\""$(datadir)"\" \
 	-DGEANY_DOCDIR=\""$(docdir)"\" \
 	-DGEANY_LIBDIR=\""$(libdir)"\" \
+	-DGEANY_LIBEXECDIR=\""$(libexecdir)"\" \
 	-DGEANY_LOCALEDIR=\""$(localedir)"\" \
 	-DGEANY_PREFIX=\""$(prefix)"\"
 
@@ -181,6 +183,13 @@ signallist.i: $(glade_file) Makefile
 	) > $@ || { $(RM) $@ && exit 1; }
 
 CLEANFILES += signallist.i
+
+# install the run script
+if MINGW
+dist_pkglibexec_SCRIPTS = geany-run-helper.bat
+else
+dist_pkglibexec_SCRIPTS = geany-run-helper
+endif
 
 # Ubuntu ld has a bug so that libtool sees /usr/local/lib as a system path so
 # doesn't add RPATH, but ld requires explicit ldconfig there, unlike when
