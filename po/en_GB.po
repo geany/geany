@@ -1221,7 +1221,7 @@ msgstr "Strip trailing spaces and tabs"
 
 #: ../data/geany.glade.h:250
 msgid "Removes trailing spaces and tabs and the end of lines"
-msgstr "Removes trailing spaces and tabs and the end of lines"
+msgstr "Removes trailing spaces and tabs at the end of lines"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
