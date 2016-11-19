@@ -55,6 +55,7 @@ typedef struct
 	gboolean enable_bash_keys;
 	gboolean cursor_blinks;
 	gboolean send_selection_unsafe;
+	gboolean allow_bold;
 	gint scrollback_lines;
 	gchar *shell;
 	gchar *font;

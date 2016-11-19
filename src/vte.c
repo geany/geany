@@ -132,6 +132,7 @@ struct VteFunctions
 	void (*vte_terminal_set_cursor_blinks) (VteTerminal *terminal, gboolean blink);
 	void (*vte_terminal_select_all) (VteTerminal *terminal);
 	void (*vte_terminal_set_audible_bell) (VteTerminal *terminal, gboolean is_audible);
+	void (*vte_terminal_set_allow_bold) (VteTerminal *terminal, gboolean allow_bold);
 	GtkAdjustment* (*vte_terminal_get_adjustment) (VteTerminal *terminal);
 #if GTK_CHECK_VERSION(3, 0, 0)
 	/* hack for the VTE 2.91 API using GdkRGBA: we wrap the API to keep using GdkColor on our side */
@@ -630,6 +631,7 @@ static gboolean vte_register_symbols(GModule *mod)
 		BIND_REQUIRED_SYMBOL(vte_terminal_set_cursor_blinks);
 	BIND_REQUIRED_SYMBOL(vte_terminal_select_all);
 	BIND_REQUIRED_SYMBOL(vte_terminal_set_audible_bell);
+	BIND_REQUIRED_SYMBOL(vte_terminal_set_allow_bold);
 	if (! BIND_SYMBOL(vte_terminal_get_adjustment))
 		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
 		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;
@@ -662,6 +664,7 @@ void vte_apply_user_settings(void)
 	vf->vte_terminal_set_color_background(VTE_TERMINAL(vc->vte), &vc->colour_back);
 	vf->vte_terminal_set_audible_bell(VTE_TERMINAL(vc->vte), prefs.beep_on_errors);
 	vte_set_cursor_blink_mode();
+	vf->vte_terminal_set_allow_bold(VTE_TERMINAL(vc->vte), vc->allow_bold);
 
 	override_menu_key();
 }

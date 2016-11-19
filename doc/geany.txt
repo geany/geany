@@ -2718,6 +2718,10 @@ Don't use run script
     This can be useful if you already have a program running in the VTE
     like a Python console (e.g. ipython). Use this with care.
 
+Draw intense colors in bold fonts
+    Use bold fonts when displaying characters that have the high-intensity
+    attribute.
+
 
 Project management
 ------------------
