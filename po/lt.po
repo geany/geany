@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
-"PO-Revision-Date: 2016-07-08 23:25+0300\n"
+"POT-Creation-Date: 2016-06-27 18:56+0200\n"
+"PO-Revision-Date: 2016-11-22 23:05+0200\n"
 "Last-Translator: Zygimantus <zygimantus@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1818,7 +1818,7 @@ msgstr "Rasti _ankstesnį pasirinkimą"
 msgid "_Mark All"
 msgstr "_Pažymėti visus"
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:390
 msgid "Go to Symbol Decl_aration"
 msgstr "Eiti į simbolio deklaravimą"
 
@@ -1955,10 +1955,10 @@ msgid "Set _Encoding"
 msgstr "Nustatyti _koduotę"
 
 #: ../data/geany.glade.h:425
+
 msgid "Set Line E_ndings"
 msgstr "Nustatyti eilučių _pabaigas"
 
-#: ../data/geany.glade.h:426
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Konvertuoti ir nustatyti į _CR/LF (Windows)"
 
@@ -1966,7 +1966,7 @@ msgstr "Konvertuoti ir nustatyti į _CR/LF (Windows)"
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konvertuoti ir nustatyti į _LF (Unix)"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:427
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Konvertuoti ir nustatyti į CR (Klasikinis _Mac)"
 
@@ -2051,7 +2051,8 @@ msgstr "_Spalvų parinkiklis"
 msgid "_Word Count"
 msgstr "Žodžių _skaičius"
 
-#: ../data/geany.glade.h:449
+
+#: ../data/geany.glade.h:448
 msgid "Load Ta_gs File..."
 msgstr "Įkelti ž_ymų failą..."
 
@@ -3551,11 +3552,12 @@ msgstr "Eiti į atitinkamą riestinį skliaustą"
 msgid "Toggle marker"
 msgstr "Perjungti žymeklį"
 
-#: ../src/keybindings.c:579
+
+#: ../src/keybindings.c:575
 msgid "Go to Symbol Definition"
 msgstr "Eiti į simbolio aprašymą"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:578
 msgid "Go to Symbol Declaration"
 msgstr "Eiti į simbolio deklaravimą"
 
@@ -3959,9 +3961,8 @@ msgid "Switch to Document"
 msgstr "Persijungti į dokumentą"
 
 #: ../src/notebook.c:451
-#, fuzzy
 msgid "Open in New _Window"
-msgstr "Atverti failą"
+msgstr "Atidaryti naujame lange"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4908,11 +4909,11 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1677
+#: ../src/symbols.c:1634
 msgid "Load Tags File"
 msgstr "Įkelti žymų failą"
 
-#: ../src/symbols.c:1684
+#: ../src/symbols.c:1641
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany žymių failas (*.*.tags)"
 
@@ -5725,9 +5726,8 @@ msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Nepavyko įvykdyti sukonfigūruotos išorinės komandos „%s“ (%s)."
 
 #: ../plugins/filebrowser.c:649
-#, fuzzy
 msgid "Open in _Geany"
-msgstr "Atverti failą"
+msgstr "Atverti su Geany"
 
 #: ../plugins/filebrowser.c:655
 msgid "Open _Externally"
