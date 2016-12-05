@@ -28,11 +28,6 @@
 #include "XPM.h"
 #include "UniConversion.h"
 
-#if defined(__clang__)
-// Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
-#pragma GCC diagnostic ignored "-Wsentinel"
-#endif
-
 #include "Converter.h"
 
 static const double kPi = 3.14159265358979323846;
@@ -550,7 +545,7 @@ static void PathRoundRectangle(cairo_t *context, double left, double top, double
 }
 
 void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
-		ColourDesired outline, int alphaOutline, int flags) {
+		ColourDesired outline, int alphaOutline, int /*flags*/) {
 	if (context && rc.Width() > 0) {
 		ColourDesired cdFill(fill.AsLong());
 		cairo_set_source_rgba(context,
