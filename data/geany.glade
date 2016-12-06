@@ -369,9 +369,18 @@
                       <object class="GtkMenuItem" id="insert_gpl_notice1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Insert _GPL Notice</property>
+                        <property name="label" translatable="yes">Insert _GPLv3 Notice</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_comments_gpl_activate" swapped="no"/>
+                      </object>
+                    </child>
+					<child>
+                      <object class="GtkMenuItem" id="insert_gplv2_notice1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Insert _GPLv2 Notice</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="on_comments_gplv2_activate" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -6960,9 +6969,18 @@
                                   <object class="GtkMenuItem" id="insert_gpl_notice2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Insert _GPL Notice</property>
+                                    <property name="label" translatable="yes">Insert _GPLv3 Notice</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_menu_comments_gpl_activate" swapped="no"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkMenuItem" id="insert_gplv2_notice2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="label" translatable="yes">Insert _GPLv2 Notice</property>
+                                    <property name="use_underline">True</property>
+                                    <signal name="activate" handler="on_menu_comments_gplv2_activate" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>

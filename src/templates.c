@@ -131,7 +131,8 @@ static void init_general_templates(void)
 {
 	/* read the contents */
 	read_template("fileheader", GEANY_TEMPLATE_FILEHEADER);
-	read_template("gpl", GEANY_TEMPLATE_GPL);
+	read_template("gplv3", GEANY_TEMPLATE_GPL);
+	read_template("gplv2", GEANY_TEMPLATE_GPLV2);
 	read_template("bsd", GEANY_TEMPLATE_BSD);
 	read_template("function", GEANY_TEMPLATE_FUNCTION);
 	read_template("changelog", GEANY_TEMPLATE_CHANGELOG);
@@ -283,7 +284,7 @@ static void create_file_template_menu(void)
 
 	new_with_template_toolbar_menu = gtk_menu_new();
 	g_object_ref(new_with_template_toolbar_menu);
-	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), 
+	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")),
 		new_with_template_toolbar_menu);
 }
 
@@ -423,7 +424,9 @@ gchar *templates_get_template_licence(GeanyDocument *doc, gint licence_type)
 	GString *template;
 
 	g_return_val_if_fail(DOC_VALID(doc), NULL);
-	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL);
+	/* g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_BSD, NULL); */
+	g_return_val_if_fail(licence_type == GEANY_TEMPLATE_GPL || licence_type == GEANY_TEMPLATE_GPLV2 || \
+	licence_type == GEANY_TEMPLATE_BSD, NULL);
 
 	template = g_string_new(templates[licence_type]);
 	replace_static_values(template);
@@ -445,6 +448,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 	templates_replace_valist(template,
 		"{gpl}", templates[GEANY_TEMPLATE_GPL],
+		"{gplv2}", templates[GEANY_TEMPLATE_GPLV2],
 		"{bsd}", templates[GEANY_TEMPLATE_BSD],
 		NULL);
 
