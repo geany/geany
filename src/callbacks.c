@@ -1077,6 +1077,19 @@ static void on_menu_comments_gpl_activate(GtkMenuItem *menuitem, gpointer user_d
 }
 
 
+static void on_comments_gplv2_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_GPLV2);
+}
+
+
+static void on_menu_comments_gplv2_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_comment_template(document_get_current(), -1, GEANY_TEMPLATE_GPLV2);
+}
+
+
+
 static void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_BSD);

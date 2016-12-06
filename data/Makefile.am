@@ -99,7 +99,8 @@ templates = \
 	templates/changelog \
 	templates/fileheader \
 	templates/function \
-	templates/gpl
+	templates/gplv2 \
+	templates/gplv3
 
 nobase_dist_pkgdata_DATA = \
 	$(colorschemes) \
