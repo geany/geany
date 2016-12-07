@@ -100,7 +100,8 @@ templates = \
 	templates/fileheader \
 	templates/function \
 	templates/gplv2 \
-	templates/gplv3
+	templates/gplv3 \
+	templates/agplv3
 
 nobase_dist_pkgdata_DATA = \
 	$(colorschemes) \
