@@ -1089,7 +1089,6 @@ static void on_menu_comments_gplv2_activate(GtkMenuItem *menuitem, gpointer user
 }
 
 
-
 static void on_comments_bsd_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	insert_comment_template(document_get_current(), editor_info.click_pos, GEANY_TEMPLATE_BSD);
