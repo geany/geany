@@ -1,7 +1,17 @@
 Geany 1.30 (unreleased)
 
+    General
+    * Initial accessibility support in the editor (SF#328).
+
+    Editor
+    * Update Scintilla to version 3.7.1.
+
     Internationalization
     * Updated translations: lt
+
+    API
+    * Remove unprefixed Scintilla structure aliases.  Plugins must use
+      the `Sci_`-prefixed version from now on.
 
 
 Geany 1.29 (November 13, 2016)
