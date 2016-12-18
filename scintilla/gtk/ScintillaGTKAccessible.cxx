@@ -478,7 +478,7 @@ void ScintillaGTKAccessible::GetCharacterExtents(int charOffset,
 	} else if (nextByteOffset > byteOffset) {
 		/* maybe next position was on the next line or something.
 		 * just compute the expected character width */
-		int style = sci->pdoc->StyleAt(byteOffset);
+		int style = StyleAt(byteOffset, true);
 		int len = nextByteOffset - byteOffset;
 		char *ch = new char[len + 1];
 		sci->pdoc->GetCharRange(ch, byteOffset, len);
@@ -556,13 +556,14 @@ AtkAttributeSet *ScintillaGTKAccessible::GetRunAttributes(int charOffset, int *s
 
 	g_return_val_if_fail(byteOffset <= length, NULL);
 
-	const char style = sci->pdoc->StyleAt(byteOffset);
+	const char style = StyleAt(byteOffset, true);
 	// compute the range for this style
 	Position startByte = byteOffset;
+	// when going backwards, we know the style is already computed
 	while (startByte > 0 && sci->pdoc->StyleAt((startByte) - 1) == style)
 		(startByte)--;
 	Position endByte = byteOffset + 1;
-	while (endByte < length && sci->pdoc->StyleAt(endByte) == style)
+	while (endByte < length && StyleAt(endByte, true) == style)
 		(endByte)++;
 
 	CharacterRangeFromByteRange(startByte, endByte, startChar, endChar);

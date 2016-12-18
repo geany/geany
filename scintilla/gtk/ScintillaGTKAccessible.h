@@ -73,6 +73,12 @@ private:
 		return sci->pdoc->MovePositionOutsideChar(pos + 1, 1, true);
 	}
 
+	int StyleAt(Position position, bool ensureStyle = false) {
+		if (ensureStyle)
+			sci->pdoc->EnsureStyledTo(position);
+		return sci->pdoc->StyleAt(position);
+	}
+
 	// For AtkText
 	gchar *GetTextRangeUTF8(Position startByte, Position endByte);
 	gchar *GetText(int startChar, int endChar);
