@@ -7,6 +7,8 @@ primary=break case catch class const continue default delete do each else extend
 secondary=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError constructor prototype decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt
 
 [lexer_properties=C]
+# partially handles ES6 template strings
+lexer.cpp.backquoted.strings=1
 
 [settings]
 # default extension used when saving files
