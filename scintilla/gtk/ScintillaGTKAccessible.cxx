@@ -553,15 +553,15 @@ AtkAttributeSet *ScintillaGTKAccessible::GetRunAttributes(int charOffset, int *s
 	}
 	int length = sci->pdoc->Length();
 
-	g_return_val_if_fail(byteOffset < length, NULL);
+	g_return_val_if_fail(byteOffset <= length, NULL);
 
 	const char style = sci->pdoc->StyleAt(byteOffset);
 	// compute the range for this style
 	Position startByte = byteOffset;
 	while (startByte > 0 && sci->pdoc->StyleAt((startByte) - 1) == style)
 		(startByte)--;
-	Position endByte = byteOffset;
-	while ((endByte) + 1 < length && sci->pdoc->StyleAt((endByte) + 1) == style)
+	Position endByte = byteOffset + 1;
+	while (endByte < length && sci->pdoc->StyleAt(endByte) == style)
 		(endByte)++;
 
 	CharacterRangeFromByteRange(startByte, endByte, startChar, endChar);
