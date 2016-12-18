@@ -1064,10 +1064,12 @@ static AtkObject *scintilla_object_accessible_new(GType parent_type, GObject *ob
 // @p cache pointer to store the AtkObject between repeated calls.  Might or might not be filled.
 // @p widget_parent_class pointer to the widget's parent class (to chain up method calls).
 AtkObject *ScintillaGTKAccessible::WidgetGetAccessibleImpl(GtkWidget *widget, AtkObject **cache, gpointer widget_parent_class G_GNUC_UNUSED) {
-#if HAVE_GTK_A11Y_H // just instantiate the accessible
-	if (*cache == NULL) {
-		*cache = scintilla_object_accessible_new(0, G_OBJECT(widget));
+	if (*cache != NULL) {
+		return *cache;
 	}
+
+#if HAVE_GTK_A11Y_H // just instantiate the accessible
+	*cache = scintilla_object_accessible_new(0, G_OBJECT(widget));
 #elif HAVE_GTK_FACTORY // register in the factory and let GTK instantiate
 	static volatile gsize registered = 0;
 
@@ -1085,24 +1087,22 @@ AtkObject *ScintillaGTKAccessible::WidgetGetAccessibleImpl(GtkWidget *widget, At
 		}
 		g_once_init_leave(&registered, 1);
 	}
-	*cache = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+	AtkObject *obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+	*cache = static_cast<AtkObject*>(g_object_ref(obj));
 #else // no public API, no factory, so guess from the parent and instantiate
-	if (*cache == NULL) {
-		static GType parent_atk_type = 0;
+	static GType parent_atk_type = 0;
 
-		if (parent_atk_type == 0) {
-			AtkObject *parent_obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
-			if (parent_obj) {
-				GType parent_atk_type = G_OBJECT_TYPE(parent_obj);
+	if (parent_atk_type == 0) {
+		AtkObject *parent_obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+		if (parent_obj) {
+			GType parent_atk_type = G_OBJECT_TYPE(parent_obj);
 
-				// Figure out whether accessibility is enabled by looking at the type of the accessible
-				// object which would be created for the parent type of ScintillaObject.
-				if (g_type_is_a(parent_atk_type, GTK_TYPE_ACCESSIBLE)) {
-					*cache = scintilla_object_accessible_new(parent_atk_type, G_OBJECT(widget));
-					g_object_unref(parent_obj);
-				} else {
-					*cache = parent_obj;
-				}
+			// Figure out whether accessibility is enabled by looking at the type of the accessible
+			// object which would be created for the parent type of ScintillaObject.
+			if (g_type_is_a(parent_atk_type, GTK_TYPE_ACCESSIBLE)) {
+				*cache = scintilla_object_accessible_new(parent_atk_type, G_OBJECT(widget));
+			} else {
+				*cache = static_cast<AtkObject*>(g_object_ref(parent_obj));
 			}
 		}
 	}
