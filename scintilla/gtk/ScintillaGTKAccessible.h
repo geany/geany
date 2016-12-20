@@ -16,9 +16,12 @@ namespace Scintilla {
 
 class ScintillaGTKAccessible {
 private:
+	// weak references to related objects
 	GtkAccessible *accessible;
 	ScintillaGTK *sci;
 
+	// cached length of the deletion, in characters (see Notify())
+	int deletionLengthChar;
 	// local state for comparing
 	Position old_pos;
 	std::vector<SelectionRange> old_sels;
@@ -68,6 +71,12 @@ private:
 
 	Position PositionAfter(Position pos) {
 		return sci->pdoc->MovePositionOutsideChar(pos + 1, 1, true);
+	}
+
+	int StyleAt(Position position, bool ensureStyle = false) {
+		if (ensureStyle)
+			sci->pdoc->EnsureStyledTo(position);
+		return sci->pdoc->StyleAt(position);
 	}
 
 	// For AtkText

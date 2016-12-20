@@ -3,6 +3,28 @@
 /* Copyright 2016 by Colomban Wendling <colomban@geany.org>
  * The License.txt file describes the conditions under which this software may be distributed. */
 
+// REFERENCES BETWEEN THE DIFFERENT OBJECTS
+//
+// ScintillaGTKAccessible is the actual implementation, as a C++ class.
+// ScintillaObjectAccessible is the GObject derived from AtkObject that
+// implements the various ATK interfaces, through ScintillaGTKAccessible.
+// This follows the same pattern as ScintillaGTK and ScintillaObject.
+//
+// ScintillaGTK owns a strong reference to the ScintillaObjectAccessible, and
+// is both responsible for creating and destroying that object.
+//
+// ScintillaObjectAccessible owns a strong reference to ScintillaGTKAccessible,
+// and is responsible for creating and destroying that object.
+//
+// ScintillaGTKAccessible has weak references to both the ScintillaGTK and
+// the ScintillaObjectAccessible objects associated, but does not own any
+// strong references to those objects.
+//
+// The chain of ownership is as follows:
+// ScintillaGTK -> ScintillaObjectAccessible -> ScintillaGTKAccessible
+
+// DETAILS ON THE GOBJECT TYPE IMPLEMENTATION
+//
 // On GTK < 3.2, we need to use the AtkObjectFactory.  We need to query
 // the factory to see what type we should derive from, thus making use of
 // dynamic inheritance.  It's tricky, but it works so long as it's done
@@ -134,6 +156,7 @@ ScintillaGTKAccessible *ScintillaGTKAccessible::FromAccessible(GtkAccessible *ac
 ScintillaGTKAccessible::ScintillaGTKAccessible(GtkAccessible *accessible_, GtkWidget *widget_) :
 		accessible(accessible_),
 		sci(ScintillaGTK::FromWidget(widget_)),
+		deletionLengthChar(0),
 		old_pos(-1) {
 	g_signal_connect(widget_, "sci-notify", G_CALLBACK(SciNotify), this);
 }
@@ -455,7 +478,7 @@ void ScintillaGTKAccessible::GetCharacterExtents(int charOffset,
 	} else if (nextByteOffset > byteOffset) {
 		/* maybe next position was on the next line or something.
 		 * just compute the expected character width */
-		int style = sci->pdoc->StyleAt(byteOffset);
+		int style = StyleAt(byteOffset, true);
 		int len = nextByteOffset - byteOffset;
 		char *ch = new char[len + 1];
 		sci->pdoc->GetCharRange(ch, byteOffset, len);
@@ -531,15 +554,16 @@ AtkAttributeSet *ScintillaGTKAccessible::GetRunAttributes(int charOffset, int *s
 	}
 	int length = sci->pdoc->Length();
 
-	g_return_val_if_fail(byteOffset < length, NULL);
+	g_return_val_if_fail(byteOffset <= length, NULL);
 
-	const char style = sci->pdoc->StyleAt(byteOffset);
+	const char style = StyleAt(byteOffset, true);
 	// compute the range for this style
 	Position startByte = byteOffset;
+	// when going backwards, we know the style is already computed
 	while (startByte > 0 && sci->pdoc->StyleAt((startByte) - 1) == style)
 		(startByte)--;
-	Position endByte = byteOffset;
-	while ((endByte) + 1 < length && sci->pdoc->StyleAt((endByte) + 1) == style)
+	Position endByte = byteOffset + 1;
+	while (endByte < length && StyleAt(endByte, true) == style)
 		(endByte)++;
 
 	CharacterRangeFromByteRange(startByte, endByte, startChar, endChar);
@@ -835,10 +859,15 @@ void ScintillaGTKAccessible::Notify(GtkWidget *, gint, SCNotification *nt) {
 				g_signal_emit_by_name(accessible, "text-changed::insert", startChar, lengthChar);
 				UpdateCursor();
 			}
+			if (nt->modificationType & SC_MOD_BEFOREDELETE) {
+				// We cannot compute the deletion length in DELETETEXT as it requires accessing the
+				// buffer, so that the character are still present.  So, we cache the value here,
+				// and use it in DELETETEXT that fires quickly after.
+				deletionLengthChar = sci->pdoc->CountCharacters(nt->position, nt->position + nt->length);
+			}
 			if (nt->modificationType & SC_MOD_DELETETEXT) {
 				int startChar = CharacterOffsetFromByteOffset(nt->position);
-				int lengthChar = sci->pdoc->CountCharacters(nt->position, nt->position + nt->length);
-				g_signal_emit_by_name(accessible, "text-changed::delete", startChar, lengthChar);
+				g_signal_emit_by_name(accessible, "text-changed::delete", startChar, deletionLengthChar);
 				UpdateCursor();
 			}
 			if (nt->modificationType & SC_MOD_CHANGESTYLE) {
@@ -1042,10 +1071,12 @@ static AtkObject *scintilla_object_accessible_new(GType parent_type, GObject *ob
 // @p cache pointer to store the AtkObject between repeated calls.  Might or might not be filled.
 // @p widget_parent_class pointer to the widget's parent class (to chain up method calls).
 AtkObject *ScintillaGTKAccessible::WidgetGetAccessibleImpl(GtkWidget *widget, AtkObject **cache, gpointer widget_parent_class G_GNUC_UNUSED) {
-#if HAVE_GTK_A11Y_H // just instantiate the accessible
-	if (*cache == NULL) {
-		*cache = scintilla_object_accessible_new(0, G_OBJECT(widget));
+	if (*cache != NULL) {
+		return *cache;
 	}
+
+#if HAVE_GTK_A11Y_H // just instantiate the accessible
+	*cache = scintilla_object_accessible_new(0, G_OBJECT(widget));
 #elif HAVE_GTK_FACTORY // register in the factory and let GTK instantiate
 	static volatile gsize registered = 0;
 
@@ -1063,24 +1094,22 @@ AtkObject *ScintillaGTKAccessible::WidgetGetAccessibleImpl(GtkWidget *widget, At
 		}
 		g_once_init_leave(&registered, 1);
 	}
-	*cache = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+	AtkObject *obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+	*cache = static_cast<AtkObject*>(g_object_ref(obj));
 #else // no public API, no factory, so guess from the parent and instantiate
-	if (*cache == NULL) {
-		static GType parent_atk_type = 0;
+	static GType parent_atk_type = 0;
 
-		if (parent_atk_type == 0) {
-			AtkObject *parent_obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
-			if (parent_obj) {
-				GType parent_atk_type = G_OBJECT_TYPE(parent_obj);
+	if (parent_atk_type == 0) {
+		AtkObject *parent_obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
+		if (parent_obj) {
+			GType parent_atk_type = G_OBJECT_TYPE(parent_obj);
 
-				// Figure out whether accessibility is enabled by looking at the type of the accessible
-				// object which would be created for the parent type of ScintillaObject.
-				if (g_type_is_a(parent_atk_type, GTK_TYPE_ACCESSIBLE)) {
-					*cache = scintilla_object_accessible_new(parent_atk_type, G_OBJECT(widget));
-					g_object_unref(parent_obj);
-				} else {
-					*cache = parent_obj;
-				}
+			// Figure out whether accessibility is enabled by looking at the type of the accessible
+			// object which would be created for the parent type of ScintillaObject.
+			if (g_type_is_a(parent_atk_type, GTK_TYPE_ACCESSIBLE)) {
+				*cache = scintilla_object_accessible_new(parent_atk_type, G_OBJECT(widget));
+			} else {
+				*cache = static_cast<AtkObject*>(g_object_ref(parent_obj));
 			}
 		}
 	}
