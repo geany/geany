@@ -45,6 +45,7 @@
 #include "encodings.h"
 #include "filetypesprivate.h"
 #include "geanyobject.h"
+#include "highlighting.h"
 #include "main.h"
 #include "navqueue.h"
 #include "sciwrappers.h"
@@ -2275,14 +2276,51 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
+/* gets the fold header after or on @line, but skipping folds created because of parentheses */
 static gint get_fold_header_after(ScintillaObject *sci, gint line)
 {
-	gint line_count = sci_get_line_count(sci);
+	const gint line_count = sci_get_line_count(sci);
 
 	for (; line < line_count; line++)
 	{
 		if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
-			return line;
+		{
+			const gint last_child = scintilla_send_message(sci, SCI_GETLASTCHILD, line, -1);
+			const gint line_end = sci_get_line_end_position(sci, line);
+			const gint lexer = sci_get_lexer(sci);
+			gint parenthesis_match_line = -1;
+
+			/* now find any unbalanced open parenthesis on the line and see where the matching
+			 * brace would be, mimicking what folding on () does */
+			for (gint pos = sci_get_position_from_line(sci, line); pos < line_end; pos++)
+			{
+				if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)) &&
+				    sci_get_char_at(sci, pos) == '(')
+				{
+					const gint matching = sci_find_matching_brace(sci, pos);
+
+					if (matching >= 0)
+					{
+						parenthesis_match_line = sci_get_line_from_position(sci, matching);
+						if (parenthesis_match_line != line)
+							break;  /* match is on a different line, we found a possible fold */
+						else
+							pos = matching;  /* just skip the range and continue searching */
+					}
+				}
+			}
+
+			/* if the matching parenthesis matches the fold level, skip it and continue.
+			 * it matches if it either spans the same lines, or spans one more but the next one is
+			 * a fold header (in which case the last child of the fold is one less to let the
+			 * header be at the parent level) */
+			if ((parenthesis_match_line == last_child) ||
+			    (parenthesis_match_line == last_child + 1 &&
+			     sci_get_fold_level(sci, parenthesis_match_line) & SC_FOLDLEVELHEADERFLAG))
+				line = last_child;
+			else
+				return line;
+		}
 	}
 
 	return -1;
@@ -2309,10 +2347,12 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 
 			/* if it may be a false positive because we're inside a fold level not inside anything
 			 * we match, e.g. a #if in C or C++, we check we're inside the fold level that start
-			 * right after the tag we got from TM */
+			 * right after the tag we got from TM.
+			 * Additionally, we perform parentheses matching on the initial line not to get confused
+			 * by folding on () in case the parameter list spans multiple lines */
 			if (abs(tag_line - parent) > 1)
 			{
-				gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
+				const gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
 				if (tag_fold >= 0)
 					last_child = scintilla_send_message(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
 			}
