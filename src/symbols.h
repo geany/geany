@@ -66,9 +66,7 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname);
 
 TMTag* symbols_get_current_selection_tag();
 
-gboolean symbols_select_tag(gint tag_line, const gchar *tagname);
-
-gboolean symbols_select_symbol_at_cursor(gint cursor_line);
+gboolean symbols_select_tag_at_line(gint line);
 
 void symbols_clear_selection();
 #endif /* GEANY_PRIVATE */

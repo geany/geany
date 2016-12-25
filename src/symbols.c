@@ -75,7 +75,6 @@ typedef struct
 typedef struct
 {
 	gint tag_line;         /* input: the line to look for */
-	const gchar *tag_name; /* input: the tag name to validate (optional, set to NULL to skip) */
 	GtkTreeIter iter;      /* return: the iterator of the symmbol found */
 	gboolean found;        /* return: wheither or not a symbol have been found */
 } TagQueryIterData;
@@ -2505,13 +2504,9 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 		/* look for matching line in tree view */
 		if (ptr_user_data_query->tag_line == current_tag->line)
 		{
-			/* if tag name is not null, also validate it */
-			if (!ptr_user_data_query->tag_name || g_strcmp0(ptr_user_data_query->tag_name, current_tag->name) == 0)
-			{
-				ptr_user_data_query->iter = *iter;
-				ptr_user_data_query->found = TRUE;
-				return TRUE;
-			}
+            ptr_user_data_query->iter = *iter;
+            ptr_user_data_query->found = TRUE;
+            return TRUE;
 		}
 	}
 
@@ -2521,38 +2516,13 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 
 
 /* Sets selection to a given tagname */
-gboolean symbols_select_tag(gint tag_line, const gchar *tag_name) {
+gboolean symbols_select_tag_at_line(gint line) {
 	GeanyDocument *doc = document_get_current();
 	if (!doc)
 		return FALSE;
 
 	TagQueryIterData query;
-	query.tag_line = tag_line;
-	query.tag_name = tag_name;
-
-	gtk_tree_model_foreach(GTK_TREE_MODEL(doc->priv->tag_store), search_tag_func, (gpointer) &query);
-	if (query.found)
-	{
-		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
-		gtk_tree_selection_select_iter(selection, &query.iter);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-
-/* Sets selection to the current prototype if detecting any.
- * If no prototype is detected the selection is cleared. */
-gboolean symbols_select_symbol_at_cursor(gint cursor_line)
-{
-	GeanyDocument *doc = document_get_current();
-	if (!doc)
-		return FALSE;
-
-	TagQueryIterData query;
-	query.tag_line = cursor_line;
-	query.tag_name = NULL;
+	query.tag_line = line;
 
 	gtk_tree_model_foreach(GTK_TREE_MODEL(doc->priv->tag_store), search_tag_func, (gpointer) &query);
 	if (query.found)

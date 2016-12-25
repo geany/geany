@@ -304,7 +304,7 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item);
 
 void ui_update_fold_items(void);
 
-void ui_update_symbols_window_selection(gint tag_line, const gchar *tag_name, gint cursor_line);
+void ui_update_symbols_window_selection(gint scope_tag_line, gint cursor_line);
 
 void ui_create_insert_menu_items(void);
 

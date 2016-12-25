@@ -567,17 +567,17 @@ void ui_update_fold_items(void)
 }
 
 
-void ui_update_symbols_window_selection(gint tag_line, const gchar *tag_name, gint cursor_line)
+void ui_update_symbols_window_selection(gint scope_tag_line, gint cursor_line)
 {
 	/* First try to find a symbol exactly at cursor line. */
-	if (!symbols_select_symbol_at_cursor(cursor_line + 1))
+	if (!symbols_select_tag_at_line(cursor_line + 1))
 	{
 		/* If not resolving the cursor line, maybe we are in scope of something. */
-		if (tag_line != -1)
+		if (scope_tag_line != -1)
 		{
 			TMTag* selection_tag = symbols_get_current_selection_tag();
-			if (!selection_tag || selection_tag->line != tag_line + 1)
-				symbols_select_tag(tag_line + 1, tag_name);
+			if (!selection_tag || selection_tag->line != scope_tag_line + 1)
+				symbols_select_tag_at_line(scope_tag_line + 1);
 		}
 		else
 			symbols_clear_selection();
