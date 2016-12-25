@@ -2518,7 +2518,8 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 
 /* Search for a given tag line in tree model than sets the tree selection it.
  * If not found, selection is cleared. */
-gboolean symbols_select_tag_at_line(gint line) {
+gboolean symbols_select_tag_at_line(gint line)
+{
 	GeanyDocument *doc = document_get_current();
 	if (!doc)
 		return FALSE;
@@ -2534,9 +2535,7 @@ gboolean symbols_select_tag_at_line(gint line) {
 		return TRUE;
 	}
 	else
-	{
 		symbols_clear_selection();
-	}
 
 	return FALSE;
 }
