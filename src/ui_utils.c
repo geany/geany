@@ -567,6 +567,7 @@ void ui_update_fold_items(void)
 }
 
 
+/* Resolve the most accurate symbol of the cursor line */
 void ui_update_symbols_window_selection(gint scope_tag_line, gint cursor_line)
 {
 	/* First try to find a symbol exactly at cursor line. */

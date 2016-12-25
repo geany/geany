@@ -2471,7 +2471,7 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 
 
 /* Gets selected symbol in TreeView.
- * Helpful to check weither or not the selection must be updated. */
+ * Helpful to check whether or not the selection must be updated. */
 TMTag* symbols_get_current_selection_tag()
 {
 	GeanyDocument *doc = document_get_current();
@@ -2491,7 +2491,8 @@ TMTag* symbols_get_current_selection_tag()
 }
 
 
-/* *GtkTreeModelForeachFunc for finding a match in symbols panel according to a tag line and tag name*/
+/* Function pointer of type GtkTreeModelForeachFunc.
+ * This function is called for each items of a tree model and will stop as soon as a match is found. */
 gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data_query)
 {
 	TagQueryIterData *ptr_user_data_query = (TagQueryIterData*) user_data_query;
@@ -2501,7 +2502,7 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 
 	if (current_tag)
 	{
-		/* look for matching line in tree view */
+		/* Look for a matching line in tree view */
 		if (ptr_user_data_query->tag_line == current_tag->line)
 		{
 			ptr_user_data_query->iter = *iter;
@@ -2515,7 +2516,8 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 }
 
 
-/* Sets selection to a given tagname */
+/* Search for a given tag line in tree model than sets the tree selection it.
+ * If not found, selection is cleared. */
 gboolean symbols_select_tag_at_line(gint line) {
 	GeanyDocument *doc = document_get_current();
 	if (!doc)
@@ -2531,11 +2533,16 @@ gboolean symbols_select_tag_at_line(gint line) {
 		gtk_tree_selection_select_iter(selection, &query.iter);
 		return TRUE;
 	}
+	else
+	{
+		symbols_clear_selection();
+	}
 
 	return FALSE;
 }
 
 
+/* Clear any selected items in tree selection */
 void symbols_clear_selection()
 {
 	GeanyDocument *doc = document_get_current();
