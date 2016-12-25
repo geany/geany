@@ -531,7 +531,7 @@ static void on_update_ui(GeanyEditor *editor, G_GNUC_UNUSED SCNotification *nt)
 	ui_update_statusbar_with_scope(editor->document, pos, scope);
 
 	/* update selection in symbols window */
-    gint cursor_line = sci_get_current_line(sci);
+	gint cursor_line = sci_get_current_line(sci);
 	ui_update_symbols_window_selection(tag_line, scope, cursor_line);
 
 #if 0
