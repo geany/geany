@@ -2473,7 +2473,6 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 
 /* Gets selected symbol in TreeView.
  * Helpful to check weither or not the selection must be updated. */
-#include "dialogs.h"
 TMTag* symbols_get_current_selection_tag()
 {
 	GeanyDocument *doc = document_get_current();
