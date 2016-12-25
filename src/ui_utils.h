@@ -281,6 +281,7 @@ void ui_add_config_file_menu_item(const gchar *real_path, const gchar *label,
 
 void ui_update_statusbar(GeanyDocument *doc, gint pos);
 
+void ui_update_statusbar_with_scope(GeanyDocument *doc, gint pos, const gchar *scope);
 
 /* This sets the window title according to the current filename. */
 void ui_set_window_title(GeanyDocument *doc);
@@ -303,6 +304,7 @@ void ui_update_insert_include_item(GeanyDocument *doc, gint item);
 
 void ui_update_fold_items(void);
 
+void ui_update_symbols_window_selection(gint tag_line, const gchar *tag_name, gint cursor_line);
 
 void ui_create_insert_menu_items(void);
 

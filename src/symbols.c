@@ -72,6 +72,14 @@ typedef struct
 	gboolean lower   /* input: search only for lines with lower number than @line */;
 } TreeSearchData;
 
+typedef struct
+{
+	gint tag_line;         /* input: the line to look for */
+	const gchar *tag_name; /* input: the tag name to validate (optional, set to NULL to skip) */
+	GtkTreeIter iter;      /* return: the iterator of the symmbol found */
+	gboolean found;        /* return: wheither or not a symbol have been found */
+} TagQueryIterData;
+
 
 static GPtrArray *top_level_iter_names = NULL;
 
@@ -2460,6 +2468,113 @@ gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 		tag_types |= tm_tag_namespace_t;
 
 	return get_current_tag_name_cached(doc, tagname, tag_types);
+}
+
+
+/* Gets selected symbol in TreeView.
+ * Helpful to check weither or not the selection must be updated. */
+#include "dialogs.h"
+TMTag* symbols_get_current_selection_tag()
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return NULL;
+    
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	GtkTreeModel *model = GTK_TREE_MODEL(doc->priv->tag_store);
+	GtkTreeIter iter;
+    
+	if (!gtk_tree_selection_get_selected(selection, &model, &iter))
+		return NULL;
+
+	TMTag *selection_tag;
+	gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &selection_tag, -1);
+	return selection_tag;
+}
+
+
+/* *GtkTreeModelForeachFunc for finding a match in symbols panel according to a tag line and tag name*/
+gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer user_data_query)
+{
+	TagQueryIterData *ptr_user_data_query = (TagQueryIterData*) user_data_query;
+
+	TMTag *current_tag;
+	gtk_tree_model_get(model, iter, SYMBOLS_COLUMN_TAG, &current_tag, -1);
+
+	if (current_tag)
+	{
+		/* look for matching line in tree view */
+		if (ptr_user_data_query->tag_line == current_tag->line)
+		{
+			/* if tag name is not null, also validate it */
+			if (!ptr_user_data_query->tag_name || g_strcmp0(ptr_user_data_query->tag_name, current_tag->name) == 0)
+			{
+				ptr_user_data_query->iter = *iter;
+				ptr_user_data_query->found = TRUE;
+				return TRUE;
+			}
+		}
+	}
+
+	ptr_user_data_query->found = FALSE;
+	return FALSE;
+}
+
+
+/* Sets selection to a given tagname */
+gboolean symbols_select_tag(gint tag_line, const gchar *tag_name) {
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return FALSE;
+
+	TagQueryIterData query;
+	query.tag_line = tag_line;
+	query.tag_name = tag_name;
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(doc->priv->tag_store), search_tag_func, (gpointer) &query);
+	if (query.found)
+	{
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+		gtk_tree_selection_select_iter(selection, &query.iter);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/* Sets selection to the current prototype if detecting any.
+ * If no prototype is detected the selection is cleared. */
+gboolean symbols_select_symbol_at_cursor(gint cursor_line)
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return FALSE;
+
+	TagQueryIterData query;
+	query.tag_line = cursor_line;
+	query.tag_name = NULL;
+
+	gtk_tree_model_foreach(GTK_TREE_MODEL(doc->priv->tag_store), search_tag_func, (gpointer) &query);
+	if (query.found)
+	{
+		GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+		gtk_tree_selection_select_iter(selection, &query.iter);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+void symbols_clear_selection()
+{
+	GeanyDocument *doc = document_get_current();
+	if (!doc)
+		return;
+
+	GtkTreeSelection *selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(doc->priv->tag_tree));
+	gtk_tree_selection_unselect_all(selection);
 }
 
 
