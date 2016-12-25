@@ -2504,9 +2504,9 @@ gboolean search_tag_func(GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *it
 		/* look for matching line in tree view */
 		if (ptr_user_data_query->tag_line == current_tag->line)
 		{
-            ptr_user_data_query->iter = *iter;
-            ptr_user_data_query->found = TRUE;
-            return TRUE;
+			ptr_user_data_query->iter = *iter;
+			ptr_user_data_query->found = TRUE;
+			return TRUE;
 		}
 	}
 
