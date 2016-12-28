@@ -9,7 +9,7 @@
 # This script should be run in the top source directory.
 #
 # Parses all files given on command line for Python classes or functions and write
-# them into data/tags/python.tags (internal tagmanager format).
+# them into data/tags/std.py.tags (internal tagmanager format).
 # If called without command line arguments, a preset of common Python libs is used.
 #
 # WARNING
@@ -51,7 +51,7 @@ TA_SCOPE = '%c' % 206
 TYPE_CLASS = '%d' % 1
 TYPE_FUNCTION = '%d' % 128
 
-tag_filename = 'data/tags/python.tags'
+tag_filename = 'data/tags/std.py.tags'
 tag_regexp = '^[ \t]*(def|class)[ \t]+([a-zA-Z0-9_]+)[ \t]*(\(.*\))[:]'
 
 
