@@ -7,7 +7,7 @@
 #
 
 tmpfile="tmp.c.tags"
-tagfile="data/c99.tags"
+tagfile="data/tags/c99.tags"
 
 headers="\
 assert.h \

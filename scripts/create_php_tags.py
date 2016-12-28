@@ -7,7 +7,7 @@
 # This script downloads the PHP tag definitions in JSON format from
 # http://doc.php.net/downloads/json/php_manual_en.json.
 # From those defintions all function tags are extracted and written
-# to ../data/php.tags (relative to the script's location, not $CWD).
+# to ../data/tags/php.tags (relative to the script's location, not $CWD).
 
 from json import loads
 from os.path import dirname, join
@@ -85,7 +85,7 @@ def parse_and_create_php_tags_file():
 
     # write tags
     script_dir = dirname(__file__)
-    tags_file_path = join(script_dir, '..', 'data', 'php.tags')
+    tags_file_path = join(script_dir, '..', 'data', 'tags', 'php.tags')
     with open(tags_file_path, 'w') as tags_file:
         tags_file.write('# format=tagmanager\n')
         for tag_name, tag_type, return_type, arg_list, scope in sorted(tag_list):
