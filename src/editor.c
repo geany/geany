@@ -191,13 +191,13 @@ static void snippets_load(GKeyFile *sysconfig, GKeyFile *userconfig)
 }
 
 
-static void on_snippet_keybinding_activate(gchar *key)
+static gboolean on_snippet_keybinding_activate(gchar *key)
 {
 	GeanyDocument *doc = document_get_current();
 	const gchar *s;
 
 	if (!doc || !gtk_widget_has_focus(GTK_WIDGET(doc->editor->sci)))
-		return;
+		return FALSE;
 
 	s = snippets_find_completion_by_name(doc->file_type->name, key);
 	if (!s) /* allow user to specify keybindings for "special" snippets */
@@ -210,11 +210,13 @@ static void on_snippet_keybinding_activate(gchar *key)
 	if (!s)
 	{
 		utils_beep();
-		return;
+		return FALSE;
 	}
 
 	editor_insert_snippet(doc->editor, sci_get_current_position(doc->editor->sci), s);
 	sci_scroll_caret(doc->editor->sci);
+
+	return TRUE;
 }
 
 
