@@ -14,7 +14,7 @@ s/^    //
 s/^[A-Za-z0-9_-]/## \0/
 # Turn PR and Issue references to links
 s%PR#\([0-9]\{1,\}\)%[\0](https://github.com/geany/geany/pull/\1)%g
-s%Issue#\([0-9]\{1,\}\)%[\0](https://github.com/geany/geany/issue/\1)%g
+s%Issue#\([0-9]\{1,\}\)%[\0](https://github.com/geany/geany/issues/\1)%g
 
 p
 n
