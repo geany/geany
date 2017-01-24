@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.28\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-10-30 12:54+0100\n"
-"PO-Revision-Date: 2016-10-22 21:20+0200\n"
+"PO-Revision-Date: 2017-01-24 09:11+0100\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.8.10\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1044,7 +1044,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Línies visibles al volt_ant del cursor:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -2720,8 +2720,8 @@ msgid ""
 "An error occurred or file information could not be retrieved (e.g. from a "
 "new file)."
 msgstr ""
-"S'ha produït un error o no s'ha pogut recuperar a la informació del fitxer "
-"(p. ex. des d'un fitxer nou)."
+"S'ha produït un error o no s'ha pogut recuperar la informació del fitxer (p. "
+"ex. des d'un fitxer nou)."
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
@@ -3356,12 +3356,11 @@ msgstr "Refés"
 
 #: ../src/keybindings.c:388
 msgid "Delete to line end"
-msgstr "Suprimeix fins al final de la línia"
+msgstr "Suprimeix fins a l'acabament de la línia"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Suprimeix fins al final de la línia"
+msgstr "Suprimeix fins al començament de la línia"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4056,6 +4055,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"El connector del servidor intermediari «%s» amb extensió «%s» comença amb un "
+"punt. Corregiu el connector del vostre servidor intermediari."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"
@@ -4340,13 +4341,12 @@ msgid "_Use regular expressions"
 msgstr "_Utilitza expressions regulars"
 
 #: ../src/search.c:311
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Utilitza expressions regulars de tipus POSIX. Per a informació detallada "
-"sobre expressions regulars, llegiu la documentació."
+"Utilitza expressions regulars de tipus Perl. Per a informació detallada "
+"sobre expressions regulars, consulteu el manual."
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -5018,6 +5018,9 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"No es pot executar l'ordre de la plantilla «%s». Consell: els camins "
+"incorrectes a l'ordre acostumen a ser una causa comuna dels errors. Error: "
+"%s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
