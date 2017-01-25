@@ -4597,6 +4597,33 @@ indicator_error
 
     *Example:* ``indicator_error=0xff0000``
 
+msg_default
+	The default foreground color in the compiler tab of the message window.
+
+	Only the first argument (foreground color) is used.
+
+	*Example:* ``msg_default=0x000000``
+
+msg_error
+	The foreground color of compiler errors in the message window.
+
+	Only the first argument (foreground color) is used.
+
+	*Example:* ``msg_error=0xff0000``
+
+msg_context
+	The foreground color of the surrounding lines of compiler errors.
+
+	Only the first argument (foreground color) is used.
+
+	*Example:* ``msg_context=0x880000``
+
+msg_message
+	The foreground color of messages and commands in the message window.
+
+	Only the first argument (foreground color) is used.
+
+	*Example:* ``msg_message=0x0000cc``
 
 [settings] section
 ``````````````````
