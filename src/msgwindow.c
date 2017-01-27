@@ -37,7 +37,6 @@
 #include "document.h"
 #include "callbacks.h"
 #include "filetypes.h"
-#include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
 #include "navqueue.h"
@@ -84,6 +83,11 @@ enum
 };
 
 
+static GdkColor color_error = {0, 65535, 0, 0};
+static GdkColor color_context = {0, 65535 / 2, 0, 0};
+static GdkColor color_message = {0, 0, 0, 0xD000};
+
+
 static void prepare_msg_tree_view(void);
 static void prepare_status_tree_view(void);
 static void prepare_compiler_tree_view(void);
@@ -113,6 +117,40 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
+GdkColor load_color(gchar *color_name) {
+	GdkColor color;
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+	GdkRGBA rgba_color;
+	GtkWidgetPath *path = gtk_widget_path_new();
+	GtkStyleContext *ctx = gtk_style_context_new();
+
+	gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+	gtk_widget_path_iter_set_name(path, -1, color_name);
+	gtk_style_context_set_screen(ctx, gdk_screen_get_default());
+	gtk_style_context_set_path(ctx, path);
+	gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &rgba_color);
+
+	color.red   = 0xffff * rgba_color.red;
+	color.green = 0xffff * rgba_color.green;
+	color.blue  = 0xffff * rgba_color.blue;
+
+	gtk_widget_path_unref(path);
+	g_object_unref(ctx);
+#else
+	gchar *path = g_strconcat("*.", color_name, NULL);
+
+	GtkSettings *settings = gtk_settings_get_default();
+	GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_WIDGET);
+	color = style->fg[GTK_STATE_NORMAL];
+
+	g_free(path);
+#endif
+
+	return color;
+}
+
+
 void msgwin_init(void)
 {
 	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
@@ -131,6 +169,10 @@ void msgwin_init(void)
 
 	ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
 	g_signal_connect(msgwindow.scribble, "populate-popup", G_CALLBACK(on_scribble_populate), NULL);
+
+	color_error = load_color("geany-compiler-error");
+	color_context = load_color("geany-compiler-context");
+	color_message = load_color("geany-compiler-message");
 }
 
 
@@ -263,30 +305,15 @@ static void prepare_compiler_tree_view(void)
 	/*g_signal_connect(selection, "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
-GdkColor get_color(gint msg_color)
+static const GdkColor *get_color(gint msg_color)
 {
-	gint color;
 	switch (msg_color)
 	{
-		case COLOR_RED:
-			color = msg_error;
-			break;
-		case COLOR_DARK_RED:
-			color = msg_context;
-			break;
-		case COLOR_BLUE:
-			color = msg_message;
-			break;
-		default:
-			color = msg_default;
+		case COLOR_RED: return &color_error;
+		case COLOR_DARK_RED: return &color_context;
+		case COLOR_BLUE: return &color_message;
+		default: return NULL;
 	}
-
-	gint red = color & 0xFF;
-	gint green = (color >> 8) & 0xFF;
-	gint blue = (color >> 16) & 0xFF;
-	GdkColor gdk_color = {0, red * 255, green * 255, blue * 255};
-
-	return gdk_color;
 }
 
 
@@ -314,7 +341,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
-	const GdkColor color = get_color(msg_color);
+	const GdkColor *color = get_color(msg_color);
 	gchar *utf8_msg;
 
 	if (! g_utf8_validate(msg, -1, NULL))
@@ -324,7 +351,7 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
-		COMPILER_COL_COLOR, &color, COMPILER_COL_STRING, utf8_msg, -1);
+		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
@@ -390,7 +417,7 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
-	const GdkColor color = get_color(msg_color);
+	const GdkColor *color = get_color(msg_color);
 	gchar *tmp;
 	gsize len;
 	gchar *utf8_msg;
@@ -415,7 +442,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gtk_list_store_append(msgwindow.store_msg, &iter);
 	gtk_list_store_set(msgwindow.store_msg, &iter,
 		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
-		&color, MSG_COL_STRING, utf8_msg, -1);
+		color, MSG_COL_STRING, utf8_msg, -1);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -740,8 +767,7 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 	{
 		/* if the item is not coloured red, it's not an error line */
 		gtk_tree_model_get(model, &iter, COMPILER_COL_COLOR, &color, -1);
-		const GdkColor error = get_color(COLOR_RED);
-		if (color == NULL || ! gdk_color_equal(color, &error))
+		if (color == NULL || ! gdk_color_equal(color, &color_error))
 		{
 			if (color != NULL)
 				gdk_color_free(color);

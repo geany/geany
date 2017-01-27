@@ -60,10 +60,6 @@
 
 static gchar *whitespace_chars = NULL;
 
-gint msg_context = 0x880000;
-gint msg_default = 0x000000;
-gint msg_error = 0xff0000;
-gint msg_message = 0x0000cc;
 
 typedef struct
 {
@@ -460,29 +456,7 @@ static void add_named_style(GKeyFile *config, const gchar *key)
 		GeanyLexerStyle *style = g_new0(GeanyLexerStyle, 1);
 
 		parse_keyfile_style(config, list, &gsd_default, style);
-
-		if (!strcmp(key, "msg_context"))
-		{
-			msg_context = style->foreground;
-			g_free(style);
-		}
-		else if (!strcmp(key, "msg_default"))
-		{
-			msg_default = style->foreground;
-			g_free(style);
-		}
-		else if (!strcmp(key, "msg_error"))
-		{
-			msg_error = style->foreground;
-			g_free(style);
-		}
-		else if (!strcmp(key, "msg_message"))
-		{
-			msg_message = style->foreground;
-			g_free(style);
-		}
-		else
-			g_hash_table_insert(named_style_hash, g_strdup(key), style);
+		g_hash_table_insert(named_style_hash, g_strdup(key), style);
 	}
 	g_strfreev(list);
 }
