@@ -2097,7 +2097,9 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 		if (g_file_test(global_file, G_FILE_TEST_EXISTS))
 			g_file_get_contents(global_file, &global_content, NULL, NULL);
 
-		document_new_file(utf8_filename, ft, global_content);
+		// open or create the document and mark it as changed if it didn't already exist
+		GeanyDocument *doc = document_new_file(utf8_filename, ft, global_content);
+		document_set_text_changed(doc, ! g_file_test(file_name, G_FILE_TEST_EXISTS));
 
 		utils_free_pointers(4, utf8_filename, base_name, global_file, global_content, NULL);
 	}
@@ -2495,7 +2497,7 @@ static void load_css_theme(const gchar *fn, guint priority)
 
 
 // see setup_gtk2_styles() in libmain.c for GTK+ 2-specific theme initialization
-static void init_custom_style(void)
+static void init_default_style(void)
 {
 #if GTK_CHECK_VERSION(3, 0, 0)
 	gchar *theme_fn;
@@ -2512,9 +2514,17 @@ static void init_custom_style(void)
 		load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 		g_free(theme_fn);
 	}
+#endif
+}
 
+
+static void init_user_style(void)
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gchar *theme_fn;
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
+	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
 	if (g_file_test(theme_fn, G_FILE_TEST_EXISTS))
 		load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	g_free(theme_fn);
@@ -2524,7 +2534,7 @@ static void init_custom_style(void)
 
 void ui_init(void)
 {
-	init_custom_style();
+	init_default_style();
 
 	init_recent_files();
 
@@ -2572,6 +2582,10 @@ void ui_init(void)
 	ui_init_toolbar_widgets();
 	init_document_widgets();
 	create_config_files_menu();
+
+	// after UI is initialized, apply user's custom CSS (if it exists)
+	// to override other CSS styles
+	init_user_style();
 }
 
 
