@@ -494,6 +494,17 @@ An example of a simple ``.gtkrc-2.0``::
     widget "GeanyPrefsDialog" style "geanyStyle"
 
 
+Customizing Geany's appearance using GTK+ 3 CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When Geany is built against GTK+ 3.0 or greater, the widget themes are
+provided by CSS files. After the normal GTK+ theme loading, Geany then
+loads some CSS files from its system-wide data directory needed for
+normal operation, and then if a file named ``geany.css`` exists in the
+user's Geany configuration directory (usually ``~/.config/geany``) it
+is loaded to override the previously loaded CSS files.
+
+
 Documents
 ---------
 
