@@ -1,5 +1,3 @@
-@import "geany.css";
-
 /* make close button on the editor's tabs smaller */
 #geany-close-tab-button {
 	outline-offset: 0;
