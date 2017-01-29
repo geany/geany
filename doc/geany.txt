@@ -502,7 +502,7 @@ can create a file named ``geany.css`` in the user configuration directory
 (usually ``~/.config/geany``) which will be loaded after other CSS styles
 are applied to allow overriding the default styles.
 
-Geany offers a number of CSS classes which can be overridden to taylor its
+Geany offers a number of CSS IDs which can be used to taylor its
 appearence. Among the more interesting include:
 
 * ``geany-compiler-context`` - the style used for build command output surrounding errors
