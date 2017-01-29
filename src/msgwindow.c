@@ -83,8 +83,8 @@ enum
 };
 
 
-static GdkColor color_error = {0, 65535, 0, 0};
-static GdkColor color_context = {0, 65535 / 2, 0, 0};
+static GdkColor color_error = {0, 0xFFFF, 0, 0};
+static GdkColor color_context = {0, 0x7FFF, 0, 0};
 static GdkColor color_message = {0, 0, 0, 0xD000};
 
 

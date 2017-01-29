@@ -56,8 +56,8 @@ style "geany-compiler-error-style" {
     fg[ACTIVE] = "#ffff00000000"
 }
 style "geany-compiler-context-style" {
-    fg[NORMAL] = "#888800000000"
-    fg[ACTIVE] = "#888800000000"
+    fg[NORMAL] = "#7f7f00000000"
+    fg[ACTIVE] = "#7f7f00000000"
 }
 style "geany-compiler-message-style" {
     fg[NORMAL] = "#00000000D000"
