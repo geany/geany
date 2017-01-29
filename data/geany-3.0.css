@@ -1,0 +1,8 @@
+/* make close button on the editor's tabs smaller */
+#geany-close-tab-button {
+	-GtkWidget-focus-padding: 0;
+	-GtkWidget-focus-line-width: 0;
+	-GtkButton-default-border: 0;
+	-GtkButton-default-outside-border: 0;
+	-GtkButton-inner-border: 0;
+}

@@ -2493,13 +2493,11 @@ static void load_css_theme(const gchar *fn, guint priority)
 
 	g_object_unref(provider);
 }
-#endif
 
 
 // see setup_gtk2_styles() in libmain.c for GTK+ 2-specific theme initialization
-static void init_default_style(void)
+static void init_css_styles(void)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
 	gchar *theme_fn;
 
 	// load the main geany.css file from system data dir
@@ -2507,34 +2505,54 @@ static void init_default_style(void)
 	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	g_free(theme_fn);
 
-	// if runtime GTK+ version is >= 3.20 then override with some needed version-specific changes
-	if (gtk_check_version(3, 20, 0) == NULL)
+	// load themes to handle breakage between various GTK+ versions
+	const struct
 	{
-		theme_fn = g_build_filename(app->datadir, "geany-3.20.css", NULL);
-		load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-		g_free(theme_fn);
+		guint min_version;
+		guint max_version;
+		const gchar *file;
 	}
-#endif
-}
+	css_files[] =
+	{
+		{ 20, G_MAXUINT, "geany-3.20.css" },
+		{ 0, 19, "geany-3.0.css" },
+	};
 
+	guint gtk_version = gtk_get_minor_version();
+	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
+	{
+		if (gtk_version >= css_files[i].min_version &&
+			gtk_version <= css_files[i].max_version)
+		{
+			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
+			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+			g_free(theme_fn);
+		}
+	}
 
-static void init_user_style(void)
-{
-#if GTK_CHECK_VERSION(3, 0, 0)
-	gchar *theme_fn;
 	// if the user provided a geany.css file in their config dir, try and load that
 	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
-	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
 	if (g_file_test(theme_fn, G_FILE_TEST_EXISTS))
 		load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_USER);
 	g_free(theme_fn);
-#endif
 }
+
+
+static void add_css_config_file_item(void)
+{
+	gchar *theme_fn;
+	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
+	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
+	g_free(theme_fn);
+}
+#endif // GTK3
 
 
 void ui_init(void)
 {
-	init_default_style();
+#if GTK_CHECK_VERSION(3, 0, 0)
+	init_css_styles();
+#endif
 
 	init_recent_files();
 
@@ -2581,11 +2599,11 @@ void ui_init(void)
 
 	ui_init_toolbar_widgets();
 	init_document_widgets();
-	create_config_files_menu();
 
-	// after UI is initialized, apply user's custom CSS (if it exists)
-	// to override other CSS styles
-	init_user_style();
+	create_config_files_menu();
+#if GTK_CHECK_VERSION(3, 0, 0)
+	add_css_config_file_item();
+#endif
 }
 
 

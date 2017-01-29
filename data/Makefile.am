@@ -115,6 +115,7 @@ nobase_dist_pkgdata_DATA = \
 
 if GTK3
 nobase_dist_pkgdata_DATA += \
+	geany-3.0.css \
 	geany-3.20.css \
 	geany.css
 else
