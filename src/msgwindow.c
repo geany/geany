@@ -112,8 +112,7 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
-static void
-on_width_change(GtkTreeView *treeview)
+static void on_width_change(GtkTreeView *treeview)
 {
 	/* get width of visible region of treeview */
 	GdkRectangle visible_rect;
