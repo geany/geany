@@ -55,6 +55,7 @@ typedef struct GeanyInterfacePrefs
 	gint			tab_pos_msgwin;				/**< positions of message window's tabs */
 	gint			tab_pos_sidebar;			/**< positions of sidebar's tabs */
 	gboolean		statusbar_visible;			/**< whether the status bar is visible */
+	gboolean		msgwin_linewrap;			/**< whether to enable linewrapping in the message window */
 	gboolean		show_symbol_list_expanders;	/**< whether to show expanders in the symbol list */
 	/** whether a double click on notebook tabs hides all other windows */
 	gboolean		notebook_double_click_hides_widgets;
