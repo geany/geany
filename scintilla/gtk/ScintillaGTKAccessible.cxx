@@ -162,6 +162,7 @@ ScintillaGTKAccessible::ScintillaGTKAccessible(GtkAccessible *accessible_, GtkWi
 }
 
 ScintillaGTKAccessible::~ScintillaGTKAccessible() {
+	g_signal_handlers_disconnect_by_func (sci->sci, reinterpret_cast<gpointer>(SciNotify), this);
 }
 
 gchar *ScintillaGTKAccessible::GetTextRangeUTF8(Position startByte, Position endByte) {
