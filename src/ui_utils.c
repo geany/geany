@@ -512,10 +512,18 @@ void ui_update_popup_goto_items(gboolean enable)
 }
 
 
+static void set_menu_copy_items_sensitive(gboolean enable)
+{
+	guint i, len;
+	len = G_N_ELEMENTS(widgets.menu_copy_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.menu_copy_items[i], enable);
+}
+
+
 void ui_update_menu_copy_items(GeanyDocument *doc)
 {
 	gboolean enable = FALSE;
-	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
@@ -533,9 +541,13 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	len = G_N_ELEMENTS(widgets.menu_copy_items);
-	for (i = 0; i < len; i++)
-		ui_widget_set_sensitive(widgets.menu_copy_items[i], enable);
+	set_menu_copy_items_sensitive(enable);
+}
+
+
+void ui_restore_menu_copy_items()
+{
+	set_menu_copy_items_sensitive(TRUE);
 }
 
 
