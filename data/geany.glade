@@ -6321,6 +6321,7 @@
               <object class="GtkMenuBar" id="menubar1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <signal name="deactivate" handler="on_menubar1_deactivate" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkMenuItem" id="file1">
                     <property name="visible">True</property>
