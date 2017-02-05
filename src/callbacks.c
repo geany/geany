@@ -183,7 +183,7 @@ static void on_file1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 
 /* edit actions, c&p & co, from menu bar and from popup menu */
-static void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void on_edit1_select(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *item;
 	GeanyDocument *doc = document_get_current();
@@ -200,9 +200,9 @@ static void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void on_menubar1_deactivate(GtkMenuShell *menushell, gpointer user_data)
+static void on_edit1_deselect(GtkMenuShell *menushell, gpointer user_data)
 {
-	/* we re-enable items that were disabled in on_edit1_activate() on menu popdown to
+	/* we re-enable items that were disabled in on_edit1_select() on menu popdown to
 	 * workaround mutli-layout keyboard issues in our keybinding handling code, so that
 	 * GTK's accelerator handling can catch them.
 	 * See https://github.com/geany/geany/issues/1368#issuecomment-273678207 */

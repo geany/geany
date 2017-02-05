@@ -6321,7 +6321,6 @@
               <object class="GtkMenuBar" id="menubar1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <signal name="deactivate" handler="on_menubar1_deactivate" after="yes" swapped="no"/>
                 <child>
                   <object class="GtkMenuItem" id="file1">
                     <property name="visible">True</property>
@@ -6563,7 +6562,8 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Edit</property>
                     <property name="use_underline">True</property>
-                    <signal name="activate" handler="on_edit1_activate" swapped="no"/>
+                    <signal name="select" handler="on_edit1_select" swapped="no"/>
+                    <signal name="deselect" handler="on_edit1_deselect" swapped="no"/>
                     <child type="submenu">
                       <object class="GtkMenu" id="edit1_menu">
                         <property name="can_focus">False</property>
