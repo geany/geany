@@ -299,6 +299,8 @@ void ui_update_popup_goto_items(gboolean enable);
 
 void ui_update_menu_copy_items(GeanyDocument *doc);
 
+void ui_restore_menu_copy_items();
+
 void ui_update_insert_include_item(GeanyDocument *doc, gint item);
 
 void ui_update_fold_items(void);

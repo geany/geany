@@ -200,6 +200,12 @@ static void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
+static void on_menubar1_deactivate(GtkMenuShell *menushell, gpointer user_data)
+{
+	ui_restore_menu_copy_items();
+}
+
+
 void on_undo1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
