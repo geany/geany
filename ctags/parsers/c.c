@@ -3149,7 +3149,7 @@ static rescanReason findCTags (const unsigned int passCount)
 		kind_for_define);
 
 	exception = (exception_t) setjmp (Exception);
-
+	rescan = RESCAN_NONE;
 	if (exception == ExceptionNone)
 	{
 		createTags (0, NULL);
