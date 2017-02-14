@@ -3137,16 +3137,13 @@ static rescanReason findCTags (const unsigned int passCount)
 {
 	exception_t exception;
 	rescanReason rescan = RESCAN_NONE;
-	kindOption *kind_for_define = NULL;
 
 	contextual_fake_count = 0;
 
 	Assert (passCount < 3);
 
-	kind_for_define = CKinds+CK_DEFINE;
-
 	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
-		kind_for_define);
+		CKinds+CK_DEFINE);
 
 	exception = (exception_t) setjmp (Exception);
 	rescan = RESCAN_NONE;
