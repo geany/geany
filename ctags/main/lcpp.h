@@ -75,5 +75,6 @@ extern int cppSkipOverCComment (void);
 extern char *cppGetSignature (void);
 extern void cppStartCollectingSignature (void);
 extern void cppStopCollectingSignature (void);
+extern void cppClearSignature (void);
 
 #endif  /* CTAGS_MAIN_GET_H */

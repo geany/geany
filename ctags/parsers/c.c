@@ -955,6 +955,7 @@ static void reinitStatement (statementInfo *const st, const bool partial)
 	initToken (st->context);
 	initToken (st->blockName);
 	vStringClear (st->parentClasses);
+	cppClearSignature ();
 
 	/* Init member info. */
 	if (! partial)

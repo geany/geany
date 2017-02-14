@@ -175,6 +175,8 @@ extern void cppUngetc (const int c)
 	Assert (Cpp.ungetch2 == '\0');
 	Cpp.ungetch2 = Cpp.ungetch;
 	Cpp.ungetch = c;
+	if (collectingSignature)
+		vStringChop (signature);
 }
 
 static inline int getcAndCollect ()
@@ -681,6 +683,8 @@ extern int cppGetc (void)
 		c = Cpp.ungetch;
 		Cpp.ungetch = Cpp.ungetch2;
 		Cpp.ungetch2 = '\0';
+		if (collectingSignature)
+			vStringPut (signature, c);
 		return c;  /* return here to avoid re-calling debugPutc () */
 	}
 	else do
@@ -1007,5 +1011,11 @@ extern void cppStartCollectingSignature (void)
 
 extern void cppStopCollectingSignature (void)
 {
+	collectingSignature = false;
+}
+
+extern void cppClearSignature (void)
+{
+	signature = vStringNewOrClear (signature);
 	collectingSignature = false;
 }
