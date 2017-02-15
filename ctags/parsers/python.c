@@ -28,7 +28,7 @@
 *   DATA DEFINITIONS
 */
 
-struct corkPair {
+struct corkInfo {
 	int index;
 };
 
@@ -120,14 +120,14 @@ static void addAccessFields (tagEntryInfo *const entry,
 /* Given a string with the contents of a line directly after the "def" keyword,
  * extract all relevant information and create a tag.
  */
-static struct corkPair makeFunctionTag (vString *const function,
+static struct corkInfo makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
 	int corkIndex;
 	int fqCorkIndex = CORK_NIL;
-	const struct corkPair nilPair = {CORK_NIL};
-	struct corkPair pair;
+	const struct corkInfo nilInfo = {CORK_NIL};
+	struct corkInfo info;
 
 	if (vStringLength (parent) > 0)
 	{
@@ -153,8 +153,8 @@ static struct corkPair makeFunctionTag (vString *const function,
 
 	corkIndex = makeTagEntry (&tag);
 
-	pair.index = corkIndex;
-	return pair;
+	info.index = corkIndex;
+	return info;
 }
 
 /* Given a string with the contents of the line directly after the "class"
@@ -404,18 +404,18 @@ static char *parseArglist(const char *buf)
 	return strdup(start);
 }
 
-static struct corkPair parseFunction (const char *cp, vString *const def,
+static struct corkInfo parseFunction (const char *cp, vString *const def,
 	vString *const parent, int is_class_parent)
 {
 	char *arglist;
-	struct corkPair pair;
+	struct corkInfo info;
 
 	cp = parseIdentifier (cp, def);
 	arglist = parseArglist (cp);
-	pair = makeFunctionTag (def, parent, is_class_parent, arglist);
+	info = makeFunctionTag (def, parent, is_class_parent, arglist);
 	if (arglist != NULL)
 		eFree (arglist);
-	return pair;
+	return info;
 }
 
 /* Get the combined name of a nested symbol. Classes are separated with ".",
@@ -486,7 +486,7 @@ static void checkIndent(NestingLevels *nls, int indent, bool eof)
 	}
 }
 
-static void addNestingLevel(NestingLevels *nls, int indentation, struct corkPair *corkPair)
+static void addNestingLevel(NestingLevels *nls, int indentation, struct corkInfo *info)
 {
 	int i;
 	NestingLevel *nl = NULL;
@@ -497,10 +497,10 @@ static void addNestingLevel(NestingLevels *nls, int indentation, struct corkPair
 		if (indentation <= PY_NL_INDENTATION(nl)) break;
 	}
 	if (i == nls->n)
-		nl = nestingLevelsPush(nls, corkPair->index);
+		nl = nestingLevelsPush(nls, info->index);
 	else
 		/* reuse existing slot */
-		nl = nestingLevelsTruncate (nls, i + 1, corkPair->index);
+		nl = nestingLevelsTruncate (nls, i + 1, info->index);
 
 	PY_NL_INDENTATION(nl) = indentation;
 }
@@ -821,19 +821,19 @@ static void findPythonTags (void)
 			if (found)
 			{
 				bool is_parent_class;
-				struct corkPair corkPair;
+				struct corkInfo info;
 
 				is_parent_class =
 					constructParentString(nesting_levels, indent, parent);
 
 				if (is_class)
 				{
-					corkPair.index = parseClass (cp, name, parent, is_parent_class);
+					info.index = parseClass (cp, name, parent, is_parent_class);
 				}
 				else
-					corkPair = parseFunction(cp, name, parent, is_parent_class);
+					info = parseFunction(cp, name, parent, is_parent_class);
 
-				addNestingLevel(nesting_levels, indent, &corkPair);
+				addNestingLevel(nesting_levels, indent, &info);
 			}
 			continue;
 		}
