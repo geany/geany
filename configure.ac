@@ -42,10 +42,8 @@ AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
 
 # Checks for dependencies needed by ctags
 AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
-AH_TEMPLATE([USE_STDBOOL_H], [whether or not to use <stdbool.h>.])
-AC_DEFINE([USE_STDBOOL_H])
-AH_TEMPLATE([CTAGS_LIB], [compile ctags as a library.])
-AC_DEFINE([CTAGS_LIB])
+AC_DEFINE([USE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
+AC_DEFINE([CTAGS_LIB], [1], [compile ctags as a library.])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
