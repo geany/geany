@@ -987,7 +987,7 @@ extern char *cppGetSignature(void)
 	if (NULL == signature || vStringLength (signature) < 2)
 		return NULL;
 
-	start = strdup (vStringValue (signature));
+	start = eStrdup (vStringValue (signature));
 	stripCodeBuffer(start);
 	for (level = 1, end = start + 1; level > 0; ++end)
 	{
