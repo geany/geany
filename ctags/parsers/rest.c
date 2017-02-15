@@ -80,11 +80,6 @@ static void makeRestTag (const vString* const name, const int kind)
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
 
-		if (parent && ((parent->kind - RestKinds) < kind))
-		{
-			e.extensionFields.scopeKind = &(RestKinds [parent->kind - RestKinds]);
-			e.extensionFields.scopeName = parent->name;
-		}
 		r = makeTagEntry (&e);
 	}
 	nestingLevelsPush(nestingLevels, r);

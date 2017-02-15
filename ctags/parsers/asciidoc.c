@@ -83,11 +83,6 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
 
-		if (parent && ((parent->kind - AsciidocKinds) < kind))
-		{
-			e.extensionFields.scopeKind = &(AsciidocKinds [parent->kind - AsciidocKinds]);
-			e.extensionFields.scopeName = parent->name;
-		}
 		r = makeTagEntry (&e);
 	}
 	nestingLevelsPush(nestingLevels, r);
