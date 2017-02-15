@@ -461,7 +461,7 @@ static bool constructParentString(NestingLevels *nls, int indent,
 			is_class = ((e->kind - PythonKinds)  == K_CLASS);
 		}
 		else
-			is_class = K_FUNCTION; /* ??? */
+			is_class = false;
 
 		prev = nl;
 	}
@@ -469,7 +469,7 @@ static bool constructParentString(NestingLevels *nls, int indent,
 }
 
 /* Check indentation level and truncate nesting levels accordingly */
-static void checkIndent(NestingLevels *nls, int indent, bool eof)
+static void checkIndent(NestingLevels *nls, int indent)
 {
 	int i;
 	NestingLevel *n;
@@ -740,7 +740,7 @@ static void findPythonTags (void)
 			continue;
 		}
 
-		checkIndent(nesting_levels, indent, false);
+		checkIndent(nesting_levels, indent);
 
 		/* Find global and class variables */
 		variable = findVariable(line);
@@ -842,7 +842,7 @@ static void findPythonTags (void)
 	}
 
 	/* Force popping all nesting levels. */
-	checkIndent(nesting_levels, 0, true);
+	checkIndent(nesting_levels, 0);
 
 	/* Clean up all memory we allocated. */
 	vStringDelete (parent);
