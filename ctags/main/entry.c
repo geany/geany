@@ -1110,8 +1110,10 @@ static void writeTagEntry (const tagEntryInfo *const tag)
 
 	if (tag->placeholder)
 		return;
+#ifndef CTAGS_LIB
 	if (! tag->kind->enabled)
 		return;
+#endif
 	if (tag->extensionFields.roleIndex != ROLE_INDEX_DEFINITION
 	    && ! isXtagEnabled (XTAG_REFERENCE_TAGS))
 		return;
@@ -1233,6 +1235,7 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 	int r = CORK_NIL;
 	Assert (tag->name != NULL);
 
+#ifndef CTAGS_LIB
 	if (getInputLanguageFileKind() != tag->kind)
 	{
 		if (! isInputLanguageKindEnabled (tag->kind->letter) &&
@@ -1242,6 +1245,7 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 		    && (! tag->kind->roles[tag->extensionFields.roleIndex].enabled))
 			return CORK_NIL;
 	}
+#endif
 
 	if (tag->name [0] == '\0' && (!tag->placeholder))
 	{

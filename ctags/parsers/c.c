@@ -289,12 +289,12 @@ static kindOption CKinds [] = {
 	{ true,  'g', "enum",       "enumeration names"},
 	{ true,  'm', "member",     "class, struct, and union members"},
 	{ true,  'n', "namespace",  "namespaces"},
-	{ true,  'p', "prototype",  "function prototypes"},
+	{ false, 'p', "prototype",  "function prototypes"},
 	{ true,  's', "struct",     "structure names"},
 	{ true,  't', "typedef",    "typedefs"},
 	{ true,  'u', "union",      "union names"},
 	{ true,  'v', "variable",   "variable definitions"},
-	{ true,  'x', "externvar",  "external variable declarations"},
+	{ false, 'x', "externvar",  "external variable declarations"},
 };
 
 /* Used to index into the DKinds table. */
@@ -315,12 +315,12 @@ static kindOption DKinds [] = {
 	{ true,  'i', "interface",  "interfaces"},
 	{ true,  'm', "member",     "class, struct, and union members"},
 	{ true,  'n', "namespace",  "namespaces"},
-	{ true,  'p', "prototype",  "function prototypes"},
+	{ false, 'p', "prototype",  "function prototypes"},
 	{ true,  's', "struct",     "structure names"},
 	{ true,  't', "typedef",    "typedefs"},
 	{ true,  'u', "union",      "union names"},
 	{ true,  'v', "variable",   "variable definitions"},
-	{ true,  'x', "externvar",  "external variable declarations"},
+	{ false, 'x', "externvar",  "external variable declarations"},
 };
 
 /* Used to index into the JavaKinds table. */
