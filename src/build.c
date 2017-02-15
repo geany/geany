@@ -1387,17 +1387,6 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 }
 
 
-/* portability to various GTK versions needs checking
- * conforms to description of gtk_accel_label as child of menu item
- * NB 2.16 adds set_label but not yet set_label_mnemonic */
-static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
-{
-	GtkWidget *c = gtk_bin_get_child(GTK_BIN(w));
-
-	gtk_label_set_text_with_mnemonic(GTK_LABEL(c), label);
-}
-
-
 /* * Update the build menu to reflect changes in configuration or status.
  *
  * Sets the labels and number of visible items to match the highest
@@ -1480,7 +1469,7 @@ void build_menu_update(GeanyDocument *doc)
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
 						if (bc != NULL && !EMPTY(label))
 						{
-							geany_menu_item_set_label(menu_item, label);
+							gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item), label);
 							gtk_widget_show_all(menu_item);
 							vis |= TRUE;
 						}
@@ -1508,7 +1497,7 @@ void build_menu_update(GeanyDocument *doc)
 						gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 						if (bc != NULL && !EMPTY(label))
 						{
-							geany_menu_item_set_label(menu_item, label);
+							gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item), label);
 							gtk_widget_show_all(menu_item);
 							vis |= TRUE;
 						}
