@@ -734,20 +734,6 @@ static void free_key_group(gpointer item)
 }
 
 
-void keybindings_init(void)
-{
-	memset(binding_ids, 0, sizeof binding_ids);
-	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
-	g_ptr_array_set_free_func(keybinding_groups, free_key_group);
-	kb_accel_group = gtk_accel_group_new();
-
-	init_default_kb();
-	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
-
-	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
-}
-
-
 typedef void (*KBItemCallback) (GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_data);
 
 static void keybindings_foreach(KBItemCallback cb, gpointer user_data)
@@ -779,6 +765,36 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 		kb->mods = mods;
 		g_free(val);
 	}
+}
+
+
+static void init_platform_kb(void)
+{
+#ifdef __APPLE__
+	gchar *configfile = g_build_filename(app->datadir, "keybindings_osx.conf", NULL);
+	GKeyFile *config = g_key_file_new();
+
+	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
+		keybindings_foreach(load_kb, config);
+
+	g_free(configfile);
+	g_key_file_free(config);
+#endif
+}
+
+
+void keybindings_init(void)
+{
+	memset(binding_ids, 0, sizeof binding_ids);
+	keybinding_groups = g_ptr_array_sized_new(GEANY_KEY_GROUP_COUNT);
+	g_ptr_array_set_free_func(keybinding_groups, free_key_group);
+	kb_accel_group = gtk_accel_group_new();
+
+	init_default_kb();
+	init_platform_kb();
+	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
+
+	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);
 }
 
 
