@@ -4759,7 +4759,7 @@ static gboolean editor_check_colourise(GeanyEditor *editor)
 {
 	GeanyDocument *doc = editor->document;
 
-	if (!doc->priv->colourise_needed)
+	if (!doc->priv->colourise_needed || main_status.quitting)
 		return FALSE;
 
 	doc->priv->colourise_needed = FALSE;
