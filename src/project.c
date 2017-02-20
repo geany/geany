@@ -83,7 +83,7 @@ typedef struct _PropertyDialogElements
 static gboolean update_config(const PropertyDialogElements *e, gboolean new_project);
 static void on_file_save_button_clicked(GtkButton *button, PropertyDialogElements *e);
 static gboolean load_config(const gchar *filename);
-static gboolean write_config(gboolean emit_signal);
+static gboolean write_config(void);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
@@ -246,7 +246,7 @@ void project_new(void)
 		if (update_config(&e, TRUE))
 		{
 			// app->project is now set
-			if (!write_config(TRUE))
+			if (!write_config())
 			{
 				SHOW_ERR(_("Project file could not be written"));
 				destroy_project(FALSE);
@@ -404,7 +404,7 @@ gboolean project_close(gboolean open_default)
 	g_return_val_if_fail(app->project != NULL, FALSE);
 
 	/* save project session files, etc */
-	if (!write_config(FALSE))
+	if (!write_config())
 		g_warning("Project file \"%s\" could not be written", app->project->file_name);
 
 	if (project_prefs.project_session)
@@ -619,7 +619,7 @@ static void show_project_properties(gboolean show_build)
 		if (update_config(&e, FALSE))
 		{
 			g_signal_emit_by_name(geany_object, "project-dialog-confirmed", e.notebook);
-			if (!write_config(TRUE))
+			if (!write_config())
 				SHOW_ERR(_("Project file could not be written"));
 			else
 			{
@@ -1092,11 +1092,8 @@ static void apply_editor_prefs(void)
 
 
 /* Write the project settings as well as the project session files into its configuration files.
- * emit_signal defines whether the project-save signal should be emitted. When write_config()
- * is called while closing a project, this is used to skip emitting the signal because
- * project-close will be emitted afterwards.
  * Returns: TRUE if project file was written successfully. */
-static gboolean write_config(gboolean emit_signal)
+static gboolean write_config(void)
 {
 	GeanyProject *p;
 	GKeyFile *config;
@@ -1134,10 +1131,7 @@ static gboolean write_config(gboolean emit_signal)
 	if (project_prefs.project_session)
 		configuration_save_session_files(config);
 	build_save_menu(config, (gpointer)p, GEANY_BCS_PROJ);
-	if (emit_signal)
-	{
-		g_signal_emit_by_name(geany_object, "project-save", config);
-	}
+	g_signal_emit_by_name(geany_object, "project-save", config);
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
 	ret = (utils_write_file(filename, data) == 0);
@@ -1158,7 +1152,7 @@ static gboolean write_config(gboolean emit_signal)
 GEANY_API_SYMBOL
 void project_write_config(void)
 {
-	if (!write_config(TRUE))
+	if (!write_config())
 		SHOW_ERR(_("Project file could not be written"));
 }
 
