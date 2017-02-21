@@ -20,6 +20,9 @@ private:
 	GtkAccessible *accessible;
 	ScintillaGTK *sci;
 
+	// cache holding character offset for each line start, see CharacterOffsetFromByteOffset()
+	std::vector<Position> character_offsets;
+
 	// cached length of the deletion, in characters (see Notify())
 	int deletionLengthChar;
 	// local state for comparing
@@ -52,7 +55,18 @@ private:
 	}
 
 	int CharacterOffsetFromByteOffset(Position byteOffset) {
-		return sci->pdoc->CountCharacters(0, byteOffset);
+		const Position line = sci->pdoc->LineFromPosition(byteOffset);
+		if (character_offsets.size() <= static_cast<size_t>(line)) {
+			if (character_offsets.empty())
+				character_offsets.push_back(0);
+			for (Position i = character_offsets.size(); i <= line; i++) {
+				const Position start = sci->pdoc->LineStart(i - 1);
+				const Position end = sci->pdoc->LineStart(i);
+				character_offsets.push_back(character_offsets[i - 1] + sci->pdoc->CountCharacters(start, end));
+			}
+		}
+		const Position lineStart = sci->pdoc->LineStart(line);
+		return character_offsets[line] + sci->pdoc->CountCharacters(lineStart, byteOffset);
 	}
 
 	void CharacterRangeFromByteRange(Position startByte, Position endByte, int *startChar, int *endChar) {

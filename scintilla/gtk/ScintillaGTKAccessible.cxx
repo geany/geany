@@ -856,6 +856,13 @@ void ScintillaGTKAccessible::NotifyReadOnly() {
 void ScintillaGTKAccessible::Notify(GtkWidget *, gint, SCNotification *nt) {
 	switch (nt->nmhdr.code) {
 		case SCN_MODIFIED: {
+			if (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) {
+				// invalidate character offset cache if applicable
+				const Position line = sci->pdoc->LineFromPosition(nt->position);
+				if (character_offsets.size() > static_cast<size_t>(line + 1)) {
+					character_offsets.resize(line + 1);
+				}
+			}
 			if (nt->modificationType & SC_MOD_INSERTTEXT) {
 				int startChar = CharacterOffsetFromByteOffset(nt->position);
 				int lengthChar = sci->pdoc->CountCharacters(nt->position, nt->position + nt->length);
