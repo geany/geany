@@ -1801,7 +1801,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 			return FALSE;
 
 #if defined(GDK_WINDOWING_WAYLAND)
-		if (event->direction == GDK_SCROLL_SMOOTH) {
+		if (event->direction == GDK_SCROLL_SMOOTH && GDK_IS_WAYLAND_WINDOW (event->window)) {
 			const int smoothScrollFactor = 4;
 			sciThis->smoothScrollY += event->delta_y * smoothScrollFactor;
 			sciThis->smoothScrollX += event->delta_x * smoothScrollFactor;;
