@@ -8,9 +8,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.28\n"
+"Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-29 20:21+0200\n"
+"POT-Creation-Date: 2017-02-19 19:13+0100\n"
 "PO-Revision-Date: 2016-11-07 23:57+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:341
 msgid "Geany"
 msgstr "Geany"
 
@@ -109,11 +109,11 @@ msgstr "搜索(_S)"
 msgid "Open Selected F_ile"
 msgstr "打开选择的文件(_I)"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2550
+#: ../data/geany.glade.h:19 ../src/symbols.c:2590
 msgid "Find _Usage"
 msgstr "查找用法(_U)"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2555
+#: ../data/geany.glade.h:20 ../src/symbols.c:2595
 msgid "Find _Document Usage"
 msgstr "查找文档用法(_D)"
 
@@ -382,7 +382,7 @@ msgstr "杂项"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1604
+#: ../data/geany.glade.h:76 ../src/prefs.c:1597
 msgid "General"
 msgstr "常规"
 
@@ -470,7 +470,7 @@ msgstr "显示状态栏"
 msgid "Whether to show the status bar at the bottom of the main window"
 msgstr "是否在主窗口底部显示状态栏"
 
-#: ../data/geany.glade.h:98 ../src/prefs.c:1606
+#: ../data/geany.glade.h:98 ../src/prefs.c:1599
 msgid "Interface"
 msgstr "界面"
 
@@ -598,7 +598,7 @@ msgstr "<b>图标尺寸</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>工具栏</b>"
 
-#: ../data/geany.glade.h:129 ../src/prefs.c:1608
+#: ../data/geany.glade.h:129 ../src/prefs.c:1601
 msgid "Toolbar"
 msgstr "工具栏"
 
@@ -1073,7 +1073,7 @@ msgstr "<b>虚拟空格</b>"
 msgid "Display"
 msgstr "显示"
 
-#: ../data/geany.glade.h:233 ../src/keybindings.c:309 ../src/prefs.c:1610
+#: ../data/geany.glade.h:233 ../src/keybindings.c:309 ../src/prefs.c:1603
 msgid "Editor"
 msgstr "编辑器"
 
@@ -1149,7 +1149,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "去除行尾空白"
 
 #: ../data/geany.glade.h:250
-msgid "Removes trailing spaces and tabs and the end of lines"
+#, fuzzy
+msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "去除行尾空格和制表符"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
@@ -1182,7 +1183,7 @@ msgid ""
 "disables checking."
 msgstr "设置磁盘检查的间隔时间。零表示不检查。"
 
-#: ../data/geany.glade.h:258 ../src/prefs.c:1612 ../src/symbols.c:466
+#: ../data/geany.glade.h:258 ../src/prefs.c:1605 ../src/symbols.c:467
 #: ../plugins/filebrowser.c:1159
 msgid "Files"
 msgstr "文件"
@@ -1232,7 +1233,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>命令</b>"
 
-#: ../data/geany.glade.h:270 ../src/keybindings.c:321 ../src/prefs.c:1614
+#: ../data/geany.glade.h:270 ../src/keybindings.c:321 ../src/prefs.c:1607
 msgid "Tools"
 msgstr "工具"
 
@@ -1313,7 +1314,7 @@ msgstr ""
 msgid "<b>Template data</b>"
 msgstr "<b>模板数据</b>"
 
-#: ../data/geany.glade.h:288 ../src/prefs.c:1616
+#: ../data/geany.glade.h:288 ../src/prefs.c:1609
 msgid "Templates"
 msgstr "模板"
 
@@ -1326,7 +1327,7 @@ msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>快捷键</b>"
 
 #: ../data/geany.glade.h:291 ../src/plugins.c:1941 ../src/plugins.c:1978
-#: ../src/prefs.c:1618
+#: ../src/prefs.c:1611
 msgid "Keybindings"
 msgstr "快捷键"
 
@@ -1399,7 +1400,7 @@ msgstr "使用原生的 GTK 打印"
 msgid "<b>Printing</b>"
 msgstr "<b>打印</b>"
 
-#: ../data/geany.glade.h:308 ../src/prefs.c:1620
+#: ../data/geany.glade.h:308 ../src/prefs.c:1613
 msgid "Printing"
 msgstr "打印"
 
@@ -1424,79 +1425,71 @@ msgid "Background color:"
 msgstr "背景颜色："
 
 #: ../data/geany.glade.h:314
-msgid "Background image:"
-msgstr "背景图片："
-
-#: ../data/geany.glade.h:315
 msgid "Scrollback lines:"
 msgstr "回滚条数："
 
-#: ../data/geany.glade.h:316
+#: ../data/geany.glade.h:315
 msgid "Shell:"
 msgstr "Shell："
 
-#: ../data/geany.glade.h:317
+#: ../data/geany.glade.h:316
 msgid "Sets the foreground color of the text in the terminal widget"
 msgstr "设置终端文本前景色"
 
-#: ../data/geany.glade.h:318
+#: ../data/geany.glade.h:317
 msgid "Sets the background color of the text in the terminal widget"
 msgstr "设置终端文本背景色"
 
-#: ../data/geany.glade.h:319
-msgid "Sets the path to the background image in the terminal widget"
-msgstr "设置终端背景图片"
-
-#: ../data/geany.glade.h:320
+#: ../data/geany.glade.h:318
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
 msgstr "设置终端历史条数，以便于回滚"
 
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:319
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "设置在终端中启动的 shell 路径"
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:320
 msgid "Scroll on keystroke"
 msgstr "按键时滚动"
 
-#: ../data/geany.glade.h:323
+#: ../data/geany.glade.h:321
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "按键时是否滚动到底端"
 
-#: ../data/geany.glade.h:324
+#: ../data/geany.glade.h:322
 msgid "Scroll on output"
 msgstr "输出时滚动"
 
-#: ../data/geany.glade.h:325
+#: ../data/geany.glade.h:323
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "输出时是否滚动到底端。"
 
-#: ../data/geany.glade.h:326
+#: ../data/geany.glade.h:324
 msgid "Cursor blinks"
 msgstr "光标闪烁"
 
-#: ../data/geany.glade.h:327
+#: ../data/geany.glade.h:325
 msgid "Whether to blink the cursor"
 msgstr "是否闪烁光标"
 
-#: ../data/geany.glade.h:328
+#: ../data/geany.glade.h:326
 msgid "Override Geany keybindings"
 msgstr "覆写 Geany 的快捷键"
 
-#: ../data/geany.glade.h:329
+#: ../data/geany.glade.h:327
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr "允许在虚拟终端使用快捷键 (与焦点命令相区别)"
 
-#: ../data/geany.glade.h:330
+#: ../data/geany.glade.h:328
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "禁止菜单快捷键 (缺省为F10)"
 
-#: ../data/geany.glade.h:331
+#: ../data/geany.glade.h:329
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1505,564 +1498,564 @@ msgstr ""
 "这个选项禁止通过快捷键 (缺省为F10) 弹出菜单。当在虚拟终端中使用类似 Midnight "
 "Commander 这类程序时有用。"
 
-#: ../data/geany.glade.h:332
+#: ../data/geany.glade.h:330
 msgid "Follow path of the current file"
 msgstr "跟随当前文件路径"
 
-#: ../data/geany.glade.h:333
+#: ../data/geany.glade.h:331
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "当切换打开的文件时是否执行“cd $path”"
 
-#: ../data/geany.glade.h:334
+#: ../data/geany.glade.h:332
 msgid "Execute programs in the VTE"
 msgstr "在虚拟终端中执行程序"
 
-#: ../data/geany.glade.h:335
+#: ../data/geany.glade.h:333
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
 msgstr "在虚拟终端而不是一个终端中执行程序。注意：虚拟终端中的程序不能停止。"
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:334
 msgid "Don't use run script"
 msgstr "不要使用运行脚本"
 
-#: ../data/geany.glade.h:337
+#: ../data/geany.glade.h:335
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
 msgstr "不使用用于显示程序的退出状态的简单运行脚本。"
 
-#: ../data/geany.glade.h:338
+#: ../data/geany.glade.h:336
 msgid "<b>Terminal</b>"
 msgstr "<b>终端</b>"
 
-#: ../data/geany.glade.h:339 ../src/prefs.c:1624 ../src/vte.c:320
+#: ../data/geany.glade.h:337 ../src/prefs.c:1617 ../src/vte.c:384
 msgid "Terminal"
 msgstr "虚拟终端"
 
-#: ../data/geany.glade.h:340
+#: ../data/geany.glade.h:338
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>警告：在修改这些设置前请阅读文档。</i>"
 
-#: ../data/geany.glade.h:341
+#: ../data/geany.glade.h:339
 msgid "<b>Various preferences</b>"
 msgstr "<b>高级设置</b>"
 
-#: ../data/geany.glade.h:342 ../src/prefs.c:1622
+#: ../data/geany.glade.h:340 ../src/prefs.c:1615
 msgid "Various"
 msgstr "高级设置"
 
-#: ../data/geany.glade.h:344
+#: ../data/geany.glade.h:342
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../data/geany.glade.h:345
+#: ../data/geany.glade.h:343
 msgid "New (with _Template)"
 msgstr "从模板新建(_T)"
 
-#: ../data/geany.glade.h:346
+#: ../data/geany.glade.h:344
 msgid "_Open..."
 msgstr "打开...(_O)"
 
-#: ../data/geany.glade.h:347
+#: ../data/geany.glade.h:345
 msgid "Recent _Files"
 msgstr "最近打开的文件(_F)"
 
-#: ../data/geany.glade.h:348
+#: ../data/geany.glade.h:346
 msgid "Save _As..."
 msgstr "另存为...(_A)"
 
-#: ../data/geany.glade.h:349
+#: ../data/geany.glade.h:347
 msgid "Sa_ve All"
 msgstr "全部保存(_L)"
 
-#: ../data/geany.glade.h:350 ../src/document.c:1651 ../src/document.c:3620
+#: ../data/geany.glade.h:348 ../src/document.c:1651 ../src/document.c:3620
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "重新载入(_R)"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:349
 msgid "R_eload As"
 msgstr "重新载入为(_E)"
 
-#: ../data/geany.glade.h:352
+#: ../data/geany.glade.h:350
 msgid "Page Set_up"
 msgstr "页面设置(_U)"
 
-#: ../data/geany.glade.h:353
+#: ../data/geany.glade.h:351
 msgid "_Print..."
 msgstr "打印...(_P)"
 
-#: ../data/geany.glade.h:354 ../src/notebook.c:470
+#: ../data/geany.glade.h:352 ../src/notebook.c:470
 msgid "Close Ot_her Documents"
 msgstr "关闭其它文件(_H)"
 
-#: ../data/geany.glade.h:355 ../src/notebook.c:476
+#: ../data/geany.glade.h:353 ../src/notebook.c:476
 msgid "C_lose All"
 msgstr "全部关闭(_L)"
 
-#: ../data/geany.glade.h:356
+#: ../data/geany.glade.h:354
 msgid "Co_mmands"
 msgstr "命令(_C)"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:434
+#: ../data/geany.glade.h:355 ../src/keybindings.c:434
 msgid "Cu_t Current Line(s)"
 msgstr "剪切当前行(_C)"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:431
+#: ../data/geany.glade.h:356 ../src/keybindings.c:431
 msgid "_Copy Current Line(s)"
 msgstr "复制当前行(_C)"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:384
+#: ../data/geany.glade.h:357 ../src/keybindings.c:384
 msgid "_Delete Current Line(s)"
 msgstr "删除当前行(_D)"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:381
+#: ../data/geany.glade.h:358 ../src/keybindings.c:381
 msgid "D_uplicate Line or Selection"
 msgstr "重复行或选中的文本(_D)"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:444
+#: ../data/geany.glade.h:359 ../src/keybindings.c:444
 msgid "S_elect Current Line(s)"
 msgstr "选择当前行(_S)"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:447
+#: ../data/geany.glade.h:360 ../src/keybindings.c:447
 msgid "Se_lect Current Paragraph"
 msgstr "选择当前段落(_S)"
 
-#: ../data/geany.glade.h:363
+#: ../data/geany.glade.h:361
 msgid "_Move Line(s) Up"
 msgstr "上移行(_M)"
 
-#: ../data/geany.glade.h:364
+#: ../data/geany.glade.h:362
 msgid "M_ove Line(s) Down"
 msgstr "下移行(_M)"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:498
+#: ../data/geany.glade.h:363 ../src/keybindings.c:498
 msgid "_Send Selection to Terminal"
 msgstr "发送选中的文字到终端(_S)"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:500
+#: ../data/geany.glade.h:364 ../src/keybindings.c:500
 msgid "_Reflow Lines/Block"
 msgstr "重排行/区块(_R)"
 
-#: ../data/geany.glade.h:367 ../src/keybindings.c:458
+#: ../data/geany.glade.h:365 ../src/keybindings.c:458
 msgid "T_oggle Case of Selection"
 msgstr "切换大小写(_O)"
 
-#: ../data/geany.glade.h:368
+#: ../data/geany.glade.h:366
 msgid "_Comment Line(s)"
 msgstr "转换为注释(_C)"
 
-#: ../data/geany.glade.h:369
+#: ../data/geany.glade.h:367
 msgid "U_ncomment Line(s)"
 msgstr "取消注释(_N)"
 
-#: ../data/geany.glade.h:370
+#: ../data/geany.glade.h:368
 msgid "_Toggle Line Commentation"
 msgstr "切换注释状态(_T)"
 
-#: ../data/geany.glade.h:371
+#: ../data/geany.glade.h:369
 msgid "_Increase Indent"
 msgstr "增加缩进(_I)"
 
-#: ../data/geany.glade.h:372
+#: ../data/geany.glade.h:370
 msgid "_Decrease Indent"
 msgstr "减少缩进(_D)"
 
-#: ../data/geany.glade.h:373 ../src/keybindings.c:477
+#: ../data/geany.glade.h:371 ../src/keybindings.c:477
 msgid "S_mart Line Indent"
 msgstr "智能缩进(_S)"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:372
 msgid "_Send Selection to"
 msgstr "发送选中的文字到(_S)"
 
-#: ../data/geany.glade.h:375
+#: ../data/geany.glade.h:373
 msgid "I_nsert Comments"
 msgstr "插入注释(_N)"
 
-#: ../data/geany.glade.h:376
+#: ../data/geany.glade.h:374
 msgid "Preference_s"
 msgstr "首选项(_S)"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:524
+#: ../data/geany.glade.h:375 ../src/keybindings.c:524
 msgid "P_lugin Preferences"
 msgstr "插件首选项(_L)"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:376
 msgid "_Find..."
 msgstr "查找...(_F)"
 
-#: ../data/geany.glade.h:379
+#: ../data/geany.glade.h:377
 msgid "Find _Next"
 msgstr "查找下一个(_N)"
 
-#: ../data/geany.glade.h:380
+#: ../data/geany.glade.h:378
 msgid "Find _Previous"
 msgstr "查找上一个(_P)"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2560
+#: ../data/geany.glade.h:379 ../src/symbols.c:2600
 msgid "Find in F_iles..."
 msgstr "在多个文件中查找...(_I)"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:380
 msgid "_Replace..."
 msgstr "替换...(_R)"
 
-#: ../data/geany.glade.h:383
+#: ../data/geany.glade.h:381
 msgid "Next Me_ssage"
 msgstr "下一个信息(_M)"
 
-#: ../data/geany.glade.h:384
+#: ../data/geany.glade.h:382
 msgid "Pr_evious Message"
 msgstr "前一个信息(_E)"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:573
+#: ../data/geany.glade.h:383 ../src/keybindings.c:573
 msgid "Go to Ne_xt Marker"
 msgstr "到下一个标记(_G)"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:576
+#: ../data/geany.glade.h:384 ../src/keybindings.c:576
 msgid "Go to Pre_vious Marker"
 msgstr "到上一个标记(_G)"
 
-#: ../data/geany.glade.h:387
+#: ../data/geany.glade.h:385
 msgid "_Go to Line..."
 msgstr "跳转到指定行...(_G)"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:536
+#: ../data/geany.glade.h:386 ../src/keybindings.c:536
 msgid "Find Next _Selection"
 msgstr "查找下一个选择(_S)"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:538
+#: ../data/geany.glade.h:387 ../src/keybindings.c:538
 msgid "Find Pre_vious Selection"
 msgstr "查找上一个选择(_S)"
 
-#: ../data/geany.glade.h:390 ../src/keybindings.c:555
+#: ../data/geany.glade.h:388 ../src/keybindings.c:555
 msgid "_Mark All"
 msgstr "标记全部(_M)"
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:389
 msgid "Go to Symbol Decl_aration"
 msgstr "跳转到符号声明(_A)"
 
-#: ../data/geany.glade.h:392
+#: ../data/geany.glade.h:390
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../data/geany.glade.h:393
+#: ../data/geany.glade.h:391
 msgid "Change _Font..."
 msgstr "更改字体...(_F)"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:392
 msgid "Change _Color Scheme..."
 msgstr "更改配色方案...(_C)"
 
-#: ../data/geany.glade.h:395
+#: ../data/geany.glade.h:393
 msgid "Show _Markers Margin"
 msgstr "显示页边标注区域(_M)"
 
-#: ../data/geany.glade.h:396
+#: ../data/geany.glade.h:394
 msgid "Show _Line Numbers"
 msgstr "显示行号(_L)"
 
-#: ../data/geany.glade.h:397
+#: ../data/geany.glade.h:395
 msgid "Show White S_pace"
 msgstr "显示空白(_W)"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:396
 msgid "Show Line _Endings"
 msgstr "显示行尾(_E)"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:397
 msgid "Show Indentation _Guides"
 msgstr "显示缩进标记(_I)"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:398
 msgid "Full_screen"
 msgstr "全屏(_S)"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:399
 msgid "Toggle All _Additional Widgets"
 msgstr "开关所有附加部件(_G)"
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:400
 msgid "Show Message _Window"
 msgstr "显示信息窗口(_W)"
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:401
 msgid "Show _Toolbar"
 msgstr "显示工具栏(_T)"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:402
 msgid "Show Side_bar"
 msgstr "显示侧边栏(_B)"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:403
 msgid "_Document"
 msgstr "文档(_D)"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:404
 msgid "_Line Wrapping"
 msgstr "自动换行(_L)"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:405
 msgid "Line _Breaking"
 msgstr "自动断行(_B)"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:406
 msgid "_Auto-indentation"
 msgstr "自动缩进(_A)"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:407
 msgid "In_dent Type"
 msgstr "缩进类型(_D)"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:408
 msgid "_Detect from Content"
 msgstr "根据文件探测(_D)"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:409
 msgid "T_abs and Spaces"
 msgstr "制表符和空格(_A)"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:410
 msgid "Indent Widt_h"
 msgstr "缩进宽度(_H)"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:411
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:412
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:413
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:414
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:415
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:416
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:417
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:418
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:419
 msgid "Read _Only"
 msgstr "只读(_O)"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:420
 msgid "_Write Unicode BOM"
 msgstr "写 Unicode BOM (_W)"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:421
 msgid "Set File_type"
 msgstr "设置文件类型(_T)"
 
-#: ../data/geany.glade.h:424
+#: ../data/geany.glade.h:422
 msgid "Set _Encoding"
 msgstr "设置文件编码(_E)"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:423
 msgid "Set Line E_ndings"
 msgstr "设置换行符(_N)"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:424
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "转换并设置为 _CR/LF (Windows)"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:425
 msgid "Convert and Set to _LF (Unix)"
 msgstr "转换并设置为 _LF (Unix)"
 
-#: ../data/geany.glade.h:428
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "转换并设置为 CR (早期 _Mac)"
 
-#: ../data/geany.glade.h:429 ../src/keybindings.c:664
+#: ../data/geany.glade.h:427 ../src/keybindings.c:664
 msgid "_Clone"
 msgstr "克隆(_C)"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:428
 msgid "_Strip Trailing Spaces"
 msgstr "去除行尾空白(_S)"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:429
 msgid "Replace Tabs with S_paces"
 msgstr "替换制表符为空格(_R)"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:430
 msgid "_Replace Spaces with Tabs..."
 msgstr "替换空格为制表符...(_Y)"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:431
 msgid "_Fold All"
 msgstr "全部折叠(_F)"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:432
 msgid "_Unfold All"
 msgstr "全部展开(_U)"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:433
 msgid "Remove _Markers"
 msgstr "去除记号(_M)"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:434
 msgid "Remove Error _Indicators"
 msgstr "去除所有出错指示(_I)"
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:435
 msgid "_Project"
 msgstr "项目(_P)"
 
-#: ../data/geany.glade.h:438
+#: ../data/geany.glade.h:436
 msgid "_New..."
 msgstr "新建...(_N)"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:437
 msgid "_Recent Projects"
 msgstr "最近项目(_R)"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:438
 msgid "_Close"
 msgstr "关闭(_C)"
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:439
 msgid "Apply the default indentation settings to all documents"
 msgstr "对所有文档使用默认的缩进设置"
 
-#: ../data/geany.glade.h:442
+#: ../data/geany.glade.h:440
 msgid "_Apply Default Indentation"
 msgstr "使用默认缩进(_A)"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2392 ../src/build.c:2669
+#: ../data/geany.glade.h:441 ../src/build.c:2402 ../src/build.c:2679
 msgid "_Build"
 msgstr "生成(_B)"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:442
 msgid "_Tools"
 msgstr "工具(_T)"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:443
 msgid "_Reload Configuration"
 msgstr "重新载入设置(_R)"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:444
 msgid "C_onfiguration Files"
 msgstr "配置文件(_O)"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:445
 msgid "_Color Chooser"
 msgstr "颜色选择器(_C)"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:446
 msgid "_Word Count"
 msgstr "字数统计(_W)"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:447
 msgid "Load Ta_gs File..."
 msgstr "载入标记文件…(_G)"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:448
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:449
 msgid "Keyboard _Shortcuts"
 msgstr "快捷键(_K)"
 
-#: ../data/geany.glade.h:452
+#: ../data/geany.glade.h:450
 msgid "Debug _Messages"
 msgstr "调试信息(_M)"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:451
 msgid "_Website"
 msgstr "网站(_W)"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:452
 msgid "Wi_ki"
 msgstr "Wi_ki"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:453
 msgid "Report a _Bug..."
 msgstr "报告错误...(_B)"
 
-#: ../data/geany.glade.h:456
+#: ../data/geany.glade.h:454
 msgid "_Donate..."
 msgstr "捐赠...(_D)"
 
-#: ../data/geany.glade.h:457 ../src/sidebar.c:126
+#: ../data/geany.glade.h:455 ../src/sidebar.c:126
 msgid "Symbols"
 msgstr "标记"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:456
 msgid "Documents"
 msgstr "文档"
 
-#: ../data/geany.glade.h:459
+#: ../data/geany.glade.h:457
 msgid "Status"
 msgstr "状态"
 
-#: ../data/geany.glade.h:460
+#: ../data/geany.glade.h:458
 msgid "Compiler"
 msgstr "编译器"
 
-#: ../data/geany.glade.h:461
+#: ../data/geany.glade.h:459
 msgid "Messages"
 msgstr "信息"
 
-#: ../data/geany.glade.h:462
+#: ../data/geany.glade.h:460
 msgid "Scribble"
 msgstr "便签"
 
-#: ../data/geany.glade.h:463
+#: ../data/geany.glade.h:461
 msgid "Project Properties"
 msgstr "项目属性"
 
-#: ../data/geany.glade.h:464 ../src/project.c:180
+#: ../data/geany.glade.h:462 ../src/project.c:180
 msgid "Filename:"
 msgstr "文件名："
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../data/geany.glade.h:463 ../src/project.c:169 ../plugins/classbuilder.c:467
 #: ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "名称："
 
-#: ../data/geany.glade.h:466
+#: ../data/geany.glade.h:464
 msgid "Description:"
 msgstr "描述："
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
+#: ../data/geany.glade.h:465 ../src/project.c:202
 msgid "Base path:"
 msgstr "根路径："
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:466
 msgid "File patterns:"
 msgstr "文件通配符："
 
-#: ../data/geany.glade.h:469
+#: ../data/geany.glade.h:467
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
 msgstr "空格分隔的文件通配符，用于在文件中查找 (例如 *.c *.h)"
 
-#: ../data/geany.glade.h:470 ../src/project.c:209
+#: ../data/geany.glade.h:468 ../src/project.c:209
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2071,79 +2064,79 @@ msgstr ""
 "组成项目的所有文件的根路径，可以是一个新路径或一个已存在的路径。你可以使用与"
 "项目名关联的路径。"
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:319
+#: ../data/geany.glade.h:469 ../src/keybindings.c:319
 msgid "Project"
 msgstr "项目"
 
-#: ../data/geany.glade.h:472
+#: ../data/geany.glade.h:470
 msgid "Display:"
 msgstr "显示："
 
-#: ../data/geany.glade.h:473
+#: ../data/geany.glade.h:471
 msgid "Custom"
 msgstr "自定义"
 
-#: ../data/geany.glade.h:474
+#: ../data/geany.glade.h:472
 msgid "Use global settings"
 msgstr "使用全局设置"
 
-#: ../data/geany.glade.h:475
+#: ../data/geany.glade.h:473
 msgid "Size:"
 msgstr "尺寸："
 
-#: ../data/geany.glade.h:476
+#: ../data/geany.glade.h:474
 msgid "Location:"
 msgstr "位置："
 
-#: ../data/geany.glade.h:477
+#: ../data/geany.glade.h:475
 msgid "Read-only:"
 msgstr "只读："
 
-#: ../data/geany.glade.h:478
+#: ../data/geany.glade.h:476
 msgid "Encoding:"
 msgstr "编码："
 
-#: ../data/geany.glade.h:479
+#: ../data/geany.glade.h:477
 msgid "Modified:"
 msgstr "修改于："
 
-#: ../data/geany.glade.h:480
+#: ../data/geany.glade.h:478
 msgid "Changed:"
 msgstr "变更于 (ctime)："
 
-#: ../data/geany.glade.h:481
+#: ../data/geany.glade.h:479
 msgid "Accessed:"
 msgstr "访问于："
 
-#: ../data/geany.glade.h:482
+#: ../data/geany.glade.h:480
 msgid "(only inside Geany)"
 msgstr "（仅在 Geany 中）"
 
-#: ../data/geany.glade.h:483
+#: ../data/geany.glade.h:481
 msgid "Permissions:"
 msgstr "权限："
 
-#: ../data/geany.glade.h:484
+#: ../data/geany.glade.h:482
 msgid "Read:"
 msgstr "读："
 
-#: ../data/geany.glade.h:485
+#: ../data/geany.glade.h:483
 msgid "Write:"
 msgstr "写："
 
-#: ../data/geany.glade.h:486
+#: ../data/geany.glade.h:484
 msgid "Execute:"
 msgstr "执行："
 
-#: ../data/geany.glade.h:487
+#: ../data/geany.glade.h:485
 msgid "Owner:"
 msgstr "所有者："
 
-#: ../data/geany.glade.h:488
+#: ../data/geany.glade.h:486
 msgid "Group:"
 msgstr "组："
 
-#: ../data/geany.glade.h:489
+#: ../data/geany.glade.h:487
 msgid "Other:"
 msgstr "其他："
 
@@ -2247,172 +2240,172 @@ msgstr "进程失败，没有工作目录"
 msgid "%s (in directory: %s)"
 msgstr "%s (在目录 %s 中)"
 
-#: ../src/build.c:773
+#: ../src/build.c:775
 #, c-format
 msgid "Process failed (%s)"
 msgstr "进程失败 (%s)"
 
-#: ../src/build.c:807
+#: ../src/build.c:809
 #, c-format
 msgid "Invalid working directory \"%s\""
 msgstr "无效的工作路径“%s”"
 
-#: ../src/build.c:832
+#: ../src/build.c:845
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr "执行 %s 失败 (启动脚本无法创建：%s)"
 
-#: ../src/build.c:874
+#: ../src/build.c:887
 msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr "因为终端中可能含有一些输入，没有执行文件（按 Ctrl+C 或回车键清除）。"
 
-#: ../src/build.c:907
+#: ../src/build.c:935
 #, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr "无法执行生成命令“%s”：%s。请检查首选项中的终端设置。"
 
-#: ../src/build.c:1016
+#: ../src/build.c:1046
 msgid "Compilation failed."
 msgstr "编译失败。"
 
-#: ../src/build.c:1030
+#: ../src/build.c:1060
 msgid "Compilation finished successfully."
 msgstr "编译成功结束。"
 
-#: ../src/build.c:1199
+#: ../src/build.c:1220
 msgid "Custom Text"
 msgstr "自定义文本"
 
-#: ../src/build.c:1200
+#: ../src/build.c:1221
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "在这里输入自定义文本，所有输入的文本将追加到命令上。"
 
-#: ../src/build.c:1278
+#: ../src/build.c:1299
 msgid "_Next Error"
 msgstr "下一个错误(_N)"
 
-#: ../src/build.c:1280
+#: ../src/build.c:1301
 msgid "_Previous Error"
 msgstr "前一个错误(_P)"
 
 #. arguments
-#: ../src/build.c:1290 ../src/build.c:2709
+#: ../src/build.c:1311 ../src/build.c:2719
 msgid "_Set Build Commands"
 msgstr "设置生成命令(_S)"
 
-#: ../src/build.c:1576 ../src/toolbar.c:376
+#: ../src/build.c:1586 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "生成当前文件"
 
-#: ../src/build.c:1587
+#: ../src/build.c:1597
 msgid "Build the current file with Make and the default target"
 msgstr "使用 Make 和缺省目标来生成当前文件"
 
-#: ../src/build.c:1589
+#: ../src/build.c:1599
 msgid "Build the current file with Make and the specified target"
 msgstr "使用 Make 和特定目标来生成当前文件"
 
-#: ../src/build.c:1591
+#: ../src/build.c:1601
 msgid "Compile the current file with Make"
 msgstr "使用 Make 来编译文件"
 
-#: ../src/build.c:1610
+#: ../src/build.c:1620
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "进程无法停止 (%s)。"
 
-#: ../src/build.c:1624 ../src/build.c:1636
+#: ../src/build.c:1634 ../src/build.c:1646
 msgid "No more build errors."
 msgstr "没有生成错误。"
 
-#: ../src/build.c:1749 ../src/build.c:1751
+#: ../src/build.c:1759 ../src/build.c:1761
 msgid "Set menu item label"
 msgstr "设置菜单项的标签"
 
-#: ../src/build.c:1776 ../src/symbols.c:521 ../src/tools.c:397
+#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "标签"
 
 #. command column, holding status and command display
-#: ../src/build.c:1777 ../src/symbols.c:516 ../src/tools.c:382
+#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "命令"
 
-#: ../src/build.c:1778
+#: ../src/build.c:1788
 msgid "Working directory"
 msgstr "工作目录"
 
-#: ../src/build.c:1779
+#: ../src/build.c:1789
 msgid "Reset"
 msgstr "重置"
 
-#: ../src/build.c:1836
+#: ../src/build.c:1846
 msgid "Click to set menu item label"
 msgstr "点击设置菜单项标签"
 
-#: ../src/build.c:1920 ../src/build.c:1922
+#: ../src/build.c:1930 ../src/build.c:1932
 #, c-format
 msgid "%s commands"
 msgstr "%s命令"
 
-#: ../src/build.c:1922
+#: ../src/build.c:1932
 msgid "No filetype"
 msgstr "无文件类型"
 
-#: ../src/build.c:1931 ../src/build.c:1966
+#: ../src/build.c:1941 ../src/build.c:1976
 msgid "Error regular expression:"
 msgstr "错误正则表达式："
 
-#: ../src/build.c:1959
+#: ../src/build.c:1969
 msgid "Independent commands"
 msgstr "文件类型无关命令"
 
-#: ../src/build.c:1991
+#: ../src/build.c:2001
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "附注：第 2 项会打开一个对话框，并将输入的文本追加到命令中。"
 
-#: ../src/build.c:2000
+#: ../src/build.c:2010
 msgid "Execute commands"
 msgstr "执行命令"
 
-#: ../src/build.c:2012
+#: ../src/build.c:2022
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr "命令和目录字段中的 %d、%e、%f、%p 和 %l 将被替代，详见手册。"
 
-#: ../src/build.c:2170
+#: ../src/build.c:2180
 msgid "Set Build Commands"
 msgstr "设置生成命令"
 
-#: ../src/build.c:2385
+#: ../src/build.c:2395
 msgid "_Compile"
 msgstr "编译(_C)"
 
-#: ../src/build.c:2399 ../src/build.c:2429 ../src/build.c:2637
+#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
 msgid "_Execute"
 msgstr "执行(_E)"
 
 #. build the code with make custom
-#: ../src/build.c:2444 ../src/build.c:2635 ../src/build.c:2689
+#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
 msgid "Make Custom _Target..."
 msgstr "生成自定义目标...(_T)"
 
 #. build the code with make object
-#: ../src/build.c:2446 ../src/build.c:2636 ../src/build.c:2697
+#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "生成目标文件(_O)"
 
-#: ../src/build.c:2448 ../src/build.c:2634
+#: ../src/build.c:2458 ../src/build.c:2644
 msgid "_Make"
 msgstr "生成(_M)"
 
 #. build the code with make all
-#: ../src/build.c:2681
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "生成全部(_M)"
 
@@ -2422,38 +2415,38 @@ msgid "%d file saved."
 msgid_plural "%d files saved."
 msgstr[0] "%d个文件已保存。"
 
-#: ../src/callbacks.c:890 ../src/keybindings.c:564
+#: ../src/callbacks.c:900 ../src/keybindings.c:564
 msgid "Go to Line"
 msgstr "跳转到行"
 
-#: ../src/callbacks.c:891
+#: ../src/callbacks.c:901
 msgid "Enter the line you want to go to:"
 msgstr "输入您要跳转到的行号："
 
-#: ../src/callbacks.c:992 ../src/callbacks.c:1018
+#: ../src/callbacks.c:1002 ../src/callbacks.c:1028
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "在使用这个功能前请设置当前文件的文件类型。"
 
-#: ../src/callbacks.c:1308 ../src/callbacks.c:1316
+#: ../src/callbacks.c:1318 ../src/callbacks.c:1326
 msgid "No more message items."
 msgstr "没有消息"
 
-#: ../src/callbacks.c:1419
+#: ../src/callbacks.c:1429
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "无法打开文件 %s (文件不存在)"
 
-#: ../src/callbacks.c:1468
+#: ../src/callbacks.c:1478
 msgid "Check the path setting in Filetype configuration."
 msgstr "请检查文件类型设置中的路径设置。"
 
-#: ../src/callbacks.c:1473
+#: ../src/callbacks.c:1483
 msgid "Check the path setting in Preferences."
 msgstr "请检查首选项中的路径设置。"
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1486
+#: ../src/callbacks.c:1496
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "无法执行上下文动作命令“%s”：%s。%s"
@@ -2597,7 +2590,7 @@ msgstr "发生了一个错误或无法取得文件信息 (比如一个空文件)
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2364 ../src/symbols.c:2380 ../src/ui_utils.c:289
+#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "未知"
 
@@ -2833,15 +2826,15 @@ msgstr[0] "%s：替换了 %d 处，从“%s”变为“%s”。"
 msgid "Do you want to reload it?"
 msgstr "您要重新载入吗？"
 
-#: ../src/editor.c:4455
+#: ../src/editor.c:4457
 msgid "Enter Tab Width"
 msgstr "输入制表符宽度"
 
-#: ../src/editor.c:4456
+#: ../src/editor.c:4458
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "输入要用一个制表符代替多少个空格。"
 
-#: ../src/editor.c:4661
+#: ../src/editor.c:4663
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "警告：非标准的硬 tab 宽度：%d != 8！"
@@ -3098,7 +3091,7 @@ msgid "Color Schemes"
 msgstr "配色方案"
 
 #. visual group order
-#: ../src/keybindings.c:308 ../src/symbols.c:493
+#: ../src/keybindings.c:308 ../src/symbols.c:494
 msgid "File"
 msgstr "文件"
 
@@ -3134,12 +3127,12 @@ msgstr "跳转到行"
 msgid "View"
 msgstr "查看"
 
-#: ../src/keybindings.c:318 ../src/symbols.c:642
+#: ../src/keybindings.c:318 ../src/symbols.c:643
 msgid "Document"
 msgstr "文档"
 
 #: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:513
-#: ../src/ui_utils.c:2195
+#: ../src/ui_utils.c:2202
 msgid "Build"
 msgstr "生成"
 
@@ -3179,7 +3172,7 @@ msgstr "另存为"
 msgid "Save all"
 msgstr "全部保存"
 
-#: ../src/keybindings.c:347 ../src/symbols.c:726
+#: ../src/keybindings.c:347 ../src/symbols.c:727
 msgid "Properties"
 msgstr "属性"
 
@@ -3647,11 +3640,11 @@ msgstr "快捷键"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "下列快捷键可定义："
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1027
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "随便写写，当便签或草稿好了。从前有座山，山里有个庙……"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1254
 msgid "Failed to load one or more session files."
 msgstr "打开一个或多个上次会话的文件失败。"
 
@@ -3910,11 +3903,11 @@ msgstr "获取按键"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "请按下用于“%s”的按键组合。"
 
-#: ../src/prefs.c:227 ../src/symbols.c:2518 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "全部展开(_E)"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2523 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "全部折叠(_C)"
 
@@ -3926,38 +3919,38 @@ msgstr "操作"
 msgid "Shortcut"
 msgstr "快捷键"
 
-#: ../src/prefs.c:1486
+#: ../src/prefs.c:1479
 msgid "_Allow"
 msgstr "允许(_A)"
 
-#: ../src/prefs.c:1488
+#: ../src/prefs.c:1481
 msgid "_Override"
 msgstr "覆写(_O)"
 
-#: ../src/prefs.c:1489
+#: ../src/prefs.c:1482
 msgid "Override that keybinding?"
 msgstr "覆写快捷键？"
 
-#: ../src/prefs.c:1490
+#: ../src/prefs.c:1483
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "按键组合“%s”已用于“%s”。"
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1699
+#: ../src/prefs.c:1692
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr "在下面输入工具路径。不需要的请留空。"
 
 #. page Templates
-#: ../src/prefs.c:1704
+#: ../src/prefs.c:1697
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr "定义用于模板的信息。查看帮助文档了解更多细节。"
 
 #. page Keybindings
-#: ../src/prefs.c:1709
+#: ../src/prefs.c:1702
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -3967,7 +3960,7 @@ msgstr ""
 "击一个操作直接编辑快捷键的字符串。"
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1714
+#: ../src/prefs.c:1707
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4423,11 +4416,11 @@ msgstr "被引号包含的 Windows 程序必须整个包含于引号中"
 msgid "Program not found"
 msgstr "程序未找到"
 
-#: ../src/spawn.c:672
+#: ../src/spawn.c:764
 msgid "Failed to change to the working directory"
 msgstr "无法变更工作目录"
 
-#: ../src/spawn.c:677
+#: ../src/spawn.c:769
 msgid "Unknown error executing child process"
 msgstr "执行子进程时发生未知错误"
 
@@ -4435,322 +4428,322 @@ msgstr "执行子进程时发生未知错误"
 msgid "Value"
 msgstr "值"
 
-#: ../src/symbols.c:472 ../src/symbols.c:522 ../src/symbols.c:632
+#: ../src/symbols.c:473 ../src/symbols.c:523 ../src/symbols.c:633
 msgid "Chapter"
 msgstr "章"
 
-#: ../src/symbols.c:473 ../src/symbols.c:518 ../src/symbols.c:633
+#: ../src/symbols.c:474 ../src/symbols.c:519 ../src/symbols.c:634
 msgid "Section"
 msgstr "节"
 
-#: ../src/symbols.c:474
+#: ../src/symbols.c:475
 msgid "Sect1"
 msgstr "第1节"
 
-#: ../src/symbols.c:475
+#: ../src/symbols.c:476
 msgid "Sect2"
 msgstr "第2节"
 
-#: ../src/symbols.c:476
+#: ../src/symbols.c:477
 msgid "Sect3"
 msgstr "第3节"
 
-#: ../src/symbols.c:477
+#: ../src/symbols.c:478
 msgid "Appendix"
 msgstr "索引"
 
-#: ../src/symbols.c:478 ../src/symbols.c:523 ../src/symbols.c:548
-#: ../src/symbols.c:564 ../src/symbols.c:579 ../src/symbols.c:590
-#: ../src/symbols.c:691 ../src/symbols.c:702 ../src/symbols.c:715
-#: ../src/symbols.c:729 ../src/symbols.c:741 ../src/symbols.c:753
-#: ../src/symbols.c:770 ../src/symbols.c:799 ../src/symbols.c:831
+#: ../src/symbols.c:479 ../src/symbols.c:524 ../src/symbols.c:549
+#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
+#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
+#: ../src/symbols.c:730 ../src/symbols.c:742 ../src/symbols.c:754
+#: ../src/symbols.c:771 ../src/symbols.c:800 ../src/symbols.c:832
 msgid "Other"
 msgstr "其他"
 
-#: ../src/symbols.c:484 ../src/symbols.c:761 ../src/symbols.c:809
+#: ../src/symbols.c:485 ../src/symbols.c:762 ../src/symbols.c:810
 msgid "Module"
 msgstr "模块"
 
-#: ../src/symbols.c:485 ../src/symbols.c:575 ../src/symbols.c:687
-#: ../src/symbols.c:739 ../src/symbols.c:751 ../src/symbols.c:766
-#: ../src/symbols.c:780
+#: ../src/symbols.c:486 ../src/symbols.c:576 ../src/symbols.c:688
+#: ../src/symbols.c:740 ../src/symbols.c:752 ../src/symbols.c:767
+#: ../src/symbols.c:781
 msgid "Types"
 msgstr "类型"
 
-#: ../src/symbols.c:486
+#: ../src/symbols.c:487
 msgid "Type constructors"
 msgstr "类型结构"
 
-#: ../src/symbols.c:487 ../src/symbols.c:509 ../src/symbols.c:530
-#: ../src/symbols.c:547 ../src/symbols.c:559 ../src/symbols.c:572
-#: ../src/symbols.c:587 ../src/symbols.c:601 ../src/symbols.c:611
-#: ../src/symbols.c:675 ../src/symbols.c:725 ../src/symbols.c:748
-#: ../src/symbols.c:793 ../src/symbols.c:817
+#: ../src/symbols.c:488 ../src/symbols.c:510 ../src/symbols.c:531
+#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
+#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
+#: ../src/symbols.c:676 ../src/symbols.c:726 ../src/symbols.c:749
+#: ../src/symbols.c:794 ../src/symbols.c:818
 msgid "Functions"
 msgstr "函数"
 
-#: ../src/symbols.c:492
+#: ../src/symbols.c:493
 msgid "Program"
 msgstr "程序"
 
-#: ../src/symbols.c:494 ../src/symbols.c:502 ../src/symbols.c:508
+#: ../src/symbols.c:495 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
 msgstr "节"
 
-#: ../src/symbols.c:495
+#: ../src/symbols.c:496
 msgid "Paragraph"
 msgstr "段"
 
-#: ../src/symbols.c:496
+#: ../src/symbols.c:497
 msgid "Group"
 msgstr "组"
 
-#: ../src/symbols.c:497
+#: ../src/symbols.c:498
 msgid "Data"
 msgstr "数据"
 
-#: ../src/symbols.c:503
+#: ../src/symbols.c:504
 msgid "Keys"
 msgstr "键值"
 
-#: ../src/symbols.c:510 ../src/symbols.c:561 ../src/symbols.c:577
-#: ../src/symbols.c:603 ../src/symbols.c:676 ../src/symbols.c:701
-#: ../src/symbols.c:727 ../src/symbols.c:740 ../src/symbols.c:749
-#: ../src/symbols.c:765 ../src/symbols.c:800 ../src/symbols.c:829
+#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
+#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
+#: ../src/symbols.c:728 ../src/symbols.c:741 ../src/symbols.c:750
+#: ../src/symbols.c:766 ../src/symbols.c:801 ../src/symbols.c:830
 msgid "Variables"
 msgstr "变量"
 
-#: ../src/symbols.c:517
+#: ../src/symbols.c:518
 msgid "Environment"
 msgstr "环境"
 
-#: ../src/symbols.c:519 ../src/symbols.c:634
+#: ../src/symbols.c:520 ../src/symbols.c:635
 msgid "Subsection"
 msgstr "小节"
 
-#: ../src/symbols.c:520 ../src/symbols.c:635
+#: ../src/symbols.c:521 ../src/symbols.c:636
 msgid "Subsubsection"
 msgstr "小小节"
 
-#: ../src/symbols.c:531 ../src/symbols.c:556
+#: ../src/symbols.c:532 ../src/symbols.c:557
 msgid "Structures"
 msgstr "结构"
 
-#: ../src/symbols.c:538
+#: ../src/symbols.c:539
 msgid "Parts"
 msgstr "部分"
 
-#: ../src/symbols.c:539
+#: ../src/symbols.c:540
 msgid "Assembly"
 msgstr "汇编"
 
-#: ../src/symbols.c:540
+#: ../src/symbols.c:541
 msgid "Steps"
 msgstr "步骤"
 
-#: ../src/symbols.c:555 ../src/symbols.c:653 ../src/symbols.c:699
+#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
 msgid "Modules"
 msgstr "模块"
 
-#: ../src/symbols.c:557 ../src/symbols.c:604
+#: ../src/symbols.c:558 ../src/symbols.c:605
 msgid "Traits"
 msgstr "接口"
 
-#: ../src/symbols.c:558
+#: ../src/symbols.c:559
 msgid "Implementations"
 msgstr "实现"
 
-#: ../src/symbols.c:560 ../src/symbols.c:820
+#: ../src/symbols.c:561 ../src/symbols.c:821
 msgid "Typedefs / Enums"
 msgstr "定义/枚举"
 
-#: ../src/symbols.c:562 ../src/symbols.c:778 ../src/symbols.c:787
-#: ../src/symbols.c:826
+#: ../src/symbols.c:563 ../src/symbols.c:779 ../src/symbols.c:788
+#: ../src/symbols.c:827
 msgid "Macros"
 msgstr "宏"
 
-#: ../src/symbols.c:563 ../src/symbols.c:656 ../src/symbols.c:665
-#: ../src/symbols.c:674 ../src/symbols.c:712 ../src/symbols.c:738
+#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
+#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:739
 msgid "Methods"
 msgstr "方法"
 
-#: ../src/symbols.c:571 ../src/symbols.c:586 ../src/symbols.c:684
-#: ../src/symbols.c:709 ../src/symbols.c:722
+#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
+#: ../src/symbols.c:710 ../src/symbols.c:723
 msgid "Package"
 msgstr "包"
 
-#: ../src/symbols.c:573 ../src/symbols.c:599 ../src/symbols.c:710
-#: ../src/symbols.c:723 ../src/symbols.c:736 ../src/symbols.c:763
-#: ../src/symbols.c:816
+#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
+#: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:764
+#: ../src/symbols.c:817
 msgid "Interfaces"
 msgstr "接口"
 
-#: ../src/symbols.c:574 ../src/symbols.c:819
+#: ../src/symbols.c:575 ../src/symbols.c:820
 msgid "Structs"
 msgstr "结构"
 
-#: ../src/symbols.c:576 ../src/symbols.c:589 ../src/symbols.c:602
-#: ../src/symbols.c:728 ../src/symbols.c:750
+#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
+#: ../src/symbols.c:729 ../src/symbols.c:751
 msgid "Constants"
 msgstr "固定值"
 
-#: ../src/symbols.c:578 ../src/symbols.c:713 ../src/symbols.c:818
+#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:819
 msgid "Members"
 msgstr "成员"
 
-#: ../src/symbols.c:588 ../src/symbols.c:752 ../src/symbols.c:777
+#: ../src/symbols.c:589 ../src/symbols.c:753 ../src/symbols.c:778
 msgid "Labels"
 msgstr "标签"
 
-#: ../src/symbols.c:598 ../src/symbols.c:663 ../src/symbols.c:812
+#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:813
 msgid "Namespaces"
 msgstr "命名空间"
 
-#: ../src/symbols.c:600 ../src/symbols.c:622 ../src/symbols.c:654
-#: ../src/symbols.c:664 ../src/symbols.c:673 ../src/symbols.c:711
-#: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:815
+#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
+#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
+#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:816
 msgid "Classes"
 msgstr "类"
 
-#: ../src/symbols.c:612
+#: ../src/symbols.c:613
 msgid "Anchors"
 msgstr "锚点"
 
-#: ../src/symbols.c:613
+#: ../src/symbols.c:614
 msgid "H1 Headings"
 msgstr "标题一"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:615
 msgid "H2 Headings"
 msgstr "标题二"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:616
 msgid "H3 Headings"
 msgstr "标题三"
 
-#: ../src/symbols.c:623
+#: ../src/symbols.c:624
 msgid "ID Selectors"
 msgstr "ID 选择"
 
-#: ../src/symbols.c:624
+#: ../src/symbols.c:625
 msgid "Type Selectors"
 msgstr "类型选择器"
 
-#: ../src/symbols.c:643
+#: ../src/symbols.c:644
 msgid "Section Level 1"
 msgstr "章节一"
 
-#: ../src/symbols.c:644
+#: ../src/symbols.c:645
 msgid "Section Level 2"
 msgstr "章节二"
 
-#: ../src/symbols.c:645
+#: ../src/symbols.c:646
 msgid "Section Level 3"
 msgstr "章节三"
 
-#: ../src/symbols.c:646
+#: ../src/symbols.c:647
 msgid "Section Level 4"
 msgstr "章节四"
 
-#: ../src/symbols.c:655
+#: ../src/symbols.c:656
 msgid "Singletons"
 msgstr "单态"
 
-#: ../src/symbols.c:666 ../src/symbols.c:794
+#: ../src/symbols.c:667 ../src/symbols.c:795
 msgid "Procedures"
 msgstr "过程"
 
-#: ../src/symbols.c:677
+#: ../src/symbols.c:678
 msgid "Imports"
 msgstr "导出"
 
-#: ../src/symbols.c:685
+#: ../src/symbols.c:686
 msgid "Entities"
 msgstr "实体"
 
-#: ../src/symbols.c:686
+#: ../src/symbols.c:687
 msgid "Architectures"
 msgstr "结构"
 
-#: ../src/symbols.c:688
+#: ../src/symbols.c:689
 msgid "Functions / Procedures"
 msgstr "函数 / 过程"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:690
 msgid "Variables / Signals"
 msgstr "变量 / 信号"
 
-#: ../src/symbols.c:690
+#: ../src/symbols.c:691
 msgid "Processes / Blocks / Components"
 msgstr "进程 / 块 / 元件"
 
-#: ../src/symbols.c:698
+#: ../src/symbols.c:699
 msgid "Events"
 msgstr "事件"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:701
 msgid "Functions / Tasks"
 msgstr "函数 / 任务"
 
-#: ../src/symbols.c:714 ../src/symbols.c:769
+#: ../src/symbols.c:715 ../src/symbols.c:770
 msgid "Enums"
 msgstr "枚举"
 
-#: ../src/symbols.c:762
+#: ../src/symbols.c:763
 msgid "Programs"
 msgstr "程序"
 
-#: ../src/symbols.c:764
+#: ../src/symbols.c:765
 msgid "Functions / Subroutines"
 msgstr "函数 / 过程"
 
-#: ../src/symbols.c:767
+#: ../src/symbols.c:768
 msgid "Components"
 msgstr "组件"
 
-#: ../src/symbols.c:768
+#: ../src/symbols.c:769
 msgid "Blocks"
 msgstr "块"
 
-#: ../src/symbols.c:779
+#: ../src/symbols.c:780
 msgid "Defines"
 msgstr "预定义"
 
-#: ../src/symbols.c:786
+#: ../src/symbols.c:787
 msgid "Targets"
 msgstr "目标"
 
-#: ../src/symbols.c:795
+#: ../src/symbols.c:796
 msgid "Indexes"
 msgstr "索引"
 
-#: ../src/symbols.c:796
+#: ../src/symbols.c:797
 msgid "Tables"
 msgstr "表"
 
-#: ../src/symbols.c:797
+#: ../src/symbols.c:798
 msgid "Triggers"
 msgstr "触发器"
 
-#: ../src/symbols.c:798
+#: ../src/symbols.c:799
 msgid "Views"
 msgstr "视图"
 
-#: ../src/symbols.c:830
+#: ../src/symbols.c:831
 msgid "Extern Variables"
 msgstr "外部变量"
 
-#: ../src/symbols.c:1629
+#: ../src/symbols.c:1630
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "“%s”是未知的文件类型。\n"
 
-#: ../src/symbols.c:1655
+#: ../src/symbols.c:1656
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "创建标记文件失败，可能因为未找到符号。\n"
 
-#: ../src/symbols.c:1662
+#: ../src/symbols.c:1663
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4759,7 +4752,7 @@ msgstr ""
 "用法：%s -g <标记文件> <文件列表>\n"
 "\n"
 
-#: ../src/symbols.c:1663
+#: ../src/symbols.c:1664
 #, c-format
 msgid ""
 "Example:\n"
@@ -4770,52 +4763,52 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1677
+#: ../src/symbols.c:1678
 msgid "Load Tags File"
 msgstr "载入标记文件"
 
-#: ../src/symbols.c:1684
+#: ../src/symbols.c:1685
 msgid "Geany tags file (*.*.tags)"
 msgstr "Geany 标记文件 (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1704
+#: ../src/symbols.c:1705
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "载入 %s 标记文件“%s”。"
 
-#: ../src/symbols.c:1707
+#: ../src/symbols.c:1708
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "无法载入标记文件“%s”。"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1942
+#: ../src/symbols.c:1943
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1945
+#: ../src/symbols.c:1946
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2154
+#: ../src/symbols.c:2155
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "未找到“%s”的声明。"
 
-#: ../src/symbols.c:2156
+#: ../src/symbols.c:2157
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "未找到“%s”的定义。"
 
-#: ../src/symbols.c:2533
+#: ../src/symbols.c:2573
 msgid "Sort by _Name"
 msgstr "按名称排序(_N)"
 
-#: ../src/symbols.c:2540
+#: ../src/symbols.c:2580
 msgid "Sort by _Appearance"
 msgstr "按外观排序(_A)"
 
@@ -5134,59 +5127,59 @@ msgstr " (新实例)"
 msgid "Font updated (%s)."
 msgstr "字体已更新 (%s)。"
 
-#: ../src/ui_utils.c:682
+#: ../src/ui_utils.c:689
 msgid "C Standard Library"
 msgstr "C标准库"
 
-#: ../src/ui_utils.c:683
+#: ../src/ui_utils.c:690
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:684
+#: ../src/ui_utils.c:691
 msgid "C++ (C Standard Library)"
 msgstr "C++ (C标准库)"
 
-#: ../src/ui_utils.c:685
+#: ../src/ui_utils.c:692
 msgid "C++ Standard Library"
 msgstr "C++ 标准库"
 
-#: ../src/ui_utils.c:686
+#: ../src/ui_utils.c:693
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:708 ../src/ui_utils.c:786
+#: ../src/ui_utils.c:715 ../src/ui_utils.c:793
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.yyyy"
 
-#: ../src/ui_utils.c:710 ../src/ui_utils.c:787
+#: ../src/ui_utils.c:717 ../src/ui_utils.c:794
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.yyyy"
 
-#: ../src/ui_utils.c:712 ../src/ui_utils.c:788
+#: ../src/ui_utils.c:719 ../src/ui_utils.c:795
 msgid "yyyy/mm/dd"
 msgstr "yyyy/mm/dd"
 
-#: ../src/ui_utils.c:714 ../src/ui_utils.c:797
+#: ../src/ui_utils.c:721 ../src/ui_utils.c:804
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.yyyy hh:mm:ss"
 
-#: ../src/ui_utils.c:716 ../src/ui_utils.c:798
+#: ../src/ui_utils.c:723 ../src/ui_utils.c:805
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.yyyy hh:mm:ss"
 
-#: ../src/ui_utils.c:718 ../src/ui_utils.c:799
+#: ../src/ui_utils.c:725 ../src/ui_utils.c:806
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "yyyy/mm/dd hh:mm:ss"
 
-#: ../src/ui_utils.c:720 ../src/ui_utils.c:808
+#: ../src/ui_utils.c:727 ../src/ui_utils.c:815
 msgid "_Use Custom Date Format"
 msgstr "使用自定义日期格式(_U)"
 
-#: ../src/ui_utils.c:724
+#: ../src/ui_utils.c:731
 msgid "Custom Date Format"
 msgstr "自定义日期格式"
 
-#: ../src/ui_utils.c:725
+#: ../src/ui_utils.c:732
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -5194,35 +5187,35 @@ msgstr ""
 "请在这里输入自定义日期和时间格式。你可以使用 ANSI C strftime 函数中的任何一个"
 "转义符。"
 
-#: ../src/ui_utils.c:746
+#: ../src/ui_utils.c:753
 msgid "Date format string could not be converted (possibly too long)."
 msgstr "日期格式字符串无法转换 (可能太长了)。"
 
-#: ../src/ui_utils.c:821
+#: ../src/ui_utils.c:828
 msgid "_Set Custom Date Format"
 msgstr "设置自定义日期格式(_S)"
 
-#: ../src/ui_utils.c:2009
+#: ../src/ui_utils.c:2016
 msgid "Select Folder"
 msgstr "选择目录"
 
-#: ../src/ui_utils.c:2009
+#: ../src/ui_utils.c:2016
 msgid "Select File"
 msgstr "选择文件"
 
-#: ../src/ui_utils.c:2156
+#: ../src/ui_utils.c:2163
 msgid "_Filetype Configuration"
 msgstr "文件类型设置(_F)"
 
-#: ../src/ui_utils.c:2193
+#: ../src/ui_utils.c:2200
 msgid "Save All"
 msgstr "全部保存"
 
-#: ../src/ui_utils.c:2194
+#: ../src/ui_utils.c:2201
 msgid "Close All"
 msgstr "全部关闭"
 
-#: ../src/ui_utils.c:2428
+#: ../src/ui_utils.c:2435
 msgid "Geany cannot start!"
 msgstr "Geany 无法启动！"
 
@@ -5260,24 +5253,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:487
+#: ../src/vte.c:577
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "无效的 VTE 库 \"%s\"：缺少符号 \"%s\""
 
-#: ../src/vte.c:636
+#: ../src/vte.c:758
 msgid "_Set Path From Document"
 msgstr "根据文档设置路径(_S)"
 
-#: ../src/vte.c:641
+#: ../src/vte.c:763
 msgid "_Restart Terminal"
 msgstr "重启虚拟终端(_R)"
 
-#: ../src/vte.c:664
+#: ../src/vte.c:796
 msgid "_Input Methods"
 msgstr "输入法(_I)"
 
-#: ../src/vte.c:754
+#: ../src/vte.c:888
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5793,6 +5786,12 @@ msgstr "左右"
 #: ../plugins/splitwindow.c:468
 msgid "Top and Bottom"
 msgstr "上下"
+
+#~ msgid "Background image:"
+#~ msgstr "背景图片："
+
+#~ msgid "Sets the path to the background image in the terminal widget"
+#~ msgstr "设置终端背景图片"
 
 #~ msgid ""
 #~ "Cannot execute command \"%s\" from the template: %s. Check the path in "
