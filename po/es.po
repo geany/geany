@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-11-04 15:35+0100\n"
-"Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
+"POT-Creation-Date: 2017-02-23 02:36+0000\n"
+"PO-Revision-Date: 2017-02-23 21:42+0100\n"
+"Last-Translator: Abel 'Akronix' Serrano Juste <akronix5@gmail.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:341
 msgid "Geany"
@@ -1238,9 +1238,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Borrar espacios y tabulaciones al final"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Borra los espacios y tabulaciones al final de las líneas"
+msgstr "Borra los espacios y tabulaciones sobrantes al final de cada línea"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
