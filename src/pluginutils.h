@@ -35,6 +35,7 @@ G_BEGIN_DECLS
 struct GeanyPlugin;
 struct GeanyDocument;
 
+gint geany_api_version(void);
 
 void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
 
