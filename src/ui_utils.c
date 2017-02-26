@@ -1973,6 +1973,7 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	gchar *ret_path = NULL;
 
 	gtk_widget_set_name(dialog, "GeanyDialog");
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
@@ -1990,7 +1991,8 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	{
 		gchar *dir_locale;
 
-		dir_locale = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		dir_locale = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
+		SETPTR(dir_locale, utils_get_path_from_uri(dir_locale));
 		ret_path = utils_get_utf8_from_locale(dir_locale);
 		g_free(dir_locale);
 	}

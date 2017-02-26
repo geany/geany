@@ -168,6 +168,7 @@ static void create_file_save_as_dialog(const gchar *extension, ExportFunc func,
 
 	dialog = gtk_file_chooser_dialog_new(_("Export File"), GTK_WINDOW(geany->main_widgets->window),
 				GTK_FILE_CHOOSER_ACTION_SAVE, NULL, NULL);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 	gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_destroy_with_parent(GTK_WINDOW(dialog), TRUE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), TRUE);
@@ -327,7 +328,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 
 	if (response == GTK_RESPONSE_ACCEPT && exi != NULL)
 	{
-		gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+		gchar *new_filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 		gchar *utf8_filename;
 		gboolean insert_line_numbers;
 		gboolean use_zoom_level = FALSE;

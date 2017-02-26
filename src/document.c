@@ -1311,6 +1311,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 #else
 		locale_filename = g_strdup(filename);
 #endif
+		SETPTR(locale_filename, utils_get_path_from_uri(locale_filename));
+		if (!locale_filename)
+			return NULL;
+
 		/* remove relative junk */
 		utils_tidy_path(locale_filename);
 
