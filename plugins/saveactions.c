@@ -142,19 +142,24 @@ static gchar *backupcopy_create_dir_parts(const gchar *filename)
 	gint error;
 	gchar *result;
 	gchar *target_dir;
+	gchar *start;
 
 	if (backupcopy_dir_levels == 0)
 		return g_strdup("");
 
 	dirname = g_path_get_dirname(filename);
 
-	cp = dirname;
+	/* skip URL scheme */
+	cp = strstr(dirname, "://");
+	start = (cp == NULL) ? dirname : cp + 3;
+
+	cp = start;
 	/* walk to the end of the string */
 	while (*cp != '\0')
 		cp++;
 
 	/* walk backwards to find directory parts */
-	while (cp > dirname)
+	while (cp > start)
 	{
 		if (*cp == G_DIR_SEPARATOR && last_char != G_DIR_SEPARATOR)
 			cnt_dir_parts++;
@@ -187,40 +192,57 @@ static gchar *backupcopy_create_dir_parts(const gchar *filename)
 }
 
 
-static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+gboolean is_uri(const gchar *uri)
+{
+	g_return_val_if_fail(uri != NULL, FALSE);
+
+	return (strstr(uri, "://") != NULL);
+}
+
+
+GFile *create_gfile(const gchar *fname)
+{
+	g_return_val_if_fail(fname != NULL, NULL);
+
+	if (is_uri(fname))
+		return g_file_new_for_uri(fname);
+
+	return g_file_new_for_path(fname);
+}
+
+
+static void copy_gio(gchar *locale_filename_src, gchar *locale_filename_dst)
+{
+	GFile *src, *dst;
+	GError *error;
+
+	src = create_gfile(locale_filename_src);
+	dst = create_gfile(locale_filename_dst);
+
+	if (!g_file_copy(src, dst, G_FILE_COPY_NONE, NULL, NULL, NULL, &error))
+	{
+		ui_set_statusbar(FALSE, _("Backup Copy: Failed to create backup copy (%s)."),
+			error->message);
+	}
+
+	g_object_unref(src);
+	g_object_unref(dst);
+}
+
+
+static void copy_unix(gchar *locale_filename_src, gchar *locale_filename_dst)
 {
 	FILE *src, *dst;
-	gchar *locale_filename_src;
-	gchar *locale_filename_dst;
-	gchar *basename_src;
-	gchar *dir_parts_src;
-	gchar *stamp;
 	gchar buf[512];
 	gint fd_dst = -1;
-
-	if (! enable_backupcopy)
-		return;
-
-	locale_filename_src = utils_get_locale_from_utf8(doc->file_name);
 
 	if ((src = g_fopen(locale_filename_src, "r")) == NULL)
 	{
 		/* it's unlikely that this happens */
 		ui_set_statusbar(FALSE, _("Backup Copy: File could not be read (%s)."),
 			g_strerror(errno));
-		g_free(locale_filename_src);
 		return;
 	}
-
-	stamp = utils_get_date_time(backupcopy_time_fmt, NULL);
-	basename_src = g_path_get_basename(locale_filename_src);
-	dir_parts_src = backupcopy_create_dir_parts(locale_filename_src);
-	locale_filename_dst = g_strconcat(
-		backupcopy_backup_dir, G_DIR_SEPARATOR_S,
-		dir_parts_src, G_DIR_SEPARATOR_S,
-		basename_src, ".", stamp, NULL);
-	g_free(basename_src);
-	g_free(dir_parts_src);
 
 #ifdef G_OS_WIN32
 	if ((dst = g_fopen(locale_filename_dst, "wb")) == NULL)
@@ -233,9 +255,6 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	{
 		ui_set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
 			g_strerror(errno));
-		g_free(locale_filename_src);
-		g_free(locale_filename_dst);
-		g_free(stamp);
 		fclose(src);
 		if (fd_dst != -1)
 			close(fd_dst);
@@ -251,9 +270,40 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	fclose(dst);
 	if (fd_dst != -1)
 		close(fd_dst);
+}
+
+
+static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpointer user_data)
+{
+	gchar *locale_filename_src;
+	gchar *locale_filename_dst;
+	gchar *basename_src;
+	gchar *dir_parts_src;
+	gchar *stamp;
+
+	if (! enable_backupcopy)
+		return;
+
+	locale_filename_src = utils_get_locale_from_utf8(doc->file_name);
+
+	stamp = utils_get_date_time(backupcopy_time_fmt, NULL);
+	basename_src = g_path_get_basename(locale_filename_src);
+	dir_parts_src = backupcopy_create_dir_parts(locale_filename_src);
+	locale_filename_dst = g_strconcat(
+		backupcopy_backup_dir, G_DIR_SEPARATOR_S,
+		dir_parts_src, G_DIR_SEPARATOR_S,
+		basename_src, ".", stamp, NULL);
+	g_free(basename_src);
+	g_free(dir_parts_src);
+	g_free(stamp);
+
+	if (is_uri(locale_filename_src) || is_uri(locale_filename_dst))
+		copy_gio(locale_filename_src, locale_filename_dst);
+	else
+		copy_unix(locale_filename_src, locale_filename_dst);
+
 	g_free(locale_filename_src);
 	g_free(locale_filename_dst);
-	g_free(stamp);
 }
 
 
