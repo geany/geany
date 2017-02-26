@@ -4,14 +4,14 @@
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015, 2016, 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-10-30 15:41+0000\n"
+"PO-Revision-Date: 2017-02-23 09:16+0000\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <>\n"
 "Language: pt\n"
@@ -1228,9 +1228,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Remover espaços e tabulações finais"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Remove finais de linha e espaços e tabulações finais"
+msgstr "Remove espaços e tabulações nos finais de linha"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
