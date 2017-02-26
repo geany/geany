@@ -27,6 +27,8 @@
 # include <windows.h> /* for GetFullPathName */
 #endif
 
+#include "utils.h"
+
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
@@ -112,7 +114,7 @@ static char *realpath (const char *pathname, char *resolved_path)
 
 /**
  Given a file name, returns a newly allocated string containing the realpath()
- of the file.
+ of the file. If the filename is URI, it returns @file_name unmodified.
  @param file_name The original file_name
  @return A newly allocated string containing the real path to the file. NULL if none is available.
 */
@@ -129,6 +131,10 @@ gchar *tm_get_real_path(const gchar *file_name)
 		else
 			g_free(path);
 	}
+
+	if (utils_is_uri(file_name))
+		return g_strdup(file_name);
+
 	return NULL;
 }
 
