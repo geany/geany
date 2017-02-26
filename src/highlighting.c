@@ -1424,6 +1424,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
 				style == SCE_P_CHARACTER ||
+				style == SCE_P_FSTRING ||
+				style == SCE_P_FCHARACTER ||
+				style == SCE_P_FTRIPLE ||
+				style == SCE_P_FTRIPLEDOUBLE ||
 				style == SCE_P_STRINGEOL);
 
 		case SCLEX_F77:
