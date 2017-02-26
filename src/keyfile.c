@@ -628,7 +628,7 @@ void configuration_save(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);
@@ -1072,7 +1072,7 @@ void configuration_save_default_session(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);
@@ -1093,7 +1093,7 @@ void configuration_clear_default_session(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);

@@ -1178,7 +1178,7 @@ void filetypes_save_commands(GeanyFiletype *ft)
 	g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	build_save_menu(config_home, ft, GEANY_BCS_HOME_FT);
 	data = g_key_file_to_data(config_home, NULL, NULL);
-	utils_write_file(fname, data);
+	g_file_set_contents(fname, data, strlen(data), NULL);
 	g_free(data);
 	g_key_file_free(config_home);
 	g_free(fname);

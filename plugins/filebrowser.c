@@ -1241,7 +1241,7 @@ static void save_settings(void)
 	{
 		/* write config to file */
 		data = g_key_file_to_data(config, NULL, NULL);
-		utils_write_file(config_file, data);
+		g_file_set_contents(config_file, data, strlen(data), NULL);
 		g_free(data);
 	}
 	g_free(config_dir);

@@ -706,7 +706,7 @@ static gint create_config_dir(void)
 "Copy files from ", app->datadir, "/filedefs to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
 "the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").", NULL);
-			utils_write_file(filedefs_readme, text);
+			g_file_set_contents(filedefs_readme, text, strlen(text), NULL);
 			g_free(text);
 		}
 		g_free(filedefs_readme);
@@ -728,7 +728,7 @@ static gint create_config_dir(void)
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").",
 					NULL);
-			utils_write_file(templates_readme, text);
+			g_file_set_contents(templates_readme, text, strlen(text), NULL);
 			g_free(text);
 		}
 		g_free(templates_readme);

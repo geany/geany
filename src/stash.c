@@ -82,6 +82,7 @@
 #include "utils.h"   /* only for foreach_*, utils_get_setting_*(). Stash should not depend on Geany. */
 
 #include <stdlib.h> /* only for atoi() */
+#include <errno.h>
 
 
 /* GTK3 removed ComboBoxEntry, but we need a value to differentiate combo box with and
@@ -341,7 +342,7 @@ gint stash_group_save_to_file(StashGroup *group, const gchar *filename,
 
 	stash_group_save_to_key_file(group, keyfile);
 	data = g_key_file_to_data(keyfile, NULL, NULL);
-	ret = utils_write_file(filename, data);
+	ret = g_file_set_contents(filename, data, strlen(data), NULL) ? 0 : EIO;
 	g_free(data);
 	g_key_file_free(keyfile);
 	return ret;

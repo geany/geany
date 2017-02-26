@@ -541,7 +541,7 @@ static void configure_response_cb(GtkDialog *dialog, gint response, G_GNUC_UNUSE
 		{
 			/* write config to file */
 			str = g_key_file_to_data(config, NULL, NULL);
-			utils_write_file(config_file, str);
+			g_file_set_contents(config_file, str, strlen(str), NULL);
 			g_free(str);
 		}
 
