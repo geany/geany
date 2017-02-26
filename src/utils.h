@@ -332,6 +332,8 @@ gboolean utils_file_is_dir(const gchar *fname);
 
 gboolean utils_file_is_regular(const gchar *fname);
 
+GFile *utils_gfile_create(const gchar *fname);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
