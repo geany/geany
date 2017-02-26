@@ -1392,16 +1392,24 @@ gchar **utils_strv_new(const gchar *first, ...)
 GEANY_API_SYMBOL
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 {
-	gint mode = 0700;
-	gint result;
+	GFile *file;
+	GError *error = NULL;
+	gboolean success;
 
 	if (path == NULL || strlen(path) == 0)
 		return EFAULT;
 
-	result = (create_parent_dirs) ? g_mkdir_with_parents(path, mode) : g_mkdir(path, mode);
-	if (result != 0)
-		return errno;
-	return 0;
+	file = utils_gfile_create(path);
+	if (create_parent_dirs)
+		success = g_file_make_directory_with_parents(file, NULL, &error);
+	else
+		success = g_file_make_directory(file, NULL, &error);
+	g_object_unref(file);
+
+	if (error && error->code == G_IO_ERROR_EXISTS)
+		success = TRUE;
+
+	return success ? 0 : EIO;
 }
 
 
