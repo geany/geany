@@ -7,7 +7,7 @@ Geany 1.30 (unreleased)
     * Update Scintilla to version 3.7.1.
 
     Internationalization
-    * Updated translations: de, es,t, pt
+    * Updated translations: de, es, lt, pt
 
     API
     * Remove unprefixed Scintilla structure aliases.  Plugins must use
