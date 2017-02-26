@@ -215,18 +215,32 @@ static GIcon *get_icon(const gchar *fname)
 }
 
 
+gboolean is_uri(const gchar *uri)
+{
+	g_return_val_if_fail(uri != NULL, FALSE);
+
+	return (strstr(uri, "://") != NULL);
+}
+
+
+GFile *create_gfile(const gchar *fname)
+{
+	g_return_val_if_fail(fname != NULL, NULL);
+
+	if (is_uri(fname))
+		return g_file_new_for_uri(fname);
+
+	return g_file_new_for_path(fname);
+}
+
+
 static gboolean filetype_test(const gchar *fname, GFileType filetype)
 {
 	gboolean res = FALSE;
-	GFile *file;
+	GFile *file = create_gfile(fname);
 	GFileInfo *info;
 
-	g_return_val_if_fail(fname != NULL, FALSE);
-
-	if (strstr(fname, "://") != NULL)
-		file = g_file_new_for_uri(fname);
-	else
-		file = g_file_new_for_path(fname);
+	g_return_val_if_fail(file != NULL, FALSE);
 
 	info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
 
@@ -340,15 +354,10 @@ static void clear(void)
 
 static gboolean file_exists(const gchar *fname)
 {
-	GFile *file;
+	GFile *file = create_gfile(fname);
 	gboolean exists;
 
-	g_return_val_if_fail(fname != NULL, FALSE);
-
-	if (strstr(fname, "://") != NULL)
-		file = g_file_new_for_uri(fname);
-	else
-		file = g_file_new_for_path(fname);
+	g_return_val_if_fail(file != NULL, FALSE);
 
 	exists = g_file_query_exists(file, NULL);
 	g_object_unref(file);
@@ -418,13 +427,22 @@ static gchar *get_default_dir(void)
 }
 
 
+static gboolean is_absolute_path(const gchar *fname)
+{
+	if (is_uri(fname))
+		return TRUE;
+
+	return g_path_is_absolute(fname);
+}
+
+
 static void on_current_path(void)
 {
 	gchar *fname;
 	gchar *dir;
 	GeanyDocument *doc = document_get_current();
 
-	if (doc == NULL || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
+	if (doc == NULL || doc->file_name == NULL || ! is_absolute_path(doc->file_name))
 	{
 		SETPTR(current_dir, get_default_dir());
 		refresh();
@@ -1093,7 +1111,7 @@ static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile
 		return;
 
 	/* TODO this is a copy of project_get_base_path(), add it to the plugin API */
-	if (g_path_is_absolute(project->base_path))
+	if (is_absolute_path(project->base_path))
 		new_dir = g_strdup(project->base_path);
 	else
 	{	/* build base_path out of project file name's dir and base_path */
@@ -1124,7 +1142,7 @@ static void document_activate_cb(G_GNUC_UNUSED GObject *obj, GeanyDocument *doc,
 
 	last_activate_path = doc->real_path;
 
-	if (! fb_follow_path || doc->file_name == NULL || ! g_path_is_absolute(doc->file_name))
+	if (! fb_follow_path || doc->file_name == NULL || ! is_absolute_path(doc->file_name))
 		return;
 
 	new_dir = g_path_get_dirname(doc->file_name);

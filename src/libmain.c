@@ -308,7 +308,7 @@ gchar *main_get_argv_filename(const gchar *filename)
 {
 	gchar *result;
 
-	if (g_path_is_absolute(filename) || utils_is_uri(filename))
+	if (utils_is_absolute_path(filename))
 		result = g_strdup(filename);
 	else
 	{

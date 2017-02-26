@@ -1977,12 +1977,12 @@ static gchar *run_file_chooser(const gchar *title, GtkFileChooserAction action,
 	locale_path = utils_get_locale_from_utf8(utf8_path);
 	if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
 	{
-		if (g_path_is_absolute(locale_path) && utils_file_is_dir(locale_path))
+		if (utils_is_absolute_path(locale_path) && utils_file_is_dir(locale_path))
 			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), locale_path);
 	}
 	else if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
 	{
-		if (g_path_is_absolute(locale_path))
+		if (utils_is_absolute_path(locale_path))
 			gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(dialog), locale_path);
 	}
 	g_free(locale_path);

@@ -823,7 +823,7 @@ GeanyDocument *document_new_file(const gchar *utf8_filename, GeanyFiletype *ft, 
 {
 	GeanyDocument *doc;
 
-	if (utf8_filename && g_path_is_absolute(utf8_filename))
+	if (utf8_filename && utils_is_absolute_path(utf8_filename))
 	{
 		gchar *tmp;
 		tmp = utils_strdupa(utf8_filename);	/* work around const */
@@ -1809,7 +1809,7 @@ gboolean document_need_save_as(GeanyDocument *doc)
 {
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	return (doc->file_name == NULL || !g_path_is_absolute(doc->file_name));
+	return (doc->file_name == NULL || !utils_is_absolute_path(doc->file_name));
 }
 
 

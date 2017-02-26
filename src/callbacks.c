@@ -1390,7 +1390,7 @@ void on_menu_open_selected_file1_activate(GtkMenuItem *menuitem, gpointer user_d
 	{
 		gchar *filename = NULL;
 
-		if (g_path_is_absolute(sel))
+		if (utils_is_absolute_path(sel))
 			filename = g_strdup(sel);
 		else
 		{	/* relative filename, add the path of the current file */

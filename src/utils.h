@@ -336,6 +336,9 @@ gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
 gboolean utils_read_file(const gchar *locale_filename, char **contents,
 		gsize *length, GError **error);
 
+gboolean utils_is_absolute_path(const gchar *fname);
+
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

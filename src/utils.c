@@ -2310,3 +2310,12 @@ gboolean utils_file_is_regular(const gchar *fname)
 
 	return g_file_test(fname, G_FILE_TEST_IS_REGULAR);
 }
+
+
+gboolean utils_is_absolute_path(const gchar *fname)
+{
+	if (utils_is_uri(fname))
+		return TRUE;
+
+	return g_path_is_absolute(fname);
+}

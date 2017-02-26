@@ -472,7 +472,7 @@ void dialogs_show_open_file(void)
 
 		open_file_dialog_apply_settings(dialog);
 
-		if (initdir != NULL && g_path_is_absolute(initdir))
+		if (initdir != NULL && utils_is_absolute_path(initdir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
 		if (app->project && !EMPTY(app->project->base_path))
@@ -608,7 +608,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 
 	if (doc->file_name != NULL)
 	{
-		if (g_path_is_absolute(doc->file_name))
+		if (utils_is_absolute_path(doc->file_name))
 		{
 			gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
 			gchar *locale_basename = g_path_get_basename(locale_filename);

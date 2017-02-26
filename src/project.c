@@ -748,7 +748,7 @@ static gboolean update_config(const PropertyDialogElements *e, gboolean new_proj
 	{	/* check whether the given directory actually exists */
 		gchar *locale_path = utils_get_locale_from_utf8(base_path);
 
-		if (! g_path_is_absolute(locale_path))
+		if (! utils_is_absolute_path(locale_path))
 		{	/* relative base path, so add base dir of project file name */
 			gchar *dir = g_path_get_dirname(locale_filename);
 			SETPTR(locale_path, g_build_filename(dir, locale_path, NULL));
@@ -887,7 +887,7 @@ static void run_dialog(GtkWidget *dialog, GtkWidget *entry)
 	const gchar *utf8_filename = gtk_entry_get_text(GTK_ENTRY(entry));
 	gchar *locale_filename = utils_get_locale_from_utf8(utf8_filename);
 
-	if (g_path_is_absolute(locale_filename))
+	if (utils_is_absolute_path(locale_filename))
 	{
 		if (utils_file_exists(locale_filename))
 		{
@@ -1202,7 +1202,7 @@ gchar *project_get_base_path(void)
 
 	if (project && !EMPTY(project->base_path))
 	{
-		if (g_path_is_absolute(project->base_path))
+		if (utils_is_absolute_path(project->base_path))
 			return g_strdup(project->base_path);
 		else
 		{	/* build base_path out of project file name's dir and base_path */

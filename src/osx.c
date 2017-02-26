@@ -58,7 +58,7 @@ static gboolean app_open_file_cb(GtkosxApplication *osx_app, gchar *path, gpoint
 
 	locale_path = utils_get_locale_from_utf8(path);
 
-	if (!g_path_is_absolute(locale_path))
+	if (!utils_is_absolute_path(locale_path))
 	{
 		gchar *cwd = g_get_current_dir();
 		SETPTR(locale_path, g_build_filename(cwd, locale_path, NULL));
