@@ -1179,7 +1179,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR))
+	if (utils_file_is_regular(locale_filename))
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		GeanyDocument *doc = document_open_file_full(

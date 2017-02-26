@@ -303,6 +303,24 @@ static gchar *get_date(gint type)
 }
 
 
+static gboolean file_exists(const gchar *fname)
+{
+	GFile *file;
+	gboolean exists;
+
+	g_return_val_if_fail(fname != NULL, FALSE);
+
+	if (strstr(fname, "://") != NULL)
+		file = g_file_new_for_uri(fname);
+	else
+		file = g_file_new_for_path(fname);
+
+	exists = g_file_query_exists(file, NULL);
+	g_object_unref(file);
+	return exists;
+}
+
+
 static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
 	ExportInfo *exi = user_data;
@@ -325,7 +343,7 @@ static void on_file_save_dialog_response(GtkDialog *dialog, gint response, gpoin
 		utf8_filename = utils_get_utf8_from_locale(new_filename);
 
 		/* check if file exists and ask whether to overwrite or not */
-		if (g_file_test(new_filename, G_FILE_TEST_EXISTS))
+		if (file_exists(new_filename))
 		{
 			if (dialogs_show_question(
 				_("The file '%s' already exists. Do you want to overwrite it?"),

@@ -655,8 +655,8 @@ gint utils_is_file_writable(const gchar *locale_filename)
 	gchar *file;
 	gint ret;
 
-	if (! g_file_test(locale_filename, G_FILE_TEST_EXISTS) &&
-		! g_file_test(locale_filename, G_FILE_TEST_IS_DIR))
+	if (! utils_file_exists(locale_filename) &&
+		! utils_file_is_dir(locale_filename))
 		/* get the file's directory to check for write permission if it doesn't yet exist */
 		file = g_path_get_dirname(locale_filename);
 	else
@@ -2171,4 +2171,60 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	}
 	else
 		g_printerr("Unable to find 'geany'");
+}
+
+
+static GFile *utils_gfile_create(const gchar *fname)
+{
+	if (utils_is_uri(fname))
+		return g_file_new_for_uri(fname);
+	return g_file_new_for_path(fname);
+}
+
+
+static gboolean gio_filetype_test(const gchar *fname, GFileType filetype)
+{
+	gboolean res = FALSE;
+	GFile *file = utils_gfile_create(fname);
+	GFileInfo *info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+	if (info)
+	{
+		res = g_file_info_get_file_type(info) == filetype;
+		g_object_unref(info);
+	}
+	g_object_unref(file);
+
+	return res;
+}
+
+
+gboolean utils_file_exists(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *file = utils_gfile_create(fname);
+		gboolean exists = g_file_query_exists(file, NULL);
+		g_object_unref(file);
+		return exists;
+	}
+	return g_file_test(fname, G_FILE_TEST_EXISTS);
+}
+
+
+gboolean utils_file_is_dir(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+		return gio_filetype_test(fname, G_FILE_TYPE_DIRECTORY);
+
+	return g_file_test(fname, G_FILE_TEST_IS_DIR);
+}
+
+
+gboolean utils_file_is_regular(const gchar *fname)
+{
+	if (USE_GIO_FILE_OPERATIONS)
+		return gio_filetype_test(fname, G_FILE_TYPE_REGULAR);
+
+	return g_file_test(fname, G_FILE_TEST_IS_REGULAR);
 }

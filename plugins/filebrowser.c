@@ -215,6 +215,32 @@ static GIcon *get_icon(const gchar *fname)
 }
 
 
+static gboolean filetype_test(const gchar *fname, GFileType filetype)
+{
+	gboolean res = FALSE;
+	GFile *file;
+	GFileInfo *info;
+
+	g_return_val_if_fail(fname != NULL, FALSE);
+
+	if (strstr(fname, "://") != NULL)
+		file = g_file_new_for_uri(fname);
+	else
+		file = g_file_new_for_path(fname);
+
+	info = g_file_query_info(file, G_FILE_ATTRIBUTE_STANDARD_TYPE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+	if (info)
+	{
+		res = g_file_info_get_file_type(info) == filetype;
+		g_object_unref(info);
+	}
+	g_object_unref(file);
+
+	return res;
+}
+
+
 /* name is in locale encoding */
 static void add_item(const gchar *name)
 {
@@ -230,7 +256,7 @@ static void add_item(const gchar *name)
 	/* root directory doesn't need separator */
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
-	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
+	dir = filetype_test(fname, G_FILE_TYPE_DIRECTORY);
 	utf8_fullname = utils_get_utf8_from_locale(fname);
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
@@ -312,6 +338,24 @@ static void clear(void)
 }
 
 
+static gboolean file_exists(const gchar *fname)
+{
+	GFile *file;
+	gboolean exists;
+
+	g_return_val_if_fail(fname != NULL, FALSE);
+
+	if (strstr(fname, "://") != NULL)
+		file = g_file_new_for_uri(fname);
+	else
+		file = g_file_new_for_path(fname);
+
+	exists = g_file_query_exists(file, NULL);
+	g_object_unref(file);
+	return exists;
+}
+
+
 /* recreate the tree model from current_dir. */
 static void refresh(void)
 {
@@ -319,7 +363,7 @@ static void refresh(void)
 	GSList *list, *node;
 
 	/* don't clear when the new path doesn't exist */
-	if (! g_file_test(current_dir, G_FILE_TEST_EXISTS))
+	if (! file_exists(current_dir))
 		return;
 
 	clear();

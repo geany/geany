@@ -211,8 +211,9 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
-
 #ifdef GEANY_PRIVATE
+
+#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
 
 typedef enum
 {
@@ -324,6 +325,12 @@ gchar *utils_get_user_config_dir(void);
 const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
+
+gboolean utils_file_exists(const gchar *fname);
+
+gboolean utils_file_is_dir(const gchar *fname);
+
+gboolean utils_file_is_regular(const gchar *fname);
 
 #endif /* GEANY_PRIVATE */
 

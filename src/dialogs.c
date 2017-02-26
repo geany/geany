@@ -156,7 +156,7 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 			const gchar *first = filelist->data;
 
 			// When there's only one filename it may have been typed manually
-			if (!filelist->next && !g_file_test(first, G_FILE_TEST_EXISTS))
+			if (!filelist->next && !utils_file_exists(first))
 			{
 				dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("\"%s\" was not found."), first);
 				ret = FALSE;
@@ -530,7 +530,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 				utils_beep();
 				break;
 			}
-			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
+			if (utils_file_exists(new_filename) &&
 				!dialogs_show_question_full(NULL, NULL, NULL,
 					_("Overwrite?"),
 					_("Filename already exists!")))
