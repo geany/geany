@@ -2664,7 +2664,7 @@ void document_update_tags(GeanyDocument *doc)
 
 		/* lookup the name rather than using filetype name to support custom filetypes */
 		name = tm_source_file_get_lang_name(doc->file_type->lang);
-		doc->tm_file = tm_source_file_new(locale_filename, name);
+		doc->tm_file = tm_source_file_new_full(locale_filename, name, doc->priv->is_remote);
 		g_free(locale_filename);
 
 		if (doc->tm_file)
