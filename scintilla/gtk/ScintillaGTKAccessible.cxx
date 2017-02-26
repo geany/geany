@@ -162,7 +162,9 @@ ScintillaGTKAccessible::ScintillaGTKAccessible(GtkAccessible *accessible_, GtkWi
 }
 
 ScintillaGTKAccessible::~ScintillaGTKAccessible() {
-	g_signal_handlers_disconnect_matched(sci->sci, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+	if (gtk_accessible_get_widget(accessible)) {
+		g_signal_handlers_disconnect_matched(sci->sci, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, this);
+	}
 }
 
 gchar *ScintillaGTKAccessible::GetTextRangeUTF8(Position startByte, Position endByte) {
