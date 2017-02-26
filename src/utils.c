@@ -703,12 +703,27 @@ gint utils_is_file_writable(const gchar *locale_filename)
 	ret = win32_check_write_permission(file);
 #else
 
-	/* access set also errno to "FILE NOT FOUND" even if locale_filename is writeable, so use
-	 * errno only when access() explicitly returns an error */
-	if (access(file, R_OK | W_OK) != 0)
-		ret = errno;
+	if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *gfile = utils_gfile_create(file);
+		GFileInfo *info = g_file_query_info(gfile, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE, G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+		if (info)
+		{
+			ret = g_file_info_get_attribute_boolean(info, G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE) ? 0 : EIO;
+			g_object_unref(info);
+		}
+		g_object_unref(gfile);
+	}
 	else
-		ret = 0;
+	{
+		/* access set also errno to "FILE NOT FOUND" even if locale_filename is writeable, so use
+		 * errno only when access() explicitly returns an error */
+		if (access(file, R_OK | W_OK) != 0)
+			ret = errno;
+		else
+			ret = 0;
+	}
 #endif
 	g_free(file);
 	return ret;
