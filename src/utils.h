@@ -334,6 +334,9 @@ gboolean utils_file_is_regular(const gchar *fname);
 
 GFile *utils_gfile_create(const gchar *fname);
 
+gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
+		gsize len, GError **error);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

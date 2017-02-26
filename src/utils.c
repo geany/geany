@@ -190,6 +190,94 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 }
 
 
+gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
+		gsize len, GError **error)
+{
+	gint save_errno = 0;
+
+	g_return_val_if_fail(locale_filename != NULL, ENOENT);
+	g_return_val_if_fail(data != NULL, EINVAL);
+
+	if (file_prefs.use_safe_file_saving)
+	{
+		/* Use old GLib API for safe saving (GVFS-safe, but alters ownership and permissons).
+		 * This is the only option that handles disk space exhaustion. */
+		if (! g_file_set_contents(locale_filename, data, len, error))
+			save_errno = EIO;
+	}
+	else if (USE_GIO_FILE_OPERATIONS)
+	{
+		GFile *fp;
+
+		/* Use GIO API to save file (GVFS-safe)
+		 * It is best in most GVFS setups but don't seem to work correctly on some more complex
+		 * setups (saving from some VM to their host, over some SMB shares, etc.) */
+		fp = utils_gfile_create(locale_filename);
+		if (! g_file_replace_contents(fp, data, len, NULL, file_prefs.gio_unsafe_save_backup,
+				G_FILE_CREATE_NONE, NULL, NULL, error))
+			save_errno = EIO;
+		g_object_unref(fp);
+	}
+	else
+	{
+		FILE *fp;
+		gchar *display_name = g_filename_display_name(locale_filename);
+
+		/* Use POSIX API for unsafe saving (GVFS-unsafe) */
+		/* The error handling is taken from glib-2.26.0 gfileutils.c */
+		errno = 0;
+		fp = g_fopen(locale_filename, "wb");
+		if (fp == NULL)
+		{
+			save_errno = errno;
+
+			g_set_error(error,
+				G_FILE_ERROR,
+				g_file_error_from_errno(save_errno),
+				_("Failed to open file '%s' for writing: fopen() failed: %s"),
+				display_name,
+				g_strerror(save_errno));
+		}
+		else
+		{
+			gsize bytes_written;
+
+			errno = 0;
+			bytes_written = fwrite(data, sizeof(gchar), len, fp);
+
+			if (len != bytes_written)
+			{
+				save_errno = errno;
+
+				g_set_error(error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to write file '%s': fwrite() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
+
+			errno = 0;
+			/* preserve the fwrite() error if any */
+			if (fclose(fp) != 0 && save_errno == 0)
+			{
+				save_errno = errno;
+
+				g_set_error(error,
+					G_FILE_ERROR,
+					g_file_error_from_errno(save_errno),
+					_("Failed to close file '%s': fclose() failed: %s"),
+					display_name,
+					g_strerror(save_errno));
+			}
+		}
+
+		g_free(display_name);
+	}
+	return save_errno;
+}
+
+
 /**
  * Writes @a text into a file named @a filename.
  * If the file doesn't exist, it will be created.
@@ -208,55 +296,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
 GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
-	g_return_val_if_fail(filename != NULL, ENOENT);
-	g_return_val_if_fail(text != NULL, EINVAL);
-
-	if (file_prefs.use_safe_file_saving)
-	{
-		GError *error = NULL;
-		if (! g_file_set_contents(filename, text, -1, &error))
-		{
-			geany_debug("%s: could not write to file %s (%s)", G_STRFUNC, filename, error->message);
-			g_error_free(error);
-			return EIO;
-		}
-	}
-	else
-	{
-		FILE *fp;
-		gsize bytes_written, len;
-		gboolean fail = FALSE;
-
-		if (filename == NULL)
-			return ENOENT;
-
-		len = strlen(text);
-		errno = 0;
-		fp = g_fopen(filename, "w");
-		if (fp == NULL)
-			fail = TRUE;
-		else
-		{
-			bytes_written = fwrite(text, sizeof(gchar), len, fp);
-
-			if (len != bytes_written)
-			{
-				fail = TRUE;
-				geany_debug(
-					"utils_write_file(): written only %"G_GSIZE_FORMAT" bytes, had to write %"G_GSIZE_FORMAT" bytes to %s",
-					bytes_written, len, filename);
-			}
-			if (fclose(fp) != 0)
-				fail = TRUE;
-		}
-		if (fail)
-		{
-			geany_debug("utils_write_file(): could not write to file %s (%s)",
-				filename, g_strerror(errno));
-			return FALLBACK(errno, EIO);
-		}
-	}
-	return 0;
+	return utils_write_file_full(filename, text, strlen(text), NULL);
 }
 
 
