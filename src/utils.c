@@ -487,29 +487,6 @@ gboolean utils_atob(const gchar *str)
 }
 
 
-/* NULL-safe version of g_path_is_absolute(). */
-gboolean utils_is_absolute_path(const gchar *path)
-{
-	if (G_UNLIKELY(EMPTY(path)))
-		return FALSE;
-
-	return g_path_is_absolute(path);
-}
-
-
-/* Skips root if path is absolute, do nothing otherwise.
- * This is a relative-safe version of g_path_skip_root().
- */
-const gchar *utils_path_skip_root(const gchar *path)
-{
-	const gchar *path_relative;
-
-	path_relative = g_path_skip_root(path);
-
-	return (path_relative != NULL) ? path_relative : path;
-}
-
-
 gdouble utils_scale_round(gdouble val, gdouble factor)
 {
 	/*val = floor(val * factor + 0.5);*/
