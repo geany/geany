@@ -1054,12 +1054,19 @@ static gboolean load_config(const gchar *filename)
 	GKeyFile *config;
 	GeanyProject *p;
 	GSList *node;
+	gchar *data = NULL;
+	gboolean read_success;
+	gsize len;
 
 	/* there should not be an open project */
 	g_return_val_if_fail(app->project == NULL && filename != NULL, FALSE);
 
 	config = g_key_file_new();
-	if (! g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL))
+	read_success = utils_read_file(filename, &data, &len, NULL) &&
+		g_key_file_load_from_data(config, data, len, G_KEY_FILE_NONE, NULL);
+	g_free(data);
+
+	if (!read_success)
 	{
 		g_key_file_free(config);
 		return FALSE;
@@ -1119,7 +1126,8 @@ static gboolean write_config(gboolean emit_signal)
 	GeanyProject *p;
 	GKeyFile *config;
 	gchar *filename;
-	gchar *data;
+	gchar *data = NULL;
+	gsize len;
 	gboolean ret = FALSE;
 	GSList *node;
 
@@ -1130,7 +1138,9 @@ static gboolean write_config(gboolean emit_signal)
 	config = g_key_file_new();
 	/* try to load an existing config to keep manually added comments */
 	filename = utils_get_locale_from_utf8(p->file_name);
-	g_key_file_load_from_file(config, filename, G_KEY_FILE_NONE, NULL);
+	if (utils_read_file(filename, &data, &len, NULL))
+		g_key_file_load_from_data(config, data, len, G_KEY_FILE_NONE, NULL);
+	g_free(data);
 
 	foreach_slist(node, stash_groups)
 		stash_group_save_to_key_file(node->data, config);
