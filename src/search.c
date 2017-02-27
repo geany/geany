@@ -126,12 +126,14 @@ find_dlg = {NULL, NULL, FALSE, {0, 0}};
 static struct
 {
 	GtkWidget	*dialog;
+	GtkWidget	*find_combobox;
 	GtkWidget	*find_entry;
+	GtkWidget	*replace_combobox;
 	GtkWidget	*replace_entry;
 	gboolean	all_expanded;
 	gint		position[2]; /* x, y */
 }
-replace_dlg = {NULL, NULL, NULL, FALSE, {0, 0}};
+replace_dlg = {NULL, NULL, NULL, NULL, NULL, FALSE, {0, 0}};
 
 static struct
 {
@@ -610,7 +612,7 @@ on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer 
 
 static void create_replace_dialog(void)
 {
-	GtkWidget *label_find, *label_replace, *entry_find, *entry_replace,
+	GtkWidget *label_find, *label_replace,
 		*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
 	GtkSizeGroup *label_size;
 
@@ -641,27 +643,27 @@ static void create_replace_dialog(void)
 	label_replace = gtk_label_new_with_mnemonic(_("Replace wit_h:"));
 	gtk_misc_set_alignment(GTK_MISC(label_replace), 0, 0.5);
 
-	entry_find = gtk_combo_box_text_new_with_entry();
-	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))));
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), entry_find);
-	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_find))), 50);
-	ui_hookup_widget(replace_dlg.dialog, entry_find, "entry_find");
-	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(entry_find));
+	replace_dlg.find_combobox = gtk_combo_box_text_new_with_entry();
+	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.find_combobox));
+	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.find_entry));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), replace_dlg.find_combobox);
+	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.find_entry), 50);
+	ui_hookup_widget(replace_dlg.dialog, replace_dlg.find_combobox, "entry_find");
 
-	entry_replace = gtk_combo_box_text_new_with_entry();
-	ui_entry_add_clear_icon(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))));
-	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), entry_replace);
-	gtk_entry_set_width_chars(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(entry_replace))), 50);
-	ui_hookup_widget(replace_dlg.dialog, entry_replace, "entry_replace");
-	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(entry_replace));
+	replace_dlg.replace_combobox = gtk_combo_box_text_new_with_entry();
+	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.replace_combobox));
+	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.replace_entry));
+	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), replace_dlg.replace_combobox);
+	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.replace_entry), 50);
+	ui_hookup_widget(replace_dlg.dialog, replace_dlg.replace_combobox, "entry_replace");
 
 	/* tab from find to the replace entry */
-	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)),
+	g_signal_connect(replace_dlg.find_entry,
 			"key-press-event", G_CALLBACK(on_widget_key_pressed_set_focus),
-			gtk_bin_get_child(GTK_BIN(entry_replace)));
-	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_find)), "activate",
+			replace_dlg.replace_entry);
+	g_signal_connect(replace_dlg.find_entry, "activate",
 			G_CALLBACK(on_replace_find_entry_activate), NULL);
-	g_signal_connect(gtk_bin_get_child(GTK_BIN(entry_replace)), "activate",
+	g_signal_connect(replace_dlg.replace_entry, "activate",
 			G_CALLBACK(on_replace_entry_activate), NULL);
 	g_signal_connect(replace_dlg.dialog, "response",
 			G_CALLBACK(on_replace_dialog_response), NULL);
@@ -670,11 +672,11 @@ static void create_replace_dialog(void)
 
 	fbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(fbox), label_find, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(fbox), entry_find, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), replace_dlg.find_combobox, TRUE, TRUE, 0);
 
 	rbox = gtk_hbox_new(FALSE, 6);
 	gtk_box_pack_start(GTK_BOX(rbox), label_replace, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(rbox), entry_replace, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(rbox), replace_dlg.replace_combobox, TRUE, TRUE, 0);
 
 	label_size = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(label_size, label_find);
@@ -1483,10 +1485,8 @@ on_replace_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			goto fail;
 	}
 
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(
-		gtk_widget_get_parent(replace_dlg.find_entry)), original_find, 0);
-	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(
-		gtk_widget_get_parent(replace_dlg.replace_entry)), original_replace, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_dlg.find_combobox), original_find, 0);
+	ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(replace_dlg.replace_combobox), original_replace, 0);
 
 	switch (response)
 	{
