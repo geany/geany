@@ -37,6 +37,7 @@
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
+#include "tm_source_file.h" // for tm_get_real_path()
 #include "templates.h"
 #include "ui_utils.h"
 #include "win32.h"
@@ -1757,7 +1758,7 @@ gboolean utils_is_remote_path(const gchar *path)
 
 /* Remove all relative and untidy elements from the path of @a filename.
  * @param filename must be a valid absolute path.
- * @see tm_get_real_path() - also resolves links. */
+ * @see utils_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
 	GString *str;
@@ -2171,4 +2172,30 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	}
 	else
 		g_printerr("Unable to find 'geany'");
+}
+
+
+/**
+ * Get a link-dereferenced, absolute version of a file name.
+ *
+ * This is similar to the POSIX `realpath` function when passed a
+ * @c NULL argument.
+ *
+ * @warning This function suffers the same problems as the POSIX
+ * function `realpath()`, namely that it's impossible to determine
+ * a suitable size for the returned buffer, and so it's limited to a
+ * maximum of `PATH_MAX`.
+ *
+ * @param file_name The file name to get the real path of.
+ *
+ * @return A newly-allocated string containing the real path which
+ * should be freed with `g_free()` when no longer needed, or @c NULL
+ * if the real path cannot be obtained.
+ *
+ * @since 1.29 (API 230)
+ */
+GEANY_API_SYMBOL
+gchar *utils_get_real_path(const gchar *file_name)
+{
+	return tm_get_real_path(file_name);
 }
