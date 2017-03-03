@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-10-31 20:39+0000\n"
+"PO-Revision-Date: 2017-02-22 22:01+0000\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -1245,9 +1245,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Elimina spazi e tabulazioni in coda"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Rimuove gli spazi e le tabulazioni in eccesso alla fine delle righe"
+msgstr "Rimuove spazi e tabulazioni in eccesso alla fine delle righe"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
