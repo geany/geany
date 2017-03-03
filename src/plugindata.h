@@ -339,6 +339,101 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
 
+
+#ifndef GEANY_PRIVATE
+
+#if defined(LOCALEDIR) && defined(GETTEXT_PACKAGE)
+# define GEANY_PLUGIN_LOCALE_INIT() main_locale_init(LOCALEDIR, GETTEXT_PACKAGE)
+#else
+# define GEANY_PLUGIN_LOCALE_INIT() do {} while (0)
+#endif
+
+/**
+ * Convenience macro to minimize plugin boilerplate.
+ *
+ * This is an example of a minimal plugin using this macro:
+ *
+ * @code
+ * #include <geanyplugin.h>
+ *
+ * static gboolean init(GeanyPlugin *plugin, gpointer pdata)
+ * {
+ *   g_debug(_("plugin activated"));
+ *   return TRUE;
+ * }
+ *
+ * static void cleanup(GeanyPlugin *plugin, gpointer pdata)
+ * {
+ *   g_debug(_("plugin de-activated"));
+ * }
+ *
+ * GEANY_REGISTER_PLUGIN(230, "The Plugin", "A plugin", "0.1", "Someone",
+ *   init, cleanup, NULL, NULL)
+ * @endcode
+ *
+ * @param min_api Minimum API version required.
+ * @param name_ The plugin's name.
+ * @param description_ A description of the plugin.
+ * @param version_ The plugin version.
+ * @param author_ The plugin's author(s).
+ * @param init_func The plugin's initialization function pointer (required).
+ * @param cleanup_func The plugin's cleanup function pointer (required).
+ * @param config_func The plugin's configure function pointer or @c NULL.
+ * @param help_func The plugin's help function pointer or @c NULL.
+ *
+ * @since 1.29 (API 230)
+ */
+#define GEANY_REGISTER_PLUGIN(min_api, name_, description_, version_, author_, \
+	init_func, cleanup_func, config_func, help_func) \
+	G_MODULE_EXPORT \
+	void geany_load_module(GeanyPlugin *plugin) \
+	{ \
+		GEANY_PLUGIN_LOCALE_INIT(); \
+		plugin->info->name = _(name_); \
+		plugin->info->description = _(description_); \
+		plugin->info->version = version_; \
+		plugin->info->author = author_; \
+		plugin->funcs->init = init_func; \
+		plugin->funcs->cleanup = cleanup_func; \
+		plugin->funcs->configure = config_func; \
+		plugin->funcs->help = help_func; \
+		GEANY_PLUGIN_REGISTER(plugin, min_api); \
+	}
+
+/**
+ * Convenience macro to minimize proxy plugin boilerplate.
+ *
+ * @param min_api Minimum API version required.
+ * @param name_ The plugin's name.
+ * @param description_ A description of the plugin.
+ * @param version_ The plugin version.
+ * @param author_ the plugin's author(s).
+ * @param init_func The plugin's initialization function pointer (required).
+ * @param cleanup_func The plugin's cleanup function pointer (required).
+ * @param config_func The plugin's configure function pointer or @c NULL.
+ * @param help_func The plugin's help function pointer or @c NULL.
+ * @param extensions A null-terminated initializer of supported file extensions.
+ * @param probe_func The proxy plugin's probe function or @c NULL.
+ * @param load_func The proxy plugin's load function pointer (required).
+ * @param unload_func The proxy plugin's unload function pointer (required).
+ */
+#define GEANY_REGISTER_PROXY_PLUGIN(min_api, name_, description_, version_, author_, \
+	init_func, cleanup_func, config_func, help_func, \
+	extensions, probe_func, load_func, unload_func) \
+	static gboolean geany_plugin_real_init_(GeanyPlugin *plugin, gpointer pdata) \
+	{ \
+		plugin->proxy_funcs->probe = probe_func; \
+		plugin->proxy_funcs->load = load_func; \
+		plugin->proxy_funcs->unload = unload_func; \
+		if (geany_plugin_register_proxy(plugin, extensions)) \
+			return init_func(plugin, pdata); \
+		return FALSE; \
+	} \
+	GEANY_REGISTER_PLUGIN(min_api, name_, description_, version_, author_, \
+		geany_plugin_real_init_, cleanup_func, config_func, help_func)
+
+#endif // !GEANY_PRIVATE
+
 /** Return values for GeanyProxyHooks::probe()
  *
  * @see geany_plugin_register_proxy() for a full description of the proxy plugin mechanisms.
