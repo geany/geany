@@ -303,29 +303,31 @@ static void printfcmds(void)
 
 
 /* macros to save typing and make the logic visible */
-#define return_cmd_if(src, cmds)\
+#define return_cmd_if(src, cmds, src_out)\
 	if (cmds != NULL && cmds[cmdindex].exists && below>src)\
 	{ \
 		*fr=src; \
 		if (printbuildcmds) \
 			printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
+		if (src_out) *src_out = src; \
 		return &(cmds[cmdindex]); \
 	}
 
-#define return_ft_cmd_if(src, cmds)\
+#define return_ft_cmd_if(src, cmds, src_out)\
 	if (ft != NULL && ft->priv->cmds != NULL \
 		&& ft->priv->cmds[cmdindex].exists && below>src)\
 		{ \
 			*fr=src; \
 			if (printbuildcmds) \
 				printf("cmd[%u,%u]=%u\n",cmdgrp,cmdindex,src); \
+			if (src_out) *src_out = src; \
 			return &(ft->priv->cmds[cmdindex]); \
 		}
 
 
 /* get the next lowest command taking priority into account */
-static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, guint cmdgrp, guint cmdindex,
-											 guint below, guint *from)
+static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, guint cmdgrp,
+	guint cmdindex, guint below, guint *from, GeanyBuildSource *src_out)
 {
 	/* Note: parameter below used in macros above */
 	GeanyFiletype *ft = NULL;
@@ -349,25 +351,25 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, guint cmdgrp, g
 		case GEANY_GBG_FT: /* order proj ft, home ft, ft, defft */
 			if (ft != NULL)
 			{
-				return_ft_cmd_if(GEANY_BCS_PROJ, projfilecmds);
-				return_ft_cmd_if(GEANY_BCS_PREF, homefilecmds);
-				return_ft_cmd_if(GEANY_BCS_FT, filecmds);
+				return_ft_cmd_if(GEANY_BCS_PROJ, projfilecmds, src_out);
+				return_ft_cmd_if(GEANY_BCS_PREF, homefilecmds, src_out);
+				return_ft_cmd_if(GEANY_BCS_FT, filecmds, src_out);
 			}
-			return_cmd_if(GEANY_BCS_DEF, ft_def);
+			return_cmd_if(GEANY_BCS_DEF, ft_def, src_out);
 			break;
 		case GEANY_GBG_NON_FT: /* order proj, pref, def */
-			return_cmd_if(GEANY_BCS_PROJ, non_ft_proj);
-			return_cmd_if(GEANY_BCS_PREF, non_ft_pref);
-			return_ft_cmd_if(GEANY_BCS_FT, ftdefcmds);
-			return_cmd_if(GEANY_BCS_DEF, non_ft_def);
+			return_cmd_if(GEANY_BCS_PROJ, non_ft_proj, src_out);
+			return_cmd_if(GEANY_BCS_PREF, non_ft_pref, src_out);
+			return_ft_cmd_if(GEANY_BCS_FT, ftdefcmds, src_out);
+			return_cmd_if(GEANY_BCS_DEF, non_ft_def, src_out);
 			break;
 		case GEANY_GBG_EXEC: /* order proj, proj ft, pref, home ft, ft, def */
-			return_cmd_if(GEANY_BCS_PROJ, exec_proj);
-			return_ft_cmd_if(GEANY_BCS_PROJ_FT, projexeccmds);
-			return_cmd_if(GEANY_BCS_PREF, exec_pref);
-			return_ft_cmd_if(GEANY_BCS_FT, homeexeccmds);
-			return_ft_cmd_if(GEANY_BCS_FT, execcmds);
-			return_cmd_if(GEANY_BCS_DEF, exec_def);
+			return_cmd_if(GEANY_BCS_PROJ, exec_proj, src_out);
+			return_ft_cmd_if(GEANY_BCS_PROJ_FT, projexeccmds, src_out);
+			return_cmd_if(GEANY_BCS_PREF, exec_pref, src_out);
+			return_ft_cmd_if(GEANY_BCS_FT, homeexeccmds, src_out);
+			return_ft_cmd_if(GEANY_BCS_FT, execcmds, src_out);
+			return_cmd_if(GEANY_BCS_DEF, exec_def, src_out);
 			break;
 		default:
 			break;
@@ -377,9 +379,10 @@ static GeanyBuildCommand *get_next_build_cmd(GeanyDocument *doc, guint cmdgrp, g
 
 
 /* shortcut to start looking at the top */
-static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp, guint cmdindex, guint *from)
+static GeanyBuildCommand *get_build_cmd(GeanyDocument *doc, guint grp,
+	guint cmdindex, guint *from, GeanyBuildSource *src_out)
 {
-	return get_next_build_cmd(doc, grp, cmdindex, GEANY_BCS_COUNT, from);
+	return get_next_build_cmd(doc, grp, cmdindex, GEANY_BCS_COUNT, from, src_out);
 }
 
 
@@ -515,32 +518,32 @@ void build_remove_menu_item(const GeanyBuildSource src, const GeanyBuildGroup gr
 }
 
 
-/* * Get the @a GeanyBuildCommand structure for the specified Build menu item.
+/**
+ * Get the current source for the given group and command.
  *
- * Get the command for any menu item specified by @a src, @a grp and @a cmd even if it is
- * hidden by higher priority commands.
+ * @param grp The group containing the command.
+ * @param cmd The index of the command in the group.
+ * @param src A pointer pointing to a location to store the current source
+ * in, or @c NULL if no result is needed.
  *
- * @param src the source of the specified menu item.
- * @param grp the group of the specified menu item.
- * @param cmd the index of the command within the group.
+ * @return @c TRUE if the current source could be found, @c FALSE otherwise.
  *
- * @return a pointer to the @a GeanyBuildCommand structure or @c NULL if it doesn't exist.
- *         This is a pointer to an internal structure and must not be freed.
- *
- * @see build_menu_update
- **/
-GeanyBuildCommand *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp, guint cmd)
+ * @since 1.29 (API 230)
+ */
+gboolean build_get_current_source(GeanyBuildGroup grp, guint cmd, GeanyBuildSource *src)
 {
-	GeanyBuildCommand *bc;
+	GeanyBuildSource source;
 
-	g_return_val_if_fail(src < GEANY_BCS_COUNT, NULL);
-	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
-	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
+	g_return_val_if_fail(grp < GEANY_GBG_COUNT, FALSE);
+	g_return_val_if_fail(cmd < build_groups_count[grp], FALSE);
 
-	bc = get_build_group(src, grp);
-	if (bc == NULL)
-		return NULL;
-	return &(bc[cmd]);
+	if (get_build_cmd(NULL, grp, cmd, NULL, &source) == NULL)
+		return FALSE;
+
+	if (src != NULL)
+		*src = source;
+
+	return TRUE;
 }
 
 
@@ -561,31 +564,61 @@ GEANY_API_SYMBOL
 const gchar *build_get_current_menu_item(const GeanyBuildGroup grp, const guint cmd,
                                          const GeanyBuildCmdEntries fld)
 {
-	GeanyBuildCommand *c;
-	gchar *str = NULL;
+	GeanyBuildSource src;
 
 	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
 	g_return_val_if_fail(fld < GEANY_BC_CMDENTRIES_COUNT, NULL);
 	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
 
-	c = get_build_cmd(NULL, grp, cmd, NULL);
-	if (c == NULL) return NULL;
-	switch (fld)
+	if (build_get_current_source(grp, cmd, &src))
+		return build_get_menu_item(src, grp, cmd, fld);
+
+	return NULL;
+}
+
+
+/**
+ * Get the string for the build command field.
+ *
+ * Get the specified field of the command speicifed by @a src, @a grp and @a cmd.
+ *
+ * @param src The source of the command.
+ * @param grp The group of the specified command.
+ * @param cmd The index of the specified command within the group.
+ * @param field The field of the command to get.
+ *
+ * @return A string containing the field value or @c NULL if invalid
+ * arguments are provided.
+ *
+ * @since 1.29 (API 230)
+ */
+const gchar *build_get_menu_item(GeanyBuildSource src, GeanyBuildGroup grp,
+	guint cmd, GeanyBuildCmdEntries field)
+{
+	GeanyBuildCommand *command;
+
+	g_return_val_if_fail(src < GEANY_BCS_COUNT, NULL);
+	g_return_val_if_fail(grp < GEANY_GBG_COUNT, NULL);
+	g_return_val_if_fail(field < GEANY_BC_CMDENTRIES_COUNT, NULL);
+	g_return_val_if_fail(cmd < build_groups_count[grp], NULL);
+
+	command = get_build_group(src, grp);
+	if (command == NULL)
+		return NULL;
+
+	switch (field)
 	{
 		case GEANY_BC_COMMAND:
-			str = c->command;
-			break;
+			return command[cmd].command;
 		case GEANY_BC_LABEL:
-			str = c->label;
-			break;
+			return command[cmd].label;
 		case GEANY_BC_WORKING_DIR:
-			str = c->working_dir;
-			break;
+			return command[cmd].working_dir;
 		default:
-			break;
+			return NULL;
 	}
-	return str;
 }
+
 
 /** Set the string for the menu item field.
  *
@@ -794,7 +827,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	gchar *cmd_string_utf8, *working_dir_utf8, *run_cmd, *cmd_string;
 	GError *error = NULL;
 
-	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL);
+	cmd = get_build_cmd(doc, GEANY_GBG_EXEC, cmdindex, NULL, NULL);
 
 	cmd_string_utf8 = build_replace_placeholder(doc, cmd->command);
 	cmd_working_dir =  cmd->working_dir;
@@ -1149,7 +1182,7 @@ static void build_command(GeanyDocument *doc, GeanyBuildGroup grp, guint cmd, gc
 {
 	gchar *dir;
 	gchar *full_command, *subs_command;
-	GeanyBuildCommand *buildcmd = get_build_cmd(doc, grp, cmd, NULL);
+	GeanyBuildCommand *buildcmd = get_build_cmd(doc, grp, cmd, NULL, NULL);
 	gchar *cmdstr;
 
 	if (buildcmd == NULL)
@@ -1234,7 +1267,7 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 			kill_process(&run_info[cmd].pid);
 			return;
 		}
-		bc = get_build_cmd(doc, grp, cmd, NULL);
+		bc = get_build_cmd(doc, grp, cmd, NULL, NULL);
 		if (bc != NULL && strcmp(bc->command, "builtin") == 0)
 		{
 			gchar *uri;
@@ -1369,14 +1402,14 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 			guint grp = bs->build_grp - GEANY_GBG_COUNT;
 			for (j = bs->build_cmd; j < build_groups_count[grp]; ++j)
 			{
-				GeanyBuildCommand *bc = get_build_cmd(NULL, grp, j, NULL);
+				GeanyBuildCommand *bc = get_build_cmd(NULL, grp, j, NULL, NULL);
 				const gchar *lbl = (bc == NULL) ? "" : bc->label;
 				create_build_menu_item(menu, keygroup, accel_group, bs, lbl, grp, j);
 			}
 		}
 		else
 		{
-			GeanyBuildCommand *bc = get_build_cmd(NULL, bs->build_grp, bs->build_cmd, NULL);
+			GeanyBuildCommand *bc = get_build_cmd(NULL, bs->build_grp, bs->build_cmd, NULL, NULL);
 			const gchar *lbl = (bc == NULL) ? "" : bc->label;
 			create_build_menu_item(menu, keygroup, accel_group, bs, lbl, bs->build_grp, bs->build_cmd);
 		}
@@ -1455,7 +1488,7 @@ void build_menu_update(GeanyDocument *doc)
 				{
 					GtkWidget *menu_item = menu_items.menu_item[grp][cmd];
 					const gchar *label;
-					bc = get_build_cmd(doc, grp, cmd, NULL);
+					bc = get_build_cmd(doc, grp, cmd, NULL, NULL);
 					if (bc)
 						label = bc->label;
 					else
@@ -1509,27 +1542,27 @@ void build_menu_update(GeanyDocument *doc)
 	}
 
 	run_sensitivity &= (doc != NULL);
-	can_build = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_BUILD), NULL) != NULL
+	can_build = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_BUILD), NULL, NULL) != NULL
 					&& have_path && ! build_running;
 	if (widgets.toolitem_build != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_build, can_build);
 	can_make = FALSE;
 	if (widgets.toolitem_make_all != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_make_all,
-			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_MAKE_ALL), NULL) != NULL
+			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_MAKE_ALL), NULL, NULL) != NULL
 							&& ! build_running));
 	if (widgets.toolitem_make_custom != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_make_custom,
-			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_CUSTOM), NULL) != NULL
+			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_CUSTOM), NULL, NULL) != NULL
 							&& ! build_running));
 	if (widgets.toolitem_make_object != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_make_object,
-			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT), NULL) != NULL
+			(can_make |= get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT), NULL, NULL) != NULL
 							&& ! build_running));
 	if (widgets.toolitem_set_args != NULL)
 		gtk_widget_set_sensitive(widgets.toolitem_set_args, TRUE);
 
-	can_compile = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_COMPILE), NULL) != NULL
+	can_compile = get_build_cmd(doc, GEANY_GBG_FT, GBO_TO_CMD(GEANY_GBO_COMPILE), NULL, NULL) != NULL
 					&& have_path && ! build_running;
 	gtk_action_set_sensitive(widgets.compile_action, can_compile);
 	gtk_action_set_sensitive(widgets.build_action, can_make);
@@ -1716,7 +1749,7 @@ static void on_clear_dialog_row(GtkWidget *unused, gpointer user_data)
 	RowWidgets *r = user_data;
 	guint src;
 	enum GeanyBuildCmdEntries i;
-	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src);
+	GeanyBuildCommand *bc = get_next_build_cmd(NULL, r->grp, r->cmd, r->dst, &src, NULL);
 
 	if (bc != NULL)
 	{
@@ -1861,7 +1894,7 @@ static RowWidgets *build_add_dialog_row(GeanyDocument *doc, GtkTable *table, gui
 	g_signal_connect(clear, "clicked", G_CALLBACK(on_clear_dialog_row), roww);
 	gtk_table_attach(table, clear, column, column + 1, row, row + 1, GTK_FILL,
 		GTK_FILL | GTK_EXPAND, entry_x_padding, entry_y_padding);
-	roww->cmdsrc = bc = get_build_cmd(doc, grp, cmd, &src);
+	roww->cmdsrc = bc = get_build_cmd(doc, grp, cmd, &src, NULL);
 	if (bc != NULL)
 		roww->src = src;
 
