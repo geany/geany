@@ -2,17 +2,22 @@ Geany 1.30 (March 05, 2017)
 
     General
     * Initial accessibility support in the editor (SF#328).
+    * Fix scrolling on Wayland (Issue#1320).
 
     Bug fixes
     * Fix Ctrl+X and Ctrl+C in non-Latin keyboard layouts
       (Forkest, PR#1386).
     * Fix search history filling on GTK >= 3.20 (PR#1404).
+    * Simplify setting build menu items labels, fixing a Commander plugin
+      issue (Vasiliy Faronov, PR#1396).
 
     Interface
     * Fix the current scope shown in the statusbar (Issue#1279).
 
     Editor
     * Update Scintilla to version 3.7.3.
+    * Fix triggering default keybindings together with snippets keybindings
+      (Issue#1354, PR#1356).
 
     Filetypes
     * Update JavaScript keywords (Abel 'Akronix' Serrano Juste, PR#1361).
@@ -27,6 +32,9 @@ Geany 1.30 (March 05, 2017)
       the `Sci_`-prefixed version from now on.
     * Add `geany_api_version()` to detect the API version of Geany at
       runtime (Thomas Martitz, PR#1406).
+
+    OSX
+    * Fix slow startup (Jiří Techet, Issue#1277, PR#1399).
 
 
 Geany 1.29 (November 13, 2016)
