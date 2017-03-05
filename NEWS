@@ -1,4 +1,4 @@
-Geany 1.30 (unreleased)
+Geany 1.30 (March 05, 2017)
 
     General
     * Initial accessibility support in the editor (SF#328).
@@ -10,7 +10,7 @@ Geany 1.30 (unreleased)
     * Updated translations: de, es, it, lt, pt
 
     API
-    * Remove unprefixed Scintilla structure aliases.  Plugins must use
+    * Remove unprefixed Scintilla structure aliases. Plugins must use
       the `Sci_`-prefixed version from now on.
 
 
