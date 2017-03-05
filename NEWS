@@ -3,8 +3,21 @@ Geany 1.30 (March 05, 2017)
     General
     * Initial accessibility support in the editor (SF#328).
 
+    Bug fixes
+    * Fix Ctrl+X and Ctrl+C in non-Latin keyboard layouts
+      (Forkest, PR#1386).
+    * Fix search history filling on GTK >= 3.20 (PR#1404).
+
+    Interface
+    * Fix the current scope shown in the statusbar (Issue#1279).
+
     Editor
-    * Update Scintilla to version 3.7.1.
+    * Update Scintilla to version 3.7.3.
+
+    Filetypes
+    * Update JavaScript keywords (Abel 'Akronix' Serrano Juste, PR#1361).
+    * Partial highlighting of JavaScript ES6 template strings (Issue#934).
+    * Add Arduino custom filetype (Issue#1339).
 
     Internationalization
     * Updated translations: de, es, it, lt, pt
@@ -12,6 +25,8 @@ Geany 1.30 (March 05, 2017)
     API
     * Remove unprefixed Scintilla structure aliases. Plugins must use
       the `Sci_`-prefixed version from now on.
+    * Add `geany_api_version()` to detect the API version of Geany at
+      runtime (Thomas Martitz, PR#1406).
 
 
 Geany 1.29 (November 13, 2016)
