@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-10-27 10:27+0200\n"
+"PO-Revision-Date: 2017-03-05 14:10+0100\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -1258,7 +1258,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Enlever les espaces et tabulations de fin"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Enlève les espaces et tabulations restants à la fin des lignes"
 
@@ -4099,6 +4098,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"L'extension « %2$s » du plugin proxy « %1$s » commence par un point.  "
+"Veuillez corriger votre plugin proxy."
 
 #: ../src/pluginutils.c:411
 msgid "Configure Plugins"

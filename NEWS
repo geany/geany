@@ -20,7 +20,7 @@ Geany 1.30 (March 05, 2017)
     * Add Arduino custom filetype (Issue#1339).
 
     Internationalization
-    * Updated translations: de, es, it, lt, pt
+    * Updated translations: de, es, fr, it, lt, pt
 
     API
     * Remove unprefixed Scintilla structure aliases. Plugins must use
