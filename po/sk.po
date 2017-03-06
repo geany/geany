@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-11-05 21:43+0100\n"
+"PO-Revision-Date: 2017-03-06 19:36+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -1211,7 +1211,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Odstrániť medzery a tabulátory na konci riadkov"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Odstráni medzery a tabulátory na konci riadkov"
 
@@ -5951,9 +5950,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:468
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Background image:"
-#~ msgstr "Obrázok pozadia:"
-
-#~ msgid "Sets the path to the background image in the terminal widget"
-#~ msgstr "Nastaví cestu k obrázku použitému na pozadí okna terminálu"
