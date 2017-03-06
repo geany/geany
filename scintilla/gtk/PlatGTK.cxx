@@ -1059,25 +1059,21 @@ void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
 	GdkWindow *wndRelativeTo = WindowFromWidget(PWidget(relativeTo.wid));
 	gdk_window_get_origin(wndRelativeTo, &ox, &oy);
 	ox += rc.left;
-	if (ox < 0)
-		ox = 0;
 	oy += rc.top;
-	if (oy < 0)
-		oy = 0;
 
-	GdkRectangle rcScreen = MonitorRectangleForWidget(PWidget(relativeTo.wid));
+	GdkRectangle rcMonitor = MonitorRectangleForWidget(PWidget(relativeTo.wid));
 
 	/* do some corrections to fit into screen */
 	int sizex = rc.right - rc.left;
 	int sizey = rc.bottom - rc.top;
-	const int screenWidth = rcScreen.width;
-	const int screenHeight = rcScreen.height;
-	if (sizex > screenWidth)
-		ox = 0; /* the best we can do */
-	else if (ox + sizex > screenWidth)
-		ox = screenWidth - sizex;
-	if (oy + sizey > screenHeight)
-		oy = screenHeight - sizey;
+	if (sizex > rcMonitor.width || ox < rcMonitor.x)
+		ox = rcMonitor.x; /* the best we can do */
+	else if (ox + sizex > rcMonitor.x + rcMonitor.width)
+		ox = rcMonitor.x + rcMonitor.width - sizex;
+	if (sizey > rcMonitor.height || oy < rcMonitor.y)
+		oy = rcMonitor.y;
+	else if (oy + sizey > rcMonitor.y + rcMonitor.height)
+		oy = rcMonitor.y + rcMonitor.height - sizey;
 
 	gtk_window_move(GTK_WINDOW(PWidget(wid)), ox, oy);
 
@@ -1929,20 +1925,18 @@ void Menu::Show(Point pt, Window &wnd) {
 	// Rely on GTK+ to do the right thing with positioning
 	gtk_menu_popup_at_pointer(widget, NULL);
 #else
-	GdkRectangle rcScreen = MonitorRectangleForWidget(PWidget(wnd.GetID()));
-	const int screenWidth = rcScreen.width;
-	const int screenHeight = rcScreen.height;
+	GdkRectangle rcMonitor = MonitorRectangleForWidget(PWidget(wnd.GetID()));
 	GtkRequisition requisition;
 #if GTK_CHECK_VERSION(3,0,0)
 	gtk_widget_get_preferred_size(GTK_WIDGET(widget), NULL, &requisition);
 #else
 	gtk_widget_size_request(GTK_WIDGET(widget), &requisition);
 #endif
-	if ((pt.x + requisition.width) > screenWidth) {
-		pt.x = screenWidth - requisition.width;
+	if ((pt.x + requisition.width) > rcMonitor.x + rcMonitor.width) {
+		pt.x = rcMonitor.x + rcMonitor.width - requisition.width;
 	}
-	if ((pt.y + requisition.height) > screenHeight) {
-		pt.y = screenHeight - requisition.height;
+	if ((pt.y + requisition.height) > rcMonitor.y + rcMonitor.height) {
+		pt.y = rcMonitor.y + rcMonitor.height - requisition.height;
 	}
 	gtk_menu_popup(widget, NULL, NULL, MenuPositionFunc,
 		GINT_TO_POINTER((static_cast<int>(pt.y) << 16) | static_cast<int>(pt.x)), 0,
