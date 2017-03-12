@@ -2697,10 +2697,12 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 		group = g_new0(GeanyKeyGroup, 1);
 		add_kb_group(group, section_name, label, callback, TRUE);
 	}
+	/* Calls free_key_binding() for individual entries for plugins - has to be
+	 * called before g_free(group->plugin_keys) */
+	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
-	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 
