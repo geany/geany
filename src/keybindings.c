@@ -824,6 +824,15 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 }
 
 
+/** Reloads keybinding settings from configuration file. Normally plugins do
+ * not need to call this function as it is called automatically when a the
+ * plugin is activated. However, plugins which need to create keybindings
+ * dynamically and reload them when needed should call this function after
+ * all keybindings have been updated with plugin_set_key_group() and
+ * keybindings_set_item() calls - this makes sure that the corresponding user
+ * keybinding shortcuts are applied.
+ * @since 1.31. */
+GEANY_API_SYMBOL
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
