@@ -2245,7 +2245,7 @@ msgstr "Other:"
 
 #: ../src/about.c:48
 msgid ""
-"Copyright (c)  2005-2016\n"
+"Copyright (c)  2005-2017\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
