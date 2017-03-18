@@ -2,14 +2,14 @@
 # Copyright (C) 2007-2011 by Geany's COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # toni <topi@elpiset.net>, 2007-2016.
-# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2016.
+# Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>, 2016-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2017-01-24 09:11+0100\n"
+"PO-Revision-Date: 2017-03-18 15:42+0100\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:341
 msgid "Geany"
@@ -466,19 +466,19 @@ msgstr "Editor:"
 
 #: ../data/geany.glade.h:92
 msgid "Sets the font for the message window"
-msgstr "Estableix el tipus de lletra per a la finestra de missatges"
+msgstr "Estableix la lletra per a la finestra dels missatges"
 
 #: ../data/geany.glade.h:93
 msgid "Sets the font for the symbol list"
-msgstr "Estableix el tipus de lletra per a la llista dels símbols"
+msgstr "Estableix la lletra per a la llista dels símbols"
 
 #: ../data/geany.glade.h:94
 msgid "Sets the editor font"
-msgstr "Estableix el tipus de lletra de l'editor"
+msgstr "Estableix la lletra de l'editor"
 
 #: ../data/geany.glade.h:95
 msgid "<b>Fonts</b>"
-msgstr "<b>Tipus de lletres</b>"
+msgstr "<b>Lletres</b>"
 
 #: ../data/geany.glade.h:96
 msgid "Show status bar"
@@ -1100,7 +1100,7 @@ msgid ""
 msgstr ""
 "El color del fons dels caràcters després que la posició del cursor donada "
 "(veieu més avall) hagi canviat al color establer més avall. (es recomana "
-"quan s'utilitzen tipus de lletres proporcionals)"
+"quan s'utilitzen lletres proporcionals)"
 
 #: ../data/geany.glade.h:223
 msgid "Enabled"
@@ -1226,10 +1226,9 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Elimina els espais i els tabuladors finals"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr ""
-"Suprimeix els espais i els tabuladors finals i l'acabament de les línies"
+"Suprimeix els espais i els tabuladors finals a l'acabament de les línies"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
@@ -1504,15 +1503,15 @@ msgstr "Impressió"
 
 #: ../data/geany.glade.h:309
 msgid "Font:"
-msgstr "Tipus de lletra:"
+msgstr "Lletra:"
 
 #: ../data/geany.glade.h:310
 msgid "Sets the font for the terminal widget"
-msgstr "Estableix el tipus de lletra per a l'estri del terminal"
+msgstr "Estableix la lletra per a l'estri del terminal"
 
 #: ../data/geany.glade.h:311
 msgid "Choose Terminal Font"
-msgstr "Tria el tipus de lletra del terminal"
+msgstr "Tria la lletra del terminal"
 
 #: ../data/geany.glade.h:312
 msgid "Foreground color:"
@@ -1852,7 +1851,7 @@ msgstr "_Visualitza"
 
 #: ../data/geany.glade.h:391
 msgid "Change _Font..."
-msgstr "Canvia el _tipus de lletra..."
+msgstr "Canvia la lle_tra..."
 
 #: ../data/geany.glade.h:392
 msgid "Change _Color Scheme..."
@@ -1880,7 +1879,7 @@ msgstr "Mostra les _guies de sagnat"
 
 #: ../data/geany.glade.h:398
 msgid "Full_screen"
-msgstr "Pantalla _completa"
+msgstr "_Pantalla completa"
 
 #: ../data/geany.glade.h:399
 msgid "Toggle All _Additional Widgets"
@@ -1892,7 +1891,7 @@ msgstr "Mostra la _finestra dels missatges"
 
 #: ../data/geany.glade.h:401
 msgid "Show _Toolbar"
-msgstr "Mos_tra la barra d'eines"
+msgstr "Mostra la barra d’_eines"
 
 #: ../data/geany.glade.h:402
 msgid "Show Side_bar"
@@ -2706,7 +2705,7 @@ msgstr "Voleu desar-ho abans de tancar?"
 
 #: ../src/dialogs.c:891
 msgid "Choose font"
-msgstr "Tria el tipus de lletra"
+msgstr "Tria la lletra"
 
 #: ../src/dialogs.c:1185
 msgid ""
@@ -5322,7 +5321,7 @@ msgstr " (instància nova)"
 #: ../src/ui_utils.c:438
 #, c-format
 msgid "Font updated (%s)."
-msgstr "Tipus de lletra actualitzada (%s)."
+msgstr "Lletra actualitzada (%s)."
 
 #: ../src/ui_utils.c:689
 msgid "C Standard Library"
@@ -5730,8 +5729,7 @@ msgstr "_Utilitza el nivell de zoom actual"
 msgid ""
 "Renders the font size of the document together with the current zoom level"
 msgstr ""
-"Renderitza la mida del tipus de lletra del document amb el nivell actual del "
-"zoom"
+"Renderitza la mida de la lletra del document amb el nivell actual del zoom"
 
 #: ../plugins/export.c:279
 #, c-format
