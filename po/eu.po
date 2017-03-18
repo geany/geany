@@ -2154,7 +2154,6 @@ msgid "Other:"
 msgstr "Besteak:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c)  2005-2017\n"
 "Colomban Wendling\n"
