@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2017-03-18 15:42+0100\n"
+"PO-Revision-Date: 2017-03-18 22:45+0100\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -1674,7 +1674,7 @@ msgstr "_Anomena i desa"
 
 #: ../data/geany.glade.h:347
 msgid "Sa_ve All"
-msgstr "Desa-ho _tot"
+msgstr "Desa-_ho tot"
 
 #: ../data/geany.glade.h:348 ../src/document.c:1651 ../src/document.c:3620
 #: ../src/sidebar.c:718
@@ -1687,7 +1687,7 @@ msgstr "Torna a carr_egar com a..."
 
 #: ../data/geany.glade.h:350
 msgid "Page Set_up"
-msgstr "_Configuració de la pàgina"
+msgstr "Config_uració de la pàgina"
 
 #: ../data/geany.glade.h:351
 msgid "_Print..."
@@ -1867,7 +1867,7 @@ msgstr "Mostra els números de _línia"
 
 #: ../data/geany.glade.h:395
 msgid "Show White S_pace"
-msgstr "Mostra els _espais en blanc"
+msgstr "Mostra els e_spais en blanc"
 
 #: ../data/geany.glade.h:396
 msgid "Show Line _Endings"
@@ -2039,7 +2039,7 @@ msgstr "Projectes _recents"
 
 #: ../data/geany.glade.h:438
 msgid "_Close"
-msgstr "_Tanca"
+msgstr "Tan_ca"
 
 #: ../data/geany.glade.h:439
 msgid "Apply the default indentation settings to all documents"
@@ -2072,7 +2072,7 @@ msgstr "Selector de _color"
 
 #: ../data/geany.glade.h:446
 msgid "_Word Count"
-msgstr "_Recompte de paraules"
+msgstr "Reco_mpte de paraules"
 
 #: ../data/geany.glade.h:447
 msgid "Load Ta_gs File..."
@@ -2084,7 +2084,7 @@ msgstr "A_juda"
 
 #: ../data/geany.glade.h:449
 msgid "Keyboard _Shortcuts"
-msgstr "_Dreceres de teclat"
+msgstr "Drecere_s de teclat"
 
 #: ../data/geany.glade.h:450
 msgid "Debug _Messages"
@@ -2512,7 +2512,7 @@ msgstr "_Executa"
 #. build the code with make custom
 #: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
 msgid "Make Custom _Target..."
-msgstr "Make d'_objectiu personalitzat..."
+msgstr "Make d'objec_tiu personalitzat..."
 
 #. build the code with make object
 #: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
@@ -4311,7 +4311,7 @@ msgstr "No es pot escriure el fitxer de projecte (%s)."
 
 #: ../src/project.c:779 ../src/search.c:627
 msgid "_Replace"
-msgstr "_Substitueix"
+msgstr "S_ubstitueix"
 
 #: ../src/project.c:781 ../plugins/export.c:331
 #, c-format
