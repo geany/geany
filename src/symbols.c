@@ -1933,15 +1933,23 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	GdkEventButton *button_event = NULL;
 	TMTag *tmtag;
 	guint i;
-
+	gchar **short_names, **file_names, **p;
 	menu = gtk_menu_new();
+
+	/* If popup would show multiple files presend a smart file list that allows
+	 * to easily distinguish the files while avoiding the file paths in their entirety */
+	file_names = g_new(gchar *, tags->len);
+	foreach_ptr_array(tmtag, i, tags)
+		file_names[i] = tmtag->file->file_name;
+	short_names = utils_strv_shorten_file_list(file_names, tags->len);
+	g_free(file_names);
 
 	foreach_ptr_array(tmtag, i, tags)
 	{
 		GtkWidget *item;
 		GtkWidget *label;
 		GtkWidget *image;
-		gchar *fname = g_path_get_basename(tmtag->file->file_name);
+		gchar *fname = short_names[i];
 		gchar *text;
 
 		if (! first && have_best)
@@ -1964,6 +1972,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 		g_free(text);
 		g_free(fname);
 	}
+	g_free(short_names);
 
 	gtk_widget_show_all(menu);
 

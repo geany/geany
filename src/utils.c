@@ -2146,7 +2146,7 @@ gchar *utils_strv_find_lcs(gchar **strv, size_t num)
 }
 
 
-/** Transform file names in a list to be shorter.
+/* * Transform file names in a list to be shorter.
  *
  * This function takes a list of file names (porbably with absolute paths), and
  * transforms the paths such that they are short but still unique. This is intended
@@ -2156,13 +2156,10 @@ gchar *utils_strv_find_lcs(gchar **strv, size_t num)
  * The algorthm strips the common prefix (e-g. the user's home directory) and
  * replaces the longest common substring with "...".
  *
- * @param file_names @arraylen{num} The list of strings to process.
+ * @param file_names The list of strings to process.
  * @param num The number of strings contained in @a strv. Can be 0 if @a strv is a @c GStrv
- * @return @transfer{full} A newly-allocated NULL-terminated array of transformed paths strings. Use @c g_strfreev() to free it.
- *
- * @since 1.31 (API 232
+ * @return A newly-allocated NULL-terminated array of transformed paths strings. Use @c g_strfreev() to free it.
  */
-GEANY_API_SYMBOL
 gchar **utils_strv_shorten_file_list(gchar **file_names, size_t num)
 {
 	gint i, j;
