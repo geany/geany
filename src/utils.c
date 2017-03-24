@@ -2046,10 +2046,10 @@ gchar **utils_strv_join(gchar **first, gchar **second)
 
 /* * Returns the common prefix in a list of strings.
  *
- * The size of the list may be given explicitely automatically determined if passed a GStrv.
+ * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be 0 if @a strv is a @c GStrv
+ * @param num The number of strings contained in @a strv. Can be 0 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings (maybe empty), or NULL if an empty list
  *         was passed in.
@@ -2068,7 +2068,6 @@ static gchar *utils_strv_find_common_prefix(gchar **strv, size_t num)
 
 	for (gint i = 0; prefix[i]; i++)
 	{
-		foreach_strv(ptr, &strv[1])
 		for (gint j = 1; j < num; j++)
 		{
 			gchar *s = strv[j];
@@ -2085,12 +2084,12 @@ static gchar *utils_strv_find_common_prefix(gchar **strv, size_t num)
 	return prefix;
 }
 
-/* * Returns the common prefix in a list of strings.
+/* * Returns the longest common substring in a list of strings.
  *
- * The size of the list may be given explicitely automatically determined if passed a GStrv.
+ * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be 0 if @a strv is a @c GStrv
+ * @param num The number of strings contained in @a strv. Can be 0 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings.
  */
@@ -2154,11 +2153,12 @@ gchar *utils_strv_find_lcs(gchar **strv, size_t num)
  * in duplicates (showing the full path might be inappropriate).
  *
  * The algorthm strips the common prefix (e-g. the user's home directory) and
- * replaces the longest common substring with "...".
+ * replaces the longest common substring with an ellipsis ("...").
  *
  * @param file_names @arraylen{num} The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be 0 if @a strv is a @c GStrv
- * @return @transfer{full} A newly-allocated NULL-terminated array of transformed paths strings. Use @c g_strfreev() to free it.
+ * @param num The number of strings contained in @a file_names. Can be 0 if it's terminated by @c NULL.
+ * @return @transfer{full} A newly-allocated array of transformed paths strings, terminated by
+            @c NULL. Use @c g_strfreev() to free it.
  *
  * @since 1.34 (API 239)
  */
