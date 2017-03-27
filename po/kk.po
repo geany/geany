@@ -5677,7 +5677,7 @@ msgstr "Буманы ағымдағы ашық жобасының басты б�
 
 #: ../plugins/saveactions.c:43
 msgid "Save Actions"
-msgstr "Әрекеттерді сақтау"
+msgstr "Сақтау әрекеттері"
 
 #: ../plugins/saveactions.c:43
 msgid "This plugin provides different actions related to saving of files."
