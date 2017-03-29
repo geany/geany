@@ -68,6 +68,7 @@ filetypes = \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.Swift.conf \
+	filedefs/filetypes.TypeScript.conf \
 	filedefs/filetypes.tcl \
 	filedefs/filetypes.txt2tags \
 	filedefs/filetypes.vala \
