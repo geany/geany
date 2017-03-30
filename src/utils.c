@@ -2155,7 +2155,7 @@ gchar *utils_strv_find_lcs(gchar **strv, size_t num)
  * The algorthm strips the common prefix (e-g. the user's home directory) and
  * replaces the longest common substring with an ellipsis ("...").
  *
- * @param file_names @arraylen{num} The list of strings to process.
+ * @param file_names @array{length=num} The list of strings to process.
  * @param num The number of strings contained in @a file_names. Can be 0 if it's terminated by @c NULL.
  * @return @transfer{full} A newly-allocated array of transformed paths strings, terminated by
             @c NULL. Use @c g_strfreev() to free it.
