@@ -53,6 +53,7 @@
 #include "sciwrappers.h"
 #include "support.h"
 #include "symbols.h"
+#include "spawn.h"
 #include "templates.h"
 #include "ui_utils.h"
 #include "utils.h"
@@ -701,6 +702,126 @@ static void request_reshowing_calltip(SCNotification *nt)
 	}
 }
 
+static GPtrArray *parse_gocode_output(gchar *result) {
+	GPtrArray *tags = g_ptr_array_new();
+	gchar class[1024], name[1024], type[1024];
+	
+	int added = 0;
+	gchar *p = result-1, *next;
+	
+	do {
+		p++;
+		/* Example:	func,,Len,,func() int */
+		next = strchr(p, ',');
+		if (next == NULL) {
+			break;
+		}
+		*next = 0;
+		strcpy(class, p);
+		p = next+1;
+		if (!p[0]) {
+			break;
+		}
+		
+		/* ignored field 1 */
+		next = strchr(p, ',');
+		if (next == NULL) {
+			break;
+		}
+		p = next+1;
+		
+		next = strchr(p, ',');
+		if (next == NULL) {
+			break;
+		}
+		*next = 0;
+		strcpy(name, p);
+		p = next+1;
+		
+		/* ignored field 2 */
+		next = strchr(p, ',');
+		if (next == NULL) {
+			break;
+		}
+		p = next+1;
+		
+		next = strchr(p, '\n');
+		if (next == NULL) {
+			break;
+		}
+		*next = 0;
+		strcpy(type, p);
+		p = next; /* notice no increment here */
+		
+		g_warning("gocode line with class='%s' name='%s' type='%s'", class, name, type);
+		
+		/* cheating here to create a tag without using proper tm_ functions */
+		TMTag *tag = g_slice_new0(TMTag);
+		tag->name = g_strdup(name);
+		tag->refcount = 1;
+		
+		if (!strcmp(class, "func")) {
+			tag->type = tm_tag_function_t;
+			tag->arglist = g_strdup(type);
+		} else if (!strcmp(class, "var")) {
+			tag->type = tm_tag_attr_vartype_t;
+			tag->var_type = g_strdup(type);
+		} else {
+			tag->type = tm_tag_other_t; /* default */
+		}
+		
+		tag->access = TAG_ACCESS_PUBLIC;
+		/* other fields to possibly populate:
+		tag->file
+		tag->line
+		tag->impl
+		tag->inheritance
+		tag->scope
+		tag->local */
+	
+		g_ptr_array_add(tags, tag);
+		added++;
+	} while (p[1]);
+
+	if (added == 0) {
+		g_ptr_array_free(tags, TRUE);
+		tags = NULL;
+	}
+
+	return tags;
+}
+
+static GPtrArray *query_gocode(gint pos, const gchar *text) {
+	GString *output = g_string_new(NULL);
+	gchar *result = NULL;
+	GError *error = NULL;
+	GPtrArray *tags = NULL;
+	SpawnWriteData input;
+	input.ptr = text;
+	input.size = strlen(text);
+
+	gchar command[512];
+	g_snprintf(command, sizeof(command), "gocode -f=csv autocomplete %d", pos);
+
+	gint exitStatus = -1;
+	if (spawn_sync(NULL, command, NULL, NULL, &input, output, NULL, &exitStatus, &error))
+	{
+		result = g_string_free(output, FALSE);
+		g_warning("gocode results (exit code = %d): %s", exitStatus, result);
+		
+		tags = parse_gocode_output(result);	
+	}
+	else
+	{
+		result = g_string_free(output, FALSE);
+		g_warning(_("Cannot execute gocode command \"%s\": %s."), command, error->message);
+		g_error_free(error);
+	}
+
+	g_free(result);
+	
+	return tags;
+}
 
 static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize rootlen)
 {
@@ -718,72 +839,83 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 	const gchar *current_scope;
 	const gchar *context_sep = tm_tag_context_separator(ft->lang);
 
-	if (autocomplete_scope_shown)
-	{
-		/* move at the operator position */
-		pos -= rootlen;
+	if (ft->id == GEANY_FILETYPES_GO) {
+		/* get current buffer */
+		gchar *text = sci_get_contents(sci, -1);
+		/* query gocode via CLI */
+		tags = query_gocode(pos, text);
+		g_free(text);
+	} else {
+		if (autocomplete_scope_shown)
+		{
+			/* move at the operator position */
+			pos -= rootlen;
+
+			/* allow for a space between word and operator */
+			while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+				pos--;
+
+			if (pos > 0)
+				typed = sci_get_char_at(sci, pos - 1);
+		}
+
+		/* make sure to keep in sync with similar checks below */
+		if (match_last_chars(sci, pos, context_sep))
+		{
+			pos -= strlen(context_sep);
+			scope_sep_typed = TRUE;
+		}
+		else if (typed == '.')
+			pos -= 1;
+		else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
+				match_last_chars(sci, pos, "->"))
+			pos -= 2;
+		else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
+			pos -= 3;
+		else
+			return FALSE;
 
 		/* allow for a space between word and operator */
 		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 			pos--;
 
-		if (pos > 0)
-			typed = sci_get_char_at(sci, pos - 1);
-	}
-
-	/* make sure to keep in sync with similar checks below */
-	if (match_last_chars(sci, pos, context_sep))
-	{
-		pos -= strlen(context_sep);
-		scope_sep_typed = TRUE;
-	}
-	else if (typed == '.')
-		pos -= 1;
-	else if ((ft->id == GEANY_FILETYPES_C || ft->id == GEANY_FILETYPES_CPP) &&
-			match_last_chars(sci, pos, "->"))
-		pos -= 2;
-	else if (ft->id == GEANY_FILETYPES_CPP && match_last_chars(sci, pos, "->*"))
-		pos -= 3;
-	else
-		return FALSE;
-
-	/* allow for a space between word and operator */
-	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
-		pos--;
-
-	/* if function or array index, skip to matching brace */
-	brace_char = sci_get_char_at(sci, pos - 1);
-	if (pos > 0 && (brace_char == ')' || brace_char == ']'))
-	{
-		gint brace_pos = sci_find_matching_brace(sci, pos - 1);
-
-		if (brace_pos != -1)
+		/* if function or array index, skip to matching brace */
+		brace_char = sci_get_char_at(sci, pos - 1);
+		if (pos > 0 && (brace_char == ')' || brace_char == ']'))
 		{
-			pos = brace_pos;
-			function = brace_char == ')';
+			gint brace_pos = sci_find_matching_brace(sci, pos - 1);
+
+			if (brace_pos != -1)
+			{
+				pos = brace_pos;
+				function = brace_char == ')';
+			}
+
+			/* allow for a space between opening brace and name */
+			while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
+				pos--;
 		}
 
-		/* allow for a space between opening brace and name */
+		name = editor_get_word_at_pos(editor, pos, NULL);
+		if (!name)
+			return FALSE;
+
+		/* check if invoked on member */
+		pos -= strlen(name);
 		while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
 			pos--;
+		/* make sure to keep in sync with similar checks above */
+		member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, context_sep) ||
+				 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
+
+		if (symbols_get_current_scope(editor->document, &current_scope) == -1)
+			current_scope = "";
+
+		tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
+					member, current_scope, scope_sep_typed);
+		g_free(name);
 	}
 
-	name = editor_get_word_at_pos(editor, pos, NULL);
-	if (!name)
-		return FALSE;
-
-	/* check if invoked on member */
-	pos -= strlen(name);
-	while (pos > 0 && isspace(sci_get_char_at(sci, pos - 1)))
-		pos--;
-	/* make sure to keep in sync with similar checks above */
-	member = match_last_chars(sci, pos, ".") || match_last_chars(sci, pos, context_sep) ||
-			 match_last_chars(sci, pos, "->") || match_last_chars(sci, pos, "->*");
-
-	if (symbols_get_current_scope(editor->document, &current_scope) == -1)
-		current_scope = "";
-	tags = tm_workspace_find_scope_members(editor->document->tm_file, name, function,
-				member, current_scope, scope_sep_typed);
 	if (tags)
 	{
 		GPtrArray *filtered = g_ptr_array_new();
@@ -806,10 +938,8 @@ static gboolean autocomplete_scope(GeanyEditor *editor, const gchar *root, gsize
 		g_ptr_array_free(filtered, TRUE);
 	}
 
-	g_free(name);
 	return ret;
 }
-
 
 static void on_char_added(GeanyEditor *editor, SCNotification *nt)
 {
@@ -1905,6 +2035,8 @@ static gchar *find_calltip(const gchar *word, GeanyFiletype *ft)
 	TMTag *tag;
 	GString *str = NULL;
 	guint i;
+	
+	/* TODO: use here Go-specific autocomplete call for the calltips */
 
 	g_return_val_if_fail(ft && word && *word, NULL);
 
