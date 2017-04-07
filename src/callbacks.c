@@ -1975,6 +1975,7 @@ G_MODULE_EXPORT void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gp
 	{
 		editor_set_indent_type(doc->editor, type);
 		ui_document_show_hide(doc);
+		ui_update_statusbar(doc, -1);
 	}
 }
 
