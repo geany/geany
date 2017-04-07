@@ -98,6 +98,7 @@ static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar *
 #endif
 
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
+#define MAX_EMPTY_GIO_INS 3
 
 
 /*
@@ -842,21 +843,42 @@ typedef struct _SpawnChannelData
 	GString *buffer;       /* NULL if recursive */
 	GString *line_buffer;  /* NULL if char buffered */
 	gsize max_length;
+	/* stdout/stderr: fix continuous empty G_IO_IN-s for recursive channels */
+	guint empty_gio_ins;
 } SpawnChannelData;
 
 
-static void spawn_destroy_cb(gpointer data)
+static void spawn_destroy_common(SpawnChannelData *sc)
 {
-	SpawnChannelData *sc = (SpawnChannelData *) data;
-
 	g_io_channel_shutdown(sc->channel, FALSE, NULL);
-	sc->channel = NULL;
 
 	if (sc->buffer)
 		g_string_free(sc->buffer, TRUE);
 
 	if (sc->line_buffer)
 		g_string_free(sc->line_buffer, TRUE);
+}
+
+
+static void spawn_timeout_destroy_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	spawn_destroy_common(sc);
+	g_io_channel_unref(sc->channel);
+	sc->channel = NULL;
+}
+
+
+static void spawn_destroy_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	if (sc->empty_gio_ins < MAX_EMPTY_GIO_INS)
+	{
+		spawn_destroy_common(sc);
+		sc->channel = NULL;
+	}
 }
 
 
@@ -871,6 +893,16 @@ static gboolean spawn_write_cb(GIOChannel *channel, GIOCondition condition, gpoi
 }
 
 
+static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpointer data);
+
+static gboolean spawn_timeout_read_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	/* The solution for continuous empty G_IO_IN-s is to generate them outselves. :) */
+	return spawn_read_cb(sc->channel, G_IO_IN, data);
+}
+
 static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpointer data)
 {
 	SpawnChannelData *sc = (SpawnChannelData *) data;
@@ -878,6 +910,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	GString *buffer = sc->buffer ? sc->buffer : g_string_sized_new(sc->max_length);
 	GIOCondition input_cond = condition & (G_IO_IN | G_IO_PRI);
 	GIOCondition failure_cond = condition & G_IO_FAILURE;
+	GIOStatus status = G_IO_STATUS_NORMAL;
 	/*
 	 * - Normally, read only once. With IO watches, our data processing must be immediate,
 	 *   which may give the child time to emit more data, and a read loop may combine it into
@@ -888,7 +921,6 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	if (input_cond)
 	{
 		gsize chars_read;
-		GIOStatus status;
 
 		if (line_buffer)
 		{
@@ -967,6 +999,23 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 
 		sc->cb.read(buffer, input_cond | failure_cond, sc->cb_data);
 	}
+	/* Check for continuous activations with G_IO_IN | G_IO_PRI, without any
+	   data to read and without errors. If detected, switch to timeout source. */
+	else if (sc->empty_gio_ins < MAX_EMPTY_GIO_INS && status == G_IO_STATUS_AGAIN)
+	{
+		if (++sc->empty_gio_ins == MAX_EMPTY_GIO_INS)
+		{
+			GSource *old_source = g_main_current_source();
+			GSource *new_source = g_timeout_source_new(50);
+
+			g_io_channel_ref(sc->channel);
+			g_source_set_can_recurse(new_source, g_source_get_can_recurse(old_source));
+			g_source_set_callback(new_source, spawn_timeout_read_cb, data, spawn_timeout_destroy_cb);
+			g_source_attach(new_source, g_source_get_context(old_source));
+			g_source_unref(new_source);
+			failure_cond |= G_IO_ERR;
+		}
+	}
 
 	if (buffer != sc->buffer)
 		g_string_free(buffer, TRUE);
@@ -1003,7 +1052,7 @@ static void spawn_finalize(SpawnWatcherData *sw)
 }
 
 
-static gboolean spawn_timeout_cb(gpointer data)
+static gboolean spawn_timeout_watch_cb(gpointer data)
 {
 	SpawnWatcherData *sw = (SpawnWatcherData *) data;
 	int i;
@@ -1031,7 +1080,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 		{
 			GSource *source = g_timeout_source_new(50);
 
-			g_source_set_callback(source, spawn_timeout_cb, data, NULL);
+			g_source_set_callback(source, spawn_timeout_watch_cb, data, NULL);
 			g_source_attach(source, sw->main_context);
 			g_source_unref(source);
 			return;
@@ -1065,6 +1114,9 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  The default max lengths are 24K for line buffered stdout, 8K for line buffered stderr,
  *  4K for unbuffered input under Unix, and 2K for unbuffered input under Windows.
+ *
+ *  Due to a bug in some glib versions, the sources for recursive stdout/stderr callbacks may
+ *  be converted from child watch to timeout(50ms). No callback changes are required.
  *
  *  @c exit_cb is always invoked last, after all I/O callbacks.
  *
@@ -1171,6 +1223,8 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 					sc->line_buffer = g_string_sized_new(sc->max_length +
 						DEFAULT_IO_LENGTH);
 				}
+
+				sc->empty_gio_ins = 0;
 			}
 
 			source = g_io_create_watch(sc->channel, condition);
