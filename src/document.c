@@ -3614,19 +3614,24 @@ static void monitor_reload_file(GeanyDocument *doc)
 	/* show this message only once */
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD] == NULL)
 	{
-		GtkWidget *bar;
+		/* don't create info bar if file hasn't been edited at all */
+		if (doc->changed) {
+			GtkWidget *bar;
 
-		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-				_("_Reload"), RESPONSE_DOCUMENT_RELOAD,
-				_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				_("Do you want to reload it?"),
-				_("The file '%s' on the disk is more recent than the current buffer."),
-				base_name);
+			bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
+					_("_Reload"), RESPONSE_DOCUMENT_RELOAD,
+					_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
+					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					_("Do you want to reload it?"),
+					_("The file '%s' on the disk is more recent than the current buffer."),
+					base_name);
 
-		protect_document(doc);
-		doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
-		enable_key_intercept(doc, bar);
+			protect_document(doc);
+			doc->priv->info_bars[MSG_TYPE_RELOAD] = bar;
+			enable_key_intercept(doc, bar);
+		} else {
+			document_reload_force(doc, doc->encoding);
+		}
 	}
 	g_free(base_name);
 }
