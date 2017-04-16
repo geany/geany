@@ -98,7 +98,7 @@ static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar *
 #endif
 
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
-#define MAX_EMPTY_GIO_INS 3
+#define MAX_EMPTY_GIO_INS 200
 
 
 /*
