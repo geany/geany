@@ -2478,7 +2478,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 /* Move the cursor to the next specified cursor position in an inserted snippet.
  * Can, and should, be optimized to give better results */
-void editor_goto_next_snippet_cursor(GeanyEditor *editor)
+gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gint current_pos = sci_get_current_position(sci);
@@ -2494,10 +2494,12 @@ void editor_goto_next_snippet_cursor(GeanyEditor *editor)
 			snippet_cursor_insert_pos += offset;
 
 		sci_set_current_position(sci, snippet_cursor_insert_pos, TRUE);
+		return TRUE;
 	}
 	else
 	{
 		utils_beep();
+		return FALSE;
 	}
 }
 

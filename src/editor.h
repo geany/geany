@@ -237,7 +237,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 gboolean editor_complete_word_part(GeanyEditor *editor);
 
-void editor_goto_next_snippet_cursor(GeanyEditor *editor);
+gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 
