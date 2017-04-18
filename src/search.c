@@ -1559,7 +1559,7 @@ static GString *get_grep_options(void)
 	if (settings.fif_match_whole_word)
 		g_string_append_c(gstr, 'w');
 	if (settings.fif_recursive)
-		g_string_append_c(gstr, 'r');
+		g_string_append_c(gstr, 'R');
 
 	if (!settings.fif_regexp)
 		g_string_append_c(gstr, 'F');
