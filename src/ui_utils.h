@@ -70,6 +70,7 @@ typedef struct GeanyInterfacePrefs
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
 	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
+	gint			editor_split;				/**< orientation of the editor split paned */
 }
 GeanyInterfacePrefs;
 
@@ -81,7 +82,7 @@ typedef struct GeanyMainWidgets
 	GtkWidget	*window;			/**< Main window. */
 	GtkWidget	*toolbar;			/**< Main toolbar. */
 	GtkWidget	*sidebar_notebook;	/**< Sidebar notebook. */
-	GtkWidget	*notebook;			/**< Document notebook. */
+	GtkWidget	*notebook;			/**< Primary document notebook for ABI compat.  */
 	GtkWidget	*editor_menu;		/**< Popup editor menu. */
 	GtkWidget	*tools_menu;		/**< Most plugins add menu items to the Tools menu. */
 	/** Progress bar widget in the status bar to show progress of various actions.
@@ -90,6 +91,7 @@ typedef struct GeanyMainWidgets
 	GtkWidget	*message_window_notebook; /**< Message Window notebook. */
 	/** Plugins modifying the project can add their items to the Project menu. */
 	GtkWidget	*project_menu;
+	GPtrArray	*notebooks;			/**< Array of document notebooks. */
 }
 GeanyMainWidgets;
 
