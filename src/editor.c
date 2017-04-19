@@ -72,8 +72,6 @@
 #define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 static GHashTable *snippet_hash = NULL;
-static GQueue *snippet_offsets = NULL;
-static gint snippet_cursor_insert_pos;
 static GtkAccelGroup *snippet_accel_group = NULL;
 static gboolean autocomplete_scope_shown = FALSE;
 
@@ -112,7 +110,6 @@ static void read_current_word(GeanyEditor *editor, gint pos, gchar *word, gsize 
 static gsize count_indent_size(GeanyEditor *editor, const gchar *base_indent);
 static const gchar *snippets_find_completion_by_name(const gchar *type, const gchar *name);
 static void snippets_make_replacements(GeanyEditor *editor, GString *pattern);
-static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern);
 static GeanyFiletype *editor_get_filetype_at_line(GeanyEditor *editor, gint line);
 static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
 
@@ -120,7 +117,6 @@ static gboolean sci_is_blank_line(ScintillaObject *sci, gint line);
 void editor_snippets_free(void)
 {
 	g_hash_table_destroy(snippet_hash);
-	g_queue_free(snippet_offsets);
 	gtk_window_remove_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
 }
 
@@ -271,8 +267,6 @@ void editor_snippets_init(void)
 	gchar *sysconfigfile, *userconfigfile;
 	GKeyFile *sysconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
-
-	snippet_offsets = g_queue_new();
 
 	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
 	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
@@ -2394,6 +2388,50 @@ static void fix_indentation(GeanyEditor *editor, GString *buf)
 }
 
 
+typedef struct
+{
+	Sci_Position start, len;
+} SelectionRange;
+
+
+#define CURSOR_PLACEHOLDER "…" /* U+2026 */
+/* Replaces the internal cursor markers with the placeholder suitable for
+ * display. Except for the first cursor if indicator_for_first is FALSE,
+ * which is simply deleted.
+ *
+ * Returns insertion points as SelectionRange list, so that the caller
+ * can use the positions (currently for indicators). */
+static GSList *replace_cursor_markers(GeanyEditor *editor, GString *template,
+									  gboolean indicator_for_first)
+{
+	gssize cur_index = -1;
+	gint i = 0;
+	GSList *temp_list = NULL;
+	gint cursor_steps = 0, old_cursor = 0;
+	SelectionRange *sel;
+
+	while (TRUE)
+	{
+		cursor_steps = utils_string_find(template, cursor_steps, -1, geany_cursor_marker);
+		if (cursor_steps == -1)
+			break;
+
+		sel = g_new0(SelectionRange, 1);
+		sel->start = cursor_steps;
+		g_string_erase(template, cursor_steps, strlen(geany_cursor_marker));
+		if (i > 0 || indicator_for_first)
+		{
+			g_string_insert(template, cursor_steps, CURSOR_PLACEHOLDER);
+			sel->len = sizeof(CURSOR_PLACEHOLDER) - 1;
+		}
+		i += 1;
+		temp_list = g_slist_append(temp_list, sel);
+	}
+
+	return temp_list;
+}
+
+
 /** Inserts text, replacing \\t tab chars (@c 0x9) and \\n newline chars (@c 0xA)
  * accordingly for the document.
  * - Leading tabs are replaced with the correct indentation.
@@ -2421,6 +2459,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	GString *buf;
 	const gchar *eol = editor_get_eol_char(editor);
 	gint idx;
+	GSList *jump_locs, *item;
 
 	g_return_if_fail(text);
 	g_return_if_fail(editor != NULL);
@@ -2461,18 +2500,47 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	fix_indentation(editor, buf);
 
-	idx = replace_cursor_markers(editor, buf);
-	if (idx >= 0)
-	{
-		sci_insert_text(sci, insert_pos, buf->str);
+	jump_locs = replace_cursor_markers(editor, buf, cursor_index < 0);
+	sci_insert_text(sci, insert_pos, buf->str);
+	if (cursor_index >= 0)
 		sci_set_current_position(sci, insert_pos + idx, FALSE);
+
+	foreach_list(item, jump_locs)
+	{
+		SelectionRange *sel = item->data;
+		gint start = insert_pos + sel->start;
+		gint end = start + sel->len;
+		editor_indicator_set_on_range(editor, GEANY_INDICATOR_SNIPPET, start, end);
+		/* jump to first cursor position initially */
+		if (item == jump_locs)
+			sci_set_selection(sci, start, end);
 	}
-	else
-		sci_insert_text(sci, insert_pos, buf->str);
 
-	snippet_cursor_insert_pos = sci_get_current_position(sci);
-
+	g_slist_free_full(jump_locs, g_free);
 	g_string_free(buf, TRUE);
+}
+
+
+static gboolean find_next_snippet_indicator(GeanyEditor *editor, SelectionRange *sel)
+{
+	ScintillaObject *sci = editor->sci;
+	gint val;
+	gint pos = sci_get_current_position(sci);
+	gint start;
+
+	/* Rewind the cursor a bit if we're in the middle (or start) of an indicator,
+	 * and treat that as the next indicator. */
+	while (SSM(sci, SCI_INDICATORVALUEAT, GEANY_INDICATOR_SNIPPET, pos) && pos > 0)
+		pos -= 1;
+
+	start = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, pos);
+	if (start == 0)
+		return FALSE; /* EOF */
+
+	sel->start = start;
+	sel->len = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, start) - start;
+
+	return TRUE;
 }
 
 
@@ -2482,18 +2550,12 @@ gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
 	gint current_pos = sci_get_current_position(sci);
+	SelectionRange sel;
 
-	if (snippet_offsets && !g_queue_is_empty(snippet_offsets))
+	if (find_next_snippet_indicator(editor, &sel))
 	{
-		gint offset;
-
-		offset = GPOINTER_TO_INT(g_queue_pop_head(snippet_offsets));
-		if (current_pos > snippet_cursor_insert_pos)
-			snippet_cursor_insert_pos = offset + current_pos;
-		else
-			snippet_cursor_insert_pos += offset;
-
-		sci_set_current_position(sci, snippet_cursor_insert_pos, TRUE);
+		sci_indicator_set(sci, GEANY_INDICATOR_SNIPPET);
+		sci_set_selection(sci, sel.start, sel.start + sel.len);
 		return TRUE;
 	}
 	else
@@ -2527,60 +2589,6 @@ static void snippets_make_replacements(GeanyEditor *editor, GString *pattern)
 
 	/* replace any template {foo} wildcards */
 	templates_replace_common(pattern, editor->document->file_name, editor->document->file_type, NULL);
-}
-
-
-static gssize replace_cursor_markers(GeanyEditor *editor, GString *pattern)
-{
-	gssize cur_index = -1;
-	gint i;
-	GList *temp_list = NULL;
-	gint cursor_steps = 0, old_cursor = 0;
-
-	i = 0;
-	while (1)
-	{
-		cursor_steps = utils_string_find(pattern, cursor_steps, -1, geany_cursor_marker);
-		if (cursor_steps == -1)
-			break;
-
-		g_string_erase(pattern, cursor_steps, strlen(geany_cursor_marker));
-
-		if (i++ > 0)
-		{
-			/* save the relative offset to each cursor position */
-			temp_list = g_list_prepend(temp_list, GINT_TO_POINTER(cursor_steps - old_cursor));
-		}
-		else
-		{
-			/* first cursor already includes newline positions */
-			cur_index = cursor_steps;
-		}
-		old_cursor = cursor_steps;
-	}
-
-	/* put the cursor positions for the most recent
-	 * parsed snippet first, followed by any remaining positions */
-	i = 0;
-	if (temp_list)
-	{
-		GList *node;
-
-		temp_list = g_list_reverse(temp_list);
-		foreach_list(node, temp_list)
-			g_queue_push_nth(snippet_offsets, node->data, i++);
-
-		/* limit length of queue */
-		while (g_queue_get_length(snippet_offsets) > 20)
-			g_queue_pop_tail(snippet_offsets);
-
-		g_list_free(temp_list);
-	}
-	/* if there's no first cursor, skip whole snippet */
-	if (cur_index < 0)
-		cur_index = pattern->len;
-
-	return cur_index;
 }
 
 

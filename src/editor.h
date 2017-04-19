@@ -70,7 +70,8 @@ typedef enum
 	/** Indicator used to highlight search results in the document. This is a
 	 *  rounded box around the text. */
 	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */
-	GEANY_INDICATOR_SEARCH = 8
+	GEANY_INDICATOR_SEARCH = 8,
+	GEANY_INDICATOR_SNIPPET = 9
 }
 GeanyIndicator;
 
