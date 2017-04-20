@@ -20,6 +20,7 @@ test_sources = \
 	array-spec.f90					\
 	attributes.cs					\
 	auto.f							\
+	backslashes.c					\
 	bit_field.c						\
 	block.f90						\
 	bracematch.js					\
