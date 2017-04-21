@@ -59,6 +59,7 @@ static const GtkActionEntry ui_entries[] = {
 	{ "SaveAs", GTK_STOCK_SAVE_AS, NULL, NULL, N_("Save as"), G_CALLBACK(on_save_as1_activate) },
 	{ "SaveAll", GEANY_STOCK_SAVE_ALL, NULL, NULL, N_("Save all open files"), G_CALLBACK(on_save_all1_activate) },
 	{ "Reload", GTK_STOCK_REVERT_TO_SAVED, NULL, NULL, N_("Reload the current file from disk"), G_CALLBACK(on_toolbutton_reload_clicked) },
+	{ "ReloadAll", GEANY_STOCK_RELOAD_ALL, NULL, NULL, N_("Reload all session file from disk"), G_CALLBACK(on_toolbutton_reload_all_clicked) },
 	{ "Close", GTK_STOCK_CLOSE, NULL, NULL, N_("Close the current file"), G_CALLBACK(on_close1_activate) },
 	{ "CloseAll", GEANY_STOCK_CLOSE_ALL, NULL, NULL, N_("Close all open files"), G_CALLBACK(on_close_all1_activate) },
 	{ "Cut", GTK_STOCK_CUT, NULL, NULL, N_("Cut the current selection"), G_CALLBACK(on_cut1_activate) },
@@ -96,6 +97,7 @@ static const gchar *toolbar_markup =
 	"<toolitem action='SaveAll'/>"
 	"<separator/>"
 	"<toolitem action='Reload'/>"
+	"<toolitem action='ReloadAll'/>"
 	"<toolitem action='Close'/>"
 	"<separator/>"
 	"<toolitem action='NavBack'/>"

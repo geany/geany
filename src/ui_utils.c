@@ -883,6 +883,7 @@ static void init_document_widgets(void)
 	add_doc_widget("menu_undo2");
 	add_doc_widget("properties1");
 	add_doc_widget("menu_reload1");
+	add_doc_widget("menu_reload_all1");
 	add_doc_widget("menu_document1");
 	add_doc_widget("menu_choose_color1");
 	add_doc_widget("menu_color_schemes");
@@ -937,6 +938,7 @@ static void init_document_widgets(void)
 	add_doc_toolitem("Compile");
 	add_doc_toolitem("Run");
 	add_doc_toolitem("Reload");
+	add_doc_toolitem("ReloadAll");
 	add_doc_toolitem("Color");
 	add_doc_toolitem("Goto");
 	add_doc_toolitem("GotoEntry");
@@ -1469,7 +1471,7 @@ void ui_update_view_editor_menu_items(void)
  *
  * @return @transfer{floating} The frame widget, setting the alignment container for
  * packing child widgets.
- * 
+ *
  * @deprecated 1.29: Use GTK API directly
  **/
 GEANY_API_SYMBOL
@@ -2199,7 +2201,8 @@ void ui_init_stock_items(void)
 	{
 		{ GEANY_STOCK_SAVE_ALL, N_("Save All"), 0, 0, GETTEXT_PACKAGE },
 		{ GEANY_STOCK_CLOSE_ALL, N_("Close All"), 0, 0, GETTEXT_PACKAGE },
-		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE }
+		{ GEANY_STOCK_BUILD, N_("Build"), 0, 0, GETTEXT_PACKAGE },
+		{ GEANY_STOCK_RELOAD_ALL, N_("Reload All"), 0, 0, GETTEXT_PACKAGE }
 	};
 
 	gtk_stock_add(items, G_N_ELEMENTS(items));

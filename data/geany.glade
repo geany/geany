@@ -704,6 +704,12 @@
     <property name="stock">gtk-find</property>
     <property name="icon-size">1</property>
   </object>
+  <object class="GtkImage" id="image4084">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">geany-reload-all</property>
+    <property name="icon-size">1</property>
+  </object>
   <object class="GtkListStore" id="indent_mode_list">
     <columns>
       <!-- column-name item -->
@@ -6432,6 +6438,17 @@
                             <property name="image">image4058</property>
                             <property name="use_stock">False</property>
                             <signal name="activate" handler="on_toolbutton_reload_clicked" swapped="no"/>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImageMenuItem" id="menu_reload_all1">
+                            <property name="label" translatable="yes">Reloa_d All</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="use_underline">True</property>
+                            <property name="image">image4084</property>
+                            <property name="use_stock">False</property>
+                            <signal name="activate" handler="on_toolbutton_reload_all_clicked" swapped="no"/>
                           </object>
                         </child>
                         <child>

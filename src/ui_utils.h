@@ -97,6 +97,7 @@ GeanyMainWidgets;
 #define GEANY_STOCK_SAVE_ALL "geany-save-all"
 #define GEANY_STOCK_CLOSE_ALL "geany-close-all"
 #define GEANY_STOCK_BUILD "geany-build"
+#define GEANY_STOCK_RELOAD_ALL "geany-reload-all"
 
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
