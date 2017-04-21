@@ -110,11 +110,11 @@ static void cb_func_move_tab(guint key_id);
 static void add_popup_menu_accels(void);
 
 
-/** Gets significant modifiers from a GdkModifierType mask. The set of 
- * significant modifiers corresponds to the default modifier mask as returned 
+/** Gets significant modifiers from a GdkModifierType mask. The set of
+ * significant modifiers corresponds to the default modifier mask as returned
  * by @c gtk_accelerator_get_default_mod_mask(). In addition, it improves
  * the Command key handling on OS X by adding @c GEANY_PRIMARY_MOD_MASK
- * when needed. For this reason it is preferred to use this function 
+ * when needed. For this reason it is preferred to use this function
  * instead of @c gtk_accelerator_set_default_mod_mask().
  * @param mods GdkModifierType mask.
  * @return Significant modifiers from the mask.
@@ -354,6 +354,9 @@ static void init_default_kb(void)
 		"menu_close_all1");
 	add_kb(group, GEANY_KEYS_FILE_RELOAD, NULL,
 		GDK_r, GEANY_PRIMARY_MOD_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
+	add_kb(group, GEANY_KEYS_FILE_RELOAD_ALL, NULL,
+		GDK_r, GDK_MOD1_MASK, "menu_reloadallfile", _("Reload all file"),
+		"menu_reload_all1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
 	add_kb(group, GEANY_KEYS_FILE_QUIT, NULL,
@@ -1457,6 +1460,9 @@ static gboolean cb_func_file_action(guint key_id)
 			break;
 		case GEANY_KEYS_FILE_RELOAD:
 			on_toolbutton_reload_clicked(NULL, NULL);
+			break;
+		case GEANY_KEYS_FILE_RELOAD_ALL:
+			on_toolbutton_reload_all_clicked(NULL, NULL);
 			break;
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
@@ -2697,12 +2703,10 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 		group = g_new0(GeanyKeyGroup, 1);
 		add_kb_group(group, section_name, label, callback, TRUE);
 	}
-	/* Calls free_key_binding() for individual entries for plugins - has to be
-	 * called before g_free(group->plugin_keys) */
-	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
+	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 
