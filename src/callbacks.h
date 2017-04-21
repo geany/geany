@@ -99,6 +99,8 @@ void on_find_in_files1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data);
 
+void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data);
+
 void on_go_to_line_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_help1_activate(GtkMenuItem *menuitem, gpointer user_data);

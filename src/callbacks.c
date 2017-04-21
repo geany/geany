@@ -327,14 +327,27 @@ void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-/* reload file */
-void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
+static void reloadDoc(GeanyDocument *doc)
 {
-	GeanyDocument *doc = document_get_current();
-
 	g_return_if_fail(doc != NULL);
 
 	document_reload_prompt(doc, NULL);
+}
+
+
+/* reload file */
+void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
+{
+	reloadDoc(document_get_current());
+}
+
+
+/* reload all file */
+void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
+{
+	for (guint doc_count = 0; doc_count < documents_array->len; ++doc_count) {
+		reloadDoc(document_get_from_page(doc_count));
+	}
 }
 
 
@@ -1912,7 +1925,6 @@ static void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		editor_set_indent_type(doc->editor, type);
 		ui_document_show_hide(doc);
-		ui_update_statusbar(doc, -1);
 	}
 }
 
