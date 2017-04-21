@@ -8,4 +8,5 @@ dist_icons_apps_DATA =		\
 dist_icons_actions_DATA =	\
 	geany-build.svg			\
 	geany-close-all.svg		\
-	geany-save-all.svg
+	geany-save-all.svg		\
+	geany-reload-all.svg
