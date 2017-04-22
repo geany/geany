@@ -1925,6 +1925,7 @@ static void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		editor_set_indent_type(doc->editor, type);
 		ui_document_show_hide(doc);
+		ui_update_statusbar(doc, -1);
 	}
 }
 
