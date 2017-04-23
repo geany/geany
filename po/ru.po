@@ -1176,7 +1176,7 @@ msgid ""
 "(usually not needed)"
 msgstr ""
 "Эта опция отключает автоматическое определение кодировки файла при открытии; "
-"файлы c кодировкой, отличной от Unicode, будут открыватся в указанной "
+"файлы c кодировкой, отличной от Unicode, будут открываться в указанной "
 "кодировке. Обычно в этом нет необходимости."
 
 #: ../data/geany.glade.h:242
@@ -1517,7 +1517,7 @@ msgstr "Оболочка:"
 
 #: ../data/geany.glade.h:316
 msgid "Sets the foreground color of the text in the terminal widget"
-msgstr "Устанавлиивает цвет текста для окна терминала"
+msgstr "Устанавливает цвет текста для окна терминала"
 
 #: ../data/geany.glade.h:317
 msgid "Sets the background color of the text in the terminal widget"
@@ -3364,7 +3364,7 @@ msgstr "Прокрутить вниз на одну строку"
 
 #: ../src/keybindings.c:402
 msgid "Complete snippet"
-msgstr "Завешить фрагмент кода"
+msgstr "Завершить фрагмент кода"
 
 #: ../src/keybindings.c:404
 msgid "Move cursor in snippet"
@@ -6293,7 +6293,7 @@ msgstr "По горизонтали"
 #~ msgstr "Собрать:"
 
 #~ msgid "Choose Project Run Command"
-#~ msgstr "Выберите команду запсука проекта"
+#~ msgstr "Выберите команду запуска проекта"
 
 #~ msgid ""
 #~ "Command-line to run in the project base directory. Options can be "
@@ -6386,7 +6386,7 @@ msgstr "По горизонтали"
 #~ msgstr "Установить программы и опции для сборки и просмотра (La)TeX файлов."
 
 #~ msgid "Set the commands for building and running programs."
-#~ msgstr "Установить команды для сборки и запуска програм."
+#~ msgstr "Установить команды для сборки и запуска программ."
 
 #~ msgid "Terminal plugin"
 #~ msgstr "Модуль терминала"
