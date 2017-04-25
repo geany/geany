@@ -176,7 +176,7 @@ libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
 
-You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_28`` C
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_32`` C
 preprocessor flag to get warnings about newer symbols from the GLib.
 
 On the contrary, you might also want to get deprecation warnings for symbols
@@ -196,7 +196,7 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.27.3 and GTK 2.24. At least for the
+* Your code should build against GLib 2.32 and GTK 2.24. At least for the
   moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
