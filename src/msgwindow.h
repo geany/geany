@@ -103,6 +103,8 @@ void msgwin_show_hide_tabs(void);
 
 void msgwin_shift_line_numbers(GeanyDocument *doc, gint line, gint added);
 
+void msgwin_forget_line_shifts(GeanyDocument *doc);
+
 
 void msgwin_menu_add_common_items(GtkMenu *menu);
 

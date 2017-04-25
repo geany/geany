@@ -1380,3 +1380,15 @@ void msgwin_shift_line_numbers(GeanyDocument *doc, gint line, gint added)
 			record_line_shift(msgwindow.line_shifts_compiler, doc, line, added);
 	}
 }
+
+
+void msgwin_forget_line_shifts(GeanyDocument *doc)
+{
+	if (doc->file_name)
+	{
+		if (msgwindow.line_shifts_msg)
+			g_hash_table_remove(msgwindow.line_shifts_msg, doc->file_name);
+		if (msgwindow.line_shifts_compiler)
+			g_hash_table_remove(msgwindow.line_shifts_compiler, doc->file_name);
+	}
+}
