@@ -98,7 +98,6 @@ static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar *
 #endif
 
 #define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
-#define MAX_EMPTY_GIO_INS 200
 
 
 /*
@@ -847,6 +846,8 @@ typedef struct _SpawnChannelData
 	guint empty_gio_ins;
 } SpawnChannelData;
 
+#define SPAWN_CHANNEL_GIO_WATCH(sc) ((sc)->empty_gio_ins < 200)
+
 
 static void spawn_destroy_common(SpawnChannelData *sc)
 {
@@ -874,7 +875,7 @@ static void spawn_destroy_cb(gpointer data)
 {
 	SpawnChannelData *sc = (SpawnChannelData *) data;
 
-	if (sc->empty_gio_ins < MAX_EMPTY_GIO_INS)
+	if (SPAWN_CHANNEL_GIO_WATCH(sc))
 	{
 		spawn_destroy_common(sc);
 		sc->channel = NULL;
@@ -917,6 +918,8 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	 *   large stdout and stderr portions. Under Windows, looping blocks.
 	 * - On failure, read in a loop. It won't block now, there will be no more data, and the
 	 *   IO watch is not guaranteed to be called again (under Windows this is the last call).
+	 * - When using timeout callbacks, read in a loop. Otherwise, the input processing will
+	 *   be limited to (1/0.050 * DEFAULT_IO_LENGTH) KB/sec, which is pretty low.
 	 */
 	if (input_cond)
 	{
@@ -955,7 +958,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 					}
 				}
 
-				if (!failure_cond)
+				if (SPAWN_CHANNEL_GIO_WATCH(sc) && !failure_cond)
 					break;
 			}
 		}
@@ -968,7 +971,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 				/* input only, failures are reported separately below */
 				sc->cb.read(buffer, input_cond, sc->cb_data);
 
-				if (!failure_cond)
+				if (SPAWN_CHANNEL_GIO_WATCH(sc) && !failure_cond)
 					break;
 			}
 		}
@@ -1001,9 +1004,11 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	}
 	/* Check for continuous activations with G_IO_IN | G_IO_PRI, without any
 	   data to read and without errors. If detected, switch to timeout source. */
-	else if (sc->empty_gio_ins < MAX_EMPTY_GIO_INS && status == G_IO_STATUS_AGAIN)
+	else if (SPAWN_CHANNEL_GIO_WATCH(sc) && status == G_IO_STATUS_AGAIN)
 	{
-		if (++sc->empty_gio_ins == MAX_EMPTY_GIO_INS)
+		sc->empty_gio_ins++;
+
+		if (!SPAWN_CHANNEL_GIO_WATCH(sc))
 		{
 			GSource *old_source = g_main_current_source();
 			GSource *new_source = g_timeout_source_new(50);
