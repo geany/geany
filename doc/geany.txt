@@ -3556,22 +3556,29 @@ Next message                                              Jumps to the line with
 Previous message                                          Jumps to the line with the previous message
                                                           in the Messages window.
 
-Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection in all open
+Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word
+                                                          or selection (see note below) in all open
                                                           documents and displays them in the messages
                                                           window.
 
-Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection in the current
+Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word
+                                                          or selection (see note below) in the current
                                                           document and displays them in the messages
                                                           window.
 
 Mark All                        Ctrl-Shift-M              Highlight all matches of the current
-                                                          word/selection in the current document
-                                                          with a colored box. If there's nothing to
-                                                          find, or the cursor is next to an existing match,
-                                                          the highlighted matches will be cleared.
+                                                          word/selection (see note below) in the current
+                                                          document with a colored box. If there's nothing
+                                                          to find, or the cursor is next to an existing
+                                                          match, the highlighted matches will be cleared.
 =============================== ========================= ==================================================
+
+.. note::
+    The keybindings marked "see note below" work like this: if no text is
+    selected, the word under cursor is used, and *it has to match fully*
+    (like when `Match only a whole word` is enabled in the Search dialog).
+    However if some text is selected, then it is matched regardless of
+    word boundaries.
 
 
 Go to keybindings
