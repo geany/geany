@@ -2502,8 +2502,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	jump_locs = replace_cursor_markers(editor, buf, cursor_index < 0);
 	sci_insert_text(sci, insert_pos, buf->str);
-	if (cursor_index >= 0)
-		sci_set_current_position(sci, insert_pos + idx, FALSE);
 
 	foreach_list(item, jump_locs)
 	{
@@ -2515,6 +2513,12 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 		if (item == jump_locs)
 			sci_set_selection(sci, start, end);
 	}
+
+	/* Set cursor to the requested index, or by default to after the snippet */
+	if (cursor_index >= 0)
+		sci_set_current_position(sci, insert_pos + idx, FALSE);
+	else if (jump_locs == NULL)
+		sci_set_current_position(sci, insert_pos + buf->len, FALSE);
 
 	g_slist_free_full(jump_locs, g_free);
 	g_string_free(buf, TRUE);
