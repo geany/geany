@@ -3329,7 +3329,7 @@ Close                           Ctrl-W  (C)               Closes the current fil
 
 Reload file                     Ctrl-R  (C)               Reloads the current file.
 
-Reload all                      Alt-R                     Reloads all opened file.
+Reload all                      Alt-R                     Reloads all open files.
 
 Print                           Ctrl-P  (C)               Prints the current file.
 
@@ -5015,7 +5015,7 @@ Open               Open an existing file
 Save               Save the current file
 SaveAll            Save all open files
 Reload             Reload the current file from disk
-ReloadAll          Reload all session file from disk
+ReloadAll          Reload all open files from disk
 Close              Close the current file
 CloseAll           Close all open files
 Print              Print the current file

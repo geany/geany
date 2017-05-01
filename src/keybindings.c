@@ -355,7 +355,7 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FILE_RELOAD, NULL,
 		GDK_r, GEANY_PRIMARY_MOD_MASK, "menu_reloadfile", _("Reload file"), "menu_reload1");
 	add_kb(group, GEANY_KEYS_FILE_RELOAD_ALL, NULL,
-		GDK_r, GDK_MOD1_MASK, "menu_reloadallfile", _("Reload all file"),
+		GDK_r, GDK_MOD1_MASK, "menu_reloadallfiles", _("Reload all files"),
 		"menu_reload_all1");
 	add_kb(group, GEANY_KEYS_FILE_OPENLASTTAB, NULL,
 		0, 0, "file_openlasttab", _("Re-open last closed tab"), NULL);
