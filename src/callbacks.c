@@ -342,11 +342,13 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 }
 
 
-/* reload all file */
+/* reload all files */
 void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
 {
-	for (guint doc_count = 0; doc_count < documents_array->len; ++doc_count) {
-		reloadDoc(document_get_from_page(doc_count));
+	guint i;
+
+	foreach_document(i) {
+		reloadDoc(documents[i]);
 	}
 }
 
