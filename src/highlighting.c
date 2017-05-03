@@ -658,7 +658,7 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
 		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
-	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, common_style_set.styling[GCS_MARKER_TRANSLUCENCY].background);
 
 	/* define marker symbols
 	 * 0 -> line marker */
