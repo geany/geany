@@ -15,8 +15,10 @@
 
 # You may change those
 HOST=i686-w64-mingw32
-GTK2_BUNDLE_ZIP="http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip"
-GTK3_BUNDLE_ZIP="http://win32builder.gnome.org/gtk+-bundle_3.8.2-20131001_win32.zip"
+#GTK2_BUNDLE_ZIP="http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip"
+GTK2_BUNDLE_ZIP="https://oc.tmartitz.de/index.php/s/6ekbdk5UUQPpYpa/download"
+#GTK3_BUNDLE_ZIP="http://win32builder.gnome.org/gtk+-bundle_3.8.2-20131001_win32.zip"
+GTK3_BUNDLE_ZIP="https://oc.tmartitz.de/index.php/s/TIHtvtl8zTHC0mh/download"
 BUILDDIR=_build-cross-mingw
 GTK3=no
 CONFIGUREFLAGS="--enable-nls"
@@ -91,6 +93,8 @@ fetch_and_unzip "$GTK3_BUNDLE_ZIP" _deps
 [ "$GTK3" = yes ] || fetch_and_unzip "$BUNDLE_ZIP" _deps
 # fixup the prefix= in the pkg-config files
 sed -i "s%^\(prefix=\).*$%\1$PWD/_deps%" _deps/lib/pkgconfig/*.pc
+# mingw-w64 doesn't know -pthread
+sed -i -e 's%-pthread%%g' _deps/lib/pkgconfig/*.pc
 
 export PKG_CONFIG_PATH="$PWD/_deps/lib/pkgconfig/"
 export CPPFLAGS="-I$PWD/_deps/include"

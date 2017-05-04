@@ -39,6 +39,7 @@ gettext
 glib2
 graphite2
 libwinpthread-git
+graphite2
 harfbuzz
 fontconfig
 freetype
@@ -174,14 +175,9 @@ cleanup_unnecessary_files() {
 	rmdir var/cache
 	rmdir var
 	# cleanup development and other unnecessary files
-	rm -rf include
 	rm -rf lib/gettext
 	rm -rf lib/libffi-*
-	rm -rf lib/pkgconfig
-	find lib -name '*.a' -delete
-	find lib -name '*.typelib' -delete
-	find lib -name '*.def' -delete
-	find lib -name '*.h' -delete
+	find lib -name '*.a' ! -name "*.dll.a" -delete
 	find lib -name '*.sh' -delete
 	# cleanup other unnecessary files
 	rm -rf share/aclocal
@@ -201,8 +197,8 @@ cleanup_unnecessary_files() {
 	rm -rf share/info
 	rm -rf share/man
 	rm -rf share/xml
-	# cleanup binaries and libs (delete anything except *.dll)
-	find bin ! -name '*.dll' -type f -delete
+	# cleanup binaries and libs (delete anything except *.dll and pkg-config.exe)
+	find bin ! -name '*.dll' ! -name pkg-config.exe -type f -delete
 	# cleanup empty directories
 	find . -type d -empty -delete
 }
