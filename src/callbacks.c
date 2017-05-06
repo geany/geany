@@ -345,11 +345,14 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 /* reload all files */
 void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
 {
+	GeanyDocument *cur_doc = document_get_current();
 	guint i;
 
 	foreach_document(i) {
 		reloadDoc(documents[i]);
 	}
+
+	document_show_tab(cur_doc);
 }
 
 
