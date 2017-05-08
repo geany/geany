@@ -349,7 +349,14 @@ void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
 	guint i;
 
 	foreach_document(i) {
-		reloadDoc(documents[i]);
+		GeanyDocument *doc = documents[i];
+		if (document_check_disk_status(doc, TRUE))
+		{
+			if (! doc->changed)
+				reloadDoc(doc);
+			else
+				document_save_file(doc, FALSE);
+		}
 	}
 
 	document_show_tab(cur_doc);
