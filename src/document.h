@@ -241,6 +241,8 @@ GeanyDocument* document_new_file_if_non_open(void);
 
 gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
 
+void document_reload_all_prompt(GeanyDocument *cur_doc);
+
 void document_reload_config(GeanyDocument *doc);
 
 GeanyDocument *document_find_by_sci(ScintillaObject *sci);

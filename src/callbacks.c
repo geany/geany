@@ -327,18 +327,14 @@ void on_open1_activate(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static void reloadDoc(GeanyDocument *doc)
-{
-	g_return_if_fail(doc != NULL);
-
-	document_reload_prompt(doc, NULL);
-}
-
-
 /* reload file */
 void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 {
-	reloadDoc(document_get_current());
+	GeanyDocument *doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	document_reload_prompt(doc, NULL);
 }
 
 
@@ -346,20 +342,8 @@ void on_toolbutton_reload_clicked(GtkAction *action, gpointer user_data)
 void on_toolbutton_reload_all_clicked(GtkAction *action, gpointer user_data)
 {
 	GeanyDocument *cur_doc = document_get_current();
-	guint i;
 
-	foreach_document(i) {
-		GeanyDocument *doc = documents[i];
-		if (document_check_disk_status(doc, TRUE))
-		{
-			if (! doc->changed)
-				reloadDoc(doc);
-			else
-				document_save_file(doc, FALSE);
-		}
-	}
-
-	document_show_tab(cur_doc);
+	document_reload_all_prompt(cur_doc);
 }
 
 
