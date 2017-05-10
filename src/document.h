@@ -170,6 +170,7 @@ GeanyDocument;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
+GeanyDocument* document_file_new(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
 GeanyDocument *document_get_current(void);
