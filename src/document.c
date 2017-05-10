@@ -102,9 +102,15 @@ typedef struct
 enum
 {
 	RESPONSE_DOCUMENT_RELOAD = 1,
+	RESPONSE_DOCUMENT_RELOAD_ALL,
 	RESPONSE_DOCUMENT_SAVE,
 };
 
+typedef struct
+{
+	const gchar *btn;
+	GtkResponseType response;
+} message_button;
 
 static guint doc_id_counter = 0;
 
@@ -116,10 +122,8 @@ static void document_redo_add(GeanyDocument *doc, guint type, gpointer data);
 static gboolean remove_page(guint page_num);
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
-	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(11, 12);
+	const message_button mbutton[], const guint numberOfItems,
+	const gchar *extra_text, const gchar *format, ...) G_GNUC_PRINTF(7, 8);
 
 
 /**
@@ -1609,13 +1613,17 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly, doc->file_type, forced_enc);
 
+	message_button mbutton[] = {
+		{GTK_STOCK_OK, GTK_RESPONSE_ACCEPT},
+		{_("Discard history"), GTK_RESPONSE_NO}
+	};
+
 	if (file_prefs.keep_edit_history_on_reload && file_prefs.show_keep_edit_history_on_reload_msg)
 	{
 		bar = document_show_message(doc, GTK_MESSAGE_INFO,
 						on_keep_edit_history_on_reload_response,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-						_("Discard history"), GTK_RESPONSE_NO,
-						NULL, 0, _("The buffer's previous state is stored in the history and "
+						mbutton, sizeof(mbutton) / sizeof(mbutton[0]),
+						_("The buffer's previous state is stored in the history and "
 						"undoing restores it. You can disable this by discarding the history upon "
 						"reload. This message will not be displayed again but "
 						"Your choice can be changed in the various preferences."),
@@ -1659,6 +1667,29 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 	}
 	g_free(base_name);
 	return result;
+}
+
+
+static gboolean call_proper_reload(GeanyDocument *doc)
+{
+	return doc->changed ?
+		document_reload_prompt(doc, doc->encoding) :
+		document_reload_force(doc, doc->encoding);
+}
+
+
+void document_reload_all_prompt(GeanyDocument *cur_doc)
+{
+	guint i;
+
+	foreach_document(i) {
+		GeanyDocument *doc = documents[i];
+		if ((document_check_disk_status(doc, TRUE)) || (doc == cur_doc))
+		{
+			call_proper_reload(doc);
+		}
+	}
+	document_show_tab(cur_doc);
 }
 
 
@@ -3453,15 +3484,14 @@ gboolean document_close_all(void)
  * */
 static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgtype,
 	void (*response_cb)(GtkWidget *info_bar, gint response_id, GeanyDocument *doc),
-	const gchar *btn_1, GtkResponseType response_1,
-	const gchar *btn_2, GtkResponseType response_2,
-	const gchar *btn_3, GtkResponseType response_3,
+	const message_button mbutton[], const guint numberOfItems,
 	const gchar *extra_text, const gchar *format, ...)
 {
 	va_list args;
 	gchar *text, *markup;
 	GtkWidget *hbox, *icon, *label, *content_area;
 	GtkWidget *info_widget, *parent;
+	guint i;
 	parent = document_get_notebook_child(doc);
 
 	va_start(args, format);
@@ -3477,12 +3507,10 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 
 	gtk_info_bar_set_message_type(GTK_INFO_BAR(info_widget), msgtype);
 
-	if (btn_1)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_1, response_1);
-	if (btn_2)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_2, response_2);
-	if (btn_3)
-		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), btn_3, response_3);
+	for (i = 0; i < numberOfItems; ++i)
+	{
+		gtk_info_bar_add_button(GTK_INFO_BAR(info_widget), mbutton[i].btn, mbutton[i].response);
+	}
 
 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_widget));
 
@@ -3547,9 +3575,12 @@ static void on_monitor_reload_file_response(GtkWidget *bar, gint response_id, Ge
 
 	if (response_id == RESPONSE_DOCUMENT_RELOAD)
 	{
-		close = doc->changed ?
-			document_reload_prompt(doc, doc->encoding) :
-			document_reload_force(doc, doc->encoding);
+		close = call_proper_reload(doc);
+	}
+	else if (response_id == RESPONSE_DOCUMENT_RELOAD_ALL)
+	{
+		document_reload_all_prompt(doc);
+		close = TRUE;
 	}
 	else if (response_id == RESPONSE_DOCUMENT_SAVE)
 	{
@@ -3616,10 +3647,15 @@ static void monitor_reload_file(GeanyDocument *doc)
 	{
 		GtkWidget *bar;
 
+		message_button mbutton[] = {
+			{_("_Reload"), RESPONSE_DOCUMENT_RELOAD},
+			{_("Reload _All"), RESPONSE_DOCUMENT_RELOAD_ALL},
+			{_("_Overwrite"), RESPONSE_DOCUMENT_SAVE},
+			{GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL}
+		};
+
 		bar = document_show_message(doc, GTK_MESSAGE_QUESTION, on_monitor_reload_file_response,
-				_("_Reload"), RESPONSE_DOCUMENT_RELOAD,
-				_("_Overwrite"), RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				mbutton, sizeof(mbutton) / sizeof(mbutton[0]),
 				_("Do you want to reload it?"),
 				_("The file '%s' on the disk is more recent than the current buffer."),
 				base_name);
@@ -3665,11 +3701,15 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 		if (bar != NULL) /* the "file on disk is newer" warning is now moot */
 			gtk_info_bar_response(GTK_INFO_BAR(bar), GTK_RESPONSE_CANCEL);
 
+		message_button mbutton[] = {
+			{GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE},
+			{GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL},
+			{NULL, GTK_RESPONSE_NONE}
+		};
+
 		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
 				on_monitor_resave_missing_file_response,
-				GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE,
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				NULL, GTK_RESPONSE_NONE,
+				mbutton, sizeof(mbutton) / sizeof(mbutton[0]),
 				_("Try to resave the file?"),
 				_("File \"%s\" was not found on disk!"),
 				doc->file_name);
