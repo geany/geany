@@ -3719,9 +3719,13 @@ Clone                                                     See `Cloning documents
 
 Replace tabs with space                                   Replaces all tabs with the right amount of spaces
                                                           in the whole document, or the current selection.
+                                                          If there was no selection, also changes the
+                                                          document's indent type to *Spaces*.
 
 Replace spaces with tabs                                  Replaces leading spaces with tab characters in the
                                                           whole document, or the current selection.
+                                                          If there was no selection, also changes the
+                                                          document's indent type to *Tabs*.
 
 Toggle current fold                                       Toggles the folding state of the current code block.
 
