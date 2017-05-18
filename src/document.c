@@ -3330,7 +3330,7 @@ GeanyDocument *document_index(gint idx)
 
 GeanyDocument *document_clone(GeanyDocument *old_doc)
 {
-	gchar *text;
+	gchar *text, *new_filename = NULL;
 	GeanyDocument *doc;
 	ScintillaObject *old_sci;
 
@@ -3341,7 +3341,44 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 	else
 		text = sci_get_contents(old_sci, -1);
 
-	doc = document_new_file(NULL, old_doc->file_type, text);
+	/* create a new filename based on the old filename */
+	if (old_doc->file_name)
+	{
+		guint i, j;
+
+		for (i = 0; i <= 99; ++i)
+		{
+			gchar *candidate = g_strdup_printf("%s.copy-%02u", old_doc->file_name, i);
+			gboolean unused = TRUE;
+
+			foreach_document(j)
+			{
+				if (documents[j]->file_name && strcmp(documents[j]->file_name, candidate) == 0)
+				{
+					unused = FALSE;
+					break;
+				}
+			}
+
+			if (unused)
+			{
+				gchar *locale_candidate = utils_get_locale_from_utf8(candidate);
+				gboolean file_exists = g_file_test(locale_candidate, G_FILE_TEST_EXISTS);
+				g_free(locale_candidate);
+
+				if (!file_exists)
+				{
+					new_filename = candidate;
+					break;
+				}
+			}
+
+			g_free(candidate);
+		}
+	}
+
+	doc = document_new_file(new_filename, old_doc->file_type, text);
+	g_free(new_filename);
 	g_free(text);
 	document_set_text_changed(doc, TRUE);
 
