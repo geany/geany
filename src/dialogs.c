@@ -58,10 +58,11 @@
 /* gstdio.h also includes sys/stat.h */
 #include <glib/gstdio.h>
 
+#include <errno.h>
 
 enum
 {
-	GEANY_RESPONSE_RENAME,
+	GEANY_RESPONSE_SAVE_AND_REMOVE_ORIG,
 	GEANY_RESPONSE_VIEW
 };
 
@@ -487,19 +488,19 @@ void dialogs_show_open_file(void)
 }
 
 
-static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
+static gboolean handle_save_as(const gchar *utf8_filename, gboolean remove_orig_file)
 {
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
+	gchar *orig_file_name = NULL;
 
 	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
 
 	if (doc->file_name != NULL)
 	{
-		if (rename_file)
-		{
-			document_rename_file(doc, utf8_filename);
-		}
+		if (remove_orig_file && strcmp(utf8_filename, doc->file_name) != 0)
+			orig_file_name = g_strdup(doc->file_name);
+
 		if (doc->tm_file)
 		{
 			/* create a new tm_source_file object otherwise tagmanager won't work correctly */
@@ -508,7 +509,24 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 			doc->tm_file = NULL;
 		}
 	}
+
 	success = document_save_file_as(doc, utf8_filename);
+
+	if (orig_file_name)
+	{
+		if (success)
+		{
+			gchar *orig_file_name_locale = utils_get_locale_from_utf8(orig_file_name);
+
+			if (g_remove(orig_file_name_locale) != 0)
+				dialogs_show_msgbox_with_secondary(GTK_MESSAGE_ERROR,
+						_("Error deleting original file."), g_strerror(errno));
+
+			g_free(orig_file_name_locale);
+		}
+
+		g_free(orig_file_name);
+	}
 
 	build_menu_update(doc);
 	return success;
@@ -517,32 +535,26 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 
 static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
-	gboolean rename_file = FALSE;
+	gboolean remove_orig_file = FALSE;
 	gboolean success = FALSE;
 	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
 
 	switch (response)
 	{
-		case GEANY_RESPONSE_RENAME:
-			/* rename doesn't check for empty filename or overwriting */
-			if (G_UNLIKELY(EMPTY(new_filename)))
-			{
-				utils_beep();
-				break;
-			}
+		case GEANY_RESPONSE_SAVE_AND_REMOVE_ORIG:
 			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
 				!dialogs_show_question_full(NULL, NULL, NULL,
 					_("Overwrite?"),
 					_("Filename already exists!")))
 				break;
-			rename_file = TRUE;
+			remove_orig_file = TRUE;
 			/* fall through */
 		case GTK_RESPONSE_ACCEPT:
 		{
 			gchar *utf8_filename;
 
 			utf8_filename = utils_get_utf8_from_locale(new_filename);
-			success = handle_save_as(utf8_filename, rename_file);
+			success = handle_save_as(utf8_filename, remove_orig_file);
 			g_free(utf8_filename);
 			break;
 		}
@@ -559,7 +571,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 
 static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 {
-	GtkWidget *dialog, *rename_btn;
+	GtkWidget *dialog, *save_and_remove_orig_btn;
 	const gchar *initdir;
 
 	dialog = gtk_file_chooser_dialog_new(_("Save File"), GTK_WINDOW(main_widgets.window),
@@ -571,10 +583,10 @@ static GtkWidget *create_save_file_dialog(GeanyDocument *doc)
 	gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(main_widgets.window));
 	gtk_widget_set_name(dialog, "GeanyDialog");
 
-	rename_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("R_ename"), GEANY_RESPONSE_RENAME);
-	gtk_widget_set_tooltip_text(rename_btn, _("Save the file and rename it"));
-	/* disable rename unless file exists on disk */
-	gtk_widget_set_sensitive(rename_btn, doc->real_path != NULL);
+	save_and_remove_orig_btn = gtk_dialog_add_button(GTK_DIALOG(dialog), _("Save and R_emove Original"), GEANY_RESPONSE_SAVE_AND_REMOVE_ORIG);
+	gtk_widget_set_tooltip_text(save_and_remove_orig_btn, _("Save to new file, then delete the original"));
+	/* disable 'save and remove original' unless file exists on disk */
+	gtk_widget_set_sensitive(save_and_remove_orig_btn, doc->real_path != NULL);
 
 	gtk_dialog_add_buttons(GTK_DIALOG(dialog),
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
