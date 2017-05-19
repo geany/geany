@@ -69,7 +69,7 @@ done
 # if no languages where specified on the command line, take all listed languages in LINGUAS
 if [ -z "$linguas" ]
 then
-	linguas=`sed -e '/^#/d' po/LINGUAS`
+	linguas=`sed -e '/^#/d' LINGUAS`
 fi
 
 # dash and zsh don't need the -e switch to echo, bash does
@@ -85,15 +85,15 @@ if [ $check_accelerators ]
 then
    for lang in $linguas
    do
-     msgfmt --check --statistics $check_accelerators po/$lang.po;
+     msgfmt --check --statistics $check_accelerators $lang.po;
    done
 else
    for lang in $linguas
    do
      # maybe the regexp can be optimized, regexps are not my best friends
-     creationdate=`grep "PO-Revision-Date:" po/$lang.po | sed 's/.*: \([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}[+|-][0-9]\{4\}\).*/\1/'`
+     creationdate=`grep "PO-Revision-Date:" $lang.po | sed 's/.*: \([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}[+|-][0-9]\{4\}\).*/\1/'`
      printf "%s %s\t(%s):\t" "$eswitch" "$lang" "$creationdate"
-     msgfmt --check --statistics po/$lang.po;
+     msgfmt --check --statistics $lang.po;
    done
 fi
 
