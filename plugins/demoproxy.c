@@ -188,7 +188,7 @@ static void demoproxy_cleanup(GeanyPlugin *plugin, gpointer data)
 
 
 G_MODULE_EXPORT
-void geany_load_module(GeanyPlugin *plugin)
+void geany_load_module(GeanyPlugin *plugin, GModule *module)
 {
 	plugin->info->name = _("Demo Proxy");
 	plugin->info->description = _("Example Proxy.");
