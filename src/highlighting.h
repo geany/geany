@@ -45,6 +45,10 @@ typedef struct GeanyLexerStyle
 }
 GeanyLexerStyle;
 
+extern gint msg_context;
+extern gint msg_default;
+extern gint msg_error;
+extern gint msg_message;
 
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
