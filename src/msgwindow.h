@@ -73,6 +73,8 @@ typedef struct
 	GtkListStore	*store_status;
 	GtkListStore	*store_msg;
 	GtkListStore	*store_compiler;
+	GHashTable		*line_shifts_msg;
+	GHashTable		*line_shifts_compiler;
 	GtkWidget		*tree_compiler;
 	GtkWidget		*tree_status;
 	GtkWidget		*tree_msg;
@@ -98,6 +100,10 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
 void msgwin_show_hide_tabs(void);
+
+void msgwin_shift_line_numbers(GeanyDocument *doc, gint line, gint added);
+
+void msgwin_forget_line_shifts(GeanyDocument *doc);
 
 
 void msgwin_menu_add_common_items(GtkMenu *menu);

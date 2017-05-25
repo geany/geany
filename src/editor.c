@@ -48,6 +48,7 @@
 #include "highlighting.h"
 #include "keybindings.h"
 #include "main.h"
+#include "msgwindow.h"
 #include "prefs.h"
 #include "projectprivate.h"
 #include "sciwrappers.h"
@@ -1063,6 +1064,26 @@ static gboolean check_partial_completion(GeanyEditor *editor, const gchar *entry
 }
 
 
+static void shift_line_numbers(GeanyDocument *doc, GeanyEditor *editor,
+		gint position, gint lines_added)
+{
+	gint line = sci_get_line_from_position(editor->sci, position);
+
+	if (editor_prefs.show_linenumber_margin)
+		/* adjust Scintilla's line numbers margin width */
+		auto_update_margin_width(editor);
+
+	/* Track change to line numbers in message window. Scintilla reports line as 0-based,
+	 * while msgwin_shift_line_numbers expects the 1-based line number *after which*
+	 * the change happened (0 if at the beginning of the document). */
+	if (position == sci_get_position_from_line(editor->sci, line))
+		/* before line */
+		msgwin_shift_line_numbers(doc, line, lines_added);
+	else
+		msgwin_shift_line_numbers(doc, line + 1, lines_added);
+}
+
+
 /* Callback for the "sci-notify" signal to emit a "editor-notify" signal.
  * Plugins can connect to the "editor-notify" signal. */
 void editor_sci_notify_cb(G_GNUC_UNUSED GtkWidget *widget, G_GNUC_UNUSED gint scn,
@@ -1123,10 +1144,9 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			break;
 
  		case SCN_MODIFIED:
-			if (editor_prefs.show_linenumber_margin && (nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
+			if ((nt->modificationType & (SC_MOD_INSERTTEXT | SC_MOD_DELETETEXT)) && nt->linesAdded)
 			{
-				/* automatically adjust Scintilla's line numbers margin width */
-				auto_update_margin_width(editor);
+				shift_line_numbers(doc, editor, nt->position, nt->linesAdded);
 			}
 			if (nt->modificationType & SC_STARTACTION && ! ignore_callback)
 			{

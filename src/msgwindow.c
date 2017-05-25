@@ -64,6 +64,14 @@ typedef struct
 }
 ParseData;
 
+/* used for tracking changes to line numbers as documents are edited */
+typedef struct
+{
+	gint line;
+	gint added;
+}
+LineShift;
+
 MessageWindow msgwindow;
 
 enum
@@ -135,6 +143,10 @@ void msgwin_init(void)
 
 void msgwin_finalize(void)
 {
+	if (msgwindow.line_shifts_msg)
+		g_hash_table_destroy(msgwindow.line_shifts_msg);
+	if (msgwindow.line_shifts_compiler)
+		g_hash_table_destroy(msgwindow.line_shifts_compiler);
 	g_free(msgwindow.messages_dir);
 }
 
@@ -160,6 +172,72 @@ static gboolean on_msgwin_key_press_event(GtkWidget *widget, GdkEventKey *event,
 		}
 	}
 	return FALSE;
+}
+
+
+/* Remember the fact that lines have been added (deleted if negative) to doc after line
+ * (0 if at the beginning of document), so we can update the line number on the fly
+ * when we need to go to a message/error. */
+static void record_line_shift(GHashTable *shifts, GeanyDocument *doc, gint line, gint added)
+{
+	GArray *shifts_seq = g_hash_table_lookup(shifts, doc->file_name);
+	LineShift shift = { line, added };
+
+	if (!shifts_seq)
+	{
+		shifts_seq = g_array_new(FALSE, FALSE, sizeof(LineShift));
+		g_hash_table_insert(shifts, g_strdup(doc->file_name), shifts_seq);
+	}
+
+	if (shifts_seq->len > 0)
+	{
+		/* See if we can amend the last shift instead of adding a new one. */
+		LineShift *last = &g_array_index(shifts_seq, LineShift, shifts_seq->len - 1);
+
+		if ((added > 0 && last->added > 0 && line >= last->line && line <= last->line + last->added)
+			|| (added < 0 && last->added < 0 && line == last->line))
+		{
+			last->added += added;
+			return;
+		}
+	}
+
+	g_array_append_val(shifts_seq, shift);
+}
+
+
+/* Update a message/error line number with shifts that have happened
+ * since the message/error was generated. */
+static gint adjust_line_number(GeanyDocument *doc, gint line, GHashTable *shifts)
+{
+	GArray *shifts_seq = g_hash_table_lookup(shifts, doc->file_name);
+	LineShift *shift;
+
+	if (shifts_seq)
+	{
+		foreach_array(LineShift, shift, shifts_seq)
+		{
+			if (line > shift->line)
+			{
+				line += shift->added;
+				if (line < shift->line)
+					/* Line has been deleted. But we can't just "lose" messages/errors, so stay
+					 * at the same line. (Doing this instead of line + 1 is consistent with the
+					 * Git Change Bar plugin, which marks deleted lines on the preceding line. */
+					line = shift->line;
+				if (line < 1)
+					/* It was the first line and it was deleted. */
+					line = 1;
+			}
+		}
+	}
+	return line;
+}
+
+
+static void free_line_shifts_seq(gpointer data)
+{
+	g_array_free(data, TRUE);
 }
 
 
@@ -200,6 +278,8 @@ static void prepare_msg_tree_view(void)
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_msg), GTK_TREE_MODEL(msgwindow.store_msg));
 	g_object_unref(msgwindow.store_msg);
 
+	msgwindow.line_shifts_msg = NULL;
+
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
 		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
@@ -236,6 +316,8 @@ static void prepare_compiler_tree_view(void)
 	msgwindow.store_compiler = gtk_list_store_new(COMPILER_COL_COUNT, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(msgwindow.tree_compiler), GTK_TREE_MODEL(msgwindow.store_compiler));
 	g_object_unref(msgwindow.store_compiler);
+
+	msgwindow.line_shifts_compiler = NULL;
 
 	renderer = gtk_cell_renderer_text_new();
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
@@ -315,6 +397,11 @@ void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 	gtk_list_store_append(msgwindow.store_compiler, &iter);
 	gtk_list_store_set(msgwindow.store_compiler, &iter,
 		COMPILER_COL_COLOR, color, COMPILER_COL_STRING, utf8_msg, -1);
+
+	/* Lazily initialize the line shifts hash table once we get a non-status compiler message */
+	if (msg_color != COLOR_BLUE && msgwindow.line_shifts_compiler == NULL)
+		msgwindow.line_shifts_compiler = g_hash_table_new_full(g_str_hash, g_str_equal,
+			g_free, free_line_shifts_seq);
 
 	if (ui_prefs.msgwindow_visible && interface_prefs.compiler_tab_autoscroll)
 	{
@@ -406,6 +493,11 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 	gtk_list_store_set(msgwindow.store_msg, &iter,
 		MSG_COL_LINE, line, MSG_COL_DOC_ID, doc ? doc->id : 0, MSG_COL_COLOR,
 		color, MSG_COL_STRING, utf8_msg, -1);
+
+	/* Lazily initialize the line shifts hash table once we get a non-status message */
+	if (msg_color != COLOR_BLUE && msgwindow.line_shifts_msg == NULL)
+		msgwindow.line_shifts_msg = g_hash_table_new_full(g_str_hash, g_str_equal,
+			g_free, free_line_shifts_seq);
 
 	g_free(tmp);
 	if (utf8_msg != tmp)
@@ -700,7 +792,9 @@ static gboolean goto_compiler_file_line(const gchar *fname, gint line, gboolean 
 
 		if (doc != NULL)
 		{
-			if (! doc->changed && editor_prefs.use_indicators)	/* if modified, line may be wrong */
+			line = adjust_line_number(doc, line, msgwindow.line_shifts_compiler);
+
+			if (editor_prefs.use_indicators)
 				editor_indicator_set_on_line(doc->editor, GEANY_INDICATOR_ERROR, line - 1);
 
 			ret = navqueue_goto_line(old_doc, doc, line);
@@ -1120,6 +1214,7 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 			}
 			else
 			{
+				line = adjust_line_number(doc, line, msgwindow.line_shifts_msg);
 				ret = navqueue_goto_line(old_doc, doc, line);
 				if (ret && focus_editor)
 					gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
@@ -1137,6 +1232,7 @@ gboolean msgwin_goto_messages_file_line(gboolean focus_editor)
 				doc = document_open_file(filename, FALSE, NULL, NULL);
 				if (doc != NULL)
 				{
+					line = adjust_line_number(doc, line, msgwindow.line_shifts_msg);
 					ret = (line < 0) ? TRUE : navqueue_goto_line(old_doc, doc, line);
 					if (ret && focus_editor)
 						gtk_widget_grab_focus(GTK_WIDGET(doc->editor->sci));
@@ -1250,23 +1346,49 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 GEANY_API_SYMBOL
 void msgwin_clear_tab(gint tabnum)
 {
-	GtkListStore *store = NULL;
-
 	switch (tabnum)
 	{
 		case MSG_MESSAGE:
-			store = msgwindow.store_msg;
+			gtk_list_store_clear(msgwindow.store_msg);
+			if (msgwindow.line_shifts_msg)
+				g_hash_table_destroy(msgwindow.line_shifts_msg);
+			msgwindow.line_shifts_msg = NULL;
 			break;
 
 		case MSG_COMPILER:
 			gtk_list_store_clear(msgwindow.store_compiler);
+			if (msgwindow.line_shifts_compiler)
+				g_hash_table_destroy(msgwindow.line_shifts_compiler);
+			msgwindow.line_shifts_compiler = NULL;
 			build_menu_update(NULL);	/* update next error items */
-			return;
+			break;
 
-		case MSG_STATUS: store = msgwindow.store_status; break;
-		default: return;
+		case MSG_STATUS:
+			gtk_list_store_clear(msgwindow.store_status);
+			break;
 	}
-	if (store == NULL)
-		return;
-	gtk_list_store_clear(store);
+}
+
+
+void msgwin_shift_line_numbers(GeanyDocument *doc, gint line, gint added)
+{
+	if (doc->file_name)
+	{
+		if (msgwindow.line_shifts_msg)
+			record_line_shift(msgwindow.line_shifts_msg, doc, line, added);
+		if (msgwindow.line_shifts_compiler)
+			record_line_shift(msgwindow.line_shifts_compiler, doc, line, added);
+	}
+}
+
+
+void msgwin_forget_line_shifts(GeanyDocument *doc)
+{
+	if (doc->file_name)
+	{
+		if (msgwindow.line_shifts_msg)
+			g_hash_table_remove(msgwindow.line_shifts_msg, doc->file_name);
+		if (msgwindow.line_shifts_compiler)
+			g_hash_table_remove(msgwindow.line_shifts_compiler, doc->file_name);
+	}
 }

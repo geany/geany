@@ -1474,6 +1474,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		else
 			document_apply_indent_settings(doc);
 
+		msgwin_forget_line_shifts(doc);
 		document_set_text_changed(doc, FALSE);	/* also updates tab state */
 		ui_document_show_hide(doc);	/* update the document menu */
 

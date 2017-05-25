@@ -1695,7 +1695,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 		}
 	}
 
-	gtk_list_store_clear(msgwindow.store_msg);
+	msgwin_clear_tab(MSG_MESSAGE);
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
 
 	/* we can pass 'enc' without strdup'ing it here because it's a global const string and
@@ -2199,7 +2199,7 @@ void search_find_usage(const gchar *search_text, const gchar *original_search_te
 	}
 
 	gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_MESSAGE);
-	gtk_list_store_clear(msgwindow.store_msg);
+	msgwin_clear_tab(MSG_MESSAGE);
 
 	if (! in_session)
 	{	/* use current document */
