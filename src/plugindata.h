@@ -32,6 +32,7 @@
 #ifndef GEANY_PLUGIN_DATA_H
 #define GEANY_PLUGIN_DATA_H 1
 
+#include "geany.h"  /* for GEANY_DEPRECATED */
 #include "build.h"  /* GeanyBuildGroup, GeanyBuildSource, GeanyBuildCmdEntries enums */
 #include "document.h" /* GeanyDocument */
 #include "editor.h"	/* GeanyEditor, GeanyIndentType */
@@ -58,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 226
+#define GEANY_API_VERSION 231
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -146,35 +147,6 @@ PluginInfo;
 	}
 
 
-/** @deprecated - use plugin_set_key_group() instead.
- * @see PLUGIN_KEY_GROUP() macro. */
-typedef struct GeanyKeyGroupInfo
-{
-	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
-	gsize count;			/**< The number of keybindings the group will hold */
-}
-GeanyKeyGroupInfo;
-
-/** @deprecated - use plugin_set_key_group() instead.
- * Declare and initialise a keybinding group.
- * @code GeanyKeyGroup *plugin_key_group; @endcode
- * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
- * normally using keybindings_set_item().
- * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
- * is called, to the name of the plugin.
- * @param group_name A unique group name (without quotes) to be used in the
- * configuration file, such as @c html_chars.
- * @param key_count	The number of keybindings the group will hold. */
-#define PLUGIN_KEY_GROUP(group_name, key_count) \
-	/* We have to declare this as a single element array.
-	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
-	GeanyKeyGroupInfo plugin_key_group_info[1] = \
-	{ \
-		{G_STRINGIFY(group_name), key_count} \
-	};\
-	GeanyKeyGroup *plugin_key_group = NULL;
-
-
 /** Callback array entry type used with the @ref plugin_callbacks symbol. */
 typedef struct PluginCallback
 {
@@ -193,37 +165,40 @@ typedef struct PluginCallback
 PluginCallback;
 
 
-/** @deprecated Use @ref ui_add_document_sensitive() instead.
- * Flags to be set by plugins in PluginFields struct. */
-typedef enum
-{
-	/** Whether a plugin's menu item should be disabled when there are no open documents */
-	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0
-}
-PluginFlags;
-
-/** @deprecated Use @ref ui_add_document_sensitive() instead.
- * Fields set and owned by the plugin. */
-typedef struct PluginFields
-{
-	/** Bitmask of @c PluginFlags. */
-	PluginFlags	flags;
-	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
-	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
-	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
-	GtkWidget	*menu_item;
-}
-PluginFields;
-
-
 /** This contains pointers to global variables owned by Geany for plugins to use.
  * Core variable pointers can be appended when needed by plugin authors, if appropriate. */
 typedef struct GeanyData
 {
 	struct GeanyApp				*app;				/**< Geany application data fields */
 	struct GeanyMainWidgets		*main_widgets;		/**< Important widgets in the main window */
-	GPtrArray					*documents_array;	/**< See document.h#documents_array. */
-	GPtrArray					*filetypes_array;	/**< Dynamic array of GeanyFiletype pointers */
+	/** Dynamic array of GeanyDocument pointers.
+	 * Once a pointer is added to this, it is never freed. This means the same document pointer
+	 * can represent a different document later on, or it may have been closed and become invalid.
+	 * For this reason, you should use document_find_by_id() instead of storing
+	 * document pointers over time if there is a chance the user can close the
+	 * document.
+	 *
+	 * @warning You must check @c GeanyDocument::is_valid when iterating over this array.
+	 * This is done automatically if you use the foreach_document() macro.
+	 *
+	 * @note
+	 * Never assume that the order of document pointers is the same as the order of notebook tabs.
+	 * One reason is that notebook tabs can be reordered.
+	 * Use @c document_get_from_page() to lookup a document from a notebook tab number.
+	 *
+	 * @see documents.
+	 *
+	 * @elementtype{GeanyDocument}
+	 */
+	GPtrArray					*documents_array;
+	/** Dynamic array of filetype pointers
+	 *
+	 * List the list is dynamically expanded for custom filetypes filetypes so don't expect
+	 * the list of known filetypes to be a constant.
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
+	GPtrArray					*filetypes_array;
 	struct GeanyPrefs			*prefs;				/**< General settings */
 	struct GeanyInterfacePrefs	*interface_prefs;	/**< Interface settings */
 	struct GeanyToolbarPrefs	*toolbar_prefs;		/**< Toolbar settings */
@@ -232,8 +207,22 @@ typedef struct GeanyData
 	struct GeanySearchPrefs		*search_prefs;		/**< Search-related settings */
 	struct GeanyToolPrefs		*tool_prefs;		/**< Tool settings */
 	struct GeanyTemplatePrefs	*template_prefs;	/**< Template settings */
-	struct GeanyBuildInfo		*build_info;		/**< Current build information */
-	GSList						*filetypes_by_title; /**< See filetypes.h#filetypes_by_title. */
+	gpointer					*_compat;			/* Remove field on next ABI break (abi-todo) */
+	/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
+	 * first, as this is usually treated specially.
+	 * The list does not change (after filetypes have been initialized), so you can use
+	 * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
+	 * @see filetypes_get_sorted_by_name().
+	 *
+	 * @elementtype{GeanyFiletype}
+	 */
+	GSList						*filetypes_by_title;
+	/** @gironly
+	 * Global object signalling events via signals
+	 *
+	 * This is mostly for language bindings. Otherwise prefer to use
+	 * plugin_signal_connect() instead this which adds automatic cleanup. */
+	GObject						*object;
 }
 GeanyData;
 
@@ -284,6 +273,7 @@ void plugin_cleanup(void);
  *  - main_locale_init()
  *  - geany_plugin_register() (and GEANY_PLUGIN_REGISTER())
  *  - geany_plugin_register_full() (and GEANY_PLUGIN_REGISTER_FULL())
+ *  - plugin_module_make_resident()
  *
  * @param plugin The unique plugin handle to your plugin. You must set some fields here.
  *
@@ -327,7 +317,7 @@ gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gpointer data, GDestroyNotify free_func);
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
-/** Convinience macro to register a plugin.
+/** Convenience macro to register a plugin.
  *
  * It simply calls geany_plugin_register() with GEANY_API_VERSION and GEANY_ABI_VERSION.
  *
@@ -338,7 +328,7 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 	geany_plugin_register((plugin), GEANY_API_VERSION, \
 	                      (min_api_version), GEANY_ABI_VERSION)
 
-/** Convinience macro to register a plugin with data.
+/** Convenience macro to register a plugin with data.
  *
  * It simply calls geany_plugin_register_full() with GEANY_API_VERSION and GEANY_ABI_VERSION.
  *
@@ -351,34 +341,47 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 
 /** Return values for GeanyProxyHooks::probe()
  *
- * Only @c PROXY_IGNORED, @c PROXY_MATCHED or @c PROXY_MATCHED|PROXY_NOLOAD
- * are valid return values.
- *
  * @see geany_plugin_register_proxy() for a full description of the proxy plugin mechanisms.
- *
- * @since 1.26 (API 226)
  */
 typedef enum
 {
 	/** The proxy is not responsible at all, and Geany or other plugins are free
 	 * to probe it.
+	 *
+	 * @since 1.29 (API 229)
 	 **/
-	PROXY_IGNORED,
-	/** The proxy is responsible for this file, and creates a plugin for it */
-	PROXY_MATCHED,
-
-	/** The proxy is does not directly load it, but it's still tied to the proxy
+	GEANY_PROXY_IGNORE,
+	/** The proxy is responsible for this file, and creates a plugin for it.
+	 *
+	 * @since 1.29 (API 229)
+	 */
+	GEANY_PROXY_MATCH,
+	/** The proxy is does not directly load it, but it's still tied to the proxy.
 	 *
 	 * This is for plugins that come in multiple files where only one of these
 	 * files is relevant for the plugin creation (for the PM dialog). The other
 	 * files should be ignored by Geany and other proxies. Example: libpeas has
 	 * a .plugin and a .so per plugin. Geany should not process the .so file
 	 * if there is a corresponding .plugin.
+	 *
+	 * @since 1.29 (API 229)
 	 */
-	PROXY_NOLOAD = 0x100,
+	GEANY_PROXY_RELATED = GEANY_PROXY_MATCH | 0x100
 }
 GeanyProxyProbeResults;
 
+/** @deprecated Use GEANY_PROXY_IGNORE instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_IGNORED GEANY_PROXY_IGNORE
+/** @deprecated Use GEANY_PROXY_MATCH instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_MATCHED GEANY_PROXY_MATCH
+/** @deprecated Use GEANY_PROXY_RELATED instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_NOLOAD 0x100
 
 /** Hooks that need to be implemented by every proxy
  *
@@ -389,7 +392,7 @@ GeanyProxyProbeResults;
 struct GeanyProxyFuncs
 {
 	/** Called to determine whether the proxy is truly responsible for the requested plugin.
-	 * A NULL pointer assumes the probe() function would always return @ref PROXY_MATCHED */
+	 * A NULL pointer assumes the probe() function would always return @ref GEANY_PROXY_MATCH */
 	gint		(*probe)     (GeanyPlugin *proxy, const gchar *filename, gpointer pdata);
 	/** Called after probe(), to perform the actual job of loading the plugin */
 	gpointer	(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *filename, gpointer pdata);
@@ -405,7 +408,57 @@ gint geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions);
 /* This remains so that older plugins that contain a `GeanyFunctions *geany_functions;`
  * variable in their plugin - as was previously required - will still compile
  * without changes.  */
-typedef struct GeanyFunctionsUndefined GeanyFunctions;
+typedef struct GeanyFunctionsUndefined GeanyFunctions GEANY_DEPRECATED;
+
+/** @deprecated - use plugin_set_key_group() instead.
+ * @see PLUGIN_KEY_GROUP() macro. */
+typedef struct GeanyKeyGroupInfo
+{
+	const gchar *name;		/**< Group name used in the configuration file, such as @c "html_chars" */
+	gsize count;			/**< The number of keybindings the group will hold */
+}
+GeanyKeyGroupInfo GEANY_DEPRECATED_FOR(plugin_set_key_group);
+
+/** @deprecated - use plugin_set_key_group() instead.
+ * Declare and initialise a keybinding group.
+ * @code GeanyKeyGroup *plugin_key_group; @endcode
+ * You must then set the @c plugin_key_group::keys[] entries for the group in plugin_init(),
+ * normally using keybindings_set_item().
+ * The @c plugin_key_group::label field is set by Geany after @c plugin_init()
+ * is called, to the name of the plugin.
+ * @param group_name A unique group name (without quotes) to be used in the
+ * configuration file, such as @c html_chars.
+ * @param key_count	The number of keybindings the group will hold. */
+#define PLUGIN_KEY_GROUP(group_name, key_count) \
+	/* We have to declare this as a single element array.
+	 * Declaring as a pointer to a struct doesn't work with g_module_symbol(). */ \
+	GeanyKeyGroupInfo plugin_key_group_info[1] = \
+	{ \
+		{G_STRINGIFY(group_name), key_count} \
+	};\
+	GeanyKeyGroup *plugin_key_group = NULL;
+
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Flags to be set by plugins in PluginFields struct. */
+typedef enum
+{
+	/** Whether a plugin's menu item should be disabled when there are no open documents */
+	PLUGIN_IS_DOCUMENT_SENSITIVE	= 1 << 0
+}
+PluginFlags;
+
+/** @deprecated Use @ref ui_add_document_sensitive() instead.
+ * Fields set and owned by the plugin. */
+typedef struct PluginFields
+{
+	/** Bitmask of @c PluginFlags. */
+	PluginFlags	flags;
+	/** Pointer to a plugin's menu item which will be automatically enabled/disabled when there
+	 *  are no open documents and @c PLUGIN_IS_DOCUMENT_SENSITIVE is set.
+	 *  This is required if using @c PLUGIN_IS_DOCUMENT_SENSITIVE, ignored otherwise */
+	GtkWidget	*menu_item;
+}
+PluginFields GEANY_DEPRECATED_FOR(ui_add_document_sensitive);
 
 #define document_reload_file document_reload_force
 

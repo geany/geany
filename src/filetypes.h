@@ -24,7 +24,7 @@
 #define GEANY_FILETYPES_H 1
 
 #include "geany.h" /* for GEANY() macro */
-#include "tm_source_file.h" /* for langType */
+#include "tm_parser.h" /* for TMParserType */
 
 #include "gtkcompat.h" /* Needed by ScintillaWidget.h */
 #include "Scintilla.h" /* Needed by ScintillaWidget.h */
@@ -38,7 +38,10 @@ G_BEGIN_DECLS
 /* Forward-declared to avoid including document.h since it includes this header */
 struct GeanyDocument;
 
-/* Do not change the order, only append. */
+/** IDs of known filetypes
+ *
+ * @ref filetypes will contain an item for each. Use GeanyData::filetypes_array to
+ * determine the known filetypes at runtime */
 typedef enum
 {
 	GEANY_FILETYPES_NONE = 0,	/* first filetype is always None & must be 0 */
@@ -106,8 +109,17 @@ typedef enum
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
-filetype_id;
+GeanyFiletypeID;
 
+#ifndef GEANY_DISABLE_DEPRECATED
+/* compat define - should be removed in the future */
+typedef GeanyFiletypeID filetype_id GEANY_DEPRECATED_FOR(GeanyFiletypeID);
+#endif /* GEANY_DISABLE_DEPRECATED */
+
+/** @gironly
+ * Filetype categories
+ *
+ * These are used to provide submenus for each category in the GUI */
 typedef enum
 {
 	GEANY_FILETYPE_GROUP_NONE,
@@ -128,10 +140,10 @@ GeanyFiletypeGroupID;
 /** Represents a filetype. */
 typedef struct GeanyFiletype
 {
-	filetype_id		  id;				/**< Index in @c filetypes_array. */
-	/** Represents the langType of tagmanager (see the table
-	 * in tagmanager/parsers.h), -1 represents all, -2 none. */
-	langType 		  lang;
+	GeanyFiletypeID	  id;				/**< Index in @ref filetypes. */
+	/* Represents the TMParserType of tagmanager (see the table
+	 * in src/tagmanager/tm_parser.h). */
+	TMParserType	  lang;
 	/** Untranslated short name, such as "C", "None".
 	 * Must not be translated as it's used for hash table lookups - use
 	 * filetypes_get_display_name() instead. */
@@ -158,9 +170,7 @@ typedef struct GeanyFiletype
 }
 GeanyFiletype;
 
-extern GPtrArray *filetypes_array;
-
-/** Wraps filetypes_array so it can be used with C array syntax.
+/** Wraps @ref GeanyData::filetypes_array so it can be used with C array syntax.
  * Example: filetypes[GEANY_FILETYPES_C]->name = ...;
  * @see filetypes_index(). */
 #define filetypes	((GeanyFiletype **)GEANY(filetypes_array)->pdata)
@@ -176,8 +186,13 @@ const gchar *filetypes_get_display_name(GeanyFiletype *ft);
 
 const GSList *filetypes_get_sorted_by_name(void);
 
+#define GEANY_TYPE_FILETYPE (filetype_get_type())
+
+GType filetype_get_type (void);
 
 #ifdef GEANY_PRIVATE
+
+extern GPtrArray *filetypes_array;
 
 extern GSList *filetypes_by_title;
 

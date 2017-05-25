@@ -55,7 +55,7 @@ typedef gboolean (*GeanyKeyGroupCallback) (guint key_id);
  * with the same key combination to handle it).
  *
  * @since 1.26 (API 226) */
-typedef gboolean (*GeanyKeyGroupFunc)(GeanyKeyGroup *group, guint key_id, gpointer pdata);
+typedef gboolean (*GeanyKeyGroupFunc)(GeanyKeyGroup *group, guint key_id, gpointer user_data);
 
 /** Function pointer type used for keybinding callbacks. */
 typedef void (*GeanyKeyCallback) (guint key_id);
@@ -67,7 +67,7 @@ typedef void (*GeanyKeyCallback) (guint key_id);
  * with the same key combination to handle it).
  *
  * @since 1.26 (API 226) */
-typedef gboolean (*GeanyKeyBindingFunc)(GeanyKeyBinding *key, guint key_id, gpointer pdata);
+typedef gboolean (*GeanyKeyBindingFunc)(GeanyKeyBinding *key, guint key_id, gpointer user_data);
 
 /** Represents a single keybinding action.
  *
@@ -266,6 +266,14 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_GOTO_LINESTARTVISUAL,			/**< Keybinding. */
 	GEANY_KEYS_DOCUMENT_CLONE,					/**< Keybinding. */
 	GEANY_KEYS_FILE_QUIT,						/**< Keybinding. */
+	GEANY_KEYS_FILE_PROPERTIES,					/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD4,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD5,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD6,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD7,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD8,				/**< Keybinding. */
+	GEANY_KEYS_FORMAT_SENDTOCMD9,				/**< Keybinding. */
+	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 

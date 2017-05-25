@@ -41,13 +41,7 @@ EXTRA_DIST = \
 	geany.html \
 	geany.css \
 	geany.txt \
-	geany.1 \
-	plugins.dox \
-	pluginsymbols.c \
-	pluginsignals.c \
-	stash-example.c \
-	stash-gui-example.c \
-	makefile.win32
+	geany.1
 
 # HTML user manual and hacking file
 if WITH_RST2HTML
@@ -92,21 +86,71 @@ endif
 if WITH_DOXYGEN
 
 doxygen_sources = \
-	$(srcdir)/*.[ch] \
-	$(srcdir)/*.dox \
+	$(srcdir)/plugins.dox \
+	$(srcdir)/pluginsignals.c \
+	$(srcdir)/pluginsymbols.c \
+	$(srcdir)/stash-example.c \
+	$(srcdir)/stash-gui-example.c
+
+EXTRA_DIST += $(doxygen_sources)
+
+doxygen_dependencies = \
+	$(doxygen_sources) \
 	$(top_srcdir)/src/*.[ch] \
 	$(top_srcdir)/plugins/geanyplugin.h \
-	$(top_srcdir)/tagmanager/src/tm_source_file.[ch] \
-	$(top_srcdir)/tagmanager/src/tm_workspace.[ch]
+	$(top_srcdir)/src/tagmanager/tm_source_file.[ch] \
+	$(top_srcdir)/src/tagmanager/tm_workspace.[ch] \
+	$(top_srcdir)/src/tagmanager/tm_tag.h \
+	$(top_srcdir)/src/tagmanager/tm_parser.h
 
-Doxyfile.stamp: Doxyfile $(doxygen_sources)
+Doxyfile.stamp: Doxyfile $(doxygen_dependencies)
 	$(AM_V_GEN)$(DOXYGEN) Doxyfile && echo "" > $@
 
-all-local: Doxyfile.stamp
+ALL_LOCAL_TARGETS = Doxyfile.stamp
+CLEAN_LOCAL_TARGETS = clean-api-docs-local
 
-clean-local: clean-api-docs-local
 clean-api-docs-local:
 	-rm -rf reference/ Doxyfile.stamp doxygen_*
+
+if ENABLE_GTKDOC_HEADER
+
+# set WARN_IF_UNDOCUMENTED because apparently doxygens warns for undocumented stuff
+# in headers (even though it's correctly documented in the corresponding .c file) only
+# for xml output
+Doxyfile-gi: Doxyfile
+	$(AM_V_GEN)$(SED) \
+		-e 's,gironly=@internal,gironly=,' \
+		-e 's,^\(GENERATE_HTML.*\)YES,\1NO,' \
+		-e 's,^\(GENERATE_XML.*\)NO,\1YES,' \
+		-e 's,^\(WARN_IF_UNDOCUMENTED.*\)YES,\1NO,' \
+		-e 's,^\(SORT_MEMBER_DOCS.*\)YES,\1NO,' \
+		-e 's,^\(SORT_BRIEF_DOCS.*\)YES,\1NO,' \
+		$< > $@ || { $(RM) $@ && exit 1; }
+
+# we depend on Doxyfile.stamp not have this run in parallel with it to avoid
+# concurrent Doxygen runs, which might overwrite each other's files
+Doxyfile-gi.stamp: Doxyfile-gi Doxyfile.stamp $(doxygen_dependencies)
+	$(AM_V_GEN)$(DOXYGEN) Doxyfile-gi && echo "" > $@
+
+geany-gtkdoc.h: Doxyfile-gi.stamp $(top_srcdir)/scripts/gen-api-gtkdoc.py
+	$(AM_V_GEN)$(top_srcdir)/scripts/gen-api-gtkdoc.py xml -d $(builddir) -o $@ \
+			--sci-output geany-sciwrappers-gtkdoc.h
+
+geany-sciwrappers-gtkdoc.h: geany-gtkdoc.h
+
+geany_gtkdocincludedir = $(includedir)/geany/gtkdoc
+nodist_geany_gtkdocinclude_HEADERS = geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
+
+ALL_LOCAL_TARGETS += geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
+CLEAN_LOCAL_TARGETS += clean-gtkdoc-header-local
+
+clean-gtkdoc-header-local:
+	-rm -rf xml/ Doxyfile-gi Doxyfile-gi.stamp geany-gtkdoc.h geany-sciwrappers-gtkdoc.h
+
+endif
+
+all-local: $(ALL_LOCAL_TARGETS)
+clean-local: $(CLEAN_LOCAL_TARGETS)
 
 endif
 

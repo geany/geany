@@ -27,7 +27,7 @@
 
 G_BEGIN_DECLS
 
-struct socket_info_struct
+struct SocketInfo
 {
 	gboolean	 ignore_socket;
 	gchar		*file_name;
@@ -36,7 +36,7 @@ struct socket_info_struct
 	guint 		 lock_socket_tag;
 };
 
-extern struct socket_info_struct socket_info;
+extern struct SocketInfo socket_info;
 
 gint socket_init(gint argc, gchar **argv);
 

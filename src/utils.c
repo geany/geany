@@ -263,7 +263,7 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return The tag name (newly allocated) or @c NULL if no opening tag was found.
+ * @return @nullable The tag name (newly allocated) or @c NULL if no opening tag was found.
  */
 GEANY_API_SYMBOL
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
@@ -288,7 +288,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
+ * @return @nullable pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
  */
 GEANY_API_SYMBOL
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size)
@@ -490,8 +490,8 @@ static gchar *utf8_strdown(const gchar *str)
  *
  *  The input strings should be in UTF-8 or locale encoding.
  *
- *  @param s1 Pointer to first string or @c NULL.
- *  @param s2 Pointer to second string or @c NULL.
+ *  @param s1 @nullable Pointer to first string or @c NULL.
+ *  @param s2 @nullable Pointer to second string or @c NULL.
  *
  *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
  *          to be less than, to match, or to be greater than @a s2.
@@ -586,8 +586,8 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
  *  @c NULL-safe string comparison. Returns @c TRUE if both @a a and @a b are @c NULL
  *  or if @a a and @a b refer to valid strings which are equal.
  *
- *  @param a Pointer to first string or @c NULL.
- *  @param b Pointer to second string or @c NULL.
+ *  @param a @nullable Pointer to first string or @c NULL.
+ *  @param b @nullable Pointer to second string or @c NULL.
  *
  *  @return @c TRUE if @a a equals @a b, else @c FALSE.
  **/
@@ -722,7 +722,7 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
  *
  *  @param format The format string to pass to strftime(3). See the strftime(3)
  *                documentation for details, in UTF-8 encoding.
- *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
+ *  @param time_to_use @nullable The date/time to use, in time_t format or @c NULL to use the current time.
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
  *
@@ -1060,25 +1060,6 @@ GIOChannel *utils_set_up_io_channel(
 }
 
 
-gchar **utils_read_file_in_array(const gchar *filename)
-{
-	gchar **result = NULL;
-	gchar *data;
-
-	g_return_val_if_fail(filename != NULL, NULL);
-
-	g_file_get_contents(filename, &data, NULL, NULL);
-
-	if (data != NULL)
-	{
-		result = g_strsplit_set(data, "\r\n", -1);
-		g_free(data);
-	}
-
-	return result;
-}
-
-
 /* Contributed by Stefan Oltmanns, thanks.
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts.
  * keep_backslash is used for regex strings to leave '\\' and '\?' in place */
@@ -1405,8 +1386,8 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  * @param sort Whether to sort alphabetically (UTF-8 safe).
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- * freed when no longer needed.
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL if
+ * no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list().
  **/
 GEANY_API_SYMBOL
@@ -1450,8 +1431,8 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
  *               unless @c NULL.
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- *         freed when no longer needed.
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL
+ * if no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list_full().
  **/
 GEANY_API_SYMBOL
@@ -1647,16 +1628,16 @@ const gchar *utils_get_default_dir_utf8(void)
 /**
  *  Wraps @c spawn_sync(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup Ignored.
- *  @param user_data Ignored.
- *  @param std_out The return location for child output, or @a NULL.
- *  @param std_err The return location for child error messages, or @a NULL.
- *  @param exit_status The child exit status, as returned by waitpid(), or @a NULL.
- *  @param error The return location for error or @a NULL.
+ *  @param child_setup @girskip Ignored.
+ *  @param user_data @girskip Ignored.
+ *  @param std_out @out @optional The return location for child output, or @c NULL.
+ *  @param std_err @out @optional The return location for child error messages, or @c NULL.
+ *  @param exit_status @out @optional The child exit status, as returned by waitpid(), or @c NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
@@ -1682,14 +1663,14 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
 /**
  *  Wraps @c spawn_async(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
  *  @param flags Ignored.
- *  @param child_setup Ignored.
+ *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
- *  @param child_pid The return location for child process ID, or NULL.
- *  @param error The return location for error or @a NULL.
+ *  @param child_pid @out @nullable The return location for child process ID, or @c NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
@@ -1912,7 +1893,7 @@ gchar *utils_get_help_url(const gchar *suffix)
 
 #ifdef G_OS_WIN32
 	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
+	uri = g_strconcat("file:///", app->docdir, "/index.html", NULL);
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
 #else
 	skip = 7;
@@ -1959,7 +1940,7 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  * @param first_varname Name of the first variable to copy into the new array.
  * @param ... Key-value pairs of variable names and values, @c NULL-terminated.
  *
- * @return The new environment array.
+ * @return @transfer{full} The new environment array. Use @c g_strfreev() to free it.
  **/
 GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)
@@ -2119,9 +2100,10 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 
 		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
 		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
-		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "doc", NULL);
+		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())
@@ -2134,6 +2116,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 			g_free(prefix);
 # endif
 		}
@@ -2144,6 +2127,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(GEANY_LIBEXECDIR, "geany", NULL);
 		}
 #endif
 	}

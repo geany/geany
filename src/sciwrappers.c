@@ -970,7 +970,7 @@ void sci_get_text_range(ScintillaObject *sci, gint start, gint end, gchar *text)
 	tr.chrg.cpMin = start;
 	tr.chrg.cpMax = end;
 	tr.lpstrText = text;
-	SSM(sci, SCI_GETTEXTRANGE, 0, (long) &tr);
+	SSM(sci, SCI_GETTEXTRANGE, 0, (sptr_t) &tr);
 }
 
 

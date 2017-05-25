@@ -1,26 +1,23 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tagmanager scintilla src plugins icons po doc data tests
+SUBDIRS = ctags scintilla src plugins icons po doc data tests
 
 AUTOMAKE_OPTIONS =	1.7
 
 ACLOCAL_AMFLAGS = -I m4
-AM_DISTCHECK_CONFIGURE_FLAGS = --enable-api-docs --enable-html-docs --enable-pdf-docs
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-api-docs --enable-html-docs --enable-pdf-docs \
+                               --enable-gtkdoc-header
 
 WIN32_BUILD_FILES = \
 	geany_private.rc \
-	geany.exe.manifest \
-	win32-config.h \
-	makefile.win32
+	geany.exe.manifest
 
 EXTRA_DIST = \
 	autogen.sh \
-	wscript \
-	waf \
+	scripts/gen-api-gtkdoc.py \
 	geany.desktop.in \
 	geany.pc.in \
 	geany.spec \
-	ChangeLog.pre-0-17 \
 	ChangeLog.pre-1-22 \
 	HACKING \
 	README.I18N \

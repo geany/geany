@@ -97,6 +97,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
+	GCS_INDICATOR_ERROR,
 	GCS_MAX
 };
 
@@ -560,6 +561,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
+	get_keyfile_style(config, config_home, "indicator_error", &common_style_set.styling[GCS_INDICATOR_ERROR]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -649,7 +651,8 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(0x0000FF /* red, in BGR */));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR,
+		invert(common_style_set.styling[GCS_INDICATOR_ERROR].foreground));
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
@@ -1421,6 +1424,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
 				style == SCE_P_CHARACTER ||
+				style == SCE_P_FSTRING ||
+				style == SCE_P_FCHARACTER ||
+				style == SCE_P_FTRIPLE ||
+				style == SCE_P_FTRIPLEDOUBLE ||
 				style == SCE_P_STRINGEOL);
 
 		case SCLEX_F77:

@@ -135,18 +135,18 @@ signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_da
 /** Sent after a project is opened but before session files are loaded.
  *
  * @param obj a GeanyObject instance, should be ignored.
- * @param config an exising GKeyFile object which can be used to read and write data.
+ * @param config an existing GKeyFile object which can be used to read and write data.
  *        It must not be closed or freed.
  * @param user_data user data.
  */
 signal void (*project_open)(GObject *obj, GKeyFile *config, gpointer user_data);
 
-/** Sent when a project is saved(happens when the project is created, the properties
+/** Sent when a project is saved (happens when the project is created, the properties
  *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
  *  will write the contents of the GKeyFile to the disc.
  *
  * @param obj a GeanyObject instance, should be ignored.
- * @param config an exising GKeyFile object which can be used to read and write data.
+ * @param config an existing GKeyFile object which can be used to read and write data.
  *        It must not be closed or freed.
  * @param user_data user data.
  */
@@ -158,6 +158,15 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  * @param user_data user data.
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
+
+/** Sent before a project is closed.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param user_data user data.
+ *
+ * @since 1.29 (API 230)
+ */
+signal void (*project_before_close)(GObject *obj, gpointer user_data);
 
 /** Sent after a project dialog is opened but before it is displayed. Plugins
  *  can append their own project settings tabs by using this signal.
@@ -242,7 +251,7 @@ signal void (*update_editor_menu)(GObject *obj, const gchar *word, gint pos, Gea
  * The signal can be sent after Geany's default handler has been run when you set
  * PluginCallback::after field to TRUE.
  *
- * An example callback implemention of this signal can be found in the Demo plugin.
+ * An example callback implementation of this signal can be found in the Demo plugin.
  *
  * @warning This signal has much power and should be used carefully. You should especially
  *          care about the return value; make sure to return TRUE only if it is necessary

@@ -50,11 +50,7 @@ void symbols_reload_config_files(void);
 
 void symbols_global_tags_loaded(guint file_type_idx);
 
-GString *symbols_find_typenames_as_string(gint lang, gboolean global);
-
-const GList *symbols_get_tag_list(GeanyDocument *doc, guint tag_types);
-
-const gchar **symbols_get_html_entities(void);
+GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global);
 
 gboolean symbols_recreate_tag_list(GeanyDocument *doc, gint sort_mode);
 

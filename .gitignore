@@ -10,7 +10,6 @@
 deps.mak
 .deps/
 .libs/
-.lock-waf_*
 Makefile
 Makefile.in
 .dirstamp
@@ -20,7 +19,6 @@ Makefile.in
 #-----------------------------------------------------------------------
 /aclocal.m4
 /autom4te.cache
-/_build_
 /build-aux/
 /build-stamp
 /codenames
@@ -41,15 +39,12 @@ Makefile.in
 /geany.pc
 /geany.nsi
 /geany.spec
-/geany_private.res
 /global.tags.old
 /install-sh
 /intltool
 /intltool-*
 /libtool
 /localwin32.mk
-/.lock-wscript
-/.lock-wafbuild
 /ltmain.sh
 /m4/lt*.m4
 /m4/intltool.m4
@@ -63,9 +58,6 @@ Makefile.in
 /stamp-h.in
 /*.tar.*
 /TODO.*
-# extracted Waf directory (without dot on Windows)
-/.waf-*
-/waf-*
 
 #-----------------------------------------------------------------------
 # /po/
@@ -93,13 +85,17 @@ Makefile.in
 # /src/
 #-----------------------------------------------------------------------
 /src/geany
+/src/geany_private.res
 /src/signallist.i
 
 #-----------------------------------------------------------------------
 # /doc/
 #-----------------------------------------------------------------------
 /doc/Doxyfile
+/doc/Doxyfile-gi
 /doc/Doxyfile.stamp
+/doc/Doxyfile-gi.stamp
+/doc/doxygen_*
 /doc/geany.1
 /doc/geany.html
 /doc/hacking.html
@@ -110,6 +106,9 @@ Makefile.in
 /doc/*.tex
 /doc/*.toc
 /doc/reference
+/doc/geany-gtkdoc.h
+/doc/geany-sciwrappers-gtkdoc.h
+/doc/xml/
 
 #-----------------------------------------------------------------------
 # /tests/

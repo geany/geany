@@ -16,6 +16,7 @@ install:
   - sudo apt-get install -y python-docutils rst2pdf
   # try not to install doxygen-latex because we don't need it and it's huge
   - sudo apt-get install -y --no-install-recommends doxygen
+  - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=aggregate-return -Werror=implicit-function-declaration"
 script:

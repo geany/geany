@@ -36,7 +36,7 @@
 #include "callbacks.h"
 #include "dialogs.h"
 #include "document.h"
-#include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanyobject.h"
 #include "highlighting.h"
@@ -119,7 +119,7 @@ static GOptionEntry entries[] =
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
-	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags"), NULL },
+	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags file"), NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
 	{ "socket-file", 0, 0, G_OPTION_ARG_FILENAME, &cl_options.socket_filename, N_("Use this socket filename for communication with a running Geany instance"), NULL },
@@ -251,7 +251,6 @@ static void main_init(void)
 	file_prefs.tab_order_beside		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
-	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
@@ -704,7 +703,7 @@ static gint create_config_dir(void)
 		if (saved_errno == 0 && ! g_file_test(filedefs_readme, G_FILE_TEST_EXISTS))
 		{
 			gchar *text = g_strconcat(
-"Copy files from ", app->datadir, " to this directory to overwrite "
+"Copy files from ", app->datadir, "/filedefs to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
 "the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").", NULL);
 			utils_write_file(filedefs_readme, text);
@@ -877,10 +876,13 @@ static void load_session_project_file(void)
 
 static void load_settings(void)
 {
+#ifdef HAVE_VTE
+	vte_info.load_vte_cmdline = !no_vte;
+#endif
 	configuration_load();
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
-	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
+	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
 		ui_prefs.msgwindow_visible = FALSE;
@@ -1047,6 +1049,8 @@ gint main_lib(gint argc, gchar **argv)
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
+	/* initialize TM before parsing command-line - needed for tag file generation */
+	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)

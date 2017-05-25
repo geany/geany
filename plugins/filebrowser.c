@@ -59,8 +59,6 @@ enum
 	KB_COUNT
 };
 
-PLUGIN_KEY_GROUP(file_browser, KB_COUNT)
-
 
 enum
 {
@@ -233,7 +231,7 @@ static void add_item(const gchar *name)
 	sep = (utils_str_equal(current_dir, "/")) ? "" : G_DIR_SEPARATOR_S;
 	fname = g_strconcat(current_dir, sep, name, NULL);
 	dir = g_file_test(fname, G_FILE_TEST_IS_DIR);
-	utf8_fullname = utils_get_locale_from_utf8(fname);
+	utf8_fullname = utils_get_utf8_from_locale(fname);
 	utf8_name = utils_get_utf8_from_locale(name);
 	g_free(fname);
 
@@ -1122,6 +1120,7 @@ static void kb_activate(guint key_id)
 
 void plugin_init(GeanyData *data)
 {
+	GeanyKeyGroup *key_group;
 	GtkWidget *scrollwin, *toolbar, *filterbar;
 
 	filter = NULL;
@@ -1160,9 +1159,10 @@ void plugin_init(GeanyData *data)
 		file_view_vbox, gtk_label_new(_("Files")));
 
 	/* setup keybindings */
-	keybindings_set_item(plugin_key_group, KB_FOCUS_FILE_LIST, kb_activate,
+	key_group = plugin_set_key_group(geany_plugin, "file_browser", KB_COUNT, NULL);
+	keybindings_set_item(key_group, KB_FOCUS_FILE_LIST, kb_activate,
 		0, 0, "focus_file_list", _("Focus File List"), NULL);
-	keybindings_set_item(plugin_key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
+	keybindings_set_item(key_group, KB_FOCUS_PATH_ENTRY, kb_activate,
 		0, 0, "focus_path_entry", _("Focus Path Entry"), NULL);
 
 	plugin_signal_connect(geany_plugin, NULL, "document-activate", TRUE,

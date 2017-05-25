@@ -29,6 +29,11 @@
     <property name="step_increment">1</property>
     <property name="page_increment">158.44</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment13">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAdjustment" id="adjustment2">
     <property name="lower">1</property>
     <property name="upper">99</property>
@@ -500,7 +505,7 @@
     </child>
     <child>
       <object class="GtkImageMenuItem" id="goto_tag_definition2">
-        <property name="label" translatable="yes">Go to _Tag Definition</property>
+        <property name="label" translatable="yes">Go to Symbol Defini_tion</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="use_underline">True</property>
@@ -1543,7 +1548,7 @@
                                         <property name="can_focus">False</property>
                                         <property name="left_padding">12</property>
                                         <child>
-                                          <object class="GtkVBox" id="vbox46">
+                                          <object class="GtkVBox" id="box_sidebar_visible_children">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
                                             <child>
@@ -1555,11 +1560,75 @@
                                                 <property name="tooltip_text" translatable="yes">Toggle the symbol list on and off</property>
                                                 <property name="use_underline">True</property>
                                                 <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="on_show_symbol_list_toggled" swapped="no"/>
                                               </object>
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
                                                 <property name="position">0</property>
+                                              </packing>
+                                            </child>
+                                            <child>
+                                              <object class="GtkAlignment" id="alignment15">
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">False</property>
+                                                <property name="left_padding">12</property>
+                                                <child>
+                                                  <object class="GtkHBox" id="box_show_symbol_list_children">
+                                                    <property name="visible">True</property>
+                                                    <property name="can_focus">False</property>
+                                                    <property name="tooltip_text" translatable="yes">Default symbol sorting mode</property>
+                                                    <property name="spacing">12</property>
+                                                    <child>
+                                                      <object class="GtkLabel" id="label24">
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">False</property>
+                                                        <property name="label" translatable="yes">Default sorting mode:</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">0</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioButton" id="radio_symbols_sort_by_name">
+                                                        <property name="label" translatable="yes">Name</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">False</property>
+                                                        <property name="active">True</property>
+                                                        <property name="draw_indicator">True</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">1</property>
+                                                      </packing>
+                                                    </child>
+                                                    <child>
+                                                      <object class="GtkRadioButton" id="radio_symbols_sort_by_appearance">
+                                                        <property name="label" translatable="yes">Appearance</property>
+                                                        <property name="visible">True</property>
+                                                        <property name="can_focus">True</property>
+                                                        <property name="receives_default">False</property>
+                                                        <property name="active">True</property>
+                                                        <property name="draw_indicator">True</property>
+                                                        <property name="group">radio_symbols_sort_by_name</property>
+                                                      </object>
+                                                      <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">True</property>
+                                                        <property name="position">2</property>
+                                                      </packing>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                              <packing>
+                                                <property name="expand">True</property>
+                                                <property name="fill">True</property>
+                                                <property name="position">1</property>
                                               </packing>
                                             </child>
                                             <child>
@@ -1575,7 +1644,7 @@
                                               <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
-                                                <property name="position">1</property>
+                                                <property name="position">2</property>
                                               </packing>
                                             </child>
                                           </object>
@@ -3797,6 +3866,49 @@
                                     <property name="position">6</property>
                                   </packing>
                                 </child>
+                                <child>
+                                  <object class="GtkHBox" id="hbox4">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="tooltip_markup">Number of lines to maintain between the cursor and the top and bottom edges of the view. This allows some lines of context around the cursor to always be visible. If &lt;i&gt;Stop scrolling at last line&lt;/i&gt; is &lt;b&gt;disabled&lt;/b&gt;, the cursor will never reach the bottom edge when this value is greater than 0.</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel" id="label25">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">False</property>
+                                        <property name="label" translatable="yes">Lines visible _around the cursor:</property>
+                                        <property name="use_underline">True</property>
+                                        <property name="mnemonic_widget">spin_scroll_lines_around_cursor</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">0</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="spin_scroll_lines_around_cursor">
+                                        <property name="visible">True</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="primary_icon_activatable">False</property>
+                                        <property name="secondary_icon_activatable">False</property>
+                                        <property name="primary_icon_sensitive">True</property>
+                                        <property name="secondary_icon_sensitive">True</property>
+                                        <property name="adjustment">adjustment13</property>
+                                      </object>
+                                      <packing>
+                                        <property name="expand">True</property>
+                                        <property name="fill">True</property>
+                                        <property name="position">1</property>
+                                      </packing>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">7</property>
+                                  </packing>
+                                </child>
                               </object>
                             </child>
                           </object>
@@ -4422,7 +4534,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="tooltip_text" translatable="yes">Removes trailing spaces and tabs and the end of lines</property>
+                                <property name="tooltip_text" translatable="yes">Removes trailing spaces and tabs at the end of lines</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                               </object>
@@ -5746,20 +5858,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkLabel" id="bg_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Background image:</property>
-                              </object>
-                              <packing>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkLabel" id="terminal_scrollback_lines_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -5767,8 +5865,8 @@
                                 <property name="label" translatable="yes">Scrollback lines:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -5781,8 +5879,8 @@
                                 <property name="label" translatable="yes">Shell:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -5822,48 +5920,6 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkEntry" id="entry_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Sets the path to the background image in the terminal widget</property>
-                                <property name="invisible_char">•</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
-                                <property name="primary_icon_sensitive">True</property>
-                                <property name="secondary_icon_sensitive">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="right_attach">2</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="button_term_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <child>
-                                  <object class="GtkImage" id="image1337">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="stock">gtk-open</property>
-                                    <property name="icon-size">1</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="left_attach">2</property>
-                                <property name="right_attach">3</property>
-                                <property name="top_attach">3</property>
-                                <property name="bottom_attach">4</property>
-                                <property name="x_options">GTK_FILL</property>
-                                <property name="y_options">GTK_FILL</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkSpinButton" id="spin_scrollback">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -5880,8 +5936,8 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">3</property>
-                                <property name="top_attach">4</property>
-                                <property name="bottom_attach">5</property>
+                                <property name="top_attach">3</property>
+                                <property name="bottom_attach">4</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -5899,8 +5955,8 @@
                               <packing>
                                 <property name="left_attach">1</property>
                                 <property name="right_attach">2</property>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
                             </child>
@@ -5921,8 +5977,8 @@
                               <packing>
                                 <property name="left_attach">2</property>
                                 <property name="right_attach">3</property>
-                                <property name="top_attach">5</property>
-                                <property name="bottom_attach">6</property>
+                                <property name="top_attach">4</property>
+                                <property name="bottom_attach">5</property>
                                 <property name="x_options">GTK_FILL</property>
                                 <property name="y_options">GTK_FILL</property>
                               </packing>
@@ -6407,7 +6463,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkImageMenuItem" id="preferences2">
+                          <object class="GtkImageMenuItem" id="properties1">
                             <property name="label">gtk-properties</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -6506,7 +6562,8 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">_Edit</property>
                     <property name="use_underline">True</property>
-                    <signal name="activate" handler="on_edit1_activate" swapped="no"/>
+                    <signal name="select" handler="on_edit1_select" swapped="no"/>
+                    <signal name="deselect" handler="on_edit1_deselect" swapped="no"/>
                     <child type="submenu">
                       <object class="GtkMenu" id="edit1_menu">
                         <property name="can_focus">False</property>
@@ -7219,7 +7276,7 @@
                                   <object class="GtkMenuItem" id="goto_tag_definition1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Go to _Tag Definition</property>
+                                    <property name="label" translatable="yes">Go to Symbol Defini_tion</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_goto_tag_definition1" swapped="no"/>
                                   </object>
@@ -7228,7 +7285,7 @@
                                   <object class="GtkMenuItem" id="goto_tag_declaration1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Go to T_ag Declaration</property>
+                                    <property name="label" translatable="yes">Go to Symbol Decl_aration</property>
                                     <property name="use_underline">True</property>
                                     <signal name="activate" handler="on_goto_tag_declaration1" swapped="no"/>
                                   </object>
@@ -7985,7 +8042,7 @@
                           <object class="GtkMenuItem" id="load_tags1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Load Ta_gs...</property>
+                            <property name="label" translatable="yes">Load Ta_gs File...</property>
                             <property name="use_underline">True</property>
                             <signal name="activate" handler="on_load_tags1_activate" swapped="no"/>
                           </object>

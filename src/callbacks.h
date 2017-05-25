@@ -117,6 +117,8 @@ void on_menu_remove_indicators1_activate(GtkMenuItem *menuitem, gpointer user_da
 
 void on_print1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
+void on_file_properties_activate(GtkMenuItem *menuitem, gpointer user_data);
+
 void on_menu_select_all1_activate(GtkMenuItem *menuitem, gpointer user_data);
 
 void on_menu_show_sidebar1_toggled(GtkCheckMenuItem *checkmenuitem, gpointer user_data);

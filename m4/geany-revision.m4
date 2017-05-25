@@ -1,6 +1,6 @@
 dnl GEANY_CHECK_REVISION([action-if-found], [action-if-not-found])
-dnl Check for the Git-SVN or SVN revision and set REVISION to
-dnl "r<revnum>" or to "-1" if the revision can't be found
+dnl Check for the Git revision and set REVISION to "<revid>"
+dnl or to "-1" if the revision can't be found
 dnl Also AC_DEFINEs REVISION
 AC_DEFUN([GEANY_CHECK_REVISION],
 [

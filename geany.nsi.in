@@ -51,10 +51,10 @@ VIProductVersion "${PRODUCT_VERSION_ID}"
 VIAddVersionKey "ProductName" "${PRODUCT_NAME}"
 VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}"
 VIAddVersionKey "ProductVersion" "${PRODUCT_VERSION}"
-VIAddVersionKey "LegalCopyright" "Copyright 2005-2014 by the Geany developer team"
+VIAddVersionKey "LegalCopyright" "Copyright 2005-2017 by the Geany developer team"
 VIAddVersionKey "FileDescription" "${PRODUCT_NAME} Installer"
 
-BrandingText "$(^NAME) installer (NSIS 2.46)"
+BrandingText "$(^NAME) installer (NSIS 2.51)"
 InstallDir "$PROGRAMFILES\Geany"
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
 SetCompressor /SOLID lzma
@@ -76,6 +76,12 @@ Var UNINSTDIR
 ; MUI Settings ;
 ;;;;;;;;;;;;;;;;
 !include "MUI2.nsh"
+
+;Reserve files used in .onInit, for faster start-up
+ReserveFile "${NSISDIR}\Plugins\System.dll"
+ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
+ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
+ReserveFile "${NSISDIR}\Plugins\LangDLL.dll"
 
 !define MUI_ABORTWARNING
 !define MUI_ICON "icons\geany.ico"
@@ -126,18 +132,29 @@ Section "!Program Files" SEC01
 	SetOutPath "$INSTDIR\bin"
 	File "${RESOURCEDIR}\bin\Geany.exe"
 	File "${RESOURCEDIR}\bin\*Geany*.dll"
+	# non-GTK dependencies
+	File "gtk\bin\libgcc_s_dw*.dll"
+	File "gtk\bin\libstdc++-*.dll"
+	File "gtk\bin\libwinpthread*.dll"
+
+	SetOutPath "$INSTDIR\libexec"
+	File /r "${RESOURCEDIR}\libexec\*"
 
 	SetOutPath "$INSTDIR\data"
 	File "${RESOURCEDIR}\data\GPL-2"
-	File "${RESOURCEDIR}\data\file*"
+	File "${RESOURCEDIR}\data\filetype_extensions.conf"
 	File "${RESOURCEDIR}\data\geany.glade"
 !if ${GTK_VERSION} >= 3
+	File "${RESOURCEDIR}\data\geany-3.20.css"
 	File "${RESOURCEDIR}\data\geany.css"
 !else
 	File "${RESOURCEDIR}\data\geany.gtkrc"
 !endif
 	File "${RESOURCEDIR}\data\snippets.conf"
 	File "${RESOURCEDIR}\data\ui_toolbar.xml"
+
+	SetOutPath "$INSTDIR\data\filedefs"
+	File /r "${RESOURCEDIR}\data\filedefs\*"
 
 	SetOutPath "$INSTDIR\data\templates"
 	File /r "${RESOURCEDIR}\data\templates\*"
@@ -189,9 +206,9 @@ SectionEnd
 Section "Documentation" SEC04
 	SectionIn 1
 	SetOverwrite ifnewer
-	SetOutPath "$INSTDIR"
-	File /r "${RESOURCEDIR}\doc"
-	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\doc\Manual.html"
+	SetOutPath "$INSTDIR\share\doc"
+	File /r "${RESOURCEDIR}\share\doc\*"
+	WriteIniStr "$INSTDIR\Documentation.url" "InternetShortcut" "URL" "$INSTDIR\share\doc\geany\html\index.html"
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN ${PRODUCT_NAME}
 	CreateShortCut "$SMPROGRAMS\$StartmenuFolder\Documentation.lnk" "$INSTDIR\Documentation.url"
 	!insertmacro MUI_STARTMENU_WRITE_END
@@ -199,13 +216,9 @@ SectionEnd
 
 Section "Autocompletion Tags" SEC05
 	SectionIn 1
-	SetOutPath "$INSTDIR\data"
 	SetOverwrite ifnewer
-	File "${RESOURCEDIR}\data\php.tags"
-	File "${RESOURCEDIR}\data\pascal.tags"
-	File "${RESOURCEDIR}\data\python.tags"
-	File "${RESOURCEDIR}\data\html_entities.tags"
-	File "${RESOURCEDIR}\data\c99.tags"
+	SetOutPath "$INSTDIR\data\tags"
+	File /r "${RESOURCEDIR}\data\tags\*"
 SectionEnd
 
 ; Include GTK runtime library but only if desired from command line
@@ -213,22 +226,16 @@ SectionEnd
 Section "GTK ${GTK_VERSION} Runtime Environment" SEC06
 	SectionIn 1
 	SetOverwrite ifnewer
+	SetOutPath "$INSTDIR"
+	File "gtk\ReadMe.Dependencies.Geany.txt"
 	SetOutPath "$INSTDIR\bin"
 	File /r "gtk\bin\*"
 	SetOutPath "$INSTDIR\etc"
 	File /r "gtk\etc\*"
 	SetOutPath "$INSTDIR\lib"
 	File /r "gtk\lib\*"
-	SetOutPath "$INSTDIR\share\themes"
-	File /r "gtk\share\themes\*"
-!if ${GTK_VERSION} >= 3
-	SetOutPath "$INSTDIR\share\icons"
-	File /r "gtk\share\icons\*"
-	SetOutPath "$INSTDIR\share\glib-2.0"
-	File /r "gtk\share\glib-2.0\*"
-	SetOutPath "$INSTDIR\share\gtk-3.0"
-	File /r "gtk\share\gtk-3.0\*"
-!endif
+	SetOutPath "$INSTDIR\share"
+	File /r "gtk\share\*"
 SectionEnd
 !endif
 
@@ -287,6 +294,7 @@ Section Uninstall
 	Delete "$INSTDIR\uninst.exe"
 	Delete "$INSTDIR\News.txt"
 	Delete "$INSTDIR\ReadMe.txt"
+	Delete "$INSTDIR\ReadMe.Dependencies.Geany.txt"
 	Delete "$INSTDIR\Thanks.txt"
 	Delete "$INSTDIR\ToDo.txt"
 	Delete "$INSTDIR\Authors.txt"
@@ -302,11 +310,11 @@ Section Uninstall
 	Delete "$DESKTOP\Geany.lnk"
 
 	RMDir /r "$INSTDIR\bin"
-	RMDir /r "$INSTDIR\doc"
 	RMDir /r "$INSTDIR\data"
 	RMDir /r "$INSTDIR\etc"
 	RMDir /r "$INSTDIR\include"
 	RMDir /r "$INSTDIR\lib"
+	RMDir /r "$INSTDIR\libexec"
 	RMDir /r "$INSTDIR\share"
 	RMDir "$INSTDIR"
 

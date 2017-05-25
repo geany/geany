@@ -43,12 +43,15 @@ typedef enum GeanyFindFlags
 }
 GeanyFindFlags;
 
-enum GeanyFindSelOptions
+/** @gironly
+ * Find selection options */
+typedef enum
 {
 	GEANY_FIND_SEL_CURRENT_WORD,
 	GEANY_FIND_SEL_X,
 	GEANY_FIND_SEL_AGAIN
-};
+}
+GeanyFindSelOptions;
 
 /** Search preferences */
 typedef struct GeanySearchPrefs
@@ -58,7 +61,7 @@ typedef struct GeanySearchPrefs
 	gboolean	use_current_file_dir;	/* find in files directory to use on showing dialog */
 	gboolean	hide_find_dialog;		/* hide the find dialog on next or previous */
 	gboolean	replace_and_find_by_default;	/* enter in replace window performs Replace & Find instead of Replace */
-	enum GeanyFindSelOptions find_selection_type;
+	GeanyFindSelOptions find_selection_type;
 }
 GeanySearchPrefs;
 

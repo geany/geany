@@ -1,0 +1,178 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# use foreground;background;bold;italic or named_style,bold,italic
+
+# used for filetype All/None
+default=default
+
+# 3rd selection argument is true to override default foreground
+# 4th selection argument is true to override default background
+selection=selection
+
+# style for a matching brace
+brace_good=brace_good
+# style for a non-matching brace (a brace without a counterpart)
+brace_bad=brace_bad
+
+# the following settings define the colours of the margins on the left side
+margin_linenumber=margin_line_number
+margin_folding=margin_folding
+fold_symbol_highlight=fold_symbol_highlight
+
+# background colour of the current line, only the second and third argument is interpreted
+# use the third argument to enable or disable the highlighting of the current line (has to be true/false)
+current_line=current_line
+
+# translucency for the current line(first argument) and the selection (second argument)
+# values between 0 and 256 are accepted. Note for Windows 95, 98 and ME users:
+# keep this value at 256 to disable translucency otherwise Geany might crash
+translucency=256;256
+
+# style for a highlighted line (e.g when using Goto line or goto tag)
+marker_line=marker_line
+
+# style for a marked search results (when using "Mark" in Search dialogs)
+# the second argument sets the background colour for the drawn rectangle
+# only the second argument is interpreted
+marker_search=marker_search
+
+# style for a marked line (e.g when using the "Toggle Marker" keybinding (Ctrl-M))
+marker_mark=marker_mark
+
+# translucency for the line marker(first argument) and the search marker (second argument)
+marker_translucency=256;256
+
+# colour of the caret(the blinking cursor), only first and third argument is interpreted
+# set the third argument to true to change the caret into a block caret
+caret=caret
+
+# width of the caret(the blinking cursor)
+# width in pixels, use 0 to make it invisible, maximum width is 3
+caret_width=1
+
+# set foreground and background colour of indentation guides
+indent_guide=indent_guide
+
+# third argument: if true, use this foreground color. If false, use the default value defined by the filetypes.
+# fourth argument: if true, use this background color. If false, use the default value defined by the filetypes.
+white_space=white_space
+
+# style of folding icons, valid values are:
+# first argument:  1 for boxes, 2 for circles, 3 for arrows, 4 for +/-
+# second argument: 1 for straight lines, 2 for curved lines or 0 for none
+folding_style=1;1;
+
+# should an horizontal line be drawn at the line where text is folded
+# 0 to disable
+# 1 to draw the line above folded text
+# 2 to draw the line below folded text
+folding_horiz_line=2
+
+# first argument: drawing of visual flags to indicate a line is wrapped. This is a bitmask of the
+# values: 0 - No visual flags, 1 - Visual flag at end of subline of a wrapped line, 2 - Visual flag
+# at begin of subline of a wrapped line, Subline is indented by at least 1 to make room for the flag.
+# second argument: whether the visual flags to indicate a line is wrapped are drawn near the border
+# or near the text. This is a bitmask of the values: 0 - Visual flags drawn near border,
+# 1 - Visual flag at end of subline drawn near text, 2 - Visual flag at begin of subline drawn near text
+line_wrap_visuals=1;0;
+
+# first argument: sets the size of indentation of sublines for wrapped lines in terms of
+# the width of a space, only used when the second argument is 0
+# second argument: wrapped sublines can be indented to the position of their first subline or
+# one more indent level, possible values:
+# 0 - Wrapped sublines aligned to left of window plus amount set by the first argument
+# 1 - Wrapped sublines are aligned to first subline indent (use the same indentation)
+# 2 - Wrapped sublines are aligned to first subline indent plus one more level of indentation
+line_wrap_indent=0;1;
+
+# first argument: amount of space to be drawn above the line's baseline
+# second argument: amount of space to be drawn below the line's baseline
+line_height=0;0;
+
+# 3rd argument is true to override default foreground of calltips
+# 4th argument is true to override default background of calltips
+calltips=call_tips
+
+# error indicator color
+indicator_error=0xff0000
+
+[settings]
+# which characters should be skipped when moving (or included when deleting) to word boundaries
+# should always include space and tab (\s\t)
+whitespace_chars=\s\t!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+[named_styles]
+# This is the Default "built-in" color scheme
+default=0x000000;0xffffff;false;false
+error=0xff0000;0xBFBFBF;false;italic
+
+selection=0x000000;0xc0c0c0;false;true
+current_line=0x000000;0xf0f0f0;true;
+brace_good=0x0000ff;0xFFFFFF;true;false
+brace_bad=0xff0000;0xFFFFFF;true;false
+margin_line_number=0x000000;0xd0d0d0;
+margin_folding=0x000000;0xdfdfdf;
+fold_symbol_highlight=0xffffff
+indent_guide=0xc0c0c0;;
+caret=0x000000;0x000000;false;
+marker_line=0x000000;0xffff00;
+marker_search=0x000000;0x0000f0;
+marker_mark=0x000000;0xb8f4b8;
+call_tips=0xc0c0c0;0xffffff;false;false
+white_space=0xc0c0c0;0xffffff;true;false
+
+comment=0xd00000
+comment_doc=0x3f5fbf
+comment_line=comment
+comment_line_doc=comment_doc
+comment_doc_keyword=comment_doc,bold
+comment_doc_keyword_error=comment_doc,italic
+
+number=0x007f00
+number_1=number
+number_2=number_1
+
+type=0x0000d0;;true;false
+class=type
+function=0x000080
+parameter=function
+
+keyword=0x00007f;;true;false
+keyword_1=keyword
+keyword_2=0x991111;;true;false
+keyword_3=keyword_1
+keyword_4=keyword_1
+
+identifier=default
+identifier_1=identifier
+identifier_2=identifier_1
+identifier_3=identifier_1
+identifier_4=identifier_1
+
+string=0xff8000
+string_1=string
+string_2=0x008000
+string_eol=0x000000;0xe0c0e0;false;false
+character=string_1
+backticks=string_2
+here_doc=string_2
+
+label=default,bold
+preprocessor=0x007f7f
+regex=number_1
+operator=0x301010
+decorator=string_1,bold
+other=0x404080
+
+tag=type
+tag_unknown=tag,bold
+tag_end=tag,bold
+attribute=keyword_1
+attribute_unknown=attribute,bold
+value=string_1
+entity=default
+
+line_added=0x34b034;0xffffff;false;false
+line_removed=0xff2727;0xffffff;false;false
+line_changed=0x7f007f;0xffffff;false;false

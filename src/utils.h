@@ -49,8 +49,13 @@ G_BEGIN_DECLS
  * E.g. @code SETPTR(str, g_strndup(str, 5)); @endcode
  **/
 #define SETPTR(ptr, result) \
-	do setptr(ptr, result) while (0)
+	do {\
+		gpointer setptr_tmp = ptr;\
+		ptr = result;\
+		g_free(setptr_tmp);\
+	} while (0)
 
+#ifndef GEANY_DISABLE_DEPRECATED
 /** @deprecated 2011/11/15 - use SETPTR() instead. */
 #define setptr(ptr, result) \
 	{\
@@ -58,6 +63,7 @@ G_BEGIN_DECLS
 		ptr = result;\
 		g_free(setptr_tmp);\
 	}
+#endif
 
 /** Duplicates a string on the stack using @c g_alloca().
  * Like glibc's @c strdupa(), but portable.
@@ -215,6 +221,7 @@ typedef enum
 	RESOURCE_DIR_DOC,
 	RESOURCE_DIR_LOCALE,
 	RESOURCE_DIR_PLUGIN,
+	RESOURCE_DIR_LIBEXEC,
 
 	RESOURCE_DIR_COUNT
 } GeanyResourceDirType;
@@ -282,8 +289,6 @@ gchar *utils_get_current_time_string(void);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);
-
-gchar **utils_read_file_in_array(const gchar *filename);
 
 gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash);
 

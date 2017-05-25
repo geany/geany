@@ -145,7 +145,7 @@ public:
 			(pt.y >= top) && (pt.y <= bottom);
 	}
 	bool ContainsWholePixel(Point pt) const {
-		// Does the rectangle contain all of the pixel to left/below the point 
+		// Does the rectangle contain all of the pixel to left/below the point
 		return (pt.x >= left) && ((pt.x+1) <= right) &&
 			(pt.y >= top) && ((pt.y+1) <= bottom);
 	}
@@ -524,10 +524,6 @@ public:
 
 #ifdef SCI_NAMESPACE
 }
-#endif
-
-#if defined(__GNUC__) && defined(SCINTILLA_QT)
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
 
 #endif

@@ -418,7 +418,6 @@ void toolbar_update_ui(void)
 {
 	static GtkWidget *hbox_menubar = NULL;
 	static GtkWidget *menubar = NULL;
-	GtkWidget *menubar_toolbar_separator = NULL;
 	GtkWidget *parent;
 	GtkToolItem *first_item;
 
@@ -438,6 +437,8 @@ void toolbar_update_ui(void)
 
 	if (toolbar_prefs.append_to_menu)
 	{
+		GtkWidget *menubar_toolbar_separator;
+
 		if (parent != NULL)
 		{
 			if (parent != hbox_menubar)
@@ -1064,10 +1065,8 @@ static TBEditorWidget *tb_editor_create_dialog(GtkWindow *parent)
 void toolbar_configure(GtkWindow *parent)
 {
 	gchar *markup;
-	const gchar *name;
 	GSList *sl, *used_items;
 	GList *l, *all_items;
-	GtkTreeIter iter;
 	GtkTreePath *path;
 	TBEditorWidget *tbw;
 
@@ -1089,15 +1088,20 @@ void toolbar_configure(GtkWindow *parent)
 		-1);
 	foreach_list(l, all_items)
 	{
-		name = gtk_action_get_name(l->data);
+		const gchar *name = gtk_action_get_name(l->data);
+
 		if (g_slist_find_custom(used_items, name, (GCompareFunc) strcmp) == NULL)
 		{
+			GtkTreeIter iter;
+
 			gtk_list_store_append(tbw->store_available, &iter);
 			tb_editor_set_item_values(name, tbw->store_available, &iter);
 		}
 	}
 	foreach_slist(sl, used_items)
 	{
+		GtkTreeIter iter;
+
 		gtk_list_store_append(tbw->store_used, &iter);
 		tb_editor_set_item_values(sl->data, tbw->store_used, &iter);
 	}

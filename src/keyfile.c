@@ -38,6 +38,7 @@
 #include "build.h"
 #include "document.h"
 #include "encodings.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
 #include "geanyobject.h"
 #include "main.h"
@@ -48,6 +49,7 @@
 #include "sciwrappers.h"
 #include "stash.h"
 #include "support.h"
+#include "symbols.h"
 #include "templates.h"
 #include "toolbar.h"
 #include "ui_utils.h"
@@ -161,6 +163,11 @@ static void init_pref_groups(void)
 		"radio_sidebar_left", GTK_POS_LEFT,
 		"radio_sidebar_right", GTK_POS_RIGHT,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.symbols_sort_mode,
+		"symbols_sort_mode", SYMBOLS_SORT_BY_NAME,
+		"radio_symbols_sort_by_name", SYMBOLS_SORT_BY_NAME,
+		"radio_symbols_sort_by_appearance", SYMBOLS_SORT_BY_APPEARANCE,
+		NULL);
 	stash_group_add_radio_buttons(group, &interface_prefs.msgwin_orientation,
 		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
@@ -208,6 +215,8 @@ static void init_pref_groups(void)
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_spin_button_integer(group, &editor_prefs.scroll_lines_around_cursor,
+		"scroll_lines_around_cursor", 0, "spin_scroll_lines_around_cursor");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
@@ -363,7 +372,6 @@ void configuration_save_session_files(GKeyFile *config)
 	gint npage;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
-	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
@@ -375,7 +383,8 @@ void configuration_save_session_files(GKeyFile *config)
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;
@@ -515,13 +524,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	{
 		gchar *tmp_string;
 
-		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
-			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
-				vc->send_selection_unsafe);
-		if (!g_key_file_has_key(config, "VTE", "send_cmd_prefix", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "send_cmd_prefix", vc->send_cmd_prefix);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -533,7 +535,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -747,9 +748,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* read stash prefs */
-	settings_action(config, SETTING_READ);
-
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
@@ -858,8 +856,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
-	if (vte_info.load_vte)
+	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
+		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
@@ -879,10 +878,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			/* fallback to root */
 			vte_info.dir = g_strdup("/");
 
-		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
-			"send_selection_unsafe", FALSE);
-		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
@@ -890,13 +885,21 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->send_cmd_prefix = utils_get_setting_string(config, "VTE", "send_cmd_prefix", "");
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
+
+		/* various VTE prefs.
+		 * this can't be done in init_pref_groups() because we need to know the value of
+		 * vte_info.load_vte, and `vc` to be initialized */
+		group = stash_group_new("VTE");
+		configuration_add_various_pref_group(group);
+
+		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
+		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);
 	}
 #endif
 	/* templates */
@@ -942,12 +945,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
-	/* build menu */
-	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
-	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
-	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
-	build_load_menu(config, GEANY_BCS_PREF, NULL);
-
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 
@@ -974,6 +971,16 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
+
+	/* read stash prefs */
+	settings_action(config, SETTING_READ);
+
+	/* build menu
+	 * after stash prefs as it uses some of them */
+	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 
 

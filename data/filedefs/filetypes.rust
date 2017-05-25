@@ -1,0 +1,83 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+commentblock=comment
+commentline=comment_line
+commentblockdoc=comment_doc
+commentlinedoc=comment_doc
+number=number_1
+word=keyword_1
+word2=keyword_2
+word3=keyword_3
+word4=type
+string=string_1
+stringraw=string_2
+character=character
+bytestring=string_1
+bytestringraw=string_2
+bytecharacter=character
+operator=operator
+identifier=identifier_1
+lifetime=parameter
+macro=preprocessor
+lexerror=error
+
+[keywords]
+# all items must be in one line
+primary=abstract alignof as become box break const continue crate do else enum extern false final fn for if impl in let loop macro match mod move mut offsetof override priv proc pub pure ref return self sizeof static struct super trait true type typeof unsafe unsized use virtual where while yield
+secondary=bool char f32 f64 i16 i32 i64 i8 isize str u16 u32 u64 u8 usize
+tertiary=Self
+
+[lexer_properties]
+styling.within.preprocessor=1
+lexer.cpp.track.preprocessor=0
+
+[settings]
+# default extension used when saving files
+extension=rs
+
+# MIME type
+mime_type=text/x-rustsrc
+
+# single comments, like # in this file
+comment_single=//
+# multiline comments
+comment_open=/*
+comment_close=*/
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=0
+
+[build-menu]
+FT_00_LB=Compile
+FT_00_CM=rustc "%f"
+FT_00_WD=
+NF_00_LB=Cargo Build
+NF_00_CM=cargo build
+NF_00_WD=
+NF_01_LB=Cargo Test
+NF_01_CM=cargo test
+NF_01_WD=
+NF_02_LB=Cargo Bench
+NF_02_CM=cargo bench
+NF_02_WD=
+EX_00_LB=Run
+EX_00_CM="./%e"
+EX_00_WD=
+EX_01_LB=Cargo Run
+EX_01_CM=cargo run
+EX_01_WD=

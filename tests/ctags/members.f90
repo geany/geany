@@ -2,7 +2,7 @@ module Members
   implicit none
 
   type HasMembers
-    ! a "derived type" in Fortran is analagous to a "class" in other languages
+    ! a "derived type" in Fortran is analogous to a "class" in other languages
     integer, kind :: kind_member
     integer, len  :: len_member
     integer       :: member

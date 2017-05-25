@@ -22,6 +22,7 @@
 #ifndef GEANY_UI_UTILS_H
 #define GEANY_UI_UTILS_H 1
 
+#include "geany.h" /* for GEANY_DEPRECATED */
 #include "document.h"
 
 #include "gtkcompat.h"
@@ -68,6 +69,7 @@ typedef struct GeanyInterfacePrefs
 	/** whether compiler messages window is automatically scrolled to show new messages */
 	gboolean		compiler_tab_autoscroll;
 	gint			msgwin_orientation;			/**< orientation of the message window */
+	gint 			symbols_sort_mode;			/**< symbol list sorting mode */
 }
 GeanyInterfacePrefs;
 
@@ -99,8 +101,6 @@ GeanyMainWidgets;
 
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog);
 
-GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment);
-
 void ui_set_statusbar(gboolean log, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void ui_table_add_row(GtkTable *table, gint row, ...) G_GNUC_NULL_TERMINATED;
@@ -110,8 +110,6 @@ GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkE
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text);
 
 void ui_add_document_sensitive(GtkWidget *widget);
-
-void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text);
 
 GtkWidget *ui_image_menu_item_new(const gchar *stock_id, const gchar *label);
 
@@ -140,6 +138,13 @@ void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 const gchar *ui_lookup_stock_label(const gchar *stock_id);
 
 void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column);
+
+
+#ifndef GEANY_DISABLE_DEPRECATED
+GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment) GEANY_DEPRECATED;
+
+void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text) GEANY_DEPRECATED_FOR(gtk_widget_set_tooltip_text);
+#endif	/* GEANY_DISABLE_DEPRECATED */
 
 
 #ifdef GEANY_PRIVATE
@@ -291,6 +296,8 @@ void ui_update_popup_copy_items(GeanyDocument *doc);
 
 void ui_update_popup_goto_items(gboolean enable);
 
+
+void ui_menu_copy_items_set_sensitive(gboolean sensitive);
 
 void ui_update_menu_copy_items(GeanyDocument *doc);
 

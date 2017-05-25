@@ -284,7 +284,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir)
 {
 	BROWSEINFOW bi;
-	LPCITEMIDLIST pidl;
+	LPITEMIDLIST pidl;
 	gchar *result = NULL;
 	wchar_t fname[MAX_PATH];
 	wchar_t w_title[512];
@@ -305,14 +305,14 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	pidl = SHBrowseForFolderW(&bi);
 
 	/* convert the strange Windows folder list item something into an usual path string ;-) */
-	if (pidl != 0)
+	if (pidl != NULL)
 	{
 		if (SHGetPathFromIDListW(pidl, fname))
 		{
 			result = g_malloc0(MAX_PATH * 2);
 			WideCharToMultiByte(CP_UTF8, 0, fname, -1, result, MAX_PATH * 2, NULL, NULL);
 		}
-		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
+		CoTaskMemFree(pidl);
 	}
 	return result;
 }
@@ -785,6 +785,7 @@ gint win32_check_write_permission(const gchar *dir)
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
 {
+	gint ret;
 	if (strncmp(uri, "file://", 7) == 0)
 	{
 		uri += 7;
@@ -794,7 +795,14 @@ void win32_open_browser(const gchar *uri)
 				uri++;
 		}
 	}
-	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	ret = (gint) ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	if (ret <= 32)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		ui_set_statusbar(TRUE, _("Failed to open URI \"%s\": %s"), uri, err);
+		g_warning("ShellExecute failed opening \"%s\" (code %d): %s", uri, ret, err);
+		g_free(err);
+	}
 }
 
 
@@ -816,7 +824,7 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 	if (hConHandle == -1)
 	{
 		gchar *err = g_win32_error_message(GetLastError());
-		g_warning("_open_osfhandle(%ld, _O_TEXT) failed: %s", (long)lStdHandle, err);
+		g_warning("_open_osfhandle(handle(%ld), _O_TEXT) failed: %s", (long)handle, err);
 		g_free(err);
 		return NULL;
 	}
@@ -883,14 +891,19 @@ void win32_init_debug_code(void)
 }
 
 
+/* expands environment placeholders in @str.  input and output is in UTF-8 */
 gchar *win32_expand_environment_variables(const gchar *str)
 {
-	gchar expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	wchar_t *cmdline = g_utf8_to_utf16(str, -1, NULL, NULL, NULL);
+	wchar_t expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	gchar *expanded = NULL;
 
-	if (ExpandEnvironmentStrings((LPCTSTR) str, (LPTSTR) expCmdline, sizeof(expCmdline)) != 0)
-		return g_strdup(expCmdline);
-	else
-		return g_strdup(str);
+	if (cmdline && ExpandEnvironmentStringsW(cmdline, expCmdline, sizeof(expCmdline)) != 0)
+		expanded = g_utf16_to_utf8(expCmdline, -1, NULL, NULL, NULL);
+
+	g_free(cmdline);
+
+	return expanded ? expanded : g_strdup(str);
 }
 
 

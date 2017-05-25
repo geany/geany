@@ -33,6 +33,7 @@ typedef struct StashGroup StashGroup;
  * stash_group_display() and stash_group_update(). */
 typedef gconstpointer StashWidgetID;
 
+GType stash_group_get_type(void);
 
 StashGroup *stash_group_new(const gchar *name);
 

@@ -41,7 +41,8 @@ G_BEGIN_DECLS
  * listed in the documentation should not be changed */
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
-#define GEANY_CODENAME					"Rosset"
+#define GEANY_TAGS_SUBDIR				"tags"
+#define GEANY_CODENAME					"Trevin"
 #define GEANY_HOMEPAGE					"http://www.geany.org/"
 #define GEANY_WIKI						"http://wiki.geany.org/"
 #define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"
@@ -53,6 +54,14 @@ G_BEGIN_DECLS
 
 #ifndef G_GNUC_WARN_UNUSED_RESULT
 #define G_GNUC_WARN_UNUSED_RESULT
+#endif
+
+#if defined(GEANY_PRIVATE) || defined(GEANY_DISABLE_DEPRECATION_WARNINGS)
+#	define GEANY_DEPRECATED
+#	define GEANY_DEPRECATED_FOR(x)
+#else
+#	define GEANY_DEPRECATED			G_GNUC_DEPRECATED
+#	define GEANY_DEPRECATED_FOR(x)	G_GNUC_DEPRECATED_FOR(x)
 #endif
 
 /* Re-defined by plugindata.h as something else */

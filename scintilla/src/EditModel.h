@@ -42,9 +42,10 @@ public:
 	Selection sel;
 	bool primarySelection;
 
-	enum IMEInteraction { imeWindowed, imeInline } imeInteraction; 
+	enum IMEInteraction { imeWindowed, imeInline } imeInteraction;
 
 	int foldFlags;
+	int foldDisplayTextStyle;
 	ContractionState cs;
 	// Hotspot support
 	Range hotspot;

@@ -64,7 +64,7 @@ static void ColouriseLuaDoc(
 	// but probably enough in most cases. [pP] is for hex floats.
 	CharacterSet setNumber(CharacterSet::setDigits, ".-+abcdefpABCDEFP");
 	CharacterSet setExponent(CharacterSet::setNone, "eEpP");
-	CharacterSet setLuaOperator(CharacterSet::setNone, "*/-+()={}~[];<>,.^%:#");
+	CharacterSet setLuaOperator(CharacterSet::setNone, "*/-+()={}~[];<>,.^%:#&|");
 	CharacterSet setEscapeSkip(CharacterSet::setNone, "\"'\\");
 
 	Sci_Position currentLine = styler.GetLine(startPos);
@@ -89,8 +89,8 @@ static void ColouriseLuaDoc(
 	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
-	if (startPos == 0 && sc.ch == '#') {
-		// shbang line: # is a comment only if first char of the script
+	if (startPos == 0 && sc.ch == '#' && sc.chNext == '!') {
+		// shbang line: "#!" is a comment only if located at the start of the script
 		sc.SetState(SCE_LUA_COMMENTLINE);
 	}
 	for (; sc.More(); sc.Forward()) {

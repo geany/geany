@@ -1,0 +1,23 @@
+# format=tagmanager
+FOURÌ65536Ö0
+memb1Ì64Îtyp1Ö0Ïint
+memb2Ì64Îtyp2Ö0Ïint
+memb3Ì64Îtyp3Ö0Ïint
+memb4Ì64Îtyp4Ö0Ïint
+memb5Ì64Îtyp5Ö0Ïint
+memb6Ì64Îtyp6Ö0Ïint
+memb7Ì64Îtyp7Ö0Ïint
+str1Ì16384Ö0Ïconst char *
+str2Ì16384Ö0Ïconst char *
+str3Ì16384Ö0Ïconst char *
+str4Ì16384Ö0Ïconst char *
+str5Ì16384Ö0Ïconst char *
+str6Ì16384Ö0Ïconst char *
+str7Ì16384Ö0Ïconst char *
+typ1Ì2048Ö0
+typ2Ì2048Ö0
+typ3Ì2048Ö0
+typ4Ì2048Ö0
+typ5Ì2048Ö0
+typ6Ì2048Ö0
+typ7Ì2048Ö0

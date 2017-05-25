@@ -133,7 +133,7 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 /** Looks up a keybinding item.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @return The keybinding.
+ * @return @transfer{none} The keybinding.
  * @since 0.19. */
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
@@ -150,20 +150,21 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id)
 
 /* This is used to set default keybindings on startup.
  * Menu accels are set in apply_kb_accel(). */
-/** Fills a GeanyKeyBinding struct item.
+/** @girskip
+ * Fills a GeanyKeyBinding struct item.
  * @note Always set @a key and @a mod to 0, otherwise you will likely
  * cause conflicts with the user's custom, other plugin's keybindings or
  * future default keybindings.
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @param callback Function to call when activated, or @c NULL to use the group callback.
+ * @param callback @nullable Function to call when activated, or @c NULL to use the group callback.
  * Usually it's better to use the group callback instead - see plugin_set_key_group().
- * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
+ * @param key Default key, e.g. @c GDK_j (must be lower case), but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
- * @param kf_name Key name for the configuration file, such as @c "menu_new".
+ * @param kf_name Key name used for this item in the keybindings configuration file, i.e. @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL.
+ * @param menu_item @nullable Optional widget to set an accelerator for, or @c NULL.
  * @return The keybinding - normally this is ignored. */
 GEANY_API_SYMBOL
 GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
@@ -211,16 +212,16 @@ GeanyKeyBinding *keybindings_set_item(GeanyKeyGroup *group, gsize key_id,
  *
  * @param group Group.
  * @param key_id Keybinding index for the group.
- * @param key (Lower case) default key, e.g. @c GDK_j, but usually 0 for unset.
+ * @param key Default key, e.g. @c GDK_j (must be lower case), but usually 0 for unset.
  * @param mod Default modifier, e.g. @c GDK_CONTROL_MASK, but usually 0 for unset.
- * @param kf_name Key name for the configuration file, such as @c "menu_new".
+ * @param kf_name Key name used for this item in the keybindings configuration file, i.e. @c "menu_new".
  * @param label Label used in the preferences dialog keybindings tab. May contain
  * underscores - these won't be displayed.
- * @param menu_item Optional widget to set an accelerator for, or @c NULL.
- * @param cb New-style callback to be called when activated, or @c NULL to use the group callback.
- * @param pdata Plugin-specific data passed back to the callback.
+ * @param menu_item @nullable Optional widget to set an accelerator for, or @c NULL.
+ * @param cb @nullable New-style callback to be called when activated, or @c NULL to use the group callback.
+ * @param pdata Plugin-specific data passed back to the callback @a cb.
  * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
- * @return The keybinding - normally this is ignored.
+ * @return @transfer{none} The keybinding - normally this is ignored.
  *
  * @since 1.26 (API 226)
  * @see See plugin_set_key_group_full
@@ -261,8 +262,9 @@ static void add_kb_group(GeanyKeyGroup *group,
 {
 	g_ptr_array_add(keybinding_groups, group);
 
-	group->name = name;
-	group->label = label;
+	/* as for items, we only require duplicated name and label for plugins */
+	group->name = plugin ? g_strdup(name) : name;
+	group->label = plugin ? g_strdup(label) : label;
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
@@ -341,6 +343,8 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_FILE_SAVEALL, NULL,
 		GDK_s, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "menu_saveall", _("Save all"),
 		"menu_save_all1");
+	add_kb(group, GEANY_KEYS_FILE_PROPERTIES, NULL,
+		0, 0, "file_properties", _("Properties"), "properties1");
 	add_kb(group, GEANY_KEYS_FILE_PRINT, NULL,
 		GDK_p, GEANY_PRIMARY_MOD_MASK, "menu_print", _("Print"), "print1");
 	add_kb(group, GEANY_KEYS_FILE_CLOSE, NULL,
@@ -382,6 +386,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOBEGINNING, NULL,
+		GDK_BackSpace, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetobegin",
+		_("Delete to beginning of line"), NULL);
 	/* Note: transpose may fit better in format group, but that would break the API */
 	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
 		0, 0, "edit_transposeline", _("_Transpose Current Line"), NULL);
@@ -474,6 +481,18 @@ static void init_default_kb(void)
 		GDK_2, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd2", _("Send to Custom Command 2"), NULL);
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD3, NULL,
 		GDK_3, GEANY_PRIMARY_MOD_MASK, "edit_sendtocmd3", _("Send to Custom Command 3"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD4, NULL,
+		0, 0, "edit_sendtocmd4", _("Send to Custom Command 4"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD5, NULL,
+		0, 0, "edit_sendtocmd5", _("Send to Custom Command 5"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD6, NULL,
+		0, 0, "edit_sendtocmd6", _("Send to Custom Command 6"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD7, NULL,
+		0, 0, "edit_sendtocmd7", _("Send to Custom Command 7"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD8, NULL,
+		0, 0, "edit_sendtocmd8", _("Send to Custom Command 8"), NULL);
+	add_kb(group, GEANY_KEYS_FORMAT_SENDTOCMD9, NULL,
+		0, 0, "edit_sendtocmd9", _("Send to Custom Command 9"), NULL);
 	/* may fit better in editor group */
 	add_kb(group, GEANY_KEYS_FORMAT_SENDTOVTE, NULL,
 		0, 0, "edit_sendtovte", _("_Send Selection to Terminal"), "send_selection_to_vte1");
@@ -557,10 +576,10 @@ static void init_default_kb(void)
 		_("Go to Pre_vious Marker"), "go_to_previous_marker1");
 	add_kb(group, GEANY_KEYS_GOTO_TAGDEFINITION, NULL,
 		GDK_t, GEANY_PRIMARY_MOD_MASK, "popup_gototagdefinition",
-		_("Go to Tag Definition"), "goto_tag_definition1");
+		_("Go to Symbol Definition"), "goto_tag_definition1");
 	add_kb(group, GEANY_KEYS_GOTO_TAGDECLARATION, NULL,
 		GDK_t, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "popup_gototagdeclaration",
-		_("Go to Tag Declaration"), "goto_tag_declaration1");
+		_("Go to Symbol Declaration"), "goto_tag_declaration1");
 	add_kb(group, GEANY_KEYS_GOTO_LINESTART, NULL,
 		GDK_Home, 0, "edit_gotolinestart", _("Go to Start of Line"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_LINEEND, NULL,
@@ -707,6 +726,9 @@ static void free_key_group(gpointer item)
 		if (group->cb_data_destroy)
 			group->cb_data_destroy(group->cb_data);
 		g_free(group->plugin_keys);
+		/* we allocated those in add_kb_group() as it's a plugin group */
+		g_free((gchar *) group->name);
+		g_free((gchar *) group->label);
 		g_free(group);
 	}
 }
@@ -1439,6 +1461,9 @@ static gboolean cb_func_file_action(guint key_id)
 		case GEANY_KEYS_FILE_PRINT:
 			on_print1_activate(NULL, NULL);
 			break;
+		case GEANY_KEYS_FILE_PROPERTIES:
+			on_file_properties_activate(NULL, NULL);
+			break;
 		case GEANY_KEYS_FILE_QUIT:
 			main_quit();
 			break;
@@ -1713,14 +1738,43 @@ static void focus_sidebar(void)
 }
 
 
+static GtkWidget *find_focus_widget(GtkWidget *widget)
+{
+	GtkWidget *focus = NULL;
+
+	if (GTK_IS_BIN(widget)) /* optimized simple case */
+		focus = find_focus_widget(gtk_bin_get_child(GTK_BIN(widget)));
+	else if (GTK_IS_CONTAINER(widget))
+	{
+		GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+		GList *node;
+
+		for (node = children; node && ! focus; node = node->next)
+			focus = find_focus_widget(node->data);
+		g_list_free(children);
+	}
+
+	/* Some containers handled above might not have children and be what we want to focus
+	 * (e.g. GtkTreeView), so focus that if possible and we don't have anything better */
+	if (! focus && gtk_widget_get_can_focus(widget))
+		focus = widget;
+
+	return focus;
+}
+
+
 static void focus_msgwindow(void)
 {
 	if (ui_prefs.msgwindow_visible)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
-		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+		GtkWidget *widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
 
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		widget = find_focus_widget(widget);
+		if (widget)
+			gtk_widget_grab_focus(widget);
+		else
+			utils_beep();
 	}
 }
 
@@ -2112,6 +2166,9 @@ static gboolean cb_func_editor_action(guint key_id)
 		case GEANY_KEYS_EDITOR_DELETELINETOEND:
 			sci_send_command(doc->editor->sci, SCI_DELLINERIGHT);
 			break;
+		case GEANY_KEYS_EDITOR_DELETELINETOBEGINNING:
+			sci_send_command(doc->editor->sci, SCI_DELLINELEFT);
+			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
 			break;
@@ -2216,7 +2273,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		gint pos;
 
 		/* don't split on a trailing space of a line */
-		if (sci_get_char_at(sci, lend - 1) == GDK_space)
+		if (sci_get_char_at(sci, lend - 1) == ' ')
 			lend--;
 
 		/* detect when the line is short enough and no more splitting is needed */
@@ -2227,7 +2284,7 @@ static gint split_line(GeanyEditor *editor, gint column)
 		found = FALSE;
 		for (pos = edge - 1; pos > lstart; pos--)
 		{
-			if (sci_get_char_at(sci, pos) == GDK_space)
+			if (sci_get_char_at(sci, pos) == ' ')
 			{
 				found = TRUE;
 				break;
@@ -2237,19 +2294,21 @@ static gint split_line(GeanyEditor *editor, gint column)
 		{
 			for (pos = edge; pos < lend; pos++)
 			{
-				if (sci_get_char_at(sci, pos) == GDK_space)
+				if (sci_get_char_at(sci, pos) == ' ')
 				{
 					found = TRUE;
 					break;
 				}
 			}
 		}
-		if (!found)
+		/* don't split right before a space */
+		while (pos + 1 <= lend && sci_get_char_at(sci, pos + 1) == ' ')
+			pos++;
+
+		if (!found || pos >= lend)
 			break;
 
-		sci_set_current_position(sci, pos + 1, FALSE);
-		sci_cancel(sci); /* don't select from completion list */
-		sci_send_command(sci, SCI_NEWLINE);
+		sci_insert_text(sci, pos + 1, editor_get_eol_char(editor));
 		line++;
 	}
 	return line - start_line;
@@ -2423,6 +2482,30 @@ static gboolean cb_func_format_action(guint key_id)
 		case GEANY_KEYS_FORMAT_SENDTOCMD3:
 			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 2)
 				tools_execute_custom_command(doc, ui_prefs.custom_commands[2]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD4:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 3)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[3]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD5:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 4)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[4]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD6:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 5)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[5]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD7:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 6)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[6]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD8:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 7)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[7]);
+			break;
+		case GEANY_KEYS_FORMAT_SENDTOCMD9:
+			if (ui_prefs.custom_commands && g_strv_length(ui_prefs.custom_commands) > 8)
+				tools_execute_custom_command(doc, ui_prefs.custom_commands[8]);
 			break;
 		case GEANY_KEYS_FORMAT_SENDTOVTE:
 			on_send_selection_to_vte1_activate(NULL, NULL);
@@ -2614,10 +2697,12 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 		group = g_new0(GeanyKeyGroup, 1);
 		add_kb_group(group, section_name, label, callback, TRUE);
 	}
+	/* Calls free_key_binding() for individual entries for plugins - has to be
+	 * called before g_free(group->plugin_keys) */
+	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
-	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 

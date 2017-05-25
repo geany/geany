@@ -24,7 +24,7 @@
  * Filetype detection, file extensions and filetype menu items.
  */
 
-/* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
+/* Note: we use GeanyFiletypeID for some function arguments, but GeanyFiletype is better; we should
  * only use GeanyFiletype for API functions. */
 
 #ifdef HAVE_CONFIG_H
@@ -55,15 +55,8 @@
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
-GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
-
+GPtrArray *filetypes_array = NULL;
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
-
-/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
- * first, as this is usually treated specially.
- * The list does not change (after filetypes have been initialized), so you can use
- * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
- * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
 
 
@@ -103,7 +96,7 @@ static gchar *filetype_make_title(const char *name, enum TitleType type)
 
 /* name argument (ie filetype name) must not be translated as it is used for
  * filetype lookup. Use filetypes_get_display_name() instead.*/
-static void ft_init(filetype_id ft_id, int lang, const char *name,
+static void ft_init(GeanyFiletypeID ft_id, TMParserType lang, const char *name,
 	const char *title_name, enum TitleType title_type,
 	GeanyFiletypeGroupID group_id)
 {
@@ -202,7 +195,7 @@ static GeanyFiletype *filetype_new(void)
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
-	ft->lang = -2;	/* assume no tagmanager parser */
+	ft->lang = TM_PARSER_NONE;	/* assume no tagmanager parser */
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
 	ft->indent_width = -1;
@@ -233,7 +226,7 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2, gpointer data)
 
 /** Gets a list of filetype pointers sorted by name.
  * The list does not change on subsequent calls.
- * @return The list - do not free.
+ * @return @elementtype{GeanyFiletype} @transfer{none} The list - do not free.
  * @see filetypes_by_title. */
 GEANY_API_SYMBOL
 const GSList *filetypes_get_sorted_by_name(void)
@@ -318,7 +311,7 @@ static void init_custom_filetypes(const gchar *path)
  * Warning: GTK isn't necessarily initialized yet. */
 void filetypes_init_types(void)
 {
-	filetype_id ft_id;
+	GeanyFiletypeID ft_id;
 	gchar *f;
 
 	g_return_if_fail(filetypes_array == NULL);
@@ -339,7 +332,9 @@ void filetypes_init_types(void)
 	{
 		filetype_add(filetypes[ft_id]);
 	}
-	init_custom_filetypes(app->datadir);
+	f = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, NULL);
+	init_custom_filetypes(f);
+	g_free(f);
 	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	init_custom_filetypes(f);
 	g_free(f);
@@ -529,7 +524,7 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	SETPTR(path, g_build_filename(app->datadir, "filetypes.", NULL));
+	SETPTR(path, g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
@@ -609,7 +604,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 	{
 		static const struct {
 			const gchar *name;
-			filetype_id filetype;
+			GeanyFiletypeID filetype;
 		} intepreter_map[] = {
 			{ "sh",		GEANY_FILETYPES_SH },
 			{ "bash",	GEANY_FILETYPES_SH },
@@ -764,8 +759,8 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
  *
  *  @param utf8_filename The filename in UTF-8 encoding.
  *
- *  @return The detected filetype for @a utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
- *          if it could not be detected.
+ *  @return @transfer{none} The detected filetype for @a utf8_filename or
+ *           @c filetypes[GEANY_FILETYPES_NONE] if it could not be detected.
  **/
 GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
@@ -950,8 +945,8 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result != NULL)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
-		if (ft->lang < 0)
-			geany_debug("Cannot find tag parser '%s' for custom filetype '%s'.", result, ft->name);
+		if (ft->lang == TM_PARSER_NONE)
+			geany_debug("Cannot find tags parser '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
 
@@ -965,7 +960,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	}
 
 	ft->priv->symbol_list_sort_mode = utils_get_setting(integer, configh, config, "settings",
-		"symbol_list_sort_mode", SYMBOLS_SORT_BY_NAME);
+		"symbol_list_sort_mode", SYMBOLS_SORT_USE_PREVIOUS);
 	ft->priv->xml_indent_tags = utils_get_setting(boolean, configh, config, "settings",
 		"xml_indent_tags", FALSE);
 
@@ -1005,7 +1000,7 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 	if (user)
 		file_name = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 	else
-		file_name = g_build_filename(app->datadir, base_name, NULL);
+		file_name = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 
 	g_free(ext);
 	g_free(base_name);
@@ -1240,13 +1235,13 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 {
 	g_return_val_if_fail(ft != NULL, FALSE);
 
-	return ft->lang >= 0;
+	return ft->lang != TM_PARSER_NONE;
 }
 
 
 /** Finds a filetype pointer from its @a name field.
  * @param name Filetype name.
- * @return The filetype found, or @c NULL.
+ * @return @transfer{none} @nullable The filetype found, or @c NULL.
  *
  * @since 0.15
  **/
@@ -1492,7 +1487,7 @@ void filetypes_reload_extensions(void)
 /** Accessor function for @ref GeanyData::filetypes_array items.
  * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
  * @param idx @c filetypes_array index.
- * @return The filetype, or @c NULL if @a idx is out of range.
+ * @return @transfer{none} @nullable The filetype, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
  */
@@ -1576,3 +1571,15 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 
 	return !EMPTY(*co);
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyFiletype
+ *
+ * @return the GeanyFiletype type */
+GEANY_API_SYMBOL
+GType filetype_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyFiletype, filetype, copy_, free_);

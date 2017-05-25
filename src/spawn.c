@@ -68,6 +68,10 @@
 # include "support.h"
 #endif
 
+#if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
+# define G_SPAWN_ERROR_TOO_BIG G_SPAWN_ERROR_2BIG
+#endif
+
 #ifdef G_OS_WIN32
 /* Each 4KB under Windows seem to come in 2 portions, so 2K + 2K is more
    balanced than 4095 + 1. May be different on the latest Windows/glib? */
@@ -303,11 +307,11 @@ gboolean spawn_kill_process(GPid pid, GError **error)
 
 
 #ifdef G_OS_WIN32
-static gchar *spawn_create_process_with_pipes(char *command_line, const char *working_directory,
-	void *environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
+static gchar *spawn_create_process_with_pipes(wchar_t *w_command_line, const wchar_t *w_working_directory,
+	void *w_environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
 {
 	enum { WRITE_STDIN, READ_STDOUT, READ_STDERR, READ_STDIN, WRITE_STDOUT, WRITE_STDERR };
-	STARTUPINFO startup;
+	STARTUPINFOW startup;
 	PROCESS_INFORMATION process;
 	HANDLE hpipe[6] = { NULL, NULL, NULL, NULL, NULL, NULL };
 	int *fd[3] = { stdin_fd, stdout_fd, stderr_fd };
@@ -368,8 +372,9 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	startup.hStdOutput = hpipe[WRITE_STDOUT];
 	startup.hStdError = hpipe[WRITE_STDERR];
 
-	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
-		environment, working_directory, &startup, &process))
+	if (!CreateProcessW(NULL, w_command_line, NULL, NULL, TRUE,
+		CREATE_UNICODE_ENVIRONMENT | (pipe_io ? CREATE_NO_WINDOW : 0),
+		w_environment, w_working_directory, &startup, &process))
 	{
 		failed = "";  /* report the message only */
 		/* further errors will not be reported */
@@ -517,8 +522,10 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 #ifdef G_OS_WIN32
 	GString *command;
-	GArray *environment;
-	gchar *failure;
+	GArray *w_environment;
+	wchar_t *w_working_directory = NULL;
+	wchar_t *w_command = NULL;
+	gboolean success = TRUE;
 
 	if (command_line)
 	{
@@ -549,35 +556,124 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	else
 		command = g_string_new(NULL);
 
-	environment = g_array_new(TRUE, FALSE, sizeof(char));
+	w_environment = g_array_new(TRUE, FALSE, sizeof(wchar_t));
 
 	while (argv && *argv)
 		spawn_append_argument(command, *argv++);
 
-#ifdef SPAWN_TEST
-	g_message("full spawn command line: %s\n", command->str);
+#if defined(SPAWN_TEST) || defined(GEANY_DEBUG)
+	g_message("full spawn command line: %s", command->str);
 #endif
 
-	while (envp && *envp)
+	while (envp && *envp && success)
 	{
-		g_array_append_vals(environment, *envp, strlen(*envp) + 1);
+		glong w_entry_len;
+		wchar_t *w_entry;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(*envp, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(*envp, -1, NULL, NULL, NULL);
+			if (tmp)
+				*envp = tmp;
+		}
+		/* TODO: better error message */
+		w_entry = g_utf8_to_utf16(*envp, -1, NULL, &w_entry_len, error);
+
+		if (! w_entry)
+			success = FALSE;
+		else
+		{
+			/* copy the entry, including NUL terminator */
+			g_array_append_vals(w_environment, w_entry, w_entry_len + 1);
+			g_free(w_entry);
+		}
+
+		g_free(tmp);
 		envp++;
 	}
 
-	failure = spawn_create_process_with_pipes(command->str, working_directory,
-		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
-
-	g_string_free(command, TRUE);
-	g_array_free(environment, TRUE);
-
-	if (failure)
+	/* convert working directory into locale encoding */
+	if (success && working_directory)
 	{
-		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
-		g_free(failure);
-		return FALSE;
+		GError *gerror = NULL;
+		const gchar *utf8_working_directory;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(working_directory, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(working_directory, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_working_directory = tmp;
+		}
+		else
+			utf8_working_directory = working_directory;
+
+		w_working_directory = g_utf8_to_utf16(utf8_working_directory, -1, NULL, NULL, &gerror);
+		if (! w_working_directory)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
+		g_free(tmp);
+	}
+	/* convert command into locale encoding */
+	if (success)
+	{
+		GError *gerror = NULL;
+		const gchar *utf8_cmd;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(command->str, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(command->str, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_cmd = tmp;
+		}
+		else
+			utf8_cmd = command->str;
+
+		w_command = g_utf8_to_utf16(utf8_cmd, -1, NULL, NULL, &gerror);
+		if (! w_command)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert command into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
 	}
 
-	return TRUE;
+	if (success)
+	{
+		gchar *failure;
+
+		failure = spawn_create_process_with_pipes(w_command, w_working_directory,
+			envp ? w_environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
+
+		if (failure)
+		{
+			g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
+			g_free(failure);
+		}
+
+		success = failure == NULL;
+	}
+
+	g_string_free(command, TRUE);
+	g_array_free(w_environment, TRUE);
+	g_free(w_working_directory);
+	g_free(w_command);
+
+	return success;
 #else  /* G_OS_WIN32 */
 	int cl_argc;
 	char **full_argv;
@@ -651,7 +747,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		#ifdef ENFILE
 			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
 		#endif
-		#ifdef EMFILE 
+		#ifdef EMFILE
 			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
 		#endif
 		#ifdef EINVAL
@@ -701,11 +797,11 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
  *
  *  If a @a child_pid is passed, it's your responsibility to invoke @c g_spawn_close_pid().
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -946,7 +1042,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 }
 
 
-/**
+/** @girskip
  *  Executes a child program and setups callbacks.
  *
  *  A command line or an argument vector must be passed. If both are present, the argument
@@ -974,22 +1070,22 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  The @a child_pid will be closed automatically, after @a exit_cb is invoked.
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
  *  @param spawn_flags flags from SpawnFlags.
- *  @param stdin_cb callback to send data to childs's stdin, or @c NULL.
+ *  @param stdin_cb @nullable callback to send data to childs's stdin, or @c NULL.
  *  @param stdin_data data to pass to @a stdin_cb.
- *  @param stdout_cb callback to receive child's stdout, or @c NULL.
+ *  @param stdout_cb @nullable callback to receive child's stdout, or @c NULL.
  *  @param stdout_data data to pass to @a stdout_cb.
  *  @param stdout_max_length maximum data length to pass to stdout_cb, @c 0 = default.
- *  @param stderr_cb callback to receive child's stderr, or @c NULL.
+ *  @param stderr_cb @nullable callback to receive child's stderr, or @c NULL.
  *  @param stderr_data data to pass to @a stderr_cb.
  *  @param stderr_max_length maximum data length to pass to stderr_cb, @c 0 = default.
- *  @param exit_cb callback to invoke when the child exits, or @c NULL.
+ *  @param exit_cb @nullable callback to invoke when the child exits, or @c NULL.
  *  @param exit_data data to pass to @a exit_cb.
- *  @param child_pid return location for child process ID, or @c NULL.
+ *  @param child_pid @out @optional return location for child process ID, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -1179,14 +1275,14 @@ static void spawn_get_exit_status_cb(G_GNUC_UNUSED GPid pid, gint status, gpoint
  *  All output from the child, including the nul characters, is stored in @a stdout_data and
  *  @a stderr_data (if non-NULL). Any existing data in these strings will be erased.
  *
- *  @param working_directory child's current working directory, or @c NULL.
- *  @param command_line child program and arguments, or @c NULL.
- *  @param argv child's argument vector, or @c NULL.
- *  @param envp child's environment, or @c NULL.
- *  @param stdin_data data to send to childs's stdin, or @c NULL.
- *  @param stdout_data GString location to receive the child's stdout, or NULL.
- *  @param stderr_data GString location to receive the child's stderr, or NULL.
- *  @param exit_status return location for the child exit code, or NULL.
+ *  @param working_directory @nullable child's current working directory, or @c NULL.
+ *  @param command_line @nullable child program and arguments, or @c NULL.
+ *  @param argv @nullable child's argument vector, or @c NULL.
+ *  @param envp @nullable child's environment, or @c NULL.
+ *  @param stdin_data @nullable data to send to childs's stdin, or @c NULL.
+ *  @param stdout_data @nullable GString location to receive the child's stdout, or @c NULL.
+ *  @param stderr_data @nullable GString location to receive the child's stderr, or @c NULL.
+ *  @param exit_status @out @optional return location for the child exit code, or @c NULL.
  *  @param error return location for error.
  *
  *  @return @c TRUE on success, @c FALSE on error.
@@ -1198,8 +1294,10 @@ gboolean spawn_sync(const gchar *working_directory, const gchar *command_line, g
 	gchar **envp, SpawnWriteData *stdin_data, GString *stdout_data, GString *stderr_data,
 	gint *exit_status, GError **error)
 {
-	g_string_truncate(stdout_data, 0);
-	g_string_truncate(stderr_data, 0);
+	if (stdout_data)
+		g_string_truncate(stdout_data, 0);
+	if (stderr_data)
+		g_string_truncate(stderr_data, 0);
 
 	return spawn_with_callbacks(working_directory, command_line, argv, envp, SPAWN_SYNC |
 		SPAWN_UNBUFFERED, stdin_data ? (GIOFunc) spawn_write_data : NULL, stdin_data,
