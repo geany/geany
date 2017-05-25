@@ -2,7 +2,7 @@
 # Copyright (C) 2007-2011 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Fajar Wahyu <fajarwahyuabdillah@gmail.com>, 2012.
-# Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015.
+# Samsul Ma'arif <mail@samsul.web.id>, 2014, 2015, 2017.
 # Bervianto Leo Pratama <bervianto.leo@gmail.com>, 2016.
 #
 msgid ""
@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-10-29 03:00+0700\n"
-"Last-Translator: Bervianto Leo Pratama <bervianto.leo@gmail.com>\n"
+"PO-Revision-Date: 2017-05-25 08:18+0700\n"
+"Last-Translator: Samsul Ma'arif <mail@samsul.web.id>\n"
 "Language-Team: Indonesian\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -32,9 +32,8 @@ msgid "A fast and lightweight IDE using GTK+"
 msgstr "Sebuah IDE yang cepat dan ringan menggunakan GTK+"
 
 #: ../geany.desktop.in.h:4
-#, fuzzy
 msgid "Text;Editor;"
-msgstr "Editor"
+msgstr "Text;Editor"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -117,9 +116,8 @@ msgid "Find _Document Usage"
 msgstr "Cari Pemakaian _Dokumen"
 
 #: ../data/geany.glade.h:21
-#, fuzzy
 msgid "Go to Symbol Defini_tion"
-msgstr "Lompat ke Definisi Tag"
+msgstr "Lompat ke Definisi Simbol"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -425,18 +423,16 @@ msgid "Default symbol sorting mode"
 msgstr ""
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Encoding standar (berkas baru):"
+msgstr "Mode pengurutan bawaan:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
 msgstr "Nama"
 
 #: ../data/geany.glade.h:82
-#, fuzzy
 msgid "Appearance"
-msgstr "<b>Appearance</b>"
+msgstr "Penampilan"
 
 #: ../data/geany.glade.h:83
 msgid "Show documents list"
@@ -1245,9 +1241,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Hilangkan spasi dan tab ikutan"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Menghilangkan spasi dan tab yang mengikuti pada akhir suatu baris"
+msgstr "Menghilangkan spasi dan tab pada akhir suatu baris"
 
 #: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
@@ -1861,9 +1856,8 @@ msgid "_Mark All"
 msgstr "Tandai _Semua"
 
 #: ../data/geany.glade.h:389
-#, fuzzy
 msgid "Go to Symbol Decl_aration"
-msgstr "Lompat ke Deklarasi Tag"
+msgstr "Lompat ke Deklarasi Simbol"
 
 #: ../data/geany.glade.h:390
 msgid "_View"
@@ -2095,9 +2089,8 @@ msgid "_Word Count"
 msgstr "_Jumlah Kata"
 
 #: ../data/geany.glade.h:447
-#, fuzzy
 msgid "Load Ta_gs File..."
-msgstr "Muat Ta_g..."
+msgstr "Muat Berkas Ta_g..."
 
 #: ../data/geany.glade.h:448
 msgid "_Help"
@@ -2397,13 +2390,13 @@ msgstr ""
 "(tekan Ctrl+C atau tekan Enter untuk membersihkannya)."
 
 #: ../src/build.c:935
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
 msgstr ""
-"Tidak bisa mengeksekusi perintah cetak \"%s\": %s. Periksalah pengaturan "
-"lokasinya pada Preferensi."
+"Tidak bisa mengeksekusi perintah bangun \"%s\": %s. Periksalah pengaturan "
+"Terminalnya pada Preferensi."
 
 #: ../src/build.c:1046
 msgid "Compilation failed."
@@ -3377,9 +3370,8 @@ msgid "Delete to line end"
 msgstr "Hapus sampai akhir baris"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Hapus sampai akhir baris"
+msgstr "Hapus sampai awal baris"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -3502,34 +3494,28 @@ msgid "Send to Custom Command 3"
 msgstr "Kirim ke Custom Command 3"
 
 #: ../src/keybindings.c:485
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 4"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 5"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 6"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 7"
 
 #: ../src/keybindings.c:493
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 8"
 
 #: ../src/keybindings.c:495
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Kirim ke Custom Command 1"
+msgstr "Kirim ke Custom Command 9"
 
 #: ../src/keybindings.c:503
 msgid "Join lines"
@@ -3600,14 +3586,12 @@ msgid "Toggle marker"
 msgstr "Toggle penanda"
 
 #: ../src/keybindings.c:579
-#, fuzzy
 msgid "Go to Symbol Definition"
-msgstr "Lompat ke Definisi Tag"
+msgstr "Lompat ke Definisi Simbol"
 
 #: ../src/keybindings.c:582
-#, fuzzy
 msgid "Go to Symbol Declaration"
-msgstr "Lompat ke Deklarasi Tag"
+msgstr "Lompat ke Deklarasi Simbol"
 
 #: ../src/keybindings.c:584
 msgid "Go to Start of Line"
@@ -3844,9 +3828,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Ciptakan berkas tag global (lihat dokumentasi)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "Jangan mem-preproses berkas C/C++ ketika menciptakan tag"
+msgstr "Jangan mem-preproses berkas C/C++ ketika menghasilkan tag"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -4620,7 +4603,7 @@ msgstr "Teks kosong (atau hanya berisi spasi)"
 
 #: ../src/spawn.c:151 ../src/spawn.c:165
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr "Kutipan program Windoes harus berada dalam kutipan seluruhnya"
+msgstr "Kutipan program Windows harus berada dalam kutipan seluruhnya"
 
 #: ../src/spawn.c:258
 msgid "Program not found"
@@ -4644,23 +4627,23 @@ msgstr "Bab"
 
 #: ../src/symbols.c:474 ../src/symbols.c:519 ../src/symbols.c:634
 msgid "Section"
-msgstr "Seksi"
+msgstr "Bagian"
 
 #: ../src/symbols.c:475
 msgid "Sect1"
-msgstr "Sect1"
+msgstr "Bag1"
 
 #: ../src/symbols.c:476
 msgid "Sect2"
-msgstr "Sect2"
+msgstr "Bag2"
 
 #: ../src/symbols.c:477
 msgid "Sect3"
-msgstr "Sect3"
+msgstr "Bag3"
 
 #: ../src/symbols.c:478
 msgid "Appendix"
-msgstr "Appendix"
+msgstr "Lampiran"
 
 #: ../src/symbols.c:479 ../src/symbols.c:524 ../src/symbols.c:549
 #: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
@@ -4841,23 +4824,23 @@ msgstr "Tipe Selektor"
 
 #: ../src/symbols.c:644
 msgid "Section Level 1"
-msgstr "Seksi Level 1"
+msgstr "Bagian Level 1"
 
 #: ../src/symbols.c:645
 msgid "Section Level 2"
-msgstr "Seksi Level 2"
+msgstr "Bagian Level 2"
 
 #: ../src/symbols.c:646
 msgid "Section Level 3"
-msgstr "Seksi Level 3"
+msgstr "Bagian Level 3"
 
 #: ../src/symbols.c:647
 msgid "Section Level 4"
-msgstr "Seksi Level 4"
+msgstr "Bagian Level 4"
 
 #: ../src/symbols.c:656
 msgid "Singletons"
-msgstr "Singleton"
+msgstr "Tunggal"
 
 #: ../src/symbols.c:667 ../src/symbols.c:795
 msgid "Procedures"
@@ -4949,18 +4932,18 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Ekstensi tipe-berkas tidak diketahui untuk \"%s\".\n"
 
 #: ../src/symbols.c:1656
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
-"Gagal membuat berkas tag, kemungkinan karena tidak ada tag yang ditemukan.\n"
+"Gagal membuat berkas tag, kemungkinan karena tidak ada simbol yang ditemukan.\n"
 
 #: ../src/symbols.c:1663
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
-"Pemakaian: %s -g <Tag Berkas> <Daftar berkas>\n"
+"Pemakaian: %s -g <Berkas Tag> <Daftar berkas>\n"
 "\n"
 
 #: ../src/symbols.c:1664
@@ -4975,12 +4958,10 @@ msgstr ""
 "gtk/gtk.h\n"
 
 #: ../src/symbols.c:1678
-#, fuzzy
 msgid "Load Tags File"
-msgstr "Angkat Tag"
+msgstr "Muat Berkas Tag"
 
 #: ../src/symbols.c:1685
-#, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "Berkas tag Geany (*.*.tags)"
 
@@ -4988,7 +4969,7 @@ msgstr "Berkas tag Geany (*.*.tags)"
 #: ../src/symbols.c:1705
 #, c-format
 msgid "Loaded %s tags file '%s'."
-msgstr "Terangkat %s berkas tag '%s'."
+msgstr "Termuat %s berkas tag '%s'."
 
 #: ../src/symbols.c:1708
 #, c-format
@@ -4997,7 +4978,7 @@ msgstr "Tidak dapat mengangkat berkas tag '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1943
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
@@ -5271,9 +5252,8 @@ msgid "Characters:"
 msgstr "Karakter:"
 
 #: ../src/sidebar.c:178
-#, fuzzy
 msgid "No symbols found"
-msgstr "Tag tidak ditemukan"
+msgstr "Simbol tidak ditemukan"
 
 #: ../src/sidebar.c:602
 msgid "Show S_ymbol List"
@@ -5915,7 +5895,7 @@ msgid "Backup Copy: File could not be saved (%s)."
 msgstr "Copy-an Backup: Berkas tidak bisa disimpan (%s)."
 
 #: ../plugins/saveactions.c:371
-#, fuzzy, c-format
+#, c-format
 msgid "Autosave: Saved %d file automatically."
 msgid_plural "Autosave: Saved %d files automatically."
 msgstr[0] "Simpan Otomatis: Menyimpan berkas %d secara otomatis."
@@ -6053,9 +6033,8 @@ msgstr "Atas dan Bawah"
 #~ msgid "Printing of \"%s\" failed (return code: %s)."
 #~ msgstr "Mencetak \"%s\" gagal (return code: %s)."
 
-#, fuzzy
 #~ msgid "TerminateProcess() failed: %s"
-#~ msgstr "Proses gagal (%s)"
+#~ msgstr "TerminateProcess() gagal: (%s)"
 
 #~ msgid "Custom command failed: %s"
 #~ msgstr "Perintah custom gagal: %s"
@@ -6136,9 +6115,8 @@ msgstr "Atas dan Bawah"
 #~ msgid "Subroutines"
 #~ msgstr "Subrutin"
 
-#, fuzzy
 #~ msgid "style: %d"
-#~ msgstr "Icon style:"
+#~ msgstr "Style:"
 
 #~ msgid "Split Horizontally"
 #~ msgstr "Belah secara Horisontal"
