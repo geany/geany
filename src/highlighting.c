@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
- 
+
 #include "highlighting.h"
 #include "highlightingmappings.h"
 
@@ -1570,6 +1570,40 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_VERILOG:
 			return (style == SCE_V_STRING);
+
+		case SCLEX_CAML:
+			return (style == SCE_CAML_CHAR ||
+				style == SCE_CAML_STRING);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_DOUBLESTRING ||
+				style == SCE_CSS_SINGLESTRING);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_STRING ||
+				style == SCE_ERLANG_CHARACTER);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_STRING ||
+				style == SCE_LISP_STRINGEOL);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_STRING);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_STRING ||
+				style == SCE_POWERSHELL_CHARACTER);
+
+		case SCLEX_BATCH:
+		case SCLEX_DIFF:
+		case SCLEX_LATEX:
+		case SCLEX_MAKEFILE:
+		case SCLEX_MARKDOWN:
+		case SCLEX_PROPERTIES:
+		case SCLEX_TXT2TAGS:
+		case SCLEX_YAML:
+			/* there is no string type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
@@ -1715,8 +1749,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NSIS_COMMENTBOX);
 
 		case SCLEX_ADA:
-			return (style == SCE_ADA_COMMENTLINE ||
-				style == SCE_NSIS_COMMENTBOX);
+			return (style == SCE_ADA_COMMENTLINE);
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_COMMENT ||
@@ -1743,6 +1776,53 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_V_COMMENTLINE ||
 				style == SCE_V_COMMENTLINEBANG ||
 				style == SCE_V_COMMENT_WORD);
+
+		case SCLEX_VHDL:
+			return (style == SCE_VHDL_COMMENT ||
+				style == SCE_VHDL_COMMENTLINEBANG ||
+				style == SCE_VHDL_BLOCK_COMMENT);
+
+		case SCLEX_BATCH:
+			return (style == SCE_BAT_COMMENT);
+
+		case SCLEX_CAML:
+			return (style == SCE_CAML_COMMENT ||
+				style == SCE_CAML_COMMENT1 ||
+				style == SCE_CAML_COMMENT2 ||
+				style == SCE_CAML_COMMENT3);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_COMMENT ||
+				style == SCE_ERLANG_COMMENT_FUNCTION ||
+				style == SCE_ERLANG_COMMENT_MODULE ||
+				style == SCE_ERLANG_COMMENT_DOC ||
+				style == SCE_ERLANG_COMMENT_DOC_MACRO);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_COMMENT ||
+				style == SCE_FORTH_COMMENT_ML);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_COMMENT);
+
+		case SCLEX_DIFF:
+			return (style == SCE_DIFF_COMMENT);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_COMMENT ||
+				style == SCE_LISP_MULTI_COMMENT);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_COMMENT ||
+				style == SCE_POWERSHELL_COMMENTSTREAM ||
+				style == SCE_POWERSHELL_COMMENTDOCKEYWORD);
+
+		case SCLEX_TXT2TAGS:
+			return (style == SCE_TXT2TAGS_COMMENT);
+
+		case SCLEX_MARKDOWN:
+			/* there is no comment type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
