@@ -1403,6 +1403,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGEOL ||
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
+				style == SCE_C_USERLITERAL ||
 				style == SCE_C_TRIPLEVERBATIM ||
 				style == SCE_C_HASHQUOTEDSTRING ||
 				style == SCE_C_ESCAPESEQUENCE);
@@ -1471,6 +1472,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RB_HERE_Q ||
 				style == SCE_RB_HERE_QQ ||
 				style == SCE_RB_HERE_QX ||
+				style == SCE_RB_STRING_Q ||
+				style == SCE_RB_STRING_QQ ||
+				style == SCE_RB_STRING_QX ||
+				style == SCE_RB_STRING_QR ||
+				style == SCE_RB_STRING_QW ||
 				style == SCE_RB_POD);
 
 		case SCLEX_BASH:
