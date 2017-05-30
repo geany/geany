@@ -1666,6 +1666,7 @@ gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc)
 		_("Are you sure you want to reload '%s'?"), base_name))
 	{
 		result = document_reload_force(doc, forced_enc);
+		ui_set_statusbar(TRUE, _("File %s was unsaved"), doc->file_name);
 		if (forced_enc != NULL)
 			ui_update_statusbar(doc, -1);
 	}
@@ -1686,7 +1687,8 @@ void document_reload_all_prompt(GeanyDocument *cur_doc)
 {
 	guint i;
 
-	foreach_document(i) {
+	foreach_document(i)
+	{
 		GeanyDocument *doc = documents[i];
 		if ((doc == cur_doc) || (document_check_disk_status(doc, TRUE)))
 		{
