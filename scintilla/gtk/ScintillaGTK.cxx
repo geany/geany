@@ -3,13 +3,14 @@
 // Copyright 1998-2004 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <time.h>
-#include <math.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstddef>
+#include <cstdlib>
+#include <cassert>
+#include <cstring>
+#include <cctype>
+#include <cstdio>
+#include <ctime>
+#include <cmath>
 
 #include <stdexcept>
 #include <new>
@@ -17,6 +18,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <memory>
 
 #include <glib.h>
 #include <gmodule.h>
@@ -44,6 +46,7 @@
 #include "LexerModule.h"
 #endif
 #include "Position.h"
+#include "UniqueString.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -174,6 +177,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 		rgnUpdate(0),
 		repaintFullWindow(false),
 		styleIdleID(0),
+		accessibilityEnabled(SC_ACCESSIBILITY_ENABLED),
 		accessible(0) {
 	sci = sci_;
 	wMain = GTK_WIDGET(sci);
@@ -202,7 +206,7 @@ ScintillaGTK::ScintillaGTK(_ScintillaObject *sci_) :
 	lastWheelMouseTime.tv_sec = 0;
 	lastWheelMouseTime.tv_usec = 0;
 
-	Initialise();
+	Init();
 }
 
 ScintillaGTK::~ScintillaGTK() {
@@ -546,8 +550,7 @@ void ScintillaGTK::SizeAllocate(GtkWidget *widget, GtkAllocation *allocation) {
 	}
 }
 
-void ScintillaGTK::Initialise() {
-	//Platform::DebugPrintf("ScintillaGTK::Initialise\n");
+void ScintillaGTK::Init() {
 	parentClass = reinterpret_cast<GtkWidgetClass *>(
 	                  g_type_class_ref(gtk_container_get_type()));
 
@@ -874,6 +877,19 @@ sptr_t ScintillaGTK::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam
 			return ret;
 		}
 
+		case SCI_GETACCESSIBILITY:
+			return accessibilityEnabled;
+
+		case SCI_SETACCESSIBILITY:
+			accessibilityEnabled = wParam;
+			if (accessible) {
+				ScintillaGTKAccessible *sciAccessible = ScintillaGTKAccessible::FromAccessible(accessible);
+				if (sciAccessible) {
+					sciAccessible->SetAccessibility();
+				}
+			}
+			break;
+
 		default:
 			return ScintillaBase::WndProc(iMessage, wParam, lParam);
 		}
@@ -1014,17 +1030,19 @@ PRectangle ScintillaGTK::GetClientRectangle() const {
 	return rc;
 }
 
-void ScintillaGTK::ScrollText(int linesToMove) {
-	int diff = vs.lineHeight * -linesToMove;
-	//Platform::DebugPrintf("ScintillaGTK::ScrollText %d %d %0d,%0d %0d,%0d\n", linesToMove, diff,
-	//	rc.left, rc.top, rc.right, rc.bottom);
-	GtkWidget *wi = PWidget(wText);
+void ScintillaGTK::ScrollText(Sci::Line linesToMove) {
 	NotifyUpdateUI();
 
+#if GTK_CHECK_VERSION(3,22,0)
+	Redraw();
+#else
+	GtkWidget *wi = PWidget(wText);
 	if (IS_WIDGET_REALIZED(wi)) {
+		const int diff = vs.lineHeight * -linesToMove;
 		gdk_window_scroll(WindowFromWidget(wi), 0, -diff);
 		gdk_window_process_updates(WindowFromWidget(wi), FALSE);
 	}
+#endif
 }
 
 void ScintillaGTK::SetVerticalScrollPos() {
@@ -1037,7 +1055,7 @@ void ScintillaGTK::SetHorizontalScrollPos() {
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(adjustmenth), xOffset);
 }
 
-bool ScintillaGTK::ModifyScrollBars(int nMax, int nPage) {
+bool ScintillaGTK::ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) {
 	bool modified = false;
 	int pageScroll = LinesToScroll();
 
@@ -1133,7 +1151,7 @@ public:
 	explicit CaseFolderDBCS(const char *charSet_) : charSet(charSet_) {
 		StandardASCII();
 	}
-	virtual size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) {
+	size_t Fold(char *folded, size_t sizeFolded, const char *mixed, size_t lenMixed) override {
 		if ((lenMixed == 1) && (sizeFolded > 0)) {
 			folded[0] = mapping[static_cast<unsigned char>(mixed[0])];
 			return 1;
@@ -1278,7 +1296,7 @@ void ScintillaGTK::Paste() {
 	class Helper : GObjectWatcher {
 		ScintillaGTK *sci;
 
-		virtual void Destroyed() {
+		void Destroyed() override {
 			sci = 0;
 		}
 
@@ -1483,24 +1501,24 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 	// GDK on Win32 expands any \n into \r\n, so make a copy of
 	// the clip text now with newlines converted to \n.  Use { } to hide symbols
 	// from code below
-	SelectionText *newline_normalized = NULL;
+	std::unique_ptr<SelectionText> newline_normalized;
 	{
 		std::string tmpstr = Document::TransformLineEnds(text->Data(), text->Length(), SC_EOL_LF);
-		newline_normalized = new SelectionText();
+		newline_normalized.reset(new SelectionText());
 		newline_normalized->Copy(tmpstr, SC_CP_UTF8, 0, text->rectangular, false);
-		text = newline_normalized;
+		text = newline_normalized.get();
 	}
 #endif
 
 	// Convert text to utf8 if it isn't already
-	SelectionText *converted = 0;
+	std::unique_ptr<SelectionText> converted;
 	if ((text->codePage != SC_CP_UTF8) && (info == TARGET_UTF8_STRING)) {
 		const char *charSet = ::CharacterSetID(text->characterSet);
 		if (*charSet) {
 			std::string tmputf = ConvertText(text->Data(), text->Length(), "UTF-8", charSet, false);
-			converted = new SelectionText();
+			converted.reset(new SelectionText());
 			converted->Copy(tmputf, SC_CP_UTF8, 0, text->rectangular, false);
-			text = converted;
+			text = converted.get();
 		}
 	}
 
@@ -1525,11 +1543,6 @@ void ScintillaGTK::GetSelection(GtkSelectionData *selection_data, guint info, Se
 			static_cast<GdkAtom>(GDK_SELECTION_TYPE_STRING),
 			8, reinterpret_cast<const unsigned char *>(textData), len);
 	}
-	delete converted;
-
-#if PLAT_GTK_WIN32
-	delete newline_normalized;
-#endif
 }
 
 void ScintillaGTK::StoreOnClipboard(SelectionText *clipText) {
@@ -1801,7 +1814,7 @@ gint ScintillaGTK::ScrollEvent(GtkWidget *widget, GdkEventScroll *event) {
 			return FALSE;
 
 #if defined(GDK_WINDOWING_WAYLAND)
-		if (event->direction == GDK_SCROLL_SMOOTH && GDK_IS_WAYLAND_WINDOW (event->window)) {
+		if (event->direction == GDK_SCROLL_SMOOTH && GDK_IS_WAYLAND_WINDOW(event->window)) {
 			const int smoothScrollFactor = 4;
 			sciThis->smoothScrollY += event->delta_y * smoothScrollFactor;
 			sciThis->smoothScrollX += event->delta_x * smoothScrollFactor;;
@@ -2212,7 +2225,7 @@ void ScintillaGTK::DrawImeIndicator(int indicator, int len) {
 	if (indicator < 8 || indicator > INDIC_MAX) {
 		return;
 	}
-	pdoc->decorations.SetCurrentIndicator(indicator);
+	pdoc->DecorationSetCurrentIndicator(indicator);
 	for (size_t r=0; r<sel.Count(); r++) {
 		int positionInsert = sel.Range(r).Start().Position();
 		pdoc->DecorationFillRange(positionInsert - len, 1, len);
@@ -2323,12 +2336,13 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 
 		view.imeCaretBlockOverride = false; // If backspace.
 
+		bool initialCompose = false;
 		if (pdoc->TentativeActive()) {
 			pdoc->TentativeUndo();
 		} else {
 			// No tentative undo means start of this composition so
 			// fill in any virtual spaces.
-			ClearBeforeTentativeStart();
+			initialCompose = true;
 		}
 
 		PreEditString preeditStr(im_context);
@@ -2345,6 +2359,8 @@ void ScintillaGTK::PreeditChangedInlineThis() {
 			return;
 		}
 
+		if (initialCompose)
+			ClearBeforeTentativeStart();
 		pdoc->TentativeStart(); // TentativeActive() from now on
 
 		std::vector<int> indicator = MapImeIndicators(preeditStr.attrs, preeditStr.str);
@@ -2513,13 +2529,10 @@ gboolean ScintillaGTK::DrawTextThis(cairo_t *cr) {
 		rcPaint.bottom = y2;
 		PRectangle rcClient = GetClientRectangle();
 		paintingAllText = rcPaint.Contains(rcClient);
-		Surface *surfaceWindow = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
-		if (surfaceWindow) {
-			surfaceWindow->Init(cr, PWidget(wText));
-			Paint(surfaceWindow, rcPaint);
-			surfaceWindow->Release();
-			delete surfaceWindow;
-		}
+		std::unique_ptr<Surface> surfaceWindow(Surface::Allocate(SC_TECHNOLOGY_DEFAULT));
+		surfaceWindow->Init(cr, PWidget(wText));
+		Paint(surfaceWindow.get(), rcPaint);
+		surfaceWindow->Release();
 		if ((paintState == paintAbandoned) || repaintFullWindow) {
 			// Painting area was insufficient to cover new styling or brace highlight positions
 			FullPaint();
@@ -2603,15 +2616,12 @@ gboolean ScintillaGTK::ExposeTextThis(GtkWidget * /*widget*/, GdkEventExpose *os
 		rgnUpdate = gdk_region_copy(ose->region);
 		PRectangle rcClient = GetClientRectangle();
 		paintingAllText = rcPaint.Contains(rcClient);
-		Surface *surfaceWindow = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
-		if (surfaceWindow) {
-			cairo_t *cr = gdk_cairo_create(PWindow(wText));
-			surfaceWindow->Init(cr, PWidget(wText));
-			Paint(surfaceWindow, rcPaint);
-			surfaceWindow->Release();
-			delete surfaceWindow;
-			cairo_destroy(cr);
-		}
+		std::unique_ptr<Surface> surfaceWindow(Surface::Allocate(SC_TECHNOLOGY_DEFAULT));
+		cairo_t *cr = gdk_cairo_create(PWindow(wText));
+		surfaceWindow->Init(cr, PWidget(wText));
+		Paint(surfaceWindow.get(), rcPaint);
+		surfaceWindow->Release();
+		cairo_destroy(cr);
 		if (paintState == paintAbandoned) {
 			// Painting area was insufficient to cover new styling or brace highlight positions
 			FullPaint();
@@ -2745,7 +2755,7 @@ gboolean ScintillaGTK::DragMotion(GtkWidget *widget, GdkDragContext *context,
 void ScintillaGTK::DragLeave(GtkWidget *widget, GdkDragContext * /*context*/, guint) {
 	ScintillaGTK *sciThis = FromWidget(widget);
 	try {
-		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
+		sciThis->SetDragPosition(SelectionPosition(Sci::invalidPosition));
 		//Platform::DebugPrintf("DragLeave %x\n", sciThis);
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
@@ -2758,7 +2768,7 @@ void ScintillaGTK::DragEnd(GtkWidget *widget, GdkDragContext * /*context*/) {
 		// If drag did not result in drop here or elsewhere
 		if (!sciThis->dragWasDropped)
 			sciThis->SetEmptySelection(sciThis->posDrag);
-		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
+		sciThis->SetDragPosition(SelectionPosition(Sci::invalidPosition));
 		//Platform::DebugPrintf("DragEnd %x %d\n", sciThis, sciThis->dragWasDropped);
 		sciThis->inDragDrop = ddNone;
 	} catch (...) {
@@ -2771,7 +2781,7 @@ gboolean ScintillaGTK::Drop(GtkWidget *widget, GdkDragContext * /*context*/,
 	ScintillaGTK *sciThis = FromWidget(widget);
 	try {
 		//Platform::DebugPrintf("Drop %x\n", sciThis);
-		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
+		sciThis->SetDragPosition(SelectionPosition(Sci::invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2783,7 +2793,7 @@ void ScintillaGTK::DragDataReceived(GtkWidget *widget, GdkDragContext * /*contex
 	ScintillaGTK *sciThis = FromWidget(widget);
 	try {
 		sciThis->ReceivedDrop(selection_data);
-		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
+		sciThis->SetDragPosition(SelectionPosition(Sci::invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2814,7 +2824,7 @@ void ScintillaGTK::DragDataGet(GtkWidget *widget, GdkDragContext *context,
 			}
 			sciThis->ClearSelection();
 		}
-		sciThis->SetDragPosition(SelectionPosition(invalidPosition));
+		sciThis->SetDragPosition(SelectionPosition(Sci::invalidPosition));
 	} catch (...) {
 		sciThis->errorStatus = SC_STATUS_FAILURE;
 	}
@@ -2852,7 +2862,7 @@ void ScintillaGTK::IdleWork() {
 	styleIdleID = 0;
 }
 
-void ScintillaGTK::QueueIdleWork(WorkNeeded::workItems items, int upTo) {
+void ScintillaGTK::QueueIdleWork(WorkNeeded::workItems items, Sci::Position upTo) {
 	Editor::QueueIdleWork(items, upTo);
 	if (!styleIdleID) {
 		// Only allow one style needed to be queued
@@ -2909,15 +2919,12 @@ gboolean ScintillaGTK::PressCT(GtkWidget *widget, GdkEventButton *event, Scintil
 
 gboolean ScintillaGTK::DrawCT(GtkWidget *widget, cairo_t *cr, CallTip *ctip) {
 	try {
-		Surface *surfaceWindow = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
-		if (surfaceWindow) {
-			surfaceWindow->Init(cr, widget);
-			surfaceWindow->SetUnicodeMode(SC_CP_UTF8 == ctip->codePage);
-			surfaceWindow->SetDBCSMode(ctip->codePage);
-			ctip->PaintCT(surfaceWindow);
-			surfaceWindow->Release();
-			delete surfaceWindow;
-		}
+		std::unique_ptr<Surface> surfaceWindow(Surface::Allocate(SC_TECHNOLOGY_DEFAULT));
+		surfaceWindow->Init(cr, widget);
+		surfaceWindow->SetUnicodeMode(SC_CP_UTF8 == ctip->codePage);
+		surfaceWindow->SetDBCSMode(ctip->codePage);
+		ctip->PaintCT(surfaceWindow.get());
+		surfaceWindow->Release();
 	} catch (...) {
 		// No pointer back to Scintilla to save status
 	}
@@ -2928,17 +2935,14 @@ gboolean ScintillaGTK::DrawCT(GtkWidget *widget, cairo_t *cr, CallTip *ctip) {
 
 gboolean ScintillaGTK::ExposeCT(GtkWidget *widget, GdkEventExpose * /*ose*/, CallTip *ctip) {
 	try {
-		Surface *surfaceWindow = Surface::Allocate(SC_TECHNOLOGY_DEFAULT);
-		if (surfaceWindow) {
-			cairo_t *cr = gdk_cairo_create(WindowFromWidget(widget));
-			surfaceWindow->Init(cr, widget);
-			surfaceWindow->SetUnicodeMode(SC_CP_UTF8 == ctip->codePage);
-			surfaceWindow->SetDBCSMode(ctip->codePage);
-			ctip->PaintCT(surfaceWindow);
-			surfaceWindow->Release();
-			delete surfaceWindow;
-			cairo_destroy(cr);
-		}
+		std::unique_ptr<Surface> surfaceWindow(Surface::Allocate(SC_TECHNOLOGY_DEFAULT));
+		cairo_t *cr = gdk_cairo_create(WindowFromWidget(widget));
+		surfaceWindow->Init(cr, widget);
+		surfaceWindow->SetUnicodeMode(SC_CP_UTF8 == ctip->codePage);
+		surfaceWindow->SetDBCSMode(ctip->codePage);
+		ctip->PaintCT(surfaceWindow.get());
+		surfaceWindow->Release();
+		cairo_destroy(cr);
 	} catch (...) {
 		// No pointer back to Scintilla to save status
 	}
@@ -3027,7 +3031,7 @@ void ScintillaGTK::ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_
 
 	// Define default signal handlers for the class:  Could move more
 	// of the signal handlers here (those that currently attached to wDraw
-	// in Initialise() may require coordinate translation?)
+	// in Init() may require coordinate translation?)
 
 	object_class->dispose = Dispose;
 	object_class->finalize = Destroy;
