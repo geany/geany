@@ -3703,8 +3703,7 @@ static void monitor_resave_missing_file(GeanyDocument *doc)
 
 		message_button mbutton[] = {
 			{GTK_STOCK_SAVE, RESPONSE_DOCUMENT_SAVE},
-			{GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL},
-			{NULL, GTK_RESPONSE_NONE}
+			{GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL}
 		};
 
 		bar = document_show_message(doc, GTK_MESSAGE_WARNING,
