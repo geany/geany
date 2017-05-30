@@ -10,7 +10,7 @@ env:
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
-  - sudo apt-get install gcc-7 -y
+  - sudo apt-get install gcc-6 g++-6 -y
 install:
   - sudo apt-get install -y intltool libtool
   - test -n "$MINGW" || sudo apt-get install -y libgtk2.0-dev libgtk-3-dev
