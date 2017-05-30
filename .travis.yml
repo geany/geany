@@ -1,6 +1,5 @@
 # we use both C and C++, so advertize C++
 language: cpp
-dist: trusty
 compiler:
   - gcc
 env:
