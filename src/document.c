@@ -98,6 +98,7 @@ typedef struct
 						 * it contains the new value */
 } undo_action;
 
+
 /* Custom document info bar response IDs */
 enum
 {
@@ -106,11 +107,13 @@ enum
 	RESPONSE_DOCUMENT_SAVE,
 };
 
+
 typedef struct
 {
 	const gchar *btn;
 	GtkResponseType response;
 } message_button;
+
 
 static guint doc_id_counter = 0;
 
@@ -1601,7 +1604,6 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 {
 	gint pos = 0;
 	GeanyDocument *new_doc;
-	GtkWidget *bar;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
@@ -1613,13 +1615,15 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 	pos = sci_get_current_position(doc->editor->sci);
 	new_doc = document_open_file_full(doc, NULL, pos, doc->readonly, doc->file_type, forced_enc);
 
-	message_button mbutton[] = {
-		{GTK_STOCK_OK, GTK_RESPONSE_ACCEPT},
-		{_("Discard history"), GTK_RESPONSE_NO}
-	};
-
 	if (file_prefs.keep_edit_history_on_reload && file_prefs.show_keep_edit_history_on_reload_msg)
 	{
+		GtkWidget *bar;
+
+		message_button mbutton[] = {
+			{GTK_STOCK_OK, GTK_RESPONSE_ACCEPT},
+			{_("Discard history"), GTK_RESPONSE_NO}
+		};
+
 		bar = document_show_message(doc, GTK_MESSAGE_INFO,
 						on_keep_edit_history_on_reload_response,
 						mbutton, sizeof(mbutton) / sizeof(mbutton[0]),
