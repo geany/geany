@@ -147,6 +147,7 @@ static struct
 }
 fif_dlg = {NULL, NULL, NULL, NULL, NULL, NULL, {0, 0}};
 
+extern gboolean on_search_key_press_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 static void search_read_io(GString *string, GIOCondition condition, gpointer data);
 static void search_read_io_stderr(GString *string, GIOCondition condition, gpointer data);
@@ -564,6 +565,12 @@ void search_show_find_dialog(void)
 
 	sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
+if(replace_dlg.dialog)
+        {gtk_widget_destroy(replace_dlg.dialog);replace_dlg.dialog=NULL;}
+if(fif_dlg.dialog)
+        {gtk_widget_destroy(fif_dlg.dialog);fif_dlg.dialog=NULL;}
+
+
 	if (find_dlg.dialog == NULL)
 	{
 		create_find_dialog();
@@ -573,11 +580,13 @@ void search_show_find_dialog(void)
 
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
 		gtk_widget_show_all(find_dlg.dialog);
+		g_signal_connect (GTK_DIALOG (find_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
+
 	}
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
+//		if (! gtk_widget_get_visible(find_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(find_dlg.entry), sel);
 		gtk_widget_grab_focus(find_dlg.entry);
 		set_dialog_position(find_dlg.dialog, find_dlg.position);
@@ -740,6 +749,13 @@ void search_show_replace_dialog(void)
 
 	sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
+if(find_dlg.dialog)
+        {gtk_widget_destroy(find_dlg.dialog);find_dlg.dialog=NULL;}
+if(fif_dlg.dialog)
+        {gtk_widget_destroy(fif_dlg.dialog);fif_dlg.dialog=NULL;}
+
+
+
 	if (replace_dlg.dialog == NULL)
 	{
 		create_replace_dialog();
@@ -749,11 +765,12 @@ void search_show_replace_dialog(void)
 
 		set_dialog_position(replace_dlg.dialog, replace_dlg.position);
 		gtk_widget_show_all(replace_dlg.dialog);
+                g_signal_connect (GTK_DIALOG (replace_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
 	}
 	else
 	{
 		/* only set selection if the dialog is not already visible */
-		if (! gtk_widget_get_visible(replace_dlg.dialog) && sel)
+	//	if (! gtk_widget_get_visible(replace_dlg.dialog) && sel)
 			gtk_entry_set_text(GTK_ENTRY(replace_dlg.find_entry), sel);
 		if (sel != NULL) /* when we have a selection, reset the entry widget's background colour */
 			ui_set_search_entry_background(replace_dlg.find_entry, TRUE);
@@ -1048,10 +1065,18 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	gchar *cur_dir = NULL;
 	GeanyEncodingIndex enc_idx = GEANY_ENCODING_UTF_8;
 
+if(find_dlg.dialog)
+        {gtk_widget_destroy(find_dlg.dialog);find_dlg.dialog=NULL;}
+if(replace_dlg.dialog)
+        {gtk_widget_destroy(replace_dlg.dialog);replace_dlg.dialog=NULL;}
+
+
+
 	if (fif_dlg.dialog == NULL)
 	{
 		create_fif_dialog();
 		gtk_widget_show_all(fif_dlg.dialog);
+                g_signal_connect (GTK_DIALOG (fif_dlg.dialog),"key-press-event", G_CALLBACK(on_search_key_press_event), NULL);
 		if (doc && !text)
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 	}
@@ -1060,7 +1085,7 @@ void search_show_find_in_files_dialog_full(const gchar *text, const gchar *dir)
 	if (!text)
 	{
 		/* only set selection if the dialog is not already visible, or has just been created */
-		if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
+		//if (doc && ! sel && ! gtk_widget_get_visible(fif_dlg.dialog))
 			sel = editor_get_default_selection(doc->editor, search_prefs.use_current_word, NULL);
 
 		text = sel;
