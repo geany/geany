@@ -2644,7 +2644,11 @@ static struct
 	{ N_("_Make"), "make", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_ALL)},
 	{ N_("Make Custom _Target..."), "make ", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_CUSTOM)},
 	{ N_("Make _Object"), "make %e.o", NULL, &non_ft_def, GBO_TO_CMD(GEANY_GBO_MAKE_OBJECT)},
+#ifdef G_OS_WIN32
+	{ N_("_Execute"), "./%e.exe", NULL, &exec_def, GBO_TO_CMD(GEANY_GBO_EXEC)},
+#else
 	{ N_("_Execute"), "./%e", NULL, &exec_def, GBO_TO_CMD(GEANY_GBO_EXEC)},
+#endif
 	{ NULL, NULL, NULL, NULL, 0 }
 };
 
