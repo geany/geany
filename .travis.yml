@@ -30,7 +30,7 @@ script:
     else
       mkdir _build                        &&
       cd _build                           &&
-      ../configure --enable-gtk3=$GTK3    &&
+      { ../configure --enable-gtk3=$GTK3 || { cat config.log; exit 1; } ; } &&
       make -j2                            &&
       make -j2 check;
     fi
