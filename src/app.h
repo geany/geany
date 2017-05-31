@@ -50,6 +50,7 @@ typedef struct GeanyApp
 	gchar				*docdir;
 	const TMWorkspace	*tm_workspace;	/**< TagManager workspace/session tags. */
 	struct GeanyProject	*project;		/**< Currently active project or @c NULL if none is open. */
+	gchar				*executable;	/**< Full Geany executable name or @c NULL if not determined. */
 }
 GeanyApp;
 
