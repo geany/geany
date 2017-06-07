@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
+SUBDIRS = tagmanager
 
 EXTRA_DIST = \
 	gb.c \
@@ -9,13 +10,12 @@ EXTRA_DIST = \
 	filetypesprivate.h \
 	keybindingsprivate.h \
 	pluginprivate.h \
-	projectprivate.h \
-	makefile.win32
+	projectprivate.h
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
-	-I$(top_srcdir)/tagmanager/src \
+	-I$(srcdir)/tagmanager \
 	-DGTK \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\""Geany"\" \
@@ -120,9 +120,7 @@ libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
 	$(top_builddir)/scintilla/libscintilla.la \
-	$(top_builddir)/tagmanager/ctags/libctags.la \
-	$(top_builddir)/tagmanager/mio/libmio.la \
-	$(top_builddir)/tagmanager/src/libtagmanager.la \
+	$(builddir)/tagmanager/libtagmanager.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \
@@ -140,6 +138,7 @@ AM_CPPFLAGS += \
 	-DGEANY_DATADIR=\"data\" \
 	-DGEANY_DOCDIR=\"\" \
 	-DGEANY_LIBDIR=\"\" \
+	-DGEANY_LIBEXECDIR=\"\" \
 	-DGEANY_LOCALEDIR=\"\" \
 	-DGEANY_PREFIX=\"\"
 
@@ -164,6 +163,7 @@ AM_CPPFLAGS += \
 	-DGEANY_DATADIR=\""$(datadir)"\" \
 	-DGEANY_DOCDIR=\""$(docdir)"\" \
 	-DGEANY_LIBDIR=\""$(libdir)"\" \
+	-DGEANY_LIBEXECDIR=\""$(libexecdir)"\" \
 	-DGEANY_LOCALEDIR=\""$(localedir)"\" \
 	-DGEANY_PREFIX=\""$(prefix)"\"
 
@@ -183,6 +183,11 @@ signallist.i: $(glade_file) Makefile
 	) > $@ || { $(RM) $@ && exit 1; }
 
 CLEANFILES += signallist.i
+
+# install the run script
+if MINGW
+dist_pkglibexec_SCRIPTS = geany-run-helper.bat
+endif
 
 # Ubuntu ld has a bug so that libtool sees /usr/local/lib as a system path so
 # doesn't add RPATH, but ld requires explicit ldconfig there, unlike when

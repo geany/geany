@@ -28,11 +28,6 @@
 #include "XPM.h"
 #include "UniConversion.h"
 
-#if defined(__clang__)
-// Clang 3.0 incorrectly displays  sentinel warnings. Fixed by clang 3.1.
-#pragma GCC diagnostic ignored "-Wsentinel"
-#endif
-
 #include "Converter.h"
 
 static const double kPi = 3.14159265358979323846;
@@ -550,7 +545,7 @@ static void PathRoundRectangle(cairo_t *context, double left, double top, double
 }
 
 void SurfaceImpl::AlphaRectangle(PRectangle rc, int cornerSize, ColourDesired fill, int alphaFill,
-		ColourDesired outline, int alphaOutline, int flags) {
+		ColourDesired outline, int alphaOutline, int /*flags*/) {
 	if (context && rc.Width() > 0) {
 		ColourDesired cdFill(fill.AsLong());
 		cairo_set_source_rgba(context,
@@ -655,12 +650,12 @@ static std::string UTF8FromIconv(const Converter &conv, const char *s, int len) 
 	if (conv) {
 		std::string utfForm(len*3+1, '\0');
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = len;
+		gsize inLeft = len;
 		char *putf = &utfForm[0];
 		char *pout = putf;
-		size_t outLeft = len*3+1;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = len*3+1;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			*pout = '\0';
 			utfForm.resize(pout - putf);
 			return utfForm;
@@ -675,11 +670,11 @@ static size_t MultiByteLenFromIconv(const Converter &conv, const char *s, size_t
 	for (size_t lenMB=1; (lenMB<4) && (lenMB <= len); lenMB++) {
 		char wcForm[2];
 		char *pin = const_cast<char *>(s);
-		size_t inLeft = lenMB;
+		gsize inLeft = lenMB;
 		char *pout = wcForm;
-		size_t outLeft = 2;
-		size_t conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
-		if (conversions != ((size_t)(-1))) {
+		gsize outLeft = 2;
+		gsize conversions = conv.Convert(&pin, &inLeft, &pout, &outLeft);
+		if (conversions != sizeFailure) {
 			return lenMB;
 		}
 	}
@@ -1039,28 +1034,46 @@ void Window::SetPosition(PRectangle rc) {
 	gtk_widget_size_allocate(PWidget(wid), &alloc);
 }
 
+namespace {
+
+GdkRectangle MonitorRectangleForWidget(GtkWidget *wid) {
+	GdkWindow *wnd = WindowFromWidget(wid);
+	GdkRectangle rcScreen = GdkRectangle();
+#if GTK_CHECK_VERSION(3,22,0)
+	GdkDisplay *pdisplay = gtk_widget_get_display(wid);
+	GdkMonitor *monitor = gdk_display_get_monitor_at_window(pdisplay, wnd);
+	gdk_monitor_get_geometry(monitor, &rcScreen);
+#else
+	GdkScreen* screen = gtk_widget_get_screen(wid);
+	gint monitor_num = gdk_screen_get_monitor_at_window(screen, wnd);
+	gdk_screen_get_monitor_geometry(screen, monitor_num, &rcScreen);
+#endif
+	return rcScreen;
+}
+
+}
+
 void Window::SetPositionRelative(PRectangle rc, Window relativeTo) {
 	int ox = 0;
 	int oy = 0;
-	gdk_window_get_origin(WindowFromWidget(PWidget(relativeTo.wid)), &ox, &oy);
+	GdkWindow *wndRelativeTo = WindowFromWidget(PWidget(relativeTo.wid));
+	gdk_window_get_origin(wndRelativeTo, &ox, &oy);
 	ox += rc.left;
-	if (ox < 0)
-		ox = 0;
 	oy += rc.top;
-	if (oy < 0)
-		oy = 0;
+
+	GdkRectangle rcMonitor = MonitorRectangleForWidget(PWidget(relativeTo.wid));
 
 	/* do some corrections to fit into screen */
 	int sizex = rc.right - rc.left;
 	int sizey = rc.bottom - rc.top;
-	int screenWidth = gdk_screen_width();
-	int screenHeight = gdk_screen_height();
-	if (sizex > screenWidth)
-		ox = 0; /* the best we can do */
-	else if (ox + sizex > screenWidth)
-		ox = screenWidth - sizex;
-	if (oy + sizey > screenHeight)
-		oy = screenHeight - sizey;
+	if (sizex > rcMonitor.width || ox < rcMonitor.x)
+		ox = rcMonitor.x; /* the best we can do */
+	else if (ox + sizex > rcMonitor.x + rcMonitor.width)
+		ox = rcMonitor.x + rcMonitor.width - sizex;
+	if (sizey > rcMonitor.height || oy < rcMonitor.y)
+		oy = rcMonitor.y;
+	else if (oy + sizey > rcMonitor.y + rcMonitor.height)
+		oy = rcMonitor.y + rcMonitor.height - sizey;
 
 	gtk_window_move(GTK_WINDOW(PWidget(wid)), ox, oy);
 
@@ -1150,13 +1163,19 @@ PRectangle Window::GetMonitorRect(Point pt) {
 
 	gdk_window_get_origin(WindowFromWidget(PWidget(wid)), &x_offset, &y_offset);
 
-	GdkScreen* screen;
-	gint monitor_num;
 	GdkRectangle rect;
 
-	screen = gtk_widget_get_screen(PWidget(wid));
-	monitor_num = gdk_screen_get_monitor_at_point(screen, pt.x + x_offset, pt.y + y_offset);
+#if GTK_CHECK_VERSION(3,22,0)
+	GdkDisplay *pdisplay = gtk_widget_get_display(PWidget(wid));
+	GdkMonitor *monitor = gdk_display_get_monitor_at_point(pdisplay,
+		pt.x + x_offset, pt.y + y_offset);
+	gdk_monitor_get_geometry(monitor, &rect);
+#else
+	GdkScreen* screen = gtk_widget_get_screen(PWidget(wid));
+	gint monitor_num = gdk_screen_get_monitor_at_point(screen,
+		pt.x + x_offset, pt.y + y_offset);
 	gdk_screen_get_monitor_geometry(screen, monitor_num, &rect);
+#endif
 	rect.x -= x_offset;
 	rect.y -= y_offset;
 	return PRectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
@@ -1263,6 +1282,30 @@ ListBox *ListBox::Allocate() {
 	return lb;
 }
 
+static int treeViewGetRowHeight(GtkTreeView *view) {
+#if GTK_CHECK_VERSION(3,0,0)
+	// This version sometimes reports erroneous results on GTK2, but the GTK2
+	// version is inaccurate for GTK 3.14.
+	GdkRectangle rect;
+	GtkTreePath *path = gtk_tree_path_new_first();
+	gtk_tree_view_get_background_area(view, path, NULL, &rect);
+	gtk_tree_path_free(path);
+	return rect.height;
+#else
+	int row_height=0;
+	int vertical_separator=0;
+	int expander_size=0;
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(view, 0);
+	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
+	gtk_widget_style_get(GTK_WIDGET(view),
+		"vertical-separator", &vertical_separator,
+		"expander-size", &expander_size, NULL);
+	row_height += vertical_separator;
+	row_height = Platform::Maximum(row_height, expander_size);
+	return row_height;
+#endif
+}
+
 // SmallScroller, a GtkScrolledWindow that can shrink very small, as
 // gtk_widget_set_size_request() cannot shrink widgets on GTK3
 typedef struct {
@@ -1287,9 +1330,19 @@ G_DEFINE_TYPE(SmallScroller, small_scroller, GTK_TYPE_SCROLLED_WINDOW)
 
 #if GTK_CHECK_VERSION(3,0,0)
 static void small_scroller_get_preferred_height(GtkWidget *widget, gint *min, gint *nat) {
-	GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
-	if (*min > 1)
-		*min = 1;
+	GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
+	if (GTK_IS_TREE_VIEW(child)) {
+		GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(child));
+		int n_rows = gtk_tree_model_iter_n_children(model, NULL);
+		int row_height = treeViewGetRowHeight(GTK_TREE_VIEW(child));
+
+		*min = MAX(1, row_height);
+		*nat = MAX(*min, n_rows * row_height);
+	} else {
+		GTK_WIDGET_CLASS(small_scroller_parent_class)->get_preferred_height(widget, min, nat);
+		if (*min > 1)
+			*min = 1;
+	}
 }
 #else
 static void small_scroller_size_request(GtkWidget *widget, GtkRequisition *req) {
@@ -1372,7 +1425,7 @@ static void StyleSet(GtkWidget *w, GtkStyle*, void*) {
 #endif
 }
 
-void ListBoxX::Create(Window &, int, Point, int, bool, int) {
+void ListBoxX::Create(Window &parent, int, Point, int, bool, int) {
 	if (widCached != 0) {
 		wid = widCached;
 		return;
@@ -1446,6 +1499,10 @@ void ListBoxX::Create(Window &, int, Point, int, bool, int) {
 	gtk_widget_show(widget);
 	g_signal_connect(G_OBJECT(widget), "button_press_event",
 	                   G_CALLBACK(ButtonPress), this);
+
+	GtkWidget *top = gtk_widget_get_toplevel(static_cast<GtkWidget *>(parent.GetID()));
+	gtk_window_set_transient_for(GTK_WINDOW(static_cast<GtkWidget *>(wid)),
+		GTK_WINDOW(top));
 }
 
 void ListBoxX::SetFont(Font &scint_font) {
@@ -1456,11 +1513,19 @@ void ListBoxX::SetFont(Font &scint_font) {
 		if (cssProvider) {
 			PangoFontDescription *pfd = PFont(scint_font)->pfd;
 			std::ostringstream ssFontSetting;
-			ssFontSetting << "GtkTreeView { ";
+			ssFontSetting << "GtkTreeView, treeview { ";
 			ssFontSetting << "font-family: " << pango_font_description_get_family(pfd) <<  "; ";
 			ssFontSetting << "font-size:";
 			ssFontSetting << static_cast<double>(pango_font_description_get_size(pfd)) / PANGO_SCALE;
-			ssFontSetting << "px; ";
+			// On GTK < 3.21.0 the units are incorrectly parsed, so a font size in points
+			// need to use the "px" unit.  Normally we only get fonts in points here, so
+			// don't bother to handle the case the font is actually in pixels on < 3.21.0.
+			if (gtk_check_version(3, 21, 0) != NULL || // on < 3.21.0
+			    pango_font_description_get_size_is_absolute(pfd)) {
+				ssFontSetting << "px; ";
+			} else {
+				ssFontSetting << "pt; ";
+			}
 			ssFontSetting << "font-weight:"<< pango_font_description_get_weight(pfd) << "; ";
 			ssFontSetting << "}";
 			gtk_css_provider_load_from_data(GTK_CSS_PROVIDER(cssProvider),
@@ -1486,28 +1551,8 @@ int ListBoxX::GetVisibleRows() const {
 	return desiredVisibleRows;
 }
 
-int ListBoxX::GetRowHeight()
-{
-#if GTK_CHECK_VERSION(3,0,0)
-	// This version sometimes reports erroneous results on GTK2, but the GTK2
-	// version is inaccurate for GTK 3.14.
-	GdkRectangle rect;
-	GtkTreePath *path = gtk_tree_path_new_first();
-	gtk_tree_view_get_background_area(GTK_TREE_VIEW(list), path, NULL, &rect);
-	return rect.height;
-#else
-	int row_height=0;
-	int vertical_separator=0;
-	int expander_size=0;
-	GtkTreeViewColumn *column = gtk_tree_view_get_column(GTK_TREE_VIEW(list), 0);
-	gtk_tree_view_column_cell_get_size(column, NULL, NULL, NULL, NULL, &row_height);
-	gtk_widget_style_get(PWidget(list),
-		"vertical-separator", &vertical_separator,
-		"expander-size", &expander_size, NULL);
-	row_height += vertical_separator;
-	row_height = Platform::Maximum(row_height, expander_size);
-	return row_height;
-#endif
+int ListBoxX::GetRowHeight() {
+	return treeViewGetRowHeight(GTK_TREE_VIEW(list));
 }
 
 PRectangle ListBoxX::GetDesiredRect() {
@@ -1534,12 +1579,35 @@ PRectangle ListBoxX::GetDesiredRect() {
 		int row_height = GetRowHeight();
 #if GTK_CHECK_VERSION(3,0,0)
 		GtkStyleContext *styleContextFrame = gtk_widget_get_style_context(PWidget(frame));
-		GtkBorder padding, border;
-		gtk_style_context_get_padding(styleContextFrame, GTK_STATE_FLAG_NORMAL, &padding);
-		gtk_style_context_get_border(styleContextFrame, GTK_STATE_FLAG_NORMAL, &border);
+		GtkStateFlags stateFlagsFrame = gtk_style_context_get_state(styleContextFrame);
+		GtkBorder padding, border, border_border = { 0, 0, 0, 0 };
+		gtk_style_context_get_padding(styleContextFrame, stateFlagsFrame, &padding);
+		gtk_style_context_get_border(styleContextFrame, stateFlagsFrame, &border);
+
+#	if GTK_CHECK_VERSION(3,20,0)
+		// on GTK 3.20 the frame border is in a sub-node "border".
+		// Unfortunately we need to be built against 3.20 to be able to support this, as it requires
+		// new API.
+		GtkStyleContext *styleContextFrameBorder = gtk_style_context_new();
+		GtkWidgetPath *widget_path = gtk_widget_path_copy(gtk_style_context_get_path(styleContextFrame));
+		gtk_widget_path_append_type(widget_path, GTK_TYPE_BORDER); // dummy type
+		gtk_widget_path_iter_set_object_name(widget_path, -1, "border");
+		gtk_style_context_set_path(styleContextFrameBorder, widget_path);
+		gtk_widget_path_free(widget_path);
+		gtk_style_context_get_border(styleContextFrameBorder, stateFlagsFrame, &border_border);
+		g_object_unref(styleContextFrameBorder);
+#	else // < 3.20
+		if (gtk_check_version(3, 20, 0) == NULL) {
+			// default to 1px all around as it's likely what it is, and so we don't miss 2px height
+			// on GTK 3.20 when built against an earlier version.
+			border_border.top = border_border.bottom = border_border.left = border_border.right = 1;
+		}
+#	endif
+
 		height = (rows * row_height
 		          + padding.top + padding.bottom
 		          + border.top + border.bottom
+		          + border_border.top + border_border.bottom
 		          + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		height = (rows * row_height
@@ -1560,6 +1628,7 @@ PRectangle ListBoxX::GetDesiredRect() {
 #if GTK_CHECK_VERSION(3,0,0)
 		rc.right += (padding.left + padding.right
 		             + border.left + border.right
+		             + border_border.left + border_border.right
 		             + 2 * gtk_container_get_border_width(GTK_CONTAINER(PWidget(list))));
 #else
 		rc.right += 2 * (PWidget(frame)->style->xthickness
@@ -1841,32 +1910,38 @@ void Menu::Destroy() {
 	mid = 0;
 }
 
+#if !GTK_CHECK_VERSION(3,22,0)
 static void MenuPositionFunc(GtkMenu *, gint *x, gint *y, gboolean *, gpointer userData) {
 	sptr_t intFromPointer = GPOINTER_TO_INT(userData);
 	*x = intFromPointer & 0xffff;
 	*y = intFromPointer >> 16;
 }
+#endif
 
-void Menu::Show(Point pt, Window &) {
-	int screenHeight = gdk_screen_height();
-	int screenWidth = gdk_screen_width();
+void Menu::Show(Point pt, Window &wnd) {
 	GtkMenu *widget = static_cast<GtkMenu *>(mid);
 	gtk_widget_show_all(GTK_WIDGET(widget));
+#if GTK_CHECK_VERSION(3,22,0)
+	// Rely on GTK+ to do the right thing with positioning
+	gtk_menu_popup_at_pointer(widget, NULL);
+#else
+	GdkRectangle rcMonitor = MonitorRectangleForWidget(PWidget(wnd.GetID()));
 	GtkRequisition requisition;
 #if GTK_CHECK_VERSION(3,0,0)
 	gtk_widget_get_preferred_size(GTK_WIDGET(widget), NULL, &requisition);
 #else
 	gtk_widget_size_request(GTK_WIDGET(widget), &requisition);
 #endif
-	if ((pt.x + requisition.width) > screenWidth) {
-		pt.x = screenWidth - requisition.width;
+	if ((pt.x + requisition.width) > rcMonitor.x + rcMonitor.width) {
+		pt.x = rcMonitor.x + rcMonitor.width - requisition.width;
 	}
-	if ((pt.y + requisition.height) > screenHeight) {
-		pt.y = screenHeight - requisition.height;
+	if ((pt.y + requisition.height) > rcMonitor.y + rcMonitor.height) {
+		pt.y = rcMonitor.y + rcMonitor.height - requisition.height;
 	}
 	gtk_menu_popup(widget, NULL, NULL, MenuPositionFunc,
 		GINT_TO_POINTER((static_cast<int>(pt.y) << 16) | static_cast<int>(pt.x)), 0,
 		gtk_get_current_event_time());
+#endif
 }
 
 ElapsedTime::ElapsedTime() {

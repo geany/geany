@@ -8,13 +8,7 @@ secondary=
 # these are some doxygen keywords (incomplete)
 docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
 
-[lexer_properties]
-styling.within.preprocessor=1
-lexer.cpp.track.preprocessor=0
-preprocessor.symbol.$(file.patterns.cpp)=#
-preprocessor.start.$(file.patterns.cpp)=if
-preprocessor.middle.$(file.patterns.cpp)=else elif
-preprocessor.end.$(file.patterns.cpp)=endif
+[lexer_properties=C]
 
 [settings]
 lexer_filetype=C

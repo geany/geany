@@ -20,6 +20,16 @@ widget "GeanyDialogSearch.*.geany-search-entry-no-match" style "geany-monospace"
 style "geany-search-entry-no-match-style" {
 	base[NORMAL] = "#ffff66666666"
 	text[NORMAL] = "#ffffffffffff"
+	base[SELECTED] = "#777711111111"
+	# try and remove the entry background image on pixmap engine so that our
+	# background color is visible, and we don't end up with white text on white
+	# background (workaround for Adwaita 3.20).
+	engine "pixmap" {
+		image {
+			function = FLAT_BOX
+			detail   = "entry_bg"
+		}
+	}
 }
 widget "*.geany-search-entry-no-match" style "geany-search-entry-no-match-style"
 

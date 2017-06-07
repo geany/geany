@@ -1,7 +1,156 @@
-Geany 1.28 (unreleased)
+Geany 1.31 (unreleased)
+
+
+Geany 1.30.1 (March 19, 2017)
+
+    Editor
+    * Fix auto-completion and calltip popup position on multi-monitor
+      setups (Issue#1422).
 
     Internationalization
-    * Updated translations: el
+    * Updated translations: ca, de, el, es, sk
+
+
+Geany 1.30 (March 05, 2017)
+
+    General
+    * Initial accessibility support in the editor (SF#328).
+    * Fix scrolling on Wayland (Issue#1320).
+
+    Bug fixes
+    * Fix Ctrl+X and Ctrl+C in non-Latin keyboard layouts
+      (Forkest, PR#1386).
+    * Fix search history filling on GTK >= 3.20 (PR#1404).
+    * Simplify setting build menu items labels, fixing a Commander plugin
+      issue (Vasiliy Faronov, PR#1396).
+
+    Interface
+    * Fix the current scope shown in the statusbar (Issue#1279).
+
+    Editor
+    * Update Scintilla to version 3.7.3.
+    * Fix triggering default keybindings together with snippets keybindings
+      (Issue#1354, PR#1356).
+
+    Filetypes
+    * Update JavaScript keywords (Abel 'Akronix' Serrano Juste, PR#1361).
+    * Partial highlighting of JavaScript ES6 template strings (Issue#934).
+    * Add Arduino custom filetype (Issue#1339).
+
+    Internationalization
+    * Updated translations: de, es, fr, it, lt, pt
+
+    API
+    * Remove unprefixed Scintilla structure aliases. Plugins must use
+      the `Sci_`-prefixed version from now on.
+    * Add `geany_api_version()` to detect the API version of Geany at
+      runtime (Thomas Martitz, PR#1406).
+
+    OSX
+    * Fix slow startup (Jiří Techet, Issue#1277, PR#1399).
+
+
+Geany 1.29 (November 13, 2016)
+
+    General
+    * Fix search entries color with the default GNOME 3.20 GTK2 theme
+      (PR#1137, Issue#1101, Issue#1135, Issue#1267).
+    * Improve support for GTK 3.22.
+    * Add support for VTE 0.38 and newer (Issue#336, PR#1181).
+
+    Bug fixes
+    * Fix build when the CXX variable contains flags (PR#1155, Issue#829).
+    * Fix focusing the message window when the Terminal tab is active
+      (PR#1200, Issue#1198).
+
+    Editor
+    * Update Scintilla to version 3.7.0 (Issue#1143).
+    * Add support for keeping the cursor a number of lines from the edges to
+      always show some context (PR#1154, Issue#1152).
+    * Allow to configure keybinding for "Delete to beginning of line"
+      (Abel Serrano Juste, PR#1134).
+    * Performance improvements with many duplicate symbols (Jiří Techet,
+      PR#797, Issue#577).
+    * Allow to configure the error indicator color (PR#1185).
+
+    Filetypes
+    * Fix highlighting of Haxe preprocessor (Issue#936).
+    * Add `.exp` extension to TCL (Simon Marchi, PR#979).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, id, it, kk, nl pt, pt_BR,
+      sv, zh_CN,
+
+    API
+    * Update `GeanyProxyProbeResults` API (PR#1213).
+    * Warn if a dot is used at the start of a proxy extension (PR#1212,
+      PR#1233).
+    * Add support for custom data attached to documents through
+      `plugin_set_document_data()`, `plugin_get_document_data()` and
+      `plugin_set_document_data_full()` (PR#1203).
+    * Add "project-before-close" signal (PR#1223).
+
+    Plugins
+    * Split Window: Work around a GTK bug present from 3.15.9 to 3.21.4
+      that breaks the document selection popup (Issue#1149, PR#1272).
+
+    Windows
+    * Include 'grep.exe' from MSYS2 which works better than the previously
+      self-compiled version
+      (Issue#783, Issue#784, Issue#1229, Issue#1260, PR#1301).
+    * Fix executing external commands (mainly Build and Run commands)
+      where paths and filenames with non-ASCII characters are involved
+      (Issue#1076, Issue#1259, Issue#1278, PR#1095).
+    * Do not create a batch file on Run commands any longer, instead use
+      a re-usable script and so eliminate the need to delete the script
+      from itself (Issue#1276, PR#1095).
+
+
+Geany 1.28 (July 10, 2016)
+
+    General
+    * Improve support for GTK 3.20.
+    * System filetype files and system tags files are now in sub-directories
+      *filedefs/* and *tags/* respectively (Jiří Techet, PR#485).
+
+    Bug fixes
+    * Fix canceling keybinding overriding by discarding the dialog (Issue#714).
+    * Fix type name coloring when types change (Jiří Techet, PR#1039,
+      Issue#1020, Issue#1022).
+    * Fix undo of line end type change (Jiří Techet, PR#527, Issue#409).
+
+    Editor
+    * Update Scintilla to version 3.6.6.
+    * Improve Goto Symbol popup contents (Jiří Techet, PR#958).
+
+    Filetypes
+    * Treat `.h` headers as C++ by default (Jiří Techet, PR#857).
+    * Various improvements to the Ruby parser (Issue#587).
+    * Fix Haskell single line comments (Alexander, PR#1029).
+    * Update Java keywords (Yan Pashkovsky, PR#1024).
+    * Fix handling of curly brackets in Make (Masatake Yamato).
+    * Add ECMAScript 6 keywords (Chris Mayo, PR#980).
+    * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
+    * Add missing `last-child` CSS pseudo-class (Issue#1102).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, it, ja, lt, pt, ru, sk,
+                            tr, zh_CN
+
+    API
+    * Don't require static strings for key group name and label (PR#1126).
+    * Formally add TMTag to the API (Thomas Martitz, PR#1093).
+
+    Plugins
+    * Class builder: use `.hpp` extension for C++ headers by default
+      (Yan Pashkovsky, PR#999).
+
+    Windows
+    * Show an error if an URI cannot be opened (PR#1079).
+
+    OSX
+    * Fix refreshing the keybindings displayed in the menus (Jiří Techet,
+      PR#973).
 
 
 Geany 1.27 (March 13, 2016)

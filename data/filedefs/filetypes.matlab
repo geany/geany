@@ -13,7 +13,7 @@ doublequotedstring=string_2
 
 [keywords]
 # all items must be in one line
-primary=break case catch classdef continue else elseif end enumeration events for function global if methods otherwise persistent properties return switch try while
+primary=break case catch classdef continue else elseif end enumeration events for function global if methods otherwise parfor persistent properties return switch try while
 
 [settings]
 # default extension used when saving files

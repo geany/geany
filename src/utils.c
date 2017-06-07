@@ -1060,25 +1060,6 @@ GIOChannel *utils_set_up_io_channel(
 }
 
 
-gchar **utils_read_file_in_array(const gchar *filename)
-{
-	gchar **result = NULL;
-	gchar *data;
-
-	g_return_val_if_fail(filename != NULL, NULL);
-
-	g_file_get_contents(filename, &data, NULL, NULL);
-
-	if (data != NULL)
-	{
-		result = g_strsplit_set(data, "\r\n", -1);
-		g_free(data);
-	}
-
-	return result;
-}
-
-
 /* Contributed by Stefan Oltmanns, thanks.
  * Replaces \\, \r, \n, \t and \uXXX by their real counterparts.
  * keep_backslash is used for regex strings to leave '\\' and '\?' in place */
@@ -1688,7 +1669,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
- *  @param child_pid @nullable The return location for child process ID, or @c NULL.
+ *  @param child_pid @out @nullable The return location for child process ID, or @c NULL.
  *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
@@ -2122,6 +2103,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())
@@ -2134,6 +2116,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 			g_free(prefix);
 # endif
 		}
@@ -2144,6 +2127,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(GEANY_LIBEXECDIR, "geany", NULL);
 		}
 #endif
 	}

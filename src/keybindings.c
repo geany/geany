@@ -262,8 +262,9 @@ static void add_kb_group(GeanyKeyGroup *group,
 {
 	g_ptr_array_add(keybinding_groups, group);
 
-	group->name = name;
-	group->label = label;
+	/* as for items, we only require duplicated name and label for plugins */
+	group->name = plugin ? g_strdup(name) : name;
+	group->label = plugin ? g_strdup(label) : label;
 	group->callback = callback;
 	group->cb_func = NULL;
 	group->cb_data = NULL;
@@ -385,6 +386,9 @@ static void init_default_kb(void)
 	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOEND, NULL,
 		GDK_Delete, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetoend",
 		_("Delete to line end"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_DELETELINETOBEGINNING, NULL,
+		GDK_BackSpace, GDK_SHIFT_MASK | GEANY_PRIMARY_MOD_MASK, "edit_deletelinetobegin",
+		_("Delete to beginning of line"), NULL);
 	/* Note: transpose may fit better in format group, but that would break the API */
 	add_kb(group, GEANY_KEYS_EDITOR_TRANSPOSELINE, NULL,
 		0, 0, "edit_transposeline", _("_Transpose Current Line"), NULL);
@@ -722,6 +726,9 @@ static void free_key_group(gpointer item)
 		if (group->cb_data_destroy)
 			group->cb_data_destroy(group->cb_data);
 		g_free(group->plugin_keys);
+		/* we allocated those in add_kb_group() as it's a plugin group */
+		g_free((gchar *) group->name);
+		g_free((gchar *) group->label);
 		g_free(group);
 	}
 }
@@ -1731,14 +1738,43 @@ static void focus_sidebar(void)
 }
 
 
+static GtkWidget *find_focus_widget(GtkWidget *widget)
+{
+	GtkWidget *focus = NULL;
+
+	if (GTK_IS_BIN(widget)) /* optimized simple case */
+		focus = find_focus_widget(gtk_bin_get_child(GTK_BIN(widget)));
+	else if (GTK_IS_CONTAINER(widget))
+	{
+		GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+		GList *node;
+
+		for (node = children; node && ! focus; node = node->next)
+			focus = find_focus_widget(node->data);
+		g_list_free(children);
+	}
+
+	/* Some containers handled above might not have children and be what we want to focus
+	 * (e.g. GtkTreeView), so focus that if possible and we don't have anything better */
+	if (! focus && gtk_widget_get_can_focus(widget))
+		focus = widget;
+
+	return focus;
+}
+
+
 static void focus_msgwindow(void)
 {
 	if (ui_prefs.msgwindow_visible)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
-		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+		GtkWidget *widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
 
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		widget = find_focus_widget(widget);
+		if (widget)
+			gtk_widget_grab_focus(widget);
+		else
+			utils_beep();
 	}
 }
 
@@ -2129,6 +2165,9 @@ static gboolean cb_func_editor_action(guint key_id)
 			break;
 		case GEANY_KEYS_EDITOR_DELETELINETOEND:
 			sci_send_command(doc->editor->sci, SCI_DELLINERIGHT);
+			break;
+		case GEANY_KEYS_EDITOR_DELETELINETOBEGINNING:
+			sci_send_command(doc->editor->sci, SCI_DELLINELEFT);
 			break;
 		case GEANY_KEYS_EDITOR_TRANSPOSELINE:
 			sci_send_command(doc->editor->sci, SCI_LINETRANSPOSE);
@@ -2658,10 +2697,12 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 		group = g_new0(GeanyKeyGroup, 1);
 		add_kb_group(group, section_name, label, callback, TRUE);
 	}
+	/* Calls free_key_binding() for individual entries for plugins - has to be
+	 * called before g_free(group->plugin_keys) */
+	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
-	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 

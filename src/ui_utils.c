@@ -512,10 +512,19 @@ void ui_update_popup_goto_items(gboolean enable)
 }
 
 
+void ui_menu_copy_items_set_sensitive(gboolean sensitive)
+{
+	guint i, len;
+
+	len = G_N_ELEMENTS(widgets.menu_copy_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.menu_copy_items[i], sensitive);
+}
+
+
 void ui_update_menu_copy_items(GeanyDocument *doc)
 {
 	gboolean enable = FALSE;
-	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
@@ -533,9 +542,7 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	len = G_N_ELEMENTS(widgets.menu_copy_items);
-	for (i = 0; i < len; i++)
-		ui_widget_set_sensitive(widgets.menu_copy_items[i], enable);
+	ui_menu_copy_items_set_sensitive(enable);
 }
 
 
@@ -608,8 +615,6 @@ static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user
 static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
-	GtkWidget *tmp_menu;
-	GtkWidget *tmp_popup;
 	GtkWidget *edit_menu, *edit_menu_item;
 	GtkWidget *popup_menu, *popup_menu_item;
 
@@ -622,8 +627,9 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 	while (includes[i] != NULL)
 	{
-		tmp_menu = gtk_menu_item_new_with_label(includes[i]);
-		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_menu = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+
 		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
 		g_signal_connect(tmp_menu, "activate",
@@ -1106,16 +1112,15 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 
 static void recent_create_menu(GeanyRecentFiles *grf)
 {
-	GtkWidget *tmp;
 	guint i, len;
-	gchar *filename;
 
 	len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
 	for (i = 0; i < len; i++)
 	{
-		filename = g_queue_peek_nth(grf->recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
-		tmp = gtk_menu_item_new_with_label(filename);
+		const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
+		GtkWidget *tmp = gtk_menu_item_new_with_label(filename);
+
 		gtk_widget_show(tmp);
 		gtk_container_add(GTK_CONTAINER(grf->menubar), tmp);
 		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
@@ -1464,6 +1469,8 @@ void ui_update_view_editor_menu_items(void)
  *
  * @return @transfer{floating} The frame widget, setting the alignment container for
  * packing child widgets.
+ * 
+ * @deprecated 1.29: Use GTK API directly
  **/
 GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
@@ -2475,10 +2482,28 @@ void ui_init_builder(void)
 static void init_custom_style(void)
 {
 #if GTK_CHECK_VERSION(3, 0, 0)
-	gchar *css_file = g_build_filename(app->datadir, "geany.css", NULL);
+	const struct {
+		guint version;
+		const gchar *file;
+	} css_files[] = {
+		/*
+		 * Keep these from newest to oldest,
+		 * and make sure 0 remains last
+		 */
+		{ 20, "geany-3.20.css" },
+		{ 0, "geany-3.0.css" },
+	};
+	guint gtk_version = gtk_get_minor_version();
+	gsize i = 0;
+	gchar *css_file;
 	GtkCssProvider *css = gtk_css_provider_new();
 	GError *error = NULL;
 
+	/* gtk_version will never be smaller than 0 */
+	while (css_files[i].version > gtk_version)
+		++i;
+
+	css_file = g_build_filename(app->datadir, css_files[i].file, NULL);
 	if (! gtk_css_provider_load_from_path(css, css_file, &error))
 	{
 		g_warning("Failed to load custom CSS: %s", error->message);
@@ -2819,7 +2844,7 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 	gchar *text;
 
 	va_start(a, format);
-	text = g_strdup_vprintf(format, a);
+	text = g_markup_vprintf_escaped(format, a);
 	va_end(a);
 
 	gtk_label_set_text(label, text);
@@ -2831,12 +2856,9 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 GtkWidget *ui_label_new_bold(const gchar *text)
 {
 	GtkWidget *label;
-	gchar *label_text;
 
-	label_text = g_markup_escape_text(text, -1);
 	label = gtk_label_new(NULL);
-	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", label_text);
-	g_free(label_text);
+	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", text);
 	return label;
 }
 
@@ -2880,7 +2902,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GtkWidget *menu_item, *menu_item_label, *image;
 	GeanyDocument *doc;
 	guint i, len;
-	gchar *base_name, *label;
+	gchar *base_name;
 	GPtrArray *sorted_documents;
 
 	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -2914,11 +2936,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		gtk_widget_set_name(menu_item_label, document_get_status_widget_class(doc));
 
 		if (doc == active)
-		{
-			label = g_markup_escape_text(base_name, -1);
-			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", label);
-			g_free(label);
-		}
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
 
 		g_free(base_name);
 	}

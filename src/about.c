@@ -45,14 +45,14 @@
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT _("Copyright (c)  2005-2016\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
+#define COPYRIGHT _("Copyright (c)  2005-2017\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
 
 static const gchar *translators[][2] = {
 	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Siamashka &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
-	{ "ca_ES", "Toni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
+	{ "ca_ES", "Robert Buj &lt;rbuj@fedoraproject.org&gt;\nToni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
 	{ "cs_CZ", "Petr Messner &lt;messa@messa.cz&gt;\nAnna Talianova &lt;anickat1@gmail.com&gt;" },
 	{ "de_DE", "Frank Lanitz &lt;frank@frank.uvena.de&gt;\nDominic Hopf &lt;dmaphy@googlemail.com&gt;" },
 	{ "el", "Stavros Temertzidis &lt;bullgr@gmail.com&gt;" },
@@ -66,6 +66,9 @@ static const gchar *translators[][2] = {
 	{ "hi", "Asheesh Ranjan &lt;asheeshranjan1@gmail.com&gt;"},
 	{ "he", "Yosef Or Boczko &lt;yoseforb@gmail.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
+	{ "id", "Fajar Wahyu &lt;fajarwahyuabdillah@gmail.com&gt;\n"
+			   "Samsul Ma'arif &lt;mail@samsul.web.id&gt;\n"
+			   "Bervianto Leo Pratama &ltbervianto.leo@gmail.com&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
 	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },

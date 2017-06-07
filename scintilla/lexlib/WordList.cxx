@@ -29,10 +29,7 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 	int words = 0;
 	// For rapid determination of whether a character is a separator, build
 	// a look up table.
-	bool wordSeparator[256];
-	for (int i=0; i<256; i++) {
-		wordSeparator[i] = false;
-	}
+	bool wordSeparator[256] = {};	// Initialise all to false.
 	wordSeparator[static_cast<unsigned int>('\r')] = true;
 	wordSeparator[static_cast<unsigned int>('\n')] = true;
 	if (!onlyLineEnds) {
@@ -118,7 +115,7 @@ static int cmpWords(const void *a, const void *b) {
 }
 
 static void SortWordList(char **words, unsigned int len) {
-	qsort(reinterpret_cast<void *>(words), len, sizeof(*words), cmpWords);
+	qsort(static_cast<void *>(words), len, sizeof(*words), cmpWords);
 }
 
 #endif
@@ -134,8 +131,7 @@ void WordList::Set(const char *s) {
 #else
 	SortWordList(words, len);
 #endif
-	for (unsigned int k = 0; k < ELEMENTS(starts); k++)
-		starts[k] = -1;
+	std::fill(starts, starts + ELEMENTS(starts), -1);
 	for (int l = len - 1; l >= 0; l--) {
 		unsigned char indexChar = words[l][0];
 		starts[indexChar] = l;
@@ -233,6 +229,66 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const {
 			j++;
 		}
 	}
+	return false;
+}
+
+/** similar to InListAbbreviated, but word s can be a abridged version of a keyword.
+* eg. the keyword is defined as "after.~:". This means the word must have a prefix (begins with) of
+* "after." and suffix (ends with) of ":" to be a keyword, Hence "after.field:" , "after.form.item:" are valid.
+* Similarly "~.is.valid" keyword is suffix only... hence "field.is.valid" , "form.is.valid" are valid.
+* The marker is ~ in this case.
+* No multiple markers check is done and wont work.
+*/
+bool WordList::InListAbridged(const char *s, const char marker) const {
+	if (0 == words)
+		return false;
+	unsigned char firstChar = s[0];
+	int j = starts[firstChar];
+	if (j >= 0) {
+		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+			const char *a = words[j];
+			const char *b = s;
+			while (*a && *a == *b) {
+				a++;
+				if (*a == marker) {
+					a++;
+					const size_t suffixLengthA = strlen(a);
+					const size_t suffixLengthB = strlen(b);
+					if (suffixLengthA >= suffixLengthB)
+						break;
+					b = b + suffixLengthB - suffixLengthA - 1;
+				}
+				b++;
+			}
+			if (!*a  && !*b)
+				return true;
+			j++;
+		}
+	}
+
+	j = starts[static_cast<unsigned int>(marker)];
+	if (j >= 0) {
+		while (words[j][0] == marker) {
+			const char *a = words[j] + 1;
+			const char *b = s;
+			const size_t suffixLengthA = strlen(a);
+			const size_t suffixLengthB = strlen(b);
+			if (suffixLengthA > suffixLengthB) {
+				j++;
+				continue;
+			}
+			b = b + suffixLengthB - suffixLengthA;
+
+			while (*a && *a == *b) {
+				a++;
+				b++;
+			}
+			if (!*a && !*b)
+				return true;
+			j++;
+		}
+	}
+
 	return false;
 }
 

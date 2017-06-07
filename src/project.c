@@ -425,6 +425,8 @@ static void destroy_project(gboolean open_default)
 
 	g_return_if_fail(app->project != NULL);
 
+	g_signal_emit_by_name(geany_object, "project-before-close");
+
 	/* remove project filetypes build entries */
 	if (app->project->priv->build_filetypes_list != NULL)
 	{

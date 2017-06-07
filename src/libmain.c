@@ -251,7 +251,6 @@ static void main_init(void)
 	file_prefs.tab_order_beside		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
-	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
@@ -877,10 +876,13 @@ static void load_session_project_file(void)
 
 static void load_settings(void)
 {
+#ifdef HAVE_VTE
+	vte_info.load_vte_cmdline = !no_vte;
+#endif
 	configuration_load();
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
-	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
+	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
 		ui_prefs.msgwindow_visible = FALSE;
@@ -1047,6 +1049,8 @@ gint main_lib(gint argc, gchar **argv)
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
+	/* initialize TM before parsing command-line - needed for tag file generation */
+	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)

@@ -136,8 +136,13 @@ typedef struct GeanyEditorPrefs
 	gint 		show_virtual_space;
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
+	gint		scroll_lines_around_cursor;
 }
 GeanyEditorPrefs;
+
+
+#define GEANY_TYPE_EDITOR (editor_get_type())
+GType editor_get_type (void);
 
 /** Editor-owned fields for each document. */
 typedef struct GeanyEditor
@@ -153,8 +158,6 @@ typedef struct GeanyEditor
 	gint			 indent_width;
 }
 GeanyEditor;
-
-typedef struct SCNotification SCNotification;
 
 
 const GeanyIndentPrefs *editor_get_indent_prefs(GeanyEditor *editor);

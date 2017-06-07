@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.27\n"
+"Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-28 14:14+0100\n"
-"PO-Revision-Date: 2016-03-07 20:58+0100\n"
+"POT-Creation-Date: 2017-02-19 19:13+0100\n"
+"PO-Revision-Date: 2017-03-06 19:36+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: ../geany.desktop.in.h:1 ../data/geany.glade.h:342
+#: ../geany.desktop.in.h:1 ../data/geany.glade.h:341
 msgid "Geany"
 msgstr "Geany"
 
@@ -29,6 +29,10 @@ msgstr "Integrované vývojové prostredie"
 #: ../geany.desktop.in.h:3
 msgid "A fast and lightweight IDE using GTK+"
 msgstr "Rýchle a nenáročné IDE pre GTK+"
+
+#: ../geany.desktop.in.h:4
+msgid "Text;Editor;"
+msgstr "Text;Editor;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -90,7 +94,7 @@ msgstr "neviditeľné"
 msgid "_Insert \"include <...>\""
 msgstr "Vložiť „_include <…>“"
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:506
+#: ../data/geany.glade.h:16 ../src/keybindings.c:511
 msgid "Insert Alternative _White Space"
 msgstr "Vložiť _alternatívny biely znak"
 
@@ -102,11 +106,11 @@ msgstr "_Hľadať"
 msgid "Open Selected F_ile"
 msgstr "O_tvoriť vybraný súbor"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2557
+#: ../data/geany.glade.h:19 ../src/symbols.c:2590
 msgid "Find _Usage"
 msgstr "_Nájsť použitie"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2562
+#: ../data/geany.glade.h:20 ../src/symbols.c:2595
 msgid "Find _Document Usage"
 msgstr "Nájsť použitie v _dokumente"
 
@@ -127,7 +131,7 @@ msgstr "Konte_xtová akcia"
 #. *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 #. * --------------------------------------------------------------------------------------------------------------------------
 #. *       [0]         [1]           [2]                 [3]                        [4]          [5]
-#: ../data/geany.glade.h:23 ../src/filetypes.c:135 ../src/filetypes.c:1540
+#: ../data/geany.glade.h:23 ../src/filetypes.c:128 ../src/filetypes.c:1535
 msgid "None"
 msgstr "Žiadne"
 
@@ -159,7 +163,7 @@ msgstr "Hore"
 msgid "Bottom"
 msgstr "Dole"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:516
+#: ../data/geany.glade.h:31 ../src/keybindings.c:521
 msgid "Preferences"
 msgstr "Nastavenia"
 
@@ -390,7 +394,7 @@ msgstr "Rôzne"
 #. * corresponding chapter in the documentation, comparing translatable
 #. * strings is easy to break. Maybe attach an identifying string to the
 #. * tab label object.
-#: ../data/geany.glade.h:76 ../src/prefs.c:1598
+#: ../data/geany.glade.h:76 ../src/prefs.c:1597
 msgid "General"
 msgstr "Všeobecné"
 
@@ -479,7 +483,7 @@ msgid "Whether to show the status bar at the bottom of the main window"
 msgstr ""
 "Určuje, či sa má zobrazovať stavový riadok v spodnej časti hlavného okna"
 
-#: ../data/geany.glade.h:98 ../src/prefs.c:1600
+#: ../data/geany.glade.h:98 ../src/prefs.c:1599
 msgid "Interface"
 msgstr "Rozhranie"
 
@@ -565,7 +569,7 @@ msgid "Pack the toolbar to the main menu to save vertical space"
 msgstr ""
 "Pre ušetrenie vertikálneho miesta pripojiť panel nástrojov k hlavnej ponuke"
 
-#: ../data/geany.glade.h:117 ../src/toolbar.c:943
+#: ../data/geany.glade.h:117 ../src/toolbar.c:944
 msgid "Customize Toolbar"
 msgstr "Prispôsobiť panel nástrojov"
 
@@ -613,7 +617,7 @@ msgstr "<b>Veľkosť ikon</b>"
 msgid "<b>Toolbar</b>"
 msgstr "<b>Panel nástrojov</b>"
 
-#: ../data/geany.glade.h:129 ../src/prefs.c:1602
+#: ../data/geany.glade.h:129 ../src/prefs.c:1601
 msgid "Toolbar"
 msgstr "Panel nástrojov"
 
@@ -1022,26 +1026,30 @@ msgstr ""
 "Určuje, či sa má zastaviť posúvanie strany na poslednom riadku dokumentu"
 
 #: ../data/geany.glade.h:212
+msgid "Lines visible _around the cursor:"
+msgstr "Počet _riadkov viditeľných okolo kurzora:"
+
+#: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
 msgstr "<b>Zobrazenie</b>"
 
-#: ../data/geany.glade.h:213
+#: ../data/geany.glade.h:214
 msgid "Column:"
 msgstr "Stĺpec:"
 
-#: ../data/geany.glade.h:214
+#: ../data/geany.glade.h:215
 msgid "Color:"
 msgstr "Farba:"
 
-#: ../data/geany.glade.h:215
+#: ../data/geany.glade.h:216
 msgid "Sets the color of the long line marker"
 msgstr "Nastaví farbu označenia dlhého riadku"
 
-#: ../data/geany.glade.h:216 ../src/toolbar.c:74 ../src/tools.c:831
+#: ../data/geany.glade.h:217 ../src/toolbar.c:74 ../src/tools.c:831
 msgid "Color Chooser"
 msgstr "Výber farby"
 
-#: ../data/geany.glade.h:217
+#: ../data/geany.glade.h:218
 msgid ""
 "The long line marker is a thin vertical line in the editor, it helps to mark "
 "long lines, or as a hint to break the line. Set this value to a value "
@@ -1051,22 +1059,22 @@ msgstr ""
 "dlhých riadkov alebo ako tip na rozdelenie riadka. Hodnota väčšia ako 0 "
 "označuje stĺpec, kde sa má táto značka zobraziť."
 
-#: ../data/geany.glade.h:218
+#: ../data/geany.glade.h:219
 msgid "Line"
 msgstr "Čiara"
 
-#: ../data/geany.glade.h:219
+#: ../data/geany.glade.h:220
 msgid ""
 "Prints a vertical line in the editor window at the given cursor position "
 "(see below)"
 msgstr ""
 "Zobrazí vertikálnu čiaru v okne editora na danej pozícii kurzora (viď nižšie)"
 
-#: ../data/geany.glade.h:220
+#: ../data/geany.glade.h:221
 msgid "Background"
 msgstr "Pozadie"
 
-#: ../data/geany.glade.h:221
+#: ../data/geany.glade.h:222
 msgid ""
 "The background color of characters after the given cursor position (see "
 "below) changed to the color set below, (this is recommended if you use "
@@ -1075,27 +1083,27 @@ msgstr ""
 "Farba pozadia znakov za danou pozíciou (viď nižšie) sa zmení na nižšie "
 "nastavenú farbu (odporúčané, ak používate proporcionálne písmo)."
 
-#: ../data/geany.glade.h:222
+#: ../data/geany.glade.h:223
 msgid "Enabled"
 msgstr "Povolené"
 
-#: ../data/geany.glade.h:223
+#: ../data/geany.glade.h:224
 msgid "<b>Long line marker</b>"
 msgstr "<b>Označenie dlhého riadka</b>"
 
-#: ../data/geany.glade.h:224
+#: ../data/geany.glade.h:225
 msgid "Disabled"
 msgstr "Zakázané"
 
-#: ../data/geany.glade.h:225
+#: ../data/geany.glade.h:226
 msgid "Do not show virtual spaces"
 msgstr "Nezobrazovať virtuálne medzery"
 
-#: ../data/geany.glade.h:226
+#: ../data/geany.glade.h:227
 msgid "Only for rectangular selections"
 msgstr "Iba pre obdĺžnikový výber"
 
-#: ../data/geany.glade.h:227
+#: ../data/geany.glade.h:228
 msgid ""
 "Only show virtual spaces beyond the end of lines when drawing a rectangular "
 "selection"
@@ -1103,58 +1111,58 @@ msgstr ""
 "Zobraziť virtuálne medzery za koncom riadka iba pri vykresľovaní "
 "obdĺžnikového výberu"
 
-#: ../data/geany.glade.h:228
+#: ../data/geany.glade.h:229
 msgid "Always"
 msgstr "Vždy"
 
-#: ../data/geany.glade.h:229
+#: ../data/geany.glade.h:230
 msgid "Always show virtual spaces beyond the end of lines"
 msgstr "Vždy zobraziť virtuálne medzery za koncom riadkov"
 
-#: ../data/geany.glade.h:230
+#: ../data/geany.glade.h:231
 msgid "<b>Virtual spaces</b>"
 msgstr "<b>Virtuálne medzery</b>"
 
-#: ../data/geany.glade.h:231
+#: ../data/geany.glade.h:232
 msgid "Display"
 msgstr "Zobrazenie"
 
-#: ../data/geany.glade.h:232 ../src/keybindings.c:307 ../src/prefs.c:1604
+#: ../data/geany.glade.h:233 ../src/keybindings.c:309 ../src/prefs.c:1603
 msgid "Editor"
 msgstr "Editor"
 
-#: ../data/geany.glade.h:233
+#: ../data/geany.glade.h:234
 msgid "Open new documents from the command-line"
 msgstr "Otvoriť nové dokumenty z príkazového riadku"
 
-#: ../data/geany.glade.h:234
+#: ../data/geany.glade.h:235
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Pre každý parameter z príkazového riadku vytvorí nový súbor, ak súbor "
 "neexistuje"
 
-#: ../data/geany.glade.h:235
+#: ../data/geany.glade.h:236
 msgid "Default end of line characters:"
 msgstr "Predvolený znak konca riadku:"
 
-#: ../data/geany.glade.h:236
+#: ../data/geany.glade.h:237
 msgid "<b>New files</b>"
 msgstr "<b>Nové súbory</b>"
 
-#: ../data/geany.glade.h:237
+#: ../data/geany.glade.h:238
 msgid "Default encoding (new files):"
 msgstr "Predvolené kódovanie (pre nové súbory):"
 
-#: ../data/geany.glade.h:238
+#: ../data/geany.glade.h:239
 msgid "Sets the default encoding for newly created files"
 msgstr "Nastaví predvolené kódovanie pre novo vytvorené súbory"
 
-#: ../data/geany.glade.h:239
+#: ../data/geany.glade.h:240
 msgid "Use fixed encoding when opening non-Unicode files"
 msgstr ""
 "Použiť predvolené kódovanie pri otváraní súborov ktoré nie sú v Unicode"
 
-#: ../data/geany.glade.h:240
+#: ../data/geany.glade.h:241
 msgid ""
 "This option disables the automatic detection of the file encoding when "
 "opening non-Unicode files and opens the file with the specified encoding "
@@ -1164,33 +1172,33 @@ msgstr ""
 "Súbor ktorý nie je v Unicode sa otvorí s predvoleným kódovaním (zvyčajne to "
 "nie je potrebné)"
 
-#: ../data/geany.glade.h:241
+#: ../data/geany.glade.h:242
 msgid "Default encoding (existing non-Unicode files):"
 msgstr "Predvolené kódovanie (pre existujúce súbory, ktoré nie sú v Unicode)"
 
-#: ../data/geany.glade.h:242
+#: ../data/geany.glade.h:243
 msgid "Sets the default encoding for opening existing non-Unicode files"
 msgstr ""
 "Nastaví predvolené kódovanie pre otvárané súbory, ktoré nie sú v Unicode "
 "kódovaní"
 
-#: ../data/geany.glade.h:243
+#: ../data/geany.glade.h:244
 msgid "<b>Encodings</b>"
 msgstr "<b>Kódovanie</b>"
 
-#: ../data/geany.glade.h:244
+#: ../data/geany.glade.h:245
 msgid "Ensure new line at file end"
 msgstr "Zabezpečiť nový riadok na konci súboru"
 
-#: ../data/geany.glade.h:245
+#: ../data/geany.glade.h:246
 msgid "Ensures that at the end of the file is a new line"
 msgstr "Zabezpečí, že posledným znakom súboru je znak nového riadku"
 
-#: ../data/geany.glade.h:246
+#: ../data/geany.glade.h:247
 msgid "Ensure consistent line endings"
 msgstr "Zabezpečiť jednotné ukončenie riadkov"
 
-#: ../data/geany.glade.h:247
+#: ../data/geany.glade.h:248
 msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
@@ -1198,39 +1206,39 @@ msgstr ""
 "Pred uloženým budú znaky konca riadkov konvertované na rovnaký znak, čím sa "
 "predchádza výskytu rôznych znakov konca riadkov v jednom súbore"
 
-#: ../data/geany.glade.h:248
+#: ../data/geany.glade.h:249
 msgid "Strip trailing spaces and tabs"
 msgstr "Odstrániť medzery a tabulátory na konci riadkov"
 
-#: ../data/geany.glade.h:249
-msgid "Removes trailing spaces and tabs and the end of lines"
+#: ../data/geany.glade.h:250
+msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Odstráni medzery a tabulátory na konci riadkov"
 
-#: ../data/geany.glade.h:250 ../src/keybindings.c:661
+#: ../data/geany.glade.h:251 ../src/keybindings.c:666
 msgid "Replace tabs with space"
 msgstr "Nahradiť tabulátory medzerami"
 
-#: ../data/geany.glade.h:251
+#: ../data/geany.glade.h:252
 msgid "Replaces all tabs in document with spaces"
 msgstr "V dokumente nahradí všetky tabulátory medzerami"
 
-#: ../data/geany.glade.h:252
+#: ../data/geany.glade.h:253
 msgid "<b>Saving files</b>"
 msgstr "<b>Ukladanie súborov</b>"
 
-#: ../data/geany.glade.h:253
+#: ../data/geany.glade.h:254
 msgid "Recent files list length:"
 msgstr "Dĺžka zoznamu nedávnych súborov:"
 
-#: ../data/geany.glade.h:254
+#: ../data/geany.glade.h:255
 msgid "Specifies the number of files which are stored in the Recent files list"
 msgstr "Určuje počet súborov, ktoré sú uložené v zozname Nedávne súbory"
 
-#: ../data/geany.glade.h:255
+#: ../data/geany.glade.h:256
 msgid "Disk check timeout:"
 msgstr "Časový interval pre overovanie zmien súborov na disku:"
 
-#: ../data/geany.glade.h:256
+#: ../data/geany.glade.h:257
 msgid ""
 "How often to check for changes to document files on disk, in seconds. Zero "
 "disables checking."
@@ -1238,20 +1246,20 @@ msgstr ""
 "Ako často sa má kontrolovať zmena súboru na disku, v sekundách. Nula znamená "
 "vypnutú kontrolu."
 
-#: ../data/geany.glade.h:257 ../src/prefs.c:1606 ../src/symbols.c:542
-#: ../plugins/filebrowser.c:1160
+#: ../data/geany.glade.h:258 ../src/prefs.c:1605 ../src/symbols.c:467
+#: ../plugins/filebrowser.c:1159
 msgid "Files"
 msgstr "Súbory"
 
-#: ../data/geany.glade.h:258
+#: ../data/geany.glade.h:259
 msgid "Terminal:"
 msgstr "Terminál:"
 
-#: ../data/geany.glade.h:259
+#: ../data/geany.glade.h:260
 msgid "Browser:"
 msgstr "Prehliadač:"
 
-#: ../data/geany.glade.h:261
+#: ../data/geany.glade.h:262
 #, no-c-format
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
@@ -1260,23 +1268,23 @@ msgstr ""
 "Príkaz emulátora terminálu (miesto %c bude vložený názov súboru spúšťaného "
 "skriptu)"
 
-#: ../data/geany.glade.h:262
+#: ../data/geany.glade.h:263
 msgid "Path (and possibly additional arguments) to your favorite browser"
 msgstr "Cesta (a prípadne ďalšie parametre) k Vášmu obľúbenému prehliadaču"
 
-#: ../data/geany.glade.h:263
+#: ../data/geany.glade.h:264
 msgid "Grep:"
 msgstr "Grep:"
 
-#: ../data/geany.glade.h:264
+#: ../data/geany.glade.h:265
 msgid "<b>Tool paths</b>"
 msgstr "<b>Cesty k nástrojom</b>"
 
-#: ../data/geany.glade.h:265
+#: ../data/geany.glade.h:266
 msgid "Context action:"
 msgstr "Kontextová akcia:"
 
-#: ../data/geany.glade.h:267
+#: ../data/geany.glade.h:268
 #, no-c-format
 msgid ""
 "Context action command. The currently selected word can be used with %s. It "
@@ -1287,67 +1295,67 @@ msgstr ""
 "%s. Môže sa použiť kdekoľvek v danom príkaze a náhrada bude vykonaná pred "
 "spustením príkazu."
 
-#: ../data/geany.glade.h:268
+#: ../data/geany.glade.h:269
 msgid "<b>Commands</b>"
 msgstr "<b>Príkazy</b>"
 
-#: ../data/geany.glade.h:269 ../src/keybindings.c:319 ../src/prefs.c:1608
+#: ../data/geany.glade.h:270 ../src/keybindings.c:321 ../src/prefs.c:1607
 msgid "Tools"
 msgstr "Nástroje"
 
-#: ../data/geany.glade.h:270
+#: ../data/geany.glade.h:271
 msgid "email address of the developer"
 msgstr "E-mailová adresa vývojára"
 
-#: ../data/geany.glade.h:271
+#: ../data/geany.glade.h:272
 msgid "Initials of the developer name"
 msgstr "Iniciálky mena vývojára"
 
-#: ../data/geany.glade.h:272
+#: ../data/geany.glade.h:273
 msgid "Initial version:"
 msgstr "Počiatočná verzia:"
 
-#: ../data/geany.glade.h:273
+#: ../data/geany.glade.h:274
 msgid "Version number, which a new file initially has"
 msgstr "Číslo verzie, použité pre nový súbor"
 
-#: ../data/geany.glade.h:274
+#: ../data/geany.glade.h:275
 msgid "Company name"
 msgstr "Názov spoločnosti"
 
-#: ../data/geany.glade.h:275
+#: ../data/geany.glade.h:276
 msgid "Developer:"
 msgstr "Vývojár:"
 
-#: ../data/geany.glade.h:276
+#: ../data/geany.glade.h:277
 msgid "Company:"
 msgstr "Spoločnosť:"
 
-#: ../data/geany.glade.h:277
+#: ../data/geany.glade.h:278
 msgid "Mail address:"
 msgstr "E-Mailová adresa:"
 
-#: ../data/geany.glade.h:278
+#: ../data/geany.glade.h:279
 msgid "Initials:"
 msgstr "Iniciálky:"
 
-#: ../data/geany.glade.h:279
+#: ../data/geany.glade.h:280
 msgid "The name of the developer"
 msgstr "Meno vývojára"
 
-#: ../data/geany.glade.h:280
+#: ../data/geany.glade.h:281
 msgid "Year:"
 msgstr "Rok:"
 
-#: ../data/geany.glade.h:281
+#: ../data/geany.glade.h:282
 msgid "Date:"
 msgstr "Dátum:"
 
-#: ../data/geany.glade.h:282
+#: ../data/geany.glade.h:283
 msgid "Date & time:"
 msgstr "Dátum a čas:"
 
-#: ../data/geany.glade.h:283
+#: ../data/geany.glade.h:284
 msgid ""
 "Specify a format for the {datetime} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -1355,7 +1363,7 @@ msgstr ""
 "Určuje formát pre značku {datetime}. Je možné použiť akýkoľvek zápis, ktorý "
 "je možné použiť s funkciou ANSI C strftime."
 
-#: ../data/geany.glade.h:284
+#: ../data/geany.glade.h:285
 msgid ""
 "Specify a format for the {year} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -1363,7 +1371,7 @@ msgstr ""
 "Určuje formát pre značku {year}. Je možné použiť akýkoľvek zápis, ktorý je "
 "možné použiť s funkciou ANSI C strftime."
 
-#: ../data/geany.glade.h:285
+#: ../data/geany.glade.h:286
 msgid ""
 "Specify a format for the {date} wildcard. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -1371,64 +1379,64 @@ msgstr ""
 "Určuje formát pre značku {date}. Je možné použiť akýkoľvek zápis, ktorý je "
 "možné použiť s funkciou ANSI C strftime."
 
-#: ../data/geany.glade.h:286
+#: ../data/geany.glade.h:287
 msgid "<b>Template data</b>"
 msgstr "<b>Údajové šablóny</b>"
 
-#: ../data/geany.glade.h:287 ../src/prefs.c:1610
+#: ../data/geany.glade.h:288 ../src/prefs.c:1609
 msgid "Templates"
 msgstr "Šablóny"
 
-#: ../data/geany.glade.h:288
+#: ../data/geany.glade.h:289
 msgid "C_hange"
 msgstr "_Zmeniť"
 
-#: ../data/geany.glade.h:289
+#: ../data/geany.glade.h:290
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Klávesové skratky</b>"
 
-#: ../data/geany.glade.h:290 ../src/plugins.c:1898 ../src/plugins.c:1935
-#: ../src/prefs.c:1612
+#: ../data/geany.glade.h:291 ../src/plugins.c:1941 ../src/plugins.c:1978
+#: ../src/prefs.c:1611
 msgid "Keybindings"
 msgstr "Klávesové skratky"
 
-#: ../data/geany.glade.h:291
+#: ../data/geany.glade.h:292
 msgid "Command:"
 msgstr "Príkaz:"
 
-#: ../data/geany.glade.h:293
+#: ../data/geany.glade.h:294
 #, no-c-format
 msgid "Path to the command for printing files (use %f for the filename)"
 msgstr "Cesta k príkazu na tlač súborov (použite %f pre názov súboru)"
 
-#: ../data/geany.glade.h:294
+#: ../data/geany.glade.h:295
 msgid "Use an external command for printing"
 msgstr "Použiť externý príkaz pre tlač"
 
-#: ../data/geany.glade.h:295 ../src/printing.c:239
+#: ../data/geany.glade.h:296 ../src/printing.c:239
 msgid "Print line numbers"
 msgstr "Tlačiť čísla riadkov"
 
-#: ../data/geany.glade.h:296 ../src/printing.c:241
+#: ../data/geany.glade.h:297 ../src/printing.c:241
 msgid "Add line numbers to the printed page"
 msgstr "Pridať čísla riadkov na tlačenú stranu"
 
-#: ../data/geany.glade.h:297 ../src/printing.c:244
+#: ../data/geany.glade.h:298 ../src/printing.c:244
 msgid "Print page numbers"
 msgstr "Tlačiť čísla strán"
 
-#: ../data/geany.glade.h:298 ../src/printing.c:246
+#: ../data/geany.glade.h:299 ../src/printing.c:246
 msgid ""
 "Add page numbers at the bottom of each page. It takes 2 lines of the page."
 msgstr ""
 "Pridať číslo strany na spodok každej strany. Použije 2 riadky z každej "
 "strany."
 
-#: ../data/geany.glade.h:299 ../src/printing.c:249
+#: ../data/geany.glade.h:300 ../src/printing.c:249
 msgid "Print page header"
 msgstr "Tlačiť hlavičku strany"
 
-#: ../data/geany.glade.h:300 ../src/printing.c:251
+#: ../data/geany.glade.h:301 ../src/printing.c:251
 msgid ""
 "Add a little header to every page containing the page number, the filename "
 "and the current date (see below). It takes 3 lines of the page."
@@ -1436,19 +1444,19 @@ msgstr ""
 "Pridať na každú stranu hlavičku obsahujúcu číslo strany, názov súboru a "
 "aktuálny dátum (viď nižšie). Použije 3 riadky z každej strany."
 
-#: ../data/geany.glade.h:301 ../src/printing.c:267
+#: ../data/geany.glade.h:302 ../src/printing.c:267
 msgid "Use the basename of the printed file"
 msgstr "Použiť iba názov tlačeného súboru"
 
-#: ../data/geany.glade.h:302
+#: ../data/geany.glade.h:303
 msgid "Print only the basename (without the path) of the printed file"
 msgstr "Tlačiť iba názov tlačeného súboru (bez cesty)"
 
-#: ../data/geany.glade.h:303 ../src/printing.c:275
+#: ../data/geany.glade.h:304 ../src/printing.c:275
 msgid "Date format:"
 msgstr "Formát dátumu:"
 
-#: ../data/geany.glade.h:304 ../src/printing.c:281
+#: ../data/geany.glade.h:305 ../src/printing.c:281
 msgid ""
 "Specify a format for the date and time stamp which is added to the page "
 "header on each page. You can use any conversion specifiers which can be used "
@@ -1457,41 +1465,37 @@ msgstr ""
 "Určuje formát dátumu a času pridávaného do hlavičky každej stránky. Je možné "
 "použiť akýkoľvek zápis, ktorý je možné použiť s funkciou ANSI C strftime."
 
-#: ../data/geany.glade.h:305
+#: ../data/geany.glade.h:306
 msgid "Use native GTK printing"
 msgstr "Použiť natívnu GTK tlač"
 
-#: ../data/geany.glade.h:306
+#: ../data/geany.glade.h:307
 msgid "<b>Printing</b>"
 msgstr "<b>Tlač</b>"
 
-#: ../data/geany.glade.h:307 ../src/prefs.c:1614
+#: ../data/geany.glade.h:308 ../src/prefs.c:1613
 msgid "Printing"
 msgstr "Tlač"
 
-#: ../data/geany.glade.h:308
+#: ../data/geany.glade.h:309
 msgid "Font:"
 msgstr "Písmo:"
 
-#: ../data/geany.glade.h:309
+#: ../data/geany.glade.h:310
 msgid "Sets the font for the terminal widget"
 msgstr "Nastaví písmo pre okno terminálu"
 
-#: ../data/geany.glade.h:310
+#: ../data/geany.glade.h:311
 msgid "Choose Terminal Font"
 msgstr "Vybrať písmo pre terminál"
 
-#: ../data/geany.glade.h:311
+#: ../data/geany.glade.h:312
 msgid "Foreground color:"
 msgstr "Farba textu:"
 
-#: ../data/geany.glade.h:312
+#: ../data/geany.glade.h:313
 msgid "Background color:"
 msgstr "Farba pozadia:"
-
-#: ../data/geany.glade.h:313
-msgid "Background image:"
-msgstr "Obrázok pozadia:"
 
 #: ../data/geany.glade.h:314
 msgid "Scrollback lines:"
@@ -1510,10 +1514,6 @@ msgid "Sets the background color of the text in the terminal widget"
 msgstr "Nastaví farbu pozadia v okne terminálu"
 
 #: ../data/geany.glade.h:318
-msgid "Sets the path to the background image in the terminal widget"
-msgstr "Nastaví cestu k obrázku použitému na pozadí okna terminálu"
-
-#: ../data/geany.glade.h:319
 msgid ""
 "Specifies the history in lines, which you can scroll back in the terminal "
 "widget"
@@ -1521,52 +1521,52 @@ msgstr ""
 "Určuje počet riadkov histórie, o ktorý sa je možné spätne presúvať v okne "
 "terminálu"
 
-#: ../data/geany.glade.h:320
+#: ../data/geany.glade.h:319
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
 msgstr "Nastaví cestu k shellu, ktorý sa má spúšťať v emulátore terminálu"
 
-#: ../data/geany.glade.h:321
+#: ../data/geany.glade.h:320
 msgid "Scroll on keystroke"
 msgstr "Rolovať pri stlačení klávesy"
 
-#: ../data/geany.glade.h:322
+#: ../data/geany.glade.h:321
 msgid "Whether to scroll to the bottom if a key was pressed"
 msgstr "Určuje, či sa má pri stlačení klávesy posunúť obsah okna na koniec"
 
-#: ../data/geany.glade.h:323
+#: ../data/geany.glade.h:322
 msgid "Scroll on output"
 msgstr "Rolovať pri výstupe"
 
-#: ../data/geany.glade.h:324
+#: ../data/geany.glade.h:323
 msgid "Whether to scroll to the bottom when output is generated"
 msgstr "Určuje, či sa má posunúť obsah okna pri vygenerovaní výstupu"
 
-#: ../data/geany.glade.h:325
+#: ../data/geany.glade.h:324
 msgid "Cursor blinks"
 msgstr "Blikajúci kurzor"
 
-#: ../data/geany.glade.h:326
+#: ../data/geany.glade.h:325
 msgid "Whether to blink the cursor"
 msgstr "Určuje, či má kurzor blikať"
 
-#: ../data/geany.glade.h:327
+#: ../data/geany.glade.h:326
 msgid "Override Geany keybindings"
 msgstr "Ignorovať klávesové skratky Geany"
 
-#: ../data/geany.glade.h:328
+#: ../data/geany.glade.h:327
 msgid ""
 "Allows the VTE to receive keyboard shortcuts (apart from focus commands)"
 msgstr ""
 "Dovoľuje virtuálnemu terminálu obdržať klávesové skratky (okrem skratiek pre "
 "zmenu zamerania)"
 
-#: ../data/geany.glade.h:329
+#: ../data/geany.glade.h:328
 msgid "Disable menu shortcut key (F10 by default)"
 msgstr "Zakázať skratku pre menu (štandardne F10)"
 
-#: ../data/geany.glade.h:330
+#: ../data/geany.glade.h:329
 msgid ""
 "This option disables the keybinding to popup the menu bar (default is F10). "
 "Disabling it can be useful if you use, for example, Midnight Commander "
@@ -1576,19 +1576,19 @@ msgstr ""
 "F10). Vypnutie môže byť užitočné, ak napríklad používate Midnight Commander "
 "vo virtuálnom terminály."
 
-#: ../data/geany.glade.h:331
+#: ../data/geany.glade.h:330
 msgid "Follow path of the current file"
 msgstr "Nasledovať cestu aktuálneho súboru"
 
-#: ../data/geany.glade.h:332
+#: ../data/geany.glade.h:331
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
 msgstr "Určuje, či spustiť „cd $path“ pri prepínaní medzi otvorenými súbormi"
 
-#: ../data/geany.glade.h:333
+#: ../data/geany.glade.h:332
 msgid "Execute programs in the VTE"
 msgstr "Spúšťať programy vo virtuálnom termináli"
 
-#: ../data/geany.glade.h:334
+#: ../data/geany.glade.h:333
 msgid ""
 "Run programs in VTE instead of opening a terminal emulation window. Please "
 "note, programs executed in VTE cannot be stopped"
@@ -1596,11 +1596,11 @@ msgstr ""
 "Spúšťať programy vo virtuálnom terminály namiesto otvárania nového okna. "
 "Programy spustené vo virtuálnom terminály nie je možné zastaviť."
 
-#: ../data/geany.glade.h:335
+#: ../data/geany.glade.h:334
 msgid "Don't use run script"
 msgstr "Nepoužívať spúšťací skript"
 
-#: ../data/geany.glade.h:336
+#: ../data/geany.glade.h:335
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
@@ -1608,530 +1608,530 @@ msgstr ""
 "Nepoužívať jednoduchý spúšťací skript, ktorý zvyčajne vypisuje stav "
 "ukončenia programu"
 
-#: ../data/geany.glade.h:337
+#: ../data/geany.glade.h:336
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminál</b>"
 
-#: ../data/geany.glade.h:338 ../src/prefs.c:1618 ../src/vte.c:320
+#: ../data/geany.glade.h:337 ../src/prefs.c:1617 ../src/vte.c:384
 msgid "Terminal"
 msgstr "Terminál"
 
-#: ../data/geany.glade.h:339
+#: ../data/geany.glade.h:338
 msgid "<i>Warning: read the manual before changing these preferences.</i>"
 msgstr "<i>Upozornenie: pred zmenou týchto hodnôt si prečítajte manuál.</i>"
 
-#: ../data/geany.glade.h:340
+#: ../data/geany.glade.h:339
 msgid "<b>Various preferences</b>"
 msgstr "<b>Rôzne nastavenia</b>"
 
-#: ../data/geany.glade.h:341 ../src/prefs.c:1616
+#: ../data/geany.glade.h:340 ../src/prefs.c:1615
 msgid "Various"
 msgstr "Rôzne"
 
-#: ../data/geany.glade.h:343
+#: ../data/geany.glade.h:342
 msgid "_File"
 msgstr "_Súbor"
 
-#: ../data/geany.glade.h:344
+#: ../data/geany.glade.h:343
 msgid "New (with _Template)"
 msgstr "Nový (zo _šablóny)"
 
-#: ../data/geany.glade.h:345
+#: ../data/geany.glade.h:344
 msgid "_Open..."
 msgstr "_Otvoriť…"
 
-#: ../data/geany.glade.h:346
+#: ../data/geany.glade.h:345
 msgid "Recent _Files"
 msgstr "N_edávne súbory"
 
-#: ../data/geany.glade.h:347
+#: ../data/geany.glade.h:346
 msgid "Save _As..."
 msgstr "Uložiť _ako…"
 
-#: ../data/geany.glade.h:348
+#: ../data/geany.glade.h:347
 msgid "Sa_ve All"
 msgstr "U_ložiť všetky"
 
-#: ../data/geany.glade.h:349 ../src/document.c:1666 ../src/document.c:3596
+#: ../data/geany.glade.h:348 ../src/document.c:1651 ../src/document.c:3620
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Znova načítať"
 
-#: ../data/geany.glade.h:350
+#: ../data/geany.glade.h:349
 msgid "R_eload As"
 msgstr "Znova na_čítať ako"
 
-#: ../data/geany.glade.h:351
+#: ../data/geany.glade.h:350
 msgid "Page Set_up"
 msgstr "Nastavenia _strany"
 
-#: ../data/geany.glade.h:352
+#: ../data/geany.glade.h:351
 msgid "_Print..."
 msgstr "_Tlačiť…"
 
-#: ../data/geany.glade.h:353 ../src/notebook.c:470
+#: ../data/geany.glade.h:352 ../src/notebook.c:470
 msgid "Close Ot_her Documents"
 msgstr "Zavrieť ostatné _dokumenty"
 
-#: ../data/geany.glade.h:354 ../src/notebook.c:476
+#: ../data/geany.glade.h:353 ../src/notebook.c:476
 msgid "C_lose All"
 msgstr "Zavrieť všetk_y"
 
-#: ../data/geany.glade.h:355
+#: ../data/geany.glade.h:354
 msgid "Co_mmands"
 msgstr "_Príkazy"
 
-#: ../data/geany.glade.h:356 ../src/keybindings.c:429
+#: ../data/geany.glade.h:355 ../src/keybindings.c:434
 msgid "Cu_t Current Line(s)"
 msgstr "Vystrih_núť riadok (riadky)"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:426
+#: ../data/geany.glade.h:356 ../src/keybindings.c:431
 msgid "_Copy Current Line(s)"
 msgstr "_Kopírovať riadok (riadky)"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:382
+#: ../data/geany.glade.h:357 ../src/keybindings.c:384
 msgid "_Delete Current Line(s)"
 msgstr "O_dstrániť riadok (riadky)"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:379
+#: ../data/geany.glade.h:358 ../src/keybindings.c:381
 msgid "D_uplicate Line or Selection"
 msgstr "Du_plikovať riadok alebo výber"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:439
+#: ../data/geany.glade.h:359 ../src/keybindings.c:444
 msgid "S_elect Current Line(s)"
 msgstr "Vybrať _riadok (riadky)"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:442
+#: ../data/geany.glade.h:360 ../src/keybindings.c:447
 msgid "Se_lect Current Paragraph"
 msgstr "Vybrať _odsek"
 
-#: ../data/geany.glade.h:362
+#: ../data/geany.glade.h:361
 msgid "_Move Line(s) Up"
 msgstr "Presunúť riadok (riadky) _vyššie"
 
-#: ../data/geany.glade.h:363
+#: ../data/geany.glade.h:362
 msgid "M_ove Line(s) Down"
 msgstr "Presunúť riadok (riadky) _nižšie"
 
-#: ../data/geany.glade.h:364 ../src/keybindings.c:493
+#: ../data/geany.glade.h:363 ../src/keybindings.c:498
 msgid "_Send Selection to Terminal"
 msgstr "Odoslať výber do _terminálu"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:495
+#: ../data/geany.glade.h:364 ../src/keybindings.c:500
 msgid "_Reflow Lines/Block"
 msgstr "Znovu _rozdeliť riadky/odsek"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:453
+#: ../data/geany.glade.h:365 ../src/keybindings.c:458
 msgid "T_oggle Case of Selection"
 msgstr "_Prepnúť veľkosť písmen vo výbere"
 
-#: ../data/geany.glade.h:367
+#: ../data/geany.glade.h:366
 msgid "_Comment Line(s)"
 msgstr "_Zakomentovať riadky"
 
-#: ../data/geany.glade.h:368
+#: ../data/geany.glade.h:367
 msgid "U_ncomment Line(s)"
 msgstr "_Odkomentovať riadky"
 
-#: ../data/geany.glade.h:369
+#: ../data/geany.glade.h:368
 msgid "_Toggle Line Commentation"
 msgstr "Prepnúť _komentár na riadku"
 
-#: ../data/geany.glade.h:370
+#: ../data/geany.glade.h:369
 msgid "_Increase Indent"
 msgstr "Z_väčšiť odsadenie"
 
-#: ../data/geany.glade.h:371
+#: ../data/geany.glade.h:370
 msgid "_Decrease Indent"
 msgstr "Z_menšiť odsadenie"
 
-#: ../data/geany.glade.h:372 ../src/keybindings.c:472
+#: ../data/geany.glade.h:371 ../src/keybindings.c:477
 msgid "S_mart Line Indent"
 msgstr "_Inteligentné odsadzovanie riadkov"
 
-#: ../data/geany.glade.h:373
+#: ../data/geany.glade.h:372
 msgid "_Send Selection to"
 msgstr "Odoslať výber _do"
 
-#: ../data/geany.glade.h:374
+#: ../data/geany.glade.h:373
 msgid "I_nsert Comments"
 msgstr "Vložiť _komentár"
 
-#: ../data/geany.glade.h:375
+#: ../data/geany.glade.h:374
 msgid "Preference_s"
 msgstr "_Nastavenia"
 
-#: ../data/geany.glade.h:376 ../src/keybindings.c:519
+#: ../data/geany.glade.h:375 ../src/keybindings.c:524
 msgid "P_lugin Preferences"
 msgstr "Nastavenia _zásuvných modulov"
 
-#: ../data/geany.glade.h:377
+#: ../data/geany.glade.h:376
 msgid "_Find..."
 msgstr "_Nájsť…"
 
-#: ../data/geany.glade.h:378
+#: ../data/geany.glade.h:377
 msgid "Find _Next"
 msgstr "Nájsť n_asledujúce"
 
-#: ../data/geany.glade.h:379
+#: ../data/geany.glade.h:378
 msgid "Find _Previous"
 msgstr "Nájsť _predchádzajúce"
 
-#: ../data/geany.glade.h:380 ../src/symbols.c:2567
+#: ../data/geany.glade.h:379 ../src/symbols.c:2600
 msgid "Find in F_iles..."
 msgstr "Nájsť v _súboroch…"
 
-#: ../data/geany.glade.h:381
+#: ../data/geany.glade.h:380
 msgid "_Replace..."
 msgstr "Na_hradiť…"
 
-#: ../data/geany.glade.h:382
+#: ../data/geany.glade.h:381
 msgid "Next Me_ssage"
 msgstr "Nas_ledujúca správa"
 
-#: ../data/geany.glade.h:383
+#: ../data/geany.glade.h:382
 msgid "Pr_evious Message"
 msgstr "Pre_dchádzajúca správa"
 
-#: ../data/geany.glade.h:384 ../src/keybindings.c:568
+#: ../data/geany.glade.h:383 ../src/keybindings.c:573
 msgid "Go to Ne_xt Marker"
 msgstr "Pr_ejsť na nasledujúcu značku"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:571
+#: ../data/geany.glade.h:384 ../src/keybindings.c:576
 msgid "Go to Pre_vious Marker"
 msgstr "Pre_jsť na predchádzajúci značku"
 
-#: ../data/geany.glade.h:386
+#: ../data/geany.glade.h:385
 msgid "_Go to Line..."
 msgstr "Prejsť na _riadok…"
 
-#: ../data/geany.glade.h:387 ../src/keybindings.c:531
+#: ../data/geany.glade.h:386 ../src/keybindings.c:536
 msgid "Find Next _Selection"
 msgstr "Nájsť n_asledujúci výskyt vybraného textu"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:533
+#: ../data/geany.glade.h:387 ../src/keybindings.c:538
 msgid "Find Pre_vious Selection"
 msgstr "Nájsť p_redchádzajúci výskyt vybraného textu"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:550
+#: ../data/geany.glade.h:388 ../src/keybindings.c:555
 msgid "_Mark All"
 msgstr "Označiť _všetky výskyty"
 
-#: ../data/geany.glade.h:390
+#: ../data/geany.glade.h:389
 msgid "Go to Symbol Decl_aration"
 msgstr "Prejsť na de_klaráciu symbolu"
 
-#: ../data/geany.glade.h:391
+#: ../data/geany.glade.h:390
 msgid "_View"
 msgstr "_Zobraziť"
 
-#: ../data/geany.glade.h:392
+#: ../data/geany.glade.h:391
 msgid "Change _Font..."
 msgstr "Zmeniť _písmo…"
 
-#: ../data/geany.glade.h:393
+#: ../data/geany.glade.h:392
 msgid "Change _Color Scheme..."
 msgstr "Zmeniť _farebnú schému…"
 
-#: ../data/geany.glade.h:394
+#: ../data/geany.glade.h:393
 msgid "Show _Markers Margin"
 msgstr "Zobraziť _značky"
 
-#: ../data/geany.glade.h:395
+#: ../data/geany.glade.h:394
 msgid "Show _Line Numbers"
 msgstr "Zobraziť čísla _riadkov"
 
-#: ../data/geany.glade.h:396
+#: ../data/geany.glade.h:395
 msgid "Show White S_pace"
 msgstr "Zobraziť _biele znaky"
 
-#: ../data/geany.glade.h:397
+#: ../data/geany.glade.h:396
 msgid "Show Line _Endings"
 msgstr "Zobraziť _konce riadkov"
 
-#: ../data/geany.glade.h:398
+#: ../data/geany.glade.h:397
 msgid "Show Indentation _Guides"
 msgstr "Zobraziť _indikátory odsadenia"
 
-#: ../data/geany.glade.h:399
+#: ../data/geany.glade.h:398
 msgid "Full_screen"
 msgstr "_Celá obrazovka"
 
-#: ../data/geany.glade.h:400
+#: ../data/geany.glade.h:399
 msgid "Toggle All _Additional Widgets"
 msgstr "Prepnúť zobrazenie _doplnkových ovládacích prvkov"
 
-#: ../data/geany.glade.h:401
+#: ../data/geany.glade.h:400
 msgid "Show Message _Window"
 msgstr "Zobraziť okno _správ"
 
-#: ../data/geany.glade.h:402
+#: ../data/geany.glade.h:401
 msgid "Show _Toolbar"
 msgstr "Zobraziť p_anel nástrojov"
 
-#: ../data/geany.glade.h:403
+#: ../data/geany.glade.h:402
 msgid "Show Side_bar"
 msgstr "Zobraziť b_očný panel"
 
-#: ../data/geany.glade.h:404
+#: ../data/geany.glade.h:403
 msgid "_Document"
 msgstr "_Dokument"
 
-#: ../data/geany.glade.h:405
+#: ../data/geany.glade.h:404
 msgid "_Line Wrapping"
 msgstr "_Zalamovanie riadkov"
 
-#: ../data/geany.glade.h:406
+#: ../data/geany.glade.h:405
 msgid "Line _Breaking"
 msgstr "_Rozdeľovanie dlhých riadkov"
 
-#: ../data/geany.glade.h:407
+#: ../data/geany.glade.h:406
 msgid "_Auto-indentation"
 msgstr "_Automatické odsadzovanie"
 
-#: ../data/geany.glade.h:408
+#: ../data/geany.glade.h:407
 msgid "In_dent Type"
 msgstr "Ty_p odsadenia"
 
-#: ../data/geany.glade.h:409
+#: ../data/geany.glade.h:408
 msgid "_Detect from Content"
 msgstr "_Zistiť z obsahu"
 
-#: ../data/geany.glade.h:410
+#: ../data/geany.glade.h:409
 msgid "T_abs and Spaces"
 msgstr "Tabulátory _a medzery"
 
-#: ../data/geany.glade.h:411
+#: ../data/geany.glade.h:410
 msgid "Indent Widt_h"
 msgstr "Šírka o_dsadenia"
 
-#: ../data/geany.glade.h:412
+#: ../data/geany.glade.h:411
 msgid "_1"
 msgstr "_1"
 
-#: ../data/geany.glade.h:413
+#: ../data/geany.glade.h:412
 msgid "_2"
 msgstr "_2"
 
-#: ../data/geany.glade.h:414
+#: ../data/geany.glade.h:413
 msgid "_3"
 msgstr "_3"
 
-#: ../data/geany.glade.h:415
+#: ../data/geany.glade.h:414
 msgid "_4"
 msgstr "_4"
 
-#: ../data/geany.glade.h:416
+#: ../data/geany.glade.h:415
 msgid "_5"
 msgstr "_5"
 
-#: ../data/geany.glade.h:417
+#: ../data/geany.glade.h:416
 msgid "_6"
 msgstr "_6"
 
-#: ../data/geany.glade.h:418
+#: ../data/geany.glade.h:417
 msgid "_7"
 msgstr "_7"
 
-#: ../data/geany.glade.h:419
+#: ../data/geany.glade.h:418
 msgid "_8"
 msgstr "_8"
 
-#: ../data/geany.glade.h:420
+#: ../data/geany.glade.h:419
 msgid "Read _Only"
 msgstr "_Iba na čítanie"
 
-#: ../data/geany.glade.h:421
+#: ../data/geany.glade.h:420
 msgid "_Write Unicode BOM"
 msgstr "Zapísať Unicode _BOM"
 
-#: ../data/geany.glade.h:422
+#: ../data/geany.glade.h:421
 msgid "Set File_type"
 msgstr "Nastaviť typ súbor_u"
 
-#: ../data/geany.glade.h:423
+#: ../data/geany.glade.h:422
 msgid "Set _Encoding"
 msgstr "Nastaviť _kódovanie"
 
-#: ../data/geany.glade.h:424
+#: ../data/geany.glade.h:423
 msgid "Set Line E_ndings"
 msgstr "Nasta_viť konce riadkov"
 
-#: ../data/geany.glade.h:425
+#: ../data/geany.glade.h:424
 msgid "Convert and Set to _CR/LF (Windows)"
 msgstr "Konvertovať a nastaviť na CR/LF (_Windows)"
 
-#: ../data/geany.glade.h:426
+#: ../data/geany.glade.h:425
 msgid "Convert and Set to _LF (Unix)"
 msgstr "Konvertovať a nastaviť na LF (_Unix)"
 
-#: ../data/geany.glade.h:427
+#: ../data/geany.glade.h:426
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Konvertovať a nastaviť na CR (_Mac)"
 
-#: ../data/geany.glade.h:428 ../src/keybindings.c:659
+#: ../data/geany.glade.h:427 ../src/keybindings.c:664
 msgid "_Clone"
 msgstr "K_lonovať"
 
-#: ../data/geany.glade.h:429
+#: ../data/geany.glade.h:428
 msgid "_Strip Trailing Spaces"
 msgstr "_Odstrániť medzery z koncov riadkov"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:429
 msgid "Replace Tabs with S_paces"
 msgstr "Nahradiť _tabulátory medzerami"
 
-#: ../data/geany.glade.h:431
+#: ../data/geany.glade.h:430
 msgid "_Replace Spaces with Tabs..."
 msgstr "Nahradiť _medzery tabulátormi…"
 
-#: ../data/geany.glade.h:432
+#: ../data/geany.glade.h:431
 msgid "_Fold All"
 msgstr "Zbaliť vš_etky"
 
-#: ../data/geany.glade.h:433
+#: ../data/geany.glade.h:432
 msgid "_Unfold All"
 msgstr "Rozbaliť všetk_y"
 
-#: ../data/geany.glade.h:434
+#: ../data/geany.glade.h:433
 msgid "Remove _Markers"
 msgstr "Od_strániť značky"
 
-#: ../data/geany.glade.h:435
+#: ../data/geany.glade.h:434
 msgid "Remove Error _Indicators"
 msgstr "Odstrániť indikátory _chýb"
 
-#: ../data/geany.glade.h:436
+#: ../data/geany.glade.h:435
 msgid "_Project"
 msgstr "Pro_jekt"
 
-#: ../data/geany.glade.h:437
+#: ../data/geany.glade.h:436
 msgid "_New..."
 msgstr "_Nový…"
 
-#: ../data/geany.glade.h:438
+#: ../data/geany.glade.h:437
 msgid "_Recent Projects"
 msgstr "Nedávne _projekty"
 
-#: ../data/geany.glade.h:439
+#: ../data/geany.glade.h:438
 msgid "_Close"
 msgstr "_Zavrieť"
 
-#: ../data/geany.glade.h:440
+#: ../data/geany.glade.h:439
 msgid "Apply the default indentation settings to all documents"
 msgstr "Použiť predvolené nastavenia odsadenia vo všetkých dokumentoch"
 
-#: ../data/geany.glade.h:441
+#: ../data/geany.glade.h:440
 msgid "_Apply Default Indentation"
 msgstr "Použiť predvolené o_dsadenie"
 
 #. build the code
-#: ../data/geany.glade.h:442 ../src/build.c:2390 ../src/build.c:2667
+#: ../data/geany.glade.h:441 ../src/build.c:2402 ../src/build.c:2679
 msgid "_Build"
 msgstr "Z_ostaviť"
 
-#: ../data/geany.glade.h:443
+#: ../data/geany.glade.h:442
 msgid "_Tools"
 msgstr "_Nástroje"
 
-#: ../data/geany.glade.h:444
+#: ../data/geany.glade.h:443
 msgid "_Reload Configuration"
 msgstr "Obnoviť _konfiguráciu"
 
-#: ../data/geany.glade.h:445
+#: ../data/geany.glade.h:444
 msgid "C_onfiguration Files"
 msgstr "Konfi_guračné súbory"
 
-#: ../data/geany.glade.h:446
+#: ../data/geany.glade.h:445
 msgid "_Color Chooser"
 msgstr "Výber _farby"
 
-#: ../data/geany.glade.h:447
+#: ../data/geany.glade.h:446
 msgid "_Word Count"
 msgstr "Počet _slov"
 
-#: ../data/geany.glade.h:448
+#: ../data/geany.glade.h:447
 msgid "Load Ta_gs File..."
 msgstr "N_ačítať súbor symbolov…"
 
-#: ../data/geany.glade.h:449
+#: ../data/geany.glade.h:448
 msgid "_Help"
 msgstr "_Pomoc"
 
-#: ../data/geany.glade.h:450
+#: ../data/geany.glade.h:449
 msgid "Keyboard _Shortcuts"
 msgstr "_Klávesové skratky"
 
-#: ../data/geany.glade.h:451
+#: ../data/geany.glade.h:450
 msgid "Debug _Messages"
 msgstr "_Ladiace správy"
 
-#: ../data/geany.glade.h:452
+#: ../data/geany.glade.h:451
 msgid "_Website"
 msgstr "_Webová stránka"
 
-#: ../data/geany.glade.h:453
+#: ../data/geany.glade.h:452
 msgid "Wi_ki"
 msgstr "W_iki"
 
-#: ../data/geany.glade.h:454
+#: ../data/geany.glade.h:453
 msgid "Report a _Bug..."
 msgstr "Nahlásiť _chybu…"
 
-#: ../data/geany.glade.h:455
+#: ../data/geany.glade.h:454
 msgid "_Donate..."
 msgstr "_Darovať…"
 
-#: ../data/geany.glade.h:456 ../src/sidebar.c:126
+#: ../data/geany.glade.h:455 ../src/sidebar.c:126
 msgid "Symbols"
 msgstr "Symboly"
 
-#: ../data/geany.glade.h:457
+#: ../data/geany.glade.h:456
 msgid "Documents"
 msgstr "Dokumenty"
 
-#: ../data/geany.glade.h:458
+#: ../data/geany.glade.h:457
 msgid "Status"
 msgstr "Stav"
 
-#: ../data/geany.glade.h:459
+#: ../data/geany.glade.h:458
 msgid "Compiler"
 msgstr "Kompilátor"
 
-#: ../data/geany.glade.h:460
+#: ../data/geany.glade.h:459
 msgid "Messages"
 msgstr "Správy"
 
-#: ../data/geany.glade.h:461
+#: ../data/geany.glade.h:460
 msgid "Scribble"
 msgstr "Poznámky"
 
-#: ../data/geany.glade.h:462
+#: ../data/geany.glade.h:461
 msgid "Project Properties"
 msgstr "Vlastnosti projektu"
 
-#: ../data/geany.glade.h:463 ../src/project.c:180
+#: ../data/geany.glade.h:462 ../src/project.c:180
 msgid "Filename:"
 msgstr "Názov súboru:"
 
-#: ../data/geany.glade.h:464 ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../data/geany.glade.h:463 ../src/project.c:169 ../plugins/classbuilder.c:467
 #: ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Názov:"
 
-#: ../data/geany.glade.h:465
+#: ../data/geany.glade.h:464
 msgid "Description:"
 msgstr "Popis:"
 
-#: ../data/geany.glade.h:466 ../src/project.c:202
+#: ../data/geany.glade.h:465 ../src/project.c:202
 msgid "Base path:"
 msgstr "Základná cesta:"
 
-#: ../data/geany.glade.h:467
+#: ../data/geany.glade.h:466
 msgid "File patterns:"
 msgstr "Vzory názvov súborov:"
 
-#: ../data/geany.glade.h:468
+#: ../data/geany.glade.h:467
 msgid ""
 "Space separated list of file patterns used for the find in files dialog (e."
 "g. *.c *.h)"
@@ -2139,7 +2139,7 @@ msgstr ""
 "Medzerami oddelený zoznam vzorov pre názvy súborov, použitý v dialógovom "
 "okne vyhľadať v súboroch (napr. „*.c *.h“)"
 
-#: ../data/geany.glade.h:469 ../src/project.c:209
+#: ../data/geany.glade.h:468 ../src/project.c:209
 msgid ""
 "Base directory of all files that make up the project. This can be a new "
 "path, or an existing directory tree. You can use paths relative to the "
@@ -2149,85 +2149,85 @@ msgstr ""
 "alebo existujúcu štruktúru adresárov. Môžete používať cesty relatívne k "
 "súboru projektu."
 
-#: ../data/geany.glade.h:470 ../src/keybindings.c:317
+#: ../data/geany.glade.h:469 ../src/keybindings.c:319
 msgid "Project"
 msgstr "Projekt"
 
-#: ../data/geany.glade.h:471
+#: ../data/geany.glade.h:470
 msgid "Display:"
 msgstr "Zobrazenie:"
 
-#: ../data/geany.glade.h:472
+#: ../data/geany.glade.h:471
 msgid "Custom"
 msgstr "Vlastné"
 
-#: ../data/geany.glade.h:473
+#: ../data/geany.glade.h:472
 msgid "Use global settings"
 msgstr "Použiť globálne nastavenia"
 
-#: ../data/geany.glade.h:474
+#: ../data/geany.glade.h:473
 msgid "Size:"
 msgstr "Veľkosť:"
 
-#: ../data/geany.glade.h:475
+#: ../data/geany.glade.h:474
 msgid "Location:"
 msgstr "Umiestnenie:"
 
-#: ../data/geany.glade.h:476
+#: ../data/geany.glade.h:475
 msgid "Read-only:"
 msgstr "Iba na čítanie:"
 
-#: ../data/geany.glade.h:477
+#: ../data/geany.glade.h:476
 msgid "Encoding:"
 msgstr "Kódovanie:"
 
-#: ../data/geany.glade.h:478
+#: ../data/geany.glade.h:477
 msgid "Modified:"
 msgstr "Upravené:"
 
-#: ../data/geany.glade.h:479
+#: ../data/geany.glade.h:478
 msgid "Changed:"
 msgstr "Zmenené:"
 
-#: ../data/geany.glade.h:480
+#: ../data/geany.glade.h:479
 msgid "Accessed:"
 msgstr "Posledný prístup:"
 
-#: ../data/geany.glade.h:481
+#: ../data/geany.glade.h:480
 msgid "(only inside Geany)"
 msgstr "(iba v rámci Geany)"
 
-#: ../data/geany.glade.h:482
+#: ../data/geany.glade.h:481
 msgid "Permissions:"
 msgstr "Oprávnenia:"
 
-#: ../data/geany.glade.h:483
+#: ../data/geany.glade.h:482
 msgid "Read:"
 msgstr "Čítať:"
 
-#: ../data/geany.glade.h:484
+#: ../data/geany.glade.h:483
 msgid "Write:"
 msgstr "Zapisovať:"
 
-#: ../data/geany.glade.h:485
+#: ../data/geany.glade.h:484
 msgid "Execute:"
 msgstr "Spustiť:"
 
-#: ../data/geany.glade.h:486
+#: ../data/geany.glade.h:485
 msgid "Owner:"
 msgstr "Vlastník:"
 
-#: ../data/geany.glade.h:487
+#: ../data/geany.glade.h:486
 msgid "Group:"
 msgstr "Skupina:"
 
-#: ../data/geany.glade.h:488
+#: ../data/geany.glade.h:487
 msgid "Other:"
 msgstr "Ostatný:"
 
 #: ../src/about.c:48
 msgid ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2017\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2235,13 +2235,13 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2015\n"
+"Copyright (c)  2005-2017\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
 "Enrico Tröger\n"
 "Frank Lanitz\n"
-"All rights reserved."
+"Všetky práva vyhradené."
 
 #: ../src/about.c:168
 msgid "About Geany"
@@ -2312,36 +2312,36 @@ msgstr ""
 "www.gnu.org/licenses/gpl-2.0.txt"
 
 #. fall back to %d
-#: ../src/build.c:714
+#: ../src/build.c:710
 #, c-format
 msgid "failed to substitute %%p, no project active"
 msgstr "nepodarilo sa nahradiť %%p, žiadny projekt nie je aktívny"
 
-#: ../src/build.c:746
+#: ../src/build.c:738
 msgid "Process failed, no working directory"
 msgstr "Proces zlyhal, chýba pracovný adresár"
 
-#: ../src/build.c:759
+#: ../src/build.c:750
 #, c-format
 msgid "%s (in directory: %s)"
 msgstr "%s (v adresári: %s)"
 
-#: ../src/build.c:780
+#: ../src/build.c:775
 #, c-format
 msgid "Process failed (%s)"
 msgstr "Proces zlyhal (%s)"
 
-#: ../src/build.c:813
+#: ../src/build.c:809
 #, c-format
 msgid "Invalid working directory \"%s\""
 msgstr "Neplatný pracovný adresár „%s“"
 
-#: ../src/build.c:838
+#: ../src/build.c:845
 #, c-format
 msgid "Failed to execute \"%s\" (start-script could not be created: %s)"
 msgstr "Nepodarilo sa spustiť „%s“ (spúšťací skript nebolo možné vytvoriť: %s)"
 
-#: ../src/build.c:880
+#: ../src/build.c:887
 msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
@@ -2349,123 +2349,123 @@ msgstr ""
 "Súbor nebol spustený, pretože terminál môže obsahovať nejaký vstup (stlačte "
 "Ctrl+C alebo Enter na jeho vyčistenie)."
 
-#: ../src/build.c:912
+#: ../src/build.c:935
 #, c-format
 msgid ""
-"Cannot execute terminal command \"%s\": %s. Check the path setting in "
-"Preferences."
+"Cannot execute build command \"%s\": %s. Check the Terminal setting in "
+"Preferences"
 msgstr ""
-"Nie je možné spustiť príkaz „%s“: %s. Skontrolujte cestu uvedenú v "
-"Nastaveniach."
+"Nie je možné spustiť príkaz pre zostavenie „%s“: %s. Skontrolujte nastavenia "
+"terminálu v Nastavenia->Nástroje."
 
-#: ../src/build.c:1020
+#: ../src/build.c:1046
 msgid "Compilation failed."
 msgstr "Kompilácia zlyhala."
 
-#: ../src/build.c:1034
+#: ../src/build.c:1060
 msgid "Compilation finished successfully."
 msgstr "Kompilácia bola úspešne dokončená."
 
-#: ../src/build.c:1203
+#: ../src/build.c:1220
 msgid "Custom Text"
 msgstr "Vlastný text"
 
-#: ../src/build.c:1204
+#: ../src/build.c:1221
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Sem zadajte vlastný text. Čokoľvek sem zadané bude pripojené na koniec "
 "príkazu."
 
-#: ../src/build.c:1282
+#: ../src/build.c:1299
 msgid "_Next Error"
 msgstr "_Nasledujúca chyba"
 
-#: ../src/build.c:1284
+#: ../src/build.c:1301
 msgid "_Previous Error"
 msgstr "_Predchádzajúca chyba"
 
 #. arguments
-#: ../src/build.c:1294 ../src/build.c:2707
+#: ../src/build.c:1311 ../src/build.c:2719
 msgid "_Set Build Commands"
 msgstr "Nastaviť príkazy pre _zostavenie"
 
-#: ../src/build.c:1580 ../src/toolbar.c:376
+#: ../src/build.c:1586 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "Zostaviť aktuálny súbor"
 
-#: ../src/build.c:1591
+#: ../src/build.c:1597
 msgid "Build the current file with Make and the default target"
 msgstr "Zostaviť aktuálny súbor pomocou Make s predvoleným cieľom"
 
-#: ../src/build.c:1593
+#: ../src/build.c:1599
 msgid "Build the current file with Make and the specified target"
 msgstr "Zostaviť aktuálny súbor pomocou Make so špecifikovaným cieľom"
 
-#: ../src/build.c:1595
+#: ../src/build.c:1601
 msgid "Compile the current file with Make"
 msgstr "Zostaviť aktuálny súbor pomocou Make"
 
-#: ../src/build.c:1614
+#: ../src/build.c:1620
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Proces nebolo možné zastaviť (%s)."
 
-#: ../src/build.c:1628 ../src/build.c:1640
+#: ../src/build.c:1634 ../src/build.c:1646
 msgid "No more build errors."
 msgstr "Žiadne ďalšie chyby pri zostavovaní."
 
-#: ../src/build.c:1753 ../src/build.c:1755
+#: ../src/build.c:1759 ../src/build.c:1761
 msgid "Set menu item label"
 msgstr "Nastaviť označenie položky v ponuke"
 
-#: ../src/build.c:1780 ../src/symbols.c:597 ../src/tools.c:397
+#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "Označenie"
 
 #. command column, holding status and command display
-#: ../src/build.c:1781 ../src/symbols.c:592 ../src/tools.c:382
+#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "Príkaz"
 
-#: ../src/build.c:1782
+#: ../src/build.c:1788
 msgid "Working directory"
 msgstr "Pracovný adresár"
 
-#: ../src/build.c:1783
+#: ../src/build.c:1789
 msgid "Reset"
 msgstr "Obnoviť"
 
-#: ../src/build.c:1834
+#: ../src/build.c:1846
 msgid "Click to set menu item label"
 msgstr "Kliknite pre nastavenie označenia položky v ponuke"
 
-#: ../src/build.c:1918 ../src/build.c:1920
+#: ../src/build.c:1930 ../src/build.c:1932
 #, c-format
 msgid "%s commands"
 msgstr "Príkazy pre: %s"
 
-#: ../src/build.c:1920
+#: ../src/build.c:1932
 msgid "No filetype"
 msgstr "Žiadny typ súboru"
 
-#: ../src/build.c:1929 ../src/build.c:1964
+#: ../src/build.c:1941 ../src/build.c:1976
 msgid "Error regular expression:"
 msgstr "Regulárny výraz pre chyby:"
 
-#: ../src/build.c:1957
+#: ../src/build.c:1969
 msgid "Independent commands"
 msgstr "Nezávislé príkazy"
 
-#: ../src/build.c:1989
+#: ../src/build.c:2001
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Poznámka: 2. položka zobrazí dialógové okno a pripojí odpoveď k príkazu."
 
-#: ../src/build.c:1998
+#: ../src/build.c:2010
 msgid "Execute commands"
 msgstr "Príkazy pre spustenie"
 
-#: ../src/build.c:2010
+#: ../src/build.c:2022
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2473,38 +2473,38 @@ msgstr ""
 "%d, %e, %f, %p, %l sú nahradené v poliach pre príkaz a priečinok, viď manuál "
 "pre viac detailov."
 
-#: ../src/build.c:2168
+#: ../src/build.c:2180
 msgid "Set Build Commands"
 msgstr "Nastaviť príkazy pre zostavenie"
 
-#: ../src/build.c:2383
+#: ../src/build.c:2395
 msgid "_Compile"
 msgstr "_Zostaviť"
 
-#: ../src/build.c:2397 ../src/build.c:2427 ../src/build.c:2635
+#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
 msgid "_Execute"
 msgstr "_Spustiť"
 
 #. build the code with make custom
-#: ../src/build.c:2442 ../src/build.c:2633 ../src/build.c:2687
+#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
 msgid "Make Custom _Target..."
 msgstr "Make vlastný _cieľ…"
 
 #. build the code with make object
-#: ../src/build.c:2444 ../src/build.c:2634 ../src/build.c:2695
+#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
 msgid "Make _Object"
 msgstr "Make _objekt"
 
-#: ../src/build.c:2446 ../src/build.c:2632
+#: ../src/build.c:2458 ../src/build.c:2644
 msgid "_Make"
 msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2679
+#: ../src/build.c:2691
 msgid "_Make All"
 msgstr "Make _všetko"
 
-#: ../src/callbacks.c:146
+#: ../src/callbacks.c:147
 #, c-format
 msgid "%d file saved."
 msgid_plural "%d files saved."
@@ -2512,50 +2512,50 @@ msgstr[0] "%d súbor uložený."
 msgstr[1] "%d súbory uložené."
 msgstr[2] "%d súborov uložených."
 
-#: ../src/callbacks.c:885 ../src/keybindings.c:559
+#: ../src/callbacks.c:900 ../src/keybindings.c:564
 msgid "Go to Line"
 msgstr "Prejsť na riadok"
 
-#: ../src/callbacks.c:886
+#: ../src/callbacks.c:901
 msgid "Enter the line you want to go to:"
 msgstr "Vložte číslo riadku, na ktorý chcete prejsť:"
 
-#: ../src/callbacks.c:987 ../src/callbacks.c:1013
+#: ../src/callbacks.c:1002 ../src/callbacks.c:1028
 msgid ""
 "Please set the filetype for the current file before using this function."
 msgstr "Pred použitím tejto funkcie nastavte typ súboru pre aktuálny súbor."
 
-#: ../src/callbacks.c:1303 ../src/callbacks.c:1311
+#: ../src/callbacks.c:1318 ../src/callbacks.c:1326
 msgid "No more message items."
 msgstr "Žiadne ďalšie správy."
 
-#: ../src/callbacks.c:1414
+#: ../src/callbacks.c:1429
 #, c-format
 msgid "Could not open file %s (File not found)"
 msgstr "Nie je možné otvoriť súbor %s (súbor nebol nájdený)"
 
-#: ../src/callbacks.c:1463
+#: ../src/callbacks.c:1478
 msgid "Check the path setting in Filetype configuration."
 msgstr "Skontrolujte cestu uvedenú v konfigurácii typu súboru."
 
-#: ../src/callbacks.c:1468
+#: ../src/callbacks.c:1483
 msgid "Check the path setting in Preferences."
 msgstr "Skontrolujte cestu uvedenú v Nastaveniach."
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
-#: ../src/callbacks.c:1481
+#: ../src/callbacks.c:1496
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Nie je možné spustiť príkaz kontextovej akcie „%s“: %s. %s"
 
-#: ../src/dialogs.c:161 ../src/document.c:2313 ../src/document.c:2378
-#: ../src/document.c:2386
+#: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
+#: ../src/document.c:2371
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "„%s“ nebol nájdený."
 
 #. auto-detect
-#: ../src/dialogs.c:223 ../src/encodings.c:532
+#: ../src/dialogs.c:223 ../src/encodings.c:531
 msgid "Detect from file"
 msgstr "Zistiť zo súboru"
 
@@ -2632,7 +2632,7 @@ msgstr ""
 "Otvorí súbor iba na čítanie. Pokiaľ vyberiete viacero súborov všetky budú "
 "otvorené iba na čítanie."
 
-#: ../src/dialogs.c:535 ../src/document.c:2064
+#: ../src/dialogs.c:535 ../src/document.c:2049
 msgid "Overwrite?"
 msgstr "Prepísať?"
 
@@ -2696,7 +2696,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2371 ../src/symbols.c:2387 ../src/ui_utils.c:289
+#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "neznáme"
 
@@ -2713,27 +2713,27 @@ msgstr "(s BOM)"
 msgid "(without BOM)"
 msgstr "(bez BOM)"
 
-#: ../src/document.c:749
+#: ../src/document.c:734
 #, c-format
 msgid "File %s closed."
 msgstr "Súbor %s bol zatvorený."
 
-#: ../src/document.c:905
+#: ../src/document.c:890
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "Súbor „%s“ bol otvorený."
 
-#: ../src/document.c:979
+#: ../src/document.c:964
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "Nepodarilo sa otvoriť súbor %s (%s)"
 
-#: ../src/document.c:1028
+#: ../src/document.c:1013
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "Súbor „%s“ nie je platný %s."
 
-#: ../src/document.c:1034
+#: ../src/document.c:1019
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2742,7 +2742,7 @@ msgstr ""
 "Súbor „%s“ pravdepodobne nie je textový súbor, alebo jeho kódovanie nie je "
 "podporované"
 
-#: ../src/document.c:1044
+#: ../src/document.c:1029
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2755,31 +2755,31 @@ msgstr ""
 "stratu dát.\n"
 "Súbor bol otvorený len na čítanie"
 
-#: ../src/document.c:1256
+#: ../src/document.c:1241
 msgid "Spaces"
 msgstr "Medzery"
 
-#: ../src/document.c:1259
+#: ../src/document.c:1244
 msgid "Tabs"
 msgstr "Tabulátory"
 
-#: ../src/document.c:1262
+#: ../src/document.c:1247
 msgid "Tabs and Spaces"
 msgstr "Tabulátory a medzery"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1267
+#: ../src/document.c:1252
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "Nastavujem režim odsadenia „%s“ pre %s."
 
-#: ../src/document.c:1278
+#: ../src/document.c:1263
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "Nastavujem šírku odsadenia na %d pre %s."
 
-#: ../src/document.c:1502
+#: ../src/document.c:1487
 #, c-format
 msgid "File %s reloaded."
 msgstr "Súbor %s bol znova načítaný."
@@ -2787,20 +2787,20 @@ msgstr "Súbor %s bol znova načítaný."
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1510
+#: ../src/document.c:1495
 #, c-format
 msgid "File %s opened(%d%s)."
 msgstr "Súbor %s bol otvorený (%d%s)."
 
-#: ../src/document.c:1512
+#: ../src/document.c:1497
 msgid ", read-only"
 msgstr ", iba na čítanie"
 
-#: ../src/document.c:1632
+#: ../src/document.c:1617
 msgid "Discard history"
 msgstr "Zahodiť históriu"
 
-#: ../src/document.c:1633
+#: ../src/document.c:1618
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2812,28 +2812,28 @@ msgstr ""
 "Táto správa nebude opäť zobrazovaná, Vašu voľbu ale môžete zmeniť v "
 "Nastavenia->Rôzne."
 
-#: ../src/document.c:1637
+#: ../src/document.c:1622
 msgid "The file has been reloaded."
 msgstr "Súbor bol znova načítaný."
 
-#: ../src/document.c:1667
+#: ../src/document.c:1652
 msgid "Any unsaved changes will be lost."
 msgstr "Akékoľvek neuložené zmeny budú stratené."
 
-#: ../src/document.c:1668
+#: ../src/document.c:1653
 msgid "Undo history will be lost."
 msgstr "História pre vrátiť späť bude stratená."
 
-#: ../src/document.c:1669
+#: ../src/document.c:1654
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Ste si istý, že chcete znova načítať „%s“?"
 
-#: ../src/document.c:1775
+#: ../src/document.c:1760
 msgid "Error renaming file."
 msgstr "Chyba pri premenovaní súboru."
 
-#: ../src/document.c:1896
+#: ../src/document.c:1881
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2841,7 +2841,7 @@ msgid ""
 msgstr ""
 "Nastala chyba pri prevádzaní kódovania z UTF-8 v „%s“. Súbor nebol uložený."
 
-#: ../src/document.c:1917
+#: ../src/document.c:1902
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2850,55 +2850,55 @@ msgstr ""
 "Chybová správa: %s\n"
 "Chyba nastala v „%s“ (riadok: %d, stĺpec: %d)."
 
-#: ../src/document.c:1921
+#: ../src/document.c:1906
 #, c-format
 msgid "Error message: %s."
 msgstr "Chybová správa: %s."
 
-#: ../src/document.c:1981
+#: ../src/document.c:1966
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "Nepodarilo sa otvoriť súbor „%s“ pre zápis: fopen() zlyhal: %s"
 
-#: ../src/document.c:1999
+#: ../src/document.c:1984
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Nepodarilo sa zapísať do súboru „%s“: fwrite() zlyhal: %s"
 
-#: ../src/document.c:2013
+#: ../src/document.c:1998
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Nepodarilo sa zatvoriť súbor „%s“: fclose() zlyhal: %s"
 
-#: ../src/document.c:2063 ../src/document.c:3597
+#: ../src/document.c:2048 ../src/document.c:3621
 msgid "_Overwrite"
 msgstr "_Prepísať"
 
-#: ../src/document.c:2065 ../src/document.c:3600
+#: ../src/document.c:2050 ../src/document.c:3624
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "Súbor „%s“ na disku je novší ako aktuálna medzipamäť."
 
-#: ../src/document.c:2073 ../src/document.c:3649
+#: ../src/document.c:2058 ../src/document.c:3673
 msgid "Try to resave the file?"
 msgstr "Pokúsiť sa uložiť súbor znova?"
 
-#: ../src/document.c:2074 ../src/document.c:3650
+#: ../src/document.c:2059 ../src/document.c:3674
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Súbor „%s“ nebol nájdený na disku!"
 
-#: ../src/document.c:2137
+#: ../src/document.c:2122
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Nie je možné uložiť súbor „%s“ dostupný len na čítanie!"
 
-#: ../src/document.c:2205
+#: ../src/document.c:2190
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Chyba pri ukladaní súboru (%s)."
 
-#: ../src/document.c:2210
+#: ../src/document.c:2195
 #, c-format
 msgid ""
 "%s\n"
@@ -2909,26 +2909,26 @@ msgstr ""
 "\n"
 "Súbor na disku mohol byť orezaný!"
 
-#: ../src/document.c:2212
+#: ../src/document.c:2197
 msgid "Error saving file."
 msgstr "Chyba pri ukladaní súboru."
 
-#: ../src/document.c:2236
+#: ../src/document.c:2221
 #, c-format
 msgid "File %s saved."
 msgstr "Súbor %s bol uložený."
 
-#: ../src/document.c:2386
+#: ../src/document.c:2371
 msgid "Wrap search and find again?"
 msgstr "Začať hľadať na opačnom konci dokumentu?"
 
-#: ../src/document.c:2475 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Nebola nájdená zhoda pre „%s“."
 
-#: ../src/document.c:2481
+#: ../src/document.c:2466
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -2936,19 +2936,19 @@ msgstr[0] "%s: nahradená %d zhoda „%s“ s „%s“"
 msgstr[1] "%s: nahradené %d zhody „%s“ s „%s“"
 msgstr[2] "%s: nahradených %d zhôd „%s“ s „%s“"
 
-#: ../src/document.c:3599
+#: ../src/document.c:3623
 msgid "Do you want to reload it?"
 msgstr "Naozaj ho chcete znova načítať?"
 
-#: ../src/editor.c:4490
+#: ../src/editor.c:4457
 msgid "Enter Tab Width"
 msgstr "Zadajte šírku tabulátoru"
 
-#: ../src/editor.c:4491
+#: ../src/editor.c:4458
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Zadajte počet medzier, ktoré by mali byť nahradené tabulátorom."
 
-#: ../src/editor.c:4696
+#: ../src/editor.c:4663
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Varovanie: neštandardná šírka tabulátoru: %d != 8!"
@@ -3035,7 +3035,7 @@ msgstr "Vietnamčina"
 
 #: ../src/encodings.c:117 ../src/encodings.c:118 ../src/encodings.c:119
 #: ../src/encodings.c:120 ../src/encodings.c:121 ../src/encodings.c:122
-#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:546
+#: ../src/encodings.c:123 ../src/encodings.c:124 ../src/encodings.c:545
 msgid "Unicode"
 msgstr "Unicode"
 
@@ -3087,666 +3087,670 @@ msgstr "_Blízky Východ"
 msgid "_Unicode"
 msgstr "_Unicode"
 
-#: ../src/encodings.c:536
+#: ../src/encodings.c:535
 msgid "West European"
 msgstr "Západná Európa"
 
-#: ../src/encodings.c:538
+#: ../src/encodings.c:537
 msgid "East European"
 msgstr "Východná Európa"
 
-#: ../src/encodings.c:540
+#: ../src/encodings.c:539
 msgid "East Asian"
 msgstr "Východná Ázia"
 
-#: ../src/encodings.c:542
+#: ../src/encodings.c:541
 msgid "SE & SW Asian"
 msgstr "JV a JZ Ázia"
 
-#: ../src/encodings.c:544
+#: ../src/encodings.c:543
 msgid "Middle Eastern"
 msgstr "Blízky Východ"
 
-#: ../src/filetypes.c:94
+#: ../src/filetypes.c:87
 #, c-format
 msgid "%s source file"
 msgstr "%s zdrojový súbor"
 
-#: ../src/filetypes.c:95
+#: ../src/filetypes.c:88
 #, c-format
 msgid "%s file"
 msgstr "%s súbor"
 
-#: ../src/filetypes.c:96
+#: ../src/filetypes.c:89
 #, c-format
 msgid "%s script"
 msgstr "%s skript"
 
-#: ../src/filetypes.c:97
+#: ../src/filetypes.c:90
 #, c-format
 msgid "%s document"
 msgstr "%s dokument"
 
-#: ../src/filetypes.c:162
+#: ../src/filetypes.c:155
 msgid "Shell"
 msgstr "Shell"
 
-#: ../src/filetypes.c:163
+#: ../src/filetypes.c:156
 msgid "Makefile"
 msgstr "Makefile"
 
-#: ../src/filetypes.c:167
+#: ../src/filetypes.c:160
 msgid "Cascading Stylesheet"
 msgstr "Kaskádový Štýl (CSS)"
 
-#: ../src/filetypes.c:176
+#: ../src/filetypes.c:169
 msgid "Config"
 msgstr "Konfigurácia"
 
-#: ../src/filetypes.c:177
+#: ../src/filetypes.c:170
 msgid "Gettext translation"
 msgstr "Preklad Gettext"
 
-#: ../src/filetypes.c:436
+#: ../src/filetypes.c:431
 msgid "_Programming Languages"
 msgstr "_Programovacie jazyky"
 
-#: ../src/filetypes.c:437
+#: ../src/filetypes.c:432
 msgid "_Scripting Languages"
 msgstr "_Skriptovacie jazyky"
 
-#: ../src/filetypes.c:438
+#: ../src/filetypes.c:433
 msgid "_Markup Languages"
 msgstr "_Značkovanie jazyky"
 
-#: ../src/filetypes.c:439
+#: ../src/filetypes.c:434
 msgid "M_iscellaneous"
 msgstr "_Ostatné"
 
-#: ../src/filetypes.c:1200 ../src/win32.c:156
+#: ../src/filetypes.c:1195 ../src/win32.c:156
 msgid "All Source"
 msgstr "Všetky zdrojové súbory"
 
 #. create meta file filter "All files"
-#: ../src/filetypes.c:1225 ../src/project.c:350 ../src/win32.c:146
+#: ../src/filetypes.c:1220 ../src/project.c:350 ../src/win32.c:146
 #: ../src/win32.c:191 ../src/win32.c:212 ../src/win32.c:217
 msgid "All files"
 msgstr "Všetky súbory"
 
-#: ../src/filetypes.c:1274
+#: ../src/filetypes.c:1269
 #, c-format
 msgid "Bad regex for filetype %s: %s"
 msgstr "Zle naformátovaný regulárny výraz pre súborový typ %s: %s"
 
-#: ../src/geany.h:49
+#: ../src/geany.h:50
 msgid "untitled"
 msgstr "bez_nazvu"
 
-#: ../src/highlighting.c:1226 ../src/libmain.c:851 ../src/socket.c:171
-#: ../src/templates.c:234
+#: ../src/highlighting.c:1229 ../src/libmain.c:850 ../src/socket.c:170
+#: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Nie je možné nájsť súbor „%s“."
 
-#: ../src/highlighting.c:1296
+#: ../src/highlighting.c:1299
 msgid "Default"
 msgstr "Predvolené"
 
-#: ../src/highlighting.c:1337
+#: ../src/highlighting.c:1340
 msgid "The current filetype overrides the default style."
 msgstr "Aktuálny typ súboru preváži prednastavený štýl."
 
-#: ../src/highlighting.c:1338
+#: ../src/highlighting.c:1341
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Toto môže spôsobiť nekorektné zobrazenie farebných schém."
 
-#: ../src/highlighting.c:1363
+#: ../src/highlighting.c:1366
 msgid "Color Schemes"
 msgstr "Farebné schémy"
 
 #. visual group order
-#: ../src/keybindings.c:306 ../src/symbols.c:569
+#: ../src/keybindings.c:308 ../src/symbols.c:494
 msgid "File"
 msgstr "Súbor"
 
-#: ../src/keybindings.c:308
+#: ../src/keybindings.c:310
 msgid "Clipboard"
 msgstr "Schránka"
 
-#: ../src/keybindings.c:309
+#: ../src/keybindings.c:311
 msgid "Select"
 msgstr "Vybrať"
 
-#: ../src/keybindings.c:310
+#: ../src/keybindings.c:312
 msgid "Format"
 msgstr "Formát"
 
-#: ../src/keybindings.c:311
+#: ../src/keybindings.c:313
 msgid "Insert"
 msgstr "Vložiť"
 
-#: ../src/keybindings.c:312
+#: ../src/keybindings.c:314
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:315
 msgid "Search"
 msgstr "Hľadať"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:316
 msgid "Go to"
 msgstr "Prejsť na"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:317
 msgid "View"
 msgstr "Zobraziť"
 
-#: ../src/keybindings.c:316 ../src/symbols.c:718
+#: ../src/keybindings.c:318 ../src/symbols.c:643
 msgid "Document"
 msgstr "Dokument"
 
-#: ../src/keybindings.c:318 ../src/keybindings.c:684 ../src/project.c:511
-#: ../src/ui_utils.c:2191
+#: ../src/keybindings.c:320 ../src/keybindings.c:689 ../src/project.c:513
+#: ../src/ui_utils.c:2202
 msgid "Build"
 msgstr "Zostaviť"
 
-#: ../src/keybindings.c:320 ../src/keybindings.c:709
+#: ../src/keybindings.c:322 ../src/keybindings.c:714
 msgid "Help"
 msgstr "Pomoc"
 
-#: ../src/keybindings.c:321
+#: ../src/keybindings.c:323
 msgid "Focus"
 msgstr "Zameranie"
 
-#: ../src/keybindings.c:322
+#: ../src/keybindings.c:324
 msgid "Notebook tab"
 msgstr "Karty dokumentov"
 
-#: ../src/keybindings.c:331 ../src/keybindings.c:363
+#: ../src/keybindings.c:333 ../src/keybindings.c:365
 msgid "New"
 msgstr "Nový"
 
-#: ../src/keybindings.c:333 ../src/keybindings.c:365
+#: ../src/keybindings.c:335 ../src/keybindings.c:367
 msgid "Open"
 msgstr "Otvoriť"
 
-#: ../src/keybindings.c:336
+#: ../src/keybindings.c:338
 msgid "Open selected file"
 msgstr "Otvoriť vybraný súbor"
 
-#: ../src/keybindings.c:338
+#: ../src/keybindings.c:340
 msgid "Save"
 msgstr "Uložiť"
 
-#: ../src/keybindings.c:340 ../src/toolbar.c:59
+#: ../src/keybindings.c:342 ../src/toolbar.c:59
 msgid "Save as"
 msgstr "Uložiť ako"
 
-#: ../src/keybindings.c:342
+#: ../src/keybindings.c:344
 msgid "Save all"
 msgstr "Uložiť všetky"
 
-#: ../src/keybindings.c:345 ../src/symbols.c:802
+#: ../src/keybindings.c:347 ../src/symbols.c:727
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:349
 msgid "Print"
 msgstr "Tlačiť"
 
-#: ../src/keybindings.c:349 ../src/keybindings.c:370
+#: ../src/keybindings.c:351 ../src/keybindings.c:372
 msgid "Close"
 msgstr "Zavrieť"
 
-#: ../src/keybindings.c:351
+#: ../src/keybindings.c:353
 msgid "Close all"
 msgstr "Zavrieť všetky"
 
-#: ../src/keybindings.c:354
+#: ../src/keybindings.c:356
 msgid "Reload file"
 msgstr "Znova načítať"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:358
 msgid "Re-open last closed tab"
 msgstr "Znova otvoriť zatvorenú kartu"
 
-#: ../src/keybindings.c:358
+#: ../src/keybindings.c:360
 msgid "Quit"
 msgstr "Koniec"
 
-#: ../src/keybindings.c:375
+#: ../src/keybindings.c:377
 msgid "Undo"
 msgstr "Vrátiť späť"
 
-#: ../src/keybindings.c:377
+#: ../src/keybindings.c:379
 msgid "Redo"
 msgstr "Opakovať vrátené"
 
-#: ../src/keybindings.c:386
+#: ../src/keybindings.c:388
 msgid "Delete to line end"
 msgstr "Vymazať do konca riadku"
 
-#: ../src/keybindings.c:389
+#: ../src/keybindings.c:391
+msgid "Delete to beginning of line"
+msgstr "Vymazať po začiatok riadku"
+
+#: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
 msgstr "_Premiestniť aktuálny riadok"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:396
 msgid "Scroll to current line"
 msgstr "Posunúť zobrazenie na aktuálny riadok"
 
-#: ../src/keybindings.c:393
+#: ../src/keybindings.c:398
 msgid "Scroll up the view by one line"
 msgstr "Posunúť zobrazenie o jeden riadok hore"
 
-#: ../src/keybindings.c:395
+#: ../src/keybindings.c:400
 msgid "Scroll down the view by one line"
 msgstr "Posunúť zobrazenie o jeden riadok dole"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:402
 msgid "Complete snippet"
 msgstr "Dokončiť útržok"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:404
 msgid "Move cursor in snippet"
 msgstr "Presunúť kurzor v útržku"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:406
 msgid "Suppress snippet completion"
 msgstr "Potlačiť dokončovanie útržku"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:408
 msgid "Context Action"
 msgstr "Kontextová akcia"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:410
 msgid "Complete word"
 msgstr "Dokončiť slovo"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:412
 msgid "Show calltip"
 msgstr "Zobraziť typ funkcie"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:414
 msgid "Word part completion"
 msgstr "Dokončenie časti slova"
 
-#: ../src/keybindings.c:412
+#: ../src/keybindings.c:417
 msgid "Move line(s) up"
 msgstr "Presunúť riadky hore"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:420
 msgid "Move line(s) down"
 msgstr "Presunúť riadky dole"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:425
 msgid "Cut"
 msgstr "Vystrihnúť"
 
-#: ../src/keybindings.c:422
+#: ../src/keybindings.c:427
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: ../src/keybindings.c:424
+#: ../src/keybindings.c:429
 msgid "Paste"
 msgstr "Vložiť"
 
-#: ../src/keybindings.c:435
+#: ../src/keybindings.c:440
 msgid "Select All"
 msgstr "Vybrať všetko"
 
-#: ../src/keybindings.c:437
+#: ../src/keybindings.c:442
 msgid "Select current word"
 msgstr "Vybrať slovo"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:450
 msgid "Select to previous word part"
 msgstr "Vybrať po prechádzajúcu časť slova"
 
-#: ../src/keybindings.c:447
+#: ../src/keybindings.c:452
 msgid "Select to next word part"
 msgstr "Vybrať po nasledujúcu časť slova"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:460
 msgid "Toggle line commentation"
 msgstr "Prepnúť komentár na riadku"
 
-#: ../src/keybindings.c:458
+#: ../src/keybindings.c:463
 msgid "Comment line(s)"
 msgstr "Zakomentovať riadky"
 
-#: ../src/keybindings.c:460
+#: ../src/keybindings.c:465
 msgid "Uncomment line(s)"
 msgstr "Odkomentovať riadky"
 
-#: ../src/keybindings.c:462
+#: ../src/keybindings.c:467
 msgid "Increase indent"
 msgstr "Zväčšiť odsadenie"
 
-#: ../src/keybindings.c:465
+#: ../src/keybindings.c:470
 msgid "Decrease indent"
 msgstr "Zmenšiť odsadenie"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:473
 msgid "Increase indent by one space"
 msgstr "Zväčšiť odsadenie o jednu medzeru"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:475
 msgid "Decrease indent by one space"
 msgstr "Zmenšiť odsadenie o jednu medzeru"
 
-#: ../src/keybindings.c:474
+#: ../src/keybindings.c:479
 msgid "Send to Custom Command 1"
 msgstr "Použiť 1. vlastný príkaz"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:481
 msgid "Send to Custom Command 2"
 msgstr "Použiť 2. vlastný príkaz"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:483
 msgid "Send to Custom Command 3"
 msgstr "Použiť 3. vlastný príkaz"
 
-#: ../src/keybindings.c:480
+#: ../src/keybindings.c:485
 msgid "Send to Custom Command 4"
 msgstr "Použiť 4. vlastný príkaz"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:487
 msgid "Send to Custom Command 5"
 msgstr "Použiť 5. vlastný príkaz"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:489
 msgid "Send to Custom Command 6"
 msgstr "Použiť 6. vlastný príkaz"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:491
 msgid "Send to Custom Command 7"
 msgstr "Použiť 7. vlastný príkaz"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:493
 msgid "Send to Custom Command 8"
 msgstr "Použiť 8. vlastný príkaz"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:495
 msgid "Send to Custom Command 9"
 msgstr "Použiť 9. vlastný príkaz"
 
-#: ../src/keybindings.c:498
+#: ../src/keybindings.c:503
 msgid "Join lines"
 msgstr "Spojiť riadky"
 
-#: ../src/keybindings.c:503
+#: ../src/keybindings.c:508
 msgid "Insert date"
 msgstr "Vložiť dátum"
 
-#: ../src/keybindings.c:509
+#: ../src/keybindings.c:514
 msgid "Insert New Line Before Current"
 msgstr "Vložiť nový riadok pred aktuálny"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:516
 msgid "Insert New Line After Current"
 msgstr "Vložiť nový riadok za aktuálny"
 
-#: ../src/keybindings.c:524 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:464
 msgid "Find"
 msgstr "Nájsť"
 
-#: ../src/keybindings.c:526
+#: ../src/keybindings.c:531
 msgid "Find Next"
 msgstr "Nájsť nasledujúce"
 
-#: ../src/keybindings.c:528
+#: ../src/keybindings.c:533
 msgid "Find Previous"
 msgstr "Nájsť predchádzajúce"
 
-#: ../src/keybindings.c:535 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:617
 msgid "Replace"
 msgstr "Nahradiť"
 
-#: ../src/keybindings.c:537 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:867
 msgid "Find in Files"
 msgstr "Nájsť v súboroch"
 
-#: ../src/keybindings.c:540
+#: ../src/keybindings.c:545
 msgid "Next Message"
 msgstr "Nasledujúca správa"
 
-#: ../src/keybindings.c:542
+#: ../src/keybindings.c:547
 msgid "Previous Message"
 msgstr "Predchádzajúca správa"
 
-#: ../src/keybindings.c:545
+#: ../src/keybindings.c:550
 msgid "Find Usage"
 msgstr "Nájsť použitie"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:553
 msgid "Find Document Usage"
 msgstr "Nájsť použitie v dokumente"
 
-#: ../src/keybindings.c:555 ../src/toolbar.c:70
+#: ../src/keybindings.c:560 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Prejsť na predchádzajúcu polohu"
 
-#: ../src/keybindings.c:557 ../src/toolbar.c:71
+#: ../src/keybindings.c:562 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Prejsť na nasledujúcu polohu"
 
-#: ../src/keybindings.c:562
+#: ../src/keybindings.c:567
 msgid "Go to matching brace"
 msgstr "Prejsť na zodpovedajúcu zátvorku"
 
-#: ../src/keybindings.c:565
+#: ../src/keybindings.c:570
 msgid "Toggle marker"
 msgstr "Prepnúť značku"
 
-#: ../src/keybindings.c:574
+#: ../src/keybindings.c:579
 msgid "Go to Symbol Definition"
 msgstr "Prejsť na definíciu symbolu"
 
-#: ../src/keybindings.c:577
+#: ../src/keybindings.c:582
 msgid "Go to Symbol Declaration"
 msgstr "Prejsť na deklaráciu symbolu"
 
-#: ../src/keybindings.c:579
+#: ../src/keybindings.c:584
 msgid "Go to Start of Line"
 msgstr "Prejsť na začiatok riadka"
 
-#: ../src/keybindings.c:581
+#: ../src/keybindings.c:586
 msgid "Go to End of Line"
 msgstr "Prejsť na koniec riadka"
 
-#: ../src/keybindings.c:583
+#: ../src/keybindings.c:588
 msgid "Go to Start of Display Line"
 msgstr "Prejsť na začiatok zobrazovaného riadka"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:590
 msgid "Go to End of Display Line"
 msgstr "Prejsť na koniec zobrazovaného riadka"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:592
 msgid "Go to Previous Word Part"
 msgstr "Prejsť na predchádzajúcu časť slova"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:594
 msgid "Go to Next Word Part"
 msgstr "Prejsť na nasledujúcu časť slova"
 
-#: ../src/keybindings.c:594
+#: ../src/keybindings.c:599
 msgid "Toggle All Additional Widgets"
 msgstr "Prepnúť zobrazenie doplnkových ovládacích prvkov"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:602
 msgid "Fullscreen"
 msgstr "Celá obrazovka"
 
-#: ../src/keybindings.c:599
+#: ../src/keybindings.c:604
 msgid "Toggle Messages Window"
 msgstr "Prepnúť zobrazenie okna správ"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:607
 msgid "Toggle Sidebar"
 msgstr "Prepnúť zobrazenie bočného panelu"
 
-#: ../src/keybindings.c:604
+#: ../src/keybindings.c:609
 msgid "Zoom In"
 msgstr "Zväčšiť"
 
-#: ../src/keybindings.c:606
+#: ../src/keybindings.c:611
 msgid "Zoom Out"
 msgstr "Zmenšiť"
 
-#: ../src/keybindings.c:608
+#: ../src/keybindings.c:613
 msgid "Zoom Reset"
 msgstr "Normálna veľkosť"
 
-#: ../src/keybindings.c:613
+#: ../src/keybindings.c:618
 msgid "Switch to Editor"
 msgstr "Prepnúť na editor"
 
-#: ../src/keybindings.c:615
+#: ../src/keybindings.c:620
 msgid "Switch to Search Bar"
 msgstr "Prepnúť do vyhľadávacieho poľa"
 
-#: ../src/keybindings.c:617
+#: ../src/keybindings.c:622
 msgid "Switch to Message Window"
 msgstr "Prepnúť na okno správ"
 
-#: ../src/keybindings.c:619
+#: ../src/keybindings.c:624
 msgid "Switch to Compiler"
 msgstr "Prepnúť na kompilátor"
 
-#: ../src/keybindings.c:621
+#: ../src/keybindings.c:626
 msgid "Switch to Messages"
 msgstr "Prepnúť na správy"
 
-#: ../src/keybindings.c:623
+#: ../src/keybindings.c:628
 msgid "Switch to Scribble"
 msgstr "Prepnúť na poznámky"
 
-#: ../src/keybindings.c:625
+#: ../src/keybindings.c:630
 msgid "Switch to VTE"
 msgstr "Prepnúť na virtuálny terminál"
 
-#: ../src/keybindings.c:627
+#: ../src/keybindings.c:632
 msgid "Switch to Sidebar"
 msgstr "Prepnúť na bočný panel"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:634
 msgid "Switch to Sidebar Symbol List"
 msgstr "Prepnúť na zoznam symbolov"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:636
 msgid "Switch to Sidebar Document List"
 msgstr "Prepnúť na zoznam dokumentov"
 
-#: ../src/keybindings.c:636
+#: ../src/keybindings.c:641
 msgid "Switch to left document"
 msgstr "Prepnúť na ľavý dokument"
 
-#: ../src/keybindings.c:638
+#: ../src/keybindings.c:643
 msgid "Switch to right document"
 msgstr "Prepnúť na pravý dokument"
 
-#: ../src/keybindings.c:640
+#: ../src/keybindings.c:645
 msgid "Switch to last used document"
 msgstr "Prepnúť na naposledy používaný dokument"
 
-#: ../src/keybindings.c:643
+#: ../src/keybindings.c:648
 msgid "Move document left"
 msgstr "Presunúť dokument doľava"
 
-#: ../src/keybindings.c:646
+#: ../src/keybindings.c:651
 msgid "Move document right"
 msgstr "Presunúť dokument doprava"
 
-#: ../src/keybindings.c:648
+#: ../src/keybindings.c:653
 msgid "Move document first"
 msgstr "Presunúť dokument na začiatok"
 
-#: ../src/keybindings.c:650
+#: ../src/keybindings.c:655
 msgid "Move document last"
 msgstr "Presunúť dokument na koniec"
 
-#: ../src/keybindings.c:655
+#: ../src/keybindings.c:660
 msgid "Toggle Line wrapping"
 msgstr "Prepnúť zalamovanie riadkov"
 
-#: ../src/keybindings.c:657
+#: ../src/keybindings.c:662
 msgid "Toggle Line breaking"
 msgstr "Prepnúť rozdeľovanie dlhých riadkov"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:668
 msgid "Replace spaces with tabs"
 msgstr "Nahradiť medzery tabulátormi"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:670
 msgid "Toggle current fold"
 msgstr "Prepnúť zbalenie kódu"
 
-#: ../src/keybindings.c:667
+#: ../src/keybindings.c:672
 msgid "Fold all"
 msgstr "Zbaliť všetko"
 
-#: ../src/keybindings.c:669
+#: ../src/keybindings.c:674
 msgid "Unfold all"
 msgstr "Rozbaliť všetko"
 
-#: ../src/keybindings.c:671
+#: ../src/keybindings.c:676
 msgid "Reload symbol list"
 msgstr "Znova načítať zoznam symbolov"
 
-#: ../src/keybindings.c:673
+#: ../src/keybindings.c:678
 msgid "Remove Markers"
 msgstr "Odstrániť značky"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:680
 msgid "Remove Error Indicators"
 msgstr "Odstrániť indikátory chýb"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:682
 msgid "Remove Markers and Error Indicators"
 msgstr "Odstrániť značky a indikátory chýb"
 
-#: ../src/keybindings.c:682 ../src/toolbar.c:72
+#: ../src/keybindings.c:687 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Zostaviť"
 
-#: ../src/keybindings.c:686
+#: ../src/keybindings.c:691
 msgid "Make all"
 msgstr "Make všetko"
 
-#: ../src/keybindings.c:689
+#: ../src/keybindings.c:694
 msgid "Make custom target"
 msgstr "Make vlastný cieľ"
 
-#: ../src/keybindings.c:691
+#: ../src/keybindings.c:696
 msgid "Make object"
 msgstr "Make objekt"
 
-#: ../src/keybindings.c:693
+#: ../src/keybindings.c:698
 msgid "Next error"
 msgstr "Nasledujúca chyba"
 
-#: ../src/keybindings.c:695
+#: ../src/keybindings.c:700
 msgid "Previous error"
 msgstr "Predchádzajúca chyba"
 
-#: ../src/keybindings.c:697
+#: ../src/keybindings.c:702
 msgid "Run"
 msgstr "Spustiť"
 
-#: ../src/keybindings.c:699
+#: ../src/keybindings.c:704
 msgid "Build options"
 msgstr "Voľby pre zostavenie"
 
-#: ../src/keybindings.c:704
+#: ../src/keybindings.c:709
 msgid "Show Color Chooser"
 msgstr "Zobraziť Výber farieb"
 
-#: ../src/keybindings.c:974
+#: ../src/keybindings.c:982
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové skratky"
 
-#: ../src/keybindings.c:986
+#: ../src/keybindings.c:994
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Je možné nastaviť nasledovné klávesové skratky:"
 
@@ -3839,25 +3843,25 @@ msgstr "Rozsiahly výstup"
 msgid "Show version and exit"
 msgstr "Zobraziť verziu a skončiť"
 
-#: ../src/libmain.c:525
+#: ../src/libmain.c:524
 msgid "[FILES...]"
 msgstr "[SÚBORY...]"
 
 #. note for translators: library versions are printed after this
-#: ../src/libmain.c:559
+#: ../src/libmain.c:558
 #, c-format
 msgid "built on %s with "
 msgstr "zostavený v %s s "
 
-#: ../src/libmain.c:652
+#: ../src/libmain.c:651
 msgid "Move it now?"
 msgstr "Presunúť ho teraz?"
 
-#: ../src/libmain.c:654
+#: ../src/libmain.c:653
 msgid "Geany needs to move your old configuration directory before starting."
 msgstr "Geany musí pred spustením presunúť váš starý adresár s konfiguráciou."
 
-#: ../src/libmain.c:663
+#: ../src/libmain.c:662
 #, c-format
 msgid ""
 "Your configuration directory has been successfully moved from \"%s\" to \"%s"
@@ -3866,7 +3870,7 @@ msgstr "Váš adresár s konfiguráciou bol úspešne presunutý z „%s“ do �
 
 #. for translators: the third %s in brackets is the error message which
 #. * describes why moving the dir didn't work
-#: ../src/libmain.c:673
+#: ../src/libmain.c:672
 #, c-format
 msgid ""
 "Your old configuration directory \"%s\" could not be moved to \"%s\" (%s). "
@@ -3875,7 +3879,7 @@ msgstr ""
 "Váš starý adresár s konfiguráciou „%s“ nemohol byť presunutý do „%s“ (%s). "
 "Prosím vykonajte tento presun ručne."
 
-#: ../src/libmain.c:755
+#: ../src/libmain.c:754
 #, c-format
 msgid ""
 "Configuration directory could not be created (%s).\n"
@@ -3886,21 +3890,21 @@ msgstr ""
 "Pri používaní Geany bez adresára s konfiguráciou môžu nastať problémy.\n"
 "Chcete spustiť Geany aj napriek tomu?"
 
-#: ../src/libmain.c:1154
+#: ../src/libmain.c:1158
 #, c-format
 msgid "This is Geany %s."
 msgstr "Toto je Geany %s."
 
-#: ../src/libmain.c:1156
+#: ../src/libmain.c:1160
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Nebolo možné vytvoriť adresár s konfiguráciou (%s)."
 
-#: ../src/libmain.c:1380
+#: ../src/libmain.c:1384
 msgid "Do you really want to quit?"
 msgstr "Naozaj chcete ukončiť program?"
 
-#: ../src/libmain.c:1418
+#: ../src/libmain.c:1422
 msgid "Configuration files reloaded."
 msgstr "Konfiguračné súbory boli znova načítané."
 
@@ -3928,12 +3932,12 @@ msgstr "Kopírovať _všetky"
 msgid "_Hide Message Window"
 msgstr "_Skryť okno so správami"
 
-#: ../src/msgwindow.c:677
+#: ../src/msgwindow.c:682
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Nie je možné nájsť súbor „%s“ - skúšam cestu k aktuálnemu dokumentu."
 
-#: ../src/msgwindow.c:1109
+#: ../src/msgwindow.c:1118
 msgid "The document has been closed."
 msgstr "Dokument bol zatvorený."
 
@@ -3945,7 +3949,7 @@ msgstr "Prepnúť na dokument"
 msgid "Open in New _Window"
 msgstr "Otvoriť v _novom okne"
 
-#: ../src/plugins.c:223
+#: ../src/plugins.c:233
 #, c-format
 msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
@@ -3954,11 +3958,11 @@ msgstr ""
 "Zásuvný modul „%s“ nie je binárne kompatibilný s aktuálnou verziou Geany  - "
 "prosím zostavte modul znovu."
 
-#: ../src/plugins.c:1228
+#: ../src/plugins.c:1271
 msgid "_Plugin Manager"
 msgstr "Správca _zásuvných modulov"
 
-#: ../src/plugins.c:1607
+#: ../src/plugins.c:1650
 msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
@@ -3969,7 +3973,7 @@ msgstr ""
 "deaktivovania tohoto modulu.</i>\n"
 
 #. Four allocations is less than ideal but meh
-#: ../src/plugins.c:1609
+#: ../src/plugins.c:1652
 #, c-format
 msgid ""
 "Version:\t%s\n"
@@ -3980,81 +3984,88 @@ msgstr ""
 "Autor(i):\t%s\n"
 "Názov súboru:\t%s"
 
-#: ../src/plugins.c:1637
+#: ../src/plugins.c:1680
 msgid "No plugins available."
 msgstr "Nie je dostupný žiadny zásuvný modul."
 
-#: ../src/plugins.c:1769
+#: ../src/plugins.c:1812
 msgid "Active"
 msgstr "Aktívny"
 
-#: ../src/plugins.c:1776
+#: ../src/plugins.c:1819
 msgid "Plugin"
 msgstr "Zásuvný modul"
 
-#: ../src/plugins.c:1883
+#: ../src/plugins.c:1926
 msgid "Plugins"
 msgstr "Zásuvné moduly"
 
-#: ../src/plugins.c:1924
+#: ../src/plugins.c:1967
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Vyberte, ktoré zásuvné moduly by mali byť načítané pri spustení:"
 
-#: ../src/pluginutils.c:396
+#: ../src/plugins.c:2060
+#, c-format
+msgid ""
+"Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
+"plugin."
+msgstr ""
+
+#: ../src/pluginutils.c:411
 msgid "Configure Plugins"
 msgstr "Nastaviť zásuvné moduly"
 
-#: ../src/prefs.c:180
+#: ../src/prefs.c:181
 msgid "Grab Key"
 msgstr "Zachytiť kláves"
 
-#: ../src/prefs.c:186
+#: ../src/prefs.c:187
 #, c-format
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Stlačte kombináciu kláves, ktorú chcete nastaviť pre „%s“."
 
-#: ../src/prefs.c:225 ../src/symbols.c:2525 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "Rozbaliť vš_etky"
 
-#: ../src/prefs.c:230 ../src/symbols.c:2530 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "Zbaliť všetk_y"
 
-#: ../src/prefs.c:290
+#: ../src/prefs.c:292
 msgid "Action"
 msgstr "Akcia"
 
-#: ../src/prefs.c:295
+#: ../src/prefs.c:297
 msgid "Shortcut"
 msgstr "Klávesová skratka"
 
-#: ../src/prefs.c:1480
+#: ../src/prefs.c:1479
 msgid "_Allow"
 msgstr "P_ovoliť"
 
-#: ../src/prefs.c:1482
+#: ../src/prefs.c:1481
 msgid "_Override"
 msgstr "_Prepísať"
 
-#: ../src/prefs.c:1483
+#: ../src/prefs.c:1482
 msgid "Override that keybinding?"
 msgstr "Prepísať túto klávesovú skratku?"
 
-#: ../src/prefs.c:1484
+#: ../src/prefs.c:1483
 #, c-format
 msgid "The combination '%s' is already used for \"%s\"."
 msgstr "Kombinácia „%s“ je už nastavená pre „%s“."
 
 #. add manually GeanyWrapLabels because they can't be added with Glade
 #. page Tools
-#: ../src/prefs.c:1693
+#: ../src/prefs.c:1692
 msgid "Enter tool paths below. Tools you do not need can be left blank."
 msgstr ""
 "Zadajte cesty k nástrojom. Nástroje, ktoré nepotrebujete, môžu ostať prázdne."
 
 #. page Templates
-#: ../src/prefs.c:1698
+#: ../src/prefs.c:1697
 msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
@@ -4062,7 +4073,7 @@ msgstr ""
 "Nastavte údaje použité v šablóne. Pre viac detailov pozrite dokumentáciu."
 
 #. page Keybindings
-#: ../src/prefs.c:1703
+#: ../src/prefs.c:1702
 msgid ""
 "Here you can change keyboard shortcuts for various actions. Select one and "
 "press the Change button to enter a new shortcut, or double click on an "
@@ -4073,7 +4084,7 @@ msgstr ""
 "textovej reprezentácie skratky."
 
 #. page Editor->Indentation
-#: ../src/prefs.c:1708
+#: ../src/prefs.c:1707
 msgid ""
 "<i>Warning: these settings are overridden by the current project. See "
 "<b>Project->Properties</b>.</i>"
@@ -4178,11 +4189,11 @@ msgstr ""
 "Cesta k súboru reprezentujúcemu projekt, v ktorom sú uložené jeho "
 "nastavenia. Normálne by mala mať „%s“ príponu."
 
-#: ../src/project.c:212 ../src/project.c:484
+#: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
 msgstr "Vyberte základnú cestu projektu"
 
-#: ../src/project.c:251 ../src/project.c:621 ../src/project.c:1160
+#: ../src/project.c:251 ../src/project.c:623 ../src/project.c:1162
 msgid "Project file could not be written"
 msgstr "Nie je možné zapísať súbor projektu"
 
@@ -4191,12 +4202,12 @@ msgstr "Nie je možné zapísať súbor projektu"
 msgid "Project \"%s\" created."
 msgstr "Projekt „%s“ bol vytvorený."
 
-#: ../src/project.c:296 ../src/project.c:328 ../src/project.c:1021
+#: ../src/project.c:295 ../src/project.c:322 ../src/project.c:1023
 #, c-format
 msgid "Project file \"%s\" could not be loaded."
 msgstr "Nepodarilo sa načítať projekt „%s“."
 
-#: ../src/project.c:322 ../src/project.c:334
+#: ../src/project.c:316 ../src/project.c:334
 msgid "Open Project"
 msgstr "Otvoriť projekt"
 
@@ -4209,67 +4220,67 @@ msgstr "Súbory projektu"
 msgid "Project \"%s\" closed."
 msgstr "Projekt „%s“ bol zatvorený."
 
-#: ../src/project.c:624
+#: ../src/project.c:626
 #, c-format
 msgid "Project \"%s\" saved."
 msgstr "Projekt „%s“ bol uložený."
 
-#: ../src/project.c:657
+#: ../src/project.c:659
 msgid "Do you want to close it before proceeding?"
 msgstr "Chcete ho pred pokračovaním zatvoriť?"
 
-#: ../src/project.c:658
+#: ../src/project.c:660
 #, c-format
 msgid "The '%s' project is open."
 msgstr "Projekt „%s“ je otvorený."
 
-#: ../src/project.c:707
+#: ../src/project.c:709
 msgid "The specified project name is too short."
 msgstr "Zadaný názov projektu je príliš krátky."
 
-#: ../src/project.c:713
+#: ../src/project.c:715
 #, c-format
 msgid "The specified project name is too long (max. %d characters)."
 msgstr "Zadaný názov projektu je príliš dlhý (max. %d znakov)."
 
-#: ../src/project.c:725
+#: ../src/project.c:727
 msgid "You have specified an invalid project filename."
 msgstr "Zadali ste nesprávny názov projektu."
 
-#: ../src/project.c:748
+#: ../src/project.c:750
 msgid "Create the project's base path directory?"
 msgstr "Vytvoriť adresár projektu?"
 
-#: ../src/project.c:749
+#: ../src/project.c:751
 #, c-format
 msgid "The path \"%s\" does not exist."
 msgstr "Cesta „%s“ neexistuje."
 
-#: ../src/project.c:758
+#: ../src/project.c:760
 #, c-format
 msgid "Project base directory could not be created (%s)."
 msgstr "Nie je možné vytvoriť adresár projektu (%s)."
 
-#: ../src/project.c:771
+#: ../src/project.c:773
 #, c-format
 msgid "Project file could not be written (%s)."
 msgstr "Nie je možné zapísať súbor projektu (%s)."
 
-#: ../src/project.c:777 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:627
 msgid "_Replace"
 msgstr "_Nahradiť"
 
-#: ../src/project.c:779 ../plugins/export.c:331
+#: ../src/project.c:781 ../plugins/export.c:331
 #, c-format
 msgid "The file '%s' already exists. Do you want to overwrite it?"
 msgstr "Súbor „%s“ už existuje. Želáte si tento súbor prepísať?"
 
 #. initialise the dialog
-#: ../src/project.c:925 ../src/project.c:936
+#: ../src/project.c:927 ../src/project.c:938
 msgid "Choose Project Filename"
 msgstr "Vyberte názov projektu"
 
-#: ../src/project.c:1011
+#: ../src/project.c:1013
 #, c-format
 msgid "Project \"%s\" opened."
 msgstr "Projekt „%s“ bol otvorený."
@@ -4280,11 +4291,11 @@ msgstr "Používať re_gulárne výrazy"
 
 #: ../src/search.c:311
 msgid ""
-"Use POSIX-like regular expressions. For detailed information about using "
-"regular expressions, please read the documentation."
+"Use Perl-like regular expressions. For detailed information about using "
+"regular expressions, please refer to the manual."
 msgstr ""
-"Používať POSIX regulárne výrazy. Pre viac detailov o používaní regulárnych "
-"výrazov, si prečítajte dokumentáciu."
+"Používať regulárne výrazy jayzka Perl. Pre viac detailov o používaní "
+"regulárnych výrazov, si prečítajte dokumentáciu."
 
 #: ../src/search.c:316
 msgid "Use _escape sequences"
@@ -4520,7 +4531,7 @@ msgid "Bad regex: %s"
 msgstr "Neplatný regulárny výraz: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:237
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -4546,11 +4557,11 @@ msgstr "Celý názov programu pre Windows musí byť v úvodzovkách"
 msgid "Program not found"
 msgstr "Program nebol nájdený"
 
-#: ../src/spawn.c:672
+#: ../src/spawn.c:764
 msgid "Failed to change to the working directory"
 msgstr "Nepodarilo sa zmeniť pracovný adresár"
 
-#: ../src/spawn.c:677
+#: ../src/spawn.c:769
 msgid "Unknown error executing child process"
 msgstr "Neznáma chyba pri spúšťaní potomka"
 
@@ -4558,324 +4569,324 @@ msgstr "Neznáma chyba pri spúšťaní potomka"
 msgid "Value"
 msgstr "Hodnota"
 
-#: ../src/symbols.c:548 ../src/symbols.c:598 ../src/symbols.c:708
+#: ../src/symbols.c:473 ../src/symbols.c:523 ../src/symbols.c:633
 msgid "Chapter"
 msgstr "Kapitola"
 
-#: ../src/symbols.c:549 ../src/symbols.c:594 ../src/symbols.c:709
+#: ../src/symbols.c:474 ../src/symbols.c:519 ../src/symbols.c:634
 msgid "Section"
 msgstr "Sekcia"
 
-#: ../src/symbols.c:550
+#: ../src/symbols.c:475
 msgid "Sect1"
 msgstr "Sekcia 1"
 
-#: ../src/symbols.c:551
+#: ../src/symbols.c:476
 msgid "Sect2"
 msgstr "Sekcia 2"
 
-#: ../src/symbols.c:552
+#: ../src/symbols.c:477
 msgid "Sect3"
 msgstr "Sekcia 3"
 
-#: ../src/symbols.c:553
+#: ../src/symbols.c:478
 msgid "Appendix"
 msgstr "Príloha"
 
-#: ../src/symbols.c:554 ../src/symbols.c:599 ../src/symbols.c:624
-#: ../src/symbols.c:640 ../src/symbols.c:655 ../src/symbols.c:666
-#: ../src/symbols.c:767 ../src/symbols.c:778 ../src/symbols.c:791
-#: ../src/symbols.c:805 ../src/symbols.c:817 ../src/symbols.c:829
-#: ../src/symbols.c:846 ../src/symbols.c:875 ../src/symbols.c:907
+#: ../src/symbols.c:479 ../src/symbols.c:524 ../src/symbols.c:549
+#: ../src/symbols.c:565 ../src/symbols.c:580 ../src/symbols.c:591
+#: ../src/symbols.c:692 ../src/symbols.c:703 ../src/symbols.c:716
+#: ../src/symbols.c:730 ../src/symbols.c:742 ../src/symbols.c:754
+#: ../src/symbols.c:771 ../src/symbols.c:800 ../src/symbols.c:832
 msgid "Other"
 msgstr "Iné"
 
-#: ../src/symbols.c:560 ../src/symbols.c:837 ../src/symbols.c:885
+#: ../src/symbols.c:485 ../src/symbols.c:762 ../src/symbols.c:810
 msgid "Module"
 msgstr "Modul"
 
-#: ../src/symbols.c:561 ../src/symbols.c:651 ../src/symbols.c:763
-#: ../src/symbols.c:815 ../src/symbols.c:827 ../src/symbols.c:842
-#: ../src/symbols.c:856
+#: ../src/symbols.c:486 ../src/symbols.c:576 ../src/symbols.c:688
+#: ../src/symbols.c:740 ../src/symbols.c:752 ../src/symbols.c:767
+#: ../src/symbols.c:781
 msgid "Types"
 msgstr "Typy"
 
-#: ../src/symbols.c:562
+#: ../src/symbols.c:487
 msgid "Type constructors"
 msgstr "Konštruktory typov"
 
-#: ../src/symbols.c:563 ../src/symbols.c:585 ../src/symbols.c:606
-#: ../src/symbols.c:623 ../src/symbols.c:635 ../src/symbols.c:648
-#: ../src/symbols.c:663 ../src/symbols.c:677 ../src/symbols.c:687
-#: ../src/symbols.c:751 ../src/symbols.c:801 ../src/symbols.c:824
-#: ../src/symbols.c:869 ../src/symbols.c:893
+#: ../src/symbols.c:488 ../src/symbols.c:510 ../src/symbols.c:531
+#: ../src/symbols.c:548 ../src/symbols.c:560 ../src/symbols.c:573
+#: ../src/symbols.c:588 ../src/symbols.c:602 ../src/symbols.c:612
+#: ../src/symbols.c:676 ../src/symbols.c:726 ../src/symbols.c:749
+#: ../src/symbols.c:794 ../src/symbols.c:818
 msgid "Functions"
 msgstr "Funkcie"
 
-#: ../src/symbols.c:568
+#: ../src/symbols.c:493
 msgid "Program"
 msgstr "Program"
 
-#: ../src/symbols.c:570 ../src/symbols.c:578 ../src/symbols.c:584
+#: ../src/symbols.c:495 ../src/symbols.c:503 ../src/symbols.c:509
 msgid "Sections"
 msgstr "Sekcie"
 
-#: ../src/symbols.c:571
+#: ../src/symbols.c:496
 msgid "Paragraph"
 msgstr "Odsek"
 
-#: ../src/symbols.c:572
+#: ../src/symbols.c:497
 msgid "Group"
 msgstr "Skupina"
 
-#: ../src/symbols.c:573
+#: ../src/symbols.c:498
 msgid "Data"
 msgstr "Dáta"
 
-#: ../src/symbols.c:579
+#: ../src/symbols.c:504
 msgid "Keys"
 msgstr "Kľúče"
 
-#: ../src/symbols.c:586 ../src/symbols.c:637 ../src/symbols.c:653
-#: ../src/symbols.c:679 ../src/symbols.c:752 ../src/symbols.c:777
-#: ../src/symbols.c:803 ../src/symbols.c:816 ../src/symbols.c:825
-#: ../src/symbols.c:841 ../src/symbols.c:876 ../src/symbols.c:905
+#: ../src/symbols.c:511 ../src/symbols.c:562 ../src/symbols.c:578
+#: ../src/symbols.c:604 ../src/symbols.c:677 ../src/symbols.c:702
+#: ../src/symbols.c:728 ../src/symbols.c:741 ../src/symbols.c:750
+#: ../src/symbols.c:766 ../src/symbols.c:801 ../src/symbols.c:830
 msgid "Variables"
 msgstr "Premenné"
 
-#: ../src/symbols.c:593
+#: ../src/symbols.c:518
 msgid "Environment"
 msgstr "Prostredie"
 
-#: ../src/symbols.c:595 ../src/symbols.c:710
+#: ../src/symbols.c:520 ../src/symbols.c:635
 msgid "Subsection"
 msgstr "Podsekcia"
 
-#: ../src/symbols.c:596 ../src/symbols.c:711
+#: ../src/symbols.c:521 ../src/symbols.c:636
 msgid "Subsubsection"
 msgstr "Podpodsekcia"
 
-#: ../src/symbols.c:607 ../src/symbols.c:632
+#: ../src/symbols.c:532 ../src/symbols.c:557
 msgid "Structures"
 msgstr "Štruktúry"
 
-#: ../src/symbols.c:614
+#: ../src/symbols.c:539
 msgid "Parts"
 msgstr "Časti"
 
-#: ../src/symbols.c:615
+#: ../src/symbols.c:540
 msgid "Assembly"
 msgstr "Zostava"
 
-#: ../src/symbols.c:616
+#: ../src/symbols.c:541
 msgid "Steps"
 msgstr "Kroky"
 
-#: ../src/symbols.c:631 ../src/symbols.c:729 ../src/symbols.c:775
+#: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
 msgid "Modules"
 msgstr "Moduly"
 
-#: ../src/symbols.c:633 ../src/symbols.c:680
+#: ../src/symbols.c:558 ../src/symbols.c:605
 msgid "Traits"
 msgstr ""
 
-#: ../src/symbols.c:634
+#: ../src/symbols.c:559
 msgid "Implementations"
 msgstr "Implementácie"
 
-#: ../src/symbols.c:636 ../src/symbols.c:896
+#: ../src/symbols.c:561 ../src/symbols.c:821
 msgid "Typedefs / Enums"
 msgstr "Definície typov"
 
-#: ../src/symbols.c:638 ../src/symbols.c:854 ../src/symbols.c:863
-#: ../src/symbols.c:902
+#: ../src/symbols.c:563 ../src/symbols.c:779 ../src/symbols.c:788
+#: ../src/symbols.c:827
 msgid "Macros"
 msgstr "Makrá"
 
-#: ../src/symbols.c:639 ../src/symbols.c:732 ../src/symbols.c:741
-#: ../src/symbols.c:750 ../src/symbols.c:788 ../src/symbols.c:814
+#: ../src/symbols.c:564 ../src/symbols.c:657 ../src/symbols.c:666
+#: ../src/symbols.c:675 ../src/symbols.c:713 ../src/symbols.c:739
 msgid "Methods"
 msgstr "Metódy"
 
-#: ../src/symbols.c:647 ../src/symbols.c:662 ../src/symbols.c:760
-#: ../src/symbols.c:785 ../src/symbols.c:798
+#: ../src/symbols.c:572 ../src/symbols.c:587 ../src/symbols.c:685
+#: ../src/symbols.c:710 ../src/symbols.c:723
 msgid "Package"
 msgstr "Balíček"
 
-#: ../src/symbols.c:649 ../src/symbols.c:675 ../src/symbols.c:786
-#: ../src/symbols.c:799 ../src/symbols.c:812 ../src/symbols.c:839
-#: ../src/symbols.c:892
+#: ../src/symbols.c:574 ../src/symbols.c:600 ../src/symbols.c:711
+#: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:764
+#: ../src/symbols.c:817
 msgid "Interfaces"
 msgstr "Rozhrania"
 
-#: ../src/symbols.c:650 ../src/symbols.c:895
+#: ../src/symbols.c:575 ../src/symbols.c:820
 msgid "Structs"
 msgstr "Štruktúry"
 
-#: ../src/symbols.c:652 ../src/symbols.c:665 ../src/symbols.c:678
-#: ../src/symbols.c:804 ../src/symbols.c:826
+#: ../src/symbols.c:577 ../src/symbols.c:590 ../src/symbols.c:603
+#: ../src/symbols.c:729 ../src/symbols.c:751
 msgid "Constants"
 msgstr "Konštanty"
 
-#: ../src/symbols.c:654 ../src/symbols.c:789 ../src/symbols.c:894
+#: ../src/symbols.c:579 ../src/symbols.c:714 ../src/symbols.c:819
 msgid "Members"
 msgstr "Členovia"
 
-#: ../src/symbols.c:664 ../src/symbols.c:828 ../src/symbols.c:853
+#: ../src/symbols.c:589 ../src/symbols.c:753 ../src/symbols.c:778
 msgid "Labels"
 msgstr "Značky"
 
-#: ../src/symbols.c:674 ../src/symbols.c:739 ../src/symbols.c:888
+#: ../src/symbols.c:599 ../src/symbols.c:664 ../src/symbols.c:813
 msgid "Namespaces"
 msgstr "Menné priestory"
 
-#: ../src/symbols.c:676 ../src/symbols.c:698 ../src/symbols.c:730
-#: ../src/symbols.c:740 ../src/symbols.c:749 ../src/symbols.c:787
-#: ../src/symbols.c:800 ../src/symbols.c:813 ../src/symbols.c:891
+#: ../src/symbols.c:601 ../src/symbols.c:623 ../src/symbols.c:655
+#: ../src/symbols.c:665 ../src/symbols.c:674 ../src/symbols.c:712
+#: ../src/symbols.c:725 ../src/symbols.c:738 ../src/symbols.c:816
 msgid "Classes"
 msgstr "Triedy"
 
-#: ../src/symbols.c:688
+#: ../src/symbols.c:613
 msgid "Anchors"
 msgstr "Odkazy"
 
-#: ../src/symbols.c:689
+#: ../src/symbols.c:614
 msgid "H1 Headings"
 msgstr "H1 hlavičky"
 
-#: ../src/symbols.c:690
+#: ../src/symbols.c:615
 msgid "H2 Headings"
 msgstr "H2 hlavičky"
 
-#: ../src/symbols.c:691
+#: ../src/symbols.c:616
 msgid "H3 Headings"
 msgstr "H3 hlavičky"
 
-#: ../src/symbols.c:699
+#: ../src/symbols.c:624
 msgid "ID Selectors"
 msgstr "ID selektory"
 
-#: ../src/symbols.c:700
+#: ../src/symbols.c:625
 msgid "Type Selectors"
 msgstr "Typové selektory"
 
-#: ../src/symbols.c:719
+#: ../src/symbols.c:644
 msgid "Section Level 1"
 msgstr "Sekcia úroveň 1"
 
-#: ../src/symbols.c:720
+#: ../src/symbols.c:645
 msgid "Section Level 2"
 msgstr "Sekcia úroveň 2"
 
-#: ../src/symbols.c:721
+#: ../src/symbols.c:646
 msgid "Section Level 3"
 msgstr "Sekcia úroveň 3"
 
-#: ../src/symbols.c:722
+#: ../src/symbols.c:647
 msgid "Section Level 4"
 msgstr "Sekcia úroveň 4"
 
-#: ../src/symbols.c:731
+#: ../src/symbols.c:656
 msgid "Singletons"
 msgstr "Singletony"
 
-#: ../src/symbols.c:742 ../src/symbols.c:870
+#: ../src/symbols.c:667 ../src/symbols.c:795
 msgid "Procedures"
 msgstr "Procedúry"
 
-#: ../src/symbols.c:753
+#: ../src/symbols.c:678
 msgid "Imports"
 msgstr "Importy"
 
-#: ../src/symbols.c:761
+#: ../src/symbols.c:686
 msgid "Entities"
 msgstr "Entity"
 
-#: ../src/symbols.c:762
+#: ../src/symbols.c:687
 msgid "Architectures"
 msgstr "Architektúry"
 
-#: ../src/symbols.c:764
+#: ../src/symbols.c:689
 msgid "Functions / Procedures"
 msgstr "Funkcie / Procedúry"
 
-#: ../src/symbols.c:765
+#: ../src/symbols.c:690
 msgid "Variables / Signals"
 msgstr "Premenné / Signály"
 
-#: ../src/symbols.c:766
+#: ../src/symbols.c:691
 msgid "Processes / Blocks / Components"
 msgstr "Procesy / Bloky / Komponenty"
 
-#: ../src/symbols.c:774
+#: ../src/symbols.c:699
 msgid "Events"
 msgstr "Udalosti"
 
-#: ../src/symbols.c:776
+#: ../src/symbols.c:701
 msgid "Functions / Tasks"
 msgstr "Funkcie / Úlohy"
 
-#: ../src/symbols.c:790 ../src/symbols.c:845
+#: ../src/symbols.c:715 ../src/symbols.c:770
 msgid "Enums"
 msgstr "Enumerácie"
 
-#: ../src/symbols.c:838
+#: ../src/symbols.c:763
 msgid "Programs"
 msgstr "Programy"
 
-#: ../src/symbols.c:840
+#: ../src/symbols.c:765
 msgid "Functions / Subroutines"
 msgstr "Funkcie / Podprogramy"
 
-#: ../src/symbols.c:843
+#: ../src/symbols.c:768
 msgid "Components"
 msgstr "Komponenty"
 
-#: ../src/symbols.c:844
+#: ../src/symbols.c:769
 msgid "Blocks"
 msgstr "Bloky"
 
-#: ../src/symbols.c:855
+#: ../src/symbols.c:780
 msgid "Defines"
 msgstr "Definície"
 
-#: ../src/symbols.c:862
+#: ../src/symbols.c:787
 msgid "Targets"
 msgstr "Ciele"
 
-#: ../src/symbols.c:871
+#: ../src/symbols.c:796
 msgid "Indexes"
 msgstr "Indexy"
 
-#: ../src/symbols.c:872
+#: ../src/symbols.c:797
 msgid "Tables"
 msgstr "Tabuľky"
 
-#: ../src/symbols.c:873
+#: ../src/symbols.c:798
 msgid "Triggers"
 msgstr "Spúšťače"
 
-#: ../src/symbols.c:874
+#: ../src/symbols.c:799
 msgid "Views"
 msgstr "Zobrazenia"
 
-#: ../src/symbols.c:906
+#: ../src/symbols.c:831
 msgid "Extern Variables"
 msgstr "Externé premenné"
 
-#: ../src/symbols.c:1670
+#: ../src/symbols.c:1630
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Neznámy typ súboru pre príponu „%s“.\n"
 
-#: ../src/symbols.c:1696
+#: ../src/symbols.c:1656
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Nie je možné vytvoriť súbor symbolov, pravdepodobne preto, lebo neboli "
 "nájdené žiadne symboly.\n"
 
-#: ../src/symbols.c:1703
+#: ../src/symbols.c:1663
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4884,7 +4895,7 @@ msgstr ""
 "Použitie: %s -g <súbor symbolov> <zoznam súborov>\n"
 "\n"
 
-#: ../src/symbols.c:1704
+#: ../src/symbols.c:1664
 #, c-format
 msgid ""
 "Example:\n"
@@ -4895,52 +4906,52 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1718
+#: ../src/symbols.c:1678
 msgid "Load Tags File"
 msgstr "Načítať súbor symbolov"
 
-#: ../src/symbols.c:1725
+#: ../src/symbols.c:1685
 msgid "Geany tags file (*.*.tags)"
 msgstr "Súbor symbolov (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1745
+#: ../src/symbols.c:1705
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Načítaný %s súbor tagov „%s“."
 
-#: ../src/symbols.c:1748
+#: ../src/symbols.c:1708
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Nie je možné načítať súbor tagov „%s“."
 
-#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
-#: ../src/symbols.c:1983
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1943
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
-#. For translators: it's the filename and line number of a tag in the goto-tag popup menu
-#: ../src/symbols.c:1986
+#. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
+#: ../src/symbols.c:1946
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2155
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarácia „%s“ nebola nájdená."
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2157
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definícia „%s“ nebola nájdená."
 
-#: ../src/symbols.c:2540
+#: ../src/symbols.c:2573
 msgid "Sort by _Name"
 msgstr "Zoradiť _podľa názvu"
 
-#: ../src/symbols.c:2547
+#: ../src/symbols.c:2580
 msgid "Sort by _Appearance"
 msgstr "Zoradiť podľa _výskytu"
 
@@ -4949,13 +4960,14 @@ msgstr "Zoradiť podľa _výskytu"
 msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Pri prevode šablóny „%s“ do kódovania UTF-8 nastala chyba"
 
-#: ../src/templates.c:620
+#: ../src/templates.c:618
 #, c-format
 msgid ""
-"Cannot execute command \"%s\" from the template: %s. Check the path in the "
-"template."
+"Cannot execute template command \"%s\". Hint: incorrect paths in the command "
+"are a common cause of errors. Error: %s."
 msgstr ""
-"Nemôžem spustiť príkaz „%s“ zo šablóny: %s. Skontrolujte cestu v šablóne."
+"Nie je možné spustíť príkaz šablóny „%s“. Tip: nesprávne cesty v príkaze sú "
+"častou príčinou chýb. Chyba: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5085,15 +5097,15 @@ msgstr "Vyhľadávacie pole"
 msgid "Goto Field"
 msgstr "Pole prejsť na"
 
-#: ../src/toolbar.c:586
+#: ../src/toolbar.c:587
 msgid "Separator"
 msgstr "Oddeľovač"
 
-#: ../src/toolbar.c:587
+#: ../src/toolbar.c:588
 msgid "--- Separator ---"
 msgstr "--- Oddeľovač ---"
 
-#: ../src/toolbar.c:959
+#: ../src/toolbar.c:960
 msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
@@ -5101,11 +5113,11 @@ msgstr ""
 "Vyberte položky, ktoré majú byť zobrazené na panely nástrojov. Položky je "
 "možné zoradiť ťahaním."
 
-#: ../src/toolbar.c:975
+#: ../src/toolbar.c:976
 msgid "Available Items"
 msgstr "Dostupné položky"
 
-#: ../src/toolbar.c:996
+#: ../src/toolbar.c:997
 msgid "Displayed Items"
 msgstr "Zobrazené položky"
 
@@ -5199,11 +5211,11 @@ msgstr "Zobraziť zoznam s_ymbolov"
 msgid "Show _Document List"
 msgstr "Zobraziť z_oznam dokumentov"
 
-#: ../src/sidebar.c:626 ../plugins/filebrowser.c:701
+#: ../src/sidebar.c:626 ../plugins/filebrowser.c:699
 msgid "H_ide Sidebar"
 msgstr "Skryť _bočný panel"
 
-#: ../src/sidebar.c:731 ../plugins/filebrowser.c:672
+#: ../src/sidebar.c:731 ../plugins/filebrowser.c:670
 msgid "_Find in Files..."
 msgstr "Nájsť v _súboroch…"
 
@@ -5266,59 +5278,59 @@ msgstr " (nová inštancia)"
 msgid "Font updated (%s)."
 msgstr "Písmo aktualizované (%s)."
 
-#: ../src/ui_utils.c:683
+#: ../src/ui_utils.c:689
 msgid "C Standard Library"
 msgstr "Štandardná knižnica C"
 
-#: ../src/ui_utils.c:684
+#: ../src/ui_utils.c:690
 msgid "ISO C99"
 msgstr "ISO C99"
 
-#: ../src/ui_utils.c:685
+#: ../src/ui_utils.c:691
 msgid "C++ (C Standard Library)"
 msgstr "C++ (Štandardná knižnica C)"
 
-#: ../src/ui_utils.c:686
+#: ../src/ui_utils.c:692
 msgid "C++ Standard Library"
 msgstr "Štandardná knižnica C++"
 
-#: ../src/ui_utils.c:687
+#: ../src/ui_utils.c:693
 msgid "C++ STL"
 msgstr "C++ STL"
 
-#: ../src/ui_utils.c:709 ../src/ui_utils.c:787
+#: ../src/ui_utils.c:715 ../src/ui_utils.c:793
 msgid "dd.mm.yyyy"
 msgstr "dd.mm.rrrr"
 
-#: ../src/ui_utils.c:711 ../src/ui_utils.c:788
+#: ../src/ui_utils.c:717 ../src/ui_utils.c:794
 msgid "mm.dd.yyyy"
 msgstr "mm.dd.rrrr"
 
-#: ../src/ui_utils.c:713 ../src/ui_utils.c:789
+#: ../src/ui_utils.c:719 ../src/ui_utils.c:795
 msgid "yyyy/mm/dd"
 msgstr "rrrr/mm/dd"
 
-#: ../src/ui_utils.c:715 ../src/ui_utils.c:798
+#: ../src/ui_utils.c:721 ../src/ui_utils.c:804
 msgid "dd.mm.yyyy hh:mm:ss"
 msgstr "dd.mm.rrrr hh:mm:ss"
 
-#: ../src/ui_utils.c:717 ../src/ui_utils.c:799
+#: ../src/ui_utils.c:723 ../src/ui_utils.c:805
 msgid "mm.dd.yyyy hh:mm:ss"
 msgstr "mm.dd.rrrr hh:mm:ss"
 
-#: ../src/ui_utils.c:719 ../src/ui_utils.c:800
+#: ../src/ui_utils.c:725 ../src/ui_utils.c:806
 msgid "yyyy/mm/dd hh:mm:ss"
 msgstr "rrrr/mm/dd hh:mm:ss"
 
-#: ../src/ui_utils.c:721 ../src/ui_utils.c:809
+#: ../src/ui_utils.c:727 ../src/ui_utils.c:815
 msgid "_Use Custom Date Format"
 msgstr "_Použiť vlastný formát dátumu"
 
-#: ../src/ui_utils.c:725
+#: ../src/ui_utils.c:731
 msgid "Custom Date Format"
 msgstr "Vlastný formát dátumu"
 
-#: ../src/ui_utils.c:726
+#: ../src/ui_utils.c:732
 msgid ""
 "Enter here a custom date and time format. You can use any conversion "
 "specifiers which can be used with the ANSI C strftime function."
@@ -5326,37 +5338,37 @@ msgstr ""
 "Zadajte vlastný formát pre dátum a čas. Je možné použiť akýkoľvek zápis, "
 "ktorý je možné použiť s funkciou ANSI C strftime."
 
-#: ../src/ui_utils.c:747
+#: ../src/ui_utils.c:753
 msgid "Date format string could not be converted (possibly too long)."
 msgstr ""
 "Reťazec pre formát dátumu nie je možné spracovať (pravdepodobne je príliš "
 "dlhý)."
 
-#: ../src/ui_utils.c:822
+#: ../src/ui_utils.c:828
 msgid "_Set Custom Date Format"
 msgstr "_Nastaviť vlastný formát dátumu"
 
-#: ../src/ui_utils.c:2005
+#: ../src/ui_utils.c:2016
 msgid "Select Folder"
 msgstr "Vybrať priečinok"
 
-#: ../src/ui_utils.c:2005
+#: ../src/ui_utils.c:2016
 msgid "Select File"
 msgstr "Vybrať súbor"
 
-#: ../src/ui_utils.c:2152
+#: ../src/ui_utils.c:2163
 msgid "_Filetype Configuration"
 msgstr "_Konfigurácia súborových typov"
 
-#: ../src/ui_utils.c:2189
+#: ../src/ui_utils.c:2200
 msgid "Save All"
 msgstr "Uložiť všetko"
 
-#: ../src/ui_utils.c:2190
+#: ../src/ui_utils.c:2201
 msgid "Close All"
 msgstr "Zavrieť všetko"
 
-#: ../src/ui_utils.c:2424
+#: ../src/ui_utils.c:2435
 msgid "Geany cannot start!"
 msgstr "Nie je možné zapnúť Geany!"
 
@@ -5396,24 +5408,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:489
+#: ../src/vte.c:577
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "nevhodná knižnica VTE: „%s“: chýba symbol „%s“"
 
-#: ../src/vte.c:638
+#: ../src/vte.c:758
 msgid "_Set Path From Document"
 msgstr "_Nastaviť cestu z dokumentu"
 
-#: ../src/vte.c:643
+#: ../src/vte.c:763
 msgid "_Restart Terminal"
 msgstr "_Reštartovať terminál"
 
-#: ../src/vte.c:666
+#: ../src/vte.c:796
 msgid "_Input Methods"
 msgstr "_Metódy vstupu"
 
-#: ../src/vte.c:759
+#: ../src/vte.c:888
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5428,6 +5440,11 @@ msgstr "Súbory projektu Geany"
 #: ../src/win32.c:216
 msgid "Executables"
 msgstr "Spustiteľné súbory"
+
+#: ../src/win32.c:802
+#, c-format
+msgid "Failed to open URI \"%s\": %s"
+msgstr "Nepodarilo sa otvoriť URI „%s“: %s"
 
 #: ../plugins/classbuilder.c:36
 msgid "Class Builder"
@@ -5537,65 +5554,65 @@ msgstr "Trieda _GTK+…"
 msgid "_PHP Class..."
 msgstr "Trieda _PHP…"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:40
 msgid "HTML Characters"
 msgstr "HTML znaky"
 
-#: ../plugins/htmlchars.c:39
+#: ../plugins/htmlchars.c:40
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Vkladá HTML entity znakov ako je napr. „&amp;“."
 
-#: ../plugins/htmlchars.c:40 ../plugins/export.c:38 ../plugins/filebrowser.c:51
+#: ../plugins/htmlchars.c:41 ../plugins/export.c:38 ../plugins/filebrowser.c:51
 #: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "Vývojový tím Geany"
 
-#: ../plugins/htmlchars.c:76
+#: ../plugins/htmlchars.c:75
 msgid "HTML characters"
 msgstr "Znaky HTML"
 
-#: ../plugins/htmlchars.c:82
+#: ../plugins/htmlchars.c:81
 msgid "ISO 8859-1 characters"
 msgstr "Znaky ISO 8859-1"
 
-#: ../plugins/htmlchars.c:180
+#: ../plugins/htmlchars.c:179
 msgid "Greek characters"
 msgstr "Grécke znaky"
 
-#: ../plugins/htmlchars.c:235
+#: ../plugins/htmlchars.c:234
 msgid "Mathematical characters"
 msgstr "Matematické znaky"
 
-#: ../plugins/htmlchars.c:276
+#: ../plugins/htmlchars.c:275
 msgid "Technical characters"
 msgstr "Technické znaky"
 
-#: ../plugins/htmlchars.c:284
+#: ../plugins/htmlchars.c:283
 msgid "Arrow characters"
 msgstr "Znaky šípok"
 
-#: ../plugins/htmlchars.c:297
+#: ../plugins/htmlchars.c:296
 msgid "Punctuation characters"
 msgstr "Interpunkčné znaky"
 
-#: ../plugins/htmlchars.c:313
+#: ../plugins/htmlchars.c:312
 msgid "Miscellaneous characters"
 msgstr "Rôzne znaky"
 
-#: ../plugins/htmlchars.c:368 ../plugins/filebrowser.c:1194
+#: ../plugins/htmlchars.c:367 ../plugins/filebrowser.c:1194
 #: ../plugins/saveactions.c:538
 msgid "Plugin configuration directory could not be created."
 msgstr "Nie je možné vytvoriť priečinok pre konfiguráciu zásuvného modulu."
 
-#: ../plugins/htmlchars.c:489
+#: ../plugins/htmlchars.c:488
 msgid "Special Characters"
 msgstr "Špeciálne znaky"
 
-#: ../plugins/htmlchars.c:491
+#: ../plugins/htmlchars.c:490
 msgid "_Insert"
 msgstr "_Vložiť"
 
-#: ../plugins/htmlchars.c:500
+#: ../plugins/htmlchars.c:499
 msgid ""
 "Choose a special character from the list below and double click on it or use "
 "the button to insert it at the current cursor position."
@@ -5603,11 +5620,11 @@ msgstr ""
 "Vyberte špeciálny znak so zoznamu nižšie a dvojitým kliknutím alebo použitím "
 "tlačidla ho vložte na aktuálnu pozíciu kurzora."
 
-#: ../plugins/htmlchars.c:514
+#: ../plugins/htmlchars.c:513
 msgid "Character"
 msgstr "Znak"
 
-#: ../plugins/htmlchars.c:520
+#: ../plugins/htmlchars.c:519
 msgid "HTML (name)"
 msgstr "HTML (entita)"
 
@@ -5628,15 +5645,15 @@ msgstr "_Automaticky nahradiť špeciálne znaky"
 msgid "_Replace Characters in Selection"
 msgstr "_Nahradiť znaky vo výbere"
 
-#: ../plugins/htmlchars.c:784
+#: ../plugins/htmlchars.c:785
 msgid "Insert Special HTML Characters"
 msgstr "Vložiť špeciálne HTML znaky"
 
-#: ../plugins/htmlchars.c:787
+#: ../plugins/htmlchars.c:788
 msgid "Replace special characters"
 msgstr "Nahradiť špeciálne znaky"
 
-#: ../plugins/htmlchars.c:790
+#: ../plugins/htmlchars.c:791
 msgid "Toggle plugin status"
 msgstr "Prepnúť stav zásuvného modulu"
 
@@ -5702,48 +5719,48 @@ msgstr "Prehliadač súborov"
 msgid "Adds a file browser tab to the sidebar."
 msgstr "Pridá prehliadač súborov do bočného panelu."
 
-#: ../plugins/filebrowser.c:417
+#: ../plugins/filebrowser.c:415
 msgid "Too many items selected!"
 msgstr "Príliš veľa vybraných položiek!"
 
-#: ../plugins/filebrowser.c:487
+#: ../plugins/filebrowser.c:485
 #, c-format
 msgid "Could not execute configured external command '%s' (%s)."
 msgstr "Nie je možné spustiť nastavený externý príkaz „%s“ (%s)."
 
-#: ../plugins/filebrowser.c:651
+#: ../plugins/filebrowser.c:649
 msgid "Open in _Geany"
 msgstr "Otvoriť v _Geany"
 
-#: ../plugins/filebrowser.c:657
+#: ../plugins/filebrowser.c:655
 msgid "Open _Externally"
 msgstr "Otvoriť _externe"
 
-#: ../plugins/filebrowser.c:682
+#: ../plugins/filebrowser.c:680
 msgid "Show _Hidden Files"
 msgstr "Zobraziť _skryté súbory"
 
-#: ../plugins/filebrowser.c:912
+#: ../plugins/filebrowser.c:910
 msgid "Up"
 msgstr "Hore"
 
-#: ../plugins/filebrowser.c:917
+#: ../plugins/filebrowser.c:915
 msgid "Refresh"
 msgstr "Obnoviť"
 
-#: ../plugins/filebrowser.c:922
+#: ../plugins/filebrowser.c:920
 msgid "Home"
 msgstr "Domov"
 
-#: ../plugins/filebrowser.c:927
+#: ../plugins/filebrowser.c:925
 msgid "Set path from document"
 msgstr "Nastaviť cestu z dokumentu"
 
-#: ../plugins/filebrowser.c:941
+#: ../plugins/filebrowser.c:939
 msgid "Filter:"
 msgstr "Filter:"
 
-#: ../plugins/filebrowser.c:950
+#: ../plugins/filebrowser.c:948
 msgid ""
 "Filter your files with the usual wildcards. Separate multiple patterns with "
 "a space."
@@ -5905,31 +5922,31 @@ msgstr "Rozdelenie okna"
 msgid "Splits the editor view into two windows."
 msgstr "Rozdelí okno editora na dve časti."
 
-#: ../plugins/splitwindow.c:272
+#: ../plugins/splitwindow.c:300
 msgid "Show the current document"
 msgstr "Zobraziť aktuálny dokument"
 
-#: ../plugins/splitwindow.c:289 ../plugins/splitwindow.c:422
-#: ../plugins/splitwindow.c:437
+#: ../plugins/splitwindow.c:322 ../plugins/splitwindow.c:455
+#: ../plugins/splitwindow.c:470
 msgid "_Unsplit"
 msgstr "_Zrušiť rozdelenie"
 
-#: ../plugins/splitwindow.c:404
+#: ../plugins/splitwindow.c:437
 msgid "_Split Window"
 msgstr "Rozdeliť _okno"
 
-#: ../plugins/splitwindow.c:412
+#: ../plugins/splitwindow.c:445
 msgid "_Side by Side"
 msgstr "_Vedľa seba"
 
-#: ../plugins/splitwindow.c:417
+#: ../plugins/splitwindow.c:450
 msgid "_Top and Bottom"
 msgstr "_Nad sebou"
 
-#: ../plugins/splitwindow.c:433
+#: ../plugins/splitwindow.c:466
 msgid "Side by Side"
 msgstr "Vedľa seba"
 
-#: ../plugins/splitwindow.c:435
+#: ../plugins/splitwindow.c:468
 msgid "Top and Bottom"
 msgstr "Nad sebou"
