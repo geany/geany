@@ -2527,6 +2527,9 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
 indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
+editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
+                                  window behaviour. May be 0 (windowed) or                 documents
+                                  1 (inline)
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
