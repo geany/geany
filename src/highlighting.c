@@ -1405,6 +1405,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_VERBATIM ||
 				style == SCE_C_USERLITERAL ||
 				style == SCE_C_TRIPLEVERBATIM ||
+				style == SCE_C_REGEX ||
 				style == SCE_C_HASHQUOTEDSTRING ||
 				style == SCE_C_ESCAPESEQUENCE);
 
@@ -1451,6 +1452,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_STRING_QR ||
 				style == SCE_PL_STRING_QW ||
 				style == SCE_PL_POD_VERB ||
+				style == SCE_PL_REGEX ||
+				style == SCE_PL_REGEX_VAR ||
 				style == SCE_PL_XLAT
 				/* we don't include any STRING_*_VAR for autocompletion */);
 
@@ -1472,6 +1475,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RB_HERE_Q ||
 				style == SCE_RB_HERE_QQ ||
 				style == SCE_RB_HERE_QX ||
+				style == SCE_RB_REGEX ||
 				style == SCE_RB_STRING_Q ||
 				style == SCE_RB_STRING_QQ ||
 				style == SCE_RB_STRING_QX ||
@@ -1521,9 +1525,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_HJA_DOUBLESTRING ||
 				style == SCE_HJA_SINGLESTRING ||
 				style == SCE_HJA_STRINGEOL ||
+				style == SCE_HJA_REGEX ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
 				style == SCE_HJ_STRINGEOL ||
+				style == SCE_HJ_REGEX ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -1572,6 +1578,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_COFFEESCRIPT:
 			return (style == SCE_COFFEESCRIPT_CHARACTER ||
 				style == SCE_COFFEESCRIPT_STRING ||
+				style == SCE_COFFEESCRIPT_REGEX ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX ||
 				style == SCE_COFFEESCRIPT_STRINGEOL);
 
 		case SCLEX_VERILOG:
