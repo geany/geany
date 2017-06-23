@@ -1690,7 +1690,7 @@ void document_reload_all_prompt(GeanyDocument *cur_doc)
 	foreach_document(i)
 	{
 		GeanyDocument *doc = documents[i];
-		if ((doc == cur_doc) || (document_check_disk_status(doc, TRUE)))
+		if (doc->file_name && ((doc == cur_doc) || (document_check_disk_status(doc, TRUE))))
 		{
 			call_proper_reload(doc);
 		}
