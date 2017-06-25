@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
 "PO-Revision-Date: 2010-03-05 17:14+0100\n"
 "Last-Translator: maacub <maacub@gmail.com>\n"
 "Language-Team: Asturian <alministradores@softastur.org>\n"
@@ -2324,53 +2324,53 @@ msgid ""
 "All rights reserved."
 msgstr ""
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "Tocante a Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "Un IDE rápidu y llixeru"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(construyíu en, o dempués del %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "Información"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "Desarrolladores"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 msgid "maintainer"
 msgstr "caltenedor"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "desendolcador"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "caltenedor de torna"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "Tornadores"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 msgid "Previous Translators"
 msgstr "Tornadores Anteriores"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 msgid "Contributors"
 msgstr "Collaboradores"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -2378,15 +2378,15 @@ msgstr ""
 "Dalgunos de los munchos collaboradores (pa una llista detallada, mira'l "
 "ficheru %s):"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "Créitos"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "Llicencia"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -3015,7 +3015,7 @@ msgstr "Ficheru %s guardáu."
 msgid "Wrap search and find again?"
 msgstr "¿Volver al entamu y guetar de nueves?"
 
-#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
@@ -3605,7 +3605,7 @@ msgstr ""
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:529 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:466
 msgid "Find"
 msgstr "Atopar"
 
@@ -3617,11 +3617,11 @@ msgstr "Guetar Siguente"
 msgid "Find Previous"
 msgstr "Guetar Anterior"
 
-#: ../src/keybindings.c:540 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:619
 msgid "Replace"
 msgstr "Reemplazar"
 
-#: ../src/keybindings.c:542 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Guetar en Ficheros"
 
@@ -4138,7 +4138,7 @@ msgid ""
 "plugin."
 msgstr ""
 
-#: ../src/pluginutils.c:411
+#: ../src/pluginutils.c:427
 msgid "Configure Plugins"
 msgstr "Configurar Plugins"
 
@@ -4398,7 +4398,7 @@ msgstr "Non se pudo criar el direutoriu principal pal proyeutu (%s)."
 msgid "Project file could not be written (%s)."
 msgstr "El ficheru de proyeutu non pudo ser escritu (%s)."
 
-#: ../src/project.c:779 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:629
 msgid "_Replace"
 msgstr "_Reemplazar"
 
@@ -4417,11 +4417,11 @@ msgstr "Escueye'l Nome del ficheru del Proyeutu"
 msgid "Project \"%s\" opened."
 msgstr "Proyeutu \"%s\" abiertu."
 
-#: ../src/search.c:308 ../src/search.c:960
+#: ../src/search.c:310 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "_Usar espresiones regulares"
 
-#: ../src/search.c:311
+#: ../src/search.c:313
 #, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
@@ -4430,11 +4430,11 @@ msgstr ""
 "Usar espresiones regulares estilo-POSIX. Por información detallada so l'usu "
 "d'espresiones regulares, por favor llee la documentación"
 
-#: ../src/search.c:316
+#: ../src/search.c:318
 msgid "Use _escape sequences"
 msgstr "Usar secuencies d'_escape"
 
-#: ../src/search.c:320
+#: ../src/search.c:322
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
@@ -4442,11 +4442,11 @@ msgstr ""
 "Reemplaza \\\\, \\t, \\n, \\r i \\uXXXX (caráuteres Unicode) polos "
 "carauteres de control correspondientes"
 
-#: ../src/search.c:323
+#: ../src/search.c:325
 msgid "Use multi-line matchin_g"
 msgstr ""
 
-#: ../src/search.c:328
+#: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4454,155 +4454,155 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 
-#: ../src/search.c:341
+#: ../src/search.c:343
 msgid "Search _backwards"
 msgstr "Guetar p'_atras"
 
-#: ../src/search.c:347 ../src/search.c:969
+#: ../src/search.c:349 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "_Respetar Mayúscules y minúscules"
 
-#: ../src/search.c:351 ../src/search.c:974
+#: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "Sólo _pallabres enteres"
 
-#: ../src/search.c:355
+#: ../src/search.c:357
 msgid "Match from s_tart of word"
 msgstr "Sólo dende l'entamu de les _pallabres"
 
-#: ../src/search.c:471
+#: ../src/search.c:473
 msgid "_Previous"
 msgstr "_Anterior"
 
-#: ../src/search.c:476
+#: ../src/search.c:478
 msgid "_Next"
 msgstr "Siguie_nte"
 
-#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
 msgid "_Search for:"
 msgstr "_Guetar por:"
 
 #. Now add the multiple match options
-#: ../src/search.c:508
+#: ../src/search.c:510
 msgid "_Find All"
 msgstr "Guetar _Toos"
 
-#: ../src/search.c:515
+#: ../src/search.c:517
 msgid "_Mark"
 msgstr "_Marcar"
 
-#: ../src/search.c:517
+#: ../src/search.c:519
 msgid "Mark all matches in the current document"
 msgstr "Marca toles coincidencies nel documentu"
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
 msgstr "Na _Sesión"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:529 ../src/search.c:704
 msgid "_In Document"
 msgstr "Nel _Documentu"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:535 ../src/search.c:717
 msgid "Close _dialog"
 msgstr "Zarrar _diálogu"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:539 ../src/search.c:721
 msgid "Disable this option to keep the dialog open"
 msgstr "Desactiva esta opción pa caltener el diálogu d'abrir"
 
-#: ../src/search.c:632
+#: ../src/search.c:634
 msgid "Replace & Fi_nd"
 msgstr "Reemplazar y G_uetar"
 
-#: ../src/search.c:641
+#: ../src/search.c:643
 msgid "Replace wit_h:"
 msgstr "Reem_plazar con:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:690
+#: ../src/search.c:692
 msgid "Re_place All"
 msgstr "Reemplazar _Toes"
 
-#: ../src/search.c:707
+#: ../src/search.c:709
 msgid "In Se_lection"
 msgstr "Na Se_leición"
 
-#: ../src/search.c:709
+#: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
 msgstr "Reemplaza toles ocurrencies atopaes nel testu actualmente seleicionáu"
 
-#: ../src/search.c:826
+#: ../src/search.c:828
 msgid "all"
 msgstr ""
 
-#: ../src/search.c:828
+#: ../src/search.c:830
 #, fuzzy
 msgid "project"
 msgstr "proyeutos"
 
-#: ../src/search.c:830
+#: ../src/search.c:832
 #, fuzzy
 msgid "custom"
 msgstr "Testu Personalizáu"
 
-#: ../src/search.c:834
+#: ../src/search.c:836
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
 
-#: ../src/search.c:896
+#: ../src/search.c:898
 msgid "Fi_les:"
 msgstr ""
 
-#: ../src/search.c:908
+#: ../src/search.c:910
 #, fuzzy
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Patrones de ficheros:"
 
-#: ../src/search.c:920
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "_Direutoriu:"
 
-#: ../src/search.c:939
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "_Codificación:"
 
-#: ../src/search.c:963
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr "Ver la páxina de manual grep pa más información"
 
-#: ../src/search.c:965
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "Operar _Recursivamente nos subdireutorios"
 
-#: ../src/search.c:978
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "_Invertir los resultaos de la gueta"
 
-#: ../src/search.c:982
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Invertir el sen de la rellación pa seleicionar llinies non venceyaes"
 
-#: ../src/search.c:999
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "Opciónes e_xtra:"
 
-#: ../src/search.c:1007
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Otres opciones a pasar a Grep"
 
-#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Atopóse %d coincidencia pa \"%s\"."
 msgstr[1] "Atopáronse %d coincidencies pa \"%s\"."
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Sustituyir %u coincidencies en %u documentos."
