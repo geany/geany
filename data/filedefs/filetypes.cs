@@ -7,6 +7,7 @@ primary=abstract as base bool break byte case catch char checked class const con
 secondary=add alias ascending async await descending dynamic from get global group into join let orderby partial remove select set value var where yield
 # these are some doxygen keywords (incomplete)
 docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
+# keywords: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 
 [lexer_properties=C]
 
