@@ -2530,21 +2530,24 @@ static gboolean find_next_snippet_indicator(GeanyEditor *editor, SelectionRange 
 	ScintillaObject *sci = editor->sci;
 	gint val;
 	gint pos = sci_get_current_position(sci);
-	gint start;
+
+	if (pos == sci_get_length(sci))
+		return FALSE; /* EOF */
 
 	/* Rewind the cursor a bit if we're in the middle (or start) of an indicator,
 	 * and treat that as the next indicator. */
 	while (SSM(sci, SCI_INDICATORVALUEAT, GEANY_INDICATOR_SNIPPET, pos) && pos > 0)
 		pos -= 1;
 
-	start = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, pos);
-	if (start == 0)
-		return FALSE; /* EOF */
+	/* Be careful at the beginning of the file */
+	if (SSM(sci, SCI_INDICATORVALUEAT, GEANY_INDICATOR_SNIPPET, pos))
+		sel->start = pos;
+	else
+		sel->start = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, pos);
+	sel->len = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, sel->start) - sel->start;
 
-	sel->start = start;
-	sel->len = SSM(sci, SCI_INDICATOREND, GEANY_INDICATOR_SNIPPET, start) - start;
-
-	return TRUE;
+	/* 0 if there is no remaining cursor */
+	return sel->len > 0;
 }
 
 
