@@ -2394,7 +2394,7 @@ typedef struct
 } SelectionRange;
 
 
-#define CURSOR_PLACEHOLDER "…" /* U+2026 */
+#define CURSOR_PLACEHOLDER "_" /* Would rather use … but not all docs are unicode */
 /* Replaces the internal cursor markers with the placeholder suitable for
  * display. Except for the first cursor if indicator_for_first is FALSE,
  * which is simply deleted.
