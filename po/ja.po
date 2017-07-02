@@ -409,11 +409,11 @@ msgstr "シンボルリストのオン／オフを切り替える"
 
 #: ../data/geany.glade.h:79
 msgid "Default symbol sorting mode"
-msgstr "デフォルトのシンボル ソート モード"
+msgstr "デフォルトのシンボル ソートモード"
 
 #: ../data/geany.glade.h:80
 msgid "Default sorting mode:"
-msgstr "デフォルトのソート モード:"
+msgstr "デフォルトのソートモード:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
@@ -1193,7 +1193,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "行末の空白とタブを除去"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "行末の空白やタブを除去します"
 
@@ -3296,9 +3295,8 @@ msgid "Delete to line end"
 msgstr "行末まで削除"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "行末まで削除"
+msgstr "行頭まで削除"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -4260,13 +4258,12 @@ msgid "_Use regular expressions"
 msgstr "正規表現を使用(_U)"
 
 #: ../src/search.c:313
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"POSIX 風の正規表現を使用します。正規表現の使用についてはドキュメントを読んで"
-"ください。"
+"Perl 風の正規表現を使用します。正規表現の使用については"
+"ドキュメントを読んでください。"
 
 #: ../src/search.c:318
 msgid "Use _escape sequences"
