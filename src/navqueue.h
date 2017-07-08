@@ -44,6 +44,8 @@ void navqueue_init(void);
 
 void navqueue_free(void);
 
+void navqueue_add_position(const gchar *utf8_filename, gint pos);
+
 void navqueue_remove_file(const gchar *filename);
 
 void navqueue_go_back(void);

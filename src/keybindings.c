@@ -560,6 +560,8 @@ static void init_default_kb(void)
 		GDK_Left, GDK_MOD1_MASK, "nav_back", _("Navigate back a location"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_FORWARD, NULL,
 		GDK_Right, GDK_MOD1_MASK, "nav_forward", _("Navigate forward a location"), NULL);
+	add_kb(group, GEANY_KEYS_GOTO_ADDPOSITION, NULL,
+		0, 0, "nav_addposition", _("Remember location in history"), NULL);
 	add_kb(group, GEANY_KEYS_GOTO_LINE, NULL,
 		GDK_l, GEANY_PRIMARY_MOD_MASK, "menu_gotoline", _("Go to Line"), "go_to_line1");
 	add_kb(group, GEANY_KEYS_GOTO_MATCHINGBRACE, NULL,
@@ -2022,6 +2024,10 @@ static gboolean cb_func_goto_action(guint key_id)
 			return TRUE;
 		case GEANY_KEYS_GOTO_FORWARD:
 			navqueue_go_forward();
+			return TRUE;
+		case GEANY_KEYS_GOTO_ADDPOSITION:
+			if (doc->file_name)
+				navqueue_add_position(doc->file_name, sci_get_current_position(doc->editor->sci));
 			return TRUE;
 		case GEANY_KEYS_GOTO_LINE:
 		{

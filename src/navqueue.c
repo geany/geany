@@ -113,7 +113,7 @@ queue_pos_matches(guint queue_pos, const gchar *fname, gint pos)
 }
 
 
-static void add_new_position(const gchar *utf8_filename, gint pos)
+void navqueue_add_position(const gchar *utf8_filename, gint pos)
 {
 	filepos *npos;
 	guint i;
@@ -165,13 +165,13 @@ gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint
 	{
 		gint cur_pos = sci_get_current_position(old_doc->editor->sci);
 
-		add_new_position(old_doc->file_name, cur_pos);
+		navqueue_add_position(old_doc->file_name, cur_pos);
 	}
 
 	/* now add new file position */
 	if (new_doc->file_name)
 	{
-		add_new_position(new_doc->file_name, pos);
+		navqueue_add_position(new_doc->file_name, pos);
 	}
 
 	return editor_goto_pos(new_doc->editor, pos, TRUE);
@@ -197,11 +197,11 @@ void navqueue_go_back(void)
 	/* If the navqueue is currently at some position A, but the actual cursor is at some other
 	 * place B, we should add B to the navqueue, so that (1) we go back to A, not to the next
 	 * item in the queue; and (2) we can later restore B by going forward.
-	 * (If A = B, add_new_position will ignore it.) */
+	 * (If A = B, navqueue_add_position will ignore it.) */
 	if (doc)
 	{
 		if (doc->file_name)
-			add_new_position(doc->file_name, sci_get_current_position(doc->editor->sci));
+			navqueue_add_position(doc->file_name, sci_get_current_position(doc->editor->sci));
 	}
 	else
 		/* see also https://github.com/geany/geany/pull/1537 */
