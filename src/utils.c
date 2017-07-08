@@ -451,10 +451,14 @@ const gchar *utils_path_skip_root(const gchar *path)
 }
 
 
+/* Convert a fractional @a val in the range [0, 1] to a whole value in the range [0, @a factor].
+ * In particular, this is used for converting a @c GdkColor to the "#RRGGBB" format in a way that
+ * agrees with GTK+, so the "#RRGGBB" in the color picker is the same "#RRGGBB" that is inserted
+ * into the document. See https://github.com/geany/geany/issues/1527
+ */
 gdouble utils_scale_round(gdouble val, gdouble factor)
 {
-	/*val = floor(val * factor + 0.5);*/
-	val = floor(val);
+	val = floor(val * factor + 0.5);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
 
@@ -881,9 +885,9 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	g_return_val_if_fail(color != NULL, NULL);
 
 	return g_strdup_printf("#%02X%02X%02X",
-		(guint) (utils_scale_round(color->red / 256, 255)),
-		(guint) (utils_scale_round(color->green / 256, 255)),
-		(guint) (utils_scale_round(color->blue / 256, 255)));
+		(guint) (utils_scale_round(color->red / 65535.0, 255)),
+		(guint) (utils_scale_round(color->green / 65535.0, 255)),
+		(guint) (utils_scale_round(color->blue / 65535.0, 255)));
 }
 
 
