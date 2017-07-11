@@ -1,5 +1,25 @@
 Geany 1.31 (unreleased)
 
+    Bug fixes
+    * Update statusbar after applying indentation detection.
+
+    Filetypes
+    * Add `parfor` to the Matlab keyword list (A. Tombs, PR#1021).
+    * C: fix line continuation handling (PR#1370).
+    * Add `require_relative` to the Ruby keyword list (Jacob H. Pratt,
+      PR#1472).
+    * Update Haxe keywords (PR#1216).
+    * Fix Arduino comment toggling (Giorgioggì, PR#1510).
+    * Update CMake keywords (Yan Pashkovsky, PR#1315).
+    * Update C# keywords (Yan Pashkovsky, PR#1315).
+
+    Internationalization
+    * Updated translations: ca, id, ja, kk, lt, ru
+
+    API
+    * Fix crash when calling plugin_set_key_group() more than once
+      (Jiří Techet, PR#1426).
+
 
 Geany 1.30.1 (March 19, 2017)
 
