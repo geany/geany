@@ -308,7 +308,7 @@ gchar *main_get_argv_filename(const gchar *filename)
 {
 	gchar *result;
 
-	if (g_path_is_absolute(filename) || utils_is_uri(filename))
+	if (utils_is_absolute_path(filename))
 		result = g_strdup(filename);
 	else
 	{
@@ -343,7 +343,7 @@ static void get_line_and_column_from_filename(gchar *filename, gint *line, gint 
 		return;
 
 	/* allow to open files like "test:0" */
-	if (g_file_test(filename, G_FILE_TEST_EXISTS))
+	if (utils_file_exists(filename))
 		return;
 
 	len = strlen(filename);
@@ -706,7 +706,7 @@ static gint create_config_dir(void)
 "Copy files from ", app->datadir, "/filedefs to this directory to overwrite "
 "them. To use the defaults, just delete the file in this directory.\nFor more information read "
 "the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").", NULL);
-			utils_write_file(filedefs_readme, text);
+			g_file_set_contents(filedefs_readme, text, strlen(text), NULL);
 			g_free(text);
 		}
 		g_free(filedefs_readme);
@@ -728,7 +728,7 @@ static gint create_config_dir(void)
 "There are several template files in this directory. For these templates you can use wildcards.\n\
 For more information read the documentation (in ", app->docdir, G_DIR_SEPARATOR_S "index.html or visit " GEANY_HOMEPAGE ").",
 					NULL);
-			utils_write_file(templates_readme, text);
+			g_file_set_contents(templates_readme, text, strlen(text), NULL);
 			g_free(text);
 		}
 		g_free(templates_readme);
@@ -776,6 +776,7 @@ static void signal_cb(gint sig)
 }
  */
 
+
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
 gboolean main_handle_filename(const gchar *locale_filename)
@@ -797,7 +798,7 @@ gboolean main_handle_filename(const gchar *locale_filename)
 	if (column >= 0)
 		cl_options.goto_column = column;
 
-	if (g_file_test(filename, G_FILE_TEST_IS_REGULAR))
+	if (utils_file_is_regular(filename))
 	{
 		doc = document_open_file(filename, cl_options.readonly, NULL, NULL);
 		/* add recent file manually if opening_session_files is set */
@@ -835,7 +836,7 @@ static void open_cl_files(gint argc, gchar **argv)
 	{
 		gchar *filename = main_get_argv_filename(argv[i]);
 
-		if (g_file_test(filename, G_FILE_TEST_IS_DIR))
+		if (utils_file_is_dir(filename))
 		{
 			g_free(filename);
 			continue;

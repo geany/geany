@@ -909,7 +909,7 @@ at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\
 	toolbar_reload(str->str);
 
 	filename = g_build_filename(app->configdir, "ui_toolbar.xml", NULL);
-	utils_write_file(filename, str->str);
+	g_file_set_contents(filename, str->str, str->len, NULL);
 	g_free(filename);
 
 	g_string_free(str, TRUE);

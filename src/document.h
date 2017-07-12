@@ -83,7 +83,7 @@ typedef struct GeanyDocument
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
 	gboolean		 has_tags;
-	/** The UTF-8 encoded file name.
+	/** The UTF-8 encoded file name or URI for remote files.
 	 * Be careful; glibc and GLib file functions expect the locale representation of the
 	 * file name which can be different from this.
 	 * For conversion into locale encoding, you can use @ref utils_get_locale_from_utf8().
@@ -104,7 +104,7 @@ typedef struct GeanyDocument
 	gboolean		 readonly;
 	/** Whether this document has been changed since it was last saved. */
 	gboolean		 changed;
-	/** The link-dereferenced, locale-encoded file name.
+	/** The link-dereferenced, locale-encoded file name (URI for remote files).
 	 * If non-NULL, this indicates the file once existed on disk (not just as an
 	 * unsaved document with a filename set).
 	 *

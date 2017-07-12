@@ -27,6 +27,8 @@
 # include <windows.h> /* for GetFullPathName */
 #endif
 
+#include "utils.h"
+
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
@@ -112,7 +114,7 @@ static char *realpath (const char *pathname, char *resolved_path)
 
 /**
  Given a file name, returns a newly allocated string containing the realpath()
- of the file.
+ of the file. If the filename is URI, it returns @file_name unmodified.
  @param file_name The original file_name
  @return A newly allocated string containing the real path to the file. NULL if none is available.
 */
@@ -129,6 +131,10 @@ gchar *tm_get_real_path(const gchar *file_name)
 		else
 			g_free(path);
 	}
+
+	if (utils_is_uri(file_name))
+		return g_strdup(file_name);
+
 	return NULL;
 }
 
@@ -662,7 +668,7 @@ static gboolean ctags_new_tag(const tagEntryInfo *const tag,
 
 /* Initializes a TMSourceFile structure from a file name. */
 static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
-	const char* name)
+	const char* name, gboolean remote)
 {
 	GStatBuf s;
 	int status;
@@ -671,7 +677,10 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	g_message("Source File init: %s", file_name);
 #endif
 
-	if (file_name != NULL)
+	if (file_name == NULL)
+		return FALSE;
+
+	if (!remote)
 	{
 		status = g_stat(file_name, &s);
 		if (0 != status)
@@ -684,13 +693,13 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 			g_warning("%s: Not a regular file", file_name);
 			return FALSE;
 		}
-		source_file->file_name = tm_get_real_path(file_name);
-		source_file->short_name = strrchr(source_file->file_name, '/');
-		if (source_file->short_name)
-			++ source_file->short_name;
-		else
-			source_file->short_name = source_file->file_name;
 	}
+	source_file->file_name = tm_get_real_path(file_name);
+	source_file->short_name = strrchr(source_file->file_name, '/');
+	if (source_file->short_name)
+		++ source_file->short_name;
+	else
+		source_file->short_name = source_file->file_name;
 
 	source_file->tags_array = g_ptr_array_new();
 
@@ -699,7 +708,23 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	else
 		source_file->lang = tm_ctags_get_named_lang(name);
 
+	source_file->is_remote = remote;
+
 	return TRUE;
+}
+
+TMSourceFile *tm_source_file_new_full(const char *file_name, const char *name, gboolean remote)
+{
+	TMSourceFilePriv *priv;
+
+	SOURCE_FILE_NEW(priv);
+	if (TRUE != tm_source_file_init(&priv->public, file_name, name, remote))
+	{
+		SOURCE_FILE_FREE(priv);
+		return NULL;
+	}
+	priv->refcount = 1;
+	return &priv->public;
 }
 
 /** Initializes a TMSourceFile structure and returns a pointer to it. The
@@ -711,16 +736,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 GEANY_API_SYMBOL
 TMSourceFile *tm_source_file_new(const char *file_name, const char *name)
 {
-	TMSourceFilePriv *priv;
-
-	SOURCE_FILE_NEW(priv);
-	if (TRUE != tm_source_file_init(&priv->public, file_name, name))
-	{
-		SOURCE_FILE_FREE(priv);
-		return NULL;
-	}
-	priv->refcount = 1;
-	return &priv->public;
+	return tm_source_file_new_full(file_name, name, FALSE);
 }
 
 
@@ -799,7 +815,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		return FALSE;
 	}
 	
-	if (source_file->lang == TM_PARSER_NONE)
+	if (source_file->lang == TM_PARSER_NONE || (source_file->is_remote && !use_buffer))
 	{
 		tm_tags_array_free(source_file->tags_array, FALSE);
 		return FALSE;

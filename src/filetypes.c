@@ -766,23 +766,26 @@ GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
-	gchar *lines[2];
-	FILE  *f;
+	gchar *lines[2] = {line, NULL};
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
+	GFile *file;
+	GFileInputStream *stream;
 
-	f = g_fopen(locale_name, "r");
-	g_free(locale_name);
-	if (f != NULL)
+	line[0] = '\0';
+	file = utils_gfile_create(locale_name);
+	stream = g_file_read(file, NULL, NULL);
+	if (stream)
 	{
-		if (fgets(line, sizeof(line), f) != NULL)
-		{
-			fclose(f);
-			lines[0] = line;
-			lines[1] = NULL;
-			return filetypes_detect_from_file_internal(utf8_filename, lines);
-		}
-		fclose(f);
+		if (g_input_stream_read(G_INPUT_STREAM(stream), line, sizeof(line), NULL, NULL) == -1)
+			line[0] = '\0';
+		g_object_unref(stream);
 	}
+	g_object_unref(file);
+	g_free(locale_name);
+
+	if (*line)
+		return filetypes_detect_from_file_internal(utf8_filename, lines);
+
 	return filetypes_detect_from_extension(utf8_filename);
 }
 #endif
@@ -1178,7 +1181,7 @@ void filetypes_save_commands(GeanyFiletype *ft)
 	g_key_file_load_from_file(config_home, fname, G_KEY_FILE_KEEP_COMMENTS, NULL);
 	build_save_menu(config_home, ft, GEANY_BCS_HOME_FT);
 	data = g_key_file_to_data(config_home, NULL, NULL);
-	utils_write_file(fname, data);
+	g_file_set_contents(fname, data, strlen(data), NULL);
 	g_free(data);
 	g_key_file_free(config_home);
 	g_free(fname);

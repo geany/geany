@@ -628,7 +628,7 @@ void configuration_save(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);
@@ -1072,7 +1072,7 @@ void configuration_save_default_session(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);
@@ -1093,7 +1093,7 @@ void configuration_clear_default_session(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 	g_free(data);
 
 	g_key_file_free(config);
@@ -1179,7 +1179,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	if (len > 8)
 		line_breaking = atoi(tmp[8]);
 
-	if (g_file_test(locale_filename, G_FILE_TEST_IS_REGULAR))
+	if (utils_file_is_regular(locale_filename))
 	{
 		GeanyFiletype *ft = filetypes_lookup_by_name(ft_name);
 		GeanyDocument *doc = document_open_file_full(

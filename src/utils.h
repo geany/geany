@@ -211,8 +211,9 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
-
 #ifdef GEANY_PRIVATE
+
+#define USE_GIO_FILE_OPERATIONS (!file_prefs.use_safe_file_saving && file_prefs.use_gio_unsafe_file_saving)
 
 typedef enum
 {
@@ -246,10 +247,6 @@ const gchar *utils_get_eol_short_name(gint eol_mode);
 gboolean utils_atob(const gchar *str);
 
 void utils_tidy_path(gchar *filename);
-
-gboolean utils_is_absolute_path(const gchar *path);
-
-const gchar *utils_path_skip_root(const gchar *path);
 
 gdouble utils_scale_round(gdouble val, gdouble factor);
 
@@ -324,6 +321,23 @@ gchar *utils_get_user_config_dir(void);
 const gchar *utils_resource_dir(GeanyResourceDirType type);
 
 void utils_start_new_geany_instance(const gchar *doc_path);
+
+gboolean utils_file_exists(const gchar *fname);
+
+gboolean utils_file_is_dir(const gchar *fname);
+
+gboolean utils_file_is_regular(const gchar *fname);
+
+GFile *utils_gfile_create(const gchar *fname);
+
+gint utils_write_file_full(const gchar *locale_filename, const gchar *data,
+		gsize len, GError **error);
+
+gboolean utils_read_file(const gchar *locale_filename, char **contents,
+		gsize *length, GError **error);
+
+gboolean utils_is_absolute_path(const gchar *fname);
+
 
 #endif /* GEANY_PRIVATE */
 

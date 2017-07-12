@@ -1051,7 +1051,7 @@ static void documents_menu_update(GtkTreeSelection *selection)
 			DOCUMENTS_SHORTNAME, &shortname, -1);
 	}
 	path = !EMPTY(shortname) &&
-		(g_path_is_absolute(shortname) ||
+		(utils_is_absolute_path(shortname) ||
 		(app->project && g_str_has_prefix(shortname, app->project->name)));
 
 	/* can close all, save all (except shortname), but only reload individually ATM */

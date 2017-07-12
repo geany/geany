@@ -34,6 +34,7 @@ typedef struct TMSourceFile
 	char *file_name; /**< Full file name (inc. path) */
 	char *short_name; /**< Just the name of the file (without the path) */
 	GPtrArray *tags_array; /**< Sorted tag array obtained by parsing the object. @elementtype{TMTag} */
+	gboolean is_remote; /* TRUE when the file is not locally accessible */
 } TMSourceFile;
 
 GType tm_source_file_get_type(void);
@@ -45,6 +46,8 @@ void tm_source_file_free(TMSourceFile *source_file);
 gchar *tm_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
+
+TMSourceFile *tm_source_file_new_full(const char *file_name, const char *name, gboolean remote);
 
 const gchar *tm_source_file_get_lang_name(TMParserType lang);
 

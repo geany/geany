@@ -235,7 +235,7 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
 	static wchar_t w_dir[MAX_PATH];
 	gchar *result;
 
-	if (g_file_test(utf8_filename, G_FILE_TEST_IS_DIR))
+	if (utils_file_is_dir(utf8_filename))
 		result = (gchar*) utf8_filename;
 	else
 		result = g_path_get_dirname(utf8_filename);
@@ -651,7 +651,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	if (field[0])
 	{
 		filename = g_find_program_in_path(field[0]);
-		if (filename != NULL && g_file_test(filename, G_FILE_TEST_EXISTS))
+		if (filename != NULL && utils_file_exists(filename))
 		{
 			MultiByteToWideChar(CP_UTF8, 0, filename, -1, fname, G_N_ELEMENTS(fname));
 			g_free(filename);

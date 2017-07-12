@@ -1680,6 +1680,7 @@ void symbols_show_load_tags_dialog(void)
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK,
 		NULL);
+	gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(dialog), FALSE);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	filter = gtk_file_filter_new();
 	gtk_file_filter_set_name(filter, _("Geany tags file (*.*.tags)"));

@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = tagmanager
-
 EXTRA_DIST = \
 	gb.c \
 	plugindata.h \
@@ -15,6 +13,7 @@ EXTRA_DIST = \
 AM_CPPFLAGS = \
 	-I$(top_srcdir) \
 	-I$(top_srcdir)/scintilla/include \
+	-I$(top_srcdir)/ctags/main \
 	-I$(srcdir)/tagmanager \
 	-DGTK \
 	-DGEANY_PRIVATE \
@@ -32,6 +31,13 @@ geany_LDFLAGS =
 if ENABLE_BINRELOC
 geany_LDFLAGS += -Wl,-rpath='$$ORIGIN/../lib'
 endif
+
+tagmanager_includedir = $(includedir)/geany/tagmanager
+tagmanager_include_HEADERS = \
+	tagmanager/tm_source_file.h \
+	tagmanager/tm_tag.h \
+	tagmanager/tm_workspace.h \
+	tagmanager/tm_parser.h
 
 geany_includedir = $(includedir)/geany
 geany_include_HEADERS = \
@@ -64,7 +70,20 @@ geany_include_HEADERS = \
 	ui_utils.h \
 	utils.h
 
+TM_SRCS = \
+	tagmanager/tm_parser.c \
+	tagmanager/tm_parser.h \
+	tagmanager/tm_source_file.c \
+	tagmanager/tm_source_file.h \
+	tagmanager/tm_tag.c \
+	tagmanager/tm_tag.h \
+	tagmanager/tm_workspace.c \
+	tagmanager/tm_workspace.h \
+	tagmanager/tm_ctags_wrappers.c \
+	tagmanager/tm_ctags_wrappers.h
+
 libgeany_la_SOURCES = \
+	$(TM_SRCS) \
 	about.c about.h \
 	app.h \
 	build.c build.h \
@@ -120,7 +139,7 @@ libgeany_la_LDFLAGS = @LIBGEANY_LDFLAGS@
 
 libgeany_la_LIBADD = \
 	$(top_builddir)/scintilla/libscintilla.la \
-	$(builddir)/tagmanager/libtagmanager.la \
+	$(top_builddir)/ctags/libctags.la \
 	@GTK_LIBS@ \
 	@GTHREAD_LIBS@ \
 	$(MAC_INTEGRATION_LIBS) \

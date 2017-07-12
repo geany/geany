@@ -150,13 +150,13 @@ static gboolean open_file_dialog_handle_response(GtkWidget *dialog, gint respons
 		if (filesel_state.open.encoding_idx >= 0 && filesel_state.open.encoding_idx < GEANY_ENCODINGS_MAX)
 			charset = encodings[filesel_state.open.encoding_idx].charset;
 
-		filelist = gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(dialog));
+		filelist = gtk_file_chooser_get_uris(GTK_FILE_CHOOSER(dialog));
 		if (filelist != NULL)
 		{
 			const gchar *first = filelist->data;
 
 			// When there's only one filename it may have been typed manually
-			if (!filelist->next && !g_file_test(first, G_FILE_TEST_EXISTS))
+			if (!filelist->next && !utils_file_exists(first))
 			{
 				dialogs_show_msgbox(GTK_MESSAGE_ERROR, _("\"%s\" was not found."), first);
 				ret = FALSE;
@@ -472,7 +472,7 @@ void dialogs_show_open_file(void)
 
 		open_file_dialog_apply_settings(dialog);
 
-		if (initdir != NULL && g_path_is_absolute(initdir))
+		if (initdir != NULL && utils_is_absolute_path(initdir))
 				gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), initdir);
 
 		if (app->project && !EMPTY(app->project->base_path))
@@ -519,8 +519,9 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 {
 	gboolean rename_file = FALSE;
 	gboolean success = FALSE;
-	gchar *new_filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+	gchar *new_filename = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(dialog));
 
+	SETPTR(new_filename, utils_get_path_from_uri(new_filename));
 	switch (response)
 	{
 		case GEANY_RESPONSE_RENAME:
@@ -530,7 +531,7 @@ static gboolean save_as_dialog_handle_response(GtkWidget *dialog, gint response)
 				utils_beep();
 				break;
 			}
-			if (g_file_test(new_filename, G_FILE_TEST_EXISTS) &&
+			if (utils_file_exists(new_filename) &&
 				!dialogs_show_question_full(NULL, NULL, NULL,
 					_("Overwrite?"),
 					_("Filename already exists!")))
@@ -607,7 +608,7 @@ static gboolean show_save_as_gtk(GeanyDocument *doc)
 
 	if (doc->file_name != NULL)
 	{
-		if (g_path_is_absolute(doc->file_name))
+		if (utils_is_absolute_path(doc->file_name))
 		{
 			gchar *locale_filename = utils_get_locale_from_utf8(doc->file_name);
 			gchar *locale_basename = g_path_get_basename(locale_filename);
@@ -1150,17 +1151,16 @@ gboolean dialogs_show_input_numeric(const gchar *title, const gchar *label_text,
 void dialogs_show_file_properties(GeanyDocument *doc)
 {
 	GtkWidget *dialog, *label, *image, *check;
-	gchar *file_size, *title, *base_name, *time_changed, *time_modified, *time_accessed, *enctext;
+	gchar *file_size, *title, *base_name, *enctext;
+	gchar *time_changed = NULL;
+	gchar *time_modified = NULL;
+	gchar *time_accessed = NULL;
 	gchar *short_name;
-#ifdef HAVE_SYS_TYPES_H
-	GStatBuf st;
-	off_t filesize;
-	mode_t mode;
+	GFile *file;
+	GFileInfo *info;
+	goffset filesize = 0;
+	guint mode = 0;
 	gchar *locale_filename;
-#else
-	gint filesize = 0;
-	gint mode = 0;
-#endif
 
 /* define this ones, to avoid later trouble */
 #ifndef S_IRUSR
@@ -1186,33 +1186,43 @@ void dialogs_show_file_properties(GeanyDocument *doc)
 		return;
 	}
 
-
-#ifdef HAVE_SYS_TYPES_H
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
-	if (g_stat(locale_filename, &st) == 0)
+	file = utils_gfile_create(locale_filename);
+	info = g_file_query_info(file,
+		"time::changed,time::modified,time::access,unix::mode,standard::size",
+		G_FILE_QUERY_INFO_NONE, NULL, NULL);
+
+	if (info)
 	{
+		gulong timeval;
+
 		/* first copy the returned string and the trim it, to not modify the static glibc string
 		 * g_strchomp() is used to remove trailing EOL chars, which are there for whatever reason */
-		time_changed  = g_strchomp(g_strdup(ctime(&st.st_ctime)));
-		time_modified = g_strchomp(g_strdup(ctime(&st.st_mtime)));
-		time_accessed = g_strchomp(g_strdup(ctime(&st.st_atime)));
-		filesize = st.st_size;
-		mode = st.st_mode;
+		timeval = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_TIME_CHANGED);
+		if (timeval != 0)
+			time_changed = g_strchomp(g_strdup(ctime(&timeval)));
+		timeval = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+		if (timeval != 0)
+			time_modified = g_strchomp(g_strdup(ctime(&timeval)));
+		timeval = g_file_info_get_attribute_uint64(info, G_FILE_ATTRIBUTE_TIME_ACCESS);
+		if (timeval != 0)
+			time_accessed = g_strchomp(g_strdup(ctime(&timeval)));
+
+		filesize = g_file_info_get_size(info);
+		mode = g_file_info_get_attribute_uint32(info, G_FILE_ATTRIBUTE_UNIX_MODE);
+
+		g_object_unref(info);
 	}
-	else
-	{
-		time_changed  = g_strdup(_("unknown"));
-		time_modified = g_strdup(_("unknown"));
-		time_accessed = g_strdup(_("unknown"));
-		filesize = (off_t) 0;
-		mode = (mode_t) 0;
-	}
+
+	g_object_unref(file);
 	g_free(locale_filename);
-#else
-	time_changed  = g_strdup(_("unknown"));
-	time_modified = g_strdup(_("unknown"));
-	time_accessed = g_strdup(_("unknown"));
-#endif
+
+	if (time_changed == NULL)
+		time_changed  = g_strdup(_("unknown"));
+	if (time_modified == NULL)
+		time_modified = g_strdup(_("unknown"));
+	if (time_accessed == NULL)
+		time_accessed = g_strdup(_("unknown"));
 
 	base_name = g_path_get_basename(doc->file_name);
 	short_name = utils_str_middle_truncate(base_name, 30);

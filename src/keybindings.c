@@ -791,7 +791,7 @@ static void load_user_kb(void)
 	if (!g_file_test(configfile, G_FILE_TEST_EXISTS))
 	{
 		gchar *geanyconf = g_build_filename(app->configdir, "geany.conf", NULL);
-		const gchar data[] = "[Bindings]\n"
+		const gchar *data = "[Bindings]\n"
 			"popup_gototagdefinition=\n"
 			"edit_transposeline=<Control>t\n"
 			"edit_movelineup=\n"
@@ -799,8 +799,8 @@ static void load_user_kb(void)
 			"move_tableft=<Alt>Page_Up\n"
 			"move_tabright=<Alt>Page_Down\n";
 
-		utils_write_file(configfile, g_file_test(geanyconf, G_FILE_TEST_EXISTS) ?
-			data : "");
+		data = g_file_test(geanyconf, G_FILE_TEST_EXISTS) ? data : "";
+		g_file_set_contents(configfile, data, strlen(data), NULL);
 		g_free(geanyconf);
 	}
 
@@ -908,7 +908,7 @@ void keybindings_write_to_file(void)
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
-	utils_write_file(configfile, data);
+	g_file_set_contents(configfile, data, strlen(data), NULL);
 
 	g_free(data);
 	g_free(configfile);
