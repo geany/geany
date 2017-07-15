@@ -2,6 +2,8 @@ Geany 1.31 (unreleased)
 
     Bug fixes
     * Update statusbar after applying indentation detection.
+    * Fix converting color to hex for insertion in the Color Chooser
+      dialog (Vasiliy Faronov, PR#1536).
 
     Filetypes
     * Add `parfor` to the Matlab keyword list (A. Tombs, PR#1021).
@@ -12,6 +14,7 @@ Geany 1.31 (unreleased)
     * Fix Arduino comment toggling (Giorgioggì, PR#1510).
     * Update CMake keywords (Yan Pashkovsky, PR#1315).
     * Update C# keywords (Yan Pashkovsky, PR#1315).
+    * Update HTML keywords (Vasiliy Faronov, PR#1530).
 
     Internationalization
     * Updated translations: ca, id, ja, kk, lt, ru
