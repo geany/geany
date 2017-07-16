@@ -34,6 +34,7 @@ identifiers=ArithmeticError AssertionError AttributeError BaseException Blocking
 [lexer_properties]
 fold.comment.python=1
 fold.quotes.python=1
+lexer.python.keywords2.no.sub.identifiers=1
 
 [settings]
 # default extension used when saving files
