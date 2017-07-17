@@ -2598,6 +2598,11 @@ gio_unsafe_save_backup            Make a backup when using GIO unsafe file     f
 keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
                                   reloading a file, and allow the operation
                                   to be reverted.
+reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
+                                  that have no changes but which have changed
+                                  on disk.
+                                  If unsaved changes exist then the user is
+                                  prompted to reload manually.
 **Filetype related**
 extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.
