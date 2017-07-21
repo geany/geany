@@ -2158,8 +2158,8 @@ static gboolean cb_func_editor_action(guint key_id)
 			duplicate_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
-			editor_goto_next_snippet_cursor(doc->editor);
-			break;
+			/* allow overloading */
+			return editor_goto_next_snippet_cursor(doc->editor);
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
 			break;
