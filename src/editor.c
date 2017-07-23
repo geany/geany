@@ -2390,7 +2390,7 @@ typedef struct
 } SelectionRange;
 
 
-#define CURSOR_PLACEHOLDER "_" /* Would rather use … but not all docs are unicode */
+#define CURSOR_PLACEHOLDER "..." /* Would rather use … but not all docs are unicode */
 
 
 /* Replaces the internal cursor markers with the placeholder suitable for
