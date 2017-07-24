@@ -2562,7 +2562,6 @@ gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor)
 	}
 	else
 	{
-		utils_beep();
 		return FALSE;
 	}
 }
