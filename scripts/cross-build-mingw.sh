@@ -102,6 +102,9 @@ cd _build
   --host=$HOST \
   --disable-silent-rules \
   --prefix="$PWD/../_install" \
-  $CONFIGUREFLAGS
+  $CONFIGUREFLAGS || {
+  cat config.log
+  exit 1
+}
 make $MAKEFLAGS
 make $MAKEFLAGS install
