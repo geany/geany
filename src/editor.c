@@ -2458,7 +2458,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 	gint line_start = sci_get_line_from_position(sci, insert_pos);
 	GString *buf;
 	const gchar *eol = editor_get_eol_char(editor);
-	gint idx;
 	GSList *jump_locs, *item;
 
 	g_return_if_fail(text);
@@ -2475,6 +2474,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 		/* count indent size up to insert_pos instead of asking sci
 		 * because there may be spaces after it */
 		gchar *tmp = sci_get_line(sci, line_start);
+		gint idx;
 
 		idx = insert_pos - sci_get_position_from_line(sci, line_start);
 		tmp[idx] = '\0';
@@ -2516,7 +2516,7 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 
 	/* Set cursor to the requested index, or by default to after the snippet */
 	if (cursor_index >= 0)
-		sci_set_current_position(sci, insert_pos + idx, FALSE);
+		sci_set_current_position(sci, insert_pos + cursor_index, FALSE);
 	else if (jump_locs == NULL)
 		sci_set_current_position(sci, insert_pos + buf->len, FALSE);
 
