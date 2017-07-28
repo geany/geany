@@ -1902,6 +1902,7 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 				plugin_list = NULL;
 			}
 			gtk_widget_destroy(GTK_WIDGET(dialog));
+			pm_widgets.dialog = NULL;
 
 			configuration_save();
 			break;
@@ -1918,6 +1919,12 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *vbox, *vbox2, *swin, *label, *menu_item, *filter_entry;
+
+	if (pm_widgets.dialog != NULL)
+	{
+		gtk_window_present(GTK_WINDOW(pm_widgets.dialog));
+		return;
+	}
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
