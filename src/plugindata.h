@@ -284,6 +284,118 @@ void geany_load_module(GeanyPlugin *plugin);
 
 #endif
 
+/**
+ * Type of function called when the plugin is activated.
+ *
+ * This happens either when the user activates it from the Plugin Manager
+ * dialog or when Geany starts, if the plugin was activated at last run.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @returns `TRUE` if the plugin loaded successfully, `FALSE` otherwise.
+ *
+ * @since Geany 1.29 (API 231)
+ * @see GeanyPluginCleanupFunc
+ */
+typedef gboolean (*GeanyPluginInitFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Like @ref GeanyPluginInitFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginInitFunc
+ * @see GeanyPluginSwappedCleanup
+ */
+typedef gboolean (*GeanyPluginSwappedInitFunc) (gpointer pdata, GeanyPlugin *plugin);
+
+/**
+ * Type of function called when the plugin should create a configuration GUI.
+ *
+ * This happens when the user activates Geany's "Plugin Preferences" dialog
+ * in order to configure plugins. The plugin should create its preferences
+ * GUI (if not already created) and return the top-most GtkWidget. Usually
+ * this will be some kind of GtkBox or GtkNotebook or other container, and
+ * at present it will be added to a GtkNotebook as a page along with other
+ * plugins. If you intend to recycle to same GUI each call, remember to
+ * hold a GObject reference on the widget so it is not destroyed when
+ * the "Plugin Preferences" dialog is.
+ *
+ * The @a dialog parameter is provided so plugins can connect to its
+ * "response" signal. Typically a plugin will handle `GTK_RESPONSE_OK`
+ * (the dialog was accepted and dismissed), `GTK_RESPONSE_ACCEPT` (the
+ * "Apply" button was clicked but the dialog was not dismissed), or any
+ * other response meaning the dialog was cancelled without accepting any
+ * changes.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param dialog The top-level window/dialog beneath which the provided
+ * GUI will be packed into.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @returns A GtkWidget providing the GUI needed to configure the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef GtkWidget* (*GeanyPluginConfigureFunc) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
+
+/**
+ * Like @ref GeanyPluginConfigureFunc but with argument 1 and 3 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginConfigureFunc
+ */
+typedef GtkWidget* (*GeanyPluginSwappedConfigureFunc) (gpointer pdata, GtkDialog *dialog, GeanyPlugin *plugin);
+
+/**
+ * Type of function called when the plugin should show its help documentation.
+ *
+ * Commonly, a plugin will ship with some kind of documentation viewable
+ * in a web browser. To enable this, the utils_open_browser function is
+ * provided to plugins. Alternatively, a plugin could load its README or
+ * other documentation file(s) directly into Geany using document_open_file.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef void (*GeanyPluginHelpFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Like @ref GeanyPluginHelpFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginHelpFunc
+ */
+typedef void (*GeanyPluginSwappedHelpFunc) (gpointer pdata, GeanyPlugin *plugin);
+
+/**
+ * Type of function called when the plugin is de-activated.
+ *
+ * This either occurs when the user de-activates the plugin using the
+ * Plugin Manager dialog or when Geany itself is closing. Plugins should
+ * perform any required cleanup or restoration at this point.
+ *
+ * @param plugin Pointer to the GeanyPlugin structure for the plugin.
+ * @param pdata Pointer passed to one of the `_register()` or `_set_data()`
+ * functions for the plugin.
+ *
+ * @since Geany 1.29 (API 231)
+ */
+typedef void (*GeanyPluginCleanupFunc) (GeanyPlugin *plugin, gpointer pdata);
+
+/**
+ * Like @ref GeanyPluginCleanupFunc but with argument 1 and 2 swapped.
+ *
+ * @since Geany 1.29 (API 232)
+ * @see GeanyPluginCleanupFunc
+ */
+typedef void (*GeanyPluginSwappedCleanupFunc) (gpointer pdata, GeanyPlugin *plugin);
+
 /** Callback functions that need to be implemented for every plugin.
  *
  * These callbacks should be registered by the plugin within Geany's call to
@@ -301,13 +413,41 @@ struct GeanyPluginFuncs
 	/** Array of plugin-provided signal handlers @see PluginCallback */
 	PluginCallback *callbacks;
 	/** Called to initialize the plugin, when the user activates it (must not be @c NULL) */
-	gboolean    (*init)      (GeanyPlugin *plugin, gpointer pdata);
-	/** plugins configure dialog, optional (can be @c NULL) */
-	GtkWidget*  (*configure) (GeanyPlugin *plugin, GtkDialog *dialog, gpointer pdata);
+	GeanyPluginInitFunc init;
+	/** Plugin's configure dialog, optional (can be @c NULL) */
+	GeanyPluginConfigureFunc configure;
 	/** Called when the plugin should show some help, optional (can be @c NULL) */
-	void        (*help)      (GeanyPlugin *plugin, gpointer pdata);
+	GeanyPluginHelpFunc help;
 	/** Called when the plugin is disabled or when Geany exits (must not be @c NULL) */
-	void        (*cleanup)   (GeanyPlugin *plugin, gpointer pdata);
+	GeanyPluginCleanupFunc cleanup;
+	/**
+	 * Like GeanyPluginFuncs::init but with parameter 1 and 2 swapped. If `NULL`
+	 * then GeanyPluginFuncs::init will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedInitFunc init_swapped;
+	/**
+	 * Like GeanyPluginFuncs::configure but with parameter 1 and 3 swapped.
+	 * If `NULL` then GeanyPluginFuncs::configure will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedConfigureFunc configure_swapped;
+	/**
+	 * Like GeanyPluginFuncs::help but with parameter 1 and 2 swapped. If `NULL`
+	 * then GeanyPluginFuncs::help will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedHelpFunc help_swapped;
+	/**
+	 * Like GeanyPluginFuncs::cleanup but with parameter 1 and 2 swapped. If
+	 * `NULL` then GeanyPluginFuncs::cleanup will be tried.
+	 *
+	 * @since Geany 1.29 (API 232)
+	 */
+	GeanyPluginSwappedCleanupFunc cleanup_swapped;
 };
 
 gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
@@ -338,6 +478,39 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 #define GEANY_PLUGIN_REGISTER_FULL(plugin, min_api_version, pdata, free_func) \
 	geany_plugin_register_full((plugin), GEANY_API_VERSION, \
 	                           (min_api_version), GEANY_ABI_VERSION, (pdata), (free_func))
+
+/**
+ * Convenience macro to register a GObject instance.
+ *
+ * The instance is scoped to the module's lifetime, which is distinct
+ * from the activation lifetime of the plugin. Typically the GObject
+ * will have member functions to handle the `init()`, `cleanup()` and
+ * other GeanyPluginFuncs.
+ *
+ * @warning Forgetting to pass `NULL` as the last argument is likely
+ * to lead strange and confusing (undefined) behaviour. The compiler
+ * should offer useful warnings if not ignored.
+ *
+ * @warning Never call geany_plugin_set_data() if you have used this
+ * macro. The data has already been bound to the instance of the
+ * given GType.
+ *
+ * @param plugin  The GeanyPlugin instance.
+ * @param min_api The minimum GEANY_API_VERSION required.
+ * @param gtype   The GType of the GObject class.
+ * @param ...     A `NULL`-terminated list of construction properties
+ *                as passed to `g_object_new()`.
+ *
+ * @since Geany 1.29 (API 230)
+ *
+ * @see GEANY_PLUGIN_REGISTER_FULL()
+ */
+#define GEANY_PLUGIN_REGISTER_OBJECT(plugin, min_api, gtype, ...) \
+	plugin_module_make_resident(plugin);                          \
+	GEANY_PLUGIN_REGISTER_FULL(plugin,                            \
+	                           min_api,                           \
+	                           g_object_new(gtype, __VA_ARGS__),  \
+	                           g_object_unref)
 
 /** Return values for GeanyProxyHooks::probe()
  *
