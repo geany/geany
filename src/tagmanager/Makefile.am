@@ -1,8 +1,9 @@
 AM_CPPFLAGS = \
-	-I$(srcdir) \
+	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/ctags/main \
 	-DGEANY_PRIVATE \
 	-DG_LOG_DOMAIN=\"Tagmanager\"
+
 AM_CFLAGS = \
 	$(GTK_CFLAGS) \
 	@LIBGEANY_CFLAGS@
@@ -11,6 +12,7 @@ noinst_LTLIBRARIES = libtagmanager.la
 
 tagmanager_includedir = $(includedir)/geany/tagmanager
 tagmanager_include_HEADERS = \
+	tm_query.h \
 	tm_source_file.h \
 	tm_tag.h \
 	tm_workspace.h \
@@ -20,6 +22,8 @@ tagmanager_include_HEADERS = \
 libtagmanager_la_SOURCES =\
 	tm_parser.h \
 	tm_parser.c \
+	tm_query.c \
+	tm_query.h \
 	tm_source_file.h \
 	tm_source_file.c \
 	tm_tag.h \

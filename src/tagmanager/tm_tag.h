@@ -106,6 +106,14 @@ typedef struct TMTag
 
 #ifdef GEANY_PRIVATE
 
+typedef struct
+{
+	guint *sort_attrs;
+	gssize cmp_len;
+	const GPtrArray *tags_array;
+	gboolean first;
+} TMSortOptions;
+
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
@@ -118,6 +126,8 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
 	TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
+gint tm_tag_compare(gconstpointer ptr1, gconstpointer ptr2, gpointer user_data);
+
 void tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,
 	gboolean dedup, gboolean unref_duplicates);
 
@@ -128,7 +138,7 @@ void tm_tags_prune(GPtrArray *tags_array);
 void tm_tags_dedup(GPtrArray *tags_array, TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
 TMTag **tm_tags_find(const GPtrArray *tags_array, const char *name,
-		gboolean partial, guint * tagCount);
+		gssize name_len, guint * tagCount);
 
 void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all);
 

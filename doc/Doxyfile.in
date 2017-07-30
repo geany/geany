@@ -262,6 +262,7 @@ ALIASES               += "optional=\noop \xmlonly <simplesect kind=\"geany:optio
 ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
 ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
 ALIASES               += "cbfree=\noop \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
+ALIASES               += "array{1}=\noop \xmlonly <simplesect kind=\"geany:array\">\1</simplesect>\endxmlonly"
 
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
@@ -799,7 +800,9 @@ INPUT                  = @top_srcdir@/src/ \
                          @top_srcdir@/src/tagmanager/tm_workspace.c \
                          @top_srcdir@/src/tagmanager/tm_workspace.h \
                          @top_srcdir@/src/tagmanager/tm_tag.h \
-                         @top_srcdir@/src/tagmanager/tm_parser.h
+                         @top_srcdir@/src/tagmanager/tm_parser.h \
+                         @top_srcdir@/src/tagmanager/tm_query.c \
+                         @top_srcdir@/src/tagmanager/tm_query.h
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
