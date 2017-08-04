@@ -31,7 +31,8 @@ typedef struct GeanyPrefs
 {
 	gboolean		load_session;
 	gboolean		load_plugins;
-	gboolean		save_winpos;
+        gboolean                save_winpos;
+        gboolean                save_wingeom;
 	gboolean		confirm_exit;
 	gboolean		beep_on_errors;		/* use utils_beep() instead */
 	gboolean		suppress_status_messages;
