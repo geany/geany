@@ -42,6 +42,32 @@
 #include <string.h>
 
 
+#ifndef NDEBUG
+sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject *sci,
+	guint msg, uptr_t wparam, sptr_t lparam)
+{
+	sptr_t result;
+	gint status;
+
+	scintilla_send_message(sci, SCI_SETSTATUS, 0, 0);
+	result = scintilla_send_message(sci, msg, wparam, lparam);
+	status = scintilla_send_message(sci, SCI_GETSTATUS, 0, 0);
+
+	if (status != 0)
+	{
+		static const gchar *fmt = "%s:%u: scintilla message '%u' failed "
+			"on instance '%p' with wParam='%llu' and lParam='%llu'";
+		if (status < SC_STATUS_WARN_START)
+			g_critical(fmt, file, line, msg, (gpointer)sci, wparam, lparam);
+		else
+			g_warning(fmt, file, line, msg, (gpointer)sci, wparam, lparam);
+	}
+
+	return result;
+}
+#endif
+
+
 /* line numbers visibility */
 void sci_set_line_numbers(ScintillaObject *sci, gboolean set)
 {
