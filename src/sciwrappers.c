@@ -43,6 +43,7 @@
 
 
 #ifndef NDEBUG
+
 sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject *sci,
 	guint msg, uptr_t wparam, sptr_t lparam)
 {
@@ -55,12 +56,32 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 
 	if (status != 0)
 	{
-		static const gchar *fmt = "%s:%u: scintilla message '%u' failed "
-			"on instance '%p' with wParam='%llu' and lParam='%llu'";
-		if (status < SC_STATUS_WARN_START)
-			g_critical(fmt, file, line, msg, (gpointer)sci, wparam, lparam);
+		static const gchar *fmt = "%s:%u: scintilla has non-zero status "
+			"code '%d' after sending message '%u' to instance '%p' with "
+			"wParam='%llu' and lParam='%llu': %s";
+		const gchar *sub_msg = "unknown";
+		switch (status)
+		{
+			case SC_STATUS_FAILURE:
+				sub_msg = "generic failure";
+				break;
+			case SC_STATUS_BADALLOC:
+				sub_msg = "memory is exhausted";
+				break;
+			case SC_STATUS_WARN_REGEX:
+				sub_msg = "regular expression is invalid";
+				break;
+			default:
+				if (status >= SC_STATUS_WARN_START)
+					sub_msg = "unknown warning";
+				else
+					sub_msg = "unknown failure";
+				break;
+		}
+		if (status >= SC_STATUS_WARN_START)
+			g_warning(fmt, file, line, status, msg, (gpointer)sci, wparam, lparam, sub_msg);
 		else
-			g_warning(fmt, file, line, msg, (gpointer)sci, wparam, lparam);
+			g_critical(fmt, file, line, status, msg, (gpointer)sci, wparam, lparam, sub_msg);
 	}
 
 	return result;
