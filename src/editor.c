@@ -4940,7 +4940,10 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
-	
+
+	/* input method editor's candidate window behaviour */
+	SSM(sci, SCI_SETIMEINTERACTION, editor_prefs.ime_interaction, 0);
+
 #ifdef GDK_WINDOWING_QUARTZ
 # if ! GTK_CHECK_VERSION(3,16,0)
 	/* "retina" (HiDPI) display support on OS X - requires disabling buffered draw
