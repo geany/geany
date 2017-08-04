@@ -67,10 +67,6 @@
 #include <gdk/gdkkeysyms.h>
 
 
-/* Note: use sciwrappers.h instead where possible.
- * Do not use SSM in files unrelated to scintilla. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
-
 static GHashTable *snippet_hash = NULL;
 static GtkAccelGroup *snippet_accel_group = NULL;
 static gboolean autocomplete_scope_shown = FALSE;

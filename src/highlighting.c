@@ -125,10 +125,6 @@ static GHashTable *named_style_hash = NULL;
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
 
-/* Note: use sciwrappers.h instead where possible.
- * Do not use SSM in files unrelated to scintilla. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
-
 /* filetypes should use the filetypes.foo [lexer_properties] group instead of hardcoding */
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
 {

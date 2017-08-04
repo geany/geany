@@ -28,6 +28,11 @@
 #include "ScintillaWidget.h" /* for ScintillaObject */
 
 
+#ifdef GEANY_PRIVATE
+#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+#endif
+
+
 G_BEGIN_DECLS
 
 void 				sci_set_text				(ScintillaObject *sci,  const gchar *text);
