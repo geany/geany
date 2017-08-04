@@ -315,6 +315,7 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
 gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gint min_api_version, gint abi_version,
                                     gpointer data, GDestroyNotify free_func);
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin);
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convenience macro to register a plugin.
