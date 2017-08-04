@@ -56,9 +56,6 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 
 	if (status != 0)
 	{
-		static const gchar *fmt = "%s:%u: scintilla has non-zero status "
-			"code '%d' after sending message '%u' to instance '%p' with "
-			"wParam='%llu' and lParam='%llu': %s";
 		const gchar *sub_msg = "unknown";
 		switch (status)
 		{
@@ -78,10 +75,19 @@ sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject
 					sub_msg = "unknown failure";
 				break;
 		}
+#define SCI_STATUS_FORMAT_STRING "%s:%u: scintilla has non-zero status " \
+			"code '%d' after sending message '%u' to instance '%p' with " \
+			"wParam='%lu' and lParam='%ld': %s"
 		if (status >= SC_STATUS_WARN_START)
-			g_warning(fmt, file, line, status, msg, (gpointer)sci, wparam, lparam, sub_msg);
+		{
+			g_warning(SCI_STATUS_FORMAT_STRING, file, line, status, msg,
+				(gpointer)sci, wparam, lparam, sub_msg);
+		}
 		else
-			g_critical(fmt, file, line, status, msg, (gpointer)sci, wparam, lparam, sub_msg);
+		{
+			g_critical(SCI_STATUS_FORMAT_STRING, file, line, status, msg,
+				(gpointer)sci, wparam, lparam, sub_msg);
+		}
 	}
 
 	return result;
