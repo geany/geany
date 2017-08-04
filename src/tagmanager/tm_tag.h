@@ -103,13 +103,12 @@ typedef struct TMTag
 	TMParserType lang; /* Programming language of the file */
 } TMTag;
 
-
-#ifdef GEANY_PRIVATE
-
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
 GType tm_tag_get_type(void) G_GNUC_CONST;
+
+#ifdef GEANY_PRIVATE
 
 TMTag *tm_tag_new(void);
 
