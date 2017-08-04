@@ -85,7 +85,7 @@ typedef struct
 /** Gets the GType for a TMTag.
  *
  * @return TMTag type
- * @since 1.32 (API 232) */
+ * @since 1.32 (API 233) */
 GEANY_API_SYMBOL
 GType tm_tag_get_type(void)
 {
