@@ -2146,7 +2146,7 @@ static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 	flags = SCFIND_WORDSTART | SCFIND_MATCHCASE;
 
 	/* search the whole document for the word root and collect results */
-	pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+	pos_find = SSM(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
 	while (pos_find >= 0 && pos_find < len)
 	{
 		word_end = pos_find + rootlen;
@@ -2172,7 +2172,7 @@ static GSList *get_doc_words(ScintillaObject *sci, gchar *root, gsize rootlen)
 			}
 		}
 		ttf.chrg.cpMin = word_end;
-		pos_find = scintilla_send_message(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
+		pos_find = SSM(sci, SCI_FINDTEXT, flags, (uptr_t) &ttf);
 	}
 
 	return g_slist_sort(words, (GCompareFunc)utils_str_casecmp);
@@ -2189,7 +2189,7 @@ static gboolean autocomplete_doc_word(GeanyEditor *editor, gchar *root, gsize ro
 	words = get_doc_words(sci, root, rootlen);
 	if (!words)
 	{
-		scintilla_send_message(sci, SCI_AUTOCCANCEL, 0, 0);
+		SSM(sci, SCI_AUTOCCANCEL, 0, 0);
 		return FALSE;
 	}
 

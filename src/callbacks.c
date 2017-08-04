@@ -579,7 +579,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		gboolean rectsel = (gboolean) SSM(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 		gchar *text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))

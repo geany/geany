@@ -1860,10 +1860,10 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
 		gint pos = sci_get_current_position(sci);
 		gint line = sci_get_line_from_position(sci, pos);
-		gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
-		gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
+		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
 
-		line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
+		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
 
 		gdk_window_get_origin(window, x, y);
 		*x += pos_x;
@@ -2285,7 +2285,7 @@ static gint get_fold_header_after(ScintillaObject *sci, gint line)
 	{
 		if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
 		{
-			const gint last_child = scintilla_send_message(sci, SCI_GETLASTCHILD, line, -1);
+			const gint last_child = SSM(sci, SCI_GETLASTCHILD, line, -1);
 			const gint line_end = sci_get_line_end_position(sci, line);
 			const gint lexer = sci_get_lexer(sci);
 			gint parenthesis_match_line = -1;
@@ -2354,7 +2354,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 			{
 				const gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
 				if (tag_fold >= 0)
-					last_child = scintilla_send_message(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
+					last_child = SSM(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
 			}
 
 			if (line <= last_child)

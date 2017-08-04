@@ -1940,7 +1940,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 	if (multiline)
 	{
 		/* Warning: any SCI calls will invalidate 'text' after calling SCI_GETCHARACTERPOINTER */
-		text = (void*)scintilla_send_message(sci, SCI_GETCHARACTERPOINTER, 0, 0);
+		text = (void*)SSM(sci, SCI_GETCHARACTERPOINTER, 0, 0);
 		g_regex_match_full(regex, text, -1, pos, 0, &minfo, NULL);
 	}
 	else /* single-line mode, manually match against each line */
@@ -1952,7 +1952,7 @@ static gint find_regex(ScintillaObject *sci, guint pos, GRegex *regex, gboolean 
 			gint start = sci_get_position_from_line(sci, line);
 			gint end = sci_get_line_end_position(sci, line);
 
-			text = (void*)scintilla_send_message(sci, SCI_GETRANGEPOINTER, start, end - start);
+			text = (void*)SSM(sci, SCI_GETRANGEPOINTER, start, end - start);
 			if (g_regex_match_full(regex, text, end - start, pos - start, 0, &minfo, NULL))
 			{
 				offset = start;

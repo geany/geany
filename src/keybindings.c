@@ -1558,13 +1558,17 @@ static gboolean cb_func_search_action(guint key_id)
 			gint pos = sci_get_current_position(sci);
 
 			/* clear existing search indicators instead if next to cursor */
-			if (scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+			if (SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, pos) ||
-				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+				SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
+			{
 				text = NULL;
+			}
 			else
+			{
 				text = get_current_word_or_sel(doc, TRUE);
+			}
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, GEANY_FIND_MATCHCASE);
