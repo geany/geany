@@ -439,7 +439,7 @@ static gboolean has_tabs_on_right(GeanyDocument *doc)
 }
 
 
-void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
+static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
 {
 	g_return_if_fail(has_tabs_on_right(doc));
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
