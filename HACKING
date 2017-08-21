@@ -229,7 +229,10 @@ to set warning options (as well as anything else e.g. -g -O2).
 
 * Enable warnings - for gcc use '-Wall -Wextra' (and optionally
   -Wno-unused-parameter to avoid unused parameter warnings in Glade
-  callbacks).
+  callbacks). Alternatively you can use the Glib macro G_GNUC_UNUSED
+  to suppress warnings on single parameters, e.g.
+  ``void examplefunction(G_GNUC_UNUSED gchar *foo)``. Also see
+  https://developer.gnome.org/glib/stable/glib-Miscellaneous-Macros.html.
 * You should try to write ISO C99 code for portability, so always
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
