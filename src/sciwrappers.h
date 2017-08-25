@@ -30,6 +30,16 @@
 
 G_BEGIN_DECLS
 
+#ifdef GEANY_PRIVATE
+# ifndef NDEBUG
+#  define SSM(s, m, w, l) sci_send_message_internal(__FILE__, __LINE__, s, m, w, l)
+sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject *sci,
+	guint msg, uptr_t wparam, sptr_t lparam);
+# else
+#  define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+# endif
+#endif
+
 void 				sci_set_text				(ScintillaObject *sci,  const gchar *text);
 gboolean			sci_has_selection			(ScintillaObject *sci);
 void 				sci_end_undo_action			(ScintillaObject *sci);

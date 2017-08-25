@@ -82,7 +82,11 @@ typedef struct
 	gboolean first;
 } TMSortOptions;
 
-/* Gets the GType for a TMTag */
+/** Gets the GType for a TMTag.
+ *
+ * @return TMTag type
+ * @since 1.32 (API 233) */
+GEANY_API_SYMBOL
 GType tm_tag_get_type(void)
 {
 	static GType gtype = 0;

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
 "PO-Revision-Date: 2015-06-23 19:16+0300\n"
 "Last-Translator: Yury Siamashka <yurand2@gmail.com>\n"
 "Language-Team: Belarusian <geany-i18n@uvena.de>\n"
@@ -2246,68 +2246,68 @@ msgstr ""
 "Frank Lanitz\n"
 "Усе правы абаронены."
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "Пра Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "Хуткае і легкаважнае асяроддзе распрацоўкі"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(пабудавана %s або пазней)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "Інфармацыя"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "Распрацоўшчыкі"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 msgid "maintainer"
 msgstr "вядучы распрацоўшчык"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "распрацоўшчык"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "вядучы перакладчык"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "Перакладчыкі"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 msgid "Previous Translators"
 msgstr "Былыя перакладчыкі"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 msgid "Contributors"
 msgstr "Удзельнікі"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
 "Некаторыя з шматлікіх удзельнікаў (больш дэталёвы спіс глядзі ў файле %s):"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "Аўтары"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "Ліцэнзія"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2922,7 +2922,7 @@ msgstr "Файл %s захаваны."
 msgid "Wrap search and find again?"
 msgstr "Шукаць зноў спачатку?"
 
-#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
@@ -3497,7 +3497,7 @@ msgstr "Уставіць новы радок перад цяперашнім"
 msgid "Insert New Line After Current"
 msgstr "Уставіць новы радок пасля цяперашняга"
 
-#: ../src/keybindings.c:529 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:466
 msgid "Find"
 msgstr "Шукаць"
 
@@ -3509,11 +3509,11 @@ msgstr "Шукаць наступны"
 msgid "Find Previous"
 msgstr "Шукаць папярэдні"
 
-#: ../src/keybindings.c:540 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:619
 msgid "Replace"
 msgstr "Замяніць"
 
-#: ../src/keybindings.c:542 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Шукаць у файлах"
 
@@ -4025,7 +4025,7 @@ msgid ""
 "plugin."
 msgstr ""
 
-#: ../src/pluginutils.c:411
+#: ../src/pluginutils.c:427
 msgid "Configure Plugins"
 msgstr "Наладзіць убудовы"
 
@@ -4282,7 +4282,7 @@ msgstr "Немагчыма стварыць базавую дырэкторыю 
 msgid "Project file could not be written (%s)."
 msgstr "Не атрымалася выканаць запіс у файл праекта (%s)."
 
-#: ../src/project.c:779 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:629
 msgid "_Replace"
 msgstr "_Замяніць"
 
@@ -4301,11 +4301,11 @@ msgstr "Выберыце імя файла праекта"
 msgid "Project \"%s\" opened."
 msgstr "Праект \"%s\" адкрыты."
 
-#: ../src/search.c:308 ../src/search.c:960
+#: ../src/search.c:310 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "Выкарыстоўваць рэгулярныя выразы"
 
-#: ../src/search.c:311
+#: ../src/search.c:313
 #, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
@@ -4314,11 +4314,11 @@ msgstr ""
 "Выкарыстоўваць рэгулярныя выразы POSIX. Дэталёвую інфармацыю па рэгулярным "
 "выразам глядзіце ў дакументацыі."
 
-#: ../src/search.c:316
+#: ../src/search.c:318
 msgid "Use _escape sequences"
 msgstr "Выкарыстоўваць _escape паслядоўнасці "
 
-#: ../src/search.c:320
+#: ../src/search.c:322
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
@@ -4326,11 +4326,11 @@ msgstr ""
 "Замяняць \\\\, \\t, \\n, \\r і \\uXXXX (літары Unicode) на адпаведныя "
 "кіруючыя сімвалы"
 
-#: ../src/search.c:323
+#: ../src/search.c:325
 msgid "Use multi-line matchin_g"
 msgstr "Выкарыстоўваць шматрадковы пошук"
 
-#: ../src/search.c:328
+#: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4342,98 +4342,98 @@ msgstr ""
 "гэтым рэжыме сімвалы новага радка становяцца часткай ўваходных дадзеных і "
 "могуць адпавядаць шаблону як звычайныя сімвалы."
 
-#: ../src/search.c:341
+#: ../src/search.c:343
 msgid "Search _backwards"
 msgstr "Шукаць у зваротным кірунку"
 
-#: ../src/search.c:347 ../src/search.c:969
+#: ../src/search.c:349 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "З улікам рэгістру"
 
-#: ../src/search.c:351 ../src/search.c:974
+#: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "Супадзенне толькі ўсяго слова"
 
-#: ../src/search.c:355
+#: ../src/search.c:357
 msgid "Match from s_tart of word"
 msgstr "Супадзенне з пачатку слова"
 
-#: ../src/search.c:471
+#: ../src/search.c:473
 msgid "_Previous"
 msgstr "Папярэдні"
 
-#: ../src/search.c:476
+#: ../src/search.c:478
 msgid "_Next"
 msgstr "Наступны"
 
-#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
 msgid "_Search for:"
 msgstr "Шукаць:"
 
 #. Now add the multiple match options
-#: ../src/search.c:508
+#: ../src/search.c:510
 msgid "_Find All"
 msgstr "Шукаць усё"
 
-#: ../src/search.c:515
+#: ../src/search.c:517
 msgid "_Mark"
 msgstr "Пазначыць"
 
-#: ../src/search.c:517
+#: ../src/search.c:519
 msgid "Mark all matches in the current document"
 msgstr "Пазначыць усё супадзенні ў цяперашнім дакуменце"
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
 msgstr "У сесіі"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:529 ../src/search.c:704
 msgid "_In Document"
 msgstr "У дакуменце"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:535 ../src/search.c:717
 msgid "Close _dialog"
 msgstr "Закрыць дыялог"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:539 ../src/search.c:721
 msgid "Disable this option to keep the dialog open"
 msgstr "Забараніце гэту наладку, каб трымаць дыялог адчыненым"
 
-#: ../src/search.c:632
+#: ../src/search.c:634
 msgid "Replace & Fi_nd"
 msgstr "Замяніць і шукаць"
 
-#: ../src/search.c:641
+#: ../src/search.c:643
 msgid "Replace wit_h:"
 msgstr "Замяніць на:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:690
+#: ../src/search.c:692
 msgid "Re_place All"
 msgstr "Замяніць усё"
 
-#: ../src/search.c:707
+#: ../src/search.c:709
 msgid "In Se_lection"
 msgstr "У вылучэнні"
 
-#: ../src/search.c:709
+#: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
 msgstr "Замяніць ўсе супадзенні ў вылучаным тэксце"
 
-#: ../src/search.c:826
+#: ../src/search.c:828
 msgid "all"
 msgstr "усё"
 
-#: ../src/search.c:828
+#: ../src/search.c:830
 msgid "project"
 msgstr "праекты"
 
-#: ../src/search.c:830
+#: ../src/search.c:832
 msgid "custom"
 msgstr "пазначыць"
 
-#: ../src/search.c:834
+#: ../src/search.c:836
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4443,48 +4443,48 @@ msgstr ""
 "Праект: выкарыстоўваць шаблоны назваў файлаў, зададзеныя ў наладах праекта\n"
 "Пазначыць: пазначыць шаблоны імёнаў файлаў уручную"
 
-#: ../src/search.c:896
+#: ../src/search.c:898
 msgid "Fi_les:"
 msgstr "Файлы:"
 
-#: ../src/search.c:908
+#: ../src/search.c:910
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Шаблоны файлаў:  *.c *.h "
 
-#: ../src/search.c:920
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "Каталог:"
 
-#: ../src/search.c:939
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "Кадыроўка:"
 
-#: ../src/search.c:963
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr "Дэталёвую інфармацыю глядзі ў дадведцы grep "
 
-#: ../src/search.c:965
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "Рэкурсіўна ў падкаталогах"
 
-#: ../src/search.c:978
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "Інвертаваць вынікі пошуку"
 
-#: ../src/search.c:982
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Інвертаваць сэнс адпаведнасці, для выбару несупадаючых з шаблонам радкоў"
 
-#: ../src/search.c:999
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "Дадатковыя наладкі:"
 
-#: ../src/search.c:1007
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Іншыя наладкі для перадачы утыліце Grep"
 
-#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4492,7 +4492,7 @@ msgstr[0] "Знойдзена %d супадзенне для \"%s\"."
 msgstr[1] "Знойдзена %d супадзення для \"%s\"."
 msgstr[2] "Знойдзена %d супадзенняў для \"%s\"."
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Праведзена %u замен(ы) у %u дакументах."

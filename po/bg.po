@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
 "PO-Revision-Date: 2008-11-30 16:22+0200\n"
 "Last-Translator: Atanas Beloborodov <nasko@cod3r.org>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
@@ -2451,70 +2451,70 @@ msgid ""
 "All rights reserved."
 msgstr ""
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "За Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "Бърза и лека среда за разработване"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, fuzzy, c-format
 msgid "(built on or after %s)"
 msgstr "(компилиран на %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "Информация"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "Разработчици"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 #, fuzzy
 msgid "maintainer"
 msgstr "Отговорник по поддръжката"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "разработчик"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "отговорник по поддържането на превода"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "Преводачи"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 #, fuzzy
 msgid "Previous Translators"
 msgstr "Преводачи"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 #, fuzzy
 msgid "Contributors"
 msgstr "Сътрудници"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "Някой от многото сътрудници (за повече детайли, вижте файла %s)"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "Екип"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "Лиценз"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -3154,7 +3154,7 @@ msgstr "Запазих файла %s."
 msgid "Wrap search and find again?"
 msgstr "Да пробвам ли отново с търсенето?"
 
-#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2222 ../src/search.c:2223
 #, fuzzy, c-format
 msgid "No matches found for \"%s\"."
@@ -3767,7 +3767,7 @@ msgstr ""
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:529 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:466
 msgid "Find"
 msgstr "Намери"
 
@@ -3779,11 +3779,11 @@ msgstr "Намери следващото"
 msgid "Find Previous"
 msgstr "Намери предишното"
 
-#: ../src/keybindings.c:540 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:619
 msgid "Replace"
 msgstr "Замени"
 
-#: ../src/keybindings.c:542 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:869
 #, fuzzy
 msgid "Find in Files"
 msgstr "Намери въф _файлове"
@@ -4336,7 +4336,7 @@ msgid ""
 "plugin."
 msgstr ""
 
-#: ../src/pluginutils.c:411
+#: ../src/pluginutils.c:427
 msgid "Configure Plugins"
 msgstr ""
 
@@ -4603,7 +4603,7 @@ msgstr "Не можах да създам конфигурационната д�
 msgid "Project file could not be written (%s)."
 msgstr "Не можах да запиша файла на проекта."
 
-#: ../src/project.c:779 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:629
 msgid "_Replace"
 msgstr "_Замени"
 
@@ -4622,11 +4622,11 @@ msgstr "Изберете име за проекта"
 msgid "Project \"%s\" opened."
 msgstr "Отворих проекта \"%s\"."
 
-#: ../src/search.c:308 ../src/search.c:960
+#: ../src/search.c:310 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "_Използвай редовни изрази"
 
-#: ../src/search.c:311
+#: ../src/search.c:313
 #, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
@@ -4635,11 +4635,11 @@ msgstr ""
 "Използвай изрази в стил POSIX. За по-подробна информация за редовните изрази,"
 "моля прочетете документацията."
 
-#: ../src/search.c:316
+#: ../src/search.c:318
 msgid "Use _escape sequences"
 msgstr "Използвай _escape·sequences"
 
-#: ../src/search.c:320
+#: ../src/search.c:322
 #, fuzzy
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
@@ -4648,11 +4648,11 @@ msgstr ""
 "Замени ·\\\\,·\\t, \\n, \\r·и·\\uXXXX·(Unicode·символи)·със съответните "
 "контролни символи."
 
-#: ../src/search.c:323
+#: ../src/search.c:325
 msgid "Use multi-line matchin_g"
 msgstr ""
 
-#: ../src/search.c:328
+#: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4660,170 +4660,170 @@ msgid ""
 "characters by the pattern."
 msgstr ""
 
-#: ../src/search.c:341
+#: ../src/search.c:343
 #, fuzzy
 msgid "Search _backwards"
 msgstr "_Търси назад"
 
-#: ../src/search.c:347 ../src/search.c:969
+#: ../src/search.c:349 ../src/search.c:971
 #, fuzzy
 msgid "C_ase sensitive"
 msgstr "_Зачитане на малки/големи букви"
 
-#: ../src/search.c:351 ../src/search.c:974
+#: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "Само _ако съвпада с цяла дума"
 
-#: ../src/search.c:355
+#: ../src/search.c:357
 msgid "Match from s_tart of word"
 msgstr "Само ако съвпада с _началото на думата"
 
-#: ../src/search.c:471
+#: ../src/search.c:473
 msgid "_Previous"
 msgstr "_Предишен"
 
-#: ../src/search.c:476
+#: ../src/search.c:478
 msgid "_Next"
 msgstr "_Следващ"
 
-#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
 #, fuzzy
 msgid "_Search for:"
 msgstr "Търси за:"
 
 #. Now add the multiple match options
-#: ../src/search.c:508
+#: ../src/search.c:510
 #, fuzzy
 msgid "_Find All"
 msgstr "Намери всички"
 
-#: ../src/search.c:515
+#: ../src/search.c:517
 msgid "_Mark"
 msgstr "_Отбележи"
 
-#: ../src/search.c:517
+#: ../src/search.c:519
 #, fuzzy
 msgid "Mark all matches in the current document"
 msgstr "Отбелязва всички съвпадения в текущия документ."
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
 msgstr "В _Сесията"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:529 ../src/search.c:704
 msgid "_In Document"
 msgstr "В _Документа"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:535 ../src/search.c:717
 msgid "Close _dialog"
 msgstr "Затвори _прозореца"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:539 ../src/search.c:721
 #, fuzzy
 msgid "Disable this option to keep the dialog open"
 msgstr "Забранете тази опция, за да оставите прозореца отворен."
 
-#: ../src/search.c:632
+#: ../src/search.c:634
 #, fuzzy
 msgid "Replace & Fi_nd"
 msgstr "За_мени и намери"
 
-#: ../src/search.c:641
+#: ../src/search.c:643
 #, fuzzy
 msgid "Replace wit_h:"
 msgstr "Замени със:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:690
+#: ../src/search.c:692
 #, fuzzy
 msgid "Re_place All"
 msgstr "Замени всички"
 
-#: ../src/search.c:707
+#: ../src/search.c:709
 msgid "In Se_lection"
 msgstr "В _избраното"
 
-#: ../src/search.c:709
+#: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
 msgstr "Замени всички намерени съвпадени е избрания текст"
 
-#: ../src/search.c:826
+#: ../src/search.c:828
 msgid "all"
 msgstr ""
 
-#: ../src/search.c:828
+#: ../src/search.c:830
 #, fuzzy
 msgid "project"
 msgstr "проекти"
 
-#: ../src/search.c:830
+#: ../src/search.c:832
 #, fuzzy
 msgid "custom"
 msgstr "Изрежи"
 
-#: ../src/search.c:834
+#: ../src/search.c:836
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
 "Custom: specify file patterns manually"
 msgstr ""
 
-#: ../src/search.c:896
+#: ../src/search.c:898
 msgid "Fi_les:"
 msgstr ""
 
-#: ../src/search.c:908
+#: ../src/search.c:910
 #, fuzzy
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Файлови образци:"
 
-#: ../src/search.c:920
+#: ../src/search.c:922
 #, fuzzy
 msgid "_Directory:"
 msgstr "Директория:"
 
-#: ../src/search.c:939
+#: ../src/search.c:941
 #, fuzzy
 msgid "E_ncoding:"
 msgstr "Задайте знаково кодиране:"
 
-#: ../src/search.c:963
+#: ../src/search.c:965
 #, fuzzy
 msgid "See grep's manual page for more information"
 msgstr "Виж страницата на ръководството на grep за повече информация."
 
-#: ../src/search.c:965
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "Рек_урсивно в поддиректории"
 
-#: ../src/search.c:978
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "О_бърни наопъки резултатие от търсенето"
 
-#: ../src/search.c:982
+#: ../src/search.c:984
 #, fuzzy
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr ""
 "Обърни наопъки логиката за търсене на съвпадения, за да изберете не-"
 "съвпадащите редове."
 
-#: ../src/search.c:999
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "Д_опълнителни настройки:"
 
-#: ../src/search.c:1007
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Други опции, които да се предадат на Grep"
 
-#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
 #, fuzzy, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "Намерих %d съвпадения за '%s'."
 msgstr[1] "Намерих %d съвпадения за '%s'."
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, fuzzy, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Отбелязва всички съвпадения в текущия документ."

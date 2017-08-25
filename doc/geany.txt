@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.31
+.. |(version)| replace:: 1.32
 .. -*- reStructuredText -*-
 
 =======
@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2017-03-19
+:Date: 2017-07-16
 :Version: |(version)|
 
 Copyright © 2005-2017
@@ -2527,6 +2527,9 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
 indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
+editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
+                                  window behaviour. May be 0 (windowed) or                 documents
+                                  1 (inline)
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
@@ -2598,6 +2601,11 @@ gio_unsafe_save_backup            Make a backup when using GIO unsafe file     f
 keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
                                   reloading a file, and allow the operation
                                   to be reverted.
+reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
+                                  that have no changes but which have changed
+                                  on disk.
+                                  If unsaved changes exist then the user is
+                                  prompted to reload manually.
 **Filetype related**
 extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.

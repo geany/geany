@@ -1,15 +1,15 @@
 # Lithuanian of Geany
 # Copyright (C) 2013
 # This file is distributed under the same license as the PACKAGE package.
-# Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012 - 2013.
+# Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012 - 2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
-"PO-Revision-Date: 2016-11-22 23:05+0200\n"
-"Last-Translator: Zygimantus <zygimantus@gmail.com>\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
+"PO-Revision-Date: 2017-07-02 12:41+0300\n"
+"Last-Translator: Algimantas Margevičius <algimantas@margevicius.lt>\n"
 "Language-Team: Lietuvių <>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:341
 msgid "Geany"
@@ -33,7 +33,7 @@ msgstr "Greita ir supaprastinta kūrimo aplinka naudojanti GTK+"
 
 #: ../geany.desktop.in.h:4
 msgid "Text;Editor;"
-msgstr "Redaktorius"
+msgstr "Teksto;Redaktorius;"
 
 #: ../data/geany.glade.h:1
 msgid "_Toolbar Preferences"
@@ -186,7 +186,7 @@ msgid ""
 "disable it if you do not need it"
 msgstr ""
 "Ar, paleidimo metu, “virtual terminal emulation (VTE)“ turėtų būti įkeltas. "
-"Išjunkite jei nenaudojate."
+"Išjunkite jei nenaudojate"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -345,7 +345,7 @@ msgid ""
 "Replace dialog and there is no selection"
 msgstr ""
 "Atveriant paieškos dialogą, paieškos failuose ar pakeitimo dialoge po pelės "
-"žymekliu naudoti dabartinį žodį "
+"žymekliu naudoti dabartinį žodį"
 
 #: ../data/geany.glade.h:68
 msgid "Use the current file's directory for Find in Files"
@@ -409,9 +409,8 @@ msgid "Default symbol sorting mode"
 msgstr "Numatytasis simbolių rūšiavimo rėžimas"
 
 #: ../data/geany.glade.h:80
-#, fuzzy
 msgid "Default sorting mode:"
-msgstr "Numatytoji koduotė (naujiem failams):"
+msgstr "Numatytasis rikiavimo būdas:"
 
 #: ../data/geany.glade.h:81 ../src/stash.c:1170
 msgid "Name"
@@ -727,7 +726,7 @@ msgid ""
 msgstr ""
 "Pastaba: norėdami pritaikyti šiuos nustatymus visiems šiuo metu atvertiems "
 "dokumentams, naudokite <i>Projektas->Pritaikyti numatytuosius atitraukimus</"
-"i>"
+"i>."
 
 #: ../data/geany.glade.h:149
 msgid "Width:"
@@ -1019,7 +1018,7 @@ msgstr "Ar baigti slinkti pasiekus paskutinę dokumento eilutę"
 
 #: ../data/geany.glade.h:212
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Eilutės matomos _aplink žymeklį:"
 
 #: ../data/geany.glade.h:213
 msgid "<b>Display</b>"
@@ -1131,7 +1130,6 @@ msgid "Open new documents from the command-line"
 msgstr "Naujus dokumentus atverti iš komandinės eilutės"
 
 #: ../data/geany.glade.h:235
-#, fuzzy
 msgid "Create a new file for each command-line filename that doesn't exist"
 msgstr ""
 "Sukurti naują failą kiekvienam neegzistuojančiam failui, iš komandinės "
@@ -1203,7 +1201,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Pašalinti pradžioje esančius tarpus ir tabuliavimo ženklus"
 
 #: ../data/geany.glade.h:250
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Eilutės pabaigoje pašalina tarpus ir tabuliavimo ženklus"
 
@@ -1298,7 +1295,7 @@ msgstr "Įrankiai"
 
 #: ../data/geany.glade.h:271
 msgid "email address of the developer"
-msgstr "Kūrėjo el. paštas"
+msgstr "kūrėjo el. paštas"
 
 #: ../data/geany.glade.h:272
 msgid "Initials of the developer name"
@@ -1574,9 +1571,8 @@ msgid "Follow path of the current file"
 msgstr "Sekti dabartinio failo kelią"
 
 #: ../data/geany.glade.h:331
-#, fuzzy
 msgid "Whether to execute \"cd $path\" when you switch between opened files"
-msgstr "Ar, persijungiant tarp atvertų failų vykdyti, \\\"cd $path\\\""
+msgstr "Ar persijungiant tarp atvertų failų vykdyti „cd $path“"
 
 #: ../data/geany.glade.h:332
 msgid "Execute programs in the VTE"
@@ -2236,53 +2232,53 @@ msgstr ""
 "Frank Lanitz\n"
 "Visos teisės saugomos."
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "Apie Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "Greita ir supaprastinta IDE"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(sukurta %s arba vėliau)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "Informacija"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "Kūrėjai"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 msgid "maintainer"
 msgstr "prižiūrėtojas"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "kūrėjas"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "vertimų prižiūrėtojas"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "Vertėjai"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 msgid "Previous Translators"
 msgstr "Ankstesni vertėjai"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 msgid "Contributors"
 msgstr "Pagalbininkai"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -2290,15 +2286,15 @@ msgstr ""
 "Kai kurie iš daugelio prisidėjusiųjų (detalesniam sąrašui peržiūrėkite failą "
 "%s):"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "Padėkos"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "Licencija"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2327,9 +2323,9 @@ msgid "Process failed (%s)"
 msgstr "Procesas nepavyko (%s)"
 
 #: ../src/build.c:809
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid working directory \"%s\""
-msgstr "Pakeisti darbinį aplanką į „%s“ nepavyko"
+msgstr "Netinkamas darbinis aplankas „%s“"
 
 #: ../src/build.c:845
 #, c-format
@@ -2345,11 +2341,12 @@ msgstr ""
 "Enter jai išvalyti)."
 
 #: ../src/build.c:935
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute build command \"%s\": %s. Check the Terminal setting in "
 "Preferences"
-msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
+msgstr ""
+"Įvykdyti kūrimo komandos „%s“: %s nepavyko. Patikrinkite terminalo nustatymą"
 
 #: ../src/build.c:1046
 msgid "Compilation failed."
@@ -2533,15 +2530,14 @@ msgid "Check the path setting in Filetype configuration."
 msgstr "Tikrinti kelio nustatymą failo tipo konfigūracijoje."
 
 #: ../src/callbacks.c:1483
-#, fuzzy
 msgid "Check the path setting in Preferences."
-msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
+msgstr "Nustatymuose patikrinkite kelio nustatymą"
 
 #. G_SHELL_ERROR is parsing error, it may be caused by %s word with quotes
 #: ../src/callbacks.c:1496
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "Nepavyko įvykdyti sukonfigūruotos išorinės komandos „%s“ (%s)."
+msgstr "Nepavyko įvykdyti kontekstinio veiksmo komandos „%s“: %s. %s"
 
 #: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
 #: ../src/document.c:2371
@@ -2613,7 +2609,6 @@ msgid "Open File"
 msgstr "Atverti failą"
 
 #: ../src/dialogs.c:381
-#, fuzzy
 msgctxt "Open dialog action"
 msgid "_View"
 msgstr "R_odymas"
@@ -2798,6 +2793,9 @@ msgid ""
 "will not be displayed again but Your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Buferio ankstesnė stadija saugoma istorijoje ir einant atgal ji bus "
+"atstatyta. Galite išjungti tai ištrindami istoriją. Šio pranešimo daugiau "
+"nematysite, bet nustatymą galite pakeisti nustatymuose."
 
 #: ../src/document.c:1622
 msgid "The file has been reloaded."
@@ -2808,9 +2806,8 @@ msgid "Any unsaved changes will be lost."
 msgstr "Visi neišsaugoti pakeitimai bus prarasti."
 
 #: ../src/document.c:1653
-#, fuzzy
 msgid "Undo history will be lost."
-msgstr "Visi neišsaugoti pakeitimai bus prarasti."
+msgstr "Atšaukimų istorija bus prarasta."
 
 #: ../src/document.c:1654
 #, c-format
@@ -2862,11 +2859,9 @@ msgid "_Overwrite"
 msgstr "Perrašyti"
 
 #: ../src/document.c:2050 ../src/document.c:3624
-#, fuzzy, c-format
+#, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
-msgstr ""
-"Failas „%s“ diske yra naujesnis nei\n"
-"esantis atmintyje."
+msgstr "Failas „%s“ diske yra naujesnis nei esantis atmintyje."
 
 #: ../src/document.c:2058 ../src/document.c:3673
 msgid "Try to resave the file?"
@@ -2911,7 +2906,7 @@ msgstr "Failas %s išsaugotas."
 msgid "Wrap search and find again?"
 msgstr "Ieškoti nuo pradžios?"
 
-#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
@@ -2921,9 +2916,9 @@ msgstr "„%s“ atitikmenų nerasta."
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
-msgstr[0] "%s: „%d“ pakeistas „%s“ %s kartą"
-msgstr[1] "%s: „%d“ pakeistas „%s“ %s kartus"
-msgstr[2] "%s: „%d“ pakeistas „%s“ %s kartų"
+msgstr[0] "%s: „%d“ pakeistas „%s“ %s kartą."
+msgstr[1] "%s: „%d“ pakeistas „%s“ %s kartus."
+msgstr[2] "%s: „%d“ pakeistas „%s“ %s kartų."
 
 #: ../src/document.c:3623
 msgid "Do you want to reload it?"
@@ -3316,9 +3311,8 @@ msgid "Delete to line end"
 msgstr "Ištrinti iki eilutės pabaigos"
 
 #: ../src/keybindings.c:391
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Ištrinti iki eilutės pabaigos"
+msgstr "Pašalinti iki eilutės pradžios"
 
 #: ../src/keybindings.c:394
 msgid "_Transpose Current Line"
@@ -3446,34 +3440,28 @@ msgid "Send to Custom Command 3"
 msgstr "Siųsti į pasirinktą komandą 3"
 
 #: ../src/keybindings.c:485
-#, fuzzy
 msgid "Send to Custom Command 4"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 4"
 
 #: ../src/keybindings.c:487
-#, fuzzy
 msgid "Send to Custom Command 5"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 5"
 
 #: ../src/keybindings.c:489
-#, fuzzy
 msgid "Send to Custom Command 6"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 6"
 
 #: ../src/keybindings.c:491
-#, fuzzy
 msgid "Send to Custom Command 7"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 7"
 
 #: ../src/keybindings.c:493
-#, fuzzy
 msgid "Send to Custom Command 8"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 8"
 
 #: ../src/keybindings.c:495
-#, fuzzy
 msgid "Send to Custom Command 9"
-msgstr "Siųsti į pasirinktą komandą 1"
+msgstr "Siųsti į pasirinktinę komandą 9"
 
 #: ../src/keybindings.c:503
 msgid "Join lines"
@@ -3491,7 +3479,7 @@ msgstr "Prieš dabartinę, įterpti naują eilutę"
 msgid "Insert New Line After Current"
 msgstr "Po dabartinės, įterpti naują eilutę"
 
-#: ../src/keybindings.c:529 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:466
 msgid "Find"
 msgstr "Ieškoti"
 
@@ -3503,11 +3491,11 @@ msgstr "Ieškoti kito"
 msgid "Find Previous"
 msgstr "Ieškoti ankstesnio"
 
-#: ../src/keybindings.c:540 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:619
 msgid "Replace"
 msgstr "Pakeisti"
 
-#: ../src/keybindings.c:542 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Ieškoti failuose"
 
@@ -3784,9 +3772,8 @@ msgid "Generate global tags file (see documentation)"
 msgstr "Generuoti bendrinį žymių failą (žiūrėkite dokumentacijoje)"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid "Don't preprocess C/C++ files when generating tags file"
-msgstr "Generuojant žymes, iš anksto neapdoroti C/C++ failų"
+msgstr "Generuojant žymes iš anksto neapdoroti C/C++ failų"
 
 #: ../src/libmain.c:124
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -3856,7 +3843,7 @@ msgstr "[FAILAI...]"
 #: ../src/libmain.c:558
 #, c-format
 msgid "built on %s with "
-msgstr "sukurta ant %s su"
+msgstr "sukurta ant %s su "
 
 #: ../src/libmain.c:651
 msgid "Move it now?"
@@ -3972,6 +3959,8 @@ msgid ""
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Kitas įskiepis priklauso nuo šito. Pirmiausia išjunkite jį.</i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1652
@@ -4011,8 +4000,10 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Tarpinio serverio įskiepio „%s“ papildinys „%s“ prasideda tašku. Pataisykite "
+"tarpinio serverio įskiepį."
 
-#: ../src/pluginutils.c:411
+#: ../src/pluginutils.c:427
 msgid "Configure Plugins"
 msgstr "Konfigūruoti įskiepius"
 
@@ -4147,11 +4138,12 @@ msgstr ""
 "%s"
 
 #: ../src/printing.c:615
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute print command \"%s\": %s. Check the path setting in "
 "Preferences."
-msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
+msgstr ""
+"Įvykdyti „print“ komandos nepavyko „%s“: %s. Patikrinkite kelio nustatymą."
 
 #: ../src/printing.c:622
 #, c-format
@@ -4166,7 +4158,7 @@ msgstr "projektai"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Perkelti esamus dokumentus į naujo projekto sesiją?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4186,6 +4178,8 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Failo kelias atvaizduojantis projektą ir saugantis jo nustatymus. Paprastai "
+"jis turėtų turėt plėtinį „%s“."
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
@@ -4264,7 +4258,7 @@ msgstr "Sukurti projekto bazinio aplanko nepavyko (%s)."
 msgid "Project file could not be written (%s)."
 msgstr "Projekto įrašyti nepavyko (%s)."
 
-#: ../src/project.c:779 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:629
 msgid "_Replace"
 msgstr "Pa_keisti"
 
@@ -4283,24 +4277,23 @@ msgstr "Pasirinkite projekto failo vardą"
 msgid "Project \"%s\" opened."
 msgstr "Projektas „%s“ atvertas."
 
-#: ../src/search.c:308 ../src/search.c:960
+#: ../src/search.c:310 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "_Naudoti reguliariąsias išraiškas"
 
-#: ../src/search.c:311
-#, fuzzy
+#: ../src/search.c:313
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Naudoti POSIX tipo reguliariąsias išraiškas. Platesnei informacijai apie "
+"Naudoti Perl-like tipo reguliariąsias išraiškas. Platesnei informacijai apie "
 "reguliariųjų išraiškų naudojimą paskaitykite dokumentaciją."
 
-#: ../src/search.c:316
+#: ../src/search.c:318
 msgid "Use _escape sequences"
 msgstr "Naudoti „_escape“ sekas"
 
-#: ../src/search.c:320
+#: ../src/search.c:322
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
@@ -4308,110 +4301,114 @@ msgstr ""
 "Pakeisti \\\\, \\t, \\n, \\r ir \\uXXXX (unikodo simboliai) atitinkamais "
 "valdymo simboliais"
 
-#: ../src/search.c:323
+#: ../src/search.c:325
 msgid "Use multi-line matchin_g"
-msgstr ""
+msgstr "Naudokite kelių eilučių atitiki_mą"
 
-#: ../src/search.c:328
+#: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Atlikti reguliariajųjų išraiškų paiešką visoje atmintyje, o ne kiekvienoje "
+"eilutėje, leisti aptikti paieškos tekstą keliose eilutėse. Šioje veiksenoje "
+"naujos eilutės simbolis yra įvesties dalis ir gali būti aptinkamas kaip "
+"įprastas simbolis."
 
-#: ../src/search.c:341
+#: ../src/search.c:343
 msgid "Search _backwards"
 msgstr "Ieškoti _atgal"
 
-#: ../src/search.c:347 ../src/search.c:969
+#: ../src/search.c:349 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "Skirti r_aidžių dydį"
 
-#: ../src/search.c:351 ../src/search.c:974
+#: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "_Atitikti tik pilnus žodžius"
 
-#: ../src/search.c:355
+#: ../src/search.c:357
 msgid "Match from s_tart of word"
 msgstr "_Atitikti nuo žodžio pradžios"
 
-#: ../src/search.c:471
+#: ../src/search.c:473
 msgid "_Previous"
 msgstr "_Ankstesnis"
 
-#: ../src/search.c:476
+#: ../src/search.c:478
 msgid "_Next"
 msgstr "S_ekantis"
 
-#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
 msgid "_Search for:"
 msgstr "_Ieškoti:"
 
 #. Now add the multiple match options
-#: ../src/search.c:508
+#: ../src/search.c:510
 msgid "_Find All"
 msgstr "_Surasti visus"
 
-#: ../src/search.c:515
+#: ../src/search.c:517
 msgid "_Mark"
 msgstr "_Pasirinkime"
 
-#: ../src/search.c:517
+#: ../src/search.c:519
 msgid "Mark all matches in the current document"
 msgstr "Pažymėti visus atitikimus"
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
 msgstr "_Sesijoje"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:529 ../src/search.c:704
 msgid "_In Document"
 msgstr "_Dokumente"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:535 ../src/search.c:717
 msgid "Close _dialog"
 msgstr "_Užverti dialogą"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:539 ../src/search.c:721
 msgid "Disable this option to keep the dialog open"
 msgstr "Išjunkite šią parinktį, jei norite palikti šį dialogą atvertą"
 
-#: ../src/search.c:632
+#: ../src/search.c:634
 msgid "Replace & Fi_nd"
 msgstr "_Ieškoti pakeisti"
 
-#: ../src/search.c:641
+#: ../src/search.c:643
 msgid "Replace wit_h:"
 msgstr "_Pakeisti:"
 
 #. Now add the multiple replace options
-#: ../src/search.c:690
+#: ../src/search.c:692
 msgid "Re_place All"
 msgstr "P_akeisti visus"
 
-#: ../src/search.c:707
+#: ../src/search.c:709
 msgid "In Se_lection"
 msgstr "Pasi_rinkime"
 
-#: ../src/search.c:709
+#: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
 msgstr "Pakeisti visus atitikmenis, šiuo metu pasirinktame tekste"
 
-#: ../src/search.c:826
+#: ../src/search.c:828
 msgid "all"
 msgstr "visi"
 
-#: ../src/search.c:828
+#: ../src/search.c:830
 msgid "project"
 msgstr "projektai"
 
-#: ../src/search.c:830
+#: ../src/search.c:832
 msgid "custom"
 msgstr "pasirinktinis"
 
-#: ../src/search.c:834
+#: ../src/search.c:836
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4421,55 +4418,55 @@ msgstr ""
 "Projektas: naudoti failų formas projekto nustatymuose\n"
 "Pasirinktinis: nurodykite failų formas rankiniu būdu"
 
-#: ../src/search.c:896
+#: ../src/search.c:898
 msgid "Fi_les:"
 msgstr "Fai_lai:"
 
-#: ../src/search.c:908
+#: ../src/search.c:910
 msgid "File patterns, e.g. *.c *.h"
 msgstr "Failų formos, pvz. *.c *h"
 
-#: ../src/search.c:920
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "_Aplankas:"
 
-#: ../src/search.c:939
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "_Koduotė:"
 
-#: ../src/search.c:963
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr "Platesnei informacijai peržiūrėkite grep žinyną"
 
-#: ../src/search.c:965
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "_Rekursyviai"
 
-#: ../src/search.c:978
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "_Apversti paieškos rezultatus"
 
-#: ../src/search.c:982
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "Apversti paieškos prasmę, ta prasme pasirinkti neatitinkančias eilutes"
 
-#: ../src/search.c:999
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "_Papildomos parinktys:"
 
-#: ../src/search.c:1007
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "Kitos parinktys kurios perduodamos Grep"
 
-#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
-msgstr[0] "Rastas %d atitikmuo, ieškota „%s“"
-msgstr[1] "Rasti %d atitikmenys, ieškota „%s“"
-msgstr[2] "Rasta %d atitikmenų, ieškota „%s“"
+msgstr[0] "Rastas %d atitikmuo, ieškota „%s“."
+msgstr[1] "Rasti %d atitikmenys, ieškota „%s“."
+msgstr[2] "Rasta %d atitikmenų, ieškota „%s“."
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "Pakeista %u atitikmenys, %u dokumentuose."
@@ -4492,10 +4489,10 @@ msgid "%s %s -- %s (in directory: %s)"
 msgstr "%s %s -- %s (aplanke: %s)"
 
 #: ../src/search.c:1719
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute grep tool \"%s\": %s. Check the path setting in Preferences."
-msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
+msgstr "Įvykdyti grep įrankio „%s“: %s. Patikrinkite kelio nustatymą."
 
 #: ../src/search.c:1759
 #, c-format
@@ -4536,7 +4533,7 @@ msgstr ""
 
 #: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
 msgid "Text ended before matching quote was found"
-msgstr ""
+msgstr "Tekstas baigėsi prieš randant reikalingą tekstą"
 
 #. TL note: from glib
 #: ../src/spawn.c:130
@@ -4552,9 +4549,8 @@ msgid "Program not found"
 msgstr "Programa nerasta"
 
 #: ../src/spawn.c:764
-#, fuzzy
 msgid "Failed to change to the working directory"
-msgstr "Procesas nepavyko, nėra darbinio aplanko"
+msgstr "Pakeisti darbinio aplanko nepavyko"
 
 #: ../src/spawn.c:769
 msgid "Unknown error executing child process"
@@ -4875,12 +4871,12 @@ msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Nežinomas failo tipo plėtinys „%s“.\n"
 
 #: ../src/symbols.c:1656
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
-msgstr "Nepavyko sukurti žymių failo, gali būti jog nerasta žymių.\n"
+msgstr "Nepavyko sukurti žymių failo, gali būti jog simbolių nerasta.\n"
 
 #: ../src/symbols.c:1663
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
@@ -4920,15 +4916,15 @@ msgstr "Įkelti žymių failo nepavyko „%s“."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1943
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%s: %lu</b>"
-msgstr "<b>Rodymas</b>"
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1946
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2155
 #, c-format
@@ -4959,6 +4955,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Nepavyko įvykdyti šablono komandos „%s“. Patarimas: dažnai to priežastimi "
+"būna netinkamas kelias komandoje. Klaida: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5134,11 +5132,13 @@ msgid "The executed custom command exited with an unsuccessful exit code."
 msgstr "Įvykdyta pasirinktinė komanda išėjo su nesėkmingu išėjimo kodu."
 
 #: ../src/tools.c:242
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot execute custom command \"%s\": %s. Check the path setting in Custom "
 "Commands."
-msgstr "Įvykdyti grep įrankio „%s“ nepavyko; patikrinkite kelią."
+msgstr ""
+"Įvykdyti pasirinktinės komandos „%s“: %s nepavyko. Patikrinkite kelio "
+"nustatymą pasirinktinėse komandose."
 
 #: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
@@ -5418,6 +5418,8 @@ msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Aplankas nepakeistas, nes terminale gali būti teksto (paspauskite Ctrl+C ar "
+"Enter ir išvalykite)."
 
 #: ../src/win32.c:211
 msgid "Geany project files"
@@ -5518,7 +5520,7 @@ msgstr "Yra abstraktus"
 
 #: ../plugins/classbuilder.c:567
 msgid "Is singleton"
-msgstr "Yra „singleton“"
+msgstr "Yra singleton"
 
 #: ../plugins/classbuilder.c:577
 msgid "Constructor type:"
@@ -5894,7 +5896,7 @@ msgstr "_Aplankas kuriame saugoti atsarginę kopiją:"
 #: ../plugins/saveactions.c:753
 msgid "Date/_Time format for backup files (\"man strftime\" for details):"
 msgstr ""
-"Atsarginės kopijos failų _datos/laiko formatas (plačiau „man strftime“);"
+"Atsarginės kopijos failų _datos/laiko formatas (plačiau „man strftime“):"
 
 #: ../plugins/saveactions.c:766
 msgid "Directory _levels to include in the backup destination:"

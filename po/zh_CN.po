@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 19:13+0100\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
 "PO-Revision-Date: 2016-11-07 23:57+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -2158,67 +2158,67 @@ msgstr ""
 "Frank Lanitz\n"
 "保留所有权利。"
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "关于 Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "轻快的 IDE"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s 或之后生成)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "信息"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "开发人员"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 msgid "maintainer"
 msgstr "主管"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "开发"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "翻译"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "翻译者"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 msgid "Previous Translators"
 msgstr "原翻译者"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 msgid "Contributors"
 msgstr "贡献者"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "一部分贡献者 (详细清单参见文件 %s)"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "荣誉"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "许可条款"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2810,7 +2810,7 @@ msgstr "文件 %s 已保存。"
 msgid "Wrap search and find again?"
 msgstr "要循环查找吗？"
 
-#: ../src/document.c:2460 ../src/search.c:1366 ../src/search.c:1419
+#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2222 ../src/search.c:2223
 #, c-format
 msgid "No matches found for \"%s\"."
@@ -3376,7 +3376,7 @@ msgstr "在前面插入一个新行"
 msgid "Insert New Line After Current"
 msgstr "在后面插入一个新行"
 
-#: ../src/keybindings.c:529 ../src/search.c:464
+#: ../src/keybindings.c:529 ../src/search.c:466
 msgid "Find"
 msgstr "查找"
 
@@ -3388,11 +3388,11 @@ msgstr "查找下一个"
 msgid "Find Previous"
 msgstr "查找上一个"
 
-#: ../src/keybindings.c:540 ../src/search.c:617
+#: ../src/keybindings.c:540 ../src/search.c:619
 msgid "Replace"
 msgstr "替换"
 
-#: ../src/keybindings.c:542 ../src/search.c:867
+#: ../src/keybindings.c:542 ../src/search.c:869
 msgid "Find in Files"
 msgstr "在多个文件中查找"
 
@@ -3890,7 +3890,7 @@ msgid ""
 "plugin."
 msgstr "代理插件“%s”的扩展名“%s”由点号开始。请修复您的的代理插件。"
 
-#: ../src/pluginutils.c:411
+#: ../src/pluginutils.c:427
 msgid "Configure Plugins"
 msgstr "设置插件"
 
@@ -4136,7 +4136,7 @@ msgstr "项目根目录无法创建 (%s)。"
 msgid "Project file could not be written (%s)."
 msgstr "项目文件无法写入 (%s)。"
 
-#: ../src/project.c:779 ../src/search.c:627
+#: ../src/project.c:779 ../src/search.c:629
 msgid "_Replace"
 msgstr "替换(_R)"
 
@@ -4155,32 +4155,32 @@ msgstr "选择项目文件名"
 msgid "Project \"%s\" opened."
 msgstr "已打开项目“%s”。"
 
-#: ../src/search.c:308 ../src/search.c:960
+#: ../src/search.c:310 ../src/search.c:962
 msgid "_Use regular expressions"
 msgstr "使用正则表达式(_U)"
 
-#: ../src/search.c:311
+#: ../src/search.c:313
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
 "使用 Perl-like 正则表达式。要了解关于使用正则表达式的详细信息，请参阅文档。"
 
-#: ../src/search.c:316
+#: ../src/search.c:318
 msgid "Use _escape sequences"
 msgstr "使用转义序列(_E)"
 
-#: ../src/search.c:320
+#: ../src/search.c:322
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
 msgstr "替换 \\\\、\\t、\\n、\\r 和 \\uXXXX (Unicode字符串) 为对应的控制字符。"
 
-#: ../src/search.c:323
+#: ../src/search.c:325
 msgid "Use multi-line matchin_g"
 msgstr "使用多行匹配(_G)"
 
-#: ../src/search.c:328
+#: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
@@ -4190,98 +4190,98 @@ msgstr ""
 "使用整个文本而非逐行进行正则表达式匹配，允许跨越多行的匹配。在这个模式中，换"
 "行符将作为输入的一部分，可以作为正常字符被捕获。"
 
-#: ../src/search.c:341
+#: ../src/search.c:343
 msgid "Search _backwards"
 msgstr "向后搜索(_B)"
 
-#: ../src/search.c:347 ../src/search.c:969
+#: ../src/search.c:349 ../src/search.c:971
 msgid "C_ase sensitive"
 msgstr "大小写敏感(_A)"
 
-#: ../src/search.c:351 ../src/search.c:974
+#: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
 msgstr "整词配对(_W)"
 
-#: ../src/search.c:355
+#: ../src/search.c:357
 msgid "Match from s_tart of word"
 msgstr "匹配词首(_T)"
 
-#: ../src/search.c:471
+#: ../src/search.c:473
 msgid "_Previous"
 msgstr "上一个(_P)"
 
-#: ../src/search.c:476
+#: ../src/search.c:478
 msgid "_Next"
 msgstr "下一个(_N)"
 
-#: ../src/search.c:480 ../src/search.c:638 ../src/search.c:877
+#: ../src/search.c:482 ../src/search.c:640 ../src/search.c:879
 msgid "_Search for:"
 msgstr "搜索(_S)："
 
 #. Now add the multiple match options
-#: ../src/search.c:508
+#: ../src/search.c:510
 msgid "_Find All"
 msgstr "查找全部(_F)"
 
-#: ../src/search.c:515
+#: ../src/search.c:517
 msgid "_Mark"
 msgstr "标记(_M)"
 
-#: ../src/search.c:517
+#: ../src/search.c:519
 msgid "Mark all matches in the current document"
 msgstr "在当前文档中标记所有匹配项。"
 
-#: ../src/search.c:522 ../src/search.c:697
+#: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
 msgstr "在所有打开的文档中(_O)"
 
-#: ../src/search.c:527 ../src/search.c:702
+#: ../src/search.c:529 ../src/search.c:704
 msgid "_In Document"
 msgstr "在当前文档中(_I)"
 
 #. close window checkbox
-#: ../src/search.c:533 ../src/search.c:715
+#: ../src/search.c:535 ../src/search.c:717
 msgid "Close _dialog"
 msgstr "关闭对话框(_D)"
 
-#: ../src/search.c:537 ../src/search.c:719
+#: ../src/search.c:539 ../src/search.c:721
 msgid "Disable this option to keep the dialog open"
 msgstr "禁止该选项使对话框保持打开"
 
-#: ../src/search.c:632
+#: ../src/search.c:634
 msgid "Replace & Fi_nd"
 msgstr "替换和查找(_N)"
 
-#: ../src/search.c:641
+#: ../src/search.c:643
 msgid "Replace wit_h:"
 msgstr "替换为(_H)："
 
 #. Now add the multiple replace options
-#: ../src/search.c:690
+#: ../src/search.c:692
 msgid "Re_place All"
 msgstr "全部替换(_P)"
 
-#: ../src/search.c:707
+#: ../src/search.c:709
 msgid "In Se_lection"
 msgstr "在选中的文字中(_L)"
 
-#: ../src/search.c:709
+#: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
 msgstr "在当前选中的文字中替换"
 
-#: ../src/search.c:826
+#: ../src/search.c:828
 msgid "all"
 msgstr "全部"
 
-#: ../src/search.c:828
+#: ../src/search.c:830
 msgid "project"
 msgstr "项目"
 
-#: ../src/search.c:830
+#: ../src/search.c:832
 msgid "custom"
 msgstr "自定义"
 
-#: ../src/search.c:834
+#: ../src/search.c:836
 msgid ""
 "All: search all files in the directory\n"
 "Project: use file patterns defined in the project settings\n"
@@ -4291,53 +4291,53 @@ msgstr ""
 "项目：使用项目设置中定义的文件通配符\n"
 "自定义：自定义文件通配符"
 
-#: ../src/search.c:896
+#: ../src/search.c:898
 msgid "Fi_les:"
 msgstr "文件(_L)："
 
-#: ../src/search.c:908
+#: ../src/search.c:910
 msgid "File patterns, e.g. *.c *.h"
 msgstr "文件通配符，比如 *.c *.h"
 
-#: ../src/search.c:920
+#: ../src/search.c:922
 msgid "_Directory:"
 msgstr "目录(_D)："
 
-#: ../src/search.c:939
+#: ../src/search.c:941
 msgid "E_ncoding:"
 msgstr "编码(_N)："
 
-#: ../src/search.c:963
+#: ../src/search.c:965
 msgid "See grep's manual page for more information"
 msgstr "详情请参阅 Grep 手册"
 
-#: ../src/search.c:965
+#: ../src/search.c:967
 msgid "_Recurse in subfolders"
 msgstr "搜索子目录(_R)"
 
-#: ../src/search.c:978
+#: ../src/search.c:980
 msgid "_Invert search results"
 msgstr "反转查找结果(_I)"
 
-#: ../src/search.c:982
+#: ../src/search.c:984
 msgid "Invert the sense of matching, to select non-matching lines"
 msgstr "反转查找结果以选择不匹配的行"
 
-#: ../src/search.c:999
+#: ../src/search.c:1001
 msgid "E_xtra options:"
 msgstr "额外的参数(_X)："
 
-#: ../src/search.c:1007
+#: ../src/search.c:1009
 msgid "Other options to pass to Grep"
 msgstr "传给 Grep 的其它参数"
 
-#: ../src/search.c:1369 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
 msgstr[0] "找到 %d 个“%s”的匹配项。"
 
-#: ../src/search.c:1425
+#: ../src/search.c:1427
 #, c-format
 msgid "Replaced %u matches in %u documents."
 msgstr "在 %2$u 个文档中替换了 %1$u 个匹配项。"

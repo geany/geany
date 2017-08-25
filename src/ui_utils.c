@@ -2095,9 +2095,22 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 	else
 	{
 		gchar *utf8_filename = utils_get_utf8_from_locale(file_name);
-		gchar *base_name = g_path_get_basename(file_name);
-		gchar *global_file = g_build_filename(app->datadir, base_name, NULL);
+		gchar *global_file;
+		gchar *base_name = NULL;
 		gchar *global_content = NULL;
+
+		/* get the path inside app->configdir - can contain subdirectories */
+		if (g_str_has_prefix(file_name, app->configdir))
+		{
+			gsize len = strlen(app->configdir);
+			if (file_name[len] == G_DIR_SEPARATOR)
+				base_name = g_strdup(file_name + len + 1);
+		}
+
+		if (!base_name)
+			base_name = g_path_get_basename(file_name);
+
+		global_file = g_build_filename(app->datadir, base_name, NULL);
 
 		/* if the requested file doesn't exist in the user's config dir, try loading the file
 		 * from the global data directory and use its contents for the newly created file */

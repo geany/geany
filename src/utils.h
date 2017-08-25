@@ -211,6 +211,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
+gchar *utils_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
 

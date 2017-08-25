@@ -1,5 +1,5 @@
 # German translations for geany package.
-# Copyright (C) 2006-2016 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2017 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Enrico Tröger <enrico.troeger@uvena.de> 2006 - 2009
 # Frank Lanitz <frank@frank.uvena.de> 2006 - 2017
@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-15 15:41+0100\n"
+"POT-Creation-Date: 2017-05-29 19:31+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2291,53 +2291,53 @@ msgstr ""
 "Frank Lanitz\n"
 "Alle Rechte vorbehalten."
 
-#: ../src/about.c:168
+#: ../src/about.c:171
 msgid "About Geany"
 msgstr "Über Geany"
 
-#: ../src/about.c:212
+#: ../src/about.c:215
 msgid "A fast and lightweight IDE"
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
-#: ../src/about.c:234
+#: ../src/about.c:237
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(kompiliert am %s oder später)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:266
+#: ../src/about.c:269
 msgid "Info"
 msgstr "Info"
 
-#: ../src/about.c:282
+#: ../src/about.c:285
 msgid "Developers"
 msgstr "Entwickler"
 
-#: ../src/about.c:289
+#: ../src/about.c:292
 msgid "maintainer"
 msgstr "Hauptentwickler"
 
-#: ../src/about.c:297 ../src/about.c:305 ../src/about.c:313
+#: ../src/about.c:300 ../src/about.c:308 ../src/about.c:316
 msgid "developer"
 msgstr "Entwickler"
 
-#: ../src/about.c:321
+#: ../src/about.c:324
 msgid "translation maintainer"
 msgstr "Übersetzungskoordinator"
 
-#: ../src/about.c:330
+#: ../src/about.c:333
 msgid "Translators"
 msgstr "Übersetzer"
 
-#: ../src/about.c:350
+#: ../src/about.c:353
 msgid "Previous Translators"
 msgstr "Ehemalige Übersetzer"
 
-#: ../src/about.c:371
+#: ../src/about.c:374
 msgid "Contributors"
 msgstr "Mitwirkende"
 
-#: ../src/about.c:381
+#: ../src/about.c:384
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
@@ -2345,15 +2345,15 @@ msgstr ""
 "Einige der vielen Leute, die an Geany mitgearbeitet haben (eine "
 "detailliertere Liste findet sich in der Datei %s):"
 
-#: ../src/about.c:407
+#: ../src/about.c:410
 msgid "Credits"
 msgstr "Credits"
 
-#: ../src/about.c:424
+#: ../src/about.c:427
 msgid "License"
 msgstr "Lizenz"
 
-#: ../src/about.c:433
+#: ../src/about.c:436
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."

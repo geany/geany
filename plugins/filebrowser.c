@@ -101,13 +101,12 @@ static struct
 } popup_items;
 
 
-static void project_change_cb(GObject *obj, GKeyFile *config, gpointer data);
+static void project_open_cb(GObject *obj, GKeyFile *config, gpointer data);
 
 /* note: other callbacks connected in plugin_init */
 PluginCallback plugin_callbacks[] =
 {
-	{ "project-open", (GCallback) &project_change_cb, TRUE, NULL },
-	{ "project-save", (GCallback) &project_change_cb, TRUE, NULL },
+	{ "project-open", (GCallback) &project_open_cb, TRUE, NULL },
 	{ NULL, NULL, FALSE, NULL }
 };
 
@@ -393,6 +392,16 @@ static void on_current_path(void)
 
 	SETPTR(current_dir, dir);
 	refresh();
+}
+
+
+static void on_realized(void)
+{
+	GeanyProject *project = geany->app->project;
+
+	/* if fb_set_project_base_path and project open, the path has already been set */
+	if (! fb_set_project_base_path || project == NULL || EMPTY(project->base_path))
+		on_current_path();
 }
 
 
@@ -891,7 +900,7 @@ static void prepare_file_view(void)
 	gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
 
 	/* Show the current path when the FB is first needed */
-	g_signal_connect(file_view, "realize", G_CALLBACK(on_current_path), NULL);
+	g_signal_connect(file_view, "realize", G_CALLBACK(on_realized), NULL);
 	g_signal_connect(selection, "changed", G_CALLBACK(on_tree_selection_changed), NULL);
 	g_signal_connect(file_view, "button-press-event", G_CALLBACK(on_button_press), NULL);
 	g_signal_connect(file_view, "key-press-event", G_CALLBACK(on_key_press), NULL);
@@ -1039,8 +1048,8 @@ static void load_settings(void)
 }
 
 
-static void project_change_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile *config,
-							  G_GNUC_UNUSED gpointer data)
+static void project_open_cb(G_GNUC_UNUSED GObject *obj, G_GNUC_UNUSED GKeyFile *config,
+							G_GNUC_UNUSED gpointer data)
 {
 	gchar *new_dir;
 	GeanyProject *project = geany->app->project;
