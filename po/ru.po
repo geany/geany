@@ -4411,7 +4411,7 @@ msgstr "Отключите эту опцию, чтобы оставить диа
 
 #: ../src/search.c:634
 msgid "Replace & Fi_nd"
-msgstr "Найти _и заменить"
+msgstr "Заменить _и Найти"
 
 #: ../src/search.c:643
 msgid "Replace wit_h:"
