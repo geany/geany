@@ -667,11 +667,15 @@ Method
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In tagmanager/src/tm_parsers.c:
+In src/tagmanager/tm_parser.c:
 Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
 FooKinds to the appropriate TMTagType, and add the corresponding
 MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
+
+In src/tagmanager/tm_tag.c:
+Update tm_tag_context_separator() and tm_tag_has_full_context() to handle the
+new parser if applicable, by adding a TM_PARSER_FOO case entry.
 
 In filetypes.c, init_builtin_filetypes():
 Set the 2nd argument of the FT_INIT() macro for this filetype to FOO.

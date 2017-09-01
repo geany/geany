@@ -693,6 +693,47 @@ const gchar *tm_tag_context_separator(TMParserType lang)
 	}
 }
 
+gboolean tm_tag_has_full_context(TMParserType lang)
+{
+	switch (lang)
+	{
+		/* These parsers include full hierarchy in the tag scope, separated by tm_tag_context_separator() */
+		case TM_PARSER_C:
+		case TM_PARSER_CPP:
+		case TM_PARSER_CSHARP:
+		case TM_PARSER_D:
+		case TM_PARSER_FERITE:
+		case TM_PARSER_GLSL:
+		case TM_PARSER_JAVA:
+		case TM_PARSER_JAVASCRIPT:
+		case TM_PARSER_JSON:
+		case TM_PARSER_PHP:
+		case TM_PARSER_POWERSHELL:
+		case TM_PARSER_PYTHON:
+		case TM_PARSER_RUBY:
+		case TM_PARSER_RUST:
+		case TM_PARSER_SQL:
+		case TM_PARSER_TXT2TAGS:
+		case TM_PARSER_VALA:
+		case TM_PARSER_ZEPHIR:
+			return TRUE;
+
+		/* These make use of the scope, but don't include nested hierarchy
+		 * (either as a parser limitation or a language semantic) */
+		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_CONF:
+		case TM_PARSER_ERLANG:
+		case TM_PARSER_F77:
+		case TM_PARSER_FORTRAN:
+		case TM_PARSER_GO:
+		case TM_PARSER_OBJC:
+		case TM_PARSER_REST:
+		/* Other parsers don't use scope at all (or should be somewhere above) */
+		default:
+			return FALSE;
+	}
+}
+
 gboolean tm_tag_is_anon(const TMTag *tag)
 {
 	guint i;

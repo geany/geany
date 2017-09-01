@@ -922,30 +922,9 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 }
 
 
-/* find the last word in "foo::bar::blah", e.g. "blah" */
-static const gchar *get_parent_name(const TMTag *tag, GeanyFiletypeID ft_id)
+static const gchar *get_parent_name(const TMTag *tag)
 {
-	const gchar *scope = tag->scope;
-	const gchar *separator = symbols_get_context_separator(ft_id);
-	const gchar *str, *ptr;
-
-	if (!scope)
-		return NULL;
-
-	str = scope;
-
-	while (1)
-	{
-		ptr = strstr(str, separator);
-		if (ptr)
-		{
-			str = ptr + strlen(separator);
-		}
-		else
-			break;
-	}
-
-	return !EMPTY(str) ? str : NULL;
+	return !EMPTY(tag->scope) ? tag->scope : NULL;
 }
 
 
@@ -1147,21 +1126,46 @@ static void parents_table_tree_value_free(gpointer data)
 
 
 /* adds a new element in the parent table if its key is known. */
-static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
-		const GtkTreeIter *iter)
+static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkTreeIter *iter)
 {
+	const gchar *name;
+	gchar *name_free = NULL;
 	GTree *tree;
-	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &tree) &&
-		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
+
+	if (EMPTY(tag->scope))
+	{
+		/* simple case, just use the tag name */
+		name = tag->name;
+	}
+	else if (! tm_tag_has_full_context(tag->lang))
+	{
+		/* if the parser doesn't use fully qualified scope, use the name alone but
+		 * prevent Foo::Foo from making parent = child */
+		if (utils_str_equal(tag->scope, tag->name))
+			name = NULL;
+		else
+			name = tag->name;
+	}
+	else
+	{
+		/* build the fully qualified scope as get_parent_name() would return it for a child tag */
+		name_free = g_strconcat(tag->scope, tm_tag_context_separator(tag->lang), tag->name, NULL);
+		name = name_free;
+	}
+
+	if (name && g_hash_table_lookup_extended(table, name, NULL, (gpointer *) &tree))
 	{
 		if (!tree)
 		{
 			tree = g_tree_new_full(tree_cmp, NULL, NULL, parents_table_tree_value_free);
-			g_hash_table_insert(table, tag->name, tree);
+			g_hash_table_insert(table, name_free ? name_free : g_strdup(name), tree);
+			name_free = NULL;
 		}
 
 		g_tree_insert(tree, GINT_TO_POINTER(tag->line), g_slice_dup(GtkTreeIter, iter));
 	}
+
+	g_free(name_free);
 }
 
 
@@ -1314,20 +1318,20 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 	/* Build hash tables holding tags and parents */
 	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>> */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, parents_table_value_free);
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, parents_table_value_free);
 	/* tags table is another representation of the @tags list,
 	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
 	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, tags_table_value_free);
 	foreach_list(item, *tags)
 	{
 		TMTag *tag = item->data;
-		const gchar *name;
+		const gchar *parent_name;
 
 		tags_table_insert(tags_table, tag, item);
 
-		name = get_parent_name(tag, doc->file_type->id);
-		if (name)
-			g_hash_table_insert(parents_table, (gpointer) name, NULL);
+		parent_name = get_parent_name(tag);
+		if (parent_name)
+			g_hash_table_insert(parents_table, g_strdup(parent_name), NULL);
 	}
 
 	/* First pass, update existing rows or delete them.
@@ -1354,7 +1358,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				const gchar *parent_name;
 				TMTag *found = found_item->data;
 
-				parent_name = get_parent_name(found, doc->file_type->id);
+				parent_name = get_parent_name(found);
 				/* if parent is unknown, ignore it */
 				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
 					parent_name = NULL;
@@ -1376,7 +1380,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 					g_free(tooltip);
 				}
 
-				update_parents_table(parents_table, found, parent_name, &iter);
+				update_parents_table(parents_table, found, &iter);
 
 				/* remove the updated tag from the table and list */
 				tags_table_remove(tags_table, found);
@@ -1407,7 +1411,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			gchar *tooltip;
 			GdkPixbuf *icon = get_child_icon(store, parent);
 
-			parent_name = get_parent_name(tag, doc->file_type->id);
+			parent_name = get_parent_name(tag);
 			if (parent_name)
 			{
 				GtkTreeIter *parent_search = parents_table_lookup(parents_table, parent_name, tag->line);
@@ -1435,7 +1439,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			if (G_LIKELY(icon))
 				g_object_unref(icon);
 
-			update_parents_table(parents_table, tag, parent_name, &iter);
+			update_parents_table(parents_table, tag, &iter);
 
 			if (expand)
 				tree_view_expand_to_iter(GTK_TREE_VIEW(doc->priv->tag_tree), &iter);
