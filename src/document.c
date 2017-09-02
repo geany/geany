@@ -1618,7 +1618,7 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 						NULL, 0, _("The buffer's previous state is stored in the history and "
 						"undoing restores it. You can disable this by discarding the history upon "
 						"reload. This message will not be displayed again but "
-						"Your choice can be changed in the various preferences."),
+						"your choice can be changed in the various preferences."),
 						_("The file has been reloaded."));
 		doc->priv->info_bars[MSG_TYPE_POST_RELOAD] = bar;
 		file_prefs.show_keep_edit_history_on_reload_msg = FALSE;
