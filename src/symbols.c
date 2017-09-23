@@ -229,7 +229,7 @@ GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 			tag = TM_TAG(typedefs->pdata[j]);
 			tag_lang = tag->lang;
 
-			if (tag->name && tm_tag_langs_compatible(lang, tag_lang) &&
+			if (tag->name && tm_parser_langs_compatible(lang, tag_lang) &&
 				strcmp(tag->name, last_name) != 0)
 			{
 				if (j != 0)
@@ -256,7 +256,7 @@ GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	return tm_tag_context_separator(filetypes[ft_id]->lang);
+	return tm_parser_context_separator(filetypes[ft_id]->lang);
 }
 
 
@@ -1137,7 +1137,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 		/* simple case, just use the tag name */
 		name = tag->name;
 	}
-	else if (! tm_tag_has_full_context(tag->lang))
+	else if (! tm_parser_has_full_context(tag->lang))
 	{
 		/* if the parser doesn't use fully qualified scope, use the name alone but
 		 * prevent Foo::Foo from making parent = child */
@@ -1149,7 +1149,7 @@ static void update_parents_table(GHashTable *table, const TMTag *tag, const GtkT
 	else
 	{
 		/* build the fully qualified scope as get_parent_name() would return it for a child tag */
-		name_free = g_strconcat(tag->scope, tm_tag_context_separator(tag->lang), tag->name, NULL);
+		name_free = g_strconcat(tag->scope, tm_parser_context_separator(tag->lang), tag->name, NULL);
 		name = name_free;
 	}
 
@@ -1319,7 +1319,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	/* Build hash tables holding tags and parents */
 	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>>
 	 * where tag_name might be a fully qualified name (with scope) if the language
-	 * parser reports scope properly (see tm_tag_has_full_context()). */
+	 * parser reports scope properly (see tm_parser_has_full_context()). */
 	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, parents_table_value_free);
 	/* tags table is another representation of the @tags list,
 	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
