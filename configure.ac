@@ -104,6 +104,7 @@ AC_DEFINE([HAVE_REGCOMP], [1], [Should always be 1, required for CTags.])
 GEANY_CHECK_PLUGINS
 # check for mingw specific settings
 GEANY_CHECK_MINGW
+GEANY_CHECK_OSX
 
 GEANY_CHECK_SOCKET
 GEANY_CHECK_VTE

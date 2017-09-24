@@ -768,10 +768,9 @@ static void load_kb(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer user_dat
 }
 
 
-static void init_platform_kb(void)
+static void init_system_kb(void)
 {
-#ifdef __APPLE__
-	gchar *configfile = g_build_filename(app->datadir, "keybindings_osx.conf", NULL);
+	gchar *configfile = g_build_filename(app->datadir, "keybindings.conf", NULL);
 	GKeyFile *config = g_key_file_new();
 
 	if (g_key_file_load_from_file(config, configfile, G_KEY_FILE_KEEP_COMMENTS, NULL))
@@ -779,7 +778,6 @@ static void init_platform_kb(void)
 
 	g_free(configfile);
 	g_key_file_free(config);
-#endif
 }
 
 
@@ -791,7 +789,7 @@ void keybindings_init(void)
 	kb_accel_group = gtk_accel_group_new();
 
 	init_default_kb();
-	init_platform_kb();
+	init_system_kb();
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), kb_accel_group);
 
 	g_signal_connect(main_widgets.window, "key-press-event", G_CALLBACK(on_key_press_event), NULL);

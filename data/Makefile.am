@@ -109,10 +109,15 @@ nobase_dist_pkgdata_DATA = \
 	$(template_files) \
 	$(templates) \
 	filetype_extensions.conf \
-	keybindings_osx.conf \
 	snippets.conf \
 	ui_toolbar.xml \
 	geany.glade
+
+dist_pkgdata_DATA =
+
+if OSX
+dist_pkgdata_DATA += osx/keybindings.conf
+endif OSX
 
 if GTK3
 nobase_dist_pkgdata_DATA += \
