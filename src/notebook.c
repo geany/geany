@@ -443,13 +443,16 @@ static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocume
 {
 	g_return_if_fail(has_tabs_on_right(doc));
 	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint current_page = gtk_notebook_get_current_page(nb);
 	gint doc_page = document_get_notebook_page(doc);
 	for (gint i = doc_page + 1; i < gtk_notebook_get_n_pages(nb); )
 	{
 		if (! document_close(document_get_from_page(i)))
 			i++; // only increment if tab wasn't closed
 	}
-	gtk_notebook_set_current_page(nb, doc_page);
+	/* keep the current tab to the original one unless it has been closed, in
+	 * which case use the activated one */
+	gtk_notebook_set_current_page(nb, MIN(current_page, doc_page));
 }
 
 
