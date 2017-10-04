@@ -352,14 +352,14 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 	dinfo->sci = editor_create_widget(dinfo->doc->editor);
 	/* since we won't add the widget to any container, assume it's ownership */
 	g_object_ref_sink(dinfo->sci);
-	scintilla_send_message(dinfo->sci, SCI_SETDOCPOINTER, 0,
-			scintilla_send_message(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
+	SSM(dinfo->sci, SCI_SETDOCPOINTER, 0,
+			SSM(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
 	highlighting_set_styles(dinfo->sci, dinfo->doc->file_type);
 	sci_set_line_numbers(dinfo->sci, printing_prefs.print_line_numbers);
-	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
+	SSM(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
+	SSM(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
+	SSM(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
+	SSM(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
 
 	/* Scintilla doesn't respect the context resolution, so we'll scale ourselves.
 	 * Actually Scintilla simply doesn't know about the resolution since it creates its own
@@ -401,7 +401,7 @@ static gint format_range(DocInfo *dinfo, gboolean draw)
 
 	cairo_save(dinfo->fr.hdc);
 	cairo_scale(dinfo->fr.hdc, dinfo->sci_scale, dinfo->sci_scale);
-	pos = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
+	pos = (gint) SSM(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
 	cairo_restore(dinfo->fr.hdc);
 
 	return pos;

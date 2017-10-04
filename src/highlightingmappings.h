@@ -1257,6 +1257,10 @@ static const HLStyle highlighting_styles_PYTHON[] =
 	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
 	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
 	{ SCE_P_WORD2,			"word2",			FALSE },
+	{ SCE_P_FSTRING,		"fstring",			FALSE },
+	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE },
+	{ SCE_P_FTRIPLE,		"ftriple",			FALSE },
+	{ SCE_P_FTRIPLEDOUBLE,	"ftripledouble",	FALSE },
 	{ SCE_P_DECORATOR,		"decorator",		FALSE }
 };
 static const HLKeyword highlighting_keywords_PYTHON[] =

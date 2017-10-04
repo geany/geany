@@ -22,17 +22,19 @@ GTK3=no
 CONFIGUREFLAGS="--enable-nls"
 MAKEFLAGS="${MAKEFLAGS:--j2}"
 
-while getopts '32h' o; do
+while getopts '32b:h' o; do
   case "$o" in
     3) GTK3=yes;;
     2) GTK3=no;;
+    b) BUILDDIR="$OPTARG";;
     h)
       cat <<EOF
-USAGE: $0 [-2|-3] [-h]
+USAGE: $0 [-2|-3] [-b DIR] [-h]
 
--2  Build against GTK2
--3  Build against GTK3
--h  Show this help and exit
+-2      Build against GTK2
+-3      Build against GTK3
+-b DIR  Use DIR as build directory
+-h      Show this help and exit
 EOF
       exit 0;;
     *) echo "Invalid option $o (see -h)">&2; exit 1;;
@@ -52,7 +54,7 @@ fetch_and_unzip()
 {
   local basename=${1##*/}
   curl -L -# "$1" > "$basename"
-  unzip -q "$basename" -d "$2"
+  unzip -qn "$basename" -d "$2"
   rm -f "$basename"
 }
 
@@ -85,7 +87,8 @@ mkdir "$BUILDDIR"
 cd "$BUILDDIR"
 
 mkdir _deps
-fetch_and_unzip "$BUNDLE_ZIP" _deps
+fetch_and_unzip "$GTK3_BUNDLE_ZIP" _deps
+[ "$GTK3" = yes ] || fetch_and_unzip "$BUNDLE_ZIP" _deps
 # fixup the prefix= in the pkg-config files
 sed -i "s%^\(prefix=\).*$%\1$PWD/_deps%" _deps/lib/pkgconfig/*.pc
 
@@ -99,6 +102,9 @@ cd _build
   --host=$HOST \
   --disable-silent-rules \
   --prefix="$PWD/../_install" \
-  $CONFIGUREFLAGS
+  $CONFIGUREFLAGS || {
+  cat config.log
+  exit 1
+}
 make $MAKEFLAGS
 make $MAKEFLAGS install

@@ -37,6 +37,7 @@
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
+#include "tm_source_file.h" // for tm_get_real_path()
 #include "templates.h"
 #include "ui_utils.h"
 #include "win32.h"
@@ -451,10 +452,14 @@ const gchar *utils_path_skip_root(const gchar *path)
 }
 
 
+/* Convert a fractional @a val in the range [0, 1] to a whole value in the range [0, @a factor].
+ * In particular, this is used for converting a @c GdkColor to the "#RRGGBB" format in a way that
+ * agrees with GTK+, so the "#RRGGBB" in the color picker is the same "#RRGGBB" that is inserted
+ * into the document. See https://github.com/geany/geany/issues/1527
+ */
 gdouble utils_scale_round(gdouble val, gdouble factor)
 {
-	/*val = floor(val * factor + 0.5);*/
-	val = floor(val);
+	val = floor(val * factor + 0.5);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
 
@@ -881,9 +886,9 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	g_return_val_if_fail(color != NULL, NULL);
 
 	return g_strdup_printf("#%02X%02X%02X",
-		(guint) (utils_scale_round(color->red / 256, 255)),
-		(guint) (utils_scale_round(color->green / 256, 255)),
-		(guint) (utils_scale_round(color->blue / 256, 255)));
+		(guint) (utils_scale_round(color->red / 65535.0, 255)),
+		(guint) (utils_scale_round(color->green / 65535.0, 255)),
+		(guint) (utils_scale_round(color->blue / 65535.0, 255)));
 }
 
 
@@ -1057,25 +1062,6 @@ GIOChannel *utils_set_up_io_channel(
 	g_io_channel_unref(ioc);
 
 	return ioc;
-}
-
-
-gchar **utils_read_file_in_array(const gchar *filename)
-{
-	gchar **result = NULL;
-	gchar *data;
-
-	g_return_val_if_fail(filename != NULL, NULL);
-
-	g_file_get_contents(filename, &data, NULL, NULL);
-
-	if (data != NULL)
-	{
-		result = g_strsplit_set(data, "\r\n", -1);
-		g_free(data);
-	}
-
-	return result;
 }
 
 
@@ -1688,7 +1674,7 @@ gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFla
  *  @param flags Ignored.
  *  @param child_setup @girskip Ignored.
  *  @param user_data Ignored.
- *  @param child_pid @nullable The return location for child process ID, or @c NULL.
+ *  @param child_pid @out @nullable The return location for child process ID, or @c NULL.
  *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
@@ -1776,7 +1762,7 @@ gboolean utils_is_remote_path(const gchar *path)
 
 /* Remove all relative and untidy elements from the path of @a filename.
  * @param filename must be a valid absolute path.
- * @see tm_get_real_path() - also resolves links. */
+ * @see utils_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
 	GString *str;
@@ -2122,6 +2108,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 		g_free(prefix);
 #else
 		if (is_osx_bundle())
@@ -2134,6 +2121,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
 			g_free(prefix);
 # endif
 		}
@@ -2144,6 +2132,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
 			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
 			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(GEANY_LIBEXECDIR, "geany", NULL);
 		}
 #endif
 	}
@@ -2187,4 +2176,30 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	}
 	else
 		g_printerr("Unable to find 'geany'");
+}
+
+
+/**
+ * Get a link-dereferenced, absolute version of a file name.
+ *
+ * This is similar to the POSIX `realpath` function when passed a
+ * @c NULL argument.
+ *
+ * @warning This function suffers the same problems as the POSIX
+ * function `realpath()`, namely that it's impossible to determine
+ * a suitable size for the returned buffer, and so it's limited to a
+ * maximum of `PATH_MAX`.
+ *
+ * @param file_name The file name to get the real path of.
+ *
+ * @return A newly-allocated string containing the real path which
+ * should be freed with `g_free()` when no longer needed, or @c NULL
+ * if the real path cannot be obtained.
+ *
+ * @since 1.32 (API 235)
+ */
+GEANY_API_SYMBOL
+gchar *utils_get_real_path(const gchar *file_name)
+{
+	return tm_get_real_path(file_name);
 }

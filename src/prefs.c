@@ -56,6 +56,7 @@
 #include "ui_utils.h"
 #include "utils.h"
 #include "vte.h"
+#include "osx.h"
 
 #include "gtkcompat.h"
 
@@ -213,13 +214,14 @@ static void kb_tree_view_change_button_clicked_cb(GtkWidget *button, KbData *kbd
 
 static void kb_show_popup_menu(KbData *kbdata, GtkWidget *widget, GdkEventButton *event)
 {
-	GtkWidget *item;
 	static GtkWidget *menu = NULL;
 	guint button;
 	guint32 event_time;
 
 	if (menu == NULL)
 	{
+		GtkWidget *item;
+
 		menu = gtk_menu_new();
 
 		item = ui_image_menu_item_new(GTK_STOCK_ADD, _("_Expand All"));
@@ -415,8 +417,11 @@ static void prefs_init_dialog(void)
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), project_prefs.project_file_in_basedir);
 
-	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_winpos);
+        widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_winpos);
+
+        widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_geom");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.save_wingeom);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), prefs.confirm_exit);
@@ -768,9 +773,6 @@ static void prefs_init_dialog(void)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "color_back");
 		gtk_color_button_set_color(GTK_COLOR_BUTTON(widget), &vc->colour_back);
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
-		gtk_entry_set_text(GTK_ENTRY(widget), vc->image);
-
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget), vc->scrollback_lines);
 
@@ -898,8 +900,11 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_project_file_in_basedir");
 		project_prefs.project_file_in_basedir = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
-		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
-		prefs.save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+                widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_pos");
+                prefs.save_winpos = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
+                widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_save_win_geom");
+                prefs.save_wingeom = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_ask_for_quit");
 		prefs.confirm_exit = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
@@ -1197,6 +1202,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			kb_update(&global_kb_data);
 			tools_create_insert_custom_command_menu_items();
 			keybindings_write_to_file();
+#ifdef MAC_INTEGRATION
+			/* Force re-syncing the menubar to update displayed keybindings. */
+			gtkosx_application_sync_menubar(gtkosx_application_get());
+#endif
 		}
 
 		/* Printing */
@@ -1234,10 +1243,6 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "spin_scrollback");
 			gtk_spin_button_update(GTK_SPIN_BUTTON(widget));
 			vc->scrollback_lines = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(widget));
-
-			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_image");
-			g_free(vc->image);
-			vc->image = g_strdup(gtk_entry_get_text(GTK_ENTRY(widget)));
 
 			widget = ui_lookup_widget(ui_widgets.prefs_dialog, "entry_shell");
 			g_free(vc->shell);
@@ -1492,7 +1497,7 @@ static gboolean kb_find_duplicate(GtkTreeStore *store, GtkWidget *parent, GtkTre
 					/* carry on looking for other duplicates if overriding */
 					continue;
 				}
-				return ret == GTK_RESPONSE_NO;
+				return ret != GTK_RESPONSE_APPLY;
 			}
 		}
 		while (gtk_tree_model_iter_next(model, &iter));

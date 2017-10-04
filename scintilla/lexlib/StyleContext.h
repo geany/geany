@@ -12,13 +12,6 @@
 namespace Scintilla {
 #endif
 
-static inline int MakeLowerCase(int ch) {
-	if (ch < 'A' || ch > 'Z')
-		return ch;
-	else
-		return ch - 'A' + 'a';
-}
-
 // All languages handled so far can treat all characters >= 0x80 as one class
 // which just continues the current token or starts an identifier if in default.
 // DBCS treated specially as the second character can be < 0x80 and hence
@@ -33,8 +26,6 @@ class StyleContext {
 	Sci_PositionU posRelative;
 	Sci_PositionU currentPosLastRelative;
 	Sci_Position offsetRelative;
-
-	StyleContext &operator=(const StyleContext &);
 
 	void GetNextChar() {
 		if (multiByteAccess) {
@@ -104,6 +95,9 @@ public:
 
 		GetNextChar();
 	}
+	// Deleted so StyleContext objects can not be copied.
+	StyleContext(const StyleContext &) = delete;
+	StyleContext &operator=(const StyleContext &) = delete;
 	void Complete() {
 		styler.ColourTo(currentPos - ((currentPos > lengthDocument) ? 2 : 1), state);
 		styler.Flush();
@@ -137,7 +131,7 @@ public:
 		}
 	}
 	void ForwardBytes(Sci_Position nb) {
-		Sci_PositionU forwardPos = currentPos + nb;
+		const Sci_PositionU forwardPos = currentPos + nb;
 		while (forwardPos > currentPos) {
 			Forward();
 		}
@@ -172,7 +166,7 @@ public:
 			}
 			Sci_Position diffRelative = n - offsetRelative;
 			Sci_Position posNew = multiByteAccess->GetRelativePosition(posRelative, diffRelative);
-			int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
+			const int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
 			posRelative = posNew;
 			currentPosLastRelative = currentPos;
 			offsetRelative = n;
@@ -204,22 +198,8 @@ public:
 		}
 		return true;
 	}
-	bool MatchIgnoreCase(const char *s) {
-		if (MakeLowerCase(ch) != static_cast<unsigned char>(*s))
-			return false;
-		s++;
-		if (MakeLowerCase(chNext) != static_cast<unsigned char>(*s))
-			return false;
-		s++;
-		for (int n=2; *s; n++) {
-			if (static_cast<unsigned char>(*s) !=
-				MakeLowerCase(static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+n, 0))))
-				return false;
-			s++;
-		}
-		return true;
-	}
 	// Non-inline
+	bool MatchIgnoreCase(const char *s);
 	void GetCurrent(char *s, Sci_PositionU len);
 	void GetCurrentLowered(char *s, Sci_PositionU len);
 };

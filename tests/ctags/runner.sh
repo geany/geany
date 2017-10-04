@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # error out on undefined variable expansion, useful for debugging
 set -u

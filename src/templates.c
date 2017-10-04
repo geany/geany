@@ -175,15 +175,13 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 									 GeanyFiletype *ft)
 {
 	gchar *content;
-	GString *template = NULL;
 
 	content = read_file(locale_fname);
 
 	if (content != NULL)
 	{
 		gchar *file_header;
-
-		template = g_string_new(content);
+		GString *template = g_string_new(content);
 
 		file_header = get_template_fileheader(ft);
 		templates_replace_valist(template,
@@ -617,8 +615,9 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 	}
 	else
 	{
-		g_warning(_("Cannot execute command \"%s\" from the template: %s. "
-			"Check the path in the template."), command, error->message);
+		g_warning(_("Cannot execute template command \"%s\". "
+			"Hint: incorrect paths in the command are a common cause of errors. "
+			"Error: %s."), command, error->message);
 		g_error_free(error);
 	}
 
@@ -630,16 +629,16 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 static void templates_replace_command(GString *text, const gchar *file_name,
 							   const gchar *file_type, const gchar *func_name)
 {
-	gchar *match = NULL;
-	gchar *wildcard = NULL;
-	gchar *cmd;
-	gchar *result;
+	gchar *match;
 
 	g_return_if_fail(text != NULL);
 
 	while ((match = strstr(text->str, "{command:")) != NULL)
 	{
-		cmd = match;
+		gchar *wildcard;
+		gchar *cmd = match;
+		gchar *result;
+
 		while (*match != '}' && *match != '\0')
 			match++;
 

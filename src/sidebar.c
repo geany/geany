@@ -768,11 +768,10 @@ static void create_openfiles_popup_menu(void)
 static void unfold_parent(GtkTreeIter *iter)
 {
 	GtkTreeIter parent;
-	GtkTreePath *path;
 
 	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter))
 	{
-		path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
+		GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}

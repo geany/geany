@@ -128,7 +128,6 @@ static gint socket_fd_close			(gint sock);
 static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
-	gchar *filename;
 
 	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
@@ -158,7 +157,7 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 
 	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
-		filename = main_get_argv_filename(argv[i]);
+		gchar *filename = main_get_argv_filename(argv[i]);
 
 		/* if the filename is valid or if a new file should be opened is check on the other side */
 		if (filename != NULL)
@@ -285,8 +284,15 @@ gint socket_init(gint argc, gchar **argv)
 	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
 
+	/* On OS X with quartz backend gdk_display_get_name() returns hostname
+	 * using [NSHost currentHost] (it could return more or less whatever string
+	 * as display name is a X11 specific thing). This call can lead to network
+	 * query and block for several seconds so better skip it. */
+#ifndef GDK_WINDOWING_QUARTZ
 	if (display != NULL)
 		display_name = g_strdup(gdk_display_get_name(display));
+#endif
+
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");
 

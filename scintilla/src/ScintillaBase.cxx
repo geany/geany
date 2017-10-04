@@ -5,17 +5,17 @@
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <assert.h>
-#include <ctype.h>
+#include <cstddef>
+#include <cstdlib>
+#include <cassert>
+#include <cstring>
 
 #include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <memory>
 
 #include "Platform.h"
 
@@ -34,6 +34,7 @@
 #endif
 
 #include "Position.h"
+#include "UniqueString.h"
 #include "SplitVector.h"
 #include "Partitioning.h"
 #include "RunStyles.h"
@@ -64,7 +65,7 @@ using namespace Scintilla;
 #endif
 
 ScintillaBase::ScintillaBase() {
-	displayPopupMenu = true;
+	displayPopupMenu = SC_POPUP_ALL;
 	listType = 0;
 	maxListWidth = 0;
 	multiAutoCMode = SC_MULTIAUTOC_ONCE;
@@ -79,7 +80,7 @@ void ScintillaBase::Finalise() {
 }
 
 void ScintillaBase::AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS) {
-	bool isFillUp = ac.Active() && ac.IsFillUpChar(*s);
+	const bool isFillUp = ac.Active() && ac.IsFillUpChar(*s);
 	if (!isFillUp) {
 		Editor::AddCharUTF(s, len, treatAsDBCS);
 	}
@@ -202,28 +203,28 @@ int ScintillaBase::KeyCommand(unsigned int iMessage) {
 }
 
 void ScintillaBase::AutoCompleteDoubleClick(void *p) {
-	ScintillaBase *sci = reinterpret_cast<ScintillaBase *>(p);
+	ScintillaBase *sci = static_cast<ScintillaBase *>(p);
 	sci->AutoCompleteCompleted(0, SC_AC_DOUBLECLICK);
 }
 
-void ScintillaBase::AutoCompleteInsert(Position startPos, int removeLen, const char *text, int textLen) {
+void ScintillaBase::AutoCompleteInsert(Sci::Position startPos, int removeLen, const char *text, int textLen) {
 	UndoGroup ug(pdoc);
 	if (multiAutoCMode == SC_MULTIAUTOC_ONCE) {
 		pdoc->DeleteChars(startPos, removeLen);
-		const int lengthInserted = pdoc->InsertString(startPos, text, textLen);
+		const Sci::Position lengthInserted = pdoc->InsertString(startPos, text, textLen);
 		SetEmptySelection(startPos + lengthInserted);
 	} else {
 		// SC_MULTIAUTOC_EACH
 		for (size_t r=0; r<sel.Count(); r++) {
 			if (!RangeContainsProtected(sel.Range(r).Start().Position(),
 				sel.Range(r).End().Position())) {
-				int positionInsert = sel.Range(r).Start().Position();
-				positionInsert = InsertSpace(positionInsert, sel.Range(r).caret.VirtualSpace());
+				Sci::Position positionInsert = sel.Range(r).Start().Position();
+				positionInsert = RealizeVirtualSpace(positionInsert, sel.Range(r).caret.VirtualSpace());
 				if (positionInsert - removeLen >= 0) {
 					positionInsert -= removeLen;
 					pdoc->DeleteChars(positionInsert, removeLen);
 				}
-				const int lengthInserted = pdoc->InsertString(positionInsert, text, textLen);
+				const Sci::Position lengthInserted = pdoc->InsertString(positionInsert, text, textLen);
 				if (lengthInserted > 0) {
 					sel.Range(r).caret.SetPosition(positionInsert + lengthInserted);
 					sel.Range(r).anchor.SetPosition(positionInsert + lengthInserted);
@@ -287,7 +288,7 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 		rcac.top = pt.y + vs.lineHeight;
 	}
 	rcac.right = rcac.left + widthLB;
-	rcac.bottom = static_cast<XYPOSITION>(Platform::Minimum(static_cast<int>(rcac.top) + heightLB, static_cast<int>(rcPopupBounds.bottom)));
+	rcac.bottom = static_cast<XYPOSITION>(std::min(static_cast<int>(rcac.top) + heightLB, static_cast<int>(rcPopupBounds.bottom)));
 	ac.lb->SetPositionRelative(rcac, wMain);
 	ac.lb->SetFont(vs.styles[STYLE_DEFAULT].font);
 	unsigned int aveCharWidth = static_cast<unsigned int>(vs.styles[STYLE_DEFAULT].aveCharWidth);
@@ -299,9 +300,9 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 	// Fiddle the position of the list so it is right next to the target and wide enough for all its strings
 	PRectangle rcList = ac.lb->GetDesiredRect();
 	int heightAlloced = static_cast<int>(rcList.bottom - rcList.top);
-	widthLB = Platform::Maximum(widthLB, static_cast<int>(rcList.right - rcList.left));
+	widthLB = std::max(widthLB, static_cast<int>(rcList.right - rcList.left));
 	if (maxListWidth != 0)
-		widthLB = Platform::Minimum(widthLB, aveCharWidth*maxListWidth);
+		widthLB = std::min(widthLB, static_cast<int>(aveCharWidth)*maxListWidth);
 	// Make an allowance for large strings in list
 	rcList.left = pt.x - ac.lb->CaretFromEdge();
 	rcList.right = rcList.left + widthLB;
@@ -365,7 +366,7 @@ void ScintillaBase::AutoCompleteCharacterDeleted() {
 }
 
 void ScintillaBase::AutoCompleteCompleted(char ch, unsigned int completionMethod) {
-	int item = ac.GetSelection();
+	const int item = ac.GetSelection();
 	if (item == -1) {
 		AutoCompleteCancel();
 		return;
@@ -381,7 +382,7 @@ void ScintillaBase::AutoCompleteCompleted(char ch, unsigned int completionMethod
 	scn.listCompletionMethod = completionMethod;
 	scn.wParam = listType;
 	scn.listType = listType;
-	Position firstPos = ac.posStart - ac.startLen;
+	Sci::Position firstPos = ac.posStart - ac.startLen;
 	scn.position = firstPos;
 	scn.lParam = firstPos;
 	scn.text = selected.c_str();
@@ -394,7 +395,7 @@ void ScintillaBase::AutoCompleteCompleted(char ch, unsigned int completionMethod
 	if (listType > 0)
 		return;
 
-	Position endPos = sel.MainCaret();
+	Sci::Position endPos = sel.MainCaret();
 	if (ac.dropRestOfWord)
 		endPos = pdoc->ExtendWordSelect(endPos, 1, true);
 	if (endPos < firstPos)
@@ -415,7 +416,7 @@ int ScintillaBase::AutoCompleteGetCurrent() const {
 
 int ScintillaBase::AutoCompleteGetCurrentText(char *buffer) const {
 	if (ac.Active()) {
-		int item = ac.GetSelection();
+		const int item = ac.GetSelection();
 		if (item != -1) {
 			const std::string selected = ac.GetValue(item);
 			if (buffer != NULL)
@@ -453,7 +454,7 @@ void ScintillaBase::CallTipShow(Point pt, const char *defn) {
 		wMain);
 	// If the call-tip window would be out of the client
 	// space
-	PRectangle rcClient = GetClientRectangle();
+	const PRectangle rcClient = GetClientRectangle();
 	int offset = vs.lineHeight + static_cast<int>(rc.Height());
 	// adjust so it displays above the text.
 	if (rc.bottom > rcClient.bottom && rc.Height() < rcClient.Height()) {
@@ -478,9 +479,14 @@ void ScintillaBase::CallTipClick() {
 	NotifyParent(scn);
 }
 
+bool ScintillaBase::ShouldDisplayPopup(Point ptInWindowCoordinates) const {
+	return (displayPopupMenu == SC_POPUP_ALL ||
+		(displayPopupMenu == SC_POPUP_TEXT && !PointInSelMargin(ptInWindowCoordinates)));
+}
+
 void ScintillaBase::ContextMenu(Point pt) {
 	if (displayPopupMenu) {
-		bool writable = !WndProc(SCI_GETREADONLY, 0, 0);
+		const bool writable = !WndProc(SCI_GETREADONLY, 0, 0);
 		popup.CreatePopUp();
 		AddToPopUp("Undo", idcmdUndo, writable && pdoc->CanUndo());
 		AddToPopUp("Redo", idcmdRedo, writable && pdoc->CanRedo());
@@ -510,6 +516,11 @@ void ScintillaBase::ButtonDown(Point pt, unsigned int curTime, bool shift, bool 
 	ButtonDownWithModifiers(pt, curTime, ModifierFlags(shift, ctrl, alt));
 }
 
+void ScintillaBase::RightButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) {
+	CancelModes();
+	Editor::RightButtonDownWithModifiers(pt, curTime, modifiers);
+}
+
 #ifdef SCI_LEXER
 
 #ifdef SCI_NAMESPACE
@@ -525,7 +536,7 @@ public:
 	int lexLanguage;
 
 	explicit LexState(Document *pdoc_);
-	virtual ~LexState();
+	~LexState() override;
 	void SetLexer(uptr_t wParam);
 	void SetLexerLanguage(const char *languageName);
 	const char *DescribeWordListSets();
@@ -571,10 +582,10 @@ LexState::~LexState() {
 }
 
 LexState *ScintillaBase::DocumentLexState() {
-	if (!pdoc->pli) {
-		pdoc->pli = new LexState(pdoc);
+	if (!pdoc->GetLexInterface()) {
+		pdoc->SetLexInterface(new LexState(pdoc));
 	}
-	return static_cast<LexState *>(pdoc->pli);
+	return static_cast<LexState *>(pdoc->GetLexInterface());
 }
 
 void LexState::SetLexerModule(const LexerModule *lex) {
@@ -760,11 +771,11 @@ const char *LexState::GetSubStyleBases() {
 
 #endif
 
-void ScintillaBase::NotifyStyleToNeeded(int endStyleNeeded) {
+void ScintillaBase::NotifyStyleToNeeded(Sci::Position endStyleNeeded) {
 #ifdef SCI_LEXER
 	if (DocumentLexState()->lexLanguage != SCLEX_CONTAINER) {
-		int lineEndStyled = pdoc->LineFromPosition(pdoc->GetEndStyled());
-		int endStyled = pdoc->LineStart(lineEndStyled);
+		Sci::Line lineEndStyled = pdoc->LineFromPosition(pdoc->GetEndStyled());
+		Sci::Position endStyled = pdoc->LineStart(lineEndStyled);
 		DocumentLexState()->Colourise(endStyled, endStyleNeeded);
 		return;
 	}
@@ -970,7 +981,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		break;
 
 	case SCI_USEPOPUP:
-		displayPopupMenu = wParam != 0;
+		displayPopupMenu = static_cast<int>(wParam);
 		break;
 
 #ifdef SCI_LEXER
@@ -983,10 +994,10 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 
 	case SCI_COLOURISE:
 		if (DocumentLexState()->lexLanguage == SCLEX_CONTAINER) {
-			pdoc->ModifiedAt(static_cast<int>(wParam));
-			NotifyStyleToNeeded((lParam == -1) ? pdoc->Length() : static_cast<int>(lParam));
+			pdoc->ModifiedAt(static_cast<Sci::Position>(wParam));
+			NotifyStyleToNeeded((lParam == -1) ? pdoc->Length() : static_cast<Sci::Position>(lParam));
 		} else {
-			DocumentLexState()->Colourise(static_cast<int>(wParam), static_cast<int>(lParam));
+			DocumentLexState()->Colourise(static_cast<Sci::Position>(wParam), static_cast<Sci::Position>(lParam));
 		}
 		Redraw();
 		break;

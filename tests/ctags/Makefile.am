@@ -20,6 +20,7 @@ test_sources = \
 	array-spec.f90					\
 	attributes.cs					\
 	auto.f							\
+	backslashes.c					\
 	bit_field.c						\
 	block.f90						\
 	bracematch.js					\
@@ -211,6 +212,7 @@ test_sources = \
 	make-comment-in-rule.mak		\
 	make-gnumake-pattern-rules.mak	\
 	make-multi-target.mak			\
+	make-parentheses.mak			\
 	make-target-with-parentheses.mak	\
 	make-variable-on-cmdline.mak	\
 	masm.asm						\

@@ -42,7 +42,57 @@
 #include <string.h>
 
 
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
+#ifndef NDEBUG
+
+sptr_t sci_send_message_internal (const gchar *file, guint line, ScintillaObject *sci,
+	guint msg, uptr_t wparam, sptr_t lparam)
+{
+	sptr_t result;
+	gint status;
+
+	scintilla_send_message(sci, SCI_SETSTATUS, 0, 0);
+	result = scintilla_send_message(sci, msg, wparam, lparam);
+	status = scintilla_send_message(sci, SCI_GETSTATUS, 0, 0);
+
+	if (status != 0)
+	{
+		const gchar *sub_msg = "unknown";
+		switch (status)
+		{
+			case SC_STATUS_FAILURE:
+				sub_msg = "generic failure";
+				break;
+			case SC_STATUS_BADALLOC:
+				sub_msg = "memory is exhausted";
+				break;
+			case SC_STATUS_WARN_REGEX:
+				sub_msg = "regular expression is invalid";
+				break;
+			default:
+				if (status >= SC_STATUS_WARN_START)
+					sub_msg = "unknown warning";
+				else
+					sub_msg = "unknown failure";
+				break;
+		}
+#define SCI_STATUS_FORMAT_STRING "%s:%u: scintilla has non-zero status " \
+			"code '%d' after sending message '%u' to instance '%p' with " \
+			"wParam='%lu' and lParam='%ld': %s"
+		if (status >= SC_STATUS_WARN_START)
+		{
+			g_warning(SCI_STATUS_FORMAT_STRING, file, line, status, msg,
+				(gpointer)sci, wparam, lparam, sub_msg);
+		}
+		else
+		{
+			g_critical(SCI_STATUS_FORMAT_STRING, file, line, status, msg,
+				(gpointer)sci, wparam, lparam, sub_msg);
+		}
+	}
+
+	return result;
+}
+#endif
 
 
 /* line numbers visibility */

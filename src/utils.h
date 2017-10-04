@@ -211,6 +211,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
+gchar *utils_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
 
@@ -221,6 +222,7 @@ typedef enum
 	RESOURCE_DIR_DOC,
 	RESOURCE_DIR_LOCALE,
 	RESOURCE_DIR_PLUGIN,
+	RESOURCE_DIR_LIBEXEC,
 
 	RESOURCE_DIR_COUNT
 } GeanyResourceDirType;
@@ -288,8 +290,6 @@ gchar *utils_get_current_time_string(void);
 
 GIOChannel *utils_set_up_io_channel(gint fd, GIOCondition cond, gboolean nblock,
 									GIOFunc func, gpointer data);
-
-gchar **utils_read_file_in_array(const gchar *filename);
 
 gboolean utils_str_replace_escape(gchar *string, gboolean keep_backslash);
 

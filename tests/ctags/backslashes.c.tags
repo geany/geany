@@ -1,0 +1,12 @@
+# format=tagmanager
+MACRO1Ì65536Ö0
+MACRO2Ì131072Í(x)Ö0
+MACRO3Ì131072Í(y)Ö0
+TÌ4096Ö0Ïint
+func1Ì1024Í(int var1, int var2, ...)Ö0Ïint
+func2Ì1024Í(int var1, int var2, ...)Ö0Ïint
+func3Ì1024Í(T var1, T var2, ...)Ö0Ïint
+func4Ì1024Í(T var1, T var2, ...)Ö0Ïint
+func5Ì1024Í(int var1, int var2, ...)Ö0Ïint
+func6Ì1024Í(void)Ö0Ïint
+func7Ì1024Í(int a)Ö0Ïint

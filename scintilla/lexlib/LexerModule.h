@@ -53,9 +53,9 @@ public:
 
 	ILexer *Create() const;
 
-	virtual void Lex(Sci_PositionU startPos, Sci_Position length, int initStyle,
+	virtual void Lex(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler) const;
-	virtual void Fold(Sci_PositionU startPos, Sci_Position length, int initStyle,
+	virtual void Fold(Sci_PositionU startPos, Sci_Position lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler) const;
 
 	friend class Catalogue;
@@ -67,7 +67,7 @@ inline int Maximum(int a, int b) {
 
 // Shut up annoying Visual C++ warnings:
 #ifdef _MSC_VER
-#pragma warning(disable: 4244 4309 4456 4457)
+#pragma warning(disable: 4244 4456 4457)
 #endif
 
 // Turn off shadow warnings for lexers as may be maintained by others

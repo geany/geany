@@ -273,6 +273,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FORMAT_SENDTOCMD7,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOCMD8,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOCMD9,				/**< Keybinding. */
+	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };
 
@@ -292,14 +293,14 @@ GeanyKeyBinding *keybindings_get_item(GeanyKeyGroup *group, gsize key_id);
 
 GdkModifierType keybindings_get_modifiers(GdkModifierType mods);
 
+void keybindings_load_keyfile(void);
+
 #ifdef GEANY_PRIVATE
 
 extern GPtrArray *keybinding_groups;	/* array of GeanyKeyGroup pointers */
 
 
 void keybindings_init(void);
-
-void keybindings_load_keyfile(void);
 
 void keybindings_free(void);
 

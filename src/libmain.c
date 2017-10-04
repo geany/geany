@@ -76,6 +76,10 @@
 
 #include <glib/gstdio.h>
 
+#ifdef G_OS_UNIX
+# include <glib-unix.h>
+#endif
+
 #ifdef HAVE_LOCALE_H
 # include <locale.h>
 #endif
@@ -148,19 +152,27 @@ static GOptionEntry entries[] =
 static void setup_window_position(void)
 {
 	/* interprets the saved window geometry */
-	if (!prefs.save_winpos)
-		return;
+	if (prefs.save_wingeom)
+	{
+		if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
+		{
+			gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
+				ui_prefs.geometry[2], ui_prefs.geometry[3]);
+		}
+	}
 
-	if (ui_prefs.geometry[0] != -1 && ui_prefs.geometry[1] != -1)
-		gtk_window_move(GTK_WINDOW(main_widgets.window),
-			ui_prefs.geometry[0], ui_prefs.geometry[1]);
-
-	if (ui_prefs.geometry[2] != -1 && ui_prefs.geometry[3] != -1)
-		gtk_window_set_default_size(GTK_WINDOW(main_widgets.window),
-			ui_prefs.geometry[2], ui_prefs.geometry[3]);
-
-	if (ui_prefs.geometry[4] == 1)
-		gtk_window_maximize(GTK_WINDOW(main_widgets.window));
+	if (prefs.save_winpos)
+	{
+		if (ui_prefs.geometry[0] != -1 && ui_prefs.geometry[1] != -1)
+		{
+			gtk_window_move(GTK_WINDOW(main_widgets.window),
+				ui_prefs.geometry[0], ui_prefs.geometry[1]);
+		}
+		if (ui_prefs.geometry[4] == 1)
+		{
+			gtk_window_maximize(GTK_WINDOW(main_widgets.window));
+		}
+	}
 }
 
 
@@ -251,7 +263,6 @@ static void main_init(void)
 	file_prefs.tab_order_beside		= FALSE;
 	main_status.quitting			= FALSE;
 	ignore_callback	= FALSE;
-	app->tm_workspace		= tm_get_workspace();
 	ui_prefs.recent_queue				= g_queue_new();
 	ui_prefs.recent_projects_queue		= g_queue_new();
 	main_status.opening_session_files	= FALSE;
@@ -761,21 +772,25 @@ static gint setup_config_dir(void)
 	}
 	/* make configdir a real path */
 	if (g_file_test(app->configdir, G_FILE_TEST_EXISTS))
-		SETPTR(app->configdir, tm_get_real_path(app->configdir));
+		SETPTR(app->configdir, utils_get_real_path(app->configdir));
 
 	return mkdir_result;
 }
 
-/* Signal handling removed since main_quit() uses functions that are
- * illegal in signal handlers
-static void signal_cb(gint sig)
+
+#ifdef G_OS_UNIX
+static gboolean signal_cb(gpointer user_data)
 {
+	gint sig = GPOINTER_TO_INT(user_data);
 	if (sig == SIGTERM)
 	{
+		geany_debug("Received SIGTERM signal");
 		main_quit();
 	}
+	return G_SOURCE_REMOVE;
 }
- */
+#endif
+
 
 /* Used for command-line arguments at startup or from socket.
  * this will strip any :line:col filename suffix from locale_filename */
@@ -877,10 +892,13 @@ static void load_session_project_file(void)
 
 static void load_settings(void)
 {
+#ifdef HAVE_VTE
+	vte_info.load_vte_cmdline = !no_vte;
+#endif
 	configuration_load();
 	/* let cmdline options overwrite configuration settings */
 #ifdef HAVE_VTE
-	vte_info.have_vte = (no_vte) ? FALSE : vte_info.load_vte;
+	vte_info.have_vte = vte_info.load_vte && vte_info.load_vte_cmdline;
 #endif
 	if (no_msgwin)
 		ui_prefs.msgwindow_visible = FALSE;
@@ -1047,6 +1065,8 @@ gint main_lib(gint argc, gchar **argv)
 #ifdef ENABLE_NLS
 	main_locale_init(utils_resource_dir(RESOURCE_DIR_LOCALE), GETTEXT_PACKAGE);
 #endif
+	/* initialize TM before parsing command-line - needed for tag file generation */
+	app->tm_workspace = tm_get_workspace();
 	parse_command_line_options(&argc, &argv);
 
 #if ! GLIB_CHECK_VERSION(2, 32, 0)
@@ -1056,10 +1076,9 @@ gint main_lib(gint argc, gchar **argv)
 		g_thread_init(NULL);
 #endif
 
-	/* removed as signal handling was wrong, see signal_cb()
-	signal(SIGTERM, signal_cb); */
-
 #ifdef G_OS_UNIX
+	g_unix_signal_add(SIGTERM, signal_cb, GINT_TO_POINTER(SIGTERM));
+
 	/* ignore SIGPIPE signal for preventing sudden death of program */
 	signal(SIGPIPE, SIG_IGN);
 #endif

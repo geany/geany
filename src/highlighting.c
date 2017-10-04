@@ -28,7 +28,7 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
- 
+
 #include "highlighting.h"
 #include "highlightingmappings.h"
 
@@ -97,6 +97,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
+	GCS_INDICATOR_ERROR,
 	GCS_MAX
 };
 
@@ -123,10 +124,6 @@ static GHashTable *named_style_hash = NULL;
 /* 0xBBGGRR format, set by "default" named style. */
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
-
-/* Note: use sciwrappers.h instead where possible.
- * Do not use SSM in files unrelated to scintilla. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 /* filetypes should use the filetypes.foo [lexer_properties] group instead of hardcoding */
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
@@ -560,6 +557,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
+	get_keyfile_style(config, config_home, "indicator_error", &common_style_set.styling[GCS_INDICATOR_ERROR]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -649,13 +647,19 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(0x0000FF /* red, in BGR */));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR,
+		invert(common_style_set.styling[GCS_INDICATOR_ERROR].foreground));
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
 		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
 	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
+
+	/* Snippet cursor indicator, when inserting snippets with multiple
+	 * cursor positions. */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SNIPPET, INDIC_DOTBOX);
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SNIPPET, 60);
 
 	/* define marker symbols
 	 * 0 -> line marker */
@@ -1402,7 +1406,9 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGEOL ||
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
+				style == SCE_C_USERLITERAL ||
 				style == SCE_C_TRIPLEVERBATIM ||
+				style == SCE_C_REGEX ||
 				style == SCE_C_HASHQUOTEDSTRING ||
 				style == SCE_C_ESCAPESEQUENCE);
 
@@ -1423,6 +1429,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
 				style == SCE_P_CHARACTER ||
+				style == SCE_P_FSTRING ||
+				style == SCE_P_FCHARACTER ||
+				style == SCE_P_FTRIPLE ||
+				style == SCE_P_FTRIPLEDOUBLE ||
 				style == SCE_P_STRINGEOL);
 
 		case SCLEX_F77:
@@ -1445,6 +1455,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_STRING_QR ||
 				style == SCE_PL_STRING_QW ||
 				style == SCE_PL_POD_VERB ||
+				style == SCE_PL_REGEX ||
+				style == SCE_PL_REGEX_VAR ||
 				style == SCE_PL_XLAT
 				/* we don't include any STRING_*_VAR for autocompletion */);
 
@@ -1466,6 +1478,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RB_HERE_Q ||
 				style == SCE_RB_HERE_QQ ||
 				style == SCE_RB_HERE_QX ||
+				style == SCE_RB_REGEX ||
+				style == SCE_RB_STRING_Q ||
+				style == SCE_RB_STRING_QQ ||
+				style == SCE_RB_STRING_QX ||
+				style == SCE_RB_STRING_QR ||
+				style == SCE_RB_STRING_QW ||
 				style == SCE_RB_POD);
 
 		case SCLEX_BASH:
@@ -1510,9 +1528,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_HJA_DOUBLESTRING ||
 				style == SCE_HJA_SINGLESTRING ||
 				style == SCE_HJA_STRINGEOL ||
+				style == SCE_HJA_REGEX ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
 				style == SCE_HJ_STRINGEOL ||
+				style == SCE_HJ_REGEX ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -1561,11 +1581,46 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_COFFEESCRIPT:
 			return (style == SCE_COFFEESCRIPT_CHARACTER ||
 				style == SCE_COFFEESCRIPT_STRING ||
+				style == SCE_COFFEESCRIPT_REGEX ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX ||
 				style == SCE_COFFEESCRIPT_STRINGEOL);
 
 		case SCLEX_VERILOG:
 			return (style == SCE_V_STRING);
 
+		case SCLEX_CAML:
+			return (style == SCE_CAML_CHAR ||
+				style == SCE_CAML_STRING);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_DOUBLESTRING ||
+				style == SCE_CSS_SINGLESTRING);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_STRING ||
+				style == SCE_ERLANG_CHARACTER);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_STRING ||
+				style == SCE_LISP_STRINGEOL);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_STRING);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_STRING ||
+				style == SCE_POWERSHELL_CHARACTER);
+
+		case SCLEX_BATCH:
+		case SCLEX_DIFF:
+		case SCLEX_LATEX:
+		case SCLEX_MAKEFILE:
+		case SCLEX_MARKDOWN:
+		case SCLEX_PROPERTIES:
+		case SCLEX_TXT2TAGS:
+		case SCLEX_YAML:
+			/* there is no string type in those lexers, listing here just for completeness */
+			return FALSE;
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
 	}
@@ -1713,8 +1768,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NSIS_COMMENTBOX);
 
 		case SCLEX_ADA:
-			return (style == SCE_ADA_COMMENTLINE ||
-				style == SCE_NSIS_COMMENTBOX);
+			return (style == SCE_ADA_COMMENTLINE);
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_COMMENT ||
@@ -1742,7 +1796,54 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_V_COMMENTLINEBANG ||
 				style == SCE_V_COMMENT_WORD);
 
-		case SCLEX_AU3:
+		case SCLEX_VHDL:
+			return (style == SCE_VHDL_COMMENT ||
+				style == SCE_VHDL_COMMENTLINEBANG ||
+				style == SCE_VHDL_BLOCK_COMMENT);
+
+		case SCLEX_BATCH:
+			return (style == SCE_BAT_COMMENT);
+
+		case SCLEX_CAML:
+			return (style == SCE_CAML_COMMENT ||
+				style == SCE_CAML_COMMENT1 ||
+				style == SCE_CAML_COMMENT2 ||
+				style == SCE_CAML_COMMENT3);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_COMMENT ||
+				style == SCE_ERLANG_COMMENT_FUNCTION ||
+				style == SCE_ERLANG_COMMENT_MODULE ||
+				style == SCE_ERLANG_COMMENT_DOC ||
+				style == SCE_ERLANG_COMMENT_DOC_MACRO);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_COMMENT ||
+				style == SCE_FORTH_COMMENT_ML);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_COMMENT);
+
+		case SCLEX_DIFF:
+			return (style == SCE_DIFF_COMMENT);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_COMMENT ||
+				style == SCE_LISP_MULTI_COMMENT);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_COMMENT ||
+				style == SCE_POWERSHELL_COMMENTSTREAM ||
+				style == SCE_POWERSHELL_COMMENTDOCKEYWORD);
+
+		case SCLEX_TXT2TAGS:
+			return (style == SCE_TXT2TAGS_COMMENT);
+
+		case SCLEX_MARKDOWN:
+			/* there is no comment type in those lexers, listing here just for completeness */
+			return FALSE;
+
+    case SCLEX_AU3:
 			return (style == SCE_AU3_COMMENT ||
 				style == SCE_AU3_COMMENTBLOCK);
 	}

@@ -167,7 +167,7 @@ unmanageable diffs.
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.24 and GLib >= 2.28. API symbols from newer
+Geany requires GTK >= 2.24 and GLib >= 2.32. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
@@ -176,7 +176,7 @@ libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
 
-You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_28`` C
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_32`` C
 preprocessor flag to get warnings about newer symbols from the GLib.
 
 On the contrary, you might also want to get deprecation warnings for symbols
@@ -196,14 +196,29 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.27.3 and GTK 2.24. At least for the
+* Your code should build against GLib 2.32 and GTK 2.24. At least for the
   moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
-* Variables should be declared before statements. You can use
-  gcc's -Wdeclaration-after-statement to warn about this.
+* Variables should be declared (and initialized) as close as practical
+  to their first use. This reduces the chances of intervening code being
+  inserted between declaration and use, where the variable may be
+  uninitialized.
+* Variables should be defined within the smallest scope that is practical,
+  for example inside a conditional branch which uses them or in the
+  initialization part of a for loop.
+* Local variables that will not be modified should be marked as ``const``
+  to indicate intention. This allows the compiler to give a warning if
+  part of the code accidentally tries to change the value.
+* Pointer parameters should be marked ``const`` if the value they point
+  to will not be mutated within the function.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
+* Use the strictest possible data type where practical. For example
+  for an enumeration, use the actual enum type rather than just a
+  ``gint``, use a ``gchar`` for individual (ASCII/UTF-8) string
+  characters rather than ``gint``, and use a ``guint`` for integers
+  which cannot be negative rather than ``gint``.
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
   add noise to the code with little real benefit.
 
@@ -212,9 +227,12 @@ Compiler options & warnings
 Use ``CFLAGS='-Wfoo' ./configure`` or ``CFLAGS='-Wfoo' ./autogen.sh``
 to set warning options (as well as anything else e.g. -g -O2).
 
-* Enable warnings - for gcc use '-Wall -W' (and optionally
+* Enable warnings - for gcc use '-Wall -Wextra' (and optionally
   -Wno-unused-parameter to avoid unused parameter warnings in Glade
-  callbacks).
+  callbacks). Alternatively you can use the Glib macro G_GNUC_UNUSED
+  to suppress warnings on single parameters, e.g.
+  ``void examplefunction(G_GNUC_UNUSED gchar *foo)``. Also see
+  https://developer.gnome.org/glib/stable/glib-Miscellaneous-Macros.html.
 * You should try to write ISO C99 code for portability, so always
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
@@ -460,7 +478,6 @@ Bugs to watch out for
 * Inserting fields into structs in the plugin API instead of appending.
 * Not breaking the plugin ABI when necessary.
 * Using an idle callback that doesn't check main_status.quitting.
-* Forgetting to call vStringTerminate in CTags code.
 * Forgetting CRLF line endings on Windows.
 * Not handling Tabs & Spaces indent mode.
 
@@ -497,7 +514,6 @@ printf("Prefix: %s", GEANY_PREFIX);
 Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
 * Add foo.c, foo.h to SRCS in path/Makefile.am.
-* Add foo.o to OBJS in path/makefile.win32.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -560,7 +576,6 @@ LexFoo.cxx. Try the official Scintilla project first.
 When adding a lexer, update:
 
 * scintilla/Makefile.am
-* scintilla/makefile.win32
 * scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and
@@ -628,7 +643,7 @@ Adding a TagManager parser
 This assumes the filetype for Geany already exists.
 
 First write or find a CTags compatible parser, foo.c. Check this fork:
-https://github.com/fishman/ctags
+https://github.com/universal-ctags/ctags
 
 There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
@@ -648,13 +663,14 @@ http://sf.net/projects/ctags - see the tracker.
 Method
 ``````
 * Add foo.c to SRCS in Makefile.am.
-* Add foo.o to OBJS in makefile.win32.
 * Add Foo to parsers.h
-* Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
+* Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In foo.c:
-Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+In tagmanager/src/tm_parsers.c:
+Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
+FooKinds to the appropriate TMTagType, and add the corresponding
+MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():

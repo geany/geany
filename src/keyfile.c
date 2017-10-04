@@ -215,6 +215,8 @@ static void init_pref_groups(void)
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_spin_button_integer(group, &editor_prefs.scroll_lines_around_cursor,
+		"scroll_lines_around_cursor", 0, "spin_scroll_lines_around_cursor");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
@@ -244,6 +246,8 @@ static void init_pref_groups(void)
 		"keep_edit_history_on_reload", TRUE);
 	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
 		"show_keep_edit_history_on_reload_msg", TRUE);
+	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
+		"reload_clean_doc_on_file_change", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -253,6 +257,8 @@ static void init_pref_groups(void)
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+	stash_group_add_integer(group, &editor_prefs.ime_interaction,
+		"editor_ime_interaction", SC_IME_WINDOWED);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
@@ -370,7 +376,6 @@ void configuration_save_session_files(GKeyFile *config)
 	gint npage;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
-	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
@@ -382,7 +387,8 @@ void configuration_save_session_files(GKeyFile *config)
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;
@@ -416,7 +422,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
@@ -522,13 +529,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	{
 		gchar *tmp_string;
 
-		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
-			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
-				vc->send_selection_unsafe);
-		if (!g_key_file_has_key(config, "VTE", "send_cmd_prefix", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "send_cmd_prefix", vc->send_cmd_prefix);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -540,7 +540,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -578,7 +577,7 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
-	if (prefs.save_winpos)
+	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
 
@@ -754,16 +753,14 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* read stash prefs */
-	settings_action(config, SETTING_READ);
-
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
-	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+        prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+        prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", TRUE);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
@@ -865,8 +862,9 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
-	if (vte_info.load_vte)
+	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
+		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
 
@@ -886,10 +884,6 @@ static void load_dialog_prefs(GKeyFile *config)
 			/* fallback to root */
 			vte_info.dir = g_strdup("/");
 
-		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
-			"send_selection_unsafe", FALSE);
-		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
 		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
@@ -897,13 +891,21 @@ static void load_dialog_prefs(GKeyFile *config)
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->send_cmd_prefix = utils_get_setting_string(config, "VTE", "send_cmd_prefix", "");
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
+
+		/* various VTE prefs.
+		 * this can't be done in init_pref_groups() because we need to know the value of
+		 * vte_info.load_vte, and `vc` to be initialized */
+		group = stash_group_new("VTE");
+		configuration_add_various_pref_group(group);
+
+		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
+		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);
 	}
 #endif
 	/* templates */
@@ -949,12 +951,6 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
-	/* build menu */
-	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
-	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
-	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
-	build_load_menu(config, GEANY_BCS_PREF, NULL);
-
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
 
@@ -981,6 +977,16 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
+
+	/* read stash prefs */
+	settings_action(config, SETTING_READ);
+
+	/* build menu
+	 * after stash prefs as it uses some of them */
+	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 
 

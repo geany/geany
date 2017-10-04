@@ -66,16 +66,20 @@ typedef struct GeanyFilePrefs
 	gboolean		tab_close_switch_to_mru;
 	gboolean		keep_edit_history_on_reload; /* Keep undo stack upon, and allow undoing of, document reloading. */
 	gboolean		show_keep_edit_history_on_reload_msg; /* whether to show the message introducing the above feature */
+ 	gboolean		reload_clean_doc_on_file_change;
 }
 GeanyFilePrefs;
 
+
+#define GEANY_TYPE_DOCUMENT (document_get_type())
+GType document_get_type (void);
 
 /**
  *  Structure for representing an open tab with all its properties.
  **/
 typedef struct GeanyDocument
 {
-	/** Flag used to check if this document is valid when iterating @ref documents_array. */
+	/** Flag used to check if this document is valid when iterating @ref GeanyData::documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -118,9 +122,7 @@ typedef struct GeanyDocument
 }
 GeanyDocument;
 
-extern GPtrArray *documents_array;
-
-/** Wraps @ref documents_array so it can be used with C array syntax.
+/** Wraps @ref GeanyData::documents_array so it can be used with C array syntax.
  * @warning Always check the returned document is valid (@c doc->is_valid).
  *
  * Example: @code GeanyDocument *doc = documents[i]; @endcode
@@ -137,7 +139,7 @@ extern GPtrArray *documents_array;
 
 /** Iterates all valid document indexes.
  * Use like a @c for statement.
- * @param i @c guint index for @ref documents_array.
+ * @param i @c guint index for @ref GeanyData::documents_array.
  *
  * Example:
  * @code
@@ -231,6 +233,7 @@ GeanyDocument *document_find_by_id(guint id);
 #endif
 
 extern GeanyFilePrefs file_prefs;
+extern GPtrArray *documents_array;
 
 
 /* These functions will replace the older functions. For now they have a documents_ prefix. */
@@ -313,6 +316,13 @@ void document_apply_indent_settings(GeanyDocument *doc);
 void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
+
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key);
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func);
 
 #endif /* GEANY_PRIVATE */
 

@@ -45,6 +45,7 @@
 #include "encodings.h"
 #include "filetypesprivate.h"
 #include "geanyobject.h"
+#include "highlighting.h"
 #include "main.h"
 #include "navqueue.h"
 #include "sciwrappers.h"
@@ -64,35 +65,13 @@
 #include <stdlib.h>
 
 
-static gchar **html_entities = NULL;
-
 typedef struct
 {
-	gboolean	tags_loaded;
-	const gchar	*tag_file;
-} TagFileInfo;
+	gint found_line; /* return: the nearest line found */
+	gint line;       /* input: the line to look for */
+	gboolean lower   /* input: search only for lines with lower number than @line */;
+} TreeSearchData;
 
-/* Check before adding any more tags files, usually they should be downloaded separately. */
-enum	/* Geany tag files */
-{
-	GTF_C,
-	GTF_PASCAL,
-	GTF_PHP,
-	GTF_HTML_ENTITIES,
-	GTF_LATEX,
-	GTF_PYTHON,
-	GTF_MAX
-};
-
-static TagFileInfo tag_file_info[GTF_MAX] =
-{
-	{FALSE, "c99.tags"},
-	{FALSE, "pascal.tags"},
-	{FALSE, "php.tags"},
-	{FALSE, "html_entities.tags"},
-	{FALSE, "latex.tags"},
-	{FALSE, "python.tags"}
-};
 
 static GPtrArray *top_level_iter_names = NULL;
 
@@ -138,7 +117,6 @@ static struct
 }
 symbol_menu;
 
-static void html_tags_loaded(void);
 static void load_user_tags(GeanyFiletypeID ft_id);
 
 /* get the tags_ignore list, exported by tagmanager's options.c */
@@ -201,9 +179,6 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
  * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(guint file_type_idx)
 {
-	TagFileInfo *tfi;
-	gint tag_type;
-
 	/* load ignore list for C/C++ parser */
 	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
 		c_tags_ignore == NULL)
@@ -221,53 +196,12 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	switch (file_type_idx)
 	{
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_HTML:
-			html_tags_loaded();
-	}
-	switch (file_type_idx)
-	{
 		case GEANY_FILETYPES_CPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
-			/* no C++ tagfile yet */
-			return;
-		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
-		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
-		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
-		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
-		case GEANY_FILETYPES_PYTHON:tag_type = GTF_PYTHON; break;
-		default:
-			return;
-	}
-	tfi = &tag_file_info[tag_type];
-
-	if (! tfi->tags_loaded)
-	{
-		gchar *fname = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
-
-		symbols_load_global_tags(fname, filetypes[file_type_idx]);
-		tfi->tags_loaded = TRUE;
-		g_free(fname);
-	}
-}
-
-
-/* HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;') */
-static void html_tags_loaded(void)
-{
-	TagFileInfo *tfi;
-
-	if (cl_options.ignore_global_tags)
-		return;
-
-	tfi = &tag_file_info[GTF_HTML_ENTITIES];
-	if (! tfi->tags_loaded)
-	{
-		gchar *file = g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, tfi->tag_file, NULL);
-
-		html_entities = utils_read_file_in_array(file);
-		tfi->tags_loaded = TRUE;
-		g_free(file);
+			break;
+		case GEANY_FILETYPES_PHP:
+			symbols_global_tags_loaded(GEANY_FILETYPES_HTML);	/* load HTML global tags */
+			break;
 	}
 }
 
@@ -326,15 +260,6 @@ const gchar *symbols_get_context_separator(gint ft_id)
 }
 
 
-const gchar **symbols_get_html_entities(void)
-{
-	if (html_entities == NULL)
-		html_tags_loaded(); /* if not yet created, force creation of the array but shouldn't occur */
-
-	return (const gchar **) html_entities;
-}
-
-
 /* sort by name, then line */
 static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 {
@@ -385,7 +310,6 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
-	TMTag *tag;
 	guint i;
 
 	g_return_val_if_fail(doc, NULL);
@@ -395,7 +319,8 @@ static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
-		tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+
 		if (G_UNLIKELY(tag == NULL))
 			return NULL;
 
@@ -1181,38 +1106,90 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 }
 
 
-/* adds a new element in the parent table if it's key is known.
- * duplicates are kept */
+static gint tree_search_func(gconstpointer key, gpointer user_data)
+{
+	TreeSearchData *data = user_data;
+	gint parent_line = GPOINTER_TO_INT(key);
+	gboolean new_nearest;
+
+	if (data->found_line == -1)
+		data->found_line = parent_line; /* initial value */
+
+	new_nearest = ABS(data->line - parent_line) < ABS(data->line - data->found_line);
+
+	if (parent_line > data->line)
+	{
+		if (new_nearest && !data->lower)
+			data->found_line = parent_line;
+		return -1;
+	}
+
+	if (new_nearest)
+		data->found_line = parent_line;
+
+	if (parent_line < data->line)
+		return 1;
+
+	return 0;
+}
+
+
+static gint tree_cmp(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	return GPOINTER_TO_INT(a) - GPOINTER_TO_INT(b);
+}
+
+
+static void parents_table_tree_value_free(gpointer data)
+{
+	g_slice_free(GtkTreeIter, data);
+}
+
+
+/* adds a new element in the parent table if its key is known. */
 static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
 		const GtkTreeIter *iter)
 {
-	GList **list;
-	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &list) &&
+	GTree *tree;
+	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &tree) &&
 		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
 	{
-		if (! list)
+		if (!tree)
 		{
-			list = g_slice_alloc(sizeof *list);
-			*list = NULL;
-			g_hash_table_insert(table, tag->name, list);
+			tree = g_tree_new_full(tree_cmp, NULL, NULL, parents_table_tree_value_free);
+			g_hash_table_insert(table, tag->name, tree);
 		}
-		*list = g_list_prepend(*list, g_slice_dup(GtkTreeIter, iter));
+
+		g_tree_insert(tree, GINT_TO_POINTER(tag->line), g_slice_dup(GtkTreeIter, iter));
 	}
 }
 
 
-static void free_iter_slice_list(gpointer data)
+static GtkTreeIter *parents_table_lookup(GHashTable *table, const gchar *name, guint line)
 {
-	GList **list = data;
+	GtkTreeIter *parent_search = NULL;
+	GTree *tree;
 
-	if (list)
+	tree = g_hash_table_lookup(table, name);
+	if (tree)
 	{
-		GList *node;
-		foreach_list(node, *list)
-			g_slice_free(GtkTreeIter, node->data);
-		g_list_free(*list);
-		g_slice_free1(sizeof *list, list);
+		TreeSearchData user_data = {-1, line, TRUE};
+
+		/* search parent candidates for the one with the nearest
+		 * line number which is lower than the tag's line number */
+		g_tree_search(tree, (GCompareFunc)tree_search_func, &user_data);
+		parent_search = g_tree_lookup(tree, GINT_TO_POINTER(user_data.found_line));
 	}
+
+	return parent_search;
+}
+
+
+static void parents_table_value_free(gpointer data)
+{
+	GTree *tree = data;
+	if (tree)
+		g_tree_destroy(tree);
 }
 
 
@@ -1220,44 +1197,40 @@ static void free_iter_slice_list(gpointer data)
  * previous data is not overwritten if the key is duplicated, but rather the
  * two values are kept in a list
  *
- * table is: GHashTable<TMTag, GList<GList<TMTag>>> */
+ * table is: GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
 static void tags_table_insert(GHashTable *table, TMTag *tag, GList *data)
 {
-	GList *list = g_hash_table_lookup(table, tag);
+	GTree *tree = g_hash_table_lookup(table, tag);
+	if (!tree)
+	{
+		tree = g_tree_new_full(tree_cmp, NULL, NULL, NULL);
+		g_hash_table_insert(table, tag, tree);
+	}
+	GList *list = g_tree_lookup(tree, GINT_TO_POINTER(tag->line));
 	list = g_list_prepend(list, data);
-	g_hash_table_insert(table, tag, list);
+	g_tree_insert(tree, GINT_TO_POINTER(tag->line), list);
 }
 
 
-/* looks up the entry in @table that better matches @tag.
- * if there are more than one candidate, the one that has closest line position to @tag is chosen */
+/* looks up the entry in @table that best matches @tag.
+ * if there is more than one candidate, the one that has closest line position to @tag is chosen */
 static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
 {
-	GList *data = NULL;
-	GList *node = g_hash_table_lookup(table, tag);
-	if (node)
+	TreeSearchData user_data = {-1, tag->line, FALSE};
+	GTree *tree = g_hash_table_lookup(table, tag);
+
+	if (tree)
 	{
-		glong delta;
-		data = node->data;
+		GList *list;
 
-#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->line - (glong) TM_TAG(b)->line)
-
-		delta = TAG_DELTA(((GList *) node->data)->data, tag);
-		for (node = node->next; node; node = node->next)
-		{
-			glong d = TAG_DELTA(((GList *) node->data)->data, tag);
-
-			if (d < delta)
-			{
-				data = node->data;
-				delta = d;
-			}
-		}
-
-#undef TAG_DELTA
-
+		g_tree_search(tree, (GCompareFunc)tree_search_func, &user_data);
+		list = g_tree_lookup(tree, GINT_TO_POINTER(user_data.found_line));
+		/* return the first value in the list - we don't care which of the
+		 * tags with identical names defined on the same line we get */
+		if (list)
+			return list->data;
 	}
-	return data;
+	return NULL;
 }
 
 
@@ -1265,36 +1238,49 @@ static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
  * @tag must be the exact pointer used at insertion time */
 static void tags_table_remove(GHashTable *table, TMTag *tag)
 {
-	GList *list = g_hash_table_lookup(table, tag);
-	if (list)
+	GTree *tree = g_hash_table_lookup(table, tag);
+	if (tree)
 	{
-		GList *node;
-		foreach_list(node, list)
-		{
-			if (((GList *) node->data)->data == tag)
-				break;
-		}
-		list = g_list_delete_link(list, node);
+		GList *list = g_tree_lookup(tree, GINT_TO_POINTER(tag->line));
 		if (list)
-			g_hash_table_insert(table, tag, list);
-		else
-			g_hash_table_remove(table, tag);
+		{
+			GList *node;
+			/* should always be the first element as we returned the first one in
+			 * tags_table_lookup() */
+			foreach_list(node, list)
+			{
+				if (((GList *) node->data)->data == tag)
+					break;
+			}
+			list = g_list_delete_link(list, node);
+			if (!list)
+				g_tree_remove(tree, GINT_TO_POINTER(tag->line));
+			else
+				g_tree_insert(tree, GINT_TO_POINTER(tag->line), list);
+		}
 	}
 }
 
 
-static void tags_table_destroy(GHashTable *table)
+static gboolean tags_table_tree_value_free(gpointer key, gpointer value, gpointer data)
 {
-	/* free any leftover elements.  note that we can't register a value_free_func when
-	 * creating the hash table because we only want to free it when destroying the table,
-	 * not when inserting a duplicate (we handle this manually) */
-	GHashTableIter iter;
-	gpointer value;
+	GList *list = value;
+	g_list_free(list);
+	return FALSE;
+}
 
-	g_hash_table_iter_init(&iter, table);
-	while (g_hash_table_iter_next(&iter, NULL, &value))
-		g_list_free(value);
-	g_hash_table_destroy(table);
+
+static void tags_table_value_free(gpointer data)
+{
+	GTree *tree = data;
+	if (tree)
+	{
+		/* free any leftover elements.  note that we can't register a value_free_func when
+		 * creating the tree because we only want to free it when destroying the tree,
+		 * not when inserting a duplicate (we handle this manually) */
+		g_tree_foreach(tree, tags_table_tree_value_free, NULL);
+		g_tree_destroy(tree);
+	}
 }
 
 
@@ -1327,10 +1313,11 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	GList *item;
 
 	/* Build hash tables holding tags and parents */
-	/* parent table holds "tag-name":GtkTreeIter */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice_list);
-	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
-	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
+	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>> */
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, parents_table_value_free);
+	/* tags table is another representation of the @tags list,
+	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
+	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, tags_table_value_free);
 	foreach_list(item, *tags)
 	{
 		TMTag *tag = item->data;
@@ -1423,34 +1410,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			parent_name = get_parent_name(tag, doc->file_type->id);
 			if (parent_name)
 			{
-				GList **candidates;
-				GtkTreeIter *parent_search = NULL;
-
-				/* walk parent candidates to find the better one.
-				 * if there are more than one, take the one that has the closest line number
-				 * after the tag we're searching the parent for */
-				candidates = g_hash_table_lookup(parents_table, parent_name);
-				if (candidates)
-				{
-					GList *node;
-					glong delta = G_MAXLONG;
-					foreach_list(node, *candidates)
-					{
-						TMTag *parent_tag;
-						glong  d;
-
-						gtk_tree_model_get(GTK_TREE_MODEL(store), node->data,
-								SYMBOLS_COLUMN_TAG, &parent_tag, -1);
-
-						d = tag->line - parent_tag->line;
-						if (! parent_search || (d >= 0 && d < delta))
-						{
-							delta = d;
-							parent_search = node->data;
-						}
-						tm_tag_unref(parent_tag);
-					}
-				}
+				GtkTreeIter *parent_search = parents_table_lookup(parents_table, parent_name, tag->line);
 
 				if (parent_search)
 					parent = parent_search;
@@ -1483,7 +1443,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	}
 
 	g_hash_table_destroy(parents_table);
-	tags_table_destroy(tags_table);
+	g_hash_table_destroy(tags_table);
 }
 
 
@@ -1900,10 +1860,10 @@ static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *
 		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
 		gint pos = sci_get_current_position(sci);
 		gint line = sci_get_line_from_position(sci, pos);
-		gint pos_x = scintilla_send_message(sci, SCI_POINTXFROMPOSITION, 0, pos);
-		gint pos_y = scintilla_send_message(sci, SCI_POINTYFROMPOSITION, 0, pos);
+		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
+		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
 
-		line_height = scintilla_send_message(sci, SCI_TEXTHEIGHT, line, 0);
+		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
 
 		gdk_window_get_origin(window, x, y);
 		*x += pos_x;
@@ -2071,102 +2031,113 @@ static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
 }
 
 
+static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
+{
+	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	TMTag *tmtag, *last_tag = NULL;
+	GPtrArray *filtered_tags = g_ptr_array_new();
+	guint i;
+
+	foreach_ptr_array(tmtag, i, tags)
+	{
+		if ((definition && !(tmtag->type & forward_types)) ||
+			(!definition && (tmtag->type & forward_types)))
+		{
+			/* If there are typedefs of e.g. a struct such as
+			 * "typedef struct Foo {} Foo;", filter out the typedef unless
+			 * cursor is at the struct name. */
+			if (last_tag != NULL && last_tag->file == tmtag->file &&
+				last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
+			{
+				if (last_tag == current_tag)
+					g_ptr_array_add(filtered_tags, tmtag);
+			}
+			else if (tmtag != current_tag)
+				g_ptr_array_add(filtered_tags, tmtag);
+
+			last_tag = tmtag;
+		}
+	}
+
+	return filtered_tags;
+}
+
+
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
 	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	TMTagType type;
-	TMTag *tmtag, *last_tag;
+	TMTag *tmtag, *current_tag = NULL;
 	GeanyDocument *old_doc = document_get_current();
 	gboolean found = FALSE;
 	const GPtrArray *all_tags;
-	GPtrArray *workspace_tags, *filtered_tags;
+	GPtrArray *tags, *filtered_tags;
 	guint i;
 	guint current_line = sci_get_current_line(old_doc->editor->sci) + 1;
 
-	/* goto tag definition: all except prototypes / forward declarations / externs */
-	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
-	all_tags = tm_workspace_find(name, NULL, type, NULL, old_doc->file_type->lang);
+	all_tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, old_doc->file_type->lang);
 
-	/* get rid of global tags */
-	workspace_tags = g_ptr_array_new();
+	/* get rid of global tags and find tag at current line */
+	tags = g_ptr_array_new();
 	foreach_ptr_array(tmtag, i, all_tags)
 	{
 		if (tmtag->file)
-			g_ptr_array_add(workspace_tags, tmtag);
-	}
-
-	/* If there are typedefs of e.g. a struct such as "typedef struct Foo {} Foo;",
-	 * keep just one of the names in the list - when the cursor is on the struct
-	 * name, keep the typename, otherwise keep the struct name. */
-	last_tag = NULL;
-	filtered_tags = g_ptr_array_new();
-	foreach_ptr_array(tmtag, i, workspace_tags)
-	{
-		if (last_tag != NULL && last_tag->file == tmtag->file &&
-			last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
 		{
-			if (last_tag->line == current_line && filtered_tags->len > 0)
-				/* if cursor on struct, replace struct with the typedef */
-				filtered_tags->pdata[filtered_tags->len-1] = tmtag;
-			/* if cursor anywhere else, use struct (already added) and discard typedef */
+			g_ptr_array_add(tags, tmtag);
+			if (tmtag->file == old_doc->tm_file && tmtag->line == current_line)
+				current_tag = tmtag;
 		}
-		else
-			g_ptr_array_add(filtered_tags, tmtag);
-
-		last_tag = tmtag;
 	}
-	g_ptr_array_free(workspace_tags, TRUE);
-	workspace_tags = filtered_tags;
 
-	if (workspace_tags->len == 1)
+	if (current_tag)
+		/* swap definition/declaration search */
+		definition = current_tag->type & forward_types;
+
+	filtered_tags = filter_tags(tags, current_tag, definition);
+	if (filtered_tags->len == 0)
+	{
+		/* if we didn't find anything, try again with the opposite type */
+		g_ptr_array_free(filtered_tags, TRUE);
+		filtered_tags = filter_tags(tags, current_tag, !definition);
+	}
+	g_ptr_array_free(tags, TRUE);
+	tags = filtered_tags;
+
+	if (tags->len == 1)
 	{
 		GeanyDocument *new_doc;
 
-		tmtag = workspace_tags->pdata[0];
-		new_doc = document_find_by_real_path(
-			tmtag->file->file_name);
+		tmtag = tags->pdata[0];
+		new_doc = document_find_by_real_path(tmtag->file->file_name);
 
-		if (new_doc)
-		{
-			/* If we are already on the tag line, swap definition/declaration */
-			if (new_doc == old_doc && tmtag->line == current_line)
-			{
-				if (goto_tag(name, !definition))
-					found = TRUE;
-			}
-		}
-		else
-		{
+		if (!new_doc)
 			/* not found in opened document, should open */
 			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
-		}
 
-		if (!found && navqueue_goto_line(old_doc, new_doc, tmtag->line))
-			found = TRUE;
+		navqueue_goto_line(old_doc, new_doc, tmtag->line);
 	}
-	else if (workspace_tags->len > 1)
+	else if (tags->len > 1)
 	{
-		GPtrArray *tags;
+		GPtrArray *tag_list;
 		TMTag *tag, *best_tag;
 
-		g_ptr_array_sort(workspace_tags, compare_tags_by_name_line);
-		best_tag = find_best_goto_tag(old_doc, workspace_tags);
+		g_ptr_array_sort(tags, compare_tags_by_name_line);
+		best_tag = find_best_goto_tag(old_doc, tags);
 
-		tags = g_ptr_array_new();
+		tag_list = g_ptr_array_new();
 		if (best_tag)
-			g_ptr_array_add(tags, best_tag);
-		foreach_ptr_array(tag, i, workspace_tags)
+			g_ptr_array_add(tag_list, best_tag);
+		foreach_ptr_array(tag, i, tags)
 		{
 			if (tag != best_tag)
-				g_ptr_array_add(tags, tag);
+				g_ptr_array_add(tag_list, tag);
 		}
-		show_goto_popup(old_doc, tags, best_tag != NULL);
+		show_goto_popup(old_doc, tag_list, best_tag != NULL);
 
-		g_ptr_array_free(tags, TRUE);
-		found = TRUE;
+		g_ptr_array_free(tag_list, TRUE);
 	}
 
-	g_ptr_array_free(workspace_tags, TRUE);
+	found = tags->len > 0;
+	g_ptr_array_free(tags, TRUE);
 
 	return found;
 }
@@ -2305,14 +2276,51 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
+/* gets the fold header after or on @line, but skipping folds created because of parentheses */
 static gint get_fold_header_after(ScintillaObject *sci, gint line)
 {
-	gint line_count = sci_get_line_count(sci);
+	const gint line_count = sci_get_line_count(sci);
 
 	for (; line < line_count; line++)
 	{
 		if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
-			return line;
+		{
+			const gint last_child = SSM(sci, SCI_GETLASTCHILD, line, -1);
+			const gint line_end = sci_get_line_end_position(sci, line);
+			const gint lexer = sci_get_lexer(sci);
+			gint parenthesis_match_line = -1;
+
+			/* now find any unbalanced open parenthesis on the line and see where the matching
+			 * brace would be, mimicking what folding on () does */
+			for (gint pos = sci_get_position_from_line(sci, line); pos < line_end; pos++)
+			{
+				if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)) &&
+				    sci_get_char_at(sci, pos) == '(')
+				{
+					const gint matching = sci_find_matching_brace(sci, pos);
+
+					if (matching >= 0)
+					{
+						parenthesis_match_line = sci_get_line_from_position(sci, matching);
+						if (parenthesis_match_line != line)
+							break;  /* match is on a different line, we found a possible fold */
+						else
+							pos = matching;  /* just skip the range and continue searching */
+					}
+				}
+			}
+
+			/* if the matching parenthesis matches the fold level, skip it and continue.
+			 * it matches if it either spans the same lines, or spans one more but the next one is
+			 * a fold header (in which case the last child of the fold is one less to let the
+			 * header be at the parent level) */
+			if ((parenthesis_match_line == last_child) ||
+			    (parenthesis_match_line == last_child + 1 &&
+			     sci_get_fold_level(sci, parenthesis_match_line) & SC_FOLDLEVELHEADERFLAG))
+				line = last_child;
+			else
+				return line;
+		}
 	}
 
 	return -1;
@@ -2339,12 +2347,14 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType 
 
 			/* if it may be a false positive because we're inside a fold level not inside anything
 			 * we match, e.g. a #if in C or C++, we check we're inside the fold level that start
-			 * right after the tag we got from TM */
+			 * right after the tag we got from TM.
+			 * Additionally, we perform parentheses matching on the initial line not to get confused
+			 * by folding on () in case the parameter list spans multiple lines */
 			if (abs(tag_line - parent) > 1)
 			{
-				gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
+				const gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
 				if (tag_fold >= 0)
-					last_child = scintilla_send_message(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
+					last_child = SSM(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
 			}
 
 			if (line <= last_child)
@@ -2634,7 +2644,6 @@ void symbols_finalize(void)
 {
 	guint i;
 
-	g_strfreev(html_entities);
 	g_strfreev(c_tags_ignore);
 
 	for (i = 0; i < G_N_ELEMENTS(symbols_icons); i++)

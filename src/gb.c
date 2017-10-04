@@ -99,10 +99,11 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 	/* we use the window style context because the area one has a transparent
 	 * background and we want something to paint for the overlay */
 	GtkStyleContext *ctx = gtk_widget_get_style_context(GTK_WIDGET(self));
+	GtkStateFlags state = gtk_style_context_get_state(ctx);
 	GdkRGBA fg, bg;
 
-	gtk_style_context_get_color(ctx, GTK_STATE_FLAG_ACTIVE, &fg);
-	gtk_style_context_get_background_color(ctx, GTK_STATE_FLAG_BACKDROP, &bg);
+	gtk_style_context_get_color(ctx, state, &fg);
+	gtk_style_context_get_background_color(ctx, state, &bg);
 #else
 	GtkStyle *style = gtk_widget_get_style(area);
 	GdkColor fg = style->fg[GTK_STATE_NORMAL];
@@ -144,7 +145,7 @@ static gboolean geany_pong_area_draw(GtkWidget *area, cairo_t *cr, GeanyPong *se
 		layout = pango_cairo_create_layout(cr);
 #if GTK_CHECK_VERSION(3, 0, 0)
 		PangoFontDescription *font = NULL;
-		gtk_style_context_get(ctx, GTK_STATE_FLAG_NORMAL, GTK_STYLE_PROPERTY_FONT, &font, NULL);
+		gtk_style_context_get(ctx, state, GTK_STYLE_PROPERTY_FONT, &font, NULL);
 		if (font)
 		{
 			pango_layout_set_font_description(layout, font);
