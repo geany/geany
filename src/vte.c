@@ -286,7 +286,7 @@ void vte_init(void)
 # ifdef __APPLE__
 			"libvte.9.dylib", "libvte.dylib",
 # endif
-			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9",
+			"libvte.so", "libvte.so.9", "libvte.so.8", "libvte.so.4",
 #endif
 			NULL
 		};
