@@ -1843,7 +1843,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 			/* there is no comment type in those lexers, listing here just for completeness */
 			return FALSE;
 
-    case SCLEX_AU3:
+		case SCLEX_AU3:
 			return (style == SCE_AU3_COMMENT ||
 				style == SCE_AU3_COMMENTBLOCK);
 	}
