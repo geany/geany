@@ -1321,20 +1321,6 @@ void keybindings_get_normalised_event(GdkEventKey *ev, guint *state, guint *keyv
 }
 
 
-/* Check if event keypress matches keybinding combo */
-gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
-{
-	guint state, keyval;
-
-	if (ev->keyval == 0)
-		return FALSE;
-
-	keybindings_get_normalised_event(ev, &state, &keyval);
-
-	return (keyval == kb->key && state == kb->mods);
-}
-
-
 static gboolean run_kb(GeanyKeyBinding *kb, GeanyKeyGroup *group)
 {
 	gboolean handled = TRUE;

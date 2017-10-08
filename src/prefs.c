@@ -1633,8 +1633,14 @@ static gboolean prefs_dialog_key_press_response_cb(GtkWidget *dialog, GdkEventKe
 												   gpointer data)
 {
 	GeanyKeyBinding *kb = keybindings_lookup_item(GEANY_KEY_GROUP_HELP, GEANY_KEYS_HELP_HELP);
+	guint state, keyval;
 
-	if (keybindings_check_event(event, kb))
+	if (event->keyval == 0)
+		return FALSE;
+
+	keybindings_get_normalised_event(event, &state, &keyval);
+
+	if (keyval == kb->key && state == kb->mods)
 	{
 		open_preferences_help();
 		return TRUE;
