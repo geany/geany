@@ -1293,6 +1293,34 @@ static guint key_kp_translate(guint key_in)
 }
 
 
+void keybindings_get_normalised_event(GdkEventKey *ev, guint *state, guint *keyval)
+{
+	GdkModifierType consumed;
+	GdkKeymap *keymap = gdk_keymap_get_default();
+
+	gdk_keymap_translate_keyboard_state(keymap, ev->hardware_keycode,
+		ev->state, ev->group, keyval, NULL, NULL, &consumed);
+
+	/* Don't consume modifiers when no other key is set */
+	if (*keyval == GDK_VoidSymbol)
+		consumed = 0;
+
+	*state = keybindings_get_modifiers(ev->state) & ~consumed;
+
+	if ((consumed & GDK_SHIFT_MASK || consumed & GDK_LOCK_MASK) &&
+		gdk_keyval_to_lower(*keyval) != *keyval)
+	{
+		/* When shift is consumed and keyval is uppercase, unconsume the shift.
+		 * We want to see Ctrl+Shift+r instead of Ctrl+R */
+		*state |= GDK_SHIFT_MASK;
+		*keyval = gdk_keyval_to_lower(*keyval);
+	}
+
+	if (*keyval >= GDK_KP_Space && *keyval < GDK_KP_Equal)
+		*keyval = key_kp_translate(*keyval);
+}
+
+
 /* Check if event keypress matches keybinding combo */
 gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
 {
@@ -1301,15 +1329,7 @@ gboolean keybindings_check_event(GdkEventKey *ev, GeanyKeyBinding *kb)
 	if (ev->keyval == 0)
 		return FALSE;
 
-	keyval = ev->keyval;
-	state = keybindings_get_modifiers(ev->state);
-	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
-	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
-		if (keyval >= GDK_A && keyval <= GDK_Z)
-			keyval += GDK_a - GDK_A;
-
-	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
-		keyval = key_kp_translate(keyval);
+	keybindings_get_normalised_event(ev, &state, &keyval);
 
 	return (keyval == kb->key && state == kb->mods);
 }
@@ -1355,15 +1375,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	if (doc)
 		document_check_disk_status(doc, FALSE);
 
-	keyval = ev->keyval;
-	state = keybindings_get_modifiers(ev->state);
-	/* hack to get around that CTRL+Shift+r results in GDK_R not GDK_r */
-	if ((ev->state & GDK_SHIFT_MASK) || (ev->state & GDK_LOCK_MASK))
-		if (keyval >= GDK_A && keyval <= GDK_Z)
-			keyval += GDK_a - GDK_A;
-
-	if (keyval >= GDK_KP_Space && keyval < GDK_KP_Equal)
-		keyval = key_kp_translate(keyval);
+	keybindings_get_normalised_event(ev, &state, &keyval);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
