@@ -1621,6 +1621,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_YAML:
 			/* there is no string type in those lexers, listing here just for completeness */
 			return FALSE;
+
 		case SCLEX_AU3:
 			return (style == SCE_AU3_STRING);
 	}
