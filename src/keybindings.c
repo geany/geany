@@ -1296,7 +1296,8 @@ static guint key_kp_translate(guint key_in)
 void keybindings_get_normalised_event(GdkEventKey *ev, guint *state, guint *keyval)
 {
 	GdkModifierType consumed;
-	GdkKeymap *keymap = gdk_keymap_get_default();
+	GdkDisplay *display = gdk_window_get_display(ev->window);
+	GdkKeymap *keymap = gdk_keymap_get_for_display(display);
 
 	gdk_keymap_translate_keyboard_state(keymap, ev->hardware_keycode,
 		ev->state, ev->group, keyval, NULL, NULL, &consumed);
