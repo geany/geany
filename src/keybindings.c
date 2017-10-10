@@ -1357,7 +1357,7 @@ static gboolean run_kb(GeanyKeyBinding *kb, GeanyKeyGroup *group)
 /* central keypress event handler, almost all keypress events go to this function */
 static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer user_data)
 {
-	guint state, keyval;
+	guint state, keyval, legacy_state;
 	gsize g, i;
 	GeanyDocument *doc;
 	GeanyKeyGroup *group;
@@ -1371,6 +1371,9 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 		document_check_disk_status(doc, FALSE);
 
 	keybindings_get_normalised_event(ev, &state, &keyval);
+	/* User keybindings of old Geany versions may contain extra modifiers
+	 * such as shift - make sure these still work. */
+	legacy_state = keybindings_get_modifiers(ev->state);
 
 	/*geany_debug("%d (%d) %d (%d)", keyval, ev->keyval, state, ev->state);*/
 
@@ -1386,7 +1389,7 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	{
 		foreach_ptr_array(kb, i, group->key_items)
 		{
-			if (keyval == kb->key && state == kb->mods)
+			if (keyval == kb->key && (state == kb->mods || legacy_state == kb->mods))
 			{
 				if (run_kb(kb, group))
 					return TRUE;
