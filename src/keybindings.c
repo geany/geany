@@ -1301,20 +1301,28 @@ void keybindings_get_normalised_event(GdkEventKey *ev, guint *state, guint *keyv
 	gdk_keymap_translate_keyboard_state(keymap, ev->hardware_keycode,
 		ev->state, ev->group, keyval, NULL, NULL, &consumed);
 
+	/* Keys such as caps lock are always reported as consumed even when they
+	 * are not pressed - AND with the original state to get the actually
+	 * consumed events */
+	consumed &= ev->state;
+
 	/* Don't consume modifiers when no other key is set */
 	if (*keyval == GDK_VoidSymbol)
 		consumed = 0;
 
 	*state = keybindings_get_modifiers(ev->state) & ~consumed;
 
-	if ((consumed & GDK_SHIFT_MASK || consumed & GDK_LOCK_MASK) &&
-		gdk_keyval_to_lower(*keyval) != *keyval)
+	/* We want to see Ctrl+Shift+r instead of Ctrl+R. When shift is consumed
+	 * and keyval is uppercase, unconsume the shift. Also handle the case when
+	 * both caps lock and shift are pressed which makes keyval lowercase. */
+	if ((consumed & GDK_SHIFT_MASK && gdk_keyval_to_lower(*keyval) != *keyval) ||
+		(consumed & GDK_SHIFT_MASK && consumed & GDK_LOCK_MASK &&
+		 gdk_keyval_to_upper(*keyval) != *keyval))
 	{
-		/* When shift is consumed and keyval is uppercase, unconsume the shift.
-		 * We want to see Ctrl+Shift+r instead of Ctrl+R */
 		*state |= GDK_SHIFT_MASK;
-		*keyval = gdk_keyval_to_lower(*keyval);
 	}
+	if (consumed & (GDK_SHIFT_MASK|GDK_LOCK_MASK))
+		*keyval = gdk_keyval_to_lower(*keyval);
 
 	if (*keyval >= GDK_KP_Space && *keyval < GDK_KP_Equal)
 		*keyval = key_kp_translate(*keyval);
