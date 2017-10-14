@@ -77,6 +77,13 @@ enum TitleType
 	TITLE_DOCUMENT
 };
 
+typedef struct GeanyCtxtActionPattern
+{
+	gchar	*pattern;
+	gchar	*cmd;
+}
+GeanyCtxtActionPattern;
+
 /* Save adding many translation strings if the filetype name doesn't need translating */
 static gchar *filetype_make_title(const char *name, enum TitleType type)
 {
@@ -839,6 +846,7 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->comment_close);
 	g_free(ft->comment_single);
 	g_free(ft->context_action_cmd);
+	g_ptr_array_free (ft->context_action_patterns, TRUE);
 	g_free(ft->priv->filecmds);
 	g_free(ft->priv->ftdefcmds);
 	g_free(ft->priv->execcmds);
@@ -886,6 +894,102 @@ static void load_indent_settings(GeanyFiletype *ft, GKeyFile *config, GKeyFile *
 			g_warning("Invalid indent type %d in file type %s", ft->indent_type, ft->name);
 			ft->indent_type = -1;
 			break;
+	}
+}
+
+
+/* Free an action pattern entry, see ft->context_action_patterns */
+static void free_action_patterns_entry(gpointer data)
+{
+	GeanyCtxtActionPattern *entry;
+
+	if (data != NULL)
+	{
+		entry = (GeanyCtxtActionPattern *)data;
+		g_free(entry->pattern);
+		g_free(entry->cmd);
+		g_free(entry);
+	}
+}
+
+
+/**
+ * Get the action command for the given filetype.
+ * First, the function tries to match @word against the action patterns
+ * and returns the corresponding command on a match. If no match is found
+ * then ft->context_action_cmd is returned.
+ *
+ * Patterns are matched with option G_REGEX_MATCH_ANCHORED which means all
+ * patterns have to match with/from the start of @word (this is the same
+ * as using "^" at the start of a pattern).
+ * 
+ *  @param ft The GeanyFiletype.
+ *  @param word The word to match (usually the current word/selection).
+ *
+ *  @return The command string
+ **/
+gchar *filetypes_get_action_cmd(const GeanyFiletype *ft, gchar *word)
+{
+	if (word != NULL && ft->context_action_patterns != NULL)
+	{
+		guint index;
+		GeanyCtxtActionPattern *entry;
+
+		for (index = 0 ; index < ft->context_action_patterns->len ; index++)
+		{
+			entry = (GeanyCtxtActionPattern *)ft->context_action_patterns->pdata[index];
+			if (g_regex_match_simple(entry->pattern, word, 0, G_REGEX_MATCH_ANCHORED))
+			{
+				return entry->cmd;
+			}
+		}
+	}
+	return ft->context_action_cmd;
+}
+
+
+/* The function loads all action patterns from the given keyfiles.
+   Action patterns keys are of the format "context_action_pattern" followed
+   by a number from 1 to 99 (e.g. "context_action_pattern1"). Loading stops
+   on the first not found key or after the 99th entry. So the sequence of
+   action pattern keys may not have gaps. */
+static void load_action_patterns_settings(GeanyFiletype *ft, GKeyFile *config, GKeyFile *configh)
+{
+	guint count;
+	gsize length;
+	gchar **list;
+	gchar patternkey[sizeof("context_action_pattern")+3];
+	GeanyCtxtActionPattern *pattern;
+
+	for (count = 1 ;; count++)
+	{
+		g_snprintf(patternkey, sizeof(patternkey), "context_action_pattern%u", count);
+		list = g_key_file_get_string_list(configh, "settings", patternkey, &length, NULL);
+		if (list == NULL)
+		{
+			list = g_key_file_get_string_list(config, "settings", patternkey, &length, NULL);
+		}
+		if (list != NULL && length == 2 &&
+			strlen(list[0]) > 0 && strlen(list[1]) > 0)
+		{
+			/* Only accept lists with exactly 2 values in it. */
+			if (ft->context_action_patterns == NULL)
+			{
+				ft->context_action_patterns = g_ptr_array_new_full(1, free_action_patterns_entry);
+			}
+
+			pattern = g_new0(GeanyCtxtActionPattern, 1);
+			pattern->pattern = strdup(list[0]);
+			pattern->cmd = strdup(list[1]);
+			g_ptr_array_add(ft->context_action_patterns, pattern);
+		}
+		else if (list == NULL || count >= 99)
+		{
+			/* Assume that there are no more entries
+			   ==> there may not be gaps in the numbering */
+			break;
+		}
+		g_strfreev(list);
 	}
 }
 
@@ -940,6 +1044,9 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	{
 		SETPTR(filetypes[ft_id]->context_action_cmd, result);
 	}
+
+	/* read context action patterns */
+	load_action_patterns_settings(ft, config, configh);
 
 	result = utils_get_setting(string, configh, config, "settings", "tag_parser", NULL);
 	if (result != NULL)

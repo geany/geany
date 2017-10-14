@@ -1454,7 +1454,7 @@ static void on_load_tags1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 {
-	gchar *word, *command;
+	gchar *word, *command, *context_action_cmd;
 	GError *error = NULL;
 	GeanyDocument *doc = document_get_current();
 	const gchar *check_msg;
@@ -1471,10 +1471,11 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	}
 
 	/* use the filetype specific command if available, fallback to global command otherwise */
+	context_action_cmd = filetypes_get_action_cmd(doc->file_type, word);
 	if (doc->file_type != NULL &&
-		!EMPTY(doc->file_type->context_action_cmd))
+		!EMPTY(context_action_cmd))
 	{
-		command = g_strdup(doc->file_type->context_action_cmd);
+		command = g_strdup(context_action_cmd);
 		check_msg = _("Check the path setting in Filetype configuration.");
 	}
 	else
