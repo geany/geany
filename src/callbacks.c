@@ -1500,6 +1500,10 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		g_free(command_line);
 	}
+	else
+	{
+		ui_set_statusbar(TRUE, _("No context action set."));
+	}
 	g_free(word);
 	g_free(command);
 }
