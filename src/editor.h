@@ -66,6 +66,9 @@ typedef enum
 {
 	/** Indicator to highlight errors in the document text. This is a red squiggly underline. */
 	GEANY_INDICATOR_ERROR = 0,
+	GEANY_INDICATOR_NOTE = 1,
+	GEANY_INDICATOR_WARNING = 2,
+
 	/** Indicator used to highlight search results in the document. This is a
 	 *  rounded box around the text. */
 	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */

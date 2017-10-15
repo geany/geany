@@ -60,6 +60,7 @@ typedef struct
 	guint min_fields;		/* used to detect errors after parsing */
 	guint line_idx;			/* idx of the field where the line is */
 	gint file_idx;			/* idx of the field where the filename is or -1 */
+	gint type_idx;
 }
 ParseData;
 
@@ -83,6 +84,7 @@ enum
 
 
 static GdkColor color_error = {0, 0xFFFF, 0, 0};
+static GdkColor color_warning = {0, 0xFFFF, 0x7FFF, 0};
 static GdkColor color_context = {0, 0x7FFF, 0, 0};
 static GdkColor color_message = {0, 0, 0, 0xD000};
 
@@ -293,11 +295,13 @@ static void prepare_compiler_tree_view(void)
 	/*g_signal_connect(selection, "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
+
 static const GdkColor *get_color(gint msg_color)
 {
 	switch (msg_color)
 	{
 		case COLOR_RED: return &color_error;
+		case COLOR_YELLOW: return &color_warning;
 		case COLOR_DARK_RED: return &color_context;
 		case COLOR_BLUE: return &color_message;
 		default: return NULL;
@@ -821,11 +825,12 @@ gboolean msgwin_goto_compiler_file_line(gboolean focus_editor)
 			gchar *filename, *dir;
 			GtkTreePath *path;
 			gboolean ret;
+			GeanyLineType linetype;
 
 			path = gtk_tree_model_get_path(model, &iter);
 			find_prev_build_dir(path, model, &dir);
 			gtk_tree_path_free(path);
-			msgwin_parse_compiler_error_line(string, dir, &filename, &line);
+			msgwin_parse_compiler_error_line(string, dir, &filename, &line, &linetype);
 			g_free(string);
 			g_free(dir);
 
@@ -861,11 +866,10 @@ static void make_absolute(gchar **filename, const gchar *dir)
  * relevant file with the error in *filename.
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
-static void parse_file_line(ParseData *data, gchar **filename, gint *line)
+static void parse_file_line(ParseData *data, gchar **filename, gint *line, GeanyLineType *linetype)
 {
 	gchar *end = NULL;
 	gchar **fields;
-
 	*filename = NULL;
 	*line = -1;
 
@@ -889,6 +893,20 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 		return;
 	}
 
+
+	if (data->type_idx != -1)
+	{
+		gchar* typestr = fields[data->type_idx];
+		for(size_t i=0; typestr[i] != '\0'; ++i)
+			typestr[i] = g_ascii_tolower(typestr[i]);
+		*linetype = LINE_TEXT;
+		if(g_strstr_len(typestr, G_MAXSIZE, "err"))
+			*linetype = LINE_ERROR;
+		else if(g_strstr_len(typestr, G_MAXSIZE, "warn"))
+			*linetype = LINE_WARNING;
+		else if(g_strstr_len(typestr, G_MAXSIZE, "note"))
+			*linetype = LINE_NOTE;
+	}
 	/* let's stop here if there is no filename in the error message */
 	if (data->file_idx == -1)
 	{
@@ -906,10 +924,9 @@ static void parse_file_line(ParseData *data, gchar **filename, gint *line)
 
 
 static void parse_compiler_error_line(const gchar *string,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, GeanyLineType *linetype)
 {
-	ParseData data = {NULL, NULL, 0, 0, 0};
-
+	ParseData data = {NULL, NULL, 0, 0, 0, -1};
 	data.string = string;
 
 	switch (build_info.file_type_id)
@@ -1037,15 +1054,23 @@ static void parse_compiler_error_line(const gchar *string,
 			data.file_idx = -1;
 			break;
 		}
-		/* All GNU gcc-like error messages */
+		/* only gcc is supported, I don't know any other C(++) compilers and their error messages
+		 * empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
+		 * empty.c:21: error: conflicting types for `foo'
+		 * Only parse file and line, so that linker errors will also work (with -g) */
 		case GEANY_FILETYPES_C:
 		case GEANY_FILETYPES_CPP:
+		{
+			data.pattern = ":";
+			data.min_fields = 5;
+			data.line_idx = 1;
+			data.file_idx = 0;
+			data.type_idx = 3;
+			break;
+		}
+		/* All GNU gcc-like error messages */
 		case GEANY_FILETYPES_RUBY:
 		case GEANY_FILETYPES_JAVA:
-			/* only gcc is supported, I don't know any other C(++) compilers and their error messages
-			 * empty.h:4: Warnung: type defaults to `int' in declaration of `foo'
-			 * empty.c:21: error: conflicting types for `foo'
-			 * Only parse file and line, so that linker errors will also work (with -g) */
 		case GEANY_FILETYPES_F77:
 		case GEANY_FILETYPES_FORTRAN:
 		case GEANY_FILETYPES_LATEX:
@@ -1061,6 +1086,7 @@ static void parse_compiler_error_line(const gchar *string,
 				 * [javac] <Full Path to File + extension>:<line n°>: <error> */
 				data.pattern = " :";
 				data.min_fields = 4;
+				data.type_idx = 3;
 				data.line_idx = 2;
 				data.file_idx = 1;
 				break;
@@ -1070,6 +1096,7 @@ static void parse_compiler_error_line(const gchar *string,
 			{
 				data.pattern = ":";
 				data.min_fields = 3;
+				data.type_idx = 2;
 				data.line_idx = 1;
 				data.file_idx = 0;
 				break;
@@ -1078,7 +1105,7 @@ static void parse_compiler_error_line(const gchar *string,
 	}
 
 	if (data.pattern != NULL)
-		parse_file_line(&data, filename, line);
+		parse_file_line(&data, filename, line, linetype);
 }
 
 
@@ -1088,13 +1115,14 @@ static void parse_compiler_error_line(const gchar *string,
  * *line will be -1 if no error was found in string.
  * *filename must be freed unless it is NULL. */
 void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, GeanyLineType *linetype)
 {
 	GeanyFiletype *ft;
 	gchar *trimmed_string, *utf8_dir;
 
 	*filename = NULL;
 	*line = -1;
+	*linetype = LINE_ERROR;
 
 	if (G_UNLIKELY(string == NULL))
 		return;
@@ -1111,10 +1139,10 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 	ft = filetypes[build_info.file_type_id];
 
 	/* try parsing with a custom regex */
-	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line))
+	if (!filetypes_parse_error_message(ft, trimmed_string, filename, line, linetype))
 	{
 		/* fallback to default old-style parsing */
-		parse_compiler_error_line(trimmed_string, filename, line);
+		parse_compiler_error_line(trimmed_string, filename, line, linetype);
 	}
 	make_absolute(filename, utf8_dir);
 	g_free(trimmed_string);

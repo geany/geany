@@ -1270,28 +1270,29 @@ static void compile_regex(GeanyFiletype *ft, gchar *regstr)
 
 
 gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
-		gchar **filename, gint *line)
+		gchar **filename, gint *line, GeanyLineType *linetype)
 {
 	gchar *regstr;
-	gchar **tmp;
-	GeanyDocument *doc;
 	GMatchInfo *minfo;
 	gint i, n_match_groups;
 	gchar *first, *second;
 
 	if (ft == NULL)
 	{
-		doc = document_get_current();
+		GeanyDocument *doc = document_get_current();
 		if (doc != NULL)
 			ft = doc->file_type;
 	}
-	tmp = build_get_regex(build_info.grp, ft, NULL);
-	if (tmp == NULL)
-		return FALSE;
-	regstr = *tmp;
+	{
+		gchar **tmp = build_get_regex(build_info.grp, ft, NULL);
+		if (tmp == NULL)
+			return FALSE;
+		regstr = *tmp;
+	}
 
 	*filename = NULL;
 	*line = -1;
+	*linetype = LINE_ERROR;
 
 	if (G_UNLIKELY(EMPTY(regstr)))
 		return FALSE;
@@ -1313,56 +1314,92 @@ gboolean filetypes_parse_error_message(GeanyFiletype *ft, const gchar *message,
 	n_match_groups = g_match_info_get_match_count(minfo);
 	first = second = NULL;
 
-	for (i = 1; i < n_match_groups; i++)
+	gchar* linepat = g_match_info_fetch_named(minfo, "line");
+	if(linepat)
 	{
-		gint start_pos;
+		gboolean res = FALSE;
 
-		g_match_info_fetch_pos(minfo, i, &start_pos, NULL);
-		if (start_pos != -1)
+		*line = g_ascii_strtoll(linepat, NULL, 10);
+		g_free(linepat);
+		if(*line == 0) {
+			*line = -1;
+			goto match_free;
+		}
+		*filename = g_match_info_fetch_named(minfo, "file");
+		res = *filename != NULL;
+
+		gint pos_beg;
+		if(g_match_info_fetch_named_pos(minfo, "error", &pos_beg, NULL) && pos_beg != -1)
 		{
-			if (first == NULL)
-				first = g_match_info_fetch(minfo, i);
-			else
+			*linetype = LINE_ERROR;
+		}
+		else if(g_match_info_fetch_named_pos(minfo, "warning", &pos_beg, NULL) && pos_beg != -1)
+		{
+			*linetype = LINE_WARNING;
+		}
+		else if(g_match_info_fetch_named_pos(minfo, "note", &pos_beg, NULL) && pos_beg != -1)
+		{
+			*linetype = LINE_NOTE;
+		}
+
+match_free:
+		g_match_info_free(minfo);
+		return res;
+	}
+	else /* fallback to old regexp conventions */
+	{
+		for (i = 1; i < n_match_groups; i++)
+		{
+			gint start_pos;
+
+			g_match_info_fetch_pos(minfo, i, &start_pos, NULL);
+			if (start_pos != -1)
 			{
-				second = g_match_info_fetch(minfo, i);
-				break;
+				if (first == NULL)
+					first = g_match_info_fetch(minfo, i);
+				else
+				{
+					second = g_match_info_fetch(minfo, i);
+					break;
+				}
 			}
 		}
-	}
 
-	if (second)
-	{
-		gchar *end;
-		glong l;
+		if (second)
+		{
+			gchar *end;
+			glong l;
 
-		l = strtol(first, &end, 10);
-		if (*end == '\0')	/* first is purely decimals */
-		{
-			*line = l;
-			g_free(first);
-			*filename = second;
-		}
-		else
-		{
-			l = strtol(second, &end, 10);
-			if (*end == '\0')
+			l = strtol(first, &end, 10);
+			if (*end == '\0')	/* first is purely decimals */
 			{
 				*line = l;
-				g_free(second);
-				*filename = first;
+				g_free(first);
+				*filename = second;
 			}
 			else
 			{
-				g_free(first);
-				g_free(second);
+				l = strtol(second, &end, 10);
+				if (*end == '\0')
+				{
+					*line = l;
+					g_free(second);
+					*filename = first;
+				}
+				else
+				{
+					g_free(first);
+					g_free(second);
+				}
 			}
 		}
-	}
-	else
-		g_free(first);
+		else
+			g_free(first);
 
-	g_match_info_free(minfo);
-	return *filename != NULL;
+		g_match_info_free(minfo);
+		return *filename != NULL;
+	}
+
 }
 
 
