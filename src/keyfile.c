@@ -220,6 +220,8 @@ static void init_pref_groups(void)
 		"color_scheme", NULL);
 	stash_group_add_spin_button_integer(group, &editor_prefs.scroll_lines_around_cursor,
 		"scroll_lines_around_cursor", 0, "spin_scroll_lines_around_cursor");
+	stash_group_add_boolean(group, &editor_prefs.mouse_back_forward_enabled,
+		"mouse_back_forward_enabled", TRUE);
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
