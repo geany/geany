@@ -354,15 +354,18 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		return TRUE;
 	}
 
-	else if (event->button == 8 /*backwards*/)
+	else if (event->button == 8 /*backwards*/ && editor_prefs.mouse_back_forward_enabled)
 	{
 		navqueue_go_back();
 	}
 
-	else if (event->button == 9 /*forwards*/)
+	else if (event->button == 9 /*forwards*/ && editor_prefs.mouse_back_forward_enabled)
 	{
 		navqueue_go_forward();
 	}
+
+	else if (event->button > 5 && app->debug_mode)
+		g_warning("Unknown mouse button was pressed %i", event->button);
 
 	return FALSE;
 }
