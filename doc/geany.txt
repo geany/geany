@@ -911,6 +911,12 @@ the cursor position or by the current selection. If the cursor is at
 the word "echo", a browser window will open(assumed your browser is
 called firefox) and it will open the address: http://www.php.net/echo.
 
+Context action patterns
+```````````````````````
+It is also possible to execute different actions commands depending
+on regular expressions. This feature is only usable using the filetype
+configuration (see "context_action_pattern" in the section called
+`Filetype configuration`_).
 
 Autocompletion
 ^^^^^^^^^^^^^^
@@ -4204,6 +4210,62 @@ context_action_cmd
     context_action_cmd=firefox "http://www.php.net/%s"
 
     *Example:* ``context_action_cmd=devhelp -s "%s"``
+
+context_action_pattern
+    Like *context_action_cmd* a command which can be executed on the
+    current word or the current selection. In this case the command is
+    only executed if the current word or the current selection matches
+    a regular expression.
+
+    You can specify mutiple context action patterns. Therefore the entries
+    must be numerated like this::
+    
+        context_action_pattern1 = ...
+        context_action_pattern2 = ...
+        context_action_pattern3 = ...
+
+    Make sure to not have gaps in the numeration. Otherwise all commands
+    after the gap will be ignored. In this example only command 1 and 2
+    are used::
+
+        context_action_pattern1 = ...
+        context_action_pattern2 = ...
+        context_action_pattern4 = ...
+        context_action_pattern5 = ...
+
+    A context action pattern consists of the regular expression to match
+    and of a command which will be executed on match. Both followed by a
+    semicolon like this::
+
+        context_action_pattern1 = g_.*;firefox --new-tab "https://developer.gnome.org/symbols/search?q=%s";
+
+    The regular expression must match the current word or selection from
+    the beginning. The example above would match a word like ``g_foo_bar``
+    but it would not match ``foo_g_bar`` (please **do not** use '^' to
+    match from the start, it is not required).
+
+    If there is no match with any context action pattern then
+    *context_action_cmd* can be used to set a default action. The
+    regular expressions are matched in the order of numeration. It is
+    first checked if *context_action_pattern1* matches, then
+    *context_action_pattern2* and so on.
+
+    Example usage: Open the GNOME API documentation for the
+    current function call at the cursor position if it starts with *g_*.
+    Otherwise open a standard C library documentation.
+
+    The command can
+    be set for every filetype or if not set, a global command will
+    be used. The command itself can be specified without the full
+    path, then it is searched in $PATH. But for security reasons,
+    it is recommended to specify the full path to the command. The
+    wildcard %s will be replaced by the current word at the cursor
+    position or by the current selection.
+
+    *Example:*
+
+    | ``context_action_cmd=firefox --new-tab "http://www.cplusplus.com/search.do?q=%s"``
+    | ``context_action_pattern1=g_.*;firefox --new-tab "https://developer.gnome.org/symbols/search?q=%s";``
 
 .. _tag_parser:
 
