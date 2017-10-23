@@ -9,9 +9,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-03 10:19+0200\n"
+"POT-Creation-Date: 2017-10-12 23:28+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -1665,7 +1665,7 @@ msgstr ""
 msgid "<b>Terminal</b>"
 msgstr "<b>Terminal</b>"
 
-#: ../data/geany.glade.h:339 ../src/prefs.c:1623 ../src/vte.c:384
+#: ../data/geany.glade.h:339 ../src/prefs.c:1623 ../src/vte.c:391
 msgid "Terminal"
 msgstr "Terminal"
 
@@ -3632,7 +3632,7 @@ msgstr "Gehe zum sichtbaren Zeilenbeginn"
 
 #: ../src/keybindings.c:590
 msgid "Go to End of Display Line"
-msgstr "Gehe zum angezeigten Zeilenende"
+msgstr "Gehe zum sichtbaren Zeilenende"
 
 #: ../src/keybindings.c:592
 msgid "Go to Previous Word Part"
@@ -5510,24 +5510,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:577
+#: ../src/vte.c:584
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "Ungültige VTE-Bibliothek \"%s\": Es fehlt das Symbol \"%s\""
 
-#: ../src/vte.c:758
+#: ../src/vte.c:765
 msgid "_Set Path From Document"
 msgstr "Pfad des Dokumentes _übernehmen"
 
-#: ../src/vte.c:763
+#: ../src/vte.c:770
 msgid "_Restart Terminal"
 msgstr "Terminal _neustarten"
 
-#: ../src/vte.c:796
+#: ../src/vte.c:803
 msgid "_Input Methods"
 msgstr "Eingabe_methoden"
 
-#: ../src/vte.c:888
+#: ../src/vte.c:895
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."

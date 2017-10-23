@@ -119,17 +119,17 @@ static gboolean dummy = FALSE;
 /* in alphabetical order of short options */
 static GOptionEntry entries[] =
 {
-	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number for the first opened file (useful in conjunction with --line)"), NULL },
-	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use an alternate configuration directory"), NULL },
+	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number to COLUMN for the first opened file (useful in conjunction with --line)"), N_("COLUMN") },
+	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use alternate configuration directory DIR"), N_("DIR") },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags file"), NULL },
 #ifdef HAVE_SOCKET
 	{ "new-instance", 'i', 0, G_OPTION_ARG_NONE, &cl_options.new_instance, N_("Don't open files in a running instance, force opening a new instance"), NULL },
-	{ "socket-file", 0, 0, G_OPTION_ARG_FILENAME, &cl_options.socket_filename, N_("Use this socket filename for communication with a running Geany instance"), NULL },
+	{ "socket-file", 0, 0, G_OPTION_ARG_FILENAME, &cl_options.socket_filename, N_("Use socket filename FILE for communication with a running Geany instance"), N_("FILE") },
 	{ "list-documents", 0, 0, G_OPTION_ARG_NONE, &cl_options.list_documents, N_("Return a list of open documents in a running Geany instance"), NULL },
 #endif
-	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number for the first opened file"), NULL },
+	{ "line", 'l', 0, G_OPTION_ARG_INT, &cl_options.goto_line, N_("Set initial line number to LINE for the first opened file"), N_("LINE") },
 	{ "no-msgwin", 'm', 0, G_OPTION_ARG_NONE, &no_msgwin, N_("Don't show message window at startup"), NULL },
 	{ "no-ctags", 'n', 0, G_OPTION_ARG_NONE, &ignore_global_tags, N_("Don't load auto completion data (see documentation)"), NULL },
 #ifdef HAVE_PLUGINS
@@ -140,7 +140,7 @@ static GOptionEntry entries[] =
 	{ "no-session", 's', G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &cl_options.load_session, N_("Don't load the previous session's files"), NULL },
 #ifdef HAVE_VTE
 	{ "no-terminal", 't', 0, G_OPTION_ARG_NONE, &no_vte, N_("Don't load terminal support"), NULL },
-	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Filename of libvte.so"), NULL },
+	{ "vte-lib", 0, 0, G_OPTION_ARG_FILENAME, &lib_vte, N_("Use FILE as the dynamically-linked VTE library"), N_("FILE") },
 #endif
 	{ "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose_mode, N_("Be verbose"), NULL },
 	{ "version", 'V', 0, G_OPTION_ARG_NONE, &show_version, N_("Show version and exit"), NULL },
@@ -535,6 +535,8 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 
 	context = g_option_context_new(_("[FILES...]"));
 
+	g_option_context_set_summary(context, _("A fast and lightweight IDE."));
+	g_option_context_set_description(context, _("Report bugs to https://github.com/geany/geany/issues."));
 	g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
 	g_option_group_set_translation_domain(g_option_context_get_main_group(context), GETTEXT_PACKAGE);
 	g_option_context_add_group(context, gtk_get_option_group(FALSE));
