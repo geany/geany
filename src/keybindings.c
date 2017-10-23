@@ -124,7 +124,10 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 {
 #ifdef __APPLE__
 	if (mods & GDK_MOD2_MASK)
+	{
 		mods |= GEANY_PRIMARY_MOD_MASK;
+		mods &= ~GDK_MOD2_MASK;
+	}
 #endif
 	return mods & gtk_accelerator_get_default_mod_mask();
 }
