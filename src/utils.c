@@ -1688,6 +1688,17 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 }
 
 
+/* Returns "file:///" on Windows, "file://" everywhere else */
+const gchar *utils_get_uri_file_prefix(void)
+{
+#ifdef G_OS_WIN32
+	return "file:///";
+#else
+	return "file://";
+#endif
+}
+
+
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
@@ -1893,16 +1904,13 @@ GSList *utils_get_config_files(const gchar *subdir)
  * an anchor link, e.g. "#some_anchor". */
 gchar *utils_get_help_url(const gchar *suffix)
 {
-	gint skip;
 	gchar *uri;
+	const gchar *uri_file_prefix = utils_get_uri_file_prefix();
+	gint skip = strlen(uri_file_prefix);
 
+	uri = g_strconcat(uri_file_prefix, app->docdir, "/index.html", NULL);
 #ifdef G_OS_WIN32
-	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/index.html", NULL);
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
-#else
-	skip = 7;
-	uri = g_strconcat("file://", app->docdir, "/index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
@@ -2115,7 +2123,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
