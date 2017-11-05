@@ -1237,13 +1237,14 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 		bc = get_build_cmd(doc, grp, cmd, NULL);
 		if (bc != NULL && strcmp(bc->command, "builtin") == 0)
 		{
+			const gchar *uri_file_prefix;
 			gchar *uri;
 			if (doc == NULL)
 				return;
-			uri = g_strconcat("file:///", g_path_skip_root(doc->file_name), NULL);
+			uri_file_prefix = utils_get_uri_file_prefix();
+			uri = g_strconcat(uri_file_prefix, doc->file_name, NULL);
 			utils_open_browser(uri);
 			g_free(uri);
-
 		}
 		else
 			build_run_cmd(doc, cmd);
