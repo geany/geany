@@ -3834,26 +3834,24 @@ msgstr ""
 "werden."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Setzt die Spaltennummer in der zuerst geöffneten Datei. Sinnvoll nur in "
-"Kombination mit der Option -l oder --line"
+"Setzt die Spaltennummer zu SPALTE in der zuerst geöffneten Datei. Nur "
+"sinnvoll in Kombination mit der Option -l oder --line"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "SPALTE"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Benutzt ein anderes Verzeichnis für die Konfigurationsdateien"
+msgstr "Benutzt DIR als alternatives Verzeichnis für die Konfigurationsdateien"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3875,16 +3873,15 @@ msgstr ""
 "Instanz öffnen"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
-"Benutze diesen Socket-Namen für die Kommunikation mit einer bereits "
+"Benutze den in DATEI angegebenen Socket-Namen für die Kommunikation mit einer bereits "
 "laufenden Instanz von Geany"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "DATEI"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3892,13 +3889,12 @@ msgstr ""
 "Gibt eine Liste mit in dieser Instanz von Geany geöffneten Dokumenten aus"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Setzt die Zeilennummer in der zuerst geöffneten Datei"
+msgstr "Setzt die Zeilennummer in der zuerst geöffneten Datei zu dem in ZEILE angebenden Wert"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "ZEILE"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3914,12 +3910,12 @@ msgstr "Plugins nicht laden"
 
 #: ../src/libmain.c:138
 msgid "Print Geany's installation prefix"
-msgstr "Geanys Installationsverzeichnis ausgeben"
+msgstr "Präfixe der Geany-Installation ausgeben"
 
 #: ../src/libmain.c:139
 msgid "Open all FILES in read-only mode (see documentation)"
 msgstr ""
-"Alle Dateien nur zum Lesen öffnen (die Dokumentation dazu konsultieren)"
+"Alle Dateien nur zum Lesen öffnen (Dokumentation beachten)"
 
 #: ../src/libmain.c:140
 msgid "Don't load the previous session's files"
@@ -3931,7 +3927,7 @@ msgstr "Das integrierte Terminal (VTE) nicht starten"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Nutzt den Werte aus DATEI als dynmaisch gelinkte VTE-Bibliothek"
 
 # siehe http://en.de.open-tran.eu/suggest/be verbose
 #: ../src/libmain.c:145
@@ -3947,13 +3943,12 @@ msgid "[FILES...]"
 msgstr "[Dateien...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
 msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Fehler nach https://github.com/geany/geany/issues berichten."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
