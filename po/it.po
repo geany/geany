@@ -5115,7 +5115,7 @@ msgstr "Ordina per _nome"
 
 #: ../src/symbols.c:2580
 msgid "Sort by _Appearance"
-msgstr "Ordina per _aspetto"
+msgstr "Ordina per _posizione"
 
 #: ../src/templates.c:83
 #, c-format
