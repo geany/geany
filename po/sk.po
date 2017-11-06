@@ -2,14 +2,14 @@
 # Copyright (C) 2014 Enrico Tröger, Matthew Brush, Colomban Wendling, Frank Lanitz, Nick Treleaven and Dominic Hopf
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2016.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2017.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2017-03-06 19:36+0100\n"
+"PO-Revision-Date: 2017-11-06 19:22+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -196,24 +196,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Spustenie</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Uložiť polohu a rozmery okna"
+msgstr "Uložiť rozmery okna"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Uloží polohu a rozmery okna a obnoví ich pri štarte"
+msgstr "Uloží rozmery okna a obnoví ich pri štarte"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Uložiť polohu a rozmery okna"
+msgstr "Uložiť polohu okna"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Uloží polohu a rozmery okna a obnoví ich pri štarte"
+msgstr "Uloží polohu okna a obnoví ju pri štarte"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -3775,26 +3771,24 @@ msgid "Failed to load one or more session files."
 msgstr "Nepodarilo sa načítať jeden, alebo viac súborov relácie."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Nastaviť počiatočné číslo stĺpca pre prvý otvorený súbor (užitočné pri "
+"Nastaviť kurzor na stĺpec STĹPEC pre prvý otvorený súbor (užitočné pri "
 "použití spolu s --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "STĹPEC"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Použiť alternatívny priečinok pre konfiguráciu"
+msgstr "Použiť alternatívny priečinok ADRESÁR pre konfiguráciu"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "ADRESÁR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3813,27 +3807,27 @@ msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "Súbory otvoriť v novej inštancii programu"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
-msgstr "Používať tento soket na komunikáciu s bežiacou inštanciou Geany"
+msgstr ""
+"Používať soket s názvom súboru SÚBOR na komunikáciu s bežiacou inštanciou "
+"Geany"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "SÚBOR"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
 msgstr "Vrátiť zoznam dokumentov otvorených v bežiacej inštancii Geany"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Nastaviť počiatočné číslo riadku pre prvý otvorený súbor"
+msgstr "Nastaviť kurzor na riadok RIADOK pre prvý otvorený súbor"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "RIADOK"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3865,7 +3859,7 @@ msgstr "Nenačítavať podporu terminálu"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Použiť SÚBOR ako dynamicky načítavanú knižnicu VTE"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3880,13 +3874,12 @@ msgid "[FILES...]"
 msgstr "[SÚBORY...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Rýchle a nenáročné IDE"
+msgstr "Rýchle a nenáročné IDE."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Chyby hláste na adrese https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -3991,9 +3984,8 @@ msgid "Open in New _Window"
 msgstr "Otvoriť v _novom okne"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Presunúť dokument doprava"
+msgstr "Zavrieť dokumenty v_pravo"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -5996,6 +5988,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:468
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid "Filename of libvte.so"
-#~ msgstr "Názov súboru libvte.so"
