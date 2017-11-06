@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2017-03-18 22:45+0100\n"
+"PO-Revision-Date: 2017-11-06 10:07+0100\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
 "Language: ca\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -197,24 +197,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Inici</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Desa la posició i la geometria de la finestra"
+msgstr "Desa la mida de la finestra"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Desa la posició i la geometria de la finestra i ho restaura a l'inici"
+msgstr "Desa la mida de la finestra i la restaura a l'inici"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Desa la posició i la geometria de la finestra"
+msgstr "Desa la posició de la finestra"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Desa la posició i la geometria de la finestra i ho restaura a l'inici"
+msgstr "Desa la posició de la finestra i la restaura a l'inici"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -2976,7 +2972,7 @@ msgstr "Voleu actualitzar-la?"
 
 #: ../src/editor.c:4470
 msgid "Enter Tab Width"
-msgstr "Introduïu l'amplada del tabulador:"
+msgstr "Introduïu l'amplada del tabulador"
 
 #: ../src/editor.c:4471
 msgid "Enter the amount of spaces which should be replaced by a tab character."
@@ -3800,26 +3796,24 @@ msgid "Failed to load one or more session files."
 msgstr "No s'ha pogut carregar un o més fitxers de sessió."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Estableix el número de columna inicial per al primer fitxer obert (és útil "
-"en conjunció amb --line)"
+"Estableix el número de columna inicial a COLUMNA per al primer fitxer obert "
+"(és útil en conjunció amb --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "COLUMNA"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Utilitza un directori de configuració alternatiu"
+msgstr "Utilitza el directori de configuració alternatiu DIR"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3842,16 +3836,15 @@ msgstr ""
 "instància"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
-"Utilitza aquest nom de fitxer de sòcol per a la comunicació amb una "
+"Utilitza el nom de fitxer de sòcol FITXER per a la comunicació amb una "
 "instància de Geany en execució"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FITXER"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3859,13 +3852,13 @@ msgstr ""
 "Torna una llista de documents oberts en una instància en execució de Geany"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Estableix el número de línia inicial per al primer fitxer obert"
+msgstr ""
+"Estableix el número de línia inicial a LÍNIA per al primer fitxer obert"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "LÍNIA"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3898,7 +3891,7 @@ msgstr "No carreguis el suport de terminal"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Utilitza el FITXER com a la biblioteca VTE enllaçada dinàmicament"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3913,13 +3906,12 @@ msgid "[FILES...]"
 msgstr "[FITXERS...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Un IDE ràpid i lleuger"
+msgstr "Un IDE ràpid i lleuger."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Informeu dels errors a https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4028,9 +4020,8 @@ msgid "Open in New _Window"
 msgstr "Obre en una _finestra nova"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Canvia al document de la dreta"
+msgstr "Tanca els documents de la d_reta"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4420,7 +4411,7 @@ msgstr "Cerca cap e_nrere"
 
 #: ../src/search.c:349 ../src/search.c:971
 msgid "C_ase sensitive"
-msgstr "Sensible a _majúscules"
+msgstr "Distinció m_ajúscules/minúscules"
 
 #: ../src/search.c:353 ../src/search.c:976
 msgid "Match only a _whole word"
@@ -5824,7 +5815,7 @@ msgstr "Obre a _Geany"
 
 #: ../plugins/filebrowser.c:664
 msgid "Open _Externally"
-msgstr "Obre _Externament..."
+msgstr "Obre _externament"
 
 #: ../plugins/filebrowser.c:689
 msgid "Show _Hidden Files"
