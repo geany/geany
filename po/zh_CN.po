@@ -11,14 +11,14 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2016-11-07 23:57+0800\n"
+"PO-Revision-Date: 2017-11-07 19:09+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.4\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -197,24 +197,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>启动</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "保存窗口位置和尺寸"
+msgstr "保存窗口尺寸"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "保存窗口位置和尺寸并在启动时恢复"
+msgstr "保存窗口尺寸并在启动时恢复"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "保存窗口位置和尺寸"
+msgstr "保存窗口位置"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "保存窗口位置和尺寸并在启动时恢复"
+msgstr "保存窗口位置并在启动时恢复"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -348,7 +344,7 @@ msgid ""
 "Use current word under the cursor when opening the Find, Find in Files or "
 "Replace dialog and there is no selection"
 msgstr ""
-"在未选中单词时，打开查找、在文件中查找或替换对话框时使用当前光标后面的单词。"
+"在未选中单词时，打开查找、在文件中查找或替换对话框时使用当前光标下的单词"
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
@@ -366,7 +362,7 @@ msgstr "使用基于项目的会话文件"
 msgid ""
 "Whether to store a project's session files and open them when re-opening the "
 "project"
-msgstr "是否保存项目会话文件并在下次打开这个项目时使用会话文件。"
+msgstr "是否保存项目会话文件以在下次打开项目时使用"
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
@@ -676,7 +672,7 @@ msgstr "使用指示器显示编译错误"
 msgid ""
 "Whether to use indicators (a squiggly underline) to highlight the lines "
 "where the compiler found a warning or an error"
-msgstr "是否使用指示器 (弯曲的下划线) 将编译器找到错误或警告的行高亮。"
+msgstr "是否使用提示 (弯曲的下划线) 将编译器找到错误或警告行高亮"
 
 #: ../data/geany.glade.h:143
 msgid "Newline strips trailing spaces"
@@ -801,7 +797,7 @@ msgstr "片断自动完成"
 msgid ""
 "Type a defined short character sequence and complete it to a more complex "
 "string using a single keypress"
-msgstr "使用一个按键来使输入的简短字符串变成一个复杂的语句。"
+msgstr "使用一个按键来使输入的简短字符串变成一个复杂的语句"
 
 #: ../data/geany.glade.h:171
 msgid "XML/HTML tag auto-closing"
@@ -1161,7 +1157,6 @@ msgid "Strip trailing spaces and tabs"
 msgstr "去除行尾空白"
 
 #: ../data/geany.glade.h:252
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "去除行尾空格和制表符"
 
@@ -1478,7 +1473,7 @@ msgstr "输出时滚动"
 
 #: ../data/geany.glade.h:325
 msgid "Whether to scroll to the bottom when output is generated"
-msgstr "输出时是否滚动到底端。"
+msgstr "输出时是否滚动到底端"
 
 #: ../data/geany.glade.h:326
 msgid "Cursor blinks"
@@ -1536,7 +1531,7 @@ msgstr "不要使用运行脚本"
 msgid ""
 "Don't use the simple run script which is usually used to display the exit "
 "status of the executed program"
-msgstr "不使用用于显示程序的退出状态的简单运行脚本。"
+msgstr "不要使用简单运行脚本（通常用于显示程序的退出状态）"
 
 #: ../data/geany.glade.h:338
 msgid "<b>Terminal</b>"
@@ -2442,7 +2437,7 @@ msgstr "在使用这个功能前请设置当前文件的文件类型。"
 
 #: ../src/callbacks.c:1318 ../src/callbacks.c:1326
 msgid "No more message items."
-msgstr "没有消息"
+msgstr "没有更多消息。"
 
 #: ../src/callbacks.c:1429
 #, c-format
@@ -2613,11 +2608,11 @@ msgstr "%s 属性"
 
 #: ../src/dialogs.c:1251 ../src/ui_utils.c:293
 msgid "(with BOM)"
-msgstr " (含有 BOM)"
+msgstr "(含有 BOM)"
 
 #: ../src/dialogs.c:1251
 msgid "(without BOM)"
-msgstr " (无 BOM)"
+msgstr "(无 BOM)"
 
 #: ../src/document.c:734
 #, c-format
@@ -3661,24 +3656,22 @@ msgid "Failed to load one or more session files."
 msgstr "打开一个或多个上次会话的文件失败。"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
-msgstr "设置第一个打开的文件的初始行号 (用于以 --line 连接)"
+msgstr "设置第一个打开的文件的初始列号 (与 --line 同时使用)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "COLUMN"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "使用自定义的配置文件目录"
+msgstr "使用自定义的配置文件目录 DIR"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3697,27 +3690,25 @@ msgid "Don't open files in a running instance, force opening a new instance"
 msgstr "不要在一个已运行的实例中打开文件，强制在新的实例中打开"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
-msgstr "使用这个 socket 文件名与一个正在运行的 Geany 实例进行通信"
+msgstr "使用 socket 文件 FILE 与一个正在运行的 Geany 实例通信"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FILE"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
 msgstr "返回一个正在运行的 Geany 实例打开的文件列表"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "设置第一个打开的文件的初始行号"
+msgstr "设置第一个打开的文件的初始行号 LINE"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "LINE"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3749,7 +3740,7 @@ msgstr "不要载入虚拟终端"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "使用 FILE 作为动态链接的 VTE 库"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3764,13 +3755,12 @@ msgid "[FILES...]"
 msgstr "[文件...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "轻快的 IDE"
+msgstr "轻快的 IDE。"
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "到 https://github.com/geany/geany/issues 报告问题。"
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -3873,9 +3863,8 @@ msgid "Open in New _Window"
 msgstr "在新窗口中打开(_W)"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "向右移动文档"
+msgstr "关闭右边所有文档(_R)"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4023,7 +4012,7 @@ msgstr "文档设置"
 
 #: ../src/printing.c:269
 msgid "Print only the basename(without the path) of the printed file"
-msgstr "打印文件的基本文件名，不包括路径。"
+msgstr "打印文件的基本文件名，不包括路径"
 
 #: ../src/printing.c:421
 msgid "Paginating"
@@ -4220,7 +4209,7 @@ msgstr "使用转义序列(_E)"
 msgid ""
 "Replace \\\\, \\t, \\n, \\r and \\uXXXX (Unicode characters) with the "
 "corresponding control characters"
-msgstr "替换 \\\\、\\t、\\n、\\r 和 \\uXXXX (Unicode字符串) 为对应的控制字符。"
+msgstr "替换 \\\\、\\t、\\n、\\r 和 \\uXXXX (Unicode字符串) 为对应的控制字符"
 
 #: ../src/search.c:325
 msgid "Use multi-line matchin_g"
@@ -4275,7 +4264,7 @@ msgstr "标记(_M)"
 
 #: ../src/search.c:519
 msgid "Mark all matches in the current document"
-msgstr "在当前文档中标记所有匹配项。"
+msgstr "在当前文档中标记所有匹配项"
 
 #: ../src/search.c:524 ../src/search.c:699
 msgid "In Sessi_on"
@@ -5135,7 +5124,7 @@ msgstr "%dL"
 #. RO = read-only
 #: ../src/ui_utils.c:250 ../src/ui_utils.c:257
 msgid "RO "
-msgstr "只读"
+msgstr "只读 "
 
 #. OVR = overwrite/overtype, INS = insert
 #: ../src/ui_utils.c:252
