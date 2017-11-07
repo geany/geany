@@ -23,11 +23,16 @@
 #ifndef GEANY_HIGHLIGHTING_H
 #define GEANY_HIGHLIGHTING_H 1
 
+#include "filetypes.h"
+
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* for ScintillaObject */
+
+
+#include <glib.h>
+
 G_BEGIN_DECLS
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
-
 
 /** Fields representing the different attributes of a Scintilla lexer style.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
@@ -41,20 +46,25 @@ typedef struct GeanyLexerStyle
 GeanyLexerStyle;
 
 
-void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *configh);
-
-void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
-
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id);
 
-void highlighting_free_styles(void);
+void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft);
 
 gboolean highlighting_is_string_style(gint lexer, gint style);
 gboolean highlighting_is_comment_style(gint lexer, gint style);
 gboolean highlighting_is_code_style(gint lexer, gint style);
 
+
+#ifdef GEANY_PRIVATE
+
+void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *configh);
+
+void highlighting_free_styles(void);
+
 void highlighting_show_color_scheme_dialog(void);
+
+#endif /* GEANY_PRIVATE */
 
 G_END_DECLS
 
-#endif
+#endif /* GEANY_HIGHLIGHTING_H */

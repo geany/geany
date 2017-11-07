@@ -30,17 +30,22 @@
  */
  /* Stolen from anjuta */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "encodings.h"
+#include "encodingsprivate.h"
+
+#include "app.h"
+#include "callbacks.h"
+#include "documentprivate.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include <string.h>
 
-#include "geany.h"
-#include "utils.h"
-#include "support.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "msgwindow.h"
-#include "encodings.h"
-#include "callbacks.h"
-#include "ui_utils.h"
 
 /* <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> */
 #define PATTERN_HTMLMETA "<meta\\s+http-equiv\\s*=\\s*\"?content-type\"?\\s+content\\s*=\\s*\"text/x?html;\\s*charset=([a-z0-9_-]+)\"\\s*/?>"
@@ -255,10 +260,11 @@ const GeanyEncoding *encodings_get_from_index(gint idx)
  *  @param idx @ref GeanyEncodingIndex to retrieve the corresponding character set.
  *
  *
- *  @return The charset according to idx, or @c NULL if the index is invalid.
+ *  @return @nullable The charset according to idx, or @c NULL if the index is invalid.
  *
  *  @since 0.13
  **/
+GEANY_API_SYMBOL
 const gchar* encodings_get_charset_from_index(gint idx)
 {
 	g_return_val_if_fail(idx >= 0 && idx < GEANY_ENCODINGS_MAX, NULL);
@@ -356,11 +362,11 @@ static gchar *regex_match(GRegex *preg, const gchar *buffer, gsize size)
 static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer user_data)
 {
 	GeanyDocument *doc = document_get_current();
-	guint i = GPOINTER_TO_INT(user_data);
+	const gchar *charset = user_data;
 
-	if (ignore_callback || doc == NULL || encodings[i].charset == NULL ||
+	if (ignore_callback || doc == NULL || charset == NULL ||
 		! gtk_check_menu_item_get_active(menuitem) ||
-		utils_str_equal(encodings[i].charset, doc->encoding))
+		utils_str_equal(charset, doc->encoding))
 		return;
 
 	if (doc->readonly)
@@ -370,7 +376,16 @@ static void encodings_radio_item_change_cb(GtkCheckMenuItem *menuitem, gpointer 
 	}
 	document_undo_add(doc, UNDO_ENCODING, g_strdup(doc->encoding));
 
-	document_set_encoding(doc, encodings[i].charset);
+	document_set_encoding(doc, charset);
+}
+
+static void encodings_reload_radio_item_change_cb(GtkMenuItem *menuitem, gpointer user_data)
+{
+	GeanyDocument *doc = document_get_current();
+
+	g_return_if_fail(doc != NULL);
+
+	document_reload_prompt(doc, user_data);
 }
 
 
@@ -390,14 +405,19 @@ void encodings_finalize(void)
 
 void encodings_init(void)
 {
-	GtkWidget *item, *menu[2], *submenu, *menu_westeuro, *menu_easteuro, *menu_eastasian, *menu_asian,
-			  *menu_utf8, *menu_middleeast, *item_westeuro, *item_easteuro, *item_eastasian,
-			  *item_asian, *item_utf8, *item_middleeast;
+	GtkWidget *menu[2];
 	GCallback cb_func[2];
-	GSList *group = NULL;
-	gchar *label;
-	gint order, group_size;
-	guint i, j, k;
+	gint group_sizes[GEANY_ENCODING_GROUPS_MAX] = { 0 };
+	const gchar *const groups[GEANY_ENCODING_GROUPS_MAX] =
+	{
+		[NONE]			= NULL,
+		[WESTEUROPEAN]	= N_("_West European"),
+		[EASTEUROPEAN]	= N_("_East European"),
+		[EASTASIAN]		= N_("East _Asian"),
+		[ASIAN]			= N_("_SE & SW Asian"),
+		[MIDDLEEASTERN]	= N_("_Middle Eastern"),
+		[UNICODE]		= N_("_Unicode"),
+	};
 
 	init_encodings();
 
@@ -412,88 +432,181 @@ void encodings_init(void)
 	menu[0] = ui_lookup_widget(main_widgets.window, "set_encoding1_menu");
 	menu[1] = ui_lookup_widget(main_widgets.window, "menu_reload_as1_menu");
 	cb_func[0] = G_CALLBACK(encodings_radio_item_change_cb);
-	cb_func[1] = G_CALLBACK(on_reload_as_activate);
+	cb_func[1] = G_CALLBACK(encodings_reload_radio_item_change_cb);
 
-	for (k = 0; k < 2; k++)
+	for (guint i = 0; i < G_N_ELEMENTS(encodings); i++)
+		group_sizes[encodings[i].group]++;
+
+	for (guint k = 0; k < 2; k++)
 	{
-		menu_westeuro = gtk_menu_new();
-		item_westeuro = gtk_menu_item_new_with_mnemonic(_("_West European"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_westeuro), menu_westeuro);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_westeuro);
-		gtk_widget_show_all(item_westeuro);
+		GSList *group = NULL;
+		GtkWidget *submenus[GEANY_ENCODING_GROUPS_MAX];
+		gint orders[GEANY_ENCODING_GROUPS_MAX] = { 0 };
+		guint n_added = 0;
 
-		menu_easteuro = gtk_menu_new();
-		item_easteuro = gtk_menu_item_new_with_mnemonic(_("_East European"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_easteuro), menu_easteuro);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_easteuro);
-		gtk_widget_show_all(item_easteuro);
-
-		menu_eastasian = gtk_menu_new();
-		item_eastasian = gtk_menu_item_new_with_mnemonic(_("East _Asian"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_eastasian), menu_eastasian);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_eastasian);
-		gtk_widget_show_all(item_eastasian);
-
-		menu_asian = gtk_menu_new();
-		item_asian = gtk_menu_item_new_with_mnemonic(_("_SE & SW Asian"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_asian), menu_asian);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_asian);
-		gtk_widget_show_all(item_asian);
-
-		menu_middleeast = gtk_menu_new();
-		item_middleeast = gtk_menu_item_new_with_mnemonic(_("_Middle Eastern"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_middleeast), menu_middleeast);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_middleeast);
-		gtk_widget_show_all(item_middleeast);
-
-		menu_utf8 = gtk_menu_new();
-		item_utf8 = gtk_menu_item_new_with_mnemonic(_("_Unicode"));
-		gtk_menu_item_set_submenu(GTK_MENU_ITEM(item_utf8), menu_utf8);
-		gtk_container_add(GTK_CONTAINER(menu[k]), item_utf8);
-		gtk_widget_show_all(item_utf8);
-
-		/** TODO can it be optimized? ATM 3782 runs at line "if (encodings[j].group ...)" */
-		for (i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
+		for (guint i = 0; i < GEANY_ENCODING_GROUPS_MAX; i++)
 		{
-			order = 0;
-			switch (i)
+			if (! groups[i]) /* NONE */
+				submenus[i] = menu[k];
+			else
 			{
-				case WESTEUROPEAN: submenu = menu_westeuro; group_size = 9; break;
-				case EASTEUROPEAN: submenu = menu_easteuro; group_size = 14; break;
-				case EASTASIAN: submenu = menu_eastasian; group_size = 14; break;
-				case ASIAN: submenu = menu_asian; group_size = 9; break;
-				case MIDDLEEASTERN: submenu = menu_middleeast; group_size = 7; break;
-				case UNICODE: submenu = menu_utf8; group_size = 8; break;
-				default: submenu = menu[k]; group_size = 1;
-			}
-
-			while (order < group_size)	/* the biggest group has 13 elements */
-			{
-				for (j = 0; j < GEANY_ENCODINGS_MAX; j++)
-				{
-					if (encodings[j].group == i && encodings[j].order == order)
-					{
-						label = encodings_to_string(&encodings[j]);
-						if (k == 0)
-						{
-							item = gtk_radio_menu_item_new_with_label(group, label);
-							group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
-							radio_items[j] = item;
-						}
-						else
-							item = gtk_menu_item_new_with_label(label);
-						gtk_widget_show(item);
-						gtk_container_add(GTK_CONTAINER(submenu), item);
-						g_signal_connect(item, "activate",
-										cb_func[k], GINT_TO_POINTER(encodings[j].idx));
-						g_free(label);
-						break;
-					}
-				}
-				order++;
+				GtkWidget *item = gtk_menu_item_new_with_mnemonic(_(groups[i]));
+				submenus[i] = gtk_menu_new();
+				gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), submenus[i]);
+				gtk_container_add(GTK_CONTAINER(menu[k]), item);
+				gtk_widget_show_all(item);
 			}
 		}
+
+		/** TODO can it be optimized? ATM 882 runs at line "if (encodings[i].order ...)" */
+		do
+		{
+			for (guint i = 0; i < G_N_ELEMENTS(encodings); i++)
+			{
+				if (encodings[i].order == orders[encodings[i].group])
+				{
+					GtkWidget *item;
+					gchar *label = encodings_to_string(&encodings[i]);
+
+					if (k == 0) /* Set Encoding menu */
+					{
+						item = gtk_radio_menu_item_new_with_label(group, label);
+						group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+						radio_items[i] = item;
+					}
+					else
+						item = gtk_menu_item_new_with_label(label);
+					gtk_widget_show(item);
+					gtk_container_add(GTK_CONTAINER(submenus[encodings[i].group]), item);
+					g_signal_connect(item, "activate", cb_func[k],
+							(gpointer) encodings[i].charset);
+					g_free(label);
+
+					orders[encodings[i].group]++;
+					n_added++;
+				}
+			}
+		}
+		while (n_added < G_N_ELEMENTS(encodings));
 	}
+}
+
+
+static gint encoding_combo_store_sort_func(GtkTreeModel *model,
+										   GtkTreeIter *a,
+										   GtkTreeIter *b,
+										   gpointer data)
+{
+	gboolean a_has_child = gtk_tree_model_iter_has_child(model, a);
+	gboolean b_has_child = gtk_tree_model_iter_has_child(model, b);
+	gchar *a_string;
+	gchar *b_string;
+	gint cmp_res;
+
+	if (a_has_child != b_has_child)
+		return a_has_child ? -1 : 1;
+
+	gtk_tree_model_get(model, a, 1, &a_string, -1);
+	gtk_tree_model_get(model, b, 1, &b_string, -1);
+	cmp_res = strcmp(a_string, b_string);
+	g_free(a_string);
+	g_free(b_string);
+	return cmp_res;
+}
+
+
+GtkTreeStore *encodings_encoding_store_new(gboolean has_detect)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter_current, iter_westeuro, iter_easteuro, iter_eastasian,
+				iter_asian, iter_utf8, iter_middleeast;
+	GtkTreeIter *iter_parent;
+	gint i;
+
+	store = gtk_tree_store_new(2, G_TYPE_INT, G_TYPE_STRING);
+
+	if (has_detect)
+	{
+		gtk_tree_store_append(store, &iter_current, NULL);
+		gtk_tree_store_set(store, &iter_current, 0, GEANY_ENCODINGS_MAX, 1, _("Detect from file"), -1);
+	}
+
+	gtk_tree_store_append(store, &iter_westeuro, NULL);
+	gtk_tree_store_set(store, &iter_westeuro, 0, -1, 1, _("West European"), -1);
+	gtk_tree_store_append(store, &iter_easteuro, NULL);
+	gtk_tree_store_set(store, &iter_easteuro, 0, -1, 1, _("East European"), -1);
+	gtk_tree_store_append(store, &iter_eastasian, NULL);
+	gtk_tree_store_set(store, &iter_eastasian, 0, -1, 1, _("East Asian"), -1);
+	gtk_tree_store_append(store, &iter_asian, NULL);
+	gtk_tree_store_set(store, &iter_asian, 0, -1, 1, _("SE & SW Asian"), -1);
+	gtk_tree_store_append(store, &iter_middleeast, NULL);
+	gtk_tree_store_set(store, &iter_middleeast, 0, -1, 1, _("Middle Eastern"), -1);
+	gtk_tree_store_append(store, &iter_utf8, NULL);
+	gtk_tree_store_set(store, &iter_utf8, 0, -1, 1, _("Unicode"), -1);
+
+	for (i = 0; i < GEANY_ENCODINGS_MAX; i++)
+	{
+		gchar *encoding_string;
+
+		switch (encodings[i].group)
+		{
+			case WESTEUROPEAN: iter_parent = &iter_westeuro; break;
+			case EASTEUROPEAN: iter_parent = &iter_easteuro; break;
+			case EASTASIAN: iter_parent = &iter_eastasian; break;
+			case ASIAN: iter_parent = &iter_asian; break;
+			case MIDDLEEASTERN: iter_parent = &iter_middleeast; break;
+			case UNICODE: iter_parent = &iter_utf8; break;
+			case NONE:
+			default: iter_parent = NULL;
+		}
+		gtk_tree_store_append(store, &iter_current, iter_parent);
+		encoding_string = encodings_to_string(&encodings[i]);
+		gtk_tree_store_set(store, &iter_current, 0, i, 1, encoding_string, -1);
+		g_free(encoding_string);
+	}
+
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), 1, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), 1, encoding_combo_store_sort_func, NULL, NULL);
+
+	return store;
+}
+
+
+gint encodings_encoding_store_get_encoding(GtkTreeStore *store, GtkTreeIter *iter)
+{
+	gint enc;
+	gtk_tree_model_get(GTK_TREE_MODEL(store), iter, 0, &enc, -1);
+	return enc;
+}
+
+
+gboolean encodings_encoding_store_get_iter(GtkTreeStore *store, GtkTreeIter *iter, gint enc)
+{
+	if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), iter))
+	{
+		do
+		{
+			if (encodings_encoding_store_get_encoding(store, iter) == enc)
+				return TRUE;
+		}
+		while (ui_tree_model_iter_any_next(GTK_TREE_MODEL(store), iter, TRUE));
+	}
+	return FALSE;
+}
+
+
+void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout,
+											 GtkCellRenderer *cell,
+											 GtkTreeModel *tree_model,
+											 GtkTreeIter *iter,
+											 gpointer data)
+{
+	gboolean sensitive = !gtk_tree_model_iter_has_child(tree_model, iter);
+	gchar *text;
+
+	gtk_tree_model_get(tree_model, iter, 1, &text, -1);
+	g_object_set(cell, "sensitive", sensitive, "text", text, NULL);
+	g_free(text);
 }
 
 
@@ -509,6 +622,7 @@ void encodings_init(void)
  *  @return If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
+GEANY_API_SYMBOL
 gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 											  const gchar *charset, gboolean fast)
 {
@@ -662,11 +776,12 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
  *
  *  @param buffer the input string to convert.
  *  @param size the length of the string, or -1 if the string is nul-terminated.
- *  @param used_encoding return location of the detected encoding of the input string, or @c NULL.
+ *  @param used_encoding @out @optional return location of the detected encoding of the input string, or @c NULL.
  *
- *  @return If the conversion was successful, a newly allocated nul-terminated string,
+ *  @return @nullable If the conversion was successful, a newly allocated nul-terminated string,
  *    which must be freed with @c g_free(). Otherwise @c NULL.
  **/
+GEANY_API_SYMBOL
 gchar *encodings_convert_to_utf8(const gchar *buffer, gssize size, gchar **used_encoding)
 {
 	gchar *regex_charset;
@@ -876,7 +991,7 @@ handle_bom(BufferData *buffer)
 	/* use filedata->len here because the contents are already converted into UTF-8 */
 	buffer->len -= bom_len;
 	/* overwrite the BOM with the remainder of the file contents, plus the NULL terminator. */
-	g_memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
+	memmove(buffer->data, buffer->data + bom_len, buffer->len + 1);
 	buffer->data = g_realloc(buffer->data, buffer->len + 1);
 }
 

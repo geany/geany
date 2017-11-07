@@ -5,9 +5,11 @@
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
+#include <cstdlib>
 
+#include <stdexcept>
 #include <vector>
+#include <map>
 
 #include "Platform.h"
 
@@ -36,26 +38,12 @@ void KeyMap::Clear() {
 }
 
 void KeyMap::AssignCmdKey(int key, int modifiers, unsigned int msg) {
-	for (size_t keyIndex = 0; keyIndex < kmap.size(); keyIndex++) {
-		if ((key == kmap[keyIndex].key) && (modifiers == kmap[keyIndex].modifiers)) {
-			kmap[keyIndex].msg = msg;
-			return;
-		}
-	}
-	KeyToCommand ktc;
-	ktc.key = key;
-	ktc.modifiers = modifiers;
-	ktc.msg = msg;
-	kmap.push_back(ktc);
+	kmap[KeyModifiers(key, modifiers)] = msg;
 }
 
 unsigned int KeyMap::Find(int key, int modifiers) const {
-	for (size_t i = 0; i < kmap.size(); i++) {
-		if ((key == kmap[i].key) && (modifiers == kmap[i].modifiers)) {
-			return kmap[i].msg;
-		}
-	}
-	return 0;
+	std::map<KeyModifiers, unsigned int>::const_iterator it = kmap.find(KeyModifiers(key, modifiers));
+	return (it == kmap.end()) ? 0 : it->second;
 }
 
 #if PLAT_GTK_MACOSX

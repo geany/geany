@@ -24,38 +24,40 @@
  * User Interface general utility functions.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
+#include "ui_utils.h"
+
+#include "app.h"
+#include "callbacks.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "encodingsprivate.h"
+#include "filetypes.h"
+#include "geanymenubuttonaction.h"
+#include "keyfile.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "project.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "stash.h"
 #include "support.h"
+#include "symbols.h"
+#include "toolbar.h"
+#include "utils.h"
+#include "win32.h"
+#include "osx.h"
+
+#include "gtkcompat.h"
 
 #include <string.h>
 #include <ctype.h>
+#include <stdarg.h>
 #include <gdk/gdkkeysyms.h>
-
-#include "ui_utils.h"
-#include "dialogs.h"
-#include "prefs.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "filetypes.h"
-#include "support.h"
-#include "msgwindow.h"
-#include "utils.h"
-#include "callbacks.h"
-#include "encodings.h"
-#include "sidebar.h"
-#include "win32.h"
-#include "project.h"
-#include "editor.h"
-#include "plugins.h"
-#include "symbols.h"
-#include "toolbar.h"
-#include "geanymenubuttonaction.h"
-#include "main.h"
-#include "stash.h"
-#include "keyfile.h"
-#include "gtkcompat.h"
 
 
 #define DEFAULT_STATUSBAR_TEMPLATE N_(\
@@ -118,6 +120,7 @@ static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf
 static void recent_file_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static void recent_project_activate_cb(GtkMenuItem *menuitem, gpointer user_data);
 static GtkWidget *progress_bar_create(void);
+static void ui_menu_sort_by_label(GtkMenu *menu);
 
 
 /* simple wrapper for gtk_widget_set_sensitive() to allow widget being NULL */
@@ -163,6 +166,7 @@ static void set_statusbar(const gchar *text, gboolean allow_override)
 /** Displays text on the statusbar.
  * @param log Whether the message should be recorded in the Status window.
  * @param format A @c printf -style string. */
+GEANY_API_SYMBOL
 void ui_set_statusbar(gboolean log, const gchar *format, ...)
 {
 	gchar *string;
@@ -184,7 +188,7 @@ void ui_set_statusbar(gboolean log, const gchar *format, ...)
 
 /* note: some comments below are for translators */
 static gchar *create_statusbar_statistics(GeanyDocument *doc,
-	guint line, guint col, guint pos)
+	guint line, guint vcol, guint pos)
 {
 	const gchar *cur_tag;
 	const gchar *fmt;
@@ -215,10 +219,10 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 					sci_get_line_count(doc->editor->sci));
 				break;
 			case 'c':
-				g_string_append_printf(stats_str, "%d", col);
+				g_string_append_printf(stats_str, "%d", vcol);
 				break;
 			case 'C':
-				g_string_append_printf(stats_str, "%d", col + 1);
+				g_string_append_printf(stats_str, "%d", vcol + 1);
 				break;
 			case 'p':
 				g_string_append_printf(stats_str, "%u", pos);
@@ -237,6 +241,10 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 						sci_get_lines_selected(doc->editor->sci) - 1);
 				break;
 			}
+			case 'n' :
+				g_string_append_printf(stats_str, "%d",
+					sci_get_selected_text_length(doc->editor->sci) - 1);
+				break;
 			case 'w':
 				/* RO = read-only */
 				g_string_append(stats_str, (doc->readonly) ? _("RO ") :
@@ -274,7 +282,7 @@ static gchar *create_statusbar_statistics(GeanyDocument *doc,
 				}
 				break;
 			case 'M':
-				g_string_append(stats_str, editor_get_eol_char_name(doc->editor));
+				g_string_append(stats_str, utils_get_eol_short_name(sci_get_eol_mode(doc->editor->sci)));
 				break;
 			case 'e':
 				g_string_append(stats_str,
@@ -327,7 +335,7 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 
 	if (doc != NULL)
 	{
-		guint line, col;
+		guint line, vcol;
 		gchar *stats_str;
 
 		if (pos == -1)
@@ -338,11 +346,12 @@ void ui_update_statusbar(GeanyDocument *doc, gint pos)
 		 * when current pos is beyond document end (can occur when removing
 		 * blocks of selected lines especially esp. brace sections near end of file). */
 		if (pos <= sci_get_length(doc->editor->sci))
-			col = sci_get_col_from_position(doc->editor->sci, pos);
+			vcol = sci_get_col_from_position(doc->editor->sci, pos);
 		else
-			col = 0;
+			vcol = 0;
+		vcol += sci_get_cursor_virtual_space(doc->editor->sci);
 
-		stats_str = create_statusbar_statistics(doc, line, col, pos);
+		stats_str = create_statusbar_statistics(doc, line, vcol, pos);
 
 		/* can be overridden by status messages */
 		set_statusbar(stats_str, TRUE);
@@ -503,10 +512,19 @@ void ui_update_popup_goto_items(gboolean enable)
 }
 
 
+void ui_menu_copy_items_set_sensitive(gboolean sensitive)
+{
+	guint i, len;
+
+	len = G_N_ELEMENTS(widgets.menu_copy_items);
+	for (i = 0; i < len; i++)
+		ui_widget_set_sensitive(widgets.menu_copy_items[i], sensitive);
+}
+
+
 void ui_update_menu_copy_items(GeanyDocument *doc)
 {
 	gboolean enable = FALSE;
-	guint i, len;
 	GtkWidget *focusw = gtk_window_get_focus(GTK_WINDOW(main_widgets.window));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
@@ -524,9 +542,7 @@ void ui_update_menu_copy_items(GeanyDocument *doc)
 		enable = gtk_text_buffer_get_selection_bounds(buffer, NULL, NULL);
 	}
 
-	len = G_N_ELEMENTS(widgets.menu_copy_items);
-	for (i = 0; i < len; i++)
-		ui_widget_set_sensitive(widgets.menu_copy_items[i], enable);
+	ui_menu_copy_items_set_sensitive(enable);
 }
 
 
@@ -553,11 +569,52 @@ void ui_update_fold_items(void)
 }
 
 
+/* @include include name or NULL for empty with cursor ready for typing it */
+static void insert_include(GeanyDocument *doc, gint pos, const gchar *include)
+{
+	gint pos_after = -1;
+	gchar *text;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	if (! include)
+	{
+		text = g_strdup("#include \"\"\n");
+		pos_after = pos + 10;
+	}
+	else
+	{
+		text = g_strconcat("#include <", include, ">\n", NULL);
+	}
+
+	sci_start_undo_action(doc->editor->sci);
+	sci_insert_text(doc->editor->sci, pos, text);
+	sci_end_undo_action(doc->editor->sci);
+	g_free(text);
+	if (pos_after >= 0)
+		sci_goto_pos(doc->editor->sci, pos_after, FALSE);
+}
+
+
+static void on_popup_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_include_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_include(document_get_current(), -1, user_data);
+}
+
+
 static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gchar *label)
 {
 	guint i = 0;
-	GtkWidget *tmp_menu;
-	GtkWidget *tmp_popup;
 	GtkWidget *edit_menu, *edit_menu_item;
 	GtkWidget *popup_menu, *popup_menu_item;
 
@@ -570,14 +627,15 @@ static void insert_include_items(GtkMenu *me, GtkMenu *mp, gchar **includes, gch
 
 	while (includes[i] != NULL)
 	{
-		tmp_menu = gtk_menu_item_new_with_label(includes[i]);
-		tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_menu = gtk_menu_item_new_with_label(includes[i]);
+		GtkWidget *tmp_popup = gtk_menu_item_new_with_label(includes[i]);
+
 		gtk_container_add(GTK_CONTAINER(edit_menu), tmp_menu);
 		gtk_container_add(GTK_CONTAINER(popup_menu), tmp_popup);
 		g_signal_connect(tmp_menu, "activate",
 					G_CALLBACK(on_menu_insert_include_activate), (gpointer) includes[i]);
 		g_signal_connect(tmp_popup, "activate",
-					G_CALLBACK(on_insert_include_activate), (gpointer) includes[i]);
+					G_CALLBACK(on_popup_insert_include_activate), (gpointer) includes[i]);
 		i++;
 	}
 	gtk_widget_show_all(edit_menu_item);
@@ -615,8 +673,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_menu_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new ();
 	gtk_container_add(GTK_CONTAINER(menu_edit), blank);
 	gtk_widget_show(blank);
@@ -624,8 +681,7 @@ void ui_create_insert_menu_items(void)
 	blank = gtk_menu_item_new_with_label("#include \"...\"");
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
-	g_signal_connect(blank, "activate", G_CALLBACK(on_insert_include_activate),
-																	(gpointer) "blank");
+	g_signal_connect(blank, "activate", G_CALLBACK(on_popup_insert_include_activate), NULL);
 	blank = gtk_separator_menu_item_new();
 	gtk_container_add(GTK_CONTAINER(menu_popup), blank);
 	gtk_widget_show(blank);
@@ -635,6 +691,79 @@ void ui_create_insert_menu_items(void)
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cpp, _("C++ (C Standard Library)"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_cppstdlib, _("C++ Standard Library"));
 	insert_include_items(menu_edit, menu_popup, (gchar**) c_includes_stl, _("C++ STL"));
+}
+
+
+static void insert_date(GeanyDocument *doc, gint pos, const gchar *date_style)
+{
+	const gchar *format = NULL;
+	gchar *time_str;
+
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(pos == -1 || pos >= 0);
+
+	if (pos == -1)
+		pos = sci_get_current_position(doc->editor->sci);
+
+	/* set default value */
+	if (utils_str_equal("", ui_prefs.custom_date_format))
+	{
+		g_free(ui_prefs.custom_date_format);
+		ui_prefs.custom_date_format = g_strdup("%d.%m.%Y");
+	}
+
+	if (utils_str_equal(_("dd.mm.yyyy"), date_style))
+		format = "%d.%m.%Y";
+	else if (utils_str_equal(_("mm.dd.yyyy"), date_style))
+		format = "%m.%d.%Y";
+	else if (utils_str_equal(_("yyyy/mm/dd"), date_style))
+		format = "%Y/%m/%d";
+	else if (utils_str_equal(_("dd.mm.yyyy hh:mm:ss"), date_style))
+		format = "%d.%m.%Y %H:%M:%S";
+	else if (utils_str_equal(_("mm.dd.yyyy hh:mm:ss"), date_style))
+		format = "%m.%d.%Y %H:%M:%S";
+	else if (utils_str_equal(_("yyyy/mm/dd hh:mm:ss"), date_style))
+		format = "%Y/%m/%d %H:%M:%S";
+	else if (utils_str_equal(_("_Use Custom Date Format"), date_style))
+		format = ui_prefs.custom_date_format;
+	else
+	{
+		gchar *str = dialogs_show_input(_("Custom Date Format"), GTK_WINDOW(main_widgets.window),
+				_("Enter here a custom date and time format. "
+				"You can use any conversion specifiers which can be used with the ANSI C strftime function."),
+				ui_prefs.custom_date_format);
+		if (str)
+			SETPTR(ui_prefs.custom_date_format, str);
+		return;
+	}
+
+	time_str = utils_get_date_time(format, NULL);
+	if (time_str != NULL)
+	{
+		sci_start_undo_action(doc->editor->sci);
+		sci_insert_text(doc->editor->sci, pos, time_str);
+		sci_goto_pos(doc->editor->sci, pos + strlen(time_str), FALSE);
+		sci_end_undo_action(doc->editor->sci);
+		g_free(time_str);
+	}
+	else
+	{
+		utils_beep();
+		ui_set_statusbar(TRUE,
+				_("Date format string could not be converted (possibly too long)."));
+	}
+}
+
+
+static void on_popup_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), editor_info.click_pos, user_data);
+}
+
+
+static void on_menu_insert_date_activate(GtkMenuItem *menuitem, gpointer user_data)
+{
+	insert_date(document_get_current(), -1, user_data);
 }
 
 
@@ -650,7 +779,7 @@ static void insert_date_items(GtkMenu *me, GtkMenu *mp, gchar *label)
 	item = gtk_menu_item_new_with_mnemonic(label);
 	gtk_container_add(GTK_CONTAINER(mp), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), label);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), label);
 }
 
 
@@ -693,7 +822,7 @@ void ui_create_insert_date_menu_items(void)
 	item = gtk_menu_item_new_with_mnemonic(str);
 	gtk_container_add(GTK_CONTAINER(menu_popup), item);
 	gtk_widget_show(item);
-	g_signal_connect(item, "activate", G_CALLBACK(on_insert_date_activate), str);
+	g_signal_connect(item, "activate", G_CALLBACK(on_popup_insert_date_activate), str);
 	ui_hookup_widget(main_widgets.editor_menu, item, "insert_date_custom2");
 
 	insert_date_items(menu_edit, menu_popup, _("_Set Custom Date Format"));
@@ -752,7 +881,7 @@ static void init_document_widgets(void)
 	add_doc_widget("add_comments1");
 	add_doc_widget("menu_paste1");
 	add_doc_widget("menu_undo2");
-	add_doc_widget("preferences2");
+	add_doc_widget("properties1");
 	add_doc_widget("menu_reload1");
 	add_doc_widget("menu_document1");
 	add_doc_widget("menu_choose_color1");
@@ -845,6 +974,7 @@ static void on_doc_sensitive_widget_destroy(GtkWidget *widget, G_GNUC_UNUSED gpo
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 void ui_add_document_sensitive(GtkWidget *widget)
 {
 	gboolean enable = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)) > 0;
@@ -982,16 +1112,15 @@ void ui_set_search_entry_background(GtkWidget *widget, gboolean success)
 
 static void recent_create_menu(GeanyRecentFiles *grf)
 {
-	GtkWidget *tmp;
 	guint i, len;
-	gchar *filename;
 
 	len = MIN(file_prefs.mru_length, g_queue_get_length(grf->recent_queue));
 	for (i = 0; i < len; i++)
 	{
-		filename = g_queue_peek_nth(grf->recent_queue, i);
 		/* create menu item for the recent files menu in the menu bar */
-		tmp = gtk_menu_item_new_with_label(filename);
+		const gchar *filename = g_queue_peek_nth(grf->recent_queue, i);
+		GtkWidget *tmp = gtk_menu_item_new_with_label(filename);
+
 		gtk_widget_show(tmp);
 		gtk_container_add(GTK_CONTAINER(grf->menubar), tmp);
 		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
@@ -1164,91 +1293,116 @@ static gint find_recent_file_item(gconstpointer list_data, gconstpointer user_da
 }
 
 
+/* update the project menu item's sensitivity */
+void ui_update_recent_project_menu(void)
+{
+	GeanyRecentFiles *grf = recent_get_recent_projects();
+	GList *children, *item;
+
+	/* only need to update the menubar menu, the project doesn't have a toolbar item */
+	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
+	for (item = children; item; item = item->next)
+	{
+		gboolean sensitive = TRUE;
+
+		if (app->project)
+		{
+			const gchar *filename = gtk_menu_item_get_label(item->data);
+			sensitive = g_strcmp0(app->project->file_name, filename) != 0;
+		}
+		gtk_widget_set_sensitive(item->data, sensitive);
+	}
+	g_list_free(children);
+}
+
+
+/* Use instead of gtk_menu_reorder_child() to update the menubar properly on OS X */
+static void menu_reorder_child(GtkMenu *menu, GtkWidget *child, gint position)
+{
+	gtk_menu_reorder_child(menu, child, position);
+#ifdef MAC_INTEGRATION
+	/* On OS X GtkMenuBar is kept in sync with the native OS X menubar using
+	 * signals. Unfortunately gtk_menu_reorder_child() doesn't emit anything
+	 * so we have to update the OS X menubar manually. */
+	gtkosx_application_sync_menubar(gtkosx_application_get());
+#endif
+}
+
+
+static void add_recent_file_menu_item(const gchar *utf8_filename, GeanyRecentFiles *grf, GtkWidget *menu)
+{
+	GtkWidget *child = gtk_menu_item_new_with_label(utf8_filename);
+
+	gtk_widget_show(child);
+	if (menu != grf->toolbar)
+		gtk_menu_shell_prepend(GTK_MENU_SHELL(menu), child);
+	else
+	{
+		/* this is a bit ugly, but we need to use gtk_container_add(). Using
+		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal
+		 * which we need in GeanyMenubuttonAction */
+		gtk_container_add(GTK_CONTAINER(menu), child);
+		menu_reorder_child(GTK_MENU(menu), child, 0);
+	}
+	g_signal_connect(child, "activate", G_CALLBACK(grf->activate_cb), NULL);
+}
+
+
 static void recent_file_loaded(const gchar *utf8_filename, GeanyRecentFiles *grf)
 {
-	GList *item, *children;
-	void *data;
-	GtkWidget *tmp;
+	GList *item;
+	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
+	guint i;
 
 	/* first reorder the queue */
 	item = g_queue_find_custom(grf->recent_queue, utf8_filename, (GCompareFunc) strcmp);
 	g_return_if_fail(item != NULL);
 
-	data = item->data;
-	g_queue_remove(grf->recent_queue, data);
-	g_queue_push_head(grf->recent_queue, data);
+	g_queue_unlink(grf->recent_queue, item);
+	g_queue_push_head_link(grf->recent_queue, item);
 
-	/* remove the old menuitem for the filename */
-	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
-	item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-	if (item != NULL)
-		gtk_widget_destroy(GTK_WIDGET(item->data));
-	g_list_free(children);
-
-	if (grf->toolbar != NULL)
+	for (i = 0; i < G_N_ELEMENTS(parents); i++)
 	{
-		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
+		GList *children;
+
+		if (! parents[i])
+			continue;
+
+		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
 		item = g_list_find_custom(children, utf8_filename, (GCompareFunc) find_recent_file_item);
-		if (item != NULL)
-			gtk_widget_destroy(GTK_WIDGET(item->data));
+		/* either reorder or prepend a new one */
+		if (item)
+			menu_reorder_child(GTK_MENU(parents[i]), item->data, 0);
+		else
+			add_recent_file_menu_item(utf8_filename, grf, parents[i]);
 		g_list_free(children);
 	}
-	/* now prepend a new menuitem for the filename,
-	 * first for the recent files menu in the menu bar */
-	tmp = gtk_menu_item_new_with_label(utf8_filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
-	/* then for the recent files menu in the tool bar */
-	if (grf->toolbar != NULL)
-	{
-		tmp = gtk_menu_item_new_with_label(utf8_filename);
-		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
-		/* this is a bit ugly, but we need to use gtk_container_add(). Using
-		 * gtk_menu_shell_prepend() doesn't emit GtkContainer's "add" signal which we need in
-		 * GeanyMenubuttonAction */
-		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
-	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 
 static void update_recent_menu(GeanyRecentFiles *grf)
 {
-	GtkWidget *tmp;
 	gchar *filename;
-	GList *children, *item;
+	GtkWidget *parents[] = { grf->menubar, grf->toolbar };
+	guint i;
 
 	filename = g_queue_peek_head(grf->recent_queue);
 
-	/* clean the MRU list before adding an item (menubar) */
-	children = gtk_container_get_children(GTK_CONTAINER(grf->menubar));
-	if (g_list_length(children) > file_prefs.mru_length - 1)
+	for (i = 0; i < G_N_ELEMENTS(parents); i++)
 	{
-		item = g_list_nth(children, file_prefs.mru_length - 1);
-		while (item != NULL)
-		{
-			if (GTK_IS_MENU_ITEM(item->data))
-				gtk_widget_destroy(GTK_WIDGET(item->data));
-			item = g_list_next(item);
-		}
-	}
-	g_list_free(children);
+		GList *children;
 
-	/* create item for the menu bar menu */
-	tmp = gtk_menu_item_new_with_label(filename);
-	gtk_widget_show(tmp);
-	gtk_menu_shell_prepend(GTK_MENU_SHELL(grf->menubar), tmp);
-	g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+		if (! parents[i])
+			continue;
 
-	/* clean the MRU list before adding an item (toolbar) */
-	if (grf->toolbar != NULL)
-	{
-		children = gtk_container_get_children(GTK_CONTAINER(grf->toolbar));
+		/* clean the MRU list before adding an item */
+		children = gtk_container_get_children(GTK_CONTAINER(parents[i]));
 		if (g_list_length(children) > file_prefs.mru_length - 1)
 		{
-			item = g_list_nth(children, file_prefs.mru_length - 1);
+			GList *item = g_list_nth(children, file_prefs.mru_length - 1);
 			while (item != NULL)
 			{
 				if (GTK_IS_MENU_ITEM(item->data))
@@ -1258,13 +1412,12 @@ static void update_recent_menu(GeanyRecentFiles *grf)
 		}
 		g_list_free(children);
 
-		/* create item for the tool bar menu */
-		tmp = gtk_menu_item_new_with_label(filename);
-		gtk_widget_show(tmp);
-		gtk_container_add(GTK_CONTAINER(grf->toolbar), tmp);
-		gtk_menu_reorder_child(GTK_MENU(grf->toolbar), tmp, 0);
-		g_signal_connect(tmp, "activate", G_CALLBACK(grf->activate_cb), NULL);
+		/* create the new item */
+		add_recent_file_menu_item(filename, grf, parents[i]);
 	}
+
+	if (grf->type == RECENT_FILE_PROJECT)
+		ui_update_recent_project_menu();
 }
 
 
@@ -1282,7 +1435,7 @@ void ui_toggle_editor_features(GeanyUIEditorFeatures feature)
 				sci_set_symbol_margin(doc->editor->sci, editor_prefs.show_markers_margin);
 				break;
 			case GEANY_EDITOR_SHOW_LINE_NUMBERS:
-				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin, 0);
+				sci_set_line_numbers(doc->editor->sci, editor_prefs.show_linenumber_margin);
 				break;
 			case GEANY_EDITOR_SHOW_WHITE_SPACE:
 				sci_set_visible_white_spaces(doc->editor->sci, editor_prefs.show_white_space);
@@ -1313,7 +1466,13 @@ void ui_update_view_editor_menu_items(void)
 /** Creates a GNOME HIG-style frame (with no border and indented child alignment).
  * @param label_text The label text.
  * @param alignment An address to store the alignment widget pointer.
- * @return The frame widget, setting the alignment container for packing child widgets. */
+ *
+ * @return @transfer{floating} The frame widget, setting the alignment container for
+ * packing child widgets.
+ * 
+ * @deprecated 1.29: Use GTK API directly
+ **/
+GEANY_API_SYMBOL
 GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alignment)
 {
 	GtkWidget *label, *align;
@@ -1335,7 +1494,9 @@ GtkWidget *ui_frame_new_with_alignment(const gchar *label_text, GtkWidget **alig
 
 /** Makes a fixed border for dialogs without increasing the button box border.
  * @param dialog The parent container for the @c GtkVBox.
- * @return The packed @c GtkVBox. */
+ *
+ * @return @transfer{none} The packed @c GtkVBox. */
+GEANY_API_SYMBOL
 GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 {
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 12);	/* need child vbox to set a separate border. */
@@ -1343,29 +1504,6 @@ GtkWidget *ui_dialog_vbox_new(GtkDialog *dialog)
 	gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
 	gtk_box_pack_start(GTK_BOX(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), vbox, TRUE, TRUE, 0);
 	return vbox;
-}
-
-
-static GtkWidget *dialog_get_widget_for_response(GtkDialog *dialog, gint response_id)
-{
-#if GTK_CHECK_VERSION(2, 20, 0)
-	return gtk_dialog_get_widget_for_response(dialog, response_id);
-#else /* GTK < 2.20 */
-	/* base logic stolen from GTK */
-	GtkWidget *action_area = gtk_dialog_get_action_area(dialog);
-	GtkWidget *widget = NULL;
-	GList *children, *node;
-
-	children = gtk_container_get_children(GTK_CONTAINER(action_area));
-	for (node = children; node && ! widget; node = node->next)
-	{
-		if (gtk_dialog_get_response_for_widget(dialog, node->data) == response_id)
-			widget = node->data;
-	}
-	g_list_free(children);
-
-	return widget;
-#endif
 }
 
 
@@ -1392,7 +1530,7 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
 	va_start(ap, response);
 	for (position = 0; response != -1; position++)
 	{
-		GtkWidget *child = dialog_get_widget_for_response(dialog, response);
+		GtkWidget *child = gtk_dialog_get_widget_for_response(dialog, response);
 		if (child)
 			gtk_box_reorder_child(GTK_BOX(action_area), child, position);
 		else
@@ -1408,8 +1546,10 @@ void ui_dialog_set_primary_button_order(GtkDialog *dialog, gint response, ...)
  * @c gtk_button_new_from_stock().
  * @param stock_id A @c GTK_STOCK_NAME string.
  * @param text Button label text, can include mnemonics.
- * @return The new @c GtkButton.
+ *
+ * @return @transfer{floating} The new @c GtkButton.
  */
+GEANY_API_SYMBOL
 GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 {
 	GtkWidget *image, *button;
@@ -1426,10 +1566,11 @@ GtkWidget *ui_button_new_with_image(const gchar *stock_id, const gchar *text)
 /** Creates a @c GtkImageMenuItem with a stock image and a custom label.
  * @param stock_id Stock image ID, e.g. @c GTK_STOCK_OPEN.
  * @param label Menu item label, can include mnemonics.
- * @return The new @c GtkImageMenuItem.
+ * @return @transfer{floating} The new @c GtkImageMenuItem.
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GtkWidget *
 ui_image_menu_item_new(const gchar *stock_id, const gchar *label)
 {
@@ -1460,6 +1601,7 @@ static void entry_clear_icon_release_cb(GtkEntry *entry, gint icon_pos,
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void ui_entry_add_clear_icon(GtkEntry *entry)
 {
 	g_object_set(entry, "secondary-icon-stock", GTK_STOCK_CLEAR,
@@ -1550,8 +1692,9 @@ static gboolean tree_model_find_text(GtkTreeModel *model,
 /** Prepends @a text to the drop down list, removing a duplicate element in
  * the list if found. Also ensures there are <= @a history_len elements.
  * @param combo_entry .
- * @param text Text to add, or @c NULL for current entry text.
+ * @param text @nullable Text to add, or @c NULL for current entry text.
  * @param history_len Max number of items, or @c 0 for default. */
+GEANY_API_SYMBOL
 void ui_combo_box_add_to_history(GtkComboBoxText *combo_entry,
 		const gchar *text, gint history_len)
 {
@@ -1680,12 +1823,75 @@ gboolean ui_tree_view_find_previous(GtkTreeView *treeview, TVMatchCallback cb)
 }
 
 
+/* Shamelessly stolen from GTK */
+static gboolean ui_tree_view_query_tooltip_cb(GtkWidget *widget, gint x, gint y,
+		gboolean keyboard_tip, GtkTooltip *tooltip, gpointer data)
+{
+	GValue value = { 0 };
+	GValue transformed = { 0 };
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	GtkTreeModel *model;
+	GtkTreeView *tree_view = GTK_TREE_VIEW(widget);
+	gint column = GPOINTER_TO_INT(data);
+	gboolean tootlip_set = FALSE;
+
+	if (! gtk_tree_view_get_tooltip_context(tree_view, &x, &y, keyboard_tip, &model, &path, &iter))
+		return FALSE;
+
+	gtk_tree_model_get_value(model, &iter, column, &value);
+
+	g_value_init(&transformed, G_TYPE_STRING);
+	if (g_value_transform(&value, &transformed) && g_value_get_string(&transformed))
+	{
+		gtk_tooltip_set_text(tooltip, g_value_get_string(&transformed));
+		gtk_tree_view_set_tooltip_row(tree_view, tooltip, path);
+		tootlip_set = TRUE;
+	}
+
+	g_value_unset(&transformed);
+	g_value_unset(&value);
+	gtk_tree_path_free(path);
+
+	return tootlip_set;
+}
+
+
+/** Adds text tooltips to a tree view.
+ *
+ * This is similar to gtk_tree_view_set_tooltip_column() but considers the column contents to be
+ * text, not markup -- it uses gtk_tooltip_set_text() rather than gtk_tooltip_set_markup() to set
+ * the tooltip's value.
+ *
+ * @warning Unlike gtk_tree_view_set_tooltip_column() you currently cannot change or remove the
+ * tooltip column after it has been added.  Trying to do so will probably give funky results.
+ *
+ * @param tree_view The tree view
+ * @param column The column to get the tooltip from
+ *
+ * @since 1.25 (API 223)
+ */
+/* Note: @p column is int and not uint both to match gtk_tree_view_set_tooltip_column() signature
+ * and to allow future support of -1 to unset if ever wanted */
+GEANY_API_SYMBOL
+void ui_tree_view_set_tooltip_text_column(GtkTreeView *tree_view, gint column)
+{
+	g_return_if_fail(column >= 0);
+	g_return_if_fail(GTK_IS_TREE_VIEW(tree_view));
+
+	g_signal_connect(tree_view, "query-tooltip",
+			G_CALLBACK(ui_tree_view_query_tooltip_cb), GINT_TO_POINTER(column));
+	gtk_widget_set_has_tooltip(GTK_WIDGET(tree_view), TRUE);
+}
+
+
 /**
  * Modifies the font of a widget using gtk_widget_modify_font().
  *
  * @param widget The widget.
  * @param str The font name as expected by pango_font_description_from_string().
  */
+GEANY_API_SYMBOL
 void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
 {
 	PangoFontDescription *pfd;
@@ -1700,30 +1906,30 @@ void ui_widget_modify_font_from_string(GtkWidget *widget, const gchar *str)
  * file chooser, replacing entry text (if successful) with the path returned from the
  * @c GtkFileChooser.
  * @note @a entry can be the child of an unparented widget, such as @c GtkComboBoxEntry.
- * @param title The file chooser dialog title, or @c NULL.
+ * @param title @nullable The file chooser dialog title, or @c NULL.
  * @param action The mode of the file chooser.
  * @param entry Can be an unpacked @c GtkEntry, or the child of an unpacked widget,
  * such as @c GtkComboBoxEntry.
- * @return The @c GtkHBox.
+ *
+ * @return @transfer{floating} The @c GtkHBox.
  */
 /* @see ui_setup_open_button_callback(). */
+GEANY_API_SYMBOL
 GtkWidget *ui_path_box_new(const gchar *title, GtkFileChooserAction action, GtkEntry *entry)
 {
-	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry;
+	GtkWidget *vbox, *dirbtn, *openimg, *hbox, *path_entry, *parent, *next_parent;
 
 	hbox = gtk_hbox_new(FALSE, 6);
 	path_entry = GTK_WIDGET(entry);
 
 	/* prevent path_entry being vertically stretched to the height of dirbtn */
 	vbox = gtk_vbox_new(FALSE, 0);
-	if (gtk_widget_get_parent(path_entry))	/* entry->parent may be a GtkComboBoxEntry */
-	{
-		GtkWidget *parent = gtk_widget_get_parent(path_entry);
 
-		gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
-	}
-	else
-		gtk_box_pack_start(GTK_BOX(vbox), path_entry, TRUE, FALSE, 0);
+	parent = path_entry;
+	while ((next_parent = gtk_widget_get_parent(parent)) != NULL)
+		parent = next_parent;
+
+	gtk_box_pack_start(GTK_BOX(vbox), parent, TRUE, FALSE, 0);
 
 	dirbtn = gtk_button_new();
 	openimg = gtk_image_new_from_stock(GTK_STOCK_OPEN, GTK_ICON_SIZE_BUTTON);
@@ -1857,6 +2063,7 @@ void ui_statusbar_showhide(gboolean state)
  * @param table
  * @param row The row number of the table.
  */
+GEANY_API_SYMBOL
 void ui_table_add_row(GtkTable *table, gint row, ...)
 {
 	va_list args;
@@ -1888,9 +2095,22 @@ static void on_config_file_clicked(GtkWidget *widget, gpointer user_data)
 	else
 	{
 		gchar *utf8_filename = utils_get_utf8_from_locale(file_name);
-		gchar *base_name = g_path_get_basename(file_name);
-		gchar *global_file = g_build_filename(app->datadir, base_name, NULL);
+		gchar *global_file;
+		gchar *base_name = NULL;
 		gchar *global_content = NULL;
+
+		/* get the path inside app->configdir - can contain subdirectories */
+		if (g_str_has_prefix(file_name, app->configdir))
+		{
+			gsize len = strlen(app->configdir);
+			if (file_name[len] == G_DIR_SEPARATOR)
+				base_name = g_strdup(file_name + len + 1);
+		}
+
+		if (!base_name)
+			base_name = g_path_get_basename(file_name);
+
+		global_file = g_build_filename(app->datadir, base_name, NULL);
 
 		/* if the requested file doesn't exist in the user's config dir, try loading the file
 		 * from the global data directory and use its contents for the newly created file */
@@ -1952,6 +2172,12 @@ static void create_config_files_menu(void)
 
 	item = ui_lookup_widget(main_widgets.window, "configuration_files1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
+
+	item = gtk_menu_item_new_with_mnemonic(_("_Filetype Configuration"));
+	gtk_container_add(GTK_CONTAINER(menu), item);
+	ui_widgets.config_files_filetype_menu = gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), ui_widgets.config_files_filetype_menu);
+	gtk_widget_show(item);
 
 	/* sort menu after all items added */
 	g_idle_add(sort_menu, widgets.config_files_menu);
@@ -2229,7 +2455,7 @@ void ui_init_builder(void)
 	}
 	g_free(interface_file);
 
-	gtk_builder_connect_signals(builder, NULL);
+	callbacks_connect(builder);
 
 	edit_menu1 = GTK_WIDGET(gtk_builder_get_object(builder, "edit_menu1"));
 	prefs_dialog = GTK_WIDGET(gtk_builder_get_object(builder, "prefs_dialog"));
@@ -2269,10 +2495,28 @@ void ui_init_builder(void)
 static void init_custom_style(void)
 {
 #if GTK_CHECK_VERSION(3, 0, 0)
-	gchar *css_file = g_build_filename(app->datadir, "geany.css", NULL);
+	const struct {
+		guint version;
+		const gchar *file;
+	} css_files[] = {
+		/*
+		 * Keep these from newest to oldest,
+		 * and make sure 0 remains last
+		 */
+		{ 20, "geany-3.20.css" },
+		{ 0, "geany-3.0.css" },
+	};
+	guint gtk_version = gtk_get_minor_version();
+	gsize i = 0;
+	gchar *css_file;
 	GtkCssProvider *css = gtk_css_provider_new();
 	GError *error = NULL;
 
+	/* gtk_version will never be smaller than 0 */
+	while (css_files[i].version > gtk_version)
+		++i;
+
+	css_file = g_build_filename(app->datadir, css_files[i].file, NULL);
 	if (! gtk_css_provider_load_from_path(css, css_file, &error))
 	{
 		g_warning("Failed to load custom CSS: %s", error->message);
@@ -2436,6 +2680,7 @@ void ui_auto_separator_add_ref(GeanyAutoSeparator *autosep, GtkWidget *item)
  * @since 0.16
  * @deprecated 0.21 use gtk_widget_set_tooltip_text() instead
  */
+GEANY_API_SYMBOL
 void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
 {
 	gtk_widget_set_tooltip_text(widget, text);
@@ -2448,11 +2693,13 @@ void ui_widget_set_tooltip_text(GtkWidget *widget, const gchar *text)
  * you want returned.
  * @param widget Widget with the @a widget_name property set.
  * @param widget_name Name to lookup.
- * @return The widget found.
+ *
+ * @return @transfer{none} The widget found.
  * @see ui_hookup_widget().
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GtkWidget *ui_lookup_widget(GtkWidget *widget, const gchar *widget_name)
 {
 	GtkWidget *parent, *found_widget;
@@ -2527,10 +2774,11 @@ static gboolean progress_bar_pulse(gpointer data)
  * In this case, you need to show and hide the widget yourself. You can find some example code
  * in @c src/printing.c.
  *
- * @param text The text to be shown as the progress bar label or NULL to leave it empty.
+ * @param text @nullable The text to be shown as the progress bar label or @c NULL to leave it empty.
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void ui_progress_bar_start(const gchar *text)
 {
 	g_return_if_fail(progress_bar_timer_id == 0);
@@ -2550,6 +2798,7 @@ void ui_progress_bar_start(const gchar *text)
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void ui_progress_bar_stop(void)
 {
 	gtk_widget_hide(GTK_WIDGET(main_widgets.progressbar));
@@ -2569,6 +2818,12 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 	gchar *sa, *sb;
 	gint result;
 
+	/* put entries with submenus at the end of the menu */
+	if (gtk_menu_item_get_submenu(item_a) && !gtk_menu_item_get_submenu(item_b))
+		return 1;
+	else if (!gtk_menu_item_get_submenu(item_a) && gtk_menu_item_get_submenu(item_b))
+		return -1;
+
 	sa = ui_menu_item_get_text(item_a);
 	sb = ui_menu_item_get_text(item_b);
 	result = utils_str_casecmp(sa, sb);
@@ -2579,7 +2834,7 @@ static gint compare_menu_item_labels(gconstpointer a, gconstpointer b)
 
 
 /* Currently @a menu should contain only GtkMenuItems with labels. */
-void ui_menu_sort_by_label(GtkMenu *menu)
+static void ui_menu_sort_by_label(GtkMenu *menu)
 {
 	GList *list = gtk_container_get_children(GTK_CONTAINER(menu));
 	GList *node;
@@ -2589,7 +2844,7 @@ void ui_menu_sort_by_label(GtkMenu *menu)
 	pos = 0;
 	foreach_list(node, list)
 	{
-		gtk_menu_reorder_child(menu, node->data, pos);
+		menu_reorder_child(menu, node->data, pos);
 		pos++;
 	}
 	g_list_free(list);
@@ -2602,7 +2857,7 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 	gchar *text;
 
 	va_start(a, format);
-	text = g_strdup_vprintf(format, a);
+	text = g_markup_vprintf_escaped(format, a);
 	va_end(a);
 
 	gtk_label_set_text(label, text);
@@ -2614,30 +2869,31 @@ void ui_label_set_markup(GtkLabel *label, const gchar *format, ...)
 GtkWidget *ui_label_new_bold(const gchar *text)
 {
 	GtkWidget *label;
-	gchar *label_text;
 
-	label_text = g_markup_escape_text(text, -1);
 	label = gtk_label_new(NULL);
-	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", label_text);
-	g_free(label_text);
+	ui_label_set_markup(GTK_LABEL(label), "<b>%s</b>", text);
 	return label;
 }
 
 
-/** Adds a list of document items to @a menu.
+/** @girskip
+ * Adds a list of document items to @a menu.
  * @param menu Menu.
- * @param active Which document to highlight, or @c NULL.
- * @param callback is used for each menu item's @c "activate" signal and will be passed
- * the corresponding document pointer as @c user_data.
+ * @param active @nullable Which document to highlight, or @c NULL.
+ * @param callback is used for each menu item's @c "activate" signal and will be
+ * passed the corresponding document pointer as @c user_data.
  * @warning You should check @c doc->is_valid in the callback.
- * @since 0.19 */
+ * @since 0.19
+ **/
+GEANY_API_SYMBOL
 void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback callback)
 {
 	ui_menu_add_document_items_sorted(menu, active, callback, NULL);
 }
 
 
-/** Adds a list of document items to @a menu.
+/** @girskip
+ * Adds a list of document items to @a menu.
  *
  * @a compare_func might be NULL to not sort the documents in the menu. In this case,
  * the order of the document tabs is used.
@@ -2645,19 +2901,21 @@ void ui_menu_add_document_items(GtkMenu *menu, GeanyDocument *active, GCallback 
  * See document_compare_by_display_name() for an example sort function.
  *
  * @param menu Menu.
- * @param active Which document to highlight, or @c NULL.
+ * @param active @nullable Which document to highlight, or @c NULL.
  * @param callback is used for each menu item's @c "activate" signal and will be passed
  * the corresponding document pointer as @c user_data.
  * @param compare_func is used to sort the list. Might be @c NULL to not sort the list.
  * @warning You should check @c doc->is_valid in the callback.
- * @since 0.21 */
+ * @since 0.21
+ **/
+GEANY_API_SYMBOL
 void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 	GCallback callback, GCompareFunc compare_func)
 {
 	GtkWidget *menu_item, *menu_item_label, *image;
 	GeanyDocument *doc;
 	guint i, len;
-	gchar *base_name, *label;
+	gchar *base_name;
 	GPtrArray *sorted_documents;
 
 	len = (guint) gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
@@ -2680,7 +2938,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 
 		base_name = g_path_get_basename(DOC_FILENAME(doc));
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
-		image = gtk_image_new_from_pixbuf(doc->file_type->icon);
+		image = gtk_image_new_from_gicon(doc->file_type->icon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 
 		gtk_widget_show(menu_item);
@@ -2691,11 +2949,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		gtk_widget_set_name(menu_item_label, document_get_status_widget_class(doc));
 
 		if (doc == active)
-		{
-			label = g_markup_escape_text(base_name, -1);
-			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", label);
-			g_free(label);
-		}
+			ui_label_set_markup(GTK_LABEL(menu_item_label), "<b>%s</b>", base_name);
 
 		g_free(base_name);
 	}
@@ -2710,6 +2964,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
  * @param keyval A keyval.
  * @return @c TRUE if @a keyval is the one of the Enter/Return key values, otherwise @c FALSE.
  * @since 0.19 */
+GEANY_API_SYMBOL
 gboolean ui_is_keyval_enter_or_return(guint keyval)
 {
 	return (keyval == GDK_Return || keyval == GDK_ISO_Enter|| keyval == GDK_KP_Enter);
@@ -2722,6 +2977,7 @@ gboolean ui_is_keyval_enter_or_return(guint keyval)
  * @param default_value The default value in case the value could not be read.
  * @return The value for the property if it exists, otherwise the @a default_value.
  * @since 0.19 */
+GEANY_API_SYMBOL
 gint ui_get_gtk_settings_integer(const gchar *property_name, gint default_value)
 {
 	if (g_object_class_find_property(G_OBJECT_GET_CLASS(G_OBJECT(
@@ -2758,60 +3014,43 @@ void ui_editable_insert_text_callback(GtkEditable *editable, gchar *new_text,
 
 
 /* gets the icon that applies to a particular MIME type */
-GdkPixbuf *ui_get_mime_icon(const gchar *mime_type, GtkIconSize size)
+GIcon *ui_get_mime_icon(const gchar *mime_type)
 {
-	GdkPixbuf *icon = NULL;
+	GIcon *icon = NULL;
 	gchar *ctype;
-	GIcon *gicon;
-	GtkIconInfo *info;
-	GtkIconTheme *theme;
-	gint real_size;
 
-	if (!gtk_icon_size_lookup(size, &real_size, NULL))
-	{
-		g_return_val_if_reached(NULL);
-	}
 	ctype = g_content_type_from_mime_type(mime_type);
-	if (ctype != NULL)
+	if (ctype)
 	{
-		gicon = g_content_type_get_icon(ctype);
-		theme = gtk_icon_theme_get_default();
-		info = gtk_icon_theme_lookup_by_gicon(theme, gicon, real_size, 0);
-		g_object_unref(gicon);
-		g_free(ctype);
+		GdkScreen *screen = gdk_screen_get_default();
 
-		if (info != NULL)
+		icon = g_content_type_get_icon(ctype);
+		if (screen && icon)
 		{
-			icon = gtk_icon_info_load_icon(info, NULL);
-			gtk_icon_info_free(info);
+			GtkIconInfo *icon_info;
+
+			icon_info = gtk_icon_theme_lookup_by_gicon(gtk_icon_theme_get_for_screen(screen), icon, 16, 0);
+			if (!icon_info)
+			{
+				g_object_unref(icon);
+				icon = NULL;
+			}
+			else
+				gtk_icon_info_free(icon_info);
 		}
+
+		g_free(ctype);
 	}
 
-	/* fallback for builds with GIO < 2.18 or if icon lookup failed, like it might happen on Windows */
-	if (icon == NULL)
+	/* fallback if icon lookup failed, like it might happen on Windows (?) */
+	if (! icon)
 	{
-		const gchar *stock_id = GTK_STOCK_FILE;
-		GtkIconSet *icon_set;
+		const gchar *icon_name = "text-x-generic";
 
 		if (strstr(mime_type, "directory"))
-			stock_id = GTK_STOCK_DIRECTORY;
+			icon_name = "folder";
 
-		icon_set = gtk_icon_factory_lookup_default(stock_id);
-		if (icon_set)
-		{
-#if GTK_CHECK_VERSION(3, 0, 0)
-			GtkStyleContext *ctx = gtk_style_context_new();
-			GtkWidgetPath *path = gtk_widget_path_new();
-			gtk_style_context_set_path(ctx, path);
-			gtk_widget_path_unref(path);
-			icon = gtk_icon_set_render_icon_pixbuf(icon_set, ctx, size);
-			g_object_unref(ctx);
-#else
-			icon = gtk_icon_set_render_icon(icon_set, gtk_widget_get_default_style(),
-				gtk_widget_get_default_direction(),
-				GTK_STATE_NORMAL, size, NULL, NULL);
-#endif
-		}
+		icon = g_themed_icon_new(icon_name);
 	}
 	return icon;
 }
@@ -2830,6 +3069,7 @@ void ui_focus_current_document(void)
  * @param stock_id stock_id to lookup e.g. @c GTK_STOCK_OPEN.
  * @return The label text for stock
  * @since Geany 1.22 */
+GEANY_API_SYMBOL
 const gchar *ui_lookup_stock_label(const gchar *stock_id)
 {
 	GtkStockItem item;
@@ -2839,4 +3079,95 @@ const gchar *ui_lookup_stock_label(const gchar *stock_id)
 
 	g_warning("No stock id '%s'!", stock_id);
 	return NULL;
+}
+
+
+/* finds the next iter at any level
+ * @param iter in/out, the current iter, will be changed to the next one
+ * @param down whether to try the child iter
+ * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
+gboolean ui_tree_model_iter_any_next(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
+{
+	GtkTreeIter guess;
+	GtkTreeIter copy = *iter;
+
+	/* go down if the item has children */
+	if (down && gtk_tree_model_iter_children(model, &guess, iter))
+		*iter = guess;
+	/* or to the next item at the same level */
+	else if (gtk_tree_model_iter_next(model, &copy))
+		*iter = copy;
+	/* or to the next item at a parent level */
+	else if (gtk_tree_model_iter_parent(model, &guess, iter))
+	{
+		copy = guess;
+		while (TRUE)
+		{
+			if (gtk_tree_model_iter_next(model, &copy))
+			{
+				*iter = copy;
+				return TRUE;
+			}
+			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
+				guess = copy;
+			else
+				return FALSE;
+		}
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+
+
+GtkWidget *ui_create_encodings_combo_box(gboolean has_detect, gint default_enc)
+{
+	GtkCellRenderer *renderer;
+	GtkTreeIter iter;
+	GtkWidget *combo = gtk_combo_box_new();
+	GtkTreeStore *store = encodings_encoding_store_new(has_detect);
+
+	if (default_enc < 0 || default_enc >= GEANY_ENCODINGS_MAX)
+		default_enc = has_detect ? GEANY_ENCODINGS_MAX : GEANY_ENCODING_NONE;
+
+	gtk_combo_box_set_model(GTK_COMBO_BOX(combo), GTK_TREE_MODEL(store));
+	if (encodings_encoding_store_get_iter(store, &iter, default_enc))
+		gtk_combo_box_set_active_iter(GTK_COMBO_BOX(combo), &iter);
+	renderer = gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), renderer, TRUE);
+	gtk_cell_layout_set_cell_data_func(GTK_CELL_LAYOUT(combo), renderer,
+			encodings_encoding_store_cell_data_func, NULL, NULL);
+
+	return combo;
+}
+
+
+gint ui_encodings_combo_box_get_active_encoding(GtkComboBox *combo)
+{
+	GtkTreeIter iter;
+	gint enc = GEANY_ENCODING_NONE;
+
+	/* there should always be an active iter anyway, but we check just in case */
+	if (gtk_combo_box_get_active_iter(combo, &iter))
+	{
+		GtkTreeModel *model = gtk_combo_box_get_model(combo);
+		enc = encodings_encoding_store_get_encoding(GTK_TREE_STORE(model), &iter);
+	}
+
+	return enc;
+}
+
+
+gboolean ui_encodings_combo_box_set_active_encoding(GtkComboBox *combo, gint enc)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_combo_box_get_model(combo);
+
+	if (encodings_encoding_store_get_iter(GTK_TREE_STORE(model), &iter, enc))
+	{
+		gtk_combo_box_set_active_iter(combo, &iter);
+		return TRUE;
+	}
+	return FALSE;
 }

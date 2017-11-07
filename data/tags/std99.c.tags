@@ -1,0 +1,1619 @@
+# format=tagmanager
+AIO_PRIO_DELTA_MAXÌ65536Ö0
+ARG_MAXÌ65536Ö0
+BC_BASE_MAXÌ65536Ö0
+BC_DIM_MAXÌ65536Ö0
+BC_SCALE_MAXÌ65536Ö0
+BC_STRING_MAXÌ65536Ö0
+BIG_ENDIANÌ65536Ö0
+BUFSIZÌ65536Ö0
+BUS_ADRALNÌ65536Ö0
+BUS_ADRALNÌ4Îanon_enum_26Ö0
+BUS_ADRERRÌ65536Ö0
+BUS_ADRERRÌ4Îanon_enum_26Ö0
+BUS_OBJERRÌ65536Ö0
+BUS_OBJERRÌ4Îanon_enum_26Ö0
+BYTE_ORDERÌ65536Ö0
+CHARCLASS_NAME_MAXÌ65536Ö0
+CHAR_BITÌ65536Ö0
+CHAR_MAXÌ65536Ö0
+CHAR_MINÌ65536Ö0
+CLD_CONTINUEDÌ65536Ö0
+CLD_CONTINUEDÌ4Îanon_enum_28Ö0
+CLD_DUMPEDÌ65536Ö0
+CLD_DUMPEDÌ4Îanon_enum_28Ö0
+CLD_EXITEDÌ65536Ö0
+CLD_EXITEDÌ4Îanon_enum_28Ö0
+CLD_KILLEDÌ65536Ö0
+CLD_KILLEDÌ4Îanon_enum_28Ö0
+CLD_STOPPEDÌ65536Ö0
+CLD_STOPPEDÌ4Îanon_enum_28Ö0
+CLD_TRAPPEDÌ65536Ö0
+CLD_TRAPPEDÌ4Îanon_enum_28Ö0
+CLOCKS_PER_SECÌ65536Ö0
+CLOCK_MONOTONICÌ65536Ö0
+CLOCK_PROCESS_CPUTIME_IDÌ65536Ö0
+CLOCK_REALTIMEÌ65536Ö0
+CLOCK_THREAD_CPUTIME_IDÌ65536Ö0
+COLL_WEIGHTS_MAXÌ65536Ö0
+DBL_DIGÌ65536Ö0
+DBL_EPSILONÌ65536Ö0
+DBL_MANT_DIGÌ65536Ö0
+DBL_MAXÌ65536Ö0
+DBL_MAX_10_EXPÌ65536Ö0
+DBL_MAX_EXPÌ65536Ö0
+DBL_MINÌ65536Ö0
+DBL_MIN_10_EXPÌ65536Ö0
+DBL_MIN_EXPÌ65536Ö0
+DELAYTIMER_MAXÌ65536Ö0
+DOMAINÌ65536Ö0
+E2BIGÌ65536Ö0
+EACCESÌ65536Ö0
+EADDRINUSEÌ65536Ö0
+EADDRNOTAVAILÌ65536Ö0
+EADVÌ65536Ö0
+EAFNOSUPPORTÌ65536Ö0
+EAGAINÌ65536Ö0
+EALREADYÌ65536Ö0
+EBADEÌ65536Ö0
+EBADFÌ65536Ö0
+EBADFDÌ65536Ö0
+EBADMSGÌ65536Ö0
+EBADRÌ65536Ö0
+EBADRQCÌ65536Ö0
+EBADSLTÌ65536Ö0
+EBFONTÌ65536Ö0
+EBUSYÌ65536Ö0
+ECANCELEDÌ65536Ö0
+ECHILDÌ65536Ö0
+ECHRNGÌ65536Ö0
+ECOMMÌ65536Ö0
+ECONNABORTEDÌ65536Ö0
+ECONNREFUSEDÌ65536Ö0
+ECONNRESETÌ65536Ö0
+EDEADLKÌ65536Ö0
+EDEADLOCKÌ65536Ö0
+EDESTADDRREQÌ65536Ö0
+EDOMÌ65536Ö0
+EDOTDOTÌ65536Ö0
+EDQUOTÌ65536Ö0
+EEXISTÌ65536Ö0
+EFAULTÌ65536Ö0
+EFBIGÌ65536Ö0
+EHOSTDOWNÌ65536Ö0
+EHOSTUNREACHÌ65536Ö0
+EIDRMÌ65536Ö0
+EILSEQÌ65536Ö0
+EINPROGRESSÌ65536Ö0
+EINTRÌ65536Ö0
+EINVALÌ65536Ö0
+EIOÌ65536Ö0
+EISCONNÌ65536Ö0
+EISDIRÌ65536Ö0
+EISNAMÌ65536Ö0
+EKEYEXPIREDÌ65536Ö0
+EKEYREJECTEDÌ65536Ö0
+EKEYREVOKEDÌ65536Ö0
+EL2HLTÌ65536Ö0
+EL2NSYNCÌ65536Ö0
+EL3HLTÌ65536Ö0
+EL3RSTÌ65536Ö0
+ELIBACCÌ65536Ö0
+ELIBBADÌ65536Ö0
+ELIBEXECÌ65536Ö0
+ELIBMAXÌ65536Ö0
+ELIBSCNÌ65536Ö0
+ELNRNGÌ65536Ö0
+ELOOPÌ65536Ö0
+EMEDIUMTYPEÌ65536Ö0
+EMFILEÌ65536Ö0
+EMLINKÌ65536Ö0
+EMSGSIZEÌ65536Ö0
+EMULTIHOPÌ65536Ö0
+ENAMETOOLONGÌ65536Ö0
+ENAVAILÌ65536Ö0
+ENETDOWNÌ65536Ö0
+ENETRESETÌ65536Ö0
+ENETUNREACHÌ65536Ö0
+ENFILEÌ65536Ö0
+ENOANOÌ65536Ö0
+ENOBUFSÌ65536Ö0
+ENOCSIÌ65536Ö0
+ENODATAÌ65536Ö0
+ENODEVÌ65536Ö0
+ENOENTÌ65536Ö0
+ENOEXECÌ65536Ö0
+ENOKEYÌ65536Ö0
+ENOLCKÌ65536Ö0
+ENOLINKÌ65536Ö0
+ENOMEDIUMÌ65536Ö0
+ENOMEMÌ65536Ö0
+ENOMSGÌ65536Ö0
+ENONETÌ65536Ö0
+ENOPKGÌ65536Ö0
+ENOPROTOOPTÌ65536Ö0
+ENOSPCÌ65536Ö0
+ENOSRÌ65536Ö0
+ENOSTRÌ65536Ö0
+ENOSYSÌ65536Ö0
+ENOTBLKÌ65536Ö0
+ENOTCONNÌ65536Ö0
+ENOTDIRÌ65536Ö0
+ENOTEMPTYÌ65536Ö0
+ENOTNAMÌ65536Ö0
+ENOTRECOVERABLEÌ65536Ö0
+ENOTSOCKÌ65536Ö0
+ENOTSUPÌ65536Ö0
+ENOTTYÌ65536Ö0
+ENOTUNIQÌ65536Ö0
+ENXIOÌ65536Ö0
+EOFÌ65536Ö0
+EOPNOTSUPPÌ65536Ö0
+EOVERFLOWÌ65536Ö0
+EOWNERDEADÌ65536Ö0
+EPERMÌ65536Ö0
+EPFNOSUPPORTÌ65536Ö0
+EPIPEÌ65536Ö0
+EPROTOÌ65536Ö0
+EPROTONOSUPPORTÌ65536Ö0
+EPROTOTYPEÌ65536Ö0
+ERANGEÌ65536Ö0
+EREMCHGÌ65536Ö0
+EREMOTEÌ65536Ö0
+EREMOTEIOÌ65536Ö0
+ERESTARTÌ65536Ö0
+EROFSÌ65536Ö0
+ESHUTDOWNÌ65536Ö0
+ESOCKTNOSUPPORTÌ65536Ö0
+ESPIPEÌ65536Ö0
+ESRCHÌ65536Ö0
+ESRMNTÌ65536Ö0
+ESTALEÌ65536Ö0
+ESTRPIPEÌ65536Ö0
+ETIMEÌ65536Ö0
+ETIMEDOUTÌ65536Ö0
+ETOOMANYREFSÌ65536Ö0
+ETXTBSYÌ65536Ö0
+EUCLEANÌ65536Ö0
+EUNATCHÌ65536Ö0
+EUSERSÌ65536Ö0
+EWOULDBLOCKÌ65536Ö0
+EXDEVÌ65536Ö0
+EXFULLÌ65536Ö0
+EXIT_FAILUREÌ65536Ö0
+EXIT_SUCCESSÌ65536Ö0
+EXPR_NEST_MAXÌ65536Ö0
+FD_CLRÌ131072Í(fd,fdsetp)Ö0
+FD_ISSETÌ131072Í(fd,fdsetp)Ö0
+FD_SETÌ131072Í(fd,fdsetp)Ö0
+FD_SETSIZEÌ65536Ö0
+FD_ZEROÌ131072Í(fdsetp)Ö0
+FE_ALL_EXCEPTÌ65536Ö0
+FE_DFL_ENVÌ65536Ö0
+FE_DIVBYZEROÌ65536Ö0
+FE_DIVBYZEROÌ4Îanon_enum_4Ö0
+FE_DOWNWARDÌ65536Ö0
+FE_DOWNWARDÌ4Îanon_enum_5Ö0
+FE_INEXACTÌ65536Ö0
+FE_INEXACTÌ4Îanon_enum_4Ö0
+FE_INVALIDÌ65536Ö0
+FE_INVALIDÌ4Îanon_enum_4Ö0
+FE_NOMASK_ENVÌ65536Ö0
+FE_OVERFLOWÌ65536Ö0
+FE_OVERFLOWÌ4Îanon_enum_4Ö0
+FE_TONEARESTÌ65536Ö0
+FE_TONEARESTÌ4Îanon_enum_5Ö0
+FE_TOWARDZEROÌ65536Ö0
+FE_TOWARDZEROÌ4Îanon_enum_5Ö0
+FE_UNDERFLOWÌ65536Ö0
+FE_UNDERFLOWÌ4Îanon_enum_4Ö0
+FE_UPWARDÌ65536Ö0
+FE_UPWARDÌ4Îanon_enum_5Ö0
+FILEÌ4096Ö0Ï_IO_FILE
+FILENAME_MAXÌ65536Ö0
+FLT_DIGÌ65536Ö0
+FLT_EPSILONÌ65536Ö0
+FLT_MANT_DIGÌ65536Ö0
+FLT_MAXÌ65536Ö0
+FLT_MAX_10_EXPÌ65536Ö0
+FLT_MAX_EXPÌ65536Ö0
+FLT_MINÌ65536Ö0
+FLT_MIN_10_EXPÌ65536Ö0
+FLT_MIN_EXPÌ65536Ö0
+FLT_RADIXÌ65536Ö0
+FLT_ROUNDSÌ65536Ö0
+FOPEN_MAXÌ65536Ö0
+FPE_FLTDIVÌ65536Ö0
+FPE_FLTDIVÌ4Îanon_enum_24Ö0
+FPE_FLTINVÌ65536Ö0
+FPE_FLTINVÌ4Îanon_enum_24Ö0
+FPE_FLTOVFÌ65536Ö0
+FPE_FLTOVFÌ4Îanon_enum_24Ö0
+FPE_FLTRESÌ65536Ö0
+FPE_FLTRESÌ4Îanon_enum_24Ö0
+FPE_FLTSUBÌ65536Ö0
+FPE_FLTSUBÌ4Îanon_enum_24Ö0
+FPE_FLTUNDÌ65536Ö0
+FPE_FLTUNDÌ4Îanon_enum_24Ö0
+FPE_INTDIVÌ65536Ö0
+FPE_INTDIVÌ4Îanon_enum_24Ö0
+FPE_INTOVFÌ65536Ö0
+FPE_INTOVFÌ4Îanon_enum_24Ö0
+FP_ILOGB0Ì65536Ö0
+FP_ILOGBNANÌ65536Ö0
+FP_INFINITEÌ65536Ö0
+FP_INFINITEÌ4Îanon_enum_12Ö0
+FP_NANÌ65536Ö0
+FP_NANÌ4Îanon_enum_12Ö0
+FP_NORMALÌ65536Ö0
+FP_NORMALÌ4Îanon_enum_12Ö0
+FP_SUBNORMALÌ65536Ö0
+FP_SUBNORMALÌ4Îanon_enum_12Ö0
+FP_ZEROÌ65536Ö0
+FP_ZEROÌ4Îanon_enum_12Ö0
+HOST_NAME_MAXÌ65536Ö0
+HUGEÌ65536Ö0
+HUGE_VALÌ65536Ö0
+HUGE_VALFÌ65536Ö0
+HUGE_VALLÌ65536Ö0
+IÌ65536Ö0
+ILL_BADSTKÌ65536Ö0
+ILL_BADSTKÌ4Îanon_enum_23Ö0
+ILL_COPROCÌ65536Ö0
+ILL_COPROCÌ4Îanon_enum_23Ö0
+ILL_ILLADRÌ65536Ö0
+ILL_ILLADRÌ4Îanon_enum_23Ö0
+ILL_ILLOPCÌ65536Ö0
+ILL_ILLOPCÌ4Îanon_enum_23Ö0
+ILL_ILLOPNÌ65536Ö0
+ILL_ILLOPNÌ4Îanon_enum_23Ö0
+ILL_ILLTRPÌ65536Ö0
+ILL_ILLTRPÌ4Îanon_enum_23Ö0
+ILL_PRVOPCÌ65536Ö0
+ILL_PRVOPCÌ4Îanon_enum_23Ö0
+ILL_PRVREGÌ65536Ö0
+ILL_PRVREGÌ4Îanon_enum_23Ö0
+INFINITYÌ65536Ö0
+INT_MAXÌ65536Ö0
+INT_MINÌ65536Ö0
+IOV_MAXÌ65536Ö0
+LC_ADDRESSÌ65536Ö0
+LC_ADDRESS_MASKÌ65536Ö0
+LC_ALLÌ65536Ö0
+LC_ALL_MASKÌ65536Ö0
+LC_COLLATEÌ65536Ö0
+LC_COLLATE_MASKÌ65536Ö0
+LC_CTYPEÌ65536Ö0
+LC_CTYPE_MASKÌ65536Ö0
+LC_GLOBAL_LOCALEÌ65536Ö0
+LC_IDENTIFICATIONÌ65536Ö0
+LC_IDENTIFICATION_MASKÌ65536Ö0
+LC_MEASUREMENTÌ65536Ö0
+LC_MEASUREMENT_MASKÌ65536Ö0
+LC_MESSAGESÌ65536Ö0
+LC_MESSAGES_MASKÌ65536Ö0
+LC_MONETARYÌ65536Ö0
+LC_MONETARY_MASKÌ65536Ö0
+LC_NAMEÌ65536Ö0
+LC_NAME_MASKÌ65536Ö0
+LC_NUMERICÌ65536Ö0
+LC_NUMERIC_MASKÌ65536Ö0
+LC_PAPERÌ65536Ö0
+LC_PAPER_MASKÌ65536Ö0
+LC_TELEPHONEÌ65536Ö0
+LC_TELEPHONE_MASKÌ65536Ö0
+LC_TIMEÌ65536Ö0
+LC_TIME_MASKÌ65536Ö0
+LDBL_DIGÌ65536Ö0
+LDBL_EPSILONÌ65536Ö0
+LDBL_MANT_DIGÌ65536Ö0
+LDBL_MAXÌ65536Ö0
+LDBL_MAX_10_EXPÌ65536Ö0
+LDBL_MAX_EXPÌ65536Ö0
+LDBL_MINÌ65536Ö0
+LDBL_MIN_10_EXPÌ65536Ö0
+LDBL_MIN_EXPÌ65536Ö0
+LINE_MAXÌ65536Ö0
+LINK_MAXÌ65536Ö0
+LITTLE_ENDIANÌ65536Ö0
+LLONG_MAXÌ65536Ö0
+LLONG_MINÌ65536Ö0
+LOGIN_NAME_MAXÌ65536Ö0
+LONG_BITÌ65536Ö0
+LONG_LONG_MAXÌ65536Ö0
+LONG_LONG_MINÌ65536Ö0
+LONG_MAXÌ65536Ö0
+LONG_MINÌ65536Ö0
+LT_OBJDIRÌ65536Ö0
+L_ctermidÌ65536Ö0
+L_cuseridÌ65536Ö0
+L_tmpnamÌ65536Ö0
+MATH_ERREXCEPTÌ65536Ö0
+MATH_ERRNOÌ65536Ö0
+MAX_CANONÌ65536Ö0
+MAX_INPUTÌ65536Ö0
+MB_CUR_MAXÌ65536Ö0
+MB_LEN_MAXÌ65536Ö0
+MINSIGSTKSZÌ65536Ö0
+MQ_PRIO_MAXÌ65536Ö0
+M_1_PIÌ65536Ö0
+M_1_PIlÌ65536Ö0
+M_2_PIÌ65536Ö0
+M_2_PIlÌ65536Ö0
+M_2_SQRTPIÌ65536Ö0
+M_2_SQRTPIlÌ65536Ö0
+M_EÌ65536Ö0
+M_ElÌ65536Ö0
+M_LN10Ì65536Ö0
+M_LN10lÌ65536Ö0
+M_LN2Ì65536Ö0
+M_LN2lÌ65536Ö0
+M_LOG10EÌ65536Ö0
+M_LOG10ElÌ65536Ö0
+M_LOG2EÌ65536Ö0
+M_LOG2ElÌ65536Ö0
+M_PIÌ65536Ö0
+M_PI_2Ì65536Ö0
+M_PI_2lÌ65536Ö0
+M_PI_4Ì65536Ö0
+M_PI_4lÌ65536Ö0
+M_PIlÌ65536Ö0
+M_SQRT1_2Ì65536Ö0
+M_SQRT1_2lÌ65536Ö0
+M_SQRT2Ì65536Ö0
+M_SQRT2lÌ65536Ö0
+NAME_MAXÌ65536Ö0
+NANÌ65536Ö0
+NFDBITSÌ65536Ö0
+NGREGÌ65536Ö0
+NGROUPS_MAXÌ65536Ö0
+NL_ARGMAXÌ65536Ö0
+NL_LANGMAXÌ65536Ö0
+NL_MSGMAXÌ65536Ö0
+NL_NMAXÌ65536Ö0
+NL_SETMAXÌ65536Ö0
+NL_TEXTMAXÌ65536Ö0
+NR_OPENÌ65536Ö0
+NSIGÌ65536Ö0
+NULLÌ65536Ö0
+NZEROÌ65536Ö0
+OPEN_MAXÌ65536Ö0
+OVERFLOWÌ65536Ö0
+PATH_MAXÌ65536Ö0
+PDP_ENDIANÌ65536Ö0
+PIPE_BUFÌ65536Ö0
+PLOSSÌ65536Ö0
+POLL_ERRÌ65536Ö0
+POLL_ERRÌ4Îanon_enum_29Ö0
+POLL_HUPÌ65536Ö0
+POLL_HUPÌ4Îanon_enum_29Ö0
+POLL_INÌ65536Ö0
+POLL_INÌ4Îanon_enum_29Ö0
+POLL_MSGÌ65536Ö0
+POLL_MSGÌ4Îanon_enum_29Ö0
+POLL_OUTÌ65536Ö0
+POLL_OUTÌ4Îanon_enum_29Ö0
+POLL_PRIÌ65536Ö0
+POLL_PRIÌ4Îanon_enum_29Ö0
+PTHREAD_DESTRUCTOR_ITERATIONSÌ65536Ö0
+PTHREAD_KEYS_MAXÌ65536Ö0
+PTHREAD_STACK_MINÌ65536Ö0
+PTHREAD_THREADS_MAXÌ65536Ö0
+P_tmpdirÌ65536Ö0
+RAND_MAXÌ65536Ö0
+REG_CSÌ65536Ö0
+REG_CSÌ4Îanon_enum_35Ö0
+REG_DSÌ65536Ö0
+REG_DSÌ4Îanon_enum_35Ö0
+REG_EAXÌ65536Ö0
+REG_EAXÌ4Îanon_enum_35Ö0
+REG_EBPÌ65536Ö0
+REG_EBPÌ4Îanon_enum_35Ö0
+REG_EBXÌ65536Ö0
+REG_EBXÌ4Îanon_enum_35Ö0
+REG_ECXÌ65536Ö0
+REG_ECXÌ4Îanon_enum_35Ö0
+REG_EDIÌ65536Ö0
+REG_EDIÌ4Îanon_enum_35Ö0
+REG_EDXÌ65536Ö0
+REG_EDXÌ4Îanon_enum_35Ö0
+REG_EFLÌ65536Ö0
+REG_EFLÌ4Îanon_enum_35Ö0
+REG_EIPÌ65536Ö0
+REG_EIPÌ4Îanon_enum_35Ö0
+REG_ERRÌ65536Ö0
+REG_ERRÌ4Îanon_enum_35Ö0
+REG_ESÌ65536Ö0
+REG_ESÌ4Îanon_enum_35Ö0
+REG_ESIÌ65536Ö0
+REG_ESIÌ4Îanon_enum_35Ö0
+REG_ESPÌ65536Ö0
+REG_ESPÌ4Îanon_enum_35Ö0
+REG_FSÌ65536Ö0
+REG_FSÌ4Îanon_enum_35Ö0
+REG_GSÌ65536Ö0
+REG_GSÌ4Îanon_enum_35Ö0
+REG_SSÌ65536Ö0
+REG_SSÌ4Îanon_enum_35Ö0
+REG_TRAPNOÌ65536Ö0
+REG_TRAPNOÌ4Îanon_enum_35Ö0
+REG_UESPÌ65536Ö0
+REG_UESPÌ4Îanon_enum_35Ö0
+RE_DUP_MAXÌ65536Ö0
+RTSIG_MAXÌ65536Ö0
+SA_INTERRUPTÌ65536Ö0
+SA_NOCLDSTOPÌ65536Ö0
+SA_NOCLDWAITÌ65536Ö0
+SA_NODEFERÌ65536Ö0
+SA_NOMASKÌ65536Ö0
+SA_ONESHOTÌ65536Ö0
+SA_ONSTACKÌ65536Ö0
+SA_RESETHANDÌ65536Ö0
+SA_RESTARTÌ65536Ö0
+SA_SIGINFOÌ65536Ö0
+SA_STACKÌ65536Ö0
+SCHAR_MAXÌ65536Ö0
+SCHAR_MINÌ65536Ö0
+SEEK_CURÌ65536Ö0
+SEEK_ENDÌ65536Ö0
+SEEK_SETÌ65536Ö0
+SEGV_ACCERRÌ65536Ö0
+SEGV_ACCERRÌ4Îanon_enum_25Ö0
+SEGV_MAPERRÌ65536Ö0
+SEGV_MAPERRÌ4Îanon_enum_25Ö0
+SEM_VALUE_MAXÌ65536Ö0
+SHRT_MAXÌ65536Ö0
+SHRT_MINÌ65536Ö0
+SIGABRTÌ65536Ö0
+SIGALRMÌ65536Ö0
+SIGBUSÌ65536Ö0
+SIGCHLDÌ65536Ö0
+SIGCLDÌ65536Ö0
+SIGCONTÌ65536Ö0
+SIGEV_NONEÌ65536Ö0
+SIGEV_NONEÌ4Îanon_enum_32Ö0
+SIGEV_SIGNALÌ65536Ö0
+SIGEV_SIGNALÌ4Îanon_enum_32Ö0
+SIGEV_THREADÌ65536Ö0
+SIGEV_THREADÌ4Îanon_enum_32Ö0
+SIGEV_THREAD_IDÌ65536Ö0
+SIGEV_THREAD_IDÌ4Îanon_enum_32Ö0
+SIGFPEÌ65536Ö0
+SIGHUPÌ65536Ö0
+SIGILLÌ65536Ö0
+SIGINTÌ65536Ö0
+SIGIOÌ65536Ö0
+SIGIOTÌ65536Ö0
+SIGKILLÌ65536Ö0
+SIGPIPEÌ65536Ö0
+SIGPOLLÌ65536Ö0
+SIGPROFÌ65536Ö0
+SIGPWRÌ65536Ö0
+SIGQUITÌ65536Ö0
+SIGRTMAXÌ65536Ö0
+SIGRTMINÌ65536Ö0
+SIGSEGVÌ65536Ö0
+SIGSTKFLTÌ65536Ö0
+SIGSTKSZÌ65536Ö0
+SIGSTOPÌ65536Ö0
+SIGSYSÌ65536Ö0
+SIGTERMÌ65536Ö0
+SIGTRAPÌ65536Ö0
+SIGTSTPÌ65536Ö0
+SIGTTINÌ65536Ö0
+SIGTTOUÌ65536Ö0
+SIGUNUSEDÌ65536Ö0
+SIGURGÌ65536Ö0
+SIGUSR1Ì65536Ö0
+SIGUSR2Ì65536Ö0
+SIGVTALRMÌ65536Ö0
+SIGWINCHÌ65536Ö0
+SIGXCPUÌ65536Ö0
+SIGXFSZÌ65536Ö0
+SIG_BLOCKÌ65536Ö0
+SIG_DFLÌ65536Ö0
+SIG_ERRÌ65536Ö0
+SIG_HOLDÌ65536Ö0
+SIG_IGNÌ65536Ö0
+SIG_SETMASKÌ65536Ö0
+SIG_UNBLOCKÌ65536Ö0
+SINGÌ65536Ö0
+SI_ASYNCIOÌ65536Ö0
+SI_ASYNCIOÌ4Îanon_enum_22Ö0
+SI_ASYNCNLÌ65536Ö0
+SI_ASYNCNLÌ4Îanon_enum_22Ö0
+SI_KERNELÌ65536Ö0
+SI_KERNELÌ4Îanon_enum_22Ö0
+SI_MESGQÌ65536Ö0
+SI_MESGQÌ4Îanon_enum_22Ö0
+SI_QUEUEÌ65536Ö0
+SI_QUEUEÌ4Îanon_enum_22Ö0
+SI_SIGIOÌ65536Ö0
+SI_SIGIOÌ4Îanon_enum_22Ö0
+SI_TIMERÌ65536Ö0
+SI_TIMERÌ4Îanon_enum_22Ö0
+SI_TKILLÌ65536Ö0
+SI_TKILLÌ4Îanon_enum_22Ö0
+SI_USERÌ65536Ö0
+SI_USERÌ4Îanon_enum_22Ö0
+SSIZE_MAXÌ65536Ö0
+SS_DISABLEÌ65536Ö0
+SS_DISABLEÌ4Îanon_enum_34Ö0
+SS_ONSTACKÌ65536Ö0
+SS_ONSTACKÌ4Îanon_enum_34Ö0
+STDC_HEADERSÌ65536Ö0
+SV_INTERRUPTÌ65536Ö0
+SV_ONSTACKÌ65536Ö0
+SV_RESETHANDÌ65536Ö0
+TIMER_ABSTIMEÌ65536Ö0
+TLOSSÌ65536Ö0
+TMP_MAXÌ65536Ö0
+TRAP_BRKPTÌ65536Ö0
+TRAP_BRKPTÌ4Îanon_enum_27Ö0
+TRAP_TRACEÌ65536Ö0
+TRAP_TRACEÌ4Îanon_enum_27Ö0
+TTY_NAME_MAXÌ65536Ö0
+UCHAR_MAXÌ65536Ö0
+UINT_MAXÌ65536Ö0
+ULLONG_MAXÌ65536Ö0
+ULONG_LONG_MAXÌ65536Ö0
+ULONG_MAXÌ65536Ö0
+UNDERFLOWÌ65536Ö0
+USHRT_MAXÌ65536Ö0
+WCHAR_MAXÌ65536Ö0
+WCHAR_MINÌ65536Ö0
+WCONTINUEDÌ65536Ö0
+WEOFÌ65536Ö0
+WEXITEDÌ65536Ö0
+WEXITSTATUSÌ131072Í(status)Ö0
+WIFCONTINUEDÌ131072Í(status)Ö0
+WIFEXITEDÌ131072Í(status)Ö0
+WIFSIGNALEDÌ131072Í(status)Ö0
+WIFSTOPPEDÌ131072Í(status)Ö0
+WNOHANGÌ65536Ö0
+WNOWAITÌ65536Ö0
+WORD_BITÌ65536Ö0
+WSTOPPEDÌ65536Ö0
+WSTOPSIGÌ131072Í(status)Ö0
+WTERMSIGÌ131072Í(status)Ö0
+WUNTRACEDÌ65536Ö0
+XATTR_LIST_MAXÌ65536Ö0
+XATTR_NAME_MAXÌ65536Ö0
+XATTR_SIZE_MAXÌ65536Ö0
+X_TLOSSÌ65536Ö0
+a64lÌ1024Í(const char *__s)Ö0Ïlong int
+abortÌ1024Í(void)Ö0Ïvoid
+absÌ1024Í(int __x)Ö0Ïint
+acosÌ1024Í(double __x)Ö0Ïdouble
+acosfÌ1024Í(float __x)Ö0Ïfloat
+acoshÌ1024Í(double __x)Ö0Ïdouble
+acoshfÌ1024Í(float __x)Ö0Ïfloat
+acoshlÌ1024Í(long double __x)Ö0Ïlong double
+acoslÌ1024Í(long double __x)Ö0Ïlong double
+allocaÌ1024Í(size_t __size)Ö0Ïvoid *
+allocaÌ65536Ö0
+anon_enum_12Ì2Ö0
+anon_enum_13Ì2Ö0
+anon_enum_22Ì2Ö0
+anon_enum_23Ì2Ö0
+anon_enum_24Ì2Ö0
+anon_enum_25Ì2Ö0
+anon_enum_26Ì2Ö0
+anon_enum_27Ì2Ö0
+anon_enum_28Ì2Ö0
+anon_enum_29Ì2Ö0
+anon_enum_3Ì2Ö0
+anon_enum_32Ì2Ö0
+anon_enum_34Ì2Ö0
+anon_enum_35Ì2Ö0
+anon_enum_4Ì2Ö0
+anon_enum_5Ì2Ö0
+anon_enum_60Ì2Ö0
+anon_enum_8Ì2Ö0
+asctimeÌ1024Í(const struct tm *__tp)Ö0Ïchar *
+asctime_rÌ1024Í(const struct tm * __tp, char * __buf)Ö0Ïchar *
+asinÌ1024Í(double __x)Ö0Ïdouble
+asinfÌ1024Í(float __x)Ö0Ïfloat
+asinhÌ1024Í(double __x)Ö0Ïdouble
+asinhfÌ1024Í(float __x)Ö0Ïfloat
+asinhlÌ1024Í(long double __x)Ö0Ïlong double
+asinlÌ1024Í(long double __x)Ö0Ïlong double
+asprintfÌ1024Í(char ** __ptr, const char * __fmt, ...)Ö0Ïint
+assertÌ131072Í(expr)Ö0
+assert_perrorÌ131072Í(errnum)Ö0
+atanÌ1024Í(double __x)Ö0Ïdouble
+atan2Ì1024Í(double __y, double __x)Ö0Ïdouble
+atan2fÌ1024Í(float __y, float __x)Ö0Ïfloat
+atan2lÌ1024Í(long double __y, long double __x)Ö0Ïlong double
+atanfÌ1024Í(float __x)Ö0Ïfloat
+atanhÌ1024Í(double __x)Ö0Ïdouble
+atanhfÌ1024Í(float __x)Ö0Ïfloat
+atanhlÌ1024Í(long double __x)Ö0Ïlong double
+atanlÌ1024Í(long double __x)Ö0Ïlong double
+atexitÌ1024Í(void (*__func) (void))Ö0Ïint
+atofÌ1024Í(const char *__nptr)Ö0Ïdouble
+atoiÌ1024Í(const char *__nptr)Ö0Ïint
+atolÌ1024Í(const char *__nptr)Ö0Ïlong int
+atollÌ1024Í(const char *__nptr)Ö0Ïlong long int
+basenameÌ1024Í(const char *__filename)Ö0Ïchar *
+bcmpÌ1024Í(const void *__s1, const void *__s2, size_t __n)Ö0Ïint
+bcopyÌ1024Í(const void *__src, void *__dest, size_t __n)Ö0Ïvoid
+be16tohÌ131072Í(x)Ö0
+be32tohÌ131072Í(x)Ö0
+be64tohÌ131072Í(x)Ö0
+blkcnt64_tÌ4096Ö0Ï__blkcnt64_t
+blkcnt_tÌ4096Ö0Ï__blkcnt_t
+blksize_tÌ4096Ö0Ï__blksize_t
+boolÌ65536Ö0
+bsd_signalÌ1024Í(int __sig, __sighandler_t __handler)Ö0Ï__sighandler_t
+bsearchÌ1024Í(const void *__key, const void *__base, size_t __nmemb, size_t __size, __compar_fn_t __compar)Ö0Ïvoid *
+btowcÌ1024Í(int __c)Ö0Ïwint_t
+bzeroÌ1024Í(void *__s, size_t __n)Ö0Ïvoid
+cabsÌ1024Í(double _Complex __z)Ö0Ïdouble
+cabsfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cabslÌ1024Í(long double _Complex __z)Ö0Ïlong double
+cacosÌ1024Í(double _Complex __z)Ö0Ïdouble
+cacosfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cacoshÌ1024Í(double _Complex __z)Ö0Ïdouble
+cacoshfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cacoshlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+cacoslÌ1024Í(long double _Complex __z)Ö0Ïlong double
+caddr_tÌ4096Ö0Ï__caddr_t
+callocÌ1024Í(size_t __nmemb, size_t __size)Ö0Ïvoid *
+canonicalize_file_nameÌ1024Í(const char *__name)Ö0Ïchar *
+cargÌ1024Í(double _Complex __z)Ö0Ïdouble
+cargfÌ1024Í(float _Complex __z)Ö0Ïfloat
+carglÌ1024Í(long double _Complex __z)Ö0Ïlong double
+casinÌ1024Í(double _Complex __z)Ö0Ïdouble
+casinfÌ1024Í(float _Complex __z)Ö0Ïfloat
+casinhÌ1024Í(double _Complex __z)Ö0Ïdouble
+casinhfÌ1024Í(float _Complex __z)Ö0Ïfloat
+casinhlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+casinlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+catanÌ1024Í(double _Complex __z)Ö0Ïdouble
+catanfÌ1024Í(float _Complex __z)Ö0Ïfloat
+catanhÌ1024Í(double _Complex __z)Ö0Ïdouble
+catanhfÌ1024Í(float _Complex __z)Ö0Ïfloat
+catanhlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+catanlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+cbrtÌ1024Í(double __x)Ö0Ïdouble
+cbrtfÌ1024Í(float __x)Ö0Ïfloat
+cbrtlÌ1024Í(long double __x)Ö0Ïlong double
+ccosÌ1024Í(double _Complex __z)Ö0Ïdouble
+ccosfÌ1024Í(float _Complex __z)Ö0Ïfloat
+ccoshÌ1024Í(double _Complex __z)Ö0Ïdouble
+ccoshfÌ1024Í(float _Complex __z)Ö0Ïfloat
+ccoshlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+ccoslÌ1024Í(long double _Complex __z)Ö0Ïlong double
+ceilÌ1024Í(double __x)Ö0Ïdouble
+ceilfÌ1024Í(float __x)Ö0Ïfloat
+ceillÌ1024Í(long double __x)Ö0Ïlong double
+cexpÌ1024Í(double _Complex __z)Ö0Ïdouble
+cexpfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cexplÌ1024Í(long double _Complex __z)Ö0Ïlong double
+cfreeÌ1024Í(void *__ptr)Ö0Ïvoid
+cimagÌ1024Í(double _Complex __z)Ö0Ïdouble
+cimagfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cimaglÌ1024Í(long double _Complex __z)Ö0Ïlong double
+clearenvÌ1024Í(void)Ö0Ïint
+clearerrÌ1024Í(FILE *__stream)Ö0Ïvoid
+clearerr_unlockedÌ1024Í(FILE *__stream)Ö0Ïvoid
+clockÌ1024Í(void)Ö0Ïclock_t
+clock_getcpuclockidÌ1024Í(pid_t __pid, clockid_t *__clock_id)Ö0Ïint
+clock_getresÌ1024Í(clockid_t __clock_id, struct timespec *__res)Ö0Ïint
+clock_gettimeÌ1024Í(clockid_t __clock_id, struct timespec *__tp)Ö0Ïint
+clock_nanosleepÌ1024Í(clockid_t __clock_id, int __flags, const struct timespec *__req, struct timespec *__rem)Ö0Ïint
+clock_settimeÌ1024Í(clockid_t __clock_id, const struct timespec *__tp)Ö0Ïint
+clock_tÌ4096Ö0Ï__clock_t
+clockid_tÌ4096Ö0Ï__clockid_t
+clogÌ1024Í(double _Complex __z)Ö0Ïdouble
+clog10Ì1024Í(double _Complex __z)Ö0Ïdouble
+clog10fÌ1024Í(float _Complex __z)Ö0Ïfloat
+clog10lÌ1024Í(long double _Complex __z)Ö0Ïlong double
+clogfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cloglÌ1024Í(long double _Complex __z)Ö0Ïlong double
+comparison_fn_tÌ4096Ö0Ï__compar_fn_t
+complexÌ65536Ö0
+conjÌ1024Í(double _Complex __z)Ö0Ïdouble
+conjfÌ1024Í(float _Complex __z)Ö0Ïfloat
+conjlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+cookie_close_function_tÌ4096Ö0Ï__io_close_fn
+cookie_io_functions_tÌ4096Ö0Ï_IO_cookie_io_functions_t
+cookie_read_function_tÌ4096Ö0Ï__io_read_fn
+cookie_seek_function_tÌ4096Ö0Ï__io_seek_fn
+cookie_write_function_tÌ4096Ö0Ï__io_write_fn
+copysignÌ1024Í(double __x, double __y)Ö0Ïdouble
+copysignfÌ1024Í(float __x, float __y)Ö0Ïfloat
+copysignlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+cosÌ1024Í(double __x)Ö0Ïdouble
+cosfÌ1024Í(float __x)Ö0Ïfloat
+coshÌ1024Í(double __x)Ö0Ïdouble
+coshfÌ1024Í(float __x)Ö0Ïfloat
+coshlÌ1024Í(long double __x)Ö0Ïlong double
+coslÌ1024Í(long double __x)Ö0Ïlong double
+cpowÌ1024Í(double _Complex __x, double _Complex __y)Ö0Ïdouble
+cpowfÌ1024Í(float _Complex __x, float _Complex __y)Ö0Ïfloat
+cpowlÌ1024Í(long double _Complex __x, long double _Complex __y)Ö0Ïlong double
+cprojÌ1024Í(double _Complex __z)Ö0Ïdouble
+cprojfÌ1024Í(float _Complex __z)Ö0Ïfloat
+cprojlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+crealÌ1024Í(double _Complex __z)Ö0Ïdouble
+crealfÌ1024Í(float _Complex __z)Ö0Ïfloat
+creallÌ1024Í(long double _Complex __z)Ö0Ïlong double
+csinÌ1024Í(double _Complex __z)Ö0Ïdouble
+csinfÌ1024Í(float _Complex __z)Ö0Ïfloat
+csinhÌ1024Í(double _Complex __z)Ö0Ïdouble
+csinhfÌ1024Í(float _Complex __z)Ö0Ïfloat
+csinhlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+csinlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+csqrtÌ1024Í(double _Complex __z)Ö0Ïdouble
+csqrtfÌ1024Í(float _Complex __z)Ö0Ïfloat
+csqrtlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+ctanÌ1024Í(double _Complex __z)Ö0Ïdouble
+ctanfÌ1024Í(float _Complex __z)Ö0Ïfloat
+ctanhÌ1024Í(double _Complex __z)Ö0Ïdouble
+ctanhfÌ1024Í(float _Complex __z)Ö0Ïfloat
+ctanhlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+ctanlÌ1024Í(long double _Complex __z)Ö0Ïlong double
+ctermidÌ1024Í(char *__s)Ö0Ïchar *
+ctimeÌ1024Í(const time_t *__timer)Ö0Ïchar *
+ctime_rÌ1024Í(const time_t * __timer, char * __buf)Ö0Ïchar *
+cuseridÌ1024Í(char *__s)Ö0Ïchar *
+daddr_tÌ4096Ö0Ï__daddr_t
+dev_tÌ4096Ö0Ï__dev_t
+difftimeÌ1024Í(time_t __time1, time_t __time0)Ö0Ïdouble
+divÌ1024Í(int __numer, int __denom)Ö0Ïdiv_t
+div_tÌ4096Ö0Ïanon_struct_56
+double_tÌ4096Ö0Ïlong
+dprintfÌ1024Í(int __fd, const char * __fmt, ...)Ö0Ïint
+drand48Ì1024Í(void)Ö0Ïdouble
+drand48_rÌ1024Í(struct drand48_data * __buffer, double * __result)Ö0Ïint
+dremÌ1024Í(double __x, double __y)Ö0Ïdouble
+dremfÌ1024Í(float __x, float __y)Ö0Ïfloat
+dremlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+duplocaleÌ1024Í(__locale_t __dataset)Ö0Ï__locale_t
+dysizeÌ1024Í(int __year)Ö0Ïint
+ecvtÌ1024Í(double __value, int __ndigit, int * __decpt, int * __sign)Ö0Ïchar *
+ecvt_rÌ1024Í(double __value, int __ndigit, int * __decpt, int * __sign, char * __buf, size_t __len)Ö0Ïint
+erand48Ì1024Í(unsigned short int __xsubi[3])Ö0Ïdouble
+erand48_rÌ1024Í(unsigned short int __xsubi[3], struct drand48_data * __buffer, double * __result)Ö0Ïint
+erfÌ1024Í(double)Ö0Ïdouble
+erfcÌ1024Í(double)Ö0Ïdouble
+erfcfÌ1024Í(float)Ö0Ïfloat
+erfclÌ1024Í(long double)Ö0Ïlong double
+erffÌ1024Í(float)Ö0Ïfloat
+erflÌ1024Í(long double)Ö0Ïlong double
+errnoÌ65536Ö0
+error_tÌ4096Ö0Ïint
+exitÌ1024Í(int __status)Ö0Ïvoid
+expÌ1024Í(double __x)Ö0Ïdouble
+exp10Ì1024Í(double __x)Ö0Ïdouble
+exp10fÌ1024Í(float __x)Ö0Ïfloat
+exp10lÌ1024Í(long double __x)Ö0Ïlong double
+exp2Ì1024Í(double __x)Ö0Ïdouble
+exp2fÌ1024Í(float __x)Ö0Ïfloat
+exp2lÌ1024Í(long double __x)Ö0Ïlong double
+expfÌ1024Í(float __x)Ö0Ïfloat
+explÌ1024Í(long double __x)Ö0Ïlong double
+expm1Ì1024Í(double __x)Ö0Ïdouble
+expm1fÌ1024Í(float __x)Ö0Ïfloat
+expm1lÌ1024Í(long double __x)Ö0Ïlong double
+fabsÌ1024Í(double __x)Ö0Ïdouble
+fabsfÌ1024Í(float __x)Ö0Ïfloat
+fabslÌ1024Í(long double __x)Ö0Ïlong double
+falseÌ65536Ö0
+fcloseÌ1024Í(FILE *__stream)Ö0Ïint
+fcloseallÌ1024Í(void)Ö0Ïint
+fcvtÌ1024Í(double __value, int __ndigit, int * __decpt, int * __sign)Ö0Ïchar *
+fcvt_rÌ1024Í(double __value, int __ndigit, int * __decpt, int * __sign, char * __buf, size_t __len)Ö0Ïint
+fd_maskÌ4096Ö0Ï__fd_mask
+fd_setÌ4096Ö0Ïanon_struct_59
+fdimÌ1024Í(double __x, double __y)Ö0Ïdouble
+fdimfÌ1024Í(float __x, float __y)Ö0Ïfloat
+fdimlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+fdopenÌ1024Í(int __fd, const char *__modes)Ö0ÏFILE *
+feclearexceptÌ1024Í(int __excepts)Ö0Ïint
+fedisableexceptÌ1024Í(int __excepts)Ö0Ïint
+feenableexceptÌ1024Í(int __excepts)Ö0Ïint
+fegetenvÌ1024Í(fenv_t *__envp)Ö0Ïint
+fegetexceptÌ1024Í(void)Ö0Ïint
+fegetexceptflagÌ1024Í(fexcept_t *__flagp, int __excepts)Ö0Ïint
+fegetroundÌ1024Í(void)Ö0Ïint
+feholdexceptÌ1024Í(fenv_t *__envp)Ö0Ïint
+fenv_tÌ4096Ö0Ïanon_struct_6
+feofÌ1024Í(FILE *__stream)Ö0Ïint
+feof_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+feraiseexceptÌ1024Í(int __excepts)Ö0Ïint
+ferrorÌ1024Í(FILE *__stream)Ö0Ïint
+ferror_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+fesetenvÌ1024Í(const fenv_t *__envp)Ö0Ïint
+fesetexceptflagÌ1024Í(const fexcept_t *__flagp, int __excepts)Ö0Ïint
+fesetroundÌ1024Í(int __rounding_direction)Ö0Ïint
+fetestexceptÌ1024Í(int __excepts)Ö0Ïint
+feupdateenvÌ1024Í(const fenv_t *__envp)Ö0Ïint
+fexcept_tÌ4096Ö0Ïshort
+fflushÌ1024Í(FILE *__stream)Ö0Ïint
+fflush_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+ffsÌ1024Í(int __i)Ö0Ïint
+ffslÌ1024Í(long int __l)Ö0Ïint
+fgetcÌ1024Í(FILE *__stream)Ö0Ïint
+fgetc_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+fgetposÌ1024Í(FILE * __stream, fpos_t * __pos)Ö0Ïint
+fgetpos64Ì1024Í(FILE * __stream, fpos64_t * __pos)Ö0Ïint
+fgetsÌ1024Í(char * __s, int __n, FILE * __stream)Ö0Ïchar *
+fgets_unlockedÌ1024Í(char * __s, int __n, FILE * __stream)Ö0Ïchar *
+fgetwcÌ1024Í(__FILE *__stream)Ö0Ïwint_t
+fgetwc_unlockedÌ1024Í(__FILE *__stream)Ö0Ïwint_t
+fgetwsÌ1024Í(wchar_t * __ws, int __n, __FILE * __stream)Ö0Ïwchar_t *
+fgetws_unlockedÌ1024Í(wchar_t * __ws, int __n, __FILE * __stream)Ö0Ïwchar_t *
+filenoÌ1024Í(FILE *__stream)Ö0Ïint
+fileno_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+finiteÌ1024Í(double __value)Ö0Ïint
+finitefÌ1024Í(float __value)Ö0Ïint
+finitelÌ1024Í(long double __value)Ö0Ïint
+float_tÌ4096Ö0Ïlong
+flockfileÌ1024Í(FILE *__stream)Ö0Ïvoid
+floorÌ1024Í(double __x)Ö0Ïdouble
+floorfÌ1024Í(float __x)Ö0Ïfloat
+floorlÌ1024Í(long double __x)Ö0Ïlong double
+fmaÌ1024Í(double __x, double __y, double __z)Ö0Ïdouble
+fmafÌ1024Í(float __x, float __y, float __z)Ö0Ïfloat
+fmalÌ1024Í(long double __x, long double __y, long double __z)Ö0Ïlong double
+fmaxÌ1024Í(double __x, double __y)Ö0Ïdouble
+fmaxfÌ1024Í(float __x, float __y)Ö0Ïfloat
+fmaxlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+fmemopenÌ1024Í(void *__s, size_t __len, const char *__modes)Ö0ÏFILE *
+fminÌ1024Í(double __x, double __y)Ö0Ïdouble
+fminfÌ1024Í(float __x, float __y)Ö0Ïfloat
+fminlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+fmodÌ1024Í(double __x, double __y)Ö0Ïdouble
+fmodfÌ1024Í(float __x, float __y)Ö0Ïfloat
+fmodlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+fopenÌ1024Í(const char * __filename, const char * __modes)Ö0ÏFILE *
+fopen64Ì1024Í(const char * __filename, const char * __modes)Ö0ÏFILE *
+fopencookieÌ1024Í(void * __magic_cookie, const char * __modes, _IO_cookie_io_functions_t __io_funcs)Ö0ÏFILE *
+fpclassifyÌ131072Í(x)Ö0
+fpos64_tÌ4096Ö0Ï_G_fpos64_t
+fpos_tÌ4096Ö0Ï_G_fpos_t
+fpregset_tÌ4096Ö0Ï_libc_fpstate
+fprintfÌ1024Í(FILE * __stream, const char * __format, ...)Ö0Ïint
+fputcÌ1024Í(int __c, FILE *__stream)Ö0Ïint
+fputc_unlockedÌ1024Í(int __c, FILE *__stream)Ö0Ïint
+fputsÌ1024Í(const char * __s, FILE * __stream)Ö0Ïint
+fputs_unlockedÌ1024Í(const char * __s, FILE * __stream)Ö0Ïint
+fputwcÌ1024Í(wchar_t __wc, __FILE *__stream)Ö0Ïwint_t
+fputwc_unlockedÌ1024Í(wchar_t __wc, __FILE *__stream)Ö0Ïwint_t
+fputwsÌ1024Í(const wchar_t * __ws, __FILE * __stream)Ö0Ïint
+fputws_unlockedÌ1024Í(const wchar_t * __ws, __FILE * __stream)Ö0Ïint
+freadÌ1024Í(void * __ptr, size_t __size, size_t __n, FILE * __stream)Ö0Ïsize_t
+fread_unlockedÌ1024Í(void * __ptr, size_t __size, size_t __n, FILE * __stream)Ö0Ïsize_t
+freeÌ1024Í(void *__ptr)Ö0Ïvoid
+freelocaleÌ1024Í(__locale_t __dataset)Ö0Ïvoid
+freopenÌ1024Í(const char * __filename, const char * __modes, FILE * __stream)Ö0ÏFILE *
+freopen64Ì1024Í(const char * __filename, const char * __modes, FILE * __stream)Ö0ÏFILE *
+frexpÌ1024Í(double __x, int *__exponent)Ö0Ïdouble
+frexpfÌ1024Í(float __x, int *__exponent)Ö0Ïfloat
+frexplÌ1024Í(long double __x, int *__exponent)Ö0Ïlong double
+fsblkcnt64_tÌ4096Ö0Ï__fsblkcnt64_t
+fsblkcnt_tÌ4096Ö0Ï__fsblkcnt_t
+fscanfÌ1024Í(FILE * __stream, const char * __format, ...)Ö0Ïint
+fseekÌ1024Í(FILE *__stream, long int __off, int __whence)Ö0Ïint
+fseekoÌ1024Í(FILE *__stream, __off_t __off, int __whence)Ö0Ïint
+fseeko64Ì1024Í(FILE *__stream, __off64_t __off, int __whence)Ö0Ïint
+fsetposÌ1024Í(FILE *__stream, const fpos_t *__pos)Ö0Ïint
+fsetpos64Ì1024Í(FILE *__stream, const fpos64_t *__pos)Ö0Ïint
+fsfilcnt64_tÌ4096Ö0Ï__fsfilcnt64_t
+fsfilcnt_tÌ4096Ö0Ï__fsfilcnt_t
+fsid_tÌ4096Ö0Ï__fsid_t
+ftellÌ1024Í(FILE *__stream)Ö0Ïlong int
+ftelloÌ1024Í(FILE *__stream)Ö0Ï__off_t
+ftello64Ì1024Í(FILE *__stream)Ö0Ï__off64_t
+ftrylockfileÌ1024Í(FILE *__stream)Ö0Ïint
+funlockfileÌ1024Í(FILE *__stream)Ö0Ïvoid
+fwideÌ1024Í(__FILE *__fp, int __mode)Ö0Ïint
+fwprintfÌ1024Í(__FILE * __stream, const wchar_t * __format, ...)Ö0Ïint
+fwriteÌ1024Í(const void * __ptr, size_t __size, size_t __n, FILE * __s)Ö0Ïsize_t
+fwrite_unlockedÌ1024Í(const void * __ptr, size_t __size, size_t __n, FILE * __stream)Ö0Ïsize_t
+fwscanfÌ1024Í(__FILE * __stream, const wchar_t * __format, ...)Ö0Ïint
+gammaÌ1024Í(double)Ö0Ïdouble
+gammafÌ1024Í(float)Ö0Ïfloat
+gammalÌ1024Í(long double)Ö0Ïlong double
+gcvtÌ1024Í(double __value, int __ndigit, char *__buf)Ö0Ïchar *
+getcÌ1024Í(FILE *__stream)Ö0Ïint
+getcÌ131072Í(_fp)Ö0
+getc_unlockedÌ1024Í(FILE *__stream)Ö0Ïint
+getcharÌ1024Í(void)Ö0Ïint
+getchar_unlockedÌ1024Í(void)Ö0Ïint
+getdateÌ1024Í(const char *__string)Ö0Ïstruct tm *
+getdate_rÌ1024Í(const char * __string, struct tm * __resbufp)Ö0Ïint
+getdelimÌ1024Í(char ** __lineptr, size_t * __n, int __delimiter, FILE * __stream)Ö0Ï__ssize_t
+getenvÌ1024Í(const char *__name)Ö0Ïchar *
+getlineÌ1024Í(char ** __lineptr, size_t * __n, FILE * __stream)Ö0Ï__ssize_t
+getloadavgÌ1024Í(double __loadavg[], int __nelem)Ö0Ïint
+getptÌ1024Í(void)Ö0Ïint
+getsÌ1024Í(char *__s)Ö0Ïchar *
+getsuboptÌ1024Í(char ** __optionp, char *const * __tokens, char ** __valuep)Ö0Ïint
+getwÌ1024Í(FILE *__stream)Ö0Ïint
+getwcÌ1024Í(__FILE *__stream)Ö0Ïwint_t
+getwc_unlockedÌ1024Í(__FILE *__stream)Ö0Ïwint_t
+getwcharÌ1024Í(void)Ö0Ïwint_t
+getwchar_unlockedÌ1024Í(void)Ö0Ïwint_t
+gid_tÌ4096Ö0Ï__gid_t
+gmtimeÌ1024Í(const time_t *__timer)Ö0Ïstruct tm *
+gmtime_rÌ1024Í(const time_t * __timer, struct tm * __tp)Ö0Ïstruct tm *
+grantptÌ1024Í(int __fd)Ö0Ïint
+greg_tÌ4096Ö0Ïint
+gregset_tÌ4096Ö0Ïgreg_t
+gsignalÌ1024Í(int __sig)Ö0Ïint
+htobe16Ì131072Í(x)Ö0
+htobe32Ì131072Í(x)Ö0
+htobe64Ì131072Í(x)Ö0
+htole16Ì131072Í(x)Ö0
+htole32Ì131072Í(x)Ö0
+htole64Ì131072Í(x)Ö0
+hypotÌ1024Í(double __x, double __y)Ö0Ïdouble
+hypotfÌ1024Í(float __x, float __y)Ö0Ïfloat
+hypotlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+id_tÌ4096Ö0Ï__id_t
+ilogbÌ1024Í(double __x)Ö0Ïint
+ilogbfÌ1024Í(float __x)Ö0Ïint
+ilogblÌ1024Í(long double __x)Ö0Ïint
+imaxabsÌ1024Í(intmax_t __n)Ö0Ïintmax_t
+imaxdivÌ1024Í(intmax_t __numer, intmax_t __denom)Ö0Ïimaxdiv_t
+imaxdiv_tÌ4096Ö0Ïanon_struct_7
+indexÌ1024Í(const char *__s, int __c)Ö0Ïchar *
+initstateÌ1024Í(unsigned int __seed, char *__statebuf, size_t __statelen)Ö0Ïchar *
+initstate_rÌ1024Í(unsigned int __seed, char * __statebuf, size_t __statelen, struct random_data * __buf)Ö0Ïint
+ino64_tÌ4096Ö0Ï__ino64_t
+ino_tÌ4096Ö0Ï__ino_t
+int16_tÌ4096Ö0Ïshort
+int32_tÌ4096Ö0Ïint
+int64_tÌ4096Ö0Ïlong
+int8_tÌ4096Ö0Ïchar
+int_fast16_tÌ4096Ö0Ïint
+int_fast32_tÌ4096Ö0Ïint
+int_fast64_tÌ4096Ö0Ïlong
+int_fast8_tÌ4096Ö0Ïchar
+int_least16_tÌ4096Ö0Ïshort
+int_least32_tÌ4096Ö0Ïint
+int_least64_tÌ4096Ö0Ïlong
+int_least8_tÌ4096Ö0Ïchar
+intmax_tÌ4096Ö0Ïlong
+intptr_tÌ4096Ö0Ïint
+isalnumÌ1024Í(int)Ö0Ïint
+isalnum_lÌ1024Í(int, __locale_t)Ö0Ïint
+isalphaÌ1024Í(int)Ö0Ïint
+isalpha_lÌ1024Í(int, __locale_t)Ö0Ïint
+isasciiÌ1024Í(int __c)Ö0Ïint
+isblankÌ1024Í(int)Ö0Ïint
+isblank_lÌ1024Í(int, __locale_t)Ö0Ïint
+iscntrlÌ1024Í(int)Ö0Ïint
+iscntrl_lÌ1024Í(int, __locale_t)Ö0Ïint
+isctypeÌ1024Í(int __c, int __mask)Ö0Ïint
+isdigitÌ1024Í(int)Ö0Ïint
+isdigit_lÌ1024Í(int, __locale_t)Ö0Ïint
+isfiniteÌ131072Í(x)Ö0
+isgraphÌ1024Í(int)Ö0Ïint
+isgraph_lÌ1024Í(int, __locale_t)Ö0Ïint
+isgreaterÌ131072Í(x,y)Ö0
+isgreaterequalÌ131072Í(x,y)Ö0
+isinfÌ1024Í(double __value)Ö0Ïint
+isinfÌ131072Í(x)Ö0
+isinffÌ1024Í(float __value)Ö0Ïint
+isinflÌ1024Í(long double __value)Ö0Ïint
+islessÌ131072Í(x,y)Ö0
+islessequalÌ131072Í(x,y)Ö0
+islessgreaterÌ131072Í(x,y)Ö0
+islowerÌ1024Í(int)Ö0Ïint
+islower_lÌ1024Í(int, __locale_t)Ö0Ïint
+isnanÌ1024Í(double __value)Ö0Ïint
+isnanÌ131072Í(x)Ö0
+isnanfÌ1024Í(float __value)Ö0Ïint
+isnanlÌ1024Í(long double __value)Ö0Ïint
+isnormalÌ131072Í(x)Ö0
+isprintÌ1024Í(int)Ö0Ïint
+isprint_lÌ1024Í(int, __locale_t)Ö0Ïint
+ispunctÌ1024Í(int)Ö0Ïint
+ispunct_lÌ1024Í(int, __locale_t)Ö0Ïint
+isspaceÌ1024Í(int)Ö0Ïint
+isspace_lÌ1024Í(int, __locale_t)Ö0Ïint
+isunorderedÌ131072Í(u,v)Ö0
+isupperÌ1024Í(int)Ö0Ïint
+isupper_lÌ1024Í(int, __locale_t)Ö0Ïint
+iswalnumÌ1024Í(wint_t __wc)Ö0Ïint
+iswalnum_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswalphaÌ1024Í(wint_t __wc)Ö0Ïint
+iswalpha_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswblankÌ1024Í(wint_t __wc)Ö0Ïint
+iswblank_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswcntrlÌ1024Í(wint_t __wc)Ö0Ïint
+iswcntrl_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswctypeÌ1024Í(wint_t __wc, wctype_t __desc)Ö0Ïint
+iswctype_lÌ1024Í(wint_t __wc, wctype_t __desc, __locale_t __locale)Ö0Ïint
+iswdigitÌ1024Í(wint_t __wc)Ö0Ïint
+iswdigit_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswgraphÌ1024Í(wint_t __wc)Ö0Ïint
+iswgraph_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswlowerÌ1024Í(wint_t __wc)Ö0Ïint
+iswlower_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswprintÌ1024Í(wint_t __wc)Ö0Ïint
+iswprint_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswpunctÌ1024Í(wint_t __wc)Ö0Ïint
+iswpunct_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswspaceÌ1024Í(wint_t __wc)Ö0Ïint
+iswspace_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswupperÌ1024Í(wint_t __wc)Ö0Ïint
+iswupper_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+iswxdigitÌ1024Í(wint_t __wc)Ö0Ïint
+iswxdigit_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïint
+isxdigitÌ1024Í(int)Ö0Ïint
+isxdigit_lÌ1024Í(int, __locale_t)Ö0Ïint
+j0Ì1024Í(double)Ö0Ïdouble
+j0fÌ1024Í(float)Ö0Ïfloat
+j0lÌ1024Í(long double)Ö0Ïlong double
+j1Ì1024Í(double)Ö0Ïdouble
+j1fÌ1024Í(float)Ö0Ïfloat
+j1lÌ1024Í(long double)Ö0Ïlong double
+jmp_bufÌ4096Ö0Ï__jmp_buf_tag
+jnÌ1024Í(int, double)Ö0Ïdouble
+jnfÌ1024Í(int, float)Ö0Ïfloat
+jnlÌ1024Í(int, long double)Ö0Ïlong double
+jrand48Ì1024Í(unsigned short int __xsubi[3])Ö0Ïlong int
+jrand48_rÌ1024Í(unsigned short int __xsubi[3], struct drand48_data * __buffer, long int * __result)Ö0Ïint
+key_tÌ4096Ö0Ï__key_t
+killÌ1024Í(__pid_t __pid, int __sig)Ö0Ïint
+killpgÌ1024Í(__pid_t __pgrp, int __sig)Ö0Ïint
+l64aÌ1024Í(long int __n)Ö0Ïchar *
+labsÌ1024Í(long int __x)Ö0Ïlong int
+lcong48Ì1024Í(unsigned short int __param[7])Ö0Ïvoid
+lcong48_rÌ1024Í(unsigned short int __param[7], struct drand48_data *__buffer)Ö0Ïint
+ldexpÌ1024Í(double __x, int __exponent)Ö0Ïdouble
+ldexpfÌ1024Í(float __x, int __exponent)Ö0Ïfloat
+ldexplÌ1024Í(long double __x, int __exponent)Ö0Ïlong double
+ldivÌ1024Í(long int __numer, long int __denom)Ö0Ïldiv_t
+ldiv_tÌ4096Ö0Ïanon_struct_57
+le16tohÌ131072Í(x)Ö0
+le32tohÌ131072Í(x)Ö0
+le64tohÌ131072Í(x)Ö0
+lgammaÌ1024Í(double)Ö0Ïdouble
+lgamma_rÌ1024Í(double, int *__signgamp)Ö0Ïdouble
+lgammafÌ1024Í(float)Ö0Ïfloat
+lgammaf_rÌ1024Í(float, int *__signgamp)Ö0Ïfloat
+lgammalÌ1024Í(long double)Ö0Ïlong double
+lgammal_rÌ1024Í(long double, int *__signgamp)Ö0Ïlong double
+llabsÌ1024Í(long long int __x)Ö0Ïlong long int
+lldivÌ1024Í(long long int __numer, long long int __denom)Ö0Ïlldiv_t
+lldiv_tÌ4096Ö0Ïanon_struct_58
+llrintÌ1024Í(double __x)Ö0Ïlong long int
+llrintfÌ1024Í(float __x)Ö0Ïlong long int
+llrintlÌ1024Í(long double __x)Ö0Ïlong long int
+llroundÌ1024Í(double __x)Ö0Ïlong long int
+llroundfÌ1024Í(float __x)Ö0Ïlong long int
+llroundlÌ1024Í(long double __x)Ö0Ïlong long int
+locale_tÌ4096Ö0Ï__locale_t
+localeconvÌ1024Í(void)Ö0Ïstruct lconv *
+localtimeÌ1024Í(const time_t *__timer)Ö0Ïstruct tm *
+localtime_rÌ1024Í(const time_t * __timer, struct tm * __tp)Ö0Ïstruct tm *
+loff_tÌ4096Ö0Ï__loff_t
+logÌ1024Í(double __x)Ö0Ïdouble
+log10Ì1024Í(double __x)Ö0Ïdouble
+log10fÌ1024Í(float __x)Ö0Ïfloat
+log10lÌ1024Í(long double __x)Ö0Ïlong double
+log1pÌ1024Í(double __x)Ö0Ïdouble
+log1pfÌ1024Í(float __x)Ö0Ïfloat
+log1plÌ1024Í(long double __x)Ö0Ïlong double
+log2Ì1024Í(double __x)Ö0Ïdouble
+log2fÌ1024Í(float __x)Ö0Ïfloat
+log2lÌ1024Í(long double __x)Ö0Ïlong double
+logbÌ1024Í(double __x)Ö0Ïdouble
+logbfÌ1024Í(float __x)Ö0Ïfloat
+logblÌ1024Í(long double __x)Ö0Ïlong double
+logfÌ1024Í(float __x)Ö0Ïfloat
+loglÌ1024Í(long double __x)Ö0Ïlong double
+longjmpÌ1024Í(struct __jmp_buf_tag __env[1], int __val)Ö0Ïvoid
+lrand48Ì1024Í(void)Ö0Ïlong int
+lrand48_rÌ1024Í(struct drand48_data * __buffer, long int * __result)Ö0Ïint
+lrintÌ1024Í(double __x)Ö0Ïlong int
+lrintfÌ1024Í(float __x)Ö0Ïlong int
+lrintlÌ1024Í(long double __x)Ö0Ïlong int
+lroundÌ1024Í(double __x)Ö0Ïlong int
+lroundfÌ1024Í(float __x)Ö0Ïlong int
+lroundlÌ1024Í(long double __x)Ö0Ïlong int
+mallocÌ1024Í(size_t __size)Ö0Ïvoid *
+maxÌ65536Ö0
+mblenÌ1024Í(const char *__s, size_t __n)Ö0Ïint
+mbrlenÌ1024Í(const char * __s, size_t __n, mbstate_t * __ps)Ö0Ïsize_t
+mbrtowcÌ1024Í(wchar_t * __pwc, const char * __s, size_t __n, mbstate_t *__p)Ö0Ïsize_t
+mbsinitÌ1024Í(const mbstate_t *__ps)Ö0Ïint
+mbsnrtowcsÌ1024Í(wchar_t * __dst, const char ** __src, size_t __nmc, size_t __len, mbstate_t * __ps)Ö0Ïsize_t
+mbsrtowcsÌ1024Í(wchar_t * __dst, const char ** __src, size_t __len, mbstate_t * __ps)Ö0Ïsize_t
+mbstate_tÌ4096Ö0Ï__mbstate_t
+mbstowcsÌ1024Í(wchar_t * __pwcs, const char * __s, size_t __n)Ö0Ïsize_t
+mbtowcÌ1024Í(wchar_t * __pwc, const char * __s, size_t __n)Ö0Ïint
+mcontext_tÌ4096Ö0Ïanon_struct_36
+memccpyÌ1024Í(void * __dest, const void * __src, int __c, size_t __n)Ö0Ïvoid *
+memchrÌ1024Í(const void *__s, int __c, size_t __n)Ö0Ïvoid *
+memcmpÌ1024Í(const void *__s1, const void *__s2, size_t __n)Ö0Ïint
+memcpyÌ1024Í(void * __dest, const void * __src, size_t __n)Ö0Ïvoid *
+memfrobÌ1024Í(void *__s, size_t __n)Ö0Ïvoid *
+memmemÌ1024Í(const void *__haystack, size_t __haystacklen, const void *__needle, size_t __needlelen)Ö0Ïvoid *
+memmoveÌ1024Í(void *__dest, const void *__src, size_t __n)Ö0Ïvoid *
+mempcpyÌ1024Í(void * __dest, const void * __src, size_t __n)Ö0Ïvoid *
+memrchrÌ1024Í(const void *__s, int __c, size_t __n)Ö0Ïvoid *
+memsetÌ1024Í(void *__s, int __c, size_t __n)Ö0Ïvoid *
+minÌ65536Ö0
+mkdtempÌ1024Í(char *__template)Ö0Ïchar *
+mkostempÌ1024Í(char *__template, int __flags)Ö0Ïint
+mkostemp64Ì1024Í(char *__template, int __flags)Ö0Ïint
+mkstempÌ1024Í(char *__template)Ö0Ïint
+mkstemp64Ì1024Í(char *__template)Ö0Ïint
+mktempÌ1024Í(char *__template)Ö0Ïchar *
+mktimeÌ1024Í(struct tm *__tp)Ö0Ïtime_t
+mode_tÌ4096Ö0Ï__mode_t
+modfÌ1024Í(double __x, double *__iptr)Ö0Ïdouble
+modffÌ1024Í(float __x, float *__iptr)Ö0Ïfloat
+modflÌ1024Í(long double __x, long double *__iptr)Ö0Ïlong double
+mrand48Ì1024Í(void)Ö0Ïlong int
+mrand48_rÌ1024Í(struct drand48_data * __buffer, long int * __result)Ö0Ïint
+nanÌ1024Í(const char *__tagb)Ö0Ïdouble
+nanfÌ1024Í(const char *__tagb)Ö0Ïfloat
+nanlÌ1024Í(const char *__tagb)Ö0Ïlong double
+nanosleepÌ1024Í(const struct timespec *__requested_time, struct timespec *__remaining)Ö0Ïint
+nearbyintÌ1024Í(double __x)Ö0Ïdouble
+nearbyintfÌ1024Í(float __x)Ö0Ïfloat
+nearbyintlÌ1024Í(long double __x)Ö0Ïlong double
+newlocaleÌ1024Í(int __category_mask, const char *__locale, __locale_t __base)Ö0Ï__locale_t
+nextafterÌ1024Í(double __x, double __y)Ö0Ïdouble
+nextafterfÌ1024Í(float __x, float __y)Ö0Ïfloat
+nextafterlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+nexttowardÌ1024Í(double __x, long double __y)Ö0Ïdouble
+nexttowardfÌ1024Í(float __x, long double __y)Ö0Ïfloat
+nexttowardlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+nlink_tÌ4096Ö0Ï__nlink_t
+nrand48Ì1024Í(unsigned short int __xsubi[3])Ö0Ïlong int
+nrand48_rÌ1024Í(unsigned short int __xsubi[3], struct drand48_data * __buffer, long int * __result)Ö0Ïint
+obstack_printfÌ1024Í(struct obstack * __obstack, const char * __format, ...)Ö0Ïint
+obstack_vprintfÌ1024Í(struct obstack * __obstack, const char * __format, __gnuc_va_list __args)Ö0Ïint
+off64_tÌ4096Ö0Ï__off64_t
+off_tÌ4096Ö0Ï__off_t
+offsetofÌ131072Í(TYPE,MEMBER)Ö0
+on_exitÌ1024Í(void (*__func) (int __status, void *__arg), void *__arg)Ö0Ïint
+open_memstreamÌ1024Í(char **__bufloc, size_t *__sizeloc)Ö0ÏFILE *
+open_wmemstreamÌ1024Í(wchar_t **__bufloc, size_t *__sizeloc)Ö0Ï__FILE *
+pcloseÌ1024Í(FILE *__stream)Ö0Ïint
+perrorÌ1024Í(const char *__s)Ö0Ïvoid
+pid_tÌ4096Ö0Ï__pid_t
+popenÌ1024Í(const char *__command, const char *__modes)Ö0ÏFILE *
+posix_memalignÌ1024Í(void **__memptr, size_t __alignment, size_t __size)Ö0Ïint
+posix_openptÌ1024Í(int __oflag)Ö0Ïint
+powÌ1024Í(double __x, double __y)Ö0Ïdouble
+pow10Ì1024Í(double __x)Ö0Ïdouble
+pow10fÌ1024Í(float __x)Ö0Ïfloat
+pow10lÌ1024Í(long double __x)Ö0Ïlong double
+powfÌ1024Í(float __x, float __y)Ö0Ïfloat
+powlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+printfÌ1024Í(const char * __format, ...)Ö0Ïint
+pselectÌ1024Í(int __nfds, fd_set * __readfds, fd_set * __writefds, fd_set * __exceptfds, const struct timespec * __timeout, const __sigset_t * __sigmask)Ö0Ïint
+psignalÌ1024Í(int __sig, const char *__s)Ö0Ïvoid
+pthread_attr_tÌ4096Ö0Ïanon_union_37
+pthread_barrier_tÌ4096Ö0Ïanon_union_47
+pthread_barrierattr_tÌ4096Ö0Ïanon_union_48
+pthread_cond_tÌ4096Ö0Ïanon_union_41
+pthread_condattr_tÌ4096Ö0Ïanon_union_43
+pthread_key_tÌ4096Ö0Ïint
+pthread_killÌ1024Í(pthread_t __threadid, int __signo)Ö0Ïint
+pthread_mutex_tÌ4096Ö0Ïanon_union_38
+pthread_mutexattr_tÌ4096Ö0Ïanon_union_40
+pthread_once_tÌ4096Ö0Ïint
+pthread_rwlock_tÌ4096Ö0Ïanon_union_44
+pthread_rwlockattr_tÌ4096Ö0Ïanon_union_46
+pthread_sigmaskÌ1024Í(int __how, const __sigset_t * __newmask, __sigset_t * __oldmask)Ö0Ïint
+pthread_spinlock_tÌ4096Ö0Ïint
+pthread_tÌ4096Ö0Ïlong
+ptrdiff_tÌ4096Ö0Ïlong
+ptsnameÌ1024Í(int __fd)Ö0Ïchar *
+ptsname_rÌ1024Í(int __fd, char *__buf, size_t __buflen)Ö0Ïint
+putcÌ1024Í(int __c, FILE *__stream)Ö0Ïint
+putcÌ131072Í(_ch,_fp)Ö0
+putc_unlockedÌ1024Í(int __c, FILE *__stream)Ö0Ïint
+putcharÌ1024Í(int __c)Ö0Ïint
+putchar_unlockedÌ1024Í(int __c)Ö0Ïint
+putenvÌ1024Í(char *__string)Ö0Ïint
+putsÌ1024Í(const char *__s)Ö0Ïint
+putwÌ1024Í(int __w, FILE *__stream)Ö0Ïint
+putwcÌ1024Í(wchar_t __wc, __FILE *__stream)Ö0Ïwint_t
+putwc_unlockedÌ1024Í(wchar_t __wc, __FILE *__stream)Ö0Ïwint_t
+putwcharÌ1024Í(wchar_t __wc)Ö0Ïwint_t
+putwchar_unlockedÌ1024Í(wchar_t __wc)Ö0Ïwint_t
+qecvtÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign)Ö0Ïchar *
+qecvt_rÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign, char * __buf, size_t __len)Ö0Ïint
+qfcvtÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign)Ö0Ïchar *
+qfcvt_rÌ1024Í(long double __value, int __ndigit, int * __decpt, int * __sign, char * __buf, size_t __len)Ö0Ïint
+qgcvtÌ1024Í(long double __value, int __ndigit, char *__buf)Ö0Ïchar *
+qsortÌ1024Í(void *__base, size_t __nmemb, size_t __size, __compar_fn_t __compar)Ö0Ïvoid
+qsort_rÌ1024Í(void *__base, size_t __nmemb, size_t __size, __compar_d_fn_t __compar, void *__arg)Ö0Ïvoid
+quad_tÌ4096Ö0Ï__quad_t
+raiseÌ1024Í(int __sig)Ö0Ïint
+randÌ1024Í(void)Ö0Ïint
+rand_rÌ1024Í(unsigned int *__seed)Ö0Ïint
+randomÌ1024Í(void)Ö0Ïlong int
+random_rÌ1024Í(struct random_data * __buf, int32_t * __result)Ö0Ïint
+rawmemchrÌ1024Í(const void *__s, int __c)Ö0Ïvoid *
+reallocÌ1024Í(void *__ptr, size_t __size)Ö0Ïvoid *
+realpathÌ1024Í(const char * __name, char * __resolved)Ö0Ïchar *
+register_tÌ4096Ö0Ïint
+remainderÌ1024Í(double __x, double __y)Ö0Ïdouble
+remainderfÌ1024Í(float __x, float __y)Ö0Ïfloat
+remainderlÌ1024Í(long double __x, long double __y)Ö0Ïlong double
+removeÌ1024Í(const char *__filename)Ö0Ïint
+remquoÌ1024Í(double __x, double __y, int *__quo)Ö0Ïdouble
+remquofÌ1024Í(float __x, float __y, int *__quo)Ö0Ïfloat
+remquolÌ1024Í(long double __x, long double __y, int *__quo)Ö0Ïlong double
+renameÌ1024Í(const char *__old, const char *__new)Ö0Ïint
+renameatÌ1024Í(int __oldfd, const char *__old, int __newfd, const char *__new)Ö0Ïint
+rewindÌ1024Í(FILE *__stream)Ö0Ïvoid
+rindexÌ1024Í(const char *__s, int __c)Ö0Ïchar *
+rintÌ1024Í(double __x)Ö0Ïdouble
+rintfÌ1024Í(float __x)Ö0Ïfloat
+rintlÌ1024Í(long double __x)Ö0Ïlong double
+roundÌ1024Í(double __x)Ö0Ïdouble
+roundfÌ1024Í(float __x)Ö0Ïfloat
+roundlÌ1024Í(long double __x)Ö0Ïlong double
+rpmatchÌ1024Í(const char *__response)Ö0Ïint
+sa_handlerÌ65536Ö0
+sa_restorerÌ1024Í(void)ÎsigactionÖ0Ïvoid
+sa_sigactionÌ65536Ö0
+sa_sigactionÌ1024Í(int, siginfo_t *, void *)Îsigaction::anon_union_33Ö0Ïvoid
+scalbÌ1024Í(double __x, double __n)Ö0Ïdouble
+scalbfÌ1024Í(float __x, float __n)Ö0Ïfloat
+scalblÌ1024Í(long double __x, long double __n)Ö0Ïlong double
+scalblnÌ1024Í(double __x, long int __n)Ö0Ïdouble
+scalblnfÌ1024Í(float __x, long int __n)Ö0Ïfloat
+scalblnlÌ1024Í(long double __x, long int __n)Ö0Ïlong double
+scalbnÌ1024Í(double __x, int __n)Ö0Ïdouble
+scalbnfÌ1024Í(float __x, int __n)Ö0Ïfloat
+scalbnlÌ1024Í(long double __x, int __n)Ö0Ïlong double
+scanfÌ1024Í(const char * __format, ...)Ö0Ïint
+seed48Ì1024Í(unsigned short int __seed16v[3])Ö0Ïunsigned short int *
+seed48_rÌ1024Í(unsigned short int __seed16v[3], struct drand48_data *__buffer)Ö0Ïint
+selectÌ1024Í(int __nfds, fd_set * __readfds, fd_set * __writefds, fd_set * __exceptfds, struct timeval * __timeout)Ö0Ïint
+setbufÌ1024Í(FILE * __stream, char * __buf)Ö0Ïvoid
+setbufferÌ1024Í(FILE * __stream, char * __buf, size_t __size)Ö0Ïvoid
+setenvÌ1024Í(const char *__name, const char *__value, int __replace)Ö0Ïint
+setjmpÌ1024Í(jmp_buf __env)Ö0Ïint
+setjmpÌ131072Í(env)Ö0
+setkeyÌ1024Í(const char *__key)Ö0Ïvoid
+setlinebufÌ1024Í(FILE *__stream)Ö0Ïvoid
+setlocaleÌ1024Í(int __category, const char *__locale)Ö0Ïchar *
+setstateÌ1024Í(char *__statebuf)Ö0Ïchar *
+setstate_rÌ1024Í(char * __statebuf, struct random_data * __buf)Ö0Ïint
+setvbufÌ1024Í(FILE * __stream, char * __buf, int __modes, size_t __n)Ö0Ïint
+si_addrÌ65536Ö0
+si_bandÌ65536Ö0
+si_fdÌ65536Ö0
+si_intÌ65536Ö0
+si_overrunÌ65536Ö0
+si_pidÌ65536Ö0
+si_ptrÌ65536Ö0
+si_statusÌ65536Ö0
+si_stimeÌ65536Ö0
+si_timeridÌ65536Ö0
+si_uidÌ65536Ö0
+si_utimeÌ65536Ö0
+si_valueÌ65536Ö0
+sig_atomic_tÌ4096Ö0Ï__sig_atomic_t
+sig_tÌ4096Ö0Ï__sighandler_t
+sigactionÌ1024Í(int __sig, const struct sigaction * __act, struct sigaction * __oact)Ö0Ïint
+sigaddsetÌ1024Í(sigset_t *__set, int __signo)Ö0Ïint
+sigaltstackÌ1024Í(const struct sigaltstack * __ss, struct sigaltstack * __oss)Ö0Ïint
+sigandsetÌ1024Í(sigset_t *__set, const sigset_t *__left, const sigset_t *__right)Ö0Ïint
+sigblockÌ1024Í(int __mask)Ö0Ïint
+sigcontext_structÌ65536Ö0
+sigdelsetÌ1024Í(sigset_t *__set, int __signo)Ö0Ïint
+sigemptysetÌ1024Í(sigset_t *__set)Ö0Ïint
+sigev_notify_attributesÌ65536Ö0
+sigev_notify_functionÌ65536Ö0
+sigevent_tÌ4096Ö0Ïsigevent
+sigfillsetÌ1024Í(sigset_t *__set)Ö0Ïint
+siggetmaskÌ1024Í(void)Ö0Ïint
+sighandler_tÌ4096Ö0Ï__sighandler_t
+sigholdÌ1024Í(int __sig)Ö0Ïint
+sigignoreÌ1024Í(int __sig)Ö0Ïint
+siginfo_tÌ4096Ö0Ïsiginfo
+siginterruptÌ1024Í(int __sig, int __interrupt)Ö0Ïint
+sigisemptysetÌ1024Í(const sigset_t *__set)Ö0Ïint
+sigismemberÌ1024Í(const sigset_t *__set, int __signo)Ö0Ïint
+sigjmp_bufÌ4096Ö0Ï__jmp_buf_tag
+siglongjmpÌ1024Í(sigjmp_buf __env, int __val)Ö0Ïvoid
+sigmaskÌ131072Í(sig)Ö0
+signalÌ1024Í(int __sig, __sighandler_t __handler)Ö0Ï__sighandler_t
+signbitÌ131072Í(x)Ö0
+significandÌ1024Í(double __x)Ö0Ïdouble
+significandfÌ1024Í(float __x)Ö0Ïfloat
+significandlÌ1024Í(long double __x)Ö0Ïlong double
+sigorsetÌ1024Í(sigset_t *__set, const sigset_t *__left, const sigset_t *__right)Ö0Ïint
+sigpauseÌ131072Í(sig)Ö0
+sigpendingÌ1024Í(sigset_t *__set)Ö0Ïint
+sigprocmaskÌ1024Í(int __how, const sigset_t * __set, sigset_t * __oset)Ö0Ïint
+sigqueueÌ1024Í(__pid_t __pid, int __sig, const union sigval __val)Ö0Ïint
+sigrelseÌ1024Í(int __sig)Ö0Ïint
+sigreturnÌ1024Í(struct sigcontext *__scp)Ö0Ïint
+sigsetÌ1024Í(int __sig, __sighandler_t __disp)Ö0Ï__sighandler_t
+sigset_tÌ4096Ö0Ï__sigset_t
+sigsetjmpÌ131072Í(env,savemask)Ö0
+sigsetmaskÌ1024Í(int __mask)Ö0Ïint
+sigstackÌ1024Í(struct sigstack *__ss, struct sigstack *__oss)Ö0Ïint
+sigsuspendÌ1024Í(const sigset_t *__set)Ö0Ïint
+sigtimedwaitÌ1024Í(const sigset_t * __set, siginfo_t * __info, const struct timespec * __timeout)Ö0Ïint
+sigval_tÌ4096Ö0Ïsigval
+sigvecÌ1024Í(int __sig, const struct sigvec *__vec, struct sigvec *__ovec)Ö0Ïint
+sigwaitÌ1024Í(const sigset_t * __set, int * __sig)Ö0Ïint
+sigwaitinfoÌ1024Í(const sigset_t * __set, siginfo_t * __info)Ö0Ïint
+sinÌ1024Í(double __x)Ö0Ïdouble
+sincosÌ1024Í(double __x, double *__sinx, double *__cosx)Ö0Ïvoid
+sincosfÌ1024Í(float __x, float *__sinx, float *__cosx)Ö0Ïvoid
+sincoslÌ1024Í(long double __x, long double *__sinx, long double *__cosx)Ö0Ïvoid
+sinfÌ1024Í(float __x)Ö0Ïfloat
+sinhÌ1024Í(double __x)Ö0Ïdouble
+sinhfÌ1024Í(float __x)Ö0Ïfloat
+sinhlÌ1024Í(long double __x)Ö0Ïlong double
+sinlÌ1024Í(long double __x)Ö0Ïlong double
+size_tÌ4096Ö0Ï__SIZE_TYPE__
+snprintfÌ1024Í(char * __s, size_t __maxlen, const char * __format, ...)Ö0Ïint
+sprintfÌ1024Í(char * __s, const char * __format, ...)Ö0Ïint
+sqrtÌ1024Í(double __x)Ö0Ïdouble
+sqrtfÌ1024Í(float __x)Ö0Ïfloat
+sqrtlÌ1024Í(long double __x)Ö0Ïlong double
+srandÌ1024Í(unsigned int __seed)Ö0Ïvoid
+srand48Ì1024Í(long int __seedval)Ö0Ïvoid
+srand48_rÌ1024Í(long int __seedval, struct drand48_data *__buffer)Ö0Ïint
+srandomÌ1024Í(unsigned int __seed)Ö0Ïvoid
+srandom_rÌ1024Í(unsigned int __seed, struct random_data *__buf)Ö0Ïint
+sscanfÌ1024Í(const char * __s, const char * __format, ...)Ö0Ïint
+ssignalÌ1024Í(int __sig, __sighandler_t __handler)Ö0Ï__sighandler_t
+ssize_tÌ4096Ö0Ï__ssize_t
+stack_tÌ4096Ö0Ïsigaltstack
+stderrÌ65536Ö0
+stdinÌ65536Ö0
+stdoutÌ65536Ö0
+stimeÌ1024Í(const time_t *__when)Ö0Ïint
+stpcpyÌ1024Í(char * __dest, const char * __src)Ö0Ïchar *
+stpncpyÌ1024Í(char * __dest, const char * __src, size_t __n)Ö0Ïchar *
+strcasecmpÌ1024Í(const char *__s1, const char *__s2)Ö0Ïint
+strcasecmp_lÌ1024Í(const char *__s1, const char *__s2, __locale_t __loc)Ö0Ïint
+strcasestrÌ1024Í(const char *__haystack, const char *__needle)Ö0Ïchar *
+strcatÌ1024Í(char * __dest, const char * __src)Ö0Ïchar *
+strchrÌ1024Í(const char *__s, int __c)Ö0Ïchar *
+strchrnulÌ1024Í(const char *__s, int __c)Ö0Ïchar *
+strcmpÌ1024Í(const char *__s1, const char *__s2)Ö0Ïint
+strcollÌ1024Í(const char *__s1, const char *__s2)Ö0Ïint
+strcoll_lÌ1024Í(const char *__s1, const char *__s2, __locale_t __l)Ö0Ïint
+strcpyÌ1024Í(char * __dest, const char * __src)Ö0Ïchar *
+strcspnÌ1024Í(const char *__s, const char *__reject)Ö0Ïsize_t
+strdupÌ1024Í(const char *__s)Ö0Ïchar *
+strerrorÌ1024Í(int __errnum)Ö0Ïchar *
+strerror_lÌ1024Í(int __errnum, __locale_t __l)Ö0Ïchar *
+strerror_rÌ1024Í(int __errnum, char *__buf, size_t __buflen)Ö0Ïchar *
+strfryÌ1024Í(char *__string)Ö0Ïchar *
+strftimeÌ1024Í(char * __s, size_t __maxsize, const char * __format, const struct tm * __tp)Ö0Ïsize_t
+strftime_lÌ1024Í(char * __s, size_t __maxsize, const char * __format, const struct tm * __tp, __locale_t __loc)Ö0Ïsize_t
+strlenÌ1024Í(const char *__s)Ö0Ïsize_t
+strncasecmpÌ1024Í(const char *__s1, const char *__s2, size_t __n)Ö0Ïint
+strncasecmp_lÌ1024Í(const char *__s1, const char *__s2, size_t __n, __locale_t __loc)Ö0Ïint
+strncatÌ1024Í(char * __dest, const char * __src, size_t __n)Ö0Ïchar *
+strncmpÌ1024Í(const char *__s1, const char *__s2, size_t __n)Ö0Ïint
+strncpyÌ1024Í(char * __dest, const char * __src, size_t __n)Ö0Ïchar *
+strndupÌ1024Í(const char *__string, size_t __n)Ö0Ïchar *
+strnlenÌ1024Í(const char *__string, size_t __maxlen)Ö0Ïsize_t
+strpbrkÌ1024Í(const char *__s, const char *__accept)Ö0Ïchar *
+strptimeÌ1024Í(const char * __s, const char * __fmt, struct tm *__tp)Ö0Ïchar *
+strptime_lÌ1024Í(const char * __s, const char * __fmt, struct tm *__tp, __locale_t __loc)Ö0Ïchar *
+strrchrÌ1024Í(const char *__s, int __c)Ö0Ïchar *
+strsepÌ1024Í(char ** __stringp, const char * __delim)Ö0Ïchar *
+strsignalÌ1024Í(int __sig)Ö0Ïchar *
+strspnÌ1024Í(const char *__s, const char *__accept)Ö0Ïsize_t
+strstrÌ1024Í(const char *__haystack, const char *__needle)Ö0Ïchar *
+strtodÌ1024Í(const char * __nptr, char ** __endptr)Ö0Ïdouble
+strtod_lÌ1024Í(const char * __nptr, char ** __endptr, __locale_t __loc)Ö0Ïdouble
+strtofÌ1024Í(const char * __nptr, char ** __endptr)Ö0Ïfloat
+strtof_lÌ1024Í(const char * __nptr, char ** __endptr, __locale_t __loc)Ö0Ïfloat
+strtoimaxÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïintmax_t
+strtokÌ1024Í(char * __s, const char * __delim)Ö0Ïchar *
+strtok_rÌ1024Í(char * __s, const char * __delim, char ** __save_ptr)Ö0Ïchar *
+strtolÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïlong int
+strtol_lÌ1024Í(const char * __nptr, char ** __endptr, int __base, __locale_t __loc)Ö0Ïlong int
+strtoldÌ1024Í(const char * __nptr, char ** __endptr)Ö0Ïlong double
+strtold_lÌ1024Í(const char * __nptr, char ** __endptr, __locale_t __loc)Ö0Ïlong double
+strtollÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïlong long int
+strtoll_lÌ1024Í(const char * __nptr, char ** __endptr, int __base, __locale_t __loc)Ö0Ïlong long int
+strtoulÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïunsigned long int
+strtoul_lÌ1024Í(const char * __nptr, char ** __endptr, int __base, __locale_t __loc)Ö0Ïunsigned long int
+strtoullÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïunsigned long long int
+strtoull_lÌ1024Í(const char * __nptr, char ** __endptr, int __base, __locale_t __loc)Ö0Ïunsigned long long int
+strtoumaxÌ1024Í(const char * __nptr, char ** __endptr, int __base)Ö0Ïuintmax_t
+strverscmpÌ1024Í(const char *__s1, const char *__s2)Ö0Ïint
+strxfrmÌ1024Í(char * __dest, const char * __src, size_t __n)Ö0Ïsize_t
+strxfrm_lÌ1024Í(char *__dest, const char *__src, size_t __n, __locale_t __l)Ö0Ïsize_t
+suseconds_tÌ4096Ö0Ï__suseconds_t
+sv_onstackÌ65536Ö0
+swprintfÌ1024Í(wchar_t * __s, size_t __n, const wchar_t * __format, ...)Ö0Ïint
+swscanfÌ1024Í(const wchar_t * __s, const wchar_t * __format, ...)Ö0Ïint
+systemÌ1024Í(const char *__command)Ö0Ïint
+sysv_signalÌ1024Í(int __sig, __sighandler_t __handler)Ö0Ï__sighandler_t
+tanÌ1024Í(double __x)Ö0Ïdouble
+tanfÌ1024Í(float __x)Ö0Ïfloat
+tanhÌ1024Í(double __x)Ö0Ïdouble
+tanhfÌ1024Í(float __x)Ö0Ïfloat
+tanhlÌ1024Í(long double __x)Ö0Ïlong double
+tanlÌ1024Í(long double __x)Ö0Ïlong double
+tempnamÌ1024Í(const char *__dir, const char *__pfx)Ö0Ïchar *
+tgammaÌ1024Í(double)Ö0Ïdouble
+tgammafÌ1024Í(float)Ö0Ïfloat
+tgammalÌ1024Í(long double)Ö0Ïlong double
+timeÌ1024Í(time_t *__timer)Ö0Ïtime_t
+time_tÌ4096Ö0Ï__time_t
+timegmÌ1024Í(struct tm *__tp)Ö0Ïtime_t
+timelocalÌ1024Í(struct tm *__tp)Ö0Ïtime_t
+timer_createÌ1024Í(clockid_t __clock_id, struct sigevent * __evp, timer_t * __timerid)Ö0Ïint
+timer_deleteÌ1024Í(timer_t __timerid)Ö0Ïint
+timer_getoverrunÌ1024Í(timer_t __timerid)Ö0Ïint
+timer_gettimeÌ1024Í(timer_t __timerid, struct itimerspec *__value)Ö0Ïint
+timer_settimeÌ1024Í(timer_t __timerid, int __flags, const struct itimerspec * __value, struct itimerspec * __ovalue)Ö0Ïint
+timer_tÌ4096Ö0Ï__timer_t
+tmpfileÌ1024Í(void)Ö0ÏFILE *
+tmpfile64Ì1024Í(void)Ö0ÏFILE *
+tmpnamÌ1024Í(char *__s)Ö0Ïchar *
+tmpnam_rÌ1024Í(char *__s)Ö0Ïchar *
+toasciiÌ1024Í(int __c)Ö0Ïint
+tolowerÌ1024Í(int __c)Ö0Ïint
+tolower_lÌ1024Í(int __c, __locale_t __l)Ö0Ïint
+toupperÌ1024Í(int __c)Ö0Ïint
+toupper_lÌ1024Í(int __c, __locale_t __l)Ö0Ïint
+towctransÌ1024Í(wint_t __wc, wctrans_t __desc)Ö0Ïwint_t
+towctrans_lÌ1024Í(wint_t __wc, wctrans_t __desc, __locale_t __locale)Ö0Ïwint_t
+towlowerÌ1024Í(wint_t __wc)Ö0Ïwint_t
+towlower_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïwint_t
+towupperÌ1024Í(wint_t __wc)Ö0Ïwint_t
+towupper_lÌ1024Í(wint_t __wc, __locale_t __locale)Ö0Ïwint_t
+trueÌ65536Ö0
+truncÌ1024Í(double __x)Ö0Ïdouble
+truncfÌ1024Í(float __x)Ö0Ïfloat
+trunclÌ1024Í(long double __x)Ö0Ïlong double
+tzsetÌ1024Í(void)Ö0Ïvoid
+u_charÌ4096Ö0Ï__u_char
+u_intÌ4096Ö0Ï__u_int
+u_int16_tÌ4096Ö0Ïshort
+u_int32_tÌ4096Ö0Ïint
+u_int8_tÌ4096Ö0Ïchar
+u_longÌ4096Ö0Ï__u_long
+u_quad_tÌ4096Ö0Ï__u_quad_t
+u_shortÌ4096Ö0Ï__u_short
+ucontext_tÌ4096Ö0Ïucontext
+uid_tÌ4096Ö0Ï__uid_t
+uintÌ4096Ö0Ïint
+uint16_tÌ4096Ö0Ïshort
+uint32_tÌ4096Ö0Ïint
+uint64_tÌ4096Ö0Ïlong
+uint8_tÌ4096Ö0Ïchar
+uint_fast16_tÌ4096Ö0Ïint
+uint_fast32_tÌ4096Ö0Ïint
+uint_fast64_tÌ4096Ö0Ïlong
+uint_fast8_tÌ4096Ö0Ïchar
+uint_least16_tÌ4096Ö0Ïshort
+uint_least32_tÌ4096Ö0Ïint
+uint_least64_tÌ4096Ö0Ïlong
+uint_least8_tÌ4096Ö0Ïchar
+uintmax_tÌ4096Ö0Ïlong
+uintptr_tÌ4096Ö0Ïint
+ulongÌ4096Ö0Ïlong
+ungetcÌ1024Í(int __c, FILE *__stream)Ö0Ïint
+ungetwcÌ1024Í(wint_t __wc, __FILE *__stream)Ö0Ïwint_t
+unlockptÌ1024Í(int __fd)Ö0Ïint
+unsetenvÌ1024Í(const char *__name)Ö0Ïint
+useconds_tÌ4096Ö0Ï__useconds_t
+uselocaleÌ1024Í(__locale_t __dataset)Ö0Ï__locale_t
+ushortÌ4096Ö0Ïshort
+va_argÌ131072Í(v,l)Ö0
+va_copyÌ131072Í(d,s)Ö0
+va_endÌ131072Í(v)Ö0
+va_listÌ4096Ö0Ï__gnuc_va_list
+va_startÌ131072Í(v,l)Ö0
+vallocÌ1024Í(size_t __size)Ö0Ïvoid *
+vasprintfÌ1024Í(char ** __ptr, const char * __f, __gnuc_va_list __arg)Ö0Ïint
+vdprintfÌ1024Í(int __fd, const char * __fmt, __gnuc_va_list __arg)Ö0Ïint
+vfprintfÌ1024Í(FILE * __s, const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vfscanfÌ1024Í(FILE * __s, const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vfwprintfÌ1024Í(__FILE * __s, const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+vfwscanfÌ1024Í(__FILE * __s, const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+vprintfÌ1024Í(const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vscanfÌ1024Í(const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vsnprintfÌ1024Í(char * __s, size_t __maxlen, const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vsprintfÌ1024Í(char * __s, const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vsscanfÌ1024Í(const char * __s, const char * __format, __gnuc_va_list __arg)Ö0Ïint
+vswprintfÌ1024Í(wchar_t * __s, size_t __n, const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+vswscanfÌ1024Í(const wchar_t * __s, const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+vwprintfÌ1024Í(const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+vwscanfÌ1024Í(const wchar_t * __format, __gnuc_va_list __arg)Ö0Ïint
+w_coredumpÌ65536Ö0
+w_retcodeÌ65536Ö0
+w_stopsigÌ65536Ö0
+w_stopvalÌ65536Ö0
+w_termsigÌ65536Ö0
+wcpcpyÌ1024Í(wchar_t *__dest, const wchar_t *__src)Ö0Ïwchar_t *
+wcpncpyÌ1024Í(wchar_t *__dest, const wchar_t *__src, size_t __n)Ö0Ïwchar_t *
+wcrtombÌ1024Í(char * __s, wchar_t __wc, mbstate_t * __ps)Ö0Ïsize_t
+wcscasecmpÌ1024Í(const wchar_t *__s1, const wchar_t *__s2)Ö0Ïint
+wcscasecmp_lÌ1024Í(const wchar_t *__s1, const wchar_t *__s2, __locale_t __loc)Ö0Ïint
+wcscatÌ1024Í(wchar_t * __dest, const wchar_t * __src)Ö0Ïwchar_t *
+wcschrÌ1024Í(const wchar_t *__wcs, wchar_t __wc)Ö0Ïwchar_t *
+wcschrnulÌ1024Í(const wchar_t *__s, wchar_t __wc)Ö0Ïwchar_t *
+wcscmpÌ1024Í(const wchar_t *__s1, const wchar_t *__s2)Ö0Ïint
+wcscollÌ1024Í(const wchar_t *__s1, const wchar_t *__s2)Ö0Ïint
+wcscoll_lÌ1024Í(const wchar_t *__s1, const wchar_t *__s2, __locale_t __loc)Ö0Ïint
+wcscpyÌ1024Í(wchar_t * __dest, const wchar_t * __src)Ö0Ïwchar_t *
+wcscspnÌ1024Í(const wchar_t *__wcs, const wchar_t *__reject)Ö0Ïsize_t
+wcsdupÌ1024Í(const wchar_t *__s)Ö0Ïwchar_t *
+wcsftimeÌ1024Í(wchar_t * __s, size_t __maxsize, const wchar_t * __format, const struct tm * __tp)Ö0Ïsize_t
+wcsftime_lÌ1024Í(wchar_t * __s, size_t __maxsize, const wchar_t * __format, const struct tm * __tp, __locale_t __loc)Ö0Ïsize_t
+wcslenÌ1024Í(const wchar_t *__s)Ö0Ïsize_t
+wcsncasecmpÌ1024Í(const wchar_t *__s1, const wchar_t *__s2, size_t __n)Ö0Ïint
+wcsncasecmp_lÌ1024Í(const wchar_t *__s1, const wchar_t *__s2, size_t __n, __locale_t __loc)Ö0Ïint
+wcsncatÌ1024Í(wchar_t * __dest, const wchar_t * __src, size_t __n)Ö0Ïwchar_t *
+wcsncmpÌ1024Í(const wchar_t *__s1, const wchar_t *__s2, size_t __n)Ö0Ïint
+wcsncpyÌ1024Í(wchar_t * __dest, const wchar_t * __src, size_t __n)Ö0Ïwchar_t *
+wcsnlenÌ1024Í(const wchar_t *__s, size_t __maxlen)Ö0Ïsize_t
+wcsnrtombsÌ1024Í(char * __dst, const wchar_t ** __src, size_t __nwc, size_t __len, mbstate_t * __ps)Ö0Ïsize_t
+wcspbrkÌ1024Í(const wchar_t *__wcs, const wchar_t *__accept)Ö0Ïwchar_t *
+wcsrchrÌ1024Í(const wchar_t *__wcs, wchar_t __wc)Ö0Ïwchar_t *
+wcsrtombsÌ1024Í(char * __dst, const wchar_t ** __src, size_t __len, mbstate_t * __ps)Ö0Ïsize_t
+wcsspnÌ1024Í(const wchar_t *__wcs, const wchar_t *__accept)Ö0Ïsize_t
+wcsstrÌ1024Í(const wchar_t *__haystack, const wchar_t *__needle)Ö0Ïwchar_t *
+wcstodÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr)Ö0Ïdouble
+wcstod_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, __locale_t __loc)Ö0Ïdouble
+wcstofÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr)Ö0Ïfloat
+wcstof_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, __locale_t __loc)Ö0Ïfloat
+wcstoimaxÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïintmax_t
+wcstokÌ1024Í(wchar_t * __s, const wchar_t * __delim, wchar_t ** __ptr)Ö0Ïwchar_t *
+wcstolÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïlong int
+wcstol_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base, __locale_t __loc)Ö0Ïlong int
+wcstoldÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr)Ö0Ïlong double
+wcstold_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, __locale_t __loc)Ö0Ïlong double
+wcstollÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïlong long int
+wcstoll_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base, __locale_t __loc)Ö0Ïlong long int
+wcstombsÌ1024Í(char * __s, const wchar_t * __pwcs, size_t __n)Ö0Ïsize_t
+wcstoulÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïunsigned long int
+wcstoul_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base, __locale_t __loc)Ö0Ïunsigned long int
+wcstoullÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïunsigned long long int
+wcstoull_lÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base, __locale_t __loc)Ö0Ïunsigned long long int
+wcstoumaxÌ1024Í(const wchar_t * __nptr, wchar_t ** __endptr, int __base)Ö0Ïuintmax_t
+wcswcsÌ1024Í(const wchar_t *__haystack, const wchar_t *__needle)Ö0Ïwchar_t *
+wcswidthÌ1024Í(const wchar_t *__s, size_t __n)Ö0Ïint
+wcsxfrmÌ1024Í(wchar_t * __s1, const wchar_t * __s2, size_t __n)Ö0Ïsize_t
+wcsxfrm_lÌ1024Í(wchar_t *__s1, const wchar_t *__s2, size_t __n, __locale_t __loc)Ö0Ïsize_t
+wctobÌ1024Í(wint_t __c)Ö0Ïint
+wctombÌ1024Í(char *__s, wchar_t __wchar)Ö0Ïint
+wctransÌ1024Í(const char *__property)Ö0Ïwctrans_t
+wctrans_lÌ1024Í(const char *__property, __locale_t __locale)Ö0Ïwctrans_t
+wctrans_tÌ4096Ö0Ï__int32_t
+wctypeÌ1024Í(const char *__property)Ö0Ïwctype_t
+wctype_lÌ1024Í(const char *__property, __locale_t __locale)Ö0Ïwctype_t
+wctype_tÌ4096Ö0Ïlong
+wcwidthÌ1024Í(wchar_t __c)Ö0Ïint
+wint_tÌ4096Ö0Ïint
+wmemchrÌ1024Í(const wchar_t *__s, wchar_t __c, size_t __n)Ö0Ïwchar_t *
+wmemcmpÌ1024Í(const wchar_t * __s1, const wchar_t * __s2, size_t __n)Ö0Ïint
+wmemcpyÌ1024Í(wchar_t * __s1, const wchar_t * __s2, size_t __n)Ö0Ïwchar_t *
+wmemmoveÌ1024Í(wchar_t *__s1, const wchar_t *__s2, size_t __n)Ö0Ïwchar_t *
+wmempcpyÌ1024Í(wchar_t * __s1, const wchar_t * __s2, size_t __n)Ö0Ïwchar_t *
+wmemsetÌ1024Í(wchar_t *__s, wchar_t __c, size_t __n)Ö0Ïwchar_t *
+wprintfÌ1024Í(const wchar_t * __format, ...)Ö0Ïint
+wscanfÌ1024Í(const wchar_t * __format, ...)Ö0Ïint
+y0Ì1024Í(double)Ö0Ïdouble
+y0fÌ1024Í(float)Ö0Ïfloat
+y0lÌ1024Í(long double)Ö0Ïlong double
+y1Ì1024Í(double)Ö0Ïdouble
+y1fÌ1024Í(float)Ö0Ïfloat
+y1lÌ1024Í(long double)Ö0Ïlong double
+ynÌ1024Í(int, double)Ö0Ïdouble
+ynfÌ1024Í(int, float)Ö0Ïfloat
+ynlÌ1024Í(int, long double)Ö0Ïlong double

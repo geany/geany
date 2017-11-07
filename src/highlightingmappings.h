@@ -21,11 +21,16 @@
  */
 
 
-#ifndef GEANY_HIGHLIGHTINGMAPPINGS_H
-#define GEANY_HIGHLIGHTINGMAPPINGS_H 1
+#ifndef GEANY_HIGHLIGHTING_MAPPINGS_H
+#define GEANY_HIGHLIGHTING_MAPPINGS_H 1
 
 #include "Scintilla.h"
+#include "SciLexer.h"
 
+#include <glib.h>
+
+
+G_BEGIN_DECLS
 
 /* contains all filtypes informations in the form of:
  *  - highlighting_lexer_LANG:		the SCI lexer
@@ -168,6 +173,10 @@ static const HLStyle highlighting_styles_BASIC[] =
 {
 	{ SCE_B_DEFAULT,		"default",			FALSE },
 	{ SCE_B_COMMENT,		"comment",			FALSE },
+	{ SCE_B_COMMENTBLOCK,	"commentblock",		FALSE },
+	{ SCE_B_DOCLINE,		"docline",			FALSE },
+	{ SCE_B_DOCBLOCK,		"docblock",			FALSE },
+	{ SCE_B_DOCKEYWORD,		"dockeyword",		FALSE },
 	{ SCE_B_NUMBER,			"number",			FALSE },
 	{ SCE_B_KEYWORD,		"word",				FALSE },
 	{ SCE_B_STRING,			"string",			FALSE },
@@ -234,6 +243,7 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_STRING,					"string",					FALSE },
 	{ SCE_C_STRINGRAW,				"stringraw",				FALSE },
 	{ SCE_C_CHARACTER,				"character",				FALSE },
+	{ SCE_C_USERLITERAL,			"userliteral",				FALSE },
 	{ SCE_C_UUID,					"uuid",						FALSE },
 	{ SCE_C_PREPROCESSOR,			"preprocessor",				FALSE },
 	{ SCE_C_OPERATOR,				"operator",					FALSE },
@@ -248,7 +258,9 @@ static const HLStyle highlighting_styles_C[] =
 	{ SCE_C_COMMENTDOCKEYWORD,		"commentdockeyword",		FALSE },
 	{ SCE_C_COMMENTDOCKEYWORDERROR,	"commentdockeyworderror",	FALSE },
 	/* used for local structs and typedefs */
-	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE }
+	{ SCE_C_GLOBALCLASS,			"globalclass",				FALSE },
+	{ SCE_C_TASKMARKER,				"taskmarker",				FALSE },
+	{ SCE_C_ESCAPESEQUENCE,			"escapesequence",			FALSE }
 };
 static const HLKeyword highlighting_keywords_C[] =
 {
@@ -256,7 +268,7 @@ static const HLKeyword highlighting_keywords_C[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE }
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 static const HLProperty highlighting_properties_C[] =
 {
@@ -320,6 +332,35 @@ static const HLKeyword highlighting_keywords_CMAKE[] =
 	{ 2, "userdefined",	FALSE }
 };
 #define highlighting_properties_CMAKE	EMPTY_PROPERTIES
+
+/* CoffeeScript */
+#define highlighting_lexer_COFFEESCRIPT		SCLEX_COFFEESCRIPT
+static const HLStyle highlighting_styles_COFFEESCRIPT[] =
+{
+	{ SCE_COFFEESCRIPT_DEFAULT,					"default",				FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTLINE,				"commentline",			FALSE },
+	{ SCE_COFFEESCRIPT_NUMBER,					"number",				FALSE },
+	{ SCE_COFFEESCRIPT_WORD,					"word",					FALSE },
+	{ SCE_COFFEESCRIPT_STRING,					"string",				FALSE },
+	{ SCE_COFFEESCRIPT_CHARACTER,				"character",			FALSE },
+	{ SCE_COFFEESCRIPT_OPERATOR,				"operator",				FALSE },
+	{ SCE_COFFEESCRIPT_IDENTIFIER,				"identifier",			FALSE },
+	{ SCE_COFFEESCRIPT_STRINGEOL,				"stringeol",			FALSE },
+	{ SCE_COFFEESCRIPT_REGEX,					"regex",				FALSE },
+	{ SCE_COFFEESCRIPT_WORD2,					"word2",				FALSE },
+	{ SCE_COFFEESCRIPT_GLOBALCLASS,				"globalclass",			FALSE },
+	{ SCE_COFFEESCRIPT_COMMENTBLOCK,			"commentblock",			FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX,			"verbose_regex",		FALSE },
+	{ SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT,	"verbose_regex_comment",FALSE },
+	{ SCE_COFFEESCRIPT_INSTANCEPROPERTY,		"instanceproperty",		FALSE }
+};
+static const HLKeyword highlighting_keywords_COFFEESCRIPT[] =
+{
+	{ 0, "primary",		FALSE },
+	{ 1, "secondary",	FALSE },
+	{ 3, "globalclass",	FALSE }
+};
+#define highlighting_properties_COFFEESCRIPT	EMPTY_PROPERTIES
 
 
 /* CSS */
@@ -427,7 +468,7 @@ static const HLKeyword highlighting_keywords_D[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 	{ 4, "types",		FALSE },
 };
 #define highlighting_properties_D		EMPTY_PROPERTIES
@@ -610,6 +651,13 @@ static const HLKeyword highlighting_keywords_FORTH[] =
 #define highlighting_styles_FORTRAN			highlighting_styles_F77
 #define highlighting_keywords_FORTRAN		highlighting_keywords_F77
 #define highlighting_properties_FORTRAN		highlighting_properties_F77
+
+
+/* Go */
+#define highlighting_lexer_GO		SCLEX_CPP
+#define highlighting_styles_GO		highlighting_styles_C
+#define highlighting_keywords_GO	highlighting_keywords_C
+#define highlighting_properties_GO	highlighting_properties_C
 
 
 /* Haskell */
@@ -817,7 +865,7 @@ static const HLKeyword highlighting_keywords_JAVA[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "doccomment",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 	{ 4, "typedefs",	FALSE }
 };
 #define highlighting_properties_JAVA	highlighting_properties_C
@@ -1035,7 +1083,7 @@ static const HLKeyword highlighting_keywords_OBJECTIVEC[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types, see below */
 	{ 1, "secondary",	TRUE },
 	{ 2, "docComment",	FALSE }
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 #define highlighting_properties_OBJECTIVEC	highlighting_properties_C
 
@@ -1209,6 +1257,10 @@ static const HLStyle highlighting_styles_PYTHON[] =
 	{ SCE_P_COMMENTBLOCK,	"commentblock",		FALSE },
 	{ SCE_P_STRINGEOL,		"stringeol",		FALSE },
 	{ SCE_P_WORD2,			"word2",			FALSE },
+	{ SCE_P_FSTRING,		"fstring",			FALSE },
+	{ SCE_P_FCHARACTER,		"fcharacter",		FALSE },
+	{ SCE_P_FTRIPLE,		"ftriple",			FALSE },
+	{ SCE_P_FTRIPLEDOUBLE,	"ftripledouble",	FALSE },
 	{ SCE_P_DECORATOR,		"decorator",		FALSE }
 };
 static const HLKeyword highlighting_keywords_PYTHON[] =
@@ -1314,7 +1366,10 @@ static const HLStyle highlighting_styles_RUST[] =
 	{ SCE_RUST_IDENTIFIER,			"identifier",				FALSE },
 	{ SCE_RUST_LIFETIME,			"lifetime",					FALSE },
 	{ SCE_RUST_MACRO,				"macro",					FALSE },
-	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE }
+	{ SCE_RUST_LEXERROR,			"lexerror",					FALSE },
+	{ SCE_RUST_BYTESTRING,			"bytestring",				FALSE },
+	{ SCE_RUST_BYTESTRINGR,			"bytestringr",				FALSE },
+	{ SCE_RUST_BYTECHARACTER,		"bytecharacter",			FALSE }
 };
 static const HLKeyword highlighting_keywords_RUST[] =
 {
@@ -1322,7 +1377,7 @@ static const HLKeyword highlighting_keywords_RUST[] =
 	/* SCI_SETKEYWORDS = 1 - secondary + global tags file types */
 	{ 1, "secondary",	TRUE },
 	{ 2, "tertiary",	FALSE },
-	/* SCI_SETKEYWORDS = 3 is for current session types - see editor_lexer_get_type_keyword_idx() */
+	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 #define highlighting_properties_RUST		EMPTY_PROPERTIES
 
@@ -1373,7 +1428,8 @@ static const HLStyle highlighting_styles_SQL[] =
 	{ SCE_SQL_SQLPLUS,					"sqlplus",					FALSE },
 	{ SCE_SQL_SQLPLUS_PROMPT,			"sqlplus_prompt",			FALSE },
 	{ SCE_SQL_SQLPLUS_COMMENT,			"sqlplus_comment",			FALSE },
-	{ SCE_SQL_QUOTEDIDENTIFIER,			"quotedidentifier",			FALSE }
+	{ SCE_SQL_QUOTEDIDENTIFIER,			"quotedidentifier",			FALSE },
+	{ SCE_SQL_QOPERATOR,				"qoperator",				FALSE }
 	/* these are for user-defined keywords we don't set yet */
 	/*{ SCE_SQL_USER1,					"user1",					FALSE },
 	{ SCE_SQL_USER2,					"user2",					FALSE },
@@ -1468,6 +1524,7 @@ static const HLStyle highlighting_styles_VHDL[] =
 	{ SCE_VHDL_DEFAULT,			"default",				FALSE },
 	{ SCE_VHDL_COMMENT,			"comment",				FALSE },
 	{ SCE_VHDL_COMMENTLINEBANG,	"comment_line_bang",	FALSE },
+	{ SCE_VHDL_BLOCK_COMMENT,	"block_comment",		FALSE },
 	{ SCE_VHDL_NUMBER,			"number",				FALSE },
 	{ SCE_VHDL_STRING,			"string",				FALSE },
 	{ SCE_VHDL_OPERATOR,		"operator",				FALSE },
@@ -1511,13 +1568,19 @@ static const HLStyle highlighting_styles_VERILOG[] =
 	{ SCE_V_OPERATOR,			"operator",				FALSE },
 	{ SCE_V_IDENTIFIER,			"identifier",			FALSE },
 	{ SCE_V_STRINGEOL,			"stringeol",			FALSE },
-	{ SCE_V_USER,				"userword",				FALSE }
+	{ SCE_V_USER,				"userword",				FALSE },
+	{ SCE_V_COMMENT_WORD,		"comment_word",			FALSE },
+	{ SCE_V_INPUT,				"input",				FALSE },
+	{ SCE_V_OUTPUT,				"output",				FALSE },
+	{ SCE_V_INOUT,				"inout",				FALSE },
+	{ SCE_V_PORT_CONNECT,		"port_connect",			FALSE }
 };
 static const HLKeyword highlighting_keywords_VERILOG[] =
 {
-	{ 0, "word",	FALSE },
-	{ 1, "word2",	FALSE },
-	{ 2, "word3",	FALSE }
+	{ 0, "word",		FALSE },
+	{ 1, "word2",		FALSE },
+	{ 2, "word3",		FALSE },
+	{ 4, "docComment",	FALSE }
 };
 #define highlighting_properties_VERILOG		EMPTY_PROPERTIES
 
@@ -1554,4 +1617,12 @@ static const HLKeyword highlighting_keywords_YAML[] =
 #define highlighting_properties_YAML	EMPTY_PROPERTIES
 
 
-#endif /* guard */
+/* Zephir */
+#define highlighting_lexer_ZEPHIR		SCLEX_PHPSCRIPT
+#define highlighting_styles_ZEPHIR		highlighting_styles_PHP
+#define highlighting_keywords_ZEPHIR	highlighting_keywords_PHP
+#define highlighting_properties_ZEPHIR	highlighting_properties_PHP
+
+G_END_DECLS
+
+#endif /* GEANY_HIGHLIGHTING_MAPPINGS_H */

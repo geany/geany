@@ -25,20 +25,26 @@
  * @see GLib's @c gi18n-lib.h.
  **/
 
-G_BEGIN_DECLS
+#ifndef GEANY_SUPPORT_H
+#define GEANY_SUPPORT_H 1
 
-#include "geany.h"
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 #ifdef GETTEXT_PACKAGE
 # include <glib/gi18n-lib.h>
 #else
+# define GETTEXT_PACKAGE NULL
 # define textdomain(String) (String)
-# define bind_textdomain_codeset(String) (String)
-# define bindtextdomain(Domain,Charset) (Domain)
-# define ngettext(String) (String)
+# define bind_textdomain_codeset(Domain,Codeset) (Codeset)
+# define bindtextdomain(Domain,Dir) (Dir)
+# define ngettext(String,PluralString,Number) (((Number) == 1) ? (String) : (PluralString))
 # define _(String) String
-# define Q_(String) g_strip_context((String), (String))
 # define N_(String) String
+# define C_(Context,String) (String)
 #endif
 
 G_END_DECLS
+
+#endif /* GEANY_SUPPORT_H */

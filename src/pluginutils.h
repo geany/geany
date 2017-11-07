@@ -20,17 +20,22 @@
  */
 
 
-#ifndef GEANY_PLUGINUTILS_H
-#define GEANY_PLUGINUTILS_H
+#ifndef GEANY_PLUGIN_UTILS_H
+#define GEANY_PLUGIN_UTILS_H 1
 
 #ifdef HAVE_PLUGINS
 
 #include "keybindings.h"	/* GeanyKeyGroupCallback */
 
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 /* avoid including plugindata.h otherwise this redefines the GEANY() macro */
 struct GeanyPlugin;
+struct GeanyDocument;
 
+gint geany_api_version(void);
 
 void plugin_add_toolbar_item(struct GeanyPlugin *plugin, GtkToolItem *item);
 
@@ -51,10 +56,25 @@ guint plugin_idle_add(struct GeanyPlugin *plugin, GSourceFunc function, gpointer
 struct GeanyKeyGroup *plugin_set_key_group(struct GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback);
 
+GeanyKeyGroup *plugin_set_key_group_full(struct GeanyPlugin *plugin,
+		const gchar *section_name, gsize count, GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify);
+
 void plugin_show_configure(struct GeanyPlugin *plugin);
 
 void plugin_builder_connect_signals(struct GeanyPlugin *plugin,
 	GtkBuilder *builder, gpointer user_data);
 
+gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key);
+
+void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
+	const gchar *key, gpointer data);
+
+void plugin_set_document_data_full(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key, gpointer data,
+	GDestroyNotify free_func);
+
+G_END_DECLS
+
 #endif /* HAVE_PLUGINS */
-#endif /* GEANY_PLUGINUTILS_H */
+#endif /* GEANY_PLUGIN_UTILS_H */

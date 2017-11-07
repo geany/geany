@@ -1,0 +1,140 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+html_default=default
+html_tag=tag
+html_tagunknown=tag_unknown
+html_attribute=attribute
+html_attributeunknown=attribute_unknown
+html_number=number_1
+html_doublestring=string_2
+html_singlestring=string_1
+html_other=other
+html_comment=comment
+html_entity=entity
+html_tagend=tag_end
+html_xmlstart=tag
+html_xmlend=tag_end
+html_script=tag
+html_asp=tag
+html_aspat=tag
+html_cdata=string_2
+html_question=number_2
+html_value=value
+html_xccomment=comment
+
+sgml_default=default
+sgml_comment=comment
+sgml_special=number_1
+sgml_command=number_2
+sgml_doublestring=string_2
+sgml_simplestring=string_1
+sgml_1st_param=attribute
+sgml_entity=entity
+sgml_block_default=default
+sgml_1st_param_comment=comment
+sgml_error=error
+
+php_default=default
+php_simplestring=string_1
+php_hstring=string_2
+php_number=number_1
+php_word=keyword_1
+php_variable=preprocessor
+php_comment=comment
+php_commentline=comment_line
+php_operator=operator
+php_hstring_variable=preprocessor
+php_complex_variable=preprocessor
+
+jscript_start=tag
+jscript_default=default
+jscript_comment=comment
+jscript_commentline=comment_line
+jscript_commentdoc=comment_doc
+jscript_number=number_1
+jscript_word=default
+jscript_keyword=keyword_1
+jscript_doublestring=string_2
+jscript_singlestring=string_1
+
+jscript_symbols=operator
+jscript_stringeol=string_eol
+jscript_regex=regex
+
+python_default=default
+python_commentline=comment_line
+python_number=number_1
+python_string=string_1
+python_character=character
+python_word=keyword_1
+python_triple=string_2
+python_tripledouble=string_2
+python_classname=type
+python_defname=function
+python_operator=operator
+python_identifier=identifier_1
+
+
+[keywords]
+html=^aria- ^data- a abbr accept accept-charset accesskey acronym action address align alink allowfullscreen allowpaymentrequest allowusermedia alt applet archive area article as aside async audio autocomplete autofocus autoplay axis b background base basefont bdi bdo bgcolor big blockquote body border br button canvas caption cellpadding cellspacing center challenge char charoff charset checkbox checked cite class classid clear code codebase codetype col colgroup color cols colspan command compact content contenteditable contextmenu controls coords crossorigin data datafld dataformatas datalist datapagesize datasrc datetime dd declare default defer del details dfn dialog dir dirname disabled div dl doctype download draggable dropzone dt em embed enctype face fieldset figcaption figure file font footer for form formaction formenctype formmethod formnovalidate formtarget frame frameborder frameset framespacing h1 h2 h3 h4 h5 h6 head header headers height hgroup hidden high hr href hreflang hspace html http-equiv i icon id iframe image img input inputmode ins integrity is isindex ismap itemid itemprop itemref itemscope itemtype kbd keygen keytype kind label lang language leftmargin legend li link list longdesc loop low main manifest map marginheight marginwidth mark math max maxlength media menu menuitem meta meter method min minlength multiple muted name nav noframes nohref nomodule nonce noresize noscript noshade novalidate nowrap object ol onblur onchange onclick ondblclick onfocus onkeydown onkeypress onkeyup onload onmousedown onmousemove onmouseout onmouseover onmouseup onreset onselect onsubmit onunload open optgroup optimum option output p param password pattern picture ping placeholder playsinline pluginspage poster pre preload profile progress prompt public q quality radio radiogroup rb readonly referrerpolicy rel required reset rev reversed role rows rowspan rp rt rtc ruby rules s samp sandbox scheme scope scoped script scrolling seamless section select selected shape size sizes slot small source span spellcheck src srcdoc srclang srcset standby start step strike strong style sub submit summary sup svg tabindex table target tbody td template text textarea tfoot th thead time title topmargin tr track translate tt type typemustmatch u ul updateviacache usemap valign value valuetype var version video vlink vspace wbr width workertype wrap xml xml:lang xmlns
+javascript=abs abstract acos anchor asin atan atan2 big bold boolean break byte case catch ceil char charAt charCodeAt class concat const continue cos Date debugger default delete do double else enum escape eval exp export extends false final finally fixed float floor fontcolor fontsize for fromCharCode function goto if implements import in indexOf Infinity instanceof int interface isFinite isNaN italics join lastIndexOf length link log long Math max MAX_VALUE min MIN_VALUE NaN native NEGATIVE_INFINITY new null Number package parseFloat parseInt pop POSITIVE_INFINITY pow private protected public push random return reverse round shift short sin slice small sort splice split sqrt static strike string String sub substr substring sup super switch synchronized tan this throw throws toLowerCase toString toUpperCase transient true try typeof undefined unescape unshift valueOf var void volatile while with
+vbscript=and as boolean byref byte byval call case class const continue currency date dim do double each else elseif empty end error exit false for function get global goto if in integer long loop me new next not nothing object on optional or private property public put redim rem resume select set single string sub then to true type until variant wend while with
+python=and assert break class continue complex def del elif else except exec finally for from global if import in inherit is int lambda not or pass print raise return tuple try unicode while yield long float str list
+php=abstract and argumentcounterror arithmeticerror array arrayaccess as assert assertionerror bool boolean break __call __callstatic callable case catch cfunction __class__ class clone __clone closure const __construct continue countable __debuginfo declare default __destruct die __dir__ directory divisionbyzeroerror do double echo else elseif empty enddeclare endfor endforeach endif endswitch endwhile error errorexception eval exception exit extends false __file__ final finally float for foreach __function__ function generator __get goto global __halt_compiler if implements include include_once instanceof insteadof int integer interface __invoke isset __isset iterable iterator iteratoraggregate __line__ list __method__ namespace __namespace__ new null object old_function or parent parseerror php_user_filter print private protected public real require require_once resource return self serializable __set __set_state __sleep static stdclass stderr stdin stdout string switch __tostring this throw throwable trait __trait__ traversable true try typeerror unset __unset use var void __wakeup while xor yield
+sgml=ELEMENT DOCTYPE ATTLIST ENTITY NOTATION
+
+
+[lexer_properties]
+# default scripting language for ASP
+# 1 = JavaScript (or leave blank for default)
+# 2 = VBScript
+# 3 = Python
+# asp.default.language=2
+
+[settings]
+# default extension used when saving files
+extension=html
+
+# MIME type
+mime_type=text/html
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# these comments are used for PHP, the comments used in HTML are in filetypes.xml
+# single comments, like # in this file
+#comment_single=
+# multiline comments
+comment_open=<!--
+comment_close=-->
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+# if this setting is set to true, a new line after a line ending with an
+# unclosed tag will be automatically indented
+xml_indent_tags=true
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+# use a syntax checker and ignore the formatted output
+compiler=tidy %f >/dev/null
+
+# the file will be opened with the default browser which can be set in the preferences dialog
+run_cmd=builtin

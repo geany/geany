@@ -22,7 +22,7 @@ class WordList {
 	bool onlyLineEnds;	///< Delimited by any white space or only line ends
 	int starts[256];
 public:
-	WordList(bool onlyLineEnds_ = false);
+	explicit WordList(bool onlyLineEnds_ = false);
 	~WordList();
 	operator bool() const;
 	bool operator!=(const WordList &other) const;
@@ -31,6 +31,7 @@ public:
 	void Set(const char *s);
 	bool InList(const char *s) const;
 	bool InListAbbreviated(const char *s, const char marker) const;
+	bool InListAbridged(const char *s, const char marker) const;
 	const char *WordAt(int n) const;
 };
 

@@ -21,9 +21,13 @@
 
 
 #ifndef GEANY_PLUGINS_H
-#define GEANY_PLUGINS_H
+#define GEANY_PLUGINS_H 1
 
 #ifdef HAVE_PLUGINS
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 extern GList *active_plugin_list;
 
@@ -36,6 +40,8 @@ void plugins_load_active(void);
 
 gboolean plugins_have_preferences(void);
 
-#endif
+G_END_DECLS
 
-#endif
+#endif /* HAVE_PLUGINS */
+
+#endif /* GEANY_PLUGINS_H */

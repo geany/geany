@@ -5,7 +5,10 @@
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
+#include <cstdlib>
+
+#include <stdexcept>
+#include <string>
 
 #include "UniConversion.h"
 
@@ -17,14 +20,10 @@ using namespace Scintilla;
 namespace Scintilla {
 #endif
 
-enum { SURROGATE_LEAD_FIRST = 0xD800 };
-enum { SURROGATE_TRAIL_FIRST = 0xDC00 };
-enum { SURROGATE_TRAIL_LAST = 0xDFFF };
-
-unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen) {
-	unsigned int len = 0;
-	for (unsigned int i = 0; i < tlen && uptr[i];) {
-		unsigned int uch = uptr[i];
+size_t UTF8Length(const wchar_t *uptr, size_t tlen) {
+	size_t len = 0;
+	for (size_t i = 0; i < tlen && uptr[i];) {
+		const unsigned int uch = uptr[i];
 		if (uch < 0x80) {
 			len++;
 		} else if (uch < 0x800) {
@@ -41,10 +40,10 @@ unsigned int UTF8Length(const wchar_t *uptr, unsigned int tlen) {
 	return len;
 }
 
-void UTF8FromUTF16(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned int len) {
-	int k = 0;
-	for (unsigned int i = 0; i < tlen && uptr[i];) {
-		unsigned int uch = uptr[i];
+void UTF8FromUTF16(const wchar_t *uptr, size_t tlen, char *putf, size_t len) {
+	size_t k = 0;
+	for (size_t i = 0; i < tlen && uptr[i];) {
+		const unsigned int uch = uptr[i];
 		if (uch < 0x80) {
 			putf[k++] = static_cast<char>(uch);
 		} else if (uch < 0x800) {
@@ -54,7 +53,7 @@ void UTF8FromUTF16(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned 
 			(uch <= SURROGATE_TRAIL_LAST)) {
 			// Half a surrogate pair
 			i++;
-			unsigned int xch = 0x10000 + ((uch & 0x3ff) << 10) + (uptr[i] & 0x3ff);
+			const unsigned int xch = 0x10000 + ((uch & 0x3ff) << 10) + (uptr[i] & 0x3ff);
 			putf[k++] = static_cast<char>(0xF0 | (xch >> 18));
 			putf[k++] = static_cast<char>(0x80 | ((xch >> 12) & 0x3f));
 			putf[k++] = static_cast<char>(0x80 | ((xch >> 6) & 0x3f));
@@ -66,7 +65,8 @@ void UTF8FromUTF16(const wchar_t *uptr, unsigned int tlen, char *putf, unsigned 
 		}
 		i++;
 	}
-	putf[len] = '\0';
+	if (k < len)
+		putf[k] = '\0';
 }
 
 unsigned int UTF8CharLength(unsigned char ch) {
@@ -81,11 +81,11 @@ unsigned int UTF8CharLength(unsigned char ch) {
 	}
 }
 
-unsigned int UTF16Length(const char *s, unsigned int len) {
-	unsigned int ulen = 0;
-	unsigned int charLen;
-	for (unsigned int i=0; i<len;) {
-		unsigned char ch = static_cast<unsigned char>(s[i]);
+size_t UTF16Length(const char *s, size_t len) {
+	size_t ulen = 0;
+	size_t charLen;
+	for (size_t i = 0; i<len;) {
+		const unsigned char ch = static_cast<unsigned char>(s[i]);
 		if (ch < 0x80) {
 			charLen = 1;
 		} else if (ch < 0x80 + 0x40 + 0x20) {
@@ -102,10 +102,10 @@ unsigned int UTF16Length(const char *s, unsigned int len) {
 	return ulen;
 }
 
-unsigned int UTF16FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsigned int tlen) {
-	unsigned int ui=0;
+size_t UTF16FromUTF8(const char *s, size_t len, wchar_t *tbuf, size_t tlen) {
+	size_t ui = 0;
 	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
-	unsigned int i=0;
+	size_t i = 0;
 	while ((i<len) && (ui<tlen)) {
 		unsigned char ch = us[i++];
 		if (ch < 0x80) {
@@ -138,6 +138,51 @@ unsigned int UTF16FromUTF8(const char *s, unsigned int len, wchar_t *tbuf, unsig
 	return ui;
 }
 
+size_t UTF32FromUTF8(const char *s, size_t len, unsigned int *tbuf, size_t tlen) {
+	size_t ui=0;
+	const unsigned char *us = reinterpret_cast<const unsigned char *>(s);
+	size_t i=0;
+	while ((i<len) && (ui<tlen)) {
+		unsigned char ch = us[i++];
+		unsigned int value = 0;
+		if (ch < 0x80) {
+			value = ch;
+		} else if (((len-i) >= 1) && (ch < 0x80 + 0x40 + 0x20)) {
+			value = (ch & 0x1F) << 6;
+			ch = us[i++];
+			value += ch & 0x7F;
+		} else if (((len-i) >= 2) && (ch < 0x80 + 0x40 + 0x20 + 0x10)) {
+			value = (ch & 0xF) << 12;
+			ch = us[i++];
+			value += (ch & 0x7F) << 6;
+			ch = us[i++];
+			value += ch & 0x7F;
+		} else if ((len-i) >= 3) {
+			value = (ch & 0x7) << 18;
+			ch = us[i++];
+			value += (ch & 0x3F) << 12;
+			ch = us[i++];
+			value += (ch & 0x3F) << 6;
+			ch = us[i++];
+			value += ch & 0x3F;
+		}
+		tbuf[ui] = value;
+		ui++;
+	}
+	return ui;
+}
+
+unsigned int UTF16FromUTF32Character(unsigned int val, wchar_t *tbuf) {
+	if (val < SUPPLEMENTAL_PLANE_FIRST) {
+		tbuf[0] = static_cast<wchar_t>(val);
+		return 1;
+	} else {
+		tbuf[0] = static_cast<wchar_t>(((val - SUPPLEMENTAL_PLANE_FIRST) >> 10) + SURROGATE_LEAD_FIRST);
+		tbuf[1] = static_cast<wchar_t>((val & 0x3ff) + SURROGATE_TRAIL_FIRST);
+		return 2;
+	}
+}
+
 int UTF8BytesOfLead[256];
 static bool initialisedBytesOfLead = false;
 
@@ -159,7 +204,7 @@ static int BytesFromLead(int leadByte) {
 
 void UTF8BytesOfLeadInitialise() {
 	if (!initialisedBytesOfLead) {
-		for (int i=0;i<256;i++) {
+		for (int i=0; i<256; i++) {
 			UTF8BytesOfLead[i] = BytesFromLead(i);
 		}
 		initialisedBytesOfLead = true;
@@ -256,8 +301,30 @@ int UTF8Classify(const unsigned char *us, int len) {
 }
 
 int UTF8DrawBytes(const unsigned char *us, int len) {
-	int utf8StatusNext = UTF8Classify(us, len);
+	const int utf8StatusNext = UTF8Classify(us, len);
 	return (utf8StatusNext & UTF8MaskInvalid) ? 1 : (utf8StatusNext & UTF8MaskWidth);
+}
+
+// Replace invalid bytes in UTF-8 with the replacement character
+std::string FixInvalidUTF8(const std::string &text) {
+	std::string result;
+	const unsigned char *us = reinterpret_cast<const unsigned char *>(text.c_str());
+	size_t remaining = text.size();
+	while (remaining > 0) {
+		const int utf8Status = UTF8Classify(us, static_cast<int>(remaining));
+		if (utf8Status & UTF8MaskInvalid) {
+			// Replacement character 0xFFFD = UTF8:"efbfbd".
+			result.append("\xef\xbf\xbd");
+			us++;
+			remaining--;
+		} else {
+			const int len = utf8Status&UTF8MaskWidth;
+			result.append(reinterpret_cast<const char *>(us), len);
+			us += len;
+			remaining -= len;
+		}
+	}
+	return result;
 }
 
 #ifdef SCI_NAMESPACE

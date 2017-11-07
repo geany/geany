@@ -20,7 +20,9 @@
  */
 
 #ifndef GEANY_TOOLBAR_H
-#define GEANY_TOOLBAR_H
+#define GEANY_TOOLBAR_H 1
+
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 
@@ -35,6 +37,9 @@ typedef struct GeanyToolbarPrefs
 	gboolean		append_to_menu;
 }
 GeanyToolbarPrefs;
+
+
+#ifdef GEANY_PRIVATE
 
 extern GeanyToolbarPrefs toolbar_prefs;
 
@@ -61,6 +66,8 @@ void toolbar_finalize(void);
 
 void toolbar_configure(GtkWindow *parent);
 
+#endif /* GEANY_PRIVATE */
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_TOOLBAR_H */

@@ -24,9 +24,10 @@
  * (inspired by libview's WrapLabel, http://view.sourceforge.net)
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
-#include "utils.h"
 #include "geanywraplabel.h"
 
 

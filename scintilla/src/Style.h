@@ -33,11 +33,11 @@ struct FontSpecification {
 
 // Just like Font but only has a copy of the FontID so should not delete it
 class FontAlias : public Font {
-	// Private so FontAlias objects can not be copied
-	FontAlias(const FontAlias &);
-	FontAlias &operator=(const FontAlias &);
 public:
 	FontAlias();
+	// FontAlias objects can not be assigned except for initialization
+	FontAlias &operator=(const FontAlias &) = delete;
+	FontAlias(const FontAlias &);
 	virtual ~FontAlias();
 	void MakeAlias(Font &fontOrigin);
 	void ClearFont();
@@ -46,6 +46,7 @@ public:
 struct FontMeasurements {
 	unsigned int ascent;
 	unsigned int descent;
+	XYPOSITION capitalHeight;	// Top of capital letter to baseline: ascent - internal leading
 	XYPOSITION aveCharWidth;
 	XYPOSITION spaceWidth;
 	int sizeZoomed;
@@ -61,7 +62,7 @@ public:
 	ColourDesired back;
 	bool eolFilled;
 	bool underline;
-	enum ecaseForced {caseMixed, caseUpper, caseLower};
+	enum ecaseForced {caseMixed, caseUpper, caseLower, caseCamel};
 	ecaseForced caseForce;
 	bool visible;
 	bool changeable;

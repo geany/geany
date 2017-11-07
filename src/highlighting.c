@@ -25,30 +25,31 @@
  * Syntax highlighting for the different filetypes, using the Scintilla lexers.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "highlighting.h"
+#include "highlightingmappings.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypesprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "SciLexer.h"
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <glib.h>
 #include <glib/gprintf.h>
-
-#include "SciLexer.h"
-#include "highlighting.h"
-#include "editor.h"
-#include "utils.h"
-#include "filetypes.h"
-#include "symbols.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "main.h"
-#include "support.h"
-#include "sciwrappers.h"
-#include "document.h"
-#include "dialogs.h"
-#include "filetypesprivate.h"
-
-#include "highlightingmappings.h"
 
 
 #define GEANY_COLORSCHEMES_SUBDIR "colorschemes"
@@ -57,7 +58,7 @@
 #define GEANY_WHITESPACE_CHARS " \t" "!\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~"
 
 
-static gchar *whitespace_chars;
+static gchar *whitespace_chars = NULL;
 
 
 typedef struct
@@ -96,6 +97,7 @@ enum	/* Geany common styling */
 	GCS_MARKER_TRANSLUCENCY,
 	GCS_LINE_HEIGHT,
 	GCS_CALLTIPS,
+	GCS_INDICATOR_ERROR,
 	GCS_MAX
 };
 
@@ -111,7 +113,7 @@ static struct
 	gint fold_draw_line;
 
 	gchar			*wordchars;
-} common_style_set;
+} common_style_set = { { { 0 } }, 0, 0, 0, NULL };
 
 
 /* For filetypes.common [named_styles] section.
@@ -122,10 +124,6 @@ static GHashTable *named_style_hash = NULL;
 /* 0xBBGGRR format, set by "default" named style. */
 static GeanyLexerStyle gsd_default = {0x000000, 0xffffff, FALSE, FALSE};
 
-
-/* Note: use sciwrappers.h instead where possible.
- * Do not use SSM in files unrelated to scintilla. */
-#define SSM(s, m, w, l) scintilla_send_message(s, m, w, l)
 
 /* filetypes should use the filetypes.foo [lexer_properties] group instead of hardcoding */
 static void sci_set_property(ScintillaObject *sci, const gchar *name, const gchar *value)
@@ -170,10 +168,11 @@ static void get_keyfile_keywords(GKeyFile *config, GKeyFile *configh,
 }
 
 
-static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars)
+static void get_keyfile_wordchars(GKeyFile *config, GKeyFile *configh, gchar **wordchars,
+		const gchar *default_wordchars)
 {
 	*wordchars = utils_get_setting(string, configh, config,
-		"settings", "wordchars", GEANY_WORDCHARS);
+		"settings", "wordchars", default_wordchars);
 }
 
 
@@ -432,23 +431,6 @@ void highlighting_free_styles(void)
 }
 
 
-static GString *get_global_typenames(gint lang)
-{
-	GString *s = NULL;
-
-	if (app->tm_workspace)
-	{
-		GPtrArray *tags_array = app->tm_workspace->global_tags;
-
-		if (tags_array)
-		{
-			s = symbols_find_tags_as_string(tags_array, TM_GLOBAL_TYPE_MASK, lang);
-		}
-	}
-	return s;
-}
-
-
 static gchar*
 get_keyfile_whitespace_chars(GKeyFile *config, GKeyFile *configh)
 {
@@ -575,6 +557,7 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_style(config, config_home, "marker_search", &common_style_set.styling[GCS_MARKER_SEARCH]);
 	get_keyfile_style(config, config_home, "marker_mark", &common_style_set.styling[GCS_MARKER_MARK]);
 	get_keyfile_style(config, config_home, "calltips", &common_style_set.styling[GCS_CALLTIPS]);
+	get_keyfile_style(config, config_home, "indicator_error", &common_style_set.styling[GCS_INDICATOR_ERROR]);
 
 	get_keyfile_ints(config, config_home, "styling", "folding_style",
 		1, 1, &common_style_set.fold_marker, &common_style_set.fold_lines);
@@ -593,7 +576,9 @@ static void styleset_common_init(GKeyFile *config, GKeyFile *config_home)
 	get_keyfile_int(config, config_home, "styling", "line_height",
 		0, 0, &common_style_set.styling[GCS_LINE_HEIGHT]);
 
-	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars);
+	g_free(common_style_set.wordchars);
+	get_keyfile_wordchars(config, config_home, &common_style_set.wordchars, GEANY_WORDCHARS);
+	g_free(whitespace_chars);
 	whitespace_chars = get_keyfile_whitespace_chars(config, config_home);
 }
 
@@ -662,13 +647,19 @@ static void styleset_common(ScintillaObject *sci, guint ft_id)
 
 	/* Error indicator */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_ERROR, INDIC_SQUIGGLEPIXMAP);
-	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR, invert(0x0000FF /* red, in BGR */));
+	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_ERROR,
+		invert(common_style_set.styling[GCS_INDICATOR_ERROR].foreground));
 
 	/* Search indicator, used for 'Mark' matches */
 	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SEARCH, INDIC_ROUNDBOX);
 	SSM(sci, SCI_INDICSETFORE, GEANY_INDICATOR_SEARCH,
 		invert(common_style_set.styling[GCS_MARKER_SEARCH].background));
 	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SEARCH, 60);
+
+	/* Snippet cursor indicator, when inserting snippets with multiple
+	 * cursor positions. */
+	SSM(sci, SCI_INDICSETSTYLE, GEANY_INDICATOR_SNIPPET, INDIC_DOTBOX);
+	SSM(sci, SCI_INDICSETALPHA, GEANY_INDICATOR_SNIPPET, 60);
 
 	/* define marker symbols
 	 * 0 -> line marker */
@@ -822,7 +813,7 @@ static void merge_type_keywords(ScintillaObject *sci, guint ft_id, guint keyword
 	const gchar *user_words = style_sets[ft_id].keywords[keyword_idx];
 	GString *s;
 
-	s = get_global_typenames(filetypes[ft_id]->lang);
+	s = symbols_find_typenames_as_string(filetypes[ft_id]->lang, TRUE);
 	if (G_UNLIKELY(s == NULL))
 		s = g_string_sized_new(200);
 	else
@@ -1017,6 +1008,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(CAML);
 		init_styleset_case(CMAKE);
 		init_styleset_case(COBOL);
+		init_styleset_case(COFFEESCRIPT);
 		init_styleset_case(CONF);
 		init_styleset_case(CSS);
 		init_styleset_case(D);
@@ -1028,6 +1020,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(F77);
 		init_styleset_case(FORTH);
 		init_styleset_case(FORTRAN);
+		init_styleset_case(GO);
 		init_styleset_case(HASKELL);
 		init_styleset_case(HAXE);
 		init_styleset_case(AS);
@@ -1058,6 +1051,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 		init_styleset_case(VERILOG);
 		init_styleset_case(XML);
 		init_styleset_case(YAML);
+		init_styleset_case(ZEPHIR);
 		default:
 			if (ft->lexer_filetype)
 				geany_debug("Filetype %s has a recursive lexer_filetype %s set!",
@@ -1065,7 +1059,8 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 	}
 
 	/* should be done in filetypes.c really: */
-	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars);
+	get_keyfile_wordchars(config, configh, &style_sets[filetype_idx].wordchars,
+			common_style_set.wordchars);
 }
 
 
@@ -1083,6 +1078,7 @@ void highlighting_init_styles(guint filetype_idx, GKeyFile *config, GKeyFile *co
 /** Sets up highlighting and other visual settings.
  * @param sci Scintilla widget.
  * @param ft Filetype settings to use. */
+GEANY_API_SYMBOL
 void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 {
 	guint lexer_id = get_lexer_filetype(ft);
@@ -1100,6 +1096,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(CAML);
 		styleset_case(CMAKE);
 		styleset_case(COBOL);
+		styleset_case(COFFEESCRIPT);
 		styleset_case(CONF);
 		styleset_case(CSS);
 		styleset_case(D);
@@ -1111,6 +1108,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(F77);
 		styleset_case(FORTH);
 		styleset_case(FORTRAN);
+		styleset_case(GO);
 		styleset_case(HASKELL);
 		styleset_case(HAXE);
 		styleset_case(AS);
@@ -1141,6 +1139,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
 		styleset_case(VERILOG);
 		styleset_case(XML);
 		styleset_case(YAML);
+		styleset_case(ZEPHIR);
 		case GEANY_FILETYPES_NONE:
 		default:
 			styleset_default(sci, ft->id);
@@ -1169,6 +1168,7 @@ void highlighting_set_styles(ScintillaObject *sci, GeanyFiletype *ft)
  * @param style_id A Scintilla lexer style, e.g. @c SCE_DIFF_ADDED. See scintilla/include/SciLexer.h.
  * @return A pointer to the style struct.
  * @see Scintilla messages @c SCI_STYLEGETFORE, etc, for use with scintilla_send_message(). */
+GEANY_API_SYMBOL
 const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 {
 	g_return_val_if_fail(ft_id >= 0 && (guint) ft_id < filetypes_array->len, NULL);
@@ -1182,8 +1182,6 @@ const GeanyLexerStyle *highlighting_get_style(gint ft_id, gint style_id)
 	return get_style((guint) ft_id, (guint) style_id);
 }
 
-
-static GtkWidget *scheme_tree = NULL;
 
 enum
 {
@@ -1246,7 +1244,7 @@ static gchar *utils_get_setting_locale_string(GKeyFile *keyfile,
 
 
 static void add_color_scheme_item(GtkListStore *store,
-	gchar *name, gchar *desc, const gchar *fn)
+	gchar *name, gchar *desc, const gchar *fn, GtkTreeIter *current_iter)
 {
 	GtkTreeIter iter;
 	gchar *markup;
@@ -1263,17 +1261,15 @@ static void add_color_scheme_item(GtkListStore *store,
 		SCHEME_FILE, fn, -1);
 	g_free(markup);
 
-	if (utils_str_equal(fn, editor_prefs.color_scheme))
-	{
-		GtkTreeSelection *treesel =
-			gtk_tree_view_get_selection(GTK_TREE_VIEW(scheme_tree));
-
-		gtk_tree_selection_select_iter(treesel, &iter);
-	}
+	/* select the current iter if the the color scheme matches, or if it's the
+	 * default (fn == NULL), in case of bad config file.  the default theme is
+	 * first anyway so if a later scheme matches it will override default */
+	if ((! fn || utils_str_equal(fn, editor_prefs.color_scheme)) && current_iter)
+		*current_iter = iter;
 }
 
 
-static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
+static void add_color_scheme_file(GtkListStore *store, const gchar *fname, GtkTreeIter *current_iter)
 {
 	GKeyFile *hkeyfile, *skeyfile;
 	gchar *path, *theme_name, *theme_desc;
@@ -1286,7 +1282,7 @@ static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
 
 	theme_name = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "name", theme_fn);
 	theme_desc = utils_get_setting(locale_string, hkeyfile, skeyfile, "theme_info", "description", NULL);
-	add_color_scheme_item(store, theme_name, theme_desc, theme_fn);
+	add_color_scheme_item(store, theme_name, theme_desc, theme_fn, current_iter);
 
 	g_free(path);
 	g_free(theme_fn);
@@ -1297,11 +1293,11 @@ static void add_color_scheme_file(GtkListStore *store, const gchar *fname)
 }
 
 
-static gboolean add_color_scheme_items(GtkListStore *store)
+static gboolean add_color_scheme_items(GtkListStore *store, GtkTreeIter *current_iter)
 {
 	GSList *list, *node;
 
-	add_color_scheme_item(store, _("Default"), _("Default"), NULL);
+	add_color_scheme_item(store, _("Default"), _("Default"), NULL, current_iter);
 	list = utils_get_config_files(GEANY_COLORSCHEMES_SUBDIR);
 
 	foreach_slist(node, list)
@@ -1309,7 +1305,7 @@ static gboolean add_color_scheme_items(GtkListStore *store)
 		gchar *fname = node->data;
 
 		if (g_str_has_suffix(fname, ".conf"))
-			add_color_scheme_file(store, fname);
+			add_color_scheme_file(store, fname, current_iter);
 
 		g_free(fname);
 	}
@@ -1334,6 +1330,8 @@ void highlighting_show_color_scheme_dialog(void)
 	GtkCellRenderer *text_renderer;
 	GtkTreeViewColumn *column;
 	GtkTreeSelection *treesel;
+	GtkTreeIter current_iter;
+	GtkTreePath *path;
 	GtkWidget *vbox, *swin, *tree;
 	GeanyDocument *doc;
 
@@ -1343,7 +1341,7 @@ void highlighting_show_color_scheme_dialog(void)
 			_("The current filetype overrides the default style."),
 			_("This may cause color schemes to display incorrectly."));
 
-	scheme_tree = tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
+	tree = gtk_tree_view_new_with_model(GTK_TREE_MODEL(store));
 	g_object_unref(store);
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
@@ -1354,9 +1352,13 @@ void highlighting_show_color_scheme_dialog(void)
 		NULL, text_renderer, "markup", SCHEME_MARKUP, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
-	add_color_scheme_items(store);
+	add_color_scheme_items(store, &current_iter);
 
 	treesel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
+	gtk_tree_selection_select_iter(treesel, &current_iter);
+	path = gtk_tree_model_get_path(GTK_TREE_MODEL(store), &current_iter);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(tree), path, NULL, FALSE, 0, 0);
+	gtk_tree_path_free(path);
 	g_signal_connect(treesel, "changed", G_CALLBACK(on_color_scheme_changed), NULL);
 
 	/* old dialog may still be showing */
@@ -1372,7 +1374,7 @@ void highlighting_show_color_scheme_dialog(void)
 		GEANY_DEFAULT_DIALOG_HEIGHT * 7/4, GEANY_DEFAULT_DIALOG_HEIGHT);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_ETCHED_IN);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), tree);
@@ -1389,6 +1391,7 @@ void highlighting_show_color_scheme_dialog(void)
  *
  * @return @c TRUE if the style is a string, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_string_style(gint lexer, gint style)
 {
 	/* Don't forget STRINGEOL, to prevent completion whilst typing a string with no closing char. */
@@ -1401,8 +1404,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_STRINGEOL ||
 				style == SCE_C_STRINGRAW ||
 				style == SCE_C_VERBATIM ||
+				style == SCE_C_USERLITERAL ||
 				style == SCE_C_TRIPLEVERBATIM ||
-				style == SCE_C_HASHQUOTEDSTRING);
+				style == SCE_C_REGEX ||
+				style == SCE_C_HASHQUOTEDSTRING ||
+				style == SCE_C_ESCAPESEQUENCE);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
@@ -1421,6 +1427,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_P_TRIPLE ||
 				style == SCE_P_TRIPLEDOUBLE ||
 				style == SCE_P_CHARACTER ||
+				style == SCE_P_FSTRING ||
+				style == SCE_P_FCHARACTER ||
+				style == SCE_P_FTRIPLE ||
+				style == SCE_P_FTRIPLEDOUBLE ||
 				style == SCE_P_STRINGEOL);
 
 		case SCLEX_F77:
@@ -1443,6 +1453,8 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_PL_STRING_QR ||
 				style == SCE_PL_STRING_QW ||
 				style == SCE_PL_POD_VERB ||
+				style == SCE_PL_REGEX ||
+				style == SCE_PL_REGEX_VAR ||
 				style == SCE_PL_XLAT
 				/* we don't include any STRING_*_VAR for autocompletion */);
 
@@ -1464,6 +1476,12 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_RB_HERE_Q ||
 				style == SCE_RB_HERE_QQ ||
 				style == SCE_RB_HERE_QX ||
+				style == SCE_RB_REGEX ||
+				style == SCE_RB_STRING_Q ||
+				style == SCE_RB_STRING_QQ ||
+				style == SCE_RB_STRING_QX ||
+				style == SCE_RB_STRING_QR ||
+				style == SCE_RB_STRING_QW ||
 				style == SCE_RB_POD);
 
 		case SCLEX_BASH:
@@ -1497,6 +1515,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_STRING ||
 				style == SCE_HBA_STRINGEOL ||
@@ -1507,9 +1526,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_HJA_DOUBLESTRING ||
 				style == SCE_HJA_SINGLESTRING ||
 				style == SCE_HJA_STRINGEOL ||
+				style == SCE_HJA_REGEX ||
 				style == SCE_HJ_DOUBLESTRING ||
 				style == SCE_HJ_SINGLESTRING ||
 				style == SCE_HJ_STRINGEOL ||
+				style == SCE_HJ_REGEX ||
 				style == SCE_HPA_CHARACTER ||
 				style == SCE_HPA_STRING ||
 				style == SCE_HPA_TRIPLE ||
@@ -1548,9 +1569,56 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_RUST:
 			return (style == SCE_RUST_CHARACTER ||
+				style == SCE_RUST_BYTECHARACTER ||
 				style == SCE_RUST_STRING ||
 				style == SCE_RUST_STRINGR ||
+				style == SCE_RUST_BYTESTRING ||
+				style == SCE_RUST_BYTESTRINGR ||
 				style == SCE_RUST_LEXERROR);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_CHARACTER ||
+				style == SCE_COFFEESCRIPT_STRING ||
+				style == SCE_COFFEESCRIPT_REGEX ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX ||
+				style == SCE_COFFEESCRIPT_STRINGEOL);
+
+		case SCLEX_VERILOG:
+			return (style == SCE_V_STRING);
+
+		case SCLEX_CAML:
+			return (style == SCE_CAML_CHAR ||
+				style == SCE_CAML_STRING);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_DOUBLESTRING ||
+				style == SCE_CSS_SINGLESTRING);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_STRING ||
+				style == SCE_ERLANG_CHARACTER);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_STRING ||
+				style == SCE_LISP_STRINGEOL);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_STRING);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_STRING ||
+				style == SCE_POWERSHELL_CHARACTER);
+
+		case SCLEX_BATCH:
+		case SCLEX_DIFF:
+		case SCLEX_LATEX:
+		case SCLEX_MAKEFILE:
+		case SCLEX_MARKDOWN:
+		case SCLEX_PROPERTIES:
+		case SCLEX_TXT2TAGS:
+		case SCLEX_YAML:
+			/* there is no string type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
@@ -1563,6 +1631,7 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is a comment, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_comment_style(gint lexer, gint style)
 {
 	switch (lexer)
@@ -1576,7 +1645,8 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_C_PREPROCESSORCOMMENTDOC ||
 				style == SCE_C_COMMENTLINEDOC ||
 				style == SCE_C_COMMENTDOCKEYWORD ||
-				style == SCE_C_COMMENTDOCKEYWORDERROR);
+				style == SCE_C_COMMENTDOCKEYWORDERROR ||
+				style == SCE_C_TASKMARKER);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_COMMENT ||
@@ -1658,13 +1728,18 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_HA_LITERATE_CODEDELIM);
 
 		case SCLEX_FREEBASIC:
-			return (style == SCE_B_COMMENT);
+			return (style == SCE_B_COMMENT ||
+				style == SCE_B_COMMENTBLOCK ||
+				style == SCE_B_DOCLINE ||
+				style == SCE_B_DOCBLOCK ||
+				style == SCE_B_DOCKEYWORD);
 
 		case SCLEX_YAML:
 			return (style == SCE_YAML_COMMENT);
 
 		case SCLEX_XML:
 		case SCLEX_HTML:
+		case SCLEX_PHPSCRIPT:
 			return (
 				style == SCE_HBA_COMMENTLINE ||
 				style == SCE_HB_COMMENTLINE ||
@@ -1689,8 +1764,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_NSIS_COMMENTBOX);
 
 		case SCLEX_ADA:
-			return (style == SCE_ADA_COMMENTLINE ||
-				style == SCE_NSIS_COMMENTBOX);
+			return (style == SCE_ADA_COMMENTLINE);
 
 		case SCLEX_ABAQUS:
 			return (style == SCE_ABAQUS_COMMENT ||
@@ -1706,6 +1780,64 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
 				style == SCE_RUST_COMMENTLINE ||
 				style == SCE_RUST_COMMENTBLOCKDOC ||
 				style == SCE_RUST_COMMENTLINEDOC);
+
+		case SCLEX_COFFEESCRIPT:
+			return (style == SCE_COFFEESCRIPT_COMMENTLINE ||
+				style == SCE_COFFEESCRIPT_COMMENTBLOCK ||
+				style == SCE_COFFEESCRIPT_VERBOSE_REGEX_COMMENT);
+
+		case SCLEX_VERILOG:
+			return (style == SCE_V_COMMENT ||
+				style == SCE_V_COMMENTLINE ||
+				style == SCE_V_COMMENTLINEBANG ||
+				style == SCE_V_COMMENT_WORD);
+
+		case SCLEX_VHDL:
+			return (style == SCE_VHDL_COMMENT ||
+				style == SCE_VHDL_COMMENTLINEBANG ||
+				style == SCE_VHDL_BLOCK_COMMENT);
+
+		case SCLEX_BATCH:
+			return (style == SCE_BAT_COMMENT);
+
+		case SCLEX_CAML:
+			return (style == SCE_CAML_COMMENT ||
+				style == SCE_CAML_COMMENT1 ||
+				style == SCE_CAML_COMMENT2 ||
+				style == SCE_CAML_COMMENT3);
+
+		case SCLEX_ERLANG:
+			return (style == SCE_ERLANG_COMMENT ||
+				style == SCE_ERLANG_COMMENT_FUNCTION ||
+				style == SCE_ERLANG_COMMENT_MODULE ||
+				style == SCE_ERLANG_COMMENT_DOC ||
+				style == SCE_ERLANG_COMMENT_DOC_MACRO);
+
+		case SCLEX_FORTH:
+			return (style == SCE_FORTH_COMMENT ||
+				style == SCE_FORTH_COMMENT_ML);
+
+		case SCLEX_CSS:
+			return (style == SCE_CSS_COMMENT);
+
+		case SCLEX_DIFF:
+			return (style == SCE_DIFF_COMMENT);
+
+		case SCLEX_LISP:
+			return (style == SCE_LISP_COMMENT ||
+				style == SCE_LISP_MULTI_COMMENT);
+
+		case SCLEX_POWERSHELL:
+			return (style == SCE_POWERSHELL_COMMENT ||
+				style == SCE_POWERSHELL_COMMENTSTREAM ||
+				style == SCE_POWERSHELL_COMMENTDOCKEYWORD);
+
+		case SCLEX_TXT2TAGS:
+			return (style == SCE_TXT2TAGS_COMMENT);
+
+		case SCLEX_MARKDOWN:
+			/* there is no comment type in those lexers, listing here just for completeness */
+			return FALSE;
 	}
 	return FALSE;
 }
@@ -1718,6 +1850,7 @@ gboolean highlighting_is_comment_style(gint lexer, gint style)
  *
  * @return @c TRUE if the style is code, @c FALSE otherwise.
  */
+GEANY_API_SYMBOL
 gboolean highlighting_is_code_style(gint lexer, gint style)
 {
 	switch (lexer)
@@ -1732,6 +1865,12 @@ gboolean highlighting_is_code_style(gint lexer, gint style)
 		case SCLEX_LITERATEHASKELL:
 		{
 			if (style == SCE_HA_PREPROCESSOR)
+				return FALSE;
+			break;
+		}
+		case SCLEX_VERILOG:
+		{
+			if (style == SCE_V_PREPROCESSOR)
 				return FALSE;
 			break;
 		}

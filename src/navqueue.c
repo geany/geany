@@ -24,16 +24,19 @@
  * Simple code navigation
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "sciwrappers.h"
-#include "document.h"
-#include "utils.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "editor.h"
 #include "navqueue.h"
+
+#include "document.h"
+#include "geanyobject.h"
+#include "sciwrappers.h"
 #include "toolbar.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
 
 
 /* for the navigation history queue */
@@ -146,6 +149,7 @@ static void add_new_position(const gchar *utf8_filename, gint pos)
  *
  *  @return @c TRUE if the cursor has changed the position to @a line or @c FALSE otherwise.
  **/
+GEANY_API_SYMBOL
 gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line)
 {
 	gint pos;
@@ -188,6 +192,20 @@ static gboolean goto_file_pos(const gchar *file, gint pos)
 void navqueue_go_back(void)
 {
 	filepos *fprev;
+	GeanyDocument *doc = document_get_current();
+
+	/* If the navqueue is currently at some position A, but the actual cursor is at some other
+	 * place B, we should add B to the navqueue, so that (1) we go back to A, not to the next
+	 * item in the queue; and (2) we can later restore B by going forward.
+	 * (If A = B, add_new_position will ignore it.) */
+	if (doc)
+	{
+		if (doc->file_name)
+			add_new_position(doc->file_name, sci_get_current_position(doc->editor->sci));
+	}
+	else
+		/* see also https://github.com/geany/geany/pull/1537 */
+		g_warning("Attempted navigation when nothing is open");
 
 	/* return if theres no place to go back to */
 	if (g_queue_is_empty(navigation_queue) ||

@@ -24,30 +24,35 @@
  * About dialog and credits.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "about.h"
+
+#include "app.h"
+#include "gb.c"
 #include "geany.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "support.h"
 #include "geanywraplabel.h"
 #include "main.h"
-#include "templates.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
 
-#include "gb.c"
-
+#include "gtkcompat.h"
 
 #define HEADER "<span size=\"larger\" weight=\"bold\">Geany %s</span>"
 #define INFO "<span size=\"larger\" weight=\"bold\">%s</span>"
 #define CODENAME "<span weight=\"bold\">\"" GEANY_CODENAME "\"</span>"
 #define BUILDDATE "<span size=\"smaller\">%s</span>"
-#define COPYRIGHT _("Copyright (c)  2005-2012\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
+#define COPYRIGHT _("Copyright (c)  2005-2017\nColomban Wendling\nNick Treleaven\nMatthew Brush\nEnrico Tröger\nFrank Lanitz\nAll rights reserved.")
 
-const gchar *translators[][2] = {
+static const gchar *translators[][2] = {
 	{ "ar", "Fayssal Chamekh &lt;chamfay@gmail.com&gt;"},
 	{ "ast", "Marcos Costales &lt;marcoscostales@gmail.com&gt;"},
 	{ "be_BY", "Yura Siamashka &lt;yurand2@gmail.com&gt;" },
 	{ "bg", "Dilyan Rusev &lt;dilyanrusev@gmail.com&gt;" },
-	{ "ca_ES", "Toni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
+	{ "ca_ES", "Robert Buj &lt;rbuj@fedoraproject.org&gt;\nToni Garcia-Navarro &lt;topi@elpiset.net&gt;" },
 	{ "cs_CZ", "Petr Messner &lt;messa@messa.cz&gt;\nAnna Talianova &lt;anickat1@gmail.com&gt;" },
 	{ "de_DE", "Frank Lanitz &lt;frank@frank.uvena.de&gt;\nDominic Hopf &lt;dmaphy@googlemail.com&gt;" },
 	{ "el", "Stavros Temertzidis &lt;bullgr@gmail.com&gt;" },
@@ -61,6 +66,9 @@ const gchar *translators[][2] = {
 	{ "hi", "Asheesh Ranjan &lt;asheeshranjan1@gmail.com&gt;"},
 	{ "he", "Yosef Or Boczko &lt;yoseforb@gmail.com&gt;"},
 	{ "hu", "Gabor Kmetyko &lt;kg_kilo@freemail.hu&gt;" },
+	{ "id", "Fajar Wahyu &lt;fajarwahyuabdillah@gmail.com&gt;\n"
+			   "Samsul Ma'arif &lt;mail@samsul.web.id&gt;\n"
+			   "Bervianto Leo Pratama &lt;bervianto.leo@gmail.com&gt;" },
 	{ "it", "Max Baldinelli &lt;m.baldinelli@agora.it&gt;,\nDario Santomarco &lt;dariello@yahoo.it&gt;" },
 	{ "ja", "Tarot Osuji &lt;tarot@sdf.lonestar.org&gt;\nChikahiro Masami &lt;cmasa.z321@gmail.com&gt;" },
 	{ "ko", "Park Jang-heon &lt;dotkabi@gmail.com&gt;" },
@@ -68,13 +76,13 @@ const gchar *translators[][2] = {
 	{ "lt", "Algimantas Margevičius &lt;margevicius.algimantas@gmail.com&gt;"},
 	{ "lb", "Laurent Hoeltgen &lt;hoeltgman@gmail.com&gt;" },
 	{ "mn", "tsetsee &lt;tsetsee.yugi@gmail.com&gt;"},
-	{ "nl", "Peter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
+	{ "nl", "Benno Schulenberg &lt;benno@vertaalt.nl&gt;\nPeter Scholtens &lt;peter.scholtens@xs4all.nl&gt;\nAyke van Laethem &lt;aykevanlaethem@gmail.com&gt;" },
 	{ "pl", "Wojciech Świderski &lt;woj.swiderski@gmail.com&gt;"},
 	{ "pt_BR", "Alexandra Moreire &lt;alexandream@gmail.com&gt;\n"
 			   "Adrovane Marques Kade &lt;adrovane@gmail.com&gt;\n"
 			   "Rafael Peregrino da Silva &lt;rperegrino@linuxnewmedia.com.br&gt;"},
 	{ "ro", "Alex Eftimie &lt;alex@rosedu.org&gt;" },
-	{ "ru", "brahmann_ &lt;brahmann@pisem.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
+	{ "ru", "brahmann_ &lt;brahmann@lifec0re.net&gt;,\nNikita E. Shalaev &lt;nshalaev@eu.spb.ru&gt;" },
 	{ "sk", "Tomáš Vadina &lt;kyberdev@gmail.com&gt;" },
 	{ "sl", "Jože Klepec &lt;joze.klepec@siol.net&gt;"},
 	{ "sv", "Tony Mattsson &lt;superxorn@gmail.com&gt;" },
@@ -87,7 +95,7 @@ const gchar *translators[][2] = {
 };
 static const guint translators_len = G_N_ELEMENTS(translators);
 
-const gchar *prev_translators[][2] = {
+static const gchar *prev_translators[][2] = {
 	{ "es", "Damián Viano &lt;debian@damianv.com.ar&gt;\nNacho Cabanes &lt;ncabanes@gmail.com&gt;" },
 	{ "pl", "Jacek Wolszczak &lt;shutdownrunner@o2.pl&gt;\nJarosław Foksa &lt;jfoksa@gmail.com&gt;" },
 	{ "nl", "Kurt De Bree &lt;kdebree@telenet.be&gt;" }
@@ -165,7 +173,6 @@ static GtkWidget *create_dialog(void)
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	gtk_dialog_add_button(GTK_DIALOG(dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
 	gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-	gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
 	g_signal_connect(dialog, "key-press-event", G_CALLBACK(gb_on_key_pressed), NULL);
 
 	/* create header */
@@ -453,31 +460,17 @@ void about_dialog_show(void)
 
 static void header_eventbox_style_set(GtkWidget *widget)
 {
-	static gint recursive = 0;
-	GtkStyle *style;
-
-	if (recursive > 0)
-		return;
-
-	++recursive;
-	style = gtk_widget_get_style(widget);
-	gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
-	--recursive;
+	GtkStyle *style = gtk_widget_get_style(widget);
+	if (! gdk_color_equal(&style->bg[GTK_STATE_NORMAL], &style->bg[GTK_STATE_SELECTED]))
+		gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
 }
 
 
 static void header_label_style_set(GtkWidget *widget)
 {
-	static gint recursive = 0;
-	GtkStyle *style;
-
-	if (recursive > 0)
-		return;
-
-	++recursive;
-	style = gtk_widget_get_style(widget);
-	gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
-	--recursive;
+	GtkStyle *style = gtk_widget_get_style(widget);
+	if (! gdk_color_equal(&style->fg[GTK_STATE_NORMAL], &style->fg[GTK_STATE_SELECTED]))
+		gtk_widget_modify_fg(widget, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
 }
 
 

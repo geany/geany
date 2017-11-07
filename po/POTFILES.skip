@@ -6,5 +6,6 @@ geany.desktop.in
 geany.glade
 # no need to translate these files
 plugins/demoplugin.c
+plugins/demoproxy.c
 doc/stash-example.c
 doc/stash-gui-example.c

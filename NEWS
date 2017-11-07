@@ -1,4 +1,474 @@
-Geany 1.24 (unreleased)
+Geany 1.32 (unreleased)
+
+    Internationalization
+    * Updated translations: ca, de, fr, it, lv, pt, ru, sk, sv
+
+
+Geany 1.31 (July 16, 2017)
+
+    Bug fixes
+    * Update statusbar after applying indentation detection.
+    * Fix converting color to hex for insertion in the Color Chooser
+      dialog (Vasiliy Faronov, PR#1536).
+
+    Filetypes
+    * Add `parfor` to the Matlab keyword list (A. Tombs, PR#1021).
+    * C: fix line continuation handling (PR#1370).
+    * Add `require_relative` to the Ruby keyword list (Jacob H. Pratt,
+      PR#1472).
+    * Update Haxe keywords (PR#1216).
+    * Fix Arduino comment toggling (Giorgioggì, PR#1510).
+    * Update CMake keywords (Yan Pashkovsky, PR#1315).
+    * Update C# keywords (Yan Pashkovsky, PR#1315).
+    * Update HTML keywords (Vasiliy Faronov, PR#1530).
+
+    Internationalization
+    * Updated translations: ca, id, ja, kk, lt, ru
+
+    API
+    * Fix crash when calling plugin_set_key_group() more than once
+      (Jiří Techet, PR#1426).
+
+
+Geany 1.30.1 (March 19, 2017)
+
+    Editor
+    * Fix auto-completion and calltip popup position on multi-monitor
+      setups (Issue#1422).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, sk
+
+
+Geany 1.30 (March 05, 2017)
+
+    General
+    * Initial accessibility support in the editor (SF#328).
+    * Fix scrolling on Wayland (Issue#1320).
+
+    Bug fixes
+    * Fix Ctrl+X and Ctrl+C in non-Latin keyboard layouts
+      (Forkest, PR#1386).
+    * Fix search history filling on GTK >= 3.20 (PR#1404).
+    * Simplify setting build menu items labels, fixing a Commander plugin
+      issue (Vasiliy Faronov, PR#1396).
+
+    Interface
+    * Fix the current scope shown in the statusbar (Issue#1279).
+
+    Editor
+    * Update Scintilla to version 3.7.3.
+    * Fix triggering default keybindings together with snippets keybindings
+      (Issue#1354, PR#1356).
+
+    Filetypes
+    * Update JavaScript keywords (Abel 'Akronix' Serrano Juste, PR#1361).
+    * Partial highlighting of JavaScript ES6 template strings (Issue#934).
+    * Add Arduino custom filetype (Issue#1339).
+
+    Internationalization
+    * Updated translations: de, es, fr, it, lt, pt
+
+    API
+    * Remove unprefixed Scintilla structure aliases. Plugins must use
+      the `Sci_`-prefixed version from now on.
+    * Add `geany_api_version()` to detect the API version of Geany at
+      runtime (Thomas Martitz, PR#1406).
+
+    OSX
+    * Fix slow startup (Jiří Techet, Issue#1277, PR#1399).
+
+
+Geany 1.29 (November 13, 2016)
+
+    General
+    * Fix search entries color with the default GNOME 3.20 GTK2 theme
+      (PR#1137, Issue#1101, Issue#1135, Issue#1267).
+    * Improve support for GTK 3.22.
+    * Add support for VTE 0.38 and newer (Issue#336, PR#1181).
+
+    Bug fixes
+    * Fix build when the CXX variable contains flags (PR#1155, Issue#829).
+    * Fix focusing the message window when the Terminal tab is active
+      (PR#1200, Issue#1198).
+
+    Editor
+    * Update Scintilla to version 3.7.0 (Issue#1143).
+    * Add support for keeping the cursor a number of lines from the edges to
+      always show some context (PR#1154, Issue#1152).
+    * Allow to configure keybinding for "Delete to beginning of line"
+      (Abel Serrano Juste, PR#1134).
+    * Performance improvements with many duplicate symbols (Jiří Techet,
+      PR#797, Issue#577).
+    * Allow to configure the error indicator color (PR#1185).
+
+    Filetypes
+    * Fix highlighting of Haxe preprocessor (Issue#936).
+    * Add `.exp` extension to TCL (Simon Marchi, PR#979).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, id, it, kk, nl pt, pt_BR,
+      sv, zh_CN,
+
+    API
+    * Update `GeanyProxyProbeResults` API (PR#1213).
+    * Warn if a dot is used at the start of a proxy extension (PR#1212,
+      PR#1233).
+    * Add support for custom data attached to documents through
+      `plugin_set_document_data()`, `plugin_get_document_data()` and
+      `plugin_set_document_data_full()` (PR#1203).
+    * Add "project-before-close" signal (PR#1223).
+
+    Plugins
+    * Split Window: Work around a GTK bug present from 3.15.9 to 3.21.4
+      that breaks the document selection popup (Issue#1149, PR#1272).
+
+    Windows
+    * Include 'grep.exe' from MSYS2 which works better than the previously
+      self-compiled version
+      (Issue#783, Issue#784, Issue#1229, Issue#1260, PR#1301).
+    * Fix executing external commands (mainly Build and Run commands)
+      where paths and filenames with non-ASCII characters are involved
+      (Issue#1076, Issue#1259, Issue#1278, PR#1095).
+    * Do not create a batch file on Run commands any longer, instead use
+      a re-usable script and so eliminate the need to delete the script
+      from itself (Issue#1276, PR#1095).
+
+
+Geany 1.28 (July 10, 2016)
+
+    General
+    * Improve support for GTK 3.20.
+    * System filetype files and system tags files are now in sub-directories
+      *filedefs/* and *tags/* respectively (Jiří Techet, PR#485).
+
+    Bug fixes
+    * Fix canceling keybinding overriding by discarding the dialog (Issue#714).
+    * Fix type name coloring when types change (Jiří Techet, PR#1039,
+      Issue#1020, Issue#1022).
+    * Fix undo of line end type change (Jiří Techet, PR#527, Issue#409).
+
+    Editor
+    * Update Scintilla to version 3.6.6.
+    * Improve Goto Symbol popup contents (Jiří Techet, PR#958).
+
+    Filetypes
+    * Treat `.h` headers as C++ by default (Jiří Techet, PR#857).
+    * Various improvements to the Ruby parser (Issue#587).
+    * Fix Haskell single line comments (Alexander, PR#1029).
+    * Update Java keywords (Yan Pashkovsky, PR#1024).
+    * Fix handling of curly brackets in Make (Masatake Yamato).
+    * Add ECMAScript 6 keywords (Chris Mayo, PR#980).
+    * Slight improvement to the Java file template (Philipp Wiesemann, PR#1073).
+    * Add missing `last-child` CSS pseudo-class (Issue#1102).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, it, ja, lt, pt, ru, sk,
+                            tr, zh_CN
+
+    API
+    * Don't require static strings for key group name and label (PR#1126).
+    * Formally add TMTag to the API (Thomas Martitz, PR#1093).
+
+    Plugins
+    * Class builder: use `.hpp` extension for C++ headers by default
+      (Yan Pashkovsky, PR#999).
+
+    Windows
+    * Show an error if an URI cannot be opened (PR#1079).
+
+    OSX
+    * Fix refreshing the keybindings displayed in the menus (Jiří Techet,
+      PR#973).
+
+
+Geany 1.27 (March 13, 2016)
+
+    General
+    * Remove Waf build system (PR#769).
+
+    Bug fixes
+    * Fix build with GLib < 2.32 (Issue#764).
+    * Fix missing progress bar during build runs (Issue#765).
+    * Fix infinite loop when performing reflow on some input with many
+      consecutive spaces (Issue#848, PR#852).
+    * Fix some locale encoding conversion issues (Jiří Techet, PR#547).
+
+    Interface
+    * Allow to set a keybinding for File->Properties (Issue#622, PR#952).
+    * Make it possible to define default symbol_list_sort_mode (Jiří Techet,
+      Issue#313, PR#581).
+    * Add keybindings for custom commands 4 through 9 (Thomas Sahlin, PR#858).
+    * Use "Symbol" in place of "Tag" everywhere it does not refer to markup
+      tags (Jiří Techet, Issue#579, PR#582).
+
+    Editor
+    * Update Scintilla to version 3.6.3 (including improved support for Lua
+      5.3 and Perl 5.22).
+    * Greatly improve scope completion (Jiří Techet, PR#488, PR#505, PR#862,
+      PR#906).
+    * Performance improvement highlighting types (Jiří Techet, PR#575).
+    * Show calltips after a C++ explicit specialization (PR#496).
+    * Show a popup to select the symbol when going to a symbol has several
+      options (Jiří Techet, PR#406, PR#923).
+
+    Filetypes
+    * Added some extra Markdown extensions (Andrea Stacchiotti, PR#820).
+    * Add `.asm51` and `.a51` extensions for 8051 assembly (Devyn Collier
+      Johnson, PR#739).
+    * Fix C++ namespaces scope (Issue#871).
+    * Fix parsing of C++ global scope qualifiers in base class lists.
+    * Use the C++ parser for CUDA filetype (Issue#830, PR#831).
+    * Add Clojure file extensions (Daniel Șuteu, PR#842).
+    * Improve return type and var type recognition in C, C++, C# and D
+      (Issue#845, PR#889).
+    * Fix parsing of C++11 raw string literals (PR#879).
+    * Update built-in PHP symbols (Issue#584, PR#603).
+    * Fix parsing some Objective-C properties (PR#940, PR#941).
+
+    Internationalization
+    * Updated translations: de, es, fr, it, ja, kk, lt, nl, pt, ru, sk,
+                            zh_CN
+
+    API
+    * Add `editor_set_indent_width()` (Thomas Martitz, PR#903).
+    * Add `GeanyFiletypeID` and deprecate `filetype_id` (PR#932).
+    * Remove non-API type `langType` (Jiří Techet, part of PR#906).
+    * Mark deprecated API so GCC-like compilers can warn about it, and add
+      `GEANY_DISABLE_DEPRECATION_WARNINGS` to silence those (PR#911).
+    * Add `scintilla_object_send_message()`, `scintilla_object_get_type()`
+      and `scintilla_object_new()` alias to the API as synonyms for their
+      legacy counterparts `scintilla_send_message()`, `scintilla_get_type()`
+      and `scintilla_new()` (Thomas Martitz, PR#874).
+
+    Windows
+    * Project->Open now respects the native dialog setting (PR#961).
+
+
+Geany 1.26 (November 15, 2015)
+
+    General
+    * New plugin API (Thomas Martitz, PR#469).
+    * Add support for "proxy" plugins (Thomas Martitz, PR#629).
+
+    Bug fixes
+    * Fix "Open in New Window" command (Issue#590).
+    * Fix spurious "source file has been modified" (Jiří Techet, Issue#605,
+      PR#621).
+    * Don't open more than one document for non-existing paths from the CLI
+      (https://bugs.launchpad.net/linuxmint/+bug/1482558, PR#646).
+    * Fix configuration directory encoding on non-UTF-8 non-Windows systems
+      (Dimitar Zhekov, PR#658).
+
+    Interface
+    * Use monospace font for the message window by default (Jiří Techet,
+      Issue#435, PR#580).
+    * Fix mnemonic conflict in "Use multi-line matching" (Ross Konsolebox,
+      Issue#589, PR#647).
+
+    Editor
+    * Update Scintilla to version 3.6.1.
+    * Fix completion popup height when view is zoomed (Issue#702).
+    * Fix Go To End Of Display Line when wrapping is on and EOL are visible
+      (Issue#712).
+    * Keeping undo history when reloading files is now enabled by default
+      (Thomas Martitz, Issue#562, PR#672).
+    * "Strip trailing spaces", "Replace tabs" and "Replace spaces" now
+      follow the current selection (Pavel Sountsov, PR#394).
+    * Respect Smart Home Key setting in Go To Start of Display Line.
+    * Check whether the document is newer on disk when the window gets
+      focused (Jiří Techet, PR#533).
+
+    Filetypes
+    * Add Cargo build commands for Rust (Wayne Nilsen, PR#557).
+    * Add recent Perl keywords (Olivier Duclos, PR#599).
+    * Add missing Python 3 keywords and builtins (PR#755).
+    * Improvements to the Rust filetype (Pavel Sountsov, PR#613).
+    * Add multiline comment to Haskell (Abel Serrano Juste, PR#638).
+    * Recognize `.adoc` is as Asciidoc (PR#708, PR#711).
+    * Recognize `.mml` and `.mathml` as XML (Devyn Collier Johnson, PR#731).
+
+    Internationalization
+    * Updated translations: de, el, es, fr, hu, id, kk, pt, sk, sv, ru
+    * Fix internationalization of "Open in New Window" items.
+
+    API
+    * New plugin API, `geany_load_module()`, `geany_plugin_register()`,
+      `GEANY_PLUGIN_REGISTER()`, `geany_plugin_register_full()`,
+      `GEANY_PLUGIN_REGISTER_FULL()` (Thomas Martitz, PR#469).
+    * Add support for "proxy" plugins, `geany_plugin_register_proxy()`
+      (Thomas Martitz, PR#629).
+    * Allow `user_data` parameter and `destroy_notify` callback to
+      keybindings with new `keybindings_set_item_full()` and
+      `plugin_set_key_group_full()` (Thomas Martitz, PR#376).
+
+    Windows
+    * Restore modern design of native file dialogs (Issue#578).
+
+
+Geany 1.25 (July 12, 2015)
+
+    General
+    * GTK3 support, while not enabled by default, is now considered stable.
+    * Improve MacOS X support (PR#396, PR#419, PR#420, Jiří Techet).
+    * Improve subprocess spawning (especially on Windows) (PR#441,
+      Dimitar Zhekov).
+    * Huge tag management performance improvement (auto-completion,
+      calltips, etc.) (PR#356, Jiří Techet).
+    * Remove broken "Show macro list" keybinding and feature (PR#378).
+    * Add %l substitution to build commands (PR#289, Martin Spacek).
+    * Depend on GTK 2.24 and GLib 2.28.
+    * Add per-project line wrapping, line breaking and comment
+      continuation settings.
+    * The plugin API is now split out of the main executable into libgeany,
+      a shared library plugins have to link against.
+
+    Bug fixes
+    * Fix applying filetype-specific indentation settings for newly
+      opened files.
+    * Fix relative project base path when creating a new project
+      (#1062).
+    * Fix next/previous keybindings when no files are open.
+    * Fix markup injection in some tooltips (#1091).
+    * Use absolute project path for projects opened from the command
+      line (PR#431, Jiří Techet).
+    * Fix goto tag in some cases when the same symbol name appears in
+      different languages (PR#487, Jiří Techet).
+    * Fix UI updating after loading a project.
+    * Fix the currently selected document after Save All.
+    * Fix leftovers in the Project dialog in some cases (PR#363, Jiří
+      Techet).
+    * Fix function return type in symbol list tooltips in some cases
+      (PR#475, Jiří Techet).
+    * Fix VTE path following on startup.
+
+    Interface
+    * Show document-related dialogs embedded in the main window ("info
+      bars") (PR#277, Matthew Brush and Thomas Martitz).
+    * Plugin manager dialog cleanup and overhaul (PR#251, PR#414).
+    * Filetypes can now define the MIME type used to select their icon
+      (PR#179).
+    * Close documents in the sidebar with middle mouse button (PR#172,
+      Pavel Roschin).
+    * Ask whether to replace project files when creating a project.
+    * Ask whether to adopt the open documents when creating a new
+      project (PR#315).
+    * Allow to disable the list of recent files.
+    * Fix many shadow inconsistencies (PR#411, Jiří Techet).
+    * Add virtual column and selected chars to the statusbar (Patch #10,
+      Dimitar Zhekov).
+    * Add "dirty" terminal indication (PR#476, Jiří Techet).
+    * Allow to select the None filetype in the Open File dialog
+      (Issue#483).
+    * Add configuration menu entries for all filetypes (PR#491, Jiří Techet).
+
+    Editor
+    * Update Scintilla to version 3.5.6 (#1041).
+    * Do not comment out blank lines when toggling comments (PR#79, Igor
+      Shaula).
+    * Improve handling of Verilog strings and comments.
+    * Support for keeping undo history when reloading files (PR#188, Arthur
+      Rosenstein).  This is not enabled by default in this release.
+    * Respect filetype.common's wordchars if a filetype doesn't have its own
+      (Issue#492, PR#501).
+
+    Search
+    * Add support for single-line regular expressions (PR#310).
+    * Default action is now "Replace & Find" in the replace dialog but
+      can be configured (Roland Pallai).
+    * Activate default action from all fields in the Find in Files
+      dialog (#959).
+
+    Filetypes
+    * Add JSON filetype.
+    * Add Zephir filetype.
+    * Add CoffeScript filetype (PR#230, Mark Dresselhaus).
+    * Add Go tags parser (PR#373, PR#481, Issue#238, Jiří Techet).
+    * Add Erlang tags parser (PR#445, Beng Tan).
+    * Add PowerShell tags parser (PR#477).
+    * Many JavaScript parsing fixes and improvements.
+    * Many CSS parser fixes and improvements.
+    * Many Txt2tags parsing fixes and improvements (feature #690).
+    * Make parser fixes and improvements.
+    * Parse D enum base type (PR#404).
+    * Various small Rust fixes (PR#306, SiegeLord).
+    * Highlight C types in C++.
+    * Add some missing C11 keywords.
+    * Add some missing SQL keywords.
+    * Fix and add some CSS keywords (PR#333, Hannes Heute).
+    * Fix some FreeBasic keywords (#691).
+    * Add some missing D keywords (PR#293, Danyal Zia).
+    * Fix R keywords and wordchars (PR#273, landroni).
+    * Fix styling of some CSS elements.
+    * Fix styling of Lua preprocessor.
+    * Fix style of PHP variables interpolation.
+    * Recognize `.vbs` files as FreeBasic (PR#171, Nicolas Karolak).
+    * Recognize `.tpl` files as HTML.
+    * Recognize `.xtpl` files as XML.
+    * Recognize `.xpm` files as C.
+    * Recognize more Bash files (PR#291, Peter Bittner).
+    * Update templates for Python and Vala.
+    * Add template for HTML5.
+    * Fix parsing of some Python triple-quoted strings.
+    * Add some linting tools to some filetype's default Build menu.
+    * Fix scope of some Python symbols.
+    * Fix support of trigraphs in C-like languages.
+    * Add support of digraphs in C-like languages.
+    * Add support of `final`, `override` and `noexcept` C++11 keywords
+      (PR#544).
+
+    Internationalization
+    * Update translations: be, ca, cs, de, el, es, fr, id, it, ja, nl, pl,
+                           pt_BR, pt, ru, sl, sr, sv, zh_CN.
+
+    Plugins
+    * File Browser: use "explorer" as the default open command on
+                    Windows.
+    * File Browser: use icons based on the detected file's MIME type (PR#455,
+                    Jiří Techet).
+    * Save Actions: use mode 0600 for backup copies (#833, PR#413).
+    * Split Window: Fix a few keybindings (cut, copy, paste, delete,
+                    select all) (PR#467, Alex).
+
+    API
+    * Hide private API (PR#351, Jiří Techet, and PR#429, Matthew Brush and
+      Thomas Martitz).
+    * Cleaner and safer TagManager API (Part of PR#356, Jiří Techet).
+    * Entry point prototypes are now checked by the compiler (PR#359).
+    * Add pseudo-unique document IDs through GeanyDocument::id and
+      document_find_by_id(). This is a safer API for keeping a reference
+      to a document for a long time (PR#256).
+    * Add convenient and portable spawning API: spawn_sync(), spawn_async(),
+      spawn_with_callbacks(), spawn_kill_process(), spawn_check_command(),
+      spawn_write_data() (PR#441, Dimitar Zhekov).
+    * plugin_signal_connect() is now safe to use also with objects
+      destroyed before unloading the plugin.
+    * Add document_reload_force() to replace document_reload_file().
+    * Add project_write_config() (PR#361, Jiří Techet).
+    * Add keybindings_get_modifiers() and GEANY_PRIMARY_MOD_MASK (Jiří
+      Techet).
+    * Fix emission of the 'document-activate' signal in some cases.
+    * Add ui_tree_view_set_tooltip_text_column().
+    * Add scintilla_get_type().
+
+    Windows
+    * Use native Windows quoting rules for commands (on Windows, part of
+      subprocess spawning improvements).
+    * Prompt before overwriting existing files when using native Save As
+      dialog (PR#113, Adam Coyne).
+    * View -> Change Font now respects the native dialog setting.
+    * Fix main window freeze when displaying native dialogs.
+    * Use the same plugin directory as other platforms (PR#540, Thomas
+      Martitz).
+
+
+Geany 1.24.1 (April 16, 2014)
+
+    General
+    * Fix distribution of custom GTK style files (#1037).
+
+
+Geany 1.24 (April 13, 2014)
 
     General
     * Add experimental support for GTK3.
@@ -10,24 +480,37 @@ Geany 1.24 (unreleased)
     * Fix stopping of some spawned commands.
     * Fix cursor position and selection after comment toggling (#3576431).
     * Fix truncated output of ``--list-documents`` command-line option.
-    * Fix launching a new instance when ``--list-documents`` is passed and
-      no other instance is running.
+    * Fix launching a new instance when ``--list-documents`` is passed
+      and no other instance is running.
+    * Fix crash if a Custom Command returns after its related document
+      has been closed.
+    * Fix typo in "deque" C++ include name (#1027).
+    * Fix replacing a selection starting with "0x" by a color if the
+      selection is not 8 bytes long.
+    * Fix a possible crash on quit.
 
     Interface
     * Fix custom GTK styles under KDE (#3607935).
     * Add Find entries in the Symbol List popup menu (#3608278).
     * Flatten-out the View menu.
     * Add a button to directly configure a plugin's keybindings in the
-      plugin manager (Pavel Roschin)
+      plugin manager (Pavel Roschin).
+    * Add an Apply button to the color chooser dialog (FR#686,
+      Steven Valsesia).
+    * Use a non-cropped 16x16 application icon (#1010).
+    * Fix "leaks" of geany_run_script (#975).
 
     Editor
-    * Update Scintilla to version 3.3.6.
-    * Fix Reflow to follow Line breaking behavior (Eugene Arshinov).
+    * Update Scintilla to version 3.3.6 (#962, #995).
+    * Fix Reflow to follow Line breaking behavior (#382, #412, #464,
+      Eugene Arshinov).
     * Fix unfolding the very last line in a level (#1007).
     * Fix commenting the very last line in some situations.
 
     Search
     * Fix bulk Search & Replace not to match replacements.
+    * Fix finding start of word when performing whole word matching.
+    * Search when activating the Replace dialog find entry.
 
     Filetypes
     * Add CUDA filetype (PR#147, Benjamin Chrétien).
@@ -35,25 +518,33 @@ Geany 1.24 (unreleased)
     * Add Batch filetype (canou).
     * Add Graphviz filetype (PR#125, Miro Hrončok).
     * Add PowerShell filetype (Igor Shaula).
-    * Add Clojure fieltype (PR#92, Hoàng Minh Thắng).
+    * Add Clojure filetype (PR#92, Hoàng Minh Thắng).
     * Many improvements to the PHP tag parser.
     * Update PHP global tags file (PR#137, John Long).
+    * Improve shebang detection for mksh and tcsh shells
+      (PR#126 , Ypnose).
     * Fix Asciidoc parser recognition of open block as underline.
     * Fix symbol list entry for Asciidoc headers containing a dot.
+    * Fix Asciidoc title parsing.
     * SQL parsing improvements.
     * Extend list of recognized keywords for SQL.
     * Fix SQL single-line comment marker (#997).
-    * Fix parsing of some JavaScript constructors.
+    * Fix parsing of some JavaScript constructors (#966).
     * Fix parsing a JavaScript regular expression in a return statement.
+    * Fix parsing JavaScript files with a shebang.
     * Parse Java annotations with parameters (#924, Braden Walters).
     * Display Java enums in the symbol list.
+    * Add "strictfp" Java keyword and fix annotation parsing (#936, #924).
     * Fix parsing of C++ static_assert.
     * Fix parsing of typed enums in C# and C++.
-    * Fix parsing of Frotran "forall" blocks and procedure pointers
+    * Mitigate parsing errors on C++ generics containing an expression.
+    * Add C++ member pointer operator to scope autocomplete operators
+      (#907).
+    * Fix parsing of Fortran "forall" blocks and procedure pointers
       (Alexander Eberspächer).
     * Fix parsing of complex Cython types.
     * Fix re-parsing Objective-C code.
-    * Fix parsing of Verliog initializers.
+    * Fix parsing of Verilog initializers.
     * Fix displaying of quoted Bash HereDoc delimiters (#952).
     * Add some HTML5 keywords (Duncan de Wet).
     * Add Erlang snippets and a template (PR#157, Fabio Ticconi).
@@ -62,16 +553,42 @@ Geany 1.24 (unreleased)
     * Fix argument list on some Python constructors.
     * Fix R indenting to use braces.
     * Display R sources and libraries in the symbol list.
+    * Many improvements to the Fortran tag parser (#1023, #1030, with
+      help from Adam Hirst).
+    * Put Makefile comments at start of line.
+    * Add some missing Pascal keywords (#1033, PR#144).
+    * Add default build command for Bibtex in the Latex filetype
+      (PR#227, Francisco Iacobelli).
+    * Ignore Python imports when going to a tag's definition.
+    * Add some more Ruby extensions (Igor Shaula).
 
     Internationalization
     * Make date templates translatable (Christian Dywan).
-    * Update translations: cs, de, es, eu, he, it, lt, sk, sl, sv, zh_CN
+    * Update translations: ca, cs, de, es, eu, fr, gl, he, hu, it, kk,
+                           lt, nl, pt, ru, sk, sl, sv, tr, zh_CN, zh_TW
+
+    Plugins
+    * Save Actions: add autosave when the editor lose focus (FR#683,
+      Steven Valsesia).
+    * Export: fix exporting a document not ending with a newline.
+    * Export: fix including random, unused styles in the output.
+    * Export: fix HTML title if the file name contains control characters.
+    * Export: fix LaTeX export with many consecutive '-', '<' or '>'.
 
     API
     * Add plugin_builder_connect_signals().
 
     Windows
     * Fix infinite pagination when printing (#961).
+    * Fix spawning commands with spaces (#943).
+    * Allow to use the GTK color chooser dialog (PR#218, Steven Valsesia).
+    * Add default extension to native save dialogs (#1021).
+    * Add colorschemes from the Geany-Themes project to the
+      Windows  installer.
+    * Add option to install Geany header files and pkgconfig file to the
+      Windows installer.
+    * Fix broken opening files from command line on Windows
+      (again, #3613096).
 
 
 Geany 1.23.1 (May 19, 2013)

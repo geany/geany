@@ -5,11 +5,13 @@
 // Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstdlib>
+#include <cstring>
 
+#include <stdexcept>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "Platform.h"
 
@@ -21,13 +23,13 @@ using namespace Scintilla;
 
 static const char *NextField(const char *s) {
 	// In case there are leading spaces in the string
-	while (*s && *s == ' ') {
+	while (*s == ' ') {
 		s++;
 	}
 	while (*s && *s != ' ') {
 		s++;
 	}
-	while (*s && *s == ' ') {
+	while (*s == ' ') {
 		s++;
 	}
 	return s;
@@ -45,9 +47,9 @@ ColourDesired XPM::ColourFromCode(int ch) const {
 	return colourCodeTable[ch];
 }
 
-void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) {
+void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) const {
 	if ((code != codeTransparent) && (startX != x)) {
-		PRectangle rc(startX, y, x, y+1);
+		PRectangle rc = PRectangle::FromInts(startX, y, x, y + 1);
 		surface->FillRectangle(rc, ColourFromCode(code));
 	}
 }
@@ -61,11 +63,9 @@ XPM::XPM(const char *const *linesForm) {
 }
 
 XPM::~XPM() {
-	Clear();
 }
 
 void XPM::Init(const char *textForm) {
-	Clear();
 	// Test done is two parts to avoid possibility of overstepping the memory
 	// if memcmp implemented strangely. Must be 4 bytes at least at destination.
 	if ((0 == memcmp(textForm, "/* X", 4)) && (0 == memcmp(textForm, "/* XPM */", 9))) {
@@ -81,7 +81,6 @@ void XPM::Init(const char *textForm) {
 }
 
 void XPM::Init(const char *const *linesForm) {
-	Clear();
 	height = 1;
 	width = 1;
 	nColours = 1;
@@ -112,34 +111,31 @@ void XPM::Init(const char *const *linesForm) {
 		if (*colourDef == '#') {
 			colour.Set(colourDef);
 		} else {
-			codeTransparent = code;
+			codeTransparent = static_cast<char>(code);
 		}
 		colourCodeTable[code] = colour;
 	}
 
 	for (int y=0; y<height; y++) {
 		const char *lform = linesForm[y+nColours+1];
-		size_t len = MeasureLength(lform);
-		for (size_t x = 0; x<len; x++) 
+		const size_t len = MeasureLength(lform);
+		for (size_t x = 0; x<len; x++)
 			pixels[y * width + x] = static_cast<unsigned char>(lform[x]);
 	}
 }
 
-void XPM::Clear() {
-}
-
-void XPM::Draw(Surface *surface, PRectangle &rc) {
+void XPM::Draw(Surface *surface, const PRectangle &rc) {
 	if (pixels.empty()) {
 		return;
 	}
 	// Centre the pixmap
-	int startY = rc.top + (rc.Height() - height) / 2;
-	int startX = rc.left + (rc.Width() - width) / 2;
+	const int startY = static_cast<int>(rc.top + (rc.Height() - height) / 2);
+	const int startX = static_cast<int>(rc.left + (rc.Width() - width) / 2);
 	for (int y=0; y<height; y++) {
 		int prevCode = 0;
 		int xStartRun = 0;
 		for (int x=0; x<width; x++) {
-			int code = pixels[y * width + x];
+			const int code = pixels[y * width + x];
 			if (code != prevCode) {
 				FillRun(surface, prevCode, startX + xStartRun, startY + y, startX + x);
 				xStartRun = x;
@@ -244,7 +240,7 @@ void RGBAImage::SetPixel(int x, int y, ColourDesired colour, int alpha) {
 	pixel[3] = static_cast<unsigned char>(alpha);
 }
 
-RGBAImageSet::RGBAImageSet() : height(-1), width(-1){
+RGBAImageSet::RGBAImageSet() : height(-1), width(-1) {
 }
 
 RGBAImageSet::~RGBAImageSet() {
@@ -253,10 +249,6 @@ RGBAImageSet::~RGBAImageSet() {
 
 /// Remove all images.
 void RGBAImageSet::Clear() {
-	for (ImageMap::iterator it=images.begin(); it != images.end(); ++it) {
-		delete it->second;
-		it->second = 0;
-	}
 	images.clear();
 	height = -1;
 	width = -1;
@@ -266,10 +258,9 @@ void RGBAImageSet::Clear() {
 void RGBAImageSet::Add(int ident, RGBAImage *image) {
 	ImageMap::iterator it=images.find(ident);
 	if (it == images.end()) {
-		images[ident] = image;
+		images[ident] = std::unique_ptr<RGBAImage>(image);
 	} else {
-		delete it->second;
-		it->second = image;
+		it->second.reset(image);
 	}
 	height = -1;
 	width = -1;
@@ -279,17 +270,17 @@ void RGBAImageSet::Add(int ident, RGBAImage *image) {
 RGBAImage *RGBAImageSet::Get(int ident) {
 	ImageMap::iterator it = images.find(ident);
 	if (it != images.end()) {
-		return it->second;
+		return it->second.get();
 	}
-	return NULL;
+	return nullptr;
 }
 
 /// Give the largest height of the set.
 int RGBAImageSet::GetHeight() const {
 	if (height < 0) {
-		for (ImageMap::const_iterator it=images.begin(); it != images.end(); ++it) {
-			if (height < it->second->GetHeight()) {
-				height = it->second->GetHeight();
+		for (const std::pair<const int, std::unique_ptr<RGBAImage>> &image : images) {
+			if (height < image.second->GetHeight()) {
+				height = image.second->GetHeight();
 			}
 		}
 	}
@@ -299,9 +290,9 @@ int RGBAImageSet::GetHeight() const {
 /// Give the largest width of the set.
 int RGBAImageSet::GetWidth() const {
 	if (width < 0) {
-		for (ImageMap::const_iterator it=images.begin(); it != images.end(); ++it) {
-			if (width < it->second->GetWidth()) {
-				width = it->second->GetWidth();
+		for (const std::pair<const int, std::unique_ptr<RGBAImage>> &image : images) {
+			if (width < image.second->GetWidth()) {
+				width = image.second->GetWidth();
 			}
 		}
 	}

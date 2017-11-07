@@ -22,6 +22,12 @@
 #ifndef GEANY_NOTEBOOK_H
 #define GEANY_NOTEBOOK_H 1
 
+#include "document.h"
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 void notebook_init(void);
 
 void notebook_free(void);
@@ -40,4 +46,6 @@ void notebook_switch_tablastused(void);
  * document yet). */
 gboolean notebook_switch_in_progress(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_NOTEBOOK_H */

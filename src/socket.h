@@ -23,8 +23,11 @@
 #ifndef GEANY_SOCKET_H
 #define GEANY_SOCKET_H 1
 
+#include <glib.h>
 
-struct socket_info_struct
+G_BEGIN_DECLS
+
+struct SocketInfo
 {
 	gboolean	 ignore_socket;
 	gchar		*file_name;
@@ -33,7 +36,7 @@ struct socket_info_struct
 	guint 		 lock_socket_tag;
 };
 
-extern struct socket_info_struct socket_info;
+extern struct SocketInfo socket_info;
 
 gint socket_init(gint argc, gchar **argv);
 
@@ -41,5 +44,6 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 
 gint socket_finalize(void);
 
+G_END_DECLS
 
-#endif
+#endif /* GEANY_SOCKET_H */

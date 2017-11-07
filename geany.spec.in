@@ -5,7 +5,7 @@
 Name:          geany
 Version:       @VERSION@
 Release:       1
-Summary:       A fast and lightweight IDE using GTK2
+Summary:       A fast and lightweight IDE using GTK+
 
 Group:         Development/Tools
 License:       GPLv2+
@@ -34,7 +34,7 @@ Requires:      glib2, gtk2, pango
 BuildRequires: glib2-devel, gtk2-devel, pango-devel, gettext, intltool
 
 %description
-Geany is a small and fast integrated development enviroment with basic
+Geany is a small and fast integrated development environment with basic
 features and few dependencies to other packages or Desktop Environments.
 
 Some features:
@@ -62,10 +62,6 @@ Geany plug-ins. You do not need to install this package to use Geany.
 
 %prep
 %setup -q
-# remove waf since this isn't needed for the build, we're building the package
-# with autotools
-rm -f waf
-rm -f wscript
 
 %build
 %configure

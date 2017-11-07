@@ -1,0 +1,37 @@
+# format=tagmanager
+#a #fooÌ16384Ö0
+#a #foo #barÌ16384Ö0
+#a #foo .barÌ1Ö0
+#a #foo barÌ2048Ö0
+#a .fooÌ1Ö0
+#a .foo #barÌ16384Ö0
+#a .foo .barÌ1Ö0
+#a .foo barÌ2048Ö0
+#a fooÌ2048Ö0
+#a foo #barÌ16384Ö0
+#a foo .barÌ1Ö0
+#a foo barÌ2048Ö0
+.a #fooÌ16384Ö0
+.a #foo #barÌ16384Ö0
+.a #foo .barÌ1Ö0
+.a #foo barÌ2048Ö0
+.a .fooÌ1Ö0
+.a .foo #barÌ16384Ö0
+.a .foo .barÌ1Ö0
+.a .foo barÌ2048Ö0
+.a fooÌ2048Ö0
+.a foo #barÌ16384Ö0
+.a foo .barÌ1Ö0
+.a foo barÌ2048Ö0
+a #fooÌ16384Ö0
+a #foo #barÌ16384Ö0
+a #foo .barÌ1Ö0
+a #foo barÌ2048Ö0
+a .fooÌ1Ö0
+a .foo #barÌ16384Ö0
+a .foo .barÌ1Ö0
+a .foo barÌ2048Ö0
+a fooÌ2048Ö0
+a foo #barÌ16384Ö0
+a foo .barÌ1Ö0
+a foo barÌ2048Ö0

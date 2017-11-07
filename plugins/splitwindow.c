@@ -36,7 +36,6 @@ PLUGIN_SET_INFO(_("Split Window"), _("Splits the editor view into two windows.")
 
 
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 GeanyPlugin		*geany_plugin;
 
 
@@ -248,7 +247,7 @@ static void on_doc_menu_item_clicked(gpointer item, GeanyDocument *doc)
 }
 
 
-static void on_doc_menu_show(GtkMenu *menu)
+static void on_doc_show_menu(GtkMenuToolButton *button, GtkMenu *menu)
 {
 	/* clear the old menu items */
 	gtk_container_foreach(GTK_CONTAINER(menu), (GtkCallback) gtk_widget_destroy, NULL);
@@ -256,6 +255,34 @@ static void on_doc_menu_show(GtkMenu *menu)
 	ui_menu_add_document_items(menu, edit_window.editor->document,
 		G_CALLBACK(on_doc_menu_item_clicked));
 }
+
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+/* Blocks the ::show-menu signal if the menu's parent toggle button was inactive in the previous run.
+ * This is a hack to workaround https://bugzilla.gnome.org/show_bug.cgi?id=769287
+ * and should NOT be used for any other version than 3.15.9 to 3.21.4, although the code tries and
+ * not block a legitimate signal in case the GTK version in use has been patched */
+static void show_menu_gtk316_fix(GtkMenuToolButton *button, gpointer data)
+{
+	/* we assume only a single menu can popup at once, so reentrency isn't an issue.
+	 * if it was, we could use custom data on the button, but it shouldn't be required */
+	static gboolean block_next = FALSE;
+
+	if (block_next)
+	{
+		g_signal_stop_emission_by_name(button, "show-menu");
+		block_next = FALSE;
+	}
+	else
+	{
+		GtkWidget *menu = gtk_menu_tool_button_get_menu(button);
+		GtkWidget *parent = gtk_menu_get_attach_widget(GTK_MENU(menu));
+
+		if (parent && GTK_IS_TOGGLE_BUTTON(parent) && ! gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(parent)))
+			block_next = TRUE;
+	}
+}
+#endif
 
 
 static GtkWidget *create_toolbar(void)
@@ -276,7 +303,12 @@ static GtkWidget *create_toolbar(void)
 
 	item = gtk_menu_new();
 	gtk_menu_tool_button_set_menu(GTK_MENU_TOOL_BUTTON(tool_item), item);
-	g_signal_connect(item, "show", G_CALLBACK(on_doc_menu_show), NULL);
+#if GTK_CHECK_VERSION (3, 0, 0)
+	/* hack for https://bugzilla.gnome.org/show_bug.cgi?id=769287 */
+	if (! gtk_check_version(3, 15, 9) && gtk_check_version(3, 21, 4+1))
+		g_signal_connect(tool_item, "show-menu", G_CALLBACK(show_menu_gtk316_fix), NULL);
+#endif
+	g_signal_connect(tool_item, "show-menu", G_CALLBACK(on_doc_show_menu), item);
 
 	tool_item = gtk_tool_item_new();
 	gtk_tool_item_set_expand(tool_item, TRUE);
@@ -299,7 +331,7 @@ static void split_view(gboolean horizontal)
 {
 	GtkWidget *notebook = geany_data->main_widgets->notebook;
 	GtkWidget *parent = gtk_widget_get_parent(notebook);
-	GtkWidget *pane, *toolbar, *box;
+	GtkWidget *pane, *toolbar, *box, *splitwin_notebook;
 	GeanyDocument *doc = document_get_current();
 	gint width = gtk_widget_get_allocated_width(notebook) / 2;
 	gint height = gtk_widget_get_allocated_height(notebook) / 2;
@@ -321,8 +353,13 @@ static void split_view(gboolean horizontal)
 	box = gtk_vbox_new(FALSE, 0);
 	toolbar = create_toolbar();
 	gtk_box_pack_start(GTK_BOX(box), toolbar, FALSE, FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(pane), box);
 	edit_window.vbox = box;
+
+	/* used just to make the split window look the same as the main editor */
+	splitwin_notebook = gtk_notebook_new();
+	gtk_notebook_set_show_tabs(GTK_NOTEBOOK(splitwin_notebook), FALSE);
+	gtk_notebook_append_page(GTK_NOTEBOOK(splitwin_notebook), box, NULL);
+	gtk_container_add(GTK_CONTAINER(pane), splitwin_notebook);
 
 	set_editor(&edit_window, doc->editor);
 

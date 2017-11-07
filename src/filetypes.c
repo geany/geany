@@ -24,50 +24,48 @@
  * Filetype detection, file extensions and filetype menu items.
  */
 
-/* Note: we use filetype_id for some function arguments, but GeanyFiletype is better; we should
+/* Note: we use GeanyFiletypeID for some function arguments, but GeanyFiletype is better; we should
  * only use GeanyFiletype for API functions. */
 
-#include <string.h>
-#include <glib/gstdio.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
 #include "filetypes.h"
-#include "filetypesprivate.h"
-#include "highlighting.h"
-#include "support.h"
-#include "templates.h"
-#include "document.h"
-#include "editor.h"
-#include "msgwindow.h"
-#include "utils.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "symbols.h"
 
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "document.h"
+#include "filetypesprivate.h"
+#include "geany.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "projectprivate.h"
+#include "sciwrappers.h"
+#include "support.h"
+#include "symbols.h"
 #include "tm_parser.h"
+#include "utils.h"
+#include "ui_utils.h"
 
 #include <stdlib.h>
+#include <string.h>
+
+#include <glib/gstdio.h>
 
 #define GEANY_FILETYPE_SEARCH_LINES 2 /* lines of file to search for filetype */
 
-GPtrArray *filetypes_array = NULL;	/* Dynamic array of filetype pointers */
-
+GPtrArray *filetypes_array = NULL;
 static GHashTable *filetypes_hash = NULL;	/* Hash of filetype pointers based on name keys */
-
-/** List of filetype pointers sorted by name, but with @c filetypes_index(GEANY_FILETYPES_NONE)
- * first, as this is usually treated specially.
- * The list does not change (after filetypes have been initialized), so you can use
- * @code g_slist_nth_data(filetypes_by_title, n) @endcode and expect the same result at different times.
- * @see filetypes_get_sorted_by_name(). */
 GSList *filetypes_by_title = NULL;
-
-static GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
 
 
 static void create_radio_menu_item(GtkWidget *menu, GeanyFiletype *ftype);
 
 static gchar *filetypes_get_conf_extension(const GeanyFiletype *ft);
 static void read_filetype_config(void);
+static void create_set_filetype_menu(gboolean config);
+static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user);
 
 
 enum TitleType
@@ -82,43 +80,37 @@ enum TitleType
 /* Save adding many translation strings if the filetype name doesn't need translating */
 static gchar *filetype_make_title(const char *name, enum TitleType type)
 {
-	const gchar *fmt = NULL;
-
 	g_return_val_if_fail(name != NULL, NULL);
 
 	switch (type)
 	{
-		case TITLE_SOURCE_FILE:	fmt = _("%s source file"); break;
-		case TITLE_FILE:		fmt = _("%s file"); break;
-		case TITLE_SCRIPT:		fmt = _("%s script"); break;
-		case TITLE_DOCUMENT:	fmt = _("%s document"); break;
+		case TITLE_SOURCE_FILE:	return g_strdup_printf(_("%s source file"), name);
+		case TITLE_FILE:		return g_strdup_printf(_("%s file"), name);
+		case TITLE_SCRIPT:		return g_strdup_printf(_("%s script"), name);
+		case TITLE_DOCUMENT:	return g_strdup_printf(_("%s document"), name);
 		case TITLE_NONE: /* fall through */
-		default:				fmt = "%s"; break;
+		default:				return g_strdup(name);
 	}
-
-	return g_strdup_printf(fmt, name);
 }
 
 
 /* name argument (ie filetype name) must not be translated as it is used for
  * filetype lookup. Use filetypes_get_display_name() instead.*/
-static void ft_init(filetype_id ft_id, int lang, const char *name,
-	const char *title_name, enum TitleType title_type, const char *mime_type,
+static void ft_init(GeanyFiletypeID ft_id, TMParserType lang, const char *name,
+	const char *title_name, enum TitleType title_type,
 	GeanyFiletypeGroupID group_id)
 {
 	GeanyFiletype *ft = filetypes[ft_id];
 	ft->lang = lang;
 	ft->name = g_strdup(name);
 	ft->title = filetype_make_title((title_name != NULL) ? title_name : ft->name, title_type);
-	if (mime_type != NULL)
-		SETPTR(ft->mime_type, g_strdup(mime_type));
 	ft->group = group_id;
 }
 
 /* Evil macro to save typing and make init_builtin_filetypes() more readable */
-#define FT_INIT(ft_id, parser_id, name, title_name, title_type, mime_type, group_id) \
+#define FT_INIT(ft_id, parser_id, name, title_name, title_type, group_id) \
 	ft_init(GEANY_FILETYPES_##ft_id, TM_PARSER_##parser_id, name, title_name, \
-		TITLE_##title_type, mime_type, GEANY_FILETYPE_GROUP_##group_id)
+		TITLE_##title_type, GEANY_FILETYPE_GROUP_##group_id)
 
 
 /* Note: remember to update HACKING if this function is renamed. */
@@ -130,68 +122,70 @@ static void init_builtin_filetypes(void)
 	 *   [2] = Non-translated filetype name (*not* label for display)
 	 *   [3] = Translatable human filetype title prefix or NULL to use [2]
 	 *   [4] = Title type (TITLE_*) constant (ex. TITLE_SOURCE_FILE is 'source file' suffix)
-	 *   [5] = Mime type or NULL for none/unknown
-	 *   [6] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
+	 *   [5] = The filetype group constant (GEANY_FILETYPE_GROUP_*)
 	 * --------------------------------------------------------------------------------------------------------------------------
-	 *       [0]         [1]           [2]                 [3]                        [4]          [5]                           [6]      */
-	FT_INIT( NONE,       NONE,         "None",             _("None"),                 NONE,        NULL,                         NONE     );
-	FT_INIT( C,          C,            "C",                NULL,                      SOURCE_FILE, "text/x-csrc",                COMPILED );
-	FT_INIT( CPP,        CPP,          "C++",              NULL,                      SOURCE_FILE, "text/x-c++src",              COMPILED );
-	FT_INIT( OBJECTIVEC, OBJC,         "Objective-C",      NULL,                      SOURCE_FILE, "text/x-objc",                COMPILED );
-	FT_INIT( CS,         CSHARP,       "C#",               NULL,                      SOURCE_FILE, "text/x-csharp",              COMPILED );
-	FT_INIT( VALA,       VALA,         "Vala",             NULL,                      SOURCE_FILE, "text/x-vala",                COMPILED );
-	FT_INIT( D,          D,            "D",                NULL,                      SOURCE_FILE, "text/x-dsrc",                COMPILED );
-	FT_INIT( JAVA,       JAVA,         "Java",             NULL,                      SOURCE_FILE, "text/x-java",                COMPILED );
-	FT_INIT( PASCAL,     PASCAL,       "Pascal",           NULL,                      SOURCE_FILE, "text/x-pascal",              COMPILED );
-	FT_INIT( ASM,        ASM,          "ASM",              "Assembler",               SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( BASIC,      FREEBASIC,    "FreeBasic",        NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( FORTRAN,    FORTRAN,      "Fortran",          "Fortran (F90)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
-	FT_INIT( F77,        F77,          "F77",              "Fortran (F77)",           SOURCE_FILE, "text/x-fortran",             COMPILED );
-	FT_INIT( GLSL,       GLSL,         "GLSL",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( CAML,       NONE,         "CAML",             "(O)Caml",                 SOURCE_FILE, "text/x-ocaml",               COMPILED );
-	FT_INIT( PERL,       PERL,         "Perl",             NULL,                      SOURCE_FILE, "application/x-perl",         SCRIPT   );
-	FT_INIT( PHP,        PHP,          "PHP",              NULL,                      SOURCE_FILE, "application/x-php",          SCRIPT   );
-	FT_INIT( JS,         JAVASCRIPT,   "Javascript",       NULL,                      SOURCE_FILE, "application/javascript",     SCRIPT   );
-	FT_INIT( PYTHON,     PYTHON,       "Python",           NULL,                      SOURCE_FILE, "text/x-python",              SCRIPT   );
-	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, "application/x-ruby",         SCRIPT   );
-	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, "text/x-tcl",                 SCRIPT   );
-	FT_INIT( LUA,        LUA,          "Lua",              NULL,                      SOURCE_FILE, "text/x-lua",                 SCRIPT   );
-	FT_INIT( FERITE,     FERITE,       "Ferite",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( HASKELL,    HASKELL,      "Haskell",          NULL,                      SOURCE_FILE, "text/x-haskell",             COMPILED );
-	FT_INIT( MARKDOWN,   MARKDOWN,     "Markdown",         NULL,                      SOURCE_FILE, "text/x-markdown",            MARKUP   );
-	FT_INIT( TXT2TAGS,   TXT2TAGS,     "Txt2tags",         NULL,                      SOURCE_FILE, "text/x-txt2tags",            MARKUP   );
-	FT_INIT( ABC,        ABC,          "Abc",              NULL,                      FILE,        NULL,                         MISC     );
-	FT_INIT( SH,         SH,           "Sh",               _("Shell"),                SCRIPT,      "application/x-shellscript",  SCRIPT   );
-	FT_INIT( MAKE,       MAKEFILE,     "Make",             _("Makefile"),             NONE,        "text/x-makefile",            SCRIPT   );
-	FT_INIT( XML,        NONE,         "XML",              NULL,                      DOCUMENT,    "application/xml",            MARKUP   );
-	FT_INIT( DOCBOOK,    DOCBOOK,      "Docbook",          NULL,                      DOCUMENT,    "application/docbook+xml",    MARKUP   );
-	FT_INIT( HTML,       HTML,         "HTML",             NULL,                      DOCUMENT,    "text/html",                  MARKUP   );
-	FT_INIT( CSS,        CSS,          "CSS",              _("Cascading Stylesheet"), NONE,        "text/css",                   MARKUP   ); /* not really markup but fit quite well to HTML */
-	FT_INIT( SQL,        SQL,          "SQL",              NULL,                      FILE,        "text/x-sql",                 MISC     );
-	FT_INIT( COBOL,      COBOL,        "COBOL",            NULL,                      SOURCE_FILE, "text/x-cobol",               COMPILED );
-	FT_INIT( LATEX,      LATEX,        "LaTeX",            NULL,                      SOURCE_FILE, "text/x-tex",                 MARKUP   );
-	FT_INIT( VHDL,       VHDL,         "VHDL",             NULL,                      SOURCE_FILE, "text/x-vhdl",                COMPILED );
-	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, "text/x-verilog",             COMPILED );
-	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        "text/x-patch",               MISC     );
-	FT_INIT( LISP,       NONE,         "Lisp",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ERLANG,     NONE,         "Erlang",           NULL,                      SOURCE_FILE, "text/x-erlang",              COMPILED );
-	FT_INIT( CONF,       CONF,         "Conf",             _("Config"),               FILE,        NULL,                         MISC     );
-	FT_INIT( PO,         NONE,         "Po",               _("Gettext translation"),  FILE,        "text/x-gettext-translation", MISC     );
-	FT_INIT( HAXE,       HAXE,         "Haxe",             NULL,                      SOURCE_FILE, NULL,                         COMPILED );
-	FT_INIT( AS,         ACTIONSCRIPT, "ActionScript",     NULL,                      SOURCE_FILE, "application/ecmascript",     SCRIPT   );
-	FT_INIT( R,          R,            "R",                NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( REST,       REST,         "reStructuredText", NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
-	FT_INIT( MATLAB,     MATLAB,       "Matlab/Octave",    NULL,                      SOURCE_FILE, "text/x-matlab",              SCRIPT   );
-	FT_INIT( YAML,       NONE,         "YAML",             NULL,                      FILE,        "application/x-yaml",         MISC     );
-	FT_INIT( CMAKE,      NONE,         "CMake",            NULL,                      SOURCE_FILE, "text/x-cmake",               SCRIPT   );
-	FT_INIT( NSIS,       NSIS,         "NSIS",             NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ADA,        NONE,         "Ada",              NULL,                      SOURCE_FILE, "text/x-adasrc",              COMPILED );
-	FT_INIT( FORTH,      NONE,         "Forth",            NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, NULL,                         MARKUP   );
-	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( BATCH,      NONE,         "Batch",            NULL,                      SCRIPT,      NULL,                         SCRIPT   );
-	FT_INIT( POWERSHELL, NONE,         "PowerShell",       NULL,                      SOURCE_FILE, NULL,                         SCRIPT   );
-	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, "text/x-rustsrc",             COMPILED );
+	 *       [0]         [1]           [2]                 [3]                        [4]          [5]      */
+	FT_INIT( NONE,       NONE,         "None",             _("None"),                 NONE,        NONE     );
+	FT_INIT( C,          C,            "C",                NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( CPP,        CPP,          "C++",              NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( OBJECTIVEC, OBJC,         "Objective-C",      NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( CS,         CSHARP,       "C#",               NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( VALA,       VALA,         "Vala",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( D,          D,            "D",                NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( JAVA,       JAVA,         "Java",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( PASCAL,     PASCAL,       "Pascal",           NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( ASM,        ASM,          "ASM",              "Assembler",               SOURCE_FILE, COMPILED );
+	FT_INIT( BASIC,      FREEBASIC,    "FreeBasic",        NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( FORTRAN,    FORTRAN,      "Fortran",          "Fortran (F90)",           SOURCE_FILE, COMPILED );
+	FT_INIT( F77,        F77,          "F77",              "Fortran (F77)",           SOURCE_FILE, COMPILED );
+	FT_INIT( GLSL,       GLSL,         "GLSL",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( CAML,       NONE,         "CAML",             "(O)Caml",                 SOURCE_FILE, COMPILED );
+	FT_INIT( PERL,       PERL,         "Perl",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( PHP,        PHP,          "PHP",              NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( JS,         JAVASCRIPT,   "Javascript",       NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( PYTHON,     PYTHON,       "Python",           NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( RUBY,       RUBY,         "Ruby",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( TCL,        TCL,          "Tcl",              NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( LUA,        LUA,          "Lua",              NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( FERITE,     FERITE,       "Ferite",           NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( HASKELL,    HASKELL,      "Haskell",          NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( MARKDOWN,   MARKDOWN,     "Markdown",         NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( TXT2TAGS,   TXT2TAGS,     "Txt2tags",         NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( ABC,        ABC,          "Abc",              NULL,                      FILE,        MISC     );
+	FT_INIT( SH,         SH,           "Sh",               _("Shell"),                SCRIPT,      SCRIPT   );
+	FT_INIT( MAKE,       MAKEFILE,     "Make",             _("Makefile"),             NONE,        SCRIPT   );
+	FT_INIT( XML,        NONE,         "XML",              NULL,                      DOCUMENT,    MARKUP   );
+	FT_INIT( DOCBOOK,    DOCBOOK,      "Docbook",          NULL,                      DOCUMENT,    MARKUP   );
+	FT_INIT( HTML,       HTML,         "HTML",             NULL,                      DOCUMENT,    MARKUP   );
+	FT_INIT( CSS,        CSS,          "CSS",              _("Cascading Stylesheet"), NONE,        MARKUP   ); /* not really markup but fit quite well to HTML */
+	FT_INIT( SQL,        SQL,          "SQL",              NULL,                      FILE,        MISC     );
+	FT_INIT( COBOL,      COBOL,        "COBOL",            NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( LATEX,      LATEX,        "LaTeX",            NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( VHDL,       VHDL,         "VHDL",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( VERILOG,    VERILOG,      "Verilog",          NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( DIFF,       DIFF,         "Diff",             NULL,                      FILE,        MISC     );
+	FT_INIT( LISP,       NONE,         "Lisp",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( ERLANG,     ERLANG,       "Erlang",           NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( CONF,       CONF,         "Conf",             _("Config"),               FILE,        MISC     );
+	FT_INIT( PO,         NONE,         "Po",               _("Gettext translation"),  FILE,        MISC     );
+	FT_INIT( HAXE,       HAXE,         "Haxe",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( AS,         ACTIONSCRIPT, "ActionScript",     NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( R,          R,            "R",                NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( REST,       REST,         "reStructuredText", NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( MATLAB,     MATLAB,       "Matlab/Octave",    NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( YAML,       NONE,         "YAML",             NULL,                      FILE,        MISC     );
+	FT_INIT( CMAKE,      NONE,         "CMake",            NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( NSIS,       NSIS,         "NSIS",             NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( ADA,        NONE,         "Ada",              NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( FORTH,      NONE,         "Forth",            NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( ASCIIDOC,   ASCIIDOC,     "Asciidoc",         NULL,                      SOURCE_FILE, MARKUP   );
+	FT_INIT( ABAQUS,     ABAQUS,       "Abaqus",           NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( BATCH,      NONE,         "Batch",            NULL,                      SCRIPT,      SCRIPT   );
+	FT_INIT( POWERSHELL, POWERSHELL,   "PowerShell",       NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( RUST,       RUST,         "Rust",             NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( COFFEESCRIPT, NONE,       "CoffeeScript",     NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( GO,         GO,           "Go",               NULL,                      SOURCE_FILE, COMPILED );
+	FT_INIT( ZEPHIR,     ZEPHIR,       "Zephir",           NULL,                      SOURCE_FILE, COMPILED );
 }
 
 
@@ -201,14 +195,15 @@ static GeanyFiletype *filetype_new(void)
 	GeanyFiletype *ft = g_new0(GeanyFiletype, 1);
 
 	ft->group = GEANY_FILETYPE_GROUP_NONE;
-	ft->lang = -2;	/* assume no tagmanager parser */
+	ft->lang = TM_PARSER_NONE;	/* assume no tagmanager parser */
 	/* pattern must not be null */
 	ft->pattern = g_new0(gchar*, 1);
-	ft->project_list_entry = -1; /* no entry */
 	ft->indent_width = -1;
 	ft->indent_type = -1;
 
 	ft->priv = g_new0(GeanyFiletypePrivate, 1);
+	ft->priv->project_list_entry = -1; /* no entry */
+
 	return ft;
 }
 
@@ -231,8 +226,9 @@ static gint cmp_filetype(gconstpointer pft1, gconstpointer pft2, gpointer data)
 
 /** Gets a list of filetype pointers sorted by name.
  * The list does not change on subsequent calls.
- * @return The list - do not free.
+ * @return @elementtype{GeanyFiletype} @transfer{none} The list - do not free.
  * @see filetypes_by_title. */
+GEANY_API_SYMBOL
 const GSList *filetypes_get_sorted_by_name(void)
 {
 	static GSList *list = NULL;
@@ -261,9 +257,6 @@ static void filetype_add(GeanyFiletype *ft)
 
 	/* list will be sorted later */
 	filetypes_by_title = g_slist_prepend(filetypes_by_title, ft);
-
-	if (!ft->mime_type)
-		ft->mime_type = g_strdup("text/plain");
 }
 
 
@@ -318,7 +311,7 @@ static void init_custom_filetypes(const gchar *path)
  * Warning: GTK isn't necessarily initialized yet. */
 void filetypes_init_types(void)
 {
-	filetype_id ft_id;
+	GeanyFiletypeID ft_id;
 	gchar *f;
 
 	g_return_if_fail(filetypes_array == NULL);
@@ -339,7 +332,9 @@ void filetypes_init_types(void)
 	{
 		filetype_add(filetypes[ft_id]);
 	}
-	init_custom_filetypes(app->datadir);
+	f = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, NULL);
+	init_custom_filetypes(f);
+	g_free(f);
 	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, NULL);
 	init_custom_filetypes(f);
 	g_free(f);
@@ -354,28 +349,43 @@ void filetypes_init_types(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f;
+	gchar *f, *basename;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
 	f = g_build_filename(app->configdir, "filetype_extensions.conf", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		filetypes_reload_extensions();
-
 	g_free(f);
-	f = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, "filetypes.common", NULL);
-	if (utils_str_equal(doc->real_path, f))
+
+	basename = g_path_get_basename(doc->real_path);
+	if (g_str_has_prefix(basename, "filetypes."))
 	{
 		guint i;
 
-		/* Note: we don't reload other filetypes, even though the named styles may have changed.
-		 * The user can do this manually with 'Tools->Reload Configuration' */
-		filetypes_load_config(GEANY_FILETYPES_NONE, TRUE);
+		for (i = 0; i < filetypes_array->len; i++)
+		{
+			GeanyFiletype *ft = filetypes[i];
 
-		foreach_document(i)
-			document_reload_config(documents[i]);
+			f = filetypes_get_filename(ft, TRUE);
+			if (utils_str_equal(doc->real_path, f))
+			{
+				guint j;
+
+				/* Note: we don't reload other filetypes, even though the named styles may have changed.
+				 * The user can do this manually with 'Tools->Reload Configuration' */
+				filetypes_load_config(i, TRUE);
+
+				foreach_document(j)
+					document_reload_config(documents[j]);
+
+				g_free(f);
+				break;
+			}
+			g_free(f);
+		}
 	}
-	g_free(f);
+	g_free(basename);
 }
 
 
@@ -389,11 +399,13 @@ static void setup_config_file_menus(void)
 	ui_add_config_file_menu_item(f, NULL, NULL);
 	g_free(f);
 
+	create_set_filetype_menu(TRUE);
+
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
 }
 
 
-static void create_sub_menu(GtkWidget *parent, GeanyFiletypeGroupID group_id, const gchar *title)
+static GtkWidget *create_sub_menu(GtkWidget *parent, const gchar *title)
 {
 	GtkWidget *menu, *item;
 
@@ -402,46 +414,52 @@ static void create_sub_menu(GtkWidget *parent, GeanyFiletypeGroupID group_id, co
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), menu);
 	gtk_container_add(GTK_CONTAINER(parent), item);
 	gtk_widget_show(item);
-	group_menus[group_id] = menu;
+
+	return menu;
 }
 
 
-static void create_set_filetype_menu(void)
+static void create_set_filetype_menu(gboolean config)
 {
+	GtkWidget *group_menus[GEANY_FILETYPE_GROUP_COUNT] = {NULL};
 	GSList *node;
-	GtkWidget *filetype_menu = ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
+	GtkWidget *menu;
 
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_COMPILED, _("_Programming Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_SCRIPT, _("_Scripting Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MARKUP, _("_Markup Languages"));
-	create_sub_menu(filetype_menu, GEANY_FILETYPE_GROUP_MISC, _("M_iscellaneous"));
+	menu = config ? ui_widgets.config_files_filetype_menu :
+		ui_lookup_widget(main_widgets.window, "set_filetype1_menu");
 
-	/* Append all filetypes to the filetype menu */
+	group_menus[GEANY_FILETYPE_GROUP_COMPILED] = create_sub_menu(menu, _("_Programming Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_SCRIPT] = create_sub_menu(menu, _("_Scripting Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_MARKUP] = create_sub_menu(menu, _("_Markup Languages"));
+	group_menus[GEANY_FILETYPE_GROUP_MISC] = create_sub_menu(menu, _("M_iscellaneous"));
+
+	/* Append all filetypes to the menu */
 	foreach_slist(node, filetypes_by_title)
 	{
 		GeanyFiletype *ft = node->data;
+		GtkWidget *parent = (ft->group != GEANY_FILETYPE_GROUP_NONE) ? group_menus[ft->group] : menu;
 
-		if (ft->group != GEANY_FILETYPE_GROUP_NONE)
-			create_radio_menu_item(group_menus[ft->group], ft);
+		/* we already have filetypes.common config entry */
+		if (config && ft->id == GEANY_FILETYPES_NONE)
+			continue;
+
+		if (config)
+		{
+			gchar *filename = filetypes_get_filename(ft, TRUE);
+
+			ui_add_config_file_menu_item(filename, NULL, GTK_CONTAINER(parent));
+			g_free(filename);
+		}
 		else
-			create_radio_menu_item(filetype_menu, ft);
+			create_radio_menu_item(parent, ft);
 	}
 }
 
 
 void filetypes_init(void)
 {
-	GSList *node;
-
 	filetypes_init_types();
-
-	/* this has to be here as GTK isn't initialized in filetypes_init_types(). */
-	foreach_slist(node, filetypes_by_title)
-	{
-		GeanyFiletype *ft = node->data;
-		ft->icon = ui_get_mime_icon(ft->mime_type, GTK_ICON_SIZE_MENU);
-	}
-	create_set_filetype_menu();
+	create_set_filetype_menu(FALSE);
 	setup_config_file_menus();
 }
 
@@ -506,7 +524,7 @@ static GeanyFiletype *check_builtin_filenames(const gchar *utf8_filename)
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
-	SETPTR(path, g_build_filename(app->datadir, "filetypes.", NULL));
+	SETPTR(path, g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, "filetypes.", NULL));
 	if (g_str_has_prefix(lfn, path))
 		found = TRUE;
 
@@ -586,7 +604,7 @@ static GeanyFiletype *find_shebang(const gchar *utf8_filename, const gchar *line
 	{
 		static const struct {
 			const gchar *name;
-			filetype_id filetype;
+			GeanyFiletypeID filetype;
 		} intepreter_map[] = {
 			{ "sh",		GEANY_FILETYPES_SH },
 			{ "bash",	GEANY_FILETYPES_SH },
@@ -741,9 +759,10 @@ GeanyFiletype *filetypes_detect_from_document(GeanyDocument *doc)
  *
  *  @param utf8_filename The filename in UTF-8 encoding.
  *
- *  @return The detected filetype for @a utf8_filename or @c filetypes[GEANY_FILETYPES_NONE]
- *          if it could not be detected.
+ *  @return @transfer{none} The detected filetype for @a utf8_filename or
+ *           @c filetypes[GEANY_FILETYPES_NONE] if it could not be detected.
  **/
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_detect_from_file(const gchar *utf8_filename)
 {
 	gchar line[1024];
@@ -820,9 +839,9 @@ static void filetype_free(gpointer data, G_GNUC_UNUSED gpointer user_data)
 	g_free(ft->comment_close);
 	g_free(ft->comment_single);
 	g_free(ft->context_action_cmd);
-	g_free(ft->filecmds);
-	g_free(ft->ftdefcmds);
-	g_free(ft->execcmds);
+	g_free(ft->priv->filecmds);
+	g_free(ft->priv->ftdefcmds);
+	g_free(ft->priv->execcmds);
 	g_free(ft->error_regex_string);
 	if (ft->icon)
 		g_object_unref(ft->icon);
@@ -883,6 +902,10 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 		SETPTR(filetypes[ft_id]->extension, result);
 	}
 
+	/* MIME type */
+	result = utils_get_setting(string, configh, config, "settings", "mime_type", "text/plain");
+	SETPTR(filetypes[ft_id]->mime_type, result);
+
 	/* read comment notes */
 	result = utils_get_setting(string, configh, config, "settings", "comment_open", NULL);
 	if (result != NULL)
@@ -922,8 +945,8 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	if (result != NULL)
 	{
 		ft->lang = tm_source_file_get_named_lang(result);
-		if (ft->lang < 0)
-			geany_debug("Cannot find tag parser '%s' for custom filetype '%s'.", result, ft->name);
+		if (ft->lang == TM_PARSER_NONE)
+			geany_debug("Cannot find tags parser '%s' for custom filetype '%s'.", result, ft->name);
 		g_free(result);
 	}
 
@@ -937,7 +960,7 @@ static void load_settings(guint ft_id, GKeyFile *config, GKeyFile *configh)
 	}
 
 	ft->priv->symbol_list_sort_mode = utils_get_setting(integer, configh, config, "settings",
-		"symbol_list_sort_mode", SYMBOLS_SORT_BY_NAME);
+		"symbol_list_sort_mode", SYMBOLS_SORT_USE_PREVIOUS);
 	ft->priv->xml_indent_tags = utils_get_setting(boolean, configh, config, "settings",
 		"xml_indent_tags", FALSE);
 
@@ -977,7 +1000,7 @@ static gchar *filetypes_get_filename(GeanyFiletype *ft, gboolean user)
 	if (user)
 		file_name = g_build_filename(app->configdir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 	else
-		file_name = g_build_filename(app->datadir, base_name, NULL);
+		file_name = g_build_filename(app->datadir, GEANY_FILEDEFS_SUBDIR, base_name, NULL);
 
 	g_free(ext);
 	g_free(base_name);
@@ -1110,6 +1133,10 @@ void filetypes_load_config(guint ft_id, gboolean reload)
 	load_settings(ft_id, config, config_home);
 	highlighting_init_styles(ft_id, config, config_home);
 
+	if (ft->icon)
+		g_object_unref(ft->icon);
+	ft->icon = ui_get_mime_icon(ft->mime_type);
+
 	g_key_file_free(config);
 	g_key_file_free(config_home);
 }
@@ -1208,16 +1235,17 @@ gboolean filetype_has_tags(GeanyFiletype *ft)
 {
 	g_return_val_if_fail(ft != NULL, FALSE);
 
-	return ft->lang >= 0;
+	return ft->lang != TM_PARSER_NONE;
 }
 
 
 /** Finds a filetype pointer from its @a name field.
  * @param name Filetype name.
- * @return The filetype found, or @c NULL.
+ * @return @transfer{none} @nullable The filetype found, or @c NULL.
  *
  * @since 0.15
  **/
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_lookup_by_name(const gchar *name)
 {
 	GeanyFiletype *ft;
@@ -1459,10 +1487,11 @@ void filetypes_reload_extensions(void)
 /** Accessor function for @ref GeanyData::filetypes_array items.
  * Example: @code ft = filetypes_index(GEANY_FILETYPES_C); @endcode
  * @param idx @c filetypes_array index.
- * @return The filetype, or @c NULL if @a idx is out of range.
+ * @return @transfer{none} @nullable The filetype, or @c NULL if @a idx is out of range.
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 GeanyFiletype *filetypes_index(gint idx)
 {
 	return (idx >= 0 && idx < (gint) filetypes_array->len) ? filetypes[idx] : NULL;
@@ -1500,6 +1529,7 @@ void filetypes_reload(void)
  * @param ft .
  * @return .
  * @since Geany 0.20 */
+GEANY_API_SYMBOL
 const gchar *filetypes_get_display_name(GeanyFiletype *ft)
 {
 	return ft->id == GEANY_FILETYPES_NONE ? _("None") : ft->name;
@@ -1541,3 +1571,15 @@ gboolean filetype_get_comment_open_close(const GeanyFiletype *ft, gboolean singl
 
 	return !EMPTY(*co);
 }
+
+static void        *copy_(void *src) { return src; }
+static void         free_(void *doc) { }
+
+/** @gironly
+ * Gets the GType of GeanyFiletype
+ *
+ * @return the GeanyFiletype type */
+GEANY_API_SYMBOL
+GType filetype_get_type (void);
+
+G_DEFINE_BOXED_TYPE(GeanyFiletype, filetype, copy_, free_);

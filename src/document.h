@@ -29,21 +29,19 @@
 #ifndef GEANY_DOCUMENT_H
 #define GEANY_DOCUMENT_H 1
 
-G_BEGIN_DECLS
-
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
 #include "editor.h"
+#include "filetypes.h"
+#include "geany.h"
 #include "search.h"
 
-#if defined(G_OS_WIN32)
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
-#elif defined(G_OS_UNIX)
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
-#else
-# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CR
-#endif
+#include "gtkcompat.h" /* Needed by ScintillaWidget.h */
+#include "Scintilla.h" /* Needed by ScintillaWidget.h */
+#include "ScintillaWidget.h" /* For ScintillaObject */
 
+#include <glib.h>
+
+
+G_BEGIN_DECLS
 
 /** File Prefs. */
 typedef struct GeanyFilePrefs
@@ -66,18 +64,22 @@ typedef struct GeanyFilePrefs
 	gboolean		use_gio_unsafe_file_saving; /* whether to use GIO as the unsafe backend */
 	gchar			*extract_filetype_regex;	/* regex to extract filetype on opening */
 	gboolean		tab_close_switch_to_mru;
+	gboolean		keep_edit_history_on_reload; /* Keep undo stack upon, and allow undoing of, document reloading. */
+	gboolean		show_keep_edit_history_on_reload_msg; /* whether to show the message introducing the above feature */
+ 	gboolean		reload_clean_doc_on_file_change;
 }
 GeanyFilePrefs;
 
-extern GeanyFilePrefs file_prefs;
 
+#define GEANY_TYPE_DOCUMENT (document_get_type())
+GType document_get_type (void);
 
 /**
  *  Structure for representing an open tab with all its properties.
  **/
-struct GeanyDocument
+typedef struct GeanyDocument
 {
-	/** General flag to represent this document is active and all properties are set correctly. */
+	/** Flag used to check if this document is valid when iterating @ref GeanyData::documents_array. */
 	gboolean		 is_valid;
 	gint			 index;		/**< Index in the documents array. */
 	/** Whether this document supports source code symbols(tags) to show in the sidebar. */
@@ -93,12 +95,12 @@ struct GeanyDocument
 	gchar 			*encoding;
 	/** Internally used flag to indicate whether the file of this document has a byte-order-mark. */
 	gboolean		 has_bom;
-	struct GeanyEditor *editor;	/**< The editor associated with the document. */
+	GeanyEditor *editor;	/**< The editor associated with the document. */
 	/** The filetype for this document, it's only a reference to one of the elements of the global
 	 *  filetypes array. */
 	GeanyFiletype	*file_type;
-	/** TMWorkObject object for this document, or @c NULL. */
-	TMWorkObject	*tm_file;
+	/** TMSourceFile object for this document, or @c NULL. */
+	TMSourceFile	*tm_file;
 	/** Whether this document is read-only. */
 	gboolean		 readonly;
 	/** Whether this document has been changed since it was last saved. */
@@ -111,16 +113,20 @@ struct GeanyDocument
 	 * not be set elsewhere.
 	 * @see file_name. */
 	gchar 			*real_path;
+	/** A pseudo-unique ID for this document.
+	 * @c 0 is reserved as an unused value.
+	 * @see document_find_by_id(). */
+	guint			 id;
 
 	struct GeanyDocumentPrivate *priv;	/* should be last, append fields before this item */
-};
+}
+GeanyDocument;
 
-extern GPtrArray *documents_array;
-
-
-/** Wraps documents_array so it can be used with C array syntax.
- * Example: documents[0]->sci = NULL;
- * @see document_index(). */
+/** Wraps @ref GeanyData::documents_array so it can be used with C array syntax.
+ * @warning Always check the returned document is valid (@c doc->is_valid).
+ *
+ * Example: @code GeanyDocument *doc = documents[i]; @endcode
+ * @see documents_array(). */
 #define documents ((GeanyDocument **)GEANY(documents_array)->pdata)
 
 /** @deprecated Use @ref foreach_document() instead.
@@ -131,18 +137,26 @@ extern GPtrArray *documents_array;
 #define documents_foreach(i) foreach_document(i)
 #endif
 
-/** Iterates all valid documents.
+/** Iterates all valid document indexes.
  * Use like a @c for statement.
- * @param i @c guint index for document_index(). */
+ * @param i @c guint index for @ref GeanyData::documents_array.
+ *
+ * Example:
+ * @code
+ * guint i;
+ * foreach_document(i)
+ * {
+ * 	GeanyDocument *doc = documents[i];
+ * 	g_assert(doc->is_valid);
+ * }
+ * @endcode */
 #define foreach_document(i) \
 	for (i = 0; i < GEANY(documents_array)->len; i++)\
 		if (!documents[i]->is_valid)\
 			{}\
 		else /* prevent outside 'else' matching our macro 'if' */
 
-/** @c NULL-safe way to check @c doc_ptr->is_valid.
- * This is useful when @a doc_ptr was stored some time earlier and documents may have been
- * closed since then.
+/** Null-safe way to check @ref GeanyDocument::is_valid.
  * @note This should not be used to check the result of the main API functions,
  * these only need a NULL-pointer check - @c document_get_current() != @c NULL. */
 #define DOC_VALID(doc_ptr) \
@@ -157,12 +171,13 @@ extern GPtrArray *documents_array;
 	(G_LIKELY((doc)->file_name != NULL) ? ((doc)->file_name) : GEANY_STRING_UNTITLED)
 
 
-
-/* These functions will replace the older functions. For now they have a documents_ prefix. */
-
 GeanyDocument* document_new_file(const gchar *filename, GeanyFiletype *ft, const gchar *text);
 
-GeanyDocument* document_new_file_if_non_open(void);
+GeanyDocument *document_get_current(void);
+
+GeanyDocument *document_get_from_notebook_child(GtkWidget *page);
+
+GeanyDocument* document_get_from_page(guint page_num);
 
 GeanyDocument* document_find_by_filename(const gchar *utf8_filename);
 
@@ -170,30 +185,66 @@ GeanyDocument* document_find_by_real_path(const gchar *realname);
 
 gboolean document_save_file(GeanyDocument *doc, gboolean force);
 
-gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
-
 GeanyDocument* document_open_file(const gchar *locale_filename, gboolean readonly,
 		GeanyFiletype *ft, const gchar *forced_enc);
 
-gboolean document_reload_file(GeanyDocument *doc, const gchar *forced_enc);
+void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+		const gchar *forced_enc);
+
+gboolean document_remove_page(guint page_num);
+
+gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc);
+
+void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
 void document_set_text_changed(GeanyDocument *doc, gboolean changed);
 
 void document_set_filetype(GeanyDocument *doc, GeanyFiletype *type);
 
-void document_reload_config(GeanyDocument *doc);
-
-void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
+gboolean document_close(GeanyDocument *doc);
 
 GeanyDocument *document_index(gint idx);
 
-GeanyDocument *document_find_by_sci(ScintillaObject *sci);
+gboolean document_save_file_as(GeanyDocument *doc, const gchar *utf8_fname);
+
+void document_rename_file(GeanyDocument *doc, const gchar *new_filename);
+
+const GdkColor *document_get_status_color(GeanyDocument *doc);
+
+gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
 
 gint document_get_notebook_page(GeanyDocument *doc);
 
-GeanyDocument* document_get_from_page(guint page_num);
+gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
 
-GeanyDocument *document_get_current(void);
+gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
+
+gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
+
+GeanyDocument *document_find_by_id(guint id);
+
+
+#ifdef GEANY_PRIVATE
+
+#if defined(G_OS_WIN32)
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_CRLF
+#else
+# define GEANY_DEFAULT_EOL_CHARACTER SC_EOL_LF
+#endif
+
+extern GeanyFilePrefs file_prefs;
+extern GPtrArray *documents_array;
+
+
+/* These functions will replace the older functions. For now they have a documents_ prefix. */
+
+GeanyDocument* document_new_file_if_non_open(void);
+
+gboolean document_reload_prompt(GeanyDocument *doc, const gchar *forced_enc);
+
+void document_reload_config(GeanyDocument *doc);
+
+GeanyDocument *document_find_by_sci(ScintillaObject *sci);
 
 void document_show_tab(GeanyDocument *doc);
 
@@ -201,11 +252,7 @@ void document_init_doclist(void);
 
 void document_finalize(void);
 
-gboolean document_remove_page(guint page_num);
-
 void document_try_focus(GeanyDocument *doc, GtkWidget *source_widget);
-
-gboolean document_close(GeanyDocument *doc);
 
 gboolean document_account_for_unsaved(void);
 
@@ -216,32 +263,27 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 void document_open_file_list(const gchar *data, gsize length);
 
-void document_open_files(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
-		const gchar *forced_enc);
-
-gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gint flags, gboolean inc,
+gboolean document_search_bar_find(GeanyDocument *doc, const gchar *text, gboolean inc,
 		gboolean backwards);
 
 gint document_find_text(GeanyDocument *doc, const gchar *text, const gchar *original_text,
-		gint flags, gboolean search_backwards, GeanyMatchInfo **match_,
+		GeanyFindFlags flags, gboolean search_backwards, GeanyMatchInfo **match_,
 		gboolean scroll, GtkWidget *parent);
 
 gint document_replace_text(GeanyDocument *doc, const gchar *find_text, const gchar *original_find_text,
-		const gchar *replace_text, gint flags, gboolean search_backwards);
+		const gchar *replace_text, GeanyFindFlags flags, gboolean search_backwards);
 
 gint document_replace_all(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-		const gchar *original_find_text, const gchar *original_replace_text, gint flags);
+		const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags);
 
 void document_replace_sel(GeanyDocument *doc, const gchar *find_text, const gchar *replace_text,
-						  const gchar *original_find_text, const gchar *original_replace_text, gint flags);
+						  const gchar *original_find_text, const gchar *original_replace_text, GeanyFindFlags flags);
 
 void document_update_tags(GeanyDocument *doc);
 
 void document_update_tag_list_in_idle(GeanyDocument *doc);
 
 void document_highlight_tags(GeanyDocument *doc);
-
-void document_set_encoding(GeanyDocument *doc, const gchar *new_encoding);
 
 gboolean document_check_disk_status(GeanyDocument *doc, gboolean force);
 
@@ -263,10 +305,6 @@ void document_update_tab_label(GeanyDocument *doc);
 
 const gchar *document_get_status_widget_class(GeanyDocument *doc);
 
-const GdkColor *document_get_status_color(GeanyDocument *doc);
-
-gchar *document_get_basename_for_display(GeanyDocument *doc, gint length);
-
 gboolean document_need_save_as(GeanyDocument *doc);
 
 gboolean document_detect_indent_type(GeanyDocument *doc, GeanyIndentType *type_);
@@ -275,16 +313,19 @@ gboolean document_detect_indent_width(GeanyDocument *doc, gint *width_);
 
 void document_apply_indent_settings(GeanyDocument *doc);
 
-gint document_compare_by_display_name(gconstpointer a, gconstpointer b);
-
-gint document_compare_by_tab_order(gconstpointer a, gconstpointer b);
-
-gint document_compare_by_tab_order_reverse(gconstpointer a, gconstpointer b);
-
 void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
 
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key);
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func);
+
+#endif /* GEANY_PRIVATE */
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_DOCUMENT_H */

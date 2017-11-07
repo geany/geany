@@ -29,6 +29,16 @@
 #ifndef GEANY_NAVQUEUE_H
 #define GEANY_NAVQUEUE_H 1
 
+#include "document.h"
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line);
+
+
+#ifdef GEANY_PRIVATE
 
 void navqueue_init(void);
 
@@ -36,12 +46,12 @@ void navqueue_free(void);
 
 void navqueue_remove_file(const gchar *filename);
 
-
-gboolean navqueue_goto_line(GeanyDocument *old_doc, GeanyDocument *new_doc, gint line);
-
 void navqueue_go_back(void);
 
 void navqueue_go_forward(void);
 
+#endif /* GEANY_PRIVATE */
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_NAVQUEUE_H */

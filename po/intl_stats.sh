@@ -92,7 +92,7 @@ else
    do
      # maybe the regexp can be optimized, regexps are not my best friends
      creationdate=`grep "PO-Revision-Date:" po/$lang.po | sed 's/.*: \([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}[+|-][0-9]\{4\}\).*/\1/'`
-     echo -n $eswitch $lang"\t("$creationdate"):\t"
+     printf "%s %s\t(%s):\t" "$eswitch" "$lang" "$creationdate"
      msgfmt --check --statistics po/$lang.po;
    done
 fi

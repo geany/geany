@@ -28,7 +28,34 @@
 #ifndef GEANY_TEMPLATES_H
 #define GEANY_TEMPLATES_H 1
 
+#include "document.h"
+#include "filetypes.h"
+
+#include <glib.h>
+
 G_BEGIN_DECLS
+
+/** Template preferences. */
+typedef struct GeanyTemplatePrefs
+{
+	gchar			*developer;	/**< Name */
+	gchar			*company;	/**< Company */
+	gchar			*mail;		/**< Email */
+	gchar			*initials;	/**< Initials */
+	gchar			*version;	/**< Initial version */
+	gchar			*year_format;
+	gchar			*date_format;
+	gchar			*datetime_format;
+}
+GeanyTemplatePrefs;
+
+
+gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
+
+
+#ifdef GEANY_PRIVATE
+
+struct filetype;
 
 #define GEANY_TEMPLATES_INDENT 3
 #define GEANY_TEMPLATES_FORMAT_YEAR              C_("DefaultYear", "%Y")
@@ -46,28 +73,10 @@ enum
 };
 
 
-/** Template preferences. */
-typedef struct GeanyTemplatePrefs
-{
-	gchar			*developer;	/**< Name */
-	gchar			*company;	/**< Company */
-	gchar			*mail;		/**< Email */
-	gchar			*initials;	/**< Initials */
-	gchar			*version;	/**< Initial version */
-	gchar			*year_format;
-	gchar			*date_format;
-	gchar			*datetime_format;
-}
-GeanyTemplatePrefs;
-
 extern GeanyTemplatePrefs template_prefs;
 
 
-struct filetype;
-
 void templates_init(void);
-
-gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname);
 
 gchar *templates_get_template_changelog(GeanyDocument *doc);
 
@@ -83,6 +92,8 @@ void templates_replace_valist(GString *text,
 
 void templates_free_templates(void);
 
+#endif /* GEANY_PRIVATE */
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_TEMPLATES_H */

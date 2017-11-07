@@ -1,0 +1,50 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling=F77]
+
+[keywords]
+# all items must be in one line
+primary=abstract access action advance all allstop allocatable allocate apostrophe assign assignment associate asynchronous backspace bind blank block blockdata call case character class close codimension common complex concurrent contains contiguous continue critical cycle data deallocate decimal delim default dimension direct do dowhile double doubleprecision elemental else elseif elsewhere encoding end endassociate endblock endblockdata endcritical enddo endfile endforall endfunction endif endinterface endmodule endprocedure endprogram endselect endsubmodule endsubroutine endtype endwhere entry enum enumerator eor equivalence err errmsg exist exit extends external file final flush fmt forall form format formatted function generic go goto id if images implicit import impure in include inout integer inquire intent interface intrinsic iomsg iolength iostat is kind len lock logical memory module name named namelist nextrec nml non_intrinsic non_overridable none nopass nullify number only open opened operator optional out pad parameter pass pause pending pointer pos position precision print private procedure program protected public quote pure read readwrite real rec recl recursive result return rewind save select selectcase selecttype sequential sign size stat status stop stream submodule subroutine sync syncall syncimages syncmemory target then to type unformatted unit unlock use value volatile wait where while write
+intrinsic_functions=abs achar acos acosd acosh adjustl adjustr aimag aimax0 aimin0 aint ajmax0 ajmin0 akmax0 akmin0 all allocated alog alog10 amax0 amax1 amin0 amin1 amod anint any asin asind asinh associated atan atan2 atan2d atand atanh atomic_define atomic_ref bessel_j0 bessel_j1 bessel_jn bessel_y0 bessel_y1 bessel_yn bge bgt bit_size bitest bitl bitlr bitrl bjtest bktest ble blt break btest c_associated c_f_pointer c_f_procpointer c_funloc c_loc c_sizeof cabs ccos cdabs cdcos cdexp cdlog cdsin cdsqrt ceiling cexp char clog cmplx command_argument_count conjg cos cosd cosh count cpu_time cshift csin csqrt dabs dacos dacosd dasin dasind datan datan2 datan2d datand date date_and_time dble dcmplx dconjg dcos dcosd dcosh dcotan ddim dexp dfloat dfloti dflotj dflotk digits dim dimag dint dlog dlog10 dmax1 dmin1 dmod dnint dot_product dprod dreal dshiftl dshiftr dsign dsin dsind dsinh dsqrt dtan dtand dtanh eoshift epsilon erf erfc erfc_scaled errsns execute_command_line exp exponent extends_type_of findloc float floati floatj floatk floor fraction free gamma get_command get_command_argument get_environment_variable huge hypot iabs iachar iall iand iany ibclr ibits ibset ichar idate idim idint idnint ieor ifix iiabs iiand iibclr iibits iibset iidim iidint iidnnt iieor iifix iint iior iiqint iiqnnt iishft iishftc iisign ilen image_index imax0 imax1 imin0 imin1 imod index inint inot int int1 int2 int4 int8 ior iparity iqint iqnint is_contiguous is_isostat_end is_isostat_eor ishft ishftc isign isnan izext jiand jibclr jibits jibset jidim jidint jidnnt jieor jifix jint jior jiqint jiqnnt jishft jishftc jisign jmax0 jmax1 jmin0 jmin1 jmod jnint jnot jzext kiabs kiand kibclr kibits kibset kidim kidint kidnnt kieor kifix kind kint kior kishft kishftc kisign kmax0 kmax1 kmin0 kmin1 kmod knint knot kzext lbound lcobound leadz len len_trim lge lgt lle llt log log10 log_gamma logical lshift malloc maskl maskr matmul max max0 max1 maxexponent maxloc maxval merge merge_bits min min0 min1 minexponent minloc minval mod modulo move_alloc mvbits nearest new_line nint norm2 not null num_images number_of_processors nworkers pack parity popcnt poppar precision present product radix random random_number random_seed range real repeat reshape rrspacing rshift same_type_as scale scan secnds selected_char_kind selected_int_kind selected_real_kind set_exponent shape shifta shiftl shiftr sign sin sind sinh size sizeof sngl snglq spacing spread sqrt storage_size sum system_clock tan tand tanh this_image tiny trailz transfer transpose trim ubound ucobound unpack verify
+user_functions=cdabs cdcos cdexp cdlog cdsin cdsqrt cotan cotand dcmplx dconjg dcotan dcotand decode dimag dll_export dll_import doublecomplex dreal dvchk encode find flen flush getarg getcharqq getcl getdat getenv gettim hfix ibchng identifier imag int1 int2 int4 intc intrup invalop iostat_msg isha ishc ishl jfix lacfar locking locnear map nargs nbreak ndperr ndpexc offset ovefl peekcharqq precfill prompt qabs qacos qacosd qasin qasind qatan qatand qatan2 qcmplx qconjg qcos qcosd qcosh qdim qexp qext qextd qfloat qimag qlog qlog10 qmax1 qmin1 qmod qreal qsign qsin qsind qsinh qsqrt qtan qtand qtanh ran rand randu rewrite segment setdat settim system timer undfl unlock union val virtual volatile zabs zcos zexp zlog zsin zsqrt
+
+
+[settings]
+# default extension used when saving files
+extension=f90
+
+# MIME type
+mime_type=text/x-fortran
+
+# the following characters are these which a "word" can contains, see documentation
+#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+
+# single comments, like # in this file
+comment_single=!
+# multiline comments
+#comment_open=
+#comment_close=
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=false
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+#width=4
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+#type=1
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=gfortran -Wall -c "%f"
+linker=gfortran -Wall -o "%e" "%f"
+run_cmd="./%e"
+

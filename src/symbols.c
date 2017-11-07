@@ -32,68 +32,78 @@
  * matching filetype is first loaded.
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "symbols.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
+#include "documentprivate.h"
+#include "editor.h"
+#include "encodings.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
+#include "highlighting.h"
+#include "main.h"
+#include "navqueue.h"
+#include "sciwrappers.h"
+#include "sidebar.h"
+#include "support.h"
+#include "tm_parser.h"
+#include "tm_tag.h"
+#include "ui_utils.h"
+#include "utils.h"
+
 #include "SciLexer.h"
-#include "geany.h"
+
+#include "gtkcompat.h"
 
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
 
-#include "prefix.h"
-#include "symbols.h"
-#include "utils.h"
-#include "filetypes.h"
-#include "encodings.h"
-#include "document.h"
-#include "documentprivate.h"
-#include "support.h"
-#include "msgwindow.h"
-#include "sidebar.h"
-#include "main.h"
-#include "navqueue.h"
-#include "ui_utils.h"
-#include "editor.h"
-#include "sciwrappers.h"
-#include "filetypesprivate.h"
-#include "search.h"
-
-
-const guint TM_GLOBAL_TYPE_MASK =
-	tm_tag_class_t | tm_tag_enum_t | tm_tag_interface_t |
-	tm_tag_struct_t | tm_tag_typedef_t | tm_tag_union_t | tm_tag_namespace_t;
-
-
-static gchar **html_entities = NULL;
 
 typedef struct
 {
-	gboolean	tags_loaded;
-	const gchar	*tag_file;
-} TagFileInfo;
+	gint found_line; /* return: the nearest line found */
+	gint line;       /* input: the line to look for */
+	gboolean lower   /* input: search only for lines with lower number than @line */;
+} TreeSearchData;
 
-/* Check before adding any more tags files, usually they should be downloaded separately. */
-enum	/* Geany tag files */
-{
-	GTF_C,
-	GTF_PASCAL,
-	GTF_PHP,
-	GTF_HTML_ENTITIES,
-	GTF_LATEX,
-	GTF_PYTHON,
-	GTF_MAX
-};
-
-static TagFileInfo tag_file_info[GTF_MAX] =
-{
-	{FALSE, "c99.tags"},
-	{FALSE, "pascal.tags"},
-	{FALSE, "php.tags"},
-	{FALSE, "html_entities.tags"},
-	{FALSE, "latex.tags"},
-	{FALSE, "python.tags"}
-};
 
 static GPtrArray *top_level_iter_names = NULL;
+
+enum
+{
+	ICON_CLASS,
+	ICON_MACRO,
+	ICON_MEMBER,
+	ICON_METHOD,
+	ICON_NAMESPACE,
+	ICON_OTHER,
+	ICON_STRUCT,
+	ICON_VAR,
+	ICON_NONE,
+	N_ICONS = ICON_NONE
+};
+
+static struct
+{
+	const gchar *icon_name;
+	GdkPixbuf *pixbuf;
+}
+symbols_icons[N_ICONS] = {
+	[ICON_CLASS]		= { "classviewer-class", NULL },
+	[ICON_MACRO]		= { "classviewer-macro", NULL },
+	[ICON_MEMBER]		= { "classviewer-member", NULL },
+	[ICON_METHOD]		= { "classviewer-method", NULL },
+	[ICON_NAMESPACE]	= { "classviewer-namespace", NULL },
+	[ICON_OTHER]		= { "classviewer-other", NULL },
+	[ICON_STRUCT]		= { "classviewer-struct", NULL },
+	[ICON_VAR]			= { "classviewer-var", NULL },
+};
 
 static struct
 {
@@ -107,9 +117,7 @@ static struct
 }
 symbol_menu;
 
-
-static void html_tags_loaded(void);
-static void load_user_tags(filetype_id ft_id);
+static void load_user_tags(GeanyFiletypeID ft_id);
 
 /* get the tags_ignore list, exported by tagmanager's options.c */
 extern gchar **c_tags_ignore;
@@ -160,7 +168,7 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
 	result = tm_workspace_load_global_tags(tags_file, ft->lang);
 	if (result)
 	{
-		geany_debug("Loaded %s (%s), %u tag(s).", tags_file, ft->name,
+		geany_debug("Loaded %s (%s), %u symbol(s).", tags_file, ft->name,
 			(guint) (get_tag_count() - old_tag_count));
 	}
 	return result;
@@ -171,9 +179,6 @@ static gboolean symbols_load_global_tags(const gchar *tags_file, GeanyFiletype *
  * This provides autocompletion, calltips, etc. */
 void symbols_global_tags_loaded(guint file_type_idx)
 {
-	TagFileInfo *tfi;
-	gint tag_type;
-
 	/* load ignore list for C/C++ parser */
 	if ((file_type_idx == GEANY_FILETYPES_C || file_type_idx == GEANY_FILETYPES_CPP) &&
 		c_tags_ignore == NULL)
@@ -191,92 +196,49 @@ void symbols_global_tags_loaded(guint file_type_idx)
 
 	switch (file_type_idx)
 	{
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_HTML:
-			html_tags_loaded();
-	}
-	switch (file_type_idx)
-	{
 		case GEANY_FILETYPES_CPP:
 			symbols_global_tags_loaded(GEANY_FILETYPES_C);	/* load C global tags */
-			/* no C++ tagfile yet */
-			return;
-		case GEANY_FILETYPES_C:		tag_type = GTF_C; break;
-		case GEANY_FILETYPES_PASCAL:tag_type = GTF_PASCAL; break;
-		case GEANY_FILETYPES_PHP:	tag_type = GTF_PHP; break;
-		case GEANY_FILETYPES_LATEX:	tag_type = GTF_LATEX; break;
-		case GEANY_FILETYPES_PYTHON:tag_type = GTF_PYTHON; break;
-		default:
-			return;
-	}
-	tfi = &tag_file_info[tag_type];
-
-	if (! tfi->tags_loaded)
-	{
-		gchar *fname = g_build_filename(app->datadir, tfi->tag_file, NULL);
-
-		symbols_load_global_tags(fname, filetypes[file_type_idx]);
-		tfi->tags_loaded = TRUE;
-		g_free(fname);
+			break;
+		case GEANY_FILETYPES_PHP:
+			symbols_global_tags_loaded(GEANY_FILETYPES_HTML);	/* load HTML global tags */
+			break;
 	}
 }
 
 
-/* HTML tagfile is just a list of entities for autocompletion (e.g. '&amp;') */
-static void html_tags_loaded(void)
-{
-	TagFileInfo *tfi;
-
-	if (cl_options.ignore_global_tags)
-		return;
-
-	tfi = &tag_file_info[GTF_HTML_ENTITIES];
-	if (! tfi->tags_loaded)
-	{
-		gchar *file = g_build_filename(app->datadir, tfi->tag_file, NULL);
-
-		html_entities = utils_read_file_in_array(file);
-		tfi->tags_loaded = TRUE;
-		g_free(file);
-	}
-}
-
-
-GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gint lang)
+GString *symbols_find_typenames_as_string(TMParserType lang, gboolean global)
 {
 	guint j;
 	TMTag *tag;
 	GString *s = NULL;
 	GPtrArray *typedefs;
-	gint tag_lang;
+	TMParserType tag_lang;
 
-	g_return_val_if_fail(tags_array != NULL, NULL);
-
-	typedefs = tm_tags_extract(tags_array, tag_types);
+	if (global)
+		typedefs = app->tm_workspace->global_typename_array;
+	else
+		typedefs = app->tm_workspace->typename_array;
 
 	if ((typedefs) && (typedefs->len > 0))
 	{
+		const gchar *last_name = "";
+
 		s = g_string_sized_new(typedefs->len * 10);
 		for (j = 0; j < typedefs->len; ++j)
 		{
 			tag = TM_TAG(typedefs->pdata[j]);
-			/* tag->atts.file.lang contains (for some reason) the line of the tag if
-			 * tag->atts.entry.file is not NULL */
-			tag_lang = (tag->atts.entry.file) ? tag->atts.entry.file->lang : tag->atts.file.lang;
+			tag_lang = tag->lang;
 
-			/* the check for tag_lang == lang is necessary to avoid wrong type colouring of
-			 * e.g. PHP classes in C++ files
-			 * lang = -2 disables the check */
-			if (tag->name && (tag_lang == lang || lang == -2))
+			if (tag->name && tm_tag_langs_compatible(lang, tag_lang) &&
+				strcmp(tag->name, last_name) != 0)
 			{
 				if (j != 0)
 					g_string_append_c(s, ' ');
 				g_string_append(s, tag->name);
+				last_name = tag->name;
 			}
 		}
 	}
-	if (typedefs)
-		g_ptr_array_free(typedefs, TRUE);
 	return s;
 }
 
@@ -285,162 +247,16 @@ GString *symbols_find_tags_as_string(GPtrArray *tags_array, guint tag_types, gin
  * type.
  * @param ft_id File type identifier.
  * @return The context separator string.
- * 
+ *
  * Returns non-printing sequence "\x03" ie ETX (end of text) for filetypes
  * without a context separator.
  *
  * @since 0.19
  */
+GEANY_API_SYMBOL
 const gchar *symbols_get_context_separator(gint ft_id)
 {
-	switch (ft_id)
-	{
-		case GEANY_FILETYPES_C:	/* for C++ .h headers or C structs */
-		case GEANY_FILETYPES_CPP:
-		case GEANY_FILETYPES_GLSL:	/* for structs */
-		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		case GEANY_FILETYPES_PHP:
-		case GEANY_FILETYPES_RUST:
-			return "::";
-
-		/* avoid confusion with other possible separators in group/section name */
-		case GEANY_FILETYPES_CONF:
-		case GEANY_FILETYPES_REST:
-			return ":::";
-
-		/* no context separator */
-		case GEANY_FILETYPES_ASCIIDOC:
-			return "\x03";
-
-		default:
-			return ".";
-	}
-}
-
-
-GString *symbols_get_macro_list(gint lang)
-{
-	guint j, i;
-	GPtrArray *ftags;
-	GString *words;
-	gint tag_lang;
-	TMTag *tag;
-
-	if (app->tm_workspace->work_objects == NULL)
-		return NULL;
-
-	ftags = g_ptr_array_sized_new(50);
-	words = g_string_sized_new(200);
-
-	for (j = 0; j < app->tm_workspace->work_objects->len; j++)
-	{
-		GPtrArray *tags;
-
-		tags = tm_tags_extract(TM_WORK_OBJECT(app->tm_workspace->work_objects->pdata[j])->tags_array,
-			tm_tag_enum_t | tm_tag_variable_t | tm_tag_macro_t | tm_tag_macro_with_arg_t);
-		if (NULL != tags)
-		{
-			for (i = 0; ((i < tags->len) && (i < editor_prefs.autocompletion_max_entries)); ++i)
-			{
-				tag = TM_TAG(tags->pdata[i]);
-				tag_lang = (tag->atts.entry.file) ?
-					tag->atts.entry.file->lang : tag->atts.file.lang;
-
-				if (tag_lang == lang)
-					g_ptr_array_add(ftags, (gpointer) tags->pdata[i]);
-			}
-			g_ptr_array_free(tags, TRUE);
-		}
-	}
-
-	if (ftags->len == 0)
-	{
-		g_ptr_array_free(ftags, TRUE);
-		g_string_free(words, TRUE);
-		return NULL;
-	}
-
-	tm_tags_sort(ftags, NULL, FALSE);
-	for (j = 0; j < ftags->len; j++)
-	{
-		if (j > 0)
-			g_string_append_c(words, '\n');
-		g_string_append(words, TM_TAG(ftags->pdata[j])->name);
-	}
-	g_ptr_array_free(ftags, TRUE);
-	return words;
-}
-
-
-/* Note: if tags is sorted, we can use bsearch or tm_tags_find() to speed this up. */
-static TMTag *
-symbols_find_tm_tag(const GPtrArray *tags, const gchar *tag_name)
-{
-	guint i;
-	g_return_val_if_fail(tags != NULL, NULL);
-
-	for (i = 0; i < tags->len; ++i)
-	{
-		if (utils_str_equal(TM_TAG(tags->pdata[i])->name, tag_name))
-			return TM_TAG(tags->pdata[i]);
-	}
-	return NULL;
-}
-
-
-static TMTag *find_work_object_tag(const TMWorkObject *workobj,
-		const gchar *tag_name, guint type)
-{
-	GPtrArray *tags;
-	TMTag *tmtag;
-
-	if (G_LIKELY(workobj != NULL))
-	{
-		tags = tm_tags_extract(workobj->tags_array, type);
-		if (tags != NULL)
-		{
-			tmtag = symbols_find_tm_tag(tags, tag_name);
-
-			g_ptr_array_free(tags, TRUE);
-
-			if (tmtag != NULL)
-				return tmtag;
-		}
-	}
-	return NULL;	/* not found */
-}
-
-
-static TMTag *find_workspace_tag(const gchar *tag_name, guint type)
-{
-	guint j;
-	const GPtrArray *work_objects = NULL;
-
-	if (app->tm_workspace != NULL)
-		work_objects = app->tm_workspace->work_objects;
-
-	if (work_objects != NULL)
-	{
-		for (j = 0; j < work_objects->len; j++)
-		{
-			TMWorkObject *workobj = TM_WORK_OBJECT(work_objects->pdata[j]);
-			TMTag *tmtag;
-
-			tmtag = find_work_object_tag(workobj, tag_name, type);
-			if (tmtag != NULL)
-				return tmtag;
-		}
-	}
-	return NULL;	/* not found */
-}
-
-
-const gchar **symbols_get_html_entities(void)
-{
-	if (html_entities == NULL)
-		html_tags_loaded(); /* if not yet created, force creation of the array but shouldn't occur */
-
-	return (const gchar **) html_entities;
+	return tm_tag_context_separator(filetypes[ft_id]->lang);
 }
 
 
@@ -461,7 +277,7 @@ static gint compare_symbol(const TMTag *tag_a, const TMTag *tag_b)
 	ret = strcmp(tag_a->name, tag_b->name);
 	if (ret == 0)
 	{
-		return tag_a->atts.entry.line - tag_b->atts.entry.line;
+		return tag_a->line - tag_b->line;
 	}
 	return ret;
 }
@@ -477,24 +293,23 @@ static gint compare_symbol_lines(gconstpointer a, gconstpointer b)
 	if (a == NULL || b == NULL)
 		return 0;
 
-	ret = tag_a->atts.entry.line - tag_b->atts.entry.line;
+	ret = tag_a->line - tag_b->line;
 	if (ret == 0)
 	{
-		if (tag_a->atts.entry.scope == NULL)
-			return -(tag_a->atts.entry.scope != tag_b->atts.entry.scope);
-		if (tag_b->atts.entry.scope == NULL)
-			return tag_a->atts.entry.scope != tag_b->atts.entry.scope;
+		if (tag_a->scope == NULL)
+			return -(tag_a->scope != tag_b->scope);
+		if (tag_b->scope == NULL)
+			return tag_a->scope != tag_b->scope;
 		else
-			return strcmp(tag_a->atts.entry.scope, tag_b->atts.entry.scope);
+			return strcmp(tag_a->scope, tag_b->scope);
 	}
 	return ret;
 }
 
 
-static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
+static GList *get_tag_list(GeanyDocument *doc, TMTagType tag_types)
 {
 	GList *tag_names = NULL;
-	TMTag *tag;
 	guint i;
 
 	g_return_val_if_fail(doc, NULL);
@@ -504,7 +319,8 @@ static GList *get_tag_list(GeanyDocument *doc, guint tag_types)
 
 	for (i = 0; i < doc->tm_file->tags_array->len; ++i)
 	{
-		tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+		TMTag *tag = TM_TAG(doc->tm_file->tags_array->pdata[i]);
+
 		if (G_UNLIKELY(tag == NULL))
 			return NULL;
 
@@ -570,45 +386,6 @@ static GdkPixbuf *get_tag_icon(const gchar *icon_name)
 }
 
 
-/* finds the next iter at any level
- * @param iter in/out, the current iter, will be changed to the next one
- * @param down whether to try the child iter
- * @return TRUE if there @p iter was set, or FALSE if there is no next iter */
-static gboolean next_iter(GtkTreeModel *model, GtkTreeIter *iter, gboolean down)
-{
-	GtkTreeIter guess;
-	GtkTreeIter copy = *iter;
-
-	/* go down if the item has children */
-	if (down && gtk_tree_model_iter_children(model, &guess, iter))
-		*iter = guess;
-	/* or to the next item at the same level */
-	else if (gtk_tree_model_iter_next(model, &copy))
-		*iter = copy;
-	/* or to the next item at a parent level */
-	else if (gtk_tree_model_iter_parent(model, &guess, iter))
-	{
-		copy = guess;
-		while(TRUE)
-		{
-			if (gtk_tree_model_iter_next(model, &copy))
-			{
-				*iter = copy;
-				return TRUE;
-			}
-			else if (gtk_tree_model_iter_parent(model, &copy, &guess))
-				guess = copy;
-			else
-				return FALSE;
-		}
-	}
-	else
-		return FALSE;
-
-	return TRUE;
-}
-
-
 static gboolean find_toplevel_iter(GtkTreeStore *store, GtkTreeIter *iter, const gchar *title)
 {
 	GtkTreeModel *model = GTK_TREE_MODEL(store);
@@ -650,13 +427,11 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 	for (; iter = va_arg(args, GtkTreeIter*), iter != NULL;)
 	{
 		gchar *title = va_arg(args, gchar*);
-		gchar *icon_name = va_arg(args, gchar *);
+		guint icon_id = va_arg(args, guint);
 		GdkPixbuf *icon = NULL;
 
-		if (icon_name)
-		{
-			icon = get_tag_icon(icon_name);
-		}
+		if (icon_id < N_ICONS)
+			icon = symbols_icons[icon_id].pixbuf;
 
 		g_assert(title != NULL);
 		g_ptr_array_add(top_level_iter_names, title);
@@ -664,11 +439,8 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 		if (!find_toplevel_iter(tree_store, iter, title))
 			gtk_tree_store_append(tree_store, iter, NULL);
 
-		if (G_IS_OBJECT(icon))
-		{
+		if (icon)
 			gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_ICON, icon, -1);
-			g_object_unref(icon);
-		}
 		gtk_tree_store_set(tree_store, iter, SYMBOLS_COLUMN_NAME, title, -1);
 	}
 	va_end(args);
@@ -677,7 +449,7 @@ tag_list_add_groups(GtkTreeStore *tree_store, ...)
 
 static void add_top_level_items(GeanyDocument *doc)
 {
-	filetype_id ft_id = doc->file_type->id;
+	GeanyFiletypeID ft_id = doc->file_type->id;
 	GtkTreeStore *tag_store = doc->priv->tag_store;
 
 	if (top_level_iter_names == NULL)
@@ -692,149 +464,165 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_DIFF:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Files"), NULL, NULL);
+				&(tv_iters.tag_function), _("Files"), ICON_NONE, NULL);
 			break;
 		}
 		case GEANY_FILETYPES_DOCBOOK:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Chapter"), NULL,
-				&(tv_iters.tag_class), _("Section"), NULL,
-				&(tv_iters.tag_member), _("Sect1"), NULL,
-				&(tv_iters.tag_macro), _("Sect2"), NULL,
-				&(tv_iters.tag_variable), _("Sect3"), NULL,
-				&(tv_iters.tag_struct), _("Appendix"), NULL,
-				&(tv_iters.tag_other), _("Other"), NULL,
+				&(tv_iters.tag_function), _("Chapter"), ICON_NONE,
+				&(tv_iters.tag_class), _("Section"), ICON_NONE,
+				&(tv_iters.tag_member), _("Sect1"), ICON_NONE,
+				&(tv_iters.tag_macro), _("Sect2"), ICON_NONE,
+				&(tv_iters.tag_variable), _("Sect3"), ICON_NONE,
+				&(tv_iters.tag_struct), _("Appendix"), ICON_NONE,
+				&(tv_iters.tag_other), _("Other"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_HASKELL:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Module"), NULL,
-				&tv_iters.tag_type, _("Types"), NULL,
-				&tv_iters.tag_macro, _("Type constructors"), NULL,
-				&tv_iters.tag_function, _("Functions"), "classviewer-method",
+				&tv_iters.tag_namespace, _("Module"), ICON_NONE,
+				&tv_iters.tag_type, _("Types"), ICON_NONE,
+				&tv_iters.tag_macro, _("Type constructors"), ICON_NONE,
+				&tv_iters.tag_function, _("Functions"), ICON_METHOD,
 				NULL);
 			break;
 		case GEANY_FILETYPES_COBOL:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_class, _("Program"), "classviewer-class",
-				&tv_iters.tag_function, _("File"), "classviewer-method",
-				&tv_iters.tag_namespace, _("Sections"), "classviewer-namespace",
-				&tv_iters.tag_macro, _("Paragraph"), "classviewer-other",
-				&tv_iters.tag_struct, _("Group"), "classviewer-struct",
-				&tv_iters.tag_variable, _("Data"), "classviewer-var",
+				&tv_iters.tag_class, _("Program"), ICON_CLASS,
+				&tv_iters.tag_function, _("File"), ICON_METHOD,
+				&tv_iters.tag_namespace, _("Sections"), ICON_NAMESPACE,
+				&tv_iters.tag_macro, _("Paragraph"), ICON_OTHER,
+				&tv_iters.tag_struct, _("Group"), ICON_STRUCT,
+				&tv_iters.tag_variable, _("Data"), ICON_VAR,
 				NULL);
 			break;
 		case GEANY_FILETYPES_CONF:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",
-				&tv_iters.tag_macro, _("Keys"), "classviewer-var",
+				&tv_iters.tag_namespace, _("Sections"), ICON_OTHER,
+				&tv_iters.tag_macro, _("Keys"), ICON_VAR,
 				NULL);
 			break;
 		case GEANY_FILETYPES_NSIS:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_namespace, _("Sections"), "classviewer-other",
-				&tv_iters.tag_function, _("Functions"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&tv_iters.tag_namespace, _("Sections"), ICON_OTHER,
+				&tv_iters.tag_function, _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
 				NULL);
 			break;
 		case GEANY_FILETYPES_LATEX:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Command"), NULL,
-				&(tv_iters.tag_class), _("Environment"), NULL,
-				&(tv_iters.tag_member), _("Section"), NULL,
-				&(tv_iters.tag_macro), _("Subsection"), NULL,
-				&(tv_iters.tag_variable), _("Subsubsection"), NULL,
-				&(tv_iters.tag_struct), _("Label"), NULL,
-				&(tv_iters.tag_namespace), _("Chapter"), NULL,
-				&(tv_iters.tag_other), _("Other"), NULL,
+				&(tv_iters.tag_function), _("Command"), ICON_NONE,
+				&(tv_iters.tag_class), _("Environment"), ICON_NONE,
+				&(tv_iters.tag_member), _("Section"), ICON_NONE,
+				&(tv_iters.tag_macro), _("Subsection"), ICON_NONE,
+				&(tv_iters.tag_variable), _("Subsubsection"), ICON_NONE,
+				&(tv_iters.tag_struct), _("Label"), ICON_NONE,
+				&(tv_iters.tag_namespace), _("Chapter"), ICON_NONE,
+				&(tv_iters.tag_other), _("Other"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_MATLAB:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_struct), _("Structures"), "classviewer-struct",
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_struct), _("Structures"), ICON_STRUCT,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_ABAQUS:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Parts"), NULL,
-				&(tv_iters.tag_member), _("Assembly"), NULL,
-				&(tv_iters.tag_namespace), _("Steps"), NULL,
+				&(tv_iters.tag_class), _("Parts"), ICON_NONE,
+				&(tv_iters.tag_member), _("Assembly"), ICON_NONE,
+				&(tv_iters.tag_namespace), _("Steps"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_R:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_other), _("Other"), NULL,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_other), _("Other"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_RUST:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Structures"), "classviewer-struct",
-				&(tv_iters.tag_interface), _("Traits"), "classviewer-class",
-				&(tv_iters.tag_class), _("Implementations"), "classviewer-class",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_type), _("Typedefs / Enums"), "classviewer-struct",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_macro), _("Macros"), "classviewer-macro",
-				&(tv_iters.tag_member), _("Methods"), "classviewer-member",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL,
+				&(tv_iters.tag_namespace), _("Modules"), ICON_NAMESPACE,
+				&(tv_iters.tag_struct), _("Structures"), ICON_STRUCT,
+				&(tv_iters.tag_interface), _("Traits"), ICON_CLASS,
+				&(tv_iters.tag_class), _("Implementations"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_type), _("Typedefs / Enums"), ICON_STRUCT,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_macro), _("Macros"), ICON_MACRO,
+				&(tv_iters.tag_member), _("Methods"), ICON_MEMBER,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
+				NULL);
+			break;
+		}
+		case GEANY_FILETYPES_GO:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_struct), _("Structs"), ICON_STRUCT,
+				&(tv_iters.tag_type), _("Types"), ICON_STRUCT,
+				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PERL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_macro), _("Labels"), NULL,
-				&(tv_iters.tag_type), _("Constants"), NULL,
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_macro), _("Labels"), ICON_NONE,
+				&(tv_iters.tag_type), _("Constants"), ICON_NONE,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PHP:
+		case GEANY_FILETYPES_ZEPHIR:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_struct), _("Traits"), "classviewer-struct",
+				&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_struct), _("Traits"), ICON_STRUCT,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_HTML:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), NULL,
-				&(tv_iters.tag_member), _("Anchors"), NULL,
-				&(tv_iters.tag_namespace), _("H1 Headings"), NULL,
-				&(tv_iters.tag_class), _("H2 Headings"), NULL,
-				&(tv_iters.tag_variable), _("H3 Headings"), NULL,
+				&(tv_iters.tag_function), _("Functions"), ICON_NONE,
+				&(tv_iters.tag_member), _("Anchors"), ICON_NONE,
+				&(tv_iters.tag_namespace), _("H1 Headings"), ICON_NONE,
+				&(tv_iters.tag_class), _("H2 Headings"), ICON_NONE,
+				&(tv_iters.tag_variable), _("H3 Headings"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_CSS:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_variable), _("ID Selectors"), "classviewer-var",
-				&(tv_iters.tag_struct), _("Type Selectors"), "classviewer-struct", NULL);
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_variable), _("ID Selectors"), ICON_VAR,
+				&(tv_iters.tag_struct), _("Type Selectors"), ICON_STRUCT, NULL);
 			break;
 		}
 		case GEANY_FILETYPES_REST:
@@ -842,128 +630,128 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_ABC:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Chapter"), NULL,
-				&(tv_iters.tag_member), _("Section"), NULL,
-				&(tv_iters.tag_macro), _("Subsection"), NULL,
-				&(tv_iters.tag_variable), _("Subsubsection"), NULL,
+				&(tv_iters.tag_namespace), _("Chapter"), ICON_NONE,
+				&(tv_iters.tag_member), _("Section"), ICON_NONE,
+				&(tv_iters.tag_macro), _("Subsection"), ICON_NONE,
+				&(tv_iters.tag_variable), _("Subsubsection"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_ASCIIDOC:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Document"), NULL,
-				&(tv_iters.tag_member), _("Section Level 1"), NULL,
-				&(tv_iters.tag_macro), _("Section Level 2"), NULL,
-				&(tv_iters.tag_variable), _("Section Level 3"), NULL,
-				&(tv_iters.tag_struct), _("Section Level 4"), NULL,
+				&(tv_iters.tag_namespace), _("Document"), ICON_NONE,
+				&(tv_iters.tag_member), _("Section Level 1"), ICON_NONE,
+				&(tv_iters.tag_macro), _("Section Level 2"), ICON_NONE,
+				&(tv_iters.tag_variable), _("Section Level 3"), ICON_NONE,
+				&(tv_iters.tag_struct), _("Section Level 4"), ICON_NONE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_RUBY:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Modules"), "classviewer-namespace",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_member), _("Singletons"), "classviewer-struct",
-				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
+				&(tv_iters.tag_namespace), _("Modules"), ICON_NAMESPACE,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_member), _("Singletons"), ICON_STRUCT,
+				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_TCL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_member), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_function), _("Procedures"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_member), _("Methods"), ICON_METHOD,
+				&(tv_iters.tag_function), _("Procedures"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_PYTHON:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_member), _("Methods"), "classviewer-macro",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_externvar), _("Imports"), "classviewer-namespace",
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_member), _("Methods"), ICON_MACRO,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_externvar), _("Imports"), ICON_NAMESPACE,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_VHDL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_class), _("Entities"), "classviewer-class",
-				&(tv_iters.tag_struct), _("Architectures"), "classviewer-struct",
-				&(tv_iters.tag_type), _("Types"), "classviewer-other",
-				&(tv_iters.tag_function), _("Functions / Procedures"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables / Signals"), "classviewer-var",
-				&(tv_iters.tag_member), _("Processes / Blocks / Components"), "classviewer-member",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
+				&(tv_iters.tag_class), _("Entities"), ICON_CLASS,
+				&(tv_iters.tag_struct), _("Architectures"), ICON_STRUCT,
+				&(tv_iters.tag_type), _("Types"), ICON_OTHER,
+				&(tv_iters.tag_function), _("Functions / Procedures"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables / Signals"), ICON_VAR,
+				&(tv_iters.tag_member), _("Processes / Blocks / Components"), ICON_MEMBER,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_VERILOG:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_type), _("Events"), "classviewer-macro",
-				&(tv_iters.tag_class), _("Modules"), "classviewer-class",
-				&(tv_iters.tag_function), _("Functions / Tasks"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_type), _("Events"), ICON_MACRO,
+				&(tv_iters.tag_class), _("Modules"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Functions / Tasks"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_JAVA:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_member), _("Members"), "classviewer-member",
-				&(tv_iters.tag_type), _("Enums"), "classviewer-struct",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
+				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
+				&(tv_iters.tag_type), _("Enums"), ICON_STRUCT,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_AS:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Package"), "classviewer-namespace",
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_member), _("Properties"), "classviewer-member",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Package"), ICON_NAMESPACE,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_member), _("Properties"), ICON_MEMBER,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_HAXE:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_function), _("Methods"), "classviewer-method",
-				&(tv_iters.tag_type), _("Types"), "classviewer-macro",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_function), _("Methods"), ICON_METHOD,
+				&(tv_iters.tag_type), _("Types"), ICON_MACRO,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_BASIC:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_macro), _("Constants"), "classviewer-macro",
-				&(tv_iters.tag_struct), _("Types"), "classviewer-namespace",
-				&(tv_iters.tag_namespace), _("Labels"), "classviewer-member",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_macro), _("Constants"), ICON_MACRO,
+				&(tv_iters.tag_struct), _("Types"), ICON_NAMESPACE,
+				&(tv_iters.tag_namespace), _("Labels"), ICON_MEMBER,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
@@ -971,46 +759,46 @@ static void add_top_level_items(GeanyDocument *doc)
 		case GEANY_FILETYPES_FORTRAN:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Module"), "classviewer-class",
-				&(tv_iters.tag_struct), _("Programs"), "classviewer-class",
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_function), _("Functions / Subroutines"), "classviewer-method",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_class), _("Types"), "classviewer-class",
-				&(tv_iters.tag_member), _("Components"), "classviewer-member",
-				&(tv_iters.tag_macro), _("Blocks"), "classviewer-member",
-				&(tv_iters.tag_type), _("Enums"), "classviewer-struct",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
+				&(tv_iters.tag_namespace), _("Module"), ICON_CLASS,
+				&(tv_iters.tag_struct), _("Programs"), ICON_CLASS,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_function), _("Functions / Subroutines"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_class), _("Types"), ICON_CLASS,
+				&(tv_iters.tag_member), _("Components"), ICON_MEMBER,
+				&(tv_iters.tag_macro), _("Blocks"), ICON_MEMBER,
+				&(tv_iters.tag_type), _("Enums"), ICON_STRUCT,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_ASM:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_namespace), _("Labels"), "classviewer-namespace",
-				&(tv_iters.tag_function), _("Macros"), "classviewer-method",
-				&(tv_iters.tag_macro), _("Defines"), "classviewer-macro",
-				&(tv_iters.tag_struct), _("Types"), "classviewer-struct",
+				&(tv_iters.tag_namespace), _("Labels"), ICON_NAMESPACE,
+				&(tv_iters.tag_function), _("Macros"), ICON_METHOD,
+				&(tv_iters.tag_macro), _("Defines"), ICON_MACRO,
+				&(tv_iters.tag_struct), _("Types"), ICON_STRUCT,
 				NULL);
 			break;
 		}
 		case GEANY_FILETYPES_MAKE:
 			tag_list_add_groups(tag_store,
-				&tv_iters.tag_function, _("Targets"), "classviewer-method",
-				&tv_iters.tag_macro, _("Macros"), "classviewer-macro",
+				&tv_iters.tag_function, _("Targets"), ICON_METHOD,
+				&tv_iters.tag_macro, _("Macros"), ICON_MACRO,
 				NULL);
 			break;
 		case GEANY_FILETYPES_SQL:
 		{
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_namespace), _("Procedures"), "classviewer-namespace",
-				&(tv_iters.tag_struct), _("Indexes"), "classviewer-struct",
-				&(tv_iters.tag_class), _("Tables"), "classviewer-class",
-				&(tv_iters.tag_macro), _("Triggers"), "classviewer-macro",
-				&(tv_iters.tag_member), _("Views"), "classviewer-var",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other",
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_namespace), _("Procedures"), ICON_NAMESPACE,
+				&(tv_iters.tag_struct), _("Indexes"), ICON_STRUCT,
+				&(tv_iters.tag_class), _("Tables"), ICON_CLASS,
+				&(tv_iters.tag_macro), _("Triggers"), ICON_MACRO,
+				&(tv_iters.tag_member), _("Views"), ICON_VAR,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER,
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
 				NULL);
 			break;
 		}
@@ -1019,29 +807,29 @@ static void add_top_level_items(GeanyDocument *doc)
 		{
 			if (ft_id == GEANY_FILETYPES_D)
 				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_namespace), _("Module"), NULL, NULL);
+					&(tv_iters.tag_namespace), _("Module"), ICON_NONE, NULL);
 			else
 				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_namespace), _("Namespaces"), "classviewer-namespace", NULL);
+					&(tv_iters.tag_namespace), _("Namespaces"), ICON_NAMESPACE, NULL);
 
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_class), _("Classes"), "classviewer-class",
-				&(tv_iters.tag_interface), _("Interfaces"), "classviewer-struct",
-				&(tv_iters.tag_function), _("Functions"), "classviewer-method",
-				&(tv_iters.tag_member), _("Members"), "classviewer-member",
-				&(tv_iters.tag_struct), _("Structs"), "classviewer-struct",
-				&(tv_iters.tag_type), _("Typedefs / Enums"), "classviewer-struct",
+				&(tv_iters.tag_class), _("Classes"), ICON_CLASS,
+				&(tv_iters.tag_interface), _("Interfaces"), ICON_STRUCT,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_member), _("Members"), ICON_MEMBER,
+				&(tv_iters.tag_struct), _("Structs"), ICON_STRUCT,
+				&(tv_iters.tag_type), _("Typedefs / Enums"), ICON_STRUCT,
 				NULL);
 
 			if (ft_id != GEANY_FILETYPES_D)
 			{
 				tag_list_add_groups(tag_store,
-					&(tv_iters.tag_macro), _("Macros"), "classviewer-macro", NULL);
+					&(tv_iters.tag_macro), _("Macros"), ICON_MACRO, NULL);
 			}
 			tag_list_add_groups(tag_store,
-				&(tv_iters.tag_variable), _("Variables"), "classviewer-var",
-				&(tv_iters.tag_externvar), _("Extern Variables"), "classviewer-var",
-				&(tv_iters.tag_other), _("Other"), "classviewer-other", NULL);
+				&(tv_iters.tag_variable), _("Variables"), ICON_VAR,
+				&(tv_iters.tag_externvar), _("Extern Variables"), ICON_VAR,
+				&(tv_iters.tag_other), _("Other"), ICON_OTHER, NULL);
 		}
 	}
 }
@@ -1069,7 +857,7 @@ static void hide_empty_rows(GtkTreeStore *store)
 static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboolean found_parent)
 {
 	gchar *utf8_name;
-	const gchar *scope = tag->atts.entry.scope;
+	const gchar *scope = tag->scope;
 	static GString *buffer = NULL;	/* buffer will be small so we can keep it for reuse */
 	gboolean doc_is_utf8 = FALSE;
 
@@ -1110,7 +898,7 @@ static const gchar *get_symbol_name(GeanyDocument *doc, const TMTag *tag, gboole
 	if (! doc_is_utf8)
 		g_free(utf8_name);
 
-	g_string_append_printf(buffer, " [%lu]", tag->atts.entry.line);
+	g_string_append_printf(buffer, " [%lu]", tag->line);
 
 	return buffer->str;
 }
@@ -1130,17 +918,14 @@ static gchar *get_symbol_tooltip(GeanyDocument *doc, const TMTag *tag)
 			encodings_convert_to_utf8_from_charset(utf8_name, -1, doc->encoding, TRUE));
 	}
 
-	if (utf8_name != NULL)
-		SETPTR(utf8_name, g_markup_escape_text(utf8_name, -1));
-
 	return utf8_name;
 }
 
 
 /* find the last word in "foo::bar::blah", e.g. "blah" */
-static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
+static const gchar *get_parent_name(const TMTag *tag, GeanyFiletypeID ft_id)
 {
-	const gchar *scope = tag->atts.entry.scope;
+	const gchar *scope = tag->scope;
 	const gchar *separator = symbols_get_context_separator(ft_id);
 	const gchar *str, *ptr;
 
@@ -1164,7 +949,7 @@ static const gchar *get_parent_name(const TMTag *tag, filetype_id ft_id)
 }
 
 
-static GtkTreeIter *get_tag_type_iter(TMTagType tag_type, filetype_id ft_id)
+static GtkTreeIter *get_tag_type_iter(TMTagType tag_type)
 {
 	GtkTreeIter *iter = NULL;
 
@@ -1243,7 +1028,7 @@ static GdkPixbuf *get_child_icon(GtkTreeStore *tree_store, GtkTreeIter *parent)
 
 	if (parent == &tv_iters.tag_other)
 	{
-		return get_tag_icon("classviewer-var");
+		return g_object_ref(symbols_icons[ICON_VAR].pixbuf);
 	}
 	/* copy parent icon */
 	gtk_tree_model_get(GTK_TREE_MODEL(tree_store), parent,
@@ -1258,9 +1043,9 @@ static gboolean tag_equal(gconstpointer v1, gconstpointer v2)
 	const TMTag *t2 = v2;
 
 	return (t1->type == t2->type && strcmp(t1->name, t2->name) == 0 &&
-			utils_str_equal(t1->atts.entry.scope, t2->atts.entry.scope) &&
+			utils_str_equal(t1->scope, t2->scope) &&
 			/* include arglist in match to support e.g. C++ overloading */
-			utils_str_equal(t1->atts.entry.arglist, t2->atts.entry.arglist));
+			utils_str_equal(t1->arglist, t2->arglist));
 }
 
 
@@ -1274,15 +1059,15 @@ static guint tag_hash(gconstpointer v)
 	h = (h << 5) + h + tag->type;
 	for (p = tag->name; *p != '\0'; p++)
 		h = (h << 5) + h + *p;
-	if (tag->atts.entry.scope)
+	if (tag->scope)
 	{
-		for (p = tag->atts.entry.scope; *p != '\0'; p++)
+		for (p = tag->scope; *p != '\0'; p++)
 			h = (h << 5) + h + *p;
 	}
 	/* for e.g. C++ overloading */
-	if (tag->atts.entry.arglist)
+	if (tag->arglist)
 	{
-		for (p = tag->atts.entry.arglist; *p != '\0'; p++)
+		for (p = tag->arglist; *p != '\0'; p++)
 			h = (h << 5) + h + *p;
 	}
 
@@ -1314,45 +1099,97 @@ static gboolean tree_store_remove_row(GtkTreeStore *store, GtkTreeIter *iter)
 	if (! cont && has_parent)
 	{
 		*iter = parent;
-		cont = next_iter(GTK_TREE_MODEL(store), iter, FALSE);
+		cont = ui_tree_model_iter_any_next(GTK_TREE_MODEL(store), iter, FALSE);
 	}
 
 	return cont;
 }
 
 
-/* adds a new element in the parent table if it's key is known.
- * duplicates are kept */
+static gint tree_search_func(gconstpointer key, gpointer user_data)
+{
+	TreeSearchData *data = user_data;
+	gint parent_line = GPOINTER_TO_INT(key);
+	gboolean new_nearest;
+
+	if (data->found_line == -1)
+		data->found_line = parent_line; /* initial value */
+
+	new_nearest = ABS(data->line - parent_line) < ABS(data->line - data->found_line);
+
+	if (parent_line > data->line)
+	{
+		if (new_nearest && !data->lower)
+			data->found_line = parent_line;
+		return -1;
+	}
+
+	if (new_nearest)
+		data->found_line = parent_line;
+
+	if (parent_line < data->line)
+		return 1;
+
+	return 0;
+}
+
+
+static gint tree_cmp(gconstpointer a, gconstpointer b, gpointer user_data)
+{
+	return GPOINTER_TO_INT(a) - GPOINTER_TO_INT(b);
+}
+
+
+static void parents_table_tree_value_free(gpointer data)
+{
+	g_slice_free(GtkTreeIter, data);
+}
+
+
+/* adds a new element in the parent table if its key is known. */
 static void update_parents_table(GHashTable *table, const TMTag *tag, const gchar *parent_name,
 		const GtkTreeIter *iter)
 {
-	GList **list;
-	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &list) &&
+	GTree *tree;
+	if (g_hash_table_lookup_extended(table, tag->name, NULL, (gpointer *) &tree) &&
 		! utils_str_equal(parent_name, tag->name) /* prevent Foo::Foo from making parent = child */)
 	{
-		if (! list)
+		if (!tree)
 		{
-			list = g_slice_alloc(sizeof *list);
-			*list = NULL;
-			g_hash_table_insert(table, tag->name, list);
+			tree = g_tree_new_full(tree_cmp, NULL, NULL, parents_table_tree_value_free);
+			g_hash_table_insert(table, tag->name, tree);
 		}
-		*list = g_list_prepend(*list, g_slice_dup(GtkTreeIter, iter));
+
+		g_tree_insert(tree, GINT_TO_POINTER(tag->line), g_slice_dup(GtkTreeIter, iter));
 	}
 }
 
 
-static void free_iter_slice_list(gpointer data)
+static GtkTreeIter *parents_table_lookup(GHashTable *table, const gchar *name, guint line)
 {
-	GList **list = data;
+	GtkTreeIter *parent_search = NULL;
+	GTree *tree;
 
-	if (list)
+	tree = g_hash_table_lookup(table, name);
+	if (tree)
 	{
-		GList *node;
-		foreach_list(node, *list)
-			g_slice_free(GtkTreeIter, node->data);
-		g_list_free(*list);
-		g_slice_free1(sizeof *list, list);
+		TreeSearchData user_data = {-1, line, TRUE};
+
+		/* search parent candidates for the one with the nearest
+		 * line number which is lower than the tag's line number */
+		g_tree_search(tree, (GCompareFunc)tree_search_func, &user_data);
+		parent_search = g_tree_lookup(tree, GINT_TO_POINTER(user_data.found_line));
 	}
+
+	return parent_search;
+}
+
+
+static void parents_table_value_free(gpointer data)
+{
+	GTree *tree = data;
+	if (tree)
+		g_tree_destroy(tree);
 }
 
 
@@ -1360,44 +1197,40 @@ static void free_iter_slice_list(gpointer data)
  * previous data is not overwritten if the key is duplicated, but rather the
  * two values are kept in a list
  *
- * table is: GHashTable<TMTag, GList<GList<TMTag>>> */
+ * table is: GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
 static void tags_table_insert(GHashTable *table, TMTag *tag, GList *data)
 {
-	GList *list = g_hash_table_lookup(table, tag);
+	GTree *tree = g_hash_table_lookup(table, tag);
+	if (!tree)
+	{
+		tree = g_tree_new_full(tree_cmp, NULL, NULL, NULL);
+		g_hash_table_insert(table, tag, tree);
+	}
+	GList *list = g_tree_lookup(tree, GINT_TO_POINTER(tag->line));
 	list = g_list_prepend(list, data);
-	g_hash_table_insert(table, tag, list);
+	g_tree_insert(tree, GINT_TO_POINTER(tag->line), list);
 }
 
 
-/* looks up the entry in @table that better matches @tag.
- * if there are more than one candidate, the one that has closest line position to @tag is chosen */
+/* looks up the entry in @table that best matches @tag.
+ * if there is more than one candidate, the one that has closest line position to @tag is chosen */
 static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
 {
-	GList *data = NULL;
-	GList *node = g_hash_table_lookup(table, tag);
-	if (node)
+	TreeSearchData user_data = {-1, tag->line, FALSE};
+	GTree *tree = g_hash_table_lookup(table, tag);
+
+	if (tree)
 	{
-		glong delta;
-		data = node->data;
+		GList *list;
 
-#define TAG_DELTA(a, b) ABS((glong) TM_TAG(a)->atts.entry.line - (glong) TM_TAG(b)->atts.entry.line)
-
-		delta = TAG_DELTA(((GList *) node->data)->data, tag);
-		for (node = node->next; node; node = node->next)
-		{
-			glong d = TAG_DELTA(((GList *) node->data)->data, tag);
-
-			if (d < delta)
-			{
-				data = node->data;
-				delta = d;
-			}
-		}
-
-#undef TAG_DELTA
-
+		g_tree_search(tree, (GCompareFunc)tree_search_func, &user_data);
+		list = g_tree_lookup(tree, GINT_TO_POINTER(user_data.found_line));
+		/* return the first value in the list - we don't care which of the
+		 * tags with identical names defined on the same line we get */
+		if (list)
+			return list->data;
 	}
-	return data;
+	return NULL;
 }
 
 
@@ -1405,36 +1238,49 @@ static GList *tags_table_lookup(GHashTable *table, TMTag *tag)
  * @tag must be the exact pointer used at insertion time */
 static void tags_table_remove(GHashTable *table, TMTag *tag)
 {
-	GList *list = g_hash_table_lookup(table, tag);
-	if (list)
+	GTree *tree = g_hash_table_lookup(table, tag);
+	if (tree)
 	{
-		GList *node;
-		foreach_list(node, list)
-		{
-			if (((GList *) node->data)->data == tag)
-				break;
-		}
-		list = g_list_delete_link(list, node);
+		GList *list = g_tree_lookup(tree, GINT_TO_POINTER(tag->line));
 		if (list)
-			g_hash_table_insert(table, tag, list);
-		else
-			g_hash_table_remove(table, tag);
+		{
+			GList *node;
+			/* should always be the first element as we returned the first one in
+			 * tags_table_lookup() */
+			foreach_list(node, list)
+			{
+				if (((GList *) node->data)->data == tag)
+					break;
+			}
+			list = g_list_delete_link(list, node);
+			if (!list)
+				g_tree_remove(tree, GINT_TO_POINTER(tag->line));
+			else
+				g_tree_insert(tree, GINT_TO_POINTER(tag->line), list);
+		}
 	}
 }
 
 
-static void tags_table_destroy(GHashTable *table)
+static gboolean tags_table_tree_value_free(gpointer key, gpointer value, gpointer data)
 {
-	/* free any leftover elements.  note that we can't register a value_free_func when
-	 * creating the hash table because we only want to free it when destroying the table,
-	 * not when inserting a duplicate (we handle this manually) */
-	GHashTableIter iter;
-	gpointer value;
+	GList *list = value;
+	g_list_free(list);
+	return FALSE;
+}
 
-	g_hash_table_iter_init(&iter, table);
-	while (g_hash_table_iter_next(&iter, NULL, &value))
-		g_list_free(value);
-	g_hash_table_destroy(table);
+
+static void tags_table_value_free(gpointer data)
+{
+	GTree *tree = data;
+	if (tree)
+	{
+		/* free any leftover elements.  note that we can't register a value_free_func when
+		 * creating the tree because we only want to free it when destroying the tree,
+		 * not when inserting a duplicate (we handle this manually) */
+		g_tree_foreach(tree, tags_table_tree_value_free, NULL);
+		g_tree_destroy(tree);
+	}
 }
 
 
@@ -1467,10 +1313,11 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	GList *item;
 
 	/* Build hash tables holding tags and parents */
-	/* parent table holds "tag-name":GtkTreeIter */
-	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, free_iter_slice_list);
-	/* tags table is another representation of the @tags list, TMTag:GList<TMTag> */
-	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, NULL);
+	/* parent table is GHashTable<tag_name, GTree<line_num, GtkTreeIter>> */
+	parents_table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, parents_table_value_free);
+	/* tags table is another representation of the @tags list,
+	 * GHashTable<TMTag, GTree<line_num, GList<GList<TMTag>>>> */
+	tags_table = g_hash_table_new_full(tag_hash, tag_equal, NULL, tags_table_value_free);
 	foreach_list(item, *tags)
 	{
 		TMTag *tag = item->data;
@@ -1494,7 +1341,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 
 		gtk_tree_model_get(model, &iter, SYMBOLS_COLUMN_TAG, &tag, -1);
 		if (! tag) /* most probably a toplevel, skip it */
-			cont = next_iter(model, &iter, TRUE);
+			cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 		else
 		{
 			GList *found_item;
@@ -1504,7 +1351,6 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				cont = tree_store_remove_row(store, &iter);
 			else /* tag still exist, update it */
 			{
-				const gchar *name;
 				const gchar *parent_name;
 				TMTag *found = found_item->data;
 
@@ -1513,13 +1359,22 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				if (parent_name && ! g_hash_table_lookup(parents_table, parent_name))
 					parent_name = NULL;
 
-				/* only update fields that (can) have changed (name that holds line
-				 * number, and the tag itself) */
-				name = get_symbol_name(doc, found, parent_name != NULL);
-				gtk_tree_store_set(store, &iter,
-						SYMBOLS_COLUMN_NAME, name,
-						SYMBOLS_COLUMN_TAG, found,
-						-1);
+				if (!tm_tags_equal(tag, found))
+				{
+					const gchar *name;
+					gchar *tooltip;
+
+					/* only update fields that (can) have changed (name that holds line
+					 * number, tooltip, and the tag itself) */
+					name = get_symbol_name(doc, found, parent_name != NULL);
+					tooltip = get_symbol_tooltip(doc, found);
+					gtk_tree_store_set(store, &iter,
+							SYMBOLS_COLUMN_NAME, name,
+							SYMBOLS_COLUMN_TOOLTIP, tooltip,
+							SYMBOLS_COLUMN_TAG, found,
+							-1);
+					g_free(tooltip);
+				}
 
 				update_parents_table(parents_table, found, parent_name, &iter);
 
@@ -1527,7 +1382,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 				tags_table_remove(tags_table, found);
 				*tags = g_list_delete_link(*tags, found_item);
 
-				cont = next_iter(model, &iter, TRUE);
+				cont = ui_tree_model_iter_any_next(model, &iter, TRUE);
 			}
 
 			tm_tag_unref(tag);
@@ -1541,7 +1396,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 		TMTag *tag = item->data;
 		GtkTreeIter *parent;
 
-		parent = get_tag_type_iter(tag->type, doc->file_type->id);
+		parent = get_tag_type_iter(tag->type);
 		if (G_UNLIKELY(! parent))
 			geany_debug("Missing symbol-tree parent iter for type %d!", tag->type);
 		else
@@ -1555,34 +1410,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			parent_name = get_parent_name(tag, doc->file_type->id);
 			if (parent_name)
 			{
-				GList **candidates;
-				GtkTreeIter *parent_search = NULL;
-
-				/* walk parent candidates to find the better one.
-				 * if there are more than one, take the one that has the closest line number
-				 * after the tag we're searching the parent for */
-				candidates = g_hash_table_lookup(parents_table, parent_name);
-				if (candidates)
-				{
-					GList *node;
-					glong delta = G_MAXLONG;
-					foreach_list(node, *candidates)
-					{
-						TMTag *parent_tag;
-						glong  d;
-
-						gtk_tree_model_get(GTK_TREE_MODEL(store), node->data,
-								SYMBOLS_COLUMN_TAG, &parent_tag, -1);
-
-						d = tag->atts.entry.line - parent_tag->atts.entry.line;
-						if (! parent_search || (d >= 0 && d < delta))
-						{
-							delta = d;
-							parent_search = node->data;
-						}
-						tm_tag_unref(parent_tag);
-					}
-				}
+				GtkTreeIter *parent_search = parents_table_lookup(parents_table, parent_name, tag->line);
 
 				if (parent_search)
 					parent = parent_search;
@@ -1595,10 +1423,9 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 			expand = ! gtk_tree_model_iter_has_child(model, parent);
 
 			/* insert the new element */
-			gtk_tree_store_append(store, &iter, parent);
 			name = get_symbol_name(doc, tag, parent_name != NULL);
 			tooltip = get_symbol_tooltip(doc, tag);
-			gtk_tree_store_set(store, &iter,
+			gtk_tree_store_insert_with_values(store, &iter, parent, 0,
 					SYMBOLS_COLUMN_NAME, name,
 					SYMBOLS_COLUMN_TOOLTIP, tooltip,
 					SYMBOLS_COLUMN_ICON, icon,
@@ -1616,7 +1443,7 @@ static void update_tree_tags(GeanyDocument *doc, GList **tags)
 	}
 
 	g_hash_table_destroy(parents_table);
-	tags_table_destroy(tags_table);
+	g_hash_table_destroy(tags_table);
 }
 
 
@@ -1648,7 +1475,7 @@ static gboolean tag_has_missing_parent(const TMTag *tag, GtkTreeStore *store,
 		GtkTreeIter *iter)
 {
 	/* if the tag has a parent tag, it should be at depth >= 2 */
-	return !EMPTY(tag->atts.entry.scope) &&
+	return !EMPTY(tag->scope) &&
 		gtk_tree_store_iter_depth(store, iter) == 1;
 }
 
@@ -1698,7 +1525,7 @@ static gint tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 				if (tag_a && tag_b)
 					if (!sort_by_name ||
 						(utils_str_equal(tag_a->name, tag_b->name) &&
-							utils_str_equal(tag_a->atts.entry.scope, tag_b->atts.entry.scope)))
+							utils_str_equal(tag_a->scope, tag_b->scope)))
 						cmp = compare_symbol_lines(tag_a, tag_b);
 			}
 		}
@@ -1826,14 +1653,14 @@ int symbols_generate_global_tags(int argc, char **argv, gboolean want_preprocess
 		symbols_finalize(); /* free c_tags_ignore data */
 		if (! status)
 		{
-			g_printerr(_("Failed to create tags file, perhaps because no tags "
+			g_printerr(_("Failed to create tags file, perhaps because no symbols "
 				"were found.\n"));
 			return 1;
 		}
 	}
 	else
 	{
-		g_printerr(_("Usage: %s -g <Tag File> <File list>\n\n"), argv[0]);
+		g_printerr(_("Usage: %s -g <Tags File> <File list>\n\n"), argv[0]);
 		g_printerr(_("Example:\n"
 			"CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags"
 			" /usr/include/gtk-2.0/gtk/gtk.h\n"), argv[0]);
@@ -1848,14 +1675,14 @@ void symbols_show_load_tags_dialog(void)
 	GtkWidget *dialog;
 	GtkFileFilter *filter;
 
-	dialog = gtk_file_chooser_dialog_new(_("Load Tags"), GTK_WINDOW(main_widgets.window),
+	dialog = gtk_file_chooser_dialog_new(_("Load Tags File"), GTK_WINDOW(main_widgets.window),
 		GTK_FILE_CHOOSER_ACTION_OPEN,
 		GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 		GTK_STOCK_OPEN, GTK_RESPONSE_OK,
 		NULL);
 	gtk_widget_set_name(dialog, "GeanyDialog");
 	filter = gtk_file_filter_new();
-	gtk_file_filter_set_name(filter, _("Geany tag files (*.*.tags)"));
+	gtk_file_filter_set_name(filter, _("Geany tags file (*.*.tags)"));
 	gtk_file_filter_add_pattern(filter, "*.*.tags");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(dialog), filter);
 
@@ -1895,13 +1722,13 @@ static void init_user_tags(void)
 	const GSList *node;
 	gchar *dir;
 
-	dir = g_build_filename(app->configdir, "tags", NULL);
+	dir = g_build_filename(app->configdir, GEANY_TAGS_SUBDIR, NULL);
 	/* create the user tags dir for next time if it doesn't exist */
 	if (! g_file_test(dir, G_FILE_TEST_IS_DIR))
 		utils_mkdir(dir, FALSE);
 	file_list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 
-	SETPTR(dir, g_build_filename(app->datadir, "tags", NULL));
+	SETPTR(dir, g_build_filename(app->datadir, GEANY_TAGS_SUBDIR, NULL));
 	list = utils_get_file_list_full(dir, TRUE, FALSE, NULL);
 	g_free(dir);
 
@@ -1931,7 +1758,7 @@ static void init_user_tags(void)
 }
 
 
-static void load_user_tags(filetype_id ft_id)
+static void load_user_tags(GeanyFiletypeID ft_id)
 {
 	static guchar *tags_loaded = NULL;
 	static gboolean init_tags = FALSE;
@@ -1961,49 +1788,358 @@ static void load_user_tags(filetype_id ft_id)
 }
 
 
+static void on_goto_popup_item_activate(GtkMenuItem *item, TMTag *tag)
+{
+	GeanyDocument *new_doc, *old_doc;
+
+	g_return_if_fail(tag);
+
+	old_doc = document_get_current();
+	new_doc = document_open_file(tag->file->file_name, FALSE, NULL, NULL);
+
+	if (new_doc)
+		navqueue_goto_line(old_doc, new_doc, tag->line);
+}
+
+
+/* FIXME: use the same icons as in the symbols tree defined in add_top_level_items() */
+static guint get_tag_class(const TMTag *tag)
+{
+	switch (tag->type)
+	{
+		case tm_tag_prototype_t:
+		case tm_tag_method_t:
+		case tm_tag_function_t:
+			return ICON_METHOD;
+		case tm_tag_variable_t:
+		case tm_tag_externvar_t:
+			return ICON_VAR;
+		case tm_tag_macro_t:
+		case tm_tag_macro_with_arg_t:
+			return ICON_MACRO;
+		case tm_tag_class_t:
+			return ICON_CLASS;
+		case tm_tag_member_t:
+		case tm_tag_field_t:
+			return ICON_MEMBER;
+		case tm_tag_typedef_t:
+		case tm_tag_enum_t:
+		case tm_tag_union_t:
+		case tm_tag_struct_t:
+			return ICON_STRUCT;
+		case tm_tag_namespace_t:
+		case tm_tag_package_t:
+			return ICON_NAMESPACE;
+		default:
+			break;
+	}
+	return ICON_STRUCT;
+}
+
+
+/* positions a popup at the caret from the ScintillaObject in @p data */
+static void goto_popup_position_func(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer data)
+{
+	gint line_height;
+	GdkScreen *screen = gtk_widget_get_screen(GTK_WIDGET(menu));
+	gint monitor_num;
+	GdkRectangle monitor;
+	GtkRequisition req;
+	GdkEventButton *event_button = g_object_get_data(G_OBJECT(menu), "geany-button-event");
+
+	if (event_button)
+	{
+		/* if we got a mouse click, popup at that position */
+		*x = (gint) event_button->x_root;
+		*y = (gint) event_button->y_root;
+		line_height = 0; /* we don't want to offset below the line or anything */
+	}
+	else /* keyboard positioning */
+	{
+		ScintillaObject *sci = data;
+		GdkWindow *window = gtk_widget_get_window(GTK_WIDGET(sci));
+		gint pos = sci_get_current_position(sci);
+		gint line = sci_get_line_from_position(sci, pos);
+		gint pos_x = SSM(sci, SCI_POINTXFROMPOSITION, 0, pos);
+		gint pos_y = SSM(sci, SCI_POINTYFROMPOSITION, 0, pos);
+
+		line_height = SSM(sci, SCI_TEXTHEIGHT, line, 0);
+
+		gdk_window_get_origin(window, x, y);
+		*x += pos_x;
+		*y += pos_y;
+	}
+
+	monitor_num = gdk_screen_get_monitor_at_point(screen, *x, *y);
+
+#if GTK_CHECK_VERSION(3, 0, 0)
+	gtk_widget_get_preferred_size(GTK_WIDGET(menu), NULL, &req);
+#else
+	gtk_widget_size_request(GTK_WIDGET(menu), &req);
+#endif
+
+#if GTK_CHECK_VERSION(3, 4, 0)
+	gdk_screen_get_monitor_workarea(screen, monitor_num, &monitor);
+#else
+	gdk_screen_get_monitor_geometry(screen, monitor_num, &monitor);
+#endif
+
+	/* put on one size of the X position, but within the monitor */
+	if (gtk_widget_get_direction(GTK_WIDGET(menu)) == GTK_TEXT_DIR_RTL)
+	{
+		if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
+		else if (*x + req.width > monitor.x + monitor.width)
+			*x = monitor.x;
+		else
+			*x += 1;
+	}
+	else
+	{
+		if (*x + req.width + 1 <= monitor.x + monitor.width)
+			*x = MAX(monitor.x, *x + 1);
+		else if (*x - req.width - 1 >= monitor.x)
+			*x -= req.width + 1;
+		else
+			*x = monitor.x + MAX(0, monitor.width - req.width);
+	}
+
+	/* try to put, in order:
+	 * 1. below the Y position, under the line
+	 * 2. above the Y position
+	 * 3. within the monitor */
+	if (*y + line_height + req.height <= monitor.y + monitor.height)
+		*y = MAX(monitor.y, *y + line_height);
+	else if (*y - req.height >= monitor.y)
+		*y = *y - req.height;
+	else
+		*y = monitor.y + MAX(0, monitor.height - req.height);
+
+	*push_in = FALSE;
+}
+
+
+static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_best)
+{
+	GtkWidget *first = NULL;
+	GtkWidget *menu;
+	GdkEvent *event;
+	GdkEventButton *button_event = NULL;
+	TMTag *tmtag;
+	guint i;
+
+	menu = gtk_menu_new();
+
+	foreach_ptr_array(tmtag, i, tags)
+	{
+		GtkWidget *item;
+		GtkWidget *label;
+		GtkWidget *image;
+		gchar *fname = g_path_get_basename(tmtag->file->file_name);
+		gchar *text;
+
+		if (! first && have_best)
+			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
+			text = g_markup_printf_escaped(_("<b>%s: %lu</b>"), fname, tmtag->line);
+		else
+			/* For translators: it's the filename and line number of a symbol in the goto-symbol popup menu */
+			text = g_markup_printf_escaped(_("%s: %lu"), fname, tmtag->line);
+
+		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
+		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, NULL);
+		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
+		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+
+		if (! first)
+			first = item;
+
+		g_free(text);
+		g_free(fname);
+	}
+
+	gtk_widget_show_all(menu);
+
+	if (first) /* always select the first item for better keyboard navigation */
+		g_signal_connect(menu, "realize", G_CALLBACK(gtk_menu_shell_select_item), first);
+
+	event = gtk_get_current_event();
+	if (event && event->type == GDK_BUTTON_PRESS)
+		button_event = (GdkEventButton *) event;
+	else
+		gdk_event_free(event);
+
+	g_object_set_data_full(G_OBJECT(menu), "geany-button-event", button_event,
+	                       button_event ? (GDestroyNotify) gdk_event_free : NULL);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, goto_popup_position_func, doc->editor->sci,
+				   button_event ? button_event->button : 0, gtk_get_current_event_time ());
+}
+
+
+static gint compare_tags_by_name_line(gconstpointer ptr1, gconstpointer ptr2)
+{
+	gint res;
+	TMTag *t1 = *((TMTag **) ptr1);
+	TMTag *t2 = *((TMTag **) ptr2);
+
+	res = g_strcmp0(t1->file->short_name, t2->file->short_name);
+	if (res != 0)
+		return res;
+	return t1->line - t2->line;
+}
+
+
+static TMTag *find_best_goto_tag(GeanyDocument *doc, GPtrArray *tags)
+{
+	TMTag *tag;
+	guint i;
+
+	/* first check if we have a tag in the current file */
+	foreach_ptr_array(tag, i, tags)
+	{
+		if (g_strcmp0(doc->real_path, tag->file->file_name) == 0)
+			return tag;
+	}
+
+	/* next check if we have a tag for some of the open documents */
+	foreach_ptr_array(tag, i, tags)
+	{
+		guint j;
+
+		foreach_document(j)
+		{
+			if (g_strcmp0(documents[j]->real_path, tag->file->file_name) == 0)
+				return tag;
+		}
+	}
+
+	/* next check if we have a tag for a file inside the current document's directory */
+	foreach_ptr_array(tag, i, tags)
+	{
+		gchar *dir = g_path_get_dirname(doc->real_path);
+
+		if (g_str_has_prefix(tag->file->file_name, dir))
+		{
+			g_free(dir);
+			return tag;
+		}
+		g_free(dir);
+	}
+
+	return NULL;
+}
+
+
+static GPtrArray *filter_tags(GPtrArray *tags, TMTag *current_tag, gboolean definition)
+{
+	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	TMTag *tmtag, *last_tag = NULL;
+	GPtrArray *filtered_tags = g_ptr_array_new();
+	guint i;
+
+	foreach_ptr_array(tmtag, i, tags)
+	{
+		if ((definition && !(tmtag->type & forward_types)) ||
+			(!definition && (tmtag->type & forward_types)))
+		{
+			/* If there are typedefs of e.g. a struct such as
+			 * "typedef struct Foo {} Foo;", filter out the typedef unless
+			 * cursor is at the struct name. */
+			if (last_tag != NULL && last_tag->file == tmtag->file &&
+				last_tag->type != tm_tag_typedef_t && tmtag->type == tm_tag_typedef_t)
+			{
+				if (last_tag == current_tag)
+					g_ptr_array_add(filtered_tags, tmtag);
+			}
+			else if (tmtag != current_tag)
+				g_ptr_array_add(filtered_tags, tmtag);
+
+			last_tag = tmtag;
+		}
+	}
+
+	return filtered_tags;
+}
+
+
 static gboolean goto_tag(const gchar *name, gboolean definition)
 {
-	const gint forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
-	guint type;
-	TMTag *tmtag = NULL;
+	const TMTagType forward_types = tm_tag_prototype_t | tm_tag_externvar_t;
+	TMTag *tmtag, *current_tag = NULL;
 	GeanyDocument *old_doc = document_get_current();
+	gboolean found = FALSE;
+	const GPtrArray *all_tags;
+	GPtrArray *tags, *filtered_tags;
+	guint i;
+	guint current_line = sci_get_current_line(old_doc->editor->sci) + 1;
 
-	/* goto tag definition: all except prototypes / forward declarations / externs */
-	type = (definition) ? tm_tag_max_t - forward_types : forward_types;
+	all_tags = tm_workspace_find(name, NULL, tm_tag_max_t, NULL, old_doc->file_type->lang);
 
-	/* first look in the current document */
-	if (old_doc != NULL && old_doc->tm_file)
-		tmtag = find_work_object_tag(old_doc->tm_file, name, type);
-
-	/* if not found, look in the workspace */
-	if (tmtag == NULL)
-		tmtag = find_workspace_tag(name, type);
-
-	if (tmtag != NULL)
+	/* get rid of global tags and find tag at current line */
+	tags = g_ptr_array_new();
+	foreach_ptr_array(tmtag, i, all_tags)
 	{
-		GeanyDocument *new_doc = document_find_by_real_path(
-			tmtag->atts.entry.file->work_object.file_name);
-
-		if (new_doc)
+		if (tmtag->file)
 		{
-			/* If we are already on the tag line, swap definition/declaration */
-			if (new_doc == old_doc &&
-				tmtag->atts.entry.line == (guint)sci_get_current_line(old_doc->editor->sci) + 1)
-			{
-				if (goto_tag(name, !definition))
-					return TRUE;
-			}
+			g_ptr_array_add(tags, tmtag);
+			if (tmtag->file == old_doc->tm_file && tmtag->line == current_line)
+				current_tag = tmtag;
 		}
-		else
-		{
-			/* not found in opened document, should open */
-			new_doc = document_open_file(tmtag->atts.entry.file->work_object.file_name, FALSE, NULL, NULL);
-		}
-
-		if (navqueue_goto_line(old_doc, new_doc, tmtag->atts.entry.line))
-			return TRUE;
 	}
-	return FALSE;
+
+	if (current_tag)
+		/* swap definition/declaration search */
+		definition = current_tag->type & forward_types;
+
+	filtered_tags = filter_tags(tags, current_tag, definition);
+	if (filtered_tags->len == 0)
+	{
+		/* if we didn't find anything, try again with the opposite type */
+		g_ptr_array_free(filtered_tags, TRUE);
+		filtered_tags = filter_tags(tags, current_tag, !definition);
+	}
+	g_ptr_array_free(tags, TRUE);
+	tags = filtered_tags;
+
+	if (tags->len == 1)
+	{
+		GeanyDocument *new_doc;
+
+		tmtag = tags->pdata[0];
+		new_doc = document_find_by_real_path(tmtag->file->file_name);
+
+		if (!new_doc)
+			/* not found in opened document, should open */
+			new_doc = document_open_file(tmtag->file->file_name, FALSE, NULL, NULL);
+
+		navqueue_goto_line(old_doc, new_doc, tmtag->line);
+	}
+	else if (tags->len > 1)
+	{
+		GPtrArray *tag_list;
+		TMTag *tag, *best_tag;
+
+		g_ptr_array_sort(tags, compare_tags_by_name_line);
+		best_tag = find_best_goto_tag(old_doc, tags);
+
+		tag_list = g_ptr_array_new();
+		if (best_tag)
+			g_ptr_array_add(tag_list, best_tag);
+		foreach_ptr_array(tag, i, tags)
+		{
+			if (tag != best_tag)
+				g_ptr_array_add(tag_list, tag);
+		}
+		show_goto_popup(old_doc, tag_list, best_tag != NULL);
+
+		g_ptr_array_free(tag_list, TRUE);
+	}
+
+	found = tags->len > 0;
+	g_ptr_array_free(tags, TRUE);
+
+	return found;
 }
 
 
@@ -2140,21 +2276,58 @@ static gchar *parse_cpp_function_at_line(ScintillaObject *sci, gint tag_line)
 }
 
 
+/* gets the fold header after or on @line, but skipping folds created because of parentheses */
 static gint get_fold_header_after(ScintillaObject *sci, gint line)
 {
-	gint line_count = sci_get_line_count(sci);
+	const gint line_count = sci_get_line_count(sci);
 
 	for (; line < line_count; line++)
 	{
 		if (sci_get_fold_level(sci, line) & SC_FOLDLEVELHEADERFLAG)
-			return line;
+		{
+			const gint last_child = SSM(sci, SCI_GETLASTCHILD, line, -1);
+			const gint line_end = sci_get_line_end_position(sci, line);
+			const gint lexer = sci_get_lexer(sci);
+			gint parenthesis_match_line = -1;
+
+			/* now find any unbalanced open parenthesis on the line and see where the matching
+			 * brace would be, mimicking what folding on () does */
+			for (gint pos = sci_get_position_from_line(sci, line); pos < line_end; pos++)
+			{
+				if (highlighting_is_code_style(lexer, sci_get_style_at(sci, pos)) &&
+				    sci_get_char_at(sci, pos) == '(')
+				{
+					const gint matching = sci_find_matching_brace(sci, pos);
+
+					if (matching >= 0)
+					{
+						parenthesis_match_line = sci_get_line_from_position(sci, matching);
+						if (parenthesis_match_line != line)
+							break;  /* match is on a different line, we found a possible fold */
+						else
+							pos = matching;  /* just skip the range and continue searching */
+					}
+				}
+			}
+
+			/* if the matching parenthesis matches the fold level, skip it and continue.
+			 * it matches if it either spans the same lines, or spans one more but the next one is
+			 * a fold header (in which case the last child of the fold is one less to let the
+			 * header be at the parent level) */
+			if ((parenthesis_match_line == last_child) ||
+			    (parenthesis_match_line == last_child + 1 &&
+			     sci_get_fold_level(sci, parenthesis_match_line) & SC_FOLDLEVELHEADERFLAG))
+				line = last_child;
+			else
+				return line;
+		}
 	}
 
 	return -1;
 }
 
 
-static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_types)
+static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, TMTagType tag_types)
 {
 	gint line;
 	gint parent;
@@ -2169,23 +2342,25 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_
 
 		if (tag)
 		{
-			gint tag_line = tag->atts.entry.line - 1;
+			gint tag_line = tag->line - 1;
 			gint last_child = line + 1;
 
 			/* if it may be a false positive because we're inside a fold level not inside anything
 			 * we match, e.g. a #if in C or C++, we check we're inside the fold level that start
-			 * right after the tag we got from TM */
+			 * right after the tag we got from TM.
+			 * Additionally, we perform parentheses matching on the initial line not to get confused
+			 * by folding on () in case the parameter list spans multiple lines */
 			if (abs(tag_line - parent) > 1)
 			{
-				gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
+				const gint tag_fold = get_fold_header_after(doc->editor->sci, tag_line);
 				if (tag_fold >= 0)
-					last_child = scintilla_send_message(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
+					last_child = SSM(doc->editor->sci, SCI_GETLASTCHILD, tag_fold, -1);
 			}
 
 			if (line <= last_child)
 			{
-				if (tag->atts.entry.scope)
-					*tagname = g_strconcat(tag->atts.entry.scope,
+				if (tag->scope)
+					*tagname = g_strconcat(tag->scope,
 							symbols_get_context_separator(doc->file_type->id), tag->name, NULL);
 				else
 					*tagname = g_strdup(tag->name);
@@ -2231,7 +2406,7 @@ static gint get_current_tag_name(GeanyDocument *doc, gchar **tagname, guint tag_
 }
 
 
-static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagname, guint tag_types)
+static gint get_current_tag_name_cached(GeanyDocument *doc, const gchar **tagname, TMTagType tag_types)
 {
 	static gint tag_line = -1;
 	static gchar *cur_tag = NULL;
@@ -2277,7 +2452,7 @@ gint symbols_get_current_function(GeanyDocument *doc, const gchar **tagname)
 /* same as symbols_get_current_function() but finds class, namespaces and more */
 gint symbols_get_current_scope(GeanyDocument *doc, const gchar **tagname)
 {
-	guint tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
+	TMTagType tag_types = (tm_tag_function_t | tm_tag_method_t | tm_tag_class_t |
 			tm_tag_struct_t | tm_tag_enum_t | tm_tag_union_t);
 
 	/* Python parser reports imports as namespaces which confuses the scope detection */
@@ -2366,7 +2541,7 @@ static void on_find_usage(GtkWidget *widget, G_GNUC_UNUSED gpointer unused)
 		if (widget == symbol_menu.find_in_files)
 			search_show_find_in_files_dialog_full(tag->name, NULL);
 		else
-			search_find_usage(tag->name, tag->name, SCFIND_WHOLEWORD | SCFIND_MATCHCASE,
+			search_find_usage(tag->name, tag->name, GEANY_FIND_WHOLEWORD | GEANY_FIND_MATCHCASE,
 				widget == symbol_menu.find_usage);
 
 		tm_tag_unref(tag);
@@ -2435,10 +2610,11 @@ static void create_taglist_popup_menu(void)
 
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *f = g_build_filename(app->configdir, "ignore.tags", NULL);
+	gchar *f;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
+	f = g_build_filename(app->configdir, "ignore.tags", NULL);
 	if (utils_str_equal(doc->real_path, f))
 		load_c_ignore_tags();
 
@@ -2449,6 +2625,7 @@ static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 void symbols_init(void)
 {
 	gchar *f;
+	guint i;
 
 	create_taglist_popup_menu();
 
@@ -2457,11 +2634,21 @@ void symbols_init(void)
 	g_free(f);
 
 	g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+
+	for (i = 0; i < G_N_ELEMENTS(symbols_icons); i++)
+		symbols_icons[i].pixbuf = get_tag_icon(symbols_icons[i].icon_name);
 }
 
 
 void symbols_finalize(void)
 {
-	g_strfreev(html_entities);
+	guint i;
+
 	g_strfreev(c_tags_ignore);
+
+	for (i = 0; i < G_N_ELEMENTS(symbols_icons); i++)
+	{
+		if (symbols_icons[i].pixbuf)
+			g_object_unref(symbols_icons[i].pixbuf);
+	}
 }

@@ -26,22 +26,27 @@
  * (basic code layout were adopted from Sylpheed's printing implementation, thanks)
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "printing.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "geany.h"
+#include "highlighting.h"
+#include "msgwindow.h"
+#include "sciwrappers.h"
+#include "spawn.h"
+#include "support.h"
+#include "utils.h"
+#include "ui_utils.h"
+
 #include <math.h>
 #include <time.h>
 #include <string.h>
-
-#include "geany.h"
-#include "printing.h"
-#include "document.h"
-#include "sciwrappers.h"
-#include "editor.h"
-#include "utils.h"
-#include "support.h"
-#include "dialogs.h"
-#include "ui_utils.h"
-#include "msgwindow.h"
-#include "highlighting.h"
-#include "Scintilla.h"
 
 
 PrintingPrefs printing_prefs;
@@ -345,14 +350,16 @@ static void begin_print(GtkPrintOperation *operation, GtkPrintContext *context, 
 
 	/* setup printing scintilla object */
 	dinfo->sci = editor_create_widget(dinfo->doc->editor);
-	scintilla_send_message(dinfo->sci, SCI_SETDOCPOINTER, 0,
-			scintilla_send_message(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
+	/* since we won't add the widget to any container, assume it's ownership */
+	g_object_ref_sink(dinfo->sci);
+	SSM(dinfo->sci, SCI_SETDOCPOINTER, 0,
+			SSM(dinfo->doc->editor->sci, SCI_GETDOCPOINTER, 0, 0));
 	highlighting_set_styles(dinfo->sci, dinfo->doc->file_type);
-	sci_set_line_numbers(dinfo->sci, printing_prefs.print_line_numbers, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
-	scintilla_send_message(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
+	sci_set_line_numbers(dinfo->sci, printing_prefs.print_line_numbers);
+	SSM(dinfo->sci, SCI_SETVIEWWS, SCWS_INVISIBLE, 0);
+	SSM(dinfo->sci, SCI_SETVIEWEOL, FALSE, 0);
+	SSM(dinfo->sci, SCI_SETEDGEMODE, EDGE_NONE, 0);
+	SSM(dinfo->sci, SCI_SETPRINTCOLOURMODE, SC_PRINT_COLOURONWHITE, 0);
 
 	/* Scintilla doesn't respect the context resolution, so we'll scale ourselves.
 	 * Actually Scintilla simply doesn't know about the resolution since it creates its own
@@ -394,7 +401,7 @@ static gint format_range(DocInfo *dinfo, gboolean draw)
 
 	cairo_save(dinfo->fr.hdc);
 	cairo_scale(dinfo->fr.hdc, dinfo->sci_scale, dinfo->sci_scale);
-	pos = (gint) scintilla_send_message(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
+	pos = (gint) SSM(dinfo->sci, SCI_FORMATRANGE, draw, (sptr_t) &dinfo->fr);
 	cairo_restore(dinfo->fr.hdc);
 
 	return pos;
@@ -517,9 +524,7 @@ static void printing_print_gtk(GeanyDocument *doc)
 
 	gtk_print_operation_set_unit(op, GTK_UNIT_POINTS);
 	gtk_print_operation_set_show_progress(op, TRUE);
-#if GTK_CHECK_VERSION(2, 18, 0)
 	gtk_print_operation_set_embed_page_setup(op, TRUE);
-#endif
 
 	g_signal_connect(op, "begin-print", G_CALLBACK(begin_print), &dinfo);
 	g_signal_connect(op, "end-print", G_CALLBACK(end_print), &dinfo);
@@ -596,27 +601,26 @@ static void print_external(GeanyDocument *doc)
 			doc->file_name, cmdline))
 	{
 		GError *error = NULL;
-
-#ifdef G_OS_WIN32
-		gchar *tmp_cmdline = g_strdup(cmdline);
-#else
 		/* /bin/sh -c emulates the system() call and makes complex commands possible
-		 * but only needed on non-win32 systems due to the lack of win32's shell capabilities */
-		gchar *tmp_cmdline = g_strconcat("/bin/sh -c \"", cmdline, "\"", NULL);
-#endif
+		 * but only on non-win32 systems due to the lack of win32's shell capabilities */
+	#ifdef G_OS_UNIX
+		gchar *argv[] = { "/bin/sh", "-c", cmdline, NULL };
 
-		if (! g_spawn_command_line_async(tmp_cmdline, &error))
+		if (!spawn_async(NULL, NULL, argv, NULL, NULL, &error))
+	#else
+		if (!spawn_async(NULL, cmdline, NULL, NULL, NULL, &error))
+	#endif
 		{
 			dialogs_show_msgbox(GTK_MESSAGE_ERROR,
-				_("Printing of \"%s\" failed (return code: %s)."),
-				doc->file_name, error->message);
+				_("Cannot execute print command \"%s\": %s. "
+				"Check the path setting in Preferences."),
+				printing_prefs.external_print_cmd, error->message);
 			g_error_free(error);
 		}
 		else
 		{
 			msgwin_status_add(_("File %s printed."), doc->file_name);
 		}
-		g_free(tmp_cmdline);
 	}
 	g_free(cmdline);
 }

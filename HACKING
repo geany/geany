@@ -11,8 +11,12 @@ About this file
 This file contains information for anyone wanting to work on the Geany
 codebase. You should be aware of the open source licenses used - see
 the README file or the documentation. It is reStructuredText; the
-source file is HACKING. You can generate hacking.html by running ``make
-hacking-doc`` from the doc/ subdirectory.
+source file is HACKING.
+
+You can generate this file by:
+
+* Passing the *--enable-html-docs* option to ``configure``.
+* Running ``make`` from the doc/ subdirectory.
 
 Writing plugins
 ---------------
@@ -28,8 +32,12 @@ You should generate and read the plugin API documentation, see below.
 Plugin API documentation
 ^^^^^^^^^^^^^^^^^^^^^^^^
 You can generate documentation for the plugin API using the doxygen
-tool. Run ``make api-doc`` in the doc subdirectory. The documentation
-will be output to doc/reference/index.html.
+tool:
+
+* Pass the *--enable-api-docs* option to ``configure``.
+* Run ``make`` from the doc/ subdirectory.
+
+The documentation will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
@@ -43,7 +51,7 @@ See `Rules to contribute`_ for more information.
 
 Patches
 -------
-We are happy to receive patches, but the prefered way is to make a pull
+We are happy to receive patches, but the preferred way is to make a pull
 request on our Github repository. If you don't want to make a pull request,
 you can send your patches on the devel mailing list, but the rules are the same:
 see `Rules to contribute`_ for more information.
@@ -56,7 +64,7 @@ current Git (see `Committing`_)::
 
 We also accept patches against other releases, but it's more work for us.
 
-If you're not using Git, although you're strongly suggested to used it,
+If you're not using Git, although you're strongly suggested to use it,
 you can use the diff command::
 
     $ diff -u originalpath modifiedpath > new-feature.patch
@@ -90,7 +98,7 @@ See `Committing`_ for more information.
 
 Windows tools
 -------------
-* Git: http://git-scm.com/ and http://code.google.com/p/msysgit/
+* Git: http://git-scm.com/ and http://msysgit.github.io/
 * diff, grep, etc: http://mingw.org/ or http://unxutils.sourceforge.net/
 
 See also the 'Building on Windows' document on the website.
@@ -153,21 +161,34 @@ Glade
 Add user-interface widgets to the Glade 3 file ``data/geany.glade``.
 Callbacks for the user-interface should go in ``src/callbacks.c``.
 
+Use Glade 3.8.5. The 3.8 series still supports GTK+ 2, and earlier
+point releases did not preserve the order of XML elements, leading to
+unmanageable diffs.
+
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.16 and GLib >= 2.20. API symbols from newer
+Geany requires GTK >= 2.24 and GLib >= 2.32. API symbols from newer
 GTK/GLib versions should be avoided or made optional to keep the source
 code building on older systems.
 
-The official GTK 2.16 API documentation may not be available online
-anymore, so we put it on http://www.geany.org/manual/gtk/. There
-is also a tarball with all available files for download and use with
-devhelp.
+It is recommended to use the 2.24 API documentation of the GTK
+libs (including GLib, GDK and Pango) has the advantages
+that you don't get confused by any newer API additions and you
+don't have to take care about whether you can use them or not.
 
-Using the 2.16 API documentation of the GTK libs (including GLib, GDK
-and Pango) has the advantages that you don't get confused by any
-newer API additions and you don't have to take care about whether
-you can use them or not.
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_32`` C
+preprocessor flag to get warnings about newer symbols from the GLib.
+
+On the contrary, you might also want to get deprecation warnings for symbols
+deprecated in newer versions, typically when preparing a dependency bump or
+trying to improve forward compatibility.
+To do so, use the ``-UGLIB_VERSION_MIN_REQUIRED`` flag for GLib deprecations,
+and ``-UGDK_DISABLE_DEPRECATION_WARNINGS`` for GTK and GDK ones.
+To change the lower deprecation bound for GLib (and then get warnings about
+symbols deprecated more recently) instead of simply removing it entirely, use
+``-UGLIB_VERSION_MIN_REQUIRED -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_X_YY``.
+
+See `Compiler options & warnings`_ for how to set such flags.
 
 Coding
 ------
@@ -175,14 +196,29 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.20 and GTK 2.16. At least for the
-  moment, we want to keep the minimum requirement for GTK at 2.16 (of
+* Your code should build against GLib 2.32 and GTK 2.24. At least for the
+  moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
-* Variables should be declared before statements. You can use
-  gcc's -Wdeclaration-after-statement to warn about this.
+* Variables should be declared (and initialized) as close as practical
+  to their first use. This reduces the chances of intervening code being
+  inserted between declaration and use, where the variable may be
+  uninitialized.
+* Variables should be defined within the smallest scope that is practical,
+  for example inside a conditional branch which uses them or in the
+  initialization part of a for loop.
+* Local variables that will not be modified should be marked as ``const``
+  to indicate intention. This allows the compiler to give a warning if
+  part of the code accidentally tries to change the value.
+* Pointer parameters should be marked ``const`` if the value they point
+  to will not be mutated within the function.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
+* Use the strictest possible data type where practical. For example
+  for an enumeration, use the actual enum type rather than just a
+  ``gint``, use a ``gchar`` for individual (ASCII/UTF-8) string
+  characters rather than ``gint``, and use a ``guint`` for integers
+  which cannot be negative rather than ``gint``.
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
   add noise to the code with little real benefit.
 
@@ -191,9 +227,12 @@ Compiler options & warnings
 Use ``CFLAGS='-Wfoo' ./configure`` or ``CFLAGS='-Wfoo' ./autogen.sh``
 to set warning options (as well as anything else e.g. -g -O2).
 
-* Enable warnings - for gcc use '-Wall -W' (and optionally
+* Enable warnings - for gcc use '-Wall -Wextra' (and optionally
   -Wno-unused-parameter to avoid unused parameter warnings in Glade
-  callbacks).
+  callbacks). Alternatively you can use the Glib macro G_GNUC_UNUSED
+  to suppress warnings on single parameters, e.g.
+  ``void examplefunction(G_GNUC_UNUSED gchar *foo)``. Also see
+  https://developer.gnome.org/glib/stable/glib-Miscellaneous-Macros.html.
 * You should try to write ISO C99 code for portability, so always
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
@@ -302,6 +341,78 @@ Example::
     {
         ...
 
+Header Includes
+---------------
+
+In order to make including various headers in Geany more convenient, each
+file should include what it uses. If there is a file named ``foo.c``, and a
+file named ``foo.h``, it should be possible to include ``foo.h`` on its own
+without depending on stuff in ``foo.c`` that is included for the first time
+before ``foo.h``.
+
+Private Headers
+^^^^^^^^^^^^^^^
+
+If there is some data that needs to be shared between various parts of the
+core code, put them in a "private header", that is, if the public header is
+called ``foo.h``, then make a ``fooprivate.h`` header that contains the
+non-public functions, types, globals, etc that are needed. Other core source
+files can then just include the ``foo.h`` and/or ``fooprivate.h`` depending
+what they need, without exposing that stuff to plugins.
+
+Order of Includes
+^^^^^^^^^^^^^^^^^
+
+Inside a source file the includes section should be ordered like this:
+
+1. Always include the ``config.h`` file at the start of every source file,
+   for example::
+
+    #ifdef HAVE_CONFIG_H
+    # include "config.h"
+    #endif
+
+   This allows the Autotools and other build systems use the ``./configure``
+   time settings. If you don't do this, there's likely to be a number of
+   macros that you'll have to define in the build system or custom headers.
+
+   Warning: Never include ``config.h`` in headers, and especially in "public"
+   headers that plugins might include.
+
+2. Then include the header that has the same name as the source file (if
+   applicable). For example, for a source file named ``foo.c``, include
+   the ``foo.h`` below the ``config.h`` include. If there is a
+   ``fooprivate.h``, ``foo.c`` will most likely want to include that too,
+   put it in with includes in #3.
+
+3. At this point, it should be safe to include all the headers that declare
+   whatever is needed. If everything generally "includes what it uses" and
+   all files included contain the appropriate multiple-declaration guards
+   then the order of includes is fairly arbitrary. Prefer to use English
+   alphabetic order if possible.
+
+4. By now it doesn't really matter about the order, nothing below here is
+   "our problem". Semi-arbitrarily, you should use an include order like this:
+
+    1. Standard C headers
+    2. Non-standard system headers (eg. ``windows.h`` or ``unistd.h``)
+    3. GLib/GTK+ or related headers
+
+5. Everything else that should not influence 1-4.
+
+Including in Header Files
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Headers should also include what they use. All of the types should defined in
+order to allow the header to be included stand-alone. For example, if a
+header uses a ``GtkWidget*``, it should ``#include <gtk/gtk.h>``. Or, if a
+headers uses a ``GPtrArray*``, it should ``#include <glib.h>`` to ensure that
+all of the types are declared, whether by pointers/opaquely or fully, as
+required. Since all headers will use a ``G_BEGIN_DECLS`` and ``G_END_DECLS``
+guard for C++, the bare minimum for a header is to include ``glib.h`` or
+``<gtk/gtk.h>`` or ``gtkcompat.h`` or some other header that makes those
+macros available.
+
 
 Committing
 ----------
@@ -367,7 +478,6 @@ Bugs to watch out for
 * Inserting fields into structs in the plugin API instead of appending.
 * Not breaking the plugin ABI when necessary.
 * Using an idle callback that doesn't check main_status.quitting.
-* Forgetting to call vStringTerminate in CTags code.
 * Forgetting CRLF line endings on Windows.
 * Not handling Tabs & Spaces indent mode.
 
@@ -404,8 +514,6 @@ printf("Prefix: %s", GEANY_PREFIX);
 Adding a source file foo.[hc] in src/ or plugins/
 -------------------------------------------------
 * Add foo.c, foo.h to SRCS in path/Makefile.am.
-* Add foo.o to OBJS in path/makefile.win32.
-* Add path/foo.c to geany_sources in wscript.
 * Add path/foo.c to po/POTFILES.in (for string translation).
 
 Adding a filetype
@@ -419,7 +527,7 @@ first (scintilla or ctags).
 If you want to reuse an existing lexer and/or tag parser, making a
 custom filetype is probably easier - it doesn't require any
 changes to the source code. Follow instructions in the manual:
-http://geany.org/manual/geany.html#custom-filetypes. Don't forget to
+http://geany.org/manual/index.html#custom-filetypes. Don't forget to
 update the ``[Groups]`` section in ``filetype_extensions.conf``.
 
 .. warning::
@@ -452,6 +560,8 @@ For languages with a Scintilla lexer, there should be a [styling] section,
 to correspond to the styles used in highlighting_styles_FOO[] in
 highlightingmappings.h - see below.
 
+Don't forget to add the newly created filetype file to data/Makefile.am.
+
 Syntax highlighting
 ^^^^^^^^^^^^^^^^^^^
 It may be possible to use an existing Scintilla lexer in the scintilla/
@@ -466,8 +576,6 @@ LexFoo.cxx. Try the official Scintilla project first.
 When adding a lexer, update:
 
 * scintilla/Makefile.am
-* scintilla/makefile.win32
-* wscript
 * scintilla/src/Catalogue.cxx - add a LINK_LEXER command *manually*
 
 For syntax highlighting, you will need to edit highlighting.c and
@@ -534,11 +642,13 @@ Adding a TagManager parser
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 This assumes the filetype for Geany already exists.
 
-First write or find a CTags compatible parser, foo.c. Note that there
-are some language patches for CTags at:
+First write or find a CTags compatible parser, foo.c. Check this fork:
+https://github.com/universal-ctags/ctags
+
+There may be some unmerged language patches for CTags at:
 http://sf.net/projects/ctags - see the tracker.
 
-(You can also try the Anjuta project's tagmanager codebase.)
+(You can also try the Anjuta project's anjuta-tags codebase.)
 
 .. note::
     From Geany 1.22 GLib's GRegex engine is used instead of POSIX
@@ -553,14 +663,14 @@ http://sf.net/projects/ctags - see the tracker.
 Method
 ``````
 * Add foo.c to SRCS in Makefile.am.
-* Add foo.o to OBJS in makefile.win32.
-* Add path/foo.c to geany_sources in wscript.
 * Add Foo to parsers.h
-* Add TM_PARSER_FOO to tagmanager/src/tm_parser.h.  The list here must follow
+* Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In foo.c:
-Edit FooKinds 3rd column to match a s_tag_type_names string in tm_tag.c.
+In tagmanager/src/tm_parsers.c:
+Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
+FooKinds to the appropriate TMTagType, and add the corresponding
+MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
 
 In filetypes.c, init_builtin_filetypes():
@@ -593,6 +703,22 @@ source file.
 When you have these two files, you have to list your new test along the
 other ones in the ``test_source`` variable in ``tests/ctags/Makefile.am``.
 Please keep this list sorted alphabetically.
+
+Upgrading Scintilla
+-------------------
+
+To upgrade the local Scintilla copy, use the ``scripts/update-scintilla.sh``
+script.
+
+To use it, you need to first obtain a copy of the Scintilla sources you want
+to update to.  This will generally mean checking out a release tag from the
+Scintilla Mercurial repository, or extracting a tarball.
+
+Then, just run the script from Geany's to source directory passing the path
+to the Scintilla source directory as first argument, and follow the
+instructions, if any::
+
+    ./scripts/update-scintilla.sh /path/to/scintilla/
 
 GDB
 ---

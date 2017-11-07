@@ -51,10 +51,25 @@
  *
  */
 
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_SOCKET
+
+#include "socket.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "encodings.h"
+#include "main.h"
+#include "support.h"
+#include "utils.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
+
 
 #ifndef G_OS_WIN32
 # include <sys/time.h>
@@ -64,9 +79,9 @@
 # include <netinet/in.h>
 # include <glib/gstdio.h>
 #else
-# include <gdk/gdkwin32.h>
-# include <windows.h>
 # include <winsock2.h>
+# include <windows.h>
+# include <gdk/gdkwin32.h>
 # include <ws2tcpip.h>
 #endif
 #include <string.h>
@@ -78,16 +93,6 @@
 #include <gdk/gdkx.h>
 #endif
 
-#include "main.h"
-#include "socket.h"
-#include "document.h"
-#include "support.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "dialogs.h"
-#include "encodings.h"
-#include "project.h"
-
 
 #ifdef G_OS_WIN32
 #define REMOTE_CMD_PORT		49876
@@ -98,7 +103,7 @@
 #endif
 #define BUFFER_LENGTH 4096
 
-struct socket_info_struct socket_info;
+struct SocketInfo socket_info;
 
 
 #ifdef G_OS_WIN32
@@ -123,7 +128,6 @@ static gint socket_fd_close			(gint sock);
 static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
-	gchar *filename;
 
 	g_return_if_fail(argc > 1);
 	geany_debug("using running instance of Geany");
@@ -153,7 +157,7 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 
 	for (i = 1; i < argc && argv[i] != NULL; i++)
 	{
-		filename = main_get_argv_filename(argv[i]);
+		gchar *filename = main_get_argv_filename(argv[i]);
 
 		/* if the filename is valid or if a new file should be opened is check on the other side */
 		if (filename != NULL)
@@ -205,7 +209,7 @@ static void socket_get_document_list(gint sock)
 
 	do
 	{
-		n_read = socket_fd_read(sock, buf, sizeof(buf));
+		n_read = socket_fd_read(sock, buf, BUFFER_LENGTH);
 		/* if we received ETX (end-of-text), there is nothing else to read, so cut that
 		 * byte not to output it and to be sure not to validate the loop condition */
 		if (n_read > 0 && buf[n_read - 1] == '\3')
@@ -213,14 +217,14 @@ static void socket_get_document_list(gint sock)
 		if (n_read > 0)
 			fwrite(buf, 1, n_read, stdout);
 	}
-	while (n_read >= sizeof(buf));
+	while (n_read >= BUFFER_LENGTH);
 }
 
 
 #ifndef G_OS_WIN32
 static void check_socket_permissions(void)
 {
-	struct stat socket_stat;
+	GStatBuf socket_stat;
 
 	if (g_lstat(socket_info.file_name, &socket_stat) == 0)
 	{	/* If the user id of the process is not the same as the owner of the socket
@@ -275,9 +279,19 @@ gint socket_init(gint argc, gchar **argv)
 	if (sock < 0)
 		return -1;
 #else
-	gchar *display_name = gdk_get_display();
+	gchar *display_name = NULL;
 	const gchar *hostname = g_get_host_name();
+	GdkDisplay *display = gdk_display_get_default();
 	gchar *p;
+
+	/* On OS X with quartz backend gdk_display_get_name() returns hostname
+	 * using [NSHost currentHost] (it could return more or less whatever string
+	 * as display name is a X11 specific thing). This call can lead to network
+	 * query and block for several seconds so better skip it. */
+#ifndef GDK_WINDOWING_QUARTZ
+	if (display != NULL)
+		display_name = g_strdup(gdk_display_get_name(display));
+#endif
 
 	if (display_name == NULL)
 		display_name = g_strdup("NODISPLAY");

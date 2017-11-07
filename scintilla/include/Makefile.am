@@ -9,4 +9,5 @@ scintilla_include_HEADERS = \
 	SciLexer.h \
 	Scintilla.h \
 	Scintilla.iface \
-	ScintillaWidget.h
+	ScintillaWidget.h \
+	Sci_Position.h

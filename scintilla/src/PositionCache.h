@@ -17,55 +17,84 @@ static inline bool IsEOLChar(char ch) {
 }
 
 /**
+* A point in document space.
+* Uses double for sufficient resolution in large (>20,000,000 line) documents.
+*/
+class PointDocument {
+public:
+	double x;
+	double y;
+
+	explicit PointDocument(double x_ = 0, double y_ = 0) : x(x_), y(y_) {
+	}
+
+	// Conversion from Point.
+	explicit PointDocument(Point pt) : x(pt.x), y(pt.y) {
+	}
+};
+
+// There are two points for some positions and this enumeration
+// can choose between the end of the first line or subline
+// and the start of the next line or subline.
+enum PointEnd {
+	peDefault = 0x0,
+	peLineEnd = 0x1,
+	peSubLineEnd = 0x2
+};
+
+/**
  */
 class LineLayout {
 private:
 	friend class LineLayoutCache;
-	int *lineStarts;
+	std::unique_ptr<int []>lineStarts;
 	int lenLineStarts;
 	/// Drawing is only performed for @a maxLineLength characters on each line.
-	int lineNumber;
+	Sci::Line lineNumber;
 	bool inCache;
 public:
 	enum { wrapWidthInfinite = 0x7ffffff };
+
 	int maxLineLength;
 	int numCharsInLine;
 	int numCharsBeforeEOL;
 	enum validLevel { llInvalid, llCheckTextAndStyle, llPositions, llLines } validity;
 	int xHighlightGuide;
 	bool highlightColumn;
-	Selection *psel;
 	bool containsCaret;
 	int edgeColumn;
-	char *chars;
-	unsigned char *styles;
-	int styleBitsSet;
-	char *indicators;
-	XYPOSITION *positions;
+	std::unique_ptr<char[]> chars;
+	std::unique_ptr<unsigned char[]> styles;
+	std::unique_ptr<XYPOSITION[]> positions;
 	char bracePreviousStyles[2];
 
 	// Hotspot support
-	int hsStart;
-	int hsEnd;
+	Range hotspot;
 
 	// Wrapped line support
 	int widthLine;
 	int lines;
 	XYPOSITION wrapIndent; // In pixels
 
-	LineLayout(int maxLineLength_);
+	explicit LineLayout(int maxLineLength_);
+	// Deleted so LineLayout objects can not be copied.
+	LineLayout(const LineLayout &) = delete;
+	void operator=(const LineLayout &) = delete;
 	virtual ~LineLayout();
 	void Resize(int maxLineLength_);
 	void Free();
 	void Invalidate(validLevel validity_);
 	int LineStart(int line) const;
 	int LineLastVisible(int line) const;
+	Range SubLineRange(int subLine) const;
 	bool InLine(int offset, int line) const;
 	void SetLineStart(int line, int start);
-	void SetBracesHighlight(Range rangeLine, Position braces[],
+	void SetBracesHighlight(Range rangeLine, const Sci::Position braces[],
 		char bracesMatchStyle, int xHighlight, bool ignoreStyle);
-	void RestoreBracesHighlight(Range rangeLine, Position braces[], bool ignoreStyle);
+	void RestoreBracesHighlight(Range rangeLine, const Sci::Position braces[], bool ignoreStyle);
 	int FindBefore(XYPOSITION x, int lower, int upper) const;
+	int FindPositionFromX(XYPOSITION x, Range range, bool charPosition) const;
+	Point PointFromPosition(int posInLine, int lineHeight, PointEnd pe) const;
 	int EndLineStyle() const;
 };
 
@@ -73,14 +102,17 @@ public:
  */
 class LineLayoutCache {
 	int level;
-	std::vector<LineLayout *>cache;
+	std::vector<std::unique_ptr<LineLayout>>cache;
 	bool allInvalidated;
 	int styleClock;
 	int useCount;
 	void Allocate(size_t length_);
-	void AllocateForLevel(int linesOnScreen, int linesInDoc);
+	void AllocateForLevel(Sci::Line linesOnScreen, Sci::Line linesInDoc);
 public:
 	LineLayoutCache();
+	// Deleted so LineLayoutCache objects can not be copied.
+	LineLayoutCache(const LineLayoutCache &) = delete;
+	void operator=(const LineLayoutCache &) = delete;
 	virtual ~LineLayoutCache();
 	void Deallocate();
 	enum {
@@ -92,8 +124,8 @@ public:
 	void Invalidate(LineLayout::validLevel validity_);
 	void SetLevel(int level_);
 	int GetLevel() const { return level; }
-	LineLayout *Retrieve(int lineNumber, int lineCaret, int maxChars, int styleClock_,
-		int linesOnScreen, int linesInDoc);
+	LineLayout *Retrieve(Sci::Line lineNumber, Sci::Line lineCaret, int maxChars, int styleClock_,
+		Sci::Line linesOnScreen, Sci::Line linesInDoc);
 	void Dispose(LineLayout *ll);
 };
 
@@ -101,14 +133,18 @@ class PositionCacheEntry {
 	unsigned int styleNumber:8;
 	unsigned int len:8;
 	unsigned int clock:16;
-	XYPOSITION *positions;
+	std::unique_ptr<XYPOSITION []> positions;
 public:
 	PositionCacheEntry();
+	// Copy constructor not currently used, but needed for being element in std::vector.
+	PositionCacheEntry(const PositionCacheEntry &);
+	// Deleted so PositionCacheEntry objects can not be assigned.
+	void operator=(const PositionCacheEntry &) = delete;
 	~PositionCacheEntry();
-	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_, unsigned int clock);
+	void Set(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_, unsigned int clock_);
 	void Clear();
 	bool Retrieve(unsigned int styleNumber_, const char *s_, unsigned int len_, XYPOSITION *positions_) const;
-	static int Hash(unsigned int styleNumber_, const char *s, unsigned int len);
+	static unsigned int Hash(unsigned int styleNumber_, const char *s, unsigned int len_);
 	bool NewerThan(const PositionCacheEntry &other) const;
 	void ResetClock();
 };
@@ -116,7 +152,7 @@ public:
 class Representation {
 public:
 	std::string stringRep;
-	Representation(const char *value="") : stringRep(value) {
+	explicit Representation(const char *value="") : stringRep(value) {
 	}
 };
 
@@ -129,7 +165,7 @@ public:
 	SpecialRepresentations();
 	void SetRepresentation(const char *charBytes, const char *value);
 	void ClearRepresentation(const char *charBytes);
-	Representation *RepresentationFromCharacter(const char *charBytes, size_t len);
+	const Representation *RepresentationFromCharacter(const char *charBytes, size_t len) const;
 	bool Contains(const char *charBytes, size_t len) const;
 	void Clear();
 };
@@ -137,8 +173,8 @@ public:
 struct TextSegment {
 	int start;
 	int length;
-	Representation *representation;
-	TextSegment(int start_=0, int length_=0, Representation *representation_=0) :
+	const Representation *representation;
+	TextSegment(int start_=0, int length_=0, const Representation *representation_=0) :
 		start(start_), length(length_), representation(representation_) {
 	}
 	int end() const {
@@ -148,29 +184,29 @@ struct TextSegment {
 
 // Class to break a line of text into shorter runs at sensible places.
 class BreakFinder {
-	LineLayout *ll;
-	int lineStart;
-	int lineEnd;
-	int posLineStart;
+	const LineLayout *ll;
+	Range lineRange;
+	Sci::Position posLineStart;
 	int nextBreak;
 	std::vector<int> selAndEdge;
 	unsigned int saeCurrentPos;
 	int saeNext;
 	int subBreak;
-	Document *pdoc;
+	const Document *pdoc;
 	EncodingFamily encodingFamily;
-	SpecialRepresentations *preprs;
+	const SpecialRepresentations *preprs;
 	void Insert(int val);
-	// Private so BreakFinder objects can not be copied
-	BreakFinder(const BreakFinder &);
 public:
 	// If a whole run is longer than lengthStartSubdivision then subdivide
 	// into smaller runs at spaces or punctuation.
 	enum { lengthStartSubdivision = 300 };
 	// Try to make each subdivided run lengthEachSubdivision or shorter.
 	enum { lengthEachSubdivision = 100 };
-	BreakFinder(LineLayout *ll_, int lineStart_, int lineEnd_, int posLineStart_,
-		int xStart, bool breakForSelection, Document *pdoc_, SpecialRepresentations *preprs_);
+	BreakFinder(const LineLayout *ll_, const Selection *psel, Range lineRange_, Sci::Position posLineStart_,
+		int xStart, bool breakForSelection, const Document *pdoc_, const SpecialRepresentations *preprs_, const ViewStyle *pvsDraw);
+	// Deleted so BreakFinder objects can not be copied.
+	BreakFinder(const BreakFinder &) = delete;
+	void operator=(const BreakFinder &) = delete;
 	~BreakFinder();
 	TextSegment Next();
 	bool More() const;
@@ -180,16 +216,17 @@ class PositionCache {
 	std::vector<PositionCacheEntry> pces;
 	unsigned int clock;
 	bool allClear;
-	// Private so PositionCache objects can not be copied
-	PositionCache(const PositionCache &);
 public:
 	PositionCache();
+	// Deleted so PositionCache objects can not be copied.
+	PositionCache(const PositionCache &) = delete;
+	void operator=(const PositionCache &) = delete;
 	~PositionCache();
 	void Clear();
 	void SetSize(size_t size_);
 	size_t GetSize() const { return pces.size(); }
-	void MeasureWidths(Surface *surface, ViewStyle &vstyle, unsigned int styleNumber,
-		const char *s, unsigned int len, XYPOSITION *positions, Document *pdoc);
+	void MeasureWidths(Surface *surface, const ViewStyle &vstyle, unsigned int styleNumber,
+		const char *s, unsigned int len, XYPOSITION *positions, const Document *pdoc);
 };
 
 inline bool IsSpaceOrTab(int ch) {

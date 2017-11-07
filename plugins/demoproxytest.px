@@ -1,0 +1,15 @@
+#!!PLUXY_MAGIC!!
+
+[Init]
+item0 = Bam
+item1 = Foo
+item2 = Bar
+
+[Help]
+text = I'm a simple test. Nothing to see!
+
+[Info]
+name = Demo Pluxy Tester
+description = I'm a simple test. Nothing to see!
+version = 0.1
+author = The Geany developer team

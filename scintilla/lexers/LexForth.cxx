@@ -27,15 +27,6 @@
 using namespace Scintilla;
 #endif
 
-static inline bool IsAWordChar(int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' ||
-		ch == '_' || ch == '?' || ch == '"' || ch == '@' ||
-		ch == '!' || ch == '[' || ch == ']' || ch == '/' ||
-		ch == '+' || ch == '-' || ch == '*' || ch == '<' ||
-		ch == '>' || ch == '=' || ch == ';' || ch == '(' ||
-		ch == ')' );
-}
-
 static inline bool IsAWordStart(int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_' || ch == '.');
 }
@@ -48,7 +39,7 @@ static inline bool IsASpaceChar(int ch) {
 	return (ch < 0x80) && isspace(ch);
 }
 
-static void ColouriseForthDoc(unsigned int startPos, int length, int initStyle, WordList *keywordLists[],
+static void ColouriseForthDoc(Sci_PositionU startPos, Sci_Position length, int initStyle, WordList *keywordLists[],
                             Accessor &styler) {
 
     WordList &control = *keywordLists[0];
@@ -160,7 +151,7 @@ static void ColouriseForthDoc(unsigned int startPos, int length, int initStyle, 
 	sc.Complete();
 }
 
-static void FoldForthDoc(unsigned int, int, int, WordList *[],
+static void FoldForthDoc(Sci_PositionU, Sci_Position, int, WordList *[],
 						Accessor &) {
 }
 

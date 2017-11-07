@@ -1,0 +1,12 @@
+# format=tagmanager
+a:lang(en):afterÌ2048Ö0
+body :not(span)Ì2048Ö0
+span:not(:first-child)Ì2048Ö0
+span:nth-child(-n+3)Ì2048Ö0
+span:nth-child(0n+1)Ì2048Ö0
+span:nth-child(1)Ì2048Ö0
+tr:nth-child(10n+0)Ì2048Ö0
+tr:nth-child(2n)Ì2048Ö0
+tr:nth-child(2n+1)Ì2048Ö0
+tr:nth-child(even)Ì2048Ö0
+tr:nth-child(odd)Ì2048Ö0

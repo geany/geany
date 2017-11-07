@@ -23,19 +23,50 @@
  * Plugin utility functions.
  * These functions all take the @ref geany_plugin symbol as their first argument. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_PLUGINS
 
 #include "pluginutils.h"
+
+#include "app.h"
+#include "geanyobject.h"
+#include "keybindings.h"
+#include "keybindingsprivate.h"
+#include "plugindata.h"
 #include "pluginprivate.h"
-
-#include "ui_utils.h"
-#include "toolbar.h"
-#include "utils.h"
-#include "support.h"
 #include "plugins.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
 
+
+typedef struct
+{
+	gpointer data;
+	GDestroyNotify free_func;
+}
+PluginDocDataProxy;
+
+
+/** Returns the runtime API version Geany was compiled with.
+ *
+ * Unlike @ref GEANY_API_VERSION this version is the value of that
+ * define at the time when Geany itself was compiled. This allows to
+ * establish soft dependencies which are resolved at runtime depending
+ * on Geany's API version.
+ *
+ * @return Geany's API version
+ * @since 1.30 (API 231)
+ **/
+GEANY_API_SYMBOL
+gint geany_api_version(void)
+{
+	return GEANY_API_VERSION;
+}
 
 /** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.
  * A separator is added on the first call to this function, and will be shown when @a item is
@@ -43,6 +74,7 @@
  * @note You should still destroy @a item yourself, usually in @ref plugin_cleanup().
  * @param plugin Must be @ref geany_plugin.
  * @param item The item to add. */
+GEANY_API_SYMBOL
 void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
 {
 	GtkToolbar *toolbar = GTK_TOOLBAR(main_widgets.toolbar);
@@ -86,30 +118,53 @@ void plugin_add_toolbar_item(GeanyPlugin *plugin, GtkToolItem *item)
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 void plugin_module_make_resident(GeanyPlugin *plugin)
 {
 	g_return_if_fail(plugin);
-
-	g_module_make_resident(plugin->priv->module);
+	plugin_make_resident(plugin->priv);
 }
 
 
-/** Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
+/** @girskip
+ * Connects a signal which will be disconnected on unloading the plugin, to prevent a possible segfault.
  * @param plugin Must be @ref geany_plugin.
- * @param object Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
+ * @param object @nullable Object to connect to, or @c NULL when using @link pluginsignals.c Geany signals @endlink.
  * @param signal_name The name of the signal. For a list of available
  * signals, please see the @link pluginsignals.c Signal documentation @endlink.
  * @param after Set to @c TRUE to call your handler after the main signal handlers have been called
  * (if supported by @a signal_name).
  * @param callback The function to call when the signal is emitted.
  * @param user_data The user data passed to the signal handler.
- * @see plugin_callbacks. */
+ * @see plugin_callbacks.
+ *
+ * @warning Before version 1.25 (API < 218),
+ *          this should only be used on objects that outlive the plugin, never on
+ *          objects that will get destroyed before the plugin is unloaded.  For objects
+ *          created and destroyed by the plugin, you can simply use @c g_signal_connect(),
+ *          since all handlers are disconnected when the object is destroyed anyway.
+ *          For objects that may or may not outlive the plugin (like @link GeanyEditor.sci
+ *          a document's @c ScintillaObject @endlink, which is destroyed when the document
+ *          is closed), you currently have to manually handle both situations, when the
+ *          plugin is unloaded before the object is destroyed (and then, you have to
+ *          disconnect the signal on @c plugin_cleanup()), and when the object is destroyed
+ *          during the plugin's lifetime (in which case you cannot and should not disconnect
+ *          manually in @c plugin_cleanup() since it already has been disconnected and the
+ *          object has been destroyed), and disconnect yourself or not as appropriate.
+ * @note Since version 1.25 (API >= 218), the object lifetime is watched and so the above
+ *       restriction does not apply.  However, for objects destroyed by the plugin,
+ *       @c g_signal_connect() is safe and has lower overhead.
+ **/
+GEANY_API_SYMBOL
 void plugin_signal_connect(GeanyPlugin *plugin,
 		GObject *object, const gchar *signal_name, gboolean after,
 		GCallback callback, gpointer user_data)
 {
 	gulong id;
 	SignalConnection sc;
+
+	g_return_if_fail(plugin != NULL);
+	g_return_if_fail(object == NULL || G_IS_OBJECT(object));
 
 	if (!object)
 		object = geany_object;
@@ -124,6 +179,9 @@ void plugin_signal_connect(GeanyPlugin *plugin,
 	sc.object = object;
 	sc.handler_id = id;
 	g_array_append_val(plugin->priv->signal_ids, sc);
+
+	/* watch the object lifetime to nuke our pointers to it */
+	plugin_watch_object(plugin->priv, object);
 }
 
 
@@ -197,8 +255,9 @@ static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc
 }
 
 
-/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
- *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ * preventing it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param interval The time between calls to the function, in milliseconds.
@@ -210,14 +269,16 @@ static guint plugin_source_add(GeanyPlugin *plugin, GSource *source, GSourceFunc
  * @see g_timeout_add()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc function, gpointer data)
 {
 	return plugin_source_add(plugin, g_timeout_source_new(interval), function, data);
 }
 
 
-/** Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
- *  preventing it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop timeout callback that will be removed when unloading the plugin,
+ * preventing it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param interval The time between calls to the function, in seconds.
@@ -229,6 +290,7 @@ guint plugin_timeout_add(GeanyPlugin *plugin, guint interval, GSourceFunc functi
  * @see g_timeout_add_seconds()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFunc function,
 		gpointer data)
 {
@@ -236,8 +298,9 @@ guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFun
 }
 
 
-/** Adds a GLib main loop IDLE callback that will be removed when unloading the plugin, preventing
- *  it to run after the plugin has been unloaded (which may lead to a segfault).
+/** @girskip
+ * Adds a GLib main loop IDLE callback that will be removed when unloading the plugin, preventing
+ * it to run after the plugin has been unloaded (which may lead to a segfault).
  *
  * @param plugin Must be @ref geany_plugin.
  * @param function The function to call in IDLE time.
@@ -248,20 +311,24 @@ guint plugin_timeout_add_seconds(GeanyPlugin *plugin, guint interval, GSourceFun
  * @see g_idle_add()
  * @since 0.21, plugin API 205.
  */
+GEANY_API_SYMBOL
 guint plugin_idle_add(GeanyPlugin *plugin, GSourceFunc function, gpointer data)
 {
 	return plugin_source_add(plugin, g_idle_source_new(), function, data);
 }
 
 
-/** Sets up or resizes a keybinding group for the plugin.
+/** @girskip
+ * Sets up or resizes a keybinding group for the plugin.
  * You should then call keybindings_set_item() for each keybinding in the group.
  * @param plugin Must be @ref geany_plugin.
- * @param section_name Name used in the configuration file, such as @c "html_chars".
+ * @param section_name Name of the section used for this group in the keybindings configuration file, i.e. @c "html_chars".
  * @param count Number of keybindings for the group.
- * @param callback Group callback, or @c NULL if you only want individual keybinding callbacks.
+ * @param callback @nullable Group callback, or @c NULL if you only want individual keybinding callbacks.
  * @return The plugin's keybinding group.
- * @since 0.19. */
+ * @since 0.19.
+ **/
+GEANY_API_SYMBOL
 GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 		const gchar *section_name, gsize count, GeanyKeyGroupCallback callback)
 {
@@ -270,6 +337,37 @@ GeanyKeyGroup *plugin_set_key_group(GeanyPlugin *plugin,
 	priv->key_group = keybindings_set_group(priv->key_group, section_name,
 		priv->info.name, count, callback);
 	return priv->key_group;
+}
+
+/** Sets up or resizes a keybinding group for the plugin
+ *
+ * You should then call keybindings_set_item() or keybindings_set_item_full() for each
+ * keybinding in the group.
+ * @param plugin Must be @ref geany_plugin.
+ * @param section_name Name of the section used for this group in the keybindings configuration file, i.e. @c "html_chars".
+ * @param count Number of keybindings for the group.
+ * @param cb @nullable New-style group callback, or @c NULL if you only want individual keybinding callbacks.
+ * @param pdata Plugin specific data, passed to the group callback @a cb.
+ * @param destroy_notify Function that is invoked to free the plugin data when not needed anymore.
+ * @return @transfer{none} The plugin's keybinding group.
+ *
+ * @since 1.26 (API 226)
+ * @see See keybindings_set_item
+ * @see See keybindings_set_item_full
+ **/
+GEANY_API_SYMBOL
+GeanyKeyGroup *plugin_set_key_group_full(GeanyPlugin *plugin,
+		const gchar *section_name, gsize count,
+		GeanyKeyGroupFunc cb, gpointer pdata, GDestroyNotify destroy_notify)
+{
+	GeanyKeyGroup *group;
+
+	group = plugin_set_key_group(plugin, section_name, count, NULL);
+	group->cb_func = cb;
+	group->cb_data = pdata;
+	group->cb_data_destroy = destroy_notify;
+
+	return group;
 }
 
 
@@ -283,10 +381,9 @@ static GtkWidget *create_pref_page(Plugin *p, GtkWidget *dialog)
 {
 	GtkWidget *page = NULL;	/* some plugins don't have prefs */
 
-	if (p->configure)
+	if (p->cbs.configure)
 	{
-		page = p->configure(GTK_DIALOG(dialog));
-
+		page = p->cbs.configure(&p->public, GTK_DIALOG(dialog), p->cb_data);
 		if (! GTK_IS_WIDGET(page))
 		{
 			geany_debug("Invalid widget returned from plugin_configure() in plugin \"%s\"!",
@@ -374,6 +471,7 @@ static void configure_plugins(Plugin *current_plugin)
  * @param plugin Must be @ref geany_plugin.
  * @since 0.19. */
 /* if NULL, show all plugins */
+GEANY_API_SYMBOL
 void plugin_show_configure(GeanyPlugin *plugin)
 {
 	Plugin *p;
@@ -385,7 +483,7 @@ void plugin_show_configure(GeanyPlugin *plugin)
 	}
 	p = plugin->priv;
 
-	if (p->configure)
+	if (p->cbs.configure)
 		configure_plugins(p);
 	else
 	{
@@ -409,12 +507,7 @@ static void connect_plugin_signals(GtkBuilder *builder, GObject *object,
 	gpointer symbol = NULL;
 	struct BuilderConnectData *data = user_data;
 
-	if (!g_module_symbol(data->plugin->priv->module, handler_name, &symbol))
-	{
-		g_warning("Failed to locate signal handler for '%s': %s",
-			signal_name, g_module_error());
-		return;
-	}
+	symbol = plugin_get_module_symbol(data->plugin->priv, handler_name);
 
 	plugin_signal_connect(data->plugin, object, signal_name, FALSE,
 		G_CALLBACK(symbol) /*ub?*/, data->user_data);
@@ -461,19 +554,235 @@ static void connect_plugin_signals(GtkBuilder *builder, GObject *object,
  *
  * @since 1.24, plugin API 217.
  */
+GEANY_API_SYMBOL
 void plugin_builder_connect_signals(GeanyPlugin *plugin,
 	GtkBuilder *builder, gpointer user_data)
 {
 	struct BuilderConnectData data = { NULL };
 
 	g_return_if_fail(plugin != NULL && plugin->priv != NULL);
-	g_return_if_fail(plugin->priv->module != NULL);
 	g_return_if_fail(GTK_IS_BUILDER(builder));
 
 	data.user_data = user_data;
 	data.plugin = plugin;
 
 	gtk_builder_connect_signals_full(builder, connect_plugin_signals, &data);
+}
+
+
+/** Get the additional data that corresponds to the plugin.
+ *
+ * @param plugin The plugin provided by Geany
+ * @return The data corresponding to the plugin or @c NULL if none set.
+ *
+ * @since 1.32 (API 234)
+ *
+ * @see geany_plugin_set_data()
+ */
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin)
+{
+	g_return_val_if_fail (plugin != NULL, NULL);
+	g_return_val_if_fail (PLUGIN_LOADED_OK (plugin->priv), NULL);
+
+	return plugin->priv->cb_data;
+}
+
+
+/** Add additional data that corresponds to the plugin.
+ *
+ * @p pdata is the pointer going to be passed to the individual plugin callbacks
+ * of GeanyPlugin::funcs. When the  plugin is cleaned up, @p free_func is invoked for the data,
+ * which connects the data to the time the plugin is enabled.
+ *
+ * One intended use case is to set GObjects as data and have them destroyed automatically
+ * by passing g_object_unref() as @a free_func, so that member functions can be used
+ * for the @ref GeanyPluginFuncs (via wrappers) but you can set completely custom data.
+ *
+ * Be aware that this can only be called once and only by plugins registered via
+ * @ref geany_plugin_register(). So-called legacy plugins cannot use this function.
+ *
+ * @note This function must not be called if the plugin was registered with
+ * geany_plugin_register_full().
+ *
+ * @param plugin The plugin provided by Geany
+ * @param pdata The plugin's data to associate, must not be @c NULL
+ * @param free_func The destroy notify
+ *
+ * @since 1.26 (API 225)
+ */
+GEANY_API_SYMBOL
+void geany_plugin_set_data(GeanyPlugin *plugin, gpointer pdata, GDestroyNotify free_func)
+{
+	Plugin *p = plugin->priv;
+
+	g_return_if_fail(PLUGIN_LOADED_OK(p));
+	/* Do not allow calling this only to set a notify. */
+	g_return_if_fail(pdata != NULL);
+	/* The rationale to allow only setting the data once is the following:
+	 * In the future we want to support proxy plugins (which bind non-C plugins to
+	 * Geany's plugin api). These proxy plugins might need to own the data pointer
+	 * on behalf of the proxied plugin. However, if not, then the plugin should be
+	 * free to use it. This way we can make sure the plugin doesn't accidentally
+	 * trash its proxy.
+	 *
+	 * Better a more limited API now that can be opened up later than a potentially
+	 * wrong one that can only be replaced by another one. */
+	if (p->cb_data != NULL || p->cb_data_destroy != NULL)
+	{
+		if (PLUGIN_HAS_LOAD_DATA(p))
+			g_warning("Invalid call to %s(), geany_plugin_register_full() was used. Ignored!\n", G_STRFUNC);
+		else
+			g_warning("Double call to %s(), ignored!", G_STRFUNC);
+		return;
+	}
+
+	p->cb_data = pdata;
+	p->cb_data_destroy = free_func;
+}
+
+
+static void plugin_doc_data_proxy_free(gpointer pdata)
+{
+	PluginDocDataProxy *prox = pdata;
+	if (prox != NULL)
+	{
+		if (prox->free_func)
+			prox->free_func(prox->data);
+		g_slice_free(PluginDocDataProxy, prox);
+	}
+}
+
+
+/**
+ * Retrieve plugin-specific data attached to a document.
+ *
+ * @param plugin The plugin who attached the data.
+ * @param doc The document which the data was attached to.
+ * @param key The key name of the attached data.
+ *
+ * @return The attached data pointer or `NULL` if the key is not found
+ * for the given plugin.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_set_document_data plugin_set_document_data_full
+ */
+GEANY_API_SYMBOL
+gpointer plugin_get_document_data(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key)
+{
+	gchar *real_key;
+	PluginDocDataProxy *data;
+
+	g_return_val_if_fail(plugin != NULL, NULL);
+	g_return_val_if_fail(doc != NULL, NULL);
+	g_return_val_if_fail(key != NULL && *key != '\0', NULL);
+
+	real_key = g_strdup_printf("geany/plugins/%s/%s", plugin->info->name, key);
+	data = document_get_data(doc, real_key);
+	g_free(real_key);
+
+	return (data != NULL) ? data->data : NULL;
+}
+
+
+/**
+ * Attach plugin-specific data to a document.
+ *
+ * @param plugin The plugin attaching data to the document.
+ * @param doc The document to attach the data to.
+ * @param key The key name for the data.
+ * @param data The pointer to attach to the document.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_get_document_data plugin_set_document_data_full
+ */
+GEANY_API_SYMBOL
+void plugin_set_document_data(struct GeanyPlugin *plugin, struct GeanyDocument *doc,
+	const gchar *key, gpointer data)
+{
+	plugin_set_document_data_full(plugin, doc, key, data, NULL);
+}
+
+
+/**
+ * Attach plugin-specific data and a free function to a document.
+ *
+ * This is useful for plugins who want to keep some additional data with
+ * the document and even have it auto-released appropriately (see below).
+ *
+ * This is a simple example showing how a plugin might use this to
+ * attach a string to each document and print it when the document is
+ * saved:
+ *
+ * @code
+ * void on_document_open(GObject *unused, GeanyDocument *doc, GeanyPlugin *plugin)
+ * {
+ *     plugin_set_document_data_full(plugin, doc, "my-data",
+ *         g_strdup("some-data"), g_free);
+ * }
+ *
+ * void on_document_save(GObject *unused, GeanyDocument *doc, GeanyPlugin *plugin)
+ * {
+ *     const gchar *some_data = plugin_get_document_data(plugin, doc, "my-data");
+ *     g_print("my-data: %s", some_data);
+ * }
+ *
+ * gboolean plugin_init(GeanyPlugin *plugin, gpointer unused)
+ * {
+ *     plugin_signal_connect(plugin, NULL, "document-open", TRUE,
+ *         G_CALLBACK(on_document_open), plugin);
+ *     plugin_signal_connect(plugin, NULL, "document-new", TRUE,
+ *         G_CALLBACK(on_document_open), plugin);
+ *     plugin_signal_connect(plugin, NULL, "document-save", TRUE,
+ *         G_CALLBACK(on_document_save), plugin);
+ *     return TRUE;
+ * }
+ *
+ * void geany_load_module(GeanyPlugin *plugin)
+ * {
+ *   // ...
+ *   plugin->funcs->init = plugin_init;
+ *   // ...
+ * }
+ * @endcode
+ *
+ * The @a free_func can be used to tie the lifetime of the data to that
+ * of the @a doc and/or the @a plugin. The @a free_func will be called
+ * in any of the following cases:
+ *
+ *   - When a document is closed.
+ *   - When the plugin is unloaded.
+ *   - When the document data is set again using the same key.
+ *
+ * @param plugin The plugin attaching data to the document.
+ * @param doc The document to attach the data to.
+ * @param key The key name for the data.
+ * @param data The pointer to attach to the document.
+ * @param free_func The function to call with data when removed.
+ *
+ * @since 1.29 (Plugin API 228)
+ * @see plugin_get_document_data plugin_set_document_data
+ */
+GEANY_API_SYMBOL
+void plugin_set_document_data_full(struct GeanyPlugin *plugin,
+	struct GeanyDocument *doc, const gchar *key, gpointer data,
+	GDestroyNotify free_func)
+{
+	PluginDocDataProxy *prox;
+
+	g_return_if_fail(plugin != NULL);
+	g_return_if_fail(doc != NULL);
+	g_return_if_fail(key != NULL);
+
+	prox = g_slice_new(PluginDocDataProxy);
+	if (prox != NULL)
+	{
+		gchar *real_key = g_strdup_printf("geany/plugins/%s/%s", plugin->info->name, key);
+		prox->data = data;
+		prox->free_func = free_func;
+		document_set_data_full(doc, real_key, prox, plugin_doc_data_proxy_free);
+		g_free(real_key);
+	}
 }
 
 

@@ -1,0 +1,6 @@
+# format=tagmanager
+onInitÌ128Í()Îapp.my_formÖ0
+refreshFormÌ128Í(AUFNR)Îapp.my_formÖ0
+refreshSettlementsÌ128Í(AUFNR)Îapp.my_formÖ0
+setRefreshedÌ128Í(value)Îapp.my_formÖ0
+successfulRequestÌ128Í(data)Îapp.my_formÖ0

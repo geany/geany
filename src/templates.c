@@ -24,27 +24,35 @@
  * document from.
  */
 
-#include <time.h>
-#include <string.h>
-
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "templates.h"
-#include "support.h"
-#include "utils.h"
+
+#include "app.h"
 #include "document.h"
-#include "encodings.h"
-#include "editor.h"
+#include "encodingsprivate.h"
 #include "filetypes.h"
-#include "ui_utils.h"
-#include "toolbar.h"
+#include "geany.h"
 #include "geanymenubuttonaction.h"
-#include "project.h"
+#include "geanyobject.h"
+#include "spawn.h"
+#include "support.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+
+#include "gtkcompat.h"
+
+#include <time.h>
+#include <string.h>
 
 
 GeanyTemplatePrefs template_prefs;
 
-static GtkWidget *new_with_template_menu = NULL;	/* submenu used for both file menu and toolbar */
+static GtkWidget *new_with_template_menu = NULL;
+static GtkWidget *new_with_template_toolbar_menu = NULL;
 
 /* TODO: implement custom insertion templates instead? */
 static gchar *templates[GEANY_MAX_TEMPLATES];
@@ -167,15 +175,13 @@ static gchar *get_template_from_file(const gchar *locale_fname, const gchar *doc
 									 GeanyFiletype *ft)
 {
 	gchar *content;
-	GString *template = NULL;
 
 	content = read_file(locale_fname);
 
 	if (content != NULL)
 	{
 		gchar *file_header;
-
-		template = g_string_new(content);
+		GString *template = g_string_new(content);
 
 		file_header = get_template_fileheader(ft);
 		templates_replace_valist(template,
@@ -251,7 +257,7 @@ static void add_file_item(const gchar *fname, GtkWidget *menu)
 }
 
 
-static gboolean add_custom_template_items(void)
+static void populate_file_template_menu(GtkWidget *menu)
 {
 	GSList *list = utils_get_config_files(GEANY_TEMPLATES_SUBDIR G_DIR_SEPARATOR_S "files");
 	GSList *node;
@@ -260,50 +266,36 @@ static gboolean add_custom_template_items(void)
 	{
 		gchar *fname = node->data;
 
-		add_file_item(fname, new_with_template_menu);
+		add_file_item(fname, menu);
 		g_free(fname);
 	}
 	g_slist_free(list);
-	return list != NULL;
 }
 
 
 static void create_file_template_menu(void)
 {
+	GtkWidget *item;
+
 	new_with_template_menu = gtk_menu_new();
-	add_custom_template_items();
-
-	/* unless the file menu is showing, menu should be in the toolbar widget */
-	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(
-		toolbar_get_action_by_name("New")), new_with_template_menu);
-}
-
-
-static void on_file_menu_show(GtkWidget *item)
-{
-	geany_menu_button_action_set_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
 	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), new_with_template_menu);
-}
 
-
-static void on_file_menu_hide(GtkWidget *item)
-{
-	item = ui_lookup_widget(main_widgets.window, "menu_new_with_template1");
-	gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), NULL);
-	geany_menu_button_action_set_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), new_with_template_menu);
+	new_with_template_toolbar_menu = gtk_menu_new();
+	g_object_ref(new_with_template_toolbar_menu);
+	geany_menu_button_action_set_menu(GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), 
+		new_with_template_toolbar_menu);
 }
 
 
 /* reload templates if any file in the templates path is saved */
 static void on_document_save(G_GNUC_UNUSED GObject *object, GeanyDocument *doc)
 {
-	gchar *path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
+	gchar *path;
 
 	g_return_if_fail(!EMPTY(doc->real_path));
 
+	path = g_build_filename(app->configdir, GEANY_TEMPLATES_SUBDIR, NULL);
 	if (strncmp(doc->real_path, path, strlen(path)) == 0)
 	{
 		/* reload templates */
@@ -321,23 +313,15 @@ void templates_init(void)
 
 	init_general_templates();
 
-	create_file_template_menu();
-	/* we hold our own ref for the menu as it has no parent whilst being moved */
-	g_object_ref(new_with_template_menu);
-
-	/* only connect signals to persistent objects once */
 	if (!init_done)
 	{
-		GtkWidget *item;
-		/* reparent the template menu as needed */
-		item = ui_lookup_widget(main_widgets.window, "file1");
-		item = gtk_menu_item_get_submenu(GTK_MENU_ITEM(item));
-		g_signal_connect(item, "show", G_CALLBACK(on_file_menu_show), NULL);
-		g_signal_connect(item, "hide", G_CALLBACK(on_file_menu_hide), NULL);
-
+		create_file_template_menu();
 		g_signal_connect(geany_object, "document-save", G_CALLBACK(on_document_save), NULL);
+		init_done = TRUE;
 	}
-	init_done = TRUE;
+
+	populate_file_template_menu(new_with_template_menu);
+	populate_file_template_menu(new_with_template_toolbar_menu);
 }
 
 
@@ -471,6 +455,7 @@ static gchar *get_template_fileheader(GeanyFiletype *ft)
 
 
 /* TODO change the signature to take a GeanyDocument? this would break plugin API/ABI */
+GEANY_API_SYMBOL
 gchar *templates_get_template_fileheader(gint filetype_idx, const gchar *fname)
 {
 	GeanyFiletype *ft = filetypes[filetype_idx];
@@ -520,30 +505,25 @@ gchar *templates_get_template_changelog(GeanyDocument *doc)
 }
 
 
+static void free_template_menu_items(GtkWidget *menu)
+{
+	GList *children, *item;
+
+	children = gtk_container_get_children(GTK_CONTAINER(menu));
+	foreach_list(item, children)
+		gtk_widget_destroy(GTK_WIDGET(item->data));
+	g_list_free(children);
+}
+
+
 void templates_free_templates(void)
 {
 	gint i;
-	GList *children, *item;
-
-	/* disconnect the menu from the action widget, so destroying the items below doesn't
-	 * trigger rebuilding of the menu on each item destroy */
-	geany_menu_button_action_set_menu(
-		GEANY_MENU_BUTTON_ACTION(toolbar_get_action_by_name("New")), NULL);
 
 	for (i = 0; i < GEANY_MAX_TEMPLATES; i++)
-	{
 		g_free(templates[i]);
-	}
-	/* destroy "New with template" sub menu items (in case we want to reload the templates) */
-	children = gtk_container_get_children(GTK_CONTAINER(new_with_template_menu));
-	foreach_list(item, children)
-	{
-		gtk_widget_destroy(GTK_WIDGET(item->data));
-	}
-	g_list_free(children);
-
-	g_object_unref(new_with_template_menu);
-	new_with_template_menu = NULL;
+	free_template_menu_items(new_with_template_menu);
+	free_template_menu_items(new_with_template_toolbar_menu);
 }
 
 
@@ -614,33 +594,34 @@ static void templates_replace_default_dates(GString *text)
 static gchar *run_command(const gchar *command, const gchar *file_name,
 						  const gchar *file_type, const gchar *func_name)
 {
+	GString *output = g_string_new(NULL);
 	gchar *result = NULL;
-	gchar **argv;
+	GError *error = NULL;
+	gchar **env;
 
-	if (g_shell_parse_argv(command, NULL, &argv, NULL))
+	file_name = (file_name != NULL) ? file_name : "";
+	file_type = (file_type != NULL) ? file_type : "";
+	func_name = (func_name != NULL) ? func_name : "";
+
+	env = utils_copy_environment(NULL,
+		"GEANY_FILENAME", file_name,
+		"GEANY_FILETYPE", file_type,
+		"GEANY_FUNCNAME", func_name,
+		NULL);
+
+	if (spawn_sync(NULL, command, NULL, env, NULL, output, NULL, NULL, &error))
 	{
-		GError *error = NULL;
-		gchar **env;
-
-		file_name = (file_name != NULL) ? file_name : "";
-		file_type = (file_type != NULL) ? file_type : "";
-		func_name = (func_name != NULL) ? func_name : "";
-
-		env = utils_copy_environment(NULL,
-			"GEANY_FILENAME", file_name,
-			"GEANY_FILETYPE", file_type,
-			"GEANY_FUNCNAME", func_name,
-			NULL);
-		if (! utils_spawn_sync(NULL, argv, env, G_SPAWN_SEARCH_PATH,
-				NULL, NULL, &result, NULL, NULL, &error))
-		{
-			g_warning("templates_replace_command: %s", error->message);
-			g_error_free(error);
-			result = NULL;
-		}
-		g_strfreev(argv);
-		g_strfreev(env);
+		result = g_string_free(output, FALSE);
 	}
+	else
+	{
+		g_warning(_("Cannot execute template command \"%s\". "
+			"Hint: incorrect paths in the command are a common cause of errors. "
+			"Error: %s."), command, error->message);
+		g_error_free(error);
+	}
+
+	g_strfreev(env);
 	return result;
 }
 
@@ -648,16 +629,16 @@ static gchar *run_command(const gchar *command, const gchar *file_name,
 static void templates_replace_command(GString *text, const gchar *file_name,
 							   const gchar *file_type, const gchar *func_name)
 {
-	gchar *match = NULL;
-	gchar *wildcard = NULL;
-	gchar *cmd;
-	gchar *result;
+	gchar *match;
 
 	g_return_if_fail(text != NULL);
 
 	while ((match = strstr(text->str, "{command:")) != NULL)
 	{
-		cmd = match;
+		gchar *wildcard;
+		gchar *cmd = match;
+		gchar *result;
+
 		while (*match != '}' && *match != '\0')
 			match++;
 

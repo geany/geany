@@ -23,7 +23,12 @@
 
 /**
  * @file pluginsymbols.c
- * Symbols declared from within plugins.
+ * Symbols declared from within plugins, all of this is <b>deprecated</b>.
+ *
+ * @deprecated This is the legacy way of making plugins for Geany. Refer to @ref howto for the
+ * reworked process and @ref legacy to learn how to port your plugin to that new world.
+ * Meanwhile Geany will still load plugins programmed against this interface (even the items that
+ * are marked deprecated individually such as @ref plugin_fields).
  *
  * Geany looks for these symbols (arrays, pointers and functions) when initializing
  * plugins. Some of them are optional, i.e. they can be omitted; others are required
@@ -32,8 +37,10 @@
  */
 
 /** Use the PLUGIN_VERSION_CHECK() macro instead. Required by Geany.
- * @return . */
-gint plugin_version_check(gint);
+ *
+ * @param abi ABI version Geany was compiled with
+ * @return The API version the plugin was compiled with, or -1 if the plugin is incompatible. */
+gint plugin_version_check(gint abi);
 
 /** Use the PLUGIN_SET_INFO() macro to define it. Required by Geany.
  * This function is called before the plugin is initialized, so Geany
@@ -41,8 +48,8 @@ gint plugin_version_check(gint);
  * @param info The data struct which should be initialized by this function. */
 void plugin_set_info(PluginInfo *info);
 
-/** @deprecated Use @ref GeanyPlugin.info instead.
- * Basic information about a plugin, which is set in plugin_set_info(). */
+/** Basic information about a plugin, which is set in plugin_set_info().
+ * @deprecated Use @ref GeanyPlugin.info instead.*/
 const PluginInfo *plugin_info;
 
 /** Basic information for the plugin and identification. */
@@ -59,8 +66,8 @@ const GeanyData *geany_data;
  * This is equivalent of @c geany_functions->p_document->document_new_file(NULL, NULL, NULL); */
 const GeanyFunctions *geany_functions;
 
-/** @deprecated Use @ref ui_add_document_sensitive() instead.
- * Plugin owned fields, including flags. */
+/** Plugin owned fields, including flags.
+ * @deprecated Use @ref ui_add_document_sensitive() instead.*/
 PluginFields *plugin_fields;
 
 /** An array for connecting GeanyObject events, which should be terminated with
@@ -79,8 +86,10 @@ KeyBindingGroup *plugin_key_group;
  * The dialog will show all plugins that support this symbol together.
  * @param dialog The plugin preferences dialog widget - this should only be used to
  * connect the @c "response" signal. If settings should be read from the dialog, the
- * reponse will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
- * @return A container widget holding preference widgets.
+ * response will be either @c GTK_RESPONSE_OK or @c GTK_RESPONSE_APPLY.
+ *
+ * @return @transfer{floating} A container widget holding preference widgets.
+ *
  * @note Using @link stash.h Stash @endlink can make implementing preferences easier.
  * @see plugin_configure_single(). */
 GtkWidget *plugin_configure(GtkDialog *dialog);
@@ -102,8 +111,7 @@ void plugin_init(GeanyData *data);
 void plugin_cleanup();
 
 /** Called whenever the plugin should show its documentation (if any). This may open a dialog,
- * a browser with a website or a local installed HTML help file(see utils_open_browser())
+ * a browser with a website or a local installed HTML help file (see utils_open_browser())
  * or something else.
  * Can be omitted when not needed. */
 void plugin_help();
-

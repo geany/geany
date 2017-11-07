@@ -25,11 +25,15 @@
 
 #ifdef HAVE_VTE
 
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 typedef struct
 {
-	gboolean load_vte;	/* this is the preference, NOT the current instance VTE state */
-	gboolean have_vte;	/* use this field to check if the current instance has VTE */
+	gboolean load_vte;			/* this is the preference, NOT the current instance VTE state */
+	gboolean load_vte_cmdline;	/* this is the command line option */
+	gboolean have_vte;			/* use this field to check if the current instance has VTE */
 	gchar	*lib_vte;
 	gchar	*dir;
 } VteInfo;
@@ -52,9 +56,7 @@ typedef struct
 	gboolean cursor_blinks;
 	gboolean send_selection_unsafe;
 	gint scrollback_lines;
-	gchar *emulation;
 	gchar *shell;
-	gchar *image;
 	gchar *font;
 	gchar *send_cmd_prefix;
 	GdkColor colour_fore;
@@ -81,6 +83,8 @@ void vte_send_selection_to_vte(void);
 
 void vte_select_all(void);
 
-#endif
+G_END_DECLS
 
-#endif
+#endif /* HAVE_VTE */
+
+#endif /* GEANY_VTE_H */

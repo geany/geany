@@ -1,0 +1,12 @@
+# format=tagmanager
+AÌ65536Ö0
+BÌ65536Ö0
+M3_INITÌ131072Í(a, b, c)Ö0
+STRINGIFYÌ131072Í(x)Ö0
+STRINGIFY_INTERNÌ131072Í(x)Ö0
+bufÌ64ÎstrÖ0Ïchar *
+lenÌ64ÎstrÖ0Ïunsigned int
+mainÌ16Í(void)Ö0Ïint
+matrix3Ì4096Ö0Ïint
+sizeÌ64ÎstrÖ0Ïint
+strÌ2048Ö0

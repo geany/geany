@@ -22,6 +22,11 @@
 #ifndef GEANY_MSGWINDOW_H
 #define GEANY_MSGWINDOW_H 1
 
+#include "document.h"
+
+#include "gtkcompat.h"
+
+
 G_BEGIN_DECLS
 
 /**
@@ -47,6 +52,21 @@ typedef enum
 } MessageWindowTabNum;
 
 
+void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
+
+void msgwin_compiler_add(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
+
+void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
+			G_GNUC_PRINTF (4, 5);
+
+void msgwin_clear_tab(gint tabnum);
+
+void msgwin_switch_tab(gint tabnum, gboolean show);
+
+void msgwin_set_messages_dir(const gchar *messages_dir);
+
+
+#ifdef GEANY_PRIVATE
 
 typedef struct
 {
@@ -73,24 +93,11 @@ void msgwin_finalize(void);
 
 void msgwin_show_hide(gboolean show);
 
-void msgwin_switch_tab(gint tabnum, gboolean show);
-
-void msgwin_clear_tab(gint tabnum);
-
-void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
-			G_GNUC_PRINTF (4, 5);
-
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
-
-void msgwin_compiler_add(gint msg_color, const gchar *format, ...) G_GNUC_PRINTF (2, 3);
 
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
 
-void msgwin_status_add(const gchar *format, ...) G_GNUC_PRINTF (1, 2);
-
 void msgwin_show_hide_tabs(void);
-
-void msgwin_set_messages_dir(const gchar *messages_dir);
 
 
 void msgwin_menu_add_common_items(GtkMenu *menu);
@@ -102,6 +109,8 @@ void msgwin_parse_compiler_error_line(const gchar *string, const gchar *dir,
 
 gboolean msgwin_goto_messages_file_line(gboolean focus_editor);
 
+#endif /* GEANY_PRIVATE */
+
 G_END_DECLS
 
-#endif
+#endif /* GEANY_MSGWINDOW_H */

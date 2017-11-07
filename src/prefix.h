@@ -15,7 +15,7 @@
  */
 
 #ifndef GEANY_PREFIX_H
-#define GEANY_PREFIX_H
+#define GEANY_PREFIX_H 1
 
 
 /*
@@ -23,6 +23,10 @@
  *          this only happens if configure option --enable-binreloc was used
  */
 #ifdef ENABLE_BINRELOC
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 
 /* WARNING, BEFORE YOU MODIFY PREFIX.C:
@@ -77,6 +81,7 @@
 	#define GEANY_PREFIX		(br_thread_local_store (br_locate_prefix ((void *) "")))
 	#define GEANY_DATADIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share")))
 	#define GEANY_LIBDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/lib")))
+	#define GEANY_LIBEXECDIR	(br_thread_local_store (br_prepend_prefix ((void *) "", "/libexec/geany")))
 	#define GEANY_DOCDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/doc/geany")))
 	#define GEANY_LOCALEDIR		(br_thread_local_store (br_prepend_prefix ((void *) "", "/share/locale")))
 #endif /* BR_NO_MACROS */
@@ -90,6 +95,7 @@ char *br_locate		(void *symbol);
 char *br_locate_prefix	(void *symbol);
 char *br_prepend_prefix	(void *symbol, char *path);
 
+G_END_DECLS
 
 #endif /* ENABLE_BINRELOC */
 

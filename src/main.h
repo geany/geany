@@ -21,7 +21,20 @@
 
 
 #ifndef GEANY_MAIN_H
-#define GEANY_MAIN_H
+#define GEANY_MAIN_H 1
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+void main_reload_configuration(void);
+
+void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
+
+gboolean main_is_realized(void);
+
+
+#ifdef GEANY_PRIVATE
 
 typedef struct
 {
@@ -56,16 +69,16 @@ const gchar *main_get_version_string(void);
 
 gchar *main_get_argv_filename(const gchar *filename);
 
-void main_quit(void);
+gboolean main_quit(void);
 
 gboolean main_handle_filename(const gchar *locale_filename);
 
-void main_reload_configuration(void);
-
-void main_locale_init(const gchar *locale_dir, const gchar *gettext_package);
-
-gboolean main_is_realized(void);
-
 void main_load_project_from_command_line(const gchar *locale_filename, gboolean use_session);
 
-#endif
+gint main_lib(gint argc, gchar **argv);
+
+#endif /* GEANY_PRIVATE */
+
+G_END_DECLS
+
+#endif /* GEANY_MAIN_H */

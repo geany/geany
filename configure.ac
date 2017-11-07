@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.24],
-		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
+AC_INIT([Geany], [1.32],
+		[https://github.com/geany/geany/issues])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -24,16 +24,14 @@ fi
 AC_USE_SYSTEM_EXTENSIONS
 
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
+LT_INIT([disable-static])
 AC_PROG_CC
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
 
 AC_PROG_CXX
-# check for C++ compiler explicitly and fail if none is found, do this check
-# after AC_PROG_CXX has set the CXX environment variable
-if ! which $CXX >/dev/null 2>&1; then
-	AC_MSG_ERROR([No C++ compiler found. Please install a C++ compiler.])
-fi
+GEANY_PROG_CXX
+AX_CXX_COMPILE_STDCXX_11
 
 AC_PROG_INSTALL
 AC_PROG_LN_S
@@ -49,13 +47,13 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([ftruncate fgetpos mkstemp strerror strstr])
+AC_CHECK_FUNCS([ftruncate fgetpos fnmatch mkstemp strerror strstr])
 
 # autoscan end
 
 
-# check for SVN revision
-GEANY_CHECK_REVISION([dnl force debug mode for a SVN working copy
+# check for VCS revision
+GEANY_CHECK_REVISION([dnl force debug mode for a VCS working copy
 					  CFLAGS="-g -DGEANY_DEBUG $CFLAGS"])
 
 
@@ -69,17 +67,22 @@ AS_IF([test "x$enable_gtk3" = xyes],
 	  [gtk_package=gtk+-3.0
 	   gtk_min_version=3.0],
 	  [gtk_package=gtk+-2.0
-	   gtk_min_version=2.16])
+	   gtk_min_version=2.24])
 AM_CONDITIONAL([GTK3], [test "x$gtk_package" = "xgtk+-3.0"])
 
 # GTK/GLib/GIO checks
-gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.20"
-gtk_modules_private="gio-2.0 >= 2.20 gmodule-2.0"
+gtk_modules="$gtk_package >= $gtk_min_version glib-2.0 >= 2.32"
+gtk_modules_private="gio-2.0 >= 2.32 gmodule-no-export-2.0"
 PKG_CHECK_MODULES([GTK], [$gtk_modules $gtk_modules_private])
 AC_SUBST([DEPENDENCIES], [$gtk_modules])
+AS_VAR_APPEND([GTK_CFLAGS], [" -DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_32"])
+dnl Disable all GTK deprecations on 3.x so long as we want to keep 2.x support and only require 3.0.
+dnl No need on 2.x as we target the latest version.
+AM_COND_IF([GTK3], [AS_VAR_APPEND([GTK_CFLAGS], [" -DGDK_DISABLE_DEPRECATION_WARNINGS"])])
 AC_SUBST([GTK_CFLAGS])
 AC_SUBST([GTK_LIBS])
 GTK_VERSION=`$PKG_CONFIG --modversion $gtk_package`
+AC_SUBST([GTK_VERSION])
 GEANY_STATUS_ADD([Using GTK version], [${GTK_VERSION}])
 # GTHREAD checks
 gthread_modules="gthread-2.0"
@@ -87,7 +90,7 @@ PKG_CHECK_MODULES([GTHREAD], [$gthread_modules])
 AC_SUBST([GTHREAD_CFLAGS])
 AC_SUBST([GTHREAD_LIBS])
 
-# --disable-deprecated switch for GTK2 purification
+# --disable-deprecated switch for GTK purification
 AC_ARG_ENABLE([deprecated],
 		[AS_HELP_STRING([--disable-deprecated], [Disable deprecated GTK functions.])],
 		[GTK_CFLAGS="$GTK_CFLAGS -DG_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED"],
@@ -105,13 +108,26 @@ GEANY_CHECK_MINGW
 
 GEANY_CHECK_SOCKET
 GEANY_CHECK_VTE
+GEANY_CHECK_MAC_INTEGRATION
 GEANY_CHECK_THE_FORCE dnl hehe
 
 # i18n
 GEANY_I18N
 
-GEANY_DATA_DIR=`eval echo ${datarootdir}/geany`
-AC_SUBST([GEANY_DATA_DIR])
+# double eval since datarootdir is usually defined as ${prefix}/share
+AM_COND_IF([MINGW],
+  [pkgdatadir='${prefix}/data'],
+  [pkgdatadir='${datarootdir}/geany'])
+AC_SUBST([GEANY_DATA_DIR], [$(eval echo $(eval echo $pkgdatadir))])
+AC_SUBST([pkgdatadir])
+
+# Documentation tools
+GEANY_CHECK_DOCUTILS
+GEANY_CHECK_DOXYGEN
+GEANY_CHECK_GTKDOC_HEADER
+
+# libgeany
+GEANY_LIB_INIT
 
 # Output
 AC_CONFIG_FILES([
@@ -128,19 +144,19 @@ AC_CONFIG_FILES([
 		icons/tango/32x32/Makefile
 		icons/tango/48x48/Makefile
 		icons/tango/scalable/Makefile
-		tagmanager/Makefile
-		tagmanager/ctags/Makefile
-		tagmanager/mio/Makefile
-		tagmanager/src/Makefile
+		ctags/Makefile
 		scintilla/Makefile
 		scintilla/include/Makefile
 		src/Makefile
+		src/tagmanager/Makefile
 		plugins/Makefile
 		po/Makefile.in
+		data/Makefile
 		doc/Makefile
 		doc/geany.1
 		geany.spec
 		geany.pc
+		geany.nsi
 		doc/Doxyfile
 		tests/Makefile
 		tests/ctags/Makefile

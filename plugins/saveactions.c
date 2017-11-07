@@ -27,6 +27,8 @@
 #include "geanyplugin.h"
 #include "gtkcompat.h"
 
+#include <stdio.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
 #include <glib/gstdio.h>
@@ -34,7 +36,6 @@
 
 GeanyPlugin		*geany_plugin;
 GeanyData		*geany_data;
-GeanyFunctions	*geany_functions;
 
 
 PLUGIN_VERSION_CHECK(GEANY_API_VERSION)
@@ -195,6 +196,7 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	gchar *dir_parts_src;
 	gchar *stamp;
 	gchar buf[512];
+	gint fd_dst = -1;
 
 	if (! enable_backupcopy)
 		return;
@@ -220,7 +222,14 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 	g_free(basename_src);
 	g_free(dir_parts_src);
 
+#ifdef G_OS_WIN32
 	if ((dst = g_fopen(locale_filename_dst, "wb")) == NULL)
+#else
+	/* Use g_open() on non-Windows to set file permissions to 600 atomically.
+	 * On Windows, seting file permissions would require specific Windows API. */
+	fd_dst = g_open(locale_filename_dst, O_CREAT | O_WRONLY, S_IWUSR | S_IRUSR);
+	if (fd_dst == -1 || (dst = fdopen(fd_dst, "w")) == NULL)
+#endif
 	{
 		ui_set_statusbar(FALSE, _("Backup Copy: File could not be saved (%s)."),
 			g_strerror(errno));
@@ -228,6 +237,8 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 		g_free(locale_filename_dst);
 		g_free(stamp);
 		fclose(src);
+		if (fd_dst != -1)
+			close(fd_dst);
 		return;
 	}
 
@@ -238,6 +249,8 @@ static void backupcopy_document_save_cb(GObject *obj, GeanyDocument *doc, gpoint
 
 	fclose(src);
 	fclose(dst);
+	if (fd_dst != -1)
+		close(fd_dst);
 	g_free(locale_filename_src);
 	g_free(locale_filename_dst);
 	g_free(stamp);

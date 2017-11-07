@@ -28,37 +28,43 @@
  * filename_xx=pos;filetype UID;read only;Eencoding;use_tabs;auto_indent;line_wrapping;filename
  */
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "keyfile.h"
+
+#include "app.h"
+#include "build.h"
+#include "document.h"
+#include "encodings.h"
+#include "encodingsprivate.h"
+#include "filetypes.h"
+#include "geanyobject.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "prefs.h"
+#include "printing.h"
+#include "project.h"
+#include "sciwrappers.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "vte.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-#include "geany.h"
 
 #ifdef HAVE_VTE
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
 #endif
-
-#include "support.h"
-#include "keyfile.h"
-#include "prefs.h"
-#include "ui_utils.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "sciwrappers.h"
-#include "encodings.h"
-#include "vte.h"
-#include "main.h"
-#include "msgwindow.h"
-#include "search.h"
-#include "project.h"
-#include "editor.h"
-#include "printing.h"
-#include "templates.h"
-#include "toolbar.h"
-#include "stash.h"
 
 
 /* some default settings which are used at the very first start of Geany to fill
@@ -70,16 +76,25 @@
 #define GEANY_DEFAULT_TOOLS_MAKE		"make"
 #ifdef G_OS_WIN32
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"cmd.exe /Q /C %c"
+#elif defined(__APPLE__)
+#define GEANY_DEFAULT_TOOLS_TERMINAL	"open -a terminal %c"
 #else
 #define GEANY_DEFAULT_TOOLS_TERMINAL	"xterm -e \"/bin/sh %c\""
 #endif
+#ifdef __APPLE__
+#define GEANY_DEFAULT_TOOLS_BROWSER		"open -a safari"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Helvetica Medium 12"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Menlo Medium 12"
+#define GEANY_DEFAULT_FONT_EDITOR		"Menlo Medium 12"
+#else
 #define GEANY_DEFAULT_TOOLS_BROWSER		"firefox"
+#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
+#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Monospace 9"
+#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
+#endif
 #define GEANY_DEFAULT_TOOLS_PRINTCMD	"lpr"
 #define GEANY_DEFAULT_TOOLS_GREP		"grep"
 #define GEANY_DEFAULT_MRU_LENGTH		10
-#define GEANY_DEFAULT_FONT_SYMBOL_LIST	"Sans 9"
-#define GEANY_DEFAULT_FONT_MSG_WINDOW	"Sans 9"
-#define GEANY_DEFAULT_FONT_EDITOR		"Monospace 10"
 #define GEANY_TOGGLE_MARK				"~ "
 #define GEANY_MAX_AUTOCOMPLETE_WORDS	30
 #define GEANY_MAX_SYMBOLS_UPDATE_FREQ	250
@@ -148,6 +163,11 @@ static void init_pref_groups(void)
 		"radio_sidebar_left", GTK_POS_LEFT,
 		"radio_sidebar_right", GTK_POS_RIGHT,
 		NULL);
+	stash_group_add_radio_buttons(group, &interface_prefs.symbols_sort_mode,
+		"symbols_sort_mode", SYMBOLS_SORT_BY_NAME,
+		"radio_symbols_sort_by_name", SYMBOLS_SORT_BY_NAME,
+		"radio_symbols_sort_by_appearance", SYMBOLS_SORT_BY_APPEARANCE,
+		NULL);
 	stash_group_add_radio_buttons(group, &interface_prefs.msgwin_orientation,
 		"msgwin_orientation", GTK_ORIENTATION_VERTICAL,
 		"radio_msgwin_vertical", GTK_ORIENTATION_VERTICAL,
@@ -195,6 +215,8 @@ static void init_pref_groups(void)
 		"autocompletion_update_freq", GEANY_MAX_SYMBOLS_UPDATE_FREQ, "spin_symbol_update_freq");
 	stash_group_add_string(group, &editor_prefs.color_scheme,
 		"color_scheme", NULL);
+	stash_group_add_spin_button_integer(group, &editor_prefs.scroll_lines_around_cursor,
+		"scroll_lines_around_cursor", 0, "spin_scroll_lines_around_cursor");
 
 	/* files */
 	stash_group_add_spin_button_integer(group, (gint*)&file_prefs.mru_length,
@@ -220,6 +242,12 @@ static void init_pref_groups(void)
 		"gio_unsafe_save_backup", FALSE);
 	stash_group_add_boolean(group, &file_prefs.use_gio_unsafe_file_saving,
 		"use_gio_unsafe_file_saving", TRUE);
+	stash_group_add_boolean(group, &file_prefs.keep_edit_history_on_reload,
+		"keep_edit_history_on_reload", TRUE);
+	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
+		"show_keep_edit_history_on_reload_msg", TRUE);
+	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
+		"reload_clean_doc_on_file_change", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -227,6 +255,10 @@ static void init_pref_groups(void)
 		"find_selection_type", GEANY_FIND_SEL_CURRENT_WORD);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
+	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
+		"replace_and_find_by_default", TRUE);
+	stash_group_add_integer(group, &editor_prefs.ime_interaction,
+		"editor_ime_interaction", SC_IME_WINDOWED);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
@@ -325,22 +357,38 @@ static gchar *get_session_file_string(GeanyDocument *doc)
 }
 
 
+static void remove_session_files(GKeyFile *config)
+{
+	gchar **ptr;
+	gchar **keys = g_key_file_get_keys(config, "files", NULL, NULL);
+
+	foreach_strv(ptr, keys)
+	{
+		if (g_str_has_prefix(*ptr, "FILE_NAME_"))
+			g_key_file_remove_key(config, "files", *ptr, NULL);
+	}
+	g_strfreev(keys);
+}
+
+
 void configuration_save_session_files(GKeyFile *config)
 {
 	gint npage;
-	gchar *tmp;
 	gchar entry[16];
 	guint i = 0, j = 0, max;
-	GeanyDocument *doc;
 
 	npage = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
 	g_key_file_set_integer(config, "files", "current_page", npage);
+
+	// clear existing entries first as they might not all be overwritten
+	remove_session_files(config);
 
 	/* store the filenames in the notebook tab order to reopen them the next time */
 	max = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	for (i = 0; i < max; i++)
 	{
-		doc = document_get_from_page(i);
+		GeanyDocument *doc = document_get_from_page(i);
+
 		if (doc != NULL && doc->real_path != NULL)
 		{
 			gchar *fname;
@@ -350,23 +398,6 @@ void configuration_save_session_files(GKeyFile *config)
 			g_key_file_set_string(config, "files", entry, fname);
 			g_free(fname);
 			j++;
-		}
-	}
-	/* if open filenames less than saved session files, delete existing entries in the list */
-	i = j;
-	while (TRUE)
-	{
-		g_snprintf(entry, sizeof(entry), "FILE_NAME_%d", i);
-		tmp = g_key_file_get_string(config, "files", entry, NULL);
-		if (G_UNLIKELY(tmp == NULL))
-		{
-			break;
-		}
-		else
-		{
-			g_key_file_remove_key(config, "files", entry, NULL);
-			g_free(tmp);
-			i++;
 		}
 	}
 
@@ -391,7 +422,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
-	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
@@ -497,13 +529,6 @@ static void save_dialog_prefs(GKeyFile *config)
 	{
 		gchar *tmp_string;
 
-		if (!g_key_file_has_key(config, "VTE", "emulation", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "emulation", vc->emulation);
-		if (!g_key_file_has_key(config, "VTE", "send_selection_unsafe", NULL))	/* hidden */
-			g_key_file_set_boolean(config, "VTE", "send_selection_unsafe",
-				vc->send_selection_unsafe);
-		if (!g_key_file_has_key(config, "VTE", "send_cmd_prefix", NULL))	/* hidden */
-			g_key_file_set_string(config, "VTE", "send_cmd_prefix", vc->send_cmd_prefix);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_key", vc->scroll_on_key);
 		g_key_file_set_boolean(config, "VTE", "scroll_on_out", vc->scroll_on_out);
@@ -515,7 +540,6 @@ static void save_dialog_prefs(GKeyFile *config)
 		g_key_file_set_boolean(config, "VTE", "cursor_blinks", vc->cursor_blinks);
 		g_key_file_set_integer(config, "VTE", "scrollback_lines", vc->scrollback_lines);
 		g_key_file_set_string(config, "VTE", "font", vc->font);
-		g_key_file_set_string(config, "VTE", "image", vc->image);
 		g_key_file_set_string(config, "VTE", "shell", vc->shell);
 		tmp_string = utils_get_hex_from_color(&vc->colour_fore);
 		g_key_file_set_string(config, "VTE", "colour_fore", tmp_string);
@@ -553,7 +577,7 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
-	if (prefs.save_winpos)
+	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
 
@@ -657,7 +681,11 @@ void configuration_load_session_files(GKeyFile *config, gboolean read_recent_fil
 
 	/* the project may load another list than the main setting */
 	if (session_files != NULL)
+	{
+		foreach_ptr_array(tmp_array, i, session_files)
+			g_strfreev(tmp_array);
 		g_ptr_array_free(session_files, TRUE);
+	}
 
 	session_files = g_ptr_array_new();
 	have_session_files = TRUE;
@@ -725,16 +753,14 @@ static void load_dialog_prefs(GKeyFile *config)
 			g_key_file_set_boolean(config, "search", "pref_search_hide_find_dialog", suppress_search_dialogs);
 	}
 
-	/* read stash prefs */
-	settings_action(config, SETTING_READ);
-
 	/* general */
 	prefs.confirm_exit = utils_get_setting_boolean(config, PACKAGE, "pref_main_confirm_exit", FALSE);
 	prefs.suppress_status_messages = utils_get_setting_boolean(config, PACKAGE, "pref_main_suppress_status_messages", FALSE);
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
-	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+        prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+        prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", TRUE);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
@@ -836,10 +862,18 @@ static void load_dialog_prefs(GKeyFile *config)
 	/* VTE */
 #ifdef HAVE_VTE
 	vte_info.load_vte = utils_get_setting_boolean(config, "VTE", "load_vte", TRUE);
-	if (vte_info.load_vte)
+	if (vte_info.load_vte && vte_info.load_vte_cmdline /* not disabled on the cmdline */)
 	{
+		StashGroup *group;
 		struct passwd *pw = getpwuid(getuid());
 		const gchar *shell = (pw != NULL) ? pw->pw_shell : "/bin/sh";
+
+#ifdef __APPLE__
+		/* Geany is started using launchd on OS X and we don't get any environment variables
+		 * so PS1 isn't defined. Start as a login shell to read the corresponding config files. */
+		if (strcmp(shell, "/bin/bash") == 0)
+			shell = "/bin/bash -l";
+#endif
 
 		vc = g_new0(VteConfig, 1);
 		vte_info.dir = utils_get_setting_string(config, "VTE", "last_dir", NULL);
@@ -850,24 +884,28 @@ static void load_dialog_prefs(GKeyFile *config)
 			/* fallback to root */
 			vte_info.dir = g_strdup("/");
 
-		vc->emulation = utils_get_setting_string(config, "VTE", "emulation", "xterm");
-		vc->send_selection_unsafe = utils_get_setting_boolean(config, "VTE",
-			"send_selection_unsafe", FALSE);
-		vc->image = utils_get_setting_string(config, "VTE", "image", "");
 		vc->shell = utils_get_setting_string(config, "VTE", "shell", shell);
-		vc->font = utils_get_setting_string(config, "VTE", "font", "Monospace 10");
+		vc->font = utils_get_setting_string(config, "VTE", "font", GEANY_DEFAULT_FONT_EDITOR);
 		vc->scroll_on_key = utils_get_setting_boolean(config, "VTE", "scroll_on_key", TRUE);
 		vc->scroll_on_out = utils_get_setting_boolean(config, "VTE", "scroll_on_out", TRUE);
 		vc->enable_bash_keys = utils_get_setting_boolean(config, "VTE", "enable_bash_keys", TRUE);
 		vc->ignore_menu_bar_accel = utils_get_setting_boolean(config, "VTE", "ignore_menu_bar_accel", FALSE);
 		vc->follow_path = utils_get_setting_boolean(config, "VTE", "follow_path", FALSE);
-		vc->send_cmd_prefix = utils_get_setting_string(config, "VTE", "send_cmd_prefix", "");
 		vc->run_in_vte = utils_get_setting_boolean(config, "VTE", "run_in_vte", FALSE);
 		vc->skip_run_script = utils_get_setting_boolean(config, "VTE", "skip_run_script", FALSE);
 		vc->cursor_blinks = utils_get_setting_boolean(config, "VTE", "cursor_blinks", FALSE);
 		vc->scrollback_lines = utils_get_setting_integer(config, "VTE", "scrollback_lines", 500);
 		get_setting_color(config, "VTE", "colour_fore", &vc->colour_fore, "#ffffff");
 		get_setting_color(config, "VTE", "colour_back", &vc->colour_back, "#000000");
+
+		/* various VTE prefs.
+		 * this can't be done in init_pref_groups() because we need to know the value of
+		 * vte_info.load_vte, and `vc` to be initialized */
+		group = stash_group_new("VTE");
+		configuration_add_various_pref_group(group);
+
+		stash_group_add_string(group, &vc->send_cmd_prefix, "send_cmd_prefix", "");
+		stash_group_add_boolean(group, &vc->send_selection_unsafe, "send_selection_unsafe", FALSE);
 	}
 #endif
 	/* templates */
@@ -913,27 +951,22 @@ static void load_dialog_prefs(GKeyFile *config)
 
 	tool_prefs.context_action_cmd = utils_get_setting_string(config, PACKAGE, "context_action_cmd", "");
 
-	/* build menu */
-	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
-	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
-	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
-	build_load_menu(config, GEANY_BCS_PREF, NULL);
-
 	/* printing */
 	tmp_string2 = g_find_program_in_path(GEANY_DEFAULT_TOOLS_PRINTCMD);
-#ifdef G_OS_WIN32
+
 	if (!EMPTY(tmp_string2))
 	{
-		/* single quote paths on Win32 for g_spawn_command_line_async */
-		tmp_string = g_strconcat("'", tmp_string2, "' '%f'", NULL);
+	#ifdef G_OS_WIN32
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " \"%f\"", NULL);
+	#else
+		tmp_string = g_strconcat(GEANY_DEFAULT_TOOLS_PRINTCMD, " '%f'", NULL);
+	#endif
 	}
 	else
 	{
 		tmp_string = g_strdup("");
 	}
-#else
-	tmp_string = g_strconcat(tmp_string2, " %f", NULL);
-#endif
+
 	printing_prefs.external_print_cmd = utils_get_setting_string(config, "printing", "print_cmd", tmp_string);
 	g_free(tmp_string);
 	g_free(tmp_string2);
@@ -944,6 +977,16 @@ static void load_dialog_prefs(GKeyFile *config)
 	printing_prefs.print_page_header = utils_get_setting_boolean(config, "printing", "print_page_header", TRUE);
 	printing_prefs.page_header_basename = utils_get_setting_boolean(config, "printing", "page_header_basename", FALSE);
 	printing_prefs.page_header_datefmt = utils_get_setting_string(config, "printing", "page_header_datefmt", "%c");
+
+	/* read stash prefs */
+	settings_action(config, SETTING_READ);
+
+	/* build menu
+	 * after stash prefs as it uses some of them */
+	build_set_group_count(GEANY_GBG_FT, build_menu_prefs.number_ft_menu_items);
+	build_set_group_count(GEANY_GBG_NON_FT, build_menu_prefs.number_non_ft_menu_items);
+	build_set_group_count(GEANY_GBG_EXEC, build_menu_prefs.number_exec_menu_items);
+	build_load_menu(config, GEANY_BCS_PREF, NULL);
 }
 
 
@@ -1032,6 +1075,27 @@ void configuration_save_default_session(void)
 
 	if (cl_options.load_session)
 		configuration_save_session_files(config);
+
+	/* write the file */
+	data = g_key_file_to_data(config, NULL, NULL);
+	utils_write_file(configfile, data);
+	g_free(data);
+
+	g_key_file_free(config);
+	g_free(configfile);
+}
+
+
+void configuration_clear_default_session(void)
+{
+	gchar *configfile = g_build_filename(app->configdir, "geany.conf", NULL);
+	gchar *data;
+	GKeyFile *config = g_key_file_new();
+
+	g_key_file_load_from_file(config, configfile, G_KEY_FILE_NONE, NULL);
+
+	if (cl_options.load_session)
+		remove_session_files(config);
 
 	/* write the file */
 	data = g_key_file_to_data(config, NULL, NULL);
@@ -1194,14 +1258,20 @@ void configuration_open_files(void)
 
 	if (failure)
 		ui_set_statusbar(TRUE, _("Failed to load one or more session files."));
-	else if (session_notebook_page >= 0)
+	else
 	{
-		/* explicitly allow notebook switch page callback to be called for window title,
-		 * encoding settings and so other things */
+		/* explicitly trigger a notebook page switch after unsetting main_status.opening_session_files
+		 * for callbacks to run (and update window title, encoding settings, and so on) */
+		gint n_pages = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
+		gint cur_page = gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.notebook));
+		gint target_page = session_notebook_page >= 0 ? session_notebook_page : cur_page;
+
+		/* if target page is current page, switch to another page first to really trigger an event */
+		if (target_page == cur_page && n_pages > 0)
+			gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), (cur_page + 1) % n_pages);
+
 		main_status.opening_session_files = FALSE;
-		/** TODO if session_notebook_page is equal to the current notebook tab(the last opened)
-		 ** the notebook switch page callback isn't triggered and e.g. menu items are not updated */
-		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), session_notebook_page);
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(main_widgets.notebook), target_page);
 	}
 	main_status.opening_session_files = FALSE;
 }

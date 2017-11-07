@@ -23,7 +23,25 @@
  * General utility functions, non-GTK related.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#include "utils.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "document.h"
+#include "prefs.h"
+#include "prefix.h"
+#include "sciwrappers.h"
+#include "spawn.h"
+#include "support.h"
+#include "tm_source_file.h" // for tm_get_real_path()
+#include "templates.h"
+#include "ui_utils.h"
+#include "win32.h"
+#include "osx.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -41,20 +59,7 @@
 #endif
 
 #include <glib/gstdio.h>
-
 #include <gio/gio.h>
-
-#include "prefs.h"
-#include "support.h"
-#include "document.h"
-#include "filetypes.h"
-#include "dialogs.h"
-#include "win32.h"
-#include "project.h"
-#include "ui_utils.h"
-#include "templates.h"
-
-#include "utils.h"
 
 
 /**
@@ -67,35 +72,28 @@
  *
  *  @since 0.16
  **/
+GEANY_API_SYMBOL
 void utils_open_browser(const gchar *uri)
 {
 #ifdef G_OS_WIN32
 	g_return_if_fail(uri != NULL);
 	win32_open_browser(uri);
 #else
-	gboolean again = TRUE;
+	gchar *argv[2] = { (gchar *) uri, NULL };
 
 	g_return_if_fail(uri != NULL);
 
-	while (again)
+	while (!spawn_async(NULL, tool_prefs.browser_cmd, argv, NULL, NULL, NULL))
 	{
-		gchar *cmdline = g_strconcat(tool_prefs.browser_cmd, " \"", uri, "\"", NULL);
+		gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
+			_("Failed to spawn the configured browser command. "
+			  "Please correct it or enter another one."),
+			tool_prefs.browser_cmd);
 
-		if (g_spawn_command_line_async(cmdline, NULL))
-			again = FALSE;
-		else
-		{
-			gchar *new_cmd = dialogs_show_input(_("Select Browser"), GTK_WINDOW(main_widgets.window),
-				_("Failed to spawn the configured browser command. "
-				  "Please correct it or enter another one."),
-				tool_prefs.browser_cmd);
+		if (new_cmd == NULL) /* user canceled */
+			break;
 
-			if (new_cmd == NULL) /* user canceled */
-				again = FALSE;
-			else
-				SETPTR(tool_prefs.browser_cmd, new_cmd);
-		}
-		g_free(cmdline);
+		SETPTR(tool_prefs.browser_cmd, new_cmd);
 	}
 #endif
 }
@@ -208,6 +206,7 @@ gboolean utils_is_opening_brace(gchar c, gboolean include_angles)
  * @return 0 if the file was successfully written, otherwise the @c errno of the
  *         failed operation is returned.
  **/
+GEANY_API_SYMBOL
 gint utils_write_file(const gchar *filename, const gchar *text)
 {
 	g_return_val_if_fail(filename != NULL, ENOENT);
@@ -265,8 +264,9 @@ gint utils_write_file(const gchar *filename, const gchar *text)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return The tag name (newly allocated) or @c NULL if no opening tag was found.
+ * @return @nullable The tag name (newly allocated) or @c NULL if no opening tag was found.
  */
+GEANY_API_SYMBOL
 gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 {
 	const gchar *cur, *begin;
@@ -289,8 +289,9 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size)
 /** Searches backward through @a size bytes looking for a '<'.
  * @param sel .
  * @param size .
- * @return pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
+ * @return @nullable pointer to '<' of the found opening tag within @a sel, or @c NULL if no opening tag was found.
  */
+GEANY_API_SYMBOL
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size)
 {
 	/* stolen from anjuta and modified */
@@ -372,9 +373,20 @@ const gchar *utils_get_eol_name(gint eol_mode)
 {
 	switch (eol_mode)
 	{
-		case SC_EOL_CRLF: return _("Win (CRLF)"); break;
-		case SC_EOL_CR: return _("Mac (CR)"); break;
+		case SC_EOL_CRLF: return _("Windows (CRLF)"); break;
+		case SC_EOL_CR: return _("Classic Mac (CR)"); break;
 		default: return _("Unix (LF)"); break;
+	}
+}
+
+
+const gchar *utils_get_eol_short_name(gint eol_mode)
+{
+	switch (eol_mode)
+	{
+		case SC_EOL_CRLF: return _("CRLF"); break;
+		case SC_EOL_CR: return _("CR"); break;
+		default: return _("LF"); break;
 	}
 }
 
@@ -440,10 +452,14 @@ const gchar *utils_path_skip_root(const gchar *path)
 }
 
 
+/* Convert a fractional @a val in the range [0, 1] to a whole value in the range [0, @a factor].
+ * In particular, this is used for converting a @c GdkColor to the "#RRGGBB" format in a way that
+ * agrees with GTK+, so the "#RRGGBB" in the color picker is the same "#RRGGBB" that is inserted
+ * into the document. See https://github.com/geany/geany/issues/1527
+ */
 gdouble utils_scale_round(gdouble val, gdouble factor)
 {
-	/*val = floor(val * factor + 0.5);*/
-	val = floor(val);
+	val = floor(val * factor + 0.5);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
 
@@ -479,14 +495,15 @@ static gchar *utf8_strdown(const gchar *str)
  *
  *  The input strings should be in UTF-8 or locale encoding.
  *
- *  @param s1 Pointer to first string or @c NULL.
- *  @param s2 Pointer to second string or @c NULL.
+ *  @param s1 @nullable Pointer to first string or @c NULL.
+ *  @param s2 @nullable Pointer to second string or @c NULL.
  *
  *  @return an integer less than, equal to, or greater than zero if @a s1 is found, respectively,
  *          to be less than, to match, or to be greater than @a s2.
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 gint utils_str_casecmp(const gchar *s1, const gchar *s2)
 {
 	gchar *tmp1, *tmp2;
@@ -529,6 +546,7 @@ gint utils_str_casecmp(const gchar *s1, const gchar *s2)
  *  @since 0.17
  */
 /* This following function is taken from Gedit. */
+GEANY_API_SYMBOL
 gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 {
 	GString *truncated;
@@ -545,7 +563,7 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
 
 	g_return_val_if_fail(g_utf8_validate(string, length, NULL), NULL);
 
-	/* It doesnt make sense to truncate strings to less than the size of the delimiter plus 2
+	/* It doesn't make sense to truncate strings to less than the size of the delimiter plus 2
 	 * characters (one on each side) */
 	delimiter_length = g_utf8_strlen(delimiter, -1);
 	if (truncate_length < (delimiter_length + 2))
@@ -573,22 +591,19 @@ gchar *utils_str_middle_truncate(const gchar *string, guint truncate_length)
  *  @c NULL-safe string comparison. Returns @c TRUE if both @a a and @a b are @c NULL
  *  or if @a a and @a b refer to valid strings which are equal.
  *
- *  @param a Pointer to first string or @c NULL.
- *  @param b Pointer to second string or @c NULL.
+ *  @param a @nullable Pointer to first string or @c NULL.
+ *  @param b @nullable Pointer to second string or @c NULL.
  *
  *  @return @c TRUE if @a a equals @a b, else @c FALSE.
  **/
+GEANY_API_SYMBOL
 gboolean utils_str_equal(const gchar *a, const gchar *b)
 {
 	/* (taken from libexo from os-cillation) */
 	if (a == NULL && b == NULL) return TRUE;
 	else if (a == NULL || b == NULL) return FALSE;
 
-	while (*a == *b++)
-		if (*a++ == '\0')
-			return TRUE;
-
-	return FALSE;
+	return strcmp(a, b) == 0;
 }
 
 
@@ -599,6 +614,7 @@ gboolean utils_str_equal(const gchar *a, const gchar *b)
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
  **/
+GEANY_API_SYMBOL
 gchar *utils_remove_ext_from_filename(const gchar *filename)
 {
 	gchar *last_dot;
@@ -711,12 +727,13 @@ gint utils_strpos(const gchar *haystack, const gchar *needle)
  *
  *  @param format The format string to pass to strftime(3). See the strftime(3)
  *                documentation for details, in UTF-8 encoding.
- *  @param time_to_use The date/time to use, in time_t format or NULL to use the current time.
+ *  @param time_to_use @nullable The date/time to use, in time_t format or @c NULL to use the current time.
  *
  *  @return A newly-allocated string, should be freed when no longer needed.
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 gchar *utils_get_date_time(const gchar *format, time_t *time_to_use)
 {
 	const struct tm *tm;
@@ -785,6 +802,7 @@ gchar *utils_get_initials(const gchar *name)
  *  @return The value associated with @a key as an integer, or the given default value if the value
  *          could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gchar *key,
 							   const gint default_value)
 {
@@ -815,6 +833,7 @@ gint utils_get_setting_integer(GKeyFile *config, const gchar *section, const gch
  *  @return The value associated with @a key as a boolean, or the given default value if the value
  *          could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const gchar *key,
 								   const gboolean default_value)
 {
@@ -845,6 +864,7 @@ gboolean utils_get_setting_boolean(GKeyFile *config, const gchar *section, const
  *  @return A newly allocated string, either the value for @a key or a copy of the given
  *          default value if it could not be retrieved.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_setting_string(GKeyFile *config, const gchar *section, const gchar *key,
 								const gchar *default_value)
 {
@@ -866,9 +886,9 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	g_return_val_if_fail(color != NULL, NULL);
 
 	return g_strdup_printf("#%02X%02X%02X",
-		(guint) (utils_scale_round(color->red / 256, 255)),
-		(guint) (utils_scale_round(color->green / 256, 255)),
-		(guint) (utils_scale_round(color->blue / 256, 255)));
+		(guint) (utils_scale_round(color->red / 65535.0, 255)),
+		(guint) (utils_scale_round(color->green / 65535.0, 255)),
+		(guint) (utils_scale_round(color->blue / 65535.0, 255)));
 }
 
 
@@ -1042,25 +1062,6 @@ GIOChannel *utils_set_up_io_channel(
 	g_io_channel_unref(ioc);
 
 	return ioc;
-}
-
-
-gchar **utils_read_file_in_array(const gchar *filename)
-{
-	gchar **result = NULL;
-	gchar *data;
-
-	g_return_val_if_fail(filename != NULL, NULL);
-
-	g_file_get_contents(filename, &data, NULL, NULL);
-
-	if (data != NULL)
-	{
-		result = g_strsplit_set(data, "\r\n", -1);
-		g_free(data);
-	}
-
-	return result;
 }
 
 
@@ -1238,6 +1239,7 @@ gboolean utils_wrap_string(gchar *string, gint wrapstart)
  *  @return The converted string in locale encoding, or a copy of the input string if conversion
  *    failed. Should be freed with g_free(). If @a utf8_text is @c NULL, @c NULL is returned.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
 {
 #ifdef G_OS_WIN32
@@ -1266,6 +1268,7 @@ gchar *utils_get_locale_from_utf8(const gchar *utf8_text)
  *  @return The converted string in UTF-8 encoding, or a copy of the input string if conversion
  *    failed. Should be freed with g_free(). If @a locale_text is @c NULL, @c NULL is returned.
  **/
+GEANY_API_SYMBOL
 gchar *utils_get_utf8_from_locale(const gchar *locale_text)
 {
 #ifdef G_OS_WIN32
@@ -1355,6 +1358,7 @@ gchar **utils_strv_new(const gchar *first, ...)
  *  @return 0 if the directory was successfully created, otherwise the @c errno of the
  *          failed operation is returned.
  **/
+GEANY_API_SYMBOL
 gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
 {
 	gint mode = 0700;
@@ -1387,10 +1391,11 @@ gint utils_mkdir(const gchar *path, gboolean create_parent_dirs)
  * @param sort Whether to sort alphabetically (UTF-8 safe).
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- * freed when no longer needed.
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL if
+ * no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list().
  **/
+GEANY_API_SYMBOL
 GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean sort, GError **error)
 {
 	GSList *list = NULL;
@@ -1431,10 +1436,11 @@ GSList *utils_get_file_list_full(const gchar *path, gboolean full_path, gboolean
  *               unless @c NULL.
  * @param error The location for storing a possible error, or @c NULL.
  *
- * @return A newly allocated list or @c NULL if no files were found. The list and its data should be
- *         freed when no longer needed.
+ * @return @elementtype{filename} @transfer{full} @nullable A newly allocated list or @c NULL
+ * if no files were found. The list and its data should be freed when no longer needed.
  * @see utils_get_file_list_full().
  **/
+GEANY_API_SYMBOL
 GSList *utils_get_file_list(const gchar *path, guint *length, GError **error)
 {
 	GSList *list = utils_get_file_list_full(path, FALSE, TRUE, error);
@@ -1522,6 +1528,7 @@ gint utils_string_replace(GString *str, gint pos, gint len, const gchar *replace
  *
  * @return Number of replacements made.
  **/
+GEANY_API_SYMBOL
 guint utils_string_replace_all(GString *haystack, const gchar *needle, const gchar *replace)
 {
 	guint count = 0;
@@ -1555,6 +1562,7 @@ guint utils_string_replace_all(GString *haystack, const gchar *needle, const gch
  *
  *  @since 0.16
  */
+GEANY_API_SYMBOL
 guint utils_string_replace_first(GString *haystack, const gchar *needle, const gchar *replace)
 {
 	gint pos = utils_string_find(haystack, 0, -1, needle);
@@ -1623,83 +1631,71 @@ const gchar *utils_get_default_dir_utf8(void)
 
 
 /**
- *  Wraps g_spawn_sync() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps @c spawn_sync(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
- *  @param std_out The return location for child output.
- *  @param std_err The return location for child error messages.
- *  @param exit_status The child exit status, as returned by waitpid().
- *  @param error The return location for error or @a NULL.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
+ *  @param flags Ignored.
+ *  @param child_setup @girskip Ignored.
+ *  @param user_data @girskip Ignored.
+ *  @param std_out @out @optional The return location for child output, or @c NULL.
+ *  @param std_err @out @optional The return location for child error messages, or @c NULL.
+ *  @param exit_status @out @optional The child exit status, as returned by waitpid(), or @c NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
+GEANY_API_SYMBOL
 gboolean utils_spawn_sync(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						  GSpawnChildSetupFunc child_setup, gpointer user_data, gchar **std_out,
 						  gchar **std_err, gint *exit_status, GError **error)
 {
-	gboolean result;
-
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
+	GString *output = std_out ? g_string_new(NULL) : NULL;
+	GString *errors = std_err ? g_string_new(NULL) : NULL;
+	gboolean result = spawn_sync(dir, NULL, argv, env, NULL, output, errors, exit_status, error);
 
 	if (std_out)
-		*std_out = NULL;
+		*std_out = g_string_free(output, !result);
 
 	if (std_err)
-		*std_err = NULL;
-
-#ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, std_out, std_err, exit_status, error);
-#else
-	result = g_spawn_sync(dir, argv, env, flags, NULL, NULL, std_out, std_err, exit_status, error);
-#endif
+		*std_err = g_string_free(errors, !result);
 
 	return result;
 }
 
 
 /**
- *  Wraps g_spawn_async() and internally calls this function on Unix-like
- *  systems. On Win32 platforms, it uses the Windows API.
+ *  Wraps @c spawn_async(), which see.
  *
- *  @param dir The child's current working directory, or @a NULL to inherit parent's.
+ *  @param dir @nullable The child's current working directory, or @c NULL to inherit parent's.
  *  @param argv The child's argument vector.
- *  @param env The child's environment, or @a NULL to inherit parent's.
- *  @param flags Flags from GSpawnFlags.
- *  @param child_setup A function to run in the child just before exec().
- *  @param user_data The user data for child_setup.
- *  @param child_pid The return location for child process ID, or NULL.
- *  @param error The return location for error or @a NULL.
+ *  @param env @nullable The child's environment, or @c NULL to inherit parent's.
+ *  @param flags Ignored.
+ *  @param child_setup @girskip Ignored.
+ *  @param user_data Ignored.
+ *  @param child_pid @out @nullable The return location for child process ID, or @c NULL.
+ *  @param error The return location for error or @c NULL.
  *
  *  @return @c TRUE on success, @c FALSE if an error was set.
  **/
+GEANY_API_SYMBOL
 gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
 						   GSpawnChildSetupFunc child_setup, gpointer user_data, GPid *child_pid,
 						   GError **error)
 {
-	gboolean result;
+	return spawn_async(dir, NULL, argv, env, child_pid, error);
+}
 
-	if (argv == NULL)
-	{
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "argv must not be NULL");
-		return FALSE;
-	}
 
+/* Returns "file:///" on Windows, "file://" everywhere else */
+const gchar *utils_get_uri_file_prefix(void)
+{
 #ifdef G_OS_WIN32
-	result = win32_spawn(dir, argv, env, flags, NULL, NULL, NULL, error);
+	return "file:///";
 #else
-	result = g_spawn_async(dir, argv, env, flags, NULL, NULL, child_pid, error);
+	return "file://";
 #endif
-	return result;
 }
 
 
@@ -1777,7 +1773,7 @@ gboolean utils_is_remote_path(const gchar *path)
 
 /* Remove all relative and untidy elements from the path of @a filename.
  * @param filename must be a valid absolute path.
- * @see tm_get_real_path() - also resolves links. */
+ * @see utils_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
 	GString *str;
@@ -1850,6 +1846,7 @@ void utils_tidy_path(gchar *filename)
  *
  *  @see @c g_strdelimit.
  **/
+GEANY_API_SYMBOL
 gchar *utils_str_remove_chars(gchar *string, const gchar *chars)
 {
 	const gchar *r;
@@ -1907,16 +1904,13 @@ GSList *utils_get_config_files(const gchar *subdir)
  * an anchor link, e.g. "#some_anchor". */
 gchar *utils_get_help_url(const gchar *suffix)
 {
-	gint skip;
 	gchar *uri;
+	const gchar *uri_file_prefix = utils_get_uri_file_prefix();
+	gint skip = strlen(uri_file_prefix);
 
+	uri = g_strconcat(uri_file_prefix, app->docdir, "/index.html", NULL);
 #ifdef G_OS_WIN32
-	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/Manual.html", NULL);
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
-#else
-	skip = 7;
-	uri = g_strconcat("file://", app->docdir, "/index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
@@ -1959,8 +1953,9 @@ static gboolean str_in_array(const gchar **haystack, const gchar *needle)
  * @param first_varname Name of the first variable to copy into the new array.
  * @param ... Key-value pairs of variable names and values, @c NULL-terminated.
  *
- * @return The new environment array.
+ * @return @transfer{full} The new environment array. Use @c g_strfreev() to free it.
  **/
+GEANY_API_SYMBOL
 gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_varname, ...)
 {
 	gchar **result;
@@ -1970,9 +1965,6 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	const gchar *key, *value;
 	guint n, o;
 
-	/* get all the environ variables */
-	env = g_listenv();
-
 	/* count the additional variables */
 	va_start(args, first_varname);
 	for (o = 1; va_arg(args, gchar*) != NULL; o++);
@@ -1981,6 +1973,9 @@ gchar **utils_copy_environment(const gchar **exclude_vars, const gchar *first_va
 	g_return_val_if_fail(o % 2 == 0, NULL);
 
 	o /= 2;
+
+	/* get all the environ variables */
+	env = g_listenv();
 
 	/* create an array large enough to hold the new environment */
 	n = g_strv_length(env);
@@ -2080,4 +2075,139 @@ gchar *utils_parse_and_format_build_date(const gchar *input)
 	}
 
 	return g_strdup(input);
+}
+
+
+gchar *utils_get_user_config_dir(void)
+{
+#ifdef G_OS_WIN32
+	return win32_get_user_config_dir();
+#else
+	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
+#endif
+}
+
+
+static gboolean is_osx_bundle(void)
+{
+#ifdef MAC_INTEGRATION
+	gchar *bundle_id = gtkosx_application_get_bundle_id();
+	if (bundle_id)
+	{
+		g_free(bundle_id);
+		return TRUE;
+	}
+#endif
+	return FALSE;
+}
+
+
+const gchar *utils_resource_dir(GeanyResourceDirType type)
+{
+	static const gchar *resdirs[RESOURCE_DIR_COUNT] = {NULL};
+
+	if (!resdirs[RESOURCE_DIR_DATA])
+	{
+#ifdef G_OS_WIN32
+		gchar *prefix = win32_get_installation_dir();
+
+		resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "data", NULL);
+		resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
+		resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
+		resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
+		resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+		resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
+		g_free(prefix);
+#else
+		if (is_osx_bundle())
+		{
+# ifdef MAC_INTEGRATION
+			gchar *prefix = gtkosx_application_get_resource_path();
+
+			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
+			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
+			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
+			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(prefix, "share", "locale", NULL);
+			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(prefix, "lib", "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(prefix, "libexec", "geany", NULL);
+			g_free(prefix);
+# endif
+		}
+		else
+		{
+			resdirs[RESOURCE_DIR_DATA] = g_build_filename(GEANY_DATADIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_ICON] = g_build_filename(GEANY_DATADIR, "icons", NULL);
+			resdirs[RESOURCE_DIR_DOC] = g_build_filename(GEANY_DOCDIR, "html", NULL);
+			resdirs[RESOURCE_DIR_LOCALE] = g_build_filename(GEANY_LOCALEDIR, NULL);
+			resdirs[RESOURCE_DIR_PLUGIN] = g_build_filename(GEANY_LIBDIR, "geany", NULL);
+			resdirs[RESOURCE_DIR_LIBEXEC] = g_build_filename(GEANY_LIBEXECDIR, "geany", NULL);
+		}
+#endif
+	}
+
+	return resdirs[type];
+}
+
+
+void utils_start_new_geany_instance(const gchar *doc_path)
+{
+	const gchar *command = is_osx_bundle() ? "open" : "geany";
+	gchar *exec_path = g_find_program_in_path(command);
+
+	if (exec_path)
+	{
+		GError *err = NULL;
+		const gchar *argv[6]; // max args + 1
+		gint argc = 0;
+
+		argv[argc++] = exec_path;
+		if (is_osx_bundle())
+		{
+			argv[argc++] = "-n";
+			argv[argc++] = "-a";
+			argv[argc++] = "Geany";
+			argv[argc++] = doc_path;
+		}
+		else
+		{
+			argv[argc++] = "-i";
+			argv[argc++] = doc_path;
+		}
+		argv[argc] = NULL;
+
+		if (!utils_spawn_async(NULL, (gchar**) argv, NULL, 0, NULL, NULL, NULL, &err))
+		{
+			g_printerr("Unable to open new window: %s", err->message);
+			g_error_free(err);
+		}
+		g_free(exec_path);
+	}
+	else
+		g_printerr("Unable to find 'geany'");
+}
+
+
+/**
+ * Get a link-dereferenced, absolute version of a file name.
+ *
+ * This is similar to the POSIX `realpath` function when passed a
+ * @c NULL argument.
+ *
+ * @warning This function suffers the same problems as the POSIX
+ * function `realpath()`, namely that it's impossible to determine
+ * a suitable size for the returned buffer, and so it's limited to a
+ * maximum of `PATH_MAX`.
+ *
+ * @param file_name The file name to get the real path of.
+ *
+ * @return A newly-allocated string containing the real path which
+ * should be freed with `g_free()` when no longer needed, or @c NULL
+ * if the real path cannot be obtained.
+ *
+ * @since 1.32 (API 235)
+ */
+GEANY_API_SYMBOL
+gchar *utils_get_real_path(const gchar *file_name)
+{
+	return tm_get_real_path(file_name);
 }

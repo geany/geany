@@ -20,7 +20,7 @@ class WordClassifier {
 
 public:
 
-	WordClassifier(int baseStyle_) : baseStyle(baseStyle_), firstStyle(0), lenStyles(0) {
+	explicit WordClassifier(int baseStyle_) : baseStyle(baseStyle_), firstStyle(0), lenStyles(0) {
 	}
 
 	void Allocate(int firstStyle_, int lenStyles_) {
@@ -166,7 +166,8 @@ public:
 	}
 
 	const WordClassifier &Classifier(int baseStyle) const {
-		return classifiers[BlockFromBaseStyle(baseStyle)];
+		const int block = BlockFromBaseStyle(baseStyle);
+		return classifiers[block >= 0 ? block : 0];
 	}
 };
 

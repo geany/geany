@@ -1,9 +1,0 @@
-# For complete documentation of this file, please see Geany's main documentation
-[styling]
-# no syntax highlighting yet
-
-[settings]
-# default extension used when saving files
-extension=abc
-
-

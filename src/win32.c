@@ -23,62 +23,113 @@
  * Special functions for the win32 platform, to provide native dialogs.
  */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+/* Need Windows XP for SHGetFolderPathAndSubDirW */
+#define _WIN32_WINNT 0x0501
+/* Needed for SHGFP_TYPE */
+#define _WIN32_IE 0x0500
+
+#include "win32.h"
 
 #ifdef G_OS_WIN32
 
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <commdlg.h>
-#include <shlobj.h>
-#include <io.h>
-#include <fcntl.h>
+#include "dialogs.h"
+#include "document.h"
+#include "editor.h"
+#include "filetypes.h"
+#include "project.h"
+#include "support.h"
+#include "ui_utils.h"
+#include "utils.h"
 
-#include <string.h>
 #include <ctype.h>
+#include <fcntl.h>
+#include <io.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
+
+#include <windows.h>
+#include <commdlg.h>
+#include <shellapi.h>
+#include <shlobj.h>
 
 #include <glib/gstdio.h>
 #include <gdk/gdkwin32.h>
 
-#include "win32.h"
 
-#include "document.h"
-#include "support.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "sciwrappers.h"
-#include "dialogs.h"
-#include "filetypes.h"
-#include "project.h"
-#include "editor.h"
+/* The timer handle used to refresh windows below modal native dialogs. If
+ * ever more than one dialog can be shown at a time, this needs to be changed
+ * to be for specific dialogs. */
+static UINT_PTR dialog_timer = 0;
 
-#define BUFSIZE 4096
-#define CMDSIZE 32768
 
-struct _geany_win32_spawn
+G_INLINE_FUNC void win32_dialog_reset_timer(HWND hwnd)
 {
-	HANDLE hChildStdinRd;
-	HANDLE hChildStdinWr;
-	HANDLE hChildStdoutRd;
-	HANDLE hChildStdoutWr;
-	HANDLE hChildStderrRd;
-	HANDLE hChildStderrWr;
-	HANDLE hInputFile;
-	HANDLE hStdout;
-	HANDLE hStderr;
-	HANDLE processId;
-	DWORD dwExitCode;
-};
-typedef struct _geany_win32_spawn geany_win32_spawn;
+	if (G_UNLIKELY(dialog_timer != 0))
+	{
+		KillTimer(hwnd, dialog_timer);
+		dialog_timer = 0;
+	}
+}
 
-static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **error);
-static HANDLE GetTempFileHandle(GError **error);
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
-		const TCHAR *dir, GError **error);
-static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error);
+
+VOID CALLBACK
+win32_dialog_update_main_window(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
+{
+	gint i;
+
+	/* Pump the main window loop a bit, but not enough to lock-up.
+	 * The typical `while(gtk_events_pending()) gtk_main_iteration();`
+	 * loop causes the entire operating system to lock-up. */
+	for (i = 0; i < 4 && gtk_events_pending(); i++)
+		gtk_main_iteration();
+
+	/* Cancel any pending timers since we just did an update */
+	win32_dialog_reset_timer(hwnd);
+}
+
+
+G_INLINE_FUNC UINT_PTR win32_dialog_queue_main_window_redraw(HWND dlg, UINT msg,
+	WPARAM wParam, LPARAM lParam, gboolean postpone)
+{
+	switch (msg)
+	{
+		/* Messages that likely mean the window below a dialog needs to be re-drawn. */
+		case WM_WINDOWPOSCHANGED:
+		case WM_MOVE:
+		case WM_SIZE:
+		case WM_THEMECHANGED:
+			if (postpone)
+			{
+				win32_dialog_reset_timer(dlg);
+				dialog_timer = SetTimer(dlg, 0, 33 /* around 30fps */, win32_dialog_update_main_window);
+			}
+			else
+				win32_dialog_update_main_window(dlg, msg, wParam, lParam);
+			break;
+	}
+	return 0; /* always let the default proc handle it */
+}
+
+
+/* This function is called for OPENFILENAME lpfnHook function and it establishes
+ * a timer that is reset each time which will update the main window loop eventually. */
+UINT_PTR CALLBACK win32_dialog_explorer_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return win32_dialog_queue_main_window_redraw(dlg, msg, wParam, lParam, TRUE);
+}
+
+
+/* This function is called for old-school win32 dialogs that accept a proper
+ * lpfnHook function for all messages, it doesn't use a timer. */
+UINT_PTR CALLBACK win32_dialog_hook_proc(HWND dlg, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	return win32_dialog_queue_main_window_redraw(dlg, msg, wParam, lParam, FALSE);
+}
 
 
 static wchar_t *get_file_filters(void)
@@ -204,6 +255,7 @@ static wchar_t *get_dir_for_path(const gchar *utf8_filename)
  * folder when the dialog is initialised. Yeah, I like Windows. */
 INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
+	win32_dialog_hook_proc(hwnd, uMsg, lp, pData);
 	switch (uMsg)
 	{
 		case BFFM_INITIALIZED:
@@ -232,7 +284,7 @@ INT CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gchar *initial_dir)
 {
 	BROWSEINFOW bi;
-	LPCITEMIDLIST pidl;
+	LPITEMIDLIST pidl;
 	gchar *result = NULL;
 	wchar_t fname[MAX_PATH];
 	wchar_t w_title[512];
@@ -248,19 +300,19 @@ gchar *win32_show_folder_dialog(GtkWidget *parent, const gchar *title, const gch
 	bi.lpszTitle = w_title;
 	bi.lpfn = BrowseCallbackProc;
 	bi.lParam = (LPARAM) get_dir_for_path(initial_dir);
-	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
+	bi.ulFlags = BIF_DONTGOBELOWDOMAIN | BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT | BIF_USENEWUI;
 
 	pidl = SHBrowseForFolderW(&bi);
 
 	/* convert the strange Windows folder list item something into an usual path string ;-) */
-	if (pidl != 0)
+	if (pidl != NULL)
 	{
 		if (SHGetPathFromIDListW(pidl, fname))
 		{
 			result = g_malloc0(MAX_PATH * 2);
 			WideCharToMultiByte(CP_UTF8, 0, fname, -1, result, MAX_PATH * 2, NULL, NULL);
 		}
-		/* SHBrowseForFolder() probably leaks memory here, but how to free the allocated memory? */
+		CoTaskMemFree(pidl);
 	}
 	return result;
 }
@@ -291,11 +343,7 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(parent));
 	of.lpstrFilter = get_filters(project_file_filter);
 
@@ -307,7 +355,9 @@ gchar *win32_show_project_open_dialog(GtkWidget *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY;
+	of.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_HIDEREADONLY |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	if (! allow_new_file)
 		of.Flags |= OFN_FILEMUSTEXIST;
 
@@ -353,11 +403,7 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 	of.lpstrFilter = get_file_filters();
 
@@ -369,7 +415,9 @@ gboolean win32_show_document_open_dialog(GtkWindow *parent, const gchar *title, 
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_ALLOWMULTISELECT | OFN_FILEMUSTEXIST | OFN_EXPLORER |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 
 	retval = GetOpenFileNameW(&of);
 
@@ -434,7 +482,8 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	n = MultiByteToWideChar(CP_UTF8, 0, DOC_FILENAME(doc), -1, w_file, G_N_ELEMENTS(w_file));
 
 	/* If creating a new file name, convert and append the extension if any */
-	if (! doc->file_name && doc->file_type && doc->file_type->extension && n + 1 < G_N_ELEMENTS(w_file))
+	if (! doc->file_name && doc->file_type && doc->file_type->extension &&
+		n + 1 < (int)G_N_ELEMENTS(w_file))
 	{
 		w_file[n - 1] = L'.';
 		MultiByteToWideChar(CP_UTF8, 0, doc->file_type->extension, -1, &w_file[n],
@@ -445,11 +494,7 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFilter = get_file_filter_all_files();
@@ -461,7 +506,8 @@ gchar *win32_show_document_save_as_dialog(GtkWindow *parent, const gchar *title,
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_OVERWRITEPROMPT | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetSaveFileNameW(&of);
 
 	if (! retval)
@@ -501,11 +547,7 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 
 	/* initialise file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(GTK_WIDGET(parent)));
 
 	of.lpstrFile = w_file;
@@ -513,7 +555,8 @@ gchar *win32_show_file_dialog(GtkWindow *parent, const gchar *title, const gchar
 	of.lpstrFileTitle = NULL;
 	of.lpstrTitle = w_title;
 	of.lpstrDefExt = L"";
-	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_FILEMUSTEXIST | OFN_EXPLORER | OFN_ENABLEHOOK | OFN_ENABLESIZING;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
 	if (! retval)
@@ -548,7 +591,8 @@ void win32_show_font_dialog(void)
 	cf.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cf.lpLogFont = &lf;
 	/* support CF_APPLY? */
-	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS;
+	cf.Flags = CF_NOSCRIPTSEL | CF_FORCEFONTEXIST | CF_INITTOLOGFONTSTRUCT | CF_SCREENFONTS | CF_ENABLEHOOK;
+	cf.lpfnHook = win32_dialog_hook_proc;
 
 	retval = ChooseFont(&cf);
 
@@ -575,16 +619,14 @@ void win32_show_color_dialog(const gchar *colour)
 	cc.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window));
 	cc.lpCustColors = (LPDWORD) acr_cust_clr;
 	cc.rgbResult = (colour != NULL) ? utils_parse_color_to_bgr(colour) : 0;
-	cc.Flags = CC_FULLOPEN | CC_RGBINIT;
+	cc.Flags = CC_FULLOPEN | CC_RGBINIT | CC_ENABLEHOOK;
+	cc.lpfnHook = win32_dialog_hook_proc;
 
 	if (ChooseColor(&cc))
 	{
 		rgb_current = cc.rgbResult;
 		g_snprintf(hex, 11, "#%02X%02X%02X",
-	      (guint) (utils_scale_round(GetRValue(rgb_current), 255)),
-	      (guint) (utils_scale_round(GetGValue(rgb_current), 255)),
-	      (guint) (utils_scale_round(GetBValue(rgb_current), 255)));
-
+			GetRValue(rgb_current), GetGValue(rgb_current), GetBValue(rgb_current));
 		editor_insert_color(doc->editor, hex);
 	}
 	g_free(hex);
@@ -615,11 +657,7 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 
 	/* initialize file dialog info struct */
 	memset(&of, 0, sizeof of);
-#ifdef OPENFILENAME_SIZE_VERSION_400
-	of.lStructSize = OPENFILENAME_SIZE_VERSION_400;
-#else
 	of.lStructSize = sizeof of;
-#endif
 	of.hwndOwner = GDK_WINDOW_HWND(gtk_widget_get_window(ui_widgets.prefs_dialog));
 
 	of.lpstrFilter = get_filters(FALSE);
@@ -633,7 +671,9 @@ void win32_show_pref_file_dialog(GtkEntry *item)
 	of.lpstrInitialDir = NULL;
 	of.lpstrTitle = NULL;
 	of.lpstrDefExt = L"exe";
-	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER;
+	of.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_EXPLORER |
+		OFN_ENABLEHOOK | OFN_ENABLESIZING;
+	of.lpfnHook = win32_dialog_explorer_hook_proc;
 	retval = GetOpenFileNameW(&of);
 
 	if (!retval)
@@ -742,6 +782,7 @@ gint win32_check_write_permission(const gchar *dir)
 /* Just a simple wrapper function to open a browser window */
 void win32_open_browser(const gchar *uri)
 {
+	gint ret;
 	if (strncmp(uri, "file://", 7) == 0)
 	{
 		uri += 7;
@@ -751,18 +792,14 @@ void win32_open_browser(const gchar *uri)
 				uri++;
 		}
 	}
-	ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
-}
-
-
-/* Returns TRUE if the command, which child_pid refers to, returned with a successful exit code,
- * otherwise FALSE. */
-gboolean win32_get_exit_status(GPid child_pid)
-{
-	DWORD exit_code;
-	GetExitCodeProcess(child_pid, &exit_code);
-
-	return (exit_code == 0);
+	ret = (gint) ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
+	if (ret <= 32)
+	{
+		gchar *err = g_win32_error_message(GetLastError());
+		ui_set_statusbar(TRUE, _("Failed to open URI \"%s\": %s"), uri, err);
+		g_warning("ShellExecute failed opening \"%s\" (code %d): %s", uri, ret, err);
+		g_free(err);
+	}
 }
 
 
@@ -780,11 +817,11 @@ static FILE *open_std_handle(DWORD handle, const char *mode)
 		g_free(err);
 		return NULL;
 	}
-	hConHandle = _open_osfhandle((long)lStdHandle, _O_TEXT);
+	hConHandle = _open_osfhandle((intptr_t)lStdHandle, _O_TEXT);
 	if (hConHandle == -1)
 	{
 		gchar *err = g_win32_error_message(GetLastError());
-		g_warning("_open_osfhandle(%ld, _O_TEXT) failed: %s", (long)lStdHandle, err);
+		g_warning("_open_osfhandle(handle(%ld), _O_TEXT) failed: %s", (long)handle, err);
 		g_free(err);
 		return NULL;
 	}
@@ -847,475 +884,23 @@ void win32_init_debug_code(void)
 		/* create a console window to get log messages on Windows,
 		 * especially useful when generating tags files */
 		debug_setup_console();
-		/* Enable GLib process spawn debug mode when Geany was started with the debug flag */
-		g_setenv("G_SPAWN_WIN32_DEBUG", "1", FALSE);
 	}
 }
 
 
-static gchar *create_temp_file(void)
-{
-	gchar *name;
-	gint fd;
-
-	fd = g_file_open_tmp("tmp_XXXXXX", &name, NULL);
-	if (fd == -1)
-		name = NULL;
-	else
-		close(fd);
-
-	return name;
-}
-
-
-/* Sometimes this blocks for 30s before aborting when there are several
- * pages of (error) output and sometimes hangs - see the FIXME.
- * Also gw_spawn.dwExitCode seems to be not set properly. */
-/* Process spawning implementation for Windows, by Pierre Joye.
- * Don't call this function directly, use utils_spawn_[a]sync() instead. */
-static
-gboolean _broken_win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
-{
-	TCHAR  buffer[CMDSIZE]=TEXT("");
-	TCHAR  cmdline[CMDSIZE] = TEXT("");
-	TCHAR* lpPart[CMDSIZE]={NULL};
-	DWORD  retval = 0;
-	gint argc = 0, i;
-	gint cmdpos = 0;
-
-	SECURITY_ATTRIBUTES saAttr;
-	BOOL fSuccess;
-	geany_win32_spawn gw_spawn;
-
-	/* Temp file */
-	HANDLE hStdoutTempFile = NULL;
-	HANDLE hStderrTempFile = NULL;
-
-	gchar *stdout_content = NULL;
-	gchar *stderr_content = NULL;
-
-	while (argv[argc])
-	{
-		++argc;
-	}
-	g_return_val_if_fail (std_out == NULL ||
-						!(flags & G_SPAWN_STDOUT_TO_DEV_NULL), FALSE);
-	g_return_val_if_fail (std_err == NULL ||
-						!(flags & G_SPAWN_STDERR_TO_DEV_NULL), FALSE);
-
-	if (flags & G_SPAWN_SEARCH_PATH)
-	{
-		retval = SearchPath(NULL, argv[0], ".exe", sizeof(buffer), buffer, lpPart);
-		if (retval > 0)
-			g_snprintf(cmdline, sizeof(cmdline), "\"%s\"", buffer);
-		else
-			g_strlcpy(cmdline, argv[0], sizeof(cmdline));
-		cmdpos = 1;
-	}
-
-	for (i = cmdpos; i < argc; i++)
-	{
-		g_snprintf(cmdline, sizeof(cmdline), "%s %s", cmdline, argv[i]);
-		/*MessageBox(NULL, cmdline, cmdline, MB_OK);*/
-	}
-
-	if (std_err != NULL)
-	{
-		hStderrTempFile = GetTempFileHandle(error);
-		if (hStderrTempFile == INVALID_HANDLE_VALUE)
-		{
-			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
-			g_free(msg);
-			return FALSE;
-		}
-	}
-
-	if (std_out != NULL)
-	{
-		hStdoutTempFile = GetTempFileHandle(error);
-		if (hStdoutTempFile == INVALID_HANDLE_VALUE)
-		{
-			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("win32_spawn: Second CreateFile failed (%d)", (gint) GetLastError());
-			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
-			g_free(msg);
-			return FALSE;
-		}
-	}
-
-	/* Set the bInheritHandle flag so pipe handles are inherited. */
-	saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
-	saAttr.bInheritHandle = TRUE;
-	saAttr.lpSecurityDescriptor = NULL;
-
-	/* Get the handle to the current STDOUT and STDERR. */
-	gw_spawn.hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
-	gw_spawn.hStderr = GetStdHandle(STD_ERROR_HANDLE);
-	gw_spawn.dwExitCode = 0;
-
-	/* Create a pipe for the child process's STDOUT. */
-	if (! CreatePipe(&(gw_spawn.hChildStdoutRd), &(gw_spawn.hChildStdoutWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stdout pipe creation failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
-	SetHandleInformation(gw_spawn.hChildStdoutRd, HANDLE_FLAG_INHERIT, 0);
-
-	/* Create a pipe for the child process's STDERR. */
-	if (! CreatePipe(&(gw_spawn.hChildStderrRd), &(gw_spawn.hChildStderrWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stderr pipe creation failed");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	/* Ensure that the read handle to the child process's pipe for STDOUT is not inherited.*/
-	SetHandleInformation(gw_spawn.hChildStderrRd, HANDLE_FLAG_INHERIT, 0);
-
-	/* Create a pipe for the child process's STDIN.  */
-	if (! CreatePipe(&(gw_spawn.hChildStdinRd), &(gw_spawn.hChildStdinWr), &saAttr, 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("win32_spawn: Stdin pipe creation failed");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	/* Ensure that the write handle to the child process's pipe for STDIN is not inherited. */
-	SetHandleInformation(gw_spawn.hChildStdinWr, HANDLE_FLAG_INHERIT, 0);
-
-	/* Now create the child process. */
-	fSuccess = CreateChildProcess(&gw_spawn, cmdline, dir, error);
-	if (exit_status)
-	{
-		*exit_status = gw_spawn.dwExitCode;
-	}
-
-	if (! fSuccess)
-	{
-		geany_debug("win32_spawn: Create process failed");
-		return FALSE;
-	}
-
-	/* Read from pipe that is the standard output for child process. */
-	if (std_out != NULL)
-	{
-		ReadFromPipe(gw_spawn.hChildStdoutRd, gw_spawn.hChildStdoutWr, hStdoutTempFile, error);
-		if (! GetContentFromHandle(hStdoutTempFile, &stdout_content, error))
-		{
-			return FALSE;
-		}
-		*std_out = stdout_content;
-	}
-
-	if (std_err != NULL)
-	{
-		ReadFromPipe(gw_spawn.hChildStderrRd, gw_spawn.hChildStderrWr, hStderrTempFile, error);
-		if (! GetContentFromHandle(hStderrTempFile, &stderr_content, error))
-		{
-			return FALSE;
-		}
-		*std_err = stderr_content;
-	}
-	return TRUE;
-}
-
-
-/* Note: g_spawn is broken for receiving both stdio and stderr e.g. when
- * running make and there are compile errors. See glib/giowin32.c header
- * comment about Windows bugs, e.g. #338943 */
-/* Simple replacement for _broken_win32_spawn().
- * flags is ignored, G_SPAWN_SEARCH_PATH is implied.
- * Don't call this function directly, use utils_spawn_[a]sync() instead.
- * Adapted from tm_workspace_create_global_tags(). */
-gboolean win32_spawn(const gchar *dir, gchar **argv, gchar **env, GSpawnFlags flags,
-					 gchar **std_out, gchar **std_err, gint *exit_status, GError **error)
-{
-	gint ret;
-	gboolean fail;
-	gchar *tmp_file = create_temp_file();
-	gchar *tmp_errfile = create_temp_file();
-	gchar *command;
-	gchar *locale_command;
-
-	if (env != NULL)
-	{
-		return _broken_win32_spawn(dir, argv, env, flags, std_out, std_err,
-			exit_status, error);
-	}
-	if (!tmp_file || !tmp_errfile)
-	{
-		g_warning("%s: Could not create temporary files!", G_STRFUNC);
-		return FALSE;
-	}
-	command = g_strjoinv(" ", argv);
-	SETPTR(command, g_strdup_printf("cmd.exe /S /C \"%s >%s 2>%s\"",
-		command, tmp_file, tmp_errfile));
-	locale_command = g_locale_from_utf8(command, -1, NULL, NULL, NULL);
-	if (! locale_command)
-		locale_command = g_strdup(command);
-	geany_debug("WIN32: actually running command:\n%s", command);
-	g_chdir(dir);
-	errno = 0;
-	ret = system(locale_command);
-	/* the command can return -1 as an exit code, so check errno also */
-	fail = ret == -1 && errno;
-	if (!fail)
-	{
-		if (std_out != NULL)
-			g_file_get_contents(tmp_file, std_out, NULL, NULL);
-		if (std_err != NULL)
-			g_file_get_contents(tmp_errfile, std_err, NULL, NULL);
-	}
-	else if (error)
-		g_set_error_literal(error, G_SPAWN_ERROR, errno, g_strerror(errno));
-
-	g_free(command);
-	g_free(locale_command);
-	g_unlink(tmp_file);
-	g_free(tmp_file);
-	g_unlink(tmp_errfile);
-	g_free(tmp_errfile);
-	if (exit_status)
-		*exit_status = ret;
-
-	return !fail;
-}
-
-
-static gboolean GetContentFromHandle(HANDLE hFile, gchar **content, GError **error)
-{
-	DWORD filesize;
-	gchar * buffer;
-	DWORD dwRead;
-
-	filesize = GetFileSize(hFile, NULL);
-	if (filesize < 1)
-	{
-		*content = NULL;
-		return TRUE;
-	}
-
-	buffer = g_malloc(filesize + 1);
-	if (! buffer)
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetContentFromHandle: Alloc failed");
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	SetFilePointer(hFile, 0, NULL, FILE_BEGIN);
-	if (! ReadFile(hFile, buffer, filesize, &dwRead, NULL) || dwRead == 0)
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetContentFromHandle: Cannot read tempfile");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_FAILED, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-
-	if (! CloseHandle(hFile))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetContentFromHandle: CloseHandle failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_FAILED, "%s", msg);
-		g_free(msg);
-		g_free(buffer);
-		*content = NULL;
-		return FALSE;
-	}
-	buffer[filesize] = '\0';
-	*content = buffer;
-	return TRUE;
-}
-
-
+/* expands environment placeholders in @str.  input and output is in UTF-8 */
 gchar *win32_expand_environment_variables(const gchar *str)
 {
-	gchar expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	wchar_t *cmdline = g_utf8_to_utf16(str, -1, NULL, NULL, NULL);
+	wchar_t expCmdline[32768]; /* 32768 is the limit for ExpandEnvironmentStrings() */
+	gchar *expanded = NULL;
 
-	if (ExpandEnvironmentStrings((LPCTSTR) str, (LPTSTR) expCmdline, sizeof(expCmdline)) != 0)
-		return g_strdup(expCmdline);
-	else
-		return g_strdup(str);
-}
+	if (cmdline && ExpandEnvironmentStringsW(cmdline, expCmdline, sizeof(expCmdline)) != 0)
+		expanded = g_utf16_to_utf8(expCmdline, -1, NULL, NULL, NULL);
 
+	g_free(cmdline);
 
-static gboolean CreateChildProcess(geany_win32_spawn *gw_spawn, TCHAR *szCmdline,
-		const TCHAR *dir, GError **error)
-{
-	PROCESS_INFORMATION piProcInfo;
-	STARTUPINFOW siStartInfo;
-	BOOL bFuncRetn = FALSE;
-	gchar *expandedCmdline;
-	wchar_t w_commandline[CMDSIZE];
-	wchar_t w_dir[MAX_PATH];
-
-	/* Set up members of the PROCESS_INFORMATION structure. */
-	ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
-
-	/* Set up members of the STARTUPINFO structure.*/
-	ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
-
-	siStartInfo.cb         = sizeof(STARTUPINFO);
-	siStartInfo.hStdError  = gw_spawn->hChildStderrWr;
-	siStartInfo.hStdOutput = gw_spawn->hChildStdoutWr;
-	siStartInfo.hStdInput  = gw_spawn->hChildStdinRd;
-	siStartInfo.dwFlags   |= STARTF_USESTDHANDLES;
-
-	/* Expand environment variables like %blah%. */
-	expandedCmdline = win32_expand_environment_variables(szCmdline);
-
-	MultiByteToWideChar(CP_UTF8, 0, expandedCmdline, -1, w_commandline, G_N_ELEMENTS(w_commandline));
-	MultiByteToWideChar(CP_UTF8, 0, dir, -1, w_dir, G_N_ELEMENTS(w_dir));
-
-	/* Create the child process. */
-	bFuncRetn = CreateProcessW(NULL,
-		w_commandline,             /* command line */
-		NULL,          /* process security attributes */
-		NULL,          /* primary thread security attributes */
-		TRUE,          /* handles are inherited */
-		CREATE_NO_WINDOW,             /* creation flags */
-		NULL,          /* use parent's environment */
-		w_dir,           /* use parent's current directory */
-		&siStartInfo,  /* STARTUPINFO pointer */
-		&piProcInfo);  /* receives PROCESS_INFORMATION */
-
-	g_free(expandedCmdline);
-
-	if (bFuncRetn == 0)
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("CreateChildProcess: CreateProcess failed (%s)", msg);
-		g_set_error(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, "%s", msg);
-		g_free(msg);
-		return FALSE;
-	}
-	else
-	{
-		gint i;
-		gsize ms = 30*1000;
-
-		/* FIXME: this seems to timeout when there are many lines
-		 * to read - maybe because the child's pipe is full */
-		for (i = 0; i < 2 &&
-			WaitForSingleObject(piProcInfo.hProcess, ms) == WAIT_TIMEOUT; i++)
-		{
-			ui_set_statusbar(FALSE, _("Process timed out after %.02f s!"), ms / 1000.0F);
-			geany_debug("CreateChildProcess: timed out");
-			TerminateProcess(piProcInfo.hProcess, WAIT_TIMEOUT); /* NOTE: This will not kill grandkids. */
-		}
-
-		if (!GetExitCodeProcess(piProcInfo.hProcess, &gw_spawn->dwExitCode))
-		{
-			gchar *msg = g_win32_error_message(GetLastError());
-			geany_debug("GetExitCodeProcess failed: %s", msg);
-			g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_FAILED, "%s", msg);
-			g_free(msg);
-		}
-		CloseHandle(piProcInfo.hProcess);
-		CloseHandle(piProcInfo.hThread);
-		return bFuncRetn;
-	}
-	return FALSE;
-}
-
-
-static VOID ReadFromPipe(HANDLE hRead, HANDLE hWrite, HANDLE hFile, GError **error)
-{
-	DWORD dwRead, dwWritten;
-	CHAR chBuf[BUFSIZE];
-
-	/* Close the write end of the pipe before reading from the
-	   read end of the pipe. */
-	if (! CloseHandle(hWrite))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("ReadFromPipe: Closing handle failed");
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR_PIPE, "%s", msg);
-		g_free(msg);
-		return;
-	}
-
-	/* Read output from the child process, and write to parent's STDOUT. */
-	for (;;)
-	{
-		if (! ReadFile(hRead, chBuf, BUFSIZE, &dwRead, NULL) || dwRead == 0)
-			break;
-
-		if (! WriteFile(hFile, chBuf, dwRead, &dwWritten, NULL))
-			break;
-	}
-}
-
-
-static HANDLE GetTempFileHandle(GError **error)
-{
-	/* Temp file */
-	DWORD dwBufSize = BUFSIZE;
-	UINT uRetVal;
-	TCHAR szTempName[BUFSIZE];
-	TCHAR lpPathBuffer[BUFSIZE];
-	DWORD dwRetVal;
-	HANDLE hTempFile;
-
-	/* Get the temp path. */
-	dwRetVal = GetTempPath(dwBufSize,     /* length of the buffer*/
-						   lpPathBuffer); /* buffer for path */
-
-	if (dwRetVal > dwBufSize || (dwRetVal == 0))
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetTempFileHandle: GetTempPath failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
-		g_free(msg);
-		return NULL;
-	}
-
-	/* Create a temporary file for STDOUT. */
-	uRetVal = GetTempFileName(lpPathBuffer, /* directory for tmp files */
-							  TEXT("GEANY_VCDIFF_"),  /* temp file name prefix */
-							  0,            /* create unique name */
-							  szTempName);  /* buffer for name */
-	if (uRetVal == 0)
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetTempFileName failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
-		g_free(msg);
-		return NULL;
-	}
-
-	hTempFile = CreateFile((LPTSTR) szTempName, /* file name */
-						   GENERIC_READ | GENERIC_WRITE, /* open r-w */
-						   0,                    /* do not share */
-						   NULL,                 /* default security */
-						   CREATE_ALWAYS,        /* overwrite existing */
-						   FILE_ATTRIBUTE_NORMAL,/* normal file */
-						   NULL);                /* no template */
-
-	if (hTempFile == INVALID_HANDLE_VALUE)
-	{
-		gchar *msg = g_win32_error_message(GetLastError());
-		geany_debug("GetTempFileHandle: Second CreateFile failed (%d)", (gint) GetLastError());
-		g_set_error(error, G_SPAWN_ERROR, G_FILE_ERROR, "%s", msg);
-		g_free(msg);
-		return NULL;
-	}
-	return hTempFile;
+	return expanded ? expanded : g_strdup(str);
 }
 
 
@@ -1392,8 +977,16 @@ gchar *win32_get_shortcut_target(const gchar *file_name)
 {
 	gchar *path = NULL;
 	wchar_t *wfilename = g_utf8_to_utf16(file_name, -1, NULL, NULL, NULL);
+	HWND hWnd = NULL;
 
-	resolve_link(GDK_WINDOW_HWND(gtk_widget_get_window(main_widgets.window)), wfilename, &path);
+	if (main_widgets.window != NULL)
+	{
+		GdkWindow *window = gtk_widget_get_window(main_widgets.window);
+		if (window != NULL)
+			hWnd = GDK_WINDOW_HWND(window);
+	}
+
+	resolve_link(hWnd, wfilename, &path);
 	g_free(wfilename);
 
 	if (path == NULL)
@@ -1414,5 +1007,31 @@ gchar *win32_get_installation_dir(void)
 	return g_win32_get_package_installation_directory_of_module(NULL);
 }
 
+
+gchar *win32_get_user_config_dir(void)
+{
+	HRESULT hr;
+	wchar_t path[MAX_PATH];
+
+	hr = SHGetFolderPathAndSubDirW(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, L"geany", path);
+	if (SUCCEEDED(hr))
+	{
+		// GLib always uses UTF-8 for filename encoding on Windows
+		int u8_size = WideCharToMultiByte(CP_UTF8, 0, path, -1, NULL, 0, NULL, NULL);
+		if (u8_size > 0)
+		{
+			gchar *u8_path = g_malloc0(u8_size + 1);
+			if (u8_path != NULL &&
+				WideCharToMultiByte(CP_UTF8, 0, path, -1, u8_path, u8_size, NULL, NULL))
+			{
+				return u8_path;
+			}
+		}
+	}
+
+	// glib fallback
+	g_warning("Failed to retrieve Windows config dir, falling back to default");
+	return g_build_filename(g_get_user_config_dir(), "geany", NULL);
+}
 
 #endif

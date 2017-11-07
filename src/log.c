@@ -23,17 +23,22 @@
  * Logging functions and the debug messages window.
  */
 
-#include "geany.h"
-
-#ifdef HAVE_LOCALE_H
-# include <locale.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
 #endif
 
 #include "log.h"
+
+#include "app.h"
 #include "support.h"
 #include "utils.h"
 #include "ui_utils.h"
 
+#include "gtkcompat.h"
+
+#ifdef HAVE_LOCALE_H
+# include <locale.h>
+#endif
 
 static GString *log_buffer = NULL;
 static GtkTextBuffer *dialog_textbuffer = NULL;
@@ -197,6 +202,7 @@ void log_show_debug_messages_dialog(void)
 	gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(textview), GTK_WRAP_WORD_CHAR);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(swin), GTK_SHADOW_IN);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(swin), textview);

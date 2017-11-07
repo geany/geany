@@ -21,7 +21,11 @@
 
 
 #ifndef GEANY_LOG_H
-#define GEANY_LOG_H
+#define GEANY_LOG_H 1
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 void log_handlers_init(void);
 
@@ -29,4 +33,6 @@ void log_finalize(void);
 
 void log_show_debug_messages_dialog(void);
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_LOG_H */

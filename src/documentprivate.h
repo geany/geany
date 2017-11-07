@@ -21,8 +21,11 @@
 
 
 #ifndef GEANY_DOCUMENT_PRIVATE_H
-#define GEANY_DOCUMENT_PRIVATE_H
+#define GEANY_DOCUMENT_PRIVATE_H 1
 
+#include "gtkcompat.h"
+
+G_BEGIN_DECLS
 
 /* available UNDO actions, UNDO_SCINTILLA is a pseudo action to trigger Scintilla's
  * undo management */
@@ -31,8 +34,17 @@ enum
 	UNDO_SCINTILLA = 0,
 	UNDO_ENCODING,
 	UNDO_BOM,
+	UNDO_RELOAD,
+	UNDO_EOL,
 	UNDO_ACTIONS_MAX
 };
+
+typedef struct UndoReloadData
+{
+	guint actions_count; /* How many following undo/redo actions need to be applied. */
+	gint eol_mode;       /* End-Of-Line mode before/after reloading. */
+}
+UndoReloadData;
 
 typedef enum
 {
@@ -50,6 +62,14 @@ typedef struct FileEncoding
 }
 FileEncoding;
 
+enum
+{
+	MSG_TYPE_RELOAD,
+	MSG_TYPE_RESAVE,
+	MSG_TYPE_POST_RELOAD,
+
+	NUM_MSG_TYPES
+};
 
 /* Private GeanyDocument fields */
 typedef struct GeanyDocumentPrivate
@@ -60,6 +80,8 @@ typedef struct GeanyDocumentPrivate
 	GtkWidget		*tag_tree;
 	/* GtkTreeStore object for this document within the Symbols treeview of the sidebar. */
 	GtkTreeStore	*tag_store;
+	/* Indicates whether tag tree has to be updated */
+	gboolean		tag_tree_dirty;
 	/* Iter for this document within the Open Files treeview of the sidebar. */
 	GtkTreeIter		 iter;
 	/* Used by the Undo/Redo management code. */
@@ -69,6 +91,7 @@ typedef struct GeanyDocumentPrivate
 	/* Used so Undo/Redo works for encoding changes. */
 	FileEncoding	 saved_encoding;
 	gboolean		 colourise_needed;	/* use document.c:queue_colourise() instead */
+	guint			 keyword_hash;	/* hash of keyword string used for typename colourisation */
 	gint			 line_count;		/* Number of lines in the document. */
 	gint			 symbol_list_sort_mode;
 	/* indicates whether a file is on a remote filesystem, works only with GIO/GVfs */
@@ -83,7 +106,16 @@ typedef struct GeanyDocumentPrivate
 	time_t			 mtime;
 	/* ID of the idle callback updating the tag list */
 	guint			 tag_list_update_source;
+	/* Whether it's temporarily protected (read-only and saving needs confirmation). Does
+	 * not imply doc->readonly as writable files can be protected */
+	gint			 protected;
+	/* Save pointer to info bars allowing to cancel them programatically (to avoid multiple ones) */
+	GtkWidget		*info_bars[NUM_MSG_TYPES];
+	/* Keyed Data List to attach arbitrary data to the document */
+	GData			*data;
 }
 GeanyDocumentPrivate;
 
-#endif
+G_END_DECLS
+
+#endif /* GEANY_DOCUMENT_PRIVATE_H */

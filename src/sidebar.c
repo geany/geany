@@ -23,25 +23,27 @@
  * Sidebar related code for the Symbol list and Open files GtkTreeViews.
  */
 
-#include <string.h>
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
-#include "geany.h"
-#include "support.h"
-#include "callbacks.h"
 #include "sidebar.h"
-#include "document.h"
-#include "editor.h"
+
+#include "app.h"
+#include "callbacks.h" /* FIXME: for ignore_callback */
 #include "documentprivate.h"
-#include "filetypes.h"
-#include "utils.h"
-#include "ui_utils.h"
-#include "symbols.h"
-#include "navqueue.h"
-#include "project.h"
-#include "stash.h"
+#include "filetypesprivate.h"
+#include "geanyobject.h"
 #include "keyfile.h"
-#include "sciwrappers.h"
-#include "search.h"
+#include "navqueue.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "keybindings.h"
+
+#include <string.h>
 
 #include <gdk/gdkkeysyms.h>
 
@@ -140,7 +142,7 @@ static void prepare_taglist(GtkWidget *tree, GtkTreeStore *store)
 	if (! interface_prefs.show_symbol_list_expanders)
 		gtk_tree_view_set_level_indentation(GTK_TREE_VIEW(tree), 10);
 	/* Tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tree), SYMBOLS_COLUMN_TOOLTIP);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
@@ -172,7 +174,8 @@ static void create_default_tag_tree(void)
 	tv.default_tag_tree = gtk_viewport_new(
 		gtk_scrolled_window_get_hadjustment(scrolled_window),
 		gtk_scrolled_window_get_vadjustment(scrolled_window));
-	label = gtk_label_new(_("No tags found"));
+	gtk_viewport_set_shadow_type(GTK_VIEWPORT(tv.default_tag_tree), GTK_SHADOW_NONE);
+	label = gtk_label_new(_("No symbols found"));
 	gtk_misc_set_alignment(GTK_MISC(label), 0.1f, 0.01f);
 	gtk_container_add(GTK_CONTAINER(tv.default_tag_tree), label);
 	gtk_widget_show_all(tv.default_tag_tree);
@@ -188,6 +191,12 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 	GtkWidget *child = gtk_bin_get_child(GTK_BIN(tag_window));
 
 	g_return_if_fail(doc == NULL || doc->is_valid);
+
+	if (update)
+		doc->priv->tag_tree_dirty = TRUE;
+
+	if (gtk_notebook_get_current_page(GTK_NOTEBOOK(main_widgets.sidebar_notebook)) != TREEVIEW_SYMBOL)
+		return; /* don't bother updating symbol tree if we don't see it */
 
 	/* changes the tree view to the given one, trying not to do useless changes */
 	#define CHANGE_TREE(new_child) \
@@ -213,7 +222,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		return;
 	}
 
-	if (update)
+	if (doc->priv->tag_tree_dirty)
 	{	/* updating the tag list in the left tag window */
 		if (doc->priv->tag_tree == NULL)
 		{
@@ -226,6 +235,7 @@ void sidebar_update_tag_list(GeanyDocument *doc, gboolean update)
 		}
 
 		doc->has_tags = symbols_recreate_tag_list(doc, SYMBOLS_SORT_USE_PREVIOUS);
+		doc->priv->tag_tree_dirty = FALSE;
 	}
 
 	if (doc->has_tags)
@@ -276,7 +286,7 @@ static void prepare_openfiles(void)
 
 	/* store the icon and the short filename to show, and the index as reference,
 	 * the colour (black/red/green) and the full name for the tooltip */
-	store_openfiles = gtk_tree_store_new(5, GDK_TYPE_PIXBUF, G_TYPE_STRING,
+	store_openfiles = gtk_tree_store_new(5, G_TYPE_ICON, G_TYPE_STRING,
 		G_TYPE_POINTER, GDK_TYPE_COLOR, G_TYPE_STRING);
 	gtk_tree_view_set_model(GTK_TREE_VIEW(tv.tree_openfiles), GTK_TREE_MODEL(store_openfiles));
 
@@ -287,11 +297,12 @@ static void prepare_openfiles(void)
 		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
 	icon_renderer = gtk_cell_renderer_pixbuf_new();
+	g_object_set(icon_renderer, "stock-size", GTK_ICON_SIZE_MENU, NULL);
 	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
 	column = gtk_tree_view_column_new();
 	gtk_tree_view_column_pack_start(column, icon_renderer, FALSE);
-	gtk_tree_view_column_set_attributes(column, icon_renderer, "pixbuf", DOCUMENTS_ICON, NULL);
+	gtk_tree_view_column_set_attributes(column, icon_renderer, "gicon", DOCUMENTS_ICON, NULL);
 	gtk_tree_view_column_pack_start(column, text_renderer, TRUE);
 	gtk_tree_view_column_set_attributes(column, text_renderer, "text", DOCUMENTS_SHORTNAME,
 		"foreground-gdk", DOCUMENTS_COLOR, NULL);
@@ -309,7 +320,7 @@ static void prepare_openfiles(void)
 	ui_widget_modify_font_from_string(tv.tree_openfiles, interface_prefs.tagbar_font);
 
 	/* tooltips */
-	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
+	ui_tree_view_set_tooltip_text_column(GTK_TREE_VIEW(tv.tree_openfiles), DOCUMENTS_FILENAME);
 
 	/* selection handling */
 	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(tv.tree_openfiles));
@@ -413,7 +424,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	gchar *dirname = NULL;
 	static GtkTreeIter parent;
 	GtkTreeModel *model = GTK_TREE_MODEL(store_openfiles);
-	static GdkPixbuf *dir_icon = NULL;
+	static GIcon *dir_icon = NULL;
 
 	if (!documents_show_paths)
 		return NULL;
@@ -436,7 +447,7 @@ static GtkTreeIter *get_doc_parent(GeanyDocument *doc)
 	}
 	/* no match, add dir parent */
 	if (!dir_icon)
-		dir_icon = ui_get_mime_icon("inode/directory", GTK_ICON_SIZE_MENU);
+		dir_icon = ui_get_mime_icon("inode/directory");
 
 	gtk_tree_store_append(store_openfiles, &parent, NULL);
 	gtk_tree_store_set(store_openfiles, &parent, DOCUMENTS_ICON, dir_icon,
@@ -457,7 +468,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 	GtkTreeIter *parent = get_doc_parent(doc);
 	gchar *basename;
 	const GdkColor *color = document_get_status_color(doc);
-	static GdkPixbuf *file_icon = NULL;
+	static GIcon *file_icon = NULL;
 
 	gtk_tree_store_append(store_openfiles, iter, parent);
 
@@ -472,7 +483,7 @@ void sidebar_openfiles_add(GeanyDocument *doc)
 		gtk_tree_path_free(path);
 	}
 	if (!file_icon)
-		file_icon = ui_get_mime_icon("text/plain", GTK_ICON_SIZE_MENU);
+		file_icon = ui_get_mime_icon("text/plain");
 
 	basename = g_path_get_basename(DOC_FILENAME(doc));
 	gtk_tree_store_set(store_openfiles, iter,
@@ -507,7 +518,7 @@ void sidebar_openfiles_update(GeanyDocument *doc)
 	{
 		/* just update color and the icon */
 		const GdkColor *color = document_get_status_color(doc);
-		GdkPixbuf *icon = doc->file_type->icon;
+		GIcon *icon = doc->file_type->icon;
 
 		gtk_tree_store_set(store_openfiles, iter, DOCUMENTS_COLOR, color, -1);
 		if (icon)
@@ -757,11 +768,10 @@ static void create_openfiles_popup_menu(void)
 static void unfold_parent(GtkTreeIter *iter)
 {
 	GtkTreeIter parent;
-	GtkTreePath *path;
 
 	if (gtk_tree_model_iter_parent(GTK_TREE_MODEL(store_openfiles), &parent, iter))
 	{
-		path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
+		GtkTreePath *path = gtk_tree_model_get_path(GTK_TREE_MODEL(store_openfiles), &parent);
 		gtk_tree_view_expand_row(GTK_TREE_VIEW(tv.tree_openfiles), path, TRUE);
 		gtk_tree_path_free(path);
 	}
@@ -817,7 +827,7 @@ static void document_action(GeanyDocument *doc, gint action)
 		}
 		case OPENFILES_ACTION_RELOAD:
 		{
-			on_toolbutton_reload_clicked(NULL, NULL);
+			document_reload_prompt(doc, NULL);
 			break;
 		}
 	}
@@ -902,7 +912,7 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 		if (! tag)
 			return FALSE;
 
-		line = tag->atts.entry.line;
+		line = tag->line;
 		if (line > 0)
 		{
 			GeanyDocument *doc = document_get_current();
@@ -910,7 +920,8 @@ static gboolean taglist_go_to_selection(GtkTreeSelection *selection, guint keyva
 			if (doc != NULL)
 			{
 				navqueue_goto_line(doc, doc, line);
-				if (keyval != GDK_space && ! (state & GDK_CONTROL_MASK))
+				state = keybindings_get_modifiers(state);
+				if (keyval != GDK_space && ! (state & GEANY_PRIMARY_MOD_MASK))
 					change_focus_to_editor(doc, NULL);
 				else
 					handled = FALSE;
@@ -996,6 +1007,11 @@ static gboolean sidebar_button_press_cb(GtkWidget *widget, GdkEventButton *event
 		else
 			handled = taglist_go_to_selection(selection, 0, event->state);
 	}
+	else if (event->button == 2)
+	{
+		if (widget == tv.tree_openfiles)
+			on_openfiles_document_action(NULL, GINT_TO_POINTER(OPENFILES_ACTION_REMOVE));
+	}
 	else if (event->button == 3)
 	{
 		if (widget == tv.tree_openfiles)
@@ -1071,6 +1087,14 @@ static void on_save_settings(void)
 }
 
 
+static void on_sidebar_switch_page(GtkNotebook *notebook,
+	gpointer page, guint page_num, gpointer user_data)
+{
+	if (page_num == TREEVIEW_SYMBOL)
+		sidebar_update_tag_list(document_get_current(), FALSE);
+}
+
+
 void sidebar_init(void)
 {
 	StashGroup *group;
@@ -1093,6 +1117,8 @@ void sidebar_init(void)
 	/* tabs may have changed when sidebar is reshown */
 	g_signal_connect(main_widgets.sidebar_notebook, "show",
 		G_CALLBACK(sidebar_tabs_show_hide), NULL);
+	g_signal_connect_after(main_widgets.sidebar_notebook, "switch-page",
+		G_CALLBACK(on_sidebar_switch_page), NULL);
 
 	sidebar_tabs_show_hide(GTK_NOTEBOOK(main_widgets.sidebar_notebook), NULL, 0, NULL);
 }

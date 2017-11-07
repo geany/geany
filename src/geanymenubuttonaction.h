@@ -21,7 +21,9 @@
 
 
 #ifndef GEANY_MENU_BUTTON_ACTION_H
-#define GEANY_MENU_BUTTON_ACTION_H
+#define GEANY_MENU_BUTTON_ACTION_H 1
+
+#include "gtkcompat.h"
 
 G_BEGIN_DECLS
 

@@ -21,44 +21,51 @@
 
 /* Code to manage, load and unload plugins. */
 
-#include "geany.h"
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #ifdef HAVE_PLUGINS
 
+#include "plugins.h"
+
+#include "app.h"
+#include "dialogs.h"
+#include "documentprivate.h"
+#include "encodings.h"
+#include "geanyobject.h"
+#include "geanywraplabel.h"
+#include "highlighting.h"
+#include "keybindingsprivate.h"
+#include "keyfile.h"
+#include "main.h"
+#include "msgwindow.h"
+#include "navqueue.h"
+#include "plugindata.h"
+#include "pluginprivate.h"
+#include "pluginutils.h"
+#include "prefs.h"
+#include "sciwrappers.h"
+#include "stash.h"
+#include "support.h"
+#include "symbols.h"
+#include "templates.h"
+#include "toolbar.h"
+#include "ui_utils.h"
+#include "utils.h"
+#include "win32.h"
+
+#include "gtkcompat.h"
+
 #include <string.h>
 
-#include "Scintilla.h"
-#include "ScintillaWidget.h"
 
-#include "prefix.h"
-#include "plugins.h"
-#include "plugindata.h"
-#include "support.h"
-#include "utils.h"
-#include "document.h"
-#include "filetypes.h"
-#include "templates.h"
-#include "sciwrappers.h"
-#include "ui_utils.h"
-#include "editor.h"
-#include "dialogs.h"
-#include "msgwindow.h"
-#include "prefs.h"
-#include "geanywraplabel.h"
-/* #include "build.h" included in plugindata.h so it can use enums */
-#include "encodings.h"
-#include "search.h"
-#include "highlighting.h"
-#include "keybindings.h"
-#include "navqueue.h"
-#include "main.h"
-#include "toolbar.h"
-#include "stash.h"
-#include "symbols.h"
-#include "keyfile.h"
-#include "win32.h"
-#include "pluginutils.h"
-#include "pluginprivate.h"
+typedef struct
+{
+	gchar *prefix;
+	GeanyDocument *document;
+}
+ForEachDocData;
 
 
 GList *active_plugin_list = NULL; /* list of only actually loaded plugins, always valid */
@@ -77,319 +84,33 @@ static GtkWidget *menu_separator = NULL;
 static gchar *get_plugin_path(void);
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data);
 
+typedef struct {
+	gchar		extension[8];
+	Plugin		*plugin; /* &builtin_so_proxy_plugin for native plugins */
+} PluginProxy;
 
-static PluginFuncs plugin_funcs = {
-	&plugin_add_toolbar_item,
-	&plugin_module_make_resident,
-	&plugin_signal_connect,
-	&plugin_set_key_group,
-	&plugin_show_configure,
-	&plugin_timeout_add,
-	&plugin_timeout_add_seconds,
-	&plugin_idle_add,
-	&plugin_builder_connect_signals
+
+static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, const gchar *filename, gpointer pdata);
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *plugin, gpointer load_data, gpointer pdata);
+
+static Plugin builtin_so_proxy_plugin = {
+	.proxy_cbs = {
+		.load = plugin_load_gmodule,
+		.unload = plugin_unload_gmodule,
+	},
+	/* rest of Plugin can be NULL/0 */
 };
 
-static DocumentFuncs doc_funcs = {
-	&document_new_file,
-	&document_get_current,
-	&document_get_from_page,
-	&document_find_by_filename,
-	&document_find_by_real_path,
-	&document_save_file,
-	&document_open_file,
-	&document_open_files,
-	&document_remove_page,
-	&document_reload_file,
-	&document_set_encoding,
-	&document_set_text_changed,
-	&document_set_filetype,
-	&document_close,
-	&document_index,
-	&document_save_file_as,
-	&document_rename_file,
-	&document_get_status_color,
-	&document_get_basename_for_display,
-	&document_get_notebook_page,
-	&document_compare_by_display_name,
-	&document_compare_by_tab_order,
-	&document_compare_by_tab_order_reverse
+static PluginProxy builtin_so_proxy = {
+	.extension = G_MODULE_SUFFIX,
+	.plugin = &builtin_so_proxy_plugin,
 };
 
-static EditorFuncs editor_funcs = {
-	&editor_get_indent_prefs,
-	&editor_create_widget,
-	&editor_indicator_set_on_range,
-	&editor_indicator_set_on_line,
-	&editor_indicator_clear,
-	&editor_set_indent_type,
-	&editor_get_word_at_pos,
-	&editor_get_eol_char_name,
-	&editor_get_eol_char_len,
-	&editor_get_eol_char,
-	&editor_insert_text_block,
-	&editor_get_eol_char_mode,
-	&editor_goto_pos,
-	&editor_find_snippet,
-	&editor_insert_snippet
-};
+static GQueue active_proxies = G_QUEUE_INIT;
 
-static ScintillaFuncs scintilla_funcs = {
-	&scintilla_send_message,
-	&scintilla_new
-};
-
-/* Macro to prevent a duplicate macro being generated in geanyfunctions.h */
-#define _scintilla_send_message_macro	scintilla_send_message
-
-static SciFuncs sci_funcs = {
-	&_scintilla_send_message_macro,
-	&sci_send_command,
-	&sci_start_undo_action,
-	&sci_end_undo_action,
-	&sci_set_text,
-	&sci_insert_text,
-	&sci_get_text,
-	&sci_get_length,
-	&sci_get_current_position,
-	&sci_set_current_position,
-	&sci_get_col_from_position,
-	&sci_get_line_from_position,
-	&sci_get_position_from_line,
-	&sci_replace_sel,
-	&sci_get_selected_text,
-	&sci_get_selected_text_length,
-	&sci_get_selection_start,
-	&sci_get_selection_end,
-	&sci_get_selection_mode,
-	&sci_set_selection_mode,
-	&sci_set_selection_start,
-	&sci_set_selection_end,
-	&sci_get_text_range,
-	&sci_get_line,
-	&sci_get_line_length,
-	&sci_get_line_count,
-	&sci_get_line_is_visible,
-	&sci_ensure_line_is_visible,
-	&sci_scroll_caret,
-	&sci_find_matching_brace,
-	&sci_get_style_at,
-	&sci_get_char_at,
-	&sci_get_current_line,
-	&sci_has_selection,
-	&sci_get_tab_width,
-	&sci_indicator_clear,
-	&sci_indicator_set,
-	&sci_get_contents,
-	&sci_get_contents_range,
-	&sci_get_selection_contents,
-	&sci_set_font,
-	&sci_get_line_end_position,
-	&sci_set_target_start,
-	&sci_set_target_end,
-	&sci_replace_target,
-	&sci_set_marker_at_line,
-	&sci_delete_marker_at_line,
-	&sci_is_marker_set_at_line,
-	&sci_goto_line,
-	&sci_find_text,
-	&sci_set_line_indentation,
-	&sci_get_line_indentation,
-	&sci_get_lexer
-};
-
-static TemplateFuncs template_funcs = {
-	&templates_get_template_fileheader
-};
-
-static UtilsFuncs utils_funcs = {
-	&utils_str_equal,
-	&utils_string_replace_all,
-	&utils_get_file_list,
-	&utils_write_file,
-	&utils_get_locale_from_utf8,
-	&utils_get_utf8_from_locale,
-	&utils_remove_ext_from_filename,
-	&utils_mkdir,
-	&utils_get_setting_boolean,
-	&utils_get_setting_integer,
-	&utils_get_setting_string,
-	&utils_spawn_sync,
-	&utils_spawn_async,
-	&utils_str_casecmp,
-	&utils_get_date_time,
-	&utils_open_browser,
-	&utils_string_replace_first,
-	&utils_str_middle_truncate,
-	&utils_str_remove_chars,
-	&utils_get_file_list_full,
-	&utils_copy_environment,
-	&utils_find_open_xml_tag,
-	&utils_find_open_xml_tag_pos
-};
-
-static UIUtilsFuncs uiutils_funcs = {
-	&ui_dialog_vbox_new,
-	&ui_frame_new_with_alignment,
-	&ui_set_statusbar,
-	&ui_table_add_row,
-	&ui_path_box_new,
-	&ui_button_new_with_image,
-	&ui_add_document_sensitive,
-	&ui_widget_set_tooltip_text,
-	&ui_image_menu_item_new,
-	&ui_lookup_widget,
-	&ui_progress_bar_start,
-	&ui_progress_bar_stop,
-	&ui_entry_add_clear_icon,
-	&ui_menu_add_document_items,
-	&ui_widget_modify_font_from_string,
-	&ui_is_keyval_enter_or_return,
-	&ui_get_gtk_settings_integer,
-	&ui_combo_box_add_to_history,
-	&ui_menu_add_document_items_sorted,
-	&ui_lookup_stock_label
-};
-
-static DialogFuncs dialog_funcs = {
-	&dialogs_show_question,
-	&dialogs_show_msgbox,
-	&dialogs_show_save_as,
-	&dialogs_show_input_numeric,
-	&dialogs_show_input
-};
-
-/* Macro to prevent confusing macro being generated in geanyfunctions.h */
-#define _lookup_widget_macro	ui_lookup_widget
-
-/* deprecated */
-static SupportFuncs support_funcs = {
-	&_lookup_widget_macro
-};
-
-static MsgWinFuncs msgwin_funcs = {
-	&msgwin_status_add,
-	&msgwin_compiler_add,
-	&msgwin_msg_add,
-	&msgwin_clear_tab,
-	&msgwin_switch_tab,
-	&msgwin_set_messages_dir
-};
-
-static EncodingFuncs encoding_funcs = {
-	&encodings_convert_to_utf8,
-	&encodings_convert_to_utf8_from_charset,
-	&encodings_get_charset_from_index
-};
-
-static KeybindingFuncs keybindings_funcs = {
-	&keybindings_send_command,
-	&keybindings_set_item,
-	&keybindings_get_item
-};
-
-static TagManagerFuncs tagmanager_funcs = {
-	&tm_get_real_path,
-	&tm_source_file_new,
-	&tm_workspace_add_object,
-	&tm_source_file_update,
-	&tm_work_object_free,
-	&tm_workspace_remove_object
-};
-
-static SearchFuncs search_funcs = {
-	&search_show_find_in_files_dialog
-};
-
-static HighlightingFuncs highlighting_funcs = {
-	&highlighting_get_style,
-	&highlighting_set_styles,
-	&highlighting_is_string_style,
-	&highlighting_is_comment_style,
-	&highlighting_is_code_style
-};
-
-static FiletypeFuncs filetype_funcs = {
-	&filetypes_detect_from_file,
-	&filetypes_lookup_by_name,
-	&filetypes_index,
-	&filetypes_get_display_name,
-	&filetypes_get_sorted_by_name
-};
-
-static NavQueueFuncs navqueue_funcs = {
-	&navqueue_goto_line
-};
-
-static MainFuncs main_funcs = {
-	&main_reload_configuration,
-	&main_locale_init,
-	&main_is_realized
-};
-
-static StashFuncs stash_funcs = {
-	&stash_group_new,
-	&stash_group_add_boolean,
-	&stash_group_add_integer,
-	&stash_group_add_string,
-	&stash_group_add_string_vector,
-	&stash_group_load_from_key_file,
-	&stash_group_save_to_key_file,
-	&stash_group_free,
-	&stash_group_load_from_file,
-	&stash_group_save_to_file,
-	&stash_group_add_toggle_button,
-	&stash_group_add_radio_buttons,
-	&stash_group_add_spin_button_integer,
-	&stash_group_add_combo_box,
-	&stash_group_add_combo_box_entry,
-	&stash_group_add_entry,
-	&stash_group_add_widget_property,
-	&stash_group_display,
-	&stash_group_update,
-	&stash_group_free_settings
-};
-
-static SymbolsFuncs symbols_funcs = {
-	&symbols_get_context_separator
-};
-
-static BuildFuncs build_funcs = {
-	&build_activate_menu_item,
-	&build_get_current_menu_item,
-	&build_remove_menu_item,
-	&build_set_menu_item,
-	&build_get_group_count
-};
-
-static GeanyFunctions geany_functions = {
-	&doc_funcs,
-	&sci_funcs,
-	&template_funcs,
-	&utils_funcs,
-	&uiutils_funcs,
-	&support_funcs,
-	&dialog_funcs,
-	&msgwin_funcs,
-	&encoding_funcs,
-	&keybindings_funcs,
-	&tagmanager_funcs,
-	&search_funcs,
-	&highlighting_funcs,
-	&filetype_funcs,
-	&navqueue_funcs,
-	&editor_funcs,
-	&main_funcs,
-	&plugin_funcs,
-	&scintilla_funcs,
-	&msgwin_funcs,
-	&stash_funcs,
-	&symbols_funcs,
-	&build_funcs
-};
+static void plugin_free(Plugin *plugin);
 
 static GeanyData geany_data;
-
 
 static void
 geany_data_init(void)
@@ -407,27 +128,51 @@ geany_data_init(void)
 		&search_prefs,
 		&tool_prefs,
 		&template_prefs,
-		&build_info,
-		filetypes_by_title
+		NULL, /* Remove field on next ABI break (abi-todo) */
+		filetypes_by_title,
+		geany_object,
 	};
 
 	geany_data = gd;
 }
 
 
+/* In order to have nested proxies work the count of dependent plugins must propagate up.
+ * This prevents that any plugin in the tree is unloaded while a leaf plugin is active. */
+static void proxied_count_inc(Plugin *proxy)
+{
+	do
+	{
+		proxy->proxied_count += 1;
+		proxy = proxy->proxy;
+	} while (proxy != NULL);
+}
+
+
+static void proxied_count_dec(Plugin *proxy)
+{
+	g_warn_if_fail(proxy->proxied_count > 0);
+
+	do
+	{
+		proxy->proxied_count -= 1;
+		proxy = proxy->proxy;
+	} while (proxy != NULL);
+}
+
+
 /* Prevent the same plugin filename being loaded more than once.
  * Note: g_module_name always returns the .so name, even when Plugin::filename is a .la file. */
 static gboolean
-plugin_loaded(GModule *module)
+plugin_loaded(Plugin *plugin)
 {
 	gchar *basename_module, *basename_loaded;
 	GList *item;
 
-	basename_module = g_path_get_basename(g_module_name(module));
+	basename_module = g_path_get_basename(plugin->filename);
 	for (item = plugin_list; item != NULL; item = g_list_next(item))
 	{
-		basename_loaded = g_path_get_basename(
-			g_module_name(((Plugin*)item->data)->module));
+		basename_loaded = g_path_get_basename(((Plugin*)item->data)->filename);
 
 		if (utils_str_equal(basename_module, basename_loaded))
 		{
@@ -444,7 +189,7 @@ plugin_loaded(GModule *module)
 	 * would cause a crash. */
 	for (item = active_plugin_list; item != NULL; item = g_list_next(item))
 	{
-		basename_loaded = g_path_get_basename(g_module_name(((Plugin*)item->data)->module));
+		basename_loaded = g_path_get_basename(((Plugin*)item->data)->filename);
 
 		if (utils_str_equal(basename_module, basename_loaded))
 		{
@@ -475,39 +220,33 @@ static Plugin *find_active_plugin_by_name(const gchar *filename)
 }
 
 
+/* Mimics plugin_version_check() of legacy plugins for use with plugin_check_version() below */
+#define PLUGIN_VERSION_CODE(api, abi) ((abi) != GEANY_ABI_VERSION ? -1 : (api))
+
 static gboolean
-plugin_check_version(GModule *module)
+plugin_check_version(Plugin *plugin, int plugin_version_code)
 {
-	gint (*version_check)(gint) = NULL;
-
-	g_module_symbol(module, "plugin_version_check", (void *) &version_check);
-
-	if (G_UNLIKELY(! version_check))
+	gboolean ret = TRUE;
+	if (plugin_version_code < 0)
 	{
-		geany_debug("Plugin \"%s\" has no plugin_version_check() function - ignoring plugin!",
-				g_module_name(module));
-		return FALSE;
+		gchar *name = g_path_get_basename(plugin->filename);
+		msgwin_status_add(_("The plugin \"%s\" is not binary compatible with this "
+			"release of Geany - please recompile it."), name);
+		geany_debug("Plugin \"%s\" is not binary compatible with this "
+			"release of Geany - recompile it.", name);
+		ret = FALSE;
+		g_free(name);
 	}
-	else
+	else if (plugin_version_code > GEANY_API_VERSION)
 	{
-		gint result = version_check(GEANY_ABI_VERSION);
-
-		if (result < 0)
-		{
-			msgwin_status_add(_("The plugin \"%s\" is not binary compatible with this "
-				"release of Geany - please recompile it."), g_module_name(module));
-			geany_debug("Plugin \"%s\" is not binary compatible with this "
-				"release of Geany - recompile it.", g_module_name(module));
-			return FALSE;
-		}
-		if (result > GEANY_API_VERSION)
-		{
-			geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
-				g_module_name(module), result);
-			return FALSE;
-		}
+		gchar *name = g_path_get_basename(plugin->filename);
+		geany_debug("Plugin \"%s\" requires a newer version of Geany (API >= v%d).",
+			name, plugin_version_code);
+		ret = FALSE;
+		g_free(name);
 	}
-	return TRUE;
+
+	return ret;
 }
 
 
@@ -530,8 +269,9 @@ static void add_callbacks(Plugin *plugin, PluginCallback *callbacks)
 	{
 		cb = &callbacks[i];
 
+		/* Pass the callback data as default user_data if none was set by the plugin itself */
 		plugin_signal_connect(&plugin->public, NULL, cb->signal_name, cb->after,
-			cb->callback, cb->user_data);
+			cb->callback, cb->user_data ? cb->user_data : plugin->cb_data);
 	}
 }
 
@@ -540,9 +280,10 @@ static void read_key_group(Plugin *plugin)
 {
 	GeanyKeyGroupInfo *p_key_info;
 	GeanyKeyGroup **p_key_group;
+	GModule *module = plugin->proxy_data;
 
-	g_module_symbol(plugin->module, "plugin_key_group_info", (void *) &p_key_info);
-	g_module_symbol(plugin->module, "plugin_key_group", (void *) &p_key_group);
+	g_module_symbol(module, "plugin_key_group_info", (void *) &p_key_info);
+	g_module_symbol(module, "plugin_key_group", (void *) &p_key_group);
 	if (p_key_info && p_key_group)
 	{
 		GeanyKeyGroupInfo *key_info = p_key_info;
@@ -582,85 +323,351 @@ static gint cmp_plugin_names(gconstpointer a, gconstpointer b)
 }
 
 
-static void
-plugin_init(Plugin *plugin)
+/** Register a plugin to Geany.
+ *
+ * The plugin will show up in the plugin manager. The user can interact with
+ * it based on the functions it provides and installed GUI elements.
+ *
+ * You must initialize the info and funcs fields of @ref GeanyPlugin
+ * appropriately prior to calling this, otherwise registration will fail. For
+ * info at least a valid name must be set (possibly localized). For funcs,
+ * at least init() and cleanup() functions must be implemented and set.
+ *
+ * The return value must be checked. It may be FALSE if the plugin failed to register which can
+ * mainly happen for two reasons (future Geany versions may add new failure conditions):
+ *  - Not all mandatory fields of GeanyPlugin have been set.
+ *  - The ABI or API versions reported by the plugin are incompatible with the running Geany.
+ *
+ * Do not call this directly. Use GEANY_PLUGIN_REGISTER() instead which automatically
+ * handles @a api_version and @a abi_version.
+ *
+ * @param plugin The plugin provided by Geany
+ * @param api_version The API version the plugin is compiled against (pass GEANY_API_VERSION)
+ * @param min_api_version The minimum API version required by the plugin
+ * @param abi_version The exact ABI version the plugin is compiled against (pass GEANY_ABI_VERSION)
+ *
+ * @return TRUE if the plugin was successfully registered. Otherwise FALSE.
+ *
+ * @since 1.26 (API 225)
+ * @see GEANY_PLUGIN_REGISTER()
+ **/
+GEANY_API_SYMBOL
+gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version, gint min_api_version,
+                               gint abi_version)
 {
-	GeanyPlugin **p_geany_plugin;
-	PluginCallback *callbacks;
-	PluginInfo **p_info;
-	PluginFields **plugin_fields;
+	Plugin *p;
+	GeanyPluginFuncs *cbs = plugin->funcs;
 
-	/* set these symbols before plugin_init() is called
-	 * we don't set geany_functions and geany_data since they are set directly by plugin_new() */
-	g_module_symbol(plugin->module, "geany_plugin", (void *) &p_geany_plugin);
-	if (p_geany_plugin)
-		*p_geany_plugin = &plugin->public;
-	g_module_symbol(plugin->module, "plugin_info", (void *) &p_info);
-	if (p_info)
-		*p_info = &plugin->info;
-	g_module_symbol(plugin->module, "plugin_fields", (void *) &plugin_fields);
-	if (plugin_fields)
-		*plugin_fields = &plugin->fields;
-	read_key_group(plugin);
+	g_return_val_if_fail(plugin != NULL, FALSE);
 
-	/* start the plugin */
-	g_return_if_fail(plugin->init);
-	plugin->init(&geany_data);
+	p = plugin->priv;
+	/* already registered successfully */
+	g_return_val_if_fail(!PLUGIN_LOADED_OK(p), FALSE);
 
-	/* store some function pointers for later use */
-	g_module_symbol(plugin->module, "plugin_configure", (void *) &plugin->configure);
-	g_module_symbol(plugin->module, "plugin_configure_single", (void *) &plugin->configure_single);
-	if (app->debug_mode && plugin->configure && plugin->configure_single)
-		g_warning("Plugin '%s' implements plugin_configure_single() unnecessarily - "
-			"only plugin_configure() will be used!",
-			plugin->info.name);
+	/* Prevent registering incompatible plugins. */
+	if (! plugin_check_version(p, PLUGIN_VERSION_CODE(api_version, abi_version)))
+		return FALSE;
 
-	g_module_symbol(plugin->module, "plugin_help", (void *) &plugin->help);
-	g_module_symbol(plugin->module, "plugin_cleanup", (void *) &plugin->cleanup);
-	if (plugin->cleanup == NULL)
+	/* Only init and cleanup callbacks are truly mandatory. */
+	if (! cbs->init || ! cbs->cleanup)
 	{
-		if (app->debug_mode)
+		gchar *name = g_path_get_basename(p->filename);
+		geany_debug("Plugin '%s' has no %s function - ignoring plugin!", name,
+		            cbs->init ? "cleanup" : "init");
+		g_free(name);
+	}
+	else
+	{
+		/* Yes, name is checked again later on, however we want return FALSE here
+		 * to signal the error back to the plugin (but we don't print the message twice) */
+		if (! EMPTY(p->info.name))
+			p->flags = LOADED_OK;
+	}
+
+	/* If it ever becomes necessary we can save the api version in Plugin
+	 * and apply compat code on a per-plugin basis, because we learn about
+	 * the requested API version here. For now it's not necessary. */
+
+	return PLUGIN_LOADED_OK(p);
+}
+
+
+/** Register a plugin to Geany, with plugin-defined data.
+ *
+ * This is a variant of geany_plugin_register() that also allows to set the plugin-defined data.
+ * Refer to that function for more details on registering in general.
+ *
+ * @p pdata is the pointer going to be passed to the individual plugin callbacks
+ * of GeanyPlugin::funcs. When the plugin module is unloaded, @p free_func is invoked on
+ * @p pdata, which connects the data to the plugin's module life time.
+ *
+ * You cannot use geany_plugin_set_data() after registering with this function. Use
+ * geany_plugin_register() if you need to.
+ *
+ * Do not call this directly. Use GEANY_PLUGIN_REGISTER_FULL() instead which automatically
+ * handles @p api_version and @p abi_version.
+ *
+ * @param plugin The plugin provided by Geany.
+ * @param api_version The API version the plugin is compiled against (pass GEANY_API_VERSION).
+ * @param min_api_version The minimum API version required by the plugin.
+ * @param abi_version The exact ABI version the plugin is compiled against (pass GEANY_ABI_VERSION).
+ * @param pdata Pointer to the plugin-defined data. Must not be @c NULL.
+ * @param free_func Function used to deallocate @a pdata, may be @c NULL.
+ *
+ * @return TRUE if the plugin was successfully registered. Otherwise FALSE.
+ *
+ * @since 1.26 (API 225)
+ * @see GEANY_PLUGIN_REGISTER_FULL()
+ * @see geany_plugin_register()
+ **/
+GEANY_API_SYMBOL
+gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version, gint min_api_version,
+									gint abi_version, gpointer pdata, GDestroyNotify free_func)
+{
+	if (geany_plugin_register(plugin, api_version, min_api_version, abi_version))
+	{
+		geany_plugin_set_data(plugin, pdata, free_func);
+		/* We use LOAD_DATA to indicate that pdata cb_data was set during loading/registration
+		 * as opposed to during GeanyPluginFuncs::init(). In the latter case we call free_func
+		 * after GeanyPluginFuncs::cleanup() */
+		plugin->priv->flags |= LOAD_DATA;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+struct LegacyRealFuncs
+{
+	void       (*init) (GeanyData *data);
+	GtkWidget* (*configure) (GtkDialog *dialog);
+	void       (*help) (void);
+	void       (*cleanup) (void);
+};
+
+/* Wrappers to support legacy plugins are below */
+static gboolean legacy_init(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	h->init(plugin->geany_data);
+	return TRUE;
+}
+
+static void legacy_cleanup(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	/* Can be NULL because it's optional for legacy plugins */
+	if (h->cleanup)
+		h->cleanup();
+}
+
+static void legacy_help(GeanyPlugin *plugin, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	h->help();
+}
+
+static GtkWidget *legacy_configure(GeanyPlugin *plugin, GtkDialog *parent, gpointer pdata)
+{
+	struct LegacyRealFuncs *h = pdata;
+	return h->configure(parent);
+}
+
+static void free_legacy_cbs(gpointer data)
+{
+	g_slice_free(struct LegacyRealFuncs, data);
+}
+
+/* This function is the equivalent of geany_plugin_register() for legacy-style
+ * plugins which we continue to load for the time being. */
+static void register_legacy_plugin(Plugin *plugin, GModule *module)
+{
+	gint (*p_version_check) (gint abi_version);
+	void (*p_set_info) (PluginInfo *info);
+	void (*p_init) (GeanyData *geany_data);
+	GeanyData **p_geany_data;
+	struct LegacyRealFuncs *h;
+
+#define CHECK_FUNC(__x)                                                                   \
+	if (! g_module_symbol(module, "plugin_" #__x, (void *) (&p_##__x)))                   \
+	{                                                                                     \
+		geany_debug("Plugin \"%s\" has no plugin_" #__x "() function - ignoring plugin!", \
+				g_module_name(module));                                                   \
+		return;                                                                           \
+	}
+	CHECK_FUNC(version_check);
+	CHECK_FUNC(set_info);
+	CHECK_FUNC(init);
+#undef CHECK_FUNC
+
+	/* We must verify the version first. If the plugin has become incompatible any
+	 * further actions should be considered invalid and therefore skipped. */
+	if (! plugin_check_version(plugin, p_version_check(GEANY_ABI_VERSION)))
+		return;
+
+	h = g_slice_new(struct LegacyRealFuncs);
+
+	/* Since the version check passed we can proceed with setting basic fields and
+	 * calling its set_info() (which might want to call Geany functions already). */
+	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
+	if (p_geany_data)
+		*p_geany_data = &geany_data;
+	/* Read plugin name, etc. name is mandatory but that's enforced in the common code. */
+	p_set_info(&plugin->info);
+
+	/* If all went well we can set the remaining callbacks and let it go for good. */
+	h->init = p_init;
+	g_module_symbol(module, "plugin_configure", (void *) &h->configure);
+	g_module_symbol(module, "plugin_configure_single", (void *) &plugin->configure_single);
+	g_module_symbol(module, "plugin_help", (void *) &h->help);
+	g_module_symbol(module, "plugin_cleanup", (void *) &h->cleanup);
+	/* pointer to callbacks struct can be stored directly, no wrapper necessary */
+	g_module_symbol(module, "plugin_callbacks", (void *) &plugin->cbs.callbacks);
+	if (app->debug_mode)
+	{
+		if (h->configure && plugin->configure_single)
+			g_warning("Plugin '%s' implements plugin_configure_single() unnecessarily - "
+				"only plugin_configure() will be used!",
+				plugin->info.name);
+		if (h->cleanup == NULL)
 			g_warning("Plugin '%s' has no plugin_cleanup() function - there may be memory leaks!",
 				plugin->info.name);
 	}
 
-	/* now read any plugin-owned data that might have been set in plugin_init() */
+	plugin->cbs.init = legacy_init;
+	plugin->cbs.cleanup = legacy_cleanup;
+	plugin->cbs.configure = h->configure ? legacy_configure : NULL;
+	plugin->cbs.help = h->help ? legacy_help : NULL;
 
-	if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+	plugin->flags = LOADED_OK | IS_LEGACY;
+	geany_plugin_set_data(&plugin->public, h, free_legacy_cbs);
+}
+
+
+static gboolean
+plugin_load(Plugin *plugin)
+{
+	gboolean init_ok = TRUE;
+
+	/* Start the plugin. Legacy plugins require additional cruft. */
+	if (PLUGIN_IS_LEGACY(plugin) && plugin->proxy == &builtin_so_proxy_plugin)
 	{
-		ui_add_document_sensitive(plugin->fields.menu_item);
+		GeanyPlugin **p_geany_plugin;
+		PluginInfo **p_info;
+		PluginFields **plugin_fields;
+		GModule *module = plugin->proxy_data;
+		/* set these symbols before plugin_init() is called
+		 * we don't set geany_data since it is set directly by plugin_new() */
+		g_module_symbol(module, "geany_plugin", (void *) &p_geany_plugin);
+		if (p_geany_plugin)
+			*p_geany_plugin = &plugin->public;
+		g_module_symbol(module, "plugin_info", (void *) &p_info);
+		if (p_info)
+			*p_info = &plugin->info;
+		g_module_symbol(module, "plugin_fields", (void *) &plugin_fields);
+		if (plugin_fields)
+			*plugin_fields = &plugin->fields;
+		read_key_group(plugin);
+
+		/* Legacy plugin_init() cannot fail. */
+		plugin->cbs.init(&plugin->public, plugin->cb_data);
+
+		/* now read any plugin-owned data that might have been set in plugin_init() */
+		if (plugin->fields.flags & PLUGIN_IS_DOCUMENT_SENSITIVE)
+		{
+			ui_add_document_sensitive(plugin->fields.menu_item);
+		}
+	}
+	else
+	{
+		init_ok = plugin->cbs.init(&plugin->public, plugin->cb_data);
 	}
 
-	g_module_symbol(plugin->module, "plugin_callbacks", (void *) &callbacks);
-	if (callbacks)
-		add_callbacks(plugin, callbacks);
+	if (! init_ok)
+		return FALSE;
+
+	/* new-style plugins set their callbacks in geany_load_module() */
+	if (plugin->cbs.callbacks)
+		add_callbacks(plugin, plugin->cbs.callbacks);
 
 	/* remember which plugins are active.
 	 * keep list sorted so tools menu items and plugin preference tabs are
 	 * sorted by plugin name */
 	active_plugin_list = g_list_insert_sorted(active_plugin_list, plugin, cmp_plugin_names);
+	proxied_count_inc(plugin->proxy);
 
-	geany_debug("Loaded:   %s (%s)", plugin->filename,
-		FALLBACK(plugin->info.name, "<Unknown>"));
+	geany_debug("Loaded:   %s (%s)", plugin->filename, plugin->info.name);
+	return TRUE;
+}
+
+
+static gpointer plugin_load_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *fname, gpointer pdata)
+{
+	GModule *module;
+	void (*p_geany_load_module)(GeanyPlugin *);
+
+	g_return_val_if_fail(g_module_supported(), NULL);
+	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
+	 * causing a segfault. Without that flag the module will safely fail to load.
+	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
+	 * otherwise not be detected due to the shadowing of Geany's app variable.
+	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
+	 * function from a plugin will be shadowed. */
+	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
+	if (!module)
+	{
+		geany_debug("Can't load plugin: %s", g_module_error());
+		return NULL;
+	}
+
+	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
+	g_module_symbol(module, "geany_load_module", (void *) &p_geany_load_module);
+	if (p_geany_load_module)
+	{
+		/* set this here already so plugins can call i.e. plugin_module_make_resident()
+		 * right from their geany_load_module() */
+		subplugin->priv->proxy_data = module;
+
+		/* This is a new style plugin. It should fill in plugin->info and then call
+		 * geany_plugin_register() in its geany_load_module() to successfully load.
+		 * The ABI and API checks are performed by geany_plugin_register() (i.e. by us).
+		 * We check the LOADED_OK flag separately to protect us against buggy plugins
+		 * who ignore the result of geany_plugin_register() and register anyway */
+		p_geany_load_module(subplugin);
+	}
+	else
+	{
+		/* This is the legacy / deprecated code path. It does roughly the same as
+		 * geany_load_module() and geany_plugin_register() together for the new ones */
+		register_legacy_plugin(subplugin->priv, module);
+	}
+	/* We actually check the LOADED_OK flag later */
+	return module;
+}
+
+
+static void plugin_unload_gmodule(GeanyPlugin *proxy, GeanyPlugin *subplugin, gpointer load_data, gpointer pdata)
+{
+	GModule *module = (GModule *) load_data;
+
+	g_return_if_fail(module != NULL);
+
+	if (! g_module_close(module))
+		g_warning("%s: %s", subplugin->priv->filename, g_module_error());
 }
 
 
 /* Load and optionally init a plugin.
- * init_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
+ * load_plugin decides whether the plugin's plugin_init() function should be called or not. If it is
  * called, the plugin will be started, if not the plugin will be read only (for the list of
  * available plugins in the plugin manager).
  * When add_to_list is set, the plugin will be added to the plugin manager's plugin_list. */
 static Plugin*
-plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
+plugin_new(Plugin *proxy, const gchar *fname, gboolean load_plugin, gboolean add_to_list)
 {
 	Plugin *plugin;
-	GModule *module;
-	GeanyData **p_geany_data;
-	GeanyFunctions **p_geany_functions;
-	void (*plugin_set_info)(PluginInfo*);
 
 	g_return_val_if_fail(fname, NULL);
-	g_return_val_if_fail(g_module_supported(), NULL);
+	g_return_val_if_fail(proxy, NULL);
 
 	/* find the plugin in the list of already loaded, active plugins and use it, otherwise
 	 * load the module */
@@ -679,93 +686,102 @@ plugin_new(const gchar *fname, gboolean init_plugin, gboolean add_to_list)
 		return plugin;
 	}
 
-	/* Don't use G_MODULE_BIND_LAZY otherwise we can get unresolved symbols at runtime,
-	 * causing a segfault. Without that flag the module will safely fail to load.
-	 * G_MODULE_BIND_LOCAL also helps find undefined symbols e.g. app when it would
-	 * otherwise not be detected due to the shadowing of Geany's app variable.
-	 * Also without G_MODULE_BIND_LOCAL calling public functions e.g. the old info()
-	 * function from a plugin will be shadowed. */
-	module = g_module_open(fname, G_MODULE_BIND_LOCAL);
-	if (! module)
-	{
-		geany_debug("Can't load plugin: %s", g_module_error());
-		return NULL;
-	}
+	plugin = g_new0(Plugin, 1);
+	plugin->filename = g_strdup(fname);
+	plugin->proxy = proxy;
+	plugin->public.geany_data = &geany_data;
+	plugin->public.priv = plugin;
+	/* Fields of plugin->info/funcs must to be initialized by the plugin */
+	plugin->public.info = &plugin->info;
+	plugin->public.funcs = &plugin->cbs;
+	plugin->public.proxy_funcs = &plugin->proxy_cbs;
 
-	if (plugin_loaded(module))
+	if (plugin_loaded(plugin))
 	{
 		geany_debug("Plugin \"%s\" already loaded.", fname);
-
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		return NULL;
+		goto err;
 	}
 
-	if (! plugin_check_version(module))
+	/* Load plugin, this should read its name etc. It must also call
+	 * geany_plugin_register() for the following PLUGIN_LOADED_OK condition */
+	plugin->proxy_data = proxy->proxy_cbs.load(&proxy->public, &plugin->public, fname, proxy->cb_data);
+
+	if (! PLUGIN_LOADED_OK(plugin))
 	{
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		return NULL;
+		geany_debug("Failed to load \"%s\" - ignoring plugin!", fname);
+		goto err;
 	}
 
-	g_module_symbol(module, "plugin_set_info", (void *) &plugin_set_info);
-	if (plugin_set_info == NULL)
+	/* The proxy assumes success, therefore we have to call unload from here
+	 * on in case of errors */
+	if (EMPTY(plugin->info.name))
 	{
-		geany_debug("No plugin_set_info() defined for \"%s\" - ignoring plugin!", fname);
-
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		return NULL;
+		geany_debug("No plugin name set for \"%s\" - ignoring plugin!", fname);
+		goto err_unload;
 	}
 
-	plugin = g_new0(Plugin, 1);
-
-	/* set basic fields here to allow plugins to call Geany functions in set_info() */
-	g_module_symbol(module, "geany_data", (void *) &p_geany_data);
-	if (p_geany_data)
-		*p_geany_data = &geany_data;
-	g_module_symbol(module, "geany_functions", (void *) &p_geany_functions);
-	if (p_geany_functions)
-		*p_geany_functions = &geany_functions;
-
-	/* read plugin name, etc. */
-	plugin_set_info(&plugin->info);
-	if (G_UNLIKELY(EMPTY(plugin->info.name)))
+	/* cb_data_destroy() frees plugin->cb_data. If that pointer also passed to unload() afterwards
+	 * then that would become a use-after-free. Disallow this combination. If a proxy
+	 * needs the same pointer it must not use a destroy func but free manually in its unload(). */
+	if (plugin->proxy_data == proxy->cb_data && plugin->cb_data_destroy)
 	{
-		geany_debug("No plugin name set in plugin_set_info() for \"%s\" - ignoring plugin!",
-			fname);
-
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		g_free(plugin);
-		return NULL;
+		geany_debug("Proxy of plugin \"%s\" specified invalid data - ignoring plugin!", fname);
+		plugin->proxy_data = NULL;
+		goto err_unload;
 	}
 
-	g_module_symbol(module, "plugin_init", (void *) &plugin->init);
-	if (plugin->init == NULL)
+	if (load_plugin && !plugin_load(plugin))
 	{
-		geany_debug("Plugin '%s' has no plugin_init() function - ignoring plugin!",
-			plugin->info.name);
-
-		if (! g_module_close(module))
-			g_warning("%s: %s", fname, g_module_error());
-		g_free(plugin);
-		return NULL;
+		/* Handle failing init same as failing to load for now. In future we
+		 * could present a informational UI or something */
+		geany_debug("Plugin failed to initialize \"%s\" - ignoring plugin!", fname);
+		goto err_unload;
 	}
-	/*geany_debug("Initializing plugin '%s'", plugin->info.name);*/
-
-	plugin->filename = g_strdup(fname);
-	plugin->module = module;
-	plugin->public.info = &plugin->info;
-	plugin->public.priv = plugin;
-
-	if (init_plugin)
-		plugin_init(plugin);
 
 	if (add_to_list)
 		plugin_list = g_list_prepend(plugin_list, plugin);
 
 	return plugin;
+
+err_unload:
+	if (plugin->cb_data_destroy)
+		plugin->cb_data_destroy(plugin->cb_data);
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, plugin->proxy_data, proxy->cb_data);
+err:
+	g_free(plugin->filename);
+	g_free(plugin);
+	return NULL;
+}
+
+
+static void on_object_weak_notify(gpointer data, GObject *old_ptr)
+{
+	Plugin *plugin = data;
+	guint i = 0;
+
+	g_return_if_fail(plugin && plugin->signal_ids);
+
+	for (i = 0; i < plugin->signal_ids->len; i++)
+	{
+		SignalConnection *sc = &g_array_index(plugin->signal_ids, SignalConnection, i);
+
+		if (sc->object == old_ptr)
+		{
+			g_array_remove_index_fast(plugin->signal_ids, i);
+			/* we can break the loop right after finding the first match,
+			 * because we will get one notification per connected signal */
+			break;
+		}
+	}
+}
+
+
+/* add an object to watch for destruction, and release pointers to it when destroyed.
+ * this should only be used by plugin_signal_connect() to add a watch on
+ * the object lifetime and nuke out references to it in plugin->signal_ids */
+void plugin_watch_object(Plugin *plugin, gpointer object)
+{
+	g_object_weak_ref(object, on_object_weak_notify, plugin);
 }
 
 
@@ -778,7 +794,10 @@ static void remove_callbacks(Plugin *plugin)
 		return;
 
 	foreach_array(SignalConnection, sc, signal_ids)
+	{
 		g_signal_handler_disconnect(sc->object, sc->handler_id);
+		g_object_weak_unref(sc->object, on_object_weak_notify, plugin);
+	}
 
 	g_array_free(signal_ids, TRUE);
 }
@@ -800,9 +819,72 @@ static void remove_sources(Plugin *plugin)
 }
 
 
+/* Make the GModule backing plugin resident (if it's GModule-backed at all) */
+void plugin_make_resident(Plugin *plugin)
+{
+	if (plugin->proxy == &builtin_so_proxy_plugin)
+	{
+		g_return_if_fail(plugin->proxy_data != NULL);
+		g_module_make_resident(plugin->proxy_data);
+	}
+	else
+		g_warning("Skipping g_module_make_resident() for non-native plugin");
+}
+
+
+/* Retrieve the address of a symbol sym located in plugin, if it's GModule-backed */
+gpointer plugin_get_module_symbol(Plugin *plugin, const gchar *sym)
+{
+	gpointer symbol;
+
+	if (plugin->proxy == &builtin_so_proxy_plugin)
+	{
+		g_return_val_if_fail(plugin->proxy_data != NULL, NULL);
+		if (g_module_symbol(plugin->proxy_data, sym, &symbol))
+			return symbol;
+		else
+			g_warning("Failed to locate signal handler for '%s': %s",
+				sym, g_module_error());
+	}
+	else /* TODO: Could possibly support this via a new proxy hook */
+		g_warning("Failed to locate signal handler for '%s': Not supported for non-native plugins",
+			sym);
+	return NULL;
+}
+
+
 static gboolean is_active_plugin(Plugin *plugin)
 {
 	return (g_list_find(active_plugin_list, plugin) != NULL);
+}
+
+
+static void remove_each_doc_data(GQuark key_id, gpointer data, gpointer user_data)
+{
+	const ForEachDocData *doc_data = user_data;
+	const gchar *key = g_quark_to_string(key_id);
+	if (g_str_has_prefix(key, doc_data->prefix))
+		g_datalist_remove_data(&doc_data->document->priv->data, key);
+}
+
+
+static void remove_doc_data(Plugin *plugin)
+{
+	ForEachDocData data;
+
+	data.prefix = g_strdup_printf("geany/plugins/%s/", plugin->public.info->name);
+
+	for (guint i = 0; i < documents_array->len; i++)
+	{
+		GeanyDocument *doc = documents_array->pdata[i];
+		if (DOC_VALID(doc))
+		{
+			data.document = doc;
+			g_datalist_foreach(&doc->priv->data, remove_each_doc_data, &data);
+		}
+	}
+
+	g_free(data.prefix);
 }
 
 
@@ -812,9 +894,10 @@ plugin_cleanup(Plugin *plugin)
 {
 	GtkWidget *widget;
 
-	if (plugin->cleanup)
-		plugin->cleanup();
+	/* With geany_register_plugin cleanup is mandatory */
+	plugin->cbs.cleanup(&plugin->public, plugin->cb_data);
 
+	remove_doc_data(plugin);
 	remove_callbacks(plugin);
 	remove_sources(plugin);
 
@@ -825,29 +908,94 @@ plugin_cleanup(Plugin *plugin)
 	if (widget)
 		gtk_widget_destroy(widget);
 
+	if (!PLUGIN_HAS_LOAD_DATA(plugin) && plugin->cb_data_destroy)
+	{
+		/* If the plugin has used geany_plugin_set_data(), destroy the data here. But don't
+		 * if it was already set through geany_plugin_register_full() because we couldn't call
+		 * its init() anymore (not without completely reloading it anyway). */
+		plugin->cb_data_destroy(plugin->cb_data);
+		plugin->cb_data = NULL;
+		plugin->cb_data_destroy = NULL;
+	}
+
+	proxied_count_dec(plugin->proxy);
 	geany_debug("Unloaded: %s", plugin->filename);
 }
 
 
+/* Remove all plugins that proxy is a proxy for from plugin_list (and free) */
+static void free_subplugins(Plugin *proxy)
+{
+	GList *item;
+
+	item = plugin_list;
+	while (item)
+	{
+		GList *next = g_list_next(item);
+		if (proxy == ((Plugin *) item->data)->proxy)
+		{
+			/* plugin_free modifies plugin_list */
+			plugin_free((Plugin *) item->data);
+		}
+		item = next;
+	}
+}
+
+
+/* Returns true if the removal was successful (=> never for non-proxies) */
+static gboolean unregister_proxy(Plugin *proxy)
+{
+	gboolean is_proxy = FALSE;
+	GList *node;
+
+	/* Remove the proxy from the proxy list first. It might appear more than once (once
+	 * for each extension), but if it doesn't appear at all it's not actually a proxy */
+	foreach_list_safe(node, active_proxies.head)
+	{
+		PluginProxy *p = node->data;
+		if (p->plugin == proxy)
+		{
+			is_proxy = TRUE;
+			g_queue_delete_link(&active_proxies, node);
+		}
+	}
+	return is_proxy;
+}
+
+
+/* Cleanup a plugin and free all resources allocated on behalf of it.
+ *
+ * If the plugin is a proxy then this also takes special care to unload all
+ * subplugin loaded through it (make sure none of them is active!) */
 static void
 plugin_free(Plugin *plugin)
 {
-	g_return_if_fail(plugin);
-	g_return_if_fail(plugin->module);
+	Plugin *proxy;
 
+	g_return_if_fail(plugin);
+	g_return_if_fail(plugin->proxy);
+	g_return_if_fail(plugin->proxied_count == 0);
+
+	proxy = plugin->proxy;
+	/* If this a proxy remove all depending subplugins. We can assume none of them is *activated*
+	 * (but potentially loaded). Note that free_subplugins() might call us through recursion */
 	if (is_active_plugin(plugin))
+	{
+		if (unregister_proxy(plugin))
+			free_subplugins(plugin);
 		plugin_cleanup(plugin);
+	}
 
 	active_plugin_list = g_list_remove(active_plugin_list, plugin);
-
-	if (! g_module_close(plugin->module))
-		g_warning("%s: %s", plugin->filename, g_module_error());
-
 	plugin_list = g_list_remove(plugin_list, plugin);
+
+	/* cb_data_destroy might be plugin code and must be called before unloading the module. */
+	if (plugin->cb_data_destroy)
+		plugin->cb_data_destroy(plugin->cb_data);
+	proxy->proxy_cbs.unload(&proxy->public, &plugin->public, plugin->proxy_data, proxy->cb_data);
 
 	g_free(plugin->filename);
 	g_free(plugin);
-	plugin = NULL;
 }
 
 
@@ -905,25 +1053,90 @@ static gboolean check_plugin_path(const gchar *fname)
 }
 
 
+/* Returns NULL if this ain't a plugin,
+ * otherwise it returns the appropriate PluginProxy instance to load it */
+static PluginProxy* is_plugin(const gchar *file)
+{
+	GList *node;
+	const gchar *ext;
+
+	/* extract file extension to avoid g_str_has_suffix() in the loop */
+	ext = (const gchar *)strrchr(file, '.');
+	if (ext == NULL)
+		return FALSE;
+	/* ensure the dot is really part of the filename */
+	else if (strchr(ext, G_DIR_SEPARATOR) != NULL)
+		return FALSE;
+
+	ext += 1;
+	/* O(n*m), (m being extensions per proxy) doesn't scale very well in theory
+	 * but not a problem in practice yet */
+	foreach_list(node, active_proxies.head)
+	{
+		PluginProxy *proxy = node->data;
+		if (utils_str_casecmp(ext, proxy->extension) == 0)
+		{
+			Plugin *p = proxy->plugin;
+			gint ret = GEANY_PROXY_MATCH;
+
+			if (p->proxy_cbs.probe)
+				ret = p->proxy_cbs.probe(&p->public, file, p->cb_data);
+			switch (ret)
+			{
+				case GEANY_PROXY_MATCH:
+					return proxy;
+				case GEANY_PROXY_RELATED:
+					return NULL;
+				case GEANY_PROXY_IGNORE:
+					continue;
+				default:
+					g_warning("Ignoring bogus return value '%d' from "
+						"proxy plugin '%s' probe() function!", ret,
+						proxy->plugin->info.name);
+					continue;
+			}
+		}
+	}
+	return NULL;
+}
+
+
 /* load active plugins at startup */
 static void
 load_active_plugins(void)
 {
-	guint i, len;
+	guint i, len, proxies;
 
 	if (active_plugins_pref == NULL || (len = g_strv_length(active_plugins_pref)) == 0)
 		return;
 
-	for (i = 0; i < len; i++)
+	/* If proxys are loaded we have to restart to load plugins that sort before their proxy */
+	do
 	{
-		const gchar *fname = active_plugins_pref[i];
-
-		if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+		proxies = active_proxies.length;
+		g_list_free_full(failed_plugins_list, (GDestroyNotify) g_free);
+		failed_plugins_list = NULL;
+		for (i = 0; i < len; i++)
 		{
-			if (!check_plugin_path(fname) || plugin_new(fname, TRUE, FALSE) == NULL)
-				failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
+			gchar *fname = active_plugins_pref[i];
+
+#ifdef G_OS_WIN32
+			/* ensure we have canonical paths */
+			gchar *p = fname;
+			while ((p = strchr(p, '/')) != NULL)
+				*p = G_DIR_SEPARATOR;
+#endif
+
+			if (!EMPTY(fname) && g_file_test(fname, G_FILE_TEST_EXISTS))
+			{
+				PluginProxy *proxy = NULL;
+				if (check_plugin_path(fname))
+					proxy = is_plugin(fname);
+				if (proxy == NULL || plugin_new(proxy->plugin, fname, TRUE, FALSE) == NULL)
+					failed_plugins_list = g_list_prepend(failed_plugins_list, g_strdup(fname));
+			}
 		}
-	}
+	} while (proxies != active_proxies.length);
 }
 
 
@@ -931,20 +1144,18 @@ static void
 load_plugins_from_path(const gchar *path)
 {
 	GSList *list, *item;
-	gchar *fname, *tmp;
 	gint count = 0;
 
 	list = utils_get_file_list(path, NULL, NULL);
 
 	for (item = list; item != NULL; item = g_slist_next(item))
 	{
-		tmp = strrchr(item->data, '.');
-		if (tmp == NULL || utils_str_casecmp(tmp, "." G_MODULE_SUFFIX) != 0)
-			continue;
+		gchar *fname = g_build_filename(path, item->data, NULL);
+		PluginProxy *proxy = is_plugin(fname);
 
-		fname = g_build_filename(path, item->data, NULL);
-		if (plugin_new(fname, FALSE, TRUE))
+		if (proxy != NULL && plugin_new(proxy->plugin, fname, FALSE, TRUE))
 			count++;
+
 		g_free(fname);
 	}
 
@@ -958,17 +1169,29 @@ load_plugins_from_path(const gchar *path)
 
 static gchar *get_plugin_path(void)
 {
-#ifdef G_OS_WIN32
-	gchar *path;
-	gchar *install_dir = win32_get_installation_dir();
+	return g_strdup(utils_resource_dir(RESOURCE_DIR_PLUGIN));
+}
 
-	path = g_build_filename(install_dir, "lib", NULL);
-	g_free(install_dir);
 
-	return path;
-#else
-	return g_build_filename(GEANY_LIBDIR, "geany", NULL);
-#endif
+/* See load_all_plugins(), this simply sorts items with lower hierarchy level first
+ * (where hierarchy level == number of intermediate proxies before the builtin so loader) */
+static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+{
+	const Plugin *pa = a;
+	const Plugin *pb = b;
+
+	while (TRUE)
+	{
+		if (pa->proxy == pb->proxy)
+			return 0;
+		else if (pa->proxy == &builtin_so_proxy_plugin)
+			return -1;
+		else if (pb->proxy == &builtin_so_proxy_plugin)
+			return 1;
+
+		pa = pa->proxy;
+		pb = pb->proxy;
+	}
 }
 
 
@@ -995,6 +1218,13 @@ static void load_all_plugins(void)
 
 	/* finally load plugins from $prefix/lib/geany */
 	load_plugins_from_path(plugin_path_system);
+
+	/* It is important to sort any plugins that are proxied after their proxy because
+	 * pm_populate() needs the proxy to be loaded and active (if selected by user) in order
+	 * to properly set the value for the PLUGIN_COLUMN_CAN_UNCHECK column. The order between
+	 * sub-plugins does not matter, only between sub-plugins and their proxy, thus
+	 * sorting by hierarchy level is perfectly sufficient */
+	plugin_list = g_list_sort(plugin_list, cmp_plugin_by_proxy);
 
 	g_free(plugin_path_config);
 	g_free(plugin_path_system);
@@ -1113,6 +1343,17 @@ void plugins_init(void)
 
 	g_signal_connect(geany_object, "save-settings", G_CALLBACK(update_active_plugins_pref), NULL);
 	stash_group_add_string_vector(group, &active_plugins_pref, "active_plugins", NULL);
+
+	g_queue_push_head(&active_proxies, &builtin_so_proxy);
+}
+
+
+/* Same as plugin_free(), except it does nothing for proxies-in-use, to be called on
+ * finalize in a loop */
+static void plugin_free_leaf(Plugin *p)
+{
+	if (p->proxied_count == 0)
+		plugin_free(p);
 }
 
 
@@ -1124,11 +1365,11 @@ void plugins_finalize(void)
 		g_list_foreach(failed_plugins_list, (GFunc) g_free,	NULL);
 		g_list_free(failed_plugins_list);
 	}
-	if (active_plugin_list != NULL)
-	{
-		g_list_foreach(active_plugin_list, (GFunc) plugin_free,	NULL);
-		g_list_free(active_plugin_list);
-	}
+	/* Have to loop because proxys cannot be unloaded until after all their
+	 * plugins are unloaded as well (the second loop should should catch all the remaining ones) */
+	while (active_plugin_list != NULL)
+		g_list_foreach(active_plugin_list, (GFunc) plugin_free_leaf, NULL);
+
 	g_strfreev(active_plugins_pref);
 }
 
@@ -1144,7 +1385,7 @@ gboolean plugins_have_preferences(void)
 	foreach_list(item, active_plugin_list)
 	{
 		Plugin *plugin = item->data;
-		if (plugin->configure != NULL || plugin->configure_single != NULL)
+		if (plugin->configure_single != NULL || plugin->cbs.configure != NULL)
 			return TRUE;
 	}
 
@@ -1157,8 +1398,7 @@ gboolean plugins_have_preferences(void)
 enum
 {
 	PLUGIN_COLUMN_CHECK = 0,
-	PLUGIN_COLUMN_NAME,
-	PLUGIN_COLUMN_DESCRIPTION,
+	PLUGIN_COLUMN_CAN_UNCHECK,
 	PLUGIN_COLUMN_PLUGIN,
 	PLUGIN_N_COLUMNS,
 	PM_BUTTON_KEYBINDINGS,
@@ -1170,13 +1410,15 @@ typedef struct
 {
 	GtkWidget *dialog;
 	GtkWidget *tree;
-	GtkListStore *store;
-	GtkWidget *plugin_label;
-	GtkWidget *filename_label;
-	GtkWidget *author_label;
+	GtkTreeStore *store;
+	GtkWidget *filter_entry;
 	GtkWidget *configure_button;
 	GtkWidget *keybindings_button;
 	GtkWidget *help_button;
+	GtkWidget *popup_menu;
+	GtkWidget *popup_configure_menu_item;
+	GtkWidget *popup_keybindings_menu_item;
+	GtkWidget *popup_help_menu_item;
 }
 PluginManagerWidgets;
 
@@ -1185,14 +1427,24 @@ static PluginManagerWidgets pm_widgets;
 
 static void pm_update_buttons(Plugin *p)
 {
-	gboolean is_active;
+	gboolean has_configure = FALSE;
+	gboolean has_help = FALSE;
+	gboolean has_keybindings = FALSE;
 
-	is_active = is_active_plugin(p);
-	gtk_widget_set_sensitive(pm_widgets.configure_button,
-		(p->configure || p->configure_single) && is_active);
-	gtk_widget_set_sensitive(pm_widgets.help_button, p->help != NULL && is_active);
-	gtk_widget_set_sensitive(pm_widgets.keybindings_button,
-		p->key_group && p->key_group->plugin_key_count > 0 && is_active);
+	if (p != NULL && is_active_plugin(p))
+	{
+		has_configure = p->cbs.configure || p->configure_single;
+		has_help = p->cbs.help != NULL;
+		has_keybindings = p->key_group && p->key_group->plugin_key_count;
+	}
+
+	gtk_widget_set_sensitive(pm_widgets.configure_button, has_configure);
+	gtk_widget_set_sensitive(pm_widgets.help_button, has_help);
+	gtk_widget_set_sensitive(pm_widgets.keybindings_button, has_keybindings);
+
+	gtk_widget_set_sensitive(pm_widgets.popup_configure_menu_item, has_configure);
+	gtk_widget_set_sensitive(pm_widgets.popup_help_menu_item, has_help);
+	gtk_widget_set_sensitive(pm_widgets.popup_keybindings_menu_item, has_keybindings);
 }
 
 
@@ -1207,22 +1459,30 @@ static void pm_selection_changed(GtkTreeSelection *selection, gpointer user_data
 		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
 
 		if (p != NULL)
-		{
-			gchar *text;
-			PluginInfo *pi;
-
-			pi = &p->info;
-			/* Translators: <plugin name> <plugin version> */
-			text = g_strdup_printf(_("%s %s"), pi->name, pi->version);
-			gtk_label_set_text(GTK_LABEL(pm_widgets.plugin_label), text);
-			gtk_label_set_text(GTK_LABEL(pm_widgets.filename_label), p->filename);
-			gtk_label_set_text(GTK_LABEL(pm_widgets.author_label), pi->author);
-			g_free(text);
-
 			pm_update_buttons(p);
-		}
 	}
 }
+
+
+static gboolean find_iter_for_plugin(Plugin *p, GtkTreeModel *model, GtkTreeIter *iter)
+{
+	Plugin *pp;
+	gboolean valid;
+
+	for (valid = gtk_tree_model_get_iter_first(model, iter);
+	     valid;
+	     valid = gtk_tree_model_iter_next(model, iter))
+	{
+		gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &pp, -1);
+		if (p == pp)
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+static void pm_populate(GtkTreeStore *store);
 
 
 static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer data)
@@ -1230,37 +1490,52 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 	gboolean old_state, state;
 	gchar *file_name;
 	GtkTreeIter iter;
+	GtkTreeIter store_iter;
 	GtkTreePath *path = gtk_tree_path_new_from_string(pth);
+	GtkTreeModel *model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
 	Plugin *p;
+	Plugin *proxy;
+	guint prev_num_proxies;
 
-	gtk_tree_model_get_iter(GTK_TREE_MODEL(pm_widgets.store), &iter, path);
-	gtk_tree_path_free(path);
+	gtk_tree_model_get_iter(model, &iter, path);
 
-	gtk_tree_model_get(GTK_TREE_MODEL(pm_widgets.store), &iter,
-		PLUGIN_COLUMN_CHECK, &old_state, PLUGIN_COLUMN_PLUGIN, &p, -1);
+	gtk_tree_model_get(model, &iter,
+		PLUGIN_COLUMN_CHECK, &old_state,
+		PLUGIN_COLUMN_PLUGIN, &p, -1);
 
 	/* no plugins item */
 	if (p == NULL)
+	{
+		gtk_tree_path_free(path);
 		return;
+	}
+
+	gtk_tree_model_filter_convert_iter_to_child_iter(
+		GTK_TREE_MODEL_FILTER(model), &store_iter, &iter);
 
 	state = ! old_state; /* toggle the state */
 
-	/* save the filename of the plugin */
+	/* save the filename and proxy of the plugin */
 	file_name = g_strdup(p->filename);
+	proxy = p->proxy;
+	prev_num_proxies = active_proxies.length;
 
 	/* unload plugin module */
 	if (!state)
 		/* save shortcuts (only need this group, but it doesn't take long) */
 		keybindings_write_to_file();
 
+	/* plugin_new() below may cause a tree view refresh with invalid p - set to NULL */
+	gtk_tree_store_set(pm_widgets.store, &store_iter,
+		PLUGIN_COLUMN_PLUGIN, NULL, -1);
 	plugin_free(p);
 
 	/* reload plugin module and initialize it if item is checked */
-	p = plugin_new(file_name, state, TRUE);
+	p = plugin_new(proxy, file_name, state, TRUE);
 	if (!p)
 	{
 		/* plugin file may no longer be on disk, or is now incompatible */
-		gtk_list_store_remove(pm_widgets.store, &iter);
+		gtk_tree_store_remove(pm_widgets.store, &store_iter);
 	}
 	else
 	{
@@ -1268,82 +1543,312 @@ static void pm_plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer 
 			keybindings_load_keyfile();		/* load shortcuts */
 
 		/* update model */
-		gtk_list_store_set(pm_widgets.store, &iter,
+		gtk_tree_store_set(pm_widgets.store, &store_iter,
 			PLUGIN_COLUMN_CHECK, state,
 			PLUGIN_COLUMN_PLUGIN, p, -1);
 
 		/* set again the sensitiveness of the configure and help buttons */
 		pm_update_buttons(p);
+
+		/* Depending on the state disable the checkbox for the proxy of this plugin, and
+		 * only re-enable if the proxy is not used by any other plugin */
+		if (p->proxy != &builtin_so_proxy_plugin)
+		{
+			GtkTreeIter parent;
+			gboolean can_uncheck;
+			GtkTreePath *store_path = gtk_tree_model_filter_convert_path_to_child_path(
+			                                GTK_TREE_MODEL_FILTER(model), path);
+
+			g_warn_if_fail(store_path != NULL);
+			if (gtk_tree_path_up(store_path))
+			{
+				gtk_tree_model_get_iter(GTK_TREE_MODEL(pm_widgets.store), &parent, store_path);
+
+				if (state)
+					can_uncheck = FALSE;
+				else
+					can_uncheck = p->proxy->proxied_count == 0;
+
+				gtk_tree_store_set(pm_widgets.store, &parent,
+					PLUGIN_COLUMN_CAN_UNCHECK, can_uncheck, -1);
+			}
+			gtk_tree_path_free(store_path);
+		}
 	}
+	/* We need to find out if a proxy was added or removed because that affects the plugin list
+	 * presented by the plugin manager */
+	if (prev_num_proxies != active_proxies.length)
+	{
+		/* Rescan the plugin list as we now support more. Gives some "already loaded" warnings
+		 * they are unproblematic */
+		if (prev_num_proxies < active_proxies.length)
+			load_all_plugins();
+
+		pm_populate(pm_widgets.store);
+		gtk_tree_view_expand_row(GTK_TREE_VIEW(pm_widgets.tree), path, FALSE);
+	}
+
+	gtk_tree_path_free(path);
 	g_free(file_name);
 }
 
+static void pm_populate(GtkTreeStore *store)
+{
+	GtkTreeIter iter;
+	GList *list;
 
-static void pm_prepare_treeview(GtkWidget *tree, GtkListStore *store)
+	gtk_tree_store_clear(store);
+	list = g_list_first(plugin_list);
+	if (list == NULL)
+	{
+		gtk_tree_store_append(store, &iter, NULL);
+		gtk_tree_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
+				PLUGIN_COLUMN_PLUGIN, NULL, -1);
+	}
+	else
+	{
+		for (; list != NULL; list = list->next)
+		{
+			Plugin *p = list->data;
+			GtkTreeIter parent;
+
+			if (p->proxy != &builtin_so_proxy_plugin
+			        && find_iter_for_plugin(p->proxy, GTK_TREE_MODEL(pm_widgets.store), &parent))
+				gtk_tree_store_append(store, &iter, &parent);
+			else
+				gtk_tree_store_append(store, &iter, NULL);
+
+			gtk_tree_store_set(store, &iter,
+				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
+				PLUGIN_COLUMN_PLUGIN, p,
+				PLUGIN_COLUMN_CAN_UNCHECK, (p->proxied_count == 0),
+				-1);
+		}
+	}
+}
+
+static gboolean pm_treeview_query_tooltip(GtkWidget *widget, gint x, gint y,
+		gboolean keyboard_mode, GtkTooltip *tooltip, gpointer user_data)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GtkTreePath *path;
+	Plugin *p = NULL;
+	gboolean can_uncheck = TRUE;
+
+	if (! gtk_tree_view_get_tooltip_context(GTK_TREE_VIEW(widget), &x, &y, keyboard_mode,
+			&model, &path, &iter))
+		return FALSE;
+
+	gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, PLUGIN_COLUMN_CAN_UNCHECK, &can_uncheck, -1);
+	if (p != NULL)
+	{
+		gchar *prefix, *suffix, *details, *markup;
+		const gchar *uchk;
+
+		uchk = can_uncheck ?
+		       "" : _("\n<i>Other plugins depend on this. Disable them first to allow deactivation.</i>\n");
+		/* Four allocations is less than ideal but meh */
+		details = g_strdup_printf(_("Version:\t%s\nAuthor(s):\t%s\nFilename:\t%s"),
+			p->info.version, p->info.author, p->filename);
+		prefix = g_markup_printf_escaped("<b>%s</b>\n%s\n", p->info.name, p->info.description);
+		suffix = g_markup_printf_escaped("<small><i>\n%s</i></small>", details);
+		markup = g_strconcat(prefix, uchk, suffix, NULL);
+
+		gtk_tooltip_set_markup(tooltip, markup);
+		gtk_tree_view_set_tooltip_row(GTK_TREE_VIEW(widget), tooltip, path);
+
+		g_free(details);
+		g_free(suffix);
+		g_free(prefix);
+		g_free(markup);
+	}
+	gtk_tree_path_free(path);
+
+	return p != NULL;
+}
+
+
+static void pm_treeview_text_cell_data_func(GtkTreeViewColumn *column, GtkCellRenderer *cell,
+		GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+	Plugin *p;
+
+	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
+
+	if (p == NULL)
+		g_object_set(cell, "text", _("No plugins available."), NULL);
+	else
+	{
+		gchar *markup = g_markup_printf_escaped("<b>%s</b>\n%s", p->info.name, p->info.description);
+
+		g_object_set(cell, "markup", markup, NULL);
+		g_free(markup);
+	}
+}
+
+
+static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *event,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	if (event->button == 3)
+	{
+		gtk_menu_popup(GTK_MENU(pm_widgets.popup_menu), NULL, NULL, NULL, NULL,
+				event->button, event->time);
+	}
+	return FALSE;
+}
+
+
+static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
+		gpointer user_data)
+{
+	Plugin *pa, *pb;
+
+	gtk_tree_model_get(model, a, PLUGIN_COLUMN_PLUGIN, &pa, -1);
+	gtk_tree_model_get(model, b, PLUGIN_COLUMN_PLUGIN, &pb, -1);
+
+	if (pa && pb)
+		return strcmp(pa->info.name, pb->info.name);
+	else
+		return pa - pb;
+}
+
+
+static gboolean pm_tree_search(const gchar *key, const gchar *haystack)
+{
+	gchar *normalized_string = NULL;
+	gchar *normalized_key = NULL;
+	gchar *case_normalized_string = NULL;
+	gchar *case_normalized_key = NULL;
+	gboolean matched = TRUE;
+
+	normalized_string = g_utf8_normalize(haystack, -1, G_NORMALIZE_ALL);
+	normalized_key = g_utf8_normalize(key, -1, G_NORMALIZE_ALL);
+
+	if (normalized_string != NULL && normalized_key != NULL)
+	{
+		GString *stripped_key;
+		gchar **subkey, **subkeys;
+
+		case_normalized_string = g_utf8_casefold(normalized_string, -1);
+		case_normalized_key = g_utf8_casefold(normalized_key, -1);
+		stripped_key = g_string_new(case_normalized_key);
+		do {} while (utils_string_replace_all(stripped_key, "  ", " "));
+		subkeys = g_strsplit(stripped_key->str, " ", -1);
+		g_string_free(stripped_key, TRUE);
+		foreach_strv(subkey, subkeys)
+		{
+			if (strstr(case_normalized_string, *subkey) == NULL)
+			{
+				matched = FALSE;
+				break;
+			}
+		}
+		g_strfreev(subkeys);
+	}
+
+	g_free(normalized_key);
+	g_free(normalized_string);
+	g_free(case_normalized_key);
+	g_free(case_normalized_string);
+
+	return matched;
+}
+
+
+static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+{
+	Plugin *plugin;
+	gboolean matched;
+	const gchar *key;
+	gchar *haystack, *filename;
+
+	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
+
+	if (!plugin)
+		return FALSE;
+	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
+
+	filename = g_path_get_basename(plugin->filename);
+	haystack = g_strjoin(" ", plugin->info.name, plugin->info.description,
+					plugin->info.author, filename, NULL);
+	matched = pm_tree_search(key, haystack);
+	g_free(haystack);
+	g_free(filename);
+
+	return matched;
+}
+
+
+static void on_pm_tree_filter_entry_changed_cb(GtkEntry *entry, gpointer user_data)
+{
+	GtkTreeModel *filter_model = gtk_tree_view_get_model(GTK_TREE_VIEW(pm_widgets.tree));
+	gtk_tree_model_filter_refilter(GTK_TREE_MODEL_FILTER(filter_model));
+}
+
+
+static void on_pm_tree_filter_entry_icon_release_cb(GtkEntry *entry, GtkEntryIconPosition icon_pos,
+		GdkEvent *event, gpointer user_data)
+{
+	if (event->button.button == 1 && icon_pos == GTK_ENTRY_ICON_PRIMARY)
+		on_pm_tree_filter_entry_changed_cb(entry, user_data);
+}
+
+
+static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 {
 	GtkCellRenderer *text_renderer, *checkbox_renderer;
 	GtkTreeViewColumn *column;
-	GtkTreeIter iter;
-	GList *list;
+	GtkTreeModel *filter_model;
 	GtkTreeSelection *sel;
+
+	g_signal_connect(tree, "query-tooltip", G_CALLBACK(pm_treeview_query_tooltip), NULL);
+	gtk_widget_set_has_tooltip(tree, TRUE);
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(tree), FALSE);
 
 	checkbox_renderer = gtk_cell_renderer_toggle_new();
 	column = gtk_tree_view_column_new_with_attributes(
-		_("Active"), checkbox_renderer, "active", PLUGIN_COLUMN_CHECK, NULL);
+		_("Active"), checkbox_renderer,
+		"active", PLUGIN_COLUMN_CHECK, "activatable", PLUGIN_COLUMN_CAN_UNCHECK, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 	g_signal_connect(checkbox_renderer, "toggled", G_CALLBACK(pm_plugin_toggled), NULL);
 
 	text_renderer = gtk_cell_renderer_text_new();
-	column = gtk_tree_view_column_new_with_attributes(
-		_("Plugin"), text_renderer, "text", PLUGIN_COLUMN_NAME, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
-
-	text_renderer = gtk_cell_renderer_text_new();
 	g_object_set(text_renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-	column = gtk_tree_view_column_new_with_attributes(
-		_("Description"), text_renderer, "text", PLUGIN_COLUMN_DESCRIPTION, NULL);
+	column = gtk_tree_view_column_new_with_attributes(_("Plugin"), text_renderer, NULL);
+	gtk_tree_view_column_set_cell_data_func(column, text_renderer,
+		pm_treeview_text_cell_data_func, NULL, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tree), column);
 
 	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(tree), TRUE);
 	gtk_tree_view_set_enable_search(GTK_TREE_VIEW(tree), FALSE);
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_PLUGIN,
+		pm_tree_sort_func, NULL, NULL);
 	gtk_tree_sortable_set_sort_column_id(
-		GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_NAME, GTK_SORT_ASCENDING);
+		GTK_TREE_SORTABLE(store), PLUGIN_COLUMN_PLUGIN, GTK_SORT_ASCENDING);
 
 	/* selection handling */
 	sel = gtk_tree_view_get_selection(GTK_TREE_VIEW(tree));
 	gtk_tree_selection_set_mode(sel, GTK_SELECTION_SINGLE);
 	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
 
-	list = g_list_first(plugin_list);
-	if (list == NULL)
-	{
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter, PLUGIN_COLUMN_CHECK, FALSE,
-				PLUGIN_COLUMN_NAME, _("No plugins available."),
-				PLUGIN_COLUMN_DESCRIPTION, "", PLUGIN_COLUMN_PLUGIN, NULL, -1);
-	}
-	else
-	{
-		Plugin *p;
-		for (; list != NULL; list = list->next)
-		{
-			p = list->data;
+	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
 
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter,
-				PLUGIN_COLUMN_CHECK, is_active_plugin(p),
-				PLUGIN_COLUMN_NAME, p->info.name,
-				PLUGIN_COLUMN_DESCRIPTION, p->info.description,
-				PLUGIN_COLUMN_PLUGIN, p,
-				-1);
-		}
-	}
-	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), GTK_TREE_MODEL(store));
-	g_object_unref(store);
+	/* filter */
+	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
+	gtk_tree_model_filter_set_visible_func(
+		GTK_TREE_MODEL_FILTER(filter_model), pm_tree_filter_func, NULL, NULL);
+
+	/* set model to tree view */
+	gtk_tree_view_set_model(GTK_TREE_VIEW(tree), filter_model);
+	g_object_unref(filter_model);
+
+	pm_populate(store);
 }
 
 
-static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
+static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointer user_data)
 {
 	GtkTreeModel *model;
 	GtkTreeSelection *selection;
@@ -1359,8 +1864,8 @@ static void pm_on_plugin_button_clicked(GtkButton *button, gpointer user_data)
 		{
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				plugin_show_configure(&p->public);
-			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP && p->help != NULL)
-				p->help();
+			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP)
+				p->cbs.help(&p->public, p->cb_data);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
 				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}
@@ -1381,59 +1886,84 @@ free_non_active_plugin(gpointer data, gpointer user_data)
 }
 
 
-/* Callback when plugin manager dialog closes, only ever has response of
- * GTK_RESPONSE_OK or GTK_RESPONSE_DELETE_EVENT and both are treated the same. */
+/* Callback when plugin manager dialog closes, responses GTK_RESPONSE_CLOSE and
+ * GTK_RESPONSE_DELETE_EVENT are treated the same. */
 static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 {
-	if (plugin_list != NULL)
+	switch (response)
 	{
-		/* remove all non-active plugins from the list */
-		g_list_foreach(plugin_list, free_non_active_plugin, NULL);
-		g_list_free(plugin_list);
-		plugin_list = NULL;
+		case GTK_RESPONSE_CLOSE:
+		case GTK_RESPONSE_DELETE_EVENT:
+			if (plugin_list != NULL)
+			{
+				/* remove all non-active plugins from the list */
+				g_list_foreach(plugin_list, free_non_active_plugin, NULL);
+				g_list_free(plugin_list);
+				plugin_list = NULL;
+			}
+			gtk_widget_destroy(GTK_WIDGET(dialog));
+			pm_widgets.dialog = NULL;
+
+			configuration_save();
+			break;
+		case PM_BUTTON_CONFIGURE:
+		case PM_BUTTON_HELP:
+		case PM_BUTTON_KEYBINDINGS:
+			/* forward event to the generic handler */
+			pm_on_plugin_button_clicked(NULL, GINT_TO_POINTER(response));
+			break;
 	}
-	gtk_widget_destroy(GTK_WIDGET(dialog));
-
-	configuration_save();
-}
-
-
-static GtkWidget *create_table_label(const gchar *text)
-{
-	GtkWidget *label;
-	PangoAttrList *attrs;
-
-	attrs = pango_attr_list_new();
-	pango_attr_list_insert(attrs, pango_attr_weight_new(PANGO_WEIGHT_BOLD));
-	label = gtk_label_new(text);
-	gtk_label_set_attributes(GTK_LABEL(label), attrs);
-	gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.0);
-	pango_attr_list_unref(attrs);
-
-	return label;
 }
 
 
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
-	GtkWidget *vbox, *vbox2, *label_vbox, *hbox, *swin, *label, *label2, *desc_win, *table, *paned;
+	GtkWidget *vbox, *vbox2, *swin, *label, *menu_item, *filter_entry;
+
+	if (pm_widgets.dialog != NULL)
+	{
+		gtk_window_present(GTK_WINDOW(pm_widgets.dialog));
+		return;
+	}
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
 
-	pm_widgets.dialog = gtk_dialog_new_with_buttons(_("Plugins"), GTK_WINDOW(main_widgets.window),
-						GTK_DIALOG_DESTROY_WITH_PARENT,
-						GTK_STOCK_OK, GTK_RESPONSE_OK, NULL);
+	pm_widgets.dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(pm_widgets.dialog), _("Plugins"));
+	gtk_window_set_transient_for(GTK_WINDOW(pm_widgets.dialog), GTK_WINDOW(main_widgets.window));
+	gtk_window_set_destroy_with_parent(GTK_WINDOW(pm_widgets.dialog), TRUE);
+
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(pm_widgets.dialog));
 	gtk_widget_set_name(pm_widgets.dialog, "GeanyDialog");
 	gtk_box_set_spacing(GTK_BOX(vbox), 6);
 
 	gtk_window_set_default_size(GTK_WINDOW(pm_widgets.dialog), 500, 450);
 
+	pm_widgets.help_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_HELP, PM_BUTTON_HELP);
+	pm_widgets.configure_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_PREFERENCES, PM_BUTTON_CONFIGURE);
+	pm_widgets.keybindings_button = gtk_dialog_add_button(
+		GTK_DIALOG(pm_widgets.dialog), _("Keybindings"), PM_BUTTON_KEYBINDINGS);
+	gtk_dialog_add_button(GTK_DIALOG(pm_widgets.dialog), GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);
+	gtk_dialog_set_default_response(GTK_DIALOG(pm_widgets.dialog), GTK_RESPONSE_CLOSE);
+
+	/* filter */
+	pm_widgets.filter_entry = filter_entry = gtk_entry_new();
+	gtk_entry_set_icon_from_stock(GTK_ENTRY(filter_entry), GTK_ENTRY_ICON_PRIMARY, GTK_STOCK_FIND);
+	ui_entry_add_clear_icon(GTK_ENTRY(filter_entry));
+	g_signal_connect(filter_entry, "changed", G_CALLBACK(on_pm_tree_filter_entry_changed_cb), NULL);
+	g_signal_connect(filter_entry, "icon-release",
+		G_CALLBACK(on_pm_tree_filter_entry_icon_release_cb), NULL);
+
+	/* prepare treeview */
 	pm_widgets.tree = gtk_tree_view_new();
-	pm_widgets.store = gtk_list_store_new(
-		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
+	pm_widgets.store = gtk_tree_store_new(
+		PLUGIN_N_COLUMNS, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_POINTER);
 	pm_prepare_treeview(pm_widgets.tree, pm_widgets.store);
+	gtk_tree_view_expand_all(GTK_TREE_VIEW(pm_widgets.tree));
+	g_object_unref(pm_widgets.store);
 
 	swin = gtk_scrolled_window_new(NULL, NULL);
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(swin),
@@ -1443,66 +1973,109 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 
 	label = geany_wrap_label_new(_("Choose which plugins should be loaded at startup:"));
 
-	pm_widgets.keybindings_button = gtk_button_new_with_label(_("Keybindings"));
-	gtk_widget_set_sensitive(pm_widgets.keybindings_button, FALSE);
-	g_signal_connect(pm_widgets.keybindings_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
+	/* plugin popup menu */
+	pm_widgets.popup_menu = gtk_menu_new();
 
-	pm_widgets.configure_button = gtk_button_new_from_stock(GTK_STOCK_PREFERENCES);
-	gtk_widget_set_sensitive(pm_widgets.configure_button, FALSE);
-	g_signal_connect(pm_widgets.configure_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
+	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_PREFERENCES, NULL);
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_CONFIGURE));
+	pm_widgets.popup_configure_menu_item = menu_item;
 
-	pm_widgets.help_button = gtk_button_new_from_stock(GTK_STOCK_HELP);
-	gtk_widget_set_sensitive(pm_widgets.help_button, FALSE);
-	g_signal_connect(pm_widgets.help_button, "clicked",
-		G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
+	menu_item = gtk_image_menu_item_new_with_mnemonic(_("Keybindings"));
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_KEYBINDINGS));
+	pm_widgets.popup_keybindings_menu_item = menu_item;
 
-	label2 = gtk_label_new(_("<b>Plugin details:</b>"));
-	gtk_label_set_use_markup(GTK_LABEL(label2), TRUE);
-	gtk_misc_set_alignment(GTK_MISC(label2), 0, 0.5);
+	menu_item = gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP, NULL);
+	gtk_container_add(GTK_CONTAINER(pm_widgets.popup_menu), menu_item);
+	g_signal_connect(menu_item, "activate",
+			G_CALLBACK(pm_on_plugin_button_clicked), GINT_TO_POINTER(PM_BUTTON_HELP));
+	pm_widgets.popup_help_menu_item = menu_item;
 
-	table = gtk_table_new(3, 2, FALSE);
-	gtk_table_set_col_spacings(GTK_TABLE(table), 6);
-	pm_widgets.plugin_label = geany_wrap_label_new(NULL);
-	pm_widgets.filename_label = geany_wrap_label_new(NULL);
-	pm_widgets.author_label = geany_wrap_label_new(NULL);
-	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Plugin:")), 0, 1, 0, 1, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Author(s):")), 0, 1, 1, 2, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), create_table_label(_("Filename:")), 0, 1, 2, 3, GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), pm_widgets.plugin_label, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), pm_widgets.author_label, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-	gtk_table_attach(GTK_TABLE(table), pm_widgets.filename_label, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-
-	desc_win = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(desc_win),
-		GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(desc_win), table);
-
-	hbox = gtk_hbox_new(FALSE, 0);
-	gtk_box_set_spacing(GTK_BOX(hbox), 6);
-	gtk_box_pack_start(GTK_BOX(hbox), label2, TRUE, TRUE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.help_button, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.configure_button, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(hbox), pm_widgets.keybindings_button, FALSE, FALSE, 0);
-
-	label_vbox = gtk_vbox_new(FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(label_vbox), hbox, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(label_vbox), desc_win, TRUE, TRUE, 0);
-
-	paned = gtk_vpaned_new();
-	gtk_paned_pack1(GTK_PANED(paned), swin, TRUE, FALSE);
-	gtk_paned_pack2(GTK_PANED(paned), label_vbox, FALSE, FALSE);
-
-	vbox2 = gtk_vbox_new(FALSE, 3);
-	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 5);
-	gtk_box_pack_start(GTK_BOX(vbox2), paned, TRUE, TRUE, 0);
+	/* put it together */
+	vbox2 = gtk_vbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(vbox2), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), filter_entry, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox2), swin, TRUE, TRUE, 0);
 
 	g_signal_connect(pm_widgets.dialog, "response", G_CALLBACK(pm_dialog_response), NULL);
 
 	gtk_box_pack_start(GTK_BOX(vbox), vbox2, TRUE, TRUE, 0);
 	gtk_widget_show_all(pm_widgets.dialog);
+	gtk_widget_show_all(pm_widgets.popup_menu);
+
+	/* set initial plugin buttons state, pass NULL as no plugin is selected by default */
+	pm_update_buttons(NULL);
+	gtk_widget_grab_focus(pm_widgets.filter_entry);
 }
 
+
+/** Register the plugin as a proxy for other plugins
+ *
+ * Proxy plugins register a list of file extensions and a set of callbacks that are called
+ * appropriately. A plugin can be a proxy for multiple types of sub-plugins by handling
+ * separate file extensions, however they must share the same set of hooks, because this
+ * function can only be called at most once per plugin.
+ *
+ * Each callback receives the plugin-defined data as parameter (see geany_plugin_register()). The
+ * callbacks must be set prior to calling this, by assigning to @a plugin->proxy_funcs.
+ * GeanyProxyFuncs::load and GeanyProxyFuncs::unload must be implemented.
+ *
+ * Nested proxies are unsupported at this point (TODO).
+ *
+ * @note It is entirely up to the proxy to provide access to Geany's plugin API. Native code
+ * can naturally call Geany's API directly, for interpreted languages the proxy has to
+ * implement some kind of bindings that the plugin can use.
+ *
+ * @see proxy for detailed documentation and an example.
+ *
+ * @param plugin The pointer to the plugin's GeanyPlugin instance
+ * @param extensions A @c NULL-terminated string array of file extensions, excluding the dot.
+ * @return @c TRUE if the proxy was successfully registered, otherwise @c FALSE
+ *
+ * @since 1.26 (API 226)
+ */
+GEANY_API_SYMBOL
+gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensions)
+{
+	Plugin *p;
+	const gchar **ext;
+	PluginProxy *proxy;
+	GList *node;
+
+	g_return_val_if_fail(plugin != NULL, FALSE);
+	g_return_val_if_fail(extensions != NULL, FALSE);
+	g_return_val_if_fail(*extensions != NULL, FALSE);
+	g_return_val_if_fail(plugin->proxy_funcs->load != NULL, FALSE);
+	g_return_val_if_fail(plugin->proxy_funcs->unload != NULL, FALSE);
+
+	p = plugin->priv;
+	/* Check if this was called already. We want to reserve for the use case of calling
+	 * this again to set new supported extensions (for example, based on proxy configuration). */
+	foreach_list(node, active_proxies.head)
+	{
+		proxy = node->data;
+		g_return_val_if_fail(p != proxy->plugin, FALSE);
+	}
+
+	foreach_strv(ext, extensions)
+	{
+		if (**ext == '.')
+		{
+			g_warning(_("Proxy plugin '%s' extension '%s' starts with a dot. "
+				"Please fix your proxy plugin."), p->info.name, *ext);
+		}
+
+		proxy = g_new(PluginProxy, 1);
+		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
+		proxy->plugin = p;
+		/* prepend, so that plugins automatically override core providers for a given extension */
+		g_queue_push_head(&active_proxies, proxy);
+	}
+
+	return TRUE;
+}
 
 #endif
