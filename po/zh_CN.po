@@ -4,11 +4,11 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2015.
+# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2017.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
 "PO-Revision-Date: 2017-11-07 19:09+0800\n"
