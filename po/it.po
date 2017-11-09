@@ -1,17 +1,17 @@
 # Italian translations for geany package
 # Traduzioni italiane per il pacchetto geany..
-# Copyright (C) 2006-2013 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2017 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #  <dario.santomarco@gmail.com>, 2006.
 #  <M.Baldinelli@agora.it>, 2006 - 2009
 # Giuliano Manzitti <giuliano1979@hotmail.com>, 2011
-# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2015
+# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2017-02-22 22:01+0000\n"
+"PO-Revision-Date: 2017-11-08 23:32+0000\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -200,26 +200,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Avvio</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Salva posizione e geometria della finestra"
+msgstr "Salva dimensione finestra"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr ""
-"Salva la posizione e la geometria della finestra e la ripristina all'avvio"
+msgstr "Salva la dimensione della finestra e la ripristina all'avvio"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Salva posizione e geometria della finestra"
+msgstr "Salva posizione finestra"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr ""
-"Salva la posizione e la geometria della finestra e la ripristina all'avvio"
+msgstr "Salva la posizione della finestra e la ripristina all'avvio"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -3856,26 +3850,24 @@ msgid "Failed to load one or more session files."
 msgstr "Caricamento di uno o più file della sessione non riuscito."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Imposta il numero iniziale di colonna per il primo file aperto (utile "
-"insieme all'opzione --line)"
+"Imposta il numero iniziale a COLONNA per il primo file aperto (utile insieme "
+"all'opzione --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "COLONNA"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Imposta una cartella di configurazione alternativa"
+msgstr "Utilizza cartella di configurazione alternativa DIR"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3896,14 +3888,15 @@ msgstr ""
 "nuova istanza"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
-msgstr "Usare questo socket per comunicare con un'istanza avviata di Geany"
+msgstr ""
+"Usa socket nome file FILE per comunicare con un'istanza in esecuzione di "
+"Geany"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FILE"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3911,13 +3904,12 @@ msgstr ""
 "Ritorna una lista di documenti aperti in un istanza Geany in esecuzione"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Imposta il numero di riga iniziale per il primo file aperto"
+msgstr "Imposta il numero di riga iniziale a RIGA per il primo file aperto"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "RIGA"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3951,7 +3943,7 @@ msgstr "Non caricare il supporto del terminale"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Usa FILE come libreria VTE dinamicamente collegata"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3966,13 +3958,12 @@ msgid "[FILES...]"
 msgstr "[FILE...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Un IDE veloce e leggero"
+msgstr "Un IDE veloce e leggero."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Notifica bug a https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4083,9 +4074,8 @@ msgid "Open in New _Window"
 msgstr "Apri in _nuova finestra"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Sposta il documento a destra"
+msgstr "Chiudi i documenti a _destra"
 
 #: ../src/plugins.c:233
 #, c-format
