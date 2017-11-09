@@ -1,14 +1,14 @@
 # Italian translations for geany package
 # Traduzioni italiane per il pacchetto geany..
-# Copyright (C) 2006-2013 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2006-2017 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #  <dario.santomarco@gmail.com>, 2006.
 #  <M.Baldinelli@agora.it>, 2006 - 2009
 # Giuliano Manzitti <giuliano1979@hotmail.com>, 2011
-# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2015
+# Giuseppe Penone <giuspen@gmail.com>, 2013 - 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
 "PO-Revision-Date: 2017-11-08 23:32+0000\n"
