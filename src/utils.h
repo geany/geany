@@ -309,6 +309,7 @@ gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writable(const gchar *locale_filename);
 
+const gchar *utils_get_uri_file_prefix(void);
 
 gchar *utils_get_path_from_uri(const gchar *uri);
 

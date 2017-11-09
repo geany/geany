@@ -46,7 +46,7 @@ mime_type=text/x-python
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comment char, like # in this file
-comment_single=#
+comment_single=#\s
 # multiline comments
 #comment_open="""
 #comment_close="""
