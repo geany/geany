@@ -3927,7 +3927,7 @@ msgstr "Das integrierte Terminal (VTE) nicht starten"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr "Nutzt den Werte aus DATEI als dynmaisch gelinkte VTE-Bibliothek"
+msgstr "Nutzt DATEI als dynamisch gelinkte VTE-Bibliothek"
 
 # siehe http://en.de.open-tran.eu/suggest/be verbose
 #: ../src/libmain.c:145
@@ -3948,7 +3948,7 @@ msgstr "Eine kleine und schnelle Entwicklungsumgebung"
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr "Fehler nach https://github.com/geany/geany/issues berichten."
+msgstr "Fehlerberichte bitte auf https://github.com/geany/geany/issues einreichen."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
