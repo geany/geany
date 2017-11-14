@@ -315,22 +315,28 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 		}
 		if (event->type == GDK_BUTTON_PRESS && state == GEANY_PRIMARY_MOD_MASK)
 		{
-			sci_set_current_position(editor->sci, editor_info.click_pos, FALSE);
-
-			editor_find_current_word(editor, editor_info.click_pos,
-				current_word, sizeof current_word, NULL);
-			if (*current_word)
-				return symbols_goto_tag(current_word, TRUE);
-			else
-				keybindings_send_command(GEANY_KEY_GROUP_GOTO, GEANY_KEYS_GOTO_MATCHINGBRACE);
-			return TRUE;
+			g_warning("ctrl-left-click");
+			g_warning("%d selection(s) before", sci_get_selections(editor->sci));
+			sci_add_selection(editor->sci, editor_info.click_pos, editor_info.click_pos);
+			g_warning("%d selection(s) after", sci_get_selections(editor->sci));
 		}
 		return document_check_disk_status(doc, FALSE);
 	}
+	
 
 	/* calls the edit popup menu in the editor */
 	if (event->button == 3)
 	{
+		//TODO: Remove from here ...
+		guint state = keybindings_get_modifiers(event->state);
+		if (event->type == GDK_BUTTON_PRESS && state == GEANY_PRIMARY_MOD_MASK)
+		{
+			g_warning("ctrl-right-click");
+			sci_rotate_selection(editor->sci);
+			g_warning("%d selections total", sci_get_selections(editor->sci));
+			return TRUE;
+		}
+		// ... to here.
 		gboolean can_goto;
 
 		/* ensure the editor widget has the focus after this operation */
@@ -4919,6 +4925,8 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	sci_use_popup(sci, FALSE);
 
 	setup_sci_keys(sci);
+
+	sci_set_multiple_selection(sci, TRUE);
 
 	sci_set_symbol_margin(sci, editor_prefs.show_markers_margin);
 	sci_set_lines_wrapped(sci, editor->line_wrapping);

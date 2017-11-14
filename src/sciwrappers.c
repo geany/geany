@@ -1226,6 +1226,90 @@ gint sci_find_matching_brace(ScintillaObject *sci, gint pos)
 }
 
 
+void sci_set_multiple_selection(ScintillaObject *sci, gboolean set)
+{
+	SSM(sci, SCI_SETMULTIPLESELECTION, set, 0);
+}
+
+
+gboolean sci_get_multiple_selection(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETMULTIPLESELECTION, 0, 0);
+}
+
+
+gint sci_get_selections(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETSELECTIONS, 0, 0);
+}
+
+
+gboolean sci_get_selection_empty(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETSELECTIONEMPTY, 0, 0);
+}
+
+
+void sci_clear_selections(ScintillaObject *sci)
+{
+	SSM(sci, SCI_CLEARSELECTIONS, 0, 0);
+}
+
+//Not to be confused with sci_set_selection!
+void sci_set_selection_single(ScintillaObject *sci, gint caret, gint anchor)
+{
+	SSM(sci, SCI_SETSELECTION, caret, anchor);
+}
+
+
+void sci_add_selection(ScintillaObject *sci, gint caret, gint anchor)
+{
+	SSM(sci, SCI_ADDSELECTION, caret, anchor);
+}
+
+
+void sci_drop_selection_n(ScintillaObject *sci, gint selection)
+{
+	SSM(sci, SCI_DROPSELECTIONN, 0, 0);
+}
+
+
+void sci_set_main_selection(ScintillaObject *sci, gint selection)
+{
+	SSM(sci, SCI_SETMAINSELECTION, 0, 0);
+}
+
+
+gint sci_get_main_selection(ScintillaObject *sci)
+{
+	SSM(sci, SCI_GETMAINSELECTION, 0, 0);
+}
+
+
+void sci_swap_main_anchor_caret(ScintillaObject *sci)
+{
+	SSM(sci, SCI_SWAPMAINANCHORCARET, 0, 0);
+}
+
+
+void sci_rotate_selection(ScintillaObject *sci)
+{
+	SSM(sci, SCI_ROTATESELECTION, 0, 0);
+}
+
+
+void sci_multiple_select_add_next(ScintillaObject *sci)
+{
+	SSM(sci, SCI_MULTIPLESELECTADDNEXT, 0, 0);
+}
+
+
+void sci_multiple_select_add_each(ScintillaObject *sci)
+{
+	SSM(sci, SCI_MULTIPLESELECTADDEACH, 0, 0);
+}
+
+
 gint sci_get_overtype(ScintillaObject *sci)
 {
 	return (gint) SSM(sci, SCI_GETOVERTYPE, 0, 0);
