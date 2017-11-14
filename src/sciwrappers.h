@@ -103,6 +103,23 @@ void				sci_set_line_indentation	(ScintillaObject *sci, gint line, gint indent);
 gint				sci_get_line_indentation	(ScintillaObject *sci, gint line);
 gint				sci_find_matching_brace		(ScintillaObject *sci, gint pos);
 
+void				sci_set_multiple_selection	(ScintillaObject *sci, gboolean set);
+gboolean			sci_get_multiple_selection	(ScintillaObject *sci);
+
+gint				sci_get_selections			(ScintillaObject *sci);
+gboolean			sci_get_selection_empty		(ScintillaObject *sci);
+void				sci_clear_selections		(ScintillaObject *sci);
+void				sci_set_selection_single	(ScintillaObject *sci, gint caret, gint anchor);
+void				sci_add_selection			(ScintillaObject *sci, gint caret, gint anchor);
+void				sci_drop_selection_n		(ScintillaObject *sci, gint selection);
+void				sci_set_main_selection		(ScintillaObject *sci, gint selection);
+gint				sci_get_main_selection		(ScintillaObject *sci);
+
+void				sci_swap_main_anchor_caret	(ScintillaObject *sci);
+void				sci_rotate_selection		(ScintillaObject *sci);
+void				sci_multiple_select_add_next(ScintillaObject *sci);
+void				sci_multiple_select_add_each(ScintillaObject *sci);
+
 #ifndef GEANY_DISABLE_DEPRECATED
 void				sci_get_text				(ScintillaObject *sci, gint len, gchar *text) GEANY_DEPRECATED_FOR(sci_get_contents);
 void				sci_get_selected_text		(ScintillaObject *sci, gchar *text) GEANY_DEPRECATED_FOR(sci_get_selection_contents);
