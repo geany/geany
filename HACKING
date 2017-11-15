@@ -41,6 +41,24 @@ The documentation will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
+Build a standalone Geany for hacking
+------------------------------------
+This performs a simple in-tree build of Geany that does not interfere with your installed version.
+
+Assuming you have installed the necessary tools.
+
+Create a directory `/home/you/somewhere/` then::
+
+  cd /home/you/somewhere
+  git clone https://github.com/geany/geany.git
+  cd geany
+  ./autogen.sh --prefix=/home/you/somewhere
+  make install
+  cd ../bin
+  ./geany -c ../config
+
+Note no privileges or sudo are required, and when you are finished just `rm -rf /home/you/somewhere`.
+
 Pull requests
 -------------
 Making pull requests on Github is the preferred way of contributing for geany.
