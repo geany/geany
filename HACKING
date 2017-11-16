@@ -154,24 +154,25 @@ into an executable program::
 
 This usually takes a few minutes, depending on the speed of your
 system. This step is where you'll get all of your compilation errors
-so if you've change the source code, take heed of the warning/error
+so if you've changed the source code, take heed of the warning/error
 messages reported here.
 
 If you have multiple CPUs/cores you can pass the `-j` option to `make`
 to have it spin up the specified number of concurrent processes where
 possible to complete the compilation and linking stages in less time.
-Geany's build system is incremental, so after you hack on the code and
+Geany's build system is also incremental, so after you hack on the code and
 want to rebuild, you can run `make` again and only the needed files
-will be built, which makes it much faster than the initial build.
+will be re-built, which makes it much faster than the initial build.
 
-Once Geany is built, we want to install it into the provided `--prefix`
+Once Geany is built, we want to install it into the directory
+previously specified to the `configure` script using `--prefix` option
 to test it, like this::
 
     $ make install
 
-In fact, the `make install` rule will necessary run the complete build,
-so you can skip running `make` by itself as above and instead just run
-`make install`, combining the two steps into one.
+In fact, the `make install` rule will necessarily run the complete
+build, so you can skip running `make` by itself as above and instead
+just run `make install`, combining the two steps into one.
 
 Now that Geany is installed in our special isolated prefix, we can run
 it as follows::
@@ -203,7 +204,7 @@ to the master branch like this::
 
     $ git checkout master
 
-Whenever you've made changes to the source in some branch and want to
+Whenever you've made changes to the sources in some branch and want to
 test them, you can always re-run these commands::
 
     $ make install
