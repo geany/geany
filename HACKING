@@ -41,23 +41,173 @@ The documentation will be output to doc/reference/index.html.
 Alternatively you can view the API documentation online at
 http://www.geany.org/manual/reference/.
 
-Build a standalone Geany for hacking
+Setting up a Development Environment
 ------------------------------------
-This performs a simple in-tree build of Geany that does not interfere with your installed version.
 
-Assuming you have installed the necessary tools.
+If you plan on hacking on Geany's code, you probably want to setup a
+working environment for compiling it and testing it out without
+interfering with your main Geany installation from your package manager
+or release package. This approach does not require "root"/sudo
+permissions, and doesn't risk messing up your system or leaving cruft
+behind.
 
-Create a directory `/home/you/somewhere/` then::
+This section assumes you have all of the tools, and development
+dependencies already installed (ex. autoconf, automake, libtool, GTK+
+development headers, etc), which are documented elsewhere. Generally
+speaking if you encounter an error during the set up here, read any
+warning/error messages produced and most likely they will mention if
+you need to install something else. Install these dependencies using
+your package manager or preferred software distribution mechanism
 
-  cd /home/you/somewhere
-  git clone https://github.com/geany/geany.git
-  cd geany
-  ./autogen.sh --prefix=/home/you/somewhere
-  make install
-  cd ../bin
-  ./geany -c ../config
+To save some typing and potential typos, lets first define an
+environment variable containing the path to where your Geany "hacking"
+files will live, for example::
 
-Note no privileges or sudo are required, and when you are finished just `rm -rf /home/you/somewhere`.
+    $ export DEVDIR=$HOME/geany-dev
+
+Everything related to this "hacking" build will be below this
+directory. You can call the directory whatever you want, but it's
+recommended that it's a directory somewhere below your home directory.
+
+Now let's create that directory and change into it::
+
+    $ mkdir -p $DEVDIR
+    $ cd $DEVDIR
+
+We'll keep a checkout of Geany's source code in a directory called
+`source`. Let's use Git to put a fresh copy of Geany's development code
+in this directory and then change into it::
+
+    $ git clone https://github.com/geany/geany.git source
+    $ cd source
+
+If you plan on ever contributing your changes back to Geany, you should
+setup the Git repository with your correct authorship information::
+
+    $ git config user.name "Your Name Here"
+    $ git config user.email "you@domain.com"
+
+This should be one of the email addresses you've setup with Github (if
+applicable) if you want Github to recognize your user as having
+authored the changes (linking to your profile, etc).
+
+The first time you checkout Geany's source code from Git, and possibly
+later down the line if you find yourself hacking on Geany's build
+system, you need to run the `autogen.sh` script to bootstrap the build
+system and prepare the configuration scripts. The `autogen.sh` script
+will automatically run the build system configuration scripts by
+default, which we don't want with the way the development environment
+will be set up, so we're setting the `NOCONFIGURE` environment variable
+for the `autogen.sh` script to disable that behaviour::
+
+    $ cd $DEVDIR/source
+    $ NOCONFIGURE=1 ./autogen.sh
+
+After this command a script named `configure` will be available in the
+source directory that needs to be run to actually configure the build
+system. It's usually a good idea not to build Geany right inside the
+source directory because it will produce all kinds of files that will
+soil your nice clean Git checkout, so we'll do an "out-of-tree" build
+by executing the `configure` script from a different directory, which
+we'll create and change into like this::
+
+    $ mkdir -p $DEVDIR/build
+    $ cd $DEVDIR/build
+
+Now to actually run the `configure` script that will check your system
+to ensure you have all of the requisit tools, libraries and headers
+installed, and produce Make files which we'll use to compile and link
+Geany.
+
+We can run it as follows::
+
+    $ CFLAGS='-Wall -Wextra -Wno-unused-parameter' \
+        $DEVDIR/source/configure \
+            --prefix=$DEVDIR/prefix/install_1
+
+This might look a little complicated but it's actually not bad (note
+the escaped line-breaks are for readability, you don't have to put it
+on multiple lines). The first line is setting the `CFLAGS` environment
+variable to enable some stricter-than-default compiler warning messages
+(see `Compiler options & warnings`_). If you're hacking on Geany's
+source and have any intention of providing your changes for inclusion
+into Geany proper, you definitively want stricter-than-default compiler
+warnings.
+
+The second line is actually calling the `configure` script using an
+explicit path, since we're building in a different directory.
+
+The third line is passing the `--prefix` option to the `configure`
+script, giving a directory within the development directory called
+`prefix/install_1`. This is where this build of Geany will be installed
+later, as opposed to the default directory (usually `/usr/local`, which
+requires root permissions). The reason it's called `install_1` is
+simply to highlight that you may want to have several concurrent
+development installs without them interfering with each other. You
+might name another install `install_2`, for example. The actual path is
+completely arbitrary.
+
+With the build system configured, we're ready to compile and link Geany
+into an executable program::
+
+    $ make
+
+This usually takes a few minutes, depending on the speed of your
+system. This step is where you'll get all of your compilation errors
+so if you've change the source code, take heed of the warning/error
+messages reported here.
+
+If you have multiple CPUs/cores you can pass the `-j` option to `make`
+to have it spin up the specified number of concurrent processes where
+possible to complete the compilation and linking stages in less time.
+Geany's build system is incremental, so after you hack on the code and
+want to rebuild, you can run `make` again and only the needed files
+will be built, which makes it much faster than the initial build.
+
+Once Geany is built, we want to install it into the provided `--prefix`
+to test it, like this::
+
+    $ make install
+
+In fact, the `make install` rule will necessary run the complete build,
+so you can skip running `make` by itself as above and instead just run
+`make install`, combining the two steps into one.
+
+Now that Geany is installed in our special isolated prefix, we can run
+it as follows::
+
+    $ $DEVDIR/prefix/install_1/bin/geany -v -c $DEVDIR/conf/install_1
+
+This fires up the freshly installed Geany executable passing it the
+`-v` option to have it print out verbose debugging messages in the
+terminal, as well as the `-c` option to specify a configuration
+different from our main Geany installation. The sub-directory
+`conf/install_1` is used here to indicate that we're testing that
+specific installation (from above). This path is completely arbitrary
+and it would not be uncommon to have more than one testing "config"
+directory per installation/hacking session. Generally, whenever you
+want to start from scratch at manually testing some changes to Geany,
+especially preferences, filetypes, plugin preferences, etc, you should
+work from a new config directory.
+
+Now you're ready to start hacking away on Geany. If you have an
+explicit change in mind and plan to propose it for inclusion into Geany
+proper, it's always best to create a Git branch to keep the changes
+isolated from everything else::
+
+    $ git checkout -b fix-some-bug
+
+Now you can make changes to Geany's source and commit them to this
+branch, and always get back to a clean Geany checkout by switching back
+to the master branch like this::
+
+    $ git checkout master
+
+Whenever you've made changes to the source in some branch and want to
+test them, you can always re-run these commands::
+
+    $ make install
+    $ $DEVDIR/prefix/install_1/bin/geany -v -c $DEVDIR/conf/install_1
 
 Pull requests
 -------------
