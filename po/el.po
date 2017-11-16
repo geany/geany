@@ -1,16 +1,16 @@
 # translation of el.po to Greek
 # Greek translations for geany package.
-# Copyright (C) 2008-2016 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2008-2017 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
 # Stavros Temertzidis <bullgr@gmail.com>, 2008-2014
-# Michael Misirlis <mmisirlis@gmail.com>, 2015-2016
+# Michael Misirlis <mmisirlis@gmail.com>, 2015-2017
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2017-03-16 13:03+0200\n"
+"POT-Creation-Date: 2017-11-09 00:11+0100\n"
+"PO-Revision-Date: 2017-11-16 20:05+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 2.0.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -58,7 +58,7 @@ msgstr "Ε_ισαγωγή"
 
 #: ../data/geany.glade.h:6
 msgid "Insert _ChangeLog Entry"
-msgstr "Εισαγωγή Καταχώρησης _ChangeLog "
+msgstr "Εισαγωγή Καταχώρησης _ChangeLog"
 
 #: ../data/geany.glade.h:7
 msgid "Insert _Function Description"
@@ -198,28 +198,21 @@ msgid "<b>Startup</b>"
 msgstr "<b>Εκκίνηση</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Αποθήκευση της θέσης και γεωμετρίας του παραθύρου"
+msgstr "Αποθήκευση μεγέθους  παραθύρου"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
 msgstr ""
-"Αποθηκεύει την θέση και γεωμετρία του παραθύρου και τα επαναφέρει κατά την "
-"εκκίνηση"
+"Αποθηκεύει το μέγεθος του παραθύρου και το επαναφέρει κατά την εκκίνηση"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Αποθήκευση της θέσης και γεωμετρίας του παραθύρου"
+msgstr "Αποθήκευση θέσης παραθύρου"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr ""
-"Αποθηκεύει την θέση και γεωμετρία του παραθύρου και τα επαναφέρει κατά την "
-"εκκίνηση"
+msgstr "Αποθηκεύει την θέση του παραθύρου και την επαναφέρει κατά την εκκίνηση"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -907,7 +900,7 @@ msgstr "Απόρριψη της υπόλοιπης λέξης κατά την σ
 
 #: ../data/geany.glade.h:179
 msgid "Max. symbol name suggestions:"
-msgstr "Μάξιμουμ προτάσεις ονομάτων συμβόλων"
+msgstr "Μάξιμουμ προτάσεις ονομάτων συμβόλων:"
 
 #: ../data/geany.glade.h:180
 msgid "Completion list height:"
@@ -2092,9 +2085,9 @@ msgid "_Apply Default Indentation"
 msgstr "_Εφαρμογή Αυτόματης Εσοχής"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2402 ../src/build.c:2679
+#: ../data/geany.glade.h:443 ../src/build.c:2403 ../src/build.c:2680
 msgid "_Build"
-msgstr "_Κατασκευή (Build)"
+msgstr "_Κατασκευή"
 
 #: ../data/geany.glade.h:444
 msgid "_Tools"
@@ -2130,7 +2123,7 @@ msgstr "_Συντομεύσεις Πληκτρολογίου"
 
 #: ../data/geany.glade.h:452
 msgid "Debug _Messages"
-msgstr "Μηνύματα _Αποσφαλμάτωσης (Debug)"
+msgstr "Μηνύματα _Αποσφαλμάτωσης"
 
 #: ../data/geany.glade.h:453
 msgid "_Website"
@@ -2446,100 +2439,100 @@ msgstr ""
 "Εισάγετε το προσαρμοσμένο κείμενο εδώ, όλο το εισακτέο κείμενο προστίθεται "
 "στην εντολή."
 
-#: ../src/build.c:1299
+#: ../src/build.c:1300
 msgid "_Next Error"
 msgstr "_Επόμενο Σφάλμα"
 
-#: ../src/build.c:1301
+#: ../src/build.c:1302
 msgid "_Previous Error"
 msgstr "_Προηγούμενο Σφάλμα"
 
 #. arguments
-#: ../src/build.c:1311 ../src/build.c:2719
+#: ../src/build.c:1312 ../src/build.c:2720
 msgid "_Set Build Commands"
 msgstr "Ρ_ύθμιση Εντολών Κατασκευής (Build)"
 
-#: ../src/build.c:1586 ../src/toolbar.c:376
+#: ../src/build.c:1587 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "Κατασκευή (Build) του τρέχοντος αρχείου"
 
-#: ../src/build.c:1597
+#: ../src/build.c:1598
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Κατασκευάζει (build) το τρέχον αρχείο με το εργαλείο Δημιουργίας (Make) και "
 "τον προεπιλεγμένο προορισμό"
 
-#: ../src/build.c:1599
+#: ../src/build.c:1600
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Κατασκευή (Build) του τρέχοντος αρχείου με Make και στο καθορισμένο προορισμό"
 
-#: ../src/build.c:1601
+#: ../src/build.c:1602
 msgid "Compile the current file with Make"
 msgstr "Μεταγλώττιση του τρέχοντος αρχείου με Make"
 
-#: ../src/build.c:1620
+#: ../src/build.c:1621
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Αδύνατη η διακοπή της διαδικασίας (%s)."
 
-#: ../src/build.c:1634 ../src/build.c:1646
+#: ../src/build.c:1635 ../src/build.c:1647
 msgid "No more build errors."
 msgstr "Δεν έχει άλλα λάθη στη κατασκευή (build)."
 
-#: ../src/build.c:1759 ../src/build.c:1761
+#: ../src/build.c:1760 ../src/build.c:1762
 msgid "Set menu item label"
 msgstr "Καθορισμός ετικέτας του αντικειμένου μενού"
 
-#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
+#: ../src/build.c:1787 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "Ετικέτα"
 
 #. command column, holding status and command display
-#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
+#: ../src/build.c:1788 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "Εντολή"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1789
 msgid "Working directory"
 msgstr "Φάκελος εργασίας"
 
-#: ../src/build.c:1789
+#: ../src/build.c:1790
 msgid "Reset"
 msgstr "Επαναφορά"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1847
 msgid "Click to set menu item label"
 msgstr "Κλικ για καθορισμό ετικέτας του αντικειμένου μενού"
 
-#: ../src/build.c:1930 ../src/build.c:1932
+#: ../src/build.c:1931 ../src/build.c:1933
 #, c-format
 msgid "%s commands"
 msgstr "%s εντολές"
 
-#: ../src/build.c:1932
+#: ../src/build.c:1933
 msgid "No filetype"
 msgstr "Χωρίς τύπο αρχείου"
 
-#: ../src/build.c:1941 ../src/build.c:1976
+#: ../src/build.c:1942 ../src/build.c:1977
 msgid "Error regular expression:"
 msgstr "Σφάλμα κανονικής έκφρασης:"
 
-#: ../src/build.c:1969
+#: ../src/build.c:1970
 msgid "Independent commands"
 msgstr "Ανεξάρτητες εντολές"
 
-#: ../src/build.c:2001
+#: ../src/build.c:2002
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Σημείωση: Το αντικείμενο 2 ανοίγει ένα διάλογο και προσθέτει την απόκριση "
 "στην εντολή."
 
-#: ../src/build.c:2010
+#: ../src/build.c:2011
 msgid "Execute commands"
 msgstr "Εκτέλεση εντολών"
 
-#: ../src/build.c:2022
+#: ../src/build.c:2023
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2547,34 +2540,34 @@ msgstr ""
 "Τα %d, %e, %f, %p έχουν αντικατασταθεί στην εντολή και τα πεδία του φακέλου, "
 "δείτε το εγχειρίδιο για περισσότερες λεπτομέρειες."
 
-#: ../src/build.c:2180
+#: ../src/build.c:2181
 msgid "Set Build Commands"
 msgstr "Καθορισμός Εντολών Κατασκευής (Build)"
 
-#: ../src/build.c:2395
+#: ../src/build.c:2396
 msgid "_Compile"
 msgstr "_Μεταγλώττιση"
 
-#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
+#: ../src/build.c:2410 ../src/build.c:2440 ../src/build.c:2648
 msgid "_Execute"
 msgstr "_Εκτέλεση"
 
 #. build the code with make custom
-#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
+#: ../src/build.c:2455 ../src/build.c:2646 ../src/build.c:2700
 msgid "Make Custom _Target..."
 msgstr "Δημιουργία _Προσαρμοσμένου Προορισμού..."
 
 #. build the code with make object
-#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
+#: ../src/build.c:2457 ../src/build.c:2647 ../src/build.c:2708
 msgid "Make _Object"
 msgstr "Δημιουργία _Αντικειμένου"
 
-#: ../src/build.c:2458 ../src/build.c:2644
+#: ../src/build.c:2459 ../src/build.c:2645
 msgid "_Make"
-msgstr "_Δημιουργία (Make)"
+msgstr "_Δημιουργία"
 
 #. build the code with make all
-#: ../src/build.c:2691
+#: ../src/build.c:2692
 msgid "_Make All"
 msgstr "Δημιουργία (Make) _Όλων"
 
@@ -3212,7 +3205,7 @@ msgstr "Κέλυφος (Shell)"
 
 #: ../src/filetypes.c:156
 msgid "Makefile"
-msgstr "Αρχείο δημιουργίας (Make)"
+msgstr "Αρχείο δημιουργίας"
 
 #: ../src/filetypes.c:160
 msgid "Cascading Stylesheet"
@@ -3327,7 +3320,7 @@ msgstr "Έγγραφο"
 #: ../src/keybindings.c:323 ../src/keybindings.c:692 ../src/project.c:513
 #: ../src/ui_utils.c:2215
 msgid "Build"
-msgstr "Κατασκευή (Build)"
+msgstr "Κατασκευή"
 
 #: ../src/keybindings.c:325 ../src/keybindings.c:717
 msgid "Help"
@@ -3819,7 +3812,7 @@ msgstr "Εκτέλεση"
 
 #: ../src/keybindings.c:707
 msgid "Build options"
-msgstr "Επιλογές κατασκευής (build)"
+msgstr "Επιλογές κατασκευής"
 
 #: ../src/keybindings.c:712
 msgid "Show Color Chooser"
@@ -3844,26 +3837,24 @@ msgid "Failed to load one or more session files."
 msgstr "Αποτυχία φόρτωσης ενός ή περισσότερων αρχείων συνεδρίας."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Καθορισμός αρχικών αριθμών στηλών για το πρώτο ανοιγμένο αρχείο (χρήσιμο σε "
-"συνδυασμό με το --line)"
+"Καθορισμός αρχικών αριθμών στηλών σε ΣΤΗΛΗ για το πρώτο ανοιγμένο αρχείο "
+"(χρήσιμο σε συνδυασμό με το --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "ΣΤΗΛΗ"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Χρήση ενός εναλλακτικού φακέλου ρυθμίσεων"
+msgstr "Χρήση ενός εναλλακτικού φακέλου ρυθμίσεων DIR"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3880,20 +3871,19 @@ msgstr "Μη προεπεξεργασία αρχείων C/C++ όταν παρά
 #: ../src/libmain.c:128
 msgid "Don't open files in a running instance, force opening a new instance"
 msgstr ""
-"Να μην ανοίγονται αρχεία κατά τη εκτέλεση μιας διαδικασίας  instance), "
+"Να μην ανοίγονται αρχεία κατά τη εκτέλεση μιας διαδικασίας ( instance), "
 "εξαναγκασμός ανοίγματος μιας νέας διαδικασίας (instance)"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
 "Χρήση του ονόματος αρχείου αυτού του socket για επικοινωνία με μια τρέχουσα "
-"διαδικασία Geany (running Geany instance)"
+"διαδικασία Geany (Geany instance)"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "ΑΡΧΕΙΟ"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3902,13 +3892,13 @@ msgstr ""
 "Geany(running Geany instance)"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Καθορισμός αρχικών αριθμών γραμμών για το πρώτο ανοιγμένο αρχείο"
+msgstr ""
+"Καθορισμός αρχικών αριθμών γραμμών σε ΓΡΑΜΜΗ για το πρώτο ανοιγμένο αρχείο"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "ΓΡΑΜΜΗ"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3933,7 +3923,7 @@ msgstr "Άνοιγμα όλων των ΑΡΧΕΙΩΝ μόνο για ανάγν
 
 #: ../src/libmain.c:140
 msgid "Don't load the previous session's files"
-msgstr "να μην φορτώνονται να προηγούμενα αρχεία συνεδριών"
+msgstr "Να μην φορτώνονται τα αρχεία προηγούμενων συνεδριών"
 
 #: ../src/libmain.c:142
 msgid "Don't load terminal support"
@@ -3941,7 +3931,7 @@ msgstr "Να μην φορτώνεται η υποστήριξη τερματι�
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Χρήση FILE ως δυναμικά-συνεδόμενη βιβλιοθήκη VTE"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3956,13 +3946,12 @@ msgid "[FILES...]"
 msgstr "[ΑΡΧΕΙΑ...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Γρήγορο και ελαφρύ IDE"
+msgstr "Ένα γρήγορο και ελαφρύ IDE."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Αναφορά σφαλμάτων στο https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4030,7 +4019,7 @@ msgstr "Τα αρχεία ρυθμίσεων επαναφορτώθηκαν."
 
 #: ../src/log.c:186
 msgid "Debug Messages"
-msgstr "Μηνύματα Αποσφαλμάτωσης (Debug)"
+msgstr "Μηνύματα Αποσφαλμάτωσης"
 
 #: ../src/log.c:188
 msgid "Cl_ear"
@@ -4071,9 +4060,8 @@ msgid "Open in New _Window"
 msgstr "Άνοιγμα σε Νέο _Παράθυρο"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Μετακίνηση εγγράφου δεξιά"
+msgstr "Κλείσιμο Εγγ_ράφων στα Δεξιά"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4141,7 +4129,7 @@ msgstr ""
 
 #: ../src/pluginutils.c:427
 msgid "Configure Plugins"
-msgstr "Ρύθμιση Πρόσθετων:"
+msgstr "Ρύθμιση Πρόσθετων"
 
 #: ../src/prefs.c:181
 msgid "Grab Key"
@@ -4547,7 +4535,7 @@ msgstr "Έργο"
 
 #: ../src/search.c:832
 msgid "custom"
-msgstr "προσαρμοσμένο (custom)"
+msgstr "προσαρμοσμένο"
 
 #: ../src/search.c:836
 msgid ""
@@ -4687,7 +4675,7 @@ msgstr "Το κείμενο ήταν κενό (ή περιείχε μόνο χα
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Ένα αναφερόμενο πρόγραμμα των Windows πρέπει να είναι ολόκληρο εντός των "
-"εισαγωγικών."
+"εισαγωγικών"
 
 #: ../src/spawn.c:258
 msgid "Program not found"
@@ -4757,7 +4745,7 @@ msgstr "Τύποι constructor"
 #: ../src/symbols.c:676 ../src/symbols.c:726 ../src/symbols.c:749
 #: ../src/symbols.c:794 ../src/symbols.c:818
 msgid "Functions"
-msgstr "Συναρτήσεις (Functions)"
+msgstr "Συναρτήσεις"
 
 #: ../src/symbols.c:493
 msgid "Program"
@@ -4853,7 +4841,7 @@ msgstr "Πακέτο"
 #: ../src/symbols.c:724 ../src/symbols.c:737 ../src/symbols.c:764
 #: ../src/symbols.c:817
 msgid "Interfaces"
-msgstr "Διασυνδέσεις (Interfaces)"
+msgstr "Διασυνδέσεις"
 
 #: ../src/symbols.c:575 ../src/symbols.c:820
 msgid "Structs"
@@ -4932,7 +4920,7 @@ msgstr "Διεργασίες (Procedures)"
 
 #: ../src/symbols.c:678
 msgid "Imports"
-msgstr "Εισαγωγές (Imports)"
+msgstr "Εισαγωγές"
 
 #: ../src/symbols.c:686
 msgid "Entities"
@@ -4944,7 +4932,7 @@ msgstr "Αρχιτεκτονικές"
 
 #: ../src/symbols.c:689
 msgid "Functions / Procedures"
-msgstr "Συναρτήσεις / Διεργασίες (Functions / Procedures)"
+msgstr "Συναρτήσεις / Διεργασίες"
 
 #: ../src/symbols.c:690
 msgid "Variables / Signals"
@@ -4956,11 +4944,11 @@ msgstr "Διεργασίες / Μπλοκ / Συστατικά (Processes / Bloc
 
 #: ../src/symbols.c:699
 msgid "Events"
-msgstr "Συμβάντα (Events)"
+msgstr "Συμβάντα"
 
 #: ../src/symbols.c:701
 msgid "Functions / Tasks"
-msgstr "Συναρτήσεις / Εργασίες (Functions / Tasks)"
+msgstr "Συναρτήσεις / Εργασίες"
 
 #: ../src/symbols.c:715 ../src/symbols.c:770
 msgid "Enums"
@@ -4976,11 +4964,11 @@ msgstr "Συναρτήσεις / Υπορουτίνες"
 
 #: ../src/symbols.c:768
 msgid "Components"
-msgstr "Συστατικά (Components)"
+msgstr "Συστατικά "
 
 #: ../src/symbols.c:769
 msgid "Blocks"
-msgstr "Μπλοκ (Blocks)"
+msgstr "Μπλοκ"
 
 #: ../src/symbols.c:780
 msgid "Defines"
@@ -5182,7 +5170,7 @@ msgstr "Αύξηση εσοχής"
 
 #: ../src/toolbar.c:79 ../src/toolbar.c:384
 msgid "Find the entered text in the current file"
-msgstr " Βρείτε το εισακτέο κείμενο στο τρέχον αρχείο"
+msgstr "Βρείτε το δοσμένο κείμενο στο τρέχον αρχείο"
 
 #: ../src/toolbar.c:80 ../src/toolbar.c:394
 msgid "Jump to the entered line number"
@@ -5222,7 +5210,7 @@ msgstr "Άνοιγμα ενός πρόσφατου αρχείου"
 
 #: ../src/toolbar.c:377
 msgid "Choose more build actions"
-msgstr "Επιλογή περισσότερων επιλογών κατασκευής (build)"
+msgstr "Επιλογή περισσότερων επιλογών κατασκευής"
 
 #: ../src/toolbar.c:384
 msgid "Search Field"
@@ -5636,7 +5624,7 @@ msgstr "Βασική κλάση:"
 
 #: ../plugins/classbuilder.c:496
 msgid "Base source:"
-msgstr "Βασικό πηγαίο αρχείο"
+msgstr "Βασικό πηγαίο αρχείο:"
 
 #: ../plugins/classbuilder.c:501
 msgid "Base header:"
@@ -5676,7 +5664,7 @@ msgstr "Είναι Σίνγκλετον"
 
 #: ../plugins/classbuilder.c:577
 msgid "Constructor type:"
-msgstr "Τύπος Constructor"
+msgstr "Τύπος Constructor:"
 
 #: ../plugins/classbuilder.c:1089
 msgid "Create Cla_ss"
