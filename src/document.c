@@ -1601,6 +1601,10 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	/* Cancel resave bar if still open from previous file deletion */
+	if (doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL)
+		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RESAVE]), GTK_RESPONSE_CANCEL);
+
 	/* Use cancel because the response handler would call this recursively */
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL)
 		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RELOAD]), GTK_RESPONSE_CANCEL);
