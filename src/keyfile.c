@@ -422,8 +422,8 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_load_session", prefs.load_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
-        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
-        g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
@@ -759,8 +759,8 @@ static void load_dialog_prefs(GKeyFile *config)
 	prefs.load_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_load_session", TRUE);
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
-        prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
-        prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", TRUE);
+	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+	prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_winpos);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);
