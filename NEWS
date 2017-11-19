@@ -1,4 +1,62 @@
-Geany 1.32 (unreleased)
+Geany 1.33 (unreleased)
+
+
+Geany 1.32 (November 19, 2017)
+
+    General
+    * Improve CLI argument help (PR#1644).
+    * Keep the current tab when closing documents to the right of another tab.
+    * Re-enable SIGTERM handling (PR#1255).
+    * Create correct path for filetype config files (Jiří Techet, PR#1482).
+    * Add an option to enable IME's candidate window display inline
+      (Sinpo Wei, PR#1514).
+    * Add an option to automatically reload files changed on disk
+      (Mark O'Donovan, PR#1246).
+
+    Bug fixes
+    * Fix backward compatibility of the geometry saving setting.
+    * Close "Deleted from Disk" Infobar on Reload (Lars Paulsen, PR#1628).
+    * Make sure GDK_MOD2_MASK is cleared when getting modifiers
+      (Jiří Techet, PR#1636).
+    * Use non-symlinked VTE libraries on MacOS X (Jiří Techet, PR#1625).
+    * Fix crash if plugin manager is opened more than once (PR#1564).
+    * Fix incorrect variable reference (Thomas Martitz, PR#1561).
+
+    Interface
+    * Add "Close Documents to the Right" feature (PR#1362).
+    * Add an option to save/reload either window position or size,
+      but optionally not both (delt01, PR#1456).
+
+    Editor
+    * Update Scintilla to version 3.7.5 (PR#1503).
+    * Improve snippet support (visual indicators and more)
+      (Thomas Martitz, PR#1470).
+    * Push current position to navqueue before navigating back
+      (Vasiliy Faronov, PR#1537).
+
+    Filetypes
+    * Add GNU assembler filetype extensions (Issue#904).
+    * Make Python comment hash space (PR#1682).
+    * Add missing string and comment styles for various lexers (PR#1502).
+    * Add missing PHP keywords, especially for PHP 7.x (1547, PR#1547).
+    * Python: Don't highlight sub-identifiers as keywords (PR#1544).
+
+    Plugins
+    * FileBrowser: don't change directory on project save
+      (Jiří Techet, PR#1400).
+
+    Windows
+    * Fix Execute button on Windows when using HTML files and
+      "builtin" command (Issue#1018, PR#1667).
+
+    API
+    * Add `utils_get_real_path()` and deprecate `tm_get_real_path()` (PR#1224).
+    * Add `geany_plugin_get_data()` (PR#1234).
+    * Add `keybindings_load_keyfile()` (Jiří Techet, PR#1430).
+    * Add `tm_tag_get_type()` (Thomas Martitz, PR#1465).
+
+    HACKING
+    * Add note about data types and update for best practices (PR#1282).
 
     Internationalization
     * Updated translations: ca, de, el, es, fr, it, lt, lv, nl, pt, ru,
