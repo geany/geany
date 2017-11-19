@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.32
+.. |(version)| replace:: 1.33
 .. -*- reStructuredText -*-
 
 =======
@@ -14,7 +14,7 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2017-07-16
+:Date: 2017-11-19
 :Version: |(version)|
 
 Copyright © 2005-2017
