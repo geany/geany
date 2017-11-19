@@ -52,7 +52,7 @@ Geany 1.32 (November 19, 2017)
     * Add `keybindings_load_keyfile()` (Jiří Techet, PR#1430).
     * Add `tm_tag_get_type()` (Thomas Martitz, PR#1465).
 
-    HACKING:
+    HACKING
     * Add note about data types and update for best practices (PR#1282).
 
     Internationalization
