@@ -14,6 +14,7 @@ parsers = \
 	parsers/actionscript.c \
 	parsers/asciidoc.c \
 	parsers/asm.c \
+	parsers/autoit.c \
 	parsers/basic.c \
 	parsers/c.c \
 	parsers/cobol.c \
