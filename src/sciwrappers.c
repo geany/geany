@@ -321,6 +321,10 @@ void sci_zoom_off(ScintillaObject *sci)
 	SSM(sci, SCI_SETZOOM, 0, 0);
 }
 
+gint sci_get_zoom(ScintillaObject *sci)
+{
+	return SSM(sci, SCI_GETZOOM, 0, 0);
+}
 
 /** Sets a line marker.
  * @param sci Scintilla widget.
@@ -961,6 +965,12 @@ GEANY_API_SYMBOL
 void sci_set_font(ScintillaObject *sci, gint style, const gchar *font, gint size)
 {
 	sci_set_font_fractional(sci, style, font, size);
+}
+
+
+gdouble sci_get_font_size(ScintillaObject *sci, gint style)
+{
+	return SSM(sci, SCI_STYLEGETSIZEFRACTIONAL, (uptr_t) style, 0) / (gdouble) SC_FONT_SIZE_MULTIPLIER;
 }
 
 
