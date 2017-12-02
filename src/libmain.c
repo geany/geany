@@ -49,6 +49,7 @@
 #include "plugins.h"
 #include "prefs.h"
 #include "printing.h"
+#include "resources.h"
 #include "sidebar.h"
 #ifdef HAVE_SOCKET
 # include "socket.h"
@@ -1046,6 +1047,7 @@ gint main_lib(gint argc, gchar **argv)
 	g_type_init();
 #endif
 
+	geany_register_resource();
 	log_handlers_init();
 
 	app = g_new0(GeanyApp, 1);
@@ -1362,6 +1364,7 @@ static void do_main_quit(void)
 	g_free(app);
 
 	ui_finalize_builder();
+	geany_unregister_resource();
 
 	gtk_main_quit();
 }

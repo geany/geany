@@ -110,8 +110,9 @@ nobase_dist_pkgdata_DATA = \
 	$(templates) \
 	filetype_extensions.conf \
 	snippets.conf \
-	ui_toolbar.xml \
-	geany.glade
+	ui_toolbar.xml
+
+EXTRA_DIST = geany.glade
 
 if GTK3
 nobase_dist_pkgdata_DATA += \
