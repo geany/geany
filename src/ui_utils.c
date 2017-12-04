@@ -2940,6 +2940,7 @@ void ui_menu_add_document_items_sorted(GtkMenu *menu, GeanyDocument *active,
 		menu_item = gtk_image_menu_item_new_with_label(base_name);
 		image = gtk_image_new_from_gicon(doc->file_type->icon, GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
+		gtk_widget_set_tooltip_text(menu_item, DOC_FILENAME(doc));
 
 		gtk_widget_show(menu_item);
 		gtk_container_add(GTK_CONTAINER(menu), menu_item);
