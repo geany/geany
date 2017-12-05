@@ -610,6 +610,29 @@ void encodings_encoding_store_cell_data_func(GtkCellLayout *cell_layout,
 }
 
 
+/* g_utf8_validate() but accepts NULs */
+static gboolean utf8_validate_with_nuls(const gchar *data, gssize size, const gchar **end)
+{
+	const gchar *endp;
+
+	while (! g_utf8_validate(data, size, &endp))
+	{
+		if (size <= (endp - data) || *endp != 0)
+		{
+			if (end)
+				*end = endp;
+			return FALSE;
+		}
+
+		endp++;
+		size -= endp - data;
+		data = (gchar *) endp;
+	}
+
+	return TRUE;
+}
+
+
 /**
  *  Tries to convert @a buffer into UTF-8 encoding from the encoding specified with @a charset.
  *  If @a fast is not set, additional checks to validate the converted string are performed.
@@ -642,7 +665,7 @@ gchar *encodings_convert_to_utf8_from_charset(const gchar *buffer, gssize size,
 		utf8_content = converted_contents;
 		if (conv_error != NULL) g_error_free(conv_error);
 	}
-	else if (conv_error != NULL || ! g_utf8_validate(converted_contents, bytes_written, NULL))
+	else if (conv_error != NULL || ! utf8_validate_with_nuls(converted_contents, bytes_written, NULL))
 	{
 		if (conv_error != NULL)
 		{
@@ -883,7 +906,7 @@ handle_forced_encoding(BufferData *buffer, const gchar *forced_enc)
 
 	if (utils_str_equal(forced_enc, "UTF-8"))
 	{
-		if (! g_utf8_validate(buffer->data, buffer->len, NULL))
+		if (! utf8_validate_with_nuls(buffer->data, buffer->len, NULL))
 		{
 			return FALSE;
 		}
@@ -955,7 +978,7 @@ handle_encoding(BufferData *buffer, GeanyEncodingIndex enc_idx)
 
 			/* try UTF-8 first */
 			if (encodings_get_idx_from_charset(regex_charset) == GEANY_ENCODING_UTF_8 &&
-				(buffer->size == buffer->len) && g_utf8_validate(buffer->data, buffer->len, NULL))
+				(buffer->size == buffer->len) && utf8_validate_with_nuls(buffer->data, buffer->len, NULL))
 			{
 				buffer->enc = g_strdup("UTF-8");
 			}
