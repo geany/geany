@@ -111,6 +111,8 @@ void				sci_get_text_range			(ScintillaObject *sci, gint start, gint end, gchar 
 
 #ifdef GEANY_PRIVATE
 
+void				sci_set_text_with_length	(ScintillaObject *sci, const gchar *text, gsize len);
+
 gchar*				sci_get_string				(ScintillaObject *sci, guint msg, gulong wParam);
 
 void 				sci_set_line_numbers		(ScintillaObject *sci,  gboolean set);
