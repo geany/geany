@@ -1876,7 +1876,7 @@ static gsize save_convert_to_encoding(GeanyDocument *doc, gchar **data, gsize *l
 	g_return_val_if_fail(len != NULL, FALSE);
 
 	/* try to convert it from UTF-8 to original encoding */
-	conv_file_contents = g_convert(*data, *len - 1, doc->encoding, "UTF-8",
+	conv_file_contents = g_convert(*data, *len, doc->encoding, "UTF-8",
 												&bytes_read, &conv_len, &conv_error);
 
 	if (conv_error != NULL)
@@ -1892,7 +1892,7 @@ _("An error occurred while converting the file from UTF-8 in \"%s\". The file re
 			gint context_len;
 			gunichar unic;
 			/* don't read over the doc length */
-			gint max_len = MIN((gint)bytes_read + 6, (gint)*len - 1);
+			gint max_len = MIN((gint)bytes_read + 6, (gint)*len);
 			gchar context[7]; /* read 6 bytes from Sci + '\0' */
 			sci_get_text_range(doc->editor->sci, bytes_read, max_len, context);
 
@@ -2147,22 +2147,22 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* notify plugins which may wish to modify the document before it's saved */
 	g_signal_emit_by_name(geany_object, "document-before-save", doc);
 
-	len = sci_get_length(doc->editor->sci) + 1;
+	len = sci_get_length(doc->editor->sci);
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
 	{	/* always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
 		 * encoding, it will be converted to doc->encoding below and this conversion
 		 * also changes the BOM */
-		data = (gchar*) g_malloc(len + 3);	/* 3 chars for BOM */
+		data = (gchar*) g_malloc(len + 3 + 1);	/* 3 chars for BOM */
 		data[0] = (gchar) 0xef;
 		data[1] = (gchar) 0xbb;
 		data[2] = (gchar) 0xbf;
-		sci_get_text(doc->editor->sci, len, data + 3);
+		sci_get_text(doc->editor->sci, len + 1, data + 3);
 		len += 3;
 	}
 	else
 	{
-		data = (gchar*) g_malloc(len);
-		sci_get_text(doc->editor->sci, len, data);
+		data = (gchar*) g_malloc(len + 1);
+		sci_get_text(doc->editor->sci, len + 1, data);
 	}
 
 	/* save in original encoding, skip when it is already UTF-8 or has the encoding "None" */
