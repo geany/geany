@@ -1026,9 +1026,9 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 	if (filedata->readonly)
 	{
 		const gchar *warn_msg = _(
-			"The file \"%s\" could not be opened properly and has been truncated. " \
-			"This can occur if the file contains a NULL byte. " \
-			"Be aware that saving it can cause data loss.\nThe file was set to read-only.");
+			"The file \"%s\" contains a NUL byte. " \
+			"Geany does not handle such files very well and be aware that editing "
+			"it can cause data loss.\nThe file was set to read-only.");
 
 		if (main_status.main_window_realized)
 			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
