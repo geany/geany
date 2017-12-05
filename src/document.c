@@ -2175,10 +2175,6 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 			return FALSE;
 		}
 	}
-	else
-	{
-		len = strlen(data);
-	}
 
 	locale_filename = utils_get_locale_from_utf8(doc->file_name);
 
