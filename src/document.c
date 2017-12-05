@@ -1025,15 +1025,8 @@ static gboolean load_text_file(const gchar *locale_filename, const gchar *displa
 
 	if (filedata->readonly)
 	{
-		const gchar *warn_msg = _(
-			"The file \"%s\" contains a NUL byte. " \
-			"Geany does not handle such files very well and be aware that editing "
-			"it can cause data loss.\nThe file was set to read-only.");
-
-		if (main_status.main_window_realized)
-			dialogs_show_msgbox(GTK_MESSAGE_WARNING, warn_msg, display_filename);
-
-		ui_set_statusbar(TRUE, warn_msg, display_filename);
+		msgwin_status_add(_("The file \"%s\" contains a NUL byte, which is not properly " \
+				"supported. Editing this file might lead to unexpected behavior."), display_filename);
 	}
 
 	return TRUE;
@@ -1278,6 +1271,13 @@ void document_show_tab(GeanyDocument *doc)
 }
 
 
+static void on_document_has_nul_byte_response(GtkWidget *bar, gint response, GeanyDocument *doc)
+{
+	doc->priv->info_bars[MSG_TYPE_HAS_NUL] = NULL;
+	gtk_widget_destroy(bar);
+}
+
+
 /* To open a new file, set doc to NULL; filename should be locale encoded.
  * To reload a file, set the doc for the document to be reloaded; filename should be NULL.
  * pos is the cursor position, which can be overridden by --line and --column.
@@ -1384,6 +1384,26 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		sci_set_readonly(doc->editor->sci, FALSE);	/* to allow replacing text */
 		sci_set_text_with_length(doc->editor->sci, filedata.data, filedata.len);
 		queue_colourise(doc);	/* Ensure the document gets colourised. */
+
+		/* the file has embedded NULs, warn the user */
+		if (filedata.readonly && doc->priv->info_bars[MSG_TYPE_HAS_NUL] == NULL)
+		{
+			doc->priv->info_bars[MSG_TYPE_HAS_NUL] = document_show_message(
+					doc, GTK_MESSAGE_WARNING,
+					on_document_has_nul_byte_response,
+					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					NULL, 0,
+					NULL, 0,
+					_("Geany does not handle such files very well. Be aware that some features "
+					"might not work as expected and can lead to data loss. "
+					"The file has been set to read-only."),
+					_("The file contains a NUL byte."));
+		}
+		else if (! filedata.readonly && doc->priv->info_bars[MSG_TYPE_HAS_NUL] != NULL)
+		{
+			/* dismiss the info bar if reloading a file that don't has embedded NULs anymore */
+			gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_HAS_NUL]), GTK_RESPONSE_CANCEL);
+		}
 
 		/* detect & set line endings */
 		editor_mode = utils_get_line_endings(filedata.data, filedata.len);
