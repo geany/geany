@@ -186,6 +186,10 @@ static void init_pref_groups(void)
 		"check_detect_indent", FALSE, "check_detect_indent_type");
 	stash_group_add_toggle_button(group, &editor_prefs.indentation->detect_width,
 		"detect_indent_width", FALSE, "check_detect_indent_width");
+	stash_group_add_toggle_button(group, &editor_prefs.indentation->paren_align,
+		"align_parentheses", FALSE, "check_align_paren");
+	stash_group_add_toggle_button(group, &editor_prefs.indentation->align_with_spaces,
+		"align_with_spaces", TRUE, "check_align_with_spaces");
 	stash_group_add_toggle_button(group, &editor_prefs.use_tab_to_indent,
 		"use_tab_to_indent", TRUE, "check_tab_key_indents");
 	stash_group_add_spin_button_integer(group, &editor_prefs.indentation->width,
