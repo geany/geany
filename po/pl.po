@@ -8,13 +8,14 @@
 # Krzysztof Troska <elleander86@gmail.com>, 2008.
 # Wojciech świderski <woj.swiderski@gmail.com>, 2011
 # Michał Olber <michal.olber@osworld.pl>, 2014
+# Piotr Orzechowski <tech@orzechowski.hub.pl>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2014-09-16 09:48+0100\n"
-"Last-Translator: Michał Olber <michal.olber@osworld.pl>\n"
+"PO-Revision-Date: 2017-12-17 04:30+0100\n"
+"Last-Translator: Piotr Orzechowski <tech@orzechowski.hub.pl>\n"
 "Language-Team: polski <geany-i18n@uvena.de>\n"
 "Language: pl_PL\n"
 "MIME-Version: 1.0\n"
@@ -348,8 +349,9 @@ msgid "<b>Miscellaneous</b>"
 msgstr "<b>Różne</b>"
 
 #: ../data/geany.glade.h:64
+#, fuzzy
 msgid "Always wrap search"
-msgstr ""
+msgstr "Zawsze szukaj od nowa po napotkaniu końca pliku"
 
 #: ../data/geany.glade.h:65
 #, fuzzy
@@ -442,7 +444,7 @@ msgstr "Wyświetla lub ukrywa listę symboli"
 
 #: ../data/geany.glade.h:81
 msgid "Default symbol sorting mode"
-msgstr ""
+msgstr "Domyślny tryb sortowania symboli"
 
 #: ../data/geany.glade.h:82
 #, fuzzy
@@ -1049,8 +1051,9 @@ msgid "Whether to stop scrolling one page past the last line of a document"
 msgstr "Ustala, czy zatrzymać przewijanie stronę po ostatnim wierszu dokumentu"
 
 #: ../data/geany.glade.h:214
+#, fuzzy
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Linie widoczne wokół kursor_a:"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -1286,11 +1289,13 @@ msgid "Browser:"
 msgstr "Przeglądarka:"
 
 #: ../data/geany.glade.h:264
-#, no-c-format
+#, no-c-format, fuzzy
 msgid ""
 "A terminal emulator command (%c is substituted with the Geany run script "
 "filename)"
 msgstr ""
+"Polecenie emulatora terminalu (%c jest zastąpione przez nazwę skryptu "
+"uruchomieniowego Geany)"
 
 #: ../data/geany.glade.h:265
 msgid "Path (and possibly additional arguments) to your favorite browser"
@@ -2382,10 +2387,13 @@ msgstr ""
 "Nie udało się wykonać \"%s\" (skrypt startowy nie mógł zostać utworzony)"
 
 #: ../src/build.c:887
+#, fuzzy
 msgid ""
 "File not executed because the terminal may contain some input (press Ctrl+C "
 "or Enter to clear it)."
 msgstr ""
+"Polecenie nie zostało wykonane, ponieważ terminal może zawierać jakieś dane "
+"wejściowe (wciśnij Ctrl+C lub Enter, aby je wyczyścić)."
 
 #: ../src/build.c:935
 #, fuzzy, c-format
@@ -2573,8 +2581,9 @@ msgid "Could not open file %s (File not found)"
 msgstr "Nie można otworzyć pliku %s (%s)"
 
 #: ../src/callbacks.c:1478
+#, fuzzy
 msgid "Check the path setting in Filetype configuration."
-msgstr ""
+msgstr "Sprawdź ustawienie ścieżki w konfiguracji typu pliku."
 
 #: ../src/callbacks.c:1483
 #, fuzzy
@@ -2839,15 +2848,20 @@ msgstr ", tylko do odczytu"
 
 #: ../src/document.c:1617
 msgid "Discard history"
-msgstr ""
+msgstr "Wyczyść historię"
 
 #: ../src/document.c:1618
+#, fuzzy
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
 "will not be displayed again but your choice can be changed in the various "
 "preferences."
 msgstr ""
+"Poprzedni stan buforu jest przechowywany w historii i cofanie go odtwarza. "
+"Możesz to wyłączyć poprzez wyczyszczenie historii po przeładowaniu. Ta "
+"wiadomość nie będzie wyświetlona ponownie, ale możesz zmienić swój wybór w "
+"różnych ustawieniach."
 
 #: ../src/document.c:1622
 #, fuzzy
@@ -2932,9 +2946,9 @@ msgid "File \"%s\" was not found on disk!"
 msgstr "Pliku \"%s\" nie znaleziono na dysku!"
 
 #: ../src/document.c:2122
-#, c-format
+#, c-format, fuzzy
 msgid "Cannot save read-only document '%s'!"
-msgstr ""
+msgstr "Nie można zapisać pliku '%s', bo jest tylko do odczytu!"
 
 #: ../src/document.c:2190
 #, c-format
@@ -3152,22 +3166,22 @@ msgstr "Bliskowschodnie"
 #: ../src/filetypes.c:87
 #, c-format
 msgid "%s source file"
-msgstr "%s plik źródłowy"
+msgstr "Plik źródłowy %s"
 
 #: ../src/filetypes.c:88
 #, c-format
 msgid "%s file"
-msgstr "%s plik"
+msgstr "Plik %s"
 
 #: ../src/filetypes.c:89
 #, fuzzy, c-format
 msgid "%s script"
-msgstr "Pliki skryptów powłoki"
+msgstr "Skrypt %s"
 
 #: ../src/filetypes.c:90
 #, fuzzy, c-format
 msgid "%s document"
-msgstr "XML"
+msgstr "Dokument %s"
 
 #: ../src/filetypes.c:155
 #, fuzzy
@@ -3245,8 +3259,9 @@ msgid "The current filetype overrides the default style."
 msgstr "Kompiluje bieżący plik z przy pomocy 'make' i domyślnego celu"
 
 #: ../src/highlighting.c:1342
+#, fuzzy
 msgid "This may cause color schemes to display incorrectly."
-msgstr ""
+msgstr "To może spowodować niepoprawne wyświetlanie schematów kolorów."
 
 #: ../src/highlighting.c:1367
 #, fuzzy
@@ -3833,7 +3848,7 @@ msgstr ""
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "KOLUMNA"
 
 #: ../src/libmain.c:123
 #, fuzzy
@@ -3842,7 +3857,7 @@ msgstr "Użyj innego katalogu z konfiguracją"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "KATALOG"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3871,20 +3886,20 @@ msgstr "Użyj nazwy tego socketu, by skomunikować się z działającą kopią G
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "PLIK"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
-msgstr "Zwraca listę otwartych dokumentów aktywnej kopii Geany."
+msgstr "Zwróć listę otwartych dokumentów aktywnej instancji Geany"
 
 #: ../src/libmain.c:132
 #, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Ustawia kursor w podanym wierszu pierwszego z otwieranych plików"
+msgstr "Ustaw kursor na podanym WIERSZU pierwszego z otwieranych plików"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "WIERSZ"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3917,8 +3932,9 @@ msgid "Don't load terminal support"
 msgstr "Nie wczytuj obsługi wbudowanego terminala"
 
 #: ../src/libmain.c:143
+#, fuzzy
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Użyj PLIKU jako dynamicznie linkowanej biblioteki VTE"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3940,8 +3956,9 @@ msgstr ""
 "środowisko programistyczne"
 
 #: ../src/libmain.c:539
+#, fuzzy
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Zgłaszaj błędy na https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4068,20 +4085,27 @@ msgid "_Plugin Manager"
 msgstr "_Menedżer wtyczek"
 
 #: ../src/plugins.c:1650
+#, fuzzy
 msgid ""
 "\n"
 "<i>Other plugins depend on this. Disable them first to allow deactivation.</"
 "i>\n"
 msgstr ""
+"\n"
+"<i>Inne wtyczki są od tego zależne. Wyłącz je, aby umożliwić deaktywację.</"
+"i>\n"
 
 #. Four allocations is less than ideal but meh
 #: ../src/plugins.c:1652
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Version:\t%s\n"
 "Author(s):\t%s\n"
 "Filename:\t%s"
 msgstr ""
+"Wersja:\t%s\n"
+"Autor(rzy):\t%s\n"
+"Nazwa pliku:\t%s"
 
 #: ../src/plugins.c:1680
 msgid "No plugins available."
@@ -4104,11 +4128,12 @@ msgid "Choose which plugins should be loaded at startup:"
 msgstr "Wskaż, które wtyczki wczytać podczas uruchamiania programu:"
 
 #: ../src/plugins.c:2067
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Rozszerzenie '%2$s' wtyczki proxy '%1$s' rozpoczyna się od kropki. Proszę to poprawić."
 
 #: ../src/pluginutils.c:427
 msgid "Configure Plugins"
@@ -4266,7 +4291,7 @@ msgstr "projekty"
 
 #: ../src/project.c:135
 msgid "Move the current documents into the new project's session?"
-msgstr ""
+msgstr "Przenieść bieżące dokumenty do sesji nowego projektu?"
 
 #: ../src/project.c:153
 msgid "New Project"
@@ -4282,11 +4307,13 @@ msgid "Project name"
 msgstr "Projekt"
 
 #: ../src/project.c:188
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+"Ścieżka do pliku reprezentującego projekt i przechowującego jego ustawienia. "
+"W normalnych warunkach plik powinien mieć rozszerzenie \"%s\"."
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
@@ -4409,16 +4436,22 @@ msgstr ""
 "kontrolnymi."
 
 #: ../src/search.c:325
+#, fuzzy
 msgid "Use multi-line matchin_g"
-msgstr ""
+msgstr "Użyj dopasowywania wielowierszowe_go"
 
 #: ../src/search.c:330
+#, fuzzy
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
 "line by line, allowing matches to span multiple lines.  In this mode, "
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
+"Wykonaj dopasowanie wyrażenia regularnego na całym buforze na raz, zamiast "
+"wiersz po wierszu, pozwalając na wielowierszowe dopasowania. W tym trybie "
+"znaki nowej linii są częścią wejścia i mogą być wychwycone przez wzorzec jak "
+"zwykłe znaki."
 
 #: ../src/search.c:343
 msgid "Search _backwards"
@@ -4635,17 +4668,19 @@ msgstr ""
 "Błąd krytyczny - program za chwilę zakończy działanie."
 
 #: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#, fuzzy
 msgid "Text ended before matching quote was found"
-msgstr ""
+msgstr "Tekst skończył się przed znalezieniem zamykającego cudzysłowu"
 
 #. TL note: from glib
 #: ../src/spawn.c:130
 msgid "Text was empty (or contained only whitespace)"
-msgstr ""
+msgstr "Tekst był pusty lub zawierał tylko białe znaki"
 
 #: ../src/spawn.c:151 ../src/spawn.c:165
+#, fuzzy
 msgid "A quoted Windows program name must be entirely inside the quotes"
-msgstr ""
+msgstr "Nazwa programu windowsowego musi być w całości w cudzysłowach"
 
 #: ../src/spawn.c:258
 #, fuzzy
@@ -4658,12 +4693,13 @@ msgid "Failed to change to the working directory"
 msgstr "Proces zakończony niepowodzeniem, brak katalogu roboczego"
 
 #: ../src/spawn.c:769
+#, fuzzy
 msgid "Unknown error executing child process"
-msgstr ""
+msgstr "Nieznany błąd podczas uruchamiania procesu potomnego"
 
 #: ../src/stash.c:1177
 msgid "Value"
-msgstr ""
+msgstr "Wartość"
 
 #: ../src/symbols.c:473 ../src/symbols.c:523 ../src/symbols.c:633
 msgid "Chapter"
@@ -4767,24 +4803,27 @@ msgid "Structures"
 msgstr "Struktury"
 
 #: ../src/symbols.c:539
+#, fuzzy
 msgid "Parts"
-msgstr ""
+msgstr "Części"
 
 #: ../src/symbols.c:540
+#, fuzzy
 msgid "Assembly"
-msgstr ""
+msgstr "Assembler"
 
 #: ../src/symbols.c:541
 msgid "Steps"
-msgstr ""
+msgstr "Kroki"
 
 #: ../src/symbols.c:556 ../src/symbols.c:654 ../src/symbols.c:700
 msgid "Modules"
 msgstr "Moduły"
 
 #: ../src/symbols.c:558 ../src/symbols.c:605
+#, fuzzy
 msgid "Traits"
-msgstr ""
+msgstr "Cechy"
 
 #: ../src/symbols.c:559
 #, fuzzy
@@ -4930,8 +4969,9 @@ msgid "Functions / Tasks"
 msgstr "Funkcje / Zadania"
 
 #: ../src/symbols.c:715 ../src/symbols.c:770
+#, fuzzy
 msgid "Enums"
-msgstr ""
+msgstr "Enumeracje"
 
 #: ../src/symbols.c:763
 #, fuzzy
@@ -5043,7 +5083,7 @@ msgstr "<b>Wyświetlanie</b>"
 #: ../src/symbols.c:1946
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2155
 #, c-format
@@ -5069,11 +5109,13 @@ msgid "Failed to convert template file \"%s\" to UTF-8"
 msgstr "Nie udało się zmienić kodowania szablonu \"%s\" na UTF-8"
 
 #: ../src/templates.c:618
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Nie można wykonać szablonu polecenia \"%s\". Podpowiedź: typowym źródłem "
+"problemu są błędy w ścieżkach do poleceń. Błąd: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
@@ -5200,7 +5242,7 @@ msgstr "Wyszukiwanie nieudane"
 
 #: ../src/toolbar.c:394
 msgid "Goto Field"
-msgstr ""
+msgstr "Pole 'idź do'"
 
 #: ../src/toolbar.c:587
 msgid "Separator"
@@ -5507,20 +5549,20 @@ msgstr "Unix (LF)"
 
 #: ../src/utils.c:387
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:388
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:389
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:584
-#, c-format
+#, c-format, fuzzy
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
-msgstr ""
+msgstr "niepoprawna biblioteka VTE: \"%s\": brakuje symbolu \"%s\""
 
 #: ../src/vte.c:765
 msgid "_Set Path From Document"
@@ -5535,10 +5577,13 @@ msgid "_Input Methods"
 msgstr "Meto_dy wejściowe"
 
 #: ../src/vte.c:895
+#, fuzzy
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
 msgstr ""
+"Nie zmieniono katalogu, ponieważ terminal może zawierać jakieś dane wejściowe "
+"(wciśnij Ctrl+C lub Enter, aby je wyczyścić)."
 
 #: ../src/win32.c:211
 msgid "Geany project files"
@@ -5551,7 +5596,7 @@ msgstr "Pliki wykonywalne"
 #: ../src/win32.c:799
 #, c-format
 msgid "Failed to open URI \"%s\": %s"
-msgstr ""
+msgstr "Nie udało się otworzyć URI \"%s\": %s"
 
 # Nazwa własna wtyczki
 #: ../plugins/classbuilder.c:36
