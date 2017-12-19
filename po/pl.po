@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2017-12-17 04:30+0100\n"
+"PO-Revision-Date: 2017-12-19 03:11+0100\n"
 "Last-Translator: Piotr Orzechowski <tech@orzechowski.hub.pl>\n"
 "Language-Team: polski <geany-i18n@uvena.de>\n"
 "Language: pl_PL\n"
@@ -4810,9 +4810,10 @@ msgstr "Części"
 #: ../src/symbols.c:540
 #, fuzzy
 msgid "Assembly"
-msgstr "Assembler"
+msgstr "Asembler"
 
 #: ../src/symbols.c:541
+#, fuzzy
 msgid "Steps"
 msgstr "Kroki"
 
