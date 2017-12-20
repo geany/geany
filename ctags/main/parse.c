@@ -316,7 +316,7 @@ static void initializeParserOne (langType lang)
 
 static void initializeParsers (void)
 {
-	int i;
+	unsigned int i;
 	for (i = 0; i < LanguageCount;  i++)
 		initializeParserOne(i);
 }
