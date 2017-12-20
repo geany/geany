@@ -103,7 +103,7 @@ extern kindOption* getLanguageFileKind (const langType language)
 
 	kind = LanguageTable [language]->fileKind;
 
-	Assert (kind != KIND_NULL);
+	Assert (kind != NULL);
 
 	return kind;
 }
