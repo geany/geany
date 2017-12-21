@@ -138,9 +138,11 @@ SUB_DECL_SWITCH:
 				case ';':
 					if (!nparens)
 						return true;
+					/* fall through */
 				case '{':
 					if (!nparens)
 						return false;
+					/* fall through */
 				default:
 					if (attr) {
 						if (isIdentifier1(*cp)) {
