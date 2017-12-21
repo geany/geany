@@ -139,11 +139,7 @@ TMTag *tm_tag_ref(TMTag *tag);
 
 gboolean tm_tags_equal(const TMTag *a, const TMTag *b);
 
-const gchar *tm_tag_context_separator(TMParserType lang);
-
 gboolean tm_tag_is_anon(const TMTag *tag);
-
-gboolean tm_tag_langs_compatible(TMParserType lang, TMParserType other);
 
 #ifdef TM_DEBUG /* various debugging functions */
 

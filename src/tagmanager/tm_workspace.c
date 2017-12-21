@@ -675,7 +675,7 @@ static void fill_find_tags_array(GPtrArray *dst, const GPtrArray *src,
 	for (i = 0; i < num; ++i)
 	{
 		if ((type & (*tag)->type) &&
-			tm_tag_langs_compatible(lang, (*tag)->lang) &&
+			tm_parser_langs_compatible(lang, (*tag)->lang) &&
 			(!scope || g_strcmp0((*tag)->scope, scope) == 0))
 		{
 			g_ptr_array_add(dst, *tag);
@@ -722,7 +722,7 @@ static void fill_find_tags_array_prefix(GPtrArray *dst, const GPtrArray *src,
 	tag = tm_tags_find(src, name, TRUE, &count);
 	for (i = 0; i < count && num < max_num; ++i)
 	{
-		if (tm_tag_langs_compatible(lang, (*tag)->lang) &&
+		if (tm_parser_langs_compatible(lang, (*tag)->lang) &&
 			!tm_tag_is_anon(*tag) &&
 			(!last || g_strcmp0(last->name, (*tag)->name) != 0))
 		{
@@ -778,7 +778,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 		member_types = tm_tag_max_t;
 
 	if (type_tag->scope && *(type_tag->scope))
-		scope = g_strconcat(type_tag->scope, tm_tag_context_separator(type_tag->lang), type_tag->name, NULL);
+		scope = g_strconcat(type_tag->scope, tm_parser_context_separator(type_tag->lang), type_tag->name, NULL);
 	else
 		scope = g_strdup(type_tag->name);
 
@@ -788,7 +788,7 @@ find_scope_members_tags (const GPtrArray *all, TMTag *type_tag, gboolean namespa
 
 		if (tag && (tag->type & member_types) &&
 			tag->scope && tag->scope[0] != '\0' &&
-			tm_tag_langs_compatible(tag->lang, type_tag->lang) &&
+			tm_parser_langs_compatible(tag->lang, type_tag->lang) &&
 			strcmp(scope, tag->scope) == 0 &&
 			(!namespace || !tm_tag_is_anon(tag)))
 		{
@@ -813,7 +813,7 @@ static gchar *strip_type(const gchar *scoped_name, TMParserType lang)
 	if (scoped_name != NULL)
 	{
 		/* remove scope prefix */
-		const gchar *sep = tm_tag_context_separator(lang);
+		const gchar *sep = tm_parser_context_separator(lang);
 		const gchar *base = g_strrstr(scoped_name, sep);
 		gchar *name = base ? g_strdup(base + strlen(sep)) : g_strdup(scoped_name);
 
@@ -909,7 +909,7 @@ find_scope_members (const GPtrArray *tags_array, const gchar *name, TMSourceFile
 static gboolean member_at_method_scope(const GPtrArray *tags, const gchar *method_scope, TMTag *member_tag,
 	TMParserType lang)
 {
-	const gchar *sep = tm_tag_context_separator(lang);
+	const gchar *sep = tm_parser_context_separator(lang);
 	gboolean ret = FALSE;
 	gchar **comps;
 	guint len;
