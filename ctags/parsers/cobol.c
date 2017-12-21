@@ -19,17 +19,17 @@ static tagRegexTable cobolTagRegexTable[] = {
 	{"^[ \t]*[0-9]+[ \t]+([A-Z0-9][A-Z0-9-]*)[ \t]+("
 	 "BLANK|OCCURS|IS|JUST|PIC|REDEFINES|RENAMES|SIGN|SYNC|USAGE|VALUE"
 	 ")", "\\1",
-	 "d,data,data items", "i"},
+	 "d,data,data items", "i", NULL},
 	{"^[ \t]*[FSR]D[ \t]+([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
-	 "f,file,file descriptions (FD, SD, RD)", "i"},
+	 "f,file,file descriptions (FD, SD, RD)", "i", NULL},
 	{"^[ \t]*[0-9]+[ \t]+([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
-	 "g,group,group items", "i"},
+	 "g,group,group items", "i", NULL},
 	{"^[ \t]*([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
-	 "p,paragraph,paragraphs", "i"},
+	 "p,paragraph,paragraphs", "i", NULL},
 	{"^[ \t]*PROGRAM-ID\\.[ \t]+([A-Z0-9][A-Z0-9-]*)\\.", "\\1",
-	 "P,program,program ids", "i"},
+	 "P,program,program ids", "i", NULL},
 	{"^[ \t]*([A-Z0-9][A-Z0-9-]*)[ \t]+SECTION\\.", "\\1",
-	 "s,section,sections", "i"},
+	 "s,section,sections", "i", NULL},
 };
 
 /*
