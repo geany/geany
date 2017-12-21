@@ -664,35 +664,6 @@ tm_get_current_tag (GPtrArray * file_tags, const gulong line, const TMTagType ta
 	return matching_tag;
 }
 
-const gchar *tm_tag_context_separator(TMParserType lang)
-{
-	switch (lang)
-	{
-		case TM_PARSER_C:	/* for C++ .h headers or C structs */
-		case TM_PARSER_CPP:
-		case TM_PARSER_GLSL:	/* for structs */
-		/*case GEANY_FILETYPES_RUBY:*/ /* not sure what to use atm*/
-		case TM_PARSER_PHP:
-		case TM_PARSER_POWERSHELL:
-		case TM_PARSER_RUST:
-		case TM_PARSER_ZEPHIR:
-			return "::";
-
-		/* avoid confusion with other possible separators in group/section name */
-		case TM_PARSER_CONF:
-		case TM_PARSER_REST:
-			return ":::";
-
-		/* no context separator */
-		case TM_PARSER_ASCIIDOC:
-		case TM_PARSER_TXT2TAGS:
-			return "\x03";
-
-		default:
-			return ".";
-	}
-}
-
 gboolean tm_tag_is_anon(const TMTag *tag)
 {
 	guint i;
@@ -704,22 +675,6 @@ gboolean tm_tag_is_anon(const TMTag *tag)
 		return sscanf(tag->name, "Structure#%u%c", &i, &dummy) == 1 ||
 			sscanf(tag->name, "Interface#%u%c", &i, &dummy) == 1 ||
 			sscanf(tag->name, "Enum#%u%c", &i, &dummy) == 1;
-	return FALSE;
-}
-
-
-gboolean tm_tag_langs_compatible(TMParserType lang, TMParserType other)
-{
-	if (lang == TM_PARSER_NONE || other == TM_PARSER_NONE)
-		return FALSE;
-	if (lang == other)
-		return TRUE;
-	/* Accept CPP tags for C lang and vice versa */
-	else if (lang == TM_PARSER_C && other == TM_PARSER_CPP)
-		return TRUE;
-	else if (lang == TM_PARSER_CPP && other == TM_PARSER_C)
-		return TRUE;
-
 	return FALSE;
 }
 
@@ -825,7 +780,7 @@ void tm_tags_array_print(GPtrArray *tags, FILE *fp)
 */
 gint tm_tag_scope_depth(const TMTag *t)
 {
-	const gchar *context_sep = tm_tag_context_separator(t->lang);
+	const gchar *context_sep = tm_parser_context_separator(t->lang);
 	gint depth;
 	char *s;
 	if(!(t && t->scope))
