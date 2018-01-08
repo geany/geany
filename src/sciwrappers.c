@@ -144,12 +144,31 @@ void sci_set_mark_long_lines(ScintillaObject *sci, gint type, gint column, const
 }
 
 
+/* compute margin width based on ratio of line height */
+static gint margin_width_from_line_height(ScintillaObject *sci, gdouble ratio, gint threshold)
+{
+	const gint line_height = SSM(sci, SCI_TEXTHEIGHT, 0, 0);
+	gint width;
+
+	width = line_height * ratio;
+	/* round down to an even size */
+	width = width - (width % 2);
+	/* if under threshold, just use the line height */
+	if (width < threshold)
+		width = MIN(threshold, line_height);
+
+	return width;
+}
+
+
 /* symbol margin visibility */
 void sci_set_symbol_margin(ScintillaObject *sci, gboolean set)
 {
 	if (set)
 	{
-		SSM(sci, SCI_SETMARGINWIDTHN, 1, 16);
+		const gint width = margin_width_from_line_height(sci, 0.88, 16);
+
+		SSM(sci, SCI_SETMARGINWIDTHN, 1, width);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 1, TRUE);
 	}
 	else
@@ -165,7 +184,9 @@ void sci_set_folding_margin_visible(ScintillaObject *sci, gboolean set)
 {
 	if (set)
 	{
-		SSM(sci, SCI_SETMARGINWIDTHN, 2, 12);
+		const gint width = margin_width_from_line_height(sci, 0.66, 12);
+
+		SSM(sci, SCI_SETMARGINWIDTHN, 2, width);
 		SSM(sci, SCI_SETMARGINSENSITIVEN, 2, TRUE);
 	}
 	else
