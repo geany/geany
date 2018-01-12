@@ -117,9 +117,8 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
-GdkColor load_color(gchar *color_name) {
-	GdkColor color;
-
+void load_color(const gchar *color_name, GdkColor *color)
+{
 #if GTK_CHECK_VERSION(3, 0, 0)
 	GdkRGBA rgba_color;
 	GtkWidgetPath *path = gtk_widget_path_new();
@@ -131,9 +130,9 @@ GdkColor load_color(gchar *color_name) {
 	gtk_style_context_set_path(ctx, path);
 	gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &rgba_color);
 
-	color.red   = 0xffff * rgba_color.red;
-	color.green = 0xffff * rgba_color.green;
-	color.blue  = 0xffff * rgba_color.blue;
+	color->red   = 0xffff * rgba_color.red;
+	color->green = 0xffff * rgba_color.green;
+	color->blue  = 0xffff * rgba_color.blue;
 
 	gtk_widget_path_unref(path);
 	g_object_unref(ctx);
@@ -142,12 +141,10 @@ GdkColor load_color(gchar *color_name) {
 
 	GtkSettings *settings = gtk_settings_get_default();
 	GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_WIDGET);
-	color = style->fg[GTK_STATE_NORMAL];
+	*color = style->fg[GTK_STATE_NORMAL];
 
 	g_free(path);
 #endif
-
-	return color;
 }
 
 
@@ -170,9 +167,9 @@ void msgwin_init(void)
 	ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
 	g_signal_connect(msgwindow.scribble, "populate-popup", G_CALLBACK(on_scribble_populate), NULL);
 
-	color_error = load_color("geany-compiler-error");
-	color_context = load_color("geany-compiler-context");
-	color_message = load_color("geany-compiler-message");
+	load_color("geany-compiler-error", &color_error);
+	load_color("geany-compiler-context", &color_context);
+	load_color("geany-compiler-message", &color_message);
 }
 
 
