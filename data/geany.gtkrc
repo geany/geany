@@ -50,5 +50,22 @@ widget "*.geany-document-status-changed" style "geany-document-status-changed-st
 widget "*.geany-document-status-disk-changed" style "geany-document-status-disk-changed-style"
 widget "*.geany-document-status-readonly" style "geany-document-status-readonly-style"
 
+# compiler message colors
+style "geany-compiler-error-style" {
+    fg[NORMAL] = "#ffff00000000"
+    fg[ACTIVE] = "#ffff00000000"
+}
+style "geany-compiler-context-style" {
+    fg[NORMAL] = "#7f7f00000000"
+    fg[ACTIVE] = "#7f7f00000000"
+}
+style "geany-compiler-message-style" {
+    fg[NORMAL] = "#00000000D000"
+    fg[ACTIVE] = "#00000000D000"
+}
+widget "*.geany-compiler-error" style "geany-compiler-error-style"
+widget "*.geany-compiler-context" style "geany-compiler-context-style"
+widget "*.geany-compiler-message" style "geany-compiler-message-style"
+
 # red "Terminal" label when terminal dirty
 widget "*.geany-terminal-dirty" style "geany-document-status-changed-style"
