@@ -63,6 +63,8 @@ void msgwin_clear_tab(gint tabnum);
 
 void msgwin_switch_tab(gint tabnum, gboolean show);
 
+void msgwin_set_linewrap(gboolean b);
+
 void msgwin_set_messages_dir(const gchar *messages_dir);
 
 

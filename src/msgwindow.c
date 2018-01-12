@@ -112,6 +112,54 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
+static void on_width_change(GtkTreeView *treeview)
+{
+	/* get width of visible region of treeview */
+	GdkRectangle visible_rect;
+	visible_rect.width = 0;
+	gtk_tree_view_get_visible_rect (treeview, &visible_rect);
+	gint width = visible_rect.width;
+
+	/* limit maximum column width to visible region and adjust line wrap threshold */
+	GtkTreeViewColumn *column = gtk_tree_view_get_column(treeview, 0);
+	gtk_tree_view_column_set_max_width(column, width);
+	GList *cell_list = gtk_tree_view_column_get_cell_renderers (column);
+	g_object_set (G_OBJECT (cell_list->data), "wrap-width", width, NULL);
+}
+
+
+void treeview_set_linewrap(GtkTreeView *treeview, gboolean has_linewrap)
+{
+	if (has_linewrap) {
+		on_width_change(treeview);
+		g_signal_connect(msgwindow.tree_compiler, "size-allocate", G_CALLBACK(on_width_change), NULL);
+		g_signal_connect(msgwindow.tree_msg, "size-allocate", G_CALLBACK(on_width_change), NULL);
+		g_signal_connect(msgwindow.tree_status, "size-allocate", G_CALLBACK(on_width_change), NULL);
+	}
+	else
+	{
+		g_signal_handlers_disconnect_by_func(msgwindow.tree_compiler, on_width_change, NULL);
+		g_signal_handlers_disconnect_by_func(msgwindow.tree_msg, on_width_change, NULL);
+		g_signal_handlers_disconnect_by_func(msgwindow.tree_status, on_width_change, NULL);
+
+		/* set maximum column width and line wrap threshold to unlimited */
+		GtkTreeViewColumn *column = gtk_tree_view_get_column(treeview, 0);
+		GList *cell_list = gtk_tree_view_column_get_cell_renderers (column);
+		gtk_tree_view_column_set_max_width(column, -1);
+		g_object_set (G_OBJECT (cell_list->data), "wrap-width", -1, NULL);
+	}
+	gtk_widget_queue_draw(GTK_WIDGET(treeview));
+}
+
+
+void msgwin_set_linewrap(gboolean has_linewrap)
+{
+	treeview_set_linewrap(GTK_TREE_VIEW(msgwindow.tree_compiler), has_linewrap);
+	treeview_set_linewrap(GTK_TREE_VIEW(msgwindow.tree_msg), has_linewrap);
+	treeview_set_linewrap(GTK_TREE_VIEW(msgwindow.tree_status), has_linewrap);
+}
+
+
 void msgwin_init(void)
 {
 	msgwindow.notebook = ui_lookup_widget(main_widgets.window, "notebook_info");
@@ -130,6 +178,12 @@ void msgwin_init(void)
 
 	ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
 	g_signal_connect(msgwindow.scribble, "populate-popup", G_CALLBACK(on_scribble_populate), NULL);
+
+	if (interface_prefs.msgwin_linewrap) {
+		g_signal_connect(msgwindow.tree_compiler, "size-allocate", G_CALLBACK(on_width_change), NULL);
+		g_signal_connect(msgwindow.tree_msg, "size-allocate", G_CALLBACK(on_width_change), NULL);
+		g_signal_connect(msgwindow.tree_status, "size-allocate", G_CALLBACK(on_width_change), NULL);
+	}
 }
 
 
@@ -174,6 +228,7 @@ static void prepare_status_tree_view(void)
 	g_object_unref(msgwindow.store_status);
 
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set (G_OBJECT(renderer), "wrap-mode", GTK_WRAP_WORD, NULL);
 	column = gtk_tree_view_column_new_with_attributes(_("Status messages"), renderer, "text", 0, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_status), column);
 
@@ -201,6 +256,7 @@ static void prepare_msg_tree_view(void)
 	g_object_unref(msgwindow.store_msg);
 
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set (G_OBJECT(renderer), "wrap-mode", GTK_WRAP_WORD, NULL);
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
 		"foreground-gdk", MSG_COL_COLOR, "text", MSG_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_msg), column);
@@ -238,6 +294,7 @@ static void prepare_compiler_tree_view(void)
 	g_object_unref(msgwindow.store_compiler);
 
 	renderer = gtk_cell_renderer_text_new();
+	g_object_set (G_OBJECT(renderer), "wrap-mode", GTK_WRAP_WORD, NULL);
 	column = gtk_tree_view_column_new_with_attributes(NULL, renderer,
 		"foreground-gdk", COMPILER_COL_COLOR, "text", COMPILER_COL_STRING, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(msgwindow.tree_compiler), column);

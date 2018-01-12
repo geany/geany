@@ -1916,6 +1916,10 @@ Position
 Message window
 ``````````````
 
+Line wrapping
+    Show long lines wrapped around to new display lines in the status-, compiler-
+    and message-tab. Changing this setting only affects newly printed lines.
+
 Position
     Whether to place the message window on the bottom or right of the editor window.
 
