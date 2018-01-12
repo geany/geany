@@ -142,6 +142,7 @@ static void createRTags (void)
 							break;
 						}
 					}
+					/* fall through */
 				case ' ':
 				case '\x009':
 					/* skip whitespace */

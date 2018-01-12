@@ -1879,6 +1879,7 @@ static void search_finished(GPid child_pid, gint status, gpointer user_data)
 		}
 		case 1:
 			msg = _("No matches found.");
+			/* fall through */
 		default:
 			msgwin_msg_add_string(COLOR_BLUE, -1, NULL, msg);
 			ui_set_statusbar(FALSE, "%s", msg);

@@ -2256,7 +2256,7 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	GeanyBuildCommand *dstcmd;
 	gchar *key;
-	static gchar cmdbuf[3] = "  ";
+	static gchar cmdbuf[4] = "  ";
 
 	if (*dst == NULL)
 		*dst = g_new0(GeanyBuildCommand, build_groups_count[grp]);

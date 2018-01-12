@@ -20,9 +20,9 @@ static tagRegexTable htmlTagRegexTable [] = {
 	{"<a"
 	 POSSIBLE_ATTRIBUTES "[ \t]+name=\"?([^>\"]+)\"?" POSSIBLE_ATTRIBUTES
 	 "[ \t]*>", "\\2",
-	 "a,anchor,named anchors", "i"},
+	 "a,anchor,named anchors", "i", NULL},
 	{"^[ \t]*function[ \t]*([A-Za-z0-9_]+)[ \t]*\\(", "\\1",
-	 "f,function,JavaScript functions", NULL},
+	 "f,function,JavaScript functions", NULL, NULL},
 
 /* the following matches headings with tags inside like
  * <h1><a href="#id109"><i>Some Text</i></a></h1>
@@ -34,13 +34,13 @@ static tagRegexTable htmlTagRegexTable [] = {
 	ATTRS ">" SPACES "(<" ATTRS ">" SPACES ")*([^<]+).*"
 
 	{"<h1" INNER_HEADING "</h1>", "\\2",
-	 "n,namespace,H1 heading", "i"},
+	 "n,namespace,H1 heading", "i", NULL},
 
 	{"<h2" INNER_HEADING "</h2>", "\\2",
-	 "c,class,H2 heading", "i"},
+	 "c,class,H2 heading", "i", NULL},
 
 	{"<h3" INNER_HEADING "</h3>", "\\2",
-	 "v,variable,H3 heading", "i"},
+	 "v,variable,H3 heading", "i", NULL},
 };
 
 /*

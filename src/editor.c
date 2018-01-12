@@ -2391,6 +2391,8 @@ typedef struct
 
 
 #define CURSOR_PLACEHOLDER "_" /* Would rather use … but not all docs are unicode */
+
+
 /* Replaces the internal cursor markers with the placeholder suitable for
  * display. Except for the first cursor if indicator_for_first is FALSE,
  * which is simply deleted.
@@ -2400,10 +2402,9 @@ typedef struct
 static GSList *replace_cursor_markers(GeanyEditor *editor, GString *template,
 									  gboolean indicator_for_first)
 {
-	gssize cur_index = -1;
 	gint i = 0;
 	GSList *temp_list = NULL;
-	gint cursor_steps = 0, old_cursor = 0;
+	gint cursor_steps = 0;
 	SelectionRange *sel;
 
 	while (TRUE)
@@ -2524,7 +2525,6 @@ void editor_insert_text_block(GeanyEditor *editor, const gchar *text, gint inser
 static gboolean find_next_snippet_indicator(GeanyEditor *editor, SelectionRange *sel)
 {
 	ScintillaObject *sci = editor->sci;
-	gint val;
 	gint pos = sci_get_current_position(sci);
 
 	if (pos == sci_get_length(sci))
@@ -2552,7 +2552,6 @@ static gboolean find_next_snippet_indicator(GeanyEditor *editor, SelectionRange 
 gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor)
 {
 	ScintillaObject *sci = editor->sci;
-	gint current_pos = sci_get_current_position(sci);
 	SelectionRange sel;
 
 	if (find_next_snippet_indicator(editor, &sel))
