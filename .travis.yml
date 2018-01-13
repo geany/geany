@@ -21,7 +21,7 @@ install:
   - sudo apt-get install -y --no-install-recommends doxygen
   - sudo apt-get install -y python-lxml
 before_script:
-  - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=aggregate-return -Werror=implicit-function-declaration"
+  - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
 script:
   - NOCONFIGURE=1 ./autogen.sh
   - >

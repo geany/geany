@@ -3701,7 +3701,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
-	time_t mtime;
+	time_t mtime = 0;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
 
