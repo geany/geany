@@ -702,7 +702,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 	/* First check for preferred charset, if specified */
 	preferred_charset = file_prefs.default_open_encoding;
 
-	if (preferred_charset == encodings[GEANY_ENCODING_NONE].idx ||
+	if (preferred_charset == (gint) encodings[GEANY_ENCODING_NONE].idx ||
 		preferred_charset < 0 ||
 		preferred_charset >= GEANY_ENCODINGS_MAX)
 	{
@@ -712,7 +712,7 @@ static gchar *encodings_convert_to_utf8_with_suggestion(const gchar *buffer, gss
 	/* -1 means "Preferred charset" */
 	for (i = -1; i < GEANY_ENCODINGS_MAX; i++)
 	{
-		if (G_UNLIKELY(i == encodings[GEANY_ENCODING_NONE].idx))
+		if (G_UNLIKELY(i == (gint) encodings[GEANY_ENCODING_NONE].idx))
 			continue;
 
 		if (check_suggestion)

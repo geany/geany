@@ -284,10 +284,13 @@ static void parse_keyfile_style(GKeyFile *kf, gchar **list,
 	{
 		case 4:
 			style->italic = utils_atob(list[3]);
+			/* fall through */
 		case 3:
 			style->bold = utils_atob(list[2]);
+			/* fall through */
 		case 2:
 			parse_color(kf, list[1], &style->background);
+			/* fall through */
 		case 1:
 			parse_color(kf, list[0], &style->foreground);
 	}

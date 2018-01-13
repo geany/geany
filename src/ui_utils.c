@@ -2492,53 +2492,85 @@ void ui_init_builder(void)
 }
 
 
-static void init_custom_style(void)
-{
 #if GTK_CHECK_VERSION(3, 0, 0)
-	const struct {
-		guint version;
-		const gchar *file;
-	} css_files[] = {
-		/*
-		 * Keep these from newest to oldest,
-		 * and make sure 0 remains last
-		 */
-		{ 20, "geany-3.20.css" },
-		{ 0, "geany-3.0.css" },
-	};
-	guint gtk_version = gtk_get_minor_version();
-	gsize i = 0;
-	gchar *css_file;
-	GtkCssProvider *css = gtk_css_provider_new();
+static void load_css_theme(const gchar *fn, guint priority)
+{
+	GtkCssProvider *provider = gtk_css_provider_new();
 	GError *error = NULL;
 
-	/* gtk_version will never be smaller than 0 */
-	while (css_files[i].version > gtk_version)
-		++i;
-
-	css_file = g_build_filename(app->datadir, css_files[i].file, NULL);
-	if (! gtk_css_provider_load_from_path(css, css_file, &error))
+	if (! gtk_css_provider_load_from_path(provider, fn, &error))
 	{
 		g_warning("Failed to load custom CSS: %s", error->message);
 		g_error_free(error);
-	}
-	else
-	{
-		gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
-			GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+		return;
 	}
 
-	g_object_unref(css);
-	g_free(css_file);
-#else
-	/* see setup_gtk2_styles() in main.c */
-#endif
+	gtk_style_context_add_provider_for_screen(gdk_screen_get_default(),
+		GTK_STYLE_PROVIDER(provider), priority);
+	geany_debug("Loaded GTK+ CSS theme '%s'", fn);
+
+	g_object_unref(provider);
 }
+
+
+// see setup_gtk2_styles() in libmain.c for GTK+ 2-specific theme initialization
+static void init_css_styles(void)
+{
+	gchar *theme_fn;
+
+	// load the main geany.css file from system data dir
+	theme_fn = g_build_filename(app->datadir, "geany.css", NULL);
+	load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+	g_free(theme_fn);
+
+	// load themes to handle breakage between various GTK+ versions
+	const struct
+	{
+		guint min_version;
+		guint max_version;
+		const gchar *file;
+	}
+	css_files[] =
+	{
+		{ 20, G_MAXUINT, "geany-3.20.css" },
+		{ 0, 19, "geany-3.0.css" },
+	};
+
+	guint gtk_version = gtk_get_minor_version();
+	for (guint i = 0; i < G_N_ELEMENTS(css_files); i++)
+	{
+		if (gtk_version >= css_files[i].min_version &&
+			gtk_version <= css_files[i].max_version)
+		{
+			theme_fn = g_build_filename(app->datadir, css_files[i].file, NULL);
+			load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+			g_free(theme_fn);
+		}
+	}
+
+	// if the user provided a geany.css file in their config dir, try and load that
+	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
+	if (g_file_test(theme_fn, G_FILE_TEST_EXISTS))
+		load_css_theme(theme_fn, GTK_STYLE_PROVIDER_PRIORITY_USER);
+	g_free(theme_fn);
+}
+
+
+static void add_css_config_file_item(void)
+{
+	gchar *theme_fn;
+	theme_fn = g_build_filename(app->configdir, "geany.css", NULL);
+	ui_add_config_file_menu_item(theme_fn, NULL, NULL);
+	g_free(theme_fn);
+}
+#endif // GTK3
 
 
 void ui_init(void)
 {
-	init_custom_style();
+#if GTK_CHECK_VERSION(3, 0, 0)
+	init_css_styles();
+#endif
 
 	init_recent_files();
 
@@ -2585,7 +2617,11 @@ void ui_init(void)
 
 	ui_init_toolbar_widgets();
 	init_document_widgets();
+
 	create_config_files_menu();
+#if GTK_CHECK_VERSION(3, 0, 0)
+	add_css_config_file_item();
+#endif
 }
 
 

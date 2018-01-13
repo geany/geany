@@ -673,7 +673,7 @@ static int getFixedFormChar (void)
 					Column = 6;
 					break;
 				}
-				/* fall through to next case */
+				/* fall through */
 			case LTYPE_CONTINUATION:
 				Column = 5;
 				do
@@ -1001,7 +1001,7 @@ getNextChar:
 				skipLine ();
 				Column = 0;
 			}
-			/* fall through to newline case */
+			/* fall through */
 		case '\n':
 			token->type = TOKEN_STATEMENT_END;
 			if (FreeSourceForm)

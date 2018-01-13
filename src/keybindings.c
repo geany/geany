@@ -2614,8 +2614,8 @@ static gboolean cb_func_document_action(guint key_id)
 			{
 				gint line = sci_get_current_line(doc->editor->sci);
 				editor_toggle_fold(doc->editor, line, 0);
-				break;
 			}
+			break;
 		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS:
 			on_remove_markers1_activate(NULL, NULL);
 			break;
