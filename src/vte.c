@@ -541,7 +541,12 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	{
 		gtk_widget_grab_focus(widget);
 	}
-	return FALSE;
+	else
+	{
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 
