@@ -106,9 +106,11 @@ void msgwin_show_hide_tabs(void)
 }
 
 
-/** Sets the Messages path for opening any parsed filenames without absolute path
- * from message lines.
- * @param messages_dir The directory. **/
+/**
+ * Sets the Messages path for opening any parsed filenames without absolute path from message lines.
+ *
+ * @param messages_dir The directory.
+ **/
 GEANY_API_SYMBOL
 void msgwin_set_messages_dir(const gchar *messages_dir)
 {
@@ -315,11 +317,13 @@ static const GdkColor *get_color(gint msg_color)
 
 
 /**
- *  Adds a new message in the compiler tab treeview in the messages window.
+ * Adds a new message in the compiler tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param format    @c printf()-style format string.
+ * @param ...       Arguments for the @c format string.
+ *
+ * @since 0.15
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
@@ -335,12 +339,12 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 }
 
 /**
- *  Adds a new message in the compiler tab treeview in the messages window.
+ * Adds a new message in the compiler tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param msg Compiler message to be added.
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param msg       Compiler message to be added.
  *
- *  @since @todo
+ * @since @todo
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
@@ -391,15 +395,16 @@ void msgwin_show_hide(gboolean show)
 
 
 /**
- *  Adds a new message in the messages tab treeview in the messages window.
- *  If @a line and @a doc are set, clicking on this line jumps into the file which is specified
- *  by @a doc into the line specified with @a line.
+ * Adds a new message in the messages tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param line The document's line where the message belongs to. Set to @c -1 to ignore.
- *  @param doc The document. Set to @c NULL to ignore.
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * If @a line and @a doc are set, clicking on this line jumps into the file
+ * which is specified by @a doc into the line specified with @a line.
+ *
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param format    @c printf()-style format string.
+ * @param ...       Arguments for the @c format string.
  *
  * @since 0.15
  **/
@@ -419,16 +424,17 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 
 
 /**
- *  Adds a new message in the messages tab treeview in the messages window.
- *  If @a line and @a doc are set, clicking on this line jumps into the
- *  file which is specified by @a doc into the line specified with @a line.
+ * Adds a new message in the messages tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param line The document's line where the message belongs to. Set to @c -1 to ignore.
- *  @param doc The document. Set to @c NULL to ignore.
- *  @param string Message to be added.
+ * If @a line and @a doc are set, clicking on this line jumps into the
+ * file which is specified by @a doc into the line specified with @a line.
  *
- *  @since @todo
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param string    Message to be added.
+ *
+ * @since @todo
  **/
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
@@ -467,12 +473,13 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 
 
 /**
- *  Logs a status message *without* setting the status bar.
- *  (Use ui_set_statusbar() to display text on the statusbar)
+ * Logs a status message *without* setting the status bar.
  *
- *  @param string Status message to be logged.
+ * Use @ref ui_set_statusbar() to display text on the statusbar.
  *
- *  @since @todo
+ * @param string Status message to be logged.
+ *
+ * @since @todo
  **/
 GEANY_API_SYMBOL
 void msgwin_status_add_string(const gchar *string)
@@ -502,11 +509,12 @@ void msgwin_status_add_string(const gchar *string)
 }
 
 /**
- *  Logs a status message *without* setting the status bar.
- *  (Use ui_set_statusbar() to display text on the statusbar)
+ * Logs a status message *without* setting the status bar.
  *
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * Use @ref ui_set_statusbar() to display text on the statusbar.
+ *
+ * @param format @c printf()-style format string.
+ * @param ...    Arguments for the @c format string.
  **/
 GEANY_API_SYMBOL
 void msgwin_status_add(const gchar *format, ...)
@@ -1273,12 +1281,13 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 
 
 /**
- *  Switches to the given notebook tab of the messages window and shows the messages window
- *  if it was previously hidden and @a show is set to @c TRUE.
+ * Switches to the given notebook tab of the messages window.
  *
- *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
- *                #MessageWindowTabNum.
- *  @param show Whether to show the messages window at all if it was hidden before.
+ * The messages window is shown if it was previously hidden and @a show is set to @c TRUE.
+ *
+ * @param tabnum An index of a tab in the messages window. Valid values are
+ *                all elements of #MessageWindowTabNum.
+ * @param show   Whether to show the messages window at all if it was hidden before.
  *
  * @since 0.15
  **/
@@ -1310,9 +1319,9 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 
 /**
- *  Removes all messages from a tab specified by @a tabnum in the messages window.
+ * Removes all messages from a tab specified by @a tabnum in the messages window.
  *
- *  @param tabnum An index of a tab in the messages window which should be cleared.
+ * @param tabnum An index of a tab in the messages window which should be cleared.
  *                Valid values are @c MSG_STATUS, @c MSG_COMPILER and @c MSG_MESSAGE.
  *
  * @since 0.15
