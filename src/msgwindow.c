@@ -334,7 +334,15 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 	g_free(string);
 }
 
-
+/**
+ *  Adds a new message in the compiler tab treeview in the messages window.
+ *
+ *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ *  @param msg Compiler message to be added.
+ *
+ *  @since @todo
+ **/
+GEANY_API_SYMBOL
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
@@ -410,7 +418,18 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 }
 
 
-/* adds string to the msg treeview */
+/**
+ *  Adds a new message in the messages tab treeview in the messages window.
+ *  If @a line and @a doc are set, clicking on this line jumps into the
+ *  file which is specified by @a doc into the line specified with @a line.
+ *
+ *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ *  @param line The document's line where the message belongs to. Set to @c -1 to ignore.
+ *  @param doc The document. Set to @c NULL to ignore.
+ *  @param string Message to be added.
+ *
+ *  @since @todo
+ **/
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
@@ -451,26 +470,20 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
  *  Logs a status message *without* setting the status bar.
  *  (Use ui_set_statusbar() to display text on the statusbar)
  *
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ *  @param string Status message to be logged.
+ *
+ *  @since @todo
  **/
 GEANY_API_SYMBOL
-void msgwin_status_add(const gchar *format, ...)
+void msgwin_status_add_string(const gchar *string)
 {
 	GtkTreeIter iter;
-	gchar *string;
 	gchar *statusmsg, *time_str;
-	va_list args;
-
-	va_start(args, format);
-	string = g_strdup_vprintf(format, args);
-	va_end(args);
 
 	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
 	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
-	g_free(string);
 
 	/* add message to Status window */
 	gtk_list_store_append(msgwindow.store_status, &iter);
@@ -486,6 +499,29 @@ void msgwin_status_add(const gchar *format, ...)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
+}
+
+/**
+ *  Logs a status message *without* setting the status bar.
+ *  (Use ui_set_statusbar() to display text on the statusbar)
+ *
+ *  @param format @c printf()-style format string.
+ *  @param ... Arguments for the @c format string.
+ **/
+GEANY_API_SYMBOL
+void msgwin_status_add(const gchar *format, ...)
+{
+	GtkTreeIter iter;
+	gchar *string;
+	gchar *statusmsg, *time_str;
+	va_list args;
+
+	va_start(args, format);
+	string = g_strdup_vprintf(format, args);
+	va_end(args);
+
+	msgwin_status_add_string(string);
+	g_free(string);
 }
 
 
