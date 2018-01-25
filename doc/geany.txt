@@ -2357,6 +2357,7 @@ Saving files
 ````````````
 Perform formatting operations when a document is saved. These
 can each be undone with the Undo command.
+These options can also be set per project in `Project properties`_.
 
 Ensure newline at file end
     Add a newline at the end of the document if one is missing.
