@@ -2107,6 +2107,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	gchar *data;
 	gsize len;
 	gchar *locale_filename;
+	gboolean replace_tabs;
 	const GeanyFilePrefs *fp;
 
 	g_return_val_if_fail(doc != NULL, FALSE);
@@ -2132,16 +2133,17 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 
 	fp = project_get_file_prefs();
 	/* replaces tabs with spaces but only if the current file is not a Makefile */
-	if (fp->replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
+	replace_tabs = fp->replace_tabs || file_prefs.replace_tabs;
+	if (replace_tabs && doc->file_type->id != GEANY_FILETYPES_MAKE)
 		editor_replace_tabs(doc->editor, TRUE);
 	/* strip trailing spaces */
-	if (fp->strip_trailing_spaces)
+	if (fp->strip_trailing_spaces || file_prefs.strip_trailing_spaces)
 		editor_strip_trailing_spaces(doc->editor, TRUE);
 	/* ensure the file has a newline at the end */
-	if (fp->final_new_line)
+	if (fp->final_new_line || file_prefs.final_new_line)
 		editor_ensure_final_newline(doc->editor);
 	/* ensure newlines are consistent */
-	if (fp->ensure_convert_new_lines)
+	if (fp->ensure_convert_new_lines || file_prefs.ensure_convert_new_lines)
 		sci_convert_eols(doc->editor->sci, sci_get_eol_mode(doc->editor->sci));
 
 	/* notify plugins which may wish to modify the document before it's saved */
