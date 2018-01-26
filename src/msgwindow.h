@@ -96,10 +96,6 @@ void msgwin_finalize(void);
 
 void msgwin_show_hide(gboolean show);
 
-void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string);
-
-void msgwin_compiler_add_string(gint msg_color, const gchar *msg);
-
 void msgwin_show_hide_tabs(void);
 
 

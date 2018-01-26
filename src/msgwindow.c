@@ -444,6 +444,7 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  *
  * @since @todo
  **/
+GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
@@ -533,9 +534,7 @@ void msgwin_status_add_string(const gchar *string)
 GEANY_API_SYMBOL
 void msgwin_status_add(const gchar *format, ...)
 {
-	GtkTreeIter iter;
 	gchar *string;
-	gchar *statusmsg, *time_str;
 	va_list args;
 
 	va_start(args, format);
