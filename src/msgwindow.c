@@ -317,13 +317,15 @@ static const GdkColor *get_color(gint msg_color)
 
 
 /**
- * Adds a new message in the compiler tab treeview in the messages window.
+ * Adds a formatted message in the compiler tab treeview in the messages window.
  *
  * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  * @param format    @c printf()-style format string.
  * @param ...       Arguments for the @c format string.
  *
- * @since 0.15
+ * @see msgwin_compiler_add_string()
+ *
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
@@ -343,6 +345,8 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
  *
  * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
  * @param msg       Compiler message to be added.
+ *
+ * @see msgwin_compiler_add()
  *
  * @since @todo
  **/
@@ -395,7 +399,7 @@ void msgwin_show_hide(gboolean show)
 
 
 /**
- * Adds a new message in the messages tab treeview in the messages window.
+ * Adds a formatted message in the messages tab treeview in the messages window.
  *
  * If @a line and @a doc are set, clicking on this line jumps into the file
  * which is specified by @a doc into the line specified with @a line.
@@ -406,7 +410,9 @@ void msgwin_show_hide(gboolean show)
  * @param format    @c printf()-style format string.
  * @param ...       Arguments for the @c format string.
  *
- * @since 0.15
+ * @see msgwin_msg_add_string()
+ *
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
@@ -433,6 +439,8 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
  * @param doc       @nullable The document. Set to @c NULL to ignore.
  * @param string    Message to be added.
+ *
+ * @see msgwin_msg_add()
  *
  * @since @todo
  **/
@@ -474,11 +482,13 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 
 
 /**
- * Logs a status message *without* setting the status bar.
+ * Logs a new status message *without* setting the status bar.
  *
  * Use @ref ui_set_statusbar() to display text on the statusbar.
  *
  * @param string Status message to be logged.
+ *
+ * @see msgwin_status_add()
  *
  * @since @todo
  **/
@@ -510,12 +520,16 @@ void msgwin_status_add_string(const gchar *string)
 }
 
 /**
- * Logs a status message *without* setting the status bar.
+ * Logs a formatted status message *without* setting the status bar.
  *
  * Use @ref ui_set_statusbar() to display text on the statusbar.
  *
  * @param format @c printf()-style format string.
  * @param ...    Arguments for the @c format string.
+ *
+ * @see msgwin_status_add_string()
+ *
+ * @since 0.12
  **/
 GEANY_API_SYMBOL
 void msgwin_status_add(const gchar *format, ...)
