@@ -65,6 +65,7 @@
 	GoParser, \
 	JsonParser, \
 	ZephirParser, \
-	PowerShellParser
+	PowerShellParser, \
+	AutoItParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */

@@ -268,6 +268,7 @@ test_sources = \
 	semicolon.f90					\
 	shebang.js						\
 	signature.cpp					\
+	simple.au3						\
 	simple.bas						\
 	simple.cbl						\
 	simple.d						\

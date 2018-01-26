@@ -831,6 +831,14 @@ static void add_top_level_items(GeanyDocument *doc)
 				&(tv_iters.tag_externvar), _("Extern Variables"), ICON_VAR,
 				&(tv_iters.tag_other), _("Other"), ICON_OTHER, NULL);
 		}
+		case GEANY_FILETYPES_AU3:
+		{
+			tag_list_add_groups(tag_store,
+				&tv_iters.tag_function, _("Functions"), ICON_METHOD,
+				&tv_iters.tag_other, _("Regions"), ICON_OTHER,
+				NULL);
+			break;
+		}
 	}
 }
 

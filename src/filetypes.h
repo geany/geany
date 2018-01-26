@@ -106,6 +106,7 @@ typedef enum
 	GEANY_FILETYPES_COFFEESCRIPT,
 	GEANY_FILETYPES_GO,
 	GEANY_FILETYPES_ZEPHIR,
+	GEANY_FILETYPES_AU3,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
