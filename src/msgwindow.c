@@ -325,7 +325,7 @@ static const GdkColor *get_color(gint msg_color)
  *
  * @see msgwin_compiler_add_string()
  *
- * @since 0.15
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
@@ -412,7 +412,7 @@ void msgwin_show_hide(gboolean show)
  *
  * @see msgwin_msg_add_string()
  *
- * @since 0.15
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
