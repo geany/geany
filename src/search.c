@@ -2341,15 +2341,9 @@ void search_find_again(gboolean change_direction)
 
 static void load_combo_box_history(GtkWidget *combo_entry, gchar **recent_terms)
 {
-	guint i, len = 0;
-
-	if (recent_terms != NULL)
+	for (; recent_terms != NULL && *recent_terms != NULL; recent_terms++)
 	{
-		len = g_strv_length(recent_terms);
-		for (i = 0; (i < len); i++)
-		{
-			ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo_entry), recent_terms[i], 0);
-		}
+		ui_combo_box_add_to_history(GTK_COMBO_BOX_TEXT(combo_entry), *recent_terms, 0);
 	}
 }
 
@@ -2367,7 +2361,7 @@ static void save_combo_box_history(GtkComboBox *combo, gchar ***recent_terms)
 
 	g_strfreev(*recent_terms);
 
-	if (count == 0)
+	if (count == 0 || !gtk_tree_model_get_iter_first(model, &iter))
 	{
 		*recent_terms = NULL;
 		return;
@@ -2375,21 +2369,20 @@ static void save_combo_box_history(GtkComboBox *combo, gchar ***recent_terms)
 
 	*recent_terms = g_new0(gchar*, count + 1);
 
-	if (gtk_tree_model_get_iter_first(model, &iter))
+	do
 	{
-		do
+		gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
+		if (!EMPTY(combo_text))
 		{
-			gtk_tree_model_get(model, &iter, 0, &combo_text, -1);
-			if (*combo_text != 0)
-			{
-				(*recent_terms)[i] = g_strdup(combo_text);
-			}
-
-			g_free(combo_text);
-			i++;
+			(*recent_terms)[i] = combo_text;
 		}
-		while (gtk_tree_model_iter_next(model, &iter));
-
-		(*recent_terms)[count] = NULL;
+		else
+		{
+			g_free(combo_text);
+		}
+		i++;
 	}
+	while (gtk_tree_model_iter_next(model, &iter));
+
+	(*recent_terms)[count] = NULL;
 }
