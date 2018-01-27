@@ -48,6 +48,7 @@ parsers = \
 	parsers/ada.c \
 	parsers/asciidoc.c \
 	parsers/asm.c \
+	parsers/autoit.c \
 	parsers/basic.c \
 	parsers/bibtex.c \
 	parsers/geany_c.c \

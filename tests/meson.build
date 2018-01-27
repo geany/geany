@@ -291,6 +291,7 @@ ctags_tests = files([
 	'ctags/signature.cpp.tags',
 	'ctags/simple.abc.tags',
 	'ctags/simple.asciidoc.tags',
+	'ctags/simple.au3.tags',
 	'ctags/simple.bas.tags',
 	'ctags/simple.bat.tags',
 	'ctags/simple.clj.tags',

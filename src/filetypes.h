@@ -108,6 +108,7 @@ typedef enum
 	GEANY_FILETYPES_BIBTEX,
 	GEANY_FILETYPES_SMALLTALK,
 	GEANY_FILETYPES_JULIA,
+	GEANY_FILETYPES_AU3,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }
