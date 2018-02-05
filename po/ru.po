@@ -8,10 +8,10 @@
 # Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2015
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.33\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2016-07-09 11:20+0300\n"
+"PO-Revision-Date: 2018-02-05 06:26+0400\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -200,24 +200,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>Запуск</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "Сохранять позицию и размеры окна"
+msgstr "Сохранять размер окна"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "Сохранять позицию и размеры окна и восстанавливать их при запуске"
+msgstr "Сохранять размер окна и восстанавливать его при следующем запуске"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "Сохранять позицию и размеры окна"
+msgstr "Сохранять позицию окна"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "Сохранять позицию и размеры окна и восстанавливать их при запуске"
+msgstr "Сохранять позицию окна и восстанавливать её при следующем запуске"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -1044,7 +1040,7 @@ msgstr "Останавливает прокрутку на последней с
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "Строки, видимые _вблизи курсора:"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -1231,9 +1227,8 @@ msgid "Strip trailing spaces and tabs"
 msgstr "Убирать лишние пробелы и табуляции"
 
 #: ../data/geany.glade.h:252
-#, fuzzy
 msgid "Removes trailing spaces and tabs at the end of lines"
-msgstr "Убирать лишние пробелы, табуляции и окончания строк"
+msgstr "Убирать лишние пробелы и табуляции в конце строк"
 
 #: ../data/geany.glade.h:253 ../src/keybindings.c:669
 msgid "Replace tabs with space"
@@ -3354,9 +3349,8 @@ msgid "Delete to line end"
 msgstr "Удалить до конца строки"
 
 #: ../src/keybindings.c:394
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Удалить до конца строки"
+msgstr "Удалить до начала строки"
 
 #: ../src/keybindings.c:397
 msgid "_Transpose Current Line"
@@ -3793,12 +3787,11 @@ msgid "Failed to load one or more session files."
 msgstr "Не удалось загрузить один или несколько файлов сессии."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Задать начальный номер столбца для первого открытого файла (полезно в "
+"Задать начальный номер столбца COLUMN для первого открытого файла (полезно в "
 "сочетании с --line)"
 
 #: ../src/libmain.c:122
@@ -3806,9 +3799,8 @@ msgid "COLUMN"
 msgstr ""
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Использовать другой каталог настроек"
+msgstr "Использовать DIR как альтернативный каталог для файлов конфигурации"
 
 #: ../src/libmain.c:123
 msgid "DIR"
@@ -3833,11 +3825,9 @@ msgstr ""
 "новую"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
-msgstr ""
-"Использовать это имя файла сокета для соединения с запущенной копией Geany"
+msgstr "Использовать файл сокета FILE для соединения с запущенной копией Geany"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
@@ -3848,9 +3838,8 @@ msgid "Return a list of open documents in a running Geany instance"
 msgstr "Вернуть список открытых документов в запущенной копии Geany"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Установить начальный номер строки для первого открытого файла"
+msgstr "Установить начальный номер строки LINE для первого открытого файла"
 
 #: ../src/libmain.c:132
 msgid "LINE"
@@ -3886,7 +3875,7 @@ msgstr "Не загружать поддержку терминала"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Использовать FILE в качестве динамически подключаемой библиотеки VTE"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3901,13 +3890,13 @@ msgid "[FILES...]"
 msgstr "[ФАЙЛЫ...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Быстрая и легковесная среда разработки"
+msgstr "Быстрая и легковесная среда разработки."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
 msgstr ""
+"Сообщения об ошибках отправляйте на https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4015,9 +4004,8 @@ msgid "Open in New _Window"
 msgstr "Открыть в новом _окне"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "Переместить документ вправо"
+msgstr "Закрыть все с_права"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4080,6 +4068,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"Для плагина '%s' расширение '%s' начинается с точки. Пожалуйста, исправьте "
+"это."
 
 #: ../src/pluginutils.c:427
 msgid "Configure Plugins"
@@ -4361,13 +4351,12 @@ msgid "_Use regular expressions"
 msgstr "_Использовать регулярные выражения"
 
 #: ../src/search.c:313
-#, fuzzy
 msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Использовать регулярные выражения POSIX. Для более подробной информации по "
-"использованию регулярных выражений см. документацию."
+"Использовать Perl-совместимые регулярные выражения. Для более подробной "
+"информации по использованию регулярных выражений см. документацию."
 
 #: ../src/search.c:318
 msgid "Use _escape sequences"
@@ -5041,6 +5030,8 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"Не удаётся выполнить команду \"%s\". Подсказка: Часто возможной причиной "
+"являются неправильные пути. Ошибка: %s"
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
