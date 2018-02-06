@@ -1619,7 +1619,6 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:
-		case SCLEX_LATEX:
 		case SCLEX_MAKEFILE:
 		case SCLEX_MARKDOWN:
 		case SCLEX_PROPERTIES:
