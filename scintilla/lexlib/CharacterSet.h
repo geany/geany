@@ -48,6 +48,17 @@ public:
 			bset[i] = other.bset[i];
 		}
 	}
+	CharacterSet &operator=(CharacterSet &&other) {
+		if (this != &other) {
+			delete []bset;
+			size = other.size;
+			valueAfter = other.valueAfter;
+			bset = other.bset;
+			other.size = 0;
+			other.bset = nullptr;
+		}
+		return *this;
+	}
 	~CharacterSet() {
 		delete []bset;
 		bset = 0;
@@ -160,11 +171,18 @@ inline bool isoperator(int ch) {
 
 // Simple case functions for ASCII.
 
-inline char MakeUpperCase(char ch) {
+inline int MakeUpperCase(int ch) {
 	if (ch < 'a' || ch > 'z')
 		return ch;
 	else
 		return static_cast<char>(ch - 'a' + 'A');
+}
+
+inline int MakeLowerCase(int ch) {
+	if (ch < 'A' || ch > 'Z')
+		return ch;
+	else
+		return ch - 'A' + 'a';
 }
 
 int CompareCaseInsensitive(const char *a, const char *b);

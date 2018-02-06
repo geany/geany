@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2003, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Python language
 *   files.
@@ -15,11 +15,14 @@
 #include <string.h>
 
 #include "entry.h"
+#include "nestlevel.h"
 #include "options.h"
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
-#include "nestlevel.h"
+#include "routines.h"
+#include "debug.h"
+#include "xtag.h"
 
 /*
 *   DATA DEFINITIONS
@@ -29,11 +32,11 @@ typedef enum {
 } pythonKind;
 
 static kindOption PythonKinds[] = {
-	{TRUE, 'c', "class",    "classes"},
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "member",   "class members"},
-    {TRUE, 'v', "variable", "variables"},
-    {TRUE, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
+	{true, 'c', "class",    "classes"},
+	{true, 'f', "function", "functions"},
+	{true, 'm', "member",   "class members"},
+	{true, 'v', "variable", "variables"},
+	{true, 'x', "unknown", "name referring a classe/variable/function/module defined in other module"}
 };
 
 typedef enum {
@@ -51,14 +54,14 @@ static char const * const doubletriple = "\"\"\"";
 *   FUNCTION DEFINITIONS
 */
 
-static boolean isIdentifierFirstCharacter (int c)
+static bool isIdentifierFirstCharacter (int c)
 {
-	return (boolean) (isalpha (c) || c == '_');
+	return (bool) (isalpha (c) || c == '_');
 }
 
-static boolean isIdentifierCharacter (int c)
+static bool isIdentifierCharacter (int c)
 {
-	return (boolean) (isalnum (c) || c == '_');
+	return (bool) (isalnum (c) || c == '_');
 }
 
 /* follows PEP-8, and always reports single-underscores as protected
@@ -67,7 +70,7 @@ static boolean isIdentifierCharacter (int c)
  * - http://www.python.org/dev/peps/pep-0008/#designing-for-inheritance
  */
 static pythonAccess accessFromIdentifier (const vString *const ident,
-	pythonKind kind, boolean has_parent, boolean parent_is_class)
+	pythonKind kind, bool has_parent, bool parent_is_class)
 {
 	const char *const p = vStringValue (ident);
 	const size_t len = vStringLength (ident);
@@ -92,7 +95,7 @@ static pythonAccess accessFromIdentifier (const vString *const ident,
 
 static void addAccessFields (tagEntryInfo *const entry,
 	const vString *const ident, pythonKind kind,
-	boolean has_parent, boolean parent_is_class)
+	bool has_parent, bool parent_is_class)
 {
 	pythonAccess access;
 
@@ -100,7 +103,7 @@ static void addAccessFields (tagEntryInfo *const entry,
 	entry->extensionFields.access = PythonAccesses [access];
 	/* FIXME: should we really set isFileScope in addition to access? */
 	if (access == A_PRIVATE)
-		entry->isFileScope = TRUE;
+		entry->isFileScope = true;
 }
 
 /* Given a string with the contents of a line directly after the "def" keyword,
@@ -110,27 +113,25 @@ static void makeFunctionTag (vString *const function,
 	vString *const parent, int is_class_parent, const char *arglist)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (function));
-
-	tag.kindName = PythonKinds[K_FUNCTION].name;
-	tag.kind = PythonKinds[K_FUNCTION].letter;
-	tag.extensionFields.arglist = arglist;
 
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.kindName = PythonKinds[K_METHOD].name;
-			tag.kind = PythonKinds[K_METHOD].letter;
-			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_METHOD]));
+			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
 		}
+		tag.extensionFields.scopeName = vStringValue (parent);
 	}
+	else
+		initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+
+	tag.extensionFields.signature = arglist;
 
 	addAccessFields (&tag, function, is_class_parent ? K_METHOD : K_FUNCTION,
 		vStringLength (parent) > 0, is_class_parent);
@@ -145,20 +146,18 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 	vString *const parent, int is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (class));
-	tag.kindName = PythonKinds[K_CLASS].name;
-	tag.kind = PythonKinds[K_CLASS].letter;
+	initTagEntry (&tag, vStringValue (class), &(PythonKinds[K_CLASS]));
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 		else
 		{
-			tag.extensionFields.scope [0] = PythonKinds[K_FUNCTION].name;
-			tag.extensionFields.scope [1] = vStringValue (parent);
+			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
+			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 	}
 	tag.extensionFields.inheritance = vStringValue (inheritance);
@@ -168,16 +167,14 @@ static void makeClassTag (vString *const class, vString *const inheritance,
 }
 
 static void makeVariableTag (vString *const var, vString *const parent,
-	boolean is_class_parent)
+	bool is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (var));
-	tag.kindName = PythonKinds[K_VARIABLE].name;
-	tag.kind = PythonKinds[K_VARIABLE].letter;
+	initTagEntry (&tag, vStringValue (var), &(PythonKinds[K_VARIABLE]));
 	if (vStringLength (parent) > 0)
 	{
-		tag.extensionFields.scope [0] = PythonKinds[K_CLASS].name;
-		tag.extensionFields.scope [1] = vStringValue (parent);
+		tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+		tag.extensionFields.scopeName = vStringValue (parent);
 	}
 	addAccessFields (&tag, var, K_VARIABLE, vStringLength (parent) > 0,
 		is_class_parent);
@@ -217,7 +214,7 @@ static const char *skipEverything (const char *cp)
 		/* these checks find unicode, binary (Python 3) and raw strings */
 		if (!match)
 		{
-			boolean r_first = (*cp == 'r' || *cp == 'R');
+			bool r_first = (*cp == 'r' || *cp == 'R');
 
 			/* "r" | "R" | "u" | "U" | "b" | "B" */
 			if (r_first || *cp == 'u' || *cp == 'U' ||  *cp == 'b' || *cp == 'B')
@@ -289,7 +286,6 @@ static const char *parseIdentifier (const char *cp, vString *const identifier)
 		vStringPut (identifier, (int) *cp);
 		++cp;
 	}
-	vStringTerminate (identifier);
 	return cp;
 }
 
@@ -308,7 +304,7 @@ static void parseClass (const char *cp, vString *const class,
 			if (*cp == '\0')
 			{
 				/* Closing parenthesis can be in follow up line. */
-				cp = (const char *) fileReadLine ();
+				cp = (const char *) readLineFromInputFile ();
 				if (!cp) break;
 				vStringPut (inheritance, ' ');
 				continue;
@@ -316,7 +312,6 @@ static void parseClass (const char *cp, vString *const class,
 			vStringPut (inheritance, *cp);
 			++cp;
 		}
-		vStringTerminate (inheritance);
 	}
 	makeClassTag (class, inheritance, parent, is_class_parent);
 	vStringDelete (inheritance);
@@ -365,7 +360,7 @@ static void parseImports (const char *cp)
 	vStringDelete (name_next);
 }
 
-/* modified from get.c getArglistFromStr().
+/* modified from lcpp.c getArglistFromStr().
  * warning: terminates rest of string past arglist!
  * note: does not ignore brackets inside strings! */
 static char *parseArglist(const char *buf)
@@ -412,12 +407,12 @@ static void parseFunction (const char *cp, vString *const def,
  * Would produce this string:
  * MyClass.MyFunction/SubFunction/SubClass.Method
  */
-static boolean constructParentString(NestingLevels *nls, int indent,
+static bool constructParentString(NestingLevels *nls, int indent,
 	vString *result)
 {
 	int i;
 	NestingLevel *prev = NULL;
-	int is_class = FALSE;
+	int is_class = false;
 	vStringClear (result);
 	for (i = 0; i < nls->n; i++)
 	{
@@ -460,7 +455,7 @@ static void checkIndent(NestingLevels *nls, int indent)
 }
 
 static void addNestingLevel(NestingLevels *nls, int indentation,
-	const vString *name, boolean is_class)
+	const vString *name, bool is_class)
 {
 	int i;
 	NestingLevel *nl = NULL;
@@ -495,7 +490,6 @@ static char const *find_triple_start(char const *string, char const **which)
 	{
 		if (*cp == '#')
 			break;
-
 		if (*cp == '"' || *cp == '\'')
 		{
 			if (strncmp(cp, doubletriple, 3) == 0)
@@ -576,7 +570,7 @@ static const char *findVariable(const char *line)
 }
 
 /* Skip type declaration that optionally follows a cdef/cpdef */
-static const char *skipTypeDecl (const char *cp, boolean *is_class)
+static const char *skipTypeDecl (const char *cp, bool *is_class)
 {
 	const char *lastStart = cp, *ptr = cp;
 	int loopCount = 0;
@@ -588,7 +582,7 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 	}
 	if (!strncmp("class", ptr, 5)) {
 		ptr += 5 ;
-		*is_class = TRUE;
+		*is_class = true;
 		ptr = skipSpace(ptr);
 		return ptr;
 	}
@@ -605,7 +599,7 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
 		}
 		if (!*ptr || *ptr == '=') return NULL;
 		if (*ptr == '(') {
-		    return lastStart; /* if we stopped on a '(' we are done */
+			return lastStart; /* if we stopped on a '(' we are done */
 		}
 		ptr = skipSpace(ptr);
 		lastStart = ptr;
@@ -618,9 +612,9 @@ static const char *skipTypeDecl (const char *cp, boolean *is_class)
  * if so.
  * We don't return the lambda name since it is useless for now since we already
  * know it when we call this function, and it would be a little slower. */
-static boolean varIsLambda (const char *cp, char **arglist)
+static bool varIsLambda (const char *cp, char **arglist)
 {
-	boolean is_lambda = FALSE;
+	bool is_lambda = false;
 
 	cp = skipSpace (cp);
 	cp = skipIdentifier (cp); /* skip the lambda's name */
@@ -646,11 +640,10 @@ static boolean varIsLambda (const char *cp, char **arglist)
 				for (; *cp != 0 && *cp != ':'; cp++)
 					vStringPut (args, *cp);
 				vStringPut (args, ')');
-				vStringTerminate (args);
 				if (arglist)
 					*arglist = strdup (vStringValue (args));
 				vStringDelete (args);
-				is_lambda = TRUE;
+				is_lambda = true;
 			}
 		}
 	}
@@ -659,15 +652,15 @@ static boolean varIsLambda (const char *cp, char **arglist)
 
 /* checks if @p cp has keyword @p keyword at the start, and fills @p cp_n with
  * the position of the next non-whitespace after the keyword */
-static boolean matchKeyword (const char *keyword, const char *cp, const char **cp_n)
+static bool matchKeyword (const char *keyword, const char *cp, const char **cp_n)
 {
 	size_t kw_len = strlen (keyword);
 	if (strncmp (cp, keyword, kw_len) == 0 && isspace (cp[kw_len]))
 	{
 		*cp_n = skipSpace (&cp[kw_len + 1]);
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
 static void findPythonTags (void)
@@ -682,7 +675,7 @@ static void findPythonTags (void)
 	int line_skip = 0;
 	char const *longStringLiteral = NULL;
 
-	while ((line = (const char *) fileReadLine ()) != NULL)
+	while ((line = (const char *) readLineFromInputFile ()) != NULL)
 	{
 		const char *cp = line, *candidate;
 		char const *longstring;
@@ -729,7 +722,7 @@ static void findPythonTags (void)
 		{
 			const char *start = variable;
 			char *arglist;
-			boolean parent_is_class;
+			bool parent_is_class;
 
 			vStringClear (name);
 			while (isIdentifierCharacter ((int) *start))
@@ -737,7 +730,6 @@ static void findPythonTags (void)
 				vStringPut (name, (int) *start);
 				++start;
 			}
-			vStringTerminate (name);
 
 			parent_is_class = constructParentString(nesting_levels, indent, parent);
 			if (varIsLambda (variable, &arglist))
@@ -769,40 +761,40 @@ static void findPythonTags (void)
 		keyword = findDefinitionOrClass (cp);
 		if (keyword)
 		{
-			boolean found = FALSE;
-			boolean is_class = FALSE;
+			bool found = false;
+			bool is_class = false;
 			if (matchKeyword ("def", keyword, &cp))
 			{
-				found = TRUE;
+				found = true;
 			}
 			else if (matchKeyword ("class", keyword, &cp))
 			{
-				found = TRUE;
-				is_class = TRUE;
+				found = true;
+				is_class = true;
 			}
 			else if (matchKeyword ("cdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = true;
+					cp = candidate;
+				}
 
-		    }
-    		else if (matchKeyword ("cpdef", keyword, &cp))
-		    {
-		        candidate = skipTypeDecl (cp, &is_class);
-		        if (candidate)
-		        {
-		    		found = TRUE;
-		    		cp = candidate;
-		        }
-		    }
+			}
+			else if (matchKeyword ("cpdef", keyword, &cp))
+			{
+				candidate = skipTypeDecl (cp, &is_class);
+				if (candidate)
+				{
+					found = true;
+					cp = candidate;
+				}
+			}
 
 			if (found)
 			{
-				boolean is_parent_class;
+				bool is_parent_class;
 
 				is_parent_class =
 					constructParentString(nesting_levels, indent, parent);
@@ -830,10 +822,8 @@ extern parserDefinition *PythonParser (void)
     static const char *const extensions[] = { "py", "pyx", "pxd", "pxi" ,"scons", NULL };
 	parserDefinition *def = parserNew ("Python");
 	def->kinds = PythonKinds;
-	def->kindCount = KIND_COUNT (PythonKinds);
+	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

@@ -1,8 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.60])
-AC_INIT([Geany], [1.29],
-		[https://sourceforge.net/tracker/?group_id=153444&atid=787791])
+AC_INIT([Geany], [1.33],
+		[https://github.com/geany/geany/issues])
 AC_CONFIG_SRCDIR([src/geany.h])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -30,11 +30,8 @@ AC_PROG_CC_C99
 AM_PROG_CC_C_O
 
 AC_PROG_CXX
-# check for C++ compiler explicitly and fail if none is found, do this check
-# after AC_PROG_CXX has set the CXX environment variable
-if ! which $CXX >/dev/null 2>&1; then
-	AC_MSG_ERROR([No C++ compiler found. Please install a C++ compiler.])
-fi
+GEANY_PROG_CXX
+AX_CXX_COMPILE_STDCXX_11
 
 AC_PROG_INSTALL
 AC_PROG_LN_S

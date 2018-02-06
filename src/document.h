@@ -66,6 +66,7 @@ typedef struct GeanyFilePrefs
 	gboolean		tab_close_switch_to_mru;
 	gboolean		keep_edit_history_on_reload; /* Keep undo stack upon, and allow undoing of, document reloading. */
 	gboolean		show_keep_edit_history_on_reload_msg; /* whether to show the message introducing the above feature */
+ 	gboolean		reload_clean_doc_on_file_change;
 }
 GeanyFilePrefs;
 
@@ -315,6 +316,13 @@ void document_apply_indent_settings(GeanyDocument *doc);
 void document_grab_focus(GeanyDocument *doc);
 
 GeanyDocument *document_clone(GeanyDocument *old_doc);
+
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key);
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func);
 
 #endif /* GEANY_PRIVATE */
 

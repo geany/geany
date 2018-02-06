@@ -12,7 +12,7 @@
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"    /* must always come first */
 
 #include <ctype.h>
 #include <string.h>
@@ -20,6 +20,7 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -35,13 +36,13 @@ typedef enum {
 } TeXKind;
 
 static kindOption TeXKinds[] = {
-	{ TRUE, 'f', "function",      "command definitions" },
-	{ TRUE, 'c', "class",         "environment definitions" },
-	{ TRUE, 'm', "member",        "labels, sections and bibliography" },
-	{ TRUE, 'd', "macro",         "subsections" },
-	{ TRUE, 'v', "variable",      "subsubsections" },
-	{ TRUE, 'n', "namespace",     "chapters"},
-	{ TRUE, 's', "struct",        "labels and bibliography" }
+	{ true, 'f', "function",      "command definitions" },
+	{ true, 'c', "class",         "environment definitions" },
+	{ true, 'm', "member",        "labels, sections and bibliography" },
+	{ true, 'd', "macro",         "subsections" },
+	{ true, 'v', "variable",      "subsubsections" },
+	{ true, 'n', "namespace",     "chapters"},
+	{ true, 's', "struct",        "labels and bibliography" }
 };
 
 #define TEX_BRACES (1<<0)
@@ -60,13 +61,15 @@ static int getWord(const char * ref, const char **ptr)
 		ref++, p++;
 
 	if (*ref)
-		return FALSE;
+		return false;
+
 
 	if (*p == '*') /* to allow something like \section*{foobar} */
 		p++;
 
 	*ptr = p;
-	return TRUE;
+
+	return true;
 }
 
 static void createTag(int flags, TeXKind kind, const char * l)
@@ -103,7 +106,6 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut(name, (int) *l);
 			++l;
 		} while ((*l != '\0') && (*l != '}'));
-		vStringTerminate(name);
 		if (name->buffer[0] != '}')
 			makeSimpleTag(name, TeXKinds, kind);
 	}
@@ -114,17 +116,15 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut (name, (int) *l);
 			++l;
 		} while (isalpha((int) *l) || *l == '@');
-		vStringTerminate(name);
 		makeSimpleTag(name, TeXKinds, kind);
 	}
 	else
 	{
 		vStringPut(name, (int) *l);
-		vStringTerminate(name);
 		makeSimpleTag(name, TeXKinds, kind);
 	}
 
-	no_tag:
+no_tag:
 	vStringDelete(name);
 }
 
@@ -132,7 +132,7 @@ static void findTeXTags(void)
 {
 	const char *line;
 
-	while ((line = (const char*)fileReadLine()) != NULL)
+	while ((line = (const char*)readLineFromInputFile()) != NULL)
 	{
 		const char *cp = line;
 		/*int escaped = 0;*/
@@ -161,7 +161,7 @@ static void findTeXTags(void)
 				{
 					if (*cp == '*')
 						cp++;
-					createTag(TEX_BRACES, K_COMMAND, cp);
+					createTag(TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
 					continue;
 				}
 
@@ -239,7 +239,7 @@ extern parserDefinition* LaTeXParser (void)
 	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
 	parserDefinition * def = parserNew ("LaTeX");
 	def->kinds      = TeXKinds;
-	def->kindCount  = KIND_COUNT (TeXKinds);
+	def->kindCount  = ARRAY_SIZE (TeXKinds);
 	def->extensions = extensions;
 	def->parser     = findTeXTags;
 	return def;

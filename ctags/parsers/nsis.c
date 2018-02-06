@@ -19,6 +19,7 @@
 #include "read.h"
 #include "main.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
@@ -30,9 +31,9 @@ typedef enum {
 } NsisKind;
 
 static kindOption NsisKinds [] = {
-	{ TRUE, 'n', "namespace", "sections"},
-	{ TRUE, 'f', "function", "functions"},
-	{ TRUE, 'v', "variable", "variables"}
+	{ true, 'n', "namespace", "sections"},
+	{ true, 'f', "function", "functions"},
+	{ true, 'v', "variable", "variables"}
 };
 
 /*
@@ -44,7 +45,7 @@ static void findNsisTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char* cp = line;
 
@@ -67,7 +68,6 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, NsisKinds, K_FUNCTION);
 			vStringClear (name);
 		}
@@ -93,7 +93,6 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, NsisKinds, K_VARIABLE);
 			vStringClear (name);
 		}
@@ -101,7 +100,7 @@ static void findNsisTags (void)
 		else if (strncasecmp ((const char*) cp, "section", (size_t) 7) == 0  &&
 				 isspace ((int) cp [7]))
 		{
-			boolean in_quotes = FALSE;
+			bool in_quotes = false;
 			cp += 7;
 			/* skip all whitespace */
 			while (isspace ((int) *cp))
@@ -115,7 +114,7 @@ static void findNsisTags (void)
 						break;
 					else
 					{
-						in_quotes = TRUE;
+						in_quotes = true;
 						++cp;
 						continue;
 					}
@@ -123,7 +122,6 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			vStringTerminate (name);
 			makeSimpleTag (name, NsisKinds, K_SECTION);
 			vStringClear (name);
 		}
@@ -138,10 +136,8 @@ extern parserDefinition* NsisParser (void)
 	};
 	parserDefinition* def = parserNew ("NSIS");
 	def->kinds      = NsisKinds;
-	def->kindCount  = KIND_COUNT (NsisKinds);
+	def->kindCount  = ARRAY_SIZE (NsisKinds);
 	def->extensions = extensions;
 	def->parser     = findNsisTags;
 	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

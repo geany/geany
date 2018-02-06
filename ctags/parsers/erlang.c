@@ -2,7 +2,7 @@
 *   Copyright (c) 2003, Brent Fulgham <bfulgham@debian.org>
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Erlang language
 *   files.  Some of the parsing constructs are based on the Emacs 'etags'
@@ -18,7 +18,7 @@
 #include "entry.h"
 #include "options.h"
 #include "read.h"
-// #include "routines.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -29,11 +29,11 @@ typedef enum {
 } erlangKind;
 
 static kindOption ErlangKinds[] = {
-	{TRUE, 'd', "macro",    "macro definitions"},
-	{TRUE, 'f', "function", "functions"},
-	{TRUE, 'm', "module",   "modules"},
-	{TRUE, 'r', "record",   "record definitions"},
-	{TRUE, 't', "type",     "type definitions"},
+	{true, 'd', "macro",    "macro definitions"},
+	{true, 'f', "function", "functions"},
+	{true, 'm', "module",   "modules"},
+	{true, 'r', "record",   "record definitions"},
+	{true, 't', "type",     "type definitions"},
 };
 
 /*
@@ -43,14 +43,14 @@ static kindOption ErlangKinds[] = {
  * necessary. If successful you will find class name in vString
  */
 
-static boolean isIdentifierFirstCharacter (int c)
+static bool isIdentifierFirstCharacter (int c)
 {
-	return (boolean) (isalpha (c));
+	return (bool) (isalpha (c));
 }
 
-static boolean isIdentifierCharacter (int c)
+static bool isIdentifierCharacter (int c)
 {
-	return (boolean) (isalnum (c) || c == '_' || c == ':');
+	return (bool) (isalnum (c) || c == '_' || c == ':');
 }
 
 static const unsigned char *skipSpace (const unsigned char *cp)
@@ -69,7 +69,6 @@ static const unsigned char *parseIdentifier (
 		vStringPut (identifier, (int) *cp);
 		++cp;
 	}
-	vStringTerminate (identifier);
 	return cp;
 }
 
@@ -79,14 +78,12 @@ static void makeMemberTag (
 	if (ErlangKinds [kind].enabled  &&  vStringLength (identifier) > 0)
 	{
 		tagEntryInfo tag;
-		initTagEntry (&tag, vStringValue (identifier));
-		tag.kindName = ErlangKinds[kind].name;
-		tag.kind = ErlangKinds[kind].letter;
+		initTagEntry (&tag, vStringValue (identifier), &(ErlangKinds[kind]));
 
 		if (module != NULL  &&  vStringLength (module) > 0)
 		{
-			tag.extensionFields.scope [0] = "module";
-			tag.extensionFields.scope [1] = vStringValue (module);
+			tag.extensionFields.scopeKind = &(ErlangKinds [K_MODULE]);
+			tag.extensionFields.scopeName = vStringValue (module);
 		}
 		makeTagEntry (&tag);
 	}
@@ -160,7 +157,7 @@ static void findErlangTags (void)
 	vString *const module = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const unsigned char *cp = line;
 
@@ -185,10 +182,8 @@ extern parserDefinition *ErlangParser (void)
 	static const char *const extensions[] = { "erl", "ERL", "hrl", "HRL", NULL };
 	parserDefinition *def = parserNew ("Erlang");
 	def->kinds = ErlangKinds;
-	def->kindCount = KIND_COUNT (ErlangKinds);
+	def->kindCount = ARRAY_SIZE (ErlangKinds);
 	def->extensions = extensions;
 	def->parser = findErlangTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

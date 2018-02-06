@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 228
+#define GEANY_API_VERSION 235
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -315,6 +315,7 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
 gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gint min_api_version, gint abi_version,
                                     gpointer data, GDestroyNotify free_func);
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin);
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convenience macro to register a plugin.
@@ -341,34 +342,47 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
 
 /** Return values for GeanyProxyHooks::probe()
  *
- * Only @c PROXY_IGNORED, @c PROXY_MATCHED or @c PROXY_MATCHED|PROXY_NOLOAD
- * are valid return values.
- *
  * @see geany_plugin_register_proxy() for a full description of the proxy plugin mechanisms.
- *
- * @since 1.26 (API 226)
  */
 typedef enum
 {
 	/** The proxy is not responsible at all, and Geany or other plugins are free
 	 * to probe it.
+	 *
+	 * @since 1.29 (API 229)
 	 **/
-	PROXY_IGNORED,
-	/** The proxy is responsible for this file, and creates a plugin for it */
-	PROXY_MATCHED,
-
-	/** The proxy is does not directly load it, but it's still tied to the proxy
+	GEANY_PROXY_IGNORE,
+	/** The proxy is responsible for this file, and creates a plugin for it.
+	 *
+	 * @since 1.29 (API 229)
+	 */
+	GEANY_PROXY_MATCH,
+	/** The proxy is does not directly load it, but it's still tied to the proxy.
 	 *
 	 * This is for plugins that come in multiple files where only one of these
 	 * files is relevant for the plugin creation (for the PM dialog). The other
 	 * files should be ignored by Geany and other proxies. Example: libpeas has
 	 * a .plugin and a .so per plugin. Geany should not process the .so file
 	 * if there is a corresponding .plugin.
+	 *
+	 * @since 1.29 (API 229)
 	 */
-	PROXY_NOLOAD = 0x100,
+	GEANY_PROXY_RELATED = GEANY_PROXY_MATCH | 0x100
 }
 GeanyProxyProbeResults;
 
+/** @deprecated Use GEANY_PROXY_IGNORE instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_IGNORED GEANY_PROXY_IGNORE
+/** @deprecated Use GEANY_PROXY_MATCH instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_MATCHED GEANY_PROXY_MATCH
+/** @deprecated Use GEANY_PROXY_RELATED instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_NOLOAD 0x100
 
 /** Hooks that need to be implemented by every proxy
  *
@@ -379,7 +393,7 @@ GeanyProxyProbeResults;
 struct GeanyProxyFuncs
 {
 	/** Called to determine whether the proxy is truly responsible for the requested plugin.
-	 * A NULL pointer assumes the probe() function would always return @ref PROXY_MATCHED */
+	 * A NULL pointer assumes the probe() function would always return @ref GEANY_PROXY_MATCH */
 	gint		(*probe)     (GeanyPlugin *proxy, const gchar *filename, gpointer pdata);
 	/** Called after probe(), to perform the actual job of loading the plugin */
 	gpointer	(*load)      (GeanyPlugin *proxy, GeanyPlugin *subplugin, const gchar *filename, gpointer pdata);

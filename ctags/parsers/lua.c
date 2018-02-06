@@ -2,7 +2,7 @@
 *   Copyright (c) 2000-2001, Max Ischenko <mfi@ukr.net>.
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for Lua language.
 */
@@ -16,6 +16,7 @@
 
 #include "parse.h"
 #include "read.h"
+#include "routines.h"
 #include "vstring.h"
 
 /*
@@ -26,7 +27,7 @@ typedef enum {
 } luaKind;
 
 static kindOption LuaKinds [] = {
-	{ TRUE, 'f', "function", "functions" }
+	{ true, 'f', "function", "functions" }
 };
 
 /*
@@ -34,7 +35,7 @@ static kindOption LuaKinds [] = {
 */
 
 /* for debugging purposes */
-static void UNUSED print_string (char *p, char *q)
+static void CTAGS_ATTR_UNUSED print_string (char *p, char *q)
 {
 	for ( ; p != q; p++)
 		fprintf (errout, "%c", *p);
@@ -49,18 +50,18 @@ static void UNUSED print_string (char *p, char *q)
  * (Lua treat first line as a comment if it starts with #!)
  *
  */
-static boolean is_a_code_line (const unsigned char *line)
+static bool is_a_code_line (const unsigned char *line)
 {
-	boolean result;
+	bool result;
 	const unsigned char *p = line;
 	while (isspace ((int) *p))
 		p++;
 	if (p [0] == '\0')
-		result = FALSE;
+		result = false;
 	else if (p [0] == '-' && p [1] == '-')
-		result = FALSE;
+		result = false;
 	else
-		result = TRUE;
+		result = true;
 	return result;
 }
 
@@ -78,7 +79,6 @@ static void extract_name (const char *begin, const char *end, vString *name)
 		{
 			for (cp = begin ; cp != end; cp++)
 				vStringPut (name, (int) *cp);
-			vStringTerminate (name);
 
 			makeSimpleTag (name, LuaKinds, K_FUNCTION);
 			vStringClear (name);
@@ -91,7 +91,7 @@ static void findLuaTags (void)
 	vString *name = vStringNew ();
 	const unsigned char *line;
 
-	while ((line = fileReadLine ()) != NULL)
+	while ((line = readLineFromInputFile ()) != NULL)
 	{
 		const char *p, *q;
 
@@ -121,10 +121,8 @@ extern parserDefinition* LuaParser (void)
 	static const char* const extensions [] = { "lua", NULL };
 	parserDefinition* def = parserNew ("Lua");
 	def->kinds      = LuaKinds;
-	def->kindCount  = KIND_COUNT (LuaKinds);
+	def->kindCount  = ARRAY_SIZE (LuaKinds);
 	def->extensions = extensions;
 	def->parser     = findLuaTags;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

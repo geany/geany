@@ -2,20 +2,20 @@
 *   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Provides the external interface for resizeable strings.
 */
-#ifndef _VSTRING_H
-#define _VSTRING_H
+#ifndef CTAGS_MAIN_VSTRING_H
+#define CTAGS_MAIN_VSTRING_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
 
 #if defined(HAVE_STDLIB_H)
-# include <stdlib.h>	/* to define size_t */
+# include <stdlib.h>  /* to define size_t */
 #endif
 
 /*
@@ -31,34 +31,33 @@
 	((c) == '\0' ? 0 : ((s)->buffer [++(s)->length] = '\0')))
 #endif
 
-#define vStringValue(vs)	((vs)->buffer)
-#define vStringItem(vs,i)	((vs)->buffer[i])
-#define vStringLast(vs)		((vs)->buffer[(vs)->length - 1])
-#define vStringLength(vs)	((vs)->length)
-#define vStringSize(vs)		((vs)->size)
-#define vStringCat(vs,s)	vStringCatS((vs), vStringValue((s)))
-#define vStringNCat(vs,s,l)	vStringNCatS((vs), vStringValue((s)), (l))
-#define vStringCopy(vs,s)	vStringCopyS((vs), vStringValue((s)))
-#define vStringNCopy(vs,s,l)	vStringNCopyS((vs), vStringValue((s)), (l))
-#define vStringChar(vs,i)	((vs)->buffer[i])
-#define vStringTerminate(vs)	vStringPut(vs, '\0')
-#define vStringLower(vs)	toLowerString((vs)->buffer)
-#define vStringUpper(vs)	toUpperString((vs)->buffer)
+#define vStringValue(vs)      ((vs)->buffer)
+#define vStringItem(vs,i)     ((vs)->buffer[i])
+#define vStringLast(vs)       ((vs)->buffer[(vs)->length - 1])
+#define vStringLength(vs)     ((vs)->length)
+#define vStringSize(vs)       ((vs)->size)
+#define vStringCat(vs,s)      vStringCatS((vs), vStringValue((s)))
+#define vStringNCat(vs,s,l)   vStringNCatS((vs), vStringValue((s)), (l))
+#define vStringCopy(vs,s)     vStringCopyS((vs), vStringValue((s)))
+#define vStringNCopy(vs,s,l)  vStringNCopyS((vs), vStringValue((s)), (l))
+#define vStringChar(vs,i)     ((vs)->buffer[i])
+#define vStringLower(vs)      toLowerString((vs)->buffer)
+#define vStringUpper(vs)      toUpperString((vs)->buffer)
 
 /*
 *   DATA DECLARATIONS
 */
 
 typedef struct sVString {
-    size_t	length;		/* size of buffer used */
-    size_t	size;		/* allocated size of buffer */
-    char *	buffer;		/* location of buffer */
+	size_t  length;  /* size of buffer used */
+	size_t  size;    /* allocated size of buffer */
+	char   *buffer;  /* location of buffer */
 } vString;
 
 /*
 *   FUNCTION PROTOTYPES
 */
-extern boolean vStringAutoResize (vString *const string);
+extern bool vStringAutoResize (vString *const string);
 extern void vStringClear (vString *const string);
 extern vString *vStringNew (void);
 extern void vStringDelete (vString *const string);
@@ -79,6 +78,6 @@ extern void vStringCopyToLower (vString *const dest, const vString *const src);
 extern void vStringSetLength (vString *const string);
 extern void vStringTruncate (vString *const string, const size_t length);
 
-#endif	/* _VSTRING_H */
+extern vString *vStringNewOwn (char *s);
 
-/* vi:set tabstop=4 shiftwidth=4: */
+#endif  /* CTAGS_MAIN_VSTRING_H */

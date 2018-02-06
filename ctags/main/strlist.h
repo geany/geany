@@ -2,12 +2,12 @@
 *   Copyright (c) 1999-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   Defines external interface to resizable string lists.
 */
-#ifndef _STRLIST_H
-#define _STRLIST_H
+#ifndef CTAGS_MAIN_STRLIST_H
+#define CTAGS_MAIN_STRLIST_H
 
 /*
 *   INCLUDE FILES
@@ -39,14 +39,12 @@ extern unsigned int stringListCount (const stringList *const current);
 extern vString* stringListItem (const stringList *const current, const unsigned int indx);
 extern vString* stringListLast (const stringList *const current);
 extern void stringListDelete (stringList *const current);
-extern boolean stringListHasInsensitive (const stringList *const current, const char *const string);
-extern boolean stringListHas (const stringList *const current, const char *const string);
-extern boolean stringListHasTest (const stringList *const current, boolean (*test)(const char *s));
-extern boolean stringListRemoveExtension (stringList* const current, const char* const extension);
-extern boolean stringListExtensionMatched (const stringList* const list, const char* const extension);
-extern boolean stringListFileMatched (const stringList* const list, const char* const str);
+extern bool stringListHasInsensitive (const stringList *const current, const char *const string);
+extern bool stringListHas (const stringList *const current, const char *const string);
+extern bool stringListHasTest (const stringList *const current, bool (*test)(const char *s));
+extern bool stringListRemoveExtension (stringList* const current, const char* const extension);
+extern bool stringListExtensionMatched (const stringList* const list, const char* const extension);
+extern bool stringListFileMatched (const stringList* const list, const char* const str);
 extern void stringListPrint (const stringList *const current);
 
-#endif  /* _STRLIST_H */
-
-/* vi:set tabstop=4 shiftwidth=4: */
+#endif  /* CTAGS_MAIN_STRLIST_H */

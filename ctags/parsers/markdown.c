@@ -19,13 +19,14 @@
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
+#include "routines.h"
 
 /*
 *   DATA DEFINITIONS
 */
 
 static kindOption MarkdownKinds[] = {
-	{ TRUE, 'v', "variable", "sections" }
+	{ true, 'v', "variable", "sections" }
 };
 
 /*
@@ -33,27 +34,25 @@ static kindOption MarkdownKinds[] = {
 */
 
 /* checks if str is all the same character */
-static boolean issame(const char *str)
+static bool issame(const char *str)
 {
 	char first = *str;
 
 	while (*(++str))
 	{
 		if (*str && *str != first)
-			return FALSE;
+			return false;
 	}
-	return TRUE;
+	return true;
 }
 
-static void makeMarkdownTag (const vString* const name, boolean name_before)
+static void makeMarkdownTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name));
+	initTagEntry (&e, vStringValue(name), &(MarkdownKinds [0]));
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */
-	e.kindName = "variable";
-	e.kind = 'v';
 
 	makeTagEntry(&e);
 }
@@ -64,26 +63,24 @@ static void findMarkdownTags (void)
 	vString *name = vStringNew();
 	const unsigned char *line;
 
-	while ((line = fileReadLine()) != NULL)
+	while ((line = readLineFromInputFile()) != NULL)
 	{
 		int name_len = vStringLength(name);
 
 		/* underlines must be the same length or more */
 		if (name_len > 0 &&	(line[0] == '=' || line[0] == '-') && issame((const char*) line))
 		{
-			makeMarkdownTag(name, TRUE);
+			makeMarkdownTag(name, true);
 		}
 		else if (line[0] == '#') {
 			vStringClear(name);
 			vStringCatS(name, (const char *) line);
-			vStringTerminate(name);
-			makeMarkdownTag(name, FALSE);
+			makeMarkdownTag(name, false);
 		}
 		else {
 			vStringClear (name);
 			if (! isspace(*line))
 				vStringCatS(name, (const char*) line);
-			vStringTerminate(name);
 		}
 	}
 	vStringDelete (name);
@@ -96,7 +93,7 @@ extern parserDefinition* MarkdownParser (void)
 	parserDefinition* const def = parserNew ("Markdown");
 
 	def->kinds = MarkdownKinds;
-	def->kindCount = KIND_COUNT (MarkdownKinds);
+	def->kindCount = ARRAY_SIZE (MarkdownKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findMarkdownTags;

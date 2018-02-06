@@ -1,12 +1,12 @@
 /*
 *   Copyright (c) 2003, Darren Hiebert
-*
+* 
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
-*
+*   GNU General Public License version 2 or (at your option) any later version.
+* 
 *   This module contains functions for generating tags for the Verilog HDL
 *   (Hardware Description Language).
-*
+* 
 *   Language definition documents:
 *       http://www.eg.bucknell.edu/~cs320/verilog/verilog-manual.html
 *       http://www.sutherland-hdl.com/on-line_ref_guide/vlog_ref_top.html
@@ -22,11 +22,14 @@
 #include <string.h>
 #include <setjmp.h>
 
+#include "debug.h"
 #include "keyword.h"
 #include "parse.h"
 #include "read.h"
 #include "vstring.h"
-#include "get.h"
+#include "lcpp.h"
+#include "routines.h"
+#include "xtag.h"
 
 /*
  *   DATA DECLARATIONS
@@ -45,11 +48,6 @@ typedef enum {
 	K_TASK
 } verilogKind;
 
-typedef struct {
-	const char *keyword;
-	verilogKind kind;
-} keywordAssoc;
-
 /*
  *   DATA DEFINITIONS
  */
@@ -58,17 +56,17 @@ static int Lang_verilog;
 static jmp_buf Exception;
 
 static kindOption VerilogKinds [] = {
- { TRUE, 'c', "constant",  "constants (define, parameter, specparam)" },
- { TRUE, 'e', "event",     "events" },
- { TRUE, 'f', "function",  "functions" },
- { TRUE, 'm', "module",    "modules" },
- { TRUE, 'n', "net",       "net data types" },
- { TRUE, 'p', "port",      "ports" },
- { TRUE, 'r', "register",  "register data types" },
- { TRUE, 't', "task",      "tasks" }
+ { true, 'c', "constant",  "constants (define, parameter, specparam)" },
+ { true, 'e', "event",     "events" },
+ { true, 'f', "function",  "functions" },
+ { true, 'm', "module",    "modules" },
+ { true, 'n', "net",       "net data types" },
+ { true, 'p', "port",      "ports" },
+ { true, 'r', "register",  "register data types" },
+ { true, 't', "task",      "tasks" }
 };
 
-static keywordAssoc VerilogKeywordTable [] = {
+static keywordTable VerilogKeywordTable [] = {
 	{ "`define",   K_CONSTANT },
 	{ "event",     K_EVENT },
 	{ "function",  K_FUNCTION },
@@ -104,13 +102,12 @@ static keywordAssoc VerilogKeywordTable [] = {
 static void initialize (const langType language)
 {
 	size_t i;
-	const size_t count =
-			sizeof (VerilogKeywordTable) / sizeof (VerilogKeywordTable [0]);
+	const size_t count = ARRAY_SIZE (VerilogKeywordTable);
 	Lang_verilog = language;
 	for (i = 0  ;  i < count  ;  ++i)
 	{
-		const keywordAssoc* const p = &VerilogKeywordTable [i];
-		addKeyword (p->keyword, language, (int) p->kind);
+		const keywordTable* const p = &VerilogKeywordTable [i];
+		addKeyword (p->name, language, (int) p->id);
 	}
 }
 
@@ -124,7 +121,7 @@ static int vGetc (void)
 {
 	int c;
 	if (Ungetc == '\0')
-		c = fileGetc ();
+		c = getcFromInputFile ();
 	else
 	{
 		c = Ungetc;
@@ -132,29 +129,29 @@ static int vGetc (void)
 	}
 	if (c == '/')
 	{
-		int c2 = fileGetc ();
+		int c2 = getcFromInputFile ();
 		if (c2 == EOF)
 			longjmp (Exception, (int) ExceptionEOF);
 		else if (c2 == '/')  /* strip comment until end-of-line */
 		{
 			do
-				c = fileGetc ();
+				c = getcFromInputFile ();
 			while (c != '\n'  &&  c != EOF);
 		}
 		else if (c2 == '*')  /* strip block comment */
 		{
-			c = skipOverCComment();
+			c = cppSkipOverCComment();
 		}
 		else
 		{
-			fileUngetc (c2);
+			ungetcToInputFile (c2);
 		}
 	}
 	else if (c == '"')  /* strip string contents */
 	{
 		int c2;
 		do
-			c2 = fileGetc ();
+			c2 = getcFromInputFile ();
 		while (c2 != '"'  &&  c2 != EOF);
 		c = '@';
 	}
@@ -163,9 +160,9 @@ static int vGetc (void)
 	return c;
 }
 
-static boolean isIdentifierCharacter (const int c)
+static bool isIdentifierCharacter (const int c)
 {
-	return (boolean)(isalnum (c)  ||  c == '_'  ||  c == '`');
+	return (bool)(isalnum (c)  ||  c == '_'  ||  c == '`');
 }
 
 static int skipWhite (int c)
@@ -192,7 +189,7 @@ static int skipPastMatch (const char *const pair)
 	return vGetc ();
 }
 
-static boolean readIdentifier (vString *const name, int c)
+static bool readIdentifier (vString *const name, int c)
 {
 	vStringClear (name);
 	if (isIdentifierCharacter (c))
@@ -203,19 +200,18 @@ static boolean readIdentifier (vString *const name, int c)
 			c = vGetc ();
 		}
 		vUngetc (c);
-		vStringTerminate (name);
 	}
-	return (boolean)(name->length > 0);
+	return (bool)(name->length > 0);
 }
 
 static void tagNameList (const verilogKind kind, int c)
 {
 	vString *name = vStringNew ();
-	boolean repeat;
+	bool repeat;
 	Assert (isIdentifierCharacter (c));
 	do
 	{
-		repeat = FALSE;
+		repeat = false;
 		if (isIdentifierCharacter (c))
 		{
 			readIdentifier (name, c);
@@ -242,10 +238,10 @@ static void tagNameList (const verilogKind kind, int c)
 		if (c == ',')
 		{
 			c = skipWhite (vGetc ());
-			repeat = TRUE;
+			repeat = true;
 		}
 		else
-			repeat = FALSE;
+			repeat = false;
 	} while (repeat);
 	vStringDelete (name);
 	vUngetc (c);
@@ -295,7 +291,7 @@ static void findTag (vString *const name)
 static void findVerilogTags (void)
 {
 	vString *const name = vStringNew ();
-	volatile boolean newStatement = TRUE;
+	volatile bool newStatement = true;
 	volatile int c = '\0';
 	exception_t exception = (exception_t) setjmp (Exception);
 
@@ -306,7 +302,7 @@ static void findVerilogTags (void)
 		{
 			case ';':
 			case '\n':
-				newStatement = TRUE;
+				newStatement = true;
 				break;
 
 			case ' ':
@@ -316,7 +312,7 @@ static void findVerilogTags (void)
 			default:
 				if (newStatement && readIdentifier (name, c))
 					findTag (name);
-				newStatement = FALSE;
+				newStatement = false;
 				break;
 		}
 	}
@@ -328,11 +324,9 @@ extern parserDefinition* VerilogParser (void)
 	static const char *const extensions [] = { "v", NULL };
 	parserDefinition* def = parserNew ("Verilog");
 	def->kinds      = VerilogKinds;
-	def->kindCount  = KIND_COUNT (VerilogKinds);
+	def->kindCount  = ARRAY_SIZE (VerilogKinds);
 	def->extensions = extensions;
 	def->parser     = findVerilogTags;
 	def->initialize = initialize;
 	return def;
 }
-
-/* vi:set tabstop=4 shiftwidth=4: */

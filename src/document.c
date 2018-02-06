@@ -126,7 +126,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
  * Finds a document whose @c real_path field matches the given filename.
  *
  * @param realname The filename to search, which should be identical to the
- * string returned by @c tm_get_real_path().
+ * string returned by @c utils_get_real_path().
  *
  * @return @transfer{none} @nullable The matching document, or @c NULL.
  * @note This is only really useful when passing a @c TMSourceFile::file_name.
@@ -163,7 +163,7 @@ GeanyDocument* document_find_by_real_path(const gchar *realname)
 static gchar *get_real_path_from_utf8(const gchar *utf8_filename)
 {
 	gchar *locale_name = utils_get_locale_from_utf8(utf8_filename);
-	gchar *realname = tm_get_real_path(locale_name);
+	gchar *realname = utils_get_real_path(locale_name);
 
 	g_free(locale_name);
 	return realname;
@@ -657,6 +657,8 @@ static GeanyDocument *document_create(const gchar *utf8_filename)
 	doc->priv->last_check = time(NULL);
 #endif
 
+	g_datalist_init(&doc->priv->data);
+
 	sidebar_openfiles_add(doc);	/* sets doc->iter */
 
 	notebook_new_tab(doc);
@@ -711,6 +713,8 @@ static gboolean remove_page(guint page_num)
 	/* Checking real_path makes it likely the file exists on disk */
 	if (! main_status.closing_all && doc->real_path != NULL)
 		ui_add_recent_document(doc);
+
+	g_datalist_clear(&doc->priv->data);
 
 	doc->is_valid = FALSE;
 	doc->id = 0;
@@ -1344,7 +1348,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			g_return_val_if_fail(doc != NULL, NULL); /* really should not happen */
 
 			/* file exists on disk, set real_path */
-			SETPTR(doc->real_path, tm_get_real_path(locale_filename));
+			SETPTR(doc->real_path, utils_get_real_path(locale_filename));
 
 			doc->priv->is_remote = utils_is_remote_path(locale_filename);
 			monitor_file_setup(doc);
@@ -1597,6 +1601,10 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
+	/* Cancel resave bar if still open from previous file deletion */
+	if (doc->priv->info_bars[MSG_TYPE_RESAVE] != NULL)
+		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RESAVE]), GTK_RESPONSE_CANCEL);
+
 	/* Use cancel because the response handler would call this recursively */
 	if (doc->priv->info_bars[MSG_TYPE_RELOAD] != NULL)
 		gtk_info_bar_response(GTK_INFO_BAR(doc->priv->info_bars[MSG_TYPE_RELOAD]), GTK_RESPONSE_CANCEL);
@@ -1614,7 +1622,7 @@ gboolean document_reload_force(GeanyDocument *doc, const gchar *forced_enc)
 						NULL, 0, _("The buffer's previous state is stored in the history and "
 						"undoing restores it. You can disable this by discarding the history upon "
 						"reload. This message will not be displayed again but "
-						"Your choice can be changed in the various preferences."),
+						"your choice can be changed in the various preferences."),
 						_("The file has been reloaded."));
 		doc->priv->info_bars[MSG_TYPE_POST_RELOAD] = bar;
 		file_prefs.show_keep_edit_history_on_reload_msg = FALSE;
@@ -2025,7 +2033,7 @@ static gchar *save_doc(GeanyDocument *doc, const gchar *locale_filename,
 	/* now the file is on disk, set real_path */
 	if (doc->real_path == NULL)
 	{
-		doc->real_path = tm_get_real_path(locale_filename);
+		doc->real_path = utils_get_real_path(locale_filename);
 		doc->priv->is_remote = utils_is_remote_path(locale_filename);
 		monitor_file_setup(doc);
 	}
@@ -2683,7 +2691,7 @@ void document_update_tags(GeanyDocument *doc)
 	/* Parse Scintilla's buffer directly using TagManager
 	 * Note: this buffer *MUST NOT* be modified */
 	len = sci_get_length(doc->editor->sci);
-	buffer_ptr = (guchar *) scintilla_send_message(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
+	buffer_ptr = (guchar *) SSM(doc->editor->sci, SCI_GETCHARACTERPOINTER, 0, 0);
 	tm_workspace_update_source_file_buffer(doc->tm_file, buffer_ptr, len);
 
 	sidebar_update_tag_list(doc, TRUE);
@@ -3605,6 +3613,12 @@ static void enable_key_intercept(GeanyDocument *doc, GtkWidget *bar)
 
 static void monitor_reload_file(GeanyDocument *doc)
 {
+	if (! doc->changed && file_prefs.reload_clean_doc_on_file_change)
+	{
+		document_reload_force(doc, doc->encoding);
+		return;
+	}
+
 	gchar *base_name = g_path_get_basename(doc->file_name);
 
 	/* show this message only once */
@@ -3687,7 +3701,7 @@ gboolean document_check_disk_status(GeanyDocument *doc, gboolean force)
 {
 	gboolean ret = FALSE;
 	gboolean use_gio_filemon;
-	time_t mtime;
+	time_t mtime = 0;
 	gchar *locale_filename;
 	FileDiskStatus old_status;
 
@@ -3839,3 +3853,22 @@ GEANY_API_SYMBOL
 GType document_get_type (void);
 
 G_DEFINE_BOXED_TYPE(GeanyDocument, document, copy_, free_);
+
+
+gpointer document_get_data(const GeanyDocument *doc, const gchar *key)
+{
+	return g_datalist_get_data(&doc->priv->data, key);
+}
+
+
+void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data)
+{
+	g_datalist_set_data(&doc->priv->data, key, data);
+}
+
+
+void document_set_data_full(GeanyDocument *doc, const gchar *key,
+	gpointer data, GDestroyNotify free_func)
+{
+	g_datalist_set_data_full(&doc->priv->data, key, data, free_func);
+}

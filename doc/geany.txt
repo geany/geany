@@ -1,4 +1,4 @@
-.. |(version)| replace:: 1.29
+.. |(version)| replace:: 1.33
 .. -*- reStructuredText -*-
 
 =======
@@ -14,10 +14,10 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2016-07-10
+:Date: 2017-11-19
 :Version: |(version)|
 
-Copyright © 2005-2016
+Copyright © 2005-2017
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
@@ -492,6 +492,27 @@ An example of a simple ``.gtkrc-2.0``::
         font_name="Sans 10"
     }
     widget "GeanyPrefsDialog" style "geanyStyle"
+
+
+Customizing Geany's appearance using GTK+ 3 CSS
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To override GTK+ CSS styles, you can use traditional mechanisms or you
+can create a file named ``geany.css`` in the user configuration directory
+(usually ``~/.config/geany``) which will be loaded after other CSS styles
+are applied to allow overriding the default styles.
+
+Geany offers a number of CSS IDs which can be used to taylor its
+appearence. Among the more interesting include:
+
+* ``geany-compiler-context`` - the style used for build command output surrounding errors
+* ``geany-compiler-error`` - the style used for build command errors
+* ``geany-compiler-message`` - the style other output encountered while running build command
+* ``geany-document-status-changed`` - the style for document tab labels when the document is changed
+* ``geany-document-status-disk-changed`` - the style for document tab labels when the file on disk has changed
+* ``geany-document-status-readyonly``` - the style for document tab labels when the document is read-only
+* ``geany-search-entry-no-match`` - the style of find/replace diaog entries when no match is found
+* ``geany-terminal-dirty`` - the style for the message window Terminal tab label when the terminal output has changed.
 
 
 Documents
@@ -2254,6 +2275,12 @@ Stop scrolling at last line
     When enabled Geany stops scrolling when at the last line of the document.
     Otherwise you can scroll one more page even if there are no real lines.
 
+Lines visible around the cursor
+    The number of lines to maintain between the cursor and the top and bottom
+    edges of the view. This allows some lines of context around the cursor to
+    always be visible. If *Stop scrolling at last line* is disabled, the cursor
+    will never reach the bottom edge when this value is greater than 0.
+
 
 Long line marker
 ````````````````
@@ -2521,6 +2548,9 @@ show_editor_scrollbars            Whether to display scrollbars. If set to     t
 indent_hard_tab_width             The size of a tab character. Don't change    8           immediately
                                   it unless you really need to; use the
                                   indentation settings instead.
+editor_ime_interaction            Input method editor (IME)'s candidate        0           to new
+                                  window behaviour. May be 0 (windowed) or                 documents
+                                  1 (inline)
 **Interface related**
 show_symbol_list_expanders        Whether to show or hide the small            true        to new
                                   expander icons on the symbol list                        documents
@@ -2548,9 +2578,6 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
 **VTE related**
-emulation                         Terminal emulation mode. Only change this    xterm       immediately
-                                  if you have VTE termcap files other than
-                                  ``vte/termcap/xterm``.
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
                                   selection before sending it to the terminal
@@ -2595,6 +2622,11 @@ gio_unsafe_save_backup            Make a backup when using GIO unsafe file     f
 keep_edit_history_on_reload       Whether to maintain the edit history when    true        immediately
                                   reloading a file, and allow the operation
                                   to be reverted.
+reload_clean_doc_on_file_change   Whether to automatically reload documents    false       immediately
+                                  that have no changes but which have changed
+                                  on disk.
+                                  If unsaved changes exist then the user is
+                                  prompted to reload manually.
 **Filetype related**
 extract_filetype_regex            Regex to extract filetype name from file     See below.  immediately
                                   via capture group one.
@@ -3553,22 +3585,29 @@ Next message                                              Jumps to the line with
 Previous message                                          Jumps to the line with the previous message
                                                           in the Messages window.
 
-Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection in all open
+Find Usage                      Ctrl-Shift-E              Finds all occurrences of the current word
+                                                          or selection (see note below) in all open
                                                           documents and displays them in the messages
                                                           window.
 
-Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word (near
-                                                          the keyboard cursor) or selection in the current
+Find Document Usage             Ctrl-Shift-D              Finds all occurrences of the current word
+                                                          or selection (see note below) in the current
                                                           document and displays them in the messages
                                                           window.
 
 Mark All                        Ctrl-Shift-M              Highlight all matches of the current
-                                                          word/selection in the current document
-                                                          with a colored box. If there's nothing to
-                                                          find, or the cursor is next to an existing match,
-                                                          the highlighted matches will be cleared.
+                                                          word/selection (see note below) in the current
+                                                          document with a colored box. If there's nothing
+                                                          to find, or the cursor is next to an existing
+                                                          match, the highlighted matches will be cleared.
 =============================== ========================= ==================================================
+
+.. note::
+    The keybindings marked "see note below" work like this: if no text is
+    selected, the word under cursor is used, and *it has to match fully*
+    (like when `Match only a whole word` is enabled in the Search dialog).
+    However if some text is selected, then it is matched regardless of
+    word boundaries.
 
 
 Go to keybindings
@@ -4586,6 +4625,13 @@ calltips
     arguments set whether to use the defined colors.
 
     *Example:* ``calltips=0xc0c0c0;0xffffff;false;false``
+
+indicator_error
+    The color of the error indicator.
+
+    Only the first argument (foreground color) is used.
+
+    *Example:* ``indicator_error=0xff0000``
 
 
 [settings] section

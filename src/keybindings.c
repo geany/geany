@@ -124,7 +124,10 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 {
 #ifdef __APPLE__
 	if (mods & GDK_MOD2_MASK)
+	{
 		mods |= GEANY_PRIMARY_MOD_MASK;
+		mods &= ~GDK_MOD2_MASK;
+	}
 #endif
 	return mods & gtk_accelerator_get_default_mod_mask();
 }
@@ -824,6 +827,16 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 }
 
 
+/** Reloads keybinding settings from configuration file.
+ *
+ * Normally plugins do not need to call this function as it is called automatically when a
+ * the plugin is activated. However, plugins which need to create keybindings dynamically
+ * and reload them when needed should call this function after all keybindings have been
+ * updated with plugin_set_key_group() and keybindings_set_item() calls - this makes sure
+ * that the corresponding user keybinding shortcuts are applied.
+ *
+ * @since 1.32 (API 233) */
+GEANY_API_SYMBOL
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
@@ -1558,13 +1571,17 @@ static gboolean cb_func_search_action(guint key_id)
 			gint pos = sci_get_current_position(sci);
 
 			/* clear existing search indicators instead if next to cursor */
-			if (scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+			if (SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, pos) ||
-				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+				SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
+			{
 				text = NULL;
+			}
 			else
+			{
 				text = get_current_word_or_sel(doc, TRUE);
+			}
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, GEANY_FIND_MATCHCASE);
@@ -1738,14 +1755,43 @@ static void focus_sidebar(void)
 }
 
 
+static GtkWidget *find_focus_widget(GtkWidget *widget)
+{
+	GtkWidget *focus = NULL;
+
+	if (GTK_IS_BIN(widget)) /* optimized simple case */
+		focus = find_focus_widget(gtk_bin_get_child(GTK_BIN(widget)));
+	else if (GTK_IS_CONTAINER(widget))
+	{
+		GList *children = gtk_container_get_children(GTK_CONTAINER(widget));
+		GList *node;
+
+		for (node = children; node && ! focus; node = node->next)
+			focus = find_focus_widget(node->data);
+		g_list_free(children);
+	}
+
+	/* Some containers handled above might not have children and be what we want to focus
+	 * (e.g. GtkTreeView), so focus that if possible and we don't have anything better */
+	if (! focus && gtk_widget_get_can_focus(widget))
+		focus = widget;
+
+	return focus;
+}
+
+
 static void focus_msgwindow(void)
 {
 	if (ui_prefs.msgwindow_visible)
 	{
 		gint page_num = gtk_notebook_get_current_page(GTK_NOTEBOOK(msgwindow.notebook));
-		GtkWidget *page = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
+		GtkWidget *widget = gtk_notebook_get_nth_page(GTK_NOTEBOOK(msgwindow.notebook), page_num);
 
-		gtk_widget_grab_focus(gtk_bin_get_child(GTK_BIN(page)));
+		widget = find_focus_widget(widget);
+		if (widget)
+			gtk_widget_grab_focus(widget);
+		else
+			utils_beep();
 	}
 }
 
@@ -2129,8 +2175,8 @@ static gboolean cb_func_editor_action(guint key_id)
 			duplicate_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
-			editor_goto_next_snippet_cursor(doc->editor);
-			break;
+			/* allow overloading */
+			return editor_goto_next_snippet_cursor(doc->editor);
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
 			break;
@@ -2568,8 +2614,8 @@ static gboolean cb_func_document_action(guint key_id)
 			{
 				gint line = sci_get_current_line(doc->editor->sci);
 				editor_toggle_fold(doc->editor, line, 0);
-				break;
 			}
+			break;
 		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS:
 			on_remove_markers1_activate(NULL, NULL);
 			break;
@@ -2668,10 +2714,12 @@ GeanyKeyGroup *keybindings_set_group(GeanyKeyGroup *group, const gchar *section_
 		group = g_new0(GeanyKeyGroup, 1);
 		add_kb_group(group, section_name, label, callback, TRUE);
 	}
+	/* Calls free_key_binding() for individual entries for plugins - has to be
+	 * called before g_free(group->plugin_keys) */
+	g_ptr_array_set_size(group->key_items, 0);
 	g_free(group->plugin_keys);
 	group->plugin_keys = g_new0(GeanyKeyBinding, count);
 	group->plugin_key_count = count;
-	g_ptr_array_set_size(group->key_items, 0);
 	return group;
 }
 

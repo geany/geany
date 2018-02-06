@@ -7,6 +7,7 @@ filetypes = \
 	filedefs/filetypes.abc \
 	filedefs/filetypes.actionscript \
 	filedefs/filetypes.ada \
+	filedefs/filetypes.Arduino.conf \
 	filedefs/filetypes.asciidoc \
 	filedefs/filetypes.asm \
 	filedefs/filetypes.batch \

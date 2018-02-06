@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include "parse.h"
+#include "routines.h"
 #include "read.h"
 #include "vstring.h"
 
@@ -25,13 +26,13 @@
 *   DATA DEFINITIONS
 */
 typedef enum {
-    K_FUNCTION,
+	K_FUNCTION,
 	K_STRUCT
 } MatlabKind;
 
 static kindOption MatlabKinds [] = {
-    { TRUE, 'f', "function", "Functions" },
-	{ TRUE, 's', "struct", "Structures" },
+	{ true, 'f', "function", "Functions" },
+	{ true, 's', "struct", "Structures" },
 };
 
 /*
@@ -40,12 +41,12 @@ static kindOption MatlabKinds [] = {
 
 static void findMatlabTags (void)
 {
-    vString *name = vStringNew ();
-    const unsigned char *line;
+	vString *name = vStringNew ();
+	const unsigned char *line;
 	const unsigned char *p;
 
-    while ((line = fileReadLine ()) != NULL)
-    {
+	while ((line = readLineFromInputFile ()) != NULL)
+	{
 		int i, ic;
 
 		if (line [0] == '\0'  ||  line [0] == '%')
@@ -65,7 +66,7 @@ static void findMatlabTags (void)
 		{
 			const unsigned char *cp = line + i;
 			const unsigned char *ptr = cp;
-			boolean eq=FALSE;
+			bool eq=false;
 
 			while (isspace ((int) *cp))
 				++cp;
@@ -75,7 +76,7 @@ static void findMatlabTags (void)
 			{
 				if (*ptr == '=')
 				{
-					eq=TRUE;
+					eq=true;
 					break;
 				}
 				ptr++;
@@ -106,7 +107,6 @@ static void findMatlabTags (void)
 				}
 			}
 
-			vStringTerminate (name);
 			makeSimpleTag (name, MatlabKinds, K_FUNCTION);
 			vStringClear (name);
 		}
@@ -128,23 +128,20 @@ static void findMatlabTags (void)
 				++cp;
 			}
 
-			vStringTerminate (name);
 			makeSimpleTag (name, MatlabKinds, K_STRUCT);
 			vStringClear (name);
 		}
-    }
-    vStringDelete (name);
+	}
+	vStringDelete (name);
 }
 
 extern parserDefinition* MatlabParser (void)
 {
-    static const char *const extensions [] = { "m", NULL };
-    parserDefinition* def = parserNew ("Matlab");
-    def->kinds      = MatlabKinds;
-    def->kindCount  = KIND_COUNT (MatlabKinds);
-    def->extensions = extensions;
-    def->parser     = findMatlabTags;
-    return def;
+	static const char *const extensions [] = { "m", NULL };
+	parserDefinition* def = parserNew ("Matlab");
+	def->kinds      = MatlabKinds;
+	def->kindCount  = ARRAY_SIZE (MatlabKinds);
+	def->extensions = extensions;
+	def->parser     = findMatlabTags;
+	return def;
 }
-
-/* vi:set tabstop=8 shiftwidth=4: */

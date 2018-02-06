@@ -55,16 +55,18 @@ parsers = \
 libctags_la_SOURCES = \
 	main/args.c \
 	main/args.h \
-	main/ctags.c \
 	main/ctags.h \
+	main/debug.h \
 	main/entry.c \
 	main/entry.h \
 	main/general.h \
-	main/get.c \
-	main/get.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/kind.h \
+	main/lcpp.c \
+	main/lcpp.h \
 	main/lregex.c \
+	main/main.c \
 	main/main.h \
 	main/mio.c \
 	main/mio.h \
@@ -77,10 +79,14 @@ libctags_la_SOURCES = \
 	main/parsers.h \
 	main/read.c \
 	main/read.h \
+	main/routines.c \
+	main/routines.h \
 	main/sort.c \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
 	main/vstring.c \
 	main/vstring.h \
+	main/xtag.h \
+	main/xtag.c \
 	$(parsers)

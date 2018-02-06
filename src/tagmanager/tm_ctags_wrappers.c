@@ -161,7 +161,7 @@ gchar tm_ctags_get_kind_from_name(const gchar *name, TMParserType lang)
 
 gboolean tm_ctags_is_using_regex_parser(TMParserType lang)
 {
-	return LanguageTable[lang]->regex;
+	return LanguageTable[lang]->method & METHOD_REGEX;
 }
 
 

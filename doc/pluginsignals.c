@@ -142,8 +142,9 @@ signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_da
 signal void (*project_open)(GObject *obj, GKeyFile *config, gpointer user_data);
 
 /** Sent when a project is saved (happens when the project is created, the properties
- *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
- *  will write the contents of the GKeyFile to the disc.
+ *  dialog is closed, before the project is closed, or when Geany is exited).
+ *  This signal is emitted shortly before Geany will write the contents of the
+ *  GKeyFile to the disc.
  *
  * @param obj a GeanyObject instance, should be ignored.
  * @param config an existing GKeyFile object which can be used to read and write data.
@@ -158,6 +159,15 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  * @param user_data user data.
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
+
+/** Sent before a project is closed.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param user_data user data.
+ *
+ * @since 1.29 (API 230)
+ */
+signal void (*project_before_close)(GObject *obj, gpointer user_data);
 
 /** Sent after a project dialog is opened but before it is displayed. Plugins
  *  can append their own project settings tabs by using this signal.

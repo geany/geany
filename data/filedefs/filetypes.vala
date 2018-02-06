@@ -8,13 +8,7 @@ primary=abstract as async base bool break callback case catch char class const c
 # these are the Doxygen and Valadoc keywords
 docComment=a addindex addtogroup anchor arg attention author authors b brief bug c callergraph callgraph category cite class code cond copybrief copydetails copydoc copyright date def defgroup deprecated details dir dontinclude dot dotfile e else elseif em endcode endcond enddot endhtmlonly endif endinternal endlatexonly endlink endmanonly endmsc endrtfonly endverbatim endxmlonly enum example exception extends file fn headerfile hideinitializer htmlinclude htmlonly if ifnot image implements include includelineno ingroup inheritDoc interface internal invariant latexonly li line link mainpage manonly memberof msc mscfile n name namespace nosubgrouping note overload p package page par paragraph param post pre private privatesection property protected protectedsection protocol public publicsection ref related relatedalso relates relatesalso remark remarks result return returns retval rtfonly sa section see short showinitializer since skip skipline snippet struct subpage subsection subsubsection tableofcontents test throw throws todo tparam typedef union until var verbatim verbinclude version warning weakgroup xmlonly xrefitem
 
-[lexer_properties]
-styling.within.preprocessor=1
-lexer.cpp.track.preprocessor=0
-preprocessor.symbol.$(file.patterns.cpp)=#
-preprocessor.start.$(file.patterns.cpp)=if
-preprocessor.middle.$(file.patterns.cpp)=else elif
-preprocessor.end.$(file.patterns.cpp)=endif
+[lexer_properties=C]
 lexer.cpp.triplequoted.strings=1
 
 [settings]

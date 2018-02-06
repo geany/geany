@@ -1,21 +1,22 @@
 /*
-*
-*   Copyright (c) 1998-2001, Darren Hiebert
+*   Copyright (c) 1998-2002, Darren Hiebert
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   External interface to keyword.c
 */
-#ifndef _KEYWORD_H
-#define _KEYWORD_H
+#ifndef CTAGS_MAIN_KEYWORD_H
+#define CTAGS_MAIN_KEYWORD_H
 
 /*
 *   INCLUDE FILES
 */
-#include "general.h"	/* must always come first */
+#include "general.h"  /* must always come first */
 
 #include "parse.h"
+
+#define KEYWORD_NONE -1
 
 /*
 *   FUNCTION PROTOTYPES
@@ -23,10 +24,8 @@
 extern void addKeyword (const char *const string, langType language, int value);
 extern int lookupKeyword (const char *const string, langType language);
 extern void freeKeywordTable (void);
-#ifdef TM_DEBUG
+#ifdef DEBUG
 extern void printKeywordTable (void);
 #endif
 
-#endif	/* _KEYWORD_H */
-
-/* vi:set tabstop=8 shiftwidth=4: */
+#endif  /* CTAGS_MAIN_KEYWORD_H */

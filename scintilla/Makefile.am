@@ -53,6 +53,9 @@ SRCS= \
 gtk/Converter.h \
 gtk/PlatGTK.cxx \
 gtk/ScintillaGTK.cxx \
+gtk/ScintillaGTK.h \
+gtk/ScintillaGTKAccessible.cxx \
+gtk/ScintillaGTKAccessible.h \
 gtk/scintilla-marshal.c \
 gtk/scintilla-marshal.h \
 lexlib/Accessor.cxx \
@@ -132,12 +135,14 @@ src/ScintillaBase.cxx \
 src/ScintillaBase.h \
 src/Selection.cxx \
 src/Selection.h \
+src/SparseVector.h \
 src/SplitVector.h \
 src/Style.cxx \
 src/Style.h \
 src/UniConversion.cxx \
 src/UniConversion.h \
 src/UnicodeFromUTF8.h \
+src/UniqueString.h \
 src/ViewStyle.cxx \
 src/ViewStyle.h \
 src/XPM.cxx \
