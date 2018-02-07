@@ -647,14 +647,12 @@ static void create_replace_dialog(void)
 	replace_dlg.find_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.find_combobox));
 	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.find_entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_find), replace_dlg.find_combobox);
-	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.find_entry), 50);
 	ui_hookup_widget(replace_dlg.dialog, replace_dlg.find_combobox, "entry_find");
 
 	replace_dlg.replace_combobox = gtk_combo_box_text_new_with_entry();
 	replace_dlg.replace_entry = gtk_bin_get_child(GTK_BIN(replace_dlg.replace_combobox));
 	ui_entry_add_clear_icon(GTK_ENTRY(replace_dlg.replace_entry));
 	gtk_label_set_mnemonic_widget(GTK_LABEL(label_replace), replace_dlg.replace_combobox);
-	gtk_entry_set_width_chars(GTK_ENTRY(replace_dlg.replace_entry), 50);
 	ui_hookup_widget(replace_dlg.dialog, replace_dlg.replace_combobox, "entry_replace");
 
 	/* tab from find to the replace entry */
@@ -1705,7 +1703,7 @@ search_find_in_files(const gchar *utf8_search_text, const gchar *utf8_dir, const
 		NULL, &error))
  	{
 		gchar *utf8_str;
- 
+
  		ui_progress_bar_start(_("Searching..."));
  		msgwin_set_messages_dir(dir);
 		utf8_str = g_strdup_printf(_("%s %s -- %s (in directory: %s)"),
