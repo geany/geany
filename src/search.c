@@ -613,12 +613,11 @@ on_widget_key_pressed_set_focus(GtkWidget *widget, GdkEventKey *event, gpointer 
 static void create_replace_dialog(void)
 {
 	GtkWidget *label_find, *label_replace,
-		*check_close, *button, *rbox, *fbox, *vbox, *exp, *bbox;
+		*check_close, *button, *fbox, *vbox, *exp, *bbox;
 	GtkSizeGroup *label_size;
 
-	replace_dlg.dialog = gtk_dialog_new_with_buttons(_("Replace"),
-		GTK_WINDOW(main_widgets.window), GTK_DIALOG_DESTROY_WITH_PARENT,
-		GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL, NULL);
+	replace_dlg.dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(replace_dlg.dialog), _("Replace"));
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(replace_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
 	gtk_widget_set_name(replace_dlg.dialog, "GeanyDialogSearch");
@@ -668,21 +667,15 @@ static void create_replace_dialog(void)
 	g_signal_connect(replace_dlg.dialog, "delete-event",
 			G_CALLBACK(gtk_widget_hide_on_delete), NULL);
 
-	fbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(fbox), label_find, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(fbox), replace_dlg.find_combobox, TRUE, TRUE, 0);
-
-	rbox = gtk_hbox_new(FALSE, 6);
-	gtk_box_pack_start(GTK_BOX(rbox), label_replace, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(rbox), replace_dlg.replace_combobox, TRUE, TRUE, 0);
-
 	label_size = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
 	gtk_size_group_add_widget(label_size, label_find);
 	gtk_size_group_add_widget(label_size, label_replace);
 	g_object_unref(G_OBJECT(label_size));	/* auto destroy the size group */
 
-	gtk_box_pack_start(GTK_BOX(vbox), fbox, TRUE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(vbox), rbox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), label_find, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), replace_dlg.find_combobox, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), label_replace, TRUE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(vbox), replace_dlg.replace_combobox, TRUE, FALSE, 0);
 	gtk_container_add(GTK_CONTAINER(vbox),
 		add_find_checkboxes(GTK_DIALOG(replace_dlg.dialog)));
 
@@ -717,13 +710,15 @@ static void create_replace_dialog(void)
 	gtk_button_set_focus_on_click(GTK_BUTTON(check_close), FALSE);
 	gtk_widget_set_tooltip_text(check_close,
 			_("Disable this option to keep the dialog open"));
-	gtk_container_add(GTK_CONTAINER(bbox), check_close);
-	gtk_button_box_set_child_secondary(GTK_BUTTON_BOX(bbox), check_close, TRUE);
+
+	fbox = gtk_vbox_new(FALSE, 6);
+	gtk_box_pack_start(GTK_BOX(fbox), check_close, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), bbox, FALSE, TRUE, 0);
 
 	ui_hbutton_box_copy_layout(
 		GTK_BUTTON_BOX(gtk_dialog_get_action_area(GTK_DIALOG(replace_dlg.dialog))),
 		GTK_BUTTON_BOX(bbox));
-	gtk_container_add(GTK_CONTAINER(exp), bbox);
+	gtk_container_add(GTK_CONTAINER(exp), fbox);
 	gtk_container_add(GTK_CONTAINER(vbox), exp);
 }
 
