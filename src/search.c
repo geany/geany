@@ -305,7 +305,7 @@ static void on_widget_toggled_set_insensitive(
 static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 {
 	GtkWidget *checkbox1, *checkbox2, *check_regexp, *checkbox5,
-			  *checkbox7, *check_multiline, *hbox, *fbox, *mbox;
+			  *checkbox7, *check_multiline, *fbox;
 
 	check_regexp = gtk_check_button_new_with_mnemonic(_("_Use regular expressions"));
 	ui_hookup_widget(dialog, check_regexp, "check_regexp");
@@ -362,16 +362,11 @@ static GtkWidget *add_find_checkboxes(GtkDialog *dialog)
 	g_signal_connect(checkbox2, "toggled",
 		G_CALLBACK(on_widget_toggled_set_insensitive), checkbox5);
 
-	/* Matching options */
-	mbox = gtk_vbox_new(FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(mbox), checkbox1, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(mbox), checkbox2, FALSE, FALSE, 0);
-	gtk_box_pack_start(GTK_BOX(mbox), checkbox5, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox1, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox2, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(fbox), checkbox5, FALSE, FALSE, 0);
 
-	hbox = gtk_hbox_new(TRUE, 6);
-	gtk_container_add(GTK_CONTAINER(hbox), fbox);
-	gtk_container_add(GTK_CONTAINER(hbox), mbox);
-	return hbox;
+	return fbox;
 }
 
 
