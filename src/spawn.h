@@ -59,7 +59,9 @@ typedef enum
 	SPAWN_STDIN_RECURSIVE      = 0x08,  /**< The stdin callback is recursive. */
 	SPAWN_STDOUT_RECURSIVE     = 0x10,  /**< The stdout callback is recursive. */
 	SPAWN_STDERR_RECURSIVE     = 0x20,  /**< The stderr callback is recursive. */
-	SPAWN_RECURSIVE            = 0x38   /**< All callbacks are recursive. */
+	SPAWN_RECURSIVE            = 0x38,  /**< All callbacks are recursive. */
+	/* other flags */
+	SPAWN_LEAVE_STDIN_OPEN     = 0x40   /**< Leave stdin channel open on callback removal. */
 } SpawnFlags;
 
 /**
