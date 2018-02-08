@@ -613,6 +613,7 @@ static void create_replace_dialog(void)
 
 	replace_dlg.dialog = gtk_dialog_new();
 	gtk_window_set_title(GTK_WINDOW(replace_dlg.dialog), _("Replace"));
+	gtk_window_set_transient_for(GTK_WINDOW(replace_dlg.dialog), GTK_WINDOW(main_widgets.window));
 	vbox = ui_dialog_vbox_new(GTK_DIALOG(replace_dlg.dialog));
 	gtk_box_set_spacing(GTK_BOX(vbox), 9);
 	gtk_widget_set_name(replace_dlg.dialog, "GeanyDialogSearch");
