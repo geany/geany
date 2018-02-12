@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-06 19:22+0100\n"
+"PO-Revision-Date: 2018-02-12 18:21+0100\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -2557,9 +2557,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Nie je možné spustiť príkaz kontextovej akcie „%s“: %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Kontextová akcia:"
+msgstr "Nebola nastavená žiadna kontextová akcia."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
