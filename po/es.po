@@ -9,15 +9,15 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-06 10:09+0100\n"
-"Last-Translator: Lucas Vieites <lucas@codexion.com>\n"
+"PO-Revision-Date: 2018-02-13 23:10+0100\n"
+"Last-Translator: Abel 'Akronix' Serrano Juste <akronix5@gmail.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2597,9 +2597,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "No se ha podido ejecutar el comando de acción de contexto «%s»: %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Acción contextual:"
+msgstr "No hay fijada ninguna acción contextual."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
