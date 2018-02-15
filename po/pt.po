@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015 - 2017.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015 - 2017, 2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-06 10:56+0000\n"
+"POT-Creation-Date: 2018-02-14 02:36+0000\n"
+"PO-Revision-Date: 2018-02-14 06:00+0000\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
-"Language-Team: Português <>\n"
+"Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
@@ -100,7 +100,7 @@ msgstr "_Inserir \"include <...>\""
 
 #: ../data/geany.glade.h:16 ../src/keybindings.c:514
 msgid "Insert Alternative _White Space"
-msgstr "_Inserir espaço em branco alternactivo"
+msgstr "_Inserir espaço em branco alternativo"
 
 #: ../data/geany.glade.h:17
 msgid "_Search"
@@ -2149,8 +2149,8 @@ msgstr "Propriedades do projecto"
 msgid "Filename:"
 msgstr "Nome do ficheiro:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
+#: ../data/geany.glade.h:465 ../src/project.c:169
+#: ../plugins/classbuilder.c:467 ../plugins/classbuilder.c:477
 msgid "Name:"
 msgstr "Nome:"
 
@@ -2584,9 +2584,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Impossível executar o comando de acção contextual \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Acção contextual:"
+msgstr "Sem acção contextual definida."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -5645,8 +5644,9 @@ msgstr "Caracteres HTML"
 msgid "Inserts HTML character entities like '&amp;'."
 msgstr "Insere entidades de caracteres HTML como o \"&amp;\"."
 
-#: ../plugins/htmlchars.c:41 ../plugins/export.c:38 ../plugins/filebrowser.c:51
-#: ../plugins/saveactions.c:44 ../plugins/splitwindow.c:35
+#: ../plugins/htmlchars.c:41 ../plugins/export.c:38
+#: ../plugins/filebrowser.c:51 ../plugins/saveactions.c:44
+#: ../plugins/splitwindow.c:35
 msgid "The Geany developer team"
 msgstr "A equipa responsável pelo Geany"
 
