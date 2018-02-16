@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-10-23 11:45+0200\n"
-"Last-Translator: Jean-Philippe Moal <skateinmars@skateinmars.net>\n"
+"PO-Revision-Date: 2018-02-15 22:59-0600\n"
+"Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -2624,9 +2624,8 @@ msgstr ""
 "Impossible d'exécuter la commande d'action contextuelle « %s » : %s.  %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Action contextuelle :"
+msgstr "Aucune action contextuelle définie."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
