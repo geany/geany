@@ -64,8 +64,10 @@
 #ifdef SPAWN_TEST
 # define _
 # define GEANY_API_SYMBOL
+# define geany_debug g_debug
 #else
 # include "support.h"
+# include "geany.h"
 #endif
 
 #if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
@@ -1012,6 +1014,9 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 		{
 			GSource *old_source = g_main_current_source();
 			GSource *new_source = g_timeout_source_new(50);
+
+			geany_debug("Switching spawn source %s ((GSource*)%p on (GIOChannel*)%p) to a timeout source",
+						g_source_get_name(old_source), (gpointer) old_source, (gpointer)sc->channel);
 
 			g_io_channel_ref(sc->channel);
 			g_source_set_can_recurse(new_source, g_source_get_can_recurse(old_source));
