@@ -585,6 +585,12 @@ static void prefs_init_dialog(void)
 	const char* tooltip = project_open ? _("These settings are overridden by your project settings") : "";
 	gtk_widget_set_tooltip_text(widget, tooltip);
 
+	const gchar* label_text = _("<b>Saving files</b>");
+	if( project_open )
+		label_text = _("<b>Saving files</b> (using project settings)");
+	widget = gtk_frame_get_label_widget(GTK_FRAME(widget));
+	gtk_label_set_markup(GTK_LABEL(widget), label_text);
+
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_new_line");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), file_prefs.final_new_line);
 
