@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2017.
+# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-07 19:09+0800\n"
+"PO-Revision-Date: 2018-02-17 21:56+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -2459,9 +2459,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "无法执行上下文动作命令“%s”：%s。%s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "上下文动作："
+msgstr "未设置上下文动作。"
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
