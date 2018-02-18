@@ -1,23 +1,23 @@
 # translation of es.po to
-# Spanish translation file for Geany 1.24
+# Spanish translation file for Geany 1.33
 # This file is distributed under the same license as the geany package.
 # Damián Viano <des@damianv.com.ar>, 2006, 2007.
 # Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
-# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2015.
+# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2018-02-13 23:10+0100\n"
-"Last-Translator: Abel 'Akronix' Serrano Juste <akronix5@gmail.com>\n"
+"POT-Creation-Date: 2018-02-14 02:36+0000\n"
+"PO-Revision-Date: 2018-02-14 11:04+0100\n"
+"Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Geany 1.32\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2598,7 +2598,7 @@ msgstr "No se ha podido ejecutar el comando de acción de contexto «%s»: %s. %
 
 #: ../src/callbacks.c:1505
 msgid "No context action set."
-msgstr "No hay fijada ninguna acción contextual."
+msgstr "No se ha configurado una acción."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
