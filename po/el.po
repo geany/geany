@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-16 20:05+0200\n"
+"POT-Creation-Date: 2018-02-24 02:36+0000\n"
+"PO-Revision-Date: 2018-02-24 09:39+0200\n"
 "Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
 "Language-Team: Greek\n"
 "Language: el\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.4\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -1013,7 +1013,7 @@ msgstr "Εμφάνιση οδηγών εσοχής"
 msgid "Shows small dotted lines to help you to use the right indentation"
 msgstr ""
 "Εμφανίζει μικρές γραμμές με κουκκίδες για να σας βοηθήσει να χρησιμοποιείτε "
-"τη σωστή εσοχή."
+"τη σωστή εσοχή"
 
 #: ../data/geany.glade.h:204
 msgid "Show white space"
@@ -2419,7 +2419,7 @@ msgid ""
 "Preferences"
 msgstr ""
 "Αδυναμία εκτέλεσης εντολής κατασκευής \"%s\": %s. Ελέγξτε τη ρύθμιση "
-"Τερματικού στις Ιδιότητες."
+"Τερματικού στις Ιδιότητες"
 
 #: ../src/build.c:1046
 msgid "Compilation failed."
@@ -2617,9 +2617,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Αδυναμία εκτέλεσης εντολής δράσης πλαισίου \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Δράση πλαισίου:"
+msgstr "Δεν έχει οριστεί δράση πλαισίου."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -3962,7 +3961,7 @@ msgstr "Αναφορά σφαλμάτων στο https://github.com/geany/geany/
 #: ../src/libmain.c:572
 #, c-format
 msgid "built on %s with "
-msgstr "δημιουργήθηκε την %s με"
+msgstr "δημιουργήθηκε την %s με "
 
 #: ../src/libmain.c:665
 msgid "Move it now?"
@@ -4528,7 +4527,7 @@ msgstr "Στην Επιλο_γή"
 
 #: ../src/search.c:711
 msgid "Replace all matches found in the currently selected text"
-msgstr "Αντικαθιστά τα ευρήματα της αναζήτησης στο τρέχον επιλεγμένο κείμενο."
+msgstr "Αντικαθιστά τα ευρήματα της αναζήτησης στο τρέχον επιλεγμένο κείμενο"
 
 #: ../src/search.c:828
 msgid "all"
@@ -4536,7 +4535,7 @@ msgstr "όλα"
 
 #: ../src/search.c:830
 msgid "project"
-msgstr "Έργο"
+msgstr "έργο"
 
 #: ../src/search.c:832
 msgid "custom"
@@ -4969,7 +4968,7 @@ msgstr "Συναρτήσεις / Υπορουτίνες"
 
 #: ../src/symbols.c:768
 msgid "Components"
-msgstr "Συστατικά "
+msgstr "Συστατικά"
 
 #: ../src/symbols.c:769
 msgid "Blocks"
@@ -5403,7 +5402,7 @@ msgstr "MOD"
 
 #: ../src/ui_utils.c:408
 msgid " (new instance)"
-msgstr "(νέα ενότητα)"
+msgstr " (νέα ενότητα)"
 
 #: ../src/ui_utils.c:438
 #, c-format
