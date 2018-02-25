@@ -14,10 +14,10 @@
           Frank Lanitz,
           Colomban Wendling,
           Matthew Brush
-:Date: 2017-11-19
+:Date: 2018-02-25
 :Version: |(version)|
 
-Copyright © 2005-2017
+Copyright © 2005-2018
 
 This document is distributed under the terms of the GNU General Public
 License as published by the Free Software Foundation; either version 2
