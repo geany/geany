@@ -119,6 +119,12 @@ TMTagType tm_parser_get_tag_type(gchar kind, TMParserType lang);
 
 gchar tm_parser_get_tag_kind(TMTagType type, TMParserType lang);
 
+const gchar *tm_parser_context_separator(TMParserType lang);
+
+gboolean tm_parser_has_full_context(TMParserType lang);
+
+gboolean tm_parser_langs_compatible(TMParserType lang, TMParserType other);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS

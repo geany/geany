@@ -211,6 +211,7 @@ gchar *utils_find_open_xml_tag(const gchar sel[], gint size);
 
 const gchar *utils_find_open_xml_tag_pos(const gchar sel[], gint size);
 
+gchar *utils_get_real_path(const gchar *file_name);
 
 #ifdef GEANY_PRIVATE
 
@@ -308,6 +309,7 @@ gboolean utils_str_has_upper(const gchar *str);
 
 gint utils_is_file_writable(const gchar *locale_filename);
 
+const gchar *utils_get_uri_file_prefix(void);
 
 gchar *utils_get_path_from_uri(const gchar *uri);
 

@@ -70,7 +70,8 @@ typedef enum
 	/** Indicator used to highlight search results in the document. This is a
 	 *  rounded box around the text. */
 	/* start container indicator outside of lexer indicators (0..7), see Scintilla docs */
-	GEANY_INDICATOR_SEARCH = 8
+	GEANY_INDICATOR_SEARCH = 8,
+	GEANY_INDICATOR_SNIPPET = 9
 }
 GeanyIndicator;
 
@@ -137,6 +138,7 @@ typedef struct GeanyEditorPrefs
 	gboolean	long_line_enabled;
 	gint		autocompletion_update_freq;
 	gint		scroll_lines_around_cursor;
+	gint		ime_interaction; /* input method editor's candidate window behaviour */
 }
 GeanyEditorPrefs;
 
@@ -237,7 +239,7 @@ gboolean editor_start_auto_complete(GeanyEditor *editor, gint pos, gboolean forc
 
 gboolean editor_complete_word_part(GeanyEditor *editor);
 
-void editor_goto_next_snippet_cursor(GeanyEditor *editor);
+gboolean editor_goto_next_snippet_cursor(GeanyEditor *editor);
 
 gboolean editor_complete_snippet(GeanyEditor *editor, gint pos);
 

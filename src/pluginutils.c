@@ -570,6 +570,24 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 }
 
 
+/** Get the additional data that corresponds to the plugin.
+ *
+ * @param plugin The plugin provided by Geany
+ * @return The data corresponding to the plugin or @c NULL if none set.
+ *
+ * @since 1.32 (API 234)
+ *
+ * @see geany_plugin_set_data()
+ */
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin)
+{
+	g_return_val_if_fail (plugin != NULL, NULL);
+	g_return_val_if_fail (PLUGIN_LOADED_OK (plugin->priv), NULL);
+
+	return plugin->priv->cb_data;
+}
+
+
 /** Add additional data that corresponds to the plugin.
  *
  * @p pdata is the pointer going to be passed to the individual plugin callbacks

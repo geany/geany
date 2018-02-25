@@ -1,4 +1,115 @@
-Geany 1.31 (unreleased)
+Geany 1.34 (unreleased)
+
+
+Geany 1.33 (February 25, 2018)
+
+    Bug fixes
+    * Fix the symbols tree hierarchy when several tags have the same name
+      (PR#1598).
+
+    Interface
+    * Add a tooltip showing the full path on menu items representing documents
+      (PR#1706).
+    * Add a note for applying the indent settings in the project preferences
+      (PR#1650).
+    * Enable popup menu on sidebar and message window notebooks (PR#1726).
+    * Show status message on attempt to execute empty context action
+      (Lars Paulsen, PR#1642).
+    * GTK3 theming improvements and documentation (PR#1382).
+
+    Filetypes
+    * CSS: Update Grid properties (Issue#1705).
+
+    Internationalization
+    * Updated translations: de, el, es, fr, it, lv, pl, pt, tr, ru, zh_CN
+
+
+Geany 1.32 (November 19, 2017)
+
+    General
+    * Improve CLI argument help (PR#1644).
+    * Keep the current tab when closing documents to the right of another tab.
+    * Re-enable SIGTERM handling (PR#1255).
+    * Create correct path for filetype config files (Jiří Techet, PR#1482).
+    * Add an option to enable IME's candidate window display inline
+      (Sinpo Wei, PR#1514).
+    * Add an option to automatically reload files changed on disk
+      (Mark O'Donovan, PR#1246).
+
+    Bug fixes
+    * Fix backward compatibility of the geometry saving setting.
+    * Close "Deleted from Disk" Infobar on Reload (Lars Paulsen, PR#1628).
+    * Make sure GDK_MOD2_MASK is cleared when getting modifiers
+      (Jiří Techet, PR#1636).
+    * Use non-symlinked VTE libraries on MacOS X (Jiří Techet, PR#1625).
+    * Fix crash if plugin manager is opened more than once (PR#1564).
+    * Fix incorrect variable reference (Thomas Martitz, PR#1561).
+
+    Interface
+    * Add "Close Documents to the Right" feature (PR#1362).
+    * Add an option to save/reload either window position or size,
+      but optionally not both (delt01, PR#1456).
+
+    Editor
+    * Update Scintilla to version 3.7.5 (PR#1503).
+    * Improve snippet support (visual indicators and more)
+      (Thomas Martitz, PR#1470).
+    * Push current position to navqueue before navigating back
+      (Vasiliy Faronov, PR#1537).
+
+    Filetypes
+    * Add GNU assembler filetype extensions (Issue#904).
+    * Make Python comment hash space (PR#1682).
+    * Add missing string and comment styles for various lexers (PR#1502).
+    * Add missing PHP keywords, especially for PHP 7.x (1547, PR#1547).
+    * Python: Don't highlight sub-identifiers as keywords (PR#1544).
+
+    Plugins
+    * FileBrowser: don't change directory on project save
+      (Jiří Techet, PR#1400).
+
+    Windows
+    * Fix Execute button on Windows when using HTML files and
+      "builtin" command (Issue#1018, PR#1667).
+
+    API
+    * Add `utils_get_real_path()` and deprecate `tm_get_real_path()` (PR#1224).
+    * Add `geany_plugin_get_data()` (PR#1234).
+    * Add `keybindings_load_keyfile()` (Jiří Techet, PR#1430).
+    * Add `tm_tag_get_type()` (Thomas Martitz, PR#1465).
+
+    HACKING
+    * Add note about data types and update for best practices (PR#1282).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, it, lt, lv, nl, pt, ru,
+                            sk, sv, zh_CN
+
+
+Geany 1.31 (July 16, 2017)
+
+    Bug fixes
+    * Update statusbar after applying indentation detection.
+    * Fix converting color to hex for insertion in the Color Chooser
+      dialog (Vasiliy Faronov, PR#1536).
+
+    Filetypes
+    * Add `parfor` to the Matlab keyword list (A. Tombs, PR#1021).
+    * C: fix line continuation handling (PR#1370).
+    * Add `require_relative` to the Ruby keyword list (Jacob H. Pratt,
+      PR#1472).
+    * Update Haxe keywords (PR#1216).
+    * Fix Arduino comment toggling (Giorgioggì, PR#1510).
+    * Update CMake keywords (Yan Pashkovsky, PR#1315).
+    * Update C# keywords (Yan Pashkovsky, PR#1315).
+    * Update HTML keywords (Vasiliy Faronov, PR#1530).
+
+    Internationalization
+    * Updated translations: ca, id, ja, kk, lt, ru
+
+    API
+    * Fix crash when calling plugin_set_key_group() more than once
+      (Jiří Techet, PR#1426).
 
 
 Geany 1.30.1 (March 19, 2017)

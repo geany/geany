@@ -341,8 +341,7 @@ void geany_load_module(GeanyPlugin *plugin)
 	plugin->funcs->cleanup = hello_cleanup;
 
 	/* Step 3: Register! */
-	if (GEANY_PLUGIN_REGISTER(plugin, 225))
-		return;
+	GEANY_PLUGIN_REGISTER(plugin, 225);
 	/* alternatively:
 	GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, free_func); */
 }

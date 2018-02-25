@@ -276,10 +276,17 @@ void vte_init(void)
 		gint i;
 		const gchar *sonames[] = {
 #if GTK_CHECK_VERSION(3, 0, 0)
-			"libvte-2.91.so", "libvte-2.91.so.0", "libvte-2.91.dylib",
-			"libvte2_90.so", "libvte2_90.so.9", "libvte2_90.dylib",
-#else
-			"libvte.so", "libvte.so.4", "libvte.so.8", "libvte.so.9", "libvte.dylib",
+# ifdef __APPLE__
+			"libvte-2.91.0.dylib", "libvte-2.91.dylib",
+			"libvte2_90.9.dylib", "libvte2_90.dylib",
+# endif
+			"libvte-2.91.so", "libvte-2.91.so.0",
+			"libvte2_90.so", "libvte2_90.so.9",
+#else /* GTK 2 */
+# ifdef __APPLE__
+			"libvte.9.dylib", "libvte.dylib",
+# endif
+			"libvte.so", "libvte.so.9", "libvte.so.8", "libvte.so.4",
 #endif
 			NULL
 		};
@@ -529,6 +536,7 @@ static gboolean vte_button_pressed(GtkWidget *widget, GdkEventButton *event, gpo
 	{
 		gtk_widget_grab_focus(vc->vte);
 		gtk_menu_popup(GTK_MENU(vc->menu), NULL, NULL, NULL, NULL, event->button, event->time);
+		return TRUE;
 	}
 	else if (event->button == 2)
 	{

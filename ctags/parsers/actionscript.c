@@ -41,43 +41,43 @@
 static tagRegexTable actionscriptTagRegexTable[] = {
 	/* Functions */
     {"^[ \t]*[(private|public|static|protected|internal|final|override)( \t)]*function[ \t]+([A-Za-z0-9_]+)[ \t]*\\(([^\\{]*)",
-	    "\\1 (\\2", "f,function,functions,methods", NULL},
+	    "\\1 (\\2", "f,function,functions,methods", NULL, NULL},
 
 	/* Getters and setters */
 	{"^[ \t]*[(public|static|internal|final|override)( \t)]*function[ \t]+(set|get)[ \t]+([A-Za-z0-9_]+)[ \t]*\\(",
-		"\\2 \\1", "l,field,fields", NULL},
+		"\\2 \\1", "l,field,fields", NULL, NULL},
 
 	/* Variables */
 	{"^[ \t]*[(private|public|static|protected|internal)( \t)]*var[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
-		"\\1 \\: \\3", "v,variable,variables", NULL},
+		"\\1 \\: \\3", "v,variable,variables", NULL, NULL},
 
 	/* Constants */
 	{"^[ \t]*[(private|public|static|protected|internal)( \t)]*const[ \t]+([A-Za-z0-9_]+)([ \t]*\\:[ \t]*([A-Za-z0-9_]+))*[ \t]*",
-		"\\1 : \\3", "m,macro,macros", NULL},
+		"\\1 : \\3", "m,macro,macros", NULL, NULL},
 
 	/* Classes */
 	{"^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*class[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
-		"\\1 (\\2)", "c,class,classes", NULL},
+		"\\1 (\\2)", "c,class,classes", NULL, NULL},
 
 	/* Interfaces */
 	{"^[ \t]*[(private|public|static|dynamic|final|internal)( \t)]*interface[ \t]+([A-Za-z0-9_]+)[ \t]*([^\\{]*)",
-		"\\1 (\\2)", "i,interface,interfaces", NULL},
+		"\\1 (\\2)", "i,interface,interfaces", NULL, NULL},
 
 	/* Packages */
 	{"^[ \t]*[(private|public|static)( \t)]*package[ \t]+([A-Za-z0-9_.]+)[ \t]*",
-		"\\1", "p,package", NULL},
+		"\\1", "p,package", NULL, NULL},
 
 	/* Notes */
 	{"\\/\\/[ \t]*(NOTE|note|Note)[ \t]*\\:*(.*)",
-		"\\2", "o,other"},
+		"\\2", "o,other", NULL, NULL},
 
 	/* Todos */
 	{"\\/\\/[ \t]*(TODO|todo|ToDo|Todo)[ \t]*\\:*(.*)",
-		"\\2", "o,other"},
+		"\\2", "o,other", NULL, NULL},
 
 	/* Prototypes (Put this in for AS1 compatibility...) */
     {".*\\.prototype\\.([A-Za-z0-9 ]+)[ \t]*\\=([ \t]*)function( [ \t]?)*\\(",
-	    "\\1", "r,prototype"}
+	    "\\1", "r,prototype", NULL, NULL}
 };
 
 /*

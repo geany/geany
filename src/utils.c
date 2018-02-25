@@ -37,6 +37,7 @@
 #include "sciwrappers.h"
 #include "spawn.h"
 #include "support.h"
+#include "tm_source_file.h" // for tm_get_real_path()
 #include "templates.h"
 #include "ui_utils.h"
 #include "win32.h"
@@ -451,10 +452,14 @@ const gchar *utils_path_skip_root(const gchar *path)
 }
 
 
+/* Convert a fractional @a val in the range [0, 1] to a whole value in the range [0, @a factor].
+ * In particular, this is used for converting a @c GdkColor to the "#RRGGBB" format in a way that
+ * agrees with GTK+, so the "#RRGGBB" in the color picker is the same "#RRGGBB" that is inserted
+ * into the document. See https://github.com/geany/geany/issues/1527
+ */
 gdouble utils_scale_round(gdouble val, gdouble factor)
 {
-	/*val = floor(val * factor + 0.5);*/
-	val = floor(val);
+	val = floor(val * factor + 0.5);
 	val = MAX(val, 0);
 	val = MIN(val, factor);
 
@@ -881,9 +886,9 @@ gchar *utils_get_hex_from_color(GdkColor *color)
 	g_return_val_if_fail(color != NULL, NULL);
 
 	return g_strdup_printf("#%02X%02X%02X",
-		(guint) (utils_scale_round(color->red / 256, 255)),
-		(guint) (utils_scale_round(color->green / 256, 255)),
-		(guint) (utils_scale_round(color->blue / 256, 255)));
+		(guint) (utils_scale_round(color->red / 65535.0, 255)),
+		(guint) (utils_scale_round(color->green / 65535.0, 255)),
+		(guint) (utils_scale_round(color->blue / 65535.0, 255)));
 }
 
 
@@ -1683,6 +1688,17 @@ gboolean utils_spawn_async(const gchar *dir, gchar **argv, gchar **env, GSpawnFl
 }
 
 
+/* Returns "file:///" on Windows, "file://" everywhere else */
+const gchar *utils_get_uri_file_prefix(void)
+{
+#ifdef G_OS_WIN32
+	return "file:///";
+#else
+	return "file://";
+#endif
+}
+
+
 /* Retrieves the path for the given URI.
  * It returns:
  * - the path which was determined by g_filename_from_uri() or GIO
@@ -1757,7 +1773,7 @@ gboolean utils_is_remote_path(const gchar *path)
 
 /* Remove all relative and untidy elements from the path of @a filename.
  * @param filename must be a valid absolute path.
- * @see tm_get_real_path() - also resolves links. */
+ * @see utils_get_real_path() - also resolves links. */
 void utils_tidy_path(gchar *filename)
 {
 	GString *str;
@@ -1888,16 +1904,13 @@ GSList *utils_get_config_files(const gchar *subdir)
  * an anchor link, e.g. "#some_anchor". */
 gchar *utils_get_help_url(const gchar *suffix)
 {
-	gint skip;
 	gchar *uri;
+	const gchar *uri_file_prefix = utils_get_uri_file_prefix();
+	gint skip = strlen(uri_file_prefix);
 
+	uri = g_strconcat(uri_file_prefix, app->docdir, "/index.html", NULL);
 #ifdef G_OS_WIN32
-	skip = 8;
-	uri = g_strconcat("file:///", app->docdir, "/index.html", NULL);
 	g_strdelimit(uri, "\\", '/'); /* replace '\\' by '/' */
-#else
-	skip = 7;
-	uri = g_strconcat("file://", app->docdir, "/index.html", NULL);
 #endif
 
 	if (! g_file_test(uri + skip, G_FILE_TEST_IS_REGULAR))
@@ -2110,7 +2123,7 @@ const gchar *utils_resource_dir(GeanyResourceDirType type)
 		{
 # ifdef MAC_INTEGRATION
 			gchar *prefix = gtkosx_application_get_resource_path();
-			
+
 			resdirs[RESOURCE_DIR_DATA] = g_build_filename(prefix, "share", "geany", NULL);
 			resdirs[RESOURCE_DIR_ICON] = g_build_filename(prefix, "share", "icons", NULL);
 			resdirs[RESOURCE_DIR_DOC] = g_build_filename(prefix, "share", "doc", "geany", "html", NULL);
@@ -2171,4 +2184,30 @@ void utils_start_new_geany_instance(const gchar *doc_path)
 	}
 	else
 		g_printerr("Unable to find 'geany'");
+}
+
+
+/**
+ * Get a link-dereferenced, absolute version of a file name.
+ *
+ * This is similar to the POSIX `realpath` function when passed a
+ * @c NULL argument.
+ *
+ * @warning This function suffers the same problems as the POSIX
+ * function `realpath()`, namely that it's impossible to determine
+ * a suitable size for the returned buffer, and so it's limited to a
+ * maximum of `PATH_MAX`.
+ *
+ * @param file_name The file name to get the real path of.
+ *
+ * @return A newly-allocated string containing the real path which
+ * should be freed with `g_free()` when no longer needed, or @c NULL
+ * if the real path cannot be obtained.
+ *
+ * @since 1.32 (API 235)
+ */
+GEANY_API_SYMBOL
+gchar *utils_get_real_path(const gchar *file_name)
+{
+	return tm_get_real_path(file_name);
 }

@@ -167,16 +167,16 @@ unmanageable diffs.
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.24 and GLib >= 2.32. API symbols from newer
-GTK/GLib versions should be avoided or made optional to keep the source
-code building on older systems.
+Geany requires GTK >= 2.24 or GTK 3 (with the --enable-gtk3 configure option)
+and GLib >= 2.32. API symbols from newer GTK/GLib versions should be 
+avoided or made optional to keep the source code building on older systems.
 
 It is recommended to use the 2.24 API documentation of the GTK
 libs (including GLib, GDK and Pango) has the advantages
 that you don't get confused by any newer API additions and you
 don't have to take care about whether you can use them or not.
 
-You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_28`` C
+You might want to pass the ``-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_32`` C
 preprocessor flag to get warnings about newer symbols from the GLib.
 
 On the contrary, you might also want to get deprecation warnings for symbols
@@ -196,14 +196,29 @@ Coding
   them down into smaller static functions where possible. This makes code
   much easier to read and maintain.
 * Use GLib types and functions - gint not int, g_free() not free().
-* Your code should build against GLib 2.27.3 and GTK 2.24. At least for the
+* Your code should build against GLib 2.32 and GTK 2.24. At least for the
   moment, we want to keep the minimum requirement for GTK at 2.24 (of
   course, you can use the GTK_CHECK_VERSION macro to protect code using
   later versions).
-* Variables should be declared before statements. You can use
-  gcc's -Wdeclaration-after-statement to warn about this.
+* Variables should be declared (and initialized) as close as practical
+  to their first use. This reduces the chances of intervening code being
+  inserted between declaration and use, where the variable may be
+  uninitialized.
+* Variables should be defined within the smallest scope that is practical,
+  for example inside a conditional branch which uses them or in the
+  initialization part of a for loop.
+* Local variables that will not be modified should be marked as ``const``
+  to indicate intention. This allows the compiler to give a warning if
+  part of the code accidentally tries to change the value.
+* Pointer parameters should be marked ``const`` if the value they point
+  to will not be mutated within the function.
 * Don't let variable names shadow outer variables - use gcc's -Wshadow
   option.
+* Use the strictest possible data type where practical. For example
+  for an enumeration, use the actual enum type rather than just a
+  ``gint``, use a ``gchar`` for individual (ASCII/UTF-8) string
+  characters rather than ``gint``, and use a ``guint`` for integers
+  which cannot be negative rather than ``gint``.
 * Do not use G_LIKELY or G_UNLIKELY (except in critical loops). These
   add noise to the code with little real benefit.
 
@@ -212,9 +227,12 @@ Compiler options & warnings
 Use ``CFLAGS='-Wfoo' ./configure`` or ``CFLAGS='-Wfoo' ./autogen.sh``
 to set warning options (as well as anything else e.g. -g -O2).
 
-* Enable warnings - for gcc use '-Wall -W' (and optionally
+* Enable warnings - for gcc use '-Wall -Wextra' (and optionally
   -Wno-unused-parameter to avoid unused parameter warnings in Glade
-  callbacks).
+  callbacks). Alternatively you can use the Glib macro G_GNUC_UNUSED
+  to suppress warnings on single parameters, e.g.
+  ``void examplefunction(G_GNUC_UNUSED gchar *foo)``. Also see
+  https://developer.gnome.org/glib/stable/glib-Miscellaneous-Macros.html.
 * You should try to write ISO C99 code for portability, so always
   use C ``/* */`` comments and function_name(void) instead of
   function_name(). This is for compatibility with various Unix-like
@@ -649,11 +667,15 @@ Method
 * Add TM_PARSER_FOO to src/tagmanager/tm_parser.h.  The list here must follow
   exactly the order in parsers.h.
 
-In tagmanager/src/tm_parsers.c:
+In src/tagmanager/tm_parser.c:
 Add a map_FOO TMParserMapEntry mapping each kind's letter from foo.c's
 FooKinds to the appropriate TMTagType, and add the corresponding
 MAP_ENTRY(FOO) to parser_map.
 (You may want to make the symbols.c change before doing this).
+
+In src/tagmanager/tm_parser.c:
+Update tm_parser_context_separator() and tm_parser_has_full_context() to
+handle the new parser if applicable, by adding a TM_PARSER_FOO case entry.
 
 In filetypes.c, init_builtin_filetypes():
 Set the 2nd argument of the FT_INIT() macro for this filetype to FOO.
@@ -764,6 +786,9 @@ Building Plugins
 
 The geany-plugins autotools script automatically detects the
 installed system Geany and builds the plugins against that.
+
+Plugins will build with either GTK2 or GTK3, whichever the detected
+Geany was built with.
 
 To use plugins with a development version of Geany built with
 a different prefix, the plugins will need to be compiled against

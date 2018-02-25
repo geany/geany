@@ -32,8 +32,8 @@ primary=False None True and as assert break class continue def del elif else exc
 identifiers=ArithmeticError AssertionError AttributeError BaseException BlockingIOError BrokenPipeError BufferError BytesWarning ChildProcessError ConnectionAbortedError ConnectionError ConnectionRefusedError ConnectionResetError DeprecationWarning EOFError Ellipsis EnvironmentError Exception FileExistsError FileNotFoundError FloatingPointError FutureWarning GeneratorExit IOError ImportError ImportWarning IndentationError IndexError InterruptedError IsADirectoryError KeyError KeyboardInterrupt LookupError MemoryError NameError NotADirectoryError NotImplemented NotImplementedError OSError OverflowError PendingDeprecationWarning PermissionError ProcessLookupError ReferenceError ResourceWarning RuntimeError RuntimeWarning StandardError StopIteration SyntaxError SyntaxWarning SystemError SystemExit TabError TimeoutError TypeError UnboundLocalError UnicodeDecodeError UnicodeEncodeError UnicodeError UnicodeTranslateError UnicodeWarning UserWarning ValueError Warning ZeroDivisionError __build_class__ __debug__ __doc__ __import__ __loader__ __name__ __package__ __spec__ abs all any apply ascii basestring bin bool buffer bytearray bytes callable chr classmethod cmp coerce compile complex copyright credits delattr dict dir divmod enumerate eval execfile exit file filter float format frozenset getattr globals hasattr hash help hex id input int intern isinstance issubclass iter len license list locals long map max memoryview min next object oct open ord pow property quit range raw_input reduce reload repr reversed round set setattr slice sorted staticmethod str sum super tuple type unichr unicode vars xrange zip
 
 [lexer_properties]
-fold.comment.python=1
 fold.quotes.python=1
+lexer.python.keywords2.no.sub.identifiers=1
 
 [settings]
 # default extension used when saving files
@@ -46,7 +46,7 @@ mime_type=text/x-python
 #wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
 
 # single comment char, like # in this file
-comment_single=#
+comment_single=#\s
 # multiline comments
 #comment_open="""
 #comment_close="""

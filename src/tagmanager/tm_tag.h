@@ -103,13 +103,12 @@ typedef struct TMTag
 	TMParserType lang; /* Programming language of the file */
 } TMTag;
 
-
-#ifdef GEANY_PRIVATE
-
 /* The GType for a TMTag */
 #define TM_TYPE_TAG (tm_tag_get_type())
 
 GType tm_tag_get_type(void) G_GNUC_CONST;
+
+#ifdef GEANY_PRIVATE
 
 TMTag *tm_tag_new(void);
 
@@ -140,11 +139,7 @@ TMTag *tm_tag_ref(TMTag *tag);
 
 gboolean tm_tags_equal(const TMTag *a, const TMTag *b);
 
-const gchar *tm_tag_context_separator(TMParserType lang);
-
 gboolean tm_tag_is_anon(const TMTag *tag);
-
-gboolean tm_tag_langs_compatible(TMParserType lang, TMParserType other);
 
 #ifdef TM_DEBUG /* various debugging functions */
 

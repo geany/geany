@@ -4,9 +4,10 @@
 [keywords]
 # all items must be in one line
 primary=abstract as base bool break byte case catch char checked class const continue decimal default delegate do double else enum event explicit extern false finally fixed float for foreach goto if implicit in int interface internal is lock long namespace new null object operator out override params private protected public readonly ref return sbyte sealed short sizeof stackalloc static string struct switch this throw true try typeof uint ulong unchecked unsafe ushort using virtual void volatile while
-secondary=
+secondary=add alias ascending async await descending dynamic from get global group into join let orderby partial remove select set value var where yield
 # these are some doxygen keywords (incomplete)
 docComment=attention author brief bug class code date def enum example exception file fn namespace note param remarks return see since struct throw todo typedef var version warning union
+# keywords: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/
 
 [lexer_properties=C]
 

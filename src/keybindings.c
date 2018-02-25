@@ -124,7 +124,10 @@ GdkModifierType keybindings_get_modifiers(GdkModifierType mods)
 {
 #ifdef __APPLE__
 	if (mods & GDK_MOD2_MASK)
+	{
 		mods |= GEANY_PRIMARY_MOD_MASK;
+		mods &= ~GDK_MOD2_MASK;
+	}
 #endif
 	return mods & gtk_accelerator_get_default_mod_mask();
 }
@@ -827,6 +830,16 @@ static void apply_kb_accel(GeanyKeyGroup *group, GeanyKeyBinding *kb, gpointer u
 }
 
 
+/** Reloads keybinding settings from configuration file.
+ *
+ * Normally plugins do not need to call this function as it is called automatically when a
+ * the plugin is activated. However, plugins which need to create keybindings dynamically
+ * and reload them when needed should call this function after all keybindings have been
+ * updated with plugin_set_key_group() and keybindings_set_item() calls - this makes sure
+ * that the corresponding user keybinding shortcuts are applied.
+ *
+ * @since 1.32 (API 233) */
+GEANY_API_SYMBOL
 void keybindings_load_keyfile(void)
 {
 	load_user_kb();
@@ -1564,13 +1577,17 @@ static gboolean cb_func_search_action(guint key_id)
 			gint pos = sci_get_current_position(sci);
 
 			/* clear existing search indicators instead if next to cursor */
-			if (scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+			if (SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, pos) ||
-				scintilla_send_message(sci, SCI_INDICATORVALUEAT,
+				SSM(sci, SCI_INDICATORVALUEAT,
 					GEANY_INDICATOR_SEARCH, MAX(pos - 1, 0)))
+			{
 				text = NULL;
+			}
 			else
+			{
 				text = get_current_word_or_sel(doc, TRUE);
+			}
 
 			if (sci_has_selection(sci))
 				search_mark_all(doc, text, GEANY_FIND_MATCHCASE);
@@ -2164,8 +2181,8 @@ static gboolean cb_func_editor_action(guint key_id)
 			duplicate_lines(doc->editor);
 			break;
 		case GEANY_KEYS_EDITOR_SNIPPETNEXTCURSOR:
-			editor_goto_next_snippet_cursor(doc->editor);
-			break;
+			/* allow overloading */
+			return editor_goto_next_snippet_cursor(doc->editor);
 		case GEANY_KEYS_EDITOR_DELETELINE:
 			delete_lines(doc->editor);
 			break;
@@ -2603,8 +2620,8 @@ static gboolean cb_func_document_action(guint key_id)
 			{
 				gint line = sci_get_current_line(doc->editor->sci);
 				editor_toggle_fold(doc->editor, line, 0);
-				break;
 			}
+			break;
 		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS:
 			on_remove_markers1_activate(NULL, NULL);
 			break;

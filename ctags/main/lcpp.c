@@ -704,7 +704,10 @@ process:
 				int next = getcFromInputFile ();
 
 				if (next == NEWLINE)
-					continue;
+				{
+					c = getcFromInputFile ();
+					goto process;
+				}
 				else
 					ungetcToInputFile (next);
 				break;

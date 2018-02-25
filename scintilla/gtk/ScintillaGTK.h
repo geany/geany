@@ -68,31 +68,31 @@ class ScintillaGTK : public ScintillaBase {
 	bool repaintFullWindow;
 
 	guint styleIdleID;
+	int accessibilityEnabled;
 	AtkObject *accessible;
-
-	// Private so ScintillaGTK objects can not be copied
-	ScintillaGTK(const ScintillaGTK &);
-	ScintillaGTK &operator=(const ScintillaGTK &);
 
 public:
 	explicit ScintillaGTK(_ScintillaObject *sci_);
+	// Deleted so ScintillaGTK objects can not be copied.
+	ScintillaGTK(const ScintillaGTK &) = delete;
+	ScintillaGTK &operator=(const ScintillaGTK &) = delete;
 	virtual ~ScintillaGTK();
 	static ScintillaGTK *FromWidget(GtkWidget *widget);
 	static void ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_class, GtkContainerClass *container_class);
 private:
-	virtual void Initialise();
-	virtual void Finalise();
-	virtual bool AbandonPaint();
-	virtual void DisplayCursor(Window::Cursor c);
-	virtual bool DragThreshold(Point ptStart, Point ptNow);
-	virtual void StartDrag();
+	void Init();
+	void Finalise() override;
+	bool AbandonPaint() override;
+	void DisplayCursor(Window::Cursor c) override;
+	bool DragThreshold(Point ptStart, Point ptNow) override;
+	void StartDrag() override;
 	int TargetAsUTF8(char *text);
 	int EncodedFromUTF8(char *utf8, char *encoded) const;
-	virtual bool ValidCodePage(int codePage) const;
+	bool ValidCodePage(int codePage) const override;
 public: 	// Public for scintilla_send_message
-	virtual sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+	sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
 private:
-	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+	sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
 	struct TimeThunk {
 		TickReason reason;
 		ScintillaGTK *scintilla;
@@ -100,41 +100,41 @@ private:
 		TimeThunk() : reason(tickCaret), scintilla(NULL), timer(0) {}
 	};
 	TimeThunk timers[tickDwell+1];
-	virtual bool FineTickerAvailable();
-	virtual bool FineTickerRunning(TickReason reason);
-	virtual void FineTickerStart(TickReason reason, int millis, int tolerance);
-	virtual void FineTickerCancel(TickReason reason);
-	virtual bool SetIdle(bool on);
-	virtual void SetMouseCapture(bool on);
-	virtual bool HaveMouseCapture();
-	virtual bool PaintContains(PRectangle rc);
+	bool FineTickerAvailable() override;
+	bool FineTickerRunning(TickReason reason) override;
+	void FineTickerStart(TickReason reason, int millis, int tolerance) override;
+	void FineTickerCancel(TickReason reason) override;
+	bool SetIdle(bool on) override;
+	void SetMouseCapture(bool on) override;
+	bool HaveMouseCapture() override;
+	bool PaintContains(PRectangle rc) override;
 	void FullPaint();
-	virtual PRectangle GetClientRectangle() const;
-	virtual void ScrollText(int linesToMove);
-	virtual void SetVerticalScrollPos();
-	virtual void SetHorizontalScrollPos();
-	virtual bool ModifyScrollBars(int nMax, int nPage);
-	void ReconfigureScrollBars();
-	virtual void NotifyChange();
-	virtual void NotifyFocus(bool focus);
-	virtual void NotifyParent(SCNotification scn);
+	PRectangle GetClientRectangle() const override;
+	void ScrollText(Sci::Line linesToMove) override;
+	void SetVerticalScrollPos() override;
+	void SetHorizontalScrollPos() override;
+	bool ModifyScrollBars(Sci::Line nMax, Sci::Line nPage) override;
+	void ReconfigureScrollBars() override;
+	void NotifyChange() override;
+	void NotifyFocus(bool focus) override;
+	void NotifyParent(SCNotification scn) override;
 	void NotifyKey(int key, int modifiers);
 	void NotifyURIDropped(const char *list);
 	const char *CharacterSetID() const;
-	virtual CaseFolder *CaseFolderForEncoding();
-	virtual std::string CaseMapString(const std::string &s, int caseMapping);
-	virtual int KeyDefault(int key, int modifiers);
-	virtual void CopyToClipboard(const SelectionText &selectedText);
-	virtual void Copy();
-	virtual void Paste();
-	virtual void CreateCallTipWindow(PRectangle rc);
-	virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true);
+	CaseFolder *CaseFolderForEncoding() override;
+	std::string CaseMapString(const std::string &s, int caseMapping) override;
+	int KeyDefault(int key, int modifiers) override;
+	void CopyToClipboard(const SelectionText &selectedText) override;
+	void Copy() override;
+	void Paste() override;
+	void CreateCallTipWindow(PRectangle rc) override;
+	void AddToPopUp(const char *label, int cmd = 0, bool enabled = true) override;
 	bool OwnPrimarySelection();
-	virtual void ClaimSelection();
+	void ClaimSelection() override;
 	void GetGtkSelectionText(GtkSelectionData *selectionData, SelectionText &selText);
 	void ReceivedSelection(GtkSelectionData *selection_data);
 	void ReceivedDrop(GtkSelectionData *selection_data);
-	static void GetSelection(GtkSelectionData *selection_data, guint info, SelectionText *selected);
+	static void GetSelection(GtkSelectionData *selection_data, guint info, SelectionText *text);
 	void StoreOnClipboard(SelectionText *clipText);
 	static void ClipboardGetSelection(GtkClipboard* clip, GtkSelectionData *selection_data, guint info, void *data);
 	static void ClipboardClearSelection(GtkClipboard* clip, void *data);
@@ -196,7 +196,7 @@ private:
 	static AtkObject* GetAccessible(GtkWidget *widget);
 
 	bool KoreanIME();
-	void CommitThis(char *str);
+	void CommitThis(char *commitStr);
 	static void Commit(GtkIMContext *context, char *str, ScintillaGTK *sciThis);
 	void PreeditChangedInlineThis();
 	void PreeditChangedWindowedThis();
@@ -229,15 +229,15 @@ private:
 	static gboolean TimeOut(gpointer ptt);
 	static gboolean IdleCallback(gpointer pSci);
 	static gboolean StyleIdle(gpointer pSci);
-	virtual void IdleWork();
-	virtual void QueueIdleWork(WorkNeeded::workItems items, int upTo);
-	virtual void SetDocPointer(Document *document);
+	void IdleWork() override;
+	void QueueIdleWork(WorkNeeded::workItems items, Sci::Position upTo) override;
+	void SetDocPointer(Document *document) override;
 	static void PopUpCB(GtkMenuItem *menuItem, ScintillaGTK *sciThis);
 
 #if GTK_CHECK_VERSION(3,0,0)
 	static gboolean DrawCT(GtkWidget *widget, cairo_t *cr, CallTip *ctip);
 #else
-	static gboolean ExposeCT(GtkWidget *widget, GdkEventExpose *ose, CallTip *ct);
+	static gboolean ExposeCT(GtkWidget *widget, GdkEventExpose *ose, CallTip *ctip);
 #endif
 	static gboolean PressCT(GtkWidget *widget, GdkEventButton *event, ScintillaGTK *sciThis);
 

@@ -246,6 +246,8 @@ static void init_pref_groups(void)
 		"keep_edit_history_on_reload", TRUE);
 	stash_group_add_boolean(group, &file_prefs.show_keep_edit_history_on_reload_msg,
 		"show_keep_edit_history_on_reload_msg", TRUE);
+	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
+		"reload_clean_doc_on_file_change", FALSE);
 	/* for backwards-compatibility */
 	stash_group_add_integer(group, &editor_prefs.indentation->hard_tab_width,
 		"indent_hard_tab_width", 8);
@@ -255,6 +257,8 @@ static void init_pref_groups(void)
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &search_prefs.replace_and_find_by_default,
 		"replace_and_find_by_default", TRUE);
+	stash_group_add_integer(group, &editor_prefs.ime_interaction,
+		"editor_ime_interaction", SC_IME_WINDOWED);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
@@ -419,6 +423,7 @@ static void save_dialog_prefs(GKeyFile *config)
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_session", project_prefs.project_session);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", project_prefs.project_file_in_basedir);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_winpos", prefs.save_winpos);
+	g_key_file_set_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_wingeom);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_confirm_exit", prefs.confirm_exit);
 	g_key_file_set_boolean(config, PACKAGE, "pref_main_suppress_status_messages", prefs.suppress_status_messages);
 	g_key_file_set_boolean(config, PACKAGE, "switch_msgwin_pages", prefs.switch_to_status);
@@ -572,7 +577,7 @@ static void save_ui_prefs(GKeyFile *config)
 		g_key_file_set_integer(config, PACKAGE, "scribble_pos", scribble_pos);
 	}
 
-	if (prefs.save_winpos)
+	if (prefs.save_winpos || prefs.save_wingeom)
 	{
 		GdkWindowState wstate;
 
@@ -755,6 +760,7 @@ static void load_dialog_prefs(GKeyFile *config)
 	project_prefs.project_session = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_session", TRUE);
 	project_prefs.project_file_in_basedir = utils_get_setting_boolean(config, PACKAGE, "pref_main_project_file_in_basedir", FALSE);
 	prefs.save_winpos = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_winpos", TRUE);
+	prefs.save_wingeom = utils_get_setting_boolean(config, PACKAGE, "pref_main_save_wingeom", prefs.save_winpos);
 	prefs.beep_on_errors = utils_get_setting_boolean(config, PACKAGE, "beep_on_errors", TRUE);
 	prefs.switch_to_status = utils_get_setting_boolean(config, PACKAGE, "switch_msgwin_pages", FALSE);
 	prefs.auto_focus = utils_get_setting_boolean(config, PACKAGE, "auto_focus", FALSE);

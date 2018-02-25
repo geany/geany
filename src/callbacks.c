@@ -588,7 +588,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		gboolean rectsel = (gboolean) SSM(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 		gchar *text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
@@ -1508,6 +1508,10 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 			g_error_free(error);
 		}
 		g_free(command_line);
+	}
+	else
+	{
+		ui_set_statusbar(TRUE, _("No context action set."));
 	}
 	g_free(word);
 	g_free(command);

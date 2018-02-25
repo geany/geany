@@ -66,6 +66,7 @@ typedef struct GeanyFilePrefs
 	gboolean		tab_close_switch_to_mru;
 	gboolean		keep_edit_history_on_reload; /* Keep undo stack upon, and allow undoing of, document reloading. */
 	gboolean		show_keep_edit_history_on_reload_msg; /* whether to show the message introducing the above feature */
+ 	gboolean		reload_clean_doc_on_file_change;
 }
 GeanyFilePrefs;
 
