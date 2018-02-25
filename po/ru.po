@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.33\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2018-02-05 06:26+0400\n"
+"PO-Revision-Date: 2018-02-13 02:52+0400\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -2571,9 +2571,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Не удалось выполнить команду контекстного действия \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Контекстное действие:"
+msgstr "Контекстное действие не задано."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
