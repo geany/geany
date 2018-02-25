@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-11-08 23:32+0000\n"
+"PO-Revision-Date: 2018-02-25 10:59+0000\n"
 "Last-Translator: Giuseppe Penone <giuspen@gmail.com>\n"
 "Language-Team: geany-i18n@uvena.de\n"
 "Language: it\n"
@@ -2625,9 +2625,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Impossibile eseguire il comando di azione contestuale \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Azione contestuale:"
+msgstr "Azione contestuale non impostata."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
