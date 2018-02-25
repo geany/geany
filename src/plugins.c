@@ -1700,6 +1700,24 @@ static gboolean pm_treeview_button_press_cb(GtkWidget *widget, GdkEventButton *e
 }
 
 
+static gboolean pm_treeview_button_release_cb(GtkWidget *widget, GdkEventButton *event,
+		G_GNUC_UNUSED gpointer user_data)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	Plugin *p;
+
+	if (gtk_tree_selection_get_selected(gtk_tree_view_get_selection(GTK_TREE_VIEW(widget)), &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, PLUGIN_COLUMN_PLUGIN, &p, -1);
+
+		if (p != NULL)
+			pm_update_buttons(p);
+	}
+	return FALSE;
+}
+
+
 static gint pm_tree_sort_func(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b,
 		gpointer user_data)
 {
@@ -1834,6 +1852,7 @@ static void pm_prepare_treeview(GtkWidget *tree, GtkTreeStore *store)
 	g_signal_connect(sel, "changed", G_CALLBACK(pm_selection_changed), NULL);
 
 	g_signal_connect(tree, "button-press-event", G_CALLBACK(pm_treeview_button_press_cb), NULL);
+	g_signal_connect(tree, "button-release-event", G_CALLBACK(pm_treeview_button_release_cb), NULL);
 
 	/* filter */
 	filter_model = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), NULL);
