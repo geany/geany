@@ -787,7 +787,7 @@ Building Plugins
 The geany-plugins autotools script automatically detects the
 installed system Geany and builds the plugins against that.
 
-Plugins will build with the version of GTK2/3 that the detected 
+Plugins will build with either GTK2 or GTK3, whichever the detected
 Geany was built with.
 
 To use plugins with a development version of Geany built with
