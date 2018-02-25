@@ -1,4 +1,21 @@
-Geany 1.33 (unreleased)
+Geany 1.33 (February 25, 2018)
+
+    Bug fixes
+    * Fix the symbols tree hierarchy when several tags have the same name
+      (PR#1598).
+
+    Interface
+    * Add a tooltip showing the full path on menu items representing documents
+      (PR#1706).
+    * Add a note for applying the indent settings in the project preferences
+      (PR#1650).
+    * Enable popup menu on sidebar and message window notebooks (PR#1726).
+    * Show status message on attempt to execute empty context action
+      (Lars Paulsen, PR#1642).
+    * GTK3 theming improvements and documentation (PR#1382).
+
+    Filetypes
+    * CSS: Update Grid properties (Issue#1705).
 
     Internationalization
     * Updated translations: de, el, es, fr, lv, pl, pt, tr, ru, zh_CN
