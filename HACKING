@@ -167,9 +167,9 @@ unmanageable diffs.
 
 GTK versions & API documentation
 --------------------------------
-Geany requires GTK >= 2.24 and GLib >= 2.32. API symbols from newer
-GTK/GLib versions should be avoided or made optional to keep the source
-code building on older systems.
+Geany requires GTK >= 2.24 or GTK 3 (with the --enable-gtk3 configure option)
+and GLib >= 2.32. API symbols from newer GTK/GLib versions should be 
+avoided or made optional to keep the source code building on older systems.
 
 It is recommended to use the 2.24 API documentation of the GTK
 libs (including GLib, GDK and Pango) has the advantages
@@ -786,6 +786,9 @@ Building Plugins
 
 The geany-plugins autotools script automatically detects the
 installed system Geany and builds the plugins against that.
+
+Plugins will build with either GTK2 or GTK3, whichever the detected
+Geany was built with.
 
 To use plugins with a development version of Geany built with
 a different prefix, the plugins will need to be compiled against
