@@ -2,11 +2,11 @@
 # Copyright (C) 2006-2014 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
-# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2016
+# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2018
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.30\n"
+"Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-01-18 23:33+0100\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
@@ -199,24 +199,20 @@ msgid "<b>Startup</b>"
 msgstr "<b>起動時</b>"
 
 #: ../data/geany.glade.h:38
-#, fuzzy
 msgid "Save window size"
-msgstr "ウィンドウ位置とサイズを保存する"
+msgstr "ウィンドウ サイズを保存する"
 
 #: ../data/geany.glade.h:39
-#, fuzzy
 msgid "Saves the window size and restores it at the start"
-msgstr "ウィンドウの位置とサイズを保存し、次回の起動時に復元します"
+msgstr "ウィンドウ サイズを保存し、次回の起動時に復元します"
 
 #: ../data/geany.glade.h:40
-#, fuzzy
 msgid "Save window position"
-msgstr "ウィンドウ位置とサイズを保存する"
+msgstr "ウィンドウ位置を保存する"
 
 #: ../data/geany.glade.h:41
-#, fuzzy
 msgid "Saves the window position and restores it at the start"
-msgstr "ウィンドウの位置とサイズを保存し、次回の起動時に復元します"
+msgstr "ウィンドウの位置を保存し、次回の起動時に復元します"
 
 #: ../data/geany.glade.h:42
 msgid "Confirm exit"
@@ -812,7 +808,7 @@ msgid ""
 "Pressing tab/shift-tab indents/unindents instead of inserting a tab character"
 msgstr ""
 "タブ文字を挿入する代わりに、タブキーを押すとインデントし、シフトとタブキーを"
-"押すとインデントを解除する"
+"押すとインデントを解除します"
 
 #: ../data/geany.glade.h:167
 msgid "<b>Indentation</b>"
@@ -2533,9 +2529,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "コンテキスト アクション コマンド \"%s\" を実行できません: %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "ユーザ定義コマンド:"
+msgstr "コンテキスト アクション コマンド がありません"
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -3748,21 +3743,19 @@ msgid "Failed to load one or more session files."
 msgstr "セッションファイルの読み込みに失敗"
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"最初に開くファイルの、最初の桁番号を設定( --line と一緒に使うと便利です)"
+"最初に開くファイルの、最初の桁番号 COLUMN を設定( --line と一緒に使うと便利です)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
 msgstr ""
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "標準でない設定ディレクトリを使用"
+msgstr "代替の設定ディレクトリ DIR を設定"
 
 #: ../src/libmain.c:123
 msgid "DIR"
@@ -3779,7 +3772,7 @@ msgstr "グローバルタグファイルを生成(ドキュメントを参照)"
 #: ../src/libmain.c:126
 msgid "Don't preprocess C/C++ files when generating tags file"
 msgstr ""
-"タグファイルを生成するときに、C/C++ファイルのプリプロセッサを使用しない"
+"タグファイルを生成するときに、C/C++ファイルのプリプロセッサを使用しません"
 
 #: ../src/libmain.c:128
 msgid "Don't open files in a running instance, force opening a new instance"
@@ -3787,11 +3780,10 @@ msgstr ""
 "実行中のインスタンスでファイルを開けません。新しいインスタンスで開きます。"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
 msgstr ""
-"実行中のGeanyのインスタンスとの通信にこのソケットファイル名を使用します"
+"実行中のGeanyのインスタンスとの通信にこのソケットファイル名 FILE を使用します"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
@@ -3802,9 +3794,8 @@ msgid "Return a list of open documents in a running Geany instance"
 msgstr "実行中のGeanyのインスタンスが開いている文書のリストを返します"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "最初に開かれるファイルの、最初の行番号を設定"
+msgstr "最初に開かれるファイルの、最初の行番号 LINE を設定"
 
 #: ../src/libmain.c:132
 msgid "LINE"
@@ -3812,7 +3803,7 @@ msgstr ""
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
-msgstr "起動時にメッセージウィンドウを表示しない"
+msgstr "起動時にメッセージウィンドウを表示しません"
 
 #: ../src/libmain.c:134
 msgid "Don't load auto completion data (see documentation)"
@@ -3840,7 +3831,7 @@ msgstr "端末サポートを読み込みません"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "FILE をダイナミック リンク VTE ライブラリとして使用 "
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3855,13 +3846,12 @@ msgid "[FILES...]"
 msgstr "[ファイル...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
 msgstr "高速で軽量な IDE"
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "バグを https://github.com/geany/geany/issues に報告"
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -3966,9 +3956,8 @@ msgid "Open in New _Window"
 msgstr "新しいウィンドウで開く(_W)"
 
 #: ../src/notebook.c:502
-#, fuzzy
 msgid "Close Documents to the _Right"
-msgstr "文書を右に移動"
+msgstr "右の文書を閉じる(_R)"
 
 #: ../src/plugins.c:233
 #, c-format
@@ -4031,6 +4020,8 @@ msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
 "plugin."
 msgstr ""
+"プロキシ プラグイン '%s' の拡張子 '%s' はドットを付けて指定します。"
+"プロキシ プラグインの設定を修正してください。"
 
 #: ../src/pluginutils.c:427
 msgid "Configure Plugins"
@@ -4978,6 +4969,9 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
+"テンプレート コマンド \"%s\" を実行できません。"
+"ヒント: コマンドのパスが間違っていないかどうか確認してください。"
+"エラー: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
 #: ../src/toolbar.c:58
