@@ -1492,7 +1492,7 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 			/* For translators: this is the status window message for opening a file. %d is the number
 			 * of the newly opened file, %s indicates whether the file is opened read-only
 			 * (it is replaced with the string ", read-only"). */
-			msgwin_status_add(_("File %s opened(%d%s)."),
+			msgwin_status_add(_("File %s opened (%d%s)."),
 				display_filename, gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook)),
 				(readonly) ? _(", read-only") : "");
 		}
