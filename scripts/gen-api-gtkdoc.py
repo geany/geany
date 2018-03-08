@@ -271,6 +271,28 @@ class DoxyTypedef(DoxyElement):
         return DoxyTypedef(name, d)
 
 
+class DoxyDefine(DoxyElement):
+    @staticmethod
+    def from_memberdef(xml):
+        name = xml.find("name").text
+        v = xml.find("initializer")
+        if (v is not None):
+            proc = DoxygenProcess()
+            text = proc.process_element(v)
+            params = ",".join(p.text for p in xml.xpath(".//param/defname"))
+            if (params != ""):
+                params = "(%s)" % params
+            d = "#define %s%s %s" % (name, params, text)
+        else:
+            d = "#define %s" % name
+
+        e = DoxyEnum(name, d)
+        e.add_brief(xml.find("briefdescription"))
+        e.add_detail(xml.find("detaileddescription"))
+        for p in xml.xpath(".//detaileddescription/*/parameterlist[@kind='param']/parameteritem"):
+            e.add_param(p)
+        return e
+
 class DoxyEnum(DoxyElement):
     @staticmethod
     def from_memberdef(xml):
@@ -377,6 +399,10 @@ def main(args):
                 if not (DoxygenProcess.stringify_children(n0.find("type")).startswith("enum")):
                     e = DoxyTypedef.from_memberdef(n0)
                     typedefs.append(e)
+
+        for n0 in f.xpath(".//*/memberdef[@kind='define' and @prot='public']"):
+            e = DoxyDefine.from_memberdef(n0)
+            other.append(e)
 
         for n0 in f.xpath(".//*/memberdef[@kind='enum' and @prot='public']"):
             e = DoxyEnum.from_memberdef(n0)
