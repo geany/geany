@@ -1767,7 +1767,7 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
 
 	if (!plugin)
-		return FALSE;
+		return TRUE;
 	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
 
 	filename = g_path_get_basename(plugin->filename);
