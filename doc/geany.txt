@@ -538,6 +538,15 @@ there is a selection, only the selected text is copied. This can be
 useful when making temporary copies of text or for creating
 documents with similar or identical contents.
 
+Automatic filename insertion on `Save As...`
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+If a document is saved via `Document->Save As...` then the filename is
+automatically inserted into the comment header replacing text like
+`untitled.ext` in the first 3 lines of the file. E.g. if a new ``.c``
+file is created using `File->New (with Template)` then the text `untitled.c`
+in line 2 would be replaced with the choosen file name on `Save As...`
+(this example assumes the default file templates being used).
+
 
 Character sets and Unicode Byte-Order-Mark (BOM)
 ------------------------------------------------
