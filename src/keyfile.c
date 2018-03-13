@@ -1206,7 +1206,7 @@ static gboolean open_session_file(gchar **tmp, guint len)
 	}
 	else
 	{
-		geany_debug("Could not find file '%s'.", tmp[7]);
+		geany_debug("Could not find file '%s'.", unescaped_filename);
 	}
 
 	g_free(locale_filename);
