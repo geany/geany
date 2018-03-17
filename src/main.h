@@ -46,6 +46,7 @@ typedef struct
 	gboolean	ignore_global_tags;
 	gboolean	list_documents;
 	gboolean 	readonly;
+	gboolean	untitled;
 }
 CommandLineOptions;
 

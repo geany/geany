@@ -121,6 +121,7 @@ static GOptionEntry entries[] =
 {
 	{ "column", 0, 0, G_OPTION_ARG_INT, &cl_options.goto_column, N_("Set initial column number to COLUMN for the first opened file (useful in conjunction with --line)"), N_("COLUMN") },
 	{ "config", 'c', 0, G_OPTION_ARG_FILENAME, &alternate_config, N_("Use alternate configuration directory DIR"), N_("DIR") },
+	{ "untitled", 'u', 0, G_OPTION_ARG_NONE, &cl_options.untitled, N_("Open a new, empty and untitled file"), NULL },
 	{ "ft-names", 0, 0, G_OPTION_ARG_NONE, &ft_names, N_("Print internal filetype names"), NULL },
 	{ "generate-tags", 'g', 0, G_OPTION_ARG_NONE, &generate_tags, N_("Generate global tags file (see documentation)"), NULL },
 	{ "no-preprocessing", 'P', 0, G_OPTION_ARG_NONE, &no_preprocessing, N_("Don't preprocess C/C++ files when generating tags file"), NULL },
@@ -517,7 +518,7 @@ static void parse_command_line_options(gint *argc, gchar ***argv)
 	GError *error = NULL;
 	GOptionContext *context;
 	gint i;
-	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE};
+	CommandLineOptions def_clo = {FALSE, NULL, TRUE, -1, -1, FALSE, FALSE, FALSE, FALSE};
 
 	/* first initialise cl_options fields with default values */
 	cl_options = def_clo;
@@ -1095,7 +1096,7 @@ gint main_lib(gint argc, gchar **argv)
 		socket_info.lock_socket = socket_init(argc, argv);
 		/* Quit if filenames were sent to first instance or the list of open
 		 * documents has been printed */
-		if ((socket_info.lock_socket == -2 /* socket exists */ && argc > 1) ||
+		if ((socket_info.lock_socket == -2 /* socket exists */ && (argc > 1 || cl_options.untitled == TRUE)) ||
 			cl_options.list_documents)
 		{
 			socket_finalize();
@@ -1203,8 +1204,15 @@ gint main_lib(gint argc, gchar **argv)
 	load_startup_files(argc, argv);
 	main_status.opening_session_files = FALSE;
 
-	/* open a new file if no other file was opened */
-	document_new_file_if_non_open();
+	if (cl_options.untitled == TRUE)
+	{
+		document_new_file(NULL, NULL, NULL);
+	}
+	else
+	{
+		/* open a new file if no other file was opened */
+		document_new_file_if_non_open();
+	}
 
 	ui_document_buttons_update();
 	ui_save_buttons_toggle(FALSE);

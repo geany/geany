@@ -326,6 +326,10 @@ Short option  Long option              Function
 
                                          geany --socket-file=/tmp/geany-sock-$(xprop -root _NET_CURRENT_DESKTOP | awk '{print $3}')
 
+-u            --untitled               Open an new, empty, untitled document. If an already
+                                       running instance of Geany exists, then the document will
+                                       be opened in that instance in a new tab.
+
 *none*        --vte-lib                Specify explicitly the path including filename or only
                                        the filename to the VTE library, e.g.
                                        ``/usr/lib/libvte.so`` or ``libvte.so``. This option is

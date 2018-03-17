@@ -129,7 +129,7 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 {
 	gint i;
 
-	g_return_if_fail(argc > 1);
+	g_return_if_fail(argc > 1 || cl_options.untitled == TRUE);
 	geany_debug("using running instance of Geany");
 
 	if (cl_options.goto_line >= 0)
@@ -173,6 +173,13 @@ static void send_open_command(gint sock, gint argc, gchar **argv)
 		g_free(filename);
 	}
 	socket_fd_write_all(sock, ".\n", 2);
+
+	if (cl_options.untitled == TRUE)
+	{
+		socket_fd_write_all(sock, "new\n", 4);
+		socket_fd_write_all(sock, ".\n", 2);
+	}
+
 }
 
 
@@ -332,7 +339,7 @@ gint socket_init(gint argc, gchar **argv)
 		SetForegroundWindow(hwnd);
 #endif
 	/* now we send the command line args */
-	if (argc > 1)
+	if (argc > 1 || cl_options.untitled == TRUE)
 	{
 		send_open_command(sock, argc, argv);
 	}
@@ -677,6 +684,10 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 			socket_fd_write(sock, (gchar *)&hwnd, sizeof(hwnd));
 		}
 #endif
+		else if (strncmp(buf, "new", 3) == 0)
+		{
+			document_new_file(NULL, NULL, NULL);
+		}
 	}
 
 	if (popup)
