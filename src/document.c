@@ -2105,7 +2105,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 {
 	gchar *errmsg;
 	gchar *data;
-	gsize len;
+	gsize len, sci_len;
 	gchar *locale_filename;
 	const GeanyFilePrefs *fp;
 
@@ -2129,6 +2129,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	document_check_disk_status(doc, TRUE);
 	if (doc->priv->protected)
 		return save_file_handle_infobars(doc, force);
+	sci_len = sci_get_length(doc->editor->sci);
 
 	fp = project_get_file_prefs();
 	/* replaces tabs with spaces but only if the current file is not a Makefile */
@@ -2138,7 +2139,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	if (fp->strip_trailing_spaces)
 		editor_strip_trailing_spaces(doc->editor, TRUE);
 	/* ensure the file has a newline at the end */
-	if (fp->final_new_line)
+	if (fp->final_new_line && sci_len > 0)
 		editor_ensure_final_newline(doc->editor);
 	/* ensure newlines are consistent */
 	if (fp->ensure_convert_new_lines)
@@ -2147,7 +2148,7 @@ gboolean document_save_file(GeanyDocument *doc, gboolean force)
 	/* notify plugins which may wish to modify the document before it's saved */
 	g_signal_emit_by_name(geany_object, "document-before-save", doc);
 
-	len = sci_get_length(doc->editor->sci) + 1;
+	len = sci_len + 1;
 	if (doc->has_bom && encodings_is_unicode_charset(doc->encoding))
 	{	/* always write a UTF-8 BOM because in this moment the text itself is still in UTF-8
 		 * encoding, it will be converted to doc->encoding below and this conversion
