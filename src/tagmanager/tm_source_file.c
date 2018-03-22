@@ -523,6 +523,7 @@ static gboolean write_tag(TMTag *tag, FILE *fp, TMTagAttrType attrs)
 
 GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mode)
 {
+	gboolean rewindfile = TRUE;
 	guchar buf[BUFSIZ];
 	FILE *fp;
 	GPtrArray *file_tags;
@@ -543,7 +544,10 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
 			format = TM_FILE_FORMAT_TAGMANAGER;
 		else if (buf[0] == '#' && strstr((gchar*) buf, "format=ctags") != NULL)
+		{
 			format = TM_FILE_FORMAT_CTAGS;
+			rewindfile = FALSE;
+		}
 		else if (strncmp((gchar*) buf, "!_TAG_", 6) == 0)
 			format = TM_FILE_FORMAT_CTAGS;
 		else
@@ -563,7 +567,10 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 			else if (tab_cnt > 1)
 				format = TM_FILE_FORMAT_CTAGS;
 		}
-		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
+		if (rewindfile == TRUE)
+		{
+			rewind(fp); /* reset the file pointer, to start reading again from the beginning */
+		}
 	}
 
 	file_tags = g_ptr_array_new();
