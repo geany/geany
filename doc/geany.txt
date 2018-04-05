@@ -4573,7 +4573,7 @@ line_wrap_indent
 
 translucency
     Translucency for the current line (first argument) and the selection
-    (second argument). Values between 0 and 255 are accepted.
+    (second argument). Values between 0 and 255 (inclusive) are accepted.
 
     Note for Windows 95, 98 and ME users:
     keep this value at 255 to disable translucency otherwise Geany might crash.
@@ -4601,7 +4601,8 @@ marker_search
 
 marker_search_translucency
     Translucency for the search marker's outline (first argument) and
-    background (second argument). Values between 0 and 255 are accepted.
+    background (second argument). Values between 0 and 255 (inclusive) are
+    accepted.
 
     Only the first and second arguments are interpreted.
 
@@ -4618,7 +4619,7 @@ marker_mark
 
 marker_translucency
     Translucency for the line marker (first argument) and the user marker
-    (second argument). Values between 0 and 255 are accepted.
+    (second argument). Values between 0 and 255 (inclusive) are accepted.
 
     Note for Windows 95, 98 and ME users:
     keep this value at 255 to disable translucency otherwise Geany might crash.
