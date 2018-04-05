@@ -348,7 +348,7 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
  *
  * @see msgwin_compiler_add()
  *
- * @since @todo
+ * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
@@ -442,7 +442,7 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
  *
  * @see msgwin_msg_add()
  *
- * @since @todo
+ * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
@@ -490,7 +490,7 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
  *
  * @see msgwin_status_add()
  *
- * @since @todo
+ * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
 void msgwin_status_add_string(const gchar *string)
