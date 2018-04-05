@@ -4617,7 +4617,7 @@ marker_mark
     *Example:* ``marker_mark=0x000000;0xb8f4b8;false;false``
 
 marker_translucency
-    Translucency for the line marker (first argument) and the mark marker
+    Translucency for the line marker (first argument) and the user marker
     (second argument). Values between 0 and 255 are accepted.
 
     Note for Windows 95, 98 and ME users:
