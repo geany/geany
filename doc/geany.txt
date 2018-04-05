@@ -4575,9 +4575,6 @@ translucency
     Translucency for the current line (first argument) and the selection
     (second argument). Values between 0 and 255 (inclusive) are accepted.
 
-    Note for Windows 95, 98 and ME users:
-    keep this value at 255 to disable translucency otherwise Geany might crash.
-
     Only the first and second arguments are interpreted.
 
     *Example:* ``translucency=255;255``
@@ -4620,9 +4617,6 @@ marker_mark
 marker_translucency
     Translucency for the line marker (first argument) and the user marker
     (second argument). Values between 0 and 255 (inclusive) are accepted.
-
-    Note for Windows 95, 98 and ME users:
-    keep this value at 255 to disable translucency otherwise Geany might crash.
 
     Only the first and second arguments are interpreted.
 
