@@ -529,7 +529,7 @@ void msgwin_status_add_string(const gchar *string)
  *
  * @see msgwin_status_add_string()
  *
- * @since 0.15
+ * @since 0.12
  **/
 GEANY_API_SYMBOL
 void msgwin_status_add(const gchar *format, ...)
