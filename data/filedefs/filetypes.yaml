@@ -11,6 +11,7 @@ document=preprocessor
 text=string_1
 error=error
 operator=operator
+identifier=keyword
 
 [keywords]
 # all items must be in one line
