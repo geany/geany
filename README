@@ -41,7 +41,7 @@ and many more.
 Installation on Mac OS and Windows
 ----------------------------------
 Prebuilt binary packages for Mac OS and Windows can be found on
-http://www.geany.org.
+https://www.geany.org.
 
 
 Installation from sources
@@ -133,7 +133,7 @@ included with the source code of this program.
 
 Ideas, questions, patches and bug reports
 -----------------------------------------
-See http://www.geany.org/.
+See https://www.geany.org/.
 If you add something, or fix a bug, please create a pull request at
 https://github.com/geany/geany/. Also see the HACKING file.
 

@@ -64,9 +64,9 @@ Some basic features of Geany:
 Where to get it
 ---------------
 
-You can obtain Geany from http://www.geany.org/ or perhaps also from
+You can obtain Geany from https://www.geany.org/ or perhaps also from
 your distribution. For a list of available packages, please see
-http://www.geany.org/Download/ThirdPartyPackages.
+https://www.geany.org/Download/ThirdPartyPackages.
 
 
 
@@ -89,7 +89,7 @@ About this document
 -------------------
 
 This documentation is available in HTML and text formats.
-The latest version can always be found at http://www.geany.org/.
+The latest version can always be found at https://www.geany.org/.
 
 If you want to contribute to it, see `Contributing to this document`_.
 
@@ -113,7 +113,7 @@ Binary packages
 ---------------
 
 There are many binary packages available. For an up-to-date but maybe
-incomplete list see http://www.geany.org/Download/ThirdPartyPackages.
+incomplete list see https://www.geany.org/Download/ThirdPartyPackages.
 
 
 Source compilation
@@ -1425,7 +1425,7 @@ You can use regular expressions in the Find and Replace dialogs
 by selecting the *Use regular expressions* check box (see `Matching
 options`_). The syntax is Perl compatible. Basic syntax is described
 in the table below. For full details, see
-http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html.
+https://www.geany.org/manual/gtk/glib/glib-regex-syntax.html.
 
 By default regular expressions are matched on a line-by-line basis.
 If you are interested in multi-line regular expressions, matched against
@@ -1529,7 +1529,7 @@ While the syntax is the same, a few practical differences applies:
 ======= ============================================================
 .       Matches any character but newlines.  This behavior can be changed
         to also match newlines using the (?s) option, see
-        http://www.geany.org/manual/gtk/glib/glib-regex-syntax.html#idp5671632
+        https://www.geany.org/manual/gtk/glib/glib-regex-syntax.html#idp5671632
 
 [^...]  A negative range (see above) *will* match newlines if they are
         not explicitly listed in that negative range.  For example, range
