@@ -1467,6 +1467,9 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	}
 	else
 	{
+        /* take a current word under caret */
+        editor_find_current_word_sciwc(doc->editor, -1,
+            editor_info.current_word, GEANY_MAX_WORD_LENGTH);
 		word = g_strdup(editor_info.current_word);
 	}
 
@@ -1486,8 +1489,11 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	/* substitute the wildcard %s and run the command if it is non empty */
 	if (G_LIKELY(!EMPTY(command)))
 	{
-		gchar *command_line = g_strdup(command);
-
+        /* add %f, %d, %e, %p, %l placeholders */
+        gchar *command_tmp = g_strdup(command);
+        gchar *command_line = build_replace_placeholder(doc, command_tmp);
+        g_free(command_tmp);
+        /* add %s placeholder */
 		utils_str_replace_all(&command_line, "%s", word);
 
 		if (!spawn_async(NULL, command_line, NULL, NULL, NULL, &error))

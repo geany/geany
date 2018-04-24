@@ -340,7 +340,23 @@ static gboolean on_editor_button_press_event(GtkWidget *widget, GdkEventButton *
 			current_word, sizeof current_word, NULL);
 
 		can_goto = sci_has_selection(editor->sci) || current_word[0] != '\0';
-		ui_update_popup_goto_items(can_goto);
+
+
+		/* create a list of locks/unlocks for the goto and context actions */
+        gchar cangos[64];  // never reachable maximum
+        for (gint i=0; i<64; i++)
+            cangos[i]=(can_goto?'1':'0'); // flag the whole group
+        gchar* command;
+        if (doc->file_type != NULL &&
+        !EMPTY(doc->file_type->context_action_cmd))
+            command = g_strdup(doc->file_type->context_action_cmd);
+        else
+            command = g_strdup(tool_prefs.context_action_cmd);
+        /* flag the context action (see widgets.popup_goto_items[1] ) */
+        cangos[1] = (G_LIKELY(!EMPTY(command))?'1':'0');
+        g_free(command);
+        
+        ui_update_popup_goto_items(cangos);
 		ui_update_popup_copy_items(doc);
 		ui_update_insert_include_item(doc, 0);
 

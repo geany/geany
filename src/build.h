@@ -73,6 +73,7 @@ void build_set_menu_item(const GeanyBuildSource src, const GeanyBuildGroup grp,
 
 guint build_get_group_count(const GeanyBuildGroup grp);
 
+gchar *build_replace_placeholder(const GeanyDocument *doc, const gchar *src);
 
 #ifdef GEANY_PRIVATE
 
