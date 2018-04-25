@@ -491,9 +491,9 @@ void plugin_init(GeanyData *data)
 	keybindings_set_item(key_group, KB_SPLIT_VERTICAL, kb_activate,
 		0, 0, "split_vertical", _("Top and Bottom"), menu_items.vertical);
 	keybindings_set_item(key_group, KB_SPLIT_UNSPLIT, kb_activate,
-		0, 0, "split_unsplit", _("_Unsplit"), menu_items.unsplit);
+		0, 0, "split_unsplit", _("Unsplit"), menu_items.unsplit);
 	keybindings_set_item(key_group, KB_FOCUS_SPLIT_WINDOW, kb_activate,
-		0, 0, "focus_split_window", _("Switch _focus between windows"), menu_items.switch_focus);
+		0, 0, "focus_split_window", _("Switch focus between windows"), menu_items.switch_focus);
 }
 
 
