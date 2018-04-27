@@ -121,14 +121,19 @@ static bool notIdentChar (int c)
 	return ! isIdentChar (c);
 }
 
+static bool operatorChar (int c)
+{
+	return (c == '[' || c == ']' ||
+	        c == '=' || c == '!' || c == '~' ||
+	        c == '+' || c == '-' ||
+	        c == '@' || c == '*' || c == '/' || c == '%' ||
+	        c == '<' || c == '>' ||
+	        c == '&' || c == '^' || c == '|');
+}
+
 static bool notOperatorChar (int c)
 {
-	return ! (c == '[' || c == ']' ||
-	          c == '=' || c == '!' || c == '~' ||
-	          c == '+' || c == '-' ||
-	          c == '@' || c == '*' || c == '/' || c == '%' ||
-	          c == '<' || c == '>' ||
-	          c == '&' || c == '^' || c == '|');
+	return ! operatorChar (c);
 }
 
 static bool isWhitespace (int c)
@@ -140,25 +145,21 @@ static bool isWhitespace (int c)
  * Advance 's' while the passed predicate is true. Returns true if
  * advanced by at least one position.
  */
-static bool advanceBy (const unsigned char** s, bool (*predicate) (int))
+static bool advanceWhile (const unsigned char** s, bool (*predicate) (int))
 {
-	const int s_length = strlen ((const char *)*s);
-	unsigned char this_char;
-	int i = 0;
+	const unsigned char* original_pos = *s;
 
-	for (i = 0; i < s_length; ++i)
+	while (**s != '\0')
 	{
-		this_char = **s;
-
-		if (! predicate (this_char))
+		if (! predicate (**s))
 		{
-			return i > 0;
+			return *s != original_pos;
 		}
 
 		(*s)++;
 	}
 
-	return i > 0;
+	return *s != original_pos;
 }
 
 static bool canMatchKeyword (const unsigned char** s, const char* literal)
@@ -179,21 +180,21 @@ static bool canMatchKeywordWithAssign (const unsigned char** s, const char* lite
 		return true;
 	}
 
-	if (! advanceBy (s, isIdentChar))
+	if (! advanceWhile (s, isIdentChar))
 	{
 		*s = original_pos;
 		return false;
 	}
 
-	advanceBy (s, isWhitespace);
+	advanceWhile (s, isWhitespace);
 
-	if (**s != '=') {
+	if (! (advanceWhile (s, operatorChar) && *(*s - 1) == '='))
+	{
 		*s = original_pos;
 		return false;
 	}
 
-	(*s)++;
-	advanceBy (s, isWhitespace);
+	advanceWhile (s, isWhitespace);
 
 	if (canMatchKeyword (s, literal))
 	{
@@ -551,11 +552,11 @@ static void findRubyTags (void)
 				*/
 				break;
 			}
-			else if (canMatchKeywordWithAssign (&cp, "begin"))
+			else if (canMatchKeyword (&cp, "begin"))
 			{
 				enterUnnamedScope ();
 			}
-			else if (canMatchKeywordWithAssign (&cp, "do"))
+			else if (canMatchKeyword (&cp, "do"))
 			{
 				if (! expect_separator)
 					enterUnnamedScope ();
