@@ -704,7 +704,7 @@ static gboolean remove_page(guint page_num)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (doc->changed && ! dialogs_show_unsaved_file(doc))
+	if (! main_status.closing_all && doc->changed && ! dialogs_show_unsaved_file(doc))
 		return FALSE;
 
 	/* tell any plugins that the document is about to be closed */
@@ -3387,11 +3387,7 @@ gboolean document_account_for_unsaved(void)
 				return FALSE;
 		}
 	}
-	/* all documents should now be accounted for, so ignore any changes */
-	foreach_document (i)
-	{
-		documents[i]->changed = FALSE;
-	}
+
 	return TRUE;
 }
 
@@ -3400,14 +3396,6 @@ static void force_close_all(void)
 {
 	guint i, len = documents_array->len;
 
-	/* check all documents have been accounted for */
-	for (i = 0; i < len; i++)
-	{
-		if (documents[i]->is_valid)
-		{
-			g_return_if_fail(!documents[i]->changed);
-		}
-	}
 	main_status.closing_all = TRUE;
 
 	foreach_document(i)
