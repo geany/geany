@@ -704,7 +704,8 @@ static gboolean remove_page(guint page_num)
 
 	g_return_val_if_fail(doc != NULL, FALSE);
 
-	if (doc->changed && ! dialogs_show_unsaved_file(doc))
+	/* if we're closing all, document_account_for_unsaved() has been called already, no need to ask again. */
+	if (! main_status.closing_all && doc->changed && ! dialogs_show_unsaved_file(doc))
 		return FALSE;
 
 	/* tell any plugins that the document is about to be closed */
@@ -3368,12 +3369,10 @@ GeanyDocument *document_clone(GeanyDocument *old_doc)
 }
 
 
-/* @note If successful, this should always be followed up with a call to
- * document_close_all().
- * @return TRUE if all files were saved or had their changes discarded. */
+/* @return TRUE if all files were saved or had their changes discarded. */
 gboolean document_account_for_unsaved(void)
 {
-	guint i, p, page_count;
+	guint p, page_count;
 
 	page_count = gtk_notebook_get_n_pages(GTK_NOTEBOOK(main_widgets.notebook));
 	/* iterate over documents in tabs order */
@@ -3387,27 +3386,15 @@ gboolean document_account_for_unsaved(void)
 				return FALSE;
 		}
 	}
-	/* all documents should now be accounted for, so ignore any changes */
-	foreach_document (i)
-	{
-		documents[i]->changed = FALSE;
-	}
+
 	return TRUE;
 }
 
 
 static void force_close_all(void)
 {
-	guint i, len = documents_array->len;
+	guint i;
 
-	/* check all documents have been accounted for */
-	for (i = 0; i < len; i++)
-	{
-		if (documents[i]->is_valid)
-		{
-			g_return_if_fail(!documents[i]->changed);
-		}
-	}
 	main_status.closing_all = TRUE;
 
 	foreach_document(i)

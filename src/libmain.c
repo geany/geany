@@ -1262,16 +1262,20 @@ static void queue_free(GQueue *queue)
 }
 
 
-static void do_main_quit(void)
+static gboolean do_main_quit(void)
 {
-	geany_debug("Quitting...");
-
 	configuration_save();
 
 	if (app->project != NULL)
-		project_close(FALSE);   /* save project session files */
+	{
+		if (!project_close(FALSE))   /* save project session files */
+			return FALSE;
+	}
 
-	document_close_all();
+	if (!document_close_all())
+		return FALSE;
+
+	geany_debug("Quitting...");
 
 	main_status.quitting = TRUE;
 
@@ -1364,6 +1368,8 @@ static void do_main_quit(void)
 	ui_finalize_builder();
 
 	gtk_main_quit();
+
+	return TRUE;
 }
 
 
@@ -1389,19 +1395,16 @@ gboolean main_quit(void)
 
 	if (! check_no_unsaved())
 	{
-		if (document_account_for_unsaved())
-		{
-			do_main_quit();
+		if (do_main_quit())
 			return TRUE;
-		}
 	}
 	else
 	if (! prefs.confirm_exit ||
 		dialogs_show_question_full(NULL, GTK_STOCK_QUIT, GTK_STOCK_CANCEL, NULL,
 			_("Do you really want to quit?")))
 	{
-		do_main_quit();
-		return TRUE;
+		if (do_main_quit())
+			return TRUE;
 	}
 
 	main_status.quitting = FALSE;
