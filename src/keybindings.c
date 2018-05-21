@@ -38,6 +38,7 @@
 #include "callbacks.h"
 #include "documentprivate.h"
 #include "filetypes.h"
+#include "geanyobject.h"
 #include "keybindingsprivate.h"
 #include "main.h"
 #include "msgwindow.h"
@@ -1350,9 +1351,14 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	GeanyDocument *doc;
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
+	gboolean key_press_ret;
 
 	if (ev->keyval == 0)
 		return FALSE;
+
+	g_signal_emit_by_name(geany_object, "key-press", ev, &key_press_ret);
+	if (key_press_ret)
+		return TRUE;
 
 	doc = document_get_current();
 	if (doc)
