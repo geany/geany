@@ -790,7 +790,8 @@ gboolean document_remove_page(guint page_num)
 			document_new_file_if_non_open();
 
 		if (! main_status.closing_all)
-			project_write_config();
+			if (app->project != NULL)
+				project_write_config();
 	}
 
 	return done;
@@ -1486,8 +1487,9 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		if (! main_status.opening_session_files)
 			ui_add_recent_document(doc);
 
-		if (! main_status.opening_session_files)
-			if (! reload)
+		/* save the project if one is open  */
+		if (! main_status.opening_session_files && ! reload)
+			if (app->project != NULL)
 				project_write_config();
 
 		if (reload)
