@@ -784,8 +784,14 @@ gboolean document_remove_page(guint page_num)
 {
 	gboolean done = remove_page(page_num);
 
-	if (done && ui_prefs.new_document_after_close)
-		document_new_file_if_non_open();
+	if (done)
+	{
+		if (ui_prefs.new_document_after_close)
+			document_new_file_if_non_open();
+
+		if (! main_status.closing_all)
+			project_write_config();
+	}
 
 	return done;
 }
@@ -1425,7 +1431,6 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 
 		if (! reload)
 		{
-
 			/* "the" SCI signal (connect after initial setup(i.e. adding text)) */
 			g_signal_connect(doc->editor->sci, "sci-notify", G_CALLBACK(editor_sci_notify_cb),
 				doc->editor);
@@ -1480,6 +1485,10 @@ GeanyDocument *document_open_file_full(GeanyDocument *doc, const gchar *filename
 		/* finally add current file to recent files menu, but not the files from the last session */
 		if (! main_status.opening_session_files)
 			ui_add_recent_document(doc);
+
+		if (! main_status.opening_session_files)
+			if (! reload)
+				project_write_config();
 
 		if (reload)
 		{
