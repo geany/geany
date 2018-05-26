@@ -4748,6 +4748,10 @@ on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_d
 {
 	GeanyEditor *editor = user_data;
 
+	/* we only handle up and down, leave the rest to Scintilla */
+	if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
+		return FALSE;
+
 	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
 	if (event->state & GDK_MOD1_MASK)
