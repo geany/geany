@@ -117,11 +117,11 @@ void editor_snippets_free(void)
 }
 
 
-static void snippets_load(GKeyFile *sysconfig, GKeyFile *userconfig)
+static void snippets_load(GKeyFile *sysconfig, GKeyFile *distroconfig, GKeyFile *userconfig)
 {
 	gsize i, j, len = 0, len_keys = 0;
-	gchar **groups_user, **groups_sys;
-	gchar **keys_user, **keys_sys;
+	gchar **groups_user, **groups_distro, **groups_sys;
+	gchar **keys_user, **keys_distro, **keys_sys;
 	gchar *value;
 	GHashTable *tmp;
 
@@ -149,6 +149,39 @@ static void snippets_load(GKeyFile *sysconfig, GKeyFile *userconfig)
 	}
 	g_strfreev(groups_sys);
 
+	/* now read defined completions in DISTRO's configuration directory and add / replace them */
+	groups_distro = g_key_file_get_groups(distroconfig, &len);
+	for (i = 0; i < len; i++)
+	{
+		if (strcmp(groups_distro[i], "Keybindings") == 0)
+			continue;
+		keys_distro = g_key_file_get_keys(distroconfig, groups_distro[i], &len_keys, NULL);
+
+		tmp = g_hash_table_lookup(snippet_hash, groups_distro[i]);
+		if (tmp == NULL)
+		{	/* new key found, create hash table */
+			tmp = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+			g_hash_table_insert(snippet_hash, g_strdup(groups_distro[i]), tmp);
+		}
+		for (j = 0; j < len_keys; j++)
+		{
+			value = g_hash_table_lookup(tmp, keys_distro[j]);
+			if (value == NULL)
+			{	/* value = NULL means the key doesn't yet exist, so insert */
+				g_hash_table_insert(tmp, g_strdup(keys_distro[j]),
+						utils_get_setting_string(distroconfig, groups_distro[i], keys_distro[j], ""));
+			}
+			else
+			{	/* old key and value will be freed by destroy function (g_free) */
+				g_hash_table_replace(tmp, g_strdup(keys_distro[j]),
+						utils_get_setting_string(distroconfig, groups_distro[i], keys_distro[j], ""));
+			}
+		}
+		g_strfreev(keys_distro);
+	}
+	g_strfreev(groups_distro);
+	
+	
 	/* now read defined completions in user's configuration directory and add / replace them */
 	groups_user = g_key_file_get_groups(userconfig, &len);
 	for (i = 0; i < len; i++)
@@ -239,7 +272,7 @@ static void add_kb(GKeyFile *keyfile, const gchar *group, gchar **keys)
 }
 
 
-static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
+static void load_kb(GKeyFile *sysconfig, GKeyFile *distroconfig, GKeyFile *userconfig)
 {
 	const gchar kb_group[] = "Keybindings";
 	gchar **keys = g_key_file_get_keys(userconfig, kb_group, NULL, NULL);
@@ -255,17 +288,24 @@ static void load_kb(GKeyFile *sysconfig, GKeyFile *userconfig)
 	keys = g_key_file_get_keys(sysconfig, kb_group, NULL, NULL);
 	add_kb(sysconfig, kb_group, keys);
 	g_strfreev(keys);
+	
+	keys = g_key_file_get_keys(distroconfig, kb_group, NULL, NULL); /* extra-custom S.O distribution snippets */
+	add_kb(distroconfig, kb_group, keys);
+	g_strfreev(keys);
 }
 
 
 void editor_snippets_init(void)
 {
-	gchar *sysconfigfile, *userconfigfile;
+	gchar *sysconfigfile, *distroconfigfile, *userconfigfile;
 	GKeyFile *sysconfig = g_key_file_new();
+	GKeyFile *distroconfig = g_key_file_new();
 	GKeyFile *userconfig = g_key_file_new();
 
 	sysconfigfile = g_build_filename(app->datadir, "snippets.conf", NULL);
+	distroconfigfile = g_build_filename(app->datadir, "snippets-distro.conf", NULL); /* extra-custom S.O distribution snippets */
 	userconfigfile = g_build_filename(app->configdir, "snippets.conf", NULL);
+	
 
 	/* check for old autocomplete.conf files (backwards compatibility) */
 	if (! g_file_test(userconfigfile, G_FILE_TEST_IS_REGULAR))
@@ -273,18 +313,21 @@ void editor_snippets_init(void)
 
 	/* load the actual config files */
 	g_key_file_load_from_file(sysconfig, sysconfigfile, G_KEY_FILE_NONE, NULL);
+	g_key_file_load_from_file(distroconfig, distroconfigfile, G_KEY_FILE_NONE, NULL); /* extra-custom S.O distribution snippets */
 	g_key_file_load_from_file(userconfig, userconfigfile, G_KEY_FILE_NONE, NULL);
 
-	snippets_load(sysconfig, userconfig);
+	snippets_load(sysconfig, distroconfig, userconfig);
 
 	/* setup snippet keybindings */
 	snippet_accel_group = gtk_accel_group_new();
 	gtk_window_add_accel_group(GTK_WINDOW(main_widgets.window), snippet_accel_group);
-	load_kb(sysconfig, userconfig);
+	load_kb(sysconfig, distroconfig, userconfig);
 
 	g_free(sysconfigfile);
 	g_free(userconfigfile);
+	g_free(distroconfigfile);
 	g_key_file_free(sysconfig);
+	g_key_file_free(distroconfig);
 	g_key_file_free(userconfig);
 }
 
@@ -4747,10 +4790,6 @@ static gboolean
 on_editor_scroll_event(GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
 {
 	GeanyEditor *editor = user_data;
-
-	/* we only handle up and down, leave the rest to Scintilla */
-	if (event->direction != GDK_SCROLL_UP && event->direction != GDK_SCROLL_DOWN)
-		return FALSE;
 
 	/* Handle scroll events if Alt is pressed and scroll whole pages instead of a
 	 * few lines only, maybe this could/should be done in Scintilla directly */
