@@ -3116,7 +3116,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 	gint count_commented = 0, count_uncommented = 0;
 	gchar sel[256];
 	const gchar *co, *cc;
-	gboolean break_loop = FALSE, single_line = FALSE;
+	gboolean single_line = FALSE;
 	gboolean first_line_was_comment = FALSE;
 	gboolean last_line_was_comment = FALSE;
 	gsize co_len;
@@ -3148,7 +3148,7 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 
 	sci_start_undo_action(editor->sci);
 
-	for (i = first_line; (i <= last_line) && (! break_loop); i++)
+	for (i = first_line; i <= last_line; i++)
 	{
 		gint buf_len;
 
@@ -3208,7 +3208,6 @@ void editor_do_comment_toggle(GeanyEditor *editor)
 			}
 
 			/* break because we are already on the last line */
-			break_loop = TRUE;
 			break;
 		}
 	}
@@ -3287,7 +3286,7 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 	gint count = 0;
 	gchar sel[256];
 	const gchar *co, *cc;
-	gboolean break_loop = FALSE, single_line = FALSE;
+	gboolean single_line = FALSE;
 	GeanyFiletype *ft;
 
 	g_return_val_if_fail(editor != NULL && editor->document->file_type != NULL, 0);
@@ -3320,7 +3319,7 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 
 	sci_start_undo_action(editor->sci);
 
-	for (i = first_line; (i <= last_line) && (! break_loop); i++)
+	for (i = first_line; i <= last_line; i++)
 	{
 		gint buf_len;
 
@@ -3372,7 +3371,6 @@ gint editor_do_comment(GeanyEditor *editor, gint line, gboolean allow_empty_line
 				count = 1;
 
 				/* break because we are already on the last line */
-				break_loop = TRUE;
 				break;
 			}
 		}
