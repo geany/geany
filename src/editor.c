@@ -3931,7 +3931,7 @@ static void smart_line_indentation(GeanyEditor *editor, gint first_line, gint la
 
 
 /* simple indentation to indent the current line with the same indent as the previous one */
-void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
+void editor_smart_line_indentation(GeanyEditor *editor)
 {
 	gint first_line, last_line;
 	gint first_sel_start, first_sel_end;
@@ -3948,9 +3948,6 @@ void editor_smart_line_indentation(GeanyEditor *editor, gint pos)
 	/* Find the last line with chars selected (not EOL char) */
 	last_line = sci_get_line_from_position(sci, first_sel_end - editor_get_eol_char_len(editor));
 	last_line = MAX(first_line, last_line);
-
-	if (pos == -1)
-		pos = first_sel_start;
 
 	sci_start_undo_action(sci);
 
