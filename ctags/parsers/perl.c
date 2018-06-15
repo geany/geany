@@ -324,6 +324,7 @@ static void findPerlTags (void)
 				if (true == isSubroutineDeclaration(cp)) {
 					if (true == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
 						kind = K_SUBROUTINE_DECLARATION;
+						e.kind = &(PerlKinds[kind]);
 					} else {
 						vStringClear (name);
 						continue;
