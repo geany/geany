@@ -414,6 +414,10 @@ static void init_default_kb(void)
 		GDK_space, GEANY_PRIMARY_MOD_MASK, "edit_autocomplete", _("Complete word"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_CALLTIP, NULL,
 		GDK_space, GEANY_PRIMARY_MOD_MASK | GDK_SHIFT_MASK, "edit_calltip", _("Show calltip"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_PREVCALLTIP, NULL,
+		0, 0, "edit_prevcalltip", _("Show previous calltip"), NULL);
+	add_kb(group, GEANY_KEYS_EDITOR_NEXTCALLTIP, NULL,
+		0, 0, "edit_nextcalltip", _("Show next calltip"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_WORDPARTCOMPLETION, NULL,
 		GDK_Tab, 0, "edit_wordpartcompletion", _("Word part completion"), NULL);
 	add_kb(group, GEANY_KEYS_EDITOR_MOVELINEUP, NULL,
@@ -2199,6 +2203,14 @@ static gboolean cb_func_editor_action(guint key_id)
 			editor_start_auto_complete(doc->editor, sci_get_current_position(doc->editor->sci), TRUE);
 			break;
 		case GEANY_KEYS_EDITOR_CALLTIP:
+			editor_show_calltip(doc->editor, -1);
+			break;
+		case GEANY_KEYS_EDITOR_PREVCALLTIP:
+			editor_prev_calltip();
+			editor_show_calltip(doc->editor, -1);
+			break;
+		case GEANY_KEYS_EDITOR_NEXTCALLTIP:
+			editor_next_calltip();
 			editor_show_calltip(doc->editor, -1);
 			break;
 		case GEANY_KEYS_EDITOR_CONTEXTACTION:

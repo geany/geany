@@ -1175,12 +1175,8 @@ static gboolean on_editor_notify(G_GNUC_UNUSED GObject *object, GeanyEditor *edi
 			{
 				switch (nt->position)
 				{
-					case 1:	/* up arrow */
-						if (calltip.tag_index > 0)
-							calltip.tag_index--;
-						break;
-
-					case 2: calltip.tag_index++; break;	/* down arrow */
+					case 1: editor_prev_calltip(); break;	/* up arrow */
+					case 2: editor_next_calltip(); break;	/* down arrow */
 				}
 				editor_show_calltip(editor, -1);
 			}
@@ -2051,6 +2047,20 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 		return TRUE;
 	}
 	return FALSE;
+}
+
+
+void editor_prev_calltip(void)
+{
+	if (calltip.tag_index > 0)
+		calltip.tag_index -= 1;
+}
+
+
+void editor_next_calltip(void)
+{
+	/* Will be clipped into range by find_calltip(). */
+	calltip.tag_index += 1;
 }
 
 
