@@ -1565,6 +1565,138 @@ void document_open_files(const GSList *filenames, gboolean readonly, GeanyFilety
 }
 
 
+static GFileEnumerator *enumerate_children(const char *dir_path, GError **error)
+{
+	GFile *file = g_file_new_for_path(dir_path);
+
+	const gchar *attributes = G_FILE_ATTRIBUTE_STANDARD_TYPE "," G_FILE_ATTRIBUTE_STANDARD_NAME ","
+			G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME "," G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE;
+
+	GFileEnumerator *enumerator = g_file_enumerate_children(file, attributes,
+			G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS, NULL, error);
+
+	g_object_unref(file);
+	return enumerator;
+}
+
+
+void document_open_files_recursively(const GSList *filenames, gboolean readonly, GeanyFiletype *ft,
+		const gchar *forced_enc, GtkFileFilter *filter, GError **error)
+{
+	const GSList *item;
+	gchar *file_path, *dir_path;
+	const gchar *filename;
+	GFileEnumerator *enumerator;
+	GFileInfo *file_info;
+	GFileType file_type;
+	GError *my_error = NULL;
+
+	typedef struct EnumeratorData
+	{
+		GFileEnumerator *enumerator;
+		gchar *dir_path;
+	} EnumeratorData;
+
+	const guint RECURSION_LIMIT = 100;
+	const guint ENUM_STACK_SIZE = RECURSION_LIMIT - 1;
+	EnumeratorData enum_stack[ENUM_STACK_SIZE];
+	guint enum_stack_index = 0;
+
+	GtkFileFilterInfo filter_info;
+	filter_info.contains = GTK_FILE_FILTER_FILENAME|GTK_FILE_FILTER_DISPLAY_NAME|GTK_FILE_FILTER_MIME_TYPE;
+	filter_info.uri = NULL;
+
+	for (item = filenames; item != NULL; item = g_slist_next(item))
+	{
+		file_path = item->data;
+
+		if (g_file_test(file_path, G_FILE_TEST_IS_DIR))
+		{
+			dir_path = file_path;
+			enumerator = enumerate_children(dir_path, &my_error);
+
+			while (TRUE)
+			{
+				while (my_error == NULL)
+				{
+					file_info = g_file_enumerator_next_file(enumerator, NULL, &my_error);
+
+					if (file_info == NULL)
+						break;
+
+					file_type = g_file_info_get_file_type(file_info);
+
+					if (file_type != G_FILE_TYPE_SYMBOLIC_LINK)
+					{
+						filename = g_file_info_get_name(file_info);
+
+						if (filename == NULL)
+							my_error = g_error_new(0, 0, "Failed to get filename of a file");
+						else
+						{
+							if (file_type == G_FILE_TYPE_DIRECTORY)
+							{
+								if (enum_stack_index == ENUM_STACK_SIZE)
+									my_error = g_error_new(0, 0, "Recursion depth limit reached");
+								else
+								{
+									enum_stack[enum_stack_index].enumerator = enumerator;
+									enum_stack[enum_stack_index++].dir_path = dir_path;
+
+									dir_path = g_build_filename(dir_path, filename, NULL);
+									enumerator = enumerate_children(dir_path, &my_error);
+								}
+							}
+							else
+							{
+								file_path = g_build_filename(dir_path, filename, NULL);
+
+								if (file_path)
+								{
+									filter_info.filename = filename;
+									filter_info.display_name = g_file_info_get_display_name(file_info);
+									filter_info.mime_type = g_file_info_get_content_type(file_info);
+
+									if (gtk_file_filter_filter(filter, &filter_info))
+										document_open_file(file_path, readonly, ft, forced_enc);
+
+									g_free(file_path);
+								}
+							}
+						}
+					}
+
+					g_object_unref(file_info);
+				}
+
+				g_object_unref(enumerator);
+
+				if (enum_stack_index == 0)
+					break;
+
+				g_free(dir_path);
+				enumerator = enum_stack[--enum_stack_index].enumerator;
+				dir_path = enum_stack[enum_stack_index].dir_path;
+			}
+		}
+		else
+			document_open_file(file_path, readonly, ft, forced_enc);
+	}
+
+	if (my_error)
+	{
+		if (error)
+			*error = g_error_new(my_error->domain, my_error->code,
+					"Failed to open files recursively: %s", my_error->message);
+
+		g_error_free(my_error);
+	}
+	else
+		if (error)
+			*error = NULL;
+}
+
+
 static void on_keep_edit_history_on_reload_response(GtkWidget *bar, gint response_id, GeanyDocument *doc)
 {
 	if (response_id == GTK_RESPONSE_NO)
