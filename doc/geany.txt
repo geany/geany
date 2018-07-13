@@ -872,6 +872,10 @@ get back to the new position again, just use "Navigate forward a
 location". This makes it easier to navigate in e.g.  foreign code
 and between different files.
 
+You can also manually add your current position to this history with
+the "Remember location in history" keybinding, so you can return to it
+later.
+
 
 Sending text through custom commands
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3631,6 +3635,10 @@ Navigate forward a location     Alt-Right  (C)            Switches to the next l
 Navigate back a location        Alt-Left  (C)             Switches to the previous location in the
                                                           navigation history. See the section called
                                                           `Code navigation history`_.
+
+Remember location in history                              Adds the current location to the navigation
+                                                          history. See the section called `Code navigation
+                                                          history`_.
 
 Go to line                      Ctrl-L                    Focuses the Go to Line entry (if visible) or
                                                           shows the Go to line dialog.
