@@ -270,3 +270,23 @@ signal void (*update_editor_menu)(GObject *obj, const gchar *word, gint pos, Gea
  */
 signal gboolean (*editor_notify)(GObject *obj, GeanyEditor *editor, SCNotification *nt,
 		gpointer user_data);
+
+/** Sent whenever a key is pressed.
+ *
+ * This signal allows plugins to receive key press events before they are processed
+ * by Geany. Plugins can then process key presses before Geany and decide,
+ * whether Geany should receive the key press event or not.
+ *
+ * @warning This signal should be used carefully. If multiple plugins use this
+ *          signal, the result could be unpredictble depending on which plugin
+ *          receives the signal first.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param key The GdkEventKey corresponding to the key press.
+ * @param user_data user data.
+ * @return @c TRUE to stop other handlers from being invoked for the event.
+ *         @c FALSE to propagate the event further.
+ *
+ * @since 1.34
+ */
+signal gboolean (*key_press)(GObject *obj, GdkEventKey *key, gpointer user_data);

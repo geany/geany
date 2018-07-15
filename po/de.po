@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
+"POT-Creation-Date: 2018-03-17 18:43+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -864,7 +864,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:171
 msgid "XML/HTML tag auto-closing"
-msgstr "Automatischen Schließen von XML/HTML-Tag "
+msgstr "Automatisches Schließen von XML/HTML-Tag "
 
 #: ../data/geany.glade.h:172
 msgid "Insert matching closing tag for XML/HTML"
@@ -2282,8 +2282,9 @@ msgid "Other:"
 msgstr "Andere:"
 
 #: ../src/about.c:48
+#, fuzzy
 msgid ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2850,8 +2851,7 @@ msgstr "Datei »%s« neu geladen."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, c-format
-msgid "File %s opened(%d%s)."
+msgid "File %s opened (%d%s)."
 msgstr "Datei »%s« geöffnet (%d%s)."
 
 #: ../src/document.c:1497
@@ -4444,9 +4444,9 @@ msgstr "_Mehrzeilen-Erkennung (multi-line matching) benutzen"
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines. In this mode, "
-"newline characters are part of the input and can be captured as normal "
-"characters by the pattern."
+"line by line, allowing matches to span multiple lines. In this mode, newline "
+"characters are part of the input and can be captured as normal characters by "
+"the pattern."
 msgstr ""
 "Führt die Erkennung des Suchmusters auf das komplette Dokument, anstatt "
 "Zeile für Zeile, aus. Dies erlaubt es, auch Muster zu finden, die über "
@@ -4670,30 +4670,30 @@ msgstr ""
 " Dies ist ein schwerwiegendes Problem, so dass Geany nun beendet werden "
 "muss. "
 
-#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
 msgstr "Der Text endete, bevor das schleißende Zeichen gefunden wurde."
 
 #. TL note: from glib
-#: ../src/spawn.c:130
+#: ../src/spawn.c:132
 msgid "Text was empty (or contained only whitespace)"
 msgstr "Text war leer (oder hat nur Leerzeichen enthalten)"
 
-#: ../src/spawn.c:151 ../src/spawn.c:165
+#: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Ein Windows-Programm-Name in Anführungszeichen muss den kompletten Namen "
 "beinhalten."
 
-#: ../src/spawn.c:258
+#: ../src/spawn.c:260
 msgid "Program not found"
 msgstr "Programm nicht gefunden."
 
-#: ../src/spawn.c:764
+#: ../src/spawn.c:766
 msgid "Failed to change to the working directory"
 msgstr "Konnte das Arbeitsverzeichnis nicht wechseln."
 
-#: ../src/spawn.c:769
+#: ../src/spawn.c:771
 msgid "Unknown error executing child process"
 msgstr "Unbekannter Fehler beim Ausführen des Kind-Prozess aufgetreten."
 

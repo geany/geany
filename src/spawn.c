@@ -99,7 +99,7 @@ static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar *
 }
 #endif
 
-#define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
+#define SPAWN_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
 
 
 /*
@@ -892,7 +892,7 @@ static gboolean spawn_write_cb(GIOChannel *channel, GIOCondition condition, gpoi
 	if (!sc->cb.write(channel, condition, sc->cb_data))
 		return FALSE;
 
-	return !(condition & G_IO_FAILURE);
+	return !(condition & SPAWN_IO_FAILURE);
 }
 
 
@@ -912,7 +912,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	GString *line_buffer = sc->line_buffer;
 	GString *buffer = sc->buffer ? sc->buffer : g_string_sized_new(sc->max_length);
 	GIOCondition input_cond = condition & (G_IO_IN | G_IO_PRI);
-	GIOCondition failure_cond = condition & G_IO_FAILURE;
+	GIOCondition failure_cond = condition & SPAWN_IO_FAILURE;
 	GIOStatus status = G_IO_STATUS_NORMAL;
 	/*
 	 * - Normally, read only once. With IO watches, our data processing must be immediate,
@@ -1204,7 +1204,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 			if (i == 0)
 			{
 				sc->cb.write = stdin_cb;
-				condition = G_IO_OUT | G_IO_FAILURE;
+				condition = G_IO_OUT | SPAWN_IO_FAILURE;
 				callback = (GSourceFunc) spawn_write_cb;
 			}
 			else
@@ -1212,7 +1212,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 				gboolean line_buffered = !(spawn_flags &
 					((SPAWN_STDOUT_UNBUFFERED >> 1) << i));
 
-				condition = G_IO_IN | G_IO_PRI | G_IO_FAILURE;
+				condition = G_IO_IN | G_IO_PRI | SPAWN_IO_FAILURE;
 				callback = (GSourceFunc) spawn_read_cb;
 
 				if (i == 1)
@@ -1311,7 +1311,7 @@ gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWrit
 		}
 	}
 
-	return data->size > 0 && !(condition & G_IO_FAILURE);
+	return data->size > 0 && !(condition & SPAWN_IO_FAILURE);
 }
 
 
