@@ -119,7 +119,7 @@ void msgwin_set_messages_dir(const gchar *messages_dir)
 }
 
 
-void load_color(const gchar *color_name, GdkColor *color)
+static void load_color(const gchar *color_name, GdkColor *color)
 {
 #if GTK_CHECK_VERSION(3, 0, 0)
 	GdkRGBA rgba_color;

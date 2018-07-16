@@ -38,6 +38,7 @@
 #include "callbacks.h"
 #include "documentprivate.h"
 #include "filetypes.h"
+#include "geanyobject.h"
 #include "keybindingsprivate.h"
 #include "main.h"
 #include "msgwindow.h"
@@ -665,6 +666,8 @@ static void init_default_kb(void)
 		0, 0, "menu_linebreak", _("Toggle Line breaking"), "line_breaking1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_CLONE, NULL,
 		0, 0, "menu_clone", _("_Clone"), "clone1");
+	add_kb(group, GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES, NULL,
+		0, 0, "menu_strip_trailing_spaces", _("_Strip Trailing Spaces"), "strip_trailing_spaces1");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACETABS, NULL,
 		0, 0, "menu_replacetabs", _("Replace tabs with space"), "menu_replace_tabs");
 	add_kb(group, GEANY_KEYS_DOCUMENT_REPLACESPACES, NULL,
@@ -1350,9 +1353,14 @@ static gboolean on_key_press_event(GtkWidget *widget, GdkEventKey *ev, gpointer 
 	GeanyDocument *doc;
 	GeanyKeyGroup *group;
 	GeanyKeyBinding *kb;
+	gboolean key_press_ret;
 
 	if (ev->keyval == 0)
 		return FALSE;
+
+	g_signal_emit_by_name(geany_object, "key-press", ev, &key_press_ret);
+	if (key_press_ret)
+		return TRUE;
 
 	doc = document_get_current();
 	if (doc)
@@ -2625,6 +2633,9 @@ static gboolean cb_func_document_action(guint key_id)
 		case GEANY_KEYS_DOCUMENT_REMOVE_MARKERS_INDICATORS:
 			on_remove_markers1_activate(NULL, NULL);
 			on_menu_remove_indicators1_activate(NULL, NULL);
+			break;
+		case GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES:
+			editor_strip_trailing_spaces(doc->editor, FALSE);
 			break;
 	}
 	return TRUE;

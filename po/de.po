@@ -864,7 +864,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:171
 msgid "XML/HTML tag auto-closing"
-msgstr "Automatischen Schließen von XML/HTML-Tag "
+msgstr "Automatisches Schließen von XML/HTML-Tag "
 
 #: ../data/geany.glade.h:172
 msgid "Insert matching closing tag for XML/HTML"
