@@ -1707,7 +1707,7 @@ msgstr "Salva _tutti"
 #: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3630
 #: ../src/sidebar.c:718
 msgid "_Reload"
-msgstr "_Ripristina"
+msgstr "_Ricarica"
 
 #: ../data/geany.glade.h:351
 msgid "R_eload As"
@@ -2955,7 +2955,7 @@ msgstr "Chiusura file '%s' fallita: fclose() fallita: %s"
 
 #: ../src/document.c:2052 ../src/document.c:3631
 msgid "_Overwrite"
-msgstr "_Sovrascrivere"
+msgstr "_Sovrascrivi"
 
 #: ../src/document.c:2054 ../src/document.c:3634
 #, c-format
