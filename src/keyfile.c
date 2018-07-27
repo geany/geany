@@ -259,6 +259,8 @@ static void init_pref_groups(void)
 		"replace_and_find_by_default", TRUE);
 	stash_group_add_integer(group, &editor_prefs.ime_interaction,
 		"editor_ime_interaction", SC_IME_WINDOWED);
+	stash_group_add_boolean(group, &editor_prefs.skip_project_ask_close,
+		"skip_project_ask_close", FALSE);
 
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
