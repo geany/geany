@@ -2586,6 +2586,8 @@ msgwin_messages_visible           Whether to show the Messages tab in the      t
                                   Messages Window
 msgwin_scribble_visible           Whether to show the Scribble tab in the      true        immediately
                                   Messages Window
+skip_project_ask_close            Skip the confirmation dialog when closing    false       immediately
+                                  the current project
 **VTE related**
 send_selection_unsafe             By default, Geany strips any trailing        false       immediately
                                   newline characters from the current
