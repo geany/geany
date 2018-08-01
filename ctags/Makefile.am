@@ -1,3 +1,4 @@
+
 AM_CPPFLAGS = \
 	-I$(srcdir)/main \
 	-I$(srcdir)/parsers \
@@ -16,6 +17,7 @@ parsers = \
 	parsers/asm.c \
 	parsers/basic.c \
 	parsers/c.c \
+	parsers/clojure.c \
 	parsers/cobol.c \
 	parsers/conf.c \
 	parsers/css.c \
@@ -31,6 +33,7 @@ parsers = \
 	parsers/json.c \
 	parsers/latex.c \
 	parsers/lua.c \
+	parsers/lisp.c \
 	parsers/make.c \
 	parsers/markdown.c \
 	parsers/matlab.c \
@@ -45,6 +48,7 @@ parsers = \
 	parsers/rest.c \
 	parsers/ruby.c \
 	parsers/rust.c \
+	parsers/scheme.c \
 	parsers/sh.c \
 	parsers/sql.c \
 	parsers/tcl.c \

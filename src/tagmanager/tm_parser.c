@@ -488,6 +488,19 @@ static TMParserMapEntry map_POWERSHELL[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_CLOJURE[] = {
+	{'f', tm_tag_function_t},
+	{'n', tm_tag_namespace_t}
+};
+
+static TMParserMapEntry map_LISP[] = {
+	{'f', tm_tag_function_t}
+};
+
+static TMParserMapEntry map_SCHEME[] = {
+	{'f', tm_tag_function_t},
+	{'v', tm_tag_variable_t},
+};
 
 typedef struct
 {
@@ -550,6 +563,9 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(JSON),
 	MAP_ENTRY(ZEPHIR),
 	MAP_ENTRY(POWERSHELL),
+	MAP_ENTRY(CLOJURE),
+	MAP_ENTRY(LISP),
+	MAP_ENTRY(SCHEME)
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -705,6 +721,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_TXT2TAGS:
 		case TM_PARSER_VALA:
 		case TM_PARSER_ZEPHIR:
+		case TM_PARSER_CLOJURE:
 			return TRUE;
 
 		/* These make use of the scope, but don't include nested hierarchy
@@ -717,6 +734,8 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_GO:
 		case TM_PARSER_OBJC:
 		case TM_PARSER_REST:
+		case TM_PARSER_LISP:
+		case TM_PARSER_SCHEME:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
 		default:
 			return FALSE;

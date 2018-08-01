@@ -13,8 +13,8 @@ filetypes = \
 	filedefs/filetypes.batch \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
-	filedefs/filetypes.Clojure.conf \
 	filedefs/filetypes.cmake \
+	filedefs/filetypes.clojure \
 	filedefs/filetypes.cobol \
 	filedefs/filetypes.coffeescript \
 	filedefs/filetypes.common \
@@ -62,6 +62,7 @@ filetypes = \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
+	filedefs/filetypes.Scheme.conf \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.tcl \
@@ -121,4 +122,3 @@ nobase_dist_pkgdata_DATA += \
 else
 nobase_dist_pkgdata_DATA += geany.gtkrc
 endif
-
