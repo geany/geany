@@ -108,6 +108,7 @@ typedef enum
 	GEANY_FILETYPES_ZEPHIR,
 	GEANY_FILETYPES_CLOJURE,
 	GEANY_FILETYPES_SCHEME,
+	GEANY_FILETYPES_RACKET,
 	/* ^ append items here */
 	GEANY_MAX_BUILT_IN_FILETYPES	/* Don't use this, use filetypes_array->len instead */
 }

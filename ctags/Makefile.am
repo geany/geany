@@ -48,6 +48,7 @@ parsers = \
 	parsers/rest.c \
 	parsers/ruby.c \
 	parsers/rust.c \
+	parsers/racket.c \
 	parsers/scheme.c \
 	parsers/sh.c \
 	parsers/sql.c \

@@ -854,6 +854,14 @@ static void add_top_level_items(GeanyDocument *doc)
 				NULL);
 			break;
 		}
+		case GEANY_FILETYPES_RACKET:
+		{
+			tag_list_add_groups(tag_store,
+				&(tv_iters.tag_function), _("Functions"), ICON_METHOD,
+				&(tv_iters.tag_variable), _("Variable"), ICON_VAR,
+				NULL);
+			break;
+		}
 	}
 }
 

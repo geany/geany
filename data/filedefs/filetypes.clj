@@ -1,5 +1,18 @@
 # For complete documentation of this file, please see Geany's main documentation
-[styling=Lisp]
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment_line
+multicomment=comment
+number=number_1
+keyword=keyword_1
+keywordkw=keyword_2
+symbol=keyword_2
+string=string_1
+stringeol=string_eol
+identifier=identifier_1
+operator=operator
+special=function
 
 [keywords]
 # all items must be in one line
@@ -8,9 +21,10 @@ keywords=* *1 *2 *3 *agent* *allow-unresolved-vars* *assert* *clojure-version* *
 [settings]
 # default extension used when saving files
 extension=clj
-lexer_filetype=Lisp
+
 # the following characters are these which a "word" can contains, see documentation
-#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+wordchars=!#%*-.:<=>?@\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+whitespace_chars=\s\t\"$&'()+,/;[]^`{|}~_
 
 # single comments, like # in this file
 comment_single=;

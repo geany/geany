@@ -14,7 +14,7 @@ filetypes = \
 	filedefs/filetypes.c \
 	filedefs/filetypes.caml \
 	filedefs/filetypes.cmake \
-	filedefs/filetypes.clojure \
+	filedefs/filetypes.clj \
 	filedefs/filetypes.cobol \
 	filedefs/filetypes.coffeescript \
 	filedefs/filetypes.common \
@@ -58,11 +58,12 @@ filetypes = \
 	filedefs/filetypes.powershell \
 	filedefs/filetypes.python \
 	filedefs/filetypes.r \
+	filedefs/filetypes.racket \
 	filedefs/filetypes.restructuredtext \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
-	filedefs/filetypes.Scheme.conf \
+	filedefs/filetypes.scheme \
 	filedefs/filetypes.sh \
 	filedefs/filetypes.sql \
 	filedefs/filetypes.tcl \

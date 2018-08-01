@@ -188,6 +188,7 @@ static void init_builtin_filetypes(void)
 	FT_INIT( ZEPHIR,     ZEPHIR,       "Zephir",           NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( CLOJURE,    CLOJURE,      "Clojure",          NULL,                      SOURCE_FILE, COMPILED );
 	FT_INIT( SCHEME,     SCHEME,       "Scheme",           NULL,                      SOURCE_FILE, SCRIPT   );
+	FT_INIT( RACKET,     RACKET,       "Racket",           NULL,                      SOURCE_FILE, SCRIPT   );
 }
 
 

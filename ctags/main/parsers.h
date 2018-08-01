@@ -68,6 +68,7 @@
 	PowerShellParser, \
 	ClojureParser, \
 	LispParser, \
-	SchemeParser
+	SchemeParser, \
+	RacketParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */

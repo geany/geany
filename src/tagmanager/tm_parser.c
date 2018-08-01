@@ -502,6 +502,11 @@ static TMParserMapEntry map_SCHEME[] = {
 	{'v', tm_tag_variable_t},
 };
 
+static TMParserMapEntry map_RACKET[] = {
+	{'f', tm_tag_function_t},
+	{'v', tm_tag_variable_t},
+};
+
 typedef struct
 {
     TMParserMapEntry *entries;
@@ -565,7 +570,8 @@ static TMParserMap parser_map[] = {
 	MAP_ENTRY(POWERSHELL),
 	MAP_ENTRY(CLOJURE),
 	MAP_ENTRY(LISP),
-	MAP_ENTRY(SCHEME)
+	MAP_ENTRY(SCHEME),
+	MAP_ENTRY(RACKET)
 };
 /* make sure the parser map is consistent and complete */
 G_STATIC_ASSERT(G_N_ELEMENTS(parser_map) == TM_PARSER_COUNT);
@@ -736,6 +742,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_REST:
 		case TM_PARSER_LISP:
 		case TM_PARSER_SCHEME:
+		case TM_PARSER_RACKET:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
 		default:
 			return FALSE;

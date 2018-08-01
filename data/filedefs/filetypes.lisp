@@ -24,7 +24,8 @@ special_keywords=always and appending array-dimension-limit array-rank-limit arr
 extension=lisp
 
 # the following characters are these which a "word" can contains, see documentation
-#wordchars=_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+wordchars=!#%-:<=>?@\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+whitespace_chars=\s\t\"$&'()*+,./;[]^`{|}~_
 
 # single comments, like # in this file
 comment_single=;
