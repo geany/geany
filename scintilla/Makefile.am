@@ -64,6 +64,8 @@ lexlib/CharacterCategory.cxx \
 lexlib/CharacterCategory.h \
 lexlib/CharacterSet.cxx \
 lexlib/CharacterSet.h \
+lexlib/DefaultLexer.cxx \
+lexlib/DefaultLexer.h \
 lexlib/LexAccessor.h \
 lexlib/LexerBase.cxx \
 lexlib/LexerBase.h \
@@ -99,6 +101,8 @@ src/CharClassify.cxx \
 src/CharClassify.h \
 src/ContractionState.cxx \
 src/ContractionState.h \
+src/DBCS.cxx \
+src/DBCS.h \
 src/Decoration.cxx \
 src/Decoration.h \
 src/Document.cxx \
@@ -109,11 +113,13 @@ src/EditModel.cxx \
 src/EditModel.h \
 src/EditView.cxx \
 src/EditView.h \
+src/ElapsedPeriod.h \
 src/ExternalLexer.cxx \
 src/ExternalLexer.h \
 src/FontQuality.h \
 src/Indicator.cxx \
 src/Indicator.h \
+src/IntegerRectangle.h \
 src/KeyMap.cxx \
 src/KeyMap.h \
 src/LineMarker.cxx \

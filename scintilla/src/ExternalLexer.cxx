@@ -1,6 +1,6 @@
 // Scintilla source code edit control
 /** @file ExternalLexer.cxx
- ** Support external lexers in DLLs.
+ ** Support external lexers in DLLs or shared libraries.
  **/
 // Copyright 2001 Simon Steele <ss@pnotepad.org>, portions copyright Neil Hodgson.
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -24,9 +24,7 @@
 #include "Catalogue.h"
 #include "ExternalLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 std::unique_ptr<LexerManager> LexerManager::theInstance;
 

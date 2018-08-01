@@ -6,9 +6,7 @@
 #ifndef SCINTILLAGTKACCESSIBLE_H
 #define SCINTILLAGTKACCESSIBLE_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 #ifndef ATK_CHECK_VERSION
 # define ATK_CHECK_VERSION(x, y, z) 0
@@ -34,7 +32,7 @@ private:
 	void Notify(GtkWidget *widget, gint code, SCNotification *nt);
 	static void SciNotify(GtkWidget *widget, gint code, SCNotification *nt, gpointer data) {
 		try {
-			reinterpret_cast<ScintillaGTKAccessible*>(data)->Notify(widget, code, nt);
+			static_cast<ScintillaGTKAccessible*>(data)->Notify(widget, code, nt);
 		} catch (...) {}
 	}
 
@@ -188,9 +186,7 @@ public:
 	};
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 
 #endif /* SCINTILLAGTKACCESSIBLE_H */

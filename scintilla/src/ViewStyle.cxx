@@ -26,9 +26,7 @@
 #include "Style.h"
 #include "ViewStyle.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 MarginStyle::MarginStyle(int style_, int width_, int mask_) :
 	style(style_), width(width_), mask(mask_), sensitive(false), cursor(SC_CURSORREVERSEARROW) {
@@ -73,15 +71,15 @@ void FontRealised::Realise(Surface &surface, int zoomLevel, int technology, cons
 	if (sizeZoomed <= 2 * SC_FONT_SIZE_MULTIPLIER)	// Hangs if sizeZoomed <= 1
 		sizeZoomed = 2 * SC_FONT_SIZE_MULTIPLIER;
 
-	float deviceHeight = static_cast<float>(surface.DeviceHeightFont(sizeZoomed));
-	FontParameters fp(fs.fontName, deviceHeight / SC_FONT_SIZE_MULTIPLIER, fs.weight, fs.italic, fs.extraFontFlag, technology, fs.characterSet);
+	const float deviceHeight = static_cast<float>(surface.DeviceHeightFont(sizeZoomed));
+	const FontParameters fp(fs.fontName, deviceHeight / SC_FONT_SIZE_MULTIPLIER, fs.weight, fs.italic, fs.extraFontFlag, technology, fs.characterSet);
 	font.Create(fp);
 
 	ascent = static_cast<unsigned int>(surface.Ascent(font));
 	descent = static_cast<unsigned int>(surface.Descent(font));
 	capitalHeight = surface.Ascent(font) - surface.InternalLeading(font);
 	aveCharWidth = surface.AverageCharWidth(font);
-	spaceWidth = surface.WidthChar(font, ' ');
+	spaceWidth = surface.WidthText(font, " ", 1);
 }
 
 ViewStyle::ViewStyle() : markers(MARKER_MAX + 1), indicators(INDIC_MAX + 1) {
@@ -194,7 +192,7 @@ void ViewStyle::CalculateMarginWidthAndMask() {
 	}
 	maskDrawInText = 0;
 	for (int markBit = 0; markBit < 32; markBit++) {
-		const int maskBit = 1 << markBit;
+		const int maskBit = 1U << markBit;
 		switch (markers[markBit].markType) {
 		case SC_MARK_EMPTY:
 			maskInLine &= ~maskBit;
@@ -319,7 +317,7 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 	for (Style &style : styles) {
 		style.extraFontFlag = extraFontFlag;
 	}
-	
+
 	// Create a FontRealised object for each unique font in the styles.
 	CreateAndAddFont(styles[STYLE_DEFAULT]);
 	for (const Style &style : styles) {
@@ -367,7 +365,8 @@ void ViewStyle::Refresh(Surface &surface, int tabInChars) {
 
 	controlCharWidth = 0.0;
 	if (controlCharSymbol >= 32) {
-		controlCharWidth = surface.WidthChar(styles[STYLE_CONTROLCHAR].font, static_cast<char>(controlCharSymbol));
+		const char cc[2] = { static_cast<char>(controlCharSymbol), '\0' };
+		controlCharWidth = surface.WidthText(styles[STYLE_CONTROLCHAR].font, cc, 1);
 	}
 
 	CalculateMarginWidthAndMask();
@@ -379,10 +378,10 @@ void ViewStyle::ReleaseAllExtendedStyles() {
 }
 
 int ViewStyle::AllocateExtendedStyles(int numberStyles) {
-	int startRange = static_cast<int>(nextExtendedStyle);
+	const int startRange = nextExtendedStyle;
 	nextExtendedStyle += numberStyles;
 	EnsureStyle(nextExtendedStyle);
-	for (size_t i=startRange; i<nextExtendedStyle; i++) {
+	for (int i=startRange; i<nextExtendedStyle; i++) {
 		styles[i].ClearTo(styles[STYLE_DEFAULT]);
 	}
 	return startRange;
@@ -460,7 +459,7 @@ void ViewStyle::CalcLargestMarkerHeight() {
 }
 
 int ViewStyle::GetFrameWidth() const {
-	return Platform::Clamp(caretLineFrame, 1, lineHeight / 3);
+	return Sci::clamp(caretLineFrame, 1, lineHeight / 3);
 }
 
 bool ViewStyle::IsLineFrameOpaque(bool caretActive, bool lineContainsCaret) const {

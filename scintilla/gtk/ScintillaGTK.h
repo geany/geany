@@ -6,9 +6,7 @@
 #ifndef SCINTILLAGTK_H
 #define SCINTILLAGTK_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 class ScintillaGTKAccessible;
 
@@ -23,12 +21,14 @@ class ScintillaGTK : public ScintillaBase {
 	Window scrollbarh;
 	GtkAdjustment *adjustmentv;
 	GtkAdjustment *adjustmenth;
+	Window wSelection;
 	int verticalScrollBarWidth;
 	int horizontalScrollBarHeight;
 
 	SelectionText primary;
 
-	GdkEventButton *evbtn;
+	GdkEvent *evbtn;
+	guint buttonMouse;
 	bool capturedMouse;
 	bool dragWasDropped;
 	int lastKey;
@@ -75,7 +75,9 @@ public:
 	explicit ScintillaGTK(_ScintillaObject *sci_);
 	// Deleted so ScintillaGTK objects can not be copied.
 	ScintillaGTK(const ScintillaGTK &) = delete;
+	ScintillaGTK(ScintillaGTK &&) = delete;
 	ScintillaGTK &operator=(const ScintillaGTK &) = delete;
+	ScintillaGTK &operator=(ScintillaGTK &&) = delete;
 	virtual ~ScintillaGTK();
 	static ScintillaGTK *FromWidget(GtkWidget *widget);
 	static void ClassInit(OBJECT_CLASS* object_class, GtkWidgetClass *widget_class, GtkContainerClass *container_class);
@@ -86,8 +88,8 @@ private:
 	void DisplayCursor(Window::Cursor c) override;
 	bool DragThreshold(Point ptStart, Point ptNow) override;
 	void StartDrag() override;
-	int TargetAsUTF8(char *text);
-	int EncodedFromUTF8(char *utf8, char *encoded) const;
+	Sci::Position TargetAsUTF8(char *text) const;
+	Sci::Position EncodedFromUTF8(const char *utf8, char *encoded) const;
 	bool ValidCodePage(int codePage) const override;
 public: 	// Public for scintilla_send_message
 	sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
@@ -100,7 +102,6 @@ private:
 		TimeThunk() : reason(tickCaret), scintilla(NULL), timer(0) {}
 	};
 	TimeThunk timers[tickDwell+1];
-	bool FineTickerAvailable() override;
 	bool FineTickerRunning(TickReason reason) override;
 	void FineTickerStart(TickReason reason, int millis, int tolerance) override;
 	void FineTickerCancel(TickReason reason) override;
@@ -140,6 +141,8 @@ private:
 	static void ClipboardClearSelection(GtkClipboard* clip, void *data);
 
 	void UnclaimSelection(GdkEventSelection *selection_event);
+	static void PrimarySelection(GtkWidget *widget, GtkSelectionData *selection_data, guint info, guint time_stamp, ScintillaGTK *sciThis);
+	static gboolean PrimaryClear(GtkWidget *widget, GdkEventSelection *event, ScintillaGTK *sciThis);
 	void Resize(int width, int height);
 
 	// Callback functions
@@ -282,8 +285,6 @@ public:
 std::string ConvertText(const char *s, size_t len, const char *charSetDest,
                         const char *charSetSource, bool transliterations, bool silent=false);
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

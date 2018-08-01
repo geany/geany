@@ -30,10 +30,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' ||
@@ -139,7 +138,7 @@ struct OptionSetAsm : public OptionSet<OptionsAsm> {
 	}
 };
 
-class LexerAsm : public ILexer {
+class LexerAsm : public DefaultLexer {
 	WordList cpuInstruction;
 	WordList mathInstruction;
 	WordList registers;
