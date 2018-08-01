@@ -478,14 +478,18 @@ static const HLKeyword highlighting_keywords_D[] =
 #define highlighting_lexer_DIFF			SCLEX_DIFF
 static const HLStyle highlighting_styles_DIFF[] =
 {
-	{ SCE_DIFF_DEFAULT,		"default",	FALSE },
-	{ SCE_DIFF_COMMENT,		"comment",	FALSE },
-	{ SCE_DIFF_COMMAND,		"command",	FALSE },
-	{ SCE_DIFF_HEADER,		"header",	FALSE },
-	{ SCE_DIFF_POSITION,	"position",	FALSE },
-	{ SCE_DIFF_DELETED,		"deleted",	FALSE },
-	{ SCE_DIFF_ADDED,		"added",	FALSE },
-	{ SCE_DIFF_CHANGED,		"changed",	FALSE }
+	{ SCE_DIFF_DEFAULT,					"default",				FALSE },
+	{ SCE_DIFF_COMMENT,					"comment",				FALSE },
+	{ SCE_DIFF_COMMAND,					"command",				FALSE },
+	{ SCE_DIFF_HEADER,					"header",				FALSE },
+	{ SCE_DIFF_POSITION,				"position",				FALSE },
+	{ SCE_DIFF_DELETED,					"deleted",				FALSE },
+	{ SCE_DIFF_ADDED,					"added",				FALSE },
+	{ SCE_DIFF_CHANGED,					"changed",				FALSE },
+	{ SCE_DIFF_PATCH_ADD,				"patch_add",			FALSE },
+	{ SCE_DIFF_PATCH_DELETE,			"patch_delete",			FALSE },
+	{ SCE_DIFF_REMOVED_PATCH_ADD,		"removed_patch_add",	FALSE },
+	{ SCE_DIFF_REMOVED_PATCH_DELETE,	"removed_patch_delete",	FALSE }
 };
 #define highlighting_keywords_DIFF		EMPTY_KEYWORDS
 #define highlighting_properties_DIFF	EMPTY_PROPERTIES
