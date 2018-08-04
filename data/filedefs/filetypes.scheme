@@ -16,17 +16,19 @@ special=function
 
 [keywords]
 # all items must be in one line
-# keywords based on http://community.schemewiki.org/?scheme-keywords
-keywords=' * + , ,@ - .. / ; < <= = => > >= ` abs acos angle append apply asin assoc assq assv atan boolean? caar cadr call-with-input-file call-with-output-file call-with-values car cdddar cddddr cdr ceiling char->integer char-alphabetic? char-ci<=? char-ci<? char-ci=? char-ci>=? char-ci>? char-downcase char-lower-case? char-numeric? char-ready? char-upcase char-upper-case? char-whitespace? char<=? char<? char=? char>=? char>? char? close-input-port close-output-port complex? cons cos current-input-port current-output-port denominator display eof-object? eq? equal? eqv? eval even? exact->inexact exact? exp expt #f floor force gcd imag-part inexact->exact inexact? input-port? integer->char integer? interaction-environment lcm length list list->string list->vector list-ref list-tail list? load log magnitude make-polar make-rectangular make-string make-vector max member memq memv min modulo negative? newline not null-environment null? number->string number? numerator odd? open-input-file open-output-file output-port? pair? peek-char port? positive? procedure? quasiquote quote quotient rational? rationalize read read-char real-part real? remainder reverse round scheme-report-environment set! set-car! set-cdr! sin sqrt string string->list string->number string->symbol string-append string-ci<=? string-ci<? string-ci=? string-ci>=? string-ci>? string-copy string-fill! string-length string-ref string-set! string<=? string<? string=? string>=? string>? string? substring symbol->string symbol? #t tan transcript-off transcript-on truncate values vector vector->list vector-fill! vector-length vector-ref vector-set! with-input-from-file with-output-to-file write write-char zero?
-special_keywords=and call-with-current-continuation call-with-input-file call-with-output-file case cond define define-syntax delay do dynamic-wind else for-each if lambda let let* let-syntax letrec letrec-syntax map or syntax-rules
-
+# keywords is based on https://en.wikipedia.org/wiki/Scheme_(programming_language)#Implementations
+# special keywords are defined as R5RS standard forms
+special_keywords=define lambda do let let* letrec if cond case and or begin define-syntax let-syntax letrec-syntax syntax-rules quote unquote quasiquote unquote-splicing ' , ` ,@ set! delay
+# keywords are defined as R5RS standard procedures (primitive, library, optional)
+keywords=eq? eqv? equal? + - * / abs quotient remainder modulo gcd lcm expt sqrt numerator denominator rational? rationalize floor ceiling truncate round inexact->exact exact->inexact exact? inexact? < <= > >= = zero? negative? positive? odd? even? max min sin cos tan asin acos atan exp log make-rectangular make-polar real-part imag-part magnitude angle complex? integer? rational? real? complex? number? vector->list list->vector number->string string->number symbol->string string->symbol char->integer integer->char string->list list->string string? make-string string string-length string-ref string-set! string=? string-ci=? string<? string-ci<? string<=? string-ci<=? string>? string-ci>? string>=? string-ci>=? substring string-append string-copy string-fill! char? char=? char-ci=? char<? char-ci<? char<=? char-ci<=? char>? char-ci>? char>=? char-ci>=? char-alphabetic? char-numeric? char-whitespace? char-upper-case? char-lower-case? char-upcase char-downcase vector? make-vector vector vector-length vector-ref vector-set! vector-fill! symbol? pair? cons car cdr set-car! set-cdr! null? list? list length append reverse list-tail list-ref memq. memv. member assq assv assoc call-with-current-continuation call/cc values call-with-values dynamic-wind eval scheme-report-environment null-environment interaction-environment port? display newline read write read-char write-char peek-char char-ready? eof-object? open-input-file open-output-file close-input-port close-output-port input-port? output-port? current-input-port current-out-port call-with-input-file call-with-output-file with-input-from-file with-output-to-file load transcript-on transcript-off force procedure? apply map for-each boolean? not
 [settings]
 # default extension used when saving files
 extension=scheme
 
 # the following characters are these which a "word" can contains, see documentation
-wordchars=!#%*-:<=>?@\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
-whitespace_chars=\s\t\"$&'()+,./;[]^`{|}~_
+wordchars=`,'!#%*-.:<=>?@\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+whitespace_chars=\s\t\"$&()+/;[]^{|}~_
+# ! $ % & * + - . / : < = > ? @ ^ _ ~ https://schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%_toc_%_sec_2.1
 
 # single comments, like # in this file
 comment_single=;
@@ -55,4 +57,4 @@ type=0
 # %e will be replaced by the filename without extension
 # (use only one of it at one time)
 compiler=
-#run_cmd=clisp "%f"
+run_cmd=plt-r5rs "%f"

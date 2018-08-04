@@ -58,8 +58,8 @@ filetypes = \
 	filedefs/filetypes.powershell \
 	filedefs/filetypes.python \
 	filedefs/filetypes.r \
-	filedefs/filetypes.racket \
 	filedefs/filetypes.restructuredtext \
+	filedefs/filetypes.rkt \
 	filedefs/filetypes.ruby \
 	filedefs/filetypes.rust \
 	filedefs/filetypes.Scala.conf \
@@ -80,6 +80,7 @@ tagfiles = \
 	tags/std.php.tags \
 	tags/std.py.tags \
 	tags/std.pas.tags \
+	tags/r5rs.scheme.tags \
 	tags/entities.html.tags
 
 template_files = \
