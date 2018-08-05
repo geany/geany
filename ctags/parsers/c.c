@@ -3261,7 +3261,7 @@ extern parserDefinition* CParser (void)
 extern parserDefinition* CppParser (void)
 {
 	static const char *const extensions [] = {
-		"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx",
+		"c++", "cc", "cp", "cpp", "cxx", "h", "h++", "hh", "hp", "hpp", "hxx", "ino",
 		"i",
 #ifndef CASE_INSENSITIVE_FILENAMES
 		"C", "H",
