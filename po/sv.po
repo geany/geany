@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
-"PO-Revision-Date: 2017-10-06 15:20+0200\n"
+"POT-Creation-Date: 2018-03-12 02:36+0000\n"
+"PO-Revision-Date: 2018-03-12 09:23+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.4\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -121,7 +121,7 @@ msgstr "Gå till symboldefinition"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
-msgstr "Snabbmenyhändelse"
+msgstr "Snabbmenyåtgärd"
 
 #. Column legend:
 #. *   [0] = Filetype constant (GEANY_FILETYPES_*)
@@ -1285,7 +1285,7 @@ msgstr "<b>Sökvägar till verktyg</b>"
 
 #: ../data/geany.glade.h:268
 msgid "Context action:"
-msgstr "Snabbmenyhändelse:"
+msgstr "Snabbmenyåtgärd:"
 
 #: ../data/geany.glade.h:270
 #, no-c-format
@@ -2225,7 +2225,7 @@ msgstr "Annat:"
 
 #: ../src/about.c:48
 msgid ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2233,7 +2233,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c)  2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2546,9 +2546,8 @@ msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Kunde inte exekvera kontextmeny kommando \"%s\": %s. %s"
 
 #: ../src/callbacks.c:1505
-#, fuzzy
 msgid "No context action set."
-msgstr "Snabbmenyhändelse:"
+msgstr "Ingen snabbmenyåtgärd angiven."
 
 #: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -2788,7 +2787,7 @@ msgstr "Filen %s laddades om."
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
 #, c-format
-msgid "File %s opened(%d%s)."
+msgid "File %s opened (%d%s)."
 msgstr "Filen %s är öppnad (%d%s)."
 
 #: ../src/document.c:1497
@@ -3359,7 +3358,7 @@ msgstr "Undertryck komplettering av textfragment"
 
 #: ../src/keybindings.c:411
 msgid "Context Action"
-msgstr "Snabbmenyhändelse"
+msgstr "Snabbmenyåtgärd"
 
 #: ../src/keybindings.c:413
 msgid "Complete word"
@@ -3762,24 +3761,24 @@ msgid "Failed to load one or more session files."
 msgstr "Kunde ej ladda en eller fler av sessionens filer."
 
 #: ../src/libmain.c:122
-#, fuzzy
 msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
-msgstr "Sätt kolumn för markören vid öppnande av fil"
+msgstr ""
+"Ange inledande kolumnnummer till KOLUMN för den först öppnade filen "
+"(användbar i samband med --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "KOLUMN"
 
 #: ../src/libmain.c:123
-#, fuzzy
 msgid "Use alternate configuration directory DIR"
-msgstr "Använd en alternativ sökväg till konfigurationsfiler"
+msgstr "Använd en alternativ sökväg till mappen MAPP"
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "MAPP"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3800,27 +3799,25 @@ msgstr ""
 "i en ny session"
 
 #: ../src/libmain.c:129
-#, fuzzy
 msgid ""
 "Use socket filename FILE for communication with a running Geany instance"
-msgstr "Använd detta socket-filnamn vid kommunikation med en Geany instans"
+msgstr "Använd socket FIL för kommunikation med en annan Geany-instans"
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FIL"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
 msgstr "Returnera en lista med öppna dokument i en Geany-instans"
 
 #: ../src/libmain.c:132
-#, fuzzy
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Ange inledande radnummer för den först öppnade filen"
+msgstr "Ange inledande radnummer till RAD för den först öppnade filen"
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "RAD"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3852,7 +3849,7 @@ msgstr "Ladda inte terminal-stöd"
 
 #: ../src/libmain.c:143
 msgid "Use FILE as the dynamically-linked VTE library"
-msgstr ""
+msgstr "Använd FIL som det dynamiskt länkade VTE biblioteket"
 
 #: ../src/libmain.c:145
 msgid "Be verbose"
@@ -3867,13 +3864,12 @@ msgid "[FILES...]"
 msgstr "[FILER...]"
 
 #: ../src/libmain.c:538
-#, fuzzy
 msgid "A fast and lightweight IDE."
-msgstr "Ett snabbt och lättviktigt IDE"
+msgstr "Ett snabbt och lättviktigt IDE."
 
 #: ../src/libmain.c:539
 msgid "Report bugs to https://github.com/geany/geany/issues."
-msgstr ""
+msgstr "Rapportera fel till https://github.com/geany/geany/issues."
 
 #. note for translators: library versions are printed after this
 #: ../src/libmain.c:572
@@ -4352,9 +4348,9 @@ msgstr "Använd flerraders matchning"
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines.  In this mode, "
-"newline characters are part of the input and can be captured as normal "
-"characters by the pattern."
+"line by line, allowing matches to span multiple lines. In this mode, newline "
+"characters are part of the input and can be captured as normal characters by "
+"the pattern."
 msgstr ""
 "Utför en matchning för reguljärt uttryck på hela buffern samtidigt i stället "
 "för rad-för-rad, så att träffar kan hittas som löper över flera rader. I "
@@ -4575,29 +4571,29 @@ msgstr ""
 "körs av en annan användare.\n"
 "Detta är ett allvarligt fel, och Geany kommer nu att avslutas."
 
-#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
 msgstr "Texten tog slut innan matchande citeringstecken hittades"
 
 #. TL note: from glib
-#: ../src/spawn.c:130
+#: ../src/spawn.c:132
 msgid "Text was empty (or contained only whitespace)"
 msgstr "Texten var tom (eller innehöll bara tomt utrymme)"
 
-#: ../src/spawn.c:151 ../src/spawn.c:165
+#: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Ett Windows-program inom citattecken måste hålla sig helt inom citat-tecknen"
 
-#: ../src/spawn.c:258
+#: ../src/spawn.c:260
 msgid "Program not found"
 msgstr "Programet kunde ej hittas"
 
-#: ../src/spawn.c:764
+#: ../src/spawn.c:766
 msgid "Failed to change to the working directory"
 msgstr "Byte av arbetsmapp misslyckades"
 
-#: ../src/spawn.c:769
+#: ../src/spawn.c:771
 msgid "Unknown error executing child process"
 msgstr "Okänt fel vid exekvering av underprocess"
 
@@ -5847,7 +5843,7 @@ msgstr "Skapa en DIFF från sökvägen där den aktiva filen finns"
 
 #: ../plugins/saveactions.c:43
 msgid "Save Actions"
-msgstr "Spara \"Actions\""
+msgstr "Spara åtgärder"
 
 #: ../plugins/saveactions.c:43
 msgid "This plugin provides different actions related to saving of files."

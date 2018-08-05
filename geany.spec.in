@@ -9,7 +9,7 @@ Summary:       A fast and lightweight IDE using GTK+
 
 Group:         Development/Tools
 License:       GPLv2+
-URL:           http://www.geany.org/
+URL:           https://www.geany.org/
 Vendor:        The Geany developer team <info@geany.org>
 Packager:      Dominic Hopf <dmaphy@googlemail.com>
 Source:        http://download.geany.org/%{name}-%{version}.tar.bz2

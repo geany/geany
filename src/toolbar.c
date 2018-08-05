@@ -899,7 +899,7 @@ Everything you add or change must be inside the /ui/toolbar/ path.\n\n\
 For changes to take effect, you need to restart Geany. Alternatively you can use the toolbar\n\
 editor in Geany.\n\n\
 A list of available actions can be found in the documentation included with Geany or\n\
-at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
+at https://www.geany.org/manual/current/index.html#customizing-the-toolbar.\n-->\n\
 \t<toolbar name='GeanyToolbar'>\n";
 	gchar *filename;
 	GString *str = g_string_new(template);

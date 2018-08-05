@@ -4439,7 +4439,7 @@ msgstr ""
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines.  In this mode, "
+"line by line, allowing matches to span multiple lines. In this mode, "
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""

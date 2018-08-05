@@ -84,7 +84,7 @@ them at all.
 @subsection ideas Getting a plugin idea
 
 If you want to write a plugin but don't know yet what it should do, have a look at
-http://www.geany.org/Support/PluginWishlist to get an idea about what users wish.
+https://www.geany.org/Support/PluginWishlist to get an idea about what users wish.
 
 @subsection code Managing the source code
 
@@ -171,7 +171,7 @@ Basically, you are done at this point and could continue with writing the plugin
 
 [1] For Windows, it is basically the same but you might have some more work on setting up
 the general build environment (compiler, GTK development files, ...). This is described on
-Geany's website at http://www.geany.org/Support/BuildingOnWin32.
+Geany's website at https://www.geany.org/Support/BuildingOnWin32.
 
 @section helloworld "Hello World"
 
