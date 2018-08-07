@@ -2034,7 +2034,7 @@ gboolean editor_show_calltip(GeanyEditor *editor, gint pos)
 	}
 
 	word[0] = '\0';
-	editor_find_current_word(editor, pos - 1, word, sizeof word, NULL);
+	editor_find_current_word_sciwc(editor, pos - 1, word, sizeof word);
 	if (word[0] == '\0')
 		return FALSE;
 
