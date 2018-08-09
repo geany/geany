@@ -1,5 +1,5 @@
 /*
-*   Copyright (c) 2000-2002, Darren Hiebert
+*   Copyright (c) 2000-2002, Darren Hiebert, Maxim Jaffe
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License version 2 or (at your option) any later version.
