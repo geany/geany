@@ -552,7 +552,7 @@ void printToken(const tokenInfo *const token)
 void printTagEntry(const tagEntryInfo *tag)
 {
 	fprintf(stderr, "Tag: %s (%s) [ impl: %s, scope: %s, type: %s\n", tag->name,
-	tag->kindName, tag->extensionFields.implementation, tag->extensionFields.scope[1],
+	tag->name, tag->extensionFields.implementation, tag->extensionFields.scopeKind[1],
 	tag->extensionFields.varType);
 }
 
