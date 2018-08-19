@@ -12,7 +12,7 @@ make_zip="no"
 gtkv="3"
 run_pi="y"
 
-UNX_UTILS_URL="http://unxutils.sourceforge.net/UnxUpdates.zip"
+UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
 # path to an installation of a MSYS2 installation in the native architecture matching $ABI
 # leave empty if the script is called already from the same MSYS2 architecture as $ABI
 MSYS2_ABI_PATH="/c/msys32"
@@ -43,6 +43,7 @@ harfbuzz
 fontconfig
 freetype
 atk
+fribidi
 pango
 cairo
 pixman
@@ -175,6 +176,7 @@ cleanup_unnecessary_files() {
 	rmdir var
 	# cleanup development and other unnecessary files
 	rm -rf include
+	rm -rf lib/cmake
 	rm -rf lib/gettext
 	rm -rf lib/libffi-*
 	rm -rf lib/pkgconfig
