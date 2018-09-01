@@ -341,6 +341,22 @@ Example::
     {
         ...
 
+Translation
+^^^^^^^^^^^
+
+Strings which are visible to users need to be translated and thus should
+be enclosed in ``_( )`` to have them being recognized and translated by
+the GNU translation tools. Good coding style is to prevent spaces right
+after the first ``"`` of a string. This is a bad example::
+
+    label = gtk_label_new(_("First sentence of a bad case example."
+                            " Second sentence."));
+
+Instead put the space at the end like this::
+
+    label = gtk_label_new(_("First sentence of a good case example. "
+                            "Second sentence."));
+
 Header Includes
 ---------------
 
