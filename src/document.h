@@ -324,6 +324,10 @@ void document_set_data(GeanyDocument *doc, const gchar *key, gpointer data);
 void document_set_data_full(GeanyDocument *doc, const gchar *key,
 	gpointer data, GDestroyNotify free_func);
 
+gboolean document_rename_file_and_save(GeanyDocument *doc, const gchar *new_filename);
+
+gboolean document_rename_and_save(GeanyDocument *doc, const gchar *new_filename, gboolean ask_overwrite);
+
 #endif /* GEANY_PRIVATE */
 
 G_END_DECLS
