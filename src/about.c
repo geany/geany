@@ -292,7 +292,7 @@ static GtkWidget *create_dialog(void)
 	g_snprintf(buffer, sizeof(buffer), "Colomban Wendling - %s", _("maintainer"));
 	ROW(buffer, row, 0, 0, 0, 1);
 	row++;
-	ROW("&lt;lists.ban@herbesfolles.org&gt;", row, 0, 0, 0, 1);
+	ROW("&lt;ban@herbesfolles.org&gt;", row, 0, 0, 0, 1);
 	row++;
 	ROW("", row, 0, 0, 0, 0);
 	row++;
