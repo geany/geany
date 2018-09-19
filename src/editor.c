@@ -556,12 +556,12 @@ static void check_line_breaking(GeanyEditor *editor, gint pos)
 		return;
 
 	/* look for the last space before line_break_column */
-	pos = MIN(pos, lstart + get_project_pref(line_break_column));
+	pos = sci_get_position_from_col(sci, lstart, get_project_pref(line_break_column));
 
 	while (pos > lstart)
 	{
 		c = sci_get_char_at(sci, --pos);
-		if (c == GDK_space)
+		if (c == ' ')
 		{
 			gint diff, last_pos, last_col;
 
