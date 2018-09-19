@@ -12,11 +12,9 @@
 
 #include "CharClassify.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
-CharClassify::CharClassify() {
+CharClassify::CharClassify() : charClass{} {
 	SetDefaultCharClasses(true);
 }
 

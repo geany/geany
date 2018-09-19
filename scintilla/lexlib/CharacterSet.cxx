@@ -11,19 +11,15 @@
 
 #include "CharacterSet.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 int CompareCaseInsensitive(const char *a, const char *b) {
 	while (*a && *b) {
 		if (*a != *b) {
-			const char upperA = static_cast<char>(MakeUpperCase(*a));
-			const char upperB = static_cast<char>(MakeUpperCase(*b));
+			const char upperA = MakeUpperCase(*a);
+			const char upperB = MakeUpperCase(*b);
 			if (upperA != upperB)
 				return upperA - upperB;
 		}
@@ -37,8 +33,8 @@ int CompareCaseInsensitive(const char *a, const char *b) {
 int CompareNCaseInsensitive(const char *a, const char *b, size_t len) {
 	while (*a && *b && len) {
 		if (*a != *b) {
-			const char upperA = static_cast<char>(MakeUpperCase(*a));
-			const char upperB = static_cast<char>(MakeUpperCase(*b));
+			const char upperA = MakeUpperCase(*a);
+			const char upperB = MakeUpperCase(*b);
 			if (upperA != upperB)
 				return upperA - upperB;
 		}
@@ -53,6 +49,4 @@ int CompareNCaseInsensitive(const char *a, const char *b, size_t len) {
 		return *a - *b;
 }
 
-#ifdef SCI_NAMESPACE
 }
-#endif

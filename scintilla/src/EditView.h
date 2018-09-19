@@ -8,9 +8,7 @@
 #ifndef EDITVIEW_H
 #define EDITVIEW_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 struct PrintParameters {
 	int magnification;
@@ -44,13 +42,15 @@ void DrawStyledText(Surface *surface, const ViewStyle &vs, int styleOffset, PRec
 
 typedef void (*DrawTabArrowFn)(Surface *surface, PRectangle rcTab, int ymid);
 
+class LineTabstops;
+
 /**
 * EditView draws the main text area.
 */
 class EditView {
 public:
 	PrintParameters printParameters;
-	std::unique_ptr<PerLine> ldTabstops;
+	std::unique_ptr<LineTabstops> ldTabstops;
 	int tabWidthMinimumPixels;
 
 	bool hideSelection;
@@ -92,7 +92,9 @@ public:
 	EditView();
 	// Deleted so EditView objects can not be copied.
 	EditView(const EditView &) = delete;
+	EditView(EditView &&) = delete;
 	void operator=(const EditView &) = delete;
+	void operator=(EditView &&) = delete;
 	virtual ~EditView();
 
 	bool SetTwoPhaseDraw(bool twoPhaseDraw);
@@ -123,7 +125,7 @@ public:
 	Sci::Line DisplayFromPosition(Surface *surface, const EditModel &model, Sci::Position pos, const ViewStyle &vs);
 	Sci::Position StartEndDisplayLine(Surface *surface, const EditModel &model, Sci::Position pos, bool start, const ViewStyle &vs);
 
-	void DrawIndentGuide(Surface *surface, Sci::Line lineVisible, int lineHeight, Sci::Position start, PRectangle rcSegment, bool highlight);
+	void DrawIndentGuide(Surface *surface, Sci::Line lineVisible, int lineHeight, XYPOSITION start, PRectangle rcSegment, bool highlight);
 	void DrawEOL(Surface *surface, const EditModel &model, const ViewStyle &vsDraw, const LineLayout *ll, PRectangle rcLine,
 		Sci::Line line, Sci::Position lineEnd, int xStart, int subLine, XYACCUMULATOR subLineStart,
 		ColourOptional background);
@@ -147,7 +149,7 @@ public:
 		const ViewStyle &vsDraw);
 	void FillLineRemainder(Surface *surface, const EditModel &model, const ViewStyle &vsDraw, const LineLayout *ll,
 		Sci::Line line, PRectangle rcArea, int subLine) const;
-	long FormatRange(bool draw, Sci_RangeToFormat *pfr, Surface *surface, Surface *surfaceMeasure,
+	Sci::Position FormatRange(bool draw, const Sci_RangeToFormat *pfr, Surface *surface, Surface *surfaceMeasure,
 		const EditModel &model, const ViewStyle &vs);
 };
 
@@ -158,17 +160,19 @@ class AutoLineLayout {
 	LineLayoutCache &llc;
 	LineLayout *ll;
 public:
-	AutoLineLayout(LineLayoutCache &llc_, LineLayout *ll_) : llc(llc_), ll(ll_) {}
-	explicit AutoLineLayout(const AutoLineLayout &) = delete;
+	AutoLineLayout(LineLayoutCache &llc_, LineLayout *ll_) noexcept : llc(llc_), ll(ll_) {}
+	AutoLineLayout(const AutoLineLayout &) = delete;
+	AutoLineLayout(AutoLineLayout &&) = delete;
 	AutoLineLayout &operator=(const AutoLineLayout &) = delete;
+	AutoLineLayout &operator=(AutoLineLayout &&) = delete;
 	~AutoLineLayout() {
 		llc.Dispose(ll);
-		ll = 0;
+		ll = nullptr;
 	}
-	LineLayout *operator->() const {
+	LineLayout *operator->() const noexcept {
 		return ll;
 	}
-	operator LineLayout *() const {
+	operator LineLayout *() const noexcept {
 		return ll;
 	}
 	void Set(LineLayout *ll_) {
@@ -177,8 +181,6 @@ public:
 	}
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

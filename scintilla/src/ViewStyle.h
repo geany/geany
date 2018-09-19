@@ -8,9 +8,7 @@
 #ifndef VIEWSTYLE_H
 #define VIEWSTYLE_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 /**
  */
@@ -34,7 +32,9 @@ public:
 	FontNames();
 	// FontNames objects can not be copied.
 	FontNames(const FontNames &) = delete;
+	FontNames(FontNames &&) = delete;
 	FontNames &operator=(const FontNames &) = delete;
+	FontNames &operator=(FontNames &&) = delete;
 	~FontNames();
 	void Clear();
 	const char *Save(const char *name);
@@ -46,7 +46,9 @@ public:
 	FontRealised();
 	// FontRealised objects can not be copied.
 	FontRealised(const FontRealised &) = delete;
+	FontRealised(FontRealised &&) = delete;
 	FontRealised &operator=(const FontRealised &) = delete;
+	FontRealised &operator=(FontRealised &&) = delete;
 	virtual ~FontRealised();
 	void Realise(Surface &surface, int zoomLevel, int technology, const FontSpecification &fs);
 };
@@ -66,7 +68,7 @@ public:
 	bool isSet;
 	ColourOptional(ColourDesired colour_=ColourDesired(0,0,0), bool isSet_=false) : ColourDesired(colour_), isSet(isSet_) {
 	}
-	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<long>(lParam)), isSet(wParam != 0) {
+	ColourOptional(uptr_t wParam, sptr_t lParam) : ColourDesired(static_cast<int>(lParam)), isSet(wParam != 0) {
 	}
 };
 
@@ -82,7 +84,7 @@ struct EdgeProperties {
 		column(column_), colour(colour_) {
 	}
 	EdgeProperties(uptr_t wParam, sptr_t lParam) :
-		column(static_cast<int>(wParam)), colour(static_cast<long>(lParam)) {
+		column(static_cast<int>(wParam)), colour(static_cast<int>(lParam)) {
 	}
 };
 
@@ -93,7 +95,7 @@ class ViewStyle {
 	FontMap fonts;
 public:
 	std::vector<Style> styles;
-	size_t nextExtendedStyle;
+	int nextExtendedStyle;
 	std::vector<LineMarker> markers;
 	int largestMarkerHeight;
 	std::vector<Indicator> indicators;
@@ -176,8 +178,10 @@ public:
 
 	ViewStyle();
 	ViewStyle(const ViewStyle &source);
+	ViewStyle(ViewStyle &&) = delete;
 	// Can only be copied through copy constructor which ensures font names initialised correctly
 	ViewStyle &operator=(const ViewStyle &) = delete;
+	ViewStyle &operator=(ViewStyle &&) = delete;
 	~ViewStyle();
 	void CalculateMarginWidthAndMask();
 	void Init(size_t stylesSize_=256);
@@ -215,8 +219,6 @@ private:
 	void FindMaxAscentDescent();
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

@@ -5,11 +5,13 @@
 // Copyright 2009 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+#include <cstddef>
 #include <cstdlib>
 
 #include <stdexcept>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 #include "Platform.h"
 
@@ -18,14 +20,12 @@
 #include "Position.h"
 #include "Selection.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 void SelectionPosition::MoveForInsertDelete(bool insertion, Sci::Position startChange, Sci::Position length) {
 	if (insertion) {
 		if (position == startChange) {
-			Sci::Position virtualLengthRemove = std::min(length, virtualSpace);
+			const Sci::Position virtualLengthRemove = std::min(length, virtualSpace);
 			virtualSpace -= virtualLengthRemove;
 			position += virtualLengthRemove;
 		} else if (position > startChange) {
@@ -110,7 +110,7 @@ bool SelectionRange::ContainsCharacter(Sci::Position posCharacter) const {
 }
 
 SelectionSegment SelectionRange::Intersect(SelectionSegment check) const {
-	SelectionSegment inOrder(caret, anchor);
+	const SelectionSegment inOrder(caret, anchor);
 	if ((inOrder.start <= check.end) || (inOrder.end >= check.start)) {
 		SelectionSegment portion = check;
 		if (portion.start < inOrder.start)
@@ -298,7 +298,7 @@ void Selection::MovePositions(bool insertion, Sci::Position startChange, Sci::Po
 	}
 	if (selType == selRectangle) {
 		rangeRectangular.MoveForInsertDelete(insertion, startChange, length);
-	} 
+	}
 }
 
 void Selection::TrimSelection(SelectionRange range) {
@@ -405,7 +405,7 @@ Sci::Position Selection::VirtualSpaceFor(Sci::Position pos) const {
 
 void Selection::Clear() {
 	ranges.clear();
-	ranges.push_back(SelectionRange());
+	ranges.emplace_back();
 	mainRange = ranges.size() - 1;
 	selType = selStream;
 	moveExtends = false;

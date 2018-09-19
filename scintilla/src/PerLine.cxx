@@ -24,9 +24,7 @@
 #include "CellBuffer.h"
 #include "PerLine.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 MarkerHandleSet::MarkerHandleSet() {
 }
@@ -35,11 +33,11 @@ MarkerHandleSet::~MarkerHandleSet() {
 	mhList.clear();
 }
 
-bool MarkerHandleSet::Empty() const {
+bool MarkerHandleSet::Empty() const noexcept {
 	return mhList.empty();
 }
 
-int MarkerHandleSet::MarkValue() const {
+int MarkerHandleSet::MarkValue() const noexcept {
 	unsigned int m = 0;
 	for (const MarkerHandleNumber &mhn : mhList) {
 		m |= (1 << mhn.number);
@@ -47,7 +45,7 @@ int MarkerHandleSet::MarkValue() const {
 	return m;
 }
 
-bool MarkerHandleSet::Contains(int handle) const {
+bool MarkerHandleSet::Contains(int handle) const noexcept {
 	for (const MarkerHandleNumber &mhn : mhList) {
 		if (mhn.handle == handle) {
 			return true;
@@ -62,7 +60,7 @@ bool MarkerHandleSet::InsertHandle(int handle, int markerNum) {
 }
 
 void MarkerHandleSet::RemoveHandle(int handle) {
-	mhList.remove_if([=](const MarkerHandleNumber &mhn) { return mhn.handle == handle; });
+	mhList.remove_if([handle](const MarkerHandleNumber &mhn) { return mhn.handle == handle; });
 }
 
 bool MarkerHandleSet::RemoveNumber(int markerNum, bool all) {
@@ -127,7 +125,7 @@ void LineMarkers::MergeMarkers(Sci::Line line) {
 	}
 }
 
-int LineMarkers::MarkValue(Sci::Line line) {
+int LineMarkers::MarkValue(Sci::Line line) noexcept {
 	if (markers.Length() && (line >= 0) && (line < markers.Length()) && markers[line])
 		return markers[line]->MarkValue();
 	else
@@ -137,7 +135,7 @@ int LineMarkers::MarkValue(Sci::Line line) {
 Sci::Line LineMarkers::MarkerNext(Sci::Line lineStart, int mask) const {
 	if (lineStart < 0)
 		lineStart = 0;
-	const Sci::Line length = markers.Length();
+	const Sci::Line length = static_cast<Sci::Line>(markers.Length());
 	for (Sci::Line iLine = lineStart; iLine < length; iLine++) {
 		const MarkerHandleSet *onLine = markers[iLine].get();
 		if (onLine && ((onLine->MarkValue() & mask) != 0))
@@ -181,7 +179,7 @@ bool LineMarkers::DeleteMark(Sci::Line line, int markerNum, bool all) {
 }
 
 void LineMarkers::DeleteMarkFromHandle(int markerHandle) {
-	Sci::Line line = LineFromHandle(markerHandle);
+	const Sci::Line line = LineFromHandle(markerHandle);
 	if (line >= 0) {
 		markers[line]->RemoveHandle(markerHandle);
 		if (markers[line]->Empty()) {
@@ -199,7 +197,7 @@ void LineLevels::Init() {
 
 void LineLevels::InsertLine(Sci::Line line) {
 	if (levels.Length()) {
-		int level = (line < levels.Length()) ? levels[line] : SC_FOLDLEVELBASE;
+		const int level = (line < levels.Length()) ? levels[line] : SC_FOLDLEVELBASE;
 		levels.InsertValue(line, 1, level);
 	}
 }
@@ -257,7 +255,7 @@ void LineState::Init() {
 void LineState::InsertLine(Sci::Line line) {
 	if (lineStates.Length()) {
 		lineStates.EnsureLength(line);
-		int val = (line < lineStates.Length()) ? lineStates[line] : 0;
+		const int val = (line < lineStates.Length()) ? lineStates[line] : 0;
 		lineStates.Insert(line, val);
 	}
 }
@@ -283,10 +281,10 @@ int LineState::GetLineState(Sci::Line line) {
 }
 
 Sci::Line LineState::GetMaxLineState() const {
-	return lineStates.Length();
+	return static_cast<Sci::Line>(lineStates.Length());
 }
 
-static int NumberLines(const char *text) {
+static int NumberLines(const char *text) noexcept {
 	if (text) {
 		int newLines = 0;
 		while (*text) {
@@ -404,7 +402,7 @@ void LineAnnotation::SetStyles(Sci::Line line, const unsigned char *styles) {
 		if (!annotations[line]) {
 			annotations[line].reset(AllocateAnnotation(0, IndividualStyles));
 		} else {
-			AnnotationHeader *pahSource = reinterpret_cast<AnnotationHeader *>(annotations[line].get());
+			const AnnotationHeader *pahSource = reinterpret_cast<AnnotationHeader *>(annotations[line].get());
 			if (pahSource->style != IndividualStyles) {
 				char *allocation = AllocateAnnotation(pahSource->length, IndividualStyles);
 				AnnotationHeader *pahAlloc = reinterpret_cast<AnnotationHeader *>(allocation);

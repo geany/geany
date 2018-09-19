@@ -6,9 +6,7 @@
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 const GIConv iconvhBad = (GIConv)(-1);
 const gsize sizeFailure = static_cast<gsize>(-1);
@@ -67,8 +65,6 @@ public:
 	}
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

@@ -25,9 +25,7 @@
 #include "LexerModule.h"
 /***************************************/
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 /***********************************************/
 static inline bool IsAWordChar(const int ch) {
@@ -257,7 +255,7 @@ static void ColouriseFortranDoc(Sci_PositionU startPos, Sci_Position length, int
 }
 /***************************************/
 static void CheckLevelCommentLine(const unsigned int nComL,
-				  int nComColB[], int nComColF[], int &nComCur,
+				  Sci_Position nComColB[], Sci_Position nComColF[], Sci_Position &nComCur,
 				  bool comLineB[], bool comLineF[], bool &comLineCur,
 				  int &levelDeltaNext) {
 	levelDeltaNext = 0;
@@ -362,7 +360,7 @@ static void CheckBackComLines(Accessor &styler, bool isFixFormat, Sci_Position l
 	}
 	
 	Sci_Position lineC = lineCurrent - nComL + 1;
-	unsigned int iStart;
+	Sci_PositionU iStart;
 	if (lineC <= 0) {
 		lineC = 0;
 		iStart = nComL - lineCurrent;
@@ -373,11 +371,11 @@ static void CheckBackComLines(Accessor &styler, bool isFixFormat, Sci_Position l
 	bool levChanged = false;
 	int lev = styler.LevelAt(lineC) & SC_FOLDLEVELNUMBERMASK;
 	
-	for (unsigned int i=iStart; i<=nComL; i++) {
+	for (Sci_PositionU i=iStart; i<=nComL; i++) {
 		if (comL[i] && (!comL[i-1] || nComCol[i] != nComCol[i-1])) {
 			bool increase = true;
-			unsigned int until = i + nComL;
-			for (unsigned int j=i+1; j<=until; j++) {
+			Sci_PositionU until = i + nComL;
+			for (Sci_PositionU j=i+1; j<=until; j++) {
 				if (!comL[j] || nComCol[j] != nComCol[i]) {
 					increase = false;
 					break;
@@ -445,7 +443,7 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 	        || strcmp(s, "endsubroutine") == 0 || strcmp(s, "endtype") == 0
 	        || strcmp(s, "endwhere") == 0 || strcmp(s, "endcritical") == 0
 		|| (strcmp(prevWord, "module") == 0 && strcmp(s, "procedure") == 0)  // Take care of the "module procedure" statement
-		|| strcmp(s, "endsubmodule") == 0) {
+		|| strcmp(s, "endsubmodule") == 0 || strcmp(s, "endteam") == 0) {
 		lev = -1;
 	} else if (strcmp(prevWord, "end") == 0 && strcmp(s, "if") == 0){ // end if
 		lev = 0;
@@ -454,6 +452,8 @@ static int classifyFoldPointFortran(const char* s, const char* prevWord, const c
 	} else if ((strcmp(prevWord, "end") == 0 && strcmp(s, "procedure") == 0)
 			   || strcmp(s, "endprocedure") == 0) {
 			lev = 1; // level back to 0, because no folding support for "module procedure" in submodule
+	} else if (strcmp(prevWord, "change") == 0 && strcmp(s, "team") == 0){ // change team
+		lev = 1;
 	}
 	return lev;
 }
