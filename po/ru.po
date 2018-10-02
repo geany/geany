@@ -120,7 +120,7 @@ msgstr "Найти использования _документа"
 
 #: ../data/geany.glade.h:21
 msgid "Go to Symbol Defini_tion"
-msgstr "Перейти к определению символа"
+msgstr "Перейти к _определению символа"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -1665,7 +1665,7 @@ msgstr "Недавние _файлы"
 
 #: ../data/geany.glade.h:348
 msgid "Save _As..."
-msgstr "Сохранить как..."
+msgstr "Сохранить _как..."
 
 #: ../data/geany.glade.h:349
 msgid "Sa_ve All"
@@ -1726,11 +1726,11 @@ msgstr "Выделить _абзац"
 
 #: ../data/geany.glade.h:363
 msgid "_Move Line(s) Up"
-msgstr "Переместить строку(и) вверх"
+msgstr "Переместить строку(и) вв_ерх"
 
 #: ../data/geany.glade.h:364
 msgid "M_ove Line(s) Down"
-msgstr "Переместить строку(и) вниз"
+msgstr "Переместить строку(и) в_низ"
 
 #: ../data/geany.glade.h:365 ../src/keybindings.c:502
 msgid "_Send Selection to Terminal"
@@ -1786,7 +1786,7 @@ msgstr "Настройки _модулей"
 
 #: ../data/geany.glade.h:378
 msgid "_Find..."
-msgstr "Найти..."
+msgstr "_Найти..."
 
 #: ../data/geany.glade.h:379
 msgid "Find _Next"
@@ -1838,7 +1838,7 @@ msgstr "_Пометить все"
 
 #: ../data/geany.glade.h:391
 msgid "Go to Symbol Decl_aration"
-msgstr "Перейти к объявлению символа"
+msgstr "Перейти к о_бъявлению символа"
 
 #: ../data/geany.glade.h:392
 msgid "_View"
@@ -1962,7 +1962,7 @@ msgstr "Только _чтение"
 
 #: ../data/geany.glade.h:422
 msgid "_Write Unicode BOM"
-msgstr "Использовать _Unicode BOM"
+msgstr "Использоват_ь Unicode BOM"
 
 #: ../data/geany.glade.h:423
 msgid "Set File_type"
@@ -1990,7 +1990,7 @@ msgstr "Заменить окончания строк на CR (классиче
 
 #: ../data/geany.glade.h:429 ../src/keybindings.c:668
 msgid "_Clone"
-msgstr "Клонировать"
+msgstr "_Клонировать"
 
 #: ../data/geany.glade.h:430 ../src/keybindings.c:670
 msgid "_Strip Trailing Spaces"
@@ -3800,7 +3800,7 @@ msgstr ""
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "COLUMN"
 
 #: ../src/libmain.c:123
 msgid "Use alternate configuration directory DIR"
@@ -3808,7 +3808,7 @@ msgstr "Использовать DIR как альтернативный кат�
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3835,7 +3835,7 @@ msgstr "Использовать файл сокета FILE для соедин�
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FILE"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3847,7 +3847,7 @@ msgstr "Установить начальный номер строки LINE д�
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "LINE"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -4997,13 +4997,13 @@ msgstr "Не удалось загрузить файл тегов '%s'."
 #: ../src/symbols.c:1949
 #, c-format
 msgid "<b>%s: %lu</b>"
-msgstr ""
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
 #: ../src/symbols.c:1952
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
 #: ../src/symbols.c:2161
 #, c-format
@@ -5454,7 +5454,7 @@ msgstr ""
 
 #: ../src/utils.c:376
 msgid "Windows (CRLF)"
-msgstr ""
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:377
 msgid "Classic Mac (CR)"
@@ -5462,19 +5462,19 @@ msgstr "Классический Мac (CR)"
 
 #: ../src/utils.c:378
 msgid "Unix (LF)"
-msgstr ""
+msgstr "Unix (LF)"
 
 #: ../src/utils.c:387
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:388
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:389
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
 #: ../src/vte.c:585
 #, c-format
