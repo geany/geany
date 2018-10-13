@@ -393,7 +393,6 @@ msgid "Use the current file's directory for Find in Files"
 msgstr "Помилкова тека для пошуку файлів."
 
 #: ../data/geany.glade.h:71
-#, fuzzy
 msgid "<b>Search</b>"
 msgstr "<b>Пошук</b>"
 
@@ -793,7 +792,6 @@ msgid ""
 msgstr ""
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -838,7 +836,6 @@ msgid "Use spaces when inserting indentation"
 msgstr ""
 
 #: ../data/geany.glade.h:160
-#, fuzzy
 msgid "_Tabs"
 msgstr "Відступи"
 
@@ -1109,7 +1106,6 @@ msgid "Column:"
 msgstr "Компанія:"
 
 #: ../data/geany.glade.h:217
-#, fuzzy
 msgid "Color:"
 msgstr "Колір:"
 
@@ -1161,7 +1157,6 @@ msgstr ""
 "пропорціональними шрифтами)"
 
 #: ../data/geany.glade.h:225
-#, fuzzy
 msgid "Enabled"
 msgstr "Активовано"
 
@@ -1562,7 +1557,6 @@ msgid "Use native GTK printing"
 msgstr "Використовувати типове друкування GTK"
 
 #: ../data/geany.glade.h:309
-#, fuzzy
 msgid "<b>Printing</b>"
 msgstr "<b>Друкування</b>"
 
@@ -1714,7 +1708,6 @@ msgstr ""
 "відображення статусу закінчення виконуємої програми."
 
 #: ../data/geany.glade.h:338
-#, fuzzy
 msgid "<b>Terminal</b>"
 msgstr "<b>Термінал</b>"
 
@@ -1836,7 +1829,6 @@ msgid "M_ove Line(s) Down"
 msgstr "Закоментувати рядок(-ки)"
 
 #: ../data/geany.glade.h:365 ../src/keybindings.c:501
-#, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "_Надіслати виділене до Терміналу"
 
@@ -2118,7 +2110,6 @@ msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Конвертувати та встановити у CR (_Mac)"
 
 #: ../data/geany.glade.h:429 ../src/keybindings.c:667
-#, fuzzy
 msgid "_Clone"
 msgstr "_Клонувати"
 
@@ -2537,7 +2528,6 @@ msgid "_Next Error"
 msgstr "_Наступна помилка"
 
 #: ../src/build.c:1302
-#, fuzzy
 msgid "_Previous Error"
 msgstr "_Попередня помилка"
 
@@ -5371,7 +5361,6 @@ msgid "Quit Geany"
 msgstr "Зачинити Geany"
 
 #: ../src/toolbar.c:83
-#, fuzzy
 msgid "Print document"
 msgstr "Роздрукувати документ"
 
@@ -6442,7 +6431,6 @@ msgstr "Низовина"
 #~ msgid "Clear the filter"
 #~ msgstr "Закрити поточний файл"
 
-#, fuzzy
 #~ msgid "Clear"
 #~ msgstr "Очистити"
 
@@ -6522,7 +6510,6 @@ msgstr "Низовина"
 #~ msgid "(built on %s with GTK %d.%d.%d, GLib %d.%d.%d)"
 #~ msgstr "(будувати на %s з GTK %d.%d.%d, GLib %d.%d.%d)"
 
-#, fuzzy
 #~ msgid "Set"
 #~ msgstr "Використати"
 
@@ -6639,7 +6626,6 @@ msgstr "Низовина"
 #~ msgid "Duplicate line or selection"
 #~ msgstr "Подвоїти рядок або виділене"
 
-#, fuzzy
 #~ msgid "Send Selection to Terminal"
 #~ msgstr "_Надіслати виділене до Терміналу"
 
