@@ -83,6 +83,11 @@ enum
 };
 
 
+static GdkColor color_error = {0, 0xFFFF, 0, 0};
+static GdkColor color_context = {0, 0x7FFF, 0, 0};
+static GdkColor color_message = {0, 0, 0, 0xD000};
+
+
 static void prepare_msg_tree_view(void);
 static void prepare_status_tree_view(void);
 static void prepare_compiler_tree_view(void);
@@ -101,14 +106,47 @@ void msgwin_show_hide_tabs(void)
 }
 
 
-/** Sets the Messages path for opening any parsed filenames without absolute path
- * from message lines.
- * @param messages_dir The directory. **/
+/**
+ * Sets the Messages path for opening any parsed filenames without absolute path from message lines.
+ *
+ * @param messages_dir The directory.
+ **/
 GEANY_API_SYMBOL
 void msgwin_set_messages_dir(const gchar *messages_dir)
 {
 	g_free(msgwindow.messages_dir);
 	msgwindow.messages_dir = g_strdup(messages_dir);
+}
+
+
+static void load_color(const gchar *color_name, GdkColor *color)
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+	GdkRGBA rgba_color;
+	GtkWidgetPath *path = gtk_widget_path_new();
+	GtkStyleContext *ctx = gtk_style_context_new();
+
+	gtk_widget_path_append_type(path, GTK_TYPE_WINDOW);
+	gtk_widget_path_iter_set_name(path, -1, color_name);
+	gtk_style_context_set_screen(ctx, gdk_screen_get_default());
+	gtk_style_context_set_path(ctx, path);
+	gtk_style_context_get_color(ctx, gtk_style_context_get_state(ctx), &rgba_color);
+
+	color->red   = 0xffff * rgba_color.red;
+	color->green = 0xffff * rgba_color.green;
+	color->blue  = 0xffff * rgba_color.blue;
+
+	gtk_widget_path_unref(path);
+	g_object_unref(ctx);
+#else
+	gchar *path = g_strconcat("*.", color_name, NULL);
+
+	GtkSettings *settings = gtk_settings_get_default();
+	GtkStyle *style = gtk_rc_get_style_by_paths(settings, path, NULL, GTK_TYPE_WIDGET);
+	*color = style->fg[GTK_STATE_NORMAL];
+
+	g_free(path);
+#endif
 }
 
 
@@ -130,6 +168,10 @@ void msgwin_init(void)
 
 	ui_widget_modify_font_from_string(msgwindow.scribble, interface_prefs.msgwin_font);
 	g_signal_connect(msgwindow.scribble, "populate-popup", G_CALLBACK(on_scribble_populate), NULL);
+
+	load_color("geany-compiler-error", &color_error);
+	load_color("geany-compiler-context", &color_context);
+	load_color("geany-compiler-message", &color_message);
 }
 
 
@@ -262,30 +304,28 @@ static void prepare_compiler_tree_view(void)
 	/*g_signal_connect(selection, "changed", G_CALLBACK(on_msg_tree_selection_changed), NULL);*/
 }
 
-
-static const GdkColor color_error = {0, 65535, 0, 0};
-
 static const GdkColor *get_color(gint msg_color)
 {
-	static const GdkColor dark_red = {0, 65535 / 2, 0, 0};
-	static const GdkColor blue = {0, 0, 0, 0xD000};	/* not too bright ;-) */
-
 	switch (msg_color)
 	{
 		case COLOR_RED: return &color_error;
-		case COLOR_DARK_RED: return &dark_red;
-		case COLOR_BLUE: return &blue;
+		case COLOR_DARK_RED: return &color_context;
+		case COLOR_BLUE: return &color_message;
 		default: return NULL;
 	}
 }
 
 
 /**
- *  Adds a new message in the compiler tab treeview in the messages window.
+ * Adds a formatted message in the compiler tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param format    @c printf()-style format string.
+ * @param ...       Arguments for the @c format string.
+ *
+ * @see msgwin_compiler_add_string()
+ *
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
@@ -300,7 +340,17 @@ void msgwin_compiler_add(gint msg_color, const gchar *format, ...)
 	g_free(string);
 }
 
-
+/**
+ * Adds a new message in the compiler tab treeview in the messages window.
+ *
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param msg       Compiler message to be added.
+ *
+ * @see msgwin_compiler_add()
+ *
+ * @since 1.34 (API 236)
+ **/
+GEANY_API_SYMBOL
 void msgwin_compiler_add_string(gint msg_color, const gchar *msg)
 {
 	GtkTreeIter iter;
@@ -349,17 +399,20 @@ void msgwin_show_hide(gboolean show)
 
 
 /**
- *  Adds a new message in the messages tab treeview in the messages window.
- *  If @a line and @a doc are set, clicking on this line jumps into the file which is specified
- *  by @a doc into the line specified with @a line.
+ * Adds a formatted message in the messages tab treeview in the messages window.
  *
- *  @param msg_color A color to be used for the text. It must be an element of #MsgColors.
- *  @param line The document's line where the message belongs to. Set to @c -1 to ignore.
- *  @param doc The document. Set to @c NULL to ignore.
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * If @a line and @a doc are set, clicking on this line jumps into the file
+ * which is specified by @a doc into the line specified with @a line.
  *
- * @since 0.15
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param format    @c printf()-style format string.
+ * @param ...       Arguments for the @c format string.
+ *
+ * @see msgwin_msg_add_string()
+ *
+ * @since 0.16
  **/
 GEANY_API_SYMBOL
 void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *format, ...)
@@ -376,7 +429,22 @@ void msgwin_msg_add(gint msg_color, gint line, GeanyDocument *doc, const gchar *
 }
 
 
-/* adds string to the msg treeview */
+/**
+ * Adds a new message in the messages tab treeview in the messages window.
+ *
+ * If @a line and @a doc are set, clicking on this line jumps into the
+ * file which is specified by @a doc into the line specified with @a line.
+ *
+ * @param msg_color A color to be used for the text. It must be an element of #MsgColors.
+ * @param line      The document's line where the message belongs to. Set to @c -1 to ignore.
+ * @param doc       @nullable The document. Set to @c NULL to ignore.
+ * @param string    Message to be added.
+ *
+ * @see msgwin_msg_add()
+ *
+ * @since 1.34 (API 236)
+ **/
+GEANY_API_SYMBOL
 void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const gchar *string)
 {
 	GtkTreeIter iter;
@@ -414,29 +482,26 @@ void msgwin_msg_add_string(gint msg_color, gint line, GeanyDocument *doc, const 
 
 
 /**
- *  Logs a status message *without* setting the status bar.
- *  (Use ui_set_statusbar() to display text on the statusbar)
+ * Logs a new status message *without* setting the status bar.
  *
- *  @param format @c printf()-style format string.
- *  @param ... Arguments for the @c format string.
+ * Use @ref ui_set_statusbar() to display text on the statusbar.
+ *
+ * @param string Status message to be logged.
+ *
+ * @see msgwin_status_add()
+ *
+ * @since 1.34 (API 236)
  **/
 GEANY_API_SYMBOL
-void msgwin_status_add(const gchar *format, ...)
+void msgwin_status_add_string(const gchar *string)
 {
 	GtkTreeIter iter;
-	gchar *string;
 	gchar *statusmsg, *time_str;
-	va_list args;
-
-	va_start(args, format);
-	string = g_strdup_vprintf(format, args);
-	va_end(args);
 
 	/* add a timestamp to status messages */
 	time_str = utils_get_current_time_string();
 	statusmsg = g_strconcat(time_str, ": ", string, NULL);
 	g_free(time_str);
-	g_free(string);
 
 	/* add message to Status window */
 	gtk_list_store_append(msgwindow.store_status, &iter);
@@ -452,6 +517,32 @@ void msgwin_status_add(const gchar *format, ...)
 			gtk_notebook_set_current_page(GTK_NOTEBOOK(msgwindow.notebook), MSG_STATUS);
 		gtk_tree_path_free(path);
 	}
+}
+
+/**
+ * Logs a formatted status message *without* setting the status bar.
+ *
+ * Use @ref ui_set_statusbar() to display text on the statusbar.
+ *
+ * @param format @c printf()-style format string.
+ * @param ...    Arguments for the @c format string.
+ *
+ * @see msgwin_status_add_string()
+ *
+ * @since 0.12
+ **/
+GEANY_API_SYMBOL
+void msgwin_status_add(const gchar *format, ...)
+{
+	gchar *string;
+	va_list args;
+
+	va_start(args, format);
+	string = g_strdup_vprintf(format, args);
+	va_end(args);
+
+	msgwin_status_add_string(string);
+	g_free(string);
 }
 
 
@@ -1203,12 +1294,13 @@ static gboolean on_msgwin_button_press_event(GtkWidget *widget, GdkEventButton *
 
 
 /**
- *  Switches to the given notebook tab of the messages window and shows the messages window
- *  if it was previously hidden and @a show is set to @c TRUE.
+ * Switches to the given notebook tab of the messages window.
  *
- *  @param tabnum An index of a tab in the messages window. Valid values are all elements of
- *                #MessageWindowTabNum.
- *  @param show Whether to show the messages window at all if it was hidden before.
+ * The messages window is shown if it was previously hidden and @a show is set to @c TRUE.
+ *
+ * @param tabnum An index of a tab in the messages window. Valid values are
+ *                all elements of #MessageWindowTabNum.
+ * @param show   Whether to show the messages window at all if it was hidden before.
  *
  * @since 0.15
  **/
@@ -1240,9 +1332,9 @@ void msgwin_switch_tab(gint tabnum, gboolean show)
 
 
 /**
- *  Removes all messages from a tab specified by @a tabnum in the messages window.
+ * Removes all messages from a tab specified by @a tabnum in the messages window.
  *
- *  @param tabnum An index of a tab in the messages window which should be cleared.
+ * @param tabnum An index of a tab in the messages window which should be cleared.
  *                Valid values are @c MSG_STATUS, @c MSG_COMPILER and @c MSG_MESSAGE.
  *
  * @since 0.15

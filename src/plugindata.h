@@ -59,7 +59,7 @@ G_BEGIN_DECLS
  * @warning You should not test for values below 200 as previously
  * @c GEANY_API_VERSION was defined as an enum value, not a macro.
  */
-#define GEANY_API_VERSION 229
+#define GEANY_API_VERSION 239
 
 /* hack to have a different ABI when built with GTK3 because loading GTK2-linked plugins
  * with GTK3-linked Geany leads to crash */
@@ -73,7 +73,7 @@ G_BEGIN_DECLS
  * Changing this forces all plugins to be recompiled before Geany can load them. */
 /* This should usually stay the same if fields are only appended, assuming only pointers to
  * structs and not structs themselves are declared by plugins. */
-#define GEANY_ABI_VERSION (71 << GEANY_ABI_SHIFT)
+#define GEANY_ABI_VERSION (72 << GEANY_ABI_SHIFT)
 
 
 /** Defines a function to check the plugin is safe to load.
@@ -315,6 +315,7 @@ gboolean geany_plugin_register(GeanyPlugin *plugin, gint api_version,
 gboolean geany_plugin_register_full(GeanyPlugin *plugin, gint api_version,
                                     gint min_api_version, gint abi_version,
                                     gpointer data, GDestroyNotify free_func);
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin);
 void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify free_func);
 
 /** Convenience macro to register a plugin.
@@ -345,29 +346,17 @@ void geany_plugin_set_data(GeanyPlugin *plugin, gpointer data, GDestroyNotify fr
  */
 typedef enum
 {
-	/** @deprecated Use GEANY_PROXY_IGNORE instead.
-	 * @since 1.26 (API 226)
-	 */
-	PROXY_IGNORED,
-	/** @deprecated Use GEANY_PROXY_MATCH instead.
-	 * @since 1.26 (API 226)
-	 */
-	PROXY_MATCHED,
-	/** @deprecated Use GEANY_PROXY_RELATED instead.
-	 * @since 1.26 (API 226)
-	 */
-	PROXY_NOLOAD = 0x100,
 	/** The proxy is not responsible at all, and Geany or other plugins are free
 	 * to probe it.
 	 *
 	 * @since 1.29 (API 229)
 	 **/
-	GEANY_PROXY_IGNORE = PROXY_IGNORED,
+	GEANY_PROXY_IGNORE,
 	/** The proxy is responsible for this file, and creates a plugin for it.
 	 *
 	 * @since 1.29 (API 229)
 	 */
-	GEANY_PROXY_MATCH = PROXY_MATCHED,
+	GEANY_PROXY_MATCH,
 	/** The proxy is does not directly load it, but it's still tied to the proxy.
 	 *
 	 * This is for plugins that come in multiple files where only one of these
@@ -378,10 +367,22 @@ typedef enum
 	 *
 	 * @since 1.29 (API 229)
 	 */
-	GEANY_PROXY_RELATED = PROXY_MATCHED | PROXY_NOLOAD
+	GEANY_PROXY_RELATED = GEANY_PROXY_MATCH | 0x100
 }
 GeanyProxyProbeResults;
 
+/** @deprecated Use GEANY_PROXY_IGNORE instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_IGNORED GEANY_PROXY_IGNORE
+/** @deprecated Use GEANY_PROXY_MATCH instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_MATCHED GEANY_PROXY_MATCH
+/** @deprecated Use GEANY_PROXY_RELATED instead.
+ * @since 1.26 (API 226)
+ */
+#define PROXY_NOLOAD 0x100
 
 /** Hooks that need to be implemented by every proxy
  *

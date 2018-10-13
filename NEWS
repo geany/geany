@@ -1,7 +1,220 @@
-Geany 1.29 (unreleased)
+Geany 1.34 (unreleased)
+
+
+Geany 1.33 (February 25, 2018)
+
+    Bug fixes
+    * Fix the symbols tree hierarchy when several tags have the same name
+      (PR#1598).
+
+    Interface
+    * Add a tooltip showing the full path on menu items representing documents
+      (PR#1706).
+    * Add a note for applying the indent settings in the project preferences
+      (PR#1650).
+    * Enable popup menu on sidebar and message window notebooks (PR#1726).
+    * Show status message on attempt to execute empty context action
+      (Lars Paulsen, PR#1642).
+    * GTK3 theming improvements and documentation (PR#1382).
+
+    Filetypes
+    * CSS: Update Grid properties (Issue#1705).
 
     Internationalization
-    * Updated translations: ca, pt_BR, sv
+    * Updated translations: de, el, es, fr, it, lv, pl, pt, tr, ru, zh_CN
+
+
+Geany 1.32 (November 19, 2017)
+
+    General
+    * Improve CLI argument help (PR#1644).
+    * Keep the current tab when closing documents to the right of another tab.
+    * Re-enable SIGTERM handling (PR#1255).
+    * Create correct path for filetype config files (Jiří Techet, PR#1482).
+    * Add an option to enable IME's candidate window display inline
+      (Sinpo Wei, PR#1514).
+    * Add an option to automatically reload files changed on disk
+      (Mark O'Donovan, PR#1246).
+
+    Bug fixes
+    * Fix backward compatibility of the geometry saving setting.
+    * Close "Deleted from Disk" Infobar on Reload (Lars Paulsen, PR#1628).
+    * Make sure GDK_MOD2_MASK is cleared when getting modifiers
+      (Jiří Techet, PR#1636).
+    * Use non-symlinked VTE libraries on MacOS X (Jiří Techet, PR#1625).
+    * Fix crash if plugin manager is opened more than once (PR#1564).
+    * Fix incorrect variable reference (Thomas Martitz, PR#1561).
+
+    Interface
+    * Add "Close Documents to the Right" feature (PR#1362).
+    * Add an option to save/reload either window position or size,
+      but optionally not both (delt01, PR#1456).
+
+    Editor
+    * Update Scintilla to version 3.7.5 (PR#1503).
+    * Improve snippet support (visual indicators and more)
+      (Thomas Martitz, PR#1470).
+    * Push current position to navqueue before navigating back
+      (Vasiliy Faronov, PR#1537).
+
+    Filetypes
+    * Add GNU assembler filetype extensions (Issue#904).
+    * Make Python comment hash space (PR#1682).
+    * Add missing string and comment styles for various lexers (PR#1502).
+    * Add missing PHP keywords, especially for PHP 7.x (1547, PR#1547).
+    * Python: Don't highlight sub-identifiers as keywords (PR#1544).
+
+    Plugins
+    * FileBrowser: don't change directory on project save
+      (Jiří Techet, PR#1400).
+
+    Windows
+    * Fix Execute button on Windows when using HTML files and
+      "builtin" command (Issue#1018, PR#1667).
+
+    API
+    * Add `utils_get_real_path()` and deprecate `tm_get_real_path()` (PR#1224).
+    * Add `geany_plugin_get_data()` (PR#1234).
+    * Add `keybindings_load_keyfile()` (Jiří Techet, PR#1430).
+    * Add `tm_tag_get_type()` (Thomas Martitz, PR#1465).
+
+    HACKING
+    * Add note about data types and update for best practices (PR#1282).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, it, lt, lv, nl, pt, ru,
+                            sk, sv, zh_CN
+
+
+Geany 1.31 (July 16, 2017)
+
+    Bug fixes
+    * Update statusbar after applying indentation detection.
+    * Fix converting color to hex for insertion in the Color Chooser
+      dialog (Vasiliy Faronov, PR#1536).
+
+    Filetypes
+    * Add `parfor` to the Matlab keyword list (A. Tombs, PR#1021).
+    * C: fix line continuation handling (PR#1370).
+    * Add `require_relative` to the Ruby keyword list (Jacob H. Pratt,
+      PR#1472).
+    * Update Haxe keywords (PR#1216).
+    * Fix Arduino comment toggling (Giorgioggì, PR#1510).
+    * Update CMake keywords (Yan Pashkovsky, PR#1315).
+    * Update C# keywords (Yan Pashkovsky, PR#1315).
+    * Update HTML keywords (Vasiliy Faronov, PR#1530).
+
+    Internationalization
+    * Updated translations: ca, id, ja, kk, lt, ru
+
+    API
+    * Fix crash when calling plugin_set_key_group() more than once
+      (Jiří Techet, PR#1426).
+
+
+Geany 1.30.1 (March 19, 2017)
+
+    Editor
+    * Fix auto-completion and calltip popup position on multi-monitor
+      setups (Issue#1422).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, sk
+
+
+Geany 1.30 (March 05, 2017)
+
+    General
+    * Initial accessibility support in the editor (SF#328).
+    * Fix scrolling on Wayland (Issue#1320).
+
+    Bug fixes
+    * Fix Ctrl+X and Ctrl+C in non-Latin keyboard layouts
+      (Forkest, PR#1386).
+    * Fix search history filling on GTK >= 3.20 (PR#1404).
+    * Simplify setting build menu items labels, fixing a Commander plugin
+      issue (Vasiliy Faronov, PR#1396).
+
+    Interface
+    * Fix the current scope shown in the statusbar (Issue#1279).
+
+    Editor
+    * Update Scintilla to version 3.7.3.
+    * Fix triggering default keybindings together with snippets keybindings
+      (Issue#1354, PR#1356).
+
+    Filetypes
+    * Update JavaScript keywords (Abel 'Akronix' Serrano Juste, PR#1361).
+    * Partial highlighting of JavaScript ES6 template strings (Issue#934).
+    * Add Arduino custom filetype (Issue#1339).
+
+    Internationalization
+    * Updated translations: de, es, fr, it, lt, pt
+
+    API
+    * Remove unprefixed Scintilla structure aliases. Plugins must use
+      the `Sci_`-prefixed version from now on.
+    * Add `geany_api_version()` to detect the API version of Geany at
+      runtime (Thomas Martitz, PR#1406).
+
+    OSX
+    * Fix slow startup (Jiří Techet, Issue#1277, PR#1399).
+
+
+Geany 1.29 (November 13, 2016)
+
+    General
+    * Fix search entries color with the default GNOME 3.20 GTK2 theme
+      (PR#1137, Issue#1101, Issue#1135, Issue#1267).
+    * Improve support for GTK 3.22.
+    * Add support for VTE 0.38 and newer (Issue#336, PR#1181).
+
+    Bug fixes
+    * Fix build when the CXX variable contains flags (PR#1155, Issue#829).
+    * Fix focusing the message window when the Terminal tab is active
+      (PR#1200, Issue#1198).
+
+    Editor
+    * Update Scintilla to version 3.7.0 (Issue#1143).
+    * Add support for keeping the cursor a number of lines from the edges to
+      always show some context (PR#1154, Issue#1152).
+    * Allow to configure keybinding for "Delete to beginning of line"
+      (Abel Serrano Juste, PR#1134).
+    * Performance improvements with many duplicate symbols (Jiří Techet,
+      PR#797, Issue#577).
+    * Allow to configure the error indicator color (PR#1185).
+
+    Filetypes
+    * Fix highlighting of Haxe preprocessor (Issue#936).
+    * Add `.exp` extension to TCL (Simon Marchi, PR#979).
+
+    Internationalization
+    * Updated translations: ca, de, el, es, fr, id, it, kk, nl pt, pt_BR,
+      sv, zh_CN,
+
+    API
+    * Update `GeanyProxyProbeResults` API (PR#1213).
+    * Warn if a dot is used at the start of a proxy extension (PR#1212,
+      PR#1233).
+    * Add support for custom data attached to documents through
+      `plugin_set_document_data()`, `plugin_get_document_data()` and
+      `plugin_set_document_data_full()` (PR#1203).
+    * Add "project-before-close" signal (PR#1223).
+
+    Plugins
+    * Split Window: Work around a GTK bug present from 3.15.9 to 3.21.4
+      that breaks the document selection popup (Issue#1149, PR#1272).
+
+    Windows
+    * Include 'grep.exe' from MSYS2 which works better than the previously
+      self-compiled version
+      (Issue#783, Issue#784, Issue#1229, Issue#1260, PR#1301).
+    * Fix executing external commands (mainly Build and Run commands)
+      where paths and filenames with non-ASCII characters are involved
+      (Issue#1076, Issue#1259, Issue#1278, PR#1095).
+    * Do not create a batch file on Run commands any longer, instead use
+      a re-usable script and so eliminate the need to delete the script
+      from itself (Issue#1276, PR#1095).
 
 
 Geany 1.28 (July 10, 2016)

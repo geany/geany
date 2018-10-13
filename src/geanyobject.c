@@ -156,6 +156,12 @@ static void create_signals(GObjectClass *g_object_class)
 		G_SIGNAL_RUN_FIRST,
 		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
 		G_TYPE_NONE, 0);
+	geany_object_signals[GCB_PROJECT_BEFORE_CLOSE] = g_signal_new (
+		"project-before-close",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_FIRST,
+		0, NULL, NULL, g_cclosure_marshal_VOID__VOID,
+		G_TYPE_NONE, 0);
 	geany_object_signals[GCB_PROJECT_DIALOG_OPEN] = g_signal_new (
 		"project-dialog-open",
 		G_OBJECT_CLASS_TYPE (g_object_class),
@@ -223,6 +229,15 @@ static void create_signals(GObjectClass *g_object_class)
 		0, NULL, NULL, g_cclosure_marshal_VOID__BOXED,
 		G_TYPE_NONE, 1,
 		G_TYPE_KEY_FILE);
+
+	/* Key press signal */
+	geany_object_signals[GCB_KEY_PRESS_NOTIFY] = g_signal_new (
+		"key-press",
+		G_OBJECT_CLASS_TYPE (g_object_class),
+		G_SIGNAL_RUN_LAST,
+		0, boolean_handled_accumulator, NULL, NULL,
+		G_TYPE_BOOLEAN, 1,
+		GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 

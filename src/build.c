@@ -79,9 +79,7 @@ typedef struct RunInfo
 
 static RunInfo *run_info;
 
-#ifdef G_OS_WIN32
-static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.bat";
-#else
+#ifndef G_OS_WIN32
 static const gchar RUN_SCRIPT_CMD[] = "geany_run_script_XXXXXX.sh";
 #endif
 
@@ -115,7 +113,9 @@ static guint build_items_count = 9;
 
 static void build_exit_cb(GPid pid, gint status, gpointer user_data);
 static void build_iofunc(GString *string, GIOCondition condition, gpointer data);
+#ifndef G_OS_WIN32
 static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error);
+#endif
 static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *dir);
 static void set_stop_button(gboolean stop);
 static void run_exit_cb(GPid child_pid, gint status, gpointer user_data);
@@ -750,13 +750,15 @@ static void build_spawn_cmd(GeanyDocument *doc, const gchar *cmd, const gchar *d
 	msgwin_compiler_add(COLOR_BLUE, _("%s (in directory: %s)"), cmd, utf8_working_dir);
 	g_free(utf8_working_dir);
 
+#ifdef G_OS_UNIX
 	cmd_string = utils_get_locale_from_utf8(cmd);
 	argv[2] = cmd_string;
-
-#ifdef G_OS_UNIX
 	cmd = NULL;  /* under Unix, use argv to start cmd via sh for compatibility */
 #else
+	/* Expand environment variables like %blah%. */
+	cmd_string = win32_expand_environment_variables(cmd);
 	argv[0] = NULL;  /* under Windows, run cmd directly */
+	cmd = cmd_string;
 #endif
 
 	/* set the build info for the message window */
@@ -826,6 +828,17 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 	}
 #endif
 
+#ifdef G_OS_WIN32
+	/* Expand environment variables like %blah%. */
+	SETPTR(cmd_string, win32_expand_environment_variables(cmd_string));
+
+	gchar *helper = g_build_filename(utils_resource_dir(RESOURCE_DIR_LIBEXEC), "geany-run-helper", NULL);
+	/* escape helper appropriately */
+	/* FIXME: check the Windows rules, but it should not matter too much here as \es and "es are not
+	 * allowed in paths anyway */
+	run_cmd = g_strdup_printf("\"%s\" \"%s\" %d %s", helper, *working_dir, autoclose ? 1 : 0, cmd_string);
+	g_free(helper);
+#else
 	run_cmd = build_create_shellscript(*working_dir, cmd_string, autoclose, &error);
 	if (!run_cmd)
 	{
@@ -834,7 +847,7 @@ static gchar *prepare_run_cmd(GeanyDocument *doc, gchar **working_dir, guint cmd
 		g_error_free(error);
 		g_free(*working_dir);
 	}
-
+#endif
 	utils_free_pointers(3, cmd_string_utf8, working_dir_utf8, cmd_string, NULL);
 	return run_cmd;
 }
@@ -892,6 +905,21 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 		gchar *locale_term_cmd = utils_get_locale_from_utf8(tool_prefs.term_cmd);
 		GError *error = NULL;
 
+#ifdef G_OS_WIN32
+		if (g_regex_match_simple("^[ \"]*cmd([.]exe)?[\" ]", locale_term_cmd, 0, 0))
+		{
+			/* if passing an argument to cmd.exe, respect its quoting rules */
+			GString *escaped_run_cmd = g_string_new(NULL);
+			for (gchar *p = run_cmd; *p; p++)
+			{
+				if (strchr("()%!^\"<>&| ", *p)) // cmd.exe metacharacters
+					g_string_append_c(escaped_run_cmd, '^');
+				g_string_append_c(escaped_run_cmd, *p);
+			}
+			SETPTR(run_cmd, g_string_free(escaped_run_cmd, FALSE));
+		}
+#endif
+
 		utils_str_replace_all(&locale_term_cmd, "%c", run_cmd);
 
 		if (spawn_async(working_dir, locale_term_cmd, NULL, NULL, &(run_info[cmdindex].pid),
@@ -908,7 +936,9 @@ static void build_run_cmd(GeanyDocument *doc, guint cmdindex)
 				"Check the Terminal setting in Preferences"), utf8_term_cmd, error->message);
 			g_free(utf8_term_cmd);
 			g_error_free(error);
+#ifndef G_OS_WIN32
 			g_unlink(run_cmd);
+#endif
 			run_info[cmdindex].pid = (GPid) 0;
 		}
 	}
@@ -1063,27 +1093,18 @@ static void run_exit_cb(GPid child_pid, gint status, gpointer user_data)
 /* write a little shellscript to call the executable (similar to anjuta_launcher but "internal")
  * working_dir and cmd are both in the locale encoding
  * it returns the full file name (including path) of the created script in the locale encoding */
+#ifndef G_OS_WIN32
 static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cmd, gboolean autoclose, GError **error)
 {
 	gint fd;
 	gchar *str, *fname;
 	gboolean success = TRUE;
-#ifdef G_OS_WIN32
-	gchar *expanded_cmd;
-#else
 	gchar *escaped_dir;
-#endif
 	fd = g_file_open_tmp (RUN_SCRIPT_CMD, &fname, error);
 	if (fd < 0)
 		return NULL;
 	close(fd);
 
-#ifdef G_OS_WIN32
-	/* Expand environment variables like %blah%. */
-	expanded_cmd = win32_expand_environment_variables(cmd);
-	str = g_strdup_printf("cd \"%s\"\n\n%s\n\n%s\ndel \"%%0\"\n\npause\n", working_dir, expanded_cmd, (autoclose) ? "" : "pause");
-	g_free(expanded_cmd);
-#else
 	escaped_dir = g_shell_quote(working_dir);
 	str = g_strdup_printf(
 		"#!/bin/sh\n\nrm $0\n\ncd %s\n\n%s\n\necho \"\n\n------------------\n(program exited with code: $?)\" \
@@ -1091,7 +1112,6 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 		"\necho \"Press return to continue\"\n#to be more compatible with shells like "
 			"dash\ndummy_var=\"\"\nread dummy_var");
 	g_free(escaped_dir);
-#endif
 
 	if (!g_file_set_contents(fname, str, -1, error))
 		success = FALSE;
@@ -1119,6 +1139,7 @@ static gchar *build_create_shellscript(const gchar *working_dir, const gchar *cm
 
 	return fname;
 }
+#endif
 
 
 typedef void Callback(GtkWidget *w, gpointer u);
@@ -1216,13 +1237,14 @@ static void on_build_menu_item(GtkWidget *w, gpointer user_data)
 		bc = get_build_cmd(doc, grp, cmd, NULL);
 		if (bc != NULL && strcmp(bc->command, "builtin") == 0)
 		{
+			const gchar *uri_file_prefix;
 			gchar *uri;
 			if (doc == NULL)
 				return;
-			uri = g_strconcat("file:///", g_path_skip_root(doc->file_name), NULL);
+			uri_file_prefix = utils_get_uri_file_prefix();
+			uri = g_strconcat(uri_file_prefix, doc->file_name, NULL);
 			utils_open_browser(uri);
 			g_free(uri);
-
 		}
 		else
 			build_run_cmd(doc, cmd);
@@ -1366,17 +1388,6 @@ static void create_build_menu(BuildMenuItems *build_menu_items)
 }
 
 
-/* portability to various GTK versions needs checking
- * conforms to description of gtk_accel_label as child of menu item
- * NB 2.16 adds set_label but not yet set_label_mnemonic */
-static void geany_menu_item_set_label(GtkWidget *w, const gchar *label)
-{
-	GtkWidget *c = gtk_bin_get_child(GTK_BIN(w));
-
-	gtk_label_set_text_with_mnemonic(GTK_LABEL(c), label);
-}
-
-
 /* * Update the build menu to reflect changes in configuration or status.
  *
  * Sets the labels and number of visible items to match the highest
@@ -1459,7 +1470,7 @@ void build_menu_update(GeanyDocument *doc)
 						gtk_widget_set_sensitive(menu_item, cmd_sensitivity);
 						if (bc != NULL && !EMPTY(label))
 						{
-							geany_menu_item_set_label(menu_item, label);
+							gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item), label);
 							gtk_widget_show_all(menu_item);
 							vis |= TRUE;
 						}
@@ -1487,7 +1498,7 @@ void build_menu_update(GeanyDocument *doc)
 						gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(menu_item), image);
 						if (bc != NULL && !EMPTY(label))
 						{
-							geany_menu_item_set_label(menu_item, label);
+							gtk_menu_item_set_label(GTK_MENU_ITEM(menu_item), label);
 							gtk_widget_show_all(menu_item);
 							vis |= TRUE;
 						}
@@ -2245,7 +2256,7 @@ static void build_load_menu_grp(GKeyFile *config, GeanyBuildCommand **dst, gint 
 	gsize prefixlen; /* NOTE prefixlen used in macros above */
 	GeanyBuildCommand *dstcmd;
 	gchar *key;
-	static gchar cmdbuf[3] = "  ";
+	static gchar cmdbuf[4] = "  ";
 
 	if (*dst == NULL)
 		*dst = g_new0(GeanyBuildCommand, build_groups_count[grp]);

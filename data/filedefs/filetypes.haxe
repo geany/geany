@@ -3,8 +3,8 @@
 
 [keywords]
 # all items must be in one line
-primary=abstract break case catch class const continue trace do else enum extends finally for function goto if implements import in inline instanceof int interface new package private public return static super switch this throw throws transient try typeof using var void volatile while with
-secondary=Bool Dynamic Float Int null Void Enum String
+primary=abstract break case cast catch class continue default trace do dynamic else enum extends extern false for function if implements import in inline interface macro new null override package private public return static switch this throw true try typedef untyped using var while
+secondary=Bool Dynamic Float Int Void Enum String
 classes=Array ArrayAccess Class Date DateTools EReg Hash IntHash IntIter Iterable Iterator Lambda List Math Null Protected Reflect Std StringBuf StringTools Type UInt ValueType Xml XmlType
 
 [lexer_properties=C]

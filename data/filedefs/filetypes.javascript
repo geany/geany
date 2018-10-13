@@ -3,10 +3,12 @@
 
 [keywords]
 # all items must be in one line
-primary=break case catch class const continue default delete do each else extends false finally for function get if in Infinity instanceof let NaN new null return set static super switch this throw true try typeof undefined var void while with yield prototype
+primary=break case catch class const continue debugger default delete do else enum export extends false finally for function get if import in Infinity instanceof let NaN new null return set static super switch this throw true try typeof undefined var void while with yield prototype async await
 secondary=Array Boolean Date Function Math Number Object String RegExp EvalError Error RangeError ReferenceError SyntaxError TypeError URIError constructor prototype decodeURI decodeURIComponent encodeURI encodeURIComponent eval isFinite isNaN parseFloat parseInt
 
 [lexer_properties=C]
+# partially handles ES6 template strings
+lexer.cpp.backquoted.strings=1
 
 [settings]
 # default extension used when saving files

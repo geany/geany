@@ -183,7 +183,7 @@ static void on_file1_activate(GtkMenuItem *menuitem, gpointer user_data)
 
 
 /* edit actions, c&p & co, from menu bar and from popup menu */
-static void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data)
+static void on_edit1_select(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *item;
 	GeanyDocument *doc = document_get_current();
@@ -197,6 +197,16 @@ static void on_edit1_activate(GtkMenuItem *menuitem, gpointer user_data)
 #else
 	gtk_widget_set_sensitive(item, plugins_have_preferences());
 #endif
+}
+
+
+static void on_edit1_deselect(GtkMenuShell *menushell, gpointer user_data)
+{
+	/* we re-enable items that were disabled in on_edit1_select() on menu popdown to
+	 * workaround mutli-layout keyboard issues in our keybinding handling code, so that
+	 * GTK's accelerator handling can catch them.
+	 * See https://github.com/geany/geany/issues/1368#issuecomment-273678207 */
+	ui_menu_copy_items_set_sensitive(TRUE);
 }
 
 
@@ -569,7 +579,7 @@ void on_toggle_case1_activate(GtkMenuItem *menuitem, gpointer user_data)
 	{
 		gchar *result = NULL;
 		gint cmd = SCI_LOWERCASE;
-		gboolean rectsel = (gboolean) scintilla_send_message(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
+		gboolean rectsel = (gboolean) SSM(sci, SCI_SELECTIONISRECTANGLE, 0, 0);
 		gchar *text = sci_get_selection_contents(sci);
 
 		if (utils_str_has_upper(text))
@@ -1490,6 +1500,10 @@ void on_context_action1_activate(GtkMenuItem *menuitem, gpointer user_data)
 		}
 		g_free(command_line);
 	}
+	else
+	{
+		ui_set_statusbar(TRUE, _("No context action set."));
+	}
 	g_free(word);
 	g_free(command);
 }
@@ -1902,6 +1916,7 @@ static void on_detect_type_from_file_activate(GtkMenuItem *menuitem, gpointer us
 	{
 		editor_set_indent_type(doc->editor, type);
 		ui_document_show_hide(doc);
+		ui_update_statusbar(doc, -1);
 	}
 }
 

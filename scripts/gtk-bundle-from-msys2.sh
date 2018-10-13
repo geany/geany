@@ -12,8 +12,10 @@ make_zip="no"
 gtkv="3"
 run_pi="y"
 
-UNX_UTILS_URL="http://unxutils.sourceforge.net/UnxUpdates.zip"
-GREP_URL="https://download.geany.org/contrib/grep-2.23.tar.xz"
+UNX_UTILS_URL="https://download.geany.org/contrib/UnxUpdates.zip"
+# path to an installation of a MSYS2 installation in the native architecture matching $ABI
+# leave empty if the script is called already from the same MSYS2 architecture as $ABI
+MSYS2_ABI_PATH="/c/msys32"
 
 package_urls=""
 gtk2_dependency_pkgs=""
@@ -41,6 +43,7 @@ harfbuzz
 fontconfig
 freetype
 atk
+fribidi
 pango
 cairo
 pixman
@@ -173,6 +176,7 @@ cleanup_unnecessary_files() {
 	rmdir var
 	# cleanup development and other unnecessary files
 	rm -rf include
+	rm -rf lib/cmake
 	rm -rf lib/gettext
 	rm -rf lib/libffi-*
 	rm -rf lib/pkgconfig
@@ -205,21 +209,22 @@ cleanup_unnecessary_files() {
 	find . -type d -empty -delete
 }
 
-download_and_compile_grep() {
-	grep_archive="grep_source.tar.xz"
-	grep_build_dir="grep_build"
-	grep_build_log="grep_build.log"
-	echo "Download and compile 'grep' (see ${grep_build_dir}/${grep_build_log} for details)"
-	mkdir ${grep_build_dir}
-	cd ${grep_build_dir}
-	wget --no-verbose -O ${grep_archive} ${GREP_URL}
-	tar xf ${grep_archive}
-	grep-2*/configure > ${grep_build_log} 2>&1 || exit 1
-	make >> ${grep_build_log} 2>&1 || exit 1
-	strip src/grep.exe
-	cp src/grep.exe ../bin/
-	cd ..
-	rm -rf ${grep_build_dir}
+copy_grep_and_dependencies() {
+	own_arch=$(arch)
+	if [ "${own_arch}" == "${ABI}" -o -z "${MSYS2_ABI_PATH}" ]; then
+		bin_dir="/usr/bin"
+	else
+		# TODO extract grep and dependencies from Pacman packages according to the target ABI
+		bin_dir="${MSYS2_ABI_PATH}/usr/bin"
+	fi
+	echo "Copy 'grep' from ${bin_dir}"
+	cp "${bin_dir}/grep.exe" "bin/"
+	# dependencies for grep.exe
+	cp "${bin_dir}/msys-2.0.dll" "bin/"
+	cp "${bin_dir}/msys-gcc_s-1.dll" "bin/"
+	cp "${bin_dir}/msys-iconv-2.dll" "bin/"
+	cp "${bin_dir}/msys-intl-8.dll" "bin/"
+	cp "${bin_dir}/msys-pcre-1.dll" "bin/"
 }
 
 download_and_extract_sort() {
@@ -232,6 +237,8 @@ download_and_extract_sort() {
 }
 
 create_bundle_dependency_info_file() {
+	grep_version="$(bin/grep --version | head -n1)"
+	sort_version="$(bin/sort --version | head -n1)"
 	filename="ReadMe.Dependencies.Geany.txt"
 	cat << EOF > "${filename}"
 This installation contains dependencies for Geany which are distributed
@@ -242,10 +249,11 @@ full download URL as used to create this installation.
 
 sort.exe is extracted from the ZIP archive at
 ${UNX_UTILS_URL}.
+Sort version: ${sort_version}
 
-grep.exe is self-compiled from the sources available at
-${GREP_URL}.
-Used command to compile: ./configure && make
+grep.exe is taken from a 32bit MSYS2 installation and
+is bundled together with its dependencies.
+Grep version: ${grep_version}
 
 Other dependencies are provided by the MSYS2 project
 (https://msys2.github.io) and were downloaded from:
@@ -271,7 +279,7 @@ initialize
 extract_packages
 move_extracted_files
 cleanup_unnecessary_files
-download_and_compile_grep
+copy_grep_and_dependencies
 download_and_extract_sort
 create_bundle_dependency_info_file
 create_zip_archive

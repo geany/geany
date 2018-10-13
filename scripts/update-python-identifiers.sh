@@ -8,7 +8,7 @@
 
 set -e
 
-file=data/filetypes.python
+file=data/filedefs/filetypes.python
 
 [ -f "$file" ]
 

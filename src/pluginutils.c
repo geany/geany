@@ -52,6 +52,22 @@ typedef struct
 PluginDocDataProxy;
 
 
+/** Returns the runtime API version Geany was compiled with.
+ *
+ * Unlike @ref GEANY_API_VERSION this version is the value of that
+ * define at the time when Geany itself was compiled. This allows to
+ * establish soft dependencies which are resolved at runtime depending
+ * on Geany's API version.
+ *
+ * @return Geany's API version
+ * @since 1.30 (API 231)
+ **/
+GEANY_API_SYMBOL
+gint geany_api_version(void)
+{
+	return GEANY_API_VERSION;
+}
+
 /** Inserts a toolbar item before the Quit button, or after the previous plugin toolbar item.
  * A separator is added on the first call to this function, and will be shown when @a item is
  * shown; hidden when @a item is hidden.
@@ -551,6 +567,24 @@ void plugin_builder_connect_signals(GeanyPlugin *plugin,
 	data.plugin = plugin;
 
 	gtk_builder_connect_signals_full(builder, connect_plugin_signals, &data);
+}
+
+
+/** Get the additional data that corresponds to the plugin.
+ *
+ * @param plugin The plugin provided by Geany
+ * @return The data corresponding to the plugin or @c NULL if none set.
+ *
+ * @since 1.32 (API 234)
+ *
+ * @see geany_plugin_set_data()
+ */
+gpointer geany_plugin_get_data(const GeanyPlugin *plugin)
+{
+	g_return_val_if_fail (plugin != NULL, NULL);
+	g_return_val_if_fail (PLUGIN_LOADED_OK (plugin->priv), NULL);
+
+	return plugin->priv->cb_data;
 }
 
 

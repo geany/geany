@@ -430,6 +430,32 @@ static void on_open_in_new_window_activate(GtkMenuItem *menuitem, gpointer user_
 }
 
 
+static gboolean has_tabs_on_right(GeanyDocument *doc)
+{
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint total_pages = gtk_notebook_get_n_pages(nb);
+	gint doc_page = document_get_notebook_page(doc);
+	return total_pages > (doc_page + 1);
+}
+
+
+static void on_close_documents_right_activate(GtkMenuItem *menuitem, GeanyDocument *doc)
+{
+	g_return_if_fail(has_tabs_on_right(doc));
+	GtkNotebook *nb = GTK_NOTEBOOK(main_widgets.notebook);
+	gint current_page = gtk_notebook_get_current_page(nb);
+	gint doc_page = document_get_notebook_page(doc);
+	for (gint i = doc_page + 1; i < gtk_notebook_get_n_pages(nb); )
+	{
+		if (! document_close(document_get_from_page(i)))
+			i++; // only increment if tab wasn't closed
+	}
+	/* keep the current tab to the original one unless it has been closed, in
+	 * which case use the activated one */
+	gtk_notebook_set_current_page(nb, MIN(current_page, doc_page));
+}
+
+
 static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 {
 	GtkWidget *menu_item;
@@ -472,6 +498,12 @@ static void show_tab_bar_popup_menu(GdkEventButton *event, GeanyDocument *doc)
 	gtk_container_add(GTK_CONTAINER(menu), menu_item);
 	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_other_documents1_activate), doc);
 	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), (doc != NULL));
+
+	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("Close Documents to the _Right"));
+	gtk_widget_show(menu_item);
+	gtk_container_add(GTK_CONTAINER(menu), menu_item);
+	g_signal_connect(menu_item, "activate", G_CALLBACK(on_close_documents_right_activate), doc);
+	gtk_widget_set_sensitive(GTK_WIDGET(menu_item), doc != NULL && has_tabs_on_right(doc));
 
 	menu_item = ui_image_menu_item_new(GTK_STOCK_CLOSE, _("C_lose All"));
 	gtk_widget_show(menu_item);

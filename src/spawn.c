@@ -64,8 +64,10 @@
 #ifdef SPAWN_TEST
 # define _
 # define GEANY_API_SYMBOL
+# define geany_debug g_debug
 #else
 # include "support.h"
+# include "geany.h"
 #endif
 
 #if ! GLIB_CHECK_VERSION(2, 31, 20) && ! defined(G_SPAWN_ERROR_TOO_BIG)
@@ -97,7 +99,7 @@ static gboolean spawn_parse_argv(const gchar *command_line, gint *argcp, gchar *
 }
 #endif
 
-#define G_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
+#define SPAWN_IO_FAILURE (G_IO_ERR | G_IO_HUP | G_IO_NVAL)  /* always used together */
 
 
 /*
@@ -307,11 +309,11 @@ gboolean spawn_kill_process(GPid pid, GError **error)
 
 
 #ifdef G_OS_WIN32
-static gchar *spawn_create_process_with_pipes(char *command_line, const char *working_directory,
-	void *environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
+static gchar *spawn_create_process_with_pipes(wchar_t *w_command_line, const wchar_t *w_working_directory,
+	void *w_environment, HANDLE *hprocess, int *stdin_fd, int *stdout_fd, int *stderr_fd)
 {
 	enum { WRITE_STDIN, READ_STDOUT, READ_STDERR, READ_STDIN, WRITE_STDOUT, WRITE_STDERR };
-	STARTUPINFO startup;
+	STARTUPINFOW startup;
 	PROCESS_INFORMATION process;
 	HANDLE hpipe[6] = { NULL, NULL, NULL, NULL, NULL, NULL };
 	int *fd[3] = { stdin_fd, stdout_fd, stderr_fd };
@@ -372,8 +374,9 @@ static gchar *spawn_create_process_with_pipes(char *command_line, const char *wo
 	startup.hStdOutput = hpipe[WRITE_STDOUT];
 	startup.hStdError = hpipe[WRITE_STDERR];
 
-	if (!CreateProcess(NULL, command_line, NULL, NULL, TRUE, pipe_io ? CREATE_NO_WINDOW : 0,
-		environment, working_directory, &startup, &process))
+	if (!CreateProcessW(NULL, w_command_line, NULL, NULL, TRUE,
+		CREATE_UNICODE_ENVIRONMENT | (pipe_io ? CREATE_NO_WINDOW : 0),
+		w_environment, w_working_directory, &startup, &process))
 	{
 		failed = "";  /* report the message only */
 		/* further errors will not be reported */
@@ -521,8 +524,10 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 
 #ifdef G_OS_WIN32
 	GString *command;
-	GArray *environment;
-	gchar *failure;
+	GArray *w_environment;
+	wchar_t *w_working_directory = NULL;
+	wchar_t *w_command = NULL;
+	gboolean success = TRUE;
 
 	if (command_line)
 	{
@@ -553,7 +558,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	else
 		command = g_string_new(NULL);
 
-	environment = g_array_new(TRUE, FALSE, sizeof(char));
+	w_environment = g_array_new(TRUE, FALSE, sizeof(wchar_t));
 
 	while (argv && *argv)
 		spawn_append_argument(command, *argv++);
@@ -562,26 +567,115 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 	g_message("full spawn command line: %s", command->str);
 #endif
 
-	while (envp && *envp)
+	while (envp && *envp && success)
 	{
-		g_array_append_vals(environment, *envp, strlen(*envp) + 1);
+		glong w_entry_len;
+		wchar_t *w_entry;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(*envp, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(*envp, -1, NULL, NULL, NULL);
+			if (tmp)
+				*envp = tmp;
+		}
+		/* TODO: better error message */
+		w_entry = g_utf8_to_utf16(*envp, -1, NULL, &w_entry_len, error);
+
+		if (! w_entry)
+			success = FALSE;
+		else
+		{
+			/* copy the entry, including NUL terminator */
+			g_array_append_vals(w_environment, w_entry, w_entry_len + 1);
+			g_free(w_entry);
+		}
+
+		g_free(tmp);
 		envp++;
 	}
 
-	failure = spawn_create_process_with_pipes(command->str, working_directory,
-		envp ? environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
-
-	g_string_free(command, TRUE);
-	g_array_free(environment, TRUE);
-
-	if (failure)
+	/* convert working directory into locale encoding */
+	if (success && working_directory)
 	{
-		g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
-		g_free(failure);
-		return FALSE;
+		GError *gerror = NULL;
+		const gchar *utf8_working_directory;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(working_directory, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(working_directory, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_working_directory = tmp;
+		}
+		else
+			utf8_working_directory = working_directory;
+
+		w_working_directory = g_utf8_to_utf16(utf8_working_directory, -1, NULL, NULL, &gerror);
+		if (! w_working_directory)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert working directory into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
+		g_free(tmp);
+	}
+	/* convert command into locale encoding */
+	if (success)
+	{
+		GError *gerror = NULL;
+		const gchar *utf8_cmd;
+		gchar *tmp = NULL;
+
+		// FIXME: remove this and rely on UTF-8 input
+		if (! g_utf8_validate(command->str, -1, NULL))
+		{
+			tmp = g_locale_to_utf8(command->str, -1, NULL, NULL, NULL);
+			if (tmp)
+				utf8_cmd = tmp;
+		}
+		else
+			utf8_cmd = command->str;
+
+		w_command = g_utf8_to_utf16(utf8_cmd, -1, NULL, NULL, &gerror);
+		if (! w_command)
+		{
+			/* TODO use the code below post-1.28 as it introduces a new string
+			g_set_error(error, gerror->domain, gerror->code,
+				_("Failed to convert command into locale encoding: %s"), gerror->message);
+			*/
+			g_propagate_error(error, gerror);
+			success = FALSE;
+		}
 	}
 
-	return TRUE;
+	if (success)
+	{
+		gchar *failure;
+
+		failure = spawn_create_process_with_pipes(w_command, w_working_directory,
+			envp ? w_environment->data : NULL, child_pid, stdin_fd, stdout_fd, stderr_fd);
+
+		if (failure)
+		{
+			g_set_error_literal(error, G_SPAWN_ERROR, G_SPAWN_ERROR_FAILED, failure);
+			g_free(failure);
+		}
+
+		success = failure == NULL;
+	}
+
+	g_string_free(command, TRUE);
+	g_array_free(w_environment, TRUE);
+	g_free(w_working_directory);
+	g_free(w_command);
+
+	return success;
 #else  /* G_OS_WIN32 */
 	int cl_argc;
 	char **full_argv;
@@ -655,7 +749,7 @@ static gboolean spawn_async_with_pipes(const gchar *working_directory, const gch
 		#ifdef ENFILE
 			case G_SPAWN_ERROR_NFILE : en = ENFILE; break;
 		#endif
-		#ifdef EMFILE 
+		#ifdef EMFILE
 			case G_SPAWN_ERROR_MFILE : en = EMFILE; break;
 		#endif
 		#ifdef EINVAL
@@ -750,21 +844,44 @@ typedef struct _SpawnChannelData
 	GString *buffer;       /* NULL if recursive */
 	GString *line_buffer;  /* NULL if char buffered */
 	gsize max_length;
+	/* stdout/stderr: fix continuous empty G_IO_IN-s for recursive channels */
+	guint empty_gio_ins;
 } SpawnChannelData;
 
+#define SPAWN_CHANNEL_GIO_WATCH(sc) ((sc)->empty_gio_ins < 200)
 
-static void spawn_destroy_cb(gpointer data)
+
+static void spawn_destroy_common(SpawnChannelData *sc)
 {
-	SpawnChannelData *sc = (SpawnChannelData *) data;
-
 	g_io_channel_shutdown(sc->channel, FALSE, NULL);
-	sc->channel = NULL;
 
 	if (sc->buffer)
 		g_string_free(sc->buffer, TRUE);
 
 	if (sc->line_buffer)
 		g_string_free(sc->line_buffer, TRUE);
+}
+
+
+static void spawn_timeout_destroy_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	spawn_destroy_common(sc);
+	g_io_channel_unref(sc->channel);
+	sc->channel = NULL;
+}
+
+
+static void spawn_destroy_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	if (SPAWN_CHANNEL_GIO_WATCH(sc))
+	{
+		spawn_destroy_common(sc);
+		sc->channel = NULL;
+	}
 }
 
 
@@ -775,9 +892,19 @@ static gboolean spawn_write_cb(GIOChannel *channel, GIOCondition condition, gpoi
 	if (!sc->cb.write(channel, condition, sc->cb_data))
 		return FALSE;
 
-	return !(condition & G_IO_FAILURE);
+	return !(condition & SPAWN_IO_FAILURE);
 }
 
+
+static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpointer data);
+
+static gboolean spawn_timeout_read_cb(gpointer data)
+{
+	SpawnChannelData *sc = (SpawnChannelData *) data;
+
+	/* The solution for continuous empty G_IO_IN-s is to generate them outselves. :) */
+	return spawn_read_cb(sc->channel, G_IO_IN, data);
+}
 
 static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpointer data)
 {
@@ -785,18 +912,20 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 	GString *line_buffer = sc->line_buffer;
 	GString *buffer = sc->buffer ? sc->buffer : g_string_sized_new(sc->max_length);
 	GIOCondition input_cond = condition & (G_IO_IN | G_IO_PRI);
-	GIOCondition failure_cond = condition & G_IO_FAILURE;
+	GIOCondition failure_cond = condition & SPAWN_IO_FAILURE;
+	GIOStatus status = G_IO_STATUS_NORMAL;
 	/*
 	 * - Normally, read only once. With IO watches, our data processing must be immediate,
 	 *   which may give the child time to emit more data, and a read loop may combine it into
 	 *   large stdout and stderr portions. Under Windows, looping blocks.
 	 * - On failure, read in a loop. It won't block now, there will be no more data, and the
 	 *   IO watch is not guaranteed to be called again (under Windows this is the last call).
+	 * - When using timeout callbacks, read in a loop. Otherwise, the input processing will
+	 *   be limited to (1/0.050 * DEFAULT_IO_LENGTH) KB/sec, which is pretty low.
 	 */
 	if (input_cond)
 	{
 		gsize chars_read;
-		GIOStatus status;
 
 		if (line_buffer)
 		{
@@ -831,7 +960,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 					}
 				}
 
-				if (!failure_cond)
+				if (SPAWN_CHANNEL_GIO_WATCH(sc) && !failure_cond)
 					break;
 			}
 		}
@@ -844,7 +973,7 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 				/* input only, failures are reported separately below */
 				sc->cb.read(buffer, input_cond, sc->cb_data);
 
-				if (!failure_cond)
+				if (SPAWN_CHANNEL_GIO_WATCH(sc) && !failure_cond)
 					break;
 			}
 		}
@@ -874,6 +1003,28 @@ static gboolean spawn_read_cb(GIOChannel *channel, GIOCondition condition, gpoin
 		}
 
 		sc->cb.read(buffer, input_cond | failure_cond, sc->cb_data);
+	}
+	/* Check for continuous activations with G_IO_IN | G_IO_PRI, without any
+	   data to read and without errors. If detected, switch to timeout source. */
+	else if (SPAWN_CHANNEL_GIO_WATCH(sc) && status == G_IO_STATUS_AGAIN)
+	{
+		sc->empty_gio_ins++;
+
+		if (!SPAWN_CHANNEL_GIO_WATCH(sc))
+		{
+			GSource *old_source = g_main_current_source();
+			GSource *new_source = g_timeout_source_new(50);
+
+			geany_debug("Switching spawn source %s ((GSource*)%p on (GIOChannel*)%p) to a timeout source",
+						g_source_get_name(old_source), (gpointer) old_source, (gpointer)sc->channel);
+
+			g_io_channel_ref(sc->channel);
+			g_source_set_can_recurse(new_source, g_source_get_can_recurse(old_source));
+			g_source_set_callback(new_source, spawn_timeout_read_cb, data, spawn_timeout_destroy_cb);
+			g_source_attach(new_source, g_source_get_context(old_source));
+			g_source_unref(new_source);
+			failure_cond |= G_IO_ERR;
+		}
 	}
 
 	if (buffer != sc->buffer)
@@ -911,7 +1062,7 @@ static void spawn_finalize(SpawnWatcherData *sw)
 }
 
 
-static gboolean spawn_timeout_cb(gpointer data)
+static gboolean spawn_timeout_watch_cb(gpointer data)
 {
 	SpawnWatcherData *sw = (SpawnWatcherData *) data;
 	int i;
@@ -939,7 +1090,7 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
 		{
 			GSource *source = g_timeout_source_new(50);
 
-			g_source_set_callback(source, spawn_timeout_cb, data, NULL);
+			g_source_set_callback(source, spawn_timeout_watch_cb, data, NULL);
 			g_source_attach(source, sw->main_context);
 			g_source_unref(source);
 			return;
@@ -973,6 +1124,9 @@ static void spawn_watch_cb(GPid pid, gint status, gpointer data)
  *
  *  The default max lengths are 24K for line buffered stdout, 8K for line buffered stderr,
  *  4K for unbuffered input under Unix, and 2K for unbuffered input under Windows.
+ *
+ *  Due to a bug in some glib versions, the sources for recursive stdout/stderr callbacks may
+ *  be converted from child watch to timeout(50ms). No callback changes are required.
  *
  *  @c exit_cb is always invoked last, after all I/O callbacks.
  *
@@ -1050,7 +1204,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 			if (i == 0)
 			{
 				sc->cb.write = stdin_cb;
-				condition = G_IO_OUT | G_IO_FAILURE;
+				condition = G_IO_OUT | SPAWN_IO_FAILURE;
 				callback = (GSourceFunc) spawn_write_cb;
 			}
 			else
@@ -1058,7 +1212,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 				gboolean line_buffered = !(spawn_flags &
 					((SPAWN_STDOUT_UNBUFFERED >> 1) << i));
 
-				condition = G_IO_IN | G_IO_PRI | G_IO_FAILURE;
+				condition = G_IO_IN | G_IO_PRI | SPAWN_IO_FAILURE;
 				callback = (GSourceFunc) spawn_read_cb;
 
 				if (i == 1)
@@ -1079,6 +1233,8 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 					sc->line_buffer = g_string_sized_new(sc->max_length +
 						DEFAULT_IO_LENGTH);
 				}
+
+				sc->empty_gio_ins = 0;
 			}
 
 			source = g_io_create_watch(sc->channel, condition);
@@ -1155,7 +1311,7 @@ gboolean spawn_write_data(GIOChannel *channel, GIOCondition condition, SpawnWrit
 		}
 	}
 
-	return data->size > 0 && !(condition & G_IO_FAILURE);
+	return data->size > 0 && !(condition & SPAWN_IO_FAILURE);
 }
 
 

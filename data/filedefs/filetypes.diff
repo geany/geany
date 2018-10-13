@@ -9,6 +9,14 @@ position=number
 deleted=line_removed
 added=line_added
 changed=line_changed
+# '++' lines
+patch_add=line_added
+# '+-' lines
+patch_delete=line_added
+# '-+' lines
+removed_patch_add=line_removed
+# '--' lines
+removed_patch_delete=line_removed
 
 
 [settings]

@@ -36,6 +36,17 @@
 	color: #007f00;
 }
 
+/* compiler message colors */
+#geany-compiler-error {
+    color: #ff0000;
+}
+#geany-compiler-context {
+    color: #7f0000;
+}
+#geany-compiler-message {
+    color: #0000D0;
+}
+
 /* red "Terminal" label when terminal dirty */
 #geany-terminal-dirty {
 	color: #ff0000;

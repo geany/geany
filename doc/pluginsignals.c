@@ -142,8 +142,9 @@ signal void (*document_close)(GObject *obj, GeanyDocument *doc, gpointer user_da
 signal void (*project_open)(GObject *obj, GKeyFile *config, gpointer user_data);
 
 /** Sent when a project is saved (happens when the project is created, the properties
- *  dialog is closed or Geany is exited). This signal is emitted shortly before Geany
- *  will write the contents of the GKeyFile to the disc.
+ *  dialog is closed, before the project is closed, or when Geany is exited).
+ *  This signal is emitted shortly before Geany will write the contents of the
+ *  GKeyFile to the disc.
  *
  * @param obj a GeanyObject instance, should be ignored.
  * @param config an existing GKeyFile object which can be used to read and write data.
@@ -158,6 +159,15 @@ signal void (*project_save)(GObject *obj, GKeyFile *config, gpointer user_data);
  * @param user_data user data.
  */
 signal void (*project_close)(GObject *obj, gpointer user_data);
+
+/** Sent before a project is closed.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param user_data user data.
+ *
+ * @since 1.29 (API 230)
+ */
+signal void (*project_before_close)(GObject *obj, gpointer user_data);
 
 /** Sent after a project dialog is opened but before it is displayed. Plugins
  *  can append their own project settings tabs by using this signal.
@@ -260,3 +270,23 @@ signal void (*update_editor_menu)(GObject *obj, const gchar *word, gint pos, Gea
  */
 signal gboolean (*editor_notify)(GObject *obj, GeanyEditor *editor, SCNotification *nt,
 		gpointer user_data);
+
+/** Sent whenever a key is pressed.
+ *
+ * This signal allows plugins to receive key press events before they are processed
+ * by Geany. Plugins can then process key presses before Geany and decide,
+ * whether Geany should receive the key press event or not.
+ *
+ * @warning This signal should be used carefully. If multiple plugins use this
+ *          signal, the result could be unpredictble depending on which plugin
+ *          receives the signal first.
+ *
+ * @param obj a GeanyObject instance, should be ignored.
+ * @param key The GdkEventKey corresponding to the key press.
+ * @param user_data user data.
+ * @return @c TRUE to stop other handlers from being invoked for the event.
+ *         @c FALSE to propagate the event further.
+ *
+ * @since 1.34
+ */
+signal gboolean (*key_press)(GObject *obj, GdkEventKey *key, gpointer user_data);

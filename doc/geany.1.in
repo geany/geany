@@ -1,4 +1,4 @@
-.TH "GEANY" "1" "July 10, 2016" "geany @VERSION@" ""
+.TH "GEANY" "1" "February 25, 2018" "geany @VERSION@" ""
 .SH "NAME"
 Geany \(em a small and lightweight IDE
 .SH "SYNOPSIS"
@@ -11,7 +11,7 @@ Geany is a small and fast editor with basic features of an integrated developmen
 Some of its features: syntax highlighting, code completion, code folding, symbol/tag lists and
 many supported filetypes like C(++), Java, PHP, HTML, DocBook, Perl and more.
 .PP
-Homepage: http://www.geany.org/
+Homepage: https://www.geany.org/
 .SH "OPTIONS"
 .IP "\fB\fP    \fBfiles ...\fP         " 10
 A space-separated list of filenames. Absolute and relative filenames can be used. Geany also

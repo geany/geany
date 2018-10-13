@@ -1767,7 +1767,7 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
 
 	if (!plugin)
-		return FALSE;
+		return TRUE;
 	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
 
 	filename = g_path_get_basename(plugin->filename);
@@ -1865,7 +1865,10 @@ static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointe
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP)
+			{
+				g_return_if_fail(p->cbs.help != NULL);
 				p->cbs.help(&p->public, p->cb_data);
+			}
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
 				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}
@@ -1902,6 +1905,7 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 				plugin_list = NULL;
 			}
 			gtk_widget_destroy(GTK_WIDGET(dialog));
+			pm_widgets.dialog = NULL;
 
 			configuration_save();
 			break;
@@ -1918,6 +1922,12 @@ static void pm_dialog_response(GtkDialog *dialog, gint response, gpointer user_d
 static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 {
 	GtkWidget *vbox, *vbox2, *swin, *label, *menu_item, *filter_entry;
+
+	if (pm_widgets.dialog != NULL)
+	{
+		gtk_window_present(GTK_WINDOW(pm_widgets.dialog));
+		return;
+	}
 
 	/* before showing the dialog, we need to create the list of available plugins */
 	load_all_plugins();
@@ -2005,18 +2015,6 @@ static void pm_show_dialog(GtkMenuItem *menuitem, gpointer user_data)
 }
 
 
-static const gchar *fix_extension(const gchar *ext)
-{
-	if (*ext == '.')
-	{
-		g_warning(_("Proxy plugin extension '%s' starts with a dot, "
-			"stripping. Please fix your proxy plugin."), ext);
-		ext++;
-	}
-	return ext;
-}
-
-
 /** Register the plugin as a proxy for other plugins
  *
  * Proxy plugins register a list of file extensions and a set of callbacks that are called
@@ -2067,8 +2065,14 @@ gboolean geany_plugin_register_proxy(GeanyPlugin *plugin, const gchar **extensio
 
 	foreach_strv(ext, extensions)
 	{
+		if (**ext == '.')
+		{
+			g_warning(_("Proxy plugin '%s' extension '%s' starts with a dot. "
+				"Please fix your proxy plugin."), p->info.name, *ext);
+		}
+
 		proxy = g_new(PluginProxy, 1);
-		g_strlcpy(proxy->extension, fix_extension(*ext), sizeof(proxy->extension));
+		g_strlcpy(proxy->extension, *ext, sizeof(proxy->extension));
 		proxy->plugin = p;
 		/* prepend, so that plugins automatically override core providers for a given extension */
 		g_queue_push_head(&active_proxies, proxy);

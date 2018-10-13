@@ -798,6 +798,7 @@ INPUT                  = @top_srcdir@/src/ \
                          @top_srcdir@/src/tagmanager/tm_source_file.h \
                          @top_srcdir@/src/tagmanager/tm_workspace.c \
                          @top_srcdir@/src/tagmanager/tm_workspace.h \
+                         @top_srcdir@/src/tagmanager/tm_tag.c \
                          @top_srcdir@/src/tagmanager/tm_tag.h \
                          @top_srcdir@/src/tagmanager/tm_parser.h
 
@@ -836,11 +837,7 @@ FILE_PATTERNS          = *.c \
                          *.C++ \
                          *.H \
                          *.HH \
-                         *.H++ \
-                         *.dox \
-                         RECURSIVE \
-                         = \
-                         NO
+                         *.H++
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.

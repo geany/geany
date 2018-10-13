@@ -220,7 +220,7 @@ extern kindOption* getLanguageFileKind (const langType language)
 
 	kind = LanguageTable [language]->fileKind;
 
-	Assert (kind != KIND_NULL);
+	Assert (kind != NULL);
 
 	return kind;
 }
@@ -1430,7 +1430,7 @@ extern void initializeParser (langType lang)
 {
 	if (lang == LANG_AUTO)
 	{
-		int i;
+		unsigned int i;
 		for (i = 0; i < countParsers(); i++)
 			initializeParserOne (i);
 	}

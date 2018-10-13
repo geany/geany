@@ -74,11 +74,11 @@ G_BEGIN_DECLS
 #if GTK_CHECK_VERSION(3, 0, 0)
 /* Gtk[VH]Box */
 #	define compat_gtk_box_new(orientation, homogeneous, spacing) \
-		g_object_new(GTK_TYPE_BOX, \
+		((GtkWidget *)g_object_new(GTK_TYPE_BOX, \
 					 "orientation", (orientation), \
 					 "homogeneous", (homogeneous), \
 					 "spacing", (spacing), \
-					 NULL)
+					 NULL))
 #	define gtk_vbox_new(homogeneous, spacing) \
 		compat_gtk_box_new(GTK_ORIENTATION_VERTICAL, (homogeneous), (spacing))
 #	define gtk_hbox_new(homogeneous, spacing) \

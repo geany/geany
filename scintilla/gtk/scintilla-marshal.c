@@ -1,6 +1,4 @@
-
-#include	<glib-object.h>
-
+#include <glib-object.h>
 
 #ifdef G_ENABLE_DEBUG
 #define g_marshal_value_peek_boolean(v)  g_value_get_boolean (v)
@@ -48,8 +46,7 @@
 #define g_marshal_value_peek_variant(v)  (v)->data[0].v_pointer
 #endif /* !G_ENABLE_DEBUG */
 
-
-/* NONE:INT,OBJECT (scintilla-marshal.list:1) */
+/* VOID:INT,OBJECT (scintilla-marshal.list:1) */
 void
 scintilla_marshal_VOID__INT_OBJECT (GClosure     *closure,
                                     GValue       *return_value G_GNUC_UNUSED,
@@ -58,13 +55,13 @@ scintilla_marshal_VOID__INT_OBJECT (GClosure     *closure,
                                     gpointer      invocation_hint G_GNUC_UNUSED,
                                     gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__INT_OBJECT) (gpointer     data1,
-                                                 gint         arg_1,
-                                                 gpointer     arg_2,
-                                                 gpointer     data2);
-  GMarshalFunc_VOID__INT_OBJECT callback;
-  GCClosure *cc = (GCClosure*) closure;
+  typedef void (*GMarshalFunc_VOID__INT_OBJECT) (gpointer data1,
+                                                 gint arg1,
+                                                 gpointer arg2,
+                                                 gpointer data2);
+  GCClosure *cc = (GCClosure *) closure;
   gpointer data1, data2;
+  GMarshalFunc_VOID__INT_OBJECT callback;
 
   g_return_if_fail (n_param_values == 3);
 
@@ -86,7 +83,7 @@ scintilla_marshal_VOID__INT_OBJECT (GClosure     *closure,
             data2);
 }
 
-/* NONE:INT,BOXED (scintilla-marshal.list:2) */
+/* VOID:INT,BOXED (scintilla-marshal.list:2) */
 void
 scintilla_marshal_VOID__INT_BOXED (GClosure     *closure,
                                    GValue       *return_value G_GNUC_UNUSED,
@@ -95,13 +92,13 @@ scintilla_marshal_VOID__INT_BOXED (GClosure     *closure,
                                    gpointer      invocation_hint G_GNUC_UNUSED,
                                    gpointer      marshal_data)
 {
-  typedef void (*GMarshalFunc_VOID__INT_BOXED) (gpointer     data1,
-                                                gint         arg_1,
-                                                gpointer     arg_2,
-                                                gpointer     data2);
-  GMarshalFunc_VOID__INT_BOXED callback;
-  GCClosure *cc = (GCClosure*) closure;
+  typedef void (*GMarshalFunc_VOID__INT_BOXED) (gpointer data1,
+                                                gint arg1,
+                                                gpointer arg2,
+                                                gpointer data2);
+  GCClosure *cc = (GCClosure *) closure;
   gpointer data1, data2;
+  GMarshalFunc_VOID__INT_BOXED callback;
 
   g_return_if_fail (n_param_values == 3);
 

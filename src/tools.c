@@ -648,6 +648,7 @@ static void word_count(gchar *text, guint *chars, guint *lines, guint *words)
 		{
 			case '\n':
 				(*lines)++;
+				/* fall through */
 			case '\r':
 			case '\f':
 			case '\t':

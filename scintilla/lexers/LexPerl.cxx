@@ -27,10 +27,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 // Info for HERE document handling from perldata.pod (reformatted):
 // ----------------------------------------------------------------
@@ -122,8 +121,8 @@ static int disambiguateBareword(LexAccessor &styler, Sci_PositionU bk, Sci_Posit
 	// if ch isn't one of '[{(,' we can skip the test
 	if ((ch == '{' || ch == '(' || ch == '['|| ch == ',')
 	        && fw < endPos) {
-		while (ch = static_cast<unsigned char>(styler.SafeGetCharAt(fw)),
-		        IsASpaceOrTab(ch) && fw < endPos) {
+		while (IsASpaceOrTab(ch = static_cast<unsigned char>(styler.SafeGetCharAt(fw)))
+		        && fw < endPos) {
 			fw++;
 		}
 		if ((ch == '}' && brace)
@@ -138,10 +137,12 @@ static int disambiguateBareword(LexAccessor &styler, Sci_PositionU bk, Sci_Posit
 
 static void skipWhitespaceComment(LexAccessor &styler, Sci_PositionU &p) {
 	// when backtracking, we need to skip whitespace and comments
-	int style;
-	while ((p > 0) && (style = styler.StyleAt(p),
-	        style == SCE_PL_DEFAULT || style == SCE_PL_COMMENTLINE))
+	while (p > 0) {
+		const int style = styler.StyleAt(p);
+		if (style != SCE_PL_DEFAULT && style != SCE_PL_COMMENTLINE)
+			break;
 		p--;
+	}
 }
 
 static int findPrevLexeme(LexAccessor &styler, Sci_PositionU &bk, int &style) {
@@ -398,7 +399,7 @@ struct OptionSetPerl : public OptionSet<OptionsPerl> {
 	}
 };
 
-class LexerPerl : public ILexer {
+class LexerPerl : public DefaultLexer {
 	CharacterSet setWordStart;
 	CharacterSet setWord;
 	CharacterSet setSpecialVar;
@@ -415,30 +416,30 @@ public:
 	}
 	virtual ~LexerPerl() {
 	}
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
-	int SCI_METHOD Version() const {
+	int SCI_METHOD Version() const override {
 		return lvOriginal;
 	}
-	const char *SCI_METHOD PropertyNames() {
+	const char *SCI_METHOD PropertyNames() override {
 		return osPerl.PropertyNames();
 	}
-	int SCI_METHOD PropertyType(const char *name) {
+	int SCI_METHOD PropertyType(const char *name) override {
 		return osPerl.PropertyType(name);
 	}
-	const char *SCI_METHOD DescribeProperty(const char *name) {
+	const char *SCI_METHOD DescribeProperty(const char *name) override {
 		return osPerl.DescribeProperty(name);
 	}
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
-	const char *SCI_METHOD DescribeWordListSets() {
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
+	const char *SCI_METHOD DescribeWordListSets() override {
 		return osPerl.DescribeWordListSets();
 	}
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void *SCI_METHOD PrivateCall(int, void *) {
+	void *SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
 
@@ -755,7 +756,7 @@ void SCI_METHOD LexerPerl::Lex(Sci_PositionU startPos, Sci_Position length, int 
 		backPos++;
 	}
 
-	StyleContext sc(startPos, endPos - startPos, initStyle, styler, static_cast<char>(STYLE_MAX));
+	StyleContext sc(startPos, endPos - startPos, initStyle, styler);
 
 	for (; sc.More(); sc.Forward()) {
 
@@ -1174,6 +1175,7 @@ void SCI_METHOD LexerPerl::Lex(Sci_PositionU startPos, Sci_Position length, int 
 							break;
 						}
 						// (continued for ' delim)
+						// Falls through.
 					default:	// non-interpolated path
 						sc.Forward(sLen);
 					}

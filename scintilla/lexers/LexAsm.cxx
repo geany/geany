@@ -30,10 +30,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' ||
@@ -139,7 +138,7 @@ struct OptionSetAsm : public OptionSet<OptionsAsm> {
 	}
 };
 
-class LexerAsm : public ILexer {
+class LexerAsm : public DefaultLexer {
 	WordList cpuInstruction;
 	WordList mathInstruction;
 	WordList registers;
@@ -157,30 +156,30 @@ public:
 	}
 	virtual ~LexerAsm() {
 	}
-	void SCI_METHOD Release() {
+	void SCI_METHOD Release() override {
 		delete this;
 	}
-	int SCI_METHOD Version() const {
+	int SCI_METHOD Version() const override {
 		return lvOriginal;
 	}
-	const char * SCI_METHOD PropertyNames() {
+	const char * SCI_METHOD PropertyNames() override {
 		return osAsm.PropertyNames();
 	}
-	int SCI_METHOD PropertyType(const char *name) {
+	int SCI_METHOD PropertyType(const char *name) override {
 		return osAsm.PropertyType(name);
 	}
-	const char * SCI_METHOD DescribeProperty(const char *name) {
+	const char * SCI_METHOD DescribeProperty(const char *name) override {
 		return osAsm.DescribeProperty(name);
 	}
-	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val);
-	const char * SCI_METHOD DescribeWordListSets() {
+	Sci_Position SCI_METHOD PropertySet(const char *key, const char *val) override;
+	const char * SCI_METHOD DescribeWordListSets() override {
 		return osAsm.DescribeWordListSets();
 	}
-	Sci_Position SCI_METHOD WordListSet(int n, const char *wl);
-	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
-	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess);
+	Sci_Position SCI_METHOD WordListSet(int n, const char *wl) override;
+	void SCI_METHOD Lex(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
+	void SCI_METHOD Fold(Sci_PositionU startPos, Sci_Position length, int initStyle, IDocument *pAccess) override;
 
-	void * SCI_METHOD PrivateCall(int, void *) {
+	void * SCI_METHOD PrivateCall(int, void *) override {
 		return 0;
 	}
 
