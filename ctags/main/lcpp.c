@@ -179,7 +179,7 @@ extern void cppUngetc (const int c)
 		vStringChop (signature);
 }
 
-static inline int getcAndCollect ()
+static inline int getcAndCollect (void)
 {
 	int c = getcFromInputFile ();
 	if (collectingSignature && c != EOF)
