@@ -31,9 +31,9 @@ static bool nofatalErrorPrinter (const errorSelection selection,
 	vfprintf (stderr, format, ap);
 	if (selection & PERROR)
 #ifdef HAVE_STRERROR
-	fprintf (stderr, " : %s", strerror (errno));
+		fprintf (stderr, " : %s", strerror (errno));
 #else
-	perror (" ");
+		perror (" ");
 #endif
 	fputs ("\n", stderr);
 
