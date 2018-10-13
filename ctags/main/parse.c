@@ -2229,13 +2229,20 @@ extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long endLine, int endCharOffset,
 					       unsigned long sourceLineOffset)
 {
-	bool tagFileResized;
+	bool tagFileResized = false;
 	pushNarrowedInputStream (language,
 				 startLine, startCharOffset,
 				 endLine, endCharOffset,
 				 sourceLineOffset);
 #ifndef CTAGS_LIB
 	tagFileResized = createTagsWithFallback1 (language);
+#else
+	/* Simple parsing without rescans - not used by any sub-parsers anyway */
+	if (LanguageTable [language]->useCork)
+		corkTagFile();
+	createTagsForFile (language, 1);
+	if (LanguageTable [language]->useCork)
+		uncorkTagFile();
 #endif
 	popNarrowedInputStream  ();
 	return tagFileResized;
@@ -2275,6 +2282,7 @@ extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	{
 		setTagEntryFunction(tagCallback, userData);
 		createTagsWithFallback1 (language, passCallback, userData);
+		forcePromises ();
 		closeInputFile ();
 	}
 	else
