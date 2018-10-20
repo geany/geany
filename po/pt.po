@@ -1029,7 +1029,7 @@ msgstr "Mostra ou oculta a coluna com o número de linha"
 
 #: ../data/geany.glade.h:210
 msgid "Show markers margin"
-msgstr "Mostra margem de marcadores"
+msgstr "Mostrar margem de marcadores"
 
 #: ../data/geany.glade.h:211
 msgid ""
