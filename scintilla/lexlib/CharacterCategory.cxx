@@ -8,13 +8,11 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <algorithm>
+#include <iterator>
 
-#include "StringCopy.h"
 #include "CharacterCategory.h"
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 namespace {
 	// Use an unnamed namespace to protect the declarations from name conflicts
@@ -3681,7 +3679,6 @@ const int catRanges[] = {
 
 const int maxUnicode = 0x10ffff;
 const int maskCategory = 0x1F;
-const int nRanges = ELEMENTS(catRanges);
 
 }
 
@@ -3700,7 +3697,7 @@ CharacterCategory CategoriseCharacter(int character) {
 	if (character < 0 || character > maxUnicode)
 		return ccCn;
 	const int baseValue = character * (maskCategory+1) + maskCategory;
-	const int *placeAfter = std::lower_bound(catRanges, catRanges+nRanges, baseValue);
+	const int *placeAfter = std::lower_bound(catRanges, std::end(catRanges), baseValue);
 	return static_cast<CharacterCategory>(*(placeAfter-1) & maskCategory);
 }
 
@@ -3850,6 +3847,4 @@ bool IsXidContinue(int character) {
 	}
 }
 
-#ifdef SCI_NAMESPACE
 }
-#endif

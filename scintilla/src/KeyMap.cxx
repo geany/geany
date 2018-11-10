@@ -10,6 +10,7 @@
 #include <stdexcept>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "Platform.h"
 
@@ -17,9 +18,7 @@
 
 #include "KeyMap.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 KeyMap::KeyMap() {
 	for (int i = 0; MapDefault[i].key; i++) {

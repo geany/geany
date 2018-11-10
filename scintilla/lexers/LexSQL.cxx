@@ -31,10 +31,9 @@
 #include "LexerModule.h"
 #include "OptionSet.h"
 #include "SparseState.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 static inline bool IsAWordChar(int ch, bool sqlAllowDottedWord) {
 	if (!sqlAllowDottedWord)
@@ -302,7 +301,7 @@ struct OptionSetSQL : public OptionSet<OptionsSQL> {
 	}
 };
 
-class LexerSQL : public ILexer {
+class LexerSQL : public DefaultLexer {
 public :
 	LexerSQL() {}
 
@@ -546,7 +545,7 @@ void SCI_METHOD LexerSQL::Lex(Sci_PositionU startPos, Sci_Position length, int i
 			}
 			break;
 		case SCE_SQL_STRING:
-			if (sc.ch == '\\') {
+			if (options.sqlBackslashEscapes && sc.ch == '\\') {
 				// Escape sequence
 				sc.Forward();
 			} else if (sc.ch == '\"') {

@@ -8,9 +8,7 @@
 #ifndef STYLECONTEXT_H
 #define STYLECONTEXT_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 // All languages handled so far can treat all characters >= 0x80 as one class
 // which just continues the current token or starts an identifier if in default.
@@ -59,7 +57,7 @@ public:
 	StyleContext(Sci_PositionU startPos, Sci_PositionU length,
                         int initStyle, LexAccessor &styler_, char chMask='\377') :
 		styler(styler_),
-		multiByteAccess(0),
+		multiByteAccess(nullptr),
 		endPos(startPos + length),
 		posRelative(0),
 		currentPosLastRelative(0x7FFFFFFF),
@@ -133,7 +131,12 @@ public:
 	void ForwardBytes(Sci_Position nb) {
 		const Sci_PositionU forwardPos = currentPos + nb;
 		while (forwardPos > currentPos) {
+			const Sci_PositionU currentPosStart = currentPos;
 			Forward();
+			if (currentPos == currentPosStart) {
+				// Reached end
+				return;
+			}
 		}
 	}
 	void ChangeState(int state_) {
@@ -164,9 +167,9 @@ public:
 				posRelative = currentPos;
 				offsetRelative = 0;
 			}
-			Sci_Position diffRelative = n - offsetRelative;
-			Sci_Position posNew = multiByteAccess->GetRelativePosition(posRelative, diffRelative);
-			const int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, 0);
+			const Sci_Position diffRelative = n - offsetRelative;
+			const Sci_Position posNew = multiByteAccess->GetRelativePosition(posRelative, diffRelative);
+			const int chReturn = multiByteAccess->GetCharacterAndWidth(posNew, nullptr);
 			posRelative = posNew;
 			currentPosLastRelative = currentPos;
 			offsetRelative = n;
@@ -204,8 +207,6 @@ public:
 	void GetCurrentLowered(char *s, Sci_PositionU len);
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 14:41+0100\n"
+"POT-Creation-Date: 2018-01-18 23:33+0100\n"
 "PO-Revision-Date: 2017-05-25 08:18+0700\n"
 "Last-Translator: Samsul Ma'arif <mail@samsul.web.id>\n"
 "Language-Team: Indonesian\n"
@@ -107,11 +107,11 @@ msgstr "_Cari"
 msgid "Open Selected F_ile"
 msgstr "Buka Berkas Terp_ilih"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2590
+#: ../data/geany.glade.h:19 ../src/symbols.c:2596
 msgid "Find _Usage"
 msgstr "Cari _Pemakaian"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2595
+#: ../data/geany.glade.h:20 ../src/symbols.c:2601
 msgid "Find _Document Usage"
 msgstr "Cari Pemakaian _Dokumen"
 
@@ -1087,7 +1087,7 @@ msgstr "Warna:"
 msgid "Sets the color of the long line marker"
 msgstr "Menentukan warna untuk penanda baris panjang"
 
-#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:831
+#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:832
 msgid "Color Chooser"
 msgstr "Pelet Warna"
 
@@ -1703,7 +1703,7 @@ msgstr "Simpan S_ebagai..."
 msgid "Sa_ve All"
 msgstr "Sim_pan Semua"
 
-#: ../data/geany.glade.h:350 ../src/document.c:1651 ../src/document.c:3626
+#: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3630
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Reload"
@@ -1828,7 +1828,7 @@ msgstr "Cari _Selanjutnya"
 msgid "Find _Previous"
 msgstr "Cari Se_belumnya"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2600
+#: ../data/geany.glade.h:381 ../src/symbols.c:2606
 msgid "Find in F_iles..."
 msgstr "Cari di F_ile..."
 
@@ -2077,7 +2077,7 @@ msgid "_Apply Default Indentation"
 msgstr "Te_rapkan Indentasi Standar"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2402 ../src/build.c:2679
+#: ../data/geany.glade.h:443 ../src/build.c:2403 ../src/build.c:2680
 msgid "_Build"
 msgstr "_Build"
 
@@ -2428,102 +2428,102 @@ msgid "Enter custom text here, all entered text is appended to the command."
 msgstr ""
 "Masukkan teks di sini, semua teks yang dimasukkan akan disisipkan ke command."
 
-#: ../src/build.c:1299
+#: ../src/build.c:1300
 msgid "_Next Error"
 msgstr "Kesalahan _Berikutnya"
 
-#: ../src/build.c:1301
+#: ../src/build.c:1302
 msgid "_Previous Error"
 msgstr "Kesalahan _Sebelumnya"
 
 #. arguments
-#: ../src/build.c:1311 ../src/build.c:2719
+#: ../src/build.c:1312 ../src/build.c:2720
 msgid "_Set Build Commands"
 msgstr "_Atur Perintah Build"
 
-#: ../src/build.c:1586 ../src/toolbar.c:376
+#: ../src/build.c:1587 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "Build berkas yang sekarang sedang ditampilkan"
 
-#: ../src/build.c:1597
+#: ../src/build.c:1598
 msgid "Build the current file with Make and the default target"
 msgstr ""
 "Build berkas yang sekarang sedang ditampilkan dengan menggunakan command "
 "Make dan default target"
 
-#: ../src/build.c:1599
+#: ../src/build.c:1600
 msgid "Build the current file with Make and the specified target"
 msgstr ""
 "Build berkas yang sekarang sedang ditampilkan dengan menggunakan command "
 "Make dan target yang telah ditentukan"
 
-#: ../src/build.c:1601
+#: ../src/build.c:1602
 msgid "Compile the current file with Make"
 msgstr ""
 "Build berkas yang sekarang sedang ditampilkan dengan menggunakan command Make"
 
-#: ../src/build.c:1620
+#: ../src/build.c:1621
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Proses tidak bisa dihentikan (%s)."
 
-#: ../src/build.c:1634 ../src/build.c:1646
+#: ../src/build.c:1635 ../src/build.c:1647
 msgid "No more build errors."
 msgstr "Tidak ada lagi kesalahan untuk Build."
 
-#: ../src/build.c:1759 ../src/build.c:1761
+#: ../src/build.c:1760 ../src/build.c:1762
 msgid "Set menu item label"
 msgstr "Tetapkan label menu item"
 
-#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
+#: ../src/build.c:1787 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "Label"
 
 #. command column, holding status and command display
-#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
+#: ../src/build.c:1788 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "Command"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1789
 msgid "Working directory"
 msgstr "Working directory"
 
-#: ../src/build.c:1789
+#: ../src/build.c:1790
 msgid "Reset"
 msgstr "Reset"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1847
 msgid "Click to set menu item label"
 msgstr "Klik untuk mengukuhkan label pada menu"
 
-#: ../src/build.c:1930 ../src/build.c:1932
+#: ../src/build.c:1931 ../src/build.c:1933
 #, c-format
 msgid "%s commands"
 msgstr "%s perintah"
 
-#: ../src/build.c:1932
+#: ../src/build.c:1933
 msgid "No filetype"
 msgstr "Tidak ada tipe berkas"
 
-#: ../src/build.c:1941 ../src/build.c:1976
+#: ../src/build.c:1942 ../src/build.c:1977
 msgid "Error regular expression:"
 msgstr "Kesalahan regular-expression:"
 
-#: ../src/build.c:1969
+#: ../src/build.c:1970
 msgid "Independent commands"
 msgstr "Perintah indepen"
 
-#: ../src/build.c:2001
+#: ../src/build.c:2002
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Catatan: Item 2 membuka sebuah dialog lalu menambahkan responnya ke suatu "
 "command."
 
-#: ../src/build.c:2010
+#: ../src/build.c:2011
 msgid "Execute commands"
 msgstr "Eksekusi perintah"
 
-#: ../src/build.c:2022
+#: ../src/build.c:2023
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2531,34 +2531,34 @@ msgstr ""
 "%d, %e, %f, %p, %l telah diganti pada field perintah dan directory, "
 "detailnya lihat manual."
 
-#: ../src/build.c:2180
+#: ../src/build.c:2181
 msgid "Set Build Commands"
 msgstr "Tetapkan Build Commands"
 
-#: ../src/build.c:2395
+#: ../src/build.c:2396
 msgid "_Compile"
 msgstr "_Kompile"
 
-#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
+#: ../src/build.c:2410 ../src/build.c:2440 ../src/build.c:2648
 msgid "_Execute"
 msgstr "_Eksekusi"
 
 #. build the code with make custom
-#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
+#: ../src/build.c:2455 ../src/build.c:2646 ../src/build.c:2700
 msgid "Make Custom _Target..."
 msgstr "Buat Custom _Target..."
 
 #. build the code with make object
-#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
+#: ../src/build.c:2457 ../src/build.c:2647 ../src/build.c:2708
 msgid "Make _Object"
 msgstr "Buat _Object"
 
-#: ../src/build.c:2458 ../src/build.c:2644
+#: ../src/build.c:2459 ../src/build.c:2645
 msgid "_Make"
 msgstr "_Make"
 
 #. build the code with make all
-#: ../src/build.c:2691
+#: ../src/build.c:2692
 msgid "_Make All"
 msgstr "_Make Semua"
 
@@ -2605,8 +2605,13 @@ msgstr "Periksa lokasi pengaturan di Preferensi."
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Tidak dapat mengeksekusi konteks perintah aksi \"%s\": %s. %s"
 
-#: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
-#: ../src/document.c:2371
+#: ../src/callbacks.c:1505
+#, fuzzy
+msgid "No context action set."
+msgstr "Operasi konteks:"
+
+#: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
+#: ../src/document.c:2375
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" tidak ketemu."
@@ -2689,7 +2694,7 @@ msgstr ""
 "Membuka berkas secara hanya-baca. Jika Anda membuka berkas lebih dari satu, "
 "maka berkas-berkas itu akan dibuka secara hanya-baca semua."
 
-#: ../src/dialogs.c:535 ../src/document.c:2049
+#: ../src/dialogs.c:535 ../src/document.c:2053
 msgid "Overwrite?"
 msgstr "Timpa?"
 
@@ -2753,7 +2758,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
+#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "tak diketahui"
 
@@ -2853,11 +2858,11 @@ msgstr "Berkas %s terbuka(%d%s)."
 msgid ", read-only"
 msgstr ", read-only"
 
-#: ../src/document.c:1617
+#: ../src/document.c:1621
 msgid "Discard history"
 msgstr "Buang sejarah"
 
-#: ../src/document.c:1618
+#: ../src/document.c:1622
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2869,28 +2874,28 @@ msgstr ""
 "memuat ulang. Pesan ini tidak akan ditampilkan lagi, tetapi pilihan Anda "
 "tidak dapat diubah dalam berbagai preferensi."
 
-#: ../src/document.c:1622
+#: ../src/document.c:1626
 msgid "The file has been reloaded."
 msgstr "Berkas telah dibuka ulang."
 
-#: ../src/document.c:1652
+#: ../src/document.c:1656
 msgid "Any unsaved changes will be lost."
 msgstr "Perubahan yang belum disimpan akan hilang."
 
-#: ../src/document.c:1653
+#: ../src/document.c:1657
 msgid "Undo history will be lost."
 msgstr "Pembatalan sejarah akan hilang."
 
-#: ../src/document.c:1654
+#: ../src/document.c:1658
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Yakin mau me-reload '%s'?"
 
-#: ../src/document.c:1760
+#: ../src/document.c:1764
 msgid "Error renaming file."
 msgstr "Kesalahan dalam mengganti nama berkas."
 
-#: ../src/document.c:1881
+#: ../src/document.c:1885
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2899,7 +2904,7 @@ msgstr ""
 "Sebuah kesalahan terjadi ketika mengkonversi berkas dari UTF-8 pada \"%s\". "
 "Berkas tetap tidak tersimpan."
 
-#: ../src/document.c:1902
+#: ../src/document.c:1906
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2908,55 +2913,55 @@ msgstr ""
 "Pesan kesalahan: %s\n"
 "Kesalahan terjadi pada \"%s\" (baris: %d, kolom: %d)."
 
-#: ../src/document.c:1906
+#: ../src/document.c:1910
 #, c-format
 msgid "Error message: %s."
 msgstr "Pesan kesalahan: %s."
 
-#: ../src/document.c:1966
+#: ../src/document.c:1970
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "Gagal membuka berkas '%s' untuk menulis: fopen() gagal: %s"
 
-#: ../src/document.c:1984
+#: ../src/document.c:1988
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Gagal menulis berkas '%s': fwrite() gagal: %s"
 
-#: ../src/document.c:1998
+#: ../src/document.c:2002
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Gagal menutup berkas '%s': fclose() gagal: %s"
 
-#: ../src/document.c:2048 ../src/document.c:3627
+#: ../src/document.c:2052 ../src/document.c:3631
 msgid "_Overwrite"
 msgstr "_Timpa"
 
-#: ../src/document.c:2050 ../src/document.c:3630
+#: ../src/document.c:2054 ../src/document.c:3634
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "Berkas '%s' pada hardisk lebih baru daripada yang ada di buffer."
 
-#: ../src/document.c:2058 ../src/document.c:3679
+#: ../src/document.c:2062 ../src/document.c:3683
 msgid "Try to resave the file?"
 msgstr "Mau mencoba menyimpan-ulang berkas?"
 
-#: ../src/document.c:2059 ../src/document.c:3680
+#: ../src/document.c:2063 ../src/document.c:3684
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Berkas \"%s\" tidak ketemu di hardisk!"
 
-#: ../src/document.c:2122
+#: ../src/document.c:2126
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Tidak dapat menyimpan dokumen hanya-baca '%s'!"
 
-#: ../src/document.c:2190
+#: ../src/document.c:2194
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Kesalahan menyimpan berkas (%s)."
 
-#: ../src/document.c:2195
+#: ../src/document.c:2199
 #, c-format
 msgid ""
 "%s\n"
@@ -2967,44 +2972,44 @@ msgstr ""
 "\n"
 "Berkas ini di hardisk sepertinya akan terpotong!"
 
-#: ../src/document.c:2197
+#: ../src/document.c:2201
 msgid "Error saving file."
 msgstr "Kesalahan menyimpan berkas."
 
-#: ../src/document.c:2221
+#: ../src/document.c:2225
 #, c-format
 msgid "File %s saved."
 msgstr "Berkas %s tersimpan."
 
-#: ../src/document.c:2371
+#: ../src/document.c:2375
 msgid "Wrap search and find again?"
 msgstr "Ulangi pencarian?"
 
-#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
-#: ../src/search.c:2222 ../src/search.c:2223
+#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Kesamaan tidak ditemukan untuk pencarian \"%s\"."
 
-#: ../src/document.c:2466
+#: ../src/document.c:2470
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: menggantikan %d temuan dari \"%s\" menjadi \"%s\"."
 
-#: ../src/document.c:3629
+#: ../src/document.c:3633
 msgid "Do you want to reload it?"
 msgstr "Mau dibuka ulang?"
 
-#: ../src/editor.c:4470
+#: ../src/editor.c:4469
 msgid "Enter Tab Width"
 msgstr "Masukkan Lebar Tab"
 
-#: ../src/editor.c:4471
+#: ../src/editor.c:4470
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Masukkan jumlah spasi yang akan diganti oleh tab."
 
-#: ../src/editor.c:4676
+#: ../src/editor.c:4675
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Peringatan: lebar tab palsu tidak standar: %d != 8!"
@@ -3238,25 +3243,25 @@ msgstr "Regex payah untuk tipe-berkas %s: %s"
 msgid "untitled"
 msgstr "tanpa judul"
 
-#: ../src/highlighting.c:1230 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1233 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Tidak bisa menemukan berkas '%s'."
 
-#: ../src/highlighting.c:1300
+#: ../src/highlighting.c:1303
 msgid "Default"
 msgstr "Standar"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1344
 msgid "The current filetype overrides the default style."
 msgstr "Tipe-berkas sekarang mengabaikan style bawaan."
 
-#: ../src/highlighting.c:1342
+#: ../src/highlighting.c:1345
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Dapat mengakibatkan skema warna tampil tidak sempurna."
 
-#: ../src/highlighting.c:1367
+#: ../src/highlighting.c:1370
 msgid "Color Schemes"
 msgstr "Skema Warna"
 
@@ -4007,28 +4012,28 @@ msgstr "Pesan Debug"
 msgid "Cl_ear"
 msgstr "B_ersihkan"
 
-#: ../src/msgwindow.c:177
+#: ../src/msgwindow.c:217
 msgid "Status messages"
 msgstr "Pesan status"
 
-#: ../src/msgwindow.c:582
+#: ../src/msgwindow.c:616
 msgid "C_opy"
 msgstr "_Salin"
 
-#: ../src/msgwindow.c:591
+#: ../src/msgwindow.c:625
 msgid "Copy _All"
 msgstr "S_alin Semua"
 
-#: ../src/msgwindow.c:621
+#: ../src/msgwindow.c:655
 msgid "_Hide Message Window"
 msgstr "Sembun_yikan Window Pesan"
 
-#: ../src/msgwindow.c:682
+#: ../src/msgwindow.c:716
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Tidak bisa mencari berkas '%s' - mencoba lokasi dokumen saat ini."
 
-#: ../src/msgwindow.c:1118
+#: ../src/msgwindow.c:1152
 msgid "The document has been closed."
 msgstr "Dokumen telah ditutup."
 
@@ -4120,11 +4125,11 @@ msgstr "Angkut Kunci"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Tekan tombol kombinasi yang ingin dipakai untuk \"%s\"."
 
-#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "_Ekspan Semua"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_Kolaps Semua"
 
@@ -4418,7 +4423,7 @@ msgstr "Gunakan ke_cocokan multi-baris"
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines.  In this mode, "
+"line by line, allowing matches to span multiple lines. In this mode, "
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
@@ -4568,7 +4573,7 @@ msgstr "Opsi e_kstra:"
 msgid "Other options to pass to Grep"
 msgstr "Opsi lain untuk diberikan pada Grep"
 
-#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4623,7 +4628,7 @@ msgstr[0] "Pencarian selesai, ada %d yang ditemukan."
 msgid "No matches found."
 msgstr "Kesamaan tidak ditemukan."
 
-#: ../src/search.c:1910
+#: ../src/search.c:1911
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Regex buruk: %s"
@@ -4973,19 +4978,19 @@ msgstr "View"
 msgid "Extern Variables"
 msgstr "Variabel Eksternal"
 
-#: ../src/symbols.c:1630
+#: ../src/symbols.c:1636
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Ekstensi tipe-berkas tidak diketahui untuk \"%s\".\n"
 
-#: ../src/symbols.c:1656
+#: ../src/symbols.c:1662
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Gagal membuat berkas tag, kemungkinan karena tidak ada simbol yang "
 "ditemukan.\n"
 
-#: ../src/symbols.c:1663
+#: ../src/symbols.c:1669
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4994,7 +4999,7 @@ msgstr ""
 "Pemakaian: %s -g <Berkas Tag> <Daftar berkas>\n"
 "\n"
 
-#: ../src/symbols.c:1664
+#: ../src/symbols.c:1670
 #, c-format
 msgid ""
 "Example:\n"
@@ -5005,52 +5010,52 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1678
+#: ../src/symbols.c:1684
 msgid "Load Tags File"
 msgstr "Muat Berkas Tag"
 
-#: ../src/symbols.c:1685
+#: ../src/symbols.c:1691
 msgid "Geany tags file (*.*.tags)"
 msgstr "Berkas tag Geany (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1705
+#: ../src/symbols.c:1711
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Termuat %s berkas tag '%s'."
 
-#: ../src/symbols.c:1708
+#: ../src/symbols.c:1714
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Tidak dapat mengangkat berkas tag '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1943
+#: ../src/symbols.c:1949
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1946
+#: ../src/symbols.c:1952
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2155
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarasi maju \"%s\" tidak ditemukan."
 
-#: ../src/symbols.c:2157
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definisi dari \"%s\" tidak ditemukan."
 
-#: ../src/symbols.c:2573
+#: ../src/symbols.c:2579
 msgid "Sort by _Name"
 msgstr "Urutkan berdasarkan _Nama"
 
-#: ../src/symbols.c:2580
+#: ../src/symbols.c:2586
 msgid "Sort by _Appearance"
 msgstr "Urutkan berdasarkan _Kemunculan"
 
@@ -5271,31 +5276,31 @@ msgstr "ID"
 msgid "No custom commands defined."
 msgstr "Perintah custom tidak didefinisi."
 
-#: ../src/tools.c:695
+#: ../src/tools.c:696
 msgid "Word Count"
 msgstr "Jumlah Kata"
 
-#: ../src/tools.c:704
+#: ../src/tools.c:705
 msgid "selection"
 msgstr "seleksi"
 
-#: ../src/tools.c:709
+#: ../src/tools.c:710
 msgid "whole document"
 msgstr "seluruh dokumen"
 
-#: ../src/tools.c:718
+#: ../src/tools.c:719
 msgid "Range:"
 msgstr "Rentang:"
 
-#: ../src/tools.c:730
+#: ../src/tools.c:731
 msgid "Lines:"
 msgstr "Baris:"
 
-#: ../src/tools.c:744
+#: ../src/tools.c:745
 msgid "Words:"
 msgstr "Kata:"
 
-#: ../src/tools.c:758
+#: ../src/tools.c:759
 msgid "Characters:"
 msgstr "Karakter:"
 
@@ -5508,24 +5513,24 @@ msgstr "CR"
 msgid "LF"
 msgstr "LF"
 
-#: ../src/vte.c:584
+#: ../src/vte.c:585
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "pustaka VTE salah \"%s\": simbol tidak ada \"%s\""
 
-#: ../src/vte.c:765
+#: ../src/vte.c:766
 msgid "_Set Path From Document"
 msgstr "_Tetapkan Lokasi dari Dokumen"
 
-#: ../src/vte.c:770
+#: ../src/vte.c:771
 msgid "_Restart Terminal"
 msgstr "_Restart Terminal"
 
-#: ../src/vte.c:803
+#: ../src/vte.c:804
 msgid "_Input Methods"
 msgstr "Metode _Input"
 
-#: ../src/vte.c:895
+#: ../src/vte.c:896
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."

@@ -37,10 +37,9 @@
 #include "CharacterSet.h"
 #include "LexerModule.h"
 #include "OptionSet.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 /* Bits:
  * 1  - whitespace
@@ -226,7 +225,7 @@ struct OptionSetBasic : public OptionSet<OptionsBasic> {
 	}
 };
 
-class LexerBasic : public ILexer {
+class LexerBasic : public DefaultLexer {
 	char comment_char;
 	int (*CheckFoldPoint)(char const *, int &);
 	WordList keywordlists[4];

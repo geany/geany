@@ -8,9 +8,7 @@
 #ifndef CELLBUFFER_H
 #define CELLBUFFER_H
 
-#ifdef SCI_NAMESPACE
 namespace Scintilla {
-#endif
 
 // Interface to per-line data that wants to see each line insertion and deletion
 class PerLine {
@@ -24,33 +22,7 @@ public:
 /**
  * The line vector contains information about each of the lines in a cell buffer.
  */
-class LineVector {
-
-	Partitioning starts;
-	PerLine *perLine;
-
-public:
-
-	LineVector();
-	// Deleted so LineVector objects can not be copied.
-	LineVector(const LineVector &) = delete;
-	void operator=(const LineVector &) = delete;
-	~LineVector();
-	void Init();
-	void SetPerLine(PerLine *pl);
-
-	void InsertText(Sci::Line line, Sci::Position delta);
-	void InsertLine(Sci::Line line, Sci::Position position, bool lineStart);
-	void SetLineStart(Sci::Line line, Sci::Position position);
-	void RemoveLine(Sci::Line line);
-	Sci::Line Lines() const {
-		return starts.Partitions();
-	}
-	Sci::Line LineFromPosition(Sci::Position pos) const;
-	Sci::Position LineStart(Sci::Line line) const {
-		return starts.PositionFromPartition(line);
-	}
-};
+class ILineVector;
 
 enum actionType { insertAction, removeAction, startAction, containerAction };
 
@@ -71,10 +43,9 @@ public:
 	Action &operator=(const Action &other) = delete;
 	Action &operator=(const Action &&other) = delete;
 	// Move constructor allows vector to be resized without reallocating.
-	// Could use =default but MSVC 2013 warns.
-	Action(Action &&other);
+	Action(Action &&other) noexcept = default;
 	~Action();
-	void Create(actionType at_, Sci::Position position_=0, const char *data_=0, Sci::Position lenData_=0, bool mayCoalesce_=true);
+	void Create(actionType at_, Sci::Position position_=0, const char *data_=nullptr, Sci::Position lenData_=0, bool mayCoalesce_=true);
 	void Clear();
 };
 
@@ -95,7 +66,9 @@ public:
 	UndoHistory();
 	// Deleted so UndoHistory objects can not be copied.
 	UndoHistory(const UndoHistory &) = delete;
+	UndoHistory(UndoHistory &&) = delete;
 	void operator=(const UndoHistory &) = delete;
+	void operator=(UndoHistory &&) = delete;
 	~UndoHistory();
 
 	const char *AppendAction(actionType at, Sci::Position position, const char *data, Sci::Position lengthData, bool &startSequence, bool mayCoalesce=true);
@@ -113,7 +86,7 @@ public:
 	// Tentative actions are used for input composition so that it can be undone cleanly
 	void TentativeStart();
 	void TentativeCommit();
-	bool TentativeActive() const { return tentativePoint >= 0; }
+	bool TentativeActive() const noexcept { return tentativePoint >= 0; }
 	int TentativeSteps();
 
 	/// To perform an undo, StartUndo is called to retrieve the number of steps, then UndoStep is
@@ -135,6 +108,8 @@ public:
  */
 class CellBuffer {
 private:
+	bool hasStyles;
+	bool largeDocument;
 	SplitVector<char> substance;
 	SplitVector<char> style;
 	bool readOnly;
@@ -143,7 +118,7 @@ private:
 	bool collectingUndo;
 	UndoHistory uh;
 
-	LineVector lv;
+	std::unique_ptr<ILineVector> plv;
 
 	bool UTF8LineEndOverlaps(Sci::Position position) const;
 	void ResetLineEnds();
@@ -153,30 +128,33 @@ private:
 
 public:
 
-	CellBuffer();
+	CellBuffer(bool hasStyles_, bool largeDocument_);
 	// Deleted so CellBuffer objects can not be copied.
 	CellBuffer(const CellBuffer &) = delete;
+	CellBuffer(CellBuffer &&) = delete;
 	void operator=(const CellBuffer &) = delete;
+	void operator=(CellBuffer &&) = delete;
 	~CellBuffer();
 
 	/// Retrieving positions outside the range of the buffer works and returns 0
-	char CharAt(Sci::Position position) const;
+	char CharAt(Sci::Position position) const noexcept;
+	unsigned char UCharAt(Sci::Position position) const noexcept;
 	void GetCharRange(char *buffer, Sci::Position position, Sci::Position lengthRetrieve) const;
-	char StyleAt(Sci::Position position) const;
+	char StyleAt(Sci::Position position) const noexcept;
 	void GetStyleRange(unsigned char *buffer, Sci::Position position, Sci::Position lengthRetrieve) const;
 	const char *BufferPointer();
 	const char *RangePointer(Sci::Position position, Sci::Position rangeLength);
 	Sci::Position GapPosition() const;
 
-	Sci::Position Length() const;
+	Sci::Position Length() const noexcept;
 	void Allocate(Sci::Position newSize);
 	int GetLineEndTypes() const { return utf8LineEnds; }
 	void SetLineEndTypes(int utf8LineEnds_);
 	bool ContainsLineEnd(const char *s, Sci::Position length) const;
 	void SetPerLine(PerLine *pl);
-	Sci::Line Lines() const;
-	Sci::Position LineStart(Sci::Line line) const;
-	Sci::Line LineFromPosition(Sci::Position pos) const { return lv.LineFromPosition(pos); }
+	Sci::Line Lines() const noexcept;
+	Sci::Position LineStart(Sci::Line line) const noexcept;
+	Sci::Line LineFromPosition(Sci::Position pos) const noexcept;
 	void InsertLine(Sci::Line line, Sci::Position position, bool lineStart);
 	void RemoveLine(Sci::Line line);
 	const char *InsertString(Sci::Position position, const char *s, Sci::Position insertLength, bool &startSequence);
@@ -190,6 +168,8 @@ public:
 
 	bool IsReadOnly() const;
 	void SetReadOnly(bool set);
+	bool IsLarge() const;
+	bool HasStyles() const;
 
 	/// The save point is a marker in the undo stack where the container has stated that
 	/// the buffer was saved. Undo and redo can move over the save point.
@@ -220,8 +200,6 @@ public:
 	void PerformRedoStep();
 };
 
-#ifdef SCI_NAMESPACE
 }
-#endif
 
 #endif

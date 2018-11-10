@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 #include "ILexer.h"
 #include "Scintilla.h"
@@ -30,10 +31,9 @@
 #include "LexerModule.h"
 #include "OptionSet.h"
 #include "SubStyles.h"
+#include "DefaultLexer.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 namespace {
 // Use an unnamed namespace to protect the functions and classes from name conflicts
@@ -308,21 +308,46 @@ struct OptionSetPython : public OptionSet<OptionsPython> {
 
 const char styleSubable[] = { SCE_P_IDENTIFIER, 0 };
 
+LexicalClass lexicalClasses[] = {
+	// Lexer Python SCLEX_PYTHON SCE_P_:
+	0, "SCE_P_DEFAULT", "default", "White space",
+	1, "SCE_P_COMMENTLINE", "comment line", "Comment",
+	2, "SCE_P_NUMBER", "literal numeric", "Number",
+	3, "SCE_P_STRING", "literal string", "String",
+	4, "SCE_P_CHARACTER", "literal string", "Single quoted string",
+	5, "SCE_P_WORD", "keyword", "Keyword",
+	6, "SCE_P_TRIPLE", "literal string", "Triple quotes",
+	7, "SCE_P_TRIPLEDOUBLE", "literal string", "Triple double quotes",
+	8, "SCE_P_CLASSNAME", "identifier", "Class name definition",
+	9, "SCE_P_DEFNAME", "identifier", "Function or method name definition",
+	10, "SCE_P_OPERATOR", "operator", "Operators",
+	11, "SCE_P_IDENTIFIER", "identifier", "Identifiers",
+	12, "SCE_P_COMMENTBLOCK", "comment", "Comment-blocks",
+	13, "SCE_P_STRINGEOL", "error literal string", "End of line where string is not closed",
+	14, "SCE_P_WORD2", "identifier", "Highlighted identifiers",
+	15, "SCE_P_DECORATOR", "preprocessor", "Decorators",
+	16, "SCE_P_FSTRING", "literal string interpolated", "F-String",
+	17, "SCE_P_FCHARACTER", "literal string interpolated", "Single quoted f-string",
+	18, "SCE_P_FTRIPLE", "literal string interpolated", "Triple quoted f-string",
+	19, "SCE_P_FTRIPLEDOUBLE", "literal string interpolated", "Triple double quoted f-string",
+};
+
 }
 
-class LexerPython : public ILexerWithSubStyles {
+class LexerPython : public DefaultLexer {
 	WordList keywords;
 	WordList keywords2;
 	OptionsPython options;
 	OptionSetPython osPython;
 	enum { ssIdentifier };
 	SubStyles subStyles;
-	std::map<int, std::vector<SingleFStringExpState> > ftripleStateAtEol;
+	std::map<Sci_Position, std::vector<SingleFStringExpState> > ftripleStateAtEol;
 public:
 	explicit LexerPython() :
+		DefaultLexer(lexicalClasses, ELEMENTS(lexicalClasses)),
 		subStyles(styleSubable, 0x80, 0x40, 0) {
 	}
-	virtual ~LexerPython() {
+	~LexerPython() override {
 	}
 	void SCI_METHOD Release() override {
 		delete this;
@@ -440,7 +465,7 @@ void LexerPython::ProcessLineEnd(StyleContext &sc, std::vector<SingleFStringExpS
 		}
 	}
 	if (!fstringStateStack.empty()) {
-		std::pair<int, std::vector<SingleFStringExpState> > val;
+		std::pair<Sci_Position, std::vector<SingleFStringExpState> > val;
 		val.first = sc.currentLine;
 		val.second = fstringStateStack;
 
@@ -503,7 +528,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 	}
 
 	// Set up fstate stack from last line and remove any subsequent ftriple at eol states
-	std::map<int, std::vector<SingleFStringExpState> >::iterator it;
+	std::map<Sci_Position, std::vector<SingleFStringExpState> >::iterator it;
 	it = ftripleStateAtEol.find(lineCurrent - 1);
 	if (it != ftripleStateAtEol.end() && !it->second.empty()) {
 		fstringStateStack = it->second;
@@ -659,7 +684,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 		} else if ((sc.state == SCE_P_TRIPLE) || (sc.state == SCE_P_FTRIPLE)) {
 			if (sc.ch == '\\') {
 				sc.Forward();
-			} else if (sc.Match("\'\'\'")) {
+			} else if (sc.Match(R"(''')")) {
 				sc.Forward();
 				sc.Forward();
 				sc.ForwardSetState(SCE_P_DEFAULT);
@@ -668,7 +693,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 		} else if ((sc.state == SCE_P_TRIPLEDOUBLE) || (sc.state == SCE_P_FTRIPLEDOUBLE)) {
 			if (sc.ch == '\\') {
 				sc.Forward();
-			} else if (sc.Match("\"\"\"")) {
+			} else if (sc.Match(R"(""")")) {
 				sc.Forward();
 				sc.Forward();
 				sc.ForwardSetState(SCE_P_DEFAULT);
@@ -699,7 +724,7 @@ void SCI_METHOD LexerPython::Lex(Sci_PositionU startPos, Sci_Position length, in
 				if (sc.ch == quote) {
 					if (IsPySingleQuoteStringState(stack_state)) {
 						matching_stack_i = stack_i;
-					} else if (quote == '"' ? sc.Match("\"\"\"") : sc.Match("'''")) {
+					} else if (quote == '"' ? sc.Match(R"(""")") : sc.Match("'''")) {
 						matching_stack_i = stack_i;
 					}
 				}
@@ -812,7 +837,7 @@ static bool IsCommentLine(Sci_Position line, Accessor &styler) {
 
 static bool IsQuoteLine(Sci_Position line, const Accessor &styler) {
 	const int style = styler.StyleAt(styler.LineStart(line)) & 31;
-	return ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
+	return IsPyTripleQuoteStringState(style);
 }
 
 
@@ -848,7 +873,7 @@ void SCI_METHOD LexerPython::Fold(Sci_PositionU startPos, Sci_Position length, i
 	int prev_state = SCE_P_DEFAULT & 31;
 	if (lineCurrent >= 1)
 		prev_state = styler.StyleAt(startPos - 1) & 31;
-	int prevQuote = options.foldQuotes && ((prev_state == SCE_P_TRIPLE) || (prev_state == SCE_P_TRIPLEDOUBLE));
+	int prevQuote = options.foldQuotes && IsPyTripleQuoteStringState(prev_state);
 
 	// Process all characters to end of requested range or end of any triple quote
 	//that hangs over the end of the range.  Cap processing in all cases
@@ -865,7 +890,7 @@ void SCI_METHOD LexerPython::Fold(Sci_PositionU startPos, Sci_Position length, i
 			indentNext = styler.IndentAmount(lineNext, &spaceFlags, NULL);
 			Sci_Position lookAtPos = (styler.LineStart(lineNext) == styler.Length()) ? styler.Length() - 1 : styler.LineStart(lineNext);
 			const int style = styler.StyleAt(lookAtPos) & 31;
-			quote = options.foldQuotes && ((style == SCE_P_TRIPLE) || (style == SCE_P_TRIPLEDOUBLE));
+			quote = options.foldQuotes && IsPyTripleQuoteStringState(style);
 		}
 		const int quote_start = (quote && !prevQuote);
 		const int quote_continue = (quote && prevQuote);
@@ -905,7 +930,7 @@ void SCI_METHOD LexerPython::Fold(Sci_PositionU startPos, Sci_Position length, i
 		}
 
 		const int levelAfterComments = ((lineNext < docLines) ? indentNext & SC_FOLDLEVELNUMBERMASK : minCommentLevel);
-		const int levelBeforeComments = Maximum(indentCurrentLevel, levelAfterComments);
+		const int levelBeforeComments = std::max(indentCurrentLevel, levelAfterComments);
 
 		// Now set all the indent levels on the lines we skipped
 		// Do this from end to start.  Once we encounter one line

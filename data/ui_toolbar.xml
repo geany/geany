@@ -12,7 +12,7 @@ For changes to take effect, you need to restart Geany. Alternatively you can use
 editor in Geany.
 
 A list of available actions can be found in the documentation included with Geany or
-at http://www.geany.org/manual/current/index.html#customizing-the-toolbar.
+at https://www.geany.org/manual/current/index.html#customizing-the-toolbar.
 -->
 
 <ui>

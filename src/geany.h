@@ -42,11 +42,11 @@ G_BEGIN_DECLS
 #define GEANY_FILEDEFS_SUBDIR			"filedefs"
 #define GEANY_TEMPLATES_SUBDIR			"templates"
 #define GEANY_TAGS_SUBDIR				"tags"
-#define GEANY_CODENAME					"Gorgon"
-#define GEANY_HOMEPAGE					"http://www.geany.org/"
-#define GEANY_WIKI						"http://wiki.geany.org/"
-#define GEANY_BUG_REPORT				"http://www.geany.org/Support/Bugs"
-#define GEANY_DONATE					"http://www.geany.org/service/donate/"
+#define GEANY_CODENAME					"Keong"
+#define GEANY_HOMEPAGE					"https://www.geany.org/"
+#define GEANY_WIKI						"https://wiki.geany.org/"
+#define GEANY_BUG_REPORT				"https://www.geany.org/Support/Bugs"
+#define GEANY_DONATE					"https://www.geany.org/service/donate/"
 #define GEANY_STRING_UNTITLED			_("untitled")
 #define GEANY_DEFAULT_DIALOG_HEIGHT		350
 #define GEANY_WINDOW_DEFAULT_WIDTH		900

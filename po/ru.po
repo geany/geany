@@ -8,10 +8,10 @@
 # Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2015
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.33\n"
+"Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 14:41+0100\n"
-"PO-Revision-Date: 2018-02-05 06:26+0400\n"
+"POT-Creation-Date: 2018-09-24 22:17+0200\n"
+"PO-Revision-Date: 2018-02-13 02:52+0400\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -98,7 +98,7 @@ msgstr "невидимый"
 msgid "_Insert \"include <...>\""
 msgstr "Встав_ить \"include <...>\""
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:514
+#: ../data/geany.glade.h:16 ../src/keybindings.c:515
 msgid "Insert Alternative _White Space"
 msgstr "Вставить переменный _пробел"
 
@@ -110,17 +110,17 @@ msgstr "П_оиск"
 msgid "Open Selected F_ile"
 msgstr "Открыть _выбранный файл"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2590
+#: ../data/geany.glade.h:19 ../src/symbols.c:2596
 msgid "Find _Usage"
 msgstr "_Найти использования"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2595
+#: ../data/geany.glade.h:20 ../src/symbols.c:2601
 msgid "Find _Document Usage"
 msgstr "Найти использования _документа"
 
 #: ../data/geany.glade.h:21
 msgid "Go to Symbol Defini_tion"
-msgstr "Перейти к определению символа"
+msgstr "Перейти к _определению символа"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
@@ -167,7 +167,7 @@ msgstr "Вверху"
 msgid "Bottom"
 msgstr "Внизу"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:524
+#: ../data/geany.glade.h:31 ../src/keybindings.c:525
 msgid "Preferences"
 msgstr "Настройки"
 
@@ -1058,7 +1058,7 @@ msgstr "Цвет:"
 msgid "Sets the color of the long line marker"
 msgstr "Установить цвет маркера длинной строки"
 
-#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:831
+#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:832
 msgid "Color Chooser"
 msgstr "Выбор цвета"
 
@@ -1143,7 +1143,7 @@ msgstr "<b>Виртуальные пробелы</b>"
 msgid "Display"
 msgstr "Отображение"
 
-#: ../data/geany.glade.h:235 ../src/keybindings.c:312 ../src/prefs.c:1609
+#: ../data/geany.glade.h:235 ../src/keybindings.c:313 ../src/prefs.c:1609
 msgid "Editor"
 msgstr "Редактор"
 
@@ -1230,7 +1230,7 @@ msgstr "Убирать лишние пробелы и табуляции"
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Убирать лишние пробелы и табуляции в конце строк"
 
-#: ../data/geany.glade.h:253 ../src/keybindings.c:669
+#: ../data/geany.glade.h:253 ../src/keybindings.c:672
 msgid "Replace tabs with space"
 msgstr "Заменить табуляции пробелами"
 
@@ -1316,7 +1316,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Команды</b>"
 
-#: ../data/geany.glade.h:272 ../src/keybindings.c:324 ../src/prefs.c:1613
+#: ../data/geany.glade.h:272 ../src/keybindings.c:325 ../src/prefs.c:1613
 msgid "Tools"
 msgstr "Инструменты"
 
@@ -1412,7 +1412,7 @@ msgstr "_Изменить"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Сочетания клавиш</b>"
 
-#: ../data/geany.glade.h:293 ../src/plugins.c:1948 ../src/plugins.c:1985
+#: ../data/geany.glade.h:293 ../src/plugins.c:1951 ../src/plugins.c:1988
 #: ../src/prefs.c:1617
 msgid "Keybindings"
 msgstr "Сочетания клавиш"
@@ -1665,13 +1665,13 @@ msgstr "Недавние _файлы"
 
 #: ../data/geany.glade.h:348
 msgid "Save _As..."
-msgstr "Сохранить как..."
+msgstr "Сохранить _как..."
 
 #: ../data/geany.glade.h:349
 msgid "Sa_ve All"
 msgstr "Сохранить _все"
 
-#: ../data/geany.glade.h:350 ../src/document.c:1651 ../src/document.c:3626
+#: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3630
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "_Загрузить заново"
@@ -1700,47 +1700,47 @@ msgstr "_Закрыть все"
 msgid "Co_mmands"
 msgstr "Ко_манды"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:437
+#: ../data/geany.glade.h:357 ../src/keybindings.c:438
 msgid "Cu_t Current Line(s)"
 msgstr "_Вырезать строки"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:434
+#: ../data/geany.glade.h:358 ../src/keybindings.c:435
 msgid "_Copy Current Line(s)"
 msgstr "_Копировать строки"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:387
+#: ../data/geany.glade.h:359 ../src/keybindings.c:388
 msgid "_Delete Current Line(s)"
 msgstr "_Удалить строки"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:384
+#: ../data/geany.glade.h:360 ../src/keybindings.c:385
 msgid "D_uplicate Line or Selection"
 msgstr "_Дублировать строку"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:447
+#: ../data/geany.glade.h:361 ../src/keybindings.c:448
 msgid "S_elect Current Line(s)"
 msgstr "Выделить _текущие строки"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:450
+#: ../data/geany.glade.h:362 ../src/keybindings.c:451
 msgid "Se_lect Current Paragraph"
 msgstr "Выделить _абзац"
 
 #: ../data/geany.glade.h:363
 msgid "_Move Line(s) Up"
-msgstr "Переместить строку(и) вверх"
+msgstr "Переместить строку(и) вв_ерх"
 
 #: ../data/geany.glade.h:364
 msgid "M_ove Line(s) Down"
-msgstr "Переместить строку(и) вниз"
+msgstr "Переместить строку(и) в_низ"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:501
+#: ../data/geany.glade.h:365 ../src/keybindings.c:502
 msgid "_Send Selection to Terminal"
 msgstr "_Отправить выделенное в терминал"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:503
+#: ../data/geany.glade.h:366 ../src/keybindings.c:504
 msgid "_Reflow Lines/Block"
 msgstr "Пере_форматировать строки/блок"
 
-#: ../data/geany.glade.h:367 ../src/keybindings.c:461
+#: ../data/geany.glade.h:367 ../src/keybindings.c:462
 msgid "T_oggle Case of Selection"
 msgstr "Переключить _регистр выделенного текста"
 
@@ -1764,7 +1764,7 @@ msgstr "У_величить отступ"
 msgid "_Decrease Indent"
 msgstr "У_меньшить отступ"
 
-#: ../data/geany.glade.h:373 ../src/keybindings.c:480
+#: ../data/geany.glade.h:373 ../src/keybindings.c:481
 msgid "S_mart Line Indent"
 msgstr "Использовать \"_умный\" отступ"
 
@@ -1780,13 +1780,13 @@ msgstr "Вставить комм_ентарии"
 msgid "Preference_s"
 msgstr "_Настройки"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:527
+#: ../data/geany.glade.h:377 ../src/keybindings.c:528
 msgid "P_lugin Preferences"
 msgstr "Настройки _модулей"
 
 #: ../data/geany.glade.h:378
 msgid "_Find..."
-msgstr "Найти..."
+msgstr "_Найти..."
 
 #: ../data/geany.glade.h:379
 msgid "Find _Next"
@@ -1796,7 +1796,7 @@ msgstr "Найти _следующее"
 msgid "Find _Previous"
 msgstr "Найти _предыдущее"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2600
+#: ../data/geany.glade.h:381 ../src/symbols.c:2606
 msgid "Find in F_iles..."
 msgstr "Найти в _файлах..."
 
@@ -1812,11 +1812,11 @@ msgstr "_Следующее сообщение"
 msgid "Pr_evious Message"
 msgstr "_Предыдущее сообщение"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:576
+#: ../data/geany.glade.h:385 ../src/keybindings.c:577
 msgid "Go to Ne_xt Marker"
 msgstr "Перейти к с_ледующему маркеру"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:579
+#: ../data/geany.glade.h:386 ../src/keybindings.c:580
 msgid "Go to Pre_vious Marker"
 msgstr "Перейти к п_редыдущему маркеру"
 
@@ -1824,21 +1824,21 @@ msgstr "Перейти к п_редыдущему маркеру"
 msgid "_Go to Line..."
 msgstr "Перейти на с_троку..."
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:539
+#: ../data/geany.glade.h:388 ../src/keybindings.c:540
 msgid "Find Next _Selection"
 msgstr "Найти _следующее выделение"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:541
+#: ../data/geany.glade.h:389 ../src/keybindings.c:542
 msgid "Find Pre_vious Selection"
 msgstr "Найти _предыдущее выделенное"
 
-#: ../data/geany.glade.h:390 ../src/keybindings.c:558
+#: ../data/geany.glade.h:390 ../src/keybindings.c:559
 msgid "_Mark All"
 msgstr "_Пометить все"
 
 #: ../data/geany.glade.h:391
 msgid "Go to Symbol Decl_aration"
-msgstr "Перейти к объявлению символа"
+msgstr "Перейти к о_бъявлению символа"
 
 #: ../data/geany.glade.h:392
 msgid "_View"
@@ -1962,7 +1962,7 @@ msgstr "Только _чтение"
 
 #: ../data/geany.glade.h:422
 msgid "_Write Unicode BOM"
-msgstr "Использовать _Unicode BOM"
+msgstr "Использоват_ь Unicode BOM"
 
 #: ../data/geany.glade.h:423
 msgid "Set File_type"
@@ -1988,11 +1988,11 @@ msgstr "Заменить окончания строк на _LF (Unix)"
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Заменить окончания строк на CR (классический _Mac)"
 
-#: ../data/geany.glade.h:429 ../src/keybindings.c:667
+#: ../data/geany.glade.h:429 ../src/keybindings.c:668
 msgid "_Clone"
-msgstr "Клонировать"
+msgstr "_Клонировать"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:430 ../src/keybindings.c:670
 msgid "_Strip Trailing Spaces"
 msgstr "Удалить _лишние пробелы в конце строк"
 
@@ -2045,7 +2045,7 @@ msgid "_Apply Default Indentation"
 msgstr "При_менить отступы по умолчанию"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2402 ../src/build.c:2679
+#: ../data/geany.glade.h:443 ../src/build.c:2403 ../src/build.c:2680
 msgid "_Build"
 msgstr "_Сборка"
 
@@ -2168,7 +2168,7 @@ msgstr ""
 "новый каталог, так и уже существующий. Вы можете использовать относительные "
 "пути (относительно имени проекта)."
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:322
+#: ../data/geany.glade.h:471 ../src/keybindings.c:323
 msgid "Project"
 msgstr "Проект"
 
@@ -2246,7 +2246,7 @@ msgstr "Прочие:"
 
 #: ../src/about.c:48
 msgid ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2254,7 +2254,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2394,98 +2394,98 @@ msgstr "Свой текст"
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "Введите здесь свои опции, весь введенный текст передаётся команде."
 
-#: ../src/build.c:1299
+#: ../src/build.c:1300
 msgid "_Next Error"
 msgstr "Сл_едующая ошибка"
 
-#: ../src/build.c:1301
+#: ../src/build.c:1302
 msgid "_Previous Error"
 msgstr "_Предыдущая ошибка"
 
 #. arguments
-#: ../src/build.c:1311 ../src/build.c:2719
+#: ../src/build.c:1312 ../src/build.c:2720
 msgid "_Set Build Commands"
 msgstr "_Установить команды сборки"
 
-#: ../src/build.c:1586 ../src/toolbar.c:376
+#: ../src/build.c:1587 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "Собрать текущий файл"
 
-#: ../src/build.c:1597
+#: ../src/build.c:1598
 msgid "Build the current file with Make and the default target"
 msgstr "Собрать данный файл, используя утилиту Make и цель сборки по умолчанию"
 
-#: ../src/build.c:1599
+#: ../src/build.c:1600
 msgid "Build the current file with Make and the specified target"
 msgstr "Собрать текущий файл, используя утилиту Make и указанную цель"
 
-#: ../src/build.c:1601
+#: ../src/build.c:1602
 msgid "Compile the current file with Make"
 msgstr "Скомпилировать текущий файл, используя утилиту Make"
 
 # "Процесс невозможно остановить" - это просто шедевр.
-#: ../src/build.c:1620
+#: ../src/build.c:1621
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "Процесс не может быть остановлен (%s)."
 
-#: ../src/build.c:1634 ../src/build.c:1646
+#: ../src/build.c:1635 ../src/build.c:1647
 msgid "No more build errors."
 msgstr "Ошибок сборки больше нет."
 
-#: ../src/build.c:1759 ../src/build.c:1761
+#: ../src/build.c:1760 ../src/build.c:1762
 msgid "Set menu item label"
 msgstr "Метка элемента меню"
 
-#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
+#: ../src/build.c:1787 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "Метка"
 
 #. command column, holding status and command display
-#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
+#: ../src/build.c:1788 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "Команда"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1789
 msgid "Working directory"
 msgstr "Рабочий каталог"
 
-#: ../src/build.c:1789
+#: ../src/build.c:1790
 msgid "Reset"
 msgstr "Сбросить"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1847
 msgid "Click to set menu item label"
 msgstr "Щёлкните для указания метки элемента меню"
 
-#: ../src/build.c:1930 ../src/build.c:1932
+#: ../src/build.c:1931 ../src/build.c:1933
 #, c-format
 msgid "%s commands"
 msgstr "Команды для языка: %s"
 
-#: ../src/build.c:1932
+#: ../src/build.c:1933
 msgid "No filetype"
 msgstr "Тип файла не определён"
 
-#: ../src/build.c:1941 ../src/build.c:1976
+#: ../src/build.c:1942 ../src/build.c:1977
 msgid "Error regular expression:"
 msgstr "Регулярное выражение, являющееся признаком ошибки:"
 
-#: ../src/build.c:1969
+#: ../src/build.c:1970
 msgid "Independent commands"
 msgstr "Независимые команды"
 
-#: ../src/build.c:2001
+#: ../src/build.c:2002
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr ""
 "Примечание: для команды 2 будет открыт диалог, позволяющий ввести "
 "дополнительные параметры."
 
-#: ../src/build.c:2010
+#: ../src/build.c:2011
 msgid "Execute commands"
 msgstr "Выполнить команды"
 
-#: ../src/build.c:2022
+#: ../src/build.c:2023
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
@@ -2493,34 +2493,34 @@ msgstr ""
 "Шаблоны для подстановки в команду и рабочий каталог: %d, %e, %f, %p и %l, "
 "смотрите руководство для более детальной информации."
 
-#: ../src/build.c:2180
+#: ../src/build.c:2181
 msgid "Set Build Commands"
 msgstr "Установить пользовательские команды"
 
-#: ../src/build.c:2395
+#: ../src/build.c:2396
 msgid "_Compile"
 msgstr "_Скомпилировать"
 
-#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
+#: ../src/build.c:2410 ../src/build.c:2440 ../src/build.c:2648
 msgid "_Execute"
 msgstr "_Выполнить"
 
 #. build the code with make custom
-#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
+#: ../src/build.c:2455 ../src/build.c:2646 ../src/build.c:2700
 msgid "Make Custom _Target..."
 msgstr "Собрать заданную _цель..."
 
 #. build the code with make object
-#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
+#: ../src/build.c:2457 ../src/build.c:2647 ../src/build.c:2708
 msgid "Make _Object"
 msgstr "Собрать _объектный файл"
 
-#: ../src/build.c:2458 ../src/build.c:2644
+#: ../src/build.c:2459 ../src/build.c:2645
 msgid "_Make"
 msgstr "_Собрать"
 
 #. build the code with make all
-#: ../src/build.c:2691
+#: ../src/build.c:2692
 msgid "_Make All"
 msgstr "Собрать _всё"
 
@@ -2532,7 +2532,7 @@ msgstr[0] "%d файл сохранён."
 msgstr[1] "%d файла сохранены."
 msgstr[2] "%d файлов сохранено."
 
-#: ../src/callbacks.c:900 ../src/keybindings.c:567
+#: ../src/callbacks.c:900 ../src/keybindings.c:568
 msgid "Go to Line"
 msgstr "Перейти на строку"
 
@@ -2570,8 +2570,12 @@ msgstr "Проверьте правильность пути в настройк
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "Не удалось выполнить команду контекстного действия \"%s\": %s. %s"
 
-#: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
-#: ../src/document.c:2371
+#: ../src/callbacks.c:1505
+msgid "No context action set."
+msgstr "Контекстное действие не задано."
+
+#: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
+#: ../src/document.c:2375
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "Не удалось найти \"%s\"."
@@ -2653,7 +2657,7 @@ msgstr ""
 "Открытие файла в режиме \"только чтение\". Если выбрать более чем один файл "
 "для открытия, все выбранные файлы будут открыты в режиме \"только чтение\"."
 
-#: ../src/dialogs.c:535 ../src/document.c:2049
+#: ../src/dialogs.c:535 ../src/document.c:2053
 msgid "Overwrite?"
 msgstr "Перезаписать?"
 
@@ -2717,7 +2721,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
+#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "неизвестно"
 
@@ -2810,18 +2814,18 @@ msgstr "Файл %s загружен заново."
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
 #, c-format
-msgid "File %s opened(%d%s)."
+msgid "File %s opened (%d%s)."
 msgstr "Файл %s открыт (%d%s)."
 
 #: ../src/document.c:1497
 msgid ", read-only"
 msgstr ", только чтение"
 
-#: ../src/document.c:1617
+#: ../src/document.c:1621
 msgid "Discard history"
 msgstr "Сброс истории"
 
-#: ../src/document.c:1618
+#: ../src/document.c:1622
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2833,28 +2837,28 @@ msgstr ""
 "истории при перезагрузке. Данное сообщение не будет отображаться повторно, "
 "но ваш выбор может быть изменён в настройках \"Разное\"."
 
-#: ../src/document.c:1622
+#: ../src/document.c:1626
 msgid "The file has been reloaded."
 msgstr "Файл был загружен заново."
 
-#: ../src/document.c:1652
+#: ../src/document.c:1656
 msgid "Any unsaved changes will be lost."
 msgstr "Все несохранённые изменения будут потеряны."
 
-#: ../src/document.c:1653
+#: ../src/document.c:1657
 msgid "Undo history will be lost."
 msgstr "Вся история изменений будет потеряна."
 
-#: ../src/document.c:1654
+#: ../src/document.c:1658
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "Вы уверены, что хотите заново загрузить '%s'?"
 
-#: ../src/document.c:1760
+#: ../src/document.c:1764
 msgid "Error renaming file."
 msgstr "Ошибка при переименовании."
 
-#: ../src/document.c:1881
+#: ../src/document.c:1885
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2863,7 +2867,7 @@ msgstr ""
 "Произошла ошибка при переводе файла из UTF-8 в \"%s\". Файл остался "
 "несохранённым."
 
-#: ../src/document.c:1902
+#: ../src/document.c:1906
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2872,55 +2876,55 @@ msgstr ""
 "Текст ошибки:  %s\n"
 "Ошибка возникла в \"%s\" (строка: %d, столбец: %d)."
 
-#: ../src/document.c:1906
+#: ../src/document.c:1910
 #, c-format
 msgid "Error message: %s."
 msgstr "Текст ошибки: %s."
 
-#: ../src/document.c:1966
+#: ../src/document.c:1970
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "Не удалось открыть файл '%s' для записи: ошибка в fopen(): %s"
 
-#: ../src/document.c:1984
+#: ../src/document.c:1988
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "Не удалось выполнить запись в файл '%s': ошибка в fwrite(): %s"
 
-#: ../src/document.c:1998
+#: ../src/document.c:2002
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "Не удалось закрыть файл '%s': ошибка в fclose(): %s"
 
-#: ../src/document.c:2048 ../src/document.c:3627
+#: ../src/document.c:2052 ../src/document.c:3631
 msgid "_Overwrite"
 msgstr "_Перезаписать"
 
-#: ../src/document.c:2050 ../src/document.c:3630
+#: ../src/document.c:2054 ../src/document.c:3634
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "Файл '%s' на диске более новый, чем в текущем буфере."
 
-#: ../src/document.c:2058 ../src/document.c:3679
+#: ../src/document.c:2062 ../src/document.c:3683
 msgid "Try to resave the file?"
 msgstr "Попытаться сохранить файл заново?"
 
-#: ../src/document.c:2059 ../src/document.c:3680
+#: ../src/document.c:2063 ../src/document.c:3684
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "Файл \"%s\" не найден на диске!"
 
-#: ../src/document.c:2122
+#: ../src/document.c:2126
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "Не удалось сохранить документ '%s', доступный только для чтения!"
 
-#: ../src/document.c:2190
+#: ../src/document.c:2194
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "Ошибка при сохранении файла (%s)."
 
-#: ../src/document.c:2195
+#: ../src/document.c:2199
 #, c-format
 msgid ""
 "%s\n"
@@ -2931,26 +2935,26 @@ msgstr ""
 "\n"
 "Файл на диске может быть усечён!"
 
-#: ../src/document.c:2197
+#: ../src/document.c:2201
 msgid "Error saving file."
 msgstr "Ошибка при сохранении файла."
 
-#: ../src/document.c:2221
+#: ../src/document.c:2225
 #, c-format
 msgid "File %s saved."
 msgstr "Файл %s сохранён."
 
-#: ../src/document.c:2371
+#: ../src/document.c:2375
 msgid "Wrap search and find again?"
 msgstr "Перейти в начало и возобновить поиск?"
 
-#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
-#: ../src/search.c:2222 ../src/search.c:2223
+#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "Совпадений для  \"%s\" не найдено."
 
-#: ../src/document.c:2466
+#: ../src/document.c:2470
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
@@ -2958,19 +2962,19 @@ msgstr[0] "%s: произведена %d замена \"%s\" на \"%s\"."
 msgstr[1] "%s: произведено %d замены \"%s\" на \"%s\"."
 msgstr[2] "%s: произведено %d замен \"%s\" на \"%s\"."
 
-#: ../src/document.c:3629
+#: ../src/document.c:3633
 msgid "Do you want to reload it?"
 msgstr "Вы действительно хотите загрузить его заново?"
 
-#: ../src/editor.c:4470
+#: ../src/editor.c:4468
 msgid "Enter Tab Width"
 msgstr "Ширина табуляции:"
 
-#: ../src/editor.c:4471
+#: ../src/editor.c:4469
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Количество пробелов, которые будут заменены символом табуляции."
 
-#: ../src/editor.c:4676
+#: ../src/editor.c:4674
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Внимание: нестандартная ширина табуляции: %d != 8"
@@ -2998,7 +3002,7 @@ msgstr "Латиница"
 
 #: ../src/encodings.c:82 ../src/encodings.c:83 ../src/encodings.c:84
 msgid "Baltic"
-msgstr "Прибалтийская"
+msgstr "Балтийская"
 
 #: ../src/encodings.c:85 ../src/encodings.c:86 ../src/encodings.c:87
 msgid "Central European"
@@ -3204,575 +3208,575 @@ msgstr "Плохое регулярное выражение для типа ф�
 msgid "untitled"
 msgstr "без имени"
 
-#: ../src/highlighting.c:1230 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1231 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Не могу найти файл '%s'."
 
-#: ../src/highlighting.c:1300
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "По умолчанию"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr "Текущий тип файла переопределяет стандартный стиль."
 
-#: ../src/highlighting.c:1342
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Это может вызвать неправильное отображение цветовых схем."
 
-#: ../src/highlighting.c:1367
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Цветовые схемы"
 
 #. visual group order
-#: ../src/keybindings.c:311 ../src/symbols.c:494
+#: ../src/keybindings.c:312 ../src/symbols.c:494
 msgid "File"
 msgstr "Файл"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:314
 msgid "Clipboard"
 msgstr "Буфер обмена"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:315
 msgid "Select"
 msgstr "Выбрать"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:316
 msgid "Format"
 msgstr "Формат"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:317
 msgid "Insert"
 msgstr "Вставить"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:318
 msgid "Settings"
 msgstr "Настройки"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:319
 msgid "Search"
 msgstr "Поиск"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:320
 msgid "Go to"
 msgstr "Перейти"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:321
 msgid "View"
 msgstr "Вид"
 
-#: ../src/keybindings.c:321 ../src/symbols.c:643
+#: ../src/keybindings.c:322 ../src/symbols.c:643
 msgid "Document"
 msgstr "Документ"
 
-#: ../src/keybindings.c:323 ../src/keybindings.c:692 ../src/project.c:513
+#: ../src/keybindings.c:324 ../src/keybindings.c:695 ../src/project.c:513
 #: ../src/ui_utils.c:2215
 msgid "Build"
 msgstr "Сборка"
 
-#: ../src/keybindings.c:325 ../src/keybindings.c:717
+#: ../src/keybindings.c:326 ../src/keybindings.c:720
 msgid "Help"
 msgstr "Справка"
 
-#: ../src/keybindings.c:326
+#: ../src/keybindings.c:327
 msgid "Focus"
 msgstr "Фокус"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:328
 msgid "Notebook tab"
 msgstr "Вкладка"
 
-#: ../src/keybindings.c:336 ../src/keybindings.c:368
+#: ../src/keybindings.c:337 ../src/keybindings.c:369
 msgid "New"
 msgstr "Новый"
 
-#: ../src/keybindings.c:338 ../src/keybindings.c:370
+#: ../src/keybindings.c:339 ../src/keybindings.c:371
 msgid "Open"
 msgstr "Открыть"
 
-#: ../src/keybindings.c:341
+#: ../src/keybindings.c:342
 msgid "Open selected file"
 msgstr "Открыть выбранный файл"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:344
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../src/keybindings.c:345 ../src/toolbar.c:59
+#: ../src/keybindings.c:346 ../src/toolbar.c:59
 msgid "Save as"
 msgstr "Сохранить как"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:348
 msgid "Save all"
 msgstr "Сохранить все"
 
-#: ../src/keybindings.c:350 ../src/symbols.c:727
+#: ../src/keybindings.c:351 ../src/symbols.c:727
 msgid "Properties"
 msgstr "Свойства"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:353
 msgid "Print"
 msgstr "Печать"
 
-#: ../src/keybindings.c:354 ../src/keybindings.c:375
+#: ../src/keybindings.c:355 ../src/keybindings.c:376
 msgid "Close"
 msgstr "Закрыть"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:357
 msgid "Close all"
 msgstr "Закрыть все"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:360
 msgid "Reload file"
 msgstr "Обновить файл"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:362
 msgid "Re-open last closed tab"
 msgstr "Открыть последнюю закрытую вкладку"
 
-#: ../src/keybindings.c:363
+#: ../src/keybindings.c:364
 msgid "Quit"
 msgstr "Выход"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 msgid "Undo"
 msgstr "Отменить"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:383
 msgid "Redo"
 msgstr "Повторить"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:392
 msgid "Delete to line end"
 msgstr "Удалить до конца строки"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:395
 msgid "Delete to beginning of line"
 msgstr "Удалить до начала строки"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:398
 msgid "_Transpose Current Line"
 msgstr "П_ереставить строку"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:400
 msgid "Scroll to current line"
 msgstr "Прокрутить до текущей строки"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:402
 msgid "Scroll up the view by one line"
 msgstr "Прокрутить наверх на одну строку"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:404
 msgid "Scroll down the view by one line"
 msgstr "Прокрутить вниз на одну строку"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:406
 msgid "Complete snippet"
 msgstr "Завершить фрагмент кода"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:408
 msgid "Move cursor in snippet"
 msgstr "Перемещать курсор в фрагменте"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:410
 msgid "Suppress snippet completion"
 msgstr "Подавлять автозавершение фрагментов кода"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Context Action"
 msgstr "Контекстное действие"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:414
 msgid "Complete word"
 msgstr "Завершить слово"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:416
 msgid "Show calltip"
 msgstr "Показывать подсказки"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 msgid "Word part completion"
 msgstr "Автозавершение фрагментов кода"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:421
 msgid "Move line(s) up"
 msgstr "Переместить строки вверх"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:424
 msgid "Move line(s) down"
 msgstr "Переместить строки вниз"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:429
 msgid "Cut"
 msgstr "Вырезать"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:431
 msgid "Copy"
 msgstr "Копировать"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:433
 msgid "Paste"
 msgstr "Вставить"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:444
 msgid "Select All"
 msgstr "Выбрать все"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:446
 msgid "Select current word"
 msgstr "Выбрать слово"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:454
 msgid "Select to previous word part"
 msgstr "Выделить до начала слова"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:456
 msgid "Select to next word part"
 msgstr "Выделить до окончания слова"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:464
 msgid "Toggle line commentation"
 msgstr "Переключить комментирование строк"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:467
 msgid "Comment line(s)"
 msgstr "Закомментировать строки"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:469
 msgid "Uncomment line(s)"
 msgstr "Раскомментировать строки"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:471
 msgid "Increase indent"
 msgstr "Увеличить отступ"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:474
 msgid "Decrease indent"
 msgstr "Уменьшить отступ"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:477
 msgid "Increase indent by one space"
 msgstr "Увеличить отступ на один пробел"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:479
 msgid "Decrease indent by one space"
 msgstr "Уменьшить отступ на один пробел"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 msgid "Send to Custom Command 1"
 msgstr "Передать пользовательской команде 1"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:485
 msgid "Send to Custom Command 2"
 msgstr "Передать пользовательской команде 2"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:487
 msgid "Send to Custom Command 3"
 msgstr "Передать пользовательской команде 3"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:489
 msgid "Send to Custom Command 4"
 msgstr "Передать пользовательской команде 4"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:491
 msgid "Send to Custom Command 5"
 msgstr "Передать пользовательской команде 5"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:493
 msgid "Send to Custom Command 6"
 msgstr "Передать пользовательской команде 6"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:495
 msgid "Send to Custom Command 7"
 msgstr "Передать пользовательской команде 7"
 
-#: ../src/keybindings.c:496
+#: ../src/keybindings.c:497
 msgid "Send to Custom Command 8"
 msgstr "Передать пользовательской команде 8"
 
-#: ../src/keybindings.c:498
+#: ../src/keybindings.c:499
 msgid "Send to Custom Command 9"
 msgstr "Передать пользовательской команде 9"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:507
 msgid "Join lines"
 msgstr "Объединить строки"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:512
 msgid "Insert date"
 msgstr "Вставить дату"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:518
 msgid "Insert New Line Before Current"
 msgstr "Вставить новую строку перед текущей"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:520
 msgid "Insert New Line After Current"
 msgstr "Вставить новую строку после текущей"
 
-#: ../src/keybindings.c:532 ../src/search.c:466
+#: ../src/keybindings.c:533 ../src/search.c:466
 msgid "Find"
 msgstr "Найти"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:535
 msgid "Find Next"
 msgstr "Найти следующее"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:537
 msgid "Find Previous"
 msgstr "Найти предыдущее"
 
-#: ../src/keybindings.c:543 ../src/search.c:619
+#: ../src/keybindings.c:544 ../src/search.c:619
 msgid "Replace"
 msgstr "Заменить"
 
-#: ../src/keybindings.c:545 ../src/search.c:869
+#: ../src/keybindings.c:546 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Найти в файлах"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:549
 msgid "Next Message"
 msgstr "Следующее сообщение"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:551
 msgid "Previous Message"
 msgstr "Предыдущее сообщение"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:554
 msgid "Find Usage"
 msgstr "Найти использование"
 
-#: ../src/keybindings.c:556
+#: ../src/keybindings.c:557
 msgid "Find Document Usage"
 msgstr "Статистика документа"
 
-#: ../src/keybindings.c:563 ../src/toolbar.c:70
+#: ../src/keybindings.c:564 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Вернуться на шаг назад"
 
-#: ../src/keybindings.c:565 ../src/toolbar.c:71
+#: ../src/keybindings.c:566 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Перейти на шаг вперёд"
 
-#: ../src/keybindings.c:570
+#: ../src/keybindings.c:571
 msgid "Go to matching brace"
 msgstr "Перейти к парной скобке"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:574
 msgid "Toggle marker"
 msgstr "Переключить маркер"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:583
 msgid "Go to Symbol Definition"
 msgstr "Перейти к определению символа"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:586
 msgid "Go to Symbol Declaration"
 msgstr "Перейти к объявлению символа"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:588
 msgid "Go to Start of Line"
 msgstr "Перейти к началу строки"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:590
 msgid "Go to End of Line"
 msgstr "Перейти к концу строки"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:592
 msgid "Go to Start of Display Line"
 msgstr "Перейти к началу текущей строки"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:594
 msgid "Go to End of Display Line"
 msgstr "К концу текущей строки"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:596
 msgid "Go to Previous Word Part"
 msgstr "Перейти к началу слова"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:598
 msgid "Go to Next Word Part"
 msgstr "Перейти к концу слова"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:603
 msgid "Toggle All Additional Widgets"
 msgstr "Показать/скрыть все дополнительные элементы"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:606
 msgid "Fullscreen"
 msgstr "На весь экран"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:608
 msgid "Toggle Messages Window"
 msgstr "Показать/скрыть окно сообщений"
 
-#: ../src/keybindings.c:610
+#: ../src/keybindings.c:611
 msgid "Toggle Sidebar"
 msgstr "Показать/скрыть боковую панель"
 
-#: ../src/keybindings.c:612
+#: ../src/keybindings.c:613
 msgid "Zoom In"
 msgstr "Увеличить"
 
-#: ../src/keybindings.c:614
+#: ../src/keybindings.c:615
 msgid "Zoom Out"
 msgstr "Уменьшить"
 
-#: ../src/keybindings.c:616
+#: ../src/keybindings.c:617
 msgid "Zoom Reset"
 msgstr "Обычный размер"
 
-#: ../src/keybindings.c:621
+#: ../src/keybindings.c:622
 msgid "Switch to Editor"
 msgstr "Перейти к редактору"
 
-#: ../src/keybindings.c:623
+#: ../src/keybindings.c:624
 msgid "Switch to Search Bar"
 msgstr "Перейти к поиску"
 
-#: ../src/keybindings.c:625
+#: ../src/keybindings.c:626
 msgid "Switch to Message Window"
 msgstr "Показывать окно сообщений"
 
-#: ../src/keybindings.c:627
+#: ../src/keybindings.c:628
 msgid "Switch to Compiler"
 msgstr "Переключиться на компилятор"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:630
 msgid "Switch to Messages"
 msgstr "Перейти к сообщениям"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:632
 msgid "Switch to Scribble"
 msgstr "Перейти к заметкам"
 
-#: ../src/keybindings.c:633
+#: ../src/keybindings.c:634
 msgid "Switch to VTE"
 msgstr "Переключиться в терминал"
 
-#: ../src/keybindings.c:635
+#: ../src/keybindings.c:636
 msgid "Switch to Sidebar"
 msgstr "Перейти к боковой панели"
 
-#: ../src/keybindings.c:637
+#: ../src/keybindings.c:638
 msgid "Switch to Sidebar Symbol List"
 msgstr "Перейти к списку тегов"
 
-#: ../src/keybindings.c:639
+#: ../src/keybindings.c:640
 msgid "Switch to Sidebar Document List"
 msgstr "Перейти к списку документов"
 
-#: ../src/keybindings.c:644
+#: ../src/keybindings.c:645
 msgid "Switch to left document"
 msgstr "Перейти на документ слева"
 
-#: ../src/keybindings.c:646
+#: ../src/keybindings.c:647
 msgid "Switch to right document"
 msgstr "Перейти на документ справа"
 
-#: ../src/keybindings.c:648
+#: ../src/keybindings.c:649
 msgid "Switch to last used document"
 msgstr "Перейти на последний документ"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:652
 msgid "Move document left"
 msgstr "Переместить документ влево"
 
-#: ../src/keybindings.c:654
+#: ../src/keybindings.c:655
 msgid "Move document right"
 msgstr "Переместить документ вправо"
 
-#: ../src/keybindings.c:656
+#: ../src/keybindings.c:657
 msgid "Move document first"
 msgstr "Переместить документ в начало"
 
-#: ../src/keybindings.c:658
+#: ../src/keybindings.c:659
 msgid "Move document last"
 msgstr "Переместить документ в конец"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:664
 msgid "Toggle Line wrapping"
 msgstr "Переключить режим переноса строк"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:666
 msgid "Toggle Line breaking"
 msgstr "Переключить перенос строк"
 
-#: ../src/keybindings.c:671
+#: ../src/keybindings.c:674
 msgid "Replace spaces with tabs"
 msgstr "Заменить пробелы табуляциями"
 
-#: ../src/keybindings.c:673
+#: ../src/keybindings.c:676
 msgid "Toggle current fold"
 msgstr "Свернуть/развернуть текущий блок"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:678
 msgid "Fold all"
 msgstr "Свернуть все"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:680
 msgid "Unfold all"
 msgstr "Развернуть все"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:682
 msgid "Reload symbol list"
 msgstr "Обновить список символов"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:684
 msgid "Remove Markers"
 msgstr "Удалить маркеры"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:686
 msgid "Remove Error Indicators"
 msgstr "Убрать индикаторы ошибок"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:688
 msgid "Remove Markers and Error Indicators"
 msgstr "Убрать маркеры и индикаторы ошибок"
 
-#: ../src/keybindings.c:690 ../src/toolbar.c:72
+#: ../src/keybindings.c:693 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Скомпилировать"
 
-#: ../src/keybindings.c:694
+#: ../src/keybindings.c:697
 msgid "Make all"
 msgstr "Собрать все"
 
-#: ../src/keybindings.c:697
+#: ../src/keybindings.c:700
 msgid "Make custom target"
 msgstr "Собрать указанную цель"
 
-#: ../src/keybindings.c:699
+#: ../src/keybindings.c:702
 msgid "Make object"
 msgstr "Собрать объектный файл"
 
-#: ../src/keybindings.c:701
+#: ../src/keybindings.c:704
 msgid "Next error"
 msgstr "Следующая ошибка"
 
-#: ../src/keybindings.c:703
+#: ../src/keybindings.c:706
 msgid "Previous error"
 msgstr "Предыдущая ошибка"
 
-#: ../src/keybindings.c:705
+#: ../src/keybindings.c:708
 msgid "Run"
 msgstr "Запустить"
 
-#: ../src/keybindings.c:707
+#: ../src/keybindings.c:710
 msgid "Build options"
 msgstr "Опции сборки"
 
-#: ../src/keybindings.c:712
+#: ../src/keybindings.c:715
 msgid "Show Color Chooser"
 msgstr "Показать выбор цвета"
 
-#: ../src/keybindings.c:995
+#: ../src/keybindings.c:998
 msgid "Keyboard Shortcuts"
 msgstr "Сочетания клавиш"
 
-#: ../src/keybindings.c:1007
+#: ../src/keybindings.c:1010
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Можно настроить следующие сочетания клавиш:"
 
@@ -3796,7 +3800,7 @@ msgstr ""
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
-msgstr ""
+msgstr "COLUMN"
 
 #: ../src/libmain.c:123
 msgid "Use alternate configuration directory DIR"
@@ -3804,7 +3808,7 @@ msgstr "Использовать DIR как альтернативный кат�
 
 #: ../src/libmain.c:123
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:124
 msgid "Print internal filetype names"
@@ -3831,7 +3835,7 @@ msgstr "Использовать файл сокета FILE для соедин�
 
 #: ../src/libmain.c:129 ../src/libmain.c:143
 msgid "FILE"
-msgstr ""
+msgstr "FILE"
 
 #: ../src/libmain.c:130
 msgid "Return a list of open documents in a running Geany instance"
@@ -3843,7 +3847,7 @@ msgstr "Установить начальный номер строки LINE д�
 
 #: ../src/libmain.c:132
 msgid "LINE"
-msgstr ""
+msgstr "LINE"
 
 #: ../src/libmain.c:133
 msgid "Don't show message window at startup"
@@ -3969,29 +3973,29 @@ msgstr "Отладочные сообщения"
 msgid "Cl_ear"
 msgstr "О_чистить"
 
-#: ../src/msgwindow.c:177
+#: ../src/msgwindow.c:219
 msgid "Status messages"
 msgstr "Дежурные сообщения"
 
-#: ../src/msgwindow.c:582
+#: ../src/msgwindow.c:673
 msgid "C_opy"
 msgstr "_Копировать"
 
-#: ../src/msgwindow.c:591
+#: ../src/msgwindow.c:682
 msgid "Copy _All"
 msgstr "_Копировать все"
 
-#: ../src/msgwindow.c:621
+#: ../src/msgwindow.c:712
 msgid "_Hide Message Window"
 msgstr "_Скрыть окно сообщений"
 
-#: ../src/msgwindow.c:682
+#: ../src/msgwindow.c:773
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
 "Не удалось найти файл '%s' - пробую использовать путь текущего документа."
 
-#: ../src/msgwindow.c:1118
+#: ../src/msgwindow.c:1209
 msgid "The document has been closed."
 msgstr "Документ закрыт."
 
@@ -4054,15 +4058,15 @@ msgstr "Активный"
 msgid "Plugin"
 msgstr "Модуль"
 
-#: ../src/plugins.c:1933
+#: ../src/plugins.c:1936
 msgid "Plugins"
 msgstr "Модули"
 
-#: ../src/plugins.c:1974
+#: ../src/plugins.c:1977
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "При запуске загружать следующие модули:"
 
-#: ../src/plugins.c:2067
+#: ../src/plugins.c:2070
 #, c-format
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
@@ -4084,11 +4088,11 @@ msgstr "Захватить клавишу"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Укажите сочетание клавиш для \"%s\""
 
-#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "_Развернуть все"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_Свернуть все"
 
@@ -4377,9 +4381,9 @@ msgstr "_Многострочный поиск"
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines.  In this mode, "
-"newline characters are part of the input and can be captured as normal "
-"characters by the pattern."
+"line by line, allowing matches to span multiple lines. In this mode, newline "
+"characters are part of the input and can be captured as normal characters by "
+"the pattern."
 msgstr ""
 "Регулярное выражение будет обрабатывать весь буфер за раз, а не строку за "
 "строкой, что позволяет захватывать сразу несколько строк одним регулярным "
@@ -4528,7 +4532,7 @@ msgstr "Дополнительные _опции:"
 msgid "Other options to pass to Grep"
 msgstr "Прочие параметры для передачи утилите grep"
 
-#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4588,7 +4592,7 @@ msgstr[2] "Поиск завершён, найдено %d совпадение."
 msgid "No matches found."
 msgstr "Совпадений не найдено."
 
-#: ../src/search.c:1910
+#: ../src/search.c:1911
 #, c-format
 msgid "Bad regex: %s"
 msgstr "Неверное регулярное выражение: %s"
@@ -4604,29 +4608,29 @@ msgstr ""
 "пользователя.\n"
 "Дальнейшее продолжение работы невозможно."
 
-#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
 msgstr "Текст команды завершился до того, как была найдена парная кавычка"
 
 #. TL note: from glib
-#: ../src/spawn.c:130
+#: ../src/spawn.c:132
 msgid "Text was empty (or contained only whitespace)"
 msgstr "Текст команды пуст (или содержит только пробелы)"
 
-#: ../src/spawn.c:151 ../src/spawn.c:165
+#: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Экранированная команда Windows должна быть полностью заключена в кавычки"
 
-#: ../src/spawn.c:258
+#: ../src/spawn.c:260
 msgid "Program not found"
 msgstr "Программа не найдена"
 
-#: ../src/spawn.c:764
+#: ../src/spawn.c:766
 msgid "Failed to change to the working directory"
 msgstr "Не удалось сменить рабочий каталог"
 
-#: ../src/spawn.c:769
+#: ../src/spawn.c:771
 msgid "Unknown error executing child process"
 msgstr "Неизвестная ошибка при запуске дочернего процесса"
 
@@ -4939,18 +4943,18 @@ msgstr "Отображения"
 msgid "Extern Variables"
 msgstr "Внешние переменные"
 
-#: ../src/symbols.c:1630
+#: ../src/symbols.c:1636
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "Неизвестное расширение имени файла для \"%s\".\n"
 
-#: ../src/symbols.c:1656
+#: ../src/symbols.c:1662
 #, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr ""
 "Не удалось создать файл тегов, возможно, не было найдено ни одного символа.\n"
 
-#: ../src/symbols.c:1663
+#: ../src/symbols.c:1669
 #, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4959,7 +4963,7 @@ msgstr ""
 "Использование: %s -g <файл тэгов> <список файлов>\n"
 "\n"
 
-#: ../src/symbols.c:1664
+#: ../src/symbols.c:1670
 #, c-format
 msgid ""
 "Example:\n"
@@ -4970,52 +4974,52 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1678
+#: ../src/symbols.c:1684
 msgid "Load Tags File"
 msgstr "Загрузить файл тегов"
 
-#: ../src/symbols.c:1685
+#: ../src/symbols.c:1691
 msgid "Geany tags file (*.*.tags)"
 msgstr "Файлы тегов Geany (*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1705
+#: ../src/symbols.c:1711
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "Загружено файл с тэгами %s '%s'."
 
-#: ../src/symbols.c:1708
+#: ../src/symbols.c:1714
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "Не удалось загрузить файл тегов '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1943
+#: ../src/symbols.c:1949
 #, c-format
 msgid "<b>%s: %lu</b>"
-msgstr ""
+msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1946
+#: ../src/symbols.c:1952
 #, c-format
 msgid "%s: %lu"
-msgstr ""
+msgstr "%s: %lu"
 
-#: ../src/symbols.c:2155
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Предварительное объявление \"%s\" не найдено."
 
-#: ../src/symbols.c:2157
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Определение \"%s\" не найдено."
 
-#: ../src/symbols.c:2573
+#: ../src/symbols.c:2579
 msgid "Sort by _Name"
 msgstr "Сортировать по _имени"
 
-#: ../src/symbols.c:2580
+#: ../src/symbols.c:2586
 msgid "Sort by _Appearance"
 msgstr "Сортировать по _появлению"
 
@@ -5235,31 +5239,31 @@ msgstr "ID"
 msgid "No custom commands defined."
 msgstr "Пользовательские команды не определены."
 
-#: ../src/tools.c:695
+#: ../src/tools.c:696
 msgid "Word Count"
 msgstr "Подсчёт слов"
 
-#: ../src/tools.c:704
+#: ../src/tools.c:705
 msgid "selection"
 msgstr "выделение"
 
-#: ../src/tools.c:709
+#: ../src/tools.c:710
 msgid "whole document"
 msgstr "весь документ"
 
-#: ../src/tools.c:718
+#: ../src/tools.c:719
 msgid "Range:"
 msgstr "Интервал:"
 
-#: ../src/tools.c:730
+#: ../src/tools.c:731
 msgid "Lines:"
 msgstr "Строк:"
 
-#: ../src/tools.c:744
+#: ../src/tools.c:745
 msgid "Words:"
 msgstr "Слов:"
 
-#: ../src/tools.c:758
+#: ../src/tools.c:759
 msgid "Characters:"
 msgstr "Символов:"
 
@@ -5450,7 +5454,7 @@ msgstr ""
 
 #: ../src/utils.c:376
 msgid "Windows (CRLF)"
-msgstr ""
+msgstr "Windows (CRLF)"
 
 #: ../src/utils.c:377
 msgid "Classic Mac (CR)"
@@ -5458,38 +5462,38 @@ msgstr "Классический Мac (CR)"
 
 #: ../src/utils.c:378
 msgid "Unix (LF)"
-msgstr ""
+msgstr "Unix (LF)"
 
 #: ../src/utils.c:387
 msgid "CRLF"
-msgstr ""
+msgstr "CRLF"
 
 #: ../src/utils.c:388
 msgid "CR"
-msgstr ""
+msgstr "CR"
 
 #: ../src/utils.c:389
 msgid "LF"
-msgstr ""
+msgstr "LF"
 
-#: ../src/vte.c:584
+#: ../src/vte.c:585
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "неправильная библиотека VTE \"%s\": отсутствует идентификатор \"%s\""
 
-#: ../src/vte.c:765
+#: ../src/vte.c:766
 msgid "_Set Path From Document"
 msgstr "_Установить путь из документа"
 
-#: ../src/vte.c:770
+#: ../src/vte.c:771
 msgid "_Restart Terminal"
 msgstr "_Перезапуск терминала"
 
-#: ../src/vte.c:803
+#: ../src/vte.c:804
 msgid "_Input Methods"
 msgstr "Методы _ввода"
 
-#: ../src/vte.c:895
+#: ../src/vte.c:896
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."
@@ -5764,17 +5768,17 @@ msgstr "Документ успешно экспортирован как '%s'."
 msgid "File '%s' could not be written (%s)."
 msgstr "Файл '%s' недоступен для записи (%s)."
 
-#: ../plugins/export.c:749
+#: ../plugins/export.c:747
 msgid "_Export"
 msgstr "_Экспорт"
 
 #. HTML
-#: ../plugins/export.c:756
+#: ../plugins/export.c:754
 msgid "As _HTML..."
 msgstr "В _HTML..."
 
 #. LaTeX
-#: ../plugins/export.c:762
+#: ../plugins/export.c:760
 msgid "As _LaTeX..."
 msgstr "В _LaTeX..."
 

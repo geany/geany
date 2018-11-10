@@ -1767,7 +1767,7 @@ static gboolean pm_tree_filter_func(GtkTreeModel *model, GtkTreeIter *iter, gpoi
 	gtk_tree_model_get(model, iter, PLUGIN_COLUMN_PLUGIN, &plugin, -1);
 
 	if (!plugin)
-		return FALSE;
+		return TRUE;
 	key = gtk_entry_get_text(GTK_ENTRY(pm_widgets.filter_entry));
 
 	filename = g_path_get_basename(plugin->filename);
@@ -1865,7 +1865,10 @@ static void pm_on_plugin_button_clicked(G_GNUC_UNUSED GtkButton *button, gpointe
 			if (GPOINTER_TO_INT(user_data) == PM_BUTTON_CONFIGURE)
 				plugin_show_configure(&p->public);
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_HELP)
+			{
+				g_return_if_fail(p->cbs.help != NULL);
 				p->cbs.help(&p->public, p->cb_data);
+			}
 			else if (GPOINTER_TO_INT(user_data) == PM_BUTTON_KEYBINDINGS && p->key_group && p->key_group->plugin_key_count > 0)
 				keybindings_dialog_show_prefs_scroll(p->info.name);
 		}

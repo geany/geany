@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-05 14:41+0100\n"
+"POT-Creation-Date: 2018-01-18 23:33+0100\n"
 "PO-Revision-Date: 2014-04-01 00:39+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
@@ -107,11 +107,11 @@ msgstr "_חיפוש"
 msgid "Open Selected F_ile"
 msgstr "_פתיחת קובץ נבחר"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2590
+#: ../data/geany.glade.h:19 ../src/symbols.c:2596
 msgid "Find _Usage"
 msgstr "חיפוש _מספר המופעים"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2595
+#: ../data/geany.glade.h:20 ../src/symbols.c:2601
 msgid "Find _Document Usage"
 msgstr "חיפוש _מספר המופעים במסמך"
 
@@ -1031,7 +1031,7 @@ msgstr "צבע:"
 msgid "Sets the color of the long line marker"
 msgstr "מגדיר צבע לסימון שורה ארוכה"
 
-#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:831
+#: ../data/geany.glade.h:219 ../src/toolbar.c:74 ../src/tools.c:832
 msgid "Color Chooser"
 msgstr "בחירת צבע"
 
@@ -1613,7 +1613,7 @@ msgstr "שמירה _בשם..."
 msgid "Sa_ve All"
 msgstr "שמירת ה_כל"
 
-#: ../data/geany.glade.h:350 ../src/document.c:1651 ../src/document.c:3626
+#: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3630
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "טעינה מחד_ש"
@@ -1738,7 +1738,7 @@ msgstr "חיפוש ה_בא"
 msgid "Find _Previous"
 msgstr "חיפוש ה_קודם"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2600
+#: ../data/geany.glade.h:381 ../src/symbols.c:2606
 msgid "Find in F_iles..."
 msgstr "חיפוש ב_קובץ..."
 
@@ -1990,7 +1990,7 @@ msgid "_Apply Default Indentation"
 msgstr "ה_חלת הזחת ברירת מחדל"
 
 #. build the code
-#: ../data/geany.glade.h:443 ../src/build.c:2402 ../src/build.c:2679
+#: ../data/geany.glade.h:443 ../src/build.c:2403 ../src/build.c:2680
 msgid "_Build"
 msgstr "_בנייה"
 
@@ -2332,95 +2332,95 @@ msgstr "טקסט מותאם אישית"
 msgid "Enter custom text here, all entered text is appended to the command."
 msgstr "הזן כאן טקסט מותאם אישית. כל טקסט שמוזמן מצורף לפקודה."
 
-#: ../src/build.c:1299
+#: ../src/build.c:1300
 msgid "_Next Error"
 msgstr "שגיאה ה_באה"
 
-#: ../src/build.c:1301
+#: ../src/build.c:1302
 msgid "_Previous Error"
 msgstr "שגיאה קו_דמת"
 
 #. arguments
-#: ../src/build.c:1311 ../src/build.c:2719
+#: ../src/build.c:1312 ../src/build.c:2720
 msgid "_Set Build Commands"
 msgstr "הגדרת פקודות _בנייה"
 
-#: ../src/build.c:1586 ../src/toolbar.c:376
+#: ../src/build.c:1587 ../src/toolbar.c:376
 msgid "Build the current file"
 msgstr "בניית הקובץ הנוכחי"
 
-#: ../src/build.c:1597
+#: ../src/build.c:1598
 msgid "Build the current file with Make and the default target"
 msgstr "בניית הקובץ הנוכחי באמצעות make עם מטרת ברירת המחדל"
 
-#: ../src/build.c:1599
+#: ../src/build.c:1600
 msgid "Build the current file with Make and the specified target"
 msgstr "בניית הקובץ הנוכחי באמצעות make עם המטרה שצוינה"
 
-#: ../src/build.c:1601
+#: ../src/build.c:1602
 msgid "Compile the current file with Make"
 msgstr "הידור הקובץ הנוכחי באמצעות make"
 
-#: ../src/build.c:1620
+#: ../src/build.c:1621
 #, c-format
 msgid "Process could not be stopped (%s)."
 msgstr "לא ניתן לעצור את התהליך (%s)"
 
-#: ../src/build.c:1634 ../src/build.c:1646
+#: ../src/build.c:1635 ../src/build.c:1647
 msgid "No more build errors."
 msgstr "אין עוד שגיאות בנייה."
 
-#: ../src/build.c:1759 ../src/build.c:1761
+#: ../src/build.c:1760 ../src/build.c:1762
 msgid "Set menu item label"
 msgstr "הזנת תווית לפריט בתפריט"
 
-#: ../src/build.c:1786 ../src/symbols.c:522 ../src/tools.c:397
+#: ../src/build.c:1787 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
 msgstr "תווית"
 
 #. command column, holding status and command display
-#: ../src/build.c:1787 ../src/symbols.c:517 ../src/tools.c:382
+#: ../src/build.c:1788 ../src/symbols.c:517 ../src/tools.c:382
 msgid "Command"
 msgstr "פקודה"
 
-#: ../src/build.c:1788
+#: ../src/build.c:1789
 msgid "Working directory"
 msgstr "תיקיית העבודה"
 
-#: ../src/build.c:1789
+#: ../src/build.c:1790
 msgid "Reset"
 msgstr "איפוס"
 
-#: ../src/build.c:1846
+#: ../src/build.c:1847
 msgid "Click to set menu item label"
 msgstr "לחץ כאן להגדרת תווית בתפריט"
 
-#: ../src/build.c:1930 ../src/build.c:1932
+#: ../src/build.c:1931 ../src/build.c:1933
 #, c-format
 msgid "%s commands"
 msgstr "פקודות ‪%s"
 
-#: ../src/build.c:1932
+#: ../src/build.c:1933
 msgid "No filetype"
 msgstr "בלתי תלויות בסוג הקובץ"
 
-#: ../src/build.c:1941 ../src/build.c:1976
+#: ../src/build.c:1942 ../src/build.c:1977
 msgid "Error regular expression:"
 msgstr "שגיאת ביטוי רגולרי:"
 
-#: ../src/build.c:1969
+#: ../src/build.c:1970
 msgid "Independent commands"
 msgstr "פקודות עצמאיות"
 
-#: ../src/build.c:2001
+#: ../src/build.c:2002
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
 msgstr "הערה: שני פריטים מלאים יצורפו לתפריט הפקודות"
 
-#: ../src/build.c:2010
+#: ../src/build.c:2011
 msgid "Execute commands"
 msgstr "פקודות הרצה"
 
-#: ../src/build.c:2022
+#: ../src/build.c:2023
 #, fuzzy
 msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
@@ -2428,34 +2428,34 @@ msgid ""
 msgstr ""
 "‫‎%d, %e, %f ו־‎%p בפקודות מתחלפים בקבצים ותיקיות. עיין במדריך לקבלת פרטים."
 
-#: ../src/build.c:2180
+#: ../src/build.c:2181
 msgid "Set Build Commands"
 msgstr "הגדרת פקודות בנייה"
 
-#: ../src/build.c:2395
+#: ../src/build.c:2396
 msgid "_Compile"
 msgstr "הי_דור"
 
-#: ../src/build.c:2409 ../src/build.c:2439 ../src/build.c:2647
+#: ../src/build.c:2410 ../src/build.c:2440 ../src/build.c:2648
 msgid "_Execute"
 msgstr "ה_רצה"
 
 #. build the code with make custom
-#: ../src/build.c:2454 ../src/build.c:2645 ../src/build.c:2699
+#: ../src/build.c:2455 ../src/build.c:2646 ../src/build.c:2700
 msgid "Make Custom _Target..."
 msgstr "בנייה _מותאמת אישית..."
 
 #. build the code with make object
-#: ../src/build.c:2456 ../src/build.c:2646 ../src/build.c:2707
+#: ../src/build.c:2457 ../src/build.c:2647 ../src/build.c:2708
 msgid "Make _Object"
 msgstr "בניית קובץ _Object"
 
-#: ../src/build.c:2458 ../src/build.c:2644
+#: ../src/build.c:2459 ../src/build.c:2645
 msgid "_Make"
 msgstr "_בנייה"
 
 #. build the code with make all
-#: ../src/build.c:2691
+#: ../src/build.c:2692
 msgid "_Make All"
 msgstr "ב_ניית הכל"
 
@@ -2503,8 +2503,13 @@ msgstr "לא ניתן לבצע '%s' באמצעות grep. בדוק את העדפ�
 msgid "Cannot execute context action command \"%s\": %s. %s"
 msgstr "פקודת התצורה '%s' לא ניתנת לביצוע (%s)."
 
-#: ../src/dialogs.c:161 ../src/document.c:2298 ../src/document.c:2363
-#: ../src/document.c:2371
+#: ../src/callbacks.c:1505
+#, fuzzy
+msgid "No context action set."
+msgstr "פעולה בהקשר:"
+
+#: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
+#: ../src/document.c:2375
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "‏\"%s\" לא נמצא."
@@ -2586,7 +2591,7 @@ msgid ""
 msgstr ""
 "פותח את הקובץ לקריאה בלבד. אם נבחרו מספר קבצים, כולם יפתחו לקריאה בלבד."
 
-#: ../src/dialogs.c:535 ../src/document.c:2049
+#: ../src/dialogs.c:535 ../src/document.c:2053
 msgid "Overwrite?"
 msgstr "להחליף ?"
 
@@ -2648,7 +2653,7 @@ msgstr "ארעה שגיאה או שפרטי הקובץ אינם ניתנים ל�
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2404 ../src/symbols.c:2420 ../src/ui_utils.c:289
+#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "לא ידוע"
 
@@ -2746,11 +2751,11 @@ msgstr "הקובץ %s נפתח (%d%s)."
 msgid ", read-only"
 msgstr ", קריאה בלבד"
 
-#: ../src/document.c:1617
+#: ../src/document.c:1621
 msgid "Discard history"
 msgstr ""
 
-#: ../src/document.c:1618
+#: ../src/document.c:1622
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2758,37 +2763,37 @@ msgid ""
 "preferences."
 msgstr ""
 
-#: ../src/document.c:1622
+#: ../src/document.c:1626
 #, fuzzy
 msgid "The file has been reloaded."
 msgstr "הקובץ %s נטען מחדש."
 
-#: ../src/document.c:1652
+#: ../src/document.c:1656
 msgid "Any unsaved changes will be lost."
 msgstr "כל השינויים שלא נשמרו יאבדו."
 
-#: ../src/document.c:1653
+#: ../src/document.c:1657
 #, fuzzy
 msgid "Undo history will be lost."
 msgstr "כל השינויים שלא נשמרו יאבדו."
 
-#: ../src/document.c:1654
+#: ../src/document.c:1658
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "האם אתה בטוח שברצונך לטעון מחדש את הקובץ '%s' ?"
 
-#: ../src/document.c:1760
+#: ../src/document.c:1764
 msgid "Error renaming file."
 msgstr "ארעה שגיאה בשינוי שם הקובץ."
 
-#: ../src/document.c:1881
+#: ../src/document.c:1885
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
 "remains unsaved."
 msgstr "אירעה שגיאה בעת המרת הקובץ מקידוד UTF-8 לקידוד \"%s\". הקובץ לא נשמר."
 
-#: ../src/document.c:1902
+#: ../src/document.c:1906
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2797,56 +2802,56 @@ msgstr ""
 "הודעת שגיאה: %s\n"
 "השגיאה ארעה ב-\"%s\" (שורה: %d, עמודה: %d)."
 
-#: ../src/document.c:1906
+#: ../src/document.c:1910
 #, c-format
 msgid "Error message: %s."
 msgstr "הודעת שגיאה: %s."
 
-#: ../src/document.c:1966
+#: ../src/document.c:1970
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "נכשלה פתיחת הקובץ '%s' לכתיבה: fopen() נכשל: %s"
 
-#: ../src/document.c:1984
+#: ../src/document.c:1988
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "נכשל ניסיון לכתוב לקובץ '%s': ‫fwrite() נכשל: %s"
 
-#: ../src/document.c:1998
+#: ../src/document.c:2002
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "נכשל ניסיון סגירת הקובץ '%s': ‫fclose() נכשל: %s"
 
-#: ../src/document.c:2048 ../src/document.c:3627
+#: ../src/document.c:2052 ../src/document.c:3631
 #, fuzzy
 msgid "_Overwrite"
 msgstr "להחליף ?"
 
-#: ../src/document.c:2050 ../src/document.c:3630
+#: ../src/document.c:2054 ../src/document.c:3634
 #, fuzzy, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "הקובץ '%s' בדיסק מעודכן יותר."
 
-#: ../src/document.c:2058 ../src/document.c:3679
+#: ../src/document.c:2062 ../src/document.c:3683
 msgid "Try to resave the file?"
 msgstr "לנסות שוב לשמור את הקובץ ?"
 
-#: ../src/document.c:2059 ../src/document.c:3680
+#: ../src/document.c:2063 ../src/document.c:3684
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "הקובץ \"%s\" לא נמצא בדיסק !"
 
-#: ../src/document.c:2122
+#: ../src/document.c:2126
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr ""
 
-#: ../src/document.c:2190
+#: ../src/document.c:2194
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "ארעה שגיאה בעת שמירת הקובץ (%s)"
 
-#: ../src/document.c:2195
+#: ../src/document.c:2199
 #, c-format
 msgid ""
 "%s\n"
@@ -2857,45 +2862,45 @@ msgstr ""
 "\n"
 "יתכן והקובץ בדיסק נחתך."
 
-#: ../src/document.c:2197
+#: ../src/document.c:2201
 msgid "Error saving file."
 msgstr "שגיאה בשמירת הקובץ."
 
-#: ../src/document.c:2221
+#: ../src/document.c:2225
 #, c-format
 msgid "File %s saved."
 msgstr "הקובץ %s נשמר."
 
-#: ../src/document.c:2371
+#: ../src/document.c:2375
 msgid "Wrap search and find again?"
 msgstr "לבצע חיפוש חוזר ?"
 
-#: ../src/document.c:2460 ../src/search.c:1368 ../src/search.c:1421
-#: ../src/search.c:2222 ../src/search.c:2223
+#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "לא נמצאו התאמות עבור \"%s\"."
 
-#: ../src/document.c:2466
+#: ../src/document.c:2470
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: הוחלפו %d מופעים של \"%s\" ב-\"%s\""
 msgstr[1] "%s: הוחלפו %d מופעים של \"%s\" ב-\"%s\""
 
-#: ../src/document.c:3629
+#: ../src/document.c:3633
 msgid "Do you want to reload it?"
 msgstr "האם אתה בטוח שברצונך לטעון אותו מחדש ?"
 
-#: ../src/editor.c:4470
+#: ../src/editor.c:4469
 msgid "Enter Tab Width"
 msgstr "הכנסת רוחב טאב"
 
-#: ../src/editor.c:4471
+#: ../src/editor.c:4470
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "הזן את מספר הרווחים שיחליפו כל טאב."
 
-#: ../src/editor.c:4676
+#: ../src/editor.c:4675
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "רוחב טאב לא תקני: ‎%d != 8"
@@ -3129,25 +3134,25 @@ msgstr "ביטוי רגולרי לא תקין בסוג הקובץ %s: ‫%s"
 msgid "untitled"
 msgstr "ללא שם"
 
-#: ../src/highlighting.c:1230 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1233 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "הקובץ '%s' לא נמצא."
 
-#: ../src/highlighting.c:1300
+#: ../src/highlighting.c:1303
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: ../src/highlighting.c:1341
+#: ../src/highlighting.c:1344
 msgid "The current filetype overrides the default style."
 msgstr "סגנון הקובץ הנוכחי עוקף את סגנון ברירת המחדל."
 
-#: ../src/highlighting.c:1342
+#: ../src/highlighting.c:1345
 msgid "This may cause color schemes to display incorrectly."
 msgstr "דבר זה עלול לגרום להצגה שגויה של ערכות הצבעים"
 
-#: ../src/highlighting.c:1367
+#: ../src/highlighting.c:1370
 msgid "Color Schemes"
 msgstr "ערכות צבעים"
 
@@ -3901,28 +3906,28 @@ msgstr "חלון איתור שגיאות"
 msgid "Cl_ear"
 msgstr "ני_קוי"
 
-#: ../src/msgwindow.c:177
+#: ../src/msgwindow.c:217
 msgid "Status messages"
 msgstr "הודעות מצב"
 
-#: ../src/msgwindow.c:582
+#: ../src/msgwindow.c:616
 msgid "C_opy"
 msgstr "ה_עתקה"
 
-#: ../src/msgwindow.c:591
+#: ../src/msgwindow.c:625
 msgid "Copy _All"
 msgstr "העתקת ה_כל"
 
-#: ../src/msgwindow.c:621
+#: ../src/msgwindow.c:655
 msgid "_Hide Message Window"
 msgstr "ה_סתרת חלון ההודעות"
 
-#: ../src/msgwindow.c:682
+#: ../src/msgwindow.c:716
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "לא ניתן למצוא את הקובץ '%s' - נוסה נתיב הקובץ הנוכחי."
 
-#: ../src/msgwindow.c:1118
+#: ../src/msgwindow.c:1152
 msgid "The document has been closed."
 msgstr ""
 
@@ -4007,11 +4012,11 @@ msgstr "בחירת צירוף־מקשים"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "לחץ על צירוף המקשים שברצונך להשתמש עבור \"%s\"."
 
-#: ../src/prefs.c:227 ../src/symbols.c:2558 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "הר_חב הכל"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2563 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_כווץ הכל"
 
@@ -4292,7 +4297,7 @@ msgstr ""
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines.  In this mode, "
+"line by line, allowing matches to span multiple lines. In this mode, "
 "newline characters are part of the input and can be captured as normal "
 "characters by the pattern."
 msgstr ""
@@ -4438,7 +4443,7 @@ msgstr "אפשרו_יות נוספות:"
 msgid "Other options to pass to Grep"
 msgstr "אפשרויות נוספות שיועברו ל־Grep"
 
-#: ../src/search.c:1371 ../src/search.c:2228 ../src/search.c:2231
+#: ../src/search.c:1371 ../src/search.c:2229 ../src/search.c:2232
 #, c-format
 msgid "Found %d match for \"%s\"."
 msgid_plural "Found %d matches for \"%s\"."
@@ -4493,7 +4498,7 @@ msgstr[1] "נמצאו %d התאמות."
 msgid "No matches found."
 msgstr "לא נמצאו התאמות."
 
-#: ../src/search.c:1910
+#: ../src/search.c:1911
 #, c-format
 msgid "Bad regex: %s"
 msgstr "ביטוי רגולרי לא תקין: %s"
@@ -4845,17 +4850,17 @@ msgstr "תצוגות"
 msgid "Extern Variables"
 msgstr "משתנים חיצוניים"
 
-#: ../src/symbols.c:1630
+#: ../src/symbols.c:1636
 #, c-format
 msgid "Unknown filetype extension for \"%s\".\n"
 msgstr "סיומת הקובץ \"%s\" לא מוכרת.\n"
 
-#: ../src/symbols.c:1656
+#: ../src/symbols.c:1662
 #, fuzzy, c-format
 msgid "Failed to create tags file, perhaps because no symbols were found.\n"
 msgstr "נכשל ניסיון יצירת תגיות לקובץ, אולי לא נמצאו תגיות.\n"
 
-#: ../src/symbols.c:1663
+#: ../src/symbols.c:1669
 #, fuzzy, c-format
 msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
@@ -4864,7 +4869,7 @@ msgstr ""
 "השתמש: %s -g <קובץ תג> <רשימת קבצים>\n"
 "\n"
 
-#: ../src/symbols.c:1664
+#: ../src/symbols.c:1670
 #, c-format
 msgid ""
 "Example:\n"
@@ -4875,54 +4880,54 @@ msgstr ""
 "CFLAGS=`pkg-config gtk+-2.0 --cflags` %s -g gtk2.c.tags /usr/include/gtk-2.0/"
 "gtk/gtk.h\n"
 
-#: ../src/symbols.c:1678
+#: ../src/symbols.c:1684
 #, fuzzy
 msgid "Load Tags File"
 msgstr "טעינת תגיות"
 
-#: ../src/symbols.c:1685
+#: ../src/symbols.c:1691
 #, fuzzy
 msgid "Geany tags file (*.*.tags)"
 msgstr "‏Geany קָבְצי תג (‎*.*.tags)"
 
 #. For translators: the first wildcard is the filetype, the second the filename
-#: ../src/symbols.c:1705
+#: ../src/symbols.c:1711
 #, c-format
 msgid "Loaded %s tags file '%s'."
 msgstr "טעינת %s קובץ תג '%s'."
 
-#: ../src/symbols.c:1708
+#: ../src/symbols.c:1714
 #, c-format
 msgid "Could not load tags file '%s'."
 msgstr "לא ניתן לטעון את קובץ התגיות '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1943
+#: ../src/symbols.c:1949
 #, fuzzy, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>תצוגה</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1946
+#: ../src/symbols.c:1952
 #, c-format
 msgid "%s: %lu"
 msgstr ""
 
-#: ../src/symbols.c:2155
+#: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "לא נמצאה הצהרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:2157
+#: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "לא נמצאה הגדרה קודמת של \"%s\"."
 
-#: ../src/symbols.c:2573
+#: ../src/symbols.c:2579
 msgid "Sort by _Name"
 msgstr "מיין ל_פי שם"
 
-#: ../src/symbols.c:2580
+#: ../src/symbols.c:2586
 msgid "Sort by _Appearance"
 msgstr "מיין ל_פי סדר הופעה"
 
@@ -5135,31 +5140,31 @@ msgstr "מזהה"
 msgid "No custom commands defined."
 msgstr "לא הוגדרו פקודות מותאמות אישית"
 
-#: ../src/tools.c:695
+#: ../src/tools.c:696
 msgid "Word Count"
 msgstr "מונה מילים"
 
-#: ../src/tools.c:704
+#: ../src/tools.c:705
 msgid "selection"
 msgstr "בחירה"
 
-#: ../src/tools.c:709
+#: ../src/tools.c:710
 msgid "whole document"
 msgstr "כל המסמך"
 
-#: ../src/tools.c:718
+#: ../src/tools.c:719
 msgid "Range:"
 msgstr "טווח:"
 
-#: ../src/tools.c:730
+#: ../src/tools.c:731
 msgid "Lines:"
 msgstr "שורות:"
 
-#: ../src/tools.c:744
+#: ../src/tools.c:745
 msgid "Words:"
 msgstr "מילים:"
 
-#: ../src/tools.c:758
+#: ../src/tools.c:759
 msgid "Characters:"
 msgstr "תווים:"
 
@@ -5372,24 +5377,24 @@ msgstr ""
 msgid "LF"
 msgstr ""
 
-#: ../src/vte.c:584
+#: ../src/vte.c:585
 #, c-format
 msgid "invalid VTE library \"%s\": missing symbol \"%s\""
 msgstr "טעינת ספריית VTE %s: סמל %s חסר"
 
-#: ../src/vte.c:765
+#: ../src/vte.c:766
 msgid "_Set Path From Document"
 msgstr "הגדרת נ_תיב המסמך"
 
-#: ../src/vte.c:770
+#: ../src/vte.c:771
 msgid "_Restart Terminal"
 msgstr "הפעל מחד_ש את המסוף"
 
-#: ../src/vte.c:803
+#: ../src/vte.c:804
 msgid "_Input Methods"
 msgstr "שיטו_ת קלט"
 
-#: ../src/vte.c:895
+#: ../src/vte.c:896
 msgid ""
 "Directory not changed because the terminal may contain some input (press Ctrl"
 "+C or Enter to clear it)."

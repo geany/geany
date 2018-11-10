@@ -537,7 +537,7 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 		return NULL; /* early out on error */
 	}
 	else
-	{	/* We read the first line for the format specification. */
+	{	/* We read (and discard) the first line for the format specification. */
 		if (buf[0] == '#' && strstr((gchar*) buf, "format=pipe") != NULL)
 			format = TM_FILE_FORMAT_PIPE;
 		else if (buf[0] == '#' && strstr((gchar*) buf, "format=tagmanager") != NULL)
@@ -562,8 +562,9 @@ GPtrArray *tm_source_file_read_tags_file(const gchar *tags_file, TMParserType mo
 				format = TM_FILE_FORMAT_PIPE;
 			else if (tab_cnt > 1)
 				format = TM_FILE_FORMAT_CTAGS;
+			/* reset the file pointer, to start reading again from the beginning */
+			rewind(fp);
 		}
-		rewind(fp); /* reset the file pointer, to start reading again from the beginning */
 	}
 
 	file_tags = g_ptr_array_new();

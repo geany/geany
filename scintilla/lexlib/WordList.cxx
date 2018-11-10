@@ -10,13 +10,11 @@
 #include <cstring>
 
 #include <algorithm>
+#include <iterator>
 
-#include "StringCopy.h"
 #include "WordList.h"
 
-#ifdef SCI_NAMESPACE
 using namespace Scintilla;
-#endif
 
 /**
  * Creates an array that points into each word in the string and puts \0 terminators
@@ -114,7 +112,7 @@ static int cmpWords(const void *a, const void *b) {
 }
 
 static void SortWordList(char **words, unsigned int len) {
-	qsort(static_cast<void *>(words), len, sizeof(*words), cmpWords);
+	qsort(words, len, sizeof(*words), cmpWords);
 }
 
 #endif
@@ -130,7 +128,7 @@ void WordList::Set(const char *s) {
 #else
 	SortWordList(words, len);
 #endif
-	std::fill(starts, starts + ELEMENTS(starts), -1);
+	std::fill(starts, std::end(starts), -1);
 	for (int l = len - 1; l >= 0; l--) {
 		unsigned char indexChar = words[l][0];
 		starts[indexChar] = l;
@@ -148,7 +146,7 @@ bool WordList::InList(const char *s) const {
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
-		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+		while (words[j][0] == firstChar) {
 			if (s[1] == words[j][1]) {
 				const char *a = words[j] + 1;
 				const char *b = s + 1;
@@ -190,7 +188,7 @@ bool WordList::InListAbbreviated(const char *s, const char marker) const {
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
-		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+		while (words[j][0] == firstChar) {
 			bool isSubword = false;
 			int start = 1;
 			if (words[j][1] == marker) {
@@ -244,7 +242,7 @@ bool WordList::InListAbridged(const char *s, const char marker) const {
 	const unsigned char firstChar = s[0];
 	int j = starts[firstChar];
 	if (j >= 0) {
-		while (static_cast<unsigned char>(words[j][0]) == firstChar) {
+		while (words[j][0] == firstChar) {
 			const char *a = words[j];
 			const char *b = s;
 			while (*a && *a == *b) {
