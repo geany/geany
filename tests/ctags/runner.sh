@@ -17,9 +17,21 @@ mkdir -p "$CONFDIR/filedefs/" || exit 99
 cp "${srcdir:-.}"/../../data/filetype_extensions.conf "$CONFDIR" || exit 99
 cp "${srcdir:-.}"/../../data/filedefs/filetypes.* "$CONFDIR/filedefs/" || exit 99
 
-result="$1"
-source="${result%.*}"
+if [ "$1" = "--result" ]; then
+  # --result $result $source...
+  [ $# -gt 2 ] || exit 99
+  shift
+  result="$1"
+  shift
+  source="$1"
+else
+  # result is $1 and source is inferred from result
+  result="$1"
+  source="${result%.*}"
+fi
+shift
+
 tagfile="$TMPDIR/test.${source##*.}.tags"
 
-"$GEANY" -c "$CONFDIR" -P -g "$tagfile" "$source" || exit 1
+"$GEANY" -c "$CONFDIR" -P -g "$tagfile" "$source" "$@" || exit 1
 diff -u "$result" "$tagfile" || exit 2
