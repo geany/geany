@@ -516,7 +516,7 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 
 	g_hash_table_destroy(table);
 
-	return includes_files;
+	return g_list_reverse(includes_files);
 }
 
 static gchar *pre_process_file(const gchar *cmd, const gchar *inf)
