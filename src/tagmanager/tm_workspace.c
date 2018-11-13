@@ -370,34 +370,6 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 }
 
 
-static guint tm_file_inode_hash(gconstpointer key)
-{
-	GStatBuf file_stat;
-	const char *filename = (const char*)key;
-
-	if (g_stat(filename, &file_stat) == 0)
-	{
-#ifdef TM_DEBUG
-		g_message ("Hash for '%s' is '%d'\n", filename, file_stat.st_ino);
-#endif
-		return g_direct_hash ((gpointer)(intptr_t)file_stat.st_ino);
-	}
-
-	return 0;
-}
-
-
-static void tm_move_entries_to_g_list(gpointer key, gpointer value, gpointer user_data)
-{
-	GList **pp_list = (GList**)user_data;
-
-	if (user_data == NULL)
-		return;
-
-	*pp_list = g_list_prepend(*pp_list, g_strdup(value));
-}
-
-
 static gboolean write_includes_file(const gchar *outf, GList *includes_files)
 {
 	FILE *fp = g_fopen(outf, "w");
@@ -470,14 +442,14 @@ static gchar *create_temp_file(const gchar *tpl)
 static GList *lookup_includes(const gchar **includes, gint includes_count)
 {
 	GList *includes_files = NULL;
-	GHashTable *table;
+	GHashTable *table; /* used for deduping */
 	gint i;
 #ifdef HAVE_GLOB_H
 	glob_t globbuf;
 	size_t idx_glob;
 #endif
 
-	table = g_hash_table_new_full(tm_file_inode_hash, g_direct_equal, NULL, g_free);
+	table = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, NULL);
 
 #ifdef HAVE_GLOB_H
 	globbuf.gl_offs = 0;
@@ -515,6 +487,7 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 				{
 					gchar *file_name_copy = g_strdup(globbuf.gl_pathv[idx_glob]);
 
+					includes_files = g_list_prepend(includes_files, file_name_copy);
 					g_hash_table_insert(table, file_name_copy, file_name_copy);
 #ifdef TM_DEBUG
 					g_message ("Added ...\n");
@@ -535,15 +508,15 @@ static GList *lookup_includes(const gchar **includes, gint includes_count)
 			{
 				gchar* file_name_copy = g_strdup(includes[i]);
 
+				includes_files = g_list_prepend(includes_files, file_name_copy);
 				g_hash_table_insert(table, file_name_copy, file_name_copy);
 			}
 		}
 	}
 
-	g_hash_table_foreach(table, tm_move_entries_to_g_list, &includes_files);
 	g_hash_table_destroy(table);
 
-	return includes_files;
+	return g_list_reverse(includes_files);
 }
 
 static gchar *pre_process_file(const gchar *cmd, const gchar *inf)

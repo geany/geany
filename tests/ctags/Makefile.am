@@ -319,3 +319,13 @@ TAGS_LOG_COMPILER = $(srcdir)/runner.sh
 
 TESTS = $(test_results)
 EXTRA_DIST = $(test_sources) $(test_results)
+
+# check processing order of files on the command line
+check_processing_order_sources = \
+	process_order.c.tags process_order_1.h process_order_2.h
+EXTRA_DIST += $(check_processing_order_sources)
+.PHONY: check-processing-order
+check-processing-order: $(check_processing_order_sources)
+	srcdir="$(srcdir)" top_builddir="$(top_builddir)" \
+	$(srcdir)/runner.sh --result $(check_processing_order_sources:%=$(srcdir)/%)
+check-local: check-processing-order
