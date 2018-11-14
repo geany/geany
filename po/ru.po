@@ -383,7 +383,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
-msgstr "Хранить файл проекта внутри основного каталог проекта"
+msgstr "Хранить файл проекта внутри основного каталога проекта"
 
 #: ../data/geany.glade.h:75
 msgid ""
