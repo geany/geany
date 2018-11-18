@@ -301,7 +301,7 @@ gchar **utils_strv_new(const gchar *first, ...) G_GNUC_NULL_TERMINATED;
 
 gchar **utils_strv_join(gchar **first, gchar **second) G_GNUC_WARN_UNUSED_RESULT;
 
-gchar **utils_strv_shorten_file_list(gchar **file_names, size_t num);
+gchar **utils_strv_shorten_file_list(gchar **file_names, gssize num);
 
 GSList *utils_get_config_files(const gchar *subdir);
 

@@ -2049,51 +2049,45 @@ gchar **utils_strv_join(gchar **first, gchar **second)
  * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be 0 if it's terminated by @c NULL.
+ * @param num The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings (maybe empty), or NULL if an empty list
  *         was passed in.
  */
-static gchar *utils_strv_find_common_prefix(gchar **strv, gsize num)
+static gchar *utils_strv_find_common_prefix(gchar **strv, gssize num)
 {
-	gchar *prefix;
-
 	if (!NZV(strv))
 		return NULL;
 
-	if (num == 0)
+	if (num == -1)
 		num = g_strv_length(strv);
 
-	prefix = g_strdup(strv[0]);
-
-	for (gint i = 0; prefix[i]; i++)
+	for (gsize i = 0; strv[0][i]; i++)
 	{
 		for (gsize j = 1; j < num; j++)
 		{
-			gchar *s = strv[j];
-			if (s[i] != prefix[i])
+			if (strv[j][i] != strv[0][i])
 			{
-				/* terminate prefix on first mismatch and return */
-				prefix[i] = '\0';
-				break;
+				/* return prefix on first mismatch */
+				return g_strndup(strv[0], i);
 			}
 		}
-		if (prefix[i] == '\0')
-			break;
 	}
-	return prefix;
+
+	return g_strdup(strv[0]);
 }
+
 
 /* * Returns the longest common substring in a list of strings.
  *
  * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be 0 if it's terminated by @c NULL.
+ * @param num The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings.
  */
-static gchar *utils_strv_find_lcs(gchar **strv, gsize num)
+static gchar *utils_strv_find_lcs(gchar **strv, gssize num)
 {
 	gchar *first, *_sub, *sub;
 	gsize n_chars;
@@ -2102,14 +2096,14 @@ static gchar *utils_strv_find_lcs(gchar **strv, gsize num)
 	char *lcs;
 	gsize found;
 
-	if (strv == NULL)
+	if (num == -1)
+		num = g_strv_length(strv);
+
+	if (num < 1)
 		return NULL;
 
 	first = strv[0];
 	len = strlen(first);
-
-	if (num == 0)
-		num = g_strv_length(strv);
 
 	/* sub is the working area where substrings from first are copied to */
 	sub = g_malloc(len+1);
@@ -2154,14 +2148,14 @@ static gchar *utils_strv_find_lcs(gchar **strv, gsize num)
  * replaces the longest common substring with an ellipsis ("...").
  *
  * @param file_names @array{length=num} The list of strings to process.
- * @param num The number of strings contained in @a file_names. Can be 0 if it's terminated by @c NULL.
+ * @param num The number of strings contained in @a file_names. Can be -1 if it's terminated by @c NULL.
  * @return @transfer{full} A newly-allocated array of transformed paths strings, terminated by
             @c NULL. Use @c g_strfreev() to free it.
  *
  * @since 1.34 (API 239)
  */
 GEANY_API_SYMBOL
-gchar **utils_strv_shorten_file_list(gchar **file_names, gsize num)
+gchar **utils_strv_shorten_file_list(gchar **file_names, gssize num)
 {
 	gsize i;
 	gchar *prefix, *substring, *lcs;
@@ -2169,9 +2163,12 @@ gchar **utils_strv_shorten_file_list(gchar **file_names, gsize num)
 	gchar **names;
 	gsize prefix_len, lcs_len;
 
+	/* We don't dereference file_names if num == 0. */
+	g_return_val_if_fail(num == 0 || file_names != NULL, NULL);
+
 	/* The return value shall have exactly the same size as the input. If the input is a
 	 * GStrv (last element is NULL), the output will follow suit. */
-	if (!num)
+	if (num == -1)
 		num = g_strv_length(file_names);
 	/* Always include a terminating NULL, enables easy freeing with g_strfreev() */
 	names = g_new0(gchar *, num + 1);

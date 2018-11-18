@@ -1933,10 +1933,10 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 	GdkEventButton *button_event = NULL;
 	TMTag *tmtag;
 	guint i;
-	gchar **short_names, **file_names, **p;
+	gchar **short_names, **file_names;
 	menu = gtk_menu_new();
 
-	/* If popup would show multiple files presend a smart file list that allows
+	/* If popup would show multiple files present a smart file list that allows
 	 * to easily distinguish the files while avoiding the file paths in their entirety */
 	file_names = g_new(gchar *, tags->len);
 	foreach_ptr_array(tmtag, i, tags)
