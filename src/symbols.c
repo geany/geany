@@ -1953,7 +1953,7 @@ static void show_goto_popup(GeanyDocument *doc, GPtrArray *tags, gboolean have_b
 
 		image = gtk_image_new_from_pixbuf(symbols_icons[get_tag_class(tmtag)].pixbuf);
 		label = g_object_new(GTK_TYPE_LABEL, "label", text, "use-markup", TRUE, "xalign", 0.0, NULL);
-		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, NULL);
+		item = g_object_new(GTK_TYPE_IMAGE_MENU_ITEM, "image", image, "child", label, "always-show-image", TRUE, NULL);
 		g_signal_connect_data(item, "activate", G_CALLBACK(on_goto_popup_item_activate),
 		                      tm_tag_ref(tmtag), (GClosureNotify) tm_tag_unref, 0);
 		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
