@@ -5,8 +5,10 @@ dist: trusty
 compiler:
   - gcc
 env:
-  - GTK3=no
-  - GTK3=yes
+  - GTK3=no BINRELOC=no
+  - GTK3=yes BINRELOC=no
+  - GTK3=no BINRELOC=yes
+  - GTK3=yes BINRELOC=yes
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
 before_install:
@@ -31,7 +33,7 @@ script:
       unset CC CXX;
       sh ./scripts/cross-build-mingw.sh $arg;
     else
-      CONFIGURE_FLAGS="--enable-gtk3=$GTK3";
+      CONFIGURE_FLAGS="--enable-gtk3=$GTK3 --enable-binreloc=$BINRELOC";
       mkdir _build                        &&
       cd _build                           &&
       { ../configure $CONFIGURE_FLAGS || { cat config.log; exit 1; } ; } &&
