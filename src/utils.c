@@ -2049,18 +2049,19 @@ gchar **utils_strv_join(gchar **first, gchar **second)
  * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
+ * @param strv_len The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings (maybe empty), or NULL if an empty list
  *         was passed in.
  */
-static gchar *utils_strv_find_common_prefix(gchar **strv, gssize num)
+static gchar *utils_strv_find_common_prefix(gchar **strv, gssize strv_len)
 {
+	gsize num;
+
 	if (!NZV(strv))
 		return NULL;
 
-	if (num == -1)
-		num = g_strv_length(strv);
+	num = (strv_len == -1) ? g_strv_length(strv) : (gsize) strv_len;
 
 	for (gsize i = 0; strv[0][i]; i++)
 	{
@@ -2083,22 +2084,21 @@ static gchar *utils_strv_find_common_prefix(gchar **strv, gssize num)
  * The size of the list may be given explicitely, but defaults to @c g_strv_length(strv).
  *
  * @param strv The list of strings to process.
- * @param num The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
+ * @param strv_len The number of strings contained in @a strv. Can be -1 if it's terminated by @c NULL.
  *
  * @return The common prefix that is part of all strings.
  */
-static gchar *utils_strv_find_lcs(gchar **strv, gssize num)
+static gchar *utils_strv_find_lcs(gchar **strv, gssize strv_len)
 {
 	gchar *first, *_sub, *sub;
+	gsize num;
 	gsize n_chars;
 	gsize len;
 	gsize max = 0;
 	char *lcs;
 	gsize found;
 
-	if (num == -1)
-		num = g_strv_length(strv);
-
+	num = (strv_len == -1) ? g_strv_length(strv) : (gsize) strv_len;
 	if (num < 1)
 		return NULL;
 
@@ -2147,29 +2147,30 @@ static gchar *utils_strv_find_lcs(gchar **strv, gssize num)
  * The algorthm strips the common prefix (e-g. the user's home directory) and
  * replaces the longest common substring with an ellipsis ("...").
  *
- * @param file_names @array{length=num} The list of strings to process.
- * @param num The number of strings contained in @a file_names. Can be -1 if it's terminated by @c NULL.
+ * @param file_names @array{length=file_names_len} The list of strings to process.
+ * @param file_names_len The number of strings contained in @a file_names. Can be -1 if it's
+ *        terminated by @c NULL.
  * @return @transfer{full} A newly-allocated array of transformed paths strings, terminated by
             @c NULL. Use @c g_strfreev() to free it.
  *
  * @since 1.34 (API 239)
  */
 GEANY_API_SYMBOL
-gchar **utils_strv_shorten_file_list(gchar **file_names, gssize num)
+gchar **utils_strv_shorten_file_list(gchar **file_names, gssize file_names_len)
 {
+	gsize num;
 	gsize i;
 	gchar *prefix, *substring, *lcs;
 	gchar *start, *end;
 	gchar **names;
 	gsize prefix_len, lcs_len;
 
-	/* We don't dereference file_names if num == 0. */
-	g_return_val_if_fail(num == 0 || file_names != NULL, NULL);
+	/* We don't dereference file_names if file_names_len == 0. */
+	g_return_val_if_fail(file_names_len == 0 || file_names != NULL, NULL);
 
 	/* The return value shall have exactly the same size as the input. If the input is a
 	 * GStrv (last element is NULL), the output will follow suit. */
-	if (num == -1)
-		num = g_strv_length(file_names);
+	num = (file_names_len == -1) ? g_strv_length(file_names) : (gsize) file_names_len;
 	/* Always include a terminating NULL, enables easy freeing with g_strfreev() */
 	names = g_new0(gchar *, num + 1);
 
