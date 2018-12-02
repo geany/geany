@@ -2,6 +2,7 @@
 
 noinst_HEADERS = \
 	ILexer.h \
+	ILoader.h \
 	Platform.h
 
 scintilla_includedir = $(includedir)/geany/scintilla/
