@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-02-15 22:59-0600\n"
+"PO-Revision-Date: 2018-12-03 22:58+0100\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Geany / PoHelper 1.34\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -767,18 +767,16 @@ msgstr ""
 "ouverts, utiliser <i>Projet->Appliquer l'indentation par défaut</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Largeur :"
+msgstr "La_rgeur :"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "La largeur, en caractères, d'une indentation simple"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Mode d'indentation automatique :"
+msgstr "_Mode d'indentation automatique :"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -836,9 +834,8 @@ msgid "Type:"
 msgstr "Type :"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Indentation par la touche Tab "
+msgstr "Indentation par la to_uche Tab "
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -2187,24 +2184,20 @@ msgid "Filename:"
 msgstr "Nom de fichier :"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Nom :"
+msgstr "N_om :"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Description :"
+msgstr "_Description :"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Dossier de base :"
+msgstr "Dossier de _base :"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Motifs de fichier :"
+msgstr "_Motifs de fichier :"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2301,7 +2294,6 @@ msgid "Other:"
 msgstr "Autres :"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
@@ -2311,7 +2303,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c) 2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2874,7 +2866,7 @@ msgstr "Fichier %s rechargé."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
 msgstr "Fichier %s ouvert (%d%s)."
 
