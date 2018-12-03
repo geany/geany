@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.33\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-24 22:17+0200\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -764,7 +764,8 @@ msgstr ""
 "bitte nutzen Sie <i>Projekt->Standardeinrückung anwenden</i>."
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "Breite:"
 
 #: ../data/geany.glade.h:152
@@ -772,7 +773,8 @@ msgid "The width in chars of a single indent"
 msgstr "Die Breite einer Einrückung in Zeichen"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "Modus für automatische Einrückung:"
 
 #: ../data/geany.glade.h:154
@@ -832,7 +834,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
+#, fuzzy
+msgid "Tab _key indents"
 msgstr "Einrücken mit der Tabulatortaste"
 
 #: ../data/geany.glade.h:166
@@ -2169,21 +2172,24 @@ msgstr "Projekteigenschaften"
 msgid "Filename:"
 msgstr "Dateiname:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "Name:"
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "Beschreibung:"
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "Basisverzeichnis:"
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "Dateinamenmuster:"
 
 #: ../data/geany.glade.h:469
@@ -4304,6 +4310,11 @@ msgstr "Neues Projekt erstellen"
 msgid "C_reate"
 msgstr "_Erstellen"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Name:"
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "Projektname"
@@ -4316,6 +4327,10 @@ msgid ""
 msgstr ""
 "Der Pfad der Datei repräsentiert das Projekt und beinhaltet dessen "
 "Einstellungen. Gewöhnlich sollte sie die »%s« Dateiendung besitzen."
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "Basisverzeichnis:"
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"

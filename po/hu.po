@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2018-06-17 19:41+0200\n"
 "Last-Translator: Meskó Balázs <mesko.balazs@fsf.hu>\n"
 "Language-Team: Hungarian\n"
@@ -94,7 +94,7 @@ msgstr "láthatatlan"
 msgid "_Insert \"include <...>\""
 msgstr "„include <...>” _beszúrása"
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:514
+#: ../data/geany.glade.h:16 ../src/keybindings.c:515
 msgid "Insert Alternative _White Space"
 msgstr "Másféle szóköz beszúrása"
 
@@ -163,7 +163,7 @@ msgstr "Fent"
 msgid "Bottom"
 msgstr "Lent"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:524
+#: ../data/geany.glade.h:31 ../src/keybindings.c:525
 msgid "Preferences"
 msgstr "Beállítások"
 
@@ -745,7 +745,8 @@ msgstr ""
 "dokumentumra: <i>Projekt->Alapértelmezett behúzás alkalmazása</i>."
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "Szélesség:"
 
 #: ../data/geany.glade.h:152
@@ -753,7 +754,8 @@ msgid "The width in chars of a single indent"
 msgstr "A behúzás mérete karakterekben"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "Automatikus behúzás üzemmód:"
 
 #: ../data/geany.glade.h:154
@@ -811,7 +813,8 @@ msgid "Type:"
 msgstr "Típus:"
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
+#, fuzzy
+msgid "Tab _key indents"
 msgstr "A Tab billentyű sorbehúzást csinál"
 
 #: ../data/geany.glade.h:166
@@ -1145,7 +1148,7 @@ msgstr "<b>Virtuális szóközök</b>"
 msgid "Display"
 msgstr "Megjelenítés"
 
-#: ../data/geany.glade.h:235 ../src/keybindings.c:312 ../src/prefs.c:1609
+#: ../data/geany.glade.h:235 ../src/keybindings.c:313 ../src/prefs.c:1609
 msgid "Editor"
 msgstr "Szerkesztő"
 
@@ -1231,7 +1234,7 @@ msgstr "Sorvégi szóközök és tabulátorok levágása"
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Eltávolítja a sorvégi szóközüket és tabulátorokat"
 
-#: ../data/geany.glade.h:253 ../src/keybindings.c:669
+#: ../data/geany.glade.h:253 ../src/keybindings.c:672
 msgid "Replace tabs with space"
 msgstr "Tabulátorok cseréje szóközre"
 
@@ -1315,7 +1318,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Parancsok</b>"
 
-#: ../data/geany.glade.h:272 ../src/keybindings.c:324 ../src/prefs.c:1613
+#: ../data/geany.glade.h:272 ../src/keybindings.c:325 ../src/prefs.c:1613
 msgid "Tools"
 msgstr "Eszközök"
 
@@ -1414,7 +1417,7 @@ msgstr "_Változtatás"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Gyorsbillentyűk</b>"
 
-#: ../data/geany.glade.h:293 ../src/plugins.c:1948 ../src/plugins.c:1985
+#: ../data/geany.glade.h:293 ../src/plugins.c:1951 ../src/plugins.c:1988
 #: ../src/prefs.c:1617
 msgid "Keybindings"
 msgstr "Billentyű hozzárendelések"
@@ -1706,27 +1709,27 @@ msgstr "Öss_zeset bezár"
 msgid "Co_mmands"
 msgstr "_Parancsok"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:437
+#: ../data/geany.glade.h:357 ../src/keybindings.c:438
 msgid "Cu_t Current Line(s)"
 msgstr "Aktuális sor(ok) ki_vágása"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:434
+#: ../data/geany.glade.h:358 ../src/keybindings.c:435
 msgid "_Copy Current Line(s)"
 msgstr "Aktuális sor(ok) _másolása"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:387
+#: ../data/geany.glade.h:359 ../src/keybindings.c:388
 msgid "_Delete Current Line(s)"
 msgstr "Aktuális sor(ok) _törlése"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:384
+#: ../data/geany.glade.h:360 ../src/keybindings.c:385
 msgid "D_uplicate Line or Selection"
 msgstr "Sor vagy kiválasztás _duplikálása"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:447
+#: ../data/geany.glade.h:361 ../src/keybindings.c:448
 msgid "S_elect Current Line(s)"
 msgstr "Aktuális sor(ok) kivá_lasztása"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:450
+#: ../data/geany.glade.h:362 ../src/keybindings.c:451
 msgid "Se_lect Current Paragraph"
 msgstr "Aktuális be_kezdés kiválasztása"
 
@@ -1738,15 +1741,15 @@ msgstr "Sor(ok) mozgatása _felfelé"
 msgid "M_ove Line(s) Down"
 msgstr "Sor(ok) mozgatása _lefelé"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:501
+#: ../data/geany.glade.h:365 ../src/keybindings.c:502
 msgid "_Send Selection to Terminal"
 msgstr "A kije_lölés küldése a terminálba"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:503
+#: ../data/geany.glade.h:366 ../src/keybindings.c:504
 msgid "_Reflow Lines/Block"
 msgstr "Sorok/blokk át_tördelése"
 
-#: ../data/geany.glade.h:367 ../src/keybindings.c:461
+#: ../data/geany.glade.h:367 ../src/keybindings.c:462
 msgid "T_oggle Case of Selection"
 msgstr "K_iválasztás kis/nagybetűssé tétele"
 
@@ -1770,7 +1773,7 @@ msgstr "Behúzás _növelése"
 msgid "_Decrease Indent"
 msgstr "Behúzás _csökkentése"
 
-#: ../data/geany.glade.h:373 ../src/keybindings.c:480
+#: ../data/geany.glade.h:373 ../src/keybindings.c:481
 msgid "S_mart Line Indent"
 msgstr "Intelligens sorbehúzás"
 
@@ -1786,7 +1789,7 @@ msgstr "_Megjegyzések beszúrása"
 msgid "Preference_s"
 msgstr "Beállítá_sok"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:527
+#: ../data/geany.glade.h:377 ../src/keybindings.c:528
 msgid "P_lugin Preferences"
 msgstr "Kiegészítők beállításai"
 
@@ -1818,11 +1821,11 @@ msgstr "_Következő üzenet"
 msgid "Pr_evious Message"
 msgstr "_Előző üzenet"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:576
+#: ../data/geany.glade.h:385 ../src/keybindings.c:577
 msgid "Go to Ne_xt Marker"
 msgstr "Következő jelölőhöz ugrás"
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:579
+#: ../data/geany.glade.h:386 ../src/keybindings.c:580
 msgid "Go to Pre_vious Marker"
 msgstr "Előző jelölőhöz ugrás"
 
@@ -1830,15 +1833,15 @@ msgstr "Előző jelölőhöz ugrás"
 msgid "_Go to Line..."
 msgstr "Ugrá_s sorra…"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:539
+#: ../data/geany.glade.h:388 ../src/keybindings.c:540
 msgid "Find Next _Selection"
 msgstr "Következő kijelölés keresése"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:541
+#: ../data/geany.glade.h:389 ../src/keybindings.c:542
 msgid "Find Pre_vious Selection"
 msgstr "Előző kijelölés keresése"
 
-#: ../data/geany.glade.h:390 ../src/keybindings.c:558
+#: ../data/geany.glade.h:390 ../src/keybindings.c:559
 msgid "_Mark All"
 msgstr "Mindet kijelöl"
 
@@ -1994,11 +1997,11 @@ msgstr "Beállítás és átalakítás _LF-re (Unix)"
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Beállítás és átalakítás _CR-re (Klasszikus Mac)"
 
-#: ../data/geany.glade.h:429 ../src/keybindings.c:667
+#: ../data/geany.glade.h:429 ../src/keybindings.c:668
 msgid "_Clone"
 msgstr "_Másolat"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:430 ../src/keybindings.c:670
 msgid "_Strip Trailing Spaces"
 msgstr "_Sorvégi szóközök levágása"
 
@@ -2139,21 +2142,24 @@ msgstr "Projekt tulajdonságai"
 msgid "Filename:"
 msgstr "Fájlnév:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "Név:"
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "Leírás:"
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "Alapkönyvtár:"
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "Fájlminták:"
 
 #: ../data/geany.glade.h:469
@@ -2174,7 +2180,7 @@ msgstr ""
 "létező elérési út is. A projekt fájlnevéhez képest relatív elérési utakat is "
 "használhat."
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:322
+#: ../data/geany.glade.h:471 ../src/keybindings.c:323
 msgid "Project"
 msgstr "Projekt"
 
@@ -2251,8 +2257,9 @@ msgid "Other:"
 msgstr "Egyéb:"
 
 #: ../src/about.c:48
+#, fuzzy
 msgid ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2541,7 +2548,7 @@ msgid_plural "%d files saved."
 msgstr[0] "%d fájl elmentve."
 msgstr[1] "%d fájl elmentve."
 
-#: ../src/callbacks.c:900 ../src/keybindings.c:567
+#: ../src/callbacks.c:900 ../src/keybindings.c:568
 msgid "Go to Line"
 msgstr "Ugrás sorra"
 
@@ -2821,8 +2828,8 @@ msgstr "%s fájl újraolvasva."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, c-format
-msgid "File %s opened(%d%s)."
+#, fuzzy, c-format
+msgid "File %s opened (%d%s)."
 msgstr "%s fájl megnyitva (%d%s)."
 
 #: ../src/document.c:1497
@@ -2973,15 +2980,15 @@ msgstr[1] "%s: %d előfordulás cserélve, „%s” helyett „%s”."
 msgid "Do you want to reload it?"
 msgstr "Újra akarja olvasni?"
 
-#: ../src/editor.c:4469
+#: ../src/editor.c:4468
 msgid "Enter Tab Width"
 msgstr "Tabulátor szélessége"
 
-#: ../src/editor.c:4470
+#: ../src/editor.c:4469
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr "Adja meg, hogy hány szóköz kerüljön cserére tabulátor karakterrel."
 
-#: ../src/editor.c:4675
+#: ../src/editor.c:4674
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr "Figyelem: nem szabványos kemény tabulátor szélesség: %d != 8!"
@@ -3215,575 +3222,575 @@ msgstr "Rossz reguláris kifejezés a(z) %s fájltípushoz: %s"
 msgid "untitled"
 msgstr "névtelen"
 
-#: ../src/highlighting.c:1233 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1231 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "A(z) „%s” fájl nem található."
 
-#: ../src/highlighting.c:1303
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "Alapértelmezett"
 
-#: ../src/highlighting.c:1344
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr "A jelenlegi fájltípus felülírja az alapértelmezett stílust."
 
-#: ../src/highlighting.c:1345
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Ez a színsablonok helytelen megjelenítését okozhatja."
 
-#: ../src/highlighting.c:1370
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Színsablonok"
 
 #. visual group order
-#: ../src/keybindings.c:311 ../src/symbols.c:494
+#: ../src/keybindings.c:312 ../src/symbols.c:494
 msgid "File"
 msgstr "Fájl"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:314
 msgid "Clipboard"
 msgstr "Vágólap"
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:315
 msgid "Select"
 msgstr "Kijelölés"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:316
 msgid "Format"
 msgstr "Formázás"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:317
 msgid "Insert"
 msgstr "Beszúrás"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:318
 msgid "Settings"
 msgstr "Beállítások"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:319
 msgid "Search"
 msgstr "Keresés"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:320
 msgid "Go to"
 msgstr "Ugrás sorra"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:321
 msgid "View"
 msgstr "Nézet"
 
-#: ../src/keybindings.c:321 ../src/symbols.c:643
+#: ../src/keybindings.c:322 ../src/symbols.c:643
 msgid "Document"
 msgstr "Dokumentum"
 
-#: ../src/keybindings.c:323 ../src/keybindings.c:692 ../src/project.c:513
+#: ../src/keybindings.c:324 ../src/keybindings.c:695 ../src/project.c:513
 #: ../src/ui_utils.c:2215
 msgid "Build"
 msgstr "Összeállítás"
 
-#: ../src/keybindings.c:325 ../src/keybindings.c:717
+#: ../src/keybindings.c:326 ../src/keybindings.c:720
 msgid "Help"
 msgstr "Súgó"
 
-#: ../src/keybindings.c:326
+#: ../src/keybindings.c:327
 msgid "Focus"
 msgstr "Fókusz"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:328
 msgid "Notebook tab"
 msgstr "Jegyzettömb fül"
 
-#: ../src/keybindings.c:336 ../src/keybindings.c:368
+#: ../src/keybindings.c:337 ../src/keybindings.c:369
 msgid "New"
 msgstr "Új"
 
-#: ../src/keybindings.c:338 ../src/keybindings.c:370
+#: ../src/keybindings.c:339 ../src/keybindings.c:371
 msgid "Open"
 msgstr "Megnyitás"
 
-#: ../src/keybindings.c:341
+#: ../src/keybindings.c:342
 msgid "Open selected file"
 msgstr "Kiválasztott fájl megnyitása"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:344
 msgid "Save"
 msgstr "Mentés"
 
-#: ../src/keybindings.c:345 ../src/toolbar.c:59
+#: ../src/keybindings.c:346 ../src/toolbar.c:59
 msgid "Save as"
 msgstr "Mentés másként"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:348
 msgid "Save all"
 msgstr "Összes mentése"
 
-#: ../src/keybindings.c:350 ../src/symbols.c:727
+#: ../src/keybindings.c:351 ../src/symbols.c:727
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:353
 msgid "Print"
 msgstr "Nyomtatás"
 
-#: ../src/keybindings.c:354 ../src/keybindings.c:375
+#: ../src/keybindings.c:355 ../src/keybindings.c:376
 msgid "Close"
 msgstr "Bezárás"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:357
 msgid "Close all"
 msgstr "Összes bezárása"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:360
 msgid "Reload file"
 msgstr "Fájl újratöltése"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:362
 msgid "Re-open last closed tab"
 msgstr "Legutóbb bezárt fül újranyitása"
 
-#: ../src/keybindings.c:363
+#: ../src/keybindings.c:364
 msgid "Quit"
 msgstr "Kilépés"
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 msgid "Undo"
 msgstr "Visszavonás"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:383
 msgid "Redo"
 msgstr "Újra"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:392
 msgid "Delete to line end"
 msgstr "Törlés a sor végéig"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:395
 msgid "Delete to beginning of line"
 msgstr "Törlés a sor elejére"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:398
 msgid "_Transpose Current Line"
 msgstr "_Jelenlegi sor áthelyezése"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:400
 msgid "Scroll to current line"
 msgstr "Aktuális sorhoz görgetés"
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:402
 msgid "Scroll up the view by one line"
 msgstr "Nézet egy sorral feljebb görgetése"
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:404
 msgid "Scroll down the view by one line"
 msgstr "Nézet egy sorral lejjebb görgetése"
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:406
 msgid "Complete snippet"
 msgstr "Részlet kiegészítése"
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:408
 msgid "Move cursor in snippet"
 msgstr "Kurzor mozgatás a részletben"
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:410
 msgid "Suppress snippet completion"
 msgstr "Részlet-kiegészítés felfüggesztése"
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Context Action"
 msgstr "Környezeti művelet"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:414
 msgid "Complete word"
 msgstr "Szó kiegészítése"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:416
 msgid "Show calltip"
 msgstr "Hívástipp megjelenítése"
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 msgid "Word part completion"
 msgstr "Szóelem-kiegészítés"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:421
 msgid "Move line(s) up"
 msgstr "Sorok mozgatása felfelé"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:424
 msgid "Move line(s) down"
 msgstr "Sorok mozgatása lefelé"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:429
 msgid "Cut"
 msgstr "Kivágás"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:431
 msgid "Copy"
 msgstr "Másolás"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:433
 msgid "Paste"
 msgstr "Beillesztés"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:444
 msgid "Select All"
 msgstr "Minden kijelölése"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:446
 msgid "Select current word"
 msgstr "Aktuális szó kiválasztása"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:454
 msgid "Select to previous word part"
 msgstr "Kijelölés az előző szóelemig"
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:456
 msgid "Select to next word part"
 msgstr "Kijelölés a következő szóelemig"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:464
 msgid "Toggle line commentation"
 msgstr "Sor megjegyzésbe/vissza"
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:467
 msgid "Comment line(s)"
 msgstr "Sorok megjegyzésbe tétele"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:469
 msgid "Uncomment line(s)"
 msgstr "Sorok megjegyzésből kivétele"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:471
 msgid "Increase indent"
 msgstr "Behúzás növelése"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:474
 msgid "Decrease indent"
 msgstr "Behúzás csökkentése"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:477
 msgid "Increase indent by one space"
 msgstr "Behúzás növelése egy szóközzel"
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:479
 msgid "Decrease indent by one space"
 msgstr "Behúzás csökkentése egy szóközzel"
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 msgid "Send to Custom Command 1"
 msgstr "1. egyedi parancs"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:485
 msgid "Send to Custom Command 2"
 msgstr "2. egyedi parancs"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:487
 msgid "Send to Custom Command 3"
 msgstr "3. egyedi parancs"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:489
 msgid "Send to Custom Command 4"
 msgstr "4. egyedi parancs"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:491
 msgid "Send to Custom Command 5"
 msgstr "5. egyedi parancs"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:493
 msgid "Send to Custom Command 6"
 msgstr "6. egyedi parancs"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:495
 msgid "Send to Custom Command 7"
 msgstr "7. egyedi parancs"
 
-#: ../src/keybindings.c:496
+#: ../src/keybindings.c:497
 msgid "Send to Custom Command 8"
 msgstr "8. egyedi parancs"
 
-#: ../src/keybindings.c:498
+#: ../src/keybindings.c:499
 msgid "Send to Custom Command 9"
 msgstr "9. egyedi parancs"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:507
 msgid "Join lines"
 msgstr "Sorok egyesítése"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:512
 msgid "Insert date"
 msgstr "Dátum beszúrása"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:518
 msgid "Insert New Line Before Current"
 msgstr "Sor beszúrása a jelenlegi elé"
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:520
 msgid "Insert New Line After Current"
 msgstr "Sor beszúrása a jelenlegi mögé"
 
-#: ../src/keybindings.c:532 ../src/search.c:466
+#: ../src/keybindings.c:533 ../src/search.c:466
 msgid "Find"
 msgstr "Keresés"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:535
 msgid "Find Next"
 msgstr "Következő"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:537
 msgid "Find Previous"
 msgstr "Előző"
 
-#: ../src/keybindings.c:543 ../src/search.c:619
+#: ../src/keybindings.c:544 ../src/search.c:619
 msgid "Replace"
 msgstr "Csere"
 
-#: ../src/keybindings.c:545 ../src/search.c:869
+#: ../src/keybindings.c:546 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Keresés fájlokban"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:549
 msgid "Next Message"
 msgstr "Következő üzenet"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:551
 msgid "Previous Message"
 msgstr "Előző üzenet"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:554
 msgid "Find Usage"
 msgstr "Használat keresése"
 
-#: ../src/keybindings.c:556
+#: ../src/keybindings.c:557
 msgid "Find Document Usage"
 msgstr "Dokumentum használat keresése"
 
-#: ../src/keybindings.c:563 ../src/toolbar.c:70
+#: ../src/keybindings.c:564 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Visszatérés egy helyhez"
 
-#: ../src/keybindings.c:565 ../src/toolbar.c:71
+#: ../src/keybindings.c:566 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Továbbhaladás egy helyhez"
 
-#: ../src/keybindings.c:570
+#: ../src/keybindings.c:571
 msgid "Go to matching brace"
 msgstr "Illeszkedő zárójelhez ugrás"
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:574
 msgid "Toggle marker"
 msgstr "Jelölő be/ki"
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:583
 msgid "Go to Symbol Definition"
 msgstr "Ugrás a szimbólum definíciójához"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:586
 msgid "Go to Symbol Declaration"
 msgstr "Ugrás a szimbólum deklarációjához"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:588
 msgid "Go to Start of Line"
 msgstr "Ugrás a sor elejére"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:590
 msgid "Go to End of Line"
 msgstr "Ugrás a sor végére"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:592
 msgid "Go to Start of Display Line"
 msgstr "Ugrás a kijelzett sor elejére"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:594
 msgid "Go to End of Display Line"
 msgstr "Ugrás a kijelzett sor végére"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:596
 msgid "Go to Previous Word Part"
 msgstr "Ugrás az előző szóelemhez"
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:598
 msgid "Go to Next Word Part"
 msgstr "Ugrás a következő szóelemhez"
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:603
 msgid "Toggle All Additional Widgets"
 msgstr "Minden egyéb ablakelem be/ki"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:606
 msgid "Fullscreen"
 msgstr "Teljes képernyős"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:608
 msgid "Toggle Messages Window"
 msgstr "Üzenetablak be/ki"
 
-#: ../src/keybindings.c:610
+#: ../src/keybindings.c:611
 msgid "Toggle Sidebar"
 msgstr "Oldalsáv be/ki"
 
-#: ../src/keybindings.c:612
+#: ../src/keybindings.c:613
 msgid "Zoom In"
 msgstr "Nagyítás"
 
-#: ../src/keybindings.c:614
+#: ../src/keybindings.c:615
 msgid "Zoom Out"
 msgstr "Kicsinyítés"
 
-#: ../src/keybindings.c:616
+#: ../src/keybindings.c:617
 msgid "Zoom Reset"
 msgstr "Nagyítás alapállapotra"
 
-#: ../src/keybindings.c:621
+#: ../src/keybindings.c:622
 msgid "Switch to Editor"
 msgstr "Átváltás a szerkesztőre"
 
-#: ../src/keybindings.c:623
+#: ../src/keybindings.c:624
 msgid "Switch to Search Bar"
 msgstr "Átváltás a keresősávra"
 
-#: ../src/keybindings.c:625
+#: ../src/keybindings.c:626
 msgid "Switch to Message Window"
 msgstr "Átváltás az üzenetablakra"
 
-#: ../src/keybindings.c:627
+#: ../src/keybindings.c:628
 msgid "Switch to Compiler"
 msgstr "Átváltás a fordítóra"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:630
 msgid "Switch to Messages"
 msgstr "Átváltás az üzenetekre"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:632
 msgid "Switch to Scribble"
 msgstr "Átváltás a firka ablakra"
 
-#: ../src/keybindings.c:633
+#: ../src/keybindings.c:634
 msgid "Switch to VTE"
 msgstr "Átváltás a VTE-re"
 
-#: ../src/keybindings.c:635
+#: ../src/keybindings.c:636
 msgid "Switch to Sidebar"
 msgstr "Átváltás az oldalsávra"
 
-#: ../src/keybindings.c:637
+#: ../src/keybindings.c:638
 msgid "Switch to Sidebar Symbol List"
 msgstr "Átváltás a szimbólumlista oldalsávra"
 
-#: ../src/keybindings.c:639
+#: ../src/keybindings.c:640
 msgid "Switch to Sidebar Document List"
 msgstr "Átváltás a dokumentumlista oldalsávra"
 
-#: ../src/keybindings.c:644
+#: ../src/keybindings.c:645
 msgid "Switch to left document"
 msgstr "Átváltás a bal oldali dokumentumra"
 
-#: ../src/keybindings.c:646
+#: ../src/keybindings.c:647
 msgid "Switch to right document"
 msgstr "Átváltás a jobb oldali dokumentumra"
 
-#: ../src/keybindings.c:648
+#: ../src/keybindings.c:649
 msgid "Switch to last used document"
 msgstr "Átváltás a legutóbb használt dokumentumra"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:652
 msgid "Move document left"
 msgstr "Dokumentum mozgatása balra"
 
-#: ../src/keybindings.c:654
+#: ../src/keybindings.c:655
 msgid "Move document right"
 msgstr "Dokumentum mozgatása jobbra"
 
-#: ../src/keybindings.c:656
+#: ../src/keybindings.c:657
 msgid "Move document first"
 msgstr "Dokumentum mozgatása az első helyre"
 
-#: ../src/keybindings.c:658
+#: ../src/keybindings.c:659
 msgid "Move document last"
 msgstr "Dokumentum mozgatása az utolsó helyre"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:664
 msgid "Toggle Line wrapping"
 msgstr "Sortörés be/ki"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:666
 msgid "Toggle Line breaking"
 msgstr "Sor széttördelés be/ki"
 
-#: ../src/keybindings.c:671
+#: ../src/keybindings.c:674
 msgid "Replace spaces with tabs"
 msgstr "Szóközök cseréje tabulátorokra"
 
-#: ../src/keybindings.c:673
+#: ../src/keybindings.c:676
 msgid "Toggle current fold"
 msgstr "Aktuális blokk be/ki"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:678
 msgid "Fold all"
 msgstr "Minden blokk bezárása"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:680
 msgid "Unfold all"
 msgstr "Minden blokk kinyitása"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:682
 msgid "Reload symbol list"
 msgstr "Szimbólumlista újraolvasása"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:684
 msgid "Remove Markers"
 msgstr "Jelölők eltávolítása"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:686
 msgid "Remove Error Indicators"
 msgstr "Hibajelölések eltávolítása"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:688
 msgid "Remove Markers and Error Indicators"
 msgstr "Jelölők és hibajelek eltávolítása"
 
-#: ../src/keybindings.c:690 ../src/toolbar.c:72
+#: ../src/keybindings.c:693 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Fordítás"
 
-#: ../src/keybindings.c:694
+#: ../src/keybindings.c:697
 msgid "Make all"
 msgstr "Make all"
 
-#: ../src/keybindings.c:697
+#: ../src/keybindings.c:700
 msgid "Make custom target"
 msgstr "Make egyéni céllal"
 
-#: ../src/keybindings.c:699
+#: ../src/keybindings.c:702
 msgid "Make object"
 msgstr "Make objektumra"
 
-#: ../src/keybindings.c:701
+#: ../src/keybindings.c:704
 msgid "Next error"
 msgstr "Következő hiba"
 
-#: ../src/keybindings.c:703
+#: ../src/keybindings.c:706
 msgid "Previous error"
 msgstr "Előző hiba"
 
-#: ../src/keybindings.c:705
+#: ../src/keybindings.c:708
 msgid "Run"
 msgstr "Futtatás"
 
-#: ../src/keybindings.c:707
+#: ../src/keybindings.c:710
 msgid "Build options"
 msgstr "Összeállítási kapcsolók"
 
-#: ../src/keybindings.c:712
+#: ../src/keybindings.c:715
 msgid "Show Color Chooser"
 msgstr "Színválasztó megjelenítése"
 
-#: ../src/keybindings.c:995
+#: ../src/keybindings.c:998
 msgid "Keyboard Shortcuts"
 msgstr "Gyorsbillentyűk"
 
-#: ../src/keybindings.c:1007
+#: ../src/keybindings.c:1010
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "A következő gyorsbillentyűk állíthatók be:"
 
@@ -3981,30 +3988,30 @@ msgstr "Hibaüzenetek"
 msgid "Cl_ear"
 msgstr "Tör_lés"
 
-#: ../src/msgwindow.c:217
+#: ../src/msgwindow.c:219
 msgid "Status messages"
 msgstr "Állapot üzenetek"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:673
 msgid "C_opy"
 msgstr "_Másolás"
 
-#: ../src/msgwindow.c:625
+#: ../src/msgwindow.c:682
 msgid "Copy _All"
 msgstr "Összes _másolása"
 
-#: ../src/msgwindow.c:655
+#: ../src/msgwindow.c:712
 msgid "_Hide Message Window"
 msgstr "Üzenetablak el_rejtése"
 
-#: ../src/msgwindow.c:716
+#: ../src/msgwindow.c:773
 #, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr ""
 "A(z) „%s” fájl nem található - az aktuális dokumentum elérési útjának "
 "kipróbálása."
 
-#: ../src/msgwindow.c:1152
+#: ../src/msgwindow.c:1209
 msgid "The document has been closed."
 msgstr "A dokumentum bezárásra került."
 
@@ -4067,15 +4074,15 @@ msgstr "Aktív"
 msgid "Plugin"
 msgstr "Bővítmény"
 
-#: ../src/plugins.c:1933
+#: ../src/plugins.c:1936
 msgid "Plugins"
 msgstr "Bővítmények"
 
-#: ../src/plugins.c:1974
+#: ../src/plugins.c:1977
 msgid "Choose which plugins should be loaded at startup:"
 msgstr "Válaszd ki, mely bővítmények kerüljenek induláskor betöltésre:"
 
-#: ../src/plugins.c:2067
+#: ../src/plugins.c:2070
 #, c-format
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
@@ -4254,6 +4261,11 @@ msgstr "Új projekt"
 msgid "C_reate"
 msgstr "Lét_rehozás"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Név:"
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "Projekt neve"
@@ -4266,6 +4278,10 @@ msgid ""
 msgstr ""
 "A projektet leíró és annak beállításait tartalmazó fájl elérési útja. "
 "Alapesetben „%s” kiterjesztése kell legyen."
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "Alapkönyvtár:"
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
@@ -4619,30 +4635,30 @@ msgstr ""
 "felhasználónéven elérni.\n"
 "Ez egy végzetes hiba és a Geany most kilép."
 
-#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
 msgstr "A szöveg véget ért a záró idézőjel nélkül"
 
 #. TL note: from glib
-#: ../src/spawn.c:130
+#: ../src/spawn.c:132
 msgid "Text was empty (or contained only whitespace)"
 msgstr "A szöveg üres volt (vagy csak szóközből állt)"
 
-#: ../src/spawn.c:151 ../src/spawn.c:165
+#: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 "Idézőjeles Windows programnév teljes egészében az idézőjeleken belül kell "
 "legyen"
 
-#: ../src/spawn.c:258
+#: ../src/spawn.c:260
 msgid "Program not found"
 msgstr "Program nem található"
 
-#: ../src/spawn.c:764
+#: ../src/spawn.c:766
 msgid "Failed to change to the working directory"
 msgstr "Nem sikerült a munkakönyvtárra váltani"
 
-#: ../src/spawn.c:769
+#: ../src/spawn.c:771
 msgid "Unknown error executing child process"
 msgstr "Ismeretlen hiba a gyerekfolyamat végrehajtásában"
 
@@ -5781,17 +5797,17 @@ msgstr "A dokumentum exportálása '%s' néven sikeresen megtörtént."
 msgid "File '%s' could not be written (%s)."
 msgstr "A(z) '%s' fájlt nem lehetett írni (%s)."
 
-#: ../plugins/export.c:749
+#: ../plugins/export.c:747
 msgid "_Export"
 msgstr "_Exportálás"
 
 #. HTML
-#: ../plugins/export.c:756
+#: ../plugins/export.c:754
 msgid "As _HTML..."
 msgstr "_HTML formátumban…"
 
 #. LaTeX
-#: ../plugins/export.c:762
+#: ../plugins/export.c:760
 msgid "As _LaTeX..."
 msgstr "_LaTeX formátumban…"
 

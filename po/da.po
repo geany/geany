@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-19 02:36+0000\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2018-08-19 15:00+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
@@ -739,7 +739,8 @@ msgstr ""
 "indstillingerne på alle nuværende åbne dokumenter."
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "Bredde:"
 
 #: ../data/geany.glade.h:152
@@ -747,7 +748,8 @@ msgid "The width in chars of a single indent"
 msgstr "Bredden i tegn på én indrykning"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "Tilstand for automatisk indrykning:"
 
 #: ../data/geany.glade.h:154
@@ -803,7 +805,8 @@ msgid "Type:"
 msgstr "Type:"
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
+#, fuzzy
+msgid "Tab _key indents"
 msgstr "Indrykning med tabulatortast"
 
 #: ../data/geany.glade.h:166
@@ -2112,21 +2115,24 @@ msgstr "Projektegenskaber"
 msgid "Filename:"
 msgstr "Filnavn:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "Navn:"
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "Beskrivelse:"
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "Grundsti:"
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "Filmønstre:"
 
 #: ../data/geany.glade.h:469
@@ -3181,25 +3187,25 @@ msgstr "Dårligt regulært udtryk for filtypen %s: %s"
 msgid "untitled"
 msgstr "unavngivet"
 
-#: ../src/highlighting.c:1233 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1231 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Kunne ikke finde filen '%s'."
 
-#: ../src/highlighting.c:1303
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr "Standard"
 
-#: ../src/highlighting.c:1344
+#: ../src/highlighting.c:1342
 msgid "The current filetype overrides the default style."
 msgstr "Den nuværende filtype tilsidesætter standardstilen."
 
-#: ../src/highlighting.c:1345
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr "Det kan forårsage at farveskemaer vises forkert."
 
-#: ../src/highlighting.c:1370
+#: ../src/highlighting.c:1368
 msgid "Color Schemes"
 msgstr "Farveskemaer"
 
@@ -4208,6 +4214,11 @@ msgstr "Nyt projekt"
 msgid "C_reate"
 msgstr "_Opret"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Navn:"
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "Projektnavn"
@@ -4220,6 +4231,10 @@ msgid ""
 msgstr ""
 "Stien til filen som repræsenterer projektet og gemmer dets indstillinger. "
 "Den skal normalt have \"%s\"-endelsen."
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "Grundsti:"
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
@@ -5731,17 +5746,17 @@ msgstr "Dokumentet blev eksporteret som '%s'."
 msgid "File '%s' could not be written (%s)."
 msgstr "Filen '%s' kunne ikke skrives (%s)."
 
-#: ../plugins/export.c:749
+#: ../plugins/export.c:747
 msgid "_Export"
 msgstr "_Eksportér"
 
 #. HTML
-#: ../plugins/export.c:756
+#: ../plugins/export.c:754
 msgid "As _HTML..."
 msgstr "Som _HTML..."
 
 #. LaTeX
-#: ../plugins/export.c:762
+#: ../plugins/export.c:760
 msgid "As _LaTeX..."
 msgstr "Som _LaTeX..."
 

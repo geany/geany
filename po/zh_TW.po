@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-17 02:36+0000\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2018-11-17 21:23+0800\n"
 "Last-Translator: Hsiu-Ming Chang <cges30901@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -717,7 +717,8 @@ msgstr ""
 "i>。"
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "寬度："
 
 #: ../data/geany.glade.h:152
@@ -725,7 +726,8 @@ msgid "The width in chars of a single indent"
 msgstr "單一縮排的字元數寬度"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "自動縮排模式："
 
 #: ../data/geany.glade.h:154
@@ -778,7 +780,8 @@ msgid "Type:"
 msgstr "型態："
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
+#, fuzzy
+msgid "Tab _key indents"
 msgstr "跳格鍵縮排"
 
 #: ../data/geany.glade.h:166
@@ -2054,21 +2057,24 @@ msgstr "專案屬性"
 msgid "Filename:"
 msgstr "檔名："
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "名稱："
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "描述："
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "基底路徑："
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "檔案式樣："
 
 #: ../data/geany.glade.h:469
@@ -4106,6 +4112,11 @@ msgstr "新專案"
 msgid "C_reate"
 msgstr "建立(_R)"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "名稱："
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "專案名稱"
@@ -4116,6 +4127,10 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr "代表專案與儲存專案設定的檔案路徑。通常有「%s」副檔名。"
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "基底路徑："
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"

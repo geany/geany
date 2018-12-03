@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-24 22:17+0200\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2018-02-17 21:56+0800\n"
 "Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
@@ -712,7 +712,8 @@ msgstr ""
 "注意：如需将这些设置应用到所有打开的文档，使用 <i>项目 -> 使用默认缩进</i>。"
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "宽度："
 
 #: ../data/geany.glade.h:152
@@ -720,7 +721,8 @@ msgid "The width in chars of a single indent"
 msgstr "一个缩进的宽度"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "自动缩进模式："
 
 #: ../data/geany.glade.h:154
@@ -773,7 +775,8 @@ msgid "Type:"
 msgstr "类型："
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
+#, fuzzy
+msgid "Tab _key indents"
 msgstr "用 Tab 键缩进"
 
 #: ../data/geany.glade.h:166
@@ -2039,21 +2042,24 @@ msgstr "项目属性"
 msgid "Filename:"
 msgstr "文件名："
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "名称："
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "描述："
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "根路径："
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "文件通配符："
 
 #: ../data/geany.glade.h:469
@@ -4088,6 +4094,11 @@ msgstr "新项目"
 msgid "C_reate"
 msgstr "创建(_R)"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "名称："
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "项目名"
@@ -4098,6 +4109,10 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr "存储项目结构和设置的文件路径。通常有“%s”扩展名。"
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "根路径："
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"

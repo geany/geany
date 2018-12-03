@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-18 23:33+0100\n"
+"POT-Creation-Date: 2018-12-03 21:05+0100\n"
 "PO-Revision-Date: 2008-10-15 01:47+0200\n"
 "Last-Translator: Alex Eftimie <alexeftimie(at)gmail(dot)com>\n"
 "Language-Team: Romanian\n"
@@ -98,7 +98,7 @@ msgstr "invizibil"
 msgid "_Insert \"include <...>\""
 msgstr "_Inserează \"include <...>\""
 
-#: ../data/geany.glade.h:16 ../src/keybindings.c:514
+#: ../data/geany.glade.h:16 ../src/keybindings.c:515
 #, fuzzy
 msgid "Insert Alternative _White Space"
 msgstr "Inserează spațiu alb alternativ"
@@ -171,7 +171,7 @@ msgstr "Sus"
 msgid "Bottom"
 msgstr "Jos"
 
-#: ../data/geany.glade.h:31 ../src/keybindings.c:524
+#: ../data/geany.glade.h:31 ../src/keybindings.c:525
 msgid "Preferences"
 msgstr "Preferințe"
 
@@ -778,7 +778,8 @@ msgid ""
 msgstr ""
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
+#, fuzzy
+msgid "_Width:"
 msgstr "Lățime:"
 
 #: ../data/geany.glade.h:152
@@ -786,7 +787,8 @@ msgid "The width in chars of a single indent"
 msgstr "Lățimea în caractere  a indentării"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
+#, fuzzy
+msgid "Auto-indent _mode:"
 msgstr "Mod indentare automată"
 
 #: ../data/geany.glade.h:154
@@ -851,7 +853,7 @@ msgstr "Tip:"
 
 #: ../data/geany.glade.h:165
 #, fuzzy
-msgid "Tab key indents"
+msgid "Tab _key indents"
 msgstr "Indentare inteligentă"
 
 #: ../data/geany.glade.h:166
@@ -1180,7 +1182,7 @@ msgstr "<b>Căi unelte</b>"
 msgid "Display"
 msgstr "Afișare"
 
-#: ../data/geany.glade.h:235 ../src/keybindings.c:312 ../src/prefs.c:1609
+#: ../data/geany.glade.h:235 ../src/keybindings.c:313 ../src/prefs.c:1609
 msgid "Editor"
 msgstr "Editor"
 
@@ -1268,7 +1270,7 @@ msgstr "Elimină dâra de spații"
 msgid "Removes trailing spaces and tabs at the end of lines"
 msgstr "Șterge dâra de spații și tab-uri de la sfârșitul liniilor."
 
-#: ../data/geany.glade.h:253 ../src/keybindings.c:669
+#: ../data/geany.glade.h:253 ../src/keybindings.c:672
 msgid "Replace tabs with space"
 msgstr "Înlocuiește tab-urile cu spații"
 
@@ -1351,7 +1353,7 @@ msgstr ""
 msgid "<b>Commands</b>"
 msgstr "<b>Comenzi</b>"
 
-#: ../data/geany.glade.h:272 ../src/keybindings.c:324 ../src/prefs.c:1613
+#: ../data/geany.glade.h:272 ../src/keybindings.c:325 ../src/prefs.c:1613
 msgid "Tools"
 msgstr "Unelte"
 
@@ -1451,7 +1453,7 @@ msgstr "Sc_himbă"
 msgid "<b>Keyboard shortcuts</b>"
 msgstr "<b>Scurtături</b>"
 
-#: ../data/geany.glade.h:293 ../src/plugins.c:1948 ../src/plugins.c:1985
+#: ../data/geany.glade.h:293 ../src/plugins.c:1951 ../src/plugins.c:1988
 #: ../src/prefs.c:1617
 msgid "Keybindings"
 msgstr "Combinații de taste"
@@ -1766,32 +1768,32 @@ msgstr "Înc_hide toate"
 msgid "Co_mmands"
 msgstr "Comandă"
 
-#: ../data/geany.glade.h:357 ../src/keybindings.c:437
+#: ../data/geany.glade.h:357 ../src/keybindings.c:438
 #, fuzzy
 msgid "Cu_t Current Line(s)"
 msgstr "Taie liniile curente"
 
-#: ../data/geany.glade.h:358 ../src/keybindings.c:434
+#: ../data/geany.glade.h:358 ../src/keybindings.c:435
 #, fuzzy
 msgid "_Copy Current Line(s)"
 msgstr "Copiază liniile curente"
 
-#: ../data/geany.glade.h:359 ../src/keybindings.c:387
+#: ../data/geany.glade.h:359 ../src/keybindings.c:388
 #, fuzzy
 msgid "_Delete Current Line(s)"
 msgstr "Șterge liniile curente"
 
-#: ../data/geany.glade.h:360 ../src/keybindings.c:384
+#: ../data/geany.glade.h:360 ../src/keybindings.c:385
 #, fuzzy
 msgid "D_uplicate Line or Selection"
 msgstr "Du_plică linia sau selecția"
 
-#: ../data/geany.glade.h:361 ../src/keybindings.c:447
+#: ../data/geany.glade.h:361 ../src/keybindings.c:448
 #, fuzzy
 msgid "S_elect Current Line(s)"
 msgstr "Selectează liniile curente"
 
-#: ../data/geany.glade.h:362 ../src/keybindings.c:450
+#: ../data/geany.glade.h:362 ../src/keybindings.c:451
 #, fuzzy
 msgid "Se_lect Current Paragraph"
 msgstr "Selectează paragraful curent"
@@ -1806,16 +1808,16 @@ msgstr "Comentează liniile"
 msgid "M_ove Line(s) Down"
 msgstr "Comentează liniile"
 
-#: ../data/geany.glade.h:365 ../src/keybindings.c:501
+#: ../data/geany.glade.h:365 ../src/keybindings.c:502
 #, fuzzy
 msgid "_Send Selection to Terminal"
 msgstr "Trimite _selecția la"
 
-#: ../data/geany.glade.h:366 ../src/keybindings.c:503
+#: ../data/geany.glade.h:366 ../src/keybindings.c:504
 msgid "_Reflow Lines/Block"
 msgstr ""
 
-#: ../data/geany.glade.h:367 ../src/keybindings.c:461
+#: ../data/geany.glade.h:367 ../src/keybindings.c:462
 msgid "T_oggle Case of Selection"
 msgstr ""
 
@@ -1840,7 +1842,7 @@ msgstr "_Mărește indentarea"
 msgid "_Decrease Indent"
 msgstr "Mi_cșorează indentarea"
 
-#: ../data/geany.glade.h:373 ../src/keybindings.c:480
+#: ../data/geany.glade.h:373 ../src/keybindings.c:481
 #, fuzzy
 msgid "S_mart Line Indent"
 msgstr "Indentare inteligentă"
@@ -1858,7 +1860,7 @@ msgstr "I_nserează comentarii"
 msgid "Preference_s"
 msgstr "Preferințe"
 
-#: ../data/geany.glade.h:377 ../src/keybindings.c:527
+#: ../data/geany.glade.h:377 ../src/keybindings.c:528
 #, fuzzy
 msgid "P_lugin Preferences"
 msgstr "Preferințe"
@@ -1894,11 +1896,11 @@ msgstr "_Mesaj următor"
 msgid "Pr_evious Message"
 msgstr "Mesajul ant_erior"
 
-#: ../data/geany.glade.h:385 ../src/keybindings.c:576
+#: ../data/geany.glade.h:385 ../src/keybindings.c:577
 msgid "Go to Ne_xt Marker"
 msgstr ""
 
-#: ../data/geany.glade.h:386 ../src/keybindings.c:579
+#: ../data/geany.glade.h:386 ../src/keybindings.c:580
 #, fuzzy
 msgid "Go to Pre_vious Marker"
 msgstr "Eroare a_nterioră"
@@ -1908,17 +1910,17 @@ msgstr "Eroare a_nterioră"
 msgid "_Go to Line..."
 msgstr "Mer_gi la linia"
 
-#: ../data/geany.glade.h:388 ../src/keybindings.c:539
+#: ../data/geany.glade.h:388 ../src/keybindings.c:540
 #, fuzzy
 msgid "Find Next _Selection"
 msgstr "Caută selecția următoare"
 
-#: ../data/geany.glade.h:389 ../src/keybindings.c:541
+#: ../data/geany.glade.h:389 ../src/keybindings.c:542
 #, fuzzy
 msgid "Find Pre_vious Selection"
 msgstr "Caută selecția precedentă"
 
-#: ../data/geany.glade.h:390 ../src/keybindings.c:558
+#: ../data/geany.glade.h:390 ../src/keybindings.c:559
 #, fuzzy
 msgid "_Mark All"
 msgstr "Sa_lvează tot"
@@ -2085,12 +2087,12 @@ msgstr "Convertește și stabilește _LF (Unix)"
 msgid "Convert and Set to CR (Classic _Mac)"
 msgstr "Convertește și stabilește CR (_Mac)"
 
-#: ../data/geany.glade.h:429 ../src/keybindings.c:667
+#: ../data/geany.glade.h:429 ../src/keybindings.c:668
 #, fuzzy
 msgid "_Clone"
 msgstr "Înc_hide"
 
-#: ../data/geany.glade.h:430
+#: ../data/geany.glade.h:430 ../src/keybindings.c:670
 msgid "_Strip Trailing Spaces"
 msgstr "_Elimină dâra de spații"
 
@@ -2240,21 +2242,24 @@ msgstr "Proprietăți proiect"
 msgid "Filename:"
 msgstr "Nume fișier:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
+#: ../data/geany.glade.h:465
+#, fuzzy
+msgid "_Name:"
 msgstr "Nume:"
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
+#, fuzzy
+msgid "_Description:"
 msgstr "Descriere:"
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
+#: ../data/geany.glade.h:467
+#, fuzzy
+msgid "_Base path:"
 msgstr "Cale de bază:"
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
+#, fuzzy
+msgid "File _patterns:"
 msgstr "Modele fișier:"
 
 #: ../data/geany.glade.h:469
@@ -2273,7 +2278,7 @@ msgstr ""
 "nouă, sau un arbore de directoare existent. Puteți folosi căi relative la "
 "numele de fișier al proiectului."
 
-#: ../data/geany.glade.h:471 ../src/keybindings.c:322
+#: ../data/geany.glade.h:471 ../src/keybindings.c:323
 msgid "Project"
 msgstr "Proiect"
 
@@ -2360,7 +2365,7 @@ msgstr "Altul:"
 
 #: ../src/about.c:48
 msgid ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2651,7 +2656,7 @@ msgstr[0] "Fișierul %s a fost salvat."
 msgstr[1] "Fișierul %s a fost salvat."
 msgstr[2] "Fișierul %s a fost salvat."
 
-#: ../src/callbacks.c:900 ../src/keybindings.c:567
+#: ../src/callbacks.c:900 ../src/keybindings.c:568
 msgid "Go to Line"
 msgstr "Mergi la linia"
 
@@ -2936,8 +2941,8 @@ msgstr "Fișierul %s a fost reîncărcat."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, c-format
-msgid "File %s opened(%d%s)."
+#, fuzzy, c-format
+msgid "File %s opened (%d%s)."
 msgstr "Fișierul %s a fost deschis(%d%s)"
 
 #: ../src/document.c:1497
@@ -3088,16 +3093,16 @@ msgstr[2] "%s: am înlocuit %d apariții ale \"%s\" cu \"%s\""
 msgid "Do you want to reload it?"
 msgstr "Doriți să-l reîncărcați?"
 
-#: ../src/editor.c:4469
+#: ../src/editor.c:4468
 msgid "Enter Tab Width"
 msgstr "Introduceți lățimea tabului"
 
-#: ../src/editor.c:4470
+#: ../src/editor.c:4469
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
 "Introduceți numărul de spații care să fie înlocuite de un caracter tab."
 
-#: ../src/editor.c:4675
+#: ../src/editor.c:4674
 #, c-format
 msgid "Warning: non-standard hard tab width: %d != 8!"
 msgstr ""
@@ -3342,608 +3347,608 @@ msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
 msgid "untitled"
 msgstr "fără titlu"
 
-#: ../src/highlighting.c:1233 ../src/libmain.c:868 ../src/socket.c:170
+#: ../src/highlighting.c:1231 ../src/libmain.c:868 ../src/socket.c:170
 #: ../src/templates.c:232
 #, c-format
 msgid "Could not find file '%s'."
 msgstr "Nu am putut găsi fișierul '%s'."
 
-#: ../src/highlighting.c:1303
+#: ../src/highlighting.c:1301
 msgid "Default"
 msgstr ""
 
-#: ../src/highlighting.c:1344
+#: ../src/highlighting.c:1342
 #, fuzzy
 msgid "The current filetype overrides the default style."
 msgstr "Construiește fișierul curent cu unealta make și ținta implicită"
 
-#: ../src/highlighting.c:1345
+#: ../src/highlighting.c:1343
 msgid "This may cause color schemes to display incorrectly."
 msgstr ""
 
-#: ../src/highlighting.c:1370
+#: ../src/highlighting.c:1368
 #, fuzzy
 msgid "Color Schemes"
 msgstr "Selector _culoare"
 
 #. visual group order
-#: ../src/keybindings.c:311 ../src/symbols.c:494
+#: ../src/keybindings.c:312 ../src/symbols.c:494
 msgid "File"
 msgstr "Fișier"
 
-#: ../src/keybindings.c:313
+#: ../src/keybindings.c:314
 msgid "Clipboard"
 msgstr ""
 
-#: ../src/keybindings.c:314
+#: ../src/keybindings.c:315
 msgid "Select"
 msgstr "Selectează"
 
-#: ../src/keybindings.c:315
+#: ../src/keybindings.c:316
 msgid "Format"
 msgstr "Format"
 
-#: ../src/keybindings.c:316
+#: ../src/keybindings.c:317
 msgid "Insert"
 msgstr "Inserează"
 
-#: ../src/keybindings.c:317
+#: ../src/keybindings.c:318
 msgid "Settings"
 msgstr "Setări"
 
-#: ../src/keybindings.c:318
+#: ../src/keybindings.c:319
 msgid "Search"
 msgstr "Căutare"
 
-#: ../src/keybindings.c:319
+#: ../src/keybindings.c:320
 msgid "Go to"
 msgstr "Mergi la"
 
-#: ../src/keybindings.c:320
+#: ../src/keybindings.c:321
 msgid "View"
 msgstr ""
 
-#: ../src/keybindings.c:321 ../src/symbols.c:643
+#: ../src/keybindings.c:322 ../src/symbols.c:643
 msgid "Document"
 msgstr "Document"
 
-#: ../src/keybindings.c:323 ../src/keybindings.c:692 ../src/project.c:513
+#: ../src/keybindings.c:324 ../src/keybindings.c:695 ../src/project.c:513
 #: ../src/ui_utils.c:2215
 msgid "Build"
 msgstr "Construiește"
 
-#: ../src/keybindings.c:325 ../src/keybindings.c:717
+#: ../src/keybindings.c:326 ../src/keybindings.c:720
 msgid "Help"
 msgstr "Ajutor"
 
-#: ../src/keybindings.c:326
+#: ../src/keybindings.c:327
 msgid "Focus"
 msgstr "Focalizează"
 
-#: ../src/keybindings.c:327
+#: ../src/keybindings.c:328
 msgid "Notebook tab"
 msgstr ""
 
-#: ../src/keybindings.c:336 ../src/keybindings.c:368
+#: ../src/keybindings.c:337 ../src/keybindings.c:369
 msgid "New"
 msgstr "Nou"
 
-#: ../src/keybindings.c:338 ../src/keybindings.c:370
+#: ../src/keybindings.c:339 ../src/keybindings.c:371
 msgid "Open"
 msgstr "Deschide"
 
-#: ../src/keybindings.c:341
+#: ../src/keybindings.c:342
 msgid "Open selected file"
 msgstr "Deschide fișierul selectat"
 
-#: ../src/keybindings.c:343
+#: ../src/keybindings.c:344
 msgid "Save"
 msgstr "Salvează"
 
-#: ../src/keybindings.c:345 ../src/toolbar.c:59
+#: ../src/keybindings.c:346 ../src/toolbar.c:59
 msgid "Save as"
 msgstr "Salvează ca"
 
-#: ../src/keybindings.c:347
+#: ../src/keybindings.c:348
 msgid "Save all"
 msgstr "Salvează toate"
 
-#: ../src/keybindings.c:350 ../src/symbols.c:727
+#: ../src/keybindings.c:351 ../src/symbols.c:727
 msgid "Properties"
 msgstr "Proprietăți"
 
-#: ../src/keybindings.c:352
+#: ../src/keybindings.c:353
 msgid "Print"
 msgstr "Imprimă"
 
-#: ../src/keybindings.c:354 ../src/keybindings.c:375
+#: ../src/keybindings.c:355 ../src/keybindings.c:376
 msgid "Close"
 msgstr "Închide"
 
-#: ../src/keybindings.c:356
+#: ../src/keybindings.c:357
 msgid "Close all"
 msgstr "Închide toate"
 
-#: ../src/keybindings.c:359
+#: ../src/keybindings.c:360
 msgid "Reload file"
 msgstr "Reîncarcă fișier"
 
-#: ../src/keybindings.c:361
+#: ../src/keybindings.c:362
 msgid "Re-open last closed tab"
 msgstr ""
 
-#: ../src/keybindings.c:363
+#: ../src/keybindings.c:364
 msgid "Quit"
 msgstr ""
 
-#: ../src/keybindings.c:380
+#: ../src/keybindings.c:381
 msgid "Undo"
 msgstr "Refă"
 
-#: ../src/keybindings.c:382
+#: ../src/keybindings.c:383
 msgid "Redo"
 msgstr "Repetă"
 
-#: ../src/keybindings.c:391
+#: ../src/keybindings.c:392
 #, fuzzy
 msgid "Delete to line end"
 msgstr "Șterge liniile curente"
 
-#: ../src/keybindings.c:394
+#: ../src/keybindings.c:395
 #, fuzzy
 msgid "Delete to beginning of line"
 msgstr "Șterge liniile curente"
 
-#: ../src/keybindings.c:397
+#: ../src/keybindings.c:398
 #, fuzzy
 msgid "_Transpose Current Line"
 msgstr "Transpune linia curentă"
 
-#: ../src/keybindings.c:399
+#: ../src/keybindings.c:400
 msgid "Scroll to current line"
 msgstr ""
 
-#: ../src/keybindings.c:401
+#: ../src/keybindings.c:402
 msgid "Scroll up the view by one line"
 msgstr ""
 
-#: ../src/keybindings.c:403
+#: ../src/keybindings.c:404
 msgid "Scroll down the view by one line"
 msgstr ""
 
-#: ../src/keybindings.c:405
+#: ../src/keybindings.c:406
 msgid "Complete snippet"
 msgstr ""
 
-#: ../src/keybindings.c:407
+#: ../src/keybindings.c:408
 msgid "Move cursor in snippet"
 msgstr ""
 
-#: ../src/keybindings.c:409
+#: ../src/keybindings.c:410
 msgid "Suppress snippet completion"
 msgstr ""
 
-#: ../src/keybindings.c:411
+#: ../src/keybindings.c:412
 msgid "Context Action"
 msgstr "Acțiune contextuală"
 
-#: ../src/keybindings.c:413
+#: ../src/keybindings.c:414
 msgid "Complete word"
 msgstr "Completează cuvânt"
 
-#: ../src/keybindings.c:415
+#: ../src/keybindings.c:416
 msgid "Show calltip"
 msgstr ""
 
-#: ../src/keybindings.c:417
+#: ../src/keybindings.c:418
 #, fuzzy
 msgid "Word part completion"
 msgstr "Completare automată etichete XML"
 
-#: ../src/keybindings.c:420
+#: ../src/keybindings.c:421
 #, fuzzy
 msgid "Move line(s) up"
 msgstr "Comentează liniile"
 
-#: ../src/keybindings.c:423
+#: ../src/keybindings.c:424
 #, fuzzy
 msgid "Move line(s) down"
 msgstr "Comentează liniile"
 
-#: ../src/keybindings.c:428
+#: ../src/keybindings.c:429
 msgid "Cut"
 msgstr "Taie"
 
-#: ../src/keybindings.c:430
+#: ../src/keybindings.c:431
 msgid "Copy"
 msgstr "Copiază"
 
-#: ../src/keybindings.c:432
+#: ../src/keybindings.c:433
 msgid "Paste"
 msgstr "Lipește"
 
-#: ../src/keybindings.c:443
+#: ../src/keybindings.c:444
 msgid "Select All"
 msgstr "Selectează tot"
 
-#: ../src/keybindings.c:445
+#: ../src/keybindings.c:446
 msgid "Select current word"
 msgstr "Selectează cuvântul curent"
 
-#: ../src/keybindings.c:453
+#: ../src/keybindings.c:454
 msgid "Select to previous word part"
 msgstr ""
 
-#: ../src/keybindings.c:455
+#: ../src/keybindings.c:456
 #, fuzzy
 msgid "Select to next word part"
 msgstr "Selectează cuvântul curent"
 
-#: ../src/keybindings.c:463
+#: ../src/keybindings.c:464
 msgid "Toggle line commentation"
 msgstr ""
 
-#: ../src/keybindings.c:466
+#: ../src/keybindings.c:467
 msgid "Comment line(s)"
 msgstr "Comentează liniile"
 
-#: ../src/keybindings.c:468
+#: ../src/keybindings.c:469
 msgid "Uncomment line(s)"
 msgstr "Decomentează liniile"
 
-#: ../src/keybindings.c:470
+#: ../src/keybindings.c:471
 msgid "Increase indent"
 msgstr "Mărește indentarea"
 
-#: ../src/keybindings.c:473
+#: ../src/keybindings.c:474
 msgid "Decrease indent"
 msgstr "Micșorează indentarea"
 
-#: ../src/keybindings.c:476
+#: ../src/keybindings.c:477
 msgid "Increase indent by one space"
 msgstr ""
 
-#: ../src/keybindings.c:478
+#: ../src/keybindings.c:479
 msgid "Decrease indent by one space"
 msgstr ""
 
-#: ../src/keybindings.c:482
+#: ../src/keybindings.c:483
 msgid "Send to Custom Command 1"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:484
+#: ../src/keybindings.c:485
 msgid "Send to Custom Command 2"
 msgstr "Trimite la comanda personalizată 2"
 
-#: ../src/keybindings.c:486
+#: ../src/keybindings.c:487
 msgid "Send to Custom Command 3"
 msgstr "Trimite la comanda personalizată 3"
 
-#: ../src/keybindings.c:488
+#: ../src/keybindings.c:489
 #, fuzzy
 msgid "Send to Custom Command 4"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:490
+#: ../src/keybindings.c:491
 #, fuzzy
 msgid "Send to Custom Command 5"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:492
+#: ../src/keybindings.c:493
 #, fuzzy
 msgid "Send to Custom Command 6"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:494
+#: ../src/keybindings.c:495
 #, fuzzy
 msgid "Send to Custom Command 7"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:496
+#: ../src/keybindings.c:497
 #, fuzzy
 msgid "Send to Custom Command 8"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:498
+#: ../src/keybindings.c:499
 #, fuzzy
 msgid "Send to Custom Command 9"
 msgstr "Trimite la comanda personalizată 1"
 
-#: ../src/keybindings.c:506
+#: ../src/keybindings.c:507
 #, fuzzy
 msgid "Join lines"
 msgstr "Comentează liniile"
 
-#: ../src/keybindings.c:511
+#: ../src/keybindings.c:512
 msgid "Insert date"
 msgstr "Inserează dată"
 
-#: ../src/keybindings.c:517
+#: ../src/keybindings.c:518
 msgid "Insert New Line Before Current"
 msgstr ""
 
-#: ../src/keybindings.c:519
+#: ../src/keybindings.c:520
 msgid "Insert New Line After Current"
 msgstr ""
 
-#: ../src/keybindings.c:532 ../src/search.c:466
+#: ../src/keybindings.c:533 ../src/search.c:466
 msgid "Find"
 msgstr "Caută"
 
-#: ../src/keybindings.c:534
+#: ../src/keybindings.c:535
 msgid "Find Next"
 msgstr "Caută următor"
 
-#: ../src/keybindings.c:536
+#: ../src/keybindings.c:537
 msgid "Find Previous"
 msgstr "Caută precedent"
 
-#: ../src/keybindings.c:543 ../src/search.c:619
+#: ../src/keybindings.c:544 ../src/search.c:619
 msgid "Replace"
 msgstr "Înlocuiește"
 
-#: ../src/keybindings.c:545 ../src/search.c:869
+#: ../src/keybindings.c:546 ../src/search.c:869
 msgid "Find in Files"
 msgstr "Caută în fișiere"
 
-#: ../src/keybindings.c:548
+#: ../src/keybindings.c:549
 msgid "Next Message"
 msgstr "Mesajul următor"
 
-#: ../src/keybindings.c:550
+#: ../src/keybindings.c:551
 msgid "Previous Message"
 msgstr "Mesajul anterior"
 
-#: ../src/keybindings.c:553
+#: ../src/keybindings.c:554
 msgid "Find Usage"
 msgstr "Caută folosiri"
 
-#: ../src/keybindings.c:556
+#: ../src/keybindings.c:557
 #, fuzzy
 msgid "Find Document Usage"
 msgstr "Caută folosiri"
 
-#: ../src/keybindings.c:563 ../src/toolbar.c:70
+#: ../src/keybindings.c:564 ../src/toolbar.c:70
 msgid "Navigate back a location"
 msgstr "Mergi înapoi cu o locație"
 
-#: ../src/keybindings.c:565 ../src/toolbar.c:71
+#: ../src/keybindings.c:566 ../src/toolbar.c:71
 msgid "Navigate forward a location"
 msgstr "Mergi înainte cu o locație"
 
-#: ../src/keybindings.c:570
+#: ../src/keybindings.c:571
 msgid "Go to matching brace"
 msgstr ""
 
-#: ../src/keybindings.c:573
+#: ../src/keybindings.c:574
 msgid "Toggle marker"
 msgstr ""
 
-#: ../src/keybindings.c:582
+#: ../src/keybindings.c:583
 #, fuzzy
 msgid "Go to Symbol Definition"
 msgstr "Mergi la definiția etichetei"
 
-#: ../src/keybindings.c:585
+#: ../src/keybindings.c:586
 #, fuzzy
 msgid "Go to Symbol Declaration"
 msgstr "Mergi la declarația etichetei"
 
-#: ../src/keybindings.c:587
+#: ../src/keybindings.c:588
 msgid "Go to Start of Line"
 msgstr "Mergi la începutul liniei"
 
-#: ../src/keybindings.c:589
+#: ../src/keybindings.c:590
 msgid "Go to End of Line"
 msgstr "Mergi la finalul liniei"
 
-#: ../src/keybindings.c:591
+#: ../src/keybindings.c:592
 #, fuzzy
 msgid "Go to Start of Display Line"
 msgstr "Mergi la finalul liniei"
 
-#: ../src/keybindings.c:593
+#: ../src/keybindings.c:594
 #, fuzzy
 msgid "Go to End of Display Line"
 msgstr "Mergi la finalul liniei"
 
-#: ../src/keybindings.c:595
+#: ../src/keybindings.c:596
 msgid "Go to Previous Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:597
+#: ../src/keybindings.c:598
 msgid "Go to Next Word Part"
 msgstr ""
 
-#: ../src/keybindings.c:602
+#: ../src/keybindings.c:603
 msgid "Toggle All Additional Widgets"
 msgstr "Comută toate controalele adiționale"
 
-#: ../src/keybindings.c:605
+#: ../src/keybindings.c:606
 msgid "Fullscreen"
 msgstr "Ecran complet"
 
-#: ../src/keybindings.c:607
+#: ../src/keybindings.c:608
 msgid "Toggle Messages Window"
 msgstr "Comută fereastra de mesaje"
 
-#: ../src/keybindings.c:610
+#: ../src/keybindings.c:611
 msgid "Toggle Sidebar"
 msgstr "Comută bara laterală"
 
-#: ../src/keybindings.c:612
+#: ../src/keybindings.c:613
 msgid "Zoom In"
 msgstr "Mărește"
 
-#: ../src/keybindings.c:614
+#: ../src/keybindings.c:615
 msgid "Zoom Out"
 msgstr "Micșorează"
 
-#: ../src/keybindings.c:616
+#: ../src/keybindings.c:617
 #, fuzzy
 msgid "Zoom Reset"
 msgstr "Micșorează"
 
-#: ../src/keybindings.c:621
+#: ../src/keybindings.c:622
 msgid "Switch to Editor"
 msgstr "Treci la editor"
 
-#: ../src/keybindings.c:623
+#: ../src/keybindings.c:624
 msgid "Switch to Search Bar"
 msgstr "Treci la bara de căutare"
 
-#: ../src/keybindings.c:625
+#: ../src/keybindings.c:626
 #, fuzzy
 msgid "Switch to Message Window"
 msgstr "Arată _fereastra de mesaje"
 
-#: ../src/keybindings.c:627
+#: ../src/keybindings.c:628
 msgid "Switch to Compiler"
 msgstr "Comută la compilator"
 
-#: ../src/keybindings.c:629
+#: ../src/keybindings.c:630
 #, fuzzy
 msgid "Switch to Messages"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:631
+#: ../src/keybindings.c:632
 msgid "Switch to Scribble"
 msgstr "Treci la scribble"
 
-#: ../src/keybindings.c:633
+#: ../src/keybindings.c:634
 msgid "Switch to VTE"
 msgstr "Treci la VTE"
 
-#: ../src/keybindings.c:635
+#: ../src/keybindings.c:636
 msgid "Switch to Sidebar"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:637
+#: ../src/keybindings.c:638
 #, fuzzy
 msgid "Switch to Sidebar Symbol List"
 msgstr "Treci la bara laterală"
 
-#: ../src/keybindings.c:639
+#: ../src/keybindings.c:640
 #, fuzzy
 msgid "Switch to Sidebar Document List"
 msgstr "Treci la documentul din stânga"
 
-#: ../src/keybindings.c:644
+#: ../src/keybindings.c:645
 msgid "Switch to left document"
 msgstr "Treci la documentul din stânga"
 
-#: ../src/keybindings.c:646
+#: ../src/keybindings.c:647
 msgid "Switch to right document"
 msgstr "Treci la documentul din dreapta"
 
-#: ../src/keybindings.c:648
+#: ../src/keybindings.c:649
 msgid "Switch to last used document"
 msgstr "Treci la ultimul document folosit"
 
-#: ../src/keybindings.c:651
+#: ../src/keybindings.c:652
 msgid "Move document left"
 msgstr "Mută documentul în stânga"
 
-#: ../src/keybindings.c:654
+#: ../src/keybindings.c:655
 msgid "Move document right"
 msgstr "Mută documentul în dreapta"
 
-#: ../src/keybindings.c:656
+#: ../src/keybindings.c:657
 msgid "Move document first"
 msgstr "Mută documentul la început"
 
-#: ../src/keybindings.c:658
+#: ../src/keybindings.c:659
 msgid "Move document last"
 msgstr "Mută documentul la final"
 
-#: ../src/keybindings.c:663
+#: ../src/keybindings.c:664
 #, fuzzy
 msgid "Toggle Line wrapping"
 msgstr "Încadrare linii"
 
-#: ../src/keybindings.c:665
+#: ../src/keybindings.c:666
 #, fuzzy
 msgid "Toggle Line breaking"
 msgstr "Încadrare linii"
 
-#: ../src/keybindings.c:671
+#: ../src/keybindings.c:674
 #, fuzzy
 msgid "Replace spaces with tabs"
 msgstr "Î_nlocuiește tab-urile cu spații"
 
-#: ../src/keybindings.c:673
+#: ../src/keybindings.c:676
 #, fuzzy
 msgid "Toggle current fold"
 msgstr "Selectează cuvântul curent"
 
-#: ../src/keybindings.c:675
+#: ../src/keybindings.c:678
 msgid "Fold all"
 msgstr "Restrânge toate"
 
-#: ../src/keybindings.c:677
+#: ../src/keybindings.c:680
 msgid "Unfold all"
 msgstr "Extinde toate"
 
-#: ../src/keybindings.c:679
+#: ../src/keybindings.c:682
 msgid "Reload symbol list"
 msgstr "Reîncarcă lista de simboluri"
 
-#: ../src/keybindings.c:681
+#: ../src/keybindings.c:684
 #, fuzzy
 msgid "Remove Markers"
 msgstr "Șterge _marcatori"
 
-#: ../src/keybindings.c:683
+#: ../src/keybindings.c:686
 #, fuzzy
 msgid "Remove Error Indicators"
 msgstr "Șterge _indicatori de eroare"
 
-#: ../src/keybindings.c:685
+#: ../src/keybindings.c:688
 #, fuzzy
 msgid "Remove Markers and Error Indicators"
 msgstr "Șterge _indicatori de eroare"
 
-#: ../src/keybindings.c:690 ../src/toolbar.c:72
+#: ../src/keybindings.c:693 ../src/toolbar.c:72
 msgid "Compile"
 msgstr "Compilează"
 
-#: ../src/keybindings.c:694
+#: ../src/keybindings.c:697
 msgid "Make all"
 msgstr ""
 
-#: ../src/keybindings.c:697
+#: ../src/keybindings.c:700
 msgid "Make custom target"
 msgstr ""
 
-#: ../src/keybindings.c:699
+#: ../src/keybindings.c:702
 msgid "Make object"
 msgstr ""
 
-#: ../src/keybindings.c:701
+#: ../src/keybindings.c:704
 msgid "Next error"
 msgstr "Eroarea următoare"
 
-#: ../src/keybindings.c:703
+#: ../src/keybindings.c:706
 msgid "Previous error"
 msgstr "Eroarea anterioară"
 
-#: ../src/keybindings.c:705
+#: ../src/keybindings.c:708
 msgid "Run"
 msgstr "Rulează"
 
-#: ../src/keybindings.c:707
+#: ../src/keybindings.c:710
 msgid "Build options"
 msgstr "Opțiuni construcție"
 
-#: ../src/keybindings.c:712
+#: ../src/keybindings.c:715
 msgid "Show Color Chooser"
 msgstr "Arată Selector culoare"
 
-#: ../src/keybindings.c:995
+#: ../src/keybindings.c:998
 msgid "Keyboard Shortcuts"
 msgstr "Scurtături"
 
-#: ../src/keybindings.c:1007
+#: ../src/keybindings.c:1010
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Următoarele scurtături sunt configurabile:"
 
@@ -4136,30 +4141,30 @@ msgstr "Mesaje depanare"
 msgid "Cl_ear"
 msgstr "_Căutare"
 
-#: ../src/msgwindow.c:217
+#: ../src/msgwindow.c:219
 msgid "Status messages"
 msgstr "Mesaje de stare"
 
-#: ../src/msgwindow.c:616
+#: ../src/msgwindow.c:673
 #, fuzzy
 msgid "C_opy"
 msgstr "Copiază"
 
-#: ../src/msgwindow.c:625
+#: ../src/msgwindow.c:682
 #, fuzzy
 msgid "Copy _All"
 msgstr "Înc_hide toate"
 
-#: ../src/msgwindow.c:655
+#: ../src/msgwindow.c:712
 msgid "_Hide Message Window"
 msgstr "_Ascunde fereastra de mesaje"
 
-#: ../src/msgwindow.c:716
+#: ../src/msgwindow.c:773
 #, fuzzy, c-format
 msgid "Could not find file '%s' - trying the current document path."
 msgstr "Șterge toți indicatorii de eroare din documentul curent."
 
-#: ../src/msgwindow.c:1152
+#: ../src/msgwindow.c:1209
 msgid "The document has been closed."
 msgstr ""
 
@@ -4219,15 +4224,15 @@ msgstr "Activ"
 msgid "Plugin"
 msgstr "Modul"
 
-#: ../src/plugins.c:1933
+#: ../src/plugins.c:1936
 msgid "Plugins"
 msgstr "Module"
 
-#: ../src/plugins.c:1974
+#: ../src/plugins.c:1977
 msgid "Choose which plugins should be loaded at startup:"
 msgstr ""
 
-#: ../src/plugins.c:2067
+#: ../src/plugins.c:2070
 #, c-format
 msgid ""
 "Proxy plugin '%s' extension '%s' starts with a dot. Please fix your proxy "
@@ -4407,6 +4412,11 @@ msgstr "Proiect nou"
 msgid "C_reate"
 msgstr "C_rează"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Nume:"
+
 #: ../src/project.c:176
 #, fuzzy
 msgid "Project name"
@@ -4418,6 +4428,10 @@ msgid ""
 "Path of the file representing the project and storing its settings. It "
 "should normally have the \"%s\" extension."
 msgstr ""
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "Cale de bază:"
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
@@ -4549,9 +4563,9 @@ msgstr ""
 #: ../src/search.c:330
 msgid ""
 "Perform regular expression matching on the whole buffer at once rather than "
-"line by line, allowing matches to span multiple lines. In this mode, "
-"newline characters are part of the input and can be captured as normal "
-"characters by the pattern."
+"line by line, allowing matches to span multiple lines. In this mode, newline "
+"characters are part of the input and can be captured as normal characters by "
+"the pattern."
 msgstr ""
 
 #: ../src/search.c:343
@@ -4774,30 +4788,30 @@ msgid ""
 "This is a fatal error and Geany will now quit."
 msgstr ""
 
-#: ../src/spawn.c:94 ../src/spawn.c:144 ../src/spawn.c:188
+#: ../src/spawn.c:96 ../src/spawn.c:146 ../src/spawn.c:190
 msgid "Text ended before matching quote was found"
 msgstr ""
 
 #. TL note: from glib
-#: ../src/spawn.c:130
+#: ../src/spawn.c:132
 msgid "Text was empty (or contained only whitespace)"
 msgstr ""
 
-#: ../src/spawn.c:151 ../src/spawn.c:165
+#: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
 
-#: ../src/spawn.c:258
+#: ../src/spawn.c:260
 #, fuzzy
 msgid "Program not found"
 msgstr "\"%s\" nu a fost găsit."
 
-#: ../src/spawn.c:764
+#: ../src/spawn.c:766
 #, fuzzy
 msgid "Failed to change to the working directory"
 msgstr "Nu am putut schimba dosarul de lucru în \"%s\""
 
-#: ../src/spawn.c:769
+#: ../src/spawn.c:771
 msgid "Unknown error executing child process"
 msgstr ""
 
@@ -5986,18 +6000,18 @@ msgstr "Documentul a fost exportat cu succes ca '%s'."
 msgid "File '%s' could not be written (%s)."
 msgstr "Fișierul '%s' nu a putut fi scris (%s)."
 
-#: ../plugins/export.c:749
+#: ../plugins/export.c:747
 msgid "_Export"
 msgstr "_Exportă"
 
 #. HTML
-#: ../plugins/export.c:756
+#: ../plugins/export.c:754
 #, fuzzy
 msgid "As _HTML..."
 msgstr "Ca _HTML"
 
 #. LaTeX
-#: ../plugins/export.c:762
+#: ../plugins/export.c:760
 #, fuzzy
 msgid "As _LaTeX..."
 msgstr "Ca _LaTeX"
