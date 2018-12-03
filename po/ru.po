@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-24 22:17+0200\n"
+"POT-Creation-Date: 2018-12-03 00:02+0400\n"
 "PO-Revision-Date: 2018-02-13 02:52+0400\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -749,16 +749,16 @@ msgstr ""
 "<i>Проект->Использовать ширину отступа по умолчанию</i>."
 
 #: ../data/geany.glade.h:151
-msgid "Width:"
-msgstr "Ширина:"
+msgid "_Width:"
+msgstr "_Ширина:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Ширина в символах для отображения одного отступа"
 
 #: ../data/geany.glade.h:153
-msgid "Auto-indent mode:"
-msgstr "Тип авто-отступа:"
+msgid "Auto-indent _mode:"
+msgstr "Тип _авто-отступа:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -812,8 +812,8 @@ msgid "Type:"
 msgstr "Тип:"
 
 #: ../data/geany.glade.h:165
-msgid "Tab key indents"
-msgstr "Отступ при помощи клавиши Tab"
+msgid "Tab _key indents"
+msgstr "Отступ при помощи _клавиши Tab"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -2133,22 +2133,21 @@ msgstr "Свойства проекта"
 msgid "Filename:"
 msgstr "Имя файла:"
 
-#: ../data/geany.glade.h:465 ../src/project.c:169 ../plugins/classbuilder.c:467
-#: ../plugins/classbuilder.c:477
-msgid "Name:"
-msgstr "Имя:"
+#: ../data/geany.glade.h:465
+msgid "_Name:"
+msgstr "_Имя:"
 
 #: ../data/geany.glade.h:466
-msgid "Description:"
-msgstr "Описание:"
+msgid "_Description:"
+msgstr "Описани_е:"
 
-#: ../data/geany.glade.h:467 ../src/project.c:202
-msgid "Base path:"
-msgstr "Путь к каталогу:"
+#: ../data/geany.glade.h:467
+msgid "_Base path:"
+msgstr "_Путь к каталогу:"
 
 #: ../data/geany.glade.h:468
-msgid "File patterns:"
-msgstr "Шаблоны файлов:"
+msgid "File _patterns:"
+msgstr "_Шаблоны файлов:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -4241,6 +4240,11 @@ msgstr "Новый проект"
 msgid "C_reate"
 msgstr "С_оздать"
 
+#: ../src/project.c:169 ../plugins/classbuilder.c:467
+#: ../plugins/classbuilder.c:477
+msgid "Name:"
+msgstr "Имя:"
+
 #: ../src/project.c:176
 msgid "Project name"
 msgstr "Название проекта"
@@ -4253,6 +4257,10 @@ msgid ""
 msgstr ""
 "Путь до файла, в котором хранится проект и его параметры. Обычно он имеет "
 "расширение \"%s\"."
+
+#: ../src/project.c:202
+msgid "Base path:"
+msgstr "Путь к каталогу:"
 
 #: ../src/project.c:212 ../src/project.c:486
 msgid "Choose Project Base Path"
