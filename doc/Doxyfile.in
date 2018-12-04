@@ -262,6 +262,8 @@ ALIASES               += "optional=\noop \xmlonly <simplesect kind=\"geany:optio
 ALIASES               += "cb=\noop \xmlonly <simplesect kind=\"geany:scope\">notified</simplesect>\endxmlonly"
 ALIASES               += "cbdata=\noop \xmlonly <simplesect kind=\"geany:closure\"></simplesect>\endxmlonly"
 ALIASES               += "cbfree=\noop \xmlonly <simplesect kind=\"geany:destroy\"></simplesect>\endxmlonly"
+ALIASES               += "array=\noop \xmlonly <simplesect kind=\"geany:array\"></simplesect>\endxmlonly"
+ALIASES               += "array{1}=\noop \xmlonly <simplesect kind=\"geany:array\">\1</simplesect>\endxmlonly"
 
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
