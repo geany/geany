@@ -5136,7 +5136,7 @@
                                   <object class="GtkEntry" id="entry_template_mail">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property name="tooltip_text" translatable="yes">email address of the developer</property>
+                                    <property name="tooltip_text" translatable="yes">Email address of the developer</property>
                                     <property name="primary_icon_activatable">False</property>
                                     <property name="secondary_icon_activatable">False</property>
                                     <property name="primary_icon_sensitive">True</property>
