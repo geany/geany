@@ -9,9 +9,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.33\n"
+"Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 21:05+0100\n"
+"POT-Creation-Date: 2018-12-05 17:19+0100\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -112,11 +112,11 @@ msgstr "_Suchen"
 msgid "Open Selected F_ile"
 msgstr "_Markierte Datei öffnen"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2596
+#: ../data/geany.glade.h:19 ../src/symbols.c:2605
 msgid "Find _Usage"
 msgstr "A_uftreten finden"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2601
+#: ../data/geany.glade.h:20 ../src/symbols.c:2610
 msgid "Find _Document Usage"
 msgstr "_Auftreten im Dokument finden"
 
@@ -764,18 +764,16 @@ msgstr ""
 "bitte nutzen Sie <i>Projekt->Standardeinrückung anwenden</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Breite:"
+msgstr "_Breite:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Die Breite einer Einrückung in Zeichen"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Modus für automatische Einrückung:"
+msgstr "_Modus für automatische Einrückung:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -834,9 +832,8 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Einrücken mit der Tabulatortaste"
+msgstr "Einrüc_ken mit der Tabulatortaste"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -1351,7 +1348,7 @@ msgid "Tools"
 msgstr "Werkzeuge"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "E-Mailadresse des Entwicklers"
 
 #: ../data/geany.glade.h:274
@@ -1835,7 +1832,7 @@ msgstr "_Nächstes"
 msgid "Find _Previous"
 msgstr "_Vorheriges"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2606
+#: ../data/geany.glade.h:381 ../src/symbols.c:2615
 msgid "Find in F_iles..."
 msgstr "In _Dateien suchen..."
 
@@ -2173,24 +2170,20 @@ msgid "Filename:"
 msgstr "Dateiname:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Name:"
+msgstr "_Name:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Beschreibung:"
+msgstr "_Beschreibung:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Basisverzeichnis:"
+msgstr "_Basisverzeichnis:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Dateinamenmuster:"
+msgstr "_Dateinamenmuster:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2764,7 +2757,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
+#: ../src/symbols.c:2419 ../src/symbols.c:2435 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "unbekannt"
 
@@ -4150,11 +4143,11 @@ msgstr "Tasten festlegen"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Welche Tastenkombination soll für »%s« genutzt werden?"
 
-#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2573 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "Alle a_usklappen"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2578 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "Alle _einklappen"
 
@@ -5073,32 +5066,32 @@ msgid "Could not load tags file '%s'."
 msgstr "Konnte Tag-Datei »%s« nicht laden."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1949
+#: ../src/symbols.c:1957
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1952
+#: ../src/symbols.c:1960
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2170
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "(Vorwärts-)Deklaration von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2172
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definition von »%s« nicht gefunden."
 
-#: ../src/symbols.c:2579
+#: ../src/symbols.c:2588
 msgid "Sort by _Name"
 msgstr "Nach _Namen sortieren"
 
-#: ../src/symbols.c:2586
+#: ../src/symbols.c:2595
 msgid "Sort by _Appearance"
 msgstr "Nach _Auftreten sortieren"
 
