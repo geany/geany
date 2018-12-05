@@ -4,10 +4,10 @@
 # scootergrisen, 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: geany master\n"
+"Project-Id-Version: geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-08-19 15:00+0200\n"
+"POT-Creation-Date: 2018-12-04 02:36+0000\n"
+"PO-Revision-Date: 2018-12-04 22:46+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -54,7 +54,7 @@ msgstr "_Indsæt"
 
 #: ../data/geany.glade.h:6
 msgid "Insert _ChangeLog Entry"
-msgstr "Indsæt _ChangeLog-post"
+msgstr "Indsæt _ændringslogpost"
 
 #: ../data/geany.glade.h:7
 msgid "Insert _Function Description"
@@ -203,7 +203,7 @@ msgstr "Gemmer vinduets størrelse og gendanner den ved opstart"
 
 #: ../data/geany.glade.h:40
 msgid "Save window position"
-msgstr "Gem vindues placering"
+msgstr "Gem vinduets placering"
 
 #: ../data/geany.glade.h:41
 msgid "Saves the window position and restores it at the start"
@@ -739,18 +739,16 @@ msgstr ""
 "indstillingerne på alle nuværende åbne dokumenter."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Bredde:"
+msgstr "_Bredde:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Bredden i tegn på én indrykning"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Tilstand for automatisk indrykning:"
+msgstr "_Tilstand for automatisk indrykning:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -805,9 +803,8 @@ msgid "Type:"
 msgstr "Type:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Indrykning med tabulatortast"
+msgstr "Indrykninger med _tabulatortast"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -1063,7 +1060,7 @@ msgid ""
 "greater than 0 to specify the column where it should appear."
 msgstr ""
 "Markøren til lang linje er en tynd lodret linje i editoren, den hjælper med "
-"at mærke lange linjer, eller som et hint til at bryde linjen. Sæt værdien "
+"at mærke lange linjer, eller som et hint til at bryde linjen. Indstil værdien "
 "til en værdi større end 0 for at angive kolonnen hvor den skal vises."
 
 #: ../data/geany.glade.h:221
@@ -1948,27 +1945,27 @@ msgstr "Skriv _unicode-BOM"
 
 #: ../data/geany.glade.h:423
 msgid "Set File_type"
-msgstr "Sæt _filtype"
+msgstr "Indstil _filtype"
 
 #: ../data/geany.glade.h:424
 msgid "Set _Encoding"
-msgstr "Sæt _kodning"
+msgstr "Indstil _kodning"
 
 #: ../data/geany.glade.h:425
 msgid "Set Line E_ndings"
-msgstr "Sæt _linjeskift"
+msgstr "Indstil _linjeskift"
 
 #: ../data/geany.glade.h:426
 msgid "Convert and Set to _CR/LF (Windows)"
-msgstr "Konvertér og sæt til _CR/LF (Windows)"
+msgstr "Konvertér og indstil til _CR/LF (Windows)"
 
 #: ../data/geany.glade.h:427
 msgid "Convert and Set to _LF (Unix)"
-msgstr "Konvertér og sæt til _LF (Unix)"
+msgstr "Konvertér og indstil til _LF (Unix)"
 
 #: ../data/geany.glade.h:428
 msgid "Convert and Set to CR (Classic _Mac)"
-msgstr "Konvertér og sæt til CR (klassisk _Mac)"
+msgstr "Konvertér og indstil til CR (klassisk _Mac)"
 
 #: ../data/geany.glade.h:429 ../src/keybindings.c:668
 msgid "_Clone"
@@ -2116,24 +2113,20 @@ msgid "Filename:"
 msgstr "Filnavn:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Navn:"
+msgstr "_Navn:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Beskrivelse:"
+msgstr "_Beskrivelse:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Grundsti:"
+msgstr "_Grundsti:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Filmønstre:"
+msgstr "_Filmønstre:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2392,7 +2385,7 @@ msgstr "_Forrige fejl"
 #. arguments
 #: ../src/build.c:1312 ../src/build.c:2720
 msgid "_Set Build Commands"
-msgstr "_Sæt byggekommandoer"
+msgstr "_Indstil byggekommandoer"
 
 #: ../src/build.c:1587 ../src/toolbar.c:376
 msgid "Build the current file"
@@ -2421,7 +2414,7 @@ msgstr "Ikke flere byggefejl."
 
 #: ../src/build.c:1760 ../src/build.c:1762
 msgid "Set menu item label"
-msgstr "Sæt menupunktets etiket"
+msgstr "Indstil menupunktets etiket"
 
 #: ../src/build.c:1787 ../src/symbols.c:522 ../src/tools.c:397
 msgid "Label"
@@ -2479,7 +2472,7 @@ msgstr ""
 
 #: ../src/build.c:2181
 msgid "Set Build Commands"
-msgstr "Sæt byggekommandoer"
+msgstr "Indstil byggekommandoer"
 
 #: ../src/build.c:2396
 msgid "_Compile"
@@ -2526,7 +2519,7 @@ msgstr "Indtast linjen du vil gå til:"
 #: ../src/callbacks.c:1002 ../src/callbacks.c:1028
 msgid ""
 "Please set the filetype for the current file before using this function."
-msgstr "Sæt venligst filtypen for den nuværende fil inden funktionen bruges."
+msgstr "Indstil venligst filtypen for den nuværende fil inden funktionen bruges."
 
 #: ../src/callbacks.c:1318 ../src/callbacks.c:1326
 msgid "No more message items."
@@ -2559,7 +2552,7 @@ msgstr "Ingen konteksthandling sat."
 #: ../src/document.c:2375
 #, c-format
 msgid "\"%s\" was not found."
-msgstr "Fandt ikke \"%s\"."
+msgstr "\"%s\" blev ikke fundet."
 
 #. auto-detect
 #: ../src/dialogs.c:223 ../src/encodings.c:531
@@ -2589,7 +2582,7 @@ msgstr "Vis _skjulte filer"
 
 #: ../src/dialogs.c:326
 msgid "Set encoding:"
-msgstr "Sæt kodning:"
+msgstr "Indstil kodning:"
 
 #: ../src/dialogs.c:335
 msgid ""
@@ -2608,7 +2601,7 @@ msgstr ""
 #. line 2 with filetype combo
 #: ../src/dialogs.c:342
 msgid "Set filetype:"
-msgstr "Sæt filtype:"
+msgstr "Indstil filtype:"
 
 #: ../src/dialogs.c:351
 msgid ""
@@ -3772,7 +3765,7 @@ msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Sæt indledende kolonnenummer til KOLONNE til filen som åbnes først (nyttig "
+"Indstil indledende kolonnenummer til KOLONNE til filen som åbnes først (nyttig "
 "sammen med --line)"
 
 #: ../src/libmain.c:122
@@ -3819,7 +3812,7 @@ msgstr "Returner en liste over åbne dokumenter i en kørende Geany-instans"
 
 #: ../src/libmain.c:132
 msgid "Set initial line number to LINE for the first opened file"
-msgstr "Sæt indledende linjenummer til LINJE for filen som åbnes først"
+msgstr "Indstil indledende linjenummer til LINJE for filen som åbnes først"
 
 #: ../src/libmain.c:132
 msgid "LINE"
@@ -4108,7 +4101,7 @@ msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
-"Sæt informationen som bruges i skabeloner. Se dokumentationen for detaljer."
+"Indstil informationen som bruges i skabeloner. Se dokumentationen for detaljer."
 
 #. page Keybindings
 #: ../src/prefs.c:1708
@@ -4169,7 +4162,7 @@ msgstr "Udskrivning af %s mislykkedes (%s)."
 
 #: ../src/printing.c:592
 msgid "Please set a print command in the preferences dialog first."
-msgstr "Sæt venligst først en udskrivningskommando i præferencer-dialogen."
+msgstr "Indstil venligst først en udskrivningskommando i præferencer-dialogen."
 
 #: ../src/printing.c:600
 #, c-format
@@ -4988,12 +4981,12 @@ msgstr "%s: %lu"
 #: ../src/symbols.c:2161
 #, c-format
 msgid "Forward declaration \"%s\" not found."
-msgstr "Fandt ikke forward-deklarationen \"%s\"."
+msgstr "Forward-deklarationen \"%s\" blev ikke fundet."
 
 #: ../src/symbols.c:2163
 #, c-format
 msgid "Definition of \"%s\" not found."
-msgstr "Fandt ikke definitionen af \"%s\"."
+msgstr "Definitionen af \"%s\" blev ikke fundet."
 
 #: ../src/symbols.c:2579
 msgid "Sort by _Name"
@@ -5204,7 +5197,7 @@ msgstr ""
 
 #: ../src/tools.c:357 ../src/tools.c:626
 msgid "Set Custom Commands"
-msgstr "Sæt brugerdefinerede kommandoer"
+msgstr "Indstil brugerdefinerede kommandoer"
 
 #: ../src/tools.c:365
 msgid ""
@@ -5395,7 +5388,7 @@ msgstr "Datoformatstreng kunne ikke konverteres (muligvis for lang)."
 
 #: ../src/ui_utils.c:828
 msgid "_Set Custom Date Format"
-msgstr "_Sæt brugerdefineret datoformat"
+msgstr "_Indstil brugerdefineret datoformat"
 
 #: ../src/ui_utils.c:2016
 msgid "Select Folder"
@@ -5464,7 +5457,7 @@ msgstr "ugyldigt VTE-bibliotek \"%s\": manglende symbol \"%s\""
 
 #: ../src/vte.c:766
 msgid "_Set Path From Document"
-msgstr "_Sæt sti fra dokument"
+msgstr "_Indstil sti fra dokument"
 
 #: ../src/vte.c:771
 msgid "_Restart Terminal"
@@ -5679,7 +5672,7 @@ msgstr "HTML (navn)"
 
 #: ../plugins/htmlchars.c:738
 msgid "_Insert Special HTML Characters..."
-msgstr "_Indsæt special-HTML-tegn..."
+msgstr "_Indsæt specielle HTML-tegn..."
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:753
@@ -5803,7 +5796,7 @@ msgstr "Hjem"
 
 #: ../plugins/filebrowser.c:934
 msgid "Set path from document"
-msgstr "Sæt sti fra dokument"
+msgstr "Indstil sti fra dokument"
 
 #: ../plugins/filebrowser.c:948
 msgid "Filter:"
@@ -5876,18 +5869,18 @@ msgstr ""
 #: ../plugins/saveactions.c:175
 #, c-format
 msgid "Backup Copy: Directory could not be created (%s)."
-msgstr "Sikkerhedskopi: Mappen kunne ikke oprettes (%s)."
+msgstr "Sikkerhedskopiering: Mappen kunne ikke oprettes (%s)."
 
 #. it's unlikely that this happens
 #: ../plugins/saveactions.c:209
 #, c-format
 msgid "Backup Copy: File could not be read (%s)."
-msgstr "Sikkerhedskopi: Filen kunne ikke læses (%s)."
+msgstr "Sikkerhedskopiering: Filen kunne ikke læses (%s)."
 
 #: ../plugins/saveactions.c:234
 #, c-format
 msgid "Backup Copy: File could not be saved (%s)."
-msgstr "Sikkerhedskopi: Filen kunne ikke gemmes (%s)."
+msgstr "Sikkerhedskopiering: Filen kunne ikke gemmes (%s)."
 
 #: ../plugins/saveactions.c:371
 #, c-format
@@ -5949,7 +5942,7 @@ msgstr "_Filtype som skal bruges til nyligt åbnede filer:"
 
 #: ../plugins/saveactions.c:720
 msgid "Backup Copy"
-msgstr "Sikkerhedskopi"
+msgstr "Sikkerhedskopiering"
 
 #: ../plugins/saveactions.c:730
 msgid "_Directory to save backup files in:"
