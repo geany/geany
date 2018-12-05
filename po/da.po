@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-04 02:36+0000\n"
+"POT-Creation-Date: 2018-12-05 17:19+0100\n"
 "PO-Revision-Date: 2018-12-04 22:46+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
@@ -104,11 +104,11 @@ msgstr "_Søg"
 msgid "Open Selected F_ile"
 msgstr "Åbn _valgte fil"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2596
+#: ../data/geany.glade.h:19 ../src/symbols.c:2605
 msgid "Find _Usage"
 msgstr "Find _anvendelse"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2601
+#: ../data/geany.glade.h:20 ../src/symbols.c:2610
 msgid "Find _Document Usage"
 msgstr "Find _dokumentanvendelse"
 
@@ -1060,8 +1060,8 @@ msgid ""
 "greater than 0 to specify the column where it should appear."
 msgstr ""
 "Markøren til lang linje er en tynd lodret linje i editoren, den hjælper med "
-"at mærke lange linjer, eller som et hint til at bryde linjen. Indstil værdien "
-"til en værdi større end 0 for at angive kolonnen hvor den skal vises."
+"at mærke lange linjer, eller som et hint til at bryde linjen. Indstil "
+"værdien til en værdi større end 0 for at angive kolonnen hvor den skal vises."
 
 #: ../data/geany.glade.h:221
 msgid "Line"
@@ -1305,7 +1305,7 @@ msgid "Tools"
 msgstr "Værktøjer"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "Udviklerens e-mailadresse"
 
 #: ../data/geany.glade.h:274
@@ -1775,7 +1775,7 @@ msgstr "Find _næste"
 msgid "Find _Previous"
 msgstr "Find f_orrige"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2606
+#: ../data/geany.glade.h:381 ../src/symbols.c:2615
 msgid "Find in F_iles..."
 msgstr "Find i f_iler..."
 
@@ -2519,7 +2519,8 @@ msgstr "Indtast linjen du vil gå til:"
 #: ../src/callbacks.c:1002 ../src/callbacks.c:1028
 msgid ""
 "Please set the filetype for the current file before using this function."
-msgstr "Indstil venligst filtypen for den nuværende fil inden funktionen bruges."
+msgstr ""
+"Indstil venligst filtypen for den nuværende fil inden funktionen bruges."
 
 #: ../src/callbacks.c:1318 ../src/callbacks.c:1326
 msgid "No more message items."
@@ -2695,7 +2696,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
+#: ../src/symbols.c:2419 ../src/symbols.c:2435 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "ukendt"
 
@@ -3765,8 +3766,8 @@ msgid ""
 "Set initial column number to COLUMN for the first opened file (useful in "
 "conjunction with --line)"
 msgstr ""
-"Indstil indledende kolonnenummer til KOLONNE til filen som åbnes først (nyttig "
-"sammen med --line)"
+"Indstil indledende kolonnenummer til KOLONNE til filen som åbnes først "
+"(nyttig sammen med --line)"
 
 #: ../src/libmain.c:122
 msgid "COLUMN"
@@ -4054,11 +4055,11 @@ msgstr "Indfang tast"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Tryk kombinationen af taster som du vil bruge til \"%s\"."
 
-#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2573 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "_Udfold alle"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2578 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_Sammenfold alle"
 
@@ -4101,7 +4102,8 @@ msgid ""
 "Set the information to be used in templates. See the documentation for "
 "details."
 msgstr ""
-"Indstil informationen som bruges i skabeloner. Se dokumentationen for detaljer."
+"Indstil informationen som bruges i skabeloner. Se dokumentationen for "
+"detaljer."
 
 #. page Keybindings
 #: ../src/prefs.c:1708
@@ -4967,32 +4969,32 @@ msgid "Could not load tags file '%s'."
 msgstr "Kunne ikke indlæse tags-filen '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1949
+#: ../src/symbols.c:1957
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1952
+#: ../src/symbols.c:1960
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2170
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Forward-deklarationen \"%s\" blev ikke fundet."
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2172
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitionen af \"%s\" blev ikke fundet."
 
-#: ../src/symbols.c:2579
+#: ../src/symbols.c:2588
 msgid "Sort by _Name"
 msgstr "Sortér efter _navn"
 
-#: ../src/symbols.c:2586
+#: ../src/symbols.c:2595
 msgid "Sort by _Appearance"
 msgstr "Sortér efter _udseende"
 
