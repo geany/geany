@@ -6,10 +6,10 @@
 # Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.33\n"
+"Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-02-14 11:04+0100\n"
+"POT-Creation-Date: 2018-12-05 17:19+0100\n"
+"PO-Revision-Date: 2018-12-05 15:34+0100\n"
 "Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -107,11 +107,11 @@ msgstr "_Buscar"
 msgid "Open Selected F_ile"
 msgstr "Abrir archivo selecc_ionado"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2596
+#: ../data/geany.glade.h:19 ../src/symbols.c:2605
 msgid "Find _Usage"
 msgstr "Encontrar _uso"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2601
+#: ../data/geany.glade.h:20 ../src/symbols.c:2610
 msgid "Find _Document Usage"
 msgstr "Encontrar _uso del documento"
 
@@ -757,18 +757,16 @@ msgstr ""
 "estos ajustes a todos los documentos abiertos actualmente."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Ancho:"
+msgstr "_Ancho:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "El ancho en caracteres que ocupará una tabulación"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Modo de sangría automática:"
+msgstr "_Modo de sangría automática:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -826,9 +824,8 @@ msgid "Type:"
 msgstr "Tipo:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Usar la tecla Tabulador para realizar la sangría"
+msgstr "_Sangrar con Tab"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -1343,8 +1340,8 @@ msgid "Tools"
 msgstr "Herramientas"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "dirección de correo electrónico del desarrollador"
+msgid "Email address of the developer"
+msgstr "Email del desarrollador"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
@@ -1827,7 +1824,7 @@ msgstr "Buscar _siguiente"
 msgid "Find _Previous"
 msgstr "Buscar _anterior"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2606
+#: ../data/geany.glade.h:381 ../src/symbols.c:2615
 msgid "Find in F_iles..."
 msgstr "Buscar en arch_ivos..."
 
@@ -2166,24 +2163,20 @@ msgid "Filename:"
 msgstr "Nombre de archivo:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Nombre:"
+msgstr "_Nombre:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Descripción:"
+msgstr "_Descripción:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Ruta base:"
+msgstr "Ruta _base:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Patrones de archivos:"
+msgstr "_Patrones de archivos:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2280,7 +2273,6 @@ msgid "Other:"
 msgstr "Otros:"
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
@@ -2290,7 +2282,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"Copyright (c)  2005-2017\n"
+"Copyright (c)  2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2755,7 +2747,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
+#: ../src/symbols.c:2419 ../src/symbols.c:2435 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "desconocido"
 
@@ -2846,9 +2838,9 @@ msgstr "Archivo %s recargado."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "Archivo %s abierto(%d%s)"
+msgstr "Archivo %s abierto (%d%s)"
 
 #: ../src/document.c:1497
 msgid ", read-only"
@@ -4131,11 +4123,11 @@ msgstr "Capturar tecla"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Pulse la combinación de teclas que desee usar para «%s»."
 
-#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2573 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "_Expandir todo"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2578 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "_Colapsar todo"
 
@@ -5051,32 +5043,32 @@ msgid "Could not load tags file '%s'."
 msgstr "No se ha podido cargar el archivo de etiquetas «%s»."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1949
+#: ../src/symbols.c:1957
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1952
+#: ../src/symbols.c:1960
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2170
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Declaración de «%s» no encontrada"
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2172
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definición de «%s» no encontrada"
 
-#: ../src/symbols.c:2579
+#: ../src/symbols.c:2588
 msgid "Sort by _Name"
 msgstr "Ordenar por _nombre"
 
-#: ../src/symbols.c:2586
+#: ../src/symbols.c:2595
 msgid "Sort by _Appearance"
 msgstr "Ordenar por _aparición"
 
