@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-12-03 22:58+0100\n"
+"PO-Revision-Date: 2018-12-06 22:12+0100\n"
 "Last-Translator: Colomban Wendling <ban@herbesfolles.org>\n"
 "Language-Team: French <geany-i18n@uvena.de>\n"
 "Language: fr\n"
@@ -1362,8 +1362,8 @@ msgid "Tools"
 msgstr "Outils"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "adresse e-mail du développeur"
+msgid "Email address of the developer"
+msgstr "Adresse e-mail du développeur"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
