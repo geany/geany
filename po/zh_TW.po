@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-11-17 21:23+0800\n"
+"PO-Revision-Date: 2018-12-06 10:21+0800\n"
 "Last-Translator: Hsiu-Ming Chang <cges30901@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
 "Language: zh_TW\n"
@@ -717,18 +717,16 @@ msgstr ""
 "i>。"
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "寬度："
+msgstr "寬度(_W)："
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "單一縮排的字元數寬度"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "自動縮排模式："
+msgstr "自動縮排模式(_M)："
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -780,9 +778,8 @@ msgid "Type:"
 msgstr "型態："
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "跳格鍵縮排"
+msgstr "跳格鍵縮排(_K)"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -2058,24 +2055,20 @@ msgid "Filename:"
 msgstr "檔名："
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "名稱："
+msgstr "名稱(_N)："
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "描述："
+msgstr "描述(_D)："
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "基底路徑："
+msgstr "基底路徑(_B)："
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "檔案式樣："
+msgstr "檔案式樣(_P)："
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -3981,7 +3974,7 @@ msgstr "動作"
 
 #: ../src/prefs.c:297
 msgid "Shortcut"
-msgstr "快捷"
+msgstr "快速鍵"
 
 #: ../src/prefs.c:1485
 msgid "_Allow"
@@ -4020,8 +4013,8 @@ msgid ""
 "press the Change button to enter a new shortcut, or double click on an "
 "action to edit the string representation of the shortcut directly."
 msgstr ""
-"在此您可以變更用於各種動作的快速鍵。選取一個並按下變更按鈕以輸入新的快捷鍵，"
-"或於動作上連按兩下滑鼠以直接編輯快捷鍵的字串表示。"
+"在此您可以變更用於各種動作的快速鍵。選取一個並按下變更按鈕以輸入新的快速鍵，"
+"或於動作上連按兩下滑鼠以直接編輯快速鍵的字串表示。"
 
 #. page Editor->Indentation
 #: ../src/prefs.c:1713
