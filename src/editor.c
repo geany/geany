@@ -4936,6 +4936,9 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
 
+	/* rectangular selection modifier for creating rectangular selections with the mouse */
+	SSM(sci, SCI_SETRECTANGULARSELECTIONMODIFIER, SCMOD_CTRL, 0);
+
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
 
