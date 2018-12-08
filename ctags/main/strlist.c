@@ -217,9 +217,9 @@ extern vString* stringListExtensionFinds (
 static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
-	const char* const pattern = vStringValue (vpattern);
 /* GEANY DIFF */
-/*	return (bool) (fnmatch (pattern, fileName, 0) == 0); */
+/*	const char* const pattern = vStringValue (vpattern);
+	return (bool) (fnmatch (pattern, fileName, 0) == 0); */
 	return false;
 /* GEANY DIFF END */
 }

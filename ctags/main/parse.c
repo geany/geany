@@ -57,7 +57,9 @@ typedef struct {
  * FUNCTION PROTOTYPES
  */
 
+#ifndef CTAGS_LIB
 static void addParserPseudoTags (langType language);
+#endif
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
@@ -65,7 +67,9 @@ static void installTagXpathTable (const langType language);
 /*
 *   DATA DEFINITIONS
 */
+#ifndef CTAGS_LIB
 static parserDefinition *CTagsSelfTestParser (void);
+#endif
 static parserDefinitionFunc* BuiltInParsers[] = {
 #ifndef CTAGS_LIB
 	CTagsSelfTestParser,
@@ -2388,6 +2392,7 @@ extern void freeEncodingResources (void)
 }
 #endif
 
+#ifndef CTAGS_LIB
 static void addParserPseudoTags (langType language)
 {
 	if (!LanguageTable[language]->pseudoTagPrinted)
@@ -2398,6 +2403,7 @@ static void addParserPseudoTags (langType language)
 		LanguageTable[language]->pseudoTagPrinted = 1;
 	}
 }
+#endif
 
 extern bool doesParserRequireMemoryStream (const langType language)
 {
@@ -2741,6 +2747,7 @@ extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 	vStringCatS(buffer,szNum);
 }
 
+#ifndef CTAGS_LIB
 /*
  * A parser for CTagsSelfTest (CTST)
  */
@@ -2800,3 +2807,4 @@ static parserDefinition *CTagsSelfTestParser (void)
 	def->invisible = true;
 	return def;
 }
+#endif /* CTAGS_LIB */

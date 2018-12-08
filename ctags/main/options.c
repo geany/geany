@@ -116,6 +116,7 @@ typedef const struct sBooleanOption {
 *   DATA DEFINITIONS
 */
 
+#ifndef CTAGS_LIB
 static bool NonOptionEncountered = false;
 static stringList *OptionFiles;
 
@@ -131,6 +132,7 @@ static bool SkipConfiguration;
 static const char *const HeaderExtensions [] = {
 	"h", "H", "hh", "hpp", "hxx", "h++", "inc", "def", NULL
 };
+#endif
 
 optionValues Option = {
 	NULL,       /* -I */
@@ -184,8 +186,10 @@ optionValues Option = {
 #endif
 };
 
+#ifndef CTAGS_LIB
 static OptionLoadingStage Stage = OptionLoadingStageNone;
 #define STAGE_ANY ~0UL
+#endif
 
 /* GEANY DIFF */
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.

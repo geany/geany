@@ -84,13 +84,17 @@
 *   DATA DEFINITIONS
 */
 static struct { long files, lines, bytes; } Totals = { 0, 0, 0 };
+#ifndef CTAGS_LIB
 static mainLoopFunc mainLoop;
 static void *mainData;
+#endif
 
 /*
 *   FUNCTION PROTOTYPES
 */
+#ifndef CTAGS_LIB
 static bool createTagsForEntry (const char *const entryName);
+#endif
 
 /*
 *   FUNCTION DEFINITIONS
