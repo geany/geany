@@ -52,7 +52,17 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([ftruncate fgetpos fnmatch mkstemp strerror strstr])
+AC_CHECK_FUNCS([fgetpos fnmatch mkstemp strerror strstr])
+
+# Function checks for u-ctags
+AC_CHECK_FUNCS([strcasecmp stricmp], [break])
+AC_CHECK_FUNCS([strncasecmp strnicmp], [break])
+AC_CHECK_FUNCS([truncate ftruncate chsize], [break])
+# non-functions checks for u-ctags.  Not that we really need those as we don't
+# use u-ctags's main, but the corresponding macros have to be defined to
+# something, so simply perform the actual checks.
+AC_CHECK_DECLS([__environ],,,[[#include <unistd.h>]])
+AC_CHECK_DECLS([_NSGetEnviron],,,[[#include <crt_externs.h>]])
 
 # autoscan end
 
