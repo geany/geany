@@ -125,8 +125,6 @@ static struct corkInfo makeFunctionTag (vString *const function,
 {
 	tagEntryInfo tag;
 	int corkIndex;
-	int fqCorkIndex = CORK_NIL;
-	const struct corkInfo nilInfo = {CORK_NIL};
 	struct corkInfo info;
 
 	if (vStringLength (parent) > 0)
