@@ -1410,6 +1410,11 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 				style == SCE_C_REGEX ||
 				style == SCE_C_HASHQUOTEDSTRING ||
 				style == SCE_C_ESCAPESEQUENCE);
+		case SCLEX_LATEX:
+			return (style == SCE_L_DEFAULT ||
+				style == SCE_L_MATH ||
+				style == SCE_L_MATH2 ||
+				style == SCE_L_VERBATIM);
 
 		case SCLEX_PASCAL:
 			return (style == SCE_PAS_CHARACTER ||
@@ -1612,7 +1617,6 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 
 		case SCLEX_BATCH:
 		case SCLEX_DIFF:
-		case SCLEX_LATEX:
 		case SCLEX_MAKEFILE:
 		case SCLEX_MARKDOWN:
 		case SCLEX_PROPERTIES:

@@ -60,14 +60,15 @@ static int getWord(const char * ref, const char **ptr)
 	while ((*ref != '\0') && (*p != '\0') && (*ref == *p))
 		ref++, p++;
 
-
 	if (*ref)
 		return false;
+
 
 	if (*p == '*') /* to allow something like \section*{foobar} */
 		p++;
 
 	*ptr = p;
+
 	return true;
 }
 
@@ -148,9 +149,10 @@ static void findTeXTags(void)
 				if (getWord("newcommand", &cp)
 					|| getWord("providecommand", &cp)
 					|| getWord("renewcommand", &cp)
+					|| getWord("newlength", &cp)
 					)
 				{
-					createTag (TEX_BRACES|TEX_BSLASH, K_COMMAND, cp);
+					createTag (TEX_BSLASH | TEX_BRACES, K_COMMAND, cp);
 					continue;
 				}
 
@@ -164,7 +166,8 @@ static void findTeXTags(void)
 				}
 
 				/* \def\command */
-				else if (getWord("def", &cp))
+				else if (getWord("def", &cp)
+					|| getWord("let", &cp))
 				{
 					createTag(TEX_BSLASH, K_COMMAND, cp);
 					continue;
@@ -172,6 +175,7 @@ static void findTeXTags(void)
 
 				/* \newenvironment{name} */
 				else if ( getWord("newenvironment", &cp)
+					|| getWord("renewenvironment", &cp)
 					|| getWord("newtheorem", &cp)
 					|| getWord("begin", &cp)
 					)
