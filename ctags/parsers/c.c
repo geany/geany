@@ -584,19 +584,6 @@ void printStatement(const statementInfo *const statement)
 }
 #endif
 
-extern bool includingDefineTags (void)
-{
-	if (isInputLanguage(Lang_c) ||
-		isInputLanguage(Lang_cpp) ||
-		isInputLanguage(Lang_csharp) ||
-		isInputLanguage(Lang_ferite) ||
-		isInputLanguage(Lang_glsl) ||
-		isInputLanguage(Lang_vala))
-		return CKinds [CK_DEFINE].enabled;
-
-	return false;
-}
-
 /*
 *   Token management
 */
