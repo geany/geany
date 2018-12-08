@@ -2498,7 +2498,7 @@ extern void useXcmdMethod (const langType language)
 	lang->method |= METHOD_XCMD;
 }
 
-extern void useXpathMethod (const langType language)
+static void useXpathMethod (const langType language)
 {
 	parserDefinition* lang;
 

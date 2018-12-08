@@ -969,7 +969,7 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 	copyParserFields (tag, slot);
 }
 
-extern void clearParserFields (tagEntryInfo *const tag)
+static void clearParserFields (tagEntryInfo *const tag)
 {
 	unsigned int i;
 	const char* value;
