@@ -643,12 +643,11 @@ static int skipToEndOfCxxRawLiteralString (void)
 
 /*  Skips to the end of the three (possibly four) 'c' sequence, returning a
  *  special character to symbolically represent a generic character.
- *  Also detects Vera numbers that include a base specifier (ie. 'b1010).
  */
 static int skipToEndOfChar (void)
 {
 	int c;
-	int count = 0, veraBase = '\0';
+	int count = 0;
 
 	while ((c = getcAndCollect ()) != EOF)
 	{
