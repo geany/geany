@@ -34,6 +34,7 @@ Makefile.in
 /depcomp
 /geany.1
 /geany.desktop
+/org.geany.Geany.appdata.xml
 /geany.glade.bak
 /geany.gladep.bak
 /geany.pc
