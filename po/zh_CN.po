@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Xhacker Liu <liu.dongyuan@gmail.com>, 2009-2018.
+# Dongyuan Liu <liu.dongyuan@gmail.com>, 2009-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-02-17 21:56+0800\n"
-"Last-Translator: Xhacker Liu <liu.dongyuan@gmail.com>\n"
+"PO-Revision-Date: 2018-12-09 17:43+0800\n"
+"Last-Translator: Dongyuan Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -375,8 +375,8 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"选用这个选项后，创建一个新项目时，缺省的项目文件会保存在项目文件的根目录。当"
-"然你仍可以在新建项目对话框中改变项目文件的保存目录"
+"启用这个选项后，创建一个新项目时，项目文件会默认保存在项目的根目录。你仍然可"
+"以在新建项目对话框中改变项目文件的保存目录。"
 
 #: ../data/geany.glade.h:76
 msgid "<b>Projects</b>"
@@ -712,18 +712,16 @@ msgstr ""
 "注意：如需将这些设置应用到所有打开的文档，使用 <i>项目 -> 使用默认缩进</i>。"
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "宽度："
+msgstr "宽度(_W)："
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "一个缩进的宽度"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "自动缩进模式："
+msgstr "自动缩进模式(_M)："
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -775,9 +773,8 @@ msgid "Type:"
 msgstr "类型："
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "用 Tab 键缩进"
+msgstr "用 Tab 键缩进(_K)"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -990,7 +987,7 @@ msgstr "当移动到文档的最后一行时停止滚动"
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr "光标上下显示的行数 (_A)："
+msgstr "光标上下显示的行数(_A)："
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -2043,24 +2040,20 @@ msgid "Filename:"
 msgstr "文件名："
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "名称："
+msgstr "名称(_N)："
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "描述："
+msgstr "描述(_D)："
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "根路径："
+msgstr "根路径(_B)："
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "文件通配符："
+msgstr "文件通配符(_P)："
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2154,7 +2147,6 @@ msgid "Other:"
 msgstr "其他："
 
 #: ../src/about.c:48
-#, fuzzy
 msgid ""
 "Copyright (c) 2005-2018\n"
 "Colomban Wendling\n"
@@ -2164,7 +2156,7 @@ msgid ""
 "Frank Lanitz\n"
 "All rights reserved."
 msgstr ""
-"版权所有 (c)  2005-2017\n"
+"版权所有 (c) 2005-2018\n"
 "Colomban Wendling\n"
 "Nick Treleaven\n"
 "Matthew Brush\n"
@@ -2697,7 +2689,7 @@ msgstr "文件 %s 已重新载入。"
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
 msgstr "文件 %s 已打开 (%d%s)。"
 
