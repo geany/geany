@@ -1587,6 +1587,10 @@ gboolean highlighting_is_string_style(gint lexer, gint style)
 		case SCLEX_VERILOG:
 			return (style == SCE_V_STRING);
 
+		case SCLEX_VHDL:
+			return (style == SCE_VHDL_STRING ||
+				style == SCE_VHDL_STRINGEOL);
+
 		case SCLEX_CAML:
 			return (style == SCE_CAML_CHAR ||
 				style == SCE_CAML_STRING);
