@@ -1,14 +1,14 @@
 # Swedish translations for geany package.
-# Copyright (C) 2007 - 2017 THE geany'S COPYRIGHT HOLDER
+# Copyright (C) 2007 - 2018 THE geany'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the geany package.
 #
-# Tony Mattsson <superxorn@gmail.com>, 2007 - 2017
+# Tony Mattsson <superxorn@gmail.com>, 2007 - 2018
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.32\n"
+"Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 21:05+0100\n"
-"PO-Revision-Date: 2018-03-12 09:23+0100\n"
+"POT-Creation-Date: 2018-12-10 02:36+0000\n"
+"PO-Revision-Date: 2018-12-10 15:42+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -107,11 +107,11 @@ msgstr "Sök"
 msgid "Open Selected F_ile"
 msgstr "Öppna vald fil"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2596
+#: ../data/geany.glade.h:19 ../src/symbols.c:2605
 msgid "Find _Usage"
 msgstr "Visa användning"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2601
+#: ../data/geany.glade.h:20 ../src/symbols.c:2610
 msgid "Find _Document Usage"
 msgstr "Visa dokumentets användning"
 
@@ -736,7 +736,6 @@ msgstr ""
 "<i>Projekt->Använd förinställt indrag</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
 msgstr "Bredd:"
 
@@ -745,9 +744,8 @@ msgid "The width in chars of a single indent"
 msgstr "Bredd, i antal tecken, på ett indrag"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Automatiskt indrag:"
+msgstr "Läge för automatiskt indrag:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -805,7 +803,6 @@ msgid "Type:"
 msgstr "Typ:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
 msgstr "Tab-tangentens indrag"
 
@@ -1309,8 +1306,8 @@ msgid "Tools"
 msgstr "Verktyg"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "emailadressen till utvecklaren"
+msgid "Email address of the developer"
+msgstr "Utvecklarens emailadress"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
@@ -1779,7 +1776,7 @@ msgstr "Sök nästa"
 msgid "Find _Previous"
 msgstr "Sök föregående"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2606
+#: ../data/geany.glade.h:381 ../src/symbols.c:2615
 msgid "Find in F_iles..."
 msgstr "Sök i filer..."
 
@@ -2117,24 +2114,20 @@ msgid "Filename:"
 msgstr "Filnamn:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
 msgstr "Namn:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
 msgstr "Beskrivning:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
 msgstr "Bassökväg:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Fil-mönster:"
+msgstr "Filmönster:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2701,7 +2694,7 @@ msgstr ""
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
+#: ../src/symbols.c:2419 ../src/symbols.c:2435 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "okänd"
 
@@ -4060,11 +4053,11 @@ msgstr "Läs av tangent"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "Skriv in den tangentbordskombination du vill använda för  \"%s\"."
 
-#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2573 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "Expandera alla"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2578 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "Stäng alla"
 
@@ -4971,32 +4964,32 @@ msgid "Could not load tags file '%s'."
 msgstr "Kunde inte ladda tagg-filen '%s'."
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1949
+#: ../src/symbols.c:1957
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1952
+#: ../src/symbols.c:1960
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2170
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "Deklarationen \"%s\" kunde inte hittas."
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2172
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "Definitionen av  \"%s\" kan inte hittas."
 
-#: ../src/symbols.c:2579
+#: ../src/symbols.c:2588
 msgid "Sort by _Name"
 msgstr "Sortera efter namn"
 
-#: ../src/symbols.c:2586
+#: ../src/symbols.c:2595
 msgid "Sort by _Appearance"
 msgstr "Sortera efter egenskaper"
 
