@@ -77,6 +77,7 @@ libctags_la_SOURCES = \
 	main/general.h \
 	main/htable.c \
 	main/htable.h \
+	main/inline.h \
 	main/keyword.c \
 	main/keyword.h \
 	main/kind.c \
@@ -121,6 +122,8 @@ libctags_la_SOURCES = \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/trashbox.c \
+	main/trashbox.h \
 	main/types.h \
 	main/vstring.c \
 	main/vstring.h \
