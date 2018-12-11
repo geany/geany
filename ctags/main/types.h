@@ -26,4 +26,8 @@ typedef struct sKindOption kindOption;
 
 struct sParserDefinition;
 typedef struct sParserDefinition parserDefinition;
+
+struct sPtrArray;
+typedef struct sPtrArray ptrArray;
+
 #endif	/* CTAGS_MAIN_TYPES_H */
