@@ -118,7 +118,7 @@ extern parserDefinition* AbaqusParser (void)
 {
 	static const char *const extensions [] = { "inp", NULL };
 	parserDefinition * def = parserNew ("Abaqus");
-	def->kinds      = AbaqusKinds;
+	def->kindTable  = AbaqusKinds;
 	def->kindCount  = ARRAY_SIZE (AbaqusKinds);
 	def->extensions = extensions;
 	def->parser     = findAbaqusTags;

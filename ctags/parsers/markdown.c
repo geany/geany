@@ -93,7 +93,7 @@ extern parserDefinition* MarkdownParser (void)
 	static const char *const extensions [] = { "md", NULL };
 	parserDefinition* const def = parserNew ("Markdown");
 
-	def->kinds = MarkdownKinds;
+	def->kindTable = MarkdownKinds;
 	def->kindCount = ARRAY_SIZE (MarkdownKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

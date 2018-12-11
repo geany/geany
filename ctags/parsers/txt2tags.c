@@ -184,7 +184,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	static const char *const extensions [] = { "t2t", NULL };
 	parserDefinition* const def = parserNew ("Txt2tags");
 
-	def->kinds = Txt2tagsKinds;
+	def->kindTable = Txt2tagsKinds;
 	def->kindCount = ARRAY_SIZE (Txt2tagsKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

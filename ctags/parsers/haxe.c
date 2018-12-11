@@ -207,7 +207,7 @@ extern parserDefinition* HaxeParser (void)
 	/*
 	 * New definitions for parsing instead of regex
 	 */
-	def->kinds              = HxKinds;
+	def->kindTable          = HxKinds;
 	def->kindCount  = ARRAY_SIZE (HxKinds);
 	def->parser             = findHxTags;
 	/*def->initialize = initialize;*/

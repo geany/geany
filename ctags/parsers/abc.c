@@ -114,7 +114,7 @@ extern parserDefinition* AbcParser (void)
 	static const char *const extensions [] = { "abc", NULL };
 	parserDefinition* const def = parserNew ("Abc");
 
-	def->kinds = AbcKinds;
+	def->kindTable = AbcKinds;
 	def->kindCount = ARRAY_SIZE (AbcKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

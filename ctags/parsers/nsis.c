@@ -135,7 +135,7 @@ extern parserDefinition* NsisParser (void)
 		"nsi", "nsh", NULL
 	};
 	parserDefinition* def = parserNew ("NSIS");
-	def->kinds      = NsisKinds;
+	def->kindTable  = NsisKinds;
 	def->kindCount  = ARRAY_SIZE (NsisKinds);
 	def->extensions = extensions;
 	def->parser     = findNsisTags;

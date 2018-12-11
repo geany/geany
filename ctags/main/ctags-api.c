@@ -92,7 +92,7 @@ extern const char *ctagsGetLangKinds(int lang)
 	static char kinds[257];
 
 	for (i = 0; i < def->kindCount; i++)
-		kinds[i] = def->kinds[i].letter;
+		kinds[i] = def->kindTable[i].letter;
 	kinds[i] = '\0';
 
 	return kinds;
@@ -106,8 +106,8 @@ extern const char *ctagsGetKindName(char kind, int lang)
 
 	for (i = 0; i < def->kindCount; i++)
 	{
-		if (def->kinds[i].letter == kind)
-			return def->kinds[i].name;
+		if (def->kindTable[i].letter == kind)
+			return def->kindTable[i].name;
 	}
 	return "unknown";
 }
@@ -120,8 +120,8 @@ extern char ctagsGetKindFromName(const char *name, int lang)
 
 	for (i = 0; i < def->kindCount; i++)
 	{
-		if (strcmp(def->kinds[i].name, name) == 0)
-			return def->kinds[i].letter;
+		if (strcmp(def->kindTable[i].name, name) == 0)
+			return def->kindTable[i].letter;
 	}
 	return '-';
 }

@@ -168,7 +168,7 @@ extern parserDefinition *RParser (void)
 	 */
 	static const char *const extensions [] = { "r", "s", "q", NULL };
 	parserDefinition *const def = parserNew ("R");
-	def->kinds      = RKinds;
+	def->kindTable  = RKinds;
 	def->kindCount  = ARRAY_SIZE (RKinds);
 	def->extensions = extensions;
 	def->parser     = createRTags;

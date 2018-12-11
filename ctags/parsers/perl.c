@@ -371,7 +371,7 @@ extern parserDefinition* PerlParser (void)
 {
 	static const char *const extensions [] = { "pl", "pm", "plx", "perl", NULL };
 	parserDefinition* def = parserNew ("Perl");
-	def->kinds      = PerlKinds;
+	def->kindTable  = PerlKinds;
 	def->kindCount  = ARRAY_SIZE (PerlKinds);
 	def->extensions = extensions;
 	def->parser     = findPerlTags;

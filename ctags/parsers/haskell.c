@@ -336,7 +336,7 @@ extern parserDefinition* HaskellParser (void)
 	static const char *const extensions [] = { "hs", NULL };
 	parserDefinition* def  = parserNew ("Haskell");
 
-	def->kinds      = HaskellKinds;
+	def->kindTable  = HaskellKinds;
 	def->kindCount  = ARRAY_SIZE(HaskellKinds);
 	def->extensions = extensions;
 	def->parser     = findNormalHaskellTags;
@@ -347,7 +347,7 @@ extern parserDefinition* LiterateHaskellParser (void)
 {
 	static const char *const extensions [] = { "lhs", NULL };
 	parserDefinition* def = parserNew ("Literate Haskell");
-	def->kinds      = HaskellKinds;
+	def->kindTable  = HaskellKinds;
 	def->kindCount  = ARRAY_SIZE(HaskellKinds);
 	def->extensions = extensions;
 	def->parser     = findLiterateHaskellTags;

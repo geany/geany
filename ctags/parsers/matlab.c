@@ -139,7 +139,7 @@ extern parserDefinition* MatlabParser (void)
 {
 	static const char *const extensions [] = { "m", NULL };
 	parserDefinition* def = parserNew ("Matlab");
-	def->kinds      = MatlabKinds;
+	def->kindTable  = MatlabKinds;
 	def->kindCount  = ARRAY_SIZE (MatlabKinds);
 	def->extensions = extensions;
 	def->parser     = findMatlabTags;

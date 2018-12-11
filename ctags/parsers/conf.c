@@ -119,7 +119,7 @@ extern parserDefinition* ConfParser (void)
 	static const char *const patterns [] = { "*.ini", "*.conf", NULL };
 	static const char *const extensions [] = { "conf", NULL };
 	parserDefinition* const def = parserNew ("Conf");
-	def->kinds      = ConfKinds;
+	def->kindTable  = ConfKinds;
 	def->kindCount  = ARRAY_SIZE (ConfKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;

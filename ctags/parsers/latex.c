@@ -234,7 +234,7 @@ extern parserDefinition* LaTeXParser (void)
 {
 	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
 	parserDefinition * def = parserNew ("LaTeX");
-	def->kinds      = TeXKinds;
+	def->kindTable  = TeXKinds;
 	def->kindCount  = ARRAY_SIZE (TeXKinds);
 	def->extensions = extensions;
 	def->parser     = findTeXTags;

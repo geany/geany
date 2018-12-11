@@ -197,7 +197,7 @@ extern parserDefinition* RestParser (void)
 	static const char *const extensions [] = { "rest", NULL };
 	parserDefinition* const def = parserNew ("reStructuredText");
 
-	def->kinds = RestKinds;
+	def->kindTable = RestKinds;
 	def->kindCount = ARRAY_SIZE (RestKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

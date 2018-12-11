@@ -220,7 +220,7 @@ extern parserDefinition* AsciidocParser (void)
 	static const char *const extensions [] = { "asciidoc", NULL };
 	parserDefinition* const def = parserNew ("Asciidoc");
 
-	def->kinds = AsciidocKinds;
+	def->kindTable = AsciidocKinds;
 	def->kindCount = ARRAY_SIZE (AsciidocKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

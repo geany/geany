@@ -102,7 +102,7 @@ extern parserDefinition* ShParser (void)
 		"sh", "SH", "bsh", "bash", "ksh", "zsh", "ash", NULL
 	};
 	parserDefinition* def = parserNew ("Sh");
-	def->kinds      = ShKinds;
+	def->kindTable  = ShKinds;
 	def->kindCount  = ARRAY_SIZE (ShKinds);
 	def->extensions = extensions;
 	def->parser     = findShTags;

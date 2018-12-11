@@ -3238,7 +3238,7 @@ extern parserDefinition* CParser (void)
 {
 	static const char *const extensions [] = { "c", "pc", "sc", NULL };
 	parserDefinition* def = parserNew ("C");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3257,7 +3257,7 @@ extern parserDefinition* CppParser (void)
 		NULL
 	};
 	parserDefinition* def = parserNew ("C++");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3269,7 +3269,7 @@ extern parserDefinition* JavaParser (void)
 {
 	static const char *const extensions [] = { "java", NULL };
 	parserDefinition* def = parserNew ("Java");
-	def->kinds      = JavaKinds;
+	def->kindTable  = JavaKinds;
 	def->kindCount  = ARRAY_SIZE (JavaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3281,7 +3281,7 @@ extern parserDefinition* DParser (void)
 {
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
-	def->kinds      = DKinds;
+	def->kindTable  = DKinds;
 	def->kindCount  = ARRAY_SIZE (DKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3293,7 +3293,7 @@ extern parserDefinition* GLSLParser (void)
 {
 	static const char *const extensions [] = { "glsl", "frag", "vert", NULL };
 	parserDefinition* def = parserNew ("GLSL");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3305,7 +3305,7 @@ extern parserDefinition* FeriteParser (void)
 {
 	static const char *const extensions [] = { "fe", NULL };
 	parserDefinition* def = parserNew ("Ferite");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3317,7 +3317,7 @@ extern parserDefinition* CsharpParser (void)
 {
 	static const char *const extensions [] = { "cs", NULL };
 	parserDefinition* def = parserNew ("C#");
-	def->kinds      = CsharpKinds;
+	def->kindTable  = CsharpKinds;
 	def->kindCount  = ARRAY_SIZE (CsharpKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3329,7 +3329,7 @@ extern parserDefinition* ValaParser (void)
 {
 	static const char *const extensions [] = { "vala", NULL };
 	parserDefinition* def = parserNew ("Vala");
-	def->kinds      = ValaKinds;
+	def->kindTable  = ValaKinds;
 	def->kindCount  = ARRAY_SIZE (ValaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;

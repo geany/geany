@@ -600,7 +600,7 @@ extern parserDefinition* PowerShellParser (void)
 {
 	static const char *const extensions [] = { "ps1", "psm1", NULL };
 	parserDefinition* def = parserNew ("PowerShell");
-	def->kinds      = PowerShellKinds;
+	def->kindTable  = PowerShellKinds;
 	def->kindCount  = ARRAY_SIZE (PowerShellKinds);
 	def->extensions = extensions;
 	def->parser     = findPowerShellTags;
