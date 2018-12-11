@@ -64,7 +64,7 @@ extern unsigned int cppGetDirectiveNestLevel (void);
 extern void cppInit (const bool state,
 		     const bool hasAtLiteralStrings,
 		     const bool hasCxxRawLiteralStrings,
-		     const kindOption *defineMacroKind);
+		     const kindDefinition *defineMacroKind);
 extern void cppTerminate (void);
 extern void cppBeginStatement (void);
 extern void cppEndStatement (void);

@@ -61,7 +61,7 @@ static vString* Lastname=NULL;
 static vString* Keyword=NULL;
 static vString* TagName=NULL;
 
-static kindOption VhdlKinds [] = {
+static kindDefinition VhdlKinds [] = {
 	{ true, 'c', "variable",     "constants" },
 	{ true, 't', "typedef",      "types" },
 	{ true, 'v', "variable",     "variables" },

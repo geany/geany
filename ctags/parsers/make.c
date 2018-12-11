@@ -30,7 +30,7 @@ typedef enum {
 	K_MACRO, K_TARGET
 } shKind;
 
-static kindOption MakeKinds [] = {
+static kindDefinition MakeKinds [] = {
 	{ true, 'm', "macro",  "macros"},
 	{ true, 't', "target", "targets"}
 };

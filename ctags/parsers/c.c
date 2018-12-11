@@ -281,7 +281,7 @@ typedef enum
 	CK_EXTERN_VARIABLE
 } cKind;
 
-static kindOption CKinds [] = {
+static kindDefinition CKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -307,7 +307,7 @@ typedef enum
 	DK_EXTERN_VARIABLE
 } dKind;
 
-static kindOption DKinds [] = {
+static kindDefinition DKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
 	{ true,  'f', "function",   "function definitions"},
@@ -331,7 +331,7 @@ typedef enum
 	JK_PACKAGE, JK_ENUMERATOR, JK_ENUMERATION
 } javaKind;
 
-static kindOption JavaKinds [] = {
+static kindDefinition JavaKinds [] = {
 	{ true,  'c', "class",         "classes"},
 	{ true,  'f', "field",         "fields"},
 	{ true,  'i', "interface",     "interfaces"},
@@ -349,7 +349,7 @@ typedef enum
 	CSK_NAMESPACE, CSK_PROPERTY, CSK_STRUCT, CSK_TYPEDEF
 } csharpKind;
 
-static kindOption CsharpKinds [] = {
+static kindDefinition CsharpKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -372,7 +372,7 @@ typedef enum {
 	VK_NAMESPACE, VK_PROPERTY, VK_SIGNAL, VK_STRUCT
 } valaKind;
 
-static kindOption ValaKinds [] = {
+static kindDefinition ValaKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -1093,9 +1093,9 @@ static javaKind javaTagKind (const tagType type)
 	return result;
 }
 
-static const kindOption *tagKind (const tagType type)
+static const kindDefinition *tagKind (const tagType type)
 {
-	const kindOption* result;
+	const kindDefinition* result;
 	if (isInputLanguage (Lang_java))
 		result = &JavaKinds [javaTagKind (type)];
 	else if (isInputLanguage (Lang_csharp))

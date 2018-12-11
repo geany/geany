@@ -30,7 +30,7 @@ typedef enum {
 	K_STRUCT
 } MatlabKind;
 
-static kindOption MatlabKinds [] = {
+static kindDefinition MatlabKinds [] = {
 	{ true, 'f', "function", "Functions" },
 	{ true, 's', "struct", "Structures" },
 };

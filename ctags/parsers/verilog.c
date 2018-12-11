@@ -55,7 +55,7 @@ static int Ungetc;
 static int Lang_verilog;
 static jmp_buf Exception;
 
-static kindOption VerilogKinds [] = {
+static kindDefinition VerilogKinds [] = {
  { true, 'c', "constant",  "constants (define, parameter, specparam)" },
  { true, 'e', "event",     "events" },
  { true, 'f', "function",  "functions" },

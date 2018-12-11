@@ -66,7 +66,7 @@ typedef struct sCppState {
 	bool resolveRequired;     /* must resolve if/else/elif/endif branch */
 	bool hasAtLiteralStrings; /* supports @"c:\" strings */
 	bool hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
-	const kindOption  *defineMacroKind;
+	const kindDefinition  *defineMacroKind;
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
 		bool	accept;          /* is a directive syntactically permitted? */
@@ -118,7 +118,7 @@ extern unsigned int cppGetDirectiveNestLevel (void)
 
 extern void cppInit (const bool state, const bool hasAtLiteralStrings,
                      const bool hasCxxRawLiteralStrings,
-                     const kindOption *defineMacroKind)
+                     const kindDefinition *defineMacroKind)
 {
 	BraceFormat = state;
 

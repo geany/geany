@@ -35,7 +35,7 @@ typedef enum {
 /*
 *   DATA DEFINITIONS
 */
-static kindOption RubyKinds [] = {
+static kindDefinition RubyKinds [] = {
 	{ true, 'c', "class",  "classes" },
 	{ true, 'f', "method", "methods" },
 	{ true, 'm', "module", "modules" },

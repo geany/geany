@@ -26,7 +26,7 @@
 *   DATA DEFINITIONS
 */
 
-static kindOption MarkdownKinds[] = {
+static kindDefinition MarkdownKinds[] = {
 	{ true, 'v', "variable", "sections" }
 };
 

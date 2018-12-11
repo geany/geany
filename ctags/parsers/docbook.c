@@ -34,7 +34,7 @@ typedef enum {
 	K_APPENDIX
 } docbookKind;
 
-static kindOption DocBookKinds [] = {
+static kindDefinition DocBookKinds [] = {
 	{ true,  'f', "function",   "chapters"},
 	{ true,  'c', "class",      "sections"},
 	{ true,  'm', "member",     "sect1"},

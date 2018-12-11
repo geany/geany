@@ -30,7 +30,7 @@ typedef enum {
 	K_VARIABLE
 } NsisKind;
 
-static kindOption NsisKinds [] = {
+static kindDefinition NsisKinds [] = {
 	{ true, 'n', "namespace", "sections"},
 	{ true, 'f', "function", "functions"},
 	{ true, 'v', "variable", "variables"}

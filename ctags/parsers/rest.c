@@ -34,7 +34,7 @@ typedef enum {
 	SECTION_COUNT
 } restKind;
 
-static kindOption RestKinds[] = {
+static kindDefinition RestKinds[] = {
 	{ true, 'n', "namespace",     "chapters"},
 	{ true, 'm', "member",        "sections" },
 	{ true, 'd', "macro",         "subsections" },

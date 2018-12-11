@@ -29,7 +29,7 @@ typedef enum {
 	K_KEY
 } confKind;
 
-static kindOption ConfKinds [] = {
+static kindDefinition ConfKinds [] = {
 	{ true, 'n', "namespace",  "sections"},
 	{ true, 'm', "macro", "keys"}
 };

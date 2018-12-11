@@ -41,7 +41,7 @@ static scopeSeparator Txt2TagsSeparators [] = {
 	{ KIND_WILDCARD, SCOPE_SEPARATOR }
 };
 
-static kindOption Txt2tagsKinds[] = {
+static kindDefinition Txt2tagsKinds[] = {
 	{ true, 'm', "member", "sections",
 	  ATTACH_SEPARATORS(Txt2TagsSeparators) },
 };
@@ -61,7 +61,7 @@ static int makeTxt2tagsTag (const vString* const name,
 {
 	tagEntryInfo e;
 	NestingLevel *nl;
-	kindOption *kind = &Txt2tagsKinds[type];
+	kindDefinition *kind = &Txt2tagsKinds[type];
 	initTagEntry (&e, vStringValue(name), kind);
 
 	nl = nestingLevelsGetCurrent (nls);

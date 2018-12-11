@@ -42,7 +42,7 @@ typedef enum {
 	COUNT_KIND
 } powerShellKind;
 
-static kindOption PowerShellKinds[COUNT_KIND] = {
+static kindDefinition PowerShellKinds[COUNT_KIND] = {
 	{ true, 'f', "function",	"functions" },
 	{ true, 'v', "variable",	"variables" }
 };

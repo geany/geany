@@ -42,7 +42,7 @@ typedef enum {
 	K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE, K_IMPORT
 } pythonKind;
 
-static kindOption PythonKinds[] = {
+static kindDefinition PythonKinds[] = {
 	{true, 'c', "class",    "classes"},
 	{true, 'f', "function", "functions"},
 	{true, 'm', "member",   "class members"},

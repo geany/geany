@@ -36,7 +36,7 @@ typedef enum {
 	SECTION_COUNT
 } asciidocKind;
 
-static kindOption AsciidocKinds[] = {
+static kindDefinition AsciidocKinds[] = {
 	{ true, 'n', "namespace",     "chapters"},
 	{ true, 'm', "member",        "sections" },
 	{ true, 'd', "macro",         "level2sections" },

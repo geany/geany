@@ -47,7 +47,7 @@ typedef enum {
 	HXTAG_COUNT
 } hxKind;
 
-static kindOption HxKinds [] = {
+static kindDefinition HxKinds [] = {
 	{ true,  'm', "method",         "methods" },
 	{ true,  'c', "class",          "classes" },
 	{ true,  'e', "enum",           "enumerations" },

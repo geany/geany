@@ -21,8 +21,8 @@ typedef struct sFieldDesc fieldDesc;
 struct sPtagDesc;
 typedef struct sPtagDesc ptagDesc;
 
-struct sKindOption;
-typedef struct sKindOption kindOption;
+struct sKindDefinition;
+typedef struct sKindDefinition kindDefinition;
 
 struct sParserDefinition;
 typedef struct sParserDefinition parserDefinition;

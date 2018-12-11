@@ -27,7 +27,7 @@
 *   DATA DEFINITIONS
 */
 
-static kindOption AbcKinds[] = {
+static kindDefinition AbcKinds[] = {
 	{ true, 'm', "member", "sections" },
 	{ true, 's', "struct",  "header1"}
 };

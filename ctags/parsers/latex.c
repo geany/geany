@@ -35,7 +35,7 @@ typedef enum {
 	K_LABEL
 } TeXKind;
 
-static kindOption TeXKinds[] = {
+static kindDefinition TeXKinds[] = {
 	{ true, 'f', "function",      "command definitions" },
 	{ true, 'c', "class",         "environment definitions" },
 	{ true, 'm', "member",        "labels, sections and bibliography" },

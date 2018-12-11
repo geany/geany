@@ -28,7 +28,7 @@ typedef enum {
 	K_FUNCTION
 } diffKind;
 
-static kindOption DiffKinds [] = {
+static kindDefinition DiffKinds [] = {
 	{ true, 'f', "function", "functions"}
 };
 

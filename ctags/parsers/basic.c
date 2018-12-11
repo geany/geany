@@ -39,7 +39,7 @@ typedef struct {
 	BasicKind kind;
 } KeyWord;
 
-static kindOption BasicKinds[] = {
+static kindDefinition BasicKinds[] = {
 	{true, 'c', "constant", "constants"},
 	{true, 'f', "function", "functions"},
 	{true, 'l', "label", "labels"},

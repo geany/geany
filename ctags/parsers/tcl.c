@@ -26,7 +26,7 @@ typedef enum {
 	K_CLASS, K_METHOD, K_PROCEDURE, K_MODULE
 } tclKind;
 
-static kindOption TclKinds [] = {
+static kindDefinition TclKinds [] = {
 	{ true, 'c', "class",     "classes" },
 	{ true, 'm', "method",    "methods" },
 	{ true, 'p', "procedure", "procedures" },

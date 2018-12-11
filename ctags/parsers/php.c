@@ -113,7 +113,7 @@ typedef enum {
 	COUNT_KIND
 } phpKind;
 
-static kindOption PhpKinds[COUNT_KIND] = {
+static kindDefinition PhpKinds[COUNT_KIND] = {
 	{ true, 'c', "class",		"classes" },
 	{ true, 'd', "define",		"constant definitions" },
 	{ true, 'f', "function",	"functions" },

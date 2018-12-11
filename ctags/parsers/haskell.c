@@ -37,7 +37,7 @@ typedef enum {
 	K_TYPE, K_CONSTRUCTOR, K_FUNCTION, K_MODULE
 } haskellKind;
 
-static kindOption HaskellKinds [] = {
+static kindDefinition HaskellKinds [] = {
 	{ true, 't', "typedef", "types" },
 	{ true, 'c', "macro", "type constructors" },
 	{ true, 'f', "function", "functions" },

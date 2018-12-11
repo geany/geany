@@ -208,7 +208,7 @@ static bool NewLine = true;
 static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
-static kindOption FortranKinds [TAG_COUNT] = {
+static kindDefinition FortranKinds [TAG_COUNT] = {
 	{ true,  'b', "blockData",  "block data"},
 	{ true,  'c', "common",     "common blocks"},
 	{ true,  'e', "entry",      "entry points"},

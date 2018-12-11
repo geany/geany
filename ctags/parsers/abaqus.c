@@ -28,7 +28,7 @@ typedef enum {
 	K_STEP
 } AbaqusKind;
 
-static kindOption AbaqusKinds[] = {
+static kindDefinition AbaqusKinds[] = {
      { true, 'c', "class",      "Parts" },
      { true, 'm', "member",      "Assembly" },
      { true, 'n', "namespace",      "Steps" }

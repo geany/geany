@@ -60,7 +60,7 @@ typedef struct {
 */
 static langType Lang_asm;
 
-static kindOption AsmKinds [] = {
+static kindDefinition AsmKinds [] = {
 	{ true, 'd', "define", "defines" },
 	{ true, 'l', "label",  "labels"  },
 	{ true, 'm', "macro",  "macros"  },

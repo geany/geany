@@ -28,7 +28,7 @@ typedef enum {
 	K_FUNCTION
 } shKind;
 
-static kindOption ShKinds [] = {
+static kindDefinition ShKinds [] = {
 	{ true, 'f', "function", "functions"}
 };
 
