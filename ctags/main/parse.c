@@ -1391,14 +1391,14 @@ static void installFieldDefinition (const langType language)
 
 	Assert (0 <= language  &&  language < (int) LanguageCount);
 	parser = LanguageTable [language];
-	if (parser->fieldDefinitionCount > PRE_ALLOCATED_PARSER_FIELDS)
+	if (parser->fieldCount > PRE_ALLOCATED_PARSER_FIELDS)
 		error (FATAL,
 		       "INTERNAL ERROR: in a parser, fields are defined more than PRE_ALLOCATED_PARSER_FIELDS\n");
 
-	if (parser->fieldDefinitions != NULL)
+	if (parser->fieldTable != NULL)
 	{
-		for (i = 0; i < parser->fieldDefinitionCount; i++)
-			defineField (& parser->fieldDefinitions [i], language);
+		for (i = 0; i < parser->fieldCount; i++)
+			defineField (& parser->fieldTable [i], language);
 	}
 }
 
