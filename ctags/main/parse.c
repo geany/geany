@@ -2721,6 +2721,8 @@ extern void anonReset (void)
 	lang -> anonumousIdentiferId = 0;
 }
 
+/* GEANY DIFF */
+#if 0
 static unsigned int anonHash(const unsigned char *str)
 {
 	unsigned int hash = 5381;
@@ -2731,6 +2733,8 @@ static unsigned int anonHash(const unsigned char *str)
 
 	return hash ;
 }
+#endif
+/* GEANY DIFF END */
 
 extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 {
@@ -2741,8 +2745,12 @@ extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 
 	vStringCopyS(buffer, prefix);
 
-	unsigned int uHash = anonHash((const unsigned char *)getInputFileName());
-	sprintf(szNum,"%08x%02x%02x",uHash,lang -> anonumousIdentiferId, kind);
+/* GEANY DIFF */
+/*	unsigned int uHash = anonHash((const unsigned char *)getInputFileName());
+	sprintf(szNum,"%08x%02x%02x",uHash,lang -> anonumousIdentiferId, kind); */
+	sprintf(szNum,"%u", lang -> anonumousIdentiferId);
+/* GEANY DIFF END */
+
 	vStringCatS(buffer,szNum);
 }
 
