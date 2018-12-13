@@ -15,6 +15,7 @@
 #include "general.h"  /* must always come first */
 #include "types.h"
 
+#include <stdint.h>
 #include <stdio.h>
 
 #include "field.h"
