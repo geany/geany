@@ -13,14 +13,14 @@
 #include "routines.h"		/* for STRINGIFY */
 #include "vstring.h"
 
-typedef struct sRoleDesc {
+typedef struct sRoleDefinition {
 	bool enabled;
 	const char* name;		  /* role name */
 	const char* description;	  /* displayed in --help output */
-} roleDesc;
+} roleDefinition;
 
-extern void printRole (const roleDesc* const role); /* for --help */
-extern const char *renderRole (const roleDesc* const role, vString* b);
+extern void printRole (const roleDefinition* const role); /* for --help */
+extern const char *renderRole (const roleDefinition* const role, vString* b);
 
 /*
  * Predefined kinds
@@ -60,7 +60,7 @@ struct sKindDefinition {
 	const char* description;	  /* displayed in --help output */
 	bool referenceOnly;
 	int nRoles;		/* The number of role elements. */
-	roleDesc *roles;
+	roleDefinition *roles;
 	scopeSeparator *separators;
 	unsigned int separatorCount;
 

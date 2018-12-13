@@ -17,13 +17,13 @@
 #include "kind.h"
 #include "parse.h"
 
-extern void printRole (const roleDesc* const role)
+extern void printRole (const roleDefinition* const role)
 {
 	if (role)
 		printf ("%s\t%s\t%s\n", role->name, role->description, role->enabled? "on": "off");
 }
 
-extern const char *renderRole (const roleDesc* const role, vString* b)
+extern const char *renderRole (const roleDefinition* const role, vString* b)
 {
 	vStringCatS (b, role->name);
 	return vStringValue (b);

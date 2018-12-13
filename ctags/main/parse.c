@@ -1872,7 +1872,7 @@ static void printRoles (const langType language, const char* letters, bool allow
 			if (*c == KIND_WILDCARD || k->letter == *c)
 			{
 				int j;
-				const roleDesc *r;
+				const roleDefinition *r;
 
 				for (j = 0; j < k->nRoles; j++)
 				{
@@ -2759,7 +2759,7 @@ typedef enum {
 	R_BROKEN_REF,
 } CTST_BrokenRole;
 
-static roleDesc CTST_BrokenRoles [] = {
+static roleDefinition CTST_BrokenRoles [] = {
 	{true, "broken", "broken" },
 };
 
