@@ -53,6 +53,8 @@ typedef struct {
 	enum specType specType;
 }  parserCandidate;
 
+static ptrArray *parsersUsedInCurrentInput;
+
 /*
  * FUNCTION PROTOTYPES
  */
@@ -63,6 +65,8 @@ static void addParserPseudoTags (langType language);
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
+static void anonResetMaybe (parserDefinition *lang);
+static void clearParsersUsedInCurrentInput (void);
 
 /*
 *   DATA DEFINITIONS
@@ -2152,6 +2156,8 @@ static bool createTagsWithFallback1 (const langType language)
 	addParserPseudoTags (language);
 	tagFilePosition (&tagfpos);
 
+	anonResetMaybe (LanguageTable [language]);
+
 	while ( ( whyRescan =
 		  createTagsForFile (language, ++passCount) )
 		!= RESCAN_NONE)
@@ -2197,6 +2203,8 @@ static bool createTagsWithFallback1 (const langType language,
 
 	if (LanguageTable [language]->useCork)
 		corkTagFile();
+
+	anonResetMaybe (LanguageTable [language]);
 
 	passCallback(userData);
 	while ( ( whyRescan =
@@ -2283,6 +2291,7 @@ extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	if ((!buffer && openInputFile (fileName, language, NULL)) ||
 		(buffer && bufferOpen (fileName, language, buffer, bufferSize)))
 	{
+		clearParsersUsedInCurrentInput ();
 		setTagEntryFunction(tagCallback, userData);
 		createTagsWithFallback1 (language, passCallback, userData);
 		forcePromises ();
@@ -2458,6 +2467,9 @@ extern bool parseFile (const char *const fileName)
 #endif
 
 		setupWriter ();
+
+		clearParsersUsedInCurrentInput ();
+
 #ifndef CTAGS_LIB
 		tagFileResized = createTagsWithFallback (fileName, language, mio);
 #endif
@@ -2715,10 +2727,21 @@ extern bool makeKindDescriptionsPseudoTags (const langType language,
 *   Anonymous name generator
 */
 
-extern void anonReset (void)
+static void clearParsersUsedInCurrentInput (void)
 {
-	parserDefinition* lang = LanguageTable [getInputLanguage ()];
+	if (parsersUsedInCurrentInput)
+		ptrArrayClear (parsersUsedInCurrentInput);
+	else
+		parsersUsedInCurrentInput = ptrArrayNew (NULL);
+}
+
+static void anonResetMaybe (parserDefinition *lang)
+{
+	if (ptrArrayHas (parsersUsedInCurrentInput, lang))
+		return;
+
 	lang -> anonumousIdentiferId = 0;
+	ptrArrayAdd (parsersUsedInCurrentInput, lang);
 }
 
 /* GEANY DIFF */
