@@ -242,6 +242,7 @@ static TMParserMapEntry map_JAVASCRIPT[] = {
 	{'p', tm_tag_member_t},
 	{'C', tm_tag_macro_t},
 	{'v', tm_tag_variable_t},
+	{'g', tm_tag_function_t},
 };
 
 /* not in universal-ctags */

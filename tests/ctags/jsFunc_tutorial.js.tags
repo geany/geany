@@ -27,7 +27,7 @@ addSalaryFunctionÌ1Í(addition)Ö0
 addSalaryFunctionDT9Ì1Í(addition)Ö0
 ball0Ì16384Ö0
 ball1Ì16384Ö0
-ball2Ì16384Ö0
+ball2Ì1Ö0
 ball3Ì16384Ö0
 ball4Ì16384Ö0
 ball5Ì16384Ö0
@@ -59,11 +59,11 @@ myFunction6AÌ16Í()Ö0
 myFunction6AEÌ16Í()Ö0
 myFunction6BÌ16Í()Ö0
 myFunction6EÌ16Í()Ö0
-myObjectÌ16384Ö0
+myObjectÌ1Ö0
 my_global_var1Ì16384Ö0
-object1Ì16384Ö0
-object2Ì16384Ö0
-object3Ì16384Ö0
+object1Ì1Ö0
+object2Ì1Ö0
+object3Ì1Ö0
 priceÌ128ÎPT2Ö0
 savedFunc6BÌ16Í()Ö0
 sayName4AÌ16Í(name)Ö0
