@@ -89,6 +89,7 @@ libctags_la_SOURCES = \
 	main/lxpath.c \
 	main/main.c \
 	main/main.h \
+	main/mbcs.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
@@ -122,6 +123,7 @@ libctags_la_SOURCES = \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/trace.h \
 	main/trashbox.c \
 	main/trashbox.h \
 	main/types.h \
