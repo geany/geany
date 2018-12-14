@@ -3484,3 +3484,8 @@ extern void verbose (const char *const format, ...)
 {
 }
 /* GEANY DIFF END */
+
+extern bool canUseLineNumberAsLocator (void)
+{
+	return (Option.locate != EX_PATTERN);
+}
