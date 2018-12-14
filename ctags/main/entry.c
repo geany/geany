@@ -1105,6 +1105,7 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;
 	tag->isFileScope = info->isFileScope;
 	tag->lineNumber = info->lineNumber;
+	tag->lang = info->langType;
 }
 #endif
 

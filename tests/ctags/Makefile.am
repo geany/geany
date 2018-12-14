@@ -4,7 +4,6 @@ dist_check_SCRIPTS = runner.sh
 # Disabled tests:
 #	rules.t2t
 #	simple.cbl
-#	simple.html
 #	titles.t2t
 
 NULL =
@@ -275,6 +274,7 @@ test_sources = \
 	signature.cpp					\
 	simple.bas						\
 	simple.d						\
+	simple.html						\
 	simple.js						\
 	simple.json						\
 	simple.ksh						\

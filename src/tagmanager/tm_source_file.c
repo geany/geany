@@ -181,7 +181,13 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const ctagsTag *tag_ent
 	if (!tag_entry)
 		return FALSE;
 
-	type = tm_parser_get_tag_type(tag_entry->kindLetter, file->lang);
+	type = tm_parser_get_tag_type(tag_entry->kindLetter, tag_entry->lang);
+	if (file->lang != tag_entry->lang)  /* this is a tag from a subparser */
+	{
+		/* check for possible re-definition of subparser type */
+		type = tm_parser_get_subparser_type(file->lang, tag_entry->lang, type);
+	}
+
 	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
 
@@ -206,6 +212,8 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const ctagsTag *tag_ent
 	if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
 		tag->type = tm_tag_macro_with_arg_t;
 	tag->file = file;
+	/* redefine lang also for subparsers because the rest of Geany assumes that
+	 * tags from a single file are from a single language */
 	tag->lang = file->lang;
 	return TRUE;
 }
