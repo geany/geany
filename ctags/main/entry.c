@@ -841,21 +841,21 @@ extern int   makePatternStringCommon (const tagEntryInfo *const tag,
 	static vString *cached_pattern;
 	static MIOPos   cached_location;
 	if (TagFile.patternCacheValid
-	    && (! tag->truncateLine)
+	    && (! tag->truncateLineAfterTag)
 	    && (memcmp (&tag->filePosition, &cached_location, sizeof(MIOPos)) == 0))
 		return puts_func (vStringValue (cached_pattern), output);
 
 	line = readLineFromBypass (TagFile.vLine, tag->filePosition, NULL);
 	if (line == NULL)
 		error (FATAL, "could not read tag line from %s at line %lu", getInputFileName (),tag->lineNumber);
-	if (tag->truncateLine)
+	if (tag->truncateLineAfterTag)
 		truncateTagLine (line, tag->name, false);
 
 	line_len = strlen (line);
 	searchChar = Option.backward ? '?' : '/';
 	terminator = (bool) (line [line_len - 1] == '\n') ? "$": "";
 
-	if (!tag->truncateLine)
+	if (!tag->truncateLineAfterTag)
 	{
 		making_cache = true;
 		cached_pattern = vStringNewOrClear (cached_pattern);

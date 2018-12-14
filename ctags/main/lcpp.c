@@ -341,7 +341,7 @@ static int makeDefineTag (const char *const name, bool parameterized, bool undef
 		initTagEntry (&e, name, Cpp.defineMacroKindIndex);
 		e.lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
 		e.isFileScope  = isFileScope;
-		e.truncateLine = true;
+		e.truncateLineAfterTag = true;
 		if (parameterized)
 			e.extensionFields.signature = cppGetSignature ();
 		makeTagEntry (&e);
