@@ -216,6 +216,8 @@ extern const char *getLanguageName (const langType language);
 extern kindDefinition* getLanguageFileKind (const langType language);
 extern langType getNamedLanguage (const char *const name, size_t len);
 extern langType getFileLanguage (const char *const fileName);
+extern langType getLanguageForCommand (const char *const command, langType startFrom);
+extern langType getLanguageForFilename (const char *const filename, langType startFrom);
 extern bool isLanguageEnabled (const langType language);
 extern bool isLanguageKindEnabled (const langType language, int kindIndex);
 

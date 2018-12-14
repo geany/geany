@@ -1160,6 +1160,28 @@ extern langType getFileLanguage (const char *const fileName)
 	return getFileLanguageAndKeepMIO(fileName, NULL);
 }
 
+extern langType getLanguageForCommand (const char *const command, langType startFrom)
+{
+	const char *const tmp_command = baseFilename (command);
+	char *tmp_spec;
+	enum specType tmp_specType;
+
+	return getNameOrAliasesLanguageAndSpec (tmp_command, startFrom,
+											(const char **const)&tmp_spec,
+											&tmp_specType);
+}
+
+extern langType getLanguageForFilename (const char *const filename, langType startFrom)
+{
+	const char *const tmp_filename = baseFilename (filename);
+	char *tmp_spec;
+	enum specType tmp_specType;
+
+	return getPatternLanguageAndSpec (tmp_filename, startFrom,
+									  (const char **const)&tmp_spec,
+									  &tmp_specType);
+}
+
 typedef void (*languageCallback)  (langType language, void* user_data);
 static void foreachLanguage(languageCallback callback, void *user_data)
 {
