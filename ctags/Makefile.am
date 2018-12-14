@@ -94,6 +94,8 @@ libctags_la_SOURCES = \
 	main/mio.h \
 	main/nestlevel.c \
 	main/nestlevel.h \
+	main/numarray.c \
+	main/numarray.h \
 	main/objpool.c \
 	main/objpool.h \
 	main/options.c \
