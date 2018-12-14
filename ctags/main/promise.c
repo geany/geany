@@ -38,8 +38,12 @@ int  makePromise   (const char *parser,
 	int r;
 	langType lang;
 
+/* GEANY DIFF */
+/*
 	if (!isXtagEnabled (XTAG_TAGS_GENERATED_BY_SUB_PARSERS))
 		return -1;
+*/
+/* GEANY DIFF END */
 
 	lang = getNamedLanguage (parser, 0);
 	if (lang == LANG_IGNORE)
