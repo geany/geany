@@ -1,6 +1,8 @@
 Geany 1.34 (unreleased)
 
     General
+    * Auto-select GTK2 or GTK3 at build time depending on availability
+      (PR#1182).
     * Process files in the order they appear on the command line when
       generating tags files (Issue#1989, PR#1991).
 
@@ -12,9 +14,12 @@ Geany 1.34 (unreleased)
     * Fix horizontal and page scrolling under GTK3 (PR#1843).
 
     Interface
+    * Show part of the file path to show unique elements in the go to symbol
+      popup (Thomas Martitz, PR#1445, Issue#1069).
     * Always show icons in the go to symbol popup (PR#1997).
     * Add a keybinding for "Strip Trailing Spaces" (LarsGit223, Issue#395,
       PR#1806).
+    * Add some missing label relations.
 
     Editor
     * Update Scintilla to version 3.10.0 (Issue#1421, PR#1914).
@@ -27,6 +32,7 @@ Geany 1.34 (unreleased)
     * Python: Update keywords to Python 3.7 (Miro Hrončok, Issue#1351, PR#1894).
     * PHP: Update tags for PHP 7.2 (Dominic Hopf, PR#1970).
     * Batch: Use REM as single-line comment marker (Issue#1912, PR#1932).
+    * VHDL: Classify string styles as such (PR#1402).
 
     Windows
     * Fix display issues on HiDPI displays (Issue#692, PR#1992).
@@ -36,6 +42,8 @@ Geany 1.34 (unreleased)
       `msgwin_status_add_string()` (Thomas Martitz, PR#1748).
     * Add `GeanyObject::key-press` signal allowing plugins to intercept key
       presses before Geany (Jiří Techet, PR#1829).
+    * Add `utils_strv_shorten_file_list()` (Thomas Martitz, PR#1445).
+    * Fix value of GeanyDocument::changed when quitting (Jason Cumbie, PR#1857).
 
     Internationalization
     * Updated translations: da, de, dk, es, fr, hu, it, ja, pt, sv, sk, uk,
