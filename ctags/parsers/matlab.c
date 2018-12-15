@@ -107,7 +107,7 @@ static void findMatlabTags (void)
 				}
 			}
 
-			makeSimpleTag (name, MatlabKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 			vStringClear (name);
 		}
 
@@ -128,7 +128,7 @@ static void findMatlabTags (void)
 				++cp;
 			}
 
-			makeSimpleTag (name, MatlabKinds, K_STRUCT);
+			makeSimpleTag (name, K_STRUCT);
 			vStringClear (name);
 		}
 	}

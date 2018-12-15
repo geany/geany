@@ -104,7 +104,7 @@ static void add_tag(const char *token, haskellKind kind, vString *name)
 	for (i = 0; token[i] != '\0'; ++i)
 		vStringPut(name, token[i]);
 
-	makeSimpleTag(name, HaskellKinds, kind);
+	makeSimpleTag(name, kind);
 	vStringClear(name);
 }
 

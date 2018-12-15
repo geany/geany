@@ -177,7 +177,7 @@ static void tagNameList (const vhdlKind kind, int c)
 	if (isIdentifierCharacter (c))
 	{
 		readIdentifier (TagName, c);
-		makeSimpleTag (TagName, VhdlKinds, kind);
+		makeSimpleTag (TagName, kind);
 	}
 }
 
@@ -202,7 +202,7 @@ static void findTag (vString *const name)
 				kind = (vhdlKind)lookupKeyword (vStringValue (Keyword), Lang_vhdl);
 				if (kind == K_PROCESS || kind == K_BLOCK || kind == K_PORT)
 				{
-					makeSimpleTag (Lastname, VhdlKinds, kind);
+					makeSimpleTag (Lastname, kind);
 				}
 			}
 		} else {
@@ -225,7 +225,7 @@ static void findTag (vString *const name)
 		}
 		else if (kind == K_PROCESS || kind == K_BLOCK) {
 			vStringCopyS(TagName,"unnamed");
-			makeSimpleTag (TagName, VhdlKinds, kind);
+			makeSimpleTag (TagName, kind);
 		} else {
 			c = skipWhite (vGetc ());
 			if (c=='\"')

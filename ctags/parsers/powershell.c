@@ -98,7 +98,7 @@ static const char *findValidAccessType (const char *const access)
 static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const token,
 								 const powerShellKind kind, const char *const access)
 {
-	initTagEntry (e, vStringValue (token->string), &(PowerShellKinds[kind]));
+	initTagEntry (e, vStringValue (token->string), kind);
 
 	e->lineNumber	= token->lineNumber;
 	e->filePosition	= token->filePosition;
@@ -110,7 +110,7 @@ static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const t
 		int parentKind = token->parentKind;
 		Assert (parentKind >= 0);
 
-		e->extensionFields.scopeKind = &(PowerShellKinds[parentKind]);
+		e->extensionFields.scopeKindIndex = parentKind;
 		e->extensionFields.scopeName = vStringValue (token->scope);
 	}
 }

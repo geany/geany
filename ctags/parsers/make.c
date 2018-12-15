@@ -97,12 +97,12 @@ static void newTarget (vString *const name)
 	{
 		return;
 	}
-	makeSimpleTag (name, MakeKinds, K_TARGET);
+	makeSimpleTag (name, K_TARGET);
 }
 
 static void newMacro (vString *const name)
 {
-	makeSimpleTag (name, MakeKinds, K_MACRO);
+	makeSimpleTag (name, K_MACRO);
 }
 
 static void readIdentifier (const int first, vString *const id)

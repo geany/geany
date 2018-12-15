@@ -119,7 +119,7 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	makeSimpleTag (name, BasicKinds, kind);
+	makeSimpleTag (name, kind);
 
 	/* if the line contains a ',', we have multiple declarations */
 	while (*pos && strchr (pos, ','))
@@ -140,7 +140,7 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
-		makeSimpleTag (name, BasicKinds, kind);
+		makeSimpleTag (name, kind);
 	}
 
 	vStringDelete (name);
@@ -192,7 +192,7 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	{
 		p = extract_name (p, name);
 	}	
-	makeSimpleTag (name, BasicKinds, kw->kind);
+	makeSimpleTag (name, kw->kind);
 	vStringDelete (name);
 	return 1;
 }
@@ -207,7 +207,7 @@ static void match_colon_label (char const *p)
 	{
 		vString *name = vStringNew ();
 		vStringNCatS (name, p, end - p);
-		makeSimpleTag (name, BasicKinds, K_LABEL);
+		makeSimpleTag (name, K_LABEL);
 		vStringDelete (name);
 	}
 }

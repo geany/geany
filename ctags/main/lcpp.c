@@ -66,7 +66,7 @@ typedef struct sCppState {
 	bool resolveRequired;     /* must resolve if/else/elif/endif branch */
 	bool hasAtLiteralStrings; /* supports @"c:\" strings */
 	bool hasCxxRawLiteralStrings; /* supports R"xxx(...)xxx" strings */
-	const kindDefinition  *defineMacroKind;
+	int  defineMacroKindIndex;
 	struct sDirective {
 		enum eState state;       /* current directive being processed */
 		bool	accept;          /* is a directive syntactically permitted? */
@@ -92,7 +92,7 @@ static cppState Cpp = {
 	false,       /* resolveRequired */
 	false,       /* hasAtLiteralStrings */
 	false,       /* hasCxxRawLiteralStrings */
-	NULL,        /* defineMacroKind */
+	-1,          /* defineMacroKindIndex */
 	{
 		DRCTV_NONE,  /* state */
 		false,       /* accept */
@@ -118,7 +118,7 @@ extern unsigned int cppGetDirectiveNestLevel (void)
 
 extern void cppInit (const bool state, const bool hasAtLiteralStrings,
                      const bool hasCxxRawLiteralStrings,
-                     const kindDefinition *defineMacroKind)
+                     int defineMacroKindIndex)
 {
 	BraceFormat = state;
 
@@ -127,7 +127,7 @@ extern void cppInit (const bool state, const bool hasAtLiteralStrings,
 	Cpp.resolveRequired = false;
 	Cpp.hasAtLiteralStrings = hasAtLiteralStrings;
 	Cpp.hasCxxRawLiteralStrings = hasCxxRawLiteralStrings;
-	Cpp.defineMacroKind = defineMacroKind;
+	Cpp.defineMacroKindIndex = defineMacroKindIndex;
 
 	Cpp.directive.state     = DRCTV_NONE;
 	Cpp.directive.accept    = true;
@@ -326,19 +326,19 @@ static int makeDefineTag (const char *const name, bool parameterized, bool undef
 {
 	const bool isFileScope = (bool) (! isInputHeaderFile ());
 
-	if (!Cpp.defineMacroKind)
+	if (Cpp.defineMacroKindIndex == -1)
 		return CORK_NIL;
 	if (isFileScope && !isXtagEnabled(XTAG_FILE_SCOPE))
 		return CORK_NIL;
 
 	if ( /* condition for definition tag */
-		((!undef) && Cpp.defineMacroKind->enabled)
+		((!undef) && isLanguageKindEnabled (getInputLanguage(), Cpp.defineMacroKindIndex))
 		|| /* condition for reference tag */
 		(undef && isXtagEnabled(XTAG_REFERENCE_TAGS)))
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, name, Cpp.defineMacroKind);
+		initTagEntry (&e, name, Cpp.defineMacroKindIndex);
 		e.lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
 		e.isFileScope  = isFileScope;
 		e.truncateLine = true;

@@ -67,7 +67,7 @@ static void findConfTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, ConfKinds, K_SECTION);
+			makeSimpleTag (name, K_SECTION);
 			/* remember section name */
 			vStringCopy (scope, name);
 			vStringClear (name);
@@ -90,11 +90,11 @@ static void findConfTags (void)
 				if (*cp == '=')
 				{
 					tagEntryInfo e;
-					initTagEntry (&e, vStringValue (name), &(ConfKinds [K_KEY]));
+					initTagEntry (&e, vStringValue (name), K_KEY);
 
 					if (vStringLength (scope) > 0)
 					{
-						e.extensionFields.scopeKind = &(ConfKinds [K_SECTION]);
+						e.extensionFields.scopeKindIndex = K_SECTION;
 						e.extensionFields.scopeName = vStringValue(scope);
 					}
 					makeTagEntry (&e);

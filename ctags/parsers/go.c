@@ -521,7 +521,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	const char *const name = vStringValue (token->string);
 
 	tagEntryInfo e;
-	initTagEntry (&e, name, &(GoKinds [kind]));
+	initTagEntry (&e, name, kind);
 
 	if (!GoKinds [kind].enabled)
 		return;
@@ -535,7 +535,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 
 	if (parent_kind != GOTAG_UNDEFINED && parent_token != NULL)
 	{
-		e.extensionFields.scopeKind = &(GoKinds[parent_kind]);
+		e.extensionFields.scopeKindIndex = parent_kind;
 		e.extensionFields.scopeName = vStringValue (parent_token->string);
 	}
 	makeTagEntry (&e);

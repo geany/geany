@@ -90,7 +90,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_VARIABLE);
+			makeSimpleTag (name, HXTAG_VARIABLE);
 
 			vStringClear (name);
 		}
@@ -108,7 +108,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_METHODS);
+			makeSimpleTag (name, HXTAG_METHODS);
 
 			vStringClear (name);
 		}
@@ -125,7 +125,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_CLASS);
+			makeSimpleTag (name, HXTAG_CLASS);
 			vStringCopy(clsName,name);
 			vStringClear (name);
 		}
@@ -142,7 +142,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_ENUM);
+			makeSimpleTag (name, HXTAG_ENUM);
 			vStringClear (name);
 		} else if (strncmp ((const char*) cp, "public", (size_t) 6) == 0 &&
 				 isspace((int) cp [6]))
@@ -171,7 +171,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_INTERFACE);
+			makeSimpleTag (name, HXTAG_INTERFACE);
 			vStringClear (name);
 		} else if (strncmp ((const char *) cp,"typedef",(size_t) 7) == 0 && isspace(((int) cp[7]))) {
 			cp += 7;
@@ -183,7 +183,7 @@ another:
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, HxKinds, HXTAG_TYPEDEF);
+			makeSimpleTag (name, HXTAG_TYPEDEF);
 			vStringClear (name);
 		}
 

@@ -61,7 +61,7 @@ static void popNestingLevelToKind(const int kind)
 	{
 		nl = nestingLevelsGetCurrent(nestingLevels);
 		e = getEntryOfNestingLevel (nl);
-		if ((nl && (e == NULL)) || (e && (e->kind - AsciidocKinds) >= kind))
+		if ((nl && (e == NULL)) || (e && e->kindIndex >= kind))
 			nestingLevelsPop(nestingLevels);
 		else
 			break;
@@ -78,7 +78,7 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 	{
 		tagEntryInfo e;
 
-		initTagEntry (&e, vStringValue (name), &(AsciidocKinds [kind]));
+		initTagEntry (&e, vStringValue (name), kind);
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
 

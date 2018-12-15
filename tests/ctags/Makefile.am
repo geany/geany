@@ -1,6 +1,12 @@
 
 dist_check_SCRIPTS = runner.sh
 
+# Disabled tests:
+#	rules.t2t
+#	simple.cbl
+#	simple.html
+#	titles.t2t
+
 NULL =
 test_sources = \
 	1795612.js						\
@@ -262,16 +268,13 @@ test_sources = \
 	ruby-namespaced-class.rb		\
 	ruby-scope-after-anonymous-class.rb	\
 	ruby-sf-bug-364.rb				\
-	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
 	shebang.js						\
 	signature.cpp					\
 	simple.bas						\
-	simple.cbl						\
 	simple.d						\
-	simple.html						\
 	simple.js						\
 	simple.json						\
 	simple.ksh						\
@@ -303,7 +306,6 @@ test_sources = \
 	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
-	titles.t2t						\
 	traffic_signal.v				\
 	traits.php						\
 	ui5.controller.js				\

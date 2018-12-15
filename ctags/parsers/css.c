@@ -226,7 +226,7 @@ static void findCssTags (void)
 			if (CssKinds[kind].enabled)
 			{
 				tagEntryInfo e;
-				initTagEntry (&e, vStringValue (selector), &(CssKinds[kind]));
+				initTagEntry (&e, vStringValue (selector), kind);
 
 				e.lineNumber	= lineNumber;
 				e.filePosition	= filePosition;

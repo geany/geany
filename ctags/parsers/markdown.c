@@ -50,7 +50,7 @@ static bool issame(const char *str)
 static void makeMarkdownTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name), &(MarkdownKinds [0]));
+	initTagEntry (&e, vStringValue(name), 0);
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */

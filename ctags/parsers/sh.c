@@ -90,7 +90,7 @@ static void findShTags (void)
 				functionFound = true;
 		}
 		if (functionFound)
-			makeSimpleTag (name, ShKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 		vStringClear (name);
 	}
 	vStringDelete (name);

@@ -423,11 +423,11 @@ static objcKind parentType = K_INTERFACE;
  * add additional information to the tag. */
 static void prepareTag (tagEntryInfo * tag, vString const *name, objcKind kind)
 {
-	initTagEntry (tag, vStringValue (name), &(ObjcKinds[kind]));
+	initTagEntry (tag, vStringValue (name), kind);
 
 	if (parentName != NULL)
 	{
-		tag->extensionFields.scopeKind = &(ObjcKinds[parentType]);
+		tag->extensionFields.scopeKindIndex = parentType;
 		tag->extensionFields.scopeName = vStringValue (parentName);
 	}
 }

@@ -68,7 +68,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 			vStringClear (name);
 		}
 		/* variables */
@@ -93,7 +93,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_VARIABLE);
+			makeSimpleTag (name, K_VARIABLE);
 			vStringClear (name);
 		}
 		/* sections */
@@ -122,7 +122,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_SECTION);
+			makeSimpleTag (name, K_SECTION);
 			vStringClear (name);
 		}
 	}

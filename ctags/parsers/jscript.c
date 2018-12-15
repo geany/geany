@@ -223,7 +223,7 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 			name = p + 1;
 		}
 
-		initTagEntry (&e, name, &(JsKinds [kind]));
+		initTagEntry (&e, name, kind);
 
 		e.lineNumber   = token->lineNumber;
 		e.filePosition = token->filePosition;
@@ -239,7 +239,7 @@ static void makeJsTag (tokenInfo *const token, const jsKind kind, vString *const
 			if (kind == JSTAG_FUNCTION)
 				parent_kind = JSTAG_FUNCTION;
 
-			e.extensionFields.scopeKind = &(JsKinds [parent_kind]);
+			e.extensionFields.scopeKindIndex = parent_kind;
 			e.extensionFields.scopeName = vStringValue (fullscope);
 		}
 

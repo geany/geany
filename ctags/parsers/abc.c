@@ -53,7 +53,7 @@ static kindDefinition AbcKinds[] = {
 static void makeAbcTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name), &(AbcKinds[0]));
+	initTagEntry (&e, vStringValue(name), 0);
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */

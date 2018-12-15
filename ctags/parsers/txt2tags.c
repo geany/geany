@@ -61,8 +61,7 @@ static int makeTxt2tagsTag (const vString* const name,
 {
 	tagEntryInfo e;
 	NestingLevel *nl;
-	kindDefinition *kind = &Txt2tagsKinds[type];
-	initTagEntry (&e, vStringValue(name), kind);
+	initTagEntry (&e, vStringValue(name), type);
 
 	nl = nestingLevelsGetCurrent (nls);
 	if (nl)

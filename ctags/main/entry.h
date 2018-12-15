@@ -55,10 +55,10 @@ struct sTagEntryInfo {
 				       * (may be NULL if not present) *//*  */
 	unsigned int boundaryInfo;    /* info about nested input stream */
 	MIOPos      filePosition;     /* file position of line containing tag */
-	const char* language;         /* language of input file */
+	langType langType;         /* language of input file */
 	const char *inputFileName;   /* name of input file */
 	const char *name;             /* name of the tag */
-	const kindDefinition *kind;	  /* kind descriptor */
+	int kindIndex;	      /* kind descriptor */
 	unsigned char extra[ ((XTAG_COUNT) / 8) + 1 ];
 
 	struct {
@@ -67,7 +67,11 @@ struct sTagEntryInfo {
 		const char* implementation;
 		const char* inheritance;
 
-		const kindDefinition* scopeKind;
+		/* Which scopeKindIndex belong to. If the value is LANG_AUTO,
+		   the value for langType field of this structure is used as default value.
+		   LANG_AUTO is set automatically in initTagEntryInfo. */
+		langType    scopeLangType;
+		int         scopeKindIndex;
 		const char* scopeName;
 		int         scopeIndex;   /* cork queue entry for upper scope tag.
 					     This field is meaningful if the value
@@ -99,7 +103,7 @@ struct sTagEntryInfo {
 
 	/* Following source* fields are used only when #line is found
 	   in input and --line-directive is given in ctags command line. */
-	const char* sourceLanguage;
+	langType sourceLangType;
 	const char *sourceFileName;
 	unsigned long sourceLineNumberDifference;
 };
@@ -121,18 +125,18 @@ extern void  setupWriter (void);
 extern void  teardownWriter (const char *inputFilename);
 extern int makeTagEntry (const tagEntryInfo *const tag);
 extern void initTagEntry (tagEntryInfo *const e, const char *const name,
-			  const kindDefinition *kind);
+			  int kindIndex);
 extern void initRefTagEntry (tagEntryInfo *const e, const char *const name,
-			     const kindDefinition *kind, int roleIndex);
+			     int kindIndex, int roleIndex);
 extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 			      unsigned long lineNumber,
-			      const char* language,
+			      langType langType_,
 			      MIOPos      filePosition,
 			      const char *inputFileName,
-			      const kindDefinition *kind,
+			      int kindIndex,
 			      int roleIndex,
 			      const char *sourceFileName,
-			      const char* sourceLanguage,
+			      langType sourceLangType,
 			      long sourceLineNumberDifference);
 extern int makeQualifiedTagEntry (const tagEntryInfo *const e);
 

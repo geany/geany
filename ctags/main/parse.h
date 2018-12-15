@@ -204,11 +204,12 @@ extern parserDefinitionFunc YAML_PARSER_LIST;
 
 
 /* Language processing and parsing */
-extern int makeSimpleTag (const vString* const name, kindDefinition* const kinds, const int kind);
-extern int makeSimpleRefTag (const vString* const name, kindDefinition* const kinds, const int kind,
+extern int makeSimpleTag (const vString* const name, const int kind);
+extern int makeSimpleRefTag (const vString* const name, const int kindIndexS,
 			     int roleIndex);
 extern parserDefinition* parserNew (const char* name);
 extern parserDefinition* parserNewFull (const char* name, char fileKind);
+extern kindDefinition* getLanguageKind(const langType language, int kindIndex);
 extern bool doesLanguageAllowNullTag (const langType language);
 extern bool doesLanguageRequestAutomaticFQTag (const langType language);
 extern const char *getLanguageName (const langType language);
@@ -216,7 +217,7 @@ extern kindDefinition* getLanguageFileKind (const langType language);
 extern langType getNamedLanguage (const char *const name, size_t len);
 extern langType getFileLanguage (const char *const fileName);
 extern bool isLanguageEnabled (const langType language);
-extern bool isLanguageKindEnabled (const langType language, char kind);
+extern bool isLanguageKindEnabled (const langType language, int kindIndex);
 
 extern void installLanguageMapDefault (const langType language);
 extern void installLanguageMapDefaults (void);

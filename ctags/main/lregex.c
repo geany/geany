@@ -142,6 +142,11 @@ static int makeRegexTag (
 		const vString* const name, const kindDefinition* const kind, int scopeIndex, int placeholder)
 {
 	Assert (kind != NULL);
+	/* TODO: Disable regex tag generation for now. We would need to pass kindIndex
+	 * to initTagEntry() but currently we don't have kinds indexable because
+	 * they are stored in hash table. Consider whether we want to support
+	 * regex parsers at all in Geany. */
+#if 0
 	if (kind->enabled)
 	{
 		tagEntryInfo e;
@@ -152,6 +157,7 @@ static int makeRegexTag (
 		return makeTagEntry (&e);
 	}
 	else
+#endif
 		return CORK_NIL;
 }
 

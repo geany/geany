@@ -1093,19 +1093,19 @@ static javaKind javaTagKind (const tagType type)
 	return result;
 }
 
-static const kindDefinition *tagKind (const tagType type)
+static int kindIndexForType (const tagType type)
 {
-	const kindDefinition* result;
+	int result;
 	if (isInputLanguage (Lang_java))
-		result = &JavaKinds [javaTagKind (type)];
+		result = javaTagKind (type);
 	else if (isInputLanguage (Lang_csharp))
-		result = &CsharpKinds [csharpTagKind (type)];
+		result = csharpTagKind (type);
 	else if (isInputLanguage (Lang_d))
-		result = &DKinds [dTagKind (type)];
+		result = dTagKind (type);
 	else if (isInputLanguage (Lang_vala))
-		result = &ValaKinds [valaTagKind (type)];
+		result = valaTagKind (type);
 	else
-		result = &CKinds [cTagKind (type)];
+		result = cTagKind (type);
 	return result;
 }
 
@@ -1184,10 +1184,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 				(isMember (st) || st->parent->declaration == DECL_NAMESPACE))
 			{
 				if (isType (st->context, TOKEN_NAME))
-					tag->extensionFields.scopeKind = tagKind (TAG_CLASS);
+					tag->extensionFields.scopeKindIndex = kindIndexForType (TAG_CLASS);
 				else
-					tag->extensionFields.scopeKind =
-						tagKind (declToTagType (parentDecl (st)));
+					tag->extensionFields.scopeKindIndex =
+						kindIndexForType (declToTagType (parentDecl (st)));
 				tag->extensionFields.scopeName = vStringValue (scope);
 			}
 			if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
@@ -1435,7 +1435,7 @@ static void makeTag (const tokenInfo *const token,
 			return;
 		}
 
-		initTagEntry (&e, vStringValue (token->name), tagKind (type));
+		initTagEntry (&e, vStringValue (token->name), kindIndexForType (type));
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
@@ -3131,7 +3131,7 @@ static rescanReason findCTags (const unsigned int passCount)
 	Assert (passCount < 3);
 
 	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
-		CKinds+CK_DEFINE);
+		CK_DEFINE);
 
 	exception = (exception_t) setjmp (Exception);
 	rescan = RESCAN_NONE;

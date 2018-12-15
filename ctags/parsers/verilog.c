@@ -215,7 +215,7 @@ static void tagNameList (const verilogKind kind, int c)
 		if (isIdentifierCharacter (c))
 		{
 			readIdentifier (name, c);
-			makeSimpleTag (name, VerilogKinds, kind);
+			makeSimpleTag (name, kind);
 		}
 		else
 			break;
@@ -255,7 +255,7 @@ static void findTag (vString *const name)
 		/* Bug #961001: Verilog compiler directives are line-based. */
 		int c = skipWhite (vGetc ());
 		readIdentifier (name, c);
-		makeSimpleTag (name, VerilogKinds, kind);
+		makeSimpleTag (name, kind);
 		/* Skip the rest of the line. */
 		do {
 			c = vGetc();

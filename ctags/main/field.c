@@ -401,9 +401,10 @@ static const char *renderEscapedName (const char* s,
 		int c = *s;
 		if ((c > 0x00 && c <= 0x1F) || c == 0x7F)
 		{
+			char letter = getLanguageKind(tag->langType, tag->kindIndex)->letter;
 			verbose ("Unexpected character (0 < *c && *c < 0x20) included in a tagEntryInfo: %s\n", base);
 			verbose ("File: %s, Line: %lu, Lang: %s, Kind: %c\n",
-				 tag->inputFileName, tag->lineNumber, tag->language, tag->kind->letter);
+				 tag->inputFileName, tag->lineNumber, getLanguageName(tag->langType), letter);
 			verbose ("Escape the character\n");
 			break;
 		}
@@ -518,7 +519,8 @@ static const char* renderCompactInputLine (vString *b,  const char *const line)
 
 static const char *renderFieldKindName (const tagEntryInfo *const tag, const char *value CTAGS_ATTR_UNUSED, vString* b)
 {
-	return renderAsIs (b, tag->kind->name);
+	kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
+	return renderAsIs (b, kdef->name);
 }
 
 static const char *renderFieldCompactInputLine (const tagEntryInfo *const tag,
@@ -564,15 +566,12 @@ static const char *renderFieldRole (const tagEntryInfo *const tag,
 				    vString* b)
 {
 	int rindex = tag->extensionFields.roleIndex;
-	const roleDesc * role;
 
 	if (rindex == ROLE_INDEX_DEFINITION)
 		vStringClear (b);
 	else
 	{
-		Assert (rindex < tag->kind->nRoles);
-		role  = & (tag->kind->roles [rindex]);
-		return renderRole (role, b);
+		return "TODO";
 	}
 
 	return vStringValue (b);
@@ -582,10 +581,12 @@ static const char *renderFieldLanguage (const tagEntryInfo *const tag,
 					const char *value CTAGS_ATTR_UNUSED,
 					vString* b)
 {
-	const char *l = tag->language;
+	const char *l;
 
-	if (Option.lineDirectives && tag->sourceLanguage)
-		l = tag->sourceLanguage;
+	if (Option.lineDirectives && (tag->sourceLangType != LANG_IGNORE))
+		l = getLanguageName(tag->sourceLangType);
+	else
+		l = getLanguageName(tag->langType);
 
 	return renderAsIs (b, WITH_DEFUALT_VALUE(l));
 }
@@ -601,11 +602,7 @@ static const char *renderFieldKindLetter (const tagEntryInfo *const tag,
 					  const char *value CTAGS_ATTR_UNUSED,
 					  vString* b)
 {
-	static char c[2] = { [1] = '\0' };
-
-	c [0] = tag->kind->letter;
-
-	return renderAsIs (b, c);
+	return "TODO";
 }
 
 static const char *renderFieldImplementation (const tagEntryInfo *const tag,
@@ -712,7 +709,7 @@ static const char *renderFieldEnd (const tagEntryInfo *const tag,
 
 static bool     isLanguageFieldAvailable (const tagEntryInfo *const tag)
 {
-	return (tag->language != NULL)? true: false;
+	return (tag->langType == LANG_IGNORE)? false: true;
 }
 
 static bool     isTyperefFieldAvailable  (const tagEntryInfo *const tag)

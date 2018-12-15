@@ -105,21 +105,21 @@ extern unsigned int countParsers (void)
 }
 
 extern int makeSimpleTag (
-		const vString* const name, kindDefinition* const kinds, const int kind)
+		const vString* const name, const int kindIndex)
 {
 	int r = CORK_NIL;
 
-	if (kinds [kind].enabled  &&  name != NULL  &&  vStringLength (name) > 0)
+	if (isInputLanguageKindEnabled(kindIndex)  &&  name != NULL  &&  vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
-		initTagEntry (&e, vStringValue (name), & kinds [kind]);
+		initTagEntry (&e, vStringValue (name), kindIndex);
 
 		r = makeTagEntry (&e);
 	}
 	return r;
 }
 
-extern int makeSimpleRefTag (const vString* const name, kindDefinition* const kinds, const int kind,
+extern int makeSimpleRefTag (const vString* const name, const int kindIndex,
 			     int roleIndex)
 {
 	int r = CORK_NIL;
@@ -127,12 +127,13 @@ extern int makeSimpleRefTag (const vString* const name, kindDefinition* const ki
 	if (! isXtagEnabled (XTAG_REFERENCE_TAGS))
 		return r;
 
-	Assert (roleIndex < kinds[kind].nRoles);
+	Assert (roleIndex < countInputLanguageRoles(kindIndex));
 
-	if (kinds[kind].roles[roleIndex].enabled)
+	/* do not check for kind being disabled - that happens later in makeTagEntry() */
+	if (name != NULL  &&  vStringLength (name) > 0)
 	{
 	    tagEntryInfo e;
-	    initRefTagEntry (&e, vStringValue (name), & kinds [kind], roleIndex);
+	    initRefTagEntry (&e, vStringValue (name), kindIndex, roleIndex);
 
 	    r = makeTagEntry (&e);
 	}
@@ -227,6 +228,13 @@ extern kindDefinition* getLanguageFileKind (const langType language)
 	Assert (kind != NULL);
 
 	return kind;
+}
+
+extern kindDefinition* getLanguageKind (const langType language, int kindIndex)
+{
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+
+	return (LanguageTable [language]->kindTable) + kindIndex;
 }
 
 extern langType getNamedLanguage (const char *const name, size_t len)
@@ -1639,19 +1647,10 @@ static kindDefinition *langKindLongOption (const langType language, const char *
 	return result;
 }
 
-extern bool isLanguageKindEnabled (const langType language, char kind)
+extern bool isLanguageKindEnabled (const langType language, int kindIndex)
 {
-	const kindDefinition *kindOpt;
-
-	if (hasRegexKind (language, kind))
-		return isRegexKindEnabled (language, kind);
-	else if (hasXcmdKind (language, kind))
-		return isXcmdKindEnabled (language, kind);
-
-	kindOpt = langKindDefinition (language, kind);
-	Assert (kindOpt);
-
-	return kindOpt->enabled;
+	kindDefinition * kdef = getLanguageKind (language, kindIndex);
+	return kdef->enabled;
 }
 
 
@@ -2610,12 +2609,12 @@ extern bool makeKindSeparatorsPseudoTags (const langType language,
 
 			sep = kinds[i].separators + j;
 
-			if (sep->parentLetter == KIND_WILDCARD)
+			if (sep->parentKindIndex == KIND_WILDCARD_INDEX)
 			{
 				name[1] = KIND_WILDCARD;
 				name[2] = kinds[i].letter;
 			}
-			else if (sep->parentLetter == KIND_NULL)
+			else if (sep->parentKindIndex == KIND_GHOST_INDEX)
 			{
 				/* This is root separator: no upper item is here. */
 				name[1] = kinds[i].letter;
@@ -2625,7 +2624,7 @@ extern bool makeKindSeparatorsPseudoTags (const langType language,
 			else
 			{
 				upperKind = langKindDefinition (language,
-							    sep->parentLetter);
+							    sep->parentKindIndex);
 				if (!upperKind)
 					continue;
 
@@ -2785,7 +2784,7 @@ static void createCTSTTags (void)
 				switch (i)
 				{
 					case K_BROKEN:
-						initTagEntry (&e, "one\nof\rbroken\tname", &CTST_Kinds[i]);
+						initTagEntry (&e, "one\nof\rbroken\tname", i);
 						e.extensionFields.scopeKind = & (CTST_Kinds [K_BROKEN]);
 						e.extensionFields.scopeName = "\\Broken\tContext";
 						makeTagEntry (&e);

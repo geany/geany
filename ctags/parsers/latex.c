@@ -106,7 +106,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			++l;
 		} while ((*l != '\0') && (*l != '}'));
 		if (name->buffer[0] != '}')
-			makeSimpleTag(name, TeXKinds, kind);
+			makeSimpleTag(name, kind);
 	}
 	else if (isalpha((int) *l) || *l == '@')
 	{
@@ -115,12 +115,12 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut (name, (int) *l);
 			++l;
 		} while (isalpha((int) *l) || *l == '@');
-		makeSimpleTag(name, TeXKinds, kind);
+		makeSimpleTag(name, kind);
 	}
 	else
 	{
 		vStringPut(name, (int) *l);
-		makeSimpleTag(name, TeXKinds, kind);
+		makeSimpleTag(name, kind);
 	}
 
 no_tag:
