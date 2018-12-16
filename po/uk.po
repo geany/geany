@@ -1103,9 +1103,8 @@ msgid "<b>Display</b>"
 msgstr "<b>Показати</b>"
 
 #: ../data/geany.glade.h:216
-#, fuzzy
 msgid "Column:"
-msgstr "Компанія:"
+msgstr "Cтовпчик:"
 
 #: ../data/geany.glade.h:217
 msgid "Color:"
