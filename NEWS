@@ -46,8 +46,9 @@ Geany 1.34 (unreleased)
     * Fix value of GeanyDocument::changed when quitting (Jason Cumbie, PR#1857).
 
     Internationalization
-    * Updated translations: da, de, dk, es, fr, hu, it, ja, pt, sv, sk, uk,
-                            ru, zh_CN, zh_TW
+    * Add translation: da
+    * Updated translations: de, dk, es, fr, hu, it, ja, pt, sv, sk, uk, ru,
+                            zh_CN, zh_TW
 
 
 Geany 1.33 (February 25, 2018)
