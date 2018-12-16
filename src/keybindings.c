@@ -2491,7 +2491,7 @@ static gboolean cb_func_format_action(guint key_id)
 			editor_indentation_by_one_space(doc->editor, -1, TRUE);
 			break;
 		case GEANY_KEYS_FORMAT_AUTOINDENT:
-			editor_smart_line_indentation(doc->editor, -1);
+			editor_smart_line_indentation(doc->editor);
 			break;
 		case GEANY_KEYS_FORMAT_TOGGLECASE:
 			on_toggle_case1_activate(NULL, NULL);

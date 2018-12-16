@@ -492,6 +492,7 @@ static gboolean handle_save_as(const gchar *utf8_filename, gboolean rename_file)
 	GeanyDocument *doc = document_get_current();
 	gboolean success = FALSE;
 
+	g_return_val_if_fail(doc != NULL, FALSE);
 	g_return_val_if_fail(!EMPTY(utf8_filename), FALSE);
 
 	if (doc->file_name != NULL)
