@@ -1,4 +1,4 @@
-Geany 1.34 (unreleased)
+Geany 1.34 (December 16, 2018)
 
     General
     * Auto-select GTK2 or GTK3 at build time depending on availability
