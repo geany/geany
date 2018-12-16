@@ -44,6 +44,8 @@ fontconfig
 freetype
 atk
 fribidi
+libdatrie
+libthai
 pango
 cairo
 pixman
