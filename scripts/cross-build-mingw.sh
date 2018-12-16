@@ -15,7 +15,7 @@
 
 # You may change those
 HOST=i686-w64-mingw32
-GTK2_BUNDLE_ZIP="http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip"
+GTK2_BUNDLE_ZIP="https://download.geany.org/contrib/gtk/gtk+-bundle_2.24.10-20120208_win32.zip"
 GTK3_BUNDLE_ZIP="https://download.geany.org/contrib/gtk/gtk+-bundle_3.8.2-20131001_win32.zip"
 BUILDDIR=_build-cross-mingw
 GTK3=no
