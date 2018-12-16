@@ -1349,8 +1349,8 @@ msgid "Tools"
 msgstr "Εργαλεία"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "διεύθυνση email του δημιουργού"
+msgid "Email address of the developer"
+msgstr "Διεύθυνση email του δημιουργού"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

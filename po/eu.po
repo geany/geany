@@ -1249,8 +1249,8 @@ msgid "Tools"
 msgstr "Tresnak"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "garatzailearen e-posta helbidea"
+msgid "Email address of the developer"
+msgstr "Garatzailearen e-posta helbidea"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

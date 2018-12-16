@@ -1245,7 +1245,7 @@ msgid "Tools"
 msgstr "工具"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "开发者的电子邮件"
 
 #: ../data/geany.glade.h:274

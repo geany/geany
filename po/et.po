@@ -1247,8 +1247,8 @@ msgid "Tools"
 msgstr "Tööriistad"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "arendaja meiliaadress"
+msgid "Email address of the developer"
+msgstr "Arendaja meiliaadress"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

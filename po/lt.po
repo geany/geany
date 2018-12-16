@@ -1305,8 +1305,8 @@ msgid "Tools"
 msgstr "Įrankiai"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "kūrėjo el. paštas"
+msgid "Email address of the developer"
+msgstr "Kūrėjo el. paštas"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

@@ -1379,7 +1379,7 @@ msgid "Tools"
 msgstr "Geschir"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "E-mail Adress vum Entwéckler"
 
 #: ../data/geany.glade.h:274

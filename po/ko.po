@@ -1309,7 +1309,7 @@ msgid "Tools"
 msgstr "도구"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "개발자의 이메일 주소"
 
 #: ../data/geany.glade.h:274

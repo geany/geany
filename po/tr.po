@@ -1313,8 +1313,8 @@ msgid "Tools"
 msgstr "Araçlar"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "geliştiricinin e-posta adresi"
+msgid "Email address of the developer"
+msgstr "Geliştiricinin e-posta adresi"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

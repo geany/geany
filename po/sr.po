@@ -1255,8 +1255,8 @@ msgid "Tools"
 msgstr "Алати"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "адреса ел. поште програмера"
+msgid "Email address of the developer"
+msgstr "Адреса ел. поште програмера"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

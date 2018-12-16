@@ -1331,7 +1331,7 @@ msgid "Tools"
 msgstr "Nástroje"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "E-mailová adresa vývojáře"
 
 #: ../data/geany.glade.h:274

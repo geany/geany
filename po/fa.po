@@ -1347,8 +1347,8 @@ msgid "Tools"
 msgstr "Tools"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "e-mail address of the developer"
+msgid "Email address of the developer"
+msgstr "E-mail address of the developer"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

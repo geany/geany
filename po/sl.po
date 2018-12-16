@@ -1332,8 +1332,8 @@ msgid "Tools"
 msgstr "Orodja"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
-msgstr "e-poštni naslov razvijalca"
+msgid "Email address of the developer"
+msgstr "E-poštni naslov razvijalca"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"

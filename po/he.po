@@ -1276,7 +1276,7 @@ msgid "Tools"
 msgstr "כלים"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "כתובת הדואר האלקטרוני של המפתח"
 
 #: ../data/geany.glade.h:274
