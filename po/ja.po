@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-03 21:05+0100\n"
+"POT-Creation-Date: 2018-12-16 11:11+0100\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
 "Last-Translator: Chikahiro Masami <masami@linux-lhx4.site>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -109,11 +109,11 @@ msgstr "検索(_S)"
 msgid "Open Selected F_ile"
 msgstr "選択されたファイルを開く(_I)"
 
-#: ../data/geany.glade.h:19 ../src/symbols.c:2596
+#: ../data/geany.glade.h:19 ../src/symbols.c:2605
 msgid "Find _Usage"
 msgstr "使用箇所を検索(_U)"
 
-#: ../data/geany.glade.h:20 ../src/symbols.c:2601
+#: ../data/geany.glade.h:20 ../src/symbols.c:2610
 msgid "Find _Document Usage"
 msgstr "文書内で使用箇所を検索(_D)"
 
@@ -187,8 +187,8 @@ msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
-"起動時に仮想端末エミュレーション(VTE)を読み込むかどうか指定します。"
-"不要なら無効にできます。"
+"起動時に仮想端末エミュレーション(VTE)を読み込むかどうか指定します。不要なら無"
+"効にできます。"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -732,8 +732,8 @@ msgid ""
 "Note: To apply these settings to all currently open documents, use "
 "<i>Project->Apply Default Indentation</i>."
 msgstr ""
-"注: 現在開いている全てのドキュメントにこれらの設定を適用するには、"
-"<i>プロジェクト->標準インデントを適用</i> を使用します。"
+"注: 現在開いている全てのドキュメントにこれらの設定を適用するには、<i>プロジェ"
+"クト->標準インデントを適用</i> を使用します。"
 
 #: ../data/geany.glade.h:151
 msgid "_Width:"
@@ -1292,7 +1292,7 @@ msgid "Tools"
 msgstr "ツール"
 
 #: ../data/geany.glade.h:273
-msgid "email address of the developer"
+msgid "Email address of the developer"
 msgstr "開発者の email アドレス"
 
 #: ../data/geany.glade.h:274
@@ -1636,7 +1636,7 @@ msgstr "別名で保存...(_A)"
 msgid "Sa_ve All"
 msgstr "すべて保存(_L)"
 
-#: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3630
+#: ../data/geany.glade.h:350 ../src/document.c:1656 ../src/document.c:3617
 #: ../src/sidebar.c:718
 msgid "_Reload"
 msgstr "再読み込み(_R)"
@@ -1761,7 +1761,7 @@ msgstr "次を検索(_N)"
 msgid "Find _Previous"
 msgstr "前を検索(_P)"
 
-#: ../data/geany.glade.h:381 ../src/symbols.c:2606
+#: ../data/geany.glade.h:381 ../src/symbols.c:2615
 msgid "Find in F_iles..."
 msgstr "複数のファイルから検索(_I)..."
 
@@ -2531,8 +2531,8 @@ msgstr "コンテキスト アクション コマンド \"%s\" を実行でき�
 msgid "No context action set."
 msgstr "コンテキスト アクション コマンド がありません"
 
-#: ../src/dialogs.c:161 ../src/document.c:2302 ../src/document.c:2367
-#: ../src/document.c:2375
+#: ../src/dialogs.c:161 ../src/document.c:2303 ../src/document.c:2368
+#: ../src/document.c:2376
 #, c-format
 msgid "\"%s\" was not found."
 msgstr "\"%s\" が見つかりません"
@@ -2615,7 +2615,7 @@ msgstr ""
 "ファイルを読み取り専用モードで開きます。複数のファイルを選択して開いた場合、"
 "すべてのファイルが読み取り専用になります。"
 
-#: ../src/dialogs.c:535 ../src/document.c:2053
+#: ../src/dialogs.c:535 ../src/document.c:2054
 msgid "Overwrite?"
 msgstr "上書きしますか?"
 
@@ -2677,7 +2677,7 @@ msgstr "エラーが発生したかファイル情報が取得できません（
 
 #: ../src/dialogs.c:1204 ../src/dialogs.c:1205 ../src/dialogs.c:1206
 #: ../src/dialogs.c:1212 ../src/dialogs.c:1213 ../src/dialogs.c:1214
-#: ../src/symbols.c:2410 ../src/symbols.c:2426 ../src/ui_utils.c:289
+#: ../src/symbols.c:2419 ../src/symbols.c:2435 ../src/ui_utils.c:289
 msgid "unknown"
 msgstr "不明"
 
@@ -2694,27 +2694,27 @@ msgstr "(BOM あり)"
 msgid "(without BOM)"
 msgstr "(BOM なし)"
 
-#: ../src/document.c:734
+#: ../src/document.c:735
 #, c-format
 msgid "File %s closed."
 msgstr "ファイル %s を閉じました"
 
-#: ../src/document.c:890
+#: ../src/document.c:891
 #, c-format
 msgid "New file \"%s\" opened."
 msgstr "新しいファイル \"%s\" を開きました"
 
-#: ../src/document.c:964
+#: ../src/document.c:965
 #, c-format
 msgid "Could not open file %s (%s)"
 msgstr "ファイル %s を開けません（%s）"
 
-#: ../src/document.c:1013
+#: ../src/document.c:1014
 #, c-format
 msgid "The file \"%s\" is not valid %s."
 msgstr "ファイル \"%s\" は有効な %s ではありません"
 
-#: ../src/document.c:1019
+#: ../src/document.c:1020
 #, c-format
 msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
@@ -2723,7 +2723,7 @@ msgstr ""
 "ファイル \"%s\" はテキストファイルでないかエンコーディングがサポートされてい"
 "ません"
 
-#: ../src/document.c:1029
+#: ../src/document.c:1030
 #, c-format
 msgid ""
 "The file \"%s\" could not be opened properly and has been truncated. This "
@@ -2736,31 +2736,31 @@ msgstr ""
 "生します。\n"
 "ファイルを読み込み専用に設定しました。"
 
-#: ../src/document.c:1241
+#: ../src/document.c:1242
 msgid "Spaces"
 msgstr "空白"
 
-#: ../src/document.c:1244
+#: ../src/document.c:1245
 msgid "Tabs"
 msgstr "タブ"
 
-#: ../src/document.c:1247
+#: ../src/document.c:1248
 msgid "Tabs and Spaces"
 msgstr "タブと空白"
 
 #. For translators: first wildcard is the indentation mode (Spaces, Tabs, Tabs
 #. * and Spaces), the second one is the filename
-#: ../src/document.c:1252
+#: ../src/document.c:1253
 #, c-format
 msgid "Setting %s indentation mode for %s."
 msgstr "%s インデント形式に設定(ファイル %s )"
 
-#: ../src/document.c:1263
+#: ../src/document.c:1264
 #, c-format
 msgid "Setting indentation width to %d for %s."
 msgstr "インデント幅を %d に設定(ファイル %s )"
 
-#: ../src/document.c:1487
+#: ../src/document.c:1488
 #, c-format
 msgid "File %s reloaded."
 msgstr "ファイル %s を再読み込みしました"
@@ -2768,20 +2768,20 @@ msgstr "ファイル %s を再読み込みしました"
 #. For translators: this is the status window message for opening a file. %d is the number
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
-#: ../src/document.c:1495
+#: ../src/document.c:1496
 #, c-format
 msgid "File %s opened (%d%s)."
 msgstr "ファイル %s を開きました（%d%s）"
 
-#: ../src/document.c:1497
+#: ../src/document.c:1498
 msgid ", read-only"
 msgstr ", 読み取り専用"
 
-#: ../src/document.c:1621
+#: ../src/document.c:1622
 msgid "Discard history"
 msgstr "履歴を廃棄"
 
-#: ../src/document.c:1622
+#: ../src/document.c:1623
 msgid ""
 "The buffer's previous state is stored in the history and undoing restores "
 "it. You can disable this by discarding the history upon reload. This message "
@@ -2792,28 +2792,28 @@ msgstr ""
 "み込みにより履歴を廃棄すれば、アンドウで復元できなくなります。このメッセージ"
 "は再表示されませんが、設定により変更可能です。"
 
-#: ../src/document.c:1626
+#: ../src/document.c:1627
 msgid "The file has been reloaded."
 msgstr "ファイルを再読み込みしました。"
 
-#: ../src/document.c:1656
+#: ../src/document.c:1657
 msgid "Any unsaved changes will be lost."
 msgstr "保存されていない変更は失われます。"
 
-#: ../src/document.c:1657
+#: ../src/document.c:1658
 msgid "Undo history will be lost."
 msgstr "アンドウ履歴は失われます。"
 
-#: ../src/document.c:1658
+#: ../src/document.c:1659
 #, c-format
 msgid "Are you sure you want to reload '%s'?"
 msgstr "'%s' を再読み込みしてもよろしいですか?"
 
-#: ../src/document.c:1764
+#: ../src/document.c:1765
 msgid "Error renaming file."
 msgstr "ファイル名変更中にエラー"
 
-#: ../src/document.c:1885
+#: ../src/document.c:1886
 #, c-format
 msgid ""
 "An error occurred while converting the file from UTF-8 in \"%s\". The file "
@@ -2822,7 +2822,7 @@ msgstr ""
 "ファイルを UTF-8 から \"%s\" に変換するときにエラーがありました。ファイルは保"
 "存されていません。"
 
-#: ../src/document.c:1906
+#: ../src/document.c:1907
 #, c-format
 msgid ""
 "Error message: %s\n"
@@ -2831,55 +2831,55 @@ msgstr ""
 "エラーメッセージ: %s\n"
 "\"%s\" (行: %d, 桁: %d)でエラー"
 
-#: ../src/document.c:1910
+#: ../src/document.c:1911
 #, c-format
 msgid "Error message: %s."
 msgstr "エラーメッセージ: %s"
 
-#: ../src/document.c:1970
+#: ../src/document.c:1971
 #, c-format
 msgid "Failed to open file '%s' for writing: fopen() failed: %s"
 msgstr "ファイル '%s' 書き込みオープンに失敗: fopen() エラー: %s"
 
-#: ../src/document.c:1988
+#: ../src/document.c:1989
 #, c-format
 msgid "Failed to write file '%s': fwrite() failed: %s"
 msgstr "ファイル '%s' 書き込みに失敗: fwrite() エラー: %s"
 
-#: ../src/document.c:2002
+#: ../src/document.c:2003
 #, c-format
 msgid "Failed to close file '%s': fclose() failed: %s"
 msgstr "ファイル '%s' クローズに失敗: fclose() エラー: %s"
 
-#: ../src/document.c:2052 ../src/document.c:3631
+#: ../src/document.c:2053 ../src/document.c:3618
 msgid "_Overwrite"
 msgstr "上書き(_O)"
 
-#: ../src/document.c:2054 ../src/document.c:3634
+#: ../src/document.c:2055 ../src/document.c:3621
 #, c-format
 msgid "The file '%s' on the disk is more recent than the current buffer."
 msgstr "ディスク上のファイル '%s' は現在のバッファの内容より新しいです。"
 
-#: ../src/document.c:2062 ../src/document.c:3683
+#: ../src/document.c:2063 ../src/document.c:3670
 msgid "Try to resave the file?"
 msgstr "ファイルを保存し直しますか?"
 
-#: ../src/document.c:2063 ../src/document.c:3684
+#: ../src/document.c:2064 ../src/document.c:3671
 #, c-format
 msgid "File \"%s\" was not found on disk!"
 msgstr "ファイル \"%s\" はディスク上にありません!"
 
-#: ../src/document.c:2126
+#: ../src/document.c:2127
 #, c-format
 msgid "Cannot save read-only document '%s'!"
 msgstr "読み込み専用文書 '%s' は保存できません!"
 
-#: ../src/document.c:2194
+#: ../src/document.c:2195
 #, c-format
 msgid "Error saving file (%s)."
 msgstr "ファイル保存エラー（%s）"
 
-#: ../src/document.c:2199
+#: ../src/document.c:2200
 #, c-format
 msgid ""
 "%s\n"
@@ -2890,32 +2890,32 @@ msgstr ""
 "\n"
 "ディスク上のファイルは破損しているかもしれません!"
 
-#: ../src/document.c:2201
+#: ../src/document.c:2202
 msgid "Error saving file."
 msgstr "ファイル保存中にエラー"
 
-#: ../src/document.c:2225
+#: ../src/document.c:2226
 #, c-format
 msgid "File %s saved."
 msgstr "ファイル %s を保存しました"
 
-#: ../src/document.c:2375
+#: ../src/document.c:2376
 msgid "Wrap search and find again?"
 msgstr "もう一度折り返して検索しますか?"
 
-#: ../src/document.c:2464 ../src/search.c:1368 ../src/search.c:1421
+#: ../src/document.c:2465 ../src/search.c:1368 ../src/search.c:1421
 #: ../src/search.c:2223 ../src/search.c:2224
 #, c-format
 msgid "No matches found for \"%s\"."
 msgstr "\"%s\" に一致するものが見つかりません"
 
-#: ../src/document.c:2470
+#: ../src/document.c:2471
 #, c-format
 msgid "%s: replaced %d occurrence of \"%s\" with \"%s\"."
 msgid_plural "%s: replaced %d occurrences of \"%s\" with \"%s\"."
 msgstr[0] "%s: %d 個の \"%s\" を \"%s\" と置換しました"
 
-#: ../src/document.c:3633
+#: ../src/document.c:3620
 msgid "Do you want to reload it?"
 msgstr "再読み込みしますか?"
 
@@ -3906,11 +3906,11 @@ msgstr "Geany %s を起動しました"
 msgid "Configuration directory could not be created (%s)."
 msgstr "設定ディレクトリが作成できませんでした(%s)"
 
-#: ../src/libmain.c:1401
+#: ../src/libmain.c:1404
 msgid "Do you really want to quit?"
 msgstr "本当に終了しますか?"
 
-#: ../src/libmain.c:1439
+#: ../src/libmain.c:1442
 msgid "Configuration files reloaded."
 msgstr "設定ファイルを再読み込みしました"
 
@@ -4036,11 +4036,11 @@ msgstr "キーの読み取り"
 msgid "Press the combination of the keys you want to use for \"%s\"."
 msgstr "\"%s\"を使用するためのキーの組み合わせをタイプします"
 
-#: ../src/prefs.c:227 ../src/symbols.c:2564 ../src/sidebar.c:752
+#: ../src/prefs.c:227 ../src/symbols.c:2573 ../src/sidebar.c:752
 msgid "_Expand All"
 msgstr "すべて展開(_E)"
 
-#: ../src/prefs.c:232 ../src/symbols.c:2569 ../src/sidebar.c:758
+#: ../src/prefs.c:232 ../src/symbols.c:2578 ../src/sidebar.c:758
 msgid "_Collapse All"
 msgstr "すべて閉じる(_C)"
 
@@ -4938,32 +4938,32 @@ msgid "Could not load tags file '%s'."
 msgstr "タグファイル '%s' を読み込めませんでした"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1949
+#: ../src/symbols.c:1957
 #, c-format
 msgid "<b>%s: %lu</b>"
 msgstr "<b>%s: %lu</b>"
 
 #. For translators: it's the filename and line number of a symbol in the goto-symbol popup menu
-#: ../src/symbols.c:1952
+#: ../src/symbols.c:1960
 #, c-format
 msgid "%s: %lu"
 msgstr "%s: %lu"
 
-#: ../src/symbols.c:2161
+#: ../src/symbols.c:2170
 #, c-format
 msgid "Forward declaration \"%s\" not found."
 msgstr "前方宣言 \"%s\" が見つかりません"
 
-#: ../src/symbols.c:2163
+#: ../src/symbols.c:2172
 #, c-format
 msgid "Definition of \"%s\" not found."
 msgstr "\"%s\" の定義が見つかりません"
 
-#: ../src/symbols.c:2579
+#: ../src/symbols.c:2588
 msgid "Sort by _Name"
 msgstr "名前順に並び替え(_N)"
 
-#: ../src/symbols.c:2586
+#: ../src/symbols.c:2595
 msgid "Sort by _Appearance"
 msgstr "出現順に並び替え(_A)"
 
