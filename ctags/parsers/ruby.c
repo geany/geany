@@ -72,12 +72,13 @@ static vString* nestingLevelsToScope (const NestingLevels* nls)
 	vString* result = vStringNew ();
 	for (i = 0; i < nls->n; ++i)
 	{
-	    const vString* chunk = nls->levels[i].name;
-	    if (vStringLength (chunk) > 0)
+	    NestingLevel *nl = nestingLevelsGetNth (nls, i);
+	    tagEntryInfo *e = getEntryOfNestingLevel (nl);
+	    if (e && strlen (e->name) > 0 && (!e->placeholder))
 	    {
 	        if (chunks_output++ > 0)
 	            vStringPut (result, SCOPE_SEPARATOR);
-	        vStringCatS (result, vStringValue (chunk));
+	        vStringCatS (result, e->name);
 	    }
 	}
 	return result;
@@ -180,10 +181,12 @@ static void emitRubyTag (vString* name, rubyKind kind)
 {
 	tagEntryInfo tag;
 	vString* scope;
+	tagEntryInfo *parent;
 	rubyKind parent_kind = K_UNDEFINED;
 	NestingLevel *lvl;
 	const char *unqualified_name;
 	const char *qualified_name;
+	int r;
 
 	if (!RubyKinds[kind].enabled) {
 		return;
@@ -191,8 +194,9 @@ static void emitRubyTag (vString* name, rubyKind kind)
 
 	scope = nestingLevelsToScope (nesting);
 	lvl = nestingLevelsGetCurrent (nesting);
-	if (lvl)
-		parent_kind = lvl->type;
+	parent = getEntryOfNestingLevel (lvl);
+	if (parent)
+		parent_kind =  parent->kind - RubyKinds;
 
 	qualified_name = vStringValue (name);
 	unqualified_name = strrchr (qualified_name, SCOPE_SEPARATOR);
@@ -220,9 +224,9 @@ static void emitRubyTag (vString* name, rubyKind kind)
 		tag.extensionFields.scopeKind = &(RubyKinds [parent_kind]);
 		tag.extensionFields.scopeName = vStringValue (scope);
 	}
-	makeTagEntry (&tag);
+	r = makeTagEntry (&tag);
 
-	nestingLevelsPush (nesting, name, kind);
+	nestingLevelsPush (nesting, r);
 
 	vStringClear (name);
 	vStringDelete (scope);
@@ -367,10 +371,18 @@ static void readAndEmitTag (const unsigned char** cp, rubyKind expected_kind)
 
 static void enterUnnamedScope (void)
 {
-	vString *name = vStringNewInit ("");
+	int r = CORK_NIL;
 	NestingLevel *parent = nestingLevelsGetCurrent (nesting);
-	nestingLevelsPush (nesting, name, parent ? parent->type : K_UNDEFINED);
-	vStringDelete (name);
+	tagEntryInfo *e_parent = getEntryOfNestingLevel (parent);
+
+	if (e_parent)
+	{
+		tagEntryInfo e;
+		initTagEntry (&e, "", e_parent->kind);
+		e.placeholder = 1;
+		r = makeTagEntry (&e);
+	}
+	nestingLevelsPush (nesting, r);
 }
 
 static void findRubyTags (void)
@@ -378,7 +390,7 @@ static void findRubyTags (void)
 	const unsigned char *line;
 	bool inMultiLineComment = false;
 
-	nesting = nestingLevelsNew ();
+	nesting = nestingLevelsNew (0);
 
 	/* FIXME: this whole scheme is wrong, because Ruby isn't line-based.
 	* You could perfectly well write:
@@ -459,6 +471,7 @@ static void findRubyTags (void)
 		{
 			rubyKind kind = K_METHOD;
 			NestingLevel *nl = nestingLevelsGetCurrent (nesting);
+			tagEntryInfo *e  = getEntryOfNestingLevel (nl);
 
 			/* if the def is inside an unnamed scope at the class level, assume
 			 * it's from a singleton from a construct like this:
@@ -471,7 +484,7 @@ static void findRubyTags (void)
 			 *   end
 			 * end
 			 */
-			if (nl && nl->type == K_CLASS && vStringLength (nl->name) == 0)
+			if (e && (e->kind - RubyKinds) == K_CLASS && strlen (e->name) == 0)
 				kind = K_SINGLETON;
 			readAndEmitTag (&cp, kind);
 		}
@@ -546,5 +559,6 @@ extern parserDefinition* RubyParser (void)
 	def->kindCount  = ARRAY_SIZE (RubyKinds);
 	def->extensions = extensions;
 	def->parser     = findRubyTags;
+	def->useCork    = true;
 	return def;
 }

@@ -214,7 +214,6 @@ typedef struct sStatementInfo
 	memberInfo	member;         /* information regarding parent class/struct */
 	vString*	parentClasses;  /* parent classes */
 	struct sStatementInfo *parent;  /* statement we are nested within */
-	long 			argEndPosition; /* Position where argument list ended */
 	tokenInfo* 		firstToken; /* First token in the statement */
 } statementInfo;
 
@@ -585,19 +584,6 @@ void printStatement(const statementInfo *const statement)
 }
 #endif
 
-extern bool includingDefineTags (void)
-{
-	if (isInputLanguage(Lang_c) ||
-		isInputLanguage(Lang_cpp) ||
-		isInputLanguage(Lang_csharp) ||
-		isInputLanguage(Lang_ferite) ||
-		isInputLanguage(Lang_glsl) ||
-		isInputLanguage(Lang_vala))
-		return CKinds [CK_DEFINE].enabled;
-
-	return false;
-}
-
 /*
 *   Token management
 */
@@ -946,7 +932,6 @@ static void reinitStatement (statementInfo *const st, const bool partial)
 	st->gotName				= false;
 	st->nSemicolons			= 0;
 	st->haveQualifyingName	= false;
-	st->argEndPosition		= 0;
 
 	st->tokenIndex			= 0;
 	for (i = 0  ;  i < (unsigned int) NumTokens  ;  ++i)
@@ -957,6 +942,7 @@ static void reinitStatement (statementInfo *const st, const bool partial)
 	initToken (st->context);
 	initToken (st->blockName);
 	vStringClear (st->parentClasses);
+	cppClearSignature ();
 
 	/* Init member info. */
 	if (! partial)
@@ -1221,11 +1207,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 			{
 				tag->extensionFields.access = accessField (st);
 			}
-            if ((true == st->gotArgs) && (true == Option.extensionFields.argList) &&
+            if ((true == st->gotArgs) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				tag->extensionFields.signature = cppGetArglistFromFilePos(
-						tag->filePosition, tag->name);
+				tag->extensionFields.signature = cppGetSignature ();
 			}
 			break;
 		}
@@ -1723,7 +1708,7 @@ static void skipBraces (void)
 
 static keywordId analyzeKeyword (const char *const name)
 {
-	const keywordId id = (keywordId) lookupKeyword (name, getSourceLanguage ());
+	const keywordId id = (keywordId) lookupKeyword (name, getInputLanguage ());
 
 	/* ignore D @attributes and Java @annotations(...), but show them in function signatures */
 	if ((isInputLanguage(Lang_d) || isInputLanguage(Lang_java)) && id == KEYWORD_NONE && name[0] == '@')
@@ -2420,6 +2405,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	bool firstChar = true;
 	int nextChar = '\0';
 
+	cppStartCollectingSignature ();
+
 	info->parameterCount = 1;
 	do
 	{
@@ -2560,8 +2547,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 		skipToMatch ("()");
 		--depth;
 	}
-	if (st->argEndPosition == 0)
-		st->argEndPosition = mio_tell (File.mio);
+
+	cppStopCollectingSignature ();
 
 	if (! info->isNameCandidate)
 		initToken (token);
@@ -3134,19 +3121,20 @@ static void createTags (const unsigned int nestLevel,
 	DebugStatement ( if (nestLevel > 0) debugParseNest (false, nestLevel - 1); )
 }
 
-static bool findCTags (const unsigned int passCount)
+static rescanReason findCTags (const unsigned int passCount)
 {
 	exception_t exception;
-	bool retry;
+	rescanReason rescan = RESCAN_NONE;
 
 	contextual_fake_count = 0;
 
 	Assert (passCount < 3);
-	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage (Lang_cpp), &(CKinds [CK_DEFINE]));
+
+	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
+		CKinds+CK_DEFINE);
 
 	exception = (exception_t) setjmp (Exception);
-	retry = false;
-
+	rescan = RESCAN_NONE;
 	if (exception == ExceptionNone)
 	{
 		createTags (0, NULL);
@@ -3156,13 +3144,13 @@ static bool findCTags (const unsigned int passCount)
 		deleteAllStatements ();
 		if (exception == ExceptionBraceFormattingError  &&  passCount == 1)
 		{
-			retry = true;
+			rescan = RESCAN_FAILED;
 			verbose ("%s: retrying file with fallback brace matching algorithm\n",
 					getInputFileName ());
 		}
 	}
 	cppTerminate ();
-	return retry;
+	return rescan;
 }
 
 static void buildKeywordHash (const langType language, unsigned int idx)

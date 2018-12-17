@@ -34,14 +34,6 @@ static kindOption LuaKinds [] = {
 *   FUNCTION DEFINITIONS
 */
 
-/* for debugging purposes */
-static void CTAGS_ATTR_UNUSED print_string (char *p, char *q)
-{
-	for ( ; p != q; p++)
-		fprintf (errout, "%c", *p);
-	fprintf (errout, "\n");
-}
-
 /*
  * Helper function.
  * Returns 1 if line looks like a line of Lua code.

@@ -21,6 +21,7 @@
 #include "vstring.h"
 #include "nestlevel.h"
 #include "routines.h"
+#include "entry.h"
 
 /*
 *   DATA DEFINITIONS
@@ -48,40 +49,39 @@ static NestingLevels *nestingLevels = NULL;
 *   FUNCTION DEFINITIONS
 */
 
-static NestingLevel *getNestingLevel(const int kind)
+static void popNestingLevelToKind(const int kind)
 {
 	NestingLevel *nl;
+	tagEntryInfo *e;
 
 	while (1)
 	{
 		nl = nestingLevelsGetCurrent(nestingLevels);
-		if (nl && nl->type >= kind)
+		e = getEntryOfNestingLevel (nl);
+		if ((nl && (e == NULL)) || (e && (e->kind - RestKinds) >= kind))
 			nestingLevelsPop(nestingLevels);
 		else
 			break;
 	}
-	return nl;
 }
 
 static void makeRestTag (const vString* const name, const int kind)
 {
-	const NestingLevel *const nl = getNestingLevel(kind);
+	int r = CORK_NIL;
+
+	popNestingLevelToKind(kind);
 
 	if (vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
+
 		initTagEntry (&e, vStringValue (name), &(RestKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
 
-		if (nl && nl->type < kind)
-		{
-			e.extensionFields.scopeKind = &(RestKinds [nl->type]);
-			e.extensionFields.scopeName = vStringValue (nl->name);
-		}
-		makeTagEntry (&e);
+		r = makeTagEntry (&e);
 	}
-	nestingLevelsPush(nestingLevels, name, kind);
+	nestingLevelsPush(nestingLevels, r);
 }
 
 
@@ -158,7 +158,7 @@ static void findRestTags (void)
 	const unsigned char *line;
 
 	memset(kindchars, 0, sizeof kindchars);
-	nestingLevels = nestingLevelsNew();
+	nestingLevels = nestingLevelsNew(0);
 
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
@@ -202,5 +202,6 @@ extern parserDefinition* RestParser (void)
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findRestTags;
+	def->useCork = true;
 	return def;
 }

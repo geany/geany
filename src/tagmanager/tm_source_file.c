@@ -30,7 +30,7 @@
 #include "tm_source_file.h"
 #include "tm_tag.h"
 #include "tm_parser.h"
-#include "tm_ctags_wrappers.h"
+#include "ctags-api.h"
 
 typedef struct
 {
@@ -166,7 +166,7 @@ static char get_tag_access(const char *access)
 }
 
 /*
- Initializes a TMTag structure with information from a tagEntryInfo struct
+ Initializes a TMTag structure with information from a ctagsTag struct
  used by the ctags parsers. Note that the TMTag structure must be malloc()ed
  before calling this function.
  @param tag The TMTag structure to initialize
@@ -174,14 +174,14 @@ static char get_tag_access(const char *access)
  @param tag_entry Tag information gathered by the ctags parser
  @return TRUE on success, FALSE on failure
 */
-static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag_entry)
+static gboolean init_tag(TMTag *tag, TMSourceFile *file, const ctagsTag *tag_entry)
 {
 	TMTagType type;
 
 	if (!tag_entry)
 		return FALSE;
 
-	type = tm_parser_get_tag_type(tag_entry->kind->letter, file->lang);
+	type = tm_parser_get_tag_type(tag_entry->kindLetter, file->lang);
 	if (!tag_entry->name || type == tm_tag_undef_t)
 		return FALSE;
 
@@ -190,19 +190,19 @@ static gboolean init_tag(TMTag *tag, TMSourceFile *file, const tagEntryInfo *tag
 	tag->local = tag_entry->isFileScope;
 	tag->pointerOrder = 0;	/* backward compatibility (use var_type instead) */
 	tag->line = tag_entry->lineNumber;
-	if (NULL != tag_entry->extensionFields.signature)
-		tag->arglist = g_strdup(tag_entry->extensionFields.signature);
-	if ((NULL != tag_entry->extensionFields.scopeName) &&
-		(0 != tag_entry->extensionFields.scopeName[0]))
-		tag->scope = g_strdup(tag_entry->extensionFields.scopeName);
-	if (tag_entry->extensionFields.inheritance != NULL)
-		tag->inheritance = g_strdup(tag_entry->extensionFields.inheritance);
-	if (tag_entry->extensionFields.varType != NULL)
-		tag->var_type = g_strdup(tag_entry->extensionFields.varType);
-	if (tag_entry->extensionFields.access != NULL)
-		tag->access = get_tag_access(tag_entry->extensionFields.access);
-	if (tag_entry->extensionFields.implementation != NULL)
-		tag->impl = get_tag_impl(tag_entry->extensionFields.implementation);
+	if (NULL != tag_entry->signature)
+		tag->arglist = g_strdup(tag_entry->signature);
+	if ((NULL != tag_entry->scopeName) &&
+		(0 != tag_entry->scopeName[0]))
+		tag->scope = g_strdup(tag_entry->scopeName);
+	if (tag_entry->inheritance != NULL)
+		tag->inheritance = g_strdup(tag_entry->inheritance);
+	if (tag_entry->varType != NULL)
+		tag->var_type = g_strdup(tag_entry->varType);
+	if (tag_entry->access != NULL)
+		tag->access = get_tag_access(tag_entry->access);
+	if (tag_entry->implementation != NULL)
+		tag->impl = get_tag_impl(tag_entry->implementation);
 	if ((tm_tag_macro_t == tag->type) && (NULL != tag->arglist))
 		tag->type = tm_tag_macro_with_arg_t;
 	tag->file = file;
@@ -419,7 +419,7 @@ static gboolean init_tag_from_file_ctags(TMTag *tag, TMSourceFile *file, FILE *f
 				const gchar *kind = value ? value : key;
 
 				if (kind[0] && kind[1])
-					tag->type = tm_parser_get_tag_type(tm_ctags_get_kind_from_name(kind, lang), lang);
+					tag->type = tm_parser_get_tag_type(ctagsGetKindFromName(kind, lang), lang);
 				else
 					tag->type = tm_parser_get_tag_type(*kind, lang);
 			}
@@ -634,7 +634,7 @@ static void update_python_arglist(const TMTag *tag, TMSourceFile *current_source
 }
 
 /* new parsing pass ctags callback function */
-static gboolean ctags_pass_start(void *user_data)
+static bool ctags_pass_start(void *user_data)
 {
 	TMSourceFile *current_source_file = user_data;
 
@@ -643,7 +643,7 @@ static gboolean ctags_pass_start(void *user_data)
 }
 
 /* new tag ctags callback function */
-static gboolean ctags_new_tag(const tagEntryInfo *const tag,
+static bool ctags_new_tag(const ctagsTag *const tag,
 	void *user_data)
 {
 	TMSourceFile *current_source_file = user_data;
@@ -700,7 +700,7 @@ static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_
 	if (name == NULL)
 		source_file->lang = TM_PARSER_NONE;
 	else
-		source_file->lang = tm_ctags_get_named_lang(name);
+		source_file->lang = ctagsGetNamedLang(name);
 
 	return TRUE;
 }
@@ -793,8 +793,6 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 {
 	const char *file_name;
 	gboolean retry = TRUE;
-	gboolean parse_file = FALSE;
-	gboolean free_buf = FALSE;
 
 	if ((NULL == source_file) || (NULL == source_file->file_name))
 	{
@@ -810,40 +808,18 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 	
 	file_name = source_file->file_name;
 	
-	if (!use_buffer)
-	{
-		GStatBuf s;
-		
-		/* load file to memory and parse it from memory unless the file is too big */
-		if (g_stat(file_name, &s) != 0 || s.st_size > 10*1024*1024)
-			parse_file = TRUE;
-		else
-		{
-			if (!g_file_get_contents(file_name, (gchar**)&text_buf, (gsize*)&buf_size, NULL))
-			{
-				g_warning("Unable to open %s", file_name);
-				return FALSE;
-			}
-			free_buf = TRUE;
-		}
-	}
-
-	if (!parse_file && (NULL == text_buf || 0 == buf_size))
+	if (use_buffer && (NULL == text_buf || 0 == buf_size))
 	{
 		/* Empty buffer, "parse" by setting empty tag array */
 		tm_tags_array_free(source_file->tags_array, FALSE);
-		if (free_buf)
-			g_free(text_buf);
 		return TRUE;
 	}
 
 	tm_tags_array_free(source_file->tags_array, FALSE);
 
-	tm_ctags_parse(parse_file ? NULL : text_buf, buf_size, file_name,
+	ctagsParse(use_buffer ? text_buf : NULL, buf_size, file_name,
 		source_file->lang, ctags_new_tag, ctags_pass_start, source_file);
 
-	if (free_buf)
-		g_free(text_buf);
 	return !retry;
 }
 
@@ -853,7 +829,7 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 */
 const gchar *tm_source_file_get_lang_name(TMParserType lang)
 {
-	return tm_ctags_get_lang_name(lang);
+	return ctagsGetLangName(lang);
 }
 
 /* Gets the language index for \a name.
@@ -862,5 +838,5 @@ const gchar *tm_source_file_get_lang_name(TMParserType lang)
 */
 TMParserType tm_source_file_get_named_lang(const gchar *name)
 {
-	return tm_ctags_get_named_lang(name);
+	return ctagsGetNamedLang(name);
 }

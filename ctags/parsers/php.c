@@ -940,7 +940,7 @@ getNextChar:
 			else
 			{
 				parseIdentifier (token->string, c);
-				token->keyword = analyzeToken (token->string, getSourceLanguage ());
+				token->keyword = analyzeToken (token->string, getInputLanguage ());
 				if (token->keyword == KEYWORD_NONE)
 					token->type = TOKEN_IDENTIFIER;
 				else
@@ -1145,7 +1145,7 @@ static bool parseFunction (tokenInfo *const token, const tokenInfo *name)
 	}
 
 	/* if parsing Zephir, skip function return type hint */
-	if (getSourceLanguage () == Lang_zephir && token->type == TOKEN_OPERATOR)
+	if (getInputLanguage () == Lang_zephir && token->type == TOKEN_OPERATOR)
 	{
 		do
 			readToken (token);

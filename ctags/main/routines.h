@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 
-#include "vstring.h"
+#include "mio.h"
 
 /*
 *   MACROS
@@ -26,6 +26,7 @@
 #define xRealloc(p,n,Type) (Type *)eRealloc((p), (n) * sizeof (Type))
 
 #define ARRAY_SIZE(X)      (sizeof (X) / sizeof (X[0]))
+#define ARRAY_AND_SIZE(X)  (X), ARRAY_SIZE(X)
 
 #define STRINGIFY(X) STRINGIFY_(X)
 #define STRINGIFY_(X) #X
@@ -57,12 +58,42 @@ extern char *CurrentDirectory;
 typedef int errorSelection;
 enum eErrorTypes { FATAL = 1, WARNING = 2, PERROR = 4 };
 
+typedef struct {
+		/* Name of file for which status is valid */
+	char* name;
+
+		/* Does file exist? If not, members below do not contain valid data. */
+	bool exists;
+
+		/* is file path a symbolic link to another file? */
+	bool isSymbolicLink;
+
+		/* Is file (pointed to) a directory? */
+	bool isDirectory;
+
+		/* Is file (pointed to) a normal file? */
+	bool isNormalFile;
+
+		/* Is file (pointed to) executable? */
+	bool isExecutable;
+
+		/* Is file (pointed to) setuid? */
+	bool isSetuid;
+
+		/* Is file (pointed to) setgid? */
+	bool isSetgid;
+
+		/* Size of file (pointed to) */
+	unsigned long size;
+} fileStatus; 
 
 /*
 *   FUNCTION PROTOTYPES
 */
+extern void freeRoutineResources (void);
 extern void setExecutableName (const char *const path);
 extern const char *getExecutableName (void);
+extern const char *getExecutablePath (void);
 extern void error (const errorSelection selection, const char *const format, ...) CTAGS_ATTR_PRINTF (2, 3);
 
 /* Memory allocation functions */
@@ -74,36 +105,42 @@ extern void *eMalloc (const size_t size);
 extern void *eCalloc (const size_t count, const size_t size);
 extern void *eRealloc (void *const ptr, const size_t size);
 extern void eFree (void *const ptr);
+
+/* String manipulation functions */
+extern int struppercmp (const char *s1, const char *s2);
+extern int strnuppercmp (const char *s1, const char *s2, size_t n);
+#ifndef HAVE_STRSTR
+extern char* strstr (const char *str, const char *substr);
+#endif
+extern char* strrstr (const char *str, const char *substr);
+extern char* eStrdup (const char* str);
+extern char* eStrndup (const char* str, size_t len);
 extern void toLowerString (char* str);
 extern void toUpperString (char* str);
 extern char* newLowerString (const char* str);
 extern char* newUpperString (const char* str);
+extern bool strToUInt(const char *const str, int base, unsigned int *value);
+extern bool strToULong(const char *string, int base, unsigned long *value);
+extern bool strToInt(const char *const str, int base, int *value);
+extern bool strToLong(const char *string, int base, long *value);
 
 /* File system functions */
+extern void setCurrentDirectory (void);
+extern fileStatus *eStat (const char *const fileName);
+extern void eStatFree (fileStatus *status);
 extern bool doesFileExist (const char *const fileName);
+extern bool doesExecutableExist (const char *const fileName);
 extern bool isRecursiveLink (const char* const dirName);
 extern bool isSameFile (const char *const name1, const char *const name2);
 extern const char *baseFilename (const char *const filePath);
+extern const char *fileExtension (const char *const fileName);
 extern bool isAbsolutePath (const char *const path);
-extern vString *combinePathAndFile (const char *const path, const char *const file);
+extern char *combinePathAndFile (const char *const path, const char *const file);
 extern char* absoluteFilename (const char *file);
 extern char* absoluteDirname (char *file);
 extern char* relativeFilename (const char *file, const char *dir);
-extern FILE *tempFile (const char *const mode, char **const pName);
-extern void processExcludeOption (const char *const option, const char *const parameter);
-extern const char *fileExtension (const char *const fileName);
-extern char* eStrdup (const char* str);
-extern long unsigned int getFileSize (const char *const name);
-extern bool isExecutable (const char *const name);
+extern MIO *tempFile (const char *const mode, char **const pName);
 
-#ifndef HAVE_STRICMP
-extern int stricmp (const char *s1, const char *s2);
-#endif
-#ifndef HAVE_STRNICMP
-extern int strnicmp (const char *s1, const char *s2, size_t n);
-#endif
-#ifndef HAVE_STRSTR
-extern char* strstr (const char *str, const char *substr);
-#endif
+extern char* baseFilenameSansExtensionNew (const char *const fileName, const char *const templateExt);
 
 #endif  /* CTAGS_MAIN_ROUTINES_H */

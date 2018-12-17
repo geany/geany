@@ -14,6 +14,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "debug.h"
 #include "main.h"
 #include "parse.h"
 #include "read.h"

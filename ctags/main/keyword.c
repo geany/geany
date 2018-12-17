@@ -13,12 +13,12 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
+#include <ctype.h>
 
 #include "debug.h"
 #include "keyword.h"
 #include "options.h"
 #include "routines.h"
-#include "main.h"
 
 /*
 *   DATA DECLARATIONS
@@ -78,7 +78,7 @@ static unsigned int hashValue (const char *const string, langType language)
 
 	/* "djb" hash as used in g_str_hash() in glib */
 	for (p = (const signed char *)string; *p != '\0'; p++)
-		h = (h << 5) + h + *p;
+		h = (h << 5) + h + tolower (*p);
 
 	/* consider language as an extra "character" and add it to the hash */
 	h = (h << 5) + h + language;
@@ -136,15 +136,17 @@ extern void addKeyword (const char *const string, langType language, int value)
 	}
 }
 
-extern int lookupKeyword (const char *const string, langType language)
+static int lookupKeywordFull (const char *const string, bool caseSensitive, langType language)
 {
 	const unsigned int index = hashValue (string, language) % TableSize;
 	hashEntry *entry = getHashTableEntry (index);
-	int result = -1;
+	int result = KEYWORD_NONE;
 
 	while (entry != NULL)
 	{
-		if (language == entry->language  &&  strcmp (string, entry->string) == 0)
+		if (language == entry->language &&
+			((caseSensitive && strcmp (string, entry->string) == 0) ||
+			 (!caseSensitive && strcasecmp (string, entry->string) == 0)))
 		{
 			result = entry->value;
 			break;
@@ -152,6 +154,16 @@ extern int lookupKeyword (const char *const string, langType language)
 		entry = entry->next;
 	}
 	return result;
+}
+
+extern int lookupKeyword (const char *const string, langType language)
+{
+	return lookupKeywordFull (string, true, language);
+}
+
+extern int lookupCaseKeyword (const char *const string, langType language)
+{
+	return lookupKeywordFull (string, false, language);
 }
 
 extern void freeKeywordTable (void)

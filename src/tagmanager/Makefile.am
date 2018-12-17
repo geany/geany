@@ -25,8 +25,6 @@ libtagmanager_la_SOURCES =\
 	tm_tag.h \
 	tm_tag.c \
 	tm_workspace.h \
-	tm_workspace.c \
-	tm_ctags_wrappers.h \
-	tm_ctags_wrappers.c
+	tm_workspace.c
 
 libtagmanager_la_LIBADD = $(top_builddir)/ctags/libctags.la $(GTK_LIBS)

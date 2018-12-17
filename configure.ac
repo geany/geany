@@ -39,7 +39,12 @@ AC_PROG_LN_S
 # autoscan start
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h fnmatch.h glob.h stdlib.h sys/time.h])
+AC_CHECK_HEADERS([fcntl.h glob.h stdlib.h sys/time.h errno.h limits.h])
+
+# Checks for dependencies needed by ctags
+AC_CHECK_HEADERS([fnmatch.h direct.h io.h sys/dir.h])
+AC_DEFINE([USE_STDBOOL_H], [1], [whether or not to use <stdbool.h>.])
+AC_DEFINE([CTAGS_LIB], [1], [compile ctags as a library.])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_OFF_T
@@ -47,7 +52,17 @@ AC_TYPE_SIZE_T
 AC_STRUCT_TM
 
 # Checks for library functions.
-AC_CHECK_FUNCS([ftruncate fgetpos fnmatch mkstemp strerror strstr])
+AC_CHECK_FUNCS([fgetpos fnmatch mkstemp strerror strstr])
+
+# Function checks for u-ctags
+AC_CHECK_FUNCS([strcasecmp stricmp], [break])
+AC_CHECK_FUNCS([strncasecmp strnicmp], [break])
+AC_CHECK_FUNCS([truncate ftruncate chsize], [break])
+# non-functions checks for u-ctags.  Not that we really need those as we don't
+# use u-ctags's main, but the corresponding macros have to be defined to
+# something, so simply perform the actual checks.
+AC_CHECK_DECLS([__environ],,,[[#include <unistd.h>]])
+AC_CHECK_DECLS([_NSGetEnviron],,,[[#include <crt_externs.h>]])
 
 # autoscan end
 

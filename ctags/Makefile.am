@@ -56,35 +56,72 @@ libctags_la_SOURCES = \
 	main/args.c \
 	main/args.h \
 	main/ctags.h \
+	main/ctags-api.c \
+	main/ctags-api.h \
 	main/debug.h \
+	main/debug.c \
+	main/dependency.h \
+	main/dependency.c \
+	main/e_msoft.h \
 	main/entry.c \
 	main/entry.h \
+	main/error.c \
+	main/error.h \
+	main/field.c \
+	main/field.h \
+	main/flags.c \
+	main/flags.h \
+	main/fmt.c \
+	main/fmt.h \
+	main/gcc-attr.h \
 	main/general.h \
+	main/htable.c \
+	main/htable.h \
 	main/keyword.c \
 	main/keyword.h \
+	main/kind.c \
 	main/kind.h \
 	main/lcpp.c \
 	main/lcpp.h \
 	main/lregex.c \
+	main/lxcmd.c \
+	main/lxpath.c \
 	main/main.c \
 	main/main.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
 	main/nestlevel.h \
+	main/objpool.c \
+	main/objpool.h \
 	main/options.c \
 	main/options.h \
+	main/output-ctags.c \
+	main/output.h \
 	main/parse.c \
 	main/parse.h \
 	main/parsers.h \
+	main/pcoproc.c \
+	main/pcoproc.h \
+	main/promise.c \
+	main/promise.h \
+	main/ptag.c \
+	main/ptag.h \
+	main/ptrarray.c \
+	main/ptrarray.h \
 	main/read.c \
 	main/read.h \
+	main/repoinfo.c \
+	main/repoinfo.h \
 	main/routines.c \
 	main/routines.h \
+	main/selectors.c \
+	main/selectors.h \
 	main/sort.c \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/types.h \
 	main/vstring.c \
 	main/vstring.h \
 	main/xtag.h \

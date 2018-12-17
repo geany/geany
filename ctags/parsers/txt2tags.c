@@ -23,10 +23,11 @@
 #include "nestlevel.h"
 #include "vstring.h"
 #include "routines.h"
+#include "entry.h"
 
 
 /* as any character may happen in an input, use something highly unlikely */
-#define SCOPE_SEPARATOR '\x3' /* ASCII ETX */
+#define SCOPE_SEPARATOR "\x3" /* ASCII ETX */
 
 /*
 *   DATA DEFINITIONS
@@ -36,42 +37,38 @@ typedef enum {
 	K_SECTION = 0
 } Txt2tagsKind;
 
-static kindOption Txt2tagsKinds[] = {
-	{ true, 'm', "member", "sections" }
+static scopeSeparator Txt2TagsSeparators [] = {
+	{ KIND_WILDCARD, SCOPE_SEPARATOR }
 };
+
+static kindOption Txt2tagsKinds[] = {
+	{ true, 'm', "member", "sections",
+	  ATTACH_SEPARATORS(Txt2TagsSeparators) },
+};
+
+struct nestingLevelUserData {
+	int indentation;
+};
+#define NL_INDENTATION(nl) ((struct nestingLevelUserData *)nestingLevelGetUserData(nl))->indentation
 
 /*
 *   FUNCTION DEFINITIONS
 */
 
-static void makeTxt2tagsTag (const vString* const name,
-                             const NestingLevels *const nls,
-                             Txt2tagsKind type)
+static int makeTxt2tagsTag (const vString* const name,
+                            const NestingLevels *const nls,
+                            Txt2tagsKind type)
 {
 	tagEntryInfo e;
-	vString *scope = NULL;
+	NestingLevel *nl;
 	kindOption *kind = &Txt2tagsKinds[type];
 	initTagEntry (&e, vStringValue(name), kind);
 
-	if (nls->n > 0) {
-		int i;
-		kindOption *parentKind;
+	nl = nestingLevelsGetCurrent (nls);
+	if (nl)
+		e.extensionFields.scopeIndex = nl->corkIndex;
 
-		scope = vStringNew();
-		for (i = 0; i < nls->n; i++) {
-			if (vStringLength(scope) > 0)
-				vStringPut(scope, SCOPE_SEPARATOR);
-			vStringCat(scope, nls->levels[i].name);
-		}
-		parentKind = &Txt2tagsKinds[nls->levels[nls->n - 1].type];
-
-		e.extensionFields.scopeKind = parentKind;
-		e.extensionFields.scopeName = vStringValue(scope);
-	}
-
-	makeTagEntry(&e);
-
-	vStringDelete(scope);
+	return makeTagEntry(&e);
 }
 
 /* matches: ^ *[=_-]{20,} *$ */
@@ -150,7 +147,7 @@ static bool parseTxt2tagsTitle (const unsigned char *line,
 
 static void findTxt2tagsTags (void)
 {
-	NestingLevels *nls = nestingLevelsNew();
+	NestingLevels *nls = nestingLevelsNew(sizeof(struct nestingLevelUserData));
 	vString *name = vStringNew();
 	const unsigned char *line;
 
@@ -163,15 +160,18 @@ static void findTxt2tagsTags (void)
 		else if (parseTxt2tagsTitle(line, name, &depth))
 		{
 			NestingLevel *nl = nestingLevelsGetCurrent(nls);
-			while (nl && nl->indentation >= depth)
+			int r;
+
+			while (nl && NL_INDENTATION(nl) >= depth)
 			{
 				nestingLevelsPop(nls);
 				nl = nestingLevelsGetCurrent(nls);
 			}
 
-			makeTxt2tagsTag(name, nls, K_SECTION);
-			nestingLevelsPush(nls, name, K_SECTION);
-			nestingLevelsGetCurrent(nls)->indentation = depth;
+			r = makeTxt2tagsTag(name, nls, K_SECTION);
+			nestingLevelsPush(nls, r);
+			nl = nestingLevelsGetCurrent(nls);
+			NL_INDENTATION(nl) = depth;
 		}
 	}
 	vStringDelete (name);
@@ -189,6 +189,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	def->patterns = patterns;
 	def->extensions = extensions;
 	def->parser = findTxt2tagsTags;
+	def->useCork = true;
 	return def;
 }
 

@@ -1,4 +1,5 @@
 # format=tagmanager
 ENTSEQNOÌ16Í(seq)Ö0ÏFUNCSTS
-MEMTXTÌ16Í(form_msg)Ö0Ï
-MEMTXTÌ1024Í(form_msg)Ö0Ï
+MEMTXTÌ16Í(mail)Ö0Ï
+MEMTXTÌ1024Í(form_msg)Ö0ÏFUNCSTS
+MEMTXTÌ1024Í(text)Ö0Ï

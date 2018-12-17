@@ -20,13 +20,13 @@
 *   DATA DECLARATIONS
 */
 
+typedef enum { ARG_NONE, ARG_STRING, ARG_ARGV, ARG_FILE } argType;
+
 typedef struct sArgs {
-	enum { ARG_NONE, ARG_STRING, ARG_ARGV, ARG_FILE } type;
+	argType type;
 	union {
 		struct sStringArgs {
-			const char* string;
 			const char* next;
-			const char* item;
 		} stringArgs;
 		struct sArgvArgs {
 			char* const* argv;
