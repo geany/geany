@@ -49,7 +49,7 @@ static NestingLevels *nestingLevels = NULL;
 *   FUNCTION DEFINITIONS
 */
 
-static NestingLevel *getNestingLevel(const int kind)
+static void popNestingLevelToKind(const int kind)
 {
 	NestingLevel *nl;
 	tagEntryInfo *e;
@@ -63,17 +63,16 @@ static NestingLevel *getNestingLevel(const int kind)
 		else
 			break;
 	}
-	return nl;
 }
 
 static void makeRestTag (const vString* const name, const int kind)
 {
-	const NestingLevel *const nl = getNestingLevel(kind);
 	int r = CORK_NIL;
+
+	popNestingLevelToKind(kind);
 
 	if (vStringLength (name) > 0)
 	{
-		tagEntryInfo *parent = getEntryOfNestingLevel (nl);
 		tagEntryInfo e;
 
 		initTagEntry (&e, vStringValue (name), &(RestKinds [kind]));
