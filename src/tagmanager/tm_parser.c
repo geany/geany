@@ -668,11 +668,11 @@ const gchar *tm_parser_context_separator(TMParserType lang)
 
 		/* avoid confusion with other possible separators in group/section name */
 		case TM_PARSER_CONF:
-		case TM_PARSER_REST:
 			return ":::";
 
 		/* no context separator */
 		case TM_PARSER_ASCIIDOC:
+		case TM_PARSER_REST:
 		case TM_PARSER_TXT2TAGS:
 			return "\x03";
 
@@ -687,6 +687,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 	switch (lang)
 	{
 		/* These parsers include full hierarchy in the tag scope, separated by tm_parser_context_separator() */
+		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_C:
 		case TM_PARSER_CPP:
 		case TM_PARSER_CSHARP:
@@ -699,6 +700,7 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 		case TM_PARSER_PHP:
 		case TM_PARSER_POWERSHELL:
 		case TM_PARSER_PYTHON:
+		case TM_PARSER_REST:
 		case TM_PARSER_RUBY:
 		case TM_PARSER_RUST:
 		case TM_PARSER_SQL:
@@ -709,14 +711,12 @@ gboolean tm_parser_has_full_context(TMParserType lang)
 
 		/* These make use of the scope, but don't include nested hierarchy
 		 * (either as a parser limitation or a language semantic) */
-		case TM_PARSER_ASCIIDOC:
 		case TM_PARSER_CONF:
 		case TM_PARSER_ERLANG:
 		case TM_PARSER_F77:
 		case TM_PARSER_FORTRAN:
 		case TM_PARSER_GO:
 		case TM_PARSER_OBJC:
-		case TM_PARSER_REST:
 		/* Other parsers don't use scope at all (or should be somewhere above) */
 		default:
 			return FALSE;

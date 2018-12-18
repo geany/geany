@@ -36,12 +36,21 @@ typedef enum {
 	SECTION_COUNT
 } asciidocKind;
 
+static scopeSeparator AsciidocScopeSeparators [] = {
+	{ KIND_WILDCARD, "\x03" }
+};
+
 static kindOption AsciidocKinds[] = {
-	{ true, 'n', "namespace",     "chapters"},
-	{ true, 'm', "member",        "sections" },
-	{ true, 'd', "macro",         "level2sections" },
-	{ true, 'v', "variable",      "level3sections" },
-	{ true, 's', "struct",        "level4sections" }
+	{ true, 'n', "namespace",     "chapters",
+	  ATTACH_SEPARATORS(AsciidocScopeSeparators) },
+	{ true, 'm', "member",        "sections",
+	  ATTACH_SEPARATORS(AsciidocScopeSeparators) },
+	{ true, 'd', "macro",         "level2sections",
+	  ATTACH_SEPARATORS(AsciidocScopeSeparators) },
+	{ true, 'v', "variable",      "level3sections",
+	  ATTACH_SEPARATORS(AsciidocScopeSeparators) },
+	{ true, 's', "struct",        "level4sections",
+	  ATTACH_SEPARATORS(AsciidocScopeSeparators) }
 };
 
 static char kindchars[SECTION_COUNT]={ '=', '-', '~', '^', '+' };
@@ -52,7 +61,7 @@ static NestingLevels *nestingLevels = NULL;
 *   FUNCTION DEFINITIONS
 */
 
-static void popNestingLevelToKind(const int kind)
+static NestingLevel	*getNestingLevel (const int kind)
 {
 	NestingLevel *nl;
 	tagEntryInfo *e;
@@ -66,13 +75,13 @@ static void popNestingLevelToKind(const int kind)
 		else
 			break;
 	}
+	return nl;
 }
 
 static void makeAsciidocTag (const vString* const name, const int kind)
 {
+	const NestingLevel *nl = getNestingLevel (kind);
 	int r = CORK_NIL;
-
-	popNestingLevelToKind(kind);
 
 	if (vStringLength (name) > 0)
 	{
@@ -81,6 +90,9 @@ static void makeAsciidocTag (const vString* const name, const int kind)
 		initTagEntry (&e, vStringValue (name), &(AsciidocKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
+
+		if (nl)
+			e.extensionFields.scopeIndex = nl->corkIndex;
 
 		r = makeTagEntry (&e);
 	}

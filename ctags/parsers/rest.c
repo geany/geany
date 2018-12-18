@@ -34,11 +34,19 @@ typedef enum {
 	SECTION_COUNT
 } restKind;
 
+static scopeSeparator RestScopeSeparators [] = {
+	{ KIND_WILDCARD, "\x03" }
+};
+
 static kindOption RestKinds[] = {
-	{ true, 'n', "namespace",     "chapters"},
-	{ true, 'm', "member",        "sections" },
-	{ true, 'd', "macro",         "subsections" },
-	{ true, 'v', "variable",      "subsubsections" }
+	{ true, 'n', "namespace",     "chapters",
+	  ATTACH_SEPARATORS(RestScopeSeparators) },
+	{ true, 'm', "member",        "sections",
+	  ATTACH_SEPARATORS(RestScopeSeparators) },
+	{ true, 'd', "macro",         "subsections",
+	  ATTACH_SEPARATORS(RestScopeSeparators) },
+	{ true, 'v', "variable",      "subsubsections",
+	  ATTACH_SEPARATORS(RestScopeSeparators) }
 };
 
 static char kindchars[SECTION_COUNT];
@@ -49,7 +57,7 @@ static NestingLevels *nestingLevels = NULL;
 *   FUNCTION DEFINITIONS
 */
 
-static void popNestingLevelToKind(const int kind)
+static NestingLevel *getNestingLevel (const int kind)
 {
 	NestingLevel *nl;
 	tagEntryInfo *e;
@@ -63,13 +71,13 @@ static void popNestingLevelToKind(const int kind)
 		else
 			break;
 	}
+	return nl;
 }
 
 static void makeRestTag (const vString* const name, const int kind)
 {
+	const NestingLevel *nl = getNestingLevel (kind);
 	int r = CORK_NIL;
-
-	popNestingLevelToKind(kind);
 
 	if (vStringLength (name) > 0)
 	{
@@ -78,6 +86,9 @@ static void makeRestTag (const vString* const name, const int kind)
 		initTagEntry (&e, vStringValue (name), &(RestKinds [kind]));
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
+
+		if (nl)
+			e.extensionFields.scopeIndex = nl->corkIndex;
 
 		r = makeTagEntry (&e);
 	}
