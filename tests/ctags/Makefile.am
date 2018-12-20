@@ -273,13 +273,16 @@ test_sources = \
 	signature.cpp					\
 	simple.asciidoc					\
 	simple.bas						\
+	simple.conf						\
 	simple.d						\
+	simple.diff						\
 	simple.html						\
 	simple.js						\
 	simple.json						\
 	simple.ksh						\
 	simple.lua						\
 	simple.mak						\
+	simple.md						\
 	simple.php						\
 	simple.pl						\
 	simple.ps1						\
