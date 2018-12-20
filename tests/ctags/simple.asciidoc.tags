@@ -1,0 +1,13 @@
+# format=tagmanager
+Chapter 1 (Level 0)Ã256÷0
+Chapter 2Ã256÷0
+Level 3 Section 1.1.1.1 TitleÃ16384ŒSubsection 1.1.1÷0
+Level 3 Section 2.1.1.1 TitleÃ16384ŒSubsection 2.1.1÷0
+Level 4 Section 1.1.1.1.1 TitleÃ2048ŒLevel 3 Section 1.1.1.1 Title÷0
+Level 4 Section 2.1.1.1.1 TitleÃ2048ŒLevel 3 Section 2.1.1.1 Title÷0
+Section 1.1Ã64ŒChapter 1 (Level 0)÷0
+Section 1.2Ã64ŒChapter 1 (Level 0)÷0
+Section 2.1Ã64ŒChapter 2÷0
+Section 2.2Ã64ŒChapter 2÷0
+Subsection 1.1.1Ã65536ŒSection 1.1÷0
+Subsection 2.1.1Ã65536ŒSection 2.1÷0

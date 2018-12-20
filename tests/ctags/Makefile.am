@@ -271,6 +271,7 @@ test_sources = \
 	semicolon.f90					\
 	shebang.js						\
 	signature.cpp					\
+	simple.asciidoc					\
 	simple.bas						\
 	simple.d						\
 	simple.html						\
@@ -284,6 +285,7 @@ test_sources = \
 	simple.ps1						\
 	simple.py						\
 	simple.rb						\
+	simple.rst						\
 	simple.sh						\
 	simple.tcl						\
 	simple.zep						\
