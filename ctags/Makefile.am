@@ -17,7 +17,7 @@ parsers = \
 	parsers/basic.c \
 	parsers/c.c \
 	parsers/cobol.c \
-	parsers/conf.c \
+	parsers/iniconf.c \
 	parsers/css.c \
 	parsers/diff.c \
 	parsers/docbook.c \
