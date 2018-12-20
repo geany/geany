@@ -2,9 +2,7 @@
 dist_check_SCRIPTS = runner.sh
 
 # Disabled tests:
-#	rules.t2t
 #	simple.cbl
-#	titles.t2t
 
 NULL =
 test_sources = \
@@ -267,6 +265,7 @@ test_sources = \
 	ruby-namespaced-class.rb		\
 	ruby-scope-after-anonymous-class.rb	\
 	ruby-sf-bug-364.rb				\
+	rules.t2t						\
 	sample.t2t						\
 	secondary_fcn_name.js			\
 	semicolon.f90					\
@@ -306,6 +305,7 @@ test_sources = \
 	test.vhd						\
 	test_input.rs					\
 	test_input2.rs					\
+	titles.t2t						\
 	traffic_signal.v				\
 	traits.php						\
 	ui5.controller.js				\

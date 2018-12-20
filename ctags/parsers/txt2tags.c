@@ -38,7 +38,7 @@ typedef enum {
 } Txt2tagsKind;
 
 static scopeSeparator Txt2TagsSeparators [] = {
-	{ KIND_WILDCARD, SCOPE_SEPARATOR }
+	{ KIND_WILDCARD_INDEX, SCOPE_SEPARATOR }
 };
 
 static kindDefinition Txt2tagsKinds[] = {
