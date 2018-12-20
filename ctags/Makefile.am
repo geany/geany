@@ -42,7 +42,7 @@ parsers = \
 	parsers/powershell.c \
 	parsers/python.c \
 	parsers/r.c \
-	parsers/rest.c \
+	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
 	parsers/sh.c \
