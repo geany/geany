@@ -302,12 +302,12 @@ static TMParserMapEntry map_HAXE[] = {
 	{'t', tm_tag_typedef_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_REST[] = {
-	{'n', tm_tag_namespace_t},
-	{'m', tm_tag_member_t},
-	{'d', tm_tag_macro_t},
-	{'v', tm_tag_variable_t},
+	{'c', tm_tag_namespace_t},
+	{'s', tm_tag_member_t},
+	{'S', tm_tag_macro_t},
+	{'t', tm_tag_variable_t},
+	{'T', tm_tag_undef_t},
 };
 
 static TMParserMapEntry map_HTML[] = {
@@ -446,13 +446,14 @@ static TMParserMapEntry map_OBJC[] = {
 	{'M', tm_tag_macro_t},
 };
 
-/* not in universal-ctags */
 static TMParserMapEntry map_ASCIIDOC[] = {
-	{'n', tm_tag_namespace_t},
-	{'m', tm_tag_member_t},
-	{'d', tm_tag_macro_t},
-	{'v', tm_tag_variable_t},
-	{'s', tm_tag_struct_t},
+	{'c', tm_tag_namespace_t},
+	{'s', tm_tag_member_t},
+	{'S', tm_tag_macro_t},
+	{'t', tm_tag_variable_t},
+	{'T', tm_tag_struct_t},
+	{'u', tm_tag_undef_t},
+	{'a', tm_tag_undef_t},
 };
 
 /* not in universal-ctags */

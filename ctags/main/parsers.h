@@ -44,7 +44,7 @@
 	CsharpParser, \
 	FreeBasicParser,\
 	HaxeParser,\
-	RestParser, \
+	RstParser, \
 	HtmlParser, \
 	F77Parser, \
 	GLSLParser, \

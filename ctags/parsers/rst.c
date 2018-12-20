@@ -3,7 +3,7 @@
 *   Copyright (c) 2007-2011, Nick Treleaven
 *
 *   This source code is released for free distribution under the terms of the
-*   GNU General Public License.
+*   GNU General Public License version 2 or (at your option) any later version.
 *
 *   This module contains functions for generating tags for reStructuredText (reST) files.
 */
@@ -20,25 +20,41 @@
 #include "read.h"
 #include "vstring.h"
 #include "nestlevel.h"
-#include "routines.h"
 #include "entry.h"
+#include "routines.h"
+#include "field.h"
 
 /*
 *   DATA DEFINITIONS
 */
 typedef enum {
+	K_EOF = -1,
 	K_CHAPTER = 0,
 	K_SECTION,
 	K_SUBSECTION,
 	K_SUBSUBSECTION,
+	K_TARGET,
 	SECTION_COUNT
-} restKind;
+} rstKind;
 
-static kindDefinition RestKinds[] = {
-	{ true, 'n', "namespace",     "chapters"},
-	{ true, 'm', "member",        "sections" },
-	{ true, 'd', "macro",         "subsections" },
-	{ true, 'v', "variable",      "subsubsections" }
+static kindDefinition RstKinds[] = {
+	{ true, 'c', "chapter",       "chapters"},
+	{ true, 's', "section",       "sections" },
+	{ true, 'S', "subsection",    "subsections" },
+	{ true, 't', "subsubsection", "subsubsections" },
+	{ true, 'T', "target",        "targets" },
+};
+
+typedef enum {
+	F_SECTION_MARKER,
+} rstField;
+
+static fieldDefinition RstFields [] = {
+	{
+		.name = "sectionMarker",
+		.description = "character used for declaring section",
+		.enabled = false,
+	},
 };
 
 static char kindchars[SECTION_COUNT];
@@ -49,36 +65,100 @@ static NestingLevels *nestingLevels = NULL;
 *   FUNCTION DEFINITIONS
 */
 
-static void popNestingLevelToKind(const int kind)
+static NestingLevel *getNestingLevel(const int kind)
 {
 	NestingLevel *nl;
 	tagEntryInfo *e;
+
+	int d = 0;
+
+	if (kind > K_EOF)
+	{
+		d++;
+		/* 1. we want the line before the '---' underline chars */
+		d++;
+		/* 2. we want the line before the next section/chapter title. */
+	}
 
 	while (1)
 	{
 		nl = nestingLevelsGetCurrent(nestingLevels);
 		e = getEntryOfNestingLevel (nl);
 		if ((nl && (e == NULL)) || (e && e->kindIndex >= kind))
+		{
+			if (e)
+				e->extensionFields.endLine = (getInputLineNumber() - d);
 			nestingLevelsPop(nestingLevels);
+		}
 		else
 			break;
 	}
+	return nl;
 }
 
-static void makeRestTag (const vString* const name, const int kind)
+static int makeTargetRstTag(const vString* const name)
 {
-	int r = CORK_NIL;
+	tagEntryInfo e;
 
-	popNestingLevelToKind(kind);
+	initTagEntry (&e, vStringValue (name), K_TARGET);
+
+	const NestingLevel *nl = nestingLevelsGetCurrent(nestingLevels);
+	tagEntryInfo *parent = NULL;
+	if (nl)
+		parent = getEntryOfNestingLevel (nl);
+
+	if (parent)
+	{
+		e.extensionFields.scopeKindIndex = parent->kindIndex;
+		e.extensionFields.scopeName = parent->name;
+	}
+
+	return makeTagEntry (&e);
+}
+
+static void makeSectionRstTag(const vString* const name, const int kind, const MIOPos filepos,
+		       char marker)
+{
+	const NestingLevel *const nl = getNestingLevel(kind);
+	tagEntryInfo *parent;
+
+	int r = CORK_NIL;
 
 	if (vStringLength (name) > 0)
 	{
 		tagEntryInfo e;
+		char m [2] = { [1] = '\0' };
 
 		initTagEntry (&e, vStringValue (name), kind);
 
 		e.lineNumber--;	/* we want the line before the '---' underline chars */
+		e.filePosition = filepos;
 
+		parent = getEntryOfNestingLevel (nl);
+		if (parent && (parent->kindIndex < kind))
+		{
+#if 1
+			e.extensionFields.scopeKindIndex = parent->kindIndex;
+			e.extensionFields.scopeName = parent->name;
+#else
+			/* TODO
+
+			   Following code makes the scope information full qualified form.
+			   Do users want the full qualified form?
+			   --- ./Units/rst.simple.d/expected.tags	2015-12-18 01:32:35.574255617 +0900
+			   +++ /home/yamato/var/ctags-github/Units/rst.simple.d/FILTERED.tmp	2016-05-05 03:05:38.165604756 +0900
+			   @@ -5,2 +5,2 @@
+			   -Subsection 1.1.1	input.rst	/^Subsection 1.1.1$/;"	S	section:Section 1.1
+			   -Subsubsection 1.1.1.1	input.rst	/^Subsubsection 1.1.1.1$/;"	t	subsection:Subsection 1.1.1
+			   +Subsection 1.1.1	input.rst	/^Subsection 1.1.1$/;"	S	section:Chapter 1.Section 1.1
+			   +Subsubsection 1.1.1.1	input.rst	/^Subsubsection 1.1.1.1$/;"	t	subsection:Chapter 1.Section 1.1.Subsection 1.1.1
+			*/
+			   e.extensionFields.scopeIndex = nl->corkIndex;
+#endif
+		}
+
+		m[0] = marker;
+		attachParserField (&e, RstFields [F_SECTION_MARKER].ftype, m);
 		r = makeTagEntry (&e);
 	}
 	nestingLevelsPush(nestingLevels, r);
@@ -151,19 +231,103 @@ static int utf8_strlen(const char *buf, int buf_len)
 }
 
 
-/* TODO: parse overlining & underlining as distinct sections. */
-static void findRestTags (void)
+static const unsigned char *is_target_line (const unsigned char *line)
+{
+	if ((line [0] == '.') && (line [1] == '.') && (line [2] == ' ')
+		&& (line [3] == '_'))
+		return line + 4;
+	return NULL;
+}
+
+static int capture_target (const unsigned char *target_line)
 {
 	vString *name = vStringNew ();
-	const unsigned char *line;
+	unsigned char terminator;
+	int r = CORK_NIL;
 
+	if (*target_line == '`')
+		terminator = '`';
+	else if (!isspace (*target_line) && *target_line != '\0')
+	{
+		/* "Simple reference names are single words consisting of
+		 * alphanumerics plus isolated (no two adjacent) internal
+		 * hyphens, underscores, periods, colons and plus signs; no
+		 * whitespace or other characters are allowed."
+		 * -- http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#reference-names
+		 */
+		vStringPut (name, *target_line);
+		terminator = ':';
+	}
+	else
+		goto out;
+
+	target_line++;
+
+
+	bool escaped = false;
+	while (*target_line != '\0')
+	{
+		if (escaped)
+		{
+			vStringPut (name, *target_line);
+			escaped = false;
+		}
+		else
+		{
+			if (*target_line == '\\')
+			{
+				vStringPut (name, *target_line);
+				escaped = true;
+			}
+			else if (*target_line == terminator)
+				break;
+			else
+				vStringPut (name, *target_line);
+		}
+		target_line++;
+	}
+
+	if (vStringLength (name) == 0)
+		goto out;
+
+	r = makeTargetRstTag (name);
+
+ out:
+	vStringDelete (name);
+	return r;
+}
+
+/* TODO: parse overlining & underlining as distinct sections. */
+static void findRstTags (void)
+{
+	vString *name = vStringNew ();
+	MIOPos filepos;
+	const unsigned char *line;
+	const unsigned char *target_line;
+
+	memset(&filepos, 0, sizeof(filepos));
 	memset(kindchars, 0, sizeof kindchars);
 	nestingLevels = nestingLevelsNew(0);
 
 	while ((line = readLineFromInputFile ()) != NULL)
 	{
+		/* Handle .. _target:
+		 * http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#hyperlink-targets
+		 */
+		if ((target_line = is_target_line (line)) != NULL)
+		{
+			if (capture_target (target_line) != CORK_NIL)
+			{
+				vStringClear (name);
+				continue;
+			}
+		}
+
 		int line_len = strlen((const char*) line);
 		int name_len_bytes = vStringLength(name);
+		/* FIXME: this isn't right, actually we need the real display width,
+		 * taking into account double-width characters and stuff like that.
+		 * But duh. */
 		int name_len = utf8_strlen(vStringValue(name), name_len_bytes);
 
 		/* if the name doesn't look like UTF-8, assume one-byte charset */
@@ -179,29 +343,37 @@ static void findRestTags (void)
 
 			if (kind >= 0)
 			{
-				makeRestTag(name, kind);
+				makeSectionRstTag(name, kind, filepos, c);
 				continue;
 			}
 		}
 		vStringClear (name);
-		if (! isspace(*line))
-			vStringCatS(name, (const char*) line);
+		if (!isspace(*line))
+		{
+			vStringCatS(name, (const char*)line);
+			filepos = getInputFilePosition();
+		}
 	}
+	/* Force popping all nesting levels */
+	getNestingLevel (K_EOF);
 	vStringDelete (name);
 	nestingLevelsFree(nestingLevels);
 }
 
-extern parserDefinition* RestParser (void)
+extern parserDefinition* RstParser (void)
 {
-	static const char *const patterns [] = { "*.rest", "*.reST", NULL };
-	static const char *const extensions [] = { "rest", NULL };
-	parserDefinition* const def = parserNew ("reStructuredText");
+	static const char *const extensions [] = { "rest", "reST", "rst", NULL };
+	parserDefinition* const def = parserNew ("ReStructuredText");
 
-	def->kindTable = RestKinds;
-	def->kindCount = ARRAY_SIZE (RestKinds);
-	def->patterns = patterns;
+	def->kindTable = RstKinds;
+	def->kindCount = ARRAY_SIZE (RstKinds);
 	def->extensions = extensions;
-	def->parser = findRestTags;
+	def->parser = findRstTags;
+
+	def->fieldTable = RstFields;
+	def->fieldCount = ARRAY_SIZE (RstFields);
+
 	def->useCork = true;
+
 	return def;
 }
