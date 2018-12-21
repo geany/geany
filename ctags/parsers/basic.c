@@ -240,7 +240,7 @@ static void findBasicTags (void)
 	}
 }
 
-parserDefinition *FreeBasicParser (void)
+parserDefinition *BasicParser (void)
 {
 	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");

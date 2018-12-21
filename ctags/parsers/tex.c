@@ -230,7 +230,7 @@ static void findTeXTags(void)
 	}
 }
 
-extern parserDefinition* LaTeXParser (void)
+extern parserDefinition* TexParser (void)
 {
 	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
 	parserDefinition * def = parserNew ("LaTeX");

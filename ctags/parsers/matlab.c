@@ -135,7 +135,7 @@ static void findMatlabTags (void)
 	vStringDelete (name);
 }
 
-extern parserDefinition* MatlabParser (void)
+extern parserDefinition* MatLabParser (void)
 {
 	static const char *const extensions [] = { "m", NULL };
 	parserDefinition* def = parserNew ("Matlab");
