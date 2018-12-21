@@ -942,7 +942,7 @@ static void reinitStatement (statementInfo *const st, const bool partial)
 	initToken (st->context);
 	initToken (st->blockName);
 	vStringClear (st->parentClasses);
-	cppClearSignature ();
+	lcppClearSignature ();
 
 	/* Init member info. */
 	if (! partial)
@@ -1210,7 +1210,7 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
             if ((true == st->gotArgs) &&
 				((TAG_FUNCTION == type) || (TAG_METHOD == type) || (TAG_PROTOTYPE == type)))
 			{
-				tag->extensionFields.signature = cppGetSignature ();
+				tag->extensionFields.signature = lcppGetSignature ();
 			}
 			break;
 		}
@@ -1589,7 +1589,7 @@ static int skipToOneOf (const char *const chars)
 {
 	int c;
 	do
-		c = cppGetc ();
+		c = lcppGetc ();
 	while (c != EOF  &&  c != '\0'  &&  strchr (chars, c) == NULL);
 
 	return c;
@@ -1603,7 +1603,7 @@ static int skipToNonWhite (void)
 
 	do
 	{
-		c = cppGetc ();
+		c = lcppGetc ();
 	}
 	while (isspace (c));
 
@@ -1617,12 +1617,12 @@ static void skipToFormattedBraceMatch (void)
 {
 	int c, next;
 
-	c = cppGetc ();
-	next = cppGetc ();
+	c = lcppGetc ();
+	next = lcppGetc ();
 	while (c != EOF  &&  (c != '\n'  ||  next != '}'))
 	{
 		c = next;
-		next = cppGetc ();
+		next = lcppGetc ();
 	}
 }
 
@@ -1636,20 +1636,20 @@ static void skipToFormattedBraceMatch (void)
 static void skipToMatch (const char *const pair)
 {
 	const bool braceMatching = (bool) (strcmp ("{}", pair) == 0);
-	const bool braceFormatting = (bool) (cppIsBraceFormat () && braceMatching);
-	const unsigned int initialLevel = cppGetDirectiveNestLevel ();
+	const bool braceFormatting = (bool) (lcppIsBraceFormat () && braceMatching);
+	const unsigned int initialLevel = lcppGetDirectiveNestLevel ();
 	const int begin = pair [0], end = pair [1];
 	const unsigned long inputLineNumber = getInputLineNumber ();
 	int matchLevel = 1;
 	int c = '\0';
 	if (isInputLanguage(Lang_d) && pair[0] == '<')
 		return; /* ignore e.g. Foo!(x < 2) */
-	while (matchLevel > 0  &&  (c = cppGetc ()) != EOF)
+	while (matchLevel > 0  &&  (c = lcppGetc ()) != EOF)
 	{
 		if (c == begin)
 		{
 			++matchLevel;
-			if (braceFormatting  &&  cppGetDirectiveNestLevel () != initialLevel)
+			if (braceFormatting  &&  lcppGetDirectiveNestLevel () != initialLevel)
 			{
 				skipToFormattedBraceMatch ();
 				break;
@@ -1658,7 +1658,7 @@ static void skipToMatch (const char *const pair)
 		else if (c == end)
 		{
 			--matchLevel;
-			if (braceFormatting  &&  cppGetDirectiveNestLevel () != initialLevel)
+			if (braceFormatting  &&  lcppGetDirectiveNestLevel () != initialLevel)
 			{
 				skipToFormattedBraceMatch ();
 				break;
@@ -1671,7 +1671,7 @@ static void skipToMatch (const char *const pair)
 		else if (isInputLanguage (Lang_cpp) && begin == '<' &&
 		         (c == ';' || c == '{'))
 		{
-			cppUngetc (c);
+			lcppUngetc (c);
 			break;
 		}
 	}
@@ -1693,7 +1693,7 @@ static void skipParens (void)
 	if (c == '(')
 		skipToMatch ("()");
 	else
-		cppUngetc (c);
+		lcppUngetc (c);
 }
 
 static void skipBraces (void)
@@ -1703,7 +1703,7 @@ static void skipBraces (void)
 	if (c == '{')
 		skipToMatch ("{}");
 	else
-		cppUngetc (c);
+		lcppUngetc (c);
 }
 
 static keywordId analyzeKeyword (const char *const name)
@@ -1769,9 +1769,9 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 	do
 	{
 		vStringPut (name, c);
-		c = cppGetc ();
-	} while (cppIsident (c) || (isInputLanguage (Lang_vala) && '.' == c));
-	cppUngetc (c);        /* unget non-identifier character */
+		c = lcppGetc ();
+	} while (lcppIsident (c) || (isInputLanguage (Lang_vala) && '.' == c));
+	lcppUngetc (c);        /* unget non-identifier character */
 
 	/* Vala supports '?' at end of a type (with or without whitespace before) for nullable types */
 	if (isInputLanguage (Lang_vala))
@@ -1780,7 +1780,7 @@ static void readIdentifier (tokenInfo *const token, const int firstChar)
 		if ('?' == c)
 			vStringPut (name, c);
 		else
-			cppUngetc (c);
+			lcppUngetc (c);
 	}
 
 	analyzeIdentifier (token);
@@ -1793,12 +1793,12 @@ static void readPackageName (tokenInfo *const token, const int firstChar)
 
 	initToken (token);
 
-	while (cppIsident (c)  ||  c == '.')
+	while (lcppIsident (c)  ||  c == '.')
 	{
 		vStringPut (name, c);
-		c = cppGetc ();
+		c = lcppGetc ();
 	}
-	cppUngetc (c);        /* unget non-package character */
+	lcppUngetc (c);        /* unget non-package character */
 }
 
 static void readPackageOrNamespace (statementInfo *const st, const declType declaration)
@@ -1862,7 +1862,7 @@ static void readOperator (statementInfo *const st)
 	{
 		/*  Verify whether this is a valid function call (i.e. "()") operator.
 		 */
-		if (cppGetc () == ')')
+		if (lcppGetc () == ')')
 		{
 			vStringPut (name, ' ');  /* always separate operator from keyword */
 			c = skipToNonWhite ();
@@ -1872,10 +1872,10 @@ static void readOperator (statementInfo *const st)
 		else
 		{
 			skipToMatch ("()");
-			c = cppGetc ();
+			c = lcppGetc ();
 		}
 	}
-	else if (cppIsident1 (c))
+	else if (lcppIsident1 (c))
 	{
 		/*  Handle "new" and "delete" operators, and conversion functions
 		 *  (per 13.3.1.1.2 [2] of the C++ spec).
@@ -1894,7 +1894,7 @@ static void readOperator (statementInfo *const st)
 				}
 				vStringPut (name, c);
 			}
-			c = cppGetc ();
+			c = lcppGetc ();
 		} while (! isOneOf (c, "(;")  &&  c != EOF);
 	}
 	else if (isOneOf (c, acceptable))
@@ -1903,11 +1903,11 @@ static void readOperator (statementInfo *const st)
 		do
 		{
 			vStringPut (name, c);
-			c = cppGetc ();
+			c = lcppGetc ();
 		} while (isOneOf (c, acceptable));
 	}
 
-	cppUngetc (c);
+	lcppUngetc (c);
 
 	token->type	= TOKEN_NAME;
 	token->keyword = KEYWORD_NONE;
@@ -1934,7 +1934,7 @@ static void setAccess (statementInfo *const st, const accessType laccess)
 			if (c == ':')
 				reinitStatementWithToken (st, prevToken (st, 1), false);
 			else
-				cppUngetc (c);
+				lcppUngetc (c);
 
 			st->member.accessDefault = laccess;
 		}
@@ -1945,14 +1945,14 @@ static void setAccess (statementInfo *const st, const accessType laccess)
 static void discardTypeList (tokenInfo *const token)
 {
 	int c = skipToNonWhite ();
-	while (cppIsident1 (c))
+	while (lcppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		c = skipToNonWhite ();
 		if (c == '.'  ||  c == ',')
 			c = skipToNonWhite ();
 	}
-	cppUngetc (c);
+	lcppUngetc (c);
 }
 
 static void addParentClass (statementInfo *const st, tokenInfo *const token)
@@ -1974,7 +1974,7 @@ static void readParents (statementInfo *const st, const int qualifier)
 	do
 	{
 		c = skipToNonWhite ();
-		if (cppIsident1 (c))
+		if (lcppIsident1 (c))
 		{
 			readIdentifier (token, c);
 			if (isType (token, TOKEN_NAME))
@@ -1995,7 +1995,7 @@ static void readParents (statementInfo *const st, const int qualifier)
 			initToken (parent);
 		}
 	} while (c != '{'  &&  c != EOF);
-	cppUngetc (c);
+	lcppUngetc (c);
 	deleteToken (parent);
 	deleteToken (token);
 }
@@ -2131,7 +2131,7 @@ static void skipMemIntializerList (tokenInfo *const token)
 	do
 	{
 		c = skipToNonWhite ();
-		while (cppIsident1 (c)  ||  c == ':')
+		while (lcppIsident1 (c)  ||  c == ':')
 		{
 			if (c != ':')
 				readIdentifier (token, c);
@@ -2148,7 +2148,7 @@ static void skipMemIntializerList (tokenInfo *const token)
 			c = skipToNonWhite ();
 		}
 	} while (c == ',');
-	cppUngetc (c);
+	lcppUngetc (c);
 }
 
 static void skipMacro (statementInfo *const st)
@@ -2215,9 +2215,9 @@ static bool skipPostArgumentStuff (
 		case ')':                               break;
 		case ':': skipMemIntializerList (token);break;  /* ctor-initializer */
 		case '[': skipToMatch ("[]");           break;
-		case '=': cppUngetc (c); end = true;    break;
-		case '{': cppUngetc (c); end = true;    break;
-		case '}': cppUngetc (c); end = true;    break;
+		case '=': lcppUngetc (c); end = true;    break;
+		case '{': lcppUngetc (c); end = true;    break;
+		case '}': lcppUngetc (c); end = true;    break;
 
 			case '(':
 			{
@@ -2231,7 +2231,7 @@ static bool skipPostArgumentStuff (
 			{
 				if (parameters == 0  ||  elementCount < 2)
 				{
-					cppUngetc (c);
+					lcppUngetc (c);
 					end = true;
 				}
 				else if (--parameters == 0)
@@ -2241,7 +2241,7 @@ static bool skipPostArgumentStuff (
 
 			default:
 			{
-				if (cppIsident1 (c))
+				if (lcppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					if (isInputLanguage(Lang_d) && isDPostArgumentToken(token))
@@ -2320,7 +2320,7 @@ static void skipJavaThrows (statementInfo *const st)
 	tokenInfo *const token = activeToken (st);
 	int c = skipToNonWhite ();
 
-	if (cppIsident1 (c))
+	if (lcppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		if (token->keyword == KEYWORD_THROWS)
@@ -2328,7 +2328,7 @@ static void skipJavaThrows (statementInfo *const st)
 			do
 			{
 				c = skipToNonWhite ();
-				if (cppIsident1 (c))
+				if (lcppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					c = skipToNonWhite ();
@@ -2336,7 +2336,7 @@ static void skipJavaThrows (statementInfo *const st)
 			} while (c == '.'  ||  c == ',');
 		}
 	}
-	cppUngetc (c);
+	lcppUngetc (c);
 	setToken (st, TOKEN_NONE);
 }
 
@@ -2345,7 +2345,7 @@ static void skipValaPostParens (statementInfo *const st)
 	tokenInfo *const token = activeToken (st);
 	int c = skipToNonWhite ();
 
-	while (cppIsident1 (c))
+	while (lcppIsident1 (c))
 	{
 		readIdentifier (token, c);
 		if (token->keyword == KEYWORD_ATTRIBUTE)
@@ -2359,7 +2359,7 @@ static void skipValaPostParens (statementInfo *const st)
 			do
 			{
 				c = skipToNonWhite ();
-				if (cppIsident1 (c))
+				if (lcppIsident1 (c))
 				{
 					readIdentifier (token, c);
 					c = skipToNonWhite ();
@@ -2369,7 +2369,7 @@ static void skipValaPostParens (statementInfo *const st)
 		else
 			break;
 	}
-	cppUngetc (c);
+	lcppUngetc (c);
 	setToken (st, TOKEN_NONE);
 }
 
@@ -2378,7 +2378,7 @@ static void analyzePostParens (statementInfo *const st, parenInfo *const info)
 	const unsigned long inputLineNumber = getInputLineNumber ();
 	int c = skipToNonWhite ();
 
-	cppUngetc (c);
+	lcppUngetc (c);
 	if (isOneOf (c, "{;,="))
 		;
 	else if (isInputLanguage (Lang_java))
@@ -2405,7 +2405,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 	bool firstChar = true;
 	int nextChar = '\0';
 
-	cppStartCollectingSignature ();
+	lcppStartCollectingSignature ();
 
 	info->parameterCount = 1;
 	do
@@ -2482,7 +2482,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 				if (firstChar)
 				{
 					info->isNameCandidate = false;
-					cppUngetc (c);
+					lcppUngetc (c);
 					skipMacro (st);
 					depth = 0;
 				}
@@ -2498,8 +2498,8 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 					}
 					else
 					{
-						cppUngetc (c);
-						cppUngetc ('(');
+						lcppUngetc (c);
+						lcppUngetc ('(');
 						info->nestedArgs = true;
 					}
 				}
@@ -2510,7 +2510,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 
 			default:
 			{
-				if (cppIsident1 (c))
+				if (lcppIsident1 (c))
 				{
 					if (++identifierCount > 1)
 						info->isKnrParamList = false;
@@ -2548,7 +2548,7 @@ static int parseParens (statementInfo *const st, parenInfo *const info)
 		--depth;
 	}
 
-	cppStopCollectingSignature ();
+	lcppStopCollectingSignature ();
 
 	if (! info->isNameCandidate)
 		initToken (token);
@@ -2579,7 +2579,7 @@ static void analyzeParens (statementInfo *const st)
 		initParenInfo (&info);
 		parseParens (st, &info);
 		c = skipToNonWhite ();
-		cppUngetc (c);
+		lcppUngetc (c);
 		if (info.invalidContents)
 		{
 			reinitStatement (st, false);
@@ -2650,7 +2650,7 @@ static bool inheritingDeclaration (declType decl)
 
 static void processColon (statementInfo *const st)
 {
-	int c = cppGetc ();
+	int c = lcppGetc ();
 	const bool doubleColon = (bool) (c == ':');
 
 	if (doubleColon)
@@ -2660,7 +2660,7 @@ static void processColon (statementInfo *const st)
 	}
 	else
 	{
-		cppUngetc (c);
+		lcppUngetc (c);
 		if ((isInputLanguage (Lang_cpp) || isInputLanguage (Lang_csharp) || isInputLanguage (Lang_d) ||
 			isInputLanguage (Lang_vala)) &&
 			inheritingDeclaration (st->declaration))
@@ -2720,7 +2720,7 @@ static int skipInitializer (statementInfo *const st)
 			case '}':
 				if (insideEnumBody (st))
 					done = true;
-				else if (! cppIsBraceFormat ())
+				else if (! lcppIsBraceFormat ())
 				{
 					verbose ("%s: unexpected closing brace at line %lu\n",
 							getInputFileName (), getInputLineNumber ());
@@ -2745,7 +2745,7 @@ static void processInitializer (statementInfo *const st)
 		setToken (st, TOKEN_COMMA);
 	else if (c == '}'  &&  inEnumBody)
 	{
-		cppUngetc (c);
+		lcppUngetc (c);
 		setToken (st, TOKEN_COMMA);
 	}
 	if (st->scope == SCOPE_EXTERN)
@@ -2765,7 +2765,7 @@ static void parseGeneralToken (statementInfo *const st, const int c)
 {
 	const tokenInfo *const prev = prevToken (st, 1);
 
-	if (cppIsident1(c))
+	if (lcppIsident1(c))
 	{
 		parseIdentifier (st, c);
 		if (isType (st->context, TOKEN_NAME) &&
@@ -2904,11 +2904,11 @@ static void checkStatementEnd (statementInfo *const st)
 		reinitStatementWithToken (st, activeToken (st), comma);
 
 		DebugStatement ( if (debug (DEBUG_PARSE)) printf ("<ES>"); )
-		cppEndStatement ();
+		lcppEndStatement ();
 	}
 	else
 	{
-		cppBeginStatement ();
+		lcppBeginStatement ();
 		advanceToken (st);
 	}
 }
@@ -3130,7 +3130,7 @@ static rescanReason findCTags (const unsigned int passCount)
 
 	Assert (passCount < 3);
 
-	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
+	lcppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
 		CK_DEFINE);
 
 	exception = (exception_t) setjmp (Exception);
@@ -3149,7 +3149,7 @@ static rescanReason findCTags (const unsigned int passCount)
 					getInputFileName ());
 		}
 	}
-	cppTerminate ();
+	lcppTerminate ();
 	return rescan;
 }
 
