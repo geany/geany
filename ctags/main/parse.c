@@ -27,6 +27,7 @@
 #include "ptag.h"
 #include "read.h"
 #include "routines.h"
+#include "trashbox.h"
 #include "vstring.h"
 #ifdef HAVE_ICONV
 # include "mbcs.h"
@@ -2313,11 +2314,13 @@ extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	if ((!buffer && openInputFile (fileName, language, NULL)) ||
 		(buffer && bufferOpen (fileName, language, buffer, bufferSize)))
 	{
+		initParserTrashBox ();
 		clearParsersUsedInCurrentInput ();
 		setTagEntryFunction(tagCallback, userData);
 		createTagsWithFallback1 (language, passCallback, userData);
 		forcePromises ();
 		closeInputFile ();
+		finiParserTrashBox ();
 	}
 	else
 		error (WARNING, "Unable to open %s", fileName);

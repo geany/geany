@@ -18,6 +18,7 @@
 #include "output.h"
 #include "parse.h"
 #include "options.h"
+#include "trashbox.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -50,6 +51,8 @@ extern void ctagsInit(void)
 
 	initializeParsing ();
 	initOptions ();
+
+	initDefaultTrashBox ();
 
 	/* make sure all parsers are initialized */
 	initializeParser (LANG_AUTO);
