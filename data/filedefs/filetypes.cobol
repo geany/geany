@@ -10,7 +10,7 @@ word=keyword_1
 word2=keyword_2
 string=string_1
 character=character
-operator=operator;false;false
+operator=operator
 identifier=identifier_1
 quotedidentifier=identifier_2
 
