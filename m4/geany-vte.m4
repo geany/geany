@@ -41,7 +41,7 @@ AC_DEFUN([GEANY_CHECK_VTE],
 			AC_DEFINE([HAVE_VTE], [1], [Define if you want VTE support])
 		fi
 
-		GEANY_STATUS_ADD([Use virtual terminal support], [$geany_enable_vte])
+		GEANY_STATUS_ADD([Use virtual terminal support (VTE)], [$geany_enable_vte])
 		_geany_enable_vte_done=yes
 	fi
 ])
