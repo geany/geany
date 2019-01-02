@@ -3459,7 +3459,7 @@ static GtkWidget* document_show_message(GeanyDocument *doc, GtkMessageType msgty
 	text = g_strdup_vprintf(format, args);
 	va_end(args);
 
-	markup = g_strdup_printf("<span size=\"larger\">%s</span>", text);
+	markup = g_markup_printf_escaped("<span size=\"larger\">%s</span>", text);
 	g_free(text);
 
 	info_widget = gtk_info_bar_new();
