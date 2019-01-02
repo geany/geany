@@ -4905,6 +4905,7 @@ static gboolean register_named_icon(ScintillaObject *sci, guint id, const gchar 
 static ScintillaObject *create_new_sci(GeanyEditor *editor)
 {
 	ScintillaObject *sci;
+	int rectangular_selection_modifier;
 
 	sci = SCINTILLA(scintilla_new());
 
@@ -4936,8 +4937,14 @@ static ScintillaObject *create_new_sci(GeanyEditor *editor)
 	/* necessary for column mode editing, implemented in Scintilla since 2.0 */
 	SSM(sci, SCI_SETADDITIONALSELECTIONTYPING, 1, 0);
 
-	/* rectangular selection modifier for creating rectangular selections with the mouse */
-	SSM(sci, SCI_SETRECTANGULARSELECTIONMODIFIER, SCMOD_CTRL, 0);
+	/* rectangular selection modifier for creating rectangular selections with the mouse.
+	 * We use the historical Scintilla values by default. */
+#ifdef G_OS_WIN32
+	rectangular_selection_modifier = SCMOD_ALT;
+#else
+	rectangular_selection_modifier = SCMOD_CTRL;
+#endif
+	SSM(sci, SCI_SETRECTANGULARSELECTIONMODIFIER, rectangular_selection_modifier, 0);
 
 	/* virtual space */
 	SSM(sci, SCI_SETVIRTUALSPACEOPTIONS, editor_prefs.show_virtual_space, 0);
