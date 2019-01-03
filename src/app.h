@@ -28,7 +28,6 @@
 #ifndef GEANY_APP_H
 #define GEANY_APP_H 1
 
-#include "tm_tag.h" /* FIXME: should be included in tm_workspace.h */
 #include "tm_workspace.h"
 #include "project.h"
 
