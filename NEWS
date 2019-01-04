@@ -1,4 +1,4 @@
-Geany 1.34.1 (unreleased)
+Geany 1.34.1 (January 4, 2019)
 
     Bug fixes
     * Fix line breaking on existing lines (PR#2027).
