@@ -4522,7 +4522,7 @@ void editor_strip_line_trailing_spaces(GeanyEditor *editor, gint line)
 	gchar ch = sci_get_char_at(editor->sci, i);
 
 	/* Diff hunks should keep trailing spaces */
-	if (sci_get_lexer(editor->sci) == SCLEX_DIFF)
+	if (editor->document->file_type->id == GEANY_FILETYPES_DIFF)
 		return;
 
 	while ((i >= line_start) && ((ch == ' ') || (ch == '\t')))
