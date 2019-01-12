@@ -73,5 +73,5 @@ EditModel::EditModel() : braces{} {
 
 EditModel::~EditModel() {
 	pdoc->Release();
-	pdoc = 0;
+	pdoc = nullptr;
 }

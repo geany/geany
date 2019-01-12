@@ -201,17 +201,27 @@ struct EscapeSequence {
 
 std::string GetRestOfLine(LexAccessor &styler, Sci_Position start, bool allowSpace) {
 	std::string restOfLine;
-	Sci_Position i =0;
+	Sci_Position line = styler.GetLine(start);
+	Sci_Position pos = start;
+	Sci_Position endLine = styler.LineEnd(line);
 	char ch = styler.SafeGetCharAt(start, '\n');
-	const Sci_Position endLine = styler.LineEnd(styler.GetLine(start));
-	while (((start+i) < endLine) && (ch != '\r')) {
-		const char chNext = styler.SafeGetCharAt(start + i + 1, '\n');
-		if (ch == '/' && (chNext == '/' || chNext == '*'))
-			break;
-		if (allowSpace || (ch != ' '))
-			restOfLine += ch;
-		i++;
-		ch = chNext;
+	while (pos < endLine) {
+		if (ch == '\\' && ((pos + 1) == endLine)) {
+			// Continuation line
+			line++;
+			pos = styler.LineStart(line);
+			endLine = styler.LineEnd(line);
+			ch = styler.SafeGetCharAt(pos, '\n');
+		} else {
+			const char chNext = styler.SafeGetCharAt(pos + 1, '\n');
+			if (ch == '/' && (chNext == '/' || chNext == '*'))
+				break;
+			if (allowSpace || (ch != ' ')) {
+				restOfLine += ch;
+			}
+			pos++;
+			ch = chNext;
+		}
 	}
 	return restOfLine;
 }
@@ -242,7 +252,11 @@ class LinePPState {
 		return level >= 0 && level < 32;
 	}
 	int maskLevel() const noexcept {
-		return 1 << level;
+		if (level >= 0) {
+			return 1 << level;
+		} else {
+			return 1;
+		}
 	}
 public:
 	LinePPState() : state(0), ifTaken(0), level(-1) {
@@ -470,7 +484,8 @@ class LexerCPP : public ILexerWithMetaData {
 	bool caseSensitive;
 	CharacterSet setWord;
 	CharacterSet setNegationOp;
-	CharacterSet setArithmethicOp;
+	CharacterSet setAddOp;
+	CharacterSet setMultOp;
 	CharacterSet setRelOp;
 	CharacterSet setLogicalOp;
 	CharacterSet setWordStart;
@@ -511,7 +526,8 @@ public:
 		caseSensitive(caseSensitive_),
 		setWord(CharacterSet::setAlphaNum, "._", 0x80, true),
 		setNegationOp(CharacterSet::setNone, "!"),
-		setArithmethicOp(CharacterSet::setNone, "+-/*%"),
+		setAddOp(CharacterSet::setNone, "+-"),
+		setMultOp(CharacterSet::setNone, "*/%"),
 		setRelOp(CharacterSet::setNone, "=!<>"),
 		setLogicalOp(CharacterSet::setNone, "|&"),
 		subStyles(styleSubable, 0x80, 0x40, activeFlag) {
@@ -1275,7 +1291,7 @@ void SCI_METHOD LexerCPP::Lex(Sci_PositionU startPos, Sci_Position length, int i
 							// Ensure only one chosen out of #if .. #elif .. #elif .. #else .. #endif
 							if (!preproc.CurrentIfTaken()) {
 								// Similar to #if
-								std::string restOfLine = GetRestOfLine(styler, sc.currentPos + 2, true);
+								std::string restOfLine = GetRestOfLine(styler, sc.currentPos + 4, true);
 								const bool ifGood = EvaluateExpression(restOfLine, preprocessorDefinitions);
 								if (ifGood) {
 									preproc.InvertCurrentLevel();
@@ -1614,13 +1630,15 @@ void LexerCPP::EvaluateTokens(std::vector<std::string> &tokens, const SymbolTabl
 	}
 
 	// Evaluate expressions in precedence order
-	enum precedence { precArithmetic, precRelative, precLogical };
-	for (int prec=precArithmetic; prec <= precLogical; prec++) {
+	enum precedence { precMult, precAdd, precRelative
+		, precLogical, /* end marker */ precLast };
+	for (int prec = precMult; prec < precLast; prec++) {
 		// Looking at 3 tokens at a time so end at 2 before end
 		for (size_t k=0; (k+2)<tokens.size();) {
 			const char chOp = tokens[k+1][0];
 			if (
-				((prec==precArithmetic) && setArithmethicOp.Contains(chOp)) ||
+				((prec==precMult) && setMultOp.Contains(chOp)) ||
+				((prec==precAdd) && setAddOp.Contains(chOp)) ||
 				((prec==precRelative) && setRelOp.Contains(chOp)) ||
 				((prec==precLogical) && setLogicalOp.Contains(chOp))
 				) {
@@ -1653,11 +1671,9 @@ void LexerCPP::EvaluateTokens(std::vector<std::string> &tokens, const SymbolTabl
 					result = valA || valB;
 				else if (tokens[k+1] == "&&")
 					result = valA && valB;
-				char sResult[30];
-				sprintf(sResult, "%d", result);
 				std::vector<std::string>::iterator itInsert =
 					tokens.erase(tokens.begin() + k, tokens.begin() + k + 3);
-				tokens.insert(itInsert, sResult);
+				tokens.insert(itInsert, std::to_string(result));
 			} else {
 				k++;
 			}

@@ -1128,7 +1128,7 @@ AtkObject *ScintillaGTKAccessible::WidgetGetAccessibleImpl(GtkWidget *widget, At
 	if (parent_atk_type == 0) {
 		AtkObject *parent_obj = GTK_WIDGET_CLASS(widget_parent_class)->get_accessible(widget);
 		if (parent_obj) {
-			GType parent_atk_type = G_OBJECT_TYPE(parent_obj);
+			parent_atk_type = G_OBJECT_TYPE(parent_obj);
 
 			// Figure out whether accessibility is enabled by looking at the type of the accessible
 			// object which would be created for the parent type of ScintillaObject.

@@ -87,8 +87,31 @@ int LexInterface::LineEndTypesSupported() {
 	return 0;
 }
 
+ActionDuration::ActionDuration(double duration_, double minDuration_, double maxDuration_) noexcept :
+	duration(duration_), minDuration(minDuration_), maxDuration(maxDuration_) {
+}
+
+void ActionDuration::AddSample(size_t numberActions, double durationOfActions) noexcept {
+	// Only adjust for multiple actions to avoid instability
+	if (numberActions < 8)
+		return;
+
+	// Alpha value for exponential smoothing.
+	// Most recent value contributes 25% to smoothed value.
+	const double alpha = 0.25;
+
+	const double durationOne = durationOfActions / numberActions;
+	duration = Sci::clamp(alpha * durationOne + (1.0 - alpha) * duration,
+		minDuration, maxDuration);
+}
+
+double ActionDuration::Duration() const noexcept {
+	return duration;
+}
+
 Document::Document(int options) :
-	cb((options & SC_DOCUMENTOPTION_STYLES_NONE) == 0, (options & SC_DOCUMENTOPTION_TEXT_LARGE) != 0) {
+	cb((options & SC_DOCUMENTOPTION_STYLES_NONE) == 0, (options & SC_DOCUMENTOPTION_TEXT_LARGE) != 0),
+	durationStyleOneLine(0.00001, 0.000001, 0.0001) {
 	refCount = 0;
 #ifdef _WIN32
 	eolMode = SC_EOL_CRLF;
@@ -109,7 +132,6 @@ Document::Document(int options) :
 	useTabs = true;
 	tabIndents = true;
 	backspaceUnindents = false;
-	durationStyleOneLine = 0.00001;
 
 	matchesValid = false;
 
@@ -122,6 +144,7 @@ Document::Document(int options) :
 	decorations = DecorationListCreate(IsLarge());
 
 	cb.SetPerLine(this);
+	cb.SetUTF8Substance(SC_CP_UTF8 == dbcsCodePage);
 }
 
 Document::~Document() {
@@ -197,6 +220,8 @@ bool Document::SetDBCSCodePage(int dbcsCodePage_) {
 		dbcsCodePage = dbcsCodePage_;
 		SetCaseFolder(nullptr);
 		cb.SetLineEndTypes(lineEndBitSet & LineEndTypesSupported());
+		cb.SetUTF8Substance(SC_CP_UTF8 == dbcsCodePage);
+		ModifiedAt(0);	// Need to restyle whole document
 		return true;
 	} else {
 		return false;
@@ -296,11 +321,11 @@ Sci::Line Document::MarkerNext(Sci::Line lineStart, int mask) const {
 int Document::AddMark(Sci::Line line, int markerNum) {
 	if (line >= 0 && line <= LinesTotal()) {
 		const int prev = Markers()->AddMark(line, markerNum, LinesTotal());
-		const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+		const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, nullptr, line);
 		NotifyModified(mh);
 		return prev;
 	} else {
-		return 0;
+		return -1;
 	}
 }
 
@@ -313,19 +338,19 @@ void Document::AddMarkSet(Sci::Line line, int valueSet) {
 		if (m & 1)
 			Markers()->AddMark(line, i, LinesTotal());
 	}
-	const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+	const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, nullptr, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMark(Sci::Line line, int markerNum) {
 	Markers()->DeleteMark(line, markerNum, false);
-	const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, 0, line);
+	const DocModification mh(SC_MOD_CHANGEMARKER, LineStart(line), 0, 0, nullptr, line);
 	NotifyModified(mh);
 }
 
 void Document::DeleteMarkFromHandle(int markerHandle) {
 	Markers()->DeleteMarkFromHandle(markerHandle);
-	DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+	DocModification mh(SC_MOD_CHANGEMARKER);
 	mh.line = -1;
 	NotifyModified(mh);
 }
@@ -337,7 +362,7 @@ void Document::DeleteAllMarks(int markerNum) {
 			someChanges = true;
 	}
 	if (someChanges) {
-		DocModification mh(SC_MOD_CHANGEMARKER, 0, 0, 0, 0);
+		DocModification mh(SC_MOD_CHANGEMARKER);
 		mh.line = -1;
 		NotifyModified(mh);
 	}
@@ -423,11 +448,19 @@ Sci::Position Document::VCHomePosition(Sci::Position position) const {
 		return startText;
 }
 
+Sci::Position Document::IndexLineStart(Sci::Line line, int lineCharacterIndex) const {
+	return cb.IndexLineStart(line, lineCharacterIndex);
+}
+
+Sci::Line Document::LineFromPositionIndex(Sci::Position pos, int lineCharacterIndex) const {
+	return cb.LineFromPositionIndex(pos, lineCharacterIndex);
+}
+
 int SCI_METHOD Document::SetLevel(Sci_Position line, int level) {
 	const int prev = Levels()->SetLevel(static_cast<Sci::Line>(line), level, LinesTotal());
 	if (prev != level) {
 		DocModification mh(SC_MOD_CHANGEFOLD | SC_MOD_CHANGEMARKER,
-		                   LineStart(line), 0, 0, 0, static_cast<Sci::Line>(line));
+		                   LineStart(line), 0, 0, nullptr, static_cast<Sci::Line>(line));
 		mh.foldLevelNow = level;
 		mh.foldLevelPrev = prev;
 		NotifyModified(mh);
@@ -897,8 +930,8 @@ Sci::Position Document::GetRelativePositionUTF16(Sci::Position positionStart, Sc
 int SCI_METHOD Document::GetCharacterAndWidth(Sci_Position position, Sci_Position *pWidth) const {
 	int character;
 	int bytesInCharacter = 1;
+	const unsigned char leadByte = cb.UCharAt(position);
 	if (dbcsCodePage) {
-		const unsigned char leadByte = cb.UCharAt(position);
 		if (SC_CP_UTF8 == dbcsCodePage) {
 			if (UTF8IsAscii(leadByte)) {
 				// Single byte character or invalid
@@ -926,7 +959,7 @@ int SCI_METHOD Document::GetCharacterAndWidth(Sci_Position position, Sci_Positio
 			}
 		}
 	} else {
-		character = cb.CharAt(position);
+		character = leadByte;
 	}
 	if (pWidth) {
 		*pWidth = bytesInCharacter;
@@ -2105,7 +2138,19 @@ const char *Document::SubstituteByPosition(const char *text, Sci::Position *leng
 	if (regex)
 		return regex->SubstituteByPosition(this, text, length);
 	else
-		return 0;
+		return nullptr;
+}
+
+int Document::LineCharacterIndex() const {
+	return cb.LineCharacterIndex();
+}
+
+void Document::AllocateLineCharacterIndex(int lineCharacterIndex) {
+	return cb.AllocateLineCharacterIndex(lineCharacterIndex);
+}
+
+void Document::ReleaseLineCharacterIndex(int lineCharacterIndex) {
+	return cb.ReleaseLineCharacterIndex(lineCharacterIndex);
 }
 
 Sci::Line Document::LinesTotal() const noexcept {
@@ -2191,30 +2236,11 @@ void Document::EnsureStyledTo(Sci::Position pos) {
 }
 
 void Document::StyleToAdjustingLineDuration(Sci::Position pos) {
-	// Place bounds on the duration used to avoid glitches spiking it
-	// and so causing slow styling or non-responsive scrolling
-	const double minDurationOneLine = 0.000001;
-	const double maxDurationOneLine = 0.0001;
-
-	// Alpha value for exponential smoothing.
-	// Most recent value contributes 25% to smoothed value.
-	const double alpha = 0.25;
-
 	const Sci::Line lineFirst = SciLineFromPosition(GetEndStyled());
 	ElapsedPeriod epStyling;
 	EnsureStyledTo(pos);
-	const double durationStyling = epStyling.Duration();
 	const Sci::Line lineLast = SciLineFromPosition(GetEndStyled());
-	if (lineLast >= lineFirst + 8) {
-		// Only adjust for styling multiple lines to avoid instability
-		const double durationOneLine = durationStyling / (lineLast - lineFirst);
-		durationStyleOneLine = alpha * durationOneLine + (1.0 - alpha) * durationStyleOneLine;
-		if (durationStyleOneLine < minDurationOneLine) {
-			durationStyleOneLine = minDurationOneLine;
-		} else if (durationStyleOneLine > maxDurationOneLine) {
-			durationStyleOneLine = maxDurationOneLine;
-		}
-	}
+	durationStyleOneLine.AddSample(lineLast - lineFirst, epStyling.Duration());
 }
 
 void Document::LexerChanged() {
@@ -2235,7 +2261,7 @@ void Document::SetLexInterface(LexInterface *pLexInterface) {
 int SCI_METHOD Document::SetLineState(Sci_Position line, int state) {
 	const int statePrevious = States()->SetLineState(static_cast<Sci::Line>(line), state);
 	if (state != statePrevious) {
-		const DocModification mh(SC_MOD_CHANGELINESTATE, LineStart(line), 0, 0, 0,
+		const DocModification mh(SC_MOD_CHANGELINESTATE, LineStart(line), 0, 0, nullptr,
 			static_cast<Sci::Line>(line));
 		NotifyModified(mh);
 	}
@@ -2284,7 +2310,7 @@ void Document::MarginSetStyles(Sci::Line line, const unsigned char *styles) {
 void Document::MarginClearAll() {
 	const Sci::Line maxEditorLine = LinesTotal();
 	for (Sci::Line l=0; l<maxEditorLine; l++)
-		MarginSetText(l, 0);
+		MarginSetText(l, nullptr);
 	// Free remaining data
 	Margins()->ClearAll();
 }
@@ -2327,7 +2353,7 @@ int Document::AnnotationLines(Sci::Line line) const {
 void Document::AnnotationClearAll() {
 	const Sci::Line maxEditorLine = LinesTotal();
 	for (Sci::Line l=0; l<maxEditorLine; l++)
-		AnnotationSetText(l, 0);
+		AnnotationSetText(l, nullptr);
 	// Free remaining data
 	Annotations()->ClearAll();
 }
@@ -2960,7 +2986,6 @@ std::regex_constants::match_flag_type MatchFlags(const Document *doc, Sci::Posit
 
 template<typename Iterator, typename Regex>
 bool MatchOnLines(const Document *doc, const Regex &regexp, const RESearchRange &resr, RESearch &search) {
-	bool matched = false;
 	std::match_results<Iterator> match;
 
 	// MSVC and libc++ have problems with ^ and $ matching line ends inside a range.
@@ -2974,9 +2999,10 @@ bool MatchOnLines(const Document *doc, const Regex &regexp, const RESearchRange 
 	Iterator itStart(doc, resr.startPos);
 	Iterator itEnd(doc, resr.endPos);
 	const std::regex_constants::match_flag_type flagsMatch = MatchFlags(doc, resr.startPos, resr.endPos);
-	matched = std::regex_search(itStart, itEnd, match, regexp, flagsMatch);
+	const bool matched = std::regex_search(itStart, itEnd, match, regexp, flagsMatch);
 #else
 	// Line by line.
+	bool matched = false;
 	for (Sci::Line line = resr.lineRangeStart; line != resr.lineRangeBreak; line += resr.increment) {
 		const Range lineRange = resr.LineRange(line);
 		Iterator itStart(doc, lineRange.start);
@@ -3167,7 +3193,7 @@ const char *BuiltinRegex::SubstituteByPosition(Document *doc, const char *text, 
 	substituted.clear();
 	const DocumentIndexer di(doc, doc->Length());
 	search.GrabMatches(di);
-	for (int j = 0; j < *length; j++) {
+	for (Sci::Position j = 0; j < *length; j++) {
 		if (text[j] == '\\') {
 			if (text[j + 1] >= '0' && text[j + 1] <= '9') {
 				const unsigned int patNum = text[j + 1] - '0';

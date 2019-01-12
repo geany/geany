@@ -1075,9 +1075,10 @@ void ScintillaGTK::NotifyChange() {
 }
 
 void ScintillaGTK::NotifyFocus(bool focus) {
-	g_signal_emit(G_OBJECT(sci), scintilla_signals[COMMAND_SIGNAL], 0,
-	                Platform::LongFromTwoShorts
-					(GetCtrlID(), focus ? SCEN_SETFOCUS : SCEN_KILLFOCUS), PWidget(wMain));
+	if (commandEvents)
+		g_signal_emit(G_OBJECT(sci), scintilla_signals[COMMAND_SIGNAL], 0,
+				Platform::LongFromTwoShorts
+						(GetCtrlID(), focus ? SCEN_SETFOCUS : SCEN_KILLFOCUS), PWidget(wMain));
 	Editor::NotifyFocus(focus);
 }
 

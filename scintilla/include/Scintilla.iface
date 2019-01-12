@@ -862,6 +862,9 @@ get int GetColumn=2129(position pos,)
 # Count characters between two positions.
 fun int CountCharacters=2633(position start, position end)
 
+# Count code units between two positions.
+fun int CountCodeUnits=2715(position start, position end)
+
 # Show or hide the horizontal scroll bar.
 set void SetHScrollBar=2130(bool visible,)
 # Is the horizontal scroll bar visible?
@@ -1803,6 +1806,12 @@ get int GetDocumentOptions=2379(,)
 # Get which document modification events are sent to the container.
 get int GetModEventMask=2378(,)
 
+# Set whether command events are sent to the container.
+set void SetCommandEvents=2717(bool commandEvents,)
+
+# Get whether command events are sent to the container.
+get bool GetCommandEvents=2718(,)
+
 # Change internal focus flag.
 set void SetFocus=2380(bool focus,)
 # Get internal focus flag.
@@ -1965,6 +1974,11 @@ fun position PositionAfter=2418(position pos,)
 # Given a valid document position, return a position that differs in a number
 # of characters. Returned value is always between 0 and last position in document.
 fun position PositionRelative=2670(position pos, int relative)
+
+# Given a valid document position, return a position that differs in a number
+# of UTF-16 code units. Returned value is always between 0 and last position in document.
+# The result may point half way (2 bytes) inside a non-BMP character.
+fun position PositionRelativeCodeUnits=2716(position pos, int relative)
 
 # Copy a range of text to the clipboard. Positions are clipped into the document.
 fun void CopyRange=2419(position start, position end)
@@ -2939,6 +2953,9 @@ val SCLEX_JSON=120
 val SCLEX_EDIFACT=121
 val SCLEX_INDENT=122
 val SCLEX_MAXIMA=123
+val SCLEX_STATA=124
+val SCLEX_SAS=125
+val SCLEX_NIM=126
 val SCLEX_LPEG=999
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
@@ -4861,6 +4878,57 @@ val SCE_EDI_SEP_RELEASE=5
 val SCE_EDI_UNA=6
 val SCE_EDI_UNH=7
 val SCE_EDI_BADSEGMENT=8
+# Lexical states for SCLEX_STATA
+lex STATA=SCLEX_STATA SCE_STATA_
+val SCE_STATA_DEFAULT=0
+val SCE_STATA_COMMENT=1
+val SCE_STATA_COMMENTLINE=2
+val SCE_STATA_COMMENTBLOCK=3
+val SCE_STATA_NUMBER=4
+val SCE_STATA_OPERATOR=5
+val SCE_STATA_IDENTIFIER=6
+val SCE_STATA_STRING=7
+val SCE_STATA_TYPE=8
+val SCE_STATA_WORD=9
+val SCE_STATA_GLOBAL_MACRO=10
+val SCE_STATA_MACRO=11
+# Lexical states for SCLEX_SAS
+lex SAS=SCLEX_SAS SCE_SAS_
+val SCE_SAS_DEFAULT=0
+val SCE_SAS_COMMENT=1
+val SCE_SAS_COMMENTLINE=2
+val SCE_SAS_COMMENTBLOCK=3
+val SCE_SAS_NUMBER=4
+val SCE_SAS_OPERATOR=5
+val SCE_SAS_IDENTIFIER=6
+val SCE_SAS_STRING=7
+val SCE_SAS_TYPE=8
+val SCE_SAS_WORD=9
+val SCE_SAS_GLOBAL_MACRO=10
+val SCE_SAS_MACRO=11
+val SCE_SAS_MACRO_KEYWORD=12
+val SCE_SAS_BLOCK_KEYWORD=13
+val SCE_SAS_MACRO_FUNCTION=14
+val SCE_SAS_STATEMENT=15
+# Lexical states for SCLEX_NIM 
+lex Nim=SCLEX_NIM SCE_NIM_
+val SCE_NIM_DEFAULT=0
+val SCE_NIM_COMMENT=1
+val SCE_NIM_COMMENTDOC=2
+val SCE_NIM_COMMENTLINE=3
+val SCE_NIM_COMMENTLINEDOC=4
+val SCE_NIM_NUMBER=5
+val SCE_NIM_STRING=6
+val SCE_NIM_CHARACTER=7
+val SCE_NIM_WORD=8
+val SCE_NIM_TRIPLE=9
+val SCE_NIM_TRIPLEDOUBLE=10
+val SCE_NIM_BACKTICKS=11
+val SCE_NIM_FUNCNAME=12
+val SCE_NIM_STRINGEOL=13
+val SCE_NIM_NUMERROR=14
+val SCE_NIM_OPERATOR=15
+val SCE_NIM_IDENTIFIER=16
 
 # Events
 
@@ -4898,9 +4966,27 @@ evt void AutoCCompleted=2030(string text, int position, int ch, CompletionMethod
 evt void MarginRightClick=2031(int modifiers, int position, int margin)
 evt void AutoCSelectionChange=2032(int listType, string text, int position)
 
-# There are no provisional APIs currently.
-
 cat Provisional
+
+enu LineCharacterIndexType=SC_LINECHARACTERINDEX_
+val SC_LINECHARACTERINDEX_NONE=0
+val SC_LINECHARACTERINDEX_UTF32=1
+val SC_LINECHARACTERINDEX_UTF16=2
+
+# Retrieve line character index state.
+get int GetLineCharacterIndex=2710(,)
+
+# Request line character index be created or its use count increased.
+fun void AllocateLineCharacterIndex=2711(int lineCharacterIndex,)
+
+# Decrease use count of line character index and remove if 0.
+fun void ReleaseLineCharacterIndex=2712(int lineCharacterIndex,)
+
+# Retrieve the document line containing a position measured in index units.
+fun int LineFromIndexPosition=2713(position pos, int lineCharacterIndex)
+
+# Retrieve the position measured in index units at the start of a document line.
+fun position IndexPositionFromLine=2714(int line, int lineCharacterIndex)
 
 cat Deprecated
 

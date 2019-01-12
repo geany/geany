@@ -190,6 +190,26 @@ struct RegexError : public std::runtime_error {
 };
 
 /**
+ * The ActionDuration class stores the average time taken for some action such as styling or
+ * wrapping a line. It is used to decide how many repetitions of that action can be performed
+ * on idle to maximize efficiency without affecting application responsiveness.
+ * The duration changes if the time for the action changes. For example, if a simple lexer is
+ * changed to a complex lexer. Changes are damped and clamped to avoid short periods of easy
+ * or difficult processing moving the value too far leading to inefficiency or poor user
+ * experience.
+ */
+
+class ActionDuration {
+	double duration;
+	const double minDuration;
+	const double maxDuration;
+public:
+	ActionDuration(double duration_, double minDuration_, double maxDuration_) noexcept;
+	void AddSample(size_t numberActions, double durationOfActions) noexcept;
+	double Duration() const noexcept;
+};
+
+/**
  */
 class Document : PerLine, public IDocumentWithLineEnd, public ILoader {
 
@@ -259,7 +279,7 @@ public:
 	bool useTabs;
 	bool tabIndents;
 	bool backspaceUnindents;
-	double durationStyleOneLine;
+	ActionDuration durationStyleOneLine;
 
 	std::unique_ptr<IDecorationList> decorations;
 
@@ -389,6 +409,8 @@ public:
 	bool IsLineEndPosition(Sci::Position position) const;
 	bool IsPositionInLineEnd(Sci::Position position) const;
 	Sci::Position VCHomePosition(Sci::Position position) const;
+	Sci::Position IndexLineStart(Sci::Line line, int lineCharacterIndex) const;
+	Sci::Line LineFromPositionIndex(Sci::Position pos, int lineCharacterIndex) const;
 
 	int SCI_METHOD SetLevel(Sci_Position line, int level) override;
 	int SCI_METHOD GetLevel(Sci_Position line) const override;
@@ -414,6 +436,9 @@ public:
 	void SetCaseFolder(CaseFolder *pcf_);
 	Sci::Position FindText(Sci::Position minPos, Sci::Position maxPos, const char *search, int flags, Sci::Position *length);
 	const char *SubstituteByPosition(const char *text, Sci::Position *length);
+	int LineCharacterIndex() const;
+	void AllocateLineCharacterIndex(int lineCharacterIndex);
+	void ReleaseLineCharacterIndex(int lineCharacterIndex);
 	Sci::Line LinesTotal() const noexcept;
 
 	void SetDefaultCharClasses(bool includeWordClass);

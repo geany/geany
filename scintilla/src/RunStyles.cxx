@@ -249,7 +249,7 @@ DISTANCE RunStyles<DISTANCE, STYLE>::Runs() const noexcept {
 
 template <typename DISTANCE, typename STYLE>
 bool RunStyles<DISTANCE, STYLE>::AllSame() const noexcept {
-	for (int run = 1; run < starts->Partitions(); run++) {
+	for (DISTANCE run = 1; run < starts->Partitions(); run++) {
 		if (styles->ValueAt(run) != styles->ValueAt(run - 1))
 			return false;
 	}
@@ -299,7 +299,7 @@ void RunStyles<DISTANCE, STYLE>::Check() const {
 	if (styles->ValueAt(styles->Length()-1) != 0) {
 		throw std::runtime_error("RunStyles: Unused style at end changed.");
 	}
-	for (int j=1; j<styles->Length()-1; j++) {
+	for (ptrdiff_t j=1; j<styles->Length()-1; j++) {
 		if (styles->ValueAt(j) == styles->ValueAt(j-1)) {
 			throw std::runtime_error("RunStyles: Style of a partition same as previous.");
 		}
@@ -308,7 +308,7 @@ void RunStyles<DISTANCE, STYLE>::Check() const {
 
 template class Scintilla::RunStyles<int, int>;
 template class Scintilla::RunStyles<int, char>;
-#if PTRDIFF_MAX != INT_MAX
+#if (PTRDIFF_MAX != INT_MAX) || PLAT_HAIKU
 template class Scintilla::RunStyles<ptrdiff_t, int>;
 template class Scintilla::RunStyles<ptrdiff_t, char>;
 #endif

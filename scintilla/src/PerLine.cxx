@@ -349,14 +349,14 @@ const char *LineAnnotation::Text(Sci::Line line) const {
 	if (annotations.Length() && (line >= 0) && (line < annotations.Length()) && annotations[line])
 		return annotations[line].get()+sizeof(AnnotationHeader);
 	else
-		return 0;
+		return nullptr;
 }
 
 const unsigned char *LineAnnotation::Styles(Sci::Line line) const {
 	if (annotations.Length() && (line >= 0) && (line < annotations.Length()) && annotations[line] && MultipleStyles(line))
 		return reinterpret_cast<unsigned char *>(annotations[line].get() + sizeof(AnnotationHeader) + Length(line));
 	else
-		return 0;
+		return nullptr;
 }
 
 static char *AllocateAnnotation(int length, int style) {
