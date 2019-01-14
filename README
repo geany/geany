@@ -110,7 +110,7 @@ To run Geany just type::
     $ geany
 
 on a console or use the applications menu from your desktop environment.
-There a few command line options. See the manual page of Geany or run::
+There are several command line options. See the manual page of Geany or run::
 
     $ geany --help
 
