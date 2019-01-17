@@ -20,7 +20,11 @@ if test -n "${build}" -a -n "${target}"; then
 	GEANY_STATUS_ADD([Building Geany for], [${target}])
 fi
 
-# why do we use this?
+# If possible, enable extensions to C or Posix on hosts that normally
+# disable the extensions, typically due to standards-conformance
+# namespace issues. This should be called before any macros that run the
+# C compiler.
+# <https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Posix-Variants.html>
 AC_USE_SYSTEM_EXTENSIONS
 
 m4_ifdef([AM_PROG_AR],[AM_PROG_AR])
