@@ -185,6 +185,17 @@ AC_OUTPUT
 
 # Summary
 GEANY_STATUS_OUTPUT
+
 echo ""
 echo "Configuration is done OK."
 echo ""
+
+case $host_os in
+	*bsd*)
+		make_cmd="gmake"
+		;;
+	*)
+		make_cmd="make"
+		;;
+esac
+echo "Now type $make_cmd to compile."

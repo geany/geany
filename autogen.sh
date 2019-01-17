@@ -97,5 +97,5 @@ if [ "$NOCONFIGURE" = 1 ]; then
     exit 0;
 fi
 echo "Running $srcdir/configure $@ ..."
-$srcdir/configure "$@" && echo "Now type 'make' to compile." || exit 1
+$srcdir/configure "$@" || exit 1
 
