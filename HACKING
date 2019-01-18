@@ -89,8 +89,6 @@ Please, make sure contributions you make follow these rules:
 * only one feature should be in each pull request (or patch).
 * pull requests (or patches) should not contain changes unrelated to the feature,
   and commits should be sensible units of change.
-* the submitter should squash together corrections that are part of
-  the development process, especially correcting your own mistakes.
 * Please make sure your modifications follow the style of existing code:
   see `Coding`_ for more information.
 
