@@ -178,7 +178,6 @@ AC_CONFIG_FILES([
 		data/Makefile
 		doc/Makefile
 		doc/geany.1
-		geany.spec
 		geany.pc
 		geany.nsi
 		doc/Doxyfile

@@ -17,7 +17,6 @@ EXTRA_DIST = \
 	scripts/gen-api-gtkdoc.py \
 	geany.desktop.in \
 	geany.pc.in \
-	geany.spec \
 	ChangeLog.pre-1-22 \
 	HACKING \
 	README.I18N \
