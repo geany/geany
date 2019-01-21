@@ -542,7 +542,7 @@ static void check_line_breaking(GeanyEditor *editor, gint pos)
 	gint line, lstart, col;
 	gchar c;
 
-	if (!editor->line_breaking)
+	if (!editor->line_breaking || sci_get_selection_mode(editor->sci) != SC_SEL_STREAM)
 		return;
 
 	col = sci_get_col_from_position(sci, pos);
