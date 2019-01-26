@@ -9,6 +9,14 @@ env:
   - GTK3=yes BINRELOC=no
   - GTK3=no BINRELOC=yes
   - GTK3=yes BINRELOC=yes
+  - GTK3=no BINRELOC=no GCC_VER=7
+  - GTK3=yes BINRELOC=no GCC_VER=7
+  - GTK3=no BINRELOC=yes GCC_VER=7
+  - GTK3=yes BINRELOC=yes GCC_VER=7
+  - GTK3=no BINRELOC=no GCC_VER=8
+  - GTK3=yes BINRELOC=no GCC_VER=8
+  - GTK3=no BINRELOC=yes GCC_VER=8
+  - GTK3=yes BINRELOC=yes GCC_VER=8
   - GTK3=no MINGW=yes
   - GTK3=yes MINGW=yes
 before_install:
@@ -25,6 +33,14 @@ install:
   - sudo apt-get install -y python-lxml
 before_script:
   - export CFLAGS="-g -O2 -Werror=pointer-arith -Werror=implicit-function-declaration"
+  - if [ -n "$GCC_VER" ]; then
+      export CC=gcc-$GCC_VER;
+      export CXX=g++-$GCC_VER;
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6B05F25D762E3157 &&
+      sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test &&
+      sudo apt-get update &&
+      sudo apt-get -y install gcc-$GCC_VER g++-$GCC_VER;
+    fi
 script:
   - NOCONFIGURE=1 ./autogen.sh
   - >
