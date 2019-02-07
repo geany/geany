@@ -1,0 +1,34 @@
+# For complete documentation of this file, please see Geany's main documentation
+
+[styling=Python]
+
+[keywords]
+
+primary=addr as asm atomic bind block break case cast const continue converter defer discard distinct div do elif else end enum except export finally for from func generic if import include interface iterator let macro method mixin mod notin object of out proc raise return shl shr static template try type using var when while with without yield seq array tuple ref ptr not and xor in or is isnot new result
+
+identifiers=bool float int string nil true false echo
+
+[settings]
+
+extension=nim
+comment_single=#
+comment_use_indent=true
+tag_parser=Python
+lexer_filetype=Python
+
+[lexer_properties]
+styling.within.preprocessor=1
+lexer.cpp.track.preprocessor=0
+
+[indentation]
+
+width=2
+type=0
+
+[build-menu]
+
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=nim c "%f"
+run_cmd=%e
