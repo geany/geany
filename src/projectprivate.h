@@ -42,6 +42,7 @@ typedef struct GeanyProjectPrivate
 	gboolean	line_wrapping;
 	gint		line_break_column;
 	gboolean	auto_continue_multiline;
+	gboolean	auto_continue_multiline_auto_indent;
 	gint		long_line_behaviour; /* 0 - disabled, 1 - follow global settings, 2 - enabled (custom) */
 	gint		long_line_column; /* Long line marker position. */
 

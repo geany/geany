@@ -87,6 +87,8 @@ static gboolean write_config(void);
 static void on_name_entry_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_entries_changed(GtkEditable *editable, PropertyDialogElements *e);
 static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget *spin_long_line);
+static void on_auto_multiline_toggled(
+	GtkToggleButton *togglebutton, GtkWidget *check_auto_multiline_auto_indent);
 static void apply_editor_prefs(void);
 static void init_stash_prefs(void);
 static void destroy_project(gboolean open_default);
@@ -555,6 +557,12 @@ static void create_properties_dialog(PropertyDialogElements *e)
 				G_CALLBACK(on_radio_long_line_custom_toggled),
 				ui_lookup_widget(e->dialog, "spin_long_line_project"));
 	}
+
+	g_signal_connect(
+		ui_lookup_widget(e->dialog, "check_auto_multiline1"),
+		"toggled",
+		G_CALLBACK(on_auto_multiline_toggled),
+		ui_lookup_widget(e->dialog, "check_auto_multiline1_auto_indent"));
 }
 
 
@@ -577,6 +585,10 @@ static void show_project_properties(gboolean show_build)
 
 	foreach_slist(node, stash_groups)
 		stash_group_display(node->data, e.dialog);
+
+	on_auto_multiline_toggled(
+		GTK_TOGGLE_BUTTON(ui_lookup_widget(e.dialog, "check_auto_multiline1")),
+		ui_lookup_widget(e.dialog, "check_auto_multiline1_auto_indent"));
 
 	/* fill the elements with the appropriate data */
 	gtk_entry_set_text(GTK_ENTRY(e.name), p->name);
@@ -1002,6 +1014,14 @@ static void on_radio_long_line_custom_toggled(GtkToggleButton *radio, GtkWidget 
 }
 
 
+static void on_auto_multiline_toggled(
+	GtkToggleButton *togglebutton, GtkWidget *check_auto_multiline_auto_indent)
+{
+	gtk_widget_set_sensitive(
+		check_auto_multiline_auto_indent, gtk_toggle_button_get_active(togglebutton));
+}
+
+
 gboolean project_load_file(const gchar *locale_file_name)
 {
 	g_return_val_if_fail(locale_file_name != NULL, FALSE);
@@ -1144,7 +1164,7 @@ static gboolean write_config(void)
 }
 
 
-/** Forces the project file rewrite and emission of the project-save signal. Plugins 
+/** Forces the project file rewrite and emission of the project-save signal. Plugins
  * can use this function to save additional project data outside the project dialog.
  *
  *  @since 1.25
@@ -1311,6 +1331,9 @@ static void init_stash_prefs(void)
 	stash_group_add_toggle_button(group, &priv.auto_continue_multiline,
 		"auto_continue_multiline", editor_prefs.auto_continue_multiline,
 		"check_auto_multiline1");
+	stash_group_add_toggle_button(group, &priv.auto_continue_multiline_auto_indent,
+		"auto_continue_multiline_auto_indent", editor_prefs.auto_continue_multiline_auto_indent,
+		"check_auto_multiline1_auto_indent");
 	add_stash_group(group, TRUE);
 }
 

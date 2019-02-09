@@ -92,6 +92,7 @@ static void on_enable_plugins_toggled(GtkToggleButton *togglebutton, gpointer us
 static void on_use_folding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_open_encoding_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer user_data);
+static void on_auto_multiline_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void on_prefs_print_page_header_toggled(GtkToggleButton *togglebutton, gpointer user_data);
 static void open_preferences_help(void);
@@ -640,6 +641,10 @@ static void prefs_init_dialog(void)
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_continue_multiline);
+	on_auto_multiline_toggled(GTK_TOGGLE_BUTTON(widget), NULL);
+
+	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline_auto_indent");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_continue_multiline_auto_indent);
 
 	widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget), editor_prefs.auto_complete_symbols);
@@ -1110,6 +1115,10 @@ on_prefs_dialog_response(GtkDialog *dialog, gint response, gpointer user_data)
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline");
 		editor_prefs.auto_continue_multiline = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
+		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline_auto_indent");
+		editor_prefs.auto_continue_multiline_auto_indent = (
+			gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+
 		widget = ui_lookup_widget(ui_widgets.prefs_dialog, "check_symbol_auto_completion");
 		editor_prefs.auto_complete_symbols = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
 
@@ -1567,6 +1576,15 @@ static void on_sidebar_visible_toggled(GtkToggleButton *togglebutton, gpointer u
 }
 
 
+static void on_auto_multiline_toggled(GtkToggleButton *togglebutton, gpointer user_data)
+{
+	gboolean sens = gtk_toggle_button_get_active(togglebutton);
+
+	gtk_widget_set_sensitive(
+		ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline_auto_indent"), sens);
+}
+
+
 static void on_prefs_print_radio_button_toggled(GtkToggleButton *togglebutton, gpointer user_data)
 {
 	gboolean sens = gtk_toggle_button_get_active(togglebutton);
@@ -1818,6 +1836,8 @@ void prefs_show_dialog(void)
 				"toggled", G_CALLBACK(on_open_encoding_toggled), NULL);
 		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_sidebar_visible"),
 				"toggled", G_CALLBACK(on_sidebar_visible_toggled), NULL);
+		g_signal_connect(ui_lookup_widget(ui_widgets.prefs_dialog, "check_auto_multiline"),
+				"toggled", G_CALLBACK(on_auto_multiline_toggled), NULL);
 
 		g_signal_connect(ui_widgets.prefs_dialog,
 				"key-press-event", G_CALLBACK(prefs_dialog_key_press_response_cb), NULL);

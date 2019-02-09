@@ -414,6 +414,8 @@ get_default_prefs(void)
 	eprefs.line_wrapping = get_project_pref(line_wrapping);
 	eprefs.line_break_column = get_project_pref(line_break_column);
 	eprefs.auto_continue_multiline = get_project_pref(auto_continue_multiline);
+	eprefs.auto_continue_multiline_auto_indent = (
+		get_project_pref(auto_continue_multiline_auto_indent));
 	return &eprefs;
 }
 
@@ -3520,64 +3522,106 @@ static gboolean is_comment_char(gchar c, gint lexer)
 static void auto_multiline(GeanyEditor *editor, gint cur_line)
 {
 	ScintillaObject *sci = editor->sci;
-	gint indent_pos, style;
+	gint cur_line_indent_pos;
+	gint prev_line_indent_pos;
+	gint prev_line_style;
 	gint lexer = sci_get_lexer(sci);
+	gchar *prev_line;
+	gint prev_line_len;
+	gint i;
+	gchar continuation;
+	gchar buf[3];  /* Continuation, possibly with a leading space. */
+	gint extra_indent_len;
 
 	/* Use the start of the line enter was pressed on, to avoid any doc keyword styles */
-	indent_pos = sci_get_line_indent_position(sci, cur_line - 1);
-	style = sci_get_style_at(sci, indent_pos);
-	if (!in_block_comment(lexer, style))
+	prev_line_indent_pos = sci_get_line_indent_position(sci, cur_line - 1);
+	prev_line_style = sci_get_style_at(sci, prev_line_indent_pos);
+	if (!in_block_comment(lexer, prev_line_style))
 		return;
 
 	/* Check whether the comment block continues on this line */
-	indent_pos = sci_get_line_indent_position(sci, cur_line);
-	if (sci_get_style_at(sci, indent_pos) == style || indent_pos >= sci_get_length(sci))
+	cur_line_indent_pos = sci_get_line_indent_position(sci, cur_line);
+	if (sci_get_style_at(sci, cur_line_indent_pos) != prev_line_style
+			&& cur_line_indent_pos < sci_get_length(sci))
+		return;
+
+	prev_line = sci_get_line(sci, cur_line - 1);
+	prev_line_len = strlen(prev_line);
+
+	/* find and stop at end of multi line comment */
+	i = prev_line_len - 1;
+	while (i >= 0 && isspace(prev_line[i])) i--;
+	if (i >= 1 && is_comment_char(prev_line[i - 1], lexer) && prev_line[i] == '/')
 	{
-		gchar *previous_line = sci_get_line(sci, cur_line - 1);
-		/* the type of comment, '*' (C/C++/Java), '+' and the others (D) */
-		const gchar *continuation = "*";
-		const gchar *whitespace = ""; /* to hold whitespace if needed */
-		gchar *result;
-		gint len = strlen(previous_line);
-		gint i;
+		gint indent_len, indent_width;
 
-		/* find and stop at end of multi line comment */
-		i = len - 1;
-		while (i >= 0 && isspace(previous_line[i])) i--;
-		if (i >= 1 && is_comment_char(previous_line[i - 1], lexer) && previous_line[i] == '/')
-		{
-			gint indent_len, indent_width;
+		indent_len = sci_get_col_from_position(sci, cur_line_indent_pos);
+		indent_width = editor_get_indent_prefs(editor)->width;
 
-			indent_pos = sci_get_line_indent_position(sci, cur_line);
-			indent_len = sci_get_col_from_position(sci, indent_pos);
-			indent_width = editor_get_indent_prefs(editor)->width;
-
-			/* if there is one too many spaces, delete the last space,
-			 * to return to the indent used before the multiline comment was started. */
-			if (indent_len % indent_width == 1)
-				SSM(sci, SCI_DELETEBACKNOTLINE, 0, 0);	/* remove whitespace indent */
-			g_free(previous_line);
-			return;
-		}
-		/* check whether we are on the second line of multi line comment */
-		i = 0;
-		while (i < len && isspace(previous_line[i])) i++; /* get to start of the line */
-
-		if (i + 1 < len &&
-			previous_line[i] == '/' && is_comment_char(previous_line[i + 1], lexer))
-		{ /* we are on the second line of a multi line comment, so we have to insert white space */
-			whitespace = " ";
-		}
-
-		if (style == SCE_D_COMMENTNESTED)
-			continuation = "+"; /* for nested comments in D */
-
-		result = g_strconcat(whitespace, continuation, " ", NULL);
-		sci_add_text(sci, result);
-		g_free(result);
-
-		g_free(previous_line);
+		/* if there is one too many spaces, delete the last space,
+		 * to return to the indent used before the multiline comment was started. */
+		if (indent_len % indent_width == 1)
+			SSM(sci, SCI_DELETEBACKNOTLINE, 0, 0);	/* remove whitespace indent */
+		g_free(prev_line);
+		return;
 	}
+
+	if (prev_line_style == SCE_D_COMMENTNESTED)
+		continuation = '+';
+	else
+		continuation = '*';
+
+	i = 0;
+	while (isspace(prev_line[i]))
+		i++;
+
+	if (prev_line[i] == '/' && is_comment_char(prev_line[i + 1], lexer))
+	{
+		/* We are on the second line of a multi line comment, so we have to
+		 * insert white space before the continuation. */
+		g_snprintf(buf, sizeof(buf), " %c", continuation);
+		sci_add_text(sci, buf);
+
+		/* Skip comment start character as it's not expected by the rest of
+		 * the code. */
+		++i;
+	}
+	else
+	{
+		g_snprintf(buf, sizeof(buf), "%c", continuation);
+		sci_add_text(sci, buf);
+	}
+
+	/* Please note that we use isblank() since we are only interested in spaces
+	 * and tabs. isspace() will not work since the line can end with a newline
+	 * character. */
+
+	/* Let's see whether we need auto-indentation. */
+	if (!editor->auto_indent
+		|| !get_project_pref(auto_continue_multiline_auto_indent)
+		/* The continuation was removed by the user. */
+		|| prev_line[i] != continuation
+		/* A non-blank character after the continuation (may be a newline
+		 * character). */
+		|| !isblank(prev_line[i + 1]))
+	{
+		sci_add_text(sci, " ");
+		g_free(prev_line);
+		return;
+	}
+
+	/* At this point, we know that the previous line has a continuation
+	 * followed by a blank character. Skip the continuation and collect all
+	 * blanks to use them as indentation for the current line. */
+	++i;
+	extra_indent_len = 0;
+	do {
+		++extra_indent_len;
+	} while (isblank(prev_line[i + extra_indent_len]));
+
+	SSM(sci, SCI_ADDTEXT, extra_indent_len, (sptr_t)(prev_line + i));
+
+	g_free(prev_line);
 }
 
 
