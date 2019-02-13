@@ -1,0 +1,60 @@
+# For complete documentation of this file, please see Geany's main documentation
+[styling]
+# Edit these in the colorscheme .conf file instead
+default=default
+comment=comment_line
+multicomment=comment
+number=number_1
+keyword=keyword_1
+keywordkw=keyword_2
+symbol=keyword_2
+string=string_1
+stringeol=string_eol
+identifier=identifier_1
+operator=operator
+special=function
+
+[keywords]
+# all items must be in one line
+# keywords is based on https://en.wikipedia.org/wiki/Scheme_(programming_language)#Implementations
+# special keywords are defined as R5RS standard forms
+special_keywords=define lambda do let let* letrec if cond case and or begin define-syntax let-syntax letrec-syntax syntax-rules quote unquote quasiquote unquote-splicing ' , ` ,@ set! delay
+# keywords are defined as R5RS standard procedures (primitive, library, optional)
+keywords=eq? eqv? equal? + - * / abs quotient remainder modulo gcd lcm expt sqrt numerator denominator rational? rationalize floor ceiling truncate round inexact->exact exact->inexact exact? inexact? < <= > >= = zero? negative? positive? odd? even? max min sin cos tan asin acos atan exp log make-rectangular make-polar real-part imag-part magnitude angle complex? integer? rational? real? complex? number? vector->list list->vector number->string string->number symbol->string string->symbol char->integer integer->char string->list list->string string? make-string string string-length string-ref string-set! string=? string-ci=? string<? string-ci<? string<=? string-ci<=? string>? string-ci>? string>=? string-ci>=? substring string-append string-copy string-fill! char? char=? char-ci=? char<? char-ci<? char<=? char-ci<=? char>? char-ci>? char>=? char-ci>=? char-alphabetic? char-numeric? char-whitespace? char-upper-case? char-lower-case? char-upcase char-downcase vector? make-vector vector vector-length vector-ref vector-set! vector-fill! symbol? pair? cons car cdr set-car! set-cdr! null? list? list length append reverse list-tail list-ref memq. memv. member assq assv assoc call-with-current-continuation call/cc values call-with-values dynamic-wind eval scheme-report-environment null-environment interaction-environment port? display newline read write read-char write-char peek-char char-ready? eof-object? open-input-file open-output-file close-input-port close-output-port input-port? output-port? current-input-port current-out-port call-with-input-file call-with-output-file with-input-from-file with-output-to-file load transcript-on transcript-off force procedure? apply map for-each boolean? not
+[settings]
+# default extension used when saving files
+extension=scheme
+
+# the following characters are these which a "word" can contains, see documentation
+wordchars=`,'!#%*-.:<=>?@\\abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+whitespace_chars=\s\t\"$&()+/;[]^{|}~_
+# ! $ % & * + - . / : < = > ? @ ^ _ ~ https://schemers.org/Documents/Standards/R5RS/HTML/r5rs-Z-H-2.html#%_toc_%_sec_2.1
+
+# single comments, like # in this file
+comment_single=;
+# multiline comments
+comment_open=#|
+comment_close=|#
+
+# set to false if a comment character/string should start at column 0 of a line, true uses any
+# indentation of the line, e.g. setting to true causes the following on pressing CTRL+d
+	#command_example();
+# setting to false would generate this
+#	command_example();
+# This setting works only for single line comments
+comment_use_indent=true
+
+# context action command (please see Geany's main documentation for details)
+context_action_cmd=
+
+[indentation]
+width=2
+# 0 is spaces, 1 is tabs, 2 is tab & spaces
+type=0
+
+[build_settings]
+# %f will be replaced by the complete filename
+# %e will be replaced by the filename without extension
+# (use only one of it at one time)
+compiler=
+run_cmd=plt-r5rs "%f"

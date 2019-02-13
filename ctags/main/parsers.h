@@ -65,6 +65,10 @@
 	GoParser, \
 	JsonParser, \
 	ZephirParser, \
-	PowerShellParser
+	PowerShellParser, \
+	ClojureParser, \
+	LispParser, \
+	SchemeParser, \
+	RacketParser
 
 #endif  /* CTAGS_MAIN_PARSERS_H */

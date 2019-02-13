@@ -304,6 +304,11 @@ static const HLKeyword highlighting_keywords_CAML[] =
 };
 #define highlighting_properties_CAML	EMPTY_PROPERTIES
 
+/* Clojure */
+#define highlighting_lexer_CLOJURE		highlighting_lexer_LISP
+#define highlighting_styles_CLOJURE		highlighting_styles_LISP
+#define highlighting_keywords_CLOJURE	highlighting_keywords_LISP
+#define highlighting_properties_CLOJURE	EMPTY_PROPERTIES
 
 /* CMake */
 #define highlighting_lexer_CMAKE		SCLEX_CMAKE
@@ -1300,6 +1305,11 @@ static const HLKeyword highlighting_keywords_R[] =
 };
 #define highlighting_properties_R	EMPTY_PROPERTIES
 
+/* Racket */
+#define highlighting_lexer_RACKET		highlighting_lexer_LISP
+#define highlighting_styles_RACKET		highlighting_styles_LISP
+#define highlighting_keywords_RACKET	highlighting_keywords_LISP
+#define highlighting_properties_RACKET	EMPTY_PROPERTIES
 
 /* Ruby */
 #define highlighting_lexer_RUBY			SCLEX_RUBY
@@ -1384,6 +1394,12 @@ static const HLKeyword highlighting_keywords_RUST[] =
 	/* SCI_SETKEYWORDS = 3 is for current session types - see document_highlight_tags() */
 };
 #define highlighting_properties_RUST		EMPTY_PROPERTIES
+
+/* Scheme */
+#define highlighting_lexer_SCHEME		highlighting_lexer_LISP
+#define highlighting_styles_SCHEME		highlighting_styles_LISP
+#define highlighting_keywords_SCHEME	highlighting_keywords_LISP
+#define highlighting_properties_SCHEME	EMPTY_PROPERTIES
 
 /* SH */
 #define highlighting_lexer_SH		SCLEX_BASH
