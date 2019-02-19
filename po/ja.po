@@ -1799,7 +1799,7 @@ msgstr "選択文字列を前方に検索(_V)"
 
 #: ../data/geany.glade.h:390 ../src/keybindings.c:559
 msgid "_Mark All"
-msgstr "すべてメイク(_M)"
+msgstr "すべてマーク(_M)"
 
 #: ../data/geany.glade.h:391
 msgid "Go to Symbol Decl_aration"
