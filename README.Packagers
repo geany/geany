@@ -62,7 +62,7 @@ distribution/target and these changes might be generally useful, please
 report your changes to us(the Geany developers) so we can apply them.
 Such changes could be removing/adding any files, modifying the autotools
 configuration, any modifications to some "meta" files (like
-geany.desktop, geany.spec, images/icons, ...) or even if you have to
+geany.desktop, images/icons, ...) or even if you have to
 modify the source code to fix broken compilation or something like this.
 Please inform us about changes you made, so maybe you don't have to
 change it again with the next release and we can fix it in Geany itself
