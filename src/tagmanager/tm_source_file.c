@@ -1,6 +1,7 @@
 /*
 *
 *   Copyright (c) 2001-2002, Biswapesh Chattopadhyay
+*   Copyright 2005 The Geany contributors
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -664,7 +665,7 @@ static bool ctags_new_tag(const ctagsTag *const tag,
 }
 
 /* Initializes a TMSourceFile structure from a file name. */
-static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name, 
+static gboolean tm_source_file_init(TMSourceFile *source_file, const char *file_name,
 	const char* name)
 {
 	GStatBuf s;
@@ -799,15 +800,15 @@ gboolean tm_source_file_parse(TMSourceFile *source_file, guchar* text_buf, gsize
 		g_warning("Attempt to parse NULL file");
 		return FALSE;
 	}
-	
+
 	if (source_file->lang == TM_PARSER_NONE)
 	{
 		tm_tags_array_free(source_file->tags_array, FALSE);
 		return FALSE;
 	}
-	
+
 	file_name = source_file->file_name;
-	
+
 	if (use_buffer && (NULL == text_buf || 0 == buf_size))
 	{
 		/* Empty buffer, "parse" by setting empty tag array */

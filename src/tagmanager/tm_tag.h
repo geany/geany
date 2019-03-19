@@ -1,6 +1,7 @@
 /*
 *
 *   Copyright (c) 2001-2002, Biswapesh Chattopadhyay
+*   Copyright 2005 The Geany contributors
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -88,7 +89,7 @@ typedef struct TMTag
 	char *name; /**< Name of tag */
 	TMTagType type; /**< Tag Type */
 	gint refcount; /* the reference count of the tag */
-	
+
 	/** These are tag attributes */
 	TMSourceFile *file; /**< File in which the tag occurs; NULL for global tags */
 	gulong line; /**< Line number of the tag */
@@ -114,7 +115,7 @@ TMTag *tm_tag_new(void);
 
 void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array);
 
-GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array,
 	TMTagAttrType *sort_attributes, gboolean unref_duplicates);
 
 void tm_tags_sort(GPtrArray *tags_array, TMTagAttrType *sort_attributes,

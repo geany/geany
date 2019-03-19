@@ -1,6 +1,8 @@
 #!/bin/sh
 set -e
 
+# THIS IS OBSOLETE AS WE DO NOT MENTION THE CURRENT YEAR ANY LONGER IN COPYRIGHT NOTICES
+
 # prevent sed from doing stupid things in case the locale encoding doesn't
 # match the files'.  Unlikely, but doesn't hurt.
 export LANG=C

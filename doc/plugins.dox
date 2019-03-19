@@ -1,11 +1,7 @@
 /*
  * plugins.dox - this file is part of Geany, a fast and lightweight IDE
  *
- * Copyright 2008-2011 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- * Copyright 2008-2011 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- * Copyright 2009-2012 Frank Lanitz <frank(at)frank(dot)uvena(dot)de>
- * Copyright 2014 Matthew Brush <matt(at)geany(dot)org>
- * Copyright 2015 Thomas Martitz <kugel(at)rockbox(dot)org>
+ * Copyright 2008 The Geany contributors
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1016,7 +1012,7 @@ static gpointer demoproxy_load(GeanyPlugin *proxy, GeanyPlugin *plugin,
 		plugin->funcs->help = proxy_help;
 		plugin->funcs->cleanup = proxy_cleanup;
 
-		/* Cannot pass g_free as free_func be Geany calls it before unloading, and since 
+		/* Cannot pass g_free as free_func be Geany calls it before unloading, and since
 		 * demoproxy_unload() accesses the data this would be catastrophic */
 		GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, NULL);
 		return data;

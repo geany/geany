@@ -1,6 +1,7 @@
 /*
 *
 *   Copyright (c) 2001-2002, Biswapesh Chattopadhyay
+*   Copyright 2005 The Geany contributors
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -37,15 +38,15 @@
 
 
 /* when changing, always keep the three sort criteria below in sync */
-static TMTagAttrType workspace_tags_sort_attrs[] = 
-{ 
+static TMTagAttrType workspace_tags_sort_attrs[] =
+{
 	tm_tag_attr_name_t, tm_tag_attr_file_t, tm_tag_attr_line_t,
 	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
 };
 
 /* for file tags the file is always identical, don't use for sorting */
-static TMTagAttrType file_tags_sort_attrs[] = 
-{ 
+static TMTagAttrType file_tags_sort_attrs[] =
+{
 	tm_tag_attr_name_t, tm_tag_attr_line_t,
 	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
 };
@@ -53,7 +54,7 @@ static TMTagAttrType file_tags_sort_attrs[] =
 /* global tags don't have file/line information */
 static TMTagAttrType global_tags_sort_attrs[] =
 {
-	tm_tag_attr_name_t, 
+	tm_tag_attr_name_t,
 	tm_tag_attr_type_t, tm_tag_attr_scope_t, tm_tag_attr_arglist_t, 0
 };
 
@@ -216,7 +217,7 @@ void tm_workspace_update_source_file_buffer(TMSourceFile *source_file, guchar* t
 
 
 /** Removes a source file from the workspace if it exists. This function also removes
- the tags belonging to this file from the workspace. To completely free the TMSourceFile 
+ the tags belonging to this file from the workspace. To completely free the TMSourceFile
  pointer call tm_source_file_free() on it.
  @param source_file Pointer to the source file to be removed.
 */
@@ -240,7 +241,7 @@ void tm_workspace_remove_source_file(TMSourceFile *source_file)
 }
 
 
-/* Recreates workspace tag array from all member TMSourceFile objects. Use if you 
+/* Recreates workspace tag array from all member TMSourceFile objects. Use if you
  want to globally refresh the workspace. This function does not call tm_source_file_update()
  which should be called before this function on source files which need to be
  reparsed.
@@ -299,11 +300,11 @@ void tm_workspace_add_source_files(GPtrArray *source_files)
 	for (i = 0; i < source_files->len; i++)
 	{
 		TMSourceFile *source_file = source_files->pdata[i];
-		
+
 		tm_workspace_add_source_file_noupdate(source_file);
 		update_source_file(source_file, NULL, 0, FALSE, FALSE);
 	}
-	
+
 	tm_workspace_update();
 }
 
@@ -325,7 +326,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 	for (i = 0; i < source_files->len; i++)
 	{
 		TMSourceFile *source_file = source_files->pdata[i];
-		
+
 		for (j = 0; j < theWorkspace->source_files->len; j++)
 		{
 			if (theWorkspace->source_files->pdata[j] == source_file)
@@ -335,7 +336,7 @@ void tm_workspace_remove_source_files(GPtrArray *source_files)
 			}
 		}
 	}
-	
+
 	tm_workspace_update();
 }
 
@@ -357,7 +358,7 @@ gboolean tm_workspace_load_global_tags(const char *tags_file, TMParserType mode)
 	tm_tags_sort(file_tags, global_tags_sort_attrs, TRUE, TRUE);
 
 	/* reorder the whole array, because tm_tags_find expects a sorted array */
-	new_tags = tm_tags_merge(theWorkspace->global_tags, 
+	new_tags = tm_tags_merge(theWorkspace->global_tags,
 		file_tags, global_tags_sort_attrs, TRUE);
 	g_ptr_array_free(theWorkspace->global_tags, TRUE);
 	g_ptr_array_free(file_tags, TRUE);

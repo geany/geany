@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-#  Copyright 2015-2016 Thomas Martitz <kugel@rockbox.org>
+#  Copyright 2015 The Geany contributors
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

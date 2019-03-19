@@ -1,6 +1,7 @@
 /*
 *
 *   Copyright (c) 2001-2002, Biswapesh Chattopadhyay
+*   Copyright 2005 The Geany contributors
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.
@@ -238,7 +239,7 @@ gboolean tm_tags_equal(const TMTag *a, const TMTag *b)
 }
 
 /*
- Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since 
+ Removes NULL tag entries from an array of tags. Called after tm_tags_dedup() since
  this function substitutes duplicate entries with NULL
  @param tags_array Array of tags to dedup
 */
@@ -376,7 +377,7 @@ void tm_tags_remove_file_tags(TMSourceFile *source_file, GPtrArray *tags_array)
  * The merge complexity depends mostly on the size of the small array
  * and is almost independent of the size of the big array.
  * In addition, get rid of the duplicates (if both big_array and small_array are duplicate-free). */
-static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array, 
+static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 	TMSortOptions *sort_options, gboolean unref_duplicates) {
 	guint i1 = 0;  /* index to big_array */
 	guint i2 = 0;  /* index to small_array */
@@ -394,14 +395,14 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 		small_array = big_array;
 		big_array = tmp;
 	}
-	
-	/* on average, we are merging a value from small_array every 
+
+	/* on average, we are merging a value from small_array every
 	 * len(big_array) / len(small_array) values - good approximation for fast jump
 	 * step size */
 	initial_step = (small_array->len > 0) ? big_array->len / small_array->len : 1;
 	initial_step = initial_step > 4 ? initial_step : 1;
 	step = initial_step;
-	
+
 	while (i1 < big_array->len && i2 < small_array->len)
 	{
 		gpointer val1;
@@ -410,7 +411,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 		if (step > 4)  /* fast path start */
 		{
 			guint j1 = (i1 + step < big_array->len) ? i1 + step : big_array->len - 1;
-			
+
 			val1 = big_array->pdata[j1];
 #ifdef TM_DEBUG
 			cmpnum++;
@@ -420,14 +421,14 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 			 * into the result without making expensive string comparisons */
 			if (tm_tag_compare(&val1, &val2, sort_options) < 0)
 			{
-				while (i1 <= j1) 
+				while (i1 <= j1)
 				{
 					val1 = big_array->pdata[i1];
 					g_ptr_array_add(res_array, val1);
 					i1++;
 				}
 			}
-			else 
+			else
 			{
 				/* lower the step and try again */
 				step /= 2;
@@ -436,7 +437,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 		else
 		{
 			gint cmpval;
-			
+
 #ifdef TM_DEBUG
 			cmpnum++;
 #endif
@@ -468,7 +469,7 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 		g_ptr_array_add(res_array, big_array->pdata[i1++]);
 	while (i2 < small_array->len)
 		g_ptr_array_add(res_array, small_array->pdata[i2++]);
-		
+
 #ifdef TM_DEBUG
 	printf("cmpnums: %u\n", cmpnum);
 	printf("total tags: %u\n", big_array->len);
@@ -478,12 +479,12 @@ static GPtrArray *merge(GPtrArray *big_array, GPtrArray *small_array,
 	return res_array;
 }
 
-GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array, 
+GPtrArray *tm_tags_merge(GPtrArray *big_array, GPtrArray *small_array,
 	TMTagAttrType *sort_attributes, gboolean unref_duplicates)
 {
 	GPtrArray *res_array;
 	TMSortOptions sort_options;
-	
+
 	sort_options.sort_attrs = sort_attributes;
 	sort_options.partial = FALSE;
 	res_array = merge(big_array, small_array, &sort_options, unref_duplicates);
@@ -541,7 +542,7 @@ void tm_tags_array_free(GPtrArray *tags_array, gboolean free_all)
 
 /* copy/pasted bsearch() from libc extended with user_data for comparison function
  * and using glib types */
-static gpointer binary_search(gpointer key, gpointer base, size_t nmemb, 
+static gpointer binary_search(gpointer key, gpointer base, size_t nmemb,
 	GCompareDataFunc compar, gpointer user_data)
 {
 	gsize l, u, idx;

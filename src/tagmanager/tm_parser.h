@@ -1,6 +1,6 @@
 /*
 *
-*   Copyright (c) 2014, Colomban Wendling
+*   Copyright (c) 2014 The Geany contributors
 *
 *   This source code is released for free distribution under the terms of the
 *   GNU General Public License.

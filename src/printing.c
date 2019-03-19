@@ -1,9 +1,7 @@
 /*
  *      printing.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2007-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2007-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2012 Colomban Wendling <ban(at)herbesfolles(dot)org>
+ *      Copyright 2007 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by

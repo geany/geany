@@ -1,7 +1,7 @@
 /*
  *      demoproxy.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2015 Thomas Martitz <kugel(at)rockbox(dot)org>
+ *      Copyright 2015 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -143,7 +143,7 @@ static gpointer demoproxy_load(GeanyPlugin *proxy, GeanyPlugin *plugin,
 		plugin->funcs->help = proxy_help;
 		plugin->funcs->cleanup = proxy_cleanup;
 
-		/* Cannot pass g_free as free_func be Geany calls it before unloading, and since 
+		/* Cannot pass g_free as free_func be Geany calls it before unloading, and since
 		 * demoproxy_unload() accesses the data this would be catastrophic */
 		GEANY_PLUGIN_REGISTER_FULL(plugin, 225, data, NULL);
 		return data;

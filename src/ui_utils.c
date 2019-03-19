@@ -1,9 +1,7 @@
 /*
  *      ui_utils.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
- *      Copyright 2011-2012 Matthew Brush <mbrush(at)codebrainz(dot)ca>
+ *      Copyright 2006 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -1469,7 +1467,7 @@ void ui_update_view_editor_menu_items(void)
  *
  * @return @transfer{floating} The frame widget, setting the alignment container for
  * packing child widgets.
- * 
+ *
  * @deprecated 1.29: Use GTK API directly
  **/
 GEANY_API_SYMBOL

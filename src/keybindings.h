@@ -1,8 +1,7 @@
 /*
  *      keybindings.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -28,7 +27,7 @@ G_BEGIN_DECLS
 
 /** Defines the primary modifier mask which is the Ctrl key mask on
  * UNIX/Windows and Command key mask on OS X. When testing for the mask
- * presence, use together with keybindings_get_modifiers() which adds 
+ * presence, use together with keybindings_get_modifiers() which adds
  * @c GEANY_PRIMARY_MOD_MASK when needed.
  * @since 1.25. */
 #ifdef __APPLE__
@@ -274,7 +273,7 @@ enum GeanyKeyBindingID
 	GEANY_KEYS_FORMAT_SENDTOCMD8,				/**< Keybinding. */
 	GEANY_KEYS_FORMAT_SENDTOCMD9,				/**< Keybinding. */
 	GEANY_KEYS_EDITOR_DELETELINETOBEGINNING,	/**< Keybinding. */
-	GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES,	/**< Keybinding. 
+	GEANY_KEYS_DOCUMENT_STRIPTRAILINGSPACES,	/**< Keybinding.
 												 * @since 1.34 (API 238) */
 	GEANY_KEYS_COUNT	/* must not be used by plugins */
 };

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright:	2012, Colomban Wendling
+# Copyright:	2012, The Geany contributors
 # License:		GNU GPL v2 or later
 
 # Update Geany's bundled Scintilla from a given Scintilla source directory
