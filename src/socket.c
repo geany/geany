@@ -524,7 +524,7 @@ static gint socket_fd_open_inet(gushort port)
 	}
 
 	val = 1;
-	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) < 0)
+	if (setsockopt(sock, SOL_SOCKET, SO_EXCLUSIVEADDRUSE, &val, sizeof(val)) < 0)
 	{
 		log_error("Failed to set IPC socket exclusive option", -1);
 		socket_fd_close(sock);
