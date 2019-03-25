@@ -326,15 +326,16 @@ gint socket_init(gint argc, gchar **argv)
 
 	/* remote command mode, here we have another running instance and want to use it */
 
-#ifdef G_OS_WIN32
-	/* first we send a request to retrieve the window handle and focus the window */
-	socket_fd_write_all(sock, "window\n", 7);
-	if (socket_fd_read(sock, (gchar *)&hwnd, sizeof(hwnd)) == sizeof(hwnd))
-		SetForegroundWindow(hwnd);
-#endif
 	/* now we send the command line args */
 	if (argc > 1)
 	{
+#ifdef G_OS_WIN32
+		/* first we send a request to retrieve the window handle and focus the window */
+		socket_fd_write_all(sock, "window\n", 7);
+		if (socket_fd_read(sock, (gchar *)&hwnd, sizeof(hwnd)) == sizeof(hwnd))
+			SetForegroundWindow(hwnd);
+#endif
+
 		send_open_command(sock, argc, argv);
 	}
 
