@@ -85,6 +85,7 @@
 # include <ws2tcpip.h>
 #endif
 #include <string.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -271,7 +272,7 @@ gint socket_init(gint argc, gchar **argv)
 		 * For now we use one port number, that is we support only one instance at all. */
 		sock = socket_fd_open_inet(REMOTE_CMD_PORT);
 		if (sock < 0)
-			return 0;
+			return -1;
 		return sock;
 	}
 
@@ -375,6 +376,20 @@ gint socket_finalize(void)
 }
 
 
+static void log_error(const gchar *message_prefix, gint error_code)
+{
+#ifdef G_OS_WIN32
+	error_code = error_code == -1 ? WSAGetLastError(): error_code;
+	gchar *error_message = g_win32_error_message(error_code);
+#else
+	error_code = error_code == -1 ? errno: error_code;
+	gchar *error_message = g_strdup(g_strerror(error_code));
+#endif
+	g_warning("%s: %d: %s", message_prefix, error_code, error_message);
+	g_free(error_message);
+}
+
+
 #ifdef G_OS_UNIX
 static gint socket_fd_connect_unix(const gchar *path)
 {
@@ -384,7 +399,7 @@ static gint socket_fd_connect_unix(const gchar *path)
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
 	if (sock < 0)
 	{
-		perror("fd_connect_unix(): socket");
+		log_error("Failed to create IPC socket", errno);
 		return -1;
 	}
 
@@ -410,17 +425,16 @@ static gint socket_fd_open_unix(const gchar *path)
 	gchar *real_path;
 
 	sock = socket(PF_UNIX, SOCK_STREAM, 0);
-
 	if (sock < 0)
 	{
-		perror("sock_open_unix(): socket");
+		log_error("Failed to create IPC socket", errno);
 		return -1;
 	}
 
 	val = 1;
 	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) < 0)
 	{
-		perror("setsockopt");
+		log_error("Failed to set IPC socket option", errno);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -441,7 +455,13 @@ static gint socket_fd_open_unix(const gchar *path)
 	/* create a symlink in e.g. ~/.config/geany/geany_socket_hostname__0 to /tmp/geany_socket.499602d2 */
 	else if (symlink(real_path, path) != 0)
 	{
-		perror("symlink");
+		gint saved_errno = errno;
+		gchar* message = g_strdup_printf(
+			"Failed to create IPC socket symlink %s -> %s)",
+			real_path,
+			path);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -452,14 +472,20 @@ static gint socket_fd_open_unix(const gchar *path)
 
 	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{
-		perror("bind");
+		gint saved_errno = errno;
+		gchar* message = g_strdup_printf("Failed to bind IPC socket (%s)", real_path);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
 
 	if (listen(sock, 1) < 0)
 	{
-		perror("listen");
+		gint saved_errno = errno;
+		gchar* message = g_strdup_printf("Failed to listen on IPC socket (%s)", real_path);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -492,14 +518,14 @@ static gint socket_fd_open_inet(gushort port)
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (G_UNLIKELY(! SOCKET_IS_VALID(sock)))
 	{
-		geany_debug("fd_open_inet(): socket() failed: %d\n", WSAGetLastError());
+		log_error("Failed to create IPC socket", -1);
 		return -1;
 	}
 
 	val = 1;
 	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)) < 0)
 	{
-		perror("setsockopt");
+		log_error("Failed to set IPC socket exclusive option", -1);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -511,14 +537,20 @@ static gint socket_fd_open_inet(gushort port)
 
 	if (bind(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{
-		perror("bind");
+		gint saved_errno = WSAGetLastError();
+		gchar* message = g_strdup_printf("Failed to bind IPC socket (127.0.0.1:%d)", port);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
 
 	if (listen(sock, 1) < 0)
 	{
-		perror("listen");
+		gint saved_errno = WSAGetLastError();
+		gchar* message = g_strdup_printf("Failed to listen on IPC socket (127.0.0.1:%d)", port);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -535,7 +567,7 @@ static gint socket_fd_connect_inet(gushort port)
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (G_UNLIKELY(! SOCKET_IS_VALID(sock)))
 	{
-		geany_debug("fd_connect_inet(): socket() failed: %d\n", WSAGetLastError());
+		log_error("Failed to create IPC socket", -1);
 		return -1;
 	}
 
@@ -546,6 +578,10 @@ static gint socket_fd_connect_inet(gushort port)
 
 	if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 	{
+		gint saved_errno = WSAGetLastError();
+		gchar* message = g_strdup_printf("Failed to connect to IPC socket (127.0.0.1:%d)", port);
+		log_error(message, saved_errno);
+		g_free(message);
 		socket_fd_close(sock);
 		return -1;
 	}
@@ -612,6 +648,7 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 {
 	gint fd, sock;
 	gchar buf[BUFFER_LENGTH];
+	gchar *command = NULL;
 	struct sockaddr_in caddr;
 	socklen_t caddr_len = sizeof(caddr);
 	GtkWidget *window = data;
@@ -623,6 +660,9 @@ gboolean socket_lock_input_cb(GIOChannel *source, GIOCondition condition, gpoint
 	/* first get the command */
 	while (socket_fd_gets(sock, buf, sizeof(buf)) != -1)
 	{
+		command = g_strdup(buf);
+		geany_debug("Received IPC command from remote instance: %s", g_strstrip(command));
+		g_free(command);
 		if (strncmp(buf, "open", 4) == 0)
 		{
 			cl_options.readonly = strncmp(buf+4, "ro", 2) == 0; /* open in readonly? */
@@ -769,7 +809,7 @@ static gint socket_fd_check_io(gint fd, GIOCondition cond)
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags < 0)
 	{
-		perror("fcntl");
+		log_error("fcntl() failed", errno);
 		return 0;
 	}
 	if ((flags & O_NONBLOCK) != 0)
