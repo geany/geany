@@ -106,6 +106,7 @@ static GPtrArray *session_files = NULL;
 static gint session_notebook_page;
 static gint hpan_position;
 static gint vpan_position;
+static guint document_list_update_idle_func_id = 0;
 static const gchar atomic_file_saving_key[] = "use_atomic_file_saving";
 
 static GPtrArray *keyfile_groups = NULL;
@@ -1327,11 +1328,45 @@ void configuration_apply_settings(void)
 }
 
 
+static gboolean save_configuration_cb(gpointer data)
+{
+	configuration_save();
+	if (app->project != NULL)
+	{
+		project_write_config();
+	}
+	document_list_update_idle_func_id = 0;
+	return G_SOURCE_REMOVE;
+}
+
+
+static void document_list_changed_cb(GObject *obj, GeanyDocument *doc, gpointer data)
+{
+	g_return_if_fail(doc != NULL && doc->is_valid);
+
+	/* save configuration, especially session file list, but only if we are not just starting
+	 * and not about to quit */
+	if (main_status.main_window_realized &&
+		!main_status.opening_session_files &&
+		!main_status.quitting)
+	{
+		if (document_list_update_idle_func_id == 0)
+		{
+			document_list_update_idle_func_id = g_idle_add(save_configuration_cb, NULL);
+		}
+	}
+}
+
+
 void configuration_init(void)
 {
 	keyfile_groups = g_ptr_array_new();
 	pref_groups = g_ptr_array_new();
 	init_pref_groups();
+
+	g_signal_connect(geany_object, "document-open", G_CALLBACK(document_list_changed_cb), NULL);
+	g_signal_connect(geany_object, "document-save", G_CALLBACK(document_list_changed_cb), NULL);
+	g_signal_connect(geany_object, "document-close", G_CALLBACK(document_list_changed_cb), NULL);
 }
 
 
@@ -1339,6 +1374,8 @@ void configuration_finalize(void)
 {
 	guint i;
 	StashGroup *group;
+
+	g_signal_handlers_disconnect_by_func(geany_object, G_CALLBACK(document_list_changed_cb), NULL);
 
 	foreach_ptr_array(group, i, keyfile_groups)
 		stash_group_free(group);
