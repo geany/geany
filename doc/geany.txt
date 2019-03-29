@@ -2636,6 +2636,16 @@ reload_clean_doc_on_file_change   Whether to automatically reload documents    f
                                   on disk.
                                   If unsaved changes exist then the user is
                                   prompted to reload manually.
+save_config_on_file_change        Automatically save Geany's configuration     true        immediately
+                                  to disk once the document list changes
+                                  (i.e. new documents are opened, saved or
+                                  closed). This helps to prevent accidentally
+                                  losing the session file list or other
+                                  changed settings when Geany is not shut
+                                  down cleanly. Disable this option if your
+                                  configuration directory is on a slow drive,
+                                  network share or similar and you experience
+                                  problems.
 extract_filetype_regex            Regex to extract filetype name from file     See link    immediately
                                   via capture group one.
                                   See `ft_regex`_ for default.
@@ -4714,8 +4724,8 @@ The key names cannot be configured.
     Group membership is only read at startup.
 
 .. tip::
-    You can make commonly used filetypes appear in the top-level of the 
-    filetype menu by adding them to the `None` group, e.g. 
+    You can make commonly used filetypes appear in the top-level of the
+    filetype menu by adding them to the `None` group, e.g.
     `None=C;Python`.
 
 Preferences file format

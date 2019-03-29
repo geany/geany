@@ -259,6 +259,8 @@ static void init_pref_groups(void)
 		"show_keep_edit_history_on_reload_msg", TRUE);
 	stash_group_add_boolean(group, &file_prefs.reload_clean_doc_on_file_change,
 		"reload_clean_doc_on_file_change", FALSE);
+	stash_group_add_boolean(group, &file_prefs.save_config_on_file_change,
+		"save_config_on_file_change", TRUE);
 	stash_group_add_string(group, &file_prefs.extract_filetype_regex,
 		"extract_filetype_regex", GEANY_DEFAULT_FILETYPE_REGEX);
 	stash_group_add_boolean(group, &ui_prefs.allow_always_save,
@@ -275,7 +277,7 @@ static void init_pref_groups(void)
 	/* Note: Interface-related various prefs are in ui_init_prefs() */
 
 	/* various build-menu prefs */
-	// Warning: don't move PACKAGE group name items here 
+	// Warning: don't move PACKAGE group name items here
 	group = stash_group_new("build-menu");
 	configuration_add_various_pref_group(group, "build");
 
@@ -1346,7 +1348,8 @@ static void document_list_changed_cb(GObject *obj, GeanyDocument *doc, gpointer 
 
 	/* save configuration, especially session file list, but only if we are not just starting
 	 * and not about to quit */
-	if (main_status.main_window_realized &&
+	if (file_prefs.save_config_on_file_change &&
+		main_status.main_window_realized &&
 		!main_status.opening_session_files &&
 		!main_status.quitting)
 	{
