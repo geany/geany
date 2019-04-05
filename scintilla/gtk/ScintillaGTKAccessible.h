@@ -18,8 +18,6 @@ private:
 	GtkAccessible *accessible;
 	ScintillaGTK *sci;
 
-	// cached length of the deletion, in characters (see Notify())
-	int deletionLengthChar;
 	// local state for comparing
 	Sci::Position old_pos;
 	std::vector<SelectionRange> old_sels;

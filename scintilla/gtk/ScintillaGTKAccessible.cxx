@@ -156,7 +156,6 @@ ScintillaGTKAccessible *ScintillaGTKAccessible::FromAccessible(GtkAccessible *ac
 ScintillaGTKAccessible::ScintillaGTKAccessible(GtkAccessible *accessible_, GtkWidget *widget_) :
 		accessible(accessible_),
 		sci(ScintillaGTK::FromWidget(widget_)),
-		deletionLengthChar(0),
 		old_pos(-1) {
 	SetAccessibility(true);
 	g_signal_connect(widget_, "sci-notify", G_CALLBACK(SciNotify), this);
@@ -882,14 +881,11 @@ void ScintillaGTKAccessible::Notify(GtkWidget *, gint, SCNotification *nt) {
 				UpdateCursor();
 			}
 			if (nt->modificationType & SC_MOD_BEFOREDELETE) {
-				// We cannot compute the deletion length in DELETETEXT as it requires accessing the
-				// buffer, so that the character are still present.  So, we cache the value here,
-				// and use it in DELETETEXT that fires quickly after.
-				deletionLengthChar = sci->pdoc->CountCharacters(nt->position, nt->position + nt->length);
+				int startChar = CharacterOffsetFromByteOffset(nt->position);
+				int lengthChar = sci->pdoc->CountCharacters(nt->position, nt->position + nt->length);
+				g_signal_emit_by_name(accessible, "text-changed::delete", startChar, lengthChar);
 			}
 			if (nt->modificationType & SC_MOD_DELETETEXT) {
-				int startChar = CharacterOffsetFromByteOffset(nt->position);
-				g_signal_emit_by_name(accessible, "text-changed::delete", startChar, deletionLengthChar);
 				UpdateCursor();
 			}
 			if (nt->modificationType & SC_MOD_CHANGESTYLE) {
