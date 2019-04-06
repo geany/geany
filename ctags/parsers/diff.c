@@ -28,7 +28,7 @@ typedef enum {
 	K_FUNCTION
 } diffKind;
 
-static kindOption DiffKinds [] = {
+static kindDefinition DiffKinds [] = {
 	{ true, 'f', "function", "functions"}
 };
 
@@ -109,7 +109,7 @@ static void findDiffTags (void)
 					tmp++;
 				}
 
-				makeSimpleTag (filename, DiffKinds, K_FUNCTION);
+				makeSimpleTag (filename, K_FUNCTION);
 				vStringClear (filename);
 			}
 
@@ -125,7 +125,7 @@ extern parserDefinition* DiffParser (void)
 	static const char *const patterns [] = { "*.diff", "*.patch", NULL };
 	static const char *const extensions [] = { "diff", NULL };
 	parserDefinition* const def = parserNew ("Diff");
-	def->kinds      = DiffKinds;
+	def->kindTable  = DiffKinds;
 	def->kindCount  = ARRAY_SIZE (DiffKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;

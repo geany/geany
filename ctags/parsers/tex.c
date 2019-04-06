@@ -35,7 +35,7 @@ typedef enum {
 	K_LABEL
 } TeXKind;
 
-static kindOption TeXKinds[] = {
+static kindDefinition TeXKinds[] = {
 	{ true, 'f', "function",      "command definitions" },
 	{ true, 'c', "class",         "environment definitions" },
 	{ true, 'm', "member",        "labels, sections and bibliography" },
@@ -106,7 +106,7 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			++l;
 		} while ((*l != '\0') && (*l != '}'));
 		if (name->buffer[0] != '}')
-			makeSimpleTag(name, TeXKinds, kind);
+			makeSimpleTag(name, kind);
 	}
 	else if (isalpha((int) *l) || *l == '@')
 	{
@@ -115,12 +115,12 @@ static void createTag(int flags, TeXKind kind, const char * l)
 			vStringPut (name, (int) *l);
 			++l;
 		} while (isalpha((int) *l) || *l == '@');
-		makeSimpleTag(name, TeXKinds, kind);
+		makeSimpleTag(name, kind);
 	}
 	else
 	{
 		vStringPut(name, (int) *l);
-		makeSimpleTag(name, TeXKinds, kind);
+		makeSimpleTag(name, kind);
 	}
 
 no_tag:
@@ -230,11 +230,11 @@ static void findTeXTags(void)
 	}
 }
 
-extern parserDefinition* LaTeXParser (void)
+extern parserDefinition* TexParser (void)
 {
 	static const char *const extensions [] = { "tex", "sty", "idx", NULL };
 	parserDefinition * def = parserNew ("LaTeX");
-	def->kinds      = TeXKinds;
+	def->kindTable  = TeXKinds;
 	def->kindCount  = ARRAY_SIZE (TeXKinds);
 	def->extensions = extensions;
 	def->parser     = findTeXTags;

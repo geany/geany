@@ -26,7 +26,7 @@ typedef enum {
 	K_FUNCTION
 } luaKind;
 
-static kindOption LuaKinds [] = {
+static kindDefinition LuaKinds [] = {
 	{ true, 'f', "function", "functions" }
 };
 
@@ -72,7 +72,7 @@ static void extract_name (const char *begin, const char *end, vString *name)
 			for (cp = begin ; cp != end; cp++)
 				vStringPut (name, (int) *cp);
 
-			makeSimpleTag (name, LuaKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 			vStringClear (name);
 		}
 	}
@@ -112,7 +112,7 @@ extern parserDefinition* LuaParser (void)
 {
 	static const char* const extensions [] = { "lua", NULL };
 	parserDefinition* def = parserNew ("Lua");
-	def->kinds      = LuaKinds;
+	def->kindTable  = LuaKinds;
 	def->kindCount  = ARRAY_SIZE (LuaKinds);
 	def->extensions = extensions;
 	def->parser     = findLuaTags;

@@ -1,6 +1,9 @@
 
 dist_check_SCRIPTS = runner.sh
 
+# Disabled tests:
+#	simple.cbl
+
 NULL =
 test_sources = \
 	1795612.js						\
@@ -154,6 +157,7 @@ test_sources = \
 	fortran_associate.f90			\
 	fortran_line_continuation.f90	\
 	func_typedef.h					\
+	geany.nsi						\
 	general.cs						\
 	hex2dec.sql						\
 	implied_program.f				\
@@ -268,22 +272,32 @@ test_sources = \
 	semicolon.f90					\
 	shebang.js						\
 	signature.cpp					\
+	simple.abc						\
+	simple.asciidoc					\
 	simple.bas						\
-	simple.cbl						\
+	simple.conf						\
 	simple.d						\
+	simple.diff						\
+	simple.docbook					\
+	simple.hs						\
+	simple.hx						\
 	simple.html						\
+	simple.inp						\
 	simple.js						\
 	simple.json						\
 	simple.ksh						\
 	simple.lua						\
 	simple.mak						\
+	simple.md						\
 	simple.php						\
 	simple.pl						\
 	simple.ps1						\
 	simple.py						\
 	simple.rb						\
+	simple.rst						\
 	simple.sh						\
 	simple.tcl						\
+	simple.vala						\
 	simple.zep						\
 	size_t_wchar_t_alias.d			\
 	size_t_wchar_t_typedef.c		\

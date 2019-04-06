@@ -26,7 +26,7 @@ typedef enum {
 	K_CLASS, K_METHOD, K_PROCEDURE, K_MODULE
 } tclKind;
 
-static kindOption TclKinds [] = {
+static kindDefinition TclKinds [] = {
 	{ true, 'c', "class",     "classes" },
 	{ true, 'm', "method",    "methods" },
 	{ true, 'p', "procedure", "procedures" },
@@ -48,7 +48,7 @@ static const unsigned char *makeTclTag (
 		vStringPut (name, (int) *cp);
 		++cp;
 	}
-	makeSimpleTag (name, TclKinds, kind);
+	makeSimpleTag (name, kind);
 	return cp;
 }
 
@@ -137,7 +137,7 @@ extern parserDefinition* TclParser (void)
 {
 	static const char *const extensions [] = { "tcl", "tk", "wish", "itcl", NULL };
 	parserDefinition* def = parserNew ("Tcl");
-	def->kinds      = TclKinds;
+	def->kindTable  = TclKinds;
 	def->kindCount  = ARRAY_SIZE (TclKinds);
 	def->extensions = extensions;
 	def->parser     = findTclTags;

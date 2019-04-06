@@ -55,7 +55,7 @@ static int Ungetc;
 static int Lang_verilog;
 static jmp_buf Exception;
 
-static kindOption VerilogKinds [] = {
+static kindDefinition VerilogKinds [] = {
  { true, 'c', "constant",  "constants (define, parameter, specparam)" },
  { true, 'e', "event",     "events" },
  { true, 'f', "function",  "functions" },
@@ -215,7 +215,7 @@ static void tagNameList (const verilogKind kind, int c)
 		if (isIdentifierCharacter (c))
 		{
 			readIdentifier (name, c);
-			makeSimpleTag (name, VerilogKinds, kind);
+			makeSimpleTag (name, kind);
 		}
 		else
 			break;
@@ -255,7 +255,7 @@ static void findTag (vString *const name)
 		/* Bug #961001: Verilog compiler directives are line-based. */
 		int c = skipWhite (vGetc ());
 		readIdentifier (name, c);
-		makeSimpleTag (name, VerilogKinds, kind);
+		makeSimpleTag (name, kind);
 		/* Skip the rest of the line. */
 		do {
 			c = vGetc();
@@ -323,7 +323,7 @@ extern parserDefinition* VerilogParser (void)
 {
 	static const char *const extensions [] = { "v", NULL };
 	parserDefinition* def = parserNew ("Verilog");
-	def->kinds      = VerilogKinds;
+	def->kindTable  = VerilogKinds;
 	def->kindCount  = ARRAY_SIZE (VerilogKinds);
 	def->extensions = extensions;
 	def->parser     = findVerilogTags;

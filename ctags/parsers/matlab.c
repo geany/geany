@@ -30,7 +30,7 @@ typedef enum {
 	K_STRUCT
 } MatlabKind;
 
-static kindOption MatlabKinds [] = {
+static kindDefinition MatlabKinds [] = {
 	{ true, 'f', "function", "Functions" },
 	{ true, 's', "struct", "Structures" },
 };
@@ -107,7 +107,7 @@ static void findMatlabTags (void)
 				}
 			}
 
-			makeSimpleTag (name, MatlabKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 			vStringClear (name);
 		}
 
@@ -128,18 +128,18 @@ static void findMatlabTags (void)
 				++cp;
 			}
 
-			makeSimpleTag (name, MatlabKinds, K_STRUCT);
+			makeSimpleTag (name, K_STRUCT);
 			vStringClear (name);
 		}
 	}
 	vStringDelete (name);
 }
 
-extern parserDefinition* MatlabParser (void)
+extern parserDefinition* MatLabParser (void)
 {
 	static const char *const extensions [] = { "m", NULL };
 	parserDefinition* def = parserNew ("Matlab");
-	def->kinds      = MatlabKinds;
+	def->kindTable  = MatlabKinds;
 	def->kindCount  = ARRAY_SIZE (MatlabKinds);
 	def->extensions = extensions;
 	def->parser     = findMatlabTags;

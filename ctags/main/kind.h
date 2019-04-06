@@ -13,14 +13,14 @@
 #include "routines.h"		/* for STRINGIFY */
 #include "vstring.h"
 
-typedef struct sRoleDesc {
+typedef struct sRoleDefinition {
 	bool enabled;
 	const char* name;		  /* role name */
 	const char* description;	  /* displayed in --help output */
-} roleDesc;
+} roleDefinition;
 
-extern void printRole (const roleDesc* const role); /* for --help */
-extern const char *renderRole (const roleDesc* const role, vString* b);
+extern void printRole (const roleDefinition* const role); /* for --help */
+extern const char *renderRole (const roleDefinition* const role, vString* b);
 
 /*
  * Predefined kinds
@@ -32,9 +32,11 @@ extern const char *renderRole (const roleDesc* const role, vString* b);
 
 #define KIND_NULL    '\0'
 
+#define KIND_GHOST_INDEX -1
 #define KIND_GHOST   ' '
 #define KIND_GHOST_LONG "ghost"
 
+#define KIND_FILE_INDEX -2
 #define KIND_FILE_DEFAULT 'F'
 #define KIND_FILE_DEFAULT_LONG "file"
 
@@ -43,21 +45,22 @@ extern const char *renderRole (const roleDesc* const role, vString* b);
 #define KIND_GENERIC_REFERENCE '@'
 #define KIND_GENERIC_REFERENCE_DEFAULT_LONG "reference"
 
+#define KIND_WILDCARD_INDEX -3
 #define KIND_WILDCARD '*'
 
 typedef struct sScopeSeparator {
-	char  parentLetter;
+	int parentKindIndex;
 	const char *separator;
 } scopeSeparator;
 
-struct sKindOption {
+struct sKindDefinition {
 	bool enabled;          /* are tags for kind enabled? */
 	char  letter;               /* kind letter */
 	const char* name;		  /* kind name */
 	const char* description;	  /* displayed in --help output */
 	bool referenceOnly;
 	int nRoles;		/* The number of role elements. */
-	roleDesc *roles;
+	roleDefinition *roles;
 	scopeSeparator *separators;
 	unsigned int separatorCount;
 
@@ -71,20 +74,20 @@ struct sKindOption {
 	   If the value other than `LANG_AUTO' is specified,
 	   the main part does nothing. */
 	langType syncWith;
-	kindOption *slave;
-	kindOption *master;
+	kindDefinition *slave;
+	kindDefinition *master;
 };
 
 #define ATTACH_ROLES(RS) .nRoles = ARRAY_SIZE(RS), .roles = RS
 #define ATTACH_SEPARATORS(S) .separators = S, .separatorCount = ARRAY_SIZE(S)
 
 /* The value of `tabSeparated' is meaningfull only when `allKindFields' is true. */
-extern void printKind (const kindOption* const kind, bool allKindFields, bool indent,
+extern void printKind (const kindDefinition* const kind, bool allKindFields, bool indent,
 		       bool tabSeparated);
 extern void printKindListHeader (bool indent, bool tabSeparated);
-extern const char *scopeSeparatorFor (const kindOption *kind, char parentLetter);
+extern const char *scopeSeparatorFor (langType lang, int kindIndex, int parentKindIndex);
 
-extern void enableKind (kindOption *kind, bool enable);
+extern void enableKind (kindDefinition *kind, bool enable);
 
 #define PR_KIND_STR(X) PR_KIND_WIDTH_##X
 #define PR_KIND_FMT(X,T) "%-" STRINGIFY(PR_KIND_STR(X)) STRINGIFY(T)

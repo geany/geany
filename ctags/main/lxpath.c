@@ -23,25 +23,22 @@
 
 static void simpleXpathMakeTag (xmlNode *node,
 				const tagXpathMakeTagSpec *spec,
-				const kindOption* const kinds,
+				const kindDefinition* const kinds,
 				void *userData)
 {
 	tagEntryInfo tag;
 	xmlChar* str;
-	const kindOption *kind;
 	char *path;
 
 	str = xmlNodeGetContent(node);
 	if (str == NULL)
 		return;
 
-	kind = kinds + spec->kind;
-
 	if (spec->role == ROLE_INDEX_DEFINITION)
-		initTagEntry (&tag, (char *)str, kind);
+		initTagEntry (&tag, (char *)str, spec->kind);
 	else if (isXtagEnabled(XTAG_REFERENCE_TAGS))
 		initRefTagEntry (&tag, (char *)str,
-				 kind,
+				 spec->kind,
 				 spec->role);
 	else
 		goto out;
@@ -77,7 +74,7 @@ extern void addTagXpath (const langType language CTAGS_ATTR_UNUSED, tagXpathTabl
 
 static void findXMLTagsCore (xmlXPathContext *ctx, xmlNode *root,
 			     const tagXpathTableTable *xpathTableTable,
-			     const kindOption* const kinds,void *userData)
+			     const kindDefinition* const kinds,void *userData)
 {
 	unsigned int i;
 	int j;
@@ -156,7 +153,7 @@ static xmlDocPtr makeXMLDoc (void)
 
 extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
 			 const tagXpathTableTable *xpathTableTable,
-			 const kindOption* const kinds,void *userData)
+			 const kindDefinition* const kinds,void *userData)
 {
 	bool usedAsEntryPoint = false;
 	xmlDocPtr doc = NULL;
@@ -210,7 +207,7 @@ extern void addTagXpath (const langType language, tagXpathTable *xpathTable)
 
 extern void findXMLTags (xmlXPathContext *ctx, xmlNode *root,
 			 const tagXpathTableTable *xpathTableTable,
-			 const kindOption* const kinds, void *userData)
+			 const kindDefinition* const kinds, void *userData)
 {
 }
 

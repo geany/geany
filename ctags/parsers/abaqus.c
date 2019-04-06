@@ -28,7 +28,7 @@ typedef enum {
 	K_STEP
 } AbaqusKind;
 
-static kindOption AbaqusKinds[] = {
+static kindDefinition AbaqusKinds[] = {
      { true, 'c', "class",      "Parts" },
      { true, 'm', "member",      "Assembly" },
      { true, 'n', "namespace",      "Steps" }
@@ -71,7 +71,7 @@ static void createTag(AbaqusKind kind, const char *buf)
 		vStringPut(name, (int) *buf);
 		++buf;
 	} while ((*buf != '\0') && (*buf != ','));
-	makeSimpleTag(name, AbaqusKinds, kind);
+	makeSimpleTag(name, kind);
 	vStringDelete(name);
 }
 
@@ -118,7 +118,7 @@ extern parserDefinition* AbaqusParser (void)
 {
 	static const char *const extensions [] = { "inp", NULL };
 	parserDefinition * def = parserNew ("Abaqus");
-	def->kinds      = AbaqusKinds;
+	def->kindTable  = AbaqusKinds;
 	def->kindCount  = ARRAY_SIZE (AbaqusKinds);
 	def->extensions = extensions;
 	def->parser     = findAbaqusTags;

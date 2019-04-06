@@ -39,7 +39,7 @@ typedef struct {
 	BasicKind kind;
 } KeyWord;
 
-static kindOption BasicKinds[] = {
+static kindDefinition BasicKinds[] = {
 	{true, 'c', "constant", "constants"},
 	{true, 'f', "function", "functions"},
 	{true, 'l', "label", "labels"},
@@ -119,7 +119,7 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 
 	for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 		vStringPut (name, *pos);
-	makeSimpleTag (name, BasicKinds, kind);
+	makeSimpleTag (name, kind);
 
 	/* if the line contains a ',', we have multiple declarations */
 	while (*pos && strchr (pos, ','))
@@ -140,7 +140,7 @@ static int extract_dim (char const *pos, vString * name, BasicKind kind)
 		vStringClear (name);
 		for (; *pos && !isspace (*pos) && *pos != '(' && *pos != ',' && *pos != '='; pos++)
 			vStringPut (name, *pos);
-		makeSimpleTag (name, BasicKinds, kind);
+		makeSimpleTag (name, kind);
 	}
 
 	vStringDelete (name);
@@ -192,7 +192,7 @@ static int match_keyword (const char *p, KeyWord const *kw)
 	{
 		p = extract_name (p, name);
 	}	
-	makeSimpleTag (name, BasicKinds, kw->kind);
+	makeSimpleTag (name, kw->kind);
 	vStringDelete (name);
 	return 1;
 }
@@ -207,7 +207,7 @@ static void match_colon_label (char const *p)
 	{
 		vString *name = vStringNew ();
 		vStringNCatS (name, p, end - p);
-		makeSimpleTag (name, BasicKinds, K_LABEL);
+		makeSimpleTag (name, K_LABEL);
 		vStringDelete (name);
 	}
 }
@@ -240,11 +240,11 @@ static void findBasicTags (void)
 	}
 }
 
-parserDefinition *FreeBasicParser (void)
+parserDefinition *BasicParser (void)
 {
 	static char const *extensions[] = { "bas", "bi", "bb", "pb", NULL };
 	parserDefinition *def = parserNew ("FreeBasic");
-	def->kinds = BasicKinds;
+	def->kindTable = BasicKinds;
 	def->kindCount = ARRAY_SIZE (BasicKinds);
 	def->extensions = extensions;
 	def->parser = findBasicTags;

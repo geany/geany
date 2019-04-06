@@ -34,7 +34,7 @@ typedef enum {
 	K_APPENDIX
 } docbookKind;
 
-static kindOption DocBookKinds [] = {
+static kindDefinition DocBookKinds [] = {
 	{ true,  'f', "function",   "chapters"},
 	{ true,  'c', "class",      "sections"},
 	{ true,  'm', "member",     "sect1"},
@@ -77,7 +77,7 @@ static void createTag(docbookKind kind, const char *buf)
 		vStringPut(name, (int) *buf);
 		++buf;
 	} while ((*buf != '\0') && (*buf != '"'));
-	makeSimpleTag(name, DocBookKinds, kind);
+	makeSimpleTag(name, kind);
 }
 
 
@@ -143,7 +143,7 @@ extern parserDefinition* DocBookParser (void)
 	static const char *const extensions [] = { "sgml", "docbook", NULL };
 	parserDefinition* def = parserNew ("Docbook");
 	def->extensions = extensions;
-	def->kinds      = DocBookKinds;
+	def->kindTable  = DocBookKinds;
 	def->kindCount  = ARRAY_SIZE (DocBookKinds);
 	def->parser     = findDocBookTags;
 	return def;

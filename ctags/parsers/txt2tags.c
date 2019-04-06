@@ -38,10 +38,10 @@ typedef enum {
 } Txt2tagsKind;
 
 static scopeSeparator Txt2TagsSeparators [] = {
-	{ KIND_WILDCARD, SCOPE_SEPARATOR }
+	{ KIND_WILDCARD_INDEX, SCOPE_SEPARATOR }
 };
 
-static kindOption Txt2tagsKinds[] = {
+static kindDefinition Txt2tagsKinds[] = {
 	{ true, 'm', "member", "sections",
 	  ATTACH_SEPARATORS(Txt2TagsSeparators) },
 };
@@ -61,8 +61,7 @@ static int makeTxt2tagsTag (const vString* const name,
 {
 	tagEntryInfo e;
 	NestingLevel *nl;
-	kindOption *kind = &Txt2tagsKinds[type];
-	initTagEntry (&e, vStringValue(name), kind);
+	initTagEntry (&e, vStringValue(name), type);
 
 	nl = nestingLevelsGetCurrent (nls);
 	if (nl)
@@ -184,7 +183,7 @@ extern parserDefinition* Txt2tagsParser (void)
 	static const char *const extensions [] = { "t2t", NULL };
 	parserDefinition* const def = parserNew ("Txt2tags");
 
-	def->kinds = Txt2tagsKinds;
+	def->kindTable = Txt2tagsKinds;
 	def->kindCount = ARRAY_SIZE (Txt2tagsKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

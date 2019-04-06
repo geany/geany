@@ -28,7 +28,7 @@ typedef enum {
 	K_FUNCTION
 } shKind;
 
-static kindOption ShKinds [] = {
+static kindDefinition ShKinds [] = {
 	{ true, 'f', "function", "functions"}
 };
 
@@ -90,7 +90,7 @@ static void findShTags (void)
 				functionFound = true;
 		}
 		if (functionFound)
-			makeSimpleTag (name, ShKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 		vStringClear (name);
 	}
 	vStringDelete (name);
@@ -102,7 +102,7 @@ extern parserDefinition* ShParser (void)
 		"sh", "SH", "bsh", "bash", "ksh", "zsh", "ash", NULL
 	};
 	parserDefinition* def = parserNew ("Sh");
-	def->kinds      = ShKinds;
+	def->kindTable  = ShKinds;
 	def->kindCount  = ARRAY_SIZE (ShKinds);
 	def->extensions = extensions;
 	def->parser     = findShTags;

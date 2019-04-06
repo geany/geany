@@ -188,7 +188,7 @@ extern void makeFileTag (const char *const fileName)
 	if (xtag != XTAG_UNKNOWN)
 	{
 		tagEntryInfo tag;
-		kindOption  *kind;
+		kindDefinition  *kind;
 
 		kind = getInputLanguageFileKind();
 		Assert (kind);
@@ -196,7 +196,7 @@ extern void makeFileTag (const char *const fileName)
 
 		/* TODO: you can return here if enabled == false. */
 
-		initTagEntry (&tag, baseFilename (fileName), kind);
+		initTagEntry (&tag, baseFilename (fileName), KIND_FILE_INDEX);
 
 		tag.isFileEntry     = true;
 		tag.lineNumberEntry = true;
@@ -736,7 +736,8 @@ extern void truncateTagLine (
 static char* getFullQualifiedScopeNameFromCorkQueue (const tagEntryInfo * inner_scope)
 {
 
-	const kindOption *kind = NULL;
+	int kindIndex = KIND_GHOST_INDEX;
+	langType lang;
 	const tagEntryInfo *scope = inner_scope;
 	stringList *queue = stringListNew ();
 	vString *v;
@@ -748,16 +749,17 @@ static char* getFullQualifiedScopeNameFromCorkQueue (const tagEntryInfo * inner_
 	{
 		if (!scope->placeholder)
 		{
-			if (kind)
+			if (kindIndex != KIND_GHOST_INDEX)
 			{
-				sep = scopeSeparatorFor (kind, scope->kind->letter);
+				sep = scopeSeparatorFor (lang, kindIndex, scope->kindIndex);
 				v = vStringNewInit (sep);
 				stringListAdd (queue, v);
 			}
 			/* TODO: scope field of SCOPE can be used for optimization. */
 			v = vStringNewInit (scope->name);
 			stringListAdd (queue, v);
-			kind = scope->kind;
+			kindIndex = scope->kindIndex;
+			lang = scope->langType;
 		}
 		scope =  getEntryInCorkQueue (scope->extensionFields.scopeIndex);
 	}
@@ -783,7 +785,7 @@ extern void getTagScopeInformation (tagEntryInfo *const tag,
 	if (name)
 		*name = NULL;
 
-	if (tag->extensionFields.scopeKind == NULL
+	if (tag->extensionFields.scopeKindIndex == KIND_GHOST_INDEX
 	    && tag->extensionFields.scopeName == NULL
 	    && tag->extensionFields.scopeIndex != CORK_NIL
 	    && TagFile.corkQueue.count > 0)
@@ -796,15 +798,23 @@ extern void getTagScopeInformation (tagEntryInfo *const tag,
 		Assert (full_qualified_scope_name);
 
 		/* Make the information reusable to generate full qualified entry, and xformat output*/
-		tag->extensionFields.scopeKind = scope->kind;
+		tag->extensionFields.scopeLangType = scope->langType;
+		tag->extensionFields.scopeKindIndex = scope->kindIndex;
 		tag->extensionFields.scopeName = full_qualified_scope_name;
 	}
 
-	if (tag->extensionFields.scopeKind != NULL  &&
+	if (tag->extensionFields.scopeKindIndex != KIND_GHOST_INDEX  &&
 	    tag->extensionFields.scopeName != NULL)
 	{
 		if (kind)
-			*kind = tag->extensionFields.scopeKind->name;
+		{
+			langType lang = (tag->extensionFields.scopeLangType == LANG_AUTO)
+				? tag->langType
+				: tag->extensionFields.scopeLangType;
+			kindDefinition *kdef = getLanguageKind (lang,
+													tag->extensionFields.scopeKindIndex);
+			*kind = kdef->name;
+		}
 		if (name)
 			*name = tag->extensionFields.scopeName;
 	}
@@ -831,21 +841,21 @@ extern int   makePatternStringCommon (const tagEntryInfo *const tag,
 	static vString *cached_pattern;
 	static MIOPos   cached_location;
 	if (TagFile.patternCacheValid
-	    && (! tag->truncateLine)
+	    && (! tag->truncateLineAfterTag)
 	    && (memcmp (&tag->filePosition, &cached_location, sizeof(MIOPos)) == 0))
 		return puts_func (vStringValue (cached_pattern), output);
 
 	line = readLineFromBypass (TagFile.vLine, tag->filePosition, NULL);
 	if (line == NULL)
 		error (FATAL, "could not read tag line from %s at line %lu", getInputFileName (),tag->lineNumber);
-	if (tag->truncateLine)
+	if (tag->truncateLineAfterTag)
 		truncateTagLine (line, tag->name, false);
 
 	line_len = strlen (line);
 	searchChar = Option.backward ? '?' : '/';
 	terminator = (bool) (line [line_len - 1] == '\n') ? "$": "";
 
-	if (!tag->truncateLine)
+	if (!tag->truncateLineAfterTag)
 	{
 		making_cache = true;
 		cached_pattern = vStringNewOrClear (cached_pattern);
@@ -960,8 +970,6 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 		slot->extensionFields.xpath = eStrdup (slot->extensionFields.xpath);
 #endif
 
-	if (slot->sourceLanguage)
-		slot->sourceLanguage = eStrdup (slot->sourceLanguage);
 	if (slot->sourceFileName)
 		slot->sourceFileName = eStrdup (slot->sourceFileName);
 
@@ -999,8 +1007,6 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.implementation);
 	if (slot->extensionFields.inheritance)
 		eFree ((char *)slot->extensionFields.inheritance);
-	if (slot->extensionFields.scopeKind)
-		slot->extensionFields.scopeKind = NULL;
 	if (slot->extensionFields.scopeName)
 		eFree ((char *)slot->extensionFields.scopeName);
 	if (slot->extensionFields.signature)
@@ -1018,8 +1024,6 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.xpath);
 #endif
 
-	if (slot->sourceLanguage)
-		eFree ((char *)slot->sourceLanguage);
 	if (slot->sourceFileName)
 		eFree ((char *)slot->sourceFileName);
 
@@ -1098,9 +1102,10 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->varType = info->extensionFields.varType;
 	tag->access = info->extensionFields.access;
 	tag->implementation = info->extensionFields.implementation;
-	tag->kindLetter = info->kind->letter;
+	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;
 	tag->isFileScope = info->isFileScope;
 	tag->lineNumber = info->lineNumber;
+	tag->lang = info->langType;
 }
 #endif
 
@@ -1194,7 +1199,7 @@ extern void uncorkTagFile(void)
 		writeTagEntry (tag);
 		if (doesInputLanguageRequestAutomaticFQTag ()
 		    && isXtagEnabled (XTAG_QUALIFIED_TAGS)
-		    && tag->extensionFields.scopeKind
+		    && (tag->extensionFields.scopeKindIndex != KIND_GHOST_INDEX)
 		    && tag->extensionFields.scopeName
 		    && tag->extensionFields.scopeIndex)
 			makeQualifiedTagEntry (tag);
@@ -1281,15 +1286,15 @@ extern int makeQualifiedTagEntry (const tagEntryInfo *const e)
 		if (e->extensionFields.scopeName)
 		{
 			vStringCatS (fqn, e->extensionFields.scopeName);
-			xk = e->extensionFields.scopeKind->letter;
-			sep = scopeSeparatorFor (e->kind, xk);
+			xk = e->extensionFields.scopeKindIndex;
+			sep = scopeSeparatorFor (e->langType, e->kindIndex, xk);
 			vStringCatS (fqn, sep);
 		}
 		else
 		{
 			/* This is an top level item. prepend a root separator
 			   if the kind of the item has. */
-			sep = scopeSeparatorFor (e->kind, KIND_NULL);
+			sep = scopeSeparatorFor (e->langType, e->kindIndex, KIND_GHOST_INDEX);
 			if (sep == NULL)
 			{
 				/* No root separator. The name of the
@@ -1316,59 +1321,64 @@ extern int makeQualifiedTagEntry (const tagEntryInfo *const e)
 }
 
 extern void initTagEntry (tagEntryInfo *const e, const char *const name,
-			  const kindOption *kind)
+			  int kindIndex)
 {
 	initTagEntryFull(e, name,
 			 getInputLineNumber (),
-			 getInputLanguageName (),
+			 getInputLanguage (),
 			 getInputFilePosition (),
 			 getInputFileTagPath (),
-			 kind,
+			 kindIndex,
 			 ROLE_INDEX_DEFINITION,
 			 getSourceFileTagPath(),
-			 getSourceLanguageName(),
+			 getSourceLanguage(),
 			 getSourceLineNumber() - getInputLineNumber ());
 }
 
 extern void initRefTagEntry (tagEntryInfo *const e, const char *const name,
-			     const kindOption *kind, int roleIndex)
+			     int kindIndex, int roleIndex)
 {
 	initTagEntryFull(e, name,
 			 getInputLineNumber (),
-			 getInputLanguageName (),
+			 getInputLanguage (),
 			 getInputFilePosition (),
 			 getInputFileTagPath (),
-			 kind,
+			 kindIndex,
 			 roleIndex,
 			 getSourceFileTagPath(),
-			 getSourceLanguageName(),
+			 getSourceLanguage(),
 			 getSourceLineNumber() - getInputLineNumber ());
 }
 
 extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 			      unsigned long lineNumber,
-			      const char* language,
+			      langType langType_,
 			      MIOPos      filePosition,
 			      const char *inputFileName,
-			      const kindOption *kind,
+			      int kindIndex,
 			      int roleIndex,
 			      const char *sourceFileName,
-			      const char* sourceLanguage,
+			      langType sourceLangType,
 			      long sourceLineNumberDifference)
 {
 	int i;
+
 	Assert (getInputFileName() != NULL);
 
 	memset (e, 0, sizeof (tagEntryInfo));
 	e->lineNumberEntry = (bool) (Option.locate == EX_LINENUM);
 	e->lineNumber      = lineNumber;
 	e->boundaryInfo    = getNestedInputBoundaryInfo (lineNumber);
-	e->language        = language;
+	e->langType        = langType_;
 	e->filePosition    = filePosition;
 	e->inputFileName   = inputFileName;
 	e->name            = name;
+	e->extensionFields.scopeLangType = LANG_AUTO;
+	e->extensionFields.scopeKindIndex = KIND_GHOST_INDEX;
 	e->extensionFields.scopeIndex     = CORK_NIL;
-	e->kind = kind;
+
+	Assert (kindIndex < 0 || kindIndex < (int)countLanguageKinds(langType_));
+	e->kindIndex = kindIndex;
 
 	Assert (roleIndex >= ROLE_INDEX_DEFINITION);
 	Assert (kind == NULL || roleIndex < kind->nRoles);
@@ -1376,7 +1386,7 @@ extern void initTagEntryFull (tagEntryInfo *const e, const char *const name,
 	if (roleIndex > ROLE_INDEX_DEFINITION)
 		markTagExtraBit (e, XTAG_REFERENCE_TAGS);
 
-	e->sourceLanguage = sourceLanguage;
+	e->sourceLangType = sourceLangType;
 	e->sourceFileName = sourceFileName;
 	e->sourceLineNumberDifference = sourceLineNumberDifference;
 

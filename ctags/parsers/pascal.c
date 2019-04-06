@@ -28,7 +28,7 @@ typedef enum {
 	K_FUNCTION, K_PROCEDURE
 } pascalKind;
 
-static kindOption PascalKinds [] = {
+static kindDefinition PascalKinds [] = {
 	{ true, 'f', "function",  "functions"},
 	{ true, 'p', "procedure", "procedures"}
 };
@@ -43,14 +43,16 @@ static void createPascalTag (tagEntryInfo* const tag,
 {
 	if (PascalKinds [kind].enabled  &&  name != NULL  &&  vStringLength (name) > 0)
 	{
-		initTagEntry (tag, vStringValue (name), &(PascalKinds [kind]));
+		initTagEntry (tag, vStringValue (name), kind);
 
 		tag->extensionFields.signature = arglist;
 		tag->extensionFields.varType = vartype;
 	}
 	else
+	{
 		/* TODO: Passing NULL as name makes an assertion behind initTagEntry failure */
-		initTagEntry (tag, NULL, NULL);
+		/* initTagEntry (tag, NULL, NULL); */
+	}
 }
 
 static void makePascalTag (const tagEntryInfo* const tag)
@@ -349,7 +351,7 @@ extern parserDefinition* PascalParser (void)
 	static const char *const extensions [] = { "p", "pas", NULL };
 	parserDefinition* def = parserNew ("Pascal");
 	def->extensions = extensions;
-	def->kinds      = PascalKinds;
+	def->kindTable  = PascalKinds;
 	def->kindCount  = ARRAY_SIZE (PascalKinds);
 	def->parser     = findPascalTags;
 	return def;

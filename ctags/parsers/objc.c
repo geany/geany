@@ -38,7 +38,7 @@ typedef enum {
 	K_MACRO
 } objcKind;
 
-static kindOption ObjcKinds[] = {
+static kindDefinition ObjcKinds[] = {
 	{true, 'i', "interface", "class interface"},
 	{true, 'I', "implementation", "class implementation"},
 	{true, 'P', "protocol", "Protocol"},
@@ -423,11 +423,11 @@ static objcKind parentType = K_INTERFACE;
  * add additional information to the tag. */
 static void prepareTag (tagEntryInfo * tag, vString const *name, objcKind kind)
 {
-	initTagEntry (tag, vStringValue (name), &(ObjcKinds[kind]));
+	initTagEntry (tag, vStringValue (name), kind);
 
 	if (parentName != NULL)
 	{
-		tag->extensionFields.scopeKind = &(ObjcKinds[parentType]);
+		tag->extensionFields.scopeKindIndex = parentType;
 		tag->extensionFields.scopeName = vStringValue (parentName);
 	}
 }
@@ -1110,7 +1110,7 @@ extern parserDefinition *ObjcParser (void)
 {
 	static const char *const extensions[] = { "m", "h", NULL };
 	parserDefinition *def = parserNewFull ("ObjectiveC", KIND_FILE_ALT);
-	def->kinds = ObjcKinds;
+	def->kindTable = ObjcKinds;
 	def->kindCount = ARRAY_SIZE (ObjcKinds);
 	def->extensions = extensions;
 	def->parser = findObjcTags;

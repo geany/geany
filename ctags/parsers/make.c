@@ -30,7 +30,7 @@ typedef enum {
 	K_MACRO, K_TARGET
 } shKind;
 
-static kindOption MakeKinds [] = {
+static kindDefinition MakeKinds [] = {
 	{ true, 'm', "macro",  "macros"},
 	{ true, 't', "target", "targets"}
 };
@@ -97,12 +97,12 @@ static void newTarget (vString *const name)
 	{
 		return;
 	}
-	makeSimpleTag (name, MakeKinds, K_TARGET);
+	makeSimpleTag (name, K_TARGET);
 }
 
 static void newMacro (vString *const name)
 {
-	makeSimpleTag (name, MakeKinds, K_MACRO);
+	makeSimpleTag (name, K_MACRO);
 }
 
 static void readIdentifier (const int first, vString *const id)
@@ -225,7 +225,7 @@ extern parserDefinition* MakefileParser (void)
 	static const char *const patterns [] = { "[Mm]akefile", "GNUmakefile", NULL };
 	static const char *const extensions [] = { "mak", "mk", NULL };
 	parserDefinition* const def = parserNew ("Make");
-	def->kinds      = MakeKinds;
+	def->kindTable  = MakeKinds;
 	def->kindCount  = ARRAY_SIZE (MakeKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;

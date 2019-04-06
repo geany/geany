@@ -6,19 +6,34 @@
  **************************************************************************/
 #include "general.h"
 
-#include <string.h> 
-#include <ctype.h> 
+#include <string.h>
+#include <ctype.h>
 
 #include "entry.h"
-#include "parse.h" 
-#include "read.h" 
+#include "parse.h"
+#include "read.h"
 #include "routines.h"
+
+#define isSelectorChar(c) \
+	/* attribute selectors are handled separately */ \
+	(isalnum (c) || \
+		(c) == '_' || /* allowed char */ \
+		(c) == '-' || /* allowed char */ \
+		(c) == '+' || /* allow all sibling in a single tag */ \
+		(c) == '>' || /* allow all child in a single tag */ \
+		(c) == '|' || /* allow namespace separator */ \
+		(c) == '(' || /* allow pseudo-class arguments */ \
+		(c) == ')' || \
+		(c) == '.' || /* allow classes and selectors */ \
+		(c) == ':' || /* allow pseudo classes */ \
+		(c) == '*' || /* allow globs as P + * */ \
+		(c) == '#')   /* allow ids */
 
 typedef enum eCssKinds {
 	K_CLASS, K_SELECTOR, K_ID
 } cssKind;
 
-static kindOption CssKinds [] = {
+static kindDefinition CssKinds [] = {
 	{ true, 'c', "class",		"classes" },
 	{ true, 's', "selector",	"selectors" },
 	{ true, 'i', "id",			"identities" }
@@ -36,23 +51,6 @@ typedef struct {
 	vString *string;
 } tokenInfo;
 
-
-static bool isSelectorChar (const int c)
-{
-	/* attribute selectors are handled separately */
-	return (isalnum (c) ||
-			c == '_' || // allowed char
-			c == '-' || // allowed char
-			c == '+' || // allow all sibling in a single tag
-			c == '>' || // allow all child in a single tag
-			c == '|' || // allow namespace separator
-			c == '(' || // allow pseudo-class arguments
-			c == ')' ||
-			c == '.' || // allow classes and selectors
-			c == ':' || // allow pseudo classes
-			c == '*' || // allow globs as P + *
-			c == '#');  // allow ids
-}
 
 static void parseSelector (vString *const string, const int firstChar)
 {
@@ -226,7 +224,7 @@ static void findCssTags (void)
 			if (CssKinds[kind].enabled)
 			{
 				tagEntryInfo e;
-				initTagEntry (&e, vStringValue (selector), &(CssKinds[kind]));
+				initTagEntry (&e, vStringValue (selector), kind);
 
 				e.lineNumber	= lineNumber;
 				e.filePosition	= filePosition;
@@ -258,10 +256,9 @@ extern parserDefinition* CssParser (void)
 {
 	static const char *const extensions [] = { "css", NULL };
 	parserDefinition* def = parserNew ("CSS");
-	def->kinds      = CssKinds;
+	def->kindTable      = CssKinds;
 	def->kindCount  = ARRAY_SIZE (CssKinds);
 	def->extensions = extensions;
 	def->parser     = findCssTags;
 	return def;
 }
-

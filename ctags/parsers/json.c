@@ -69,7 +69,7 @@ typedef enum {
 
 static langType Lang_json;
 
-static kindOption JsonKinds [] = {
+static kindDefinition JsonKinds [] = {
 	{ true,  'o', "object",		"objects"	},
 	{ true,  'a', "array",		"arrays"	},
 	{ true,  'n', "number",		"numbers"	},
@@ -116,7 +116,7 @@ static void makeJsonTag (tokenInfo *const token, const jsonKind kind)
 	if (! JsonKinds[kind].enabled)
 		return;
 
-	initTagEntry (&e, vStringValue (token->string), &(JsonKinds[kind]));
+	initTagEntry (&e, vStringValue (token->string), kind);
 
 	e.lineNumber	= token->lineNumber;
 	e.filePosition	= token->filePosition;
@@ -125,7 +125,7 @@ static void makeJsonTag (tokenInfo *const token, const jsonKind kind)
 	{
 		Assert (token->scopeKind > TAG_NONE && token->scopeKind < TAG_COUNT);
 
-		e.extensionFields.scopeKind = &(JsonKinds[token->scopeKind]);
+		e.extensionFields.scopeKindIndex = token->scopeKind;
 		e.extensionFields.scopeName = vStringValue (token->scope);
 	}
 
@@ -379,7 +379,7 @@ extern parserDefinition* JsonParser (void)
 	static const char *const extensions [] = { "json", NULL };
 	parserDefinition *const def = parserNew ("JSON");
 	def->extensions = extensions;
-	def->kinds		= JsonKinds;
+	def->kindTable	= JsonKinds;
 	def->kindCount	= ARRAY_SIZE (JsonKinds);
 	def->parser		= findJsonTags;
 	def->initialize = initialize;

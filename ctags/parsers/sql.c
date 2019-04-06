@@ -200,7 +200,7 @@ typedef enum {
 	SQLTAG_COUNT
 } sqlKind;
 
-static kindOption SqlKinds [] = {
+static kindDefinition SqlKinds [] = {
 	{ true,  'c', "cursor",		  "cursors"				   },
 	{ false, 'd', "prototype",	  "prototypes"			   },
 	{ true,  'f', "function",	  "functions"			   },
@@ -437,7 +437,7 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 	{
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
-		initTagEntry (&e, name, &(SqlKinds [kind]));
+		initTagEntry (&e, name, kind);
 
 		e.lineNumber   = token->lineNumber;
 		e.filePosition = token->filePosition;
@@ -445,7 +445,7 @@ static void makeSqlTag (tokenInfo *const token, const sqlKind kind)
 		if (vStringLength (token->scope) > 0)
 		{
 			Assert (token->scopeKind < SQLTAG_COUNT);
-			e.extensionFields.scopeKind = &(SqlKinds [token->scopeKind]);
+			e.extensionFields.scopeKindIndex = token->scopeKind;
 			e.extensionFields.scopeName = vStringValue (token->scope);
 		}
 
@@ -2339,7 +2339,7 @@ extern parserDefinition* SqlParser (void)
 {
 	static const char *const extensions [] = { "sql", NULL };
 	parserDefinition* def = parserNewFull ("SQL", KIND_FILE_ALT);
-	def->kinds		= SqlKinds;
+	def->kindTable	= SqlKinds;
 	def->kindCount	= ARRAY_SIZE (SqlKinds);
 	def->extensions = extensions;
 	def->parser		= findSqlTags;

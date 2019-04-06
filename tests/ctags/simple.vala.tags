@@ -1,0 +1,22 @@
+# format=tagmanager
+Demo.HelloWorldÌ1Ö0
+FooÌ1ÎNameSpaceNameÖ0
+ITestÌ32Ö0
+MU_BOHRÌ8ÎDemo.HelloWorldÖ0Ïconst double
+NameSpaceNameÌ256Ö0
+POPUPÌ4ÎDemo.HelloWorld.WindowTypeÖ0
+TOPLEVELÌ4ÎDemo.HelloWorld.WindowTypeÖ0
+VectorÌ2048ÎDemo.HelloWorldÖ0
+WindowTypeÌ2ÎDemo.HelloWorldÖ0
+_ageÌ8ÎDemo.HelloWorldÖ0Ïint
+ageÌ8ÎDemo.HelloWorldÖ0Ïint
+cÌ8ÎDemo.HelloWorldÖ0Ïunichar
+data_1Ì8ÎITestÖ0Ïabstract int
+mainÌ128Í(string[] args)ÎDemo.HelloWorldÖ0Ïpublic int
+method_1Ì128Í()ÎITestÖ0Ïpublic abstract void
+percentileÌ8ÎDemo.HelloWorldÖ0Ïfloat
+sig_1Ì128Í(int a)ÎDemo.HelloWorldÖ0Ïpublic signal void
+the_box_has_crashedÌ8ÎDemo.HelloWorldÖ0Ïbool
+xÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble
+yÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble
+zÌ8ÎDemo.HelloWorld.VectorÖ0Ïdouble

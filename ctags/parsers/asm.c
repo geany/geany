@@ -60,7 +60,7 @@ typedef struct {
 */
 static langType Lang_asm;
 
-static kindOption AsmKinds [] = {
+static kindDefinition AsmKinds [] = {
 	{ true, 'd', "define", "defines" },
 	{ true, 'l', "label",  "labels"  },
 	{ true, 'm', "macro",  "macros"  },
@@ -152,7 +152,7 @@ static bool readPreProc (const unsigned char *const line)
 			vStringPut (name, *cp);
 			++cp;
 		}
-		makeSimpleTag (name, AsmKinds, K_DEFINE);
+		makeSimpleTag (name, K_DEFINE);
 	}
 	vStringDelete (name);
 	return result;
@@ -201,18 +201,18 @@ static void makeAsmTag (
 		if (found)
 		{
 			if (kind != K_NONE)
-				makeSimpleTag (name, AsmKinds, kind);
+				makeSimpleTag (name, kind);
 		}
 		else if (isDefineOperator (operator))
 		{
 			if (! nameFollows)
-				makeSimpleTag (name, AsmKinds, K_DEFINE);
+				makeSimpleTag (name, K_DEFINE);
 		}
 		else if (labelCandidate)
 		{
 			operatorKind (name, &found);
 			if (! found)
-				makeSimpleTag (name, AsmKinds, K_LABEL);
+				makeSimpleTag (name, K_LABEL);
 		}
 	}
 }
@@ -352,7 +352,7 @@ extern parserDefinition* AsmParser (void)
 		NULL
 	};
 	parserDefinition* def = parserNew ("Asm");
-	def->kinds      = AsmKinds;
+	def->kindTable  = AsmKinds;
 	def->kindCount  = ARRAY_SIZE (AsmKinds);
 	def->extensions = extensions;
 	def->patterns   = patterns;

@@ -19,6 +19,7 @@
 #include "debug.h"
 #include "routines.h"
 #include "vstring.h"
+#include "trashbox.h"
 
 /*
 *   DATA DEFINITIONS
@@ -79,18 +80,6 @@ extern vString *vStringNew (void)
 	return string;
 }
 
-#ifndef VSTRING_PUTC_MACRO
-extern void vStringPut (vString *const string, const int c)
-{
-	if (string->length + 1 == string->size)  /*  check for buffer overflow */
-		vStringResize (string, string->size * 2);
-
-	string->buffer [string->length] = c;
-	if (c != '\0')
-		string->buffer [++string->length] = '\0';
-}
-#endif
-
 extern vString *vStringNewCopy (const vString *const string)
 {
 	vString *vs = vStringNew ();
@@ -105,13 +94,20 @@ extern vString *vStringNewInit (const char *const s)
 	return vs;
 }
 
+extern vString *vStringNewNInit (const char *const s, const size_t length)
+{
+	vString *vs = vStringNew ();
+	vStringNCatS (vs, s, length);
+	return vs;
+}
+
 static void stringCat (
 		vString *const string, const char *const s, const size_t length)
 {
 	if (string->length + length + 1 > string->size)
 		vStringResize (string, string->length + length + 1);
 
-	strncpy (string->buffer + string->length, s, length);
+	memcpy (string->buffer + string->length, s, length);
 	string->length += length;
 	vStringPut (string, '\0');
 }
@@ -168,13 +164,14 @@ extern void vStringStripNewline (vString *const string)
  */
 extern void vStringStripLeading (vString *const string)
 {
-	while (isspace ((int) string->buffer [0]) && string->length > 0)
+	size_t n = 0;
+
+	while (n < string->length && isspace ((int) string->buffer [n]))
+		n++;
+	if (n > 0)
 	{
-		size_t i;
-		for (i = 1  ;  i < string->length  ;  ++i)
-			string->buffer [i - 1] = string->buffer [i];
-		--string->length;
-		string->buffer [string->length] = '\0';
+		memmove (string->buffer, string->buffer + n, string->length - n);
+		vStringTruncate (string, string->length - n);
 	}
 }
 
@@ -363,4 +360,28 @@ extern vString *vStringNewOrClear (vString *const string)
 	}
 	else
 		return vStringNew ();
+}
+
+extern vString *vStringNewOrClearWithAutoRelease (vString *const string)
+{
+	vString *r;
+
+	bool autoRelease = false;
+	if (!string)
+		autoRelease = true;
+
+	r = vStringNewOrClear(string);
+	if (autoRelease)
+		DEFAULT_TRASH_BOX(r, vStringDelete);
+
+	return r;
+}
+
+extern void vStringTranslate(vString *const string, char fromC, char toC)
+{
+	for (unsigned int i = 0; i < vStringLength(string); i++)
+	{
+		if (string->buffer[i] == fromC)
+			string->buffer[i] = toC;
+	}
 }

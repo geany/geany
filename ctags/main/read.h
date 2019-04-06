@@ -64,9 +64,9 @@ extern const char *getInputLanguageName (void);
 extern const char *getInputFileTagPath (void);
 extern bool isInputLanguage (langType lang);
 extern bool isInputHeaderFile (void);
-extern bool isInputLanguageKindEnabled (char c);
+extern bool isInputLanguageKindEnabled (int kindIndex);
 extern bool doesInputLanguageAllowNullTag (void);
-extern kindOption *getInputLanguageFileKind (void);
+extern kindDefinition *getInputLanguageFileKind (void);
 extern bool doesInputLanguageRequestAutomaticFQTag (void);
 
 extern void freeInputFileResources (void);
@@ -100,7 +100,7 @@ enum nestedInputBoundaryFlag {
 extern unsigned int getNestedInputBoundaryInfo (unsigned long lineNumber);
 
 extern const char *getSourceFileTagPath (void);
-extern const char *getSourceLanguageName (void);
+extern langType getSourceLanguage (void);
 extern unsigned long getSourceLineNumber (void);
 
 /* Raw: reading from given a parameter, fp */

@@ -27,7 +27,7 @@
 *   DATA DEFINITIONS
 */
 
-static kindOption AbcKinds[] = {
+static kindDefinition AbcKinds[] = {
 	{ true, 'm', "member", "sections" },
 	{ true, 's', "struct",  "header1"}
 };
@@ -53,7 +53,7 @@ static kindOption AbcKinds[] = {
 static void makeAbcTag (const vString* const name, bool name_before)
 {
 	tagEntryInfo e;
-	initTagEntry (&e, vStringValue(name), &(AbcKinds[0]));
+	initTagEntry (&e, vStringValue(name), 0);
 
 	if (name_before)
 		e.lineNumber--;	/* we want the line before the underline chars */
@@ -114,7 +114,7 @@ extern parserDefinition* AbcParser (void)
 	static const char *const extensions [] = { "abc", NULL };
 	parserDefinition* const def = parserNew ("Abc");
 
-	def->kinds = AbcKinds;
+	def->kindTable = AbcKinds;
 	def->kindCount = ARRAY_SIZE (AbcKinds);
 	def->patterns = patterns;
 	def->extensions = extensions;

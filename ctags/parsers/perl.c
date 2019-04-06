@@ -39,7 +39,7 @@ typedef enum {
 	K_SUBROUTINE_DECLARATION
 } perlKind;
 
-static kindOption PerlKinds [] = {
+static kindDefinition PerlKinds [] = {
 	{ true,  'c', "constant",               "constants" },
 	{ true,  'f', "format",                 "formats" },
 	{ true,  'l', "label",                  "labels" },
@@ -319,12 +319,12 @@ static void findPerlTags (void)
 				 * isSubroutineDeclaration() may consume several lines.  So
 				 * we record line positions.
 				 */
-				initTagEntry(&e, vStringValue(name), &(PerlKinds[kind]));
+				initTagEntry(&e, vStringValue(name), kind);
 
 				if (true == isSubroutineDeclaration(cp)) {
 					if (true == PerlKinds[K_SUBROUTINE_DECLARATION].enabled) {
 						kind = K_SUBROUTINE_DECLARATION;
-						e.kind = &(PerlKinds[kind]);
+						e.kindIndex = kind;
 					} else {
 						vStringClear (name);
 						continue;
@@ -345,7 +345,7 @@ static void findPerlTags (void)
 				}
 			} else if (vStringLength (name) > 0)
 			{
-				makeSimpleTag (name, PerlKinds, kind);
+				makeSimpleTag (name, kind);
 				if (isXtagEnabled(XTAG_QUALIFIED_TAGS) && qualified &&
 					K_PACKAGE != kind &&
 					package != NULL  && vStringLength (package) > 0)
@@ -353,7 +353,7 @@ static void findPerlTags (void)
 					vString *const qualifiedName = vStringNew ();
 					vStringCopy (qualifiedName, package);
 					vStringCat (qualifiedName, name);
-					makeSimpleTag (qualifiedName, PerlKinds, kind);
+					makeSimpleTag (qualifiedName, kind);
 					vStringDelete (qualifiedName);
 				}
 			}
@@ -371,7 +371,7 @@ extern parserDefinition* PerlParser (void)
 {
 	static const char *const extensions [] = { "pl", "pm", "plx", "perl", NULL };
 	parserDefinition* def = parserNew ("Perl");
-	def->kinds      = PerlKinds;
+	def->kindTable  = PerlKinds;
 	def->kindCount  = ARRAY_SIZE (PerlKinds);
 	def->extensions = extensions;
 	def->parser     = findPerlTags;

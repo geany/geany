@@ -180,7 +180,7 @@ extern langType getLanguageComponentInOption (const char *const option,
 
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processMapOption (const char *const option, const char *const parameter);
-extern bool processKindOption (const char *const option, const char *const parameter);
+extern bool processKindDefinition (const char *const option, const char *const parameter);
 extern bool processCorpusOption (const char *const option, const char *const parameter);
 extern bool processAliasOption (const char *const option, const char *const parameter);
 #ifdef HAVE_ICONV
@@ -191,5 +191,8 @@ extern bool processXcmdOption (const char *const option, const char *const param
 
 typedef void (* mainLoopFunc) (cookedArgs *args, void *data);
 extern void setMainLoop (mainLoopFunc func, void *data);
+
+/* This is for emitting a tag for a commnn block of Fortran parser*/
+extern bool canUseLineNumberAsLocator (void);
 
 #endif  /* CTAGS_MAIN_OPTIONS_H */

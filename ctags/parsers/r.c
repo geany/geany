@@ -34,7 +34,7 @@ typedef enum {
 	KIND_COUNT
 } rKind;
 
-static kindOption RKinds [KIND_COUNT] = {
+static kindDefinition RKinds [KIND_COUNT] = {
 	{true, 'f', "function", "functions"},
 	{true, 'l', "library", "libraries"},
 	{true, 's', "source", "sources"},
@@ -43,7 +43,7 @@ static kindOption RKinds [KIND_COUNT] = {
 static void makeRTag (const vString * const name, rKind kind)
 {
 	tagEntryInfo e;
-	initTagEntry(&e, vStringValue(name), &(RKinds[kind]));
+	initTagEntry(&e, vStringValue(name), kind);
 
 	Assert (kind < KIND_COUNT);
 
@@ -168,7 +168,7 @@ extern parserDefinition *RParser (void)
 	 */
 	static const char *const extensions [] = { "r", "s", "q", NULL };
 	parserDefinition *const def = parserNew ("R");
-	def->kinds      = RKinds;
+	def->kindTable  = RKinds;
 	def->kindCount  = ARRAY_SIZE (RKinds);
 	def->extensions = extensions;
 	def->parser     = createRTags;

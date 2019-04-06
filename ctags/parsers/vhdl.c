@@ -61,7 +61,7 @@ static vString* Lastname=NULL;
 static vString* Keyword=NULL;
 static vString* TagName=NULL;
 
-static kindOption VhdlKinds [] = {
+static kindDefinition VhdlKinds [] = {
 	{ true, 'c', "variable",     "constants" },
 	{ true, 't', "typedef",      "types" },
 	{ true, 'v', "variable",     "variables" },
@@ -177,7 +177,7 @@ static void tagNameList (const vhdlKind kind, int c)
 	if (isIdentifierCharacter (c))
 	{
 		readIdentifier (TagName, c);
-		makeSimpleTag (TagName, VhdlKinds, kind);
+		makeSimpleTag (TagName, kind);
 	}
 }
 
@@ -202,7 +202,7 @@ static void findTag (vString *const name)
 				kind = (vhdlKind)lookupKeyword (vStringValue (Keyword), Lang_vhdl);
 				if (kind == K_PROCESS || kind == K_BLOCK || kind == K_PORT)
 				{
-					makeSimpleTag (Lastname, VhdlKinds, kind);
+					makeSimpleTag (Lastname, kind);
 				}
 			}
 		} else {
@@ -225,7 +225,7 @@ static void findTag (vString *const name)
 		}
 		else if (kind == K_PROCESS || kind == K_BLOCK) {
 			vStringCopyS(TagName,"unnamed");
-			makeSimpleTag (TagName, VhdlKinds, kind);
+			makeSimpleTag (TagName, kind);
 		} else {
 			c = skipWhite (vGetc ());
 			if (c=='\"')
@@ -278,7 +278,7 @@ extern parserDefinition* VhdlParser (void)
 {
 	static const char *const extensions [] = { "vhdl", "vhd", NULL };
 	parserDefinition* def = parserNew ("Vhdl");
-	def->kinds      = VhdlKinds;
+	def->kindTable  = VhdlKinds;
 	def->kindCount  = ARRAY_SIZE (VhdlKinds);
 	def->extensions = extensions;
 	def->parser     = findVhdlTags;

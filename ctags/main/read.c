@@ -108,6 +108,7 @@ typedef struct sInputFile {
 	inputLineFposMap lineFposMap;
 } inputFile;
 
+static langType sourceLang;
 
 /*
 *   FUNCTION DECLARATIONS
@@ -183,9 +184,9 @@ extern bool isInputHeaderFile (void)
 	return File.input.isHeader;
 }
 
-extern bool isInputLanguageKindEnabled (char c)
+extern bool isInputLanguageKindEnabled (int kindIndex)
 {
-	return isLanguageKindEnabled (getInputLanguage (), c);
+	return isLanguageKindEnabled (getInputLanguage (), kindIndex);
 }
 
 extern bool doesInputLanguageAllowNullTag (void)
@@ -193,7 +194,7 @@ extern bool doesInputLanguageAllowNullTag (void)
 	return doesLanguageAllowNullTag (getInputLanguage ());
 }
 
-extern kindOption *getInputLanguageFileKind (void)
+extern kindDefinition *getInputLanguageFileKind (void)
 {
 	return getLanguageFileKind (getInputLanguage ());
 }
@@ -208,9 +209,9 @@ extern const char *getSourceFileTagPath (void)
 	return vStringValue (File.source.tagPath);
 }
 
-extern const char *getSourceLanguageName (void)
+extern langType getSourceLanguage (void)
 {
-	return getLanguageName (File.source.langInfo.type);
+	return sourceLang;
 }
 
 extern unsigned long getSourceLineNumber (void)
@@ -370,6 +371,7 @@ static void setSourceFileParameters (vString *const fileName, const langType lan
 	setInputFileParametersCommon (&File.source, fileName,
 				      language, setLangToType,
 				      File.sourceTagPathHolder);
+	sourceLang = language;
 }
 
 static bool setSourceFileName (vString *const fileName)

@@ -28,7 +28,7 @@ typedef enum {
 	K_MACRO, K_FUNCTION, K_MODULE, K_RECORD, K_TYPE
 } erlangKind;
 
-static kindOption ErlangKinds[] = {
+static kindDefinition ErlangKinds[] = {
 	{true, 'd', "macro",    "macro definitions"},
 	{true, 'f', "function", "functions"},
 	{true, 'm', "module",   "modules"},
@@ -78,11 +78,11 @@ static void makeMemberTag (
 	if (ErlangKinds [kind].enabled  &&  vStringLength (identifier) > 0)
 	{
 		tagEntryInfo tag;
-		initTagEntry (&tag, vStringValue (identifier), &(ErlangKinds[kind]));
+		initTagEntry (&tag, vStringValue (identifier), kind);
 
 		if (module != NULL  &&  vStringLength (module) > 0)
 		{
-			tag.extensionFields.scopeKind = &(ErlangKinds [K_MODULE]);
+			tag.extensionFields.scopeKindIndex = K_MODULE;
 			tag.extensionFields.scopeName = vStringValue (module);
 		}
 		makeTagEntry (&tag);
@@ -93,7 +93,7 @@ static void parseModuleTag (const unsigned char *cp, vString *const module)
 {
 	vString *const identifier = vStringNew ();
 	parseIdentifier (cp, identifier);
-	makeSimpleTag (identifier, ErlangKinds, K_MODULE);
+	makeSimpleTag (identifier, K_MODULE);
 
 	/* All further entries go in the new module */
 	vStringCopy (module, identifier);
@@ -104,7 +104,7 @@ static void parseSimpleTag (const unsigned char *cp, erlangKind kind)
 {
 	vString *const identifier = vStringNew ();
 	parseIdentifier (cp, identifier);
-	makeSimpleTag (identifier, ErlangKinds, kind);
+	makeSimpleTag (identifier, kind);
 	vStringDelete (identifier);
 }
 
@@ -181,7 +181,7 @@ extern parserDefinition *ErlangParser (void)
 {
 	static const char *const extensions[] = { "erl", "ERL", "hrl", "HRL", NULL };
 	parserDefinition *def = parserNew ("Erlang");
-	def->kinds = ErlangKinds;
+	def->kindTable = ErlangKinds;
 	def->kindCount = ARRAY_SIZE (ErlangKinds);
 	def->extensions = extensions;
 	def->parser = findErlangTags;

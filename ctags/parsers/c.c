@@ -281,7 +281,7 @@ typedef enum
 	CK_EXTERN_VARIABLE
 } cKind;
 
-static kindOption CKinds [] = {
+static kindDefinition CKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -307,7 +307,7 @@ typedef enum
 	DK_EXTERN_VARIABLE
 } dKind;
 
-static kindOption DKinds [] = {
+static kindDefinition DKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
 	{ true,  'f', "function",   "function definitions"},
@@ -331,7 +331,7 @@ typedef enum
 	JK_PACKAGE, JK_ENUMERATOR, JK_ENUMERATION
 } javaKind;
 
-static kindOption JavaKinds [] = {
+static kindDefinition JavaKinds [] = {
 	{ true,  'c', "class",         "classes"},
 	{ true,  'f', "field",         "fields"},
 	{ true,  'i', "interface",     "interfaces"},
@@ -349,7 +349,7 @@ typedef enum
 	CSK_NAMESPACE, CSK_PROPERTY, CSK_STRUCT, CSK_TYPEDEF
 } csharpKind;
 
-static kindOption CsharpKinds [] = {
+static kindDefinition CsharpKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -372,7 +372,7 @@ typedef enum {
 	VK_NAMESPACE, VK_PROPERTY, VK_SIGNAL, VK_STRUCT
 } valaKind;
 
-static kindOption ValaKinds [] = {
+static kindDefinition ValaKinds [] = {
 	{ true,  'c', "class",      "classes"},
 	{ true,  'd', "macro",      "macro definitions"},
 	{ true,  'e', "enumerator", "enumerators (values inside an enumeration)"},
@@ -1093,19 +1093,19 @@ static javaKind javaTagKind (const tagType type)
 	return result;
 }
 
-static const kindOption *tagKind (const tagType type)
+static int kindIndexForType (const tagType type)
 {
-	const kindOption* result;
+	int result;
 	if (isInputLanguage (Lang_java))
-		result = &JavaKinds [javaTagKind (type)];
+		result = javaTagKind (type);
 	else if (isInputLanguage (Lang_csharp))
-		result = &CsharpKinds [csharpTagKind (type)];
+		result = csharpTagKind (type);
 	else if (isInputLanguage (Lang_d))
-		result = &DKinds [dTagKind (type)];
+		result = dTagKind (type);
 	else if (isInputLanguage (Lang_vala))
-		result = &ValaKinds [valaTagKind (type)];
+		result = valaTagKind (type);
 	else
-		result = &CKinds [cTagKind (type)];
+		result = cTagKind (type);
 	return result;
 }
 
@@ -1184,10 +1184,10 @@ static void addOtherFields (tagEntryInfo* const tag, const tagType type,
 				(isMember (st) || st->parent->declaration == DECL_NAMESPACE))
 			{
 				if (isType (st->context, TOKEN_NAME))
-					tag->extensionFields.scopeKind = tagKind (TAG_CLASS);
+					tag->extensionFields.scopeKindIndex = kindIndexForType (TAG_CLASS);
 				else
-					tag->extensionFields.scopeKind =
-						tagKind (declToTagType (parentDecl (st)));
+					tag->extensionFields.scopeKindIndex =
+						kindIndexForType (declToTagType (parentDecl (st)));
 				tag->extensionFields.scopeName = vStringValue (scope);
 			}
 			if ((type == TAG_CLASS  ||  type == TAG_INTERFACE  ||
@@ -1435,7 +1435,7 @@ static void makeTag (const tokenInfo *const token,
 			return;
 		}
 
-		initTagEntry (&e, vStringValue (token->name), tagKind (type));
+		initTagEntry (&e, vStringValue (token->name), kindIndexForType (type));
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
@@ -3131,7 +3131,7 @@ static rescanReason findCTags (const unsigned int passCount)
 	Assert (passCount < 3);
 
 	cppInit ((bool) (passCount > 1), isInputLanguage (Lang_csharp), isInputLanguage(Lang_cpp),
-		CKinds+CK_DEFINE);
+		CK_DEFINE);
 
 	exception = (exception_t) setjmp (Exception);
 	rescan = RESCAN_NONE;
@@ -3238,7 +3238,7 @@ extern parserDefinition* CParser (void)
 {
 	static const char *const extensions [] = { "c", "pc", "sc", NULL };
 	parserDefinition* def = parserNew ("C");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3257,7 +3257,7 @@ extern parserDefinition* CppParser (void)
 		NULL
 	};
 	parserDefinition* def = parserNew ("C++");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3269,7 +3269,7 @@ extern parserDefinition* JavaParser (void)
 {
 	static const char *const extensions [] = { "java", NULL };
 	parserDefinition* def = parserNew ("Java");
-	def->kinds      = JavaKinds;
+	def->kindTable  = JavaKinds;
 	def->kindCount  = ARRAY_SIZE (JavaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3281,7 +3281,7 @@ extern parserDefinition* DParser (void)
 {
 	static const char *const extensions [] = { "d", "di", NULL };
 	parserDefinition* def = parserNew ("D");
-	def->kinds      = DKinds;
+	def->kindTable  = DKinds;
 	def->kindCount  = ARRAY_SIZE (DKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3293,7 +3293,7 @@ extern parserDefinition* GLSLParser (void)
 {
 	static const char *const extensions [] = { "glsl", "frag", "vert", NULL };
 	parserDefinition* def = parserNew ("GLSL");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3305,7 +3305,7 @@ extern parserDefinition* FeriteParser (void)
 {
 	static const char *const extensions [] = { "fe", NULL };
 	parserDefinition* def = parserNew ("Ferite");
-	def->kinds      = CKinds;
+	def->kindTable  = CKinds;
 	def->kindCount  = ARRAY_SIZE (CKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3317,7 +3317,7 @@ extern parserDefinition* CsharpParser (void)
 {
 	static const char *const extensions [] = { "cs", NULL };
 	parserDefinition* def = parserNew ("C#");
-	def->kinds      = CsharpKinds;
+	def->kindTable  = CsharpKinds;
 	def->kindCount  = ARRAY_SIZE (CsharpKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;
@@ -3329,7 +3329,7 @@ extern parserDefinition* ValaParser (void)
 {
 	static const char *const extensions [] = { "vala", NULL };
 	parserDefinition* def = parserNew ("Vala");
-	def->kinds      = ValaKinds;
+	def->kindTable  = ValaKinds;
 	def->kindCount  = ARRAY_SIZE (ValaKinds);
 	def->extensions = extensions;
 	def->parser2    = findCTags;

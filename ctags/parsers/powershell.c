@@ -42,7 +42,7 @@ typedef enum {
 	COUNT_KIND
 } powerShellKind;
 
-static kindOption PowerShellKinds[COUNT_KIND] = {
+static kindDefinition PowerShellKinds[COUNT_KIND] = {
 	{ true, 'f', "function",	"functions" },
 	{ true, 'v', "variable",	"variables" }
 };
@@ -98,7 +98,7 @@ static const char *findValidAccessType (const char *const access)
 static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const token,
 								 const powerShellKind kind, const char *const access)
 {
-	initTagEntry (e, vStringValue (token->string), &(PowerShellKinds[kind]));
+	initTagEntry (e, vStringValue (token->string), kind);
 
 	e->lineNumber	= token->lineNumber;
 	e->filePosition	= token->filePosition;
@@ -110,7 +110,7 @@ static void initPowerShellEntry (tagEntryInfo *const e, const tokenInfo *const t
 		int parentKind = token->parentKind;
 		Assert (parentKind >= 0);
 
-		e->extensionFields.scopeKind = &(PowerShellKinds[parentKind]);
+		e->extensionFields.scopeKindIndex = parentKind;
 		e->extensionFields.scopeName = vStringValue (token->scope);
 	}
 }
@@ -600,7 +600,7 @@ extern parserDefinition* PowerShellParser (void)
 {
 	static const char *const extensions [] = { "ps1", "psm1", NULL };
 	parserDefinition* def = parserNew ("PowerShell");
-	def->kinds      = PowerShellKinds;
+	def->kindTable  = PowerShellKinds;
 	def->kindCount  = ARRAY_SIZE (PowerShellKinds);
 	def->extensions = extensions;
 	def->parser     = findPowerShellTags;

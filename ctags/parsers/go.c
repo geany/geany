@@ -90,7 +90,7 @@ typedef enum {
 	GOTAG_MEMBER
 } goKind;
 
-static kindOption GoKinds[] = {
+static kindDefinition GoKinds[] = {
 	{true, 'p', "package", "packages"},
 	{true, 'f', "func", "functions"},
 	{true, 'c', "const", "constants"},
@@ -521,7 +521,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	const char *const name = vStringValue (token->string);
 
 	tagEntryInfo e;
-	initTagEntry (&e, name, &(GoKinds [kind]));
+	initTagEntry (&e, name, kind);
 
 	if (!GoKinds [kind].enabled)
 		return;
@@ -535,7 +535,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 
 	if (parent_kind != GOTAG_UNDEFINED && parent_token != NULL)
 	{
-		e.extensionFields.scopeKind = &(GoKinds[parent_kind]);
+		e.extensionFields.scopeKindIndex = parent_kind;
 		e.extensionFields.scopeName = vStringValue (parent_token->string);
 	}
 	makeTagEntry (&e);
@@ -820,7 +820,7 @@ extern parserDefinition *GoParser (void)
 {
 	static const char *const extensions[] = { "go", NULL };
 	parserDefinition *def = parserNew ("Go");
-	def->kinds = GoKinds;
+	def->kindTable = GoKinds;
 	def->kindCount = ARRAY_SIZE (GoKinds);
 	def->extensions = extensions;
 	def->parser = findGoTags;

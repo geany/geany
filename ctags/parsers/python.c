@@ -42,7 +42,7 @@ typedef enum {
 	K_CLASS, K_FUNCTION, K_METHOD, K_VARIABLE, K_IMPORT
 } pythonKind;
 
-static kindOption PythonKinds[] = {
+static kindDefinition PythonKinds[] = {
 	{true, 'c', "class",    "classes"},
 	{true, 'f', "function", "functions"},
 	{true, 'm', "member",   "class members"},
@@ -131,18 +131,18 @@ static struct corkInfo makeFunctionTag (vString *const function,
 	{
 		if (is_class_parent)
 		{
-			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_METHOD]));
-			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+			initTagEntry (&tag, vStringValue (function), K_METHOD);
+			tag.extensionFields.scopeKindIndex = K_CLASS;
 		}
 		else
 		{
-			initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
-			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
+			initTagEntry (&tag, vStringValue (function), K_FUNCTION);
+			tag.extensionFields.scopeKindIndex = K_FUNCTION;
 		}
 		tag.extensionFields.scopeName = vStringValue (parent);
 	}
 	else
-		initTagEntry (&tag, vStringValue (function), &(PythonKinds[K_FUNCTION]));
+		initTagEntry (&tag, vStringValue (function), K_FUNCTION);
 
 	tag.extensionFields.signature = arglist;
 
@@ -162,17 +162,17 @@ static int makeClassTag (vString *const class, vString *const inheritance,
 	vString *const parent, int is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (class), &(PythonKinds[K_CLASS]));
+	initTagEntry (&tag, vStringValue (class), K_CLASS);
 	if (vStringLength (parent) > 0)
 	{
 		if (is_class_parent)
 		{
-			tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+			tag.extensionFields.scopeKindIndex = K_CLASS;
 			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 		else
 		{
-			tag.extensionFields.scopeKind = &(PythonKinds[K_FUNCTION]);
+			tag.extensionFields.scopeKindIndex = K_FUNCTION;
 			tag.extensionFields.scopeName = vStringValue (parent);
 		}
 	}
@@ -186,10 +186,10 @@ static void makeVariableTag (vString *const var, vString *const parent,
 	bool is_class_parent)
 {
 	tagEntryInfo tag;
-	initTagEntry (&tag, vStringValue (var), &(PythonKinds[K_VARIABLE]));
+	initTagEntry (&tag, vStringValue (var), K_VARIABLE);
 	if (vStringLength (parent) > 0)
 	{
-		tag.extensionFields.scopeKind = &(PythonKinds[K_CLASS]);
+		tag.extensionFields.scopeKindIndex = K_CLASS;
 		tag.extensionFields.scopeName = vStringValue (parent);
 	}
 	addAccessFields (&tag, var, K_VARIABLE, vStringLength (parent) > 0,
@@ -371,7 +371,7 @@ static void parseImports (const char *cp)
 		if (strcmp (vStringValue (name_next), "as") != 0 &&
 			strcmp (vStringValue (name), "as") != 0)
 		{
-			makeSimpleTag (name, PythonKinds, K_IMPORT);
+			makeSimpleTag (name, K_IMPORT);
 		}
 	}
 	vStringDelete (name);
@@ -456,7 +456,7 @@ static bool constructParentString(NestingLevels *nls, int indent,
 		if (e)
 		{
 			vStringCatS(result, e->name);
-			is_class = ((e->kind - PythonKinds)  == K_CLASS);
+			is_class = (e->kindIndex == K_CLASS);
 		}
 		else
 			is_class = false;
@@ -853,7 +853,7 @@ extern parserDefinition *PythonParser (void)
 {
     static const char *const extensions[] = { "py", "pyx", "pxd", "pxi" ,"scons", NULL };
 	parserDefinition *def = parserNew ("Python");
-	def->kinds = PythonKinds;
+	def->kindTable = PythonKinds;
 	def->kindCount = ARRAY_SIZE (PythonKinds);
 	def->extensions = extensions;
 	def->parser = findPythonTags;

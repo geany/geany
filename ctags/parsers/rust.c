@@ -47,7 +47,7 @@ typedef enum {
 	K_NONE
 } RustKind;
 
-static kindOption rustKinds[] = {
+static kindDefinition rustKinds[] = {
 	{true, 'n', "module", "module"},
 	{true, 's', "struct", "structural type"},
 	{true, 'i', "interface", "trait interface"},
@@ -439,7 +439,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	if (kind == K_NONE)
 		return;
 	tagEntryInfo tag;
-	initTagEntry(&tag, ident->buffer, &(rustKinds[kind]));
+	initTagEntry(&tag, ident->buffer, kind);
 
 	tag.lineNumber = line;
 	tag.filePosition = pos;
@@ -449,7 +449,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	tag.extensionFields.varType = type;
 	if (parent_kind != K_NONE)
 	{
-		tag.extensionFields.scopeKind = &(rustKinds[parent_kind]);
+		tag.extensionFields.scopeKindIndex = parent_kind;
 		tag.extensionFields.scopeName = scope->buffer;
 	}
 	makeTagEntry(&tag);
@@ -974,7 +974,7 @@ extern parserDefinition *RustParser (void)
 {
 	static const char *const extensions[] = { "rs", NULL };
 	parserDefinition *def = parserNewFull ("Rust", KIND_FILE_ALT);
-	def->kinds = rustKinds;
+	def->kindTable = rustKinds;
 	def->kindCount = ARRAY_SIZE (rustKinds);
 	def->extensions = extensions;
 	def->parser = findRustTags;

@@ -1759,7 +1759,7 @@ static void processListExtraOption (
 	exit (0);
 }
 
-static void processListFileKindOption (
+static void processListFileKindDefinition (
 		const char *const option, const char *const parameter)
 {
 	if (parameter [0] == '\0' || strcasecmp (parameter, "all") == 0)
@@ -2556,7 +2556,7 @@ static parametricOption ParametricOptions [] = {
 	{ "list-extra",             processListExtraOption,        true,   STAGE_ANY },
 	{ "list-features",          processListFeaturesOption,      true,   STAGE_ANY },
 	{ "list-fields",            processListFieldsOption,        true,   STAGE_ANY },
-	{ "list-file-kind",         processListFileKindOption,      true,   STAGE_ANY },
+	{ "list-file-kind",         processListFileKindDefinition,  true,   STAGE_ANY },
 	{ "list-kinds",             processListKindsOption,         true,   STAGE_ANY },
 	{ "list-kinds-full",        processListKindsOption,         true,   STAGE_ANY },
 	{ "list-languages",         processListLanguagesOption,     true,   STAGE_ANY },
@@ -2816,7 +2816,7 @@ static void processLongOption (
 		 ;
 	else if (processParametricOption (option, parameter))
 		;
-	else if (processKindOption (option, parameter))
+	else if (processKindDefinition (option, parameter))
 		;
 	else if (processAliasOption (option, parameter))
 		;
@@ -3484,3 +3484,8 @@ extern void verbose (const char *const format, ...)
 {
 }
 /* GEANY DIFF END */
+
+extern bool canUseLineNumberAsLocator (void)
+{
+	return (Option.locate != EX_PATTERN);
+}

@@ -48,7 +48,7 @@
 #define xCalloc(n,Type)    (Type *)eCalloc((size_t)(n), sizeof (Type))
 #define xRealloc(p,n,Type) (Type *)eRealloc((p), (n) * sizeof (Type))
 
-extern void *eMalloc (const size_t size)
+static void *eMalloc (const size_t size)
 {
 	void *buffer = malloc (size);
 
@@ -61,7 +61,7 @@ extern void *eMalloc (const size_t size)
 	return buffer;
 }
 
-extern void *eCalloc (const size_t count, const size_t size)
+static void *eCalloc (const size_t count, const size_t size)
 {
 	void *buffer = calloc (count, size);
 
@@ -74,7 +74,7 @@ extern void *eCalloc (const size_t count, const size_t size)
 	return buffer;
 }
 
-extern void *eRealloc (void *const ptr, const size_t size)
+static void *eRealloc (void *const ptr, const size_t size)
 {
 	void *buffer;
 	if (ptr == NULL)
@@ -91,13 +91,13 @@ extern void *eRealloc (void *const ptr, const size_t size)
 	return buffer;
 }
 
-extern void eFree (void *const ptr)
+static void eFree (void *const ptr)
 {
 	free (ptr);
 }
 
-#  define Assert(c)
-#  define AssertNotReached()
+#  define Assert(c) do {} while(0)
+#  define AssertNotReached() do {} while(0)
 #endif
 
 /* minimal reallocation chunk size */
@@ -361,12 +361,12 @@ MIO *mio_new_memory (unsigned char *data,
  * @size: the length of the data copied from @base to new mio
  *
  * Creates a new #MIO object by copying data from existing #MIO (@base).
- * The range for copying are given with @start and @size.
+ * The range for copying is given with @start and @size.
  * Copying data at the range from @start to the end of @base is
- * done if 0 is given as @size.
+ * done if -1 is given as @size.
  *
- * If @size(!= 0) is larger than the length from @start to the end of
- * @base, %NULL is return.
+ * If @size is larger than the length from @start to the end of
+ * @base, %NULL is returned.
  *
  * The function doesn't move the file position of @base.
  *
@@ -374,7 +374,7 @@ MIO *mio_new_memory (unsigned char *data,
  *
  */
 
-MIO *mio_new_mio (MIO *base, long start, size_t size)
+MIO *mio_new_mio (MIO *base, long start, long size)
 {
 	unsigned char *data;
 	long original_pos;
@@ -383,15 +383,15 @@ MIO *mio_new_mio (MIO *base, long start, size_t size)
 
 	original_pos = mio_tell (base);
 
-	if (size == 0)
+	if (size == -1)
 	{
 		long end;
 
 		if (mio_seek (base, 0, SEEK_END) != 0)
 			return NULL;
 		end = mio_tell (base);
+		Assert (end >= start);
 		size = end - start;
-		Assert (size >= 0);
 	}
 
 	if (mio_seek (base, start, SEEK_SET) != 0)
@@ -732,7 +732,7 @@ size_t mio_write (MIO *mio,
  * Writes a character to a #MIO stream. This function behaves the same as
  * fputc().
  *
- * Returns: The written wharacter, or %EOF on error.
+ * Returns: The written character, or %EOF on error.
  */
 int mio_putc (MIO *mio, int c)
 {
@@ -796,7 +796,7 @@ int mio_puts (MIO *mio, const char *s)
 /**
  * mio_vprintf:
  * @mio: A #MIO object
- * @format: A printf fomrat string
+ * @format: A printf format string
  * @ap: The variadic argument list for the format
  *
  * Writes a formatted string into a #MIO stream. This function behaves the same
@@ -1100,7 +1100,7 @@ int mio_error (MIO *mio)
  *          SEEK_CUR from the current position and SEEK_SET from the end of the
  *          stream.
  *
- * Sets the curosr position on a #MIO stream. This functions behaves the same as
+ * Sets the cursor position on a #MIO stream. This functions behaves the same as
  * fseek(). See also mio_tell() and mio_setpos().
  *
  * Returns: 0 on success, -1 otherwise, in which case errno should be set to

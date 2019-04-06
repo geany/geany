@@ -17,13 +17,13 @@
 #include "kind.h"
 #include "parse.h"
 
-extern void printRole (const roleDesc* const role)
+extern void printRole (const roleDefinition* const role)
 {
 	if (role)
 		printf ("%s\t%s\t%s\n", role->name, role->description, role->enabled? "on": "off");
 }
 
-extern const char *renderRole (const roleDesc* const role, vString* b)
+extern const char *renderRole (const roleDefinition* const role, vString* b)
 {
 	vStringCatS (b, role->name);
 	return vStringValue (b);
@@ -78,7 +78,7 @@ extern void printKindListHeader (bool indent, bool tabSeparated)
 #undef KIND_HEADER_COMMON_FMT
 }
 
-extern void printKind (const kindOption* const kind, bool allKindFields, bool indent,
+extern void printKind (const kindDefinition* const kind, bool allKindFields, bool indent,
 		       bool tabSeparated)
 {
 #define KIND_FMT MAKE_KIND_FMT("", c, d)
@@ -109,11 +109,10 @@ extern void printKind (const kindOption* const kind, bool allKindFields, bool in
 #undef KIND_FMT
 }
 
-const char *scopeSeparatorFor (const kindOption *kind, char parentLetter)
+const char *scopeSeparatorFor (langType lang, int kindIndex, int parentKindIndex)
 {
-	scopeSeparator *table;
-	Assert (kind);
-	table = kind->separators;
+	kindDefinition *kind = getLanguageKind (lang, kindIndex);
+	scopeSeparator *table = kind->separators;
 
 	/* If no table is given, use the default generic separator ".".
 	   The exception is if a root separator is looked up. In this case,
@@ -121,7 +120,7 @@ const char *scopeSeparatorFor (const kindOption *kind, char parentLetter)
 
 	if (table == NULL)
 	{
-		if (parentLetter == KIND_NULL)
+		if (parentKindIndex == KIND_GHOST_INDEX)
 			return NULL;
 		else
 			return ".";
@@ -131,21 +130,21 @@ const char *scopeSeparatorFor (const kindOption *kind, char parentLetter)
 	{
 		/* KIND_WILDCARD cannot be used as a key for finding
 		   a root separator.*/
-		if ( (table->parentLetter == KIND_WILDCARD
-		       && parentLetter != KIND_NULL)
-		    || table->parentLetter == parentLetter)
+		if ( (table->parentKindIndex == KIND_WILDCARD_INDEX
+		       && parentKindIndex != KIND_GHOST_INDEX)
+		    || table->parentKindIndex == parentKindIndex)
 			return table->separator;
 		table++;
 	}
-	if (parentLetter == KIND_NULL)
+	if (parentKindIndex == KIND_GHOST_INDEX)
 		return NULL;
 	else
 		return ".";
 }
 
-extern void enableKind (kindOption *kind, bool enable)
+extern void enableKind (kindDefinition *kind, bool enable)
 {
-	kindOption *slave;
+	kindDefinition *slave;
 
 	if (kind->master)
 		enableKind (kind->master, enable);

@@ -13,6 +13,7 @@
 *   INCLUDE FILES
 */
 #include "general.h"  /* must always come first */
+#include "types.h"
 
 /*
 *   DATA DECLARATIONS
@@ -21,7 +22,6 @@
 typedef void (*ptrArrayDeleteFunc) (void *data);
 
 struct sPtrArray;
-typedef struct sPtrArray ptrArray;
 
 /*
 *   FUNCTION PROTOTYPES
@@ -36,11 +36,13 @@ extern unsigned int ptrArrayCount (const ptrArray *const current);
 extern void* ptrArrayItem (const ptrArray *const current, const unsigned int indx);
 extern void* ptrArrayLast (const ptrArray *const current);
 extern void ptrArrayDelete (ptrArray *const current);
-extern bool ptrArrayHasInsensitive (const ptrArray *const current, const void *const ptr);
 extern bool ptrArrayHasTest (const ptrArray *const current,
 				  bool (*test)(const void *ptr, void *userData),
 				  void *userData);
+extern bool ptrArrayHas (const ptrArray *const current, void *ptr);
 extern void ptrArrayReverse (const ptrArray *const current);
 extern void ptrArrayDeleteItem (ptrArray* const current, unsigned int indx);
+
+extern void ptrArraySort (ptrArray *const current, int (*compare)(const void *, const void *));
 
 #endif  /* CTAGS_MAIN_PTRARRAY_H */

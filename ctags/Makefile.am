@@ -17,7 +17,7 @@ parsers = \
 	parsers/basic.c \
 	parsers/c.c \
 	parsers/cobol.c \
-	parsers/conf.c \
+	parsers/iniconf.c \
 	parsers/css.c \
 	parsers/diff.c \
 	parsers/docbook.c \
@@ -29,7 +29,6 @@ parsers = \
 	parsers/html.c \
 	parsers/jscript.c \
 	parsers/json.c \
-	parsers/latex.c \
 	parsers/lua.c \
 	parsers/make.c \
 	parsers/markdown.c \
@@ -42,12 +41,13 @@ parsers = \
 	parsers/powershell.c \
 	parsers/python.c \
 	parsers/r.c \
-	parsers/rest.c \
+	parsers/rst.c \
 	parsers/ruby.c \
 	parsers/rust.c \
 	parsers/sh.c \
 	parsers/sql.c \
 	parsers/tcl.c \
+	parsers/tex.c \
 	parsers/txt2tags.c \
 	parsers/verilog.c \
 	parsers/vhdl.c
@@ -77,6 +77,7 @@ libctags_la_SOURCES = \
 	main/general.h \
 	main/htable.c \
 	main/htable.h \
+	main/inline.h \
 	main/keyword.c \
 	main/keyword.h \
 	main/kind.c \
@@ -88,10 +89,13 @@ libctags_la_SOURCES = \
 	main/lxpath.c \
 	main/main.c \
 	main/main.h \
+	main/mbcs.h \
 	main/mio.c \
 	main/mio.h \
 	main/nestlevel.c \
 	main/nestlevel.h \
+	main/numarray.c \
+	main/numarray.h \
 	main/objpool.c \
 	main/objpool.h \
 	main/options.c \
@@ -121,6 +125,9 @@ libctags_la_SOURCES = \
 	main/sort.h \
 	main/strlist.c \
 	main/strlist.h \
+	main/trace.h \
+	main/trashbox.c \
+	main/trashbox.h \
 	main/types.h \
 	main/vstring.c \
 	main/vstring.h \

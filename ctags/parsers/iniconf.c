@@ -29,7 +29,7 @@ typedef enum {
 	K_KEY
 } confKind;
 
-static kindOption ConfKinds [] = {
+static kindDefinition ConfKinds [] = {
 	{ true, 'n', "namespace",  "sections"},
 	{ true, 'm', "macro", "keys"}
 };
@@ -67,7 +67,7 @@ static void findConfTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, ConfKinds, K_SECTION);
+			makeSimpleTag (name, K_SECTION);
 			/* remember section name */
 			vStringCopy (scope, name);
 			vStringClear (name);
@@ -90,11 +90,11 @@ static void findConfTags (void)
 				if (*cp == '=')
 				{
 					tagEntryInfo e;
-					initTagEntry (&e, vStringValue (name), &(ConfKinds [K_KEY]));
+					initTagEntry (&e, vStringValue (name), K_KEY);
 
 					if (vStringLength (scope) > 0)
 					{
-						e.extensionFields.scopeKind = &(ConfKinds [K_SECTION]);
+						e.extensionFields.scopeKindIndex = K_SECTION;
 						e.extensionFields.scopeName = vStringValue(scope);
 					}
 					makeTagEntry (&e);
@@ -119,7 +119,7 @@ extern parserDefinition* ConfParser (void)
 	static const char *const patterns [] = { "*.ini", "*.conf", NULL };
 	static const char *const extensions [] = { "conf", NULL };
 	parserDefinition* const def = parserNew ("Conf");
-	def->kinds      = ConfKinds;
+	def->kindTable  = ConfKinds;
 	def->kindCount  = ARRAY_SIZE (ConfKinds);
 	def->patterns   = patterns;
 	def->extensions = extensions;

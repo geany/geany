@@ -37,7 +37,7 @@ typedef enum {
 	K_TYPE, K_CONSTRUCTOR, K_FUNCTION, K_MODULE
 } haskellKind;
 
-static kindOption HaskellKinds [] = {
+static kindDefinition HaskellKinds [] = {
 	{ true, 't', "typedef", "types" },
 	{ true, 'c', "macro", "type constructors" },
 	{ true, 'f', "function", "functions" },
@@ -104,7 +104,7 @@ static void add_tag(const char *token, haskellKind kind, vString *name)
 	for (i = 0; token[i] != '\0'; ++i)
 		vStringPut(name, token[i]);
 
-	makeSimpleTag(name, HaskellKinds, kind);
+	makeSimpleTag(name, kind);
 	vStringClear(name);
 }
 
@@ -336,7 +336,7 @@ extern parserDefinition* HaskellParser (void)
 	static const char *const extensions [] = { "hs", NULL };
 	parserDefinition* def  = parserNew ("Haskell");
 
-	def->kinds      = HaskellKinds;
+	def->kindTable  = HaskellKinds;
 	def->kindCount  = ARRAY_SIZE(HaskellKinds);
 	def->extensions = extensions;
 	def->parser     = findNormalHaskellTags;
@@ -347,7 +347,7 @@ extern parserDefinition* LiterateHaskellParser (void)
 {
 	static const char *const extensions [] = { "lhs", NULL };
 	parserDefinition* def = parserNew ("Literate Haskell");
-	def->kinds      = HaskellKinds;
+	def->kindTable  = HaskellKinds;
 	def->kindCount  = ARRAY_SIZE(HaskellKinds);
 	def->extensions = extensions;
 	def->parser     = findLiterateHaskellTags;

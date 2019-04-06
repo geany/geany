@@ -208,7 +208,7 @@ static bool NewLine = true;
 static unsigned int contextual_fake_count = 0;
 
 /* indexed by tagType */
-static kindOption FortranKinds [TAG_COUNT] = {
+static kindDefinition FortranKinds [TAG_COUNT] = {
 	{ true,  'b', "blockData",  "block data"},
 	{ true,  'c', "common",     "common blocks"},
 	{ true,  'e', "entry",      "entry points"},
@@ -487,22 +487,22 @@ static void makeFortranTag (tokenInfo *const token, tagType tag)
 		const char *const name = vStringValue (token->string);
 		tagEntryInfo e;
 
-		initTagEntry (&e, name, &(FortranKinds [token->tag]));
+		initTagEntry (&e, name, token->tag);
 
 		if (token->tag == TAG_COMMON_BLOCK)
-			e.lineNumberEntry = (bool) (Option.locate != EX_PATTERN);
+			e.lineNumberEntry = canUseLineNumberAsLocator();
 
 		e.lineNumber	= token->lineNumber;
 		e.filePosition	= token->filePosition;
 		e.isFileScope	= isFileScope (token->tag);
-		e.truncateLine	= (bool) (token->tag != TAG_LABEL);
+		e.truncateLineAfterTag	= (bool) (token->tag != TAG_LABEL);
 
 		if (ancestorCount () > 0)
 		{
 			const tokenInfo* const scope = ancestorScope ();
 			if (scope != NULL)
 			{
-				e.extensionFields.scopeKind = &(FortranKinds [scope->tag]);
+				e.extensionFields.scopeKindIndex = scope->tag;
 				e.extensionFields.scopeName = vStringValue (scope->string);
 			}
 		}
@@ -2322,7 +2322,7 @@ extern parserDefinition* FortranParser (void)
 	NULL
 	};
 	parserDefinition* def = parserNew ("Fortran");
-	def->kinds      = FortranKinds;
+	def->kindTable  = FortranKinds;
 	def->kindCount  = ARRAY_SIZE (FortranKinds);
 	def->extensions = extensions;
 	def->parser2    = findFortranTags;
@@ -2342,7 +2342,7 @@ extern parserDefinition* F77Parser (void)
 	NULL
 	};
 	parserDefinition* def = parserNew ("F77");
-	def->kinds      = FortranKinds;
+	def->kindTable  = FortranKinds;
 	def->kindCount  = ARRAY_SIZE (FortranKinds);
 	def->extensions = extensions;
 	def->parser2    = findFortranTags;

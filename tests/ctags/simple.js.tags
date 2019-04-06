@@ -11,8 +11,9 @@ invalidInnerFunctionÌ16Í(a,b)Ö0
 my_global_var1Ì16384Ö0
 my_global_var2Ì16384Ö0
 my_global_var3Ì16384Ö0
-my_global_var4Ì16Í()Ö0
 my_global_var4Ì16384Ö0
+onchangeÌ16Í()Îmy_global_var4Ö0
+originalvalueÌ16384Ö0
 validFunctionFiveÌ16Í(a,b)ÎtestlibÖ0
 validFunctionFourÌ16Í(a,b)ÎextraÖ0
 validFunctionOneÌ16Í(a,b)Ö0

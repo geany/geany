@@ -30,7 +30,7 @@ typedef enum {
 	K_VARIABLE
 } NsisKind;
 
-static kindOption NsisKinds [] = {
+static kindDefinition NsisKinds [] = {
 	{ true, 'n', "namespace", "sections"},
 	{ true, 'f', "function", "functions"},
 	{ true, 'v', "variable", "variables"}
@@ -68,7 +68,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_FUNCTION);
+			makeSimpleTag (name, K_FUNCTION);
 			vStringClear (name);
 		}
 		/* variables */
@@ -93,7 +93,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_VARIABLE);
+			makeSimpleTag (name, K_VARIABLE);
 			vStringClear (name);
 		}
 		/* sections */
@@ -122,7 +122,7 @@ static void findNsisTags (void)
 				vStringPut (name, (int) *cp);
 				++cp;
 			}
-			makeSimpleTag (name, NsisKinds, K_SECTION);
+			makeSimpleTag (name, K_SECTION);
 			vStringClear (name);
 		}
 	}
@@ -135,7 +135,7 @@ extern parserDefinition* NsisParser (void)
 		"nsi", "nsh", NULL
 	};
 	parserDefinition* def = parserNew ("NSIS");
-	def->kinds      = NsisKinds;
+	def->kindTable  = NsisKinds;
 	def->kindCount  = ARRAY_SIZE (NsisKinds);
 	def->extensions = extensions;
 	def->parser     = findNsisTags;

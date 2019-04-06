@@ -27,6 +27,7 @@ typedef struct {
 	char kindLetter;
 	bool isFileScope;
 	unsigned long lineNumber;
+	int lang;
 } ctagsTag;
 
 /* Callback invoked for every tag found by the parser. The return value is
