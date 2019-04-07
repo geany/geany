@@ -1,7 +1,7 @@
 /*
  *      spawn.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2013 Dimitar Toshkov Zhekov <dimitar(dot)zhekov(at)gmail(dot)com>
+ *      Copyright 2013 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ gboolean spawn_with_callbacks(const gchar *working_directory, const gchar *comma
 	SpawnReadFunc stderr_cb, gpointer stderr_data, gsize stderr_max_length,
 	GChildWatchFunc exit_cb, gpointer exit_data, GPid *child_pid, GError **error);
 
-/** 
+/**
  *  A simple structure used by @c spawn_write_data() to write data to a channel.
  *  See @c spawn_write_data() for more information.
  */

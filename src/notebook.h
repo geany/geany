@@ -1,8 +1,7 @@
 /*
  *      notebook.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2006-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2006-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2006 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -42,7 +41,7 @@ void notebook_remove_page(gint page_num);
  * previous tabs. */
 void notebook_switch_tablastused(void);
 
-/* Returns TRUE when MRU tab switch is in progress (i.e. not at the final 
+/* Returns TRUE when MRU tab switch is in progress (i.e. not at the final
  * document yet). */
 gboolean notebook_switch_in_progress(void);
 

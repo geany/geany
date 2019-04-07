@@ -1,7 +1,7 @@
 /*
  *      osx.h - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2015 Jiri Techet <techet(at)gmail(dot)com>
+ *      Copyright 2015 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by

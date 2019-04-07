@@ -1,8 +1,7 @@
 /*
  *      pluginsignals.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2008-2012 Enrico Tröger <enrico(dot)troeger(at)uvena(dot)de>
- *      Copyright 2008-2012 Nick Treleaven <nick(dot)treleaven(at)btinternet(dot)com>
+ *      Copyright 2008 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -191,7 +190,7 @@ signal void (*project_dialog_open)(GObject *obj, GtkWidget *notebook, gpointer u
  */
 signal void (*project_dialog_confirmed)(GObject *obj, GtkWidget *notebook, gpointer user_data);
 
-/** Sent before project dialog is closed. By using this signal, plugins can remove 
+/** Sent before project dialog is closed. By using this signal, plugins can remove
  *  tabs previously added in project-dialog-open signal handler.
  *
  * @param obj a GeanyObject instance, should be ignored.

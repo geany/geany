@@ -1,7 +1,7 @@
 /*
  *      osx.c - this file is part of Geany, a fast and lightweight IDE
  *
- *      Copyright 2015 Jiri Techet <techet(at)gmail(dot)com>
+ *      Copyright 2015 The Geany contributors
  *
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ static gboolean app_block_termination_cb(GtkosxApplication *app, gpointer data)
 }
 
 
-/* For some reason osx doesn't like when the NSApplicationOpenFile handler blocks for 
+/* For some reason osx doesn't like when the NSApplicationOpenFile handler blocks for
  * a long time which may be caused by the project_ask_close() below. Finish the
  * NSApplicationOpenFile handler immediately and perform the potentially blocking
  * code on idle in this function. */
@@ -42,7 +42,7 @@ static gboolean open_project_idle(gchar *locale_path)
 	gchar *utf8_path;
 
 	utf8_path = utils_get_utf8_from_locale(locale_path);
-	if (app->project == NULL || 
+	if (app->project == NULL ||
 		(g_strcmp0(utf8_path, app->project->file_name) != 0 && project_ask_close()))
 		project_load_file_with_session(locale_path);
 	g_free(utf8_path);
