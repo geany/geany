@@ -1174,8 +1174,18 @@ gint main_lib(gint argc, gchar **argv)
 
 	ui_set_statusbar(TRUE, _("This is Geany %s."), main_get_version_string());
 	if (config_dir_result != 0)
-		ui_set_statusbar(TRUE, _("Configuration directory could not be created (%s)."),
-			g_strerror(config_dir_result));
+	{
+		const gchar *message = _("Configuration directory could not be created (%s).");
+		ui_set_statusbar(TRUE, message, g_strerror(config_dir_result));
+		g_warning(message, g_strerror(config_dir_result));
+	}
+	if (socket_info.lock_socket == -1)
+	{
+		const gchar *message =
+			_("IPC socket could not be created, see Help->Debug Messages for details.");
+		ui_set_statusbar(TRUE, message);
+		g_warning(message);
+	}
 
 	/* apply all configuration options */
 	apply_settings();
