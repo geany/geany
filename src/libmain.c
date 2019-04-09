@@ -1182,8 +1182,8 @@ gint main_lib(gint argc, gchar **argv)
 	{
 		const gchar *message =
 			_("IPC socket could not be created, see Help->Debug Messages for details.");
-		ui_set_statusbar(TRUE, message);
-		g_warning(message);
+		ui_set_statusbar(TRUE, "%s", message);
+		g_warning("%s", message);
 	}
 
 	/* apply all configuration options */
