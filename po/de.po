@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-13 17:58+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -1693,7 +1693,7 @@ msgstr "Neu (aus _Vorlage)"
 
 #: ../data/geany.glade.h:346
 msgid "_Open..."
-msgstr "Ö_ffnen..."
+msgstr "Ö_ffnen…"
 
 #: ../data/geany.glade.h:347
 msgid "Recent _Files"
@@ -1701,7 +1701,7 @@ msgstr "_Zuletzt geöffnet"
 
 #: ../data/geany.glade.h:348
 msgid "Save _As..."
-msgstr "Speichern _unter"
+msgstr "Speichern _unter…"
 
 #: ../data/geany.glade.h:349
 msgid "Sa_ve All"
@@ -1722,7 +1722,7 @@ msgstr "Seiteneigensc_haften"
 
 #: ../data/geany.glade.h:353
 msgid "_Print..."
-msgstr "_Drucken"
+msgstr "_Drucken…"
 
 #: ../data/geany.glade.h:354 ../src/notebook.c:495
 msgid "Close Ot_her Documents"
@@ -1822,7 +1822,7 @@ msgstr "Plugin-_Einstellungen"
 
 #: ../data/geany.glade.h:378
 msgid "_Find..."
-msgstr "_Suchen"
+msgstr "_Suchen…"
 
 #: ../data/geany.glade.h:379
 msgid "Find _Next"
@@ -1834,11 +1834,11 @@ msgstr "_Vorheriges"
 
 #: ../data/geany.glade.h:381 ../src/symbols.c:2625
 msgid "Find in F_iles..."
-msgstr "In _Dateien suchen..."
+msgstr "In _Dateien suchen…"
 
 #: ../data/geany.glade.h:382
 msgid "_Replace..."
-msgstr "_Ersetzen..."
+msgstr "_Ersetzen…"
 
 #: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
@@ -1858,7 +1858,7 @@ msgstr "Zur _vorherigen Markierung springen"
 
 #: ../data/geany.glade.h:387
 msgid "_Go to Line..."
-msgstr "_Gehe zu Zeile..."
+msgstr "_Gehe zu Zeile…"
 
 #: ../data/geany.glade.h:388 ../src/keybindings.c:539
 msgid "Find Next _Selection"
@@ -1882,11 +1882,11 @@ msgstr "_Ansicht"
 
 #: ../data/geany.glade.h:393
 msgid "Change _Font..."
-msgstr "_Schriftart ändern..."
+msgstr "_Schriftart ändern…"
 
 #: ../data/geany.glade.h:394
 msgid "Change _Color Scheme..."
-msgstr "_Farbschemata..."
+msgstr "_Farbschemata…"
 
 #: ../data/geany.glade.h:395
 msgid "Show _Markers Margin"
@@ -2038,7 +2038,7 @@ msgstr "Tabulat_oren durch Leerzeichen ersetzen"
 
 #: ../data/geany.glade.h:432
 msgid "_Replace Spaces with Tabs..."
-msgstr "_Leerzeichen durch Tabulatoren ersetzen..."
+msgstr "_Leerzeichen durch Tabulatoren ersetzen…"
 
 #: ../data/geany.glade.h:433
 msgid "_Fold All"
@@ -2062,7 +2062,7 @@ msgstr "_Projekt"
 
 #: ../data/geany.glade.h:438
 msgid "_New..."
-msgstr "_Neu..."
+msgstr "_Neu…"
 
 #: ../data/geany.glade.h:439
 msgid "_Recent Projects"
@@ -2107,7 +2107,7 @@ msgstr "_Wörter zählen"
 
 #: ../data/geany.glade.h:449
 msgid "Load Ta_gs File..."
-msgstr "_Symbole laden..."
+msgstr "_Symbole laden…"
 
 #: ../data/geany.glade.h:450
 msgid "_Help"
@@ -2131,11 +2131,11 @@ msgstr "Wi_ki"
 
 #: ../data/geany.glade.h:455
 msgid "Report a _Bug..."
-msgstr "Einen Fehler _berichten..."
+msgstr "Einen Fehler _berichten…"
 
 #: ../data/geany.glade.h:456
 msgid "_Donate..."
-msgstr "_Spenden..."
+msgstr "_Spenden…"
 
 #: ../data/geany.glade.h:457 ../src/sidebar.c:125
 msgid "Symbols"
@@ -2284,7 +2284,8 @@ msgstr "Andere:"
 msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
-msgstr ""
+msgstr "Copyright (c) 2005\n"
+"Die Geany-Contributoren"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -2535,7 +2536,7 @@ msgstr "_Ausführen"
 #. build the code with make custom
 #: ../src/build.c:2453 ../src/build.c:2644 ../src/build.c:2698
 msgid "Make Custom _Target..."
-msgstr "Make (eigenes _Target)..."
+msgstr "Make (eigenes _Target)…"
 
 #. build the code with make object
 #: ../src/build.c:2455 ../src/build.c:2645 ../src/build.c:2706
@@ -3237,7 +3238,7 @@ msgstr "Schlechter RegEx für Dateityp %s: %s"
 msgid "untitled"
 msgstr "unbenannt"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3932,7 +3933,7 @@ msgstr "Versionsinformation anzeigen und Programm beenden"
 
 #: ../src/libmain.c:535
 msgid "[FILES...]"
-msgstr "[Dateien...]"
+msgstr "[Dateien…]"
 
 #: ../src/libmain.c:537
 msgid "A fast and lightweight IDE."
@@ -3995,16 +3996,22 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Willkommen bei Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+"Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt "
+"es unter Hilfe->Debug-Meldungen"
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Soll Geany wirklich beendet werden?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Einstellungen erneut geladen."
 
@@ -4614,7 +4621,7 @@ msgstr "Kein Text zum Suchen angegeben."
 
 #: ../src/search.c:1708
 msgid "Searching..."
-msgstr "Suchen..."
+msgstr "Suchen…"
 
 #: ../src/search.c:1710
 #, c-format
@@ -4655,7 +4662,7 @@ msgid "Bad regex: %s"
 msgstr "Fehler in Ausdruck: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -5346,7 +5353,7 @@ msgstr "Seitenleiste _verstecken"
 
 #: ../src/sidebar.c:730 ../plugins/filebrowser.c:678
 msgid "_Find in Files..."
-msgstr "In _Dateien suchen..."
+msgstr "In _Dateien suchen…"
 
 #: ../src/sidebar.c:740
 msgid "Show _Paths"
@@ -5672,15 +5679,15 @@ msgstr "Klasse _erstellen"
 
 #: ../plugins/classbuilder.c:1093
 msgid "_C++ Class..."
-msgstr "_C++-Klasse..."
+msgstr "_C++-Klasse…"
 
 #: ../plugins/classbuilder.c:1096
 msgid "_GTK+ Class..."
-msgstr "_GTK+-Klasse..."
+msgstr "_GTK+-Klasse…"
 
 #: ../plugins/classbuilder.c:1099
 msgid "_PHP Class..."
-msgstr "_PHP-Klasse..."
+msgstr "_PHP-Klasse…"
 
 #: ../plugins/htmlchars.c:38
 msgid "HTML Characters"
@@ -5759,7 +5766,7 @@ msgstr "HTML (Name)"
 
 #: ../plugins/htmlchars.c:736
 msgid "_Insert Special HTML Characters..."
-msgstr "_HTML-Sonderzeichen einfügen..."
+msgstr "_HTML-Sonderzeichen einfügen…"
 
 #. Add menuitem for html replacement functions
 #: ../plugins/htmlchars.c:751
@@ -5832,12 +5839,12 @@ msgstr "_Exportieren"
 #. HTML
 #: ../plugins/export.c:753
 msgid "As _HTML..."
-msgstr "Als _HTML exportieren..."
+msgstr "Als _HTML exportieren…"
 
 #. LaTeX
 #: ../plugins/export.c:759
 msgid "As _LaTeX..."
-msgstr "Als _LaTeX exportieren..."
+msgstr "Als _LaTeX exportieren…"
 
 #: ../plugins/filebrowser.c:49
 msgid "File Browser"
@@ -6571,10 +6578,6 @@ msgstr "Oben und Unten"
 
 #~ msgid "Choose Project Run Command"
 #~ msgstr "Wählen Sie das Kommando zum Ausführen des Projektes"
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr ""
-#~ "Suche fehlgeschlagen (Sie finden Details in »Hilfe -> Debug Meldungen«)."
 
 #~ msgid "My"
 #~ msgstr "My"
