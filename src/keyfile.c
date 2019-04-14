@@ -831,7 +831,9 @@ static void load_dialog_prefs(GKeyFile *config)
 		"none");
 	if (tmp_string)
 	{
-		const GeanyEncoding *enc = encodings_get_from_charset(tmp_string);
+		const GeanyEncoding *enc = NULL;
+		if (strcmp(tmp_string, "none") != 0)
+			enc = encodings_get_from_charset(tmp_string);
 		if (enc != NULL)
 			file_prefs.default_open_encoding = enc->idx;
 		else
