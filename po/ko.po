@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2008-10-14 19:27+0100\n"
 "Last-Translator: Song Hyeon Sik <hyeonsiksong@gmail.com>\n"
 "Language-Team: Korean\n"
@@ -3174,7 +3174,7 @@ msgstr "%s 파일형식에 맞지 않는 정규표현식: %s"
 msgid "untitled"
 msgstr "무제"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3764,11 +3764,11 @@ msgstr "바로 가기"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "다음 바로 가기는 변경 가능:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "메모 및 낙서로 사용할 문자열을 입력하십시오."
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "하나 또는 그 이상의 세션 파일 불러오기 실패함."
 
@@ -3929,16 +3929,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "지니 %s 입니다."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "환경설정 폴더를 만들 수 없습니다 (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "정말로 끝낼까요?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "환경설정 파일 다시 불러옴."
 
@@ -4559,7 +4563,7 @@ msgid "Bad regex: %s"
 msgstr "올바르지 않은 정규 표현식: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

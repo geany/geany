@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2008-02-04 12:44+0300\n"
 "Last-Translator: Boris Dibrov <dibrov.bor@gmail.com>\n"
 "Language-Team: \n"
@@ -3366,7 +3366,7 @@ msgstr ""
 msgid "untitled"
 msgstr "безіменний"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3993,13 +3993,13 @@ msgstr "Гарячі клавіші"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Наступні гарячі клавіші були налаштовані:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Друкуйте тут усе що забажаєте і використовуйте це вікно для приміток або як "
 "чернетку"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Помилка завантаження одного або більше файлів сесії."
 
@@ -4161,16 +4161,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Це Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Тека конфігурацій не може бути створена (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Ви дійсно бажаєте вийти?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 #, fuzzy
 msgid "Configuration files reloaded."
 msgstr "Помилка під час компіляції."
@@ -4813,7 +4817,7 @@ msgid "Bad regex: %s"
 msgstr ""
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

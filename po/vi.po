@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2009-09-29 21:16+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
@@ -3301,7 +3301,7 @@ msgstr "Sai đặt biểu thức chính quy cho dạng tập tin %s: %s"
 msgid "untitled"
 msgstr "không tên"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3900,11 +3900,11 @@ msgstr "Phím tắt"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Có thể cấu hình những phím tắt này:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Gõ bất cứ đoạn nào vào đây: dùng nó là bảng thông báo/viết tháu"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Lỗi nạp một hay nhiều tập tin phiên chạy."
 
@@ -4070,16 +4070,21 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Đây là Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Không thể tạo thư mục cấu hình (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr "Lỗi tìm kiếm (xem Trợ giúp > Thông điệp Gỡ lỗi để tìm chi tiết)."
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Bạn thật sự muốn thoát không?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Các tập tin cấu hình đã được nạp lại."
 
@@ -4713,7 +4718,7 @@ msgid "Bad regex: %s"
 msgstr "Sai đặt biểu thức chính quy cho dạng tập tin %s: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6573,9 +6578,6 @@ msgstr "Dưới"
 #~ msgid "Replaced text in %u file."
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Đã thay thế đoạn văn trong %u tập tin."
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr "Lỗi tìm kiếm (xem Trợ giúp > Thông điệp Gỡ lỗi để tìm chi tiết)."
 
 #~ msgid "My"
 #~ msgstr "Tôi"

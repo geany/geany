@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
 "Last-Translator: Chikahiro Masami <masami@linux-lhx4.site>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -3149,7 +3149,7 @@ msgstr "ファイル種類 %s の正規表現が不正です: %s"
 msgid "untitled"
 msgstr "untitled"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3721,11 +3721,11 @@ msgstr "ショートカットキー"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "以下のショートカットキーが設定できます:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "メモとして、ここには自由に入力できます。"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "セッションファイルの読み込みに失敗"
 
@@ -3889,16 +3889,21 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Geany %s を起動しました"
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "設定ディレクトリが作成できませんでした(%s)"
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr "検索に失敗しました(ヘルプのデバッグメッセージを確認してください)。"
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "本当に終了しますか?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "設定ファイルを再読み込みしました"
 
@@ -4531,7 +4536,7 @@ msgid "Bad regex: %s"
 msgstr "正規表現が不正です: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6379,9 +6384,6 @@ msgstr "上下に並べる"
 #~ msgid "Replaced text in %u file."
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "%u ファイルでテキストを置換しました"
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr "検索に失敗しました(ヘルプのデバッグメッセージを確認してください)。"
 
 #~ msgid "My"
 #~ msgstr "私の"

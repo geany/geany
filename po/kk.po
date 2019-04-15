@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2016-10-31 09:07+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
@@ -3086,7 +3086,7 @@ msgstr ""
 msgid "untitled"
 msgstr "атаусыз"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3658,11 +3658,11 @@ msgstr "Пернетақта жарлықтары"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Келесі пернетақта жарлықтары баптауға келеді:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Керек болса, осында жазбаларыңызды қалдыра аласыз"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Бір не одан да көп сессия файлдарын жүктеу сәтсіз."
 
@@ -3827,16 +3827,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Бұл - Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Баптаулар бумасын жасау мүмкін емес (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Шығуды шынымен қалайсыз ба?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Баптаулар файлдары қайта жүктелді."
 
@@ -4462,7 +4466,7 @@ msgid "Bad regex: %s"
 msgstr "Қате тұр. өрнек: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2018-12-06 10:21+0800\n"
 "Last-Translator: Hsiu-Ming Chang <cges30901@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -3084,7 +3084,7 @@ msgstr "不當的正規表示式用於檔案型態 %s：%s"
 msgid "untitled"
 msgstr "無標題"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3656,11 +3656,11 @@ msgstr "快速鍵"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "下列的快速鍵是可以設定的："
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "在這裡鍵入您想要什麼，並用它做為記事/塗鴉板"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "載入一個或更多作業階段檔案時失敗。"
 
@@ -3818,16 +3818,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "這是 Geany %s。"
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "無法建立組態目錄 (%s)。"
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "您真的要離開嗎？"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "重新載入組態檔案。"
 
@@ -4443,7 +4447,7 @@ msgid "Bad regex: %s"
 msgstr "不當的正規表示式：%s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

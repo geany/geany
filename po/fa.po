@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2011-09-15 17:23+0330\n"
 "Last-Translator: Moein Owhadi Kareshk <moein.owhadi@gmail.com>\n"
 "Language-Team: Moein Owhadi Kareshk <moein.owhadi@gmail.com>\n"
@@ -3270,7 +3270,7 @@ msgstr "Bad regex for filetype %s: %s"
 msgid "untitled"
 msgstr "untitled"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3857,11 +3857,11 @@ msgstr "Keyboard Shortcuts"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "The following keyboard shortcuts are configurable:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Type here what you want, use it as a notice/scratch board"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Failed to load one or more session files."
 
@@ -4031,16 +4031,21 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "This is Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Configuration directory could not be created (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr "Search failed (see Help->Debug Messages for details)."
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Do you really want to quit?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Configuration files reloaded."
 
@@ -4667,7 +4672,7 @@ msgid "Bad regex: %s"
 msgstr "Bad regex: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6523,9 +6528,6 @@ msgstr "Bottom"
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Replaced text in %u file."
 #~ msgstr[1] "Replaced text in %u files."
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr "Search failed (see Help->Debug Messages for details)."
 
 #~ msgid "My"
 #~ msgstr "My"

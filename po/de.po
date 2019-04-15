@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-13 17:58+0200\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2015-03-31 07:10+0200\n"
 "Last-Translator: Frank Lanitz <frank@frank.uvena.de>\n"
 "Language-Team: German <geany-i18n@uvena.de>\n"
@@ -2284,7 +2284,8 @@ msgstr "Andere:"
 msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
-msgstr "Copyright (c) 2005\n"
+msgstr ""
+"Copyright (c) 2005\n"
 "Die Geany-Contributoren"
 
 #: ../src/about.c:169
@@ -3814,12 +3815,12 @@ msgstr "Tastenkürzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Die folgenden Tastenkürzel sind frei definierbar:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Schreiben Sie hier rein, was sie möchten. Sie können es als Notizbuch nutzen."
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr ""
 "Eine oder mehrere Datei(en) aus der letzten Sitzung konnte(n) nicht geladen "
@@ -4004,8 +4005,8 @@ msgstr "Konfigurationsverzeichnis konnte nicht erstellt werden (%s)."
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
-"Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt "
-"es unter Hilfe->Debug-Meldungen"
+"Der IPC-Socket konnt konnte nicht erstellt werden. Mehr Details gibt es "
+"unter Hilfe->Debug-Meldungen"
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"

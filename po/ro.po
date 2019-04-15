@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2008-10-15 01:47+0200\n"
 "Last-Translator: Alex Eftimie <alexeftimie(at)gmail(dot)com>\n"
 "Language-Team: Romanian\n"
@@ -3343,7 +3343,7 @@ msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
 msgid "untitled"
 msgstr "fără titlu"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3948,12 +3948,12 @@ msgstr "Scurtături"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Următoarele scurtături sunt configurabile:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Scrieți orice doriți, folosiți spațiul ca pe o zonă de notițe/mâzgălituri"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Încărcarea unuia sau mai multor fișiere de sesiune eșuată."
 
@@ -4115,16 +4115,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Acesta este Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Dosarul de configurație nu a putut fi creat (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Sigur doriți să părăsiți programul?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Fișierele de configurare au fost reîncărcate"
 
@@ -4777,7 +4781,7 @@ msgid "Bad regex: %s"
 msgstr "Expresie regulată greșită pentru tipul de fișier %s: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

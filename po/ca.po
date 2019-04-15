@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2017-11-06 10:07+0100\n"
 "Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <ca@dodds.net>\n"
@@ -3212,7 +3212,7 @@ msgstr "Expressió regular incorrecta per al tipus de fitxer %s: %s"
 msgid "untitled"
 msgstr "sense títol"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3785,12 +3785,12 @@ msgstr "Dreceres de Teclat"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Les dreceres de teclat següents són configurables:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr ""
 "Teclegeu el que vulgueu, utilitzeu-ho com a un tauler d'avisos/esborranys"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "No s'ha pogut carregar un o més fitxers de sessió."
 
@@ -3963,16 +3963,20 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "No s'ha pogut crear el directori de configuració (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Esteu segur que realment voler sortir?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "S'ha recarregat el fitxer de configuració."
 
@@ -4619,7 +4623,7 @@ msgid "Bad regex: %s"
 msgstr "Expressió regular incorrecta: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"

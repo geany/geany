@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2009-05-31 13:56+0100\n"
 "Last-Translator: Laurent HOELTGEN <laurent.hoeltgen@googlemail.com>\n"
 "Language-Team: Letzebuergesch\n"
@@ -3343,7 +3343,7 @@ msgstr "Schlechten regulären Ausdrock fir den Typ vun Fichier %s: %s"
 msgid "untitled"
 msgstr "ouni Titel"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3944,11 +3944,11 @@ msgstr "Tastatur Kierzel"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Déi folgend Kierzel kënnen agestallt ginn:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Hei kënnt dier aginn wat dier wëllt, benotzt et wei en Notizbuch"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Konnt verschidden Sëtzungsfichieren net lueden."
 
@@ -4118,16 +4118,21 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Dëst as Geany '%s'."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Den Cofiguratiounsordner konnt net erstallt ginn (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr "Sich feelgeschloen (kuckt ënnert Hëllef->Debug Messagen fir Detailer)."
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Well dier wierklech ophalen?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Fichier mat den Configuratiounen nei gelueden."
 
@@ -4767,7 +4772,7 @@ msgid "Bad regex: %s"
 msgstr "Schlechten regulären Ausdrock fir den Typ vun Fichier %s: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6645,10 +6650,6 @@ msgstr "Ënnen"
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Text ersat an %u Fichier."
 #~ msgstr[1] "Text ersat an %u Fichieren"
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr ""
-#~ "Sich feelgeschloen (kuckt ënnert Hëllef->Debug Messagen fir Detailer)."
 
 #~ msgid "My"
 #~ msgstr "Mäin"

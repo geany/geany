@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2010-03-05 17:14+0100\n"
 "Last-Translator: maacub <maacub@gmail.com>\n"
 "Language-Team: Asturian <alministradores@softastur.org>\n"
@@ -3305,7 +3305,7 @@ msgstr "Espresión regular incorreuta pa la triba de ficheru %s: %s"
 msgid "untitled"
 msgstr "ensin títulu"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3895,11 +3895,11 @@ msgstr "Ataxos de Tecláu"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Los siguientes ataxos de tecláu son configurables:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Escribe equí lo que quies, úsalo como nota o borrador"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Fallu al cargar un o más ficheros de la sesión."
 
@@ -4072,16 +4072,21 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Esti ye Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "El direutoriu de configuración non pudo ser criáu (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr "Falló la gueta (Ver Aida->Mensaxes de Depuración pa detalles)."
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "¿De xuro que quies colar?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Ficheros de configuración recargaos."
 
@@ -4720,7 +4725,7 @@ msgid "Bad regex: %s"
 msgstr "Espresión regular incorreuta pa la triba de ficheru %s: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6599,9 +6604,6 @@ msgstr "Embaxu"
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Reemplazar testu en %u ficheru."
 #~ msgstr[1] "Reemplazar testu en %u ficheros."
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr "Falló la gueta (Ver Aida->Mensaxes de Depuración pa detalles)."
 
 #~ msgid "My"
 #~ msgstr "El mio"

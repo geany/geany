@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-29 11:24+0100\n"
+"POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2018-12-10 15:42+0100\n"
 "Last-Translator: Tony Mattsson <superxorn@gmail.com>\n"
 "Language-Team: Swedish <geany-i18n@uvena.de>\n"
@@ -3167,7 +3167,7 @@ msgstr "Felaktig rexex för filtypen %s: %s"
 msgid "untitled"
 msgstr "namnlös"
 
-#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:169
+#: ../src/highlighting.c:1229 ../src/libmain.c:867 ../src/socket.c:170
 #: ../src/templates.c:231
 #, c-format
 msgid "Could not find file '%s'."
@@ -3739,11 +3739,11 @@ msgstr "Tangentgenvägar"
 msgid "The following keyboard shortcuts are configurable:"
 msgstr "Följande tangentbordsgenvägar kan konfigureras:"
 
-#: ../src/keyfile.c:1032
+#: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
 msgstr "Skriv vad du vill här, använd den som ett klotterplank"
 
-#: ../src/keyfile.c:1259
+#: ../src/keyfile.c:1261
 msgid "Failed to load one or more session files."
 msgstr "Kunde ej ladda en eller fler av sessionens filer."
 
@@ -3907,16 +3907,22 @@ msgstr ""
 msgid "This is Geany %s."
 msgstr "Detta är Geany %s."
 
-#: ../src/libmain.c:1176
+#: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
 msgstr "Konfigureringsmappen kunde inte skapas (%s)."
 
-#: ../src/libmain.c:1403
+#: ../src/libmain.c:1184
+#, fuzzy
+msgid "IPC socket could not be created, see Help->Debug Messages for details."
+msgstr ""
+"Sökningen misslyckades (se Hjälp -> Debugmeddelanden för mer information)."
+
+#: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
 msgstr "Vill du verkligen avsluta?"
 
-#: ../src/libmain.c:1441
+#: ../src/libmain.c:1451
 msgid "Configuration files reloaded."
 msgstr "Konfigurationsfilerna laddades om."
 
@@ -4557,7 +4563,7 @@ msgid "Bad regex: %s"
 msgstr "Felaktig rexex: %s"
 
 #. TODO maybe this message needs a rewording
-#: ../src/socket.c:235
+#: ../src/socket.c:236
 msgid ""
 "Geany tried to access the Unix Domain socket of another instance running as "
 "another user.\n"
@@ -6347,10 +6353,6 @@ msgstr "Topp och botten"
 #~ msgid_plural "Replaced text in %u files."
 #~ msgstr[0] "Ersatt text i %u fil."
 #~ msgstr[1] "Ersatt text i %u filer."
-
-#~ msgid "Search failed (see Help->Debug Messages for details)."
-#~ msgstr ""
-#~ "Sökningen misslyckades (se Hjälp -> Debugmeddelanden för mer information)."
 
 #~ msgid "My"
 #~ msgstr "Min"
