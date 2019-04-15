@@ -4,10 +4,10 @@
 # scootergrisen, 2018.
 msgid ""
 msgstr ""
-"Project-Id-Version: geany 1.34\n"
+"Project-Id-Version: geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-04 22:46+0200\n"
+"PO-Revision-Date: 2019-04-15 23:17+0200\n"
 "Last-Translator: scootergrisen\n"
 "Language-Team: Danish\n"
 "Language: da\n"
@@ -2227,6 +2227,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Ophavsret (c) 2005\n"
+"Geany-bidragsyderne"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -3915,7 +3917,7 @@ msgstr "Konfigurationsmappen kunne ikke oprettes (%s)."
 
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr ""
+msgstr "IPC-soklen kunne ikke oprettes, se Hjælp->Fejlretningsmeddelelser for detaljer."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -5989,20 +5991,3 @@ msgstr "Side om side"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Øverst og nederst"
-
-#~ msgid ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "All rights reserved."
-#~ msgstr ""
-#~ "Ophavsret (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "Alle rettigheder forbeholdes."
