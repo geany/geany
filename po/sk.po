@@ -2,14 +2,14 @@
 # Copyright (C) 2006 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # Tomáš Havlas <tomas.havlas@raven-systems.eu>, 2014.
-# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2018.
+# Andrej Herceg <chrono.i18n@gmail.com>, 2015-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Geany 1.34\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-04 19:26+0100\n"
+"PO-Revision-Date: 2019-04-16 20:38+0200\n"
 "Last-Translator: Andrej Herceg <chrono.i18n@gmail.com>\n"
 "Language-Team: Slovak\n"
 "Language: sk\n"
@@ -864,7 +864,7 @@ msgid ""
 "Automatic completion of known symbols in open files (function names, global "
 "variables, ...)"
 msgstr ""
-"Automatické dokončovanie známych symbolov v otvorenom súbore (názvy funkcií, "
+"Automatické dokončovanie známych symbolov v otvorenom súbore (názvov funkcií, "
 "globálnych premenných, …)"
 
 #: ../data/geany.glade.h:177
@@ -1211,7 +1211,7 @@ msgid ""
 "Ensures that newline characters always get converted before saving, avoiding "
 "mixed line endings in the same file"
 msgstr ""
-"Pred uloženým budú znaky konca riadkov konvertované na rovnaký znak, čím sa "
+"Pred uložením budú znaky konca riadkov konvertované na rovnaký znak, čím sa "
 "predchádza výskytu rôznych znakov konca riadkov v jednom súbore"
 
 #: ../data/geany.glade.h:251
@@ -2237,6 +2237,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Prispievatelia do Geany"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -3928,6 +3930,8 @@ msgstr "Nebolo možné vytvoriť adresár s konfiguráciou (%s)."
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
+"Nebolo možné vytvoriť IPC soket, pre viac detailov pozrite Pomoc->Ladiace "
+"správy."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -3988,7 +3992,7 @@ msgid ""
 "The plugin \"%s\" is not binary compatible with this release of Geany - "
 "please recompile it."
 msgstr ""
-"Zásuvný modul „%s“ nie je binárne kompatibilný s aktuálnou verziou Geany  - "
+"Zásuvný modul „%s“ nie je binárne kompatibilný s aktuálnou verziou Geany - "
 "prosím zostavte modul znovu."
 
 #: ../src/plugins.c:1270
@@ -4336,7 +4340,7 @@ msgid ""
 "Use Perl-like regular expressions. For detailed information about using "
 "regular expressions, please refer to the manual."
 msgstr ""
-"Používať regulárne výrazy jayzka Perl. Pre viac detailov o používaní "
+"Používať regulárne výrazy jazyka Perl. Pre viac detailov o používaní "
 "regulárnych výrazov, si prečítajte dokumentáciu."
 
 #: ../src/search.c:317
@@ -4730,7 +4734,7 @@ msgstr "Moduly"
 
 #: ../src/symbols.c:556 ../src/symbols.c:603
 msgid "Traits"
-msgstr ""
+msgstr "Črty"
 
 #: ../src/symbols.c:557
 msgid "Implementations"
@@ -5008,7 +5012,7 @@ msgid ""
 "Cannot execute template command \"%s\". Hint: incorrect paths in the command "
 "are a common cause of errors. Error: %s."
 msgstr ""
-"Nie je možné spustíť príkaz šablóny „%s“. Tip: nesprávne cesty v príkaze sú "
+"Nie je možné spustiť príkaz šablóny „%s“. Tip: nesprávne cesty v príkaze sú "
 "častou príčinou chýb. Chyba: %s."
 
 #. custom actions defined in toolbar_init(): "New", "Open", "SearchEntry", "GotoEntry", "Build"
@@ -5412,7 +5416,7 @@ msgstr "Zavrieť všetko"
 
 #: ../src/ui_utils.c:2446
 msgid "Geany cannot start!"
-msgstr "Nie je možné zapnúť Geany!"
+msgstr "Geany sa nedá spustiť!"
 
 #: ../src/utils.c:87
 msgid "Select Browser"
@@ -5550,7 +5554,7 @@ msgstr "Globálna"
 
 #: ../plugins/classbuilder.c:526
 msgid "Base GType:"
-msgstr "Zakladný GType:"
+msgstr "Základný GType:"
 
 #: ../plugins/classbuilder.c:531
 msgid "Implements:"
@@ -5992,20 +5996,3 @@ msgstr "Vedľa seba"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "Nad sebou"
-
-#~ msgid ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "All rights reserved."
-#~ msgstr ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "Všetky práva vyhradené."
