@@ -1,23 +1,23 @@
 # Portuguese translation for geany
-# Copyright (C) 2006 The Geany contributors.
+# Copyright (C) 2006-2019 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 #
 # André Glória <gloria_dot_andre_at_gmail_dot_com> 2009 - 2014
-# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015 - 2017, 2018.
+# Pedro Albuquerque <palbuquerque73@gmail.com>, 2015 - 2019.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-05 07:26+0000\n"
+"POT-Creation-Date: 2019-04-16 02:36+0000\n"
+"PO-Revision-Date: 2019-04-16 10:20+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: Plural-Forms: nplurals=2; plural=n>1;\n"
 "X-Launchpad-Export-Date: 2010-03-08 13:33+0000\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
@@ -2263,6 +2263,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Os colaboradores do Geany"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -3957,11 +3959,10 @@ msgid "Configuration directory could not be created (%s)."
 msgstr "A pasta de configurações não pôde ser criada (%s)."
 
 #: ../src/libmain.c:1184
-#, fuzzy
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
-"Procura falhou (consulte Ajuda->Mensagens de depuração (debug) para "
-"detalhes)."
+"Impossível criar o socket IPC, veja Ajuda->Mensagens de depuração para "
+"detalhes."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
