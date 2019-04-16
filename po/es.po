@@ -1,16 +1,16 @@
 # translation of es.po to
-# Spanish translation file for Geany 1.33
-# Copyright (C) 2006 The Geany contributors.
+# Spanish translation file for Geany 1.35
+# Copyright (C) 2006-2019 The Geany contributors.
 # This file is distributed under the same license as the geany package.
-# Damián Viano <des@damianv.com.ar>, 2006, 2007.
+# Damián Viano <des@damianv.com.ar>, 2006 - 2007.
 # Antonio Jiménez González <ajimenez@linuxmail.org>, 2009 - 2010.
-# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2018.
+# Lucas Vieites <lucas.vieites@gmail.com>, 2010 - 2019.
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-05 15:34+0100\n"
+"POT-Creation-Date: 2019-04-16 02:36+0000\n"
+"PO-Revision-Date: 2019-04-16 11:34+0200\n"
 "Last-Translator: Lucas Vieites Fariña <lucas@codexion.com>\n"
 "Language-Team: Español <geany-i18n@uvena.de>\n"
 "Language: es\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Geany 1.32\n"
+"X-Generator: Geany / PoHelper 1.34\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -2278,6 +2278,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"The Geany contributors"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -3984,7 +3986,7 @@ msgstr "No se ha podido crear el directorio de configuración (%s)."
 
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr ""
+msgstr "No se ha podido crear el socket IPC, consulte Ayuda->Mensajes de depuración para obtener más información."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
