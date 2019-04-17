@@ -1,17 +1,17 @@
 # Translation Geany to Russian.
-# Copyright (C) 2006 The Geany contributors.
+# Copyright (C) 2006-2019 The Geany contributors.
 # This file is distributed under the same license as the Geany package.
 # John Wehin <john.wehin@gmail.com>, 2008-2009.
 # Denis Koryavov <dkoryavov@yandex.ru>, 2010.
 # Igor Burmistrov <meyday@yandex.ru>, 2012
 # Maxim Musatov <m1kc@yandex.ru>, 2012
-# Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2015
+# Pavel Roschin <rpg89(at)post(dot)ru>, 2014-2019
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-07 05:52+0400\n"
+"PO-Revision-Date: 2019-04-16 21:50+0400\n"
 "Last-Translator: Pavel Roschin <rpg89(at)post(dot)ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
@@ -2248,6 +2248,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Участники проекта Geany"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -3945,7 +3947,7 @@ msgstr "Каталог настроек не может быть создан (%
 
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr ""
+msgstr "IPC-сокет не может быть создан, подробнее смотрите Справка->Отладочные сообщения."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -6020,20 +6022,3 @@ msgstr "По вертикали"
 #: ../plugins/splitwindow.c:467
 msgid "Top and Bottom"
 msgstr "По горизонтали"
-
-#~ msgid ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "All rights reserved."
-#~ msgstr ""
-#~ "Copyright (c) 2005-2019\n"
-#~ "Colomban Wendling\n"
-#~ "Nick Treleaven\n"
-#~ "Matthew Brush\n"
-#~ "Enrico Tröger\n"
-#~ "Frank Lanitz\n"
-#~ "Все права защищены."
