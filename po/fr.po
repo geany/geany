@@ -2298,6 +2298,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Les contributeurs de Geany"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -4009,10 +4011,10 @@ msgid "Configuration directory could not be created (%s)."
 msgstr "Le dossier de configuration n'a pas pu être créé (%s)."
 
 #: ../src/libmain.c:1184
-#, fuzzy
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
-"La recherche a échoué (voir Aide->Messages de débogage pour plus de détails)."
+"Le socket IPC n'a pas pu être créé, voyez Aide->Messages de débogage pour "
+"plus de détails."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
