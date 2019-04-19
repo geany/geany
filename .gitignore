@@ -57,6 +57,8 @@ Makefile.in
 /stamp-h.in
 /*.tar.*
 /TODO.*
+/patches/
+/all_sci_defines.txt
 
 #-----------------------------------------------------------------------
 # /po/
