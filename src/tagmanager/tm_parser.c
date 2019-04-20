@@ -628,7 +628,7 @@ static void add_subparser(TMParserType lang, TMParserType sublang, TMSubparserMa
 
 #define SUBPARSER_MAP_ENTRY(lang, sublang, map) add_subparser(TM_PARSER_##lang, TM_PARSER_##sublang, map, G_N_ELEMENTS(map))
 
-static void init_subparser_map()
+static void init_subparser_map(void)
 {
 	SUBPARSER_MAP_ENTRY(HTML, JAVASCRIPT, subparser_HTML_javascript_map);
 }
