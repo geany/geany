@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2006 The Geany contributors.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Ingmārs Dīriņš <melhiors14@gmail.com>, 2017.
+# Ingmārs Dīriņš <melhiors14@gmail.com>, 2017-2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-01-18 21:49+0200\n"
+"POT-Creation-Date: 2019-04-19 02:36+0000\n"
+"PO-Revision-Date: 2019-04-19 15:54+0300\n"
 "Last-Translator: Ingmārs Dīriņš <melhiors14@gmail.com>\n"
 "Language-Team: \n"
 "Language: lv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
 msgid "Geany"
@@ -150,11 +150,11 @@ msgstr "Sakrist figūriekavām"
 
 #: ../data/geany.glade.h:27
 msgid "Left"
-msgstr "Kreisā"
+msgstr "Pa kreisi"
 
 #: ../data/geany.glade.h:28
 msgid "Right"
-msgstr "Labā"
+msgstr "Pa labi"
 
 #: ../data/geany.glade.h:29
 msgid "Top"
@@ -174,7 +174,7 @@ msgstr "Ielādēt datnes no pēdējās sesijas"
 
 #: ../data/geany.glade.h:33
 msgid "Opens at startup the files from the last session"
-msgstr "Pie sāknēšanas atver datnes no pēdējās sesijas"
+msgstr "Pēc palaišanas atver datnes no pēdējās sesijas"
 
 #: ../data/geany.glade.h:34
 msgid "Load virtual terminal support"
@@ -185,8 +185,8 @@ msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
-"Vai virtuālā termināļa emulēšanai (VTE) vajadzētu tikt ielādētai pie "
-"sāknēšanas, izslēdziet to, ja jums tā nav vajadzīga"
+"Vai virtuālā termināļa emulēšanai (VTE) vajadzētu tikt ielādētai palaišanas "
+"laikā — izslēdziet, ja jums tā nav vajadzīga"
 
 #: ../data/geany.glade.h:36
 msgid "Enable plugin support"
@@ -194,7 +194,7 @@ msgstr "Ieslēgt spraudņu atbalstu"
 
 #: ../data/geany.glade.h:37
 msgid "<b>Startup</b>"
-msgstr "<b>Sāknēšana</b>"
+msgstr "<b>Palaišana</b>"
 
 #: ../data/geany.glade.h:38
 msgid "Save window size"
@@ -226,7 +226,7 @@ msgstr "<b>Izslēgšana</b>"
 
 #: ../data/geany.glade.h:45
 msgid "Startup path:"
-msgstr "Sāknēšanas ceļš:"
+msgstr "Palaišanas ceļš:"
 
 #: ../data/geany.glade.h:46
 msgid ""
@@ -263,11 +263,11 @@ msgstr "<b>Ceļi</b>"
 
 #: ../data/geany.glade.h:52
 msgid "Startup"
-msgstr "Sāknēšana"
+msgstr "Palaišana"
 
 #: ../data/geany.glade.h:53
 msgid "Beep on errors or when compilation has finished"
-msgstr "Pīkstēt pie kļūdām vai kad kompilēšana ir pabeigusies"
+msgstr "Pīkstēt pie kļūdām un pie kompilēšanas beigām"
 
 #: ../data/geany.glade.h:54
 msgid ""
@@ -279,7 +279,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:55
 msgid "Switch to status message list at new message"
-msgstr "Pārslēgt uz statusa ziņojuma sarakstu pie jauna ziņojuma"
+msgstr "Pārslēgties uz statusa ziņojumu sarakstu pie jauna ziņojuma"
 
 #: ../data/geany.glade.h:56
 msgid ""
@@ -333,7 +333,7 @@ msgstr "<b>Dažādi</b>"
 
 #: ../data/geany.glade.h:64
 msgid "Always wrap search"
-msgstr "Vienmēr aplauzt meklēšanu"
+msgstr "Vienmēr veikt meklēšanu visā dokumentā"
 
 #: ../data/geany.glade.h:65
 msgid "Always wrap search around the document"
@@ -350,7 +350,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:68
 msgid "Use the current word under the cursor for Find dialogs"
-msgstr "Lietot pašreizējo vārdu zem kursora priekš dialogiem \"Atrast\""
+msgstr "Lietot pašreizējo vārdu zem kursora dialogā \"Atrast\""
 
 #: ../data/geany.glade.h:69
 msgid ""
@@ -362,7 +362,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
-msgstr "Lietot pašreizējās datnes datņu katalogu priekš \"Atrast datnēs\""
+msgstr "Lietot pašreizējās datnes datņu katalogu dialogā \"Atrast datnēs\""
 
 #: ../data/geany.glade.h:71
 msgid "<b>Search</b>"
@@ -370,7 +370,7 @@ msgstr "<b>Meklēt</b>"
 
 #: ../data/geany.glade.h:72
 msgid "Use project-based session files"
-msgstr "Lietot uz projektiem bāzētas sesiju datnes"
+msgstr "Lietot katram projektam savu sesijas datni"
 
 #: ../data/geany.glade.h:73
 msgid ""
@@ -382,7 +382,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
-msgstr "Uzglabāt projekta datni iekšpus projekta bāzes datņu kataloga"
+msgstr "Uzglabāt projekta datni projekta bāzes datņu katalogā"
 
 #: ../data/geany.glade.h:75
 msgid ""
@@ -391,10 +391,9 @@ msgid ""
 "directory. You can still change the path of the project file in the New "
 "Project dialog."
 msgstr ""
-"Kad ieslēgts, projekta datne pēc noklusējuma tiek uzglabāta iekšpus projekta "
-"bāzes datņu kataloga, nevis vienu datņu katalogu augstāk, kad izveido jaunus "
-"projektus. Jūs joprojām varat izmainīt projekta datnes ceļu dialogā \"Jauns "
-"projekts\"."
+"Kad ieslēgts, jauna projekta datne pēc noklusējuma tiek uzglabāta projekta "
+"bāzes datņu katalogā, nevis vienu datņu katalogu augstāk. Jūs joprojām varat "
+"izmainīt projekta datnes ceļu dialogā \"Jauns projekts\"."
 
 #: ../data/geany.glade.h:76
 msgid "<b>Projects</b>"
@@ -538,7 +537,7 @@ msgid ""
 "of the notebook"
 msgstr ""
 "Vai novietot datņu cilnes aiz pašreizējās cilnes, nevis pie piezīmju "
-"grāmatas virsotnēm"
+"grāmatas malas"
 
 #: ../data/geany.glade.h:109
 msgid "Double-clicking hides all additional widgets"
@@ -578,7 +577,7 @@ msgstr "_Pielikt rīkjoslu pie izvēlnes"
 
 #: ../data/geany.glade.h:118
 msgid "Pack the toolbar to the main menu to save vertical space"
-msgstr "Sapakot rīkjoslu uz galveno izvēlni, lai ietaupītu vertikālo vietu"
+msgstr "Ievietot rīkjoslu aiz galvenās izvēlnes, lai ietaupītu vertikālo vietu"
 
 #: ../data/geany.glade.h:119 ../src/toolbar.c:943
 msgid "Customize Toolbar"
@@ -586,7 +585,7 @@ msgstr "Pielāgot rīkjoslu"
 
 #: ../data/geany.glade.h:120
 msgid "System _default"
-msgstr "Sistēmas _noklusētais"
+msgstr "_Sistēmas"
 
 #: ../data/geany.glade.h:121
 msgid "Images _and text"
@@ -594,11 +593,11 @@ msgstr "_Attēli un teksts"
 
 #: ../data/geany.glade.h:122
 msgid "_Images only"
-msgstr "T_ikai attēlus"
+msgstr "T_ikai attēli"
 
 #: ../data/geany.glade.h:123
 msgid "_Text only"
-msgstr "_Tikai tekstu"
+msgstr "_Tikai teksts"
 
 #: ../data/geany.glade.h:124
 msgid "<b>Icon style</b>"
@@ -606,7 +605,7 @@ msgstr "<b>Ikonu stils</b>"
 
 #: ../data/geany.glade.h:125
 msgid "S_ystem default"
-msgstr "S_istēmas noklusētais"
+msgstr "S_istēmas"
 
 #: ../data/geany.glade.h:126
 msgid "_Small icons"
@@ -673,8 +672,8 @@ msgid ""
 "Disable drag and drop completely in the editor window so you can't drag and "
 "drop any selections within or outside of the editor window"
 msgstr ""
-"Pilnībā izslēgt vilkšanu un nomešanu redaktora logā, tādējādi jūs nevarēsiet "
-"vilkt un nomest nevienu atlasi iekšpus vai ārpus redaktora loga"
+"Pilnībā izslēgt vilkšanu un nomešanu redaktora logā, lai nevarētu vilkt un "
+"nomest nevienu atlasi redaktora logā vai ārpus tā"
 
 #: ../data/geany.glade.h:138
 msgid "Code folding"
@@ -745,18 +744,16 @@ msgstr ""
 "dokumentiem, lietojiet <i>Projekts->Pielietot noklusējuma atkāpes</i>."
 
 #: ../data/geany.glade.h:151
-#, fuzzy
 msgid "_Width:"
-msgstr "Platums:"
+msgstr "_Platums:"
 
 #: ../data/geany.glade.h:152
 msgid "The width in chars of a single indent"
 msgstr "Vienas atkāpes platums rakstzīmēs"
 
 #: ../data/geany.glade.h:153
-#, fuzzy
 msgid "Auto-indent _mode:"
-msgstr "Automātiskās atkāpes režīms:"
+msgstr "Automātiskās atkāpes režī_ms:"
 
 #: ../data/geany.glade.h:154
 msgid "Detect type from file"
@@ -810,9 +807,8 @@ msgid "Type:"
 msgstr "Tips:"
 
 #: ../data/geany.glade.h:165
-#, fuzzy
 msgid "Tab _key indents"
-msgstr "Tabulācijas taustiņa atkāpes"
+msgstr "Tabulācijas taustiņa at_kāpes"
 
 #: ../data/geany.glade.h:166
 msgid ""
@@ -898,7 +894,7 @@ msgid ""
 "The amount of characters which are necessary to show the symbol "
 "autocompletion list"
 msgstr ""
-"Rakstzīmju daudzums, kurš ir vajadzīgs, lai parādītu simbolu automātiskās "
+"Rakstzīmju skaits, kurš vajadzīgs, lai parādītu simbolu automātiskās "
 "pabeigšanas sarakstu"
 
 #: ../data/geany.glade.h:183
@@ -1168,15 +1164,15 @@ msgstr "<b>Jaunas datnes</b>"
 
 #: ../data/geany.glade.h:240
 msgid "Default encoding (new files):"
-msgstr "Noklusētais iekodējums (jauno datņu):"
+msgstr "Noklusējuma kodējums (jaunajām datnēm):"
 
 #: ../data/geany.glade.h:241
 msgid "Sets the default encoding for newly created files"
-msgstr "Iestata noklusēto iekodējumu jauni izveidotajām datnēm"
+msgstr "Iestata noklusējuma kodējumu jaunizveidotajām datnēm"
 
 #: ../data/geany.glade.h:242
 msgid "Use fixed encoding when opening non-Unicode files"
-msgstr "Lietot fiksēto iekodējumu, kad atver ne-Unicode datnes"
+msgstr "Lietot fiksēto kodējumu, kad atver ne-Unicode datnes"
 
 #: ../data/geany.glade.h:243
 msgid ""
@@ -1184,12 +1180,12 @@ msgid ""
 "opening non-Unicode files and opens the file with the specified encoding "
 "(usually not needed)"
 msgstr ""
-"Šī opcija izslēdz automātisko datņu iekodējuma noteikšanu, kad atver ne-"
-"Unicode datnes, un atver datni ar norādīto iekodējumu (parasti nav vajadzīgs)"
+"Šī opcija izslēdz automātisko datņu kodējuma noteikšanu, kad atver ne-"
+"Unicode datnes, un atver datni ar norādīto kodējumu (parasti nav vajadzīgs)"
 
 #: ../data/geany.glade.h:244
 msgid "Default encoding (existing non-Unicode files):"
-msgstr "Noklusējuma iekodējums (pastāvošu ne-Unicode datņu):"
+msgstr "Noklusējuma kodējums (esošajām ne-Unicode datnēm):"
 
 #: ../data/geany.glade.h:245
 msgid "Sets the default encoding for opening existing non-Unicode files"
@@ -1197,7 +1193,7 @@ msgstr "Iestata noklusējuma iekodējumu pastāvošu ne-Unicode datņu atvērša
 
 #: ../data/geany.glade.h:246
 msgid "<b>Encodings</b>"
-msgstr "<b>Iekodējumi</b>"
+msgstr "<b>Kodējumi</b>"
 
 #: ../data/geany.glade.h:247
 msgid "Ensure new line at file end"
@@ -1540,9 +1536,7 @@ msgstr ""
 msgid ""
 "Sets the path to the shell which should be started inside the terminal "
 "emulation"
-msgstr ""
-"Iestata ceļu uz čaulu, kurai vajadzētu tikt sāktai iekšpus termināļa "
-"emulācijas"
+msgstr "Iestata ceļu uz čaulu, kuru palaist termināļa emulācijā"
 
 #: ../data/geany.glade.h:322
 msgid "Scroll on keystroke"
@@ -1588,8 +1582,8 @@ msgid ""
 "within the VTE."
 msgstr ""
 "Šī opcija izslēdz taustiņu sasaisti izvēlnes joslas uznirināšanai "
-"(noklusējuma ir F10). Tās izslēgšana var būt lietderīga, ja jūs lietojat, "
-"piemēram, \"Midnight Commander\" iekšpus VTE."
+"(noklusējuma ir F10). Tās izslēgšana var būt lietderīga, ja lietojat, "
+"piemēram, \"Midnight Commander\" virtuālajā terminālī."
 
 #: ../data/geany.glade.h:332
 msgid "Follow path of the current file"
@@ -1968,7 +1962,7 @@ msgstr "Iestatīt datnes _tipu"
 
 #: ../data/geany.glade.h:424
 msgid "Set _Encoding"
-msgstr "Iestatīt i_ekodējumu"
+msgstr "I_estatīt kodējumu"
 
 #: ../data/geany.glade.h:425
 msgid "Set Line E_ndings"
@@ -2132,24 +2126,20 @@ msgid "Filename:"
 msgstr "Datnes nosaukums:"
 
 #: ../data/geany.glade.h:465
-#, fuzzy
 msgid "_Name:"
-msgstr "Nosaukums:"
+msgstr "_Nosaukums:"
 
 #: ../data/geany.glade.h:466
-#, fuzzy
 msgid "_Description:"
-msgstr "Apraksts:"
+msgstr "_Apraksts:"
 
 #: ../data/geany.glade.h:467
-#, fuzzy
 msgid "_Base path:"
-msgstr "Bāzes ceļš:"
+msgstr "_Bāzes ceļš:"
 
 #: ../data/geany.glade.h:468
-#, fuzzy
 msgid "File _patterns:"
-msgstr "Datnes struktūras:"
+msgstr "_Datņu šabloni:"
 
 #: ../data/geany.glade.h:469
 msgid ""
@@ -2199,7 +2189,7 @@ msgstr "Tikai lasāms:"
 
 #: ../data/geany.glade.h:478
 msgid "Encoding:"
-msgstr "Iekodējums:"
+msgstr "Kodējums:"
 
 #: ../data/geany.glade.h:479
 msgid "Modified:"
@@ -2215,7 +2205,7 @@ msgstr "Piekļūts:"
 
 #: ../data/geany.glade.h:482
 msgid "(only inside Geany)"
-msgstr "(tikai iekšpus Geany)"
+msgstr "(tikai Geany)"
 
 #: ../data/geany.glade.h:483
 msgid "Permissions:"
@@ -2250,69 +2240,71 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Autortiesības (c) 2005\n"
+"Geany atbalstītāji"
 
-#: ../src/about.c:169
+#: ../src/about.c:170
 msgid "About Geany"
 msgstr "Par Geany"
 
-#: ../src/about.c:213
+#: ../src/about.c:214
 msgid "A fast and lightweight IDE"
 msgstr "Ātra un viegla IDE"
 
-#: ../src/about.c:235
+#: ../src/about.c:236
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(būvēts uz vai pēc %s)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:267
+#: ../src/about.c:268
 msgid "Info"
 msgstr "Informācija"
 
-#: ../src/about.c:283
+#: ../src/about.c:284
 msgid "Developers"
 msgstr "Izstrādātāji"
 
-#: ../src/about.c:290
+#: ../src/about.c:291
 msgid "maintainer"
 msgstr "uzturētājs"
 
-#: ../src/about.c:298 ../src/about.c:306 ../src/about.c:314
+#: ../src/about.c:299 ../src/about.c:307 ../src/about.c:315
 msgid "developer"
 msgstr "izstrādātājs"
 
-#: ../src/about.c:322
+#: ../src/about.c:323
 msgid "translation maintainer"
 msgstr "tulkojuma uzturētājs"
 
-#: ../src/about.c:331
+#: ../src/about.c:332
 msgid "Translators"
 msgstr "Tulkotāji"
 
-#: ../src/about.c:351
+#: ../src/about.c:352
 msgid "Previous Translators"
 msgstr "Iepriekšējie tulkotāji"
 
-#: ../src/about.c:372
+#: ../src/about.c:373
 msgid "Contributors"
 msgstr "Atbalstītāji"
 
-#: ../src/about.c:382
+#: ../src/about.c:383
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr ""
-"Daži no daudziem atbalstītājiem (detalizētākam sarakstam skatīt datni %s):"
+"Daži no daudzajiem atbalstītājiem (detalizētākam sarakstam skatīt datni %s):"
 
-#: ../src/about.c:408
+#: ../src/about.c:409
 msgid "Credits"
 msgstr "Ieguldījums"
 
-#: ../src/about.c:425
+#: ../src/about.c:426
 msgid "License"
 msgstr "Licence"
 
-#: ../src/about.c:434
+#: ../src/about.c:435
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -2382,9 +2374,7 @@ msgstr "Pielāgots teksts"
 
 #: ../src/build.c:1219
 msgid "Enter custom text here, all entered text is appended to the command."
-msgstr ""
-"Ievadiet pielāgoto tekstu šeit, viss ievadītais teksts tiek pievienots "
-"komandai."
+msgstr "Ievadiet pielāgoto tekstu, kuru pievienot būvēšanas komandai."
 
 #: ../src/build.c:1298
 msgid "_Next Error"
@@ -2405,7 +2395,7 @@ msgstr "Būvēt pašreizējo datni"
 
 #: ../src/build.c:1596
 msgid "Build the current file with Make and the default target"
-msgstr "Būvēt pašreizējo datni ar Make un noklusēto mērķi"
+msgstr "Būvēt pašreizējo datni ar Make un noklusējuma mērķi"
 
 #: ../src/build.c:1598
 msgid "Build the current file with Make and the specified target"
@@ -2468,7 +2458,7 @@ msgstr "Neatkarīgās komandas"
 
 #: ../src/build.c:2000
 msgid "Note: Item 2 opens a dialog and appends the response to the command."
-msgstr "Piezīme: vienums 2 atver dialogu un pievieno atbildi pie komandas."
+msgstr "Piezīme: vienums 2 atver dialogu un pievieno atbildi komandai."
 
 #: ../src/build.c:2009
 msgid "Execute commands"
@@ -2479,8 +2469,8 @@ msgid ""
 "%d, %e, %f, %p, %l are substituted in command and directory fields, see "
 "manual for details."
 msgstr ""
-"%d, %e, %f, %p, %l tiek aizstātas komandā un datņu kataloga laukos, skatīt "
-"rokasgrāmatu, lai iegūtu sīkāku informāciju."
+"%d, %e, %f, %p, %l tiek aizstātas komandas un datņu kataloga laukos, sīkāku "
+"informāciju skatiet rokasgrāmatā."
 
 #: ../src/build.c:2179
 msgid "Set Build Commands"
@@ -2527,7 +2517,7 @@ msgstr "Iet uz rindu"
 
 #: ../src/callbacks.c:900
 msgid "Enter the line you want to go to:"
-msgstr "Ievadiet rindu, uz kuru jūs vēlaties doties:"
+msgstr "Ievadiet rindu, uz kuru vēlaties doties:"
 
 #: ../src/callbacks.c:1001 ../src/callbacks.c:1027
 msgid ""
@@ -2597,7 +2587,7 @@ msgstr "Rādīt _slēptās datnes"
 
 #: ../src/dialogs.c:325
 msgid "Set encoding:"
-msgstr "Iestatīt iekodējumu:"
+msgstr "Iestatīt kodējumu:"
 
 #: ../src/dialogs.c:334
 msgid ""
@@ -2607,11 +2597,10 @@ msgid ""
 "Note if you choose multiple files, they will all be opened with the chosen "
 "encoding."
 msgstr ""
-"Atklāti definē iekodējumu priekš datnes, ja tas nevar tikt noteikts. Šis ir "
-"lietderīgi, kad jūs zināt, ka Geany datnes iekodējumu nevar noteikt "
-"pareizi.\n"
-"Ņemiet vērā, ka, ja jūs izvēlēsieties vairākas datnes, tās visas tiks "
-"atvērtas ar izvēlēto iekodējumu."
+"Atklāti definē kodējumu datnei, ja to nevar noteikt. Šis ir lietderīgi, kad "
+"zināt, ka Geany nevar pareizi noteikt datnes kodējumu.\n"
+"Ņemiet vērā — ja izvēlēsieties vairākas datnes, tās visas tiks atvērtas ar "
+"izvēlēto kodējumu."
 
 #. line 2 with filetype combo
 #: ../src/dialogs.c:341
@@ -2754,7 +2743,8 @@ msgid ""
 "The file \"%s\" does not look like a text file or the file encoding is not "
 "supported."
 msgstr ""
-"Datne \"%s\" neizskatās kā teksta datne vai datnes iekodējums nav atbalstīts."
+"Datne \"%s\" neizskatās kā teksta datne, vai arī datnes kodējums nav "
+"atbalstīts."
 
 #: ../src/document.c:1029
 #, c-format
@@ -2802,9 +2792,9 @@ msgstr "Datne %s pārlādēta."
 #. * of the newly opened file, %s indicates whether the file is opened read-only
 #. * (it is replaced with the string ", read-only").
 #: ../src/document.c:1495
-#, fuzzy, c-format
+#, c-format
 msgid "File %s opened (%d%s)."
-msgstr "Datne %s atvērta(%d%s)."
+msgstr "Datne %s atvērta (%d%s)."
 
 #: ../src/document.c:1497
 msgid ", read-only"
@@ -2961,8 +2951,7 @@ msgstr "Ievadiet tabulācijas platumu"
 #: ../src/editor.c:4462
 msgid "Enter the amount of spaces which should be replaced by a tab character."
 msgstr ""
-"Ievadiet atstarpju daudzumu, kuram vajadzētu tikt aizstātam ar tabulācijas "
-"rakstzīmi."
+"Ievadiet atstarpju skaitu, kuras aizstāt ar vienu tabulācijas rakstzīmi."
 
 #: ../src/editor.c:4667
 #, c-format
@@ -3077,7 +3066,7 @@ msgstr "Korejiešu"
 
 #: ../src/encodings.c:142
 msgid "Without encoding"
-msgstr "Bez iekodējuma"
+msgstr "Bez kodējuma"
 
 #: ../src/encodings.c:413
 msgid "_West European"
@@ -3126,7 +3115,7 @@ msgstr "Vidējo Austrumu"
 #: ../src/filetypes.c:86
 #, c-format
 msgid "%s source file"
-msgstr "%s avota datne"
+msgstr "%s pirmkoda datne"
 
 #: ../src/filetypes.c:87
 #, c-format
@@ -3153,15 +3142,15 @@ msgstr "Makefile"
 
 #: ../src/filetypes.c:159
 msgid "Cascading Stylesheet"
-msgstr "Stila lapu kaskadēšana"
+msgstr "CSS datne"
 
 #: ../src/filetypes.c:168
 msgid "Config"
-msgstr "Konfigurācija"
+msgstr "Konfigurācijas"
 
 #: ../src/filetypes.c:169
 msgid "Gettext translation"
-msgstr "Gettext tulkojums"
+msgstr "Gettext tulkojuma"
 
 #: ../src/filetypes.c:430
 msgid "_Programming Languages"
@@ -3181,7 +3170,7 @@ msgstr "Dažād_i"
 
 #: ../src/filetypes.c:1194 ../src/win32.c:155
 msgid "All Source"
-msgstr "Visi avoti"
+msgstr "Pirmkods"
 
 #. create meta file filter "All files"
 #: ../src/filetypes.c:1219 ../src/project.c:349 ../src/win32.c:145
@@ -3280,7 +3269,7 @@ msgstr "Piezīmju grāmatas cilne"
 
 #: ../src/keybindings.c:336 ../src/keybindings.c:368
 msgid "New"
-msgstr "Jauns"
+msgstr "Jauna"
 
 #: ../src/keybindings.c:338 ../src/keybindings.c:370
 msgid "Open"
@@ -3768,7 +3757,7 @@ msgstr "Tastatūras saīsnes"
 
 #: ../src/keybindings.c:1009
 msgid "The following keyboard shortcuts are configurable:"
-msgstr "Sekojošās tastatūras saīsnes ir konfigurējamas:"
+msgstr "Šīs tastatūras saīsnes ir konfigurējamas:"
 
 #: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
@@ -3841,7 +3830,7 @@ msgstr "RINDA"
 
 #: ../src/libmain.c:132
 msgid "Don't show message window at startup"
-msgstr "Nerādīt ziņojumu logu pie sāknēšanas"
+msgstr "Nerādīt ziņojumu logu pēc palaišanas"
 
 #: ../src/libmain.c:133
 msgid "Don't load auto completion data (see documentation)"
@@ -3953,6 +3942,8 @@ msgstr "Konfigurācijas datņu katalogs nevarēja tikt izveidots (%s)."
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
 msgstr ""
+"IPC ligzda nevarēja tikt izveidota, skatīt Palīdzība->Atkļūdošanas ziņojumi, "
+"lai iegūtu sīkāku informāciju."
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -4060,8 +4051,7 @@ msgstr "Spraudņi"
 
 #: ../src/plugins.c:1976
 msgid "Choose which plugins should be loaded at startup:"
-msgstr ""
-"Izvēlēties, kuriem spraudņiem vajadzētu tikt ielādētiem pie sāknēšanas:"
+msgstr "Izvēlieties, kurus spraudņus ielādēt palaišanas laikā:"
 
 #: ../src/plugins.c:2069
 #, c-format
@@ -4204,7 +4194,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Datne \"%s\" tiks drukāta ar sekojošo komandu:\n"
+"Datne \"%s\" tiks drukāta ar šādu komandu:\n"
 "\n"
 "%s"
 
@@ -4372,7 +4362,7 @@ msgstr ""
 
 #: ../src/search.c:317
 msgid "Use _escape sequences"
-msgstr "Li_etot atsoļa secības"
+msgstr "Li_etot atsoļa virknes"
 
 #: ../src/search.c:321
 msgid ""
@@ -4394,7 +4384,7 @@ msgid ""
 "the pattern."
 msgstr ""
 "Izpildīt regulāro izteiksmju saskaņošanu uzreiz uz visa bufera, nevis rindu "
-"pa rindai, atļaujot sakritībām aptvert vairākas rindas.  Šajā režīmā jaunas "
+"pa rindai, atļaujot sakritībām aptvert vairākas rindas. Šajā režīmā jaunas "
 "rindas rakstzīmes ir daļa no ievades un var tikt šablona tvertas kā normālas "
 "rakstzīmes."
 
@@ -4408,11 +4398,11 @@ msgstr "_Reģistrjutīgs"
 
 #: ../src/search.c:352 ../src/search.c:975
 msgid "Match only a _whole word"
-msgstr "_Sakrist tikai ar veselu vārdu"
+msgstr "_Tikai veselu vārdu atbilsme"
 
 #: ../src/search.c:356
 msgid "Match from s_tart of word"
-msgstr "Sakris_t no vārda sākuma"
+msgstr "A_tbilsme no vārda sākuma"
 
 #: ../src/search.c:472
 msgid "_Previous"
@@ -4626,8 +4616,7 @@ msgstr "Teksts bija tukšs (vai saturēja tikai tukšumzīmes)"
 #: ../src/spawn.c:153 ../src/spawn.c:167
 msgid "A quoted Windows program name must be entirely inside the quotes"
 msgstr ""
-"Pēdiņās esošajam Windows programmas nosaukumam vajag būt pilnībā iekšpus "
-"pēdiņām"
+"Pēdiņās esošam Windows programmas nosaukumam jābūt pilnībā pēdiņu iekšpusē"
 
 #: ../src/spawn.c:260
 msgid "Program not found"
@@ -5185,8 +5174,8 @@ msgid ""
 "Select items to be displayed on the toolbar. Items can be reordered by drag "
 "and drop."
 msgstr ""
-"Atlasiet vienumus, kuri tiks attēloti uz rīkjoslas. Vienumi par tikt "
-"pārkārtoti ar vilkšanu un nomešanu."
+"Atlasiet vienumus, kurus attēlot rīkjoslā. Vienumus var pārkārtot, tos "
+"velkot un nometot."
 
 #: ../src/toolbar.c:975
 msgid "Available Items"
@@ -5306,7 +5295,7 @@ msgid ""
 "encoding: %e      filetype: %f      scope: %S"
 msgstr ""
 "rinda: %l / %L\t kol.: %c\t atl.: %s\t %w      %t      %mrežīms: %M      "
-"iekodējums: %e      datnes tips: %f      tvērums: %S"
+"kodējums: %e      datnes tips: %f      tvērums: %S"
 
 #. L = lines
 #: ../src/ui_utils.c:238
@@ -5898,7 +5887,7 @@ msgstr "Saglabāt darbības"
 
 #: ../plugins/saveactions.c:42
 msgid "This plugin provides different actions related to saving of files."
-msgstr "Šis spraudnis sniedz dažādas darbības, saistītas ar datņu saglabāšanu."
+msgstr "Šis spraudnis piedāvā dažādas ar datņu saglabāšanu saistītas darbības."
 
 #: ../plugins/saveactions.c:174
 #, c-format
@@ -6030,7 +6019,7 @@ msgid "Top and Bottom"
 msgstr "Augša un apakša"
 
 #~ msgid ""
-#~ "Copyright (c) 2005-2019\n"
+#~ "Copyright (c) 2005-2018\n"
 #~ "Colomban Wendling\n"
 #~ "Nick Treleaven\n"
 #~ "Matthew Brush\n"
@@ -6038,13 +6027,31 @@ msgstr "Augša un apakša"
 #~ "Frank Lanitz\n"
 #~ "All rights reserved."
 #~ msgstr ""
-#~ "Autortiesības (c) 2005-2019\n"
+#~ "Autortiesības (c) 2005-2018\n"
 #~ "Colomban Wendling\n"
 #~ "Nick Treleaven\n"
 #~ "Matthew Brush\n"
 #~ "Enrico Tröger\n"
 #~ "Frank Lanitz\n"
 #~ "Visas tiesības paturētas."
+
+#~ msgid "Width:"
+#~ msgstr "Platums:"
+
+#~ msgid "Auto-indent mode:"
+#~ msgstr "Automātiskās atkāpes režīms:"
+
+#~ msgid "Tab key indents"
+#~ msgstr "Tabulācijas taustiņa atkāpes"
+
+#~ msgid "email address of the developer"
+#~ msgstr "izstrādātāja e-pasta adrese"
+
+#~ msgid "Description:"
+#~ msgstr "Apraksts:"
+
+#~ msgid "File patterns:"
+#~ msgstr "Datnes struktūras:"
 
 #~ msgid "Filename of libvte.so"
 #~ msgstr "libvte.so datnes nosaukums"
