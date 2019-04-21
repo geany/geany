@@ -1,16 +1,16 @@
 # Japanese translations for geany package.
-# Copyright (C) 2006 The Geany contributors.
+# Copyright (C) 2006-2019 The Geany contributors.
 # This file is distributed under the same license as the geany package.
 # Tarot Osuji <tarot@sdf.lonestar.org>, 2008.
-# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2018
+# Chikahiro Masami <cmasa.z321@gmail.com>, 2008-2019
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-04-15 17:13+0200\n"
 "PO-Revision-Date: 2014-11-09 13:26+0900\n"
-"Last-Translator: Chikahiro Masami <masami@linux-lhx4.site>\n"
+"Last-Translator: Chikahiro Masami <cmasa.z321@gmail.com>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -67,7 +67,7 @@ msgstr "関数の説明を挿入(_F)"
 
 #: ../data/geany.glade.h:8
 msgid "Insert Mu_ltiline Comment"
-msgstr "複数行コメントを挿入(_M)"
+msgstr "複数行コメントを挿入(_L)"
 
 #: ../data/geany.glade.h:9
 msgid "_More"
@@ -75,7 +75,7 @@ msgstr "その他(_M)"
 
 #: ../data/geany.glade.h:10
 msgid "Insert File _Header"
-msgstr "ファイルのヘッダを挿入(_H)"
+msgstr "ファイルヘッダを挿入(_H)"
 
 #: ../data/geany.glade.h:11
 msgid "Insert _GPL Notice"
@@ -99,7 +99,7 @@ msgstr "\"include <...>\" 文を挿入(_I)"
 
 #: ../data/geany.glade.h:16 ../src/keybindings.c:514
 msgid "Insert Alternative _White Space"
-msgstr "複数の空白を挿入(_I)"
+msgstr "代替空白を挿入(_W)"
 
 #: ../data/geany.glade.h:17
 msgid "_Search"
@@ -107,23 +107,23 @@ msgstr "検索(_S)"
 
 #: ../data/geany.glade.h:18
 msgid "Open Selected F_ile"
-msgstr "選択されたファイルを開く(_I)"
+msgstr "選択したファイルを開く(_I)"
 
 #: ../data/geany.glade.h:19 ../src/symbols.c:2615
 msgid "Find _Usage"
-msgstr "使用箇所を検索(_U)"
+msgstr "使い方を検索(_U)"
 
 #: ../data/geany.glade.h:20 ../src/symbols.c:2620
 msgid "Find _Document Usage"
-msgstr "文書内で使用箇所を検索(_D)"
+msgstr "文書の使い方を検索(_D)"
 
 #: ../data/geany.glade.h:21
 msgid "Go to Symbol Defini_tion"
-msgstr "タグ定義に移動(_T)"
+msgstr "シンボル定義に移動(_T)"
 
 #: ../data/geany.glade.h:22
 msgid "Conte_xt Action"
-msgstr "ユーザ定義コマンド(_X)"
+msgstr "コンテキスト アクション(_X)"
 
 #. Column legend:
 #. *   [0] = Filetype constant (GEANY_FILETYPES_*)
@@ -176,18 +176,18 @@ msgstr "最後のセッションからファイルを読み込む"
 
 #: ../data/geany.glade.h:33
 msgid "Opens at startup the files from the last session"
-msgstr "起動時に最後のセッションからファイルを開く"
+msgstr "最後のセッションから起動時にファイルを開く"
 
 #: ../data/geany.glade.h:34
 msgid "Load virtual terminal support"
-msgstr "仮想端末サポートを読み込む"
+msgstr "仮想端末サポートをロードする"
 
 #: ../data/geany.glade.h:35
 msgid ""
 "Whether the virtual terminal emulation (VTE) should be loaded at startup, "
 "disable it if you do not need it"
 msgstr ""
-"起動時に仮想端末エミュレーション(VTE)を読み込むかどうか指定します。不要なら無"
+"起動時に仮想端末エミュレーション(VTE)をロードするかどうか指定します。不要なら無"
 "効にできます。"
 
 #: ../data/geany.glade.h:36
@@ -242,7 +242,7 @@ msgstr "プロジェクトファイル:"
 
 #: ../data/geany.glade.h:48
 msgid "Path to start in when opening project files"
-msgstr "プロジェクトファイルを開くときに使用するパスです。"
+msgstr "プロジェクトファイルを開くときに使用するパス"
 
 #: ../data/geany.glade.h:49
 msgid "Extra plugin path:"
@@ -254,9 +254,9 @@ msgid ""
 "configuration directory. The path entered here will be searched additionally "
 "for plugins. Leave blank to disable."
 msgstr ""
-"Geany はインストール先と、環境設定が保存されているパスからプラグインを検索し"
-"ます。ここで指定したパスからもプラグインを検索するようになります。指定しない"
-"ときは空欄のままにしてください。"
+"Geany は既定値ではインストール先ディレクトリと、環境設定ディレクトリから"
+"プラグインを検索します。ここで指定したパスからもプラグインを検索するよう"
+"になります。指定しないときは空欄のままにしてください。"
 
 #: ../data/geany.glade.h:51
 msgid "<b>Paths</b>"
@@ -264,7 +264,7 @@ msgstr "<b>パス</b>"
 
 #: ../data/geany.glade.h:52
 msgid "Startup"
-msgstr "起動/終了"
+msgstr "起動"
 
 #: ../data/geany.glade.h:53
 msgid "Beep on errors or when compilation has finished"
@@ -286,7 +286,7 @@ msgid ""
 "new status message arrives"
 msgstr ""
 "新しいステータスメッセージを受けとったとき、ステータスメッセージリストに切り"
-"替えます。"
+"替えます(メモウィンドウの下部)。"
 
 #: ../data/geany.glade.h:57
 msgid "Suppress status messages in the status bar"
@@ -297,8 +297,8 @@ msgid ""
 "Removes all messages from the status bar. The messages are still displayed "
 "in the status messages window."
 msgstr ""
-"ステータスバーのすべてのメッセージを消去します。メッセージはステータスメッ"
-"セージリストに残っています。"
+"ステータスバーからすべてのメッセージを消去します。メッセージは"
+"ステータスメッセージリストに残っています。"
 
 #: ../data/geany.glade.h:59
 msgid "Auto-focus widgets (focus follows mouse)"
@@ -358,7 +358,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:70
 msgid "Use the current file's directory for Find in Files"
-msgstr "検索に現在のディレクトリのファイルを使用"
+msgstr "複数ファイルから検索で現在のファイルのディレクトリを使用"
 
 #: ../data/geany.glade.h:71
 msgid "<b>Search</b>"
@@ -377,7 +377,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:74
 msgid "Store project file inside the project base directory"
-msgstr "プロジェクトファイルをプロジェクトの基本ディレクトリに保存しますか?"
+msgstr "プロジェクトファイルをプロジェクトのディレクトリに保存する"
 
 #: ../data/geany.glade.h:75
 msgid ""
@@ -409,7 +409,7 @@ msgstr "全般"
 
 #: ../data/geany.glade.h:79
 msgid "Show symbol list"
-msgstr "シンボルリストの表示"
+msgstr "シンボルリストを表示"
 
 #: ../data/geany.glade.h:80
 msgid "Toggle the symbol list on and off"
@@ -417,11 +417,11 @@ msgstr "シンボルリストのオン／オフを切り替える"
 
 #: ../data/geany.glade.h:81
 msgid "Default symbol sorting mode"
-msgstr "デフォルトのシンボル ソートモード"
+msgstr "既定のシンボル ソート モード"
 
 #: ../data/geany.glade.h:82
 msgid "Default sorting mode:"
-msgstr "デフォルトのソートモード:"
+msgstr "既定のソートモード:"
 
 #: ../data/geany.glade.h:83 ../src/stash.c:1169
 msgid "Name"
@@ -525,13 +525,13 @@ msgstr "ファイルタブは右側に配置されます"
 
 #: ../data/geany.glade.h:107
 msgid "Next to current"
-msgstr "現在のタブの次"
+msgstr "現在のタブの隣"
 
 #: ../data/geany.glade.h:108
 msgid ""
 "Whether to place file tabs next to the current tab rather than at the edges "
 "of the notebook"
-msgstr "ファイルタブを現在のタブの次に置くかメモの端にするかを指定"
+msgstr "ファイルタブを現在のタブの隣に置くかメモの端にするかを指定"
 
 #: ../data/geany.glade.h:109
 msgid "Double-clicking hides all additional widgets"
@@ -583,7 +583,7 @@ msgstr "システム標準(_D)"
 
 #: ../data/geany.glade.h:121
 msgid "Images _and text"
-msgstr "画像とテキスト(_A)"
+msgstr "画像と文字(_A)"
 
 #: ../data/geany.glade.h:122
 msgid "_Images only"
@@ -591,7 +591,7 @@ msgstr "画像のみ(_I)"
 
 #: ../data/geany.glade.h:123
 msgid "_Text only"
-msgstr "テキストのみ(_T)"
+msgstr "文字のみ(_T)"
 
 #: ../data/geany.glade.h:124
 msgid "<b>Icon style</b>"
@@ -685,7 +685,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:141
 msgid "Use indicators to show compile errors"
-msgstr "インジケータをコンパイルエラーの表示に使う"
+msgstr "コンパイルエラーの表示にインジケータを使う"
 
 #: ../data/geany.glade.h:142
 msgid ""
@@ -832,11 +832,11 @@ msgstr ""
 
 #: ../data/geany.glade.h:171
 msgid "XML/HTML tag auto-closing"
-msgstr "XML/HTML タグの自動補完"
+msgstr "XML/HTML 終了タグの自動補完"
 
 #: ../data/geany.glade.h:172
 msgid "Insert matching closing tag for XML/HTML"
-msgstr "XML/HTMLタグの対応を確認して挿入"
+msgstr "XML/HTML 終了タグを自動挿入"
 
 #: ../data/geany.glade.h:173
 msgid "Automatic continuation of multi-line comments"
@@ -847,12 +847,12 @@ msgid ""
 "Continue automatically multi-line comments in languages like C, C++ and Java "
 "when a new line is entered inside such a comment"
 msgstr ""
-"コメント記述中にEnterキーを押したとき、C, C++, Java言語のような複数行コメント"
+"コメント記述中にEnterキーを押したとき、C, C++, Java言語の複数行コメント"
 "を自動継続します"
 
 #: ../data/geany.glade.h:175
 msgid "Autocomplete symbols"
-msgstr "自動補完シンボル"
+msgstr "シンボルを自動補完"
 
 #: ../data/geany.glade.h:176
 msgid ""
@@ -978,7 +978,7 @@ msgstr "インデント位置を表示"
 
 #: ../data/geany.glade.h:203
 msgid "Shows small dotted lines to help you to use the right indentation"
-msgstr "右インデント位置を示すために破線を表示します"
+msgstr "右インデント位置を示す破線を表示します"
 
 #: ../data/geany.glade.h:204
 msgid "Show white space"
@@ -1024,7 +1024,7 @@ msgstr "文書の最後の行でさらに1ページ分スクロールするか�
 
 #: ../data/geany.glade.h:214
 msgid "Lines visible _around the cursor:"
-msgstr ""
+msgstr "カーソルの周囲に表示する行数(_A):"
 
 #: ../data/geany.glade.h:215
 msgid "<b>Display</b>"
@@ -1136,7 +1136,7 @@ msgstr "コマンドラインのファイル名から新しいファイルを作
 
 #: ../data/geany.glade.h:238
 msgid "Default end of line characters:"
-msgstr "デフォルトの改行文字:"
+msgstr "既定の改行文字:"
 
 #: ../data/geany.glade.h:239
 msgid "<b>New files</b>"
@@ -1144,11 +1144,11 @@ msgstr "<b>新規ファイル</b>"
 
 #: ../data/geany.glade.h:240
 msgid "Default encoding (new files):"
-msgstr "デフォルトのエンコーディング（新規ファイル）:"
+msgstr "標準のエンコーディング（新規ファイル）:"
 
 #: ../data/geany.glade.h:241
 msgid "Sets the default encoding for newly created files"
-msgstr "新しく作成するファイルのデフォルトのエンコーディングを設定します"
+msgstr "新しく作成するファイルの標準のエンコーディングを設定します"
 
 #: ../data/geany.glade.h:242
 msgid "Use fixed encoding when opening non-Unicode files"
@@ -1297,7 +1297,7 @@ msgstr "開発者の email アドレス"
 
 #: ../data/geany.glade.h:274
 msgid "Initials of the developer name"
-msgstr "開発者の頭文字"
+msgstr "開発者のイニシャル"
 
 #: ../data/geany.glade.h:275
 msgid "Initial version:"
@@ -1325,7 +1325,7 @@ msgstr "メールアドレス:"
 
 #: ../data/geany.glade.h:281
 msgid "Initials:"
-msgstr "頭文字:"
+msgstr "イニシャル:"
 
 #: ../data/geany.glade.h:282
 msgid "The name of the developer"
@@ -1453,7 +1453,7 @@ msgstr ""
 
 #: ../data/geany.glade.h:308
 msgid "Use native GTK printing"
-msgstr "ネイティブな GTK の印刷機能を使用"
+msgstr "ネイティブ GTK の印刷機能を使用"
 
 #: ../data/geany.glade.h:309
 msgid "<b>Printing</b>"
@@ -1634,7 +1634,7 @@ msgstr "別名で保存...(_A)"
 
 #: ../data/geany.glade.h:349
 msgid "Sa_ve All"
-msgstr "すべて保存(_L)"
+msgstr "すべて保存(_V)"
 
 #: ../data/geany.glade.h:350 ../src/document.c:1655 ../src/document.c:3616
 #: ../src/sidebar.c:717
@@ -1655,7 +1655,7 @@ msgstr "印刷...(_P)"
 
 #: ../data/geany.glade.h:354 ../src/notebook.c:495
 msgid "Close Ot_her Documents"
-msgstr "他のファイルを閉じる(_H)"
+msgstr "他の文書を閉じる(_H)"
 
 #: ../data/geany.glade.h:355 ../src/notebook.c:507
 msgid "C_lose All"
@@ -1663,11 +1663,11 @@ msgstr "すべて閉じる(_L)"
 
 #: ../data/geany.glade.h:356
 msgid "Co_mmands"
-msgstr "コマンド(_C)"
+msgstr "コマンド(_M)"
 
 #: ../data/geany.glade.h:357 ../src/keybindings.c:437
 msgid "Cu_t Current Line(s)"
-msgstr "現在の行を切り取り(_C)"
+msgstr "現在の行を切り取り(_T)"
 
 #: ../data/geany.glade.h:358 ../src/keybindings.c:434
 msgid "_Copy Current Line(s)"
@@ -1679,15 +1679,15 @@ msgstr "現在の行を削除(_D)"
 
 #: ../data/geany.glade.h:360 ../src/keybindings.c:384
 msgid "D_uplicate Line or Selection"
-msgstr "行/選択範囲を複製(_D)"
+msgstr "行/選択範囲を複製(_U)"
 
 #: ../data/geany.glade.h:361 ../src/keybindings.c:447
 msgid "S_elect Current Line(s)"
-msgstr "現在の行を選択(_S)"
+msgstr "現在の行を選択(_E)"
 
 #: ../data/geany.glade.h:362 ../src/keybindings.c:450
 msgid "Se_lect Current Paragraph"
-msgstr "現在の段落を選択(_S)"
+msgstr "現在の段落を選択(_L)"
 
 #: ../data/geany.glade.h:363
 msgid "_Move Line(s) Up"
@@ -1731,7 +1731,7 @@ msgstr "インデントを減らす(_D)"
 
 #: ../data/geany.glade.h:373 ../src/keybindings.c:480
 msgid "S_mart Line Indent"
-msgstr "スマート行インデント(_S)"
+msgstr "スマート行インデント(_M)"
 
 #: ../data/geany.glade.h:374
 msgid "_Send Selection to"
@@ -1771,7 +1771,7 @@ msgstr "置換(_R)..."
 
 #: ../data/geany.glade.h:383
 msgid "Next Me_ssage"
-msgstr "次のメッセージ(_M)"
+msgstr "次のメッセージ(_S)"
 
 #: ../data/geany.glade.h:384
 msgid "Pr_evious Message"
@@ -1779,11 +1779,11 @@ msgstr "前のメッセージ(_E)"
 
 #: ../data/geany.glade.h:385 ../src/keybindings.c:576
 msgid "Go to Ne_xt Marker"
-msgstr "次のマーカーへ移動(_G)"
+msgstr "次のマーカーへ移動(_X)"
 
 #: ../data/geany.glade.h:386 ../src/keybindings.c:579
 msgid "Go to Pre_vious Marker"
-msgstr "前のマーカーへ移動(_G)"
+msgstr "前のマーカーへ移動(_V)"
 
 #: ../data/geany.glade.h:387
 msgid "_Go to Line..."
@@ -1795,7 +1795,7 @@ msgstr "選択文字列を後方検索(_S)"
 
 #: ../data/geany.glade.h:389 ../src/keybindings.c:541
 msgid "Find Pre_vious Selection"
-msgstr "選択文字列を前方に検索(_V)"
+msgstr "選択文字列を前方検索(_V)"
 
 #: ../data/geany.glade.h:390 ../src/keybindings.c:558
 msgid "_Mark All"
@@ -1827,7 +1827,7 @@ msgstr "行番号を表示(_L)"
 
 #: ../data/geany.glade.h:397
 msgid "Show White S_pace"
-msgstr "空白を表示(_W)"
+msgstr "空白を表示(_P)"
 
 #: ../data/geany.glade.h:398
 msgid "Show Line _Endings"
@@ -1835,7 +1835,7 @@ msgstr "行末を表示(_E)"
 
 #: ../data/geany.glade.h:399
 msgid "Show Indentation _Guides"
-msgstr "インデントを表示(_I)"
+msgstr "インデントを表示(_G)"
 
 #: ../data/geany.glade.h:400
 msgid "Full_screen"
@@ -1843,7 +1843,7 @@ msgstr "全画面表示(_S)"
 
 #: ../data/geany.glade.h:401
 msgid "Toggle All _Additional Widgets"
-msgstr "すべての追加ウィジェットを表示/非表示(_G)"
+msgstr "すべての追加ウィジェットを表示/非表示(_A)"
 
 #: ../data/geany.glade.h:402
 msgid "Show Message _Window"
@@ -1963,11 +1963,11 @@ msgstr "末尾の空白を除去(_S)"
 
 #: ../data/geany.glade.h:431
 msgid "Replace Tabs with S_paces"
-msgstr "タブを空白で置換(_R)"
+msgstr "タブを空白で置換(_P)"
 
 #: ../data/geany.glade.h:432
 msgid "_Replace Spaces with Tabs..."
-msgstr "空白をタブで置換(_Y)..."
+msgstr "空白をタブで置換(_R)..."
 
 #: ../data/geany.glade.h:433
 msgid "_Fold All"
@@ -2044,7 +2044,7 @@ msgstr "ヘルプ(_H)"
 
 #: ../data/geany.glade.h:451
 msgid "Keyboard _Shortcuts"
-msgstr "ショートカットキー(_K)"
+msgstr "ショートカットキー(_S)"
 
 #: ../data/geany.glade.h:452
 msgid "Debug _Messages"
@@ -2174,7 +2174,7 @@ msgstr "変更済み:"
 
 #: ../data/geany.glade.h:481
 msgid "Accessed:"
-msgstr "アクセス日時:"
+msgstr "アクセス済み:"
 
 #: ../data/geany.glade.h:482
 msgid "(only inside Geany)"
@@ -2213,6 +2213,8 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"Copyright (c) 2005\n"
+"Geany 貢献者"
 
 #: ../src/about.c:169
 msgid "About Geany"
@@ -2513,11 +2515,11 @@ msgstr "パス設定を確認してください。"
 #: ../src/callbacks.c:1495
 #, c-format
 msgid "Cannot execute context action command \"%s\": %s. %s"
-msgstr "コンテキスト アクション コマンド \"%s\" を実行できません: %s. %s"
+msgstr "ユーザ定義コマンド \"%s\" を実行できません: %s. %s"
 
 #: ../src/callbacks.c:1504
 msgid "No context action set."
-msgstr "コンテキスト アクション コマンド がありません"
+msgstr "ユーザ定義コマンド設定がありません"
 
 #: ../src/dialogs.c:160 ../src/document.c:2302 ../src/document.c:2367
 #: ../src/document.c:2375
@@ -3507,7 +3509,7 @@ msgstr "対応する括弧に移動"
 
 #: ../src/keybindings.c:573
 msgid "Toggle marker"
-msgstr "マーカーを切り替える"
+msgstr "マーカーを切り替え"
 
 #: ../src/keybindings.c:582
 msgid "Go to Symbol Definition"
@@ -3515,7 +3517,7 @@ msgstr "シンボル定義に移動"
 
 #: ../src/keybindings.c:585
 msgid "Go to Symbol Declaration"
-msgstr "タグ宣言に移動"
+msgstr "シンボル宣言に移動"
 
 #: ../src/keybindings.c:587
 msgid "Go to Start of Line"
@@ -3543,7 +3545,7 @@ msgstr "次の単語に移動"
 
 #: ../src/keybindings.c:602
 msgid "Toggle All Additional Widgets"
-msgstr "すべての追加ウィジェットを反転"
+msgstr "すべての追加ウィジェットを表示/非表示"
 
 #: ../src/keybindings.c:605
 msgid "Fullscreen"
@@ -3551,11 +3553,11 @@ msgstr "全画面表示"
 
 #: ../src/keybindings.c:607
 msgid "Toggle Messages Window"
-msgstr "メッセージウィンドウを表示"
+msgstr "メッセージウィンドウを表示/非表示"
 
 #: ../src/keybindings.c:610
 msgid "Toggle Sidebar"
-msgstr "サイドバーを表示"
+msgstr "サイドバーを表示/非表示"
 
 #: ../src/keybindings.c:612
 msgid "Zoom In"
@@ -3571,55 +3573,55 @@ msgstr "標準サイズ"
 
 #: ../src/keybindings.c:621
 msgid "Switch to Editor"
-msgstr "エディタに切り替える"
+msgstr "エディタに切り替え"
 
 #: ../src/keybindings.c:623
 msgid "Switch to Search Bar"
-msgstr "検索バーに切り替える"
+msgstr "検索バーに切り替え"
 
 #: ../src/keybindings.c:625
 msgid "Switch to Message Window"
-msgstr "メッセージウィンドウに切り替える"
+msgstr "メッセージウィンドウに切り替え"
 
 #: ../src/keybindings.c:627
 msgid "Switch to Compiler"
-msgstr "サイドバーに切り替える"
+msgstr "コンパイラに切り替え"
 
 #: ../src/keybindings.c:629
 msgid "Switch to Messages"
-msgstr "メッセージに切り替える"
+msgstr "メッセージに切り替え"
 
 #: ../src/keybindings.c:631
 msgid "Switch to Scribble"
-msgstr "メモに切り替える"
+msgstr "メモに切り替え"
 
 #: ../src/keybindings.c:633
 msgid "Switch to VTE"
-msgstr "VTE に切り替える"
+msgstr "VTE に切り替え"
 
 #: ../src/keybindings.c:635
 msgid "Switch to Sidebar"
-msgstr "サイドバーに切り替える"
+msgstr "サイドバーに切り替え"
 
 #: ../src/keybindings.c:637
 msgid "Switch to Sidebar Symbol List"
-msgstr "シンボルリストサイドバーに切り替える"
+msgstr "シンボルリスト サイドバーに切り替え"
 
 #: ../src/keybindings.c:639
 msgid "Switch to Sidebar Document List"
-msgstr "文書リストサイドバーに切り替える"
+msgstr "文書リスト サイドバーに切り替え"
 
 #: ../src/keybindings.c:644
 msgid "Switch to left document"
-msgstr "左の文書に切り替える"
+msgstr "左の文書に切り替え"
 
 #: ../src/keybindings.c:646
 msgid "Switch to right document"
-msgstr "右の文書に切り替える"
+msgstr "右の文書に切り替え"
 
 #: ../src/keybindings.c:648
 msgid "Switch to last used document"
-msgstr "最後に使用した文書に切り替える"
+msgstr "最後に使用した文書に切り替え"
 
 #: ../src/keybindings.c:651
 msgid "Move document left"
@@ -3639,19 +3641,19 @@ msgstr "文書を末尾に移動"
 
 #: ../src/keybindings.c:663
 msgid "Toggle Line wrapping"
-msgstr "行の折り返し"
+msgstr "行の折り返しを切り替え"
 
 #: ../src/keybindings.c:665
 msgid "Toggle Line breaking"
-msgstr "自動改行"
+msgstr "自動改行を切り替え"
 
 #: ../src/keybindings.c:673
 msgid "Replace spaces with tabs"
-msgstr "タブを空白で置換"
+msgstr "タブを空白に置換"
 
 #: ../src/keybindings.c:675
 msgid "Toggle current fold"
-msgstr "行の折りたたみ"
+msgstr "行の折りたたみを切り替え"
 
 #: ../src/keybindings.c:677
 msgid "Fold all"
@@ -3715,11 +3717,11 @@ msgstr "色の選択"
 
 #: ../src/keybindings.c:997
 msgid "Keyboard Shortcuts"
-msgstr "ショートカットキー"
+msgstr "キーボード ショートカット"
 
 #: ../src/keybindings.c:1009
 msgid "The following keyboard shortcuts are configurable:"
-msgstr "以下のショートカットキーが設定できます:"
+msgstr "以下のキーボード ショートカットが設定できます:"
 
 #: ../src/keyfile.c:1034
 msgid "Type here what you want, use it as a notice/scratch board"
@@ -3739,7 +3741,7 @@ msgstr ""
 
 #: ../src/libmain.c:121
 msgid "COLUMN"
-msgstr ""
+msgstr "COLUMN"
 
 #: ../src/libmain.c:122
 msgid "Use alternate configuration directory DIR"
@@ -3747,7 +3749,7 @@ msgstr "代替の設定ディレクトリ DIR を設定"
 
 #: ../src/libmain.c:122
 msgid "DIR"
-msgstr ""
+msgstr "DIR"
 
 #: ../src/libmain.c:123
 msgid "Print internal filetype names"
@@ -3775,7 +3777,7 @@ msgstr ""
 
 #: ../src/libmain.c:128 ../src/libmain.c:142
 msgid "FILE"
-msgstr ""
+msgstr "FILE"
 
 #: ../src/libmain.c:129
 msgid "Return a list of open documents in a running Geany instance"
@@ -3787,7 +3789,7 @@ msgstr "最初に開かれるファイルの、最初の行番号 LINE を設定
 
 #: ../src/libmain.c:131
 msgid "LINE"
-msgstr ""
+msgstr "LINE"
 
 #: ../src/libmain.c:132
 msgid "Don't show message window at startup"
@@ -3892,12 +3894,11 @@ msgstr "Geany %s を起動しました"
 #: ../src/libmain.c:1177
 #, c-format
 msgid "Configuration directory could not be created (%s)."
-msgstr "設定ディレクトリが作成できませんでした(%s)"
+msgstr "設定ディレクトリが作成できません(%s)"
 
 #: ../src/libmain.c:1184
-#, fuzzy
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr "検索に失敗しました(ヘルプのデバッグメッセージを確認してください)。"
+msgstr "IPCソケットが作成できません(ヘルプのデバッグメッセージを確認してください)。"
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
@@ -3909,7 +3910,7 @@ msgstr "設定ファイルを再読み込みしました"
 
 #: ../src/log.c:185
 msgid "Debug Messages"
-msgstr "メッセージ"
+msgstr "デバッグ メッセージ"
 
 #: ../src/log.c:187
 msgid "Cl_ear"
@@ -3917,7 +3918,7 @@ msgstr "クリア(_E)"
 
 #: ../src/msgwindow.c:218
 msgid "Status messages"
-msgstr "ステータスメッセージ"
+msgstr "ステータス メッセージ"
 
 #: ../src/msgwindow.c:672
 msgid "C_opy"
@@ -4022,7 +4023,7 @@ msgstr "プラグインを設定"
 
 #: ../src/prefs.c:180
 msgid "Grab Key"
-msgstr "キーの読み取り"
+msgstr "キーの組み合わせ"
 
 #: ../src/prefs.c:186
 #, c-format
@@ -4055,7 +4056,7 @@ msgstr "変更(_O)"
 
 #: ../src/prefs.c:1487
 msgid "Override that keybinding?"
-msgstr "ショートカットキーを変更しますか?"
+msgstr "キーバインドを変更しますか?"
 
 #: ../src/prefs.c:1488
 #, c-format
@@ -4375,7 +4376,7 @@ msgstr "マーク(_M)"
 
 #: ../src/search.c:518
 msgid "Mark all matches in the current document"
-msgstr "現在の文書で一致するものすべてにマークします"
+msgstr "現在の文書で一致するものすべてをマークします"
 
 #: ../src/search.c:523 ../src/search.c:698
 msgid "In Sessi_on"
@@ -4396,7 +4397,7 @@ msgstr "ダイアログを開いたままにするには、このオプション
 
 #: ../src/search.c:633
 msgid "Replace & Fi_nd"
-msgstr "置換して検索(_N)"
+msgstr "置換と検索(_N)"
 
 #: ../src/search.c:642
 msgid "Replace wit_h:"
@@ -4695,7 +4696,7 @@ msgstr "モジュール"
 
 #: ../src/symbols.c:556 ../src/symbols.c:603
 msgid "Traits"
-msgstr "Traits"
+msgstr "特性"
 
 #: ../src/symbols.c:557
 msgid "Implementations"
@@ -4775,7 +4776,7 @@ msgstr "ID 選択"
 
 #: ../src/symbols.c:623
 msgid "Type Selectors"
-msgstr "Type 選択"
+msgstr "タイプ選択"
 
 #: ../src/symbols.c:642
 msgid "Section Level 1"
@@ -4897,7 +4898,7 @@ msgid ""
 "Usage: %s -g <Tags File> <File list>\n"
 "\n"
 msgstr ""
-"使用法: %s -g <タグファイル> <ファイルリスト>\n"
+"使い方: %s -g <タグファイル> <ファイルリスト>\n"
 "\n"
 
 #: ../src/symbols.c:1680
@@ -5641,7 +5642,7 @@ msgstr "HTML 置換(_H)"
 
 #: ../plugins/htmlchars.c:758
 msgid "_Auto-replace Special Characters"
-msgstr "特殊記号を置換(_A)"
+msgstr "特殊記号を自動置換(_A)"
 
 #: ../plugins/htmlchars.c:767
 msgid "_Replace Characters in Selection"
@@ -5657,7 +5658,7 @@ msgstr "特殊記号を置換"
 
 #: ../plugins/htmlchars.c:789
 msgid "Toggle plugin status"
-msgstr "プラグインの状態を反転"
+msgstr "プラグインの状態を切り替え"
 
 #: ../plugins/export.c:36
 msgid "Export"
@@ -5898,7 +5899,7 @@ msgstr "新しく作成するファイルのファイルの種類(_F):"
 
 #: ../plugins/saveactions.c:719
 msgid "Backup Copy"
-msgstr "バックアップ"
+msgstr "バックアップ コピー"
 
 #: ../plugins/saveactions.c:729
 msgid "_Directory to save backup files in:"
