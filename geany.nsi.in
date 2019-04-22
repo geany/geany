@@ -234,7 +234,7 @@ Section "GTK ${GTK_VERSION} Runtime Environment" SEC06
 	SetOutPath "$INSTDIR\lib"
 	File /r "gtk\lib\*"
 	SetOutPath "$INSTDIR\share"
-	File /r "gtk\share\*"
+	File /r /x "*.mo" "gtk\share\*"
 SectionEnd
 !endif
 
