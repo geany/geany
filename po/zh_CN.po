@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the geany package.
 #
 # Dormouse Young <dormouse.young@gmail.com>, 2006-2009.
-# Dongyuan Liu <liu.dongyuan@gmail.com>, 2009-2018.
+# Dongyuan Liu <liu.dongyuan@gmail.com>, 2009-2019.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Geany 1.34\n"
+"Project-Id-Version: Geany 1.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 17:13+0200\n"
-"PO-Revision-Date: 2018-12-09 17:43+0800\n"
+"POT-Creation-Date: 2019-04-21 02:36+0000\n"
+"PO-Revision-Date: 2019-04-22 10:13+0800\n"
 "Last-Translator: Dongyuan Liu <liu.dongyuan@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../geany.desktop.in.h:1 ../data/geany.glade.h:343
@@ -2151,68 +2151,70 @@ msgid ""
 "Copyright (c) 2005\n"
 "The Geany contributors"
 msgstr ""
+"版权所有 (c) 2005\n"
+"Geany 贡献者"
 
-#: ../src/about.c:169
+#: ../src/about.c:170
 msgid "About Geany"
 msgstr "关于 Geany"
 
-#: ../src/about.c:213
+#: ../src/about.c:214
 msgid "A fast and lightweight IDE"
 msgstr "轻快的 IDE"
 
-#: ../src/about.c:235
+#: ../src/about.c:236
 #, c-format
 msgid "(built on or after %s)"
 msgstr "(%s 或之后生成)"
 
 #. gtk_container_add(GTK_CONTAINER(info_box), cop_label);
-#: ../src/about.c:267
+#: ../src/about.c:268
 msgid "Info"
 msgstr "信息"
 
-#: ../src/about.c:283
+#: ../src/about.c:284
 msgid "Developers"
 msgstr "开发人员"
 
-#: ../src/about.c:290
+#: ../src/about.c:291
 msgid "maintainer"
 msgstr "主管"
 
-#: ../src/about.c:298 ../src/about.c:306 ../src/about.c:314
+#: ../src/about.c:299 ../src/about.c:307 ../src/about.c:315
 msgid "developer"
 msgstr "开发"
 
-#: ../src/about.c:322
+#: ../src/about.c:323
 msgid "translation maintainer"
 msgstr "翻译"
 
-#: ../src/about.c:331
+#: ../src/about.c:332
 msgid "Translators"
 msgstr "翻译者"
 
-#: ../src/about.c:351
+#: ../src/about.c:352
 msgid "Previous Translators"
 msgstr "原翻译者"
 
-#: ../src/about.c:372
+#: ../src/about.c:373
 msgid "Contributors"
 msgstr "贡献者"
 
-#: ../src/about.c:382
+#: ../src/about.c:383
 #, c-format
 msgid ""
 "Some of the many contributors (for a more detailed list, see the file %s):"
 msgstr "一部分贡献者 (详细清单参见文件 %s)"
 
-#: ../src/about.c:408
+#: ../src/about.c:409
 msgid "Credits"
 msgstr "荣誉"
 
-#: ../src/about.c:425
+#: ../src/about.c:426
 msgid "License"
 msgstr "许可条款"
 
-#: ../src/about.c:434
+#: ../src/about.c:435
 msgid ""
 "License text could not be found, please visit http://www.gnu.org/licenses/"
 "gpl-2.0.txt to view it online."
@@ -3806,7 +3808,7 @@ msgstr "无法创建配置文件目录 (%s)。"
 
 #: ../src/libmain.c:1184
 msgid "IPC socket could not be created, see Help->Debug Messages for details."
-msgstr ""
+msgstr "无法创建 IPC socket，在 帮助→调试信息 中查看更多信息。"
 
 #: ../src/libmain.c:1413
 msgid "Do you really want to quit?"
