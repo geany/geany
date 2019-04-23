@@ -77,4 +77,8 @@ extern void cppStartCollectingSignature (void);
 extern void cppStopCollectingSignature (void);
 extern void cppClearSignature (void);
 
+extern bool cppIsIgnoreToken (const char *const name,
+			      bool *const pIgnoreParens,
+			      const char **const replacement);
+
 #endif  /* CTAGS_MAIN_GET_H */

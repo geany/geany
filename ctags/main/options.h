@@ -42,10 +42,4 @@ extern bool inSandbox (void);
 /* This is for emitting a tag for a commnn block of Fortran parser*/
 extern bool canUseLineNumberAsLocator (void);
 
-/* GEANY_CTAGS_DIFF */
-extern bool isIgnoreToken (const char *const name,
-							  bool *const pIgnoreParens,
-							  const char **const replacement);
-/* GEANY_CTAGS_DIFF_END */
-
 #endif  /* CTAGS_MAIN_OPTIONS_H */

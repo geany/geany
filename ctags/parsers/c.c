@@ -1726,7 +1726,7 @@ static void analyzeIdentifier (tokenInfo *const token)
 	bool parensToo = false;
 
 	if (isInputLanguage (Lang_java)  ||
-		! isIgnoreToken (name, &parensToo, &replacement))
+		! cppIsIgnoreToken (name, &parensToo, &replacement))
 	{
 		if (replacement != NULL)
 			token->keyword = analyzeKeyword (replacement);
