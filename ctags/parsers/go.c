@@ -532,7 +532,7 @@ static void makeTag (tokenInfo *const token, const goKind kind,
 	if (argList)
 		e.extensionFields.signature = argList;
 	if (varType)
-		e.extensionFields.varType = varType;
+		e.extensionFields.typeRef[1] = varType;
 
 	if (parent_kind != GOTAG_UNDEFINED && parent_token != NULL)
 	{

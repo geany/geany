@@ -446,7 +446,7 @@ static void addTag (vString* ident, const char* type, const char* arg_list, int 
 	tag.sourceFileName = getInputFileName();
 
 	tag.extensionFields.signature = arg_list;
-	tag.extensionFields.varType = type;
+	tag.extensionFields.typeRef[1] = type;
 	if (parent_kind != K_NONE)
 	{
 		tag.extensionFields.scopeKindIndex = parent_kind;

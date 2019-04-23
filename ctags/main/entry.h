@@ -87,10 +87,6 @@ struct sTagEntryInfo {
 #define ROLE_MAX_COUNT (sizeof(roleBitsType) * 8)
 		roleBitsType roleBits; /* for role of reference tag */
 
-/* GEANY_CTAGS_DIFF */
-		const char *varType;
-/* GEANY_CTAGS_DIFF_END */
-
 #ifdef HAVE_LIBXML
 		const char* xpath;
 #endif

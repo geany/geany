@@ -1041,10 +1041,6 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 		slot->extensionFields.typeRef[0] = eStrdup (slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		slot->extensionFields.typeRef[1] = eStrdup (slot->extensionFields.typeRef[1]);
-/* GEANY_CTAGS_DIFF */
-	if (slot->extensionFields.varType)
-		slot->extensionFields.varType = eStrdup (slot->extensionFields.varType);
-/* GEANY_CTAGS_DIFF_END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		slot->extensionFields.xpath = eStrdup (slot->extensionFields.xpath);
@@ -1116,10 +1112,6 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		eFree ((char *)slot->extensionFields.typeRef[1]);
-/* GEANY_CTAGS_DIFF */
-	if (slot->extensionFields.varType)
-		eFree ((char *)slot->extensionFields.varType);
-/* GEANY_CTAGS_DIFF_END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		eFree ((char *)slot->extensionFields.xpath);
@@ -1233,7 +1225,7 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->signature = info->extensionFields.signature;
 	tag->scopeName = info->extensionFields.scopeName;
 	tag->inheritance = info->extensionFields.inheritance;
-	tag->varType = info->extensionFields.varType;
+	tag->varType = info->extensionFields.typeRef[1];
 	tag->access = info->extensionFields.access;
 	tag->implementation = info->extensionFields.implementation;
 	tag->kindLetter = getLanguageKind(info->langType, info->kindIndex)->letter;

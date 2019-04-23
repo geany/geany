@@ -46,7 +46,7 @@ static void createPascalTag (tagEntryInfo* const tag,
 		initTagEntry (tag, vStringValue (name), kind);
 
 		tag->extensionFields.signature = arglist;
-		tag->extensionFields.varType = vartype;
+		tag->extensionFields.typeRef[1] = vartype;
 	}
 	else
 	{
