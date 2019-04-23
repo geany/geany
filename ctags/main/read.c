@@ -715,24 +715,6 @@ extern bool openInputFile (const char *const fileName, const langType language,
 	return opened;
 }
 
-#ifdef GEANY_CTAGS_LIB
-/* The user should take care of allocate and free the buffer param. 
- * This func is NOT THREAD SAFE.
- * The user should not tamper with the buffer while this func is executing.
- */
-extern bool bufferOpen (const char *const fileName, const langType language,
-						unsigned char *buffer, size_t buffer_size)
-{
-	MIO *mio;
-	bool opened;
-
-	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
-	opened = openInputFile (fileName, language, mio);
-	mio_free (mio);
-	return opened;
-}
-#endif /* GEANY_CTAGS_LIB */
-
 extern void resetInputFile (const langType language)
 {
 	Assert (File.mio);

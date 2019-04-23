@@ -3308,6 +3308,18 @@ static bool createTagsWithFallback (
 
 #else
 
+static bool bufferOpen (const char *const fileName, const langType language,
+						unsigned char *buffer, size_t buffer_size)
+{
+	MIO *mio;
+	bool opened;
+
+	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
+	opened = openInputFile (fileName, language, mio);
+	mio_free (mio);
+	return opened;
+}
+
 extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
