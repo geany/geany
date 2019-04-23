@@ -75,7 +75,7 @@ extern void ctagsParse(unsigned char *buffer, size_t bufferSize,
 		return;
 	}
 
-	createTagsWithFallback(buffer, bufferSize, fileName, language,
+	createTagsWithFallbackGeany(buffer, bufferSize, fileName, language,
 		tagCallback, passCallback, userData);
 }
 

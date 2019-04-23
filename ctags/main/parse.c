@@ -92,9 +92,7 @@ typedef struct sParserObject {
  */
 
 static void lazyInitialize (langType language);
-#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language);
-#endif /* GEANY_CTAGS_LIB */
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
@@ -113,15 +111,13 @@ static parserDefinitionFunc* BuiltInParsers[] = {
 	CTagsSelfTestParser,
 #endif /* GEANY_CTAGS_LIB */
 	PARSER_LIST,
-#ifndef GEANY_CTAGS_LIB
 	XML_PARSER_LIST
 #ifdef HAVE_LIBXML
 	,
-#endif /* GEANY_CTAGS_LIB */
+#endif
 	YAML_PARSER_LIST
 #ifdef HAVE_LIBYAML
 	,
-#endif
 #endif
 };
 static parserObject* LanguageTable = NULL;
@@ -3107,7 +3103,6 @@ static subparser* teardownLanguageSubparsersInUse (const langType language)
 	return teardownSubparsersInUse ((LanguageTable + language)->slaveControlBlock);
 }
 
-#ifndef GEANY_CTAGS_LIB
 static bool createTagsWithFallback1 (const langType language,
 									 langType *exclusive_subparser)
 {
@@ -3179,9 +3174,10 @@ static bool createTagsWithFallback1 (const langType language,
 	return tagFileResized;
 }
 
-#else
+#ifdef GEANY_CTAGS_LIB
 
-static bool createTagsWithFallback1 (const langType language,
+/* keep in sync with createTagsWithFallback1() above */
+static bool createTagsWithFallback1Geany (const langType language,
 	passStartCallback passCallback, void *userData)
 {
 	int lastPromise = getLastPromise ();
@@ -3235,6 +3231,47 @@ static bool createTagsWithFallback1 (const langType language,
 
 	return false;
 }
+
+static bool bufferOpen (const char *const fileName, const langType language,
+						unsigned char *buffer, size_t buffer_size)
+{
+	MIO *mio;
+	bool opened;
+
+	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
+	opened = openInputFile (fileName, language, mio);
+	mio_free (mio);
+	return opened;
+}
+
+extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize,
+	const char *fileName, const langType language,
+	tagEntryFunction tagCallback, passStartCallback passCallback,
+	void *userData)
+{
+	if ((!buffer && openInputFile (fileName, language, NULL)) ||
+		(buffer && bufferOpen (fileName, language, buffer, bufferSize)))
+	{
+		/* keep in sync with parseFileWithMio() and createTagsWithFallback() */
+		setupAnon ();
+		initParserTrashBox ();
+		setTagEntryFunction(tagCallback, userData);
+		createTagsWithFallback1Geany (language, passCallback, userData);
+		forcePromises ();
+		closeInputFile ();
+		finiParserTrashBox ();
+		teardownAnon ();
+	}
+	else
+		error (WARNING, "Unable to open %s", fileName);
+}
+
+extern const parserDefinition *getParserDefinition (langType language)
+{
+	Assert (0 <= language  &&  language < (int) LanguageCount);
+	return LanguageTable[language].def;
+}
+
 #endif /* GEANY_CTAGS_LIB */
 
 extern bool runParserInNarrowedInputStream (const langType language,
@@ -3279,7 +3316,6 @@ extern bool runParserInNarrowedInputStream (const langType language,
 
 }
 
-#ifndef GEANY_CTAGS_LIB
 static bool createTagsWithFallback (
 	const char *const fileName, const langType language,
 	MIO *mio)
@@ -3305,49 +3341,6 @@ static bool createTagsWithFallback (
 
 	return tagFileResized;
 }
-
-#else
-
-static bool bufferOpen (const char *const fileName, const langType language,
-						unsigned char *buffer, size_t buffer_size)
-{
-	MIO *mio;
-	bool opened;
-
-	mio = mio_new_memory (buffer, buffer_size, NULL, NULL);
-	opened = openInputFile (fileName, language, mio);
-	mio_free (mio);
-	return opened;
-}
-
-extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
-	const char *fileName, const langType language,
-	tagEntryFunction tagCallback, passStartCallback passCallback,
-	void *userData)
-{
-	if ((!buffer && openInputFile (fileName, language, NULL)) ||
-		(buffer && bufferOpen (fileName, language, buffer, bufferSize)))
-	{
-		setupAnon ();
-		initParserTrashBox ();
-		setTagEntryFunction(tagCallback, userData);
-		createTagsWithFallback1 (language, passCallback, userData);
-		forcePromises ();
-		closeInputFile ();
-		finiParserTrashBox ();
-		teardownAnon ();
-	}
-	else
-		error (WARNING, "Unable to open %s", fileName);
-}
-
-extern const parserDefinition *getParserDefinition (langType language)
-{
-	Assert (0 <= language  &&  language < (int) LanguageCount);
-	return LanguageTable[language].def;
-}
-
-#endif /* GEANY_CTAGS_LIB */
 
 static void printGuessedParser (const char* const fileName, langType language)
 {
@@ -3428,7 +3421,6 @@ extern const char *getLanguageEncoding (const langType language)
 }
 #endif
 
-#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language)
 {
 	parserObject *parser = LanguageTable + language;
@@ -3440,7 +3432,6 @@ static void addParserPseudoTags (langType language)
 		parser->pseudoTagPrinted = 1;
 	}
 }
-#endif /* GEANY_CTAGS_LIB */
 
 extern bool doesParserRequireMemoryStream (const langType language)
 {
@@ -3523,9 +3514,7 @@ extern bool parseFileWithMio (const char *const fileName, MIO *mio)
 
 		initParserTrashBox ();
 
-#ifndef GEANY_CTAGS_LIB
-		tagFileResized = createTagsWithFallback (fileName, language, mio);
-#endif /* GEANY_CTAGS_LIB */
+		tagFileResized = createTagsWithFallback (fileName, language, req.mio);
 
 		finiParserTrashBox ();
 

@@ -67,4 +67,7 @@
 	ZephirParser, \
 	PowerShellParser
 
+#define XML_PARSER_LIST
+#define YAML_PARSER_LIST
+
 #endif  /* CTAGS_MAIN_PARSERS_H */

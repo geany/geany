@@ -18,7 +18,6 @@
 #include "kind.h"
 #include "lregex.h"
 #include "lxpath.h"
-#include "ctags-api.h"
 
 /*
 *   MACROS
@@ -135,7 +134,8 @@ extern kindDefinition* getLanguageKindForLetter (const langType language, char k
 extern void initializeParser (langType language);
 
 #ifdef GEANY_CTAGS_LIB
-extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
+#include "ctags-api.h"
+extern void createTagsWithFallbackGeany(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData);
