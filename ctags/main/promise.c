@@ -69,7 +69,7 @@ int  makePromise   (const char *parser,
 	int r;
 	langType lang;
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /*
 	if ((!isThinStreamSpec(startLine,
 						   startCharOffset,
@@ -79,7 +79,7 @@ int  makePromise   (const char *parser,
 		&& ( !isXtagEnabled (XTAG_TAGS_GENERATED_BY_GUEST_PARSERS)))
 		return -1;
 */
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 	lang = getNamedLanguage (parser, 0);
 	if (lang == LANG_IGNORE)

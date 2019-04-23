@@ -91,17 +91,17 @@
 *   DATA DEFINITIONS
 */
 static struct { long files, lines, bytes; } Totals = { 0, 0, 0 };
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static mainLoopFunc mainLoop;
 static void *mainData;
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 /*
 *   FUNCTION PROTOTYPES
 */
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static bool createTagsForEntry (const char *const entryName);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 /*
 *   FUNCTION DEFINITIONS
@@ -131,7 +131,7 @@ extern bool isDestinationStdout (void)
 	return toStdout;
 }
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 
 #if defined (HAVE_OPENDIR)
 static bool recurseUsingOpendir (const char *const dirName)
@@ -709,4 +709,4 @@ extern int main (int argc CTAGS_ATTR_UNUSED, char **argv)
 	exit (0);
 	return 0;
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */

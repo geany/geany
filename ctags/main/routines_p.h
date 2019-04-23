@@ -94,7 +94,7 @@ extern MIO *tempFile (const char *const mode, char **const pName);
 
 extern char* baseFilenameSansExtensionNew (const char *const fileName, const char *const templateExt);
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /*
 #include "portable-dirent_p.h"
 
@@ -102,6 +102,6 @@ extern int scanDirectory (const char *directory_name,
 						  struct dirent ***array_pointer, int (*select_function) (const struct dirent *),
 						  int (*compare_function) (const struct dirent **, const struct dirent **));
 */
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 #endif  /* CTAGS_MAIN_ROUTINES_PRIVATE_H */

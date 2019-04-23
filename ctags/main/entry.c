@@ -122,10 +122,10 @@ static tagFile TagFile = {
 
 static bool TagsToStdout = false;
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 static tagEntryFunction TagEntryFunction = NULL;
 static void *TagEntryUserData = NULL;
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 /*
 *   FUNCTION PROTOTYPES
@@ -160,10 +160,10 @@ extern const char *tagFileName (void)
 
 extern void abort_if_ferror(MIO *const mio)
 {
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 	if (mio_error (mio))
 		error (FATAL | PERROR, "cannot write tag file");
-#endif
+#endif /* GEANY_CTAGS_LIB */
 }
 
 static void rememberMaxLengths (const size_t nameLength, const size_t lineLength)
@@ -1041,10 +1041,10 @@ static void recordTagEntryInQueue (const tagEntryInfo *const tag, tagEntryInfo* 
 		slot->extensionFields.typeRef[0] = eStrdup (slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		slot->extensionFields.typeRef[1] = eStrdup (slot->extensionFields.typeRef[1]);
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 	if (slot->extensionFields.varType)
 		slot->extensionFields.varType = eStrdup (slot->extensionFields.varType);
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		slot->extensionFields.xpath = eStrdup (slot->extensionFields.xpath);
@@ -1116,10 +1116,10 @@ static void clearTagEntryInQueue (tagEntryInfo* slot)
 		eFree ((char *)slot->extensionFields.typeRef[0]);
 	if (slot->extensionFields.typeRef[1])
 		eFree ((char *)slot->extensionFields.typeRef[1]);
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 	if (slot->extensionFields.varType)
 		eFree ((char *)slot->extensionFields.varType);
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 #ifdef HAVE_LIBXML
 	if (slot->extensionFields.xpath)
 		eFree ((char *)slot->extensionFields.xpath);
@@ -1226,7 +1226,7 @@ static bool isTagWritable(const tagEntryInfo *const tag)
 }
 
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 {
 	tag->name = info->name;
@@ -1241,7 +1241,7 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->lineNumber = info->lineNumber;
 	tag->lang = info->langType;
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 {
@@ -1262,7 +1262,7 @@ static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 		writerBuildFqTagCache ( (tagEntryInfo *const)tag);
 	}
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 	getTagScopeInformation((tagEntryInfo *)tag, NULL, NULL);
 
 	if (TagEntryFunction != NULL)
@@ -1274,7 +1274,7 @@ static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
 	}
 #else
 	length = writerWriteTag (TagFile.mio, tag);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 	++TagFile.numTags.added;
 	rememberMaxLengths (strlen (tag->name), (size_t) length);
@@ -1393,11 +1393,11 @@ extern int makeTagEntry (const tagEntryInfo *const tag)
 	int r = CORK_NIL;
 	Assert (tag->name != NULL);
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 	if (!TagFile.cork)
 		if (!isTagWritable (tag))
 			goto out;
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 	if (tag->name [0] == '\0' && (!tag->placeholder))
 	{
@@ -1720,10 +1720,10 @@ extern const char* getTagFileDirectory (void)
 	return TagFile.directory;
 }
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
 {
 	TagEntryFunction = entry_function;
 	TagEntryUserData = user_data;
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */

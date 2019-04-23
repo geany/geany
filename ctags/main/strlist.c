@@ -13,11 +13,11 @@
 #include "general.h"  /* must always come first */
 
 #include <string.h>
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /*
 #include <fnmatch.h>
 */
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 #include "debug.h"
 #include "read.h"
@@ -219,9 +219,9 @@ extern vString* stringListExtensionFinds (
 static bool fileNameMatched (
 		const vString* const vpattern, const char* const fileName)
 {
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 	return false;
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 }
 
 extern bool stringListFileMatched (

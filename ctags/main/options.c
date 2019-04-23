@@ -3386,14 +3386,14 @@ extern void previewFirstOption (cookedArgs* const args)
 	}
 }
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static void parseConfigurationFileOptionsInDirectoryWithLeafname (const char* directory, const char* leafname)
 {
 	char* pathname = combinePathAndFile (directory, leafname);
 	parseFileOptions (pathname);
 	eFree (pathname);
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 #if defined(HAVE_SCANDIR) || defined (HAVE_DIRENT_H) || defined (_MSC_VER)
 static int ignore_dot_file(const struct dirent* dent)
@@ -3748,7 +3748,7 @@ extern bool canUseLineNumberAsLocator (void)
 	return (Option.locate != EX_PATTERN);
 }
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /* tags_ignore is a NULL-terminated array of strings, read from ~/.config/geany/ignore.tags.
  * This file contains a space or newline separated list of symbols which should be ignored
  * by the C/C++ parser, see -I command line option of ctags for details. */
@@ -3815,4 +3815,4 @@ extern bool isIgnoreToken (const char *const name,
 	}
 	return result;
 }
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */

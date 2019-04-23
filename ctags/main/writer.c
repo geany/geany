@@ -11,7 +11,7 @@
 #include "entry_p.h"
 #include "writer_p.h"
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /* Dummy definitions of writers as we don't need them */
 
 tagWriter uCtagsWriter = {
@@ -69,7 +69,7 @@ tagWriter jsonWriter = {
 	.type = WRITER_DEFAULT,
 };
 
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 static tagWriter *writerTable [WRITER_COUNT] = {
 	[WRITER_U_CTAGS] = &uCtagsWriter,

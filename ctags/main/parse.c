@@ -92,9 +92,9 @@ typedef struct sParserObject {
  */
 
 static void lazyInitialize (langType language);
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 static void installKeywordTable (const langType language);
 static void installTagRegexTable (const langType language);
 static void installTagXpathTable (const langType language);
@@ -105,19 +105,19 @@ static void teardownAnon (void);
 /*
 *   DATA DEFINITIONS
 */
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static parserDefinition *CTagsSelfTestParser (void);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 static parserDefinitionFunc* BuiltInParsers[] = {
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 	CTagsSelfTestParser,
-#endif
+#endif /* GEANY_CTAGS_LIB */
 	PARSER_LIST,
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 	XML_PARSER_LIST
 #ifdef HAVE_LIBXML
 	,
-#endif
+#endif /* GEANY_CTAGS_LIB */
 	YAML_PARSER_LIST
 #ifdef HAVE_LIBYAML
 	,
@@ -3107,7 +3107,7 @@ static subparser* teardownLanguageSubparsersInUse (const langType language)
 	return teardownSubparsersInUse ((LanguageTable + language)->slaveControlBlock);
 }
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static bool createTagsWithFallback1 (const langType language,
 									 langType *exclusive_subparser)
 {
@@ -3235,7 +3235,7 @@ static bool createTagsWithFallback1 (const langType language,
 
 	return false;
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 extern bool runParserInNarrowedInputStream (const langType language,
 					       unsigned long startLine, long startCharOffset,
@@ -3260,7 +3260,7 @@ extern bool runParserInNarrowedInputStream (const langType language,
 				 endLine, endCharOffset,
 				 sourceLineOffset,
 				 promise);
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 	tagFileResized = createTagsWithFallback1 (language, NULL);
 #else
 	/* Simple parsing without rescans - not used by any sub-parsers anyway */
@@ -3273,13 +3273,13 @@ extern bool runParserInNarrowedInputStream (const langType language,
 	if (useCork)
 		uncorkTagFile();
 	tagFileResized = false;
-#endif
+#endif /* GEANY_CTAGS_LIB */
 	popNarrowedInputStream  ();
 	return tagFileResized;
 
 }
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static bool createTagsWithFallback (
 	const char *const fileName, const langType language,
 	MIO *mio)
@@ -3335,7 +3335,7 @@ extern const parserDefinition *getParserDefinition (langType language)
 	return LanguageTable[language].def;
 }
 
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 static void printGuessedParser (const char* const fileName, langType language)
 {
@@ -3416,7 +3416,7 @@ extern const char *getLanguageEncoding (const langType language)
 }
 #endif
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 static void addParserPseudoTags (langType language)
 {
 	parserObject *parser = LanguageTable + language;
@@ -3428,7 +3428,7 @@ static void addParserPseudoTags (langType language)
 		parser->pseudoTagPrinted = 1;
 	}
 }
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 extern bool doesParserRequireMemoryStream (const langType language)
 {
@@ -3511,9 +3511,9 @@ extern bool parseFileWithMio (const char *const fileName, MIO *mio)
 
 		initParserTrashBox ();
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 		tagFileResized = createTagsWithFallback (fileName, language, mio);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 		finiParserTrashBox ();
 
@@ -3973,14 +3973,14 @@ extern void anonGenerate (vString *buffer, const char *prefix, int kind)
 
 	vStringCopyS(buffer, prefix);
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 /*
 	char buf [9];
 	anonHashString (getInputFileName(), buf);
 	sprintf(szNum,"%s%02x%02x",buf,parser -> anonymousIdentiferId, kind);
 */
 	sprintf(szNum,"%u", parser -> anonymousIdentiferId);
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 	vStringCatS(buffer,szNum);
 }
@@ -4211,7 +4211,7 @@ extern void addLanguageTagMultiTableRegex(const langType language,
 						   name, kinds, flags, disabled);
 }
 
-#ifndef CTAGS_LIB
+#ifndef GEANY_CTAGS_LIB
 /*
  * A parser for CTagsSelfTest (CTST)
  */
@@ -4449,4 +4449,4 @@ static parserDefinition *CTagsSelfTestParser (void)
 	def->useCork = true;
 	return def;
 }
-#endif /* CTAGS_LIB */
+#endif /* GEANY_CTAGS_LIB */

@@ -11,7 +11,7 @@
 
 #include "general.h"  /* must always come first */
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -52,6 +52,6 @@ extern char ctagsGetKindFromName(const char *name, int lang);
 extern bool ctagsIsUsingRegexParser(int lang);
 extern unsigned int ctagsGetLangCount(void);
 
-#endif /* CTAGS_LIB */
+#endif /* GEANY_CTAGS_LIB */
 
 #endif  /* CTAGS_API_H */

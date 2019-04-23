@@ -87,9 +87,9 @@ struct sTagEntryInfo {
 #define ROLE_MAX_COUNT (sizeof(roleBitsType) * 8)
 		roleBitsType roleBits; /* for role of reference tag */
 
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 		const char *varType;
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 
 #ifdef HAVE_LIBXML
 		const char* xpath;
@@ -155,8 +155,8 @@ CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
 		return ((roleBitsType)1) << roleIndex;
 }
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 #endif  /* CTAGS_MAIN_ENTRY_H */

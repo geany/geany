@@ -134,13 +134,13 @@ extern kindDefinition* getLanguageKindForLetter (const langType language, char k
 
 extern void initializeParser (langType language);
 
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 extern void createTagsWithFallback(unsigned char *buffer, size_t bufferSize,
 	const char *fileName, const langType language,
 	tagEntryFunction tagCallback, passStartCallback passCallback,
 	void *userData);
 extern const parserDefinition *getParserDefinition (langType language);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 
 #ifdef HAVE_ICONV
 extern const char *getLanguageEncoding (const langType language);

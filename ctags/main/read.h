@@ -84,10 +84,10 @@ extern const unsigned char *getInputFileData (size_t *size);
    internally. The 3rd argument is introduced for reusing mio object
    created in parser guessing stage. */
 extern bool openInputFile (const char *const fileName, const langType language, MIO *mio);
-#ifdef CTAGS_LIB
+#ifdef GEANY_CTAGS_LIB
 extern bool bufferOpen (const char *const fileName, const langType language,
 						unsigned char *buffer, size_t buffer_size);
-#endif
+#endif /* GEANY_CTAGS_LIB */
 extern MIO *getMio (const char *const fileName, const char *const openMode,
 				    bool memStreamRequired);
 extern void resetInputFile (const langType language);

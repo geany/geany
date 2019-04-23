@@ -95,7 +95,7 @@ static bool ptagMakeKindDescriptions (ptagDesc *desc, void *data)
 }
 
 static ptagDesc ptagDescs [] = {
-/* GEANY DIFF */
+/* GEANY_CTAGS_DIFF */
 #if 0
 	{
 	  /* The prefix is not "TAG_".
@@ -105,7 +105,7 @@ static ptagDesc ptagDescs [] = {
 	  ptagMakeJsonOutputVersion,
 	  true },
 #endif
-/* GEANY DIFF END */
+/* GEANY_CTAGS_DIFF_END */
 	{ true, "TAG_FILE_FORMAT",
 	  "the version of tags file format",
 	  ptagMakeFormat,
