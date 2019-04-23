@@ -83,6 +83,7 @@ libctags_la_SOURCES = \
 	main/htable.c \
 	main/htable.h \
 	main/inline.h \
+	main/interactive_p.h \
 	main/keyword.c \
 	main/keyword.h \
 	main/keyword_p.h \

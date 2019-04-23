@@ -35,6 +35,7 @@
 #include "xtag.h"
 #include "param.h"
 #include "error.h"
+#include "interactive_p.h"
 #include "writer_p.h"
 #include "trace.h"
 
