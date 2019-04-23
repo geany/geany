@@ -1,9 +1,6 @@
 
 dist_check_SCRIPTS = runner.sh
 
-# Disabled tests:
-#	simple.cbl
-
 NULL =
 test_sources = \
 	1795612.js						\
@@ -275,6 +272,7 @@ test_sources = \
 	simple.abc						\
 	simple.asciidoc					\
 	simple.bas						\
+	simple.cbl						\
 	simple.conf						\
 	simple.d						\
 	simple.diff						\
