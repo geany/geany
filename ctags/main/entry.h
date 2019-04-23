@@ -20,7 +20,6 @@
 #include "field.h"
 #include "xtag.h"
 #include "mio.h"
-#include "ctags-api.h"
 
 /*
 *   MACROS
@@ -152,6 +151,7 @@ CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
 }
 
 #ifdef GEANY_CTAGS_LIB
+#include "ctags-api.h"
 extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data);
 #endif /* GEANY_CTAGS_LIB */
 

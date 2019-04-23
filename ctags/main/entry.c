@@ -122,11 +122,6 @@ static tagFile TagFile = {
 
 static bool TagsToStdout = false;
 
-#ifdef GEANY_CTAGS_LIB
-static tagEntryFunction TagEntryFunction = NULL;
-static void *TagEntryUserData = NULL;
-#endif /* GEANY_CTAGS_LIB */
-
 /*
 *   FUNCTION PROTOTYPES
 */
@@ -1217,8 +1212,17 @@ static bool isTagWritable(const tagEntryInfo *const tag)
 	return true;
 }
 
-
 #ifdef GEANY_CTAGS_LIB
+
+static tagEntryFunction TagEntryFunction = NULL;
+static void *TagEntryUserData = NULL;
+
+extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
+{
+	TagEntryFunction = entry_function;
+	TagEntryUserData = user_data;
+}
+
 static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 {
 	tag->name = info->name;
@@ -1233,6 +1237,7 @@ static void initCtagsTag(ctagsTag *tag, const tagEntryInfo *info)
 	tag->lineNumber = info->lineNumber;
 	tag->lang = info->langType;
 }
+
 #endif /* GEANY_CTAGS_LIB */
 
 static void writeTagEntry (const tagEntryInfo *const tag, bool checkingNeeded)
@@ -1711,11 +1716,3 @@ extern const char* getTagFileDirectory (void)
 {
 	return TagFile.directory;
 }
-
-#ifdef GEANY_CTAGS_LIB
-extern void setTagEntryFunction(tagEntryFunction entry_function, void *user_data)
-{
-	TagEntryFunction = entry_function;
-	TagEntryUserData = user_data;
-}
-#endif /* GEANY_CTAGS_LIB */
